@@ -41,35 +41,35 @@ class HtmlReporter extends SimpleReporter {
     function paintHeader($test_name) {
         $this->sendNoCacheHeaders();
         print "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">";
-        print "<html>\n<head>\n<title>Test Suite</title>\n";
-        print "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=" .
-                $this->_character_set . "\">\n";
-        print "<style type=\"text/css\">\n";
-        print $this->_getCss() . "\n";
-        print "</style>\n";
-        print "</head>\n<body>\n";
-       
-        echo '<div style="text-align:center;min-height:100px;font-size:25px;background:url(img/header-logo.png) no-repeat left;">';
-        echo '<div style="float:right;color: green;">';
+        echo '<html>';
+        echo '<head>';
+        echo '<title>Test Suite</title>';
+        echo '</head>';
+       	echo '<body>';
+       	echo '<div id="wrapper" style="height:100%;width:100%;clear: both;">';//wrapper
+       	echo '<div id="header1">';//header1
+        echo '<div id="header3" style="text-align:center;min-height:100px;font-size:25px;background:url(img/header-logo.png) no-repeat left;">';//header3
+        echo '<div id="header4" style="float:right;color:#01933E;">';//header4
         echo ''. date('Y - m - d').'';
-        echo '</div>';
-        echo '</div>';
-        echo '<div style="border:2px solid #DDDDDD";>';
-        echo '<div>';
-        echo '<div style="width:100%;background-image:url(img/bg-header4.png);background-repeat:repeat-x";>
-        		<h2><div style="font-size:18px;font-family:Tahoma,Geneva,sans-serif;">These results showing how many functions have been tested in the code of chamilo 1.8.6.2</div></h2>         		    
-        			<br/><div style="font-size:12px;font-family:Tahoma,Geneva,sans-serif;">
-        			<p>This page showing the kind results different than have been tested and showing the lines the problems.</p>  
-        			<ol><li>This results show the amount of the tests than have been tested.</li>
-        			<li>This results show the amount of the tests than have passed.</li>
-        			<li>This results show the amount of the tests than have failed.</li>
-        			<li>This results show the amount of exceptions in the tests.</li></ol>
-        			<p>You can always find more information about simpletest on the website: http://www.lastcraft.com </p>
-        			<p>"Only a well software like Chamilo, is perfect when has been tested by excellent The Testing Engineers".</p>
-        			</div>
-        	  </div>';
-		echo '</div>';
-        flush();
+        echo '</div>';//fin header 4
+        echo '</div>';//fin header 3
+        echo '</div>';//fin header 1
+        echo '<div id="header2" style="width:100%;border:2px solid #DDDDDD;">';//header2     
+        echo '<div id="content2" style="background-image:url(img/bg-header4.png);background-repeat:repeat-x";>
+			<h2><div style="font-size:18px;font-family:Tahoma,Geneva,sans-serif;color:#01933E;text-decoration:none;">These results showing how many functions have been tested in the code of chamilo 1.8.6.2</div></h2><br/>         		    
+				<div style="font-size:12px;font-family:Tahoma,Geneva,sans-serif;color:#01933E;">
+				<p>This page showing the kind results different than have been tested and showing the lines the problems.</p>  
+				<ol><li>This results show the amount of the tests than have been tested.</li>
+				<li>This results show the amount of the tests than have passed.</li>
+				<li>This results show the amount of the tests than have failed.</li>
+				<li>This results show the amount of exceptions in the tests.</li></ol>
+				<p>You can always find more information about simpletest on the website: http://www.lastcraft.com </p>
+				<p>"Only a well software like Chamilo, is perfect when has been tested by excellent The Testing Engineers".</p>
+				</div></div>';//content2    			
+		echo '</div>';//fin header2
+
+	
+	
     }
 
     /**
@@ -109,21 +109,21 @@ class HtmlReporter extends SimpleReporter {
      */
     function paintFooter($test_name) {
         $colour = ($this->getFailCount() + $this->getExceptionCount() > 0 ? "red" : "green");
-        print "<div style=\"";
-        print "padding: 8px; margin-top: 1em; background-color: $colour; color: white;";
-        print "\">";
-        print $this->getTestCaseProgress() . "/" . $this->getTestCaseCount();
-        print " test cases complete:\n";
-        print "<strong>" . $this->getPassCount() . "</strong> passes, ";
-        print "<strong>" . $this->getFailCount() . "</strong> fails and ";
-        print "<strong>" . $this->getExceptionCount() . "</strong> exceptions.";
-        print "</div>\n";
-        print "</body>\n</html>\n";
-        echo '<div style= "clear: both;line-height: 0px;height: 0";></div>';
-        echo '<div style="min-height:100px;background-image:url(img/bg-footer.gif);background-repeat:repeat-x"> </div>';
- 
-	
+        echo '<div id="header5" style="height: 100%; padding: 8px;background-color:#EFEFEF;border:1px solid #4171B5; margin-top: 1em;color:#00407F;font-size:15px;font-family:Tahoma,Geneva,sans-serif;font-weight:bold;">';//header 5
+        echo ' Test cases complete: ';
+        echo $this->getTestCaseProgress() . '/' . $this->getTestCaseCount().'<br/><br/>';
+        echo  'Passes: ' . $this->getPassCount() . '  ';
+        echo  'Fails: ' . $this->getFailCount() . '  ';
+        echo  'Exceptions: ' . $this->getExceptionCount() . ' ';
+ 		echo '</div>';//fin header5
+ 		echo '</div>';//fin wrapper
+ 		echo '<div id="footer1" style= "margin-right:5%;padding-top:60px;height: 8em;clear: both; line-height: 0px;background-image:url(img/bg-footer.gif);background-repeat:repeat-x ">';
+        echo '</div>';//fin footer 1,2
+        echo '</body>';
+        echo '</html>';
     }
+	
+	
 
     /**
      *    Paints the test failure with a breadcrumbs

@@ -122,7 +122,7 @@ function define_course_keys($wantedCode, $prefix4all = "", $prefix4baseName = ""
 		$keysAreUnique = true;
 
 		// check if they are unique
-		$query = "SELECT 1 FROM ".$course_table . " WHERE code='".$keysCourseId . "' LIMIT 0,1";
+		echo $query = "SELECT 1 FROM ".$course_table . " WHERE code='".$keysCourseId . "' LIMIT 0,1";
 		$result = Database::query($query, __FILE__, __LINE__);
 
 		if($keysCourseId == DEFAULT_COURSE || Database::num_rows($result))
@@ -716,7 +716,8 @@ function update_Db_course($courseDbName, $language = null)
 		title VARCHAR(255),
 		content TEXT,
 		session_id smallint default 0,
-		description_type tinyint unsigned NOT NULL default 0,		
+		description_type tinyint unsigned NOT NULL default 0,
+		progress INT NOT NULL default 0,
 		UNIQUE (id)
 		)" . $charset_clause;
 	Database::query($sql, __FILE__, __LINE__);
@@ -1075,6 +1076,7 @@ function update_Db_course($courseDbName, $language = null)
 		)" . $charset_clause, __FILE__, __LINE__);
 
 	Database::query("CREATE TABLE `".$TABLEITEMPROPERTY . "` (
+		id int NOT NULL auto_increment,
 		tool varchar(100) NOT NULL default '',
 		insert_user_id int unsigned NOT NULL default '0',
 		insert_date datetime NOT NULL default '0000-00-00 00:00:00',
@@ -1087,7 +1089,8 @@ function update_Db_course($courseDbName, $language = null)
 		visibility tinyint NOT NULL default '1',
 		start_visible datetime NOT NULL default '0000-00-00 00:00:00',
 		end_visible datetime NOT NULL default '0000-00-00 00:00:00',
-		id_session INT NOT NULL DEFAULT 0
+		id_session INT NOT NULL DEFAULT 0,
+		PRIMARY KEY (id)
 		)" . $charset_clause, __FILE__, __LINE__);
 	Database::query("ALTER TABLE `$TABLEITEMPROPERTY` ADD INDEX idx_item_property_toolref (tool,ref)", __FILE__, __LINE__);
 

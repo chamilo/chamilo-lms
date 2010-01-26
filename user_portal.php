@@ -315,11 +315,12 @@ function display_especial_courses ($user_id) {
 					}
 					if (($course['status'] == 5 && !api_is_coach()) || empty($course['status'])) {
 						$status_icon=Display::return_icon('course.gif', get_lang('Course')).' '.Display::return_icon('students.gif', get_lang('Status').': '.get_lang('Student'),array('style'=>'width:11px; height:11px'));
-					}
+					} 
+					$progress_thematic_icon = get_thematic_progress_icon($course['db_name']);
 					echo "\t<tr>\n";
 					echo "\t\t<td>\n";
 					$course_title = '<a href="'.api_get_path(WEB_COURSE_PATH).$course['directory'].'/?id_session=0">'.$course['title'].'</a>';
-					echo "<div style=\"float:left;margin-right:10px;\">".$status_icon."</div><span style=\"font-size:135%;\">".$course_title."</span><br />";					
+					echo "<div style=\"float:left;margin-right:10px;\">".$status_icon."</div><span style=\"font-size:135%;\">".$course_title."</span>&nbsp;&nbsp;<span>$progress_thematic_icon</span><br />";					
 					if (api_get_setting('display_coursecode_in_courselist') == 'true') {
 						echo $course['visual_code'];
 					}
@@ -426,11 +427,12 @@ function display_courses_in_category($user_category_id) {
 		}
 		if (($course['status'] == 5 && !api_is_coach()) || empty($course['status'])) {
 			$status_icon=Display::return_icon('course.gif', get_lang('Course')).' '.Display::return_icon('students.gif', get_lang('Status').': '.get_lang('Student'),array('style'=>'width:11px; height:11px'));
-		}
+		}				
+		$progress_thematic_icon = get_thematic_progress_icon($course['db_name']);			
 		echo "\t<tr>\n";
 		echo "\t\t<td>\n";
 		$course_title = '<a href="'.api_get_path(WEB_COURSE_PATH).$course['directory'].'/?id_session=0">'.$course['title'].'</a>';
-		echo "<div style=\"float:left;margin-right:10px;\">".$status_icon."</div><span style=\"font-size:135%;\">".$course_title."</span><br />";
+		echo "<div style=\"float:left;margin-right:10px;\">".$status_icon."</div><span style=\"font-size:135%;\">".$course_title."</span>&nbsp;&nbsp;<span>$progress_thematic_icon </span><br />";
 		if (api_get_setting('display_coursecode_in_courselist') == 'true') {
 			echo $course['visual_code'];
 		}
@@ -451,6 +453,31 @@ function display_courses_in_category($user_category_id) {
 	Display functions
 -----------------------------------------------------------
 */
+
+/**
+ * get icon showing thematic progress for a course
+ * @param string 	Course database name
+ * @param int		Session id (optional)
+ * @return string   img html
+ */
+ function get_thematic_progress_icon($course_dbname,$session_id = 0) {
+ 	$tbl_course_description = Database::get_course_table(TABLE_COURSE_DESCRIPTION,$course_dbname);
+ 	$session_id = intval($session_id);
+	$sql = "SELECT progress FROM $tbl_course_description WHERE description_type = 8 AND session_id = '$session_id' ";
+	$rs  = Database::query($sql, __FILE__, __LINE__);
+	$img = '';
+	$title = '0%';
+	$image = 'level_0.png';
+	if (Database::num_rows($rs) > 0) {
+		$row = Database::fetch_array($rs);		
+		$progress = $row['progress'];
+		$image = 'level_'.$progress.'.png';
+		$title = $row['progress'].'%';	
+	} 
+	$img = Display::return_icon($image,get_lang('ThematicAdvance'),array('style'=>'vertical-align:middle')).'&nbsp;'.$title;			
+	return $img;	
+ }
+		
 
 /**
  * Warning: this function defines a global.
@@ -687,6 +714,8 @@ function get_logged_user_course_html($course, $session_id = 0, $class='courses')
 	} else {
 		$result .= $course_display_title." "." ".get_lang('CourseClosed')."";
 	}
+	$progress_thematic_icon = get_thematic_progress_icon($course_database,$session_id);
+	$result .= '&nbsp;&nbsp;<span>'.$progress_thematic_icon.'</span>';			
 	// show the course_code and teacher if chosen to display this
 	if (api_get_setting('display_coursecode_in_courselist') == 'true' || api_get_setting('display_teacher_in_courselist') == 'true') {
 		$result .= '<br />';
@@ -1175,8 +1204,8 @@ if ( is_array($courses_tree) ) {
 		// sessions and courses that are not in a session category
 
 			if (!isset($_GET['history'])) { // check if it's not history trainnign session list
-				echo display_especial_courses(api_get_user_id());
-				echo display_courses(api_get_user_id());
+				display_especial_courses(api_get_user_id());
+				display_courses(api_get_user_id());
 			}
 			//independent sessions
 			foreach ($category['sessions'] as $session) {

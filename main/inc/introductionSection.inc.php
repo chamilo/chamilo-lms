@@ -24,7 +24,8 @@
 ==============================================================================
 */
 
-include_once(api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
+require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
+require_once api_get_path(LIBRARY_PATH).'course_description.lib.php';
 
 /*
 -----------------------------------------------------------
@@ -161,12 +162,29 @@ if ($intro_dispForm) {
 	echo '</div>';
 }
 
+$course_description = new CourseDescription();
+$course_description->set_session_id(api_get_session_id());
+$thematic_description = $course_description->get_data_by_description_type(8);
+
+$thematic_description_html = '';
+if (!empty($thematic_description)) {
+	$thematic_description_html = '<td valign="bottom" width="260px"><div class="thematic-postit">
+							  <div class="thematic-postit-top">'.Display::return_icon('postit_top.jpg').'</div>
+							  <div class="thematic-postit-center">
+							  	<h3>'.get_lang('ThematicAdvance').'&nbsp;'.$course_description->get_progress_porcent(false,8).'</h3>
+								'.$thematic_description['description_title'].'
+								<p>'.$thematic_description['description_content'].'</p>
+							  </div>
+							  <div  class="thematic-postit-bottom">'.Display::return_icon('postit_bottom.jpg').'</div>
+							  </div></td>';
+}
+
 if ($intro_dispDefault) {
 	//$intro_content = make_clickable($intro_content); // make url in text clickable
 	$intro_content = text_filter($intro_content); // parse [tex] codes
-	if (!empty($intro_content))	{
-		echo "<table align='center' style='width: 80%;'><tr><td>$intro_content</td></tr></table>";
-	}
+	if (!empty($intro_content) || !empty($thematic_description_html))	{
+		echo "<table align='center' style='width: 80%;'><tr><td>$intro_content</td>$thematic_description_html</tr></table>";
+	} 
 }
 
 if ($intro_dispCommand) {

@@ -41,18 +41,18 @@ class HtmlReporter extends SimpleReporter {
     function paintHeader($test_name) {
         $this->sendNoCacheHeaders();
         print "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">";
-        echo '<html>';
+        echo '<html style="height:100%;">';
         echo '<head>';
         echo '<title>Test Suite</title>';
         echo '</head>';
        	echo '<body style="padding:0px;margin:0px;height:100%;">';
-       	echo '<div id="wrapper">';//wrapper
+       	echo '<div id="wrapper" style="width:90%;padding-left:5%;padding-bottom:9%;">';//wrapper
        	echo '<div id="header1">';//header1
-        echo '<div id="header3" style="height:100px;background:url(img/header-logo.png) no-repeat left;">';//header3
-        echo '<div id="header4" style="float:right;font-size:25px;color:#01933E;">';//header4
+        echo '<div id="header3" style="min-height:100px;background:url(img/header-logo.png) no-repeat left;"><br/>';//header3
+        echo '<div id="header4" style="float:right;font-size:25px;color:#01933E;"><br/>';//header4
         echo ''. date('Y - m - d').'';
         echo '</div>';//fin header 4
-        echo '</div>';//fin header 3
+        echo '</div><br/>';//fin header 3
         echo '</div>';//fin header 1
         echo '<div id="header2" style="width:100%;border:2px solid #DDDDDD;">';//header2     
         echo '<div id="content2" style="background-image:url(img/bg-header4.png);background-repeat:repeat-x";>
@@ -66,11 +66,16 @@ class HtmlReporter extends SimpleReporter {
 				<p>You can always find more information about simpletest on the website: http://www.lastcraft.com </p>
 				<p>"Only a well software like Chamilo, is perfect when has been tested by excellent The Testing Engineers".</p>
 				</div></div>';//content2    			
-		echo '</div>';//fin header2
-
-	
-	
+		echo '</div><br/>';//fin header2		
+		//flush();
     }
+
+	function footer() {
+		
+		echo '<div id="footer1" style= "height: 6em;background-image:url(img/bg-footer.gif);background-repeat:repeat-x ">';
+        echo '</div>';//fin footer 1
+		
+	}
 
     /**
      *    Send the headers necessary to ensure the page is
@@ -109,7 +114,10 @@ class HtmlReporter extends SimpleReporter {
      */
     function paintFooter($test_name) {
         $colour = ($this->getFailCount() + $this->getExceptionCount() > 0 ? "red" : "green");
-        echo '<div id="header5" style="background-color:#EFEFEF;border:1px solid #4171B5; margin-top: 1em;color:#00407F;font-size:15px;font-family:Tahoma,Geneva,sans-serif;font-weight:bold;">';//header 5
+        echo '<div id="header5" style="background-color: '.$colour.';color: white;font-weight:bold;">';//header 5
+        print "<style type=\"text/css\">\n";
+        print $this->_getCss() . "\n";
+        print "</style>\n";
         echo ' Test cases complete: ';
         echo $this->getTestCaseProgress() . '/' . $this->getTestCaseCount().'<br/><br/>';
         echo  'Passes: ' . $this->getPassCount() . '  ';
@@ -117,10 +125,10 @@ class HtmlReporter extends SimpleReporter {
         echo  'Exceptions: ' . $this->getExceptionCount() . ' ';
  		echo '</div>';//fin header5
  		echo '</div>';//fin wrapper
- 		echo '<div id="footer1" style= "height: 8em;background-image:url(img/bg-footer.gif);background-repeat:repeat-x ">';
-        echo '</div>';//fin footer 1,2
+ 		echo '<div id="footer1" style= "height: 6em;background-image:url(img/bg-footer.gif);background-repeat:repeat-x ">';
+        echo '</div>';//fin footer 1
         echo '</body>';
-        echo '</html>';
+        echo '</html>';		        
     }
 	
 	

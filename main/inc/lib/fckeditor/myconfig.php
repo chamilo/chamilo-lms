@@ -77,7 +77,7 @@ if ((api_get_setting('more_buttons_maximized_mode') == 'true'))
 	$config['ToolbarSets']['Directory'] = 'extended';
 }
 else
-{	
+{
 	$config['ToolbarSets']['Directory'] = 'default';
 }
 
@@ -109,10 +109,6 @@ if (api_get_setting('show_glossary_in_documents') == 'ismanual') {
 	$config['LoadPlugin'][] = 'glossary';
 }
 
-// MP3 : This is the old plugin for inserting audio files. Probably this plugin will be removed at the next release.
-// If you wish to use it, disable the "audio" plugin first.
-//$config['LoadPlugin'][] = 'MP3';
-
 // ImageManager : Adds a dialog (image gallery) for inserting images. The advanced file manager has its own functionality
 // for previewing images. This is why we load this plugin only in case when the simple file manager is used.
 if (!(api_get_setting('advanced_filemanager') == 'true')) {
@@ -131,9 +127,9 @@ $config['LoadPlugin'][] = 'flvPlayer';
 
 // youtube : Adds a dilog for inserting YouTube video-streams.
 if ((api_get_setting('youtube_for_students') == 'true')) {
-	
+
 	$config['LoadPlugin'][] = 'youtube';
-	
+
 }
 else{
 	if (api_is_allowed_to_edit() || api_is_platform_admin()) { // (not for students)
@@ -155,7 +151,7 @@ $config['LoadPlugin'][] = 'googlemaps';
 // in your server configuration have to be done. The MimeTex executable file has to be installed, see the installation guide.
 //
 if ((api_get_setting('math_mimetex') == 'true')) {
-	
+
 	$config['LoadPlugin'][] = 'mimetex';
 }
 
@@ -189,7 +185,7 @@ $config['MimetexExecutableDetectionTimeout'] = 0.05;
 // Browser compatibility: Internet Explorer 6.0+ with MathPlayer plugin, Mozilla Firefox 2.0+, Opera 9.5+
 
 if ((api_get_setting('math_asciimathML') == 'true')) {
-	
+
 	$config['LoadPlugin'][] = 'asciimath';
 }
 

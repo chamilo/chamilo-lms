@@ -55,7 +55,7 @@ class CourseDescription
 		$description_id = $this->get_id_by_description_type($description_type);		
 		$item_property_id = api_get_item_property_id($course_id, TOOL_COURSE_DESCRIPTION, $description_id);
 							
-		$sql = "SELECT * FROM $tbl_stats_item_property tip
+		$sql = "SELECT tip.id, tip.course_id, tip.item_property_id, tip.title, tip.content, tip.lastedit_date, tip.session_id FROM $tbl_stats_item_property tip
 				INNER JOIN $tbl_item_property ip ON ip.tool = '".TOOL_COURSE_DESCRIPTION."' AND ip.id = tip.item_property_id
 				WHERE tip.course_id = '$course_id' AND tip.session_id = '".intval($this->session_id)."'";
 

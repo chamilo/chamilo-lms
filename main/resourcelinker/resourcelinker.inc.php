@@ -99,16 +99,16 @@ function show_documents($folder)
 	// other tools do not have this feature. This only counts
 	if (is_allowed_to_edit())
 	{
-		$visibility="visibility<>'2'";
+		$visibility="ip.visibility<>'2'";
 	}
 	else
 	{
-		$visibility="visibility='1'";
+		$visibility="ip.visibility='1'";
 	}
 
 	$item_property_table = Database::get_course_table(TABLE_ITEM_PROPERTY);
 	$document_table = Database::get_course_table(TABLE_DOCUMENT);
-	$sql="SELECT * from $document_table, $item_property_table WHERE id=ref AND tool = '".TOOL_DOCUMENT."' AND $visibility AND to_group_id = 0 AND to_user_id IS NULL  ORDER BY path ASC";
+	$sql="SELECT * from $document_table docs, $item_property_table ip WHERE docs.id=ip.ref AND ip.tool = '".TOOL_DOCUMENT."' AND $visibility AND ip.to_group_id = 0 AND ip.to_user_id IS NULL  ORDER BY docs.path ASC";
 	$result=Database::query($sql,__FILE__,__LINE__);
 	while ($row=Database::fetch_array($result))
 	{

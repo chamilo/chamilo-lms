@@ -942,7 +942,7 @@ if ($content == "Link")
 	}
 
 	// showing the links that are in the root (having no category)
-	$sql = "SELECT * FROM ".$link_table.", ".$item_property_table." WHERE (category_id=0 or category_id IS NULL) AND tool = '".TOOL_LINK."' AND id=ref AND visibility='1'";
+	$sql = "SELECT * FROM ".$link_table." l, ".$item_property_table." ip WHERE (l.category_id=0 or l.category_id IS NULL) AND ip.tool = '".TOOL_LINK."' AND l.id=ip.ref AND ip.visibility='1'";
 	$result = Database::query($sql, __FILE__, __LINE__);
 	if (Database::num_rows($result) > 0)
 	{
@@ -961,7 +961,7 @@ if ($content == "Link")
 	$resultcategories = Database::query($sqlcategories) or die;
 	while ($myrow = @ Database::fetch_array($resultcategories))
 	{
-		$sql_links = "SELECT * FROM ".$link_table.", ".$item_property_table." WHERE category_id='".$myrow["id"]."' AND tool = '".TOOL_LINK."' AND id=ref AND visibility='1' ORDER BY display_order DESC";
+		$sql_links = "SELECT * FROM ".$link_table." l, ".$item_property_table." ip WHERE l.category_id='".$myrow["id"]."' AND ip.tool = '".TOOL_LINK."' AND l.id=ip.ref AND ip.visibility='1' ORDER BY l.display_order DESC";
 		echo "<table width=\"100%\"><tr><td bgcolor=\"#E6E6E6\"><i>".$myrow["category_title"]."</i></td></tr></table>";
 		$result_links = Database::query($sql_links, __FILE__, __LINE__);
 		while ($myrow = Database::fetch_array($result_links))

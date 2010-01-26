@@ -122,7 +122,7 @@ function define_course_keys($wantedCode, $prefix4all = "", $prefix4baseName = ""
 		$keysAreUnique = true;
 
 		// check if they are unique
-		echo $query = "SELECT 1 FROM ".$course_table . " WHERE code='".$keysCourseId . "' LIMIT 0,1";
+		$query = "SELECT 1 FROM ".$course_table . " WHERE code='".$keysCourseId . "' LIMIT 0,1";
 		$result = Database::query($query, __FILE__, __LINE__);
 
 		if($keysCourseId == DEFAULT_COURSE || Database::num_rows($result))

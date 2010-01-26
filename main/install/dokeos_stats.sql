@@ -228,7 +228,19 @@ CREATE TABLE track_e_hotspot (
   KEY hotspot_question_id (hotspot_question_id)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
 
+CREATE TABLE track_e_item_property (
+  id int NOT NULL auto_increment PRIMARY KEY,
+  course_id int NOT NULL,
+  item_property_id int NOT NULL,
+  title varchar(255),
+  content text,
+  lastedit_date datetime NOT NULL default '0000-00-00 00:00:00',
+  lastedit_user_id int  NOT NULL,
+  session_id int NOT NULL default 0
+);
+
 ALTER TABLE track_e_course_access ADD INDEX (user_id);
 ALTER TABLE track_e_course_access ADD INDEX (login_course_date);
 ALTER TABLE track_e_course_access ADD INDEX (course_code);
 ALTER TABLE track_e_online ADD INDEX (course);
+ALTER TABLE track_e_item_property ADD INDEX (course_id, item_property_id, session_id);

@@ -766,7 +766,7 @@ if (isset($cidReset) && $cidReset) { // course session data refresh requested or
     if ($cidReq) {
     	$course_table = Database::get_main_table(TABLE_MAIN_COURSE);
     	$course_cat_table = Database::get_main_table(TABLE_MAIN_CATEGORY);
-        $sql =    "SELECT course.*, course_category.code faCode, course_category.name faName
+        $sql =  "SELECT course.*, course_category.code faCode, course_category.name faName
                  FROM $course_table
                  LEFT JOIN $course_cat_table
                  ON course.category_code = course_category.code
@@ -775,29 +775,34 @@ if (isset($cidReset) && $cidReset) { // course session data refresh requested or
 
         if (Database::num_rows($result)>0) {
             $cData = Database::fetch_array($result);
-            $_cid                            = $cData['code'             ];
+            //@TODO real_cid should be cid, for working with numeric course id 
+            $_real_cid						= $cData['id'];
+            
+            $_cid							= $cData['code'];            
 			$_course = array();
-			$_course['id'          ]         = $cData['code'             ]; //auto-assigned integer
-			$_course['name'        ]         = $cData['title'         ];
-            $_course['official_code']         = $cData['visual_code'        ]; // use in echo
-            $_course['sysCode'     ]         = $cData['code'             ]; // use as key in db
-            $_course['path'        ]         = $cData['directory'        ]; // use as key in path
-            $_course['dbName'      ]         = $cData['db_name'           ]; // use as key in db list
-            $_course['dbNameGlu'   ]         = $_configuration['table_prefix'] . $cData['db_name'] . $_configuration['db_glue']; // use in all queries
-            $_course['titular'     ]         = $cData['tutor_name'       ];
-            $_course['language'    ]         = $cData['course_language'   ];
-            $_course['extLink'     ]['url' ] = $cData['department_url'    ];
-            $_course['extLink'     ]['name'] = $cData['department_name'];
-            $_course['categoryCode']         = $cData['faCode'           ];
-            $_course['categoryName']         = $cData['faName'           ];
-
-            $_course['visibility'  ]         = $cData['visibility'];
-            $_course['subscribe_allowed']    = $cData['subscribe'];
-			$_course['unubscribe_allowed']   = $cData['unsubscribe'];
+			$_course['real_id']				= $cData['id'];
+			$_course['id']					= $cData['code']; //auto-assigned integer
+			$_course['name']				= $cData['title'];
+            $_course['official_code']		= $cData['visual_code']; // use in echo
+            $_course['sysCode']         	= $cData['code']; // use as key in db
+            $_course['path']         		= $cData['directory']; // use as key in path
+            $_course['dbName']				= $cData['db_name']; // use as key in db list
+            $_course['dbNameGlu']       	= $_configuration['table_prefix'] . $cData['db_name'] . $_configuration['db_glue']; // use in all queries
+            $_course['titular']         	= $cData['tutor_name'];
+            $_course['language']        	= $cData['course_language'];
+            $_course['extLink']['url' ] 	= $cData['department_url'];
+            $_course['extLink']['name'] 	= $cData['department_name'];
+            $_course['categoryCode']		= $cData['faCode'];
+            $_course['categoryName']		= $cData['faName'];
+            $_course['visibility']			= $cData['visibility'];
+            $_course['subscribe_allowed']	= $cData['subscribe'];
+			$_course['unubscribe_allowed']	= $cData['unsubscribe'];
 
             api_session_register('_cid');
             api_session_register('_course');
-
+            //@TODO real_cid should be cid, for working with numeric course id
+            api_session_register('_real_cid');
+            
 			if ($_configuration['tracking_enabled'] && !isset($_SESSION['login_as'])) {
 	            //We add a new record in the course tracking table
 	            $course_tracking_table = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
@@ -832,6 +837,7 @@ if (isset($cidReset) && $cidReset) { // course session data refresh requested or
         }
     } else {
         api_session_unregister('_cid');
+        api_session_unregister('_real_cid');
         api_session_unregister('_course');
     }
 } else { // continue with the previous values

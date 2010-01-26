@@ -133,6 +133,7 @@ define('TOOL_WIKI','wiki');
 define('TOOL_GLOSSARY','glossary');
 define('TOOL_GRADEBOOK','gradebook');
 define('TOOL_NOTEBOOK','notebook');
+define('TOOL_ATTENDANCE','attendance');
 
 // CONSTANTS defining dokeos sections
 define('SECTION_CAMPUS', 'mycampus');
@@ -853,10 +854,18 @@ function api_get_user_info_from_username($username = '') {
 }
 
 /**
- * Returns the current course id (integer)
+ * @TODO this function should be the real id (integer)
+ * Returns the current course code (string)
  */
 function api_get_course_id() {
 	return $GLOBALS['_cid'];
+}
+
+/**
+ * Returns the current course id (integer)
+ */
+function api_get_real_course_id() {
+	return $GLOBALS['_real_cid'];
 }
 
 /**
@@ -2459,6 +2468,31 @@ function api_item_property_update($_course, $tool, $item_id, $lastedit_type, $us
 	return true;
 }
 
+
+/**
+ * get item property id from tool of a course
+ * @param string 	course code
+ * @param string 	tool name, linked to 'rubrique' of the course tool_list (Warning: language sensitive !!)
+ * @param int 		id of the item itself, linked to key of every tool ('id', ...), "*" = all items of the tool
+ */
+function api_get_item_property_id ($course_code, $tool, $ref) {
+	
+	$course_info = api_get_course_info($course_code);
+	$tool 		 = Database::escape_string($tool);
+	$ref 		 = intval($ref);
+
+	// Definition of tables
+	$TABLE_ITEMPROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY,$course_info['dbName']);
+	$sql = "SELECT id FROM $TABLE_ITEMPROPERTY WHERE tool = '$tool' AND ref = '$ref' ";
+	$rs  = Database::query($sql, __FILE__, __LINE__);
+	$item_property_id = '';
+	if (Database::num_rows($rs) > 0) {
+		$row = Database::fetch_array($rs);
+		$item_property_id = $row['id'];
+	}
+	return $item_property_id;
+}
+
 /*
 ==============================================================================
 		Language Dropdown
@@ -4030,7 +4064,7 @@ function api_get_tools_lists($my_tool = null) {
 		TOOL_COURSE_SETTING,TOOL_BACKUP,TOOL_COPY_COURSE_CONTENT,TOOL_RECYCLE_COURSE,
 		TOOL_COURSE_HOMEPAGE,TOOL_COURSE_RIGHTS_OVERVIEW,TOOL_UPLOAD,TOOL_COURSE_MAINTENANCE,
 		TOOL_VISIO,TOOL_VISIO_CONFERENCE,TOOL_VISIO_CLASSROOM,TOOL_SURVEY,TOOL_WIKI,
-		TOOL_GLOSSARY,TOOL_GRADEBOOK,TOOL_NOTEBOOK
+		TOOL_GLOSSARY,TOOL_GRADEBOOK,TOOL_NOTEBOOK,TOOL_ATTENDANCE
 	);
 	if (empty($my_tool)) {
 		return $tools_list;

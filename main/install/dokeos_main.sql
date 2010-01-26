@@ -134,6 +134,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS course;
 CREATE TABLE course (
+  id int auto_increment,
   code varchar(40) NOT NULL,
   directory varchar(40) default NULL,
   db_name varchar(40) default NULL,
@@ -156,7 +157,8 @@ CREATE TABLE course (
   subscribe tinyint NOT NULL default '1',
   unsubscribe tinyint NOT NULL default '1',
   registration_code varchar(255) NOT NULL default '',
-  PRIMARY KEY  (code)
+  PRIMARY KEY (id),
+  UNIQUE KEY code (code)
 );
 
 --

@@ -8,12 +8,8 @@ require_once 'simpletest/unit_tester.php';
 require_once 'simpletest/web_tester.php';
 require_once 'simpletest/autorun.php';
 
-//$incdir = dirname(__FILE__).'/../main/inc/';
-
-$incdir = '../main/inc/';
-
-
-//Need the ob start and clean else will show the objects 
+//Need the ob start and clean else will show the objects
+$incdir = dirname(__FILE__).'/../main/inc/'; 
 require_once $incdir.'global.inc.php';
 ob_start();
 require_once $incdir.'lib/course_document.lib.php';
@@ -23,8 +19,8 @@ require_once $incdir.'tool_navigation_menu.inc.php';
 require_once $incdir.'banner.inc.php';
 ob_end_clean();
 
-$maindir = '../main/';
 //List of files than need the tests from chamilo
+$maindir = dirname(__FILE__).'/../main/';
 require_once $maindir.'admin/calendar.lib.php';
 require_once $maindir.'admin/statistics/statistics.lib.php';
 require_once $incdir.'lib/usermanager.lib.php';

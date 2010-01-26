@@ -109,6 +109,10 @@ if (api_get_setting('show_glossary_in_documents') == 'ismanual') {
 	$config['LoadPlugin'][] = 'glossary';
 }
 
+// MP3: This is the old plugin for inserting audio files.
+// If you wish to use it, disable the "audio" plugin first.
+//$config['LoadPlugin'][] = 'MP3';
+
 // ImageManager : Adds a dialog (image gallery) for inserting images. The advanced file manager has its own functionality
 // for previewing images. This is why we load this plugin only in case when the simple file manager is used.
 if (!(api_get_setting('advanced_filemanager') == 'true')) {

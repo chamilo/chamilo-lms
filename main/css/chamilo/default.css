@@ -104,6 +104,14 @@ input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
 .courseadminview table td a {
 	font-weight: bold;		
 }
+
+.Authoringview, .courseadminview, .platformadminview {
+	position: relative;
+	width: 80%;
+	margin: 25px auto 10px;
+	padding: 10px;	
+}
+
 .Authoringview table td a {
 	font-weight: bold;		
 }

@@ -46,7 +46,7 @@ class HtmlReporter extends SimpleReporter {
         echo '<title>Test Suite</title>';
         echo '</head>';
        	echo '<body style="padding:0px;margin:0px;height:100%;">';
-       	echo '<div id="wrapper" style="width:90%;padding-left:5%;padding-bottom:9%;">';//wrapper
+       	echo '<div id="wrapper" style="width:90%;padding-left:5%;padding-bottom:10%;">';//wrapper
        	echo '<div id="header1">';//header1
         echo '<div id="header3" style="min-height:100px;background:url(img/header-logo.png) no-repeat left;"><br/>';//header3
         echo '<div id="header4" style="float:right;font-size:25px;color:#01933E;"><br/>';//header4
@@ -66,17 +66,10 @@ class HtmlReporter extends SimpleReporter {
 				<p>You can always find more information about simpletest on the website: http://www.lastcraft.com </p>
 				<p>"Only a well software like Chamilo, is perfect when has been tested by excellent The Testing Engineers".</p>
 				</div></div>';//content2    			
-		echo '</div><br/>';//fin header2		
+		echo '</div><br/>';//fin header2
 		//flush();
     }
-
-	function footer() {
-		
-		echo '<div id="footer1" style= "height: 6em;background-image:url(img/bg-footer.gif);background-repeat:repeat-x ">';
-        echo '</div>';//fin footer 1
-		
-	}
-
+    
     /**
      *    Send the headers necessary to ensure the page is
      *    reloaded on every request. Otherwise you could be
@@ -125,7 +118,7 @@ class HtmlReporter extends SimpleReporter {
         echo  'Exceptions: ' . $this->getExceptionCount() . ' ';
  		echo '</div>';//fin header5
  		echo '</div>';//fin wrapper
- 		echo '<div id="footer1" style= "height: 6em;background-image:url(img/bg-footer.gif);background-repeat:repeat-x ">';
+ 		echo '<div id="footer1" style= "height:6em;background-image:url(img/bg-footer.gif);background-repeat:repeat-x ">';
         echo '</div>';//fin footer 1
         echo '</body>';
         echo '</html>';		        

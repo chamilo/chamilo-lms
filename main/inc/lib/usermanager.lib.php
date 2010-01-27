@@ -23,11 +23,22 @@ define('USER_FIELD_TYPE_DIVIDER', 9);
 define('USER_FIELD_TYPE_TAG', 10); 
 
 //User image sizes
-
 define('USER_IMAGE_SIZE_ORIGINAL',	1);
 define('USER_IMAGE_SIZE_BIG', 		2);
 define('USER_IMAGE_SIZE_MEDIUM', 	3);
 define('USER_IMAGE_SIZE_SMALL', 	4);
+
+
+// Relation type between users
+define('USER_UNKNOW',					0);
+define('USER_RELATION_TYPE_UNKNOW',		1);
+define('USER_RELATION_TYPE_PARENT',		2); // should be deprecated is useless
+define('USER_RELATION_TYPE_FRIEND',		3);
+define('USER_RELATION_TYPE_GOODFRIEND',	4); // should be deprecated is useless
+define('USER_RELATION_TYPE_ENEMY',		5); // should be deprecated is useless
+define('USER_RELATION_TYPE_DELETED',	6);
+define('USER_RELATION_TYPE_RRHH',		7);
+
 
 
 class UserManager 
@@ -263,7 +274,7 @@ class UserManager
 			//Delete user from groups
 			
 			//Delete from user friend lists 
-			SocialManager::removed_friend($user_id,true);
+			SocialManager::remove_user_rel_user($user_id,true);
 		}
 		// add event to system log
 		$time = time();
@@ -2054,95 +2065,7 @@ class UserManager
         $row = Database::fetch_array($res, 'ASSOC');
         return $row['id'];
     }
-
-    /**
-     * Subscribes users to the given session and optionally (default) unsubscribes previous users
-     * @param	int		Session ID
-     * @param	array	List of user IDs
-     * @param	bool	Whether to unsubscribe existing users (true, default) or not (false)
-     * @return	void	Nothing, or false on error
-     */
-    public static function suscribe_users_to_session($id_session, $UserList, $empty_users = true) {
-
-    	if ($id_session != strval(intval($id_session))) return false;
-    	foreach ($UserList as $intUser) {
-    		if ($intUser != strval(intval($intUser))) return false;
-    	}
-    	$tbl_session_rel_course				= Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
-		$tbl_session_rel_course_rel_user	= Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-    	$tbl_session_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
-    	$tbl_session						= Database::get_main_table(TABLE_MAIN_SESSION);
-    	$sql = "SELECT id_user FROM $tbl_session_rel_user WHERE id_session='$id_session'";
-		$result = Database::query($sql, __FILE__, __LINE__);
-		$existingUsers = array();
-		while($row = Database::fetch_array($result)) {
-			$existingUsers[] = $row['id_user'];
-		}
-		$sql = "SELECT course_code FROM $tbl_session_rel_course WHERE id_session='$id_session'";
-		$result = Database::query($sql, __FILE__, __LINE__);
-
-		$CourseList = array();
-
-		while($row = Database::fetch_array($result)) {
-			$CourseList[] = $row['course_code'];
-		}
-
-		foreach ($CourseList as $enreg_course) {
-			// for each course in the session
-			$nbr_users = 0;
-            $enreg_course = Database::escape_string($enreg_course);
-			// delete existing users
-			if ($empty_users !== false) {
-				foreach ($existingUsers as $existing_user) {
-					if(!in_array($existing_user, $UserList)) {
-						$sql = "DELETE FROM $tbl_session_rel_course_rel_user WHERE id_session='$id_session' AND course_code='$enreg_course' AND id_user='$existing_user'";
-						Database::query($sql, __FILE__, __LINE__);
-
-						if (Database::affected_rows()) {
-							$nbr_users--;
-						}
-					}
-				}
-			}
-			// insert new users into session_rel_course_rel_user and ignore if they already exist
-			foreach ($UserList as $enreg_user) {
-				if (!in_array($enreg_user, $existingUsers)) {
-                    $enreg_user = Database::escape_string($enreg_user);
-					$insert_sql = "INSERT IGNORE INTO $tbl_session_rel_course_rel_user(id_session,course_code,id_user) VALUES('$id_session','$enreg_course','$enreg_user')";
-					Database::query($insert_sql, __FILE__, __LINE__);
-
-					if (Database::affected_rows()) {
-						$nbr_users++;
-					}
-				}
-			}
-			// count users in this session-course relation
-			$sql = "SELECT COUNT(id_user) as nbUsers FROM $tbl_session_rel_course_rel_user WHERE id_session='$id_session' AND course_code='$enreg_course'";
-			$rs = Database::query($sql, __FILE__, __LINE__);
-			list($nbr_users) = Database::fetch_array($rs);
-			// update the session-course relation to add the users total
-			$update_sql = "UPDATE $tbl_session_rel_course SET nbr_users=$nbr_users WHERE id_session='$id_session' AND course_code='$enreg_course'";
-			Database::query($update_sql, __FILE__, __LINE__);
-		}
-		// delete users from the session
-		if ($empty_users !== false) {
-			Database::query("DELETE FROM $tbl_session_rel_user WHERE id_session = $id_session", __FILE__, __LINE__);
-		}
-		// insert missing users into session
-		$nbr_users = 0;
-		foreach ($UserList as $enreg_user) {
-            $enreg_user = Database::escape_string($enreg_user);
-			$nbr_users++;
-			$insert_sql = "INSERT IGNORE INTO $tbl_session_rel_user(id_session, id_user) VALUES('$id_session','$enreg_user')";
-			Database::query($insert_sql, __FILE__, __LINE__);
-
-		}
-		// update number of users in the session
-		$nbr_users = count($UserList);
-		$update_sql = "UPDATE $tbl_session SET nbr_users= $nbr_users WHERE id='$id_session' ";
-		Database::query($update_sql, __FILE__, __LINE__);
-    }
-
+    
     /**
      * Checks if a user_id is platform admin
      * @param   int user ID
@@ -2859,4 +2782,94 @@ class UserManager
 		}
 		return $course_list;
 	}
+	
+	/**
+	 * Allow to register contact to social network
+	 * @param int user friend id
+	 * @param int user id
+	 * @param int relation between users see constants definition
+	 */
+	public static function relate_users ($friend_id,$my_user_id,$relation_type) {
+		$tbl_my_friend = Database :: get_main_table(TABLE_MAIN_USER_REL_USER);
+		
+		$friend_id = intval($friend_id);
+		$my_user_id = intval($my_user_id);
+		$relation_type = intval($relation_type);
+		
+		$sql = 'SELECT COUNT(*) as count FROM ' . $tbl_my_friend . ' WHERE friend_user_id=' .$friend_id.' AND user_id='.$my_user_id;
+		$result = Database::query($sql, __FILE__, __LINE__);
+		$row = Database :: fetch_array($result, 'ASSOC');
+		$current_date=date('Y-m-d H:i:s');
+		
+		if ($row['count'] == 0) {			
+			$sql_i = 'INSERT INTO ' . $tbl_my_friend . '(friend_user_id,user_id,relation_type,last_edit)values(' . $friend_id . ','.$my_user_id.','.$relation_type.',"'.$current_date.'");';
+			Database::query($sql_i, __FILE__, __LINE__);
+			return true;
+		} else {
+			$sql = 'SELECT COUNT(*) as count, relation_type  FROM ' . $tbl_my_friend . ' WHERE friend_user_id=' . $friend_id . ' AND user_id='.$my_user_id;
+			$result = Database::query($sql, __FILE__, __LINE__);
+			$row = Database :: fetch_array($result, 'ASSOC');
+			if ($row['count'] == 1) {
+				//only for the case of a RRHH
+				if ($row['relation_type'] != $relation_type && $relation_type == USER_RELATION_TYPE_RRHH) {
+					$sql_i = 'INSERT INTO ' . $tbl_my_friend . '(friend_user_id,user_id,relation_type,last_edit)values(' . $friend_id . ','.$my_user_id.','.$relation_type.',"'.$current_date.'");';		
+				} else {
+					$sql_i = 'UPDATE ' . $tbl_my_friend . ' SET relation_type='.$relation_type.' WHERE friend_user_id=' . $friend_id.' AND user_id='.$my_user_id;
+				}				
+				Database::query($sql_i, __FILE__, __LINE__);
+				return true;
+			} else {
+				return false;
+			}			
+		}		
+	}
+	
+	/**
+	 * Deletes a contact	  
+	 * @param int user friend id
+	 * @param bool true will delete ALL friends relationship from $friend_id
+	 * @author isaac flores paz <isaac.flores@dokeos.com>
+	 * @author Julio Montoya <gugli100@gmail.com> Cleaning code
+	 */
+	public static function remove_user_rel_user ($friend_id, $real_removed = false, $with_status_condition = '') {
+		$tbl_my_friend  = Database :: get_main_table(TABLE_MAIN_USER_REL_USER);
+		$tbl_my_message = Database :: get_main_table(TABLE_MAIN_MESSAGE);
+		$friend_id = intval($friend_id);
+		
+		if ($real_removed == true) {			
+			//Delete user friend
+			/*
+			$sql_delete_relationship1 = 'UPDATE ' . $tbl_my_friend .'  SET relation_type='.USER_RELATION_TYPE_DELETED.' WHERE friend_user_id='.$friend_id;			
+			$sql_delete_relationship2 = 'UPDATE ' . $tbl_my_friend . ' SET relation_type='.USER_RELATION_TYPE_DELETED.' WHERE user_id=' . $friend_id;
+			Database::query($sql_delete_relationship1, __FILE__, __LINE__);
+			Database::query($sql_delete_relationship2, __FILE__, __LINE__);*/
+			$extra_condition = '';				
+			if ($with_status_condition != '') {
+				$extra_condition = ' AND relation_type = '.intval($with_status_condition);
+			}
+			$sql_delete_relationship1 = 'DELETE FROM ' . $tbl_my_friend .'  WHERE friend_user_id='.$friend_id.' '.$extra_condition;			
+			$sql_delete_relationship2 = 'DELETE FROM ' . $tbl_my_friend . ' WHERE user_id=' . $friend_id.' '.$extra_condition;
+			Database::query($sql_delete_relationship1, __FILE__, __LINE__);
+			Database::query($sql_delete_relationship2, __FILE__, __LINE__);	
+				
+		} else {
+			$user_id = api_get_user_id();
+			$sql = 'SELECT COUNT(*) as count FROM ' . $tbl_my_friend . ' WHERE user_id=' . $user_id . ' AND relation_type <>'.USER_RELATION_TYPE_DELETED.' AND friend_user_id='.$friend_id;
+			$result = Database::query($sql, __FILE__, __LINE__);
+			$row = Database :: fetch_array($result, 'ASSOC');
+			if ($row['count'] == 1) {
+				//Delete user rel user
+				$sql_i = 'UPDATE ' . $tbl_my_friend .' SET relation_type='.USER_RELATION_TYPE_DELETED.' WHERE user_id='.$user_id.' AND friend_user_id='.$friend_id;
+				$sql_j = 'UPDATE ' . $tbl_my_message.' SET msg_status='.MESSAGE_STATUS_INVITATION_DENIED.' WHERE user_receiver_id=' . $user_id.' AND user_sender_id='.$friend_id.' AND update_date="0000-00-00 00:00:00" ';
+				//Delete user
+				$sql_ij = 'UPDATE ' . $tbl_my_friend . '  SET relation_type='.USER_RELATION_TYPE_DELETED.' WHERE user_id=' . $friend_id.' AND friend_user_id='.$user_id;
+				$sql_ji = 'UPDATE ' . $tbl_my_message . ' SET msg_status='.MESSAGE_STATUS_INVITATION_DENIED.' WHERE user_receiver_id=' . $friend_id.' AND user_sender_id='.$user_id.' AND update_date="0000-00-00 00:00:00" ';
+				Database::query($sql_i, __FILE__, __LINE__);
+				Database::query($sql_j, __FILE__, __LINE__);
+				Database::query($sql_ij, __FILE__, __LINE__);
+				Database::query($sql_ji, __FILE__, __LINE__);
+			}			
+		}
+	}
+	
 }

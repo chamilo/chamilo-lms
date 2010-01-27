@@ -128,9 +128,9 @@ function LoginDelete($user_id)
 function WhoIsOnline($valid, $friends = false)
 {
 	$valid = (int) $valid;
-	$current_date=date('Y-m-d H:i:s',time());
+	$current_date		= date('Y-m-d H:i:s',time());
 	$track_online_table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ONLINE);
-	$friend_user_table = Database::get_main_table(TABLE_MAIN_USER_FRIEND);
+	$friend_user_table  = Database::get_main_table(TABLE_MAIN_USER_REL_USER);
 	$query = '';
 	if ($friends) {
 		// 	who friends from social network is online	

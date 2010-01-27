@@ -25,15 +25,15 @@ switch ($action) {
 		$is_my_friend            = Security::remove_XSS($_POST['is_my_friend']); //filtered?
 		
 		if (isset($_POST['is_my_friend'])) {
-			$relation_type=SOCIALFRIEND;//my friend
+			$relation_type = USER_RELATION_TYPE_FRIEND; //My friend
 		} else {
-			$relation_type=SOCIALUNKNOW;//Contact unknown
+			$relation_type = USER_RELATION_TYPE_UNKNOW; //Unknown contact
 		}
 		
 		if (isset($_POST['friend_id'])) {
 			
-			SocialManager::register_friend($current_user_id,$my_current_friend,$relation_type);
-			SocialManager::register_friend($my_current_friend,$current_user_id,$relation_type);
+			UserManager::relate_users($current_user_id,$my_current_friend,$relation_type);
+			UserManager::relate_users($my_current_friend,$current_user_id,$relation_type);
 			
 			SocialManager::invitation_accepted($my_current_friend,$current_user_id);
 			
@@ -58,9 +58,9 @@ switch ($action) {
 		$type_friend_qualify     = Security::remove_XSS($_POST['type_friend_q']); //filtered?
 		$is_my_friend            = Security::remove_XSS($_POST['is_my_friend']); //filtered?
 		if (isset($_POST['is_my_friend'])) {
-			$relation_type=SOCIALFRIEND;//my friend
+			$relation_type=USER_RELATION_TYPE_FRIEND;//my friend
 		} else {
-			$relation_type=SOCIALUNKNOW;//Contact unknown
+			$relation_type=USER_RELATION_TYPE_UNKNOW;//Contact unknown
 		}
 		if (isset($_POST['denied_friend_id'])) {
 			SocialManager::invitation_denied($my_denied_current_friend,$current_user_id);
@@ -82,7 +82,7 @@ switch ($action) {
 		$is_my_friend            = Security::remove_XSS($_POST['is_my_friend']); //filtered?
 
 		if (isset($_POST['delete_friend_id'])) {
-			SocialManager::removed_friend($my_delete_friend);
+			SocialManager::remove_user_rel_user($my_delete_friend);
 		}
 		/*
 		if(isset($_POST['user_id_friend_q']) && isset($_POST['type_friend_q'])) {
@@ -153,7 +153,7 @@ switch ($action) {
 		$is_my_friend            = Security::remove_XSS($_POST['is_my_friend']); //filtered?
 
 		if (isset($_POST['delete_friend_id'])) {
-			SocialManager::removed_friend($my_delete_friend);
+			SocialManager::remove_user_rel_user($my_delete_friend);
 		}
 		/*
 		if(isset($_POST['user_id_friend_q']) && isset($_POST['type_friend_q'])) {

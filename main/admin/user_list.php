@@ -501,12 +501,19 @@ function modify_filter($user_id,$url_params,$row)
 			$result .= Display::return_icon('delete_na.gif', get_lang('Delete'));
 		}
 	}
-		if ($is_admin) {
-			$result .= Display::return_icon('admin_star.png', get_lang('IsAdministrator'),array('width'=> 22, 'heigth'=> 22));
-		
-		} else {
-			$result .= Display::return_icon('admin_star_na.png', get_lang('IsNotAdministrator'));		
-		}
+	if ($is_admin) {
+		$result .= Display::return_icon('admin_star.png', get_lang('IsAdministrator'),array('width'=> 22, 'heigth'=> 22));
+	
+	} else {
+		$result .= Display::return_icon('admin_star_na.png', get_lang('IsNotAdministrator'));		
+	}
+	
+	if ($row['7'] == $statusname[DRH]) {
+		$result .= '<a href="dashboard_add_users_to_user.php?user='.$user_id.'">'.Display::return_icon('addd.gif', get_lang('Add')).'</a>&nbsp;&nbsp;';
+		$result .= '<a href="dashboard_add_courses_to_user.php?user='.$user_id.'">'.Display::return_icon('addd.gif', get_lang('Add')).'</a>&nbsp;&nbsp;';
+		$result .= '<a href="dashboard_add_users_to_sessions.php?user='.$user_id.'">'.Display::return_icon('addd.gif', get_lang('Add')).'</a>&nbsp;&nbsp;';	
+	}
+			
 	return $result;
 }
 

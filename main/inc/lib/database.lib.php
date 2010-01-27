@@ -95,7 +95,7 @@ define('TABLE_MAIN_RESERVATION_CATEGORY', 'reservation_category');
 define('TABLE_MAIN_RESERVATION_ITEM_RIGHTS', 'reservation_item_rights');
 
 // Social networking
-define('TABLE_MAIN_USER_FRIEND', 'user_friend');
+define('TABLE_MAIN_USER_REL_USER', 'user_rel_user');
 define('TABLE_MAIN_USER_FRIEND_RELATION_TYPE', 'user_friend_relation_type');
 
 // Web services

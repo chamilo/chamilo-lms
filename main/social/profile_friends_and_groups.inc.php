@@ -16,8 +16,8 @@ if (isset($_GET['view']) && in_array($_GET['view'], $views)) {
 	if ($_GET['view']=='friends') {
 		echo '<div style="margin-top:20px;">';
 			$list_path_friends= $list_path_normal_friends = $list_path_parents = array();
-			//SOCIALGOODFRIEND , SOCIALFRIEND, SOCIALPARENT
-			$friends = SocialManager::get_friends($user_id, SOCIALFRIEND);
+			//SOCIALGOODFRIEND , USER_RELATION_TYPE_FRIEND, SOCIALPARENT
+			$friends = SocialManager::get_friends($user_id, USER_RELATION_TYPE_FRIEND);
 			$number_friends	= count($friends);
 			$friend_html	= '';
 			$friend_html	.= '<div><h3>'.get_lang('SocialFriend').'</h3></div>';

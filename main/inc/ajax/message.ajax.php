@@ -15,7 +15,7 @@ switch ($action) {
 		}
 		$track_online_table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ONLINE);
 		$tbl_my_user		= Database :: get_main_table(TABLE_MAIN_USER);
-		$tbl_my_user_friend = Database :: get_main_table(TABLE_MAIN_USER_FRIEND);
+		$tbl_my_user_friend = Database :: get_main_table(TABLE_MAIN_USER_REL_USER);
 		$tbl_user 			= Database :: get_main_table(TABLE_MAIN_USER);
 		$search				= Database::escape_string(Security::remove_XSS($_POST['search']));
 		$current_date		= date('Y-m-d H:i:s',time());

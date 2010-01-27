@@ -1,24 +1,5 @@
 <?php
-// $Id: index.php 8216 2006-11-3 18:03:15 NushiFirefox $
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2006 Bart Mollet <bart.mollet@hogent.be>
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact: Dokeos, 181 rue Royale, B-1000 Brussels, Belgium, info@dokeos.com
-==============================================================================
-*/
+/* For licensing terms, see /license.txt */
 require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
 /**
 ==============================================================================
@@ -486,7 +467,7 @@ class Statistics
 	 * Count the number of friends for social network users
 	 */
 	function get_friends() {
-		$user_friend_table = Database::get_main_table(TABLE_MAIN_USER_FRIEND);
+		$user_friend_table = Database::get_main_table(TABLE_MAIN_USER_REL_USER);
 		$user_table = Database::get_main_table(TABLE_MAIN_USER);
 		$sql = "SELECT lastname, firstname, username, COUNT(friend_user_id) AS count_friend
 					FROM ".$user_friend_table." uf LEFT JOIN ".$user_table." u ON uf.user_id = u.user_id

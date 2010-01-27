@@ -33,12 +33,12 @@ if (isset($_GET['u'])) {
 		} else {
 			//checking the relationship between me and my friend
 			$my_status= SocialManager::get_relation_between_contacts(api_get_user_id(), $user_id);
-			if (in_array($my_status, array(SOCIALPARENT, SOCIALFRIEND, SOCIALGOODFRIEND))) {
+			if (in_array($my_status, array(USER_RELATION_TYPE_PARENT, USER_RELATION_TYPE_FRIEND, USER_RELATION_TYPE_GOODFRIEND))) {
 				$show_full_profile = true;
 			}
 			//checking the relationship between my friend and me
 			$my_friend_status = SocialManager::get_relation_between_contacts($user_id, api_get_user_id());
-			if (in_array($my_friend_status, array(SOCIALPARENT, SOCIALFRIEND, SOCIALGOODFRIEND))) {
+			if (in_array($my_friend_status, array(USER_RELATION_TYPE_PARENT, USER_RELATION_TYPE_FRIEND, USER_RELATION_TYPE_GOODFRIEND))) {
 				$show_full_profile = true;
 			} else {
 				// im probably not a good friend
@@ -374,8 +374,8 @@ echo '<div id="social-content-right">';
 			
 			$list_path_friends= $list_path_normal_friends = $list_path_parents = array();
 
-			//SOCIALGOODFRIEND , SOCIALFRIEND, SOCIALPARENT
-			$friends = SocialManager::get_friends($user_id, SOCIALFRIEND);
+			//SOCIALGOODFRIEND , USER_RELATION_TYPE_FRIEND, USER_RELATION_TYPE_PARENT
+			$friends = SocialManager::get_friends($user_id, USER_RELATION_TYPE_FRIEND);
 
 			$friend_html		= '';
 

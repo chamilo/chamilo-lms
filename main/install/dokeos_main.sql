@@ -325,6 +325,7 @@ CREATE TABLE course_rel_user (
   tutor_id int unsigned NOT NULL default '0',
   sort int default NULL,
   user_course_cat int default '0',
+  relation_type int default 0,
   PRIMARY KEY  (course_code,user_id)
 );
 ALTER TABLE course_rel_user ADD INDEX (user_id);
@@ -498,7 +499,7 @@ DROP TABLE IF EXISTS session_rel_user;
 CREATE TABLE session_rel_user (
   id_session mediumint unsigned NOT NULL default '0',
   id_user mediumint unsigned NOT NULL default '0',
-  relation_type int default 0 ,
+  relation_type int default 0,
   PRIMARY KEY  (id_session,id_user)
 );
 

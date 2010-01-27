@@ -8,7 +8,7 @@
 *	@package dokeos.library
 ==============================================================================
 */
-require_once('display.lib.php');
+require_once 'display.lib.php';
 class SessionManager {
 	private function __construct() {
 
@@ -438,6 +438,48 @@ class SessionManager {
 		$update_sql = "UPDATE $tbl_session SET nbr_users= $nbr_users WHERE id='$id_session' ";
 		Database::query($update_sql,__FILE__,__LINE__);
 	}
+	
+	 /**
+	  * Subscribes sessions to user (Dashboard feature)
+	  * @param	integer		Session ID
+	  * @param	array		List of user IDs
+	  * @param	bool		Whether to unsubscribe existing users (true, default) or not (false)
+	  * @return	void		Nothing, or false on error
+	  **/
+	public static function suscribe_sessions_to_user($user_id,$session_list, $relation_stype) {
+
+	  	if ($user_id!= strval(intval($user_id))) return false;
+	   	foreach($session_list as $session_id){
+	   		if ($session_id!= strval(intval($session_id))) return false;
+	   	}
+	   	
+	   	$tbl_session_rel_course				= Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
+	   	$tbl_session_rel_user 				= Database::get_main_table(TABLE_MAIN_SESSION_USER);
+	   	$tbl_session						= Database::get_main_table(TABLE_MAIN_SESSION);
+		
+	
+	   	$sql = "SELECT id_session FROM $tbl_session_rel_user WHERE id_user =$user_id AND relation_type = 1 ";
+		$result = Database::query($sql,__FILE__,__LINE__);
+		$existing_sessions = array();
+		while($row = Database::fetch_array($result)){
+			$existing_sessions[] = $row['id_session'];
+		}
+		
+
+		//Deleting existing session_rel_user 
+		foreach ($existing_sessions as $existing_session) {				
+				$sql = "DELETE FROM $tbl_session_rel_user WHERE id_session=$existing_session  AND id_user=$user_id AND relation_type = 1 ";
+				Database::query($sql,__FILE__,__LINE__);					
+		}
+
+		foreach ($session_list as $session_id) {
+			// for each session		
+            $enreg_user = Database::escape_string($enreg_user);
+			$insert_sql = "INSERT IGNORE INTO $tbl_session_rel_user(id_session,id_user,relation_type) VALUES('$session_id','$user_id','1')";
+			Database::query($insert_sql,__FILE__,__LINE__);
+		}
+	}
+	
 	 /** Subscribes courses to the given session and optionally (default) unsubscribes previous users
 	 * @author Carlos Vargas <carlos.vargas@dokeos.com>,from existing code
      * @param	int		Session ID

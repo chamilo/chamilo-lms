@@ -1,28 +1,5 @@
 <?php
-
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2004-2008 Dokeos SPRL
-	Copyright (c) 2003 Ghent University (UGent)
-	Copyright (c) 2001 Universite catholique de Louvain (UCL)
-	Copyright (c) various contributors
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
-	Mail: info@dokeos.com
-==============================================================================
-*/
+/* For licensing terms, see /license.txt */
 
 /**
 *	These files are a complete rework of the forum. The database structure is
@@ -38,38 +15,17 @@
 * 	- new view option: nested view
 * 	- quoting a message
 *
-*	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University
-*	@copyright Ghent University
-*	@copyright Patrick Cool
-*   @author Julio Montoya <gugli100@gmail.com>, Dokeos Several fixes
 * 	@package dokeos.forum
 *
-* 	@todo several functions have to be moved to the itemmanager library
+* @todo several functions have to be moved to the itemmanager library
 * @todo displaying icons => display library
 * @todo complete the missing phpdoc the correct order should be
-*
-* 				some explanation of the function
-* 				@param
-* 				@return
-* 				@todo
-* 				@author firstname lastname <email>, organisation
-* 				@version (day) month year
-* 				@deprecated
 */
-/**
- **************************************************************************
- *						IMPORTANT NOTICE
- * Please do not change anything is this code yet because there are still
- * some significant code that need to happen and I do not have the time to
- * merge files and test it all over again. So for the moment, please do not
- * touch the code
- * 							-- Patrick Cool <patrick.cool@UGent.be>
- **************************************************************************
-*/
-require_once(api_get_path(LIBRARY_PATH).'mail.lib.inc.php');
-require_once(api_get_path(LIBRARY_PATH).'text.lib.php');
-require_once(api_get_path(LIBRARY_PATH).'usermanager.lib.php');
-require_once(api_get_path(LIBRARY_PATH).'text.lib.php');
+
+require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
+require_once api_get_path(LIBRARY_PATH).'text.lib.php';
+require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
+require_once api_get_path(LIBRARY_PATH).'text.lib.php';
 get_notifications_of_user();
 
 /*
@@ -77,19 +33,18 @@ get_notifications_of_user();
 	Javascript
 -----------------------------------------------------------
 */
+
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js" type="text/javascript" language="javascript"></script>'; //jQuery
 $htmlHeadXtra[] = '<script type="text/javascript">
 function setFocus(){
-$("#forum_title").focus();
-$("#category_title").focus();
-$("#search_title").focus();
+	$("#forum_title").focus();
+	$("#category_title").focus();
+	$("#search_title").focus();
 }
 $(document).ready(function () {
-  setFocus();
+	setFocus();
 });
 </script>';
-
-
 
 /**
 * This function handles all the forum and forumcategories actions. This is a wrapper for the
@@ -744,39 +699,48 @@ function delete_forum_forumcategory_thread($content, $id) {
 * We also have to decrease the number of replies in the thread table
 *
 * @param $post_id the id of the post that will be deleted
-*
 * @todo write recursive function that deletes all the posts that have this message as parent
 *
 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
-* @version february 2006, dokeos 1.8
+* @author Hubert Borderiou Function cleanead and fixed  
+* @version february 2006
 */
 function delete_post($post_id) {
 	global $table_posts;
 	global $table_threads;
+	$post_id = intval($post_id);	
+	
+	// get parent_post_id of deleted post
+	$tab_post_info = get_post_information($post_id);
+    $post_parent_id_of_deleted_post = $tab_post_info['post_parent_id'];
+    $thread_id_of_deleted_post = $tab_post_info['thread_id'];
+    $forum_if_of_deleted_post = $tab_post_info['forum_id'];
+    $sql = "UPDATE $table_posts SET post_parent_id=$post_parent_id_of_deleted_post WHERE post_parent_id=$post_id AND thread_id=$thread_id_of_deleted_post AND forum_id=$forum_if_of_deleted_post;";
+    api_sql_query($sql,__FILE__,__LINE__);
 
-	$sql="DELETE FROM $table_posts WHERE post_id='".Database::escape_string($post_id)."'"; // note: this has to be a recursive function that deletes all of the posts in this block.
-	Database::query($sql,__FILE__,__LINE__);
+    $sql="DELETE FROM $table_posts WHERE post_id='".Database::escape_string($post_id)."'"; // note: this has to be a recursive function that deletes all of the posts in this block.
+    api_sql_query($sql,__FILE__,__LINE__);
 
-	//delete attachment file about this post id
-	delete_attachment($post_id);
+    //delete attachment file about this post id
+    delete_attachment($post_id);   
 
-	$last_post_of_thread=check_if_last_post_of_thread(strval(intval($_GET['thread'])));
+    $last_post_of_thread=check_if_last_post_of_thread(strval(intval($_GET['thread'])));
 
-	if (is_array($last_post_of_thread)) {
-		// Decreasing the number of replies for this thread and also changing the last post information
-		$sql="UPDATE $table_threads SET thread_replies=thread_replies-1,
-					thread_last_post='".Database::escape_string($last_post_of_thread['post_id'])."',
-					thread_date='".Database::escape_string($last_post_of_thread['post_date'])."'
-			WHERE thread_id='".Database::escape_string($_GET['thread'])."'";
-		Database::query($sql,__FILE__,__LINE__);
-		return 'PostDeleted';
-	}
-	if ($last_post_of_thread==false) {
-		// we deleted the very single post of the thread so we need to delete the entry in the thread table also.
-		$sql="DELETE FROM $table_threads WHERE thread_id='".Database::escape_string($_GET['thread'])."'";
-		Database::query($sql,__FILE__,__LINE__);
-		return 'PostDeletedSpecial';
-	}
+    if (is_array($last_post_of_thread)) {
+        // Decreasing the number of replies for this thread and also changing the last post information
+        $sql="UPDATE $table_threads SET thread_replies=thread_replies-1,
+                    thread_last_post='".Database::escape_string($last_post_of_thread['post_id'])."',
+                    thread_date='".Database::escape_string($last_post_of_thread['post_date'])."'
+            WHERE thread_id='".intval($_GET['thread'])."'";
+        api_sql_query($sql,__FILE__,__LINE__);
+        return 'PostDeleted';
+    }
+    if ($last_post_of_thread==false) {
+        // we deleted the very single post of the thread so we need to delete the entry in the thread table also.
+        $sql="DELETE FROM $table_threads WHERE thread_id='".intval($_GET['thread'])."'";
+        api_sql_query($sql,__FILE__,__LINE__);
+        return 'PostDeletedSpecial';
+    }
 }
 
 
@@ -1952,8 +1916,8 @@ function show_add_post_form($action='', $id='', $form_values='') {
 	//$form->applyFilter('post_text', 'html_filter');
 
 	$form->addElement('html', '<div class="row"><div class="label">');
-	$form->addElement('html','<a href="javascript://" onclick="return advanced_parameters()"><span id="img_plus_and_minus">&nbsp;'.Display::return_icon('div_show.gif',get_lang('Show'),array('style'=>'vertical-align:middle')).' '.get_lang('AdvancedParameters').'</span></a>','');
-	$form->addElement('html', '</div><div class="formw"></div></div>');
+
+	$form->addElement('html', '</div><div class="formw"><a href="javascript://" onclick="return advanced_parameters()"><span id="img_plus_and_minus">&nbsp;'.Display::return_icon('div_show.gif',get_lang('Show'),array('style'=>'vertical-align:middle')).' '.get_lang('AdvancedParameters').'</span></a></div></div>');
 	$form->addElement('html','<div id="id_qualify" style="display:none">');
 
 	if( (api_is_course_admin() || api_is_course_coach() || api_is_course_tutor()) && !($my_thread) ){

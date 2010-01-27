@@ -140,16 +140,16 @@ body {
 					&nbsp;<input type="file" name="upload" id="upload"/>
 					<input type="hidden" name="dir" id="dir" value="<?php echo dirname($clean_img)?>" />
 					&nbsp;
-<? if (count($IMConfig['maxWidth']) > 1){ ?>
+<?php if (count($IMConfig['maxWidth']) > 1){ ?>
 					<label for="uploadSize" style="white-space: nowrap;">Upload Size</label>
 					<select name="uploadSize" id="uploadSize">
-	<? for ($i = 0; $i < count($IMConfig['maxWidth']); $i++){ ?>
-						<option value="<?=$i?>"><?=$IMConfig['maxWidth'][$i] . " x " . $IMConfig['maxHeight'][$i]?></option>
-	<? } ?>
+	<?php for ($i = 0; $i < count($IMConfig['maxWidth']); $i++){ ?>
+						<option value="<?php =$i ?>"><?php =$IMConfig['maxWidth'][$i] . " x " . $IMConfig['maxHeight'][$i] ?></option>
+	<?php } ?>
 				<span style="padding-left: 5px;">
 					(max width x height dimensions)
 				</span>
-<? } ?>
+<?php } ?>
 				</form>
 			</td>
 			<td>

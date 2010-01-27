@@ -170,8 +170,7 @@ else {
 }
 
 // the header
-Display :: display_header('', 'dokeos');
-
+Display::display_header(get_lang('Homepage'));
 /*
 ==============================================================================
 		MAIN CODE

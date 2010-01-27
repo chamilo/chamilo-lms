@@ -737,7 +737,8 @@ if (isset($_GET['show'])) {
 		MAIN DISPLAY SECTION
 ==============================================================================
 */
-Display :: display_header('');
+// the header
+Display::display_header(get_lang('Homepage'));
 
 if (api_get_setting('allow_social_tool') != 'true') {
 	

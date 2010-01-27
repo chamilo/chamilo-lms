@@ -302,7 +302,7 @@ $config['FontFormats'] = 'p;h1;h2;h3;h4;h5'; // A reduced format list.
 
 // The following setting guarantees white backgroung for the editing area
 // for all browsers. You may disable or change it if you wish.
-$config['EditorAreaStyles'] = 'body { background-color: #ffffff; }';
+$config['EditorAreaStyles'] = 'body { background: #ffffff; }';
 
 // A setting for blocking copy/paste functions of the editor.
 // This setting activates on leaners only. For users with other statuses there is no blocking copy/paste.

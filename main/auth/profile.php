@@ -738,7 +738,7 @@ if (isset($_GET['show'])) {
 ==============================================================================
 */
 // the header
-Display::display_header(get_lang('Homepage'));
+Display::display_header(get_lang('ModifyProfile'));
 
 if (api_get_setting('allow_social_tool') != 'true') {
 	

@@ -1,12 +1,16 @@
 <?php
-/* For licensing terms, see /dokeos_license.txt */
+/* For licensing terms, see /license.txt */
 
 /**
- * This library provides functions for course description tool. It's also used like model to course_description_controller (MVC pattern)
- * @package dokeos.library
+ * This file contains a class used like library provides functions for course description tool. It's also used like model to course_description_controller (MVC pattern)
  * @author Christian Fasanando <christian1827@gmail.com>
+ * @package chamilo.course_description
  */
 
+/**
+ * CourseDescription can be used to instanciate objects or as a library to manage course descriptions
+ * @package chamilo.course_description
+ */
 class CourseDescription
 {	
 	private $id;
@@ -55,9 +59,9 @@ class CourseDescription
 		$description_id = $this->get_id_by_description_type($description_type);		
 		$item_property_id = api_get_item_property_id($course_id, TOOL_COURSE_DESCRIPTION, $description_id);
 							
-		$sql = "SELECT tip.id, tip.course_id, tip.item_property_id, tip.title, tip.content, tip.lastedit_date, tip.session_id FROM $tbl_stats_item_property tip
+		$sql = "SELECT tip.id, tip.course_id, tip.item_property_id, tip.title, tip.content, tip.progress, tip.lastedit_date, tip.session_id FROM $tbl_stats_item_property tip
 				INNER JOIN $tbl_item_property ip ON ip.tool = '".TOOL_COURSE_DESCRIPTION."' AND ip.id = tip.item_property_id
-				WHERE tip.course_id = '$course_id' AND tip.session_id = '".intval($this->session_id)."'";
+				WHERE tip.course_id = '$course_id' AND tip.session_id = '".intval($this->session_id)."' ORDER BY tip.lastedit_date DESC";
 
 		$rs = Database::query($sql, __FILE__, __LINE__);		
 		$data = array();		
@@ -123,7 +127,7 @@ class CourseDescription
 	
 	/**
      * Insert a row like history inside track_e_item_property table  
-     * first you must set description_type, title, content properties with the object CourseDescription
+     * first you must set description_type, title, content, progress and session_id properties with the object CourseDescription
      * @param 	int 	description type
      * @return  int		affected rows 
      */
@@ -138,6 +142,7 @@ class CourseDescription
 			 	item_property_id = '$item_property_id', 			 	
 			 	title = '".Database::escape_string($this->title)."', 
 			 	content = '".Database::escape_string($this->content)."',
+			 	progress = '".intval($this->progress)."',
 			 	lastedit_date = '".date('Y-m-d H:i:s')."',
 			 	lastedit_user_id = '".api_get_user_id()."',
 			 	session_id	= '".intval($this->session_id)."'";

@@ -234,6 +234,7 @@ CREATE TABLE track_e_item_property (
   item_property_id int NOT NULL,
   title varchar(255),
   content text,
+  progress int NOT NULL default 0,
   lastedit_date datetime NOT NULL default '0000-00-00 00:00:00',
   lastedit_user_id int  NOT NULL,
   session_id int NOT NULL default 0

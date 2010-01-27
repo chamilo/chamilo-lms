@@ -90,6 +90,14 @@ $(document).ready(function() {
 		});
 	});
 });
+	
+/* toogle for post-it in course home */	
+$(function() {
+	$(".thematic-postit-head").click(function() {
+				$(".thematic-postit-center").slideToggle("normal");								
+		 	}).$(".thematic-postit-center").hide();
+});	
+	
 </script>';
 
 if (!isset($cidReq)) {

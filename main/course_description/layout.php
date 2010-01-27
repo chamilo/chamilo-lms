@@ -1,19 +1,17 @@
 <?php
-/* For licensing terms, see /dokeos_license.txt */
+/* For licensing terms, see /license.txt */
 
 /**
 * Layout (principal view) used for structuring other views  
-* @package dokeos.course_description
 * @author Christian Fasanando <christian1827@gmail.com>
+* @package chamilo.course_description
 */
 
-// Header
+// protect a course script
 api_protect_course_script(true);
-$nameTools = get_lang('CourseProgram');
-Display :: display_header('');
 
-// Constants and variables
-$nameTools = get_lang(TOOL_COURSE_DESCRIPTION);
+// Header
+Display :: display_header('');
 
 // Introduction section
 Display::display_introduction_section(TOOL_COURSE_DESCRIPTION);

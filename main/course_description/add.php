@@ -1,12 +1,13 @@
 <?php
-/* For licensing terms, see /dokeos_license.txt */
+/* For licensing terms, see /license.txt */
 
 /**
 * View (MVC patter) for adding a course description 
-* @package dokeos.course_description
 * @author Christian Fasanando <christian1827@gmail.com>
+* @package chamilo.course_description
 */
 
+// protect a course script
 api_protect_course_script(true);
 
 // display categories

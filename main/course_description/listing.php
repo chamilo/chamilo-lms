@@ -1,12 +1,13 @@
 <?php
-/* For licensing terms, see /dokeos_license.txt */
+/* For licensing terms, see /license.txt */
 
 /**
 * Template (view in MVC pattern) used for listing course descriptions  
-* @package dokeos.course_description
 * @author Christian Fasanando <christian1827@gmail.com>
+* @package chamilo.course_description
 */
 
+// protect a course script
 api_protect_course_script(true);
 
 // display messages
@@ -40,7 +41,6 @@ if (api_is_allowed_to_edit(null,true)) {
 }
 
 // display course description list
-
 if ($history) {
 	echo '<div><table width="100%"><tr><td><h3>'.get_lang('ThematicAdvanceHistory').'</h3></td><td align="right"><a href="index.php?action=listing">'.Display::return_icon('info.gif',get_lang('BackToCourseDesriptionList'),array('style'=>'vertical-align:middle;')).' '.get_lang('BackToCourseDesriptionList').'</a></td></tr></table></div>';
 }
@@ -68,15 +68,17 @@ if (isset($descriptions) && count($descriptions) > 0) {
 			}
 		}
 		
+		$progress = (isset($description['progress'])?$description['progress'].'%':'');
+		
 		if ($description['description_type'] == THEMATIC_ADVANCE) {
-			$progress_icon = (isset($description['progress_icon'])?$description['progress_icon']:'');
-			echo get_lang('ThematicAdvance').' : '.$description['title'].' - '.$progress_icon;
+			
+			echo get_lang('ThematicAdvance').' : '.$description['title'].' - '.$progress;
 		} else {
 			echo $description['title'];
 		}	
-		
+
 		if ($history) {
-			echo ' ('.$description['lastedit_date'].') ';
+			echo ' - '.$progress.' ('.$description['lastedit_date'].') ';
 		}
 
 		echo '</div>';

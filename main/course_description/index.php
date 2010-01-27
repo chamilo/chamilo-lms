@@ -1,10 +1,10 @@
 <?php
-/* For licensing terms, see /dokeos_license.txt */
+/* For licensing terms, see /license.txt */
 
 /**
 * Template (front controller in MVC pattern) used for distpaching to the controllers depend on the current action  
-* @package dokeos.course_description
 * @author Christian Fasanando <christian1827@gmail.com>
+* @package chamilo.course_description
 */
 
 // name of the language file that needs to be included
@@ -26,6 +26,7 @@ define('THEMATIC_ADVANCE', 8);
 // current section
 $this_section = SECTION_COURSES;
 
+// protect a course script
 api_protect_course_script(true);
 
 // get actions

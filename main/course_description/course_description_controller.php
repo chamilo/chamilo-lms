@@ -1,13 +1,17 @@
 <?php
-/* For licensing terms, see /dokeos_license.txt */
+/* For licensing terms, see /license.txt */
+
+/**
+ * This file contains class used like controller, it should be included inside a dispatcher file (e.g: index.php)
+ * @author Christian Fasanando <christian1827@gmail.com>
+ * @package chamilo.course_description
+ */
 
 /**
  * Controller script. Prepares the common background variables to give to the scripts corresponding to
  * the requested action
- * @package dokeos.course_description
- * @author Christian Fasanando <christian1827@gmail.com>
+ * @package dokeos.course_description 
  */
-
 class CourseDescriptionController { // extends Controller {	
 		
 	private $toolname;
@@ -83,16 +87,18 @@ class CourseDescriptionController { // extends Controller {
 		        	if ($description_type >= ADD_BLOCK) {        		        		
 						$affected_rows = $course_description->update();
 		        	} else {	        			        		
-		        		$thematic_advance = $course_description->get_data_by_description_type($description_type);	        		
+		        		$thematic_advance = $course_description->get_data_by_description_type($description_type);			        		        		
 		        		if (!empty($thematic_advance)) {
 		        			if ($description_type == THEMATIC_ADVANCE) {
 		        				// if is thematic advance type save in history
 		        				$course_description->set_title($thematic_advance['description_title']);
 		        				$course_description->set_content($thematic_advance['description_content']);
+		        				$course_description->set_progress($thematic_advance['progress']);
 		        				$course_description->insert_stats($description_type);
 		        			}
 		        			$course_description->set_title($title);
-		        			$course_description->set_content($content);	        			
+		        			$course_description->set_content($content);
+		        			$course_description->set_progress($progress);	        			
 		        			$affected_rows = $course_description->update();	        			
 		        		} else {
 		        			$affected_rows = $course_description->insert();

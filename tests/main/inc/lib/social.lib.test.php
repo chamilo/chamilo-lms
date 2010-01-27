@@ -23,6 +23,8 @@ class TestSocial extends UnitTestCase{
 		$this->social = null;
 	}
 	*/
+	//@todo this function was moved to usermanager
+	/*
 	public function testRegisterFriend(){
 		$instans= new MockDatabase();
 		$friend_id=4;
@@ -36,6 +38,7 @@ class TestSocial extends UnitTestCase{
 		//var_dump($res);
 
 	}
+	*/
 
 	public function testRemovedFriend(){
 		$instans= new MockDatabase();

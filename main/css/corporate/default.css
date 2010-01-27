@@ -2910,11 +2910,12 @@ div.image-social-content center.friend {
   overflow:hidden;
 }
 .thematic-postit-center {
- background-image: url('../../img/postit_center.jpg');
+ background-image: url('../../img/postit_center.png');
  height:auto;
- margin-top:-16px;
+ margin-top: 0px;
  margin-bottom:-16px;
  padding-left:20px;
  padding-right:20px;
  padding-bottom:10px;
+ padding-top: 5px;
 }

@@ -171,14 +171,14 @@ if (!empty($thematic_description)) {
 	if (api_is_allowed_to_edit(null,true)) {
 		$thematic_advance = '<a href="'.api_get_path(WEB_CODE_PATH).'course_description/index.php?action=edit&'.api_get_cidreq().'&description_type=8'.'">'.get_lang('ThematicAdvance').'&nbsp;'.$course_description->get_progress_porcent(false,8).'</a>';
 	}	
-	$thematic_description_html = '<td valign="bottom" width="260px"><div class="thematic-postit">
-							  <div class="thematic-postit-top"><a class="thematic-postit-head" style="" href="#">'.Display::return_icon('postit_top.jpg').'</a></div>
+	$thematic_description_html = '<td valign="top" width="260px"><div class="thematic-postit">
+							  <div class="thematic-postit-top"><a class="thematic-postit-head" style="" href="#">'.Display::return_icon('postit_top.png').'</a></div>
 							  <div class="thematic-postit-center">
 							  	<h3>'.$thematic_advance.'</h3>
 								'.$thematic_description['description_title'].'
 								<p>'.$thematic_description['description_content'].'</p>
 							  </div>
-							  <div  class="thematic-postit-bottom">'.Display::return_icon('postit_bottom.jpg').'</div>
+							  <div  class="thematic-postit-bottom">'.Display::return_icon('postit_bottom.png').'</div>
 							  </div></td>';
 }
 

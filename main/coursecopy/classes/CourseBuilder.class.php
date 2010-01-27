@@ -333,7 +333,7 @@ class CourseBuilder
 			$db_result2 = Database::query($sql, __FILE__, __LINE__);
 			while ($obj2 = Database::fetch_object($db_result2))
 			{
-				$quiz->add_question($obj2->question_id);
+				$quiz->add_question($obj2->question_id, $obj2->question_order);
 			}
 			$this->course->add_resource($quiz);
 		}

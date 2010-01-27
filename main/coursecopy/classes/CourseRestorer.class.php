@@ -843,17 +843,14 @@ class CourseRestorer
 						$condition_session;
 					Database::query($sql, __FILE__, __LINE__);
 					$new_id = Database::insert_id();
-				}
-				else
-				{
+				} else {
 					// $id = -1 identifies the fictionary test for collecting orphan questions. We do not store it in the database.
 					$new_id = -1;
 				}
 				$this->course->resources[RESOURCE_QUIZ][$id]->destination_id = $new_id;
-				foreach ($quiz->question_ids as $index => $question_id)
-				{
+				foreach ($quiz->question_ids as $index => $question_id) {
 					$qid = $this->restore_quiz_question($question_id);
-					$sql = "INSERT IGNORE INTO ".$table_rel." SET question_id = ".$qid.", exercice_id = ".$new_id."";
+					$sql = "INSERT IGNORE INTO ".$table_rel." SET question_id = ".$qid.", exercice_id = ".$new_id.", question_order = ".$quiz->question_orders[$index]."";
 					Database::query($sql, __FILE__, __LINE__);
 				}
 			}
@@ -895,7 +892,6 @@ class CourseRestorer
 			}
 			$this->course->resources[RESOURCE_QUIZQUESTION][$id]->destination_id = $new_id;
 		}
-
 		return $new_id;
 	}
 	/**

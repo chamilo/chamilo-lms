@@ -63,6 +63,10 @@ class Quiz extends Resource
 	 */
 	var $question_ids;
 	/**
+	 * Questions orders
+	 */
+	var $question_orders;
+	/**
 	 * Max attempts
 	 */
 	var $attempts;
@@ -114,6 +118,7 @@ class Quiz extends Resource
 		$this->media = $media;
 		$this->attempts = $attempts;
 		$this->question_ids = array();
+		$this->question_orders= array();
 		$this->results_disabled = $results_disabled;
 		$this->access_condition = $access_condition;
 		$this->start_time = $start_time;
@@ -125,9 +130,10 @@ class Quiz extends Resource
 	/**
 	 * Add a question to this Quiz
 	 */
-	function add_question($id)
+	function add_question($id,$question_order)
 	{
 		$this->question_ids[] = $id;
+		$this->question_orders[] = $question_order;
 	}
 	/**
 	 * Show this question

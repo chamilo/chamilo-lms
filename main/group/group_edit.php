@@ -323,7 +323,10 @@ if ($referer != 'group_space.php' && $referer != 'group.php') {
 	$referer = 'group.php';
 }
 if (isset($_POST['group_members'])) {
-	if (count($_POST['group_members'])<=$defaults['max_member']) {
+	// if it has been specified that there is a limit (contradictionary this is max_member_no_limit = 1) then we have to check if the limit 
+	// has been exceeded or not
+	if($_POST['max_member_no_limit'] == 1){
+		if (count($_POST['group_members'])<=$defaults['max_member'] AND $defaults['max_member_no_limit']) {
 		//
 	} else {
 				header('Location:group_edit.php?show_message='.get_lang('GroupTooMuchMembers'));

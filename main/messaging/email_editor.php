@@ -105,8 +105,7 @@ Display::display_header(get_lang('SendEmail'));
 </form>
 </table>
 
-<?
-
+<?php
 /* Footer */
 Display::display_footer();
 ?>

@@ -211,11 +211,15 @@ if (isset($_SESSION['id_session'])) {
 	$complete_user_list = CourseManager :: get_user_list_from_course_code($_course['id'],true,$_SESSION['id_session']);
 	$complete_user_list2 = CourseManager :: get_coach_list_from_course_code($_course['id'],$_SESSION['id_session']);
 	$complete_user_list = array_merge($complete_user_list,$complete_user_list2);
+	usort($complete_user_list, 'sort_users');
 } else {
 	$complete_user_list = CourseManager :: get_user_list_from_course_code($_course['id']);
 }
 
-usort($complete_user_list, 'sort_users');
+
+} else {
+	$complete_user_list = CourseManager :: get_user_list_from_course_code($_course['id'],false, '','',api_get_setting('user_order_by'));
+}
 
 
 $possible_users = array ();

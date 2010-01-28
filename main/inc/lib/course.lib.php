@@ -253,12 +253,23 @@ class CourseManager {
 		if (count($user_id) == 0) {
 			return;
 		}
-		$table_user = Database :: get_main_table(TABLE_MAIN_USER);		
-		
-		$user_ids = implode(',', $user_id);
+		$table_user = Database :: get_main_table(TABLE_MAIN_USER);
+				
+		//Cleaning the $user_id variable
+		if (is_array($user_id)) {
+			$new_user_id_list = array(); 
+			foreach($user_id as $my_user_id) {
+				$new_user_id_list[]= intval($my_user_id);
+			}
+			$new_user_id_list = array_filter($new_user_id_list);
+			$user_ids = implode(',', $new_user_id_list);
+		} else {
+			$user_ids = intval($user_id);
+		}
+				
 		$course_code = Database::escape_string($course_code);
 
-		$course = Database::fetch_object(Database::query("SELECT * FROM ".Database::get_main_table(TABLE_MAIN_COURSE)."
+		$course = Database::fetch_object(Database::query("SELECT db_name FROM ".Database::get_main_table(TABLE_MAIN_COURSE)."
 				WHERE code = '".$course_code."'", __FILE__, __LINE__));
 
 		// Unsubscribe user from all groups in the course.

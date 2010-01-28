@@ -253,7 +253,8 @@ class CourseManager {
 		if (count($user_id) == 0) {
 			return;
 		}
-
+		$table_user = Database :: get_main_table(TABLE_MAIN_USER);		
+		
 		$user_ids = implode(',', $user_id);
 		$course_code = Database::escape_string($course_code);
 
@@ -265,16 +266,32 @@ class CourseManager {
 				WHERE user_id IN (".$user_ids.")", __FILE__, __LINE__);
 		Database::query("DELETE FROM ".Database::get_course_table(TABLE_GROUP_TUTOR, $course->db_name)."
 				WHERE user_id IN (".$user_ids.")", __FILE__, __LINE__);
-
+		
+		// Erase user student publications (works) in the course - by André Boivin 
+		//@todo field student_publication.author should be the user id 
+			
+		$table_course_user_publication 	= Database :: get_course_table(TABLE_STUDENT_PUBLICATION, $course->db_name);
+		$sqlu = "SELECT * FROM $table_user WHERE user_id IN (".$user_ids.")"; 
+    	$resu = Database::query($sqlu, __FILE__, __LINE__);
+		$username = Database::fetch_array($resu,'ASSOC');
+	  	$userfirstname = $username['firstname'];
+		$userlastname = $username['lastname'];
+     	$publication_name = $userfirstname.' '.$userlastname ;
+      
+    	$sql = "DELETE FROM $table_course_user_publication WHERE author = '".Database::escape_string($publication_name)."'";
+		Database::query($sql, __FILE__, __LINE__);
+		
+		
 		// Unsubscribe user from all blogs in the course.
 		Database::query("DELETE FROM ".Database::get_course_table(TABLE_BLOGS_REL_USER, $course->db_name)."
 				WHERE user_id IN (".$user_ids.")", __FILE__, __LINE__);
 		Database::query("DELETE FROM ".Database::get_course_table(TABLE_BLOGS_TASKS_REL_USER, $course->db_name)."
 				WHERE user_id IN (".$user_ids.")", __FILE__, __LINE__);
+				
+		
 
 		// Unsubscribe user from the course.
 		if (!empty($_SESSION['id_session'])) { // We suppose the session is safe!
-
 			// Delete in table session_rel_course_rel_user
 			$my_session_id = intval ($_SESSION['id_session']);
 			Database::query("DELETE FROM ".Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER)."

@@ -441,10 +441,9 @@ class SessionManager {
 	
 	 /**
 	  * Subscribes sessions to user (Dashboard feature)
-	  * @param	integer		Session ID
-	  * @param	array		List of user IDs
-	  * @param	bool		Whether to unsubscribe existing users (true, default) or not (false)
-	  * @return	void		Nothing, or false on error
+	  *	@param	int 		User id
+	  * @param	int			Session id
+	  * @param	int			Relation type 
 	  **/
 	public static function suscribe_sessions_to_user($user_id,$session_list, $relation_stype) {
 
@@ -453,12 +452,12 @@ class SessionManager {
 	   		if ($session_id!= strval(intval($session_id))) return false;
 	   	}
 	   	
-	   	$tbl_session_rel_course				= Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
-	   	$tbl_session_rel_user 				= Database::get_main_table(TABLE_MAIN_SESSION_USER);
-	   	$tbl_session						= Database::get_main_table(TABLE_MAIN_SESSION);
+	   	$tbl_session_rel_course		= Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
+	   	$tbl_session_rel_user 		= Database::get_main_table(TABLE_MAIN_SESSION_USER);
+	   	$tbl_session				= Database::get_main_table(TABLE_MAIN_SESSION);
 		
 	
-	   	$sql = "SELECT id_session FROM $tbl_session_rel_user WHERE id_user =$user_id AND relation_type = 1 ";
+	   	$sql = "SELECT id_session FROM $tbl_session_rel_user WHERE id_user = $user_id AND relation_type = 1 ";
 		$result = Database::query($sql,__FILE__,__LINE__);
 		$existing_sessions = array();
 		while($row = Database::fetch_array($result)){
@@ -468,8 +467,8 @@ class SessionManager {
 
 		//Deleting existing session_rel_user 
 		foreach ($existing_sessions as $existing_session) {				
-				$sql = "DELETE FROM $tbl_session_rel_user WHERE id_session=$existing_session  AND id_user=$user_id AND relation_type = 1 ";
-				Database::query($sql,__FILE__,__LINE__);					
+			$sql = "DELETE FROM $tbl_session_rel_user WHERE id_session=$existing_session  AND id_user = $user_id AND relation_type = 1 ";
+			Database::query($sql,__FILE__,__LINE__);					
 		}
 
 		foreach ($session_list as $session_id) {

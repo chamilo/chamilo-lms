@@ -67,7 +67,7 @@ class mPDFI extends mPDF {
 
 	// Thumbnails
 	// mPDF 2.3 Templates
-	function Thumbnail($file, $npr=3, $spacing=10) {	//$npr = number per row	
+	function Thumbnail($file, $npr=3, $spacing=10) {	//$npr = number per row
 		$w = (($this->pgwidth + $spacing)/$npr) - $spacing;
 		$oldlinewidth = $this->LineWidth;
 		$this->SetLineWidth(0.02); $this->SetDrawColor(0);
@@ -85,9 +85,9 @@ class mPDFI extends mPDF {
 			$maxh = max($h, $maxh);
 			if ($n % $npr == 0) {
 			   if (($y + $h + $spacing + $maxh)>$this->PageBreakTrigger && $n != $pagecount) {
-				$this->AddPage();  
+				$this->AddPage();
 				$x = $_x;
-				$y = $_y;        
+				$y = $_y;
 			   }
 			   else {
 				$y += $h+$spacing ;
@@ -114,10 +114,10 @@ class mPDFI extends mPDF {
 		$this->current_parser =& $this->parsers[$fn];
 		return $this->parsers[$fn]->getPageCount();
 	}
-	
+
 	function ImportPage($pageno=1, $crop_x=null, $crop_y=null, $crop_w=0, $crop_h=0, $boxName='/CropBox') {
 		$fn =& $this->current_filename;
-		
+
 		$parser =& $this->parsers[$fn];
 		$parser->setPageno($pageno);
 
@@ -127,11 +127,11 @@ class mPDFI extends mPDF {
 		$tpl['parser'] =& $parser;
 		$tpl['resources'] = $parser->getPageResources();
 		$tpl['buffer'] = $parser->getContent();
-		
+
 		if (!in_array($boxName, $parser->availableBoxes))
 			return $this->Error(sprintf("Unknown box: %s", $boxName));
 		$pageboxes = $parser->getPageBoxes($pageno);
-		
+
 		/**
 		 * MediaBox
 		 * CropBox: Default -> MediaBox
@@ -143,10 +143,10 @@ class mPDFI extends mPDF {
 			$boxName = "/CropBox";
 		if (!isset($pageboxes[$boxName]) && $boxName == "/CropBox")
 			$boxName = "/MediaBox";
-		
+
 		if (!isset($pageboxes[$boxName]))
 			return false;
-		
+
 		$box = $pageboxes[$boxName];
 
 		$tpl['box'] = $box;
@@ -155,7 +155,7 @@ class mPDFI extends mPDF {
 		// An imported page will start at 0,0 everytime. Translation will be set in _putformxobjects()
 		$tpl['x'] = 0;
 		$tpl['y'] = 0;
-		
+
 		$tpl['w'] = $tpl['box']['w'] ;
 		$tpl['h'] = $tpl['box']['h'] ;
 		if ($crop_w) { $tpl['box']['w'] = $crop_w; }
@@ -164,7 +164,7 @@ class mPDFI extends mPDF {
 		if (isset($crop_y)) {$tpl['box']['y'] = $tpl['h'] - $crop_y  - $crop_h ; }
 
 		$page =& $parser->pages[$parser->pageno];
-		
+
 		// fix for rotated pages
 		$rotation = $parser->getPageRotation($pageno);
 
@@ -175,37 +175,37 @@ class mPDFI extends mPDF {
 			$_h = $tpl['h'];
 			$tpl['w'] = $steps % 2 == 0 ? $_w : $_h;
 			$tpl['h'] = $steps % 2 == 0 ? $_h : $_w;
-			
+
 			if ($steps % 2 != 0) {
 				$x = $y = ($steps == 1 || $steps == -3) ? $tpl['h'] : $tpl['w'];
 			} else {
 				$x = $tpl['w'];
 				$y = $tpl['h'];
 			}
-			
+
 			$cx=($x/2+$tpl['box']['x'])*$this->k;
 			$cy=($y/2+$tpl['box']['y'])*$this->k;
-			
-			$angle*=-1; 
-			
+
+			$angle*=-1;
+
 			$angle*=M_PI/180;
 			$c=cos($angle);
 			$s=sin($angle);
 			$tpl['box']['w'] = $tpl['w'] ;
 			$tpl['box']['h'] = $tpl['h'] ;
-			
+
 			$tpl['buffer'] = sprintf('q %.5f %.5f %.5f %.5f %.2f %.2f cm 1 0 0 1 %.2f %.2f cm %s Q',$c,$s,-$s,$c,$cx,$cy,-$cx,-$cy, $tpl['buffer']);
 		}
-		
+
 		return $this->tpl;
 	}
-	
+
 	function UseTemplate($tplidx, $_x=null, $_y=null, $_w=0, $_h=0) {
 		if (!isset($this->tpls[$tplidx]))
 			$this->Error("Template does not exist!");
 		if($this->state==0) { $this->AddPage(); }
 		$this->_out('q 0 J 1 w 0 j 0 G'); // reset standard values
-			
+
 		$x = $this->tpls[$tplidx]['x'];
 		$y = $this->tpls[$tplidx]['y'];
 		$w = $this->tpls[$tplidx]['w'];
@@ -219,15 +219,15 @@ class mPDFI extends mPDF {
 		$wh = $this->getTemplateSize($tplidx,$_w,$_h);
 		$_w = $wh['w'];
 		$_h = $wh['h'];
-	
-		$this->_out(sprintf("q %.4f 0 0 %.4f %.2f %.2f cm", ($_w/$this->tpls[$tplidx]['box']['w']), ($_h/$this->tpls[$tplidx]['box']['h']), $_x*$this->k, ($this->h-($_y+$_h))*$this->k)); 
+
+		$this->_out(sprintf("q %.4f 0 0 %.4f %.2f %.2f cm", ($_w/$this->tpls[$tplidx]['box']['w']), ($_h/$this->tpls[$tplidx]['box']['h']), $_x*$this->k, ($this->h-($_y+$_h))*$this->k));
 		$this->_out($this->tplprefix.$tplidx." Do Q");
 
 		$s = array("w" => $_w, "h" => $_h);
 		$this->_out('Q');
 		return $s;
 	}
-	
+
 	function SetPageTemplate($tplidx='') {
 		if (!isset($this->tpls[$tplidx])) {
 			$this->pageTemplate = '';
@@ -235,12 +235,12 @@ class mPDFI extends mPDF {
 		}
 		$this->pageTemplate = $tplidx;
 	}
-	
+
 	function SetDocTemplate($file='', $continue=0) {
 		$this->docTemplate = $file;
 		$this->docTemplateContinue = $continue;
 	}
-	
+
 
 //=========================================================================
 // Overwrite mPDF functions
@@ -281,7 +281,7 @@ function _putresources() {
 			$this->_out('/I'.$image['i'].' '.$image['n'].' 0 R');
 		foreach($this->formobjects as $formobject)
 			$this->_out('/FO'.$formobject['i'].' '.$formobject['n'].' 0 R');
-		// from FPDF_TPL function _putxobjectdict() 
+		// from FPDF_TPL function _putxobjectdict()
 	   	if (count($this->tpls)) {
 			foreach($this->tpls as $tplidx => $tpl) {
 				$this->_out($this->tplprefix.$tplidx.' '.$tpl['n'].' 0 R');
@@ -370,7 +370,7 @@ function _putstream($s) {
 						$this->_newobj($this->_obj_stack[$filename][$n][0]);
 						if ($nObj[0] == PDF_TYPE_STREAM) {
 							$this->pdf_write_value($nObj);
-						} 
+						}
 						else {
 							$this->pdf_write_value($nObj[1]);
 						}
@@ -383,7 +383,7 @@ function _putstream($s) {
 			}
 		}
 	}
-	
+
 
 
 	function _putformxobjects() {
@@ -396,7 +396,7 @@ function _putstream($s) {
 			$this->_out('<<'.$filter.'/Type /XObject');
 			$this->_out('/Subtype /Form');
 			$this->_out('/FormType 1');
-			
+
 			// Left/Bottom/Right/Top
 			$this->_out(sprintf('/BBox [%.2f %.2f %.2f %.2f]',
 				$tpl['box']['x']*$this->k,
@@ -408,7 +408,7 @@ function _putstream($s) {
 
 			if (isset($tpl['box']))
 				$this->_out(sprintf('/Matrix [1 0 0 1 %.5f %.5f]',-$tpl['box']['x']*$this->k, -$tpl['box']['y']*$this->k));
-			
+
 			$this->_out('/Resources ');
 
 			if (isset($tpl['resources'])) {
@@ -422,7 +422,7 @@ function _putstream($s) {
 							$this->_out('/F'.$font['i'].' '.$font['n'].' 0 R');
 						$this->_out('>>');
 				}
-					if(isset($this->_res['tpl'][$tplidx]['images']) && count($this->_res['tpl'][$tplidx]['images']) || 
+					if(isset($this->_res['tpl'][$tplidx]['images']) && count($this->_res['tpl'][$tplidx]['images']) ||
 					   isset($this->_res['tpl'][$tplidx]['tpls']) && count($this->_res['tpl'][$tplidx]['tpls']))
 					{
 						$this->_out('/XObject <<');
@@ -449,14 +449,14 @@ function _putstream($s) {
 	function hex2str($hex) {
 		return pack("H*", str_replace(array("\r","\n"," "),"", $hex));
 	}
-    
+
 	function str2hex($str) {
 		return current(unpack("H*",$str));
 	}
 
 
-    
-    
+
+
 	function pdf_write_value(&$value) {
 		switch ($value[0]) {
 			case PDF_TYPE_NUMERIC :
@@ -504,7 +504,7 @@ function _putstream($s) {
 				if ($this->encrypted) {
 					$value[1] = $this->_RC4($this->_objectkey($this->_current_obj_id), $value[1]);
 					$value[1] = $this->_escape($value[1]);
-				} 
+				}
 				// A string.
 				$this->_out('('.$value[1].')');
 				break;
@@ -555,15 +555,15 @@ function _putstream($s) {
 	if ($this->isunicode && !$this->isCJK) {
 	  foreach($search AS $k=>$val) {
 		$search[$k] = $this->UTF8ToUTF16BE($search[$k] , false);
-		$search[$k] = $this->_escape($search[$k]); 
+		$search[$k] = $this->_escape($search[$k]);
 		$replacement[$k] = $this->UTF8ToUTF16BE($replacement[$k], false);
-		$replacement[$k] = $this->_escape($replacement[$k]); 
+		$replacement[$k] = $this->_escape($replacement[$k]);
 	  }
 	}
 	else {
 	  foreach($replacement AS $k=>$val) {
-		$replacement[$k] = mb_convert_encoding($replacement[$k],$this->mb_encoding,'utf-8'); 
-		$replacement[$k] = $this->_escape($replacement[$k]); 
+		$replacement[$k] = mb_convert_encoding($replacement[$k],$this->mb_encoding,'utf-8');
+		$replacement[$k] = $this->_escape($replacement[$k]);
 	  }
 	}
 
@@ -618,7 +618,7 @@ function _putstream($s) {
 	// Update xref in PDF
 	krsort($changes);
 	$newxref = "xref\n0 ".$xref_objid."\n";
-	foreach($xref AS $v) { 
+	foreach($xref AS $v) {
 		foreach($changes AS $ck => $cv) {
 			if ($v[0] > $ck) { $v[0] += $cv; }
 		}
@@ -696,10 +696,10 @@ function _strcspn($str1, $str2, $start=null, $length=null) {
 	$numargs = func_num_args();
 	if ($numargs == 2) {
 		return strcspn($str1, $str2);
-	} 
+	}
 	else if ($numargs == 3) {
 		return strcspn($str1, $str2, $start);
-	} 
+	}
 	else {
 		return strcspn($str1, $str2, $start, $length);
 	}

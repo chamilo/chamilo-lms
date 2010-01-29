@@ -3,7 +3,10 @@
 $tempfilename = $_REQUEST['filename'].'.pdf';
 $opname = $_REQUEST['opname'];
 $dest = $_REQUEST['dest'];
-	if ($tempfilename && file_exists('../tmp/'.$tempfilename)) {
+	// Modified by Ivan Tcholakov, 28-JAN-2010.
+	//if ($tempfilename && file_exists('../tmp/'.$tempfilename)) {
+	if ($tempfilename && file_exists(_MPDF_TMP_PATH.$tempfilename)) {
+	//
 		header("Pragma: ");
 		header("Cache-Control: private");
 		header("Content-transfer-encoding: binary\n");
@@ -19,35 +22,54 @@ $dest = $_REQUEST['dest'];
 					header('Status: 200 OK');
 					header('Pragma: anytextexeptno-cache', true);
 					header("Cache-Control: public, must-revalidate");
-				} 
+				}
 				else {
 					header('Cache-Control: public, must-revalidate');
 					header('Pragma: public');
 				}
 				header('Content-Type: application/force-download');
-			} 
+			}
 			else {
 				header('Content-Type: application/octet-stream');
 			}
 			header('Content-disposition: attachment; filename='.$opname);
 		}
-		$filesize = filesize('../tmp/'.$tempfilename);
+		// Modified by Ivan Tcholakov, 28-JAN-2010.
+		//$filesize = filesize('../tmp/'.$tempfilename);
+		$filesize = filesize(_MPDF_TMP_PATH.$tempfilename);
+		//
 		header("Content-length:".$filesize);
-		$fd=fopen('../tmp/'.$tempfilename,'r');
+		// Modified by Ivan Tcholakov, 28-JAN-2010.
+		//$fd=fopen('../tmp/'.$tempfilename,'r');
+		$fd=fopen(_MPDF_TMP_PATH.$tempfilename,'r');
+		//
 		fpassthru($fd);
 		fclose($fd);
-		unlink('../tmp/'.$tempfilename);
+		// Modified by Ivan Tcholakov, 28-JAN-2010.
+		//unlink('../tmp/'.$tempfilename);
+		unlink(_MPDF_TMP_PATH.$tempfilename);
+		//
 		// ====================== DELETE OLD FILES FIRST - Housekeeping =========================================
 		// Clear any files in directory that are >24 hrs old
 		$interval = 86400;
-		if ($handle = opendir('../tmp')) {
-		   while (false !== ($file = readdir($handle))) { 
-			if (((filemtime('../tmp/'.$file)+$interval) < time()) && ($file != "..") && ($file != ".")) { 
-				unlink('../tmp/'.$file); 
+		// Modified by Ivan Tcholakov, 28-JAN-2010.
+		//if ($handle = opendir('../tmp')) {
+		//   while (false !== ($file = readdir($handle))) {
+		//	if (((filemtime('../tmp/'.$file)+$interval) < time()) && ($file != "..") && ($file != ".")) {
+		//		unlink('../tmp/'.$file);
+		//	}
+		//   }
+		//   closedir($handle);
+		//}
+		if ($handle = opendir(_MPDF_TMP_PATH)) {
+		   while (false !== ($file = readdir($handle))) {
+			if (((filemtime(_MPDF_TMP_PATH.$file)+$interval) < time()) && ($file != "..") && ($file != ".")) {
+				unlink(_MPDF_TMP_PATH.$file);
 			}
 		   }
-		   closedir($handle); 
+		   closedir($handle);
 		}
+		//
 		exit;
 	}
 ?>

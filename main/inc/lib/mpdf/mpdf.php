@@ -43,7 +43,9 @@ $errorlevel=error_reporting($errorlevel & ~E_NOTICE);
 
 if(function_exists("date_default_timezone_set") and function_exists("date_default_timezone_get"))
 @date_default_timezone_set(@date_default_timezone_get());
-if (!function_exists("mb_strlen")) { die("Error - mPDF requires mb_string functions. Ensure that PHP is compiled with php_mbstring.dll enabled."); }
+// Disabled by Ivan Tcholakov, 28-JAN-2010.
+//if (!function_exists("mb_strlen")) { die("Error - mPDF requires mb_string functions. Ensure that PHP is compiled with php_mbstring.dll enabled."); }
+//
 
 // Added by Ivan Tcholakov, 28-JAN-2010.
 // The directories ".../chamilo/main/inc/lib/mpdf/graph_cache/" and ".../chamilo/main/inc/lib/mpdf/tmp/"
@@ -1265,7 +1267,10 @@ function mPDF($codepage='win-1252',$format='A4',$default_font_size=0,$default_fo
 	if ($default_font_size) { $this->SetDefaultFontSize($default_font_size); }
 
 	$this->setMBencoding($this->codepage);	// sets $this->mb_enc
-	@mb_regex_encoding('UTF-8');
+	// Modified by Ivan Tcholakov, 28-JAN-2010.
+	//@mb_regex_encoding('UTF-8');
+	_api_mb_regex_encoding('UTF-8');
+	//
 
 	$this->setHiEntitySubstitutions();
 
@@ -1502,7 +1507,10 @@ function setMBencoding($enc) {
 	else if ($enc == 'UHC') { $this->mb_enc = 'UTF-8'; }	// cp949
 	else { $this->mb_enc = $enc; }	// works for iso-8859-n
 	if ($this->mb_enc && $curr != $this->mb_enc) {
-		mb_internal_encoding($this->mb_enc);
+		// Modified by Ivan Tcholakov, 28-JAN-2010.
+		//mb_internal_encoding($this->mb_enc);
+		_api_mb_internal_encoding($this->mb_enc);
+		//
 	}
 }
 
@@ -2793,7 +2801,10 @@ function WriteText($x,$y,$txt) {
 	if ($this->text_input_as_HTML) {
 		$txt = $this->all_entities_to_utf8($txt);
 	}
-	if (!$this->is_MB) { $txt = mb_convert_encoding($txt,$this->mb_enc,'UTF-8'); }
+	// Modified by Ivan Tcholakov, 28-JAN-2010.
+	//if (!$this->is_MB) { $txt = mb_convert_encoding($txt,$this->mb_enc,'UTF-8'); }
+	if (!$this->is_MB) { $txt = api_convert_encoding($txt,$this->mb_enc,'UTF-8'); }
+	//
 	// DIRECTIONALITY
 	$this->magic_reverse_dir($txt);	// *RTL*
 	// mPDF 4.0 Font-specific ligature substitution for Indic fonts
@@ -2807,7 +2818,10 @@ function WriteCell($w,$h=0,$txt='',$border=0,$ln=0,$align='',$fill=0,$link='', $
 	if ($this->text_input_as_HTML) {
 		$txt = $this->all_entities_to_utf8($txt);
 	}
-	if (!$this->is_MB) { $txt = mb_convert_encoding($txt,$this->mb_enc,'UTF-8'); }
+	// Modified by Ivan Tcholakov, 28-JAN-2010.
+	//if (!$this->is_MB) { $txt = mb_convert_encoding($txt,$this->mb_enc,'UTF-8'); }
+	if (!$this->is_MB) { $txt = api_convert_encoding($txt,$this->mb_enc,'UTF-8'); }
+	//
 	// DIRECTIONALITY
 	$this->magic_reverse_dir($txt);	// *RTL*
 	// mPDF 4.0 Font-specific ligature substitution for Indic fonts
@@ -3018,8 +3032,12 @@ function Cell($w,$h=0,$txt='',$border=0,$ln=0,$align='',$fill=0,$link='', $curre
 	}
 
 	if($txt!='') {
-		$stringWidth = $this->GetStringWidth($txt) + ( $this->charspacing * mb_strlen( $txt, $this->mb_enc ) / $k )
-				 + ( $this->ws * mb_substr_count( $txt, ' ', $this->mb_enc ) / $k );
+		// Modified by Ivan Tcholakov, 28-JAN-2010.
+		//$stringWidth = $this->GetStringWidth($txt) + ( $this->charspacing * mb_strlen( $txt, $this->mb_enc ) / $k )
+		//		 + ( $this->ws * mb_substr_count( $txt, ' ', $this->mb_enc ) / $k );
+		$stringWidth = $this->GetStringWidth($txt) + ( $this->charspacing * api_strlen( $txt, $this->mb_enc ) / $k )
+				 + ( $this->ws * api_substr_count( $txt, ' ', $this->mb_enc ) / $k );
+		//
 
 		// Set x OFFSET FOR PRINTING
 		if($align=='R') {
@@ -3182,7 +3200,10 @@ function MultiCell($w,$h,$txt,$border=0,$align='',$fill=0,$link='',$directionali
 		if ($this->text_input_as_HTML) {
 			$txt = $this->all_entities_to_utf8($txt);
 		}
-		if (!$this->is_MB) { $txt = mb_convert_encoding($txt,$this->mb_enc,'UTF-8'); }
+		// Modified by Ivan Tcholakov, 28-JAN-2010.
+		//if (!$this->is_MB) { $txt = mb_convert_encoding($txt,$this->mb_enc,'UTF-8'); }
+		if (!$this->is_MB) { $txt = api_convert_encoding($txt,$this->mb_enc,'UTF-8'); }
+		//
 		// mPDF 4.0 Font-specific ligature substitution for Indic fonts
 		else if ($this->is_MB) {	// *INDIC*
 			$this->ConvertIndic($tmp);	// *INDIC*
@@ -3197,8 +3218,12 @@ function MultiCell($w,$h,$txt,$border=0,$align='',$fill=0,$link='',$directionali
 	if ($this->is_MB)  {
 		$wmax = ($w - ($this->cMarginL+$this->cMarginR));
 		$s=preg_replace("/\r/u",'',$txt);
-		$nb=mb_strlen($s, $this->mb_enc );
-		while($nb>0 and mb_substr($s,$nb-1,1,$this->mb_enc )=="\n")	$nb--;
+		// Modified by Ivan Tcholakov, 28-JAN-2010.
+		//$nb=mb_strlen($s, $this->mb_enc );
+		//while($nb>0 and mb_substr($s,$nb-1,1,$this->mb_enc )=="\n")	$nb--;
+		$nb=api_strlen($s, $this->mb_enc );
+		while($nb>0 and api_substr($s,$nb-1,1,$this->mb_enc )=="\n")	$nb--;
+		//
 	}
 	else {
 /*-- END UNICODE-FONTS --*/
@@ -3233,7 +3258,10 @@ function MultiCell($w,$h,$txt,$border=0,$align='',$fill=0,$link='',$directionali
    if ($this->is_MB)  {
 	while($i<$nb) {
 		//Get next character
-		$c = mb_substr($s,$i,1,$this->mb_enc );
+		// Modified by Ivan Tcholakov, 28-JAN-2010.
+		//$c = mb_substr($s,$i,1,$this->mb_enc );
+		$c = api_substr($s,$i,1,$this->mb_enc );
+		//
 		if(preg_match("/[\n]/u", $c)) {
 			//Explicit line break
 			// WORD SPACING
@@ -3259,7 +3287,10 @@ function MultiCell($w,$h,$txt,$border=0,$align='',$fill=0,$link='',$directionali
 			$ns++;
 		}
 
-		$l = $this->GetStringWidth(mb_substr($s, $j, $i-$j,$this->mb_enc ));
+		// Modified by Ivan Tcholakov, 28-JAN-2010.
+		//$l = $this->GetStringWidth(mb_substr($s, $j, $i-$j,$this->mb_enc ));
+		$l = $this->GetStringWidth(api_substr($s, $j, $i-$j,$this->mb_enc ));
+		//
 
 		if($l>$wmax) {
 			//Automatic line break
@@ -3268,14 +3299,20 @@ function MultiCell($w,$h,$txt,$border=0,$align='',$fill=0,$link='',$directionali
 				// WORD SPACING
 				// mPDF 4.0
 				$this->ResetSpacing();
-				$tmp = $this->mb_rtrim(mb_substr($s,$j,$i-$j,$this->mb_enc),'UTF-8');
+				// Modified by Ivan Tcholakov, 28-JAN-2010.
+				//$tmp = $this->mb_rtrim(mb_substr($s,$j,$i-$j,$this->mb_enc),'UTF-8');
+				$tmp = $this->mb_rtrim(api_substr($s,$j,$i-$j,$this->mb_enc),'UTF-8');
+				//
 				// DIRECTIONALITY
 				$this->magic_reverse_dir($tmp);	// *RTL*
 
 				$this->Cell($w,$h,$tmp,$b,2,$align,$fill,$link);
 			}
 			else {
-				$tmp = $this->mb_rtrim(mb_substr($s,$j,$sep-$j,$this->mb_enc),'UTF-8');
+				// Modified by Ivan Tcholakov, 28-JAN-2010.
+				//$tmp = $this->mb_rtrim(mb_substr($s,$j,$sep-$j,$this->mb_enc),'UTF-8');
+				$tmp = $this->mb_rtrim(api_substr($s,$j,$sep-$j,$this->mb_enc),'UTF-8');
+				//
 				if($align=='J') {
 					//$this->ws=($ns>1) ? ((($wmax-$ls)/($ns-1))) : 0;
 					//$this->_out(sprintf('%.3f Tw',$this->ws*$this->k));
@@ -3286,8 +3323,12 @@ function MultiCell($w,$h,$txt,$border=0,$align='',$fill=0,$link='',$directionali
 					// Change NON_BREAKING SPACE to spaces so they are 'spaced' properly
 					$tmp = str_replace($this->chrs[194].$this->chrs[160],$this->chrs[32],$tmp );
 					$len_ligne = $this->GetStringWidth($tmp );
-					$nb_carac = mb_strlen( $tmp , $this->mb_enc ) ;
-					$nb_spaces = mb_substr_count( $tmp ,' ', $this->mb_enc ) ;
+					// Modified by Ivan Tcholakov, 28-JAN-2010.
+					//$nb_carac = mb_strlen( $tmp , $this->mb_enc ) ;
+					//$nb_spaces = mb_substr_count( $tmp ,' ', $this->mb_enc ) ;
+					$nb_carac = api_strlen( $tmp , $this->mb_enc ) ;
+					$nb_spaces = api_substr_count( $tmp ,' ', $this->mb_enc ) ;
+					//
 					list($charspacing,$ws) = $this->GetJspacing($nb_carac,$nb_spaces,((($w-2) - $len_ligne) * $this->k));
 					// mPDF 4.0
 					$this->SetSpacing($charspacing,$ws);
@@ -3391,7 +3432,10 @@ function MultiCell($w,$h,$txt,$border=0,$align='',$fill=0,$link='',$directionali
 	//Last chunk
    if($border and is_int(strpos($border,'B')))	$b.='B';
    if ($this->is_MB)  {
-		$tmp = $this->mb_rtrim(mb_substr($s,$j,$i-$j,$this->mb_enc),'UTF-8');
+		// Modified by Ivan Tcholakov, 28-JAN-2010.
+		//$tmp = $this->mb_rtrim(mb_substr($s,$j,$i-$j,$this->mb_enc),'UTF-8');
+		$tmp = $this->mb_rtrim(api_substr($s,$j,$i-$j,$this->mb_enc),'UTF-8');
+		//
 		// DIRECTIONALITY
 		$this->magic_reverse_dir($tmp);	// *RTL*
    		$this->Cell($w,$h,$tmp,$b,2,$align,$fill,$link);
@@ -3413,7 +3457,10 @@ function Write($h,$txt,$currentx=0,$link='',$directionality='ltr',$align='') {
 	if ($this->is_MB)  {
 		$wmax = ($w - ($this->cMarginL+$this->cMarginR));
 		$s=preg_replace("/\r/u",'',$txt);	//????
-		$nb=mb_strlen($s, $this->mb_enc );
+		// Modified by Ivan Tcholakov, 28-JAN-2010.
+		//$nb=mb_strlen($s, $this->mb_enc );
+		$nb=api_strlen($s, $this->mb_enc );
+		//
 			// handle single space character
 			if(($nb==1) AND preg_match("/[ ]/u", $s)) {
 				$this->x += $this->GetStringWidth($s);
@@ -3439,13 +3486,19 @@ function Write($h,$txt,$currentx=0,$link='',$directionality='ltr',$align='') {
 	if ($this->is_MB) {
 			while($i<$nb) {
 				//Get next character
-				$c = mb_substr($s,$i,1,$this->mb_enc );
+				// Modified by Ivan Tcholakov, 28-JAN-2010.
+				//$c = mb_substr($s,$i,1,$this->mb_enc );
+				$c = api_substr($s,$i,1,$this->mb_enc );
+				//
 				if(preg_match("/[\n]/u", $c)) {
 					// WORD SPACING
 					// mPDF 4.0
 					$this->ResetSpacing();
 					//Explicit line break
-					$tmp = $this->mb_rtrim(mb_substr($s,$j,$i-$j,$this->mb_enc),'UTF-8');
+					// Modified by Ivan Tcholakov, 28-JAN-2010.
+					//$tmp = $this->mb_rtrim(mb_substr($s,$j,$i-$j,$this->mb_enc),'UTF-8');
+					$tmp = $this->mb_rtrim(api_substr($s,$j,$i-$j,$this->mb_enc),'UTF-8');
+					//
 					if ($this->directionality == 'rtl') {	// *RTL*
 					   if ($align == 'J') { $align = 'R'; }	// *RTL*
 					}	// *RTL*
@@ -3470,7 +3523,10 @@ function Write($h,$txt,$currentx=0,$link='',$directionality='ltr',$align='') {
 					$sep= $i;
 				}
 
-				$l = $this->GetStringWidth(mb_substr($s, $j, $i-$j,$this->mb_enc));
+				// Modified by Ivan Tcholakov, 28-JAN-2010.
+				//$l = $this->GetStringWidth(mb_substr($s, $j, $i-$j,$this->mb_enc));
+				$l = $this->GetStringWidth(api_substr($s, $j, $i-$j,$this->mb_enc));
+				//
 
 				if($l > $wmax) {
 					//Automatic line break (word wrapping)
@@ -3492,7 +3548,10 @@ function Write($h,$txt,$currentx=0,$link='',$directionality='ltr',$align='') {
 						if($i==$j) {
 							$i++;
 						}
-						$tmp = $this->mb_rtrim(mb_substr($s,$j,$i-$j,$this->mb_enc),'UTF-8');
+						// Modified by Ivan Tcholakov, 28-JAN-2010.
+						//$tmp = $this->mb_rtrim(mb_substr($s,$j,$i-$j,$this->mb_enc),'UTF-8');
+						$tmp = $this->mb_rtrim(api_substr($s,$j,$i-$j,$this->mb_enc),'UTF-8');
+						//
 						if ($this->directionality == 'rtl') {	// *RTL*
 						   if ($align == 'J') { $align = 'R'; }	// *RTL*
 						}	// *RTL*
@@ -3502,7 +3561,10 @@ function Write($h,$txt,$currentx=0,$link='',$directionality='ltr',$align='') {
 						$this->Cell($w, $h, $tmp, 0, 2, $align, $fill, $link);
 					}
 					else {
-						$tmp = $this->mb_rtrim(mb_substr($s,$j,$sep-$j,$this->mb_enc),'UTF-8');
+						// Modified by Ivan Tcholakov, 28-JAN-2010.
+						//$tmp = $this->mb_rtrim(mb_substr($s,$j,$sep-$j,$this->mb_enc),'UTF-8');
+						$tmp = $this->mb_rtrim(api_substr($s,$j,$sep-$j,$this->mb_enc),'UTF-8');
+						//
 						if ($this->directionality == 'rtl') {	// *RTL*
 						   if ($align == 'J') { $align = 'R'; }	// *RTL*
 						}	// *RTL*
@@ -3516,8 +3578,12 @@ function Write($h,$txt,$currentx=0,$link='',$directionality='ltr',$align='') {
 							// Change NON_BREAKING SPACE to spaces so they are 'spaced' properly
 						      $tmp = str_replace($this->chrs[194].$this->chrs[160],$this->chrs[32],$tmp );
 							$len_ligne = $this->GetStringWidth($tmp );
-							$nb_carac = mb_strlen( $tmp , $this->mb_enc ) ;
-							$nb_spaces = mb_substr_count( $tmp ,' ', $this->mb_enc ) ;
+							// Modified by Ivan Tcholakov, 28-JAN-2010.
+							//$nb_carac = mb_strlen( $tmp , $this->mb_enc ) ;
+							//$nb_spaces = mb_substr_count( $tmp ,' ', $this->mb_enc ) ;
+							$nb_carac = api_strlen( $tmp , $this->mb_enc ) ;
+							$nb_spaces = api_substr_count( $tmp ,' ', $this->mb_enc ) ;
+							//
 							list($charspacing,$ws) = $this->GetJspacing($nb_carac,$nb_spaces,((($w-2) - $len_ligne) * $this->k));
 							// mPDF 4.0
 							$this->SetSpacing($charspacing,$ws);
@@ -3655,7 +3721,10 @@ function Write($h,$txt,$currentx=0,$link='',$directionality='ltr',$align='') {
 
 /*-- UNICODE-FONTS --*/
 	  if (($this->is_MB) && (!$this->usingCoreFont)) {
-		$tmp = mb_substr($s,$j,$i-$j,$this->mb_enc);
+	  	// Modified by Ivan Tcholakov, 28-JAN-2010.
+		//$tmp = mb_substr($s,$j,$i-$j,$this->mb_enc);
+		$tmp = api_substr($s,$j,$i-$j,$this->mb_enc);
+		//
 		if ($this->directionality == 'rtl') {	// *RTL*
 		   if ($align == 'J') { $align = 'R'; }	// *RTL*
 		}	// *RTL*
@@ -4232,8 +4301,12 @@ function finishFlowingBlock($endofblock=false)
 /*-- END UNICODE-FONTS --*/
 				      $chunk = str_replace($this->chrs[160],$this->chrs[32],$chunk );
 				}	// *UNICODE-FONTS*
-				$nb_carac += mb_strlen( $chunk, $this->mb_enc );
-				$nb_spaces += mb_substr_count( $chunk,' ', $this->mb_enc );
+				// Modified by Ivan Tcholakov, 28-JAN-2010.
+				//$nb_carac += mb_strlen( $chunk, $this->mb_enc );
+				//$nb_spaces += mb_substr_count( $chunk,' ', $this->mb_enc );
+				$nb_carac += api_strlen( $chunk, $this->mb_enc );
+				$nb_spaces += api_substr_count( $chunk,' ', $this->mb_enc );
+				//
 			}
 		}
 		// if it's justified, we need to find the char/word spacing (or if orphans have allowed length of line to go over the maxwidth)
@@ -4382,8 +4455,12 @@ function finishFlowingBlock($endofblock=false)
 				$save_fill = $fill; $spanfill = 1; $fill = 1;
 			}
 			// WORD SPACING
-		      $stringWidth = $this->GetStringWidth($chunk ) + ( $this->charspacing * mb_strlen($chunk,$this->mb_enc ) / $this->k )
-				+ ( $this->ws * mb_substr_count($chunk,' ',$this->mb_enc ) / $this->k );
+			// Modified by Ivan Tcholakov, 28-JAN-2010.
+		    //  $stringWidth = $this->GetStringWidth($chunk ) + ( $this->charspacing * mb_strlen($chunk,$this->mb_enc ) / $this->k )
+			//	+ ( $this->ws * mb_substr_count($chunk,' ',$this->mb_enc ) / $this->k );
+		    $stringWidth = $this->GetStringWidth($chunk ) + ( $this->charspacing * api_strlen($chunk,$this->mb_enc ) / $this->k )
+				+ ( $this->ws * api_substr_count($chunk,' ',$this->mb_enc ) / $this->k );
+			//
 			if (isset($this->objectbuffer[$dirk])) { $stringWidth = $this->objectbuffer[$dirk]['OUTER-WIDTH']; }
 
 			// mPDF 4.2 af , bf above and below font
@@ -4643,7 +4720,10 @@ function printobjectbuffer($is_table=false) {
 				$this->y += $this->form_element_spacing['input']['outer']['v'] /$k;
 			// Chop texto to max length $w-inner-padding
 			while ($this->GetStringWidth($texto) > $w-($this->form_element_spacing['input']['inner']['h']*2)) {
-				$texto = mb_substr($texto,0,mb_strlen($texto,$this->mb_enc)-1,$this->mb_enc);
+				// Modified by Ivan Tcholakov, 28-JAN-2010.
+				//$texto = mb_substr($texto,0,mb_strlen($texto,$this->mb_enc)-1,$this->mb_enc);
+				$texto = api_substr($texto,0,api_strlen($texto,$this->mb_enc)-1,$this->mb_enc);
+				//
 			}
 			// DIRECTIONALITY
 			  	$this->SetLineWidth(0.2 /$k );
@@ -4752,7 +4832,10 @@ function printobjectbuffer($is_table=false) {
                           if ($i == ($objattr['rows']-1)) $texto .= $textoaux[$i];
                           else $texto .= $textoaux[$i] . "\n";
                         }
-				$texto = mb_substr($texto,0,mb_strlen($texto,$this->mb_enc)-4,$this->mb_enc) . "...";
+                // Modified by Ivan Tcholakov, 28-JAN-2010.
+				//$texto = mb_substr($texto,0,mb_strlen($texto,$this->mb_enc)-4,$this->mb_enc) . "...";
+				$texto = api_substr($texto,0,api_strlen($texto,$this->mb_enc)-4,$this->mb_enc) . "...";
+				//
 			}
 			if ($texto != '') $this->MultiCell($w,$this->FontSize*$this->textarea_lineheight,$texto,0,'',0,'',$this->directionality,true);
 			$this->SetFillColor(255);
@@ -4855,8 +4938,12 @@ function WriteFlowingBlock( $s)
     // where the line should be cutoff if it is to be justified
     $cutoffWidth = $contentWidth;
 
-	$curlyquote = mb_convert_encoding("\xe2\x80\x9e",$this->mb_enc,'UTF-8');
-	$curlylowquote = mb_convert_encoding("\xe2\x80\x9d",$this->mb_enc,'UTF-8');
+    // Modified by Ivan Tcholakov, 28-JAN-2010.
+	//$curlyquote = mb_convert_encoding("\xe2\x80\x9e",$this->mb_enc,'UTF-8');
+	//$curlylowquote = mb_convert_encoding("\xe2\x80\x9d",$this->mb_enc,'UTF-8');
+	$curlyquote = api_convert_encoding("\xe2\x80\x9e",$this->mb_enc,'UTF-8');
+	$curlylowquote = api_convert_encoding("\xe2\x80\x9d",$this->mb_enc,'UTF-8');
+	//
 
 	// COLS
 	$oldcolumn = $this->CurrCol;
@@ -4934,7 +5021,10 @@ function WriteFlowingBlock( $s)
 
 /*-- UNICODE-FONTS --*/
    if ($this->is_MB && !$this->usingCoreFont) {
-	$tmp = mb_strlen( $s, $this->mb_enc );
+   	// Modified by Ivan Tcholakov, 28-JAN-2010.
+	//$tmp = mb_strlen( $s, $this->mb_enc );
+	$tmp = api_strlen( $s, $this->mb_enc );
+	//
    }
    else {
 /*-- END UNICODE-FONTS --*/
@@ -4952,7 +5042,10 @@ function WriteFlowingBlock( $s)
 	// get the width of the character in points
 /*-- UNICODE-FONTS --*/
 	if ($this->is_MB && !$this->usingCoreFont) {
-	      $c = mb_substr($s,$i,1,$this->mb_enc );
+		// Modified by Ivan Tcholakov, 28-JAN-2010.
+	    //  $c = mb_substr($s,$i,1,$this->mb_enc );
+		$c = api_substr($s,$i,1,$this->mb_enc );
+	    //
 		$cw = ($this->GetStringWidth($c) * $this->k);
 	}
 	else {
@@ -5052,8 +5145,12 @@ function WriteFlowingBlock( $s)
 /*-- END UNICODE-FONTS --*/
 			if (!$success && ($this->hyphenate || ($this->hyphenateTables && $is_table))) {
 				// Look ahead to get current word
-				for($ac = $i; $ac<(mb_strlen($s)-1); $ac++) {
-					$addc = mb_substr($s,$ac,1,$this->mb_enc );
+				// Modified by Ivan Tcholakov, 28-JAN-2010.
+				//for($ac = $i; $ac<(mb_strlen($s)-1); $ac++) {
+				//	$addc = mb_substr($s,$ac,1,$this->mb_enc );
+				for($ac = $i; $ac<(api_strlen($s, $this->mb_enc)-1); $ac++) {
+					$addc = api_substr($s,$ac,1,$this->mb_enc );
+				//
 					if ($addc == ' ') { break; }
 					$currWord .= $addc;
 				}
@@ -5062,10 +5159,16 @@ function WriteFlowingBlock( $s)
 			}
 			if ($success) {
 				$already = array_pop( $words );
-				$forward = mb_substr($already,$prelength,mb_strlen($already, $this->mb_enc), $this->mb_enc);
+				// Modified by Ivan Tcholakov, 28-JAN-2010.
+				//$forward = mb_substr($already,$prelength,mb_strlen($already, $this->mb_enc), $this->mb_enc);
+				$forward = api_substr($already,$prelength,api_strlen($already, $this->mb_enc), $this->mb_enc);
+				//
 				$words[] = $pre.'-';
 				$words[] = $forward;
-				$currContent = mb_substr($currContent,0,mb_strlen($currContent, $this->mb_enc)-mb_strlen($post, $this->mb_enc), $this->mb_enc) . '-';
+				// Modified by Ivan Tcholakov, 28-JAN-2010.
+				//$currContent = mb_substr($currContent,0,mb_strlen($currContent, $this->mb_enc)-mb_strlen($post, $this->mb_enc), $this->mb_enc) . '-';
+				$currContent = api_substr($currContent,0,api_strlen($currContent, $this->mb_enc)-api_strlen($post, $this->mb_enc), $this->mb_enc) . '-';
+				//
 			}
 /*-- END HYPHENATION --*/
 		}	// *CJK*
@@ -5271,9 +5374,13 @@ function WriteFlowingBlock( $s)
 /*-- END UNICODE-FONTS --*/
 					      $chunk = str_replace($this->chrs[160],$this->chrs[32],$chunk );
 					}	// *UNICODE-FONTS*
-					$nb_carac += mb_strlen( $chunk, $this->mb_enc ) ;
-					$nb_spaces += mb_substr_count( $chunk,' ', $this->mb_enc ) ;
-				}
+					// Modified by Ivan Tcholakov, 28-JAN-2010.
+					//$nb_carac += mb_strlen( $chunk, $this->mb_enc ) ;
+					//$nb_spaces += mb_substr_count( $chunk,' ', $this->mb_enc ) ;
+					$nb_carac += api_strlen( $chunk, $this->mb_enc ) ;
+					$nb_spaces += api_substr_count( $chunk,' ', $this->mb_enc ) ;
+					//
+		  		}
 			}
 			// mPDF 4.2 $lastitalic to shorten if line ends with artificial ITALIC
 			list($charspacing,$ws) = $this->GetJspacing($nb_carac,$nb_spaces,($maxWidth-$lastitalic-$cutoffWidth-$WidthCorrection-(($this->cMarginL+$this->cMarginR)*$this->k)-($paddingL+$paddingR +(($fpaddingL + $fpaddingR) * $this->k) )));
@@ -5452,8 +5559,12 @@ function WriteFlowingBlock( $s)
 			}
 
 			// WORD SPACING
-		      $stringWidth = $this->GetStringWidth($chunk ) + ( $this->charspacing * mb_strlen($chunk,$this->mb_enc ) / $this->k )
-				+ ( $this->ws * mb_substr_count($chunk,' ',$this->mb_enc ) / $this->k );
+			// Modified by Ivan Tcholakov, 28-JAN-2010.
+		    //  $stringWidth = $this->GetStringWidth($chunk ) + ( $this->charspacing * mb_strlen($chunk,$this->mb_enc ) / $this->k )
+			//	+ ( $this->ws * mb_substr_count($chunk,' ',$this->mb_enc ) / $this->k );
+		    $stringWidth = $this->GetStringWidth($chunk ) + ( $this->charspacing * api_strlen($chunk,$this->mb_enc ) / $this->k )
+				+ ( $this->ws * api_substr_count($chunk,' ',$this->mb_enc ) / $this->k );
+			//
 			if (isset($this->objectbuffer[$dirk])) { $stringWidth = $this->objectbuffer[$dirk]['OUTER-WIDTH'];  }
 
 			if ($stringWidth > 0) {
@@ -5610,7 +5721,10 @@ function WordWrap(&$text, $maxwidth, $forcewrap = 0) {
     foreach ($lines as $line) {
 /*-- UNICODE-FONTS --*/
 	if ($this->is_MB && !$this->usingCoreFont) {
-		$words = mb_split(' ', $line);
+		// Modified by Ivan Tcholakov, 28-JAN-2010.
+		//$words = mb_split(' ', $line);
+		$words = api_split(' ', $line);
+		//
 	}
 	else {
 /*-- END UNICODE-FONTS --*/
@@ -5630,17 +5744,30 @@ function WordWrap(&$text, $maxwidth, $forcewrap = 0) {
 			if ($forcewrap) {
 			  while($wordwidth > $maxwidth) {
 				$chw = 0;	// check width
-				for ( $i = 0; $i < mb_strlen($word, $this->mb_enc ); $i++ ) {
-					$chw = $this->GetStringWidth(mb_substr($word,0,$i+1,$this->mb_enc ));
+				// Modified by Ivan Tcholakov, 28-JAN-2010.
+				//for ( $i = 0; $i < mb_strlen($word, $this->mb_enc ); $i++ ) {
+				//	$chw = $this->GetStringWidth(mb_substr($word,0,$i+1,$this->mb_enc ));
+				for ( $i = 0; $i < api_strlen($word, $this->mb_enc ); $i++ ) {
+					$chw = $this->GetStringWidth(api_substr($word,0,$i+1,$this->mb_enc ));
+				//
 					if ($chw > $maxwidth ) {
 						if ($text) {
-							$text = $this->mb_rtrim($text, $this->mb_enc)."\n".mb_substr($word,0,$i,$this->mb_enc );
+							// Modified by Ivan Tcholakov, 28-JAN-2010.
+							//$text = $this->mb_rtrim($text, $this->mb_enc)."\n".mb_substr($word,0,$i,$this->mb_enc );
+							$text = $this->mb_rtrim($text, $this->mb_enc)."\n".api_substr($word,0,$i,$this->mb_enc );
+							//
 							$count++;
 						}
 						else {
-							$text = mb_substr($word,0,$i,$this->mb_enc );
+							// Modified by Ivan Tcholakov, 28-JAN-2010.
+							//$text = mb_substr($word,0,$i,$this->mb_enc );
+							$text = api_substr($word,0,$i,$this->mb_enc );
+							//
 						}
-						$word = mb_substr($word,$i,mb_strlen($word, $this->mb_enc )-$i,$this->mb_enc );
+						// Modified by Ivan Tcholakov, 28-JAN-2010.
+						//$word = mb_substr($word,$i,mb_strlen($word, $this->mb_enc )-$i,$this->mb_enc );
+						$word = api_substr($word,$i,api_strlen($word, $this->mb_enc )-$i,$this->mb_enc );
+						//
 						$wordwidth = $this->GetStringWidth($word);
 						$width = $maxwidth;
 						break;
@@ -7956,8 +8083,12 @@ function _dounderline($x,$y,$txt) {
 	// mPDF 4.0 changed to line instead of rectangle
 	// Now print line exactly where $y secifies - called from Text() and Cell() - adjust  position there
 	// WORD SPACING
-      $w =($this->GetStringWidth($txt)*$this->k) + ($this->charspacing * mb_strlen( $txt, $this->mb_enc ))
-		 + ( $this->ws * mb_substr_count( $txt, ' ', $this->mb_enc ));
+	// Modified by Ivan Tcholakov, 28-JAN-2010.
+    //  $w =($this->GetStringWidth($txt)*$this->k) + ($this->charspacing * mb_strlen( $txt, $this->mb_enc ))
+	//	 + ( $this->ws * mb_substr_count( $txt, ' ', $this->mb_enc ));
+    $w =($this->GetStringWidth($txt)*$this->k) + ($this->charspacing * api_strlen( $txt, $this->mb_enc ))
+		 + ( $this->ws * api_substr_count( $txt, ' ', $this->mb_enc ));
+	//
 	//Draw a line
 	return sprintf('%.3f %.3f m %.3f %.3f l S',$x*$this->k,($this->h-$y)*$this->k,($x*$this->k)+$w,($this->h-$y)*$this->k);
 }
@@ -8800,7 +8931,10 @@ function watermark( $texte, $angle=45, $fontsize=96, $alpha=0.2 )
 	if ($this->text_input_as_HTML) {
 		$texte= $this->all_entities_to_utf8($texte);
 	}
-	if (!$this->is_MB) { $texte = mb_convert_encoding($texte,$this->mb_enc,'UTF-8'); }
+	// Modified by Ivan Tcholakov, 28-JAN-2010.
+	//if (!$this->is_MB) { $texte = mb_convert_encoding($texte,$this->mb_enc,'UTF-8'); }
+	if (!$this->is_MB) { $texte = api_convert_encoding($texte,$this->mb_enc,'UTF-8'); }
+	//
 	// DIRECTIONALITY
 	$this->magic_reverse_dir($texte);	// *RTL*
 	// mPDF 4.0 Font-specific ligature substitution for Indic fonts
@@ -8967,7 +9101,10 @@ function Shaded_box( $text,$font='',$fontstyle='B',$szfont='',$width='70%',$styl
 	if ($this->text_input_as_HTML) {
 		$text = $this->all_entities_to_utf8($text);
 	}
-	if (!$this->is_MB) { $text = mb_convert_encoding($text,$this->mb_enc,'UTF-8'); }
+	// Modified by Ivan Tcholakov, 28-JAN-2010.
+	//if (!$this->is_MB) { $text = mb_convert_encoding($text,$this->mb_enc,'UTF-8'); }
+	if (!$this->is_MB) { $text = api_convert_encoding($text,$this->mb_enc,'UTF-8'); }
+	//
 	// DIRECTIONALITY
 	$this->magic_reverse_dir($text);	// *RTL*
 	// mPDF 4.0 Font-specific ligature substitution for Indic fonts
@@ -9138,7 +9275,10 @@ function UTF8ToUTF16BE($str, $setbom=true) {
 	if ($setbom) {
 		$outstr .= "\xFE\xFF"; // Byte Order Mark (BOM)
 	}
-	$outstr .= mb_convert_encoding($str, 'UTF-16BE', 'UTF-8');
+	// Modified by Ivan Tcholakov, 28-JAN-2010.
+	//$outstr .= mb_convert_encoding($str, 'UTF-16BE', 'UTF-8');
+	$outstr .= api_convert_encoding($str, 'UTF-16BE', 'UTF-8');
+	//
 	return $outstr;
 }
 
@@ -9706,7 +9846,10 @@ function Header($content='') {
 			$hd = $this->all_entities_to_utf8($hd);
 		}
 		// CONVERT CODEPAGE
-		if (!$this->is_MB) { $hd = mb_convert_encoding($hd,$this->mb_enc,'UTF-8'); }
+		// Modified by Ivan Tcholakov, 28-JAN-2010.
+		//if (!$this->is_MB) { $hd = mb_convert_encoding($hd,$this->mb_enc,'UTF-8'); }
+		if (!$this->is_MB) { $hd = api_convert_encoding($hd,$this->mb_enc,'UTF-8'); }
+		//
 		// DIRECTIONALITY RTL
 		$this->magic_reverse_dir($hd);	// *RTL*
 		// mPDF 4.0 Font-specific ligature substitution for Indic fonts
@@ -10639,7 +10782,10 @@ function Footer() {
 			$hd = $this->all_entities_to_utf8($hd);
 		}
 		// CONVERT CODEPAGE
-		if (!$this->is_MB) { $hd = mb_convert_encoding($hd,$this->mb_enc,'UTF-8'); }
+		// Modified by Ivan Tcholakov, 28-JAN-2010.
+		//if (!$this->is_MB) { $hd = mb_convert_encoding($hd,$this->mb_enc,'UTF-8'); }
+		if (!$this->is_MB) { $hd = api_convert_encoding($hd,$this->mb_enc,'UTF-8'); }
+		//
 		// DIRECTIONALITY RTL
 		$this->magic_reverse_dir($hd);	// *RTL*
 		// mPDF 4.0 Font-specific ligature substitution for Indic fonts
@@ -10699,7 +10845,10 @@ function softHyphenate($word, $maxWidth) {
 	$offset = 0;
 	$p = true;
 	if ($this->is_MB) { 	// *UNICODE-FONTS*
-		$wl = mb_strlen($word,'UTF-8');	// *UNICODE-FONTS*
+		// Modified by Ivan Tcholakov, 28-JAN-2010.
+		//$wl = mb_strlen($word,'UTF-8');	// *UNICODE-FONTS*
+		$wl = api_strlen($word,'UTF-8');	// *UNICODE-FONTS*
+		//
 	}	// *UNICODE-FONTS*
 	else {	// *UNICODE-FONTS*
 		$wl = strlen($word);
@@ -10707,7 +10856,10 @@ function softHyphenate($word, $maxWidth) {
 	while($offset < $wl) {
 /*-- UNICODE-FONTS --*/
 		if ($this->is_MB) {
-			$p = mb_strpos($word, "\xc2\xad", $offset, 'UTF-8');
+			// Modified by Ivan Tcholakov, 28-JAN-2010.
+			//$p = mb_strpos($word, "\xc2\xad", $offset, 'UTF-8');
+			$p = api_strpos($word, "\xc2\xad", $offset, 'UTF-8');
+			//
 		}
 		// mPDF 3.0 Soft Hyphens chr(173)
 		else
@@ -10723,11 +10875,18 @@ function softHyphenate($word, $maxWidth) {
 	foreach($poss AS $i) {
 /*-- UNICODE-FONTS --*/
 			if ($this->is_MB) {
-				$a = mb_substr($word,0,$i,'UTF-8');
+				// Modified by Ivan Tcholakov, 28-JAN-2010.
+				//$a = mb_substr($word,0,$i,'UTF-8');
+				$a = api_substr($word,0,$i,'UTF-8');
+				//
 				if ($this->GetStringWidth($a.'-') > $maxWidth) { break ; }
 				$pre = $a;
-				$post = mb_substr($word,$i+1,mb_strlen($word,'UTF-8'),'UTF-8');
-				$prelength = mb_strlen($pre, 'UTF-8');
+				// Modified by Ivan Tcholakov, 28-JAN-2010.
+				//$post = mb_substr($word,$i+1,mb_strlen($word,'UTF-8'),'UTF-8');
+				//$prelength = mb_strlen($pre, 'UTF-8');
+				$post = api_substr($word,$i+1,api_strlen($word,'UTF-8'),'UTF-8');
+				$prelength = api_strlen($pre, 'UTF-8');
+				//
 			}
 			else {
 /*-- END UNICODE-FONTS --*/
@@ -10759,14 +10918,23 @@ function hyphenateWord($word, $maxWidth) {
 				$poss = array();
 				$offset = 0;
 				$p = true;
-				$wl = mb_strlen($entry ,'UTF-8');
+				// Modified by Ivan Tcholakov, 28-JAN-2010.
+				//$wl = mb_strlen($entry ,'UTF-8');
+				$wl = api_strlen($entry ,'UTF-8');
+				//
 				while($offset < $wl) {
-					$p = mb_strpos($entry, '/', $offset, 'UTF-8');
+					// Modified by Ivan Tcholakov, 28-JAN-2010.
+					//$p = mb_strpos($entry, '/', $offset, 'UTF-8');
+					$p = api_strpos($entry, '/', $offset, 'UTF-8');
+					//
 					if ($p !== false) { $poss[] = $p - count($poss); }
 					else { break; }
 					$offset = $p+1;
 				}
-				if (count($poss)) { $this->SHYdictionaryWords[str_replace('/', '', mb_strtolower($entry))] = $poss; }
+				// Modified by Ivan Tcholakov, 28-JAN-2010.
+				//if (count($poss)) { $this->SHYdictionaryWords[str_replace('/', '', mb_strtolower($entry))] = $poss; }
+				if (count($poss)) { $this->SHYdictionaryWords[str_replace('/', '', api_strtolower($entry))] = $poss; }
+				//
 			}
 		}
 		$this->loadedSHYdictionary = true;
@@ -10786,7 +10954,10 @@ function hyphenateWord($word, $maxWidth) {
 		$this->loadedSHYpatterns = $this->SHYlang;
 	}
 
-	if (!$this->is_MB) { $word = mb_convert_encoding($word,'UTF-8',$this->mb_enc); }
+	// Modified by Ivan Tcholakov, 28-JAN-2010.
+	//if (!$this->is_MB) { $word = mb_convert_encoding($word,'UTF-8',$this->mb_enc); }
+	if (!$this->is_MB) { $word = api_convert_encoding($word,'UTF-8',$this->mb_enc); }
+	//
 
 	$prepre = '';
 	$postpost = '';
@@ -10804,39 +10975,64 @@ function hyphenateWord($word, $maxWidth) {
 		$word = $m[1];
 		$postpost = $m[2];
 	}
-	if(mb_strlen($word,'UTF-8') < $this->SHYcharmin) {
+	// Modified by Ivan Tcholakov, 28-JAN-2010.
+	//if(mb_strlen($word,'UTF-8') < $this->SHYcharmin) {
+	if(api_strlen($word,'UTF-8') < $this->SHYcharmin) {
+	//
 			return array(false,'','','');
 	}
 	$success = false;
 
-	if(isset($this->SHYdictionaryWords[mb_strtolower($word)])) {
-	   foreach($this->SHYdictionaryWords[mb_strtolower($word)] AS $i) {
-			$a = $prepre . mb_substr($word,0,$i,'UTF-8');
-			if (!$this->is_MB) { $testa = mb_convert_encoding($a,$this->mb_enc,'UTF-8'); }
+	// Modified by Ivan Tcholakov, 28-JAN-2010.
+	//if(isset($this->SHYdictionaryWords[mb_strtolower($word)])) {
+	//   foreach($this->SHYdictionaryWords[mb_strtolower($word)] AS $i) {
+	//		$a = $prepre . mb_substr($word,0,$i,'UTF-8');
+	//		if (!$this->is_MB) { $testa = mb_convert_encoding($a,$this->mb_enc,'UTF-8'); }
+	if(isset($this->SHYdictionaryWords[api_strtolower($word)])) {
+	   foreach($this->SHYdictionaryWords[api_strtolower($word)] AS $i) {
+			$a = $prepre . api_substr($word,0,$i,'UTF-8');
+			if (!$this->is_MB) { $testa = api_convert_encoding($a,$this->mb_enc,'UTF-8'); }
+	//
 			else { $testa = $a; }
 			if ($this->GetStringWidth($testa.'-') > $maxWidth) { break ; }
 			$pre = $a;
-			$post = mb_substr($word,$i+1,mb_strlen($word,'UTF-8'),'UTF-8') . $postpost;
+			// Modified by Ivan Tcholakov, 28-JAN-2010.
+			//$post = mb_substr($word,$i+1,mb_strlen($word,'UTF-8'),'UTF-8') . $postpost;
+			$post = api_substr($word,$i+1,api_strlen($word,'UTF-8'),'UTF-8') . $postpost;
+			//
 			$success = true;
 	   }
 	}
 
 	if (!$success) {
 	   $text_word = '_' . $word . '_';
-	   $word_length = mb_strlen($text_word,'UTF-8');
+	   // Modified by Ivan Tcholakov, 28-JAN-2010.
+	   //$word_length = mb_strlen($text_word,'UTF-8');
+	   $word_length = api_strlen($text_word,'UTF-8');
+	   //
 
 	   $single_character = preg_split('//u', $text_word);
 
-	   $text_word = mb_strtolower($text_word,'UTF-8');
+	   	// Modified by Ivan Tcholakov, 28-JAN-2010.
+	   //$text_word = mb_strtolower($text_word,'UTF-8');
+	   $text_word = api_strtolower($text_word,'UTF-8');
+	   //
 	   $hyphenated_word = array();
 	   $numb3rs = array('0' => true, '1' => true, '2' => true, '3' => true, '4' => true, '5' => true, '6' => true, '7' => true, '8' => true, '9' => true);
 	   for($position = 0; $position <= ($word_length - $this->SHYcharmin); $position++) {
 		$maxwins = min(($word_length - $position), $this->SHYcharmax);
 		for($win = $this->SHYcharmin; $win <= $maxwins; $win++) {
-			if(isset($this->SHYpatterns[mb_substr($text_word, $position, $win,'UTF-8')])) {
-				$pattern = $this->SHYpatterns[mb_substr($text_word, $position, $win,'UTF-8')];
+			// Modified by Ivan Tcholakov, 28-JAN-2010.
+			//if(isset($this->SHYpatterns[mb_substr($text_word, $position, $win,'UTF-8')])) {
+			//	$pattern = $this->SHYpatterns[mb_substr($text_word, $position, $win,'UTF-8')];
+			if(isset($this->SHYpatterns[api_substr($text_word, $position, $win,'UTF-8')])) {
+				$pattern = $this->SHYpatterns[api_substr($text_word, $position, $win,'UTF-8')];
+			//
 				$digits = 1;
-				$pattern_length = mb_strlen($pattern,'UTF-8');
+				// Modified by Ivan Tcholakov, 28-JAN-2010.
+				//$pattern_length = mb_strlen($pattern,'UTF-8');
+				$pattern_length = api_strlen($pattern,'UTF-8');
+				//
 
 				for($i = 0; $i < $pattern_length; $i++) {
 					$char = $pattern[$i];
@@ -10850,25 +11046,41 @@ function hyphenateWord($word, $maxWidth) {
 		}
 	   }
 
-	   for($i = $this->SHYleftmin; $i <= (mb_strlen($word,'UTF-8') - $this->SHYrightmin); $i++) {
+	// Modified by Ivan Tcholakov, 28-JAN-2010.
+	//   for($i = $this->SHYleftmin; $i <= (mb_strlen($word,'UTF-8') - $this->SHYrightmin); $i++) {
+	//	if(isset($hyphenated_word[$i]) && $hyphenated_word[$i] % 2 != 0) {
+	//		$a = $prepre . mb_substr($word,0,$i,'UTF-8');
+	//		if (!$this->is_MB) { $testa = mb_convert_encoding($a,$this->mb_enc,'UTF-8'); }
+	   for($i = $this->SHYleftmin; $i <= (api_strlen($word,'UTF-8') - $this->SHYrightmin); $i++) {
 		if(isset($hyphenated_word[$i]) && $hyphenated_word[$i] % 2 != 0) {
-			$a = $prepre . mb_substr($word,0,$i,'UTF-8');
-			if (!$this->is_MB) { $testa = mb_convert_encoding($a,$this->mb_enc,'UTF-8'); }
+			$a = $prepre . api_substr($word,0,$i,'UTF-8');
+			if (!$this->is_MB) { $testa = api_convert_encoding($a,$this->mb_enc,'UTF-8'); }
+	//
 			else { $testa = $a; }
 			if ($this->GetStringWidth($testa.'-') > $maxWidth + 0.0001) { break ; }
 			$pre = $a;
-			$post = mb_substr($word,$i+1,mb_strlen($word,'UTF-8'),'UTF-8') . $postpost;
+			// Modified by Ivan Tcholakov, 28-JAN-2010.
+			//$post = mb_substr($word,$i+1,mb_strlen($word,'UTF-8'),'UTF-8') . $postpost;
+			$post = api_substr($word,$i+1,api_strlen($word,'UTF-8'),'UTF-8') . $postpost;
+			//
 			$success = true;
 		}
 	   }
 	}
 	if (!$this->is_MB) {
-		$pre = mb_convert_encoding($pre,$this->mb_enc,'UTF-8');
-		$post = mb_convert_encoding($post,$this->mb_enc,'UTF-8');
+		// Modified by Ivan Tcholakov, 28-JAN-2010.
+		//$pre = mb_convert_encoding($pre,$this->mb_enc,'UTF-8');
+		//$post = mb_convert_encoding($post,$this->mb_enc,'UTF-8');
+		$pre = api_convert_encoding($pre,$this->mb_enc,'UTF-8');
+		$post = api_convert_encoding($post,$this->mb_enc,'UTF-8');
+		//
 		$prelength = strlen($pre);
 	}
 	else {
-		$prelength = mb_strlen($pre);
+		// Modified by Ivan Tcholakov, 28-JAN-2010.
+		//$prelength = mb_strlen($pre);
+		$prelength = api_strlen($pre);
+		//
 	}
 	return array($success,$pre,$post,$prelength);
 
@@ -11044,7 +11256,10 @@ function WriteHTML($html,$sub=0,$init=true,$close=true) {
 		$this->setCSS($properties,'','BODY');
 	}
 
-	mb_internal_encoding('UTF-8');
+	// Modified by Ivan Tcholakov, 28-JAN-2010.
+	//mb_internal_encoding('UTF-8');
+	_api_mb_internal_encoding('UTF-8');
+	//
 
 	$html = $this->AdjustHTML($html,$this->directionality,$this->usepre, $this->tabSpaces); //Try to make HTML look more like XHTML
 
@@ -11100,7 +11315,10 @@ function WriteHTML($html,$sub=0,$init=true,$close=true) {
 	// $a = preg_split ('/<((?:[^<>]+(?:"[^"]*"|\'[^\']*\')?)+)>/ms', $html, -1, PREG_SPLIT_DELIM_CAPTURE);
 
 	if ($this->mb_enc) {
-		mb_internal_encoding($this->mb_enc);
+		// Modified by Ivan Tcholakov, 28-JAN-2010.
+		//mb_internal_encoding($this->mb_enc);
+		_api_mb_internal_encoding($this->mb_enc);
+		//
 	}
 	$pbc = 0;	// *PROGRESS-BAR*
 	if ($this->progressBar) { $this->UpdateProgressBar(1,0); }	// *PROGRESS-BAR*
@@ -11136,11 +11354,18 @@ function WriteHTML($html,$sub=0,$init=true,$close=true) {
 			$this->ConvertIndic($e);	// *INDIC*
 
 			// CONVERT CODEPAGE
-			if (!$this->is_MB) { $e = mb_convert_encoding($e,$this->mb_enc,'UTF-8'); }
+			// Modified by Ivan Tcholakov, 28-JAN-2010.
+			//if (!$this->is_MB) { $e = mb_convert_encoding($e,$this->mb_enc,'UTF-8'); }
+			if (!$this->is_MB) { $e = api_convert_encoding($e,$this->mb_enc,'UTF-8'); }
+			//
 /*-- UNICODE-FONTS --*/
 			if (($this->is_MB && !$this->isCJK) && (!$this->usingCoreFont)) {
-				if ($this->toupper) { $e = mb_strtoupper($e,$this->mb_enc); }
-				if ($this->tolower) { $e = mb_strtolower($e,$this->mb_enc); }
+				// Modified by Ivan Tcholakov, 28-JAN-2010.
+				//if ($this->toupper) { $e = mb_strtoupper($e,$this->mb_enc); }
+				//if ($this->tolower) { $e = mb_strtolower($e,$this->mb_enc); }
+				if ($this->toupper) { $e = api_strtoupper($e,$this->mb_enc); }
+				if ($this->tolower) { $e = api_strtolower($e,$this->mb_enc); }
+				//
 			}
 			else
 /*-- END UNICODE-FONTS --*/
@@ -19710,8 +19935,12 @@ function TableWordWrap($maxwidth, $forcewrap = 0, $textbuffer = '', $def_fontsiz
    $biggestword=0;
    $toonarrow=false;
 
-   $curlyquote = mb_convert_encoding("\xe2\x80\x9e",$this->mb_enc,'UTF-8');
-   $curlylowquote = mb_convert_encoding("\xe2\x80\x9d",$this->mb_enc,'UTF-8');
+   // Modified by Ivan Tcholakov, 28-JAN-2010.
+   //$curlyquote = mb_convert_encoding("\xe2\x80\x9e",$this->mb_enc,'UTF-8');
+   //$curlylowquote = mb_convert_encoding("\xe2\x80\x9d",$this->mb_enc,'UTF-8');
+   $curlyquote = api_convert_encoding("\xe2\x80\x9e",$this->mb_enc,'UTF-8');
+   $curlylowquote = api_convert_encoding("\xe2\x80\x9d",$this->mb_enc,'UTF-8');
+   //
 
    // mPDF 3.0 Don't use ltrim as this gets rid of \n - new line from <br>
    //$textbuffer[0][0] = ltrim($textbuffer[0][0]);
@@ -19820,12 +20049,18 @@ function TableWordWrap($maxwidth, $forcewrap = 0, $textbuffer = '', $def_fontsiz
 
 	$space = $this->GetStringWidth(' ');
 
-	if (mb_substr($line,0,1,$this->mb_enc ) == ' ') { 	// line (chunk) starts with a space
+	// Modified by Ivan Tcholakov, 28-JAN-2010.
+	//if (mb_substr($line,0,1,$this->mb_enc ) == ' ') { 	// line (chunk) starts with a space
+	if (api_substr($line,0,1,$this->mb_enc ) == ' ') { 	// line (chunk) starts with a space
+	//
 		$width += $space;
 		$text .= ' ';
 	}
 
-	if (mb_substr($line,(mb_strlen($line,$this->mb_enc )-1),1,$this->mb_enc ) == ' ') { $lsend = true; }	// line (chunk) ends with a space
+	// Modified by Ivan Tcholakov, 28-JAN-2010.
+	//if (mb_substr($line,(mb_strlen($line,$this->mb_enc )-1),1,$this->mb_enc ) == ' ') { $lsend = true; }	// line (chunk) ends with a space
+	if (api_substr($line,(api_strlen($line,$this->mb_enc )-1),1,$this->mb_enc ) == ' ') { $lsend = true; }	// line (chunk) ends with a space
+	//
 	else { $lsend = false; }
 	$line= ltrim($line);
 	$line= $this->mb_rtrim($line, $this->mb_enc);
@@ -19833,7 +20068,10 @@ function TableWordWrap($maxwidth, $forcewrap = 0, $textbuffer = '', $def_fontsiz
 
 /*-- UNICODE-FONTS --*/
 	if ($this->is_MB && !$this->usingCoreFont) {
-		$words = mb_split(' ', $line);
+		// Modified by Ivan Tcholakov, 28-JAN-2010.
+		//$words = mb_split(' ', $line);
+		$words = api_split(' ', $line);
+		//
 	}
 	else {
 /*-- END UNICODE-FONTS --*/
@@ -19850,8 +20088,12 @@ function TableWordWrap($maxwidth, $forcewrap = 0, $textbuffer = '', $def_fontsiz
 		if ($wordwidth > $maxwidth + 0.0001) {
 			while($wordwidth > $maxwidth) {
 				$chw = 0;	// check width
-				for ( $i = 0; $i < mb_strlen($word, $this->mb_enc ); $i++ ) {
-					$chw = $this->GetStringWidth(mb_substr($word,0,$i+1,$this->mb_enc ));
+				// Modified by Ivan Tcholakov, 28-JAN-2010.
+				//for ( $i = 0; $i < mb_strlen($word, $this->mb_enc ); $i++ ) {
+				//	$chw = $this->GetStringWidth(mb_substr($word,0,$i+1,$this->mb_enc ));
+				for ( $i = 0; $i < api_strlen($word, $this->mb_enc ); $i++ ) {
+					$chw = $this->GetStringWidth(api_substr($word,0,$i+1,$this->mb_enc ));
+				//
 					if ($chw > $maxwidth) {
 						if ($text) {
 							$ch += $lh;
@@ -19860,15 +20102,22 @@ function TableWordWrap($maxwidth, $forcewrap = 0, $textbuffer = '', $def_fontsiz
 							$ln++;
 							$mxw = $maxwidth;
 						}
-						$text = mb_substr($word,0,$i,$this->mb_enc );
-						$word = mb_substr($word,$i,mb_strlen($word, $this->mb_enc )-$i,$this->mb_enc );
+						// Modified by Ivan Tcholakov, 28-JAN-2010.
+						//$text = mb_substr($word,0,$i,$this->mb_enc );
+						//$word = mb_substr($word,$i,mb_strlen($word, $this->mb_enc )-$i,$this->mb_enc );
+						$text = api_substr($word,0,$i,$this->mb_enc );
+						$word = api_substr($word,$i,api_strlen($word, $this->mb_enc )-$i,$this->mb_enc );
+						//
 						$wordwidth = $this->GetStringWidth($word);
 						$width = $maxwidth;
 						break;
 					}
 				}
 				// mPDF 4.0 to catch errors
-				if (mb_strlen($word, $this->mb_enc )<2) {
+				// Modified by Ivan Tcholakov, 28-JAN-2010.
+				//if (mb_strlen($word, $this->mb_enc )<2) {
+				if (api_strlen($word, $this->mb_enc )<2) {
+				//
 					$wordwidth = $maxwidth - 0.0001;
 					if ($this->debug) { $this->Error("Table cell width calculated less than that needed for single character!"); }
 				}
@@ -20012,7 +20261,10 @@ function TableCheckMinWidth(&$text, $maxwidth, $forcewrap = 0, $textbuffer = '')
 
 /*-- UNICODE-FONTS --*/
 	if ($this->is_MB && !$this->usingCoreFont) {
-		$words = mb_split(' ', $line);
+		// Modified by Ivan Tcholakov, 28-JAN-2010.
+		//$words = mb_split(' ', $line);
+		$words = api_split(' ', $line);
+		//
 	}
 	else {
 /*-- END UNICODE-FONTS --*/
@@ -23183,7 +23435,10 @@ function TOC_Entry($txt, $level=0, $toc_id=0) {
 		if ($this->text_input_as_HTML) {
 			$txt = $this->all_entities_to_utf8($txt);
 		}
-		if (!$this->is_MB) { $txt = mb_convert_encoding($txt,$this->mb_enc,'UTF-8'); }
+		// Modified by Ivan Tcholakov, 28-JAN-2010.
+		//if (!$this->is_MB) { $txt = mb_convert_encoding($txt,$this->mb_enc,'UTF-8'); }
+		if (!$this->is_MB) { $txt = api_convert_encoding($txt,$this->mb_enc,'UTF-8'); }
+		//
   		if ($this->ColActive) { $ily = $this->y0; } else { $ily = $this->y; }	// use top of columns
 		$linkn = $this->AddLink();
 		$this->SetLink($linkn,$ily,$this->page);
@@ -23776,7 +24031,10 @@ function IndexEntry($txt, $xref='') {
 	if ($this->text_input_as_HTML) {
 		$txt = $this->all_entities_to_utf8($txt);
 	}
-	if (!$this->is_MB) { $txt = mb_convert_encoding($txt,$this->mb_enc,'UTF-8'); }
+	// Modified by Ivan Tcholakov, 28-JAN-2010.
+	//if (!$this->is_MB) { $txt = mb_convert_encoding($txt,$this->mb_enc,'UTF-8'); }
+	if (!$this->is_MB) { $txt = api_convert_encoding($txt,$this->mb_enc,'UTF-8'); }
+	//
 
 	$Present=0;
 	$size=sizeof($this->Reference);
@@ -23877,8 +24135,12 @@ function IndexEntrySee($txta,$txtb) {
 		$txtb = $this->all_entities_to_utf8($txtb);
 	}
 	if (!$this->is_MB) {
-		$txta = mb_convert_encoding($txta,$this->mb_enc,'UTF-8');
-		$txtb = mb_convert_encoding($txtb,$this->mb_enc,'UTF-8');
+		// Modified by Ivan Tcholakov, 28-JAN-2010.
+		//$txta = mb_convert_encoding($txta,$this->mb_enc,'UTF-8');
+		//$txtb = mb_convert_encoding($txtb,$this->mb_enc,'UTF-8');
+		$txta = api_convert_encoding($txta,$this->mb_enc,'UTF-8');
+		$txtb = api_convert_encoding($txtb,$this->mb_enc,'UTF-8');
+		//
 	}
 	if ($this->directionality == 'rtl') {	// *RTL*
 		$txta = str_replace(':',' - ',$txta);	// *RTL*
@@ -23937,7 +24199,10 @@ function CreateIndex($NbCol=1, $reffontsize='', $linespacing='', $offset=3, $use
 	   	if ($this->Reference[$i]['t']) {
 			if ($usedivletters) {
 			   // mPDF 4.0
-			   $lett = mb_strtoupper(mb_substr($this->Reference[$i]['t'],0,1,$this->mb_enc ),$this->mb_enc );
+			   // Modified by Ivan Tcholakov, 28-JAN-2010.
+			   //$lett = mb_strtoupper(mb_substr($this->Reference[$i]['t'],0,1,$this->mb_enc ),$this->mb_enc );
+			   $lett = api_strtoupper(api_substr($this->Reference[$i]['t'],0,1,$this->mb_enc ),$this->mb_enc );
+			   //
 			   if ($lett != $last_lett) {
 
 				// mPDF 3.0 - Prevent break after Dividing letter
@@ -25235,7 +25500,10 @@ function AutosizeText($text,$w,$font,$style,$szfont=72) {
 	if ($this->text_input_as_HTML) {
 		$text = $this->all_entities_to_utf8($text);
 	}
-	if (!$this->is_MB) { $text = mb_convert_encoding($text,$this->mb_enc,'UTF-8'); }
+	// Modified by Ivan Tcholakov, 28-JAN-2010.
+	//if (!$this->is_MB) { $text = mb_convert_encoding($text,$this->mb_enc,'UTF-8'); }
+	if (!$this->is_MB) { $text = api_convert_encoding($text,$this->mb_enc,'UTF-8'); }
+	//
 	$text = ' '.$text.' ';
 	$width = $this->ConvertSize($w);
 	$loop   = 0;
@@ -25261,7 +25529,10 @@ function reverse_letters($str) {
 	// mPDF 4.0
 	$str = strtr($str, '{}[]()', '}{][)(');
 
-	return $this->mb_strrev($str, $this->mb_enc);
+	// Modified by Ivan Tcholakov, 28-JAN-2010.
+	//return $this->mb_strrev($str, $this->mb_enc);
+	return api_strrev($str, $this->mb_enc);
+	//
 }
 
 function magic_reverse_dir(&$chunk, $join=true) {
@@ -25385,7 +25656,10 @@ function SubstituteCharsMB(&$writehtml_a, &$writehtml_i, &$writehtml_e) {
 		}
 	}
 	if ($ftype=='C') {
-		$patt = mb_substr($writehtml_e, $start, count($repl));
+		// Modified by Ivan Tcholakov, 28-JAN-2010.
+		//$patt = mb_substr($writehtml_e, $start, count($repl));
+		$patt = api_substr($writehtml_e, $start, count($repl));
+		//
 		if (preg_match("/(.*?)(".preg_quote($patt,'/').")(.*)/u", $writehtml_e, $m)) {
 			$writehtml_e = $m[1];
 			array_splice($writehtml_a, $writehtml_i+1, 0, array($font, implode('|', $repl), '/'.$font, $m[3]));	// e.g. <tts>
@@ -25410,7 +25684,10 @@ function SubstituteCharsMB(&$writehtml_a, &$writehtml_i, &$writehtml_e) {
 		}
 		else { break; }
 	}
-	$patt = mb_substr($writehtml_e, $start, $l);
+	// Modified by Ivan Tcholakov, 28-JAN-2010.
+	//$patt = mb_substr($writehtml_e, $start, $l);
+	$patt = api_substr($writehtml_e, $start, $l);
+	//
 	if (preg_match("/(.*?)(".preg_quote($patt,'/').")(.*)/u", $writehtml_e, $m)) {
 		$writehtml_e = $m[1];
 		array_splice($writehtml_a, $writehtml_i+1, 0, array('span style="font-family: '.$font.'"', $m[2], '/span', $m[3]));
@@ -25477,12 +25754,18 @@ function SubstituteHiEntities($html) {
 
 // Edited v1.2 Pass by reference; option to continue if invalid UTF-8 chars
 function is_utf8(&$string) {
-	if ($string === mb_convert_encoding(mb_convert_encoding($string, "UTF-32", "UTF-8"), "UTF-8", "UTF-32")) {
+	// Modified by Ivan Tcholakov, 28-JAN-2010.
+	//if ($string === mb_convert_encoding(mb_convert_encoding($string, "UTF-32", "UTF-8"), "UTF-8", "UTF-32")) {
+	if ($string === api_convert_encoding(api_convert_encoding($string, "UTF-32", "UTF-8"), "UTF-8", "UTF-32")) {
+	//
 		return true;
 	}
 	else {
 	  if ($this->ignore_invalid_utf8) {
-		$string = mb_convert_encoding(mb_convert_encoding($string, "UTF-32", "UTF-8"), "UTF-8", "UTF-32") ;
+	  	// Modified by Ivan Tcholakov, 28-JAN-2010.
+		//$string = mb_convert_encoding(mb_convert_encoding($string, "UTF-32", "UTF-8"), "UTF-8", "UTF-32") ;
+		$string = api_convert_encoding(api_convert_encoding($string, "UTF-32", "UTF-8"), "UTF-8", "UTF-32") ;
+		//
 		return true;
 	  }
 	  else {
@@ -26306,16 +26589,28 @@ function ArabJoin($str) {
 		$crntChar = $chars[$i];
 		if ($i > 0){ $prevChar = $chars[$i - 1]; }
 		else{ $prevChar = NULL; }
-		if ($prevChar && mb_strpos($this->arabVowels, $prevChar, 0, 'utf-8') !== false) {
+		// Modified by Ivan Tcholakov, 28-JAN-2010.
+		//if ($prevChar && mb_strpos($this->arabVowels, $prevChar, 0, 'utf-8') !== false) {
+		if ($prevChar && api_strpos($this->arabVowels, $prevChar, 0, 'utf-8') !== false) {
+		//
 			$prevChar = $chars[$i - 2];
-			if ($prevChar && mb_strpos($this->arabVowels, $prevChar, 0, 'utf-8') !== false) {
+			// Modified by Ivan Tcholakov, 28-JAN-2010.
+			//if ($prevChar && mb_strpos($this->arabVowels, $prevChar, 0, 'utf-8') !== false) {
+			if ($prevChar && api_strpos($this->arabVowels, $prevChar, 0, 'utf-8') !== false) {
+			//
 				$prevChar = $chars[$i - 3];
 			}
 		}
-		if ($crntChar && mb_strpos($this->arabVowels, $crntChar, 0, 'utf-8') !== false) {
+		// Modified by Ivan Tcholakov, 28-JAN-2010.
+		//if ($crntChar && mb_strpos($this->arabVowels, $crntChar, 0, 'utf-8') !== false) {
+		if ($crntChar && api_strpos($this->arabVowels, $crntChar, 0, 'utf-8') !== false) {
+		//
 			// If next_char = nextLink && prev_char = prevLink:
 			// mPDF 4.0 Added && $prevchar (defined) else error on mb_strpos()
-			if ($chars[$i + 1] && (mb_strpos($this->arabNextLink, $chars[$i + 1], 0, 'utf-8') !== false)  && $prevChar && (mb_strpos($this->arabPrevLink, $prevChar, 0, 'utf-8') !== false)) {
+			// Modified by Ivan Tcholakov, 28-JAN-2010.
+			//if ($chars[$i + 1] && (mb_strpos($this->arabNextLink, $chars[$i + 1], 0, 'utf-8') !== false)  && $prevChar && (mb_strpos($this->arabPrevLink, $prevChar, 0, 'utf-8') !== false)) {
+			if ($chars[$i + 1] && (api_strpos($this->arabNextLink, $chars[$i + 1], 0, 'utf-8') !== false)  && $prevChar && (api_strpos($this->arabPrevLink, $prevChar, 0, 'utf-8') !== false)) {
+			//
 				$output[] = '&#x' . $this->get_arab_glyphs($crntChar, 1) . ';';	// <final> form
 			}
 			else {
@@ -26334,17 +26629,26 @@ function ArabJoin($str) {
 		}
 		$form = 0;
 		if (in_array($crntChar, array("\xd8\xa2", "\xd8\xa3", "\xd8\xa5", "\xd8\xa7")) && $prevChar == "\xd9\x84") {
-			if ($chars[$i - 2] && mb_strpos($this->arabPrevLink, $chars[$i - 2], 0, 'utf-8') !== false) {
+			// Modified by Ivan Tcholakov, 28-JAN-2010.
+			//if ($chars[$i - 2] && mb_strpos($this->arabPrevLink, $chars[$i - 2], 0, 'utf-8') !== false) {
+			if ($chars[$i - 2] && api_strpos($this->arabPrevLink, $chars[$i - 2], 0, 'utf-8') !== false) {
+			//
 				$form++;	// <final> form
 			}
 			$output[] = '&#x' . $this->get_arab_glyphs($prevChar . $crntChar, $form) . ';';
 			$nextChar = $prevChar;
 			continue;
 		}
-		if ($prevChar && mb_strpos($this->arabPrevLink, $prevChar, 0, 'utf-8') !== false) {
+		// Modified by Ivan Tcholakov, 28-JAN-2010.
+		//if ($prevChar && mb_strpos($this->arabPrevLink, $prevChar, 0, 'utf-8') !== false) {
+		if ($prevChar && api_strpos($this->arabPrevLink, $prevChar, 0, 'utf-8') !== false) {
+		//
 			$form++;
 		}
-		if ($nextChar && mb_strpos($this->arabNextLink, $nextChar, 0, 'utf-8') !== false) {
+		// Modified by Ivan Tcholakov, 28-JAN-2010.
+		//if ($nextChar && mb_strpos($this->arabNextLink, $nextChar, 0, 'utf-8') !== false) {
+		if ($nextChar && api_strpos($this->arabNextLink, $nextChar, 0, 'utf-8') !== false) {
+		//
 			$form += 2;
 		}
 		$output[] = '&#x' . $this->get_arab_glyphs($crntChar, $form) . ';';
@@ -26357,24 +26661,43 @@ function ArabJoin($str) {
 }
 
 function get_arab_glyphs($char, $type) {
-	$pos = mb_strpos($this->arabGlyphs, $char, 0, 'utf-8');
+	// Modified by Ivan Tcholakov, 28-JAN-2010.
+	//$pos = mb_strpos($this->arabGlyphs, $char, 0, 'utf-8');
+	$pos = api_strpos($this->arabGlyphs, $char, 0, 'utf-8');
+	//
 	if ($pos === false) { 	// If character not covered here
-	  $pos = mb_strpos($this->persianGlyphs, $char, 0, 'utf-8'); 	// Try Persian additions
+	  // Modified by Ivan Tcholakov, 28-JAN-2010.
+	  //$pos = mb_strpos($this->persianGlyphs, $char, 0, 'utf-8'); 	// Try Persian additions
+	  $pos = api_strpos($this->persianGlyphs, $char, 0, 'utf-8'); 	// Try Persian additions
+	  //
 	  if ($pos === false) { 	// return original character
-		$x = mb_encode_numericentity ($char, array (0x0, 0xffff, 0, 0xffff), 'UTF-8');
+	  	// Modified by Ivan Tcholakov, 28-JAN-2010.
+		//$x = mb_encode_numericentity ($char, array (0x0, 0xffff, 0, 0xffff), 'UTF-8');
+		if (function_exists('mb_encode_numericentity')) {
+			$x = mb_encode_numericentity ($char, array (0x0, 0xffff, 0, 0xffff), 'UTF-8');
+		} else {
+			$x = api_htmlentities($char, ENT_NOQUOTES, 'UTF-8');
+		}
+		//
 		preg_match('/&#(\d+);/', $x, $m);
 		return dechex($m[1]);
 	  }
 	  else {	// if covered by Added Persian chars
 		$pos = $pos*16 + $type*4;
-		return mb_substr($this->persianHex, $pos, 4, 'utf-8');
+		// Modified by Ivan Tcholakov, 28-JAN-2010.
+		//return mb_substr($this->persianHex, $pos, 4, 'utf-8');
+		return api_substr($this->persianHex, $pos, 4, 'utf-8');
+		//
 	  }
 	}
 	if ($pos > 48){
 		$pos = ($pos-48)/2 + 48;
 	}
 	$pos = $pos*16 + $type*4;
-	return mb_substr($this->arabHex, $pos, 4, 'utf-8');
+	// Modified by Ivan Tcholakov, 28-JAN-2010.
+	//return mb_substr($this->arabHex, $pos, 4, 'utf-8');
+	return api_substr($this->arabHex, $pos, 4, 'utf-8');
+	//
 }
 /*-- END RTL --*/
 
@@ -26391,21 +26714,31 @@ function _cmpdom($a, $b) {
 
 function mb_rtrim($str, $enc = 'utf-8'){
 	if ($str == ' ' || $str == "\n" || $str == "\t") { return ''; }
-	$end = mb_strlen($str,$enc);
+	// Modified by Ivan Tcholakov, 28-JAN-2010.
+	//$end = mb_strlen($str,$enc);
+	$end = api_strlen($str,$enc);
+	//
 	for($i=$end;$i>0;$i--) {
-		$last = mb_substr($str,$i-1,1,$enc);
-		if (($last != ' ') && ($last != "\n") && ($last != "\r") && ($last != "\t")) { return mb_substr($str,0,$i,$enc); }
+		// Modified by Ivan Tcholakov, 28-JAN-2010.
+		//$last = mb_substr($str,$i-1,1,$enc);
+		//if (($last != ' ') && ($last != "\n") && ($last != "\r") && ($last != "\t")) { return mb_substr($str,0,$i,$enc); }
+		$last = api_substr($str,$i-1,1,$enc);
+		if (($last != ' ') && ($last != "\n") && ($last != "\r") && ($last != "\t")) { return api_substr($str,0,$i,$enc); }
+		//
 	}
 	return $str;
 }
 
 function mb_strrev($str, $enc = 'utf-8'){
-	$ch = array();
-	for($i=0;$i<mb_strlen($str,$enc);$i++) {
-		$ch[] = mb_substr($str,$i,1,$enc);
-	}
-	$revch = array_reverse($ch);
-	return implode('',$revch);
+	// Modified by Ivan Tcholakov, 28-JAN-2010.
+	//$ch = array();
+	//for($i=0;$i<mb_strlen($str,$enc);$i++) {
+	//	$ch[] = mb_substr($str,$i,1,$enc);
+	//}
+	//$revch = array_reverse($ch);
+	//return implode('',$revch);
+	return api_strrev($str, $enc);
+	//
 }
 
 /*-- COLUMNS --*/
@@ -26693,7 +27026,10 @@ function AdjustHTML($html,$directionality='ltr',$usepre=true, $tabSpaces=8) {
 	$html = str_replace('</ttz><ttz>','|',$html);
 	$html = str_replace('</tta><tta>','|',$html);
 
-	$html = mb_eregi_replace('/<br \/>\s*/is',"<br />",$html); // mPDF 3.0 changed from ereg_
+	// Modified by Ivan Tcholakov, 28-JAN-2010.
+	//$html = mb_eregi_replace('/<br \/>\s*/is',"<br />",$html); // mPDF 3.0 changed from ereg_
+	$html = api_eregi_replace('/<br \/>\s*/is',"<br />",$html); // mPDF 3.0 changed from ereg_
+	//
 	if ($usepre) //used to keep \n on content inside <pre> and inside <textarea>
  	{
 		// Preserve '\n's in content between the tags <pre> and </pre>

@@ -562,7 +562,10 @@ function _putstream($s) {
 	}
 	else {
 	  foreach($replacement AS $k=>$val) {
-		$replacement[$k] = mb_convert_encoding($replacement[$k],$this->mb_encoding,'utf-8');
+	  	// Modified by Ivan Tcholakov, 28-JAN-2010.
+		//$replacement[$k] = mb_convert_encoding($replacement[$k],$this->mb_encoding,'utf-8');
+		$replacement[$k] = api_convert_encoding($replacement[$k],$this->mb_encoding,'utf-8');
+		//
 		$replacement[$k] = $this->_escape($replacement[$k]);
 	  }
 	}

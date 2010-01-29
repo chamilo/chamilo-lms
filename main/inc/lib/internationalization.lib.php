@@ -272,13 +272,13 @@ function api_get_valid_language($language) {
 function api_purify_language_id($language) {
 	static $purified = array();
 	if (!isset($purified[$language])) {
-		$purified[$language] = str_replace(array('_unicode', '_latin', '_corporate', '_org', '_km'), '', strtolower($language));
+		$purified[$language] = trim(str_replace(array('_unicode', '_latin', '_corporate', '_org', '_km'), '', strtolower($language)));
 	}
 	return $purified[$language];
 }
 
 /**
- * Gets language isocode column from the language table, taking the current language as a query parameter.
+ * Gets language isocode column from the language table, taking the given language as a query parameter.
  * @param string $language	This is the name of the folder containing translations for the corresponding language (e.g arabic, english).
  * If $language is omitted, interface language is assumed then.
  * @return string			The found isocode or null on error.
@@ -307,6 +307,34 @@ function api_get_language_isocode($language = null) {
 		}
 	}
 	return $iso_code[$language];
+}
+
+/**
+ * Gets text direction according to the given language.
+ * @param string $language	This is the name of the folder containing translations for the corresponding language (e.g 'arabic', 'english', ...).
+ * ISO-codes are acceptable too ('ar', 'en', ...). If $language is omitted, interface language is assumed then.
+ * @return string			The correspondent to the language text direction ('ltr' or 'rtl').
+ */
+function api_get_text_direction($language = null) {
+	static $text_direction = array();
+	if (empty($language)) {
+		$language = api_get_interface_language();
+	}
+	if (!isset($text_direction[$language])) {
+		$text_direction[$language] = in_array(api_purify_language_id($language),
+			array(
+				'arabic', 'ar',
+				'dari', 'prs',
+				'hebrew', 'he',
+				'iw',
+				'pashto', 'ps',
+				'persian', 'fa',
+				'ur',
+				'yiddish', 'yid'
+			)
+		) ? 'rtl' : 'ltr';
+	}
+	return $text_direction[$language];
 }
 
 /**

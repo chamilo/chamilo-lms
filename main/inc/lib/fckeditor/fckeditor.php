@@ -453,10 +453,7 @@ class FCKeditor
 			$editor_lang = isset($code_translation_table[$editor_lang]) ? $code_translation_table[$editor_lang] : $editor_lang;
 			$editor_lang = file_exists(api_get_path(SYS_PATH).'main/inc/lib/fckeditor/editor/lang/'.$editor_lang.'.js') ? $editor_lang : 'en';
 			$config['DefaultLanguage'] = $editor_lang;
-			$text_direction = trim(get_lang('text_dir', ''));
-			if (!empty($text_direction) && strlen($text_direction) == 3) {
-				$config['ContentLangDirection'] = $text_direction;
-			}
+			$config['ContentLangDirection'] = api_get_text_direction($editor_lang);
 		}
 		return $config;
 	}

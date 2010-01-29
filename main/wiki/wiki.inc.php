@@ -911,7 +911,10 @@ function display_wiki_entry($newtitle)
 
 		//page action: export to pdf
 		echo '<span style="float:right;padding-top:5px;">';
-		echo '<form name="form_export2PDF" method="post" action="export_html2pdf.php" target="_blank, fullscreen">'; // also with  export_tcpdf.php
+		// Modified by Ivan Tcholakov, 28-JAN-2010.
+		//echo '<form name="form_export2PDF" method="post" action="export_html2pdf.php" target="_blank, fullscreen">'; // also with  export_tcpdf.php
+		echo '<form name="form_export2PDF" method="post" action="export_mpdf.php" target="_blank, fullscreen">'; // also with  export_tcpdf.php
+		//
 		echo '<input type=hidden name="titlePDF" value="'.api_htmlentities($title, ENT_QUOTES, $charset).'">';
 		echo '<input type=hidden name="contentPDF" value="'.api_htmlentities(trim(preg_replace("/\[\[|\]\]/", " ", $content)), ENT_QUOTES, $charset).'">';
 		echo '<input type="image" src="../img/wiki/wexport2pdf.gif" border ="0" title="'.get_lang('ExportToPDF').'" alt="'.get_lang('ExportToPDF').'" style=" border:none; margin-top: -6px">';

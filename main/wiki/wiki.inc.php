@@ -1733,6 +1733,9 @@ function export2doc($wikiTitle, $wikiContents, $groupId)
 		$css = '';
 	}
 	// Fixing some bugs in css files.
+	$root_rel = api_get_path(REL_PATH);
+	$css_path = 'main/css/';
+	$theme = api_get_setting('stylesheets').'/';
 	$css = str_replace('behavior:url("/main/css/csshover3.htc");', '', $css);
 	$css = str_replace('main/', $root_rel.'main/', $css);
 	$css = str_replace('images/', $root_rel.$css_path.$theme.'images/', $css);

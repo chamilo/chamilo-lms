@@ -7999,7 +7999,16 @@ function _getImage(&$file, $firsttime=true, $allowwmf=true) {
 		$check = @fopen($file,"rb");
 		if ($check) {
 			fclose($check);
-			$data = file_get_contents($file);
+			// An adaptation by Ivan Tcholakov, 29-JAN-2010.
+			// When the image is URL inside a course, the security system blocks reading it.
+			// A workaround: Let us use system paths when it is possible.
+			//$data = file_get_contents($file);
+			if (api_is_internal_path($file)) {
+				$data = file_get_contents(api_get_path(TO_SYS, $file));
+			} else {
+				$data = file_get_contents($file);
+			}
+			//
 			$type = $this->_imageTypeFromString($data);
 		}
 		if ((!$data || !$type) && !ini_get('allow_url_fopen')) {		// only worth trying if remote file and !ini_get('allow_url_fopen')

@@ -2162,11 +2162,11 @@ class CourseManager {
 		$existing_courses = array();
 		while($row = Database::fetch_array($result)){
 			$existing_courses[] = $row['course_code'];
-		}
-		
+		}	
 
-		//Deleting existing session_rel_user 
-		foreach ($existing_courses as $existing_course) {				
+		//Deleting existing session_rel_user with relation ship = 1 only 
+		foreach ($existing_courses as $existing_course) {		
+			$existing_course = Database::escape_string($existing_course);	
 			$sql = "DELETE FROM $tbl_course_rel_user WHERE course_code = $existing_course  AND id_user=$user_id AND relation_type = 1 ";
 			Database::query($sql,__FILE__,__LINE__);					
 		}

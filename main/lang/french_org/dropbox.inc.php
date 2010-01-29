@@ -16,7 +16,7 @@
  * @version 1.20
  * @copyright 2004
  * @author Jan Bols <jan@ivpv.UGent.be>
- * with contributions by René Haentjens <rene.haentjens@UGent.be> (see RH)
+ * with contributions by RenÃ© Haentjens <rene.haentjens@UGent.be> (see RH)
  */
 /**
  * +----------------------------------------------------------------------+
@@ -53,16 +53,16 @@ $dropbox_lang["help"] = "Aide";
 /**
  * error variables
  */
-$dropbox_lang["aliensNotAllowed"] = "Seuls les membres de cet espace peuvent utiliser l'outil de partage. Vous n'êtes pas membre de cet espace.";
-$dropbox_lang["queryError"] = "Erreur de base de données. Veuillez contacter l'administrateur.";
+$dropbox_lang["aliensNotAllowed"] = "Seuls les membres de cet espace peuvent utiliser l'outil de partage. Vous n'ï¿½tes pas membre de cet espace.";
+$dropbox_lang["queryError"] = "Erreur de base de donnï¿½es. Veuillez contacter l'administrateur.";
 $dropbox_lang["generalError"] = "Une erreur s'est produite. Veuillez contacter l'administrateur.";
-$dropbox_lang["badFormData"] = "La soumission a échoué : données du formulaire erronées. Veuillez contacter l'administrateur.";
-$dropbox_lang["noUserSelected"] = "Veuillez sélectionner le destinataire de ce fichier.";
-$dropbox_lang["noFileSpecified"] = "Vous n'avez sélectionné aucun fichier à transférer.";
-$dropbox_lang["tooBig"] = "Le fichier sélectionné est trop gros.";
+$dropbox_lang["badFormData"] = "La soumission a ï¿½chouï¿½ : donnï¿½es du formulaire erronï¿½es. Veuillez contacter l'administrateur.";
+$dropbox_lang["noUserSelected"] = "Veuillez sï¿½lectionner le destinataire de ce fichier.";
+$dropbox_lang["noFileSpecified"] = "Vous n'avez sï¿½lectionnï¿½ aucun fichier ï¿½ transfï¿½rer.";
+$dropbox_lang["tooBig"] = "Le fichier sï¿½lectionnï¿½ est trop gros.";
 $dropbox_lang["uploadError"] = "Erreur lors du transfert. Veuillez contacter l'administrateur.";
-$dropbox_lang["errorCreatingDir"] = "Impossible de créer le répertoire. Veuillez contacter l'administrateur.";
-$dropbox_lang["installError"] = "Impossible d'installer les tables nécessaires au module. Veuillez contacter l'administrateur.";
+$dropbox_lang["errorCreatingDir"] = "Impossible de crï¿½er le rï¿½pertoire. Veuillez contacter l'administrateur.";
+$dropbox_lang["installError"] = "Impossible d'installer les tables nï¿½cessaires au module. Veuillez contacter l'administrateur.";
 
 /**
  * upload file variables
@@ -71,7 +71,7 @@ $dropbox_lang["uploadFile"] = "Envoyer un document";
 // $dropbox_lang["titleWork"] = "Paper Title";	//this var isn't used anymore
 $dropbox_lang["authors"] = "Auteurs";
 $dropbox_lang["description"] = "Description";
-$dropbox_lang["sendTo"] = "Envoyer à";
+$dropbox_lang["sendTo"] = "Envoyer ï¿½";
 
 /**
  * Sent/Received list variables
@@ -81,62 +81,62 @@ $dropbox_lang["sentTitle"] = "ENVOYE";
 $dropbox_lang["confirmDelete"] = "Ceci supprimera le fichier de votre liste, et non de celle des autres membres.";
 $dropbox_lang["all"] = "tous les fichiers";
 $dropbox_lang["workDelete"] = "Supprimer";
-$dropbox_lang["sentBy"] = "Envoyé par";
-$dropbox_lang["sentTo"] = "Envoyé à";
+$dropbox_lang["sentBy"] = "Envoyï¿½ par";
+$dropbox_lang["sentTo"] = "Envoyï¿½ ï¿½";
 $dropbox_lang["sentOn"] = "le";
 $dropbox_lang["anonymous"] = "anonyme";
 $dropbox_lang["ok"] = "Valider";
-$dropbox_lang["lastUpdated"] = "Dernière mise à jour";
-$dropbox_lang["lastResent"] = "Dernier ré-envoi";
+$dropbox_lang["lastUpdated"] = "Derniï¿½re mise ï¿½ jour";
+$dropbox_lang["lastResent"] = "Dernier rï¿½-envoi";
 $dropbox_lang['tableEmpty'] = "La liste est vide.";
-$dropbox_lang["overwriteFile"] = "Ecraser la version précédente du même fichier ?";
+$dropbox_lang["overwriteFile"] = "Ecraser la version prï¿½cï¿½dente du mï¿½me fichier ?";
 $dropbox_lang['orderBy'] = "Classer par : ";
 $dropbox_lang['lastDate'] = "date du dernier envoi";
 $dropbox_lang['firstDate'] = "date du premier envoi";
 $dropbox_lang['title'] = "titre";
 $dropbox_lang['size'] = "taille";
 $dropbox_lang['author'] = "auteur";
-$dropbox_lang['sender'] = "expéditeur";
+$dropbox_lang['sender'] = "expï¿½diteur";
 $dropbox_lang['recipient'] = "destinataire";
 
 /**
  * Feedback variables
  */
-$dropbox_lang["docAdd"] = "Le fichier a été ajouté";
-$dropbox_lang["fileDeleted"] = "Le fichier sélectionné a été supprimé de votre espace d'échange.";
-$dropbox_lang["backList"] = "Retourner à votre espace d'échange";
+$dropbox_lang["docAdd"] = "Le fichier a ï¿½tï¿½ ajoutï¿½";
+$dropbox_lang["fileDeleted"] = "Le fichier sï¿½lectionnï¿½ a ï¿½tï¿½ supprimï¿½ de votre espace d'ï¿½change.";
+$dropbox_lang["backList"] = "Retourner ï¿½ votre espace d'ï¿½change";
 
 /**
  * RH: Mailing variables
  */
 $dropbox_lang["mailingAsUsername"] = "Envoi par mail ";
 $dropbox_lang["mailingInSelect"] = "--- Mailing ---";
-$dropbox_lang["mailingSelectNoOther"] = "La fonction Mailing ne peut être combinée avec l'envoi à d'autres destinataires. Celle-ci envoie le fichier à tout le monde.";
-$dropbox_lang["mailingNonMailingError"] = "Mailing ne peut être écrasé par des envois non-mailing et vice-versa";
+$dropbox_lang["mailingSelectNoOther"] = "La fonction Mailing ne peut ï¿½tre combinï¿½e avec l'envoi ï¿½ d'autres destinataires. Celle-ci envoie le fichier ï¿½ tout le monde.";
+$dropbox_lang["mailingNonMailingError"] = "Mailing ne peut ï¿½tre ï¿½crasï¿½ par des envois non-mailing et vice-versa";
 $dropbox_lang["mailingExamine"] = "Examiner le fichier ZIP";
-$dropbox_lang["mailingNotYetSent"] = "Les fichiers contenus dans le mailing n'ont pas été envoyés ...";
+$dropbox_lang["mailingNotYetSent"] = "Les fichiers contenus dans le mailing n'ont pas ï¿½tï¿½ envoyï¿½s ...";
 $dropbox_lang["mailingSend"] = "Envoyer le contenu";
 $dropbox_lang["mailingConfirmSend"] = "Envoyer le contenu vers des personnes individuellement ?";
-$dropbox_lang["mailingBackToDropbox"] = "(retour à la page d'accueil de Partage de fichiers)";
-$dropbox_lang["mailingWrongZipfile"] = "Le fichier du Mailing doit être un ZIP avec MEMBERID ou LOGINNAME";
+$dropbox_lang["mailingBackToDropbox"] = "(retour ï¿½ la page d'accueil de Partage de fichiers)";
+$dropbox_lang["mailingWrongZipfile"] = "Le fichier du Mailing doit ï¿½tre un ZIP avec MEMBERID ou LOGINNAME";
 $dropbox_lang["mailingZipEmptyOrCorrupt"] = "Le fichier ZIP du Mailing est vide ou n'est pas un fichier ZIP valide";
-$dropbox_lang["mailingZipPhp"] = "Le fichier de Mailing ne peut contenir de fichiers PHP. Il ne sera pas envoyé";
-$dropbox_lang["mailingZipDups"] = "Le fichier ZIP ne peut pas contenir de fichiers dupliqués. Il ne sera pas envoyé";
-$dropbox_lang["mailingFileFunny"] = "aucun nom, ou l'extension ne contient pas 1 à 4 caractères";
+$dropbox_lang["mailingZipPhp"] = "Le fichier de Mailing ne peut contenir de fichiers PHP. Il ne sera pas envoyï¿½";
+$dropbox_lang["mailingZipDups"] = "Le fichier ZIP ne peut pas contenir de fichiers dupliquï¿½s. Il ne sera pas envoyï¿½";
+$dropbox_lang["mailingFileFunny"] = "aucun nom, ou l'extension ne contient pas 1 ï¿½ 4 caractï¿½res";
 $dropbox_lang["mailingFileNoPrefix"] = "le nom ne commence pas par ";
 $dropbox_lang["mailingFileNoPostfix"] = "le nom ne se termine pas par ";
 $dropbox_lang["mailingFileNoRecip"] = "le nom ne contient pas l'ID d'un destinataire";
 $dropbox_lang["mailingFileRecipNotFound"] = "aucun membre avec ";
 $dropbox_lang["mailingFileRecipDup"] = "plusieurs membres ont ";
 $dropbox_lang["mailingFileIsFor"] = "est pour ";
-$dropbox_lang["mailingFileSentTo"] = "envoyé à ";
+$dropbox_lang["mailingFileSentTo"] = "envoyï¿½ ï¿½ ";
 $dropbox_lang["mailingFileNotRegistered"] = " (pas membre de cet espace)";
 $dropbox_lang["mailingNothingFor"] = "Rien pour";
 
 /**
  * RH: Just Upload
  */
-$dropbox_lang["justUploadInSelect"] = "--- Transféré ---";
+$dropbox_lang["justUploadInSelect"] = "--- Transfï¿½rï¿½ ---";
 $dropbox_lang["justUploadInList"] = "Envoi par";
-$dropbox_lang["mailingJustUploadNoOther"] = "Ce transfert ne peut être combiné avec d'autres destinataires";
+$dropbox_lang["mailingJustUploadNoOther"] = "Ce transfert ne peut ï¿½tre combinï¿½ avec d'autres destinataires";
 ?>

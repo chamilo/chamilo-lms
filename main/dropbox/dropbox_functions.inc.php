@@ -808,7 +808,7 @@ function getUserOwningThisMailing($mailingPseudoId, $owner = 0, $or_die = '')
     die(dropbox_lang("generalError")." (code ".$or_die.")");
 }
 /**
-* @author Ren� Haentjens, Ghent University
+* @author René Haentjens, Ghent University
 * @todo check if this function is still necessary.
 */
 function removeMoreIfMailing($file_id)

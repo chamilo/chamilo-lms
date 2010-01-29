@@ -1,22 +1,22 @@
 <?php
 /**
  * Dropbox module for Dokeos/Claroline
- * language file in English language. 
+ * language file in English language.
  * To make a version in your own language, you have 2 options:
  * 		- if you want to make use of the multilanguage tool in Claroline (this way you
  * 		can make 2 seperate areas in 2 different languages and Claroline will take
  * 		care of the translations) this file must be placed in the .../claroline/lang/English/
- * 		directory and the copy of this file that contains the translations must be placed in 
- * 		the .../claroline/lang/YourLang/ directory. Be sure to give the translated version the same 
+ * 		directory and the copy of this file that contains the translations must be placed in
+ * 		the .../claroline/lang/YourLang/ directory. Be sure to give the translated version the same
  * 		name as this one.
  * 		- if you're sure you will only need the dropbox module in 1 language, you can just leave this
  * 		file in the current directory (.../claroline/plugin/dropbox/) and translate each variable into
  * 		the correct language.
- * 
+ *
  * @version 1.20
  * @copyright 2004
  * @author Jan Bols <jan@ivpv.UGent.be>
- * with contributions by René Haentjens <rene.haentjens@UGent.be> (see RH)
+ * with contributions by RenÃ© Haentjens <rene.haentjens@UGent.be> (see RH)
  */
 /**
  * +----------------------------------------------------------------------+

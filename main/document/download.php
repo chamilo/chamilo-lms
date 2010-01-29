@@ -94,7 +94,7 @@ if (substr($refer_script,0,15) == "/fillsurvey.php") {
 	{
 		//remove last slash if present
 		//$doc_url = ($doc_url{strlen($doc_url)-1}=='/')?substr($doc_url,0,strlen($doc_url)-1):$doc_url;
-		//mod_rewrite can change /some/path/ to /some/path// in some cases, so clean them all off (Ren�)
+		//mod_rewrite can change /some/path/ to /some/path// in some cases, so clean them all off (René)
 		while ($doc_url{$dul = strlen($doc_url)-1}=='/') $doc_url = substr($doc_url,0,$dul);
 		//group folder?
 		$gid_req = ($_GET['gidReq'])?'&gidReq='.Security::remove_XSS($_GET['gidReq']):'';

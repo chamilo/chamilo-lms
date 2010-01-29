@@ -16,7 +16,7 @@
  * @version 1.20
  * @copyright 2004
  * @author Jan Bols <jan@ivpv.UGent.be>
- * with contributions by René Haentjens <rene.haentjens@UGent.be> (see RH)
+ * with contributions by RenÃ© Haentjens <rene.haentjens@UGent.be> (see RH)
  */
 /**
  * +----------------------------------------------------------------------+

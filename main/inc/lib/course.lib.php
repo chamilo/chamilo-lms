@@ -2142,5 +2142,40 @@ class CourseManager {
 		$row 	= Database::fetch_row($rs);
 		return $row[0];		
 	}
+	
+	 /**
+	  * Subscribes "courses" to user (Dashboard feature)
+	  *	@param	int 	user id
+	  * @param	string	Course code
+	  * @param	int		relation type 
+	  * @return	
+	  **/
+	public static function suscribe_courses_to_user($user_id, $course_list, $relation_stype) {
+	  	if ($user_id!= strval(intval($user_id))) return false;
+	   		   	
+	   	$tbl_course				= Database::get_main_table(TABLE_MAIN_COURSE);
+	   	$tbl_course_rel_user 	= Database::get_main_table(TABLE_MAIN_COURSE_USER);
+	   	$tbl_user				= Database::get_main_table(TABLE_MAIN_USER);
+	
+	   	$sql = "SELECT course_code FROM $tbl_course_rel_user WHERE id_user = $user_id AND relation_type = 1 ";
+		$result = Database::query($sql,__FILE__,__LINE__);
+		$existing_courses = array();
+		while($row = Database::fetch_array($result)){
+			$existing_courses[] = $row['course_code'];
+		}
+		
 
+		//Deleting existing session_rel_user 
+		foreach ($existing_courses as $existing_course) {				
+			$sql = "DELETE FROM $tbl_course_rel_user WHERE course_code = $existing_course  AND id_user=$user_id AND relation_type = 1 ";
+			Database::query($sql,__FILE__,__LINE__);					
+		}
+
+		foreach ($course_list as $course_code) {
+			// for each session		
+            $course_code = Database::escape_string($course_code);
+			$insert_sql = "INSERT IGNORE INTO $tbl_course_rel_user(course_code,user_id,relation_type) VALUES('$course_code','$user_id','1')";
+			Database::query($insert_sql,__FILE__,__LINE__);
+		}
+	}
 } //end class CourseManager

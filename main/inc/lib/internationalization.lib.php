@@ -1935,6 +1935,24 @@ function api_substr($string, $start, $length = null, $encoding = null) {
 }
 
 /**
+ * Counts the number of substring occurrences.
+ * @param string $haystack				The string being checked.
+ * @param string $needle				The string being found.
+ * @param string $encoding (optional)	The used internally by this function character encoding. If it is omitted, the platform character set will be used by default.
+ * @return int							The number of times the needle substring occurs in the haystack string.
+ * @link http://php.net/manual/en/function.mb-substr-count.php
+ */
+function api_substr_count($haystack, $needle, $encoding = null) {
+	if (empty($encoding)) {
+		$encoding = _api_mb_internal_encoding();
+	}
+    if (_api_mb_supports($encoding)) {
+		return @mb_substr_count($haystack, $needle, $encoding);
+	}
+	return substr_count($haystack, $needle);
+}
+
+/**
  * Replaces text within a portion of a string.
  * @param string $string				The input string.
  * @param string $replacement			The replacement string.

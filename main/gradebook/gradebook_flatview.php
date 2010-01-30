@@ -13,8 +13,11 @@ require_once 'lib/flatview_data_generator.class.php';
 require_once 'lib/fe/flatviewtable.class.php';
 require_once 'lib/fe/displaygradebook.php';
 require_once 'lib/fe/exportgradebook.php';
-require_once api_get_path(LIBRARY_PATH).'ezpdf/class.ezpdf.php';
 require_once 'lib/scoredisplay.class.php';
+//require_once api_get_path(LIBRARY_PATH).'ezpdf/class.ezpdf.php'; // This is the old library for pdf-export (non UTF-8 compatible).
+define('_MPDF_PATH', api_get_path(LIBRARY_PATH).'mpdf/');
+require_once _MPDF_PATH.'mpdf.php';
+if (!class_exists('HTML_Table')) { require_once api_get_path(LIBRARY_PATH).'pear/HTML/Table.php'; }
 
 api_block_anonymous_users();
 block_students();
@@ -90,18 +93,137 @@ if (!empty($keyword)) {
 }
 
 if (isset ($_GET['exportpdf']))	{
+
 	$interbreadcrumb[] = array (
 		'url' => api_get_self().'?selectcat=' . Security::remove_XSS($_GET['selectcat']),
 		'name' => get_lang('FlatView')
 	);
+
 	$export_pdf_form = new DataForm(DataForm :: TYPE_EXPORT_PDF, 'export_pdf_form', null, api_get_self().'?exportpdf=&offset='.$_GET['offset'].'&selectcat='.$_GET['selectcat'], '_blank');
-	if (!$export_pdf_form->validate()) {
-		Display :: display_header(get_lang('ExportPDF'));
-	}
+
 	if ($export_pdf_form->validate()) {
+
+		// Beginning of PDF report creation
+
 		$printable_data = get_printable_data($users, $alleval, $alllinks);
 		$export = $export_pdf_form->exportValues();
-		$format = $export['orientation'];
+
+		// Reading report's CSS
+
+		//$css_file = api_get_path(TO_SYS, WEB_CSS_PATH).api_get_setting('stylesheets').'/print.css';
+		$css_file = api_get_path(SYS_CODE_PATH).'gradebook/print.css';
+		$css = file_exists($css_file) ? @file_get_contents($css_file) : '';
+
+		// HTML report creation first
+
+		$time = time();
+		$cat_name = trim($cat[0]->get_name());
+		$course_code = trim($cat[0]->get_course_code());
+		$report_name = $course_code;
+		if (!empty($cat_name) && $report_name != $cat_name) {
+			$report_name .= ' - '.$cat_name;
+		}
+		$organization = api_get_setting('Institution');
+		$creator = api_get_person_name($GLOBALS['_user']['firstName'], $GLOBALS['_user']['lastName']);
+
+		$html = '';
+
+		if (!empty($organization)) {
+			$html .= '<h2 align="center">'.$organization.'</h2>';
+		}
+		$html .= '<h1 align="center">'.get_lang('FlatView').'</h1>';
+
+		$html .= '<p><strong>'.$report_name.'</strong></p>';
+		$html .= '<p><strong>'.api_format_date(DATE_TIME_FORMAT_LONG, $time).'</strong></p>';
+		$html .= '<p><strong>'.get_lang('By').': '.$creator.'</strong></p>';
+
+		$columns = count($printable_data[0]);
+		$has_data = is_array($printable_data[1]) && count($printable_data[1]) > 0;
+
+		if (api_is_western_name_order()) {
+			// Choosing the right person name order according to the current language.
+			list($printable_data[0][0], $printable_data[0][1]) = array($printable_data[0][1], $printable_data[0][0]);
+			if ($has_data) {
+				foreach ($printable_data[1] as &$printable_data_row) {
+					list($printable_data_row[0], $printable_data_row[1]) = array($printable_data_row[1], $printable_data_row[0]);
+				}
+			}
+		}
+
+		$table = new HTML_Table(array('class' => 'data_table'));
+		$row = 0;
+		$column = 0;
+		foreach ($printable_data[0] as $printable_data_cell) {
+			$table->setHeaderContents($row, $column, $printable_data_cell);
+			$column++;
+		}
+		$row++;
+		if ($has_data) {
+			foreach ($printable_data[1] as &$printable_data_row) {
+				$column = 0;
+				foreach ($printable_data_row as &$printable_data_cell) {
+					$table->setCellContents($row, $column, $printable_data_cell);
+					$table->updateCellAttributes($row, $column, 'align="center"');
+					$column++;
+				}
+				$table->updateRowAttributes($row, $row % 2 ? 'class="row_even"' : 'class="row_odd"', true);
+				$row++;
+			}
+		} else {
+			$column = 0;
+			$table->setCellContents($row, $column, get_lang('NoResults'));
+			$table->updateCellAttributes($row, $column, 'colspan="'.$columns.'" align="center" class="row_odd"');
+		}
+
+		$html .= $table->toHtml();
+
+		$html .= '<pagefooter name="myFooter1" content-left="My Book Title" content-center="myFooter1" content-right="{PAGENO}" footer-style="font-family:sans-serif; font-size:8pt; font-weight:bold; color:#008800;" footer-style-left="" line="on" />';
+
+		// Memory release
+
+		unset($printable_data);
+		unset($table);
+
+		// Conversion of the created HTML report to a PDF report
+
+		$html = api_utf8_encode($html);
+		$creator_pdf = api_utf8_encode($creator);
+		$title_pdf = api_utf8_encode($report_name);
+		$subject_pdf = api_utf8_encode(get_lang('FlatView'));
+		$keywods_pdf = api_utf8_encode($course_code);
+
+		$pdf = new mPDF('UTF-8', 'A4', '', '', 32, 25, 27, 25, 16, 13, $export['orientation']);
+		$pdf->directionality = api_get_text_direction();
+		$pdf->useOnlyCoreFonts = true;
+
+		$pdf->SetFooter('{PAGENO}');
+
+		$pdf->SetAuthor($creator_pdf);
+		$pdf->SetTitle($title_pdf);
+		$pdf->SetSubject($subject_pdf);
+		$pdf->SetKeywords($keywods_pdf);
+
+		if (!empty($css)) {
+			$pdf->WriteHTML($css, 1);
+			$pdf->WriteHTML($html, 2);
+		} else {
+			$pdf->WriteHTML($html);
+		}
+
+		// Sending the created PDF report to the client
+
+		$file_name = date('YmdHi_', $time);
+		if (!empty($course_code)) {
+			$file_name .= $course_code.'_';
+		}
+		$file_name .= get_lang('FlatView').'.pdf';
+		$file_name = replace_dangerous_char($file_name);
+		$pdf->Output($file_name, 'D');
+
+		/*
+		// This is the old pdf-exporting routine that uses ezpdf library.
+		//
+		$format = $export['orientation']; //format is 'portrait' or 'landscape'
 		$pdf =& new Cezpdf('a4',$format); //format is 'portrait' or 'landscape'
 		$clear_printable_data=array();
 		$clear_send_printable_data=array();
@@ -114,7 +236,11 @@ if (isset ($_GET['exportpdf']))	{
 			$clear_printable_data=array();
 		}
 		export_pdf($pdf,$clear_send_printable_data,$printable_data[0],$format);
+		*/
+
 		exit;
+	} else {
+		Display :: display_header(get_lang('ExportPDF'));
 	}
 }
 

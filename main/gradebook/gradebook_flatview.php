@@ -20,8 +20,7 @@ api_block_anonymous_users();
 block_students();
 
 if (isset ($_POST['submit']) && isset ($_POST['keyword'])) {
-	header('Location: ' . api_get_self() . '?selectcat=' . Security::remove_XSS($_GET['selectcat'])
-										   . '&search=' . Security::remove_XSS($_POST['keyword']));
+	header('Location: '.api_get_self().'?selectcat='.Security::remove_XSS($_GET['selectcat']).'&search='.Security::remove_XSS($_POST['keyword']));
 	exit;
 }
 
@@ -95,7 +94,7 @@ if (isset ($_GET['exportpdf']))	{
 		'url' => api_get_self().'?selectcat=' . Security::remove_XSS($_GET['selectcat']),
 		'name' => get_lang('FlatView')
 	);
-	$export_pdf_form = new DataForm(DataForm :: TYPE_EXPORT_PDF, 'export_pdf_form', null, api_get_self() . '?exportpdf=&offset='.$_GET['offset'].'&selectcat=' . $_GET['selectcat'],'_blank');
+	$export_pdf_form = new DataForm(DataForm :: TYPE_EXPORT_PDF, 'export_pdf_form', null, api_get_self().'?exportpdf=&offset='.$_GET['offset'].'&selectcat='.$_GET['selectcat'], '_blank');
 	if (!$export_pdf_form->validate()) {
 		Display :: display_header(get_lang('ExportPDF'));
 	}
@@ -114,9 +113,6 @@ if (isset ($_GET['exportpdf']))	{
 			$clear_send_printable_data[]=$clear_printable_data;
 			$clear_printable_data=array();
 		}
-		/*var_dump($printable_data[1]);
-		var_dump('--------------');
-		var_dump($clear_send_printable_data);*/
 		export_pdf($pdf,$clear_send_printable_data,$printable_data[0],$format);
 		exit;
 	}
@@ -202,12 +198,11 @@ if (isset($_GET['isStudentView']) && $_GET['isStudentView'] == 'false') {
 Display :: display_footer();
 
 function get_printable_data($users,$alleval, $alllinks) {
-	$datagen = new FlatViewDataGenerator ($users,$alleval, $alllinks);
-	$offset = (isset($_GET['offset'])?$_GET['offset']:'0');
-	$count = (($offset+10) > $datagen->get_total_items_count()) ?
-  		 	 ($datagen->get_total_items_count()-$offset) : 10;
-	$header_names = $datagen->get_header_names($offset,$count);
-	$data_array = $datagen->get_data(FlatViewDataGenerator :: FVDG_SORT_LASTNAME,0,null,$offset,$count,true);
+	$datagen = new FlatViewDataGenerator ($users, $alleval, $alllinks);
+	$offset = isset($_GET['offset']) ? $_GET['offset'] : '0';
+	$count = (($offset + 10) > $datagen->get_total_items_count()) ? ($datagen->get_total_items_count() - $offset) : 10;
+	$header_names = $datagen->get_header_names($offset, $count);
+	$data_array = $datagen->get_data(FlatViewDataGenerator :: FVDG_SORT_LASTNAME, 0, null, $offset, $count, true);
 	$newarray = array();
 	foreach ($data_array as $data) {
 		$newarray[] = array_slice($data, 1);

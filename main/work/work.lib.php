@@ -26,11 +26,11 @@ function display_action_links($cur_dir_path, $always_show_tool_options, $always_
 	$display_output = "";
 	$origin = isset($_GET['origin'])?Security::remove_XSS($_GET['origin']):'';
 	$curdirpath = isset($_GET['curdirpath'])?Security::remove_XSS($_GET['curdirpath']):empty($curdirpath);
-	
+
 	///why is that here?
 	//$origin = api_get_tools_lists($origin);
 	echo '<div class="actions">';
-	
+
 	if (strlen($cur_dir_path) > 0 && $cur_dir_path != '/') {
 		$parent_dir = dirname($cur_dir_path);
 		$display_output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&origin='.$origin.'&gradebook='.$gradebook.'&curdirpath='.$parent_dir.'">'.Display::return_icon('back.png',get_lang('BackToWorksList')).' '.get_lang('BackToWorksList').'</a>';
@@ -67,7 +67,7 @@ function display_action_links($cur_dir_path, $always_show_tool_options, $always_
 		} else {
 			$message=get_lang('ConfirmYourChoice');
 		}
-		
+
 		if (empty($curdirpath) or $curdirpath != '.') {
 			$display_output .= 	'<a href="#">'.Display::return_icon('delete_na.gif', get_lang('Delete')).get_lang('DeleteAllFiles').'</a>';
 		} else {
@@ -104,8 +104,8 @@ function display_action_links($cur_dir_path, $always_show_tool_options, $always_
 				$display_output .=	"<a href=\"".api_get_self()."?".api_get_cidreq()."&amp;curdirpath=".$cur_dir_path."&amp;origin=$origin&amp;gradebook=$gradebook&amp;list=with\">".
 				Display::return_icon('check.gif', get_lang('ViewUsersWithTask')).' '.get_lang('ViewUsersWithTask').
 				"</a>\n";
-				
-				$_SESSION['token'] = time();				
+
+				$_SESSION['token'] = time();
 				$display_output .=	"<a href=\"".api_get_self()."?".api_get_cidreq()."&amp;curdirpath=".$cur_dir_path."&amp;origin=$origin&amp;gradebook=$gradebook&amp;list=without&amp;action=send_mail&amp;sec_token=".$_SESSION['token']."\">".
 				Display::return_icon('messagebox_warning.gif', get_lang('ReminderMessage')).' '.get_lang('ReminderMessage').
 				"</a>\n";
@@ -207,7 +207,7 @@ function display_studentsdelete_form()
 				<?php echo get_lang("Yes"); ?>
 		</div>
 	</div>
-	<?php	
+	<?php
 }
 
 /**
@@ -442,7 +442,7 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 			}else {
 				$mydir_temp = '/'.$my_sub_dir.$dir;
 			}
-	
+
 			$sql_select_directory= "SELECT prop.lastedit_date, id, author, has_properties, view_properties, description, qualification,weight,id FROM ".$iprop_table." prop INNER JOIN ".$work_table." work ON (prop.ref=work.id) WHERE ";
 						if (!empty($_SESSION['toolgroup'])) {
 							$sql_select_directory.=" work.post_group_id = '".$_SESSION['toolgroup']."' "; // set to select only messages posted by the user's group
@@ -452,8 +452,8 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 			$sql_select_directory.=" AND work.url LIKE BINARY '".$mydir_temp."' AND work.filetype = 'folder' AND prop.tool='work' $condition_session";
 			$result=Database::query($sql_select_directory,__FILE__,__LINE__);
 			$row=Database::fetch_array($result);
-	
-	
+
+
 			 if(!$row) {
 				 // the folder belongs to another session
 		         continue;
@@ -464,19 +464,19 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 			$is_assignment = $row['has_properties'];
 			$id2=$row['id'];
 			$mydir = $my_sub_dir.$dir;
-	
+
 			if ($is_allowed_to_edit) {
 				isset($_GET['edit_dir'])?$clean_edit_dir=Security :: remove_XSS(Database::escape_string($_GET['edit_dir'])):$clean_edit_dir='';
-	
+
 				// form edit directory
 				if(isset($clean_edit_dir) && $clean_edit_dir==$mydir) {
 					if(!empty($row['has_properties'])) {
 						$sql = Database::query('SELECT * FROM '.$work_assigment.' WHERE id = '."'".$row['has_properties']."'".' LIMIT 1',__FILE__,__LINE__);
 						$homework = Database::fetch_array($sql);
 					}
-	
+
 					$form_folder = new FormValidator('edit_dir', 'post', api_get_self().'?curdirpath='.$my_sub_dir.'&origin='.$origin.'&gradebook='.$gradebook.'&edit_dir='.$mydir);
-	
+
 					$group_name[] = FormValidator :: createElement('text','dir_name');
 					$form_folder -> addGroup($group_name,'my_group',get_lang('Title'));
 					$form_folder -> addGroupRule('my_group',get_lang('ThisFieldIsRequired'),'required');
@@ -484,12 +484,12 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 					$form_folder-> addElement('textarea','description',get_lang('Description'),array('rows'=>5,'cols'=>50));
 					$qualification_input[] = FormValidator :: createElement('text','qualification');
 					$form_folder -> addGroup($qualification_input,'qualification',get_lang('QualificationNumberOver'),'size="10"');
-	
+
 					if ($row['weight'] > 0) {
 						$weight_input[] = FormValidator :: createElement('text','weight');
-						$form_folder -> addGroup($weight_input,'weight',get_lang('WeightInTheGradebook'),'size="10"');						
+						$form_folder -> addGroup($weight_input,'weight',get_lang('WeightInTheGradebook'),'size="10"');
 					}
-	
+
 					$there_is_a_end_date =false;
 					if($row['view_properties']=='1') {
 						if($homework['expires_on']!='0000-00-00 00:00:00'){
@@ -500,11 +500,11 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 							$there_is_a_end_date = true;
 							$form_folder -> addGroup(create_group_date_select(),'ends',get_lang('EndsAt'));
 						}
-	
-						if ($there_is_a_expire_date && $there_is_a_end_date) { 
-							$form_folder -> addRule(array('expires','ends'), get_lang('DateExpiredNotBeLessDeadLine'), 'comparedate');	
+
+						if ($there_is_a_expire_date && $there_is_a_end_date) {
+							$form_folder -> addRule(array('expires','ends'), get_lang('DateExpiredNotBeLessDeadLine'), 'comparedate');
 						}
-											
+
 					} else {
 							$form_folder -> addElement('html','<div class="row">
 		 	                         <div class="label">&nbsp;</div>
@@ -512,12 +512,12 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 	 	  	                                 <a href="javascript://" onclick=" return plus();" ><span id="plus">&nbsp;<img style="vertical-align:middle;" src="../img/div_show.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'</span></a>
 	 	  	                         </div>
 		  	                         </div>	');
-	
+
 		  	                $form_folder -> addElement('html','<div id="options" style="display: none;">');
 										if(empty($default)) {
 											$default = date('Y-m-d 12:00:00');
 										}
-	
+
 											$parts = split(' ',$default);
 											list($d_year,$d_month,$d_day) = split('-',$parts[0]);
 											list($d_hour,$d_minute) = split(':',$parts[1]);
@@ -525,8 +525,8 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 											$form_folder -> addElement('checkbox', 'make_calification', null, get_lang('MakeQualifiable'),'onclick="javascript:if(this.checked==true){document.getElementById(\'option3\').style.display = \'block\';}else{document.getElementById(\'option3\').style.display = \'none\';}"');
 											$form_folder -> addElement('html','<div id=\'option3\' style="display:none">');
 											$weight_input2[] = FormValidator :: createElement('text','weight');
-											$form_folder -> addGroup($weight_input2,'weight',get_lang('WeightInTheGradebook'),'size="10"');	
-											$form_folder -> addElement('html','</div>');										
+											$form_folder -> addGroup($weight_input2,'weight',get_lang('WeightInTheGradebook'),'size="10"');
+											$form_folder -> addElement('html','</div>');
 										}
 										if($homework['expires_on']='0000-00-00 00:00:00') {
 											$homework['expires_on']=date("Y-m-d H:i:s");
@@ -544,22 +544,22 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 											$form_folder -> addGroup(create_group_date_select(),'ends',get_lang('EndsAt'));
 											$form_folder -> addElement('html','</div>');
 										}
-	
+
 										$form_folder -> addRule (array('expires','ends'), get_lang('DateExpiredNotBeLessDeadLine'), 'comparedate');
-	
+
 							$form_folder -> addElement('html','</div>');
 					}
-	
+
 					$form_folder -> addElement('style_submit_button','submit',get_lang('ModifyDirectory'),'class="save"');
-	
+
 					if($there_is_a_end_date == true) {
 						$defaults = array_merge($defaults,convert_date_to_array($homework['ends_on'],'ends'));
 					}
-	
+
 					if($there_is_a_expire_date == true) {
 						$defaults = array_merge($defaults,convert_date_to_array($homework['expires_on'],'expires'));
 					}
-	
+
 					if(!empty($row['qualification'])) {
 						$defaults = array_merge($defaults,array('qualification[qualification]'=>$row['qualification']));
 					}
@@ -568,7 +568,7 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 					}
 					$form_folder -> setDefaults($defaults);
 					$display_edit_form=true;
-	
+
 					if($form_folder -> validate()) {
 						$TABLEAGENDA 		= Database::get_course_table(TABLE_AGENDA);
 						if($there_is_a_end_date == true || $there_is_a_expire_date == true) {
@@ -594,24 +594,24 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 										Database::query($sql_add_publication, __FILE__, __LINE__);
 									}
 							}
-	
+
 						}
 						//if($_POST['qualification']['qualification']!='')
 							Database::query('UPDATE '.$work_table.' SET description = '."'".Database::escape_string(Security::remove_XSS($_POST['description']))."'".', qualification = '."'".Database::escape_string($_POST['qualification']['qualification'])."'".',weight = '."'".Database::escape_string($_POST['weight']['weight'])."'".' WHERE id = '."'".$row['id']."'",__FILE__,__LINE__);
 							Database::query('UPDATE '.Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK).' SET weight = '."'".Database::escape_string($_POST['weight']['weight'])."'".' WHERE course_code = '."'".api_get_course_id()."'".' AND ref_id = '."'".$row['id']."'".'',__FILE__,__LINE__);
-	
+
 					    //we are changing the current work and we want add them into gradebook
 						if(isset($_POST['make_calification']) && $_POST['make_calification']==1) {
 							require_once('../gradebook/lib/be/gradebookitem.class.php');
 							require_once('../gradebook/lib/be/evaluation.class.php');
 							require_once('../gradebook/lib/be/abstractlink.class.php');
 							require_once('../gradebook/lib/gradebook_functions.inc.php');
-					
+
 							$resource_name = Security::remove_XSS($_POST['dir_name']);
 							add_resource_to_course_gradebook(api_get_course_id(), 3, $row['id'], Database::escape_string($resource_name),(float)$_POST['weight']['weight'], (float)$_POST['qualification']['qualification'], Database::escape_string($_POST['description']),time(), 1,api_get_session_id());
-						}                    
+						}
 						Display::display_confirmation_message(get_lang('FolderEdited'));
-	
+
 						$values = $form_folder -> exportValues();
 						$values = $values['my_group'];
 						$dir_name = replace_dangerous_char($values['dir_name']);
@@ -620,7 +620,7 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 						$mydir = $my_sub_dir.$dir_name;
 						$dir = $dir_name;
 						$display_edit_form=false;
-	
+
 						// gets calendar_id from student_publication_assigment
 						$sql = "SELECT add_to_calendar FROM $work_assigment WHERE publication_id ='".$row['id']."'";
 						$res = Database::query($sql,__FILE__,__LINE__);
@@ -634,8 +634,8 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 								WHERE id='".$calendar_id[0]."'";
 						Database::query($sql,__FILE__,__LINE__);
 						}
-	
-	
+
+
 					}
 				}
 			}
@@ -644,7 +644,7 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 			$class = '';
 			$row[] = '<img src="../img/works.gif" border="0" hspace="5" align="middle" alt="'.get_lang('Assignment').'" title="'.get_lang('Assignment').'" />'; //image
 			//$a_count_directory=count_dir($work_dir.'/'.$dir,false);
-	
+
 			$cant_files=0;
 			$cant_dir = 0;
 			if(api_is_allowed_to_edit()) {
@@ -671,24 +671,24 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 			$res_directory = Database::query($sql_directory,__FILE__,__LINE__);
 			$count_directory = Database::fetch_row($res_directory);
 			$cant_dir = $count_directory[0];
-	
+
 			$text_file=get_lang('FilesUpload');
 			$text_dir=get_lang('Directories');
-	
+
 			if ($cant_files==1) {
 				$text_file=api_strtolower(get_lang('FileUpload'));
 			}
-	
+
 			if ($cant_dir==1) {
 				$text_dir=get_lang('directory');
 			}
-	
+
 			if ($cant_dir!=0) {
 				$dirtext=' ('.$cant_dir.' '.$text_dir.')';
 			} else {
 				$dirtext='';
 			}
-	
+
 			if (!empty($display_edit_form) && isset($clean_edit_dir) && $clean_edit_dir==$mydir) {
 				$row[] = '<span class="invisible" style="display:none">'.$dir.'</span>'.$form_folder->toHtml(); // form to edit the directory's name
 			} else {
@@ -715,7 +715,7 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 			if ($count_files!=0) {
 				$row[] = "";
 			}
-	
+
 			if ($direc_date!='' && $direc_date!='0000-00-00 00:00:00') {
 				$my_direc_date = api_ucfirst(format_locale_date($dateFormatShort,strtotime($direc_date))).'&nbsp;&nbsp;&nbsp;&nbsp;';
 				$my_direc_date .= ucfirst(strftime($timeNoSecFormat,strtotime($direc_date)));
@@ -723,7 +723,7 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 			} else {
 				$row[]='';
 			}
-	
+
 			if ($origin != 'learnpath') {
 				if( $is_allowed_to_edit) {
 					$action .= '<a href="'.api_get_self().'?cidReq='.api_get_course_id().
@@ -822,7 +822,7 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 		$my_params = array ('edit_dir' => Security::remove_XSS($_GET['edit_dir']));
 	}
 	$my_params['origin'] = $origin;
-		
+
 	Display::display_sortable_config_table($table_header,$table_data,$sorting_options, $paging_options,$my_params,$column_show,$column_order);
 }
 
@@ -1052,7 +1052,7 @@ function del_dir($base_work_dir,$dir,$id) {
 	//delete from DB the directories
 	$sql = "DELETE FROM $table WHERE filetype = 'folder' AND url LIKE BINARY '/".$dir."%'";
 	$res = Database::query($sql,__FILE__,__LINE__);
-	
+
 	require_once(api_get_path(LIBRARY_PATH).'/fileManage.lib.php');
 	$new_dir= $dir.'_DELETED_'.$id;
 	if (api_get_setting('permanently_remove_deleted_files') == 'true'){
@@ -1450,8 +1450,8 @@ function get_work_id($path) {
 }
 /**
  * Get list of users who have not given the task
- * @param int 
- * @return array 
+ * @param int
+ * @return array
  * @author cvargas carlos.vargas@beeznest.com
  */
 function get_list_users_without_publication($task_id) {
@@ -1460,37 +1460,37 @@ function get_list_users_without_publication($task_id) {
 	$table_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 	$table_user = Database :: get_main_table(TABLE_MAIN_USER);
 	$session_course_rel_user = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-	
+
 	//condition for the session
 	$session_id = api_get_session_id();
-	
+
 	if (!empty($session_id)){
-		$sql="SELECT C.id_user as id FROM $work_table AS S, $session_course_rel_user AS C, $iprop_table AS I WHERE C.id_user=I.insert_user_id and S.id=I.ref and S.parent_id='$task_id' and course_code='".api_get_course_id()."' and S.session_id='".$session_id."'";	
+		$sql="SELECT C.id_user as id FROM $work_table AS S, $session_course_rel_user AS C, $iprop_table AS I WHERE C.id_user=I.insert_user_id and S.id=I.ref and S.parent_id='$task_id' and course_code='".api_get_course_id()."' and S.session_id='".$session_id."'";
 	} else {
-		$sql="SELECT C.user_id as id FROM $work_table AS S, $table_course_user AS C, $iprop_table AS I WHERE C.user_id=I.insert_user_id and S.id=I.ref and C.status=5 and S.parent_id='$task_id' and course_code='".api_get_course_id()."'";		
+		$sql="SELECT C.user_id as id FROM $work_table AS S, $table_course_user AS C, $iprop_table AS I WHERE C.user_id=I.insert_user_id and S.id=I.ref and C.status=5 and S.parent_id='$task_id' and course_code='".api_get_course_id()."'";
 	}
 	$result = Database::query($sql, __FILE__, __LINE__);
 	$users_with_tasks = array();
 	while($row = Database::fetch_array($result)) {
-		$users_with_tasks[] = $row['id'];	
+		$users_with_tasks[] = $row['id'];
 	}
 
 	if (!empty($session_id)){
     	$sql_users = "SELECT cu.id_user, u.lastname, u.firstname, u.email FROM $session_course_rel_user AS cu, $table_user AS u WHERE cu.status!=1 and cu.course_code='".api_get_course_id()."' AND u.user_id=cu.id_user and cu.id_session='".$session_id."'";
 	} else {
-		$sql_users = "SELECT cu.user_id, u.lastname, u.firstname, u.email FROM $table_course_user AS cu, $table_user AS u WHERE cu.status!=1 and cu.course_code='".api_get_course_id()."' AND u.user_id=cu.user_id";	
+		$sql_users = "SELECT cu.user_id, u.lastname, u.firstname, u.email FROM $table_course_user AS cu, $table_user AS u WHERE cu.status!=1 and cu.course_code='".api_get_course_id()."' AND u.user_id=cu.user_id";
 	}
-	$result_users = Database::query($sql_users, __FILE__, __LINE__);	
+	$result_users = Database::query($sql_users, __FILE__, __LINE__);
 	$users_without_tasks = array();
-	while ($row_users = Database::fetch_row($result_users)) {		
-		if (in_array($row_users[0],$users_with_tasks)) continue;	
+	while ($row_users = Database::fetch_row($result_users)) {
+		if (in_array($row_users[0],$users_with_tasks)) continue;
 		$user_id = array_shift($row_users);
-		$row_users[3] = $row_users[2];						
+		$row_users[3] = $row_users[2];
 		$row_users[2] = Display::encrypted_mailto_link($row_users[2],$row_users[2]);
-					
+
 		$users_without_tasks[] = $row_users;
 	}
-			
+
 	return $users_without_tasks;
 }
 /**
@@ -1508,14 +1508,14 @@ function display_list_users_without_publication($task_id) {
 	$table_header[] = array(get_lang('Email'),true);
 	// table_data
 	$table_data = get_list_users_without_publication($task_id);
-	
+
 	$sorting_options=array();
 	$sorting_options['column']=1;
 	$paging_options=array();
 	$my_params = array();
-	
-	if (isset($_GET['curdirpath'])) {		
-		$my_params['curdirpath'] = Security::remove_XSS($_GET['curdirpath']);		
+
+	if (isset($_GET['curdirpath'])) {
+		$my_params['curdirpath'] = Security::remove_XSS($_GET['curdirpath']);
 	}
 	if (isset($_GET['edit_dir'])) {
 		$my_params['edit_dir'] = Security::remove_XSS($_GET['edit_dir']);
@@ -1523,8 +1523,8 @@ function display_list_users_without_publication($task_id) {
 	if (isset($_GET['list'])) {
 		$my_params['list'] = Security::remove_XSS($_GET['list']);
 	}
-	$my_params['origin'] = $origin;	
-	
+	$my_params['origin'] = $origin;
+
 	//$column_show
 	$column_show[]=1;
 	$column_show[]=1;
@@ -1540,18 +1540,18 @@ function display_list_users_without_publication($task_id) {
 */
 function send_reminder_users_without_publication($task_id) {
 
-	global $_course,$my_cur_dir_path,$currentUserFirstName,$currentUserLastName,$currentUserEmail;
+	global $_course, $my_cur_dir_path, $currentUserFirstName, $currentUserLastName, $currentUserEmail;
 	$emailsubject = "[" . api_get_setting('siteName') . "] ";
-	$sender_name = $currentUserFirstName.' '.$currentUserLastName;
+	$sender_name = api_get_person_name($currentUserFirstName, $currentUserLastName, null, PERSON_NAME_EMAIL_ADDRESS);
 	$email_admin = $currentUserEmail;
 	// The body can be as long as you wish, and any combination of text and variables
 	$emailbody_user .= get_lang('ReminderToSubmitPendingTask')."\n".get_lang('CourseName')." : ".$_course['name']."\n";
-	$emailbody_user .= get_lang('WorkName')." : ".substr($my_cur_dir_path, 0, -1)."\n\n".get_lang('Teacher')." : ".$currentUserFirstName.' '.$currentUserLastName."\n".get_lang('Email')." : ".$currentUserEmail;
-	
-	$list_users= get_list_users_without_publication($task_id);
-	
-	foreach ($list_users as $users) {
-		$name_user = $users[1].' '.$users[0];
-		@api_mail($name_user, $users[3], $emailsubject, $emailbody_user, $sender_name,$email_admin);			
-	}	
+	$emailbody_user .= get_lang('WorkName')." : ".substr($my_cur_dir_path, 0, -1)."\n\n".get_lang('Teacher')." : ".api_get_person_name($currentUserFirstName, $currentUserLastName)."\n".get_lang('Email')." : ".$currentUserEmail;
+
+	$list_users = get_list_users_without_publication($task_id);
+
+	foreach ($list_users as $user) {
+		$name_user = api_get_person_name($user[0], $user[1], null, PERSON_NAME_EMAIL_ADDRESS);
+		@api_mail($name_user, $user[3], $emailsubject, $emailbody_user, $sender_name, $email_admin);
+	}
 }

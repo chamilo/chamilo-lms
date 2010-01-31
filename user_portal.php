@@ -1454,75 +1454,70 @@ if (isset($toolsList) and is_array($toolsList) and isset($digest)) {
 	$show_menu = true;
 }
 
+echo '<div class="menusection">';
+echo '<span class="menusectioncaption">'.get_lang('MenuUser').'</span>';
+    
+//user image
+//  @todo add a platform setting to add the user image
+if (api_get_setting('allow_social_tool')=='true' && api_get_setting('allow_message_tool') == 'true') {
+    $img_array= UserManager::get_user_picture_path_by_id(api_get_user_id(),'web',true,true);        
+    $no_image =false;
+    if ($img_array['file'] == 'unknown.jpg') {
+        $no_image =true;
+    }       
+    $img_array = UserManager::get_picture_user(api_get_user_id(), $img_array['file'], 50, USER_IMAGE_SIZE_MEDIUM, ' width="90" height="90" ');
+    echo '<div class="clear"></div>';
+    echo '<div id="social_widget" >';
+      
+    echo '  <div id="social_widget_image">';
+    if ($no_image == false) {
+        echo '<a href="'.api_get_path(WEB_PATH).'main/social/home.php"><img src="'.$img_array['file'].'"  '.$img_array['style'].' border="1"></a>';
+    } else { 
+        echo '<a href="'.api_get_path(WEB_PATH).'main/auth/profile.php"><img title="'.get_lang('EditProfile').'" src="'.$img_array['file'].'" '.$img_array['style'].' border="1"></a>';
+    }
+    echo '</div>';  
+                    
+    require_once api_get_path(LIBRARY_PATH).'message.lib.php';
+    require_once api_get_path(LIBRARY_PATH).'social.lib.php';
+    require_once api_get_path(LIBRARY_PATH).'group_portal_manager.lib.php';
+        
+    // New messages
+    $number_of_new_messages             = MessageManager::get_new_messages();
+    // New contact invitations
+    $number_of_new_messages_of_friend   = SocialManager::get_message_number_invitation_by_user_id(api_get_user_id());
+       
+    // New group invitations sent by a moderator
+    $group_pending_invitations = GroupPortalManager::get_groups_by_user(api_get_user_id(), GROUP_USER_PERMISSION_PENDING_INVITATION,false);
+    $group_pending_invitations = count($group_pending_invitations);
+        
+    $total_invitations = $number_of_new_messages_of_friend + $group_pending_invitations;
+    $cant_msg  = '';
+    if ($number_of_new_messages > 0) {
+        $cant_msg = ' ('.$number_of_new_messages.')';
+    }
+    //<h2 class="message-title">'.get_lang('Messages').'</h2>
+    echo '<div class="clear"></div>';
+    echo '<div class="message-content"> <p>';
+    $link = '';
+    if (api_get_setting('show_tabs', 'social') == 'true') {
+        $link = '?f=social';
+    }
+    echo '<a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php'.$link.'" class="message-body">'.get_lang('Inbox').$cant_msg.' </a><br />';                    
+    echo '<a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php'.$link.'" class="message-body">'.get_lang('Compose').' </a><br />';
+    //echo '<a href="'.api_get_path(WEB_PATH).'main/auth/profile.php" class="message-body">'.get_lang('EditMyProfile').' </a><br />';
+    
+    if ($total_invitations > 0) {       
+        echo '<a href="'.api_get_path(WEB_PATH).'main/social/invitations.php" class="message-body">'.get_lang('PendingInvitations').' ('.$total_invitations.') </a><br />';
+    }
+            
+    echo '</p>';
+    echo '</div>';  
+    echo '</div><div class="clear"></div>';
+}  
+
+
 // My account section
 if ($show_menu) {
-	echo '<div class="menusection">';
-	echo '<span class="menusectioncaption">'.get_lang('MenuUser').'</span>';
-	
-	//user image
-	//	@todo add a platform setting to add the user image
-	if (api_get_setting('allow_social_tool')=='true' && api_get_setting('allow_message_tool') == 'true') {
-		$img_array= UserManager::get_user_picture_path_by_id(api_get_user_id(),'web',true,true);		
-		$no_image =false;
-		if ($img_array['file'] == 'unknown.jpg') {
-			$no_image =true;
-		}		
-		$img_array = UserManager::get_picture_user(api_get_user_id(), $img_array['file'], 50, USER_IMAGE_SIZE_MEDIUM, ' width="90" height="90" ');
-		echo '<div class="clear"></div>';
-		echo '<div id="social_widget" >';
-		
-			echo '<div id="social_widget_image">';
-				if ($no_image == false)
-					echo '<a href="'.api_get_path(WEB_PATH).'main/social/home.php"><img src="'.$img_array['file'].'"  '.$img_array['style'].' border="1"></a>';
-				else 
-					echo '<a href="'.api_get_path(WEB_PATH).'main/auth/profile.php"><img title="'.get_lang('EditProfile').'" src="'.$img_array['file'].'" '.$img_array['style'].' border="1"></a>';
-			echo '</div>';	
-					
-		require_once api_get_path(LIBRARY_PATH).'message.lib.php';
-		require_once api_get_path(LIBRARY_PATH).'social.lib.php';
-		require_once api_get_path(LIBRARY_PATH).'group_portal_manager.lib.php';
-		
-		// New messages
-		$number_of_new_messages				= MessageManager::get_new_messages();
-		// New contact invitations
-		$number_of_new_messages_of_friend	= SocialManager::get_message_number_invitation_by_user_id(api_get_user_id());
-		
-		// New group invitations sent by a moderator
-		$group_pending_invitations = GroupPortalManager::get_groups_by_user(api_get_user_id(), GROUP_USER_PERMISSION_PENDING_INVITATION,false);
-		$group_pending_invitations = count($group_pending_invitations);
-		
-		$total_invitations = $number_of_new_messages_of_friend + $group_pending_invitations;
-		$cant_msg  = '';
-		if ($number_of_new_messages > 0)
-			$cant_msg = ' ('.$number_of_new_messages.')';
-				//<h2 class="message-title">'.get_lang('Messages').'</h2>
-		echo '<div class="clear"></div>';
-		echo '<div class="message-content">			
-				<p>';
-				$link = '';
-				if (api_get_setting('show_tabs', 'social') == 'true') {
-					$link = '?f=social';
-				}
-				echo '<a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php'.$link.'" class="message-body">'.get_lang('Inbox').$cant_msg.' </a><br />';					
-				echo '<a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php'.$link.'" class="message-body">'.get_lang('Compose').' </a><br />';
-				//echo '<a href="'.api_get_path(WEB_PATH).'main/auth/profile.php" class="message-body">'.get_lang('EditMyProfile').' </a><br />';
-		
-				if ($total_invitations > 0) {		
-					echo '<a href="'.api_get_path(WEB_PATH).'main/social/invitations.php" class="message-body">'.get_lang('PendingInvitations').' ('.$total_invitations.') </a><br />';
-				}
-			
-		echo '</p>';
-				
-		echo '</div>';	
-		
-		echo '</div><div class="clear"></div>';
-				
-	
-	}  
-	
-
-	
-	
 	echo '<ul class="menulist">';
 	if ($show_create_link) {
 		display_create_course_link();
@@ -1535,8 +1530,9 @@ if ($show_menu) {
 		display_digest($toolsList, $digest, $orderKey, $courses);
 	}
 	echo '</ul>';
-	echo '</div>';
 }
+
+echo '</div>'; //close menusection
 
 
 //deleting the myprofile link

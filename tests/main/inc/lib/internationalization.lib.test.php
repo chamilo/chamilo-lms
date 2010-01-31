@@ -1163,7 +1163,7 @@ class TestInternationalization extends UnitTestCase {
 
 	function test_api_get_language_isocode() {
 		$test_language_table = array(
-			'*** invalid entry ***' => null, // An invalid entry.
+			'*** invalid entry ***' => 'en', // An invalid entry.
 			'arabic' => 'ar',
 			'arabic_unicode' => 'ar',
 			'asturian' => 'ast',
@@ -1248,6 +1248,17 @@ class TestInternationalization extends UnitTestCase {
 		$this->assertTrue($is_ok);
 		//var_dump($res);
 		//foreach ($res as $language => $test_case) { echo ($test_case['is_ok'] ? '<span style="color: green; font-weight: bold;">Ok</span>' : '<span style="color: red; font-weight: bold;">Failed</span>').' '.$language.' => '.(is_null($test_case['test_result']) ? 'NULL' : $test_case['test_result']).'<br />'; }
+	}
+
+	public function test_api_get_text_direction() {
+		$languages = array('english', 'en', 'arabic', 'ar');
+		$expected_results = array('ltr', 'ltr', 'rtl', 'rtl');
+		$res = array();
+		foreach ($languages as $language) {
+			$res[] = api_get_text_direction($language);
+		}
+		$this->assertTrue($res === $expected_results);
+		//var_dump($res);
 	}
 
 	public function test_api_is_latin1_compatible() {

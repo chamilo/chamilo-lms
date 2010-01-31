@@ -36,12 +36,11 @@ $DaysShort = api_get_week_days_short();
 $DaysLong = api_get_week_days_long();
 // Defining the months of the year to allow translation of the months
 $MonthsLong = api_get_months_long();
-@ $iso_lang = api_get_language_isocode($language_interface);
-if (empty ($iso_lang) )
-{
-	//if there was no valid iso-code, use the english one
-	$iso_lang = 'en';
-}
+
+$iso_lang = api_get_language_isocode($language_interface);
+
+header('Content-Type: text/html; charset='. api_get_system_encoding());
+
 ?>
 <!DOCTYPE html
      PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
@@ -49,7 +48,7 @@ if (empty ($iso_lang) )
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php echo $iso_lang; ?>" lang="<?php echo $iso_lang; ?>">
 <head>
 <title>Calendar</title>
-<meta http-equiv="Content-Type" content="text/html; charset=<?php echo $charset; ?>">
+<meta http-equiv="Content-Type" content="text/html; charset=<?php echo api_get_system_encoding(); ?>">
 <style type="text/css">
 /*<![CDATA[*/
 @import "<?php echo api_get_path(WEB_CODE_PATH); ?>css/<?php echo api_get_setting('stylesheets'); ?>/default.css";
@@ -159,7 +158,7 @@ foreach($DaysShort as $index => $day)
 /* ]]> */
 </script>
 </head>
-<body onLoad="javascript: initCalendar();">
+<body dir="<?php echo api_get_text_direction(); ?>" onLoad="javascript: initCalendar();">
 <div id="calendar_data"></div>
 <div id="clock_data"></div>
 </body>

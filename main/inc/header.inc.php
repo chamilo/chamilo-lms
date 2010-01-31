@@ -17,22 +17,11 @@
  * HTTP HEADER
  */
 
-//Give a default value to $charset. Should change to UTF-8 some time in the future.
-//This parameter should be set in the platform configuration interface in time.
-$charset = api_get_setting('platform_charset');
-if(empty($charset))
-{
-	$charset = 'ISO-8859-15';
-}
-
-//header('Content-Type: text/html; charset='. $charset)
-//	or die ("WARNING : it remains some characters before &lt;?php bracket or after ?&gt end");
-
-header('Content-Type: text/html; charset='. $charset);
+header('Content-Type: text/html; charset='.api_get_system_encoding());
 
 $navigator_info = api_get_navigator();
 //ie6 fix
-if ($navigator_info['name']=='Internet Explorer' &&  $navigator_info['version']=='6') {	
+if ($navigator_info['name']=='Internet Explorer' &&  $navigator_info['version']=='6') {
 	$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/iepngfix/iepngfix_tilebg.js" type="text/javascript" language="javascript"></script>'; //jQuery
 }
 
@@ -45,12 +34,7 @@ if ( isset($httpHeadXtra) && $httpHeadXtra )
 }
 
 // Get language iso-code for this page - ignore errors
-@$document_language = api_get_language_isocode($language_interface);
-if(empty($document_language))
-{
-  //if there was no valid iso-code, use the english one
-  $document_language = 'en';
-}
+$document_language = api_get_language_isocode();
 
 /*
  * HTML HEADER
@@ -80,7 +64,6 @@ echo api_get_setting('siteName');
 /*<![CDATA[*/
 <?php
 
- 
 $platform_theme= api_get_setting('stylesheets'); 	// plataform's css
 $my_style=$platform_theme;
 
@@ -144,10 +127,10 @@ if(empty($my_style)) {
 echo '@import "'.$my_code_path.'css/'.$my_style.'/default.css";'."\n";
 echo '@import "'.$my_code_path.'css/'.$my_style.'/course.css";'."\n";
 
-if ($navigator_info['name']=='Internet Explorer' &&  $navigator_info['version']=='6') {	
+if ($navigator_info['name']=='Internet Explorer' &&  $navigator_info['version']=='6') {
 	echo 'img, div { behavior: url('.api_get_path(WEB_LIBRARY_PATH).'javascript/iepngfix/iepngfix.htc) } ';
 }
-  
+
 ?>
 /*]]>*/
 </style>
@@ -167,7 +150,7 @@ if ($navigator_info['name']=='Internet Explorer' &&  $navigator_info['version']=
 <link href="http://www.chamilo.org/team.php" rel="Author" />
 <link href="http://www.chamilo.org" rel="Copyright" />
 <link rel="shortcut icon" href="<?php echo api_get_path(WEB_PATH); ?>favicon.ico" type="image/x-icon" />
-<meta http-equiv="Content-Type" content="text/html; charset=<?php echo $charset ?>" />
+<meta http-equiv="Content-Type" content="text/html; charset=<?php echo api_get_system_encoding(); ?>" />
 
 <script type="text/javascript">
 //<![CDATA[
@@ -216,7 +199,7 @@ include(api_get_path(LIBRARY_PATH).'/javascript/email_links.lib.js.php');
 ?>
 
 </head>
-<body dir="<?php echo  $text_dir ?>" <?php
+<body dir="<?php echo api_get_text_direction(); ?>" <?php
  if(defined('DOKEOS_HOMEPAGE') && DOKEOS_HOMEPAGE)
  echo 'onload="javascript:if(document.formLogin) { document.formLogin.login.focus(); }"'; ?>>
 <div class="skip">

@@ -495,6 +495,10 @@ if (is_array($language_files)) {
 // So, we have to reassign this variable again in order to keep its value right.
 $charset = $charset_initial_value;
 
+// The global variable $text_dir has been defined in the language file trad4all.inc.php.
+// For determing text direction correspondent to the current language we use now information from the internationalization library.
+$text_dir = api_get_text_direction();
+
 //Update of the logout_date field in the table track_e_login (needed for the calculation of the total connection time)
 
 if ($_configuration['tracking_enabled'] && !isset($_SESSION['login_as']) && isset($_user)) {

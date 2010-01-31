@@ -271,14 +271,9 @@ if ($origin != 'learnpath') {
 	Display::display_header($nameTools,"Exercise");
 } else {
 
-	header('Content-Type: text/html; charset='. $charset);
+	header('Content-Type: text/html; charset='.api_get_system_encoding());
 
-	@$document_language = api_get_language_isocode($language_interface);
-	if(empty($document_language))
-	{
-	  //if there was no valid iso-code, use the english one
-	  $document_language = 'en';
-	}
+	$document_language = api_get_language_isocode();
 
 	/*
 	 * HTML HEADER
@@ -291,10 +286,10 @@ if ($origin != 'learnpath') {
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php echo $document_language; ?>" lang="<?php echo $document_language; ?>">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=<?php echo $charset; ?>" />
+<link rel="stylesheet" type="text/css" href="<?php echo api_get_path(WEB_CODE_PATH).'css/'.api_get_setting('stylesheets').'/default.css'; ?>" />
 </head>
 
-<body>
-<link rel="stylesheet" type="text/css" href="<?php echo api_get_path(WEB_CODE_PATH).'css/'.api_get_setting('stylesheets').'/default.css'; ?>" />
+<body dir="<?php echo api_get_text_direction(); ?>">
 <?php
 }
 

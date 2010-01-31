@@ -1721,7 +1721,7 @@ function export2doc($wikiTitle, $wikiContents, $groupId)
 /*]]>*/
 </style>
 </head>
-<body>
+<body dir="{TEXT_DIRECTION}">
 {CONTENT}
 </body>
 </html>';
@@ -1741,7 +1741,7 @@ function export2doc($wikiTitle, $wikiContents, $groupId)
 	$css = str_replace('images/', $root_rel.$css_path.$theme.'images/', $css);
 	$css = str_replace('../../img/', $root_rel.'main/img/', $css);
 
-	$template = str_replace(array('{LANGUAGE}', '{ENCODING}', '{TITLE}', '{CSS}'), array(api_get_language_isocode(), api_get_system_encoding(), $wikiTitle, $css), $template);
+	$template = str_replace(array('{LANGUAGE}', '{ENCODING}', '{TEXT_DIRECTION}', '{TITLE}', '{CSS}'), array(api_get_language_isocode(), api_get_system_encoding(), api_get_text_direction(), $wikiTitle, $css), $template);
 
 	if (0 != $groupId)
 	{

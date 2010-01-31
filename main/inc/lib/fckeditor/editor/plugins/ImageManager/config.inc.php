@@ -16,7 +16,7 @@
        PHP must be able to create files in this directory.
 	   Able to create directories is nice, but not necessary.
 */
-#$IMConfig['base_dir'] = '/var/www/FCKeditor/images/';
+//$IMConfig['base_dir'] = '/var/www/FCKeditor/images/';
 
 /*
  The URL to the above path, the web browser needs to be able to see it.
@@ -27,7 +27,7 @@
  in this directory and its subdirectories.
 */
 $language_file = array('document');
-include ('../../../../../../inc/global.inc.php');
+include '../../../../../../inc/global.inc.php';
 
 // Initialization of the repositories.
 require_once api_get_path(LIBRARY_PATH).'fckeditor/repository.php';
@@ -207,13 +207,13 @@ $IMConfig['allow_overwrite'] = false;
 */
 /*
 $IMConfig['watermarks'] = array	(
-													"imageManager.png",
-													"imageManager.jpg",
-													"devshed.png",
-													"natureWatermark.png"
-												);
+	"imageManager.png",
+	"imageManager.jpg",
+	"devshed.png",
+	"natureWatermark.png"
+);
 */
-$IMConfig['watermarks'] = array	();
+$IMConfig['watermarks'] = array();
 
 /*
 	To limit the width and height for uploaded files, specify the maximum pixeldimensions.
@@ -268,10 +268,4 @@ $IMConfig['tmp_prefix'] = '.editor_';
  Language and text direction.
  */
 $IMConfig['language'] = api_get_language_isocode();
-if (empty($IMConfig['language']))
-{
-	$IMConfig['language'] = 'en';
-}
-$IMConfig['text_direction'] = in_array($IMConfig['language'], array('ar', 'prs', 'he', 'ps', 'fa')) ? 'rtl' : 'ltr';
-
-?>
+$IMConfig['text_direction'] = api_get_text_direction($IMConfig['language']);

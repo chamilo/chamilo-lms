@@ -27,13 +27,13 @@
 */
 
 
-include("../inc/global.inc.php");
+include '../inc/global.inc.php';
 api_block_anonymous_users();
 
-require('../inc/lib/html2pdf/html2pdf.class.php');
+require '../inc/lib/html2pdf/html2pdf.class.php';
 
-$contentPDF=stripslashes(api_html_entity_decode($_POST['contentPDF'], ENT_QUOTES, $charset));
-$titlePDF=stripslashes(api_html_entity_decode($_POST['titlePDF'], ENT_QUOTES, $charset));
+$contentPDF = stripslashes(api_html_entity_decode($_POST['contentPDF'], ENT_QUOTES, api_get_system_encoding()));
+$titlePDF = stripslashes(api_html_entity_decode($_POST['titlePDF'], ENT_QUOTES, api_get_system_encoding()));
 
 ob_start();//activate Output -Buffer
 ///////////////////////
@@ -50,18 +50,14 @@ ob_start();//activate Output -Buffer
  <?php
 /////////////////////
 echo $contentPDF;
-$htmlbuffer=ob_get_contents();// Store Output-Buffer in one variable
+$htmlbuffer = ob_get_contents();// Store Output-Buffer in one variable
 ob_end_clean();// delete Output-Buffer
 
 /////bridge to  dokeos lang
-	@ $langhtml2pdf = api_get_language_isocode($language_interface);
+	$langhtml2pdf = api_get_language_isocode();
 
 	// Some code translations are needed.
 	$langhtml2pdf = strtolower(str_replace('_', '-', $langhtml2pdf));
-	if (empty ($langhtml2pdf))
-	{
-		$langhtml2pdf = 'en';
-	}
 	switch ($langhtml2pdf)
 	{
 		case 'uk':

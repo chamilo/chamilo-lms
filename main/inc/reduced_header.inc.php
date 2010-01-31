@@ -17,17 +17,8 @@
  * HTTP HEADER
  */
 
-//Give a default value to $charset. Should change to UTF-8 some time in the future.
-//This parameter should be set in the platform configuration interface in time.
-if(empty($charset))
-{
-	$charset = 'ISO-8859-15';
-}
+header('Content-Type: text/html; charset='.api_get_system_encoding());
 
-//header('Content-Type: text/html; charset='. $charset)
-//	or die ("WARNING : it remains some characters before &lt;?php bracket or after ?&gt end");
-
-header('Content-Type: text/html; charset='. $charset);
 if ( isset($httpHeadXtra) && $httpHeadXtra )
 {
 	foreach($httpHeadXtra as $thisHttpHead)
@@ -37,12 +28,7 @@ if ( isset($httpHeadXtra) && $httpHeadXtra )
 }
 
 // Get language iso-code for this page - ignore errors
-@$document_language = api_get_language_isocode($language_interface);
-if(empty($document_language))
-{
-  //if there was no valid iso-code, use the english one
-  $document_language = 'en';
-}
+$document_language = api_get_language_isocode();
 
 /*
  * HTML HEADER
@@ -73,8 +59,8 @@ echo api_get_setting('siteName');
  */
 
 $platform_theme = api_get_setting('stylesheets'); 	// plataform's css
-$my_style=$platform_theme;
-if(api_get_setting('user_selected_theme') == 'true')
+$my_style = $platform_theme;
+if (api_get_setting('user_selected_theme') == 'true')
 {
 	$useri = api_get_user_info();
 	$user_theme = $useri['theme'];
@@ -172,7 +158,7 @@ if($my_style!='')
 <link href="http://www.chamilo.org/team.php" rel="Author" />
 <link href="http://www.chamilo.org" rel="Copyright" />
 <link rel="shortcut icon" href="<?php echo api_get_path(WEB_PATH); ?>favicon.ico" type="image/x-icon" />
-<meta http-equiv="Content-Type" content="text/html; charset=<?php echo $charset ?>" />
+<meta http-equiv="Content-Type" content="text/html; charset=<?php echo api_get_system_encoding(); ?>" />
 
 <script type="text/javascript">
 //<![CDATA[

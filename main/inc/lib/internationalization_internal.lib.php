@@ -941,8 +941,7 @@ function _api_get_locale_from_language($language = null) {
 		$language = api_get_interface_language();
 	}
 	if (!isset($locale[$language])) {
-		$locale[$language] = api_get_language_isocode($language);
-		$locale[$language] = empty($locale[$language]) ? 'en' : str_replace('-', '_', $locale[$language]);
+		$locale[$language] = str_replace('-', '_', api_get_language_isocode($language));
 	}
 	return $locale[$language];
 }

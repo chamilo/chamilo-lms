@@ -279,7 +279,8 @@ function api_purify_language_id($language) {
 
 /**
  * Gets language isocode column from the language table, taking the given language as a query parameter.
- * @param string $language	This is the name of the folder containing translations for the corresponding language (e.g arabic, english).
+ * @param string $language		This is the name of the folder containing translations for the corresponding language (e.g arabic, english).
+ * @param string $default_code	This is the value to be returned if there was no code found corresponding to the given language.
  * If $language is omitted, interface language is assumed then.
  * @return string			The found isocode or null on error.
  * Returned codes are according to the following standards (in order of preference):
@@ -288,22 +289,25 @@ function api_purify_language_id($language) {
  *    and the ISO 3166 two-letter territory codes (pt-BR, ...)
  * -  ISO 639-2 : Alpha-3 code (three-letters code - ast, fur, ...)
  */
-function api_get_language_isocode($language = null) {
+function api_get_language_isocode($language = null, $default_code = 'en') {
 	static $iso_code = array();
 	if (empty($language)) {
 		$language = api_get_interface_language();
 	}
 	if (!isset($iso_code[$language])) {
 		if (!class_exists('Database')) {
-			return 'en'; // This might happen, in case of calling this function early during the global initialization.
+			return $default_code; // This might happen, in case of calling this function early during the global initialization.
 		}
 		$sql_result = Database::query("SELECT isocode FROM ".Database::get_main_table(TABLE_MAIN_LANGUAGE)." WHERE dokeos_folder = '$language'", __FILE__, __LINE__);
 		if (Database::num_rows($sql_result)) {
 			$result = Database::fetch_array($sql_result);
-			$iso_code[$language] = $result['isocode'];
+			$iso_code[$language] = trim($result['isocode']);
 		} else {
 			$language_purified_id = api_purify_language_id($language);
 			$iso_code[$language] = isset($iso_code[$language_purified_id]) ? $iso_code[$language_purified_id] : null;
+		}
+		if (empty($iso_code[$language])) {
+			$iso_code[$language] = $default_code;
 		}
 	}
 	return $iso_code[$language];

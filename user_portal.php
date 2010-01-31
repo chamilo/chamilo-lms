@@ -260,11 +260,11 @@ function get_personal_course_list($user_id) {
 }
 
 /**
- *  display especial courses
+ *  display special courses
  *  @param int User id
  *  @return void
  */
-function display_especial_courses ($user_id) {
+function display_special_courses ($user_id) {
 
 		$user_id = intval($user_id);
 		$special_course_list = array();
@@ -342,7 +342,7 @@ function display_especial_courses ($user_id) {
 }
 
 /**
- *  display courses without especial courses
+ *  display courses without special courses
  *  @param int User id
  *  @return void
  */
@@ -377,7 +377,7 @@ function display_courses($user_id) {
 }
 
 /**
- *  display courses in category without especial courses
+ *  display courses in category without special courses
  *  @param int User category id
  *  @return void
  */
@@ -1204,7 +1204,7 @@ if ( is_array($courses_tree) ) {
 		// sessions and courses that are not in a session category
 
 			if (!isset($_GET['history'])) { // check if it's not history trainnign session list
-				display_especial_courses(api_get_user_id());
+				display_special_courses(api_get_user_id());
 				display_courses(api_get_user_id());
 			}
 			//independent sessions

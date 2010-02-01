@@ -17,7 +17,9 @@ class TestFileDisplay extends UnitTestCase {
 	//todo public function testGetTotalFolderSize()
 
 	public function testChooseImage(){
-		static $type, $image;
+		global $_course;
+		
+		static $type, $image;		
 		$file_name = '';
 		$res = choose_image($file_name);
 		$this->assertEqual($res,'defaut.gif');
@@ -50,19 +52,15 @@ class TestFileDisplay extends UnitTestCase {
 		//var_dump($res);
 
 	}
-
-	/*
-	 * Fatal error: Call to a member function read() on a non-object in
-	 * /var/www/dokeossvn186/main/inc/lib/fileDisplay.lib.php on line 207
-	 *
-	 ** /
+	 
 	public function testRecentModifiedFileTime(){
-		$dir_name ='';
+		$dir_name = '';
 		$$do_recursive =true;
-		$res = recent_modified_file_time($dir_name, $do_recursive = true);
-		$this->assertTrue($res);
+		$res = recent_modified_file_time($dir_name, $do_recursive);
+		$this->assertTrue(is_numeric($res));
+		//var_dump($res);
 
-	}*/
+	}
 
 	public function testFolderSize(){
 		$dir_name ='';

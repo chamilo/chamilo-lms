@@ -46,26 +46,31 @@ class Import
 	 * @return array An array with all data from the CSV-file
 	 */
 	function csv_to_array($filename) {
-		$result = array ();
-		$handle = fopen($filename, "r");
-		if($handle === false) {
+		$result = array();
+		$handle = fopen($filename, 'r');
+		if ($handle === false) {
 			return $result;
-		}		
-		$keys = fgetcsv($handle, 4096, ";");
-		while (($row_tmp = fgetcsv($handle, 4096, ";")) !== FALSE) {
-			$row = array ();
-			//avoid empty lines in csv			
-			if (is_array($row_tmp) && count($row_tmp)>0 && $row_tmp[0]!= '') {
-				if (!is_null($row_tmp[0])) {			
-					foreach ($row_tmp as $index => $value) {				
-						$row[$keys[$index]] = $value;				
+		}
+		// Modified by Ivan Tcholakov, 01-FEB-2010.
+		//$keys = fgetcsv($handle, 4096, ";");
+		$keys = api_fgetcsv($handle, null, ';');
+		//
+		// Modified by Ivan Tcholakov, 01-FEB-2010.
+		//while (($row_tmp = fgetcsv($handle, 4096, ";")) !== FALSE) {
+		while (($row_tmp = api_fgetcsv($handle, null, ';')) !== false) {
+		//
+			$row = array();
+			//avoid empty lines in csv
+			if (is_array($row_tmp) && count($row_tmp) > 0 && $row_tmp[0] != '') {
+				if (!is_null($row_tmp[0])) {
+					foreach ($row_tmp as $index => $value) {
+						$row[$keys[$index]] = $value;
 					}
 					$result[] = $row;
 				}
-			}			
+			}
 		}
 		fclose($handle);
 		return $result;
 	}
 }
-?>

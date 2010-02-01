@@ -870,7 +870,10 @@ function import_csvfile()
 			{
 				$stats = array (0, 0, 0); // fails, updates, inserts
 
-				while (($data = fgetcsv($myFile, 32768, $listsep)))
+				// Modified by Ivan Tcholakov, 01-FEB-2010.
+				//while (($data = fgetcsv($myFile, 32768, $listsep)))
+				while (($data = api_fgetcsv($myFile, null, $listsep)))
+				//
 				{
 					foreach ($data as $i => $text)
 						$linkdata[$columns[$i]] = $text;
@@ -899,4 +902,3 @@ function import_csvfile()
 	else
 		$catlinkstatus = get_lang('CsvFileNotFound');
 }
-?>

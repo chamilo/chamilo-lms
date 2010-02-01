@@ -18,25 +18,30 @@
 <a href="index.html">Documentation</a> &gt; Changelog
 <div id="outerframe">
 <div id="main">
-	
+
 <h1>Chamilo 1.8.7 - ? ?</h1>
 <h3>Release notes - summary</h3>
 <p>Chamilo 1.8.7 is a intermediate&nbsp;release including a lot of new features, mostly focused on social network, the handling of sessions (which will help many educational institutions, public or private, to manage their contents in a more flexible way) and visual style, and a few important bugfixes. It lays the first stable stone in the Chamilo software project.</p>
-<h3>New Features</h3> 
+<h3>New Features</h3>
 <ul>
   <li>New tool: class attendance (usable in gradebook)</li>
-  <li>Thematic advance option added in course description (shown on course homepage)</li>  
-</ul>   
+  <li>Thematic advance option added in course description (shown on course homepage)</li>
+  <li>Upgraded PclZip library to version 2.8.2 (Feature #553)</li>
+  <li>Upgraded PHPMailer library to version 5.1 (Feature #272)</li>
+</ul>
 
 <h3>Debugging</h3>
-<ul>  
+<ul>
   <li>PHP short tags deleted see http://www.chamilo.org/node/114 reported and fixed by Sicabol</li>
   <li>Student publications deleted when an user is unsubscribed of a course. Reported and fixed by André Boivin</li>
-  <li>Fixed bug reported by Carlosbrolotobar in http://www.chamilo.org/node/135 whereby normal students don't can't see their social profile section in the right menu if they can't see the courses catalog.</li>  
+  <li>Fixed bug reported by Carlosbrolotobar in http://www.chamilo.org/node/135 whereby normal students don't can't see their social profile section in the right menu if they can't see the courses catalog.</li>
+  <li>Corrected mailing functions, now they load the file <em>mail.conf.php</em>. Previously the file <em>mail.conf.dist.php</em> was to be loaded by mistake. (Feature #272)</li>
+  <li>Online editor: A new configuration option about editor's background has been proposed by Wofganag Schneider and it has been implemented. See <a href="http://www.chamilo.org/node/107" target="_blank">http://www.chamilo.org/node/107</a> (Feature #347)</li>
+  <li>Some PHP short tags have been fixed, the problem was reported by Sicabol. See <a href="http://www.chamilo.org/node/114" target="_blank">http://www.chamilo.org/node/114</a> (Feature #347)</li>
 </ul>
 <br />
 <h3>CSS changes</h3>
-<ul>  
+<ul>
   <li>Z</li>
 </ul>
 <h3>Known issues</h3>
@@ -46,7 +51,7 @@
 
 <h3>Deprecated files</h3>
 <ul>
-  <li>X</li>
+  <li>Online editor: The plugins "Flash" (obsolete) and "placeholder" (non-relevant to the finished product) have been removed. (Feature #347)</li>
 </ul>
 
 <br />
@@ -54,12 +59,12 @@
 <h1>Chamilo 1.8.6.2  <span style="font-style: italic;">Salto</span> - January 2010</h1>
 <h3>Release notes - summary</h3>
 <p>Chamilo 1.8.6.2 is a intermediate&nbsp;release including a lot of new features, mostly focused on social network, the handling of sessions (which will help many educational institutions, public or private, to manage their contents in a more flexible way) and visual style, and a few important bugfixes. It lays the first stable stone in the Chamilo software project.</p>
-<h3>New Features</h3> 
+<h3>New Features</h3>
 <ul>
   <li>Implemented by-session content creation tools updates</li>
   <li>Added tabs editor (from admin)</li>
   <li>Added course catalogue</li>
-  <li>Added a link to export courses in the "platform administrator &gt; courses list" entry (DT#4257)</li> 
+  <li>Added a link to export courses in the "platform administrator &gt; courses list" entry (DT#4257)</li>
   <li>Added sessions history (optional access to previous sessions in read-only or read-write, for students)</li>
   <li>Added advanced search in sessions: you can also search by session name, session category, tutor and visibility. (DT#5541)</li>
   <li>Added an option to configure courses as "auto-registered" (every user has it in his courses list and is automatically subscribed)</li>
@@ -72,7 +77,7 @@
   <li>Reporting: notification of users who have never been active yet</li>
   <li>Reporting: the additional user profile fields (defined by the platform administrator through platform administration &gt; profiling) can now be shown in the reporting screens</li>
   <li>Subscribing users in a course: you can now filter on addtional user profile fields when subscribing a user in a course (through user/subscribe_user.php) </li>
-  <li>Definition of wiki pages as tasks for students is now possible</li> 
+  <li>Definition of wiki pages as tasks for students is now possible</li>
   <li>Added feedback to student wiki pages, synchronized with their progress in the task</li>
   <li>Added posibility to establish a time limit for each wiki page</li>
   <li>Added posibility to establish a max number of words into each wiki page</li>
@@ -85,8 +90,8 @@
   <li>Added option to export the training list to CSV in Administration &gt; Training - DT#4256</li>
   <li>Added user tags in social network - DT#5508</li>
   <li>Revamped "Who is online" look - DT#5490</li>
-  <li>Added new search tool - DT#5610 </li>	
-  <li>Added user groups at platform level (social network) with posibility to send group messages, add moderators, readers, etc - DT#5611</li>  
+  <li>Added new search tool - DT#5610 </li>
+  <li>Added user groups at platform level (social network) with posibility to send group messages, add moderators, readers, etc - DT#5611</li>
   <li>Made construction of presentations with the images of document tool easier</li>
   <li>Upgraded from FCKEditor 2.6.4.1 to FCKEditor 2.6.5, Build 23959 - DT#2867</li>
   <li>Added settings for WYSIWYG editor into the Platform Admin Area (instead of files)</li>
@@ -95,7 +100,7 @@
   <li>Rebuilt social network menu interface</li>
   <li>Improved messages tool: Easier to use, no annoying ajax menun makes it faster and more reliable</li>
   <li>Added multiple attachments to messages sending</li>
-  <li>Added possibility to send emails to multiple users</li>  
+  <li>Added possibility to send emails to multiple users</li>
   <li>Improved user portal page when Social Network is enabled: User image, and subscriptions links are shown</li>
   <li>Added inc/ajax library folder to structurer AJAX calls - see CT#431. All new jQuery + AJAX reponses should be located there</li>
   <li>RSS Feed added by default to the extra fields, as well as the user tag. Still requires manual visibility change to be enabled</li>
@@ -103,9 +108,9 @@
   <li>Added list of students who have not submitted an assignment yet, and  the possibility to send them a reminder by email - BT#487 BT#489</li>
   <li>Added new question type in exercise tool: Multiple answer combination a.k.a "Exact answer" - CT#402</li>
   <li>Added e-mail notifications when a student answers an exercise</li>
-  <li>Added extensible footer style, allowing for much more information to be shown there</li> 
+  <li>Added extensible footer style, allowing for much more information to be shown there</li>
   <li>List of course improved when using Course categories in user_portal.php </li>
-</ul>   
+</ul>
 
 <h3>Debugging</h3>
 <ul>

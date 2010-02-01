@@ -604,7 +604,7 @@ function api_sort_by_first_name($language = null) {
  * @param string $string	The input string.
  * @return int				Returns the length of the input string (or binary data) as number of bytes.
  */
-function api_byte_count($string) {
+function api_byte_count(& $string) {
 	static $use_mb_strlen;
 	if (!isset($use_mb_strlen)) {
 		$use_mb_strlen = MBSTRING_INSTALLED && ((int) ini_get('mbstring.func_overload') & 2);
@@ -3399,6 +3399,92 @@ function api_is_valid_ascii(&$string) {
 		return @mb_detect_encoding($string, 'ASCII', true) == 'ASCII' ? true : false;
 	}
 	return !preg_match('/[^\x00-\x7F]/S', $string);
+}
+
+
+/**
+ * ----------------------------------------------------------------------------
+ * Parsing CSV-data.
+ * ----------------------------------------------------------------------------
+ */
+
+/**
+ * Parses CSV data (one line) into an array. This function is not affected by the OS-locale settings.
+ * @param string $string				The input string.
+ * @param string $delimiter (optional)	The field delimiter, one character only. The default delimiter character is comma {,).
+ * @param string $enclosure (optional)	The field enclosure, one character only. The default enclosure character is quote (").
+ * @param string $escape (optional)		The escape character, one character only. The default escape character is backslash (\).
+ * @return array						Returns an array containing the fields read.
+ * Note: In order this function to work correctly with UTF-8, limitation for the parameters $delimiter, $enclosure and $escape
+ * should be kept. These parameters should be single ASCII characters only. Thus the implementation of this function is faster.
+ * @link http://php.net/manual/en/function.str-getcsv.php   (exists as of PHP 5 >= 5.3.0)
+ */
+function & api_str_getcsv(& $string, $delimiter = ',', $enclosure = '"', $escape = '\\') {
+	if (api_byte_count($delimiter) > 1) { $delimiter = $delimiter[1]; }
+	if (api_byte_count($enclosure) > 1) { $enclosure = $enclosure[1]; }
+	if (api_byte_count($escape) > 1) { $escape = $escape[1]; }
+	$len = api_byte_count($string);
+	$enclosed = false;
+	$escaped = false;
+	$value = '';
+	$result = array();
+
+	for ($i = 0; $i < $len; $i++) {
+		$char = $string[$i];
+		if ($char == $escape) {
+			if (!$escaped) {
+				$escaped = true;
+				continue;
+			}
+		}
+		$escaped = false;
+		switch ($char) {
+			case $enclosure:
+				if ($enclosed && $string[$i + 1] == $enclosure) {
+					$value .= $char;
+					$i++;
+				} else {
+					$enclosed = !$enclosed;
+				}
+				break;
+			case $delimiter:
+				if (!$enclosed) {
+					$result[] = $value;
+					$value = '';
+				} else {
+					$value .= $char;
+				}
+				break;
+			default:
+				$value .= $char;
+				break;
+		}
+	}
+	if (!empty($value)) {
+		$result[] = $value;
+	}
+
+	return $result;
+}
+
+/**
+ * Reads a line from a file pointer and parses it for CSV fields. This function is not affected by the OS-locale settings.
+ * @param resource $handle				The file pointer, it must be valid and must point to a file successfully opened by fopen().
+ * @param int $length (optional)		Reading ends when length - 1 bytes have been read, on a newline (which is included in the return value), or on EOF (whichever comes first).
+ * 										If no length is specified, it will keep reading from the stream until it reaches the end of the line.
+ * @param string $delimiter (optional)	The field delimiter, one character only. The default delimiter character is comma {,).
+ * @param string $enclosure (optional)	The field enclosure, one character only. The default enclosure character is quote (").
+ * @param string $escape (optional)		The escape character, one character only. The default escape character is backslash (\).
+ * @return array						Returns an array containing the fields read.
+ * Note: In order this function to work correctly with UTF-8, limitation for the parameters $delimiter, $enclosure and $escape
+ * should be kept. These parameters should be single ASCII characters only.
+ * @link http://php.net/manual/en/function.fgetcsv.php
+ */
+function api_fgetcsv($handle, $length = null, $delimiter = ',', $enclosure = '"', $escape = '\\') {
+	if (($line = is_null($length) ? fgets($handle): fgets($handle, $length)) !== false) {
+		return api_str_getcsv($line, $delimiter, $enclosure, $escape);
+	}
+	return false;
 }
 
 

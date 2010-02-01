@@ -443,7 +443,7 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 				$mydir_temp = '/'.$my_sub_dir.$dir;
 			}
 
-			$sql_select_directory= "SELECT prop.lastedit_date, id, author, has_properties, view_properties, description, qualification,weight,id FROM ".$iprop_table." prop INNER JOIN ".$work_table." work ON (prop.ref=work.id) WHERE ";
+			$sql_select_directory= "SELECT prop.lastedit_date, work.id, author, has_properties, view_properties, description, qualification, weight FROM ".$iprop_table." prop INNER JOIN ".$work_table." work ON (prop.ref=work.id) WHERE ";
 						if (!empty($_SESSION['toolgroup'])) {
 							$sql_select_directory.=" work.post_group_id = '".$_SESSION['toolgroup']."' "; // set to select only messages posted by the user's group
 						} else {
@@ -451,6 +451,7 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 						}
 			$sql_select_directory.=" AND work.url LIKE BINARY '".$mydir_temp."' AND work.filetype = 'folder' AND prop.tool='work' $condition_session";
 			$result=Database::query($sql_select_directory,__FILE__,__LINE__);
+		//	var_dump($sql_select_directory);
 			$row=Database::fetch_array($result);
 
 

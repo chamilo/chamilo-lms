@@ -13,7 +13,7 @@ $language_file=array('admin','tracking');
 // resetting the course id
 $cidReset=true;
 
-// including some necessary dokeos files
+// including some necessary chamilo files
 require('../inc/global.inc.php');
 require_once(api_get_path(LIBRARY_PATH).'security.lib.php');
 
@@ -278,14 +278,14 @@ if(api_is_platform_admin()){
 	}*/
 ?>
 <div class="admin_section">
- <h4><?php Display::display_icon('logo.gif', 'Dokeos'); ?> Chamilo.org</h4>
+ <h4><?php Display::display_icon('logo.gif', 'Chamilo'); ?> Chamilo.org</h4>
  <ul>
   <li><a href="http://www.chamilo.org/" target="_blank"><?php echo get_lang('ChamiloHomepage'); ?></a></li>
   <li><a href="http://forum.chamilo.org/" target="_blank"><?php echo get_lang('ChamiloForum'); ?></a></li>
   <li><a href="http://www.chamilo.org/extensions" target="_blank"><?php echo get_lang('ChamiloExtensions'); ?></a></li>
 
   <?php
-  //try to display a maximum before we check the dokeos version and all that
+  //try to display a maximum before we check the chamilo version and all that
   	//session_write_close(); //close session to avoid blocking concurrent access
 	flush(); //send data to client as much as allowed by the web server
 	//ob_flush();
@@ -329,7 +329,7 @@ function version_check()
 		/*
 		if ((api_get_setting('registered') + 15552000) > mktime())
 		{
-			$return = 'It has been a long time since about your campus has been updated on Dokeos.com';
+			$return = 'It has been a long time since about your campus has been updated on chamilo.org';
 			$return .= '<form action="'.api_get_self().'" id="VersionCheck" name="VersionCheck" method="post">';
 			$return .= '<input type="submit" name="Register" value="Enable Version Check" id="register" />';
 			$return .= '</form>';
@@ -382,7 +382,7 @@ function register_site()
 function check_dokeos_version2()
 {
 	global $_configuration;
-	$dokeos_version = trim($_configuration['dokeos_version']); // the dokeos version of your installation
+	$dokeos_version = trim($_configuration['dokeos_version']); // the chamilo version of your installation
 
 	if (ini_get('allow_url_fopen')==1)
 	{
@@ -405,11 +405,11 @@ function check_dokeos_version2()
 	
 			if ($dokeos_version<>$version_info)
 			{
-				$output='<br /><span style="color:red">' . get_lang('YourVersionNotUpToDate') . '. '.get_lang('LatestVersionIs').' <b>Dokeos '.$version_info.'</b>. '.get_lang('YourVersionIs').' <b>Dokeos '.$dokeos_version. '</b>. '.str_replace('http://www.dokeos.com','<a href="http://www.dokeos.com">http://www.dokeos.com</a>',get_lang('PleaseVisitDokeos')).'</span>';
+				$output='<br /><span style="color:red">' . get_lang('YourVersionNotUpToDate') . '. '.get_lang('LatestVersionIs').' <b>Chamilo '.$version_info.'</b>. '.get_lang('YourVersionIs').' <b>Chamilo '.$dokeos_version. '</b>. '.str_replace('http://www.chamilo.org','<a href="http://www.chamilo.org">http://www.chamilo.org</a>',get_lang('PleaseVisitDokeos')).'</span>';
 			}
 			else
 			{
-				$output = '<br /><span style="color:green">'.get_lang('VersionUpToDate').': Dokeos '.$version_info.'</span>';
+				$output = '<br /><span style="color:green">'.get_lang('VersionUpToDate').': Chamilo '.$version_info.'</span>';
 			}
 		} else {
             $output = '<span style="color:red">' . get_lang('ImpossibleToContactVersionServerPleaseTryAgain') . '</span>';
@@ -435,7 +435,7 @@ function check_dokeos_version2()
 */
 function check_dokeos_version()
 {
-	global $_configuration; // the dokeos version of your installation
+	global $_configuration; // the chamilo version of your installation
 	$dokeos_version = $_configuration['dokeos_version'];
 
 	if ($fsock = @fsockopen('www.chamilo.org', 80, $errno, $errstr))
@@ -463,11 +463,11 @@ function check_dokeos_version()
 
 		if (trim($dokeos_version)<>trim($version_info))
 		{
-			$output='<span style="color:red">' . get_lang('YourVersionNotUpToDate') . '. '.get_lang('LatestVersionIs').' <b>Dokeos '.$version_info.'</b>. '.get_lang('YourVersionIs').' <b>Dokeos '.$dokeos_version. '</b>. '.str_replace('http://www.dokeos.com','<a href="http://www.dokeos.com">http://www.dokeos.com</a>',get_lang('PleaseVisitDokeos')).'</span>';
+			$output='<span style="color:red">' . get_lang('YourVersionNotUpToDate') . '. '.get_lang('LatestVersionIs').' <b>Chamilo '.$version_info.'</b>. '.get_lang('YourVersionIs').' <b>Dokeos '.$dokeos_version. '</b>. '.str_replace('http://www.chamilo.org','<a href="http://www.chamilo.org">http://www.chamilo.org</a>',get_lang('PleaseVisitDokeos')).'</span>';
 		}
 		else
 		{
-			$output = '<span style="color:green">'.get_lang('VersionUpToDate').': Dokeos '.$version_info.'</span>';
+			$output = '<span style="color:green">'.get_lang('VersionUpToDate').': Chamilo '.$version_info.'</span>';
 		}
 	}
 	else

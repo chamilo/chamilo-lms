@@ -342,7 +342,9 @@ function api_get_text_direction($language = null) {
 }
 
 /**
- * This function check whether a given language can use Latin 1 encoding.
+ * This function checks whether a given language can use Latin 1 encoding.
+ * In the past (Chamilo 1.8.6.2), the function was used in the installation script only once.
+ * It is not clear whether this function would be use useful for something else in the future.
  * @param string $language	The checked language.
  * @return bool				TRUE if the given language can use Latin 1 encoding (ISO-8859-15, ISO-8859-1, WINDOWS-1252, ...), FALSE otherwise.
  */

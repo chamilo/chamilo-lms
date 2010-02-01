@@ -172,17 +172,18 @@ function construct_not_selected_select_form($group_list=null, $user_list=null,$t
 		echo	"\t\t<option value=\"\">---------------------------------------------------------</option>\n";
 	}
 	// adding the individual users to the select form
-	foreach($user_list as $this_user)
-	{
-		if (is_array($to_already_selected)) {
-			if (!(in_array("USER:".$this_user["user_id"],$to_already_selected))) // $to_already_selected is the array containing the users (and groups) that are already selected
-			{
-				echo	"\t\t<option value=\"USER:",$this_user["user_id"],"\">",
-					"", api_get_person_name($this_user['firstName'], $this_user['lastName']),
-					"</option>\n";
+	if ($user_list) {
+		foreach($user_list as $this_user)
+		{
+			if (is_array($to_already_selected)) {
+				if (!in_array("USER:".$this_user['user_id'],$to_already_selected)) // $to_already_selected is the array containing the users (and groups) that are already selected
+				{
+					echo	"\t\t<option value=\"USER:".$this_user['user_id']."\">",
+						"", api_get_person_name($this_user['firstname'], $this_user['lastname']),
+						"</option>\n";
+				}
 			}
 		}
-
 	}
 	echo "\t\t</select>\n";
 }
@@ -253,7 +254,7 @@ function construct_selected_select_form($group_list=null, $user_list=null,$to_al
 				if (!is_array($to_already_selected) || !in_array("USER:".$this_user['user_id'],$to_already_selected)) // $to_already_selected is the array containing the users (and groups) that are already selected
 				{
 					echo	"\t\t<option value=\"USER:",$this_user['user_id'],"\">",
-						"", api_get_person_name($this_user['lastName'], $this_user['firstName']),
+						"", api_get_person_name($this_user['lastname'], $this_user['firstname']),
 						"</option>\n";
 				}
 			}

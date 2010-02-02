@@ -353,19 +353,14 @@ function xhtdoc($htt_file_contents)
 function _show_param()  // for debugging info
 {
 	global $charset;
-
     $result = '';
-
     foreach ($this->xht_param as $k => $v)
-        if ($v !== $this->_prev_param[$k])
-        {
+        if ($v !== $this->_prev_param[$k]) {
             $this->_prev_param[$k] = $v; $result .= ', ' . $k . ': ' .
                 ((api_strlen($v) <= 20) ? $v : api_substr($v, 0, 17).'...');
         }
-
     return $result ? htmlspecialchars(api_substr($result, 1), ENT_QUOTES, $charset) : '';
 }
-
 
 function _lang($var, $cur_elem = 0)
 {

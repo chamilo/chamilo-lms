@@ -10,8 +10,13 @@ class TestSystemAnnouncementManager extends UnitTestCase {
 		$content='';
 		$date_start='';
 		$date_end='';
+		$visible_teacher = 0;
+		$visible_student = 0;
+		$visible_guest = 0;
+		$lang = null;
+		$send_mail=0;
 		ob_start();
-		$res=SystemAnnouncementManager::add_announcement($title, $content, $date_start, $date_end, $visible_teacher = 0, $visible_student = 0, $visible_guest = 0, $lang = null, $send_mail=0);
+		$res=SystemAnnouncementManager::add_announcement($title, $content, $date_start, $date_end, $visible_teacher, $visible_student, $visible_guest, $lang = null, $send_mail);
         $this->assertTrue(is_bool($res));
         ob_end_clean();
         //var_dump($res);
@@ -68,10 +73,10 @@ class TestSystemAnnouncementManager extends UnitTestCase {
 		global $_user;
 		global $_setting;
 		global $charset;
-		$title='';
-		$content='';
-		$teacher='';
-		$student='';
+		$title='Arthur';
+		$content='mariconsito';
+		$teacher='portu';
+		$student='potu';
 		$res=SystemAnnouncementManager::send_system_announcement_by_email($title,$content,$teacher, $student);
 		$this->assertTrue(is_null($res));
         //var_dump($res);
@@ -81,7 +86,7 @@ class TestSystemAnnouncementManager extends UnitTestCase {
 		$announcement_id='';
 		$user='';
 		$visible='';
-		$res=SystemAnnouncementManager::set_visibility();
+		$res=SystemAnnouncementManager::set_visibility($announcement_id, $user, $visible);
 		$this->assertTrue(is_bool($res));
         //var_dump($res);
 	}

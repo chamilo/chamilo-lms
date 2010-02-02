@@ -313,8 +313,8 @@ class TestUserManager extends UnitTestCase
 	 }
 
 	 function testRemoveUserProduction() {
-	 	$user_id='121';
-	 	$production='field variable';
+	 	$user_id=1;
+	 	$production='my_files';
 	 	$res=UserManager::remove_user_production($user_id,$production);
 	 	$this->assertTrue(is_null($res));
 	 }
@@ -349,14 +349,15 @@ class TestUserManager extends UnitTestCase
 	 	$this->assertTrue(is_null($res));
 
 	}
-
+/*
+//DEPRECATED
 	function testSuscribeUsersToSession() {
-	  	$id_session='123';
+	  	$id_session=1;
 	  	$UserList='';
-	  	$res=UserManager::suscribe_users_to_session($id_session,$UserList,null);
+	  	$res=UserManager::suscribe_users_to_session($id_session,$UserList);
 	 	$this->assertTrue(is_null($res));
 	}
-
+*/
 	function testUpdateApiKey() {
 		$user_id=121;
 		$api_service='string';
@@ -368,8 +369,8 @@ class TestUserManager extends UnitTestCase
 	}
 
 	function testUpdateExtraField() {
-		$fid='5';
-		$columns=null;
+		$fid=5;
+		$columns=array();
 		$res=UserManager::update_extra_field($fid,$columns);
 	 	$this->assertTrue(is_bool($res));
 	}

@@ -154,19 +154,27 @@ class AllTestsSuite extends TestSuite {
          
 		
         
-	   // $this->addTestFile(dirname(__FILE__).'/main/inc/lib/stats.lib.inc.test.php'); 
+	   //$this->addTestFile(dirname(__FILE__).'/main/inc/lib/stats.lib.inc.test.php'); 
 	   //$this->addTestFile(dirname(__FILE__).'/main/inc/lib/surveymanager.lib.test.php');
 	   //$this->addTestFile(dirname(__FILE__).'/main/inc/lib/system_announcements.lib.test.php');
-	   //$this->addTestFile(dirname(__FILE__).'/main/inc/lib/tracking.lib.test.php');
-
-
-	  
-	    //$this->addTestFile(dirname(__FILE__).'/main/inc/lib/urlmanager.lib.test.php');
+  
+	    
         //$this->addTestFile(dirname(__FILE__).'/main/inc/lib/usermanager.lib.test.php'); 
 	    //$this->addTestFile(dirname(__FILE__).'/main/inc/lib/xht.lib.test.php');
-	    //$this->addTestFile(dirname(__FILE__).'/main/inc/lib/xmd.lib.test.php');
+	    $this->addTestFile(dirname(__FILE__).'/main/inc/lib/xmd.lib.test.php');
+
+
+
+
+
+
 
 		//Funciones probadas por carlos
+		
+		$this->addTestFile(dirname(__FILE__).'/main/inc/lib/tracking.lib.test.php');
+		$this->addTestFile(dirname(__FILE__).'/main/inc/lib/urlmanager.lib.test.php');
+		
+		
 		$this->addTestFile(dirname(__FILE__).'/main/inc/lib/session_handler.class.test.php');
 		$this->addTestFile(dirname(__FILE__).'/main/inc/lib/sessionmanager.lib.test.php');
 		$this->addTestFile(dirname(__FILE__).'/main/inc/lib/specific_fields_manager.lib.test.php');

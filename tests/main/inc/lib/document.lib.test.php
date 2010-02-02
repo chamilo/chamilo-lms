@@ -4,26 +4,24 @@ require_once(api_get_path(LIBRARY_PATH).'document.lib.php');
 class TestDocumentManager extends UnitTestCase {
 		
 		
-	public function CreateCourse(){		
+	public function testcreateCourse(){		
 		global $_configuration;
-	$course_datos = array('wanted_code'=> 'CURSO1',
-						  'title'=>'CURSO1',
-			    		  'tutor_name'=>'R. J. Wolfagan',
-						  'category_code'=>'2121',
-						  'course_language'=>'english',
-						  'course_admin_id'=>'1211',
-						  'db_prefix'=> $_configuration['db_prefix'],
-						  'firstExpirationDelay'=>'112'
-						  );
-	$res = create_course($course_datos['wanted_code'], $course_datos['title'],
-						 $course_datos['tutor_name'], $course_datos['category_code'],
-						 $course_datos['course_language'],$course_datos['course_admin_id'],
-						 $course_datos['db_prefix'], $course_datos['firstExpirationDelay']);
- 	 	
-	 
+		$course_datos = array('wanted_code'=> 'CURSO1',
+							  'title'=>'CURSO1',
+			    			  'tutor_name'=>'R. J. Wolfagan',
+							  'category_code'=>'2121',
+							  'course_language'=>'english',
+							  'course_admin_id'=>'1211',
+							  'db_prefix'=> $_configuration['db_prefix'],
+							  'firstExpirationDelay'=>'112'
+							  );
+		$res = create_course($course_datos['wanted_code'], $course_datos['title'],
+							 $course_datos['tutor_name'], $course_datos['category_code'],
+							 $course_datos['course_language'],$course_datos['course_admin_id'],
+							 $course_datos['db_prefix'], $course_datos['firstExpirationDelay']
+							 );
 	}
 
-	
     /**
 	 * This check if a document has the readonly property checked, then see if 
 	 * the user is the owner of this file, if all this is true then return true.
@@ -36,7 +34,7 @@ class TestDocumentManager extends UnitTestCase {
 	 * @return boolean true/false
 	 **/
 	public function testcheck_readonly() {
-		$_course='';
+		$_course='chamilo_CURSO1';
 		$user_id='';
 		$file='';
 		$res=DocumentManager::check_readonly($_course,$user_id,$file);
@@ -57,7 +55,7 @@ class TestDocumentManager extends UnitTestCase {
 	 * rename them too.
 	 */
 	function testdelete_document() {
-		$_course['dbName']='';
+		$_course['dbName']='chamilo_CURSO1';
 		$path='';
 		$base_work_dir='';
 		$res=DocumentManager::delete_document($_course, $path, $base_work_dir);
@@ -137,7 +135,7 @@ class TestDocumentManager extends UnitTestCase {
 	* @return array with all document data
 	*/
 	function testget_all_document_data() {
-		$_course['dbName']='';
+		$_course['dbName']='chamilo_CURSO1';
 		$path = '/';
 		$to_group_id = 0;
 		$to_user_id = NULL;
@@ -157,8 +155,10 @@ class TestDocumentManager extends UnitTestCase {
 	 * @return array with paths
 	 */
 	function testget_all_document_folders() {
-		$_course['dbName']='';
-		$res=DocumentManager::get_all_document_folders($_course);
+		$_course['dbName']='chamilo_CURSO1';
+		$to_group_id = '0';
+		$can_see_invisible = false;
+		$res=DocumentManager::get_all_document_folders($_course, $to_group_id, $can_see_invisible);
 		$this->assertTrue(is_array($_course));
 		//var_dump($_course);
 	}
@@ -180,7 +180,7 @@ class TestDocumentManager extends UnitTestCase {
 	 * @return int id of document / false if no doc found
 	 */
 	function testget_document_id() {
-		$_course['dbName']='';
+		$_course['dbName']='chamilo_CURSO1';
 		$path = Database::escape_string($path);
 		$res=DocumentManager::get_document_id($_course, $path);
 		$this->assertTrue(is_bool($res));
@@ -195,7 +195,6 @@ class TestDocumentManager extends UnitTestCase {
 	function testis_folder() {
 		$_course['dbName'] = 'chamilo_CURSO1';
 		$document_id = 1;
-		$document_id = Database::escape_string($document_id);
 		$res=DocumentManager::is_folder($_course, $document_id);
 		$this->assertTrue(is_bool($res));
 	}
@@ -207,9 +206,9 @@ class TestDocumentManager extends UnitTestCase {
      * @param array  $course the _course array info of the document's course
 	 */
 	function testis_visible() {
-		$course['dbName']='';
+		global $_course;
 		$doc_path = Database::escape_string($doc_path);
-		$res=DocumentManager::is_visible($doc_path, $course);
+		$res=DocumentManager::is_visible($doc_path, $_course);
 		$this->assertTrue(is_bool($res));
 	}
 
@@ -272,7 +271,7 @@ class TestDocumentManager extends UnitTestCase {
 		//var_dump($res);
 	}
 	
-	public function DeleteCourse(){
+	public function testdeleteCourseInDocument(){
 		$this->dmanager = null;
 	 	$code = 'CURSO1';				
 		$res = CourseManager::delete_course($code);			
@@ -288,7 +287,6 @@ class TestDocumentManager extends UnitTestCase {
 			closedir($handle);
 		}	
 
-	}
-	
+	}	
 }
 ?>

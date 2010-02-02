@@ -11,7 +11,7 @@ class TestGeometry extends UnitTestCase {
 
 	public function testCalculateArea(){
 		$xs = 12;
-		$ys = 11;
+		$ys = 12;
 		$res = calculate_area($xs,$ys);
 		$this->assertTrue(is_bool($res));
 		//var_dump($res);
@@ -68,8 +68,8 @@ class TestGeometry extends UnitTestCase {
 	}
 
 	public function testCheckPolygon(){
-		$xs=32;
-		$ys=13;
+		$xs=12;
+		$ys=12;
 		$res = _check_polygon($xs, $ys);
 		$this->assertTrue(is_bool($res));
 		$this->assertTrue($res === false);
@@ -78,8 +78,8 @@ class TestGeometry extends UnitTestCase {
 	}
 
 	public function testPolygon2String(){
-		$xs=42;
-		$ys=62;
+		$xs=12;
+		$ys=12;
 		$res = polygon2string($xs, $ys);
 		$this->assertTrue(is_string($res));
 		$this->assertTrue($res);
@@ -88,8 +88,8 @@ class TestGeometry extends UnitTestCase {
 
 	public function testIsInsidePolygon(){
 		$p=43;
-		$xs=11;
-		$ys=45;
+		$xs=12;
+		$ys=12;
 		$res =  _is_inside_polygon($p, $xs, $ys);
 		$this->assertTrue(is_bool($res));
 		$this->assertTrue($res === false);
@@ -97,8 +97,8 @@ class TestGeometry extends UnitTestCase {
 	}
 
 	public function testGetInsideConditionals(){
-		$xs=11;
-		$ys=23;
+		$xs=array(12);
+		$ys=array(12);
 		$res = _get_inside_conditionals($xs, $ys);
 		$this->assertTrue(is_array($res));
 		$this->assertTrue($res);
@@ -117,10 +117,10 @@ class TestGeometry extends UnitTestCase {
 	}
 
 	public function testGetIntersectionPolygon(){
-		$rxs='11';
-		$rys='23';
-		$uxs='54';
-		$uys='56';
+		$rxs= 11;
+		$rys= 23;
+		$uxs= 54;
+		$uys= 56;
 		$res = get_intersection_polygon($rxs, $rys, $uxs, $uys);
 		$this->assertTrue(is_null($res));
 		$this->assertTrue($res === null);
@@ -152,11 +152,12 @@ class TestGeometry extends UnitTestCase {
 	}
 
 	public function testIsNextTo(){
-		$point=32;
-		$last_point=11;
-		$xs=15;
-		$ys=56;
-		$res = _is_next_to($point, $last_point, $xs, $ys);
+		$point = 32;
+		$last_point = 10;
+		$xs = 12;
+		$ys = 12;
+		$between_points = FALSE;
+		$res = _is_next_to($point, $last_point, $xs, $ys, $between_points);
 		$this->assertTrue(is_bool($res));
 		$this->assertTrue($res === false);
 		$this->assertFalse($res);
@@ -165,7 +166,7 @@ class TestGeometry extends UnitTestCase {
 
 	public function testGetRightPoint(){
 		$point=44;
-		$polygon=0;
+		$polygon= array(12,12);
 		$res = _get_right_point($point, $polygon);
 		$this->assertTrue(is_null($res));
 		$this->assertNull($res);
@@ -174,8 +175,8 @@ class TestGeometry extends UnitTestCase {
 	}
 
 	public function testGetLeftPoint(){
-		$point=44;
-		$polygon=01;
+		$point = 44;
+		$polygon= array(12,12);
 		$res = _get_left_point($point, $polygon);
 		$this->assertTrue(is_null($res));
 		$this->assertNull($res);
@@ -184,8 +185,8 @@ class TestGeometry extends UnitTestCase {
 	}
 
 	public function testToPointsArray(){
-		$xs=22;
-		$ys=33;
+		$xs=12;
+		$ys=12;
 		$res = _to_points_array($xs, $ys);
 		$this->assertTrue(is_bool($res));
 		$this->assertTrue($res === false);
@@ -194,8 +195,8 @@ class TestGeometry extends UnitTestCase {
 	}
 
 	public function testToPointsIntersection(){
-		$xs=14;
-		$ys=14;
+		$xs=12;
+		$ys=12;
 		$res = _to_points_intersection($xs, $ys);
 		$this->assertTrue(is_bool($res));
 		$this->assertTrue($res === false);
@@ -204,16 +205,30 @@ class TestGeometry extends UnitTestCase {
 	}
 
 	public function testInInternArray(){
-		$oint=34;
-		$intern_points=13;
-		$res = in_intern_array($oint,$intern_points);
+		$point = 34;
+		$intern_points = array();
+		$res = in_intern_array($point,$intern_points);
 		$this->assertTrue(is_bool($res));
 		$this->assertTrue($res === false);
 		$this->assertFalse($res);
 		//var_dump($res);
 	}
+	
+	public function TestDeleteCourse(){				
+		$code = 'COURSEX';				
+		$res = CourseManager::delete_course($code);			
+		$path = api_get_path(SYS_PATH).'archive';		
+		if ($handle = opendir($path)) {
+			while (false !== ($file = readdir($handle))) {				
+				if (strpos($file,$code)!==false) {										
+					if (is_dir($path.'/'.$file)) {						
+						rmdirr($path.'/'.$file);						
+					}				
+				}				
+			}
+			closedir($handle);
+		}
+	}	
+	
 }
-
-
-
 ?>

@@ -72,8 +72,9 @@ class TestSubLanguageManager extends UnitTestCase {
 			$dokeos_path_file = $dirname.'spanish.inc.php';
 			$res = SubLanguageManager::add_file_in_language_directory($dokeos_path_file);
 			unlink($dokeos_path_file);
-			$this->assertTrue($res);	
+			$this->assertTrue(is_null($res));	
 		}
+		//var_dump($res);
 	}
 	
 	public function testwrite_data_in_file(){
@@ -88,11 +89,9 @@ class TestSubLanguageManager extends UnitTestCase {
 			$new_sub_language='spanishtest';
 			$variable_sub_language='test';
 			$res = SubLanguageManager::write_data_in_file($path_file,$new_sub_language,$variable_sub_language);
-			$this->assertTrue($res);	
-		}	
-		
-		
-
+			$this->assertNull($res);	
+		}
+		//var_dump($res);	
 		$this->assertFalse($res);
 		$this->assertTrue(is_null($res));
 	}
@@ -221,11 +220,20 @@ class TestSubLanguageManager extends UnitTestCase {
 		// var_dump($res);
 	}
 	
-		public function testDeleteCourse() {
-		global $cidReq;			
-		$resu = CourseManager::delete_course($cidReq);
-		session_destroy();			
-	}
-	
+	public function TestDeleteCourse(){				
+		$code = 'COURSEX';				
+		$res = CourseManager::delete_course($code);			
+		$path = api_get_path(SYS_PATH).'archive';		
+		if ($handle = opendir($path)) {
+			while (false !== ($file = readdir($handle))) {				
+				if (strpos($file,$code)!==false) {										
+					if (is_dir($path.'/'.$file)) {						
+						rmdirr($path.'/'.$file);						
+					}				
+				}				
+			}
+			closedir($handle);
+		}
+	}	
 }
 ?>

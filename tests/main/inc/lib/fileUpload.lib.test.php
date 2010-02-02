@@ -373,11 +373,5 @@ class TestFileUpload extends UnitTestCase {
 			//var_dump($res);
 		}
 		
-		public function testdeleteCourse(){
-		$this->dmanager = null;
-	 	$code = 'COURSEX';				
-		$res = CourseManager::delete_course($code);					
-		}
-
 }
 ?>

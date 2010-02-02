@@ -201,27 +201,30 @@ function format_url($file_path)
  */
 function recent_modified_file_time($dir_name, $do_recursive = true)
 {
+	
 	$dir = dir($dir_name);
 	$last_modified = 0;
-
-	while(($entry = $dir->read()) !== false)
-	{
-		if ($entry != '.' && $entry != '..')
-			continue;
-
-		if (!is_dir($dir_name.'/'.$entry))
-			$current_modified = filemtime($dir_name.'/'.$entry);
-		elseif ($do_recursive)
-			$current_modified = recent_modified_file_time($dir_name.'/'.$entry, true);
-
-		if ($current_modified > $last_modified)
-			$last_modified = $current_modified;
+	$return = 0;	
+	if (is_dir($dir)) {	
+		while(($entry = $dir->read()) !== false)
+		{
+			if ($entry != '.' && $entry != '..')
+				continue;
+	
+			if (!is_dir($dir_name.'/'.$entry))
+				$current_modified = filemtime($dir_name.'/'.$entry);
+			elseif ($do_recursive)
+				$current_modified = recent_modified_file_time($dir_name.'/'.$entry, true);
+	
+			if ($current_modified > $last_modified)
+				$last_modified = $current_modified;
+		}
+	
+		$dir->close();	
+		//prevents returning 0 (for empty directories)
+		$return = ($last_modified == 0) ? filemtime($dir_name) : $last_modified;
 	}
-
-	$dir->close();
-
-	//prevents returning 0 (for empty directories)
-	return ($last_modified == 0) ? filemtime($dir_name) : $last_modified;
+	return $return;
 }
 
 /**

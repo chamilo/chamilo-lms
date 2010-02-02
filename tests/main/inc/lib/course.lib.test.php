@@ -18,7 +18,6 @@ class TestCourse extends UnitTestCase{
 	public function TestCourse(){
 
 		$this->UnitTestCase('All main course function tests');
-
 	}
 	
 	public function setUp(){
@@ -26,8 +25,8 @@ class TestCourse extends UnitTestCase{
 		$this->tcourse = new CourseManager();
 		
 		$course_datos = array(
-				'wanted_code'=> 'CURSO1',
-				'title'=>'CURSO1',
+				'wanted_code'=> 'COURSE1',
+				'title'=>'COURSE1',
 				'tutor_name'=>'R. J. Wolfagan',
 				'category_code'=>'2121',
 				'course_language'=>'english',
@@ -38,15 +37,14 @@ class TestCourse extends UnitTestCase{
 		$res = create_course($course_datos['wanted_code'], $course_datos['title'],
 							 $course_datos['tutor_name'], $course_datos['category_code'],
 							 $course_datos['course_language'],$course_datos['course_admin_id'],
-							 $course_datos['db_prefix'], $course_datos['firstExpirationDelay']);
- 	 	
-	 
+							 $course_datos['db_prefix'], $course_datos['firstExpirationDelay']);	 
 	}
 
 	public function tearDown(){
 		$this->tcourse = null;
 		$this->dbase = null;
-	 	$code = 'CURSO1';				
+	 	$code = 'COURSE1';				
+		
 		$res = CourseManager::delete_course($code);			
 		$path = api_get_path(SYS_PATH).'archive';		
 		if ($handle = opendir($path)) {
@@ -59,7 +57,7 @@ class TestCourse extends UnitTestCase{
 			}
 			closedir($handle);
 		}	
-
+		
 	}
 
 	/*
@@ -118,7 +116,6 @@ class TestCourse extends UnitTestCase{
 	 	$this->assertFalse($res);
 		$this->assertTrue(is_bool($res));
 	 	$this->assertTrue($this->tcourse->get_course_information(1211)=== is_array($res));
-
 	 }
 
 	 public function testGetCoursesList(){
@@ -143,7 +140,7 @@ class TestCourse extends UnitTestCase{
 
 	 public function testUnsubscribeUser(){
 	 	$user_id = 1;
-	 	$course_code = 'CURSO1';
+	 	$course_code = 'COURSE1';
 	 	$res = CourseManager::unsubscribe_user($user_id, $course_code);
 	 	$this->assertNull($res);
 	 	$this->assertFalse(is_string($res));
@@ -151,24 +148,22 @@ class TestCourse extends UnitTestCase{
 
 	 public function testSubscribeUser(){
 	 	$user_id = 1;
-	 	$course_code = 'CURSO1';
+	 	$course_code = 'COURSE1';
 	 	$status = STUDENT;
 	 	$res = CourseManager::subscribe_user($user_id, $course_code, $status);
 	 	$this->assertTrue(is_bool($res));
-	 	
 	 }
 
 	public function testAddUserToCourse(){
 		$user_id = 1;
-		$course_code = 'CURSO1';
+		$course_code = 'COURSE1';
 		$status = STUDENT;
 		$res = CourseManager::add_user_to_course($user_id, $course_code, $status);
 		$this->assertTrue($res);
 		$this->assertTrue(is_bool($res));
+		//var_dump($res);
 	}
-
 	//function deprecated public function testGetRealCourseCodeSelectHtml(){}
-
 	public function testCheckParameter(){
 		$parameter = '123';
 		$error_message = 'oops!!';
@@ -188,7 +183,7 @@ class TestCourse extends UnitTestCase{
 	}
 
 	public function testIsExistingCourseCode() {
-		$wanted_course_code = 'CURSO1';
+		$wanted_course_code = 'COURSE1';
 		$res = $this->tcourse->is_existing_course_code($wanted_course_code);
 		$this->assertTrue(is_bool($res));
 		$this->assertTrue($res);
@@ -213,27 +208,36 @@ class TestCourse extends UnitTestCase{
 		$result = Database::fetch_array($sql_result);
 		$virtual_course_list[] = $result;
 		$res=$this->tcourse->get_virtual_course_list();
-
 		if (!empty($res)) {
 			$this->assertTrue(is_array($res));
 		} else {
 			$this->assertTrue(is_null($res));
 		}
-
 	}
 
 	public function testGetRealCourseListOfUserAsCourseAdmin(){
 		$user_id = 1;
 		$res = $this->tcourse->get_real_course_list_of_user_as_course_admin($user_id);
+		if(is_array($res)){
+			$this->assertTrue(is_array($res));
+			$this->assertTrue($res);
+		} else {
 		$this->assertNull($res);
 		$this->assertTrue(is_null($res));
+		}
+		//var_dump($res);
 	}
 
 	public function testGetCourseListOfUserAsCourseAdmin(){
 		$user_id = 1;
 		$res = $this->tcourse->get_course_list_of_user_as_course_admin($user_id);
+		if(is_array($res)){
 		$this->assertTrue($res);
 		$this->assertTrue(is_array($res));
+		} else {
+			$this->assertTrue(is_null($res));
+			$this->assertNull($res);
+		}
 		//var_dump($res);
 	}
 
@@ -248,7 +252,7 @@ class TestCourse extends UnitTestCase{
 	public function testCreateCombinedName(){
 		$complete_course_name = array();
 		$user_is_registered_in_real_course = false;
-	    $real_course_name = 'CURSO1';
+	    $real_course_name = 'COURSE1';
 		$virtual_course_list = array();
 		$res = CourseManager::create_combined_name($user_is_registered_in_real_course, 
 												   $real_course_name, 
@@ -262,26 +266,33 @@ class TestCourse extends UnitTestCase{
 	public function testCreateCombinedCode(){
 		$complete_course_code = array();
 		$user_is_registered_in_real_course = false; 
-		$real_course_code = 'CURSO1'; 
+		$real_course_code = 'COURSE1'; 
 		$virtual_course_list = array();
 		$res = CourseManager::create_combined_code($user_is_registered_in_real_course, 
 													$real_course_code, 
 													$virtual_course_list);
+		if(is_array($res)){
 		$this->assertFalse($res);
-		$this->assertFalse(is_null($res));
 		$this->assertTrue(is_string($res));
+		} else {
+		$this->assertFalse(is_null($res));
+		}
 		//var_dump($res);
 	}
 
 	public function testGetVirtualCourseInfo(){
-		$real_course_code = 'CURSO1';
+		$real_course_code = 'COURSE1';
 		$res = $this->tcourse->get_virtual_course_info($real_course_code);
-		$this->assertTrue($res);
+		if(is_array($res)){
 		$this->assertTrue(is_array($res));
+		} else {
+			$this->assertTrue($res);
+		}
+		//var_dump($res);
 	}
 
 	public function testIsVirtualCourseFromSystemCode(){
-		$system_code = 'CURSO1';
+		$system_code = 'COURSE1';
 		$res = $this->tcourse->is_virtual_course_from_system_code($system_code);
 		$this->assertFalse($res);
 		$this->assertTrue(is_bool($res));
@@ -289,23 +300,27 @@ class TestCourse extends UnitTestCase{
 	}
 
 	public function testIsVirtualCourseFromVisualCode(){
-		$system_code = 'CURSO1';
+		$system_code = 'COURSE1';
 		$res = $this->tcourse->is_virtual_course_from_visual_code($system_code);
 		$this->assertFalse($res);
 		$this->assertTrue(is_bool($res));
 	}
 
 	public function testHasVirtualCourseFromCode(){
-		$real_course_code = 'CURSO1';
+		$real_course_code = 'COURSE1';
 		$user_id = 1;
 		$res = CourseManager::has_virtual_courses_from_code($real_course_code, $user_id);
-		$this->assertTrue($res);
-		$this->assertTrue(is_bool($res));
-		$this->assertFalse(is_null($res));
+		if(is_bool($res)){
+			$this->assertFalse($res);
+			$this->assertTrue(is_bool($res));
+		} else {
+			$this->assertFalse(is_null($res));
+		}
+		//var_dump($res);
 	}
 
 	public function testGetVirtualCourseLinkedToRealCourse(){
-		$real_course_code = 'CURSO1';
+		$real_course_code = 'COURSE1';
 		$res = CourseManager::get_virtual_courses_linked_to_real_course($real_course_code);
 		$this->assertFalse($res);
 		$this->assertTrue(is_array($res));
@@ -313,7 +328,7 @@ class TestCourse extends UnitTestCase{
 	}
 
 	public function testGetTargetOfLinkedCourse(){
-		$virtual_course_code = 'CURSO1';
+		$virtual_course_code = 'COURSE1';
 		$res = CourseManager::get_target_of_linked_course($virtual_course_code);
 		$this->assertFalse($res);
 		$this->assertTrue(is_null($res));
@@ -322,7 +337,7 @@ class TestCourse extends UnitTestCase{
 
 	public function testIsUserSubscribedInCourse(){
 		$user_id = 1;
-		$course_code = 'CURSO1';
+		$course_code = 'COURSE1';
 		$in_a_session = false;
 		$res = CourseManager::is_user_subscribed_in_course($user_id, $course_code, $in_a_session);
 		$this->assertTrue(is_bool($res));
@@ -331,7 +346,7 @@ class TestCourse extends UnitTestCase{
 
 	public function testIsCourseTeacher(){
 		$user_id = 1; 
-		$course_code = 'CURSO1';
+		$course_code = 'COURSE1';
 		$res = CourseManager::is_course_teacher($user_id, $course_code);
 		$this->assertTrue(is_bool($res));
 		$this->assertFalse($res);
@@ -339,15 +354,20 @@ class TestCourse extends UnitTestCase{
 
 	public function testIsUserSubscribedInRealOrLinkedCourse(){
 		$user_id = 1;
-		$course_code = 'CURSO1';
+		$course_code = 'COURSE1';
 		$session_id = '';
 		$res = CourseManager::is_user_subscribed_in_real_or_linked_course($user_id, $course_code, $session_id);
-		$this-> assertTrue(is_bool($res));
-		$this->assertTrue($res);
+		if(is_bool($res)){
+			$this-> assertTrue(is_bool($res));
+			$this->assertFalse($res);
+		} else {
+			$this->assertTrue($res);
+		}
+		//var_dump($res);
 	}
 
 	public function testGetUserListFromCourseCode(){
-		$course_code = 'CURSO1';
+		$course_code = 'COURSE1';
 		$with_session = true;
 		$session_id = 0;
 		$limit = '';
@@ -359,7 +379,7 @@ class TestCourse extends UnitTestCase{
 	}
 
 	public function testGetCoachListFromCourseCode(){
-		$course_code = 'CURSO1';
+		$course_code = 'COURSE1';
 		$session_id = '';
 		$res = CourseManager::get_coach_list_from_course_code($course_code, $session_id);
 		$this->assertFalse($res);
@@ -367,7 +387,7 @@ class TestCourse extends UnitTestCase{
 	}
 
 	public function testGetStudentListFromCourseCode(){
-		$course_code = 'CURSO1';
+		$course_code = 'COURSE1';
 		$session_id = '001';
 		$res = $this->tcourse->get_student_list_from_course_code($course_code, $session_id);
 		//$this->assertTrue($res);
@@ -376,7 +396,7 @@ class TestCourse extends UnitTestCase{
 	}
 
 	public function testGetTeacherListFromCourseCode(){
-		$course_code = 'CURSO1';
+		$course_code = 'COURSE1';
 		$res = $this->tcourse->get_teacher_list_from_course_code($course_code);
 		$this->assertFalse($res);
 		$this->assertFalse(is_null($res));
@@ -384,7 +404,7 @@ class TestCourse extends UnitTestCase{
 	}
 
 	public function testGetRealAndLinkedUserList(){
-		$course_code = 'CURSO1';
+		$course_code = 'COURSE1';
 		$with_sessions = true;
 		$session_id = 0;
 		$res = $this->tcourse->get_real_and_linked_user_list($course_code, $with_sessions, $session_id);
@@ -395,15 +415,19 @@ class TestCourse extends UnitTestCase{
 	}
 
 	public function testGetListOfVirtualCoursesForSpecificUserAndRealCourse(){
-		$result_array = array('user_id' => 1, 'real_course_code' => 'CURSO1');
+		$result_array = array('user_id' => 1, 'real_course_code' => 'COURSE1');
 		$res = CourseManager::get_list_of_virtual_courses_for_specific_user_and_real_course($result_array['user_id'],$result_array['real_course_code']);
-		$this->assertTrue($res);
+		if(is_array($res)){
 		$this->assertTrue(is_array($res));
+		} else {
+			$this->assertTrue($res);
+		}
+		//var_dump($res);
 	}
 
 	public function testGetGroupListOfCourse(){
-		$course_code = 'CURSO1';
-		$sql= 	"SELECT * FROM chamilo_CURSO1";
+		$course_code = 'COURSE1';
+		$sql= 	"SELECT * FROM chamilo_COURSE1";
 		$result = CourseManager::get_group_list_of_course($course_code);
 		$this->assertTrue(is_array($result));
 		$this->assertFalse($result);
@@ -411,46 +435,37 @@ class TestCourse extends UnitTestCase{
 	}
 
 	public function testAttemptCreateVirtualCourse(){
-	    $real_course_code = 'CURSO1';
-	    $course_title = 'CURSO2';
-	    $wanted_course_code = 'CURSO3';
+	    $real_course_code = 'COURSE1';
+	    $course_title = 'COURSE1';
+	    $wanted_course_code = 'COURSE1';
 	    $course_language = 'english';
 	    $course_category = 'LANG';
 	    ob_start();
 	    $res = CourseManager::attempt_create_virtual_course($real_course_code, $course_title, $wanted_course_code, $course_language, $course_category);
 	    ob_end_clean();
-	    $this->assertTrue(is_bool($res));
-	    
+	    $this->assertTrue(is_bool($res));    
 	}
 
 	public function testCreateVirtualCourse(){
-		$real_course_code = 'CURSO2';
-		$course_title = 'CURSO2';
-		$wanted_course_code = 'CURSO4';
+		$real_course_code = 'COURSE1';
+		$course_title = 'COURSE1';
+		$wanted_course_code = 'COURSE1';
 		$course_language = 'english';
 		$course_category = 'LANG';
 		ob_start();
 		$res = CourseManager::create_virtual_course($real_course_code, $course_title, $wanted_course_code, $course_language, $course_category);
 		ob_end_clean();
-		$this->assertTrue($res);
-		$this->assertTrue(is_bool($res));
+		if(is_bool($res)){
+			$this->assertTrue(is_bool($res));
+		} else {
+			$this->assertTrue($res);
+		}
 		//var_dump($res);
 	}
-
-	public function testDeleteCourse(){
-		global $_configuration;
-		$code = 'CURSO1';
-		if (!empty($course_code)) {
-			$code = $course_code;
-		} 
-		$res = CourseManager::delete_course($code);
-		$this->assertTrue(is_null($res));
-		
-	}
-
+	
 	public function testCreateDatabaseDump(){
 		global $_configuration;
-		$course_code='CURSO1';
+		$course_code='COURSE1';
 		$res = $this->tcourse->create_database_dump($course_code);
 		$this->assertFalse($res);
 		$this->assertTrue(is_null($res));
@@ -458,7 +473,7 @@ class TestCourse extends UnitTestCase{
 
 	public function testUserCourseSort(){
 		$user_id ='01';
-		$course_code='CURSO1';
+		$course_code='COURSE1';
 		$res = CourseManager::UserCourseSort($user_id,$course_code);
 		$this->assertTrue($res);
 		$this->assertTrue(is_numeric($res));
@@ -474,7 +489,7 @@ class TestCourse extends UnitTestCase{
 	}
 
 	public function testCourseExists(){
-		$course_code='CURSO1';
+		$course_code='COURSE1';
 		$accept_virtual = false;
 		$res=$this->tcourse->course_exists($course_code, $accept_virtual);
 		$this->assertTrue(is_numeric($res));
@@ -482,7 +497,7 @@ class TestCourse extends UnitTestCase{
 
 	public function testEmailToTutor() {
 		$user_id= '01';
-		$course_code= 'CURSO1';
+		$course_code= 'COURSE1';
 		$res=CourseManager::email_to_tutor($course_code,$user_id);
 		$this->assertTrue(is_string($course_code));
 		//var_dump($res);
@@ -518,7 +533,7 @@ class TestCourse extends UnitTestCase{
 
 	public function testGetEmailOfTutorToSession(){
 		$session_id = '01';
-		$course_code = 'CURSO1';
+		$course_code = 'COURSE1';
 		ob_start();
 		$res = CourseManager::get_email_of_tutor_to_session($session_id,$course_code);
 		ob_end_clean();
@@ -536,15 +551,26 @@ class TestCourse extends UnitTestCase{
 	}
 
 	public function testUpdateCourseExtraFieldValue(){
-		$course_code = 'CURSO1';
+		$course_code = 'COURSE1';
 		$fname = '';
 		$fvalue= '';
 		$res = $this->tcourse->update_course_extra_field_value($course_code,$fname,$fvalue='');
 		$this->assertTrue($res);
 		$this->assertTrue(is_bool($res));
 		$this->assertFalse(is_null($res));
-
 	}
+		
+	public function testDeleteCourse(){
+		global $_configuration;
+		$code = 'COURSE1';
+		if (!empty($course_code)) {
+			$code = $course_code;
+		} 
+		$res = CourseManager::delete_course($code);
+		$this->assertTrue(is_null($res));	
+	}
+
+	
 }
 
 ?>

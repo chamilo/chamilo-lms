@@ -70,22 +70,6 @@ class TestAddCourse extends UnitTestCase {
 		$this->assertTrue($res);
 	}
 	
-	public function TestDeleteCourse(){				
-		$code = 'COD16';				
-		$res = CourseManager::delete_course($code);			
-		$path = api_get_path(SYS_PATH).'archive';		
-		if ($handle = opendir($path)) {
-			while (false !== ($file = readdir($handle))) {				
-				if (strpos($file,$code)!==false) {										
-					if (is_dir($path.'/'.$file)) {						
-						rmdirr($path.'/'.$file);						
-					}				
-				}				
-			}
-			closedir($handle);
-		}
-	}
-	
 /*  // 26 excepciones
 	function TestPrepareCourseRepository(){ 
 		umask(0);
@@ -185,4 +169,21 @@ class TestAddCourse extends UnitTestCase {
 		//var_dump($res);
 		}
 */
+
+    public function TestDeleteCourse(){				
+		$code = 'COD16';				
+		$res = CourseManager::delete_course($code);			
+		$path = api_get_path(SYS_PATH).'archive';		
+		if ($handle = opendir($path)) {
+			while (false !== ($file = readdir($handle))) {				
+				if (strpos($file,$code)!==false) {										
+					if (is_dir($path.'/'.$file)) {						
+						rmdirr($path.'/'.$file);						
+					}				
+				}				
+			}
+			closedir($handle);
+		}
+	}
+
 }

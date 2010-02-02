@@ -14,7 +14,7 @@ class TestDatabase extends UnitTestCase {
  	 	$this->dbase = new Database();
  	 	
  	 	$course_datos = array(
-				'wanted_code'=> 'COD16',
+				'wanted_code'=> 'CURSO1',
 				'title'=>'CURSO1',
 				'tutor_name'=>'R. J. Wolfagan',
 				'category_code'=>'2121',
@@ -32,7 +32,7 @@ class TestDatabase extends UnitTestCase {
 
 	 public function tearDown() {
 	 	$this->dbase = null;
-	 	$code = 'COD16';				
+	 	$code = 'CURSO1';				
 		$res = CourseManager::delete_course($code);			
 		$path = api_get_path(SYS_PATH).'archive';		
 		if ($handle = opendir($path)) {

@@ -293,6 +293,7 @@ class GroupManager {
 		$category_id = self :: create_category('Subgroups', '', TOOL_PRIVATE, TOOL_PRIVATE, 0, 0, 1, 1);
 		$users = self :: get_users($group_id);
 		$group_ids = array ();
+
 		for ($group_nr = 1; $group_nr <= $number_of_groups; $group_nr ++)
 		{
 			$group_ids[] = self :: create_group('SUBGROUP '.$group_nr, $category_id, 0, 0);

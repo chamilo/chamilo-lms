@@ -21,50 +21,11 @@ class TestBlog extends UnitTestCase
 	 public function setUp()
 	 {
  	 	$this-> oblog = new Blog();
- 	 	global $_configuration;
- 	 	$course_code = 'COURSEX';
-	    // check if course exists 
-	    $table_course = Database::get_main_table(TABLE_MAIN_COURSE);
-	    $sql = "SELECT code FROM  $table_course WHERE code = '$course_code' ";
-	    $rs = Database::query($sql, __FILE__, __LINE__);
-		$row = Database::fetch_row($rs);
-		
-		require_once api_get_path(SYS_PATH).'tests/main/inc/lib/add_course.lib.inc.test.php';
-		
-		if (empty($row[0])) {
-			// create a course
-			$course_datos = array(
-					'wanted_code'=> 'COURSEX',
-					'title'=>'COURSEX',
-					'tutor_name'=>'John Doe',
-					'category_code'=>'LANG',
-					'course_language'=>'spanish',
-					'course_admin_id'=>'001',
-					'db_prefix'=> $_configuration['db_prefix'],
-					'firstExpirationDelay'=>'999'
-					);
-		$res = create_course($course_datos['wanted_code'], $course_datos['title'],
-								 $course_datos['tutor_name'], $course_datos['category_code'],
-								 $course_datos['course_language'],$course_datos['course_admin_id'],
-								 $course_datos['db_prefix'], $course_datos['firstExpirationDelay']);
-		}
 	 }
 
 	 public function tearDown()
 	 {
 	 	$this->oblog = null;
-	 	$res1 = CourseManager::delete_course('COURSEX');
-		$path = api_get_path(SYS_PATH).'archive';		
-		if ($handle = opendir($path)) {
-			while (false !== ($file = readdir($handle))) {				
-				if (strpos($file,'COURSEX')!==false) {										
-					if (is_dir($path.'/'.$file)) {						
-						rmdirr($path.'/'.$file);						
-					}				
-				}				
-			}
-		closedir($handle);
-		}
 	 }
 
 	 /*
@@ -121,6 +82,8 @@ class TestBlog extends UnitTestCase
 	 */
 	 
 	 public function testGetBlogTitle(){
+	 	
+	 	global $_course;
 	 	$res = $this->oblog->get_Blog_title(11);
 	 	$this->assertFalse($this->oblog->get_Blog_title(11)===String);
 	 	$this->assertTrue(is_String($res));
@@ -389,16 +352,18 @@ class TestBlog extends UnitTestCase
 	 	global $charset, $color2;
 	 	$res = $this->oblog->display_assigned_task_list(11);
 	 	$this->assertTrue($this->oblog->display_assigned_task_list(11)===null);
-	 	$this->assertFalse($res);
 	 	ob_end_clean();
+	 	$this->assertFalse($res);
+	 	
 	 }
 
 	 public function testDisplayNewTaskForm(){
 	 	ob_start();
 	 	$res = $this->oblog->display_new_task_form(11);
 	 	$this->assertTrue($this->oblog->display_new_task_form(11)===null);
-	 	$this->assertFalse($res);
 	 	ob_end_clean();
+	 	$this->assertFalse($res);
+	 	
 
 	 }
 
@@ -416,9 +381,10 @@ class TestBlog extends UnitTestCase
 	 	ob_start();
 	 	$res = $this->oblog->display_assign_task_form(11);
 	 	$this->assertTrue($this->oblog->display_assign_task_form(11)===null);
+	 	ob_end_clean();
 	 	$this->assertFalse($res);
 	 	$this->assertTrue(is_null($res));
-	 	ob_end_clean();
+	 	
 	 }
 
 	 public function testDisplayEditAssignedTaskForm(){
@@ -435,9 +401,10 @@ class TestBlog extends UnitTestCase
 	 	ob_start();
 	 	$res = $this->oblog->assign_task(11,1,12,null);
 	 	$this->assertTrue($this->oblog->assign_task(11,1,12,null)===null);
+	 	ob_end_clean();
 	 	$this->assertFalse(is_numeric($res));
 	 	$this->assertNull(null,$res);
-	 	ob_end_clean();
+	 	
 	 }
 
 	 public function testEditAssignedTask(){
@@ -458,9 +425,10 @@ class TestBlog extends UnitTestCase
 	 	ob_start();
 	 	$res = $this->oblog->display_select_task_post(11,12);
 	 	$this->assertTrue($this->oblog->display_select_task_post(11,12)===null);
+	 	ob_end_clean();
 	 	$this->assertTrue(is_null($res));
 	 	$this->assertFalse($res);
-	 	ob_end_clean();
+	 	
      }
 
 	 public function testSetUserSubscribed(){
@@ -481,9 +449,10 @@ class TestBlog extends UnitTestCase
 	 	ob_start();
 	 	$res = $this->oblog->display_form_user_subscribe(12);
 	 	$this->assertTrue($this->oblog->display_form_user_subscribe(12)===null);
+	 	ob_end_clean();
 	 	$this->assertNotNull(is_null($res));
 	 	$this->assertFalse($res);
-	 	ob_end_clean();
+	 	
 	}
 
 	/**
@@ -499,17 +468,19 @@ class TestBlog extends UnitTestCase
 		ob_start();
 		$blog_id = '1';
 		$res = Blog::display_form_user_unsubscribe($blog_id);
+		ob_end_clean();
 		$this->assertTrue(is_null($res));		
 		$this->assertNull($res);
-		ob_end_clean();
+		
 	}
 
 	public function testDisplayFormUserRights(){
 		ob_start();
 		$res = $this->oblog->display_form_user_rights(12);
 		$this->assertTrue($this->oblog->display_form_user_rights(12)===null);
-		$this->assertFalse($res);
 		ob_end_clean();
+		$this->assertFalse($res);
+		
 	} 
 	
 	public function testDisplayNewCommentForm(){
@@ -518,9 +489,10 @@ class TestBlog extends UnitTestCase
 		$title='test';
 		ob_start();
 		$res =$this->oblog->display_new_comment_form($blog_id,$post_id,$title);
+		ob_end_clean();
 		$this->assertFalse($res);
 		$this->assertNotNull(is_null($res));
-		ob_end_clean();
+		
 	}
     
 	public function testDisplayMinimonthcalendar(){
@@ -531,8 +503,9 @@ class TestBlog extends UnitTestCase
 		$blog_id = 1;
 		$res = $this->oblog->display_minimonthcalendar($month, $year, $blog_id);
 		$this->assertTrue($this->oblog->display_minimonthcalendar($month, $year, $blog_id)=== null);
-		$this->assertTrue(is_null($res));
 		ob_end_clean();
+		$this->assertTrue(is_null($res));
+		
 	}
      
 	public function testDisplayNewBlogForm(){
@@ -548,16 +521,18 @@ class TestBlog extends UnitTestCase
 		ob_start();
 		$res = $this->oblog->display_edit_blog_form(12);
 		$this->assertTrue($this->oblog->display_edit_blog_form(12)===null);
-		$this->assertTrue(is_null($res));
 		ob_end_clean();
+		$this->assertTrue(is_null($res));
+		
 	}
 
 	public function testDisplayBlogList(){
 		ob_start();
 		$res = $this->oblog->display_blog_list();
 		$this->assertTrue($this->oblog->display_blog_list()===null);
-		$this->assertTrue(is_null($res));
 		ob_end_clean();
+		$this->assertTrue(is_null($res));
+		
 	}
 	
 	public function testGetBlogAttachment(){
@@ -587,6 +562,7 @@ class TestBlog extends UnitTestCase
 		$res = get_blog_post_from_user('chamilo_COURSEX',1);
 		$this->assertFalse($res);
 		$this->assertTrue(is_string($res));
+		//var_dump($res);
 	}
     
 	public function testGetBlogCommentFromUser(){
@@ -608,12 +584,13 @@ class TestBlog extends UnitTestCase
 		closedir($handle);
 		}
 	} 
-	
+/*	
 	public function testDeleteCourse() {
 		global $cidReq;			
 		$resu = CourseManager::delete_course($cidReq);				
 	}
 	
+	*/
 	
 	
 	

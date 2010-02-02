@@ -1,5 +1,4 @@
 <?php
-// To can run this test you need comment the line 94 "exit"
 require_once(api_get_path(LIBRARY_PATH).'session_handler.class.php');
 
 class TestSessionHandler extends UnitTestCase {

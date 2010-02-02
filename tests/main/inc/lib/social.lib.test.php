@@ -39,32 +39,28 @@ class TestSocial extends UnitTestCase{
 
 	}
 	*/
-
+/*
+//Remove or deprecate
+ 
 	public function testRemovedFriend(){
-		$instans= new MockDatabase();
-		$instans1= new MockDatabase();
+		//$instans= new MockDatabase();
+		//$instans1= new MockDatabase();
 		$friend_id=4;
 		$res = SocialManager::removed_friend ($friend_id);
 		$instans->expectCallCount(Database,8,'' );
 		$instans1->expectMaximumCallCount(Database,10,'');
-		$this->assertTrue(is_object($instans));
-		$this->assertTrue(is_object($instans1));
+		//$this->assertTrue(is_object($instans));
+		//$this->assertTrue(is_object($instans1));
 		$this->assertTrue(is_null($res));
 		//var_dump($res);
 		//var_dump($instans);
 		//var_dump($instans1);
 	}
-
+*/
 	public function testShowListTypeFriends(){
-		$instans= new MockDatabase();
-		$instans1= new MockDatabase();
 		$res =SocialManager::show_list_type_friends();
-		$instans->expectOnce(Database);
-		$instans1->expectMaximumCallCount(Database,10,'');
-		$this->assertTrue(is_object($instans) || is_object($instans1));
 		$this->assertTrue($res);
 		$this->assertTrue(is_array($res));
-		$this->assertTrue($instans);
 		//var_dump($res);
 		//var_dump($instans1);
 	}
@@ -80,22 +76,13 @@ class TestSocial extends UnitTestCase{
 	}
 
 	public function testGetRelationBetweenContacts (){
-		$instans= new MockDatabase();
-		$instans1= new MockDatabase();
-		$instans2= new MockDatabase();
 		$user_id=1;
 		$user_friend=3;
 		$res =SocialManager::get_relation_between_contacts ($user_id,$user_friend);
-		$instans->expectOnce(Database);
-		$instans1->expectMinimumCallCount(Database);
-		$instans2->expectMaximumCallCount(Database);
 		if(!is_numeric($res)):
 		$this->assertTrue(is_string($res));
 		$this->assertTrue($res);
 		endif;
-		$this->assertTrue(is_object($instans));
-		$this->assertTrue(is_object($instans1));
-		$this->assertTrue(is_object($instans2));
 		//var_dump($res);
 		//var_dump($instans);
 		//var_dump($instans1);
@@ -116,14 +103,11 @@ class TestSocial extends UnitTestCase{
 	}
 */
 	public function testGetListPathWebByUserId(){
-		$instans = new MockUserManager();
 		$user_id=1;
 		$id_group=null;
 		$search_name=null;
 		$res = SocialManager::get_list_path_web_by_user_id ($user_id,$id_group,$search_name);
-		$instans->expectOnce(UserManager::get_user_picture_path_by_id($values_ids['friend_user_id'],'web',false,true));
 		if(!($res===true)):
-		$this->assertTrue(is_object($instans));
 		$this->assertTrue(is_array($res));
 		endif;
 		//var_dump($res);
@@ -131,84 +115,62 @@ class TestSocial extends UnitTestCase{
 	}
 
 	public function testGetListWebPathUserInvitationByUserId(){
-		$instans = new MockUserManager();
 		$user_id=1;
 		$res = SocialManager::get_list_web_path_user_invitation_by_user_id($user_id);
-		$instans->expectOnce(UserManager::get_user_picture_path_by_id($values_ids['user_sender_id'],'web',false,true));
 		if(is_array($res))
 		$this->assertTrue(is_array($res));
 		else
 		$this->assertTrue(is_null($res));
-		$this->assertTrue(is_object($instans));
 		//var_dump($res);
 		//var_dump($instans);
 	}
 
 	public function testSendInvitationFriend(){
-		$instans = new MockDatabase();
 		$user_id=1;
 		$friend_id=3;
 		$message_title='hello';
 		$message_content='hola';
 		$res = SocialManager ::send_invitation_friend ($user_id,$friend_id,$message_title,$message_content);
-		$instans->expectMaximumCallCount(Database);
 		if(!is_null($res)):
 		$this->assertTrue(is_bool($res));
 		$this->assertTrue(is_bool($res===true || $res === false));
 		endif;
-		$this->assertTrue(is_object($instans));
 		//var_dump($res);
 		//var_dump($instans);
 	}
 
 	public function testGetMessageNumberInvitationByUserId(){
-		$instans = new MockDatabase();
 		$user_receiver_id=3;
 		$res = SocialManager::get_message_number_invitation_by_user_id ($user_receiver_id);
-		$instans->expectMaximumCallCount(Database);
 		if(is_string($res)):
 		$this->assertTrue(is_numeric($res));
 		endif;
-		$this->assertTrue(is_object($instans));
-
 		//var_dump($res);
 		//var_dump($instans);
 	}
 
 	public function testGetListInvitationOfFriendsByUserId(){
-		$instans = new MockDatabase();
 		$user_id=1;
 		$res = SocialManager::get_list_invitation_of_friends_by_user_id ($user_id);
-		$instans->expectCallCount(Database,3,'');
 		$this->assertTrue(is_array($res));
-		$this->assertTrue(is_object($instans));
 		//var_dump($res);
 		//var_dump($instans);
 	}
 
 	public function testInvitationAccepted(){
-		$instans = new MockDatabase();
-		$instans1= new MockDatabase();
 		$user_send_id=1;
 		$user_receiver_id=3;
 		$res = SocialManager::invitation_accepted ($user_send_id,$user_receiver_id);
-		$instans->expectOnce(Database::get_main_table(TABLE_MAIN_MESSAGE));
-		$instans1->expectOnce(Database::query($sql,__FILE__,__LINE__));
 		$this->assertTrue(is_null($res));
-		$this->assertTrue(is_object($instans));
-		$this->assertTrue(is_object($instans1));
 		//var_dump($res);
 		//var_dump($instans);
 		//var_dump($instans1);
 	}
 
 	public function testInvitationDenied(){
-		$instans = new MockDatabase();
 		$user_send_id=1;
 		$user_receiver_id=3;
 		$res = SocialManager::invitation_denied($user_send_id,$user_receiver_id);
-		$instans->expectOnce(Database::query($sql,__FILE__,__LINE__));
-		$this->assertTrue(is_object($instans));
 		$this->assertTrue(is_null($res));
 		//var_dump($res);
 		//var_dump($instans);
@@ -217,13 +179,10 @@ class TestSocial extends UnitTestCase{
 
 
 	public function testQualifyFriend(){
-		$instans = new MockDatabase();
 		$id_friend_qualify=2;
 		$type_qualify=1;
 		$res = SocialManager::qualify_friend($id_friend_qualify,$type_qualify);
-		$instans->expectOnce(Database::query($sql,__FILE__,__LINE__));
 		$this->assertTrue(is_null($res));
-		$this->assertTrue(is_object($instans));
 		//var_dump($res);
 	}
 	/*

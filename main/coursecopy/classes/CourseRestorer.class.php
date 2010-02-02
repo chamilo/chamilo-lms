@@ -94,8 +94,23 @@ class CourseRestorer
 			$this->course->destination_db = $course_info['database'];
 			$this->course->destination_path = $course_info['directory'];
 		}
-		// platform encoding
-		$course_charset = $this->course->encoding;
+
+		// Source platform encoding - reading/detection
+		// The correspondent data field has been added as of version 1.8.6.1.
+		if (empty($this->course->encoding)) {
+			// The archive has been created by a system wich is prior to 1.8.6.1 version.
+			// In this case we have to detect the encoding.
+			$sample_text = $this->course->get_sample_text()."\n";
+			// Let us exclude ASCII lines, probably they are English texts.
+			$sample_text = explode("\n", $sample_text);
+			foreach ($sample_text as $key => &$line) {
+				if (api_is_valid_ascii($line)) {
+					unset($sample_text[$key]);
+				}
+			}
+			$sample_text = join("\n", $sample_text);
+			$this->course->encoding = api_detect_encoding($sample_text);
+		}
 
 		if (!empty($session_id)) {
 			$this->restore_documents($session_id,$destination_course_code);

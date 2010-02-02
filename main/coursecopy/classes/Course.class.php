@@ -109,5 +109,102 @@ class Course
 //		}
 	}
 
+	/**
+	 * Returns sample text based on the imported course content.
+	 * This sample text is to be used for course language or encoding detection if there is missing (meta)data in the archive.
+	 * @return string	The resulting sample text extracted from some common resources' data fields.
+	 */
+	public function get_sample_text() {
+
+		$sample_text = '';
+
+		foreach ($this->resources as $type => & $resources) {
+			if (count($resources) > 0) {
+				foreach ($resources as $id => & $resource) {
+
+					$title = '';
+					$description = '';
+
+					switch ($type) {
+
+						case RESOURCE_ANNOUNCEMENT:
+						case RESOURCE_EVENT:
+						case RESOURCE_WIKI:
+							$title = $resource->title;
+							$description = $resource->content;
+							break;
+
+						case RESOURCE_DOCUMENT:
+							$title = $resource->title;
+							$description = $resource->comment;
+							break;
+
+						case RESOURCE_FORUM:
+						case RESOURCE_FORUMCATEGORY:
+						case RESOURCE_LINK:
+						case RESOURCE_LINKCATEGORY:
+						case RESOURCE_QUIZ:
+							$title = $resource->title;
+							$description = $resource->description;
+							break;
+
+						case RESOURCE_FORUMPOST:
+							$title = $resource->title;
+							$description = $resource->text;
+							break;
+
+						case RESOURCE_GLOSSARY:
+						case RESOURCE_LEARNPATH:
+							$title = $resource->name;
+							$description = $resource->description;
+							break;
+
+						case RESOURCE_FORUMTOPIC:
+						case RESOURCE_SCORM:
+							$title = $resource->title;
+							break;
+
+						case RESOURCE_QUIZQUESTION:
+							$title = $resource->question;
+							$description = $resource->description;
+							break;
+
+						case RESOURCE_SURVEY:
+							$title = $resource->title;
+							$description = $resource->subtitle;
+							break;
+
+						case RESOURCE_SURVEYQUESTION:
+							$title = $resource->survey_question;
+							$description = $resource->survey_question_comment;
+							break;
+
+						case RESOURCE_TOOL_INTRO:
+							$description = $resource->intro_text;
+							break;
+
+						default:
+							break;
+					}
+
+					$title = api_html_to_text($title);
+					$description = api_html_to_text($description);
+
+					if (!empty($title)) {
+						$sample_text .= $title."\n";
+					}
+					if (!empty($description)) {
+						$sample_text .= $description."\n";
+					}
+					if (!empty($title) || !empty($description)) {
+						$sample_text .= "\n";
+					}
+				}
+			}
+		}
+
+		return $sample_text;
+	}
+
 }
 ?>

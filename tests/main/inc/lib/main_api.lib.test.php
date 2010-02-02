@@ -153,8 +153,36 @@ class TestMainApi extends UnitTestCase {
 		//var_dump($res);
 	}
 
-	function testApiGetPath($path_type){
-		$res=api_get_path();
+	function testApiGetPath() {
+		$path_type = trim($path_type);
+		$path = array(
+		WEB_PATH => '',
+		SYS_PATH => '',
+		REL_PATH => '',
+		REL_SYS_PATH => '',
+		WEB_SERVER_ROOT_PATH => '',
+		SYS_SERVER_ROOT_PATH => '',
+		WEB_COURSE_PATH => '',
+		SYS_COURSE_PATH => '',
+		REL_COURSE_PATH => '',
+		REL_CODE_PATH => '',
+		WEB_CODE_PATH => '',
+		SYS_CODE_PATH => '',
+		SYS_LANG_PATH => 'lang/',
+		WEB_IMG_PATH => 'img/',
+		WEB_CSS_PATH => 'css/',
+		GARBAGE_PATH => 'archive/', // Deprecated?
+		SYS_PLUGIN_PATH => 'plugin/',
+		WEB_PLUGIN_PATH => 'plugin/',
+		SYS_ARCHIVE_PATH => 'archive/',
+		WEB_ARCHIVE_PATH => 'archive/',
+		INCLUDE_PATH => 'inc/',
+		LIBRARY_PATH => 'inc/lib/',
+		CONFIGURATION_PATH => 'inc/conf/',
+		WEB_LIBRARY_PATH => 'inc/lib/',
+		WEB_AJAX_PATH => 'inc/ajax/'
+	);;
+		$res=api_get_path($path_type, $path);
 	 	$this->assertTrue(is_null($res));
 	 	//var_dump($res);
 	}
@@ -202,7 +230,8 @@ class TestMainApi extends UnitTestCase {
     }
 
 	function testApiGetCourseSettingReturnFalseWhenOutOfCourseSeetingContext(){
-		$res = api_get_course_setting();
+		$setting_name = 1;
+		$res = api_get_course_setting($setting_name, $course_code = null);
 		$this->assertTrue($res);
 	}
 
@@ -238,15 +267,18 @@ class TestMainApi extends UnitTestCase {
 		//var_dump($variable);
 	}
 
-	function testApiSessionUnregister(){
+	function testApiSessionUnregister() {
 		$variable=strval($variable);
 		$res=api_session_unregister($variable);
 		$this->assertTrue(is_null($res));
 		$this->assertTrue(is_null($_SESSION[$variable]=null));
 	}
 
-	function testApiSessionClear(){
-		$res=api_session_clear();
+	function testApiSessionClear() {
+		$variable = 'test';
+		 if (!headers_sent()) {	
+			$res=api_session_clear($variable);
+		 }
 		$this->assertTrue(is_null($res));
 		//var_dump($res);
 	}
@@ -265,13 +297,14 @@ class TestMainApi extends UnitTestCase {
 	}
 
 	function testApiGeneratePassword(){
-		$res = api_generate_password();
+				
+		$res = api_generate_password($length = 8);
 	    $this->assertTrue(is_string($res));
 	    //var_dump($res);
 	}
 
 	function testApiCheckPassword(){
-		$password = 'As438kdjf';
+		$password = '';
 		$res = api_check_password($password);
 		$this->assertTrue(is_bool($res));
 		//var_dump($res);
@@ -286,10 +319,10 @@ class TestMainApi extends UnitTestCase {
 		$this->assertTrue(isset($_user['user_id'] ));
 	}
 
-	function testApiTruncStr(){
-		$res= api_trunc_str();
-		$this->assertTrue(is_null($res));
-		//var_dump($res);
+	function testApiTruncStr() {
+		$text= 'test';
+		$res= api_trunc_str($text, $length = 30, $suffix = '...', $middle = false, $encoding = null);
+		$this->assertTrue(is_string($res));
 	}
 
 	function testDomesticate(){
@@ -528,13 +561,9 @@ class TestMainApi extends UnitTestCase {
 	}
 
 	function testConvertMysqlDate(){
-	 	$result=false;
-	 	$myrow = Database::fetch_array($result);
-	 	$last_post_datetime = $myrow['end_date'];
+	 	$last_post_datetime = array();
 	 	$res=convert_mysql_date($last_post_datetime);
 	 	$this->assertTrue($res);
-	 	$this->assertFalse($result);
-	 	$this->assertFalse($myrow);
 	}
 
 	function testApiGetDatetime(){
@@ -544,13 +573,13 @@ class TestMainApi extends UnitTestCase {
 	}
 
 	function testApiGetItemVisibility(){
-	 	$_course= -1;
-	 	$tool = Database::escape_string($tool);
-	 	$id=Database::escape_string($id);
+	 	global $_course;
+	 	$tool = 'document';
+	 	$id=1;
 	 	$_course['dbName']=false;
 	 	$res =api_get_item_visibility($_course,$tool,$id);
-	 	$this->assertTrue($res);
-	 	$this->assertFalse(isset($_course['dbName']));
+	 	$this->assertTrue(is_numeric($res));
+	 	$this->assertFalse(is_bool($res));
 	}
 
 	function testApiItemPropertyUpdate(){
@@ -606,13 +635,11 @@ class TestMainApi extends UnitTestCase {
 	}
 
 	function testApiSendMail(){
-		$to= 'test@dokeos.com';
-		$subject='Hola';
-		$message="prueba de envio";
-		$send_mail=mail();
+		$to= 'chamilotest@beeznest.com';
+		$subject='Hello';
+		$message='test message';
 		$res=api_send_mail($to, $subject, $message, $additional_headers = null, $additional_parameters = null);
 		$this->assertTrue(is_numeric($res));
-		$this->assertTrue(is_null($send_mail));
 		//var_dump($res);
 		//var_dump($send_mail);
 	}
@@ -654,7 +681,6 @@ class TestMainApi extends UnitTestCase {
 		$plugin_list = true;
 		$res = api_is_plugin_installed($plugin_list, $plugin_name);
 		$this->assertTrue(is_bool($res));
-		//var_dump($res);
 	}
 
 	function testApiParseTex(){
@@ -682,50 +708,42 @@ class TestMainApi extends UnitTestCase {
 		//var_dump($res);
 	}
 
-	function testApiChmod_R(){
-		$path = $_GET['path'];
-		$filemode = '';
-		$res = api_chmod_R($path, $filemode);
-		$this->assertTrue(is_bool($res));
-		$this->assertTrue(is_null($path));
-		//var_dump($path);
+	function testApiChmod_R(){		
+		$dirname = api_get_path(SYS_LANG_PATH);
+		$perm_dir = substr(sprintf('%o', fileperms($dirname)), -4);
+		if ($perm_dir != '0777') {
+			$msg = "Error";
+			$this->assertTrue(is_string($msg));
+		} else {
+			$path = $dirname.'upload';
+			$filemode = '0777';
+			$res = api_chmod_R($path, $filemode);
+			unlink($path);
+			$this->assertTrue($res);	
+		}
 	}
 
 	function testApiGetVersion(){
-		$_configuration = null;
+		global $_configuration;
 		$res = api_get_version();
-		$this->assertFalse(isset($_configuration));
 		$this->assertTrue($res);
 	}
 
 	function testApiStatusExists(){
-		global $_status_list,$_status_list1,$_status_list2 ;
-		$status_asked[$_status_list]= false;
-		$status_asked[$_status_list1]= null;
-		$status_asked[$_status_list2]= true;
+		$status_asked = 'user';
 		$res = api_status_exists($status_asked);
 		$this->assertTrue(is_bool($res));
-		$this->assertNotNull(isset($status_asked[$_status_list]));
-		$this->assertNotNull(isset($status_asked[$_status_list1]));
-		$this->assertNotNull(isset($status_asked[$_status_list2]));
-		//var_dump($res);
 	}
 
 	function testApiStatusKey(){
-		global $_status_list, $_status_list1;
-		$status[$_status_list] = true;
-		$status[$_status_list1] = null;
+		$status = 'user';		
 		$res = api_status_key($status);
-		$this->assertNotNull(isset($status[$_status_list]));
-		$this->assertNotNull(isset($status[$_status_list1]));
-		$this->assertTrue(is_bool($res));
-		//var_dump($res);
+		$this->assertTrue(is_numeric($res));
 	}
 
 	function testApiGetStatusLangvars(){
 		$res = api_get_status_langvars();
 		$this->assertTrue(is_array($res));
-		//var_dump($res);
 	}
 
 	function testApiSetSetting(){
@@ -754,12 +772,9 @@ class TestMainApi extends UnitTestCase {
 	}
 
 	function testApiGetAccessUrl(){
-		global $_configuration;
-		$id[$_configuration]=1;
+		$id=1;
 		$res = api_get_access_url($id);
-		$this->assertTrue(is_bool($res));
-		$this->assertFalse($id[$_configuration]);
-		//var_dump($res);
+		$this->assertTrue(is_array($res));
 	}
 
 	function testApiAddAccessUrl(){

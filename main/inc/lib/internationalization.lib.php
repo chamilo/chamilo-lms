@@ -3492,7 +3492,37 @@ function api_fgetcsv($handle, $length = null, $delimiter = ',', $enclosure = '"'
 
 /**
  * ----------------------------------------------------------------------------
- * Functions for internal use behind this API.
+ * Miscellaneous routines
+ * ----------------------------------------------------------------------------
+ */
+
+/**
+ * This function strips all html-tags found in the input string and outputs a pure text.
+ * Mostly, the function is to be used before language or encoding detection of the input string.
+ * @param string $string	The input string with html-tags to be converted to plain text.
+ * @return string			The returned plain text as a result.
+ */
+function api_html_to_text($string) {
+	// These purifications have been found experimentally, for nice looking output.
+	$string = preg_replace('/<br[^>]*>/i', "\n", $string);
+	$string = preg_replace('/<\/?(div|p|h[1-6]|table|ol|ul|blockquote)[^>]*>/i', "\n", $string);
+	$string = preg_replace('/<\/(tr|li)[^>]*>/i', "\n", $string);
+	$string = preg_replace('/<\/(td|th)[^>]*>/i', "\t", $string);
+
+	$string = strip_tags($string);
+
+	// Line endings unification and cleaning.
+	$string = str_replace(array("\r\n", "\n\r", "\r"), "\n", $string);
+	$string = preg_replace('/\s*\n/', "\n", $string);
+	$string = preg_replace('/\n+/', "\n", $string);
+
+	return trim($string);
+}
+
+
+/**
+ * ----------------------------------------------------------------------------
+ * Functions for internal use behind this API
  * ----------------------------------------------------------------------------
  */
 

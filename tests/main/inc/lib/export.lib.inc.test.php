@@ -2,8 +2,6 @@
 require_once(api_get_path(LIBRARY_PATH).'export.lib.inc.php');
 require_once(api_get_path(LIBRARY_PATH).'document.lib.php');
 
-Mock::generate('DocumentManager');
-
 class TestExport extends UnitTestCase {
 
 	/** Test about export csv using class document manager
@@ -17,75 +15,83 @@ class TestExport extends UnitTestCase {
  * framework's, send first the prints and then the headers, but in this function
  * the headers are sending first.
  */	 
+ 
+ 
     function testExportTableCsv() {
-       $data = array('');
-       $filename = 'export';
-       $res = Export::export_table_csv($data, $filename);
-       $this->assertTrue(is_bool($res));
-       if(is_bool($res)){
-       	$this->assertTrue(is_bool($res));
-       } else {
-       	$this->assertFalse($res);
-       }
-       
-       //var_dump($res);
+       $data = array();
+	   if (!headers_sent()) {	
+	       $res = Export::export_table_csv($data, $filename = 'export');
+	   }
+	   if(is_null($res)) {
+			$this->assertFalse($res);
+		} else {
+			$this->assertTrue(is_string($res));
+		}
     }
+    
 
  	function testExportTableXls() {
- 		$docman = new MockDocumentManager();
 		$data = array();
 		$filename = 'export';
-		$res=Export::export_table_xls($data,$filename);
-        $docman->expectOnce('DocumentManager::file_send_for_download',
-                      array($filename,true,$filename.'.xls'));
-		$this->assertTrue(($res)=== false);
-		$this->assertTrue(is_bool($res));
-        //var_dump($docman);
-        //var_dump($export);
+		if (!headers_sent()) {
+			$res=Export::export_table_xls($data,$filename);
+		}
+		
+		if(is_null($res)) {
+			$this->assertFalse(is_bool($res));
+		} else {
+			$this->assertTrue(is_bool($res));
+		}
  	}
 
  	function testExportTableXml() {
- 		ob_start();
- 		$docman = new MockDocumentManager();
 		$data = array();
 		$filename = 'export';
 		$item_tagname = 'item';
 		$wrapper_tagname = null;
 		$encoding=null;
-		$res=Export::export_table_xml($data,$filename,$item_tagname,
-									  $wrapper_tagname,$encoding);
- 		$docman->expectOnce('DocumentManager::file_send_for_download',
- 		              array($filename,true,$filename.'.xml'));
-		ob_end_clean();
-		$this->assertTrue(is_bool($res));
-		$this->assertTrue(($res) === false);
-		//var_dump($docman);
-        //var_dump($export);
+		if (!headers_sent()) {
+			$res=Export::export_table_xml($data,$filename,$item_tagname,
+										  $wrapper_tagname,$encoding);
+		}
+		
+		if(is_null($res)) {
+			$this->assertFalse($res);
+		} else {
+			$this->assertTrue(is_bool($res));
+		}
  	}
- /*	
+ 
  	function testExportComplexTableXml() {
- 		ob_start();
- 		$docman = new MockDocumentManager();
 		$data = array();
 		$filename = 'export';
 		$wrapper_tagname=null;
  		$encoding='ISO-8859-1';
- 		$res=Export::export_complex_table_xml($data,$filename,$wrapper_tagname,
- 		                                      $encoding);
- 		$docman->expectOnce('DocumentManager::file_send_for_download',
- 		              array($filename,true,$filename.'.xml'));
-		ob_end_clean();
-		$this->assertTrue(is_bool($res));
-		$this->assertFalse($res);
-		//var_dump($docman);
+ 		if (!headers_sent()) {
+	 		$res=Export::export_complex_table_xml($data,$filename,$wrapper_tagname,
+	 		                                      $encoding);
+ 		}
+ 		
+ 		if(is_null($res)) {
+			$this->assertFalse(is_string($res));
+		} else {
+			$this->assertTrue(is_bool($res));
+		}
  	}
 
   	function testExportComplexTableXmlHelper() {
   		$data = array();
 		$level=1;
-		$res=Export::_export_complex_table_xml_helper($data,$level);
-		$this->assertTrue(is_string($res));
-		//var_dump($res);
+		if (!headers_sent()) {
+			$res=Export::_export_complex_table_xml_helper($data,$level);
+
+		}
+		if(is_null($res)) {
+			$this->assertFalse($res);
+		} else {
+			$this->assertTrue(is_string($res));
+		}
+			
  	}
  	
  	function testBackupDatabase() {
@@ -110,7 +116,7 @@ class TestExport extends UnitTestCase {
  		$res =Export::copydir($origine, $destination, $verbose = false);
  		$this->assertTrue($res);
  		var_dump($verbose);
- 	}* /
+ 	}*/
 
  	function testmakeTheBackup() {
  		global $error_msg, $error_no, $db, $archiveRepositorySys, 
@@ -121,6 +127,6 @@ class TestExport extends UnitTestCase {
 		$res=makeTheBackup($exportedCourseId);
 		$this->assertTrue(is_bool($res));
 		//var_dump($res);
- 	}*/
+ 	}
 }
 ?>

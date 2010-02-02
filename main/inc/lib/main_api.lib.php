@@ -1904,8 +1904,10 @@ function api_display_tool_view_option() {
  * @param array $info_array An array with the messages to show
  */
 function api_display_array($info_array) {
-	foreach ($info_array as $element) {
-		$message .= $element.'<br />';
+	if(is_array($info_array)) {
+		foreach ($info_array as $element) {
+			$message .= $element.'<br />';
+		}
 	}
 	Display :: display_normal_message($message);
 }
@@ -2778,8 +2780,10 @@ function api_plugin($location) {
  * @return boolean true if the plugin is installed, false otherwise.
  */
 function api_is_plugin_installed($plugin_list, $plugin_name) {
-	foreach ($plugin_list as $plugin_location) {
-		if (array_search($plugin_name, $plugin_location) !== false) { return true; }
+	if(is_array($plugin_list)) {
+		foreach ($plugin_list as $plugin_location) {
+			if (array_search($plugin_name, $plugin_location) !== false) { return true; }
+		}
 	}
 	return false;
 }

@@ -28,15 +28,16 @@ class TestUrlManager extends UnitTestCase {
 	}
 
 	function testadd_session_to_url() {
-		$session_id='';
+		$session_id=1;
 		$res=UrlManager::add_session_to_url($session_id, $url_id=1);
 		$this->assertTrue(is_bool($res));
         //var_dump($res);
 	}
 
 	function testadd_user_to_url() {
-		$user_id='';
-		$res=UrlManager::add_user_to_url($user_id, $url_id=1);
+		$user_id=1;
+		$url_id=1;
+		$res=UrlManager::add_user_to_url($user_id, $url_id);
 		$this->assertTrue(is_bool($res));
         //var_dump($res);
 	}
@@ -126,24 +127,25 @@ class TestUrlManager extends UnitTestCase {
 	}
 
 	function testrelation_url_course_exist() {
-		$course_id='';
-		$url_id='';
+		global $_course;
+		$course_id = $_course; 
+		$url_id=1;
 		$resu=UrlManager::relation_url_course_exist($course_id, $url_id);
 		$this->assertTrue(is_bool($resu));
 		//var_dump($resu);
 	}
 
 	function testrelation_url_session_exist() {
-		$session_id='';
-		$url_id='';
+		$session_id=1;
+		$url_id=1;
 		$res=UrlManager::relation_url_session_exist($session_id, $url_id);
 		$this->assertTrue(is_bool($res));
 		//var_dump($res);
 	}
 
 	function testrelation_url_user_exist() {
-		$user_id='';
-		$url_id='';
+		$user_id=1;
+		$url_id=1;
 		$res=UrlManager::relation_url_user_exist($user_id, $url_id);
 		$this->assertTrue(is_bool($res));
 		//var_dump($res);
@@ -184,8 +186,8 @@ class TestUrlManager extends UnitTestCase {
 	}
 
 	function testupdate_urls_rel_user() {
-		$user_list='';
-		$access_url_id='';
+		$user_list=array();
+		$access_url_id=1;
 		$res=UrlManager::update_urls_rel_user($user_list,$access_url_id);
 		$this->assertTrue(is_null($res));
 		//var_dump($res);
@@ -199,14 +201,14 @@ class TestUrlManager extends UnitTestCase {
 
 	function testurl_exist() {
 		$url='';
-		$res=UrlManager::url_exist();
+		$res=UrlManager::url_exist($url);
 		$this->assertTrue(is_numeric($res));
 		//var_dump($res);
 	}
 
 	function testurl_id_exist() {
 		$url='';
-		$res=UrlManager::url_id_exist();
+		$res=UrlManager::url_id_exist($url);
 		$this->assertTrue(is_numeric($res));
 		//var_dump($res);
 	}

@@ -132,10 +132,9 @@ class TestStats extends UnitTestCase {
 
 	function testloadCountries() {
 		global $TABLESTATS_COUNTRIES;
-		$sql = "SELECT code, country
-            FROM `".$TABLESTATS_COUNTRIES."`";
+		$sql = "SELECT code, country FROM ".$TABLESTATS_COUNTRIES;
     	$i=$i++;
-        $resu = mysql_query( $sql );
+        $resu = mysql_query($sql);
         $row = Database::fetch_array( $resu );
         $list_countries[$i][0] = $row["code"];
         $list_countries[$i][1] = $row["country"];

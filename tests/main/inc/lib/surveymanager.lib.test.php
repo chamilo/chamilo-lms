@@ -440,7 +440,7 @@ class TestSurveyManager extends UnitTestCase {
 	function testselect_survey_list() {
 		$seleced_surveyid='';
 		$extra_script='';
-		$res=SurveyManager::select_survey_list($seleced_surveyid='', $extra_script='');
+		$res=SurveyManager::select_survey_list($seleced_surveyid, $extra_script);
 		$this->assertTrue(is_bool($res));
 		//var_dump($res);
 	}

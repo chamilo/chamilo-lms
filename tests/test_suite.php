@@ -138,8 +138,8 @@ class AllTestsSuite extends TestSuite {
 		
 		// problemas con el envio de cabeceras -  faltan corregir estas funciones
 	    $this->addTestFile(dirname(__FILE__).'/main/inc/lib/export.lib.inc.test.php'); //20 excepciones en testExportTableCsv, testExportTableXls, testExportTableXml, testExportComplexTableXml.
-*/	    $this->addTestFile(dirname(__FILE__).'/main/inc/lib/fileManage.lib.test.php'); // 1excepcion testSetDefaultSettings
-/*	    $this->addTestFile(dirname(__FILE__).'/main/inc/lib/geometry.lib.test.php');
+	    //$this->addTestFile(dirname(__FILE__).'/main/inc/lib/fileManage.lib.test.php'); // 1excepcion testSetDefaultSettings
+	    $this->addTestFile(dirname(__FILE__).'/main/inc/lib/geometry.lib.test.php');
 	    $this->addTestFile(dirname(__FILE__).'/main/inc/lib/groupmanager.lib.test.php');	 
         $this->addTestFile(dirname(__FILE__).'/main/inc/lib/image.lib.test.php'); 
         $this->addTestFile(dirname(__FILE__).'/main/inc/lib/import.lib.test.php');
@@ -150,24 +150,32 @@ class AllTestsSuite extends TestSuite {
    	    $this->addTestFile(dirname(__FILE__).'/main/inc/lib/message.lib.test.php');
         $this->addTestFile(dirname(__FILE__).'/main/inc/lib/online.inc.test.php');
         $this->addTestFile(dirname(__FILE__).'/main/inc/lib/security.lib.test.php');
-        $this->addTestFile(dirname(__FILE__).'/main/inc/lib/session_handler.class.test.php');
-        $this->addTestFile(dirname(__FILE__).'/main/inc/lib/sessionmanager.lib.test.php'); 
-        $this->addTestFile(dirname(__FILE__).'/main/inc/lib/specific_fields_manager.lib.test.php'); 
-   	    $this->addTestFile(dirname(__FILE__).'/main/inc/lib/social.lib.test.php');
-        $this->addTestFile(dirname(__FILE__).'/main/inc/lib/sortabletable.class.test.php'); 
-	    $this->addTestFile(dirname(__FILE__).'/main/inc/lib/stats.lib.inc.test.php');
-	    $this->addTestFile(dirname(__FILE__).'/main/inc/lib/statsUtils.lib.inc.test.php');
-	    $this->addTestFile(dirname(__FILE__).'/main/inc/lib/surveymanager.lib.test.php');
-	    $this->addTestFile(dirname(__FILE__).'/main/inc/lib/system_announcements.lib.test.php');
-        $this->addTestFile(dirname(__FILE__).'/main/inc/lib/tablesort.lib.test.php');
-		$this->addTestFile(dirname(__FILE__).'/main/inc/lib/text.lib.test.php'); 
-	    $this->addTestFile(dirname(__FILE__).'/main/inc/lib/tracking.lib.test.php');
-	    $this->addTestFile(dirname(__FILE__).'/main/inc/lib/urlmanager.lib.test.php');
-        $this->addTestFile(dirname(__FILE__).'/main/inc/lib/usermanager.lib.test.php'); 
-	    $this->addTestFile(dirname(__FILE__).'/main/inc/lib/xht.lib.test.php');
-	    $this->addTestFile(dirname(__FILE__).'/main/inc/lib/xmd.lib.test.php');
+        //carlos*/
+         
+		
+        
+	   // $this->addTestFile(dirname(__FILE__).'/main/inc/lib/stats.lib.inc.test.php'); 
+	   //$this->addTestFile(dirname(__FILE__).'/main/inc/lib/surveymanager.lib.test.php');
+	   //$this->addTestFile(dirname(__FILE__).'/main/inc/lib/system_announcements.lib.test.php');
+	   //$this->addTestFile(dirname(__FILE__).'/main/inc/lib/tracking.lib.test.php');
 
 
+	  
+	    //$this->addTestFile(dirname(__FILE__).'/main/inc/lib/urlmanager.lib.test.php');
+        //$this->addTestFile(dirname(__FILE__).'/main/inc/lib/usermanager.lib.test.php'); 
+	    //$this->addTestFile(dirname(__FILE__).'/main/inc/lib/xht.lib.test.php');
+	    //$this->addTestFile(dirname(__FILE__).'/main/inc/lib/xmd.lib.test.php');
+
+		//Funciones probadas por carlos
+		$this->addTestFile(dirname(__FILE__).'/main/inc/lib/session_handler.class.test.php');
+		$this->addTestFile(dirname(__FILE__).'/main/inc/lib/sessionmanager.lib.test.php');
+		$this->addTestFile(dirname(__FILE__).'/main/inc/lib/specific_fields_manager.lib.test.php');
+		$this->addTestFile(dirname(__FILE__).'/main/inc/lib/social.lib.test.php');
+		$this->addTestFile(dirname(__FILE__).'/main/inc/lib/sortabletable.class.test.php'); 
+		$this->addTestFile(dirname(__FILE__).'/main/inc/lib/statsUtils.lib.inc.test.php');
+		$this->addTestFile(dirname(__FILE__).'/main/inc/lib/tablesort.lib.test.php');
+		$this->addTestFile(dirname(__FILE__).'/main/inc/lib/text.lib.test.php'); /*
+		
 		//Funciones corregidas por Arthur
 		//List of files from all.test1.php
 	/*	$this->addTestFile(dirname(__FILE__).'/main/inc/banner.lib.test.php');       

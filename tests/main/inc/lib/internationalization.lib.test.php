@@ -1349,6 +1349,18 @@ class TestInternationalization extends UnitTestCase {
 		//var_dump($res);
 	}
 
+	public function test_api_html_to_text() {
+		$filename = api_get_path(SYS_PATH).'documentation/installation_guide.html';
+		$res = @file_get_contents($filename);
+		if ($res !== false) {
+			$res = api_html_to_text($res);
+			$this->assertTrue(is_string($res));
+		} else {
+			$this->assertTrue(true); // The file is missing, skip this test.
+		}
+		//var_dump('<pre>'.$res.'</pre>');
+	}
+
 }
 
 ?>

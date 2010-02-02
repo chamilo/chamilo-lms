@@ -3,13 +3,13 @@ require_once(api_get_path(LIBRARY_PATH).'message.lib.php');
 
 class TestMessage extends UnitTestCase {
 
-	function testget_number_of_messages_mask() {
+	function testGetNumberOfMessagesMask() {
 		$res=get_number_of_messages_mask();
 		$this->assertTrue(is_string($res));
         //var_dump($res);
 	}
 
-	function testget_message_data_mask() {
+	function testGetMessageDataMask() {
 		$from='';
 		$number_of_items=get_number_of_messages_mask();
 		$column='3';
@@ -19,7 +19,7 @@ class TestMessage extends UnitTestCase {
 		//var_dump($res);
 	}
 
-	function testget_message_data_send_mask() {
+	function testGetMessageDataSendMask() {
 		$from='';
 		$number_of_items=get_number_of_messages_send_mask();
 		$column= '3';
@@ -29,14 +29,14 @@ class TestMessage extends UnitTestCase {
 		//var_dump($res);
 	}
 
-	function testget_number_of_messages_send_mask() {
+	function testGetNumberOfMessagesSendMask() {
 		$res=get_number_of_messages_send_mask();
 		$this->assertTrue(is_string($res));
         //var_dump($res);
 
 	}
 
-	function testinbox_display() {
+	function testInboxDisplay() {
 		global $charset;
 		ob_start();
 		$res=inbox_display();
@@ -45,7 +45,7 @@ class TestMessage extends UnitTestCase {
 		//var_dump($res);
 	}
 
-	function testoutbox_display() {
+	function testOutboxDisplay() {
 		global $charset;
 		ob_start();
 		$res=outbox_display();

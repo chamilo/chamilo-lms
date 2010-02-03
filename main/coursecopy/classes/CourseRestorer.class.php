@@ -112,6 +112,9 @@ class CourseRestorer
 			$this->course->encoding = api_detect_encoding($sample_text);
 		}
 
+		// Encoding conversion of the course, if it is needed.
+		$this->course->to_system_encoding();
+
 		if (!empty($session_id)) {
 			$this->restore_documents($session_id,$destination_course_code);
 			$this->restore_quizzes($session_id);
@@ -896,8 +899,8 @@ class CourseRestorer
 
 			if ($question->quiz_type == 4) { // for answer type matching
 				foreach ($question->answers as $index => $answer) {
-				$sql = "INSERT INTO ".$table_ans." SET id= '".$answer['id']."',question_id = '".$new_id."', answer = '".Database::escape_string($answer['answer'])."', correct = '".$answer['correct']."', comment = '".Database::escape_string($answer['comment'])."', ponderation='".$answer['ponderation']."', position = '".$answer['position']."', hotspot_coordinates = '".$answer['hotspot_coordinates']."', hotspot_type = '".$answer['hotspot_type']."'";
-				Database::query($sql, __FILE__, __LINE__);
+					$sql = "INSERT INTO ".$table_ans." SET id= '".$answer['id']."',question_id = '".$new_id."', answer = '".Database::escape_string($answer['answer'])."', correct = '".$answer['correct']."', comment = '".Database::escape_string($answer['comment'])."', ponderation='".$answer['ponderation']."', position = '".$answer['position']."', hotspot_coordinates = '".$answer['hotspot_coordinates']."', hotspot_type = '".$answer['hotspot_type']."'";
+					Database::query($sql, __FILE__, __LINE__);
 				}
 			} else {
 				foreach ($question->answers as $index => $answer) {
@@ -1505,4 +1508,3 @@ class CourseRestorer
 		}
 	}
 }
-?>

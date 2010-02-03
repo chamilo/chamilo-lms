@@ -1,8 +1,4 @@
 <?php
-//If you want to test this file you nedd change the path in work.lib.php inside the line 19,20 for this:
-//require_once (api_get_path(SYS_CODE_PATH).'document/document.inc.php');
-//require_once (api_get_path(LIBRARY_PATH).'fileDisplay.lib.php');
-
 require_once(api_get_path(SYS_CODE_PATH).'work/work.lib.php');
 require_once(api_get_path(LIBRARY_PATH).'course.lib.php');
 
@@ -421,5 +417,21 @@ class TestWork extends UnitTestCase {
 		session_destroy();			
 	}
 	*/
+	public function testDeleteCourse() {    
+	  $code = 'COURSEX';    
+	  $res = CourseManager::delete_course($code);   
+	  $path = api_get_path(SYS_PATH).'archive';  
+		  if ($handle = opendir($path)) {
+		   while (false !== ($file = readdir($handle))) {    
+			    if (strpos($file,$code)!==false) {          
+					     if (is_dir($path.'/'.$file)) {      
+					      rmdirr($path.'/'.$file);      
+					     }    
+			    	}    
+			   }
+			   closedir($handle);
+		  }
+		  session_destroy();
+ 	} 
 }
 ?>

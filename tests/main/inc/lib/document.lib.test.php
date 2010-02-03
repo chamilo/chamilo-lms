@@ -3,24 +3,6 @@ require_once(api_get_path(LIBRARY_PATH).'document.lib.php');
 
 class TestDocumentManager extends UnitTestCase {
 		
-		
-	public function testcreateCourse(){		
-		global $_configuration;
-		$course_datos = array('wanted_code'=> 'CURSO1',
-							  'title'=>'CURSO1',
-			    			  'tutor_name'=>'R. J. Wolfagan',
-							  'category_code'=>'2121',
-							  'course_language'=>'english',
-							  'course_admin_id'=>'1211',
-							  'db_prefix'=> $_configuration['db_prefix'],
-							  'firstExpirationDelay'=>'112'
-							  );
-		$res = create_course($course_datos['wanted_code'], $course_datos['title'],
-							 $course_datos['tutor_name'], $course_datos['category_code'],
-							 $course_datos['course_language'],$course_datos['course_admin_id'],
-							 $course_datos['db_prefix'], $course_datos['firstExpirationDelay']
-							 );
-	}
 
     /**
 	 * This check if a document has the readonly property checked, then see if 
@@ -34,12 +16,10 @@ class TestDocumentManager extends UnitTestCase {
 	 * @return boolean true/false
 	 **/
 	public function testcheck_readonly() {
-		$_course='chamilo_CURSO1';
-		$user_id='';
+		global $user_id, $_course;
 		$file='';
 		$res=DocumentManager::check_readonly($_course,$user_id,$file);
 		$this->assertTrue(is_bool($res));
-		//var_dump($res);
 	}
 
 	/**
@@ -55,12 +35,11 @@ class TestDocumentManager extends UnitTestCase {
 	 * rename them too.
 	 */
 	function testdelete_document() {
-		$_course['dbName']='chamilo_CURSO1';
+		global $_course;
 		$path='';
 		$base_work_dir='';
 		$res=DocumentManager::delete_document($_course, $path, $base_work_dir);
 		$this->assertTrue(is_bool($res));
-		//var_dump($res);
 	}
 
 	/**
@@ -71,11 +50,11 @@ class TestDocumentManager extends UnitTestCase {
 	 * @return void
 	 */
 	function testdelete_document_from_search_engine() {
-		$course_id='';
+		global $cidReq;
+		$course_id = $cidReq;
 		$document_id='';
 		$res=DocumentManager::delete_document_from_search_engine($course_id, $document_id);
 		$this->assertTrue(is_null($res));
-		//var_dump($res);
 	}
 
 	/**
@@ -90,7 +69,6 @@ class TestDocumentManager extends UnitTestCase {
 		$filename='';
 		$res=DocumentManager::file_get_mime_type($filename);
 		$this->assertTrue(is_string($res));
-		//var_dump($res);
 	}
 
 	/**
@@ -107,7 +85,6 @@ class TestDocumentManager extends UnitTestCase {
 		$name = '';
 		$res=DocumentManager::file_send_for_download($full_file_name, $forced, $name);
 		$this->assertTrue(is_bool($res));
-		//var_dump($res);
 	}
 
 	/**
@@ -117,11 +94,13 @@ class TestDocumentManager extends UnitTestCase {
 	* 	(bool)
 	*/
 	function testfile_visible_to_user() {
-	$this_course= 'CURSO1';
-	$doc_url='http://www.chamilo123.com/courses/CURSO1/document/video/painting.mpg?cidReq=CURSO1';
+	global $_course,$tbl_document;
+	$tbl_document = Database::get_course_table(TABLE_DOCUMENT);
+	$this_course= $_course['dbName'].'.';
+	$dirurl = api_get_path(WEB_COURSE_PATH);	
+	$doc_url= $dirurl.'COURSEX/document/video/painting.mpg?cidReq=COURSEX';
 	$res=DocumentManager::file_visible_to_user($this_course, $doc_url);
 	$this->assertTrue(is_bool($res));
-	//var_dump($res);
 	}
 
 	/**
@@ -135,7 +114,7 @@ class TestDocumentManager extends UnitTestCase {
 	* @return array with all document data
 	*/
 	function testget_all_document_data() {
-		$_course['dbName']='chamilo_CURSO1';
+		global $_course;
 		$path = '/';
 		$to_group_id = 0;
 		$to_user_id = NULL;
@@ -143,7 +122,6 @@ class TestDocumentManager extends UnitTestCase {
 		$res=DocumentManager::get_all_document_data($_course, $path, $to_group_id, 
 		$to_user_id, $can_see_invisible);
 		$this->assertTrue(is_array($_course));
-		//var_dump($_course);
 	}
 
 	/**
@@ -155,12 +133,11 @@ class TestDocumentManager extends UnitTestCase {
 	 * @return array with paths
 	 */
 	function testget_all_document_folders() {
-		$_course['dbName']='chamilo_CURSO1';
+		global $_course;
 		$to_group_id = '0';
 		$can_see_invisible = false;
 		$res=DocumentManager::get_all_document_folders($_course, $to_group_id, $can_see_invisible);
 		$this->assertTrue(is_array($_course));
-		//var_dump($_course);
 	}
 
 	/**
@@ -170,7 +147,6 @@ class TestDocumentManager extends UnitTestCase {
 		global $_course, $maxFilledSpace;
 		$res=DocumentManager::get_course_quota();
 		$this->assertTrue(is_string($res));
-		//var_dump($res);
 	}
 
 	/** Gets the id of a document with a given path
@@ -180,11 +156,10 @@ class TestDocumentManager extends UnitTestCase {
 	 * @return int id of document / false if no doc found
 	 */
 	function testget_document_id() {
-		$_course['dbName']='chamilo_CURSO1';
+		global $_course;
 		$path = Database::escape_string($path);
 		$res=DocumentManager::get_document_id($_course, $path);
 		$this->assertTrue(is_bool($res));
-		//var_dump($res);
 	}
 
 	/** This check if a document is a folder or not
@@ -193,7 +168,7 @@ class TestDocumentManager extends UnitTestCase {
 	 * @return boolean true/false
 	 **/
 	function testis_folder() {
-		$_course['dbName'] = 'chamilo_CURSO1';
+		global $_course;
 		$document_id = 1;
 		$res=DocumentManager::is_folder($_course, $document_id);
 		$this->assertTrue(is_bool($res));
@@ -223,11 +198,12 @@ class TestDocumentManager extends UnitTestCase {
 	 * @param int $user_id
 	 */
 	function testset_document_as_template() {
-		$title='';
-		$description='';
+		global $_course,$_user;
+		$title='test';
+		$description='test';
 		$document_id_for_template='';
-		$couse_code='';
-		$user_id='';
+		$couse_code=$_course;
+		$user_id=$_user;
 		$image='';
 		$res=DocumentManager::set_document_as_template($title, $description, 
 													   $document_id_for_template,
@@ -236,21 +212,23 @@ class TestDocumentManager extends UnitTestCase {
 													  );
 		$this->assertTrue(is_bool($res));
 	}
-/* this function shows some exceptions by causes of the same simpletest, because
- * this funcion that would be testing, contains headers
+ //this function shows some exceptions by causes of the same simpletest, because
+ //this funcion that would be testing, contains headers
 	function teststring_send_for_download() {
 		$full_string='';
 		$forced = false; 
 		$name = '';
 		$filename = $name;
 		$len = strlen($full_string);
-		$res=DocumentManager::string_send_for_download($full_string,
-													   $forced,
-													   $name
-													  );
-		$this->assertTrue(is_bool($res));
+		if (!headers_sent()) {	
+			$res=DocumentManager::string_send_for_download($full_string,
+														   $forced,
+														   $name
+														  );
+		}
+		$this->assertTrue(is_null($res));
 	}
-*/
+
 	/**
 	 * Unset a document as template
 	 *
@@ -270,10 +248,11 @@ class TestDocumentManager extends UnitTestCase {
 		$this->assertTrue(is_null($res));
 		//var_dump($res);
 	}
-	
+	/*
 	public function testdeleteCourseInDocument(){
 		$this->dmanager = null;
-	 	$code = 'CURSO1';				
+		global $_course;
+	 	$code = $_course;				
 		$res = CourseManager::delete_course($code);			
 		$path = api_get_path(SYS_PATH).'archive';		
 		if ($handle = opendir($path)) {
@@ -287,6 +266,6 @@ class TestDocumentManager extends UnitTestCase {
 			closedir($handle);
 		}	
 
-	}	
+	}*/	
 }
 ?>

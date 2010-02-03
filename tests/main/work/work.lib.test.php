@@ -417,7 +417,7 @@ class TestWork extends UnitTestCase {
 		session_destroy();			
 	}
 	*/
-	public function testDeleteCourse() {    
+/*	public function testDeleteCourse() {    
 	  $code = 'COURSEX';    
 	  $res = CourseManager::delete_course($code);   
 	  $path = api_get_path(SYS_PATH).'archive';  
@@ -432,6 +432,6 @@ class TestWork extends UnitTestCase {
 			   closedir($handle);
 		  }
 		  session_destroy();
- 	} 
+ 	}*/ 
 }
 ?>

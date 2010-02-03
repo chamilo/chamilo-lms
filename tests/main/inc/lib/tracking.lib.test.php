@@ -1,10 +1,28 @@
 <?php
 require_once(api_get_path(LIBRARY_PATH).'tracking.lib.php');
 require_once(api_get_path(LIBRARY_PATH).'document.lib.php');
-require_once(api_get_path(LIBRARY_PATH).'database.lib.php');
 
 class TestTracking extends UnitTestCase {
 
+	function testget_first_connection_date() {
+		global $_user;
+		$student_id=$_user;
+		$res=Tracking::get_first_connection_date($student_id);
+	 	if(!is_bool($res)){
+	 		$this->assertTrue(is_string($res));
+	 	}
+	}
+
+	function testget_first_connection_date_on_the_course() {
+		global $_course;
+		$student_id='';
+		$course_code=$_course;
+		$res=Tracking::get_first_connection_date_on_the_course($student_id, $course_code);
+	 	if(!is_null($res))$this->assertTrue(is_bool($res));
+	 	//var_dump($res);
+	}
+	
+	
 	function testchat_connections_during_last_x_days_by_course() {
 	 	global $_course;
 	 	$course_code=$_course;
@@ -15,18 +33,6 @@ class TestTracking extends UnitTestCase {
 		if(!is_numeric($res))$this->assertTrue(is_null($res));
         //var_dump($docman);
     }
-
-
-	function testchat_last_connection() {
-		require_once (api_get_path(LIBRARY_PATH) . 'course.lib.php');
-		global $_course;
-		$student_id= $_POST['student_id'];
-		$course_code= $_course;
-		$this->tracking = new Tracking();
-		$res=$this->tracking->chat_last_connection($student_id,$course_code);
-		$this->assertTrue(is_object($this->tracking));
-		if(!is_string($res))$this->assertTrue(is_null($res));
-	}
 
 	function testcount_course_per_student() {
 		$user_id=1;
@@ -161,22 +167,18 @@ class TestTracking extends UnitTestCase {
 	 }
 
 	 function testget_avg_student_score() {
-	 	$docman = new Database();
 	 	global $_user,$_course;
 		$student_id=$_user;
-	 	$course_code='';
-	 	$this->tracking = new Tracking();
+	 	$course_code=$_course;
 	 	$res=$this->tracking->get_avg_student_score($student_id, $course_code, $lp_ids=array());
-
 		if(!is_string($res))$this->assertTrue(is_null($res));
 		//var_dump($res);
 	 }
 
 
 	 function testget_course_list_in_session_from_student() {
-	 	//setUp (not practica$session_idl to have a real SetUp() here)
 	 	global $_user;
-		$student_id=$_user;
+		$user_id = $_user;
 	 	$session_id= 1;
 	 	$res=Tracking::get_course_list_in_session_from_student($user_id, $session_id);
 	 	$this->assertTrue(is_array($res));
@@ -197,22 +199,6 @@ class TestTracking extends UnitTestCase {
 	 	//var_dump($res);
 	}
 
-	function testget_first_connection_date() {
-		global $_user;
-		$student_id=$_user;
-		$res=Tracking::get_first_connection_date($student_id);
-	 	if(!is_null($res))$this->assertTrue(is_string($res));
-	}
-
-	function testget_first_connection_date_on_the_course() {
-		global $_course;
-		$student_id='';
-		$course_code=$_course;
-		$res=Tracking::get_first_connection_date_on_the_course($student_id, $course_code);
-	 	if(!is_null($res))$this->assertTrue(is_bool($res));
-	 	//var_dump($res);
-	}
-
 	function testget_inactives_students_in_course() {
 		global $_course;
 		$course_code = $_course; 
@@ -220,20 +206,6 @@ class TestTracking extends UnitTestCase {
 		$session_id='';
 		$res=Tracking::get_inactives_students_in_course($course_code, $since, $session_id);
 	 	if(!is_null($res))$this->assertTrue(is_array($res));
-	 	//var_dump($res);
-	}
-
-	function testget_last_connection_date() {
-		$student_id=1;
-		$res=Tracking::get_last_connection_date($student_id);
-	 	if(!is_null($res))$this->assertTrue(is_string($res));
-	}
-
-	function testget_last_connection_date_on_the_course() {
-		$student_id='';
-		$course_code='';
-		$res=Tracking::get_last_connection_date_on_the_course($student_id, $course_code);
-	 	if(!is_null($res))$this->assertTrue(is_bool($res));
 	 	//var_dump($res);
 	}
 
@@ -285,6 +257,31 @@ class TestTracking extends UnitTestCase {
 		$coach_id='';
 		$student_id='';
 		$res=Tracking::is_allowed_to_coach_student($coach_id, $student_id);
+	 	if(!is_null($res))$this->assertTrue(is_bool($res));
+	 	//var_dump($res);
+	}
+	
+	function testchat_last_connection() {
+		require_once (api_get_path(LIBRARY_PATH) . 'course.lib.php');
+		global $_course;
+		$student_id= $_POST['student_id'];
+		$course_code= $_course;
+		$this->tracking = new Tracking();
+		$res=$this->tracking->chat_last_connection($student_id,$course_code);
+		$this->assertTrue(is_object($this->tracking));
+		if(!is_string($res))$this->assertTrue(is_null($res));
+	}
+	
+		function testget_last_connection_date() {
+		$student_id=1;
+		$res=Tracking::get_last_connection_date($student_id);
+	 	if(!is_bool($res))$this->assertTrue(is_string($res));
+	}
+
+	function testget_last_connection_date_on_the_course() {
+		$student_id='';
+		$course_code='';
+		$res=Tracking::get_last_connection_date_on_the_course($student_id, $course_code);
 	 	if(!is_null($res))$this->assertTrue(is_bool($res));
 	 	//var_dump($res);
 	}

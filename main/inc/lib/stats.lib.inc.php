@@ -92,8 +92,7 @@ $TABLESTATS_REFERERS    = $_configuration['statistics_database']."`.`track_c_ref
      and to increment the number of occurrences of each
      different element into the corresponding tables
  */
-function decodeOpenInfos()
-{
+function decodeOpenInfos() {
     global $TABLETRACK_OPEN;
 
     // record initial value of ignore_user_abort
@@ -103,6 +102,7 @@ function decodeOpenInfos()
     ignore_user_abort(1) ;
     // we take the last event id to prevent miss of some recorded event
     // only processed record have to be cleaned
+    
     $sql = "SELECT open_id
                 FROM `$TABLETRACK_OPEN`
                 WHERE open_date <= NOW()
@@ -110,8 +110,7 @@ function decodeOpenInfos()
                 LIMIT 1";
     //$processBegin = getOneResult($sql);
     $query = @mysql_query($sql);
-    if (mysql_errno())
-    {
+    if (mysql_errno()) {
         echo "\n<!-- **** ".mysql_errno().": ".mysql_error()." In : $sql **** -->\n";
     }
     $res = @mysql_fetch_array($query);
@@ -120,17 +119,17 @@ function decodeOpenInfos()
 
     //--Providers And Countries-------------------------------------------//
 
-    $sql = "SELECT open_remote_host
+     $sql = "SELECT open_remote_host
                 FROM `$TABLETRACK_OPEN`
                 WHERE   open_remote_host != ''
                 AND     open_id <= '".$processBegin."' ";
-    $query = mysql_query( $sql );
-    if( mysql_num_rows($query) != 0 )
-    {
+    $query = Database::query($sql,__FILE__, __LINE__);
+    
+    if(Database::num_rows($query) != 0) {
     	// load list of countries
     	$list_countries = loadCountries();
 
-       	while ($row = mysql_fetch_row ($query) )
+       	while ($row = Database::fetch_row ($query) )
         {
             $remote_host = $row[0];
             /*****Provider*****/
@@ -150,6 +149,7 @@ function decodeOpenInfos()
     	fillProvidersTable( $providers_array );
     	fillCountriesTable( $countries_array );
     }
+   
     // provider and countries done
 
     //--Browsers and OS---------------------------------------------------//
@@ -158,16 +158,15 @@ function decodeOpenInfos()
                 FROM `$TABLETRACK_OPEN`
                 WHERE   open_remote_host != ''
                 AND     open_id <= '".$processBegin."' ";
-    $query = mysql_query( $sql );
-    if( mysql_num_rows($query) != 0 )
-    {
+    $query =Database::query( $sql );
+    if(Database::num_rows($query) != 0){
     	// load lists
         // of browsers
         $list_browsers = loadBrowsers();
         // of OS
         $list_os = loadOs();
 
-        while ( $row = mysql_fetch_row ($query) )
+        while ($row = Database::fetch_row ($query))
         {
             $agent = $row[0];
             /*****Browser and OS*****/
@@ -180,9 +179,7 @@ function decodeOpenInfos()
 
         fillBrowsersTable( $browsers_array );
     	fillOsTable( $os_array );
-
     }
-
     // browsers and OS done
 
     //--Referers----------------------------------------------------------//
@@ -191,20 +188,18 @@ function decodeOpenInfos()
                 FROM `$TABLETRACK_OPEN`
                 WHERE	open_referer != ''
                 AND 	open_id <= '".$processBegin."' ";
-    $query = mysql_query( $sql );
+    $query = Database::query( $sql );
 
-    if( mysql_num_rows($query) != 0 )
-    {
+    if(Database::num_rows($query) != 0) {
 
     	$i=0;
-    	while ($row = mysql_fetch_row ($query) )
+    	while ($row = Database::fetch_row ($query))
     	{
     		$ref = $row[0];
     		$referers_array = addReferer( $ref , $referers_array );
     	}
     	fillReferersTable( $referers_array );
     }
-
     // referers done
 
     //-------------------------------------------------------------------//
@@ -234,8 +229,7 @@ function decodeOpenInfos()
  	the date $limit.  OPTIMIZE is called to get back the memory
  	espaces deleted
 */
-function cleanProcessedRecords( $limit )
-{
+function cleanProcessedRecords( $limit ) {
     global $TABLETRACK_OPEN;
     $sql = "UPDATE `".$TABLETRACK_OPEN."`
                             SET open_remote_host = '',
@@ -243,9 +237,9 @@ function cleanProcessedRecords( $limit )
                                     open_referer =''
                             WHERE open_id <= '".$limit."'";
 
-    $query = mysql_query( $sql );
+    $query = Database::query( $sql );
 
-    mysql_query("OPTIMIZE TABLE $TABLETRACK_OPEN");
+    Database::query("OPTIMIZE TABLE $TABLETRACK_OPEN");
 
 }
 
@@ -265,8 +259,7 @@ function cleanProcessedRecords( $limit )
  	remote host and record this occurence in the corresponding
  	table
 */
-function extractProvider($remhost)
-{
+function extractProvider($remhost) {
 
     if($remhost == "Unknown")
     return $remhost;
@@ -293,8 +286,7 @@ function extractProvider($remhost)
  		the corresponding value
  	- if the provider doesn't exist it will be added and set to 1
 */
-function addProvider($provider,$providers_array)
-{
+function addProvider($provider,$providers_array) {
     if( isset( $providers_array[$provider] ) )
     {
             // add one unity to this provider occurrences
@@ -314,8 +306,7 @@ function addProvider($provider,$providers_array)
  * @param providers_array : list of providers  and their counter
  * @desc update the providers'table with new values
 */
-function fillProvidersTable($providers_array)
-{
+function fillProvidersTable($providers_array) {
     global $TABLESTATS_PROVIDERS;
 
     if(is_array($providers_array))
@@ -325,10 +316,10 @@ function fillProvidersTable($providers_array)
             $sql = "SELECT counter
                                     FROM `".$TABLESTATS_PROVIDERS."`
                                     WHERE `provider` = '".$prov."'";
-            $res = mysql_query($sql);
+            $res = Database::query($sql,__FILE__, __LINE__);
 
             // if this provider already exists in the DB
-            if( $row = mysql_num_rows($res) )
+            if( $row = Database::num_rows($res) )
             {
                     // update
                     $sql2 = "UPDATE `".$TABLESTATS_PROVIDERS."`
@@ -342,7 +333,7 @@ function fillProvidersTable($providers_array)
                                             (`provider`,`counter`)
                                             VALUES ('".$prov."','".$number."')";
             }
-            mysql_query($sql2);
+            Database::query($sql2,__FILE__, __LINE__);;
         }
     }
 }
@@ -363,20 +354,19 @@ function fillProvidersTable($providers_array)
 function loadCountries()
 {
     global $TABLESTATS_COUNTRIES;
-
     $sql = "SELECT code, country
                             FROM `".$TABLESTATS_COUNTRIES."`";
-
-    $res = mysql_query( $sql );
-
+    $res = Database::query($sql, __FILE__, __LINE__);
     $i = 0 ;
-    while( $row = mysql_fetch_array( $res ) ) {
-            $list_countries[$i][0] = $row["code"];
-            $list_countries[$i][1] = $row["country"];
-            $i++;
+    if (Database::num_rows($res) > 0){
+	    while ($row = Database::fetch_array($res)) {
+	            $list_countries[$i][0] = $row["code"];
+	            $list_countries[$i][1] = $row["country"];
+	            $i++;
+	    }
     }
-    return $list_countries;
     mysql_free_result($res);
+    return $list_countries;    
 }
 
 
@@ -450,7 +440,7 @@ function fillCountriesTable($countries_array)
 						SET `counter` = counter + '$number'
 						WHERE `country` = '".$country."'";
 
-		mysql_query($sql);
+		Database::query($sql,__FILE__, __LINE__);
 	}
     }
 }
@@ -609,10 +599,10 @@ function fillBrowsersTable($browsers_array)
 		$sql = "SELECT counter
 					FROM `".$TABLESTATS_BROWSERS."`
 					WHERE `browser` = '".$browser."'";
-		$res = mysql_query($sql);
+		$res = Database::query($sql,__FILE__, __LINE__);
 
 		// if this provider already exists in the DB
-		if( $row = mysql_num_rows($res) )
+		if( $row = Database::num_rows($res) )
 		{
 			// update
 			$sql2 = "UPDATE `".$TABLESTATS_BROWSERS."`
@@ -626,7 +616,7 @@ function fillBrowsersTable($browsers_array)
 						(`browser`,`counter`)
 						VALUES ('".$browser."','".$number."')";
 		}
-		mysql_query($sql2);
+		Database::query($sql2,__FILE__, __LINE__);
 	}
     }
 }
@@ -647,10 +637,10 @@ function fillOsTable($os_array)
 		$sql = "SELECT counter
 					FROM `".$TABLESTATS_OS."`
 					WHERE `os` = '".$os."'";
-		$res = mysql_query($sql);
+		$res = Database::query($sql,__FILE__, __LINE__);
 
 		// if this provider already exists in the DB
-		if( $row = mysql_num_rows($res) )
+		if( $row = Database::num_rows($res) )
 		{
 			// update
 			$sql2 = "UPDATE `".$TABLESTATS_OS."`
@@ -664,7 +654,7 @@ function fillOsTable($os_array)
 						(`os`,`counter`)
 						VALUES ('".$os."','".$number."')";
 		}
-		mysql_query($sql2);
+		Database::query($sql2,__FILE__, __LINE__);
 	}
     }
 }
@@ -719,10 +709,10 @@ function fillReferersTable($referers_array)
             $sql = "SELECT counter
                                     FROM `".$TABLESTATS_REFERERS."`
                                     WHERE `referer` = '".$referer."'";
-            $res = mysql_query($sql);
+            $res = Database::query($sql,__FILE__, __LINE__);
 
             // if this provider already exists in the DB
-            if( $row = mysql_num_rows($res) )
+            if( $row = Database::num_rows($res) )
             {
                     // update
                     $sql2 = "UPDATE `".$TABLESTATS_REFERERS."`
@@ -736,7 +726,7 @@ function fillReferersTable($referers_array)
                                             (`referer`,`counter`)
                                             VALUES ('".$referer."','".$number."')";
             }
-            mysql_query($sql2);
+            Database::query($sql2,__FILE__, __LINE__);
         }
     }
 }

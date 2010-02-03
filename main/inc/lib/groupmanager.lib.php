@@ -315,7 +315,7 @@ class GroupManager {
 	 */
 	public static function create_groups_from_virtual_courses() {
 		self :: delete_category(VIRTUAL_COURSE_CATEGORY);
-		$id = self :: create_category(get_lang('GroupsFromVirtualCourses'), '', TOOL_NOT_AVAILABLE, TOOL_NOT_AVAILABLE, 0, 0, 1, 1);
+		$id = self :: create_category(get_lang('GroupsFromVirtualCourses'), '', TOOL_NOT_AVAILABLE, TOOL_NOT_AVAILABLE, 0, 0, 1, 1);		
 		$table_group_cat = Database :: get_course_table(TABLE_GROUP_CATEGORY);
 		$sql = "UPDATE ".$table_group_cat." SET id=".VIRTUAL_COURSE_CATEGORY." WHERE id=$id";
 		Database::query($sql,__FILE__,__LINE__);
@@ -647,7 +647,9 @@ class GroupManager {
 	 * @param int $max_number_of_students
 	 * @param int $groups_per_user
 	 */
-	public static function create_category ($title, $description, $doc_state, $work_state, $calendar_state, $announcements_state, $forum_state, $wiki_state, $chat_state, $self_registration_allowed, $self_unregistration_allowed, $maximum_number_of_students, $groups_per_user) {
+	public static function create_category ($title, $description, $doc_state, $work_state, $calendar_state, $announcements_state, $forum_state, $wiki_state, 
+											$chat_state = 1, $self_registration_allowed = 0, $self_unregistration_allowed = 0, $maximum_number_of_students = 8, $groups_per_user = 0) 
+	{
 		$table_group_category = Database :: get_course_table(TABLE_GROUP_CATEGORY);
 		$sql = "SELECT MAX(display_order)+1 as new_order FROM $table_group_category ";
 		$res = Database::query($sql,__FILE__,__LINE__);
@@ -1438,6 +1440,7 @@ class GroupManager {
 	*	Filters from the array $user_array_in the users already in the group $group_id.
 	*/
 	public static function filter_users_already_in_group ($user_array_in, $group_id) {
+				
 		foreach ($user_array_in as $this_user)
 		{
 			if (!self :: is_subscribed($this_user['user_id'], $group_id))

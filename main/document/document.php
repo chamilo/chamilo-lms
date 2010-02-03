@@ -197,7 +197,7 @@ else
 }
 // If i'm in a session we should check the parameters of visibility
 if (api_get_session_id()!=0) {
-	$group_member_with_upload_rights = 
+	$group_member_with_upload_rights =
            $group_member_with_upload_rights && api_is_allowed_to_session_edit(false,true);
 }
 /*
@@ -302,7 +302,7 @@ if (isset($_GET['action']) && $_GET['action']=="download")
 
 //download of an completed folder
 if(isset($_GET['action']) && $_GET['action']=="downloadfolder" && (api_get_setting('students_download_folders') == 'true' || api_is_allowed_to_edit() || api_is_platform_admin()))
-{			
+{
 		require('downloadfolder.inc.php');
 }
 //-------------------------------------------------------------------//
@@ -778,7 +778,7 @@ if(isset($docs_and_folders) && is_array($docs_and_folders))
 		//data for checkbox
 		if (($is_allowed_to_edit || $group_member_with_upload_rights) AND count($docs_and_folders)>1) {
 			$row[] = $id['path'];
-			
+
 		}
 
 		// Show the Owner of the file only in groups
@@ -795,13 +795,13 @@ if(isset($docs_and_folders) && is_array($docs_and_folders))
 		//icons (clickable)
 		//$row[]= build_document_icon_tag($id['filetype'],$id['path']);
 		$row[] = create_document_link($http_www,  $document_name, $id['path'], $id['filetype'], $size, $id['visibility'], true);
-		
+
 		//validacion when belongs to a session
 		$session_img = api_get_session_image($id['session_id'], $_user['status']);
-		
+
 		//document title with hyperlink
 		$row[] = create_document_link($http_www, $document_name, $id['path'], $id['filetype'], $size, $id['visibility']).$session_img.'<br />'.$invisibility_span_open.nl2br(htmlspecialchars($id['comment'],ENT_QUOTES,$charset)).$invisibility_span_close.$user_link;
-		
+
 		//comments => display comment under the document name
 		//$row[] = $invisibility_span_open.nl2br(htmlspecialchars($id['comment'])).$invisibility_span_close;
 		$display_size = format_file_size($size);
@@ -810,7 +810,7 @@ if(isset($docs_and_folders) && is_array($docs_and_folders))
 		//last edit date
 		$last_edit_date=$id['lastedit_date'];
 		$display_date = date_to_str_ago($last_edit_date).'<br><span class="dropbox_date">'.$last_edit_date.'</span>';
-		$row[] = $invisibility_span_open.$display_date.$invisibility_span_close;
+		$row[] = $invisibility_span_open.$display_date.$invisibility_span_close.'<!--uts='.strtotime($last_edit_date).'-->';
 
 		//admins get an edit column
 		if ($is_allowed_to_edit || $group_member_with_upload_rights)
@@ -852,9 +852,9 @@ $column_show=array();
             {?>
                 <a href="create_document.php?<?php echo api_get_cidreq();?>&dir=<?php echo $curdirpathurl.$req_gid; ?>"><img src="../img/filenew.gif" border="0" alt="" title="<?php echo get_lang('CreateDoc'); ?>" /></a>
                 <a href="create_document.php?<?php echo api_get_cidreq();?>&dir=<?php echo $curdirpathurl.$req_gid; ?>"><?php echo get_lang("CreateDoc"); ?></a>&nbsp;&nbsp;
-      <?php }?>   
+      <?php }?>
 			<!-- file upload link -->
-            
+
 			<a href="upload.php?<?php echo api_get_cidreq();?>&curdirpath=<?php echo $curdirpathurl.$req_gid; ?>"><img src="../img/submit_file.gif" border="0" title="<?php echo get_lang('UplUploadDocument'); ?>" alt="" /></a>
 			<a href="upload.php?<?php echo api_get_cidreq();?>&curdirpath=<?php echo $curdirpathurl.$req_gid; ?>"><?php echo get_lang('UplUploadDocument'); ?></a>&nbsp;
 			<!-- create directory -->

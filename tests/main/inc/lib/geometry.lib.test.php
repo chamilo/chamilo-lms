@@ -213,7 +213,7 @@ class TestGeometry extends UnitTestCase {
 		$this->assertFalse($res);
 		//var_dump($res);
 	}
-	
+/*	
 	public function TestDeleteCourse(){				
 		$code = 'COURSEX';				
 		$res = CourseManager::delete_course($code);			
@@ -229,6 +229,6 @@ class TestGeometry extends UnitTestCase {
 			closedir($handle);
 		}
 	}	
-	
+	*/
 }
 ?>

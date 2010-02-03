@@ -118,7 +118,7 @@ class TestFileUpload extends UnitTestCase {
 
 		function testCreateLinkFile() {
 			
-			$filePath = api_get_path(SYS_PATH).'documentation/readme.html';
+			$filePath = api_get_path(SYS_PATH).'documentation/README.txt';
 			$url = 'http://www.chamilo.com';
 			$res= create_link_file($filePath, $url);
 			

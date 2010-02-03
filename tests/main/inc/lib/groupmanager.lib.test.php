@@ -1,11 +1,11 @@
 <?php
 require_once(api_get_path(LIBRARY_PATH).'groupmanager.lib.php');
 require_once(api_get_path(LIBRARY_PATH).'database.lib.php');
-require_once(api_get_path(LIBRARY_PATH).'classmanager.lib.php');
-require_once(api_get_path(LIBRARY_PATH).'fileManage.lib.php');
 require_once(api_get_path(LIBRARY_PATH).'course.lib.php');
+require_once(api_get_path(LIBRARY_PATH).'classmanager.lib.php');
+require_once(api_get_path(LIBRARY_PATH).'fileUpload.lib.php');
+require_once(api_get_path(LIBRARY_PATH).'fileManage.lib.php');
 require_once(api_get_path(LIBRARY_PATH).'tablesort.lib.php');
-//require_once(dirname(__FILE__).'/../../../simpletest/mock_objects.php');
 
 
 class TestGroupManager extends UnitTestCase {
@@ -84,12 +84,13 @@ class TestGroupManager extends UnitTestCase {
 					  'announcements_state'=>'',
 					  'forum_state'=>'',
 					  'wiki_state'=>'',
+					  'chat_state' =>'',
 					  'self_registration_allowed'=>'',
 					  'self_unregistration_allowed'=>'');
 		$res = GroupManager::set_group_properties($group['group_id'], $group['name'], $group['description'],
 													  $group['maximum_number_of_students'], $group['doc_state'],
 													  $group['work_state'], $group['calendar_state'], $group['announcements_state'],
-													  $group['forum_state'],$group['wiki_state'], $group['self_registration_allowed'],
+													  $group['forum_state'],$group['wiki_state'],$group['chat_state'], $group['self_registration_allowed'],
 													  $group['self_unregistration_allowed']);
 		$this->assertTrue(is_bool($res));
 		//var_dump($res);
@@ -141,21 +142,23 @@ class TestGroupManager extends UnitTestCase {
 
 	public function testCreateCategory(){
 		$categ = array(
-		'title'=>'DefaultGroupCategory',
-		'description'=>'xxxxx',
-		'doc_state'=>'xxxx',
-		'work_state'=>'xxxxx',
-		'calendar_state'=>'',
-		'announcements_state'=>'',
-		'forum_state'=>'',
-		'wiki_state'=>'',
-		'self_registration_allowed'=>'',
-		'self_unregistration_allowed'=>'',
-		'maximum_number_of_students'=>'',
-		'groups_per_user'=>'0');
+		'title'=>'group test',
+		'description'=>'description test',
+		'doc_state'=> 1,
+		'work_state'=> 1,
+		'calendar_state'=> 1,
+		'announcements_state' => 1,
+		'forum_state' => 1,
+		'wiki_state' => 1,
+		'chat_state' => 1,
+		'self_registration_allowed' => TRUE,
+		'self_unregistration_allowed' => FALSE,
+		'maximum_number_of_students'=> 2,
+		'groups_per_user'=>4);
 		$res = GroupManager::create_category($categ['title'], $categ['description'],
-		$categ['doc_state'], $categ['work_state'], $categ['calendar_state'], $categ['announcements_state'],
-		$categ['forum_state'],$categ['wiki_state'],$categ['self_registration_allowed'],$categ['self_unregistration_allowed'],
+		$categ['doc_state'], $categ['work_state'], $categ['calendar_state'], 
+		$categ['announcements_state'], $categ['forum_state'],$categ['wiki_state'],
+		$categ['chat_state'],$categ['self_registration_allowed'],$categ['self_unregistration_allowed'],
 		$categ['maximum_number_of_students'],$categ['groups_per_user']);
 		$this->assertTrue(is_numeric($res));
 		//var_dump($res);
@@ -164,7 +167,7 @@ class TestGroupManager extends UnitTestCase {
 
 	public function testUpdateCategory(){
 		$categ = array(
-		'id'=>'1',
+		'id'=>2,
 		'title'=>'DefaultGroupCategory',
 		'description'=>'xxxxx',
 		'doc_state'=>'xxxx',
@@ -173,13 +176,14 @@ class TestGroupManager extends UnitTestCase {
 		'announcements_state'=>'',
 		'forum_state'=>'',
 		'wiki_state'=>'',
+		'chat_state' =>'',
 		'self_registration_allowed'=>'',
 		'self_unregistration_allowed'=>'',
 		'maximum_number_of_students'=>'',
 		'groups_per_user'=>'0');
 		$res = GroupManager::update_category($categ['id'], $categ['title'], $categ['description'],
 		$categ['doc_state'], $categ['work_state'], $categ['calendar_state'], $categ['announcements_state'],
-		$categ['forum_state'],$categ['wiki_state'],$categ['self_registration_allowed'],$categ['self_unregistration_allowed'],
+		$categ['forum_state'],$categ['wiki_state'], $categ['chat_state'],$categ['self_registration_allowed'],$categ['self_unregistration_allowed'],
 		$categ['maximum_number_of_students'],$categ['groups_per_user']);
 		$this->assertTrue(is_null($res));
 		$this->assertTrue($res ===null);
@@ -406,7 +410,8 @@ class TestGroupManager extends UnitTestCase {
 	}
 	
 	public function testFilterUsersAlreadyInGroup(){
-		$user_array_in= 2;
+		global $_course;
+		$user_array_in = array();
 		$group_id = 2;
 		$res = GroupManager::filter_users_already_in_group($user_array_in, $group_id);
 		$this->assertTrue(is_null($res));
@@ -415,7 +420,7 @@ class TestGroupManager extends UnitTestCase {
 	}
 
 	public function testFilterOnlyStudents(){
-		$user_array_in='';
+		$user_array_in=array();
 		$res= GroupManager::filter_only_students($user_array_in);
 		$this->assertTrue(is_array($res));
 		//var_dump($res);
@@ -437,7 +442,7 @@ class TestGroupManager extends UnitTestCase {
 		$this->assertTrue(is_array($res));
 		//var_dump($res);
 	}
-	
+/*	
 	public function TestDeleteCourse(){				
 		$code = 'COURSEX';				
 		$res = CourseManager::delete_course($code);			
@@ -453,6 +458,6 @@ class TestGroupManager extends UnitTestCase {
 			closedir($handle);
 		}
 	}	
-	
+*/
 }
 ?>

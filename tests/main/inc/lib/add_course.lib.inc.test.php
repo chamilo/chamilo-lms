@@ -13,14 +13,14 @@ class TestAddCourse extends UnitTestCase {
     function TestCreateCourse(){
 		global $_configuration;
 		$course_datos = array(
-				'wanted_code'=> 'COD16',
+				'wanted_code'=> 'testcourse',
 				'title'=>'prueba01',
-				'tutor_name'=>'R. J. Wolfagan',
-				'category_code'=>'2121',
+				'tutor_name'=>'John Doe',
+				'category_code'=>'Lang',
 				'course_language'=>'english',
-				'course_admin_id'=>'1211',
+				'course_admin_id'=>'1',
 				'db_prefix'=> $_configuration['db_prefix'],
-				'firstExpirationDelay'=>'112'
+				'firstExpirationDelay'=>'120'
 				);
 		$res = create_course($course_datos['wanted_code'], $course_datos['title'],
 							 $course_datos['tutor_name'], $course_datos['category_code'],
@@ -33,15 +33,15 @@ class TestAddCourse extends UnitTestCase {
     function testRegisterCourse() {
 	    global $_configuration;
          $course = array(
-		    'courseSysCode'=> 'COD16',
-		    'courseScreenCode' =>'COD16',
-		    'courseRepository' =>'C16',
-		    'courseDbName' => $_configuration['db_prefix'].'ARITM',
-		    'titular' =>'R. Wofgar',
-		    'category' =>'Math',
-		    'title' =>'metodologia de calculo diferencial',
-		    'course_language' =>'English',
-		    'uidCreator'=> '212',
+		    'courseSysCode'=> 'testcourse',
+		    'courseScreenCode' =>'testcourse',
+		    'courseRepository' =>'testcourse',
+		    'courseDbName' => $_configuration['db_prefix'].'testcourse',
+		    'titular' =>'John Doe',
+		    'category' =>'Lang',
+		    'title' =>'test course',
+		    'course_language' =>'english',
+		    'uidCreator'=> '1',
 			);
 	    $res = register_course($course['courseSysCode'],$course['courseScreenCode'],
 	 					   $course['courseRepository'],$course['courseDbName'],
@@ -57,7 +57,7 @@ class TestAddCourse extends UnitTestCase {
      
     function TestGenerateCourseCode(){
     	global $charset;
-    	$course_title = 'matemáticas';
+    	$course_title = 'testcourse';
     	$res = generate_course_code($course_title);
     	$this->assertTrue($res);
 	}
@@ -110,13 +110,13 @@ class TestAddCourse extends UnitTestCase {
 	*/
 	/*
 	function TestFillCourseRepository(){
-		$courseRepository = 'COD16';
+		$courseRepository = 'testcourse';
 		$res = fill_course_repository($courseRepository);
 		$this->assertTrue($res);
 	}
 */
 	function TestLang2db(){
-		$string = 'dsdzxcwqd';
+		$string = 'test';
 		$res = lang2db($string);
 		$this->assertTrue($res);
 	}
@@ -130,9 +130,9 @@ class TestAddCourse extends UnitTestCase {
 		$default_document_array = array();
 		$sys_course_path = api_get_path(SYS_COURSE_PATH);
 		$courseDbName = $_configuration['db_prefix'].$courseDbName.$_configuration['db_glue'];
-		$courseRepository = 'sdffsdf';
+		$courseRepository = 'testcourse';
 		$language = 'english';
-		$default_document_array ='1212121';
+		$default_document_array ='testdocument';
 		$res = fill_Db_course($courseDbName, $courseRepository, $language,array());
 		$this->assertTrue($res === 0);
 	}
@@ -146,7 +146,8 @@ class TestAddCourse extends UnitTestCase {
 	}
 
 	function TestCheckArchive(){
-		$pathToArchive ='';
+		$dirarchive = api_get_path(SYS_PATH);
+		$pathToArchive = $dirarchive.'archive';
 		$res = checkArchive($pathToArchive);
 		$this->assertTrue($res === TRUE);
 	}
@@ -171,7 +172,7 @@ class TestAddCourse extends UnitTestCase {
 */
 
     public function TestDeleteCourse(){				
-		$code = 'COD16';				
+		$code = 'testcourse';				
 		$res = CourseManager::delete_course($code);			
 		$path = api_get_path(SYS_PATH).'archive';		
 		if ($handle = opendir($path)) {

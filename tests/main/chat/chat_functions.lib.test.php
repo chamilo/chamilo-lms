@@ -2,7 +2,6 @@
 require_once(api_get_path(SYS_CODE_PATH).'chat/chat_functions.lib.php');
 require_once(api_get_path(LIBRARY_PATH).'course.lib.php');
 
-Mock::generate('CourseManager');
 class TestChatFunctions extends UnitTestCase {
 
 	public function setUp() {

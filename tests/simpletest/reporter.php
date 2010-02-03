@@ -58,13 +58,13 @@ class HtmlReporter extends SimpleReporter {
         echo '<div id="content2" style="background-image:url(img/bg-header4.png);background-repeat:repeat-x";>
 			<h2><div style="font-size:18px;font-family:Tahoma,Geneva,sans-serif;color:#01933E;text-decoration:none;">These results showing how many functions have been tested in the code of chamilo 1.8.6.2</div></h2><br/>         		    
 				<div style="font-size:12px;font-family:Tahoma,Geneva,sans-serif;color:#01933E;">
-				<p>This page showing the kind results different than have been tested and showing the lines the problems.</p>  
+				<p>This page showing the different types results than have been tested and showing the lines the problems.</p>  
 				<ol><li>This results show the amount of the tests than have been tested.</li>
 				<li>This results show the amount of the tests than have passed.</li>
 				<li>This results show the amount of the tests than have failed.</li>
 				<li>This results show the amount of exceptions in the tests.</li></ol>
 				<p>You can always find more information about simpletest on the website: http://www.lastcraft.com </p>
-				<p>"Only a well software like Chamilo, is perfect when has been tested by excellent The Testing Engineers".</p>
+				<p>"Only a well software like Chamilo, is perfect when has been tested by excellent Testing Engineers".</p>
 				</div></div>';//content2    			
 		echo '</div><br/>';//fin header2
 		//flush();

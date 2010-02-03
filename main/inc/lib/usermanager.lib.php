@@ -874,7 +874,9 @@ class UserManager
 	 */
 	public static function remove_user_production($user_id, $production) {
 		$production_path = self::get_user_picture_path_by_id($user_id, 'system', true);
-		unlink($production_path['dir'].$production);
+		if (is_file($production_path['dir'].$production)) {	
+			unlink($production_path['dir'].$production);
+		}
 	}
 
 	/**

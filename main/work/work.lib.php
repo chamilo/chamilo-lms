@@ -720,7 +720,7 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 			if ($direc_date!='' && $direc_date!='0000-00-00 00:00:00') {
 				$my_direc_date = api_ucfirst(format_locale_date($dateFormatShort,strtotime($direc_date))).'&nbsp;&nbsp;&nbsp;&nbsp;';
 				$my_direc_date .= ucfirst(strftime($timeNoSecFormat,strtotime($direc_date)));
-				$row[]= date_to_str_ago($direc_date).'<br /><span class="dropbox_date">'.$my_direc_date.'</span>';
+				$row[]= date_to_str_ago($direc_date).'<br /><span class="dropbox_date">'.$my_direc_date.'</span>'.'<!--uts='.strtotime($direc_date).'-->';
 			} else {
 				$row[]='';
 			}
@@ -781,7 +781,7 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 			$row[]= display_user_link($row2['insert_user_id'],$work->author).$qualification_string;// $work->author;
 			$sent_date = api_ucfirst(format_locale_date($dateFormatShort,strtotime($work->sent_date))).'&nbsp;&nbsp;&nbsp;&nbsp;';
 			$sent_date .= ucfirst(strftime($timeNoSecFormat,strtotime($work->sent_date)));
-			$row[]= date_to_str_ago($work->sent_date).$add_string.'<br><span class="dropbox_date">'.$sent_date.'</span>';
+			$row[]= date_to_str_ago($work->sent_date).$add_string.'<br><span class="dropbox_date">'.$sent_date.'</span>'.'<!--uts='.strtotime($work->sent_date).'-->';
 
 			if( $is_allowed_to_edit) {
 

@@ -44,6 +44,37 @@ class TableSort
 	{
 		return api_strtolower($txt);
 	}
+
+	/**
+	 * This is a method for date comparison, using hidden raw values if they are given.
+	 * Date formats vary a lot, alse they have localized values. For avoiding using
+	 * unreliable in this case date parsing routine, this method checks first whether raw
+	 * date walues have been intentionaly passed in order pricise sorting to be achieved.
+	 * Here is the format of the date value, hidden in a comment: <!--uts=1234685716-->
+	 * @param string $el1	The first element provided from the table.
+	 * @param string $el2	The second element provided from the table.
+	 * @result bool			Tre comparison result.
+	 * @author Ivan Tcholakov, 2010.
+	 */
+	public function date_compare($el1, $el2) {
+		if (($pos1 = strpos($el1, '<!--uts=')) !== false && ($pos2 = strpos($el1, '-->', $pos1)) !== false) {
+			$el1 = intval(substr($el1, $pos1 + 8, $pos2 - $pos1 - 8));
+		} else {
+			$el1 = strtotime(strip_tags($el1));
+		}
+		if (($pos1 = strpos($el2, '<!--uts=')) !== false && ($pos2 = strpos($el2, '-->', $pos1)) !== false) {
+			$el2 = intval(substr($el2, $pos1 + 8, $pos2 - $pos1 - 8));
+		} else {
+			$el2 = strtotime(strip_tags($el2));
+		}
+		if ($el1 > $el2) {
+			return 1;
+		} elseif ($el1 > $el2) {
+			return -1;
+		}
+		return 0;
+	}
+
 	/**
 	 * Sort 2-dimensional table.
 	 * @param array $data The data to be sorted.
@@ -88,16 +119,17 @@ class TableSort
 				$compare_function = 'api_strnatcmp(TableSort::orderingstring(strip_tags($el1,"<img>")),TableSort::orderingstring(strip_tags($el2,"<img>"))) > 0';
 				break;
 			case SORT_DATE :
-				$compare_function = 'strtotime(strip_tags($el1)) > strtotime(strip_tags($el2))';
+				$compare_function = 'TableSort::date_compare($el1, $el2) > 0';
 				break;
             case SORT_STRING :
             default:
                 $compare_function = 'api_strnatcmp(TableSort::orderingstring(strip_tags($el1)),TableSort::orderingstring(strip_tags($el2))) > 0';
                 break;
 		}
-		$function_body = '$el1 = $a['.$column.']; $el2 = $b['.$column.']; return ('.$direction.' == SORT_ASC ? ('.$compare_function.') : !('.$compare_function.'));';
-		// Sort the content
 
+		$function_body = '$el1 = $a['.$column.']; $el2 = $b['.$column.']; return '.($direction == SORT_ASC ? ' ' : ' !').'('.$compare_function.');';
+
+		// Sort the content
 		usort($data, create_function('$a,$b', $function_body));
 
 		return $data;
@@ -133,7 +165,11 @@ class TableSort
 		$is_date = true;
 		foreach ($data as $index => $row)
 		{
-			if(strlen(strip_tags($row[$column])) != 0 )
+			if (strpos($row[$column], '<!--uts=') !== false) {
+				// A hidden raw date value (an integer Unix time stamp) has been detected. It is needed for precise sorting.
+				$is_date &= true;
+			}
+			elseif (strlen(strip_tags($row[$column])) != 0 )
 			{
 				$check_date = strtotime(strip_tags($row[$column]));
 				// strtotime Returns a timestamp on success, FALSE otherwise.
@@ -198,23 +234,27 @@ class TableSort
 			}
 	 	}
 
-		switch ($type)
+		if ($type == SORT_REGULAR)
 		{
-			case SORT_REGULAR :
-				if (TableSort::is_image_column($data, $column))
-				{
-					return TableSort::sort_table_config($data, $column, $direction, $column_show, $column_order,SORT_IMAGE);
-				}
-				elseif (TableSort::is_date_column($data, $column))
-				{
-					return TableSort::sort_table_config($data, $column, $direction, $column_show, $column_order,SORT_DATE);
-				}
-				elseif (TableSort::is_numeric_column($data, $column))
-				{
-					return TableSort::sort_table_config($data, $column, $direction, $column_show, $column_order,SORT_NUMERIC);
-				}
-				return TableSort::sort_table_config($data, $column, $direction, $column_show, $column_order,SORT_STRING);
-				break;
+			if (TableSort::is_image_column($data, $column))
+			{
+				$type = SORT_IMAGE;
+			}
+			elseif (TableSort::is_date_column($data, $column))
+			{
+				$type =  SORT_DATE;
+			}
+			elseif (TableSort::is_numeric_column($data, $column))
+			{
+				$type =  SORT_NUMERIC;
+			}
+			else
+			{
+				$type = SORT_STRING;
+			}
+		}
+	 	switch ($type)
+		{
 			case SORT_NUMERIC :
 				$compare_function = 'strip_tags($el1) > strip_tags($el2)';
 				break;
@@ -222,7 +262,7 @@ class TableSort
 				$compare_function = 'strnatcmp(TableSort::orderingstring(strip_tags($el1,"<img>")),TableSort::orderingstring(strip_tags($el2,"<img>"))) > 0';
 				break;
 			case SORT_DATE :
-				$compare_function = 'strtotime(strip_tags($el1)) > strtotime(strip_tags($el2))';
+				$compare_function = 'TableSort::date_compare($el1, $el2) > 0';
 				break;
             case SORT_STRING :
             default:
@@ -230,9 +270,7 @@ class TableSort
                 break;
 		}
 
-		$function_body = '$el1 = $a['.$column.']; ' .
-						 '$el2 = $b['.$column.']; ' .
-						 'return ('.$direction.' == SORT_ASC ? ('.$compare_function.') : !('.$compare_function.'));';
+		$function_body = '$el1 = $a['.$column.']; $el2 = $b['.$column.']; return '.($direction == SORT_ASC ? ' ' : ' !').'('.$compare_function.');';
 
 		// Sort the content
 		usort($data, create_function('$a,$b', $function_body));
@@ -266,4 +304,3 @@ class TableSort
 	}
 
 }
-?>

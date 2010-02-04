@@ -40,10 +40,11 @@ class NotebookManager
 	 * This functions stores the note in the database
 	 *
 	 * @param array $values
-	 *
+	 * @return bool
 	 * @author Christian Fasanando <christian.fasanando@dokeos.com>
 	 * @author Patrick Cool <patrick.cool@ugent.be>, Ghent University, Belgium
 	 * @version januari 2009, dokeos 1.8.6
+	 * 
 	 */
 	function save_note($values) {
 		// Database table definition
@@ -65,9 +66,10 @@ class NotebookManager
 			//insert into item_property
 			api_item_property_update(api_get_course_info(), TOOL_NOTEBOOK, $id, 'NotebookAdded', api_get_user_id());
 		}
-	
-		// display the feedback message
-		Display::display_confirmation_message(get_lang('NoteAdded'));
+		$affected_rows = Database::affected_rows();
+		if (!empty($affected_rows)){
+			return true;	
+		}
 	}
 	
 	function get_note_information($notebook_id) {
@@ -109,9 +111,10 @@ class NotebookManager
 	
 		//update item_property (update)
 		api_item_property_update(api_get_course_info(), TOOL_NOTEBOOK, Database::escape_string($values['notebook_id']), 'NotebookUpdated', api_get_user_id());
-	
-		// display the feedback message
-		Display::display_confirmation_message(get_lang('NoteUpdated'));
+		$affected_rows = Database::affected_rows();
+		if (!empty($affected_rows)){
+			return true;	
+		}
 	}
 	
 	function delete_note($notebook_id) {
@@ -123,8 +126,10 @@ class NotebookManager
 	
 		//update item_property (delete)
 		api_item_property_update(api_get_course_info(), TOOL_NOTEBOOK, Database::escape_string($notebook_id), 'delete', api_get_user_id());
-	
-		Display::display_confirmation_message(get_lang('NoteDeleted'));
+		$affected_rows = Database::affected_rows();
+		if (!empty($affected_rows)){
+			return true;	
+		}
 	}
 	
 	function display_notes() {

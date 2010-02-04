@@ -45,13 +45,11 @@ $tool = TOOL_NOTEBOOK;
 event_access_tool(TOOL_NOTEBOOK);
 
 // tool name
-if ( isset($_GET['action']) && $_GET['action'] == 'addnote')
-{
+if ( isset($_GET['action']) && $_GET['action'] == 'addnote') {
 	$tool = 'NoteAddNew';
 	$interbreadcrumb[] = array ("url"=>"index.php", "name"=> get_lang('Notebook'));
 }
-if ( isset($_GET['action']) && $_GET['action'] == 'editnote')
-{
+if ( isset($_GET['action']) && $_GET['action'] == 'editnote') {
 	$tool = 'ModifyNote';
 	$interbreadcrumb[] = array ("url"=>"index.php", "name"=> get_lang('Notebook'));
 }
@@ -64,8 +62,7 @@ Display::display_introduction_section(TOOL_NOTEBOOK);
 
 
 // Action handling: Adding a note
-if (isset($_GET['action']) && $_GET['action'] == 'addnote')
-{
+if (isset($_GET['action']) && $_GET['action'] == 'addnote') {
 	if (api_get_session_id()!=0 && api_is_allowed_to_session_edit(false,true)==false) {
 		api_not_allowed();
 	}
@@ -93,20 +90,18 @@ if (isset($_GET['action']) && $_GET['action'] == 'addnote')
 	$form->addRule('note_title', '<div class="required">'.get_lang('ThisFieldIsRequired'), 'required');
 
 	// The validation or display
-	if ( $form->validate() )
-	{
+	if ($form->validate()) {
 		$check = Security::check_token('post');
-		if ($check)
-		{
+		if ($check) {
 	   		$values = $form->exportValues();
-	   		NotebookManager::save_note($values);
-
+	   		$res = NotebookManager::save_note($values);
+	   		if ($res == true){
+	   			Display::display_confirmation_message(get_lang('NoteAdded'));	
+	   		}
 		}
 		Security::clear_token();
 		NotebookManager::display_notes();
-	}
-	else
-	{
+	} else {
 		echo '<div class="actions">';
 		echo '<a href="index.php">'.Display::return_icon('back.png').' '.get_lang('BackToNotesList').'</a>';
 		echo '</div>';
@@ -116,7 +111,6 @@ if (isset($_GET['action']) && $_GET['action'] == 'addnote')
 		$form->display();
 	}
 }
-
 // Action handling: Editing a note
 else if (isset($_GET['action']) && $_GET['action'] == 'editnote' && is_numeric($_GET['notebook_id']))
 {
@@ -147,19 +141,19 @@ else if (isset($_GET['action']) && $_GET['action'] == 'editnote' && is_numeric($
 	$form->addRule('note_title', '<div class="required">'.get_lang('ThisFieldIsRequired'), 'required');
 
 	// The validation or display
-	if ( $form->validate() )
-	{
+	if ($form->validate()) {
 		$check = Security::check_token('post');
-		if ($check)
-		{
+		if ($check) {
 	   		$values = $form->exportValues();
-	   		NotebookManager::update_note($values);
+	   		$res=NotebookManager::update_note($values);
+	   		if ($res==true){
+	   			Display::display_confirmation_message(get_lang('NoteUpdated'));
+	   		}
+	   		
 		}
 		Security::clear_token();
 		NotebookManager::display_notes();
-	}
-	else
-	{
+	} else {
 		echo '<div class="actions">';
 		echo '<a href="index.php">'.Display::return_icon('back.png').' '.get_lang('BackToNotesList').'</a>';
 		echo '</div>';
@@ -173,7 +167,11 @@ else if (isset($_GET['action']) && $_GET['action'] == 'editnote' && is_numeric($
 // Action handling: deleting a note
 else if (isset($_GET['action']) && $_GET['action'] == 'deletenote' && is_numeric($_GET['notebook_id']))
 {
-	NotebookManager::delete_note(Security::remove_XSS($_GET['notebook_id']));
+	$res=NotebookManager::delete_note(Security::remove_XSS($_GET['notebook_id']));
+	if ($res==true){
+		Display::display_confirmation_message(get_lang('NoteDeleted'));
+	}
+	
 	NotebookManager::display_notes();
 }
 

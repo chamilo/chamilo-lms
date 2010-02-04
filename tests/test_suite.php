@@ -123,14 +123,6 @@ class AllTestsSuite extends TestSuite {
     function AllTestsSuite() {
     	$this->setUp();
     	$this->TestSuite('All tests suite');
-
-        //funciones q faltan corregir parta carlos  
-/*	   
-	    $this->addTestFile(dirname(__FILE__).'/main/inc/lib/system_announcements.lib.test.php');
-	    $this->addTestFile(dirname(__FILE__).'/main/inc/lib/xht.lib.test.php');
-	    $this->addTestFile(dirname(__FILE__).'/main/inc/lib/xmd.lib.test.php');
-*/
-		//Funciones probadas
 		$this->addTestFile(dirname(__FILE__).'/main/install/install_upgrade.lib.test.php');
 		$this->addTestFile(dirname(__FILE__).'/main/inc/lib/database.lib.test.php');
 		$this->addTestFile(dirname(__FILE__).'/main/inc/lib/add_course.lib.inc.test.php');
@@ -182,10 +174,13 @@ class AllTestsSuite extends TestSuite {
         $this->addTestFile(dirname(__FILE__).'/main/inc/lib/image.lib.test.php'); 
         $this->addTestFile(dirname(__FILE__).'/main/inc/lib/import.lib.test.php');
         $this->addTestFile(dirname(__FILE__).'/main/inc/lib/internationalization.lib.test.php');  
-        
+        $this->addTestFile(dirname(__FILE__).'/main/inc/lib/system_announcements.lib.test.php');
         $this->addTestFile(dirname(__FILE__).'/main/inc/lib/main_api.lib.test.php');//al final      
         $this->addTestFile(dirname(__FILE__).'/main/inc/lib/debug.lib.inc.test.php');
         //$this->addTestFile(dirname(__FILE__).'/main/inc/lib/fileUpload.lib.test.php');
+        //This files have a metadata and is not available for the test.
+        //$this->addTestFile(dirname(__FILE__).'/main/inc/lib/xht.lib.test.php');
+	    //$this->addTestFile(dirname(__FILE__).'/main/inc/lib/xmd.lib.test.php');
     }
 }
 $test = &new AllTestsSuite();

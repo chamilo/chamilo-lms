@@ -220,7 +220,7 @@ function display_studentsdelete_form()
 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 * @version march 2006
 */
-function display_user_link($user_id, $name='')
+function display_user_link_work($user_id, $name='')
 {
 	global $_otherusers;
 
@@ -778,7 +778,7 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 			//$full_file_name = 'download.php?file='.$realname;
 			$row[]= build_document_icon_tag('file',$work->url);
 			$row[]= '<a href="download.php?file='.$url.'"'.$class.'><img src="../img/filesave.gif" style="float:right;" alt="'.get_lang('Save').'" title="'.get_lang('Save').'" />'.$work->title.'</a><br />'.$work->description;
-			$row[]= display_user_link($row2['insert_user_id'],$work->author).$qualification_string;// $work->author;
+			$row[]= display_user_link_work($row2['insert_user_id'],$work->author).$qualification_string;// $work->author;
 			$sent_date = api_ucfirst(format_locale_date($dateFormatShort,strtotime($work->sent_date))).'&nbsp;&nbsp;&nbsp;&nbsp;';
 			$sent_date .= ucfirst(strftime($timeNoSecFormat,strtotime($work->sent_date)));
 			$row[]= date_to_str_ago($work->sent_date).$add_string.'<br><span class="dropbox_date">'.$sent_date.'</span>'.'<!--uts='.strtotime($work->sent_date).'-->';

@@ -4,6 +4,8 @@ require_once(api_get_path(LIBRARY_PATH) . "/fckeditor/fckeditor.php");
 require_once(api_get_path(LIBRARY_PATH).'fileUpload.lib.php');
 require_once(api_get_path(LIBRARY_PATH).'icalcreator/iCalcreator.class.php');
 require_once(api_get_path(LIBRARY_PATH).'course.lib.php');
+
+
 class TestCalendar extends UnitTestCase {
 
 	function TestCalendar() {
@@ -269,11 +271,9 @@ class TestCalendar extends UnitTestCase {
  	}
 
  	public function testGetRepeatedEventsDayView(){	
- 			$y=0;
-			$m=0;
-			$d=0;
- 			$start = mktime(0,0,0,$m,$d,$y);
- 			$end = mktime(23,59,59,$m,$d,$y);
+ 			global $_course;
+ 			$start = 0;
+ 			$end = 0;
  			$params = array();
 			$course_code = 'COURSEX';			
 			$course_info = api_get_course_info($course_code);			
@@ -399,12 +399,22 @@ class TestCalendar extends UnitTestCase {
 		$res = delete_agenda_item($id);
 		$this->assertTrue(is_bool($res));
  	}
- 	
- /*	public function testDeleteCourse() {
-		global $cidReq;			
-		$resu = CourseManager::delete_course($cidReq);
-		session_destroy();			
+/* 	
+	public function TestDeleteCourse(){				
+		$code = 'COURSEX';				
+		$res = CourseManager::delete_course($code);			
+		$path = api_get_path(SYS_PATH).'archive';		
+		if ($handle = opendir($path)) {
+			while (false !== ($file = readdir($handle))) {				
+				if (strpos($file,$code)!==false) {										
+					if (is_dir($path.'/'.$file)) {						
+						rmdirr($path.'/'.$file);						
+					}				
+				}				
+			}
+			closedir($handle);
+		}
 	}
- */
+*/
 }
 ?>

@@ -43,12 +43,12 @@ class TestStatistics extends UnitTestCase{
 		$this->assertTrue(count($res)===0 || count($res)!==0);
 	}
 
-	public function testGetNumberOfActivities(){
+	public function testGetNumberOfActivities() {
 		$resu = Statistics::get_number_of_activities();
+		if(!is_null($resu)){
 		$this->assertTrue(is_numeric($resu));
 		$this->assertTrue(count($resu)==0 || count($resu)!==0);
-		//var_dump($resu);
-		
+		}
 	}
 
 	/**

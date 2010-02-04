@@ -218,11 +218,10 @@ class TestWork extends UnitTestCase {
 	* @todo move this function to the user library
 	*/
 
-	function testdisplay_user_link() {
+	function testdisplay_user_link_work() {
 		global $_otherusers;
 		$user_id=1;
-		$name='';
-		$res=display_user_link($user_id, $name='');
+		$res=display_user_link_work($user_id, $name='');
 		$this->assertTrue(is_string($res));
 		//var_dump($res);
 	}
@@ -406,32 +405,5 @@ class TestWork extends UnitTestCase {
 		$this->assertTrue(is_numeric($res));
 		//var_dump($res);
 	}
-	
-	/**
- * This functon only is added to the end of the test and the end of the files in the all test.
- */
-	/*
-	public function testDeleteCourse() {
-		global $cidReq;			
-		$resu = CourseManager::delete_course($cidReq);
-		session_destroy();			
-	}
-	*/
-/*	public function testDeleteCourse() {    
-	  $code = 'COURSEX';    
-	  $res = CourseManager::delete_course($code);   
-	  $path = api_get_path(SYS_PATH).'archive';  
-		  if ($handle = opendir($path)) {
-		   while (false !== ($file = readdir($handle))) {    
-			    if (strpos($file,$code)!==false) {          
-					     if (is_dir($path.'/'.$file)) {      
-					      rmdirr($path.'/'.$file);      
-					     }    
-			    	}    
-			   }
-			   closedir($handle);
-		  }
-		  session_destroy();
- 	}*/ 
 }
 ?>

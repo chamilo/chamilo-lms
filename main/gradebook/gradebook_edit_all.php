@@ -83,7 +83,9 @@ $table_evaluation = Database::get_main_table(TABLE_MAIN_GRADEBOOK_EVALUATION);
 //$table_forum_thread=Database::get_course_table(TABLE_FORUM_THREAD);
 
 $my_db_name=get_database_name_by_link_id($my_selectcat);
-$table_forum_thread = Database :: get_course_table(TABLE_FORUM_THREAD,$my_db_name);
+$tbl_forum_thread = Database :: get_course_table(TABLE_FORUM_THREAD,$my_db_name);
+$tbl_work = Database :: get_course_table(TABLE_STUDENT_PUBLICATION,$my_db_name);
+$tbl_attendance = Database :: get_course_table(TABLE_ATTENDANCE,$my_db_name);
 /*
 if($_SERVER['REQUEST_METHOD']=='POST'):
 	foreach($_POST['link'] as $key => $value){
@@ -106,6 +108,7 @@ $table_evaluated[2] = array(TABLE_DROPBOX_FILE, 'name','id', get_lang('Dropbox')
 $table_evaluated[3] = array(TABLE_STUDENT_PUBLICATION, 'url','id', get_lang('Student_publication'));
 $table_evaluated[4] = array(TABLE_LP_MAIN, 'name','id', get_lang('Learnpath'));
 $table_evaluated[5] = array(TABLE_FORUM_THREAD, 'thread_title_qualify', 'thread_id', get_lang('Forum'));
+$table_evaluated[7] = array(TABLE_ATTENDANCE, 'attendance_title_qualify', 'id', get_lang('Attendance'));
 
 
 function get_table_type_course($type,$course) {
@@ -132,14 +135,28 @@ $category_id = (int)$_GET['selectcat'];
 $output='';
 $sql='SELECT * FROM '.$table_link.' WHERE category_id = '.$category_id;
 $result = Database::query($sql,__FILE__,__LINE__);
-	while($row = Database ::fetch_array($result)){
+	while($row = Database ::fetch_array($result)) {
 		//update only if value changed
 		if(isset($_POST['link'][$row['id']]) && $_POST['link'][$row['id']] != $row['weight']) {
+						
 			AbstractLink::add_link_log($row['id']);
-			Database::query('UPDATE '.$table_link.' SET weight = '."'".trim($_POST['link'][$row['id']])."'".' WHERE id = '.$row['id'],__FILE__,__LINE__);
-			$sql='UPDATE '.$table_forum_thread.' SET thread_weight='.$_POST['link'][$row['id']].' WHERE thread_id='.$row['ref_id'];
-			Database::query($sql);
+			Database::query('UPDATE '.$table_link.' SET weight = '."'".trim($_POST['link'][$row['id']])."'".' WHERE id = '.$row['id'],__FILE__,__LINE__);								
 			$row['weight'] = trim($_POST['link'][$row['id']]);
+			
+			//Update weight for attendance
+			$sql = 'SELECT ref_id FROM '.$table_link.' WHERE id = '.intval($row['id']).' AND type='.LINK_ATTENDANCE;
+			$rs_attendance  = Database::query($sql, __FILE__, __LINE__);
+			if (Database::num_rows($rs_attendance) > 0) {
+				$row_attendance = Database::fetch_array($rs_attendance);		
+				$upd_attendance = 'UPDATE '.$tbl_attendance.' SET attendance_weight ='.floatval($_POST['link'][$row['id']]).' WHERE id = '.intval($row_attendance['ref_id']);
+				Database::query($upd_attendance, __FILE__, __LINE__);
+			}		
+			//Update weight into forum thread
+			$sql_t='UPDATE '.$tbl_forum_thread.' SET thread_weight='.floatval($_POST['link'][$row['id']]).' WHERE thread_id= (SELECT ref_id FROM '.$table_link.' WHERE id='.intval($row['id']).' AND type='.LINK_FORUM_THREAD.');';
+			Database::query($sql_t);
+			//Update weight into student publication(work)
+			$sql_t='UPDATE '.$tbl_work.' SET weight='.floatval($_POST['link'][$row['id']]).' WHERE id= (SELECT ref_id FROM '.$table_link.' WHERE id='.intval($row['id']).' AND type = '.LINK_STUDENTPUBLICATION.');';
+			Database::query($sql_t);
 		}
 
 		$tempsql = Database::query('SELECT * FROM '.get_table_type_course($row['type'],$row['course_code']).' WHERE '.$table_evaluated[$row['type']][2].' = '.$row['ref_id']);

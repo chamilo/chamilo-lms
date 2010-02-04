@@ -33,14 +33,16 @@ define('LINK_STUDENTPUBLICATION',3);
 define('LINK_LEARNPATH',4);
 define('LINK_FORUM_THREAD',5);
 //define('LINK_WORK',6);
-require_once('gradebookitem.class.php');
-require_once('abstractlink.class.php');
-require_once('exerciselink.class.php');
-require_once('evallink.class.php');
-require_once('dropboxlink.class.php');
-require_once('studentpublicationlink.class.php');
-require_once('learnpathlink.class.php');
-require_once('forumthreadlink.class.php');
+define('LINK_ATTENDANCE',7);
+require_once 'gradebookitem.class.php';
+require_once 'abstractlink.class.php';
+require_once 'exerciselink.class.php';
+require_once 'evallink.class.php';
+require_once 'dropboxlink.class.php';
+require_once 'studentpublicationlink.class.php';
+require_once 'learnpathlink.class.php';
+require_once 'forumthreadlink.class.php';
+require_once 'attendancelink.class.php';
 /**
  * Factory for link objects
  * @author Bert Steppé
@@ -101,6 +103,8 @@ class LinkFactory
 			 return new LearnpathLink();
 		} elseif ($type == LINK_FORUM_THREAD ) {
 			 return new ForumThreadLink();
+		} elseif ($type == LINK_ATTENDANCE ) {
+			 return new AttendanceLink();
 		} else {
 			 return null;
 		}
@@ -115,7 +119,8 @@ class LinkFactory
 					  //LINK_DROPBOX,
 					  LINK_STUDENTPUBLICATION,
 					  LINK_LEARNPATH,
-                      LINK_FORUM_THREAD
+                      LINK_FORUM_THREAD,
+                      LINK_ATTENDANCE
 					  );
 	}
 

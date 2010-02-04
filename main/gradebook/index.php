@@ -31,7 +31,13 @@ require_once '../inc/global.inc.php';
 $course_code = api_get_course_id();
 //make sure the destination for scripts is index.php instead of gradebook.php
 $_SESSION['gradebook_dest'] = 'index.php';
-$this_section = SECTION_MYGRADEBOOK;
+
+if (isset($_GET['cidReq'])) {
+	$this_section = SECTION_COURSES;
+} else {
+	$this_section = SECTION_MYGRADEBOOK;	
+}
+
 require_once 'lib/be.inc.php';
 require_once 'lib/scoredisplay.class.php';
 require_once 'lib/gradebook_functions.inc.php';
@@ -65,8 +71,9 @@ function confirmation ()
 </script>';
 
 $tbl_forum_thread = Database :: get_course_table(TABLE_FORUM_THREAD);
-$tbl_grade_links = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
-$status=CourseManager::get_user_in_course_status(api_get_user_id(), api_get_course_id());
+$tbl_attendance   = Database :: get_course_table(TABLE_ATTENDANCE);
+$tbl_grade_links  = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
+$status = CourseManager::get_user_in_course_status(api_get_user_id(), api_get_course_id());
 $filter_confirm_msg = true;
 $filter_warning_msg = true;
 
@@ -79,7 +86,6 @@ if (empty($cats))
 	$first_time=1;
 }
 $_GET['selectcat'] = $cats[0]->get_id();
-//
 
 if (isset($_GET['isStudentView'])) {
 	if ( (isset($_GET['selectcat']) && $_GET['selectcat']>0) && (isset($_SESSION['studentview']) && $_SESSION['studentview']=='studentview') ) {
@@ -332,8 +338,12 @@ if (isset ($_GET['deletelink'])) {
 	if (!empty($get_delete_link)) {
 		$link= LinkFactory :: load($get_delete_link);
 		if ($link[0] != null) {
-			$sql='UPDATE '.$tbl_forum_thread.' SET thread_qualify_max=0,thread_weight=0,thread_title_qualify="" WHERE thread_id=(SELECT ref_id FROM '.$tbl_grade_links.' where id='.$get_delete_link.');';
-			Database::query($sql);
+			// clean forum qualify
+			$sql='UPDATE '.$tbl_forum_thread.' SET thread_qualify_max=0,thread_weight=0,thread_title_qualify="" WHERE thread_id=(SELECT ref_id FROM '.$tbl_grade_links.' WHERE id='.$get_delete_link.' AND type = '.LINK_FORUM_THREAD.');';
+			Database::query($sql, __FILE__, __LINE__);
+			// clean attendance 
+			$sql='UPDATE '.$tbl_attendance.' SET attendance_qualify_max=0, attendance_weight = 0, attendance_qualify_title="" WHERE id=(SELECT ref_id FROM '.$tbl_grade_links.' WHERE id='.$get_delete_link.' AND type = '.LINK_ATTENDANCE.');';
+			Database::query($sql, __FILE__, __LINE__);
 			$link[0]->delete();
 		}
 		unset ($link);
@@ -750,7 +760,7 @@ if ($category != '0') {
 	$cat=new Category();
 	//$dblib=new Database();
 
-	$category_id=Security::remove_XSS($_GET['selectcat']);
+	$category_id = intval($_GET['selectcat']);
 	$course_id=Database::get_course_by_category($category_id);
 	$show_message=$cat->show_message_resource_delete($course_id);
 	if ($show_message=='') {
@@ -765,10 +775,8 @@ if ($category != '0') {
 			$visibility_icon= ($cats[0]->is_visible() == 0) ? 'invisible' : 'visible';
 			$visibility_command= ($cats[0]->is_visible() == 0) ? 'set_visible' : 'set_invisible';
 			echo '<div class="actions" align="right">';
-			$modify_icons= '<a  href="gradebook_edit_cat.php?editcat=' . $cats[0]->get_id() . ' &amp;cidReq='.$cats[0]->get_course_code().'"><img src="../img/edit.gif" border="0" title="' . get_lang('EditCategory') . '" alt="'.get_lang('EditCategory').'" />'.get_lang('EditCategory').'</a>';
-			
-			$modify_icons .= '&nbsp;<a  href="' . api_get_self() . '?deletecat=' . $cats[0]->get_id() . '&amp;selectcat=0&amp;cidReq='.$cats[0]->get_course_code().'" onclick="return confirmation();"><img src="../img/delete.gif" border="0" title="' . get_lang('DeleteAll') . '" alt="'.get_lang('DeleteAll').'" />'.get_lang('DeleteAll').'</a>';
-			
+			$modify_icons= '<a  href="gradebook_edit_cat.php?editcat=' . $cats[0]->get_id() . ' &amp;cidReq='.$cats[0]->get_course_code().'"><img src="../img/edit.gif" border="0" title="' . get_lang('EditCategory') . '" alt="'.get_lang('EditCategory').'" />'.get_lang('EditCategory').'</a>';			
+			$modify_icons .= '&nbsp;<a  href="' . api_get_self() . '?deletecat=' . $cats[0]->get_id() . '&amp;selectcat=0&amp;cidReq='.$cats[0]->get_course_code().'" onclick="return confirmation();"><img src="../img/delete.gif" border="0" title="' . get_lang('DeleteAll') . '" alt="'.get_lang('DeleteAll').'" />'.get_lang('DeleteAll').'</a>';			
 			$modify_icons .= '&nbsp;<a  href="' . api_get_self() . '?visiblecat=' . $cats[0]->get_id() . '&amp;' . $visibility_command . '=&amp;selectcat=0 "><img src="../img/' . $visibility_icon . '.gif" border="0" title="' . get_lang('Visible') . '" alt="'.get_lang('Visible').'" />'.get_lang('Visible').'</a>';
 			$opt_cat_descrip1 = strip_tags($opt_cat_descrip);
 			echo '<div  align="left" style="float:left"><img  src="../img/info3.gif" border="0" title="' . $opt_cat_descrip1 . '" alt="'.$opt_cat_descrip1.'" /> '.$op_cat_weight.' '.'&nbsp;&nbsp;'.$opt_cat_cert_min.'&nbsp;&nbsp;'.$opt_cat_descrip.'</div>';
@@ -779,7 +787,7 @@ if ($category != '0') {
 		{
 			// generating the total score for a course
 			$stud_id= api_get_user_id();
-			$cats_course = Category :: load ($id, null, null, null, null, null, false);
+			$cats_course = Category :: load ($category_id, null, null, null, null, null, false);
 			$alleval_course= $cats_course[0]->get_evaluations($stud_id,true);
 			$alllink_course= $cats_course[0]->get_links($stud_id,true);
 			$evals_links = array_merge($alleval_course, $alllink_course);
@@ -794,7 +802,7 @@ if ($category != '0') {
 						$item_total+=$item->get_weight();
 			}
 			$item_value = number_format($item_value, 2, '.', ' ');
-			$cattotal = Category :: load($id);
+			$cattotal = Category :: load($category_id);
 			$scoretotal= $cattotal[0]->calc_score(api_get_user_id());
 			$scoretotal_display = (isset($scoretotal)? round($scoretotal[0],2).'/'.round($scoretotal[1],2).'('.round(($scoretotal[0] / $scoretotal[1]) * 100,2) . ' %)': '-');
 						

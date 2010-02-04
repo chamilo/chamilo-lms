@@ -181,7 +181,7 @@ class SocialManager extends UserManager {
 		
 		$res_exist=Database::query($sql_exist,__FILE__,__LINE__);
 		$row_exist=Database::fetch_array($res_exist,'ASSOC');
-		
+
 		if ($row_exist['count']==0) {		
 			$sql='INSERT INTO '.$tbl_message.'(user_sender_id,user_receiver_id,msg_status,send_date,title,content) VALUES('.$user_id.','.$friend_id.','.MESSAGE_STATUS_INVITATION_PENDING.',"'.$current_date.'","'.$message_title.'","'.$message_content.'")';
 			Database::query($sql,__FILE__,__LINE__);
@@ -298,7 +298,6 @@ class SocialManager extends UserManager {
 	 */
 	public static function send_invitation_friend_user ($userfriend_id,$subject_message='',$content_message='') {
 		global $charset;
-		
 		//$id_user_friend=array();
 		$user_info = array();
 		$user_info = api_get_user_info($userfriend_id);
@@ -311,7 +310,7 @@ class SocialManager extends UserManager {
 			} else {
 				echo Display::display_error_message($succes,true);
 			}
-			exit;
+			return false;
 		} elseif (isset($userfriend_id) && !isset($subject_message)) {			
 			$count_is_true=false;
 			$count_number_is_true=0;

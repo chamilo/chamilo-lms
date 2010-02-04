@@ -48,7 +48,7 @@ require_once $maindir.'survey/survey.lib.php';
 require_once $maindir.'install/install_upgrade.lib.php';
 require_once $incdir.'lib/fileManage.lib.php';
 
-class AllTestsSuite extends TestSuite {
+class TestsSuite extends TestSuite {
 	function setUp() {
 		
 		global $_configuration, $_user, $_course, $cidReq;
@@ -120,7 +120,7 @@ class AllTestsSuite extends TestSuite {
 	    $_SESSION['show'] = showall;
 		
 	}
-    function AllTestsSuite() {
+    function TestsSuite() {
     	$this->setUp();
     	$this->TestSuite('All tests suite');
 		$this->addTestFile(dirname(__FILE__).'/main/install/install_upgrade.lib.test.php');
@@ -128,6 +128,7 @@ class AllTestsSuite extends TestSuite {
 		$this->addTestFile(dirname(__FILE__).'/main/inc/lib/add_course.lib.inc.test.php');
 		$this->addTestFile(dirname(__FILE__).'/main/inc/lib/course.lib.test.php');
 		$this->addTestFile(dirname(__FILE__).'/main/inc/banner.lib.test.php');
+		$this->addTestFile(dirname(__FILE__).'/main/admin/calendar.lib.test.php');
 		$this->addTestFile(dirname(__FILE__).'/main/inc/lib/session_handler.class.test.php');
         $this->addTestFile(dirname(__FILE__).'/main/inc/lib/sessionmanager.lib.test.php');
         $this->addTestFile(dirname(__FILE__).'/main/inc/lib/classmanager.lib.test.php');
@@ -154,9 +155,8 @@ class AllTestsSuite extends TestSuite {
 		$this->addTestFile(dirname(__FILE__).'/main/inc/lib/events.lib.inc.test.php');
 		$this->addTestFile(dirname(__FILE__).'/main/inc/lib/fileDisplay.lib.test.php');
 		$this->addTestFile(dirname(__FILE__).'/main/inc/lib/fileManage.lib.test.php');
-	    //$this->addTestFile(dirname(__FILE__).'/main/inc/lib/geometry.lib.test.php');
-		//$this->addTestFile(dirname(__FILE__).'/main/admin/calendar.lib.test.php');
-    	//$this->addTestFile(dirname(__FILE__).'/main/admin/statistics/statistics.lib.test.php');
+	    $this->addTestFile(dirname(__FILE__).'/main/inc/lib/geometry.lib.test.php');
+    	$this->addTestFile(dirname(__FILE__).'/main/admin/statistics/statistics.lib.test.php');
     	$this->addTestFile(dirname(__FILE__).'/main/admin/sub_language.class.test.php');
     	$this->addTestFile(dirname(__FILE__).'/main/auth/lost_password.lib.test.php');
         $this->addTestFile(dirname(__FILE__).'/main/auth/openid/xrds.lib.test.php');
@@ -183,7 +183,7 @@ class AllTestsSuite extends TestSuite {
 	    //$this->addTestFile(dirname(__FILE__).'/main/inc/lib/xmd.lib.test.php');
     }
 }
-$test = &new AllTestsSuite();
+$test = &new TestsSuite();
 
 
 

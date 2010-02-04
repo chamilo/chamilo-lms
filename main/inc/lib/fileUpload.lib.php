@@ -1527,10 +1527,13 @@ function create_link_file($filePath, $url)
 				  .'<body>'
 				  .'</body>'
 				  .'</html>';
-	if (!($fp = fopen ($filePath, 'w'))) {
-		return false;
+	if(file_exists($filePath)){
+		if (!($fp = fopen ($filePath, 'w'))) {
+			return false;
+		}
+	
+		return fwrite($fp, $fileContent); 	
 	}
-	return fwrite($fp, $fileContent); 	 		 
 }
 
 //------------------------------------------------------------------------------

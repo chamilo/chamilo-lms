@@ -35,4 +35,14 @@ INSERT INTO tool(name,link,image,visibility,admin,address,added_tool,target,cate
 ALTER TABLE course_description ADD COLUMN progress INT  NOT NULL DEFAULT 0 AFTER description_type;
 ALTER TABLE item_property ADD id int NOT NULL auto_increment PRIMARY KEY FIRST;
 UPDATE course_description SET description_type = (SELECT IF(description_type>7,description_type+1,description_type)); -- update description_type field for using thematic advance with description_type = 8
-
+CREATE TABLE attendance_calendar (id int NOT NULL auto_increment, attendance_id int NOT NULL, date_time datetime NOT NULL default '0000-00-00 00:00:00', done_attendance tinyint(3) NOT NULL default 0, PRIMARY KEY(id));
+ALTER TABLE attendance_calendar ADD INDEX(attendance_id);
+ALTER TABLE attendance_calendar ADD INDEX(done_attendance);
+CREATE TABLE attendance_sheet (user_id int NOT NULL, attendance_calendar_id int NOT NULL, presence tinyint(3) NOT NULL DEFAULT 0, PRIMARY KEY(user_id, attendance_calendar_id));
+ALTER TABLE attendance_sheet ADD INDEX(presence);
+CREATE TABLE attendance_result (id int NOT NULL auto_increment PRIMARY KEY, user_id int NOT NULL, attendance_id int NOT NULL, score int NOT NULL DEFAULT 0);
+ALTER TABLE attendance_result ADD INDEX(attendance_id);
+ALTER TABLE attendance_result ADD INDEX(user_id);
+CREATE TABLE attendance (id int NOT NULL auto_increment PRIMARY KEY, name text NOT NULL, description TEXT NULL, active tinyint(3) NOT NULL default 1, attendance_qualify_title varchar(255) NULL, attendance_qualify_max int NOT NULL default 0, attendance_weight float(6,2) NOT NULL default '0.0', session_id int NOT NULL default 0);
+ALTER TABLE attendance ADD INDEX(session_id);
+ALTER TABLE attendance ADD INDEX(active);

@@ -391,6 +391,14 @@ function update_Db_course($courseDbName, $language = null)
 
 	// Notebook
 	$TBL_NOTEBOOK   = $courseDbName . 'notebook';
+	
+	// Attendance
+	$TBL_ATTENDANCE 		 = $courseDbName . 'attendance';
+	$TBL_ATTENDANCE_SHEET 	 = $courseDbName . 'attendance_sheet';
+	$TBL_ATTENDANCE_CALENDAR = $courseDbName . 'attendance_calendar';
+	$TBL_ATTENDANCE_RESULT 	 = $courseDbName . 'attendance_result';
+	
+	
 	/*
 	-----------------------------------------------------------
 		Announcement tool
@@ -1712,6 +1720,67 @@ function update_Db_course($courseDbName, $language = null)
 			  PRIMARY KEY  (notebook_id)
 			)" . $charset_clause;
 	$result = Database::query($sql, __FILE__, __LINE__) or die(mysql_error($sql));
+
+	/* Attendance tool */
+	
+	// attendance table	
+	$sql = "
+		CREATE TABLE `".$TBL_ATTENDANCE."` (
+			id int NOT NULL auto_increment PRIMARY KEY,
+			name text NOT NULL,
+			description TEXT NULL,
+			active tinyint(3) NOT NULL default 1,
+			attendance_qualify_title varchar(255) NULL,
+			attendance_qualify_max int NOT NULL default 0,
+			attendance_weight float(6,2) NOT NULL default '0.0',
+			session_id int NOT NULL default 0
+		)" . $charset_clause;
+	$result = Database::query($sql, __FILE__, __LINE__) or die(mysql_error($sql));
+	$sql  = "ALTER TABLE `".$TBL_ATTENDANCE . "` ADD INDEX (session_id)";
+	Database::query($sql, __FILE__, __LINE__);
+	$sql  = "ALTER TABLE `".$TBL_ATTENDANCE . "` ADD INDEX (active)";
+	Database::query($sql, __FILE__, __LINE__);
+
+	// attendance sheet table	
+	$sql = "
+		CREATE TABLE `".$TBL_ATTENDANCE_SHEET."` (
+			user_id int NOT NULL,
+			attendance_calendar_id int NOT NULL,
+			presence tinyint(3) NOT NULL DEFAULT 0,
+			PRIMARY KEY(user_id, attendance_calendar_id)
+		)" . $charset_clause;
+	$result = Database::query($sql, __FILE__, __LINE__) or die(mysql_error($sql));
+	$sql  = "ALTER TABLE `".$TBL_ATTENDANCE_SHEET . "` ADD INDEX (presence) ";
+	Database::query($sql, __FILE__, __LINE__);
+
+	// attendance calendar table	
+	$sql = "
+		CREATE TABLE `".$TBL_ATTENDANCE_CALENDAR."` (
+			id int NOT NULL auto_increment,
+			attendance_id int NOT NULL ,
+			date_time datetime NOT NULL default '0000-00-00 00:00:00',
+			done_attendance tinyint(3) NOT NULL default 0,
+			PRIMARY KEY(id)
+		)" . $charset_clause;
+	$result = Database::query($sql, __FILE__, __LINE__) or die(mysql_error($sql));
+	$sql  = "ALTER TABLE `".$TBL_ATTENDANCE_CALENDAR."` ADD INDEX (attendance_id)";
+	Database::query($sql, __FILE__, __LINE__);
+	$sql  = "ALTER TABLE `".$TBL_ATTENDANCE_CALENDAR."` ADD INDEX (done_attendance)";
+	Database::query($sql, __FILE__, __LINE__);	
+	
+	// attendance result table	
+	$sql = "
+		CREATE TABLE `".$TBL_ATTENDANCE_RESULT."` (
+			id int NOT NULL auto_increment PRIMARY KEY,
+			user_id int NOT NULL,
+			attendance_id int NOT NULL,
+			score int NOT NULL DEFAULT 0
+		)" . $charset_clause;
+	$result = Database::query($sql, __FILE__, __LINE__) or die(mysql_error($sql));
+	$sql    = "ALTER TABLE `".$TBL_ATTENDANCE_RESULT."` ADD INDEX (attendance_id)";
+	Database::query($sql, __FILE__, __LINE__);
+	$sql    = "ALTER TABLE `".$TBL_ATTENDANCE_RESULT."` ADD INDEX (user_id)";
+	Database::query($sql, __FILE__, __LINE__);
 
 	return 0;
 }

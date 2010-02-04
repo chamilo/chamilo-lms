@@ -267,6 +267,12 @@ define('TABLE_MESSAGE_ATTACHMENT', 'message_attachment');
 // Metadata
 define('TABLE_METADATA', 'metadata');
 
+// Attendance Sheet
+define('TABLE_ATTENDANCE','attendance');
+define('TABLE_ATTENDANCE_CALENDAR', 'attendance_calendar');
+define('TABLE_ATTENDANCE_SHEET','attendance_sheet');
+define('TABLE_ATTENDANCE_RESULT', 'attendance_result');
+
 
 /*
 ==============================================================================

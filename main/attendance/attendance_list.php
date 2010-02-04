@@ -1,0 +1,34 @@
+<?php
+/* For licensing terms, see /license.txt */
+
+/**
+* View (MVC patter) for listing attendances 
+* @author Christian Fasanando <christian1827@gmail.com>
+* @package chamilo.attendance
+*/
+
+if (api_is_allowed_to_edit(null, true)) {
+	$param_gradebook = '';
+	if (isset($_SESSION['gradebook'])) {
+		$param_gradebook = '&gradebook='.$_SESSION['gradebook'];
+	}
+	echo '<div class="actions" style="margin-bottom:30px">';
+	echo '<a href="index?'.api_get_cidreq().$param_gradebook.'&action=attendance_add">'.Display::return_icon('adherir.png',get_lang('CreateANewAttendance')).' '.get_lang('CreateANewAttendance').'</a>';	
+	echo '</div>';
+}
+$table = new SortableTable('attendance_list', array('Attendance', 'get_number_of_attendances'), array('Attendance', 'get_attendance_data'), $default_column);
+$table->set_additional_parameters($parameters);
+$table->set_header(0, '', false, array('style'=>'width:20px;'));
+$table->set_header(1, get_lang('Name'), true );
+$table->set_header(2, get_lang('Description'), true);
+$table->set_header(3, get_lang('CountDoneAttendance'), true, array('style'=>'width:50px;'));
+
+if (api_is_allowed_to_edit(null, true)) {
+	$table->set_header(4, get_lang('Action'), false,array('style'=>'text-align:center'));
+	$table->set_form_actions(array ('attendance_delete_select' => get_lang('DeleteAllAttendances')));	
+}
+
+$table->display();
+
+
+?>

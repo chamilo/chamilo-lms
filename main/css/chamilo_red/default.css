@@ -1433,9 +1433,11 @@ span.form_error {
 .data_table tr.row_odd {
 	background-color: #F2F2F2;
 }
+
 .data_table tr.row_odd:hover, .data_table tr.row_even:hover {
 	background-color: #E1E1E1;
 }
+
 .data_table tr.row_even {
 	background-color: #fff;
 }
@@ -3916,4 +3918,30 @@ div.image-social-content center.friend {
  padding-right:20px;
  padding-bottom:10px;
  padding-top: 5px;
+}
+
+/* ATTENDANCE */
+
+div.attendance-calendar-add div.row div.formw,div.attendance-calendar-edit div.row div.formw  {
+	float: left;
+	display:inline;
+	width:auto;
+	overflow:hidden;
+	margin-right:2px;
+	margin-top:5px;
+}
+.attendance-calendar-add div.row {
+	display:inline;
+}
+.attendance-calendar-edit div.row {
+	display:inline;
+}
+.attendance-calendar-row {
+	padding:5px;
+}
+.attendance-faults-bar {
+	width:90%;
+	background-color:none;
+	padding:2px;
+	font-size:11px;
 }

@@ -10,7 +10,7 @@
 /**
  * Controller script. Prepares the common background variables to give to the scripts corresponding to
  * the requested action
- * @package dokeos.course_description 
+ * @package chamilo.course_description 
  */
 class CourseDescriptionController { // extends Controller {	
 		
@@ -28,7 +28,7 @@ class CourseDescriptionController { // extends Controller {
 	/**
 	 * It's used for listing course description,
 	 * render to listing view
-	 * @param boolan   	true for listing history (optional)
+	 * @param boolean   	true for listing history (optional)
 	 * @param array 	message for showing by action['edit','add','destroy'] (optional) 
 	 */
 	public function listing($history=false,$messages=array()) {

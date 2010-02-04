@@ -3425,3 +3425,29 @@ div.image-social-content center.friend {
  padding-bottom:10px;
  padding-top: 5px;
 }
+
+/* ATTENDANCE */
+
+div.attendance-calendar-add div.row div.formw,div.attendance-calendar-edit div.row div.formw  {
+	float: left;
+	display:inline;
+	width:auto;
+	overflow:hidden;
+	margin-right:2px;
+	margin-top:5px;
+}
+.attendance-calendar-add div.row {
+	display:inline;
+}
+.attendance-calendar-edit div.row {
+	display:inline;
+}
+.attendance-calendar-row {
+	padding:5px;
+}
+.attendance-faults-bar {
+	width:90%;
+	background-color:none;
+	padding:2px;
+	font-size:11px;
+}

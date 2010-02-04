@@ -70,7 +70,7 @@ class Statistics
 	{
 		// Database table definitions
 		$track_e_default  = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_DEFAULT);
-
+		$table_user = Database::get_main_table(TABLE_MAIN_USER);
 		$sql = "SELECT count(default_id) AS total_number_of_items FROM $track_e_default, $table_user user WHERE default_user_id = user.user_id ";
 
 		if (isset($_GET['keyword'])) {

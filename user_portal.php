@@ -293,15 +293,12 @@ function display_special_courses ($user_id) {
 
 		if (!empty($with_special_courses)) {
 			$sql = "SELECT course.code, course.visual_code, course.subscribe subscr, course.unsubscribe unsubscr,
-						   course.title title, course.tutor_name tutor, course.db_name, course.directory, course_rel_user.status status 
-												FROM    ".$tbl_course_user." course_rel_user
-												LEFT JOIN ".$tbl_course." course
-												ON course.code = course_rel_user.course_code
-												LEFT JOIN ".$tbl_user_course_category." user_course_category
-												ON course_rel_user.user_course_cat = user_course_category.id
-												WHERE  $with_special_courses 
-												GROUP BY course.code 
-												ORDER BY user_course_category.sort,course.title,course_rel_user.sort ASC";																																		
+								course.title title, course.tutor_name tutor, course.db_name, course.directory, course_rel_user.status status,
+								course_rel_user.sort sort, course_rel_user.user_course_cat user_course_cat, course_rel_user.user_id, course.visibility
+		                        FROM $TABLECOURS course
+		                        LEFT JOIN $TABLECOURSUSER course_rel_user ON course.code = course_rel_user.course_code AND course_rel_user.user_id = '$user_id'
+		                        WHERE $with_special_courses";
+																																									
 			$rs_special_course = api_sql_query($sql, __FILE__, __LINE__);				
 			$number_of_courses = Database::num_rows($rs_special_course);
 			$key = 0;
@@ -310,6 +307,18 @@ function display_special_courses ($user_id) {
 				echo "<table width=\"100%\">";
 				while ($course = Database::fetch_array($rs_special_course)) {
 					
+					// get notifications		
+					$my_course = array();
+					$my_course['db']	= $course['db_name'];
+					$my_course['k']     = $course['code'];
+					$my_course['id_session'] =	null;
+					$my_course['s']		= $course['status'];		
+					$show_notification = show_notification($my_course);
+
+					if (empty($course['user_id'])) {
+						$course['status'] = $user_info['status'];
+					}
+										
 					if ($course['status'] == 1) {
 						$status_icon=Display::return_icon('course.gif', get_lang('Course')).' '.Display::return_icon('teachers.gif', get_lang('Status').': '.get_lang('Teacher'),array('style'=>'width:11px; height:11px;'));
 					}
@@ -319,7 +328,17 @@ function display_special_courses ($user_id) {
 					$progress_thematic_icon = get_thematic_progress_icon($course['db_name']);
 					echo "\t<tr>\n";
 					echo "\t\t<td>\n";
-					$course_title = '<a href="'.api_get_path(WEB_COURSE_PATH).$course['directory'].'/?id_session=0">'.$course['title'].'</a>';
+					
+					//show a hyperlink to the course, unless the course is closed and user is not course admin
+					//$course_access_settings = CourseManager :: get_access_settings($course['code']);
+
+					$course_visibility = $course['visibility'];
+					if ($course_visibility != COURSE_VISIBILITY_CLOSED || $course['status'] == COURSEMANAGER) {			
+						$course_title = '<a href="'.api_get_path(WEB_COURSE_PATH).$course['directory'].'/?id_session=0">'.$course['title'].'</a>';			
+					} else {
+						$course_title = $course['title']." ".get_lang('CourseClosed');
+					}
+										
 					echo "<div style=\"float:left;margin-right:10px;\">".$status_icon."</div><span style=\"font-size:135%;\">".$course_title."</span>&nbsp;&nbsp;<span>$progress_thematic_icon</span><br />";					
 					if (api_get_setting('display_coursecode_in_courselist') == 'true') {
 						echo $course['visual_code'];
@@ -331,7 +350,11 @@ function display_special_courses ($user_id) {
 						echo $course['tutor'];
 					}	
 					echo '&nbsp;';
-					echo Display::return_icon('klipper.png', get_lang('CourseAutoRegister'));				
+					echo Display::return_icon('klipper.png', get_lang('CourseAutoRegister'));
+					
+					// show notifications
+					echo $show_notification;
+									
 					echo "\t\t</td>\n";
 					echo "\t</tr>\n";
 					$key++;
@@ -409,7 +432,7 @@ function display_courses_in_category($user_category_id) {
 
 	$sql_select_courses = "SELECT course.code, course.visual_code, course.subscribe subscr, course.unsubscribe unsubscr,
 								course.title title, course.tutor_name tutor, course.db_name, course.directory, course_rel_user.status status,
-								course_rel_user.sort sort, course_rel_user.user_course_cat user_course_cat
+								course_rel_user.sort sort, course_rel_user.user_course_cat user_course_cat, course.visibility
 		                        FROM    $TABLECOURS       course,
 										$TABLECOURSUSER  course_rel_user
 		                        WHERE course.code = course_rel_user.course_code
@@ -421,20 +444,62 @@ function display_courses_in_category($user_category_id) {
 	$key = 0;
 	$status_icon = '';
 	while ($course = Database::fetch_array($result)) {
-		
-		if ($course['status'] == 1) {
+				
+		// get notifications		
+		$my_course = array();
+		$my_course['db']	= $course['db_name'];
+		$my_course['k']     = $course['code'];
+		$my_course['id_session'] =	null;
+		$my_course['s']		= $course['status'];		
+		$show_notification = show_notification($my_course); 
+
+		// course list		
+		if ($course['status'] == COURSEMANAGER) {
 			$status_icon=Display::return_icon('course.gif', get_lang('Course')).' '.Display::return_icon('teachers.gif', get_lang('Status').': '.get_lang('Teacher'),array('style'=>'width:11px; height:11px;'));
 		}
-		if (($course['status'] == 5 && !api_is_coach()) || empty($course['status'])) {
+		if (($course['status'] == STUDENT && !api_is_coach()) || empty($course['status'])) {
 			$status_icon=Display::return_icon('course.gif', get_lang('Course')).' '.Display::return_icon('students.gif', get_lang('Status').': '.get_lang('Student'),array('style'=>'width:11px; height:11px'));
 		}				
 		$progress_thematic_icon = get_thematic_progress_icon($course['db_name']);			
 		echo "\t<tr>\n";
 		echo "\t\t<td>\n";
-		$course_title = '<a href="'.api_get_path(WEB_COURSE_PATH).$course['directory'].'/?id_session=0">'.$course['title'].'</a>';
+				
+		//function logic - act on the data
+		$is_virtual_course = CourseManager :: is_virtual_course_from_system_code($course['code']);
+		if ($is_virtual_course) {
+			// If the current user is also subscribed in the real course to which this
+			// virtual course is linked, we don't need to display the virtual course entry in
+			// the course list - it is combined with the real course entry.
+			$target_course_code = CourseManager :: get_target_of_linked_course($course['code']);
+			$is_subscribed_in_target_course = CourseManager :: is_user_subscribed_in_course(api_get_user_id(), $target_course_code);
+			if ($is_subscribed_in_target_course) {
+				return; //do not display this course entry
+			}
+		}
+		
+		$has_virtual_courses = CourseManager :: has_virtual_courses_from_code($course['code'], api_get_user_id());
+		if ($has_virtual_courses) {
+			$course_info = api_get_course_info($course['code']);
+			$return_result = CourseManager :: determine_course_title_from_course_info(api_get_user_id(), $course_info);
+			$course_title = $return_result['title'];
+			$course_display_code = $return_result['code'];
+		} else {
+			$course_title = $course['title'];
+			$course_display_code = $course['visual_code'];
+		}
+		
+		//show a hyperlink to the course, unless the course is closed and user is not course admin		
+		$course_visibility = $course['visibility'];
+		if ($course_visibility != COURSE_VISIBILITY_CLOSED || $course['status'] == COURSEMANAGER) {			
+			$course_title = '<a href="'.api_get_path(WEB_COURSE_PATH).$course['directory'].'/?id_session=0">'.$course['title'].'</a>';			
+		} else {
+			$course_title = $course['title']." ".get_lang('CourseClosed');
+		}
+		
+		
 		echo "<div style=\"float:left;margin-right:10px;\">".$status_icon."</div><span style=\"font-size:135%;\">".$course_title."</span>&nbsp;&nbsp;<span>$progress_thematic_icon </span><br />";
 		if (api_get_setting('display_coursecode_in_courselist') == 'true') {
-			echo $course['visual_code'];
+			echo $course_display_code;
 		}
 		if (api_get_setting('display_coursecode_in_courselist') == 'true' && api_get_setting('display_teacher_in_courselist') == 'true') {
 			echo " - ";
@@ -442,6 +507,9 @@ function display_courses_in_category($user_category_id) {
 		if (api_get_setting('display_teacher_in_courselist') == 'true') {
 			echo $course['tutor'];
 		}
+		// show notifications		
+		echo $show_notification;
+		
 		echo "\t\t</td>\n";
 		echo "\t</tr>\n";
 		$key++;
@@ -727,8 +795,6 @@ function get_logged_user_course_html($course, $session_id = 0, $class='courses')
 		$result .= ' &ndash; ';
 	}
 	if (api_get_setting('display_teacher_in_courselist') == 'true') {
-
-
 		if (api_get_setting('use_session_mode')=='true' && !$nosession) {
 			$coachs_course = api_get_coachs_from_course($my_course['id_session'],$course['code']);
 			$course_coachs = array();

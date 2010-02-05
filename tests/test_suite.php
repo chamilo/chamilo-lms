@@ -123,7 +123,7 @@ class TestsSuite extends TestSuite {
     function TestsSuite() {
     	$this->setUp();
     	$this->TestSuite('All tests suite');
-		$this->addTestFile(dirname(__FILE__).'/main/install/install_upgrade.lib.test.php');
+		/*$this->addTestFile(dirname(__FILE__).'/main/install/install_upgrade.lib.test.php');
 		$this->addTestFile(dirname(__FILE__).'/main/inc/lib/database.lib.test.php');
 		$this->addTestFile(dirname(__FILE__).'/main/inc/lib/add_course.lib.inc.test.php');
 		$this->addTestFile(dirname(__FILE__).'/main/inc/lib/course.lib.test.php');
@@ -178,7 +178,7 @@ class TestsSuite extends TestSuite {
         $this->addTestFile(dirname(__FILE__).'/main/inc/lib/fileUpload.lib.test.php');
         $this->addTestFile(dirname(__FILE__).'/main/inc/lib/main_api.lib.test.php');//this file delete the course     
         $this->addTestFile(dirname(__FILE__).'/main/inc/lib/debug.lib.inc.test.php');//this file need be to the finish of the tests
-        
+        */
         //This files have a metadata and is not available for the test.
         //$this->addTestFile(dirname(__FILE__).'/main/inc/lib/xht.lib.test.php');
 	    //$this->addTestFile(dirname(__FILE__).'/main/inc/lib/xmd.lib.test.php');

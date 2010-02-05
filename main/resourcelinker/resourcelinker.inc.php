@@ -45,7 +45,7 @@
 //include(api_get_path(SYS_CODE_PATH).'lang/english/resourcelinker.inc.php'); // TODO: Repeated deleting and moving the rest of this lang file to trad4all
 //include(api_get_path(SYS_CODE_PATH).'lang/'.$_course['language'].'/resourcelinker.inc.php'); // TODO: Repeated deleting and moving the rest of this lang file to trad4all
 include_once(api_get_path(LIBRARY_PATH).'fileDisplay.lib.php');
-include('../exercice/hotpotatoes.lib.php');
+include(api_get_path(SYS_CODE_PATH).'exercice/hotpotatoes.lib.php');
 
 /*
 ==============================================================================
@@ -1441,17 +1441,18 @@ function show_addresource_button($additionalparameters = '')
 
 /**
 * this function is to delete ONE specific resource that were added to a specific item
-*/
+* Deprecated
+*//*
 function delete_one_added_resource($source_type, $source_id, $resource_type, $resource_id)
 {
-	echo "delete_one_added_resource";
+	//echo "delete_one_added_resource";
 	global $_course;
 	$TABLERESOURCE 		= $_course['dbNameGlu']."resource";
 
 	$sql="DELETE FROM `$TABLERESOURCE` WHERE source_type='$source_type' and source_id='$source_id' and resource_type='$resource_type' and resource_id='$resource_id'";
 	Database::query($sql,__FILE__,__LINE__);
 }
-
+*/
 /**
 * this function is to delete the resources that were added to a specific item
 */

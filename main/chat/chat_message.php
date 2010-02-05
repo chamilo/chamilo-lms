@@ -47,7 +47,7 @@ $session_id = intval($_SESSION['id_session']);
 $group_id 	= intval($_SESSION['_gid']);
 
 /////
-// Juan Carlos Ra�a insert smileys and self-closing window
+// Juan Carlos Raña insert smileys and self-closing window
 ////
 ?>
 <script language="javascript" type="text/javascript">

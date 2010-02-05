@@ -712,7 +712,7 @@ class learnpathItem{
 			    			//parse it for included resources
 							$file_content = file_get_contents($abs_path);
 							//get an array of attributes from the HTML source
-							$attributes = learnpathItem::parse_HTML_attributes($file_content,$wanted_attributes);
+							$attributes = DocumentManager::parse_HTML_attributes($file_content,$wanted_attributes);
 							//look at 'src' attributes in this file
 							foreach($wanted_attributes as $attr)
 							{
@@ -1518,89 +1518,6 @@ function get_terms()
     	if($this->debug>1){error_log('New LP - End of parse_prereq. Error code is now '.$this->prereq_alert,0);}
     	return false;
     }
-    /**
-	 * Parses the HTML attributes given as string.
-	 *
-	 * @param    string  HTML attribute string
-	 * @param	 array	 List of attributes that we want to get back
-	 * @return   array   An associative array of attributes
-	 * @author Based on a function from the HTML_Common2 PEAR module
-	 */
-	function parse_HTML_attributes($attrString,$wanted=array())
-	{
-	    $attributes = array();
-	    $regs = array();
-	    $reduced = false;
-	    if(count($wanted)>0)
-	    {
-	    	$reduced = true;
-	    }
-	    try {
-	       //Find all occurences of something that looks like a URL
-           // The structure of this regexp is:
-           // (find protocol) then
-           // (optionally find some kind of space 1 or more times) then
-           // find (either an equal sign or a bracket) followed by an optional space
-           // followed by some text without quotes (between quotes itself or not)
-           // then possible closing brackets if we were in the opening bracket case
-           // OR something like @import()
-	    	$res = preg_match_all(
-                '/(((([A-Za-z_:])([A-Za-z0-9_:\.-]*))' .
-//	            '/(((([A-Za-z_:])([A-Za-z0-9_:\.-]|[^\x00-\x7F])*)' . -> seems to be taking too much
-//                '/(((([A-Za-z_:])([^\x00-\x7F])*)' . -> takes only last letter of parameter name
-	            '([ \n\t\r]+)?(' .
-//	              '(=([ \n\t\r]+)?("[^"]+"|\'[^\']+\'|[^ \n\t\r]+))' . -> doesn't restrict close enough to the url itself
-                  '(=([ \n\t\r]+)?("[^"\)]+"|\'[^\'\)]+\'|[^ \n\t\r\)]+))' .
-	              '|' .
-//	              '(\(([ \n\t\r]+)?("[^"]+"|\'[^\']+\'|[^ \n\t\r]+)\))' . -> doesn't restrict close enough to the url itself
-                  '(\(([ \n\t\r]+)?("[^"\)]+"|\'[^\'\)]+\'|[^ \n\t\r\)]+)\))' .
-	            '))' .
-	            '|' .
-//	            '(@import([ \n\t\r]+)?("[^"]+"|\'[^\']+\'|[^ \n\t\r]+)))?/', -> takes a lot (like 100's of thousands of empty possibilities)
-                '(@import([ \n\t\r]+)?("[^"]+"|\'[^\']+\'|[^ \n\t\r]+)))/',
-	            $attrString,
-	            $regs
-	       );
-
-		} catch (Exception $e) {
-    		error_log('Caught exception: '. $e->getMessage(),0) ;
-		}
-	    if ($res) {
-	        for ($i = 0; $i < count($regs[1]); $i++) {
-	            $name  = trim($regs[3][$i]);
-	            $check = trim($regs[0][$i]);
-	            $value = trim($regs[10][$i]);
-	            if(empty($value) and !empty($regs[13][$i])){
-					$value = $regs[13][$i];
-	            }
-	            if(empty($name) && !empty($regs[16][$i]))
-	            {
-	            	$name = '@import';
-	            	$value = trim($regs[16][$i]);
-	            }
-	            if(!empty($name))
-	            {
-					if(!$reduced OR in_array(strtolower($name),$wanted))
-		            {
-			            if ($name == $check) {
-		            		$attributes[strtolower($name)][] = strtolower($name);
-			            } else {
-			                if (!empty($value) && ($value[0] == '\'' || $value[0] == '"')) {
-			                    $value = substr($value, 1, -1);
-			                }
-						    if ($value=='API.LMSGetValue(name') {
-						    	$value='API.LMSGetValue(name)';
-						    }
-			                $attributes[strtolower($name)][] = $value;
-			            }
-		            }
-	            }
-	        }
-	    }else{
-	    	error_log('preg_match did not find anything',0);
-	    }
-	    return $attributes;
-	}
     /**
      * Reinits all local values as the learnpath is restarted
      * @return	boolean	True on success, false otherwise

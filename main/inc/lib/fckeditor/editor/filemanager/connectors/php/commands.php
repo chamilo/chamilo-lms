@@ -265,9 +265,9 @@ function FileUpload( $resourceType, $currentFolder, $sCommand )
 							$permissions = $Config['ChmodOnUpload'] ;
 						}
 
-						$oldumask = umask(0) ;
+						//$oldumask = umask(0) ;
 						chmod( $sFilePath, $permissions ) ;
-						umask( $oldumask ) ;
+						//umask( $oldumask ) ;
 					}
 
 					break ;

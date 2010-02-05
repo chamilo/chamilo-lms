@@ -20,10 +20,7 @@ function hotpotatoes_init($baseWorkDir) {
 		if (is_file($documentPath)) {
 			@unlink($documentPath);
 		}
-		@mkdir($documentPath);
-		$perm = api_get_setting('permissions_for_new_directories');
-		$perm = octdec(!empty($perm)?$perm:'0770');
-		chmod ($documentPath,$perm);
+		@mkdir($documentPath, api_get_permissions_for_new_directories());
 		return true;
 	} else {
 		//if this directory already exists, return false

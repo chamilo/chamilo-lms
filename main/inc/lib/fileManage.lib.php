@@ -344,12 +344,12 @@ function copyDirTo($origDirPath, $destination, $move=true)
 	// extract directory name - create it at destination - update destination trail
 	$dirName = basename($origDirPath);
 	if(is_dir($dirName)){
-		mkdir ($destination."/".$dirName, 0775);
+		mkdir ($destination."/".$dirName, api_get_permissions_for_new_directories());
 		$destinationTrail = $destination."/".$dirName;
 			if(is_dir($destination)){
 		chdir ($origDirPath) ;
 		$handle = opendir($origDirPath);
-	
+
 		while ($element = readdir($handle) )
 		{
 			if ( $element == "." || $element == "..")
@@ -359,7 +359,7 @@ function copyDirTo($origDirPath, $destination, $move=true)
 			elseif ( is_file($element) )
 			{
 				copy($element, $destinationTrail."/".$element);
-	
+
 				if($move)
 				{
 					unlink($element) ;
@@ -370,9 +370,9 @@ function copyDirTo($origDirPath, $destination, $move=true)
 				$dirToCopy[] = $origDirPath."/".$element;
 			}
 		}
-	
+
 		closedir($handle) ;
-	
+
 		if ( sizeof($dirToCopy) > 0)
 		{
 			foreach($dirToCopy as $thisDir)
@@ -380,14 +380,14 @@ function copyDirTo($origDirPath, $destination, $move=true)
 				copyDirTo($thisDir, $destinationTrail, $move);	// recursivity
 			}
 		}
-	
+
 		if($move)
 		{
 			rmdir ($origDirPath) ;
 		}
 		chdir($save_dir);
-		}	
-	}		
+		}
+	}
 }
 
 //------------------------------------------------------------------------------
@@ -537,56 +537,53 @@ function mkpath($path, $verbose = false, $mode = "herit")
 {
 	global $langCreatedIn, $_configuration;
 
-	$path=str_replace("/","\\",$path);
-	$dirs=explode("\\",$path);
+	$path = str_replace("/", "\\", $path);
+	$dirs = explode("\\", $path);
 
-	$path=$dirs[0];
+	$path = $dirs[0];
 
-	if($verbose)
+	if ($verbose)
 	{
-		echo "<UL>";
+		echo "<ul>";
 	}
 
-    $perm = api_get_setting('permissions_for_new_directories');
-    $perm = octdec(!empty($perm)?$perm:'0770');
-
-	for($i=1;$i < sizeof($dirs);$i++)
+	for ($i = 1; $i < sizeof($dirs); $i++)
 	{
-		$path.='/'.$dirs[$i];
+		$path .= '/'.$dirs[$i];
 
-		if(ereg('^'.$path,$_configuration['root_sys']) && strlen($path) < strlen($_configuration['root_sys']))
+		if (ereg('^'.$path,$_configuration['root_sys']) && strlen($path) < strlen($_configuration['root_sys']))
 		{
 			continue;
 		}
 
-		if(!is_dir($path))
+		if (!is_dir($path))
 		{
-			$ret=mkdir($path,$perm);
+			$ret = mkdir($path, api_get_permissions_for_new_directories());
 
-			if($ret)
+			if ($ret)
 			{
 				if($verbose)
 				{
-					echo '<li><strong>'.basename($path).'</strong><br>'.$langCreatedIn.'<br><strong>'.realpath($path.'/..').'</strong></li>';
+					echo '<li><strong>'.basename($path).'</strong><br />'.$langCreatedIn.'<br /><strong>'.realpath($path.'/..').'</strong></li>';
 				}
 			}
 			else
 			{
-				if($verbose)
+				if ($verbose)
 				{
-					echo '</UL>error : '.$path.' not created';
+					echo '</ul>error : '.$path.' not created';
 				}
 
-				$ret=false;
+				$ret = false;
 
 				break;
 			}
 		}
 	}
 
-	if($verbose)
+	if ($verbose)
 	{
-		echo '</UL>';
+		echo '</ul>';
 	}
 
 	return $ret;
@@ -669,19 +666,19 @@ class FileManager
 	---------------------------------------------------------------
 	*/
 	function list_all_directories($path)
-	{				
-		$resultArray = array();		
-		if (is_dir($path)) {	
+	{
+		$resultArray = array();
+		if (is_dir($path)) {
 			$save_dir = getcwd();
 			chdir($path);
 			$handle = opendir($path);
 			while ($element = readdir($handle) )
-			{								
+			{
 				if ( $element == "." || $element == "..") continue;	// skip the current and parent directories
 				if ( is_dir($element) )
 				{
 					$dirArray[] = $path."/".$element;
-				}	
+				}
 			}
 			closedir($handle);
 			// recursive operation if subdirectories exist
@@ -690,15 +687,15 @@ class FileManager
 			{
 				for ($i = 0 ; $i < $dirNumber ; $i++ )
 				{
-					$subDirArray = FileManager::list_all_directories($dirArray[$i]) ;			    // function recursivity					
+					$subDirArray = FileManager::list_all_directories($dirArray[$i]) ;			    // function recursivity
 					if (is_array($dirArray) && is_array($subDirArray)) {
 						$dirArray  =  array_merge( $dirArray , $subDirArray ) ;	// data merge
-					}					
+					}
 				}
 			}
 			$resultArray  =  $dirArray;
-			chdir($save_dir) ;			
-		}		
+			chdir($save_dir) ;
+		}
 		return $resultArray ;
 	}
 
@@ -713,12 +710,12 @@ class FileManager
 	===============================================================
 	*/
 	function list_all_files($dirArray)
-	{	
+	{
 		$elementArray = array();
 		if(is_dir($dirArray))
 		{
-			
-		
+
+
 			$save_dir = getcwd();
 			foreach ($dirArray as $directory)
 			{
@@ -736,9 +733,9 @@ class FileManager
 					chdir("..") ;
 					chdir($save_dir);
 			}
-		}	
+		}
 		return $elementArray;
-			
+
 	}
 
 
@@ -749,7 +746,7 @@ class FileManager
 		Function is binary safe (is needed on Windows)
 	*/
 	function compat_load_file($file_name)
-	{	
+	{
 		$buffer = '';
 		if(file_exists($file_name))
 		{
@@ -759,7 +756,7 @@ class FileManager
 			//api_display_debug_info(htmlentities($buffer));
 		}
 		return $buffer;
-		
+
 	}
 
 
@@ -800,7 +797,7 @@ class FileManager
 
 		$sql_query = "SELECT count(*) as number_existing FROM $glued_table WHERE path='$full_file_name'";
 		//api_display_debug_info($sql_query);
-		$sql_result = Database::query($sql_query,__FILE__,__LINE__);		
+		$sql_result = Database::query($sql_query,__FILE__,__LINE__);
 		$result = Database::fetch_array($sql_result);
 		//determine which query to execute
 		if( $result["number_existing"] > 0 )

@@ -47,7 +47,7 @@ $session_id = intval($_SESSION['id_session']);
 $group_id 	= intval($_SESSION['_gid']);
 
 /////
-// Juan Carlos Raña insert smileys and self-closing window
+// Juan Carlos Raï¿½a insert smileys and self-closing window
 ////
 ?>
 <script language="javascript" type="text/javascript">
@@ -121,17 +121,17 @@ if (!empty($course) && !empty($_user['user_id']))
 	$lastname=Database::result($result,0,'lastname');
 
 	$dateNow=date('Y-m-d');
-	
-	$basepath_chat = '';		
+
+	$basepath_chat = '';
 	$documentPath=api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';
 	if (!empty($group_id)) {
 		$group_info = GroupManager :: get_group_properties($group_id);
-		$basepath_chat = $group_info['directory'].'/chat_files';		
+		$basepath_chat = $group_info['directory'].'/chat_files';
 	} else {
-		$basepath_chat = '/chat_files';				
+		$basepath_chat = '/chat_files';
 	}
 	$chatPath=$documentPath.$basepath_chat.'/';
-	
+
 	$TABLEITEMPROPERTY= Database::get_course_table(TABLE_ITEM_PROPERTY);
 
 	if(!is_dir($chatPath)) {
@@ -139,17 +139,14 @@ if (!empty($course) && !empty($_user['user_id']))
 			@unlink($chatPath);
 		}
 		if (!api_is_anonymous()) {
-			$perm = api_get_setting('permissions_for_new_directories');
-			$perm = octdec(!empty($perm)?$perm:'0770');
-			@mkdir($chatPath,$perm);
-			@chmod($chatPath,$perm);
-			// save chat files document for group into item property	
+			@mkdir($chatPath, api_get_permissions_for_new_directories());
+			// save chat files document for group into item property
 			if (!empty($group_id)) {
-				$doc_id=add_document($_course,$basepath_chat,'folder',0,'chat_files');
+				$doc_id = add_document($_course,$basepath_chat,'folder',0,'chat_files');
 				$sql = "INSERT INTO $TABLEITEMPROPERTY (tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility)
 						VALUES ('document',1,NOW(),NOW(),$doc_id,'FolderCreated',1,$group_id,NULL,0)";
-				Database::query($sql,__FILE__,__LINE__);		
-			}			
+				Database::query($sql,__FILE__,__LINE__);
+			}
 		}
 	}
 
@@ -237,16 +234,16 @@ if (!empty($course) && !empty($_user['user_id']))
 		$message=str_replace($emoticon_text204, $emoticon_img204, $message);
 
 		$timeNow=date('d/m/y H:i:s');
-		
+
 		$basename_chat = '';
 		if (!empty($group_id)) {
 			$basename_chat = 'messages-'.$dateNow.'_gid-'.$group_id;
 		} else if (!empty($session_id)) {
 			$basename_chat = 'messages-'.$dateNow.'_sid-'.$session_id;
 		} else {
-			$basename_chat = 'messages-'.$dateNow;				
+			$basename_chat = 'messages-'.$dateNow;
 		}
-		
+
 		if (!api_is_anonymous()) {
 			if(!empty($message))
 			{

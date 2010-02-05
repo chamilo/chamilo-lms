@@ -53,13 +53,11 @@ if(function_exists("date_default_timezone_set") and function_exists("date_defaul
 // where access for writting is guaranteed.
 define(_MPDF_GRAPH_CHACHE_PATH, api_get_path(SYS_ARCHIVE_PATH).'mpdf/graph_cache/');
 define(_MPDF_TMP_PATH, api_get_path(SYS_ARCHIVE_PATH).'mpdf/tmp/');
-$_perm = api_get_setting('permissions_for_new_directories');
-$_perm = octdec(!empty($_perm) ? $_perm : '0775');
 if (!file_exists(_MPDF_GRAPH_CHACHE_PATH)) {
-	@mkdir(_MPDF_GRAPH_CHACHE_PATH, $_perm, true);
+	@mkdir(_MPDF_GRAPH_CHACHE_PATH, api_get_permissions_for_new_directories(), true);
 }
 if (!file_exists(_MPDF_TMP_PATH)) {
-	@mkdir(_MPDF_TMP_PATH, $_perm, true);
+	@mkdir(_MPDF_TMP_PATH, api_get_permissions_for_new_directories(), true);
 }
 //
 

@@ -469,19 +469,17 @@ if($is_allowedToEdit)
 
  						fputs($fp,$texte);
 						fclose($fp);
-						$perm = api_get_setting('permissions_for_new_directories');
-						$perm = octdec(!empty($perm)?$perm:'0770');
-						if(!is_dir($filepath.'css'))
+						if (!is_dir($filepath.'css'))
 						{
-							mkdir($filepath.'css',$perm);
-							$doc_id=add_document($_course,$dir.'css','folder',0,'css');
+							mkdir($filepath.'css', api_get_permissions_for_new_directories());
+							$doc_id = add_document($_course,$dir.'css','folder',0,'css');
 							api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'FolderCreated', $_user['user_id'],null,null,null,null,$current_session_id);
 							api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'invisible', $_user['user_id'],null,null,null,null,$current_session_id);
 						}
 
-						if(!is_file($filepath.'css/frames.css'))
+						if (!is_file($filepath.'css/frames.css'))
 						{
-							$platform_theme= api_get_setting('stylesheets');
+							$platform_theme = api_get_setting('stylesheets');
 							if (file_exists(api_get_path(SYS_CODE_PATH).'css/'.$platform_theme.'/frames.css')) {
 								copy(api_get_path(SYS_CODE_PATH).'css/'.$platform_theme.'/frames.css',$filepath.'css/frames.css');
 								$doc_id=add_document($_course,$dir.'css/frames.css','file',filesize($filepath.'css/frames.css'),'frames.css');
@@ -492,20 +490,20 @@ if($is_allowedToEdit)
 
 						// "WHAT'S NEW" notification: update table item_property (previously last_tooledit)
 						$document_id = DocumentManager::get_document_id($_course,$file);
-						if($document_id)
+						if ($document_id)
 						{
 							$file_size = filesize($filepath.$filename.'.'.$extension);
 							update_existing_document($_course, $document_id,$file_size,$read_only_flag);
 							api_item_property_update($_course, TOOL_DOCUMENT, $document_id, 'DocumentUpdated', $_user['user_id'],null,null,null,null,$current_session_id);
 							//update parent folders
 							item_property_update_on_folder($_course,$dir,$_user['user_id']);
-							$dir= substr($dir,0,-1);
+							$dir = substr($dir,0,-1);
 							header('Location: document.php?curdirpath='.urlencode($dir));
 							exit ();
 						}
 						else
 						{
-						//$msgError=get_lang('Impossible');
+							//$msgError=get_lang('Impossible');
 						}
 					}
 					else

@@ -117,10 +117,7 @@ if ($_configuration['multiple_access_urls']==true) {
 		$new_url_dir = api_get_path(SYS_PATH).'home/'.$clean_url;
 		//we create the new dir for the new sites
 		if (!is_dir($new_url_dir)){
-			umask(0);
-			$perm = api_get_setting('permissions_for_new_directories');
-			$perm = octdec(!empty($perm)?$perm:'0755');
-			mkdir($new_url_dir, $perm);
+			mkdir($new_url_dir, api_get_permissions_for_new_directories());
 		}
 	}
 } else {
@@ -143,15 +140,15 @@ foreach($homef as $my_file) {
 	if ($_configuration['multiple_access_urls']==true) {
 		if (!file_exists($homep_new.$my_file.'_'.$lang.$ext)) {
 			copy($homep.$my_file.$ext,$homep_new.$my_file.'_'.$lang.$ext);
-		}		
-	} else {	
+		}
+	} else {
 		if (!file_exists($homep.$my_file.'_'.$lang.$ext)) {
 			copy($homep.$my_file.$ext,$homep.$my_file.'_'.$lang.$ext);
 		}
 	}
 }
 if ($_configuration['multiple_access_urls']==true) {
-	$homep = $homep_new; 
+	$homep = $homep_new;
 }
 
 // Check WCAG settings and prepare edition using WCAG

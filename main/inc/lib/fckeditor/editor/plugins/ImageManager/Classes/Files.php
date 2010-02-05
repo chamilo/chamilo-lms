@@ -87,8 +87,7 @@ class Files
 		//return chmod($newFolder, 0777);
 
 		global $permissions_for_new_directories;
-		mkdir ($newFolder, $permissions_for_new_directories);
-		return @chmod($newFolder, $permissions_for_new_directories);
+		return mkdir($newFolder, $permissions_for_new_directories) !== false;
 	}
 
 

@@ -87,11 +87,11 @@ abstract class Question
 		$TBL_EXERCICES         = Database::get_course_table(TABLE_QUIZ_TEST);
 		$TBL_QUESTIONS         = Database::get_course_table(TABLE_QUIZ_QUESTION);
 		$TBL_EXERCICE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
-				
+
 		$sql="SELECT question,description,ponderation,position,type,picture,level FROM $TBL_QUESTIONS WHERE id='".Database::escape_string($id)."'";
 
 		$result=Database::query($sql,__FILE__,__LINE__);
-		
+
 		// if the question has been found
 		if($object=Database::fetch_object($result))
 		{
@@ -327,10 +327,7 @@ abstract class Question
 		global $picturePath, $_course, $_user;
 
 		if (!file_exists($picturePath)) {
-			if (mkdir($picturePath)) {
-				$perm = api_get_setting('permissions_for_new_directories');
-				$perm = octdec(!empty($perm)?$perm:'0770');
-				chmod($picturePath,$perm);
+			if (mkdir($picturePath, api_get_permissions_for_new_directories())) {
 				// document path
 				$documentPath = api_get_path(SYS_COURSE_PATH) . $_course['path'] . "/document";
 				$path = str_replace($documentPath,'',$picturePath);

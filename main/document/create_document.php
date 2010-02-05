@@ -182,8 +182,8 @@ function InnerDialogLoaded()
 		{
 			document.getElementById(\'title_edited\').value = "true";
 		}
-	} 
-			
+	}
+
 	function setFocus(){
 	$("#document_title").focus();
 		}
@@ -470,11 +470,8 @@ if ($form->validate()) {
 		$files_perm = api_get_setting('permissions_for_new_files');
 		$files_perm = octdec(!empty($files_perm)?$files_perm:'0770');
 		chmod($filepath.$filename.'.'.$extension,$files_perm);
-		$perm = api_get_setting('permissions_for_new_directories');
-		$perm = octdec(!empty($perm)?$perm:'0770');
 		if (!is_dir($filepath.'css')) {
-			mkdir($filepath.'css');
-			chmod($filepath.'css', $perm);
+			mkdir($filepath.'css', api_get_permissions_for_new_directories());
 			$doc_id = add_document($_course, $dir.'css', 'folder', 0, 'css');
 			api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'FolderCreated', $_user['user_id'],null,null,null,null,$current_session_id);
 			api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'invisible', $_user['user_id'],null,null,null,null,$current_session_id);

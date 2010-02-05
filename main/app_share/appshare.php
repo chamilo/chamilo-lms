@@ -15,7 +15,8 @@ $nameTools = get_lang("ModifInfo");
 $course_code = $_course["sysCode"];
 
 $app_share_tmp_dir_base = api_get_path(SYS_ARCHIVE_PATH).'app_share/';
-mkdir ($app_share_tmp_dir_base, 0700);
+//mkdir ($app_share_tmp_dir_base, 0700);
+mkdir ($app_share_tmp_dir_base, api_get_permissions_for_new_directories());
 $app_share_tmp_dir = $app_share_tmp_dir_base.$course_code;
 $app_base_file = api_get_path(SYS_CODE_PATH).'app_share/DokeosAppShare.exe';
 $app_share_app_file = $app_share_tmp_dir.'/DokeosAppShare.exe';
@@ -23,10 +24,11 @@ $app_share_app_file = $app_share_tmp_dir.'/DokeosAppShare.exe';
 $specialCode='';
 if (file_exists($app_share_app_file) == FALSE) {
 
-	mkdir ($app_share_tmp_dir, 0700);
+	//mkdir ($app_share_tmp_dir, 0700);
+	mkdir ($app_share_tmp_dir, api_get_permissions_for_new_directories());
 
 	if (file_exists($app_base_file) == FALSE) {
-		echo('FATAL ERROR: file <b>'.$app_base_file.'</b> not found.<br />');
+		echo('FATAL ERROR: file <strong>'.$app_base_file.'</strong> not found.<br />');
 	} else {
 		$source = fopen($app_base_file, "r");
 		$target = fopen($app_share_app_file, "a" );

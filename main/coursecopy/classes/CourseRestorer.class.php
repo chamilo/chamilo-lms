@@ -206,6 +206,8 @@ class CourseRestorer
 	 */
 	function restore_documents($session_id = 0,$destination_course_code = '')
 	{
+		$perm = api_get_permissions_for_new_directories();
+
 		if ($this->course->has_resources(RESOURCE_DOCUMENT)) {
 			$table = Database :: get_course_table(TABLE_DOCUMENT, $this->course->destination_db);
 			$resources = $this->course->resources;
@@ -213,8 +215,7 @@ class CourseRestorer
 			/* echo '<pre>'; echo $this->course->backup_path; echo '<br>'; */
 			foreach ($resources[RESOURCE_DOCUMENT] as $id => $document) {
 				$path = api_get_path(SYS_COURSE_PATH).$this->course->destination_path.'/';
-				$perm = api_get_setting('permissions_for_new_directories');
-			    $perm = octdec(!empty($perm)?$perm:0770);
+
 			    $dirs = explode('/', dirname($document->path));
 
 				//if (count($dirs)==1) {
@@ -430,6 +431,8 @@ class CourseRestorer
 	 */
 	function restore_scorm_documents()
 	{
+		$perm = api_get_permissions_for_new_directories();
+
 		if ($this->course->has_resources(RESOURCE_SCORM))
 		{
 			$resources = $this->course->resources;
@@ -438,8 +441,6 @@ class CourseRestorer
 			{
 				$path = api_get_path(SYS_COURSE_PATH).$this->course->destination_path.'/';
 
-				$perm = api_get_setting('permissions_for_new_directories');
-			        $perm = octdec(!empty($perm)?$perm:'0770');
 				@mkdir(dirname($path.$document->path), $perm, true);
 
 				if (file_exists($path.$document->path))
@@ -1429,10 +1430,10 @@ class CourseRestorer
  * @param boolean Option Overwrite
  * @return void()
  */
-	function allow_create_all_directory($source, $dest, $overwrite = false){
+	function allow_create_all_directory($source, $dest, $overwrite = false) {
    		if(!is_dir($dest)) {
-    		mkdir($dest);
-    	}
+   			mkdir($dest, api_get_permissions_for_new_directories());
+   		}
 
 	    if ($handle = opendir($source)) {        // if the folder exploration is sucsessful, continue
 	        while (false !== ($file = readdir($handle))) { // as long as storing the next file to $file is successful, continue

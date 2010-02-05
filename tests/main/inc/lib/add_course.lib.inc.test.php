@@ -8,7 +8,7 @@ class TestAddCourse extends UnitTestCase {
 	function TestAddCourse() {
         $this->UnitTestCase('Courses creation tests');
     }
-	
+
 
     function TestCreateCourse(){
 		global $_configuration;
@@ -27,9 +27,9 @@ class TestAddCourse extends UnitTestCase {
 							 $course_datos['course_language'],$course_datos['course_admin_id'],
 							 $course_datos['db_prefix'], $course_datos['firstExpirationDelay']);
 		$this->assertTrue(is_bool($res));
-		
+
 	}
-   
+
     function testRegisterCourse() {
 	    global $_configuration;
          $course = array(
@@ -49,12 +49,12 @@ class TestAddCourse extends UnitTestCase {
 	 					   $course['course_language'],$course['uidCreator'],
 	 					   null,null
 	 					   );
-	   
+
 	    $this->assertTrue($res === 0);
 	    $res = CourseManager::delete_course($course['courseSysCode']);
-    	
+
     }
-     
+
     function TestGenerateCourseCode(){
     	global $charset;
     	$course_title = 'testcourse';
@@ -69,21 +69,21 @@ class TestAddCourse extends UnitTestCase {
 		$res = define_course_keys(generate_course_code($wantedCode), null, null, null,null, null);
 		$this->assertTrue($res);
 	}
-	
+
 /*  // 26 excepciones
-	function TestPrepareCourseRepository(){ 
-		umask(0);
+	function TestPrepareCourseRepository(){
+		//umask(0); // This function is not thread-safe.
 		$perm = '0777';
 		$courseRepository = 'C16';
 		$courseId = 'COD16';
 		$res = prepare_course_repository($courseRepository, $courseId);
 		$res1 = CourseManager::delete_course('C16');
-		
-		
-		
-		
+
+
+
+
 		$this->assertTrue($res===0);
-	} 
+	}
 // Problemas con este archivo - falta analizar esta función
 	function TestUpdateDbCourse(){
 		global $_configuration;
@@ -136,9 +136,9 @@ class TestAddCourse extends UnitTestCase {
 		$res = fill_Db_course($courseDbName, $courseRepository, $language,array());
 		$this->assertTrue($res === 0);
 	}
-	
 
-	
+
+
 	function TestString2Binary(){
 		$variable = true;
 		$res = string2binary($variable);
@@ -151,8 +151,8 @@ class TestAddCourse extends UnitTestCase {
 		$res = checkArchive($pathToArchive);
 		$this->assertTrue($res === TRUE);
 	}
-	
-	
+
+
 /*	 // 1 excepcion de permisos
 	function TestReadPropertiesInArchive(){
 		ob_start();
@@ -163,7 +163,7 @@ class TestAddCourse extends UnitTestCase {
 		$res = readPropertiesInArchive($archive, $isCompressed = TRUE);
 		if(is_array($res)){
 	 		$this->assertTrue(is_array($res));
-	 	}else{ 
+	 	}else{
 	 		$this->assertNull($res);
 	 	}
 	 	ob_end_clean();
@@ -171,17 +171,17 @@ class TestAddCourse extends UnitTestCase {
 		}
 */
 
-    public function TestDeleteCourse(){				
-		$code = 'testcourse';				
-		$res = CourseManager::delete_course($code);			
-		$path = api_get_path(SYS_PATH).'archive';		
+    public function TestDeleteCourse(){
+		$code = 'testcourse';
+		$res = CourseManager::delete_course($code);
+		$path = api_get_path(SYS_PATH).'archive';
 		if ($handle = opendir($path)) {
-			while (false !== ($file = readdir($handle))) {				
-				if (strpos($file,$code)!==false) {										
-					if (is_dir($path.'/'.$file)) {						
-						rmdirr($path.'/'.$file);						
-					}				
-				}				
+			while (false !== ($file = readdir($handle))) {
+				if (strpos($file,$code)!==false) {
+					if (is_dir($path.'/'.$file)) {
+						rmdirr($path.'/'.$file);
+					}
+				}
 			}
 			closedir($handle);
 		}

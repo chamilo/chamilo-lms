@@ -190,9 +190,7 @@ function define_course_keys($wantedCode, $prefix4all = "", $prefix4baseName = ""
  */
 function prepare_course_repository($courseRepository, $courseId)
 {
-	umask(0);
-	$perm = api_get_setting('permissions_for_new_directories');
-	$perm = octdec(!empty($perm)?$perm:'0770');
+	$perm = api_get_permissions_for_new_directories();
     $perm_file = api_get_setting('permissions_for_new_files');
     $perm_file = octdec(!empty($perm_file)?$perm_file:'0660');
 	mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository, $perm);
@@ -391,14 +389,14 @@ function update_Db_course($courseDbName, $language = null)
 
 	// Notebook
 	$TBL_NOTEBOOK   = $courseDbName . 'notebook';
-	
+
 	// Attendance
 	$TBL_ATTENDANCE 		 = $courseDbName . 'attendance';
 	$TBL_ATTENDANCE_SHEET 	 = $courseDbName . 'attendance_sheet';
 	$TBL_ATTENDANCE_CALENDAR = $courseDbName . 'attendance_calendar';
 	$TBL_ATTENDANCE_RESULT 	 = $courseDbName . 'attendance_result';
-	
-	
+
+
 	/*
 	-----------------------------------------------------------
 		Announcement tool
@@ -695,7 +693,7 @@ function update_Db_course($courseDbName, $language = null)
 	    hotspot_coordinates text,
 	    hotspot_type enum('square','circle','poly','delineation') default NULL,
 	    destination text NOT NULL,
-		id_auto int NOT NULL AUTO_INCREMENT,		
+		id_auto int NOT NULL AUTO_INCREMENT,
 		PRIMARY KEY (id, question_id),
 		UNIQUE KEY id_auto (id_auto)
 		)" . $charset_clause;
@@ -1722,8 +1720,8 @@ function update_Db_course($courseDbName, $language = null)
 	$result = Database::query($sql, __FILE__, __LINE__) or die(mysql_error($sql));
 
 	/* Attendance tool */
-	
-	// attendance table	
+
+	// attendance table
 	$sql = "
 		CREATE TABLE `".$TBL_ATTENDANCE."` (
 			id int NOT NULL auto_increment PRIMARY KEY,
@@ -1741,7 +1739,7 @@ function update_Db_course($courseDbName, $language = null)
 	$sql  = "ALTER TABLE `".$TBL_ATTENDANCE . "` ADD INDEX (active)";
 	Database::query($sql, __FILE__, __LINE__);
 
-	// attendance sheet table	
+	// attendance sheet table
 	$sql = "
 		CREATE TABLE `".$TBL_ATTENDANCE_SHEET."` (
 			user_id int NOT NULL,
@@ -1753,7 +1751,7 @@ function update_Db_course($courseDbName, $language = null)
 	$sql  = "ALTER TABLE `".$TBL_ATTENDANCE_SHEET . "` ADD INDEX (presence) ";
 	Database::query($sql, __FILE__, __LINE__);
 
-	// attendance calendar table	
+	// attendance calendar table
 	$sql = "
 		CREATE TABLE `".$TBL_ATTENDANCE_CALENDAR."` (
 			id int NOT NULL auto_increment,
@@ -1766,9 +1764,9 @@ function update_Db_course($courseDbName, $language = null)
 	$sql  = "ALTER TABLE `".$TBL_ATTENDANCE_CALENDAR."` ADD INDEX (attendance_id)";
 	Database::query($sql, __FILE__, __LINE__);
 	$sql  = "ALTER TABLE `".$TBL_ATTENDANCE_CALENDAR."` ADD INDEX (done_attendance)";
-	Database::query($sql, __FILE__, __LINE__);	
-	
-	// attendance result table	
+	Database::query($sql, __FILE__, __LINE__);
+
+	// attendance result table
 	$sql = "
 		CREATE TABLE `".$TBL_ATTENDANCE_RESULT."` (
 			id int NOT NULL auto_increment PRIMARY KEY,
@@ -1840,9 +1838,10 @@ function sort_pictures($files,$type)
 */
 function fill_course_repository($courseRepository)
 {
-	$old_umask = umask(0);
 	$sys_course_path = api_get_path(SYS_COURSE_PATH);
 	$web_code_path = api_get_path(WEB_CODE_PATH);
+
+	$perm = api_get_permissions_for_new_directories();
 
 	/*doc_html = file(api_get_path(SYS_CODE_PATH).'document/example_document.html');
 
@@ -1879,8 +1878,6 @@ function fill_course_repository($courseRepository)
 		$pictures_array = sort_pictures($files,"dir");
 		$pictures_array = array_merge($pictures_array,sort_pictures($files,"file"));
 
-		$perm = api_get_setting('permissions_for_new_directories');
-		$perm = octdec(!empty($perm)?$perm:'0770');
 		$perm_file = api_get_setting('permissions_for_new_files');
 		$perm_file = octdec(!empty($perm_file)?$perm_file:'0660');
 		if(!is_dir($course_documents_folder_images))
@@ -2010,7 +2007,7 @@ function fill_course_repository($courseRepository)
 		$default_document_array['video']=$video_array;
 
 	}
-	umask($old_umask);
+
 	return $default_document_array;
 }
 

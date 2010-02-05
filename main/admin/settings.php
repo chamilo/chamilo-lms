@@ -742,14 +742,9 @@ function upload_stylesheet($values,$picture)
 	$style_name = api_ereg_replace("[^A-Za-z0-9]", "", $values['name_stylesheet'] );
 
 	// create the folder if needed
-	if(!is_dir(api_get_path(SYS_CODE_PATH).'css/'.$style_name.'/'))
+	if (!is_dir(api_get_path(SYS_CODE_PATH).'css/'.$style_name.'/'))
 	{
-		if(mkdir(api_get_path(SYS_CODE_PATH).'css/'.$style_name.'/'))
-		{
-			$perm = api_get_setting('permissions_for_new_directories');
-			$perm = octdec(!empty($perm)?$perm:'0770');
-			chmod(api_get_path(SYS_CODE_PATH).'css/'.$style_name.'/', $perm);
-		}
+		mkdir(api_get_path(SYS_CODE_PATH).'css/'.$style_name.'/', api_get_permissions_for_new_directories());
 	}
 
 	// move the file in the folder
@@ -906,7 +901,7 @@ function handle_search() {
         // Save the settings
         foreach ($formvalues as $key => $value)
         {
-                $result = api_set_setting($key,$value,null,null);
+        	$result = api_set_setting($key, $value, null, null);
         }
 
         Display :: display_confirmation_message($SettingsStored);
@@ -1022,7 +1017,7 @@ function get_template_data($from, $number_of_items, $column, $direction)
 	$result = Database::query($sql, __FILE__, __LINE__);
 	while ($row = Database::fetch_array($result)) {
 		$row['1'] = get_lang($row['1']);
-		$return[]=$row;
+		$return[] = $row;
 	}
 	// returning all the information for the sortable table
 	return $return;
@@ -1160,11 +1155,9 @@ function add_edit_template()
 					$upload_dir = api_get_path(SYS_PATH).'home/default_platform_document/template_thumb/';
 
 					// create dir if not exists
-	                if (!is_dir($upload_dir)) {
-	                    $perm = api_get_setting('permissions_for_new_directories');
-	                    $perm = octdec(!empty($perm)?$perm:'0770');
-	                	$res = @mkdir($upload_dir,$perm);
-	                }
+					if (!is_dir($upload_dir)) {
+						mkdir($upload_dir, api_get_permissions_for_new_directories());
+					}
 
 					// resize image to max default and upload
 					require_once (api_get_path(LIBRARY_PATH).'image.lib.php');
@@ -1226,9 +1219,6 @@ function add_edit_template()
 		}
 	   Security::clear_token();
 	   display_templates();
-
-
-
 	}
 	else
 	{

@@ -249,7 +249,7 @@ if($is_allowedToEdit) // TEACHER ONLY
 	    }
 	    else
 	    {
-	      if(mkdir($baseWorkDir.$newDirPath.$openDir."/".$newDirName, 0700)){
+	      if(mkdir($baseWorkDir.$newDirPath.$openDir."/".$newDirName, api_get_permissions_for_new_directories())){
 	        FileManager::set_default_settings($newDirPath.$openDir, $newDirName, "folder", $tbl_document);
 	        // RH: was:  set_default_settings($newDirPath.$openDir,$newDirName,"folder");
 	        $dialogBox = get_lang('DirCr');
@@ -356,7 +356,7 @@ if($is_allowedToEdit) // TEACHER ONLY
     }
     else
     {
-      if(mkdir($baseWorkDir.$newDirPath."/".$newDirName, 0700))
+      if(mkdir($baseWorkDir.$newDirPath."/".$newDirName, api_get_permissions_for_new_directories()))
         FileManager::set_default_settings($newDirPath, $newDirName, "folder", $tbl_document);
       // RH: was:  set_default_settings($newDirPath,$newDirName,"folder");
 			$dialogBox = get_lang('DirCr');
@@ -385,7 +385,7 @@ if($is_allowedToEdit) // TEACHER ONLY
     $visibilityPath = $make_directory_visible.$make_directory_invisible;
     // At least one of these variables are empty. So it's okay to proceed this way
     /* Check if there is yet a record for this file in the DB */
-    $result = mysql_query ("SELECT * FROM $tbl_document WHERE path LIKE '".$visibilityPath."'");
+    $result = Database::query ("SELECT * FROM $tbl_document WHERE path LIKE '".$visibilityPath."'", __FILE__, __LINE__);
     while($row = Database::fetch_array($result, 'ASSOC'))
     {
       $attribute['path'      ] = $row['path'      ];

@@ -135,7 +135,7 @@ function create_zip(){
 	$sys_course_path = api_get_path(SYS_COURSE_PATH);
 	$temp_zip_dir = $sys_archive_path."temp";
 	if(!is_dir($temp_zip_dir)) {
-		mkdir($temp_zip_dir);
+		mkdir($temp_zip_dir, api_get_permissions_for_new_directories());
 	} else {
 		$handle=opendir($temp_zip_dir);
 		while (false!==($file = readdir($handle))) {

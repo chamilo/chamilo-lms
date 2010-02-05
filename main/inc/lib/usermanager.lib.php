@@ -20,7 +20,7 @@ define('USER_FIELD_TYPE_DATE', 6);
 define('USER_FIELD_TYPE_DATETIME', 7);
 define('USER_FIELD_TYPE_DOUBLE_SELECT', 8);
 define('USER_FIELD_TYPE_DIVIDER', 9);
-define('USER_FIELD_TYPE_TAG', 10); 
+define('USER_FIELD_TYPE_TAG', 10);
 
 //User image sizes
 define('USER_IMAGE_SIZE_ORIGINAL',	1);
@@ -41,7 +41,7 @@ define('USER_RELATION_TYPE_RRHH',		7);
 
 
 
-class UserManager 
+class UserManager
 {
 	private function __construct () {
 	}
@@ -184,10 +184,10 @@ class UserManager
 	 */
 	public static function delete_user($user_id) {
 		global $_configuration;
-		
+
 		if ($user_id != strval(intval($user_id))) return false;
 		if ($user_id === false) return false;
-		
+
 		if (!self::can_delete_user($user_id)) {
 			return false;
 		}
@@ -268,12 +268,12 @@ class UserManager
 			}
 			UrlManager::delete_url_rel_user($user_id, $url_id);
 		}
-		
+
 		if (api_get_setting('allow_social_tool')=='true' ) {
 			require_once api_get_path(LIBRARY_PATH).'social.lib.php';
 			//Delete user from groups
-			
-			//Delete from user friend lists 
+
+			//Delete from user friend lists
 			SocialManager::remove_user_rel_user($user_id,true);
 		}
 		// add event to system log
@@ -671,7 +671,7 @@ class UserManager
 		}
 		return array('dir' => $dir, 'file' => $picture_filename);
 	}
-	
+
 
 	/**
 	 * Creates new user pfotos in various sizes of a user, or deletes user pfotos.
@@ -703,9 +703,7 @@ class UserManager
 		$path = $path_info['dir'];
 		// If this directory does not exist - we create it.
 		if (!file_exists($path)) {
-			$perm = api_get_setting('permissions_for_new_directories');
-			$perm = octdec(!empty($perm) ? $perm : '0770');
-			@mkdir($path, $perm, true);
+			@mkdir($path, api_get_permissions_for_new_directories(), true);
 		}
 
 		// The old photos (if any).
@@ -808,7 +806,7 @@ class UserManager
 	 * @return	A string containing the XHTML code to dipslay the production list, or FALSE
 	 */
 	public static function build_production_list($user_id, $force = false, $showdelete = false) {
-		
+
 		if (!$force && !empty($_POST['remove_production'])) {
 			return true; // postpone reading from the filesystem
 		}
@@ -874,7 +872,7 @@ class UserManager
 	 */
 	public static function remove_user_production($user_id, $production) {
 		$production_path = self::get_user_picture_path_by_id($user_id, 'system', true);
-		if (is_file($production_path['dir'].$production)) {	
+		if (is_file($production_path['dir'].$production)) {
 			unlink($production_path['dir'].$production);
 		}
 	}
@@ -940,8 +938,8 @@ class UserManager
 			// Check if enumerated field, if the option is available
 			$rowuf = Database::fetch_array($resuf);
 			switch ($rowuf['field_type']) {
-				case USER_FIELD_TYPE_TAG :	
-					//4. Tags are process here comes from main/auth/profile.php	
+				case USER_FIELD_TYPE_TAG :
+					//4. Tags are process here comes from main/auth/profile.php
 					UserManager::process_tags(explode(';', $fvalues), $user_id, $rowuf['id']);
 					return true;
 				break;
@@ -967,7 +965,7 @@ class UserManager
 					}
 					break;
 				case 1:
-				case 2:		
+				case 2:
 				default:
 					break;
 			}
@@ -1352,8 +1350,8 @@ class UserManager
 			while ($row = Database::fetch_array($res)) {
 				if ($row['type'] == USER_FIELD_TYPE_TAG) {
 					$tags = self::get_user_tags_to_string($user_id,$row['id'],false);
-					$extra_data['extra_'.$row['fvar']] = $tags;	
-								
+					$extra_data['extra_'.$row['fvar']] = $tags;
+
 				} else {
 					$sqlu = "SELECT field_value as fval " .
 							" FROM $t_ufv " .
@@ -1366,7 +1364,7 @@ class UserManager
 							" FROM $t_uf " .
 							" WHERE id=".$row['id'];
 					$res_df = Database::query($sql_df, __FILE__, __LINE__);
-					
+
 					if (Database::num_rows($resu) > 0) {
 						$rowu = Database::fetch_array($resu);
 						$fval = $rowu['fval'];
@@ -1475,7 +1473,7 @@ class UserManager
 		}
 		return $return;
 	}
-		
+
 	public static function get_all_extra_field_by_type($field_type) {
 		// database table definition
 		$table_field 			= Database::get_main_table(TABLE_MAIN_USER_FIELD);
@@ -1515,7 +1513,7 @@ class UserManager
 		}
 		return $return;
 	}
-	
+
 	/** Get extra user data by value
 	 * @param string the internal variable name of the field
 	 * @param string the internal value of the field
@@ -1611,7 +1609,7 @@ class UserManager
 								ORDER BY session_category_id, date_start, date_end";
 
 		$result = Database::query($sessions_sql,__FILE__,__LINE__);
-		if (Database::num_rows($result)>0) {			 
+		if (Database::num_rows($result)>0) {
 			while ($row = Database::fetch_array($result)) {
 				$categories[$row['session_category_id']][] = $row['id'];
 			}
@@ -1670,9 +1668,9 @@ class UserManager
 		$tbl_course_user 			= Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 		$tbl_session_course 		= Database :: get_main_table(TABLE_MAIN_SESSION_COURSE);
 		$tbl_session_course_user 	= Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-		
+
 		if ($user_id != strval(intval($user_id))) return array();
-		
+
 		//we filter the courses from the URL
 		$join_access_url = $where_access_url = '';
 		global $_configuration;
@@ -1709,7 +1707,7 @@ class UserManager
 				$join_access_url
 			WHERE  course_rel_user.user_id = '".$user_id."'  $where_access_url
 										ORDER BY user_course_category.sort, course_rel_user.sort, course.title ASC";
-		
+
 		$course_list_sql_result = api_sql_query($personal_course_list_sql, __FILE__, __LINE__);
 		//var_dump($course_list_sql_result); exit;
 		while ($result_row = Database::fetch_array($course_list_sql_result)) {
@@ -1743,7 +1741,7 @@ class UserManager
 		$sessions_sql = "SELECT DISTINCT id, name, date_start, date_end, DATE_SUB(date_start, INTERVAL nb_days_access_before_beginning DAY), ADDDATE(date_end, INTERVAL nb_days_access_after_end DAY)
 			FROM $tbl_session as session
 				INNER JOIN $tbl_session_course_user as session_rel_course_user
-				ON session_rel_course_user.id_session = session.id							
+				ON session_rel_course_user.id_session = session.id
 				AND session_rel_course_user.id_user = $user_id AND session_rel_course_user.status = 2
 			WHERE (CURDATE() >= DATE_SUB(date_start, INTERVAL nb_days_access_before_beginning DAY)
 				AND CURDATE() <= ADDDATE(date_end, INTERVAL nb_days_access_after_end DAY)
@@ -1781,7 +1779,7 @@ class UserManager
 							ON user.user_id = session_course_user.id_user
 					WHERE session_course_user.id_session = $id_session
 						AND ((session_course_user.id_user=$user_id AND session_course_user.status = 2) OR session.id_coach=$user_id)
-					ORDER BY i";				
+					ORDER BY i";
 
 				$course_list_sql_result = Database::query($personal_course_list_sql, __FILE__, __LINE__);
 
@@ -1813,8 +1811,8 @@ class UserManager
 			$personal_course_list_sql = "SELECT distinct course.code k, course.directory d, course.visual_code c, course.db_name db, course.title i, CONCAT(user.lastname,' ',user.firstname) t, email, course.course_language l, 1 sort, category_code user_course_cat, date_start, date_end, session.id as id_session, session.name as session_name, IF((session_course_user.id_user = 3 AND session_course_user.status=2),'2', '5')
 										FROM $tbl_session_course_user as session_course_user
 										INNER JOIN $tbl_course AS course
-										ON course.code = session_course_user.course_code AND session_course_user.id_session = $id_session 
-										INNER JOIN $tbl_session as session ON session_course_user.id_session = session.id										
+										ON course.code = session_course_user.course_code AND session_course_user.id_session = $id_session
+										INNER JOIN $tbl_session as session ON session_course_user.id_session = session.id
 										LEFT JOIN $tbl_user as user ON user.user_id = session_course_user.id_user
 										WHERE session_course_user.id_user = $user_id  ORDER BY i";
 
@@ -2067,7 +2065,7 @@ class UserManager
         $row = Database::fetch_array($res, 'ASSOC');
         return $row['id'];
     }
-    
+
     /**
      * Checks if a user_id is platform admin
      * @param   int user ID
@@ -2132,7 +2130,7 @@ class UserManager
      * @return array with the file and the style of an image i.e $array['file'] $array['style']
      */
    public static function get_picture_user($user_id, $picture_file, $height, $size_picture = USER_IMAGE_SIZE_MEDIUM , $style = '') {
-   	
+
     	$patch_profile = 'upload/users/';
     	$picture = array();
     	$picture['style'] = $style;
@@ -2140,7 +2138,7 @@ class UserManager
     		$picture['file'] = api_get_path(WEB_CODE_PATH).'img/'.$picture_file;
     		return $picture;
     	}
-    	
+
     	switch ($size_picture) {
     		case USER_IMAGE_SIZE_ORIGINAL :
     			$size_picture = '';
@@ -2153,7 +2151,7 @@ class UserManager
     		break;
     		case USER_IMAGE_SIZE_SMALL :
     			$size_picture = 'small_';
-    		break;    		
+    		break;
     		default:
     			$size_picture = 'medium_';
     	}
@@ -2165,28 +2163,28 @@ class UserManager
             $picture['file'] = $image_array['dir'].$size_picture.$picture_file;
 			$picture['style'] = '';
 			if ($height > 0) {
-				$dimension = api_getimagesize($picture['file']);				
+				$dimension = api_getimagesize($picture['file']);
 				$margin = (($height - $dimension[1]) / 2);
 				//@ todo the padding-top should not be here
-				$picture['style'] = ' style="padding-top:'.$margin.'px; width:'.$dimension[0].'px; height:'.$dimension[1].'px;" ';			
+				$picture['style'] = ' style="padding-top:'.$margin.'px; width:'.$dimension[0].'px; height:'.$dimension[1].'px;" ';
 			}
 		} else {
 			//$file = api_get_path(SYS_CODE_PATH).$patch_profile.$user_id.'/'.$picture_file;
-            $file = $image_array_sys['dir'].$picture_file;            
-			if (file_exists($file) && !is_dir($file)) {				
+            $file = $image_array_sys['dir'].$picture_file;
+			if (file_exists($file) && !is_dir($file)) {
 				$picture['file'] = $image_array['dir'].$picture_file;
 			} else {
 				switch ($size_picture) {
-					case 'big_' : 
+					case 'big_' :
 						$picture['file'] = api_get_path(WEB_CODE_PATH).'img/unknown.jpg'; break;
-					case 'medium_' : 
+					case 'medium_' :
 						$picture['file'] = api_get_path(WEB_CODE_PATH).'img/unknown_50_50.jpg'; break;
-					case 'small_' : 
+					case 'small_' :
 						$picture['file'] = api_get_path(WEB_CODE_PATH).'img/unknown.jpg'; break;
 					default:
 						$picture['file'] = api_get_path(WEB_CODE_PATH).'img/unknown.jpg'; break;
 				}
-				
+
 			}
 		}
 		return $picture;
@@ -2222,27 +2220,27 @@ class UserManager
 			$rs = Database::query($sql_insert_outbox, __FILE__, __LINE__);
 		}
 	}
-	
+
 	/*
-	 * 
+	 *
 	 * USER TAGS
-	 * 
+	 *
 	 * Intructions to create a new user tag by Julio Montoya <gugli100@gmail.com>
-	 * 
+	 *
 	 * 1. Create a new extra field in main/admin/user_fields.php with the "TAG" field type make it available and visible. Called it "books" for example.
-	 * 2. Go to profile main/auth/profile.php There you will see a special input (facebook style) that will show suggestions of tags. 
+	 * 2. Go to profile main/auth/profile.php There you will see a special input (facebook style) that will show suggestions of tags.
 	 * 3. All the tags are registered in the user_tag table and the relationship between user and tags is in the user_rel_tag table
 	 * 4. Tags are independent this means that tags can't be shared between tags + book + hobbies.
 	 * 5. Test and enjoy.
-	 * 
+	 *
 	 */
-	
+
 	/**
-	 * Gets the tags of a specific field_id 
-	 * 
+	 * Gets the tags of a specific field_id
+	 *
 	 * @param int field_id
 	 * @param string how we are going to result value in array or in a string (json)
-	 * @return mixed 
+	 * @return mixed
 	 * @since Nov 2009
 	 * @version 1.8.6.2
 	 */
@@ -2250,32 +2248,32 @@ class UserManager
 		// database table definition
 		$table_user_tag			= Database::get_main_table(TABLE_MAIN_TAG);
 		$table_user_tag_values	= Database::get_main_table(TABLE_MAIN_USER_REL_TAG);
-		$field_id	= intval($field_id);			  
-		$limit		= intval($limit);	
+		$field_id	= intval($field_id);
+		$limit		= intval($limit);
 		$tag 		= trim(Database::escape_string($tag));
-					 
+
 		// all the information of the field
 		$sql = "SELECT id, tag from $table_user_tag
 				WHERE field_id = $field_id AND tag LIKE '$tag%' ORDER BY tag LIMIT $limit";
 		$result = Database::query($sql, __FILE__, __LINE__);
-		$return = array();		
+		$return = array();
 		if (Database::num_rows($result)>0) {
 			while ($row = Database::fetch_array($result,'ASSOC')) {
 				$return[] = array('caption'=>$row['tag'], 'value'=>$row['tag']);
 			}
-		}		
+		}
 		if ($return_format=='json') {
 			$return =  json_encode($return);
 		}
 		return $return;
 	}
-	
-	public static function get_top_tags($field_id, $limit=100) {		
+
+	public static function get_top_tags($field_id, $limit=100) {
 		// database table definition
 		$table_user_tag			= Database::get_main_table(TABLE_MAIN_TAG);
 		$table_user_tag_values	= Database::get_main_table(TABLE_MAIN_USER_REL_TAG);
 		$field_id 				= intval($field_id);
-		$limit 					= intval($limit);	
+		$limit 					= intval($limit);
 		// all the information of the field
 		$sql = "SELECT count(*) count, tag FROM $table_user_tag_values  uv INNER JOIN $table_user_tag ut ON(ut.id = uv.tag_id)
 				WHERE field_id = $field_id GROUP BY tag_id ORDER BY count DESC LIMIT $limit";
@@ -2286,9 +2284,9 @@ class UserManager
 				$return[] = $row;
 			}
 		}
-		return $return;		
+		return $return;
 	}
-	
+
 	/**
 	 * Get user's tags
 	 * @param int field_id
@@ -2301,9 +2299,9 @@ class UserManager
 		$table_user_tag_values	= Database::get_main_table(TABLE_MAIN_USER_REL_TAG);
 		$field_id = intval($field_id);
 		$user_id = intval($user_id);
-	
+
 		// all the information of the field
-		$sql = "SELECT ut.id, tag,count FROM $table_user_tag ut INNER JOIN $table_user_tag_values uv ON (uv.tag_id=ut.ID) 
+		$sql = "SELECT ut.id, tag,count FROM $table_user_tag ut INNER JOIN $table_user_tag_values uv ON (uv.tag_id=ut.ID)
 				WHERE field_id = $field_id AND user_id = $user_id ORDER BY tag";
 		$result = Database::query($sql, __FILE__, __LINE__);
 		$return = array();
@@ -2314,7 +2312,7 @@ class UserManager
 		}
 		return $return;
 	}
-	
+
 
 	/**
 	 * Get user's tags
@@ -2329,9 +2327,9 @@ class UserManager
 		$table_user_tag_values	= Database::get_main_table(TABLE_MAIN_USER_REL_TAG);
 		$field_id = intval($field_id);
 		$user_id = intval($user_id);
-	
+
 		// all the information of the field
-		$sql = "SELECT ut.id, tag,count FROM $table_user_tag ut INNER JOIN $table_user_tag_values uv ON (uv.tag_id=ut.ID) 
+		$sql = "SELECT ut.id, tag,count FROM $table_user_tag ut INNER JOIN $table_user_tag_values uv ON (uv.tag_id=ut.ID)
 				WHERE field_id = $field_id AND user_id = $user_id ORDER BY tag";
 		$result = Database::query($sql, __FILE__, __LINE__);
 		$return = array();
@@ -2349,14 +2347,14 @@ class UserManager
 				$tag_tmp[] = $tag['tag'];
 			}
 		}
-		if (is_array($user_tags) && count($user_tags)>0) {							
+		if (is_array($user_tags) && count($user_tags)>0) {
 			$return = implode(', ',$tag_tmp);
 		} else {
 			return '';
 		}
 		return $return;
 	}
-	
+
 
 	/**
 	 * Get the tag id
@@ -2368,7 +2366,7 @@ class UserManager
 		$table_user_tag			= Database::get_main_table(TABLE_MAIN_TAG);
 		$tag = Database::escape_string($tag);
 		$field_id = intval($field_id);
-		//with COLLATE latin1_bin to select query in a case sensitive mode  
+		//with COLLATE latin1_bin to select query in a case sensitive mode
 		$sql = "SELECT id FROM $table_user_tag WHERE tag COLLATE latin1_bin  LIKE '$tag' AND field_id = $field_id";
 		$result = Database::query($sql, __FILE__, __LINE__);
 		if (Database::num_rows($result)>0) {
@@ -2378,7 +2376,7 @@ class UserManager
 			return 0;
 		}
 	}
-	
+
 	/**
 	 * Get the tag id
 	 * @param int tag
@@ -2398,8 +2396,8 @@ class UserManager
 			return false;
 		}
 	}
-	
-	
+
+
 	/**
 	 * Adds a user-tag value
 	 * @param mixed tag
@@ -2414,27 +2412,27 @@ class UserManager
 		$tag = Database::escape_string($tag);
 		$tag = trim($tag);
 		$user_id = intval($user_id);
-		$field_id = intval($field_id);		
-			
+		$field_id = intval($field_id);
+
 		//&&  (substr($tag,strlen($tag)-1) == '@')
-		/*$sent_by_user = false;		 
+		/*$sent_by_user = false;
 		if ( substr($tag,0,1) == '@')  {
 			//is a value sent by the list
 			$sent_by_user = true;
 			$tag = substr($tag,1,strlen($tag)-2);
 		}
-		*/		
-		$tag_id = UserManager::get_tag_id($tag,$field_id);	
-		/* IMPORTANT	
+		*/
+		$tag_id = UserManager::get_tag_id($tag,$field_id);
+		/* IMPORTANT
 		 *  @todo we don't create tags with numbers
-		 * 
+		 *
 		 */
 		if (is_numeric($tag)) {
 			//the form is sending an id this means that the user select it from the list so it MUST exists
 			/*$new_tag_id = UserManager::get_tag_id_from_id($tag,$field_id);
 			if ($new_tag_id !== false) {
 				$sql = "UPDATE $table_user_tag SET count = count + 1 WHERE id  = $new_tag_id";
-				$result = Database::query($sql, __FILE__, __LINE__);			
+				$result = Database::query($sql, __FILE__, __LINE__);
 				$last_insert_id = $new_tag_id;
 			} else {
 				$sql = "INSERT INTO $table_user_tag (tag, field_id,count) VALUES ('$tag','$field_id', count + 1)";
@@ -2442,7 +2440,7 @@ class UserManager
 				$last_insert_id = Database::get_last_insert_id();
 			}*/
 		} else {
-			//this is a new tag			
+			//this is a new tag
 			if ($tag_id == 0) {
 				//the tag doesn't exist
 				$sql = "INSERT INTO $table_user_tag (tag, field_id,count) VALUES ('$tag','$field_id', count + 1)";
@@ -2451,11 +2449,11 @@ class UserManager
 			} else {
 				//the tag exists we update it
 				$sql = "UPDATE $table_user_tag SET count = count + 1 WHERE id  = $tag_id";
-				$result = Database::query($sql, __FILE__, __LINE__);			
-				$last_insert_id = $tag_id;	
-			}			
+				$result = Database::query($sql, __FILE__, __LINE__);
+				$last_insert_id = $tag_id;
+			}
 		}
-		
+
 		if (!empty($last_insert_id) && ($last_insert_id!=0)) {
 			//we insert the relationship user-tag
 			$sql_select ="SELECT tag_id FROM $table_user_tag_values WHERE user_id = $user_id AND tag_id = $last_insert_id ";
@@ -2464,53 +2462,53 @@ class UserManager
 			if (Database::num_rows($result)==0) {
 				$sql = "INSERT INTO $table_user_tag_values SET user_id = $user_id, tag_id = $last_insert_id";
 				$result = Database::query($sql, __FILE__, __LINE__);
-			}		
+			}
 		}
 	}
 	/**
 	 * Deletes an user tag
 	 * @param int user id
 	 * @param int field id
-	 * 
+	 *
 	 */
 	public function delete_user_tags($user_id, $field_id) {
 		// database table definition
 		$table_user_tag			= Database::get_main_table(TABLE_MAIN_TAG);
-		$table_user_tag_values	= Database::get_main_table(TABLE_MAIN_USER_REL_TAG);	
-		$tags = UserManager::get_user_tags($user_id, $field_id);		
+		$table_user_tag_values	= Database::get_main_table(TABLE_MAIN_USER_REL_TAG);
+		$tags = UserManager::get_user_tags($user_id, $field_id);
 		//echo '<pre>';var_dump($tags);
 		if(is_array($tags) && count($tags)>0) {
 			foreach ($tags as $key=>$tag) {
-				if ($tag['count']>'0') {				
+				if ($tag['count']>'0') {
 					$sql = "UPDATE $table_user_tag SET count = count - 1  WHERE id = $key ";
 					$result = Database::query($sql, __FILE__, __LINE__);
 				}
 				$sql = "DELETE FROM $table_user_tag_values WHERE user_id = $user_id AND tag_id = $key";
 				$result = Database::query($sql, __FILE__, __LINE__);
-			}	
-			
-		}		
+			}
+
+		}
 	}
-	
+
 	/**
 	 * Process the tag list comes from the UserManager::update_extra_field_value() function
-	 * @param array the tag list that will be added 
+	 * @param array the tag list that will be added
 	 * @param int user id
 	 * @param int field id
 	 * @return bool
 	 */
-	public function process_tags($tags, $user_id, $field_id) {		
+	public function process_tags($tags, $user_id, $field_id) {
 		//We loop the tags and add it to the DB
 		if (is_array($tags)) {
 			foreach($tags as $tag) {
 				UserManager::add_tag($tag, $user_id, $field_id);
-			}			
+			}
 		} else {
 			UserManager::add_tag($tags,$user_id, $field_id);
 		}
 		return true;
 	}
-	
+
 	/**
 	 * Gives a list of emails from all administrators
 	 * @author cvargas carlos.vargas@dokeos.com
@@ -2519,7 +2517,7 @@ class UserManager
 	 public function get_emails_from_all_administrators() {
 	 	$table_user = Database::get_main_table(TABLE_MAIN_USER);
 	 	$table_admin = Database::get_main_table(TABLE_MAIN_ADMIN);
-	 	
+
 	 	$sql = "SELECT email from $table_user as u, $table_admin as a WHERE u.user_id=a.user_id";
 	 	$result = Database::query($sql, __FILE__, __LINE__);
 		$return = array();
@@ -2529,29 +2527,29 @@ class UserManager
 			}
 		}
 		return $return;
-	 }	
+	 }
 
-	
+
 	/**
 	 * Searchs an user (tags, firstname, lastname and email )
 	 * @param string the tag
 	 * @param int field id of the tag
-	 * @param int where to start in the query 
-	 * @param int number of items 
+	 * @param int where to start in the query
+	 * @param int number of items
 	 * @return array
 	 */
 	public static function get_all_user_tags($tag, $field_id = 0, $from = 0, $number_of_items = 10) {
 		// database table definition
-		
+
 		$user_table 			= Database::get_main_table(TABLE_MAIN_USER);
 		$table_user_tag			= Database::get_main_table(TABLE_MAIN_TAG);
 		$table_user_tag_values	= Database::get_main_table(TABLE_MAIN_USER_REL_TAG);
-		
+
 		$tag = Database::escape_string($tag);
 		$field_id = intval($field_id);
 		$from = intval($from);
 		$number_of_items = intval($number_of_items);
-		
+
     	$where_field = "";
 		if ($field_id != 0) {
 			$where_field = " field_id = $field_id AND ";
@@ -2559,9 +2557,9 @@ class UserManager
 		// all the information of the field
 		$sql = "SELECT u.user_id,u.username,firstname, lastname, email, tag, picture_uri FROM $table_user_tag ut INNER JOIN $table_user_tag_values uv ON (uv.tag_id=ut.id)
 				INNER JOIN $user_table u ON(uv.user_id =u.user_id)
-				WHERE $where_field tag LIKE '$tag%' ORDER BY tag";				
+				WHERE $where_field tag LIKE '$tag%' ORDER BY tag";
 		$sql .= " LIMIT $from,$number_of_items";
-		
+
 		$result = Database::query($sql, __FILE__, __LINE__);
 		$return = array();
 		if (Database::num_rows($result)> 0) {
@@ -2569,7 +2567,7 @@ class UserManager
 				$return[$row['user_id']] = $row;
 			}
 		}
-		 
+
 		$keyword = $tag;
 		$sql = "SELECT u.user_id, u.username, firstname, lastname, email, picture_uri FROM $user_table u";
 		global $_configuration;
@@ -2577,10 +2575,10 @@ class UserManager
 			$access_url_rel_user_table= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
 			$sql.= " INNER JOIN $access_url_rel_user_table url_rel_user ON (u.user_id=url_rel_user.user_id)";
 		}
-		
+
 		if (isset ($keyword)) {
 				$keyword = Database::escape_string($keyword);
-				//OR u.official_code LIKE '%".$keyword."%' 
+				//OR u.official_code LIKE '%".$keyword."%'
 				// OR u.email LIKE '%".$keyword."%'
 				$sql .= " WHERE (u.firstname LIKE '%".$keyword."%' OR u.lastname LIKE '%".$keyword."%'  OR u.username LIKE '%".$keyword."%' OR concat(u.firstname,' ',u.lastname) LIKE '%".$keyword."%' OR concat(u.lastname,' ',u.firstname) LIKE '%".$keyword."%' )";
 			}
@@ -2588,10 +2586,10 @@ class UserManager
 		//only active users
 		if ($keyword_active) {
 			$sql .= " AND u.active='1'";
-		} 
+		}
 		//avoid anonymous
 		$sql .= " AND u.status <> 6 ";
-		
+
 	    // adding the filter to see the user's only of the current access_url
 		if ($_configuration['multiple_access_urls']==true && api_get_current_access_url_id()!=-1) {
 	    		$sql.= " AND url_rel_user.access_url_id=".api_get_current_access_url_id();
@@ -2600,48 +2598,48 @@ class UserManager
 	    if (!in_array($direction, array('ASC','DESC'))) {
 	    	$direction = 'ASC';
 	    }
-	    
+
 	    $column = intval($column);
 	    $from = intval($from);
 	    $number_of_items = intval($number_of_items);
-	
+
 		//$sql .= " ORDER BY col$column $direction ";
 		$sql .= " LIMIT $from,$number_of_items";
-		
+
 		$res = Database::query($sql, __FILE__, __LINE__);
 		if (Database::num_rows($res)> 0) {
-			while ($row = Database::fetch_array($res,'ASSOC')) { 
-				if (!in_array($row['user_id'], $return)) {			
+			while ($row = Database::fetch_array($res,'ASSOC')) {
+				if (!in_array($row['user_id'], $return)) {
 					$return[$row['user_id']] = $row;
 				}
 			}
 		}
 		return $return;
 	}
-	
+
 	/**
 	 * Show the search form
 	 * @param string the value of the search box
-	 * 
+	 *
 	 */
 	public static function get_search_form($query) {
 		echo'<form method="GET" action="'.api_get_path(WEB_PATH).'main/social/search.php">
 		<table cellspacing="0" cellpadding="0">
 		<tr>
 		<td>
-			<div id="search_label">			
+			<div id="search_label">
 					<b>'.get_lang('Search').'</b > ('.get_lang('UsersGroups').')
 			<div>
-				<input type="text" size="30" value="'.Security::remove_XSS($query).'" name="q"/><br />				
+				<input type="text" size="30" value="'.Security::remove_XSS($query).'" name="q"/><br />
 				<button class="search" type="submit" value="search">'.get_lang('Search').'</button>
-			</div>					
+			</div>
 		</td>
 		</tr>
 		</table></form>';
 	}
 	//deprecated
-	public static function get_public_users($keyword, $from = 0, $number_of_items= 20, $column=2, $direction='ASC') {	
-			
+	public static function get_public_users($keyword, $from = 0, $number_of_items= 20, $column=2, $direction='ASC') {
+
 			$admin_table = Database :: get_main_table(TABLE_MAIN_ADMIN);
 			$sql = "SELECT
 		                 u.user_id				AS col0,
@@ -2658,42 +2656,42 @@ class UserManager
 		                 u.user_id				AS col8 ".
 		                 ", u.expiration_date      AS exp ".
 		            " FROM $user_table u ";
-		
+
 		    // adding the filter to see the user's only of the current access_url
 		    global $_configuration;
 		    if ((api_is_platform_admin() || api_is_session_admin()) && $_configuration['multiple_access_urls']==true && api_get_current_access_url_id()!=-1) {
 		    	$access_url_rel_user_table= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
 		    	$sql.= " INNER JOIN $access_url_rel_user_table url_rel_user ON (u.user_id=url_rel_user.user_id)";
 		    }
-		
+
 			if (isset ($keyword)) {
 				$keyword = Database::escape_string($keyword);
-				//OR u.official_code LIKE '%".$keyword."%' 
+				//OR u.official_code LIKE '%".$keyword."%'
 				$sql .= " WHERE (u.firstname LIKE '%".$keyword."%' OR u.lastname LIKE '%".$keyword."%'  OR u.username LIKE '%".$keyword."%'  OR u.email LIKE '%".$keyword."%' )";
 			}
 			$keyword_active = true;
 			//only active users
 			if ($keyword_active) {
 				$sql .= " AND u.active='1'";
-			} 
-		
+			}
+
 		    // adding the filter to see the user's only of the current access_url
 			if ($_configuration['multiple_access_urls']==true && api_get_current_access_url_id()!=-1) {
 		    		$sql.= " AND url_rel_user.access_url_id=".api_get_current_access_url_id();
 		    }
-		
+
 		    if (!in_array($direction, array('ASC','DESC'))) {
 		    	$direction = 'ASC';
 		    }
-		    
+
 		    $column = intval($column);
 		    $from = intval($from);
 		    $number_of_items = intval($number_of_items);
-		
+
 			$sql .= " ORDER BY col$column $direction ";
 			$sql .= " LIMIT $from,$number_of_items";
 			$res = Database::query($sql, __FILE__, __LINE__);
-		
+
 			$users = array ();
 		    $t = time();
 			while ($user = Database::fetch_row($res)) {
@@ -2705,13 +2703,13 @@ class UserManager
 		        	   $user[7] = '-1';
 		            }
 		        }
-		        // forget about the expiration date field		      
+		        // forget about the expiration date field
 		        $users[] = array($user[0],$user[1],$user[2],$user[3],$user[4],$user[5],$user[6],$user[7],$user[8]);
 			}
 			return $users;
 		}
 	/**
-	 * Shows the user menu 
+	 * Shows the user menu
 	 */
 	public static function show_menu(){
 		echo '<div class="actions">';
@@ -2720,10 +2718,10 @@ class UserManager
 		echo '<a href="/main/messages/outbox.php">'.Display::return_icon('outbox.png').' '.	get_lang('Outbox').'</a>';
 		echo '<span style="float:right; padding-top:7px;">'.
 			 '<a href="/main/auth/profile.php?show=1">'.Display::return_icon('edit.gif').' '.get_lang('Configuration').'</a>';
-			 '</span>';		 
+			 '</span>';
 		echo '</div>';
 	}
-	
+
 	/**
 	 * Gives a list of course auto-register (field special_course)
 	 * @return array  list of course
@@ -2737,19 +2735,19 @@ class UserManager
 		$tbl_course_field 			= Database :: get_main_table(TABLE_MAIN_COURSE_FIELD);
 		$tbl_course_field_value		= Database :: get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
 		$tbl_user_course_category   = Database :: get_user_personal_table(TABLE_USER_COURSE_CATEGORY);
-		
+
 		//we filter the courses from the URL
-		$join_access_url=$where_access_url='';		
+		$join_access_url=$where_access_url='';
 		global $_configuration;
 		if ($_configuration['multiple_access_urls']==true) {
 			$access_url_id = api_get_current_access_url_id();
 			if($access_url_id!=-1) {
-				$tbl_url_course = Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);		
+				$tbl_url_course = Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
 				$join_access_url= "LEFT JOIN $tbl_url_course url_rel_course ON url_rel_course.course_code= course.code";
 				$where_access_url=" AND access_url_id = $access_url_id ";
 			}
 		}
-		
+
 		// Filter special courses
 		$sql_special_course = "SELECT course_code FROM $tbl_course_field_value tcfv INNER JOIN $tbl_course_field tcf ON " .
 				" tcfv.field_id =  tcf.id WHERE tcf.field_variable = 'special_course' AND tcfv.field_value = 1 ";
@@ -2762,7 +2760,7 @@ class UserManager
 			}
 			$code_special_courses = ' course.code IN ('.join($special_course_list, ',').') ';
 		}
-		
+
 		// variable initialisation
 		$course_list_sql = '';
 		$course_list = array();
@@ -2774,8 +2772,8 @@ class UserManager
 											LEFT JOIN ".$tbl_user_course_category." user_course_category
 											ON course_rel_user.user_course_cat = user_course_category.id
 											$join_access_url
-											WHERE  $code_special_courses $where_access_url 
-											GROUP BY course.code 
+											WHERE  $code_special_courses $where_access_url
+											GROUP BY course.code
 											ORDER BY user_course_category.sort,course.title,course_rel_user.sort ASC";
 			$course_list_sql_result = api_sql_query($course_list_sql, __FILE__, __LINE__);
 			while ($result_row = Database::fetch_array($course_list_sql_result)) {
@@ -2784,7 +2782,7 @@ class UserManager
 		}
 		return $course_list;
 	}
-	
+
 	/**
 	 * Allow to register contact to social network
 	 * @param int user friend id
@@ -2793,17 +2791,17 @@ class UserManager
 	 */
 	public static function relate_users ($friend_id,$my_user_id,$relation_type) {
 		$tbl_my_friend = Database :: get_main_table(TABLE_MAIN_USER_REL_USER);
-		
+
 		$friend_id = intval($friend_id);
 		$my_user_id = intval($my_user_id);
 		$relation_type = intval($relation_type);
-		
+
 		$sql = 'SELECT COUNT(*) as count FROM ' . $tbl_my_friend . ' WHERE friend_user_id=' .$friend_id.' AND user_id='.$my_user_id;
 		$result = Database::query($sql, __FILE__, __LINE__);
 		$row = Database :: fetch_array($result, 'ASSOC');
 		$current_date=date('Y-m-d H:i:s');
-		
-		if ($row['count'] == 0) {			
+
+		if ($row['count'] == 0) {
 			$sql_i = 'INSERT INTO ' . $tbl_my_friend . '(friend_user_id,user_id,relation_type,last_edit)values(' . $friend_id . ','.$my_user_id.','.$relation_type.',"'.$current_date.'");';
 			Database::query($sql_i, __FILE__, __LINE__);
 			return true;
@@ -2814,20 +2812,20 @@ class UserManager
 			if ($row['count'] == 1) {
 				//only for the case of a RRHH
 				if ($row['relation_type'] != $relation_type && $relation_type == USER_RELATION_TYPE_RRHH) {
-					$sql_i = 'INSERT INTO ' . $tbl_my_friend . '(friend_user_id,user_id,relation_type,last_edit)values(' . $friend_id . ','.$my_user_id.','.$relation_type.',"'.$current_date.'");';		
+					$sql_i = 'INSERT INTO ' . $tbl_my_friend . '(friend_user_id,user_id,relation_type,last_edit)values(' . $friend_id . ','.$my_user_id.','.$relation_type.',"'.$current_date.'");';
 				} else {
 					$sql_i = 'UPDATE ' . $tbl_my_friend . ' SET relation_type='.$relation_type.' WHERE friend_user_id=' . $friend_id.' AND user_id='.$my_user_id;
-				}				
+				}
 				Database::query($sql_i, __FILE__, __LINE__);
 				return true;
 			} else {
 				return false;
-			}			
-		}		
+			}
+		}
 	}
-	
+
 	/**
-	 * Deletes a contact	  
+	 * Deletes a contact
 	 * @param int user friend id
 	 * @param bool true will delete ALL friends relationship from $friend_id
 	 * @author isaac flores paz <isaac.flores@dokeos.com>
@@ -2837,23 +2835,23 @@ class UserManager
 		$tbl_my_friend  = Database :: get_main_table(TABLE_MAIN_USER_REL_USER);
 		$tbl_my_message = Database :: get_main_table(TABLE_MAIN_MESSAGE);
 		$friend_id = intval($friend_id);
-		
-		if ($real_removed == true) {			
+
+		if ($real_removed == true) {
 			//Delete user friend
 			/*
-			$sql_delete_relationship1 = 'UPDATE ' . $tbl_my_friend .'  SET relation_type='.USER_RELATION_TYPE_DELETED.' WHERE friend_user_id='.$friend_id;			
+			$sql_delete_relationship1 = 'UPDATE ' . $tbl_my_friend .'  SET relation_type='.USER_RELATION_TYPE_DELETED.' WHERE friend_user_id='.$friend_id;
 			$sql_delete_relationship2 = 'UPDATE ' . $tbl_my_friend . ' SET relation_type='.USER_RELATION_TYPE_DELETED.' WHERE user_id=' . $friend_id;
 			Database::query($sql_delete_relationship1, __FILE__, __LINE__);
 			Database::query($sql_delete_relationship2, __FILE__, __LINE__);*/
-			$extra_condition = '';				
+			$extra_condition = '';
 			if ($with_status_condition != '') {
 				$extra_condition = ' AND relation_type = '.intval($with_status_condition);
 			}
-			$sql_delete_relationship1 = 'DELETE FROM ' . $tbl_my_friend .'  WHERE friend_user_id='.$friend_id.' '.$extra_condition;			
+			$sql_delete_relationship1 = 'DELETE FROM ' . $tbl_my_friend .'  WHERE friend_user_id='.$friend_id.' '.$extra_condition;
 			$sql_delete_relationship2 = 'DELETE FROM ' . $tbl_my_friend . ' WHERE user_id=' . $friend_id.' '.$extra_condition;
 			Database::query($sql_delete_relationship1, __FILE__, __LINE__);
-			Database::query($sql_delete_relationship2, __FILE__, __LINE__);	
-				
+			Database::query($sql_delete_relationship2, __FILE__, __LINE__);
+
 		} else {
 			$user_id = api_get_user_id();
 			$sql = 'SELECT COUNT(*) as count FROM ' . $tbl_my_friend . ' WHERE user_id=' . $user_id . ' AND relation_type <>'.USER_RELATION_TYPE_DELETED.' AND friend_user_id='.$friend_id;
@@ -2870,8 +2868,8 @@ class UserManager
 				Database::query($sql_j, __FILE__, __LINE__);
 				Database::query($sql_ij, __FILE__, __LINE__);
 				Database::query($sql_ji, __FILE__, __LINE__);
-			}			
+			}
 		}
 	}
-	
+
 }

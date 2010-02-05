@@ -220,7 +220,7 @@ if ( isset( $_POST["submitWork"]))
 				if ( ( ! is_dir( dropbox_cnf("sysPath"))))
 	            {
 					//The dropbox subdir doesn't exist yet so make it and create the .htaccess file
-	                mkdir( dropbox_cnf("sysPath"), 0700) or die ( dropbox_lang("errorCreatingDir")." (code 404)");
+	                mkdir( dropbox_cnf("sysPath"), api_get_permissions_for_new_directories()) or die ( dropbox_lang("errorCreatingDir")." (code 404)");
 					$fp = fopen( dropbox_cnf("sysPath")."/.htaccess", "w") or die (dropbox_lang("errorCreatingDir")." (code 405)");
 					fwrite($fp, "AuthName AllowLocalAccess
 	                             AuthType Basic

@@ -1011,8 +1011,7 @@ function is_subdir_of($subdir,$basedir)
  * @author Yannick Warnier <ywarnier@beeznest.org> Adaptation for work tool
  * @param	string	Base work dir (.../work)
  * @param 	string $desiredDirName complete path of the desired name
- * @return 	string actual directory name if it succeeds,
- *         boolean false otherwise
+ * @return 	string actual directory name if it succeeds, boolean false otherwise
  */
 function create_unexisting_work_directory($base_work_dir,$desired_dir_name)
 {
@@ -1021,14 +1020,10 @@ function create_unexisting_work_directory($base_work_dir,$desired_dir_name)
 	while ( file_exists($base_work_dir.$desired_dir_name.$nb) ) {
 		$nb += 1;
 	}
-	//echo "creating ".$base_work_dir.$desired_dir_name.$nb."#...";
-	$perm = api_get_setting('permissions_for_new_directories');
-	$perm = octdec(!empty($perm)?$perm:'0770');
-	if ( @mkdir($base_work_dir.$desired_dir_name.$nb, $perm)) {
-		chmod($base_work_dir.$desired_dir_name.$nb, $perm);
+	if (@mkdir($base_work_dir.$desired_dir_name.$nb, api_get_permissions_for_new_directories())) {
 		return $desired_dir_name.$nb;
 	} else {
-	return false;
+		return false;
 	}
 }
 

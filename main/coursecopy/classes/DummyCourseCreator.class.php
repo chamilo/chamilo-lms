@@ -65,7 +65,7 @@ class DummyCourseCreator
 		$course = Database::get_course_info($course_code);
 		$this->course = new Course();
 		$tmp_path = api_get_path(SYS_COURSE_PATH).$course['directory'].'/document/tmp_'.uniqid('');
-		@mkdir($tmp_path, 0755, true);
+		@mkdir($tmp_path, api_get_permissions_for_new_directories(), true);
 		$this->course->backup_path = $tmp_path;
 		$this->create_dummy_links();
 		$this->create_dummy_events();
@@ -108,7 +108,7 @@ class DummyCourseCreator
 			$dir_to_make = $course_doc_path.$path;
 			if (!is_dir($dir_to_make))
 			{
-				@mkdir($dir_to_make, 0755, true);
+				@mkdir($dir_to_make, api_get_permissions_for_new_directories(), true);
 			}
 			$file = $course_doc_path.$path.$filename;
 			$fp = fopen($file, 'w');

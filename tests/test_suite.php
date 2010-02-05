@@ -129,6 +129,7 @@ class TestsSuite extends TestSuite {
 		$this->addTestFile(dirname(__FILE__).'/main/inc/lib/course.lib.test.php');
 		$this->addTestFile(dirname(__FILE__).'/main/inc/banner.lib.test.php');
 		$this->addTestFile(dirname(__FILE__).'/main/admin/calendar.lib.test.php');
+		$this->addTestFile(dirname(__FILE__).'/main/inc/lib/surveymanager.lib.test.php');
 		$this->addTestFile(dirname(__FILE__).'/main/inc/lib/session_handler.class.test.php');
         $this->addTestFile(dirname(__FILE__).'/main/inc/lib/sessionmanager.lib.test.php');
         $this->addTestFile(dirname(__FILE__).'/main/inc/lib/classmanager.lib.test.php');
@@ -167,17 +168,17 @@ class TestsSuite extends TestSuite {
         $this->addTestFile(dirname(__FILE__).'/main/survey/survey.lib.test.php');
         $this->addTestFile(dirname(__FILE__).'/main/user/userInfoLib.test.php');        
         $this->addTestFile(dirname(__FILE__).'/main/webservices/user_import/import.lib.test.php');        
-        $this->addTestFile(dirname(__FILE__).'/main/work/work.lib.test.php');
-        $this->addTestFile(dirname(__FILE__).'/main/inc/lib/surveymanager.lib.test.php');
+        $this->addTestFile(dirname(__FILE__).'/main/work/work.lib.test.php');     
         $this->addTestFile(dirname(__FILE__).'/main/inc/lib/usermanager.lib.test.php'); 
         $this->addTestFile(dirname(__FILE__).'/main/inc/lib/groupmanager.lib.test.php');	 
         $this->addTestFile(dirname(__FILE__).'/main/inc/lib/image.lib.test.php'); 
         $this->addTestFile(dirname(__FILE__).'/main/inc/lib/import.lib.test.php');
         $this->addTestFile(dirname(__FILE__).'/main/inc/lib/internationalization.lib.test.php');  
         $this->addTestFile(dirname(__FILE__).'/main/inc/lib/system_announcements.lib.test.php');
-        $this->addTestFile(dirname(__FILE__).'/main/inc/lib/main_api.lib.test.php');//al final      
-        $this->addTestFile(dirname(__FILE__).'/main/inc/lib/debug.lib.inc.test.php');
-        //$this->addTestFile(dirname(__FILE__).'/main/inc/lib/fileUpload.lib.test.php');
+        $this->addTestFile(dirname(__FILE__).'/main/inc/lib/fileUpload.lib.test.php');
+        $this->addTestFile(dirname(__FILE__).'/main/inc/lib/main_api.lib.test.php');//this file delete the course     
+        $this->addTestFile(dirname(__FILE__).'/main/inc/lib/debug.lib.inc.test.php');//this file need be to the finish of the tests
+        
         //This files have a metadata and is not available for the test.
         //$this->addTestFile(dirname(__FILE__).'/main/inc/lib/xht.lib.test.php');
 	    //$this->addTestFile(dirname(__FILE__).'/main/inc/lib/xmd.lib.test.php');

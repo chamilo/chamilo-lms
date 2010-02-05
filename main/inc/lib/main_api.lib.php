@@ -135,7 +135,7 @@ define('TOOL_GRADEBOOK','gradebook');
 define('TOOL_NOTEBOOK','notebook');
 define('TOOL_ATTENDANCE','attendance');
 
-// CONSTANTS defining dokeos sections
+// CONSTANTS defining Chamilo interface sections
 define('SECTION_CAMPUS', 'mycampus');
 define('SECTION_COURSES', 'mycourses');
 define('SECTION_MYPROFILE', 'myprofile');
@@ -250,7 +250,9 @@ require_once dirname(__FILE__).'/internationalization.lib.php';
 */
 
 /**
- *	Returns a full path to a certain Dokeos area, which you specify through a parameter.
+ *	Returns a path to a certain resource within the Chamilo area, specifyed through a parameter.
+ *	Also, this function provides conversion between path types, in this case the input path points inside the Chamilo area too.
+ *
  *	See $_configuration['course_folder'] in the configuration.php to alter the WEB_COURSE_PATH and SYS_COURSE_PATH parameters.
  *	@param string $type				The requested path type (a defined constant), see the examples.
  *	@param string $path (optional)	A path which type is to be converted. Also, it may be a defined constant for a path.
@@ -260,62 +262,62 @@ require_once dirname(__FILE__).'/internationalization.lib.php';
  *	A terminology note:
  *	The defined constants used by this function contain the abbreviations WEB, REL, SYS with the following meaning for types:
  *	WEB - an absolute URL (we often call it web-path),
- *	example: http://www.mydokeos.com/dokeos/courses/COURSE01/document/lesson01.html;
+ *	example: http://www.mychamilo.org/chamilo/courses/COURSE01/document/lesson01.html;
  *	REL - represents a semi-absolute URL - a web-path, which is relative to the root web-path of the server, without server's base,
- *	example: /dokeos/courses/COURSE01/document/lesson01.html;
+ *	example: /chamilo/courses/COURSE01/document/lesson01.html;
  *	SYS - represents an absolute path inside the scope of server's file system,
- *	/var/www/dokeos/courses/COURSE01/document/lesson01.html or
- *	C:/Inetpub/wwwroot/dokeos/courses/COURSE01/document/lesson01.html.
+ *	/var/www/chamilo/courses/COURSE01/document/lesson01.html or
+ *	C:/Inetpub/wwwroot/chamilo/courses/COURSE01/document/lesson01.html.
  *	In some abstract sense we can consider these three path types as absolute.
  *
  *	Notes about the current behaviour model:
  *	1. Windows back-slashes are converted to slashes in the result.
  *	2. A semi-absolute web-path is detected by its leading slash. On Linux systems, absolute system paths start with
  *	a slash too, so an additional check about presense of leading system server base is implemented. For example, the function is
- *	able to distinguish type difference between /var/www/dokeos/courses/ (SYS) and /dokeos/courses/ (REL).
+ *	able to distinguish type difference between /var/www/chamilo/courses/ (SYS) and /chamilo/courses/ (REL).
  *	3. The function api_get_path() returns only these three types of paths, which in some sense are absolute. The function has
  *	no a mechanism for processing relative web/system paths, such as: lesson01.html, ./lesson01.html, ../css/my_styles.css.
  *	It has not been identified as needed yet.
  *	4. Also, resolving the meta-symbols "." and ".." withiin paths has not been implemented, it is to be identified as needed.
  *
  * 	@example
- *	Assume that your server root is /var/www/ dokeos is installed in a subfolder dokeos/ and the URL of your campus is http://www.mydokeos.com
+ *	Assume that your server root is /var/www/ , Chamilo is installed in a subfolder chamilo/ and the URL of your campus is http://www.mychamilo.org
  * 	The other configuration paramaters have not been changed.
  *
  * 	This is how we can retireve mosth used paths, for common purpose:
- *	api_get_path(WEB_SERVER_ROOT_PATH)			http://www.mydokeos.com/
- *	api_get_path(SYS_SERVER_ROOT_PATH)			/var/www/ - This is the physical folder where the system Dokeos has been placed. It is not always equal to $_SERVER['DOCUMENT_ROOT'].
- * 	api_get_path(WEB_PATH)						http://www.mydokeos.com/dokeos/
- * 	api_get_path(SYS_PATH)						/var/www/dokeos/
- * 	api_get_path(REL_PATH)						/dokeos/
- * 	api_get_path(WEB_COURSE_PATH)				http://www.mydokeos.com/dokeos/courses/
- * 	api_get_path(SYS_COURSE_PATH)				/var/www/dokeos/courses/
- *	api_get_path(REL_COURSE_PATH)				/dokeos/courses/
- * 	api_get_path(REL_CODE_PATH)					/dokeos/main/
- * 	api_get_path(WEB_CODE_PATH)					http://www.mydokeos.com/dokeos/main/
- * 	api_get_path(SYS_CODE_PATH)					/var/www/dokeos/main/
- * 	api_get_path(SYS_LANG_PATH)					/var/www/dokeos/main/lang/
- * 	api_get_path(WEB_IMG_PATH)					http://www.mydokeos.com/dokeos/main/img/
- *	api_get_path(WEB_CSS_PATH)					http://www.mydokeos.com/dokeos/main/css/
+ *	api_get_path(WEB_SERVER_ROOT_PATH)			http://www.mychamilo.org/
+ *	api_get_path(SYS_SERVER_ROOT_PATH)			/var/www/ - This is the physical folder where the system Chamilo has been placed. It is not always equal to $_SERVER['DOCUMENT_ROOT'].
+ * 	api_get_path(WEB_PATH)						http://www.mychamilo.org/chamilo/
+ * 	api_get_path(SYS_PATH)						/var/www/chamilo/
+ * 	api_get_path(REL_PATH)						/chamilo/
+ * 	api_get_path(WEB_COURSE_PATH)				http://www.mychamilo.org/chamilo/courses/
+ * 	api_get_path(SYS_COURSE_PATH)				/var/www/chamilo/courses/
+ *	api_get_path(REL_COURSE_PATH)				/chamilo/courses/
+ * 	api_get_path(REL_CODE_PATH)					/chamilo/main/
+ * 	api_get_path(WEB_CODE_PATH)					http://www.mychamilo.org/chamilo/main/
+ * 	api_get_path(SYS_CODE_PATH)					/var/www/chamilo/main/
+ * 	api_get_path(SYS_LANG_PATH)					/var/www/chamilo/main/lang/
+ * 	api_get_path(WEB_IMG_PATH)					http://www.mychamilo.org/chamilo/main/img/
+ *	api_get_path(WEB_CSS_PATH)					http://www.mychamilo.org/chamilo/main/css/
  * 	api_get_path(GARBAGE_PATH)					Deprecated?
- * 	api_get_path(WEB_PLUGIN_PATH)				http://www.mydokeos.com/dokeos/plugin/
- * 	api_get_path(SYS_PLUGIN_PATH)				/var/www/dokeos/plugin/
- * 	api_get_path(WEB_ARCHIVE_PATH)				http://www.mydokeos.com/dokeos/archive/
- * 	api_get_path(SYS_ARCHIVE_PATH)				/var/www/dokeos/archive/
- *	api_get_path(INCLUDE_PATH)					/var/www/dokeos/main/inc/
- * 	api_get_path(WEB_LIBRARY_PATH)				http://www.mydokeos.com/dokeos/main/inc/lib/
- * 	api_get_path(LIBRARY_PATH)					/var/www/dokeos/main/inc/lib/
- * 	api_get_path(CONFIGURATION_PATH)			/var/www/dokeos/main/inc/conf/
+ * 	api_get_path(WEB_PLUGIN_PATH)				http://www.mychamilo.org/chamilo/plugin/
+ * 	api_get_path(SYS_PLUGIN_PATH)				/var/www/chamilo/plugin/
+ * 	api_get_path(WEB_ARCHIVE_PATH)				http://www.mychamilo.org/chamilo/archive/
+ * 	api_get_path(SYS_ARCHIVE_PATH)				/var/www/chamilo/archive/
+ *	api_get_path(INCLUDE_PATH)					/var/www/chamilo/main/inc/
+ * 	api_get_path(WEB_LIBRARY_PATH)				http://www.mychamilo.org/chamilo/main/inc/lib/
+ * 	api_get_path(LIBRARY_PATH)					/var/www/chamilo/main/inc/lib/
+ * 	api_get_path(CONFIGURATION_PATH)			/var/www/chamilo/main/inc/conf/
  *
  *	This is how we retrieve paths of "registerd" resource files (scripts, players, etc.):
- *	api_get_path(TO_WEB, FLASH_PLAYER_AUDIO)	http://www.mydokeos.com/dokeos/main/inc/lib/mediaplayer/player.swf
- *	api_get_path(TO_WEB, FLASH_PLAYER_VIDEO)	http://www.mydokeos.com/dokeos/main/inc/lib/mediaplayer/player.swf
- *	api_get_path(TO_SYS, SCRIPT_SWFOBJECT)		/var/www/dokeos/main/inc/lib/swfobject/swfobject.js
- *	api_get_path(TO_REL, SCRIPT_ASCIIMATHML)	/dokeos/main/inc/lib/asciimath/ASCIIMathML.js
+ *	api_get_path(TO_WEB, FLASH_PLAYER_AUDIO)	http://www.mychamilo.org/chamilo/main/inc/lib/mediaplayer/player.swf
+ *	api_get_path(TO_WEB, FLASH_PLAYER_VIDEO)	http://www.mychamilo.org/chamilo/main/inc/lib/mediaplayer/player.swf
+ *	api_get_path(TO_SYS, SCRIPT_SWFOBJECT)		/var/www/chamilo/main/inc/lib/swfobject/swfobject.js
+ *	api_get_path(TO_REL, SCRIPT_ASCIIMATHML)	/chamilo/main/inc/lib/asciimath/ASCIIMathML.js
  *	...
  *
  *	We can convert arbitrary paths, that are not registered (no defined constant).
- *	For guaranteed result, these paths should point inside the systen Dokeos.
+ *	For guaranteed result, these paths should point inside the system Chamilo.
  *	Some random examples:
  *	api_get_path(TO_WEB, $_SERVER['REQUEST_URI'])
  *	api_get_path(TO_SYS, $_SERVER['PHP_SELF'])
@@ -467,10 +469,10 @@ function api_get_path($path_type, $path = null) {
 		$paths[WEB_PLUGIN_PATH] 	= $paths[WEB_PATH].$paths[WEB_PLUGIN_PATH];
 		$paths[SYS_ARCHIVE_PATH] 	= $paths[SYS_PATH].$paths[SYS_ARCHIVE_PATH];
 		$paths[WEB_ARCHIVE_PATH] 	= $paths[WEB_PATH].$paths[WEB_ARCHIVE_PATH];
-		// A change for Dokeos 1.8.6.2
+		// A change as of Chamilo 1.8.6.2
 		// Calculation in the previous way does not rely on configuration settings and in some cases gives unexpected results.
 		//$paths[INCLUDE_PATH] = $include_path_sys; // Old behaviour, Dokeos 1.8.6.1.
-		$paths[INCLUDE_PATH] 		= $paths[SYS_CODE_PATH].$paths[INCLUDE_PATH]; // New behaviour, coherrent with the model, Dokeos 1.8.6.2.
+		$paths[INCLUDE_PATH] 		= $paths[SYS_CODE_PATH].$paths[INCLUDE_PATH]; // New behaviour, coherrent with the model, Chamilo 1.8.6.2.
 		//
 		$paths[LIBRARY_PATH] 		= $paths[SYS_CODE_PATH].$paths[LIBRARY_PATH];
 		$paths[CONFIGURATION_PATH] 	= $paths[SYS_CODE_PATH].$paths[CONFIGURATION_PATH];
@@ -526,16 +528,16 @@ function api_get_path($path_type, $path = null) {
 		$path = substr($path, 0, $pos);
 	}
 
-	// Detection of the input path type. Conversion to semi-absolute type ( /dokeos/main/inc/.... ).
+	// Detection of the input path type. Conversion to semi-absolute type ( /chamilo/main/inc/.... ).
 
 	if (preg_match(VALID_WEB_PATH, $path)) {
 
 		// A special case: When a URL points to the document download script directly, without
 		// mod-rewrite translation, we have to translate it into an "ordinary" web path.
 		// For example:
-		// http://localhost/dokeos/main/document/download.php?doc_url=/image.png&cDir=/
+		// http://localhost/chamilo/main/document/download.php?doc_url=/image.png&cDir=/
 		// becomes
-		// http://localhost/dokeos/courses/TEST/document/image.png
+		// http://localhost/chamilo/courses/TEST/document/image.png
 		// TEST is a course directory name, so called "system course code".
 		if (strpos($path, 'download.php') !== false) { // Fast detection first.
 			$path = urldecode($path);
@@ -873,7 +875,7 @@ function api_get_real_course_id() {
  *
  * This function relies on api_get_course_info()
  * @param	string	The course code - optional (takes it from session if not given)
- * @return	string	The directory where the course is located inside the Dokeos "courses" directory
+ * @return	string	The directory where the course is located inside the Chamilo "courses" directory
  * @author	Yannick Warnier <yannick.warnier@dokeos.com>
  */
 function api_get_course_path($course_code = null) {
@@ -999,7 +1001,7 @@ function api_get_course_info($course_code = null) {
 */
 
 /**
- * Start the Dokeos session.
+ * Start the Chamilo session.
  *
  * The default lifetime for session is set here. It is not possible to have it
  * as a database setting as it is used before the database connection has been made.

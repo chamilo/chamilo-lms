@@ -410,20 +410,20 @@ function copyDirTo($origDirPath, $destination, $move=true)
 
 function index_dir($path)
 {
-	
-	
-	
 	$save_dir = getcwd();
-	chdir($path);
-	$handle = opendir($path);
-	// reads directory content end record subdirectoies names in $dir_array
-	while ($element = readdir($handle) )
-	{
-		if ( $element == "." || $element == "..") continue;	// skip the current and parent directories
-		if ( is_dir($element) )	 $dirArray[] = $path."/".$element;
+	if(is_dir($path)){
+		chdir($path);
+		$handle = opendir($path);
 	}
-
-	closedir($handle) ;
+	// reads directory content end record subdirectoies names in $dir_array
+	if (file_exists($handle)) {
+		while ($element = readdir($handle) )
+		{
+			if ( $element == "." || $element == "..") continue;	// skip the current and parent directories
+			if ( is_dir($element) )	 $dirArray[] = $path."/".$element;
+		}
+		closedir($handle) ;
+	}
 
 	// recursive operation if subdirectories exist
 	$dirNumber = sizeof($dirArray);

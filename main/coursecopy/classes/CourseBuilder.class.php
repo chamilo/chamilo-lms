@@ -396,7 +396,7 @@ class CourseBuilder
 				$db_result2 = Database::query($sql, __FILE__, __LINE__);
 				while ($obj2 = Database::fetch_object($db_result2))
 				{
-					$question->add_answer($obj2->answer, $obj2->correct, $obj2->comment, $obj2->ponderation, $obj2->position, $obj2->hotspot_coordinates, $obj2->hotspot_type);
+					$question->add_answer($obj2->id, $obj2->answer, $obj2->correct, $obj2->comment, $obj2->ponderation, $obj2->position, $obj2->hotspot_coordinates, $obj2->hotspot_type);
 				}
 				$this->course->add_resource($question);
 			}
@@ -431,7 +431,7 @@ class CourseBuilder
 				$db_result2 = Database::query($sql, __FILE__, __LINE__);
 				while ($obj2 = Database::fetch_object($db_result2))
 				{
-					$question->add_answer($obj2->answer, $obj2->correct, $obj2->comment, $obj2->ponderation, $obj2->position, $obj2->hotspot_coordinates, $obj2->hotspot_type);
+					$question->add_answer($obj2->id, $obj2->answer, $obj2->correct, $obj2->comment, $obj2->ponderation, $obj2->position, $obj2->hotspot_coordinates, $obj2->hotspot_type);
 				}
 				$this->course->add_resource($question);
 			}

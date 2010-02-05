@@ -40,6 +40,8 @@
 ==============================================================================
 */
 
+require_once api_get_path(LIBRARY_PATH).'course.lib.php';
+
 /*
 ==============================================================================
 		CONSTANTS
@@ -1091,7 +1093,509 @@ class DocumentManager {
 			return false;
 		}
     }
+    
+    
+    /**
+     * Gets the list of included resources as a list of absolute or relative paths from a html file or string html
+     * This allows for a better SCORM export or replace urls inside content html from copy course
+     * The list will generally include pictures, flash objects, java applets, or any other
+     * stuff included in the source of the current item. The current item is expected
+     * to be an HTML file or string html. If it is not, then the function will return and empty list.
+     * @param	string  source html (content or path)
+     * @param	bool  	is file or string html 
+     * @param	string	type (one of the Dokeos tools) - optional (otherwise takes the current item's type)
+     * @param	int		level of recursivity we're in
+     * @return	array	List of file paths. An additional field containing 'local' or 'remote' helps determine if the file should be copied into the zip or just linked
+     */
+    function get_resources_from_source_html($source_html, $is_file = false, $type=null, $recursivity=1)
+    {
+    	$max = 5;
+    	$attributes = array();
+    	$wanted_attributes = array('src','url','@import','href','value');
+    	$abs_path = '';
+    	
+    	if ($recursivity > $max) {
+    		return array();
+    	}
 
+    	if (!isset($type)) {
+    		$type = TOOL_DOCUMENT;
+    	}
+    	
+    	if (!$is_file) {
+    		$attributes = DocumentManager::parse_HTML_attributes($source_html,$wanted_attributes);
+    	} else {    		
+    		if (is_file($source_html)) {	
+    			$abs_path = $source_html;		   			
+    			//for now, read the whole file in one go (that's gonna be a problem when the file is too big)
+				$info = pathinfo($abs_path);
+				$ext = $info['extension'];
+				switch (strtolower($ext)) {
+					case 'html'	:
+					case 'htm'	:
+					case 'shtml':
+					case 'css'	:	$file_content = file_get_contents($abs_path);
+									//get an array of attributes from the HTML source
+									$attributes = DocumentManager::parse_HTML_attributes($file_content,$wanted_attributes);
+									break;
+					default		:	break;
+				}    			
+    		} else {
+    			return false;
+    		}
+    	}
+
+    	switch($type)
+    	{
+    		case TOOL_DOCUMENT :
+    		case TOOL_QUIZ:
+    		case 'sco':
+							foreach($wanted_attributes as $attr)
+							{
+								if(isset($attributes[$attr]))
+								{									
+									//find which kind of path these are (local or remote)
+									$sources = $attributes[$attr];
+									foreach($sources as $source)
+									{
+										//skip what is obviously not a resource
+										if(strpos($source,"+this.")) continue; //javascript code - will still work unaltered
+										if(strpos($source,'.')=== false) continue; //no dot, should not be an external file anyway
+										if(strpos($source,'mailto:')) continue; //mailto link
+										if(strpos($source,';') && !strpos($source,'&amp;')) continue; //avoid code - that should help
+
+										if($attr == 'value')
+										{
+											if(strpos($source , 'mp3file'))
+											{
+												$files_list[] = array(substr($source, 0, strpos($source , '.swf')+4),'local','abs');
+												$mp3file = substr($source , strpos($source , 'mp3file=')+8);
+												if(substr($mp3file,0,1) == '/')
+													$files_list[] = array($mp3file,'local','abs');
+												else
+													$files_list[] = array($mp3file,'local','rel');
+											}
+                                            elseif(strpos($source, 'flv=')===0)
+                                            {
+                                            	$source = substr($source, 4);
+                                                if(strpos($source, '&')>0)
+                                                {
+                                                	$source = substr($source,0,strpos($source, '&'));
+                                                }
+                                            	if(strpos($source,'://')>0)
+                                                {
+                                                    if(strpos($source,api_get_path(WEB_PATH))!==false)
+                                                    {
+                                                        //we found the current portal url
+                                                        $files_list[] = array($source,'local','url');
+                                                    }
+                                                    else
+                                                    {
+                                                        //we didn't find any trace of current portal
+                                                        $files_list[] = array($source,'remote','url');
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    $files_list[] = array($source,'local','abs');
+                                                }
+                                                continue; //skipping anything else to avoid two entries (while the others can have sub-files in their url, flv's can't)
+                                            }
+										}
+										if(strpos($source,'://') > 0)
+										{
+											//cut at '?' in a URL with params
+											if(strpos($source,'?')>0)
+											{
+												$second_part = substr($source,strpos($source,'?'));
+												if(strpos($second_part,'://')>0)
+												{//if the second part of the url contains a url too, treat the second one before cutting
+
+													$pos1 = strpos($second_part,'=');
+													$pos2 = strpos($second_part,'&');
+													$second_part = substr($second_part,$pos1+1,$pos2-($pos1+1));
+													if(strpos($second_part,api_get_path(WEB_PATH))!==false)
+													{
+														//we found the current portal url
+														$files_list[] = array($second_part,'local','url'); 
+														$in_files_list[] = DocumentManager::get_resources_from_source_html($second_part, true, TOOL_DOCUMENT, recursivity+1);
+														if(count($in_files_list)>0)
+														{
+															$files_list = array_merge($files_list,$in_files_list);
+														}
+													}
+													else
+													{
+														//we didn't find any trace of current portal
+														$files_list[] = array($second_part,'remote','url');
+													}
+												}
+												elseif(strpos($second_part,'=')>0)
+												{
+													if(substr($second_part,0,1) === '/')
+													{	//link starts with a /, making it absolute (relative to DocumentRoot)
+														$files_list[] = array($second_part,'local','abs'); 
+														$in_files_list[] = DocumentManager::get_resources_from_source_html($second_part, true, TOOL_DOCUMENT,$recursivity+1);
+														if(count($in_files_list)>0)
+														{
+															$files_list = array_merge($files_list,$in_files_list);
+														}
+													}
+													elseif(strstr($second_part,'..') === 0)
+													{	//link is relative but going back in the hierarchy
+														$files_list[] = array($second_part,'local','rel');
+														//$dir = api_get_path(SYS_CODE_PATH);//dirname($abs_path);
+														//$new_abs_path = realpath($dir.'/'.$second_part);
+														$dir = '';
+														if (!empty($abs_path)) {
+															$dir = dirname($abs_path).'/';
+														}
+														$new_abs_path = realpath($dir.$second_part);     
+														$in_files_list[] = DocumentManager::get_resources_from_source_html($new_abs_path, true, TOOL_DOCUMENT,$recursivity+1);
+														if(count($in_files_list)>0)
+														{
+															$files_list = array_merge($files_list,$in_files_list);
+														}
+													}
+													else
+													{	//no starting '/', making it relative to current document's path
+														if(substr($second_part,0,2) == './')
+														{
+															$second_part = substr($second_part,2);
+														}
+														$files_list[] = array($second_part,'local','rel');														
+														$dir = '';
+														if (!empty($abs_path)) {
+															$dir = dirname($abs_path).'/';
+														}
+														$new_abs_path = realpath($dir.$second_part);														 
+														$in_files_list[] = DocumentManager::get_resources_from_source_html($new_abs_path, true, TOOL_DOCUMENT,$recursivity+1);
+														if(count($in_files_list)>0)
+														{
+															$files_list = array_merge($files_list,$in_files_list);
+														}
+													}
+												}
+												//leave that second part behind now
+												$source = substr($source,0,strpos($source,'?'));
+												if(strpos($source,'://') > 0)
+												{
+													if(strpos($source,api_get_path(WEB_PATH))!==false)
+													{
+														//we found the current portal url
+														$files_list[] = array($source,'local','url'); 
+														$in_files_list[] = DocumentManager::get_resources_from_source_html($source, true, TOOL_DOCUMENT, $recursivity+1);
+														if(count($in_files_list)>0)
+														{
+															$files_list = array_merge($files_list,$in_files_list);
+														}
+													}
+													else
+													{
+														//we didn't find any trace of current portal
+														$files_list[] = array($source,'remote','url');
+													}
+												}
+												else
+												{
+													//no protocol found, make link local
+													if(substr($source,0,1) === '/')
+													{	//link starts with a /, making it absolute (relative to DocumentRoot)
+														$files_list[] = array($source,'local','abs');   
+														$in_files_list[] = DocumentManager::get_resources_from_source_html($source, true, TOOL_DOCUMENT, $recursivity+1);
+														if(count($in_files_list)>0)
+														{
+															$files_list = array_merge($files_list,$in_files_list);
+														}
+													}
+													elseif(strstr($source,'..') === 0)
+													{	//link is relative but going back in the hierarchy
+														$files_list[] = array($source,'local','rel');														
+														$dir = '';
+														if (!empty($abs_path)) {
+															$dir = dirname($abs_path).'/';
+														}
+														$new_abs_path = realpath($dir.$source);														
+														$in_files_list[] = DocumentManager::get_resources_from_source_html($new_abs_path, true, TOOL_DOCUMENT, $recursivity+1);
+														if(count($in_files_list)>0)
+														{
+															$files_list = array_merge($files_list,$in_files_list);
+														}
+													}
+													else
+													{	//no starting '/', making it relative to current document's path
+														if(substr($source,0,2) == './')
+														{
+															$source = substr($source,2);
+														}
+														$files_list[] = array($source,'local','rel');
+														$dir = '';
+														if (!empty($abs_path)) {
+															$dir = dirname($abs_path).'/';
+														}
+														$new_abs_path = realpath($dir.$source);
+														$in_files_list[] = DocumentManager::get_resources_from_source_html($new_abs_path, true, TOOL_DOCUMENT, $recursivity+1);
+														if(count($in_files_list)>0)
+														{
+															$files_list = array_merge($files_list,$in_files_list);
+														}
+													}
+												}
+											}
+											//found some protocol there
+											if(strpos($source,api_get_path(WEB_PATH))!==false)
+											{
+												//we found the current portal url
+												$files_list[] = array($source,'local','url'); 
+												$in_files_list[] = DocumentManager::get_resources_from_source_html($source, true, TOOL_DOCUMENT, $recursivity+1);
+												if(count($in_files_list)>0)
+												{
+													$files_list = array_merge($files_list,$in_files_list);
+												}
+											}
+											else
+											{
+												//we didn't find any trace of current portal
+												$files_list[] = array($source,'remote','url');
+											}
+										}
+										else
+										{
+											//no protocol found, make link local
+											if(substr($source,0,1) === '/')
+											{	//link starts with a /, making it absolute (relative to DocumentRoot)
+												$files_list[] = array($source,'local','abs');
+												$in_files_list[] = DocumentManager::get_resources_from_source_html($source, true, TOOL_DOCUMENT, $recursivity+1);
+												if(count($in_files_list)>0)
+												{
+													$files_list = array_merge($files_list,$in_files_list);
+												}
+											}
+											elseif(strpos($source,'..') === 0)
+											{	//link is relative but going back in the hierarchy
+												$files_list[] = array($source,'local','rel');												
+												$dir = '';
+												if (!empty($abs_path)) {
+													$dir = dirname($abs_path).'/';
+												}
+												$new_abs_path = realpath($dir.$source);												
+												$in_files_list[] = DocumentManager::get_resources_from_source_html($new_abs_path, true, TOOL_DOCUMENT,$recursivity+1);
+												if(count($in_files_list)>0)
+												{
+													$files_list = array_merge($files_list,$in_files_list);
+												}
+											}
+											else
+											{	//no starting '/', making it relative to current document's path
+												if(substr($source,0,2) == './')
+												{ 
+													$source = substr($source,2);
+												}
+												$files_list[] = array($source,'local','rel');
+												$dir = '';
+												if (!empty($abs_path)) {
+													$dir = dirname($abs_path).'/';
+												}
+												$new_abs_path = realpath($dir.$source);												
+												$in_files_list[] = DocumentManager::get_resources_from_source_html($new_abs_path, true, TOOL_DOCUMENT, $recursivity+1);
+												if(count($in_files_list)>0)
+												{
+													$files_list = array_merge($files_list,$in_files_list);
+												}
+											}
+										}
+									}
+								}
+							}
+    			break;
+    		default: //ignore
+    			break;
+    	}
+
+		$checked_files_list = array();
+    	$checked_array_list = array();
+    	
+    	if (count($files_list ) > 0) {    	
+	    	foreach($files_list as $idx => $file)
+	    	{
+	    		if(!empty($file[0]))
+	    		{
+		    		if(!in_array($file[0],$checked_files_list))
+		    		{
+		    			$checked_files_list[] = $files_list[$idx][0];
+		    			$checked_array_list[] = $files_list[$idx];
+		    		}
+	    		}
+	    	}
+    	}
+    	return $checked_array_list;
+    }
+
+ 	/**
+	 * Parses the HTML attributes given as string.
+	 *
+	 * @param    string  HTML attribute string
+	 * @param	 array	 List of attributes that we want to get back
+	 * @return   array   An associative array of attributes
+	 * @author 	 Based on a function from the HTML_Common2 PEAR module
+	 */
+	function parse_HTML_attributes($attrString,$wanted=array())
+	{
+	    $attributes = array();
+	    $regs = array();
+	    $reduced = false;
+	    if(count($wanted)>0)
+	    {
+	    	$reduced = true;
+	    }
+	    try {
+	       //Find all occurences of something that looks like a URL
+           // The structure of this regexp is:
+           // (find protocol) then
+           // (optionally find some kind of space 1 or more times) then
+           // find (either an equal sign or a bracket) followed by an optional space
+           // followed by some text without quotes (between quotes itself or not)
+           // then possible closing brackets if we were in the opening bracket case
+           // OR something like @import()
+	    	$res = preg_match_all(
+                '/(((([A-Za-z_:])([A-Za-z0-9_:\.-]*))' .
+			// '/(((([A-Za-z_:])([A-Za-z0-9_:\.-]|[^\x00-\x7F])*)' . -> seems to be taking too much
+			// '/(((([A-Za-z_:])([^\x00-\x7F])*)' . -> takes only last letter of parameter name
+	            '([ \n\t\r]+)?(' .
+			// '(=([ \n\t\r]+)?("[^"]+"|\'[^\']+\'|[^ \n\t\r]+))' . -> doesn't restrict close enough to the url itself
+                  '(=([ \n\t\r]+)?("[^"\)]+"|\'[^\'\)]+\'|[^ \n\t\r\)]+))' .
+	              '|' .
+			// '(\(([ \n\t\r]+)?("[^"]+"|\'[^\']+\'|[^ \n\t\r]+)\))' . -> doesn't restrict close enough to the url itself
+                  '(\(([ \n\t\r]+)?("[^"\)]+"|\'[^\'\)]+\'|[^ \n\t\r\)]+)\))' .
+	            '))' .
+	            '|' .
+			// '(@import([ \n\t\r]+)?("[^"]+"|\'[^\']+\'|[^ \n\t\r]+)))?/', -> takes a lot (like 100's of thousands of empty possibilities)
+                '(@import([ \n\t\r]+)?("[^"]+"|\'[^\']+\'|[^ \n\t\r]+)))/',
+	            $attrString,
+	            $regs
+	       );
+
+		} catch (Exception $e) {
+    		error_log('Caught exception: '. $e->getMessage(),0) ;
+		}
+	    if ($res) {
+	        for ($i = 0; $i < count($regs[1]); $i++) {
+	            $name  = trim($regs[3][$i]);
+	            $check = trim($regs[0][$i]);
+	            $value = trim($regs[10][$i]);
+	            if(empty($value) and !empty($regs[13][$i])){
+					$value = $regs[13][$i];
+	            }
+	            if(empty($name) && !empty($regs[16][$i]))
+	            {
+	            	$name = '@import';
+	            	$value = trim($regs[16][$i]);
+	            }
+	            if(!empty($name))
+	            {
+					if(!$reduced OR in_array(strtolower($name),$wanted))
+		            {
+			            if ($name == $check) {
+		            		$attributes[strtolower($name)][] = strtolower($name);
+			            } else {
+			                if (!empty($value) && ($value[0] == '\'' || $value[0] == '"')) {
+			                    $value = substr($value, 1, -1);
+			                }
+						    if ($value=='API.LMSGetValue(name') {
+						    	$value='API.LMSGetValue(name)';
+						    }
+			                $attributes[strtolower($name)][] = $value;
+			            }
+		            }
+	            }
+	        }
+	    }else{
+	    	error_log('preg_match did not find anything',0);
+	    }
+	    return $attributes;
+	}
+
+   /**
+    * Replace urls inside content html from a copy course
+    * @param string		content html
+    * @param string		origin course code
+    * @param string		destination course directory
+    * @return string	new content html with replaced urls or return false if content is not a string
+    */
+   function replace_urls_inside_content_html_from_copy_course($content_html, $origin_course_code, $destination_course_directory) {
+   	
+		if (!is_string($content_html)) {
+			return false;
+		}
+
+  		$orig_source_html 	= DocumentManager::get_resources_from_source_html($content_html);
+		$orig_course_info 	= api_get_course_info($origin_course_code);
+		$orig_course_path 	= api_get_path(SYS_PATH).'courses/'.$orig_course_info['path'].'/';
+		$destination_course_code = CourseManager::get_course_id_from_path ($destination_course_directory);
+		$dest_course_path 	= api_get_path(SYS_COURSE_PATH).$destination_course_directory.'/';
+		
+		
+		foreach ($orig_source_html as $source) {
+
+			//var_dump($source);
+
+			// get information about source url
+			$real_orig_url	= $source[0];	// url			
+			$scope_url  	= $source[1];   // scope (local, remote)
+			$type_url		= $source[2];	// tyle (rel, abs, url)
+
+			// get path and query from origin url
+			$orig_parse_url  = parse_url($real_orig_url);
+			$real_orig_path  = $orig_parse_url['path'];
+			$real_orig_query = $orig_parse_url['query'];
+			
+			// replace origin course code by destination course code from origin url query
+			$dest_url_query = '';					
+			if (!empty($real_orig_query)) {	
+				$dest_url_query = '?'.$real_orig_query;
+				if (strpos($dest_url_query,$origin_course_code) !== false) {
+					$dest_url_query = str_replace($origin_course_code,$destination_course_code,$dest_url_query);
+				}			
+			}
+								  
+			if ($scope_url == 'local') {
+				if ( $type_url == 'abs' || $type_url == 'rel') {
+					$document_file = strstr($real_orig_path,'document');
+					if (strpos($real_orig_path,$document_file) !== false) {
+						$origin_filepath = $orig_course_path.$document_file;
+						$destination_filepath = $dest_course_path.$document_file;
+						// copy origin file inside destination course
+						if (file_exists($origin_filepath)) {				
+							$filepath_dir = dirname($destination_filepath);
+							if (!is_dir($filepath_dir)) {
+								$perm = api_get_setting('permissions_for_new_directories');
+	    						$perm = octdec(!empty($perm)?$perm:0777);
+								@mkdir($filepath_dir,$perm,true);
+							}
+							if (!file_exists($destination_filepath)) {
+								@copy($origin_filepath,$destination_filepath);
+							}
+						}											
+						// replace origin course path by destination course path
+						if (strpos($content_html,$real_orig_url) !== false) {
+							$url_course_path = str_replace($orig_course_info['path'].'/'.$document_file,'',$real_orig_path);
+							$destination_url = $url_course_path.$destination_course_directory.'/'.$document_file.$dest_url_query;	
+							$content_html = str_replace($real_orig_url,$destination_url, $content_html);
+						}														
+					}
+
+					// replace origin course code by destination course code  from origin url
+					if (strpos($real_orig_url,'?') === 0) {
+						$dest_url = str_replace($origin_course_code,$destination_course_code,$real_orig_url);
+						$content_html = str_replace($real_orig_url,$dest_url, $content_html);						
+					}
+															
+				}
+			}
+		}   			
+   		return $content_html;   	
+   }
+    
 }
 //end class DocumentManager
 ?>

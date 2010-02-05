@@ -41,6 +41,7 @@ require_once 'SurveyQuestion.class.php';
 require_once 'Glossary.class.php';
 require_once 'wiki.class.php';
 require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
+require_once api_get_path(LIBRARY_PATH).'document.lib.php';
 
 define('FILE_SKIP', 1);
 define('FILE_RENAME', 2);
@@ -746,6 +747,9 @@ class CourseRestorer
 			$resources = $this->course->resources;
 			foreach ($resources[RESOURCE_EVENT] as $id => $event)
 			{
+				// check resources inside html from fckeditor tool and copy correct urls into recipient course				
+				$event->content = DocumentManager::replace_urls_inside_content_html_from_copy_course($event->content, $this->course->code, $this->course->destination_path);
+				
 				$sql = "INSERT INTO ".$table." SET title = '".Database::escape_string($event->title)."', content = '".Database::escape_string($event->content)."', start_date = '".$event->start_date."', end_date = '".$event->end_date."'";
 				Database::query($sql, __FILE__, __LINE__);
 				$this->course->resources[RESOURCE_EVENT][$id]->destination_id = Database::insert_id();
@@ -771,10 +775,8 @@ class CourseRestorer
 					$course_destination=$this->course->destination_path;
 				}
 
-				$course_info=api_get_course_info(api_get_course_id());
-				$search='../courses/'.$course_info['path'].'/document';
-				$replace_search_by='../courses/'.$course_destination.'/document';
-				$description_content=str_replace($search,$replace_search_by,$cd->content);
+				// check resources inside html from fckeditor tool and copy correct urls into recipient course				
+				$description_content = DocumentManager::replace_urls_inside_content_html_from_copy_course($cd->content, $this->course->code, $this->course->destination_path);
 
 				$condition_session = "";
 				if (!empty($session_id)) {
@@ -798,6 +800,10 @@ class CourseRestorer
 			$resources = $this->course->resources;
 			foreach ($resources[RESOURCE_ANNOUNCEMENT] as $id => $announcement)
 			{
+				
+				// check resources inside html from fckeditor tool and copy correct urls into recipient course				
+				$announcement->content = DocumentManager::replace_urls_inside_content_html_from_copy_course($announcement->content, $this->course->code, $this->course->destination_path);
+				
 				$sql = "INSERT INTO ".$table." " .
 						"SET title = '".Database::escape_string($announcement->title)."'," .
 							"content = '".Database::escape_string($announcement->content)."', " .
@@ -841,6 +847,9 @@ class CourseRestorer
     					$session_id = intval($session_id);
     					$condition_session = " , session_id = '$session_id' ";
     				}
+
+					// check resources inside html from fckeditor tool and copy correct urls into recipient course				
+					$quiz->description = DocumentManager::replace_urls_inside_content_html_from_copy_course($quiz->description, $this->course->code, $this->course->destination_path);
 
 					// Normal tests are stored in the database.
 					$sql = "INSERT INTO ".$table_qui.
@@ -892,6 +901,10 @@ class CourseRestorer
 			}
 			$table_que = Database :: get_course_table(TABLE_QUIZ_QUESTION, $this->course->destination_db);
 			$table_ans = Database :: get_course_table(TABLE_QUIZ_ANSWER, $this->course->destination_db);
+			
+			// check resources inside html from fckeditor tool and copy correct urls into recipient course				
+			$question->description = DocumentManager::replace_urls_inside_content_html_from_copy_course($question->description, $this->course->code, $this->course->destination_path);
+			
 			$sql = "INSERT INTO ".$table_que." SET question = '".addslashes($question->question)."', description = '".addslashes($question->description)."', ponderation = '".addslashes($question->ponderation)."', position = '".addslashes($question->position)."', type='".addslashes($question->quiz_type)."', picture='".addslashes($question->picture)."', level='".addslashes($question->level)."'";
 			Database::query($sql, __FILE__, __LINE__);
 			$new_id = Database::insert_id();
@@ -904,6 +917,11 @@ class CourseRestorer
 				}
 			} else {
 				foreach ($question->answers as $index => $answer) {
+					
+					// check resources inside html from fckeditor tool and copy correct urls into recipient course				
+					$answer['answer'] = DocumentManager::replace_urls_inside_content_html_from_copy_course($answer['answer'], $this->course->code, $this->course->destination_path);
+					$answer['comment'] = DocumentManager::replace_urls_inside_content_html_from_copy_course($answer['comment'], $this->course->code, $this->course->destination_path);
+					
 					$sql = "INSERT INTO ".$table_ans." SET id= '". ($index +1)."',question_id = '".$new_id."', answer = '".Database::escape_string($answer['answer'])."', correct = '".$answer['correct']."', comment = '".Database::escape_string($answer['comment'])."', ponderation='".$answer['ponderation']."', position = '".$answer['position']."', hotspot_coordinates = '".$answer['hotspot_coordinates']."', hotspot_type = '".$answer['hotspot_type']."'";
 					Database::query($sql, __FILE__, __LINE__);
 				}
@@ -932,6 +950,12 @@ class CourseRestorer
 								';
 
 				$result_check = Database::query($sql_check, __FILE__, __LINE__);
+
+				// check resources inside html from fckeditor tool and copy correct urls into recipient course				
+				$survey->title 		  = DocumentManager::replace_urls_inside_content_html_from_copy_course($survey->title, $this->course->code, $this->course->destination_path);
+				$survey->subtitle 	  = DocumentManager::replace_urls_inside_content_html_from_copy_course($survey->subtitle, $this->course->code, $this->course->destination_path);
+				$survey->intro 		  = DocumentManager::replace_urls_inside_content_html_from_copy_course($survey->intro, $this->course->code, $this->course->destination_path);
+				$survey->surveythanks = DocumentManager::replace_urls_inside_content_html_from_copy_course($survey->surveythanks, $this->course->code, $this->course->destination_path);
 
 				$doc = '';
 				$sql = "INSERT INTO ".$table_sur." " .
@@ -1110,6 +1134,9 @@ class CourseRestorer
 			$table_que = Database :: get_course_table(TABLE_SURVEY_QUESTION, $this->course->destination_db);
 			$table_ans = Database :: get_course_table(TABLE_SURVEY_QUESTION_OPTION, $this->course->destination_db);
 
+			// check resources inside html from fckeditor tool and copy correct urls into recipient course				
+			$question->survey_question = DocumentManager::replace_urls_inside_content_html_from_copy_course($question->survey_question, $this->course->code, $this->course->destination_path);
+
 			$sql = "INSERT INTO ".$table_que." " .
 					"SET survey_id = 		'".Database::escape_string($question->survey_id)."', " .
 					"survey_question = 		'".Database::escape_string($question->survey_question)."', " .
@@ -1123,6 +1150,10 @@ class CourseRestorer
 
 			$new_id = Database::insert_id();
 			foreach ($question->answers as $index => $answer) {
+				
+				// check resources inside html from fckeditor tool and copy correct urls into recipient course				
+				$answer['option_text'] = DocumentManager::replace_urls_inside_content_html_from_copy_course($answer['option_text'], $this->course->code, $this->course->destination_path);
+				
 				$sql = "INSERT INTO ".$table_ans." " .
 						"SET " .
 						"question_id = '".Database::escape_string($new_id)."', " .
@@ -1456,6 +1487,9 @@ class CourseRestorer
     				$condition_session = " , session_id = '$session_id' ";
     			}
 
+				// check resources inside html from fckeditor tool and copy correct urls into recipient course				
+				$glossary->description = DocumentManager::replace_urls_inside_content_html_from_copy_course($glossary->description, $this->course->code, $this->course->destination_path);
+
 				$sql = "INSERT INTO ".$table_glossary." SET  name = '".Database::escape_string($glossary->name)."', description = '".Database::escape_string($glossary->description)."', display_order='".Database::escape_string($glossary->display_order)."' $condition_session ";
 				Database::query($sql, __FILE__, __LINE__);
 				$this->course->resources[RESOURCE_GLOSSARY][$id]->destination_id = Database::insert_id();
@@ -1479,6 +1513,9 @@ class CourseRestorer
 			{
 				//$wiki = new Wiki($obj->page_id, $obj->reflink, $obj->title, $obj->content, $obj->user_id, $obj->group_id, $obj->dtime);
 				// the sql statement to insert the groups from the old course to the new course
+
+				// check resources inside html from fckeditor tool and copy correct urls into recipient course				
+				$wiki->content = DocumentManager::replace_urls_inside_content_html_from_copy_course($wiki->content, $this->course->code, $this->course->destination_path);
 
 				$sql = "INSERT INTO $table_wiki (page_id, reflink, title, content, user_id, group_id, dtime, progress, version, session_id)
 							VALUES (

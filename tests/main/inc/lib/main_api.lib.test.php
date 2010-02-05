@@ -172,7 +172,7 @@ class TestMainApi extends UnitTestCase {
 
 	function testApiSessionClear() {
 		$variable = 'test';
-		 if (!headers_sent()) {	
+		 if (!headers_sent()) {
 			$res=api_session_clear($variable);
 		 }
 		$this->assertTrue(is_null($res));
@@ -180,7 +180,7 @@ class TestMainApi extends UnitTestCase {
 	}
 
 	function testApiSessionDestroy(){
-		 if (!headers_sent()) {	
+		 if (!headers_sent()) {
 			$res=api_session_destroy();
 		 }
 		$this->assertTrue(is_null($res));
@@ -257,7 +257,7 @@ class TestMainApi extends UnitTestCase {
 		$this->assertTrue(is_numeric($res));
 		//var_dump($res);
     }
-	
+
 
     function testApiGetSessionName(){
    		$session_id='';
@@ -279,7 +279,7 @@ class TestMainApi extends UnitTestCase {
     	$this->assertTrue(is_string($res));
     	//var_dump($res);
 	}
-	
+
 /* function deprecated
    	function testGetLang(){
         global $language_interface, $language_interface_initial_value, $language_file,$variable;
@@ -582,6 +582,22 @@ class TestMainApi extends UnitTestCase {
 		//var_dump($res);
 	}
 
+	public function testApiGetPermissionsForNewDirectories() {
+		$perm = trim(api_get_setting('permissions_for_new_directories'));
+		$perm = octdec(!empty($perm) ? $perm : '0777');
+		$res = api_get_permissions_for_new_directories();
+		$this->assertTrue($res === $perm);
+		//var_dump($res);
+	}
+
+	public function testApiGetPermissionsForNewFiles() {
+		$perm = trim(api_get_setting('permissions_for_new_files'));
+		$perm = octdec(!empty($perm) ? $perm : '0666');
+		$res = api_get_permissions_for_new_files();
+		$this->assertTrue($res === $perm);
+		//var_dump($res);
+	}
+
 	function testCopyr(){
 		$source = api_get_path(SYS_CODE_PATH).'app_share/DokeosAppShare.exe';
 		$dest = '';
@@ -590,7 +606,7 @@ class TestMainApi extends UnitTestCase {
 		//var_dump($res);
 	}
 
-	function testApiChmod_R(){		
+	function testApiChmod_R(){
 		$dirname = api_get_path(SYS_LANG_PATH);
 		$perm_dir = substr(sprintf('%o', fileperms($dirname)), -4);
 		if ($perm_dir != '0777') {
@@ -601,7 +617,7 @@ class TestMainApi extends UnitTestCase {
 			$filemode = '0777';
 			$res = api_chmod_R($path, $filemode);
 			unlink($path);
-			$this->assertTrue($res);	
+			$this->assertTrue($res);
 		}
 	}
 
@@ -618,7 +634,7 @@ class TestMainApi extends UnitTestCase {
 	}
 
 	function testApiStatusKey(){
-		$status = 'user';		
+		$status = 'user';
 		$res = api_status_key($status);
 		$this->assertTrue(is_numeric($res));
 	}
@@ -849,20 +865,20 @@ class TestMainApi extends UnitTestCase {
 		$this->assertTrue($tool_list);
 		//var_dump($res);
 	}
-	public function TestDeleteCourse() {				
-		$code = 'COURSEX';				
-		$res = CourseManager::delete_course($code);			
-		$path = api_get_path(SYS_PATH).'archive';		
+	public function TestDeleteCourse() {
+		$code = 'COURSEX';
+		$res = CourseManager::delete_course($code);
+		$path = api_get_path(SYS_PATH).'archive';
 		if ($handle = opendir($path)) {
-			while (false !== ($file = readdir($handle))) {				
-				if (strpos($file,$code)!==false) {										
-					if (is_dir($path.'/'.$file)) {						
-						rmdirr($path.'/'.$file);						
-					}				
-				}				
+			while (false !== ($file = readdir($handle))) {
+				if (strpos($file,$code)!==false) {
+					if (is_dir($path.'/'.$file)) {
+						rmdirr($path.'/'.$file);
+					}
+				}
 			}
 			closedir($handle);
 		}
-	}	
+	}
 }
 ?>

@@ -56,7 +56,7 @@ class TestMainApi extends UnitTestCase {
 		$message[] = '';
 
 		$message[] = '';
-		$message[] = 'Changed behaviour of the function api_get_path() after Dokeos 1.8.6.1, i.e. as of Dokeos 1.8.6.2.';
+		$message[] = 'Changed behaviour of the function api_get_path() after Dokeos 1.8.6.1, i.e. as of Chamilo 1.8.6.2.';
 		$message[] = '---------------------------------------------------------------------------------------------------------------';
 		$message[] = '';
 		$message[] = 'Old behaviour (1.8.6.1) api_get_path(INCLUDE_PATH) = '.api_get_path_1_8_6_1(INCLUDE_PATH).'&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;'.'New behaviour (1.8.6.2) api_get_path(INCLUDE_PATH) = '.api_get_path(INCLUDE_PATH);
@@ -336,45 +336,45 @@ class TestMainApi extends UnitTestCase {
 }
 
 /**
-*	Returns a full path to a certain Dokeos area, which you specify
-*	through a parameter.
-*
-*	See $_configuration['course_folder'] in the configuration.php
-*	to alter the WEB_COURSE_PATH and SYS_COURSE_PATH parameters.
-*
-*	@param one of the following constants:
-*	WEB_SERVER_ROOT_PATH, SYS_SERVER_ROOT_PATH,
-*	WEB_PATH, SYS_PATH, REL_PATH, WEB_COURSE_PATH, SYS_COURSE_PATH,
-*	REL_COURSE_PATH, REL_CODE_PATH, WEB_CODE_PATH, SYS_CODE_PATH,
-*	SYS_LANG_PATH, WEB_IMG_PATH, GARBAGE_PATH, WEB_PLUGIN_PATH, SYS_PLUGIN_PATH, WEB_ARCHIVE_PATH, SYS_ARCHIVE_PATH,
-*	INCLUDE_PATH, WEB_LIBRARY_PATH, LIBRARY_PATH, CONFIGURATION_PATH
-*
-* 	@example assume that your server root is /var/www/ dokeos is installed in a subfolder dokeos/ and the URL of your campus is http://www.mydokeos.com
-* 	The other configuration paramaters have not been changed.
-* 	The different api_get_paths will give
-*	WEB_SERVER_ROOT_PATH	http://www.mydokeos.com/
-*	SYS_SERVER_ROOT_PATH	/var/www/ - This is the physical folder where the system Dokeos has been placed. It is not always equal to $_SERVER['DOCUMENT_ROOT'].
-* 	WEB_PATH				http://www.mydokeos.com/dokeos/
-* 	SYS_PATH				/var/www/dokeos/
-* 	REL_PATH				dokeos/
-* 	WEB_COURSE_PATH			http://www.mydokeos.com/dokeos/courses/
-* 	SYS_COURSE_PATH			/var/www/dokeos/courses/
-*	REL_COURSE_PATH			/dokeos/courses/
-* 	REL_CODE_PATH			/dokeos/main/
-* 	WEB_CODE_PATH			http://www.mydokeos.com/dokeos/main/
-* 	SYS_CODE_PATH			/var/www/dokeos/main/
-* 	SYS_LANG_PATH			/var/www/dokeos/main/lang/
-* 	WEB_IMG_PATH			http://www.mydokeos.com/dokeos/main/img/
-* 	GARBAGE_PATH
-* 	WEB_PLUGIN_PATH			http://www.mydokeos.com/dokeos/plugin/
-* 	SYS_PLUGIN_PATH			/var/www/dokeos/plugin/
-* 	WEB_ARCHIVE_PATH		http://www.mydokeos.com/dokeos/archive/
-* 	SYS_ARCHIVE_PATH		/var/www/dokeos/archive/
-*	INCLUDE_PATH			/var/www/dokeos/main/inc/
-* 	WEB_LIBRARY_PATH		http://www.mydokeos.com/dokeos/main/inc/lib/
-* 	LIBRARY_PATH			/var/www/dokeos/main/inc/lib/
-* 	CONFIGURATION_PATH		/var/www/dokeos/main/inc/conf/
-*/
+ *	Returns a full path to a certain Dokeos area, which you specify
+ *	through a parameter.
+ *
+ *	See $_configuration['course_folder'] in the configuration.php
+ *	to alter the WEB_COURSE_PATH and SYS_COURSE_PATH parameters.
+ *
+ *	@param one of the following constants:
+ *	WEB_SERVER_ROOT_PATH, SYS_SERVER_ROOT_PATH,
+ *	WEB_PATH, SYS_PATH, REL_PATH, WEB_COURSE_PATH, SYS_COURSE_PATH,
+ *	REL_COURSE_PATH, REL_CODE_PATH, WEB_CODE_PATH, SYS_CODE_PATH,
+ *	SYS_LANG_PATH, WEB_IMG_PATH, GARBAGE_PATH, WEB_PLUGIN_PATH, SYS_PLUGIN_PATH, WEB_ARCHIVE_PATH, SYS_ARCHIVE_PATH,
+ *	INCLUDE_PATH, WEB_LIBRARY_PATH, LIBRARY_PATH, CONFIGURATION_PATH
+ *
+ * 	@example assume that your server root is /var/www/ dokeos is installed in a subfolder dokeos/ and the URL of your campus is http://www.mydokeos.com
+ * 	The other configuration paramaters have not been changed.
+ * 	The different api_get_paths will give
+ *	WEB_SERVER_ROOT_PATH	http://www.mydokeos.com/
+ *	SYS_SERVER_ROOT_PATH	/var/www/ - This is the physical folder where the system Dokeos has been placed. It is not always equal to $_SERVER['DOCUMENT_ROOT'].
+ * 	WEB_PATH				http://www.mydokeos.com/dokeos/
+ * 	SYS_PATH				/var/www/dokeos/
+ * 	REL_PATH				dokeos/
+ * 	WEB_COURSE_PATH			http://www.mydokeos.com/dokeos/courses/
+ * 	SYS_COURSE_PATH			/var/www/dokeos/courses/
+ *	REL_COURSE_PATH			/dokeos/courses/
+ * 	REL_CODE_PATH			/dokeos/main/
+ * 	WEB_CODE_PATH			http://www.mydokeos.com/dokeos/main/
+ * 	SYS_CODE_PATH			/var/www/dokeos/main/
+ * 	SYS_LANG_PATH			/var/www/dokeos/main/lang/
+ * 	WEB_IMG_PATH			http://www.mydokeos.com/dokeos/main/img/
+ * 	GARBAGE_PATH
+ * 	WEB_PLUGIN_PATH			http://www.mydokeos.com/dokeos/plugin/
+ * 	SYS_PLUGIN_PATH			/var/www/dokeos/plugin/
+ * 	WEB_ARCHIVE_PATH		http://www.mydokeos.com/dokeos/archive/
+ * 	SYS_ARCHIVE_PATH		/var/www/dokeos/archive/
+ *	INCLUDE_PATH			/var/www/dokeos/main/inc/
+ * 	WEB_LIBRARY_PATH		http://www.mydokeos.com/dokeos/main/inc/lib/
+ * 	LIBRARY_PATH			/var/www/dokeos/main/inc/lib/
+ * 	CONFIGURATION_PATH		/var/www/dokeos/main/inc/conf/
+ */
 function api_get_path_1_8_6_1($path_type) {
 
 	global $_configuration;

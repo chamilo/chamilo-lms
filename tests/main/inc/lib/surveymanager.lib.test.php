@@ -285,7 +285,6 @@ class TestSurveyManager extends UnitTestCase {
 	}
 }
 
-
 class TestSurveyTree extends UnitTestCase {
 
 	var $surveylist;
@@ -298,7 +297,7 @@ class TestSurveyTree extends UnitTestCase {
 		//var_dump($res);
 	}
 	function testcreateList() {
-		$list='';
+		$list=array();
 		$res=SurveyTree::createList($list);
 		$this->assertTrue(is_array($res));
 		//var_dump($res);

@@ -2478,7 +2478,7 @@ function api_item_property_update($_course, $tool, $item_id, $lastedit_type, $us
  * @param int 		id of the item itself, linked to key of every tool ('id', ...), "*" = all items of the tool
  */
 function api_get_item_property_id ($course_code, $tool, $ref) {
-	
+
 	$course_info = api_get_course_info($course_code);
 	$tool 		 = Database::escape_string($tool);
 	$ref 		 = intval($ref);
@@ -2836,47 +2836,74 @@ function api_time_to_hms($seconds) {
 	return "$hours:$min:$sec";
 }
 
-// TODO: This function is to be simplified. File access modes to be implemented.
+/*
+==============================================================================
+		FILE SYSTEM RELATED FUNCTIONS
+==============================================================================
+*/
+
 /**
- * function adapted from a php.net comment
- * copy recursively a folder
- * @param the source folder
- * @param the dest folder
- * @param an array of excluded file_name (without extension)
- * @param copied_files the returned array of copied files
+ * Returns the permissions to be assigned to every newly created directory by the web-server.
+ * The returnd value is based on the platform administrator's setting "Administration > Configuration settings > Security > Permissions for new directories".
+ * @return int		Returns the permissions in the format "Owner-Group-Others, Read-Write-Execute", as an integer value.
  */
-
-function copyr($source, $dest, $exclude = array(), $copied_files = array()) {
-	// Simple copy for a file
-	if (is_file($source)) {
-		$path_info = pathinfo($source);
-		if (!in_array($path_info['filename'], $exclude)) {
-			copy($source, $dest);
-		}
-		return;
+function api_get_permissions_for_new_directories() {
+	static $permissions;
+	if (!isset($permissions)) {
+		$permissions = trim(api_get_setting('permissions_for_new_directories'));
+		// The default value 0777 is according to that in the platform administration panel after fresh system installation.
+		$permissions = octdec(!empty($permissions) ? $permissions : '0777');
 	}
+	return $permissions;
+}
 
-	// Make destination directory
-	if (!is_dir($dest)) {
-		mkdir($dest);
+/**
+ * Returns the permissions to be assigned to every newly created directory by the web-server.
+ * The returnd value is based on the platform administrator's setting "Administration > Configuration settings > Security > Permissions for new files".
+ * @return int		Returns the permissions in the format "Owner-Group-Others, Read-Write-Execute", as an integer value.
+ */
+function api_get_permissions_for_new_files() {
+	static $permissions;
+	if (!isset($permissions)) {
+		$permissions = trim(api_get_setting('permissions_for_new_files'));
+		// The default value 0666 is according to that in the platform administration panel after fresh system installation.
+		$permissions = octdec(!empty($permissions) ? $permissions : '0666');
 	}
+	return $permissions;
+}
 
-	// Loop through the folder
-	$dir = dir($source);
-	while (false !== $entry = $dir->read()) {
-		// Skip pointers
-		if ($entry == '.' || $entry == '..') {
-			continue;
+/**
+ * sys_get_temp_dir() was introduced as of PHP 5.2.1
+ * For older PHP versions the following implementation is to be activated.
+ * @link Based on http://www.phpit.net/article/creating-zip-tar-archives-dynamically-php/2/
+ */
+if (!function_exists('sys_get_temp_dir')) {
+
+	function sys_get_temp_dir() {
+
+		// Try to get from environment variable
+		if (!empty($_ENV['TMP'])) {
+			return realpath($_ENV['TMP']);
+		}
+		if (!empty($_ENV['TMPDIR'])) {
+			return realpath($_ENV['TMPDIR']);
+		}
+		if (!empty($_ENV['TEMP'])) {
+			return realpath($_ENV['TEMP']);
 		}
 
-		// Deep copy directories
-		if ($dest !== "$source/$entry") {
-			$files = copyr("$source/$entry", "$dest/$entry", $exclude, $copied_files);
+		// Detect by creating a temporary file
+		// Try to use system's temporary directory
+		// as random name shouldn't exist
+		$temp_file = tempnam(md5(uniqid(rand(), true)), '');
+		if ($temp_file) {
+			$temp_dir = realpath(dirname($temp_file));
+			@unlink( $temp_file );
+			return $temp_dir;
 		}
+
+		return false;
 	}
-	// Clean up
-	$dir->close();
-	return $files;
 }
 
 /**
@@ -2932,55 +2959,96 @@ function rmdirr($dirname) {
 	return $res;
 }
 
-function copy_folder_course_session($pathname, $base_path_document,$session_id,$course_info, $document)
-{
-	$table = Database :: get_course_table(TABLE_DOCUMENT, $course_info['dbName']);
-	$session_id = intval($session_id);
-    // Check if directory already exists
-    if (is_dir($pathname) || empty($pathname)) {
-        return true;
-    }
-
-    // Ensure a file does not already exist with the same name
-    if (is_file($pathname)) {
-        trigger_error('mkdirr() File exists', E_USER_WARNING);
-        return false;
-    }
-
-    $folders = explode(DIRECTORY_SEPARATOR,str_replace($base_path_document.DIRECTORY_SEPARATOR,'',$pathname));
-
-    $new_pathname = $base_path_document;
-    $path = '';
-
-    foreach ($folders as $folder) {
-	$new_pathname .= DIRECTORY_SEPARATOR.$folder;
-	$path .= DIRECTORY_SEPARATOR.$folder;
-
-	if (!file_exists($new_pathname)) {
-
-		$sql = "SELECT * FROM $table WHERE path = '$path' AND filetype = 'folder' AND session_id = '$session_id'";
-		$rs1  = Database::query($sql,__FILE__,__LINE__);
-		$num_rows = Database::num_rows($rs1);
-
-		if ($num_rows == 0) {
-			if (mkdir($new_pathname)) {
-				$perm = api_get_setting('permissions_for_new_directories');
-				$perm = octdec(!empty($perm)?$perm:'0770');
-				chmod($new_pathname,$perm);
-			}
-			// Insert new folder with destination session_id
-			$sql = "INSERT INTO ".$table." SET path = '$path', comment = '".Database::escape_string($document->comment)."', title = '".Database::escape_string(basename($new_pathname))."' ,filetype='folder', size= '0', session_id = '$session_id'";
-			Database::query($sql, __FILE__, __LINE__);
-			$document_id = Database::insert_id();
-			api_item_property_update($course_info,TOOL_DOCUMENT,$document_id,'FolderCreated',api_get_user_id(),0,0,null,null,$session_id);
+// TODO: This function is to be simplified. File access modes to be implemented.
+/**
+ * function adapted from a php.net comment
+ * copy recursively a folder
+ * @param the source folder
+ * @param the dest folder
+ * @param an array of excluded file_name (without extension)
+ * @param copied_files the returned array of copied files
+ */
+function copyr($source, $dest, $exclude = array(), $copied_files = array()) {
+	// Simple copy for a file
+	if (is_file($source)) {
+		$path_info = pathinfo($source);
+		if (!in_array($path_info['filename'], $exclude)) {
+			copy($source, $dest);
 		}
+		return;
 	}
 
-    } // en foreach
+	// Make destination directory
+	if (!is_dir($dest)) {
+		mkdir($dest);
+	}
 
+	// Loop through the folder
+	$dir = dir($source);
+	while (false !== $entry = $dir->read()) {
+		// Skip pointers
+		if ($entry == '.' || $entry == '..') {
+			continue;
+		}
+
+		// Deep copy directories
+		if ($dest !== "$source/$entry") {
+			$files = copyr("$source/$entry", "$dest/$entry", $exclude, $copied_files);
+		}
+	}
+	// Clean up
+	$dir->close();
+	return $files;
 }
 
-// TODO: chmodr() is a better name. Some corrections are needed.
+// TODO: Using DIRECTORY_SEPARATOR is not recommended, this is an obsolete approach. Documentation header to be added here.
+function copy_folder_course_session($pathname, $base_path_document,$session_id,$course_info, $document) {
+	$table = Database :: get_course_table(TABLE_DOCUMENT, $course_info['dbName']);
+	$session_id = intval($session_id);
+	// Check if directory already exists
+	if (is_dir($pathname) || empty($pathname)) {
+		return true;
+	}
+
+	// Ensure a file does not already exist with the same name
+	if (is_file($pathname)) {
+		trigger_error('copy_folder_course_session(): File exists', E_USER_WARNING);
+		return false;
+	}
+
+	$folders = explode(DIRECTORY_SEPARATOR,str_replace($base_path_document.DIRECTORY_SEPARATOR,'',$pathname));
+
+	$new_pathname = $base_path_document;
+	$path = '';
+
+	foreach ($folders as $folder) {
+		$new_pathname .= DIRECTORY_SEPARATOR.$folder;
+		$path .= DIRECTORY_SEPARATOR.$folder;
+
+		if (!file_exists($new_pathname)) {
+
+			$sql = "SELECT * FROM $table WHERE path = '$path' AND filetype = 'folder' AND session_id = '$session_id'";
+			$rs1  = Database::query($sql,__FILE__,__LINE__);
+			$num_rows = Database::num_rows($rs1);
+
+			if ($num_rows == 0) {
+				if (mkdir($new_pathname)) {
+					$perm = api_get_setting('permissions_for_new_directories');
+					$perm = octdec(!empty($perm)?$perm:'0770');
+					chmod($new_pathname,$perm);
+				}
+				// Insert new folder with destination session_id
+				$sql = "INSERT INTO ".$table." SET path = '$path', comment = '".Database::escape_string($document->comment)."', title = '".Database::escape_string(basename($new_pathname))."' ,filetype='folder', size= '0', session_id = '$session_id'";
+				Database::query($sql, __FILE__, __LINE__);
+				$document_id = Database::insert_id();
+				api_item_property_update($course_info,TOOL_DOCUMENT,$document_id,'FolderCreated',api_get_user_id(),0,0,null,null,$session_id);
+			}
+		}
+
+	} // en foreach
+}
+
+// TODO: chmodr() is a better name. Some corrections are needed. Documentation header to be added here.
 function api_chmod_R($path, $filemode) {
 	if (!is_dir($path)) {
 		return chmod($path, $filemode);
@@ -3883,38 +3951,6 @@ function api_is_in_group($group_id = null, $course_code = null) {
 		}
 	}
 	return false;
-}
-
-// sys_get_temp_dir() is on php since 5.2.1
-if (!function_exists('sys_get_temp_dir')) {
-
-	// Based on http://www.phpit.net/
-	// article/creating-zip-tar-archives-dynamically-php/2/
-	function sys_get_temp_dir() {
-
-		// Try to get from environment variable
-		if (!empty($_ENV['TMP'])) {
-			return realpath($_ENV['TMP']);
-		}
-		if (!empty($_ENV['TMPDIR'])) {
-			return realpath($_ENV['TMPDIR']);
-		}
-		if (!empty($_ENV['TEMP'])) {
-			return realpath($_ENV['TEMP']);
-		}
-
-		// Detect by creating a temporary file
-		// Try to use system's temporary directory
-		// as random name shouldn't exist
-		$temp_file = tempnam(md5(uniqid(rand(), true)), '');
-		if ($temp_file) {
-			$temp_dir = realpath(dirname($temp_file));
-			@unlink( $temp_file );
-			return $temp_dir;
-		}
-
-		return false;
-	}
 }
 
 /**

@@ -22,20 +22,20 @@ require_once(api_get_path(INCLUDE_PATH).'lib/legal.lib.php');
 //require_once (api_get_path(LIBRARY_PATH).'image.lib.php');
 
 // Load terms & conditions from the current lang
-if (get_setting('allow_terms_conditions')=='true') {	
+if (get_setting('allow_terms_conditions')=='true') {
 	$get = array_keys($_GET);
 	if (isset($get)) {
-		if ($get[0]=='legal'){				
+		if ($get[0]=='legal'){
 			//$language = api_get_setting('platformLanguage');
 			$language = api_get_interface_language();
 			$language = api_get_language_id($language);
 			$term_preview= LegalManager::get_last_condition($language);
 			if ($term_preview==false) {
 				//look for the default language
-				$language = api_get_setting('platformLanguage');				
+				$language = api_get_setting('platformLanguage');
 				$language = api_get_language_id($language);
 				$term_preview= LegalManager::get_last_condition($language);
-			}					
+			}
 			$tool_name = get_lang('TermsAndConditions');
 			Display :: display_header('');
 			echo '<div class="actions-title">';
@@ -43,7 +43,7 @@ if (get_setting('allow_terms_conditions')=='true') {
 			echo '</div>';
 			if (!empty($term_preview['content']))
 				echo $term_preview['content'];
-			else 
+			else
 				echo get_lang('ComingSoon');
 			Display :: display_footer();
 			exit;
@@ -74,28 +74,25 @@ if(!empty($_SESSION['user_language_choice'])) {
 
 // ----- Ensuring availability of main files in the corresponding language -----
 if ($_configuration['multiple_access_urls']==true) {
-	$access_url_id = api_get_current_access_url_id();										 
-	if ($access_url_id != -1){						
+	$access_url_id = api_get_current_access_url_id();
+	if ($access_url_id != -1){
 		$url_info = api_get_access_url($access_url_id);
-		// "http://" and the final "/" replaced						
-		$url = substr($url_info['url'],7,strlen($url_info['url'])-8);						
+		// "http://" and the final "/" replaced
+		$url = substr($url_info['url'],7,strlen($url_info['url'])-8);
 		$clean_url = replace_dangerous_char($url);
 		$clean_url = str_replace('/','-',$clean_url);
 		$clean_url = $clean_url.'/';
-		
-		$homep = '../../home/'; //homep for Home Path			
-		$homep_new = '../../home/'.$clean_url; //homep for Home Path added the url				
+
+		$homep = '../../home/'; //homep for Home Path
+		$homep_new = '../../home/'.$clean_url; //homep for Home Path added the url
 		$new_url_dir = api_get_path(SYS_PATH).'home/'.$clean_url;
 		//we create the new dir for the new sites
-		if (!is_dir($new_url_dir)){		
-			umask(0);
-			$perm = api_get_setting('permissions_for_new_directories');
-			$perm = octdec(!empty($perm)?$perm:'0755');
-			mkdir($new_url_dir, $perm);
-		}							
+		if (!is_dir($new_url_dir)){
+			mkdir($new_url_dir, api_get_permissions_for_new_directories());
+		}
 	}
-} else {			
-	$homep_new ='';		
+} else {
+	$homep_new ='';
 	$homep = '../../home/'; //homep for Home Path
 }
 
@@ -110,8 +107,8 @@ foreach($homef as $my_file) {
 	if ($_configuration['multiple_access_urls']==true) {
 		if (!file_exists($homep_new.$my_file.'_'.$lang.$ext)) {
 			copy($homep.$my_file.$ext,$homep_new.$my_file.'_'.$lang.$ext);
-		}		
-	} else {	
+		}
+	} else {
 		if (!file_exists($homep.$my_file.'_'.$lang.$ext)) {
 			copy($homep.$my_file.$ext,$homep.$my_file.'_'.$lang.$ext);
 		}
@@ -131,7 +128,7 @@ if(!empty($action)) {
 				}
 				// Write
 				if (file_exists($homep.$topf.'_'.$lang.$ext)) {
-					if(is_writable($homep.$topf.'_'.$lang.$ext)) {						
+					if(is_writable($homep.$topf.'_'.$lang.$ext)) {
 						$fp=fopen($homep.$topf.'_'.$lang.$ext,"w");
 						fputs($fp,$home_top);
 						fclose($fp);
@@ -139,7 +136,7 @@ if(!empty($action)) {
 						$errorMsg=get_lang('HomePageFilesNotWritable');
 					}
 				} else {
-					//File does not exist					
+					//File does not exist
 					$fp=fopen($homep.$topf.'_'.$lang.$ext,"w");
 					fputs($fp,$home_top);
 					fclose($fp);
@@ -161,7 +158,7 @@ if(!empty($action)) {
 					$home_top=file_get_contents($homep.$topf.$lang.$ext);
 				} else {
 					$errorMsg=get_lang('HomePageFilesNotReadable');
-				}		
+				}
 				break;
 		}
 	}
@@ -183,7 +180,7 @@ if (get_setting('allow_registration')=='approval') {
 }
 //if openid was not found
 if (!empty($_GET['openid_msg']) && $_GET['openid_msg'] == 'idnotfound') {
-	Display::display_warning_message(get_lang('OpenIDCouldNotBeFoundPleaseRegister'));	
+	Display::display_warning_message(get_lang('OpenIDCouldNotBeFoundPleaseRegister'));
 }
 
 $form = new FormValidator('registration');
@@ -197,7 +194,7 @@ if (get_setting('allow_terms_conditions')=='true') {
 	$display_all_form=true;
 }
 if ($display_all_form===true) {
-	
+
 //	LAST NAME and FIRST NAME
 $form->addElement('text', 'lastname',  get_lang('LastName'),  array('size' => 40, 'disabled' => 'disabled'));
 $form->applyFilter('lastname','trim');
@@ -211,7 +208,7 @@ if (api_get_setting('registration', 'email') == 'true')
 	$form->addRule('email', get_lang('ThisFieldIsRequired'), 'required');
 $form->addRule('email', get_lang('EmailWrong'), 'email');
 if (api_get_setting('openid_authentication')=='true') {
-	$form->addElement('text', 'openid', get_lang('OpenIDURL'), array('size' => 40, 'disabled' => 'disabled'));	
+	$form->addElement('text', 'openid', get_lang('OpenIDURL'), array('size' => 40, 'disabled' => 'disabled'));
 }
 
 //	USERNAME
@@ -308,15 +305,15 @@ foreach ($extra as $id => $field_details) {
 				$group[] =& HTML_QuickForm::createElement('radio', 'extra_'.$field_details[1], $option_details[1],$option_details[2].'<br />',$option_details[1]);
 			}
 			$form->addGroup($group, 'extra_'.$field_details[1], $field_details[3], '');
-			if ($field_details[7] == 0)	$form->freeze('extra_'.$field_details[1]);	
+			if ($field_details[7] == 0)	$form->freeze('extra_'.$field_details[1]);
 			break;
 		case USER_FIELD_TYPE_SELECT:
 			$options = array();
 			foreach($field_details[9] as $option_id => $option_details) {
 				$options[$option_details[1]] = $option_details[2];
 			}
-			$form->addElement('select','extra_'.$field_details[1],$field_details[3],$options,'');	
-			if ($field_details[7] == 0)	$form->freeze('extra_'.$field_details[1]);			
+			$form->addElement('select','extra_'.$field_details[1],$field_details[3],$options,'');
+			if ($field_details[7] == 0)	$form->freeze('extra_'.$field_details[1]);
 			break;
 		case USER_FIELD_TYPE_SELECT_MULTIPLE:
 			$options = array();
@@ -324,7 +321,7 @@ foreach ($extra as $id => $field_details) {
 				$options[$option_details[1]] = $option_details[2];
 			}
 			$form->addElement('select','extra_'.$field_details[1],$field_details[3],$options,array('multiple' => 'multiple'));
-			if ($field_details[7] == 0)	$form->freeze('extra_'.$field_details[1]);	
+			if ($field_details[7] == 0)	$form->freeze('extra_'.$field_details[1]);
 			break;
 		case USER_FIELD_TYPE_DATE:
 			$form->addElement('datepickerdate', 'extra_'.$field_details[1], $field_details[3],array('form_name'=>'registration'));
@@ -350,7 +347,7 @@ foreach ($extra as $id => $field_details) {
 					$values[0][$element[0]] = $element[2];
 				}
 			}
-			
+
 			$group='';
 			$group[] =& HTML_QuickForm::createElement('select', 'extra_'.$field_details[1],'',$values[0],'');
 			$group[] =& HTML_QuickForm::createElement('select', 'extra_'.$field_details[1].'*','',$values['*'],'');
@@ -362,7 +359,7 @@ foreach ($extra as $id => $field_details) {
 				// exploding all the selected values (of both select forms)
 				$selected_values = explode(';',$extra_data['extra_'.$field_details[1]]);
 				$extra_data['extra_'.$field_details[1]]  =array();
-				
+
 				// looping through the selected values and assigning the selected values to either the first or second select form
 				foreach ($selected_values as $key=>$selected_value) {
 					if (key_exists($selected_value,$values[0])) {
@@ -381,13 +378,13 @@ foreach ($extra as $id => $field_details) {
 
 }
 //------------ Terms and conditions
-if (get_setting('allow_terms_conditions')=='true') {	
+if (get_setting('allow_terms_conditions')=='true') {
 	//$language = api_get_setting('platformLanguage');
 	$language = api_get_interface_language();
 	$language = api_get_language_id($language);
-	$term_preview= LegalManager::get_last_condition($language);	
-	
-	if ($term_preview==false) { 
+	$term_preview= LegalManager::get_last_condition($language);
+
+	if ($term_preview==false) {
 		//we load from the platform
 		$language = api_get_setting('platformLanguage');
 		$language = api_get_language_id($language);
@@ -395,31 +392,31 @@ if (get_setting('allow_terms_conditions')=='true') {
 		//if is false we load from english
 		if ($term_preview==false){
 			$language = api_get_language_id('english'); //this must work
-			$term_preview= LegalManager::get_last_condition($language);	
-		}					
-	}	
+			$term_preview= LegalManager::get_last_condition($language);
+		}
+	}
 	// Version and language //password
 	$form->addElement('hidden', 'legal_accept_type',$term_preview['version'].':'.$term_preview['language_id']);
-	$form->addElement('hidden', 'legal_info',$term_preview['legal_id'].':'.$term_preview['language_id']);	
+	$form->addElement('hidden', 'legal_info',$term_preview['legal_id'].':'.$term_preview['language_id']);
 	if (isset($_SESSION['info_current_user'][1]) && isset($_SESSION['info_current_user'][2])) {
 		$form->addElement('hidden', 'login',$_SESSION['info_current_user'][1]);
-		$form->addElement('hidden', 'password',$_SESSION['info_current_user'][2]);	
+		$form->addElement('hidden', 'password',$_SESSION['info_current_user'][2]);
 	}
 	if($term_preview['type'] == 1) {
-		$form->addElement('checkbox', 'legal_accept', null, get_lang('IHaveReadAndAgree').'&nbsp;<a href="inscription.php?legal" target="_blank">'.get_lang('TermsAndConditions').'</a>');		
+		$form->addElement('checkbox', 'legal_accept', null, get_lang('IHaveReadAndAgree').'&nbsp;<a href="inscription.php?legal" target="_blank">'.get_lang('TermsAndConditions').'</a>');
 		$form->addRule('extra_legal_accept',  get_lang('ThisFieldIsRequired'), 'required');
 	} else {
-		if (!empty($term_preview['content'])) {			
+		if (!empty($term_preview['content'])) {
 			$preview = LegalManager::show_last_condition($term_preview);
 			$term_preview  = '<div class="row">
 					<div class="label">'.get_lang('TermsAndConditions').'</div>
 					<div class="formw">
 					'.$preview.'
-					<br />				
+					<br />
 					</div>
-					</div>';		
+					</div>';
 			$form->addElement('html', $term_preview);
-		}		
+		}
 	}
 }
 
@@ -448,7 +445,7 @@ if(!empty($_GET['phone']))
 
 if (api_get_setting('openid_authentication')=='true' && !empty($_GET['openid']))
 {
-	$defaults['openid'] = Security::remove_XSS($_GET['openid']);	
+	$defaults['openid'] = Security::remove_XSS($_GET['openid']);
 }
 
 switch($action){
@@ -493,7 +490,7 @@ switch($action){
 		/*******************************/
 		//Form of language
 		api_display_language_form();
-		
+
 		echo '&nbsp;&nbsp;<a href="'.api_get_self().'?action=edit_top">'.Display::display_icon('edit.gif', get_lang('Edit')).'</a> <a href="'.api_get_self().'?action=edit_top">'.get_lang('EditNotice').'</a>';
 		echo '<div class="note">';
 		$home_notice = '';
@@ -503,7 +500,7 @@ switch($action){
 			$home_notice = @file_get_contents($homep.$topf.$ext);
 		}
 		echo $home_notice;
-		echo '</div>'; 
+		echo '</div>';
 		/*******************************/
 		$form->display();
 		break;

@@ -35,7 +35,7 @@ $temp_zip_dir = $sys_course_path.$_course['path']."/temp";
 
 if(!is_dir($temp_zip_dir))
 {
-	mkdir($temp_zip_dir);
+	mkdir($temp_zip_dir, api_get_permissions_for_new_directories());
 }
 //cleanup: check the temp dir for old files and delete them
 else

@@ -116,11 +116,11 @@ class GroupManager {
 		$table_user = Database :: get_main_table(TABLE_MAIN_USER);
 		$table_course = Database :: get_main_table(TABLE_MAIN_COURSE);
 		$table_group_user = Database :: get_course_table(TABLE_GROUP_USER, $course_db);
-		
+
 		//condition for the session
 		$session_id = api_get_session_id();
 		$my_status_of_user_in_course = CourseManager::get_user_in_course_status($my_user_id,$my_course_code);
-		
+
 		$is_student_in_session = false;
 		if (is_null($my_status_of_user_in_course) || $my_status_of_user_in_course=='') {//into session
 			if ($session_id>0) {
@@ -172,7 +172,7 @@ class GroupManager {
 			if(!empty($session_condition))
 				$sql .= $session_condition;
 		}
-		else 
+		else
 			$session_condition = api_get_session_condition($session_id, false);
 			if(!empty($session_condition))
 			$sql .= $session_condition;
@@ -203,7 +203,7 @@ class GroupManager {
 					}
 				}
 				$groups[] = $thisGroup;
-			
+
 		}
 		return $groups;
 	}
@@ -235,7 +235,7 @@ class GroupManager {
 		{
 			$secret_directory = uniqid("")."_team_".$lastId;
 		}
-		FileManager :: mkdirs(api_get_path(SYS_COURSE_PATH).$currentCourseRepository."/group/".$secret_directory, 0770);
+		FileManager :: mkdirs(api_get_path(SYS_COURSE_PATH).$currentCourseRepository."/group/".$secret_directory, api_get_permissions_for_new_directories());
 		*/
 		$desired_dir_name= '/'.replace_dangerous_char($name,'strict').'_groupdocs';
 		$dir_name = create_unexisting_directory($_course,$_user['user_id'],$lastId,NULL,api_get_path(SYS_COURSE_PATH).$currentCourseRepository.'/document',$desired_dir_name);
@@ -315,7 +315,7 @@ class GroupManager {
 	 */
 	public static function create_groups_from_virtual_courses() {
 		self :: delete_category(VIRTUAL_COURSE_CATEGORY);
-		$id = self :: create_category(get_lang('GroupsFromVirtualCourses'), '', TOOL_NOT_AVAILABLE, TOOL_NOT_AVAILABLE, 0, 0, 1, 1);		
+		$id = self :: create_category(get_lang('GroupsFromVirtualCourses'), '', TOOL_NOT_AVAILABLE, TOOL_NOT_AVAILABLE, 0, 0, 1, 1);
 		$table_group_cat = Database :: get_course_table(TABLE_GROUP_CATEGORY);
 		$sql = "UPDATE ".$table_group_cat." SET id=".VIRTUAL_COURSE_CATEGORY." WHERE id=$id";
 		Database::query($sql,__FILE__,__LINE__);
@@ -417,10 +417,8 @@ class GroupManager {
 
 		// define repository for deleted element
 		$group_garbage = api_get_path(SYS_ARCHIVE_PATH).$course['path']."/group/";
-		$perm = api_get_setting('permissions_for_new_directories');
-		$perm = (!empty($perm)?$perm:'0770');
 		if (!file_exists($group_garbage))
-			FileManager :: mkdirs($group_garbage, $perm);
+			FileManager :: mkdirs($group_garbage, api_get_permissions_for_new_directories());
 		// Unsubscribe all users
 		self :: unsubscribe_all_users($group_ids);
 		$sql = 'SELECT id, secret_directory, session_id FROM '.$group_table.' WHERE id IN ('.implode(' , ', $group_ids).')';
@@ -647,8 +645,8 @@ class GroupManager {
 	 * @param int $max_number_of_students
 	 * @param int $groups_per_user
 	 */
-	public static function create_category ($title, $description, $doc_state, $work_state, $calendar_state, $announcements_state, $forum_state, $wiki_state, 
-											$chat_state = 1, $self_registration_allowed = 0, $self_unregistration_allowed = 0, $maximum_number_of_students = 8, $groups_per_user = 0) 
+	public static function create_category ($title, $description, $doc_state, $work_state, $calendar_state, $announcements_state, $forum_state, $wiki_state,
+											$chat_state = 1, $self_registration_allowed = 0, $self_unregistration_allowed = 0, $maximum_number_of_students = 8, $groups_per_user = 0)
 	{
 		$table_group_category = Database :: get_course_table(TABLE_GROUP_CATEGORY);
 		$sql = "SELECT MAX(display_order)+1 as new_order FROM $table_group_category ";
@@ -1440,7 +1438,7 @@ class GroupManager {
 	*	Filters from the array $user_array_in the users already in the group $group_id.
 	*/
 	public static function filter_users_already_in_group ($user_array_in, $group_id) {
-				
+
 		foreach ($user_array_in as $this_user)
 		{
 			if (!self :: is_subscribed($this_user['user_id'], $group_id))

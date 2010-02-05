@@ -54,9 +54,12 @@ function get_and_unzip_uploaded_exercise()
     //unzip files
 
     $exerciseRepositorySys = get_conf('rootSys') . get_conf('exerciseRepository','cache/');
+
     //create temp dir for upload
-    claro_mkdir($exerciseRepositorySys);
-    $uploadDirFullPath = tempdir($exerciseRepositorySys);
+    //claro_mkdir($exerciseRepositorySys);
+    mkdir($exerciseRepositorySys, api_get_permissions_for_new_directories(), true);
+    //
+    $uploadDirFullPath = tempdir($exerciseRepositorySys, api_get_permissions_for_new_directories());
     $uploadDir         = str_replace($exerciseRepositorySys,'',$uploadDirFullPath);
     $exercisePath        = $exerciseRepositorySys.$uploadDir.'/';
 

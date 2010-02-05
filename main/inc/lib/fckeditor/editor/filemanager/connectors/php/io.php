@@ -131,9 +131,9 @@ function CreateServerFolder( $folderPath, $lastFolder = null )
 				$permissions = $Config['ChmodOnFolderCreate'] ;
 			}
 			// To create the folder with 0777 permissions, we need to set umask to zero.
-			$oldumask = umask(0) ;
+			//$oldumask = umask(0) ;
 			mkdir( $folderPath, $permissions ) ;
-			umask( $oldumask ) ;
+			//umask( $oldumask ) ;
 		}
 
 		// While we are in a course: Registering the newly created folder in the course's database.

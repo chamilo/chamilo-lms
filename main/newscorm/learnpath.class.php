@@ -575,9 +575,7 @@ class learnpath {
 			global $_course;
 			$filepath = api_get_path('SYS_COURSE_PATH') . $_course['path'] . '/document/';
 			if (!is_dir($filepath . 'audio')) {
-				$perm = api_get_setting('permissions_for_new_directories');
-				$perm = octdec(!empty ($perm) ? $perm : '0770');
-				mkdir($filepath . 'audio', $perm);
+				mkdir($filepath . 'audio', api_get_permissions_for_new_directories());
 				$audio_id = add_document($_course, '/audio', 'folder', 0, 'audio');
 				api_item_property_update($_course, TOOL_DOCUMENT, $audio_id, 'FolderCreated', api_get_user_id(),null,null,null,null,api_get_session_id());
 			}
@@ -1046,9 +1044,7 @@ class learnpath {
 			global $_course;
 			$filepath = api_get_path('SYS_COURSE_PATH') . $_course['path'] . '/document/';
 			if (!is_dir($filepath . 'audio')) {
-				$perm = api_get_setting('permissions_for_new_directories');
-				$perm = octdec(!empty ($perm) ? $perm : '0770');
-				mkdir($filepath . 'audio', $perm);
+				mkdir($filepath . 'audio', api_get_permissions_for_new_directories());
 				$audio_id = add_document($_course, '/audio', 'folder', 0, 'audio');
 				api_item_property_update($_course, TOOL_DOCUMENT, $audio_id, 'FolderCreated', api_get_user_id(),null,null,null,null,api_get_session_id());
 			}
@@ -8046,7 +8042,7 @@ class learnpath {
 		//or do a cleanup befor creating the zipfile
 		if(!is_dir($temp_zip_dir))
 		{
-			mkdir($temp_zip_dir);
+			mkdir($temp_zip_dir, api_get_permissions_for_new_directories());
 		}
 		else
 		{//cleanup: check the temp dir for old files and delete them
@@ -8066,9 +8062,7 @@ class learnpath {
 			// remove the possible . at the end of the path
 			$dest_path_to_lp = substr($this->path, -1) == '.' ? substr($this->path, 0, -1) : $this->path;
 			$dest_path_to_scorm_folder = str_replace('//','/',$temp_zip_dir.'/scorm/'.$dest_path_to_lp);
-			$perm = api_get_setting('permissions_for_new_directories');
-			$perm = octdec(!empty($perm)?$perm:'0770');
-			mkdir ($dest_path_to_scorm_folder, $perm, true);
+			mkdir($dest_path_to_scorm_folder, api_get_permissions_for_new_directories(), true);
 			$zip_files_dist = copyr($current_course_path.'/scorm/'.$this->path, $dest_path_to_scorm_folder, array('imsmanifest'), $zip_files);
 		}
 	 	//Build a dummy imsmanifest structure. Do not add to the zip yet (we still need it)
@@ -8818,7 +8812,7 @@ class learnpath {
 EOD;
 		if(!is_dir($archive_path.$temp_dir_short.'/document'))
 		{
-			@mkdir($archive_path.$temp_dir_short.'/document');
+			@mkdir($archive_path.$temp_dir_short.'/document', api_get_permissions_for_new_directories());
 		}
 		file_put_contents($archive_path.$temp_dir_short.'/document/non_exportable.html', $file_content);
 
@@ -8870,7 +8864,7 @@ EOD;
 				if (is_dir($new_path)) {
 					$path_built = $new_path . '/';
 				} else {
-					mkdir($new_path);
+					mkdir($new_path, api_get_permissions_for_new_directories());
 					$path_built = $new_path . '/';
 				}
 			}

@@ -116,7 +116,7 @@ function htaccess2txt($filename)
  * @see htaccess2txt()
  */
 function disable_dangerous_file($filename)
-{	
+{
 	$filename = php2phps($filename);
 	$filename = htaccess2txt($filename);
 	return $filename;
@@ -491,7 +491,7 @@ function enough_space($file_size, $max_dir_space)
  */
 
 function dir_total_space($dirPath)
-{	
+{
 
 	$save_dir = getcwd();
 	chdir ($dirPath) ;
@@ -735,8 +735,8 @@ function treat_uploaded_file($uploadedFile, $baseWorkDir, $uploadPath, $maxFille
  */
 
 function unzip_uploaded_file($uploadedFile, $uploadPath, $baseWorkDir, $maxFilledSpace)
-{	
-	
+{
+
 	$zipFile = new pclZip($uploadedFile['tmp_name']);
 	// Check the zip content (real size and file extension)
 	if(file_exists($uploadedFile)) {
@@ -768,37 +768,37 @@ function unzip_uploaded_file($uploadedFile, $uploadPath, $baseWorkDir, $maxFille
 			{
 				$okAiccScorm=true;
 			}
-	
+
 			$realFileSize += $thisContent['size'];
 		}
-	 
+
 		if ((($okPlantynScorm1==true) and ($okPlantynScorm2==true) and ($okPlantynScorm3==true)) or ($okAiccScorm==true))
 		{
-			
+
 			$okScorm=true;
 		}
-	
+
 		if(!$okScorm && defined('CHECK_FOR_SCORM') && CHECK_FOR_SCORM)
 		{
 			return api_failure::set_failure('not_scorm_content');
 		}
-	
+
 		if (! enough_size($realFileSize, $baseWorkDir, $maxFilledSpace) )
 		{
 			return api_failure::set_failure('not_enough_space');
 		}
-	
+
 		// it happens on Linux that $uploadPath sometimes doesn't start with '/'
 		if($uploadPath[0] != '/')
 		{
 			$uploadPath='/'.$uploadPath;
 		}
-	
+
 		if($uploadPath[strlen($uploadPath)-1] == '/')
 		{
 			$uploadPath=substr($uploadPath,0,-1);
 		}
-	
+
 		/*
 		--------------------------------------
 			Uncompressing phase
@@ -826,11 +826,11 @@ function unzip_uploaded_file($uploadedFile, $uploadPath, $baseWorkDir, $maxFille
 			for($j=0;$j<count($unzippingState);$j++)
 			{
 				$state=$unzippingState[$j];
-	
+
 				//fix relative links in html files
 				$extension = strrchr($state["stored_filename"], ".");
 			}
-	
+
 			if($dir=@opendir($baseWorkDir.$uploadPath))
 			{
 				while($file=readdir($dir))
@@ -838,17 +838,17 @@ function unzip_uploaded_file($uploadedFile, $uploadPath, $baseWorkDir, $maxFille
 					if($file != '.' && $file != '..')
 					{
 						$filetype="file";
-	
+
 						if(is_dir($baseWorkDir.$uploadPath.'/'.$file)) $filetype="folder";
-	
+
 						$safe_file=replace_dangerous_char($file,'strict');
-	
+
 						@rename($baseWorkDir.$uploadPath.'/'.$file,$baseWorkDir.$uploadPath.'/'.$safe_file);
-	
+
 						set_default_settings($uploadPath,$safe_file,$filetype);
 					}
 				}
-	
+
 				closedir($dir);
 			}
 			chdir($save_dir); //back to previous dir position
@@ -1322,7 +1322,7 @@ function search_img_from_html($htmlFile)
 	$imgFilePath = array();
 
 	if(!$fp = fopen($htmlFile, "r")){ //or die('<center>can not open file</center>');
-		return ; 
+		return ;
 	}
 
 	// search and store occurences of the <IMG> tag in an array
@@ -1393,27 +1393,25 @@ function create_unexisting_directory($_course,$user_id,$to_group_id,$to_user_id,
 		$title = basename($desired_dir_name);
 	}
 
-	$perm = api_get_setting('permissions_for_new_directories');
-	$perm = octdec(!empty($perm)?$perm:'0770');
-	if (mkdir($base_work_dir.$desired_dir_name.$nb,$perm,true))
-	{		
+	if (mkdir($base_work_dir.$desired_dir_name.$nb, api_get_permissions_for_new_directories(), true))
+	{
 		$document_id = add_document($_course, $desired_dir_name.$nb,'folder',0,$title);
 		if ($document_id)
 		{
-		//update document item_property
-		$current_session_id = api_get_session_id();		
-		if ($visibility !== '') {
-			$visibilities = array(0 => 'invisible', 1 => 'visible', 2 => 'delete');
-			api_item_property_update($_course,TOOL_DOCUMENT,$document_id,$visibilities[$visibility],$user_id,$to_group_id,$to_user_id,null,null,$current_session_id);
-		} else {
-			api_item_property_update($_course,TOOL_DOCUMENT,$document_id,'FolderCreated',$user_id,$to_group_id,$to_user_id,null,null,$current_session_id);	
-		}
-		return $desired_dir_name.$nb;
+			//update document item_property
+			$current_session_id = api_get_session_id();
+			if ($visibility !== '') {
+				$visibilities = array(0 => 'invisible', 1 => 'visible', 2 => 'delete');
+				api_item_property_update($_course,TOOL_DOCUMENT,$document_id,$visibilities[$visibility],$user_id,$to_group_id,$to_user_id,null,null,$current_session_id);
+			} else {
+				api_item_property_update($_course,TOOL_DOCUMENT,$document_id,'FolderCreated',$user_id,$to_group_id,$to_user_id,null,null,$current_session_id);
+			}
+			return $desired_dir_name.$nb;
 		}
 	}
 	else
 	{
-	return false;
+		return false;
 	}
 }
 
@@ -1501,7 +1499,7 @@ function replace_img_path_in_html_file($originalImgPath, $newImgPath, $htmlFile)
 	if (!$fp = fopen($htmlFile, 'w')){   //or die('<center>cannot open file</center>');
 		return;
 	}
-	
+
 	if (!fwrite($fp, $new_html_content)){ //   or die('<center>cannot write in file</center>');
 		return;
 	}
@@ -1531,8 +1529,8 @@ function create_link_file($filePath, $url)
 		if (!($fp = fopen ($filePath, 'w'))) {
 			return false;
 		}
-	
-		return fwrite($fp, $fileContent); 	
+
+		return fwrite($fp, $fileContent);
 	}
 }
 
@@ -1552,10 +1550,10 @@ function api_replace_links_in_html($upload_path, $full_file_name)
 	if(file_exists($full_file_name)){
 		$fp = fopen($full_file_name, "r");
 		$buffer = fread ($fp, filesize ($full_file_name));
-	
+
 		//Parse the contents
 		$new_html_content = api_replace_links_in_string($upload_path, $buffer);
-	
+
 		//Write the result
 		$fp = fopen($full_file_name, "w");
 		fwrite($fp, $new_html_content);
@@ -1863,7 +1861,7 @@ if(is_dir($path)){
 		while($file=readdir($handle))
 		{
 		   if ($file=='.' || $file=='..') continue;
-	
+
 		   $completepath="$path/$file";
 		   //directory?
 		   if (is_dir($completepath))
@@ -1877,7 +1875,7 @@ if(is_dir($path)){
 				$document_id=add_document($_course,$current_path.'/'.$safe_file,'folder',0,$title);
 				api_item_property_update($_course,TOOL_DOCUMENT,$document_id,'DocumentAdded',$user_id, $to_group_id,null,null,null,$current_session_id);
 				//echo $current_path.'/'.$safe_file." added!<br/>";
-	
+
 			}
 			//recursive
 			add_all_documents_in_folder_to_database($_course,$user_id,$base_work_dir,$current_path.'/'.$safe_file, $to_group_id);
@@ -1888,7 +1886,7 @@ if(is_dir($path)){
 				//rename
 				$safe_file=disable_dangerous_file(replace_dangerous_char($file, 'strict'));
 				@rename($base_work_dir.$current_path.'/'.$file,$base_work_dir.$current_path.'/'.$safe_file);
-	
+
 				if(!DocumentManager::get_document_id($_course, $current_path.'/'.$safe_file))
 				{
 				$title=get_document_title($file);

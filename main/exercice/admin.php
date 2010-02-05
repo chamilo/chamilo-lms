@@ -162,7 +162,7 @@ if($_GET['action'] == 'exportqti2' && !empty($_GET['questionId']))
 	$archive_path = api_get_path(SYS_ARCHIVE_PATH);
 	$temp_dir_short = uniqid();
 	$temp_zip_dir = $archive_path."/".$temp_dir_short;
-	if(!is_dir($temp_zip_dir)) mkdir($temp_zip_dir);
+	if(!is_dir($temp_zip_dir)) mkdir($temp_zip_dir, api_get_permissions_for_new_directories());
 	$temp_zip_file = $temp_zip_dir."/".md5(time()).".zip";
 	$temp_xml_file = $temp_zip_dir."/qti2export_".$qid.'.xml';
 	file_put_contents($temp_xml_file,$export);
@@ -430,7 +430,7 @@ Display::display_header($nameTools,'Exercise');
 echo '<div class="actions">';
 echo Display::return_icon('preview.gif', get_lang('Preview')).'<a href="exercice_submit.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id.'">'.get_lang('Preview').'</a>';
 echo Display::return_icon('edit.gif', get_lang('ModifyExercise')).'<a href="exercise_admin.php?'.api_get_cidreq().'&modifyExercise=yes&exerciseId='.$objExercise->id.'">'.get_lang('ModifyExercise').'</a>';
-if (isset($_GET['hotspotadmin']) || isset($_GET['newQuestion']) || isset($_GET['myid'])) 
+if (isset($_GET['hotspotadmin']) || isset($_GET['newQuestion']) || isset($_GET['myid']))
 echo Display::return_icon('message_reply_forum.png', get_lang('GoBackToQuestionList')).' '.'<a href="admin.php?">'.get_lang('GoBackToQuestionList').'</a><br/>';
 
 echo '</div>';

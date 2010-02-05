@@ -57,14 +57,14 @@ if (!empty($course))
 	$isMaster=$is_courseAdmin?true:false;
 
 
-	$dateNow=date('Y-m-d');	
-	$basepath_chat = '';		
+	$dateNow=date('Y-m-d');
+	$basepath_chat = '';
 	$documentPath=api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';
 	if (!empty($group_id)) {
 		$group_info = GroupManager :: get_group_properties($group_id);
-		$basepath_chat = $group_info['directory'].'/chat_files';		
+		$basepath_chat = $group_info['directory'].'/chat_files';
 	} else {
-		$basepath_chat = '/chat_files';				
+		$basepath_chat = '/chat_files';
 	}
 	$chatPath=$documentPath.$basepath_chat.'/';
 
@@ -78,16 +78,13 @@ if (!empty($course))
 		}
 
 		if (!api_is_anonymous()) {
-			$perm = api_get_setting('permissions_for_new_directories');
-			$perm = octdec(!empty($perm)?$perm:'0770');
-			@mkdir($chatPath,$perm);
-			@chmod($chatPath,$perm);
-			// save chat files document for group into item property			
+			@mkdir($chatPath, api_get_permissions_for_new_directories());
+			// save chat files document for group into item property
 			if (!empty($group_id)) {
 				$doc_id=add_document($_course,$basepath_chat,'folder',0,'chat_files');
 				$sql = "INSERT INTO $TABLEITEMPROPERTY (tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility)
 						VALUES ('document',1,NOW(),NOW(),$doc_id,'FolderCreated',1,$group_id,NULL,0)";
-				Database::query($sql,__FILE__,__LINE__);		
+				Database::query($sql,__FILE__,__LINE__);
 			}
 		}
 	}
@@ -98,7 +95,7 @@ if (!empty($course))
 	} else if (!empty($session_id)) {
 		$filename_chat = 'messages-'.$dateNow.'_sid-'.$session_id.'.log.html';
 	} else {
-		$filename_chat = 'messages-'.$dateNow.'.log.html';				
+		$filename_chat = 'messages-'.$dateNow.'.log.html';
 	}
 
 	if(!file_exists($chatPath.$filename_chat))
@@ -106,7 +103,7 @@ if (!empty($course))
 		@fclose(fopen($chatPath.$filename_chat,'w'));
 		if (!api_is_anonymous()) {
 			$doc_id=add_document($_course,$basepath_chat.'/'.$filename_chat,'file',0,$filename_chat);
-			api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'DocumentAdded', $_user['user_id'],$group_id,null,null,null,$session_id);			
+			api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'DocumentAdded', $_user['user_id'],$group_id,null,null,null,$session_id);
 			api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'invisible', $_user['user_id'],$group_id,null,null,null,$session_id);
 			item_property_update_on_folder($_course,$basepath_chat, $_user['user_id']);
 		}
@@ -118,7 +115,7 @@ if (!empty($course))
 	} else if (!empty($session_id)) {
 		$basename_chat = 'messages-'.$dateNow.'_sid-'.$session_id;
 	} else {
-		$basename_chat = 'messages-'.$dateNow;				
+		$basename_chat = 'messages-'.$dateNow;
 	}
 
 	if($reset && $isMaster)

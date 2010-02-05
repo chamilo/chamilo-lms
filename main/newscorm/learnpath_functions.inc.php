@@ -2212,13 +2212,13 @@ function exportpath($learnpath_id)
 	$fromdir = '../scorm/export/'; //this dir contains some standard files
 
 	deldir($expdir); //make sure the temp dir is cleared
-	mkdir($expdir);
-	mkdir($expdir.'/css');
-	mkdir($expdir.'/data');
-	mkdir($expdir.'/js');
-	mkdir($expdir.'/data/images');
-	mkdir($expdir.'/data/audio');
-	mkdir($expdir.'/data/videos');
+	mkdir($expdir, api_get_permissions_for_new_directories());
+	mkdir($expdir.'/css', api_get_permissions_for_new_directories());
+	mkdir($expdir.'/data', api_get_permissions_for_new_directories());
+	mkdir($expdir.'/js', api_get_permissions_for_new_directories());
+	mkdir($expdir.'/data/images', api_get_permissions_for_new_directories());
+	mkdir($expdir.'/data/audio', api_get_permissions_for_new_directories());
+	mkdir($expdir.'/data/videos', api_get_permissions_for_new_directories());
 
 		$circle1 = array (//this array contains the types of elements we want to export
 	'Chapter', 'Agenda', 'Ad_Valvas', 'Course_description', 'Document', 'Introduction_text', 'Link _self', 'Link _blank', 'Forum', 'Thread', 'Post', 'Exercise', 'HotPotatoes', 'Assignments', 'Dropbox', 'Users', 'Groups');
@@ -2647,7 +2647,7 @@ function CopyNCreate($source, $dest)
 	{
 		$dir = $dir.$tdest[$i]."/";
 		if (!is_dir($dir))
-			if (!mkdir($dir))
+			if (!mkdir($dir, api_get_permissions_for_new_directories()))
 				return false;
 	}
 
@@ -2682,8 +2682,8 @@ function rcopy($source, $dest)
 
 		if (!is_dir($dest))
 		{
-			$res = @ mkdir($dest);
-			if ($res === true)
+			$res = @mkdir($dest, api_get_permissions_for_new_directories());
+			if ($res !== false)
 			{
 				return true;
 			}
@@ -2692,7 +2692,7 @@ function rcopy($source, $dest)
 				//remove latest part of path and try creating that
 				if (rcopy(substr($source, 0, strrpos($source, '/')), substr($dest, 0, strrpos($dest, '/'))))
 				{
-					return @ mkdir($dest);
+					return @mkdir($dest, api_get_permissions_for_new_directories());
 				}
 				else
 				{

@@ -433,7 +433,7 @@ if ($is_allowedToEdit && !empty ($choice) && $choice == 'exportqti2') {
 	$temp_dir_short = uniqid();
 	$temp_zip_dir = $archive_path . "/" . $temp_dir_short;
 	if (!is_dir($temp_zip_dir))
-		mkdir($temp_zip_dir);
+		mkdir($temp_zip_dir, api_get_permissions_for_new_directories());
 	$temp_zip_file = $temp_zip_dir . "/" . md5(time()) . ".zip";
 	$temp_xml_file = $temp_zip_dir . "/qti2export_" . $exerciseId . '.xml';
 	file_put_contents($temp_xml_file, $export);

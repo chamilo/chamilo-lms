@@ -1224,7 +1224,7 @@ function zip_download ($array)
 	// create the directory if it does not exist yet.
 	if(!is_dir($temp_zip_dir))
 	{
-		mkdir($temp_zip_dir);
+		mkdir($temp_zip_dir, api_get_permissions_for_new_directories());
 	}
 
 	cleanup_temp_dropbox();

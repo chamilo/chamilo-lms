@@ -229,9 +229,7 @@ if (isset($_POST['save_audio']))
 			$filepath = api_get_path('SYS_COURSE_PATH').$_course['path'].'/document/';
 			if(!is_dir($filepath.'audio'))
 			{
-				$perm = api_get_setting('permissions_for_new_directories');
-				$perm = octdec(!empty($perm)?$perm:'0770');
-				mkdir($filepath.'audio',$perm);
+				mkdir($filepath.'audio', api_get_permissions_for_new_directories());
 				$audio_id=add_document($_course,'/audio','folder',0,'audio');
 				api_item_property_update($_course, TOOL_DOCUMENT, $audio_id, 'FolderCreated', api_get_user_id(),null,null,null,null,api_get_session_id());
 			}

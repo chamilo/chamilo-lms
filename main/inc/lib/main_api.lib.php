@@ -2982,7 +2982,7 @@ function copyr($source, $dest, $exclude = array(), $copied_files = array()) {
 
 	// Make destination directory
 	if (!is_dir($dest)) {
-		mkdir($dest);
+		mkdir($dest, api_get_permissions_for_new_directories());
 	}
 
 	// Loop through the folder
@@ -3034,11 +3034,8 @@ function copy_folder_course_session($pathname, $base_path_document,$session_id,$
 			$num_rows = Database::num_rows($rs1);
 
 			if ($num_rows == 0) {
-				if (mkdir($new_pathname)) {
-					$perm = api_get_setting('permissions_for_new_directories');
-					$perm = octdec(!empty($perm)?$perm:'0770');
-					chmod($new_pathname,$perm);
-				}
+				mkdir($new_pathname, api_get_permissions_for_new_directories());
+
 				// Insert new folder with destination session_id
 				$sql = "INSERT INTO ".$table." SET path = '$path', comment = '".Database::escape_string($document->comment)."', title = '".Database::escape_string(basename($new_pathname))."' ,filetype='folder', size= '0', session_id = '$session_id'";
 				Database::query($sql, __FILE__, __LINE__);

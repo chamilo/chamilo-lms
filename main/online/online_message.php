@@ -75,8 +75,7 @@ if(!is_dir($onlinePath))
 		@unlink($onlinePath);
 	}
 
-	@mkdir($onlinePath,0777);
-	@chmod($onlinePath,0777);
+	@mkdir($onlinePath, api_get_permissions_for_new_directories());
 }
 
 $chat_size=0;

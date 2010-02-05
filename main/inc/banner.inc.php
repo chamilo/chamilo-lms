@@ -35,7 +35,7 @@ $session_name   = api_get_session_name($my_session_id);
 	Course title section
 -----------------------------------------------------------------------------
 */
-if (!empty($_cid) and $_cid != -1 and isset($_course)) { 
+if (!empty($_cid) and $_cid != -1 and isset($_course)) {
 	//Put the name of the course in the header
 ?>
 	<div id="my_courses"><a href="<?php echo api_get_path(WEB_COURSE_PATH).$_course['path']; ?>/index.php" target="_top">
@@ -58,11 +58,11 @@ if (!empty($_cid) and $_cid != -1 and isset($_course)) {
 		echo stripslashes($_course['titular']);
 	}
 	echo "</a></div>";
-} elseif (isset ($nameTools) && $language_file != 'course_home') { 
+} elseif (isset ($nameTools) && $language_file != 'course_home') {
 	//Put the name of the user-tools in the header
 	if (!isset ($_user['user_id'])) {
 		echo '<div id="my_courses"></div>';
-	} elseif(!$noPHP_SELF) {		
+	} elseif(!$noPHP_SELF) {
 		echo "<div id=\"my_courses\"><a href=\"".api_get_self()."?".api_get_cidreq(), "\" target=\"_top\">", $nameTools, "</a></div>", "\n";
 	} else {
 		echo '<div id="my_courses">'.$nameTools.'</div>';
@@ -198,8 +198,8 @@ if ($_user['user_id'] && !api_is_anonymous()) {
 		$menu_navigation['mycourses'] = $possible_tabs['mycourses'];
 	}
 
-	// My Profile 
-	if (api_get_setting('show_tabs', 'my_profile') == 'true' && api_get_setting('allow_social_tool') != 'true') { 
+	// My Profile
+	if (api_get_setting('show_tabs', 'my_profile') == 'true' && api_get_setting('allow_social_tool') != 'true') {
 		$navigation['myprofile'] = $possible_tabs['myprofile'];
 	} else {
 		$menu_navigation['myprofile'] = $possible_tabs['myprofile'];
@@ -234,8 +234,8 @@ if ($_user['user_id'] && !api_is_anonymous()) {
 		} else {
 			$menu_navigation['session_my_space'] = $possible_tabs['session_my_progress'];
 		}
-	}	
-	
+	}
+
 	// Social Networking
 	if (api_get_setting('show_tabs', 'social') == 'true') {
 		if (api_get_setting('allow_social_tool') == 'true') {
@@ -244,7 +244,7 @@ if ($_user['user_id'] && !api_is_anonymous()) {
 	} else{
 		$menu_navigation['social'] = $possible_tabs['social'];
 	}
-	
+
 	// Administration
 	if(api_is_platform_admin(true)) {
 		if (api_get_setting('show_tabs', 'platform_administration') == 'true') {
@@ -276,22 +276,19 @@ if(!empty($_SESSION['user_language_choice'])) {
 }
 
 if ($_configuration['multiple_access_urls']==true) {
-	$access_url_id = api_get_current_access_url_id();										 
-	if ($access_url_id != -1){						
+	$access_url_id = api_get_current_access_url_id();
+	if ($access_url_id != -1){
 		$url_info = api_get_access_url($access_url_id);
-		$url = substr($url_info['url'],7,strlen($url_info['url'])-8);						
+		$url = substr($url_info['url'],7,strlen($url_info['url'])-8);
 		$clean_url = replace_dangerous_char($url);
 		$clean_url = str_replace('/','-',$clean_url);
 		$clean_url = $clean_url.'/';
-		$homep = '../../home/'; //homep for Home Path			
-		$homep_new = '../../home/'.$clean_url; //homep for Home Path added the url				
+		$homep = '../../home/'; //homep for Home Path
+		$homep_new = '../../home/'.$clean_url; //homep for Home Path added the url
 		$new_url_dir = api_get_path(SYS_PATH).'home/'.$clean_url;
 		//we create the new dir for the new sites
-		if (!is_dir($new_url_dir)){		
-			umask(0);
-			$perm = api_get_setting('permissions_for_new_directories');
-			$perm = octdec(!empty($perm)?$perm:'0755');
-			mkdir($new_url_dir, $perm);
+		if (!is_dir($new_url_dir)){
+			mkdir($new_url_dir, api_get_permissions_for_new_directories());
 		}
 	}
 } else {
@@ -320,7 +317,7 @@ if(api_get_self() != '/main/admin/configure_homepage.php') {
 	echo $open;
 } else {
 	$home_menu = '';
-	if(file_exists($homep.$menutabs.'_'.$lang.$ext)) {		
+	if(file_exists($homep.$menutabs.'_'.$lang.$ext)) {
 		$home_menu = file($homep.$menutabs.'_'.$lang.$ext);
 	} else {
 		$home_menu = file ($homep.$menutabs.$ext);
@@ -330,7 +327,7 @@ if(api_get_self() != '/main/admin/configure_homepage.php') {
 		if(!empty($enreg)) {
 			$edit_link='<a href="'.api_get_self().'?action=edit_tabs&amp;link_index='.$key.'" ><span>'.Display::return_icon('edit.gif', get_lang('Edit')).'</span></a>';
 			$delete_link='<a href="'.api_get_self().'?action=delete_tabs&amp;link_index='.$key.'"  onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset)).'\')) return false;"><span>'.Display::return_icon('delete.gif', get_lang('Delete')).'</span></a>';
-			$tab_string = str_replace(array('href="'.api_get_path(WEB_PATH).'index.php?include=','</li>'),array('href="'.api_get_path(WEB_CODE_PATH).'admin/'.basename(api_get_self()).'?action=open_link&link=',''.$edit_link.$delete_link.'</li>'),$enreg);			
+			$tab_string = str_replace(array('href="'.api_get_path(WEB_PATH).'index.php?include=','</li>'),array('href="'.api_get_path(WEB_CODE_PATH).'admin/'.basename(api_get_self()).'?action=open_link&link=',''.$edit_link.$delete_link.'</li>'),$enreg);
 			echo $tab_string;
 		}
 	}
@@ -399,7 +396,7 @@ if (!empty($final_navigation)) {
 	echo implode(' &gt; ',$final_navigation);
 	echo '</div>';
 } else {
-	echo '<div id="header4">';	
+	echo '<div id="header4">';
 	echo '</div>';
 }
 if(api_get_setting('show_toolshortcuts')=='true') {

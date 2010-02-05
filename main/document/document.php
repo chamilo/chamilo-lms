@@ -641,9 +641,7 @@ if($is_allowed_to_edit || $group_member_with_upload_rights) // TEACHER ONLY
 
 		// create the template_thumbnails folder in the upload folder (if needed)
 		if (!is_dir(api_get_path(SYS_CODE_PATH).'upload/template_thumbnails/')) {
-			$perm = api_get_setting('permissions_for_new_directories');
-			$perm = octdec(!empty($perm)?$perm:'0770');
-			$res = @mkdir(api_get_path(SYS_CODE_PATH).'upload/template_thumbnails/',$perm);
+			@mkdir(api_get_path(SYS_CODE_PATH).'upload/template_thumbnails/', api_get_permissions_for_new_directories());
 		}
 
 		// upload the file

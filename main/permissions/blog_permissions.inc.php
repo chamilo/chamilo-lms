@@ -93,6 +93,7 @@ echo "<form method=\"post\" action=\"".str_replace('&', '&amp;', $_SERVER['REQUE
 // ---------------------------------------------------
 // 		DISPLAYING THE ROLES LIST
 // ---------------------------------------------------
+
 if (api_get_setting('user_roles')=='true')
 {
 	// the list of the roles for the user

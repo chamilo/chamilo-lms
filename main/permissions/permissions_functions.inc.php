@@ -416,7 +416,7 @@ function display_role_list($current_course_roles, $current_platform_roles)
 
 	$coures_roles_table=Database::get_course_table(TABLE_ROLE);
 	$platform_roles_table=Database::get_main_table(TABLE_ROLE);
-
+/*
 	// platform roles
 	$sql="SELECT * FROM $platform_roles_table";
 	$result=Database::query($sql, __FILE__, __LINE__);
@@ -445,7 +445,7 @@ function display_role_list($current_course_roles, $current_platform_roles)
 		echo $row['role_name']."<br />\n";
 		echo $row['role_comment']."<br />\n";
 	}
-
+*/
 	// course roles
 	$sql="SELECT * FROM $coures_roles_table";
 	$result=Database::query($sql, __FILE__, __LINE__);

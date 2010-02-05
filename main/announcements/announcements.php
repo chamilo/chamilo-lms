@@ -418,8 +418,8 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 
 		if (!api_is_course_coach() || api_is_element_in_the_session(TOOL_ANNOUNCEMENT, $id)) {
 			$sql="SELECT * FROM  $tbl_announcement WHERE id='$id'";
-			$result = Database::query($sql,__FILE__,__LINE__);
-			$myrow = Database::fetch_array($result);
+			$rs = Database::query($sql,__FILE__,__LINE__);
+			$myrow = Database::fetch_array($rs);
 			$last_id = $id;
 			$edit_attachment = edit_announcement_attachment_file($last_id, $_FILES['user_upload'], $file_comment);
 			if ($myrow) {
@@ -676,12 +676,12 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 			    	}
 
 					if ($sqlmail != '') {
-						$result = Database::query($sqlmail,__FILE__,__LINE__);
+						$rs_mail = Database::query($sqlmail,__FILE__,__LINE__);
 				    	/*=================================================================================
 							    				send email one by one to avoid antispam
 					    =================================================================================*/
 						$db_name = Database::get_course_table(TABLE_MAIN_SURVEY);
-						while ($myrow = Database::fetch_array($result)) {
+						while ($myrow = Database::fetch_array($rs_mail)) {
 							/*    Header : Bericht van uw lesgever - GES ($_cid)
 
 								  Body :   John Doe (prenom + nom) <john_doe@hotmail.com> (email)
@@ -724,19 +724,18 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 
 		                        $sender_name = api_get_person_name($_SESSION['_user']['firstName'], $_SESSION['_user']['lastName'], null, PERSON_NAME_EMAIL_ADDRESS);
 		                        $sender_email = $_SESSION['_user']['mail'];
-
-								$data_file = array();
-								if (!empty($_FILES['user_upload'])) {
-									$courseDir = $_course['path'].'/upload/announcements/';
-									$sys_course_path = api_get_path(SYS_COURSE_PATH);
-									$sql = 'SELECT path, filename FROM '.$tbl_announcement_attachment.'
-									  	    WHERE announcement_id = "'.$insert_id.'"';
-									$result = Database::query($sql, __FILE__, __LINE__);
-									$row = Database::fetch_array($result);
-									$data_file = array('path' => $sys_course_path.$courseDir.$row['path'],
-													   'filename' => $row['filename']);
+								
+								// send attachment file 
+								$data_file = array();											
+								$sql = 'SELECT path, filename FROM '.$tbl_announcement_attachment.' WHERE announcement_id = "'.$insert_id.'"';
+								$rs_attach = Database::query($sql, __FILE__, __LINE__);								
+								if (Database::num_rows($rs_attach) > 0) {
+									$row_attach  = Database::fetch_array($rs_attach);
+									$path_attach = api_get_path(SYS_COURSE_PATH).$_course['path'].'/upload/announcements/'.$row_attach['path'];
+									$filename_attach = $row_attach['filename'];
+									$data_file = array('path' => $path_attach,'filename' => $filename_attach);
 								}
-
+								
 								@api_mail_html($recipient_name, $mailid, stripslashes($emailSubject), $mail_body, $sender_name, $sender_email, null, $data_file);
 	                        }
 
@@ -787,8 +786,6 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 		unset($newContent);
 		unset($content_to_modify);
 		unset($title_to_modify);
-
-
 
 		if($_REQUEST['publish_survey']) {
 

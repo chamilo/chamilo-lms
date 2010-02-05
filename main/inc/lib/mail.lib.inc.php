@@ -185,6 +185,8 @@ function api_mail_html($recipient_name, $recipient_email, $subject, $message, $s
 		if(eregi( $regexp_rfc3696, $recipient_email ))
 		{
 			$mail->AddAddress($recipient_email, $recipient_name);
+		} else {
+			return 0;
 		}
 	}
 

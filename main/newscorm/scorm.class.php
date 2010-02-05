@@ -206,7 +206,7 @@ class scorm extends learnpath {
 	     		}
 		     	unset($doc);
 	     	}elseif($v==5){
-		    	if($this->debug>0){error_log('In scorm::parse_manifest() - Parsing using PHP5 method',0);}
+				if($this->debug>0){error_log('In scorm::parse_manifest() - Parsing using PHP5 method',0);}
 	     		$doc = new DOMDocument();
 	     		$res = $doc->load($file);
 	     		if($res===false){
@@ -372,7 +372,7 @@ class scorm extends learnpath {
 	     	//-for items
 	     	//-for views?
 	    	$get_max = "SELECT MAX(display_order) FROM $new_lp";
-	    	$res_max = Database::query($get_max);
+	    	$res_max = Database::query($get_max, __FILE__, __LINE__);
 	    	$dsp = 1;
 	    	if(Database::num_rows($res_max)>0){
 	    		$row = Database::fetch_array($res_max);
@@ -468,12 +468,12 @@ class scorm extends learnpath {
 						"'$prereq', ".$item['rel_order'] .", '".$item['datafromlms']."'," .
 						"'".$item['parameters']."'" .
 						")";
-				$res_item = Database::query($sql_item);
+				$res_item = Database::query($sql_item, __FILE__, __LINE__);
 				if($this->debug>1){error_log('New LP - In import_manifest(), inserting item : '.$sql_item.' : '.mysql_error(),0);}
 				$item_id = Database::insert_id();
 				//now update previous item to change next_item_id
 				$upd = "UPDATE $new_lp_item SET next_item_id = $item_id WHERE id = $previous";
-				$upd_res = Database::query($upd);
+				$upd_res = Database::query($upd, __FILE__, __LINE__);
 				//update previous item id
 				$previous = $item_id;
 
@@ -664,7 +664,7 @@ class scorm extends learnpath {
 			- parse & change relative html links
 			- make sure the filenames are secure (filter funny characters or php extensions)
 		*/
-		if(is_dir($course_sys_dir.$new_dir) OR @mkdir($course_sys_dir.$new_dir))
+		if(is_dir($course_sys_dir.$new_dir) OR @mkdir($course_sys_dir.$new_dir, api_get_permissions_for_new_directories()))
 		{
 
 			// PHP method - slower...
@@ -714,7 +714,7 @@ class scorm extends learnpath {
 									if(!empty($mysubdir)){
 										$mybasedir = $mybasedir.$mysubdir.'/';
 										if(!is_dir($mybasedir)){
-											@mkdir($mybasedir);
+											@mkdir($mybasedir, api_get_permissions_for_new_directories());
 											if($this->debug==1){error_log('New LP - Dir '.$mybasedir.' doesnt exist. Creating.',0);}
 										}
 									}
@@ -730,16 +730,14 @@ class scorm extends learnpath {
 				closedir($dir);
 				chdir($saved_dir);
 
-				$perm = api_get_setting('permissions_for_new_directories');
-				$perm = octdec(!empty($perm)?$perm:'0770');
-
-				api_chmod_R($course_sys_dir.$new_dir , $perm);
+				api_chmod_R($course_sys_dir.$new_dir, api_get_permissions_for_new_directories());
 			}
-		}else{
+		} else {
 			return '';
 		}
 		return $course_sys_dir.$new_dir.$manifest;
 	}
+
 	/**
 	 * Sets the proximity setting in the database
 	 * @param	string	Proximity setting
@@ -750,9 +748,9 @@ class scorm extends learnpath {
 	 	if($lp!=0){
 	 		$tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
 	 		$sql = "UPDATE $tbl_lp SET content_local = '$proxy' WHERE id = ".$lp;
-	 		$res = Database::query($sql);
+	 		$res = Database::query($sql, __FILE__, __LINE__);
 	 		return $res;
-	 	}else{
+	 	} else {
 	 		return false;
 	 	}
 	 }
@@ -774,10 +772,10 @@ class scorm extends learnpath {
 	 	}
 	 }
 
-	 	 /**
-	 * Sets the image setting in the database
-	 * @param	string preview_image setting
-	 */
+	 /**
+	  * Sets the image setting in the database
+	  * @param	string preview_image setting
+	  */
 	 function set_preview_image($preview_image=''){
 		if($this->debug>0){error_log('In scorm::set_theme('.$preview_image.') method',0);}
 	 	$lp = $this->get_id();
@@ -822,9 +820,9 @@ class scorm extends learnpath {
 	 	if($lp!=0){
 	 		$tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
 	 		$sql = "UPDATE $tbl_lp SET content_maker = '$maker' WHERE id = ".$lp;
-	 		$res = Database::query($sql);
+	 		$res = Database::query($sql, __FILE__, __LINE__);
 	 		return $res;
-	 	}else{
+	 	} else {
 	 		return false;
 	 	}
 	 }
@@ -876,7 +874,7 @@ class scorm extends learnpath {
 
 		//error_log('New LP - cleaning dir '.$zipfoldername,0);
 		deldir($zipfoldername); //make sure the temp dir is cleared
-		$res = mkdir($zipfoldername);
+		$res = mkdir($zipfoldername, api_get_permissions_for_new_directories());
 		//error_log('New LP - made dir '.$zipfoldername,0);
 
 		//create zipfile of given directory
@@ -963,7 +961,7 @@ class scorm extends learnpath {
 		$sql = "SELECT * FROM $main_table WHERE code = '$course'";
 		if($this->debug>2){error_log('New LP - scorm::reimport_manifest() '.__LINE__.' - Querying course: '.$sql,0);}
 		//$res = Database::query($sql);
-		$res = Database::query($sql);
+		$res = Database::query($sql, __FILE__, __LINE__);
 		if(Database::num_rows($res)>0)
 		{
 			$this->cc = $course;
@@ -983,7 +981,7 @@ class scorm extends learnpath {
 		$sql = "SELECT * FROM $lp_table WHERE id = '$lp_id'";
 		if($this->debug>2){error_log('New LP - scorm::reimport_manifest() '.__LINE__.' - Querying lp: '.$sql,0);}
 		//$res = Database::query($sql);
-		$res = Database::query($sql);
+		$res = Database::query($sql, __FILE__, __LINE__);
 		if(Database::num_rows($res)>0)
 		{
     			$this->lp_id = $lp_id;

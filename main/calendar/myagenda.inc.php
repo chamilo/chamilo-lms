@@ -67,14 +67,14 @@ function get_myagendaitems($courses_dbs, $month, $year)
 		{
 			//echo "course admin";
 			$sqlquery = "SELECT
-										DISTINCT agenda.*, item_property.*
+										DISTINCT agenda.*, ip.visibility, ip.to_group_id, ip.insert_user_id, ip.ref
 										FROM ".$TABLEAGENDA." agenda,
-											 ".$TABLE_ITEMPROPERTY." item_property
-										WHERE agenda.id = item_property.ref
+											 ".$TABLE_ITEMPROPERTY." ip
+										WHERE agenda.id = ip.ref
 										AND MONTH(agenda.start_date)='".$month."'
 										AND YEAR(agenda.start_date)='".$year."'
-										AND item_property.tool='".TOOL_CALENDAR_EVENT."'
-										AND item_property.visibility='1'
+										AND ip.tool='".TOOL_CALENDAR_EVENT."'
+										AND ip.visibility='1'
 										GROUP BY agenda.id
 										ORDER BY start_date ";
 		}
@@ -85,29 +85,29 @@ function get_myagendaitems($courses_dbs, $month, $year)
 			if (is_array($group_memberships) && count($group_memberships)>0)
 			{
 				$sqlquery = "SELECT
-													agenda.*, item_property.*
+													agenda.*, ip.visibility, ip.to_group_id, ip.insert_user_id, ip.ref
 													FROM ".$TABLEAGENDA." agenda,
-														".$TABLE_ITEMPROPERTY." item_property
-													WHERE agenda.id = item_property.ref
+														".$TABLE_ITEMPROPERTY." ip
+													WHERE agenda.id = ip.ref
 													AND MONTH(agenda.start_date)='".$month."'
 													AND YEAR(agenda.start_date)='".$year."'
-													AND item_property.tool='".TOOL_CALENDAR_EVENT."'
-													AND	( item_property.to_user_id='".$_user['user_id']."' OR item_property.to_group_id IN (0, ".implode(", ", $group_memberships).") )
-													AND item_property.visibility='1'
+													AND ip.tool='".TOOL_CALENDAR_EVENT."'
+													AND	( ip.to_user_id='".$_user['user_id']."' OR ip.to_group_id IN (0, ".implode(", ", $group_memberships).") )
+													AND ip.visibility='1'
 													ORDER BY start_date ";
 			}
 			else
 			{
 				$sqlquery = "SELECT
-													agenda.*, item_property.*
+													agenda.*, ip.visibility, ip.to_group_id, ip.insert_user_id, ip.ref
 													FROM ".$TABLEAGENDA." agenda,
-														".$TABLE_ITEMPROPERTY." item_property
-													WHERE agenda.id = item_property.ref
+														".$TABLE_ITEMPROPERTY." ip
+													WHERE agenda.id = ip.ref
 													AND MONTH(agenda.start_date)='".$month."'
 													AND YEAR(agenda.start_date)='".$year."'
-													AND item_property.tool='".TOOL_CALENDAR_EVENT."'
-													AND ( item_property.to_user_id='".$_user['user_id']."' OR item_property.to_group_id='0')
-													AND item_property.visibility='1'
+													AND ip.tool='".TOOL_CALENDAR_EVENT."'
+													AND ( ip.to_user_id='".$_user['user_id']."' OR ip.to_group_id='0')
+													AND ip.visibility='1'
 													ORDER BY start_date ";
 			}
 		}
@@ -925,14 +925,14 @@ function get_personal_agenda_items_between_dates($user_id, $date_start='', $date
 		if ($course['status'] == '1') {
 			//echo "course admin";
 			$sqlquery = "SELECT ".
-						" DISTINCT agenda.*, item_property.* ".
+						" DISTINCT agenda.*, ip.visibility, ip.to_group_id, ip.insert_user_id, ip.ref ".
 						" FROM ".$t_a." agenda, ".
-						$t_ip." item_property ".
-                        " WHERE agenda.id = item_property.ref ".
+						$t_ip." ip ".
+                        " WHERE agenda.id = ip.ref ".
 						" AND agenda.start_date>='$date_start' ".
 						" AND agenda.end_date<='$date_end' ".
-						" AND item_property.tool='".TOOL_CALENDAR_EVENT."' ".
-						" AND item_property.visibility='1' ".
+						" AND ip.tool='".TOOL_CALENDAR_EVENT."' ".
+						" AND ip.visibility='1' ".
 						" GROUP BY agenda.id ".
 						" ORDER BY start_date ";
 		} else {
@@ -940,27 +940,27 @@ function get_personal_agenda_items_between_dates($user_id, $date_start='', $date
 			if (is_array($group_memberships) && count($group_memberships)>0)
 			{
 				$sqlquery = "SELECT " .
-							" agenda.*, item_property.* ".
+							" agenda.*, ip.visibility, ip.to_group_id, ip.insert_user_id, ip.ref ".
                             " FROM ".$t_a." agenda, ".
-			                $t_ip." item_property ".
-                            " WHERE agenda.id = item_property.ref ".
+			                $t_ip." ip ".
+                            " WHERE agenda.id = ip.ref ".
 							" AND agenda.start_date>='$date_start' ".
 							" AND agenda.end_date<='$date_end' ".
-							" AND item_property.tool='".TOOL_CALENDAR_EVENT."' ".
-							" AND	( item_property.to_user_id='".$user_id."' OR item_property.to_group_id IN (0, ".implode(", ", $group_memberships).") ) ".
-							" AND item_property.visibility='1' ".
+							" AND ip.tool='".TOOL_CALENDAR_EVENT."' ".
+							" AND	( ip.to_user_id='".$user_id."' OR ip.to_group_id IN (0, ".implode(", ", $group_memberships).") ) ".
+							" AND ip.visibility='1' ".
 							" ORDER BY start_date ";
 			} else {
 				$sqlquery = "SELECT ".
-							" agenda.*, item_property.* ".
+							" agenda.*, ip.visibility, ip.to_group_id, ip.insert_user_id, ip.ref ".
 							" FROM ".$t_a." agenda, ".
-							$t_ip." item_property ".
-							" WHERE agenda.id = item_property.ref ".
+							$t_ip." ip ".
+							" WHERE agenda.id = ip.ref ".
 							" AND agenda.start_date>='$date_start' ".
 							" AND agenda.end_date<='$date_end' ".
-							" AND item_property.tool='".TOOL_CALENDAR_EVENT."' ".
-							" AND ( item_property.to_user_id='".$user_id."' OR item_property.to_group_id='0') ".
-							" AND item_property.visibility='1' ".
+							" AND ip.tool='".TOOL_CALENDAR_EVENT."' ".
+							" AND ( ip.to_user_id='".$user_id."' OR ip.to_group_id='0') ".
+							" AND ip.visibility='1' ".
 							" ORDER BY start_date ";
 			}
 		}

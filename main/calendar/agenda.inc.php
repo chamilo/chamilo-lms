@@ -148,24 +148,24 @@ function get_calendar_items($month, $year)
 			if (is_array($group_memberships) && count($group_memberships)>0)
 			{
 				$sql="SELECT
-					agenda.*, toolitemproperties.*
-					FROM ".$TABLEAGENDA." agenda, ".$TABLE_ITEM_PROPERTY." toolitemproperties
-					WHERE agenda.id = toolitemproperties.ref   ".$show_all_current."
-					AND toolitemproperties.tool='".TOOL_CALENDAR_EVENT."'
-					AND	( toolitemproperties.to_user_id=$user_id OR toolitemproperties.to_group_id IN (0, ".implode(", ", $group_memberships).") )
-					AND toolitemproperties.visibility='1'
+					agenda.*, ip.visibility, ip.to_group_id, ip.insert_user_id, ip.ref
+					FROM ".$TABLEAGENDA." agenda, ".$TABLE_ITEM_PROPERTY." ip
+					WHERE agenda.id = ip.ref   ".$show_all_current."
+					AND ip.tool='".TOOL_CALENDAR_EVENT."'
+					AND	( ip.to_user_id=$user_id OR ip.to_group_id IN (0, ".implode(", ", $group_memberships).") )
+					AND ip.visibility='1'
 					$session_condition
 					ORDER BY start_date ".$_SESSION['sort'];
 			}
 			else
 			{
 				$sql="SELECT
-					agenda.*, toolitemproperties.*
-					FROM ".$TABLEAGENDA." agenda, ".$TABLE_ITEM_PROPERTY." toolitemproperties
-					WHERE agenda.id = toolitemproperties.ref   ".$show_all_current."
-					AND toolitemproperties.tool='".TOOL_CALENDAR_EVENT."'
-					AND ( toolitemproperties.to_user_id=$user_id OR toolitemproperties.to_group_id='0')
-					AND toolitemproperties.visibility='1'
+					agenda.*, ip.visibility, ip.to_group_id, ip.insert_user_id, ip.ref
+					FROM ".$TABLEAGENDA." agenda, ".$TABLE_ITEM_PROPERTY." ip
+					WHERE agenda.id = ip.ref   ".$show_all_current."
+					AND ip.tool='".TOOL_CALENDAR_EVENT."'
+					AND ( ip.to_user_id=$user_id OR ip.to_group_id='0')
+					AND ip.visibility='1'
 					$session_condition
 					ORDER BY start_date ".$_SESSION['sort'];
 			}
@@ -175,14 +175,14 @@ function get_calendar_items($month, $year)
 		elseif (!empty($_SESSION['group']))
 		{
 			$sql="SELECT
-				agenda.*, toolitemproperties.*
-				FROM ".$TABLEAGENDA." agenda, ".$TABLE_ITEM_PROPERTY." toolitemproperties
-				WHERE agenda.id = toolitemproperties.ref  ".$show_all_current."
-				AND toolitemproperties.tool='".TOOL_CALENDAR_EVENT."'
-				AND ( toolitemproperties.to_group_id=$group_id OR toolitemproperties.to_group_id='0')
-				AND toolitemproperties.visibility='1'
+				agenda.*, ip.visibility, ip.to_group_id, ip.insert_user_id, ip.ref
+				FROM ".$TABLEAGENDA." agenda, ".$TABLE_ITEM_PROPERTY." ip
+				WHERE agenda.id = ip.ref  ".$show_all_current."
+				AND ip.tool='".TOOL_CALENDAR_EVENT."'
+				AND ( ip.to_group_id=$group_id OR ip.to_group_id='0')
+				AND ip.visibility='1'
 				$session_condition
-				GROUP BY toolitemproperties.ref
+				GROUP BY ip.ref
 				ORDER BY start_date ".$_SESSION['sort'];
 		}
 		// A.3 you are a course admin without any group or user filter
@@ -193,13 +193,13 @@ function get_calendar_items($month, $year)
 			if ($_GET['isStudentView']=='true')
 			{
 				$sql="SELECT
-					agenda.*, toolitemproperties.*
-					FROM ".$TABLEAGENDA." agenda, ".$TABLE_ITEM_PROPERTY." toolitemproperties
-					WHERE agenda.id = toolitemproperties.ref  ".$show_all_current."
-					AND toolitemproperties.tool='".TOOL_CALENDAR_EVENT."'
-					AND toolitemproperties.visibility='1'
+					agenda.*, ip.visibility, ip.to_group_id, ip.insert_user_id, ip.ref
+					FROM ".$TABLEAGENDA." agenda, ".$TABLE_ITEM_PROPERTY." ip
+					WHERE agenda.id = ip.ref  ".$show_all_current."
+					AND ip.tool='".TOOL_CALENDAR_EVENT."'
+					AND ip.visibility='1'
 					$session_condition
-					GROUP BY toolitemproperties.ref
+					GROUP BY ip.ref
 					ORDER BY start_date ".$_SESSION['sort'];
 
 			}
@@ -208,13 +208,13 @@ function get_calendar_items($month, $year)
 			else
 			{
 				$sql="SELECT
-					agenda.*, toolitemproperties.*
-					FROM ".$TABLEAGENDA." agenda, ".$TABLE_ITEM_PROPERTY." toolitemproperties
-					WHERE agenda.id = toolitemproperties.ref  ".$show_all_current."
-					AND toolitemproperties.tool='".TOOL_CALENDAR_EVENT."'
-					AND ( toolitemproperties.visibility='0' or toolitemproperties.visibility='1')
+					agenda.*, ip.visibility, ip.to_group_id, ip.insert_user_id, ip.ref
+					FROM ".$TABLEAGENDA." agenda, ".$TABLE_ITEM_PROPERTY." ip
+					WHERE agenda.id = ip.ref  ".$show_all_current."
+					AND ip.tool='".TOOL_CALENDAR_EVENT."'
+					AND ( ip.visibility='0' or ip.visibility='1')
 					$session_condition
-					GROUP BY toolitemproperties.ref
+					GROUP BY ip.ref
 					ORDER BY start_date ".$_SESSION['sort'];
 			}
 		}
@@ -227,12 +227,12 @@ function get_calendar_items($month, $year)
 		if (is_array($group_memberships) and count($group_memberships)>0)
 		{
 			$sql="SELECT
-				agenda.*, toolitemproperties.*
-				FROM ".$TABLEAGENDA." agenda, ".$TABLE_ITEM_PROPERTY." toolitemproperties
-				WHERE agenda.id = toolitemproperties.ref   ".$show_all_current."
-				AND toolitemproperties.tool='".TOOL_CALENDAR_EVENT."'
-				AND	( toolitemproperties.to_user_id=$user_id OR toolitemproperties.to_group_id IN (0, ".implode(", ", $group_memberships).") )
-				AND toolitemproperties.visibility='1'
+				agenda.*, ip.visibility, ip.to_group_id, ip.insert_user_id, ip.ref
+				FROM ".$TABLEAGENDA." agenda, ".$TABLE_ITEM_PROPERTY." ip
+				WHERE agenda.id = ip.ref   ".$show_all_current."
+				AND ip.tool='".TOOL_CALENDAR_EVENT."'
+				AND	( ip.to_user_id=$user_id OR ip.to_group_id IN (0, ".implode(", ", $group_memberships).") )
+				AND ip.visibility='1'
 				$session_condition
 				ORDER BY start_date ".$_SESSION['sort'];
 		}
@@ -241,24 +241,24 @@ function get_calendar_items($month, $year)
 			if ($_user['user_id'])
 			{
 				$sql="SELECT
-					agenda.*, toolitemproperties.*
-					FROM ".$TABLEAGENDA." agenda, ".$TABLE_ITEM_PROPERTY." toolitemproperties
-					WHERE agenda.id = toolitemproperties.ref   ".$show_all_current."
-					AND toolitemproperties.tool='".TOOL_CALENDAR_EVENT."'
-					AND ( toolitemproperties.to_user_id=$user_id OR toolitemproperties.to_group_id='0')
-					AND toolitemproperties.visibility='1'
+					agenda.*, ip.visibility, ip.to_group_id, ip.insert_user_id, ip.ref
+					FROM ".$TABLEAGENDA." agenda, ".$TABLE_ITEM_PROPERTY." ip
+					WHERE agenda.id = ip.ref   ".$show_all_current."
+					AND ip.tool='".TOOL_CALENDAR_EVENT."'
+					AND ( ip.to_user_id=$user_id OR ip.to_group_id='0')
+					AND ip.visibility='1'
 					$session_condition
 					ORDER BY start_date ".$_SESSION['sort'];
 			}
 			else
 			{
 				$sql="SELECT
-					agenda.*, toolitemproperties.*
-					FROM ".$TABLEAGENDA." agenda, ".$TABLE_ITEM_PROPERTY." toolitemproperties
-					WHERE agenda.id = toolitemproperties.ref   ".$show_all_current."
-					AND toolitemproperties.tool='".TOOL_CALENDAR_EVENT."'
-					AND toolitemproperties.to_group_id='0'
-					AND toolitemproperties.visibility='1'
+					agenda.*, ip.visibility, ip.to_group_id, ip.insert_user_id, ip.ref
+					FROM ".$TABLEAGENDA." agenda, ".$TABLE_ITEM_PROPERTY." ip
+					WHERE agenda.id = ip.ref   ".$show_all_current."
+					AND ip.tool='".TOOL_CALENDAR_EVENT."'
+					AND ip.to_group_id='0'
+					AND ip.visibility='1'
 					$session_condition
 					ORDER BY start_date ".$_SESSION['sort'];
 			}
@@ -1854,24 +1854,24 @@ function display_agenda_items()
 			if (is_array($group_memberships) && count($group_memberships)>0)
 			{
 				$sql="SELECT
-					agenda.*, toolitemproperties.*
-					FROM ".$TABLEAGENDA." agenda, ".$TABLE_ITEM_PROPERTY." toolitemproperties
-					WHERE agenda.id = toolitemproperties.ref   ".$show_all_current."
-					AND toolitemproperties.tool='".TOOL_CALENDAR_EVENT."'
-					AND	( toolitemproperties.to_user_id=$user_id OR toolitemproperties.to_group_id IN (0, ".implode(", ", $group_memberships).") )
-					AND toolitemproperties.visibility='1'
+					agenda.*, ip.visibility, ip.to_group_id, ip.insert_user_id, ip.ref
+					FROM ".$TABLEAGENDA." agenda, ".$TABLE_ITEM_PROPERTY." ip
+					WHERE agenda.id = ip.ref   ".$show_all_current."
+					AND ip.tool='".TOOL_CALENDAR_EVENT."'
+					AND	( ip.to_user_id=$user_id OR ip.to_group_id IN (0, ".implode(", ", $group_memberships).") )
+					AND ip.visibility='1'
 					$session_condition
 					ORDER BY start_date ".$_SESSION['sort'];
 			}
 			else
 			{
 					$sql="SELECT
-					agenda.*, toolitemproperties.*
-					FROM ".$TABLEAGENDA." agenda, ".$TABLE_ITEM_PROPERTY." toolitemproperties
-					WHERE agenda.id = toolitemproperties.ref   ".$show_all_current."
-					AND toolitemproperties.tool='".TOOL_CALENDAR_EVENT."'
-					AND ( toolitemproperties.to_user_id=$user_id OR toolitemproperties.to_group_id='0')
-					AND toolitemproperties.visibility='1'
+					agenda.*, ip.visibility, ip.to_group_id, ip.insert_user_id, ip.ref
+					FROM ".$TABLEAGENDA." agenda, ".$TABLE_ITEM_PROPERTY." ip
+					WHERE agenda.id = ip.ref   ".$show_all_current."
+					AND ip.tool='".TOOL_CALENDAR_EVENT."'
+					AND ( ip.to_user_id=$user_id OR ip.to_group_id='0')
+					AND ip.visibility='1'
 					$session_condition
 					ORDER BY start_date ".$_SESSION['sort'];
 			}
@@ -1894,14 +1894,14 @@ function display_agenda_items()
 			}
 
 			$sql="SELECT
-				agenda.*, toolitemproperties.*
-				FROM ".$TABLEAGENDA." agenda, ".$TABLE_ITEM_PROPERTY." toolitemproperties
-				WHERE agenda.id = toolitemproperties.ref  ".$show_all_current."
-				AND toolitemproperties.tool='".TOOL_CALENDAR_EVENT."'
-				AND ( toolitemproperties.to_group_id=$group_id OR toolitemproperties.to_group_id='0')
-				AND toolitemproperties.lastedit_type<>'CalendareventDeleted'
+				agenda.*, ip.visibility, ip.to_group_id, ip.insert_user_id, ip.ref
+				FROM ".$TABLEAGENDA." agenda, ".$TABLE_ITEM_PROPERTY." ip
+				WHERE agenda.id = ip.ref  ".$show_all_current."
+				AND ip.tool='".TOOL_CALENDAR_EVENT."'
+				AND ( ip.to_group_id=$group_id OR ip.to_group_id='0')
+				AND ip.lastedit_type<>'CalendareventDeleted'
 				$session_condition
-				GROUP BY toolitemproperties.ref
+				GROUP BY ip.ref
 				ORDER BY start_date ".$_SESSION['sort'];
 				//removed 	- > AND toolitemproperties.visibility='1'		
 		}
@@ -1914,13 +1914,13 @@ function display_agenda_items()
 			if ($_GET['isStudentView']=='true')
 			{
 				$sql="SELECT
-					agenda.*, toolitemproperties.*
-					FROM ".$TABLEAGENDA." agenda, ".$TABLE_ITEM_PROPERTY." toolitemproperties
-					WHERE agenda.id = toolitemproperties.ref  ".$show_all_current."
-					AND toolitemproperties.tool='".TOOL_CALENDAR_EVENT."'
-					AND toolitemproperties.visibility='1'
+					agenda.*, ip.visibility, ip.to_group_id, ip.insert_user_id, ip.ref
+					FROM ".$TABLEAGENDA." agenda, ".$TABLE_ITEM_PROPERTY." ip
+					WHERE agenda.id = ip.ref  ".$show_all_current."
+					AND ip.tool='".TOOL_CALENDAR_EVENT."'
+					AND ip.visibility='1'
 					$session_condition
-					GROUP BY toolitemproperties.ref
+					GROUP BY ip.ref
 					ORDER BY start_date ".$_SESSION['sort'];
 
 			}
@@ -1933,13 +1933,13 @@ function display_agenda_items()
 				 if (api_is_course_admin())
 				 {
 					 $sql="SELECT
-						agenda.*, toolitemproperties.*
-						FROM ".$TABLEAGENDA." agenda, ".$TABLE_ITEM_PROPERTY." toolitemproperties
-						WHERE agenda.id = toolitemproperties.ref  ".$show_all_current."
-						AND toolitemproperties.tool='".TOOL_CALENDAR_EVENT."'
-						AND ( toolitemproperties.visibility='0' OR toolitemproperties.visibility='1')
+						agenda.*, ip.visibility, ip.to_group_id, ip.insert_user_id, ip.ref
+						FROM ".$TABLEAGENDA." agenda, ".$TABLE_ITEM_PROPERTY." ip
+						WHERE agenda.id = ip.ref  ".$show_all_current."
+						AND ip.tool='".TOOL_CALENDAR_EVENT."'
+						AND ( ip.visibility='0' OR ip.visibility='1')
 						$session_condition
-						GROUP BY toolitemproperties.ref
+						GROUP BY ip.ref
 						ORDER BY start_date ".$_SESSION['sort'];
 				 }
 				 else
@@ -1948,13 +1948,13 @@ function display_agenda_items()
 				 	//when showing all the events we do not show the group events
 				 	//todo showing ALL events including the groups events that are available
 				 	$sql="SELECT
-						agenda.*, toolitemproperties.*
-						FROM ".$TABLEAGENDA." agenda, ".$TABLE_ITEM_PROPERTY." toolitemproperties
-						WHERE agenda.id = toolitemproperties.ref  ".$show_all_current."
-						AND toolitemproperties.tool='".TOOL_CALENDAR_EVENT."'
-						AND ( toolitemproperties.visibility='0' OR toolitemproperties.visibility='1')
+						agenda.*, ip.visibility, ip.to_group_id, ip.insert_user_id, ip.ref
+						FROM ".$TABLEAGENDA." agenda, ".$TABLE_ITEM_PROPERTY." ip
+						WHERE agenda.id = ip.ref  ".$show_all_current."
+						AND ip.tool='".TOOL_CALENDAR_EVENT."'
+						AND ( ip.visibility='0' OR ip.visibility='1')
 						$session_condition
-						GROUP BY toolitemproperties.ref
+						GROUP BY ip.ref
 						ORDER BY start_date ".$_SESSION['sort'];
 
 
@@ -1997,12 +1997,12 @@ function display_agenda_items()
 		if (is_array($group_memberships) and count($group_memberships)>0)
 		{
 			$sql="SELECT
-				agenda.*, toolitemproperties.*
-				FROM ".$TABLEAGENDA." agenda, ".$TABLE_ITEM_PROPERTY." toolitemproperties
-				WHERE agenda.id = toolitemproperties.ref   ".$show_all_current."
-				AND toolitemproperties.tool='".TOOL_CALENDAR_EVENT."'
-				AND	( toolitemproperties.to_user_id=$user_id OR toolitemproperties.to_group_id IN (0, ".implode(", ", $group_memberships).") )
-				AND toolitemproperties.visibility='1'
+				agenda.*, ip.visibility, ip.to_group_id, ip.insert_user_id, ip.ref
+				FROM ".$TABLEAGENDA." agenda, ".$TABLE_ITEM_PROPERTY." ip
+				WHERE agenda.id = ip.ref   ".$show_all_current."
+				AND ip.tool='".TOOL_CALENDAR_EVENT."'
+				AND	( ip.to_user_id=$user_id OR ip.to_group_id IN (0, ".implode(", ", $group_memberships).") )
+				AND ip.visibility='1'
 				$session_condition
 				ORDER BY start_date ".$_SESSION['sort'];
 		}
@@ -2011,24 +2011,24 @@ function display_agenda_items()
 			if ($_user['user_id'])
 			{
 				$sql="SELECT
-					agenda.*, toolitemproperties.*
-					FROM ".$TABLEAGENDA." agenda, ".$TABLE_ITEM_PROPERTY." toolitemproperties
-					WHERE agenda.id = toolitemproperties.ref   ".$show_all_current."
-					AND toolitemproperties.tool='".TOOL_CALENDAR_EVENT."'
-					AND ( toolitemproperties.to_user_id=$user_id OR toolitemproperties.to_group_id='0')
-					AND toolitemproperties.visibility='1'
+					agenda.*, ip.visibility, ip.to_group_id, ip.insert_user_id, ip.ref 
+					FROM ".$TABLEAGENDA." agenda, ".$TABLE_ITEM_PROPERTY." ip
+					WHERE agenda.id = ip.ref   ".$show_all_current."
+					AND ip.tool='".TOOL_CALENDAR_EVENT."'
+					AND ( ip.to_user_id=$user_id OR ip.to_group_id='0')
+					AND ip.visibility='1'
 					$session_condition
 					ORDER BY start_date ".$_SESSION['sort'];
 			}
 			else
 			{
 				$sql="SELECT
-					agenda.*, toolitemproperties.*
-					FROM ".$TABLEAGENDA." agenda, ".$TABLE_ITEM_PROPERTY." toolitemproperties
-					WHERE agenda.id = toolitemproperties.ref   ".$show_all_current."
-					AND toolitemproperties.tool='".TOOL_CALENDAR_EVENT."'
-					AND toolitemproperties.to_group_id='0'
-					AND toolitemproperties.visibility='1'
+					agenda.*, ip.visibility, ip.to_group_id, ip.insert_user_id, ip.ref
+					FROM ".$TABLEAGENDA." agenda, ".$TABLE_ITEM_PROPERTY." ip
+					WHERE agenda.id = ip.ref   ".$show_all_current."
+					AND ip.tool='".TOOL_CALENDAR_EVENT."'
+					AND ip.to_group_id='0'
+					AND ip.visibility='1'
 					$session_condition
 					ORDER BY start_date ".$_SESSION['sort'];
 			}
@@ -2334,11 +2334,11 @@ function display_one_agenda_item($agenda_id)
 	  --------------------------------------------------*/
 	$agenda_id = Database::escape_string($agenda_id);
 
-	$sql="SELECT agenda.*, toolitemproperties.*
-					FROM ".$TABLEAGENDA." agenda, ".$TABLE_ITEM_PROPERTY." toolitemproperties
-					WHERE agenda.id = toolitemproperties.ref
-					AND toolitemproperties.tool='".TOOL_CALENDAR_EVENT."'
-					AND toolitemproperties.visibility='1'
+	$sql="SELECT agenda.*, ip.visibility, ip.to_group_id, ip.insert_user_id, ip.ref
+					FROM ".$TABLEAGENDA." agenda, ".$TABLE_ITEM_PROPERTY." ip
+					WHERE agenda.id = ip.ref
+					AND ip.tool='".TOOL_CALENDAR_EVENT."'
+					AND ip.visibility='1'
 					AND agenda.id='$agenda_id'";
 	$result=Database::query($sql,__FILE__,__LINE__) or die(Database::error());
 	$number_items=Database::num_rows($result);

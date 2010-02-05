@@ -1,6 +1,6 @@
 <?php
+require_once(api_get_path(LIBRARY_PATH).'notebook.lib.php');
 
-//require_once api_get_path(SYS_CODE_PATH).'notebook/index.php';
 //require_once api_get_path(SYS_CODE_PATH).'inc/global.inc.php';
 class TestNotebook extends UnitTestCase {
 
@@ -8,7 +8,7 @@ class TestNotebook extends UnitTestCase {
 		ob_start();
 		$values =array();
 		$res = NotebookManager::javascript_notebook($values);
-		$this->assertTrue(is_bool($res)); 
+		$this->assertTrue(is_string($res)); 
 		ob_end_clean();
 		//var_dump($res);
 	}

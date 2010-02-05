@@ -35,7 +35,8 @@ $cidReset=true;
 require('../inc/global.inc.php');
 
 require_once (api_get_path(LIBRARY_PATH).'urlmanager.lib.php');
-require_once ('../inc/lib/xajax/xajax.inc.php');
+require_once (api_get_path(LIBRARY_PATH).'access_url_edit_courses_to_url_functions.lib.php');
+
 $xajax = new xajax();
 //$xajax->debugOn();
 $xajax -> registerFunction ('search_courses');
@@ -68,39 +69,6 @@ if(isset($_REQUEST['add_type']) && $_REQUEST['add_type']!=''){
 $access_url_id=1;
 if(isset($_REQUEST['access_url_id']) && $_REQUEST['access_url_id']!=''){
 	$access_url_id = Security::remove_XSS($_REQUEST['access_url_id']);
-}
-
-function search_courses($needle, $id)
-{
-	global $tbl_course;
-	$xajax_response = new XajaxResponse();
-	$return = '';
-
-	if(!empty($needle)) {
-		// xajax send utf8 datas... datas in db can be non-utf8 datas
-		$charset = api_get_setting('platform_charset');
-		$needle = api_convert_encoding($needle, $charset, 'utf-8');
-		$needle = Database::escape_string($needle);
-		// search courses where username or firstname or lastname begins likes $needle
-		$sql = 'SELECT code, title FROM '.$tbl_course.' u
-				WHERE (title LIKE "'.$needle.'%"
-				OR code LIKE "'.$needle.'%"
-				)
-				ORDER BY title, code
-				LIMIT 11';
-		$rs = Database::query($sql, __FILE__, __LINE__);
-        $i=0;
-		while ($course = Database :: fetch_array($rs)) {
-			$i++;
-            if ($i<=10) {
-			     $return .= '<a href="javascript: void(0);" onclick="javascript: add_user_to_url(\''.addslashes($course['code']).'\',\''.addslashes($course['title']).' ('.addslashes($course['code']).')'.'\')">'.$course['title'].' ('.$course['code'].')</a><br />';
-            } else {
-            	$return .= '...<br />';
-            }
-		}
-	}
-	$xajax_response -> addAssign('ajax_list_courses','innerHTML',api_utf8_encode($return));
-	return $xajax_response;
 }
 
 $xajax -> processRequests();

@@ -135,7 +135,7 @@ define('TOOL_GRADEBOOK','gradebook');
 define('TOOL_NOTEBOOK','notebook');
 define('TOOL_ATTENDANCE','attendance');
 
-// CONSTANTS defining dokeos sections
+// CONSTANTS defining Chamilo interface sections
 define('SECTION_CAMPUS', 'mycampus');
 define('SECTION_COURSES', 'mycourses');
 define('SECTION_MYPROFILE', 'myprofile');
@@ -250,7 +250,9 @@ require_once dirname(__FILE__).'/internationalization.lib.php';
 */
 
 /**
- *	Returns a full path to a certain Dokeos area, which you specify through a parameter.
+ *	Returns a path to a certain resource within the Chamilo area, specifyed through a parameter.
+ *	Also, this function provides conversion between path types, in this case the input path points inside the Chamilo area too.
+ *
  *	See $_configuration['course_folder'] in the configuration.php to alter the WEB_COURSE_PATH and SYS_COURSE_PATH parameters.
  *	@param string $type				The requested path type (a defined constant), see the examples.
  *	@param string $path (optional)	A path which type is to be converted. Also, it may be a defined constant for a path.
@@ -260,62 +262,62 @@ require_once dirname(__FILE__).'/internationalization.lib.php';
  *	A terminology note:
  *	The defined constants used by this function contain the abbreviations WEB, REL, SYS with the following meaning for types:
  *	WEB - an absolute URL (we often call it web-path),
- *	example: http://www.mydokeos.com/dokeos/courses/COURSE01/document/lesson01.html;
+ *	example: http://www.mychamilo.org/chamilo/courses/COURSE01/document/lesson01.html;
  *	REL - represents a semi-absolute URL - a web-path, which is relative to the root web-path of the server, without server's base,
- *	example: /dokeos/courses/COURSE01/document/lesson01.html;
+ *	example: /chamilo/courses/COURSE01/document/lesson01.html;
  *	SYS - represents an absolute path inside the scope of server's file system,
- *	/var/www/dokeos/courses/COURSE01/document/lesson01.html or
- *	C:/Inetpub/wwwroot/dokeos/courses/COURSE01/document/lesson01.html.
+ *	/var/www/chamilo/courses/COURSE01/document/lesson01.html or
+ *	C:/Inetpub/wwwroot/chamilo/courses/COURSE01/document/lesson01.html.
  *	In some abstract sense we can consider these three path types as absolute.
  *
  *	Notes about the current behaviour model:
  *	1. Windows back-slashes are converted to slashes in the result.
  *	2. A semi-absolute web-path is detected by its leading slash. On Linux systems, absolute system paths start with
  *	a slash too, so an additional check about presense of leading system server base is implemented. For example, the function is
- *	able to distinguish type difference between /var/www/dokeos/courses/ (SYS) and /dokeos/courses/ (REL).
+ *	able to distinguish type difference between /var/www/chamilo/courses/ (SYS) and /chamilo/courses/ (REL).
  *	3. The function api_get_path() returns only these three types of paths, which in some sense are absolute. The function has
  *	no a mechanism for processing relative web/system paths, such as: lesson01.html, ./lesson01.html, ../css/my_styles.css.
  *	It has not been identified as needed yet.
  *	4. Also, resolving the meta-symbols "." and ".." withiin paths has not been implemented, it is to be identified as needed.
  *
  * 	@example
- *	Assume that your server root is /var/www/ dokeos is installed in a subfolder dokeos/ and the URL of your campus is http://www.mydokeos.com
+ *	Assume that your server root is /var/www/ , Chamilo is installed in a subfolder chamilo/ and the URL of your campus is http://www.mychamilo.org
  * 	The other configuration paramaters have not been changed.
  *
  * 	This is how we can retireve mosth used paths, for common purpose:
- *	api_get_path(WEB_SERVER_ROOT_PATH)			http://www.mydokeos.com/
- *	api_get_path(SYS_SERVER_ROOT_PATH)			/var/www/ - This is the physical folder where the system Dokeos has been placed. It is not always equal to $_SERVER['DOCUMENT_ROOT'].
- * 	api_get_path(WEB_PATH)						http://www.mydokeos.com/dokeos/
- * 	api_get_path(SYS_PATH)						/var/www/dokeos/
- * 	api_get_path(REL_PATH)						/dokeos/
- * 	api_get_path(WEB_COURSE_PATH)				http://www.mydokeos.com/dokeos/courses/
- * 	api_get_path(SYS_COURSE_PATH)				/var/www/dokeos/courses/
- *	api_get_path(REL_COURSE_PATH)				/dokeos/courses/
- * 	api_get_path(REL_CODE_PATH)					/dokeos/main/
- * 	api_get_path(WEB_CODE_PATH)					http://www.mydokeos.com/dokeos/main/
- * 	api_get_path(SYS_CODE_PATH)					/var/www/dokeos/main/
- * 	api_get_path(SYS_LANG_PATH)					/var/www/dokeos/main/lang/
- * 	api_get_path(WEB_IMG_PATH)					http://www.mydokeos.com/dokeos/main/img/
- *	api_get_path(WEB_CSS_PATH)					http://www.mydokeos.com/dokeos/main/css/
+ *	api_get_path(WEB_SERVER_ROOT_PATH)			http://www.mychamilo.org/
+ *	api_get_path(SYS_SERVER_ROOT_PATH)			/var/www/ - This is the physical folder where the system Chamilo has been placed. It is not always equal to $_SERVER['DOCUMENT_ROOT'].
+ * 	api_get_path(WEB_PATH)						http://www.mychamilo.org/chamilo/
+ * 	api_get_path(SYS_PATH)						/var/www/chamilo/
+ * 	api_get_path(REL_PATH)						/chamilo/
+ * 	api_get_path(WEB_COURSE_PATH)				http://www.mychamilo.org/chamilo/courses/
+ * 	api_get_path(SYS_COURSE_PATH)				/var/www/chamilo/courses/
+ *	api_get_path(REL_COURSE_PATH)				/chamilo/courses/
+ * 	api_get_path(REL_CODE_PATH)					/chamilo/main/
+ * 	api_get_path(WEB_CODE_PATH)					http://www.mychamilo.org/chamilo/main/
+ * 	api_get_path(SYS_CODE_PATH)					/var/www/chamilo/main/
+ * 	api_get_path(SYS_LANG_PATH)					/var/www/chamilo/main/lang/
+ * 	api_get_path(WEB_IMG_PATH)					http://www.mychamilo.org/chamilo/main/img/
+ *	api_get_path(WEB_CSS_PATH)					http://www.mychamilo.org/chamilo/main/css/
  * 	api_get_path(GARBAGE_PATH)					Deprecated?
- * 	api_get_path(WEB_PLUGIN_PATH)				http://www.mydokeos.com/dokeos/plugin/
- * 	api_get_path(SYS_PLUGIN_PATH)				/var/www/dokeos/plugin/
- * 	api_get_path(WEB_ARCHIVE_PATH)				http://www.mydokeos.com/dokeos/archive/
- * 	api_get_path(SYS_ARCHIVE_PATH)				/var/www/dokeos/archive/
- *	api_get_path(INCLUDE_PATH)					/var/www/dokeos/main/inc/
- * 	api_get_path(WEB_LIBRARY_PATH)				http://www.mydokeos.com/dokeos/main/inc/lib/
- * 	api_get_path(LIBRARY_PATH)					/var/www/dokeos/main/inc/lib/
- * 	api_get_path(CONFIGURATION_PATH)			/var/www/dokeos/main/inc/conf/
+ * 	api_get_path(WEB_PLUGIN_PATH)				http://www.mychamilo.org/chamilo/plugin/
+ * 	api_get_path(SYS_PLUGIN_PATH)				/var/www/chamilo/plugin/
+ * 	api_get_path(WEB_ARCHIVE_PATH)				http://www.mychamilo.org/chamilo/archive/
+ * 	api_get_path(SYS_ARCHIVE_PATH)				/var/www/chamilo/archive/
+ *	api_get_path(INCLUDE_PATH)					/var/www/chamilo/main/inc/
+ * 	api_get_path(WEB_LIBRARY_PATH)				http://www.mychamilo.org/chamilo/main/inc/lib/
+ * 	api_get_path(LIBRARY_PATH)					/var/www/chamilo/main/inc/lib/
+ * 	api_get_path(CONFIGURATION_PATH)			/var/www/chamilo/main/inc/conf/
  *
  *	This is how we retrieve paths of "registerd" resource files (scripts, players, etc.):
- *	api_get_path(TO_WEB, FLASH_PLAYER_AUDIO)	http://www.mydokeos.com/dokeos/main/inc/lib/mediaplayer/player.swf
- *	api_get_path(TO_WEB, FLASH_PLAYER_VIDEO)	http://www.mydokeos.com/dokeos/main/inc/lib/mediaplayer/player.swf
- *	api_get_path(TO_SYS, SCRIPT_SWFOBJECT)		/var/www/dokeos/main/inc/lib/swfobject/swfobject.js
- *	api_get_path(TO_REL, SCRIPT_ASCIIMATHML)	/dokeos/main/inc/lib/asciimath/ASCIIMathML.js
+ *	api_get_path(TO_WEB, FLASH_PLAYER_AUDIO)	http://www.mychamilo.org/chamilo/main/inc/lib/mediaplayer/player.swf
+ *	api_get_path(TO_WEB, FLASH_PLAYER_VIDEO)	http://www.mychamilo.org/chamilo/main/inc/lib/mediaplayer/player.swf
+ *	api_get_path(TO_SYS, SCRIPT_SWFOBJECT)		/var/www/chamilo/main/inc/lib/swfobject/swfobject.js
+ *	api_get_path(TO_REL, SCRIPT_ASCIIMATHML)	/chamilo/main/inc/lib/asciimath/ASCIIMathML.js
  *	...
  *
  *	We can convert arbitrary paths, that are not registered (no defined constant).
- *	For guaranteed result, these paths should point inside the systen Dokeos.
+ *	For guaranteed result, these paths should point inside the system Chamilo.
  *	Some random examples:
  *	api_get_path(TO_WEB, $_SERVER['REQUEST_URI'])
  *	api_get_path(TO_SYS, $_SERVER['PHP_SELF'])
@@ -467,10 +469,10 @@ function api_get_path($path_type, $path = null) {
 		$paths[WEB_PLUGIN_PATH] 	= $paths[WEB_PATH].$paths[WEB_PLUGIN_PATH];
 		$paths[SYS_ARCHIVE_PATH] 	= $paths[SYS_PATH].$paths[SYS_ARCHIVE_PATH];
 		$paths[WEB_ARCHIVE_PATH] 	= $paths[WEB_PATH].$paths[WEB_ARCHIVE_PATH];
-		// A change for Dokeos 1.8.6.2
+		// A change as of Chamilo 1.8.6.2
 		// Calculation in the previous way does not rely on configuration settings and in some cases gives unexpected results.
 		//$paths[INCLUDE_PATH] = $include_path_sys; // Old behaviour, Dokeos 1.8.6.1.
-		$paths[INCLUDE_PATH] 		= $paths[SYS_CODE_PATH].$paths[INCLUDE_PATH]; // New behaviour, coherrent with the model, Dokeos 1.8.6.2.
+		$paths[INCLUDE_PATH] 		= $paths[SYS_CODE_PATH].$paths[INCLUDE_PATH]; // New behaviour, coherrent with the model, Chamilo 1.8.6.2.
 		//
 		$paths[LIBRARY_PATH] 		= $paths[SYS_CODE_PATH].$paths[LIBRARY_PATH];
 		$paths[CONFIGURATION_PATH] 	= $paths[SYS_CODE_PATH].$paths[CONFIGURATION_PATH];
@@ -526,16 +528,16 @@ function api_get_path($path_type, $path = null) {
 		$path = substr($path, 0, $pos);
 	}
 
-	// Detection of the input path type. Conversion to semi-absolute type ( /dokeos/main/inc/.... ).
+	// Detection of the input path type. Conversion to semi-absolute type ( /chamilo/main/inc/.... ).
 
 	if (preg_match(VALID_WEB_PATH, $path)) {
 
 		// A special case: When a URL points to the document download script directly, without
 		// mod-rewrite translation, we have to translate it into an "ordinary" web path.
 		// For example:
-		// http://localhost/dokeos/main/document/download.php?doc_url=/image.png&cDir=/
+		// http://localhost/chamilo/main/document/download.php?doc_url=/image.png&cDir=/
 		// becomes
-		// http://localhost/dokeos/courses/TEST/document/image.png
+		// http://localhost/chamilo/courses/TEST/document/image.png
 		// TEST is a course directory name, so called "system course code".
 		if (strpos($path, 'download.php') !== false) { // Fast detection first.
 			$path = urldecode($path);
@@ -873,7 +875,7 @@ function api_get_real_course_id() {
  *
  * This function relies on api_get_course_info()
  * @param	string	The course code - optional (takes it from session if not given)
- * @return	string	The directory where the course is located inside the Dokeos "courses" directory
+ * @return	string	The directory where the course is located inside the Chamilo "courses" directory
  * @author	Yannick Warnier <yannick.warnier@dokeos.com>
  */
 function api_get_course_path($course_code = null) {
@@ -999,7 +1001,7 @@ function api_get_course_info($course_code = null) {
 */
 
 /**
- * Start the Dokeos session.
+ * Start the Chamilo session.
  *
  * The default lifetime for session is set here. It is not possible to have it
  * as a database setting as it is used before the database connection has been made.
@@ -2478,7 +2480,7 @@ function api_item_property_update($_course, $tool, $item_id, $lastedit_type, $us
  * @param int 		id of the item itself, linked to key of every tool ('id', ...), "*" = all items of the tool
  */
 function api_get_item_property_id ($course_code, $tool, $ref) {
-	
+
 	$course_info = api_get_course_info($course_code);
 	$tool 		 = Database::escape_string($tool);
 	$ref 		 = intval($ref);
@@ -2836,47 +2838,74 @@ function api_time_to_hms($seconds) {
 	return "$hours:$min:$sec";
 }
 
-// TODO: This function is to be simplified. File access modes to be implemented.
+/*
+==============================================================================
+		FILE SYSTEM RELATED FUNCTIONS
+==============================================================================
+*/
+
 /**
- * function adapted from a php.net comment
- * copy recursively a folder
- * @param the source folder
- * @param the dest folder
- * @param an array of excluded file_name (without extension)
- * @param copied_files the returned array of copied files
+ * Returns the permissions to be assigned to every newly created directory by the web-server.
+ * The returnd value is based on the platform administrator's setting "Administration > Configuration settings > Security > Permissions for new directories".
+ * @return int		Returns the permissions in the format "Owner-Group-Others, Read-Write-Execute", as an integer value.
  */
-
-function copyr($source, $dest, $exclude = array(), $copied_files = array()) {
-	// Simple copy for a file
-	if (is_file($source)) {
-		$path_info = pathinfo($source);
-		if (!in_array($path_info['filename'], $exclude)) {
-			copy($source, $dest);
-		}
-		return;
+function api_get_permissions_for_new_directories() {
+	static $permissions;
+	if (!isset($permissions)) {
+		$permissions = trim(api_get_setting('permissions_for_new_directories'));
+		// The default value 0777 is according to that in the platform administration panel after fresh system installation.
+		$permissions = octdec(!empty($permissions) ? $permissions : '0777');
 	}
+	return $permissions;
+}
 
-	// Make destination directory
-	if (!is_dir($dest)) {
-		mkdir($dest);
+/**
+ * Returns the permissions to be assigned to every newly created directory by the web-server.
+ * The returnd value is based on the platform administrator's setting "Administration > Configuration settings > Security > Permissions for new files".
+ * @return int		Returns the permissions in the format "Owner-Group-Others, Read-Write-Execute", as an integer value.
+ */
+function api_get_permissions_for_new_files() {
+	static $permissions;
+	if (!isset($permissions)) {
+		$permissions = trim(api_get_setting('permissions_for_new_files'));
+		// The default value 0666 is according to that in the platform administration panel after fresh system installation.
+		$permissions = octdec(!empty($permissions) ? $permissions : '0666');
 	}
+	return $permissions;
+}
 
-	// Loop through the folder
-	$dir = dir($source);
-	while (false !== $entry = $dir->read()) {
-		// Skip pointers
-		if ($entry == '.' || $entry == '..') {
-			continue;
+/**
+ * sys_get_temp_dir() was introduced as of PHP 5.2.1
+ * For older PHP versions the following implementation is to be activated.
+ * @link Based on http://www.phpit.net/article/creating-zip-tar-archives-dynamically-php/2/
+ */
+if (!function_exists('sys_get_temp_dir')) {
+
+	function sys_get_temp_dir() {
+
+		// Try to get from environment variable
+		if (!empty($_ENV['TMP'])) {
+			return realpath($_ENV['TMP']);
+		}
+		if (!empty($_ENV['TMPDIR'])) {
+			return realpath($_ENV['TMPDIR']);
+		}
+		if (!empty($_ENV['TEMP'])) {
+			return realpath($_ENV['TEMP']);
 		}
 
-		// Deep copy directories
-		if ($dest !== "$source/$entry") {
-			$files = copyr("$source/$entry", "$dest/$entry", $exclude, $copied_files);
+		// Detect by creating a temporary file
+		// Try to use system's temporary directory
+		// as random name shouldn't exist
+		$temp_file = tempnam(md5(uniqid(rand(), true)), '');
+		if ($temp_file) {
+			$temp_dir = realpath(dirname($temp_file));
+			@unlink( $temp_file );
+			return $temp_dir;
 		}
+
+		return false;
 	}
-	// Clean up
-	$dir->close();
-	return $files;
 }
 
 /**
@@ -2932,55 +2961,96 @@ function rmdirr($dirname) {
 	return $res;
 }
 
-function copy_folder_course_session($pathname, $base_path_document,$session_id,$course_info, $document)
-{
-	$table = Database :: get_course_table(TABLE_DOCUMENT, $course_info['dbName']);
-	$session_id = intval($session_id);
-    // Check if directory already exists
-    if (is_dir($pathname) || empty($pathname)) {
-        return true;
-    }
-
-    // Ensure a file does not already exist with the same name
-    if (is_file($pathname)) {
-        trigger_error('mkdirr() File exists', E_USER_WARNING);
-        return false;
-    }
-
-    $folders = explode(DIRECTORY_SEPARATOR,str_replace($base_path_document.DIRECTORY_SEPARATOR,'',$pathname));
-
-    $new_pathname = $base_path_document;
-    $path = '';
-
-    foreach ($folders as $folder) {
-	$new_pathname .= DIRECTORY_SEPARATOR.$folder;
-	$path .= DIRECTORY_SEPARATOR.$folder;
-
-	if (!file_exists($new_pathname)) {
-
-		$sql = "SELECT * FROM $table WHERE path = '$path' AND filetype = 'folder' AND session_id = '$session_id'";
-		$rs1  = Database::query($sql,__FILE__,__LINE__);
-		$num_rows = Database::num_rows($rs1);
-
-		if ($num_rows == 0) {
-			if (mkdir($new_pathname)) {
-				$perm = api_get_setting('permissions_for_new_directories');
-				$perm = octdec(!empty($perm)?$perm:'0770');
-				chmod($new_pathname,$perm);
-			}
-			// Insert new folder with destination session_id
-			$sql = "INSERT INTO ".$table." SET path = '$path', comment = '".Database::escape_string($document->comment)."', title = '".Database::escape_string(basename($new_pathname))."' ,filetype='folder', size= '0', session_id = '$session_id'";
-			Database::query($sql, __FILE__, __LINE__);
-			$document_id = Database::insert_id();
-			api_item_property_update($course_info,TOOL_DOCUMENT,$document_id,'FolderCreated',api_get_user_id(),0,0,null,null,$session_id);
+// TODO: This function is to be simplified. File access modes to be implemented.
+/**
+ * function adapted from a php.net comment
+ * copy recursively a folder
+ * @param the source folder
+ * @param the dest folder
+ * @param an array of excluded file_name (without extension)
+ * @param copied_files the returned array of copied files
+ */
+function copyr($source, $dest, $exclude = array(), $copied_files = array()) {
+	// Simple copy for a file
+	if (is_file($source)) {
+		$path_info = pathinfo($source);
+		if (!in_array($path_info['filename'], $exclude)) {
+			copy($source, $dest);
 		}
+		return;
 	}
 
-    } // en foreach
+	// Make destination directory
+	if (!is_dir($dest)) {
+		mkdir($dest);
+	}
 
+	// Loop through the folder
+	$dir = dir($source);
+	while (false !== $entry = $dir->read()) {
+		// Skip pointers
+		if ($entry == '.' || $entry == '..') {
+			continue;
+		}
+
+		// Deep copy directories
+		if ($dest !== "$source/$entry") {
+			$files = copyr("$source/$entry", "$dest/$entry", $exclude, $copied_files);
+		}
+	}
+	// Clean up
+	$dir->close();
+	return $files;
 }
 
-// TODO: chmodr() is a better name. Some corrections are needed.
+// TODO: Using DIRECTORY_SEPARATOR is not recommended, this is an obsolete approach. Documentation header to be added here.
+function copy_folder_course_session($pathname, $base_path_document,$session_id,$course_info, $document) {
+	$table = Database :: get_course_table(TABLE_DOCUMENT, $course_info['dbName']);
+	$session_id = intval($session_id);
+	// Check if directory already exists
+	if (is_dir($pathname) || empty($pathname)) {
+		return true;
+	}
+
+	// Ensure a file does not already exist with the same name
+	if (is_file($pathname)) {
+		trigger_error('copy_folder_course_session(): File exists', E_USER_WARNING);
+		return false;
+	}
+
+	$folders = explode(DIRECTORY_SEPARATOR,str_replace($base_path_document.DIRECTORY_SEPARATOR,'',$pathname));
+
+	$new_pathname = $base_path_document;
+	$path = '';
+
+	foreach ($folders as $folder) {
+		$new_pathname .= DIRECTORY_SEPARATOR.$folder;
+		$path .= DIRECTORY_SEPARATOR.$folder;
+
+		if (!file_exists($new_pathname)) {
+
+			$sql = "SELECT * FROM $table WHERE path = '$path' AND filetype = 'folder' AND session_id = '$session_id'";
+			$rs1  = Database::query($sql,__FILE__,__LINE__);
+			$num_rows = Database::num_rows($rs1);
+
+			if ($num_rows == 0) {
+				if (mkdir($new_pathname)) {
+					$perm = api_get_setting('permissions_for_new_directories');
+					$perm = octdec(!empty($perm)?$perm:'0770');
+					chmod($new_pathname,$perm);
+				}
+				// Insert new folder with destination session_id
+				$sql = "INSERT INTO ".$table." SET path = '$path', comment = '".Database::escape_string($document->comment)."', title = '".Database::escape_string(basename($new_pathname))."' ,filetype='folder', size= '0', session_id = '$session_id'";
+				Database::query($sql, __FILE__, __LINE__);
+				$document_id = Database::insert_id();
+				api_item_property_update($course_info,TOOL_DOCUMENT,$document_id,'FolderCreated',api_get_user_id(),0,0,null,null,$session_id);
+			}
+		}
+
+	} // en foreach
+}
+
+// TODO: chmodr() is a better name. Some corrections are needed. Documentation header to be added here.
 function api_chmod_R($path, $filemode) {
 	if (!is_dir($path)) {
 		return chmod($path, $filemode);
@@ -3883,38 +3953,6 @@ function api_is_in_group($group_id = null, $course_code = null) {
 		}
 	}
 	return false;
-}
-
-// sys_get_temp_dir() is on php since 5.2.1
-if (!function_exists('sys_get_temp_dir')) {
-
-	// Based on http://www.phpit.net/
-	// article/creating-zip-tar-archives-dynamically-php/2/
-	function sys_get_temp_dir() {
-
-		// Try to get from environment variable
-		if (!empty($_ENV['TMP'])) {
-			return realpath($_ENV['TMP']);
-		}
-		if (!empty($_ENV['TMPDIR'])) {
-			return realpath($_ENV['TMPDIR']);
-		}
-		if (!empty($_ENV['TEMP'])) {
-			return realpath($_ENV['TEMP']);
-		}
-
-		// Detect by creating a temporary file
-		// Try to use system's temporary directory
-		// as random name shouldn't exist
-		$temp_file = tempnam(md5(uniqid(rand(), true)), '');
-		if ($temp_file) {
-			$temp_dir = realpath(dirname($temp_file));
-			@unlink( $temp_file );
-			return $temp_dir;
-		}
-
-		return false;
-	}
 }
 
 /**

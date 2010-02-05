@@ -6,8 +6,9 @@ class TestNotebook extends UnitTestCase {
 
 	function testJavascriptNotebook() {
 		ob_start();
-		$res = NotebookManager::javascript_notebook();
-		$this->assertTrue(is_string($res)); 
+		$values =array();
+		$res = NotebookManager::javascript_notebook($values);
+		$this->assertTrue(is_bool($res)); 
 		ob_end_clean();
 		//var_dump($res);
 	}

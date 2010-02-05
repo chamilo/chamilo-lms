@@ -628,33 +628,34 @@ class SurveyTree {
 	 */
 	public function createList ($list) {
 		$result=array();
-		foreach ($list as $key=>$node)
-		{
-			if (is_array($node['children']))
-			{
-				//echo $key; echo '--<br>';
-				//print_r($node);
-				//echo '<br>';
-				$result[$key]= $node['name'];
-				$re=self::createList($node['children']);
-				if (!empty($re))
+		if(is_array($list)) {
+			foreach ($list as $key=>$node) {
+				if (is_array($node['children']))
 				{
-					if (is_array($re))
-						foreach ($re as $key=>$r)
-						{
-							$result[$key]=''.$r;
-						}
-					else
+					//echo $key; echo '--<br>';
+					//print_r($node);
+					//echo '<br>';
+					$result[$key]= $node['name'];
+					$re=self::createList($node['children']);
+					if (!empty($re))
 					{
-						$result[]=$re;
+						if (is_array($re))
+							foreach ($re as $key=>$r)
+							{
+								$result[$key]=''.$r;
+							}
+						else
+						{
+							$result[]=$re;
+						}
+	
 					}
-
 				}
-			}
-			else
-			{
-				//echo $key; echo '-<br>';
-				$result[$key]=$node['name'];
+				else
+				{
+					//echo $key; echo '-<br>';
+					$result[$key]=$node['name'];
+				}
 			}
 		}
 		return $result;

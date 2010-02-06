@@ -32,9 +32,9 @@ require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
 if(isset($_GET['session']) && $_GET['session'] == true ){
 	$archive_path = api_get_path(SYS_ARCHIVE_PATH).'temp/';
 	$_cid = true;
-	$is_courseAdmin = true;	
+	$is_courseAdmin = true;
 } else {
-	$archive_path = api_get_path(SYS_PATH).$archiveDirName.'/';	
+	$archive_path = api_get_path(SYS_ARCHIVE_PATH);
 }
 
 $archive_file = $_GET['archive'];

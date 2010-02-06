@@ -169,7 +169,7 @@ class Export {
 
 /*
 ==============================================================================
-		FUNCTIONS
+		DEPRECATED FUNCTIONS
 ==============================================================================
 */
 
@@ -300,7 +300,7 @@ function copydir($origine, $destination, $verbose = false) {
 			return 0;
 	}
 	*/
-	mkpath($destination, 0770);
+	mkdir($destination, api_get_permissions_for_new_directories(), true);
 	if ($verbose) {
 		echo "
 						<strong>

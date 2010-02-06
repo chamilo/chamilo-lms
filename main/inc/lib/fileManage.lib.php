@@ -522,74 +522,6 @@ function form_dir_list($sourceType, $sourceComponent, $command, $baseWorkDir)
 //------------------------------------------------------------------------------
 
 /**
- * to create missing directory in a gived path
- *
- * @returns a resource identifier or FALSE if the query was not executed correctly.
- * @author KilerCris@Mail.com original function from  php manual
- * @author Christophe Gesch� gesche@ipm.ucl.ac.be Claroline Team
- * @since  28-Aug-2001 09:12
- * @param 	sting	$path 		wanted path
- * @param 	boolean	$verbose	fix if comments must be printed
- * @param 	string	$mode		fix if chmod is same of parent or default
- * @global 	string  $langCreatedIn string to say "create in"
- */
-function mkpath($path, $verbose = false, $mode = "herit")
-{
-	global $langCreatedIn, $_configuration;
-
-	$path = str_replace("/", "\\", $path);
-	$dirs = explode("\\", $path);
-
-	$path = $dirs[0];
-
-	if ($verbose)
-	{
-		echo "<ul>";
-	}
-
-	for ($i = 1; $i < sizeof($dirs); $i++)
-	{
-		$path .= '/'.$dirs[$i];
-
-		if (ereg('^'.$path,$_configuration['root_sys']) && strlen($path) < strlen($_configuration['root_sys']))
-		{
-			continue;
-		}
-
-		if (!is_dir($path))
-		{
-			$ret = mkdir($path, api_get_permissions_for_new_directories());
-
-			if ($ret)
-			{
-				if($verbose)
-				{
-					echo '<li><strong>'.basename($path).'</strong><br />'.$langCreatedIn.'<br /><strong>'.realpath($path.'/..').'</strong></li>';
-				}
-			}
-			else
-			{
-				if ($verbose)
-				{
-					echo '</ul>error : '.$path.' not created';
-				}
-
-				$ret = false;
-
-				break;
-			}
-		}
-	}
-
-	if ($verbose)
-	{
-		echo '</ul>';
-	}
-
-	return $ret;
-}
-
-/**
  * to extract the extention of the filename
  *
  * @returns array
@@ -840,4 +772,80 @@ class FileManager
 
 } //end class FileManager
 
-?>
+
+/*
+===============================================================
+	DEPRECATED FUNCTIONS
+===============================================================
+*/
+
+/**
+ * @deprecated 06-FEB-2010. The function mkdir() is able to create directories recursively.
+ * @link http://php.net/manual/en/function.mkdir.php
+ *
+ * to create missing directory in a gived path
+ *
+ * @returns a resource identifier or FALSE if the query was not executed correctly.
+ * @author KilerCris@Mail.com original function from  php manual
+ * @author Christophe Gesch� gesche@ipm.ucl.ac.be Claroline Team
+ * @since  28-Aug-2001 09:12
+ * @param 	sting	$path 		wanted path
+ * @param 	boolean	$verbose	fix if comments must be printed
+ * @param 	string	$mode		fix if chmod is same of parent or default (Note: This misterious parameter is not used).
+ * @global 	string  $langCreatedIn string to say "create in"
+ */
+function mkpath($path, $verbose = false, $mode = "herit")
+{
+	global $langCreatedIn, $_configuration;
+
+	$path = str_replace("/", "\\", $path);
+	$dirs = explode("\\", $path);
+
+	$path = $dirs[0];
+
+	if ($verbose)
+	{
+		echo "<ul>";
+	}
+
+	for ($i = 1; $i < sizeof($dirs); $i++)
+	{
+		$path .= '/'.$dirs[$i];
+
+		if (ereg('^'.$path,$_configuration['root_sys']) && strlen($path) < strlen($_configuration['root_sys']))
+		{
+			continue;
+		}
+
+		if (!is_dir($path))
+		{
+			$ret = mkdir($path, api_get_permissions_for_new_directories());
+
+			if ($ret)
+			{
+				if($verbose)
+				{
+					echo '<li><strong>'.basename($path).'</strong><br />'.$langCreatedIn.'<br /><strong>'.realpath($path.'/..').'</strong></li>';
+				}
+			}
+			else
+			{
+				if ($verbose)
+				{
+					echo '</ul>error : '.$path.' not created';
+				}
+
+				$ret = false;
+
+				break;
+			}
+		}
+	}
+
+	if ($verbose)
+	{
+		echo '</ul>';
+	}
+
+	return $ret;
+}

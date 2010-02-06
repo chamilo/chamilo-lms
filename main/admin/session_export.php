@@ -27,21 +27,21 @@
 ==============================================================================
 */
 // name of the language file that needs to be included
-$language_file='admin';
+$language_file = 'admin';
 
-$cidReset=true;
+$cidReset = true;
 
-include('../inc/global.inc.php');
+include '../inc/global.inc.php';
 
 // setting the section (for the tabs)
-$this_section=SECTION_PLATFORM_ADMIN;
+$this_section = SECTION_PLATFORM_ADMIN;
 
 api_protect_admin_script(true);
-include(api_get_path(LIBRARY_PATH).'/fileManage.lib.php');
+include api_get_path(LIBRARY_PATH).'/fileManage.lib.php';
 
-$session_id=$_GET['session_id'];
-$formSent=0;
-$errorMsg='';
+$session_id = $_GET['session_id'];
+$formSent = 0;
+$errorMsg = '';
 
 // Database Table Definitions
 $tbl_user					= Database::get_main_table(TABLE_MAIN_USER);
@@ -53,21 +53,21 @@ $tbl_session_course      	= Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
 $tbl_session_course_user 	= Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
 
-$archivePath=api_get_path(SYS_PATH).$archiveDirName.'/';
-$archiveURL=api_get_path(WEB_CODE_PATH).'course_info/download.php?archive=';
+$archivePath = api_get_path(SYS_ARCHIVE_PATH);
+$archiveURL = api_get_path(WEB_CODE_PATH).'course_info/download.php?archive=';
 
-$tool_name=get_lang('ExportSessionListXMLCSV');
+$tool_name = get_lang('ExportSessionListXMLCSV');
 
-$interbreadcrumb[]=array('url' => 'index.php',"name" => get_lang('PlatformAdmin'));
+$interbreadcrumb[] = array('url' => 'index.php',"name" => get_lang('PlatformAdmin'));
 
 set_time_limit(0);
 
-if($_POST['formSent'] )
+if ($_POST['formSent'] )
 {
-	$formSent=$_POST['formSent'];
-	$file_type=($_POST['file_type'] == 'csv')?'csv':'xml';
-	$session_id=$_POST['session_id'];
-	if(empty($session_id))
+	$formSent = $_POST['formSent'];
+	$file_type = ($_POST['file_type'] == 'csv')?'csv':'xml';
+	$session_id = $_POST['session_id'];
+	if (empty($session_id))
 	{
 		$sql = "SELECT id,name,id_coach,username,date_start,date_end,visibility,session_category_id FROM $tbl_session INNER JOIN $tbl_user
 					ON $tbl_user.user_id = $tbl_session.id_coach ORDER BY id";
@@ -102,7 +102,7 @@ if($_POST['formSent'] )
 	{
 		if(!file_exists($archivePath))
 		{
-			mkpath($archivePath);
+			mkdir($archivePath, api_get_permissions_for_new_directories(), true);
 		}
 
 		if(!file_exists($archivePath.'index.html'))
@@ -130,7 +130,7 @@ if($_POST['formSent'] )
 		else
 		{
 			$cvs = false;
-			fputs($fp,"<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n<Sessions>\n");
+			fputs($fp, "<?xml version=\"1.0\" encoding=\"".api_get_system_encoding()."\"?>\n<Sessions>\n");
 		}
 
 		while($row=Database::fetch_array($result))
@@ -180,33 +180,33 @@ if($_POST['formSent'] )
 			$add .= $users;
 
 			//courses
-			$sql = "SELECT DISTINCT $tbl_course.code 
+			$sql = "SELECT DISTINCT $tbl_course.code
 					FROM $tbl_course
 					INNER JOIN $tbl_session_course_user
-						ON $tbl_course.code = $tbl_session_course_user.course_code								
+						ON $tbl_course.code = $tbl_session_course_user.course_code
 						AND $tbl_session_course_user.id_session = '".$row['id']."'";
-													
+
 			$rsCourses = Database::query($sql,__FILE__,__LINE__);
 
 			$courses = '';
 			while($rowCourses = Database::fetch_array($rsCourses)){
 
 				// get coachs from a course
-				$sql = "SELECT u.username 
+				$sql = "SELECT u.username
 					FROM $tbl_session_course_user scu
-					INNER JOIN $tbl_user u ON u.user_id = scu.id_user		
+					INNER JOIN $tbl_user u ON u.user_id = scu.id_user
 					WHERE scu.course_code = '{$rowCourses['code']}'
-						AND scu.id_session = '".$row['id']."' AND scu.status = 2 ";				
+						AND scu.id_session = '".$row['id']."' AND scu.status = 2 ";
 
 				$rs_coachs = Database::query($sql,__FILE__,__LINE__);
 				$coachs = array();
 				while ($row_coachs = Database::fetch_array($rs_coachs)) {
-					$coachs[] = $row_coachs['username']; 
+					$coachs[] = $row_coachs['username'];
 				}
-				
-				$coachs = implode(",",$coachs); 					
-								
-				if($cvs){										
+
+				$coachs = implode(",",$coachs);
+
+				if($cvs){
 					$courses .= str_replace(';',',',$rowCourses['code']);
 					$courses .= '['.str_replace(';',',',$coachs).'][';
 				}
@@ -219,16 +219,16 @@ if($_POST['formSent'] )
 				// rel user courses
 				$sql = "SELECT DISTINCT u.username
 						FROM $tbl_session_course_user scu
-						INNER JOIN $tbl_session_user su ON scu.id_user = su.id_user AND scu.id_session = su.id_session		
+						INNER JOIN $tbl_session_user su ON scu.id_user = su.id_user AND scu.id_session = su.id_session
 						INNER JOIN $tbl_user u
 						ON scu.id_user = u.user_id
 						AND scu.course_code='".$rowCourses['code']."'
-						AND scu.id_session='".$row['id']."'";				
+						AND scu.id_session='".$row['id']."'";
 
 				$rsUsersCourse = Database::query($sql,__FILE__,__LINE__);
 				$userscourse = '';
 				while($rowUsersCourse = Database::fetch_array($rsUsersCourse)){
-					
+
 					if($cvs){
 						$userscourse .= str_replace(';',',',$rowUsersCourse['username']).',';
 					}

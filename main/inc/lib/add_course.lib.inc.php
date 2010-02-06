@@ -2555,7 +2555,7 @@ function checkArchive($pathToArchive) {
  * @return	array	List of files properties from the ZIP package
  */
 function readPropertiesInArchive($archive, $isCompressed = TRUE) {
-	include (api_get_path(LIBRARY_PATH) . "pclzip/pclzip.lib.php");
+	include api_get_path(LIBRARY_PATH) . "pclzip/pclzip.lib.php";
 	printVar(dirname($archive), "Zip : ");
 	$uid = api_get_user_id();
 	/*
@@ -2573,10 +2573,10 @@ function readPropertiesInArchive($archive, $isCompressed = TRUE) {
 	*/
 	$zipFile = new pclZip($archive);
 	$tmpDirName = dirname($archive) . "/tmp".$uid.uniqid($uid);
-	if (mkpath($tmpDirName)) {
+	if (mkdir($tmpDirName, api_get_permissions_for_new_directories(), true)) {
 		$unzippingSate = $zipFile->extract($tmpDirName);
 	} else {
-		die("mkpath failed");
+		die("mkdir failed");
 	}
 	$pathToArchiveIni = dirname($tmpDirName) . "/archive.ini";
 	//	echo $pathToArchiveIni;

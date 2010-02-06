@@ -191,8 +191,8 @@ function define_course_keys($wantedCode, $prefix4all = "", $prefix4baseName = ""
 function prepare_course_repository($courseRepository, $courseId)
 {
 	$perm = api_get_permissions_for_new_directories();
-    $perm_file = api_get_setting('permissions_for_new_files');
-    $perm_file = octdec(!empty($perm_file)?$perm_file:'0660');
+    $perm_file = api_get_permissions_for_new_files();
+
 	mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository, $perm);
 	mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . "/document", $perm);
 	mkdir(api_get_path(SYS_COURSE_PATH).$courseRepository . "/document/images", $perm);
@@ -242,8 +242,6 @@ function prepare_course_repository($courseRepository, $courseId)
 	include(\"../../main/course_home/course_home.php\");
 	?>");
 	fwrite($fd,$string);
-    $perm_file = api_get_setting('permissions_for_new_files');
-    $perm_file = octdec(!empty($perm_file)?$perm_file:'0660');
     @chmod(api_get_path(SYS_COURSE_PATH).$courseRepository . '/index.php',$perm_file);
 	$fd = fopen(api_get_path(SYS_COURSE_PATH).$courseRepository . '/group/index.html', 'w');
 	$string = "<html></html>";
@@ -1842,6 +1840,7 @@ function fill_course_repository($courseRepository)
 	$web_code_path = api_get_path(WEB_CODE_PATH);
 
 	$perm = api_get_permissions_for_new_directories();
+	$perm_file = api_get_permissions_for_new_files();
 
 	/*doc_html = file(api_get_path(SYS_CODE_PATH).'document/example_document.html');
 
@@ -1878,8 +1877,6 @@ function fill_course_repository($courseRepository)
 		$pictures_array = sort_pictures($files,"dir");
 		$pictures_array = array_merge($pictures_array,sort_pictures($files,"file"));
 
-		$perm_file = api_get_setting('permissions_for_new_files');
-		$perm_file = octdec(!empty($perm_file)?$perm_file:'0660');
 		if(!is_dir($course_documents_folder_images))
 		{
 			mkdir($course_documents_folder_images,$perm);
@@ -2024,6 +2021,7 @@ function lang2db($string)
 	$string = Database::escape_string($string);
 	return $string;
 }
+
 /**
 *	Fills the course database with some required content and example content.
 *	@version 1.2

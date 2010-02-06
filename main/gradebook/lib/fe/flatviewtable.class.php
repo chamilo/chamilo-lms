@@ -387,7 +387,7 @@ class FlatViewTable extends SortableTable
 				$user_id = api_get_user_id();
 				$img_file_generated_name = $key.uniqid('').'gradebook.png';
 				$Test->Render($tmp_path.$img_file_generated_name);
-				chmod($tmp_path.$img_file_generated_name, 0777);
+				chmod($tmp_path.$img_file_generated_name, api_get_permissions_for_new_files());
 
 				if ($i % 2 == 0 && $i!= 0) {
 					echo '<br>';

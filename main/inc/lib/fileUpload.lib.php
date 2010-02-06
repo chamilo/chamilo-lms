@@ -285,8 +285,7 @@ function handle_uploaded_document($_course,$uploaded_file,$base_work_dir,$upload
 			//size of the uploaded file (in bytes)
 			$file_size = $uploaded_file['size'];
 
-			$files_perm = api_get_setting('permissions_for_new_files');
-			$files_perm = octdec(!empty($files_perm)?$files_perm:'0770');
+			$files_perm = api_get_permissions_for_new_files();
 
 			//what to do if the target file exists
 			switch ($what_if_file_exists)

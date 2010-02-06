@@ -467,9 +467,7 @@ if ($form->validate()) {
 		//$content = preg_replace("|(flashvars=\"file=)([^/]+)/|","$1".api_get_path(REL_COURSE_PATH).$_course['path'].'/document/$2/',$content);
 		fputs($fp, $content);
 		fclose($fp);
-		$files_perm = api_get_setting('permissions_for_new_files');
-		$files_perm = octdec(!empty($files_perm)?$files_perm:'0770');
-		chmod($filepath.$filename.'.'.$extension,$files_perm);
+		chmod($filepath.$filename.'.'.$extension, api_get_permissions_for_new_files());
 		if (!is_dir($filepath.'css')) {
 			mkdir($filepath.'css', api_get_permissions_for_new_directories());
 			$doc_id = add_document($_course, $dir.'css', 'folder', 0, 'css');

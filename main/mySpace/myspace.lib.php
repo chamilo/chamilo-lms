@@ -33,9 +33,7 @@ function export_csv($header, $data, $file_name = 'export.csv') {
 
 		fwrite($open, $info);
 		fclose($open);
-		$perm = api_get_setting('permissions_for_new_files');
-		$perm = octdec(!empty($perm) ? $perm : '0660');
-		@chmod($file_name, $perm);
+		@chmod($file_name, api_get_permissions_for_new_files());
 
 		header("Location:".$archive_url.$file_name);
 	}

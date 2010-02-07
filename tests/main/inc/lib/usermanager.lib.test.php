@@ -29,7 +29,7 @@ class TestUserManager extends UnitTestCase
     	$firstName='test_first';
     	$lastName='test_last';
     	$status='1';
-    	$email='test@dokeos.com';
+    	$email='test@chamilo.org';
     	$loginName='testlogin';
     	$password='testlogin';
     	$official_code='testcode';

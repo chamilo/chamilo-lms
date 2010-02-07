@@ -143,6 +143,7 @@ $pictures_question_types[3] = 'fill_in_blanks.gif';
 $pictures_question_types[4] = 'matching.gif';
 $pictures_question_types[5] = 'open_answer.gif';
 $pictures_question_types[6] = 'hotspot.gif';
+$pictures_question_types[9] = 'mcmac.gif';
 
 foreach (Question::$questionTypes as $key=>$value)
 {

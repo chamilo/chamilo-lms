@@ -247,7 +247,7 @@ if($is_allowedToEdit)
 		{
 			
 			
-			for ($answer_type = -1; $answer_type <=6; $answer_type++) {
+			for ($answer_type = -1; $answer_type <=9; $answer_type++) {
 				$selected ='';
 				if ($answer_type!=0) {
 					if ($answerType == $answer_type)
@@ -259,6 +259,7 @@ if($is_allowedToEdit)
 					elseif ($answer_type==4) {echo '<option value="'.$answer_type.'" '.$selected.'>'.get_lang('langMatching').'</option>'; }
 					elseif ($answer_type==5) {echo '<option value="'.$answer_type.'" '.$selected.'>'.get_lang('FreeAnswer').'</option>'; }		
 					elseif ($answer_type==6) {echo '<option value="'.$answer_type.'" '.$selected.'>'.get_lang('HotSpot').'</option>'; }
+					elseif ($answer_type==9) {echo '<option value="'.$answer_type.'" '.$selected.'>'.get_lang('MultipleSelectCombination').'</option>'; }
 				}
 			}
 		}

@@ -15,7 +15,7 @@ class TestChatFunctions extends UnitTestCase {
 
 
 	function testuser_connected_in_chat () {
-		$course_code = 'COURSEX';
+		$course_code = 'COURSETEST';
 		$user_id=1;			
 		$course_info = api_get_course_info($course_code);
 		$database_name = $course_info['dbName'];
@@ -25,7 +25,7 @@ class TestChatFunctions extends UnitTestCase {
 	
 
 	function testUsersListInChat () {
-		$course_code = 'COURSEX';
+		$course_code = 'COURSETEST';
 		$course_info = api_get_course_info($course_code);
 		$database_name = $course_info['dbName'];
 		$res = users_list_in_chat($database_name);
@@ -50,7 +50,7 @@ class TestChatFunctions extends UnitTestCase {
 	
 
 	function testExitOfChat () {
-		$course_code = 'COURSEX';
+		$course_code = 'COURSETEST';
 		$course_info = api_get_course_info($course_code);
 		$database_name = $course_info['dbName'];
 		$this->CreateChatConnection($database_name);
@@ -64,7 +64,7 @@ class TestChatFunctions extends UnitTestCase {
 	
 		function testDisconnectUserOfChat() {
 		$_SESSION['is_courseAdmin'] = 1;
-		$course_code = 'COURSEX';
+		$course_code = 'COURSETEST';
 		$course_info = api_get_course_info($course_code);
 		$database_name = $course_info['dbName'];
 		$this->CreateChatConnection($database_name);		

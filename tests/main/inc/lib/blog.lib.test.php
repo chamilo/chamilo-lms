@@ -559,7 +559,7 @@ class TestBlog extends UnitTestCase
  	
 	public function testGetBlogPostFromUser(){
 		global $_configuration;
-		$res = get_blog_post_from_user('chamilo_COURSEX',1);
+		$res = get_blog_post_from_user('chamilo_COURSETEST',1);
 		$this->assertFalse($res);
 		$this->assertTrue(is_string($res));
 		//var_dump($res);
@@ -567,7 +567,7 @@ class TestBlog extends UnitTestCase
     
 	public function testGetBlogCommentFromUser(){
 		global $_configuration;
-		$course_datos['wanted_code'] = 'chamilo_COURSEX';
+		$course_datos['wanted_code'] = 'chamilo_COURSETEST';
 		$user_id = 1;
 		$res = get_blog_comment_from_user($course_datos['wanted_code'],1);
 		$this->assertFalse($res);
@@ -575,7 +575,7 @@ class TestBlog extends UnitTestCase
 		$path = api_get_path(SYS_PATH).'archive';		
 		if ($handle = opendir($path)) {
 			while (false !== ($file = readdir($handle))) {				
-				if (strpos($file,'COURSEX')!==false) {										
+				if (strpos($file,'COURSETEST')!==false) {										
 					if (is_dir($path.'/'.$file)) {						
 						rmdirr($path.'/'.$file);						
 					}				

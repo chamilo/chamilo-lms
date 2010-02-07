@@ -170,7 +170,7 @@ class TestFileManager extends UnitTestCase {
 	}
 
 	public function testListAllFiles(){
-		$dirArray = array('COURSEX, document, images');
+		$dirArray = array('COURSETEST, document, images');
 		$res = $this->fmanager->list_all_files($dirArray);
 		$this->assertFalse($res);
 		$this->assertTrue(is_array($res));

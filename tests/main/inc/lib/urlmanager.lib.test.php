@@ -127,7 +127,7 @@ class TestUrlManager extends UnitTestCase {
 	}
 
 	function testrelation_url_course_exist() {
-		$course_id = 'COURSEX'; 
+		$course_id = 'COURSETEST'; 
 		$url_id=1;
 		$resu=UrlManager::relation_url_course_exist($course_id, $url_id);
 		if(!is_numeric($resu)){

@@ -188,7 +188,7 @@ class TestSocial extends UnitTestCase{
 	}
 /*	
 	public function TestDeleteCourse(){				
-		$code = 'COURSEX';				
+		$code = 'COURSETEST';				
 		$res = CourseManager::delete_course($code);			
 		$path = api_get_path(SYS_PATH).'archive';		
 		if ($handle = opendir($path)) {

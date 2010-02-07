@@ -98,7 +98,7 @@ class TestDocumentManager extends UnitTestCase {
 	$tbl_document = Database::get_course_table(TABLE_DOCUMENT);
 	$this_course= $_course['dbName'].'.';
 	$dirurl = api_get_path(WEB_COURSE_PATH);	
-	$doc_url= $dirurl.'COURSEX/document/video/painting.mpg?cidReq=COURSEX';
+	$doc_url= $dirurl.'COURSETEST/document/video/painting.mpg?cidReq=COURSETEST';
 	$res=DocumentManager::file_visible_to_user($this_course, $doc_url);
 	$this->assertTrue(is_bool($res));
 	}

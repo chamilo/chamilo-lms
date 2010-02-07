@@ -54,7 +54,7 @@ class TestsSuite extends TestSuite {
 		
 		global $_configuration, $_user, $_course, $cidReq;
 		
-		$cidReq = 'COURSEX';
+		$cidReq = 'COURSETEST';
         // check if course exists 
         $table_course = Database::get_main_table(TABLE_MAIN_COURSE);
         $sql = "SELECT code FROM  $table_course WHERE code = '$cidReq' ";

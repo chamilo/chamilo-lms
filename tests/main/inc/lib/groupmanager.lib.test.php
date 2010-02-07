@@ -104,8 +104,8 @@ class TestGroupManager extends UnitTestCase {
 	}
 
 	public function testGetCategories(){
-		$course_code ='COURSEX';
-		$course_db = 'chamilo_COURSEX';
+		$course_code ='COURSETEST';
+		$course_db = 'chamilo_COURSETEST';
 		$res = GroupManager::get_categories($course_code);
 		$this->assertTrue(is_array($res));
 		//var_dump($res);
@@ -113,7 +113,7 @@ class TestGroupManager extends UnitTestCase {
 
 	public function testGetCategory(){
 		$id =2;
-		$course_code = 'COURSEX';
+		$course_code = 'COURSETEST';
 		$res = GroupManager::get_category($id,$course_code);
 		$this->assertTrue(is_array($res));
 		$this->assertTrue($res);
@@ -121,9 +121,9 @@ class TestGroupManager extends UnitTestCase {
 	}
 
 	public function testGetCategoryFromGroup(){
-		$course_code='COURSEX';
+		$course_code='COURSETEST';
 		$group_id= 1;
-		$course_db = 'chamilo_COURSEX';
+		$course_db = 'chamilo_COURSETEST';
 		$resu = GroupManager::get_category_from_group($group_id,$course_code);
 		$this->assertTrue(is_bool($resu));
 		//var_dump($res);
@@ -132,8 +132,8 @@ class TestGroupManager extends UnitTestCase {
 
 	public function testDeleteCategory(){
 		$cat_id=1;
-		$course_code = 'COURSEX';
-		$course_db = 'chamilo_COURSEX';
+		$course_code = 'COURSETEST';
+		$course_db = 'chamilo_COURSETEST';
 		$res = GroupManager::delete_category($cat_id, $course_code);
 		$this->assertTrue(is_null($res));
 		$this->assertNull($res);
@@ -192,8 +192,8 @@ class TestGroupManager extends UnitTestCase {
 
 	public function testGetCurrenMaxGroupsPerUser(){
 		$category_id = 2;
-		$course_code = 'COURSEX';
-		$course_db= 'chamilo_COURSEX';
+		$course_code = 'COURSETEST';
+		$course_db= 'chamilo_COURSETEST';
 		$res =GroupManager::get_current_max_groups_per_user($category_id = null, $course_code = null);
 		$this->assertTrue(is_Null($res));
 		//var_dump($res);
@@ -385,7 +385,7 @@ class TestGroupManager extends UnitTestCase {
 
 	public function testGetGroupIds(){
 		global $user_id;
-		$course_db= 'chamilo_COURSEX';
+		$course_db= 'chamilo_COURSETEST';
 		$res = GroupManager::get_group_ids($course_db,$user_id);
 		$this->assertTrue(is_array($res));
 		//var_dump($res);
@@ -393,7 +393,7 @@ class TestGroupManager extends UnitTestCase {
 
 	public function testGetCompleteListOfUsersThatCanBeAddedToGroup(){
 		global $_course, $_user;
-		$course_code= 'chamilo_COURSEX';
+		$course_code= 'chamilo_COURSETEST';
 		$group_id=2;
 		$res = GroupManager::get_complete_list_of_users_that_can_be_added_to_group($course_code, $group_id);
 		$this->assertTrue(is_array($res));
@@ -444,7 +444,7 @@ class TestGroupManager extends UnitTestCase {
 	}
 /*	
 	public function TestDeleteCourse(){				
-		$code = 'COURSEX';				
+		$code = 'COURSETEST';				
 		$res = CourseManager::delete_course($code);			
 		$path = api_get_path(SYS_PATH).'archive';		
 		if ($handle = opendir($path)) {

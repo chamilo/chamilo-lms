@@ -46,7 +46,7 @@ class TestHotpotatoes extends UnitTestCase {
 
 	function testGetComment() {
 		
-			$course_code = 'COURSEX';			
+			$course_code = 'COURSETEST';			
 			$path = 'exercice_submit.php';
 			$query ="select comment from $dbTable where path='$path'";
 			$res=GetComment($path,$course_code);
@@ -95,7 +95,7 @@ class TestHotpotatoes extends UnitTestCase {
 	}
 
 	function testGetQuizName() {
-		$course_code = 'COURSEX';	
+		$course_code = 'COURSETEST';	
 		$fname='exercice_submit.php';
 		$fpath='main/exercice/exercice_submit.php';
 		$res=GetQuizName($fname,$fpath);
@@ -172,7 +172,7 @@ class TestHotpotatoes extends UnitTestCase {
 	}
 
 	function testWriteFileCont() {
-		$course_code = 'COURSEX';	
+		$course_code = 'COURSETEST';	
 		$full_file_path='/main/exercice/';
 		$content='test test test';
 		$res=WriteFileCont($full_file_path,$content);	

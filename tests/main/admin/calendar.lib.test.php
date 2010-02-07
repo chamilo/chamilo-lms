@@ -223,20 +223,20 @@ class TestCalendar extends UnitTestCase {
  			$start = 0;
  			$end = 0;
  			$params = array();
-			$course_code = 'COURSEX';			
+			$course_code = 'COURSETEST';			
 			$course_info = api_get_course_info($course_code);			
 			$resul = get_repeated_events_day_view($course_info,$start,$end,$params);		
 	 		$this->assertTrue(is_array($resul));
  	}
 
  	public function testGetRepeatedEventsWeekView(){
- 		$course_info = 'COURSEX';
+ 		$course_info = 'COURSETEST';
  		$resul = get_repeated_events_week_view($course_info, 0, 0, '');
  		$this->assertTrue(is_array($resul));
  	}
 
  	public function testGetRepeatedEventsMonthView(){
- 		$course_code='COURSEX';
+ 		$course_code='COURSETEST';
  		$course_info = api_get_course_info($course_code);
  		$resul= get_repeated_events_month_view($course_info,0,0,'');
 		$this->assertTrue(is_array($resul));
@@ -244,7 +244,7 @@ class TestCalendar extends UnitTestCase {
 	}
 
 	public function testGetRepeatedEventsListView(){
-		$course_code='COURSEX';
+		$course_code='COURSETEST';
  		$course_info = api_get_course_info($course_code);
 		$resul = get_repeated_events_list_view($course_info,0,0,'');
 		$this->assertTrue(is_array($resul));

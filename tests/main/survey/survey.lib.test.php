@@ -55,7 +55,7 @@ class TestSurvey extends UnitTestCase {
 
 	
 	public function testGetSurvey() {			   
-		$course_code = 'COURSEX';			   											 	
+		$course_code = 'COURSETEST';			   											 	
 		$survey_id=1;
 		$res3 = $this->smanager->get_survey($survey_id,0,$course_code);
 		$this->assertTrue(is_array($res3));		

@@ -31,12 +31,10 @@ class TestFileUpload extends UnitTestCase {
 			$res= create_unexisting_directory($_course,$user_id,$to_group_id,$to_user_id,$base_work_dir,$desired_dir_name);
 			
 			if(!is_null($res)) {
-				$this->assertTrue(is_string($res));
-				$this->assertTrue($res);	
-			} else {
-				$this->assertFalse(is_string($res));
-				} 
+				$this->assertTrue(is_bool($res));
+				$this->assertFalse($res);	
 			}
+		}
 
 		/**
 		 * Creates a file containing an html redirection to a given url

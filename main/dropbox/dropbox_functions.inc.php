@@ -5,7 +5,7 @@
 * functions in the init files also but I have moved them over
 * to one file 		-- Patrick Cool <patrick.cool@UGent.be>, Ghent University
 */
-require_once '../inc/global.inc.php';
+//require_once '../inc/global.inc.php';
 /*
 -----------------------------------------------------------
 	Javascript
@@ -706,6 +706,8 @@ function display_add_form()
 */
 function getUserNameFromId ( $id)  // RH: Mailing: return 'Mailing ' + id
 {
+	global $dropbox_cnf;
+
     $mailingId = $id - dropbox_cnf("mailingIdBase");
     if ( $mailingId > 0)
     {
@@ -713,7 +715,7 @@ function getUserNameFromId ( $id)  // RH: Mailing: return 'Mailing ' + id
     }
     $id = intval($id);
     $sql = "SELECT ".(api_is_western_name_order() ? "CONCAT(firstname,' ', lastname)" : "CONCAT(lastname,' ', firstname)")." AS name
-			FROM " . dropbox_cnf("tbl_user") . "
+			FROM " . $dropbox_cnf["tbl_user"] . "
 			WHERE user_id='$id'";
     $result = Database::query($sql,__FILE__,__LINE__);
     $res = Database::fetch_array( $result);

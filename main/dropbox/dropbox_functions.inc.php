@@ -793,10 +793,11 @@ function removeUnusedFiles( )
 */
 function getUserOwningThisMailing($mailingPseudoId, $owner = 0, $or_die = '')
 {
+	global $dropbox_cnf;
     $mailingPseudoId = intval($mailingPseudoId);
     $sql = "SELECT f.uploader_id
-			FROM " . dropbox_cnf("tbl_file") . " f
-			LEFT JOIN " . dropbox_cnf("tbl_post") . " p ON f.id = p.file_id
+			FROM " . $dropbox_cnf["tbl_file"] . " f
+			LEFT JOIN " . $dropbox_cnf["tbl_post"] . " p ON f.id = p.file_id
 			WHERE p.dest_user_id = '" . $mailingPseudoId . "'";
     $result = Database::query($sql,__FILE__,__LINE__);
 
@@ -815,6 +816,7 @@ function getUserOwningThisMailing($mailingPseudoId, $owner = 0, $or_die = '')
 */
 function removeMoreIfMailing($file_id)
 {
+	global $dropbox_cnf;
     // when deleting a mailing zip-file (posted to mailingPseudoId):
     // 1. the detail window is no longer reachable, so
     //    for all content files, delete mailingPseudoId from person-table
@@ -822,7 +824,7 @@ function removeMoreIfMailing($file_id)
     //    for all content files, replace mailingPseudoId by owner as uploader
     $file_id = intval($file_id);
     $sql = "SELECT p.dest_user_id
-			FROM " . dropbox_cnf("tbl_post") . " p
+			FROM " . $dropbox_cnf["tbl_post"] . " p
 			WHERE p.file_id = '" . $file_id . "'";
     $result = Database::query($sql,__FILE__,__LINE__);
 
@@ -864,9 +866,6 @@ function dropbox_cnf($variable)
 {
     return $GLOBALS['dropbox_cnf'][$variable];
 }
-
-
-
 
 
 /**
@@ -1519,11 +1518,6 @@ function check_number_feedback($key, $array)
 		return 0;
 	}
 }
-
-
-
-
-
 
 /**
  * Get the last access to a given tool of a given user

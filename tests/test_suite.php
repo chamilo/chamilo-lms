@@ -10,6 +10,8 @@ $libdir = dirname(__FILE__).'/../main/inc/lib/';
 
 $incdir = dirname(__FILE__).'/../main/inc/';
 //Need the ob start and clean else will show the objects 
+
+
 require_once $incdir.'global.inc.php';
 
 //List of files than need the tests
@@ -47,7 +49,11 @@ require_once $maindir.'admin/statistics/statistics.lib.php';
 require_once $incdir.'lib/usermanager.lib.php';
 require_once $maindir.'survey/survey.lib.php';
 require_once $maindir.'install/install_upgrade.lib.php';
+
 require_once $incdir.'lib/fileManage.lib.php';
+ob_end_clean();
+
+
 
 class TestsSuite extends TestSuite {
 	function setUp() {
@@ -124,6 +130,7 @@ class TestsSuite extends TestSuite {
     function TestsSuite() {
     	$this->setUp();
     	$this->TestSuite('All tests suite');
+    /*	
 		$this->addTestFile(dirname(__FILE__).'/main/install/install_upgrade.lib.test.php');
 		$this->addTestFile(dirname(__FILE__).'/main/inc/lib/database.lib.test.php');
 		$this->addTestFile(dirname(__FILE__).'/main/inc/lib/add_course.lib.inc.test.php');
@@ -159,7 +166,19 @@ class TestsSuite extends TestSuite {
 		$this->addTestFile(dirname(__FILE__).'/main/inc/lib/fileManage.lib.test.php');
 	    $this->addTestFile(dirname(__FILE__).'/main/inc/lib/geometry.lib.test.php');
     	$this->addTestFile(dirname(__FILE__).'/main/admin/statistics/statistics.lib.test.php');
+    */
+    	$this->addTestFile(dirname(__FILE__).'/main/inc/lib/access_url_edit_courses_to_url_functions.lib.test.php');
+    	$this->addTestFile(dirname(__FILE__).'/main/inc/lib/access_url_edit_sessions_to_url_functions.lib.test.php');
+    	$this->addTestFile(dirname(__FILE__).'/main/inc/lib/access_url_edit_users_to_url_functions.lib.test.php');
+    	$this->addTestFile(dirname(__FILE__).'/main/inc/lib/add_courses_to_sessions_functions.lib.test.php');
+    	$this->addTestFile(dirname(__FILE__).'/main/inc/lib/add_many_session_to_category_functions.lib.test.php');
+    	
+    	//$this->addTestFile(dirname(__FILE__).'/main/admin/access_urls.test.php');
+    
+    	
     	$this->addTestFile(dirname(__FILE__).'/main/admin/sub_language.class.test.php');
+    	
+    /*	$this->addTestFile(dirname(__FILE__).'/main/inc/lib/add_courses_to_sessions_functions.lib.test.php');
     	$this->addTestFile(dirname(__FILE__).'/main/auth/lost_password.lib.test.php');
         $this->addTestFile(dirname(__FILE__).'/main/auth/openid/xrds.lib.test.php');
         $this->addTestFile(dirname(__FILE__).'/main/chat/chat_functions.lib.test.php');
@@ -176,13 +195,17 @@ class TestsSuite extends TestSuite {
         $this->addTestFile(dirname(__FILE__).'/main/inc/lib/import.lib.test.php');
         $this->addTestFile(dirname(__FILE__).'/main/inc/lib/internationalization.lib.test.php');  
         $this->addTestFile(dirname(__FILE__).'/main/inc/lib/system_announcements.lib.test.php');
-        $this->addTestFile(dirname(__FILE__).'/main/inc/lib/fileUpload.lib.test.php');
-        $this->addTestFile(dirname(__FILE__).'/main/inc/lib/main_api.lib.test.php');//this file delete the course     
-        $this->addTestFile(dirname(__FILE__).'/main/inc/lib/debug.lib.inc.test.php');//this file need be to the finish of the tests
+        
+        //$this->addTestFile(dirname(__FILE__).'/main/inc/lib/fileUpload.lib.test.php');
+
+        $this->addTestFile(dirname(__FILE__).'/main/inc/lib/debug.lib.inc.test.php');//this file need be to the finish of the tests        
+        $this->addTestFile(dirname(__FILE__).'/main/inc/lib/main_api.lib.test.php');//this file delete the course
+        
         
         //This files have a metadata and is not available for the test.
         //$this->addTestFile(dirname(__FILE__).'/main/inc/lib/xht.lib.test.php');
 	    //$this->addTestFile(dirname(__FILE__).'/main/inc/lib/xmd.lib.test.php');
+	*/
     }
 }
 $test = &new TestsSuite();

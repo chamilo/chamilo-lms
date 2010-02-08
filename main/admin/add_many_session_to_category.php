@@ -11,12 +11,12 @@
 $language_file='admin';
 // resetting the course id
 $cidReset=true;
+require_once('../inc/global.inc.php');
 
 // including some necessary dokeos files
-require '../inc/global.inc.php';
 
 // including additonal libraries
-require_once '../inc/lib/xajax/xajax.inc.php';
+require_once api_get_path(LIBRARY_PATH).'add_many_session_to_category_functions.lib.php';
 require_once api_get_path(LIBRARY_PATH).'sessionmanager.lib.php';
 $xajax = new xajax();
 $xajax -> registerFunction ('search_courses');
@@ -58,32 +58,6 @@ if (!api_is_platform_admin()) {
 	}
 }
 
-function search_courses($needle,$type) {
-	global $tbl_course, $tbl_session, $id_session;
-
-	$xajax_response = new XajaxResponse();
-	$return = '';
-	if(!empty($needle) && !empty($type)) {
-		// xajax send utf8 datas... datas in db can be non-utf8 datas
-		$charset = api_get_setting('platform_charset');
-		$needle = api_convert_encoding($needle, $charset, 'utf-8');
-
-		$sql = 'SELECT * FROM '.$tbl_session.' WHERE name LIKE "'.$needle.'%" ORDER BY id';
-
-		$rs = Database::query($sql, __FILE__, __LINE__);
-		$course_list = array();
-
-		$return .= '<select id="origin" name="NoSessionCategoryList[]" multiple="multiple" size="20" style="width:340px;">';
-		while($course = Database :: fetch_array($rs)) {
-			$course_list[] = $course['id'];
-			$return .= '<option value="'.$course['id'].'" title="'.htmlspecialchars($course['name'],ENT_QUOTES).'">'.$course['name'].'</option>';
-		}
-		$return .= '</select>';
-		$xajax_response -> addAssign('ajax_list_courses_multiple','innerHTML',api_utf8_encode($return));
-	}
-	$_SESSION['course_list'] = $course_list;
-	return $xajax_response;
-}
 $xajax -> processRequests();
 $htmlHeadXtra[] = $xajax->getJavascript('../inc/lib/xajax/');
 $htmlHeadXtra[] = '

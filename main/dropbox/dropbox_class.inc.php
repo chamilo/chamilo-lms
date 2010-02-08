@@ -39,7 +39,7 @@
  * @version 1.30
  * @copyright 2004
  * @author Jan Bols <jan@ivpv.UGent.be>
- * with contributions by RenÃ© Haentjens <rene.haentjens@UGent.be> (see RH)
+ * with contributions by René Haentjens <rene.haentjens@UGent.be> (see RH)
  * @package dokeos.dropbox
  */
 class Dropbox_Work {
@@ -69,6 +69,7 @@ class Dropbox_Work {
 	 * @return Dropbox_Work
 	 */
 	function Dropbox_Work ($arg1, $arg2=null, $arg3=null, $arg4=null, $arg5=null, $arg6=null) {
+		
 		if (func_num_args()>1)  {
 		    $this->_createNewWork($arg1, $arg2, $arg3, $arg4, $arg5, $arg6);
 		}  else  {
@@ -90,8 +91,7 @@ class Dropbox_Work {
 	 * 			As a consequence this parameter can be removed
 	 */
 	function _createNewWork ($uploader_id, $title, $description, $author, $filename, $filesize) {
-		global $_user;
-
+		global $_user,$dropbox_cnf;
 		// Do some sanity checks
 		settype($uploader_id, 'integer') or die(dropbox_lang("generalError")." (code 201)"); //set $uploader_id to correct type
 		//if (! isCourseMember($uploader_id)) die(); //uploader must be coursemember to be able to upload
@@ -111,7 +111,7 @@ class Dropbox_Work {
 		// with updated information (authors, descriptio, upload_date)
 		$this->isOldWork = FALSE;
 		$sql="SELECT id, upload_date
-				FROM ".dropbox_cnf("tbl_file")."
+				FROM ".$dropbox_cnf["tbl_file"]."
 				WHERE filename = '".addslashes($this->filename)."'";
         $result = Database::query($sql,__FILE__,__LINE__);
 		$res = Database::fetch_array($result);
@@ -122,7 +122,7 @@ class Dropbox_Work {
 		if ($this->isOldWork) {
 			$this->id = $res["id"];
 			$this->upload_date = $res["upload_date"];
-		    $sql = "UPDATE ".dropbox_cnf("tbl_file")."
+		    $sql = "UPDATE ".$dropbox_cnf["tbl_file"]."
 					SET filesize = '".addslashes($this->filesize)."'
 					, title = '".addslashes($this->title)."'
 					, description = '".addslashes($this->description)."'
@@ -132,7 +132,7 @@ class Dropbox_Work {
 			$result = Database::query($sql,__FILE__,__LINE__);
 		} else {
 			$this->upload_date = $this->last_upload_date;
-			$sql="INSERT INTO ".dropbox_cnf("tbl_file")."
+			$sql="INSERT INTO ".$dropbox_cnf["tbl_file"]."
 				(uploader_id, filename, filesize, title, description, author, upload_date, last_upload_date, session_id)
 				VALUES ('".addslashes($this->uploader_id)."'
 						, '".addslashes($this->filename)."'
@@ -150,7 +150,7 @@ class Dropbox_Work {
 		}
 
 		// insert entries into person table
-		$sql="INSERT INTO ".dropbox_cnf("tbl_person")."
+		$sql="INSERT INTO ".$dropbox_cnf["tbl_person"]."
 				(file_id, user_id)
 				VALUES ('".addslashes($this->id)."'
 						, '".addslashes($this->uploader_id)."'
@@ -164,14 +164,14 @@ class Dropbox_Work {
 	 * @param unknown_type $id
 	 */
 	function _createExistingWork ($id) {
-		global $_user;  // RH: Feedback
+		global $_user,$dropbox_cnf;  // RH: Feedback
 
 		// Do some sanity checks
 		settype($id, 'integer') or die(dropbox_lang("generalError")." (code 205)"); //set $id to correct type
 
 		// get the data from DB
 		$sql="SELECT uploader_id, filename, filesize, title, description, author, upload_date, last_upload_date, cat_id
-				FROM ".dropbox_cnf("tbl_file")."
+				FROM ".$dropbox_cnf["tbl_file"]."
 				WHERE id='".addslashes($id)."'";
         $result = Database::query($sql,__FILE__,__LINE__);
 		$res = Database::fetch_array($result, 'ASSOC');
@@ -202,7 +202,7 @@ class Dropbox_Work {
 		// Getting the feedback on the work.
 		if ($_GET['action']=='viewfeedback' AND $this->id==$_GET['id']) {
 			$feedback2=array();
-			$sql_feedback = "SELECT * FROM ".dropbox_cnf("tbl_feedback")." WHERE file_id='".$id."' ORDER BY feedback_id ASC";
+			$sql_feedback = "SELECT * FROM ".$dropbox_cnf["tbl_feedback"]." WHERE file_id='".$id."' ORDER BY feedback_id ASC";
 			$result = Database::query($sql_feedback, __FILE__, __LINE__);
 			while ($row_feedback=Database::fetch_array($result)) {
 				$row_feedback['feedback'] = Security::remove_XSS($row_feedback['feedback']);
@@ -261,6 +261,7 @@ class Dropbox_SentWork extends Dropbox_Work
 	 * @param unknown_type $recipient_ids
 	 */
 	function _createNewSentWork ($uploader_id, $title, $description, $author, $filename, $filesize, $recipient_ids) {
+		global $dropbox_cnf;
 		// Call constructor of Dropbox_Work object
 		$this->Dropbox_Work($uploader_id, $title, $description, $author, $filename, $filesize);
 
@@ -286,13 +287,13 @@ class Dropbox_SentWork extends Dropbox_Work
 
 		// insert data in dropbox_post and dropbox_person table for each recipient
 		foreach ($this->recipients as $rec) {
-			$sql="INSERT INTO ".dropbox_cnf("tbl_post")."
+			$sql="INSERT INTO ".$dropbox_cnf["tbl_post"]."
 				(file_id, dest_user_id, session_id)
 				VALUES ('".addslashes($this->id)."', '".addslashes($rec["id"])."', ".intval($_SESSION['id_session']).")";
 	        $result = Database::query($sql);	//if work already exists no error is generated
 
 			//insert entries into person table
-			$sql="INSERT INTO ".dropbox_cnf("tbl_person")."
+			$sql="INSERT INTO ".$dropbox_cnf["tbl_person"]."
 				(file_id, user_id)
 				VALUES ('".addslashes($this->id)."'
 						, '".addslashes($rec["id"])."'

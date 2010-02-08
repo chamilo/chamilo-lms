@@ -322,6 +322,7 @@ class Dropbox_SentWork extends Dropbox_Work
 	 * @param unknown_type $id
 	 */
 	function _createExistingSentWork  ($id) {
+		global $dropbox_cnf;
 		// Call constructor of Dropbox_Work object
 		$this->Dropbox_Work($id);
 
@@ -331,7 +332,7 @@ class Dropbox_SentWork extends Dropbox_Work
 		//Fill in recipients array/
 		$this->recipients = array();  // RH: Feedback: added to SELECT
 		$sql="SELECT dest_user_id, feedback_date, feedback
-				FROM ".dropbox_cnf("tbl_post")."
+				FROM ".$dropbox_cnf["tbl_post"]."
 				WHERE file_id='".addslashes($id)."'";
         $result = Database::query($sql,__FILE__,__LINE__);
 		while ($res = Database::fetch_array($result)) {
@@ -514,9 +515,10 @@ class Dropbox_Person
 	 *
 	 */
 	function deleteAllReceivedWork () {
+		global $dropbox_cnf;
 		//delete entries in person table concerning received works
 		foreach ($this->receivedWork as $w) {
-			Database::query("DELETE FROM ".dropbox_cnf("tbl_person")." WHERE user_id='".$this->userId."' AND file_id='".$w->id."'",__FILE__,__LINE__);
+			Database::query("DELETE FROM ".$dropbox_cnf["tbl_person"]." WHERE user_id='".$this->userId."' AND file_id='".$w->id."'",__FILE__,__LINE__);
 		}
 		removeUnusedFiles();	//check for unused files
 
@@ -526,11 +528,12 @@ class Dropbox_Person
 	 * Deletes all the received categories and work of this person
 	 */
 	function deleteReceivedWorkFolder($id) {
-		$sql = "DELETE FROM ".dropbox_cnf("tbl_file")." where cat_id = '".$id."' ";
+		global $dropbox_cnf;
+		$sql = "DELETE FROM ".$dropbox_cnf["tbl_file"]." where cat_id = '".$id."' ";
 		if(!Database::query($sql))		return false;
-		$sql = "DELETE FROM ".dropbox_cnf("tbl_category")." where cat_id = '".$id."' ";
+		$sql = "DELETE FROM ".$dropbox_cnf["tbl_category"]." where cat_id = '".$id."' ";
 		if(!Database::query($sql))		return false;
-		$sql = "DELETE FROM ".dropbox_cnf("tbl_post")." where cat_id = '".$id."' ";
+		$sql = "DELETE FROM ".$dropbox_cnf["tbl_post"]." where cat_id = '".$id."' ";
 		if(!Database::query($sql))		return false;
 		return true;
 	}
@@ -540,6 +543,7 @@ class Dropbox_Person
 	 * @param integer $id
 	 */
 	function deleteReceivedWork ($id) {
+		global $dropbox_cnf;
 		//id check
 		$found = false;
 		foreach($this->receivedWork as $w) {
@@ -554,7 +558,7 @@ class Dropbox_Person
 			}
 		}
 		//delete entries in person table concerning received works
-		Database::query("DELETE FROM ".dropbox_cnf("tbl_person")." WHERE user_id='".$this->userId."' AND file_id='".$id."'",__FILE__,__LINE__);
+		Database::query("DELETE FROM ".$dropbox_cnf["tbl_person"]." WHERE user_id='".$this->userId."' AND file_id='".$id."'",__FILE__,__LINE__);
 		removeUnusedFiles();	//check for unused files
 	}
 
@@ -562,9 +566,10 @@ class Dropbox_Person
 	 * Deletes all the sent dropbox files of this person
 	 */
 	function deleteAllSentWork () {
+		global $dropbox_cnf;
 		//delete entries in person table concerning sent works
 		foreach ($this->sentWork as $w) {
-			Database::query("DELETE FROM ".dropbox_cnf("tbl_person")." WHERE user_id='".$this->userId."' AND file_id='".$w->id."'",__FILE__,__LINE__);
+			Database::query("DELETE FROM ".$dropbox_cnf["tbl_person"]." WHERE user_id='".$this->userId."' AND file_id='".$w->id."'",__FILE__,__LINE__);
 			removeMoreIfMailing($w->id);  // RH: Mailing: see init1
 		}
 		removeUnusedFiles();	//check for unused files
@@ -576,6 +581,7 @@ class Dropbox_Person
 	 * @param unknown_type $id
 	 */
 	function deleteSentWork ($id) {
+		global $dropbox_cnf;
 		//index check
 		$found = false;
 		foreach($this->sentWork as $w) {
@@ -591,7 +597,7 @@ class Dropbox_Person
 		}
 		//$file_id = $this->sentWork[$index]->id;  // RH: Mailing
 		//delete entries in person table concerning sent works
-		Database::query("DELETE FROM ".dropbox_cnf("tbl_person")." WHERE user_id='".$this->userId."' AND file_id='".$id."'",__FILE__,__LINE__);
+		Database::query("DELETE FROM ".$dropbox_cnf["tbl_person"]." WHERE user_id='".$this->userId."' AND file_id='".$id."'",__FILE__,__LINE__);
 		removeMoreIfMailing($id);  // RH: Mailing: see init1
 		removeUnusedFiles();	//check for unused files
 	}
@@ -622,7 +628,7 @@ class Dropbox_Person
 		$this->receivedWork[$wi]->feedback_date = $feedback_date;
 		$this->receivedWork[$wi]->feedback = $text;
 
-		Database::query("UPDATE ".dropbox_cnf("tbl_post")." SET feedback_date='".
+		Database::query("UPDATE ".$dropbox_cnf["tbl_post"]." SET feedback_date='".
 		    addslashes($feedback_date)."', feedback='".addslashes($text).
 		    "' WHERE dest_user_id='".$this->userId."' AND file_id='".$id."'",__FILE__,__LINE__);
 
@@ -641,7 +647,7 @@ class Dropbox_Person
 	 */
 	function filter_received_work($type,$value) {
 		global $dropbox_cnf;
-
+		
     	$new_received_work = array();
 		foreach ($this->receivedWork as $index => $work) {
 			switch ($type) {

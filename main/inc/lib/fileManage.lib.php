@@ -1,28 +1,5 @@
-<?php # $Id: fileManage.lib.php 21531 2009-06-20 16:03:29Z ivantcholakov $
-
-/* vim: set expandtab tabstop=4 shiftwidth=4:
-===============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2004 Dokeos S.A.
-	Copyright (c) 2003 Ghent University (UGent)
-	Copyright (c) 2001 Universite catholique de Louvain (UCL)
-	more copyrights held by individual contributors
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact: Dokeos, 181 rue Royale, B-1000 Brussels, Belgium, info@dokeos.com
-===============================================================================
-*/
-
+<?php
+/* For licensing terms, see /license.txt */
 /**
 ==============================================================================
 *	This is the file manage library for Dokeos.
@@ -400,7 +377,7 @@ function copyDirTo($origDirPath, $destination, $move=true)
  */
 
 /**
- * Indexes all the directories and subdirectories
+ * Gets all the directories and subdirectories
  * contented in a given directory
  *
  * @author - Hugues Peeters <peeters@ipm.ucl.ac.be>
@@ -408,39 +385,31 @@ function copyDirTo($origDirPath, $destination, $move=true)
  * @return - an array containing the path of all the subdirectories
  */
 
-function index_dir($path)
-{
+function index_dir($path) {
+	$dirArray = array();
 	$save_dir = getcwd();
 	if(is_dir($path)){
 		chdir($path);
 		$handle = opendir($path);
+	    // reads directory content end record subdirectoies names in $dir_array
+	    if ($handle !== false) {
+	        while ($element = readdir($handle) ) {
+	            if ( $element == "." || $element == "..") continue; // skip the current and parent directories
+	            if ( is_dir($element) )  $dirArray[] = $path."/".$element;
+	        }
+	        closedir($handle) ;
+	    }
+	       // recursive operation if subdirectories exist
+        $dirNumber = sizeof($dirArray);
+        if ( $dirNumber > 0 ) {
+            for ($i = 0 ; $i < $dirNumber ; $i++ ) {
+                $subDirArray = index_dir( $dirArray[$i] ) ;             // function recursivity
+                $dirArray  =  array_merge( (array)$dirArray , (array)$subDirArray );    // data merge
+            }
+        }
 	}
-	// reads directory content end record subdirectoies names in $dir_array
-	if (file_exists($handle)) {
-		while ($element = readdir($handle) )
-		{
-			if ( $element == "." || $element == "..") continue;	// skip the current and parent directories
-			if ( is_dir($element) )	 $dirArray[] = $path."/".$element;
-		}
-		closedir($handle) ;
-	}
-
-	// recursive operation if subdirectories exist
-	$dirNumber = sizeof($dirArray);
-	if ( $dirNumber > 0 )
-	{
-		for ($i = 0 ; $i < $dirNumber ; $i++ )
-		{
-			$subDirArray = index_dir( $dirArray[$i] ) ;			    // function recursivity
-			$dirArray  =  array_merge( (array)$dirArray , (array)$subDirArray );	// data merge
-		}
-	}
-
 	chdir($save_dir) ;
-
-
 	return $dirArray ;
-
 }
 
 

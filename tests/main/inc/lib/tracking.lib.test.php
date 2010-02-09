@@ -286,4 +286,189 @@ class TestTracking extends UnitTestCase {
 	 	//var_dump($res);
 	}
 }
+
+class TestTrackingCourseLog extends UnitTestCase {
+
+
+	function testCountItemResources() {
+		//ob_start();
+		$res = TrackingCourseLog::count_item_resources();
+		$this->assertTrue(is_numeric($res)); 
+		//ob_end_clean();
+		//var_dump($res);
+	}	
+
+	function testDisplayAdditionalProfileFields() {
+		//ob_start();
+		$res = TrackingCourseLog::display_additional_profile_fields();
+		$this->assertTrue(is_string($res)); 
+		//ob_end_clean();
+		//var_dump($res);
+	}
+	function testGetAddtionalProfileInformationOfField() {
+		//ob_start();
+		$field_id=1;
+		$res = TrackingCourseLog::get_addtional_profile_information_of_field($field_id);
+		$this->assertTrue(is_null($res)); 
+		//ob_end_clean();
+		//var_dump($res);
+	}
+	function testGetAddtionalProfileInformationOfFieldByUser() {
+		//ob_start();
+		$field_id=1;
+		$users=array(1,2,3);
+		$res = TrackingCourseLog::get_addtional_profile_information_of_field_by_user($field_id, $users);
+		$this->assertTrue(is_null($res)); 
+		//ob_end_clean();
+		//var_dump($res);
+	}
+	function testGetItemResourcesData() {
+		//ob_start();
+		$from=3;
+		$number_of_items=2;
+		$column=1;
+		$direction='ASC';
+		$res = TrackingCourseLog::get_item_resources_data($from, $number_of_items, $column, $direction);
+		$this->assertTrue(is_array($res)); 
+		//ob_end_clean();
+		//var_dump($res);
+	}
+	function testGetNumberOfUsers() {
+		//ob_start();
+		$res = TrackingCourseLog::get_number_of_users();
+		$this->assertTrue(is_numeric($res)); 
+		//ob_end_clean();
+		//var_dump($res);
+	}
+	function testGetToolNameTable() {
+		//ob_start();
+		$tool='';
+		$res = TrackingCourseLog::get_tool_name_table($tool);
+		$this->assertTrue(is_array($res)); 
+		//ob_end_clean();
+		//var_dump($res);
+	}
+	function testGetUserData() {
+		//ob_start();
+		$from='';
+		$number_of_items='';
+		$column='';
+		$direction='';
+		$res = TrackingCourseLog::get_user_data($from, $number_of_items, $column, $direction);
+		$this->assertTrue(is_array($res)); 
+		//ob_end_clean();
+		//var_dump($res);
+	}
+	
+}
+
+class TestTrackingUserLog extends UnitTestCase {
+	
+	function testDisplayDocumentTrackingInfo() {
+		ob_start();
+		$view = '';
+		$user_id = 1;
+		$course_id = 1;
+		$res = TrackingUserLog::display_document_tracking_info($view, $user_id, $course_id);
+		$this->assertTrue(is_null($res)); 
+		ob_end_clean();
+		//var_dump($res);
+	}	
+	function testDisplayExerciseTrackingInfo() {
+		ob_start();
+		$view = '';
+		$user_id = 1;
+		$course_id = 1;
+		$res = TrackingUserLog::display_exercise_tracking_info($view, $user_id, $course_id);
+		$this->assertTrue(is_null($res)); 
+		ob_end_clean();
+		//var_dump($res);
+	}
+	function testDisplayLinksTrackingInfo() {
+		ob_start();
+		$view = '';
+		$user_id = 1;
+		$course_id = 1;
+		$res = TrackingUserLog::display_links_tracking_info($view, $user_id, $course_id);
+		$this->assertTrue(is_null($res)); 
+		ob_end_clean();
+		//var_dump($res);
+	}
+	function testDisplayLoginTrackingInfo() {
+		ob_start();
+		$view = '';
+		$user_id = 1;
+		$course_id = 1;
+		$res = TrackingUserLog::display_login_tracking_info($view, $user_id, $course_id);
+		$this->assertTrue(is_null($res)); 
+		ob_end_clean();
+		//var_dump($res);
+	}
+	function testDisplayStudentPublicationsTrackingInfo() {
+		ob_start();
+		$view = '';
+		$user_id = 1;
+		$course_id = 1;
+		$res = TrackingUserLog::display_student_publications_tracking_info($view, $user_id, $course_id);
+		$this->assertTrue(is_null($res)); 
+		ob_end_clean();
+		//var_dump($res);
+	}
+	
+}
+
+class TestTrackingUserLogCSV extends UnitTestCase {
+	
+	function testDisplayDocumentTrackingInfo() {
+		//ob_start();
+		$view = '';
+		$user_id = 1;
+		$course_id = 1;
+		$res = TrackingUserLogCSV::display_document_tracking_info($view, $user_id, $course_id);
+		$this->assertTrue(is_array($res)); 
+		//ob_end_clean();
+		//var_dump($res);
+	}	
+	function testDisplayExerciseTrackingInfo() {
+		//ob_start();
+		$view = '';
+		$user_id = 1;
+		$course_id = 1;
+		$res = TrackingUserLogCSV::display_exercise_tracking_info($view, $user_id, $course_id);
+		$this->assertTrue(is_array($res)); 
+		//ob_end_clean();
+		//var_dump($res);
+	} 
+	
+	function testDisplayLinksTrackingInfo() {
+		//ob_start();
+		$view = '';
+		$user_id = 1;
+		$course_id = 1;
+		$res = TrackingUserLogCSV::display_links_tracking_info($view, $user_id, $course_id);
+		$this->assertTrue(is_array($res)); 
+		//ob_end_clean();
+		//var_dump($res);
+	}
+	function testDisplayLoginTrackingInfo() {
+		//ob_start();
+		$view = '';
+		$user_id = 1;
+		$course_id = 1;
+		$res = TrackingUserLogCSV::display_login_tracking_info($view, $user_id, $course_id);
+		$this->assertTrue(is_array($res)); 
+		//ob_end_clean();
+		//var_dump($res);
+	}
+	function testDisplayStudentPublicationsTrackingInfo() {
+		//ob_start();
+		$view = '';
+		$user_id = 1;
+		$course_id = 1;
+		$res = TrackingUserLogCSV::display_student_publications_tracking_info($view, $user_id, $course_id);
+		$this->assertTrue(is_array($res)); 
+		//ob_end_clean();
+		//var_dump($res);
+	}	
+}
 ?>

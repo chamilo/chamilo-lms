@@ -22,6 +22,7 @@ define('FREE_ANSWER', 		5);
 define('HOTSPOT',			6);
 
 require_once(api_get_path(SYS_CODE_PATH).'/exercice/answer.class.php');
+require_once(api_get_path(SYS_CODE_PATH).'/exercice/exercise.class.php');
 require_once(api_get_path(SYS_CODE_PATH).'/exercice/hotspot.class.php');
 require_once(api_get_path(SYS_CODE_PATH).'/exercice/unique_answer.class.php');
 require_once(api_get_path(SYS_CODE_PATH).'/exercice/multiple_answer.class.php');

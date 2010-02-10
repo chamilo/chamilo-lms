@@ -119,15 +119,6 @@ class TestHotpotatoes extends UnitTestCase {
 		//var_dump($res);
 	}
 
-	function testhotpotatoes_initWithRemoveFolder() {
-		$base = '/tmp/';
-		$baseWorkDir=$base.'test/';
-		$res=hotpotatoes_init($baseWorkDir);
-		$this->assertTrue($res);
-		rmdir($baseWorkDir);
-		//var_dump($res);
-	}
-
 	function testHotPotGCt() {
 		$folder='/main/exercice';
 		$flag=4;

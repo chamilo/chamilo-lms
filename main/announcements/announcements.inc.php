@@ -358,7 +358,7 @@ function load_edit_users($tool, $id)
 	$id = Database::escape_string($id);
 
 	$sql = "SELECT * FROM $tbl_item_property WHERE tool='$tool' AND ref='$id'";
-	$result = Database::query($sql,__FILE__,__LINE__) or die();
+	$result = Database::query($sql,__FILE__,__LINE__) or die(Database::error());
 	while ($row = Database::fetch_array($result))
 	{
 		$to_group=$row['to_group_id'];
@@ -756,7 +756,7 @@ function change_visibility_announcement($tool,$id)
 
 	$sql = "SELECT * FROM $tbl_item_property WHERE tool='$tool' AND ref='$id'";
 
-	$result = Database::query($sql,__FILE__,__LINE__) or die();
+	$result = Database::query($sql,__FILE__,__LINE__) or die(Database::error());
 	$row = Database::fetch_array($result);
 
 	if ($row['visibility']=='1')
@@ -858,7 +858,7 @@ function store_advalvas_group_item($emailTitle,$newContent, $order, $to, $to_use
 
 	// store in the table announcement
 	$sql = "INSERT INTO $tbl_announcement SET content = '$newContent', title = '$emailTitle', end_date = NOW(), display_order ='$order', session_id=".intval($_SESSION['id_session']);
-	$result = Database::query($sql,__FILE__,__LINE__) or die();
+	$result = Database::query($sql,__FILE__,__LINE__) or die(Database::error());
 	if ($result === false) {
 		return false;
 	}
@@ -924,7 +924,7 @@ function edit_advalvas_item($id,$emailTitle,$newContent,$to,$file = array(), $fi
 
 	// store the modifications in the table announcement
  	$sql = "UPDATE $tbl_announcement SET content='$newContent', title = '$emailTitle' WHERE id='$id'";
-	$result = Database::query($sql,__FILE__,__LINE__) or die();
+	$result = Database::query($sql,__FILE__,__LINE__) or die(Database::error());
 
 	// save attachment file
 	$row_attach = get_attachment($id);
@@ -940,7 +940,7 @@ function edit_advalvas_item($id,$emailTitle,$newContent,$to,$file = array(), $fi
 
 	// we remove everything from item_property for this
 	$sql_delete="DELETE FROM $tbl_item_property WHERE ref='$id' AND tool='announcement'";
-	$result = Database::query($sql_delete,__FILE__,__LINE__) or die();
+	$result = Database::query($sql_delete,__FILE__,__LINE__) or die(Database::error());
 
 	// store in item_property (first the groups, then the users
 	if (!is_null($to)) // !is_null($to): when no user is selected we send it to everyone

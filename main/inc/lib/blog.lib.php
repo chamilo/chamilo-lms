@@ -2343,7 +2343,7 @@ class Blog {
 			WHERE btu.blog_id = $blog_id AND btu.user_id = " . $myrow['user_id'] . "";
 
 			if (!($sql_res = Database::query($sql, __FILE__, __LINE__))) {
-				die();
+				die(Database::error());
 			}
 
 			$task = '';

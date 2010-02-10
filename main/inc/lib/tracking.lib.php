@@ -1329,7 +1329,7 @@ class TrackingCourseLog {
 
 		$sql .=	" LIMIT $from, $number_of_items ";
 
-		$res = Database::query($sql, __FILE__, __LINE__) or die();
+		$res = Database::query($sql, __FILE__, __LINE__) or die(Database::error());
 		$resources = array ();
 
 		while ($row = Database::fetch_array($res)) {
@@ -1370,7 +1370,7 @@ class TrackingCourseLog {
 					$condition = 'tool.title as title';
 					$query_document = "SELECT $condition FROM $table_tool tool" .
 										" WHERE id = $ref";
-					$rs_document = Database::query($query_document, __FILE__, __LINE__) or die();
+					$rs_document = Database::query($query_document, __FILE__, __LINE__) or die(Database::error());
 					$obj_document = Database::fetch_object($rs_document);
 					$row[4] = $obj_document->title;
 				}

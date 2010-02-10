@@ -731,8 +731,18 @@ class Database {
 	 * @return array		Array of results as returned by php
 	 * @author Yannick Warnier <yannick.warnier@dokeos.com>
 	 */
-	public static function fetch_array($res, $option = 'BOTH') {
-		return $option == 'ASSOC' ? mysql_fetch_array($res, MYSQL_ASSOC) : ($option == 'NUM' ? mysql_fetch_array($res, MYSQL_NUM) : mysql_fetch_array($res));
+	public static function fetch_array($result, $option = 'BOTH') {
+		return $option == 'ASSOC' ? mysql_fetch_array($result, MYSQL_ASSOC) : ($option == 'NUM' ? mysql_fetch_array($result, MYSQL_NUM) : mysql_fetch_array($result));
+	}
+
+	/**
+	 * Gets an associative array from a SQL result (as returned by Database::query).
+	 * This method is equivalent to calling Database::fetch_array() with 'ASSOC' value for the optional second parameter.
+	 * @param resource $result	The result from a call to sql_query (e.g. Database::query).
+	 * @return array			Returns an associative array that corresponds to the fetched row and moves the internal data pointer ahead.
+	 */
+	public static function fetch_assoc($result) {
+		return mysql_fetch_assoc($result);
 	}
 
 	/**
@@ -743,18 +753,27 @@ class Database {
 	 * @return	object		Object of class StdClass or the required class, containing the query result row
 	 * @author	Yannick Warnier <yannick.warnier@dokeos.com>
 	 */
-	public static function fetch_object($res, $class = null, $params = null) {
-		return !empty($class) ? (is_array($params) ? mysql_fetch_object($res, $class, $params) : mysql_fetch_object($res, $class)) : mysql_fetch_object($res);
+	public static function fetch_object($result, $class = null, $params = null) {
+		return !empty($class) ? (is_array($params) ? mysql_fetch_object($result, $class, $params) : mysql_fetch_object($result, $class)) : mysql_fetch_object($result);
 	}
 
 	/**
 	 * Gets the array from a SQL result (as returned by Database::query) - help achieving database independence
-	 * @param resource		The result from a call to sql_query (e.g. Database::query)
+	 * @param resource		The result from a call to sql_query (see Database::query()).
 	 * @return array		Array of results as returned by php (mysql_fetch_row)
-	 * @author Yannick Warnier <yannick.warnier@dokeos.com>
 	 */
-	public static function fetch_row($res) {
-		return mysql_fetch_row($res);
+	public static function fetch_row($result) {
+		return mysql_fetch_row($result);
+	}
+
+	/**
+	 * Frees all the memory associated with the provided result identifier.
+	 * @return bool		Returns TRUE on success or FALSE on failure.
+	 * Notes: Use this method if you are concerned about how much memory is being used for queries that return large result sets.
+	 * Anyway, all associated result memory is automatically freed at the end of the script's execution.
+	 */
+	public static function free_result($result) {
+		return mysql_free_result($result);
 	}
 
 	/**
@@ -773,8 +792,8 @@ class Database {
 	 * @return integer		The number of rows contained in this result
 	 * @author Yannick Warnier <yannick.warnier@dokeos.com>
 	 **/
-	public static function num_rows($res) {
-		return mysql_num_rows($res);
+	public static function num_rows($result) {
+		return mysql_num_rows($result);
 	}
 
 	/**

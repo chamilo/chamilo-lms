@@ -232,7 +232,6 @@ class Security {
 	 * @return	mixed	Filtered string or array
 	 */
 	public static function remove_XSS ($var,$user_status=ANONYMOUS) {
-		global $charset;
 		$purifier = new HTMLPurifier(null,$user_status);
 		if (is_array($var)) {
 			return $purifier->purifyArray($var);

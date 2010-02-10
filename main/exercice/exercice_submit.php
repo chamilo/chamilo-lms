@@ -166,6 +166,9 @@ if ($origin == 'builder') {
     }
 }
 
+$course_code = api_get_course_id();
+$session_id  = api_get_session_id();
+
 $safe_lp_id = ($learnpath_id == '') ? 0 : (int) $learnpath_id;
 $safe_lp_item_id = ($learnpath_item_id == '') ? 0 : (int) $learnpath_item_id;
 $condition = ' WHERE ' .
@@ -175,7 +178,7 @@ $condition = ' WHERE ' .
     'status = ' . "'incomplete'" . ' AND ' .
     'orig_lp_id = ' . "'" . $safe_lp_id . "'" . ' AND ' .
     'orig_lp_item_id = ' . "'" . $safe_lp_item_id . "'" . ' AND ' .
-    'session_id = ' . "'" . (int) $_SESSION['id_session'] . "'";
+    'session_id = ' . "'" . (int) $session_id . "'";
 
 $TBL_EXERCICES = Database :: get_course_table(TABLE_QUIZ_TEST);
 $sql_track_exercice = "SELECT type,feedback_type,expired_time FROM $TBL_EXERCICES WHERE id=$exerciseId";
@@ -196,9 +199,11 @@ $total_minutes = $exercise_row["expired_time"];
 $total_seconds = $total_minutes*60;
 $current_timestamp = time();
 
+$current_expired_time_key = $course_code.'_'.$session_id.'_'.$exerciseId; 
+
 //Disable for learning path
 if ($exercise_row['expired_time'] != 0 && $origin != 'learnpath') {
-    if (!isset($_SESSION['expired_time'])) {
+    if (!isset($_SESSION['expired_time'][$current_expired_time_key])) {
         //In case that the current session php is broken
         //Timer - Get expired_time for a student
         $condition = ' WHERE ' .
@@ -206,7 +211,7 @@ if ($exercise_row['expired_time'] != 0 && $origin != 'learnpath') {
         'exe_user_id =  '."'".api_get_user_id()."'".' AND ' .
         'exe_cours_id = '."'".api_get_course_id()."'".' AND ' .
         'status = '."'incomplete'".' AND '.
-        'session_id = '."'".api_get_session_id()."'";
+        'session_id = '."'".$session_id."'";
 
         $sql_track = 'SELECT exe_id,expired_time_control FROM '.$stat_table.$condition;
         $rs_sql = Database::query($sql_track,__FILE__,__LINE__);
@@ -244,8 +249,8 @@ if ($exercise_row['expired_time'] != 0 && $origin != 'learnpath') {
             Database::query($sql_track_e_exe,__FILE__,__LINE__);
 
             //Sessions  that contain the expired time
-            $_SESSION['expired_time'] = $clock_expired_time;
-            $_SESSION['end_expired_time'] = date('M d, Y H:i:s',$expected_time);
+            $_SESSION['expired_time'][$current_expired_time_key] = $clock_expired_time;
+            $_SESSION['end_expired_time'][$current_expired_time_key] = date('M d, Y H:i:s',$expected_time);
         } else {
             $expected_time = $current_timestamp + $total_seconds;
 
@@ -253,12 +258,12 @@ if ($exercise_row['expired_time'] != 0 && $origin != 'learnpath') {
             $clock_expired_time = date('Y-m-d H:i:s',$expected_time);
 
             //Sessions  that contain the expired time
-            $_SESSION['expired_time'] = $clock_expired_time;
-            $_SESSION['end_expired_time'] = date('M d, Y H:i:s',$expected_time);
+            $_SESSION['expired_time'][$current_expired_time_key] = $clock_expired_time;
+            $_SESSION['end_expired_time'][$current_expired_time_key] = date('M d, Y H:i:s',$expected_time);
         }
 
     } else {
-        $plugin_expired_time = $_SESSION['end_expired_time'];
+        $plugin_expired_time = $_SESSION['end_expired_time'][$current_expired_time_key];
     }
 }
 
@@ -743,8 +748,8 @@ if ($formSent) {
                     //Verify if the current test is fraudulent
                     $current_time = time();
 
-                    if (isset($_SESSION['expired_time']) && $exercise_row['expired_time'] != 0) {
-                        $expired_date = $_SESSION['expired_time'];
+                    if (isset($_SESSION['expired_time'][$current_expired_time_key]) && $exercise_row['expired_time'][$exerciseId] != 0) {
+                        $expired_date = $_SESSION['expired_time'][$current_expired_time_key];
                         $expired_time = strtotime($expired_date);
 
                         //Validation in case of fraud
@@ -1040,13 +1045,12 @@ echo "<h3>" . $exerciseTitle . "</h3>";
 
 if ($exerciseAttempts > 0) {
     $user_id = api_get_user_id();
-    $course_code = api_get_course_id();
     $sql = "SELECT count(*) FROM $stat_table WHERE exe_exo_id = '$quizID'
                 AND exe_user_id = '$user_id'
                 AND status != 'incomplete'
                 AND orig_lp_id = $safe_lp_id
                 AND orig_lp_item_id = $safe_lp_item_id
-                AND exe_cours_id = '$course_code' AND session_id = '" . (int) $_SESSION['id_session'] . "'";
+                AND exe_cours_id = '$course_code' AND session_id = '" . (int) $session_id . "'";
 
     $aquery = Database::query($sql, __FILE__, __LINE__);
     $attempt = Database :: fetch_array($aquery);
@@ -1248,12 +1252,12 @@ if ($_configuration['live_exercise_tracking'] == true && $exerciseFeedbackType !
 
         if ($exerciseType == ONE_PER_PAGE) {
             $sql = "INSERT INTO $stat_table($sql_fields exe_exo_id,exe_user_id,exe_cours_id,status,session_id,data_tracking,start_date,orig_lp_id,orig_lp_item_id)
-                    VALUES($sql_fields_values '$exerciseId','" . api_get_user_id() . "','" . $_course['id'] . "','incomplete','" . api_get_session_id() . "','" . implode(',', $questionList) . "','" . date('Y-m-d H:i:s') . "',$safe_lp_id,$safe_lp_item_id)";
+                    VALUES($sql_fields_values '$exerciseId','" . api_get_user_id() . "','" . $_course['id'] . "','incomplete','" . $session_id . "','" . implode(',', $questionList) . "','" . date('Y-m-d H:i:s') . "',$safe_lp_id,$safe_lp_item_id)";
 
             Database::query($sql, __FILE__, __LINE__);
         } else {
             echo $sql = "INSERT INTO $stat_table ($sql_fields exe_exo_id,exe_user_id,exe_cours_id,status,session_id,start_date,orig_lp_id,orig_lp_item_id)
-                    VALUES($sql_fields_values '$exerciseId','" . api_get_user_id() . "','" . $_course['id'] . "','incomplete','" . api_get_session_id() . "','" . date('Y-m-d H:i:s') . "',$safe_lp_id,$safe_lp_item_id)";
+                    VALUES($sql_fields_values '$exerciseId','" . api_get_user_id() . "','" . $_course['id'] . "','incomplete','" . $session_id . "','" . date('Y-m-d H:i:s') . "',$safe_lp_id,$safe_lp_item_id)";
             Database::query($sql, __FILE__, __LINE__);
         }
 

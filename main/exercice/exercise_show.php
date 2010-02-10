@@ -95,8 +95,25 @@ $current_attempt = $_SESSION['current_exercice_attempt'][$current_user_id];
 //Is fraudulent exercice
 $current_time = time();
 
-if (isset($_SESSION['expired_time'])) { //Only for exercice of type "One page"
-	$expired_date = $_SESSION['expired_time'];
+$emailId   = $_REQUEST['email'];
+$user_name = $_REQUEST['user'];
+$test 	   = $_REQUEST['test'];
+$dt	 	   = $_REQUEST['dt'];
+$marks 	   = $_REQUEST['res'];
+$id 	   = $_REQUEST['id'];
+
+$sql_fb_type='SELECT feedback_type, exercises.id FROM '.$TBL_EXERCICES.' as exercises, '.$TBL_TRACK_EXERCICES.' as track_exercises WHERE exercises.id=track_exercises.exe_exo_id AND track_exercises.exe_id="'.Database::escape_string($id).'"';
+$res_fb_type=Database::query($sql_fb_type,__FILE__,__LINE__);
+$row_fb_type=Database::fetch_row($res_fb_type);
+$feedback_type = $row_fb_type[0];
+$exercise_id = intval($row_fb_type[1]);
+
+$course_code = api_get_course_id();
+$session_id  = api_get_session_id();
+$current_expired_time_key = $course_code.'_'.$session_id.'_'.$exercise_id;
+
+if (isset($_SESSION['expired_time'][$current_expired_time_key])) { //Only for exercice of type "One page"
+	$expired_date = $_SESSION['expired_time'][$current_expired_time_key];
 	$expired_time = strtotime($expired_date);
 
 	//Validation in case of fraud
@@ -106,10 +123,11 @@ if (isset($_SESSION['expired_time'])) { //Only for exercice of type "One page"
 	  Database::query($sql_fraud,__FILE__,__LINE__);
 	}
 }
+
 //Unset session for clock time
 unset($_SESSION['current_exercice_attempt'][$current_user_id]);
-unset($_SESSION['expired_time']);
-unset($_SESSION['end_expired_time']);
+unset($_SESSION['expired_time'][$current_expired_time_key]);
+unset($_SESSION['end_expired_time'][$current_expired_time_key]);
 
 $is_allowedToEdit=api_is_allowed_to_edit(null,true) || $is_courseTutor;
 $nameTools=get_lang('CorrectTest');
@@ -157,17 +175,6 @@ if ($origin != 'learnpath') {
 } else {
 	Display::display_reduced_header();
 }
-$emailId   = $_REQUEST['email'];
-$user_name = $_REQUEST['user'];
-$test 	   = $_REQUEST['test'];
-$dt	 	   = $_REQUEST['dt'];
-$marks 	   = $_REQUEST['res'];
-$id 	   = $_REQUEST['id'];
-
-$sql_fb_type='SELECT feedback_type FROM '.$TBL_EXERCICES.' as exercises, '.$TBL_TRACK_EXERCICES.' as track_exercises WHERE exercises.id=track_exercises.exe_exo_id AND track_exercises.exe_id="'.Database::escape_string($id).'"';
-$res_fb_type=Database::query($sql_fb_type,__FILE__,__LINE__);
-$row_fb_type=Database::fetch_row($res_fb_type);
-$feedback_type = $row_fb_type[0];
 
 ?>
 <style type="text/css">

@@ -397,11 +397,13 @@ function event_link($link_id)
 function update_event_exercice($exeid,$exo_id, $score, $weighting,$session_id,$learnpath_id=0,$learnpath_item_id=0, $duration)
 {
 	if ($exeid!='') {
-
+		
 		// Validation in case of fraud with actived control time
-	    if (isset($_SESSION['expired_time'])) { //Only for exercice of type "One page"
+		$course_code = api_get_course_id();		
+		$current_expired_time_key = $course_code.'_'.$session_id.'_'.$exeid;
+	    if (isset($_SESSION['expired_time'][$current_expired_time_key])) { //Only for exercice of type "One page"
 	    	$current_time = time();
-	    	$expired_date = $_SESSION['expired_time'];
+	    	$expired_date = $_SESSION['expired_time'][$current_expired_time_key];
 	    	$expired_time = strtotime($expired_date);	    	
 	    	$total_time_allowed = $expired_time + 30;
 		    if ($total_time_allowed < $current_time) {
@@ -433,7 +435,7 @@ function update_event_exercice($exeid,$exo_id, $score, $weighting,$session_id,$l
 				 WHERE exe_id = '".Database::escape_string($exeid)."'";
 		
 		$res = @Database::query($sql,__FILE__,__LINE__);
-		unset($_SESSION['expired_time']);
+		unset($_SESSION['expired_time'][$current_expired_time_key]);
 		return $res;
 	} else
 		return false;
@@ -450,6 +452,7 @@ function create_event_exercice($exo_id)
 {
 	global $_user, $_cid, $_configuration;
 	$TABLETRACK_EXERCICES = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+	$TBL_EXERCICES = Database::get_course_table(TABLE_QUIZ);
 	$reallyNow = time();
 	if (isset($_user['user_id']) && $_user['user_id']!='') {
 		$user_id = "'".$_user['user_id']."'";
@@ -469,8 +472,19 @@ function create_event_exercice($exo_id)
 		$row = Database::fetch_array($sql);
 		return $row['exe_id'];
 	}
-    if (isset($_SESSION['expired_time'])) { //Only for exercice of type "One page"
-    	$expired_date = $_SESSION['expired_time'];
+	// get exercise id
+	$sql_exe_id='SELECT exercises.id FROM '.$TBL_EXERCICES.' as exercises, '.$TABLETRACK_EXERCICES.' as track_exercises WHERE exercises.id=track_exercises.exe_exo_id AND track_exercises.exe_id="'.Database::escape_string($exo_id).'"';
+	$res_exe_id=Database::query($sql_exe_id,__FILE__,__LINE__);
+	$row_exe_id=Database::fetch_row($res_exe_id);
+	$exercise_id = intval($row_exe_id[0]);
+	
+	// get expired_date
+	$course_code = api_get_course_id();
+	$session_id  = api_get_session_id();
+	$current_expired_time_key = $course_code.'_'.$session_id.'_'.$exercise_id;
+		
+    if (isset($_SESSION['expired_time'][$current_expired_time_key])) { //Only for exercice of type "One page"
+    	$expired_date = $_SESSION['expired_time'][$current_expired_time_key];
     } else {
     	$expired_date = '0000-00-00 00:00:00';
     }
@@ -504,10 +518,13 @@ function exercise_attempt($score,$answer,$quesId,$exeId,$j)
 	global $_configuration, $_user, $_cid;
 	$TBL_TRACK_ATTEMPT = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 
-	//Validation in case of fraud with actived control time 
-    if (isset($_SESSION['expired_time'])) { //Only for exercice of type "One page"
+	//Validation in case of fraud with actived control time	
+	$course_code = api_get_course_id();
+	$session_id  = api_get_session_id();
+	$current_expired_time_key = $course_code.'_'.$session_id.'_'.$exeId;	 
+    if (isset($_SESSION['expired_time'][$current_expired_time_key])) { //Only for exercice of type "One page"
     	$current_time = time();
-    	$expired_date = $_SESSION['expired_time'];
+    	$expired_date = $_SESSION['expired_time'][$current_expired_time_key];
     	$expired_time = strtotime($expired_date);
 	    $total_time_allowed = $expired_time + 30;	 
 	    if ($total_time_allowed < $current_time) {
@@ -593,10 +610,15 @@ function exercise_attempt_hotspot($exe_id, $question_id, $answer_id, $correct, $
 		return 0;
 	}
 
-	//Validation in case of fraud  with actived control time   
-    if (isset($_SESSION['expired_time'])) { //Only for exercice of type "One page"
+	//Validation in case of fraud  with actived control time  
+	
+	$course_code = api_get_course_id();
+	$session_id  = api_get_session_id();
+	$current_expired_time_key = $course_code.'_'.$session_id.'_'.$exe_id;
+	 
+    if (isset($_SESSION['expired_time'][$current_expired_time_key])) { //Only for exercice of type "One page"
     	$current_time = time();
-    	$expired_date = $_SESSION['expired_time'];
+    	$expired_date = $_SESSION['expired_time'][$current_expired_time_key];
     	$expired_time = strtotime($expired_date);
     	$total_time_allowed = $expired_time + 30;
 	    if ($total_time_allowed < $current_time) {

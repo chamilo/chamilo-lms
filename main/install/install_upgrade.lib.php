@@ -1,12 +1,12 @@
 <?php //$id: $
-/* For licensing terms, see /dokeos_license.txt */
+/* For licensing terms, see /chamilo_license.txt */
 /**
 ==============================================================================
 * This file contains functions used by the install and upgrade scripts.
 * The current functions are used to
 * - fill existing tables with data;
 * - write a .htaccess file in the courses folder for extra security;
-* - write the Dokeos config file containing important settings like database names
+* - write the system config file containing important settings like database names
 * and paswords and other options.
 *
 * Ideas for future additions:
@@ -34,48 +34,45 @@ require_once dirname(__FILE__).'/../inc/lib/database.lib.php';
 */
 
 /**
-* We assume this function is called from install scripts that reside inside
-* the install folder.
-*/
-function set_file_folder_permissions()
-{
-	@chmod('.',0755); //set permissions on install dir
-	@chmod('..',0755); //set permissions on parent dir of install dir
-	@chmod('country_data.csv.csv',0755);
+ * We assume this function is called from install scripts that reside inside
+ * the install folder.
+ */
+function set_file_folder_permissions() {
+	@chmod('.', 0755); //set permissions on install dir
+	@chmod('..', 0755); //set permissions on parent dir of install dir
+	@chmod('country_data.csv.csv', 0755);
 }
 
 /**
-* Fills the countries table with a list of countries.
-*/
-function fill_track_countries_table($track_countries_table)
-{
+ * Fills the countries table with a list of countries.
+ */
+function fill_track_countries_table($track_countries_table) {
 	$file_path = dirname(__FILE__).'/'.COUNTRY_DATA_FILENAME;
 	$add_country_sql = "LOAD DATA INFILE '".mysql_real_escape_string($file_path)."' INTO TABLE $track_countries_table FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '\'';";
 	@ mysql_query($add_country_sql);
 }
+
 /**
  * Add's a .htaccess file to the courses directory
- * @param string $url_append The path from your webroot to your dokeos root
+ * @param string $url_append The path from your webroot to your chamilo root
  */
-function write_courses_htaccess_file($url_append)
-{
+function write_courses_htaccess_file($url_append) {
 	$file_path = dirname(__FILE__).'/'.COURSES_HTACCESS_FILENAME;
 	$content = file_get_contents($file_path);
 	$content = str_replace('{DOKEOS_URL_APPEND_PATH}', $url_append, $content);
 	$fp = @ fopen('../../courses/.htaccess', 'w');
-	if ($fp)
-	{
+	if ($fp) {
 		fwrite($fp, $content);
 		return fclose($fp);
 	}
 	return false;
 }
+
 /**
- * Write the main Dokeos config file
+ * Write the main system config file
  * @param string $path Path to the config file
  */
-function write_dokeos_config_file($path)
-{
+function write_dokeos_config_file($path) {
 	global $dbHostForm;
 	global $dbUsernameForm;
 	global $dbPassForm;
@@ -96,9 +93,9 @@ function write_dokeos_config_file($path)
 	global $session_lifetime;
 	global $new_version;
 	global $new_version_stable;
-    $seek = array('\\','//');
-    $destroy = array('/','/');
-	$rootSys = str_replace($seek,$destroy,realpath($pathForm).'/');
+    $seek = array('\\', '//');
+    $destroy = array('/', '/');
+	$rootSys = str_replace($seek, $destroy, realpath($pathForm).'/');
 
 	$file_path = dirname(__FILE__).'/'.DOKEOS_CONFIG_FILENAME;
 	$content = file_get_contents($file_path);
@@ -125,18 +122,16 @@ function write_dokeos_config_file($path)
 	$config['SESSION_LIFETIME'] = $session_lifetime;
 	$config['{NEW_VERSION}'] = $new_version;
 	$config['NEW_VERSION_STABLE'] = trueFalse($new_version_stable);
-	foreach ($config as $key => $value)
-	{
+	foreach ($config as $key => $value) {
 		$content = str_replace($key, $value, $content);
 	}
 
 	$fp = @ fopen($path, 'w');
 
-	if (!$fp)
-	{
-		echo '<b><font color="red">Your script doesn\'t have write access to the config directory</font></b><br />
+	if (!$fp) {
+		echo '<strong><font color="red">Your script doesn\'t have write access to the config directory</font></strong><br />
 						<em>('.str_replace('\\', '/', realpath($path)).')</em><br /><br />
-						You probably do not have write access on Dokeos root directory,
+						You probably do not have write access on Chamilo root directory,
 						i.e. you should <em>CHMOD 777</em> or <em>755</em> or <em>775</em>.<br /><br />
 						Your problems can be related on two possible causes:<br />
 						<ul>
@@ -155,16 +150,15 @@ function write_dokeos_config_file($path)
 }
 
 /**
-* Creates the structure of the main database and fills it
-* with data. Placeholder symbols in the main database file
-* have to be replaced by the settings entered by the user during installation.
-*
-* @param array $installation_settings list of settings entered by the user
-* @param string  optional path about the script for database
-* @return void
-*/
-function load_main_database($installation_settings,$db_script='')
-{
+ * Creates the structure of the main database and fills it
+ * with data. Placeholder symbols in the main database file
+ * have to be replaced by the settings entered by the user during installation.
+ *
+ * @param array $installation_settings list of settings entered by the user
+ * @param string  optional path about the script for database
+ * @return void
+ */
+function load_main_database($installation_settings, $db_script = '') {
 	if (!empty($db_script)) {
 		$dokeos_main_sql_file_string = file_get_contents($db_script);
 	} else {
@@ -172,8 +166,7 @@ function load_main_database($installation_settings,$db_script='')
 	}
 
 	//replace symbolic parameters with user-specified values
-	foreach ($installation_settings as $key => $value)
-	{
+	foreach ($installation_settings as $key => $value) {
 		$dokeos_main_sql_file_string = str_replace($key, mysql_real_escape_string($value), $dokeos_main_sql_file_string);
 	}
 
@@ -183,19 +176,17 @@ function load_main_database($installation_settings,$db_script='')
 
 	//execute the sql instructions
 	$count = count($sql_instructions);
-	for ($i = 0; $i < $count; $i++)
-	{
+	for ($i = 0; $i < $count; $i++) {
 		$this_sql_query = $sql_instructions[$i]['query'];
 		mysql_query($this_sql_query);
 	}
 }
 
 /**
-* Creates the structure of the stats database
-* @param	string	Name of the file containing the SQL script inside the install directory
-*/
-function load_database_script($db_script)
-{
+ * Creates the structure of the stats database
+ * @param	string	Name of the file containing the SQL script inside the install directory
+ */
+function load_database_script($db_script) {
 	$dokeos_sql_file_string = file_get_contents($db_script);
 
 	//split in array of sql strings
@@ -204,8 +195,7 @@ function load_database_script($db_script)
 
 	//execute the sql instructions
 	$count = count($sql_instructions);
-	for ($i = 0; $i < $count; $i++)
-	{
+	for ($i = 0; $i < $count; $i++) {
 		$this_sql_query = $sql_instructions[$i]['query'];
 		mysql_query($this_sql_query);
 	}
@@ -227,8 +217,7 @@ function load_database_script($db_script)
  *
  * @access  public
  */
-function split_sql_file(&$ret, $sql)
-{
+function split_sql_file(&$ret, $sql) {
     // do not trim, see bug #1030644
     //$sql          = trim($sql);
     $sql          = rtrim($sql, "\n\r");
@@ -347,32 +336,27 @@ function split_sql_file(&$ret, $sql)
  * @param	string	Section to return
  * @param	boolean	Print (true) or hide (false) error texts when they occur
  */
-function get_sql_file_contents($file,$section,$print_errors=true)
-{
+function get_sql_file_contents($file, $section, $print_errors = true) {
 	//check given parameters
-	if(empty($file))
-	{
+	if (empty($file)) {
 		$error = "Missing name of file to parse in get_sql_file_contents()";
-		if($print_errors) echo $error;
+		if ($print_errors) echo $error;
 		return false;
 	}
-	if(!in_array($section,array('main','user','stats','scorm','course')))
-	{
+	if (!in_array($section, array('main', 'user', 'stats', 'scorm', 'course'))) {
 		$error = "Section '$section' is not authorized in get_sql_file_contents()";
 		if($print_errors) echo $error;
 		return false;
 	}
 	$filepath = getcwd().'/'.$file;
-	if(!is_file($filepath) or !is_readable($filepath))
-	{
+	if (!is_file($filepath) or !is_readable($filepath)) {
 		$error = "File $filepath not found or not readable in get_sql_file_contents()";
 		if($print_errors) echo $error;
 		return false;
 	}
 	//read the file in an array
 	$file_contents = file($filepath);
-	if(!is_array($file_contents) or count($file_contents)<1)
-	{
+	if (!is_array($file_contents) or count($file_contents) < 1) {
 		$error = "File $filepath looks empty in get_sql_file_contents()";
 		if($print_errors) echo $error;
 		return false;
@@ -380,31 +364,25 @@ function get_sql_file_contents($file,$section,$print_errors=true)
 	//prepare the resulting array
 	$section_contents = array();
 	$record = false;
-	foreach($file_contents as $index => $line)
-	{
-		if(substr($line,0,2) == '--')
-		{
+	foreach ($file_contents as $index => $line) {
+		if (substr($line, 0, 2) == '--') {
 			//This is a comment. Check if section name, otherwise ignore
 			$result = array();
-			if(preg_match('/^-- xx([A-Z]*)xx/',$line,$result))
-			{	//we got a section name here
-				if($result[1] == strtoupper($section))
-				{	//we have the section we are looking for, start recording
+			if (preg_match('/^-- xx([A-Z]*)xx/', $line,$result)) {	//we got a section name here
+				if ($result[1] == strtoupper($section)) {
+					//we have the section we are looking for, start recording
 					$record = true;
-				}
-				else
-				{	//we have another section's header. If we were recording, stop now and exit loop
-					if($record == true)
-					{
+				} else {
+					//we have another section's header. If we were recording, stop now and exit loop
+					if ($record == true) {
 						break;
 					}
 					$record = false;
 				}
 			}
-		}else{
-			if($record == true)
-			{
-				if(!empty($line)){
+		} else {
+			if ($record == true) {
+				if (!empty($line)) {
 					$section_contents[] = $line;
 				}
 			}
@@ -414,20 +392,15 @@ function get_sql_file_contents($file,$section,$print_errors=true)
 	return $section_contents;
 }
 
-function my_directory_to_array($directory)
-{
+function my_directory_to_array($directory) {
 	$array_items = array();
-	if ($handle = opendir($directory))
-	{
-		while (false !== ($file = readdir($handle)))
-		{
-			if ($file != "." && $file != "..")
-			{
-				if (is_dir($directory. "/" . $file))
-				{
-					$array_items = array_merge($array_items, my_directory_to_array($directory. "/" . $file));
+	if ($handle = opendir($directory)) {
+		while (false !== ($file = readdir($handle))) {
+			if ($file != "." && $file != "..") {
+				if (is_dir($directory. "/" . $file)) {
+					$array_items = array_merge($array_items, my_directory_to_array($directory. '/' . $file));
 					$file = $directory . "/" . $file;
-					$array_items[] = preg_replace("/\/\//si", "/", $file);
+					$array_items[] = preg_replace("/\/\//si", '/', $file);
 				}
 			}
 		}
@@ -435,6 +408,7 @@ function my_directory_to_array($directory)
 	}
 	return $array_items;
 }
+
 /**
  * Adds a new document to the database - specific to version 1.8.0
  *
@@ -445,23 +419,17 @@ function my_directory_to_array($directory)
  * @param string $title
  * @return id if inserted document
  */
-function add_document_180($_course,$path,$filetype,$filesize,$title,$comment=NULL)
-{
-    $table_document = Database::get_course_table(TABLE_DOCUMENT,$_course['dbName']);
-    $sql="INSERT INTO $table_document
+function add_document_180($_course, $path, $filetype, $filesize, $title, $comment = null) {
+    $table_document = Database::get_course_table(TABLE_DOCUMENT, $_course['dbName']);
+    $sql = "INSERT INTO $table_document
     (`path`,`filetype`,`size`,`title`, `comment`)
     VALUES ('$path','$filetype','$filesize','".
     Database::escape_string($title)."', '$comment')";
-    if(Database::query($sql,__FILE__,__LINE__))
-    {
+    if (Database::query($sql,__FILE__,__LINE__)) {
         //display_message("Added to database (id ".mysql_insert_id().")!");
         return mysql_insert_id();
-    }
-    else
-    {
+    } else {
         //display_error("The uploaded file could not be added to the database (".mysql_error().")!");
         return false;
     }
 }
-
-?>

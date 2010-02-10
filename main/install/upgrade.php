@@ -124,7 +124,7 @@ class Page_Requirements extends HTML_QuickForm_Page
 	*
 	* @param string  $extentionName  name of the php extension to be checked
 	* @param boolean  $echoWhenOk  true => show ok when the extension exists
-	* @author Christophe Gesche
+	* @author Christophe Gesché
 	*/
 	function check_extension($extentionName)
 	{

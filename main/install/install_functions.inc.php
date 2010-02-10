@@ -3,12 +3,9 @@
  * This function prints class=active_step $current_step=$param
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  */
-function step_active($param)
-{
+function step_active($param) {
 	global $current_step;
-
-	if ($param==$current_step)
-	{
+	if ($param == $current_step) {
 		echo 'class="current_step" ';
 	}
 }
@@ -17,13 +14,12 @@ function step_active($param)
  * This function displays the Step X of Y -
  * @return	string	String that says 'Step X of Y' with the right values
  */
-function display_step_sequence()
-{
+function display_step_sequence() {
 	global $current_step;
 	global $total_steps;
-
 	return get_lang('Step'.$current_step).' &ndash; ';
 }
+
 /**
  * This function checks if a php extension exists or not and returns an HTML
  * status string.
@@ -33,30 +29,22 @@ function display_step_sequence()
  * @param	string	Text to show when extension is available (defaults to 'KO')
  * @param	boolean	Whether this extension is optional (in this case show unavailable text in orange rather than red)
  * @return	string	HTML string reporting the status of this extension. Language-aware.
- * @author 	Christophe Gesche
+ * @author 	Christophe Gesché
  * @author 	Patrick Cool <patrick.cool@UGent.be>, Ghent University
  * @author	Yannick Warnier <yannick.warnier@dokeos.com>
  * @version Dokeos 1.8.1, May 2007
  */
-function check_extension($extension_name,$return_success='Yes',$return_failure='No',$optional=false)
-{
-	if(extension_loaded($extension_name))
-	{
+function check_extension($extension_name, $return_success = 'Yes', $return_failure = 'No', $optional = false) {
+	if (extension_loaded($extension_name)) {
 		return '<strong><font color="green">'.$return_success.'</font></strong>';
-	}
-	else
-	{
-		if($optional===true)
-		{
+	} else {
+		if ($optional === true) {
 			return '<strong><font color="#ff9900">'.$return_failure.'</font></strong>';
-		}
-		else
-		{
+		} else {
 			return '<strong><font color="red">'.$return_failure.'</font></strong>';
 		}
 	}
 }
-
 
 /**
  * This function checks whether a php setting matches the recommended value
@@ -64,55 +52,47 @@ function check_extension($extension_name,$return_success='Yes',$return_failure='
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  * @version Dokeos 1.8, august 2006
  */
-function check_php_setting($php_setting, $recommended_value, $return_success=false, $return_failure=false)
-{
+function check_php_setting($php_setting, $recommended_value, $return_success = false, $return_failure = false) {
 	$current_php_value = get_php_setting($php_setting);
-	if ( $current_php_value== $recommended_value)
-	{
+	if ($current_php_value == $recommended_value) {
 		return '<strong><font color="green">'.$current_php_value.' '.$return_success.'</font></strong>';
-	}
-	else
-	{
+	} else {
 		return '<strong><font color="red">'.$current_php_value.' '.$return_failure.'</font></strong>';
 	}
 }
+
 /**
- * Enter description here...
+ * Returns a textual value ('ON' or 'OFF') based on a requester 2-state ini- configuration setting.
  *
  * @param string $val a php ini value
  * @return boolean: ON or OFF
  * @author Joomla <http://www.joomla.org>
  */
 function get_php_setting($val) {
-	$r =  (ini_get($val) == '1' ? 1 : 0);
+	$r = ini_get($val) == '1' ? 1 : 0;
 	return $r ? 'ON' : 'OFF';
 }
 
 /**
  * This function checks if the given folder is writable
  */
-function check_writable($folder)
-{
-	if (is_writable('../'.$folder))
-	{
+function check_writable($folder) {
+	if (is_writable('../'.$folder)) {
 		return '<strong><font color="green">'.get_lang('Writable').'</font></strong>';
-	}
-	else
-	{
+	} else {
 		return '<strong><font color="red">'.get_lang('NotWritable').'</font></strong>';
 	}
 }
 
 /**
- * this function returns a string "FALSE" or "TRUE" according to the variable in parameter
+ * This function returns a string "true" or "false" according to the passed parameter.
  *
- * @param integer  $var  the variable to convert
- * @return  string  the string "FALSE" or "TRUE"
- * @author Christophe Gesche
+ * @param integer  $var  The variable to present as text
+ * @return  string  the string "true" or "false"
+ * @author Christophe Gesché
  */
-function trueFalse($var)
-{
-	return $var?'true':'false';
+function trueFalse($var) {
+	return $var ? 'true' : 'false';
 }
 
 /**
@@ -121,12 +101,11 @@ function trueFalse($var)
  * @param	string	File path
  * @return	array	The lines of the file returned as an array
  */
-function file_to_array($filename)
-{
-	$fp = fopen($filename, "rb");
+function file_to_array($filename) {
+	$fp = fopen($filename, 'rb');
 	$buffer = fread($fp, filesize($filename));
 	fclose($fp);
-	$result = explode('<br />',nl2br($buffer));
+	$result = explode('<br />', nl2br($buffer));
 	return $result;
 }
 
@@ -268,9 +247,8 @@ function get_config_param($param,$updatePath='')
  * @param	string 	Name of param we want
  * @return	mixed	The parameter value or null if not found
  */
-function get_config_param_from_db($host,$login,$pass,$db_name,$param='')
-{
-	$mydb = mysql_connect($host,$login,$pass);
+function get_config_param_from_db($host, $login, $pass, $db_name, $param = '') {
+	$mydb = mysql_connect($host, $login, $pass);
 
 	// The system has not been designed to use special SQL modes that were introduced since MySQL 5
 	@mysql_query("set session sql_mode='';");
@@ -278,9 +256,11 @@ function get_config_param_from_db($host,$login,$pass,$db_name,$param='')
 	$myconnect = mysql_select_db($db_name);
 	$sql = "SELECT * FROM settings_current WHERE variable = '$param'";
 	$res = mysql_query($sql);
-	if($res===false){return null;}
-	if(mysql_num_rows($res)>0)
-	{
+	if ($res === false) {
+		return null;
+	}
+
+	if (mysql_num_rows($res) > 0) {
 		$row = mysql_fetch_array($res);
 		$value = $row['selected_value'];
 		return $value;
@@ -293,23 +273,23 @@ function get_config_param_from_db($host,$login,$pass,$db_name,$param='')
 *	@todo function does not belong here, move to code library,
 *	also see infocours.php which contains similar function
 */
-function get_language_folder_list($dirname)
-{
-	if ($dirname[strlen($dirname)-1] != '/') $dirname .= '/';
+function get_language_folder_list($dirname) {
+	if ($dirname[strlen($dirname)-1] != '/') {
+		$dirname .= '/';
+	}
 	$handle = opendir($dirname);
 	$language_list = array();
 
-	while ($entries = readdir($handle))
-	{
-		if ($entries=='.' || $entries=='..' || $entries=='CVS'  || $entries == '.svn') continue;
-		if (is_dir($dirname.$entries))
-		{
+	while ($entries = readdir($handle)) {
+		if ($entries == '.' || $entries == '..' || $entries=='CVS'  || $entries == '.svn') {
+			continue;
+		}
+		if (is_dir($dirname.$entries)) {
 			$language_list[] = $entries;
 		}
 	}
 
 	closedir($handle);
-
 	return $language_list;
 }
 
@@ -319,13 +299,11 @@ function get_language_folder_list($dirname)
 ==============================================================================
 */
 
-
 /**
-*	Displays a form (drop down menu) so the user can select
-*	his/her preferred language.
-*/
-function display_language_selection_box()
-{
+ *	Displays a form (drop down menu) so the user can select
+ *	his/her preferred language.
+ */
+function display_language_selection_box() {
 	//get language list
 	$dirname = '../lang/';
 	$language_list = get_language_folder_list($dirname);
@@ -339,10 +317,12 @@ function display_language_selection_box()
 	echo "\t\t<select name=\"language_list\">\n";
 
 	$default_language = 'english';
-	foreach ($language_to_display as $key => $value)
-	{
-		if ($value == $default_language) $option_end = ' selected="selected">';
-		else $option_end = '>';
+	foreach ($language_to_display as $key => $value) {
+		if ($value == $default_language) {
+			$option_end = ' selected="selected">';
+		} else {
+			$option_end = '>';
+		}
 		echo "\t\t\t<option value=\"$value\"$option_end";
 
 		echo api_ucfirst($value);
@@ -356,17 +336,17 @@ function display_language_selection_box()
  * This function displays a language dropdown box so that the installatioin
  * can be done in the language of the user
  */
-function display_language_selection()
-{ ?>
-	<h1><?php get_lang('WelcomeToTheDokeosInstaller');?></h1>
-	<h2><?php echo display_step_sequence(); ?><?php echo get_lang('InstallationLanguage');?></h2>
-	<p><?php echo get_lang('PleaseSelectInstallationProcessLanguage');?>:</p>
+function display_language_selection() { ?>
+	<h1><?php get_lang('WelcomeToTheDokeosInstaller'); ?></h1>
+	<h2><?php echo display_step_sequence(); ?><?php echo get_lang('InstallationLanguage'); ?></h2>
+	<p><?php echo get_lang('PleaseSelectInstallationProcessLanguage'); ?>:</p>
 	<form id="lang_form" method="post" action="<?php echo api_get_self(); ?>">
 <?php display_language_selection_box(); ?>
-	<button type="submit" name="step1" class="next" value="<?php get_lang('Next');?> &gt;"><?php echo get_lang('Next');?></button>
+	<button type="submit" name="step1" class="next" value="<?php get_lang('Next'); ?> &gt;"><?php echo get_lang('Next'); ?></button>
 	<input type="hidden" name="is_executable" id="is_executable" value="-" />
 	</form>
-<?php }
+<?php
+}
 
 /**
  * This function displays the requirements for installing Dokeos.
@@ -380,8 +360,7 @@ function display_language_selection()
  * @author unknow
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 */
-function display_requirements($installType, $badUpdatePath, $updatePath='', $update_from_version_8=array(), $update_from_version_6=array())
-{
+function display_requirements($installType, $badUpdatePath, $updatePath = '', $update_from_version_8 = array(), $update_from_version_6 = array()) {
 	echo '<h2>'.display_step_sequence().get_lang('Requirements')."</h2>\n";
 
 	echo '<strong>'.get_lang('ReadThoroughly').'</strong><br />';
@@ -395,14 +374,11 @@ function display_requirements($installType, $badUpdatePath, $updatePath='', $upd
 			<tr>
 				<td class="requirements-item">'.get_lang('PHPVersion').'>= 5.0</td>
 				<td class="requirements-value">';
-					if (phpversion() < '5.0')
-					{
-						echo '<strong><font color="red">'.get_lang('PHPVersionError').'</font></strong>';
-					}
-					else
-					{
-						echo '<strong><font color="green">'.get_lang('PHPVersionOK'). ' '.phpversion().'</font></strong>';
-					}
+	if (phpversion() < '5.0') {
+		echo '<strong><font color="red">'.get_lang('PHPVersionError').'</font></strong>';
+	} else {
+		echo '<strong><font color="green">'.get_lang('PHPVersionOK'). ' '.phpversion().'</font></strong>';
+	}
 	echo '		</td>
 			</tr>
 			<tr>
@@ -568,109 +544,97 @@ function display_requirements($installType, $badUpdatePath, $updatePath='', $upd
 	echo '	</div>';
 	echo '</div>';
 
-	if($installType == 'update' && (empty($updatePath) || $badUpdatePath))
-	{
-		if($badUpdatePath)
-		{ ?>
+	if ($installType == 'update' && (empty($updatePath) || $badUpdatePath)) {
+		if ($badUpdatePath) { ?>
 			<div style="color:red; background-color:white; font-weight:bold; text-align:center;">
-				<?php echo get_lang('Error');?>!<br />
-				Chamilo <?php echo (isset($_POST['step2_update_6'])?implode('|',$update_from_version_6):implode('|',$update_from_version_8)).' '.get_lang('HasNotBeenFoundInThatDir'); ?>.
+				<?php echo get_lang('Error'); ?>!<br />
+				Chamilo <?php echo (isset($_POST['step2_update_6']) ? implode('|', $update_from_version_6) : implode('|', $update_from_version_8)).' '.get_lang('HasNotBeenFoundInThatDir'); ?>.
 			</div>
 		<?php }
-		else
-		{
+		else {
 			echo '<br />';
 		}
 		?>
 			<table border="0" cellpadding="5" align="center">
 			<tr>
-			<td><?php echo get_lang('OldVersionRootPath');?>:</td>
-			<td><input type="text" name="updatePath" size="50" value="<?php echo ($badUpdatePath && !empty($updatePath))?htmlentities($updatePath):$_SERVER['DOCUMENT_ROOT'].'/old_version/'; ?>" /></td>
+			<td><?php echo get_lang('OldVersionRootPath'); ?>:</td>
+			<td><input type="text" name="updatePath" size="50" value="<?php echo ($badUpdatePath && !empty($updatePath)) ? htmlentities($updatePath) : $_SERVER['DOCUMENT_ROOT'].'/old_version/'; ?>" /></td>
 			</tr>
 			<tr>
 			<td colspan="2" align="center">
-				<button type="submit" class="back" name="step1" value="&lt; <?php echo get_lang('Back');?>" ><?php echo get_lang('Back');?></button>
+				<button type="submit" class="back" name="step1" value="&lt; <?php echo get_lang('Back'); ?>" ><?php echo get_lang('Back'); ?></button>
 				<input type="hidden" name="is_executable" id="is_executable" value="-" />
-				<button type="submit" class="next" name="<?php echo (isset($_POST['step2_update_6'])?'step2_update_6':'step2_update_8');?>" value="<?php echo get_lang('Next');?> &gt;" ><?php echo get_lang('Next');?></button>
+				<button type="submit" class="next" name="<?php echo (isset($_POST['step2_update_6']) ? 'step2_update_6' : 'step2_update_8'); ?>" value="<?php echo get_lang('Next'); ?> &gt;" ><?php echo get_lang('Next'); ?></button>
 			</td>
 			</tr>
 			</table>
 		<?php
-	}
-	else
-	{
-		$error=false;
+	} else {
+
+		$error = false;
 
 		$perm = api_get_setting('permissions_for_new_directories');
-		$perm = octdec(!empty($perm)?$perm:'0770');
+		$perm = octdec(!empty($perm) ? $perm : '0770');
+
 		$perm_file = api_get_setting('permissions_for_new_files');
-		$perm_file = octdec(!empty($perm_file)?$perm_file:'0660');
+		$perm_file = octdec(!empty($perm_file) ? $perm_file : '0660');
 
 		//First, attempt to set writing permissions if we don't have them yet
 		//0xxx is an octal number, this is the required format
 		$notwritable = array();
         $curdir = getcwd();
-		if(!is_writable('../inc/conf'))
-		{
+
+		if (!is_writable('../inc/conf')) {
 			$notwritable[] = realpath($curdir.'/../inc/conf');
 			@chmod('../inc/conf',$perm);
 		}
 
-		if(!is_writable('../upload/users'))
-		{
+		if (!is_writable('../upload/users')) {
 			$notwritable[] = realpath($curdir.'/../upload/users');
 			@chmod('../upload/users', $perm);
 		}
 
-        if(!is_writable('../default_course_document/images/'))
-        {
+        if (!is_writable('../default_course_document/images/')) {
             $notwritable[] = realpath($curdir.'/../default_course_document/images/');
             @chmod('../default_course_document/images/', $perm);
         }
 
-		if(!is_writable('../../archive'))
-		{
+		if (!is_writable('../../archive')) {
 			$notwritable[] = realpath($curdir.'/../../archive');
 			@chmod('../../archive',$perm);
 		}
 
-		if(!is_writable('../../courses'))
-		{
+		if (!is_writable('../../courses')) {
 			$notwritable[] = realpath($curdir.'/../../courses');
 			@chmod('../../courses',$perm);
 		}
 
-		if(!is_writable('../../home'))
-		{
+		if (!is_writable('../../home')) {
 			$notwritable[] = realpath($curdir.'/../../home');
 			@chmod('../../home',$perm);
 		}
 
-		if(file_exists('../inc/conf/configuration.php') && !is_writable('../inc/conf/configuration.php'))
-		{
+		if (file_exists('../inc/conf/configuration.php') && !is_writable('../inc/conf/configuration.php')) {
 			$notwritable[]= realpath($curdir.'/../inc/conf/configuration.php');
 			@chmod('../inc/conf/configuration.php',$perm_file);
 		}
 
 		//Second, if this fails, report an error
 		//--> the user will have to adjust the permissions manually
-		if(count($notwritable)>0)
-		{
-			$error=true;
+		if (count($notwritable) > 0) {
+			$error = true;
 			echo '<div style="color:red; background-color:white; font-weight:bold; text-align:center;">';
 			echo get_lang('Warning').':<br />';
-			printf(get_lang('NoWritePermissionPleaseReadInstallGuide'),'</font><a href="../../documentation/installation_guide.html" target="blank">','</a> <font color="red">');
+			printf(get_lang('NoWritePermissionPleaseReadInstallGuide'), '</font><a href="../../documentation/installation_guide.html" target="blank">', '</a> <font color="red">');
 			echo '<ul>';
-			foreach ($notwritable as $value)
-			{
+			foreach ($notwritable as $value) {
 				echo '<li>'.$value.'</li>';
 			}
 			echo '</ul>';
 			echo '</div>';
 		}
 		// check wether a Dokeos configuration file already exists.
-		elseif(file_exists('../inc/conf/configuration.php'))
-		{
+		elseif(file_exists('../inc/conf/configuration.php')) {
 				echo '<div style="color:red; background-color:white; font-weight:bold; text-align:center;">';
 				echo get_lang('WarningExistingDokeosInstallationDetected');
 				echo '</div>';
@@ -684,14 +648,14 @@ function display_requirements($installType, $badUpdatePath, $updatePath='', $upd
 		<?php
 		//real code
 		echo '<button type="submit" class="save" name="step2_update_8" value="Upgrade from Dokeos 1.8.x"';
-		if($error) echo ' disabled="disabled"';
+		if ($error) echo ' disabled="disabled"';
 		//temporary code for alpha version, disabling upgrade
 		//echo '<input type="submit" name="step2_update" value="Upgrading is not possible in this beta version"';
 		//echo ' disabled="disabled"';
 		//end temp code
 		echo ' >'.get_lang('UpgradeFromDokeos18x').'</button>';
 		echo '<button type="submit" class="save" name="step2_update_6" value="Upgrade from Dokeos 1.6.x"';
-		if($error) echo ' disabled="disabled"';
+		if ($error) echo ' disabled="disabled"';
 		echo ' >'.get_lang('UpgradeFromDokeos16x').'</button>';
 		echo '</p>';
 	}
@@ -702,8 +666,7 @@ function display_requirements($installType, $badUpdatePath, $updatePath='', $upd
 * - an "I accept" button named step3 to proceed to step 3;
 * - a "Back" button named step1 to go back to the first step.
 */
-function display_license_agreement()
-{
+function display_license_agreement() {
 	echo '<h2>'.display_step_sequence().get_lang('Licence').'</h2>';
 	echo '<p>'.get_lang('DokeosLicenseInfo').'</p>';
 	echo '<p><a href="../../documentation/license.html" target="_blank">'.get_lang('PrintVers').'</a></p>';
@@ -744,17 +707,14 @@ function display_license_agreement()
 * @param	string	Additional attribute for the <tr> element
 * @return	void	Direct output
 */
-function display_database_parameter($install_type, $parameter_name, $form_field_name, $parameter_value, $extra_notice, $display_when_update = true, $tr_attribute='')
+function display_database_parameter($install_type, $parameter_name, $form_field_name, $parameter_value, $extra_notice, $display_when_update = true, $tr_attribute = '')
 {
 	echo "<tr ".$tr_attribute.">\n";
 	echo "<td>$parameter_name&nbsp;&nbsp;</td>\n";
-	if ($install_type == INSTALL_TYPE_UPDATE && $display_when_update)
-	{
+	if ($install_type == INSTALL_TYPE_UPDATE && $display_when_update) {
 		echo '<td><input type="hidden" name="'.$form_field_name.'" id="'.$form_field_name.'" value="'.htmlentities($parameter_value).'" />'.$parameter_value."</td>\n";
-	}
-	else
-	{
-		if ($form_field_name=='dbPassForm') {
+	} else {
+		if ($form_field_name == 'dbPassForm') {
 			$inputtype = 'password';
 		} else {
 			$inputtype = 'text';
@@ -762,7 +722,7 @@ function display_database_parameter($install_type, $parameter_name, $form_field_
 
 		//Slightly limit the length of the database prefix to avoid
 		//having to cut down the databases names later on
-		if ($form_field_name=='dbPrefixForm') {
+		if ($form_field_name == 'dbPrefixForm') {
 			$maxlength = '15';
 		} else {
 			$maxlength = MAX_FORM_FIELD_LENGTH;
@@ -779,72 +739,58 @@ function display_database_parameter($install_type, $parameter_name, $form_field_
  * regarding the databases - login and password, names, prefixes, single
  * or multiple databases, tracking or not...
  */
-function display_database_settings_form($installType, $dbHostForm, $dbUsernameForm, $dbPassForm, $dbPrefixForm, $enableTrackingForm, $singleDbForm, $dbNameForm, $dbStatsForm, $dbScormForm, $dbUserForm)
-{
-	if($installType == 'update') {
+function display_database_settings_form($installType, $dbHostForm, $dbUsernameForm, $dbPassForm, $dbPrefixForm, $enableTrackingForm, $singleDbForm, $dbNameForm, $dbStatsForm, $dbScormForm, $dbUserForm) {
+	if ($installType == 'update') {
 		global $_configuration, $update_from_version_6;
-		if(in_array($_POST['old_version'],$update_from_version_6)) {
+		if (in_array($_POST['old_version'],$update_from_version_6)) {
 	        $dbHostForm		= get_config_param('dbHost');
             $dbUsernameForm	= get_config_param('dbLogin');
             $dbPassForm		= get_config_param('dbPass');
             $dbPrefixForm	= get_config_param('dbNamePrefix');
-            $enableTrackingForm=get_config_param('is_trackingEnabled');
-            $singleDbForm	=get_config_param('singleDbEnabled');
-            $dbNameForm		=get_config_param('mainDbName');
-            $dbStatsForm	=get_config_param('statsDbName');
-            $dbScormForm	=get_config_param('scormDbName');
-            $dbUserForm		=get_config_param('user_personal_database');
-            $dbScormExists=true;
-		}
-		else
-		{
-			$dbHostForm=$_configuration['db_host'];
-			$dbUsernameForm=$_configuration['db_user'];
-			$dbPassForm=$_configuration['db_password'];
-			$dbPrefixForm=$_configuration['db_prefix'];
-			$enableTrackingForm=$_configuration['tracking_enabled'];
-			$singleDbForm=$_configuration['single_database'];
-			$dbNameForm=$_configuration['main_database'];
-			$dbStatsForm=$_configuration['statistics_database'];
-			$dbScormForm=$_configuration['scorm_database'];
-			$dbUserForm=$_configuration['user_personal_database'];
-
-			$dbScormExists=true;
+            $enableTrackingForm	= get_config_param('is_trackingEnabled');
+            $singleDbForm	= get_config_param('singleDbEnabled');
+            $dbNameForm		= get_config_param('mainDbName');
+            $dbStatsForm	= get_config_param('statsDbName');
+            $dbScormForm	= get_config_param('scormDbName');
+            $dbUserForm		= get_config_param('user_personal_database');
+            $dbScormExists	= true;
+		} else {
+			$dbHostForm		= $_configuration['db_host'];
+			$dbUsernameForm	= $_configuration['db_user'];
+			$dbPassForm		= $_configuration['db_password'];
+			$dbPrefixForm	= $_configuration['db_prefix'];
+			$enableTrackingForm	= $_configuration['tracking_enabled'];
+			$singleDbForm	= $_configuration['single_database'];
+			$dbNameForm		= $_configuration['main_database'];
+			$dbStatsForm	= $_configuration['statistics_database'];
+			$dbScormForm	= $_configuration['scorm_database'];
+			$dbUserForm		= $_configuration['user_personal_database'];
+			$dbScormExists	= true;
 		}
 
-		if(empty($dbScormForm))
-		{
-			if($singleDbForm)
-			{
-				$dbScormForm=$dbNameForm;
-			}
-			else
-			{
-				$dbScormForm=$dbPrefixForm.'scorm';
-
-				$dbScormExists=false;
+		if (empty($dbScormForm)) {
+			if ($singleDbForm) {
+				$dbScormForm = $dbNameForm;
+			} else {
+				$dbScormForm = $dbPrefixForm.'scorm';
+				$dbScormExists = false;
 			}
 		}
-		if(empty($dbUserForm))
-		{
-			if($singleDbForm)
-			{
-				$dbUserForm=$dbNameForm;
-			}
-			else
-			{
-				$dbUserForm=$dbPrefixForm.'chamilo_user';
+		if (empty($dbUserForm)) {
+			if ($singleDbForm) {
+				$dbUserForm = $dbNameForm;
+			} else {
+				$dbUserForm = $dbPrefixForm.'chamilo_user';
 			}
 		}
-		echo "<h2>" . display_step_sequence() .get_lang("DBSetting") . "</h2>";
-		echo get_lang("DBSettingUpgradeIntro");
-	}else{
-		if(empty($dbPrefixForm)) //make sure there is a default value for db prefix
-		{
+		echo '<h2>' . display_step_sequence() .get_lang('DBSetting') . '</h2>';
+		echo get_lang('DBSettingUpgradeIntro');
+	} else {
+		if (empty($dbPrefixForm)) { //make sure there is a default value for db prefix
 			$dbPrefixForm = 'chamilo_';
 		}
-		echo "<h2>" . display_step_sequence() .get_lang("DBSetting") . "</h2>";
-		echo get_lang("DBSettingIntro");
+		echo '<h2>' . display_step_sequence() .get_lang('DBSetting') . '</h2>';
+		echo get_lang('DBSettingIntro');
 	}
 
 	?>
@@ -857,7 +803,7 @@ function display_database_settings_form($installType, $dbHostForm, $dbUsernameFo
 	<tr>
 	  <td width="40%"><?php echo get_lang('DBHost'); ?> </td>
 
-	  <?php if($installType == 'update'): ?>
+	  <?php if ($installType == 'update'): ?>
 	  <td width="30%"><input type="hidden" name="dbHostForm" value="<?php echo htmlentities($dbHostForm); ?>" /><?php echo $dbHostForm; ?></td>
 	  <td width="30%">&nbsp;</td>
 	  <?php else: ?>
@@ -876,24 +822,23 @@ function display_database_settings_form($installType, $dbHostForm, $dbUsernameFo
 	//database prefix
 	display_database_parameter($installType, get_lang('DbPrefixForm'), 'dbPrefixForm', $dbPrefixForm, get_lang('DbPrefixCom'));
 	//fields for the four standard Chamilo databases
-	echo '<tr><td colspan="3"><a href="" onclick="javascript: show_hide_option();return false;" id="optionalparameters"><img style="vertical-align:middle;" src="../img/div_show.gif" alt="show-hide" /> '.get_lang('OptionalParameters','').'</a></td></tr>';
-	display_database_parameter($installType, get_lang('MainDB'), 'dbNameForm', $dbNameForm, '&nbsp;',null,'id="optional_param1" style="display:none;"');
-	display_database_parameter($installType, get_lang('StatDB'), 'dbStatsForm', $dbStatsForm, '&nbsp;',null,'id="optional_param2" style="display:none;"');
-	if($installType == 'update' && in_array($_POST['old_version'],$update_from_version_6))
-	{
-		display_database_parameter($installType, get_lang('ScormDB'), 'dbScormForm', $dbScormForm, '&nbsp;',null,'id="optional_param3" style="display:none;"');
+	echo '<tr><td colspan="3"><a href="" onclick="javascript: show_hide_option();return false;" id="optionalparameters"><img style="vertical-align:middle;" src="../img/div_show.gif" alt="show-hide" /> '.get_lang('OptionalParameters', '').'</a></td></tr>';
+	display_database_parameter($installType, get_lang('MainDB'), 'dbNameForm', $dbNameForm, '&nbsp;', null, 'id="optional_param1" style="display:none;"');
+	display_database_parameter($installType, get_lang('StatDB'), 'dbStatsForm', $dbStatsForm, '&nbsp;', null, 'id="optional_param2" style="display:none;"');
+	if ($installType == 'update' && in_array($_POST['old_version'],$update_from_version_6)) {
+		display_database_parameter($installType, get_lang('ScormDB'), 'dbScormForm', $dbScormForm, '&nbsp;', null, 'id="optional_param3" style="display:none;"');
 	}
-	display_database_parameter($installType, get_lang('UserDB'), 'dbUserForm', $dbUserForm, '&nbsp;',null,'id="optional_param4" style="display:none;"');
+	display_database_parameter($installType, get_lang('UserDB'), 'dbUserForm', $dbUserForm, '&nbsp;', null, 'id="optional_param4" style="display:none;"');
 	?>
 	<tr id="optional_param5" style="display:none;">
 	  <td><?php echo get_lang('EnableTracking'); ?> </td>
 
-	  <?php if($installType == 'update'): ?>
-	  <td><input type="hidden" name="enableTrackingForm" value="<?php echo $enableTrackingForm; ?>" /><?php echo $enableTrackingForm? get_lang('Yes') : get_lang('No'); ?></td>
+	  <?php if ($installType == 'update'): ?>
+	  <td><input type="hidden" name="enableTrackingForm" value="<?php echo $enableTrackingForm; ?>" /><?php echo $enableTrackingForm ? get_lang('Yes') : get_lang('No'); ?></td>
 	  <?php else: ?>
 	  <td>
-		<input class="checkbox" type="radio" name="enableTrackingForm" value="1" id="enableTracking1" <?php echo $enableTrackingForm?'checked="checked" ':''; ?>/> <label for="enableTracking1"><?php echo get_lang('Yes'); ?></label>
-		<input class="checkbox" type="radio" name="enableTrackingForm" value="0" id="enableTracking0" <?php echo $enableTrackingForm?'':'checked="checked" '; ?>/> <label for="enableTracking0"><?php echo get_lang('No'); ?></label>
+		<input class="checkbox" type="radio" name="enableTrackingForm" value="1" id="enableTracking1" <?php echo $enableTrackingForm ? 'checked="checked" ' : ''; ?>/> <label for="enableTracking1"><?php echo get_lang('Yes'); ?></label>
+		<input class="checkbox" type="radio" name="enableTrackingForm" value="0" id="enableTracking0" <?php echo $enableTrackingForm ? '' : 'checked="checked" '; ?>/> <label for="enableTracking0"><?php echo get_lang('No'); ?></label>
 	  </td>
 	  <?php endif; ?>
 
@@ -903,11 +848,11 @@ function display_database_settings_form($installType, $dbHostForm, $dbUsernameFo
 	  <td><?php echo get_lang('SingleDb'); ?> </td>
 
 	  <?php if($installType == 'update'): ?>
-	  <td><input type="hidden" name="singleDbForm" value="<?php echo $singleDbForm; ?>" /><?php echo $singleDbForm? get_lang('One') : get_lang('Several'); ?></td>
+	  <td><input type="hidden" name="singleDbForm" value="<?php echo $singleDbForm; ?>" /><?php echo $singleDbForm ? get_lang('One') : get_lang('Several'); ?></td>
 	  <?php else: ?>
 	  <td>
-		<input class="checkbox" type="radio" name="singleDbForm" value="1" id="singleDb1" <?php echo $singleDbForm?'checked="checked" ':''; ?> onclick="show_hide_tracking_and_user_db(this.id);" /> <label for="singleDb1"><?php echo get_lang('One'); ?></label>
-		<input class="checkbox" type="radio" name="singleDbForm" value="0" id="singleDb0" <?php echo $singleDbForm?'':'checked="checked" '; ?> onclick="show_hide_tracking_and_user_db(this.id);" /> <label for="singleDb0"><?php echo get_lang('Several'); ?></label>
+		<input class="checkbox" type="radio" name="singleDbForm" value="1" id="singleDb1" <?php echo $singleDbForm ? 'checked="checked" ' : ''; ?> onclick="javascript: show_hide_tracking_and_user_db(this.id);" /> <label for="singleDb1"><?php echo get_lang('One'); ?></label>
+		<input class="checkbox" type="radio" name="singleDbForm" value="0" id="singleDb0" <?php echo $singleDbForm ? '' : 'checked="checked" '; ?> onclick="javascript: show_hide_tracking_and_user_db(this.id);" /> <label for="singleDb0"><?php echo get_lang('Several'); ?></label>
 	  </td>
 	  <?php endif; ?>
 
@@ -916,8 +861,9 @@ function display_database_settings_form($installType, $dbHostForm, $dbUsernameFo
 	</div>
 	<tr>
 		<td><button type="submit" class="login" name="step3" value="<?php echo get_lang('CheckDatabaseConnection'); ?>" ><?php echo get_lang('CheckDatabaseConnection'); ?></button></td>
-		<?php $dbConnect = test_db_connect ($dbHostForm, $dbUsernameForm, $dbPassForm, $singleDbForm, $dbPrefixForm);
-		if($dbConnect==1): ?>
+		<?php
+		$dbConnect = test_db_connect($dbHostForm, $dbUsernameForm, $dbPassForm, $singleDbForm, $dbPrefixForm);
+		if ($dbConnect==1): ?>
 		<td colspan="2">
 			<div class="confirmation-message">
 				<!--<div  style="float:left; margin-right:10px;">
@@ -959,19 +905,13 @@ function display_database_settings_form($installType, $dbHostForm, $dbUsernameFo
 * Displays a parameter in a table row.
 * Used by the display_configuration_settings_form function.
 */
-function display_configuration_parameter($install_type, $parameter_name, $form_field_name, $parameter_value, $display_when_update = 'true')
-{
-	global $charset;
-
+function display_configuration_parameter($install_type, $parameter_name, $form_field_name, $parameter_value, $display_when_update = 'true') {
 	echo "<tr>\n";
 	echo "<td>$parameter_name&nbsp;&nbsp;</td>\n";
-	if ($install_type == INSTALL_TYPE_UPDATE && $display_when_update)
-	{
-		echo '<td><input type="hidden" name="'.$form_field_name.'" value="'.api_htmlentities($parameter_value, ENT_QUOTES, $charset).'" />'.$parameter_value."</td>\n";
-	}
-	else
-	{
-		echo '<td><input type="text" size="'.FORM_FIELD_DISPLAY_LENGTH.'" maxlength="'.MAX_FORM_FIELD_LENGTH.'" name="'.$form_field_name.'" value="'.api_htmlentities($parameter_value, ENT_QUOTES, $charset).'" />'."</td>\n";
+	if ($install_type == INSTALL_TYPE_UPDATE && $display_when_update) {
+		echo '<td><input type="hidden" name="'.$form_field_name.'" value="'.api_htmlentities($parameter_value, ENT_QUOTES).'" />'.$parameter_value."</td>\n";
+	} else {
+		echo '<td><input type="text" size="'.FORM_FIELD_DISPLAY_LENGTH.'" maxlength="'.MAX_FORM_FIELD_LENGTH.'" name="'.$form_field_name.'" value="'.api_htmlentities($parameter_value, ENT_QUOTES).'" />'."</td>\n";
 	}
 	echo "</tr>\n";
 }
@@ -979,17 +919,13 @@ function display_configuration_parameter($install_type, $parameter_name, $form_f
 /**
  * Displays step 4 of the installation - configuration settings about Chamilo itself.
  */
-function display_configuration_settings_form($installType, $urlForm, $languageForm, $emailForm, $adminFirstName, $adminLastName, $adminPhoneForm, $campusForm, $institutionForm, $institutionUrlForm, $encryptPassForm, $allowSelfReg, $allowSelfRegProf, $loginForm, $passForm)
-{
-	global $charset;
-
-	if($installType != 'update' && empty($languageForm))
-	{
+function display_configuration_settings_form($installType, $urlForm, $languageForm, $emailForm, $adminFirstName, $adminLastName, $adminPhoneForm, $campusForm, $institutionForm, $institutionUrlForm, $encryptPassForm, $allowSelfReg, $allowSelfRegProf, $loginForm, $passForm) {
+	if ($installType != 'update' && empty($languageForm)) {
 		$languageForm = $_SESSION['install_language'];
 	}
 
 	echo "<h2>" . display_step_sequence() . get_lang("CfgSetting") . "</h2>";
-	echo '<p>'.get_lang('ConfigSettingsInfo').' <b>main/inc/conf/configuration.php</b></p>';
+	echo '<p>'.get_lang('ConfigSettingsInfo').' <strong>main/inc/conf/configuration.php</strong></p>';
 
 	echo "</td></tr>\n<tr><td>";
 	echo "<table width=\"100%\">";
@@ -997,51 +933,50 @@ function display_configuration_settings_form($installType, $urlForm, $languageFo
 	//First parameter: language
 	echo "<tr>\n";
 	echo '<td>'.get_lang('MainLang')."&nbsp;&nbsp;</td>\n";
-	if($installType == 'update')
-	{
-		echo '<td><input type="hidden" name="languageForm" value="'.api_htmlentities($languageForm, ENT_QUOTES, $charset).'" />'.$languageForm."</td>\n";
-	}
-	else // new installation
-	{
+	if ($installType == 'update') {
+		echo '<td><input type="hidden" name="languageForm" value="'.api_htmlentities($languageForm, ENT_QUOTES).'" />'.$languageForm."</td>\n";
 
-	echo '<td>';
+	} else { // new installation
 
-	$array_lang = array('asturian','bulgarian','english','italian','french','slovenian','spanish');
+		echo '<td>';
 
-	////Only display Language have 90% +
-	echo "\t\t<select name=\"languageForm\">\n";
+		$array_lang = array('asturian','english','italian','french','slovenian','spanish');
 
-	foreach ($array_lang as $key => $value)	{
-		echo '<option value="'.$value.'"';
-		if($value == $languageForm) echo ' selected="selected"';
-		echo ">$value</option>\n";
-	}
+		////Only display Language have 90% + // TODO: Ivan: Is this policy actual? I am going to change it.
+		echo "\t\t<select name=\"languageForm\">\n";
 
-	echo "\t\t</select>\n";
+		foreach ($array_lang as $key => $value)	{
+			echo '<option value="'.$value.'"';
+			if ($value == $languageForm) {
+				echo ' selected="selected"';
+			}
+			echo ">$value</option>\n";
+		}
 
-	//Display all language
-	/*echo "<select name=\"languageForm\">\n";
-		$dirname='../lang/';
+		echo "\t\t</select>\n";
 
-		if ($dir=@opendir($dirname)) {
+		//Display all language
+		/*echo "<select name=\"languageForm\">\n";
+		$dirname = '../lang/';
+
+		if ($dir = @opendir($dirname)) {
 			$lang_files = array();
-				while (($file = readdir($dir)) !== false) {
-					if($file != '.' && $file != '..' && $file != 'CVS' && $file != '.svn' && is_dir($dirname.$file)){
-						array_push($lang_files, $file);
-					}
+			while (($file = readdir($dir)) !== false) {
+				if($file != '.' && $file != '..' && $file != 'CVS' && $file != '.svn' && is_dir($dirname.$file)){
+					array_push($lang_files, $file);
 				}
+			}
 			closedir($dir);
 		}
 		sort($lang_files);
 
-
 		foreach ($lang_files as $file) {
 			echo '<option value="'.$file.'"';
-				if($file == $languageForm) echo ' selected="selected"';
-				echo ">$file</option>\n";
+			if ($file == $languageForm) {
+				echo ' selected="selected"';
+			}
+			echo ">$file</option>\n";
 		}
-
-
 		echo '</select>';*/
 		echo "</td>\n";
 	}
@@ -1051,53 +986,57 @@ function display_configuration_settings_form($installType, $urlForm, $languageFo
 	echo "<tr>\n";
 	echo '<td>'.get_lang('ChamiloURL').' (<font color="red">'.get_lang('ThisFieldIsRequired')."</font>)&nbsp;&nbsp;</td>\n";
 
-	if($installType == 'update') echo '<td>'.api_htmlentities($urlForm, ENT_QUOTES, $charset)."</td>\n";
-	else echo '<td><input type="text" size="40" maxlength="100" name="urlForm" value="'.api_htmlentities($urlForm, ENT_QUOTES, $charset).'" />'."</td>\n";
+	if ($installType == 'update') {
+		echo '<td>'.api_htmlentities($urlForm, ENT_QUOTES)."</td>\n";
+	} else {
+		echo '<td><input type="text" size="40" maxlength="100" name="urlForm" value="'.api_htmlentities($urlForm, ENT_QUOTES).'" />'."</td>\n";
+	}
 
 	echo "</tr>\n";
 
 	//Parameter 3: administrator's email
-	display_configuration_parameter($installType, get_lang("AdminEmail"), "emailForm", $emailForm);
+	display_configuration_parameter($installType, get_lang('AdminEmail'), 'emailForm', $emailForm);
 
 	//Parameters 4 and 5: administrator's names
 	if (api_is_western_name_order()) {
-    display_configuration_parameter($installType, get_lang("AdminFirstName"), "adminFirstName", $adminFirstName);
-	display_configuration_parameter($installType, get_lang("AdminLastName"), "adminLastName", $adminLastName);
+		display_configuration_parameter($installType, get_lang('AdminFirstName'), 'adminFirstName', $adminFirstName);
+		display_configuration_parameter($installType, get_lang('AdminLastName'), 'adminLastName', $adminLastName);
 	} else {
-		display_configuration_parameter($installType, get_lang("AdminLastName"), "adminLastName", $adminLastName);
-		display_configuration_parameter($installType, get_lang("AdminFirstName"), "adminFirstName", $adminFirstName);
+		display_configuration_parameter($installType, get_lang('AdminLastName'), 'adminLastName', $adminLastName);
+		display_configuration_parameter($installType, get_lang('AdminFirstName'), 'adminFirstName', $adminFirstName);
 	}
 
 	//Parameter 6: administrator's telephone
-	display_configuration_parameter($installType, get_lang("AdminPhone"), "adminPhoneForm", $adminPhoneForm);
+	display_configuration_parameter($installType, get_lang('AdminPhone'), 'adminPhoneForm', $adminPhoneForm);
 
 	//Parameter 7: administrator's login
-	display_configuration_parameter($installType, get_lang("AdminLogin"), "loginForm", $loginForm, ($installType == 'update' ? true : false));
+	display_configuration_parameter($installType, get_lang('AdminLogin'), 'loginForm', $loginForm, $installType == 'update');
 
 	//Parameter 8: administrator's password
-	if($installType != 'update')
-		display_configuration_parameter($installType, get_lang("AdminPass"), "passForm", $passForm, false);
+	if ($installType != 'update') {
+		display_configuration_parameter($installType, get_lang('AdminPass'), 'passForm', $passForm, false);
+	}
 
 	//Parameter 9: campus name
-	display_configuration_parameter($installType, get_lang("CampusName"), "campusForm", $campusForm);
+	display_configuration_parameter($installType, get_lang('CampusName'), 'campusForm', $campusForm);
 
 	//Parameter 10: institute (short) name
-	display_configuration_parameter($installType, get_lang("InstituteShortName"), "institutionForm", $institutionForm);
+	display_configuration_parameter($installType, get_lang('InstituteShortName'), 'institutionForm', $institutionForm);
 
 	//Parameter 11: institute (short) name
-	display_configuration_parameter($installType, get_lang("InstituteURL"), "institutionUrlForm", $institutionUrlForm);
+	display_configuration_parameter($installType, get_lang('InstituteURL'), 'institutionUrlForm', $institutionUrlForm);
 
 	/*
 	 //old method
 	  	<tr>
-	  <td><?php echo get_lang("EncryptUserPass"); ?> :</td>
+	  <td><?php echo get_lang('EncryptUserPass'); ?> :</td>
 
 	  <?php if($installType == 'update'): ?>
-	  <td><input type="hidden" name="encryptPassForm" value="<?php echo $encryptPassForm; ?>" /><?php echo $encryptPassForm? get_lang("Yes") : get_lang("No"); ?></td>
+	  <td><input type="hidden" name="encryptPassForm" value="<?php echo $encryptPassForm; ?>" /><?php echo $encryptPassForm? get_lang('Yes') : get_lang('No'); ?></td>
 	  <?php else: ?>
 	  <td>
-		<input class="checkbox" type="radio" name="encryptPassForm" value="1" id="encryptPass1" <?php echo $encryptPassForm?'checked="checked" ':''; ?>/> <label for="encryptPass1"><?php echo get_lang("Yes"); ?></label>
-		<input class="checkbox" type="radio" name="encryptPassForm" value="0" id="encryptPass0" <?php echo $encryptPassForm?'':'checked="checked" '; ?>/> <label for="encryptPass0"><?php echo get_lang("No"); ?></label>
+		<input class="checkbox" type="radio" name="encryptPassForm" value="1" id="encryptPass1" <?php echo $encryptPassForm?'checked="checked" ':''; ?>/> <label for="encryptPass1"><?php echo get_lang('Yes'); ?></label>
+		<input class="checkbox" type="radio" name="encryptPassForm" value="0" id="encryptPass0" <?php echo $encryptPassForm?'':'checked="checked" '; ?>/> <label for="encryptPass0"><?php echo get_lang('No'); ?></label>
 	  </td>
 	  <?php endif; ?>
 	</tr>
@@ -1108,43 +1047,39 @@ function display_configuration_settings_form($installType, $urlForm, $languageFo
 	<tr>
 	  <td><?php echo get_lang("EncryptMethodUserPass"); ?> :</td>
 
-	  <?php if($installType == 'update'): ?>
-	  <td><input type="hidden" name="encryptPassForm" value="<?php echo $encryptPassForm; ?>" /><?php  echo $encryptPassForm; ?></td>
+	  <?php if ($installType == 'update'): ?>
+	  <td><input type="hidden" name="encryptPassForm" value="<?php echo $encryptPassForm; ?>" /><?php echo $encryptPassForm; ?></td>
 	  <?php else: ?>
 	  <td>
-		<input class="checkbox" type="radio" name="encryptPassForm" value="md5" id="encryptPass0" <?php echo $encryptPassForm?'checked="checked" ':''; ?>/> <label for="encryptPass0"><?php echo "md5"; ?></label>
-		<input class="checkbox" type="radio" name="encryptPassForm" value="sha1" id="encryptPass1" <?php echo $encryptPassForm?'':'checked="checked" '; ?>/> <label for="encryptPass1"><?php echo "sha1"; ?></label>
-		<input class="checkbox" type="radio" name="encryptPassForm" value="none" id="encryptPass2" <?php echo $encryptPassForm?'':'checked="checked" '; ?>/> <label for="encryptPass2"><?php echo get_lang("None"); ?></label>
+		<input class="checkbox" type="radio" name="encryptPassForm" value="md5" id="encryptPass0" <?php echo $encryptPassForm ? 'checked="checked" ' : ''; ?>/> <label for="encryptPass0"><?php echo 'md5'; ?></label>
+		<input class="checkbox" type="radio" name="encryptPassForm" value="sha1" id="encryptPass1" <?php echo $encryptPassForm ? '' : 'checked="checked" '; ?>/> <label for="encryptPass1"><?php echo 'sha1'; ?></label>
+		<input class="checkbox" type="radio" name="encryptPassForm" value="none" id="encryptPass2" <?php echo $encryptPassForm ? '' : 'checked="checked" '; ?>/> <label for="encryptPass2"><?php echo get_lang('None'); ?></label>
 	  </td>
 	  <?php endif; ?>
 	</tr>
 
-
-
-
-
 	<tr>
-	  <td><?php echo get_lang("AllowSelfReg"); ?> :</td>
+	  <td><?php echo get_lang('AllowSelfReg'); ?> :</td>
 
-	  <?php if($installType == 'update'): ?>
-	  <td><input type="hidden" name="allowSelfReg" value="<?php echo $allowSelfReg; ?>" /><?php echo $allowSelfReg? get_lang("Yes") : get_lang("No"); ?></td>
+	  <?php if ($installType == 'update'): ?>
+	  <td><input type="hidden" name="allowSelfReg" value="<?php echo $allowSelfReg; ?>" /><?php echo $allowSelfReg? get_lang('Yes') : get_lang('No'); ?></td>
 	  <?php else: ?>
 	  <td>
-		<input class="checkbox" type="radio" name="allowSelfReg" value="1" id="allowSelfReg1" <?php echo $allowSelfReg?'checked="checked" ':''; ?>/> <label for="allowSelfReg1"><?php echo get_lang("Yes").' '.get_lang("Recommended"); ?></label>
-		<input class="checkbox" type="radio" name="allowSelfReg" value="0" id="allowSelfReg0" <?php echo $allowSelfReg?'':'checked="checked" '; ?>/> <label for="allowSelfReg0"><?php echo get_lang("No"); ?></label>
+		<input class="checkbox" type="radio" name="allowSelfReg" value="1" id="allowSelfReg1" <?php echo $allowSelfReg ? 'checked="checked" ' : ''; ?>/> <label for="allowSelfReg1"><?php echo get_lang('Yes').' '.get_lang('Recommended'); ?></label>
+		<input class="checkbox" type="radio" name="allowSelfReg" value="0" id="allowSelfReg0" <?php echo $allowSelfReg ? '' : 'checked="checked" '; ?>/> <label for="allowSelfReg0"><?php echo get_lang('No'); ?></label>
 	  </td>
 	  <?php endif; ?>
 
 	</tr>
 	<tr>
-	  <td><?php echo get_lang("AllowSelfRegProf"); ?> :</td>
+	  <td><?php echo get_lang('AllowSelfRegProf'); ?> :</td>
 
-	  <?php if($installType == 'update'): ?>
-	  <td><input type="hidden" name="allowSelfRegProf" value="<?php echo $allowSelfRegProf; ?>" /><?php echo $allowSelfRegProf? get_lang("Yes") : get_lang("No"); ?></td>
+	  <?php if ($installType == 'update'): ?>
+	  <td><input type="hidden" name="allowSelfRegProf" value="<?php echo $allowSelfRegProf; ?>" /><?php echo $allowSelfRegProf? get_lang('Yes') : get_lang('No'); ?></td>
 	  <?php else: ?>
 	  <td>
-		<input class="checkbox" type="radio" name="allowSelfRegProf" value="1" id="allowSelfRegProf1" <?php echo $allowSelfRegProf?'checked="checked" ':''; ?>/> <label for="allowSelfRegProf1"><?php echo get_lang("Yes"); ?></label>
-		<input class="checkbox" type="radio" name="allowSelfRegProf" value="0" id="allowSelfRegProf0" <?php echo $allowSelfRegProf?'':'checked="checked" '; ?>/> <label for="allowSelfRegProf0"><?php echo get_lang("No"); ?></label>
+		<input class="checkbox" type="radio" name="allowSelfRegProf" value="1" id="allowSelfRegProf1" <?php echo $allowSelfRegProf ? 'checked="checked" ' : ''; ?>/> <label for="allowSelfRegProf1"><?php echo get_lang('Yes'); ?></label>
+		<input class="checkbox" type="radio" name="allowSelfRegProf" value="0" id="allowSelfRegProf0" <?php echo $allowSelfRegProf ? '' : 'checked="checked" '; ?>/> <label for="allowSelfRegProf0"><?php echo get_lang('No'); ?></label>
 	  </td>
 	  <?php endif; ?>
 
@@ -1160,25 +1095,24 @@ function display_configuration_settings_form($installType, $urlForm, $languageFo
 /**
 * After installation is completed (step 6), this message is displayed.
 */
-function display_after_install_message($installType, $nbr_courses)
-{
+function display_after_install_message($installType, $nbr_courses) {
 	?>
 	<h2><?php echo display_step_sequence() . get_lang("CfgSetting"); ?></h2>
 
 	<?php echo get_lang('FirstUseTip'); ?>
 
-	<?php if($installType == 'update' && $nbr_courses > MAX_COURSE_TRANSFER): ?>
+	<?php if ($installType == 'update' && $nbr_courses > MAX_COURSE_TRANSFER): ?>
 	<br /><br />
-	<font color="red"><b><?php echo get_lang('Warning');?> :</b> <?php printf(get_lang('YouHaveMoreThanXCourses'),MAX_COURSE_TRANSFER,MAX_COURSE_TRANSFER,'<a href="update_courses.php"><font color="red">','</font></a>');?></font>
+	<font color="red"><strong><?php echo get_lang('Warning'); ?> :</strong> <?php printf(get_lang('YouHaveMoreThanXCourses'), MAX_COURSE_TRANSFER, MAX_COURSE_TRANSFER,'<a href="update_courses.php"><font color="red">', '</font></a>'); ?></font>
 	<?php endif; ?>
 
 	<br /><br />
 	<?php
 	echo '<div class="warning-message">';
 	//echo '<img src="../img/message_warning.png" style="float:left; margin-right:10px;" alt="'.get_lang('Warning').'"/>';
-	echo '<b>'.get_lang('SecurityAdvice').'</b>';
+	echo '<strong>'.get_lang('SecurityAdvice').'</strong>';
 	echo ': ';
-	printf(get_lang('ToProtectYourSiteMakeXAndYReadOnly'),'main/inc/conf/configuration.php','main/install/index.php');
+	printf(get_lang('ToProtectYourSiteMakeXAndYReadOnly'), 'main/inc/conf/configuration.php', 'main/install/index.php');
 	echo '</div>';
 	?>
 
@@ -1192,7 +1126,7 @@ function display_after_install_message($installType, $nbr_courses)
 * In step 3. Test the connection to the DB in case of single or multy DB.
 * Return "1"if no problems, "0" if, in case of multiDB we can't create a new DB and "-1" if there is no connection.
 */
-function test_db_connect ($dbHostForm, $dbUsernameForm, $dbPassForm, $singleDbForm, $dbPrefixForm) {
+function test_db_connect($dbHostForm, $dbUsernameForm, $dbPassForm, $singleDbForm, $dbPrefixForm) {
 	$dbConnect = -1;
 	if ($singleDbForm == 1) {
 		if(@mysql_connect($dbHostForm, $dbUsernameForm, $dbPassForm) !== false) {
@@ -1201,8 +1135,8 @@ function test_db_connect ($dbHostForm, $dbUsernameForm, $dbPassForm, $singleDbFo
 			$dbConnect = -1;
 		}
 	} elseif ($singleDbForm == 0) {
-		$res=@mysql_connect($dbHostForm, $dbUsernameForm, $dbPassForm);
-		if ($res===false) {
+		$res = @mysql_connect($dbHostForm, $dbUsernameForm, $dbPassForm);
+		if ($res === false) {
 			return $res;
 		}
 		if ($res !== false) {
@@ -1224,6 +1158,5 @@ function test_db_connect ($dbHostForm, $dbUsernameForm, $dbPassForm, $singleDbFo
 			$dbConnect = -1;
 		}
 	}
-	return($dbConnect); //return "1"if no problems, "0" if, in case of multiDB we can't create a new DB and "-1" if there is no connection.
+	return $dbConnect; //return "1"if no problems, "0" if, in case of multiDB we can't create a new DB and "-1" if there is no connection.
 }
-?>

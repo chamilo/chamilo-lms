@@ -3780,6 +3780,7 @@ function replace_dangerous_char($filename, $strict = 'loose') {
 	static $search_strict  = array('-');
 	static $replace_strict = array('_');
 
+	/* // This is the old encoding-guessing algorithm.
 	$system_encoding = api_get_file_system_encoding();
 
 	// Transliteration to ASCII filename string.
@@ -3796,6 +3797,12 @@ function replace_dangerous_char($filename, $strict = 'loose') {
 	}
 	// Transliteration.
 	$filename = api_transliterate($filename, 'x', 'UTF-8');
+	*/
+
+	// Transliteration.
+	// Note: The input encoding is guessed in a new way by using the function api_detect_encoding() from the internationalization library.
+	$filename = api_transliterate($filename, 'x', api_detect_encoding($filename));
+
 	$filename = trim($filename);
 	// Trimming any leading/trailing dots.
 	$filename = trim($filename, '.');

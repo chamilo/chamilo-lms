@@ -55,7 +55,7 @@
 */
 $language_file[] = 'document';
 require_once '../inc/global.inc.php';
-require_once '../glossary/glossary.class.php';
+require_once(api_get_path(LIBRARY_PATH).'glossary.lib.php');
 
 $language_file = 'document';
 require_once '../inc/global.inc.php';

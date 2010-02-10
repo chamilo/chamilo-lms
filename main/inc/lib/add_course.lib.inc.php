@@ -1623,7 +1623,7 @@ function update_Db_course($courseDbName, $language = null)
 			  PRIMARY KEY  (survey_id)
 			)" . $charset_clause;
 
-	$result = Database::query($sql,__FILE__,__LINE__) or die(mysql_error($sql));
+	$result = Database::query($sql,__FILE__,__LINE__) or die();
 	$sql = "ALTER TABLE `".$TABLESURVEY."` ADD INDEX ( session_id )";
 	Database::query($sql,__FILE__,__LINE__);
 
@@ -1638,7 +1638,7 @@ function update_Db_course($courseDbName, $language = null)
 			  session_id SMALLINT(5) UNSIGNED NOT NULL default 0,
 			  PRIMARY KEY  (survey_invitation_id)
 			)" . $charset_clause;
-	$result = Database::query($sql, __FILE__, __LINE__) or die(mysql_error($sql));
+	$result = Database::query($sql, __FILE__, __LINE__) or die();
 
 	$sql = "CREATE TABLE `".$TABLESURVEYQUESTION."` (
 			  question_id int unsigned NOT NULL auto_increment,
@@ -1655,7 +1655,7 @@ function update_Db_course($courseDbName, $language = null)
 			  survey_group_sec2 int unsigned NOT NULL default '0',
 			  PRIMARY KEY  (question_id)
 			)" . $charset_clause;
-	$result = Database::query($sql, __FILE__, __LINE__) or die(mysql_error($sql));
+	$result = Database::query($sql, __FILE__, __LINE__) or die();
 
 	$sql ="CREATE TABLE `".$TABLESURVEYQUESTIONOPTION."` (
 	  question_option_id int unsigned NOT NULL auto_increment,
@@ -1666,7 +1666,7 @@ function update_Db_course($courseDbName, $language = null)
 	  value int NOT NULL default '0',
 	  PRIMARY KEY  (question_option_id)
 	)" . $charset_clause;
-	$result = Database::query($sql, __FILE__, __LINE__) or die(mysql_error($sql));
+	$result = Database::query($sql, __FILE__, __LINE__) or die();
 
 	$sql = "CREATE TABLE `".$TABLESURVEYANSWER."` (
 			  answer_id int unsigned NOT NULL auto_increment,
@@ -1677,7 +1677,7 @@ function update_Db_course($courseDbName, $language = null)
 			  user varchar(250) NOT NULL,
 			  PRIMARY KEY  (answer_id)
 			)" . $charset_clause;
-	$result = Database::query($sql, __FILE__, __LINE__) or die(mysql_error($sql));
+	$result = Database::query($sql, __FILE__, __LINE__) or die();
 
 	$sql = "CREATE TABLE `".$TABLESURVEYGROUP."` (
 			  id int unsigned NOT NULL auto_increment,
@@ -1687,7 +1687,7 @@ function update_Db_course($courseDbName, $language = null)
 			  PRIMARY KEY  (id)
 			)" . $charset_clause;
 
-	$result = Database::query($sql, __FILE__, __LINE__) or die(mysql_error($sql));
+	$result = Database::query($sql, __FILE__, __LINE__) or die();
 
 	// table glosary
 	$sql = "CREATE TABLE `".$TBL_GLOSSARY."` (
@@ -1698,7 +1698,7 @@ function update_Db_course($courseDbName, $language = null)
 			  session_id smallint default 0,
 			  PRIMARY KEY  (glossary_id)
 			)" . $charset_clause;
-	$result = Database::query($sql, __FILE__, __LINE__) or die(mysql_error($sql));
+	$result = Database::query($sql, __FILE__, __LINE__) or die();
 	$sql = "ALTER TABLE `".$TBL_GLOSSARY . "` ADD INDEX ( session_id ) ";
 	Database::query($sql, __FILE__, __LINE__);
 
@@ -1715,7 +1715,7 @@ function update_Db_course($courseDbName, $language = null)
 			  status int,
 			  PRIMARY KEY  (notebook_id)
 			)" . $charset_clause;
-	$result = Database::query($sql, __FILE__, __LINE__) or die(mysql_error($sql));
+	$result = Database::query($sql, __FILE__, __LINE__) or die();
 
 	/* Attendance tool */
 
@@ -1731,7 +1731,7 @@ function update_Db_course($courseDbName, $language = null)
 			attendance_weight float(6,2) NOT NULL default '0.0',
 			session_id int NOT NULL default 0
 		)" . $charset_clause;
-	$result = Database::query($sql, __FILE__, __LINE__) or die(mysql_error($sql));
+	$result = Database::query($sql, __FILE__, __LINE__) or die();
 	$sql  = "ALTER TABLE `".$TBL_ATTENDANCE . "` ADD INDEX (session_id)";
 	Database::query($sql, __FILE__, __LINE__);
 	$sql  = "ALTER TABLE `".$TBL_ATTENDANCE . "` ADD INDEX (active)";
@@ -1745,7 +1745,7 @@ function update_Db_course($courseDbName, $language = null)
 			presence tinyint(3) NOT NULL DEFAULT 0,
 			PRIMARY KEY(user_id, attendance_calendar_id)
 		)" . $charset_clause;
-	$result = Database::query($sql, __FILE__, __LINE__) or die(mysql_error($sql));
+	$result = Database::query($sql, __FILE__, __LINE__) or die();
 	$sql  = "ALTER TABLE `".$TBL_ATTENDANCE_SHEET . "` ADD INDEX (presence) ";
 	Database::query($sql, __FILE__, __LINE__);
 
@@ -1758,7 +1758,7 @@ function update_Db_course($courseDbName, $language = null)
 			done_attendance tinyint(3) NOT NULL default 0,
 			PRIMARY KEY(id)
 		)" . $charset_clause;
-	$result = Database::query($sql, __FILE__, __LINE__) or die(mysql_error($sql));
+	$result = Database::query($sql, __FILE__, __LINE__) or die();
 	$sql  = "ALTER TABLE `".$TBL_ATTENDANCE_CALENDAR."` ADD INDEX (attendance_id)";
 	Database::query($sql, __FILE__, __LINE__);
 	$sql  = "ALTER TABLE `".$TBL_ATTENDANCE_CALENDAR."` ADD INDEX (done_attendance)";
@@ -1772,7 +1772,7 @@ function update_Db_course($courseDbName, $language = null)
 			attendance_id int NOT NULL,
 			score int NOT NULL DEFAULT 0
 		)" . $charset_clause;
-	$result = Database::query($sql, __FILE__, __LINE__) or die(mysql_error($sql));
+	$result = Database::query($sql, __FILE__, __LINE__) or die();
 	$sql    = "ALTER TABLE `".$TBL_ATTENDANCE_RESULT."` ADD INDEX (attendance_id)";
 	Database::query($sql, __FILE__, __LINE__);
 	$sql    = "ALTER TABLE `".$TBL_ATTENDANCE_RESULT."` ADD INDEX (user_id)";
@@ -2069,10 +2069,10 @@ function fill_Db_course($courseDbName, $courseRepository, $language,$default_doc
 
 	include (api_get_path(SYS_CODE_PATH) . "lang/english/create_course.inc.php");
 	$file_to_include = "lang/".$language . "/create_course.inc.php";
-	if (file_exists($file_to_include))
+	if (file_exists($file_to_include)) {
 		include (api_get_path(SYS_CODE_PATH) . $file_to_include);
+	}
 
-	//mysql_select_db("$courseDbName");
 	Database::select_db("$courseDbName");
 
 	/*

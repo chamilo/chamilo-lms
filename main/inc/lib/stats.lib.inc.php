@@ -85,7 +85,6 @@ $TABLESTATS_REFERERS    = $_configuration['statistics_database']."`.`track_c_ref
 
 
 /**
-
  * @author Sebastien Piraux <piraux_seb@hotmail.com>
  * @desc uses `$TABLETRACK_OPEN` to split recorded
      information, to count occurences (for os, provider,...)
@@ -101,18 +100,15 @@ function decodeOpenInfos() {
     ignore_user_abort(1) ;
     // we take the last event id to prevent miss of some recorded event
     // only processed record have to be cleaned
-    
+
     $sql = "SELECT open_id
                 FROM `$TABLETRACK_OPEN`
                 WHERE open_date <= NOW()
                 ORDER BY open_id DESC
                 LIMIT 1";
     //$processBegin = getOneResult($sql);
-    $query = @mysql_query($sql);
-    if (mysql_errno()) {
-        echo "\n<!-- **** ".mysql_errno().": ".mysql_error()." In : $sql **** -->\n";
-    }
-    $res = @mysql_fetch_array($query);
+    $query = Database::query($sql, __FILE__, __LINE__);
+    $res = @Database::fetch_array($query);
     $processBegin = $res[0];
     // process
 
@@ -122,8 +118,8 @@ function decodeOpenInfos() {
                 FROM `$TABLETRACK_OPEN`
                 WHERE   open_remote_host != ''
                 AND     open_id <= '".$processBegin."' ";
-    $query = Database::query($sql,__FILE__, __LINE__);
-    
+    $query = Database::query($sql, __FILE__, __LINE__);
+
     if(Database::num_rows($query) != 0) {
     	// load list of countries
     	$list_countries = loadCountries();
@@ -197,6 +193,7 @@ function decodeOpenInfos() {
     // reset to the initial value
     ignore_user_abort($ignore);
 }
+
 /***************************************************************************
  *
  *		Utils
@@ -204,14 +201,13 @@ function decodeOpenInfos() {
  ***************************************************************************/
 
 /**
-
  * @author Sebastien Piraux <piraux_seb@hotmail.com>
  * @param limit : all records BEFORE $limit will be affected
  * @desc this function will delete the remote_host, user_agent
  	and referer rows from the track_open table recorded before
  	the date $limit.  OPTIMIZE is called to get back the memory
  	espaces deleted
-*/
+ */
 function cleanProcessedRecords( $limit ) {
     global $TABLETRACK_OPEN;
     $sql = "UPDATE `".$TABLETRACK_OPEN."`
@@ -222,6 +218,7 @@ function cleanProcessedRecords( $limit ) {
     $query = Database::query( $sql );
     Database::query("OPTIMIZE TABLE $TABLETRACK_OPEN");
 }
+
 /***************************************************************************
  *
  *		Provider
@@ -229,13 +226,12 @@ function cleanProcessedRecords( $limit ) {
  ***************************************************************************/
 
 /**
-
  * @author Sebastien Piraux <piraux_seb@hotmail.com>
  * @param remhost : must be @getHostByAddr($_SERVER['REMOTE_ADDR']
  * @desc this function will extract the provider name from a given
  	remote host and record this occurence in the corresponding
  	table
-*/
+ */
 function extractProvider($remhost) {
     if($remhost == "Unknown")
     return $remhost;
@@ -251,7 +247,6 @@ function extractProvider($remhost) {
 
 
 /**
-
  * @author Sebastien Piraux <piraux_seb@hotmail.com>
  * @param provider : name of the provider
  * @param providers_array : list of providers  and their counter
@@ -259,7 +254,7 @@ function extractProvider($remhost) {
  	- if the provider is already in the array it will increment
  		the corresponding value
  	- if the provider doesn't exist it will be added and set to 1
-*/
+ */
 function addProvider($provider,$providers_array) {
     if(isset($providers_array[$provider])) {
             // add one unity to this provider occurrences
@@ -272,11 +267,10 @@ function addProvider($provider,$providers_array) {
 }
 
 /**
-
  * @author Sebastien Piraux <piraux_seb@hotmail.com>
  * @param providers_array : list of providers  and their counter
  * @desc update the providers'table with new values
-*/
+ */
 function fillProvidersTable($providers_array) {
     global $TABLESTATS_PROVIDERS;
 
@@ -311,12 +305,11 @@ function fillProvidersTable($providers_array) {
  ***************************************************************************/
 
 /**
-
  * @author Sebastien Piraux <piraux_seb@hotmail.com>
  * @return a 2D array filled with code and name of countries
  * @desc This function is used to build an array containing
  	countries informations
-*/
+ */
 function loadCountries() {
     global $TABLESTATS_COUNTRIES;
     $sql = "SELECT code, country
@@ -330,18 +323,18 @@ function loadCountries() {
 	            $i++;
 	    }
     }
-    mysql_free_result($res);
-    return $list_countries;    
+    Database::free_result($res);
+    return $list_countries;
 }
-/**
 
+/**
  * @author Sebastien Piraux <piraux_seb@hotmail.com>
  * @param remhost : must be @getHostByAddr($_SERVER['REMOTE_ADDR']
  * @param list_countries : list of countries -__-
  * @return Name of the country or "Unknown" if not found
  * @desc this function will extract the country from a given remote
  	host and increment the good value in the corresponding table
-*/
+ */
 function extractCountry($remhost,$list_countries) {
     if($remhost == "Unknown")
         return $remhost;
@@ -353,15 +346,15 @@ function extractCountry($remhost,$list_countries) {
                     return $list_countries[$i][1];
     }
 }
-/**
 
+/**
  * @author Sebastien Piraux <piraux_seb@hotmail.com>
  * @param country : name of the country or 'Unknown'
  * @param countries_array : list of countries and their
  	number of occurence
  * @desc this function will increment number of occurrence
  	for $country in the countries' tables
-*/
+ */
 function addCountry($country,$countries_array) {
     if(isset($countries_array[$country])) {
             // add one unity to this provider occurrences
@@ -372,12 +365,12 @@ function addCountry($country,$countries_array) {
     }
     return $countries_array;
 }
-/**
 
+/**
  * @author Sebastien Piraux <piraux_seb@hotmail.com>
  * @param countries_array : list of countries and their counter
  * @desc update the countries'table with new values
-*/
+ */
 function fillCountriesTable($countries_array) {
     global $TABLESTATS_COUNTRIES;
     if(is_array($countries_array)) {
@@ -390,18 +383,19 @@ function fillCountriesTable($countries_array) {
 		}
     }
 }
+
 /***************************************************************************
  *
  *		Agent : Browser and OS
  *
  ***************************************************************************/
- /**
 
+/**
  * @author Sebastien Piraux <piraux_seb@hotmail.com>
  * @return a 2D array filled with code and name of browsers
  * @desc This function is used to build an array containing
  	browser informations
-*/
+ */
 function loadBrowsers() {
 
     $buffer = split ("#","Gecko|Gecko#Mozilla/3|Mozilla 3.x#Mozilla/4.0|Mozilla 4.0x#Mozilla/4.5|Mozilla 4.5x#Mozilla/4.6|Mozilla 4.6x#Mozilla/4.7|Mozilla 4.7x#Mozilla/5.0|Mozilla 5.0x#MSIE 1.2|MSIE 1.2#MSIE 3.01|MSIE 3.x#MSIE 3.02|MSIE 3.x#MSIE 4.0|MSIE 4.x#MSIE 4.01|MSIE 4.x#MSIE 4.5|MSIE 4.5#MSIE 5.0b1|MSIE 5.0x#MSIE 5.0b2|MSIE 5.0x#MSIE 5.0|MSIE 5.0x#MSIE 5.01|MSIE 5.0x#MSIE 5.1|MSIE 5.1#MSIE 5.1b1|MSIE 5.1#MSIE 5.5|MSIE 5.5#MSIE 5.5b1|MSIE 5.5#MSIE 5.5b2|MSIE 5.5#MSIE 6.0|MSIE 6#MSIE 6.0b|MSIE 6#MSIE 6.5a|MSIE 6.5#Lynx/2.8.0|Lynx 2#Lynx/2.8.1|Lynx 2#Lynx/2.8.2|Lynx 2#Lynx/2.8.3|Lynx 2#Lynx/2.8.4|Lynx 2#Lynx/2.8.5|Lynx 2#HTTrack 3.0x|HTTrack#OmniWeb/4.0.1|OmniWeb#Opera 3.60|Opera 3.60#Opera 4.0|Opera 4#Opera 4.01|Opera 4#Opera 4.02|Opera 4#Opera 5|Opera 5#Opera/3.60|Opera 3.60#Opera/4|Opera 4#Opera/5|Opera 5#Opera/6|Opera 6#Opera 6|Opera 6#Netscape6|NS 6#Netscape/6|NS 6#Netscape7|NS 7#Netscape/7|NS 7#Konqueror/2.0|Konqueror 2#Konqueror/2.0.1|Konqueror 2#Konqueror/2.1|Konqueror 2#Konqueror/2.1.1|Konqueror 2#Konqueror/2.1.2|Konqueror 2#Konqueror/2.2|Konqueror 2#Teleport Pro|Teleport Pro#WebStripper|WebStripper#WebZIP|WebZIP#Netcraft Web|NetCraft#Googlebot|Googlebot#WebCrawler|WebCrawler#InternetSeer|InternetSeer#ia_archiver|ia archiver");
@@ -417,12 +411,11 @@ function loadBrowsers() {
 }
 
 /**
-
  * @author Sebastien Piraux <piraux_seb@hotmail.com>
  * @return a 2D array filled with code and name of OS
  * @desc This function is used to build an array containing
  	OS informations
-*/
+ */
 function loadOs() {
     $buffer = split ("#","Windows 95|Win 95#Windows_95|Win 95#Windows 98|Win 98#Windows NT|Win NT#Windows NT 5.0|Win 2000#Windows NT 5.1|Win XP#Windows 2000|Win 2000#Windows XP|Win XP#Windows ME|Win Me#Win95|Win 95#Win98|Win 98#WinNT|Win NT#linux-2.2|Linux 2#Linux|Linux#Linux 2|Linux 2#Macintosh|Mac#Mac_PPC|Mac#Mac_PowerPC|Mac#SunOS 5|SunOS 5#SunOS 6|SunOS 6#FreeBSD|FreeBSD#beOS|beOS#InternetSeer|InternetSeer#Googlebot|Googlebot#Teleport Pro|Teleport Pro");
     $i=0;
@@ -432,6 +425,7 @@ function loadOs() {
     }
     return $list_os;
 }
+
 /**
  * @author Sebastien Piraux <piraux_seb@hotmail.com>
  * @param remhost : must be $_SERVER['HTTP_USER_AGENT']
@@ -441,7 +435,7 @@ function loadOs() {
  	browser and OS are the 'viewable' names
  * @desc this function will extract browser and OS from
  	$_SERVER['HTTP_USER_AGENT']
-*/
+ */
 function extractAgent( $user_agent, $list_browsers, $list_os ) {
 	// default values, if nothing corresponding found
 	$viewable_browser = "Unknown";
@@ -468,7 +462,6 @@ function extractAgent( $user_agent, $list_browsers, $list_os ) {
 }
 
 /**
-
  * @author Sebastien Piraux <piraux_seb@hotmail.com>
  * @param browser : name of the browser or 'Unknown'
  * @param browsers_array :
@@ -476,7 +469,7 @@ function extractAgent( $user_agent, $list_browsers, $list_os ) {
  	- if the browser is already in the table it will increment
  		the corresponding value
  	- if the browser doesn't exist it will be added and set to 1
-*/
+ */
 function addBrowser($browser,$browsers_array) {
 	if(isset( $browsers_array[$browser])) {
 		// add one unity to this provider occurrences
@@ -489,7 +482,6 @@ function addBrowser($browser,$browsers_array) {
 }
 
 /**
-
  * @author Sebastien Piraux <piraux_seb@hotmail.com>
  * @param os : name of the OS or 'Unknown'
  * @param os_array : list of os and number of occurences
@@ -497,7 +489,7 @@ function addBrowser($browser,$browsers_array) {
  	- if the os is already in the table it will increment
  		the corresponding value
  	- if the os doesn't exist it will be added and set to 1
-*/
+ */
 function addOs($os,$os_array) {
 	if(isset($os_array[$os])) {
 		// add one unity to this provider occurrences
@@ -510,11 +502,10 @@ function addOs($os,$os_array) {
 }
 
 /**
-
  * @author Sebastien Piraux <piraux_seb@hotmail.com>
  * @param browsers_array : list of browsers and their counter
  * @desc update the browsers'table with new values
-*/
+ */
 function fillBrowsersTable($browsers_array) {
     global $TABLESTATS_BROWSERS;
     if (is_array($browsers_array)) {
@@ -523,7 +514,7 @@ function fillBrowsersTable($browsers_array) {
 						FROM `".$TABLESTATS_BROWSERS."`
 						WHERE `browser` = '".$browser."'";
 			$res = Database::query($sql,__FILE__, __LINE__);
-	
+
 			// if this provider already exists in the DB
 			if($row = Database::num_rows($res)) {
 				// update
@@ -542,11 +533,10 @@ function fillBrowsersTable($browsers_array) {
 }
 
 /**
-
  * @author Sebastien Piraux <piraux_seb@hotmail.com>
  * @param os_array : list of os and their counter
  * @desc update the os'table with new values
-*/
+ */
 function fillOsTable($os_array) {
     global $TABLESTATS_OS;
     if (is_array($os_array)) {
@@ -555,7 +545,7 @@ function fillOsTable($os_array) {
 						FROM `".$TABLESTATS_OS."`
 						WHERE `os` = '".$os."'";
 			$res = Database::query($sql,__FILE__, __LINE__);
-	
+
 			// if this provider already exists in the DB
 			if($row = Database::num_rows($res)) {
 				// update
@@ -578,8 +568,8 @@ function fillOsTable($os_array) {
  *		Referers
  *
  ***************************************************************************/
-/**
 
+/**
  * @author Sebastien Piraux <piraux_seb@hotmail.com>
  * @param referer : name of the referer
  * @param referers_array : list of referer and number of occurences
@@ -598,8 +588,8 @@ function addReferer($referer,$referers_array) {
     }
     return $referers_array;
 }
-/**
 
+/**
  * @author Sebastien Piraux <piraux_seb@hotmail.com>
  * @param referers_array : list of referers and their counter
  * @desc update the referers'table with new values
@@ -629,4 +619,3 @@ function fillReferersTable($referers_array) {
         }
     }
 }
-?>

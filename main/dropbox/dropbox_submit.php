@@ -340,7 +340,7 @@ if ( isset( $_GET['mailingIndex']))  // examine or send
 
 	        $result = Database::query($sel . $thisRecip . "'",__FILE__,__LINE__);
 	        while ( ($res = Database::fetch_array($result))) {$students[] = $res;}
-	        mysql_free_result($result);
+	        Database::free_result($result);
 
 	    	if (count($students) == 1)
 	    	{

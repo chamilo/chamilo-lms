@@ -82,7 +82,7 @@ if (is_allowed_to_edit())
 	//search for all files that are not deleted => visibility != 2
 	$query = Database::query("SELECT path FROM $doc_table AS docs,$prop_table AS props  WHERE `props`.`tool`='".TOOL_DOCUMENT."' AND `docs`.`id`=`props`.`ref` AND `docs`.`path` LIKE '".$querypath."/%' AND `docs`.`filetype`='file' AND `props`.`visibility`<>'2' AND `props`.`to_group_id`=".$to_group_id."",__FILE__,__LINE__);
 	//add tem to the zip file
-	while($not_deleted_file = mysql_fetch_assoc($query))
+	while ($not_deleted_file = Database::fetch_assoc($query))
 	{
 		$zip_folder->add($sys_course_path.$_course['path']."/document".$not_deleted_file['path'],PCLZIP_OPT_REMOVE_PATH, $sys_course_path.$_course['path']."/document".$remove_dir);
 	}
@@ -104,7 +104,7 @@ else
 	//1st: get all files that are visible in the given path
 	$query = Database::query("SELECT path FROM $doc_table AS docs,$prop_table AS props WHERE `props`.`tool`='".TOOL_DOCUMENT."' AND `docs`.`id`=`props`.`ref` AND `docs`.`path` LIKE '".$querypath."/%' AND `props`.`visibility`='1' AND `docs`.`filetype`='file' AND `props`.`to_group_id`=".$to_group_id,__FILE__,__LINE__);
 	//add them to an array
-	while($all_visible_files = mysql_fetch_assoc($query))
+	while ($all_visible_files = Database::fetch_assoc($query))
 	{
 		$all_visible_files_path[] = $all_visible_files['path'];
 		//echo "visible files: ".$sys_course_path.$_course['path']."/document".$all_visible_files['path']."<br>";
@@ -118,13 +118,13 @@ else
 	if(Database::num_rows($query2)>0)
 	{
 		//add tem to an array
-		while($invisible_folders = mysql_fetch_assoc($query2))
+		while ($invisible_folders = Database::fetch_assoc($query2))
 		{
 		//3rd: get all files that are in the found invisible folder (these are "invisible" too)
 		//echo "<br><br>invisible folders: ".$sys_course_path.$_course['path']."/document".$invisible_folders['path']."<br>";
 			$query3 = Database::query("SELECT path FROM $doc_table AS docs,$prop_table AS props  WHERE `props`.`tool`='".TOOL_DOCUMENT."' AND `docs`.`id`=`props`.`ref` AND `docs`.`path` LIKE '".$invisible_folders['path']."/%' AND `docs`.`filetype`='file' AND `props`.`visibility`='1'",__FILE__,__LINE__);
 			//add tem to an array
-			while($files_in_invisible_folder = mysql_fetch_assoc($query3))
+			while ($files_in_invisible_folder = Database::fetch_assoc($query3))
 			{
 				$files_in_invisible_folder_path[] = $files_in_invisible_folder['path'];
 				//echo "<br><br>files in invisible folders: ".$sys_course_path.$_course['path']."/document".$files_in_invisible_folder['path']." <b>id ".$files_in_invisible_folder['id']."</b><br>";

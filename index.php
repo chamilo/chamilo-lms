@@ -152,7 +152,7 @@ if (!empty($_POST['submitAuth'])) {
 				api_session_register('user_last_login_datetime');
 			}
 		}
-		mysql_free_result($result_last_login);
+		Database::free_result($result_last_login);
 
 		//event_login();
 		if (api_is_platform_admin()) {
@@ -231,8 +231,8 @@ if (!empty($_GET['include']) && preg_match('/^[a-zA-Z0-9_-]*\.html$/', $_GET['in
 			$home_top_temp = file_get_contents($home.'home_top.html');
 		}
 	}
-	if(trim($home_top_temp)=='') { 
-		$home_top_temp = get_lang('PortalHomepageDefaultIntroduction'); 
+	if(trim($home_top_temp)=='') {
+		$home_top_temp = get_lang('PortalHomepageDefaultIntroduction');
 	}
     $open = str_replace('{rel_path}', api_get_path(REL_PATH), $home_top_temp);
     echo $open;
@@ -443,12 +443,12 @@ function display_anonymous_right_menu() {
 			echo "</ul>";
 			echo "</div>";
 		}
-		
+
 		//deleting the myprofile link
 		if (api_get_setting('allow_social_tool') == true) {
-			unset($menu_navigation['myprofile']);	
+			unset($menu_navigation['myprofile']);
 		}
-		
+
 		if (!empty($menu_navigation)) {
 			echo "<div class=\"menusection\">";
 			echo "<span class=\"menusectioncaption\">".get_lang("MainNavigation")."</span>";

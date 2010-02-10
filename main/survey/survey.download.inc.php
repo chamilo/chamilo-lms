@@ -53,7 +53,7 @@ function check_download_survey($course, $invitation, $doc_url) {
 		Display :: display_footer();
 		exit;
 	}
-	$survey_invitation = mysql_fetch_assoc($result);
+	$survey_invitation = Database::fetch_assoc($result);
 
 	// now we check if the user already filled the survey
 	if ($survey_invitation['answered'] == 1)
@@ -83,7 +83,7 @@ function check_download_survey($course, $invitation, $doc_url) {
 		{
 			echo '<form id="language" name="language" method="POST" action="'.api_get_self().'?course='.$_GET['course'].'&invitationcode='.$_GET['invitationcode'].'">';
 			echo '  <select name="language">';
-			while ($row=mysql_fetch_assoc($result))
+			while ($row = Database::fetch_assoc($result))
 			{
 				echo '<option value="'.$row['survey_id'].'">'.$row['lang'].'</option>';
 			}
@@ -96,7 +96,7 @@ function check_download_survey($course, $invitation, $doc_url) {
 	}
 	else
 	{
-		$row=mysql_fetch_assoc($result);
+		$row = Database::fetch_assoc($result);
 		$survey_invitation['survey_id'] = $row['survey_id'];
 	}
 	$sql = "select count(*) from $table_survey where survey_id = ".$survey_invitation['survey_id']."

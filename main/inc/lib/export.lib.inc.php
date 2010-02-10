@@ -195,7 +195,6 @@ function backupDatabase($link, $db_name, $structure, $donnees, $format = 'SQL', 
 		$error_no['backup'][] = '1';
 		return false;
 	}
-	//mysql_select_db($db_name);
 	Database::select_db($db_name);
 	$format = strtolower($format);
 	$filename = $whereSave.'/courseDbContent.'.$format;

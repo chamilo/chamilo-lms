@@ -310,9 +310,9 @@ class DocumentManager {
 	*/
 	public static function file_visible_to_user ($this_course, $doc_url) {
 		$current_session_id = api_get_session_id();
-		
+
 		$is_allowed_to_edit = api_is_allowed_to_edit(null,true);
-		
+
 		if ($is_allowed_to_edit)
 		{
 			return true;
@@ -521,8 +521,8 @@ class DocumentManager {
 		//the given path will not end with a slash, unless it's the root '/'
 		//so no root -> add slash
 		$added_slash = ($path == '/') ? '' : '/';
-		
-		//condition for the session		
+
+		//condition for the session
 		$current_session_id = api_get_session_id();
 		$condition_session = " AND (id_session = '$current_session_id' OR (id_session = '0' AND insert_date <= (SELECT creation_date FROM $TABLE_COURSE WHERE code = '{$_course[id]}')))";
 
@@ -533,10 +533,10 @@ class DocumentManager {
 						AND docs.path NOT LIKE '".$path.$added_slash."%/%'
 						AND last.tool = '".TOOL_DOCUMENT."'
 						AND ".$to_field." = ".$to_value."
-						AND last.visibility".$visibility_bit . $condition_session;								
+						AND last.visibility".$visibility_bit . $condition_session;
 
 		$result = Database::query($sql,__FILE__,__LINE__);
-		
+
 		if ($result && Database::num_rows($result) != 0)
 		{
 			while ($row = Database::fetch_array($result,'ASSOC'))
@@ -567,7 +567,7 @@ class DocumentManager {
 		}
 		else
 		{
-			//display_error("Error getting document info from database (".mysql_error().")!");
+			//display_error("Error getting document info from database (".Database::error().")!");
 			return false;
 		}
 	}
@@ -601,9 +601,9 @@ class DocumentManager {
 			$sql = "SELECT path
 								FROM  ".$TABLE_ITEMPROPERTY."  AS last, ".$TABLE_DOCUMENT."  AS docs
 								WHERE docs.id = last.ref
-								AND docs.filetype = 'folder' 
-								AND last.tool = '".TOOL_DOCUMENT."' 
-								AND last.to_group_id = ".$to_group_id." 
+								AND docs.filetype = 'folder'
+								AND last.tool = '".TOOL_DOCUMENT."'
+								AND last.to_group_id = ".$to_group_id."
 								AND last.visibility <> 2 $condition_session";
 
 			$result = Database::query($sql, __FILE__, __LINE__);
@@ -636,9 +636,9 @@ class DocumentManager {
 			$visible_sql = "SELECT path
 						FROM  ".$TABLE_ITEMPROPERTY."  AS last, ".$TABLE_DOCUMENT."  AS docs
 						WHERE docs.id = last.ref
-						AND docs.filetype = 'folder' 
-						AND last.tool = '".TOOL_DOCUMENT."' 
-						AND last.to_group_id = ".$to_group_id." 
+						AND docs.filetype = 'folder'
+						AND last.tool = '".TOOL_DOCUMENT."'
+						AND last.to_group_id = ".$to_group_id."
 						AND last.visibility = 1 $condition_session";
 			$visibleresult = Database::query($visible_sql, __FILE__, __LINE__);
 			while ($all_visible_folders = Database::fetch_array($visibleresult,'ASSOC'))
@@ -653,9 +653,9 @@ class DocumentManager {
 			$invisible_sql = "SELECT path
 						FROM  ".$TABLE_ITEMPROPERTY."  AS last, ".$TABLE_DOCUMENT."  AS docs
 						WHERE docs.id = last.ref
-						AND docs.filetype = 'folder' 
-						AND last.tool = '".TOOL_DOCUMENT."' 
-						AND last.to_group_id = ".$to_group_id." 
+						AND docs.filetype = 'folder'
+						AND last.tool = '".TOOL_DOCUMENT."'
+						AND last.to_group_id = ".$to_group_id."
 						AND last.visibility = 0 $condition_session";
 			$invisibleresult = Database::query($invisible_sql, __FILE__, __LINE__);
 			while ($invisible_folders = Database::fetch_array($invisibleresult,'ASSOC'))
@@ -668,10 +668,10 @@ class DocumentManager {
 				$folder_in_invisible_sql = "SELECT path
 								FROM  ".$TABLE_ITEMPROPERTY."  AS last, ".$TABLE_DOCUMENT."  AS docs
 								WHERE docs.id = last.ref
-								AND docs.path LIKE '".Database::escape_string($invisible_folders['path'])."/%' 
-								AND docs.filetype = 'folder' 
-								AND last.tool = '".TOOL_DOCUMENT."' 
-								AND last.to_group_id = ".$to_group_id." 
+								AND docs.path LIKE '".Database::escape_string($invisible_folders['path'])."/%'
+								AND docs.filetype = 'folder'
+								AND last.tool = '".TOOL_DOCUMENT."'
+								AND last.to_group_id = ".$to_group_id."
 								AND last.visibility = 1 $condition_session";
 				$folder_in_invisible_result = Database::query($folder_in_invisible_sql, __FILE__, __LINE__);
 				while ($folders_in_invisible_folder = Database::fetch_array($folder_in_invisible_result,'ASSOC'))
@@ -848,7 +848,7 @@ class DocumentManager {
 
 						//$remove_from_item_property_sql = "DELETE FROM ".$TABLE_ITEMPROPERTY." WHERE ref = ".$row['id']." AND tool='".TOOL_DOCUMENT."'";
 						api_item_property_update($_course, TOOL_DOCUMENT, $row['id'], 'delete', api_get_user_id(),null,null,null,null,$current_session_id);
-																								
+
 						//query to delete from document table
 						$remove_from_document_sql = "DELETE FROM ".$TABLE_DOCUMENT." WHERE id = ".$row['id']."";
  						self::unset_document_as_template($row['id'],$_course, api_get_user_id());
@@ -879,7 +879,7 @@ class DocumentManager {
 			else //set visibility to 2 and rename file/folder to qsdqsd_DELETED_#id
 			{
 				if (api_item_property_update($_course, TOOL_DOCUMENT, $document_id, 'delete', api_get_user_id(),null,null,null,null,$current_session_id))
-				{	
+				{
 					//echo('item_property_update OK');
 					if (is_file($base_work_dir.$path) || is_dir($base_work_dir.$path) )
                     {
@@ -1093,8 +1093,8 @@ class DocumentManager {
 			return false;
 		}
     }
-    
-    
+
+
     /**
      * Gets the list of included resources as a list of absolute or relative paths from a html file or string html
      * This allows for a better SCORM export or replace urls inside content html from copy course
@@ -1102,7 +1102,7 @@ class DocumentManager {
      * stuff included in the source of the current item. The current item is expected
      * to be an HTML file or string html. If it is not, then the function will return and empty list.
      * @param	string  source html (content or path)
-     * @param	bool  	is file or string html 
+     * @param	bool  	is file or string html
      * @param	string	type (one of the Dokeos tools) - optional (otherwise takes the current item's type)
      * @param	int		level of recursivity we're in
      * @return	array	List of file paths. An additional field containing 'local' or 'remote' helps determine if the file should be copied into the zip or just linked
@@ -1113,7 +1113,7 @@ class DocumentManager {
     	$attributes = array();
     	$wanted_attributes = array('src','url','@import','href','value');
     	$abs_path = '';
-    	
+
     	if ($recursivity > $max) {
     		return array();
     	}
@@ -1121,12 +1121,12 @@ class DocumentManager {
     	if (!isset($type)) {
     		$type = TOOL_DOCUMENT;
     	}
-    	
+
     	if (!$is_file) {
     		$attributes = DocumentManager::parse_HTML_attributes($source_html,$wanted_attributes);
-    	} else {    		
-    		if (is_file($source_html)) {	
-    			$abs_path = $source_html;		   			
+    	} else {
+    		if (is_file($source_html)) {
+    			$abs_path = $source_html;
     			//for now, read the whole file in one go (that's gonna be a problem when the file is too big)
 				$info = pathinfo($abs_path);
 				$ext = $info['extension'];
@@ -1139,7 +1139,7 @@ class DocumentManager {
 									$attributes = DocumentManager::parse_HTML_attributes($file_content,$wanted_attributes);
 									break;
 					default		:	break;
-				}    			
+				}
     		} else {
     			return false;
     		}
@@ -1153,7 +1153,7 @@ class DocumentManager {
 							foreach($wanted_attributes as $attr)
 							{
 								if(isset($attributes[$attr]))
-								{									
+								{
 									//find which kind of path these are (local or remote)
 									$sources = $attributes[$attr];
 									foreach($sources as $source)
@@ -1217,7 +1217,7 @@ class DocumentManager {
 													if(strpos($second_part,api_get_path(WEB_PATH))!==false)
 													{
 														//we found the current portal url
-														$files_list[] = array($second_part,'local','url'); 
+														$files_list[] = array($second_part,'local','url');
 														$in_files_list[] = DocumentManager::get_resources_from_source_html($second_part, true, TOOL_DOCUMENT, recursivity+1);
 														if(count($in_files_list)>0)
 														{
@@ -1234,7 +1234,7 @@ class DocumentManager {
 												{
 													if(substr($second_part,0,1) === '/')
 													{	//link starts with a /, making it absolute (relative to DocumentRoot)
-														$files_list[] = array($second_part,'local','abs'); 
+														$files_list[] = array($second_part,'local','abs');
 														$in_files_list[] = DocumentManager::get_resources_from_source_html($second_part, true, TOOL_DOCUMENT,$recursivity+1);
 														if(count($in_files_list)>0)
 														{
@@ -1250,7 +1250,7 @@ class DocumentManager {
 														if (!empty($abs_path)) {
 															$dir = dirname($abs_path).'/';
 														}
-														$new_abs_path = realpath($dir.$second_part);     
+														$new_abs_path = realpath($dir.$second_part);
 														$in_files_list[] = DocumentManager::get_resources_from_source_html($new_abs_path, true, TOOL_DOCUMENT,$recursivity+1);
 														if(count($in_files_list)>0)
 														{
@@ -1263,12 +1263,12 @@ class DocumentManager {
 														{
 															$second_part = substr($second_part,2);
 														}
-														$files_list[] = array($second_part,'local','rel');														
+														$files_list[] = array($second_part,'local','rel');
 														$dir = '';
 														if (!empty($abs_path)) {
 															$dir = dirname($abs_path).'/';
 														}
-														$new_abs_path = realpath($dir.$second_part);														 
+														$new_abs_path = realpath($dir.$second_part);
 														$in_files_list[] = DocumentManager::get_resources_from_source_html($new_abs_path, true, TOOL_DOCUMENT,$recursivity+1);
 														if(count($in_files_list)>0)
 														{
@@ -1283,7 +1283,7 @@ class DocumentManager {
 													if(strpos($source,api_get_path(WEB_PATH))!==false)
 													{
 														//we found the current portal url
-														$files_list[] = array($source,'local','url'); 
+														$files_list[] = array($source,'local','url');
 														$in_files_list[] = DocumentManager::get_resources_from_source_html($source, true, TOOL_DOCUMENT, $recursivity+1);
 														if(count($in_files_list)>0)
 														{
@@ -1301,7 +1301,7 @@ class DocumentManager {
 													//no protocol found, make link local
 													if(substr($source,0,1) === '/')
 													{	//link starts with a /, making it absolute (relative to DocumentRoot)
-														$files_list[] = array($source,'local','abs');   
+														$files_list[] = array($source,'local','abs');
 														$in_files_list[] = DocumentManager::get_resources_from_source_html($source, true, TOOL_DOCUMENT, $recursivity+1);
 														if(count($in_files_list)>0)
 														{
@@ -1310,12 +1310,12 @@ class DocumentManager {
 													}
 													elseif(strstr($source,'..') === 0)
 													{	//link is relative but going back in the hierarchy
-														$files_list[] = array($source,'local','rel');														
+														$files_list[] = array($source,'local','rel');
 														$dir = '';
 														if (!empty($abs_path)) {
 															$dir = dirname($abs_path).'/';
 														}
-														$new_abs_path = realpath($dir.$source);														
+														$new_abs_path = realpath($dir.$source);
 														$in_files_list[] = DocumentManager::get_resources_from_source_html($new_abs_path, true, TOOL_DOCUMENT, $recursivity+1);
 														if(count($in_files_list)>0)
 														{
@@ -1346,7 +1346,7 @@ class DocumentManager {
 											if(strpos($source,api_get_path(WEB_PATH))!==false)
 											{
 												//we found the current portal url
-												$files_list[] = array($source,'local','url'); 
+												$files_list[] = array($source,'local','url');
 												$in_files_list[] = DocumentManager::get_resources_from_source_html($source, true, TOOL_DOCUMENT, $recursivity+1);
 												if(count($in_files_list)>0)
 												{
@@ -1373,12 +1373,12 @@ class DocumentManager {
 											}
 											elseif(strpos($source,'..') === 0)
 											{	//link is relative but going back in the hierarchy
-												$files_list[] = array($source,'local','rel');												
+												$files_list[] = array($source,'local','rel');
 												$dir = '';
 												if (!empty($abs_path)) {
 													$dir = dirname($abs_path).'/';
 												}
-												$new_abs_path = realpath($dir.$source);												
+												$new_abs_path = realpath($dir.$source);
 												$in_files_list[] = DocumentManager::get_resources_from_source_html($new_abs_path, true, TOOL_DOCUMENT,$recursivity+1);
 												if(count($in_files_list)>0)
 												{
@@ -1388,7 +1388,7 @@ class DocumentManager {
 											else
 											{	//no starting '/', making it relative to current document's path
 												if(substr($source,0,2) == './')
-												{ 
+												{
 													$source = substr($source,2);
 												}
 												$files_list[] = array($source,'local','rel');
@@ -1396,7 +1396,7 @@ class DocumentManager {
 												if (!empty($abs_path)) {
 													$dir = dirname($abs_path).'/';
 												}
-												$new_abs_path = realpath($dir.$source);												
+												$new_abs_path = realpath($dir.$source);
 												$in_files_list[] = DocumentManager::get_resources_from_source_html($new_abs_path, true, TOOL_DOCUMENT, $recursivity+1);
 												if(count($in_files_list)>0)
 												{
@@ -1414,8 +1414,8 @@ class DocumentManager {
 
 		$checked_files_list = array();
     	$checked_array_list = array();
-    	
-    	if (count($files_list ) > 0) {    	
+
+    	if (count($files_list ) > 0) {
 	    	foreach($files_list as $idx => $file)
 	    	{
 	    		if(!empty($file[0]))
@@ -1523,7 +1523,7 @@ class DocumentManager {
     * @return string	new content html with replaced urls or return false if content is not a string
     */
    function replace_urls_inside_content_html_from_copy_course($content_html, $origin_course_code, $destination_course_directory) {
-   	
+
 		if (!is_string($content_html)) {
 			return false;
 		}
@@ -1533,14 +1533,14 @@ class DocumentManager {
 		$orig_course_path 	= api_get_path(SYS_PATH).'courses/'.$orig_course_info['path'].'/';
 		$destination_course_code = CourseManager::get_course_id_from_path ($destination_course_directory);
 		$dest_course_path 	= api_get_path(SYS_COURSE_PATH).$destination_course_directory.'/';
-		
-		
+
+
 		foreach ($orig_source_html as $source) {
 
 			//var_dump($source);
 
 			// get information about source url
-			$real_orig_url	= $source[0];	// url			
+			$real_orig_url	= $source[0];	// url
 			$scope_url  	= $source[1];   // scope (local, remote)
 			$type_url		= $source[2];	// tyle (rel, abs, url)
 
@@ -1548,16 +1548,16 @@ class DocumentManager {
 			$orig_parse_url  = parse_url($real_orig_url);
 			$real_orig_path  = $orig_parse_url['path'];
 			$real_orig_query = $orig_parse_url['query'];
-			
+
 			// replace origin course code by destination course code from origin url query
-			$dest_url_query = '';					
-			if (!empty($real_orig_query)) {	
+			$dest_url_query = '';
+			if (!empty($real_orig_query)) {
 				$dest_url_query = '?'.$real_orig_query;
 				if (strpos($dest_url_query,$origin_course_code) !== false) {
 					$dest_url_query = str_replace($origin_course_code,$destination_course_code,$dest_url_query);
-				}			
+				}
 			}
-								  
+
 			if ($scope_url == 'local') {
 				if ( $type_url == 'abs' || $type_url == 'rel') {
 					$document_file = strstr($real_orig_path,'document');
@@ -1565,7 +1565,7 @@ class DocumentManager {
 						$origin_filepath = $orig_course_path.$document_file;
 						$destination_filepath = $dest_course_path.$document_file;
 						// copy origin file inside destination course
-						if (file_exists($origin_filepath)) {				
+						if (file_exists($origin_filepath)) {
 							$filepath_dir = dirname($destination_filepath);
 							if (!is_dir($filepath_dir)) {
 								$perm = api_get_setting('permissions_for_new_directories');
@@ -1575,27 +1575,27 @@ class DocumentManager {
 							if (!file_exists($destination_filepath)) {
 								@copy($origin_filepath,$destination_filepath);
 							}
-						}											
+						}
 						// replace origin course path by destination course path
 						if (strpos($content_html,$real_orig_url) !== false) {
 							$url_course_path = str_replace($orig_course_info['path'].'/'.$document_file,'',$real_orig_path);
-							$destination_url = $url_course_path.$destination_course_directory.'/'.$document_file.$dest_url_query;	
+							$destination_url = $url_course_path.$destination_course_directory.'/'.$document_file.$dest_url_query;
 							$content_html = str_replace($real_orig_url,$destination_url, $content_html);
-						}														
+						}
 					}
 
 					// replace origin course code by destination course code  from origin url
 					if (strpos($real_orig_url,'?') === 0) {
 						$dest_url = str_replace($origin_course_code,$destination_course_code,$real_orig_url);
-						$content_html = str_replace($real_orig_url,$dest_url, $content_html);						
+						$content_html = str_replace($real_orig_url,$dest_url, $content_html);
 					}
-															
+
 				}
 			}
-		}   			
-   		return $content_html;   	
+		}
+   		return $content_html;
    }
-    
+
 }
 //end class DocumentManager
 ?>

@@ -286,7 +286,7 @@ if( ( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse ) && $_configura
 							AND `gu`.`group_id` = '$_gid'
 							AND `u`.`user_id` = '$uInfo'";
 			$query = Database::query($sql,__FILE__,__LINE__);
-			$tracked_user_info = @mysql_fetch_assoc($query);
+			$tracked_user_info = @Database::fetch_assoc($query);
 			if(is_array($tracked_user_info)) $tracking_is_accepted = true;
 
        		$title[0] = $tracked_user_info['firstname'].'_'.$tracked_user_info['lastname'];

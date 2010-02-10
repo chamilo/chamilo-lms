@@ -2323,7 +2323,7 @@ function get_terms()
 	     	}
 	     	//if(!$res)
 	     	//{
-	     	//	$this->error = 'Could not update item_view table...'.mysql_error();
+	     	//	$this->error = 'Could not update item_view table...'.Database::error();
 	     	//}
 	     	if(is_array($this->interactions) && count($this->interactions)>0){
 	     		//save interactions

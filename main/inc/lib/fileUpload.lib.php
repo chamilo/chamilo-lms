@@ -1149,7 +1149,7 @@ function add_document($_course,$path,$filetype,$filesize,$title,$comment=NULL, $
 	}
 	else
 	{
-		//display_error("The uploaded file could not be added to the database (".mysql_error().")!");
+		//display_error("The uploaded file could not be added to the database (".Database::error().")!");
 		return false;
 	}
 }

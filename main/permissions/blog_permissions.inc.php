@@ -13,14 +13,14 @@ $rights_blog=array("article_add","article_delete","article_edit","article_rate",
 $course_tool_table = Database::get_course_table(TABLE_TOOL_LIST);
 
 // Get all user
-$blog_users = Blog::get_blog_users(mysql_escape_string($_GET['blog_id']));
+$blog_users = Blog::get_blog_users(Database::escape_string($_GET['blog_id']));
 
 // Remove the blog creater because he has all the rights automatically
 // and we want to keep it that way.
 $tbl_course_rel_user = $table=Database::get_main_table(TABLE_MAIN_COURSE_USER);
 $sql = "SELECT user_id FROM $tbl_course_rel_user WHERE status = '1' AND course_code = '".$_SESSION['_cid']."'";
 $result = Database::query($sql,__FILE__,__LINE__);
-while ($user = mysql_fetch_assoc($result)) {
+while ($user = Database::fetch_assoc($result)) {
 	unset($blog_users[$user['user_id']]);
 }
 

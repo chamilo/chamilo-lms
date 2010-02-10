@@ -2116,7 +2116,7 @@ class learnpath {
 		$sql = "SELECT * FROM " . $tbl_lp_item . " as lp inner join " . $tbl_lp_item_view . " as lp_view on lp.id = lp_view.lp_item_id " .
 				"WHERE lp.id = '" . $_SESSION['oLP']->current . "'";
 		$result = Database::query($sql, __FILE__, __LINE__);
-		$row = mysql_fetch_assoc($result);
+		$row = Database::fetch_assoc($result);
 		$output = '';
 
 		if (!empty ($row['audio'])) {
@@ -7326,7 +7326,7 @@ class learnpath {
 
 		$result = Database::query($sql, __FILE__, __LINE__);
 
-		$row = mysql_fetch_assoc($result);
+		$row = Database::fetch_assoc($result);
 		$s_title = $row['title'];
 		$s_title = api_convert_encoding($s_title, $charset, $this->encoding);
 

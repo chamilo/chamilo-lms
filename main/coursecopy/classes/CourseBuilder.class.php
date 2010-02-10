@@ -89,7 +89,7 @@ class CourseBuilder
 			$this->build_learnpaths();
 			$this->build_surveys();
 			$this->build_glossary();
-			
+
 		}
 
 		//TABLE_LINKED_RESOURCES is the "resource" course table, which is deprecated, apparently
@@ -689,7 +689,7 @@ class CourseBuilder
 				INNER JOIN  $tbl_session ON id_session = id
 				WHERE course_code = '$code_course' ";
 			$query_session = Database::query($sql_session, __FILE__, __LINE__);
-			while($rows_session = mysql_fetch_assoc($query_session)) {
+			while ($rows_session = Database::fetch_assoc($query_session)) {
 				$session = new CourseSession($rows_session['id'], $rows_session['name']);
 				$this->course->add_resource($session);
 			}
@@ -697,8 +697,8 @@ class CourseBuilder
 		}
 		return $list;
 	}
-	
-	function build_wiki($session_id = 0, $course_code = 0) 
+
+	function build_wiki($session_id = 0, $course_code = 0)
 	{
 		if (!empty($session_id) && !empty($course_code)) {
 			$course_info = api_get_course_info($course_code);
@@ -710,10 +710,10 @@ class CourseBuilder
 	        $sql = 'SELECT * FROM ' . $tbl_wiki . ' WHERE session_id = 0';
 		}
 		$db_result = api_sql_query($sql, __FILE__, __LINE__);
-		while ($obj = mysql_fetch_object($db_result))
+		while ($obj = Database::fetch_object($db_result))
 		{
 			$wiki = new Wiki($obj->id, $obj->page_id, $obj->reflink, $obj->title, $obj->content, $obj->user_id, $obj->group_id, $obj->dtime, $obj->progress, $obj->version);
 			$this->course->add_resource($wiki);
 		}
-	}	
+	}
 }

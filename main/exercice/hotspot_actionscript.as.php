@@ -39,7 +39,7 @@ $output = "hotspot_lang=$courseLang&hotspot_image=$pictureName&hotspot_image_wid
 $i = 0;
 $nmbrTries = 0;
 
-while ($hotspot = mysql_fetch_assoc($result))
+while ($hotspot = Database::fetch_assoc($result))
 {
    	$output .= "&hotspot_".$hotspot['id']."=true";
 	$output .= "&hotspot_".$hotspot['id']."_answer=".str_replace('&','{amp}',$hotspot['answer']);

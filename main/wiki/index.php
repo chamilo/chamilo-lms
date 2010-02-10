@@ -2295,7 +2295,7 @@ if ($_GET['action']=='discuss')
 					$message_author=api_get_user_id();
 
 					$sql="INSERT INTO $tbl_wiki_discuss (publication_id, userc_id, comment, p_score, dtime) VALUES ('".$id."','".$message_author."','".$_POST['comment']."','".$_POST['rating']."','".$dtime."')";
-					$result=Database::query($sql,__FILE__,__LINE__) or die(mysql_error());
+					$result=Database::query($sql,__FILE__,__LINE__) or die();
 
 					check_emailcue($id, 'D', $dtime, $message_author);
 
@@ -2306,17 +2306,17 @@ if ($_GET['action']=='discuss')
 			$user_table = Database :: get_main_table(TABLE_MAIN_USER);
 
 			$sql="SELECT * FROM $tbl_wiki_discuss reviews, $user_table user  WHERE reviews.publication_id='".$id."' AND user.user_id='".$firstuserid."' ORDER BY id DESC";
-			$result=Database::query($sql,__FILE__,__LINE__) or die(mysql_error());
+			$result=Database::query($sql,__FILE__,__LINE__) or die();
 
 			$countWPost = Database::num_rows($result);
 			echo get_lang('NumComments').": ".$countWPost; //comment's numbers
 
 			$sql="SELECT SUM(p_score) as sumWPost FROM $tbl_wiki_discuss WHERE publication_id='".$id."' AND NOT p_score='-' ORDER BY id DESC";
-			$result2=Database::query($sql,__FILE__,__LINE__) or die(mysql_error());
+			$result2=Database::query($sql,__FILE__,__LINE__) or die();
 			$row2=Database::fetch_array($result2);
 
 			$sql="SELECT * FROM $tbl_wiki_discuss WHERE publication_id='".$id."' AND NOT p_score='-'";
-			$result3=Database::query($sql,__FILE__,__LINE__) or die(mysql_error());
+			$result3=Database::query($sql,__FILE__,__LINE__) or die();
 			$countWPost_score= Database::num_rows($result3);
 
 			echo ' - '.get_lang('NumCommentsScore').': '.$countWPost_score;//

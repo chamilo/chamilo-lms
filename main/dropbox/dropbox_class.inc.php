@@ -39,7 +39,7 @@
  * @version 1.30
  * @copyright 2004
  * @author Jan Bols <jan@ivpv.UGent.be>
- * with contributions by René Haentjens <rene.haentjens@UGent.be> (see RH)
+ * with contributions by RenÃ© Haentjens <rene.haentjens@UGent.be> (see RH)
  * @package dokeos.dropbox
  */
 class Dropbox_Work {
@@ -69,7 +69,7 @@ class Dropbox_Work {
 	 * @return Dropbox_Work
 	 */
 	function Dropbox_Work ($arg1, $arg2=null, $arg3=null, $arg4=null, $arg5=null, $arg6=null) {
-		
+
 		if (func_num_args()>1)  {
 		    $this->_createNewWork($arg1, $arg2, $arg3, $arg4, $arg5, $arg6);
 		}  else  {
@@ -647,7 +647,7 @@ class Dropbox_Person
 	 */
 	function filter_received_work($type,$value) {
 		global $dropbox_cnf;
-		
+
     	$new_received_work = array();
 		foreach ($this->receivedWork as $index => $work) {
 			switch ($type) {

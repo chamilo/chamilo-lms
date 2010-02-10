@@ -91,7 +91,7 @@ class Tracking {
 	 */
 	public static function get_time_spent_on_the_course($user_id, $course_code) {
 		// protect datas
-		$course_code = Database::escape_string($course_code);		
+		$course_code = Database::escape_string($course_code);
 		$tbl_track_course = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
 		$condition_user = "";
 		if (is_array($user_id)) {
@@ -99,13 +99,13 @@ class Tracking {
 		} else {
 			$user_id = intval($user_id);
 			$condition_user = " AND user_id = '$user_id' ";
-		}			
-		$sql = " SELECT SUM(UNIX_TIMESTAMP(logout_course_date)-UNIX_TIMESTAMP(login_course_date)) as nb_seconds 
+		}
+		$sql = " SELECT SUM(UNIX_TIMESTAMP(logout_course_date)-UNIX_TIMESTAMP(login_course_date)) as nb_seconds
 				FROM $tbl_track_course
 				WHERE course_code='$course_code' $condition_user";
 		$rs = Database::query($sql,__FILE__,__LINE__);
-		$row = Database::fetch_array($rs);				
-		return $row['nb_seconds']; 
+		$row = Database::fetch_array($rs);
+		return $row['nb_seconds'];
 	}
 
 	public static function get_first_connection_date($student_id) {
@@ -245,65 +245,65 @@ class Tracking {
 		if(!empty($a_course['db_name'])) {
 			// table definition
 			$tbl_course_quiz = Database::get_course_table(TABLE_QUIZ_TEST,$a_course['db_name']);
-			$tbl_stats_exercise = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);			
+			$tbl_stats_exercise = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
 			$count_quiz = Database::fetch_row(Database::query("SELECT count(id) FROM $tbl_course_quiz WHERE active <> -1",__FILE__,__LINE__));
 			$quiz_avg_total_score = 0;
-			if (!empty($count_quiz[0]) && !empty($student_id)) {				
+			if (!empty($count_quiz[0]) && !empty($student_id)) {
 				$condition_user = "";
 				if (is_array($student_id)) {
 					$condition_user = " AND exe_user_id IN (".implode(',',$student_id).") ";
 				} else {
 					$condition_user = " AND exe_user_id = '$student_id' ";
 				}
-				$sql = "SELECT SUM(exe_result/exe_weighting*100) as avg_score 
+				$sql = "SELECT SUM(exe_result/exe_weighting*100) as avg_score
 						FROM $tbl_stats_exercise
-						WHERE exe_exo_id IN (SELECT id FROM $tbl_course_quiz WHERE active <> -1) 
+						WHERE exe_exo_id IN (SELECT id FROM $tbl_course_quiz WHERE active <> -1)
 						$condition_user
 						AND orig_lp_id = 0
-						AND exe_cours_id = '$course_code' 
+						AND exe_cours_id = '$course_code'
 						AND orig_lp_item_id = 0
-						ORDER BY exe_date DESC";				
+						ORDER BY exe_date DESC";
 				$res = Database::query($sql, __FILE__, __LINE__);
-				$row = Database::fetch_array($res);				
+				$row = Database::fetch_array($res);
 				$quiz_avg_score = 0;
 				if (!empty($row['avg_score'])) {
 					$quiz_avg_score = round($row['avg_score'],2);
-				}								
-				$count_attempt = Database::fetch_row(Database::query("SELECT count(*) FROM $tbl_stats_exercise WHERE exe_exo_id IN (SELECT id FROM $tbl_course_quiz WHERE active <> -1) $condition_user AND orig_lp_id = 0 AND exe_cours_id = '$course_code' AND orig_lp_item_id = 0 ORDER BY exe_date DESC",__FILE__,__LINE__));																
+				}
+				$count_attempt = Database::fetch_row(Database::query("SELECT count(*) FROM $tbl_stats_exercise WHERE exe_exo_id IN (SELECT id FROM $tbl_course_quiz WHERE active <> -1) $condition_user AND orig_lp_id = 0 AND exe_cours_id = '$course_code' AND orig_lp_item_id = 0 ORDER BY exe_date DESC",__FILE__,__LINE__));
 				if(!empty($count_attempt[0])) {
 					$quiz_avg_score = $quiz_avg_score / $count_attempt[0];
 		        }
-		        $quiz_avg_total_score = $quiz_avg_score;				
-				return $quiz_avg_total_score/$count_quiz[0];				
-			} 		
-		}		
-		return null;		
+		        $quiz_avg_total_score = $quiz_avg_score;
+				return $quiz_avg_total_score/$count_quiz[0];
+			}
+		}
+		return null;
 	}
 
-	public static function get_avg_student_progress($student_id, $course_code) {		
+	public static function get_avg_student_progress($student_id, $course_code) {
 		// protect datas
 		$course_code = addslashes($course_code);
 		// get the informations of the course
 		$a_course = CourseManager :: get_course_information($course_code);
 		if (!empty($a_course['db_name'])) {
 			// table definition
-			$tbl_course_lp_view = Database :: get_course_table(TABLE_LP_VIEW, $a_course['db_name']);	
-			$tbl_course_lp = Database :: get_course_table(TABLE_LP_MAIN, $a_course['db_name']);		
+			$tbl_course_lp_view = Database :: get_course_table(TABLE_LP_VIEW, $a_course['db_name']);
+			$tbl_course_lp = Database :: get_course_table(TABLE_LP_MAIN, $a_course['db_name']);
 			$count_lp = Database::fetch_row(Database::query("SELECT count(id) FROM $tbl_course_lp",__FILE__,__LINE__));
 			$avg_progress = 0;
-			if (!empty($count_lp[0]) && !empty($student_id)) {				
+			if (!empty($count_lp[0]) && !empty($student_id)) {
 				$condition_user = "";
-				if (is_array($student_id)) {			
-					$condition_user = " lp_view.user_id IN (".implode(',',$student_id).") AND ";				
+				if (is_array($student_id)) {
+					$condition_user = " lp_view.user_id IN (".implode(',',$student_id).") AND ";
 				} else {
 					$condition_user = " lp_view.user_id = '$student_id' AND ";
-				}								
-				$sqlProgress = "SELECT SUM(progress) FROM $tbl_course_lp_view AS lp_view WHERE $condition_user lp_view.lp_id IN (SELECT id FROM $tbl_course_lp)";				
+				}
+				$sqlProgress = "SELECT SUM(progress) FROM $tbl_course_lp_view AS lp_view WHERE $condition_user lp_view.lp_id IN (SELECT id FROM $tbl_course_lp)";
 				$resultItem  = Database::query($sqlProgress, __FILE__, __LINE__);
-				$rowItem = Database::fetch_row($resultItem);				
-				$avg_progress = round($rowItem[0] / $count_lp[0], 1);				
+				$rowItem = Database::fetch_row($resultItem);
+				$avg_progress = round($rowItem[0] / $count_lp[0], 1);
 				return $avg_progress;
-			} 
+			}
 		}
 		return null;
 	}
@@ -329,71 +329,71 @@ class Tracking {
 		$tbl_stats_exercices = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
 		$tbl_stats_attempts= Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 		$course = CourseManager :: get_course_information($course_code);
-		
+
 		if (!empty($course['db_name'])) {
-	
+
 			$tbl_quiz_questions= Database :: get_course_table(TABLE_QUIZ_QUESTION,$course['db_name']);
 			$lp_table = Database :: get_course_table(TABLE_LP_MAIN,$course['db_name']);
 			$lp_item_table = Database  :: get_course_table(TABLE_LP_ITEM,$course['db_name']);
 			$lp_view_table = Database  :: get_course_table(TABLE_LP_VIEW,$course['db_name']);
 			$lp_item_view_table = Database  :: get_course_table(TABLE_LP_ITEM_VIEW,$course['db_name']);
-			
+
 			$condition_lp = "";
 			if(count($lp_ids) > 0) {
 				$condition_lp =" WHERE id IN(".implode(',',$lp_ids).") ";
 			}
-	
+
 			$count_row_lp = Database::fetch_row(Database::query("SELECT count(*) FROM $lp_table $condition_lp",__FILE__,__LINE__));
-				
+
 			$lp_scorm_score_total = 0;
 			$lp_scorm_weighting_total = 0;
 			$lp_scorm_result_score_total = 0;
 			$lp_scorm_loop=0;
 			$lp_count = 0;
 			$progress = 0;
-			
+
 			if (!empty($count_row_lp[0]) && !empty($student_id)) {
-				
-				$condition_user1 = "";				
+
+				$condition_user1 = "";
 				if (is_array($student_id)) {
-					$condition_user1 =" AND user_id IN (".implode(',',$student_id).") ";	
+					$condition_user1 =" AND user_id IN (".implode(',',$student_id).") ";
 				} else {
 					$condition_user1 =" AND user_id = '$student_id' ";
 				}
-				
+
 				$sql = "SELECT max(id) as id, lp_id, user_id FROM $lp_view_table WHERE lp_id IN (SELECT id FROM $lp_table $condition_lp) $condition_user1 GROUP BY lp_id,user_id";
 				$rs_last_lp_view_id = Database::query($sql, __FILE__, __LINE__);
-				
+
 				$score_of_scorm_calculate = 0;
 				if (Database::num_rows($rs_last_lp_view_id) > 0) {
 					while ($row_lp_view = Database::fetch_array($rs_last_lp_view_id)) {
-						
-						$lp_view_id = $row_lp_view['id'];					
+
+						$lp_view_id = $row_lp_view['id'];
 						// we get the progress
 						$sql='SELECT progress FROM '.$lp_view_table.' WHERE id="'.$lp_view_id.'"';
-	
+
 						$rs = Database::query($sql, __FILE__, __LINE__);
 						$progress = Database::result($rs,0,'progress');
-	
+
 						// item's list of an scorm
 						$sql_max_score='SELECT lp_iv.score as score,lp_i.max_score
 								FROM '.$lp_item_view_table.' as lp_iv
 								INNER JOIN '.$lp_item_table.' as lp_i
 									ON lp_i.id = lp_iv.lp_item_id
 									AND lp_i.item_type="sco"
-								WHERE lp_view_id="'.$lp_view_id.'"';		
+								WHERE lp_view_id="'.$lp_view_id.'"';
 
 						$res_max_score=Database::query($sql_max_score,__FILE__,__LINE__);
 						$count_total_loop=0;
 						$num_rows_max_score=Database::num_rows($res_max_score);
-	
+
 						if ($num_rows_max_score==1) {
 							while ($row_max_score=Database::fetch_array($res_max_score)) {
 								if ($row_max_score['max_score']==0) {
 	                                //when there's no max score, we assume 100 as the max score, as the SCORM 1.2 says that the value should always be between 0 and 100.
 	                       			$lp_scorm_result_score_total+=($row_max_score['score']/100);
 									$current_value = $row_max_score['score']/100;
-	
+
 								} else {
 									$lp_scorm_result_score_total+=($row_max_score['score']/$row_max_score['max_score']);
 									$current_value = $row_max_score['score']/$row_max_score['max_score'];
@@ -413,49 +413,49 @@ class Tracking {
 								$count_total_loop++;
 							}
 						}
-	
+
 						if ($num_rows_max_score > 0 && ($progress > 0 || $current_value > 0 )) {
 							$lp_count++;
 						}
-	
+
 						if ($count_total_loop==0) {
 							$count_total_loop=1;
 						}
 						$score_of_scorm_calculate=round((($lp_scorm_result_score_total/$count_total_loop)*100),2);
-										
+
 					}
-				} 
-										
+				}
+
 				if(count($lp_ids)==0 ) {
 					$score_of_scorm_calculate=round((($score_of_scorm_calculate/$count_row_lp[0])),2);
 				}
-	
+
 				$lp_scorm_score_total = $score_of_scorm_calculate;
-				
-				$condition_user2 = "";				
+
+				$condition_user2 = "";
 				if (is_array($student_id)) {
-					$condition_user2 =" lp_view.user_id IN (".implode(',',$student_id).") AND ";	
+					$condition_user2 =" lp_view.user_id IN (".implode(',',$student_id).") AND ";
 				} else {
 					$condition_user2 =" lp_view.user_id = '$student_id' AND ";
 				}
-	
+
 				//Path is the exercise id
-				$sql = "SELECT lp_view.id as lp_view_id, lp_view.lp_id as lp_id, lp_item.path, lp_item.id as item_id, lp_item.max_score, lp_view.user_id as user_id 
-				FROM $lp_view_table lp_view 
+				$sql = "SELECT lp_view.id as lp_view_id, lp_view.lp_id as lp_id, lp_item.path, lp_item.id as item_id, lp_item.max_score, lp_view.user_id as user_id
+				FROM $lp_view_table lp_view
 				INNER JOIN $lp_item_table lp_item ON lp_item.lp_id = lp_view.lp_id AND item_type='".TOOL_QUIZ."'
 				WHERE $condition_user2 lp_view.lp_id IN (SELECT id FROM $lp_table $condition_lp)";;
-				
+
 				$rsItems = Database::query($sql, __FILE__, __LINE__);
-				
+
 				$total_score = $total_weighting = 0;
 				if (Database::num_rows($rsItems) > 0) {
 					while ($item = Database::fetch_array($rsItems)) {
-						
+
 						$lp_view_id = $item['lp_view_id'];
 						$lp_item_id = $item['item_id'];
 						$lp_id = $item['lp_id'];
 						$user_id = $item['user_id'];
-						
+
 						// we take the score from a LP because we have lp_view_id
 						$sql = "SELECT score FROM $lp_item_view_table WHERE lp_item_id = '$lp_item_id' and lp_view_id = '$lp_view_id'
 						ORDER BY view_count DESC limit 1";
@@ -485,7 +485,7 @@ class Tracking {
 						$maxscore = $row_max_score['maxscore'];
 						if ($maxscore=='') {
 							$maxscore = $item['max_score'];
-						}						
+						}
 						if(Database::num_rows($rsScores)>0) {
 							$total_score = Database::result($rsScores, 0, 0);
 							$total_weighting += $maxscore;
@@ -493,10 +493,10 @@ class Tracking {
 								$lp_scorm_score_total += ($total_score/$maxscore)*100;
 								$lp_scorm_weighting_total+=100;
 							}
-						}							
+						}
 					}
-				}									
-			}			
+				}
+			}
 			$totalScore = $lp_scorm_score_total;
 			$pourcentageScore = 0;
 			if($lp_scorm_weighting_total>0) {
@@ -508,10 +508,10 @@ class Tracking {
 				return $score_of_scorm_calculate;
 			} else {
 				return null;
-			}			
-		}	
+			}
+		}
 	}
-	
+
 
 	/**
 	 * gets the list of students followed by coach
@@ -530,7 +530,7 @@ class Tracking {
 
 		//////////////////////////////////////////////////////////////
 		// At first, courses where $coach_id is coach of the course //
-		//////////////////////////////////////////////////////////////				
+		//////////////////////////////////////////////////////////////
 		$sql = 'SELECT id_session, course_code FROM ' . $tbl_session_course_user . ' WHERE id_user=' . $coach_id.' AND status=2';
 
 		global $_configuration;
@@ -569,7 +569,7 @@ class Tracking {
 
 		$sql = 'SELECT session_course_user.id_user
 						FROM ' . $tbl_session_course_user . ' as session_course_user
-						INNER JOIN 	'.$tbl_session_user.' sru ON session_course_user.id_user = sru.id_user AND session_course_user.id_session = sru.id_session	
+						INNER JOIN 	'.$tbl_session_user.' sru ON session_course_user.id_user = sru.id_user AND session_course_user.id_session = sru.id_session
 						INNER JOIN ' . $tbl_session_course . ' as session_course
 							ON session_course.course_code = session_course_user.course_code
 							AND session_course_user.id_session = session_course.id_session
@@ -582,7 +582,7 @@ class Tracking {
 			if ($access_url_id != -1){
 				$sql = 'SELECT session_course_user.id_user
 				FROM ' . $tbl_session_course_user . ' as session_course_user
-				INNER JOIN 	'.$tbl_session_user.' sru ON session_course_user.id_user = sru.id_user AND session_course_user.id_session = sru.id_session		
+				INNER JOIN 	'.$tbl_session_user.' sru ON session_course_user.id_user = sru.id_user AND session_course_user.id_session = sru.id_session
 				INNER JOIN ' . $tbl_session_course . ' as session_course
 					ON session_course.course_code = session_course_user.course_code
 					AND session_course_user.id_session = session_course.id_session
@@ -668,8 +668,8 @@ class Tracking {
 							AND id_coach=' . $coach_id . '
 						WHERE id_user=' . $student_id;*/
 
-		$sql = 'SELECT 1 FROM ' . $tbl_session_course_user . ' WHERE id_user=' . $coach_id .' AND status=2';						
-						
+		$sql = 'SELECT 1 FROM ' . $tbl_session_course_user . ' WHERE id_user=' . $coach_id .' AND status=2';
+
 		$result = Database::query($sql, __FILE__, __LINE__);
 		if (Database::num_rows($result) > 0) {
 			return true;
@@ -876,7 +876,7 @@ class Tracking {
 		// table definition
 		$tbl_session = Database :: get_main_table(TABLE_MAIN_SESSION);
 		$tbl_session_course = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE);
-				
+
 		$sql = 'SELECT DISTINCT course_code
 						FROM ' . $tbl_session_course . '
 						WHERE id_session=' . $session_id;
@@ -892,25 +892,25 @@ class Tracking {
 	public static function count_student_assignments($student_id, $course_code) {
 		require_once (api_get_path(LIBRARY_PATH) . 'course.lib.php');
 
-		// protect datas		
+		// protect datas
 		$course_code = Database::escape_string($course_code);
 		// get the informations of the course
 		$a_course = CourseManager :: get_course_information($course_code);
 		if (!empty($a_course['db_name'])) {
 			// table definition
-			$tbl_item_property = Database :: get_course_table(TABLE_ITEM_PROPERTY, $a_course['db_name']);			
+			$tbl_item_property = Database :: get_course_table(TABLE_ITEM_PROPERTY, $a_course['db_name']);
 			$condition_user = "";
-			if (is_array($student_id)) {				
+			if (is_array($student_id)) {
 				$condition_user = " AND insert_user_id IN (".implode(',',$student_id).") ";
 			} else {
-				$condition_user = " AND insert_user_id = '$student_id' ";				
-			}			
+				$condition_user = " AND insert_user_id = '$student_id' ";
+			}
 			$sql = "SELECT count(tool) FROM $tbl_item_property WHERE tool='work' $condition_user ";
 			$rs = Database::query($sql, __LINE__, __FILE__);
 			$row = Database::fetch_row($rs);
 			return $row[0];
 		}
-		return null;		
+		return null;
 	}
 
 	public static function count_student_messages($student_id, $course_code) {
@@ -922,19 +922,19 @@ class Tracking {
 		$a_course = CourseManager :: get_course_information($course_code);
 		if (!empty($a_course['db_name'])) {
 			// table definition
-			$tbl_messages = Database :: get_course_table(TABLE_FORUM_POST, $a_course['db_name']);			
+			$tbl_messages = Database :: get_course_table(TABLE_FORUM_POST, $a_course['db_name']);
 			$condition_user = "";
 			if (is_array($student_id)) {
 				$condition_user = " WHERE poster_id IN (".implode(',',$student_id).") ";
 			} else {
 				$condition_user = " WHERE poster_id = '$student_id' ";
-			}			
-			$sql = "SELECT count(post_id) FROM $tbl_messages $condition_user ";		
+			}
+			$sql = "SELECT count(post_id) FROM $tbl_messages $condition_user ";
 			$rs = Database::query($sql, __LINE__, __FILE__);
 			$row = Database::fetch_row($rs);
 			return $row[0];
-		}		
-		return null;		
+		}
+		return null;
 	}
 
 /**
@@ -1148,13 +1148,13 @@ class Tracking {
 
 		if ($since == 'never') {
 			$sql = 'SELECT course_user.user_id FROM '.$table_course_rel_user.' course_user
-						LEFT JOIN '. $tbl_track_login.' stats_login 
+						LEFT JOIN '. $tbl_track_login.' stats_login
 						ON course_user.user_id = stats_login.user_id'.
 						$inner.'
-					WHERE course_user.course_code = \''.Database::escape_string($course_code).'\' 
+					WHERE course_user.course_code = \''.Database::escape_string($course_code).'\'
 					AND stats_login.login_course_date IS NULL
 					GROUP BY course_user.user_id';
-		}		
+		}
 		$rs = api_sql_query($sql,__FILE__,__LINE__);
 		$inactive_users = array();
 		while($user = Database::fetch_array($rs))
@@ -1208,7 +1208,7 @@ class Tracking {
 	 * @param string the course id
 	 */
 	public static function get_average_test_scorm_and_lp ($user_id,$course_id) {
-		
+
 		//the score inside the Reporting table
 		$course_info=api_get_course_info($course_id);
 		$lp_table = Database :: get_course_table(TABLE_LP_MAIN,$course_info['dbName']);
@@ -1274,28 +1274,28 @@ class Tracking {
 		}
 		return $avg_student_score;
 	}
-				
+
 }
 
 class TrackingCourseLog {
-	
+
 	function count_item_resources() {
 		$table_item_property = Database :: get_course_table(TABLE_ITEM_PROPERTY);
 		$table_user = Database :: get_main_table(TABLE_MAIN_USER);
 		$sql = "SELECT count(tool) AS total_number_of_items FROM $table_item_property track_resource, $table_user user" .
 				" WHERE track_resource.insert_user_id = user.user_id";
-	
+
 		if (isset($_GET['keyword'])) {
 			$keyword = Database::escape_string(trim($_GET['keyword']));
 			$sql .= " AND (user.username LIKE '%".$keyword."%' OR lastedit_type LIKE '%".$keyword."%' OR tool LIKE '%".$keyword."%')";
 		}
-	
+
 		$sql .= " AND tool IN ('document', 'learnpath', 'quiz', 'glossary', 'link', 'course_description')";
 		$res = Database::query($sql, __FILE__, __LINE__);
 		$obj = Database::fetch_object($res);
 		return $obj->total_number_of_items;
 	}
-	
+
 	function get_item_resources_data($from, $number_of_items, $column, $direction) {
 		global $dateTimeFormatLong;
 		$table_item_property = Database :: get_course_table(TABLE_ITEM_PROPERTY);
@@ -1310,14 +1310,14 @@ class TrackingCourseLog {
 					visibility as col6
 				FROM $table_item_property track_resource, $table_user user
 				WHERE track_resource.insert_user_id = user.user_id ";
-	
+
 		if (isset($_GET['keyword'])) {
 			$keyword = Database::escape_string(trim($_GET['keyword']));
 			$sql .= " AND (user.username LIKE '%".$keyword."%' OR lastedit_type LIKE '%".$keyword."%' OR tool LIKE '%".$keyword."%') ";
 		}
-	
+
 		$sql .= " AND tool IN ('document', 'learnpath', 'quiz', 'glossary', 'link', 'course_description')";
-	
+
 		if ($column == 0) { $column = '0'; }
 		if ($column != '' && $direction != '') {
 			if ($column != 2 && $column != 4) {
@@ -1326,12 +1326,12 @@ class TrackingCourseLog {
 		} else {
 			$sql .=	" ORDER BY col5 DESC ";
 		}
-	
+
 		$sql .=	" LIMIT $from, $number_of_items ";
-	
-		$res = Database::query($sql, __FILE__, __LINE__) or die(mysql_error());
+
+		$res = Database::query($sql, __FILE__, __LINE__) or die();
 		$resources = array ();
-	
+
 		while ($row = Database::fetch_array($res)) {
 			$ref = $row['ref'];
 			$table_name = TrackingCourseLog::get_tool_name_table($row['col0']);
@@ -1340,55 +1340,55 @@ class TrackingCourseLog {
 			$query = "SELECT session.id, session.name, user.username FROM $table_tool tool, $table_session session, $table_user user" .
 						" WHERE tool.session_id = session.id AND session.id_coach = user.user_id AND tool.$id = $ref";
 			$recorset = Database::query($query, __FILE__, __LINE__);
-	
+
 			if (!empty($recorset)) {
-	
+
 				$obj = Database::fetch_object($recorset);
-	
+
 				$name_session = '';
 				$coach_name = '';
 				if (!empty($obj)) {
 					$name_session = $obj->name;
 					$coach_name = $obj->username;
 				}
-	
+
 				$url_tool = api_get_path(WEB_CODE_PATH).$table_name['link_tool'];
-	
+
 				$row[0] = '';
 				if ($row['col6'] != 2) {
 					$row[0] = '<a href="'.$url_tool.'?'.api_get_cidreq().'&'.$obj->id.'">'.api_ucfirst($row['col0']).'</a>';
 				} else {
 					$row[0] = api_ucfirst($row['col0']);
 				}
-	
+
 				$row[1] = get_lang($row[1]);
-	
+
 				$row[5] = api_ucfirst(format_locale_date($dateTimeFormatLong, strtotime($row['col5'])));
-	
+
 				$row[4] = '';
 				if ($table_name['table_name'] == 'document') {
 					$condition = 'tool.title as title';
 					$query_document = "SELECT $condition FROM $table_tool tool" .
 										" WHERE id = $ref";
-					$rs_document = Database::query($query_document, __FILE__, __LINE__) or die(mysql_error());
+					$rs_document = Database::query($query_document, __FILE__, __LINE__) or die();
 					$obj_document = Database::fetch_object($rs_document);
 					$row[4] = $obj_document->title;
 				}
-	
+
 				$row2 = $name_session;
 				if (!empty($coach_name)) {
 					$row2 .= '<br />'.get_lang('Coach').': '.$coach_name;
 				}
 				$row[2] = $row2;
-	
+
 				$resources[] = $row;
 			}
-	
+
 		}
-	
+
 		return $resources;
 	}
-	
+
 	function get_tool_name_table($tool) {
 		switch ($tool) {
 			case 'document':
@@ -1432,17 +1432,17 @@ class TrackingCourseLog {
 	function display_additional_profile_fields() {
 		// getting all the extra profile fields that are defined by the platform administrator
 		$extra_fields = UserManager :: get_extra_fields(0,50,5,'ASC');
-	
+
 		// creating the form
-		$return = '<form action="courseLog.php" method="get" name="additional_profile_field_form" id="additional_profile_field_form">';  
-	
+		$return = '<form action="courseLog.php" method="get" name="additional_profile_field_form" id="additional_profile_field_form">';
+
 		// the select field with the additional user profile fields (= this is where we select the field of which we want to see
-		// the information the users have entered or selected. 
+		// the information the users have entered or selected.
 		$return .= '<select name="additional_profile_field">';
 		$return .= '<option value="-">'.get_lang('SelectFieldToAdd').'</option>';
-	
+
 		foreach ($extra_fields as $key=>$field) {
-			// show only extra fields that are visible, added by J.Montoya  
+			// show only extra fields that are visible, added by J.Montoya
 			if ($field[6]==1) {
 				if ($field[0] == $_GET['additional_profile_field'] ) {
 					$selected = 'selected="selected"';
@@ -1453,7 +1453,7 @@ class TrackingCourseLog {
 			}
 		}
 		$return .= '</select>';
-	
+
 		// the form elements for the $_GET parameters (because the form is passed through GET
 		foreach ($_GET as $key=>$value){
 			if ($key <> 'additional_profile_field')	{
@@ -1463,13 +1463,13 @@ class TrackingCourseLog {
 		// the submit button
 		$return .= '<button class="save" type="submit">'.get_lang('AddAdditionalProfileField').'</button>';
 		$return .= '</form>';
-		return $return; 
+		return $return;
 	}
-	
+
 	/**
 	 * This function gets all the information of a certrain ($field_id) additional profile field.
 	 * It gets the information of all the users so that it can be displayed in the sortable table or in the csv or xls export
-	 * 
+	 *
 	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
 	 * @since October 2009
 	 * @version 1.8.7
@@ -1478,7 +1478,7 @@ class TrackingCourseLog {
 		// Database table definition
 		$table_user 			= Database::get_main_table(TABLE_MAIN_USER);
 		$table_user_field_values 	= Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
-	
+
 		$sql = "SELECT user.user_id, field.field_value FROM $table_user user, $table_user_field_values field
 			WHERE user.user_id = field.user_id
 			AND field.field_id='".intval($field_id)."'";
@@ -1489,47 +1489,47 @@ class TrackingCourseLog {
 		}
 		return $return;
 	}
-	
+
 	/**
 	 * This function gets all the information of a certrain ($field_id) additional profile field for a specific list of users is more efficent than  get_addtional_profile_information_of_field() function
 	 * It gets the information of all the users so that it can be displayed in the sortable table or in the csv or xls export
-	 * 
+	 *
 	 * @author	Julio Montoya <gugli100@gmail.com>
-	 * @param	int field id 
+	 * @param	int field id
 	 * @param	array list of user ids
-	 * @return	array 
+	 * @return	array
 	 * @since	Nov 2009
 	 * @version	1.8.6.2
 	 */
 	function get_addtional_profile_information_of_field_by_user($field_id, $users) {
 		// Database table definition
 		$table_user 				= Database::get_main_table(TABLE_MAIN_USER);
-		$table_user_field_values 	= Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);	
-		$result_extra_field 		= UserManager::get_extra_field_information($field_id);	
-	
+		$table_user_field_values 	= Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
+		$result_extra_field 		= UserManager::get_extra_field_information($field_id);
+
 		if (!empty($users)) {
-			if ($result_extra_field['field_type'] == USER_FIELD_TYPE_TAG ) {	
+			if ($result_extra_field['field_type'] == USER_FIELD_TYPE_TAG ) {
 				foreach($users as $user_id) {
 					$user_result = UserManager::get_user_tags($user_id, $field_id);
 					$tag_list = array();
 					foreach($user_result as $item) {
 						$tag_list[] = $item['tag'];
-					}			
+					}
 					$return[$user_id][] = implode(', ',$tag_list);
 				}
-			} else {		
+			} else {
 				$new_user_array = array();
 				foreach($users as $user_id) {
 					$new_user_array[]= "'".$user_id."'";
 				}
-				$users = implode(',',$new_user_array);	
+				$users = implode(',',$new_user_array);
 				//selecting only the necessary information NOT ALL the user list
 				$sql = "SELECT user.user_id, field.field_value FROM $table_user user INNER JOIN $table_user_field_values field
-						ON (user.user_id = field.user_id) 
+						ON (user.user_id = field.user_id)
 						WHERE field.field_id=".intval($field_id)." AND user.user_id IN ($users)";
-						
+
 				$result = api_sql_query($sql,__FILE__,__LINE__);
-				while($row = Database::fetch_array($result)) {				
+				while($row = Database::fetch_array($result)) {
 					// get option value for field type double select by id
 					if (!empty($row['field_value'])) {
 						if ($result_extra_field['field_type'] == USER_FIELD_TYPE_DOUBLE_SELECT) {
@@ -1539,16 +1539,16 @@ class TrackingCourseLog {
 								$value2 = $result_extra_field['options'][$id_double_select[1]]['option_value'];
 								$row['field_value'] = ($value1.';'.$value2);
 							}
-						} 
+						}
 					}
-					// get other value from extra field				
+					// get other value from extra field
 					$return[$row['user_id']][] = $row['field_value'];
 				}
 			}
-		}		
+		}
 		return $return;
 	}
-	
+
 	/**
 	 * count the number of students in this course (used for SortableTable)
 	 * Deprecated
@@ -1557,69 +1557,69 @@ class TrackingCourseLog {
 		global $nbStudents;
 		return $nbStudents;
 	}
-	
+
 	function sort_users($a, $b) {
 		return strcmp(trim(api_strtolower($a[$_SESSION['tracking_column']])), trim(api_strtolower($b[$_SESSION['tracking_column']])));
 	}
-	
+
 	function sort_users_desc($a, $b) {
 		return strcmp( trim(api_strtolower($b[$_SESSION['tracking_column']])), trim(api_strtolower($a[$_SESSION['tracking_column']])));
 	}
-	
+
 	/**
-	 * Get number of users for sortable with pagination 
+	 * Get number of users for sortable with pagination
 	 * @return int
 	 */
-	function get_number_of_users() {		
-			global $user_ids;		
+	function get_number_of_users() {
+			global $user_ids;
 			return count($user_ids);
 	}
 	/**
-	 * Get data for users list in sortable with pagination 
+	 * Get data for users list in sortable with pagination
 	 * @return array
 	 */
 	function get_user_data($from, $number_of_items, $column, $direction) {
-		
+
 		global $user_ids, $course_code, $additional_user_profile_info, $export_csv, $is_western_name_order, $csv_content;
-		
+
 		$course_code = Database::escape_string($course_code);
 		$course_info = CourseManager :: get_course_information($course_code);
 		$tbl_track_cours_access = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
-		$tbl_user 				= Database :: get_main_table(TABLE_MAIN_USER);		
+		$tbl_user 				= Database :: get_main_table(TABLE_MAIN_USER);
 		$tbl_item_property 		= Database :: get_course_table(TABLE_ITEM_PROPERTY, $course_info['db_name']);
 		$tbl_forum_post  		= Database :: get_course_table(TABLE_FORUM_POST, $course_info['db_name']);
-		$tbl_course_lp_view 	= Database :: get_course_table(TABLE_LP_VIEW, $course_info['db_name']);	
+		$tbl_course_lp_view 	= Database :: get_course_table(TABLE_LP_VIEW, $course_info['db_name']);
 		$tbl_course_lp 			= Database :: get_course_table(TABLE_LP_MAIN, $course_info['db_name']);
-	
+
 		// get all users data from a course for sortable with limit
 		$condition_user = "";
 		if (is_array($user_ids)) {
-			$condition_user = " WHERE user.user_id IN (".implode(',',$user_ids).") "; 
+			$condition_user = " WHERE user.user_id IN (".implode(',',$user_ids).") ";
 		} else {
 			$condition_user = " WHERE user.user_id = '$user_ids' ";
-		}			
-		$sql = "SELECT user.user_id as col0, 
-				user.official_code as col1, 
-				user.lastname as col2, 
-				user.firstname as col3			
+		}
+		$sql = "SELECT user.user_id as col0,
+				user.official_code as col1,
+				user.lastname as col2,
+				user.firstname as col3
 				FROM $tbl_user as user
 				$condition_user ";
-	
+
 		if (!in_array($direction, array('ASC','DESC'))) {
 	    	$direction = 'ASC';
 	    }
-	
+
 	    $column = intval($column);
 	    $from = intval($from);
 	    $number_of_items = intval($number_of_items);
 		$sql .= " ORDER BY col$column $direction ";
 		$sql .= " LIMIT $from,$number_of_items";
-		$res = Database::query($sql, __FILE__, __LINE__);	
+		$res = Database::query($sql, __FILE__, __LINE__);
 		$users = array ();
 	    $t = time();
 	   	$row = array();
 		while ($user = Database::fetch_row($res)) {
-			
+
 			$row[0] = $user[1];
 			if ($is_western_name_order) {
 				$row[1] = $user[3];
@@ -1628,9 +1628,9 @@ class TrackingCourseLog {
 				$row[1] = $user[2];
 				$row[2] = $user[3];
 			}
-			$row[3] = api_time_to_hms(Tracking::get_time_spent_on_the_course($user[0], $course_code));		
+			$row[3] = api_time_to_hms(Tracking::get_time_spent_on_the_course($user[0], $course_code));
 			$avg_student_score = Tracking::get_average_test_scorm_and_lp($user[0], $course_code);
-			$avg_student_progress = Tracking::get_avg_student_progress($user[0], $course_code);			
+			$avg_student_progress = Tracking::get_avg_student_progress($user[0], $course_code);
 			if (empty($avg_student_score)) {$avg_student_score=0;}
 			if (empty($avg_student_progress)) {$avg_student_progress=0;}
 			$row[4] = $avg_student_progress.'%';
@@ -1639,7 +1639,7 @@ class TrackingCourseLog {
 			$row[7] = Tracking::count_student_messages($user[0], $course_code);//$user[5];
 			$row[8] = Tracking::get_first_connection_date_on_the_course($user[0], $course_code);
 			$row[9] = Tracking::get_last_connection_date_on_the_course($user[0], $course_code);
-					
+
 			// we need to display an additional profile field
 			if (isset($_GET['additional_profile_field']) AND is_numeric($_GET['additional_profile_field'])) {
 				if (is_array($additional_user_profile_info[$user[0]])) {
@@ -1647,7 +1647,7 @@ class TrackingCourseLog {
 				} else {
 					$row[10]='&nbsp;';
 				}
-			}		
+			}
 			$row[11] = '<center><a href="../mySpace/myStudents.php?student='.$user[0].'&details=true&course='.$course_code.'&origin=tracking_course"><img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a></center>';
 			if ($export_csv) {
 				$row[8] = strip_tags($row[8]);
@@ -1684,18 +1684,18 @@ class TrackingUserLog {
 				</tr>
 				";
 			echo "<tr><td style='padding-left : 40px;' valign='top'>".get_lang('LoginsDetails')."<br>";
-	
+
 			$sql = "SELECT UNIX_TIMESTAMP(access_date), count(access_date)
 						FROM $track_access_table
 						WHERE access_user_id = '".Database::escape_string($user_id)."'
 						AND access_cours_code = '".Database::escape_string($course_id)."'
 						GROUP BY YEAR(access_date),MONTH(access_date)
 						ORDER BY YEAR(access_date),MONTH(access_date) ASC";
-	
+
 			echo "<tr><td style='padding-left : 40px;padding-right : 40px;'>";
 			//$results = getManyResults2Col($sql);
 			$results = getManyResults3Col($sql);
-	
+
 			echo "<table cellpadding='2' cellspacing='1' border='0' align=center>";
 			echo "<tr>
 					<td class='secLine'>
@@ -1737,7 +1737,7 @@ class TrackingUserLog {
 			";
 		}
 	}
-	
+
 	/**
 	* Displays the exercise results for a specific user in a specific course.
 	* @todo remove globals
@@ -1754,24 +1754,24 @@ class TrackingUserLog {
 					</td>
 				</tr>";
 			echo "<tr><td style='padding-left : 40px;' valign='top'>".get_lang('ExercicesDetails')."<br />";
-	
+
 			$sql = "SELECT ce.title, te.exe_result , te.exe_weighting, UNIX_TIMESTAMP(te.exe_date)
 				FROM $TABLECOURSE_EXERCICES AS ce , $TABLETRACK_EXERCICES AS te
 				WHERE te.exe_cours_id = '".Database::escape_string($course_id)."'
 					AND te.exe_user_id = '".Database::escape_string($user_id)."'
 					AND te.exe_exo_id = ce.id
 				ORDER BY ce.title ASC, te.exe_date ASC";
-	
+
 			$hpsql = "SELECT te.exe_name, te.exe_result , te.exe_weighting, UNIX_TIMESTAMP(te.exe_date)
 				FROM $TBL_TRACK_HOTPOTATOES AS te
 				WHERE te.exe_user_id = '".Database::escape_string($user_id)."' AND te.exe_cours_id = '".Database::escape_string($course_id)."'
 				ORDER BY te.exe_cours_id ASC, te.exe_date ASC";
-	
+
 			$hpresults = getManyResultsXCol($hpsql, 4);
-	
+
 			$NoTestRes = 0;
 			$NoHPTestRes = 0;
-	
+
 			echo "<tr>\n<td style='padding-left : 40px;padding-right : 40px;'>\n";
 			$results = getManyResultsXCol($sql, 4);
 			echo "<table cellpadding='2' cellspacing='1' border='0' align='center'>\n";
@@ -1787,7 +1787,7 @@ class TrackingUserLog {
 					".get_lang('ExercicesTitleScoreColumn')."
 					</td>
 				</tr>";
-	
+
 			if (is_array($results)) {
 				for($i = 0; $i < sizeof($results); $i++) {
 					$display_date = format_locale_date(get_lang('dateTimeFormatLong'), $results[$i][3]);
@@ -1801,7 +1801,7 @@ class TrackingUserLog {
 				// istvan begin
 				$NoTestRes = 1;
 			}
-	
+
 			// The Result of Tests
 			if(is_array($hpresults)) {
 				for($i = 0; $i < sizeof($hpresults); $i++) {
@@ -1819,7 +1819,7 @@ class TrackingUserLog {
 			} else {
 				$NoHPTestRes = 1;
 			}
-	
+
 			if ($NoTestRes == 1 && $NoHPTestRes == 1) {
 				echo "<tr>\n";
 				echo "<td colspan='3'><center>".get_lang('NoResult')."</center></td>\n";
@@ -1837,7 +1837,7 @@ class TrackingUserLog {
 				</tr>";
 		}
 	}
-	
+
 	/**
 	* Displays the student publications for a specific user in a specific course.
 	* @todo remove globals
@@ -1904,7 +1904,7 @@ class TrackingUserLog {
 			";
 		}
 	}
-	
+
 	/**
 	* Displays the links followed for a specific user in a specific course.
 	* @todo remove globals
@@ -1960,7 +1960,7 @@ class TrackingUserLog {
 			";
 		}
 	}
-	
+
 	/**
 	* Displays the documents downloaded for a specific user in a specific course.
 	*/
@@ -1978,13 +1978,13 @@ class TrackingUserLog {
 				</tr>
 			";
 			echo "<tr><td style='padding-left : 40px;' valign='top'>".get_lang('DocumentsDetails')."<br>";
-	
+
 			$sql = "SELECT down_doc_path
 						FROM $downloads_table
 						WHERE down_cours_id = '".Database::escape_string($course_id)."'
 							AND down_user_id = '".Database::escape_string($user_id)."'
 						GROUP BY down_doc_path";
-	
+
 			echo "<tr><td style='padding-left : 40px;padding-right : 40px;'>";
 			$results = getManyResults1Col($sql);
 			echo "<table cellpadding='2' cellspacing='1' border='0' align='center'>";
@@ -2017,11 +2017,11 @@ class TrackingUserLog {
 			";
 		}
 	}
-		
+
 }
 
 class TrackingUserLogCSV {
-	
+
 	/**
 	* Displays the number of logins every month for a specific user in a specific course.
 	*/
@@ -2034,17 +2034,17 @@ class TrackingUserLogCSV {
 		{
 			$new_view = substr_replace($view,'0',0,1);
 			$title[1]= get_lang('LoginsAndAccessTools').get_lang('LoginsDetails');
-	
+
 			$sql = "SELECT UNIX_TIMESTAMP(`access_date`), count(`access_date`)
 						FROM $track_access_table
 						WHERE `access_user_id` = '$user_id'
 						AND `access_cours_code` = '".$course_id."'
 						GROUP BY YEAR(`access_date`),MONTH(`access_date`)
 						ORDER BY YEAR(`access_date`),MONTH(`access_date`) ASC";
-	
+
 			//$results = getManyResults2Col($sql);
 			$results = getManyResults3Col($sql);
-	
+
 			$title_line= get_lang('LoginsTitleMonthColumn').';'.get_lang('LoginsTitleCountColumn')."\n";
 			$line='';
 			$total = 0;
@@ -2068,7 +2068,7 @@ class TrackingUserLogCSV {
 		}
 		return array($title_line, $line);
 	}
-	
+
 	/**
 	* Displays the exercise results for a specific user in a specific course.
 	* @todo remove globals
@@ -2079,30 +2079,30 @@ class TrackingUserLogCSV {
 		if(substr($view,1,1) == '1')
 		{
 			$new_view = substr_replace($view,'0',1,1);
-	
+
 			$title[1]= get_lang('ExercicesDetails');
 			$line='';
-	
+
 			$sql = "SELECT `ce`.`title`, `te`.`exe_result` , `te`.`exe_weighting`, UNIX_TIMESTAMP(`te`.`exe_date`)
 				FROM $TABLECOURSE_EXERCICES AS ce , `$TABLETRACK_EXERCICES` AS `te`
 				WHERE `te`.`exe_cours_id` = '$course_id'
 					AND `te`.`exe_user_id` = '$user_id'
 					AND `te`.`exe_exo_id` = `ce`.`id`
 				ORDER BY `ce`.`title` ASC, `te`.`exe_date` ASC";
-	
+
 			$hpsql = "SELECT `te`.`exe_name`, `te`.`exe_result` , `te`.`exe_weighting`, UNIX_TIMESTAMP(`te`.`exe_date`)
 				FROM `$TABLETRACK_HOTPOTATOES` AS te
 				WHERE `te`.`exe_user_id` = '$user_id' AND `te`.`exe_cours_id` = '$course_id'
 				ORDER BY `te`.`exe_cours_id` ASC, `te`.`exe_date` ASC";
-	
+
 			$hpresults = getManyResultsXCol($hpsql, 4);
-	
+
 			$NoTestRes = 0;
 			$NoHPTestRes = 0;
-	
+
 			$results = getManyResultsXCol($sql, 4);
 			$title_line=get_lang('ExercicesTitleExerciceColumn').";".get_lang('Date').';'.get_lang('ExercicesTitleScoreColumn')."\n";
-	
+
 			if (is_array($results))
 			{
 				for($i = 0; $i < sizeof($results); $i++)
@@ -2115,17 +2115,17 @@ class TrackingUserLogCSV {
 			{
 				$NoTestRes = 1;
 			}
-	
+
 			// The Result of Tests
 			if(is_array($hpresults))
 			{
 				for($i = 0; $i < sizeof($hpresults); $i++)
 				{
 					$title = GetQuizName($hpresults[$i][0],'');
-	
+
 					if ($title == '')
 						$title = basename($hpresults[$i][0]);
-	
+
 					$display_date = format_locale_date(get_lang('dateTimeFormatLong'), $hpresults[$i][3]);
 					$line .= $title.';'.$display_date.';'.$hpresults[$i][1].'/'.$hpresults[$i][2]."\n";
 				}
@@ -2134,7 +2134,7 @@ class TrackingUserLogCSV {
 			{
 				$NoHPTestRes = 1;
 			}
-	
+
 			if ($NoTestRes == 1 && $NoHPTestRes == 1)
 			{
 				$line=get_lang('NoResult');
@@ -2143,11 +2143,11 @@ class TrackingUserLogCSV {
 		else
 		{
 			$new_view = substr_replace($view,'1',1,1);
-	
+
 		}
 		return array($title_line, $line);
 	}
-	
+
 	/**
 	* Displays the student publications for a specific user in a specific course.
 	* @todo remove globals
@@ -2165,11 +2165,11 @@ class TrackingUserLogCSV {
 						AND `u`.`upload_cours_id` = '$course_id'
 					ORDER BY `u`.`upload_date` DESC";
 			$results = getManyResultsXCol($sql,4);
-	
+
 			$title[1]=get_lang('WorksDetails');
 			$line='';
 			$title_line=get_lang('WorkTitle').";".get_lang('WorkAuthors').";".get_lang('Date')."\n";
-	
+
 			if (is_array($results))
 			{
 				for($j = 0 ; $j < count($results) ; $j++)
@@ -2179,7 +2179,7 @@ class TrackingUserLogCSV {
 					$beautifulDate = format_locale_date($dateTimeFormatLong,$timestamp);
 					$line .= $results[$j][1].";".$results[$j][2].";".$beautifulDate."\n";
 				}
-	
+
 			}
 			else
 			{
@@ -2192,7 +2192,7 @@ class TrackingUserLogCSV {
 		}
 		return array($title_line, $line);
 	}
-	
+
 	/**
 	* Displays the links followed for a specific user in a specific course.
 	* @todo remove globals
@@ -2217,9 +2217,9 @@ class TrackingUserLogCSV {
 				for($j = 0 ; $j < count($results) ; $j++)
 				{
 						$line .= $results[$j][0]."\n";
-	
+
 				}
-	
+
 			}
 			else
 			{
@@ -2232,7 +2232,7 @@ class TrackingUserLogCSV {
 		}
 		return array($title_line, $line);
 	}
-	
+
 	/**
 	* Displays the documents downloaded for a specific user in a specific course.
 	*/
@@ -2243,13 +2243,13 @@ class TrackingUserLogCSV {
 		{
 			$new_view = substr_replace($view,'0',4,1);
 			$title[1]= get_lang('DocumentsDetails');
-	
+
 			$sql = "SELECT `down_doc_path`
 						FROM $downloads_table
 						WHERE `down_cours_id` = '$course_id'
 							AND `down_user_id` = '$user_id'
 						GROUP BY `down_doc_path`";
-	
+
 			$results = getManyResults1Col($sql);
 			$title_line = get_lang('DocumentsTitleDocumentColumn')."\n";
 			if (is_array($results))
@@ -2258,7 +2258,7 @@ class TrackingUserLogCSV {
 				{
 						$line .= $results[$j]."\n";
 				}
-	
+
 			}
 			else
 			{

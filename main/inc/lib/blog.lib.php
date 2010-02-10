@@ -224,7 +224,7 @@ class Blog {
 	public static function create_post ($title, $full_text, $file_comment, $blog_id) {
 		global $_user;
 		global $_course;
-		
+
 		$blog_table_attachment = Database::get_course_table(TABLE_BLOGS_ATTACHMENT);
 		$upload_ok=true;
 		$has_attachment=false;
@@ -640,7 +640,7 @@ class Blog {
 			WHERE task_rel_user.user_id = ".(int)$_user['user_id']." ORDER BY target_date ASC";
 			$result = Database::query($sql, __FILE__, __LINE__);
 
-			if(mysql_numrows($result) > 0)
+			if (Database::num_rows($result) > 0)
 			{
 				echo '<ul>';
 				while($mytask = Database::fetch_array($result))
@@ -1868,7 +1868,7 @@ class Blog {
 
 		$arrUserTasks = array();
 
-        while($row = mysql_fetch_assoc($result))
+        while ($row = Database::fetch_assoc($result))
         {
             $arrUserTasks[] = $row['task_id'];
         }
@@ -1882,7 +1882,7 @@ class Blog {
 			AND	user_id = '".(int)$user_id."'
 			AND	task_id = '".(int)$task_id."'";
 		$result = Database::query($sql, __FILE__, __LINE__);
-		$row = mysql_fetch_assoc($result);
+		$row = Database::fetch_assoc($result);
 
 		$old_date = $row['target_date'];
 		$date = explode('-', $row['target_date']);
@@ -2021,7 +2021,7 @@ class Blog {
 		";
 
 		$result = @Database::query($sql, __FILE__, __LINE__);
-		$row = mysql_fetch_assoc($result);
+		$row = Database::fetch_assoc($result);
 
 		if($row['number'] == 0)
 		{
@@ -2056,7 +2056,7 @@ class Blog {
 		";
 
 		$result = @Database::query($sql, __FILE__, __LINE__);
-		$row = mysql_fetch_assoc($result);
+		$row = Database::fetch_assoc($result);
 
 		if($row['number'] == 0 || ($row['number'] != 0 && $task_id == $old_task_id && $user_id == $old_user_id))
 		{
@@ -2094,7 +2094,7 @@ class Blog {
 			FROM $tbl_blogs_tasks
 			WHERE task_id = '".(int)$task_id."'";
 		$result = Database::query($sql, __FILE__, __LINE__);
-		$row = mysql_fetch_assoc($result);
+		$row = Database::fetch_assoc($result);
 		// Get posts and authors
 		$sql = "
 			SELECT
@@ -2318,7 +2318,6 @@ class Blog {
 			ON user.user_id = blogs_rel_user.user_id
 			WHERE blogs_rel_user.blog_id = '".(int)$blog_id."'";
 
-		//$sql_result = mysql_query($sql_query) or die(mysql_error());
 		if (!($sql_result = Database::query($sql_query, __FILE__, __LINE__))) {
 			return false;
 		}
@@ -2343,7 +2342,6 @@ class Blog {
 			INNER JOIN " . Database::get_course_table(TABLE_BLOGS_TASKS) . " bt ON btu.task_id = bt.task_id
 			WHERE btu.blog_id = $blog_id AND btu.user_id = " . $myrow['user_id'] . "";
 
-			//$sql_res = mysql_query($sql) or die(mysql_error());
 			if (!($sql_res = Database::query($sql, __FILE__, __LINE__))) {
 				die();
 			}
@@ -2574,7 +2572,7 @@ class Blog {
 				ORDER BY target_date ASC";
 			$result = Database::query($sql, __FILE__, __LINE__);
 
-			if(mysql_numrows($result) > 0)
+			if (Database::num_rows($result) > 0)
 			{
 				while($mytask = Database::fetch_array($result))
 				{
@@ -2879,7 +2877,7 @@ class Blog {
 function get_blog_attachment($blog_id, $post_id=null,$comment_id=null)
 {
 	$blog_table_attachment = Database::get_course_table(TABLE_BLOGS_ATTACHMENT);
-	
+
 	$blog_id = Database::escape_string($blog_id);
 	$comment_id = Database::escape_string($comment_id);
 	$post_id = Database::escape_string($post_id);
@@ -2898,9 +2896,9 @@ function get_blog_attachment($blog_id, $post_id=null,$comment_id=null)
 		}
 		$where.=' comment_id ="'.$comment_id.'" ';
 	}
-	
+
 	$sql = 'SELECT path, filename, comment FROM '. $blog_table_attachment.' WHERE blog_id ="'.intval($blog_id).'"  '.$where;
-	
+
 	$result=Database::query($sql, __FILE__, __LINE__);
 	if (Database::num_rows($result)!=0)
 	{
@@ -2920,8 +2918,8 @@ function get_blog_attachment($blog_id, $post_id=null,$comment_id=null)
 
 function delete_all_blog_attachment($blog_id,$post_id=null,$comment_id=null)
 {
-	
-	global $_course;	
+
+	global $_course;
 	$blog_table_attachment = Database::get_course_table(TABLE_BLOGS_ATTACHMENT);
 	$blog_id = Database::escape_string($blog_id);
 	$comment_id = Database::escape_string($comment_id);

@@ -297,7 +297,7 @@ class aicc extends learnpath {
 					"'$prereq', 0" .
 					")";
 			$res_item = Database::query($sql_item);
-			if($this->debug>1){error_log('New LP - In aicc::import_aicc() - inserting item : '.$sql_item.' : '.mysql_error(),0);}
+			if($this->debug>1){error_log('New LP - In aicc::import_aicc() - inserting item : '.$sql_item.' : '.Database::error(),0);}
 			$item_id = Database::insert_id();
 			//now update previous item to change next_item_id
 			if($previous != 0){

@@ -2072,7 +2072,8 @@ function fill_Db_course($courseDbName, $courseRepository, $language,$default_doc
 	if (file_exists($file_to_include))
 		include (api_get_path(SYS_CODE_PATH) . $file_to_include);
 
-	mysql_select_db("$courseDbName");
+	//mysql_select_db("$courseDbName");
+	Database::select_db("$courseDbName");
 
 	/*
 	==============================================================================

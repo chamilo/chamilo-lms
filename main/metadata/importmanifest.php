@@ -443,7 +443,10 @@ elseif ($smo == get_lang('Index') && file_exists($phpDigIncCn) &&
     }
     // possible enhancement: UPDATE spider record for still existing pages
 
-    if(isset($db)) mysql_select_db($_configuration['main_database'], $db);  // back to Dokeos
+    if(isset($db)) {
+    	//mysql_select_db($_configuration['main_database'], $db);
+    	Database::select_db($_configuration['main_database'], $db);
+    }
 }
 elseif ($smo == get_lang('Index'))
 {

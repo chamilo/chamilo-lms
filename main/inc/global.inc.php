@@ -95,7 +95,14 @@ if (empty($_configuration['statistics_database']) && $already_installed) {
 }
 
 // Connect to the server database and select the main dokeos database.
-if (!($dokeos_database_connection = @mysql_connect($_configuration['db_host'], $_configuration['db_user'], $_configuration['db_password']))) {
+//if (!($dokeos_database_connection = @mysql_connect($_configuration['db_host'], $_configuration['db_user'], $_configuration['db_password']))) {
+if (!($dokeos_database_connection = @Database::connect(
+	array(
+		'server' => $_configuration['db_host'],
+		'username' => $_configuration['db_user'],
+		'password' => $_configuration['db_password'],
+		'persistent' => $_configuration['db_persistent_connection'] // When $_configuration['db_persistent_connection'] is set, it is expected to be a boolean type.
+	)))) {
 	$global_error_code = 3;
 	// The database server is not available or credentials are invalid.
 	require $includePath.'/global_error_message.inc.php';
@@ -111,7 +118,8 @@ if (!$_configuration['db_host']) {
 // The system has not been designed to use special SQL modes that were introduced since MySQL 5.
 Database::query("set session sql_mode='';", __FILE__, __LINE__);
 
-if (!mysql_select_db($_configuration['main_database'], $dokeos_database_connection)) {
+//if (!mysql_select_db($_configuration['main_database'], $dokeos_database_connection)) {
+if (!Database::select_db($_configuration['main_database'], $dokeos_database_connection)) {
 	$global_error_code = 5;
 	// Connection to the main Dokeos database is impossible, it might be missing or restricted or its configuration option might be incorrect.
 	require $includePath.'/global_error_message.inc.php';

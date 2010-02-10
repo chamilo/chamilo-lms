@@ -92,7 +92,8 @@ if (count($idt) && file_exists($phpDigIncCn))
 
     if(isset($db))
     {
-    	mysql_select_db($_configuration['main_database'], $db);  // back to Dokeos
+    	//mysql_select_db($_configuration['main_database'], $db);
+    	Database::select_db($_configuration['main_database'], $db);
     }
 }
 else

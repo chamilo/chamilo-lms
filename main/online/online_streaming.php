@@ -72,7 +72,8 @@ if($_POST['sent'])
 		fclose($fp);
 	}
 
-	mysql_close();
+	//mysql_close();
+	Database::close();
 	header('Location: online_master.php');
 	exit();
 }

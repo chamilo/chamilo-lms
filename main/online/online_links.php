@@ -127,7 +127,8 @@ if($_POST['sent'])
 		}
 	}
 
-	mysql_close();
+	//mysql_close();
+	Database::close();
 	header('Location: '.api_get_self());
 	exit();
 }
@@ -139,7 +140,8 @@ if($action == 'delete')
 	$query="DELETE FROM $tbl_online_link WHERE id='$link'";
 	Database::query($query,__FILE__,__LINE__);
 
-	mysql_close();
+	//mysql_close();
+	Database::close();
 	header('Location: '.api_get_self());
 	exit();
 }

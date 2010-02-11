@@ -785,6 +785,22 @@ class Database {
 	}
 
 	/**
+	 * Returns a list of databases created on the server. The list may contain all of the
+	 * available database names or filtered database names by using a pattern.
+	 * @param string $pattern (optional)		A pattern for filtering database names as if it was needed for the SQL's LIKE clause, for example 'chamilo_%'.
+	 * @param resource $connection (optional)	The database server connection, for detailed description see the method query().
+	 * @return array							Returns in an array the retrieved list of database names.
+	 */
+	public static function get_databases($pattern = '', $connection = null) {
+		$result = array();
+		$query_result = Database::query(!empty($pattern) ? "SHOW DATABASES LIKE '".self::escape_string($pattern, $connection)."'" : "SHOW DATABASES", $connection, __FILE__, __LINE__);
+		while ($row = Database::fetch_row($query_result)) {
+			$result[] = $row[0];
+		}
+		return $result;
+	}
+
+	/**
 	 * Returns information about the type of the current connection and the server host name.
 	 * @param resource $connection (optional)	The database server connection, for detailed description see the method query().
 	 * @return string/boolean					Returns string data on success or FALSE on failure.
@@ -809,6 +825,30 @@ class Database {
 	 */
 	public function get_server_info($connection = null) {
 		return self::use_default_connection($connection) ? mysql_get_server_info() : mysql_get_server_info($connection);
+	}
+
+	/**
+	 * Returns a list of tables within a database. The list may contain all of the
+	 * available table names or filtered table names by using a pattern.
+	 * @param string $database (optional)		The name of the examined database. If it is omited, the current database is assumed, see Database::select_db().
+	 * @param string $pattern (optional)		A pattern for filtering table names as if it was needed for the SQL's LIKE clause, for example 'access_%'.
+	 * @param resource $connection (optional)	The database server connection, for detailed description see the method query().
+	 * @return array							Returns in an array the retrieved list of table names.
+	 */
+	public static function get_tables($database = '', $pattern = '', $connection = null) {
+		$result = array();
+		$query = "SHOW TABLES";
+		if (!empty($database)) {
+			$query .= " FROM `".self::escape_string($database, $connection)."`";
+		}
+		if (!empty($pattern)) {
+			$query .= " LIKE '".self::escape_string($pattern, $connection)."'";
+		}
+		$query_result = Database::query($query, $connection, __FILE__, __LINE__);
+		while ($row = Database::fetch_row($query_result)) {
+			$result[] = $row[0];
+		}
+		return $result;
 	}
 
 	/**
@@ -904,22 +944,6 @@ class Database {
 	 */
 	public static function select_db($database_name, $connection = null) {
 		return self::use_default_connection($connection) ? mysql_select_db($database_name) : mysql_select_db($database_name, $connection);
-	}
-
-	/**
-	 * Returns a list of databases created on the server. The list may contain all of the
-	 * available database names or filtered database names only by using a pattern.
-	 * @param string $pattern					A pattern for filtering database names as if it was needed for the SQL's LIKE clause, for example 'chamilo_%'.
-	 * @param resource $connection (optional)	The database server connection, for detailed description see the method query().
-	 * @return array							Returns in an array the retrieved list of database names.
-	 */
-	public static function get_databases($pattern = '', $connection = null) {
-		$result = array();
-		$query_result = Database::query(!empty($pattern) ? "SHOW DATABASES LIKE '".self::escape_string($pattern, $connection)."'" : "SHOW DATABASES", $connection, __FILE__, __LINE__);
-		while ($row = Database::fetch_row($query_result)) {
-			$result[] = $row[0];
-		}
-		return $result;
 	}
 
 	/**

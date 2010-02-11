@@ -199,6 +199,8 @@ class TestAnswer extends UnitTestCase {
 	 	$auto_id = 1;
 		$res = $this->aAnswer->selectAnswerByAutoId($auto_id);
 		if(!is_null($res)){
+			$this->assertTrue(is_array($res));
+		} else {
 			$this->assertTrue(is_bool($res));
 		}
 		//var_dump($res);

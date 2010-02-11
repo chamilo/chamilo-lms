@@ -2179,4 +2179,19 @@ class CourseManager {
 			Database::query($insert_sql,__FILE__,__LINE__);
 		}
 	}
+	public static function is_special_course($course_code){
+		$tbl_course_field_value		= Database::get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
+		$tbl_course_field 			= Database::get_main_table(TABLE_MAIN_COURSE_FIELD);
+		
+		$sql = "SELECT course_code FROM $tbl_course_field_value tcfv INNER JOIN $tbl_course_field tcf ON " .
+				" tcfv.field_id =  tcf.id WHERE tcf.field_variable = 'special_course' AND tcfv.field_value = 1 AND course_code='$course_code'";	
+
+		$special_course_result = Database::query($sql, __FILE__, __LINE__);
+		
+		$affected_rows = Database::affected_rows();
+		if (!empty($affected_rows)){
+			return true;	
+		}		
+			
+	}
 } //end class CourseManager

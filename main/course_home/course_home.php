@@ -153,6 +153,16 @@ $_course['official_code'] = $course_code;
 
 api_session_unregister('toolgroup');
 
+$is_speacialcourse = CourseManager::is_special_course($course_code);
+
+if ($is_speacialcourse==true){
+	$autoreg=Security::remove_XSS($_GET['autoreg']);
+	if ($autoreg==1){
+		CourseManager::subscribe_user($user_id, $course_code, $status = STUDENT);
+	}
+}
+
+
 /*
 -----------------------------------------------------------
 	Is the user allowed here?

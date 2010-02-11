@@ -197,12 +197,12 @@ foreach($bases_new as $num_base=>$base)
 		echo "<h3>This database has been removed!</h3>";
 	}
 	echo "<h3>Differences between each table</h3>" .
-			"- fields display under each table's name, <br>" .
-			"- new tables are surrounded by '**', <br/>" .
-			"- removed tables are surrounded by '---',<br/>" .
-			"- new fields are surrounded by '++',<br/>" .
-			"- removed fields are surrounded by '--',<br/>" .
-			"- modified fields are surrounded by '~+~',<br/>";
+			"- fields display under each table's name, <br />" .
+			"- new tables are surrounded by '**', <br />" .
+			"- removed tables are surrounded by '---',<br />" .
+			"- new fields are surrounded by '++',<br />" .
+			"- removed fields are surrounded by '--',<br />" .
+			"- modified fields are surrounded by '~+~',<br />";
 	echo '<pre>'.print_r($modif_tables,true).'</pre>';
 	$all_db_changes[$base] = $modif_tables;
 }
@@ -224,7 +224,7 @@ foreach($all_db_changes as $base => $changes){
 			foreach($myold as $myname){
 				//column lost, display DROP command
 				$myname = str_replace('--','',$myname);
-				echo "ALTER TABLE ".$mytable." DROP ".$myname."<br/>";
+				echo "ALTER TABLE ".$mytable." DROP ".$myname."<br />";
 			}
 			foreach($mychanged as $myname=>$myprop){
 				//field changed, display SET command
@@ -234,12 +234,12 @@ foreach($all_db_changes as $base => $changes){
 					$myprop = str_replace('~+~','',$myprop);
 					$myprops_string .= $myprop." ";
 				}
-				echo "ALTER TABLE ".$mytable." CHANGE $myname $myname $myprops_string<br/>";
+				echo "ALTER TABLE ".$mytable." CHANGE $myname $myname $myprops_string<br />";
 			}
 			foreach($mynew as $myname){
 				//column created, display ADD command
 				$myname = str_replace('++','',$myname);
-				echo "ALTER TABLE ".$mytable." ADD $myname...<br/>";
+				echo "ALTER TABLE ".$mytable." ADD $myname...<br />";
 			}
 		}else{
 			//we have a table-level difference
@@ -248,15 +248,15 @@ foreach($all_db_changes as $base => $changes){
 				case '**':
 					//new table, display CREATE TABLE command
 					$table = str_replace('**','',$table);
-					echo "CREATE TABLE ".$table."();<br/>";
+					echo "CREATE TABLE ".$table."();<br />";
 					break;
 				case '--':
 					//dropped table, display DROP TABLE command
 					$table = str_replace('---','',$table);
-					echo "DROP TABLE ".$table."();<br/>";
+					echo "DROP TABLE ".$table."();<br />";
 					break;
 				default:
-					echo "Unknown table problem: ".$table."<br/>";
+					echo "Unknown table problem: ".$table."<br />";
 					break;
 			}
 		}

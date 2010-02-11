@@ -141,7 +141,7 @@ if($_POST['step2'])
 	<br /><br />
 
 	<?php if($nbr_courses > MAX_COURSE_TRANSFER): ?>
-	<font color="red"><b>Warning:</b> You have more than <?php echo MAX_COURSE_TRANSFER; ?> courses on your Dokeos platform ! Only <?php echo MAX_COURSE_TRANSFER; ?> courses have been updated. To update the other courses, <a href="update_courses.php?update_path=<?php echo urlencode($updatePath); ?>"><font color="red">click here</font></a>.</font>
+	<font color="red"><strong>Warning:</strong> You have more than <?php echo MAX_COURSE_TRANSFER; ?> courses on your Dokeos platform ! Only <?php echo MAX_COURSE_TRANSFER; ?> courses have been updated. To update the other courses, <a href="update_courses.php?update_path=<?php echo urlencode($updatePath); ?>"><font color="red">click here</font></a>.</font>
 	<?php else: ?>
 	<br /><br />
 	<?php endif; ?>
@@ -169,7 +169,7 @@ else
 
 		Please enter the path where the older version of Dokeos is installed (<?php echo implode('&nbsp;|&nbsp;',$update_from_version); ?>). The courses will be moved from that location to the Dokeos path.
 		<br /><br />
-		<b>Notice:</b> Please run this update script only if you've just updated (incompletely) Dokeos <?php echo implode('&nbsp;|&nbsp;',$update_from_version); ?> to Dokeos <?php echo $dokeos_version; ?>!
+		<strong>Notice:</strong> Please run this update script only if you've just updated (incompletely) Dokeos <?php echo implode('&nbsp;|&nbsp;',$update_from_version); ?> to Dokeos <?php echo $dokeos_version; ?>!
 		<br /><br />
 	<?php
 	if($badUpdatePath)

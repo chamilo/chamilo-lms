@@ -42,7 +42,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 	//check if the current Dokeos install is elligible for update
 	if (!file_exists('../inc/conf/configuration.php'))
 	{
-		echo '<b>'.get_lang('Error').' !</b> Dokeos '.implode('|', $updateFromVersion).' '.get_lang('HasNotBeenFound').'.<br><br>
+		echo '<strong>'.get_lang('Error').' !</strong> Dokeos '.implode('|', $updateFromVersion).' '.get_lang('HasNotBeenFound').'.<br /><br />
 								'.get_lang('PleasGoBackToStep1').'.
 							    <p><button type="submit" class="back" name="step1" value="&lt; '.get_lang('Back').'">'.get_lang('Back').'</button></p>
 							    </td></tr></table></form></body></html>';
@@ -80,12 +80,12 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 		//$no = mysql_errno();
 		//$msg = mysql_error();
 
-		//echo '<hr>['.$no.'] - '.$msg.'<hr>';
+		//echo '<hr />['.$no.'] - '.$msg.'<hr />';
 		echo					get_lang('DBServerDoesntWorkOrLoginPassIsWrong').'.<br /><br />' .
 				'				'.get_lang('PleaseCheckTheseValues').' :<br /><br />
-							    <b>'.get_lang('DBHost').'</b> : '.$dbHostForm.'<br />
-								<b>'.get_lang('DBLogin').'</b> : '.$dbUsernameForm.'<br />
-								<b>'.get_lang('DBPassword').'</b> : '.$dbPassForm.'<br /><br />
+							    <strong>'.get_lang('DBHost').'</strong> : '.$dbHostForm.'<br />
+								<strong>'.get_lang('DBLogin').'</strong> : '.$dbUsernameForm.'<br />
+								<strong>'.get_lang('DBPassword').'</strong> : '.$dbPassForm.'<br /><br />
 								'.get_lang('PleaseGoBackToStep').' '. (defined('DOKEOS_INSTALL') ? '3' : '1').'.
 							    <p><button type="submit" class="back" name="step'. (defined('DOKEOS_INSTALL') ? '3' : '1').'" value="&lt; '.get_lang('Back').'">'.get_lang('Back').'</button></p>
 							    </td></tr></table></form></body></html>';
@@ -251,8 +251,8 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 					<tbody>
 					<tr>
 					<td style="vertical-align: middle; width: 50%;" colspan="1" rowspan="1">
-						<h1>TITULUS 1<br>
-						<span class="gris_title">TITULUS 2</span><br>
+						<h1>TITULUS 1<br />
+						<span class="gris_title">TITULUS 2</span><br />
 						</h1>
 					</td>
 					<td style="width: 50%;">
@@ -260,8 +260,8 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 					</tr>
 					</tbody>
 					</table>
-					<p><br>
-					<br>
+					<p><br />
+					<br />
 					</p>
 					</body>
 		\');';
@@ -302,15 +302,15 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 						</td>
 						<td style="background: transparent url({IMG_DIR}postit.png ) repeat scroll center top; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; width: 33%; text-align: center; vertical-align: bottom;">
 						<h3>Ut enim ad minima</h3>
-						Veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur.<br>
+						Veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur.<br />
 						<h3>
-						<img style="width: 180px; height: 144px;" alt="trainer" src="{COURSE_DIR}images/trainer/trainer_smile.png "><br></h3>
+						<img style="width: 180px; height: 144px;" alt="trainer" src="{COURSE_DIR}images/trainer/trainer_smile.png "><br /></h3>
 						</td>
 						</tr>
 						</tbody>
 						</table>
-						<p><br>
-						<br>
+						<p><br />
+						<br />
 						</p>
 						</body>
 		\');';
@@ -341,7 +341,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 							<td style="width: 25%;"></td>
 							<td style="background: transparent url({IMG_DIR}faded_grey.png ) repeat scroll center top; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; vertical-align: top; width: 33%; text-align: right; font-weight: bold;" colspan="1" rowspan="1">
 							<span class="text">
-							<br>
+							<br />
 							Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Duis pellentesque.</span>
 							</td>
 							<td style="width: 25%; font-weight: bold;">
@@ -349,8 +349,8 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 							</tr>
 							</tbody>
 							</table>
-							<p><br>
-							<br>
+							<p><br />
+							<br />
 							</p>
 						</body>
 		\');
@@ -367,7 +367,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 						<tbody>
 						<tr>
 						<td style="width: 66%;"></td>
-						<td style="vertical-align: bottom; width: 33%;" colspan="1" rowspan="4">&nbsp;<img style="width: 180px; height: 248px;" alt="trainer" src="{COURSE_DIR}images/trainer/trainer_reads.png "><br>
+						<td style="vertical-align: bottom; width: 33%;" colspan="1" rowspan="4">&nbsp;<img style="width: 180px; height: 248px;" alt="trainer" src="{COURSE_DIR}images/trainer/trainer_reads.png "><br />
 						</td>
 						</tr>
 						<tr align="right">
@@ -378,7 +378,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 						<tr align="right">
 						<td style="background: transparent url({IMG_DIR}faded_grey.png ) repeat scroll center top; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; vertical-align: top; width: 66%;">
 						Vivamus
-						a quam.&nbsp;<br>
+						a quam.&nbsp;<br />
 						</td>
 						</tr>
 						<tr align="right">
@@ -388,8 +388,8 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 						</tr>
 						</tbody>
 						</table>
-					<p><br>
-					<br>
+					<p><br />
+					<br />
 					</p>
 					</body>
 		\');';
@@ -406,7 +406,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 						<tbody>
 						<tr>
 						<td></td>
-						<td style="vertical-align: top;" colspan="1" rowspan="4">&nbsp;<img style="width: 180px; height: 294px;" alt="Trainer" src="{COURSE_DIR}images/trainer/trainer_join_hands.png "><br>
+						<td style="vertical-align: top;" colspan="1" rowspan="4">&nbsp;<img style="width: 180px; height: 294px;" alt="Trainer" src="{COURSE_DIR}images/trainer/trainer_join_hands.png "><br />
 						</td>
 						<td></td>
 						</tr>
@@ -421,11 +421,11 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 						<tr>
 						<td style="background: transparent url({IMG_DIR}faded_grey.png ) repeat scroll center top; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; vertical-align: top; width: 33%; text-align: right;">
 						Vivamus
-						a quam.&nbsp;<br>
+						a quam.&nbsp;<br />
 						</td>
 						<td style="background: transparent url({IMG_DIR}faded_grey.png ) repeat scroll center top; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; vertical-align: top; width: 33%; text-align: left;">
 						Etiam
-						lacinia stibulum ante.<br>
+						lacinia stibulum ante.<br />
 						</td>
 						</tr>
 						<tr>
@@ -434,13 +434,13 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 						a est stibulum ante ipsum.</td>
 						<td style="background: transparent url({IMG_DIR}faded_grey.png ) repeat scroll center top; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; vertical-align: top; width: 33%; text-align: left;">
 						Consectetuer
-						adipiscing elit. <br>
+						adipiscing elit. <br />
 						</td>
 						</tr>
 						</tbody>
 						</table>
-					<p><br>
-					<br>
+					<p><br />
+					<br />
 					</p>
 					</body>
 
@@ -456,7 +456,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 						<table style="background: transparent url({IMG_DIR}faded_blue_horizontal.png ) repeat scroll 0% 50%; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; text-align: left; width: 720px; height: 400px;" border="0" cellpadding="15" cellspacing="6">
 						<tbody>
 						<tr>
-						<td style="vertical-align: bottom; width: 50%;" colspan="1" rowspan="4"><img style="width: 300px; height: 199px;" alt="trainer" src="{COURSE_DIR}images/trainer/trainer_points_right.png"><br>
+						<td style="vertical-align: bottom; width: 50%;" colspan="1" rowspan="4"><img style="width: 300px; height: 199px;" alt="trainer" src="{COURSE_DIR}images/trainer/trainer_points_right.png"><br />
 						</td>
 						<td style="width: 50%;"></td>
 						</tr>
@@ -468,19 +468,19 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 						<tr>
 						<td style="background: transparent url({IMG_DIR}faded_grey.png ) repeat scroll center top; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; vertical-align: top; text-align: left; width: 50%;">
 						Etiam
-						lacinia.<br>
+						lacinia.<br />
 						</td>
 						</tr>
 						<tr>
 						<td style="background: transparent url({IMG_DIR}faded_grey.png ) repeat scroll center top; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; vertical-align: top; text-align: left; width: 50%;">
 						Consectetuer
-						adipiscing elit. <br>
+						adipiscing elit. <br />
 						</td>
 						</tr>
 						</tbody>
 						</table>
-					<p><br>
-					<br>
+					<p><br />
+					<br />
 					</p>
 					</body>
 		\');';
@@ -497,7 +497,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 		            	<table style="background: transparent url({IMG_DIR}faded_blue_horizontal.png ) repeat scroll 0% 50%; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; text-align: left; width: 720px; height: 400px;" border="0" cellpadding="15" cellspacing="6">
 						<tr>
 							<td style="height: 10%; width: 33%;"></td>
-							<td style="vertical-align: top; width: 33%;" colspan="1" rowspan="2">&nbsp;<img style="width: 180px; height: 271px;" alt="trainer" src="{COURSE_DIR}images/trainer/trainer_standing.png "><br>
+							<td style="vertical-align: top; width: 33%;" colspan="1" rowspan="2">&nbsp;<img style="width: 180px; height: 271px;" alt="trainer" src="{COURSE_DIR}images/trainer/trainer_standing.png "><br />
 							</td>
 							<td style="height: 10%; width: 33%;"></td>
 						</tr>
@@ -525,7 +525,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 							<tbody>
 							<tr>
 							<td style="background: transparent url({IMG_DIR}faded_grey.png ) repeat scroll center top; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; vertical-align: top; text-align: left; height: 33%; width: 33%;">
-							<br>
+							<br />
 							Etiam
 							lacinia stibulum ante.
 							Convallis
@@ -541,8 +541,8 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 							</tr>
 							</tbody>
 							</table>
-							<p><br>
-							<br>
+							<p><br />
+							<br />
 							</p>
 							</body>
 		\');
@@ -559,19 +559,19 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 								<tbody>
 								<tr>
 								<td style="width: 50%; vertical-align: top;">
-									<img style="width: 48px; height: 49px; float: left;" alt="01" src="{COURSE_DIR}images/small/01.png " hspace="5"><br>Lorem ipsum dolor sit amet<br><br><br>
+									<img style="width: 48px; height: 49px; float: left;" alt="01" src="{COURSE_DIR}images/small/01.png " hspace="5"><br />Lorem ipsum dolor sit amet<br /><br /><br />
 									<img style="width: 48px; height: 49px; float: left;" alt="02" src="{COURSE_DIR}images/small/02.png " hspace="5">
-									<br>Ut enim ad minim veniam<br><br><br>
-									<img style="width: 48px; height: 49px; float: left;" alt="03" src="{COURSE_DIR}images/small/03.png " hspace="5">Duis aute irure dolor in reprehenderit<br><br><br>
+									<br />Ut enim ad minim veniam<br /><br /><br />
+									<img style="width: 48px; height: 49px; float: left;" alt="03" src="{COURSE_DIR}images/small/03.png " hspace="5">Duis aute irure dolor in reprehenderit<br /><br /><br />
 									<img style="width: 48px; height: 49px; float: left;" alt="04" src="{COURSE_DIR}images/small/04.png " hspace="5">Neque porro quisquam est</td>
 
 								<td style="vertical-align: top; width: 50%; text-align: right;" colspan="1" rowspan="1">
-									<img style="width: 300px; height: 291px;" alt="Gearbox" src="{COURSE_DIR}images/diagrams/gearbox.jpg "><br></td>
+									<img style="width: 300px; height: 291px;" alt="Gearbox" src="{COURSE_DIR}images/diagrams/gearbox.jpg "><br /></td>
 								</tr><tr></tr>
 								</tbody>
 								</table>
-								<p><br>
-								<br>
+								<p><br />
+								<br />
 								</p>
 							</body>
 		\');
@@ -590,7 +590,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 							<tbody>
 							<tr>
 							<td style="vertical-align: bottom; width: 33%;" colspan="1" rowspan="2">
-							<img style="width: 180px; height: 271px;" alt="trainer" src="{COURSE_DIR}images/trainer/trainer_chair.png "><br>
+							<img style="width: 180px; height: 271px;" alt="trainer" src="{COURSE_DIR}images/trainer/trainer_chair.png "><br />
 							</td>
 							<td style="height: 10%; width: 66%;"></td>
 							</tr>
@@ -612,8 +612,8 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 							</tr>
 							</tbody>
 							</table>
-						<p><br>
-						<br>
+						<p><br />
+						<br />
 						</p>
 						</body>
 		\');';
@@ -678,8 +678,8 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 						</tr>
 						</tbody>
 						</table>
-						<p><br>
-						<br>
+						<p><br />
+						<br />
 						</p>
 						</body>
 		\');';
@@ -697,7 +697,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 						<tbody>
 						<tr>
 						<td style="width: 33%;" colspan="1" rowspan="4">
-							<img style="width: 120px; height: 348px;" alt="learner wonders" src="{COURSE_DIR}images/silhouette.png "><br>
+							<img style="width: 120px; height: 348px;" alt="learner wonders" src="{COURSE_DIR}images/silhouette.png "><br />
 						</td>
 						<td style="width: 66%;"></td>
 						</tr>
@@ -709,19 +709,19 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 						<tr align="center">
 						<td style="background: transparent url({IMG_DIR}faded_grey.png ) repeat scroll center top; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; vertical-align: top; width: 66%;">
 						Etiam
-						lacinia stibulum ante.<br>
+						lacinia stibulum ante.<br />
 						</td>
 						</tr>
 						<tr align="center">
 						<td style="background: transparent url({IMG_DIR}faded_grey.png ) repeat scroll center top; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; vertical-align: top; width: 66%;">
 						Consectetuer
-						adipiscing elit. <br>
+						adipiscing elit. <br />
 						</td>
 						</tr>
 						</tbody>
 						</table>
-					<p><br>
-					<br>
+					<p><br />
+					<br />
 					</p>
 					</body>
 		\');
@@ -759,7 +759,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 								<li>consectetur</li>
 								<li>adipisicing elit</li>
 							</ul>
-							<br>
+							<br />
 							</td>
 							<td>
 								<img style="width: 32px; height: 32px;" alt="arrow" src="{COURSE_DIR}images/small/arrow.png ">
@@ -782,13 +782,13 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 									<li>quisquam est</li>
 									<li>qui dolorem&nbsp;&nbsp;</li>
 								</ul>
-								<br><br>
+								<br /><br />
 							</td>
 						</tr>
 						</tbody>
 						</table>
-					<p><br>
-					<br>
+					<p><br />
+					<br />
 					</p>
 					</body>
 		\');
@@ -807,7 +807,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 						<tr>
 						<td style="vertical-align: bottom; width: 33%;" colspan="1" rowspan="2">
 							<img style="width: 180px; height: 169px;" alt="trainer" src="{COURSE_DIR}images/trainer/trainer_staring.png ">
-						<br>
+						<br />
 						</td>
 						<td style="height: 10%; width: 66%;"></td>
 						</tr>
@@ -818,12 +818,12 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 								<li>sed do eiusmod tempor incididunt</li>
 								<li>ut labore et dolore magna aliqua</li>
 								<li>quis nostrud exercitation ullamco</li>
-							</ul><br></td>
+							</ul><br /></td>
 						</tr>
 						</tbody>
 						</table>
-					<p><br>
-					<br>
+					<p><br />
+					<br />
 					</p>
 					</body>
 		\');';
@@ -891,7 +891,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 						</tr>
 						</tbody>
 						</table>
-						<br>
+						<br />
 						</body>
 		\');';
 		$res = mysql_query($sql);
@@ -911,21 +911,21 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 								<embed  type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" width="300" height="20" bgcolor="#FFFFFF" src="{REL_PATH}main/inc/lib/mediaplayer/player.swf" allowfullscreen="false" allowscriptaccess="always" flashvars="file={COURSE_DIR}audio/ListeningComprehension.mp3&amp;autostart=true"></embed>
 		                    </span></div>
 
-							<br>
+							<br />
 							</td>
-							<td colspan="1" rowspan="3"><br>
-								<img style="width: 300px; height: 341px; float: right;" alt="image" src="{COURSE_DIR}images/diagrams/head_olfactory_nerve.png "><br></td>
+							<td colspan="1" rowspan="3"><br />
+								<img style="width: 300px; height: 341px; float: right;" alt="image" src="{COURSE_DIR}images/diagrams/head_olfactory_nerve.png "><br /></td>
 							</tr>
 							<tr>
 							<td colspan="1" rowspan="1">
-								<img style="width: 180px; height: 271px;" alt="trainer" src="{COURSE_DIR}images/trainer/trainer_glasses.png"><br></td>
+								<img style="width: 180px; height: 271px;" alt="trainer" src="{COURSE_DIR}images/trainer/trainer_glasses.png"><br /></td>
 							</tr>
 							<tr>
 							</tr>
 							</tbody>
 							</table>
-							<p><br>
-							<br>
+							<p><br />
+							<br />
 							</p>
 							</body>
 		\');';
@@ -967,7 +967,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 
 					</td>
 					<td style="background: transparent url({IMG_DIR}faded_grey.png) repeat scroll center top; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; vertical-align: top; width: 50%;">
-					<h3><br>
+					<h3><br />
 					</h3>
 					<h3>Lorem ipsum dolor sit amet</h3>
 						<ul>
@@ -985,8 +985,8 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 					</tr>
 					</tbody>
 					</table>
-					<p><br>
-					<br>
+					<p><br />
+					<br />
 					</p>
 					 <style type="text/css">body{}</style><!-- to fix a strange bug appearing with firefox when editing this template -->
 					</body>
@@ -1009,8 +1009,8 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 							</tr>
 						</tbody>
 						</table>
-						<p><br>
-						<br>
+						<p><br />
+						<br />
 						</p>
 					</center>
 					</body>

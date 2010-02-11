@@ -183,7 +183,7 @@ foreach($courses_id_full_table_prefix_list as $course_code => $db)
                 $row['display_order'].", " .
                 "123456" .
                 ")";
-        //echo $ins_lp_sql."<br/>\n";
+        //echo $ins_lp_sql."<br />\n";
         $ins_res = Database::query($ins_lp_sql,__FILE__,__LINE__);
         $in_id = Database::insert_id();
         //echo "&nbsp;&nbsp;Inserted item $in_id<br />\n";
@@ -455,7 +455,7 @@ foreach($courses_id_full_table_prefix_list as $course_code => $db)
         if(empty($my_new_lp_item_id)){
             //this can be ignored safely as it just means a user used a learnpath_item
             //before it was removed from items - maybe fix that in Dokeos?
-            //echo "Somehow we miss lp_items[".$learnpath_id."][".$row['learnpath_item_id']."] here...<br/>";
+            //echo "Somehow we miss lp_items[".$learnpath_id."][".$row['learnpath_item_id']."] here...<br />";
             $incoherences ++;
         }else{
             $start_time = 0;
@@ -532,7 +532,7 @@ foreach($courses_id_full_table_prefix_list as $course_code => $db)
             //make sure there is a way of retrieving which links were updated (to revert)
             fwrite($fh,$sql_tool_upd." AND link ='$link'");
             fwrite($fh_revert,"UPDATE $tbl_tool SET link='$link' WHERE id=".$row_tool['id']." AND link ='newscorm/lp_controller.php?action=view&lp_id=$new_lp_id';\n");
-            //echo $sql_tool_upd." (and link='$link')<br/>\n";
+            //echo $sql_tool_upd." (and link='$link')<br />\n";
             $res_tool_upd = Database::query($sql_tool_upd,__FILE__,__LINE__);
         }
     }
@@ -555,11 +555,11 @@ foreach($courses_id_full_table_prefix_list as $course_code => $db)
                 //make sure there is a way of retrieving which links were updated (to revert)
                 fwrite($fh,$sql_tool_upd." AND link ='$link'");
                 fwrite($fh_revert,"INSERT INTO $tbl_tool (link) VALUES ('$link');\n");
-                //echo $sql_tool_upd." (and link='$link')<br/>\n";
+                //echo $sql_tool_upd." (and link='$link')<br />\n";
                 $res_tool_upd = Database::query($sql_tool_upd,__FILE__,__LINE__);
             }
         }else{
-            //echo "No scorm link found in tool link $link<br/>";
+            //echo "No scorm link found in tool link $link<br />";
         }
         //flush();
     }
@@ -586,9 +586,9 @@ foreach($courses_id_full_table_prefix_list as $course_code => $db)
             }
         }
         if($intrp != $row_i['intro_text']){
-            //echo "<pre>Replacing ".$row_i['intro_text']."\n by \n ".$intro."</pre><br/>\n";
+            //echo "<pre>Replacing ".$row_i['intro_text']."\n by \n ".$intro."</pre><br />\n";
             $sql_upd = "update $tbl_intro set intro_text = '".mysql_real_escape_string($intro)."' WHERE id = 'course_homepage' AND intro_text = '".mysql_real_escape_string($row_i['intro_text'])."'";
-            //echo $sql_upd."<br/>\n";
+            //echo $sql_upd."<br />\n";
             fwrite($fh,"$sql_upd\n");
             fwrite($fh_revert,"UPDATE $tbl_intro set intro_text = '".$row_i['intro_text']."' WHERE id = 'course_homepage' AND intro_text = '$intro';\n");
             fwrite($fh_res,"$intro\n");
@@ -686,7 +686,7 @@ while($course_row = Database::fetch_array($res_crs)){
             //it is a main directory that should be taken as path
             $courses_dir = $sys_course_path.''.$courses_dir_list[$my_course_code].'/scorm'.$tmp_path;
             if(!is_dir($courses_dir)){
-                //echo "Scormdocument path $my_content_id: $tmp_path doesn't exist in ".$sys_course_path.$courses_dir_list[$my_course_code]."/scorm, skipping<br/>\n";
+                //echo "Scormdocument path $my_content_id: $tmp_path doesn't exist in ".$sys_course_path.$courses_dir_list[$my_course_code]."/scorm, skipping<br />\n";
                 continue;
                 //avoid if contentTitle is not the name of an existing directory
             }elseif(!is_file($courses_dir."/imsmanifest.xml")){
@@ -701,7 +701,7 @@ while($course_row = Database::fetch_array($res_crs)){
                             if(is_file($courses_dir."/".$entry."/imsmanifest.xml")){
                                 if($loglevel>2){error_log(".  .. and found $courses_dir/$entry/imsmanifest.xml!",0);}
                                 if(!in_array($tmp_path."/".$entry."/imsmanifest.xml",$scormdocuments_lps)){
-                                    if($loglevel>2){error_log("  Recording.<br/>",0);}
+                                    if($loglevel>2){error_log("  Recording.<br />",0);}
                                     $scormdocuments_lps[] = $tmp_path."/".$entry;
                                 }
                             }
@@ -764,7 +764,7 @@ while($course_row = Database::fetch_array($res_crs)){
                                 //echo "found $courses_dir/$entry/imsmanifest.xml!<br />";
                                 if($loglevel>2){error_log(".  .. and found $courses_dir/$entry/imsmanifest.xml!",0);}
                                 if(!in_array($entry."/imsmanifest.xml",$scormdocuments_lps)){
-                                    if($loglevel>2){error_log("  Recording.<br/>",0);}
+                                    if($loglevel>2){error_log("  Recording.<br />",0);}
                                     //echo "Recording $entry<br />";
                                     $scormdocuments_lps[] = $entry;
                                 }
@@ -946,7 +946,7 @@ foreach($scorms as $my_course_code => $paths_list )
                         $my_student.", " .
                         "1" .
                         ")";
-                    //echo "$ins_sql<br/>";
+                    //echo "$ins_sql<br />";
                     $ins_res = Database::query($ins_sql,__FILE__,__LINE__);
                     $view_insert_id = Database::insert_id();
                 }
@@ -965,10 +965,10 @@ foreach($scorms as $my_course_code => $paths_list )
                             "0, $my_time, $my_score," .
                             "'$my_status'" .
                             ")";
-                    //echo "$ins_sql<br/>";
+                    //echo "$ins_sql<br />";
                     $ins_res = Database::query($ins_sql,__FILE__,__LINE__);
                 }else{
-                    //echo "  Didn't find corresponding item for $my_identifier in new tables<br/>\n";
+                    //echo "  Didn't find corresponding item for $my_identifier in new tables<br />\n";
                 }
             }
         }
@@ -1028,7 +1028,7 @@ foreach($scorms as $my_course_code => $paths_list )
             if($loglevel>1){error_log("!!! imsmanifest file not found at ".$scorm_lp_paths[$my_content_id]['ims'].' for old lp '.$my_content_id.' and new '.$lp_ids[$my_content_id],0);}
             $manifest = false;
         }else{
-            //echo "Parsing ".$scorm_lp_paths[$my_content_id]['ims']."<br>\n";
+            //echo "Parsing ".$scorm_lp_paths[$my_content_id]['ims']."<br />\n";
             //parse manifest file
             $manifest = $oScorm->parse_manifest($scorm_lp_paths[$my_content_id]['ims']);
             //the title is already escaped in the method
@@ -1251,7 +1251,7 @@ foreach($scorms as $my_course_code => $paths_list )
                             $update_prereq.
                             "display_order = $dsp " .
                             "WHERE lp_id = ".$in_id." AND id = ".$new_id;
-                    //echo "$sql2<br>\n";
+                    //echo "$sql2<br />\n";
                     $res2 = Database::query($sql2,__FILE__,__LINE__);
                     $previous = $new_id;
                 }
@@ -1278,7 +1278,7 @@ foreach($scorms as $my_course_code => $paths_list )
         $out = array();
         $enc_path = str_replace('/','%2F',$my_path);
         $enc_path = str_replace(' ','\+',$enc_path);
-        //echo "Looking for path ".$enc_path."<br>\n";
+        //echo "Looking for path ".$enc_path."<br />\n";
         $pattern = '@claroline/scorm/scormdocument\.php([^\s"\']*)openDir='.$enc_path.'([\\"\'\s&]*)@';
         if(preg_match_all($pattern,$intro,$out,PREG_SET_ORDER)){
             foreach($out as $results){
@@ -1286,8 +1286,8 @@ foreach($scorms as $my_course_code => $paths_list )
                 //$intro = preg_replace('/scorm\/scormdocument\.php([^\s"\']*)openDir='.$enc_path.'([\\"\'\s&])/','newscorm/lp_controller.php'.$results[1].'action=view&lp_id='.$lp_ids[$my_content_id],$intro);
                 $intro = preg_replace('@claroline/scorm/scormdocument\.php([^\s"\']*)openDir='.$enc_path.'([^\s"\']*)@','main/newscorm/lp_controller.php'.$results[1].'action=view&lp_id='.$lp_ids[$my_content_id],$intro);
             }
-        }else{
-            //echo "No scorm link found in intro text<br/>";
+        } else {
+            //echo "No scorm link found in intro text<br />";
         }
         $pattern = '@claroline/scorm/showinframes\.php([^\s"\']*)file=([^\s"\'&]*)'.$enc_path.'@';
         if(preg_match_all($pattern,$intro,$out,PREG_SET_ORDER)){
@@ -1296,13 +1296,13 @@ foreach($scorms as $my_course_code => $paths_list )
                 //$intro = preg_replace('/scorm\/showinframes\.php([^\s"\']*)file=([^\s"\']*)'.$enc_path.'/','newscorm/lp_controller.php'.$results[1].'action=view&lp_id='.$lp_ids[$my_content_id],$intro);
                 $intro = preg_replace('@claroline/scorm/showinframes\.php([^\s"\']*)file=([^\s"\'&]*)'.$enc_path.'([^\s"\']*)@','main/newscorm/lp_controller.php'.$results[1].'action=view&lp_id='.$lp_ids[$my_content_id],$intro);
             }
-        }else{
-            //echo "No scorm link found in intro text<br/>";
+        } else {
+            //echo "No scorm link found in intro text<br />";
         }
         if($intro != $row_i['intro_text']){
-            //echo "<pre>Replacing ".$row_i['intro_text']."\n by \n ".$intro."</pre><br/>\n";
+            //echo "<pre>Replacing ".$row_i['intro_text']."\n by \n ".$intro."</pre><br />\n";
             $sql_upd = "update $tbl_intro set intro_text = '".mysql_real_escape_string($intro)."' WHERE id = 'course_homepage' AND intro_text = '".mysql_real_escape_string($row_i['intro_text'])."'";
-            //echo $sql_upd."<br/>\n";
+            //echo $sql_upd."<br />\n";
             fwrite($fh,$sql_upd."\n");
             fwrite($fh_revert,"UPDATE $tbl_intro set intro_text = '".$row_i['intro_text']."' WHERE id = 'course_homepage' AND intro_text = '$intro';\n");
             fwrite($fh_res,$intro."\n");

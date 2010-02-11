@@ -60,7 +60,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 	//check if the current Dokeos install is elligible for update
 	if (!file_exists('../inc/conf/configuration.php'))
 	{
-		echo '<b>'.get_lang('Error').' !</b> Dokeos '.implode('|', $updateFromVersion).' '.get_lang('HasNotBeenFound').'.<br><br>
+		echo '<strong>'.get_lang('Error').' !</strong> Dokeos '.implode('|', $updateFromVersion).' '.get_lang('HasNotBeenFound').'.<br /><br />
 								'.get_lang('PleasGoBackToStep1').'.
 							    <p><button type="submit" class="back" name="step1" value="&lt; '.get_lang('Back').'">'.get_lang('Back').'</button></p>
 							    </td></tr></table></form></body></html>';
@@ -98,12 +98,12 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 		//$no = mysql_errno();
 		//$msg = mysql_error();
 
-		//echo '<hr>['.$no.'] - '.$msg.'<hr>';
+		//echo '<hr />['.$no.'] - '.$msg.'<hr />';
 		echo					get_lang('DBServerDoesntWorkOrLoginPassIsWrong').'.<br /><br />' .
 				'				'.get_lang('PleaseCheckTheseValues').' :<br /><br />
-							    <b>'.get_lang('DBHost').'</b> : '.$dbHostForm.'<br />
-								<b>'.get_lang('DBLogin').'</b> : '.$dbUsernameForm.'<br />
-								<b>'.get_lang('DBPassword').'</b> : '.$dbPassForm.'<br /><br />
+							    <strong>'.get_lang('DBHost').'</strong> : '.$dbHostForm.'<br />
+								<strong>'.get_lang('DBLogin').'</strong> : '.$dbUsernameForm.'<br />
+								<strong>'.get_lang('DBPassword').'</strong> : '.$dbPassForm.'<br /><br />
 								'.get_lang('PleaseGoBackToStep').' '. (defined('DOKEOS_INSTALL') ? '3' : '1').'.
 							    <p><button type="submit" class="back" name="step'. (defined('DOKEOS_INSTALL') ? '3' : '1').'" value="&lt; '.get_lang('Back').'">'.get_lang('Back').'</button></p>
 							    </td></tr></table></form></body></html>';

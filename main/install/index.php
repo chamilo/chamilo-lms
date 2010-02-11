@@ -577,7 +577,7 @@ if ($_POST['step2']) {
 	<?php echo get_lang('AllowSelfReg').' : '.($allowSelfReg ? get_lang('Yes') : get_lang('No')); ?><br />
 	<?php echo get_lang('EncryptMethodUserPass').' : ';
   	echo $encryptPassForm;
-	?><br /><br/>
+	?><br /><br />
 
 	<?php echo get_lang('AdminEmail').' : '.$emailForm; ?><br />
 	<?php

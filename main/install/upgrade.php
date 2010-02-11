@@ -134,7 +134,7 @@ class Page_Requirements extends HTML_QuickForm_Page
 		}
 		else
 		{
-			return '<li><b>'.$extentionName.'</b> <font color="red">is missing (Dokeos can work without)</font> (<a href="http://www.php.net/'.$extentionName.'" target="_blank">'.$extentionName.'</a>)</li>';
+			return '<li><strong>'.$extentionName.'</strong> <font color="red">is missing (Dokeos can work without)</font> (<a href="http://www.php.net/'.$extentionName.'" target="_blank">'.$extentionName.'</a>)</li>';
 		}
 	}
 	function get_not_writable_folders()
@@ -179,7 +179,7 @@ class Page_Requirements extends HTML_QuickForm_Page
 			$info[] = get_lang("WarningExistingDokeosInstallationDetected");
 			$info[] = '</div>';
 		}
-		$info[] = '<b>'.get_lang("ReadThoroughly").'</b>';
+		$info[] = '<strong>'.get_lang("ReadThoroughly").'</strong>';
 		$info[] = '<br />';
 		$info[] = get_lang("DokeosNeedFollowingOnServer");
 		$info[] = "<ul>";

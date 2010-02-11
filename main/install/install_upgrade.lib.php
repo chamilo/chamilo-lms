@@ -24,8 +24,7 @@ define("COUNTRY_DATA_FILENAME", "country_data.csv");
 define("COURSES_HTACCESS_FILENAME", "htaccess.dist");
 define("DOKEOS_CONFIG_FILENAME", "configuration.dist.php");
 
-// Added by Ivan Tcholakov, 29-SEP-2009.
-require_once dirname(__FILE__).'/../inc/lib/database.lib.php';
+require_once api_get_path(LIBRARY_PATH).'database.lib.php';
 
 /*
 ==============================================================================

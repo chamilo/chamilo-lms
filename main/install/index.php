@@ -40,25 +40,26 @@ if (!function_exists('version_compare') || version_compare( phpversion(), REQUIR
 session_start();
 
 // Including necessary core libraries.
-@include '../inc/installedVersion.inc.php';
+//@include '../inc/installedVersion.inc.php';  //TODO: This line is to be removed.
 require '../inc/lib/main_api.lib.php';
+require api_get_path(LIBRARY_PATH).'database.lib.php';
 
 // Loading language files.
-require '../lang/english/trad4all.inc.php';
-require '../lang/english/install.inc.php';
+require api_get_path(SYS_LANG_PATH).'english/trad4all.inc.php';
+require api_get_path(SYS_LANG_PATH).'english/install.inc.php';
 if (!empty($_POST['language_list'])) {
 	$search = array('../', '\\0');
 	$install_language = str_replace($search, '', urldecode($_POST['language_list']));
-	if (!is_dir('../lang/'.$install_language)) {
+	if (!is_dir(api_get_path(SYS_LANG_PATH).$install_language)) {
 		$install_language = 'english';
 	}
-	include_once "../lang/$install_language/trad4all.inc.php";
-	include_once "../lang/$install_language/install.inc.php";
+	include_once api_get_path(SYS_LANG_PATH).$install_language.'/trad4all.inc.php';
+	include_once api_get_path(SYS_LANG_PATH).$install_language.'/install.inc.php';
 	api_session_register('install_language');
 } elseif (isset($_SESSION['install_language']) && $_SESSION['install_language']) {
 	$install_language = $_SESSION['install_language'];
-	include_once "../lang/$install_language/trad4all.inc.php";
-	include_once "../lang/$install_language/install.inc.php";
+	include_once api_get_path(SYS_LANG_PATH).$install_language.'/trad4all.inc.php';
+	include_once api_get_path(SYS_LANG_PATH).$install_language.'/install.inc.php';
 }
 
 // These global variables must be set for proper working of the function get_lang(...) during the installation.
@@ -76,6 +77,7 @@ api_set_internationalization_default_encoding($charset);
 // Page encoding initialization.
 header('Content-Type: text/html; charset='. api_get_system_encoding());
 
+// Specialized libraries for the installation procedure.
 require_once 'install_upgrade.lib.php'; //also defines constants
 require_once 'install_functions.inc.php';
 
@@ -88,16 +90,17 @@ define('DATABASE_FORM_FIELD_DISPLAY_LENGTH', 25);
 define('MAX_FORM_FIELD_LENGTH', 80);
 define('DEFAULT_LANGUAGE', 'english'); // TODO: To be examined.
 
-// setting the error reporting
+// Setting the error reporting levels.
 error_reporting(E_COMPILE_ERROR | E_ERROR | E_CORE_ERROR);
 
-// overriding the timelimit (for large campusses that have to be migrated)
+// Overriding the timelimit (for large campusses that have to be migrated).
 @set_time_limit(0);
 
-// upgrading from any subversion of 1.6 is just like upgrading from 1.6.5
+// Upgrading from any subversion of 1.6 is just like upgrading from 1.6.5
 $update_from_version_6 = array('1.6', '1.6.1', '1.6.2', '1.6.3', '1.6.4', '1.6.5');
-// upgrading from any subversion of 1.8 avoids the additional step of upgrading from 1.6
+// Upgrading from any subversion of 1.8 avoids the additional step of upgrading from 1.6
 $update_from_version_8 = array('1.8', '1.8.2', '1.8.3', '1.8.4', '1.8.5', '1.8.6', '1.8.6.1', '1.8.6.2');
+
 $my_old_version = '';
 $tmp_version = get_config_param('dokeos_version');
 if (!empty($_POST['old_version'])) {
@@ -195,7 +198,8 @@ if ($_POST['step2_install'] || $_POST['step2_update_8'] || $_POST['step2_update_
 }
 
 if ($installType == 'update' && in_array($my_old_version, $update_from_version_8)) {
-	include_once '../inc/conf/configuration.php';
+	// This is the main configuration file of the system before the upgrade.
+	include_once api_get_path(CONFIGURATION_PATH).'configuration.php';
 }
 
 if (!isset($_GET['running'])) {
@@ -209,10 +213,10 @@ if (!isset($_GET['running'])) {
 	$dbScormForm	='chamilo_scorm';
 	$dbUserForm		='chamilo_user';
 
-	// extract the path to append to the url if Chamilo is not installed on the web root directory
-	$urlAppendPath = str_replace('/main/install/index.php', '', api_get_self());
-  	$urlForm = 'http://'.$_SERVER['HTTP_HOST'].$urlAppendPath.'/';
-	$pathForm = str_replace('\\', '/', realpath('../..')).'/';
+	// Extract the path to append to the url if Chamilo is not installed on the web root directory.
+	$urlAppendPath = api_remove_trailing_slash(api_get_path(REL_PATH));
+  	$urlForm = api_get_path(WEB_PATH);
+	$pathForm = api_get_path(SYS_CODE_PATH);
 
 	$emailForm = $_SERVER['SERVER_ADMIN'];
 	$email_parts = explode('@', $emailForm);
@@ -452,9 +456,9 @@ if ($encryptPassForm == '1') {
 	<input type="hidden" name="ShowEmailnotcheckedToStudent" value="<?php echo api_htmlentities($ShowEmailnotcheckedToStudent, ENT_QUOTES); ?>" />
 	<input type="hidden" name="userMailCanBeEmpty"   value="<?php echo api_htmlentities($userMailCanBeEmpty, ENT_QUOTES); ?>" />
 	<input type="hidden" name="encryptPassForm"      value="<?php echo api_htmlentities($encryptPassForm, ENT_QUOTES); ?>" />
-	<input type="hidden" name="session_lifetime"  value="<?php echo api_htmlentities($session_lifetime, ENT_QUOTES); ?>" />
-	<input type="hidden" name="old_version"  value="<?php echo api_htmlentities($my_old_version, ENT_QUOTES); ?>" />
-	<input type="hidden" name="new_version"  value="<?php echo api_htmlentities($new_version, ENT_QUOTES); ?>" />
+	<input type="hidden" name="session_lifetime"     value="<?php echo api_htmlentities($session_lifetime, ENT_QUOTES); ?>" />
+	<input type="hidden" name="old_version"          value="<?php echo api_htmlentities($my_old_version, ENT_QUOTES); ?>" />
+	<input type="hidden" name="new_version"          value="<?php echo api_htmlentities($new_version, ENT_QUOTES); ?>" />
 
 <?php
 if ($_POST['step2']) {

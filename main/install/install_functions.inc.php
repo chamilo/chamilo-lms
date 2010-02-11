@@ -871,10 +871,10 @@ function display_database_settings_form($installType, $dbHostForm, $dbUsernameFo
 				<img src="../img/message_confirmation.png" alt="Confirmation" />
 				</div>-->
 				<!--<div style="float:left;">-->
-				MySQL host info: <?php echo Database::get_host_info(); ?><br />
-				MySQL server version: <?php echo Database::get_server_info(); ?><br />
-				MySQL client version: <?php echo Database::get_client_info(); ?><br />
-				MySQL protocol version: <?php echo Database::get_proto_info(); ?>
+				MySQL host info: <strong><?php echo Database::get_host_info(); ?></strong><br />
+				MySQL server version: <strong><?php echo Database::get_server_info(); ?></strong><br />
+				MySQL client version: <strong><?php echo Database::get_client_info(); ?></strong><br />
+				MySQL protocol version: <strong><?php echo Database::get_proto_info(); ?></strong>
 				<!--</div>-->
 				<div style="clear:both;"></div>
 			</div>

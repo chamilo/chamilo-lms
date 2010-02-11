@@ -131,7 +131,7 @@ foreach ($_POST as $request_index => $request_value) {
 $badUpdatePath = false;
 $emptyUpdatePath = true;
 $proposedUpdatePath = '';
-if(!empty($_POST['updatePath'])) {
+if (!empty($_POST['updatePath'])) {
 	$proposedUpdatePath = $_POST['updatePath'];
 }
 
@@ -341,15 +341,14 @@ if ($encryptPassForm == '1') {
 			if(init_visibility == 0) {
 				document.getElementById('optional_param1').style.display = '';
 				document.getElementById('optional_param2').style.display = '';
-				if(document.getElementById('optional_param3'))
-				{
+				if(document.getElementById('optional_param3')) {
 					document.getElementById('optional_param3').style.display = '';
 				}
 				document.getElementById('optional_param4').style.display = '';
 				document.getElementById('optional_param5').style.display = '';
 				document.getElementById('optional_param6').style.display = '';
 				init_visibility = 1;
-			document.getElementById('optionalparameters').innerHTML='<img style="vertical-align:middle;" src="../img/div_hide.gif" alt="" /> <?php echo get_lang('OptionalParameters'); ?>';
+				document.getElementById('optionalparameters').innerHTML='<img style="vertical-align:middle;" src="../img/div_hide.gif" alt="" /> <?php echo get_lang('OptionalParameters'); ?>';
 			} else {
 				document.getElementById('optional_param1').style.display = 'none';
 				document.getElementById('optional_param2').style.display = 'none';
@@ -359,7 +358,7 @@ if ($encryptPassForm == '1') {
 				document.getElementById('optional_param4').style.display = 'none';
 				document.getElementById('optional_param5').style.display = 'none';
 				document.getElementById('optional_param6').style.display = 'none';
-			document.getElementById('optionalparameters').innerHTML='<img style="vertical-align:middle;" src="../img/div_show.gif" alt="" /> <?php echo get_lang('OptionalParameters'); ?>';
+				document.getElementById('optionalparameters').innerHTML='<img style="vertical-align:middle;" src="../img/div_show.gif" alt="" /> <?php echo get_lang('OptionalParameters'); ?>';
 				init_visibility = 0;
 			}
 		}
@@ -552,7 +551,7 @@ if ($_POST['step2']) {
 	<?php echo get_lang('DBLogin').' : '.$dbUsernameForm; ?><br />
 	<?php echo get_lang('DBPassword').' : '.str_repeat('*', strlen($dbPassForm)); ?><br />
 	<?php if (!empty($dbPrefixForm)) echo get_lang('DbPrefixForm').' : '.$dbPrefixForm.'<br />'; ?>
-	<?php echo get_lang('MainDB').' : <strong>'.$dbNameForm; ?></strong><?php if($installType == 'new') echo ' (<font color="#cc0033">'.get_lang('ReadWarningBelow').'</font>)'; ?><br />
+	<?php echo get_lang('MainDB').' : <strong>'.$dbNameForm; ?></strong><?php if ($installType == 'new') echo ' (<font color="#cc0033">'.get_lang('ReadWarningBelow').'</font>)'; ?><br />
 	<?php
 	if (!$singleDbForm) {
 		echo get_lang('StatDB').' : <strong>'.$dbStatsForm.'</strong>';
@@ -568,10 +567,10 @@ if ($_POST['step2']) {
 		echo '<br />';
 	}
 	?>
-	<?php echo get_lang('EnableTracking').' : '.($enableTrackingForm?get_lang('Yes'):get_lang('No')); ?><br />
-	<?php echo get_lang('SingleDb').' : '.($singleDbForm?get_lang('One'):get_lang('Several')); ?><br /><br />
+	<?php echo get_lang('EnableTracking').' : '.($enableTrackingForm ? get_lang('Yes') : get_lang('No')); ?><br />
+	<?php echo get_lang('SingleDb').' : '.($singleDbForm ? get_lang('One') : get_lang('Several')); ?><br /><br />
 
-	<?php echo get_lang('AllowSelfReg').' : '.($allowSelfReg?get_lang('Yes'):get_lang('No')); ?><br />
+	<?php echo get_lang('AllowSelfReg').' : '.($allowSelfReg ? get_lang('Yes') : get_lang('No')); ?><br />
 	<?php echo get_lang('EncryptMethodUserPass').' : ';
   	echo $encryptPassForm;
 	?><br /><br/>

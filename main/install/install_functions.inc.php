@@ -269,10 +269,10 @@ function get_config_param_from_db($host, $login, $pass, $db_name, $param = '') {
 }
 
 /**
-*	Return a list of language directories.
-*	@todo function does not belong here, move to code library,
-*	also see infocours.php which contains similar function
-*/
+ *	Return a list of language directories.
+ *	@todo function does not belong here, move to code library,
+ *	also see infocours.php which contains similar function
+ */
 function get_language_folder_list($dirname) {
 	if ($dirname[strlen($dirname)-1] != '/') {
 		$dirname .= '/';
@@ -359,7 +359,7 @@ function display_language_selection() { ?>
  *
  * @author unknow
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
-*/
+ */
 function display_requirements($installType, $badUpdatePath, $updatePath = '', $update_from_version_8 = array(), $update_from_version_6 = array()) {
 	echo '<h2>'.display_step_sequence().get_lang('Requirements')."</h2>\n";
 
@@ -633,12 +633,14 @@ function display_requirements($installType, $badUpdatePath, $updatePath = '', $u
 			echo '</ul>';
 			echo '</div>';
 		}
-		// check wether a Dokeos configuration file already exists.
-		elseif(file_exists('../inc/conf/configuration.php')) {
-				echo '<div style="color:red; background-color:white; font-weight:bold; text-align:center;">';
-				echo get_lang('WarningExistingDokeosInstallationDetected');
-				echo '</div>';
+
+		// check wether a Chamilo configuration file already exists.
+		elseif (file_exists('../inc/conf/configuration.php')) {
+			echo '<div style="color:red; background-color:white; font-weight:bold; text-align:center;">';
+			echo get_lang('WarningExistingDokeosInstallationDetected');
+			echo '</div>';
 		}
+
 		//and now display the choice buttons (go back or install)
 		?>
 		<p align="center">
@@ -662,10 +664,10 @@ function display_requirements($installType, $badUpdatePath, $updatePath = '', $u
 }
 
 /**
-* Displays the license (GNU GPL) as step 2, with
-* - an "I accept" button named step3 to proceed to step 3;
-* - a "Back" button named step1 to go back to the first step.
-*/
+ * Displays the license (GNU GPL) as step 2, with
+ * - an "I accept" button named step3 to proceed to step 3;
+ * - a "Back" button named step1 to go back to the first step.
+ */
 function display_license_agreement() {
 	echo '<h2>'.display_step_sequence().get_lang('Licence').'</h2>';
 	echo '<p>'.get_lang('DokeosLicenseInfo').'</p>';
@@ -696,19 +698,18 @@ function display_license_agreement() {
 }
 
 /**
-* Displays a parameter in a table row.
-* Used by the display_database_settings_form function.
-* @param	string	Type of install
-* @param	string	Name of parameter
-* @param	string	Field name (in the HTML form)
-* @param	string	Field value
-* @param	string	Extra notice (to show on the right side)
-* @param	boolean	Whether to display in update mode
-* @param	string	Additional attribute for the <tr> element
-* @return	void	Direct output
-*/
-function display_database_parameter($install_type, $parameter_name, $form_field_name, $parameter_value, $extra_notice, $display_when_update = true, $tr_attribute = '')
-{
+ * Displays a parameter in a table row.
+ * Used by the display_database_settings_form function.
+ * @param	string	Type of install
+ * @param	string	Name of parameter
+ * @param	string	Field name (in the HTML form)
+ * @param	string	Field value
+ * @param	string	Extra notice (to show on the right side)
+ * @param	boolean	Whether to display in update mode
+ * @param	string	Additional attribute for the <tr> element
+ * @return	void	Direct output
+ */
+function display_database_parameter($install_type, $parameter_name, $form_field_name, $parameter_value, $extra_notice, $display_when_update = true, $tr_attribute = '') {
 	echo "<tr ".$tr_attribute.">\n";
 	echo "<td>$parameter_name&nbsp;&nbsp;</td>\n";
 	if ($install_type == INSTALL_TYPE_UPDATE && $display_when_update) {
@@ -863,16 +864,17 @@ function display_database_settings_form($installType, $dbHostForm, $dbUsernameFo
 		<td><button type="submit" class="login" name="step3" value="<?php echo get_lang('CheckDatabaseConnection'); ?>" ><?php echo get_lang('CheckDatabaseConnection'); ?></button></td>
 		<?php
 		$dbConnect = test_db_connect($dbHostForm, $dbUsernameForm, $dbPassForm, $singleDbForm, $dbPrefixForm);
-		if ($dbConnect==1): ?>
+		if ($dbConnect == 1): ?>
 		<td colspan="2">
 			<div class="confirmation-message">
 				<!--<div  style="float:left; margin-right:10px;">
 				<img src="../img/message_confirmation.png" alt="Confirmation" />
 				</div>-->
 				<!--<div style="float:left;">-->
-				MySQL host info: <?php echo mysql_get_host_info(); ?><br />
-				MySQL server version: <?php echo mysql_get_server_info(); ?><br />
-				MySQL protocol version: <?php echo mysql_get_proto_info(); ?>
+				MySQL host info: <?php echo Database::get_host_info(); ?><br />
+				MySQL server version: <?php echo Database::get_server_info(); ?><br />
+				MySQL client version: <?php echo Database::get_client_info(); ?><br />
+				MySQL protocol version: <?php echo Database::get_proto_info(); ?>
 				<!--</div>-->
 				<div style="clear:both;"></div>
 			</div>
@@ -884,8 +886,8 @@ function display_database_settings_form($installType, $dbHostForm, $dbUsernameFo
 				<img src="../img/message_error.png" alt="Error" />
 				</div>-->
 				<div style="float:left;">
-				<strong>MySQL error: <?php echo mysql_errno(); ?></strong><br />
-				<?php echo mysql_error().'<br/>'; ?>
+				<strong>MySQL error: <?php echo Database::errno(); ?></strong><br />
+				<?php echo Database::error().'<br />'; ?>
 				<strong><?php echo get_lang('Details').': '. get_lang('FailedConectionDatabase'); ?></strong><br />
 				</div>
 			</div>
@@ -902,9 +904,9 @@ function display_database_settings_form($installType, $dbHostForm, $dbUsernameFo
 }
 
 /**
-* Displays a parameter in a table row.
-* Used by the display_configuration_settings_form function.
-*/
+ * Displays a parameter in a table row.
+ * Used by the display_configuration_settings_form function.
+ */
 function display_configuration_parameter($install_type, $parameter_name, $form_field_name, $parameter_value, $display_when_update = 'true') {
 	echo "<tr>\n";
 	echo "<td>$parameter_name&nbsp;&nbsp;</td>\n";
@@ -1093,8 +1095,8 @@ function display_configuration_settings_form($installType, $urlForm, $languageFo
 }
 
 /**
-* After installation is completed (step 6), this message is displayed.
-*/
+ * After installation is completed (step 6), this message is displayed.
+ */
 function display_after_install_message($installType, $nbr_courses) {
 	?>
 	<h2><?php echo display_step_sequence() . get_lang("CfgSetting"); ?></h2>
@@ -1116,16 +1118,17 @@ function display_after_install_message($installType, $nbr_courses) {
 	echo '</div>';
 	?>
 
-
 	</form>
 	<a class="portal" href="../../index.php"><?php echo get_lang('GoToYourNewlyCreatedPortal'); ?></a>
 	<?php
 }
 
 /**
-* In step 3. Test the connection to the DB in case of single or multy DB.
-* Return "1"if no problems, "0" if, in case of multiDB we can't create a new DB and "-1" if there is no connection.
-*/
+ * In step 3. Tests establishing connection to the database server. Tests also the possibility for multiple databases configuration.
+ * @return int		1 when there is no problem;
+ * 					0 when a new database is impossible to be created, then the multiple databases configuration is impossible too;
+ * 					-1 when there is no connection established.
+ */
 function test_db_connect($dbHostForm, $dbUsernameForm, $dbPassForm, $singleDbForm, $dbPrefixForm) {
 	$dbConnect = -1;
 	if ($singleDbForm == 1) {
@@ -1142,7 +1145,6 @@ function test_db_connect($dbHostForm, $dbUsernameForm, $dbPassForm, $singleDbFor
 		if ($res !== false) {
 			// The system has not been designed to use special SQL modes that were introduced since MySQL 5
 			@mysql_query("set session sql_mode='';");
-
 			$multipleDbCheck = @mysql_query("CREATE DATABASE ".$dbPrefixForm."test_dokeos_connection");
 			if ($multipleDbCheck !== false) {
 				$multipleDbCheck = @mysql_query("DROP DATABASE IF EXISTS ".$dbPrefixForm."test_dokeos_connection");

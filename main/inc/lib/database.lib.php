@@ -777,6 +777,41 @@ class Database {
 	}
 
 	/**
+	 * Returns the database client library version.
+	 * @return strung		Returns a string that represents the client library version.
+	 */
+	public function get_client_info() {
+		return mysql_get_client_info();
+	}
+
+	/**
+	 * Returns information about the type of the current connection and the server host name.
+	 * @param resource $connection (optional)	The database server connection, for detailed description see the method query().
+	 * @return string/boolean					Returns string data on success or FALSE on failure.
+	 */
+	public function get_host_info($connection = null) {
+		return self::use_default_connection($connection) ? mysql_get_host_info() : mysql_get_host_info($connection);
+	}
+
+	/**
+	 * Retrieves database client/server protocol version.
+	 * @param resource $connection (optional)	The database server connection, for detailed description see the method query().
+	 * @return int/boolean						Returns the protocol version on success or FALSE on failure.
+	 */
+	public function get_proto_info($connection = null) {
+		return self::use_default_connection($connection) ? mysql_get_proto_info() : mysql_get_proto_info($connection);
+	}
+
+	/**
+	 * Retrieves the database server version.
+	 * @param resource $connection (optional)	The database server connection, for detailed description see the method query().
+	 * @return string/boolean					Returns the MySQL server version on success or FALSE on failure.
+	 */
+	public function get_server_info($connection = null) {
+		return self::use_default_connection($connection) ? mysql_get_server_info() : mysql_get_server_info($connection);
+	}
+
+	/**
 	 * Gets the ID of the last item inserted into the database
 	 * @param resource $connection (optional)	The database server connection, for detailed description see the method query().
 	 * @return int								The last ID as returned by the DB function

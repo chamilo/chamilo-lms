@@ -907,6 +907,22 @@ class Database {
 	}
 
 	/**
+	 * Returns a list of databases created on the server. The list may contain all of the
+	 * available database names or filtered database names only by using a pattern.
+	 * @param string $pattern					A pattern for filtering database names as if it was needed for the SQL's LIKE clause, for example 'chamilo_%'.
+	 * @param resource $connection (optional)	The database server connection, for detailed description see the method query().
+	 * @return array							Returns in an array the retrieved list of database names.
+	 */
+	public static function get_databases($pattern = '', $connection = null) {
+		$result = array();
+		$query_result = Database::query(!empty($pattern) ? "SHOW DATABASES LIKE '".self::escape_string($pattern, $connection)."'" : "SHOW DATABASES", $connection, __FILE__, __LINE__);
+		while ($row = Database::fetch_row($query_result)) {
+			$result[] = $row[0];
+		}
+		return $result;
+	}
+
+	/**
 	 * Stores a query result into an array.
 	 *
 	 * @author Olivier Brouckaert
@@ -941,7 +957,7 @@ class Database {
 		if (!isset($supported[$encoding])) {
 			$supported[$encoding] = false;
 			if (strlen($db_encoding = self::to_db_encoding($encoding)) > 0) {
-				if (self::num_rows(self::query("SHOW CHARACTER SET WHERE `Charset` =  '".$db_encoding."';", __FILE__, __LINE__)) > 0) {
+				if (self::num_rows(self::query("SHOW CHARACTER SET WHERE Charset =  '".self::escape_string($db_encoding)."';", __FILE__, __LINE__)) > 0) {
 					$supported[$encoding] = true;
 				}
 			}
@@ -1189,11 +1205,11 @@ class Database {
 			return null;
 		}
 		if (empty($language)) {
-			$result = self::fetch_array(self::query("SHOW COLLATION WHERE `Charset` = '".$db_encoding."' AND `Default` = 'Yes';", __FILE__, __LINE__), 'NUM');
+			$result = self::fetch_array(self::query("SHOW COLLATION WHERE Charset = '".self::escape_string($db_encoding)."' AND Default = 'Yes';", __FILE__, __LINE__), 'NUM');
 			return $result ? $result[0] : null;
 		}
 		$collation = $db_encoding.'_'.$language.'_ci';
-		$query_result = self::query("SHOW COLLATION WHERE `Charset` = '".$db_encoding."';", __FILE__, __LINE__);
+		$query_result = self::query("SHOW COLLATION WHERE Charset = '".self::escape_string($db_encoding)."';", __FILE__, __LINE__);
 		while ($result = self::fetch_array($query_result, 'NUM')) {
 			if ($result[0] == $collation) {
 				return $collation;

@@ -3344,10 +3344,9 @@ function api_add_access_url($u, $d = '', $a = 1) {
  * @param	int		Access URL's ID. Optional. Uses 1 by default, which is the unique URL
  * @return	array	Array of database results for the current settings of the current access URL
  */
-function api_get_settings($cat = null, $ordering = 'list', $access_url = 1, $url_changeable = 0) {
+function & api_get_settings($cat = null, $ordering = 'list', $access_url = 1, $url_changeable = 0) {
 	$t_cs = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
 	$access_url = (int) $access_url;
-
 	$url_changeable_where = '';
 	if ($url_changeable == 1) {
 		$url_changeable_where= " AND access_url_changeable= '1' ";
@@ -3364,8 +3363,7 @@ function api_get_settings($cat = null, $ordering = 'list', $access_url = 1, $url
 	} else {
 		$sql .= " ORDER BY 1,2 ASC";
 	}
-	$res = Database::query($sql, __FILE__, __LINE__);
-	return Database::store_result($res);
+	return Database::store_result(Database::query($sql, __FILE__, __LINE__));
 }
 
 /**
@@ -3374,7 +3372,7 @@ function api_get_settings($cat = null, $ordering = 'list', $access_url = 1, $url
  * @param	int		Access URL. Optional. Defaults to 1
  * @return	array	A list of categories
  */
-function api_get_settings_categories($exceptions = array(), $access_url = 1) {
+function & api_get_settings_categories($exceptions = array(), $access_url = 1) {
 	$access_url = (int) $access_url;
 	$t_cs = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
 	$list = "'".implode("','",$exceptions)."'";
@@ -3382,8 +3380,7 @@ function api_get_settings_categories($exceptions = array(), $access_url = 1) {
 	if ($list != "'',''" and $list != "''" and !empty($list)) {
 		$sql .= " WHERE category NOT IN ($list)";
 	}
-	$r = Database::query($sql, __FILE__, __LINE__);
-	return Database::store_result($r);
+	return Database::store_result(Database::query($sql, __FILE__, __LINE__));
 }
 
 /**

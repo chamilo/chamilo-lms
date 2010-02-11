@@ -163,7 +163,7 @@ if (!empty($_configuration['multiple_access_urls'])) {
 	$request_url1 = $protocol.$_SERVER['SERVER_NAME'].'/';
 	$request_url2 = $protocol.$_SERVER['HTTP_HOST'].'/';
 
-	foreach ($access_urls as $details) {
+	foreach ($access_urls as & $details) {
 		if ($request_url1 == $details['url'] or $request_url2 == $details['url']) {
 			$_configuration['access_url'] = $details['id'];
 		}
@@ -176,8 +176,8 @@ if (!empty($_configuration['multiple_access_urls'])) {
 if ($_configuration['access_url'] != 1) {
 	$url_info = api_get_access_url($_configuration['access_url']);
 	if ($url_info['active'] == 1) {
-		$settings_by_access = api_get_settings(null, 'list', $_configuration['access_url'], 1);
-		foreach ($settings_by_access as $row) {
+		$settings_by_access = & api_get_settings(null, 'list', $_configuration['access_url'], 1);
+		foreach ($settings_by_access as & $row) {
 			if (empty($row['variable'])) {
 				$row['variable'] = 0;
 			}
@@ -192,8 +192,8 @@ if ($_configuration['access_url'] != 1) {
 	}
 }
 
-$result = api_get_settings(null, 'list', 1);
-foreach ($result as $row) {
+$result = & api_get_settings(null, 'list', 1);
+foreach ($result as & $row) {
 	if ($_configuration['access_url'] != 1) {
 		if ($url_info['active'] == 1) {
 			$var = empty($row['variable']) ? 0 : $row['variable'];
@@ -204,7 +204,7 @@ foreach ($result as $row) {
 		if ($row['access_url_changeable'] == 1 && $url_info['active'] == 1) {
 			if ($settings_by_access_list[$var][$subkey][$category]['selected_value'] != '') {
 				if ($row['subkey'] == null) {
-					$_setting[$row['variable']]= $settings_by_access_list[$var][$subkey][$category]['selected_value'];
+					$_setting[$row['variable']] = $settings_by_access_list[$var][$subkey][$category]['selected_value'];
 				} else {
 					$_setting[$row['variable']][$row['subkey']] = $settings_by_access_list[$var][$subkey][$category]['selected_value'];
 				}
@@ -231,10 +231,10 @@ foreach ($result as $row) {
 	}
 }
 
-$result = api_get_settings('Plugins', 'list', $_configuration['access_url']);
+$result = & api_get_settings('Plugins', 'list', $_configuration['access_url']);
 $_plugins = array();
-foreach ($result as $row) {
-	$key = $row['variable'];
+foreach ($result as & $row) {
+	$key = & $row['variable'];
 	if (is_string($_setting[$key])) {
 		$_setting[$key] = array();
 	}
@@ -350,8 +350,8 @@ if (!empty($_POST['language_list'])) {
 }
 
 // Include all files (first english and then current interface language)
-$langpath = api_get_path(SYS_CODE_PATH).'lang/';
 
+$langpath = api_get_path(SYS_LANG_PATH);
 
 /* This will only work if we are in the page to edit a sub_language */
 if (api_get_self() == api_get_path(REL_PATH).'main/admin/sub_language.php' || api_get_self() == api_get_path(REL_PATH).'main/admin/sub_language_ajax.inc.php') {
@@ -407,9 +407,10 @@ if (api_get_self() == api_get_path(REL_PATH).'main/admin/sub_language.php' || ap
 }
 
 // Checking if we have a valid language. If not we set it to the platform language.
+
 $valid_languages = api_get_languages();
 
-if(!empty($valid_languages)) {
+if (!empty($valid_languages)) {
 
 	if (!in_array($user_language, $valid_languages['folder'])) {
 		$user_language = api_get_setting('platformLanguage');
@@ -437,6 +438,7 @@ if(!empty($valid_languages)) {
 		$language_interface = $_course['language'];
 	}
 }
+
 // Sometimes the variable $language_interface is changed
 // temporarily for achieving translation in different language.
 // We need to save the genuine value of this variable and

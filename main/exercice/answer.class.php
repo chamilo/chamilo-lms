@@ -253,7 +253,9 @@ class Answer
 		return $this->answer[$id];
 	}
 	
-	
+	/**
+	 * return array answer by id else return a bool 
+	 */
 	function selectAnswerByAutoId($auto_id) {
 		
 		$TBL_ANSWER = Database::get_course_table(TABLE_QUIZ_ANSWER);
@@ -274,7 +276,7 @@ class Answer
 	 *
 	 * @author - Yannick Warnier
 	 * @param - integer $id - answer ID
-	 * @return - string - answer title
+	 * @return - bool - answer title
 	 */
 	function selectAnswerIdByPosition($pos)
 	{
@@ -452,7 +454,7 @@ class Answer
 	 */
 	function updateAnswers($answer,$comment,$weighting,$position,$destination)
 	{
-		global $TBL_REPONSES;
+		$TBL_REPONSES = Database :: get_course_table(TABLE_QUIZ_ANSWER);
 
 		$questionId=$this->questionId;
 		$sql = "UPDATE $TBL_REPONSES SET " .
@@ -474,7 +476,7 @@ class Answer
 	 */
 	function save()
 	{
-		global $TBL_REPONSES;
+		$TBL_REPONSES = Database :: get_course_table(TABLE_QUIZ_ANSWER);
 
 		$questionId=$this->questionId;
 
@@ -527,7 +529,7 @@ class Answer
 	 */
 	function duplicate($newQuestionId)
 	{
-		global $TBL_REPONSES;
+		$TBL_REPONSES = Database :: get_course_table(TABLE_QUIZ_ANSWER);
 
 		// if at least one answer
 		if($this->nbrAnswers)

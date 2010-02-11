@@ -2186,10 +2186,10 @@ class CourseManager {
 		$sql = "SELECT course_code FROM $tbl_course_field_value tcfv INNER JOIN $tbl_course_field tcf ON " .
 				" tcfv.field_id =  tcf.id WHERE tcf.field_variable = 'special_course' AND tcfv.field_value = 1 AND course_code='$course_code'";	
 
-		$special_course_result = Database::query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql, __FILE__, __LINE__);
 		
-		$affected_rows = Database::affected_rows();
-		if (!empty($affected_rows)){
+		$num_rows = Database::num_rows($result);
+		if ($num_rows > 0){
 			return true;	
 		}		
 			

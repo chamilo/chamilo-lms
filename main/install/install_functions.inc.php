@@ -871,10 +871,10 @@ function display_database_settings_form($installType, $dbHostForm, $dbUsernameFo
 				<img src="../img/message_confirmation.png" alt="Confirmation" />
 				</div>-->
 				<!--<div style="float:left;">-->
-				MySQL host info: <strong><?php echo Database::get_host_info(); ?></strong><br />
-				MySQL server version: <strong><?php echo Database::get_server_info(); ?></strong><br />
-				MySQL client version: <strong><?php echo Database::get_client_info(); ?></strong><br />
-				MySQL protocol version: <strong><?php echo Database::get_proto_info(); ?></strong>
+				Database host info: <strong><?php echo Database::get_host_info(); ?></strong><br />
+				Database server version: <strong><?php echo Database::get_server_info(); ?></strong><br />
+				Database client version: <strong><?php echo Database::get_client_info(); ?></strong><br />
+				Database protocol version: <strong><?php echo Database::get_proto_info(); ?></strong>
 				<!--</div>-->
 				<div style="clear:both;"></div>
 			</div>
@@ -886,7 +886,7 @@ function display_database_settings_form($installType, $dbHostForm, $dbUsernameFo
 				<img src="../img/message_error.png" alt="Error" />
 				</div>-->
 				<div style="float:left;">
-				<strong>MySQL error: <?php echo Database::errno(); ?></strong><br />
+				<strong>Database error: <?php echo Database::errno(); ?></strong><br />
 				<?php echo Database::error().'<br />'; ?>
 				<strong><?php echo get_lang('Details').': '. get_lang('FailedConectionDatabase'); ?></strong><br />
 				</div>

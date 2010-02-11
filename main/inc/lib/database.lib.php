@@ -801,6 +801,31 @@ class Database {
 	}
 
 	/**
+	 * Returns a list of the fields that a given table contains. The list may contain all of the
+	 * available field names or filtered field names by using a pattern.
+	 * @param string $table						This is the examined table.
+	 * @param string $pattern (optional)		A pattern for filtering field names as if it was needed for the SQL's LIKE clause, for example 'column_%'.
+	 * @param string $database (optional)		The name of the targeted database. If it is omited, the current database is assumed, see Database::select_db().
+	 * @param resource $connection (optional)	The database server connection, for detailed description see the method query().
+	 * @return array							Returns in an array the retrieved list of field names.
+	 */
+	public static function get_fields($table, $pattern = '', $database = '', $connection = null) {
+		$result = array();
+		$query = "SHOW COLUMNS FROM `".self::escape_string($table, $connection)."`";
+		if (!empty($database)) {
+			$query .= " FROM `".self::escape_string($database, $connection)."`";
+		}
+		if (!empty($pattern)) {
+			$query .= " LIKE '".self::escape_string($pattern, $connection)."'";
+		}
+		$query_result = Database::query($query, $connection, __FILE__, __LINE__);
+		while ($row = Database::fetch_row($query_result)) {
+			$result[] = $row[0];
+		}
+		return $result;
+	}
+
+	/**
 	 * Returns information about the type of the current connection and the server host name.
 	 * @param resource $connection (optional)	The database server connection, for detailed description see the method query().
 	 * @return string/boolean					Returns string data on success or FALSE on failure.

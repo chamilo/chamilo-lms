@@ -1278,7 +1278,7 @@ class Database {
 			return null;
 		}
 		if (empty($language)) {
-			$result = self::fetch_array(self::query("SHOW COLLATION WHERE Charset = '".self::escape_string($db_encoding)."' AND Default = 'Yes';"), 'NUM');
+			$result = self::fetch_array(self::query("SHOW COLLATION WHERE Charset = '".self::escape_string($db_encoding)."' AND  `Default` = 'Yes';"), 'NUM');
 			return $result ? $result[0] : null;
 		}
 		$collation = $db_encoding.'_'.$language.'_ci';

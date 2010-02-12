@@ -26,10 +26,11 @@ if ($_GET['category']=='Templates') {
 // resetting the course id
 $cidReset=true;
 // including some necessary dokeos files
-include_once ('../inc/global.inc.php');
-require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
-require_once (api_get_path(LIBRARY_PATH).'fileManage.lib.php');
-require_once (api_get_path(LIBRARY_PATH).'fileUpload.lib.php');
+require_once '../inc/global.inc.php';
+require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
+require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
+require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
+require_once api_get_path(LIBRARY_PATH).'dashboard.lib.php';
 
 // setting the section (for the tabs)
 $this_section = SECTION_PLATFORM_ADMIN;
@@ -387,7 +388,22 @@ if (!empty($_GET['category']))
 		// displaying the extensions: plugins
 		// this will be available to all the sites (access_urls)
 		case 'Plugins' :
-			handle_plugins();
+		
+			if (isset($_POST['submit_dashboard_plugins'])) {
+				$affected_rows = DashboardManager::store_dashboard_plugins($_POST);				
+				if ($affected_rows) {
+					// add event to system log
+					$time = time();
+					$user_id = api_get_user_id();
+					$category = $_GET['category'];
+					event_system(LOG_CONFIGURATION_SETTINGS_CHANGE, LOG_CONFIGURATION_SETTINGS_CATEGORY, $category, $time, $user_id);
+					Display :: display_confirmation_message(get_lang('DashboardPluginsHaveBeenUpdatedSucesslly'));
+				}				
+			}
+		
+			handle_plugins();			
+			DashboardManager::handle_dashboard_plugins();
+
 			break;
 			// displaying the extensions: Stylesheets
 		case 'stylesheets' :
@@ -570,9 +586,10 @@ function handle_plugins()
 				}
 				}
 	echo '</table>';
-
+	echo '<br />';
 	echo '<button class="save" type="submit" name="submit_plugins">'.get_lang('EnablePlugins').'</button></form>';
-			}
+	echo '<br />';
+}
 
 
 function display_plugin_cell($location, $plugin_info, $current_plugin, $active_plugins)

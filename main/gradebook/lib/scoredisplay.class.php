@@ -190,7 +190,7 @@ class ScoreDisplay
 		// remove previous settings
     	$tbl_display = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_SCORE_DISPLAY);
 		$sql = 'TRUNCATE TABLE '.$tbl_display;
-		Database::query($sql, __FILE__, __LINE__);
+		Database::query($sql);
 
 		// add new settings
 		$sql = 'INSERT INTO '.$tbl_display.' (id, score, display) VALUES ';
@@ -202,7 +202,7 @@ class ScoreDisplay
 			$sql .= "(NULL, '".$display['score']."', '".Database::escape_string($display['display'])."')";
 			$count++;
 		}
-		Database::query($sql, __FILE__, __LINE__);
+		Database::query($sql);
 	}
 
 	/**
@@ -302,7 +302,7 @@ class ScoreDisplay
 
 		$sql = "SELECT selected_value FROM ".$tbl_setting
 				." WHERE category = 'Gradebook' AND variable = '".$property."'";
-		$result = Database::query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql);
 
 		if ($data = Database::fetch_row($result)) {
 			return $data[0];
@@ -312,7 +312,7 @@ class ScoreDisplay
 			$sql = "INSERT INTO ".$tbl_setting
 					." (variable, selected_value, category)"
 					." VALUES ('".$property."', '".$default."','Gradebook')";
-			Database::query($sql, __FILE__, __LINE__);
+			Database::query($sql);
 			// ...and return default value
 			return $default;
 		}
@@ -328,7 +328,7 @@ class ScoreDisplay
 		$sql = 'UPDATE '.$tbl_setting
 				." SET selected_value = '".$value."' "
 				." WHERE variable = '".$property."' AND category='Gradebook'";
-		Database::query($sql, __FILE__, __LINE__);
+		Database::query($sql);
 	}
 
 
@@ -340,7 +340,7 @@ class ScoreDisplay
     	$tbl_display = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_SCORE_DISPLAY);
 		$sql = 'SELECT * FROM '.$tbl_display.' ORDER BY score';
 		//echo $sql;
-		$result = Database::query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql);
 		return Database::store_result($result);
 	}
 

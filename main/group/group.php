@@ -76,7 +76,7 @@ if( api_get_setting('allow_group_categories') == 'false')
 {
 	$cat_table = Database::get_course_table(TABLE_GROUP_CATEGORY);
 	$sql = "SELECT * FROM $cat_table WHERE id = '".DEFAULT_GROUP_CATEGORY."'";
-	$res = Database::query($sql,__FILE__,__LINE__);
+	$res = Database::query($sql);
 	$num = Database::num_rows($res);
 	if($num == 0)
 	{
@@ -272,10 +272,10 @@ foreach ($group_cats as $index => $category)
 		$user_is_tutor = GroupManager :: is_tutor($_user['user_id']);
 		$group_data = array ();
 		foreach ($group_list as $index => $this_group) {
-			
+
 			//validacion when belongs to a session
 			$session_img = api_get_session_image($this_group['session_id'], $_user['status']);
-			
+
 			// all the tutors of this group
 			$tutorsids_of_group=GroupManager::get_subscribed_tutors($this_group['id'],true);
 

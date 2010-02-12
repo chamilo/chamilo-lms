@@ -134,23 +134,23 @@ if($submitted==1) {
 $category_id = (int)$_GET['selectcat'];
 $output='';
 $sql='SELECT * FROM '.$table_link.' WHERE category_id = '.$category_id;
-$result = Database::query($sql,__FILE__,__LINE__);
+$result = Database::query($sql);
 	while($row = Database ::fetch_array($result)) {
 		//update only if value changed
 		if(isset($_POST['link'][$row['id']]) && $_POST['link'][$row['id']] != $row['weight']) {
-						
+
 			AbstractLink::add_link_log($row['id']);
-			Database::query('UPDATE '.$table_link.' SET weight = '."'".trim($_POST['link'][$row['id']])."'".' WHERE id = '.$row['id'],__FILE__,__LINE__);								
+			Database::query('UPDATE '.$table_link.' SET weight = '."'".trim($_POST['link'][$row['id']])."'".' WHERE id = '.$row['id']);
 			$row['weight'] = trim($_POST['link'][$row['id']]);
-			
+
 			//Update weight for attendance
 			$sql = 'SELECT ref_id FROM '.$table_link.' WHERE id = '.intval($row['id']).' AND type='.LINK_ATTENDANCE;
-			$rs_attendance  = Database::query($sql, __FILE__, __LINE__);
+			$rs_attendance  = Database::query($sql);
 			if (Database::num_rows($rs_attendance) > 0) {
-				$row_attendance = Database::fetch_array($rs_attendance);		
+				$row_attendance = Database::fetch_array($rs_attendance);
 				$upd_attendance = 'UPDATE '.$tbl_attendance.' SET attendance_weight ='.floatval($_POST['link'][$row['id']]).' WHERE id = '.intval($row_attendance['ref_id']);
-				Database::query($upd_attendance, __FILE__, __LINE__);
-			}		
+				Database::query($upd_attendance);
+			}
 			//Update weight into forum thread
 			$sql_t='UPDATE '.$tbl_forum_thread.' SET thread_weight='.floatval($_POST['link'][$row['id']]).' WHERE thread_id= (SELECT ref_id FROM '.$table_link.' WHERE id='.intval($row['id']).' AND type='.LINK_FORUM_THREAD.');';
 			Database::query($sql_t);
@@ -170,13 +170,13 @@ $result = Database::query($sql,__FILE__,__LINE__);
 		$output.= '<tr><td> [ '.$table_evaluated[$row['type']][3].' ] '.$resource_name.'</td><td><input type="hidden" name="link_'.$row['id'].'" value="'.$resource_name.'" /><input size="10" type="text" name="link['.$row['id'].']" value="'.$row['weight'].'"/></td></tr>';
 	}
 
-	$sql = Database::query('SELECT * FROM '.$table_evaluation.' WHERE category_id = '.$category_id,__FILE__,__LINE__);
+	$sql = Database::query('SELECT * FROM '.$table_evaluation.' WHERE category_id = '.$category_id);
 	while($row = Database ::fetch_array($sql)) {
 
 		//update only if value changed
 		if(isset($_POST['evaluation'][$row['id']]) && $_POST['evaluation'][$row['id']] != $row['weight']) {
 			Evaluation::add_evaluation_log($row['id']);
-			Database::query('UPDATE '.$table_evaluation.' SET weight = '."'".trim($_POST['evaluation'][$row['id']])."'".' WHERE id = '.$row['id'],__FILE__,__LINE__);
+			Database::query('UPDATE '.$table_evaluation.' SET weight = '."'".trim($_POST['evaluation'][$row['id']])."'".' WHERE id = '.$row['id']);
 			$row['weight'] = trim($_POST['evaluation'][$row['id']]);
 		}
 	$type_evaluated = isset($row['type']) ? $table_evaluated[$type_evaluated][3] : null;

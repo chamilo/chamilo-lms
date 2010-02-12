@@ -36,9 +36,9 @@ function get_users_in_course($course_id) {
 	$tbl_user = Database :: get_main_table(TABLE_MAIN_USER);
 
 	$order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname ASC' : ' ORDER BY lastname, firstname ASC';
-	
+
 	$current_session = api_get_session_id();
-	
+
 	if (!empty($current_session)) {
 		$sql = "SELECT user.user_id,lastname,firstname
 			 	FROM $tbl_session_course_user as scru, $tbl_user as user
@@ -51,12 +51,12 @@ function get_users_in_course($course_id) {
 			.' WHERE course_rel_user.user_id=user.user_id'
 			.' AND course_rel_user.status='.STUDENT
 			." AND course_rel_user.course_code='".$course_id."'"
-			.$order_clause;	
+			.$order_clause;
 	}
-	
-	
-			
-	$result = Database::query($sql, __FILE__, __LINE__);
+
+
+
+	$result = Database::query($sql);
 	return get_user_array_from_sql_result($result);
 }
 
@@ -95,7 +95,7 @@ function get_all_users ($evals = array(), $links = array()) {
 					.' FROM '.$tbl_res.' as res, '.$tbl_user.' as user'
 					.' WHERE res.evaluation_id = '.$eval->get_id()
 					.' AND res.user_id = user.user_id';
-			$result = Database::query($sql, __FILE__, __LINE__);
+			$result = Database::query($sql);
 			$users = array_merge($users,get_user_array_from_sql_result($result));
 		}
 	}
@@ -136,7 +136,7 @@ function find_students($mask= '') {
 		$sql .= ' AND user.user_id = cru.user_id' . ' AND cru.course_code in' . ' (SELECT course_code' . ' FROM ' . $tbl_cru . ' WHERE user_id = ' . api_get_user_id() . ' AND status = ' . COURSEMANAGER . ')';
 	}
 	$sql .= ' ORDER BY lastname';
-	$result= Database::query($sql, __FILE__, __LINE__);
+	$result= Database::query($sql);
 	$db_users= Database::store_result($result);
 	return $db_users;
 }
@@ -149,7 +149,7 @@ function find_students($mask= '') {
 function get_user_info_from_id($userid) {
 	$user_table= Database :: get_main_table(TABLE_MAIN_USER);
 	$sql= 'SELECT * FROM ' . $user_table . ' WHERE user_id=' . $userid;
-	$res= Database::query($sql, __FILE__, __LINE__);
+	$res= Database::query($sql);
 	$user= Database::fetch_array($res,ASSOC);
 	return $user;
 }

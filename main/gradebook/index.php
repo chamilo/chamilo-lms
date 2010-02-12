@@ -35,7 +35,7 @@ $_SESSION['gradebook_dest'] = 'index.php';
 if (isset($_GET['cidReq'])) {
 	$this_section = SECTION_COURSES;
 } else {
-	$this_section = SECTION_MYGRADEBOOK;	
+	$this_section = SECTION_MYGRADEBOOK;
 }
 
 require_once 'lib/be.inc.php';
@@ -340,10 +340,10 @@ if (isset ($_GET['deletelink'])) {
 		if ($link[0] != null) {
 			// clean forum qualify
 			$sql='UPDATE '.$tbl_forum_thread.' SET thread_qualify_max=0,thread_weight=0,thread_title_qualify="" WHERE thread_id=(SELECT ref_id FROM '.$tbl_grade_links.' WHERE id='.$get_delete_link.' AND type = '.LINK_FORUM_THREAD.');';
-			Database::query($sql, __FILE__, __LINE__);
-			// clean attendance 
+			Database::query($sql);
+			// clean attendance
 			$sql='UPDATE '.$tbl_attendance.' SET attendance_qualify_max=0, attendance_weight = 0, attendance_qualify_title="" WHERE id=(SELECT ref_id FROM '.$tbl_grade_links.' WHERE id='.$get_delete_link.' AND type = '.LINK_ATTENDANCE.');';
-			Database::query($sql, __FILE__, __LINE__);
+			Database::query($sql);
 			$link[0]->delete();
 		}
 		unset ($link);
@@ -622,7 +622,7 @@ if (isset ($_GET['studentoverview'])) {
 	}
 
 	$category = Category :: load($category); //hack replace $category = Category :: load ($_GET['cat_id']); to get de course name in certificates
-	
+
 	if ($category[0]->is_certificate_available($user_id)) {
 		$user= get_user_info_from_id($user_id);
 		$scoredisplay = ScoreDisplay :: instance();
@@ -678,15 +678,15 @@ if (isset ($_GET['studentoverview'])) {
     if ($_in_course === true) {
         // When *inside* a course, we want to make sure there is one (and only
         // one) category for this course or for this session.
-		
+
 		//hack for delete a gradebook from inside course
 		$clean_deletecat=Security::remove_XSS($_GET['deletecat']);
-		if (!empty($clean_deletecat)) 
+		if (!empty($clean_deletecat))
 		{
 			exit;
-		}		
+		}
 		//end hack
-		
+
 	    $cats = Category :: load(null, null, $course_code, null, null, $session_id, false);
         if (empty($cats)) {
             // There is no category for this course+session, so create one
@@ -764,19 +764,19 @@ if ($category != '0') {
 	$course_id=Database::get_course_by_category($category_id);
 	$show_message=$cat->show_message_resource_delete($course_id);
 	if ($show_message=='') {
-		
-		//hack for inside courses menu cat	
+
+		//hack for inside courses menu cat
 		if (api_is_allowed_to_edit()) {
 
-			$op_cat_weight= '<strong>'.get_lang('Weight').'</strong>'.': '.((intval($cats[0]->get_weight())>0) ? $cats[0]->get_weight() : 0);			
+			$op_cat_weight= '<strong>'.get_lang('Weight').'</strong>'.': '.((intval($cats[0]->get_weight())>0) ? $cats[0]->get_weight() : 0);
 			$opt_cat_cert_min= '<strong>'.get_lang('CertificateMinScore').'</strong>'.': '.(intval($cats[0]->get_certificate_min_score()>0) ? $cats[0]->get_certificate_min_score() : 0);
-			$opt_cat_descrip= '<strong>'.get_lang('GradebookDescriptionLog').'</strong>'.': '.(($cats[0]->get_description() == "" || is_null($cats[0]->get_description())) ? get_lang('None') : $cats[0]->get_description());					
+			$opt_cat_descrip= '<strong>'.get_lang('GradebookDescriptionLog').'</strong>'.': '.(($cats[0]->get_description() == "" || is_null($cats[0]->get_description())) ? get_lang('None') : $cats[0]->get_description());
 
 			$visibility_icon= ($cats[0]->is_visible() == 0) ? 'invisible' : 'visible';
 			$visibility_command= ($cats[0]->is_visible() == 0) ? 'set_visible' : 'set_invisible';
 			echo '<div class="actions" align="right">';
-			$modify_icons= '<a  href="gradebook_edit_cat.php?editcat=' . $cats[0]->get_id() . ' &amp;cidReq='.$cats[0]->get_course_code().'"><img src="../img/edit.gif" border="0" title="' . get_lang('EditCategory') . '" alt="'.get_lang('EditCategory').'" />'.get_lang('EditCategory').'</a>';			
-			$modify_icons .= '&nbsp;<a  href="' . api_get_self() . '?deletecat=' . $cats[0]->get_id() . '&amp;selectcat=0&amp;cidReq='.$cats[0]->get_course_code().'" onclick="return confirmation();"><img src="../img/delete.gif" border="0" title="' . get_lang('DeleteAll') . '" alt="'.get_lang('DeleteAll').'" />'.get_lang('DeleteAll').'</a>';			
+			$modify_icons= '<a  href="gradebook_edit_cat.php?editcat=' . $cats[0]->get_id() . ' &amp;cidReq='.$cats[0]->get_course_code().'"><img src="../img/edit.gif" border="0" title="' . get_lang('EditCategory') . '" alt="'.get_lang('EditCategory').'" />'.get_lang('EditCategory').'</a>';
+			$modify_icons .= '&nbsp;<a  href="' . api_get_self() . '?deletecat=' . $cats[0]->get_id() . '&amp;selectcat=0&amp;cidReq='.$cats[0]->get_course_code().'" onclick="return confirmation();"><img src="../img/delete.gif" border="0" title="' . get_lang('DeleteAll') . '" alt="'.get_lang('DeleteAll').'" />'.get_lang('DeleteAll').'</a>';
 			$modify_icons .= '&nbsp;<a  href="' . api_get_self() . '?visiblecat=' . $cats[0]->get_id() . '&amp;' . $visibility_command . '=&amp;selectcat=0 "><img src="../img/' . $visibility_icon . '.gif" border="0" title="' . get_lang('Visible') . '" alt="'.get_lang('Visible').'" />'.get_lang('Visible').'</a>';
 			$opt_cat_descrip1 = strip_tags($opt_cat_descrip);
 			echo '<div  align="left" style="float:left"><img  src="../img/info3.gif" border="0" title="' . $opt_cat_descrip1 . '" alt="'.$opt_cat_descrip1.'" /> '.$op_cat_weight.' '.'&nbsp;&nbsp;'.$opt_cat_cert_min.'&nbsp;&nbsp;'.$opt_cat_descrip.'</div>';
@@ -805,19 +805,19 @@ if ($category != '0') {
 			$cattotal = Category :: load($category_id);
 			$scoretotal= $cattotal[0]->calc_score(api_get_user_id());
 			$scoretotal_display = (isset($scoretotal)? round($scoretotal[0],2).'/'.round($scoretotal[1],2).'('.round(($scoretotal[0] / $scoretotal[1]) * 100,2) . ' %)': '-');
-						
+
 			//show certificate
 			$certificate_min_score=$cats[0]->get_certificate_min_score();
 			if (isset($certificate_min_score) && (int)$item_value >= (int)$certificate_min_score) {
 				$certificates = '<a href="'.api_get_path(WEB_CODE_PATH) .'gradebook/'.$_SESSION['gradebook_dest'].'?export_certificate=yes&cat_id='.$cats[0]->get_course_code().'"><img src="'.api_get_path(WEB_CODE_PATH) . 'img/dokeos.gif" />'.get_lang('Certificates').'</a>&nbsp;'.get_lang('langTotal').': '.$scoretotal_display;
-			
+
 			echo '<div class="actions" align="right">';
 			 echo $certificates;
 			echo '</div>';
-			
+
 			}
 		} //end hack
-		
+
 		DisplayGradebook :: display_header_gradebook($cats[0], 0, $category_id, $is_course_admin, $is_platform_admin, $simple_search_form, false, true);
 	}
 

@@ -55,15 +55,15 @@ if ($form->validate()) {
 	$link->set_date(strtotime($values['date']));
 	$link->set_visible(empty ($values['visible']) ? 0 : 1);
 	$link->save();
-		
+
 	//Update weight for attendance
 	$sql = 'SELECT ref_id FROM '.$tbl_grade_links.' WHERE id = '.intval($_GET['editlink']).' AND type='.LINK_ATTENDANCE;
-	$rs_attendance  = Database::query($sql, __FILE__, __LINE__);
+	$rs_attendance  = Database::query($sql);
 	if (Database::num_rows($rs_attendance) > 0) {
 		$row_attendance = Database::fetch_array($rs_attendance);
-		$attendance_id  = $row_attendance['ref_id']; 		
+		$attendance_id  = $row_attendance['ref_id'];
 		$upd_attendance = 'UPDATE '.$tbl_attendance.' SET attendance_weight ='.floatval($values['weight']).' WHERE id = '.intval($attendance_id);
-		Database::query($upd_attendance, __FILE__, __LINE__);
+		Database::query($upd_attendance);
 	}
 
 	//Update weight into forum thread
@@ -71,7 +71,7 @@ if ($form->validate()) {
 	Database::query($sql_t);
 	//Update weight into student publication(work)
 	$sql_t='UPDATE '.$tbl_work.' SET weight='.$values['weight'].' WHERE id=(SELECT ref_id FROM '.$tbl_grade_links.' where id='.Security::remove_XSS($_GET['editlink']).' and type=3);';
-	Database::query($sql_t);	
+	Database::query($sql_t);
 	header('Location: '.$_SESSION['gradebook_dest'].'?linkedited=&selectcat=' . $link->get_category_id());
 	exit;
 }

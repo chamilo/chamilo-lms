@@ -103,8 +103,8 @@ else
 {
     //Checks if the field was created in the table Category. It creates it if is neccesary
     $table_category = Database :: get_course_table(TABLE_GROUP_CATEGORY);
-	if (Database::query("SELECT wiki_state FROM $table_category",__FILE__,__LINE__) == FALSE) {
-    	Database::query("ALTER TABLE $table_category ADD `wiki_state` tinyint(3) UNSIGNED NOT NULL default '1';",__FILE__,__LINE__);
+	if (Database::query("SELECT wiki_state FROM $table_category") == FALSE) {
+    	Database::query("ALTER TABLE $table_category ADD `wiki_state` tinyint(3) UNSIGNED NOT NULL default '1';");
     }
 
 

@@ -65,7 +65,7 @@ class LearnpathLink extends AbstractLink
 				." AND course_code = '".$this->get_course_code()."'"
 				.') AND lp.session_id='.api_get_session_id().'';
 
-		$result = Database::query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql);
 
 		$cats=array();
 		while ($data=Database::fetch_array($result))
@@ -87,7 +87,7 @@ class LearnpathLink extends AbstractLink
     	$tbl_grade_links = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK,$course_info['dbName']);
 
 		$sql = 'SELECT id,name FROM '.$this->get_learnpath_table().' WHERE session_id = '.api_get_session_id().' ';
-		$result = Database::query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql);
 
 		$cats=array();
 		while ($data=Database::fetch_array($result))
@@ -107,7 +107,7 @@ class LearnpathLink extends AbstractLink
     	$tbl_stats = Database::get_course_table(TABLE_LP_VIEW,$course_info['dbName']);
 		$sql = 'SELECT count(id) AS number FROM '.$tbl_stats
 				." WHERE lp_id = '".$this->get_ref_id()."'";
-    	$result = Database::query($sql, __FILE__, __LINE__);
+    	$result = Database::query($sql);
 		$number=Database::fetch_array($result,'NUM');
 		return ($number[0] != 0);
     }
@@ -134,7 +134,7 @@ class LearnpathLink extends AbstractLink
 
     	// order by id, that way the student's first attempt is accessed first
 		$sql .= ' ORDER BY view_count DESC';
-    	$scores = Database::query($sql, __FILE__, __LINE__);
+    	$scores = Database::query($sql);
 		// for 1 student
     	if (isset($stud_id))
     	{
@@ -215,7 +215,7 @@ class LearnpathLink extends AbstractLink
     {
     	$sql = 'SELECT count(id) FROM '.$this->get_learnpath_table()
 				.' WHERE id = '.$this->get_ref_id().' AND session_id='.api_get_session_id().'';
-		$result = Database::query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql);
 		$number=Database::fetch_row($result,'NUM');
 		return ($number[0] != 0);
     }
@@ -272,7 +272,7 @@ class LearnpathLink extends AbstractLink
     	} elseif (!isset($this->learnpath_data)) {
 			$sql = 'SELECT * from '.$this->get_learnpath_table()
 					.' WHERE id = '.$this->get_ref_id().' AND session_id='.api_get_session_id().'';
-			$result = Database::query($sql, __FILE__, __LINE__);
+			$result = Database::query($sql);
 			$this->learnpath_data=Database::fetch_array($result);
     	}
     	return $this->learnpath_data;

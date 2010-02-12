@@ -101,18 +101,18 @@ class Result
 		if (is_null($id ) && is_null($user_id) && !is_null($evaluation_id)) {
 
 			$sql_verified_if_exist_evaluation='SELECT COUNT(*) AS count FROM '.$tbl_grade_results.' WHERE evaluation_id="'.Database::escape_string($evaluation_id).'";';
-			$res_verified_if_exist_evaluation=Database::query($sql_verified_if_exist_evaluation,__FILE__,__LINE__);
+			$res_verified_if_exist_evaluation=Database::query($sql_verified_if_exist_evaluation);
 			$info_verified_if_exist_evaluation=Database::result($res_verified_if_exist_evaluation,0,0);
 				if ($info_verified_if_exist_evaluation!=0) {
 
 				$sql_course_rel_user= '';
 				if (api_get_session_id()) {
-					$sql_course_rel_user = 'SELECT course_code,id_user,status FROM '.$tbl_session_rel_course_user.' WHERE status=0 AND course_code="'.api_get_course_id().' AND id_session='.api_get_session_id().'"';					
+					$sql_course_rel_user = 'SELECT course_code,id_user,status FROM '.$tbl_session_rel_course_user.' WHERE status=0 AND course_code="'.api_get_course_id().' AND id_session='.api_get_session_id().'"';
 				} else {
-					$sql_course_rel_user = 'SELECT course_code,user_id,status FROM '.$tbl_course_rel_course.' WHERE status="5" AND course_code="'.api_get_course_id().'"; ';	
+					$sql_course_rel_user = 'SELECT course_code,user_id,status FROM '.$tbl_course_rel_course.' WHERE status="5" AND course_code="'.api_get_course_id().'"; ';
 				}
 
-				$res_course_rel_user=Database::query($sql_course_rel_user,__FILE__,__LINE__);
+				$res_course_rel_user=Database::query($sql_course_rel_user);
 
 				$list_user_course_list=array();
 				while ($row_course_rel_user=Database::fetch_array($res_course_rel_user)) {
@@ -123,11 +123,11 @@ class Result
 				for ($i=0;$i<count($list_user_course_list);$i++) {
 					$sql_verified='SELECT COUNT(*) AS count FROM '.$tbl_grade_results.' WHERE user_id="'.(int)($list_user_course_list[$i]['user_id']).'" AND evaluation_id="'.Database::escape_string($evaluation_id).'";';
 					//$my_status_in_course=CourseManager::get_user_in_course_status($list_user_course_list[$i]['user_id'], api_get_course_id());
-					$res_verified=Database::query($sql_verified,__FILE__,__LINE__);
+					$res_verified=Database::query($sql_verified);
 					$info_verified=Database::result($res_verified,0,0);
 					if ($info_verified==0) {
 						$sql_insert='INSERT INTO '.$tbl_grade_results.'(user_id,evaluation_id,date,score) values ("'.Database::escape_string($list_user_course_list[$i]['user_id']).'","'.Database::escape_string($evaluation_id).'","'.$current_date.'",0);';
-						$res_insert=Database::query($sql_insert,__FILE__,__LINE__);
+						$res_insert=Database::query($sql_insert);
 					}
 				}
 				$list_user_course_list=array();
@@ -155,7 +155,7 @@ class Result
 			$sql .= ' evaluation_id = '.Database::escape_string($evaluation_id);
 			$paramcount ++;
 		}
-		$result = Database::query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql);
 		$allres=array();
 		while ($data=Database::fetch_array($result)) {
 			$res= new Result();
@@ -189,7 +189,7 @@ class Result
 			}
 			$sql .= ')';
 
-			Database::query($sql, __FILE__, __LINE__);
+			Database::query($sql);
 		} else {
 			die('Error in Result add: required field empty');
 		}
@@ -221,7 +221,7 @@ class Result
 			}
 			$sql .= ')';
 
-			Database::query($sql, __FILE__, __LINE__);
+			Database::query($sql);
 		} else {
 			die('Error in Result add: required field empty');
 		}
@@ -243,7 +243,7 @@ class Result
 		}
 		$sql .= ' WHERE id = '.$this->id;
 		// no need to update creation date
-		Database::query($sql, __FILE__, __LINE__);
+		Database::query($sql);
 	}
 
 	/**
@@ -252,6 +252,6 @@ class Result
 	public function delete() {
 		$tbl_grade_results = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_RESULT);
 		$sql = 'DELETE FROM '.$tbl_grade_results.' WHERE id = '.$this->id;
-		Database::query($sql, __FILE__, __LINE__);
+		Database::query($sql);
 	}
 }

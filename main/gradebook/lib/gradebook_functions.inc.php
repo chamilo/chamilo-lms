@@ -65,7 +65,7 @@ function add_resource_to_course_gradebook($course_code, $resource_type, $resourc
     	$sql .= " AND (session_id IS NULL OR session_id = 0) ";
     }
     $sql .= " ORDER BY id";
-    $res = Database::query($sql,__FILE__,__LINE__);
+    $res = Database::query($sql);
     if (Database::num_rows($res)<1){
         //there is no unique category for this course+session combination,
         // => create one
@@ -141,7 +141,7 @@ function block_students() {
 function get_course_name_from_code($code) {
 	$tbl_main_categories= Database :: get_main_table(TABLE_MAIN_COURSE);
 	$sql= 'SELECT title,code FROM ' . $tbl_main_categories . 'WHERE code = "' . $code . '"';
-	$result= Database::query($sql,__FILE__,__LINE__);
+	$result= Database::query($sql);
 	if ($col= Database::fetch_array($result)) {
 		return $col['title'];
 	}
@@ -278,14 +278,14 @@ function is_resource_in_course_gradebook($course_code, $resource_type, $resource
         $sql .= " AND (session_id IS NULL OR session_id = 0) ";
     }
     $sql .= " ORDER BY id";
-    $res = Database::query($sql,__FILE__,__LINE__);
+    $res = Database::query($sql);
     if (Database::num_rows($res)<1) {
     	return false;
     }
     $row = Database::fetch_array($res);
     $category = $row['id'];
     $sql = "SELECT * FROM $l l WHERE l.category_id = $category AND type = ".(int) $resource_type." and ref_id = ".(int) $resource_id;
-    $res = Database::query($sql,__FILE__,__LINE__);
+    $res = Database::query($sql);
     if (Database::num_rows($res)<1) {
     	return false;
     }
@@ -303,7 +303,7 @@ function remove_resource_from_course_gradebook($link_id) {
     // TODO find the corresponding category (the first one for this course, ordered by ID)
     $l = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
     $sql = "DELETE FROM $l WHERE id = ".(int)$link_id;
-    $res = Database::query($sql,__FILE__,__LINE__);
+    $res = Database::query($sql);
     return true;
 }
 /**

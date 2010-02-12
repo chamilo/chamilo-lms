@@ -23,6 +23,11 @@ INSERT INTO course_module (name, link, image, `row`, `column`, position) VALUES 
 UPDATE settings_current SET selected_value = '1.8.7.10004' WHERE variable = 'dokeos_database_version';
 ALTER TABLE course DROP PRIMARY KEY , ADD UNIQUE KEY code (code); 
 ALTER TABLE course ADD id int NOT NULL auto_increment PRIMARY KEY FIRST;
+CREATE TABLE block (id INT NOT NULL auto_increment, name VARCHAR(255) NULL, description TEXT NULL, path VARCHAR(255) NOT NULL, controller VARCHAR(100) NOT NULL, enable TINYINT(1) NOT NULL default 1, PRIMARY KEY(id));
+ALTER TABLE block ADD UNIQUE(path);
+INSERT INTO user_field(field_type, field_variable, field_display_text, field_visible, field_changeable) VALUES(1, 'dashboard', 'dashboard', 0, 0);
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES('show_tabs', 'dashboard', 'checkbox', 'Platform', 'true', 'ShowTabsTitle','ShowTabsComment',NULL,'TabsDashboard', 1);
+
 
 -- xxSTATSxx
 CREATE TABLE track_e_item_property(id int NOT NULL auto_increment PRIMARY KEY, course_id int NOT NULL, item_property_id int NOT NULL, title varchar(255), content text, progress int NOT NULL default 0, lastedit_date datetime NOT NULL default '0000-00-00 00:00:00', lastedit_user_id int  NOT NULL, session_id int NOT NULL default 0);

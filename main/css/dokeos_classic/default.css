@@ -3735,3 +3735,30 @@ div.attendance-calendar-add div.row div.formw,div.attendance-calendar-edit div.r
 	padding:2px;
 	font-size:11px;
 }
+
+/* DASHBOARD */
+
+/* Head section */
+#head {
+    background-color: #000;
+    height: 100px;
+}
+#head h1 {
+    line-height: 100px;
+    color: #FFF;
+    text-align: center;    
+    text-indent: -9999em
+}
+/* End Head Section */
+
+/* Columns section */
+#columns .column {
+    float: left;
+    width: 50%;
+		/* Min-height: */
+		min-height: 400px;
+		height: auto !important; 
+		height: 400px;
+}
+
+#columns ul, #columns ol {margin:0; padding:0; list-style:none; border:none;}

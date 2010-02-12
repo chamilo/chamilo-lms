@@ -2871,5 +2871,76 @@ class UserManager
 			}
 		}
 	}
+	
+	
+	/**
+	 * get assigned users to human resource manager
+	 * @param int  	hr_manager id
+	 * @param int	status (optional)
+	 * @return array assigned users
+	 */
+	public static function get_assigned_users_to_hr_manager($hr_manager_id, $status = 0) {
+		
+		// Database Table Definitions
+		$tbl_user 			= 	Database::get_main_table(TABLE_MAIN_USER);
+		$tbl_user_rel_user 	= 	Database::get_main_table(TABLE_MAIN_USER_REL_USER);
+		
+		$hr_manager_id = intval($hr_manager_id);		
+		$assigned_users_to_hrm = array();
+		
+		$condition_status = '';
+		if (!empty($status)) {
+			$status = intval($status);			
+			$condition_status = ' WHERE u.status = '.$status;
+		}
+		
+		$sql = "SELECT u.user_id, u.username, u.lastname, u.firstname FROM $tbl_user u
+				 INNER JOIN $tbl_user_rel_user uru ON uru.user_id = u.user_id AND friend_user_id = '$hr_manager_id' AND relation_type = '1'";
+		$rs_assigned_users = Database::query($sql);
+		if (Database::num_rows($rs_assigned_users) > 0) {
+			while ($row_assigned_users = Database::fetch_array($rs_assigned_users))	{
+				$assigned_users_to_hrm[$row_assigned_users['user_id']] = $row_assigned_users; 
+			}
+		}		
+		return $assigned_users_to_hrm;
+	}
+	
+	/**
+	  * Subscribes users to human resource manager (Dashboard feature)
+	  *	@param	int 		User id
+	  * @param	array		Users id
+	  * @param	int			Relation type 
+	  **/
+	public static function suscribe_users_to_hr_manager($hr_manager_id,$user_list) {
+		
+		// Database Table Definitions
+		$tbl_user 			= 	Database::get_main_table(TABLE_MAIN_USER);
+		$tbl_user_rel_user 	= 	Database::get_main_table(TABLE_MAIN_USER_REL_USER);
+
+		$hr_manager_id = intval($hr_manager_id);
+		$affected_rows = 0;			
+		//Deleting assigned users to hrm_id			
+	   	$sql = "SELECT user_id FROM $tbl_user_rel_user WHERE friend_user_id = $hr_manager_id AND relation_type = 1";
+		$result = Database::query($sql,__FILE__,__LINE__);
+		
+		if (Database::num_rows($result) > 0) {
+			$sql = "DELETE FROM $tbl_user_rel_user WHERE friend_user_id = $hr_manager_id AND relation_type = 1 ";
+			Database::query($sql);					
+		}
+		
+		// inserting new user list
+		if (is_array($user_list)) {
+			foreach ($user_list as $user_id) {
+				$user_id = intval($user_id);
+				$insert_sql = "INSERT IGNORE INTO $tbl_user_rel_user(user_id, friend_user_id, relation_type) VALUES('$user_id', $hr_manager_id, '1')";
+				Database::query($insert_sql);
+				$affected_rows = Database::affected_rows();
+			}			
+		}
+		return $affected_rows;
+		
+	}
+	
+
 
 }

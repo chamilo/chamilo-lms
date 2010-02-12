@@ -2143,55 +2143,88 @@ class CourseManager {
 		return $row[0];
 	}
 
-	 /**
-	  * Subscribes "courses" to user (Dashboard feature)
-	  *	@param	int 	user id
-	  * @param	string	Course code
-	  * @param	int		relation type
-	  * @return
+/**
+	  * Subscribes courses to human resource manager (Dashboard feature)
+	  *	@param	int 		Human Resource Manager id
+	  * @param	array		Courses code
+	  * @param	int			Relation type 
 	  **/
-	public static function suscribe_courses_to_user($user_id, $course_list, $relation_stype) {
-	  	if ($user_id!= strval(intval($user_id))) return false;
+	public static function suscribe_courses_to_hr_manager($hr_manager_id,$courses_list) {
+		
+		// Database Table Definitions
+		$tbl_course 			= 	Database::get_main_table(TABLE_MAIN_COURSE);
+		$tbl_course_rel_user 	= 	Database::get_main_table(TABLE_MAIN_COURSE_USER);
 
-	   	$tbl_course				= Database::get_main_table(TABLE_MAIN_COURSE);
-	   	$tbl_course_rel_user 	= Database::get_main_table(TABLE_MAIN_COURSE_USER);
-	   	$tbl_user				= Database::get_main_table(TABLE_MAIN_USER);
-
-	    $sql = "SELECT course_code FROM $tbl_course_rel_user WHERE user_id = $user_id AND relation_type = 1 ";
-		$result = Database::query($sql);
-		$existing_courses = array();
-		while($row = Database::fetch_array($result)){
-			$existing_courses[] = $row['course_code'];
+		$hr_manager_id = intval($hr_manager_id);		
+		$affected_rows = 0;			
+		
+		//Deleting assigned courses to hrm_id			
+	   	$sql = "SELECT course_code FROM $tbl_course_rel_user WHERE user_id = $hr_manager_id AND relation_type = 1";
+		$result = Database::query($sql,__FILE__,__LINE__);
+		
+		if (Database::num_rows($result) > 0) {
+			$sql = "DELETE FROM $tbl_course_rel_user WHERE user_id = $hr_manager_id AND relation_type = 1 ";
+			Database::query($sql,__FILE__,__LINE__);					
 		}
-
-		//Deleting existing session_rel_user with relation ship = 1 only
-		foreach ($existing_courses as $existing_course) {
-			$existing_course = Database::escape_string($existing_course);
-			$sql = "DELETE FROM $tbl_course_rel_user WHERE course_code = '$existing_course'  AND user_id = $user_id AND relation_type = 1 ";
-			Database::query($sql);
+		
+		// inserting new courses list
+		if (is_array($courses_list)) {
+			foreach ($courses_list as $course_code) {
+				$course_code = Database::escape_string($course_code);
+				$insert_sql = "INSERT IGNORE INTO $tbl_course_rel_user(course_code, user_id, relation_type) VALUES('$course_code', $hr_manager_id, '1')";
+				Database::query($insert_sql,__FILE__,__LINE__);
+				$affected_rows = Database::affected_rows();
+			}			
 		}
-
-		foreach ($course_list as $course_code) {
-			// for each session
-            $course_code = Database::escape_string($course_code);
-			$insert_sql = "INSERT IGNORE INTO $tbl_course_rel_user(course_code,user_id,relation_type) VALUES('$course_code','$user_id','1')";
-
-			Database::query($insert_sql);
-		}
+		return $affected_rows;
+		
 	}
+	
+	/**
+	 * get assigned courses to human resources manager
+	 * @param int 		human resources manager id
+	 * @return array	assigned courses  
+	 */
+	public static function get_assigned_courses_to_hr_manager($hr_manager_id) {
+		
+		// Database Table Definitions
+		$tbl_course 			= 	Database::get_main_table(TABLE_MAIN_COURSE);
+		$tbl_course_rel_user 	= 	Database::get_main_table(TABLE_MAIN_COURSE_USER);
+		
+		$hr_manager_id = intval($hr_manager_id);		
+		
+		$assigned_courses_to_hrm = array();
+		
+		/* @todo relation_type field should be changed by status = 4(DRH) */		
+		$sql = "SELECT * FROM $tbl_course c
+				 INNER JOIN $tbl_course_rel_user cru ON cru.course_code = c.code AND cru.user_id = '$hr_manager_id' AND relation_type = '1'";
+				 
+		$rs_assigned_courses = Database::query($sql);
+		if (Database::num_rows($rs_assigned_courses) > 0) {
+			while ($row_assigned_courses = Database::fetch_array($rs_assigned_courses))	{
+				$assigned_courses_to_hrm[$row_assigned_courses['code']] = $row_assigned_courses; 
+			}
+		}		
+		return $assigned_courses_to_hrm;			
+	}
+	
+	/**
+	 * check if a course is special (autoregister)
+	 * @param string course code
+	 */
 	public static function is_special_course($course_code){
 		$tbl_course_field_value		= Database::get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
-		$tbl_course_field 			= Database::get_main_table(TABLE_MAIN_COURSE_FIELD);
-
+		$tbl_course_field 			= Database::get_main_table(TABLE_MAIN_COURSE_FIELD);		
+		$is_special = false;	
 		$sql = "SELECT course_code FROM $tbl_course_field_value tcfv INNER JOIN $tbl_course_field tcf ON " .
 				" tcfv.field_id =  tcf.id WHERE tcf.field_variable = 'special_course' AND tcfv.field_value = 1 AND course_code='$course_code'";
-
 		$result = Database::query($sql);
-
 		$num_rows = Database::num_rows($result);
 		if ($num_rows > 0){
-			return true;
-		}
+			$is_special = true;
+			
+		}		
+		return $is_special;
 
 	}
 } //end class CourseManager

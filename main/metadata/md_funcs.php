@@ -448,7 +448,7 @@ function _query($sql, $eid = '', $sep = '')
     if ($eid) $sql .= $sep ? $this->_coldatstart('eid', $eid . $sep) :
         $this->_coldat('eid', $eid);
 
-    return Database::query($sql, __FILE__, __LINE__);
+    return Database::query($sql);
 }
 
 }

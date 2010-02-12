@@ -282,7 +282,7 @@ if(api_get_setting('search_enabled')=='true') {
 
 
 		$sqlcategories = "SELECT * FROM ".$tbl_categories." $condition_session ORDER BY display_order DESC";
-		$resultcategories = Database::query($sqlcategories,__FILE__,__LINE__);
+		$resultcategories = Database::query($sqlcategories);
 
 		if (Database::num_rows($resultcategories)) {
 			echo '	<div class="row">

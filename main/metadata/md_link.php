@@ -169,7 +169,7 @@ function mdo_storeback(&$xmlDoc)  // by ref!
 
     $link_table = Database::get_course_table(TABLE_LINK);
     if ($u) Database::query("UPDATE $link_table SET " . substr($u, 2) .
-        " WHERE id='" . addslashes($this->mdo_id) . "'", __FILE__, __LINE__);
+        " WHERE id='" . addslashes($this->mdo_id) . "'");
 }
 
 
@@ -200,7 +200,7 @@ function mdobject($_course, $id)
     $link_table = Database::get_course_table(TABLE_LINK);
     if (($linkinfo = @Database::fetch_array(Database::query(
             "SELECT url,title,description,category_id FROM $link_table WHERE id='" .
-            addslashes($id) . "'", __FILE__, __LINE__))))
+            addslashes($id) . "'"))))
     {
         $this->mdo_url =         $linkinfo['url'];
         $this->mdo_title =       $linkinfo['title'];
@@ -210,7 +210,7 @@ function mdobject($_course, $id)
         $linkcat_table = Database::get_course_table(TABLE_LINK_CATEGORY);
         if (($catinfo = @Database::fetch_array(Database::query(
                 "SELECT category_title FROM $linkcat_table WHERE id='" .
-                addslashes($lci) . "'", __FILE__, __LINE__))))
+                addslashes($lci) . "'"))))
             $this->mdo_category_title =    $catinfo['category_title'];
     }
 }

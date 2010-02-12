@@ -74,7 +74,7 @@ function find_site($url)
     $site_url = "site_url = '" . addslashes($url) . "'";
 
     $result = Database::query("SELECT site_id FROM " . PHPDIG_DB_PREFIX .
-        "sites WHERE " . $site_url, __FILE__, __LINE__);  // find site
+        "sites WHERE " . $site_url);  // find site
 
     if (Database::num_rows($result) == 1)
     {
@@ -83,7 +83,7 @@ function find_site($url)
     else
     {
         $result = Database::query("INSERT INTO " . PHPDIG_DB_PREFIX .
-            "sites SET " . $site_url, __FILE__, __LINE__);  // new site
+            "sites SET " . $site_url);  // new site
         $site_id = Database::insert_id();
 
         $result = Database::query("INSERT INTO " . PHPDIG_DB_PREFIX .
@@ -102,20 +102,17 @@ function remove_engine_entries($url, $path, $file = '')
         str_replace(array('_', '%'), array('\_', '\%'), $file)) . "%'";
 
     $result = Database::query("SELECT spider_id FROM " . PHPDIG_DB_PREFIX .
-        "spider WHERE site_id=" . ($site_id = find_site($url)) . $and_path,
-        __FILE__, __LINE__);  // find page(s)
+        "spider WHERE site_id=" . ($site_id = find_site($url)) . $and_path);  // find page(s)
 
     while ($row = Database::fetch_array($result))
     {
         Database::query("DELETE FROM " . PHPDIG_DB_PREFIX .
-            "engine WHERE spider_id=" . (int)$row['spider_id'],
-            __FILE__, __LINE__);  // delete all references to keywords
+            "engine WHERE spider_id=" . (int)$row['spider_id']);  // delete all references to keywords
         $aff .= ' +' . Database::affected_rows();
     }
 
     Database::query("DELETE FROM " . PHPDIG_DB_PREFIX .
-        "spider WHERE site_id=" . $site_id . $and_path,
-        __FILE__, __LINE__);  // delete page
+        "spider WHERE site_id=" . $site_id . $and_path);  // delete page
 
     echo htmlspecialchars($url . $path . $file, ENT_QUOTES, $charset), ' (site_id ',
         $site_id, '): ', Database::affected_rows(), $aff,
@@ -133,8 +130,7 @@ function index_words($site_id, $path, $file, $first_words, $keywords)
         addslashes($first_words) . "',site_id='$site_id'";
         // do not set upddate,md5,num_words,last_modified,filesize
 
-    Database::query("INSERT INTO " . PHPDIG_DB_PREFIX . $spider_set_path_etc,
-        __FILE__, __LINE__);
+    Database::query("INSERT INTO " . PHPDIG_DB_PREFIX . $spider_set_path_etc);
 
     $spider_id = Database::insert_id(); $new = 0;
 
@@ -144,15 +140,13 @@ function index_words($site_id, $path, $file, $first_words, $keywords)
             ereg('^['.WORDS_CHARS_LATIN1.'#$]', $key))
     {
         $result = Database::query("SELECT key_id FROM " . PHPDIG_DB_PREFIX .
-            "keywords WHERE keyword = '" . addslashes($key) . "'",
-            __FILE__, __LINE__);
+            "keywords WHERE keyword = '" . addslashes($key) . "'");
 
         if (Database::num_rows($result) == 0)
         {
             Database::query("INSERT INTO " . PHPDIG_DB_PREFIX .
                 "keywords (keyword,twoletters) VALUES ('" . addslashes($key) .
-                "','" .addslashes(substr(str_replace('\\','',$key),0,2)) ."')",
-            __FILE__, __LINE__);
+                "','" .addslashes(substr(str_replace('\\','',$key),0,2)) ."')");
             $key_id = Database::insert_id(); $new++;
         }
         else
@@ -161,8 +155,7 @@ function index_words($site_id, $path, $file, $first_words, $keywords)
         }
 
         Database::query("INSERT INTO " . PHPDIG_DB_PREFIX .
-            "engine (spider_id,key_id,weight) VALUES ($spider_id,$key_id,$w)",
-            __FILE__, __LINE__);
+            "engine (spider_id,key_id,weight) VALUES ($spider_id,$key_id,$w)");
     }
 
     echo '<tr><td>', htmlspecialchars($file, ENT_QUOTES, $charset), '</td><td>(spider_id ',

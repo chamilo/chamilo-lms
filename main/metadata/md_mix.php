@@ -52,7 +52,7 @@ function mdobject($_course, $eid)
         if (($docinfo = @mysql_fetch_array(Database::query(
                 "SELECT path,comment,filetype FROM
                  $table WHERE id='" .
-                addslashes($id) . "'", __FILE__, __LINE__))))
+                addslashes($id) . "'"))))
         {
             $this->mdo_path =     $docinfo['path'];
             $this->mdo_comment =  $docinfo['comment'];
@@ -79,7 +79,7 @@ function mdobject($_course, $eid)
         if (($linkinfo = @mysql_fetch_array(Database::query(
                 "SELECT url,title,description,category_id FROM
                  $link_table WHERE id='" . addslashes($id) .
-                "'", __FILE__, __LINE__))))
+                "'"))))
         {
             $this->mdo_url = $linkinfo['url'];
         }

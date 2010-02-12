@@ -166,7 +166,7 @@ function mdobject($_course, $id)
     $document_table = Database::get_course_table(TABLE_DOCUMENT);
     if (($docinfo = @Database::fetch_array(Database::query(
             "SELECT path,title,comment,filetype FROM $document_table WHERE id='" .
-            addslashes($id) . "'", __FILE__, __LINE__))))
+            addslashes($id) . "'"))))
     {
         $this->mdo_path =     $docinfo['path'];
         $this->mdo_title =    $docinfo['title'];
@@ -176,7 +176,7 @@ function mdobject($_course, $id)
 
         $group_info = Database::get_course_table(TABLE_GROUP);
         if (($result = Database::query(
-                "SELECT id,secret_directory FROM $group_info",  __FILE__, __LINE__)))
+                "SELECT id,secret_directory FROM $group_info")))
             while (($row = Database::fetch_array($result)))
                 if (($secdir = $row['secret_directory'] . '/') ==
                         substr($this->mdo_path, 0, strlen($secdir)))

@@ -52,7 +52,7 @@ function validate_data($user_classes) {
 				// 2.1.1 Check whether code exists in DB.
 				$class_table = Database :: get_main_table(TABLE_MAIN_CLASS);
 				$sql = "SELECT * FROM $class_table WHERE name = '".Database::escape_string($user_class['ClassName'])."'";
-				$res = Database::query($sql, __FILE__, __LINE__);
+				$res = Database::query($sql);
 				if (Database::num_rows($res) == 0) {
 					$user_class['error'] = get_lang('CodeDoesNotExists');
 					$errors[] = $user_class;
@@ -95,10 +95,10 @@ function save_data($users_classes) {
 	$csv_data = array ();
 	foreach ($users_classes as $index => $user_class) {
 		$sql1 = "SELECT user_id FROM $user_table WHERE username = '".Database::escape_string(UserManager::purify_username($user_class['UserName'], $purification_option_for_usernames))."'";
-		$res1 = Database::query($sql1, __FILE__, __LINE__);
+		$res1 = Database::query($sql1);
 		$obj1 = Database::fetch_object($res1);
 		$sql2 = "SELECT id FROM $class_table WHERE name = '".Database::escape_string(trim($user_class['ClassName']))."'";
-		$res2 = Database::query($sql2, __FILE__, __LINE__);
+		$res2 = Database::query($sql2);
 		$obj2 = Database::fetch_object($res2);
 		if ($obj1 && $obj2) {
 			$csv_data[$obj1->user_id][$obj2->id] = 1;
@@ -109,7 +109,7 @@ function save_data($users_classes) {
 	$db_subscriptions = array();
 	foreach ($csv_data as $user_id => $csv_subscriptions) {
 		$sql = "SELECT class_id FROM $class_user_table cu WHERE cu.user_id = $user_id";
-		$res = Database::query($sql, __FILE__, __LINE__);
+		$res = Database::query($sql);
 		while ($obj = Database::fetch_object($res)) {
 			$db_subscriptions[$obj->class_id] = 1;
 		}

@@ -77,19 +77,19 @@ if (api_is_platform_admin()) {
 		<li><a href="user_export.php">	<?php echo get_lang('ExportUserListXMLCSV') ?></a></li>
 		<li><a href="user_import.php">	<?php echo get_lang('ImportUserListXMLCSV') ?></a></li>
 		<?php if (api_get_setting('allow_social_tool')=='true') { ?>
-			<li><a href="group_add.php">	<?php echo get_lang('AddGroups') ?></a></li>  
-			<li><a href="group_list.php">	<?php echo get_lang('GroupList') ?></a></li>		
+			<li><a href="group_add.php">	<?php echo get_lang('AddGroups') ?></a></li>
+			<li><a href="group_list.php">	<?php echo get_lang('GroupList') ?></a></li>
 		<?php
 		}
 		if(isset($extAuthSource) && isset($extAuthSource['ldap']) && count($extAuthSource['ldap'])>0){
 			?>
 			<!-- dynamic ldap code -->
-			  <li><a href="ldap_users_list.php"><?php echo get_lang('ImportLDAPUsersIntoPlatform');?></a></li> 
+			  <li><a href="ldap_users_list.php"><?php echo get_lang('ImportLDAPUsersIntoPlatform');?></a></li>
 			<!-- dynamic ldap code -->
 			<?php
 			}
 		?>
-		<li><a href="user_fields.php">	<?php echo get_lang('ManageUserFields'); ?></a></li>	
+		<li><a href="user_fields.php">	<?php echo get_lang('ManageUserFields'); ?></a></li>
 		</ul>
 		</div>
 <?php
@@ -118,8 +118,8 @@ if(api_is_platform_admin()) {
 		<button class="search" type="submit"> <?php echo get_lang('Search');?>
 			</button>
 		</form></div>
-		
-		
+
+
 		<ul>
 		<li>
 		<a href="course_list.php?search=advanced"><?php echo api_ucfirst(get_lang('AdvancedSearch')); ?></a>
@@ -128,7 +128,7 @@ if(api_is_platform_admin()) {
 	<li><a href="course_list.php"><?php echo get_lang('CourseList') ?></a></li>
 	<li><a href="course_add.php"><?php echo get_lang('AddCourse') ?></a></li>
 	<li><a href="course_export.php"><?php echo get_lang('ExportCourses'); ?></a></li>
-	<li><a href="course_import.php"><?php echo get_lang('ImportCourses'); ?></a></li>	
+	<li><a href="course_import.php"><?php echo get_lang('ImportCourses'); ?></a></li>
 	<!--<li><a href="course_virtual.php"><?php //echo get_lang('AdminManageVirtualCourses') ?></a></li>-->
 	<li><a href="course_category.php"><?php echo get_lang('AdminCategories'); ?></a></li>
 	<li><a href="subscribe_user2course.php"><?php echo get_lang('AddUsersToACourse'); ?></a></li>
@@ -145,7 +145,7 @@ if(api_is_platform_admin()) {
 		<?php
 		}
 	?>
-	
+
 	</ul>
 	</div>
 
@@ -308,7 +308,7 @@ function version_check()
 {
 	$tbl_settings = Database :: get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
 	$sql = 'SELECT selected_value FROM  '.$tbl_settings.' WHERE variable="registered" ';
-	$result = Database::query($sql,__FILE__,__LINE__);
+	$result = Database::query($sql);
 	$row=Database::fetch_array($result,'ASSOC');
 
 	// The site has not been registered yet
@@ -359,13 +359,13 @@ function register_site()
 
 	// the SQL statment
 	$sql = "UPDATE $tbl_settings SET selected_value='true' WHERE variable='registered'";
-	$result = Database::query($sql,__FILE__,__LINE__);
+	$result = Database::query($sql);
 
 	//
 	if ($_POST['donotlistcampus'])
 	{
 		$sql = "UPDATE $tbl_settings SET selected_value='true' WHERE variable='donotlistcampus'";
-		$result = Database::query($sql,__FILE__,__LINE__);
+		$result = Database::query($sql);
 	}
 
 	// reload the settings
@@ -388,13 +388,13 @@ function check_dokeos_version2()
 	{
 		// the number of courses
 		$sql="SELECT count(code) FROM ".Database::get_main_table(TABLE_MAIN_COURSE);
-		$result=Database::query($sql,__FILE__,__LINE__);
+		$result=Database::query($sql);
 		$row = Database::fetch_array($result);
 		$number_of_courses = $row[0];
 
 		// the number of users
 		$sql="SELECT count(user_id) FROM ".Database::get_main_table(TABLE_MAIN_USER);
-		$result=Database::query($sql,__FILE__,__LINE__);
+		$result=Database::query($sql);
 		$row = Database::fetch_array($result);
 		$number_of_users = $row[0];
 
@@ -402,7 +402,7 @@ function check_dokeos_version2()
 		$handle=@fopen($version_url,'r');
 		if ($handle !== false) {
 			$version_info=trim(@fread($handle, 1024));
-	
+
 			if ($dokeos_version<>$version_info)
 			{
 				$output='<br /><span style="color:red">' . get_lang('YourVersionNotUpToDate') . '. '.get_lang('LatestVersionIs').' <b>Chamilo '.$version_info.'</b>. '.get_lang('YourVersionIs').' <b>Chamilo '.$dokeos_version. '</b>. '.str_replace('http://www.chamilo.org','<a href="http://www.chamilo.org">http://www.chamilo.org</a>',get_lang('PleaseVisitDokeos')).'</span>';

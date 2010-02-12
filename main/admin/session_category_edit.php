@@ -37,7 +37,7 @@ $tool_name = get_lang('EditSessionCategory');
 $interbreadcrumb[]=array('url' => 'index.php',"name" => get_lang('PlatformAdmin'));
 $interbreadcrumb[]=array('url' => "session_category_list.php","name" => get_lang('ListSessionCategory'));
 $sql = "SELECT * FROM $tbl_session_category WHERE id='".$id."' ORDER BY name";
-$result=Database::query($sql,__FILE__,__LINE__);
+$result=Database::query($sql);
 if (!$infos=Database::fetch_array($result)) {
 	header('Location: session_list.php');
 	exit();

@@ -84,7 +84,7 @@ if ($_POST['formSent'] )
 
 			}
 		}
-		$result=Database::query($sql,__FILE__,__LINE__);
+		$result=Database::query($sql);
 	}
 	else
 	{
@@ -94,7 +94,7 @@ if ($_POST['formSent'] )
 					ON $tbl_user.user_id = $tbl_session.id_coach
 				WHERE id='$session_id'";
 
-		$result = Database::query($sql,__FILE__,__LINE__);
+		$result = Database::query($sql);
 
 	}
 
@@ -161,7 +161,7 @@ if ($_POST['formSent'] )
 						ON $tbl_user.user_id = $tbl_session_user.id_user
 						AND $tbl_session_user.id_session = '".$row['id']."'";
 
-			$rsUsers = Database::query($sql,__FILE__,__LINE__);
+			$rsUsers = Database::query($sql);
 			$users = '';
 			while($rowUsers = Database::fetch_array($rsUsers)){
 				if($cvs){
@@ -186,7 +186,7 @@ if ($_POST['formSent'] )
 						ON $tbl_course.code = $tbl_session_course_user.course_code
 						AND $tbl_session_course_user.id_session = '".$row['id']."'";
 
-			$rsCourses = Database::query($sql,__FILE__,__LINE__);
+			$rsCourses = Database::query($sql);
 
 			$courses = '';
 			while($rowCourses = Database::fetch_array($rsCourses)){
@@ -198,7 +198,7 @@ if ($_POST['formSent'] )
 					WHERE scu.course_code = '{$rowCourses['code']}'
 						AND scu.id_session = '".$row['id']."' AND scu.status = 2 ";
 
-				$rs_coachs = Database::query($sql,__FILE__,__LINE__);
+				$rs_coachs = Database::query($sql);
 				$coachs = array();
 				while ($row_coachs = Database::fetch_array($rs_coachs)) {
 					$coachs[] = $row_coachs['username'];
@@ -225,7 +225,7 @@ if ($_POST['formSent'] )
 						AND scu.course_code='".$rowCourses['code']."'
 						AND scu.id_session='".$row['id']."'";
 
-				$rsUsersCourse = Database::query($sql,__FILE__,__LINE__);
+				$rsUsersCourse = Database::query($sql);
 				$userscourse = '';
 				while($rowUsersCourse = Database::fetch_array($rsUsersCourse)){
 
@@ -291,7 +291,7 @@ if ($_configuration['multiple_access_urls']==true) {
 }
 
 
-$result=Database::query($sql,__FILE__,__LINE__);
+$result=Database::query($sql);
 
 $Sessions=Database::store_result($result);
 ?>

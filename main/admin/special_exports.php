@@ -59,7 +59,7 @@ if ((isset ($_POST['action']) && $_POST['action'] == 'course_select_form') || (i
 		$to_group_id = 0;
 		$code_course = '';
 		$sql_session = "SELECT id, name FROM $tbl_session ";
-		$query_session = Database::query($sql_session, __FILE__, __LINE__);
+		$query_session = Database::query($sql_session);
 		$ListSession = array();
 		while ($rows_session = Database::fetch_assoc($query_session)) {
 			$ListSession[$rows_session['id']] = $rows_session['name'];
@@ -82,7 +82,7 @@ if ((isset ($_POST['action']) && $_POST['action'] == 'course_select_form') || (i
 						AND `docs`.`session_id` = '0'
 						AND `props`.`visibility`<>'2'
 						AND `props`.`to_group_id`=".$to_group_id."";
-				$query = Database::query($sql ,__FILE__,__LINE__);
+				$query = Database::query($sql );
 				while ($rows_course_file = Database::fetch_assoc($query)) {
 					$zip_folder->add($FileZip['PATH_COURSE'].$_course['directory']."/document".$rows_course_file['path'],
 									 PCLZIP_OPT_ADD_PATH, $_course['directory'],
@@ -100,7 +100,7 @@ if ((isset ($_POST['action']) && $_POST['action'] == 'course_select_form') || (i
 							AND `docs`.`session_id` = '$session_id'
 							AND `props`.`visibility`<>'2'
 							AND `props`.`to_group_id`=".$to_group_id."";
-					$query_session_doc = Database::query($sql_session_doc, __FILE__, __LINE__);
+					$query_session_doc = Database::query($sql_session_doc);
 					while ($rows_course_session_file = Database::fetch_assoc($query_session_doc)) {
 						$zip_folder->add($FileZip['PATH_COURSE'].$_course['directory'].'/document'.$rows_course_session_file['path'],
 										 PCLZIP_OPT_ADD_PATH, $_course['directory']."/".$ListSession[$session_id],
@@ -194,7 +194,7 @@ function fullexportspecial(){
 					AND `docs`.`session_id` = '0'
 					AND `props`.`visibility`<>'2'
 					AND `props`.`to_group_id`=".$to_group_id."";
-			$query = Database::query($sql ,__FILE__,__LINE__);
+			$query = Database::query($sql );
 			while ($rows_course_file = Database::fetch_assoc($query)) {
 				$rows_course_file['path'];
 				$zip_folder->add($FileZip['PATH_COURSE'].$_course['directory']."/document".$rows_course_file['path'],
@@ -207,7 +207,7 @@ function fullexportspecial(){
 			$sql_session = "SELECT id, name, course_code  FROM $tbl_session_course
 				INNER JOIN  $tbl_session ON id_session = id
 				WHERE course_code = '$code_course' ";
-			$query_session = Database::query($sql_session, __FILE__, __LINE__);
+			$query_session = Database::query($sql_session);
 			while ($rows_session = Database::fetch_assoc($query_session)) {
 				$session_id = $rows_session['id'];
 				$sql_session_doc = "SELECT path FROM $tbl_document AS docs,$tbl_property AS props
@@ -218,7 +218,7 @@ function fullexportspecial(){
 						AND `docs`.`session_id` = '$session_id'
 						AND `props`.`visibility`<>'2'
 						AND `props`.`to_group_id`=".$to_group_id."";
-				$query_session_doc = Database::query($sql_session_doc, __FILE__, __LINE__);
+				$query_session_doc = Database::query($sql_session_doc);
 				while ($rows_course_session_file = Database::fetch_assoc($query_session_doc)) {
 					$zip_folder->add($FileZip['PATH_COURSE'].$_course['directory'].'/document'.$rows_course_session_file['path'],
 									 PCLZIP_OPT_ADD_PATH, $_course['directory']."/".$rows_session['name'],

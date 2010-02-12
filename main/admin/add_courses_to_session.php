@@ -54,7 +54,7 @@ if(isset($_GET['add_type']) && $_GET['add_type']!=''){
 
 if (!api_is_platform_admin()) {
 	$sql = 'SELECT session_admin_id FROM '.Database :: get_main_table(TABLE_MAIN_SESSION).' WHERE id='.$id_session;
-	$rs = Database::query($sql,__FILE__,__LINE__);
+	$rs = Database::query($sql);
 	if (Database::result($rs,0,0)!=$_user['user_id']) {
 		api_not_allowed(true);
 	}
@@ -122,7 +122,7 @@ if ($_POST['formSent']) {
 	$sql="SELECT id_user
 		FROM $tbl_session_rel_user
 		WHERE id_session = $id_session";
-	$result=Database::query($sql,__FILE__,__LINE__);
+	$result=Database::query($sql);
 	$UserList=Database::store_result($result);
 
 
@@ -136,19 +136,19 @@ if ($_POST['formSent']) {
 		}
 		if(!$exists) {
 			$sql_insert_rel_course= "INSERT INTO $tbl_session_rel_course(id_session,course_code) VALUES('$id_session','$enreg_course')";
-			Database::query($sql_insert_rel_course ,__FILE__,__LINE__);
+			Database::query($sql_insert_rel_course );
 			//We add in the existing courses table the current course, to not try to add another time the current course
 			$existingCourses[]=array('course_code'=>$enreg_course);
 			$nbr_users=0;
 			foreach ($UserList as $enreg_user) {
 				$enreg_user = Database::escape_string($enreg_user['id_user']);
 				$sql_insert = "INSERT IGNORE INTO $tbl_session_rel_course_rel_user(id_session,course_code,id_user) VALUES('$id_session','$enreg_course','$enreg_user')";
-				Database::query($sql_insert,__FILE__,__LINE__);
+				Database::query($sql_insert);
 				if(Database::affected_rows()) {
 					$nbr_users++;
 				}
 			}
-			Database::query("UPDATE $tbl_session_rel_course SET nbr_users=$nbr_users WHERE id_session='$id_session' AND course_code='$enreg_course'",__FILE__,__LINE__);
+			Database::query("UPDATE $tbl_session_rel_course SET nbr_users=$nbr_users WHERE id_session='$id_session' AND course_code='$enreg_course'");
 		}
 
 	}
@@ -161,7 +161,7 @@ if ($_POST['formSent']) {
 		}
 	}
 	$nbr_courses=count($CourseList);
-	Database::query("UPDATE $tbl_session SET nbr_courses=$nbr_courses WHERE id='$id_session'",__FILE__,__LINE__);
+	Database::query("UPDATE $tbl_session SET nbr_courses=$nbr_courses WHERE id='$id_session'");
 
 	if(isset($_GET['add']))
 		header('Location: add_users_to_session.php?id_session='.$id_session.'&add=true');
@@ -196,7 +196,7 @@ echo '<div class="row"><div class="form_header">'.$tool_name.' ('.$session_info[
 
 
 /*$sql = 'SELECT COUNT(1) FROM '.$tbl_course;
-$rs = Database::query($sql, __FILE__, __LINE__);
+$rs = Database::query($sql);
 $count_courses = Database::result($rs, 0, 0);*/
 
 $ajax_search = $add_type == 'unique' ? true : false;
@@ -227,7 +227,7 @@ if ($ajax_search) {
 		}
 	}
 
-	$result=Database::query($sql,__FILE__,__LINE__);
+	$result=Database::query($sql);
 	$Courses=Database::store_result($result);
 
 	foreach($Courses as $course) {
@@ -257,7 +257,7 @@ if ($ajax_search) {
 		}
 	}
 
-	$result=Database::query($sql,__FILE__,__LINE__);
+	$result=Database::query($sql);
 	$Courses=Database::store_result($result);
 	foreach($Courses as $course) {
 		if ($course['id_session'] == $id_session) {

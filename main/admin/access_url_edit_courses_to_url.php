@@ -165,7 +165,7 @@ if($ajax_search) {
 	$sql="SELECT code, title
 	  	  	FROM $tbl_course u
 			ORDER BY title, code";
-	$result=Database::query($sql,__FILE__,__LINE__);
+	$result=Database::query($sql);
 	$courses=Database::store_result($result);
 	$course_list_leys = array_keys($course_list);
 	foreach($courses as $course) {

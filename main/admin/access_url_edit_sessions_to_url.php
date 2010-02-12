@@ -164,7 +164,7 @@ if($ajax_search) {
 	$sql="SELECT id, name
 	  	  	FROM $tbl_session u
 			ORDER BY name, id";
-	$result=Database::query($sql,__FILE__,__LINE__);
+	$result=Database::query($sql);
 	$sessions=Database::store_result($result);
 	$session_list_leys = array_keys($session_list);
 	foreach($sessions as $session) {

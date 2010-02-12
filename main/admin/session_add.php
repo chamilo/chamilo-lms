@@ -80,7 +80,7 @@ function search_coachs($needle)
 			}
 		}
 
-		$rs = Database::query($sql, __FILE__, __LINE__);
+		$rs = Database::query($sql);
 		while ($user = Database :: fetch_array($rs)) {
 			$return .= '<a href="javascript: void(0);" onclick="javascript: fill_coach_field(\''.$user['username'].'\')">'.api_get_person_name($user['firstname'], $user['lastname']).' ('.$user['username'].')</a><br />';
 		}
@@ -161,7 +161,7 @@ if (!empty($return)) {
 <?php
 
 $sql = 'SELECT COUNT(1) FROM '.$tbl_user.' WHERE status=1';
-$rs = Database::query($sql, __FILE__, __LINE__);
+$rs = Database::query($sql);
 $count_users = Database::result($rs, 0, 0);
 
 if (intval($count_users)<50) {
@@ -178,7 +178,7 @@ if (intval($count_users)<50) {
 		}
 	}
 
-	$result=Database::query($sql,__FILE__,__LINE__);
+	$result=Database::query($sql);
 	$Coaches=Database::store_result($result);
 	?>
 	<select name="coach_username" value="true" style="width:250px;">
@@ -202,7 +202,7 @@ if (intval($count_users)<50) {
 	$id_session_category = '';
 	$tbl_session_category = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
 	$sql = 'SELECT id, name FROM '.$tbl_session_category.' ORDER BY name ASC';
-	$result = Database::query($sql,__FILE__,__LINE__);
+	$result = Database::query($sql);
 	$Categories = Database::store_result($result);
 ?>
 <tr>

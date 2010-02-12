@@ -36,7 +36,7 @@ require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 function add_sub_language ($original_name,$english_name,$isocode,$sublanguage_available,$parent_id) {
 	$tbl_admin_languages 	= Database :: get_main_table(TABLE_MAIN_LANGUAGE);
 	$sql='INSERT INTO '.$tbl_admin_languages.'(original_name,english_name,isocode,dokeos_folder,available,parent_id) VALUES ("'.api_htmlentities($original_name).'","'.$english_name.'","'.$isocode.'","'.$english_name.'","'.$sublanguage_available.'","'.$parent_id.'")';
-	Database::query($sql,__FILE__,__LINE__);
+	Database::query($sql);
 }
 /**
  * check if language exists
@@ -46,9 +46,9 @@ function check_if_language_exist ($original_name,$english_name,$isocode,$sublang
 	$sql_original_name='SELECT count(*) AS count_original_name FROM '.$tbl_admin_languages.' WHERE original_name="'.Database::escape_string(api_htmlentities($original_name)).'" ';
 	$sql_english_name='SELECT count(*) AS count_english_name FROM '.$tbl_admin_languages.' WHERE english_name="'.Database::escape_string($english_name).'" ';
 	$sql_isocode='SELECT count(*) AS count_isocode FROM '.$tbl_admin_languages.' WHERE isocode="'.Database::escape_string($isocode).'" ';
-	$rs_original_name=Database::query($sql_original_name,__FILE__,__LINE__);
-	$rs_english_name=Database::query($sql_english_name,__FILE__,__LINE__);
-	$rs_isocode=Database::query($sql_isocode,__FILE__,__LINE__);
+	$rs_original_name=Database::query($sql_original_name);
+	$rs_english_name=Database::query($sql_english_name);
+	$rs_isocode=Database::query($sql_isocode);
 	$count_original_name=Database::result($rs_original_name,0,'count_original_name');
 	$count_english_name=Database::result($rs_english_name,0,'count_english_name');
 	$count_isocode=Database::result($rs_isocode,0,'count_isocode');
@@ -94,7 +94,7 @@ function check_if_exist_language_by_id ($language_id) {
  */
 function ckeck_if_is_parent_of_sub_language ($parent_id) {
 	$sql='SELECT count(*) AS count FROM language WHERE parent_id="'.Database::escape_string($parent_id).'"';
-	$rs=Database::query($sql,__FILE__,__LINE__);
+	$rs=Database::query($sql);
 	if (Database::num_rows($rs)>0 && Database::result($rs,0,'count')==1) {
 		return true;
 	} else {

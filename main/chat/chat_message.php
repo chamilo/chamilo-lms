@@ -110,7 +110,7 @@ if (!empty($course) && !empty($_user['user_id']))
 	==============================================================================
 	*/
 	$query="SELECT lastname, firstname, username FROM $tbl_user WHERE user_id='".$_user['user_id']."'";
-	$result=Database::query($query,__FILE__,__LINE__);
+	$result=Database::query($query);
 
 	list($pseudoUser)=Database::fetch_row($result);
 
@@ -145,7 +145,7 @@ if (!empty($course) && !empty($_user['user_id']))
 				$doc_id = add_document($_course,$basepath_chat,'folder',0,'chat_files');
 				$sql = "INSERT INTO $TABLEITEMPROPERTY (tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility)
 						VALUES ('document',1,NOW(),NOW(),$doc_id,'FolderCreated',1,$group_id,NULL,0)";
-				Database::query($sql,__FILE__,__LINE__);
+				Database::query($sql);
 			}
 		}
 	}

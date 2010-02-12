@@ -1,4 +1,4 @@
-<?php 
+<?php
 /* For licensing terms, see /chamilo_license.txt */
 /**
 ==============================================================================
@@ -55,7 +55,7 @@ if (api_is_allowed_to_edit(null,true)) {
 
 	elseif ($_GET["destroy"])
 	{
-		Database::query("UPDATE $tool_table SET visibility='2' WHERE id='".$_GET["id"]."'",__FILE__,__LINE__);
+		Database::query("UPDATE $tool_table SET visibility='2' WHERE id='".$_GET["id"]."'");
 	}
 
   	/*
@@ -65,7 +65,7 @@ if (api_is_allowed_to_edit(null,true)) {
 	*/
 	elseif ($_GET["hide"]) // visibility 1 -> 0
 	{
-		Database::query("UPDATE $tool_table SET visibility=0 WHERE id='".$_GET["id"]."'",__FILE__,__LINE__);
+		Database::query("UPDATE $tool_table SET visibility=0 WHERE id='".$_GET["id"]."'");
 		Display::display_confirmation_message(get_lang('ToolIsNowHidden'));
 	}
 
@@ -76,7 +76,7 @@ if (api_is_allowed_to_edit(null,true)) {
 	*/
 	elseif ($_GET["restore"]) // visibility 0,2 -> 1
 	{
-		Database::query("UPDATE $tool_table SET visibility=1  WHERE id='".$_GET["id"]."'",__FILE__,__LINE__);
+		Database::query("UPDATE $tool_table SET visibility=1  WHERE id='".$_GET["id"]."'");
 		Display::display_confirmation_message(get_lang('ToolIsNowVisible'));
 	}
 }
@@ -106,7 +106,7 @@ if (api_is_platform_admin())
 
 	elseif (isset($_GET["delete"]) && $_GET["delete"])
 	{
-		Database::query("DELETE FROM $tool_table WHERE id='$id' AND added_tool=1",__FILE__,__LINE__);
+		Database::query("DELETE FROM $tool_table WHERE id='$id' AND added_tool=1");
 	}
 }
 
@@ -153,9 +153,9 @@ if (api_is_allowed_to_edit(null,true) && !api_is_coach()) {
 			"<div style=\"margin-bottom: 10px;\"><font color=\"#808080\">\n",get_lang("InLnk"),"</font></div>",
 			"</td>\n",
 			"</tr>\n";
-			
+
 	CourseHome::show_tool_2column(TOOL_PUBLIC_BUT_HIDDEN);
-	
+
 	echo	"</table>";
 	echo	"</div> ";
 }

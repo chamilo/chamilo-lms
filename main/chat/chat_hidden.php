@@ -44,7 +44,7 @@ $tbl_user 		= Database::get_main_table(TABLE_MAIN_USER);
 $tbl_chat_connected 	= Database::get_course_chat_connected_table();
 
 $query="SELECT username FROM $tbl_user WHERE user_id='".$_user['user_id']."'";
-$result=Database::query($query,__FILE__,__LINE__);
+$result=Database::query($query);
 
 list($pseudoUser)=Database::fetch_row($result);
 
@@ -76,8 +76,8 @@ $documentPath=api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';
 if (!empty($group_id)) {
 	$group_info = GroupManager :: get_group_properties($group_id);
 	$chatPath=$documentPath.$group_info['directory'].'/chat_files/';
-} else {		
-	$chatPath=$documentPath.'/chat_files/';			
+} else {
+	$chatPath=$documentPath.'/chat_files/';
 }
 
 // get chat file
@@ -87,7 +87,7 @@ if (!empty($group_id)) {
 } else if (!empty($session_id)) {
 	$basename_chat = 'messages-'.$dateNow.'_sid-'.$session_id;
 } else {
-	$basename_chat = 'messages-'.$dateNow;				
+	$basename_chat = 'messages-'.$dateNow;
 }
 
 $chat_size_old=intval($_POST['chat_size_old']);
@@ -104,10 +104,10 @@ if (Database::num_rows($result)==0) {
 	$query="UPDATE $tbl_chat_connected set last_connection='".$current_time."' WHERE user_id='".$_user['user_id']."' AND session_id='$session_id' AND to_group_id='$group_id'";
 }
 
-Database::query($query,__FILE__,__LINE__);
+Database::query($query);
 
 $query="SELECT COUNT(user_id) FROM $tbl_chat_connected WHERE last_connection>'".date('Y-m-d H:i:s',time()-60*5)."' $extra_condition";
-$result=Database::query($query,__FILE__,__LINE__);
+$result=Database::query($query);
 
 $connected_old=intval($_POST['connected_old']);
 list($connected_new) = Database::fetch_row($result);
@@ -143,12 +143,12 @@ if ($_SESSION["origin"] == 'whoisonline') {  //check if our target has denied ou
 	$talk_to=$_SESSION["target"];
 	$track_user_table = Database::get_main_table(TABLE_MAIN_USER);
 	$sql="select chatcall_text from $track_user_table where ( user_id = $talk_to )";
-	$result=Database::query($sql,__FILE__,__LINE__);
+	$result=Database::query($sql);
 	$row=Database::fetch_array($result);
 	if ($row['chatcall_text'] == 'DENIED') {
 		echo "<script language=javascript> alert('".get_lang('ChatDenied')."'); </script>";
 		$sql="update $track_user_table set chatcall_user_id = '', chatcall_date = '', chatcall_text='' where (user_id = $talk_to)";
-		$result=Database::query($sql,__FILE__,__LINE__);
+		$result=Database::query($sql);
 	}
 }
 

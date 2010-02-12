@@ -112,7 +112,7 @@ function get_myagendaitems($courses_dbs, $month, $year)
 			}
 		}
 
-		$result = Database::query($sqlquery, __FILE__, __LINE__);
+		$result = Database::query($sqlquery);
 		while ($item = Database::fetch_array($result)) {
 			$agendaday = date("j",strtotime($item['start_date']));
 			if(!isset($items[$agendaday])){$items[$agendaday]=array();}
@@ -311,7 +311,7 @@ function show_new_personal_item_form($id = "")
 	if ($id <> "")
 	{
 		$sql = "SELECT * FROM ".$tbl_personal_agenda." WHERE user='".$_user['user_id']."' AND id='".$id."'";
-		$result = Database::query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql);
 		$aantal = Database::num_rows($result);
 		if ($aantal <> 0)
 		{
@@ -329,7 +329,7 @@ function show_new_personal_item_form($id = "")
 			return false;
 		}
 	}
-	
+
 	echo '<form method="post" action="myagenda.php?action=add_personal_agenda_item&amp;id=$id" name="newedit_form">';
 	echo '<div id="newedit_form">';
 	echo '<div class="title">';
@@ -339,7 +339,7 @@ function show_new_personal_item_form($id = "")
 	echo '<!-- date: 1 -> 31 -->';
 	echo '<br/>';
 	echo ''.get_lang("Date").':	';
-	
+
 	// ********** The form containing the days (0->31) ********** \\
 	echo '<select name="frm_day">';
 	// small loop for filling all the dates
@@ -475,7 +475,7 @@ function show_new_personal_item_form($id = "")
 	echo '</div>';
 	echo '</div>';
 	echo '</form>';
-	
+
 }
 /**
  * This function shows all the forms that are needed form adding a new personal agenda item
@@ -503,7 +503,7 @@ function store_personal_item($day, $month, $year, $hour, $minute, $title, $conte
 	{ // we are adding a new item
 		$sql = "INSERT INTO $tbl_personal_agenda (user, title, text, date) VALUES ('".$_user['user_id']."','$title', '$content', '$date')";
 	}
-	$result = Database::query($sql, __FILE__, __LINE__);
+	$result = Database::query($sql);
 }
 /**
  * This function finds all the courses (also those of sessions) of the user and returns an array containing the
@@ -619,7 +619,7 @@ function get_personal_agenda_items($agendaitems, $day = "", $month = "", $year =
 		}
 	}
 
-	$result = Database::query($sql, __FILE__, __LINE__);
+	$result = Database::query($sql);
 	while ($item = Database::fetch_array($result))
 	{
 		// we break the date field in the database into a date and a time part
@@ -679,7 +679,7 @@ function get_personal_agenda_item($id)
 	// make sure events of the personal agenda can only be seen by the user himself
 	$user = api_get_user_id();
 	$sql = " SELECT * FROM ".$tbl_personal_agenda." WHERE id=".$id." AND user = ".$user;
-	$result = Database::query($sql, __FILE__, __LINE__);
+	$result = Database::query($sql);
 	if(Database::num_rows($result)==1)
 	{
 		$item = Database::fetch_array($result);
@@ -701,7 +701,7 @@ function show_personal_agenda()
 	global $_user;
 	// The SQL statement that retrieves all the personal agenda items of this user
 	$sql = "SELECT * FROM ".$tbl_personal_agenda." WHERE user='".$_user['user_id']."' ORDER BY date DESC";
-	$result = Database::query($sql, __FILE__, __LINE__);
+	$result = Database::query($sql);
 	// variable initialisation
 	$month_bar = "";
 	// setting the default day, month and year
@@ -805,7 +805,7 @@ function show_simple_personal_agenda($user_id)
 
 	// The SQL statement that retrieves all the personal agenda items of this user
 	$sql = "SELECT * FROM ".$tbl_personal_agenda." WHERE user='".$user_id."' ORDER BY date DESC";
-	$result = Database::query($sql, __FILE__, __LINE__);
+	$result = Database::query($sql);
 	// variable initialisation
 	$month_bar = "";
 	// setting the default day, month and year
@@ -884,12 +884,12 @@ function delete_personal_agenda($id)
 	if ($id <> '')
 	{
 		$sql = "SELECT * FROM ".$tbl_personal_agenda." WHERE user='".$_user['user_id']."' AND id='".$id."'";
-		$result = Database::query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql);
 		$aantal = Database::num_rows($result);
 		if ($aantal <> 0)
 		{
 			$sql = "DELETE FROM ".$tbl_personal_agenda." WHERE user='".$_user['user_id']."' AND id='".$id."'";
-			$result = Database::query($sql, __FILE__, __LINE__);
+			$result = Database::query($sql);
 		}
 	}
 }
@@ -965,7 +965,7 @@ function get_personal_agenda_items_between_dates($user_id, $date_start='', $date
 			}
 		}
 
-		$result = Database::query($sqlquery, __FILE__, __LINE__);
+		$result = Database::query($sqlquery);
 		while ($item = Database::fetch_array($result)) {
 			$agendaday = date("j",strtotime($item['start_date']));
 			$URL = api_get_path(WEB_PATH)."main/calendar/agenda.php?cidReq=".urlencode($course["code"])."&amp;day=$agendaday&amp;month=$month&amp;year=$year#$agendaday";

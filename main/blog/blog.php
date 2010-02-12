@@ -385,7 +385,7 @@ else
 								user_id = ".api_get_user_id()." AND
 								task_id = ".$task_id;
 
-	$result = Database::query($sql, __LINE__, __FILE__);
+	$result = Database::query($sql);
 	$row = Database::fetch_array($result);
 
 	if ($row['number'] == 1)

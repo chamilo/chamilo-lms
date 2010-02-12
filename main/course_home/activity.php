@@ -1,4 +1,4 @@
-<?php 
+<?php
 /* For licensing terms, see /chamilo_license.txt */
 /**
 ==============================================================================
@@ -22,29 +22,29 @@ if(api_is_allowed_to_edit(null,true)) {
 	if(!empty($_GET['hide'])) // visibility 1 -> 0
 	{
 		/* -- session condition for visibility
-		if (!empty($session_id)) {			
+		if (!empty($session_id)) {
 			$sql = "select session_id FROM $tool_table WHERE id='".intval($_GET["id"])."' AND session_id = '".intval($session_id)."'";
-			$rs = Database::query($sql,__FILE__,__LINE__);
-			if (Database::num_rows($rs) > 0) { 
+			$rs = Database::query($sql);
+			if (Database::num_rows($rs) > 0) {
 	 			$sql="UPDATE $tool_table SET visibility=0 WHERE id='".intval($_GET["id"])."' AND session_id = '".intval($session_id)."'";
 			} else {
 				$sql_select = "select * FROM $tool_table WHERE id='".$_GET["id"]."'";
-				$res_select = Database::query($sql_select,__FILE__,__LINE__);
-				$row_select = Database::fetch_array($res_select);					
+				$res_select = Database::query($sql_select);
+				$row_select = Database::fetch_array($res_select);
 				$sql = "INSERT INTO $tool_table(name,link,image,visibility,admin,address,added_tool,target,category,session_id)
 						VALUES('{$row_select['name']}','{$row_select['link']}','{$row_select['image']}','0','{$row_select['admin']}','{$row_select['address']}','{$row_select['added_tool']}','{$row_select['target']}','{$row_select['category']}','$session_id')";
-			}									
-		} else {				
+			}
+		} else {
 			$sql="UPDATE $tool_table SET visibility=0 WHERE id='".intval($_GET["id"])."'";
-		}*/		
+		}*/
 		$sql="UPDATE $tool_table SET visibility=0 WHERE id='".intval($_GET["id"])."'";
-		Database::query($sql,__FILE__,__LINE__);				
+		Database::query($sql);
 		Display::display_confirmation_message(get_lang('ToolIsNowHidden'));
 	} elseif(!empty($_GET['restore'])) {
 		// visibility 0,2 -> 1
 		//REACTIVATE
-		$sql = 	"UPDATE $tool_table SET visibility=1 WHERE id='".intval($_GET["id"])."'";			
-		Database::query($sql,__FILE__,__LINE__);
+		$sql = 	"UPDATE $tool_table SET visibility=1 WHERE id='".intval($_GET["id"])."'";
+		Database::query($sql);
 		Display::display_confirmation_message(get_lang('ToolIsNowVisible'));
 	}
 }
@@ -69,7 +69,7 @@ if (api_is_platform_admin()) {
 	elseif (isset($_GET["delete"]) && $_GET["delete"]) {
 		//where $id is set?
 		$id = intval($id);
-		Database::query("DELETE FROM $tool_table WHERE id='$id' AND added_tool=1",__FILE__,__LINE__);
+		Database::query("DELETE FROM $tool_table WHERE id='$id' AND added_tool=1");
 	}
 }
 
@@ -97,15 +97,15 @@ if(api_is_allowed_to_edit(null,true) && !api_is_coach()) {
 
 ?>
 	<div class="courseadminview" style="border:0px; margin-top: 0px;padding:5px 0px;">
-		<div class="normal-message" id="id_normal_message" style="display:none">		
-		<?php			
+		<div class="normal-message" id="id_normal_message" style="display:none">
+		<?php
 			echo '<img src="'.$server_protocol.$current_host.'/'.$path_work.'main/inc/lib/javascript/indicator.gif"/>'."&nbsp;&nbsp;";
 			echo get_lang('PleaseStandBy');
 		?>
 		</div>
 		<div class="confirmation-message" id="id_confirmation_message" style="display:none"></div>
 	</div>
-	
+
 	<?php
 	if (api_get_setting('show_session_data') === 'true' && $id_session > 0) {
 	?>
@@ -121,8 +121,8 @@ if(api_is_allowed_to_edit(null,true) && !api_is_coach()) {
 	<div class="courseadminview">
 		<span class="viewcaption"><?php echo get_lang("Authoring") ?></span>
 		<table width="100%">
-			<?php 
-			$my_list = CourseHome::get_tools_category(TOOL_AUTHORING); 
+			<?php
+			$my_list = CourseHome::get_tools_category(TOOL_AUTHORING);
 			CourseHome::show_tools_category($my_list);
 			?>
 		</table>
@@ -130,8 +130,8 @@ if(api_is_allowed_to_edit(null,true) && !api_is_coach()) {
 	<div class="courseadminview">
 		<span class="viewcaption"><?php echo get_lang("Interaction") ?></span>
 		<table width="100%">
-			<?php 
-			$my_list = CourseHome::get_tools_category(TOOL_INTERACTION); 
+			<?php
+			$my_list = CourseHome::get_tools_category(TOOL_INTERACTION);
 			CourseHome::show_tools_category($my_list);
 			?>
 		</table>
@@ -139,8 +139,8 @@ if(api_is_allowed_to_edit(null,true) && !api_is_coach()) {
 	<div class="courseadminview">
 		<span class="viewcaption"><?php echo get_lang("Administration") ?></span>
 		<table width="100%">
-			<?php 
-			$my_list = CourseHome::get_tools_category(TOOL_ADMIN_PLATEFORM); 
+			<?php
+			$my_list = CourseHome::get_tools_category(TOOL_ADMIN_PLATEFORM);
 			CourseHome::show_tools_category($my_list);
 			?>
 		</table>

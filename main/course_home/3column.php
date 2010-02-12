@@ -60,7 +60,7 @@ if (api_is_allowed_to_edit(null,true)) {
 	if($remove)
 	{
 		$sql = "SELECT * FROM $TBL_ACCUEIL WHERE id=$id";
-		$result = Database::query($sql,__FILE__,__LINE__);
+		$result = Database::query($sql);
 		$toolsRow = Database::fetch_array($result);
 		$tool_name = htmlspecialchars($toolsRow['name'] != "" ? $toolsRow['name'] : $toolsRow['link'],ENT_QUOTES,$charset);
 		if($toolsRow['img'] != "external.gif")

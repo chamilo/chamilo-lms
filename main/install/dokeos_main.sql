@@ -739,7 +739,7 @@ VALUES
 ('show_courses_descriptions_in_catalog', NULL, 'radio', 'Course', 'true', 'ShowCoursesDescriptionsInCatalogTitle', 'ShowCoursesDescriptionsInCatalogComment', NULL, NULL, 1),
 ('allow_coach_to_edit_course_session',NULL,'radio','Course','false','AllowCoachsToEditInsideTrainingSessions','AllowCoachsToEditInsideTrainingSessionsComment',NULL,NULL, 0),
 ('show_glossary_in_extra_tools', NULL, 'radio', 'Course', 'false', 'ShowGlossaryInExtraToolsTitle', 'ShowGlossaryInExtraToolsComment', NULL, NULL,1),
-('dokeos_database_version', NULL, 'textfield', NULL,'1.8.7.10004','DokeosDatabaseVersion','',NULL,NULL,0),
+('dokeos_database_version', NULL, 'textfield', NULL,'1.8.7.10303','DokeosDatabaseVersion','',NULL,NULL,0),
 ('send_email_to_admin_when_create_course',NULL,'radio','Platform','false','SendEmailToAdminTitle','SendEmailToAdminComment',NULL,NULL, 1),
 ('go_to_course_after_login',NULL,'radio','Course','false','GoToCourseAfterLoginTitle','GoToCourseAfterLoginComment',NULL,NULL, 0),
 ('math_mimetex',NULL,'radio','Editor','false','MathMimetexTitle','MathMimetexComment',NULL,NULL, 0),
@@ -2388,7 +2388,7 @@ name VARCHAR(255) NULL,
 description TEXT NULL,
 path VARCHAR(255) NOT NULL,
 controller VARCHAR(100) NOT NULL,
-enable TINYINT(1) NOT NULL DEFAULT 1,
+enable TINYINT NOT NULL DEFAULT 1,
 PRIMARY KEY(id)
 );
 ALTER TABLE block ADD UNIQUE(path);

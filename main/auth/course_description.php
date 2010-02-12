@@ -36,7 +36,7 @@ function show_course_description() {
 	$tbl_course_description = Database::get_course_table(TABLE_COURSE_DESCRIPTION, $database_course);
 
 	$sql = "SELECT * FROM $tbl_course_description WHERE session_id=0 ORDER BY id";
-	$result = Database::query($sql, __FILE__, __LINE__);
+	$result = Database::query($sql);
 	while ($description = Database::fetch_object($result)) {
 		$descriptions[$description->id] = $description;
 	}

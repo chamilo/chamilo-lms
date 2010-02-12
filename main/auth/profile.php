@@ -523,7 +523,7 @@ function check_user_password($password){
 	$table_user = Database :: get_main_table(TABLE_MAIN_USER);
 	$password = api_get_encrypted_password($password);
 	$sql_password = "SELECT * FROM $table_user WHERE user_id='".$user_id."' AND password='".$password."'";
-	$result = Database::query($sql_password, __FILE__, __LINE__);
+	$result = Database::query($sql_password);
 	return Database::num_rows($result) != 0;
 }
 /**
@@ -538,7 +538,7 @@ function check_user_email($email){
 	if ($user_id != strval(intval($user_id)) || empty($email)) { return false; }
 	$table_user = Database :: get_main_table(TABLE_MAIN_USER);
 	$sql_password = "SELECT * FROM $table_user WHERE user_id='".$user_id."' AND email='".$email."'";
-	$result = Database::query($sql_password, __FILE__, __LINE__);
+	$result = Database::query($sql_password);
 	return Database::num_rows($result) != 0;
 }
 /*
@@ -688,8 +688,7 @@ elseif (isset($_POST['remove_production'])) {
 		$sql = rtrim($sql, ',');
 	}
 	$sql .= " WHERE user_id  = '".$_user['user_id']."'";
-	//var_dump($sql); exit();
-	Database::query($sql, __FILE__, __LINE__);
+	Database::query($sql);
 
 	// User tag process
 	//1. Deleting all user tags

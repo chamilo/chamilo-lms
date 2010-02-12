@@ -62,18 +62,18 @@ echo '</div>';
 /****************/
 
 //Header of Configure Inscription
- 
+
 $home= '../../home/';
 if ($_configuration['multiple_access_urls']==true) {
-	$access_url_id = api_get_current_access_url_id();										 
-	if ($access_url_id != -1){						
+	$access_url_id = api_get_current_access_url_id();
+	if ($access_url_id != -1){
 		$url_info = api_get_access_url($access_url_id);
-		// "http://" and the final "/" replaced						
-		$url = substr($url_info['url'],7,strlen($url_info['url'])-8);						
+		// "http://" and the final "/" replaced
+		$url = substr($url_info['url'],7,strlen($url_info['url'])-8);
 		$clean_url = replace_dangerous_char($url);
 		$clean_url = str_replace('/','-',$clean_url);
 		$clean_url = $clean_url.'/';
-		$home_old  = '../../home/'; 
+		$home_old  = '../../home/';
 		$home= '../../home/'.$clean_url;
 	}
 }
@@ -456,14 +456,14 @@ if ($form->validate()) {
 		if ($store_extended) {
 			$sql .= implode(',', $sql_set);
 			$sql .= " WHERE user_id = '".Database::escape_string($user_id)."'";
-			Database::query($sql, __FILE__, __LINE__);
+			Database::query($sql);
 		}
 
 		// if there is a default duration of a valid account then we have to change the expiration_date accordingly
 		if (api_get_setting('account_valid_duration') != '') {
 			$sql = "UPDATE ".Database::get_main_table(TABLE_MAIN_USER)."
 						SET expiration_date='registration_date+1' WHERE user_id='".$user_id."'";
-			Database::query($sql, __FILE__, __LINE__);
+			Database::query($sql);
 		}
 
 		// if the account has to be approved then we set the account to inactive, sent a mail to the platform admin and exit the page.
@@ -471,14 +471,14 @@ if ($form->validate()) {
 			$TABLE_USER = Database::get_main_table(TABLE_MAIN_USER);
 			// 1. set account inactive
 			$sql = "UPDATE ".$TABLE_USER."	SET active='0' WHERE user_id='".$user_id."'";
-			Database::query($sql, __FILE__, __LINE__);
+			Database::query($sql);
 
 			$sql_get_id_admin = "SELECT * FROM ".Database::get_main_table(TABLE_MAIN_ADMIN);
-			$result = Database::query($sql_get_id_admin, __FILE__, __LINE__);
+			$result = Database::query($sql_get_id_admin);
 			while ($row = Database::fetch_array($result)) {
 
 				$sql_admin_list = "SELECT * FROM ".$TABLE_USER." WHERE user_id='".$row['user_id']."'";
-				$result_list = Database::query($sql_admin_list, __FILE__, __LINE__);
+				$result_list = Database::query($sql_admin_list);
 				$admin_list = Database::fetch_array($result_list);
 				$emailto = $admin_list['email'];
 

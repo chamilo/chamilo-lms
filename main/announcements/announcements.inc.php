@@ -71,7 +71,7 @@ function display_announcement($announcement_id)
 						AND toolitemproperties.to_group_id='0'
 						AND toolitemproperties.visibility='1'";
 	}
-	$sql_result = Database::query($sql_query,__FILE__,__LINE__);
+	$sql_result = Database::query($sql_query);
 	$result = Database::fetch_array($sql_result);
 
 	if ($result !== false) // A sanity check.
@@ -358,7 +358,7 @@ function load_edit_users($tool, $id)
 	$id = Database::escape_string($id);
 
 	$sql = "SELECT * FROM $tbl_item_property WHERE tool='$tool' AND ref='$id'";
-	$result = Database::query($sql,__FILE__,__LINE__) or die(Database::error());
+	$result = Database::query($sql) or die(Database::error());
 	while ($row = Database::fetch_array($result))
 	{
 		$to_group=$row['to_group_id'];
@@ -707,7 +707,7 @@ function sent_to($tool, $id)
 	$sent_to = array();
 
 	$sql="SELECT * FROM $tbl_item_property WHERE tool='$tool' AND ref='".$id."'";
-	$result = Database::query($sql,__FILE__,__LINE__);
+	$result = Database::query($sql);
 
 
 	while ($row=Database::fetch_array($result)) {
@@ -756,7 +756,7 @@ function change_visibility_announcement($tool,$id)
 
 	$sql = "SELECT * FROM $tbl_item_property WHERE tool='$tool' AND ref='$id'";
 
-	$result = Database::query($sql,__FILE__,__LINE__) or die(Database::error());
+	$result = Database::query($sql) or die(Database::error());
 	$row = Database::fetch_array($result);
 
 	if ($row['visibility']=='1')
@@ -767,7 +767,7 @@ function change_visibility_announcement($tool,$id)
 	{
 		$sql_visibility="UPDATE $tbl_item_property SET visibility='1' WHERE tool='$tool' AND ref='$id'";
 	}
-    $result=Database::query($sql_visibility,__FILE__,__LINE__);
+    $result=Database::query($sql_visibility);
     if ($result === false) {
         return false;
     }
@@ -800,7 +800,7 @@ function store_advalvas_item($emailTitle, $newContent, $order, $to, $file = arra
 
 	// store in the table announcement
 	$sql = "INSERT INTO $tbl_announcement SET content = '$newContent', title = '$emailTitle', end_date = NOW(), display_order ='$order', session_id=".intval($_SESSION['id_session']);
-	$result = Database::query($sql,__FILE__,__LINE__);
+	$result = Database::query($sql);
 	if ($result === false) {
 		return false;
 	}
@@ -858,7 +858,7 @@ function store_advalvas_group_item($emailTitle,$newContent, $order, $to, $to_use
 
 	// store in the table announcement
 	$sql = "INSERT INTO $tbl_announcement SET content = '$newContent', title = '$emailTitle', end_date = NOW(), display_order ='$order', session_id=".intval($_SESSION['id_session']);
-	$result = Database::query($sql,__FILE__,__LINE__) or die(Database::error());
+	$result = Database::query($sql) or die(Database::error());
 	if ($result === false) {
 		return false;
 	}
@@ -924,7 +924,7 @@ function edit_advalvas_item($id,$emailTitle,$newContent,$to,$file = array(), $fi
 
 	// store the modifications in the table announcement
  	$sql = "UPDATE $tbl_announcement SET content='$newContent', title = '$emailTitle' WHERE id='$id'";
-	$result = Database::query($sql,__FILE__,__LINE__) or die(Database::error());
+	$result = Database::query($sql) or die(Database::error());
 
 	// save attachment file
 	$row_attach = get_attachment($id);
@@ -940,7 +940,7 @@ function edit_advalvas_item($id,$emailTitle,$newContent,$to,$file = array(), $fi
 
 	// we remove everything from item_property for this
 	$sql_delete="DELETE FROM $tbl_item_property WHERE ref='$id' AND tool='announcement'";
-	$result = Database::query($sql_delete,__FILE__,__LINE__) or die(Database::error());
+	$result = Database::query($sql_delete) or die(Database::error());
 
 	// store in item_property (first the groups, then the users
 	if (!is_null($to)) // !is_null($to): when no user is selected we send it to everyone
@@ -1006,7 +1006,7 @@ function update_mail_sent($insert_id)
 	$insert_id = Database::escape_string($insert_id);
 	// store the modifications in the table tbl_annoucement
 	$sql = "UPDATE $tbl_announcement SET email_sent='1' WHERE id='$insert_id'";
-	Database::query($sql,__FILE__,__LINE__);
+	Database::query($sql);
 }
 
 /**
@@ -1032,7 +1032,7 @@ function get_all_annoucement_by_user_course($course_db, $user_id)
 						AND toolitemproperties.visibility='1'
 						AND announcement.session_id  = 0
 						ORDER BY display_order DESC";
-		$rs = Database::query($sql,__FILE__,__LINE__);
+		$rs = Database::query($sql);
 		$num_rows = Database::num_rows($rs);
 		$content = '';
 		$i=0;
@@ -1076,7 +1076,7 @@ function get_attachment($announcement_id) {
 	$announcement_id=Database::escape_string($announcement_id);
 	$row=array();
 	$sql = 'SELECT id,path, filename,comment FROM '. $tbl_announcement_attachment.' WHERE announcement_id = '.(int)$announcement_id.'';
-	$result=Database::query($sql, __FILE__, __LINE__);
+	$result=Database::query($sql);
 	if (Database::num_rows($result)!=0) {
 		$row=Database::fetch_array($result,ASSOC);
 	}
@@ -1121,7 +1121,7 @@ function add_announcement_attachment_file($announcement_id, $file_comment, $file
 			// Storing the attachments if any
 			$sql = 'INSERT INTO '.$tbl_announcement_attachment.'(filename, comment, path, announcement_id, size) '.
 				   "VALUES ( '$safe_file_name', '$file_comment', '$safe_new_file_name' , '$announcement_id', '".intval($file['size'])."' )";
-			$result = Database::query($sql, __LINE__, __FILE__);
+			$result = Database::query($sql);
             $return = 1;
 		}
 	}
@@ -1163,7 +1163,7 @@ function edit_announcement_attachment_file($id_attach, $file, $file_comment) {
 			$id_attach = intval($id_attach);
 			$sql = "UPDATE $tbl_announcement_attachment SET filename = '$safe_file_name', comment = '$safe_file_comment', path = '$safe_new_file_name', size ='".intval($file['size'])."'
 				 WHERE id = '$id_attach'";
-			$result = Database::query($sql, __FILE__,__LINE__);
+			$result = Database::query($sql);
 			if ($result === false) {
 				$return = -1;
                 Display :: display_error_message(get_lang('UplUnableToSaveFile'));
@@ -1186,7 +1186,7 @@ function delete_announcement_attachment_file($id) {
 	$tbl_announcement_attachment = Database::get_course_table(TABLE_ANNOUNCEMENT_ATTACHMENT);
 	$id=Database::escape_string($id);
 	$sql="DELETE FROM $tbl_announcement_attachment WHERE id = $id";
-	$result=Database::query($sql, __FILE__,__LINE__);
+	$result=Database::query($sql);
 	// update item_property
 	//api_item_property_update($_course, 'announcement_attachment',  $id,'AnnouncementAttachmentDeleted', api_get_user_id());
 }

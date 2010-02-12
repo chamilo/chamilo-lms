@@ -74,7 +74,7 @@ if (isset ($_GET['reset']) && isset ($_GET['id'])) {
 					FROM ".$tbl_user."
 					WHERE ( username = '".Database::escape_string($user)."' $condition ) ";
 
-		$result = Database::query($query, __FILE__, __LINE__);
+		$result = Database::query($query);
 		$num_rows = Database::num_rows($result);
 
 		if ($result && $num_rows > 0) {

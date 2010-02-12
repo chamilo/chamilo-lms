@@ -68,6 +68,11 @@ function get_tabs() {
 			$navigation['social']['title'] = get_lang('SocialNetwork');
 	}
 	
+	// Dashboard
+	if (api_is_platform_admin() || $_user['status']==DRH) {
+			$navigation['dashboard']['url'] = api_get_path(WEB_CODE_PATH).'dashboard/index.php';
+			$navigation['dashboard']['title'] = get_lang('Dashboard');
+	}
 
 	// Platform administration
 	if (api_is_platform_admin(true)) {

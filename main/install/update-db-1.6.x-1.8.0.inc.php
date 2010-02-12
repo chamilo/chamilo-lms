@@ -632,7 +632,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 
 	$sql = 'SELECT * FROM '.$table_user_categories.' ORDER BY user_id, title';
 
-	$rs = Database::query($sql, __FILE__, __LINE__);
+	$rs = Database::query($sql);
 
 	$sort = 0;
 	$old_user = 0;
@@ -647,7 +647,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
         $sql = 'UPDATE '.$table_user_categories.' SET
 	            sort = '.intval($sort).'
 	            WHERE id='.intval($cat['id']);
-        Database::query($sql, __FILE__, __LINE__);
+        Database::query($sql);
 	}
 
 

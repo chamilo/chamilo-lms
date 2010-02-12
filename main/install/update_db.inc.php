@@ -467,7 +467,7 @@ function store_forum($values)
 					'".mysql_real_escape_string($values['group_forum'])."',
 					'".mysql_real_escape_string($values['public_private_group_forum_group']['public_private_group_forum'])."',
 					'".mysql_real_escape_string($new_max)."')";
-	Database::query($sql, __LINE__,__FILE__);
+	Database::query($sql);
 	$last_id=mysql_insert_id();
 	api_item_property_update($_course, TOOL_FORUM, $last_id,"ForumCategoryAdded", $_user['user_id']);
 	return array('id'=>$last_id, 'title'=>$values['forum_title']);
@@ -496,7 +496,7 @@ function store_thread($values)
 					'".mysql_real_escape_string($values['topic_views'])."',
 					'".mysql_real_escape_string($values['post_date'])."',
 					'".mysql_real_escape_string($values['thread_sticky'])."')";
-	$result=Database::query($sql, __LINE__, __FILE__);
+	$result=Database::query($sql);
 	$last_thread_id=mysql_insert_id();
 	api_item_property_update($_course, TOOL_FORUM_THREAD, $last_thread_id,"ForumThreadAdded", $_user['user_id']);
 	// if the forum properties tell that the posts have to be approved we have to put the whole thread invisible
@@ -614,7 +614,7 @@ function migrate_posts_of_thread($phpbb_thread_id, $new_forum_thread_id, $new_fo
 						'".mysql_real_escape_string($values['post_notification'])."',
 						'".mysql_real_escape_string($values['post_parent_id'])."',
 						'".mysql_real_escape_string($values['visible'])."')";
-		$result=Database::query($sql, __LINE__, __FILE__);
+		$result=Database::query($sql);
 		$post_counter++;
 		$last_post_id=mysql_insert_id();
 
@@ -626,7 +626,7 @@ function migrate_posts_of_thread($phpbb_thread_id, $new_forum_thread_id, $new_fo
 					SET source_type='forum_post', source_id='".mysql_real_escape_string($last_post_id)."'
 					WHERE source_type='".mysql_real_escape_string(TOOL_BB_POST)."' AND source_id='".mysql_real_escape_string($row_phpbb_posts['post_id'])."'";
 			echo $sql_update_added_resource;
-			$result=Database::query($sql_update_added_resource, __LINE__, __FILE__);
+			$result=Database::query($sql_update_added_resource);
 		}
 
 
@@ -637,7 +637,7 @@ function migrate_posts_of_thread($phpbb_thread_id, $new_forum_thread_id, $new_fo
 			thread_replies='".mysql_real_escape_string($post_counter-1)."'
 			WHERE thread_id='".mysql_real_escape_string($new_forum_thread_id)."'";
 	//echo $sql;
-	$result=Database::query($sql, __LINE__, __FILE__);
+	$result=Database::query($sql);
 	//echo $sql;
 	return $post_counter;
 }
@@ -673,7 +673,7 @@ function get_forumcategory_id_by_name($forum_category_name)
 
 	$sql="SELECT cat_id FROM $table_categories WHERE cat_title='".mysql_real_escape_string($forum_category_name)."'";
 	//echo $sql;
-	$result=Database::query($sql,__LINE__,__FILE__);
+	$result=Database::query($sql);
 	$row=mysql_fetch_array($result);
 	//echo $row['cat_id'];
 	return $row['cat_id'];

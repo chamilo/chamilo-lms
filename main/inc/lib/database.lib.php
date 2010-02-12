@@ -801,15 +801,17 @@ class Database {
 	}
 
 	/**
-	 * Returns a list of the fields that a given table contains. The list may contain all of the
-	 * available field names or filtered field names by using a pattern.
+	 * Returns a list of the fields that a given table contains. The list may contain all of the available field names or filtered field names by using a pattern.
+	 * By using a special option, this method is able to return an indexed list of fields' properties, where field names are keys.
 	 * @param string $table						This is the examined table.
 	 * @param string $pattern (optional)		A pattern for filtering field names as if it was needed for the SQL's LIKE clause, for example 'column_%'.
 	 * @param string $database (optional)		The name of the targeted database. If it is omited, the current database is assumed, see Database::select_db().
+	 * @param bool $including_properties (optional)	When this option is true, the returned result has the followong format:
+	 * 												array(field_name_1 => array(0 => property_1, 1 => property_2, ...), fieald_name_2 => array(0 => property_1, ...), ...)
 	 * @param resource $connection (optional)	The database server connection, for detailed description see the method query().
 	 * @return array							Returns in an array the retrieved list of field names.
 	 */
-	public static function get_fields($table, $pattern = '', $database = '', $connection = null) {
+	public static function get_fields($table, $pattern = '', $database = '', $including_properties = false, $connection = null) {
 		$result = array();
 		$query = "SHOW COLUMNS FROM `".self::escape_string($table, $connection)."`";
 		if (!empty($database)) {
@@ -819,8 +821,16 @@ class Database {
 			$query .= " LIKE '".self::escape_string($pattern, $connection)."'";
 		}
 		$query_result = Database::query($query, $connection, __FILE__, __LINE__);
-		while ($row = Database::fetch_row($query_result)) {
-			$result[] = $row[0];
+		if ($including_properties) {
+			// Making an indexed list of the fields and their properties.
+			while ($row = Database::fetch_row($query_result)) {
+				$result[$row[0]] = $row;
+			}
+		} else {
+			// Making a plain, flat list.
+			while ($row = Database::fetch_row($query_result)) {
+				$result[] = $row[0];
+			}
 		}
 		return $result;
 	}

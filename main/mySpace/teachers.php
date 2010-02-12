@@ -54,7 +54,7 @@ if (isset($_GET["teacher_id"]) && $_GET["teacher_id"] != 0) {
 		WHERE status = 1".$order_clause;
 }
 
-$result_formateurs = Database::query($sql_formateurs, __FILE__, __LINE__);
+$result_formateurs = Database::query($sql_formateurs);
 
 if ($is_western_name_order) {
 	echo '<table class="data_table"><tr><th>'.get_lang('FirstName').'</th><th>'.get_lang('LastName').'</th><th>'.get_lang('Email').'</th><th>'.get_lang('AdminCourses').'</th><th>'.get_lang('Students').'</th></tr>';

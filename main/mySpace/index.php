@@ -48,7 +48,7 @@ $tbl_session_user 			= Database :: get_main_table(TABLE_MAIN_SESSION_USER);
 $tbl_session_course_user 	= Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 $tbl_admin					= Database :: get_main_table(TABLE_MAIN_ADMIN);
 $tbl_track_cours_access 	= Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
-	
+
 
 /********************
  * FUNCTIONS
@@ -108,7 +108,7 @@ if (api_is_allowed_to_create_course()) {
 		}
 	}
 
-	$result_nb_cours = Database::query($sql_nb_cours, __FILE__, __LINE__);
+	$result_nb_cours = Database::query($sql_nb_cours);
 	$courses = Database::store_result($result_nb_cours);
 
 	$nb_teacher_courses = count($courses);
@@ -443,9 +443,9 @@ if ($view == 'coach') {
 echo '<div class="clear">&nbsp;</div>';
 
 if (api_is_allowed_to_create_course() && $view == 'teacher') {
-	
+
 	if ($nb_teacher_courses) {
-		$table = new SortableTable('courses', 'get_number_of_courses' ,'get_course_data');						
+		$table = new SortableTable('courses', 'get_number_of_courses' ,'get_course_data');
 		$parameters['view'] = 'teacher';
 		$parameters['class'] = 'data_table';
 		$table->set_additional_parameters($parameters);
@@ -468,12 +468,12 @@ if (api_is_allowed_to_create_course() && $view == 'teacher') {
 			get_lang('AvgExercisesScore', ''),
 			get_lang('AvgMessages', ''),
 			get_lang('AvgAssignments', '')
-		);		
+		);
 		$table->display();
 	}
 }
 
-if ($is_platform_admin && $view == 'admin') { 
+if ($is_platform_admin && $view == 'admin') {
 	echo '<a href="'.api_get_self().'?view=admin&amp;display=coaches">'.get_lang('DisplayCoaches').'</a> | ';
 	echo '<a href="'.api_get_self().'?view=admin&amp;display=useroverview">'.get_lang('DisplayUserOverview').'</a>';
 	if ($_GET['display'] == 'useroverview') {
@@ -541,8 +541,8 @@ if ($is_platform_admin && $view == 'admin') {
 		$sqlCoachs = "SELECT DISTINCT scu.id_user as id_coach, user_id, lastname, firstname, MAX(login_date) as login_date
 			FROM $tbl_user, $tbl_session_course_user scu, $tbl_track_login
 			WHERE scu.id_user=user_id AND scu.status=2  AND login_user_id=user_id
-			GROUP BY user_id ";		
-			
+			GROUP BY user_id ";
+
 		if ($_configuration['multiple_access_urls'] == true) {
 			$tbl_session_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
 			$access_url_id = api_get_current_access_url_id();
@@ -557,7 +557,7 @@ if ($is_platform_admin && $view == 'admin') {
 			$sqlCoachs .= "ORDER BY ".$order[$tracking_column]." ".$tracking_direction;
 		}
 
-		$result_coaches = Database::query($sqlCoachs, __FILE__, __LINE__);
+		$result_coaches = Database::query($sqlCoachs);
 		$total_no_coaches = Database::num_rows($result_coaches);
 		$global_coaches = array();
 		while ($coach = Database::fetch_array($result_coaches)) {
@@ -582,7 +582,7 @@ if ($is_platform_admin && $view == 'admin') {
 			}
 		}
 
-		$result_sessions_coach = Database::query($sql_session_coach, __FILE__, __LINE__);
+		$result_sessions_coach = Database::query($sql_session_coach);
 		$total_no_coaches += Database::num_rows($result_sessions_coach);
 		while ($coach = Database::fetch_array($result_sessions_coach)) {
 			$global_coaches[$coach['user_id']] = $coach;
@@ -728,7 +728,7 @@ function export_tracking_user_overview() {
 	// the additional user defined fields (only those that were selected to be exported)
 	require_once (api_get_path(LIBRARY_PATH).'usermanager.lib.php');
 	$fields = UserManager::get_extra_fields(0, 50, 5, 'ASC');
-		
+
 	if (is_array($_SESSION['additional_export_fields'])) {
 		foreach ($_SESSION['additional_export_fields'] as $key => $extra_field_export) {
 			$csv_row[] = $fields[$extra_field_export][3];
@@ -753,7 +753,7 @@ function export_tracking_user_overview() {
 	foreach ($user_data as $key => $user) {
 		// getting all the courses of the user
 		$sql = "SELECT * FROM $tbl_course_user WHERE user_id = '".Database::escape_string($user[4])."'";
-		$result = Database::query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql);
 		while ($row = Database::fetch_row($result)) {
 			$csv_row = array();
 			// user official code
@@ -768,7 +768,7 @@ function export_tracking_user_overview() {
 			$csv_row[] = $row[0];
 			// the additional defined user fields
 			$extra_fields = get_user_overview_export_extra_fields($user[4]);
-			
+
 			if (is_array($field_names_to_be_exported)) {
 				foreach ($field_names_to_be_exported as $key => $extra_field_export) {
 					$csv_row[] = $extra_fields[$extra_field_export];
@@ -799,7 +799,7 @@ function export_tracking_user_overview() {
 
 			$csv_content[] = $csv_row;
 		}
-	}	
+	}
 	Export :: export_table_csv($csv_content, 'reporting_user_overview');
 	exit;
 }
@@ -866,7 +866,7 @@ function get_number_of_users_tracking_overview() {
 
 	// query
 	$sql = 'SELECT user_id FROM '.$main_user_table;
-	$result = Database::query($sql, __FILE__, __LINE__);
+	$result = Database::query($sql);
 
 	// return the number of results
 	return Database::num_rows($result);
@@ -904,7 +904,7 @@ function get_user_data_tracking_overview($from, $number_of_items, $column, $dire
 			";
 	$sql .= " ORDER BY col$column $direction ";
 	$sql .= " LIMIT $from,$number_of_items";
-	$result = Database::query($sql, __FILE__, __LINE__);
+	$result = Database::query($sql);
 	$return = array ();
 	while ($user = Database::fetch_row($result)) {
 		$return[] = $user;
@@ -948,7 +948,7 @@ function course_info_tracking_filter($user_id, $url_params, $row) {
 
 	// getting all the courses of the user
 	$sql = "SELECT * FROM $tbl_course_user WHERE user_id = '".Database::escape_string($user_id)."'";
-	$result = Database::query($sql, __FILE__, __LINE__);
+	$result = Database::query($sql);
 	while ($row = Database::fetch_row($result)) {
 		$return .= '<tr>';
 		// course code
@@ -1001,7 +1001,7 @@ function exercises_results($user_id, $course_code) {
 		FROM '.Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES)."
 		WHERE exe_cours_id = '".Database::escape_string($course_code)."'
 		AND exe_user_id = '".Database::escape_string($user_id)."'";
-	$result = Database::query($sql, __FILE__, __LINE__);
+	$result = Database::query($sql);
 	$score_obtained = 0;
 	$score_possible = 0;
 	$questions_answered = 0;
@@ -1036,16 +1036,16 @@ function display_user_overview_export_options() {
 	if ($_GET['export'] == 'options') {
 		// get all the defined extra fields
 		$extrafields = UserManager::get_extra_fields(0, 50, 5, 'ASC', false);
-	
+
 		// creating the form with all the defined extra fields
 		$form = new FormValidator('exportextrafields', 'post', api_get_self()."?view=".Security::remove_XSS($_GET['view']).'&display='.Security::remove_XSS($_GET['display']).'&export='.Security::remove_XSS($_GET['export']));
-		
-		if (is_array($extrafields) && count($extrafields) > 0) {		
+
+		if (is_array($extrafields) && count($extrafields) > 0) {
 			foreach ($extrafields as $key => $extra) {
 				$form->addElement('checkbox', 'extra_export_field'.$extra[0], '', $extra[3]);
 			}
 			$form->addElement('style_submit_button','submit', get_lang('Ok'),'class="save"' );
-			
+
 			// setting the default values for the form that contains all the extra fields
 			if (is_array($_SESSION['additional_export_fields'])) {
 				foreach ($_SESSION['additional_export_fields'] as $key => $value) {
@@ -1056,14 +1056,14 @@ function display_user_overview_export_options() {
 		} else {
 			$form->addElement('html', Display::display_warning_message(get_lang('ThereAreNotExtrafieldsAvailable')));
 		}
-		
+
 		if ($form->validate()) {
 			// exporting the form values
 			$values = $form->exportValues();
-	
+
 			// re-initialising the session that contains the additional fields that need to be exported
 			$_SESSION['additional_export_fields'] = array();
-	
+
 			// adding the fields that are checked to the session
 			$message = '';
 			foreach ($values as $field_ids => $value) {
@@ -1071,14 +1071,14 @@ function display_user_overview_export_options() {
 					$_SESSION['additional_export_fields'][] = str_replace('extra_export_field', '', $field_ids);
 				}
 			}
-	
+
 			// adding the fields that will be also exported to a message string
 			if (is_array($_SESSION['additional_export_fields'])) {
 				foreach ($_SESSION['additional_export_fields'] as $key => $extra_field_export) {
 					$message .= '<li>'.$extrafields[$extra_field_export][3].'</li>';
 				}
 			}
-	
+
 			// Displaying a feedback message
 			if (!empty($_SESSION['additional_export_fields'])) {
 				Display::display_confirmation_message(get_lang('FollowingFieldsWillAlsoBeExported').': <br /><ul>'.$message.'</ul>', false);
@@ -1088,8 +1088,8 @@ function display_user_overview_export_options() {
 			$message = '';
 		} else {
 			$form->display();
-		}	
-	
+		}
+
 	} else {
 		if (!empty($_SESSION['additional_export_fields'])) {
 			// get all the defined extra fields
@@ -1117,78 +1117,78 @@ function display_user_overview_export_options() {
  */
 function get_user_overview_export_extra_fields($user_id) {
 	// include the user manager
-	require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';	
-	$extra_data = UserManager::get_extra_user_data($user_id, true);	
+	require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
+	$extra_data = UserManager::get_extra_user_data($user_id, true);
 	return $extra_data;
 }
 /**
- * Get number of courses for sortable with pagination 
+ * Get number of courses for sortable with pagination
  * @return int
  */
 function get_number_of_courses() {
-	global $courses;	
+	global $courses;
 	return count($courses);
 }
 /**
- * Get data for courses list in sortable with pagination 
+ * Get data for courses list in sortable with pagination
  * @return array
  */
 function get_course_data($from, $number_of_items, $column, $direction) {
-	
+
 	global $courses, $csv_content, $charset ;
 	global $tbl_course, $tbl_course_user, $tbl_track_cours_access, $tbl_session_course_user;
-	
-	$a_course_students  = array();	
-	$course_data = array();	
-	$arr_course = $courses;	
-	foreach ($arr_course as &$cours) {			
+
+	$a_course_students  = array();
+	$course_data = array();
+	$arr_course = $courses;
+	foreach ($arr_course as &$cours) {
 		$cours = "'{$cours[course_code]}'";
 	}
-	
+
 	// get all courses with limit
-	$sql = "SELECT course.code as col1, course.title as col2 				
-			FROM $tbl_course course 			
-			WHERE course.code IN (".implode(',',$arr_course).")"; 	
+	$sql = "SELECT course.code as col1, course.title as col2
+			FROM $tbl_course course
+			WHERE course.code IN (".implode(',',$arr_course).")";
 	if (!in_array($direction, array('ASC','DESC'))) $direction = 'ASC';
-	
+
     $column = intval($column);
     $from = intval($from);
     $number_of_items = intval($number_of_items);
 	$sql .= " ORDER BY col$column $direction ";
 	$sql .= " LIMIT $from,$number_of_items";
 
-	$res = Database::query($sql, __FILE__, __LINE__);				
+	$res = Database::query($sql);
 	while ($row_course = Database::fetch_row($res)) {
 
 		$course_code = $row_course[0];
 		$course_info = api_get_course_info($course_code);
-		$avg_assignments_in_course = $avg_messages_in_course = $nb_students_in_course = $avg_progress_in_course = $avg_score_in_course = $avg_time_spent_in_course = $avg_score_in_exercise = 0;		
+		$avg_assignments_in_course = $avg_messages_in_course = $nb_students_in_course = $avg_progress_in_course = $avg_score_in_course = $avg_time_spent_in_course = $avg_score_in_exercise = 0;
 		$tbl_item_property 		= Database :: get_course_table(TABLE_ITEM_PROPERTY, $course_info['dbName']);
 		$tbl_forum_post  		= Database :: get_course_table(TABLE_FORUM_POST, $course_info['dbName']);
-		$tbl_course_lp_view = Database :: get_course_table(TABLE_LP_VIEW, $course_info['dbName']);	
+		$tbl_course_lp_view = Database :: get_course_table(TABLE_LP_VIEW, $course_info['dbName']);
 		$tbl_course_lp = Database :: get_course_table(TABLE_LP_MAIN, $course_info['dbName']);
-		
+
 		// students directly subscribed to the course
 		$sql = "SELECT user_id FROM $tbl_course_user as course_rel_user WHERE course_rel_user.status='5' AND course_rel_user.course_code='$course_code'
-		  		UNION DISTINCT SELECT id_user as user_id FROM $tbl_session_course_user srcu WHERE  srcu. course_code='$course_code'";					
-		$rs = Database::query($sql, __FILE__, __LINE__);
-		$users = array();		
-		while ($row = Database::fetch_array($rs)) {		
-			$users[] = $row['user_id']; 							
-		}		
+		  		UNION DISTINCT SELECT id_user as user_id FROM $tbl_session_course_user srcu WHERE  srcu. course_code='$course_code'";
+		$rs = Database::query($sql);
+		$users = array();
+		while ($row = Database::fetch_array($rs)) {
+			$users[] = $row['user_id'];
+		}
 		if (count($users) > 0) {
-			$nb_students_in_course = count($users);			
+			$nb_students_in_course = count($users);
 			$avg_assignments_in_course = Tracking::count_student_assignments($users, $course_code);
 			$avg_messages_in_course    = Tracking::count_student_messages($users, $course_code);
-			$avg_time_spent_in_course  = Tracking::get_time_spent_on_the_course($users, $course_code);			
-			$avg_progress_in_course = Tracking::get_avg_student_progress($users, $course_code);		
+			$avg_time_spent_in_course  = Tracking::get_time_spent_on_the_course($users, $course_code);
+			$avg_progress_in_course = Tracking::get_avg_student_progress($users, $course_code);
 			$avg_score_in_course = Tracking :: get_avg_student_score($users, $course_code);
 			$avg_score_in_exercise = Tracking::get_avg_student_exercise_score($users, $course_code);
-						
+
 			$avg_time_spent_in_course = api_time_to_hms($avg_time_spent_in_course / $nb_students_in_course);
 			$avg_progress_in_course = round($avg_progress_in_course / $nb_students_in_course, 2);
 			$avg_score_in_course = round($avg_score_in_course / $nb_students_in_course, 2);
-			$avg_score_in_exercise = round($avg_score_in_exercise / $nb_students_in_course, 2);		
+			$avg_score_in_exercise = round($avg_score_in_exercise / $nb_students_in_course, 2);
 		} else {
 			$avg_time_spent_in_course = null;
 			$avg_progress_in_course = null;
@@ -1197,7 +1197,7 @@ function get_course_data($from, $number_of_items, $column, $direction) {
 			$avg_messages_in_course = null;
 			$avg_assignments_in_course = null;
 		}
-		$table_row = array();		
+		$table_row = array();
 		$table_row[] = $row_course[1];
 		$table_row[] = $nb_students_in_course;
 		$table_row[] = $avg_time_spent_in_course;
@@ -1218,7 +1218,7 @@ function get_course_data($from, $number_of_items, $column, $direction) {
 			$avg_messages_in_course,
 			$avg_assignments_in_course,
 		);
-		$course_data[] = $table_row;				
+		$course_data[] = $table_row;
 	}
 	return $course_data;
 }

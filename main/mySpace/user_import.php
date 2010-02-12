@@ -103,7 +103,7 @@ function user_available_in_session($username, $course_list, $id_session) {
 		$sql_select = "	SELECT u.user_id FROM $tbl_session_rel_course_rel_user rel INNER JOIN $table_user u
 					   	ON (rel.id_user=u.user_id)
 						WHERE rel.id_session='$id_session' AND u.status='5' AND u.username ='$username' AND rel.course_code='$enreg_course'";
-		$rs = Database::query($sql_select, __FILE__, __LINE__);
+		$rs = Database::query($sql_select);
 		if (Database::num_rows($rs) > 0) {
 			return Database::result($rs, 0, 0);
 		} else {
@@ -141,7 +141,7 @@ function check_all_usernames($users, $course_list, $id_session) {
 				if ($is_session_avail == 0) {
 					$user_name = $user['UserName'];
 					$sql_select = "SELECT user_id FROM $table_user WHERE username ='$user_name' ";
-					$rs = Database::query($sql_select, __FILE__, __LINE__);
+					$rs = Database::query($sql_select);
 					$user['create'] = Database::result($rs, 0, 0); // This should be the ID because the user exists.
 				} else {
 					$user['create'] = $is_session_avail;
@@ -175,7 +175,7 @@ function get_user_creator($users, $course_list, $id_session) {
 		//echo "<br>";
 		$sql = "SELECT creator_id FROM $table_user WHERE username='$username' ";
 
-		$rs = Database::query($sql, __FILE__, __LINE__);
+		$rs = Database::query($sql);
 		$creator_id = Database::result($rs, 0, 0);
 		// check if we are the creators or not
 		if ($creator_id != '') {
@@ -278,7 +278,7 @@ function save_data($users, $course_list, $id_session) {
 			$sql = "INSERT IGNORE INTO $tbl_session_rel_course_rel_user(id_session,course_code,id_user) VALUES('$id_session','$enreg_course','$userid')";
 			$course_session = array('course' => $enreg_course, 'added' => 1);
 			//$user['added_at_session'] = $course_session;
-			Database::query($sql, __FILE__, __LINE__);
+			Database::query($sql);
 			if (Database::affected_rows()) {
 				$nbr_users++;
 			}
@@ -288,23 +288,23 @@ function save_data($users, $course_list, $id_session) {
 
 		//update the nbr_users field
 		$sql_select = "SELECT COUNT(id_user) as nbUsers FROM $tbl_session_rel_course_rel_user WHERE id_session='$id_session' AND course_code='$enreg_course'";
-		$rs = Database::query($sql_select, __FILE__, __LINE__);
+		$rs = Database::query($sql_select);
 		list($nbr_users) = Database::fetch_array($rs);
 		$sql_update = "UPDATE $tbl_session_rel_course SET nbr_users=$nbr_users WHERE id_session='$id_session' AND course_code='$enreg_course'";
-		Database::query($sql_update , __FILE__, __LINE__);
+		Database::query($sql_update);
 
 		$sql_update = "UPDATE $tbl_session SET nbr_users= '$nbr_users' WHERE id='$id_session'";
-		Database::query($sql_update, __FILE__, __LINE__);
+		Database::query($sql_update);
 	}
 	// We don't delete the users (thoughts while dreaming)
 	//$sql_delete = "DELETE FROM $tbl_session_rel_user WHERE id_session = '$id_session'";
-	//Database::query($sql_delete,__FILE__, __LINE__);
+	//Database::query($sql_delete);
 
 	$new_users = array();
 	foreach ($users as $index => $user) {
 		$userid = $user['id'];
 		$sql_insert = "INSERT IGNORE INTO $tbl_session_rel_user(id_session, id_user) VALUES('$id_session','$userid')";
-		Database::query($sql_insert, __FILE__, __LINE__);
+		Database::query($sql_insert);
 		$user['added_at_session'] = 1;
 		$new_users[] = $user;
 	}
@@ -496,7 +496,7 @@ if (api_get_setting('add_users_by_coach') == 'true') {
 		if (isset($_REQUEST['id_session'])) {
 			$id_session = intval($_REQUEST['id_session']);
 			$sql = 'SELECT id_coach FROM '.Database :: get_main_table(TABLE_MAIN_SESSION).' WHERE id='.$id_session;
-			$rs = Database::query($sql, __FILE__, __LINE__);
+			$rs = Database::query($sql);
 			if (Database::result($rs, 0, 0) != $_user['user_id']) {
 				api_not_allowed(true);
 			}
@@ -528,7 +528,7 @@ if ($_POST['formSent'] && $_FILES['import_file']['size'] !== 0) {
 				$tbl_session_rel_course	= Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
 				// Selecting all the courses from the session id requested.
 				$sql = "SELECT course_code FROM $tbl_session_rel_course WHERE id_session='$id_session'";
-				$result = Database::query($sql, __FILE__, __LINE__);
+				$result = Database::query($sql);
 				$course_list = array();
 				while ($row = Database::fetch_array($result)) {
 					$course_list[] = $row['course_code'];

@@ -34,7 +34,7 @@ if (!empty($_GET['session'])) {
 	$sql_session = "SELECT name,id
 		FROM $tbl_session
 		ORDER BY name ASC";
-	$result_session = Database::query($sql_session, __FILE__, __LINE__);
+	$result_session = Database::query($sql_session);
 
 	echo "<a href='".api_get_self()."'>".get_lang('MoyCourse')."</a>";
 	echo "<br /><br />";
@@ -49,7 +49,7 @@ if (!empty($_GET['session'])) {
 				AND rel_course.id_session = ".$session['id']."
 				ORDER BY title ASC";
 
-			$result_course = Database::query($sql_course, __FILE__, __LINE__);
+			$result_course = Database::query($sql_course);
 			$total_result = 0;
 			$total_weighting = 0;
 			while ($course = Database::fetch_array($result_course)) {
@@ -83,7 +83,7 @@ if (!empty($_GET['session'])) {
 		FROM $tbl_course as course
 		ORDER BY title ASC";
 
-	$result_course = Database::query($sql_course, __FILE__, __LINE__);
+	$result_course = Database::query($sql_course);
 
 	echo "<a href='".api_get_self()."?session=true'>".get_lang('MoySession')."</a>";
 	echo "<br /><br />";
@@ -93,7 +93,7 @@ if (!empty($_GET['session'])) {
 			$sql_moy_test = "SELECT exe_result,exe_weighting
 				FROM $tbl_track_exercice
 				WHERE exe_cours_id = '".$course['code']."'";
-			$result_moy_test = Database::query($sql_moy_test, __FILE__, __LINE__);
+			$result_moy_test = Database::query($sql_moy_test);
 			$result = 0;
 			$weighting = 0;
 			while ($moy_test = Database::fetch_array($result_moy_test)) {

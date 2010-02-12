@@ -55,7 +55,7 @@ class learnpathList {
 			$mylink = 'newscorm/lp_controller.php?action=view&lp_id='.$row['id'];
 			$sql2="SELECT * FROM $tbl_tool where (name='$myname' and image='scormbuilder.gif' and link LIKE '$mylink%')";
 			//error_log('New LP - learnpathList::learnpathList - getting visibility - '.$sql2,0);
-			$res2 = Database::query($sql2,__FILE__,__LINE__);
+			$res2 = Database::query($sql2);
 			if(Database::num_rows($res2)>0){
 				$row2 = Database::fetch_array($res2);
 				$pub = $row2['visibility'];

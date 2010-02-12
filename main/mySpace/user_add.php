@@ -175,7 +175,7 @@ if (api_is_session_admin()) {
 	$where .= ' AND ( (session.date_start <= CURDATE() AND session.date_end >= CURDATE()) OR session.date_start="0000-00-00" ) ';
 	$tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
 	$sql="SELECT id,name,nbr_courses,date_start,date_end FROM $tbl_session $where ORDER BY name";
-	$result = Database::query($sql,__FILE__,__LINE__);
+	$result = Database::query($sql);
 	$a_sessions = Database::store_result($result);
 	$session_list = array();
 	$session_list[0] = get_lang('SelectSession');
@@ -324,7 +324,7 @@ if ($form->validate()) {
 
 			$id_session = $user['session_id'];
 			if ($id_session != 0) {
-				$result = Database::query("SELECT course_code FROM $tbl_session_rel_course WHERE id_session='$id_session'",__FILE__,__LINE__);
+				$result = Database::query("SELECT course_code FROM $tbl_session_rel_course WHERE id_session='$id_session'");
 
 				$CourseList=array();
 				while ($row = Database::fetch_array($result)) {
@@ -332,21 +332,21 @@ if ($form->validate()) {
 				}
 
 				foreach ($CourseList as $enreg_course) {
-					Database::query("INSERT INTO $tbl_session_rel_course_rel_user(id_session,course_code,id_user) VALUES('$id_session','$enreg_course','$user_id')",__FILE__,__LINE__);
+					Database::query("INSERT INTO $tbl_session_rel_course_rel_user(id_session,course_code,id_user) VALUES('$id_session','$enreg_course','$user_id')");
 					// updating the total
 					$sql = "SELECT COUNT(id_user) as nbUsers FROM $tbl_session_rel_course_rel_user WHERE id_session='$id_session' AND course_code='$enreg_course'";
-					$rs = Database::query($sql, __FILE__, __LINE__);
+					$rs = Database::query($sql);
 					list($nbr_users) = Database::fetch_array($rs);
-					Database::query("UPDATE $tbl_session_rel_course SET nbr_users=$nbr_users WHERE id_session='$id_session' AND course_code='$enreg_course'",__FILE__,__LINE__);
+					Database::query("UPDATE $tbl_session_rel_course SET nbr_users=$nbr_users WHERE id_session='$id_session' AND course_code='$enreg_course'");
 				}
 
-				Database::query("INSERT INTO $tbl_session_rel_user(id_session, id_user) VALUES('$id_session','$user_id')", __FILE__, __LINE__);
+				Database::query("INSERT INTO $tbl_session_rel_user(id_session, id_user) VALUES('$id_session','$user_id')");
 
 				$sql = "SELECT COUNT(nbr_users) as nbUsers FROM $tbl_session WHERE id='$id_session' ";
-				$rs = Database::query($sql, __FILE__, __LINE__);
+				$rs = Database::query($sql);
 				list($nbr_users) = Database::fetch_array($rs);
 
-				Database::query("UPDATE $tbl_session SET nbr_users= $nbr_users WHERE id='$id_session' ", __FILE__, __LINE__);
+				Database::query("UPDATE $tbl_session SET nbr_users= $nbr_users WHERE id='$id_session' ");
 			}
 		}
 
@@ -361,7 +361,7 @@ if ($form->validate()) {
 
 		if ($platform_admin) {
 			$sql = "INSERT INTO $table_admin SET user_id = '".$user_id."'";
-			Database::query($sql, __FILE__, __LINE__);
+			Database::query($sql);
 		}
 		if (!empty ($email) && $send_mail) {
 			$emailto = '"'.api_get_person_name($firstname, $lastname, null, PERSON_NAME_EMAIL_ADDRESS).'" <'.$email.'>';

@@ -355,7 +355,7 @@ class scorm extends learnpath {
      	if($this->debug>0){error_log('New LP - Entered import_manifest('.$course_code.')',0);}
 
 		$sql = "SELECT * FROM ".Database::get_main_table(TABLE_MAIN_COURSE)." WHERE code='$course_code'";
-        $res = Database::query($sql,__FILE__,__LINE__);
+        $res = Database::query($sql);
         if(Database::num_rows($res)<1){ error_log('Database for '.$course_code.' not found '.__FILE__.' '.__LINE__,0);return -1;}
         $row = Database::fetch_array($res);
         $dbname = $row['db_name'];
@@ -372,7 +372,7 @@ class scorm extends learnpath {
 	     	//-for items
 	     	//-for views?
 	    	$get_max = "SELECT MAX(display_order) FROM $new_lp";
-	    	$res_max = Database::query($get_max, __FILE__, __LINE__);
+	    	$res_max = Database::query($get_max);
 	    	$dsp = 1;
 	    	if(Database::num_rows($res_max)>0){
 	    		$row = Database::fetch_array($res_max);
@@ -387,7 +387,7 @@ class scorm extends learnpath {
 			$sql = "INSERT INTO $new_lp (lp_type, name, ref, description, path, force_commit, default_view_mod, default_encoding, js_lib,display_order)" .
 					"VALUES (2,'".$myname."', '".$oOrganization->get_ref()."','','".$this->subdir."', 0, 'embedded', '".$this->manifest_encoding."','scorm_api.php',$dsp)";
 			if($this->debug>1){error_log('New LP - In import_manifest(), inserting path: '. $sql,0);}
-			$res = Database::query($sql,__FILE__,__LINE__);
+			$res = Database::query($sql);
 			$lp_id = Database::insert_id();
 			$this->lp_id = $lp_id;
 			//insert into item_property
@@ -468,12 +468,12 @@ class scorm extends learnpath {
 						"'$prereq', ".$item['rel_order'] .", '".$item['datafromlms']."'," .
 						"'".$item['parameters']."'" .
 						")";
-				$res_item = Database::query($sql_item, __FILE__, __LINE__);
+				$res_item = Database::query($sql_item);
 				if($this->debug>1){error_log('New LP - In import_manifest(), inserting item : '.$sql_item.' : '.mysql_error(),0);}
 				$item_id = Database::insert_id();
 				//now update previous item to change next_item_id
 				$upd = "UPDATE $new_lp_item SET next_item_id = $item_id WHERE id = $previous";
-				$upd_res = Database::query($upd, __FILE__, __LINE__);
+				$upd_res = Database::query($upd);
 				//update previous item id
 				$previous = $item_id;
 
@@ -524,7 +524,7 @@ class scorm extends learnpath {
                         $sql = 'INSERT INTO %s (id, course_code, tool_id, ref_id_high_level, ref_id_second_level, search_did)
                                 VALUES (NULL , \'%s\', \'%s\', %s, %s, %s)';
                         $sql = sprintf($sql, $tbl_se_ref, api_get_course_id(), TOOL_LEARNPATH, $lp_id, $previous, $did);
-                        Database::query($sql,__FILE__,__LINE__);
+                        Database::query($sql);
 					}
 				}
 
@@ -748,7 +748,7 @@ class scorm extends learnpath {
 	 	if($lp!=0){
 	 		$tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
 	 		$sql = "UPDATE $tbl_lp SET content_local = '$proxy' WHERE id = ".$lp;
-	 		$res = Database::query($sql, __FILE__, __LINE__);
+	 		$res = Database::query($sql);
 	 		return $res;
 	 	} else {
 	 		return false;
@@ -820,7 +820,7 @@ class scorm extends learnpath {
 	 	if($lp!=0){
 	 		$tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
 	 		$sql = "UPDATE $tbl_lp SET content_maker = '$maker' WHERE id = ".$lp;
-	 		$res = Database::query($sql, __FILE__, __LINE__);
+	 		$res = Database::query($sql);
 	 		return $res;
 	 	} else {
 	 		return false;
@@ -859,7 +859,7 @@ class scorm extends learnpath {
 		$_course = Database::get_course_info(api_get_course_id());
 
 		$sql = "SELECT * FROM $tbl_lp WHERE id=".$lp_id;
-		$result = Database::query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql);
 		$row = Database::fetch_array($result);
 		$LPname = $row['path'];
 		$list = split('/',$LPname);
@@ -961,7 +961,7 @@ class scorm extends learnpath {
 		$sql = "SELECT * FROM $main_table WHERE code = '$course'";
 		if($this->debug>2){error_log('New LP - scorm::reimport_manifest() '.__LINE__.' - Querying course: '.$sql,0);}
 		//$res = Database::query($sql);
-		$res = Database::query($sql, __FILE__, __LINE__);
+		$res = Database::query($sql);
 		if(Database::num_rows($res)>0)
 		{
 			$this->cc = $course;
@@ -981,7 +981,7 @@ class scorm extends learnpath {
 		$sql = "SELECT * FROM $lp_table WHERE id = '$lp_id'";
 		if($this->debug>2){error_log('New LP - scorm::reimport_manifest() '.__LINE__.' - Querying lp: '.$sql,0);}
 		//$res = Database::query($sql);
-		$res = Database::query($sql, __FILE__, __LINE__);
+		$res = Database::query($sql);
 		if(Database::num_rows($res)>0)
 		{
     			$this->lp_id = $lp_id;

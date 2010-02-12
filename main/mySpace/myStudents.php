@@ -168,7 +168,7 @@ function is_teacher($course_code) {
 	global $_user;
 	$tbl_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 	$sql = "SELECT 1 FROM $tbl_course_user WHERE user_id='" . $_user["user_id"] . "' AND course_code='" . Database :: escape_string($course_code) . "' AND status='1'";
-	$result = Database::query($sql, __FILE__, __LINE__);
+	$result = Database::query($sql);
 	if (Database :: result($result) != 1) {
 		return true;
 	} else {
@@ -238,7 +238,7 @@ if (!empty ($_GET['student'])) {
 	}
 	echo '</div>';
 
-	// is the user online ?	
+	// is the user online ?
 	$student_online = Security :: remove_XSS($_GET['student']);
 	$users_online = WhoIsOnline(30);
 	foreach ($users_online as $online) {
@@ -252,7 +252,7 @@ if (!empty ($_GET['student'])) {
 
 	$avg_student_progress = $avg_student_score = $nb_courses = 0;
 	$sql = 'SELECT course_code FROM ' . $tbl_course_user . ' WHERE user_id=' . Database :: escape_string($info_user['user_id']);
-	$rs = Database::query($sql, __FILE__, __LINE__);
+	$rs = Database::query($sql);
 	$courses = array ();
 	while ($row = Database :: fetch_array($rs)) {
 		$courses[$row['course_code']] = $row['course_code'];
@@ -260,7 +260,7 @@ if (!empty ($_GET['student'])) {
 
 	// get the list of sessions where the user is subscribed as student
 	$sql = 'SELECT DISTINCT course_code FROM ' . Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER) . ' WHERE id_user=' . intval($info_user['user_id']);
-	$rs = Database::query($sql, __FILE__, __LINE__);
+	$rs = Database::query($sql);
 	while ($row = Database :: fetch_array($rs)) {
 		$courses[$row['course_code']] = $row['course_code'];
 	}
@@ -507,34 +507,34 @@ if (!empty ($_GET['student'])) {
 					WHERE session_course_user.id_user = ' . intval($info_user['user_id']) . '
 					AND session_course_user.course_code = "' . Database :: escape_string($course_code_info) . '"
 					ORDER BY id_session DESC';
-			$rs = Database::query($sql, __FILE__, __LINE__);
+			$rs = Database::query($sql);
 			$num_row = Database :: num_rows($rs);
 			if ($num_row > 0) {
-				
-				
-				
+
+
+
 				$le_session_id = intval(Database :: result($rs, 0, 0));
 				if ($le_session_id > 0) {
-					
-					
+
+
 					// get session name and coach of the session
 					$sql = 'SELECT name, id_coach FROM ' . $tbl_session . '
 							WHERE id=' . $le_session_id;
-					$rs = Database::query($sql, __FILE__, __LINE__);
+					$rs = Database::query($sql);
 					$session_name = Database :: result($rs, 0, 'name');
 					$session_coach_id = intval(Database :: result($rs, 0, 'id_coach'));
 
 					// get coach of the course in the session
 					$sql = 'SELECT id_user FROM ' . $tbl_session_course_user . '
 							WHERE id_session=' . $le_session_id . '
-							AND course_code = "' . Database :: escape_string($_GET['course']) . '" AND status=2';					
+							AND course_code = "' . Database :: escape_string($_GET['course']) . '" AND status=2';
 					/*
 					$sql = 'SELECT id_coach FROM ' . $tbl_session_course . '
 							WHERE id_session=' . $le_session_id . '
 							AND course_code = "' . Database :: escape_string($_GET['course']) . '"';
 					*/
-							
-					$rs = Database::query($sql, __FILE__, __LINE__);
+
+					$rs = Database::query($sql);
 					//$session_course_coach_id = intval(Database :: result($rs, 0, 0));
 					$course_coachs = array();
 					while ($row_coachs = Database::fetch_array($rs)) {
@@ -545,11 +545,11 @@ if (!empty ($_GET['student'])) {
 						$info_tutor_name = array();
 						foreach ($course_coachs as $course_coach) {
 							$coach_infos = UserManager :: get_user_info_by_id($course_coach);
-							$info_tutor_name[] = api_get_person_name($coach_infos['firstname'], $coach_infos['lastname']);	
+							$info_tutor_name[] = api_get_person_name($coach_infos['firstname'], $coach_infos['lastname']);
 						}
-						$info_course['tutor_name'] = implode(",",$info_tutor_name);						
+						$info_course['tutor_name'] = implode(",",$info_tutor_name);
 					}
-					
+
 					/*if ($session_course_coach_id != 0) {
 						$coach_infos = UserManager :: get_user_info_by_id($session_course_coach_id);
 						$info_course['tutor_name'] = api_get_person_name($coach_infos['firstname'], $coach_infos['lastname']);
@@ -657,7 +657,7 @@ if (!empty ($_GET['student'])) {
 		$sql_learnpath = "	SELECT lp.name,lp.id
 							FROM $t_lp AS lp ORDER BY lp.name ASC";
 
-		$result_learnpath = Database::query($sql_learnpath, __FILE__, __LINE__);
+		$result_learnpath = Database::query($sql_learnpath);
 
 		$csv_content[] = array ();
 		$csv_content[] = array (
@@ -686,7 +686,7 @@ if (!empty ($_GET['student'])) {
 													ON item_view.lp_view_id = view.id
 													AND view.lp_id = ' . $learnpath['id'] . '
 													AND view.user_id = ' . intval($_GET['student']);
-				$rs = Database::query($sql, __FILE__, __LINE__);
+				$rs = Database::query($sql);
 				$total_time = 0;
 				if (Database :: num_rows($rs) > 0) {
 					$total_time = Database :: result($rs, 0, 0);
@@ -701,7 +701,7 @@ if (!empty ($_GET['student'])) {
 													ON item_view.lp_view_id = view.id
 													AND view.lp_id = ' . $learnpath['id'] . '
 													AND view.user_id = ' . intval($_GET['student']);
-				$rs = Database::query($sql, __FILE__, __LINE__);
+				$rs = Database::query($sql);
 				$start_time = null;
 				if (Database :: num_rows($rs) > 0) {
 					$start_time = Database :: result($rs, 0, 0);
@@ -829,7 +829,7 @@ if (!empty ($_GET['student'])) {
 		$t_tool = Database :: get_course_table(TABLE_TOOL_LIST, $info_course['db_name']);
 		$sql = 'SELECT visibility FROM ' . $t_tool . ' WHERE name="quiz"';
 
-		$result_visibility_quizz = Database::query($sql, __FILE__, __LINE__);
+		$result_visibility_quizz = Database::query($sql);
 		$t_quiz = Database :: get_course_table(TABLE_QUIZ_TEST, $info_course['db_name']);
 
 		if (Database :: result($result_visibility_quizz, 0, 'visibility') == 1) {
@@ -839,7 +839,7 @@ if (!empty ($_GET['student'])) {
 												WHERE active='1' ORDER BY quiz.title ASC
 												";
 
-			$result_exercices = Database::query($sql_exercices, __FILE__, __LINE__);
+			$result_exercices = Database::query($sql_exercices);
 			$i = 0;
 			$is_student = Security :: remove_XSS($_GET['student']);
 			if (Database :: num_rows($result_exercices) > 0) {
@@ -851,7 +851,7 @@ if (!empty ($_GET['student'])) {
 															AND orig_lp_id = 0
 															AND orig_lp_item_id = 0
 															AND exe_user_id='" . Database :: escape_string($is_student) . "'";
-					$result_essais = Database::query($sql_essais, __FILE__, __LINE__);
+					$result_essais = Database::query($sql_essais);
 					$essais = Database :: fetch_array($result_essais);
 
 					$sql_score = "SELECT exe_id, exe_result,exe_weighting
@@ -863,7 +863,7 @@ if (!empty ($_GET['student'])) {
 														 AND orig_lp_item_id = 0
 														 ORDER BY exe_date DESC LIMIT 1";
 
-					$result_score = Database::query($sql_score, __FILE__, __LINE__);
+					$result_score = Database::query($sql_score);
 					$score = 0;
 					while ($scores = Database :: fetch_array($result_score)) {
 						$score = $score + $scores['exe_result'];
@@ -918,7 +918,7 @@ if (!empty ($_GET['student'])) {
 												 ";
 
 					$sql_last_attempt = 'SELECT exe_id FROM ' . $tbl_stats_exercices . ' WHERE exe_exo_id="' . $exercices['id'] . '" AND exe_user_id="' . Security :: remove_XSS($_GET['student']) . '" AND exe_cours_id="' . $info_course['code'] . '" AND orig_lp_id = 0 AND orig_lp_item_id = 0 ORDER BY exe_date DESC LIMIT 1';
-					$result_last_attempt = Database::query($sql_last_attempt, __FILE__, __LINE__);
+					$result_last_attempt = Database::query($sql_last_attempt);
 					if (Database :: num_rows($result_last_attempt) > 0) {
 						$id_last_attempt = Database :: result($result_last_attempt, 0, 0);
 
@@ -1150,14 +1150,14 @@ if (!empty ($_GET['student'])) {
 											ON qrq.question_id = qq.id
 											AND qrq.exercice_id = " . intval($_GET['exe_id']);
 
-		$result_exercice_details = Database::query($sql_exercice_details, __FILE__, __LINE__);
+		$result_exercice_details = Database::query($sql_exercice_details);
 
 		$sql_ex_name = "SELECT quiz.title
 								FROM " . $t_q . " AS quiz
 							 	WHERE quiz.id = " . intval($_GET['exe_id']);
 		;
 
-		$resultExName = Database::query($sql_ex_name, __FILE__, __LINE__);
+		$resultExName = Database::query($sql_ex_name);
 		$exName = Database :: fetch_array($resultExName);
 
 		echo "<table class='data_table'>
@@ -1173,7 +1173,7 @@ if (!empty ($_GET['student'])) {
 										FROM  " . $t_qa . " as qa
 										WHERE qa.question_id = " . $exerciceDetails['id'];
 
-			$resultAnswer = Database::query($sqlAnswer, __FILE__, __LINE__);
+			$resultAnswer = Database::query($sqlAnswer);
 
 			echo "<a name='infosExe'></a>";
 

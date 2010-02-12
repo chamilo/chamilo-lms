@@ -109,7 +109,7 @@ class learnpathItem{
             $sql = 'SELECT * FROM %s WHERE course_code=\'%s\' AND tool_id=\'%s\' AND ref_id_high_level=%s AND ref_id_second_level=%d LIMIT 1';
             // TODO: verify if it's possible to assume the actual course instead of getting it from db
             $sql = sprintf($sql, $tbl_se_ref, api_get_course_id(), TOOL_LEARNPATH, $this->lp_id, $id);
-            $res = Database::query($sql, __FILE__, __LINE__);
+            $res = Database::query($sql);
             if (Database::num_rows($res) >  0) {
     	        $se_ref = Database::fetch_array($res);
     	        $this->search_did = (int)$se_ref['search_did'];
@@ -214,7 +214,7 @@ class learnpathItem{
 		$res_del_view = Database::query($sql_del_view);
 
         $sql_sel = "SELECT * FROM $lp_item WHERE id = ".$this->db_id;
-        $res_sel = Database::query($sql_sel,__FILE__,__LINE__);
+        $res_sel = Database::query($sql_sel);
         if(Database::num_rows($res_sel)<1){return false;}
         $row = Database::fetch_array($res_sel);
 
@@ -362,7 +362,7 @@ class learnpathItem{
     			case TOOL_DOCUMENT:
     				$table_doc = Database::get_course_table(TABLE_DOCUMENT);
     				$sql = 'SELECT path FROM '.$table_doc.' WHERE id = '.$path;
-    				$res = Database::query($sql,__FILE__,__LINE__);
+    				$res = Database::query($sql);
     				$row = Database::fetch_array($res);
     				$real_path = 'document'.$row['path'];
     				return $real_path;
@@ -408,7 +408,7 @@ class learnpathItem{
                     "WHERE lp_item_id = ".$this->db_id." " .
                     "AND   lp_view_id = ".$this->view_id." " .
                     "AND   view_count = ".$this->attempt_id;
-            $res = Database::query($sql,__FILE__,__LINE__);
+            $res = Database::query($sql);
             if (Database::num_rows($res)>0) {
                 $row = Database::fetch_array($res);
                 $lp_iv_id = $row[0];
@@ -436,7 +436,7 @@ class learnpathItem{
                     "WHERE lp_item_id = ".$this->db_id." " .
                     "AND   lp_view_id = ".$this->view_id." " .
                     "AND   view_count = ".$this->attempt_id;
-            $res = Database::query($sql,__FILE__,__LINE__);
+            $res = Database::query($sql);
             if (Database::num_rows($res)>0) {
                 $row = Database::fetch_array($res);
                 $lp_iv_id = $row[0];
@@ -1082,7 +1082,7 @@ function get_terms()
           {
                 $lp_item = Database::get_course_table(TABLE_LP_ITEM);
                 $sql = "SELECT * FROM $lp_item WHERE id='".Database::escape_string($this->db_id)."'";
-                $res = Database::query($sql,__FILE__,__LINE__);
+                $res = Database::query($sql);
                 $row = Database::fetch_array($res);
                 return $row['terms'];
           }
@@ -1440,7 +1440,7 @@ function get_terms()
 												AND status <> "incomplete"
 												ORDER BY exe_date DESC
 												LIMIT 0, 1';
-										$rs_quiz = Database::query($sql, __FILE__, __LINE__);
+										$rs_quiz = Database::query($sql);
 										if($quiz = Database :: fetch_array($rs_quiz))
 										{
 											if($quiz['exe_result'] >= $items[$refs_list[$prereqs_string]]->get_mastery_score())
@@ -1750,7 +1750,7 @@ function get_terms()
 	     	$sql = "SELECT * FROM $item_view_table WHERE lp_item_id = ".$this->get_id()." " .
 	     			" AND lp_view_id = ".$lp_view_id." ORDER BY view_count DESC";
 	     	if($this->debug>2){error_log('New LP - In learnpathItem::set_lp_view() - Querying lp_item_view: '.$sql,0);}
-	     	$res = Database::query($sql,__FILE__,__LINE__);
+	     	$res = Database::query($sql);
 	     	if(Database::num_rows($res)>0){
 	     		$row = Database::fetch_array($res);
 	     		$this->db_item_view_id  = $row['id'];
@@ -1769,7 +1769,7 @@ function get_terms()
 		     	//now get the number of interactions for this little guy
 		     	$item_view_interaction_table = Database::get_course_table(TABLE_LP_IV_INTERACTION);
 		     	$sql = "SELECT * FROM $item_view_interaction_table WHERE lp_iv_id = '".$this->db_item_view_id."'";
-				$res = Database::query($sql,__FILE__,__LINE__);
+				$res = Database::query($sql);
 				if($res !== false){
 					$this->interactions_count = Database::num_rows($res);
 				}else{
@@ -1778,7 +1778,7 @@ function get_terms()
 		     	//now get the number of objectives for this little guy
 		     	$item_view_objective_table = Database::get_course_table(TABLE_LP_IV_OBJECTIVE);
 		     	$sql = "SELECT * FROM $item_view_objective_table WHERE lp_iv_id = '".$this->db_item_view_id."'";
-				$res = Database::query($sql,__FILE__,__LINE__);
+				$res = Database::query($sql);
 				if($res !== false){
 					$this->objectives_count = Database::num_rows($res);
 				}else{
@@ -1897,7 +1897,7 @@ function get_terms()
         $terms_update_sql='';
         //TODO: validate csv string
         $terms_update_sql = "UPDATE $lp_item SET terms = '". Database::escape_string(api_htmlentities($new_terms_string, ENT_QUOTES, $charset)) . "' WHERE id=".$this->get_id();
-        $res = Database::query($terms_update_sql,__FILE__,__LINE__);
+        $res = Database::query($terms_update_sql);
         // save it to search engine
         if (api_get_setting('search_enabled') == 'true') {
             $di = new DokeosIndexer();
@@ -2038,7 +2038,7 @@ function get_terms()
      				"WHERE lp_item_id = ".$this->db_id." " .
      				"AND   lp_view_id = ".$this->view_id." " .
      				"AND   view_count = ".$this->attempt_id;
-     		$res = Database::query($sql,__FILE__,__LINE__);
+     		$res = Database::query($sql);
      		if(Database::num_rows($res)>0){
      			$row = Database::fetch_array($res);
      			$lp_iv_id = $row[0];
@@ -2050,7 +2050,7 @@ function get_terms()
 	     					//"AND order_id = $index";
 							//also check for the objective ID as it must be unique for this SCO view
 	     					"AND objective_id = '".Database::escape_string($objective[0])."'";
-	     			$iva_res = Database::query($iva_sql,__FILE__,__LINE__);
+	     			$iva_res = Database::query($iva_sql);
 					//id(0), type(1), time(2), weighting(3),correct_responses(4),student_response(5),result(6),latency(7)
 	     			if(Database::num_rows($iva_res)>0){
 	     				//update (or don't)
@@ -2063,7 +2063,7 @@ function get_terms()
 	     					"score_min = '".Database::escape_string($objective[4])."'," .
 	     					"score_max = '".Database::escape_string($objective[3])."' " .
 	     					"WHERE id = $iva_id";
-	     				$ivau_res = Database::query($ivau_sql,__FILE__,__LINE__);
+	     				$ivau_res = Database::query($ivau_sql);
 	     				//error_log($ivau_sql,0);
 	     			}else{
 	     				//insert new one
@@ -2072,7 +2072,7 @@ function get_terms()
 	     						"VALUES" .
 	     						"(".$lp_iv_id.", ".$index.",'".Database::escape_string($objective[0])."','".Database::escape_string($objective[1])."'," .
 	     						"'".Database::escape_string($objective[2])."','".Database::escape_string($objective[4])."','".Database::escape_string($objective[3])."')";
-	     				$ivai_res = Database::query($ivai_sql,__FILE__,__LINE__);
+	     				$ivai_res = Database::query($ivai_sql);
 	     				//error_log($ivai_sql);
 	     			}
 	     		}
@@ -2102,7 +2102,7 @@ function get_terms()
 
    		$item_view_table = Database::get_course_table(TABLE_LP_ITEM_VIEW);
 		$sql_verified='SELECT status FROM '.$item_view_table.' WHERE lp_item_id="'.$this->db_id.'" AND lp_view_id="'.$this->view_id.'" AND view_count="'.$this->attempt_id.'" ;';
-		$rs_verified=Database::query($sql_verified,__FILE__,__LINE__);
+		$rs_verified=Database::query($sql_verified);
 		$row_verified=Database::fetch_array($rs_verified);
 
    		$my_case_completed=array('completed','passed','browsed','failed');//added by isaac flores
@@ -2151,7 +2151,7 @@ function get_terms()
 		     			"'".$this->lesson_location."')";
 
       			if($this->debug>2){error_log('New LP - In learnpathItem::write_to_db() - Inserting into item_view forced: '.$sql,0);}
-		     	$res = Database::query($sql,__FILE__,__LINE__);
+		     	$res = Database::query($sql);
 		     	$this->db_item_view_id = Database::insert_id();
 		     	$inserted = true;
 		   }
@@ -2197,7 +2197,7 @@ function get_terms()
 		     			//"'".$this->get_max_time_allowed()."'," .
 		     			"'".$this->lesson_location."')";
 		     	if($this->debug>2){error_log('New LP - In learnpathItem::write_to_db() - Inserting into item_view: '.$sql,0);}
-		     	$res = Database::query($sql,__FILE__,__LINE__);
+		     	$res = Database::query($sql);
 		     	$this->db_item_view_id = Database::insert_id();
 	     	} else {
 	     		$sql = '';
@@ -2225,7 +2225,7 @@ function get_terms()
 
 							$safe_exe_id = Database::escape_string($_REQUEST['exeId']);
 		     				$sql = 'SELECT start_date,exe_date FROM ' . $TBL_TRACK_EXERCICES . ' WHERE exe_id = '.(int)$safe_exe_id;
-							$res = Database::query($sql,__FILE__,__LINE__);
+							$res = Database::query($sql);
 							$row_dates = Database::fetch_array($res);
 
 							$time_start_date = convert_mysql_date($row_dates['start_date']);
@@ -2243,7 +2243,7 @@ function get_terms()
 			  		     	// process of status verified into data base
 
 		     				$sql_verified='SELECT status FROM '.$item_view_table.' WHERE lp_item_id="'.$this->db_id.'" AND lp_view_id="'.$this->view_id.'" AND view_count="'.$this->attempt_id.'" ;';
-		     				$rs_verified=Database::query($sql_verified,__FILE__,__LINE__);
+		     				$rs_verified=Database::query($sql_verified);
 		     				$row_verified=Database::fetch_array($rs_verified);
 
 		     				//get type lp: 1=lp dokeos and  2=scorm
@@ -2287,7 +2287,7 @@ function get_terms()
 	     					if ( $my_type_lp==2) {
 				     			//verify current status in multiples attempts
 				     			$sql_status='SELECT status FROM '.$item_view_table.' WHERE lp_item_id="'.$this->db_id.'" AND lp_view_id="'.$this->view_id.'" AND view_count="'.$this->attempt_id.'" ';
-						     	$rs_status=Database::query($sql_status,__FILE__,__LINE__);
+						     	$rs_status=Database::query($sql_status);
 						     	$current_status=Database::result($rs_status,0,'status');
 						     	if (in_array($current_status,$case_completed)) {
 						     		$my_status='';
@@ -2319,7 +2319,7 @@ function get_terms()
 			     			$this->current_start_time = time();
 	     		}
 	    	 	if($this->debug>2){error_log('New LP - In learnpathItem::write_to_db() - Updating item_view: '.$sql,0);}
-		     	$res = Database::query($sql,__FILE__,__LINE__);
+		     	$res = Database::query($sql);
 	     	}
 	     	//if(!$res)
 	     	//{
@@ -2332,7 +2332,7 @@ function get_terms()
 	     				"WHERE lp_item_id = ".$this->db_id." " .
 	     				"AND   lp_view_id = ".$this->view_id." " .
 	     				"AND   view_count = ".$this->attempt_id;
-	     		$res = Database::query($sql,__FILE__,__LINE__);
+	     		$res = Database::query($sql);
 	     		if(Database::num_rows($res)>0){
 	     			$row = Database::fetch_array($res);
 	     			$lp_iv_id = $row[0];
@@ -2352,7 +2352,7 @@ function get_terms()
 								//also check for the interaction ID as it must be unique for this SCO view
 		     					"AND (order_id = $index " .
 		     					"OR interaction_id = '".Database::escape_string($interaction[0])."')";
-		     			$iva_res = Database::query($iva_sql,__FILE__,__LINE__);
+		     			$iva_res = Database::query($iva_sql);
 						//id(0), type(1), time(2), weighting(3),correct_responses(4),student_response(5),result(6),latency(7)
 		     			if(Database::num_rows($iva_res)>0){
 		     				//update (or don't)
@@ -2368,7 +2368,7 @@ function get_terms()
 		     					"result = '".Database::escape_string($interaction[6])."'," .
 		     					"latency = '".Database::escape_string($interaction[7])."'" .
 		     					"WHERE id = $iva_id";
-		     				$ivau_res = Database::query($ivau_sql,__FILE__,__LINE__);
+		     				$ivau_res = Database::query($ivau_sql);
 		     			} else {
 		     				//insert new one
 		     				$ivai_sql = "INSERT INTO $iva_table " .
@@ -2380,7 +2380,7 @@ function get_terms()
 		     						"'".Database::escape_string($interaction[3])."','".Database::escape_string($interaction[2])."','".Database::escape_string($correct_resp)."'," .
 		     						"'".Database::escape_string($interaction[5])."','".Database::escape_string($interaction[6])."','".Database::escape_string($interaction[7])."'" .
 		     						")";
-		     				$ivai_res = Database::query($ivai_sql,__FILE__,__LINE__);
+		     				$ivai_res = Database::query($ivai_sql);
 		     			}
 		     		}
 	     		}

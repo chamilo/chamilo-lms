@@ -56,7 +56,7 @@ function deleteitem($id)
 	$tbl_learnpath_chapter = Database :: get_course_table(TABLE_LEARNPATH_CHAPTER);
 	//get the display order for this item before it is deleted
 	$sql = "SELECT display_order, parent_item_id FROM $tbl_lp_item WHERE id=$id";
-	$result = Database::query($sql, __FILE__, __LINE__);
+	$result = Database::query($sql);
 	if (Database::num_rows($result) == 0)
 	{
 		return false;
@@ -66,16 +66,16 @@ function deleteitem($id)
 	$parent_item_id = $row[1];
 	// delete the item
 	$sql = "DELETE FROM $tbl_learnpath_item WHERE id='$id'";
-	$result = Database::query($sql, __FILE__, __LINE__);
+	$result = Database::query($sql);
 	if ($result === false)
 	{
 		return false;
 	}
 	// update the other items and chapters
 	$sql = "UPDATE $tbl_learnpath_item SET display_order = display_order-1 WHERE display_order > $display_order AND parent_item_id = $parent_item_id";
-	$result = Database::query($sql, __FILE__, __LINE__);
+	$result = Database::query($sql);
 	$sql = "UPDATE $tbl_learnpath_chapter SET display_order = display_order-1 WHERE display_order > $display_order AND parent_item_id = $parent_item_id";
-	$result = Database::query($sql, __FILE__, __LINE__);
+	$result = Database::query($sql);
 	//return
 	return true;
 }
@@ -94,7 +94,7 @@ function deletemodule($parent_item_id)
 
 	//Added for multi-level behaviour - slightly recursive
 	$sql = "SELECT * FROM $tbl_learnpath_chapter WHERE lp_id=$learnpath_id";
-	$result = Database::query($sql, __FILE__, __LINE__);
+	$result = Database::query($sql);
 	while ($row = Database::fetch_array($result))
 	{
 		if ($row['parent_item_id'] == $parent_item_id)
@@ -109,7 +109,7 @@ function deletemodule($parent_item_id)
 
 	//get this chapter's display order
 	$sql = "SELECT display_order, parent_item_id FROM $tbl_learnpath_chapter WHERE id=$parent_item_id and lp_id=$learnpath_id";
-	$result = Database::query($sql, __FILE__, __LINE__);
+	$result = Database::query($sql);
 	if (Database::num_rows($result) == 0)
 	{
 		return false;
@@ -121,16 +121,16 @@ function deletemodule($parent_item_id)
 
 	//delete the chapter itself
 	$sql = "DELETE FROM $tbl_learnpath_chapter WHERE (id=$parent_item_id and lp_id=$learnpath_id)";
-	$result = Database::query($sql, __FILE__, __LINE__);
+	$result = Database::query($sql);
 	//delete items from that chapter
 	$sql2 = "DELETE FROM $tbl_learnpath_item WHERE parent_item_id=$parent_item_id";
-	$result = Database::query($sql2, __FILE__, __LINE__);
+	$result = Database::query($sql2);
 
 	//update all other chapters accordingly
 	$sql = "UPDATE $tbl_learnpath_item SET display_order = display_order-1 WHERE display_order > $display_order AND parent_item_id = $parent_id";
-	$result = Database::query($sql, __FILE__, __LINE__);
+	$result = Database::query($sql);
 	$sql = "UPDATE $tbl_learnpath_chapter SET display_order = display_order-1 WHERE display_order > $display_order AND parent_item_id = $parent_id";
-	$result = Database::query($sql, __FILE__, __LINE__);
+	$result = Database::query($sql);
 
 	return true;
 }
@@ -148,12 +148,12 @@ function deletepath($path_id)
 	$tbl_learnpath_chapter = Database :: get_course_table(TABLE_LEARNPATH_CHAPTER);
 
 	$sql = "DELETE FROM $tbl_learnpath_main WHERE lp_id='$path_id'";
-	$result = Database::query($sql, __FILE__, __LINE__);
+	$result = Database::query($sql);
 
 	//@TODO check how this function is used before uncommenting the following
 	//also delete all elements inside that path
 	$sql = "SELECT * FROM $tbl_learnpath_chapter WHERE lp_id=$path_id";
-	$result = Database::query($sql, __FILE__, __LINE__);
+	$result = Database::query($sql);
 	while ($row = Database::fetch_array($result))
 	{
 		deletemodule($row['id']);
@@ -248,8 +248,8 @@ function moveitem($direction, $id, $moduleid, $type = 'item')
 	{
 		return false;
 	}
-	Database::query($sql1, __FILE__, __LINE__);
-	Database::query($sql2, __FILE__, __LINE__);
+	Database::query($sql1);
+	Database::query($sql2);
 }
 
 /**
@@ -274,7 +274,7 @@ function movemodule($direction, $id)
 
 	// Select all chapters of first level (parent_item_id = 0)
 	$sql = "SELECT * FROM $tbl_learnpath_chapter where (lp_id=$learnpath_id AND parent_item_id = 0) ORDER BY display_order $sortDirection";
-	$result = Database::query($sql, __FILE__, __LINE__);
+	$result = Database::query($sql);
 	$previousrow = "";
 
 	// see similar comment in moveitem() function
@@ -290,8 +290,8 @@ function movemodule($direction, $id)
 
 			$sql1 = "UPDATE $tbl_learnpath_chapter SET display_order = '$next_cat_order' WHERE (id='$this_cat_id' and lp_id=$learnpath_id)";
 			$sql2 = "UPDATE $tbl_learnpath_chapter SET display_order = '$this_cat_order' WHERE (id='$next_cat_id' and lp_id=$learnpath_id)";
-			Database::query($sql1, __FILE__, __LINE__);
-			Database::query($sql2, __FILE__, __LINE__);
+			Database::query($sql1);
+			Database::query($sql2);
 			unset ($this_cat_order);
 			unset ($this_cat_id);
 			unset ($next_cat_order);
@@ -331,7 +331,7 @@ function insert_item($type = 'item', $name, $chapter_description = '', $parent_i
 			WHERE lp_id=$learnpath_id
 			AND parent_item_id = $parent_id
 			ORDER BY display_order DESC";
-	$result = Database::query($sql, __FILE__, __LINE__);
+	$result = Database::query($sql);
 	$row = Database::fetch_array($result);
 	$last_chapter_order = $row["display_order"];
 
@@ -339,7 +339,7 @@ function insert_item($type = 'item', $name, $chapter_description = '', $parent_i
 	$sql = "SELECT * FROM $tbl_learnpath_item
 			AND parent_item_id = $parent_id
 			ORDER BY display_order DESC";
-	$result = Database::query($sql, __FILE__, __LINE__);
+	$result = Database::query($sql);
 	$row = Database::fetch_array($result);
 	$last_item_order = $row["display_order"];
 	$new_order = max($last_chapter_order, $last_item_order) + 1;
@@ -352,7 +352,7 @@ function insert_item($type = 'item', $name, $chapter_description = '', $parent_i
 						'".domesticate(htmlspecialchars($chapter_name))."',
 						'".domesticate(htmlspecialchars($chapter_description))."',
 						$new_order )";
-		$result = Database::query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql);
 		if ($result === false)
 		{
 			return false;
@@ -367,7 +367,7 @@ function insert_item($type = 'item', $name, $chapter_description = '', $parent_i
 						'".domesticate(htmlspecialchars($item_type))."',
 						'".domesticate(htmlspecialchars($item_id))."',
 						$new_order )";
-		$result = Database::query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql);
 		if ($result === false)
 		{
 			return false;
@@ -388,7 +388,7 @@ function array_learnpath_categories()
 	$tbl_learnpath_chapter = Database :: get_course_table(TABLE_LEARNPATH_CHAPTER);
 
 	$sql = "SELECT * FROM  $tbl_learnpath_chapter  WHERE (lp_id=$learnpath_id) ORDER BY display_order ASC";
-	$result = Database::query($sql, __FILE__, __LINE__);
+	$result = Database::query($sql);
 
 	while ($row = Database::fetch_array($result))
 	{
@@ -573,7 +573,7 @@ function display_learnpath_chapters($parent_item_id = 0, $tree = array (), $leve
 						//{
 							//item
 							$sql_items2 = "SELECT * FROM $tbl_lp_item WHERE id='$prereq'"; //check if prereq has been deleted
-							$result_items2 = Database::query($sql_items2, __FILE__, __LINE__);
+							$result_items2 = Database::query($sql_items2);
 							$number_items2 = Database::num_rows($result_items2);
 							if ($number_items2 == 0)
 							{
@@ -591,7 +591,7 @@ function display_learnpath_chapters($parent_item_id = 0, $tree = array (), $leve
 						{
 							//chapter
 							$sql_items2 = "SELECT * FROM $tbl_lp_item WHERE id='$prereq' AND item_type='dokeos_chapter'"; //check if prereq has been deleted
-							$result_items2 = Database::query($sql_items2, __FILE__, __LINE__);
+							$result_items2 = Database::query($sql_items2);
 							$number_items2 = Database::num_rows($result_items2);
 							if ($number_items2 == 0)
 							{
@@ -654,7 +654,7 @@ function display_all_learnpath()
 	$tbl_learnpath_main = Database :: get_course_table(TABLE_LEARNPATH_MAIN);
 
 	$sql = "SELECT * FROM  $tbl_learnpath_main  ORDER BY learnpath_name";
-	$result = Database::query($sql, __FILE__, __LINE__);
+	$result = Database::query($sql);
 	$i = 1;
 	$num_modules = Database::num_rows($result);
 
@@ -673,11 +673,11 @@ function display_all_learnpath()
 			echo "<td bgcolor=\"$color2\" align=center><a href='".api_get_self()."?action=deletepath&id=".$row["lp_id"]."'&SQMSESSID=36812c2dea7d8d6e708d5e6a2f09b0b9><img src=\"../img/delete.gif\" border=\"0\" title=\"$lang_delete_learnpath\" onclick=\"return confirmation('".$row2['learnpath_name']."');\"></a></td>";
 			$id = $row["lp_id"];
 			$sql2 = "SELECT * FROM $tbl_learnpath_main where lp_id=$id";
-			$result2 = Database::query($sql2, __FILE__, __LINE__);
+			$result2 = Database::query($sql2);
 			$row2 = Database::fetch_array($result2);
 			$name = $row2['learnpath_name'];
 			$sql3 = "SELECT * FROM $tbl_tool where (name=\"$name\" and image='scormbuilder.gif')";
-			$result3 = Database::query($sql3, __FILE__, __LINE__);
+			$result3 = Database::query($sql3);
 			$row3 = Database::fetch_array($result3);
 			if (($row3["visibility"]) == '1')
 			{
@@ -706,7 +706,7 @@ function display_learnpath_items($categoryid)
 	$tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
 
 	$sql_items = "SELECT * FROM $tbl_lp_item WHERE parent_item_id='$categoryid' ORDER BY display_order ASC";
-	$result_items = Database::query($sql_items,__FILE__,__LINE__);
+	$result_items = Database::query($sql_items);
 	$number_items = Database::num_rows($result_items);
 	$i = 1;
 	error_log('Selected item under '.$categoryid,0);
@@ -759,7 +759,7 @@ function display_learnpath_items($categoryid)
 				{
 					//chapter
 					$sql_items2 = "SELECT * FROM $tbl_learnpath_chapter WHERE id='$prereq'"; //check if prereq has been deleted
-					$result_items2 = Database::query($sql_items2,__FILE__,__LINE__);
+					$result_items2 = Database::query($sql_items2);
 					$number_items2 = Database::num_rows($result_items2);
 					if ($number_items2 == 0)
 					{
@@ -849,7 +849,7 @@ function learnpath_chapters($learnpath_id)
 
 	$sql_items = "SELECT * FROM $tbl_lp_item WHERE lp_id='$learnpath_id' AND item_type='dokeos_chapter' ORDER BY display_order ASC";
 	//$sql_items = "SELECT * FROM $tbl_learnpath_chapter WHERE lp_id='$learnpath_id' ORDER BY display_order ASC";
-	$result_items = Database::query($sql_items, __FILE__, __LINE__);
+	$result_items = Database::query($sql_items);
 	$ar = Database::fetch_array($result_items);
 	while ($ar != '')
 	{
@@ -873,12 +873,12 @@ function is_prereq($learnpath_id)
 	$prereq = false;
 
 	$sql_items = "SELECT * FROM $tbl_lp_item WHERE lp_id='$learnpath_id' AND parent_item_id=0 ORDER BY display_order ASC";
-	$result_items = Database::query($sql_items,__FILE__,__LINE__);
+	$result_items = Database::query($sql_items);
 	while ($ar = Database::fetch_array($result_items))
 	{
 		$c = $ar['id'];
 		$sql_items2 = "SELECT * FROM $tbl_lp_item WHERE lp_id = $learnpath_id AND parent_item_id='$c' ORDER BY display_order ASC";
-		$result_items2 = Database::query($sql_items2,__FILE__,__LINE__);
+		$result_items2 = Database::query($sql_items2);
 		while ($ar2 = Database::fetch_array($result_items2))
 		{
 			if ($ar2['prerequisite'] != '')
@@ -1061,7 +1061,7 @@ function get_learnpath_tree($learnpath_id)
 	$all_items_by_chapter = array ();
 	$sql = "SELECT * FROM $tbl_lp_item WHERE lp_id = ".$learnpath_id." AND item_type='dokeos_chapter' ORDER BY display_order";
 	//error_log('New LP - learnpath_functions - get_learnpath_tree: '.$sql,0);
-	$res = Database::query($sql, __FILE__, __LINE__);
+	$res = Database::query($sql);
 	// format the $chapters_by_parent array so we have a suitable structure to work with
 	while ($row = Database::fetch_array($res))
 	{
@@ -1082,7 +1082,7 @@ function get_learnpath_tree($learnpath_id)
 		// select items from this chapter
 		$sql = "SELECT * FROM $tbl_lp_item WHERE lp_id = $learnpath_id AND parent_item_id = ".$row['id']." ORDER BY display_order";
 		//error_log('New LP - learnpath_functions - get_learnpath_tree: '.$sql,0);
-		$res = Database::query($sql, __FILE__, __LINE__);
+		$res = Database::query($sql);
 		//error_log('New LP - learnpath_functions - get_learnpath_tree: Found '.Database::num_rows($res).' results',0);
 		while ($myrow = Database::fetch_array($res, 'ASSOC'))
 		{
@@ -1195,7 +1195,7 @@ function display_toc_chapter_contents($tree, $parent_item_id = 0, $learnpath_id,
 		{
 			// If this element is an item (understand: not a directory/module)
 			$sql0 = "SELECT * FROM $tbl_learnpath_user WHERE (user_id='".$uid."' and learnpath_item_id='".$elem['id']."' and lp_id='".$learnpath_id."')";
-			$result0 = Database::query($sql0, __FILE__, __LINE__);
+			$result0 = Database::query($sql0);
 			$row0 = Database::fetch_array($result0);
 
 			$completed = '';
@@ -1294,7 +1294,7 @@ function get_tracking_table($learnpath_id, $user_id, $parent_item_id = 0, $tree 
 		{
 
 			$sql = "SELECT * FROM $tbl_learnpath_user "."WHERE user_id = $user_id "."AND lp_id = $learnpath_id "."AND learnpath_item_id = ".$elem['id'];
-			$res = Database::query($sql, __FILE__, __LINE__);
+			$res = Database::query($sql);
 			$myrow = Database::fetch_array($res);
 
 			if (($myrow['status'] == 'completed') || ($myrow['status'] == 'passed'))
@@ -1335,7 +1335,7 @@ function is_empty($id)
 	$tbl_learnpath_chapter = Database :: get_course_table(TABLE_LEARNPATH_CHAPTER);
 
 	$sql = "SELECT * FROM $tbl_learnpath_chapter WHERE lp_id=$id ORDER BY display_order ASC";
-	$result = Database::query($sql, __FILE__, __LINE__);
+	$result = Database::query($sql);
 	$num_modules = Database::num_rows($result);
 	$empty = true;
 
@@ -1347,7 +1347,7 @@ function is_empty($id)
 			$num_items = 0;
 			$parent_item_id = $row['id'];
 			$sql2 = "SELECT * FROM $tbl_learnpath_item WHERE (parent_item_id=$parent_item_id) ORDER BY display_order ASC";
-			$result2 = Database::query($sql2, __FILE__, __LINE__);
+			$result2 = Database::query($sql2);
 			$num_items = Database::num_rows($result2);
 			if ($num_items > 0)
 			{
@@ -1693,7 +1693,7 @@ function exportitem($id, $item_id, $item_type, $add_scorm_communications = false
 			//1 Get agenda event data from the database table
 			$TABLEAGENDA = Database :: get_course_table(TABLE_AGENDA);
 			$sql = "SELECT * FROM ".$TABLEAGENDA." where (id=$item_id)";
-			$result = Database::query($sql, __FILE__, __LINE__);
+			$result = Database::query($sql);
 
 			//2 Prepare table output
 			$expcontent .= "<table class=\"data_table\" >";
@@ -1768,7 +1768,7 @@ function exportitem($id, $item_id, $item_type, $add_scorm_communications = false
 			//1 Get the announcement data from the database
 			$tbl_announcement = Database::get_course_table(TABLE_ANNOUNCEMENT);
 			$sql = "SELECT * FROM $tbl_announcement where id='$item_id'";
-			$result = Database::query($sql, __FILE__, __LINE__);
+			$result = Database::query($sql);
 
 			//2 Initialise export string
 			$expcontent .= "<table class=\"data_table\">";
@@ -1813,7 +1813,7 @@ function exportitem($id, $item_id, $item_type, $add_scorm_communications = false
 		case "Course_description" :
 			//1 Get course description data from database
 			$tbl_course_description = Database :: get_course_table(TABLE_COURSE_DESCRIPTION);
-			$result = Database::query("SELECT id, title, content FROM ".$tbl_course_description." ORDER BY id", __FILE__, __LINE__);
+			$result = Database::query("SELECT id, title, content FROM ".$tbl_course_description." ORDER BY id");
 
 			//2 Check this element
 			if (Database::num_rows($result))
@@ -1844,7 +1844,7 @@ function exportitem($id, $item_id, $item_type, $add_scorm_communications = false
 			//1 Get the document data from the database
 			$tbl_document = Database::get_course_table(TABLE_DOCUMENT);
 			$sql_query = "SELECT * FROM $tbl_document WHERE id=$item_id";
-			$sql_result = Database::query($sql_query, __FILE__, __LINE__);
+			$sql_result = Database::query($sql_query);
 			$myrow = Database::fetch_array($sql_result);
 			//2 Get the origin path of the document to treat it internally
 			$orig = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document'.$myrow["path"];
@@ -1959,7 +1959,7 @@ function exportitem($id, $item_id, $item_type, $add_scorm_communications = false
 			$TBL_INTRO = Database :: get_course_tool_intro_table();
 			// Modified by Ivan Tcholakov, 15-SEP-2008.
 			//$result = Database::query("SELECT * FROM ".$TBL_INTRO." WHERE id=1");
-			$result = Database::query("SELECT * FROM ".$TBL_INTRO." WHERE id='course_homepage'", __FILE__, __LINE__);
+			$result = Database::query("SELECT * FROM ".$TBL_INTRO." WHERE id='course_homepage'");
 			//
 			$myrow = Database::fetch_array($result);
 			$intro = $myrow["intro_text"];
@@ -1971,7 +1971,7 @@ function exportitem($id, $item_id, $item_type, $add_scorm_communications = false
 		case "HotPotatoes" :
 			//1 Get HotPotatoes data from the document table
 			$tbl_document = Database::get_course_table(TABLE_DOCUMENT);
-			$result = Database::query("SELECT * FROM $tbl_document WHERE id=$item_id", __FILE__, __LINE__);
+			$result = Database::query("SELECT * FROM $tbl_document WHERE id=$item_id");
 			$myrow = Database::fetch_array($result);
 			//2 Get the document path
 			$testfile = api_get_path(SYS_COURSE_PATH).$_course['path']."/document".urldecode($myrow['path']);
@@ -2049,11 +2049,11 @@ function exportitem($id, $item_id, $item_type, $add_scorm_communications = false
 			//1 Get the forum post data from the database
 			$tbl_posts =Database::get_course_table(TABLE_FORUM_POST);
 			$tbl_posts_text =Database::get_course_table(TOOL_FORUM_POST_TEXT_TABLE);
-			$result = Database::query("SELECT * FROM $tbl_posts where post_id=$item_id", __FILE__, __LINE__);
+			$result = Database::query("SELECT * FROM $tbl_posts where post_id=$item_id");
 			$myrow = Database::fetch_array($result);
 			// grabbing the title of the post
 			$sql_titel = "SELECT * FROM $tbl_posts_text WHERE post_id=".$myrow["post_id"];
-			$result_titel = Database::query($sql_titel, __FILE__, __LINE__);
+			$result_titel = Database::query($sql_titel);
 			$myrow_titel = Database::fetch_array($result_titel);
 
 			$posternom = $myrow['nom'];
@@ -2095,7 +2095,7 @@ function exportitem($id, $item_id, $item_type, $add_scorm_communications = false
 		case "Link _blank" :
 			//1 Get the link data from the database
 			$TABLETOOLLINK = Database :: get_course_link_table();
-			$result = Database::query("SELECT * FROM $TABLETOOLLINK WHERE id=$item_id", __FILE__, __LINE__);
+			$result = Database::query("SELECT * FROM $TABLETOOLLINK WHERE id=$item_id");
 			$myrow = Database::fetch_array($result);
 			$thelink = $myrow["url"];
 			//2 Check the link type (open in blank page or in current page)
@@ -2202,7 +2202,7 @@ function exportpath($learnpath_id)
 	//2 Get the name of the LP
 	include_once (api_get_path(LIBRARY_PATH)."fileUpload.lib.php");
 	$sql = "SELECT * FROM $tbl_learnpath_main WHERE (lp_id=$learnpath_id)";
-	$result = Database::query($sql, __FILE__, __LINE__);
+	$result = Database::query($sql);
 	$row = Database::fetch_array($result);
 	$LPname = $row['learnpath_name'];
 	$LPnamesafe = replace_dangerous_char($LPname, 'strict');
@@ -2231,7 +2231,7 @@ function exportpath($learnpath_id)
 	//to get all the elements, we should use the function that builds the table of content get_learnpath_tree
 	//WHERE (lp_id=$learnpath_id)
 	//ORDER BY parent_item_id, display_order ASC";
-	$result = Database::query($sql, __FILE__, __LINE__);
+	$result = Database::query($sql);
 
 	//5 export the items listed in Circle I one by one
 	while ($row = Database::fetch_array($result))
@@ -2239,9 +2239,9 @@ function exportpath($learnpath_id)
 		//5.1 Get items data from the database for this chapter
 		$parent_item_id = $row['id'];
 		//$sql2a="SELECT * FROM $tbl_learnpath_chapter WHERE (lp_id=$learnpath_id and parent_item_id=$parent_item_id) ORDER BY display_order ASC";
-		//$result2a=Database::query($sql,__FILE__,__LINE__);
+		//$result2a=Database::query($sql);
 		$sql2b = "SELECT * FROM $tbl_learnpath_item WHERE (parent_item_id=$parent_item_id) ORDER BY display_order ASC";
-		$result2b = Database::query($sql2b, __FILE__, __LINE__);
+		$result2b = Database::query($sql2b);
 
 		while ($row2 = Database::fetch_array($result2b))
 		{
@@ -2456,7 +2456,7 @@ function createimsmanifest($circle1_files, $learnpath_id)
 		//if (!$desc=strpos($circle1_files[2][$i],'scription')) {  //this is is needed if the descriptions are exported to file
 
 		$sql = "SELECT * FROM $tbl_learnpath_item WHERE (id=".$circle1_files[2][$i].")";
-		$result = Database::query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql);
 		$row = Database::fetch_array($result);
 		$parent_item_id = $row['parent_item_id'];
 
@@ -2464,7 +2464,7 @@ function createimsmanifest($circle1_files, $learnpath_id)
 		{
 			//we create the item tag for the chapter (without indifierref)
 			$sql2 = "SELECT * FROM $tbl_learnpath_chapter WHERE (id=".$parent_item_id.")";
-			$result2 = Database::query($sql2, __FILE__, __LINE__);
+			$result2 = Database::query($sql2);
 			$row2 = Database::fetch_array($result2);
 			$chapter_name = $row2['chapter_name'];
 

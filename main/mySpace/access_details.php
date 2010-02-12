@@ -240,7 +240,7 @@ function get_connections_to_course($user_id, $course_code) {
     $tbl_main			= Database :: get_main_table(TABLE_MAIN_COURSE);
 
     $sql_query = 'SELECT visual_code as course_code FROM '.$tbl_main.' c WHERE code="'.Database::escape_string($course_code).'";';
-    $result = Database::query($sql_query, __FILE__, __LINE__);
+    $result = Database::query($sql_query);
     $row_query = Database::fetch_array($result, 'ASSOC');
     $course_true = isset($row_query['course_code']) ? $row_query['course_code']: $course_code;
 
@@ -248,7 +248,7 @@ function get_connections_to_course($user_id, $course_code) {
     	WHERE user_id = ' . intval($user_id) . '
     	AND course_code="' . Database::escape_string($course_true) . '" ORDER BY login_course_date ASC';
 
-    $rs = Database::query($sql, __FILE__, __LINE__);
+    $rs = Database::query($sql);
     $connections = array();
 
     while ($row = Database::fetch_array($rs)) {
@@ -281,7 +281,7 @@ function get_connections_to_course_by_time($user_id, $course_code, $year = '', $
     $tbl_main				= Database :: get_main_table(TABLE_MAIN_COURSE);
 
     $sql_query = 'SELECT visual_code as course_code FROM '.$tbl_main.' c WHERE code="'.Database :: escape_string($course_code).'";';
-    $result = Database::query($sql_query, __FILE__, __LINE__);
+    $result = Database::query($sql_query);
     $row_query = Database::fetch_array($result,'ASSOC');
     $course_true = isset($row_query['course_code']) ? $row_query['course_code']: $course_code;
 
@@ -290,7 +290,7 @@ function get_connections_to_course_by_time($user_id, $course_code, $year = '', $
     				AND course_code="' . Database::escape_string($course_true) . '"
     				ORDER BY login_course_date DESC';
 
-    $rs = Database::query($sql, __FILE__, __LINE__);
+    $rs = Database::query($sql);
     $connections = array();
     while ($row = Database::fetch_array($rs)) {
         $login_date = $row['login_course_date'];

@@ -34,7 +34,7 @@ $tbl_track_exercice = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EX
 ===============================================================================
 */
 $sql_course = "SELECT title,code FROM $tbl_course as course ORDER BY title ASC";
-$result_course = Database::query($sql_course, __FILE__, __LINE__);
+$result_course = Database::query($sql_course);
 
 if (Database::num_rows($result_course) > 0) {
 	if (isset($_POST['export'])) {
@@ -48,7 +48,7 @@ if (Database::num_rows($result_course) > 0) {
 		$sql_moy_test = "SELECT exe_result,exe_weighting
 			FROM $tbl_track_exercice
 			WHERE exe_cours_id = '".$a_course['code']."'";
-		$result_moy_test = Database::query($sql_moy_test, __FILE__, __LINE__);
+		$result_moy_test = Database::query($sql_moy_test);
 		$result = 0;
 		$weighting = 0;
 		while ($moy_test = Database::fetch_array($result_moy_test)) {

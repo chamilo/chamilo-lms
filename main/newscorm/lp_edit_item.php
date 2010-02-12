@@ -216,7 +216,7 @@ echo '<table cellpadding="0" cellspacing="0" class="lp_build">';
 		$path_item = Database::escape_string($path_item);
 		$tbl_doc = Database :: get_course_table(TABLE_DOCUMENT);
 		$sql_doc = "SELECT path FROM " . $tbl_doc . " WHERE id = '". $path_item."' ";
-		$res_doc=Database::query($sql_doc, __FILE__, __LINE__);
+		$res_doc=Database::query($sql_doc);
 		$path_file=Database::result($res_doc,0,0);
 		$path_parts = pathinfo($path_file);
 

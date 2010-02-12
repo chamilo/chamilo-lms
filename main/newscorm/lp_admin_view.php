@@ -213,7 +213,7 @@ if (isset($_POST['save_audio']))
 	}
 	if (count($lp_items_to_remove_audio)>0) {
 		$sql 	= "UPDATE $tbl_lp_item SET audio = '' WHERE id IN (".$in.")";
-		$result = Database::query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql);
 	}
 
 	// uploading the audio files
@@ -271,7 +271,7 @@ if (isset($_POST['save_audio']))
 			// store the mp3 file in the lp_item table
 			$tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
 			$sql_insert_audio = "UPDATE $tbl_lp_item SET audio = '".Database::escape_string($file)."' WHERE id = '".Database::escape_string($lp_item_id)."'";
-			Database::query($sql_insert_audio, __FILE__, __LINE__);
+			Database::query($sql_insert_audio);
 
 		}
 	}

@@ -133,7 +133,7 @@ $lp_id = intval($_GET['lp_id']);
 $sql = 'SELECT name
 	FROM '.Database::get_course_table(TABLE_LP_MAIN, $_course['db_name']).'
 	WHERE id='.Database::escape_string($lp_id);
-$rs = Database::query($sql, __FILE__, __LINE__);
+$rs = Database::query($sql);
 $lp_title = Database::result($rs, 0, 0);
 
 echo '<div class ="actions"><div align="left" style="float:left;margin-top:2px;" ><strong>'.$_course['title'].' - '.$lp_title.' - '.$name.'</strong></div>

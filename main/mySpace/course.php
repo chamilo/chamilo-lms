@@ -47,7 +47,7 @@ $show_import_icon = false;
 if (api_get_setting('add_users_by_coach') == 'true') {
 	if (!api_is_platform_admin()) {
 		$sql = 'SELECT id_coach FROM '.Database :: get_main_table(TABLE_MAIN_SESSION).' WHERE id='.$id_session;
-		$rs = Database::query($sql, __FILE__, __LINE__);
+		$rs = Database::query($sql);
 		if (Database::result($rs, 0, 0) != $_user['user_id']) {
 			api_not_allowed(true);
 		} else {
@@ -120,7 +120,7 @@ if (is_array($a_courses)) {
 					FROM '.$tbl_session_course_user.'
 					WHERE course_code="'.Database :: escape_string($course_code).'"
 					AND id_session='.$id_session;
-			$rs = Database::query($sql, __FILE__, __LINE__);
+			$rs = Database::query($sql);
 
 			while ($row = Database::fetch_array($rs)) {
 				if (!in_array($row['user_id'], $a_students)) {

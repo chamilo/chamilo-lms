@@ -230,7 +230,7 @@ class aicc extends learnpath {
 
      	//The previous method wasn't safe to get the database name, so do it manually with the course_code
      	$sql = "SELECT * FROM ".Database::get_main_table(TABLE_MAIN_COURSE)." WHERE code='$course_code'";
-        $res = Database::query($sql,__FILE__,__LINE__);
+        $res = Database::query($sql);
         if(Database::num_rows($res)<1){ error_log('New LP - Database for '.$course_code.' not found '.__FILE__.' '.__LINE__,0);return -1;}
         $row = Database::fetch_array($res);
         $dbname = Database::get_course_table_prefix().$row['db_name'].Database::get_database_glue();
@@ -672,7 +672,7 @@ class aicc extends learnpath {
 		$_course = Database::get_course_info(api_get_course_id());
 
 		$sql = "SELECT * FROM $tbl_lp WHERE id=".$lp_id;
-		$result = Database::query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql);
 		$row = Database::fetch_array($result);
 		$LPname = $row['path'];
 		$list = split('/',$LPname);

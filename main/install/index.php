@@ -216,7 +216,7 @@ if (!isset($_GET['running'])) {
 	// Extract the path to append to the url if Chamilo is not installed on the web root directory.
 	$urlAppendPath = api_remove_trailing_slash(api_get_path(REL_PATH));
   	$urlForm = api_get_path(WEB_PATH);
-	$pathForm = api_get_path(SYS_CODE_PATH);
+	$pathForm = api_get_path(SYS_PATH);
 
 	$emailForm = $_SERVER['SERVER_ADMIN'];
 	$email_parts = explode('@', $emailForm);

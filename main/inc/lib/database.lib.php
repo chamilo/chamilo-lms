@@ -926,6 +926,7 @@ class Database {
 	 * $result = Database::query($query);
 	 * Database::query($query, $connection);
 	 * $result = Database::query($query, $connection);
+	 * The following ways for calling this method are obsolete:
 	 * Database::query($query, __FILE__, __LINE__);
 	 * $result = Database::query($query, __FILE__, __LINE__);
 	 * Database::query($query, $connection, __FILE__, __LINE__);
@@ -941,6 +942,16 @@ class Database {
 			$connection = null;
 		}
 		if (!($result = $use_default_connection ? @mysql_query($query) : @mysql_query($query, $connection))) {
+			// Ivan, 12-FEB-2010: Seeking a way for elimination of the parameters $file and $line.
+			// We ccould retrieve even more information, see http://php.net/manual/en/function.debug-backtrace.php
+			$backtrace = debug_backtrace();
+			if (empty($file)) {
+				$file = $backtrace[0]['file'];
+			}
+			if (empty($line)) {
+				$line = $backtrace[0]['line'];
+			}
+			//
 			$server_type = api_get_setting('server_type');
 			if (!empty($line) && !empty($server_type) && $server_type != 'production') {
 				echo '<pre>' .

@@ -148,7 +148,7 @@ if ($mysqlUserDb != $mysqlMainDb) {
 include '../lang/english/create_course.inc.php';
 
 if ($languageForm != 'english') {
-	include '../lang/$languageForm/create_course.inc.php';
+	include '../lang/'.$languageForm.'/create_course.inc.php';
 }
 
 /**

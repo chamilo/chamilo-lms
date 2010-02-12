@@ -120,7 +120,7 @@ if (api_is_course_admin() || (api_is_course_admin() && $_GET['isStudentView']=='
 		$sql = "SELECT * FROM $table_survey_question
 			WHERE survey_id = '".Database::escape_string($survey_id)."'
 				ORDER BY sort ASC";
-		$result = Database::query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql);
 
 		while ($row = Database::fetch_array($result))
 		{
@@ -142,9 +142,9 @@ if (api_is_course_admin() || (api_is_course_admin() && $_GET['isStudentView']=='
 					AND survey_question.question_id IN (".Database::escape_string(implode(',',$paged_questions[$_GET['show']])).")
 					ORDER BY survey_question.sort, survey_question_option.sort ASC";
 
-			$result = Database::query($sql, __FILE__, __LINE__);
-			$question_counter_max = Database::num_rows($result);			
-			$limit=0;			
+			$result = Database::query($sql);
+			$question_counter_max = Database::num_rows($result);
+			$limit=0;
 			while ($row = Database::fetch_array($result))
 			{
 				// if the type is not a pagebreak we store it in the $questions array
@@ -169,7 +169,7 @@ if (api_is_course_admin() || (api_is_course_admin() && $_GET['isStudentView']=='
 	}
 	// selecting the maximum number of pages
 	$sql = "SELECT * FROM $table_survey_question WHERE type='".Database::escape_string('pagebreak')."' AND survey_id='".Database::escape_string($survey_id)."'";
-	$result = Database::query($sql, __FILE__, __LINE__);
+	$result = Database::query($sql);
 	$numberofpages = Database::num_rows($result) + 1;
 	// Displaying the form with the questions
 	if (isset($_GET['show']))
@@ -181,7 +181,7 @@ if (api_is_course_admin() || (api_is_course_admin() && $_GET['isStudentView']=='
 		$show = 0;
 	}
 	echo '<form id="question" name="question" method="post" action="'.api_get_self().'?survey_id='.Security::remove_XSS($survey_id).'&show='.$show.'">';
-	
+
 	if(is_array($questions) && count($questions)>0)
 	{
 		foreach ($questions as $key=>$question)
@@ -190,7 +190,7 @@ if (api_is_course_admin() || (api_is_course_admin() && $_GET['isStudentView']=='
 			$display->render_question($question);
 		}
 	}
-		
+
 	if (($show < $numberofpages) || (!$_GET['show'] && count($questions) > 0))
 	{
 		echo '<br /><button type="submit" name="next_survey_page" class="next">'.get_lang('NextQuestion').'   </button>';

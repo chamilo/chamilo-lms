@@ -4,7 +4,7 @@
  * @package dokeos.social
  * @author Julio Montoya <gugli100@gmail.com>
  */
- 
+
 // name of the language file that needs to be included
 $language_file=array('userInfo');
 
@@ -18,20 +18,20 @@ require_once ('../inc/lib/xajax/xajax.inc.php');
 api_block_anonymous_users();
 
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js" type="text/javascript" language="javascript"></script>'; //jQuery
-$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/thickbox.js" type="text/javascript" language="javascript"></script>'; 
+$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/thickbox.js" type="text/javascript" language="javascript"></script>';
 $htmlHeadXtra[] = '<link rel="stylesheet" href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/thickbox.css" type="text/css" media="projection, screen">';
 $htmlHeadXtra[] = '<script type="text/javascript">
-		
-function show_icon_edit(element_html) {	
+
+function show_icon_edit(element_html) {
 	ident="#edit_image";
 	$(ident).show();
-}		
+}
 
 function hide_icon_edit(element_html)  {
 	ident="#edit_image";
 	$(ident).hide();
-}		
-		
+}
+
 </script>';
 $xajax = new xajax();
 //$xajax->debugOn();
@@ -75,8 +75,8 @@ if (empty($group_id)) {
 	}
 	//only admin or moderator can do that
 	if (!GroupPortalManager::is_group_member($group_id)) {
-		api_not_allowed();		
-	}	
+		api_not_allowed();
+	}
 }
 
 function search_users($needle,$type) {
@@ -98,7 +98,7 @@ function search_users($needle,$type) {
 		$group_id = Database::escape_string($group_id);
 			// check id_user from session_rel_user table
 			$sql = 'SELECT id_user FROM '.$tbl_group_rel_user.' WHERE group_id ="'.(int)$group_id.'"';
-			$res = Database::query($sql,__FILE__,__LINE__);
+			$res = Database::query($sql);
 			$user_ids = array();
 			if (Database::num_rows($res) > 0) {
 				while ($row = Database::fetch_row($res)) {
@@ -148,7 +148,7 @@ function search_users($needle,$type) {
 			}
 		}
 
-		$rs = Database::query($sql, __FILE__, __LINE__);
+		$rs = Database::query($sql);
         $i=0;
 		if ($type=='single') {
 			while ($user = Database :: fetch_array($rs)) {
@@ -230,28 +230,28 @@ if($_POST['form_sent']) {
 	$firstLetterUser	= $_POST['firstLetterUser'];
 	$firstLetterSession	= $_POST['firstLetterSession'];
 	$user_list			= $_POST['sessionUsersList'];
-		
+
 	$group_id			= intval($_POST['id']);
 
 	if(!is_array($user_list)) {
 		$user_list=array();
 	}
-	if ($form_sent == 1) {		
+	if ($form_sent == 1) {
 		//invite this users
 		$result = GroupPortalManager::add_users_to_groups($user_list, array($group_id), GROUP_USER_PERMISSION_PENDING_INVITATION);
 		$title = get_lang('YouAreInvitedToGroup').' '.$group_info['name'];
 		$content = get_lang('YouAreInvitedToGroupContent').' '.$group_info['name'].' <br />';
 		$content .= get_lang('ToSubscribeClickInTheLinkBelow').' <br />';
 		$content .= '<a href="'.api_get_path(WEB_CODE_PATH).'social/invitations.php?accept='.$group_id.'">'.get_lang('Subscribe').'</a>';
-		
+
 		if (is_array($user_list) && count($user_list) > 0) {
 			//send invitation message
 			foreach($user_list as $user_id ){
-				$result = MessageManager::send_message($user_id, $title, $content);				
+				$result = MessageManager::send_message($user_id, $title, $content);
 			}
-		}		
+		}
 	}
-	
+
 }
 
 $nosessionUsersList = $sessionUsersList = array();
@@ -279,32 +279,32 @@ if ($ajax_search) {
 				WHERE access_url_id = $access_url_id
 				$order_clause";
 		}
-	}	
-	$result=Database::query($sql,__FILE__,__LINE__);
+	}
+	$result=Database::query($sql);
 	$Users=Database::store_result($result);
 	foreach ($Users as $user) {
 		$sessionUsersList[$user['user_id']] = $user ;
 	}
-} else {		
-		$friends = SocialManager::get_friends(api_get_user_id());	
-				
+} else {
+		$friends = SocialManager::get_friends(api_get_user_id());
+
 		$suggest_friends = false;
-		
+
 		if (!$friends) {
-			$suggest_friends = true;	
+			$suggest_friends = true;
 		} else {
 			foreach($friends as $friend) {
-				$group_friend_list = GroupPortalManager::get_groups_by_user($friend['friend_user_id'], 0);				
-				//var_dump($group_friend_list);								
+				$group_friend_list = GroupPortalManager::get_groups_by_user($friend['friend_user_id'], 0);
+				//var_dump($group_friend_list);
 				$friend_group_id = '';
 				if (isset($group_friend_list[$group_id]) && $group_friend_list[$group_id]['id'] == $group_id) {
 					$friend_group_id = $group_id;
 				}
 				//var_dump ($group_friend_list[$group_id]['relation_type']);
-				if ($group_friend_list[$group_id]['relation_type'] == '' ) {				
+				if ($group_friend_list[$group_id]['relation_type'] == '' ) {
 					$Users[$friend['friend_user_id']]=array('user_id' => $friend['friend_user_id'],  'firstname' =>$friend['firstName'], 'lasttname' => $friend['lastName'], 'username' =>$friend['username'],'group_id'=>$friend_group_id );
 				}
-			}			
+			}
 		}
 		if (is_array($Users) && count($Users) > 0 ) {
 			foreach ($Users as $user) {
@@ -333,31 +333,31 @@ if ($add_type == 'multiple') {
 
 	//Shows left column
 	//echo GroupPortalManager::show_group_column_information($group_id, api_get_user_id());
-	
+
 	echo '<div id="social-content">';
-		echo '<div id="social-content-left">';	
+		echo '<div id="social-content-left">';
 			//this include the social menu div
 			SocialManager::show_social_menu('invite_friends',$group_id);
 		echo '</div>';
-		
+
 	echo '<div id="social-content-right">';
-	
+
 	if (count($nosessionUsersList) == 0) {
-		
+
 			echo get_lang('YouNeedToHaveFriendsInYourSocialNetwork');
-			
+
 			echo '<div>';
 			echo '<a href="search.php">'.get_lang('TryAndFindSomeFriends').'</a>';
 			echo '</div>';
-			
+
 			echo '</div>'; // end layout right
-		echo '</div>'; // 	
+		echo '</div>'; //
 		Display::display_footer();
-		exit;		
+		exit;
 	}
 
 ?>
-	
+
 <form name="formulaire" method="post" action="<?php echo api_get_self(); ?>?id=<?php echo $group_id; ?><?php if(!empty($_GET['add'])) echo '&add=true' ; ?>" style="margin:0px;" <?php if($ajax_search){echo ' onsubmit="valide();"';}?>>
 
 <?php
@@ -438,7 +438,7 @@ if(!empty($errorMsg)) {
   	  ?>
   	  <div id="ajax_list_users_multiple">
 	  <select id="origin_users" name="nosessionUsersList[]" multiple="multiple" size="15" style="width:320px;">
-		<?php 
+		<?php
 		foreach($nosessionUsersList as $enreg) {
 		?>
 			<option value="<?php echo $enreg['user_id']; ?>" <?php if(in_array($enreg['user_id'],$UserList)) echo 'selected="selected"'; ?>><?php echo api_get_person_name($enreg['firstname'], $enreg['lastname']).' ('.$enreg['username'].')'; ?></option>
@@ -498,24 +498,24 @@ unset($sessionUsersList);
 </form>
 <?php
 
-//current group members		
+//current group members
 $members = GroupPortalManager::get_users_by_group($group_id, false, array(GROUP_USER_PERMISSION_PENDING_INVITATION));
 if (is_array($members) && count($members)>0) {
-	
+
 	foreach ($members as &$member) {
-		$image_path = UserManager::get_user_picture_path_by_id($member['user_id'], 'web', false, true);												
-		$picture = UserManager::get_picture_user($member['user_id'], $image_path['file'],80);										
+		$image_path = UserManager::get_user_picture_path_by_id($member['user_id'], 'web', false, true);
+		$picture = UserManager::get_picture_user($member['user_id'], $image_path['file'],80);
 		$member['image'] = '<img src="'.$picture['file'].'"  width="50px" height="50px"  />';
-	}	
+	}
 	echo '<span class="social-groups-text1"><strong>'.get_lang('UsersAlreadyInvited').'</strong></span>';
 	Display::display_sortable_grid('invitation_profile', array(), $members, array('hide_navigation'=>true, 'per_page' => 100), $query_vars, false, array(true, false, true,true));
 }
 
 	echo '</div>'; // end layout right
 
-echo '</div>'; // 	
-	
-	
+echo '</div>'; //
+
+
 ?>
 
 <script type="text/javascript">

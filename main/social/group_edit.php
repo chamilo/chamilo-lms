@@ -1,4 +1,4 @@
-<?php 
+<?php
 /* For licensing terms, see /chamilo_license.txt */
 /**
  * @package dokeos.social
@@ -33,17 +33,17 @@ function textarea_maxlength(){
       document.forms[0].description.value = textarea;
    }else{
       textarea = document.forms[0].description.value;
-   } 
+   }
 }
-function show_icon_edit(element_html) {	
+function show_icon_edit(element_html) {
 	ident="#edit_image";
 	$(ident).show();
-}		
+}
 
 function hide_icon_edit(element_html)  {
 	ident="#edit_image";
 	$(ident).hide();
-}		
+}
 </script>';
 
 $group_id = isset($_GET['id']) ? intval($_GET['id']) : intval($_POST['id']);
@@ -55,7 +55,7 @@ $interbreadcrumb[] = array('url' => 'groups.php','name' => get_lang('Groups'));
 $table_group = Database::get_main_table(TABLE_MAIN_GROUP);
 
 $sql = "SELECT * FROM $table_group WHERE id = '".$group_id."'";
-$res = Database::query($sql, __FILE__, __LINE__);
+$res = Database::query($sql);
 if (Database::num_rows($res) != 1) {
 	header('Location: groups.php?id='.$group_id);
 	exit;
@@ -63,8 +63,8 @@ if (Database::num_rows($res) != 1) {
 
 //only group admins can edit the group
 if (!GroupPortalManager::is_group_admin($group_id)) {
-	api_not_allowed();		
-}	
+	api_not_allowed();
+}
 
 $group_data = Database::fetch_array($res, 'ASSOC');
 
@@ -126,10 +126,10 @@ if ( $form->validate()) {
 
 	$name 			= $group['name'];
 	$description	= $group['description'];
-	$url 			= $group['url'];	
+	$url 			= $group['url'];
 	$status 		= intval($group['visibility']);
-		
-	GroupPortalManager::update($group_id, $name, $description, $url, $status, $picture_uri);	
+
+	GroupPortalManager::update($group_id, $name, $description, $url, $status, $picture_uri);
 	$tok = Security::get_token();
 	header('Location: groups.php?id='.$group_id.'&action=show_message&message='.urlencode(get_lang('GroupUpdated')).'&sec_token='.$tok);
 	exit();
@@ -169,15 +169,15 @@ if ($image == '') {
 //echo GroupPortalManager::show_group_column_information($group_id, api_get_user_id());
 
 echo '<div id="social-content">';
-	echo '<div id="social-content-left">';	
+	echo '<div id="social-content-left">';
 	//this include the social menu div
 	SocialManager::show_social_menu('group_edit',$group_id);
 	echo '</div>';
 	echo '<div id="social-content-right">';
 		// Display form
-		$form->display();	
+		$form->display();
 	echo '</div>';
-echo '</div>';	
+echo '</div>';
 
 // Footer
 Display::display_footer();

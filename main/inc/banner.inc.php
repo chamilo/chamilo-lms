@@ -245,6 +245,15 @@ if ($_user['user_id'] && !api_is_anonymous()) {
 		$menu_navigation['social'] = $possible_tabs['social'];
 	}
 
+	// Dashboard
+	if (api_get_setting('show_tabs', 'dashboard') == 'true') {
+		if (api_is_platform_admin() || $_user['status']==DRH) {
+			$navigation['dashboard'] = $possible_tabs['dashboard'];
+		}
+	} else{
+		$menu_navigation['dashboard'] = $possible_tabs['dashboard'];
+	}
+
 	// Administration
 	if(api_is_platform_admin(true)) {
 		if (api_get_setting('show_tabs', 'platform_administration') == 'true') {

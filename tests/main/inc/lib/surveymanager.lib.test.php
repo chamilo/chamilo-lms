@@ -40,7 +40,7 @@ class TestSurveyManager extends UnitTestCase {
 		$this->assertTrue(is_numeric($res));
 		//var_dump($res);
 	}
-		
+
 	function testattach_survey() {
 		$surveyid='';
 		$newsurveyid='';
@@ -115,7 +115,7 @@ class TestSurveyManager extends UnitTestCase {
 		global $_user;
 		$table_user = Database::get_main_table(TABLE_MAIN_USER);
 		$sqlm = "SELECT  status FROM  $table_user WHERE user_id = '".Database::escape_string($_user['user_id'])."'";
-		$resm = Database::query($sqlm,__FILE__,__LINE__);
+		$resm = Database::query($sqlm);
 		$objm=@Database::fetch_object($resm);
 		$ss = $objm->status ;
 		$res=SurveyManager::get_status();
@@ -131,7 +131,7 @@ class TestSurveyManager extends UnitTestCase {
 		$user_table = Database :: get_main_table(TABLE_MAIN_USER);
 		$authorid = Database::escape_string($authorid);
 		$sql_query = "SELECT * FROM $user_table WHERE user_id='$authorid'";
-		$res = Database::query($sql_query, __FILE__, __LINE__);
+		$res = Database::query($sql_query);
 		$firstname=@Database::result($res,0,'firstname');
 		$res=SurveyManager::get_survey_author($authorid);
 		$this->assertTrue(is_null($firstname));

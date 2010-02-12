@@ -34,7 +34,7 @@ class TestHotpotatoes extends UnitTestCase {
 		$this->assertTrue(is_string($res));
 		//var_dump($res);
 
-		
+
 	}
 
 	function testGenerateHpFolder() {
@@ -45,14 +45,14 @@ class TestHotpotatoes extends UnitTestCase {
 	}
 
 	function testGetComment() {
-		
-			$course_code = 'COURSETEST';			
+
+			$course_code = 'COURSETEST';
 			$path = 'exercice_submit.php';
 			$query ="select comment from $dbTable where path='$path'";
 			$res=GetComment($path,$course_code);
 			$this->assertTrue(is_string($res));
 			//var_dump($res);
-			
+
 		}
 
 	/*  Deprecated
@@ -95,7 +95,7 @@ class TestHotpotatoes extends UnitTestCase {
 	}
 
 	function testGetQuizName() {
-		$course_code = 'COURSETEST';	
+		$course_code = 'COURSETEST';
 		$fname='exercice_submit.php';
 		$fpath='main/exercice/exercice_submit.php';
 		$res=GetQuizName($fname,$fpath);
@@ -156,17 +156,17 @@ class TestHotpotatoes extends UnitTestCase {
 		$comment='testing this function';
 		$comment = Database::escape_string($comment);
 		$query = "UPDATE $dbTable set comment='$comment' where path='$path'";
-		$result = Database::query($query,__FILE__,__LINE__);
+		$result = Database::query($query);
 		$res=SetComment($path,$comment);
 		$this->assertTrue(is_string($res));
 		//var_dump($resu);
 	}
 
 	function testWriteFileCont() {
-		$course_code = 'COURSETEST';	
+		$course_code = 'COURSETEST';
 		$full_file_path='/main/exercice/';
 		$content='test test test';
-		$res=WriteFileCont($full_file_path,$content);	
+		$res=WriteFileCont($full_file_path,$content);
 		$this->assertTrue(is_bool($res));
 		//var_dump($res);
 	}

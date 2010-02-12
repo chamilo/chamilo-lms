@@ -7,7 +7,7 @@ class TestChatFunctions extends UnitTestCase {
 	public function setUp() {
 		$this->tcourse = new CourseManager();
 	}
-	
+
 	public function tearDown() {
 		$this->tcourse = null;
 	}
@@ -16,13 +16,13 @@ class TestChatFunctions extends UnitTestCase {
 
 	function testuser_connected_in_chat () {
 		$course_code = 'COURSETEST';
-		$user_id=1;			
+		$user_id=1;
 		$course_info = api_get_course_info($course_code);
 		$database_name = $course_info['dbName'];
 		$res = user_connected_in_chat($user_id,$database_name);
- 		$this->assertTrue(is_bool($res)); 	
+ 		$this->assertTrue(is_bool($res));
 	}
-	
+
 
 	function testUsersListInChat () {
 		$course_code = 'COURSETEST';
@@ -32,7 +32,7 @@ class TestChatFunctions extends UnitTestCase {
  		$this->assertTrue(is_array($res));
  		//var_dump($res);
 	}
-	
+
 	function CreateChatConnection($database_name) {
 		$session_id = 1;
 		$tbl_chat_connected = Database::get_course_chat_connected_table($database_name);
@@ -45,9 +45,9 @@ class TestChatFunctions extends UnitTestCase {
 		} else {
 			$query="UPDATE $tbl_chat_connected set last_connection='".$current_time."' WHERE user_id=1 AND session_id='$session_id'";
 		}
-		Database::query($query,__FILE__,__LINE__);
+		Database::query($query);
 	}
-	
+
 
 	function testExitOfChat () {
 		$course_code = 'COURSETEST';
@@ -60,16 +60,16 @@ class TestChatFunctions extends UnitTestCase {
  		$this->assertTrue(is_null($res));
  		//var_dump($res);
 	}
-	
-	
+
+
 		function testDisconnectUserOfChat() {
 		$_SESSION['is_courseAdmin'] = 1;
 		$course_code = 'COURSETEST';
 		$course_info = api_get_course_info($course_code);
 		$database_name = $course_info['dbName'];
-		$this->CreateChatConnection($database_name);		
+		$this->CreateChatConnection($database_name);
 		$res = disconnect_user_of_chat($database_name);
 		$this->assertTrue(is_null($res));
-	}		
+	}
 }
 ?>

@@ -45,7 +45,7 @@ class TestDatabase extends UnitTestCase {
 
 	public function testFetchArray() {
 		$sql = 'select 1';
-		$res=Database::query($sql,__FILE__,__LINE__);
+		$res=Database::query($sql);
 		$resu=$this->dbase->fetch_array($res);
 		$this->assertTrue(is_array($resu));
 		$this->assertFalse(is_null($resu));
@@ -53,21 +53,21 @@ class TestDatabase extends UnitTestCase {
 
 	public function testFetchArrayError() {
 		$sql ="SELECT  1";
-		$res=Database::query($sql,__FILE__,__LINE__);
+		$res=Database::query($sql);
 		$resu=$this->dbase->fetch_array($res);
 		$this->assertTrue(is_array($resu));
 	}
 
 	function testFetchObject() {
 		$sql ="SELECT  1";
-		$res=Database::query($sql,__FILE__,__LINE__);
+		$res=Database::query($sql);
 		$resu=$this->dbase->fetch_object($res);
 		$this->assertTrue(is_object($resu));
 	}
 
 	function testFetchRow() {
 		$sql ="SELECT  1";
-		$res=Database::query($sql,__FILE__,__LINE__);
+		$res=Database::query($sql);
 		$resu=$this->dbase->fetch_row($res);
 		$this->assertTrue(is_array($resu));
 	}
@@ -282,13 +282,13 @@ class TestDatabase extends UnitTestCase {
 
 	function testQuery() {
 		$sql ="SELECT 1";
-		$res=$this->dbase->query($sql,__FILE__,__LINE__);
+		$res=$this->dbase->query($sql);
 		$this->assertTrue(is_resource($res));
 	}
 
 	function testResult() {
 		$sql="SELECT * FROM chamilo_main.user";
-		$resource= Database::query($sql,__FILE__,__LINE__);
+		$resource= Database::query($sql);
 		$row= 1;
 		$res= Database::result($resource, $row);
 		$this->assertTrue(is_string($res));
@@ -297,7 +297,7 @@ class TestDatabase extends UnitTestCase {
 
 	function testStoreResult(){
 		$sql="SELECT 1";
-		$resource=$this->dbase->query($sql,__FILE__,__LINE__);
+		$resource=$this->dbase->query($sql);
 		$res = $this->dbase->store_result($resource);
 		$this->assertTrue(is_array($res));
 		//var_dump($res);

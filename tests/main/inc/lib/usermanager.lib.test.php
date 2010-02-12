@@ -171,7 +171,7 @@ class TestUserManager extends UnitTestCase
 
 	function testGetExtraFieldInformationByName() {
 		$sql="SELECT 1";
-		$field_variable=Database::query($sql,__FILE__,__LINE__);
+		$field_variable=Database::query($sql);
 		$res=UserManager::get_extra_field_information_by_name($field_variable);
 		//var_dump($res);
 		$this->assertTrue(is_bool($res));

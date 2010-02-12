@@ -38,12 +38,12 @@ function text_longitud(){
       document.forms[0].description.value = textarea;
    }else{
       textarea = document.forms[0].description.value;
-   } 
-} 
+   }
+}
 </script>';
 
 $sql = "SELECT * FROM $table_group WHERE id = '".$group_id."'";
-$res = Database::query($sql, __FILE__, __LINE__);
+$res = Database::query($sql);
 if (Database::num_rows($res) != 1) {
 	header('Location: group_list.php');
 	exit;
@@ -96,7 +96,7 @@ $form->setDefaults($group_data);
 // Validate form
 if ( $form->validate()) {
 	$group = $form->exportValues();
-	
+
 	$picture_element = & $form->getElement('picture');
 	$picture = $picture_element->getValue();
 
@@ -107,13 +107,13 @@ if ( $form->validate()) {
 	elseif (!empty($picture['name'])) {
 		$picture_uri = GroupPortalManager::update_group_picture($group_id, $_FILES['picture']['name'], $_FILES['picture']['tmp_name']);
 	}
-	
+
 	$name 			= $group['name'];
 	$description	= $group['description'];
-	$url 			= $group['url'];	
+	$url 			= $group['url'];
 	$status 		= intval($group['visibility']);
-	
-	GroupPortalManager::update($group_id, $name, $description, $url, $status, $picture_uri);	
+
+	GroupPortalManager::update($group_id, $name, $description, $url, $status, $picture_uri);
 	$tok = Security::get_token();
 	header('Location: group_list.php?action=show_message&message='.urlencode(get_lang('GroupUpdated')).'&sec_token='.$tok);
 	exit();

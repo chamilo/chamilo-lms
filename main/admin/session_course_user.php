@@ -47,7 +47,7 @@ if (empty($id_user) || empty($id_session)) {
 
 if (!api_is_platform_admin()) {
 	$sql = 'SELECT session_admin_id FROM '.Database :: get_main_table(TABLE_MAIN_SESSION).' WHERE id='.$id_session;
-	$rs = Database::query($sql, __FILE__, __LINE__);
+	$rs = Database::query($sql);
 	if (Database::result($rs,0,0)!=$_user['user_id']) {
 		api_not_allowed(true);
 	}
@@ -73,7 +73,7 @@ if ($_POST['formSent']) {
 			ON (srcru.id_session =  session_rel_course.id_session)
 			WHERE id_user = $id_user and session_rel_course.id_session = $id_session";
 
-	$rs = Database::query($sql, __FILE__, __LINE__);
+	$rs = Database::query($sql);
 	$existingCourses = Database::store_result($rs);
 	if (count($CourseList) == count($existingCourses)) {
 		header('Location: session_course_user.php?id_session='.$id_session.'&id_user='.$id_user.'&msg='.get_lang('MaybeYouWantToDeleteThisUserFromSession'));
@@ -90,11 +90,11 @@ if ($_POST['formSent']) {
 			$enreg_course = Database::escape_string($enreg_course);
 			$sql_delete = "DELETE FROM $tbl_session_rel_course_rel_user
 							WHERE id_user='".$id_user."'  AND course_code='".$enreg_course."' AND id_session=$id_session";
-			Database::query($sql_delete,__FILE__, __LINE__);
+			Database::query($sql_delete);
 			if(Database::affected_rows()) {
 				//update session rel course table
 				$sql_update  = "UPDATE $tbl_session_rel_course SET nbr_users= nbr_users - 1 WHERE id_session='$id_session' AND course_code='$enreg_course'";
-				Database::query($sql_update,__FILE__, __LINE__);
+				Database::query($sql_update);
 			}
 		}
 	}
@@ -103,11 +103,11 @@ if ($_POST['formSent']) {
 		if(!in_array($existingCourse['code'], $CourseList)){
 			$existingCourse = Database::escape_string($existingCourse['code']);
 			$sql_insert = "INSERT IGNORE INTO $tbl_session_rel_course_rel_user(id_session,course_code,id_user) VALUES('$id_session','$existingCourse','$id_user')";
-			Database::query($sql_insert,__FILE__, __LINE__);
+			Database::query($sql_insert);
 			if(Database::affected_rows()) {
 				//update session rel course table
 				$sql_update  = "UPDATE $tbl_session_rel_course SET nbr_users= nbr_users + 1 WHERE id_session='$id_session' AND course_code='$existingCourse'";
-				Database::query($sql_update,__FILE__, __LINE__);
+				Database::query($sql_update);
 			}
 
 		}
@@ -170,10 +170,10 @@ if ($_configuration['multiple_access_urls']==true) {
 	}
 }*/
 
-$result=Database::query($sql,__FILE__,__LINE__);
+$result=Database::query($sql);
 $Courses=Database::store_result($result);
 
-$result=Database::query($sql_all,__FILE__,__LINE__);
+$result=Database::query($sql_all);
 $CoursesAll=Database::store_result($result);
 
 $course_temp = array();

@@ -67,7 +67,7 @@ if ($_configuration['multiple_access_urls']==true) {
 		ORDER BY visual_code";
 	}
 }
-$result = Database::query($sql, __FILE__, __LINE__);
+$result = Database::query($sql);
 while ($course = Database::fetch_object($result))
 {
 	$courses[$course->code] = $course->visual_code.' - '.$course->title;
@@ -134,7 +134,7 @@ if ($form->validate())
 		}
 
 	}
-	$res = Database::query($sql,__FILE__,__LINE__);
+	$res = Database::query($sql);
 	while($user = Database::fetch_array($res,'ASSOC')) {
 		$student_data= UserManager :: get_extra_user_data($user['UserId'],true,false);
 		foreach($student_data as $key=>$value) {

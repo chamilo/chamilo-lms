@@ -31,7 +31,7 @@ function validate_data($users_courses) {
 				// 2.1.1 Check whether course with this code exists in the system.
 				$course_table = Database :: get_main_table(TABLE_MAIN_COURSE);
 				$sql = "SELECT * FROM $course_table WHERE code = '".Database::escape_string($user_course['CourseCode'])."'";
-				$res = Database::query($sql, __FILE__, __LINE__);
+				$res = Database::query($sql);
 				if (Database::num_rows($res) == 0) {
 					$user_course['error'] = get_lang('CodeDoesNotExists');
 					$errors[] = $user_course;
@@ -72,11 +72,11 @@ function save_data($users_courses) {
 	foreach($csv_data as $username => $csv_subscriptions) {
 		$user_id = 0;
 		$sql = "SELECT * FROM $user_table u WHERE u.username = '".Database::escape_string($username)."'";
-		$res = Database::query($sql, __FILE__, __LINE__);
+		$res = Database::query($sql);
 		$obj = Database::fetch_object($res);
 		$user_id = $obj->user_id;
 		$sql = "SELECT * FROM $course_user_table cu WHERE cu.user_id = $user_id";
-		$res = Database::query($sql, __FILE__, __LINE__);
+		$res = Database::query($sql);
 		$db_subscriptions = array();
 		while($obj = Database::fetch_object($res)) {
 			$db_subscriptions[$obj->course_code] = $obj->status;

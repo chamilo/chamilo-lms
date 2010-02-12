@@ -45,7 +45,7 @@ function get_number_of_classes() {
 	if (isset ($_GET['keyword'])) {
 		$sql .= " WHERE (name LIKE '%".Database::escape_string(trim($_GET['keyword']))."%')";
 	}
-	$res = Database::query($sql, __FILE__, __LINE__);
+	$res = Database::query($sql);
 	$obj = Database::fetch_object($res);
 	return $obj->number_of_classes;
 }
@@ -71,7 +71,7 @@ function get_class_data($from, $number_of_items, $column, $direction) {
 		$sql .= " WHERE (name LIKE '%".Database::escape_string(trim($_GET['keyword']))."%')";
 	}
 	$sql .= " GROUP BY id,name ORDER BY col$column $direction LIMIT $from,$number_of_items";
-	$res = Database::query($sql, __FILE__, __LINE__);
+	$res = Database::query($sql);
 	$classes = array ();
 	while ($class = Database::fetch_row($res)) {
 		$classes[] = $class;

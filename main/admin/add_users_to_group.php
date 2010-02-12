@@ -55,47 +55,47 @@ function search_users($needle,$type,$relation_type) {
 		$group_id = intval($group_id);
 		$relation_type = intval($relation_type);
 		// get user_id from relation type and group id
-		$sql = "SELECT user_id FROM $tbl_group_rel_user 
+		$sql = "SELECT user_id FROM $tbl_group_rel_user
 				WHERE group_id = '$group_id'
 				AND relation_type IN (".GROUP_USER_PERMISSION_ADMIN.",".GROUP_USER_PERMISSION_READER.",".GROUP_USER_PERMISSION_PENDING_INVITATION.",".GROUP_USER_PERMISSION_MODERATOR.") ";
-		$res = Database::query($sql,__FILE__,__LINE__);
+		$res = Database::query($sql);
 		$user_ids = array();
-		if (Database::num_rows($res) > 0) {		
+		if (Database::num_rows($res) > 0) {
 			while ($row = Database::fetch_row($res)) {
 				$user_ids[] = $row[0];
 			}
 			$without_user_id = " AND user_id NOT IN(".implode(',',$user_ids).") ";
 		}
-		
+
 		if ($relation_type==GROUP_USER_PERMISSION_PENDING_INVITATION) {
-			$condition_relation = " AND groups.relation_type IN (".GROUP_USER_PERMISSION_PENDING_INVITATION.",".GROUP_USER_PERMISSION_READER.") ";	
+			$condition_relation = " AND groups.relation_type IN (".GROUP_USER_PERMISSION_PENDING_INVITATION.",".GROUP_USER_PERMISSION_READER.") ";
 		} else {
 			$condition_relation = " AND groups.relation_type = '$relation_type' ";
 		}
 
-		// data for destination user list		
-		$sql = "SELECT user.user_id, user.username, user.lastname, user.firstname 
+		// data for destination user list
+		$sql = "SELECT user.user_id, user.username, user.lastname, user.firstname
 				FROM $tbl_group_rel_user groups
 				INNER JOIN  $tbl_user user ON user.user_id = groups.user_id
-				WHERE groups.group_id = '$group_id' $condition_relation ";			
-		
-		$rs_destination = Database::query($sql,__FILE__,__LINE__);		
+				WHERE groups.group_id = '$group_id' $condition_relation ";
+
+		$rs_destination = Database::query($sql);
 		if (Database::num_rows($rs_destination) > 0) {
 			$return_destination .= '<select id="destination_users" name="sessionUsersList[]" multiple="multiple" size="15" style="width:360px;">';
-			while ($row = Database::fetch_array($rs_destination)) {				
+			while ($row = Database::fetch_array($rs_destination)) {
 				$person_name = api_get_person_name($row['firstname'], $row['lastname']);
-		        $return_destination .= '<option value="'.$row['user_id'].'">'.$person_name.' ('.$row['username'].')</option>';				
+		        $return_destination .= '<option value="'.$row['user_id'].'">'.$person_name.' ('.$row['username'].')</option>';
 			}
-			$return_destination .= '</select>';									
+			$return_destination .= '</select>';
 		} else {
 			$return_destination .= '<select id="destination_users" name="sessionUsersList[]" multiple="multiple" size="15" style="width:360px;"></select>';
 		}
 		$xajax_response -> addAssign('ajax_destination_list','innerHTML',api_utf8_encode($return_destination));
-		
+
 	} else {
 		$return_destination .= '<select id="destination_users" name="sessionUsersList[]" multiple="multiple" size="15" style="width:360px;"></select>';
 		$xajax_response -> addAssign('ajax_destination_list','innerHTML',api_utf8_encode($return_destination));
-		
+
 		if ($type == 'single') {
 			$return.= '';
 			$xajax_response -> addAssign('ajax_list_users_single','innerHTML',api_utf8_encode($return));
@@ -104,24 +104,24 @@ function search_users($needle,$type,$relation_type) {
 			$xajax_response -> addAssign('ajax_origin_list_multiple','innerHTML',api_utf8_encode($return_origin));
 		}
 	}
-	
+
 	if (!empty($needle) && !empty($type)) {
 
 		// xajax send utf8 datas... datas in db can be non-utf8 datas
 		$charset = api_get_setting('platform_charset');
 		$needle = Database::escape_string($needle);
 		$needle = api_convert_encoding($needle, $charset, 'utf-8');
-		$user_anonymous=api_get_anonymous_id();		
+		$user_anonymous=api_get_anonymous_id();
 		$tbl_user_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
-		
-		$order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname, username' : ' ORDER BY lastname, firstname, username';						
-		if ($type == 'single') {					
-			if (!empty($group_id) && !empty($relation_type)) {	
+
+		$order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname, username' : ' ORDER BY lastname, firstname, username';
+		if ($type == 'single') {
+			if (!empty($group_id) && !empty($relation_type)) {
 				// search users where username or firstname or lastname begins likes $needle
 				$sql = "SELECT user_id, username, lastname, firstname FROM $tbl_user user
 						WHERE (username LIKE '$needle%' OR firstname LIKE '$needle%' OR lastname LIKE '$needle%')
 						AND user_id<>'$user_anonymous' $without_user_id $order_clause LIMIT 11";
-				if ($_configuration['multiple_access_urls']==true) {			
+				if ($_configuration['multiple_access_urls']==true) {
 					$access_url_id = api_get_current_access_url_id();
 					if ($access_url_id != -1) {
 						$sql = "SELECT user.user_id, username, lastname, firstname FROM $tbl_user user
@@ -130,7 +130,7 @@ function search_users($needle,$type,$relation_type) {
 								AND user.user_id<>'$user_anonymous' $without_user_id $order_clause LIMIT 11 ";
 					}
 				}
-				$rs_single = Database::query($sql, __FILE__, __LINE__);
+				$rs_single = Database::query($sql);
 	        	$i=0;
 				while ($user = Database :: fetch_array($rs_single)) {
 		            $i++;
@@ -141,37 +141,37 @@ function search_users($needle,$type,$relation_type) {
 		            	$return .= '...<br />';
 		            }
 				}
-				$xajax_response -> addAssign('ajax_list_users_single','innerHTML',api_utf8_encode($return));				
+				$xajax_response -> addAssign('ajax_list_users_single','innerHTML',api_utf8_encode($return));
 			} else {
 				$xajax_response ->addAlert(get_lang('YouMustChooseARelationType'));
 				$xajax_response->addClear('user_to_add', 'value');
 			}
-				
+
 		} else {
 			// multiple
 			if (!empty($group_id) && !empty($relation_type)) {
 				$sql = "SELECT user_id, username, lastname, firstname FROM $tbl_user user
 					WHERE ".(api_sort_by_first_name() ? 'firstname' : 'lastname')." LIKE '$needle%' AND user_id<>'$user_anonymous' $without_user_id $order_clause ";
-				if ($_configuration['multiple_access_urls']==true) {			
+				if ($_configuration['multiple_access_urls']==true) {
 					$access_url_id = api_get_current_access_url_id();
 					if ($access_url_id != -1) {
 						$sql = "SELECT user.user_id, username, lastname, firstname FROM $tbl_user user
 								INNER JOIN $tbl_user_rel_access_url url_user ON (url_user.user_id=user.user_id)
 								WHERE access_url_id = '$access_url_id'
-								AND ".(api_sort_by_first_name() ? 'firstname' : 'lastname')." LIKE '$needle%' 
+								AND ".(api_sort_by_first_name() ? 'firstname' : 'lastname')." LIKE '$needle%'
 								AND user.user_id<>'$user_anonymous' $without_user_id $order_clause ";
 					}
 				}
-				$rs_multiple = Database::query($sql, __FILE__, __LINE__);
-				$return_origin .= '<select id="origin_users" name="nosessionUsersList[]" multiple="multiple" size="15" style="width:360px;">';				
+				$rs_multiple = Database::query($sql);
+				$return_origin .= '<select id="origin_users" name="nosessionUsersList[]" multiple="multiple" size="15" style="width:360px;">';
 				while ($user = Database :: fetch_array($rs_multiple)) {
 					$person_name = api_get_person_name($user['firstname'], $user['lastname']);
 		            $return_origin .= '<option value="'.$user['user_id'].'">'.$person_name.' ('.$user['username'].')</option>';
 				}
-				$return_origin .= '</select>';				
+				$return_origin .= '</select>';
 				$xajax_response -> addAssign('ajax_origin_list_multiple','innerHTML',api_utf8_encode($return_origin));
-			}						
-		}			
+			}
+		}
 	}
 	return $xajax_response;
 }
@@ -223,33 +223,33 @@ $users=$sessions=array();
 $noPHP_SELF=true;
 
 $group_info = GroupPortalManager::get_group_data($group_id);
-$group_name = $group_info['name']; 
+$group_name = $group_info['name'];
 
 Display::display_header($group_name);
 
 if($_POST['form_sent']) {
-	
+
 	$form_sent			= $_POST['form_sent'];
-	$firstLetterUser	= $_POST['firstLetterUser'];	
+	$firstLetterUser	= $_POST['firstLetterUser'];
 	$UserList			= $_POST['sessionUsersList'];
 	$group_id			= intval($_POST['id']);
 	$relation_type		= intval($_POST['relation']);
-	
+
 	if(!is_array($UserList)) {
 		$UserList=array();
 	}
 	if ($form_sent == 1) {
-		if ($relation_type == GROUP_USER_PERMISSION_PENDING_INVITATION) {	
+		if ($relation_type == GROUP_USER_PERMISSION_PENDING_INVITATION) {
 			$relations = array(GROUP_USER_PERMISSION_PENDING_INVITATION,GROUP_USER_PERMISSION_READER);
 			$users_by_group = GroupPortalManager::get_users_by_group($group_id,null,$relations);
-			$user_id_relation = array_keys($users_by_group);		
+			$user_id_relation = array_keys($users_by_group);
 			$user_relation_diff = array_diff($user_id_relation,$UserList);
 			foreach ($user_relation_diff as $user_id) {
 				GroupPortalManager::delete_user_rel_group($user_id,$group_id);
 			}
 		} else {
-			GroupPortalManager::delete_users($group_id, $relation_type);			
-		}		
+			GroupPortalManager::delete_users($group_id, $relation_type);
+		}
 		$result = GroupPortalManager::add_users_to_groups($UserList, array($group_id), $relation_type);
 		Display :: display_confirmation_message(get_lang('UsersEdited'));
 	}
@@ -261,110 +261,110 @@ $ajax_search = $add_type == 'unique' ? true : false;
 $order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname, username' : ' ORDER BY lastname, firstname, username';
 
 if ($ajax_search) {
-				
-	// data for destination list				
+
+	// data for destination list
 	if (isset($_POST['id']) && isset($_POST['relation'])) {
-		// data for destination user list		
+		// data for destination user list
 		$id = intval($_POST['id']);
 		$relation_type = intval($_POST['relation']);
 		$condition_relation = "";
-		
+
 		if ($relation_type==GROUP_USER_PERMISSION_PENDING_INVITATION) {
-			$condition_relation = " AND groups.relation_type IN (".GROUP_USER_PERMISSION_PENDING_INVITATION.",".GROUP_USER_PERMISSION_READER.") ";	
+			$condition_relation = " AND groups.relation_type IN (".GROUP_USER_PERMISSION_PENDING_INVITATION.",".GROUP_USER_PERMISSION_READER.") ";
 		} else {
 			$condition_relation = " AND groups.relation_type = '$relation_type' ";
 		}
-					
-		$sql = "SELECT user.user_id, user.username, user.lastname, user.firstname 
+
+		$sql = "SELECT user.user_id, user.username, user.lastname, user.firstname
 				FROM $tbl_group_rel_user groups
 				INNER JOIN  $tbl_user user ON user.user_id = groups.user_id
-				WHERE groups.group_id = '$id' $condition_relation ";			
-		$rs_destination = Database::query($sql,__FILE__,__LINE__);		
-		if (Database::num_rows($rs_destination) > 0) {					
-			while ($row_destination_list = Database::fetch_array($rs_destination)) {														
-				$sessionUsersList[$row_destination_list['user_id']] = $row_destination_list ;				
-			}											
-		} 
+				WHERE groups.group_id = '$id' $condition_relation ";
+		$rs_destination = Database::query($sql);
+		if (Database::num_rows($rs_destination) > 0) {
+			while ($row_destination_list = Database::fetch_array($rs_destination)) {
+				$sessionUsersList[$row_destination_list['user_id']] = $row_destination_list ;
+			}
+		}
 	}
 
 } else {
-	
-	$many_users = false;	
+
+	$many_users = false;
 	$sql = "SELECT count(user_id) FROM $tbl_user user
 			WHERE ".(api_sort_by_first_name() ? 'firstname' : 'lastname')." LIKE '$needle%' AND user_id<>'$user_anonymous' $without_user_id ";
-	if ($_configuration['multiple_access_urls']==true) {			
+	if ($_configuration['multiple_access_urls']==true) {
 		$access_url_id = api_get_current_access_url_id();
 		if ($access_url_id != -1) {
 			$sql = "SELECT count(user.user_id) FROM $tbl_user user
 					INNER JOIN $tbl_user_rel_access_url url_user ON (url_user.user_id=user.user_id)
 					WHERE access_url_id = '$access_url_id'
-					AND ".(api_sort_by_first_name() ? 'firstname' : 'lastname')." LIKE '$needle%' 
+					AND ".(api_sort_by_first_name() ? 'firstname' : 'lastname')." LIKE '$needle%'
 					AND user.user_id<>'$user_anonymous' $without_user_id ";
 		}
-	}				
-	$rs_count  = Database::query($sql,__FILE__,__LINE__);
-	$row_count = Database::fetch_row($rs_count);	
+	}
+	$rs_count  = Database::query($sql);
+	$row_count = Database::fetch_row($rs_count);
 	if ($row_count > 2) $many_users = true;
-		
-	// data for origin list	
-	if (isset($_POST['id']) && isset($_POST['firstLetterUser'])) {				
+
+	// data for origin list
+	if (isset($_POST['id']) && isset($_POST['firstLetterUser'])) {
 		$id = intval($_POST['id']);
 		$needle = Database::escape_string($_POST['firstLetterUser']);
 		$needle = api_convert_encoding($needle, $charset, 'utf-8');
 		$user_anonymous=api_get_anonymous_id();
 		// get user_id from relation type and group id
-		$sql = "SELECT user_id FROM $tbl_group_rel_user 
+		$sql = "SELECT user_id FROM $tbl_group_rel_user
 				WHERE group_id = '$id'
 				AND relation_type IN (".GROUP_USER_PERMISSION_ADMIN.",".GROUP_USER_PERMISSION_READER.",".GROUP_USER_PERMISSION_PENDING_INVITATION.",".GROUP_USER_PERMISSION_MODERATOR.") ";
-		$res = Database::query($sql,__FILE__,__LINE__);
+		$res = Database::query($sql);
 		$user_ids = array();
-		if (Database::num_rows($res) > 0) {		
+		if (Database::num_rows($res) > 0) {
 			while ($row = Database::fetch_row($res)) {
 				$user_ids[] = $row[0];
 			}
 			$without_user_id = " AND user_id NOT IN(".implode(',',$user_ids).") ";
 		}
-		
+
 		$sql = "SELECT user_id, username, lastname, firstname FROM $tbl_user user
 				WHERE ".(api_sort_by_first_name() ? 'firstname' : 'lastname')." LIKE '$needle%' AND user_id<>'$user_anonymous' $without_user_id $order_clause ";
-		if ($_configuration['multiple_access_urls']==true) {			
+		if ($_configuration['multiple_access_urls']==true) {
 			$access_url_id = api_get_current_access_url_id();
 			if ($access_url_id != -1) {
 				$sql = "SELECT user.user_id, username, lastname, firstname FROM $tbl_user user
 						INNER JOIN $tbl_user_rel_access_url url_user ON (url_user.user_id=user.user_id)
 						WHERE access_url_id = '$access_url_id'
-						AND ".(api_sort_by_first_name() ? 'firstname' : 'lastname')." LIKE '$needle%' 
+						AND ".(api_sort_by_first_name() ? 'firstname' : 'lastname')." LIKE '$needle%'
 						AND user.user_id<>'$user_anonymous' $without_user_id $order_clause ";
 			}
 		}
-		$rs_origin_list = Database::query($sql, __FILE__, __LINE__);
+		$rs_origin_list = Database::query($sql);
 		while ($row_origin_list = Database::fetch_array($rs_origin_list)) {
 			$nosessionUsersList[$row_origin_list['user_id']] = $row_origin_list;
-		}							   						
+		}
 	}
-	
-	// data for destination list				
+
+	// data for destination list
 	if (isset($_POST['id']) && isset($_POST['relation'])) {
-		// data for destination user list		
+		// data for destination user list
 		$id = intval($_POST['id']);
 		$relation_type = intval($_POST['relation']);
 
 		if ($relation_type==GROUP_USER_PERMISSION_PENDING_INVITATION) {
-			$condition_relation = " AND groups.relation_type IN (".GROUP_USER_PERMISSION_PENDING_INVITATION.",".GROUP_USER_PERMISSION_READER.") ";	
+			$condition_relation = " AND groups.relation_type IN (".GROUP_USER_PERMISSION_PENDING_INVITATION.",".GROUP_USER_PERMISSION_READER.") ";
 		} else {
 			$condition_relation = " AND groups.relation_type = '$relation_type' ";
 		}
-			
-		$sql = "SELECT user.user_id, user.username, user.lastname, user.firstname 
+
+		$sql = "SELECT user.user_id, user.username, user.lastname, user.firstname
 				FROM $tbl_group_rel_user groups
 				INNER JOIN  $tbl_user user ON user.user_id = groups.user_id
-				WHERE groups.group_id = '$id' $condition_relation ";			
-		$rs_destination = Database::query($sql,__FILE__,__LINE__);		
-		if (Database::num_rows($rs_destination) > 0) {					
-			while ($row_destination_list = Database::fetch_array($rs_destination)) {														
-				$sessionUsersList[$row_destination_list['user_id']] = $row_destination_list ;				
-			}											
-		} 
+				WHERE groups.group_id = '$id' $condition_relation ";
+		$rs_destination = Database::query($sql);
+		if (Database::num_rows($rs_destination) > 0) {
+			while ($row_destination_list = Database::fetch_array($rs_destination)) {
+				$sessionUsersList[$row_destination_list['user_id']] = $row_destination_list ;
+			}
+		}
 	}
 }
 
@@ -453,7 +453,7 @@ if(!empty($errorMsg)) {
 	     <select name="firstLetterUser" id="firstLetterUser" onchange = "xajax_search_users(this.value,'multiple',document.getElementById('relation').value)" >
 	      <option value = "%"><?php echo get_lang('All') ?></option>
 	      <?php
-	      	$selected_letter = isset($_POST['firstLetterUser'])?$_POST['firstLetterUser']:'';      	
+	      	$selected_letter = isset($_POST['firstLetterUser'])?$_POST['firstLetterUser']:'';
 	        echo Display :: get_alphabet_options($selected_letter);
 	      ?>
 	     </select>
@@ -476,14 +476,14 @@ if(!empty($errorMsg)) {
   	  <div id="ajax_origin_list_multiple">
 	  <select id="origin_users" name="nosessionUsersList[]" multiple="multiple" size="15" style="width:360px;">
 		<?php
-		
+
 		if (!empty($nosessionUsersList)) {
 			foreach($nosessionUsersList as $enreg) {
 			?>
 				<option value="<?php echo $enreg['user_id']; ?>"  > <?php echo $enreg['firstname'].' '.$enreg['lastname'].' ('.$enreg['username'].')'; ?></option>
 			<?php
 			}
-		}			
+		}
 		?>
 	  </select>
 	  </div>
@@ -511,12 +511,12 @@ if(!empty($errorMsg)) {
   </td>
   <td align="center">
   <div id="ajax_destination_list">
-  <select id="destination_users" name="sessionUsersList[]" multiple="multiple" size="15" style="width:360px;">  
-	<?php 
+  <select id="destination_users" name="sessionUsersList[]" multiple="multiple" size="15" style="width:360px;">
+	<?php
 	if (!empty($sessionUsersList)) {
 		foreach($sessionUsersList as $enreg) { ?>
 			<option value="<?php echo $enreg['user_id']; ?>"><?php echo $enreg['firstname'].' '.$enreg['lastname'].' ('.$enreg['username'].')'; ?></option>
-	<?php }  
+	<?php }
 	} unset($sessionUsersList);?>
   </select>
   </div>
@@ -573,7 +573,7 @@ function mysort(a, b){
 }
 
 function valide() {
-	
+
 	var relation_select = document.getElementById('relation');
 	if (relation_select && relation_select.value=="") {
 		alert("<?php echo get_lang('YouMustChooseARelationType')?>");

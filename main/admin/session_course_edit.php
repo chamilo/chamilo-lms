@@ -37,7 +37,7 @@ $interbreadcrumb[]=array('url' => "session_list.php","name" => get_lang("Session
 $interbreadcrumb[]=array('url' => "../admin/resume_session.php?id_session=".Security::remove_XSS($_REQUEST['id_session']),"name" => get_lang('SessionOverview'));
 $interbreadcrumb[]=array('url' => "session_course_list.php?id_session=$id_session","name" =>api_htmlentities($session_name,ENT_QUOTES,$charset));
 
-$result = Database::query("SELECT s.name, c.title FROM $tbl_session_course sc,$tbl_session s,$tbl_course c WHERE sc.id_session=s.id AND sc.course_code=c.code AND sc.id_session='$id_session' AND sc.course_code='".addslashes($course_code)."'",__FILE__,__LINE__);
+$result = Database::query("SELECT s.name, c.title FROM $tbl_session_course sc,$tbl_session s,$tbl_course c WHERE sc.id_session=s.id AND sc.course_code=c.code AND sc.id_session='$id_session' AND sc.course_code='".addslashes($course_code)."'");
 
 if (!list($session_name,$course_title)=Database::fetch_row($result)) {
 	header('Location: session_course_list.php?id_session='.$id_session);
@@ -50,7 +50,7 @@ if ($_POST['formSent']) {
 
 	// get all tutor by course_code in the session
 	$sql = "SELECT id_user FROM $tbl_session_rel_course_rel_user WHERE id_session = '$id_session' AND course_code = '$course_code' AND status = 2";
-	$rs_coachs = Database::query($sql,__FILE__,__LINE__);
+	$rs_coachs = Database::query($sql);
 
 	$coachs_course_session = array();
 	if (Database::num_rows($rs_coachs) > 0){
@@ -83,7 +83,7 @@ if ($_POST['formSent']) {
 }else {
 
 	$sql = "SELECT id_user FROM $tbl_session_rel_course_rel_user WHERE id_session = '$id_session' AND course_code = '$course_code' AND status = 2 ";
-	$rs = Database::query($sql,__FILE__,__LINE__);
+	$rs = Database::query($sql);
 
 	if (Database::num_rows($rs) > 0) {
 		while ($infos = Database::fetch_array($rs)) {
@@ -95,7 +95,7 @@ if ($_POST['formSent']) {
 $order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname, username' : ' ORDER BY lastname, firstname, username';
 $sql="SELECT user_id,lastname,firstname,username FROM $tbl_user WHERE status='1'".$order_clause;
 
-$result=Database::query($sql,__FILE__,__LINE__);
+$result=Database::query($sql);
 
 $coaches=Database::store_result($result);
 

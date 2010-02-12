@@ -59,7 +59,7 @@ function get_number_of_courses()
     		$sql.= " AND url_rel_course.access_url_id=".api_get_current_access_url_id();
     }
 
-	$res = Database::query($sql, __FILE__, __LINE__);
+	$res = Database::query($sql);
 	$obj = Database::fetch_object($res);
 	return $obj->total_number_of_items;
 }
@@ -103,7 +103,7 @@ function get_course_data($from, $number_of_items, $column, $direction)
 
 	$sql .= " ORDER BY col$column $direction ";
 	$sql .= " LIMIT $from,$number_of_items";
-	$res = Database::query($sql, __FILE__, __LINE__);
+	$res = Database::query($sql);
 	$courses = array ();
 	while ($course = Database::fetch_row($res))
 	{
@@ -133,7 +133,7 @@ function modify_filter($code)
 		'<a href="course_edit.php?course_code='.$code.'">'.Display::return_icon('edit.gif', get_lang('Edit')).'</a>&nbsp;'.
 		'<a href="course_list.php?delete_course='.$code.'"  onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset))."'".')) return false;">'.Display::return_icon('delete.gif', get_lang('Delete')).'</a>'.
 		'<a href="../coursecopy/backup.php?cidReq='.$code.'">'.Display::return_icon('backup.gif', get_lang('CreateBackup')).'</a>&nbsp;';
-	
+
 }
 /**
  * Return an icon representing the visibility of the course

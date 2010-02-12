@@ -159,7 +159,7 @@ if($ajax_search) {
 	$sql="SELECT u.user_id, lastname, firstname, username
 	  	  	FROM $tbl_user u".
 			$order_clause;
-	$result=Database::query($sql,__FILE__,__LINE__);
+	$result=Database::query($sql);
 	$Users=Database::store_result($result);
 	$user_list_leys = array_keys($sessionUsersList);
 	foreach($Users as $user) {

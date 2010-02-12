@@ -41,7 +41,7 @@ function get_number_of_groups()
 */
 	if ( isset ($_GET['keyword'])) {
 		$keyword = Database::escape_string(trim($_GET['keyword']));
-		$sql .= " WHERE (g.name LIKE '%".$keyword."%' OR g.description LIKE '%".$keyword."%'  OR  g.url LIKE '%".$keyword."%' )";	
+		$sql .= " WHERE (g.name LIKE '%".$keyword."%' OR g.description LIKE '%".$keyword."%'  OR  g.url LIKE '%".$keyword."%' )";
 	}
 
     // adding the filter to see the user's only of the current access_url
@@ -50,7 +50,7 @@ function get_number_of_groups()
     		$sql.= " AND url_rel_user.access_url_id=".api_get_current_access_url_id();
     }*/
 
-	$res = Database::query($sql, __FILE__, __LINE__);
+	$res = Database::query($sql);
 	$obj = Database::fetch_object($res);
 	return $obj->total_number_of_items;
 }
@@ -65,10 +65,10 @@ function get_number_of_groups()
 function get_group_data($from, $number_of_items, $column, $direction)
 {
 	$group_table = Database :: get_main_table(TABLE_MAIN_GROUP);
-	
+
 	$sql = "SELECT
                  g.id			AS col0,
-                 g.name			AS col1,                 
+                 g.name			AS col1,
                  g.description 	AS col2,
                  g.visibility 	AS col3,
                  g.id			AS col4
@@ -84,7 +84,7 @@ function get_group_data($from, $number_of_items, $column, $direction)
 	if (isset ($_GET['keyword'])) {
 		$keyword = Database::escape_string(trim($_GET['keyword']));
 		$sql .= " WHERE (g.name LIKE '%".$keyword."%' OR g.description LIKE '%".$keyword."%'  OR  g.url LIKE '%".$keyword."%' )";
-	} 
+	}
 	/*
     // adding the filter to see the user's only of the current access_url
 	if ((api_is_platform_admin() || api_is_session_admin()) && $_configuration['multiple_access_urls']==true && api_get_current_access_url_id()!=-1) {
@@ -101,19 +101,19 @@ function get_group_data($from, $number_of_items, $column, $direction)
 	$sql .= " ORDER BY col$column $direction ";
 	$sql .= " LIMIT $from,$number_of_items";
 
-	$res = Database::query($sql, __FILE__, __LINE__);
+	$res = Database::query($sql);
 
 	$users = array ();
     $t = time();
-    
+
     // Status
 	$status = array();
 	$status[GROUP_PERMISSION_OPEN] 		= get_lang('Open');
 	$status[GROUP_PERMISSION_CLOSED]	= get_lang('Closed');
-	
+
 	while ($group = Database::fetch_row($res)) {
-		$group[3] = $status[$group[3]];	
-		$group['1'] = '<a href="'.api_get_path(WEB_CODE_PATH).'social/groups.php?id='.$group['0'].'">'.$group['1'].'</a>';      
+		$group[3] = $status[$group[3]];
+		$group['1'] = '<a href="'.api_get_path(WEB_CODE_PATH).'social/groups.php?id='.$group['0'].'">'.$group['1'].'</a>';
         $groups[] = $group;
 	}
 	return $groups;
@@ -123,10 +123,10 @@ function get_group_data($from, $number_of_items, $column, $direction)
 function get_recent_group_data($from =0 , $number_of_items = 5, $column, $direction)
 {
 	$group_table = Database :: get_main_table(TABLE_MAIN_GROUP);
-	
+
 	$sql = "SELECT
                  g.id			AS col0,
-                 g.name			AS col1,                 
+                 g.name			AS col1,
                  g.description 	AS col2,
                  g.visibility 	AS col3,
                  g.id			AS col4
@@ -142,7 +142,7 @@ function get_recent_group_data($from =0 , $number_of_items = 5, $column, $direct
 	if (isset ($_GET['keyword'])) {
 		$keyword = Database::escape_string(trim($_GET['keyword']));
 		$sql .= " WHERE (g.name LIKE '%".$keyword."%' OR g.description LIKE '%".$keyword."%'  OR  g.url LIKE '%".$keyword."%' )";
-	} 
+	}
 	/*
     // adding the filter to see the user's only of the current access_url
 	if ((api_is_platform_admin() || api_is_session_admin()) && $_configuration['multiple_access_urls']==true && api_get_current_access_url_id()!=-1) {
@@ -159,12 +159,12 @@ function get_recent_group_data($from =0 , $number_of_items = 5, $column, $direct
 	$sql .= " ORDER BY col$column $direction ";
 	$sql .= " LIMIT $from,$number_of_items";
 
-	$res = Database::query($sql, __FILE__, __LINE__);
+	$res = Database::query($sql);
 
 	$users = array ();
     $t = time();
 	while ($group = Database::fetch_row($res)) {
-        // forget about the expiration date field		      
+        // forget about the expiration date field
         $groups[] = $group;
 	}
 	return $groups;
@@ -247,7 +247,7 @@ function lock_unlock_user($status,$user_id)
 	if(($status_db=='1' OR $status_db=='0') AND is_numeric($user_id))
 	{
 		$sql="UPDATE $user_table SET active='".Database::escape_string($status_db)."' WHERE user_id='".Database::escape_string($user_id)."'";
-		$result = Database::query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql);
 	}
 
 	if ($result)
@@ -324,7 +324,7 @@ else
                     	// to prevent too long messages
                     	if ($_GET['warn'] == 'session_message'){
                     		$_GET['warn'] = $_SESSION['session_message_import_users'];
-                    	} 
+                    	}
                     	Display::display_warning_message(urldecode($_GET['warn']),false);
                     }
                     if (!empty($_GET['message'])) {
@@ -358,20 +358,20 @@ else
 		if ($check) {
 			switch ($_POST['action']) {
 				case 'delete' :
-					if (api_is_platform_admin()) {						
+					if (api_is_platform_admin()) {
 						$number_of_selected_groups = count($_POST['id']);
 						$number_of_deleted_groups = 0;
-						foreach ($_POST['id'] as $index => $group_id) {								
+						foreach ($_POST['id'] as $index => $group_id) {
 							if (GroupPortalManager :: delete($group_id)) {
 								$number_of_deleted_groups++;
-							}								
+							}
 						}
 					}
 					if ($number_of_selected_groups == $number_of_deleted_groups) {
 						Display :: display_confirmation_message(get_lang('SelectedGroupsDeleted'));
 					} else {
 						Display :: display_error_message(get_lang('SomeGroupsNotDeleted'));
-					}				
+					}
 					break;
 			}
 			Security::clear_token();
@@ -387,7 +387,7 @@ else
 	echo '<div class="actions" style="width:100%;">';
 	if (api_is_platform_admin()) {
 		echo '<span style="float:right; padding-top:7px;">'.
-			 '<a href="'.api_get_path(WEB_CODE_PATH).'admin/group_add.php">'.Display::return_icon('groupadd.gif',get_lang('AddGroups')).get_lang('AddGroups').'</a>'.			 
+			 '<a href="'.api_get_path(WEB_CODE_PATH).'admin/group_add.php">'.Display::return_icon('groupadd.gif',get_lang('AddGroups')).get_lang('AddGroups').'</a>'.
 			 '</span>';
 	}
 	$form->display();
@@ -413,7 +413,7 @@ else
 	$table->set_header(1, get_lang('Name'));
 	$table->set_header(2, get_lang('Description'));
 	$table->set_header(3, get_lang('Visibility'));
-	$table->set_header(4, '', false);	
+	$table->set_header(4, '', false);
 	$table->set_column_filter(4, 'modify_filter');
 	//$table->set_column_filter(6, 'status_filter');
 	//$table->set_column_filter(7, 'active_filter');

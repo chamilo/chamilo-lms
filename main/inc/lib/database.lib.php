@@ -111,6 +111,9 @@ define('TABLE_MAIN_MESSAGE', 'message');
 // Term and conditions
 define('TABLE_MAIN_LEGAL', 'legal');
 
+// Dashboard blocks plugin
+define('TABLE_MAIN_BLOCK', 'block');
+
 // Statistic database tables
 define('TABLE_STATISTIC_TRACK_E_LASTACCESS', 'track_e_lastaccess');
 define('TABLE_STATISTIC_TRACK_E_ACCESS', 'track_e_access');

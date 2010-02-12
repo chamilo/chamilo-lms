@@ -168,7 +168,7 @@ elseif (isset($_POST['action']))
 					$ids[] = Database::escape_string($id);
 				}
 				$sql = "UPDATE $tbl_admin_languages SET available='1' WHERE id IN ('".implode("','", $ids)."')";
-				Database::query($sql,__FILE__,__LINE__);
+				Database::query($sql);
 			}
 			break;
 		case 'makeunavailable' :
@@ -180,7 +180,7 @@ elseif (isset($_POST['action']))
 					$ids[] = Database::escape_string($id);
 				}
 				$sql = "UPDATE $tbl_admin_languages SET available='0' WHERE id IN ('".implode("','", $ids)."')";
-				Database::query($sql,__FILE__,__LINE__);
+				Database::query($sql);
 			}
 			break;
 	}
@@ -212,7 +212,7 @@ $sql_select = "SELECT * FROM $tbl_admin_languages";
 $result_select = Database::query($sql_select);
 
 $sql_select_lang = "SELECT * FROM $tbl_settings_current WHERE  category='Languages'";
-$result_select_lang = Database::query($sql_select_lang,__FILE__,__LINE__);
+$result_select_lang = Database::query($sql_select_lang);
 $row_lang=Database::fetch_array($result_select_lang);
 
 /*

@@ -52,7 +52,7 @@ if(isset($_GET['add_type']) && $_GET['add_type']!=''){
 
 if (!api_is_platform_admin()) {
 	$sql = 'SELECT session_admin_id FROM '.Database :: get_main_table(TABLE_MAIN_SESSION).' WHERE id='.$id_session;
-	$rs = Database::query($sql,__FILE__,__LINE__);
+	$rs = Database::query($sql);
 	if (Database::result($rs,0,0)!=$_user['user_id']) {
 		api_not_allowed(true);
 	}
@@ -106,7 +106,7 @@ if ($_POST['formSent']) {
 	if($Categoryid != 0 && count($SessionCategoryList)>0 ){
 		$session_id = join(',', $SessionCategoryList);
 		$sql = "UPDATE $tbl_session SET session_category_id = $Categoryid WHERE id in ($session_id) ";
-		Database::query($sql,__FILE__,__LINE__);
+		Database::query($sql);
 		header('Location: session_list.php?id_category='.$Categoryid);
 	} else {
 		header('Location: add_many_session_to_category.php?msg=error');
@@ -127,16 +127,16 @@ $rows_category_session = array();
 if(isset($_POST['CategorySessionId']) && $_POST['formSent'] == 0 ){
 	$where = 'WHERE session_category_id !='.intval($_POST['CategorySessionId']);
 	$sql = 'SELECT id, name  FROM '.$tbl_session .' WHERE session_category_id ='.intval($_POST['CategorySessionId']).' ORDER BY name';
-	$result=Database::query($sql,__FILE__,__LINE__);
+	$result=Database::query($sql);
 	$rows_category_session = Database::store_result($result);
 }
 
 $sql = "SELECT id, name  FROM $tbl_session_category ORDER BY name";
-$result=Database::query($sql,__FILE__,__LINE__);
+$result=Database::query($sql);
 $rows_session_category = Database::store_result($result);
 
 $sql = "SELECT id, name  FROM $tbl_session $where ORDER BY name";
-$result=Database::query($sql,__FILE__,__LINE__);
+$result=Database::query($sql);
 $rows_session = Database::store_result($result);
 ?>
 <form name="formulaire" method="post" action="<?php echo api_get_self(); ?>?page=<?php echo $_GET['page']; if(!empty($_GET['add'])) echo '&add=true' ; ?>" style="margin:0px;" <?php if($ajax_search){echo ' onsubmit="valide();"';}?>>

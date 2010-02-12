@@ -425,7 +425,7 @@ function store_new_agenda_item()
 					        VALUES
 					        ('".$title."','".$content."', '".$start_date."','".$end_date."')";
 
-	$result = Database::query($sql,__FILE__,__LINE__) or die (Database::error());
+	$result = Database::query($sql) or die (Database::error());
 	$last_id=Database::insert_id();
 
 	// store in last_tooledit (first the groups, then the users
@@ -475,7 +475,7 @@ function store_new_agenda_item()
             {
         	   $sql = "INSERT INTO $t_agenda_repeat (cal_id, cal_type, cal_end)" .
                     " VALUES ($last_id,'$type',$end)";
-               $res = Database::query($sql,__FILE__,__LINE__);
+               $res = Database::query($sql);
             }
         }
     }
@@ -532,7 +532,7 @@ function get_agenda_item($id)
     }
     if(empty($id)){return $item;}
 	$sql 					= "SELECT * FROM ".$TABLEAGENDA." WHERE id='".$id."'";
-	$result					= Database::query($sql,__FILE__,__LINE__);
+	$result					= Database::query($sql);
 	$entry_to_edit 			= Database::fetch_array($result);
 	$item['title']			= $entry_to_edit["title"];
 	$item['content']		= $entry_to_edit["content"];
@@ -598,7 +598,7 @@ function save_edit_agenda_item($id,$title,$content,$start_date,$end_date)
 									start_date='".$start_date."',
 									end_date='".$end_date."'
 								WHERE id='".$id."'";
-	$result = Database::query($sql,__FILE__,__LINE__) or die (Database::error());
+	$result = Database::query($sql) or die (Database::error());
 	return true;
 }
 
@@ -615,18 +615,18 @@ function save_edit_agenda_item($id,$title,$content,$start_date,$end_date)
 function delete_agenda_item($id)
 {
 	global $_course;
-	
+
 	$t_agenda = Database::get_main_table(TABLE_MAIN_SYSTEM_CALENDAR);
-	$id = intval($id);	
+	$id = intval($id);
 	$sql = "SELECT * FROM $t_agenda WHERE id = '$id'";
-    $res = Database::query($sql,__FILE__,__LINE__);
+    $res = Database::query($sql);
     if(Database::num_rows($res) > 0)
     {
         $sql = "DELETE FROM ".$t_agenda." WHERE id='$id'";
-        $result = Database::query($sql,__FILE__,__LINE__) or die (Database::error());
-        api_item_property_update($_course,TOOL_CALENDAR_EVENT,$id,'delete',api_get_user_id());        
+        $result = Database::query($sql) or die (Database::error());
+        api_item_property_update($_course,TOOL_CALENDAR_EVENT,$id,'delete',api_get_user_id());
         return true;
-    } 
+    }
     return false;
 }
 /**
@@ -709,7 +709,7 @@ function display_agenda_items()
 	if (is_allowed_to_edit() && !api_is_anonymous()) {
 		$sql="SELECT * FROM ".$TABLEAGENDA.' ORDER BY start_date '.$_SESSION['sort'];
 		//echo "<pre>".$sql."</pre>";
-		$result=Database::query($sql,__FILE__,__LINE__) or die(Database::error());
+		$result=Database::query($sql) or die(Database::error());
 		$number_items=Database::num_rows($result);
 	} else {
 		$number_items = 0;
@@ -975,12 +975,12 @@ function display_one_agenda_item($agenda_id)
 	  --------------------------------------------------*/
 
 	$sql="SELECT *	FROM ".$TABLEAGENDA;
-	$result=Database::query($sql,__FILE__,__LINE__) or die(Database::error());
+	$result=Database::query($sql) or die(Database::error());
 	$number_items=Database::num_rows($result);
 	$myrow=Database::fetch_array($result); // there should be only one item so no need for a while loop
 
     $sql_rep = "SELECT * FROM $TABLEAGENDA WHERE id = $agenda_id";
-    $res_rep = Database::query($sql_rep,__FILE__,__LINE__);
+    $res_rep = Database::query($sql_rep);
     $repeat = false;
     $repeat_id = 0;
     if(Database::num_rows($res_rep)>0)
@@ -1151,7 +1151,7 @@ function display_one_agenda_item($agenda_id)
 */
 function show_group_filter_form()
 {
-/** @todo this select missing to implement */ 	 
+/** @todo this select missing to implement */
 //$group_list=get_course_groups();
 
 echo "<select name=\"select\" onchange=\"MM_jumpMenu('parent',this,0)\">";
@@ -1170,7 +1170,7 @@ echo "</select>";
 function show_user_filter_form()
 {
 
-/** @todo this select missing to implement */ 
+/** @todo this select missing to implement */
 
 //$user_list=get_course_users();
 echo "<select name=\"select\" onchange=\"MM_jumpMenu('parent',this,0)\">";
@@ -1186,8 +1186,8 @@ echo "</select>";
 }
 
 function show_user_group_filter_form()
-{	
-	/** @todo this select missing to implement */ 
+{
+	/** @todo this select missing to implement */
 	echo "\n<select name=\"select\" onchange=\"MM_jumpMenu('parent',this,0)\">";
 	echo "\n\t<option value=\"agenda.php?user=none\">".get_lang("ShowAll")."</option>";
 
@@ -1671,7 +1671,7 @@ function get_agendaitems($month, $year)
 		}
 	}
 
-    $result = Database::query($sqlquery, __FILE__, __LINE__);
+    $result = Database::query($sqlquery);
 	while ($item = Database::fetch_array($result))
 	{
 		$agendaday = date('j',strtotime($item['start_date']));
@@ -1715,7 +1715,7 @@ function display_upcoming_events()
 						ORDER BY start_date ";
 	//}
 	// if the user is not an administrator of that course
-	$result = Database::query($sqlquery, __FILE__, __LINE__);
+	$result = Database::query($sqlquery);
 	$counter = 0;
 	while ($item = Database::fetch_array($result,'ASSOC'))
 	{
@@ -1981,7 +1981,7 @@ function get_day_agendaitems($courses_dbs, $month, $year, $day)
 		//$sqlquery = "SELECT * FROM $agendadb WHERE DAYOFMONTH(day)='$day' AND month(day)='$month' AND year(day)='$year'";
 		//echo "abc";
 		//echo $sqlquery;
-		$result = Database::query($sqlquery, __FILE__, __LINE__);
+		$result = Database::query($sqlquery);
 		$portal_url = $_configuration['root_web'];
 		if ($_configuration['multiple_access_urls']==true) {
 			$access_url_id = api_get_current_access_url_id();
@@ -2092,7 +2092,7 @@ function get_week_agendaitems($courses_dbs, $month, $year, $week = '')
 		// $sqlquery = "SELECT * FROM $agendadb WHERE (DAYOFMONTH(day)>='$start_day' AND DAYOFMONTH(day)<='$end_day')
 		//				AND (MONTH(day)>='$start_month' AND MONTH(day)<='$end_month')
 		//				AND (YEAR(day)>='$start_year' AND YEAR(day)<='$end_year')";
-		$result = Database::query($sqlquery, __FILE__, __LINE__);
+		$result = Database::query($sqlquery);
 
 		$portal_url = $_configuration['root_web'];
 		if ($_configuration['multiple_access_urls']==true) {
@@ -2185,7 +2185,7 @@ function get_repeated_events_day_view($course_info,$start=0,$end=0,$params)
             .(!empty($params['conditions'])?$params['conditions']:'')
             .(!empty($params['groupby'])?' GROUP BY '.$params['groupby']:'')
             .(!empty($params['orderby'])?' ORDER BY '.$params['orderby']:'');
-	$res = Database::query($sql,__FILE__,__LINE__);
+	$res = Database::query($sql);
 	if(Database::num_rows($res)>0)
 	{
 		while($row = Database::fetch_array($res))
@@ -2306,7 +2306,7 @@ function get_repeated_events_week_view($course_info,$start=0,$end=0,$params)
             .(!empty($params['conditions'])?$params['conditions']:'')
             .(!empty($params['groupby'])?' GROUP BY '.$params['groupby']:'')
             .(!empty($params['orderby'])?' ORDER BY '.$params['orderby']:'');
-	$res = Database::query($sql,__FILE__,__LINE__);
+	$res = Database::query($sql);
 	if(Database::num_rows($res)>0)
 	{
 		while($row = Database::fetch_array($res))
@@ -2437,7 +2437,7 @@ function get_repeated_events_month_view($course_info,$start=0,$end=0,$params)
             .(!empty($params['conditions'])?$params['conditions']:'')
             .(!empty($params['groupby'])?' GROUP BY '.$params['groupby']:'')
             .(!empty($params['orderby'])?' ORDER BY '.$params['orderby']:'');
-	$res = Database::query($sql,__FILE__,__LINE__);
+	$res = Database::query($sql);
 	if(Database::num_rows($res)>0)
 	{
 		while($row = Database::fetch_array($res))
@@ -2608,7 +2608,7 @@ function get_repeated_events_list_view($course_info,$start=0,$end=0,$params)
             .(!empty($params['conditions'])?$params['conditions']:'')
             .(!empty($params['groupby'])?' GROUP BY '.$params['groupby']:'')
             .(!empty($params['orderby'])?' ORDER BY '.$params['orderby']:'');
-    $res = Database::query($sql,__FILE__,__LINE__);
+    $res = Database::query($sql);
     if(Database::num_rows($res)>0)
     {
         while($row = Database::fetch_array($res))
@@ -2787,7 +2787,7 @@ function is_repeated_event($id,$course=null)
     $id = (int) $id;
 	//$t_agenda_repeat = Database::get_course_table(TABLE_AGENDA_REPEAT,$course);
     $sql = "SELECT * FROM $t_agenda_repeat WHERE cal_id = $id";
-    $res = Database::query($sql,__FILE__,__LINE__);
+    $res = Database::query($sql);
     if(Database::num_rows($res)>0)
     {
     	return true;
@@ -2864,7 +2864,7 @@ function agenda_add_item($course_info, $title, $content, $db_start_date, $db_end
     // check if exists in calendar_event table
     $sql = "SELECT * FROM $t_agenda WHERE title='$title' AND content = '$content' AND start_date = '$start_date'
     		AND end_date = '$end_date' ".(!empty($parent_id)? "AND parent_event_id = '$parent_id'":"");
-    $result = Database::query($sql,__FILE__,__LINE__);
+    $result = Database::query($sql);
     $count = Database::num_rows($result);
     if ($count > 0) {
     	return false;
@@ -2875,7 +2875,7 @@ function agenda_add_item($course_info, $title, $content, $db_start_date, $db_end
                             VALUES
                             ('".$title."','".$content."', '".$start_date."','".$end_date."')";
 
-    $result = Database::query($sql,__FILE__,__LINE__) or die (Database::error());
+    $result = Database::query($sql) or die (Database::error());
     $last_id=Database::insert_id();
 
     // add a attachment file in agenda
@@ -2884,7 +2884,7 @@ function agenda_add_item($course_info, $title, $content, $db_start_date, $db_end
 
     // store in last_tooledit (first the groups, then the users
     $done = false;
-    
+
    //(This part of this code is not been used)
    /* if ((!is_null($to))or (!empty($_SESSION['toolgroup']))) // !is_null($to): when no user is selected we send it to everyone
     {
@@ -2954,7 +2954,7 @@ function agenda_add_item($course_info, $title, $content, $db_start_date, $db_end
 			WHERE MONTH(start_date)='".$month."' AND YEAR(start_date)='".$year."'
 			GROUP BY id ".
 			"ORDER BY  start_date ";
-		$result=Database::query($sql,__FILE__,__LINE__);
+		$result=Database::query($sql);
 
 		while ($row=Database::fetch_array($result)) {
 			$datum_item=(int)substr($row["start_date"],8,2);
@@ -2972,7 +2972,7 @@ function agenda_add_repeat_item($course_info,$orig_id,$type,$end,$orig_dest)
    // $t_agenda_r = Database::get_course_table(TABLE_AGENDA_REPEAT,$course_info['dbName']);
     //$sql = "SELECT title, content, UNIX_TIMESTAMP(start_date) as sd, UNIX_TIMESTAMP(end_date) as ed FROM $t_agenda WHERE id = $orig_id";
     $sql = "SELECT title, content, start_date as sd, end_date as ed FROM $t_agenda WHERE id = $orig_id";
-    $res = Database::query($sql,__FILE__,__LINE__);
+    $res = Database::query($sql);
     if(Database::num_rows($res)!==1){return false;}
     $row = Database::fetch_array($res);
     //$orig_start = $row['sd'];
@@ -3016,7 +3016,7 @@ function agenda_add_repeat_item($course_info,$orig_id,$type,$end,$orig_dest)
     {
        $sql = "INSERT INTO $t_agenda_r (cal_id, cal_type, cal_end)" .
             " VALUES ($orig_id,'$type',$end)";
-       $res = Database::query($sql,__FILE__,__LINE__);
+       $res = Database::query($sql);
         switch($type)
         {
             case 'daily':

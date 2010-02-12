@@ -162,7 +162,7 @@ function login_user($user_id) {
     }
 
 	$sql_query = "SELECT * FROM $main_user_table WHERE user_id='$user_id'";
-	$sql_result = Database::query($sql_query, __FILE__, __LINE__);
+	$sql_result = Database::query($sql_query);
 	$result = Database :: fetch_array($sql_result);
 
     // check if the user is allowed to 'login_as'
@@ -202,7 +202,7 @@ function login_user($user_id) {
 				WHERE user.user_id = '".$user_id."'";
 		}
 
-		$sql_result = Database::query($sql_query, __FILE__, __LINE__);
+		$sql_result = Database::query($sql_query);
 
 
 		if (Database::num_rows($sql_result) > 0) {
@@ -309,7 +309,7 @@ function get_number_of_users()
     		$sql.= " AND url_rel_user.access_url_id=".api_get_current_access_url_id();
     }
 
-	$res = Database::query($sql, __FILE__, __LINE__);
+	$res = Database::query($sql);
 	$obj = Database::fetch_object($res);
 	return $obj->total_number_of_items;
 }
@@ -324,7 +324,7 @@ function get_number_of_users()
 function get_user_data($from, $number_of_items, $column, $direction)
 {
 	global $_configuration,$origin;
-	
+
 	$user_table = Database :: get_main_table(TABLE_MAIN_USER);
 	$admin_table = Database :: get_main_table(TABLE_MAIN_ADMIN);
 	$sql = "SELECT
@@ -343,7 +343,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
                  ", u.expiration_date      AS exp ".
             " FROM $user_table u ";
 
-    // adding the filter to see the user's only of the current access_url    
+    // adding the filter to see the user's only of the current access_url
     if ((api_is_platform_admin() || api_is_session_admin()) && $_configuration['multiple_access_urls']==true && api_get_current_access_url_id()!=-1) {
     	$access_url_rel_user_table= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
     	$sql.= " INNER JOIN $access_url_rel_user_table url_rel_user ON (u.user_id=url_rel_user.user_id)";
@@ -400,7 +400,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
 	$sql .= " ORDER BY col$column $direction ";
 	$sql .= " LIMIT $from,$number_of_items";
 
-	$res = Database::query($sql, __FILE__, __LINE__);
+	$res = Database::query($sql);
 
 	$users = array ();
     $t = time();
@@ -412,7 +412,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
 			$photo = '<center><a href="'.api_get_path(WEB_PATH).'whoisonline.php?origin=user_list&id='.$user[0].'" title="'.get_lang('Info').'"  ><img src="'.$user_profile['file'].'" '.$user_profile['style'].' alt="'.api_get_person_name($user[2],$user[3]).'"  title="'.api_get_person_name($user[2], $user[3]).'" /></a></center>';
 		} else {
 			$photo = '<center><img src="'.$user_profile['file'].'" '.$user_profile['style'].' alt="'.api_get_person_name($user[2], $user[3]).'" title="'.api_get_person_name($user[2], $user[3]).'" /></center>';
-		}				
+		}
 
         if ($user[7] == 1 && $user[9] != '0000-00-00 00:00:00') {
             // check expiration date
@@ -422,7 +422,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
         	   $user[7] = '-1';
             }
         }
-        // forget about the expiration date field		      
+        // forget about the expiration date field
         $users[] = array($user[0],$photo,$user[1],$user[2],$user[3],$user[4],$user[5],$user[6],$user[7],$user[8]);
 	}
 	return $users;
@@ -503,17 +503,17 @@ function modify_filter($user_id,$url_params,$row)
 	}
 	if ($is_admin) {
 		$result .= Display::return_icon('admin_star.png', get_lang('IsAdministrator'),array('width'=> 22, 'heigth'=> 22));
-	
+
 	} else {
-		$result .= Display::return_icon('admin_star_na.png', get_lang('IsNotAdministrator'));		
+		$result .= Display::return_icon('admin_star_na.png', get_lang('IsNotAdministrator'));
 	}
-	
+
 	if ($row['7'] == $statusname[DRH]) {
 		$result .= '<a href="dashboard_add_users_to_user.php?user='.$user_id.'">'.Display::return_icon('addd.gif', get_lang('Add')).'</a>&nbsp;&nbsp;';
 		$result .= '<a href="dashboard_add_courses_to_user.php?user='.$user_id.'">'.Display::return_icon('addd.gif', get_lang('Add')).'</a>&nbsp;&nbsp;';
-		$result .= '<a href="dashboard_add_users_to_sessions.php?user='.$user_id.'">'.Display::return_icon('addd.gif', get_lang('Add')).'</a>&nbsp;&nbsp;';	
+		$result .= '<a href="dashboard_add_users_to_sessions.php?user='.$user_id.'">'.Display::return_icon('addd.gif', get_lang('Add')).'</a>&nbsp;&nbsp;';
 	}
-			
+
 	return $result;
 }
 
@@ -573,7 +573,7 @@ function lock_unlock_user($status,$user_id)
 	if(($status_db=='1' OR $status_db=='0') AND is_numeric($user_id))
 	{
 		$sql="UPDATE $user_table SET active='".Database::escape_string($status_db)."' WHERE user_id='".Database::escape_string($user_id)."'";
-		$result = Database::query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql);
 	}
 
 	if ($result)
@@ -660,7 +660,7 @@ else
                     	// to prevent too long messages
                     	if ($_GET['warn'] == 'session_message'){
                     		$_GET['warn'] = $_SESSION['session_message_import_users'];
-                    	} 
+                    	}
                     	Display::display_warning_message(urldecode($_GET['warn']),false);
                     }
                     if (!empty($_GET['message'])) {
@@ -775,7 +775,7 @@ else
 	$table = new SortableTable('users', 'get_number_of_users', 'get_user_data', (api_is_western_name_order() xor api_sort_by_first_name()) ? 3 : 2);
 	$table->set_additional_parameters($parameters);
 	$table->set_header(0, '', false);
-	$table->set_header(1, get_lang('Photo'), false);	
+	$table->set_header(1, get_lang('Photo'), false);
 	$table->set_header(2, get_lang('OfficialCode'));
 	if (api_is_western_name_order()) {
 		$table->set_header(3, get_lang('FirstName'));

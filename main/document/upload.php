@@ -48,7 +48,7 @@ require_once api_get_path(LIBRARY_PATH)	. 'formvalidator/FormValidator.class.php
 require_once 'document.inc.php';
 
 // adding extra javascript to the form
-$htmlHeadXtra[] = '<script src="../inc/lib/javascript/jquery.js" type="text/javascript" language="javascript"></script>'; 
+$htmlHeadXtra[] = '<script src="../inc/lib/javascript/jquery.js" type="text/javascript" language="javascript"></script>';
 $htmlHeadXtra[] = '<script type="text/javascript">
 
 function check_unzip() {
@@ -62,7 +62,7 @@ function check_unzip() {
 		document.upload.if_exists[2].disabled=false;
 		}
 	}
-		
+
 function advanced_parameters() {
 	if(document.getElementById(\'options\').style.display == \'none\') {
 	document.getElementById(\'options\').style.display = \'block\';
@@ -72,7 +72,7 @@ function advanced_parameters() {
 			document.getElementById(\'img_plus_and_minus\').innerHTML=\'&nbsp;<img style="vertical-align:middle;" src="../img/div_show.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'\';
 			}
 	}
-			
+
 function setFocus(){
 	$("#title_file").focus();
 	}
@@ -162,7 +162,7 @@ function get_text_content($doc_path, $doc_mime) {
 }
 
 // variables
-	
+
 $is_allowed_to_edit = api_is_allowed_to_edit(null,true);
 
 
@@ -268,7 +268,7 @@ if(isset($_FILES['user_upload'])) {
 	if($upload_ok) {
 		//file got on the server without problems, now process it
 		$new_path = handle_uploaded_document($_course, $_FILES['user_upload'],$base_work_dir,$_POST['curdirpath'],$_user['user_id'],$to_group_id,$to_user_id,$max_filled_space,$_POST['unzip'],$_POST['if_exists']);
-		
+
     	$new_comment = isset($_POST['comment']) ? trim($_POST['comment']) : '';
     	$new_title = isset($_POST['title']) ? trim($_POST['title']) : '';
 
@@ -280,7 +280,7 @@ if(isset($_FILES['user_upload'])) {
         	if ($new_comment) $ct .= ", comment='$new_comment'";
         	if ($new_title)   $ct .= ", title='$new_title'";
         	Database::query("UPDATE $table_document SET" . substr($ct, 1) .
-        	    " WHERE id = '$docid'", __FILE__, __LINE__);
+        	    " WHERE id = '$docid'");
     	}
     	//showing message when sending zip files
     	if ($new_path === true && $_POST['unzip'] == 1) {
@@ -289,7 +289,7 @@ if(isset($_FILES['user_upload'])) {
 
       if ( (api_get_setting('search_enabled')=='true') && ($docid = DocumentManager::get_document_id($_course, $new_path))) {
         $table_document = Database::get_course_table(TABLE_DOCUMENT);
-        $result = Database::query("SELECT * FROM $table_document WHERE id = '$docid' LIMIT 1", __FILE__, __LINE__);
+        $result = Database::query("SELECT * FROM $table_document WHERE id = '$docid' LIMIT 1");
         if (Database::num_rows($result) == 1) {
           $row = Database::fetch_array($result);
           $doc_path = api_get_path(SYS_COURSE_PATH) . $courseDir. $row['path'];
@@ -357,7 +357,7 @@ if(isset($_FILES['user_upload'])) {
 				$tbl_se_ref = Database::get_main_table(TABLE_MAIN_SEARCH_ENGINE_REF);
 				$sql = 'SELECT * FROM %s WHERE course_code=\'%s\' AND tool_id=\'%s\' AND ref_id_high_level=%s LIMIT 1';
 				$sql = sprintf($sql, $tbl_se_ref, $courseid, TOOL_DOCUMENT, $docid);
-				$res = Database::query($sql, __FILE__, __LINE__);
+				$res = Database::query($sql);
 
 				if (Database::num_rows($res) > 0) {
 					$se_ref = Database::fetch_array($res);
@@ -388,7 +388,7 @@ if(isset($_FILES['user_upload'])) {
 						$tbl_se_ref = Database::get_main_table(TABLE_MAIN_SEARCH_ENGINE_REF);
 						$sql = 'UPDATE %s SET search_did=%d WHERE id=%d LIMIT 1';
 						$sql = sprintf($sql, $tbl_se_ref, (int)$did, (int)$se_ref['id']);
-						Database::query($sql,__FILE__,__LINE__);
+						Database::query($sql);
 					}
 
 				}
@@ -420,7 +420,7 @@ if(isset($_FILES['user_upload'])) {
 					$sql = 'INSERT INTO %s (id, course_code, tool_id, ref_id_high_level, search_did)
 						VALUES (NULL , \'%s\', \'%s\', %s, %s)';
 					$sql = sprintf($sql, $tbl_se_ref, $courseid, TOOL_DOCUMENT, $docid, $did);
-					Database::query($sql,__FILE__,__LINE__);
+					Database::query($sql);
 				}
 			}
           }
@@ -496,7 +496,7 @@ if(isset($_GET['createdir']))
 	$new_folder_text .= '</form>';
 	//show the form
 	//Display::display_normal_message($new_folder_text, false);
-   
+
 	echo create_dir_form();
 }
 

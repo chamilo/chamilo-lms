@@ -229,22 +229,22 @@ if ($slide_id !== "all") {
 			$pathpart=$path.'/';
 		}
 		$sql = "SELECT * FROM $tbl_documents WHERE path='".Database::escape_string($pathpart.$image_files_only[$slide])."'";
-		$result = Database::query($sql,__FILE__,__LINE__);
+		$result = Database::query($sql);
 		$row = Database::fetch_array($result);
 
 		echo '<table align="center" border="0" cellspacing="10">';
 		echo '<tr>';
-		echo '<td align="center" style="font-size: xx-large; font-weight: bold;">';		
+		echo '<td align="center" style="font-size: xx-large; font-weight: bold;">';
 		echo $row['title'];
 		echo '</td>';
 		echo '</tr>';
 		echo '<tr>';
 		echo '<td align="center">';
-		echo "<a href='slideshow.php?slide_id=".$next_slide."&curdirpath=$pathurl'><img src='download.php?doc_url=$path/".$image_files_only[$slide]."' alt='".$image_files_only[$slide]."' border='0'".$height_width_tags."></a>";	
+		echo "<a href='slideshow.php?slide_id=".$next_slide."&curdirpath=$pathurl'><img src='download.php?doc_url=$path/".$image_files_only[$slide]."' alt='".$image_files_only[$slide]."' border='0'".$height_width_tags."></a>";
 		echo '</td>';
-		echo '</tr>';		
+		echo '</tr>';
 		echo '<tr>';
-		echo '<td style="border:1px solid; border-color: #CCCCCC">';		
+		echo '<td style="border:1px solid; border-color: #CCCCCC">';
 		echo $row['comment'];
 		echo '</td>';
 		echo '</tr>';
@@ -254,11 +254,11 @@ if ($slide_id !== "all") {
 		{
 			echo '<tr>';
 			echo '<td align="center">';
-			echo '<a href="edit_document.php?'.api_get_cidreq().'&curdirpath='.$pathurl.'&amp;origin=slideshow&amp;origin_opt='.$slide_id.'&amp;file='.urlencode($path).'/'.$image_files_only[$slide].'"><img src="../img/edit.gif" border="0" title="'.get_lang('Modify').'" alt="'.get_lang('Modify').'" /></a><br />';	
+			echo '<a href="edit_document.php?'.api_get_cidreq().'&curdirpath='.$pathurl.'&amp;origin=slideshow&amp;origin_opt='.$slide_id.'&amp;file='.urlencode($path).'/'.$image_files_only[$slide].'"><img src="../img/edit.gif" border="0" title="'.get_lang('Modify').'" alt="'.get_lang('Modify').'" /></a><br />';
 			$aux= explode(".", htmlspecialchars($image_files_only[$slide]));
 			$ext= $aux[count($aux)-1];
-			echo $image_files_only[$slide].' <br />';		
-			list($width, $high) = getimagesize($image);			
+			echo $image_files_only[$slide].' <br />';
+			list($width, $high) = getimagesize($image);
 			echo $width.' x '.$high.' <br />';
 			echo round((filesize($image)/1024),2).' KB';
 			echo ' - '.$ext;
@@ -278,19 +278,19 @@ if ($slide_id !== "all") {
 			}
 			echo $resize_info;
 			echo $resize_widht;
-			echo $resize_height;		
+			echo $resize_height;
 			echo '</td>';
 			echo '</tr>';
 		}
 		echo '</table>';
-		
+
 		echo '<br/>';
-		
+
 		// back forward buttons
 		echo '<table align="center" border="0">';
 		echo '<tr>';
 		echo '<td align="center" >';
-		
+
 		// first slide
 		echo '<a href="slideshow.php?slide_id=0&curdirpath='.$pathurl.'"><img src="'.api_get_path(WEB_IMG_PATH).'slide_first.png" title="'.get_lang('FirstSlide').'" alt="'.get_lang('FirstSlide').'">&nbsp;&nbsp;</a>';
 		// previous slide
@@ -308,7 +308,7 @@ if ($slide_id !== "all") {
 		// next slide
 		if ($slide < $total_slides -1 and $slide_id <> "all") {
 			echo "<a href='slideshow.php?slide_id=".$next_slide."&curdirpath=$pathurl'>";
-			
+
 		}
 		echo '<img src="'.api_get_path(WEB_IMG_PATH).'slide_next.png" title="'.get_lang('Next').'" alt="'.get_lang('Next').'">';
 		if ($slide > 0) {
@@ -318,8 +318,8 @@ if ($slide_id !== "all") {
 		echo '&nbsp;&nbsp;<a href="slideshow.php?slide_id='.($total_slides-1).'&curdirpath='.$pathurl.'"><img src="'.api_get_path(WEB_IMG_PATH).'slide_last.png" title="'.get_lang('LastSlide').'" alt="'.get_lang('LastSlide').'"></a>';
 		echo '</td>';
 		echo '</tr>';
-		echo '</table>';		
-		
+		echo '</table>';
+
 	} else {
 		Display::display_warning_message(get_lang('FileNotFound'));
 	}

@@ -1,7 +1,6 @@
 <?php //$id: $
 /* For licensing terms, see /dokeos_license.txt */
 
-
 /*
  * ========================================
  * PREVENT RESUBMITING
@@ -338,7 +337,7 @@ if ( isset( $_GET['mailingIndex']))  // examine or send
                 unset($students);
             }
 
-	        $result = Database::query($sel . $thisRecip . "'",__FILE__,__LINE__);
+	        $result = Database::query($sel . $thisRecip . "'");
 	        while ( ($res = Database::fetch_array($result))) {$students[] = $res;}
 	        Database::free_result($result);
 
@@ -482,7 +481,7 @@ if ( isset( $_GET['mailingIndex']))  // examine or send
 					ON cu.user_id = u.user_id AND cu.course_code = '".$_course['sysCode']."'
 					WHERE cu.status = 5
 					AND u.user_id NOT IN ('" . implode("', '" , $students) . "')";
-	        $result = Database::query($sql,__FILE__,__LINE__);
+	        $result = Database::query($sql);
 
 	        if ( Database::num_rows($result) > 0)
 	        {
@@ -521,11 +520,11 @@ if ( isset( $_GET['mailingIndex']))  // examine or send
 						SET filesize = '0'
 						, upload_date = '".$sendDT."', last_upload_date = '".$sendDT."'
 						WHERE id='".addslashes($mailing_item->id)."'";
-				$result =Database::query($sql,__FILE__,__LINE__);
+				$result =Database::query($sql);
 			}
-			elseif ( $mailing_item->filesize != 0)
+			elseif ($mailing_item->filesize != 0)
 			{
-		        $errormsg .= '<br>' . dropbox_lang("mailingNotYetSent") . '<br>';
+		        $errormsg .= '<br />' . dropbox_lang("mailingNotYetSent") . '<br />';
 			}
         }
     }

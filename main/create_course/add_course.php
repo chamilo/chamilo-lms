@@ -122,7 +122,7 @@ if ($form->validate()) {
 	$keys = define_course_keys($wanted_code, "", $_configuration['db_prefix']);
 
 	$sql_check = sprintf('SELECT * FROM '.$table_course.' WHERE visual_code = "%s"',Database :: escape_string($wanted_code));
-	$result_check = Database::query($sql_check,__FILE__,__LINE__); //I don't know why this api function doesn't work...
+	$result_check = Database::query($sql_check); //I don't know why this api function doesn't work...   Ivan, 12-FEB-2010: What do you mean?
 	if ( Database::num_rows($result_check)<1 ) {
 		if (sizeof($keys)) {
 			$visual_code = $keys["currentCourseCode"];

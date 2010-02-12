@@ -328,7 +328,7 @@ if (isset($_POST['newComment']))
 	$newComment = trim(Database::escape_string(Security::remove_XSS($_POST['newComment']))); // remove spaces
 	$newTitle = trim(Database::escape_string(Security::remove_XSS($_POST['newTitle']))); // remove spaces
 	// Check if there is already a record for this file in the DB
-	$result = Database::query ("SELECT * FROM $dbTable WHERE path LIKE BINARY '".$commentPath."'",__FILE__,__LINE__);
+	$result = Database::query ("SELECT * FROM $dbTable WHERE path LIKE BINARY '".$commentPath."'");
 	while($row = Database::fetch_array($result, 'ASSOC'))
 	{
 		$attribute['path'      ] = $row['path' ];
@@ -340,7 +340,7 @@ if (isset($_POST['newComment']))
 		SET comment='".$newComment."', title='".$newTitle."'
 		WHERE path
 		LIKE BINARY '".$commentPath."'";
-	Database::query($query,__FILE__,__LINE__);
+	Database::query($query);
 	$oldComment = $newComment;
 	$oldTitle = $newTitle;
 	$comments_updated = get_lang('ComMod');
@@ -370,7 +370,7 @@ if (isset($_POST['renameTo']))
 
 /** TODO check if this code is still used **/
 /* Search the old comment */  // RH: metadata: added 'id,'
-$result = Database::query("SELECT id,comment,title FROM $dbTable WHERE path LIKE BINARY '$dir$doc'",__FILE__,__LINE__);
+$result = Database::query("SELECT id,comment,title FROM $dbTable WHERE path LIKE BINARY '$dir$doc'");
 
 $message = "<i>Debug info</i><br>directory = $dir<br>";
 $message .= "document = $file_name<br>";
@@ -608,7 +608,7 @@ if( isset($info_message))
 
 // readonly
 $sql = 'SELECT id, readonly FROM '.$dbTable.' WHERE path LIKE BINARY "'.$dir.$doc.'"';
-$rs = Database::query($sql, __FILE__, __LINE__);
+$rs = Database::query($sql);
 $readonly = Database::result($rs,0,'readonly');
 $doc_id = Database::result($rs,0,'id');
 
@@ -616,7 +616,7 @@ $doc_id = Database::result($rs,0,'id');
 $sql = 'SELECT insert_user_id FROM '.Database::get_course_table(TABLE_ITEM_PROPERTY).'
 		WHERE tool LIKE "document"
 		AND ref='.intval($doc_id);
-$rs = Database::query($sql, __FILE__, __LINE__);
+$rs = Database::query($sql);
 $owner_id = Database::result($rs,0,'insert_user_id');
 
 

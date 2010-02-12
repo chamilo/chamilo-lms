@@ -4449,7 +4449,7 @@ function delete_attachment_file($id_attach) {
 	$id_attach=Database::escape_string($id_attach);
 
 	$sql="DELETE FROM $agenda_table_attachment WHERE id = ".(int)$id_attach;
-	$result=Database::query($sql, __LINE__, __FILE__);
+	$result=Database::query($sql);
 	$last_id_file=Database::insert_id();
 	// update item_property
 	api_item_property_update($_course, 'calendar_event_attachment', $id_attach ,'AgendaAttachmentDeleted', api_get_user_id());
@@ -4497,7 +4497,7 @@ function add_agenda_attachment_file($file_comment,$last_id) {
 				if ($result) {
 					$sql='INSERT INTO '.$agenda_table_attachment.'(filename,comment, path,agenda_id,size) '.
 						 "VALUES ( '".$safe_file_name."', '".$safe_file_comment."', '".$safe_new_file_name."' , '".$last_id."', '".$_FILES['user_upload']['size']."' )";
-					$result=Database::query($sql, __LINE__, __FILE__);
+					$result=Database::query($sql);
 					$message.=' / '.get_lang('FileUploadSucces').'<br />';
 
 					$last_id_file=Database::insert_id();
@@ -4548,7 +4548,7 @@ function edit_agenda_attachment_file($file_comment,$agenda_id,$id_attach) {
 				if ($result) {
 					$sql="UPDATE $agenda_table_attachment SET filename = '$safe_file_name', comment = '$safe_file_comment', path = '$safe_new_file_name', agenda_id = '$safe_agenda_id', size ='".$_FILES['user_upload']['size']."'
 						   WHERE id = '$safe_id_attach'";
-					$result=Database::query($sql, __LINE__, __FILE__);
+					$result=Database::query($sql);
 
 					api_item_property_update($_course, 'calendar_event_attachment', $safe_id_attach ,'AgendaAttachmentUpdated', api_get_user_id());
 

@@ -56,7 +56,7 @@ function build_directory_selector($folders,$curdirpath,$group_dir='',$changeRend
 			$folder_sql = implode("','",$escaped_folders);
 			$doc_table = Database::get_course_table(TABLE_DOCUMENT);
 			$sql = "SELECT * FROM $doc_table WHERE filetype='folder' AND path IN ('".$folder_sql."')";
-			$res = Database::query($sql,__FILE__,__LINE__);
+			$res = Database::query($sql);
 			$folder_titles = array();
 			while($obj = Database::fetch_object($res))
 			{
@@ -165,7 +165,7 @@ function create_document_link($www, $title, $path, $filetype, $size, $visibility
 	if (!$show_as_icon)
 	{
 		//build download link (icon)
-				
+
 		$forcedownload_link=($filetype=='folder')?api_get_self().'?'.api_get_cidreq().'&action=downloadfolder&amp;path='.$url_path.$req_gid:api_get_self().'?'.api_get_cidreq().'&amp;action=download&amp;id='.$url_path.$req_gid;
 		//folder download or file download?
 		$forcedownload_icon=($filetype=='folder')?'folder_zip.gif':'filesave.gif';
@@ -222,7 +222,7 @@ function create_document_link($www, $title, $path, $filetype, $size, $visibility
 	if (!$show_as_icon)
 	{
 		if($filetype=="folder")
-		{	
+		{
 			if(api_is_allowed_to_edit() || api_is_platform_admin() || api_get_setting('students_download_folders') == 'true')
 			{
 				$force_download_html = ($size==0)?'':'<a href="'.$forcedownload_link.'" style="float:right"'.$prevent_multiple_click.'>'.Display::return_icon($forcedownload_icon, get_lang('Download'),array('height'=>'16', 'width' => '16')).'</a>';
@@ -232,7 +232,7 @@ function create_document_link($www, $title, $path, $filetype, $size, $visibility
 		{
 			$force_download_html = ($size==0)?'':'<a href="'.$forcedownload_link.'" style="float:right"'.$prevent_multiple_click.'>'.Display::return_icon($forcedownload_icon, get_lang('Download'),array('height'=>'16', 'width' => '16')).'</a>';
 		}
-		
+
 		return '<a href="'.$url.'" title="'.$tooltip_title_alt.'" target="'.$target.'"'.$visibility_class.' style="float:left">'.$title.'</a>'.$force_download_html;
 	}
 	else
@@ -253,9 +253,9 @@ function build_document_icon_tag($type, $path)
 	$basename = basename($path);
 
 	$current_session_id = api_get_session_id();
-		
+
 	$is_allowed_to_edit = api_is_allowed_to_edit(null,true);
-	
+
 
 	if ($type == 'file')
 	{
@@ -348,27 +348,27 @@ function build_edit_icons($curdirpath,$type,$path,$visibility,$id,$is_template,$
 
 	$modify_icons = '';
 	$cur_ses = api_get_session_id();
-	// if document is read only *or* we're in a session and the document 
+	// if document is read only *or* we're in a session and the document
 	// is from a non-session context, hide the edition capabilities
 	if ($is_read_only /*or ($session_id!=$cur_ses)*/)
-	{				
-		$modify_icons = Display::return_icon('edit_na.gif', get_lang('Modify'));		
+	{
+		$modify_icons = Display::return_icon('edit_na.gif', get_lang('Modify'));
         $modify_icons .= '&nbsp;'.Display::return_icon('delete_na.gif', get_lang('Delete'));
-        $modify_icons .= '&nbsp;'.Display::return_icon('deplacer_fichier_na.gif', get_lang('Move'));        
+        $modify_icons .= '&nbsp;'.Display::return_icon('deplacer_fichier_na.gif', get_lang('Move'));
         $modify_icons .= '&nbsp;'.Display::return_icon($visibility_icon.'_na.gif', get_lang('VisibilityCannotBeChanged'));
 	}
 	else
-	{		
+	{
 		$modify_icons = '<a href="edit_document.php?'.api_get_cidreq().'&curdirpath='.$curdirpath.'&amp;file='.urlencode($path).$req_gid.'"><img src="../img/edit.gif" border="0" title="'.get_lang('Modify').'" alt="" /></a>';
-        	if (strcmp($path,'/audio')===0 or strcmp($path,'/flash')===0 or strcmp($path,'/images')===0 or strcmp($path,'/shared_folder')===0 or strcmp($path,'/video')===0 or strcmp($path,'/chat_files')===0) { 
+        	if (strcmp($path,'/audio')===0 or strcmp($path,'/flash')===0 or strcmp($path,'/images')===0 or strcmp($path,'/shared_folder')===0 or strcmp($path,'/video')===0 or strcmp($path,'/chat_files')===0) {
         		$modify_icons .= '&nbsp;'.Display::return_icon('delete_na.gif',get_lang('ThisFolderCannotBeDeleted'));
         	} else {
         		$modify_icons .= '&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.$curdirpath.'&amp;delete='.urlencode($path).$req_gid.'&amp;'.$sort_params.'" onclick="return confirmation(\''.basename($path).'\');"><img src="../img/delete.gif" border="0" title="'.get_lang('Delete').'" alt="" /></a>';
         	}
 	        $modify_icons .= '&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.$curdirpath.'&amp;move='.urlencode($path).$req_gid.'"><img src="../img/deplacer_fichier.gif" border="0" title="'.get_lang('Move').'" alt="" /></a>';
         	$modify_icons .= '&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.$curdirpath.'&amp;'.$visibility_command.'='.$id.$req_gid.'&amp;'.$sort_params.'"><img src="../img/'.$visibility_icon.'.gif" border="0" title="'.get_lang('Visible').'" alt="" /></a>';
-	}	
-	
+	}
+
 	if($type == 'file' && pathinfo($path,PATHINFO_EXTENSION)=='html')
 	{
 		if($is_template==0)
@@ -491,7 +491,7 @@ function get_titles_of_path($path)
 		else
 		{
 			$sql = 'SELECT title FROM '.Database::get_course_table(TABLE_DOCUMENT).' WHERE path LIKE BINARY "'.$tmp_path.'"';
-			$rs = Database::query($sql,__FILE__,__LINE__);
+			$rs = Database::query($sql);
 			$tmp_title = '/'.Database::result($rs,0,0);
 			$path_displayed .= $tmp_title;
 			$tmp_folders_titles[$tmp_path] = $tmp_title;
@@ -556,7 +556,7 @@ function is_my_shared_folder($user_id, $path)
 {
 	if('/shared_folder/sf_user_'.$user_id==Security::remove_XSS($path))
 	{
-		return true;		
+		return true;
 	}
 	return false;
 }

@@ -76,11 +76,15 @@ function get_php_setting($val) {
 /**
  * This function checks if the given folder is writable
  */
-function check_writable($folder) {
+function check_writable($folder,$suggestion=false) {
 	if (is_writable('../'.$folder)) {
 		return '<strong><font color="green">'.get_lang('Writable').'</font></strong>';
 	} else {
-		return '<strong><font color="red">'.get_lang('NotWritable').'</font></strong>';
+		if ($suggestion == true) {
+		  return '<strong><font color="#ff9900">'.get_lang('NotWritable').'</font></strong>';
+		} else {
+          return '<strong><font color="red">'.get_lang('NotWritable').'</font></strong>';
+		}
 	}
 }
 
@@ -531,11 +535,11 @@ function display_requirements($installType, $badUpdatePath, $updatePath = '', $u
 			</tr>
             <tr>
                 <td class="requirements-item">chamilo/main/css/</td>
-                <td class="requirements-value">'.check_writable('css/').' ('.get_lang('SuggestionOnlyToEnableCSSUploadFeature').')</td>
+                <td class="requirements-value">'.check_writable('css/',true).' ('.get_lang('SuggestionOnlyToEnableCSSUploadFeature').')</td>
             </tr>
             <tr>
                 <td class="requirements-item">chamilo/main/lang/</td>
-                <td class="requirements-value">'.check_writable('lang/').' ('.get_lang('SuggestionOnlyToEnableSubLanguageFeature').')</td>
+                <td class="requirements-value">'.check_writable('lang/',true).' ('.get_lang('SuggestionOnlyToEnableSubLanguageFeature').')</td>
             </tr>'.
             //'<tr>
             //    <td class="requirements-item">dokeos/searchdb/</td>

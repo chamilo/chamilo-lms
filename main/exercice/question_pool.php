@@ -207,7 +207,7 @@ if($is_allowedToEdit)
 	<option value="-1" <?php if($exerciseId == -1) echo 'selected="selected"'; ?>><?php echo get_lang('OrphanQuestions'); ?></option>
 	<?php
 	$sql="SELECT id,title FROM $TBL_EXERCICES WHERE id<>'".Database::escape_string($fromExercise)."' AND active<>'-1' ORDER BY id";
-	$result=Database::query($sql,__FILE__,__LINE__);
+	$result=Database::query($sql);
 
 	// shows a list-box allowing to filter questions
 	while($row=Database::fetch_array($result)) {
@@ -238,26 +238,26 @@ if($is_allowedToEdit)
 			}
 		}
 		echo '</select> ';
-		
+
 		//
     	echo get_lang('AnswerType');
-    	echo ' : <select name="answerType">';	
+    	echo ' : <select name="answerType">';
 		//answer type
 		if (!isset($answerType)) $answerType = -1;
 		{
-			
-			
+
+
 			for ($answer_type = -1; $answer_type <=9; $answer_type++) {
 				$selected ='';
 				if ($answer_type!=0) {
 					if ($answerType == $answer_type)
 					$selected = ' selected="selected" ';
-					if ($answer_type==-1) {echo '<option value="-1" '.$selected.'>'.get_lang('Any').'</option>'; } // check 0 or -1				
+					if ($answer_type==-1) {echo '<option value="-1" '.$selected.'>'.get_lang('Any').'</option>'; } // check 0 or -1
 					elseif ($answer_type==1) {echo '<option value="'.$answer_type.'" '.$selected.'>'.get_lang('UniqueAnswer').'</option>'; }
 					elseif ($answer_type==2) {echo '<option value="'.$answer_type.'" '.$selected.'>'.get_lang('MultipleAnswer').'</option>'; }
-					elseif ($answer_type==3) {echo '<option value="'.$answer_type.'" '.$selected.'>'.get_lang('langFillBlanks').'</option>'; } 		
+					elseif ($answer_type==3) {echo '<option value="'.$answer_type.'" '.$selected.'>'.get_lang('langFillBlanks').'</option>'; }
 					elseif ($answer_type==4) {echo '<option value="'.$answer_type.'" '.$selected.'>'.get_lang('langMatching').'</option>'; }
-					elseif ($answer_type==5) {echo '<option value="'.$answer_type.'" '.$selected.'>'.get_lang('FreeAnswer').'</option>'; }		
+					elseif ($answer_type==5) {echo '<option value="'.$answer_type.'" '.$selected.'>'.get_lang('FreeAnswer').'</option>'; }
 					elseif ($answer_type==6) {echo '<option value="'.$answer_type.'" '.$selected.'>'.get_lang('HotSpot').'</option>'; }
 					elseif ($answer_type==9) {echo '<option value="'.$answer_type.'" '.$selected.'>'.get_lang('MultipleSelectCombination').'</option>'; }
 				}
@@ -265,7 +265,7 @@ if($is_allowedToEdit)
 		}
 		echo '</select> ';
 	?>
-	
+
 	<button class="save" type="submit" name="name" value="<?php echo get_lang('Ok') ?>"><?php echo get_lang('Ok') ?></button>
 	<?php
 	echo '<a href="admin.php?',api_get_cidreq(),'&exerciseId=',$fromExercise,'">'.Display::return_icon('message_reply_forum.png', get_lang('GoBackToQuestionList')),get_lang('GoBackToQuestionList'),'</a>';
@@ -291,18 +291,18 @@ if($is_allowedToEdit)
 
 		if (isset($exerciseLevel) && $exerciseLevel != -1) {
 			$where .= ' level='.$exerciseLevel.' AND ';
-		}	
-		
+		}
+
 		if (isset($answerType) && $answerType != -1) {
 			$where .= ' type='.$answerType.' AND ';
-		}	
-		
+		}
+
 		$sql="SELECT id,question,type,level
 				FROM $TBL_EXERCICE_QUESTION,$TBL_QUESTIONS
 			  	WHERE $where question_id=id AND exercice_id='".Database::escape_string($exerciseId)."'
 				ORDER BY question_order";
-				
-				
+
+
 	} elseif($exerciseId == -1) {
 
 		// if we have selected the option 'Orphan questions' in the list-box 'Filter'
@@ -339,12 +339,12 @@ if($is_allowedToEdit)
 		if (isset($exerciseLevel) && $exerciseLevel!= -1 ) {
 			$level_where = ' level='.$exerciseLevel.' AND ';
 		}
-		
+
 		$answer_where = '';
 		if (isset($answerType) && $answerType!= -1 ) {
 			$answer_where = ' questions.type='.$answerType.' AND ';
 		}
-		
+
 		$sql='SELECT questions.id, questions.question, questions.type, quizz_questions.exercice_id , level
 				FROM '.$TBL_QUESTIONS.' as questions LEFT JOIN '.$TBL_EXERCICE_QUESTION.' as quizz_questions
 				ON questions.id=quizz_questions.question_id LEFT JOIN '.$TBL_EXERCICES.' as exercices
@@ -369,14 +369,14 @@ if($is_allowedToEdit)
 			else
 				$where = ' WHERE level='.$exerciseLevel.' ';
 		}
-		
+
 		if (isset($answerType) && $answerType != -1) {
 			if (strlen($where)>0)
 				$where .= ' AND type='.$answerType.' ';
 			else
 				$where = ' WHERE type='.$answerType.' ';
-		}		
-		
+		}
+
 		$sql="SELECT id,question,type,level FROM $TBL_QUESTIONS $where ";
 
 		// forces the value to 0
@@ -384,7 +384,7 @@ if($is_allowedToEdit)
 		$exerciseId=0;
 	}
 
-	$result=Database::query($sql,__FILE__,__LINE__);
+	$result=Database::query($sql);
 	$nbrQuestions=Database::num_rows($result);
 
     echo '<tr>',
@@ -414,7 +414,7 @@ if($is_allowedToEdit)
 <tr bgcolor="#e6e6e6">';
 
 	if(!empty($fromExercise)) {
-        echo '<th width="4%"> </th>', 
+        echo '<th width="4%"> </th>',
             '<th>',get_lang('Question'),'</th>',
             '<th>',get_lang('Level'),'</th>',
             '<th>',get_lang('Reuse'),'</th>';
@@ -476,7 +476,7 @@ if($is_allowedToEdit)
             '</tr>';
 	}
     echo '</table>';
-    echo '<div style="width:100%; border-top:1px dotted #4171B5;"> 
+    echo '<div style="width:100%; border-top:1px dotted #4171B5;">
     	  <button class="save" type="submit">'.get_lang('Reuse').'</button>
     	  </div></form>';
 	Display::display_footer();

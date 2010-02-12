@@ -430,13 +430,13 @@ if(is_array($threads)) {
 				$last_post=$row['thread_date']." ".get_lang('By').' '.display_user_link($row['last_poster_user_id'], $name);
 			} elseif ($origin!='learnpath') {
 				$last_post_sql="SELECT post.*, user.firstname, user.lastname FROM $table_posts post, $table_users user WHERE post.poster_id=user.user_id AND visible='1' AND thread_id='".$row['thread_id']."' ORDER BY post_id DESC";
-				$last_post_result=Database::query($last_post_sql, __FILE__, __LINE__);
+				$last_post_result=Database::query($last_post_sql);
 				$last_post_row=Database::fetch_array($last_post_result);
 				$name=api_get_person_name($last_post_row['firstname'], $last_post_row['lastname']);
 				$last_post=$last_post_row['post_date']." ".get_lang('By').' '.display_user_link($last_post_row['poster_id'], $name);
 			} else {
 				$last_post_sql="SELECT post.*, user.firstname, user.lastname FROM $table_posts post, $table_users user WHERE post.poster_id=user.user_id AND visible='1' AND thread_id='".$row['thread_id']."' ORDER BY post_id DESC";
-				$last_post_result=Database::query($last_post_sql, __FILE__, __LINE__);
+				$last_post_result=Database::query($last_post_sql);
 				$last_post_row=Database::fetch_array($last_post_result);
 				$name=api_get_person_name($last_post_row['firstname'], $last_post_row['lastname']);
 				$last_post=$last_post_row['post_date']." ".get_lang('By').' '.$name;
@@ -449,7 +449,7 @@ if(is_array($threads)) {
 			$id_attach = !empty($attachment_list)?$attachment_list['id']:'';
 
 			$sql_post_id="SELECT post_id FROM $table_posts WHERE post_title='".Database::escape_string($row['thread_title'])."'";
-			$result_post_id=Database::query($sql_post_id, __FILE__, __LINE__);
+			$result_post_id=Database::query($sql_post_id);
 			$row_post_id=Database::fetch_array($result_post_id);
 
 			if ($origin != 'learnpath') {

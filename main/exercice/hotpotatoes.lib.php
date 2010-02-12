@@ -5,7 +5,7 @@
 *	@package dokeos.exercise
 * 	@author Istvan Mandak (original author)
 */
-$dbTable     = Database::get_course_table(TABLE_DOCUMENT);
+$dbTable = Database::get_course_table(TABLE_DOCUMENT);
 /**
  * Creates a hotpotato directory
  *
@@ -87,7 +87,7 @@ function GetComment($path,$course_code='') {
 	}
 	$path = Database::escape_string($path);
 	$query = "select comment from $dbTable where path='$path'";
-	$result = Database::query($query,__FILE__,__LINE__);
+	$result = Database::query($query);
 
 	while ($row = Database::fetch_array($result)) {
 		return $row[0];
@@ -106,7 +106,7 @@ function SetComment($path,$comment) {
 	$path = Database::escape_string($path);
 	$comment = Database::escape_string($comment);
 	$query = "UPDATE $dbTable set comment='$comment' where path='$path'";
-	$result = Database::query($query,__FILE__,__LINE__);
+	$result = Database::query($query);
 	return "$result";
 }
 

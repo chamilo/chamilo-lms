@@ -104,7 +104,7 @@ $marks 	   = $_REQUEST['res'];
 $id 	   = $_REQUEST['id'];
 
 $sql_fb_type='SELECT feedback_type, exercises.id FROM '.$TBL_EXERCICES.' as exercises, '.$TBL_TRACK_EXERCICES.' as track_exercises WHERE exercises.id=track_exercises.exe_exo_id AND track_exercises.exe_id="'.Database::escape_string($id).'"';
-$res_fb_type=Database::query($sql_fb_type,__FILE__,__LINE__);
+$res_fb_type=Database::query($sql_fb_type);
 $row_fb_type=Database::fetch_row($res_fb_type);
 $feedback_type = $row_fb_type[0];
 $exercise_id = intval($row_fb_type[1]);
@@ -121,7 +121,7 @@ if (isset($_SESSION['expired_time'][$current_expired_time_key])) { //Only for ex
 	$total_time_allowed = $expired_time + 30;
 	if ($total_time_allowed < $current_time) {
 	  $sql_fraud = "UPDATE $TBL_TRACK_ATTEMPT SET answer = 0, marks=0, position=0 WHERE exe_id = '$current_attempt' ";
-	  Database::query($sql_fraud,__FILE__,__LINE__);
+	  Database::query($sql_fraud);
 	}
 }
 
@@ -306,7 +306,7 @@ if (Database::num_rows($result)>0 && isset($id)) {
 				  WHERE attempts.exe_id='".Database::escape_string($id)."' $user_restriction
 				  GROUP BY quizz_rel_questions.question_order, attempts.question_id";
 					//GROUP BY questions.position, attempts.question_id";
-		$result =Database::query($query, __FILE__, __LINE__);
+		$result =Database::query($query);
 	}
 } else {
 	Display::display_warning_message(get_lang('CantViewResults'));
@@ -446,7 +446,7 @@ if ($show_results) {
 				$answerCorrect=$objAnswerTmp->isCorrect($answerId);
 				$answerWeighting=$objAnswerTmp->selectWeighting($answerId);
 				$queryans = "select * from ".$TBL_TRACK_ATTEMPT." where exe_id = '".Database::escape_string($id)."' and question_id= '".Database::escape_string($questionId)."'";
-				$resultans = Database::query($queryans, __FILE__, __LINE__);
+				$resultans = Database::query($queryans);
 				while ($row = Database::fetch_array($resultans)) {
 					$ind = $row['answer'];
 					$choice[$ind] = 1;
@@ -500,7 +500,7 @@ if ($show_results) {
 				$answerCorrect=$objAnswerTmp->isCorrect($answerId);
 				$answerWeighting=$objAnswerTmp->selectWeighting($answerId);
 				$queryans = "select * from ".$TBL_TRACK_ATTEMPT." where exe_id = '".Database::escape_string($id)."' and question_id= '".Database::escape_string($questionId)."'";
-				$resultans = Database::query($queryans, __FILE__, __LINE__);
+				$resultans = Database::query($queryans);
 				while ($row = Database::fetch_array($resultans)) {
 					$ind = $row['answer'];
 					$choice[$ind] = 1;
@@ -576,7 +576,7 @@ if ($show_results) {
 				$answerCorrect=$objAnswerTmp->isCorrect($answerId);
 				$answerWeighting=$objAnswerTmp->selectWeighting($answerId);
 				$queryans = "select answer from ".$TBL_TRACK_ATTEMPT." where exe_id = '".Database::escape_string($id)."' and question_id= '".Database::escape_string($questionId)."'";
-				$resultans = Database::query($queryans, __FILE__, __LINE__);
+				$resultans = Database::query($queryans);
 				$choice = Database::result($resultans,0,"answer");
 
 				$numAnswer=$objAnswerTmp->selectAutoId($answerId);
@@ -676,7 +676,7 @@ if ($show_results) {
 						}
 
 						$queryfill = "select answer from ".$TBL_TRACK_ATTEMPT." where exe_id = '".Database::escape_string($id)."' and question_id= '".Database::escape_string($questionId)."'";
-						$resfill = Database::query($queryfill, __FILE__, __LINE__);
+						$resfill = Database::query($queryfill);
 						$str = Database::result($resfill,0,"answer");
 
 						preg_match_all('#\[([^[]*)\]#', $str, $arr);
@@ -727,7 +727,7 @@ if ($show_results) {
 						}
 
 						$queryfill = "SELECT answer FROM ".$TBL_TRACK_ATTEMPT." WHERE exe_id = '".Database::escape_string($id)."' and question_id= '".Database::escape_string($questionId)."'";
-						$resfill = Database::query($queryfill, __FILE__, __LINE__);
+						$resfill = Database::query($queryfill);
 						$str=Database::result($resfill,0,"answer");
 						preg_match_all ('#\[([^[/]*)/#', $str, $arr);
 						$choice = $arr[1];
@@ -803,7 +803,7 @@ if ($show_results) {
 			$table_ans = Database :: get_course_table(TABLE_QUIZ_ANSWER);
 			$TBL_TRACK_ATTEMPT= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 			$sql_answer = 'SELECT id, answer FROM '.$table_ans.' WHERE question_id="'.Database::escape_string($questionId).'" AND correct=0';
-			$res_answer = Database::query($sql_answer, __FILE__, __LINE__);
+			$res_answer = Database::query($sql_answer);
 			// getting the real answer
 			$real_list =array();
 			while ($real_answer = Database::fetch_array($res_answer)) {
@@ -811,7 +811,7 @@ if ($show_results) {
 			}
 
 			$sql_select_answer = 'SELECT id, answer, correct, id_auto FROM '.$table_ans.' WHERE question_id="'.Database::escape_string($questionId).'" AND correct<>0';
-			$res_answers = Database::query($sql_select_answer, __FILE__, __LINE__);
+			$res_answers = Database::query($sql_select_answer);
 
 			echo '<table width="100%" height="71" border="0" cellspacing="3" cellpadding="3" >';
 			echo '<tr><td colspan="2">&nbsp;</td></tr>';
@@ -833,7 +833,7 @@ if ($show_results) {
 				$sql_user_answer = "SELECT answer
 									FROM $TBL_TRACK_ATTEMPT
 									WHERE exe_id = '$id' AND question_id = '$questionId' AND position='$i_answer_id_auto'";
-				$res_user_answer = Database::query($sql_user_answer, __FILE__, __LINE__);
+				$res_user_answer = Database::query($sql_user_answer);
 
 				if (Database::num_rows($res_user_answer)>0 ) {
 					$s_user_answer = Database::result($res_user_answer,0,0); //  rich - good looking
@@ -886,7 +886,7 @@ if ($show_results) {
 				$i++;
 		 	}
 		 	$queryfree = "select marks from ".$TBL_TRACK_ATTEMPT." where exe_id = '".Database::escape_string($id)."' and question_id= '".Database::escape_string($questionId)."'";
-			$resfree = Database::query($queryfree, __FILE__, __LINE__);
+			$resfree = Database::query($queryfree);
 			$questionScore= Database::result($resfree,0,"marks");
 			$totalScore+=$questionScore;
 			echo '</table></td></tr>';
@@ -1003,7 +1003,7 @@ if ($show_results) {
 
 if ($origin!='learnpath' || ($origin == 'learnpath' && isset($_GET['fb_type']))) {
 	//$query = "update ".$TBL_TRACK_EXERCICES." set exe_result = $totalScore where exe_id = '$id'";
-	//Database::query($query,__FILE__,__LINE__);
+	//Database::query($query);
 	if ($show_results) {
 		echo '<div id="question_score">'.get_lang('YourTotalScore')." ";
 		if($dsp_percent == true) {

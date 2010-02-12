@@ -182,7 +182,7 @@ $condition = ' WHERE ' .
 
 $TBL_EXERCICES = Database :: get_course_table(TABLE_QUIZ_TEST);
 $sql_track_exercice = "SELECT type,feedback_type,expired_time FROM $TBL_EXERCICES WHERE id=$exerciseId";
-$result = Database::query($sql_track_exercice, __FILE__, __LINE__);
+$result = Database::query($sql_track_exercice);
 $exercise_row = Database :: fetch_array($result);
 $exerciseType = $exercise_row['type'];
 $exerciseFeedbackType = $exercise_row['feedback_type'];
@@ -199,7 +199,7 @@ $total_minutes = $exercise_row["expired_time"];
 $total_seconds = $total_minutes*60;
 $current_timestamp = time();
 
-$current_expired_time_key = $course_code.'_'.$session_id.'_'.$exerciseId; 
+$current_expired_time_key = $course_code.'_'.$session_id.'_'.$exerciseId;
 
 //Disable for learning path
 if ($exercise_row['expired_time'] != 0 && $origin != 'learnpath') {
@@ -214,14 +214,14 @@ if ($exercise_row['expired_time'] != 0 && $origin != 'learnpath') {
         'session_id = '."'".$session_id."'";
 
         $sql_track = 'SELECT exe_id,expired_time_control FROM '.$stat_table.$condition;
-        $rs_sql = Database::query($sql_track,__FILE__,__LINE__);
+        $rs_sql = Database::query($sql_track);
         $exists_into_database = Database::num_rows($rs_sql);
         $track_exercice_row = Database::fetch_array($rs_sql);
         $expired_time_of_this_attempt = $track_exercice_row['expired_time_control'];
 
         //Get the last attempt of an exercice
         $sql_track_attempt = 'SELECT max(tms) as last_attempt_date FROM '.$exercice_attemp_table.' WHERE exe_id="'.$track_exercice_row['exe_id'].'"';
-        $rs_last_attempt = Database::query($sql_track_attempt,__FILE__,__LINE__);
+        $rs_last_attempt = Database::query($sql_track_attempt);
         $row_last_attempt = Database::fetch_array($rs_last_attempt);
         $my_last_attempt_date = $row_last_attempt['last_attempt_date'];//Get the date of last attempt
         $date_of_last_attempt = $my_last_attempt_date;// Necessary for to change the last attempt
@@ -242,11 +242,11 @@ if ($exercise_row['expired_time'] != 0 && $origin != 'learnpath') {
 
             //We modify the "expired_time_control" field in track_e_exercices for this attempt
             $sql_track_e_exe = "UPDATE $stat_table SET expired_time_control = '".$clock_expired_time."' WHERE exe_id = '".$track_exercice_row['exe_id']."'";
-            Database::query($sql_track_e_exe,__FILE__,__LINE__);
+            Database::query($sql_track_e_exe);
 
             // How the expired time is changed into "track_e_exercices" table,then the last attempt for this student should be changed too,so
             $sql_track_e_exe = "UPDATE $exercice_attemp_table SET tms = '".$new_last_attempt."' WHERE exe_id = '".$track_exercice_row['exe_id']."' and tms = '".$date_of_last_attempt."' ";
-            Database::query($sql_track_e_exe,__FILE__,__LINE__);
+            Database::query($sql_track_e_exe);
 
             //Sessions  that contain the expired time
             $_SESSION['expired_time'][$current_expired_time_key] = $clock_expired_time;
@@ -297,7 +297,7 @@ if ($exercise_row['expired_time'] != 0 && $origin != 'learnpath') { //Sends the 
 
 if ($_configuration['live_exercise_tracking'] == true && $exerciseType == ONE_PER_PAGE && $exerciseFeedbackType != EXERCISE_FEEDBACK_TYPE_DIRECT) {
     $query = 'SELECT * FROM ' . $stat_table . $condition;
-    $result_select = Database::query($query, __FILE__, __LINE__);
+    $result_select = Database::query($query);
     if (Database :: num_rows($result_select) > 0) {
         $getIncomplete = Database :: fetch_array($result_select);
         $exe_id = $getIncomplete['exe_id'];
@@ -305,7 +305,7 @@ if ($_configuration['live_exercise_tracking'] == true && $exerciseType == ONE_PE
             define('QUESTION_LIST_ALREADY_LOGGED', 1);
             $recorded['questionList'] = explode(',', $getIncomplete['data_tracking']);
             $query = 'SELECT * FROM ' . $exercice_attemp_table . ' WHERE exe_id = ' . $getIncomplete['exe_id'] . ' ORDER BY tms ASC';
-            $result = Database::query($query, __FILE__, __LINE__);
+            $result = Database::query($query);
             while ($row = Database :: fetch_array($result)) {
                 $recorded['exerciseResult'][$row['question_id']] = 1;
             }
@@ -714,7 +714,7 @@ if ($formSent) {
                     //at loops over all questions
                     if (isset($exe_id)) {
                         $sql_update = 'UPDATE ' . $stat_table . ' SET exe_result = exe_result + ' . (int) $totalScore . ',exe_weighting = exe_weighting + ' . (int) $totalWeighting . ' WHERE exe_id = ' . Database::escape_string($exe_id);
-                        Database::query($sql_update, __FILE__, __LINE__);
+                        Database::query($sql_update);
                     }
 
                     //END of saving and qualifying
@@ -765,7 +765,7 @@ if ($formSent) {
 
                     //clean incomplete
                     $update_query = 'UPDATE ' . $stat_table . ' SET ' . "status = '', data_tracking='', exe_date = '" . date('Y-m-d H:i:s') . "' $sql_exe_result " . ' WHERE exe_id = ' . Database::escape_string($exe_id);
-                    Database::query($update_query, __FILE__, __LINE__);
+                    Database::query($update_query);
                 }
                 header("Location: exercise_show.php?id=$exe_id&exerciseType=$exerciseType&origin=$origin&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id");
             }
@@ -838,7 +838,7 @@ if (!isset ($_SESSION['questionList'])) {
     $questionList = ($randomQuestions ? $objExercise->selectRandomList() : $objExercise->selectQuestionList());
     // saves the question list into the session
     $sql = 'SELECT random FROM ' . $table_quiz_test . ' WHERE id="' . Database :: escape_string($my_exe_id) . '";';
-    $rs = Database::query($sql, __FILE__, __LINE__);
+    $rs = Database::query($sql);
     $row_number = Database :: fetch_array($rs);
     $z = 0;
 
@@ -1052,7 +1052,7 @@ if ($exerciseAttempts > 0) {
                 AND orig_lp_item_id = $safe_lp_item_id
                 AND exe_cours_id = '$course_code' AND session_id = '" . (int) $session_id . "'";
 
-    $aquery = Database::query($sql, __FILE__, __LINE__);
+    $aquery = Database::query($sql);
     $attempt = Database :: fetch_array($aquery);
 
     if ($attempt[0] >= $exerciseAttempts) {
@@ -1254,11 +1254,11 @@ if ($_configuration['live_exercise_tracking'] == true && $exerciseFeedbackType !
             $sql = "INSERT INTO $stat_table($sql_fields exe_exo_id,exe_user_id,exe_cours_id,status,session_id,data_tracking,start_date,orig_lp_id,orig_lp_item_id)
                     VALUES($sql_fields_values '$exerciseId','" . api_get_user_id() . "','" . $_course['id'] . "','incomplete','" . $session_id . "','" . implode(',', $questionList) . "','" . date('Y-m-d H:i:s') . "',$safe_lp_id,$safe_lp_item_id)";
 
-            Database::query($sql, __FILE__, __LINE__);
+            Database::query($sql);
         } else {
             echo $sql = "INSERT INTO $stat_table ($sql_fields exe_exo_id,exe_user_id,exe_cours_id,status,session_id,start_date,orig_lp_id,orig_lp_item_id)
                     VALUES($sql_fields_values '$exerciseId','" . api_get_user_id() . "','" . $_course['id'] . "','incomplete','" . $session_id . "','" . date('Y-m-d H:i:s') . "',$safe_lp_id,$safe_lp_item_id)";
-            Database::query($sql, __FILE__, __LINE__);
+            Database::query($sql);
         }
 
     }

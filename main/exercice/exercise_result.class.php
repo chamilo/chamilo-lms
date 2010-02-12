@@ -70,7 +70,7 @@ class ExerciseResult
 			$sql.= ' WHERE active=1';
 		}
 		$sql .= ' ORDER BY title';
-		$result=Database::query($sql,__FILE__,__LINE__);
+		$result=Database::query($sql);
 
 		// if the exercise has been found
 		while($row=Database::fetch_array($result,'ASSOC'))
@@ -94,7 +94,7 @@ class ExerciseResult
 			" FROM $TBL_EXERCISE_QUESTION eq, $TBL_QUESTIONS q " .
 			" WHERE eq.question_id=q.id AND eq.exercice_id='".Database::escape_string($e_id)."' " .
 			" ORDER BY eq.question_order";
-		$result=Database::query($sql,__FILE__,__LINE__);
+		$result=Database::query($sql);
 
 		// fills the array with the question ID for this exercise
 		// the key of the array is the question position
@@ -128,7 +128,7 @@ class ExerciseResult
     	$session_id_and = ' AND ce.session_id = ' . api_get_session_id() . ' ';
 		if(empty($user_id))
 		{
-				
+
 			$sql="SELECT ".(api_is_western_name_order() ? "CONCAT(firstname,' ',lastname)" : "CONCAT(lastname,' ',firstname)").", ce.title, te.exe_result ,
 								 te.exe_weighting, UNIX_TIMESTAMP(te.exe_date), te.exe_id, user.email, user.user_id
 						  FROM $TBL_EXERCISES AS ce , $TBL_TRACK_EXERCISES AS te, $TBL_USER AS user,$TBL_COURSE_REL_USER AS cuser
@@ -141,8 +141,8 @@ class ExerciseResult
 							FROM $TBL_TRACK_HOTPOTATOES tth, $TBL_USER tu
 							WHERE  tu.user_id=tth.exe_user_id AND tth.exe_cours_id = '" . Database :: escape_string($cid) . " $user_id_and '
 							ORDER BY tth.exe_cours_id ASC, tth.exe_date ASC";
-			
-			
+
+
 		}
 		else
 		{ // get only this user's results
@@ -153,7 +153,7 @@ class ExerciseResult
 							  WHERE  user.user_id=cuser.user_id AND te.exe_exo_id = ce.id AND te.status != 'incomplete' AND cuser.user_id=te.exe_user_id AND te.exe_cours_id='" . Database :: escape_string($cid) . "'
 							  AND cuser.status<>1 AND te.exe_user_id='".Database::escape_string($user_id)."' $session_id_and AND ce.active <>-1 AND orig_lp_id = 0 AND orig_lp_item_id = 0
 							  AND cuser.course_code=te.exe_cours_id ORDER BY te.exe_cours_id ASC, ce.title ASC, te.exe_date DESC";
-	
+
 					$hpsql = "SELECT '',exe_name, exe_result , exe_weighting, UNIX_TIMESTAMP(exe_date)
 							FROM $TBL_TRACK_HOTPOTATOES
 							WHERE exe_user_id = '" . $user_id . "' AND exe_cours_id = '" . Database :: escape_string($cid) . "'
@@ -166,8 +166,8 @@ class ExerciseResult
 
 		$NoTestRes = 0;
 		$NoHPTestRes = 0;
-		$j=0;				
-		
+		$j=0;
+
 		if ($filter) {
 			switch ($filter) {
 				case 1 :
@@ -180,22 +180,22 @@ class ExerciseResult
 						null;
 			}
 		}
-		
+
 		//Print the results of tests
 		if(is_array($results))
 		{
 			for($i = 0; $i < sizeof($results); $i++)
 			{
-				
+
 				$revised = false;
 				$sql_exe = 'SELECT exe_id FROM ' . Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING) . '
 							WHERE author != ' . "''" . ' AND exe_id = ' . "'" . Database :: escape_string($results[$i][5]) . "'" . ' LIMIT 1';
-				$query = Database::query($sql_exe, __FILE__, __LINE__);
-					
+				$query = Database::query($sql_exe);
+
 				if (Database :: num_rows($query) > 0) $revised = true;
-				if ($filter_by_not_revised && $revised == true) continue;				
+				if ($filter_by_not_revised && $revised == true) continue;
 				if ($filter_by_revised && $revised == false) continue;
-								
+
 				$return[$i] = array();
 				$id = $results[$i][5];
 				$mailid = $results[$i][6];
@@ -240,7 +240,7 @@ class ExerciseResult
 				$return[$j+$i]['max'] = $hpresults[$i][3];
 			}
 		}
-		$this->results = $return;	
+		$this->results = $return;
 		return true;
 	}
 	/**
@@ -332,7 +332,7 @@ class ExerciseResult
 	 * Exports the complete report as an XLS file
 	 * @return	boolean		False on error
 	 */
-	public function exportCompleteReportXLS($document_path='',$user_id=null, $export_user_fields=array(), $export_filter = 0) 
+	public function exportCompleteReportXLS($document_path='',$user_id=null, $export_user_fields=array(), $export_filter = 0)
 	{
 		global $charset;
 		$this->_getExercisesReporting($document_path,$user_id,$export_filter);
@@ -347,10 +347,10 @@ class ExerciseResult
 		$worksheet =& $workbook->addWorksheet('Report '.date('YmdGis'));
 		$line = 0;
 		$column = 0; //skip the first column (row titles)
-		
+
 		// check if exists column 'user'
-		$with_column_user = false;		
-		foreach ($this->results as $result) {			
+		$with_column_user = false;
+		foreach ($this->results as $result) {
 			if (!empty($result['user'])) {
 				$with_column_user = true;
 				break;
@@ -361,9 +361,9 @@ class ExerciseResult
 		   	$worksheet->write($line,$column,get_lang('User'));
 				$column++;
 		}
-		
+
 		$export_user_fields = true;
-		
+
 		if($export_user_fields)
 		{
 			//show user fields section with a big th colspan that spans over all fields
@@ -394,7 +394,7 @@ class ExerciseResult
 			}
 
 			if($export_user_fields)
-			{			
+			{
 				//show user fields data, if any, for this user
 				$user_fields_values = UserManager::get_extra_user_data(intval($row['user_id']),false,false);
 				foreach($user_fields_values as $value)

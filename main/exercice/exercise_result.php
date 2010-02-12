@@ -129,7 +129,7 @@ if(!is_array($exerciseResult) || !is_array($questionList) || !is_object($objExer
 }
 
 $sql_fb_type='SELECT feedback_type FROM '.$TBL_EXERCICES.' WHERE id ="'.Database::escape_string($objExercise->selectId()).'"';
-$res_fb_type=Database::query($sql_fb_type,__FILE__,__LINE__);
+$res_fb_type=Database::query($sql_fb_type);
 $row_fb_type=Database::fetch_row($res_fb_type);
 $feedback_type = $row_fb_type[0];
 
@@ -603,7 +603,7 @@ foreach ($questionList as $questionId) {
 
 	// get answer list for matching
 	$sql_answer = 'SELECT id, answer FROM '.$table_ans.' WHERE question_id="'.Database::escape_string($questionId).'" ';
-	$res_answer = Database::query($sql_answer, __FILE__, __LINE__);
+	$res_answer = Database::query($sql_answer);
 	$answer_matching =array();
 	while ($real_answer = Database::fetch_array($res_answer)) {
 		$answer_matching[$real_answer['id']]= $real_answer['answer'];

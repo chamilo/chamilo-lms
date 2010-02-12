@@ -81,7 +81,7 @@ class Answer
 
 		// fills arrays
 		$objExercise = new Exercise();
-		$objExercise->read($_REQUEST['exerciseId']);		
+		$objExercise->read($_REQUEST['exerciseId']);
 		if($objExercise->random_answers=='1')
 		{
 			$this->readOrderedBy('rand()', '');// randomize answers
@@ -126,7 +126,7 @@ class Answer
 		$sql="SELECT id,answer,correct,comment,ponderation, position, hotspot_coordinates, hotspot_type, destination, id_auto FROM
 		      $TBL_ANSWER WHERE question_id ='".Database::escape_string($questionId)."' ORDER BY position";
 
-		$result=Database::query($sql,__FILE__,__LINE__);
+		$result=Database::query($sql);
 
 		$i=1;
 
@@ -175,7 +175,7 @@ class Answer
 				"FROM $TBL_ANSWER WHERE question_id='".Database::escape_string($questionId)."' " .
 				"ORDER BY $field $order";
 
-		$result=Database::query($sql,__FILE__,__LINE__);
+		$result=Database::query($sql);
 
 		$i=1;
 
@@ -252,25 +252,25 @@ class Answer
 	{
 		return $this->answer[$id];
 	}
-	
+
 	/**
-	 * return array answer by id else return a bool 
+	 * return array answer by id else return a bool
 	 */
 	function selectAnswerByAutoId($auto_id) {
-		
+
 		$TBL_ANSWER = Database::get_course_table(TABLE_QUIZ_ANSWER);
 		$auto_id = intval($auto_id);
 		$sql="SELECT id, answer FROM $TBL_ANSWER WHERE id_auto='$auto_id'";
-		$rs = Database::query($sql, __FILE__, __LINE__);
-		
+		$rs = Database::query($sql);
+
 		if (Database::num_rows($rs)>0) {
 			$row = Database::fetch_array($rs);
 			return $row;
 		}
-		return false; 
+		return false;
 
 	}
-	
+
 	/**
 	 * returns the answer title from an answer's position
 	 *
@@ -336,7 +336,7 @@ class Answer
 	 {
 	 	$TBL_QUESTIONS = Database::get_course_table(TABLE_QUIZ_QUESTION);
 	 	$sql = "SELECT type FROM $TBL_QUESTIONS WHERE id = '".Database::escape_string($this->questionId)."'";
-	 	$res = Database::query($sql,__FILE__,__LINE__);
+	 	$res = Database::query($sql);
 	 	if(Database::num_rows($res)<=0){
 	 		return null;
 	 	}
@@ -466,7 +466,7 @@ class Answer
 				"WHERE id = '".Database::escape_string($position)."' " .
 				"AND question_i` = '".Database::escape_string($questionId)."'";
 
-		Database::query($sql,__FILE__,__LINE__);
+		Database::query($sql);
 	}
 
 	/**
@@ -482,7 +482,7 @@ class Answer
 
 		// removes old answers before inserting of new ones
 		$sql="DELETE FROM $TBL_REPONSES WHERE question_id='".Database::escape_string($questionId)."'";
-		Database::query($sql,__FILE__,__LINE__);
+		Database::query($sql);
 
 		// inserts new answers into data base
 		$sql="INSERT INTO $TBL_REPONSES" .
@@ -504,7 +504,7 @@ class Answer
 					'$weighting','$position','$hotspot_coordinates','$hotspot_type','$destination'),";
 		}
 		$sql = api_substr($sql,0,-1);
-		Database::query($sql,__FILE__,__LINE__);
+		Database::query($sql);
 
 		// moves $new_* arrays
 		$this->answer=$this->new_answer;
@@ -554,7 +554,7 @@ class Answer
 			}
 
 			$sql=api_substr($sql,0,-1);
-			Database::query($sql,__FILE__,__LINE__);
+			Database::query($sql);
 		}
 	}
 }

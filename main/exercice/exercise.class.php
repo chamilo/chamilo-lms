@@ -76,7 +76,7 @@ class Exercise
     	#$TBL_REPONSES           = Database::get_course_table(TABLE_QUIZ_ANSWER);
 
 		$sql="SELECT title,description,sound,type,random, random_answers, active, results_disabled, max_attempt,start_time,end_time,feedback_type,expired_time FROM $TBL_EXERCICES WHERE id='".Database::escape_string($id)."'";
-		$result=Database::query($sql,__FILE__,__LINE__);
+		$result=Database::query($sql);
 
 		// if the exercise has been found
 		if($object=Database::fetch_object($result))
@@ -96,7 +96,7 @@ class Exercise
       		$this->start_time = $object->start_time;
       		$this->expired_time = $object->expired_time;
 			$sql="SELECT question_id, question_order FROM $TBL_EXERCICE_QUESTION,$TBL_QUESTIONS WHERE question_id=id AND exercice_id='".Database::escape_string($id)."' ORDER BY question_order";
-			$result=Database::query($sql,__FILE__,__LINE__);
+			$result=Database::query($sql);
 
 			// fills the array with the question ID for this exercise
 			// the key of the array is the question position
@@ -239,7 +239,7 @@ class Exercise
 			return false;
 		}
 	}
-	
+
 	/**
 	 * returns random answers status.
 	 *
@@ -247,13 +247,13 @@ class Exercise
 	 */
 	function selectRandomAnswers()
 	{
-		
+
 		$this->random_answers;
-		
+
 		return $this->random_answers;
-	}	
-	
-	
+	}
+
+
 	/**
 	 * Same as isRandom() but has a name applied to values different than 0 or 1
 	 */
@@ -399,7 +399,7 @@ class Exercise
 	{
 		$this->description=$description;
 	}
-	
+
 	/**
 	* changes the exercise expired_time
 	*
@@ -410,7 +410,7 @@ class Exercise
 	{
 	$this->expired_time = $expired_time;
 	}
-	
+
 	/**
 	 * changes the exercise sound file
 	 *
@@ -432,13 +432,13 @@ class Exercise
 			{
 				$query="SELECT 1 FROM $TBL_DOCUMENT "
             ." WHERE path='".str_replace($documentPath,'',$audioPath).'/'.$this->sound."'";
-				$result=Database::query($query,__FILE__,__LINE__);
+				$result=Database::query($query);
 
 				if(!Database::num_rows($result))
 				{
         /*$query="INSERT INTO $TBL_DOCUMENT(path,filetype) VALUES "
             ." ('".str_replace($documentPath,'',$audioPath).'/'.$this->sound."','file')";
-        Database::query($query,__FILE__,__LINE__);*/
+        Database::query($query);*/
         $id = add_document($_course,str_replace($documentPath,'',$audioPath).'/'.$this->sound,'file',$sound['size'],$sound['name']);
 
         //$id = Database::insert_id();
@@ -449,7 +449,7 @@ class Exercise
                 ."(tool, ref, insert_user_id,to_group_id, insert_date, lastedit_date, lastedit_type) "
                 ." VALUES "
                 ."('".TOOL_DOCUMENT."', $id, $_user['user_id'], 0, '$time', '$time', 'DocumentAdded' )";
-        Database::query($query,__FILE__,__LINE__);*/
+        Database::query($query);*/
         api_item_property_update($_course, TOOL_DOCUMENT, $id, 'DocumentAdded',$_user['user_id']);
         item_property_update_on_folder($_course,str_replace($documentPath,'',$audioPath),$_user['user_id']);
 				}
@@ -560,7 +560,7 @@ class Exercise
 		$active = $this->active;
 		$session_id = api_get_session_id();
     	$expired_time = $this->expired_time;
-    
+
 		if ($feedbacktype==1){
 			$results_disabled = 1;
 		} else {
@@ -593,7 +593,7 @@ class Exercise
 			$sql .= " WHERE id='".Database::escape_string($id)."'";
 
 		//	echo $sql;
-			Database::query($sql,__FILE__,__LINE__);
+			Database::query($sql);
 
 			// update into the item_property table
 			api_item_property_update($_course, TOOL_QUIZ, $id,'QuizUpdated',$_user['user_id']);
@@ -630,7 +630,7 @@ class Exercise
 						'".Database::escape_string($expired_time)."',
 						'".Database::escape_string($session_id)."'
 						)";
-			Database::query($sql,__FILE__,__LINE__);
+			Database::query($sql);
 			$this->id=Database::insert_id();
         	// insert into the item_property table
 
@@ -653,7 +653,7 @@ class Exercise
             //$sql="UPDATE $TBL_QUESTIONS SET position='".Database::escape_string($position)."' WHERE id='".Database::escape_string($questionId)."'";
             $sql="UPDATE $TBL_QUIZ_QUESTION SET question_order='".Database::escape_string($position)."' " .
                  "WHERE question_id='".Database::escape_string($questionId)."' and exercice_id=".Database::escape_string($this->id)."";
-            Database::query($sql,__FILE__,__LINE__);
+            Database::query($sql);
 
         }
     }
@@ -953,9 +953,9 @@ class Exercise
 				// test type
 				$radios = array();
 				$radios[] = FormValidator :: createElement ('radio', 'exerciseType', null, get_lang('QuestionsPerPageOne'),'2','onclick = "check_per_page_one() " ');
-				
+
 				$radios[] = FormValidator :: createElement ('radio', 'exerciseType', null, get_lang('QuestionsPerPageAll'),'1',array('onclick' => 'check_per_page_all()', 'id'=>'OptionPageAll'));
-				
+
 				$form -> addGroup($radios, null, get_lang('QuestionsPerPage'));
 			} else {
 				// if is Directfeedback but has not questions we can allow to modify the question type
@@ -988,19 +988,19 @@ class Exercise
 			$random[] = FormValidator :: createElement ('static', 'help','help','<span style="font-style: italic;">'.get_lang('RandomQuestionsHelp').'</span>');
 			//$random[] = FormValidator :: createElement ('text', 'randomQuestions', null,null,'0');
 			$form -> addGroup($random,null,get_lang('RandomQuestions'),'<br />');
-			
+
 			//random answers
 			$radios_random_answers = array();
 			$radios_random_answers[] = FormValidator :: createElement ('radio', 'randomAnswers', null, get_lang('Yes'),'1');
 			$radios_random_answers[] = FormValidator :: createElement ('radio', 'randomAnswers', null, get_lang('No'),'0');
 			$form -> addGroup($radios_random_answers, null, get_lang('RandomAnswers'));
-			
+
 			//Attempts
 			$attempt_option=range(0,10);
 			$attempt_option[0]=get_lang('Infinite');
-	
+
 			$form -> addElement('select', 'exerciseAttempts',get_lang('ExerciseAttempts'),$attempt_option);
-	
+
 			$form -> addElement('checkbox', 'enabletimelimit',get_lang('EnableTimeLimits'),null,'onclick = "  return timelimit() "');
 		  	$var= Exercise::selectTimeLimit();
 
@@ -1013,10 +1013,10 @@ class Exercise
 	    	//$form -> addElement('date', 'end_time', get_lang('ExeEndTime'), array('language'=>'es','format' => 'dMYHi'));
 	    	$form->addElement('datepicker', 'start_time', get_lang('ExeStartTime'), array('form_name'=>'exercise_admin'));
 			$form->addElement('datepicker', 'end_time', get_lang('ExeEndTime'), array('form_name'=>'exercise_admin'));
-              
+
      		//$form -> addElement('select', 'enabletimercontroltotalminutes',get_lang('ExerciseTimerControlMinutes'),$time_minutes_option);
       		$form -> addElement('html','</div>');
-      
+
 
       		$check_option=$this -> selectType();
 			//      var_dump($check_option);
@@ -1025,14 +1025,14 @@ class Exercise
 				$diplay = 'none';
 			} else {
 				$diplay = 'block';
-			} 
-      
+			}
+
     		$form -> addElement('html','<div id="divtimecontrol"  style="display:'.$diplay.';">');
-           
+
 			//Timer control
 			$time_hours_option = range(0,12);
 			$time_minutes_option = range(0,59);
-			$form -> addElement('checkbox', 'enabletimercontrol',get_lang('EnableTimerControl'),null,array('onclick' =>'option_time_expired()','id'=>'enabletimercontrol','onload'=>'check_load_time()'));      
+			$form -> addElement('checkbox', 'enabletimercontrol',get_lang('EnableTimerControl'),null,array('onclick' =>'option_time_expired()','id'=>'enabletimercontrol','onload'=>'check_load_time()'));
 			$expired_date = (int)$this->selectExpiredTime();
 
 			if(($expired_date!='0')) {
@@ -1040,14 +1040,14 @@ class Exercise
 			} else {
 			$form -> addElement('html','<div id="timercontrol" style="display:none;">');
 			}
-      	
+
 			$form -> addElement('text', 'enabletimercontroltotalminutes',get_lang('ExerciseTotalDurationInMinutes'),array('style' => 'width : 35px','id' => 'enabletimercontroltotalminutes'));
 			$form -> addElement('html','</div>');
-			//$form -> addElement('text', 'exerciseAttempts', get_lang('ExerciseAttempts').' : ',array('size'=>'2'));        
-			
+			//$form -> addElement('text', 'exerciseAttempts', get_lang('ExerciseAttempts').' : ',array('size'=>'2'));
+
 			$form -> addElement('html','</div>');  //End advanced setting
-			$form -> addElement('html','</div>');  
-               
+			$form -> addElement('html','</div>');
+
 	        $defaults = array();
 
 	        if (api_get_setting('search_enabled') === 'true') {
@@ -1111,7 +1111,7 @@ class Exercise
 
 			    $defaults['start_time'] = ($this->start_time!='0000-00-00 00:00:00')? $this -> start_time : date('Y-m-d 12:00:00');
 	        	$defaults['end_time'] = ($this->end_time!='0000-00-00 00:00:00')?$this -> end_time : date('Y-m-d 12:00:00',time()+84600);
-          
+
 				//Get expired time
 				if($this -> expired_time != '0') {
 				$defaults['enabletimercontrol'] = 1;
@@ -1119,7 +1119,7 @@ class Exercise
 				} else {
 				$defaults['enabletimercontroltotalminutes'] = 0;
 				}
-                
+
 			} else {
 				$defaults['exerciseType'] = 2;
 				$defaults['exerciseAttempts'] = 0;
@@ -1160,7 +1160,7 @@ class Exercise
 		$this -> updateRandomAnswers($form -> getSubmitValue('randomAnswers'));
 		$this -> updateResultsDisabled($form -> getSubmitValue('results_disabled'));
     	$this -> updateExpiredTime($form -> getSubmitValue('enabletimercontroltotalminutes'));
-		
+
 		if($form -> getSubmitValue('enabletimelimit')==1) {
            $start_time = $form -> getSubmitValue('start_time');
            $this->start_time = $start_time['Y'].'-'.$start_time['F'].'-'.$start_time['d'].' '.$start_time['H'].':'.$start_time['i'].':00';
@@ -1174,19 +1174,19 @@ class Exercise
 		if($form -> getSubmitValue('enabletimercontrol') == 1) {
 			   $expired_total_time = $form -> getSubmitValue('enabletimercontroltotalminutes');
 			   if ($this->expired_time == 0) {
-				   $this->expired_time = $expired_total_time;                    	
+				   $this->expired_time = $expired_total_time;
 			   }
-	
+
 		} else {
 			$this->expired_time = 0;
 		}
-		
+
 		if($form -> getSubmitValue('randomAnswers') == 1) {
            $this->random_answers=1;
     	} else {
            $this->random_answers=0;
         }
-		
+
 		$this -> save($type);
 	}
 
@@ -1246,7 +1246,7 @@ class Exercise
 		    $sql = 'INSERT INTO %s (id, course_code, tool_id, ref_id_high_level, search_did)
 			    VALUES (NULL , \'%s\', \'%s\', %s, %s)';
 		    $sql = sprintf($sql, $tbl_se_ref, $course_id, TOOL_QUIZ, $this->id, $did);
-		    Database::query($sql,__FILE__,__LINE__);
+		    Database::query($sql);
 	    }
 
     }
@@ -1261,7 +1261,7 @@ class Exercise
             $tbl_se_ref = Database::get_main_table(TABLE_MAIN_SEARCH_ENGINE_REF);
             $sql = 'SELECT * FROM %s WHERE course_code=\'%s\' AND tool_id=\'%s\' AND ref_id_high_level=%s LIMIT 1';
             $sql = sprintf($sql, $tbl_se_ref, $course_id, TOOL_QUIZ, $this->id);
-            $res = Database::query($sql, __FILE__, __LINE__);
+            $res = Database::query($sql);
 
             if (Database::num_rows($res) > 0) {
                 require_once(api_get_path(LIBRARY_PATH) . 'search/DokeosIndexer.class.php');
@@ -1312,12 +1312,12 @@ class Exercise
                     // save it to db
                     $sql = 'DELETE FROM %s WHERE course_code=\'%s\' AND tool_id=\'%s\' AND ref_id_high_level=\'%s\'';
                     $sql = sprintf($sql, $tbl_se_ref, $course_id, TOOL_QUIZ, $this->id);
-                    Database::query($sql,__FILE__,__LINE__);
+                    Database::query($sql);
                     //var_dump($sql);
                     $sql = 'INSERT INTO %s (id, course_code, tool_id, ref_id_high_level, search_did)
                         VALUES (NULL , \'%s\', \'%s\', %s, %s)';
                     $sql = sprintf($sql, $tbl_se_ref, $course_id, TOOL_QUIZ, $this->id, $did);
-                    Database::query($sql,__FILE__,__LINE__);
+                    Database::query($sql);
                 }
 
             }
@@ -1332,7 +1332,7 @@ class Exercise
 		    $tbl_se_ref = Database::get_main_table(TABLE_MAIN_SEARCH_ENGINE_REF);
 		    $sql = 'SELECT * FROM %s WHERE course_code=\'%s\' AND tool_id=\'%s\' AND ref_id_high_level=%s AND ref_id_second_level IS NULL LIMIT 1';
 		    $sql = sprintf($sql, $tbl_se_ref, $course_id, TOOL_QUIZ, $this->id);
-		    $res = Database::query($sql, __FILE__, __LINE__);
+		    $res = Database::query($sql);
 		    if (Database::num_rows($res) > 0) {
 			    $row = Database::fetch_array($res);
 			    require_once(api_get_path(LIBRARY_PATH) .'search/DokeosIndexer.class.php');
@@ -1343,7 +1343,7 @@ class Exercise
                 foreach ( $this->questionList as $question_i) {
                     $sql = 'SELECT type FROM %s WHERE id=%s';
                     $sql = sprintf($sql, $tbl_quiz_question, $question_i);
-                    $qres = Database::query($sql, __FILE__, __LINE__);
+                    $qres = Database::query($sql);
                     if (Database::num_rows($qres) > 0) {
                         $qrow = Database::fetch_array($qres);
                         $objQuestion = Question::getInstance($qrow['type']);
@@ -1355,7 +1355,7 @@ class Exercise
 		    }
 		    $sql = 'DELETE FROM %s WHERE course_code=\'%s\' AND tool_id=\'%s\' AND ref_id_high_level=%s AND ref_id_second_level IS NULL LIMIT 1';
 		    $sql = sprintf($sql, $tbl_se_ref, $course_id, TOOL_QUIZ, $this->id);
-		    Database::query($sql, __FILE__, __LINE__);
+		    Database::query($sql);
 
 		    // remove terms from db
             require_once(api_get_path(LIBRARY_PATH) .'specific_fields_manager.lib.php');

@@ -72,22 +72,30 @@ class CourseDescription
 	}
 
 	/**
-     * Get all data by description and session id,
+     * Get all data by description and session id, 
      * first you must set session_id property with the object CourseDescription
      * @param 	int	description type
+     * @param   string  course code (optional)
      * @return array
      */
-	public function get_data_by_description_type($description_type) {
+	public function get_data_by_description_type($description_type, $course_code = '') {
+		
 		$tbl_course_description = Database::get_course_table(TABLE_COURSE_DESCRIPTION);
+		
+		if (!empty($course_code)) {
+			$course_info = api_get_course_info($course_code);
+			$tbl_course_description = Database::get_course_table(TABLE_COURSE_DESCRIPTION, $course_info['dbName']);
+		}
+
 		$sql = "SELECT * FROM $tbl_course_description WHERE description_type='$description_type' AND session_id='".$this->session_id."'";
-		$rs = Database::query($sql);
-		$data = array();
+		$rs = Database::query($sql, __FILE__, __LINE__);				
+		$data = array();		
 		if ($description = Database::fetch_array($rs)) {
 			$data['description_title']	 = $description['title'];
 			$data['description_content'] = $description['content'];
 			$data['progress'] 			 = $description['progress'];
-		}
-		return $data;
+		}						
+		return $data;		
 	}
 
 	/**

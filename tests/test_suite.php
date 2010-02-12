@@ -30,10 +30,10 @@ require_once $libdir.'formvalidator/FormValidator.class.php';
 
 //Need the ob start and clean else will show the objects 
 ob_start();
-require_once $incdir.'lib/main_api.lib.php';
-require_once $incdir.'lib/course_document.lib.php';
-require_once $incdir.'lib/banner.lib.php';
-require_once $incdir.'lib/add_course.lib.inc.php';
+require_once $libdir.'main_api.lib.php';
+require_once $libdir.'course_document.lib.php';
+require_once $libdir.'banner.lib.php';
+require_once $libdir.'add_course.lib.inc.php';
 require_once $incdir.'tool_navigation_menu.inc.php';
 require_once $incdir.'banner.inc.php';
 require_once $libdir.'geometry.lib.php';
@@ -49,7 +49,11 @@ require_once $maindir.'install/install_upgrade.lib.php';
 require_once $maindir.'exercice/export/scorm/scorm_classes.php';
 require_once $maindir.'exercice/export/qti2/qti2_classes.php';
 require_once $maindir.'exercice/export/exercise_import.inc.php';
-require_once $incdir.'lib/fileManage.lib.php';
+require_once $maindir.'exercice/exercise_result.class.php';
+require_once $libdir.'exercise_show_functions.lib.php';
+require_once $maindir.'exercice/answer.class.php';
+require_once $maindir.'exercice/exercise.class.php';
+require_once $libdir.'fileManage.lib.php';
 
 
 class TestsSuite extends TestSuite {
@@ -209,10 +213,16 @@ class TestsSuite extends TestSuite {
 		//$this->addTestFile(dirname(__FILE__).'/main/exercice/export/exercise_import.inc.test.php');
 		//$this->addTestFile(dirname(__FILE__).'/main/exercice/export/scorm/scorm_export.test.php');
 		
-		
+		/**EJERCICIOS**/
+		$this->addTestFile(dirname(__FILE__).'/main/exercice/answer.class.test.php');
+		$this->addTestFile(dirname(__FILE__).'/main/exercice/exercise_result.class.test.php');
+		$this->addTestFile(dirname(__FILE__).'/main/inc/lib/exercise_show_functions.lib.test.php');
+		$this->addTestFile(dirname(__FILE__).'/main/exercice/exercise.class.test.php');
 	  	
 	    $this->addTestFile(dirname(__FILE__).'/main/inc/lib/main_api.lib.test.php');//this file delete the course     
         $this->addTestFile(dirname(__FILE__).'/main/inc/lib/debug.lib.inc.test.php');//this file need be to the finish of the tests
+        
+                
 	    
     }
 }

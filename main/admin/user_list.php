@@ -509,9 +509,9 @@ function modify_filter($user_id,$url_params,$row)
 	}
 
 	if ($row['7'] == $statusname[DRH]) {
-		$result .= '<a href="dashboard_add_users_to_user.php?user='.$user_id.'">'.Display::return_icon('addd.gif', get_lang('Add')).'</a>&nbsp;&nbsp;';
-		$result .= '<a href="dashboard_add_courses_to_user.php?user='.$user_id.'">'.Display::return_icon('addd.gif', get_lang('Add')).'</a>&nbsp;&nbsp;';
-		$result .= '<a href="dashboard_add_users_to_sessions.php?user='.$user_id.'">'.Display::return_icon('addd.gif', get_lang('Add')).'</a>&nbsp;&nbsp;';
+		$result .= '<a href="dashboard_add_users_to_user.php?user='.$user_id.'">'.Display::return_icon('add_user_big.gif', get_lang('AssignUsers')).'</a>&nbsp;&nbsp;';
+		$result .= '<a href="dashboard_add_courses_to_user.php?user='.$user_id.'">'.Display::return_icon('course_add.gif', get_lang('AssignCourses')).'</a>&nbsp;&nbsp;';
+		$result .= '<a href="dashboard_add_sessions_to_user.php?user='.$user_id.'">'.Display::return_icon('view_more_stats.gif', get_lang('AssignSessions')).'</a>&nbsp;&nbsp;';	
 	}
 
 	return $result;
@@ -632,6 +632,7 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced')
 	$status_options['%'] = get_lang('All');
 	$status_options[STUDENT] = get_lang('Student');
 	$status_options[COURSEMANAGER] = get_lang('Teacher');
+	$status_options[DRH] = get_lang('HumanResourceManager');
 	$status_options[SESSIONADMIN] = get_lang('Administrator');//
 	$form->addElement('select','keyword_status',get_lang('Status'),$status_options);
 	$active_group = array();

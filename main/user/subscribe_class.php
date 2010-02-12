@@ -96,7 +96,7 @@ function get_number_of_classes()
 	$class_table = Database :: get_main_table(TABLE_MAIN_CLASS);
 	$course_class_table = Database :: get_main_table(TABLE_MAIN_COURSE_CLASS);
 	$sql = "SELECT * FROM $course_class_table WHERE course_code = '".$_SESSION['_course']['id']."'";
-	$res = Database::query($sql,__FILE__,__LINE__);
+	$res = Database::query($sql);
 	$subscribed_classes = array();
 	while($obj = Database::fetch_object($res))
 	{
@@ -112,7 +112,7 @@ function get_number_of_classes()
 	{
 		$sql .= " AND c.id NOT IN ('".implode("','",$subscribed_classes)."')";
 	}
-	$res = Database::query($sql, __FILE__, __LINE__);
+	$res = Database::query($sql);
 	$result = Database::num_rows($res);
 	return $result;
 }
@@ -125,7 +125,7 @@ function get_class_data($from, $number_of_items, $column, $direction)
 	$course_class_table = Database :: get_main_table(TABLE_MAIN_COURSE_CLASS);
 	$class_user_table = Database :: get_main_table(TABLE_MAIN_CLASS_USER);
 	$sql = "SELECT * FROM $course_class_table WHERE course_code = '".$_SESSION['_course']['id']."'";
-	$res = Database::query($sql,__FILE__,__LINE__);
+	$res = Database::query($sql);
 	$subscribed_classes = array();
 	while($obj = Database::fetch_object($res))
 	{
@@ -152,7 +152,7 @@ function get_class_data($from, $number_of_items, $column, $direction)
 	$sql .= " GROUP BY c.id, c.name ";
 	$sql .= " ORDER BY col$column $direction ";
 	$sql .= " LIMIT $from,$number_of_items";
-	$res = Database::query($sql, __FILE__, __LINE__);
+	$res = Database::query($sql);
 	$classes = array ();
 	while ($class = Database::fetch_row($res))
 	{

@@ -107,7 +107,7 @@ if ($_GET['chatid'] != '') {
 	$chatid = addslashes($_GET['chatid']);
 	if ($_GET['chatid'] == strval(intval($_GET['chatid']))) {
 		$sql = "update $track_user_table set chatcall_user_id = '".Database::escape_string($_user['user_id'])."', chatcall_date = '".Database::escape_string($time)."', chatcall_text = '' where (user_id = ".(int)Database::escape_string($chatid).")";
-		$result = Database::query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql);
 		//redirect caller to chat
 		header("Location: ".$_configuration['code_append']."chat/chat.php?".api_get_cidreq()."&origin=whoisonline&target=".Security::remove_XSS($chatid));
 		exit;
@@ -117,7 +117,7 @@ if ($_GET['chatid'] != '') {
 
 // This if statement prevents users accessing the who's online feature when it has been disabled.
 if ((api_get_setting('showonline', 'world') == 'true' && !$_user['user_id']) || ((api_get_setting('showonline', 'users') == 'true' || api_get_setting('showonline', 'course') == 'true') && $_user['user_id'])) {
-	
+
 	if(isset($_GET['cidReq']) && strlen($_GET['cidReq']) > 0) {
 		$user_list = Who_is_online_in_this_course($_user['user_id'], api_get_setting('time_limit_whosonline'), $_GET['cidReq']);
 	} else {
@@ -125,19 +125,19 @@ if ((api_get_setting('showonline', 'world') == 'true' && !$_user['user_id']) || 
 	}
 
 	$total = count($user_list);
-	if (!isset($_GET['id'])) {		
-		
+	if (!isset($_GET['id'])) {
+
 		Display::display_header(get_lang('UsersOnLineList'));
-		
+
 		if (api_get_setting('allow_social_tool') == 'true') {
-			if (!api_is_anonymous()) {		
-				echo '<div id="social-content-left">';	
-				//this include the social menu div					
+			if (!api_is_anonymous()) {
+				echo '<div id="social-content-left">';
+				//this include the social menu div
 				SocialManager::show_social_menu('whoisonline');
-				echo '</div>';				
-			}	
-			
-	  
+				echo '</div>';
+			}
+
+
 			if ($_GET['id'] == '') {
 				echo '<p><a class="refresh" href="javascript:window.location.reload()">'.get_lang('Refresh').'</a></p>';
 			} /*else {
@@ -149,18 +149,18 @@ if ((api_get_setting('showonline', 'world') == 'true' && !$_user['user_id']) || 
 		} else {
 			echo '<div class="actions-title">';
 			echo get_lang('UsersOnLineList');
-			echo '</div>';	
-		}			
+			echo '</div>';
+		}
 	}
 
 	if ($user_list) {
 		if (!isset($_GET['id'])) {
 			if (api_get_setting('allow_social_tool') == 'true') {
-				echo '<div id="social-content-right">';	
+				echo '<div id="social-content-right">';
 				//this include the social menu div
 				if (!api_is_anonymous()) {
 					echo UserManager::get_search_form($_GET['q']);
-				}	
+				}
 			}
 			SocialManager::display_user_list($user_list);
 			echo '</div>';
@@ -172,10 +172,10 @@ if ((api_get_setting('showonline', 'world') == 'true' && !$_user['user_id']) || 
 		Display::display_header(get_lang('UsersOnLineList'));
 		echo '<div class="actions-title">';
 		echo get_lang('UsersOnLineList');
-		echo '</div>';		
+		echo '</div>';
 	}
-	
-	
+
+
 } else {
 	Display::display_header(get_lang('UsersOnLineList'));
 	Display::display_error_message(get_lang('AccessNotAllowed'));

@@ -109,7 +109,7 @@ if (api_is_allowed_to_edit()) {
 						$sql_query .= ' AND id_session = '.$session_id;
 					}
 					$sql_query .= $sort_by_first_name ? ' ORDER BY user.firstname, user.lastname' : ' ORDER BY user.lastname, user.firstname';
-					$rs = Database::query($sql_query, __FILE__, __LINE__);
+					$rs = Database::query($sql_query);
 					while ($user = Database:: fetch_array($rs, 'ASSOC')) {
 						$data[] = $user;
 						//$user_infos = Database :: get_user_info_from_id($user['user_id']);
@@ -122,7 +122,7 @@ if (api_is_allowed_to_edit()) {
 					$table_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 					$sql_query = "SELECT DISTINCT user.user_id, ".($is_western_name_order ? "user.firstname, user.lastname" : "user.lastname, user.firstname").", user.email, user.official_code
 						FROM $table_course_user as course_user, $table_users as user WHERE `course_code` = '$currentCourseID' AND course_user.user_id = user.user_id ".($sort_by_first_name ? "ORDER BY user.firstname, user.lastname" : "ORDER BY user.lastname, user.firstname");
-					$rs = Database::query($sql_query, __FILE__, __LINE__);
+					$rs = Database::query($sql_query);
 					while ($user = Database::fetch_array($rs, 'ASSOC')) {
 						$data[] = $user;
 						$a_users[$user['user_id']] = $user;
@@ -159,7 +159,7 @@ if (api_is_allowed_to_edit()) {
 					WHERE user.user_id = "'.$user_id.'"
 					AND rel_course.course_code = "'.$currentCourseID.'"';
 
-			$result = Database::query($sql, __FILE__ ,__LINE__);
+			$result = Database::query($sql);
 			$row = Database::fetch_array($result, 'ASSOC');
 			if ($row['user_id'] == $user_id || $row['user_id'] == "") {
 				CourseManager::unsubscribe_user($_GET['user_id'], $_SESSION['_course']['sysCode']);
@@ -311,7 +311,7 @@ if ( api_is_allowed_to_edit()) {
 	// the action links
 	$actions .= '<a href="user.php?'.api_get_cidreq().'&action=export&amp;type=csv">'.Display::return_icon('csv.gif', get_lang('ExportAsCSV')).'&nbsp;'.get_lang('ExportAsCSV').'</a> ';
 	$actions .= '<a href="user.php?'.api_get_cidreq().'&action=export&amp;type=xls">'.Display::return_icon('excel.gif', get_lang('ExportAsXLS')).'&nbsp;'.get_lang('ExportAsXLS').'</a> ';
-	
+
 	$actions .= '<a href="subscribe_user.php?'.api_get_cidreq().'">'.Display::return_icon('add_user_big.gif',get_lang("SubscribeUserToCourse")).'&nbsp;'.get_lang("SubscribeUserToCourse").'</a> ';
 	$actions .= "<a href=\"subscribe_user.php?".api_get_cidreq()."&type=teacher\">".Display::return_icon('add_teacher_big.gif', get_lang("SubscribeUserToCourseAsTeacher"))."&nbsp;".get_lang("SubscribeUserToCourseAsTeacher")."</a> ";
 	$actions .= "<a href=\"../group/group.php?".api_get_cidreq()."\">".Display::return_icon('group.gif', get_lang("GroupUserManagement"))."&nbsp;".get_lang("GroupUserManagement")."</a>";

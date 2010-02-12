@@ -72,7 +72,7 @@ if (!empty($_GET['scormcontopen'])) {
     $tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
 	$contopen = (int) $_GET['scormcontopen'];
 	$sql = "SELECT default_encoding FROM $tbl_lp WHERE id = ".$contopen;
-	$res = Database::query($sql,__FILE__,__LINE__);
+	$res = Database::query($sql);
 	$row = Database::fetch_array($res);
 	$lp_charset = $row['default_encoding'];
 }
@@ -105,7 +105,7 @@ $tbl_learnpath_item = Database::get_course_table(TABLE_LP_ITEM);
 $tbl_learnpath_view = Database::get_course_table(TABLE_LP_VIEW);
 $tbl_learnpath_item_view = Database::get_course_table(TABLE_LP_ITEM_VIEW);
 
-// breadcrumbs 
+// breadcrumbs
 if (isset($_GET['origin']) && $_GET['origin'] == 'resume_session') {
     $interbreadcrumb[] = array('url' => '../admin/index.php','name' => get_lang('PlatformAdmin'));
     $interbreadcrumb[] = array('url' => '../admin/session_list.php','name' => get_lang('SessionList'));
@@ -122,9 +122,9 @@ Display::display_header($nameTools, 'Tracking');
 // getting all the students of the course
 $a_students = CourseManager :: get_student_list_from_course_code($_course['id'], true, (empty($_SESSION['id_session']) ? null : $_SESSION['id_session']));
 $nbStudents = count($a_students);
-			
+
 // gettting all the additional information of an additional profile field
-if (isset($_GET['additional_profile_field']) && is_numeric($_GET['additional_profile_field'])) { 
+if (isset($_GET['additional_profile_field']) && is_numeric($_GET['additional_profile_field'])) {
 	//$additional_user_profile_info = get_addtional_profile_information_of_field($_GET['additional_profile_field']);
 	$user_array = array();
 	foreach ($a_students as $key=>$item) {
@@ -138,7 +138,7 @@ if (isset($_GET['additional_profile_field']) && is_numeric($_GET['additional_pro
 
 
 
-	
+
 
 
 /*
@@ -229,7 +229,7 @@ if ($_GET['studentlist'] == 'false') {
 
 	$sql = "SELECT id, title
 			FROM $TABLEQUIZ WHERE active <> -1";
-	$rs = Database::query($sql, __FILE__, __LINE__);
+	$rs = Database::query($sql);
 
 	if ($export_csv) {
     	$temp = array(get_lang('AverageProgressInLearnpath'), '');
@@ -241,7 +241,7 @@ if ($_GET['studentlist'] == 'false') {
 		// gets course actual administrators
 		$sql = "SELECT user.user_id FROM $table_user user, $TABLECOURSUSER course_user
 			WHERE course_user.user_id=user.user_id AND course_user.course_code='".api_get_course_id()."' AND course_user.status <> '1' ";
-		$res = Database::query($sql, __FILE__, __LINE__);
+		$res = Database::query($sql);
 
 		$student_ids = array();
 
@@ -262,7 +262,7 @@ if ($_GET['studentlist'] == 'false') {
 						AND orig_lp_id = 0
 						AND orig_lp_item_id = 0
 						ORDER BY exe_date DESC';
-					$rsAttempt = Database::query($sql, __FILE__, __LINE__);
+					$rsAttempt = Database::query($sql);
 					$nb_attempts = 0;
 					$avg_student_score = 0;
 					while ($attempt = Database::fetch_array($rsAttempt)) {
@@ -343,7 +343,7 @@ if ($_GET['studentlist'] == 'false') {
             GROUP BY access_tool
 			ORDER BY count_access_tool DESC
 			LIMIT 0, 3";
-	$rs = Database::query($sql, __FILE__, __LINE__);
+	$rs = Database::query($sql);
 
 	if ($export_csv) {
     	$temp = array(get_lang('ToolsMostUsed'), '');
@@ -383,7 +383,7 @@ if ($_GET['studentlist'] == 'false') {
             GROUP BY down_doc_path
 			ORDER BY count_down DESC
 			LIMIT 0,  $num";
-    $rs = Database::query($sql, __FILE__, __LINE__);
+    $rs = Database::query($sql);
 
     if ($export_csv) {
     	$temp = array(get_lang('DocumentsMostDownloaded', ''), '');
@@ -425,7 +425,7 @@ if ($_GET['studentlist'] == 'false') {
             GROUP BY cl.title, cl.url
 			ORDER BY count_visits DESC
 			LIMIT 0, 3";
-    $rs = Database::query($sql, __FILE__, __LINE__);
+    $rs = Database::query($sql);
 
     if ($export_csv) {
     	$temp = array(get_lang('LinksMostClicked'),'');
@@ -479,7 +479,7 @@ if ($_GET['studentlist'] == 'false') {
 		15 => '15 '.get_lang('Days'),
 		30 => '30 '.get_lang('Days'),
 		'never' => get_lang('Never')
-				
+
 	);
 
 	$el = $form -> addElement('select', 'since', '<img width="22" align="middle" src="'.api_get_path(WEB_IMG_PATH).'messagebox_warning.gif" border="0" />'.get_lang('RemindInactivesLearnersSince'), $options);
@@ -502,23 +502,23 @@ if ($_GET['studentlist'] == 'false') {
 	$tracking_direction = isset($_GET['tracking_direction']) ? $_GET['tracking_direction'] : 'DESC';
 
 	if (count($a_students) > 0) {
-		
+
 	    if ($export_csv) {
 			$csv_content[] = array ();
 		}
 
 	    $all_datas = array();
 	    $course_code = $_course['id'];
-		
+
 		$user_ids = array_keys($a_students);
 		$table = new SortableTable('users_tracking', array('TrackingCourseLog','get_number_of_users'), array('TrackingCourseLog','get_user_data'), (api_is_western_name_order() xor api_sort_by_first_name()) ? 3 : 2);
-		
+
 		$parameters['cidReq'] 		= Security::remove_XSS($_GET['cidReq']);
 		$parameters['studentlist'] 	= Security::remove_XSS($_GET['studentlist']);
 		$parameters['from'] 	= Security::remove_XSS($_GET['myspace']);
-		
+
 		$table->set_additional_parameters($parameters);
-		
+
 		$table -> set_header(0, get_lang('OfficialCode'), false, 'align="center"');
 		if ($is_western_name_order) {
 			$table -> set_header(1, get_lang('FirstName'), false, 'align="center"');
@@ -529,26 +529,26 @@ if ($_GET['studentlist'] == 'false') {
 		}
 		$table -> set_header(3, get_lang('TrainingTime'),false);
 		$table -> set_header(4, get_lang('CourseProgress'),false);
-		$table -> set_header(5, get_lang('Score'),false);	
+		$table -> set_header(5, get_lang('Score'),false);
 		$table -> set_header(6, get_lang('Student_publication'),false);
 		$table -> set_header(7, get_lang('Messages'),false);
 		$table -> set_header(8, get_lang('FirstLogin'), false, 'align="center"');
-		$table -> set_header(9, get_lang('LatestLogin'), false, 'align="center"');				
+		$table -> set_header(9, get_lang('LatestLogin'), false, 'align="center"');
 		//if (isset($_GET['additional_profile_field']) AND is_numeric($_GET['additional_profile_field'])) {
-			$table -> set_header(10, get_lang('AdditionalProfileField'),false);			
+			$table -> set_header(10, get_lang('AdditionalProfileField'),false);
         /*} else {
         	$table -> set_header(10, ,false);
         }*/
 		$table -> set_header(11, get_lang('Details'),false);
 		$table->display();
-		
-		
+
+
 	} else {
 		echo get_lang('NoUsersInCourseTracking');
 	}
 
 	// send the csv file if asked
-	if ($export_csv) {			
+	if ($export_csv) {
 		if ($is_western_name_order) {
 			$csv_headers = array (
 				get_lang('OfficialCode', ''),
@@ -576,7 +576,7 @@ if ($_GET['studentlist'] == 'false') {
 				get_lang('LatestLogin', '')
 			);
 		}
-		
+
 		if (isset($_GET['additional_profile_field']) AND is_numeric($_GET['additional_profile_field'])) {
 			$csv_headers[]=get_lang('AdditionalProfileField');
 		}

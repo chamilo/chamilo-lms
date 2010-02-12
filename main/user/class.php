@@ -120,7 +120,7 @@ function get_number_of_classes()
 		$keyword = Database::escape_string(trim($_GET['keyword']));
 		$sql .= " AND (c.name LIKE '%".$keyword."%')";
 	}
-	$res = Database::query($sql, __FILE__, __LINE__);
+	$res = Database::query($sql);
 	$result = Database::num_rows($res);
 	return $result;
 }
@@ -152,7 +152,7 @@ function get_class_data($from, $number_of_items, $column, $direction)
 	$sql .= " GROUP BY c.id, c.name ";
 	$sql .= " ORDER BY col$column $direction ";
 	$sql .= " LIMIT $from,$number_of_items";
-	$res = Database::query($sql, __FILE__, __LINE__);
+	$res = Database::query($sql);
 	$classes = array ();
 	while ($class = Database::fetch_row($res))
 	{

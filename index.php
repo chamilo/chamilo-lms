@@ -144,7 +144,7 @@ if (!empty($_POST['submitAuth'])) {
 								FROM $track_login_table
 								WHERE login_user_id = '".$_user['user_id']."'
 								ORDER BY login_date DESC LIMIT 1";
-		$result_last_login = Database::query($sql_last_login, __FILE__, __LINE__);
+		$result_last_login = Database::query($sql_last_login);
 		if (!$result_last_login) {
 			if (Database::num_rows($result_last_login) > 0) {
 				$user_last_login_datetime = Database::fetch_array($result_last_login);
@@ -292,7 +292,7 @@ function logout()
 	// selecting the last login of the user
 	$uid = intval($_GET['uid']);
 	$sql_last_connection = "SELECT login_id, login_date FROM $tbl_track_login WHERE login_user_id='$uid' ORDER BY login_date DESC LIMIT 0,1";
-	$q_last_connection = Database::query($sql_last_connection, __FILE__, __LINE__);
+	$q_last_connection = Database::query($sql_last_connection);
 	if (Database::num_rows($q_last_connection) > 0) {
 		$i_id_last_connection = Database::result($q_last_connection, 0, 'login_id');
 	}
@@ -300,7 +300,7 @@ function logout()
 	if (!isset($_SESSION['login_as'])) {
 		$current_date = date('Y-m-d H:i:s', time());
 		$s_sql_update_logout_date = "UPDATE $tbl_track_login SET logout_date='".$current_date."' WHERE login_id='$i_id_last_connection'";
-		Database::query($s_sql_update_logout_date, __FILE__, __LINE__);
+		Database::query($s_sql_update_logout_date);
 	}
 	LoginDelete($uid, $_configuration['statistics_database']); //from inc/lib/online.inc.php - removes the "online" status
 
@@ -340,7 +340,7 @@ function category_has_open_courses($category) {
 	$user_identified = (api_get_user_id() > 0 && !api_is_anonymous());
 	$main_course_table = Database :: get_main_table(TABLE_MAIN_COURSE);
 	$sql_query = "SELECT * FROM $main_course_table WHERE category_code='$category'";
-	$sql_result = Database::query($sql_query, __FILE__, __LINE__);
+	$sql_result = Database::query($sql_query);
 	while ($course = Database::fetch_array($sql_result)) {
 		if (!$setting_show_also_closed_courses) {
 			if ((api_get_user_id() > 0
@@ -621,7 +621,7 @@ function display_anonymous_course_list() {
 	}
 
 	//removed: AND cours.visibility='".COURSE_VISIBILITY_OPEN_WORLD."'
-	$sql_result_courses = Database::query($sql_get_course_list, __FILE__, __LINE__);
+	$sql_result_courses = Database::query($sql_get_course_list);
 
 	while ($course_result = Database::fetch_array($sql_result_courses)) {
 		$course_list[] = $course_result;
@@ -669,7 +669,7 @@ function display_anonymous_course_list() {
 		}
 	}
 
-	$resCats = Database::query($sqlGetSubCatList, __FILE__, __LINE__);
+	$resCats = Database::query($sqlGetSubCatList);
 	$thereIsSubCat = false;
 	if (Database::num_rows($resCats) > 0) {
 		$htmlListCat = "<h4 style=\"margin-top: 0px;\">".get_lang("CatList")."</h4>"."<ul>";
@@ -856,7 +856,7 @@ function get_courses_of_user($user_id) {
 								WHERE course.code = course_rel_user.course_code
 								AND   course_rel_user.user_id = '".$user_id."'
 								ORDER BY course_rel_user.sort ASC";
-	$result = Database::query($sql_select_courses, __FILE__, __LINE__);
+	$result = Database::query($sql_select_courses);
 	while ($row = Database::fetch_array($result)) {
 		// we only need the database name of the course
 		$courses[$row['k']] = array('db' => $row['db'], 'code' => $row['k'], 'visual_code' => $row['vc'], 'title' => $row['i'], 'directory' => $row['dir'], 'status' => $row['status'], 'tutor' => $row['t'], 'subscribe' => $row['subscr'], 'unsubscribe' => $row['unsubscr'], 'sort' => $row['sort'], 'user_course_category' => $row['user_course_cat']);

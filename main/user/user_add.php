@@ -74,7 +74,7 @@ if($register)
 		                       (lastname='$lastname_form' AND firstname='$firstname_form' AND email='$email_form') AS userExists
 		                     FROM $tbl_user
 		                     WHERE username='$username_form' OR (lastname='$lastname_form' AND firstname='$firstname_form' AND email='$email_form')
-		                     ORDER BY userExists DESC, loginExists DESC", __FILE__, __LINE__);
+		                     ORDER BY userExists DESC, loginExists DESC");
 
 		if(Database::num_rows($result))
 		{
@@ -132,7 +132,7 @@ if($register)
 		                           email     = '$email_form',
 		                           status    = '$platformStatus',
 		                           official_code = '$official_code_form',
-		                           creator_id = '".$_user['user_id']."'", __FILE__, __LINE__);
+		                           creator_id = '".$_user['user_id']."'");
 
 		$userId = Database::insert_id();
 
@@ -161,7 +161,7 @@ if($register)
 						SET user_id     = '$userId',
 							course_code  = '$currentCourseID',
 							status      = '$admin_form',
-							tutor_id       = '$tutor_form'", __FILE__, __LINE__))
+							tutor_id       = '$tutor_form'"))
 		{
 			$courseRegSucceed = true;
 		}

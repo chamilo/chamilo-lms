@@ -79,7 +79,7 @@ if ($_GET['scormcontopen'])
 	$tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
 	$contopen = (int) $_GET['scormcontopen'];
 	$sql = "SELECT default_encoding FROM $tbl_lp WHERE id = ".$contopen;
-	$res = Database::query($sql,__FILE__,__LINE__);
+	$res = Database::query($sql);
 	$row = Database::fetch_array($res);
 	$lp_charset = $row['default_encoding'];
 	//header('Content-Type: text/html; charset='. $row['default_encoding']);
@@ -138,7 +138,7 @@ if(api_get_setting('use_session_mode') == "true") {
 				OR (date_start='0000-00-00' AND date_end='0000-00-00'))
 			WHERE id_session='".$_SESSION['id_session']."' AND course_code='$_cid'";
 	//echo $sql;
-	$result=Database::query($sql,__FILE__,__LINE__);
+	$result=Database::query($sql);
 	if(!Database::num_rows($result)){
 		$disabled = true;
 	}
@@ -285,7 +285,7 @@ if( ( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse ) && $_configura
 						WHERE `gu`.`user_id` = `u`.`user_id`
 							AND `gu`.`group_id` = '$_gid'
 							AND `u`.`user_id` = '$uInfo'";
-			$query = Database::query($sql,__FILE__,__LINE__);
+			$query = Database::query($sql);
 			$tracked_user_info = @Database::fetch_assoc($query);
 			if(is_array($tracked_user_info)) $tracking_is_accepted = true;
 
@@ -336,7 +336,7 @@ if( ( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse ) && $_configura
             $title[1]=get_lang('ScormContentColumn');
 			$line ='';
             $sql = "SELECT id, name FROM $tbl_learnpath_main";
-    		$result=Database::query($sql,__FILE__,__LINE__);
+    		$result=Database::query($sql);
     	    $ar=Database::fetch_array($result);
 
           if (is_array($ar))
@@ -353,7 +353,7 @@ if( ( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse ) && $_configura
 									"INNER JOIN $tbl_learnpath_item_view iv ON i.id=iv.lp_item_id " .
 									"INNER JOIN $tbl_learnpath_view v ON iv.lp_view_id=v.id " .
 									"WHERE (v.user_id=$uInfo and v.lp_id=$contentId) ORDER BY v.id, i.id";
-   							$result3=Database::query($sql3,__FILE__,__LINE__);
+   							$result3=Database::query($sql3);
    						    $ar3=Database::fetch_array($result3);
                             if (is_array($ar3)) {
                                 $title_line=get_lang('ScormTitleColumn').";".get_lang('ScormStatusColumn').";".get_lang('ScormScoreColumn').";".get_lang('ScormTimeColumn')."\n";

@@ -528,7 +528,15 @@ function display_requirements($installType, $badUpdatePath, $updatePath = '', $u
 			<tr>
 				<td class="requirements-item">chamilo/home/</td>
 				<td class="requirements-value">'.check_writable('../home/').'</td>
-			</tr>'.
+			</tr>
+            <tr>
+                <td class="requirements-item">chamilo/main/css/</td>
+                <td class="requirements-value">'.check_writable('css/').' ('.get_lang('SuggestionOnlyToEnableCSSUploadFeature').')</td>
+            </tr>
+            <tr>
+                <td class="requirements-item">chamilo/main/lang/</td>
+                <td class="requirements-value">'.check_writable('lang/').' ('.get_lang('SuggestionOnlyToEnableSubLanguageFeature').')</td>
+            </tr>'.
             //'<tr>
             //    <td class="requirements-item">dokeos/searchdb/</td>
             //    <td class="requirements-value">'.check_writable('../searchdb/').'</td>

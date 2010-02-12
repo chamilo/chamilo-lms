@@ -437,7 +437,7 @@ class MessageManager
 			// Storing the attachments if any
 			$sql="INSERT INTO $tbl_message_attach(filename,comment, path,message_id,size)
 				  VALUES ( '$safe_file_name', '$safe_file_comment', '$safe_new_file_name' , '$message_id', '".$file_attach['size']."' )";
-			$result=Database::query($sql, __LINE__, __FILE__);
+			$result=Database::query($sql);
 		}
 	}
 

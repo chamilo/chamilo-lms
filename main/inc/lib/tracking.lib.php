@@ -906,7 +906,7 @@ class Tracking {
 				$condition_user = " AND insert_user_id = '$student_id' ";
 			}
 			$sql = "SELECT count(tool) FROM $tbl_item_property WHERE tool='work' $condition_user ";
-			$rs = Database::query($sql, __LINE__, __FILE__);
+			$rs = Database::query($sql);
 			$row = Database::fetch_row($rs);
 			return $row[0];
 		}
@@ -930,7 +930,7 @@ class Tracking {
 				$condition_user = " WHERE poster_id = '$student_id' ";
 			}
 			$sql = "SELECT count(post_id) FROM $tbl_messages $condition_user ";
-			$rs = Database::query($sql, __LINE__, __FILE__);
+			$rs = Database::query($sql);
 			$row = Database::fetch_row($rs);
 			return $row[0];
 		}
@@ -1066,7 +1066,7 @@ class Tracking {
 			$sql = "SELECT access_date FROM $tbl_stats_access
 					 WHERE access_tool='".TOOL_CHAT."' AND access_user_id='$student_id' AND access_cours_code = '$course_code' ORDER BY access_date DESC limit 1";
 
-			$rs = Database::query($sql, __LINE__, __FILE__);
+			$rs = Database::query($sql);
 			$row = Database::fetch_array($rs);
 			$last_connection = $row['access_date'];
 			if (!empty($last_connection)) {
@@ -1094,7 +1094,7 @@ class Tracking {
 						WHERE links_user_id=' . $student_id . '
 						AND links_cours_id="' . $course_code . '"';
 
-		$rs = Database::query($sql, __LINE__, __FILE__);
+		$rs = Database::query($sql);
 		return Database::num_rows($rs);
 	}
 
@@ -1111,7 +1111,7 @@ class Tracking {
 						WHERE down_user_id=' . $student_id . '
 						AND down_cours_id="' . $course_code . '"';
 
-		$rs = Database::query($sql, __LINE__, __FILE__);
+		$rs = Database::query($sql);
 		return Database::num_rows($rs);
 	}
 
@@ -1120,7 +1120,7 @@ class Tracking {
 		$id_session = intval($id_session);
 		$tbl_session_course_user = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 		$sql = 'SELECT course_code FROM ' . $tbl_session_course_user . ' WHERE id_user="' . $user_id . '" AND id_session="' . $id_session . '"';
-		$result = Database::query($sql, __LINE__, __FILE__);
+		$result = Database::query($sql);
 		$a_courses = array ();
 		while ($row = Database::fetch_array($result)) {
 			$a_courses[$row['course_code']] = $row['course_code'];

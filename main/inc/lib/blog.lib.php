@@ -273,7 +273,7 @@ class Blog {
 					if ($result) {
 						$sql='INSERT INTO '.$blog_table_attachment.'(filename,comment, path, post_id,size, blog_id,comment_id) '.
 							 "VALUES ( '".Database::escape_string($file_name)."', '".Database::escape_string($comment)."', '".Database::escape_string($new_file_name)."' , '".$last_post_id."', '".intval($_FILES['user_upload']['size'])."',  '".$blog_id."', '0' )";
-						$result=Database::query($sql, __LINE__, __FILE__);
+						$result=Database::query($sql);
 						$message.=' / '.get_lang('AttachmentUpload');
 					}
 				}
@@ -399,7 +399,7 @@ class Blog {
 					{
 						$sql='INSERT INTO '.$blog_table_attachment.'(filename,comment, path, post_id,size,blog_id,comment_id) '.
 							 "VALUES ( '".Database::escape_string($file_name)."', '".Database::escape_string($comment)."', '".Database::escape_string($new_file_name)."' , '".$post_id."', '".$_FILES['user_upload']['size']."',  '".$blog_id."', '".$last_id."'  )";
-						$result=Database::query($sql, __LINE__, __FILE__);
+						$result=Database::query($sql);
 						$message.=' / '.get_lang('AttachmentUpload');
 					}
 				}
@@ -2142,9 +2142,9 @@ class Blog {
 
 		// Give this user basic rights
 		$sql="INSERT INTO $tbl_user_permissions (user_id,tool,action) VALUES ('".(int)$user_id."','BLOG_" . (int)$blog_id."','article_add')";
-		$result = Database::query($sql, __LINE__, __FILE__);
+		$result = Database::query($sql);
 		$sql="INSERT INTO $tbl_user_permissions (user_id,tool,action) VALUES ('".(int)$user_id."','BLOG_" . (int)$blog_id."','article_comments_add')";
-		$result = Database::query($sql, __LINE__, __FILE__);
+		$result = Database::query($sql);
 	}
 
 	/**
@@ -2165,7 +2165,7 @@ class Blog {
 
 		// Remove this user's permissions.
 		$sql = "DELETE FROM $tbl_user_permissions WHERE user_id = '".(int)$user_id."'";
-		$result = Database::query($sql, __LINE__, __FILE__);
+		$result = Database::query($sql);
 	}
 
 	/**

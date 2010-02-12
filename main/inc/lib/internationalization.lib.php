@@ -2,12 +2,12 @@
 /**
  * ==============================================================================
  * File: internationalization.lib.php
- * Internationalization library for Dokeos 1.8.7 LMS
+ * Internationalization library for Chamilo 1.8.7 LMS
  * A library implementing internationalization related functions.
  * License: GNU/GPL version 2 or later (Free Software Foundation)
- * @author Ivan Tcholakov, <ivantcholakov@gmail.com>, September 2009
+ * @author Ivan Tcholakov, <ivantcholakov@gmail.com>, 2009, 2010
  * @author More authors, mentioned in the correpsonding fragments of this source.
- * @package dokeos.library
+ * @package chamilo.library
  * ==============================================================================
  */
 
@@ -18,7 +18,7 @@
  * ----------------------------------------------------------------------------
  */
 
-// Predefined date formats in Dokeos provided by the language sub-system.
+// Predefined date formats in Chamilo provided by the language sub-system.
 // To be used as a parameter for the function api_format_date().
 define('TIME_NO_SEC_FORMAT', 0);	// 15:23
 define('DATE_FORMAT_SHORT', 1);		// 25.08.2009
@@ -91,7 +91,7 @@ function api_set_internationalization_default_encoding($encoding) {
  */
 
 /**
- * Whenever the server type in the Dokeos Config settings is
+ * Returns a translated (localized) string, called by its identificator.
  * @param string $variable		This is the identificator (name) of the translated string to be retrieved.
  * @param string $notrans		This parameter directs whether a link to DLTT to be shown for untranslated strings
  * 								($notrans = 'DLTT' means "yes", any other value means "no").
@@ -104,14 +104,16 @@ function api_set_internationalization_default_encoding($encoding) {
  *
  * Notes:
  * 1. If the name of a given language variable has the prefix "lang" it may be omited, i.e. get_lang('langYes') == get_lang('Yes').
- * 2. When server type in Dokeos config settings is set as test (development) server and $notrans = 'DLTT', untranslated variables
+ * 2. When server type in Chamilo config settings is set as test (development) server and $notrans = 'DLTT', untranslated variables
  * are shown as links to DLTT where translations may be proposed.
  * 3. Additionally, untranslated variables might be indicated by special opening and closing tags  -  [=  =]
  * They do not show up in these two cases (for both production and test server modes):
  * - when the special setting 'hide_dltt_markup' is set so;
  * - when showing the DLTT link (on untranslated variable) is intentionaly suppressed by a developer, using the input parameter
  * $notrans, i.e. when the function is called in this way: get_lang('MyText', '')
- * 4. DLTT means Dokeos Language Translation Tool.
+ * 4. Translations are created by using a special tool: Chamilo Translation Application.
+ * @link http://translate.chamilo.org/
+ * 5. DLTT means Dokeos Language Translation Tool - it was previously used.
  * @link http://www.dokeos.com/DLTT/
  */
 function get_lang($variable, $notrans = 'DLTT', $language = null) {
@@ -212,6 +214,7 @@ function get_lang($variable, $notrans = 'DLTT', $language = null) {
 	}
 	*/
 	$langvar = isset($$variable) ? $$variable : ${"lang$variable"};
+	// TODO: Ivan, 12-FEB-2010: These generated links (translation suggestions) to the Dokeos' site have to be corrected, I don't know how.
 	return $cache[$language][$dltt][$variable] =
 		isset($langvar) && is_string($langvar) && !empty($langvar)
 			? _get_lang_purifier(str_replace("\\'", "'", $langvar), $language)
@@ -298,7 +301,7 @@ function api_get_language_isocode($language = null, $default_code = 'en') {
 		if (!class_exists('Database')) {
 			return $default_code; // This might happen, in case of calling this function early during the global initialization.
 		}
-		$sql_result = Database::query("SELECT isocode FROM ".Database::get_main_table(TABLE_MAIN_LANGUAGE)." WHERE dokeos_folder = '$language'", __FILE__, __LINE__);
+		$sql_result = Database::query("SELECT isocode FROM ".Database::get_main_table(TABLE_MAIN_LANGUAGE)." WHERE dokeos_folder = '$language'");
 		if (Database::num_rows($sql_result)) {
 			$result = Database::fetch_array($sql_result);
 			$iso_code[$language] = trim($result['isocode']);
@@ -399,7 +402,7 @@ function api_detect_language(&$string, $encoding = null) {
  * @author Ivan Tcholakov, 2009, code refactoring, adding support for predefined date/time formats.
  * @param string/int $date_format		The date pattern. See the php-manual about the function strftime().
  * Note: For $date_format the following integer constants may be used for using predefined date/time
- * formats in the Dokeos system: TIME_NO_SEC_FORMAT, DATE_FORMAT_SHORT, DATE_FORMAT_LONG, DATE_TIME_FORMAT_LONG.
+ * formats in the Chamilo system: TIME_NO_SEC_FORMAT, DATE_FORMAT_SHORT, DATE_FORMAT_LONG, DATE_TIME_FORMAT_LONG.
  * @param int $time_stamp (optional)	Time as an integer value. The default value -1 means now, the function time() is called internally.
  * @param string $language (optional)	Language indentificator. If it is omited, the current interface language is assumed.
  * @return string						Returns the formatted date.
@@ -504,7 +507,7 @@ function api_get_months_long($language = null) {
  * Peter Ustinoff or Dr. Peter Ustinoff     - the Western order
  * Ustinoff Peter or Dr. Ustinoff Peter     - the Eastern order
  * Ustinoff, Peter or - Dr. Ustinoff, Peter - the library order
- * Note: See the file dokeos/main/inc/lib/internationalization_database/name_order_conventions.php where you can revise the convention for your language.
+ * Note: See the file chamilo/main/inc/lib/internationalization_database/name_order_conventions.php where you can revise the convention for your language.
  * @author Carlos Vargas <carlos.vargas@dokeos.com> - initial implementation.
  * @author Ivan Tcholakov
  */
@@ -906,7 +909,8 @@ function api_file_system_decode($string, $to_encoding = null) {
  * @link http://www.mediawiki.org
  * @link http://search.cpan.org/~sburke/Text-Unidecode-0.04/lib/Text/Unidecode.pm).
  *
- * Adaptation for the Dokeos 1.8.6.1, 12-JUN-2009:
+ * Adaptation for Chamilo 1.8.7, 2010
+ * Initial implementation for Dokeos 1.8.6.1, 12-JUN-2009
  * @author Ivan Tcholakov
  */
 function api_transliterate($string, $unknown = '?', $from_encoding = null) {
@@ -1136,7 +1140,9 @@ function api_chr($codepoint, $encoding) {
  * @link http://php.net/manual/en/function.str-ireplace
  * @author Henri Sivonen, mailto:hsivonen@iki.fi
  * @link http://hsivonen.iki.fi/php-utf8/
- * @author Ivan Tcholakov, August 2009, adaptation for the Dokeos LMS.
+ * Adaptation for Chamilo 1.8.7, 2010
+ * Initial implementation Dokeos LMS, August 2009
+ * @author Ivan Tcholakov
  */
 function api_str_ireplace($search, $replace, $subject, & $count = null, $encoding = null) {
 	if (empty($encoding)) {
@@ -3120,7 +3126,7 @@ function api_is_encoding_supported($encoding) {
  * The first (leading) value is actually used by the system at the moment.
  * @param string $language (optional)	The specified language, the default value is the user intrface language.
  * @return string						The correspondent encoding to the specified language.
- * Note: See the file dokeos/main/inc/lib/internationalization_database/non_utf8_encodings.php
+ * Note: See the file chamilo/main/inc/lib/internationalization_database/non_utf8_encodings.php
  * if you wish to revise the leading non-UTF-8 encoding for your language.
  */
 function api_get_non_utf8_encoding($language = null) {

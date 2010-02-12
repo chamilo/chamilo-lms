@@ -107,7 +107,7 @@ function decodeOpenInfos() {
                 ORDER BY open_id DESC
                 LIMIT 1";
     //$processBegin = getOneResult($sql);
-    $query = Database::query($sql, __FILE__, __LINE__);
+    $query = Database::query($sql);
     $res = @Database::fetch_array($query);
     $processBegin = $res[0];
     // process
@@ -118,7 +118,7 @@ function decodeOpenInfos() {
                 FROM `$TABLETRACK_OPEN`
                 WHERE   open_remote_host != ''
                 AND     open_id <= '".$processBegin."' ";
-    $query = Database::query($sql, __FILE__, __LINE__);
+    $query = Database::query($sql);
 
     if(Database::num_rows($query) != 0) {
     	// load list of countries
@@ -279,7 +279,7 @@ function fillProvidersTable($providers_array) {
             $sql = "SELECT counter
                                     FROM `".$TABLESTATS_PROVIDERS."`
                                     WHERE `provider` = '".$prov."'";
-            $res = Database::query($sql,__FILE__, __LINE__);
+            $res = Database::query($sql);
 
             // if this provider already exists in the DB
             if($row = Database::num_rows($res)) {
@@ -293,7 +293,7 @@ function fillProvidersTable($providers_array) {
                                             (`provider`,`counter`)
                                             VALUES ('".$prov."','".$number."')";
             }
-            Database::query($sql2,__FILE__, __LINE__);;
+            Database::query($sql2);;
         }
     }
 }
@@ -314,7 +314,7 @@ function loadCountries() {
     global $TABLESTATS_COUNTRIES;
     $sql = "SELECT code, country
                             FROM `".$TABLESTATS_COUNTRIES."`";
-    $res = Database::query($sql, __FILE__, __LINE__);
+    $res = Database::query($sql);
     $i = 0 ;
     if (Database::num_rows($res) > 0){
 	    while ($row = Database::fetch_array($res)) {
@@ -379,7 +379,7 @@ function fillCountriesTable($countries_array) {
 		$sql = "UPDATE `".$TABLESTATS_COUNTRIES."`
 						SET `counter` = counter + '$number'
 						WHERE `country` = '".$country."'";
-		Database::query($sql,__FILE__, __LINE__);
+		Database::query($sql);
 		}
     }
 }
@@ -513,7 +513,7 @@ function fillBrowsersTable($browsers_array) {
 			$sql = "SELECT counter
 						FROM `".$TABLESTATS_BROWSERS."`
 						WHERE `browser` = '".$browser."'";
-			$res = Database::query($sql,__FILE__, __LINE__);
+			$res = Database::query($sql);
 
 			// if this provider already exists in the DB
 			if($row = Database::num_rows($res)) {
@@ -527,7 +527,7 @@ function fillBrowsersTable($browsers_array) {
 							(`browser`,`counter`)
 							VALUES ('".$browser."','".$number."')";
 			}
-			Database::query($sql2,__FILE__, __LINE__);
+			Database::query($sql2);
 		}
     }
 }
@@ -544,7 +544,7 @@ function fillOsTable($os_array) {
 			$sql = "SELECT counter
 						FROM `".$TABLESTATS_OS."`
 						WHERE `os` = '".$os."'";
-			$res = Database::query($sql,__FILE__, __LINE__);
+			$res = Database::query($sql);
 
 			// if this provider already exists in the DB
 			if($row = Database::num_rows($res)) {
@@ -558,7 +558,7 @@ function fillOsTable($os_array) {
 							(`os`,`counter`)
 							VALUES ('".$os."','".$number."')";
 			}
-			Database::query($sql2,__FILE__, __LINE__);
+			Database::query($sql2);
 		}
     }
 }
@@ -601,7 +601,7 @@ function fillReferersTable($referers_array) {
             $sql = "SELECT counter
                                     FROM `".$TABLESTATS_REFERERS."`
                                     WHERE `referer` = '".$referer."'";
-            $res = Database::query($sql,__FILE__, __LINE__);
+            $res = Database::query($sql);
 
             // if this provider already exists in the DB
             if($row = Database::num_rows($res)) {
@@ -615,7 +615,7 @@ function fillReferersTable($referers_array) {
                                             (`referer`,`counter`)
                                             VALUES ('".$referer."','".$number."')";
             }
-            Database::query($sql2,__FILE__, __LINE__);
+            Database::query($sql2);
         }
     }
 }

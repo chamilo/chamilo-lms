@@ -85,7 +85,7 @@ class MessageManager
 		}
 		$i=0;
 		$query = "SELECT * FROM $table_message WHERE user_receiver_id=".api_get_user_id()." AND msg_status=".MESSAGE_STATUS_UNREAD;
-		$result = Database::query($query,__FILE__,__LINE__);
+		$result = Database::query($query);
 		$i = Database::num_rows($result);
 		return $i;
 	}
@@ -117,7 +117,7 @@ class MessageManager
 		}
 
 		$sql_query = "SELECT COUNT(*) as number_messages FROM $table_message WHERE $condition_msg_status AND user_receiver_id=".api_get_user_id();
-		$sql_result = Database::query($sql_query,__FILE__,__LINE__);
+		$sql_result = Database::query($sql_query);
 		$result = Database::fetch_array($sql_result);
 		return $result['number_messages'];
 	}
@@ -150,7 +150,7 @@ class MessageManager
 					 " WHERE user_receiver_id=".api_get_user_id()." AND msg_status IN (0,1)" .
 					 " ORDER BY col$column $direction LIMIT $from,$number_of_items";
 
-		$sql_result = Database::query($sql_query,__FILE__,__LINE__);
+		$sql_result = Database::query($sql_query);
 		$i = 0;
 		$message_list = array ();
 		while ($result = Database::fetch_row($sql_result)) {
@@ -249,7 +249,7 @@ class MessageManager
 
 			//useless query
 			//echo $sql = "SELECT COUNT(*) as count FROM $table_message WHERE user_sender_id = ".$user_sender_id." AND user_receiver_id='$receiver_user_id' AND title = '$title' AND content ='$content' AND group_id = '$group_id' AND parent_id = '$parent_id'";
-			//$res_exist = Database::query($sql,__FILE__,__LINE__);
+			//$res_exist = Database::query($sql);
 			//$row_exist = Database::fetch_array($res_exist,'ASSOC');
 
 			//We should ALWAYS sent emails
@@ -258,12 +258,12 @@ class MessageManager
 			//message in inbox for user friend
 			if ($edit_message_id) {
 				$query = " UPDATE $table_message SET update_date = '".date('Y-m-d H:i:s')."', title = '$subject', content = '$content' WHERE id = '$edit_message_id' ";
-				$result = Database::query($query,__FILE__,__LINE__);
+				$result = Database::query($query);
 				$inbox_last_id = $edit_message_id;
 			} else {
 				$query = "INSERT INTO $table_message(user_sender_id, user_receiver_id, msg_status, send_date, title, content, group_id, parent_id, update_date ) ".
 					 " VALUES ('$user_sender_id', '$receiver_user_id', '1', '".date('Y-m-d H:i:s')."','$subject','$content','$group_id','$parent_id', '".date('Y-m-d H:i:s')."')";
-				$result = Database::query($query,__FILE__,__LINE__);
+				$result = Database::query($query);
 				$inbox_last_id = Database::insert_id();
 			}
 
@@ -282,7 +282,7 @@ class MessageManager
 				//message in outbox for user friend or group
 				$sql = "INSERT INTO $table_message(user_sender_id, user_receiver_id, msg_status, send_date, title, content, group_id, parent_id, update_date ) ".
 						 " VALUES ('$user_sender_id', '$receiver_user_id', '4', '".date('Y-m-d H:i:s')."','$subject','$content', '$group_id', '$parent_id', '".date('Y-m-d H:i:s')."')";
-				$rs = Database::query($sql,__FILE__,__LINE__);
+				$rs = Database::query($sql);
 				$outbox_last_id = Database::insert_id();
 
 				// save attachment file for outbox messages
@@ -317,18 +317,18 @@ class MessageManager
 		$message_id = intval($message_id);
 		// first get data from message id (parent)
 		$sql_message= "SELECT * FROM $table_message WHERE id = '$parent_id'";
-		$rs_message	= Database::query($sql_message,__FILE__,__LINE__);
+		$rs_message	= Database::query($sql_message);
 		$row_message= Database::fetch_array($rs_message);
 
 		// get message id from data found early for other receiver user
 		$sql_msg_id	= " SELECT id FROM $table_message WHERE user_sender_id ='{$row_message[user_sender_id]}'
 				 		AND title='{$row_message[title]}' AND content='{$row_message[content]}' AND group_id='{$row_message[group_id]}' AND user_receiver_id='$receiver_user_id'";
-		$rs_msg_id	= Database::query($sql_msg_id,__FILE__,__LINE__);
+		$rs_msg_id	= Database::query($sql_msg_id);
 		$row = Database::fetch_array($rs_msg_id);
 
 		// update parent_id for other user receiver
 		$sql_upd = "UPDATE $table_message SET parent_id = '{$row[id]}' WHERE id = '$message_id'";
-		Database::query($sql_upd,__FILE__,__LINE__);
+		Database::query($sql_upd);
 	}
 
 	public static function delete_message_by_user_receiver ($user_receiver_id,$id) {
@@ -337,7 +337,7 @@ class MessageManager
 		$user_receiver_id = intval($user_receiver_id);
 		$id = Database::escape_string($id);
 		$sql="SELECT * FROM $table_message WHERE id=".$id." AND msg_status<>4;";
-		$rs=Database::query($sql,__FILE__,__LINE__);
+		$rs=Database::query($sql);
 
 		if (Database::num_rows($rs) > 0 ) {
 			$row = Database::fetch_array($rs);
@@ -346,7 +346,7 @@ class MessageManager
 			// delete message
 			$query = "UPDATE $table_message SET msg_status=3 WHERE user_receiver_id=".$user_receiver_id." AND id=".$id;
 			//$query = "DELETE FROM $table_message WHERE user_receiver_id=".Database::escape_string($user_receiver_id)." AND id=".$id;
-			$result = Database::query($query,__FILE__,__LINE__);
+			$result = Database::query($query);
 			return $result;
 		} else {
 			return false;
@@ -367,7 +367,7 @@ class MessageManager
 		$user_sender_id = intval($user_sender_id);
 
 		$sql="SELECT * FROM $table_message WHERE id='$id'";
-		$rs=Database::query($sql,__FILE__,__LINE__);
+		$rs=Database::query($sql);
 
 		if (Database::num_rows($rs) > 0 ) {
 			$row = Database::fetch_array($rs);
@@ -376,7 +376,7 @@ class MessageManager
 			// delete message
 			$query = "UPDATE $table_message SET msg_status=3 WHERE user_sender_id='$user_sender_id' AND id='$id'";
 			//$query = "DELETE FROM $table_message WHERE user_sender_id='$user_sender_id' AND id='$id'";
-			$result = Database::query($query,__FILE__,__LINE__);
+			$result = Database::query($query);
 			return $result;
 		}
 		return false;
@@ -455,7 +455,7 @@ class MessageManager
 		$table_message_attach = Database::get_main_table(TABLE_MESSAGE_ATTACHMENT);
 
 		$sql= "SELECT * FROM $table_message_attach WHERE message_id = '$message_id'";
-		$rs	= Database::query($sql,__FILE__,__LINE__);
+		$rs	= Database::query($sql);
 		$new_paths = array();
 		while ($row = Database::fetch_array($rs)) {
 			$path 		= $row['path'];
@@ -472,7 +472,7 @@ class MessageManager
 			if (is_file($path_message_attach.$path)) {
 				if(rename($path_message_attach.$path, $path_message_attach.$new_path)) {
 					$sql_upd = "UPDATE $table_message_attach set path='$new_path' WHERE id ='$attach_id'";
-					$rs_upd = Database::query($sql_upd,__FILE__,__LINE__);
+					$rs_upd = Database::query($sql_upd);
 				}
 			}
 		}
@@ -488,7 +488,7 @@ class MessageManager
 		if ($message_id != strval(intval($message_id)) || $user_id != strval(intval($user_id))) return false;
 		$table_message = Database::get_main_table(TABLE_MESSAGE);
 		$query = "UPDATE $table_message SET msg_status = '0' WHERE msg_status<>4 AND user_receiver_id=".intval($user_id)." AND id='".intval($message_id)."'";
-		$result = Database::query($query,__FILE__,__LINE__);
+		$result = Database::query($query);
 	}
 
 	/**
@@ -501,7 +501,7 @@ class MessageManager
 	 	if ($message_id != strval(intval($message_id)) || $user_id != strval(intval($user_id))) return false;
 		$table_message = Database::get_main_table(TABLE_MESSAGE);
 		$query = "SELECT * FROM $table_message WHERE user_receiver_id=".intval($user_id)." AND id='".intval($message_id)."'";
-		$result = Database::query($query,__FILE__,__LINE__);
+		$result = Database::query($query);
 		return $row = Database::fetch_array($result);
 	}
 
@@ -516,7 +516,7 @@ class MessageManager
 	 	$current_uid = api_get_user_id();
 	 	$group_id = intval($group_id);
 		$query = "SELECT * FROM $table_message WHERE group_id=$group_id AND msg_status <> ".MESSAGE_STATUS_OUTBOX." ORDER BY id";
-		$rs = Database::query($query,__FILE__,__LINE__);
+		$rs = Database::query($query);
 		$data = array();
 		if (Database::num_rows($rs) > 0) {
 			while ($row = Database::fetch_array($rs)) {
@@ -553,7 +553,7 @@ class MessageManager
 	 	}
 
 		$query = "SELECT * FROM $table_message WHERE parent_id='$parent_id' AND msg_status <> ".MESSAGE_STATUS_OUTBOX." $condition_group_id ORDER BY send_date DESC $condition_limit ";
-		$rs = Database::query($query,__FILE__,__LINE__);
+		$rs = Database::query($query);
 		$data = array();
 		if (Database::num_rows($rs) > 0) {
 			while ($row = Database::fetch_array($rs)) {
@@ -574,7 +574,7 @@ class MessageManager
 	 	if ($id != strval(intval($id)) || $user_id != strval(intval($user_id))) return false;
 		$table_message = Database::get_main_table(TABLE_MESSAGE);
 		$query = "SELECT id FROM $table_message WHERE user_receiver_id=".Database::escape_string($user_id)." AND id='".Database::escape_string($id)."'";
-		$result = Database::query($query,__FILE__,__LINE__);
+		$result = Database::query($query);
 		$num = Database::num_rows($result);
 		if ($num>0)
 			return true;
@@ -610,7 +610,7 @@ class MessageManager
 					 "WHERE user_sender_id=".api_get_user_id()." AND msg_status=".MESSAGE_STATUS_OUTBOX." " .
 					 "ORDER BY col$column $direction LIMIT $from,$number_of_items";
 
-		$sql_result = Database::query($sql_query,__FILE__,__LINE__);
+		$sql_result = Database::query($sql_query);
 		$i = 0;
 		$message_list = array ();
 		while ($result = Database::fetch_row($sql_result)) {
@@ -658,7 +658,7 @@ class MessageManager
 	 public static function get_number_of_messages_sent () {
 		$table_message = Database::get_main_table(TABLE_MESSAGE);
 		$sql_query = "SELECT COUNT(*) as number_messages FROM $table_message WHERE msg_status=".MESSAGE_STATUS_OUTBOX." AND user_sender_id=".api_get_user_id();
-		$sql_result = Database::query($sql_query,__FILE__,__LINE__);
+		$sql_result = Database::query($sql_query);
 		$result = Database::fetch_array($sql_result);
 		return $result['number_messages'];
 	}
@@ -677,16 +677,16 @@ class MessageManager
 		if ($source == 'outbox') {
 			if (isset($message_id) && is_numeric($message_id)) {
 				$query	= "SELECT * FROM $table_message WHERE user_sender_id=".api_get_user_id()." AND id=".$message_id." AND msg_status=4;";
-				$result = Database::query($query,__FILE__,__LINE__);
+				$result = Database::query($query);
 			    $path	= 'outbox.php';
 			}
 		} else {
 			if (is_numeric($message_id) && !empty($message_id)) {
 				$query = "UPDATE $table_message SET msg_status = '".MESSAGE_STATUS_NEW."' WHERE user_receiver_id=".api_get_user_id()." AND id='".$message_id."';";
-				$result = Database::query($query,__FILE__,__LINE__);
+				$result = Database::query($query);
 
 				$query = "SELECT * FROM $table_message WHERE msg_status<>4 AND user_receiver_id=".api_get_user_id()." AND id='".$message_id."';";
-				$result = Database::query($query,__FILE__,__LINE__);
+				$result = Database::query($query);
 			}
 			$path='inbox.php';
 		}
@@ -786,7 +786,7 @@ class MessageManager
 		$message_id = '';
 		if (is_numeric($_GET['id_send'])) {
 			$query = "SELECT * FROM $table_message WHERE user_sender_id=".api_get_user_id()." AND id=".intval(Database::escape_string($_GET['id_send']))." AND msg_status=4;";
-			$result = Database::query($query,__FILE__,__LINE__);
+			$result = Database::query($query);
 			$message_id = intval($_GET['id_send']);
 		}
 		$path='outbox.php';
@@ -846,7 +846,7 @@ class MessageManager
 	public static function get_user_id_by_email ($user_email) {
 		$tbl_user = Database::get_main_table(TABLE_MAIN_USER);
 		$sql='SELECT user_id FROM '.$tbl_user.' WHERE email="'.Database::escape_string($user_email).'";';
-		$rs=Database::query($sql,__FILE__,__LINE__);
+		$rs=Database::query($sql);
 		$row=Database::fetch_array($rs,'ASSOC');
 		if (isset($row['user_id'])) {
 			return $row['user_id'];
@@ -1056,7 +1056,7 @@ class MessageManager
 
 			$sql = "SELECT * FROM $tbl_message_attach WHERE message_id = '$message_id'";
 
-			$rs_file = Database::query($sql,__FILE__,__LINE__);
+			$rs_file = Database::query($sql);
 			if (Database::num_rows($rs_file) > 0) {
 				$attach_icon = Display::return_icon('attachment.gif');
 
@@ -1083,7 +1083,7 @@ class MessageManager
 		$tbl_message = Database::get_main_table(TABLE_MESSAGE);
 		$message_id = intval($message_id);
 		$sql = "SELECT * FROM $tbl_message WHERE id = '$message_id'";
-		$res = Database::query($sql, __FILE__, __LINE__);
+		$res = Database::query($sql);
 		$item = array();
 		if (Database::num_rows($res)>0) {
 			$item = Database::fetch_array($res,'ASSOC');

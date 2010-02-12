@@ -42,7 +42,7 @@ class SurveyManager {
 			$user_table = Database :: get_main_table(TABLE_MAIN_USER);
 			$authorid = Database::escape_string($authorid);
 		    $sql_query = "SELECT * FROM $user_table WHERE user_id='$authorid'";
-			$res = Database::query($sql_query, __FILE__, __LINE__);
+			$res = Database::query($sql_query);
 			$firstname=@Database::result($res,0,'firstname');
 			return $firstname;
 	}
@@ -55,7 +55,7 @@ class SurveyManager {
 	    //$table_survey = Database :: get_course_table(TABLE_SURVEY);
 	    $survey_id = Database::escape_string($survey_id);
 		$sql = "SELECT author FROM $db_name.survey WHERE survey_id='$survey_id'";
-		$res = Database::query($sql, __FILE__, __LINE__);
+		$res = Database::query($sql);
 		$author=@Database::result($res,0,'author');
 		return $author;
 	}
@@ -67,7 +67,7 @@ class SurveyManager {
 	    //$group_table = Database :: get_course_table(TABLE_SURVEY_QUESTION_GROUP);
 	    $group_id = Database::escape_string($group_id);
 		$sql = "SELECT survey_id FROM $db_name.survey_group WHERE group_id='$group_id'";
-		$res = Database::query($sql, __FILE__, __LINE__);
+		$res = Database::query($sql);
 		$surveyid=@Database::result($res,0,'survey_id');
 		return $surveyid;
 	}
@@ -76,7 +76,7 @@ class SurveyManager {
 		//$grouptable = Database :: get_course_table(TABLE_SURVEY_QUESTION_GROUP);
 		$gid = Database::escape_string($gid);
 		$sql = "SELECT * FROM $db_name.survey_group WHERE group_id='$gid'";
-		$res=Database::query($sql, __FILE__, __LINE__);
+		$res=Database::query($sql);
 		$code=@Database::result($res,0,'groupname');
 		return($code);
 	}
@@ -90,7 +90,7 @@ class SurveyManager {
 		$introduction = Database::escape_string($introduction);
 
 		$sql="INSERT INTO $tb (group_id,survey_id,group_title,introduction) values('','$survey_id','$group_title','$introduction')";
-		$result=Database::query($sql, __FILE__, __LINE__);
+		$result=Database::query($sql);
 		return Database::insert_id();
 	}
 	/**
@@ -102,7 +102,7 @@ class SurveyManager {
 		$sql="SELECT code FROM $table_survey where code='$survey_code'";
 		//echo $sql;
 		//exit;
-		$result=Database::query($sql, __FILE__, __LINE__);
+		$result=Database::query($sql);
 		$code=@Database::result($result,0,'code');
 		//echo $code;exit;
 		return($code);
@@ -114,7 +114,7 @@ class SurveyManager {
 	{
 		$survey_table = Database :: get_course_table(TABLE_SURVEY);
 		$sql_query = "SELECT survey_id,title FROM $survey_table where title!='' ";
-		$sql_result = Database::query($sql_query,__FILE__,__LINE__);
+		$sql_result = Database::query($sql_query);
 		echo "<select name=\"author\">";
 		echo "<option value=\"\"><--Select Survey--></optional>";
 		while ($result =@Database::fetch_array($sql_result))
@@ -130,11 +130,11 @@ class SurveyManager {
 		{
 			//$table_survey = Database :: get_course_table(TABLE_SURVEY);
 			$sql = "INSERT INTO $table_survey (code,title, subtitle, author,lang,avail_from,avail_till, is_shared,template,intro,surveythanks,creation_date) values('$surveycode','$surveytitle','$surveysubtitle','$author','$survey_language','$availablefrom','$availabletill','$isshare','$surveytemplate','$surveyintroduction','$surveythanks',curdate())";
-			$result = Database::query($sql, __FILE__, __LINE__);
-			//$result = Database::query($sql, __FILE__, __LINE__);
+			$result = Database::query($sql);
+			//$result = Database::query($sql);
 			$survey_id = Database::insert_id();
 			$sql2 = "INSERT INTO $table_group(group_id,survey_id,groupname,introduction) values('','$survey_id','No Group','This is your Default Group')";
-			$result = Database::query($sql2, __FILE__, __LINE__);
+			$result = Database::query($sql2);
 			return $survey_id;
 		}
 	/**
@@ -147,7 +147,7 @@ class SurveyManager {
 	{
 			//$table_survey = Database :: get_course_table(TABLE_SURVEY);
 			$sql = "INSERT INTO $table_survey (code,title, subtitle, author,lang,avail_from,avail_till, is_shared,template,intro,surveythanks,creation_date) values('$surveycode','$surveytitle','$surveysubtitle','$author','$survey_language','$availablefrom','$availabletill','$isshare','$surveytemplate','$surveyintroduction','$surveythanks',curdate())";
-			$result = Database::query($sql, __FILE__, __LINE__);
+			$result = Database::query($sql);
 			$survey_id = Database::insert_id();
 			return $survey_id;
 	}
@@ -157,13 +157,13 @@ class SurveyManager {
 	function update_survey($surveyid,$surveycode,$surveytitle, $surveysubtitle, $author, $survey_language, $availablefrom, $availabletill,$isshare, $surveytemplate, $surveyintroduction, $surveythanks, $cidReq,$table_course)
 	{
           $sql_course = "SELECT * FROM $table_course WHERE code = '$cidReq'";
-          $res_course = Database::query($sql_course,__FILE__,__LINE__);
+          $res_course = Database::query($sql_course);
           $obj_course=@Database::fetch_object($res_course);
           $curr_dbname = $obj_course->db_name ;
           $surveyid = Database::escape_string($surveyid);
 		  $sql = "UPDATE $curr_dbname.survey SET code='$surveycode', title='$surveytitle', subtitle='$surveysubtitle', lang='$survey_language',   avail_from='$availablefrom', avail_till='$availabletill', is_shared='$isshare', template='$surveytemplate', intro='$surveyintroduction',surveythanks='$surveythanks'
 		  		  WHERE survey_id='$surveyid'";
-		  Database::query($sql, __FILE__, __LINE__);
+		  Database::query($sql);
 		  return $curr_dbname;
 	}
 
@@ -180,7 +180,7 @@ class SurveyManager {
 		$anst = $answerT;
 		$ansd = $answerD;
 		$sql = "UPDATE $curr_dbname.questions SET qtype='$qtype',caption='$caption',alignment='$alignment',a1='$answers[0]',a2='$answers[1]',a3='$answers[2]',a4='$answers[3]',a5='$answers[4]',a6='$answers[5]',a7='$answers[6]',a8='$answers[7]',a9='$answers[8]',a10='$answers[9]' WHERE qid='$qid'";
-		$result = Database::query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql);
 		return Database::insert_id();
 	}
 
@@ -192,7 +192,7 @@ class SurveyManager {
 	  $table_question = Database :: get_course_table(TABLE_MAIN_SURVEYQUESTION);
 	  $questionid = Database::escape_string($questionid);
 	  $sql = "SELECT * FROM $table_question WHERE qid='$questionid'";
-			$res=Database::query($sql, __FILE__, __LINE__);
+			$res=Database::query($sql);
 			$code=@Database::result($res,0,'type');
 			return($code);
 	 }
@@ -205,7 +205,7 @@ class SurveyManager {
 	  //$table_question = Database :: get_course_table(TABLE_MAIN_SURVEYQUESTION);
 	  $gid = Database::escape_string($gid);
 	  $sql = "SELECT * FROM $db_name.questions WHERE gid='$gid'";
-			$res=Database::query($sql, __FILE__, __LINE__);
+			$res=Database::query($sql);
 			$code=@Database::num_rows($res);
 			return($code);
 	 }
@@ -217,7 +217,7 @@ class SurveyManager {
 	{
 		global $_course;
 		$sql='SELECT '.$field.' FROM '.$_course['dbName'].'.survey WHERE survey_id='.intval($id);
-		$res=Database::query($sql, __FILE__, __LINE__);
+		$res=Database::query($sql);
 		$code=@Database::result($res,0);
 		return($code);
 
@@ -229,7 +229,7 @@ class SurveyManager {
 	{
 		global $_course;
 		$sql='SELECT * FROM '.$_course['dbName'].'.survey WHERE survey_id='.intval($id);
-		$res=Database::query($sql, __FILE__, __LINE__);
+		$res=Database::query($sql);
 		return Database::fetch_object($res);
 	}
 	/**
@@ -240,7 +240,7 @@ class SurveyManager {
 			//$surveytable=Database:: get_course_table(TABLE_SURVEY);
 			$sid = Database::escape_string($sid);
 			$sql="SELECT * FROM $db_name.survey WHERE survey_id=$sid";
-			$res=Database::query($sql, __FILE__, __LINE__);
+			$res=Database::query($sql);
 			$code=@Database::result($res,0,'title');
 			return($code);
 	}
@@ -252,7 +252,7 @@ class SurveyManager {
 			$sid = Database::escape_string($sid);
 			$surveytable=Database:: get_course_table(TABLE_SURVEY);
 			$sql="SELECT * FROM $surveytable WHERE survey_id=$sid";
-			$res=Database::query($sql, __FILE__, __LINE__);
+			$res=Database::query($sql);
 			$code=@Database::result($res,0,'title');
 			return($code);
 	}
@@ -283,9 +283,9 @@ class SurveyManager {
 			if(isset($selected_group)){
 			 if($selected_group!=''){
 			  $sql = "SELECT $table_group('survey_id', 'groupname') values('$sid', '$groupname')";
-				$res = Database::query($sql, __FILE__, __LINE__);
+				$res = Database::query($sql);
 				$sql = "INSERT INTO $table_group('survey_id', 'groupname') values('$sid', '$groupname')";
-				$res = Database::query($sql, __FILE__, __LINE__);
+				$res = Database::query($sql);
 				$gid_arr[$index]+= Database::insert_id();
 				$groupids=implode(",",$gid_arr);
 			  }
@@ -313,20 +313,20 @@ class SurveyManager {
 
 		// Deleting the survey
 		$sql = "DELETE FROM $table_survey WHERE survey_id='".$survey_id."'";
-		Database::query($sql,__FILE__,__LINE__);
+		Database::query($sql);
 
 		// Deleting all the questions of the survey
 		$sql = "SELECT * FROM $table_group WHERE survey_id='".$survey_id."'";
-		$res = Database::query($sql,__FILE__,__LINE__);
+		$res = Database::query($sql);
 		while($obj = Database::fetch_object($res))
 		{
 			$sql = "DELETE FROM $table_question WHERE gid='".$obj->group_id."'";
-			Database::query($sql,__FILE__,__LINE__);
+			Database::query($sql);
 		}
 
 		// Deleting the groups of the survey
 		$sql = "DELETE FROM $table_group WHERE survey_id='".$survey_id."'";
-		Database::query($sql,__FILE__,__LINE__);
+		Database::query($sql);
 		return true;
 	}
 
@@ -347,9 +347,9 @@ class SurveyManager {
 		$table_survey_group = Database :: get_course_table(TABLE_SURVEY_QUESTION_GROUP);
 
 		$sql = "DELETE FROM $table_question WHERE gid='".$group_id."'";
-		Database::query($sql,__FILE__,__LINE__);
+		Database::query($sql);
 		$sql = "DELETE FROM $table_survey_group WHERE group_id='".$group_id."'";
-		Database::query($sql,__FILE__,__LINE__);
+		Database::query($sql);
 	}
 	/**
 	 *  Possible  deprecated method
@@ -358,7 +358,7 @@ class SurveyManager {
 	{
 		$group_table = Database :: get_course_table(TABLE_SURVEY_QUESTION_GROUP);
 		$sql = "SELECT * FROM $group_table WHERE survey_id='$survey_id'";
-		$sql_result = Database::query($sql,__FILE__,__LINE__);
+		$sql_result = Database::query($sql);
 		if(Database::num_rows($sql_result)>0)
 		{
 			$str_group_list = "";
@@ -389,7 +389,7 @@ class SurveyManager {
 	{
 
 		 $sql = "SELECT group_id FROM $table_group WHERE survey_id='$sid'";
-		$res = Database::query($sql, __FILE__, __LINE__);
+		$res = Database::query($sql);
 		$num = @Database::num_rows($res);
 		//echo "ths is num".$num;
 		$parameters = array();
@@ -399,7 +399,7 @@ class SurveyManager {
 
 			$groupid = $obj->group_id;
 			$query = "SELECT * FROM $table_question WHERE gid = '$groupid'";
-			$result = Database::query($query, __FILE__, __LINE__);
+			$result = Database::query($query);
 		  while($object = @Database::fetch_object($result))
 			{
 				$display = array();
@@ -427,16 +427,16 @@ class SurveyManager {
 	//For attaching the whole survey with its groups and questions
 	  {
 	 $sql = "SELECT *  FROM $db_name.survey_group WHERE survey_id = '$surveyid'";
-     $res = Database::query($sql,__FILE__,__LINE__);
+     $res = Database::query($sql);
 	 while($obj=@Database::fetch_object($res))
      {
 		 $groupname=addslashes($obj->groupname);
 		 $introduction=addslashes($obj->introduction);
 	   $sql_insert = "INSERT INTO $curr_dbname.survey_group(group_id,survey_id,groupname,introduction) values('','$newsurveyid','$groupname','$introduction')";
-	   $resnext = Database::query($sql_insert,__FILE__,__LINE__);
+	   $resnext = Database::query($sql_insert);
 	   $groupid = Database::insert_id();
 	   $sql_q = "SELECT *  FROM $db_name.questions WHERE gid = '$obj->group_id'";
-	   $res_q = Database::query($sql_q,__FILE__,__LINE__);
+	   $res_q = Database::query($sql_q);
        while($obj_q = Database::fetch_object($res_q))
 	   {
 		 $caption1=addslashes($obj_q->caption);
@@ -463,14 +463,14 @@ class SurveyManager {
 			  $r9=addslashes($obj_q->r9);
 			  $r10=addslashes($obj_q->r10);
 		 $sql_sort = "SELECT max(sortby) AS sortby FROM $curr_dbname.questions ";
-         $res_sort=Database::query($sql_sort, __FILE__, __LINE__);
+         $res_sort=Database::query($sql_sort);
          $rs=Database::fetch_object($res_sort);
 	     $sortby=$rs->sortby;
 	     if(empty($sortby))
 	     {$sortby=1;}
 	     else{$sortby=$sortby+1;}
 		 $sql_q_insert = "INSERT INTO $curr_dbname.questions (qid,gid,survey_id,qtype,caption,alignment,sortby,a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,at,ad,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10) values('','$groupid','$newsurveyid','$obj_q->qtype','$caption1','$obj_q->alignment','$sortby','$a1','$a2','$a3','$a4','$a5','$a6','$a7','$a8','$a9','$a10','$at','$ad','$r1','$r2','$r3','$r4','$r5','$r6','$r7','$r8','$r9','$r10')";
-	    Database::query($sql_q_insert,__FILE__,__LINE__);
+	    Database::query($sql_q_insert);
 	   }
      }
    }
@@ -481,7 +481,7 @@ class SurveyManager {
    function update_group($groupid,$surveyid,$groupnamme,$introduction,$curr_dbname)
 	{
 		$sql = "UPDATE $curr_dbname.survey_group SET group_id='$groupid', survey_id='$surveyid', groupname='$groupnamme', introduction='$introduction' WHERE group_id='$groupid'";
-		Database::query($sql, __FILE__, __LINE__);
+		Database::query($sql);
 	}
 
 	/**
@@ -490,12 +490,12 @@ class SurveyManager {
 	function create_course_survey_rel($cidReq,$survey_id,$table_course,$table_course_survey_rel)
 	{
 	 $sql = "SELECT * FROM $table_course WHERE code = '$cidReq'";
-	 $res = Database::query($sql,__FILE__,__LINE__);
+	 $res = Database::query($sql);
 	 $obj=@Database::fetch_object($res);
 	 $db_name = $obj->db_name ;
 	 $sql="INSERT INTO $table_course_survey_rel(id,course_code,db_name,survey_id) values('','$cidReq','$db_name','$survey_id')";
-	
-	 Database::query($sql,__FILE__,__LINE__);
+
+	 Database::query($sql);
 	 return $db_name;
 	}
 
@@ -506,7 +506,7 @@ class SurveyManager {
 	{
 		$surveytable=Database:: get_course_table(TABLE_SURVEY);
 		$sql="SELECT * FROM $surveytable WHERE survey_id=$sid";
-		$res=Database::query($sql, __FILE__, __LINE__);
+		$res=Database::query($sql);
 		$code=@Database::result($res,0,'title');
 		return($code);
 	}
@@ -517,7 +517,7 @@ class SurveyManager {
 	{
 	    $survey_table = Database :: get_course_table(TABLE_SURVEY);
 		$sql = "SELECT author FROM $survey_table WHERE survey_id='$survey_id'";
-		$res = Database::query($sql, __FILE__, __LINE__);
+		$res = Database::query($sql);
 		$author=@Database::result($res,0,'author');
 		return $author;
 	}
@@ -531,10 +531,10 @@ class SurveyManager {
 	function get_status()
 	{
 		global $_user;
-	
+
 		$table_user = Database::get_main_table(TABLE_MAIN_USER);
 		$sqlm = "SELECT  status FROM  $table_user WHERE user_id = '".Database::escape_string($_user['user_id'])."'";
-		$resm = Database::query($sqlm,__FILE__,__LINE__);
+		$resm = Database::query($sqlm);
 		$objm=@Database::fetch_object($resm);
 		$ss = $objm->status ;
 		return $ss;
@@ -574,7 +574,7 @@ class SurveyTree {
 		WHERE survey.author = user.user_id
 		GROUP BY survey.survey_id";
 
-		$res = Database::query($sql, __FILE__, __LINE__);
+		$res = Database::query($sql);
 		$surveys_parents = array ();
 		$refs = array();
 		$list = array();
@@ -648,7 +648,7 @@ class SurveyTree {
 						{
 							$result[]=$re;
 						}
-	
+
 					}
 				}
 				else

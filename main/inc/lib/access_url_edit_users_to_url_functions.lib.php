@@ -1,7 +1,7 @@
 <?php
 /* For licensing terms, see /chamilo_license.txt */
 /**
- * Access_url_edit_users_to_url class  
+ * Access_url_edit_users_to_url class
  * Contains several functions dealing with displaying,
  * editing,... of a Access_url_edit_users_to_url_functions
  *
@@ -11,18 +11,18 @@
  * @author Ricardo Rodriguez - Separated the function and code
  *
  */
- 
- 
+
+
 require_once ('xajax/xajax.inc.php');
 
 class Accessurledituserstourl{
-	
+
 	function search_users($needle, $id)
 	{
 		global $tbl_user, $tbl_access_url_rel_user;
 		$xajax_response = new XajaxResponse();
 		$return = '';
-	
+
 		if(!empty($needle)) {
 			// xajax send utf8 datas... datas in db can be non-utf8 datas
 			$charset = api_get_setting('platform_charset');
@@ -36,10 +36,10 @@ class Accessurledituserstourl{
 					OR lastname LIKE "'.$needle.'%")'.
 					$order_clause.
 					' LIMIT 11';
-	
-			$rs = Database::query($sql, __FILE__, __LINE__);
+
+			$rs = Database::query($sql);
 	        $i=0;
-	
+
 			while ($user = Database :: fetch_array($rs)) {
 				$i++;
 	            if ($i<=10) {

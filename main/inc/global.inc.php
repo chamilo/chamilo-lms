@@ -115,7 +115,7 @@ if (!$_configuration['db_host']) {
 }
 
 // The system has not been designed to use special SQL modes that were introduced since MySQL 5.
-Database::query("set session sql_mode='';", __FILE__, __LINE__);
+Database::query("set session sql_mode='';");
 
 if (!Database::select_db($_configuration['main_database'], $dokeos_database_connection)) {
 	$global_error_code = 5;
@@ -131,7 +131,7 @@ if (!Database::select_db($_configuration['main_database'], $dokeos_database_conn
 */
 // The platform's character set must be retrieved at this early moment.
 $sql = "SELECT selected_value FROM settings_current WHERE variable = 'platform_charset';";
-$result = Database::query($sql, __FILE__, __LINE__);
+$result = Database::query($sql);
 while ($row = @Database::fetch_array($result)) {
 	$charset = $row[0];
 }
@@ -472,7 +472,7 @@ if (is_array($language_files)) {
 			$tbl_admin_languages = Database :: get_main_table(TABLE_MAIN_LANGUAGE);
 			$sql_sub_language = 'SELECT dokeos_folder FROM '.$tbl_admin_languages.' WHERE parent_id=(SELECT id FROM '.$tbl_admin_languages.' WHERE dokeos_folder="'.Database::escape_string($language_interface).'" AND ISNULL(parent_id))';
 
-			$rs_sub_language = Database::query($sql_sub_language,__FILE__,__LINE__);
+			$rs_sub_language = Database::query($sql_sub_language);
 			$num_row_sub_language = Database::num_rows($rs_sub_language);
 
 			if (file_exists($langfile)) {

@@ -2,15 +2,15 @@
 /* For licensing terms, see /chamilo_license.txt */
 
 class CourseHome {
-		
+
 	/**
 	 * Gets the html content to show in the 3 column view
 	 */
-	public static function show_tool_3column($cat) {	
-		global $_user, $charset;	
+	public static function show_tool_3column($cat) {
+		global $_user, $charset;
 		$TBL_ACCUEIL = Database :: get_course_table(TABLE_TOOL_LIST);
 		$TABLE_TOOLS = Database :: get_main_table(TABLE_MAIN_COURSE_MODULE);
-	
+
 		$numcols = 3;
 		$table = new HTML_Table('width="100%"');
 		$toolsRow_all = array ();
@@ -19,7 +19,7 @@ class CourseHome {
 				$sql = "SELECT a.*, t.image img, t.row, t.column  FROM $TBL_ACCUEIL a, $TABLE_TOOLS t
 						WHERE a.link=t.link AND t.position='basic' ORDER BY t.row, t.column";
 				break;
-	
+
 			case 'External' :
 				if (api_is_allowed_to_edit()) {
 					$sql = "SELECT a.*, t.image img FROM $TBL_ACCUEIL a, $TABLE_TOOLS t
@@ -32,17 +32,17 @@ class CourseHome {
 							OR ((a.image = 'external.gif' OR a.image = 'scormbuilder.gif' OR t.image = 'blog.gif') AND a.image=t.image))
 							ORDER BY a.id";
 				}
-				break;	
+				break;
 			case 'courseAdmin' :
 				$sql = "SELECT a.*, t.image img, t.row, t.column  FROM $TBL_ACCUEIL a, $TABLE_TOOLS t
 						WHERE admin=1 AND a.link=t.link ORDER BY t.row, t.column";
 				break;
-	
+
 			case 'platformAdmin' :
 				$sql = "SELECT *, image img FROM $TBL_ACCUEIL WHERE visibility = 2 ORDER BY id";
 		}
-		$result = Database::query($sql, __FILE__, __LINE__);
-	
+		$result = Database::query($sql);
+
 		// grabbing all the tools from $course_tool_table
 		while ($tempRow = Database::fetch_array($result))
 		{
@@ -89,7 +89,7 @@ class CourseHome {
 				$toolsRow_all[] = $properties;
 			}
 		}
-	
+
 		$cell_number = 0;
 		// draw line between basic and external, only if there are entries in External
 		if ($cat == "External" && count($toolsRow_all))
@@ -98,17 +98,17 @@ class CourseHome {
 			$table->updateCellAttributes(0, 0, 'colspan="3"');
 			$cell_number += $numcols;
 		}
-	
+
 		foreach ($toolsRow_all as $toolsRow)
 		{
 			if (api_get_session_id()!=0 && in_array($toolsRow['name'],array('course_maintenance','course_setting'))) {
 					continue;
 			}
-	
+
 			$cell_content = '';
 			// the name of the tool
 			$tool_name = ($toolsRow['name_translated'] != "" ? $toolsRow['name_translated'] : htmlspecialchars($toolsRow['name'],ENT_QUOTES,$charset)); // RH: added htmlspecialchars
-	
+
 			$link_annex = '';
 			// the url of the tool
 			if ($toolsRow['img'] != "external.gif")
@@ -126,10 +126,10 @@ class CourseHome {
 					$link_annex = $_user['username'];
 				}
 			}
-	
+
 			// setting the actual image url
 			$toolsRow['img'] = api_get_path(WEB_IMG_PATH).$toolsRow['img'];
-	
+
 			// VISIBLE
 			if ($toolsRow['visibility'] or $cat == 'courseAdmin' or $cat == 'platformAdmin')
 			{
@@ -185,7 +185,7 @@ class CourseHome {
 					$cell_content .= '<span class="invisible">'.$tool_name.'</span>';
 				}
 			}
-	
+
 			$lnk = array ();
 			if (api_is_allowed_to_edit(null,true) && $cat != "courseAdmin" && !strpos($toolsRow['link'], 'learnpath_handler.php?learnpath_id') && !api_is_coach())
 			{
@@ -200,7 +200,7 @@ class CourseHome {
 					$link['name'] = Display::return_icon('add.gif', get_lang('Activate'), array('style' => 'vertical-align:middle;'));
 					$link['cmd'] = "restore=yes";
 					$lnk[] = $link;
-	
+
 					/*if($toolsRow["img"] == $dokeosRepositoryWeb."img/external.gif")
 					{
 						$link['name'] = get_lang('Remove'); $link['cmd']  = "remove=yes";
@@ -227,7 +227,7 @@ class CourseHome {
 						}
 					}
 				}
-	
+
 				// RH: Allow editing of invisible homepage links (modified external_module)
 				/*
 				if ($toolsRow["added_tool"] == 1 && api_is_allowed_to_edit() && !$toolsRow["visibility"])
@@ -244,7 +244,7 @@ class CourseHome {
 		}
 		$table->display();
 	} // end function showtools2($cat)
-	
+
 	/**
 	 * Displays the tools of a certain category.
 	 *
@@ -256,35 +256,35 @@ class CourseHome {
 		global $charset;
 		$web_code_path = api_get_path(WEB_CODE_PATH);
 		$course_tool_table = Database::get_course_table(TABLE_TOOL_LIST);
-	
+
 		switch ($course_tool_category)
 		{
 			case TOOL_PUBLIC:
-	
-					$result = Database::query("SELECT * FROM $course_tool_table WHERE visibility=1 ORDER BY id",__FILE__,__LINE__);
+
+					$result = Database::query("SELECT * FROM $course_tool_table WHERE visibility=1 ORDER BY id");
 					$colLink ="##003399";
 					break;
-	
+
 			case TOOL_PUBLIC_BUT_HIDDEN:
-	
-					$result = Database::query("SELECT * FROM $course_tool_table WHERE visibility=0 AND admin=0 ORDER BY id",__FILE__,__LINE__);
+
+					$result = Database::query("SELECT * FROM $course_tool_table WHERE visibility=0 AND admin=0 ORDER BY id");
 					$colLink ="##808080";
 					break;
-	
+
 			case TOOL_COURSE_ADMIN:
-	
-					$result = Database::query("SELECT * FROM $course_tool_table WHERE admin=1 AND visibility != 2 ORDER BY id",__FILE__,__LINE__);
+
+					$result = Database::query("SELECT * FROM $course_tool_table WHERE admin=1 AND visibility != 2 ORDER BY id");
 					$colLink ="##003399";
 					break;
-	
+
 			case TOOL_PLATFORM_ADMIN:
-	
-					$result = Database::query("SELECT * FROM $course_tool_table WHERE visibility = 2 ORDER BY id",__FILE__,__LINE__);
+
+					$result = Database::query("SELECT * FROM $course_tool_table WHERE visibility = 2 ORDER BY id");
 					$colLink ="##003399";
 		}
-	
+
 		$i=0;
-	
+
 		// grabbing all the tools from $course_tool_table
 		while ($temp_row = Database::fetch_array($result))
 		{
@@ -294,7 +294,7 @@ class CourseHome {
 			}
 			$all_tools_list[]=$temp_row;
 		}
-	
+
 		// grabbing all the links that have the property on_homepage set to 1
 		$course_link_table = Database::get_course_table(TABLE_LINK);
 		$course_item_property_table = Database::get_course_table(TABLE_ITEM_PROPERTY);
@@ -319,7 +319,7 @@ class CourseHome {
 		if( $sql_links != null )
 		{
 			$properties = array();
-			$result_links=Database::query($sql_links,__FILE__,__LINE__);
+			$result_links=Database::query($sql_links);
 			while ($links_row=Database::fetch_array($result_links))
 			{
 				unset($properties);
@@ -331,7 +331,7 @@ class CourseHome {
 				$all_tools_list[]=$properties;
 			}
 		}
-	
+
 		if (isset($all_tools_list))
 		{
 			$lnk = array();
@@ -340,12 +340,12 @@ class CourseHome {
 				if (api_get_session_id()!=0 && in_array($toolsRow['name'],array('course_maintenance','course_setting'))) {
 					continue;
 				}
-	
+
 				if (!($i%2))
 				{
 					echo	"<tr valign=\"top\">\n";
 				}
-	
+
 				// NOTE : table contains only the image file name, not full path
 				if(!stristr($toolsRow['link'],'http://') && !stristr($toolsRow['link'],'https://') && !stristr($toolsRow['link'],'ftp://'))
 				{
@@ -356,15 +356,15 @@ class CourseHome {
 				    $class="class=\"invisible\"";
 				}
 				$qm_or_amp = ((strpos($toolsRow['link'],'?')===FALSE)?'?':'&amp;');
-	
+
 				$toolsRow['link'] = $toolsRow['link'];
 				echo	'<td width="50%" height="30">';
-	
+
 				if(strpos($toolsRow['name'],'visio_')!==false)
 				{
 					echo '<a  '.$class.' href="javascript: void(0);" onclick="window.open(\'' . htmlspecialchars($toolsRow['link']).(($toolsRow['image']=="external.gif" || $toolsRow['image']=="external_na.gif") ? '' : $qm_or_amp.api_get_cidreq()) . '\',\'window_visio'.$_SESSION['_cid'].'\',config=\'height=\'+730+\', width=\'+1020+\', left=2, top=2, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no\')" target="' . $toolsRow['target'] . '">';
 				}
-	
+
 				else if(strpos($toolsRow['name'],'chat')!==false && api_get_course_setting('allow_open_chat_window')==true)
 				{
 					/*
@@ -376,7 +376,7 @@ class CourseHome {
 				{
 					echo	'<a href="'. htmlspecialchars($toolsRow['link']).(($toolsRow['image']=="external.gif" || $toolsRow['image']=="external_na.gif") ? '' : $qm_or_amp.api_get_cidreq()).'" target="' , $toolsRow['target'], '" '.$class.'>';
 				}
-	
+
 				/*
 				echo Display::return_icon($toolsRow['image'], get_lang(ucfirst($toolsRow['name']))),'&nbsp;', ($toolsRow['image']=="external.gif" || $toolsRow['image']=="external_na.gif" || $toolsRow['image']=="scormbuilder.gif" || $toolsRow['image']=="blog.gif") ? htmlspecialchars( $toolsRow['name'],ENT_QUOTES,$charset) : get_lang(ucfirst($toolsRow['name'])),'</a>';
 				*/
@@ -392,7 +392,7 @@ class CourseHome {
 					$tool_name = get_lang(ucfirst($toolsRow['name']));
 				}
 				echo Display::return_icon($toolsRow['image'], $tool_name),'&nbsp;', $tool_name,'</a>';
-	
+
 				// This part displays the links to hide or remove a tool.
 				// These links are only visible by the course manager.
 				unset($lnk);
@@ -404,13 +404,13 @@ class CourseHome {
 						$link['cmd'] = "hide=yes";
 						$lnk[] = $link;
 					}
-	
+
 					if ($course_tool_category == TOOL_PUBLIC_BUT_HIDDEN)
 					{
 						$link['name'] = Display::return_icon('add.gif', get_lang('Activate'));
 						$link['cmd']  = "restore=yes";
 						$lnk[] = $link;
-	
+
 						if($toolsRow["added_tool"] == 1)
 						{
 							$link['name'] = Display::return_icon('delete.gif', get_lang('Remove'));
@@ -423,17 +423,17 @@ class CourseHome {
 						echo	'<a href="'.$toolsRow['adminlink'].'">'.Display::return_icon('edit.gif', get_lang('Edit')).'</a>';
 						//echo "edit link:".$properties['adminlink'];
 					}
-	
+
 				}
 				if ( api_is_platform_admin() )
 				{
 					if ($toolsRow["visibility"]==2)
 					{
 						$link['name'] = Display::return_icon('undelete.gif', get_lang('Activate'));
-	
+
 						$link['cmd']  = "hide=yes";
 						$lnk[] = $link;
-	
+
 						if($toolsRow["added_tool"] == 1)
 						{
 							$link['name'] = get_lang("Delete");
@@ -441,7 +441,7 @@ class CourseHome {
 							$lnk[] = $link;
 						}
 					}
-	
+
 					if ($toolsRow["visibility"] == 0 && $toolsRow["added_tool"] == 0)
 					{
 						$link['name'] = Display::return_icon('delete.gif', get_lang('Remove'));
@@ -459,7 +459,7 @@ class CourseHome {
 							}
 					}
 				}
-	
+
 				// Allow editing of invisible homepage links (modified external_module)
 				/*
 				if ($toolsRow["added_tool"] == 1 &&
@@ -470,33 +470,33 @@ class CourseHome {
 					echo	"<a class=\"nobold\" href=\"" . api_get_path(WEB_PATH) .
 							'main/external_module/external_module.php' .
 							"?".api_get_cidreq()."&amp;id=".$toolsRow["id"]."\">". get_lang("Edit"). "</a>";
-	
+
 				echo "</td>\n";
-	
+
 				if($i%2)
 				{
 					echo "</tr>\n";
 				}
-	
+
 				$i++;
 			}
 		}
-	
+
 		if($i%2)
 		{
 			echo	"<td width=\"50%\">&nbsp;</td>\n",
 					"</tr>\n";
 		}
 	}
-		
+
 	/**
-	 * Gets the tools of a certain category. Returns an array expected 
+	 * Gets the tools of a certain category. Returns an array expected
 	 * by show_tools_category()
-	 * @param string $course_tool_category	contains the category of tools to 
+	 * @param string $course_tool_category	contains the category of tools to
 	 * display: "toolauthoring", "toolinteraction", "tooladmin", "tooladminplatform"
 	 * @return array
 	 */
-	 
+
 	public static function get_tools_category($course_tool_category) {
 		global $_user;
 		$web_code_path = api_get_path(WEB_CODE_PATH);
@@ -504,63 +504,63 @@ class CourseHome {
 		$is_allowed_to_edit = api_is_allowed_to_edit(null,true);
 		$is_platform_admin = api_is_platform_admin();
 		$all_tools_list = array();
-		
+
 		//condition for the session
 		$session_id = api_get_session_id();
 		$condition_session = api_get_session_condition($session_id,true,true);
-	
-		switch ($course_tool_category) {	
-			case TOOL_STUDENT_VIEW:					
+
+		switch ($course_tool_category) {
+			case TOOL_STUDENT_VIEW:
 					//$visibility_codition = !api_is_coach()?" visibility = '1' AND ":" ";
-					$sql = "SELECT * FROM $course_tool_table WHERE visibility = '1' AND (category = 'authoring' OR category = 'interaction') $condition_session ORDER BY id";				
-					$result = Database::query($sql,__FILE__,__LINE__);
+					$sql = "SELECT * FROM $course_tool_table WHERE visibility = '1' AND (category = 'authoring' OR category = 'interaction') $condition_session ORDER BY id";
+					$result = Database::query($sql);
 					$colLink ="##003399";
-					break;	
+					break;
 			case TOOL_AUTHORING:
 					$sql = "SELECT * FROM $course_tool_table WHERE category = 'authoring' $condition_session ORDER BY id";
-					$result = Database::query($sql,__FILE__,__LINE__);
+					$result = Database::query($sql);
 					$colLink ="##003399";
-					break;	
+					break;
 			case TOOL_INTERACTION:
 					$sql = "SELECT * FROM $course_tool_table WHERE category = 'interaction' $condition_session ORDER BY id";
-					$result = Database::query($sql,__FILE__,__LINE__);
+					$result = Database::query($sql);
 					$colLink ="##003399";
-					break;	
+					break;
 			case TOOL_ADMIN_VISIBLE:
 					$sql = "SELECT * FROM $course_tool_table WHERE category = 'admin' AND visibility ='1' $condition_session ORDER BY id";
-					$result = Database::query($sql,__FILE__,__LINE__);
+					$result = Database::query($sql);
 					$colLink ="##003399";
 					break;
 			case TOOL_ADMIN_PLATEFORM:
 					$sql = "SELECT * FROM $course_tool_table WHERE category = 'admin' $condition_session ORDER BY id";
-					$result = Database::query($sql,__FILE__,__LINE__);
+					$result = Database::query($sql);
 					$colLink ="##003399";
-					break;		
-		}	
-	
+					break;
+		}
+
 		while ($temp_row = Database::fetch_array($result)) {
 			$all_tools_list[]=$temp_row;
 		}
-	
+
 		/*if(api_is_course_coach())
 		{
-			$result = Database::query("SELECT * FROM $course_tool_table WHERE name='tracking'",__FILE__,__LINE__);
+			$result = Database::query("SELECT * FROM $course_tool_table WHERE name='tracking'");
 			$all_tools_list[]=Database :: fetch_array($result);
 		}*/
-	
+
 		$i=0;
 		// grabbing all the links that have the property on_homepage set to 1
 		$course_link_table = Database::get_course_table(TABLE_LINK);
 		$course_item_property_table = Database::get_course_table(TABLE_ITEM_PROPERTY);
-	
+
 		switch ($course_tool_category) {
 				case TOOL_AUTHORING:
 				$sql_links="SELECT tl.*, tip.visibility
 						FROM $course_link_table tl
 						LEFT JOIN $course_item_property_table tip ON tip.tool='link' AND tip.ref=tl.id
-						WHERE tl.on_homepage='1' $condition_session";	
+						WHERE tl.on_homepage='1' $condition_session";
 				break;
-	
+
 				case TOOL_INTERACTION:
 				$sql_links = null;
 				/*
@@ -570,29 +570,29 @@ class CourseHome {
 							WHERE tl.on_homepage='1' ";
 				*/
 				break;
-	
+
 				case TOOL_STUDENT_VIEW:
 					$sql_links="SELECT tl.*, tip.visibility
 					FROM $course_link_table tl
 					LEFT JOIN $course_item_property_table tip ON tip.tool='link' AND tip.ref=tl.id
 							WHERE tl.on_homepage='1' $condition_session";
 				break;
-	
+
 				case TOOL_ADMIN:
 					$sql_links="SELECT tl.*, tip.visibility
 					FROM $course_link_table tl
 					LEFT JOIN $course_item_property_table tip ON tip.tool='link' AND tip.ref=tl.id
 							WHERE tl.on_homepage='1' $condition_session";
 				break;
-	
+
 			default:
 				$sql_links = null;
 				break;
 		}
-	
+
 		//edit by Kevin Van Den Haute (kevin@develop-it.be) for integrating Smartblogs
 		if ($sql_links != null) {
-			$result_links = Database::query($sql_links,__FILE__,__LINE__);
+			$result_links = Database::query($sql_links);
 			$properties = array();
 			if (Database::num_rows($result_links) > 0) {
 				while ($links_row = Database::fetch_array($result_links)) {
@@ -608,16 +608,16 @@ class CourseHome {
 				}
 			}
 		}
-	
+
 		if (isset($tmp_all_tools_list)) {
 			foreach ($tmp_all_tools_list as $toolsRow) {
 				if ($toolsRow['image'] == 'blog.gif') {
 					// Init
 					$tbl_blogs_rel_user = Database::get_course_table(TABLE_BLOGS_REL_USER);
-	
+
 					// Get blog id
 					$blog_id = substr($toolsRow['link'], strrpos($toolsRow['link'], '=') + 1, strlen($toolsRow['link']));
-	
+
 					// Get blog members
 					if($is_platform_admin) {
 						$sql_blogs = "
@@ -632,9 +632,9 @@ class CourseHome {
 								blog_id = " . $blog_id . " AND
 								user_id = " . api_get_user_id();
 					}
-	
-					$result_blogs = Database::query($sql_blogs, __FILE__, __LINE__);
-	
+
+					$result_blogs = Database::query($sql_blogs);
+
 					if (Database::num_rows($result_blogs) > 0) {
 						$all_tools_list[] = $toolsRow;
 					}
@@ -645,13 +645,13 @@ class CourseHome {
 		}
 		return $all_tools_list;
 	}
-	
+
 	/**
 	 * Displays the tools of a certain category.
 	 * @param array List of tools as returned by get_tools_category()
 	 * @return void
 	 */
-	
+
 	public static function show_tools_category($all_tools_list)
 	{
 		global $_user;
@@ -666,42 +666,42 @@ class CourseHome {
 				if (api_get_session_id()!=0 && in_array($toolsRow['name'],array('course_maintenance','course_setting'))) {
 					continue;
 				}
-	
+
 				if (!($i%2)) {
 					echo	"<tr valign=\"top\">\n";
 	            }
-	
+
 				// This part displays the links to hide or remove a tool.
 				// These links are only visible by the course manager.
 				unset($lnk);
 				echo '<td width="50%">' . "\n";
 				if ($is_allowed_to_edit && !api_is_coach()) {
-	
+
 					if ($toolsRow['visibility'] == '1' && $toolsRow['admin'] !='1') {
 						$link['name'] = Display::return_icon('visible.gif', get_lang('Deactivate'),array('id'=>'linktool_'.$toolsRow["id"]));
 						$link['cmd'] = "hide=yes";
 						$lnk[] = $link;
 					}
-	
+
 					if ($toolsRow['visibility'] == '0' && $toolsRow['admin'] !='1') {
 						$link['name'] = Display::return_icon('invisible.gif', get_lang('Activate'),array('id'=>'linktool_'.$toolsRow["id"]));
 						$link['cmd'] = "restore=yes";
 						$lnk[] = $link;
 					}
-	
+
 					if (!empty($toolsRow['adminlink'])) {
 						echo '<a href="'.$toolsRow['adminlink'].'">'.Display::return_icon('edit.gif', get_lang('Edit')).'</a>';
 					}
-	
+
 				}
-	
+
 				// Both checks are necessary as is_platform_admin doesn't take student view into account
 				if ($is_platform_admin && $is_allowed_to_edit) {
 	 				if ($toolsRow['admin'] !='1') {
 						$link['cmd'] = "hide=yes";
 					}
 				}
-	
+
 				if (isset($lnk) && is_array($lnk)) {
 					foreach ($lnk as $this_link)	{
 						if (empty($toolsRow['adminlink'])) {
@@ -709,10 +709,10 @@ class CourseHome {
 						}
 					}
 				} else { echo '&nbsp;&nbsp;&nbsp;&nbsp;';}
-	
+
 				// NOTE : table contains only the image file name, not full path
-				if (!stristr($toolsRow['link'], 'http://') 
-	                    && !stristr($toolsRow['link'], 'https://') 
+				if (!stristr($toolsRow['link'], 'http://')
+	                    && !stristr($toolsRow['link'], 'https://')
 	                    && !stristr($toolsRow['link'],'ftp://')) {
 					$toolsRow['link'] = $web_code_path . $toolsRow['link'];
 	            }
@@ -724,7 +724,7 @@ class CourseHome {
 				} else {
 					$class='';
 				}
-	
+
 				$qm_or_amp = ((strpos($toolsRow['link'], '?') === FALSE) ? '?' : '&amp;');
 				//If it's a link, we don't add the cidReq
 				if ($toolsRow['image'] == 'file_html.gif' || $toolsRow['image'] == 'file_html_na.gif') {
@@ -736,7 +736,7 @@ class CourseHome {
 					/*
 					$toollink = "\t" . '<a ' . $class . ' href="#" onclick="window.open(\'' . htmlspecialchars($toolsRow['link']) . '\',\'window_visio\',config=\'height=\'+730+\', width=\'+1020+\', left=2, top=2, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no\')" target="' . $toolsRow['target'] . '">';
 					*/
-	
+
 					$toollink = "\t" . '<a id="tooldesc_'.$toolsRow["id"].'"  ' . $class . ' href="javascript: void(0);" onclick="window.open(\'' . htmlspecialchars($toolsRow['link']) . '\',\'window_visio'.$_SESSION['_cid'].'\',config=\'height=\'+730+\', width=\'+1020+\', left=2, top=2, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no\')" target="' . $toolsRow['target'] . '">';
 					$my_tool_link = "\t" . '<a id="istooldesc_'.$toolsRow["id"].'"  ' . $class . ' href="javascript: void(0);" onclick="window.open(\'' . htmlspecialchars($toolsRow['link']) . '\',\'window_visio'.$_SESSION['_cid'].'\',config=\'height=\'+730+\', width=\'+1020+\', left=2, top=2, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no\')" target="' . $toolsRow['target'] . '">';
 				} elseif (strpos($toolsRow['name'],'chat')!==false && api_get_course_setting('allow_open_chat_window')==true) {
@@ -745,21 +745,21 @@ class CourseHome {
 					*/
 					$toollink = "\t" . '<a id="tooldesc_'.$toolsRow["id"].'" ' . $class . ' href="javascript: void(0);" onclick="window.open(\'' . htmlspecialchars($toolsRow['link']) . '\',\'window_chat'.$_SESSION['_cid'].'\',config=\'height=\'+380+\', width=\'+625+\', left=2, top=2, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no\')" target="' . $toolsRow['target'] . '">';
 					$my_tool_link="\t" . '<a id="istooldesc_'.$toolsRow["id"].'" ' . $class . ' href="javascript: void(0);" onclick="window.open(\'' . htmlspecialchars($toolsRow['link']) . '\',\'window_chat'.$_SESSION['_cid'].'\',config=\'height=\'+380+\', width=\'+625+\', left=2, top=2, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no\')" target="' . $toolsRow['target'] . '">';
-	
+
 				} else {
-	
+
 					if (count(explode('type=classroom',$toolsRow['link']))==2 || count(explode('type=conference',$toolsRow['link']))==2) {
 						//$toollink = "\t" . '<a ' . $class . ' href="' . $toolsRow['link'] . '" target="_blank">';
 						$toollink = "\t" . '<a id="tooldesc_'.$toolsRow["id"].'" ' . $class . ' href="' . $toolsRow['link'] . '" target="_blank">';
 						$my_tool_link = "\t" . '<a id="istooldesc_'.$toolsRow["id"].'" ' . $class . ' href="' . $toolsRow['link'] . '" target="_blank">';
-	
+
 					} else {
 						//$toollink = "\t" . '<a ' . $class . ' href="' . htmlspecialchars($toolsRow['link']) . '" target="' . $toolsRow['target'] . '">';
 						$toollink = "\t" . '<a id="tooldesc_'.$toolsRow["id"].'" ' . $class . ' href="' . htmlspecialchars($toolsRow['link']) . '" target="' . $toolsRow['target'] . '">';
 						$my_tool_link = "\t" . '<a id="istooldesc_'.$toolsRow["id"].'" ' . $class . ' href="' . htmlspecialchars($toolsRow['link']) . '" target="' . $toolsRow['target'] . '">';
-	
+
 					}
-	
+
 				}
 				echo $toollink;
 				//var_dump($toollink);
@@ -776,12 +776,12 @@ class CourseHome {
 					$tool_name = get_lang(ucfirst($toolsRow['name']));
 				}
 				Display::display_icon($toolsRow['image'], $tool_name, array('class'=>'tool-icon','id'=>'toolimage_'.$toolsRow["id"]));
-	
+
 				//validacion when belongs to a session
 				$session_img = api_get_session_image($toolsRow['session_id'], $_user['status']);
-	
+
 				echo '</a> ';
-	
+
 				echo $my_tool_link;
 				/*
 					echo ($toolsRow['image'] == 'file_html_na.gif' || $toolsRow['image'] == 'file_html.gif' || $toolsRow['image'] == 'scormbuilder.gif' || $toolsRow['image'] == 'scormbuilder_na.gif' || $toolsRow['image'] == 'blog.gif' || $toolsRow['image'] == 'blog_na.gif' || $toolsRow['image'] == 'external.gif' || $toolsRow['image'] == 'external_na.gif') ? '  '.stripslashes($toolsRow['name']) : '  '.get_lang(ucfirst($toolsRow['name']));
@@ -795,14 +795,14 @@ class CourseHome {
 				$i++;
 			}
 		}
-	
+
 		if ($i%2) {
 			echo	"<td width=\"50%\">&nbsp;</td>\n",
 					"</tr>\n";
 		}
 	}
-	
-	
+
+
 	/**
 	 * Shows the general data for a particular meeting
 	 *
@@ -814,49 +814,49 @@ class CourseHome {
 		$session_table 			= Database::get_main_table(TABLE_MAIN_SESSION);
 		$user_table 			= Database::get_main_table(TABLE_MAIN_USER);
 		$session_category_table = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
-		
+
 		if ($id_session!=strval(intval($id_session))) {
 			return '';
 		} else {
 			$id_session = intval($id_session);
 		}
-		
+
 		$sql = 'SELECT name, nbr_courses, nbr_users, nbr_classes, DATE_FORMAT(date_start,"%d-%m-%Y") as date_start, DATE_FORMAT(date_end,"%d-%m-%Y") as date_end, lastname, firstname, username, session_admin_id, nb_days_access_before_beginning, nb_days_access_after_end, session_category_id, visibility
 					FROM '.$session_table.'
 				LEFT JOIN '.$user_table.'
 					ON id_coach = user_id
 				WHERE '.$session_table.'.id='.$id_session;
-	
-		$rs = Database::query($sql, __FILE__, __LINE__);
+
+		$rs = Database::query($sql);
 		$session = Database::store_result($rs);
 		$session = $session[0];
-	
+
 		$sql_category = 'SELECT name FROM '.$session_category_table.' WHERE id = "'.intval($session['session_category_id']).'"';
-		$rs_category = Database::query($sql_category, __FILE__, __LINE__);
+		$rs_category = Database::query($sql_category);
 		$session_category = '';
 		if (Database::num_rows($rs_category) > 0) {
 			$rows_session_category = Database::store_result($rs_category);
 			$rows_session_category = $rows_session_category[0];
 			$session_category = $rows_session_category['name'];
 		}
-	
+
 		if ($session['date_start'] == '00-00-0000') {
 			$msg_date = get_lang('NoTimeLimits');
 		} else {
 			$msg_date = get_lang('From').' '.$session['date_start'].' '.get_lang('To').' '.$session['date_end'];
 		}
-	
+
 		$output  = '';
 		if (!empty($session_category)) {
 			$output .= '<tr><td>'. get_lang('SessionCategory') . ': ' . '<b>' . $session_category .'</b></td></tr>';
 		}
 		$output .= '<tr><td style="width:50%">'. get_lang('SessionName') . ': ' . '<b>' . $session['name'] .'</b></td><td>'. get_lang('GeneralCoach') . ': ' . '<b>' . $session['lastname'].' '.$session['firstname'].' ('.$session['username'].')' .'</b></td></tr>';
 		$output .= '<tr><td>'. get_lang('SessionIdentifier') . ': '. Display::return_icon('star.png', ' ', array('align' => 'absmiddle')) .'</td><td>'. get_lang('Date') . ': ' . '<b>' . $msg_date .'</b></td></tr>';
-	
+
 		return $output;
 	}
 
 
-	
+
 }
 ?>

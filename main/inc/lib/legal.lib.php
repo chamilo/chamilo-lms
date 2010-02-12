@@ -39,7 +39,7 @@ class LegalManager {
 							type = '".$type."',
 							version = '".Database::escape_string($version)."',
 							date = '".$time."'";
-			$result = Database::query($sql, __FILE__, __LINE__);
+			$result = Database::query($sql);
 			return true;
 		} elseif($last['type'] != $type && $language==$last['language_id']) {
 			//update
@@ -49,7 +49,7 @@ class LegalManager {
 					type = '".$type."',
 					date = '".$time."'
 					WHERE legal_id= $id  ";
-			$result = Database::query($sql, __FILE__, __LINE__);
+			$result = Database::query($sql);
 			return true;
 		} else {
 			return false;
@@ -74,7 +74,7 @@ class LegalManager {
 		$legal_conditions_table = Database::get_main_table(TABLE_MAIN_LEGAL);
 		$language= Database::escape_string($language);
 		$sql = "SELECT version FROM $legal_conditions_table WHERE language_id = '".$language."' ORDER BY legal_id DESC LIMIT 1 ";
-		$result = Database::query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql);
 		$row = Database::fetch_array($result);
 		if (Database::num_rows($result)>0) {
 			return $row['version'];
@@ -91,7 +91,7 @@ class LegalManager {
 		$legal_conditions_table = Database::get_main_table(TABLE_MAIN_LEGAL);
 		$language= Database::escape_string($language);
 		$sql = "SELECT * FROM $legal_conditions_table WHERE language_id = '".$language."' ORDER BY version DESC LIMIT 1 ";
-		$result = Database::query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql);
 		return Database::fetch_array($result);
 	}
 
@@ -104,7 +104,7 @@ class LegalManager {
 		$legal_conditions_table = Database::get_main_table(TABLE_MAIN_LEGAL);
 		$language= Database::escape_string($language);
 		$sql = "SELECT version FROM $legal_conditions_table WHERE language_id = '".$language."' ORDER BY version DESC LIMIT 1 ";
-		$result = Database::query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql);
 		if (Database::num_rows($result)>0){
 			$version = Database::fetch_array($result);
 			$version = explode(':',$version[0]);
@@ -190,7 +190,7 @@ class LegalManager {
 		$sql .= "ORDER BY language, version ASC ";
 		$sql .= "LIMIT $from,$number_of_items ";
 
-		$result = Database::query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql);
 		$legals = array ();
 		$versions = array ();
 		while ($legal = Database::fetch_array($result)) {
@@ -216,7 +216,7 @@ class LegalManager {
 	public static function count() {
 		$legal_conditions_table = Database::get_main_table(TABLE_MAIN_LEGAL);
 		$sql = "SELECT count(*) as count_result FROM $legal_conditions_table ORDER BY legal_id DESC ";
-		$result = Database::query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql);
 		$url = Database::fetch_array($result,'ASSOC');
 		$result = $url['count_result'];
 		return $result;
@@ -233,7 +233,7 @@ class LegalManager {
 		$legal_id=Database::escape_string($legal_id);
 		$language_id=Database::escape_string($language_id);
 		$sql='SELECT type FROM '.$legal_conditions_table.' WHERE legal_id="'.$legal_id.'" AND language_id="'.$language_id.'"';
-		$rs=Database::query($sql,__FILE__,__LINE__);
+		$rs=Database::query($sql);
 		return Database::result($rs,0,'type');
 	}
 }

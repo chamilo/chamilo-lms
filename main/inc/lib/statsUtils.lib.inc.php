@@ -42,7 +42,7 @@
  * @desc return one result from a sql query (1 single result)
  */
 function getOneResult($sql) {
-	$query = Database::query($sql, __FILE__, __LINE__);
+	$query = Database::query($sql);
 	if ($query !== false) {
 		$res = @Database::fetch_array($query, 'NUM');
 	} else {
@@ -57,7 +57,7 @@ function getOneResult($sql) {
  * @desc Return many results of a query in a 1 column tab
  */
 function getManyResults1Col($sql) {
-	$res = Database::query($sql, __FILE__, __LINE__);
+	$res = Database::query($sql);
 	if ($res !== false) {
 		$i = 0;
 		while ($resA = Database::fetch_array($res, 'NUM')) {
@@ -73,7 +73,7 @@ function getManyResults1Col($sql) {
  * @desc Return many results of a query
  */
 function getManyResults2Col($sql) {
-	$res = Database::query($sql, __FILE__, __LINE__);
+	$res = Database::query($sql);
 	if ($res !== false) {
 		$i = 0;
 		while ($resA = Database::fetch_array($res, 'NUM')) {
@@ -92,7 +92,7 @@ function getManyResults2Col($sql) {
          in $resu[$i][0], $resu[$i][1],$resu[$i][2]
  */
 function getManyResults3Col($sql) {
-	$res = Database::query($sql, __FILE__, __LINE__);
+	$res = Database::query($sql);
 	if ($res !== false) {
 		$i = 0;
 		while ($resA = Database::fetch_array($res, 'NUM')) {
@@ -116,7 +116,7 @@ function getManyResults3Col($sql) {
          columns of results
  */
 function getManyResultsXCol($sql, $X) {
-	$res = Database::query($sql, __FILE__, __LINE__);
+	$res = Database::query($sql);
 	if ($res !== false) {
 		$i = 0;
 		while ($resA = Database::fetch_array($res, 'NUM')) {
@@ -141,7 +141,7 @@ function getManyResultsXCol($sql, $X) {
  */
 function hoursTab($sql) {
 	$hours_array = array('total' => 0);
-	$res = Database::query($sql, __FILE__, __LINE__);
+	$res = Database::query($sql);
 	if ($res !== false) {
 		while ($row = Database::fetch_row($res)) {
 			$date_array = getdate($row[0]);
@@ -171,7 +171,7 @@ function hoursTab($sql) {
 function daysTab($sql) {
 	$MonthsShort = api_get_months_short();
 	$days_array = array('total' => 0);
-	$res = Database::query($sql, __FILE__, __LINE__);
+	$res = Database::query($sql);
 	if ($res !== false) {
 		while ($row = Database::fetch_row($res)) {
 			$date_array = getdate($row[0]);
@@ -202,7 +202,7 @@ function daysTab($sql) {
 function monthTab($sql) {
 	$MonthsLong = api_get_months_long();
     $month_array = array('total' => 0);
-	$res = Database::query($sql, __FILE__, __LINE__);
+	$res = Database::query($sql);
 	if ($res !== false) {
 		// init tab with all months
 		for($i = 0; $i < 12; $i++) {

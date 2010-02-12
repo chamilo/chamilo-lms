@@ -77,7 +77,7 @@ function update_db_info($action, $oldPath, $newPath="")
 	}
 	//echo $query;
 	//error_log($query,0);
-	Database::query($query,__FILE__,__LINE__);
+	Database::query($query);
 	//Display::display_normal_message("query = $query");
 }
 
@@ -698,7 +698,7 @@ class FileManager
 
 		$sql_query = "SELECT count(*) as number_existing FROM $glued_table WHERE path='$full_file_name'";
 		//api_display_debug_info($sql_query);
-		$sql_result = Database::query($sql_query,__FILE__,__LINE__);
+		$sql_result = Database::query($sql_query);
 		$result = Database::fetch_array($sql_result);
 		//determine which query to execute
 		if( $result["number_existing"] > 0 )
@@ -711,7 +711,7 @@ class FileManager
 			//no entry exists, create new one
 			$query="INSERT INTO $glued_table (path,visibility,filetype) VALUES('$full_file_name','$default_visibility','$filetype')";
 		}
-		Database::query($query,__FILE__,__LINE__);
+		Database::query($query);
 	}
 		/**
 	* Like in Java, creates the directory named by this abstract pathname,

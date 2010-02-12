@@ -51,7 +51,7 @@ function get_navigation_items($include_admin_tools = false)
 		*/
 
 		$sql_menu_query = "SELECT * FROM $course_tools_table WHERE visibility='1' and admin='0' ORDER BY id ASC";
-		$sql_result = Database::query($sql_menu_query, __FILE__, __LINE__);
+		$sql_result = Database::query($sql_menu_query);
 		while ($row = Database::fetch_array($sql_result))
 		{
 			$navigation_items[$row['id']] = $row;
@@ -176,9 +176,9 @@ function show_navigation_menu()
 		</script>
 		<?php
 		echo '<div id="toolnavbox">';
-		echo '<div id="toolnavlist"><dl>';		
+		echo '<div id="toolnavlist"><dl>';
 		foreach ($navigation_items as $key => $navigation_item) {
-			//students can't see the course settings option			
+			//students can't see the course settings option
 			if (!api_is_allowed_to_edit() && $key == 'course_settings') {
 				continue;
 			}
@@ -217,7 +217,7 @@ function show_navigation_menu()
 		?>
 		<script type="text/javascript">
 		/* <![CDATA[ */
-		if(readCookie('dokeos_menu_state') == 0) 
+		if(readCookie('dokeos_menu_state') == 0)
 			swap_menu();
 		}
 		/* ]]> */

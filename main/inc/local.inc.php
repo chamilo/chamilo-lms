@@ -255,7 +255,7 @@ if (api_get_setting('allow_terms_conditions')=='true') {
                 FROM $user_table
                 WHERE username = '".trim(addslashes($login))."'";
 
-        $result = Database::query($sql,__FILE__,__LINE__);
+        $result = Database::query($sql);
 
         if (Database::num_rows($result) > 0) {
             $uData = Database::fetch_array($result);
@@ -472,7 +472,7 @@ if (api_get_setting('allow_terms_conditions')=='true') {
                           FROM $user_table
                           WHERE username = '".trim(addslashes($sso['username']))."'";
 
-                  $result = Database::query($sql,__FILE__,__LINE__);
+                  $result = Database::query($sql);
 
                   if (Database::num_rows($result) > 0) {
                       $uData = Database::fetch_array($result);
@@ -718,7 +718,7 @@ if (isset($uidReset) && $uidReset) // session data refresh requested
                     WHERE user.user_id = '".$_user['user_id']."'";
         }
 
-        $result = Database::query($sql,__FILE__,__LINE__);
+        $result = Database::query($sql);
 
         if (Database::num_rows($result) > 0) {
 			// Extracting the user data
@@ -771,14 +771,14 @@ if (isset($cidReset) && $cidReset) { // course session data refresh requested or
                  LEFT JOIN $course_cat_table
                  ON course.category_code = course_category.code
                  WHERE course.code = '$cidReq'";
-        $result = Database::query($sql,__FILE__,__LINE__);
+        $result = Database::query($sql);
 
         if (Database::num_rows($result)>0) {
             $cData = Database::fetch_array($result);
-            //@TODO real_cid should be cid, for working with numeric course id 
+            //@TODO real_cid should be cid, for working with numeric course id
             $_real_cid						= $cData['id'];
-            
-            $_cid							= $cData['code'];            
+
+            $_cid							= $cData['code'];
 			$_course = array();
 			$_course['real_id']				= $cData['id'];
 			$_course['id']					= $cData['code']; //auto-assigned integer
@@ -802,7 +802,7 @@ if (isset($cidReset) && $cidReset) { // course session data refresh requested or
             api_session_register('_course');
             //@TODO real_cid should be cid, for working with numeric course id
             api_session_register('_real_cid');
-            
+
 			if ($_configuration['tracking_enabled'] && !isset($_SESSION['login_as'])) {
 	            //We add a new record in the course tracking table
 	            $course_tracking_table = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
@@ -810,7 +810,7 @@ if (isset($cidReset) && $cidReset) { // course session data refresh requested or
 		        $sql="INSERT INTO $course_tracking_table(course_code, user_id, login_course_date, logout_course_date, counter)" .
 							"VALUES('".$_course['sysCode']."', '".$_user['user_id']."', '$time', '$time', '1')";
 
-				Database::query($sql,__FILE__,__LINE__);
+				Database::query($sql);
 			}
 
 			// if a session id has been given in url, we store the session
@@ -820,11 +820,11 @@ if (isset($cidReset) && $cidReset) { // course session data refresh requested or
 				$tbl_user 					= Database::get_main_table(TABLE_MAIN_USER);
 				$tbl_session_course 		= Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
 				$tbl_session_course_user 	= Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-				
+
 				if (!empty($_GET['id_session'])) {
 					$_SESSION['id_session'] = Database::escape_string($_GET['id_session']);
 					$sql = 'SELECT name FROM '.$tbl_session . ' WHERE id="'.intval($_SESSION['id_session']) . '"';
-					$rs = Database::query($sql,__FILE__,__LINE__);
+					$rs = Database::query($sql);
 					list($_SESSION['session_name']) = Database::fetch_array($rs);
 				} else {
 					api_session_unregister('session_name');
@@ -854,7 +854,7 @@ if (isset($cidReset) && $cidReset) { // course session data refresh requested or
 			$tbl_session 				= Database::get_main_table(TABLE_MAIN_SESSION);
 			$_SESSION['id_session'] = Database::escape_string($_GET['id_session']);
 			$sql = 'SELECT name FROM '.$tbl_session . ' WHERE id="'.intval($_SESSION['id_session']). '"';
-			$rs = Database::query($sql,__FILE__,__LINE__);
+			$rs = Database::query($sql);
 			list($_SESSION['session_name']) = Database::fetch_array($rs);
 		}
 
@@ -862,12 +862,12 @@ if (isset($cidReset) && $cidReset) { // course session data refresh requested or
        	    $course_tracking_table = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
             $time = api_get_datetime();
 	   		//We select the last record for the current course in the course tracking table
-	   			   		
+
 	   		$sql="SELECT course_access_id, logout_course_date FROM $course_tracking_table WHERE user_id=".intval($_user ['user_id'])." ORDER BY login_course_date DESC LIMIT 0,1";
-	   		$result=Database::query($sql,__FILE__,__LINE__);
+	   		$result=Database::query($sql);
 	   		$update_course_access = false;
 	   		$i_course_access_id = array();
-	   		$timeout_course_access = 0;	   		
+	   		$timeout_course_access = 0;
 	   		if (Database::num_rows($result)>0) {
 	   			$i_course_access_id = Database::fetch_array($result);
 	   			// calculate time spent between last logout course date and current date
@@ -880,15 +880,15 @@ if (isset($cidReset) && $cidReset) { // course session data refresh requested or
 				$sql="UPDATE $course_tracking_table
 		   				SET logout_course_date = '$time', counter = counter+1
 						WHERE course_access_id=".intval($i_course_access_id['course_access_id']);
-				Database::query($sql,__FILE__,__LINE__);					   			
+				Database::query($sql);
 	   		} else {
 	   			$sql="INSERT INTO $course_tracking_table(course_code, user_id, login_course_date, logout_course_date, counter)
 						VALUES('".$_course['sysCode']."', '".$_user['user_id']."', '$time', '$time', '1')";
-				Database::query($sql,__FILE__,__LINE__);	
+				Database::query($sql);
 	   		}
-			
+
 			/*
-	   		$result=Database::query($sql,__FILE__,__LINE__);
+	   		$result=Database::query($sql);
 	   		if (Database::num_rows($result)>0 ) {
 		   		$i_course_access_id = Database::fetch_array($result);
 		   		//We update the course tracking table
@@ -897,11 +897,11 @@ if (isset($cidReset) && $cidReset) { // course session data refresh requested or
 		   					"counter = counter+1 " .
 						"WHERE course_access_id=".intval($i_course_access_id['course_access_id']);
 
-				Database::query($sql,__FILE__,__LINE__);
+				Database::query($sql);
 	   		} else {
 	            $sql="INSERT INTO $course_tracking_table(course_code, user_id, login_course_date, logout_course_date, counter)" .
 						"VALUES('".$_course['sysCode']."', '".$_user['user_id']."', '$time', '$time', '1')";
-				Database::query($sql,__FILE__,__LINE__);
+				Database::query($sql);
 	   		}
 	   		*/
 		}
@@ -921,7 +921,7 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) { // ses
 	               WHERE user_id  = '".$_user['user_id']."'
 	               AND course_code = '$cidReq'";
 
-	        $result = Database::query($sql,__FILE__,__LINE__);
+	        $result = Database::query($sql);
 
 	        if (Database::num_rows($result) > 0) { // this  user have a recorded state for this course
 	            $cuData = Database::fetch_array($result);
@@ -947,7 +947,7 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) { // ses
                WHERE user_id  = '".$_user['user_id']."'
                AND course_code = '$cidReq'";
 
-	        $result = Database::query($sql,__FILE__,__LINE__);
+	        $result = Database::query($sql);
 
 	        if (Database::num_rows($result) > 0) { // this  user have a recorded state for this course
 	            $cuData = Database::fetch_array($result);
@@ -977,7 +977,7 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) { // ses
 							AND session_rel_course.course_code='$_cid'";
 				*/
 
-		        $result = Database::query($sql,__FILE__,__LINE__);
+		        $result = Database::query($sql);
 		        $row = Database::store_result($result);
 
 		        if ($row[0]['id_coach']==$_user['user_id']) {
@@ -1010,7 +1010,7 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) { // ses
 							AND id_session = '".api_get_session_id()."'
 							AND status = 2";
 
-			        $result = Database::query($sql,__FILE__,__LINE__);
+			        $result = Database::query($sql);
 			        if ($row = Database::fetch_array($result)) {
 			        	$_courseUser['role'] = 'Professor';
 			            $is_courseMember     = true;
@@ -1030,9 +1030,9 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) { // ses
 					        $sql = "SELECT * FROM ".$tbl_session_course_user."
 					        		WHERE id_user  = '".$_user['user_id']."'
 					        		AND id_session = '".api_get_session_id()."'
-									AND course_code = '$cidReq' AND status NOT IN(2)";		
-					        $result = Database::query($sql,__FILE__,__LINE__);	
-					        if (Database::num_rows($result) > 0) { // this  user have a recorded state for this course					        
+									AND course_code = '$cidReq' AND status NOT IN(2)";
+					        $result = Database::query($sql);
+					        if (Database::num_rows($result) > 0) { // this  user have a recorded state for this course
 					        	while($row = Database::fetch_array($result)){
 						            $is_courseMember     = true;
 						            $is_courseTutor      = false;
@@ -1047,10 +1047,10 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) { // ses
 						    $is_courseTutor      = false;
 						    $is_courseAdmin      = false;
 						    $is_sessionAdmin     = false;
-						    api_session_unregister('_courseUser'); 
-						    //$_course['visibility'] = 0; this depends the 
+						    api_session_unregister('_courseUser');
+						    //$_course['visibility'] = 0; this depends the
 			        	}
-					
+
 			        }
 	        	}
 	        }
@@ -1131,7 +1131,7 @@ if ((isset($gidReset) && $gidReset) || (isset($cidReset) && $cidReset)) { // ses
     if ($gidReq && $_cid ) { // have keys to search data
     	$group_table = Database::get_course_table(TABLE_GROUP);
         $sql = "SELECT * FROM $group_table WHERE id = '$gidReq'";
-        $result = Database::query($sql,__FILE__,__LINE__);
+        $result = Database::query($sql);
         if (Database::num_rows($result) > 0) { // This group has recorded status related to this course
             $gpData = Database::fetch_array($result);
             $_gid                   = $gpData ['id'             ];
@@ -1177,5 +1177,5 @@ if (isset($_cid)) {
 	$tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
     $time = api_get_datetime();
 	$sql="UPDATE $tbl_course SET last_visit= '$time' WHERE code='$_cid'";
-	Database::query($sql,__FILE__,__LINE__);
+	Database::query($sql);
 }

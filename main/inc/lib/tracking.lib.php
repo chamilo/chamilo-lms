@@ -48,7 +48,7 @@ class Tracking {
 		$sql = 'SELECT login_date, logout_date FROM ' . $tbl_track_login . '
 						WHERE login_user_id = ' . intval($user_id);
 
-		$rs = Database::query($sql,__FILE__,__LINE__);
+		$rs = Database::query($sql);
 
 		$nb_seconds = 0;
 
@@ -103,7 +103,7 @@ class Tracking {
 		$sql = " SELECT SUM(UNIX_TIMESTAMP(logout_course_date)-UNIX_TIMESTAMP(login_course_date)) as nb_seconds
 				FROM $tbl_track_course
 				WHERE course_code='$course_code' $condition_user";
-		$rs = Database::query($sql,__FILE__,__LINE__);
+		$rs = Database::query($sql);
 		$row = Database::fetch_array($rs);
 		return $row['nb_seconds'];
 	}
@@ -114,7 +114,7 @@ class Tracking {
 						WHERE login_user_id = ' . intval($student_id) . '
 						ORDER BY login_date ASC LIMIT 0,1';
 
-		$rs = Database::query($sql,__FILE__,__LINE__);
+		$rs = Database::query($sql);
 		if(Database::num_rows($rs)>0)
 		{
 			if ($first_login_date = Database::result($rs, 0, 0)) {
@@ -130,7 +130,7 @@ class Tracking {
 						WHERE login_user_id = ' . intval($student_id) . '
 						ORDER BY login_date DESC LIMIT 0,1';
 
-		$rs = Database::query($sql,__FILE__,__LINE__);
+		$rs = Database::query($sql);
 		if(Database::num_rows($rs)>0)
 		{
 			if ($last_login_date = Database::result($rs, 0, 0))
@@ -174,7 +174,7 @@ class Tracking {
 						AND course_code = "' . Database::escape_string($course_code) . '"
 						ORDER BY login_course_date ASC LIMIT 0,1';
 
-		$rs = Database::query($sql,__FILE__,__LINE__);
+		$rs = Database::query($sql);
 		if(Database::num_rows($rs)>0)
 		{
 			if ($first_login_date = Database::result($rs, 0, 0)) {
@@ -191,7 +191,7 @@ class Tracking {
 						AND course_code = "' . Database::escape_string($course_code) . '"
 						ORDER BY login_course_date DESC LIMIT 0,1';
 
-		$rs = Database::query($sql,__FILE__,__LINE__);
+		$rs = Database::query($sql);
 		if(Database::num_rows($rs)>0)
 		{
 			if ($last_login_date = Database::result($rs, 0, 0)) {
@@ -218,13 +218,13 @@ class Tracking {
 		$sql = 'SELECT DISTINCT course_code
 						FROM ' . $tbl_course_rel_user . '
 						WHERE user_id = ' . $user_id;
-		$rs = Database::query($sql, __FILE__, __LINE__);
+		$rs = Database::query($sql);
 		$nb_courses = Database::num_rows($rs);
 
 		$sql = 'SELECT DISTINCT course_code
 						FROM ' . $tbl_session_course_rel_user . '
 						WHERE id_user = ' . $user_id;
-		$rs = Database::query($sql, __FILE__, __LINE__);
+		$rs = Database::query($sql);
 		$nb_courses += Database::num_rows($rs);
 
 		return $nb_courses;
@@ -246,7 +246,7 @@ class Tracking {
 			// table definition
 			$tbl_course_quiz = Database::get_course_table(TABLE_QUIZ_TEST,$a_course['db_name']);
 			$tbl_stats_exercise = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
-			$count_quiz = Database::fetch_row(Database::query("SELECT count(id) FROM $tbl_course_quiz WHERE active <> -1",__FILE__,__LINE__));
+			$count_quiz = Database::fetch_row(Database::query("SELECT count(id) FROM $tbl_course_quiz WHERE active <> -1"));
 			$quiz_avg_total_score = 0;
 			if (!empty($count_quiz[0]) && !empty($student_id)) {
 				$condition_user = "";
@@ -263,13 +263,13 @@ class Tracking {
 						AND exe_cours_id = '$course_code'
 						AND orig_lp_item_id = 0
 						ORDER BY exe_date DESC";
-				$res = Database::query($sql, __FILE__, __LINE__);
+				$res = Database::query($sql);
 				$row = Database::fetch_array($res);
 				$quiz_avg_score = 0;
 				if (!empty($row['avg_score'])) {
 					$quiz_avg_score = round($row['avg_score'],2);
 				}
-				$count_attempt = Database::fetch_row(Database::query("SELECT count(*) FROM $tbl_stats_exercise WHERE exe_exo_id IN (SELECT id FROM $tbl_course_quiz WHERE active <> -1) $condition_user AND orig_lp_id = 0 AND exe_cours_id = '$course_code' AND orig_lp_item_id = 0 ORDER BY exe_date DESC",__FILE__,__LINE__));
+				$count_attempt = Database::fetch_row(Database::query("SELECT count(*) FROM $tbl_stats_exercise WHERE exe_exo_id IN (SELECT id FROM $tbl_course_quiz WHERE active <> -1) $condition_user AND orig_lp_id = 0 AND exe_cours_id = '$course_code' AND orig_lp_item_id = 0 ORDER BY exe_date DESC"));
 				if(!empty($count_attempt[0])) {
 					$quiz_avg_score = $quiz_avg_score / $count_attempt[0];
 		        }
@@ -289,7 +289,7 @@ class Tracking {
 			// table definition
 			$tbl_course_lp_view = Database :: get_course_table(TABLE_LP_VIEW, $a_course['db_name']);
 			$tbl_course_lp = Database :: get_course_table(TABLE_LP_MAIN, $a_course['db_name']);
-			$count_lp = Database::fetch_row(Database::query("SELECT count(id) FROM $tbl_course_lp",__FILE__,__LINE__));
+			$count_lp = Database::fetch_row(Database::query("SELECT count(id) FROM $tbl_course_lp"));
 			$avg_progress = 0;
 			if (!empty($count_lp[0]) && !empty($student_id)) {
 				$condition_user = "";
@@ -299,7 +299,7 @@ class Tracking {
 					$condition_user = " lp_view.user_id = '$student_id' AND ";
 				}
 				$sqlProgress = "SELECT SUM(progress) FROM $tbl_course_lp_view AS lp_view WHERE $condition_user lp_view.lp_id IN (SELECT id FROM $tbl_course_lp)";
-				$resultItem  = Database::query($sqlProgress, __FILE__, __LINE__);
+				$resultItem  = Database::query($sqlProgress);
 				$rowItem = Database::fetch_row($resultItem);
 				$avg_progress = round($rowItem[0] / $count_lp[0], 1);
 				return $avg_progress;
@@ -343,7 +343,7 @@ class Tracking {
 				$condition_lp =" WHERE id IN(".implode(',',$lp_ids).") ";
 			}
 
-			$count_row_lp = Database::fetch_row(Database::query("SELECT count(*) FROM $lp_table $condition_lp",__FILE__,__LINE__));
+			$count_row_lp = Database::fetch_row(Database::query("SELECT count(*) FROM $lp_table $condition_lp"));
 
 			$lp_scorm_score_total = 0;
 			$lp_scorm_weighting_total = 0;
@@ -362,7 +362,7 @@ class Tracking {
 				}
 
 				$sql = "SELECT max(id) as id, lp_id, user_id FROM $lp_view_table WHERE lp_id IN (SELECT id FROM $lp_table $condition_lp) $condition_user1 GROUP BY lp_id,user_id";
-				$rs_last_lp_view_id = Database::query($sql, __FILE__, __LINE__);
+				$rs_last_lp_view_id = Database::query($sql);
 
 				$score_of_scorm_calculate = 0;
 				if (Database::num_rows($rs_last_lp_view_id) > 0) {
@@ -372,7 +372,7 @@ class Tracking {
 						// we get the progress
 						$sql='SELECT progress FROM '.$lp_view_table.' WHERE id="'.$lp_view_id.'"';
 
-						$rs = Database::query($sql, __FILE__, __LINE__);
+						$rs = Database::query($sql);
 						$progress = Database::result($rs,0,'progress');
 
 						// item's list of an scorm
@@ -383,7 +383,7 @@ class Tracking {
 									AND lp_i.item_type="sco"
 								WHERE lp_view_id="'.$lp_view_id.'"';
 
-						$res_max_score=Database::query($sql_max_score,__FILE__,__LINE__);
+						$res_max_score=Database::query($sql_max_score);
 						$count_total_loop=0;
 						$num_rows_max_score=Database::num_rows($res_max_score);
 
@@ -445,7 +445,7 @@ class Tracking {
 				INNER JOIN $lp_item_table lp_item ON lp_item.lp_id = lp_view.lp_id AND item_type='".TOOL_QUIZ."'
 				WHERE $condition_user2 lp_view.lp_id IN (SELECT id FROM $lp_table $condition_lp)";;
 
-				$rsItems = Database::query($sql, __FILE__, __LINE__);
+				$rsItems = Database::query($sql);
 
 				$total_score = $total_weighting = 0;
 				if (Database::num_rows($rsItems) > 0) {
@@ -460,12 +460,12 @@ class Tracking {
 						$sql = "SELECT score FROM $lp_item_view_table WHERE lp_item_id = '$lp_item_id' and lp_view_id = '$lp_view_id'
 						ORDER BY view_count DESC limit 1";
 
-						$rsScores = Database::query($sql, __FILE__, __LINE__);
+						$rsScores = Database::query($sql);
 						// Real max score - this was implemented because of the random exercises
 				 		$sql_last_attempt = 'SELECT exe_id FROM '. $tbl_stats_exercices. ' ' .
 				 							'WHERE exe_exo_id="' .$item['path']. '" AND exe_user_id="' . $user_id . '" AND orig_lp_id = "'.$lp_id.'" AND orig_lp_item_id = "'.$lp_item_id.'" AND exe_cours_id="' . $course_code . '" ORDER BY exe_date DESC limit 1';
 
-						$resultLastAttempt = Database::query($sql_last_attempt, __FILE__, __LINE__);
+						$resultLastAttempt = Database::query($sql_last_attempt);
 						$num = Database :: num_rows($resultLastAttempt);
 						if ($num > 0){
 							if ($num > 1){
@@ -480,7 +480,7 @@ class Tracking {
 						$sql = "SELECT SUM(t.ponderation) as maxscore from ( SELECT distinct question_id, marks,ponderation FROM $tbl_stats_attempts as at " .
 					  	"INNER JOIN  $tbl_quiz_questions as q  on(q.id = at.question_id) where exe_id ='$id_last_attempt' ) as t";
 
-						$result = Database::query($sql, __FILE__, __LINE__);
+						$result = Database::query($sql);
 						$row_max_score = Database :: fetch_array($result);
 						$maxscore = $row_max_score['maxscore'];
 						if ($maxscore=='') {
@@ -545,7 +545,7 @@ class Tracking {
 			}
 		}
 
-		$result = Database::query($sql,__FILE__,__LINE__);
+		$result = Database::query($sql);
 
 		while ($a_courses = Database::fetch_array($result)) {
 
@@ -556,7 +556,7 @@ class Tracking {
 								FROM $tbl_session_course_user AS srcru, $tbl_session_user sru
 								WHERE srcru.id_user = sru.id_user AND srcru.id_session = sru.id_session AND srcru.course_code='$course_code' AND srcru.id_session='$id_session'";
 
-			$rs = Database::query($sql,__FILE__,__LINE__);
+			$rs = Database::query($sql);
 
 			while ($row = Database::fetch_array($rs)) {
 				$a_students[$row['id_user']] = $row['id_user'];
@@ -594,7 +594,7 @@ class Tracking {
 			}
 		}
 
-		$result = Database::query($sql,__FILE__,__LINE__);
+		$result = Database::query($sql);
 
 		while ($row = Database::fetch_array($result)) {
 			$a_students[$row['id_user']] = $row['id_user'];
@@ -617,7 +617,7 @@ class Tracking {
 		//////////////////////////////////////////////////////////////
 		$sql = 'SELECT course_code FROM ' . $tbl_session_course_user . ' WHERE id_session="' . $id_session . '" AND id_user=' . $coach_id.' AND status=2';
 
-		$result = Database::query($sql,__FILE__,__LINE__);
+		$result = Database::query($sql);
 
 		while ($a_courses = Database::fetch_array($result)) {
 			$course_code = $a_courses["course_code"];
@@ -626,7 +626,7 @@ class Tracking {
 								FROM $tbl_session_course_user AS srcru
 								WHERE course_code='$course_code' and id_session = '" . $id_session . "'";
 
-			$rs = Database::query($sql, __FILE__, __LINE__);
+			$rs = Database::query($sql);
 
 			while ($row = Database::fetch_array($rs)) {
 				$a_students[$row['id_user']] = $row['id_user'];
@@ -638,11 +638,11 @@ class Tracking {
 		//////////////////////////////////////////////////////////////
 
 		$dsl_session_coach = 'SELECT id_coach FROM ' . $tbl_session . ' WHERE id="' . $id_session . '" AND id_coach="' . $coach_id . '"';
-		$result = Database::query($dsl_session_coach, __FILE__, __LINE__);
+		$result = Database::query($dsl_session_coach);
 		//He is the session_coach so we select all the users in the session
 		if (Database::num_rows($result) > 0) {
 			$sql = 'SELECT DISTINCT srcru.id_user FROM ' . $tbl_session_course_user . ' AS srcru WHERE id_session="' . $id_session . '"';
-			$result = Database::query($sql,__FILE__,__LINE__);
+			$result = Database::query($sql);
 			while ($row = Database::fetch_array($result)) {
 				$a_students[$row['id_user']] = $row['id_user'];
 			}
@@ -670,7 +670,7 @@ class Tracking {
 
 		$sql = 'SELECT 1 FROM ' . $tbl_session_course_user . ' WHERE id_user=' . $coach_id .' AND status=2';
 
-		$result = Database::query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql);
 		if (Database::num_rows($result) > 0) {
 			return true;
 		}
@@ -687,7 +687,7 @@ class Tracking {
 							ON session.id = session_course.id_session
 							AND session.id_coach = ' . $coach_id . '
 						WHERE id_user = ' . $student_id;
-		$result = Database::query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql);
 		if (Database::num_rows($result) > 0) {
 			return true;
 		}
@@ -726,7 +726,7 @@ class Tracking {
 
 		if (!empty ($id_session))
 			$sql .= ' AND id_session=' . $id_session;
-		$result = Database::query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql);
 		while ($row = Database::fetch_array($result)) {
 			$a_courses[$row['course_code']] = $row['course_code'];
 		}
@@ -767,7 +767,7 @@ class Tracking {
 				$sql .=  ' WHERE access_url_id = '.$access_url_id;
 		}
 
-		$result = Database::query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql);
 
 		while ($row = Database::fetch_array($result)) {
 			$a_courses[$row['course_code']] = $row['course_code'];
@@ -802,7 +802,7 @@ class Tracking {
 			}
 		}
 
-		$rs = Database::query($sql,__FILE__,__LINE__);
+		$rs = Database::query($sql);
 
 		while ($row = Database::fetch_array($rs))
 		{
@@ -831,7 +831,7 @@ class Tracking {
 			}
 		}
 
-		$rs = Database::query($sql,__FILE__,__LINE__);
+		$rs = Database::query($sql);
 
 		while ($row = Database::fetch_array($rs))
 		{
@@ -881,7 +881,7 @@ class Tracking {
 						FROM ' . $tbl_session_course . '
 						WHERE id_session=' . $session_id;
 
-		$rs = Database::query($sql, __FILE__, __LINE__);
+		$rs = Database::query($sql);
 		$a_courses = array ();
 		while ($row = Database::fetch_array($rs)) {
 			$a_courses[$row['course_code']] = $row;
@@ -953,7 +953,7 @@ class Tracking {
 		if (!empty($a_course['db_name'])) {
 			$tbl_posts = Database :: get_course_table(TABLE_FORUM_POST, $a_course['db_name']);
 			$sql = "SELECT count(*) FROM $tbl_posts";
-			$result = Database::query($sql, __FILE__, __LINE__);
+			$result = Database::query($sql);
 			$row = Database::fetch_row($result);
 			$count = $row[0];
 			return $count;
@@ -978,7 +978,7 @@ class Tracking {
 		if (!empty($a_course['db_name'])) {
 			$tbl_threads = Database :: get_course_table(TABLE_FORUM_THREAD, $a_course['db_name']);
 			$sql = "SELECT count(*) FROM $tbl_threads";
-			$result = Database::query($sql, __FILE__, __LINE__);
+			$result = Database::query($sql);
 			$row = Database::fetch_row($result);
 			$count = $row[0];
 			return $count;
@@ -1003,7 +1003,7 @@ class Tracking {
 		if (!empty($a_course['db_name'])) {
 			$tbl_forums = Database :: get_course_table(TABLE_FORUM, $a_course['db_name']);
 			$sql = "SELECT count(*) FROM $tbl_forums";
-			$result = Database::query($sql, __FILE__, __LINE__);
+			$result = Database::query($sql);
 			$row = Database::fetch_row($result);
 			$count = $row[0];
 			return $count;
@@ -1032,7 +1032,7 @@ class Tracking {
 
 			$sql = "SELECT count(*) FROM $tbl_stats_access WHERE DATE_SUB(NOW(),INTERVAL $last_days DAY) <= access_date
 					AND access_cours_code = '$course_code' AND access_tool='".TOOL_CHAT."'";
-			$result = Database::query($sql, __FILE__, __LINE__);
+			$result = Database::query($sql);
 			$row = Database::fetch_row($result);
 			$count = $row[0];
 			return $count;
@@ -1155,7 +1155,7 @@ class Tracking {
 					AND stats_login.login_course_date IS NULL
 					GROUP BY course_user.user_id';
 		}
-		$rs = api_sql_query($sql,__FILE__,__LINE__);
+		$rs = api_sql_query($sql);
 		$inactive_users = array();
 		while($user = Database::fetch_array($rs))
 		{
@@ -1174,7 +1174,7 @@ class Tracking {
 		WHERE access_user_id=' . $student_id . '
 		AND access_cours_code="' . $course_code . '"';
 
-		$rs = Database::query($sql, __FILE__, __LINE__);
+		$rs = Database::query($sql);
 		$nb_login = Database::num_rows($rs);
 
 		return $nb_login;
@@ -1191,7 +1191,7 @@ class Tracking {
 
 		$sql = 'SELECT DISTINCT user_id FROM '.$tbl_user.' as user
 				WHERE hr_dept_id='.$hr_dept_id;
-		$rs = Database::query($sql, __FILE__, __LINE__);
+		$rs = Database::query($sql);
 
 		while($user = Database :: fetch_array($rs))
 		{
@@ -1224,14 +1224,14 @@ class Tracking {
 			if ($row_type['lp_type']==1) {//lp dokeos
 
 					$sql = "SELECT id FROM $lp_view_table  WHERE user_id = '".intval($user_id)."' and lp_id='".$row_type['id']."'";
-					$rs_last_lp_view_id = Database::query($sql, __FILE__, __LINE__);
+					$rs_last_lp_view_id = Database::query($sql);
 					$lp_view_id = intval(Database::result($rs_last_lp_view_id,0,'id'));
 
 					$sql_list_view='SELECT li.max_score,lv.user_id,liw.score,(liw.score/li.max_score) as sum_data FROM '.$lp_item_table.' li INNER JOIN '.$lp_view_table.' lv
 					ON li.lp_id=lv.lp_id INNER JOIN '.$lp_item_view_table.' liw ON liw.lp_item_id=li.id WHERE lv.user_id="'.$user_id.'" AND li.item_type="quiz" AND liw.lp_view_id="'.$lp_view_id.'"';
 					$sum=0;
 					$tot=0;
-					$rs_list_view1=Database::query($sql_list_view,__FILE__,__LINE__);
+					$rs_list_view1=Database::query($sql_list_view);
 					while ($row_list_view=Database::fetch_array($rs_list_view1)) {
 						$sum=$sum+$row_list_view['sum_data'];
 						$tot++;
@@ -1246,7 +1246,7 @@ class Tracking {
 
 			} elseif ($row_type['lp_type']==2) {//lp scorm
 					$sql = "SELECT id FROM $lp_view_table  WHERE user_id = '".intval($user_id)."' and lp_id='".$row_type['id']."'";
-					$rs_last_lp_view_id = Database::query($sql, __FILE__, __LINE__);
+					$rs_last_lp_view_id = Database::query($sql);
 					$lp_view_id = intval(Database::result($rs_last_lp_view_id,0,'id'));
 
 					$sql_list_view='SELECT li.max_score,lv.user_id,liw.score,((liw.score/li.max_score)*100) as sum_data FROM '.$lp_item_table.' li INNER JOIN '.$lp_view_table.' lv
@@ -1254,7 +1254,7 @@ class Tracking {
 					$tot=0;
 					$sum=0;
 
-					$rs_list_view2=Database::query($sql_list_view,__FILE__,__LINE__);
+					$rs_list_view2=Database::query($sql_list_view);
 					while ($row_list_view=Database::fetch_array($rs_list_view2)) {
 						$sum=$sum+$row_list_view['sum_data'];
 						$tot++;
@@ -1291,7 +1291,7 @@ class TrackingCourseLog {
 		}
 
 		$sql .= " AND tool IN ('document', 'learnpath', 'quiz', 'glossary', 'link', 'course_description')";
-		$res = Database::query($sql, __FILE__, __LINE__);
+		$res = Database::query($sql);
 		$obj = Database::fetch_object($res);
 		return $obj->total_number_of_items;
 	}
@@ -1329,7 +1329,7 @@ class TrackingCourseLog {
 
 		$sql .=	" LIMIT $from, $number_of_items ";
 
-		$res = Database::query($sql, __FILE__, __LINE__) or die(Database::error());
+		$res = Database::query($sql) or die(Database::error());
 		$resources = array ();
 
 		while ($row = Database::fetch_array($res)) {
@@ -1339,7 +1339,7 @@ class TrackingCourseLog {
 			$id = $table_name['id_tool'];
 			$query = "SELECT session.id, session.name, user.username FROM $table_tool tool, $table_session session, $table_user user" .
 						" WHERE tool.session_id = session.id AND session.id_coach = user.user_id AND tool.$id = $ref";
-			$recorset = Database::query($query, __FILE__, __LINE__);
+			$recorset = Database::query($query);
 
 			if (!empty($recorset)) {
 
@@ -1370,7 +1370,7 @@ class TrackingCourseLog {
 					$condition = 'tool.title as title';
 					$query_document = "SELECT $condition FROM $table_tool tool" .
 										" WHERE id = $ref";
-					$rs_document = Database::query($query_document, __FILE__, __LINE__) or die(Database::error());
+					$rs_document = Database::query($query_document) or die(Database::error());
 					$obj_document = Database::fetch_object($rs_document);
 					$row[4] = $obj_document->title;
 				}
@@ -1482,7 +1482,7 @@ class TrackingCourseLog {
 		$sql = "SELECT user.user_id, field.field_value FROM $table_user user, $table_user_field_values field
 			WHERE user.user_id = field.user_id
 			AND field.field_id='".intval($field_id)."'";
-		$result = api_sql_query($sql,__FILE__,__LINE__);
+		$result = api_sql_query($sql);
 		while($row = Database::fetch_array($result))
 		{
 			$return[$row['user_id']][] = $row['field_value'];
@@ -1528,7 +1528,7 @@ class TrackingCourseLog {
 						ON (user.user_id = field.user_id)
 						WHERE field.field_id=".intval($field_id)." AND user.user_id IN ($users)";
 
-				$result = api_sql_query($sql,__FILE__,__LINE__);
+				$result = api_sql_query($sql);
 				while($row = Database::fetch_array($result)) {
 					// get option value for field type double select by id
 					if (!empty($row['field_value'])) {
@@ -1614,7 +1614,7 @@ class TrackingCourseLog {
 	    $number_of_items = intval($number_of_items);
 		$sql .= " ORDER BY col$column $direction ";
 		$sql .= " LIMIT $from,$number_of_items";
-		$res = Database::query($sql, __FILE__, __LINE__);
+		$res = Database::query($sql);
 		$users = array ();
 	    $t = time();
 	   	$row = array();

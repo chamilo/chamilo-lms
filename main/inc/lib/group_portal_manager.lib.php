@@ -51,7 +51,7 @@ class GroupPortalManager
                 visibility 	= '".Database::escape_string($visibility)."',
                 created_on = FROM_UNIXTIME(".$tms."),
                 updated_on = FROM_UNIXTIME(".$tms.")";
-		$result = Database::query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql);
 		$return = Database::insert_id();
 		return $return;
 	}
@@ -79,7 +79,7 @@ class GroupPortalManager
                 visibility 	= '".Database::escape_string($visibility)."',
                 updated_on 	= FROM_UNIXTIME(".$tms.")
                 WHERE id = '$group_id'";
-		$result = Database::query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql);
 		return $result;
 	}
 
@@ -95,7 +95,7 @@ class GroupPortalManager
 		$id = intval($id);
 		$table = Database :: get_main_table(TABLE_MAIN_GROUP);
 		$sql= "DELETE FROM $table WHERE id = ".Database::escape_string($id);
-		$result = Database::query($sql,  __FILE__, __LINE__);
+		$result = Database::query($sql);
 		//deleting all relationship with users and groups
 		self::delete_users($id);
 		// delete group image
@@ -118,7 +118,7 @@ class GroupPortalManager
 		$visibility = intval($visibility);
 		$user_condition = '';
 		$sql = "SELECT name, description, picture_uri FROM $table WHERE visibility = $visibility ";
-		$res = Database::query($sql, __FILE__, __LINE__);
+		$res = Database::query($sql);
 		$data = array ();
 		while ($item = Database::fetch_array($res)) {
 			$data[] = $item;
@@ -137,7 +137,7 @@ class GroupPortalManager
 		$group_id = intval($group_id);
 		$user_condition = '';
 		$sql = "SELECT id, name, description, picture_uri, url, visibility  FROM $table WHERE id = $group_id ";
-		$res = Database::query($sql, __FILE__, __LINE__);
+		$res = Database::query($sql);
 		$item = array();
 		if (Database::num_rows($res)>0) {
 			$item = Database::fetch_array($res,'ASSOC');
@@ -159,7 +159,7 @@ class GroupPortalManager
 		$user_condition 		= '';
 
 		$sql = "SELECT tag FROM $tag t INNER JOIN $table_group_rel_tag gt ON (gt.tag_id= t.id) WHERE gt.group_id = $group_id ";
-		$res = Database::query($sql, __FILE__, __LINE__);
+		$res = Database::query($sql);
 		$tags = array();
 		if (Database::num_rows($res)>0) {
 			while ($row = Database::fetch_array($res,'ASSOC')) {
@@ -206,7 +206,7 @@ class GroupPortalManager
 				INNER JOIN $table_group_rel_user gu
 				ON gu.group_id = g.id WHERE gu.user_id = $user_id $where_relation_condition ORDER BY created_on desc ";
 
-		$result=Database::query($sql,__FILE__,__LINE__);
+		$result=Database::query($sql);
 		$array = array();
 		if (Database::num_rows($result) > 0) {
 			while ($row = Database::fetch_array($result, 'ASSOC')) {
@@ -244,7 +244,7 @@ class GroupPortalManager
 				INNER JOIN $table_group_rel_user gu
 				ON gu.group_id = g.id $where_relation_condition GROUP BY g.id ORDER BY count DESC LIMIT $num";
 
-		$result=Database::query($sql,__FILE__,__LINE__);
+		$result=Database::query($sql);
 		$array = array();
 		while ($row = Database::fetch_array($result, 'ASSOC')) {
 				if ($with_image == true) {
@@ -278,7 +278,7 @@ class GroupPortalManager
 				FROM $tbl_group g
 				ORDER BY created_on desc LIMIT $num ";
 
-		$result=Database::query($sql,__FILE__,__LINE__);
+		$result=Database::query($sql);
 		$array = array();
 		while ($row = Database::fetch_array($result, 'ASSOC')) {
 			if ($with_image == true) {
@@ -330,7 +330,7 @@ class GroupPortalManager
 			INNER JOIN $table_group_rel_user gu
 			ON (gu.user_id = u.user_id) WHERE gu.group_id= $group_id $where_relation_condition ORDER BY relation_type, firstname LIMIT $from, $limit";
 
-		$result=Database::query($sql,__FILE__,__LINE__);
+		$result=Database::query($sql);
 		$array = array();
 		while ($row = Database::fetch_array($result, 'ASSOC')) {
 			if ($with_image == true) {
@@ -361,7 +361,7 @@ class GroupPortalManager
 			INNER JOIN $table_group_rel_user gu
 			ON (gu.user_id = u.user_id) WHERE gu.group_id= $group_id ORDER BY relation_type, firstname";
 
-		$result=Database::query($sql,__FILE__,__LINE__);
+		$result=Database::query($sql);
 		$array = array();
 		while ($row = Database::fetch_array($result, 'ASSOC')) {
 			$array[$row['user_id']] = $row;
@@ -382,7 +382,7 @@ class GroupPortalManager
 		$return_value = 0;
 		if (!empty($user_id) && !empty($group_id)) {
 			$sql	= "SELECT relation_type FROM $table_group_rel_user WHERE group_id = ".intval($group_id)." AND  user_id = ".intval($user_id)." ";
-			$result = Database::query($sql,  __FILE__, __LINE__);
+			$result = Database::query($sql);
 			if (Database::num_rows($result)>0) {
 				$row = Database::fetch_array($result,'ASSOC');
 				$return_value = $row['relation_type'];
@@ -407,7 +407,7 @@ class GroupPortalManager
 			if ($role == 0) {
 				$sql = "INSERT INTO $table_url_rel_group
            				SET user_id = ".intval($user_id).", group_id = ".intval($group_id).", relation_type = ".intval($relation_type);
-				$result = Database::query($sql, __FILE__, __LINE__);
+				$result = Database::query($sql);
 			} elseif($role == GROUP_USER_PERMISSION_PENDING_INVITATION) {
 				//if somebody already invited me I can be added
 				self::update_user_role($user_id, $group_id, GROUP_USER_PERMISSION_READER);
@@ -437,7 +437,7 @@ class GroupPortalManager
 		               			SET user_id = ".intval($user_id).", group_id = ".intval($group_id).", relation_type = ".intval($relation_type)."";
 
 
-						$result = Database::query($sql, __FILE__, __LINE__);
+						$result = Database::query($sql);
 						if ($result)
 							$result_array[$group_id][$user_id]=1;
 						else
@@ -464,7 +464,7 @@ class GroupPortalManager
 			$condition_relation = " AND relation_type = '$relation_type'";
 		}
 		$sql	= "DELETE FROM $table_ WHERE group_id = ".intval($group_id).$condition_relation;
-		$result = Database::query($sql,  __FILE__, __LINE__);
+		$result = Database::query($sql);
 		return $result;
 	}
 
@@ -479,7 +479,7 @@ class GroupPortalManager
 	{
 		$table = Database :: get_main_table(TABLE_MAIN_USER_REL_GROUP);
 		$sql= "DELETE FROM $table WHERE user_id = ".intval($user_id)." AND group_id=".intval($group_id)."  ";
-		$result = Database::query($sql,  __FILE__, __LINE__);
+		$result = Database::query($sql);
 		return $result;
 	}
 
@@ -498,7 +498,7 @@ class GroupPortalManager
 
 		$sql = "UPDATE $table_group_rel_user
    				SET relation_type = ".intval($relation_type)." WHERE user_id = $user_id AND group_id = $group_id" ;
-		$result = Database::query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql);
 	}
 
 
@@ -510,7 +510,7 @@ class GroupPortalManager
 
 		$sql = "SELECT user_id FROM  $table_group_rel_user WHERE
    				relation_type = ".GROUP_USER_PERMISSION_ADMIN." AND user_id = $user_id AND group_id = $group_id" ;
-		$result = Database::query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql);
 	}
 
 
@@ -536,7 +536,7 @@ class GroupPortalManager
 
 		$sql .= " LIMIT $from,$number_of_items";
 
-		$result = Database::query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql);
 		$return = array();
 		if (Database::num_rows($result)> 0) {
 			while ($row = Database::fetch_array($result,'ASSOC')) {
@@ -575,7 +575,7 @@ class GroupPortalManager
 		//$sql .= " ORDER BY col$column $direction ";
 		$sql .= " LIMIT $from,$number_of_items";
 
-		$res = Database::query($sql, __FILE__, __LINE__);
+		$res = Database::query($sql);
 		if (Database::num_rows($res)> 0) {
 			while ($row = Database::fetch_array($res,'ASSOC')) {
 				if (!in_array($row['id'], $return)) {
@@ -728,7 +728,7 @@ class GroupPortalManager
 
 		$group_table = Database :: get_main_table(TABLE_MAIN_GROUP);
 		$sql = "SELECT picture_uri FROM $group_table WHERE id=".$id;
-		$res = Database::query($sql, __FILE__, __LINE__);
+		$res = Database::query($sql);
 
 		if (!Database::num_rows($res)) {
 			return $anonymous ? array('dir' => $base.'img/', 'file' => 'unknown.jpg') : array('dir' => '', 'file' => '');

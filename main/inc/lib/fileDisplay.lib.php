@@ -201,26 +201,26 @@ function format_url($file_path)
  */
 function recent_modified_file_time($dir_name, $do_recursive = true)
 {
-	
+
 	$dir = dir($dir_name);
 	$last_modified = 0;
-	$return = 0;	
-	if (is_dir($dir)) {	
+	$return = 0;
+	if (is_dir($dir)) {
 		while(($entry = $dir->read()) !== false)
 		{
 			if ($entry != '.' && $entry != '..')
 				continue;
-	
+
 			if (!is_dir($dir_name.'/'.$entry))
 				$current_modified = filemtime($dir_name.'/'.$entry);
 			elseif ($do_recursive)
 				$current_modified = recent_modified_file_time($dir_name.'/'.$entry, true);
-	
+
 			if ($current_modified > $last_modified)
 				$last_modified = $current_modified;
 		}
-	
-		$dir->close();	
+
+		$dir->close();
 		//prevents returning 0 (for empty directories)
 		$return = ($last_modified == 0) ? filemtime($dir_name) : $last_modified;
 	}
@@ -281,7 +281,7 @@ SELECT SUM(size)
 		AND $visibility_rule
 EOQ;
 
-	$result = Database::query($sql,__FILE__,__LINE__);
+	$result = Database::query($sql);
 
 	if($result && Database::num_rows($result) != 0)
 	{

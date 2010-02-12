@@ -1,7 +1,7 @@
 <?php
 /* For licensing terms, see /chamilo_license.txt */
 /**
- * Access_url_edit_courses_to_url class  
+ * Access_url_edit_courses_to_url class
  * Contains several functions dealing with displaying,
  * editing,... of a Access_url_edit_courses_to_url_functions
  *
@@ -21,7 +21,7 @@ class Accessurleditcoursestourl {
 		global $tbl_course;
 		$xajax_response = new XajaxResponse();
 		$return = '';
-	
+
 		if(!empty($needle)) {
 			// xajax send utf8 datas... datas in db can be non-utf8 datas
 			$charset = api_get_setting('platform_charset');
@@ -34,7 +34,7 @@ class Accessurleditcoursestourl {
 					)
 					ORDER BY title, code
 					LIMIT 11';
-			$rs = Database::query($sql, __FILE__, __LINE__);
+			$rs = Database::query($sql);
 	        $i=0;
 			while ($course = Database :: fetch_array($rs)) {
 				$i++;

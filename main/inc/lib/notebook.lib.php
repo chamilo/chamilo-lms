@@ -35,7 +35,7 @@ class NotebookManager
 				}
 				</script>";
 	}
-	
+
 	/**
 	 * This functions stores the note in the database
 	 *
@@ -44,12 +44,12 @@ class NotebookManager
 	 * @author Christian Fasanando <christian.fasanando@dokeos.com>
 	 * @author Patrick Cool <patrick.cool@ugent.be>, Ghent University, Belgium
 	 * @version januari 2009, dokeos 1.8.6
-	 * 
+	 *
 	 */
 	function save_note($values) {
 		// Database table definition
 		$t_notebook = Database :: get_course_table(TABLE_NOTEBOOK);
-	
+
 		$sql = "INSERT INTO $t_notebook (user_id, course, session_id, title, description, creation_date,update_date,status)
 				VALUES(
 					'".Database::escape_string(api_get_user_id())."',
@@ -60,7 +60,7 @@ class NotebookManager
 					'".Database::escape_string(date('Y-m-d H:i:s'))."',
 					'".Database::escape_string(date('Y-m-d H:i:s'))."',
 					'0')";
-		$result = Database::query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql);
 		$id = Database::insert_id();
 		if ($id > 0) {
 			//insert into item_property
@@ -68,24 +68,24 @@ class NotebookManager
 		}
 		$affected_rows = Database::affected_rows();
 		if (!empty($affected_rows)){
-			return true;	
+			return true;
 		}
 	}
-	
+
 	function get_note_information($notebook_id) {
 		// Database table definition
 		$t_notebook = Database :: get_course_table(TABLE_NOTEBOOK);
-	
+
 		$sql = "SELECT 	notebook_id 		AS notebook_id,
 						title				AS note_title,
 						description 		AS note_comment,
 				   		session_id			AS session_id
 				   FROM $t_notebook
 				   WHERE notebook_id = '".Database::escape_string($notebook_id)."' ";
-		$result = Database::query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql);
 		return Database::fetch_array($result);
 	}
-	
+
 	/**
 	 * This functions updates the note in the database
 	 *
@@ -98,7 +98,7 @@ class NotebookManager
 	function update_note($values) {
 		// Database table definition
 		$t_notebook = Database :: get_course_table(TABLE_NOTEBOOK);
-	
+
 		$sql = "UPDATE $t_notebook SET
 					user_id = '".Database::escape_string(api_get_user_id())."',
 					course = '".Database::escape_string(api_get_course_id())."',
@@ -107,35 +107,35 @@ class NotebookManager
 					description = '".Database::escape_string(Security::remove_XSS(stripslashes(api_html_entity_decode($values['note_comment'])),COURSEMANAGERLOWSECURITY))."',
 					update_date = '".Database::escape_string(date('Y-m-d H:i:s'))."'
 				WHERE notebook_id = '".Database::escape_string($values['notebook_id'])."'";
-		$result = Database::query($sql, __FILE__, __LINE__);
-	
+		$result = Database::query($sql);
+
 		//update item_property (update)
 		api_item_property_update(api_get_course_info(), TOOL_NOTEBOOK, Database::escape_string($values['notebook_id']), 'NotebookUpdated', api_get_user_id());
 		$affected_rows = Database::affected_rows();
 		if (!empty($affected_rows)){
-			return true;	
+			return true;
 		}
 	}
-	
+
 	function delete_note($notebook_id) {
 		// Database table definition
 		$t_notebook = Database :: get_course_table(TABLE_NOTEBOOK);
-	
+
 		$sql = "DELETE FROM $t_notebook WHERE notebook_id='".Database::escape_string($notebook_id)."' AND user_id = '".Database::escape_string(api_get_user_id())."'";
-		$result = Database::query($sql, __FILE__, __LINE__);
-	
+		$result = Database::query($sql);
+
 		//update item_property (delete)
 		api_item_property_update(api_get_course_info(), TOOL_NOTEBOOK, Database::escape_string($notebook_id), 'delete', api_get_user_id());
 		$affected_rows = Database::affected_rows();
 		if (!empty($affected_rows)){
-			return true;	
+			return true;
 		}
 	}
-	
+
 	function display_notes() {
-	
+
 		global $_user;
-	
+
 		if (!$_GET['direction'])
 		{
 			$sort_direction = 'ASC';
@@ -151,8 +151,8 @@ class NotebookManager
 			$sort_direction = 'DESC';
 			$link_sort_direction = 'ASC';
 		}
-	
-	
+
+
 		// action links
 		echo '<div class="actions" style="margin-bottom:20px">';
 		//if (api_is_allowed_to_edit())
@@ -163,7 +163,7 @@ class NotebookManager
 				elseif(api_is_allowed_to_session_edit(false,true)){
 					echo '<a href="index.php?'.api_get_cidreq().'&amp;action=addnote">'.Display::return_icon('filenew.gif',get_lang('NoteAddNew')).get_lang('NoteAddNew').'</a>';
 				}
-	
+
 			} else {
 				echo '<a href="javascript:void(0)">'.Display::return_icon('filenew.gif',get_lang('NoteAddNew')).get_lang('NoteAddNew').'</a>';
 			}
@@ -172,11 +172,11 @@ class NotebookManager
 		echo '<a href="index.php?'.api_get_cidreq().'&amp;action=changeview&amp;view=update_date&amp;direction='.$link_sort_direction.'">'.Display::return_icon('calendar_select.gif',get_lang('OrderByModificationDate')).get_lang('OrderByModificationDate').'</a>';
 		echo '<a href="index.php?'.api_get_cidreq().'&amp;action=changeview&amp;view=title&amp;direction='.$link_sort_direction.'">'.Display::return_icon('comment.gif',get_lang('OrderByTitle')).get_lang('OrderByTitle').'</a>';
 		echo '</div>';
-	
+
 		if (!in_array($_SESSION['notebook_view'],array('creation_date','update_date', 'title'))) {
 			$_SESSION['notebook_view'] = 'creation_date';
 		}
-	
+
 		// Database table definition
 		$t_notebook = Database :: get_course_table(TABLE_NOTEBOOK);
 		$order_by = "";
@@ -185,15 +185,15 @@ class NotebookManager
 		} else {
 			$order_by = " ORDER BY ".$_SESSION['notebook_view']." $sort_direction ";
 		}
-	
+
 		//condition for the session
 		$session_id = api_get_session_id();
 		$condition_session = api_get_session_condition($session_id);
-	
+
 		$cond_extra = ($_SESSION['notebook_view']== 'update_date')?" AND update_date <> '0000-00-00 00:00:00'":" ";
-	
+
 		$sql = "SELECT * FROM $t_notebook WHERE user_id = '".Database::escape_string(api_get_user_id())."' $condition_session $cond_extra $order_by";
-		$result = Database::query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql);
 		while ($row = Database::fetch_array($result)) {
 			//validacion when belongs to a session
 			$session_img = api_get_session_image($row['session_id'], $_user['status']);

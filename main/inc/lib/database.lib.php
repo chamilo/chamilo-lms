@@ -395,7 +395,7 @@ class Database {
 		Example:
 		$table = Database::get_course_table(TABLE_DOCUMENT);
 		$sql_query = "SELECT * FROM $table WHERE $condition";
-		$sql_result = Database::query($sql_query, __FILE__, __LINE__);
+		$sql_result = Database::query($sql_query);
 		$result = Database::fetch_array($sql_result);
 	-----------------------------------------------------------------------------
 	*/
@@ -443,7 +443,7 @@ class Database {
 				LEFT JOIN $course_cat_table
 					ON $course_table.category_code =  $course_cat_table.code
 			WHERE $course_table.code = '$course_code'
-			LIMIT 1", __FILE__, __LINE__));
+			LIMIT 1"));
 		return sprintf("%s.%s", $result[0], $table);
 	}
 
@@ -500,7 +500,7 @@ class Database {
 	 */
 	public static function get_course_list() {
 		$table = self::get_main_table(TABLE_MAIN_COURSE);
-		return self::store_result(self::query("SELECT * FROM $table", __FILE__, __LINE__));
+		return self::store_result(self::query("SELECT * FROM $table"));
 	}
 
 	/**
@@ -513,7 +513,7 @@ class Database {
 		$course_code = self::escape_string($course_code);
 		$table = self::get_main_table(TABLE_MAIN_COURSE);
 		$result = self::generate_abstract_course_field_names(
-			self::fetch_array(self::query("SELECT * FROM $table WHERE `code` = '$course_code'", __FILE__, __LINE__)));
+			self::fetch_array(self::query("SELECT * FROM $table WHERE `code` = '$course_code'")));
 		return $result === false ? array('db_name' => '') : $result;
 	}
 
@@ -533,7 +533,7 @@ class Database {
 		$table = self::get_main_table(TABLE_MAIN_USER);
 		$user_id = self::escape_string($user_id);
 		return self::generate_abstract_user_field_names(
-			self::fetch_array(self::query("SELECT * FROM $table WHERE user_id = '$user_id'", __FILE__, __LINE__)));
+			self::fetch_array(self::query("SELECT * FROM $table WHERE user_id = '$user_id'")));
 	}
 
 	/**
@@ -543,7 +543,7 @@ class Database {
 	 * @todo move this function in a gradebook-related library
 	 */
 	public static function get_course_by_category($category_id) {
-		$info = self::fetch_array(self::query('SELECT course_code FROM '.self::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY).' WHERE id='.$category_id, __FILE__, __LINE__), 'ASSOC');
+		$info = self::fetch_array(self::query('SELECT course_code FROM '.self::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY).' WHERE id='.$category_id), 'ASSOC');
 		return $info ? $info['course_code'] : false;
 	}
 
@@ -627,7 +627,7 @@ class Database {
 	 * @return int The number of rows in the given table.
 	 */
 	public static function count_rows($table) {
-		$obj = self::fetch_object(self::query("SELECT COUNT(*) AS n FROM $table", __FILE__, __LINE__));
+		$obj = self::fetch_object(self::query("SELECT COUNT(*) AS n FROM $table"));
 		return $obj->n;
 	}
 
@@ -796,7 +796,7 @@ class Database {
 	 */
 	public static function get_databases($pattern = '', $connection = null) {
 		$result = array();
-		$query_result = Database::query(!empty($pattern) ? "SHOW DATABASES LIKE '".self::escape_string($pattern, $connection)."'" : "SHOW DATABASES", $connection, __FILE__, __LINE__);
+		$query_result = Database::query(!empty($pattern) ? "SHOW DATABASES LIKE '".self::escape_string($pattern, $connection)."'" : "SHOW DATABASES", $connection);
 		while ($row = Database::fetch_row($query_result)) {
 			$result[] = $row[0];
 		}
@@ -823,7 +823,7 @@ class Database {
 		if (!empty($pattern)) {
 			$query .= " LIKE '".self::escape_string($pattern, $connection)."'";
 		}
-		$query_result = Database::query($query, $connection, __FILE__, __LINE__);
+		$query_result = Database::query($query, $connection);
 		if ($including_properties) {
 			// Making an indexed list of the fields and their properties.
 			while ($row = Database::fetch_row($query_result)) {
@@ -882,7 +882,7 @@ class Database {
 		if (!empty($pattern)) {
 			$query .= " LIKE '".self::escape_string($pattern, $connection)."'";
 		}
-		$query_result = Database::query($query, $connection, __FILE__, __LINE__);
+		$query_result = Database::query($query, $connection);
 		while ($row = Database::fetch_row($query_result)) {
 			$result[] = $row[0];
 		}
@@ -1030,7 +1030,7 @@ class Database {
 		if (!isset($supported[$encoding])) {
 			$supported[$encoding] = false;
 			if (strlen($db_encoding = self::to_db_encoding($encoding)) > 0) {
-				if (self::num_rows(self::query("SHOW CHARACTER SET WHERE Charset =  '".self::escape_string($db_encoding)."';", __FILE__, __LINE__)) > 0) {
+				if (self::num_rows(self::query("SHOW CHARACTER SET WHERE Charset =  '".self::escape_string($db_encoding)."';")) > 0) {
 					$supported[$encoding] = true;
 				}
 			}
@@ -1278,11 +1278,11 @@ class Database {
 			return null;
 		}
 		if (empty($language)) {
-			$result = self::fetch_array(self::query("SHOW COLLATION WHERE Charset = '".self::escape_string($db_encoding)."' AND Default = 'Yes';", __FILE__, __LINE__), 'NUM');
+			$result = self::fetch_array(self::query("SHOW COLLATION WHERE Charset = '".self::escape_string($db_encoding)."' AND Default = 'Yes';"), 'NUM');
 			return $result ? $result[0] : null;
 		}
 		$collation = $db_encoding.'_'.$language.'_ci';
-		$query_result = self::query("SHOW COLLATION WHERE Charset = '".self::escape_string($db_encoding)."';", __FILE__, __LINE__);
+		$query_result = self::query("SHOW COLLATION WHERE Charset = '".self::escape_string($db_encoding)."';");
 		while ($result = self::fetch_array($query_result, 'NUM')) {
 			if ($result[0] == $collation) {
 				return $collation;

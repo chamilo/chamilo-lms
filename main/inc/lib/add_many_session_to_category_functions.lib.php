@@ -4,9 +4,9 @@ require_once (api_get_path(LIBRARY_PATH).'xajax/xajax.inc.php');
 
 
 class AddManySessionToCategoryFunctions {
-	
+
 	function search_courses($needle,$type) {
-		
+
 		global $tbl_course, $tbl_session, $id_session;
 		$xajax_response = new XajaxResponse();
 		$return = '';
@@ -14,12 +14,12 @@ class AddManySessionToCategoryFunctions {
 			// xajax send utf8 datas... datas in db can be non-utf8 datas
 			$charset = api_get_setting('platform_charset');
 			$needle = api_convert_encoding($needle, $charset, 'utf-8');
-	
+
 			$sql = 'SELECT * FROM '.$tbl_session.' WHERE name LIKE "'.$needle.'%" ORDER BY id';
-	
-			$rs = Database::query($sql, __FILE__, __LINE__);
+
+			$rs = Database::query($sql);
 			$course_list = array();
-	
+
 			$return .= '<select id="origin" name="NoSessionCategoryList[]" multiple="multiple" size="20" style="width:340px;">';
 			while($course = Database :: fetch_array($rs)) {
 				$course_list[] = $course['id'];

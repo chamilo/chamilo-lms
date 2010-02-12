@@ -117,7 +117,7 @@ class UserManager
 				expiration_date = '".Database::escape_string($expiration_date)."',
 				hr_dept_id = '".Database::escape_string($hr_dept_id)."',
 				active = '".Database::escape_string($active)."'";
-		$result = Database::query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql);
 		if ($result) {
 			//echo "id returned";
 			$return = Database::insert_id();
@@ -166,10 +166,10 @@ class UserManager
 		if ($user_id != strval(intval($user_id))) return false;
 		if ($user_id === false) return false;
 		$sql = "SELECT * FROM $table_course_user WHERE status = '1' AND user_id = '".$user_id."'";
-		$res = Database::query($sql, __FILE__, __LINE__);
+		$res = Database::query($sql);
 		while ($course = Database::fetch_object($res)) {
 			$sql = "SELECT user_id FROM $table_course_user WHERE status='1' AND course_code ='".Database::escape_string($course->course_code)."'";
-			$res2 = Database::query($sql, __FILE__, __LINE__);
+			$res2 = Database::query($sql);
 			if (Database::num_rows($res2) == 1) {
 				return false;
 			}
@@ -201,28 +201,28 @@ class UserManager
 
 		// Unsubscribe the user from all groups in all his courses
 		$sql = "SELECT * FROM $table_course c, $table_course_user cu WHERE cu.user_id = '".$user_id."' AND c.code = cu.course_code";
-		$res = Database::query($sql, __FILE__, __LINE__);
+		$res = Database::query($sql);
 		while ($course = Database::fetch_object($res)) {
 			$table_group = Database :: get_course_table(TABLE_GROUP_USER, $course->db_name);
 			$sql = "DELETE FROM $table_group WHERE user_id = '".$user_id."'";
-			Database::query($sql, __FILE__, __LINE__);
+			Database::query($sql);
 		}
 
 		// Unsubscribe user from all classes
 		$sql = "DELETE FROM $table_class_user WHERE user_id = '".$user_id."'";
-		Database::query($sql, __FILE__, __LINE__);
+		Database::query($sql);
 
 		// Unsubscribe user from all courses
 		$sql = "DELETE FROM $table_course_user WHERE user_id = '".$user_id."'";
-		Database::query($sql, __FILE__, __LINE__);
+		Database::query($sql);
 
 		// Unsubscribe user from all courses in sessions
 		$sql = "DELETE FROM $table_session_course_user WHERE id_user = '".$user_id."'";
-		Database::query($sql, __FILE__, __LINE__);
+		Database::query($sql);
 
 		// Unsubscribe user from all sessions
 		$sql = "DELETE FROM $table_session_user WHERE id_user = '".$user_id."'";
-		Database::query($sql, __FILE__, __LINE__);
+		Database::query($sql);
 
 		// Delete user picture
 		// TODO: Logic about api_get_setting('split_users_upload_directory') === 'true' , a user has 4 differnt sized photos to be deleted.
@@ -236,29 +236,29 @@ class UserManager
 		// Delete the personal course categories
 		$course_cat_table = Database::get_user_personal_table(TABLE_USER_COURSE_CATEGORY);
 		$sql = "DELETE FROM $course_cat_table WHERE user_id = '".$user_id."'";
-		Database::query($sql, __FILE__, __LINE__);
+		Database::query($sql);
 
 		// Delete user from database
 		$sql = "DELETE FROM $table_user WHERE user_id = '".$user_id."'";
-		Database::query($sql, __FILE__, __LINE__);
+		Database::query($sql);
 
 		// Delete user from the admin table
 		$sql = "DELETE FROM $table_admin WHERE user_id = '".$user_id."'";
-		Database::query($sql, __FILE__, __LINE__);
+		Database::query($sql);
 
 		// Delete the personal agenda-items from this user
 		$agenda_table = Database :: get_user_personal_table(TABLE_PERSONAL_AGENDA);
 		$sql = "DELETE FROM $agenda_table WHERE user = '".$user_id."'";
-		Database::query($sql, __FILE__, __LINE__);
+		Database::query($sql);
 
 		$gradebook_results_table = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_RESULT);
 		$sql = 'DELETE FROM '.$gradebook_results_table.' WHERE user_id = '.$user_id;
-		Database::query($sql, __FILE__, __LINE__);
+		Database::query($sql);
 
 		$user = Database::fetch_array($res);
 		$t_ufv = Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
 		$sqlv = "DELETE FROM $t_ufv WHERE user_id = $user_id";
-		$resv = Database::query($sqlv, __FILE__, __LINE__);
+		$resv = Database::query($sqlv);
 
 		if ($_configuration['multiple_access_urls']) {
 			require_once api_get_path(LIBRARY_PATH).'urlmanager.lib.php';
@@ -297,7 +297,7 @@ class UserManager
 		$sql = "UPDATE $table_user SET
 				openid='".Database::escape_string($openid)."'";
 		$sql .=	" WHERE user_id='$user_id'";
-		return Database::query($sql, __FILE__, __LINE__);
+		return Database::query($sql);
 	}
 
 	/**
@@ -349,7 +349,7 @@ class UserManager
 			$sql .= ", creator_id='".Database::escape_string($creator_id)."'";
 		}
 		$sql .=	" WHERE user_id='$user_id'";
-		$return = Database::query($sql, __FILE__, __LINE__);
+		$return = Database::query($sql);
 		if (is_array($extra) && count($extra) > 0) {
 			$res = true;
 			foreach($extra as $fname => $fvalue) {
@@ -367,7 +367,7 @@ class UserManager
 	public static function is_username_available($username) {
 		$table_user = Database :: get_main_table(TABLE_MAIN_USER);
 		$sql = "SELECT username FROM $table_user WHERE username = '".Database::escape_string($username)."'";
-		$res = Database::query($sql, __FILE__, __LINE__);
+		$res = Database::query($sql);
 		return Database::num_rows($res) == 0;
 	}
 
@@ -502,7 +502,7 @@ class UserManager
 		if (count($order_by) > 0) {
 			$sql_query .= ' ORDER BY '.Database::escape_string(implode(',', $order_by));
 		}
-		$sql_result = Database::query($sql_query, __FILE__, __LINE__);
+		$sql_result = Database::query($sql_query);
 		while ($result = Database::fetch_array($sql_result)) {
 			$return_array[] = $result;
 		}
@@ -531,7 +531,7 @@ class UserManager
         if (count($order_by) > 0) {
             $sql_query .= ' ORDER BY '.Database::escape_string(implode(',', $order_by));
         }
-        $sql_result = Database::query($sql_query, __FILE__, __LINE__);
+        $sql_result = Database::query($sql_query);
         while ($result = Database::fetch_array($sql_result)) {
             $return_array[] = $result;
         }
@@ -547,7 +547,7 @@ class UserManager
 		$user_table = Database :: get_main_table(TABLE_MAIN_USER);
 		$username = Database::escape_string($username);
 		$sql = "SELECT * FROM $user_table WHERE username='".$username."'";
-		$res = Database::query($sql, __FILE__, __LINE__);
+		$res = Database::query($sql);
 		if (Database::num_rows($res) > 0) {
 			return Database::fetch_array($res);
 		}
@@ -564,17 +564,17 @@ class UserManager
 		$user_id = intval($user_id);
 		$user_table = Database :: get_main_table(TABLE_MAIN_USER);
 		$sql = "SELECT * FROM $user_table WHERE user_id=".$user_id;
-		$res = Database::query($sql, __FILE__, __LINE__);
+		$res = Database::query($sql);
 		if (Database::num_rows($res) > 0) {
 			$user = Database::fetch_array($res);
 			$t_uf = Database::get_main_table(TABLE_MAIN_USER_FIELD);
 			$t_ufv = Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
 			$sqlf = "SELECT * FROM $t_uf ORDER BY field_order";
-			$resf = Database::query($sqlf, __FILE__, __LINE__);
+			$resf = Database::query($sqlf);
 			if (Database::num_rows($resf) > 0) {
 				while ($rowf = Database::fetch_array($resf)) {
 					$sqlv = "SELECT * FROM $t_ufv WHERE field_id = ".$rowf['id']." AND user_id = ".$user['user_id']." ORDER BY id DESC";
-					$resv = Database::query($sqlv, __FILE__, __LINE__);
+					$resv = Database::query($sqlv);
 					if (Database::num_rows($resv) > 0) {
 						//There should be only one value for a field and a user
 						$rowv = Database::fetch_array($resv);
@@ -600,7 +600,7 @@ class UserManager
 		$user_table = Database :: get_main_table(TABLE_MAIN_USER);
 		$course_id = Database::escape_string($course_id);
 		$sql_query = "SELECT * FROM $user_table a, $user_course_table b where a.user_id=b.user_id AND b.status=1 AND b.course_code='$course_id'";
-		$sql_result = Database::query($sql_query, __FILE__, __LINE__);
+		$sql_result = Database::query($sql_query);
 		echo "<select name=\"author\">";
 		while ($result = Database::fetch_array($sql_result)) {
 			if ($sel_teacher == $result['user_id']) $selected ="selected";
@@ -646,7 +646,7 @@ class UserManager
 
 		$user_table = Database :: get_main_table(TABLE_MAIN_USER);
 		$sql = "SELECT picture_uri FROM $user_table WHERE user_id=".$user_id;
-		$res = Database::query($sql, __FILE__, __LINE__);
+		$res = Database::query($sql);
 
 		if (!Database::num_rows($res)) {
 			return $anonymous ? array('dir' => $base.'img/', 'file' => 'unknown.jpg') : array('dir' => '', 'file' => '');
@@ -900,7 +900,7 @@ class UserManager
 		}
 		$time = time();
 		$sqluf .= " tms = FROM_UNIXTIME($time) WHERE id='$fid'";
-		$resuf = Database::query($sqluf, __FILE__, __LINE__);
+		$resuf = Database::query($sqluf);
 		return $resuf;
 	}
 
@@ -932,7 +932,7 @@ class UserManager
 			$fvalues = Database::escape_string($fvalue);
 		}
 		$sqluf = "SELECT * FROM $t_uf WHERE field_variable='$fname'";
-		$resuf = Database::query($sqluf, __FILE__, __LINE__);
+		$resuf = Database::query($sqluf);
 		if (Database::num_rows($resuf) == 1) {
 			//ok, the field exists
 			// Check if enumerated field, if the option is available
@@ -947,7 +947,7 @@ class UserManager
 				case USER_FIELD_TYPE_SELECT:
 				case USER_FIELD_TYPE_SELECT_MULTIPLE:
 					$sqluo = "SELECT * FROM $t_ufo WHERE field_id = ".$rowuf['id'];
-					$resuo = Database::query($sqluo, __FILE__, __LINE__);
+					$resuo = Database::query($sqluo);
 					$values = split(';',$fvalues);
 					if (Database::num_rows($resuo) > 0) {
 						$check = false;
@@ -971,20 +971,20 @@ class UserManager
 			}
 			$tms = time();
 			$sqlufv = "SELECT * FROM $t_ufv WHERE user_id = $user_id AND field_id = ".$rowuf['id']." ORDER BY id";
-			$resufv = Database::query($sqlufv, __FILE__, __LINE__);
+			$resufv = Database::query($sqlufv);
 			$n = Database::num_rows($resufv);
 			if ($n > 1) {
 				//problem, we already have to values for this field and user combination - keep last one
 				while ($rowufv = Database::fetch_array($resufv)) {
 					if ($n > 1) {
 						$sqld = "DELETE FROM $t_ufv WHERE id = ".$rowufv['id'];
-						$resd = Database::query($sqld, __FILE__, __LINE__);
+						$resd = Database::query($sqld);
 						$n--;
 					}
 					$rowufv = Database::fetch_array($resufv);
 					if ($rowufv['field_value'] != $fvalues) {
 						$sqlu = "UPDATE $t_ufv SET field_value = '$fvalues', tms = FROM_UNIXTIME($tms) WHERE id = ".$rowufv['id'];
-						$resu = Database::query($sqlu, __FILE__, __LINE__);
+						$resu = Database::query($sqlu);
 						return($resu ? true : false);
 					}
 					return true;
@@ -996,7 +996,7 @@ class UserManager
 				if ($rowufv['field_value'] != $fvalues) {
 					$sqlu = "UPDATE $t_ufv SET field_value = '$fvalues', tms = FROM_UNIXTIME($tms) WHERE id = ".$rowufv['id'];
 					//error_log('UM::update_extra_field_value: '.$sqlu);
-					$resu = Database::query($sqlu, __FILE__, __LINE__);
+					$resu = Database::query($sqlu);
 					return($resu ? true : false);
 				}
 				return true;
@@ -1004,7 +1004,7 @@ class UserManager
 				$sqli = "INSERT INTO $t_ufv (user_id,field_id,field_value,tms) " .
 					"VALUES ($user_id,".$rowuf['id'].",'$fvalues',FROM_UNIXTIME($tms))";
 				//error_log('UM::update_extra_field_value: '.$sqli);
-				$resi = Database::query($sqli, __FILE__, __LINE__);
+				$resi = Database::query($sqli);
 				return($resi ? true : false);
 			}
 		} else {
@@ -1040,7 +1040,7 @@ class UserManager
 			$sqlf .= " LIMIT ".Database::escape_string($from).','.Database::escape_string($number_of_items);
 		}
 
-		$resf = Database::query($sqlf, __FILE__, __LINE__);
+		$resf = Database::query($sqlf);
 		if (Database::num_rows($resf) > 0) {
 			while($rowf = Database::fetch_array($resf)) {
 				$fields[$rowf['id']] = array(
@@ -1060,7 +1060,7 @@ class UserManager
 				);
 
 				$sqlo = "SELECT * FROM $t_ufo WHERE field_id = ".$rowf['id']." ORDER BY option_order ASC";
-				$reso = Database::query($sqlo, __FILE__, __LINE__);
+				$reso = Database::query($sqlo);
 				if (Database::num_rows($reso) > 0) {
 					while ($rowo = Database::fetch_array($reso)) {
 						$fields[$rowf['id']][9][$rowo['id']] = array(
@@ -1092,7 +1092,7 @@ class UserManager
 					INNER JOIN '.$t_uf.' fields
 						ON fields.id = options.field_id
 							AND fields.field_variable="'.Database::escape_string($field_name).'"';
-		$rs = Database::query($sql, __FILE__, __LINE__);
+		$rs = Database::query($sql);
 		return Database::store_result($rs);
 	}
 
@@ -1108,7 +1108,7 @@ class UserManager
 			$sqlf .= " WHERE field_visible = 1 ";
 		}
 		$sqlf .= " ORDER BY field_order";
-		$resf = Database::query($sqlf, __FILE__, __LINE__);
+		$resf = Database::query($sqlf);
 		return Database::num_rows($resf);
 	}
 
@@ -1131,7 +1131,7 @@ class UserManager
 			return api_set_failure('login-pass already taken');
 		}
 		$sql = "SELECT MAX(field_order) FROM $table_field";
-		$res = Database::query($sql, __FILE__, __LINE__);
+		$res = Database::query($sql);
 		$order = 0;
 		if (Database::num_rows($res) > 0) {
 			$row = Database::fetch_array($res);
@@ -1176,12 +1176,12 @@ class UserManager
 			foreach ($list as $option) {
 				$option = Database::escape_string($option);
 				$sql = "SELECT * FROM $table_field_options WHERE field_id = $return AND option_value = '".$option."'";
-				$res = Database::query($sql, __FILE__, __LINE__);
+				$res = Database::query($sql);
 				if (Database::num_rows($res) > 0) {
 					//the option already exists, do nothing
 				} else {
 					$sql = "SELECT MAX(option_order) FROM $table_field_options WHERE field_id = $return";
-					$res = Database::query($sql, __FILE__, __LINE__);
+					$res = Database::query($sql);
 					$max = 1;
 					if (Database::num_rows($res) > 0) {
 						$row = Database::fetch_array($res);
@@ -1189,7 +1189,7 @@ class UserManager
 					}
 					$time = time();
 					$sql = "INSERT INTO $table_field_options (field_id,option_value,option_display_text,option_order,tms) VALUES ($return,'$option','$option',$max,FROM_UNIXTIME($time))";
-					$res = Database::query($sql, __FILE__, __LINE__);
+					$res = Database::query($sql);
 					if ($res === false) {
 						$return = false;
 					}
@@ -1243,7 +1243,7 @@ class UserManager
 				field_default_value = '".Database::escape_string($fielddefault)."',
 				tms = FROM_UNIXTIME($time)
 			WHERE id = '".Database::escape_string($fieldid)."'";
-		$result = Database::query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql);
 
 		// we create an array with all the options (will be used later in the script)
 		if ($fieldtype == USER_FIELD_TYPE_DOUBLE_SELECT) {
@@ -1268,23 +1268,23 @@ class UserManager
 
 		// Remove all the field options (and also the choices of the user) that are NOT in the new list of options
 		$sql = "SELECT * FROM $table_field_options WHERE option_value NOT IN ('".implode("','", $list)."') AND field_id = '".Database::escape_string($fieldid)."'";
-		$result = Database::query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql);
 		$return['deleted_options'] = 0;
 		while ($row = Database::fetch_array($result)) {
 			// deleting the option
 			$sql_delete_option = "DELETE FROM $table_field_options WHERE id='".Database::escape_string($row['id'])."'";
-			$result_delete_option = Database::query($sql_delete_option, __FILE__, __LINE__);
+			$result_delete_option = Database::query($sql_delete_option);
 			$return['deleted_options']++;
 
 			// deleting the answer of the user who has chosen this option
 			$sql_delete_option_value = "DELETE FROM $table_field_options_values WHERE field_id = '".Database::escape_string($fieldid)."' AND field_value = '".Database::escape_string($row['option_value'])."'";
-			$result_delete_option_value = Database::query($sql_delete_option_value, __FILE__, __LINE__);
+			$result_delete_option_value = Database::query($sql_delete_option_value);
 			$return['deleted_option_values'] = $return['deleted_option_values'] + Database::affected_rows();
 		}
 
 		// we now try to find the field options that are newly added
 		$sql = "SELECT * FROM $table_field_options WHERE field_id = '".Database::escape_string($fieldid)."'";
-		$result = Database::query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql);
 		while ($row = Database::fetch_array($result)) {
 			// we remove every option that is already in the database from the $list
 			if (in_array(trim($row['option_display_text']), $list)) {
@@ -1296,7 +1296,7 @@ class UserManager
 		// we store the new field options in the database
 		foreach ($list as $key => $option) {
 			$sql = "SELECT MAX(option_order) FROM $table_field_options WHERE field_id = '".Database::escape_string($fieldid)."'";
-			$res = Database::query($sql, __FILE__, __LINE__);
+			$res = Database::query($sql);
 			$max = 1;
 			if (Database::num_rows($res) > 0) {
 				$row = Database::fetch_array($res);
@@ -1304,7 +1304,7 @@ class UserManager
 			}
 			$time = time();
 			$sql = "INSERT INTO $table_field_options (field_id,option_value,option_display_text,option_order,tms) VALUES ('".Database::escape_string($fieldid)."','".Database::escape_string($option)."','".Database::escape_string($option)."',$max,FROM_UNIXTIME($time))";
-			$result = Database::query($sql, __FILE__, __LINE__);
+			$result = Database::query($sql);
 		}
 		return true;
 	}
@@ -1317,7 +1317,7 @@ class UserManager
 	public static function is_extra_field_available($fieldname) {
 		$t_uf = Database :: get_main_table(TABLE_MAIN_USER_FIELD);
 		$sql = "SELECT * FROM $t_uf WHERE field_variable = '".Database::escape_string($fieldname)."'";
-		$res = Database::query($sql, __FILE__, __LINE__);
+		$res = Database::query($sql);
 		return Database::num_rows($res) > 0;
 	}
 
@@ -1345,7 +1345,7 @@ class UserManager
 			$sql .= " WHERE f.field_visible = 1 ";
 		}
 		$sql .= " ORDER BY f.field_order";
-		$res = Database::query($sql, __FILE__, __LINE__);
+		$res = Database::query($sql);
 		if (Database::num_rows($res) > 0) {
 			while ($row = Database::fetch_array($res)) {
 				if ($row['type'] == USER_FIELD_TYPE_TAG) {
@@ -1357,13 +1357,13 @@ class UserManager
 							" FROM $t_ufv " .
 							" WHERE field_id=".$row['id']."" .
 							" AND user_id=".$user_id;
-					$resu = Database::query($sqlu, __FILE__, __LINE__);
+					$resu = Database::query($sqlu);
 					$fval = '';
 					// get default value
 					$sql_df = "SELECT field_default_value as fval_df " .
 							" FROM $t_uf " .
 							" WHERE id=".$row['id'];
-					$res_df = Database::query($sql_df, __FILE__, __LINE__);
+					$res_df = Database::query($sql_df);
 
 					if (Database::num_rows($resu) > 0) {
 						$rowu = Database::fetch_array($resu);
@@ -1421,14 +1421,14 @@ class UserManager
 
 		$sql .= " ORDER BY f.field_order";
 
-		$res = Database::query($sql, __FILE__, __LINE__);
+		$res = Database::query($sql);
 		if (Database::num_rows($res) > 0) {
 			while ($row = Database::fetch_array($res)) {
 				$sqlu = "SELECT field_value as fval " .
 						" FROM $t_ufv " .
 						" WHERE field_id=".$row['id']."" .
 						" AND user_id=".$user_id;
-				$resu = Database::query($sqlu, __FILE__, __LINE__);
+				$resu = Database::query($sqlu);
 				$fval = '';
 				if (Database::num_rows($resu) > 0) {
 					$rowu = Database::fetch_array($resu);
@@ -1462,12 +1462,12 @@ class UserManager
 
 		// all the information of the field
 		$sql = "SELECT * FROM $table_field WHERE field_variable='".Database::escape_string($field_variable)."'";
-		$result = Database::query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql);
 		$return = Database::fetch_array($result);
 
 		// all the options of the field
 		$sql = "SELECT * FROM $table_field_options WHERE field_id='".Database::escape_string($return['id'])."' ORDER BY option_order ASC";
-		$result = Database::query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql);
 		while ($row = Database::fetch_array($result)) {
 			$return['options'][$row['id']] = $row;
 		}
@@ -1480,7 +1480,7 @@ class UserManager
 
 		// all the information of the field
 		$sql = "SELECT * FROM $table_field WHERE field_type='".Database::escape_string($field_type)."'";
-		$result = Database::query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql);
 		while ($row = Database::fetch_array($result)) {
 			$return[] = $row['id'];
 		}
@@ -1502,12 +1502,12 @@ class UserManager
 
 		// all the information of the field
 		$sql = "SELECT * FROM $table_field WHERE id='".Database::escape_string($field_id)."'";
-		$result = Database::query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql);
 		$return = Database::fetch_array($result);
 
 		// all the options of the field
 		$sql = "SELECT * FROM $table_field_options WHERE field_id='".Database::escape_string($field_id)."' ORDER BY option_order ASC";
-		$result = Database::query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql);
 		while ($row = Database::fetch_array($result)) {
 			$return['options'][$row['id']] = $row;
 		}
@@ -1550,7 +1550,7 @@ class UserManager
 		} else {
 			$sql .= " AND user_field.field_visible = 0 ";
 		}
-		$res = Database::query($sql, __FILE__, __LINE__);
+		$res = Database::query($sql);
 		$result_data = array();
 		if (Database::num_rows($res) > 0) {
 			while ($row = Database::fetch_array($res)) {
@@ -1608,7 +1608,7 @@ class UserManager
 								WHERE id_session=id AND id_user=$user_id $condition_date_end
 								ORDER BY session_category_id, date_start, date_end";
 
-		$result = Database::query($sessions_sql,__FILE__,__LINE__);
+		$result = Database::query($sessions_sql);
 		if (Database::num_rows($result)>0) {
 			while ($row = Database::fetch_array($result)) {
 				$categories[$row['session_category_id']][] = $row['id'];
@@ -1631,7 +1631,7 @@ class UserManager
 									AND session_rel_course_user.status = 2	$condition_date_end
 								ORDER BY session_category_id, date_start, date_end";
 
-		$result = Database::query($sessions_sql,__FILE__,__LINE__);
+		$result = Database::query($sessions_sql);
 		if (Database::num_rows($result)>0) {
 			while ($row = Database::fetch_array($result)) {
 				$categories[$row['session_category_id']][] = $row['id'];
@@ -1644,7 +1644,7 @@ class UserManager
 								WHERE session.id_coach = $user_id $condition_date_end
 								ORDER BY session_category_id, date_start, date_end";
 
-		$result = Database::query($sessions_sql,__FILE__,__LINE__);
+		$result = Database::query($sessions_sql);
 		if (Database::num_rows($result)>0) {
 			while ($row = Database::fetch_array($result)) {
 				$categories[$row['session_category_id']][] = $row['id'];
@@ -1708,7 +1708,7 @@ class UserManager
 			WHERE  course_rel_user.user_id = '".$user_id."'  $where_access_url
 										ORDER BY user_course_category.sort, course_rel_user.sort, course.title ASC";
 
-		$course_list_sql_result = api_sql_query($personal_course_list_sql, __FILE__, __LINE__);
+		$course_list_sql_result = api_sql_query($personal_course_list_sql);
 		//var_dump($course_list_sql_result); exit;
 		while ($result_row = Database::fetch_array($course_list_sql_result)) {
 			$personal_course_list[] = $result_row;
@@ -1720,7 +1720,7 @@ class UserManager
 								WHERE id_session=id AND id_user=$user_id
 								AND (date_start <= CURDATE() AND date_end >= CURDATE() OR date_start='0000-00-00')
 								ORDER BY date_start, date_end, name";
-		$result = Database::query($sessions_sql,__FILE__,__LINE__);
+		$result = Database::query($sessions_sql);
 		$sessions=Database::store_result($result);
 		$sessions = array_merge($sessions , Database::store_result($result));
 
@@ -1731,7 +1731,7 @@ class UserManager
 								WHERE id_session=id AND id_user=$user_id
 								AND (date_end <= CURDATE() AND date_end<>'0000-00-00') AND (visibility = ".SESSION_VISIBLE_READ_ONLY." || visibility = ".SESSION_VISIBLE.")
 								ORDER BY date_start, date_end, name";
-		$result_out_date = Database::query($sessions_out_date_sql,__FILE__,__LINE__);
+		$result_out_date = Database::query($sessions_out_date_sql);
 		$sessions_out_date=Database::store_result($result_out_date);
 		$sessions = array_merge($sessions , $sessions_out_date);
 
@@ -1748,7 +1748,7 @@ class UserManager
 				OR date_start='0000-00-00')
 			ORDER BY date_start, date_end, name";
 
-		$result = Database::query($sessions_sql, __FILE__, __LINE__);
+		$result = Database::query($sessions_sql);
 
 		$session_is_coach = Database::store_result($result);
 
@@ -1762,7 +1762,7 @@ class UserManager
 				AND CURDATE() <= ADDDATE(date_end, INTERVAL nb_days_access_after_end DAY)
 				OR date_start='0000-00-00')
 			ORDER BY date_start, date_end, name";
-		$result = Database::query($sessions_sql, __FILE__, __LINE__);
+		$result = Database::query($sessions_sql);
 
 		$sessions = array_merge($sessions, Database::store_result($result));
 
@@ -1781,7 +1781,7 @@ class UserManager
 						AND ((session_course_user.id_user=$user_id AND session_course_user.status = 2) OR session.id_coach=$user_id)
 					ORDER BY i";
 
-				$course_list_sql_result = Database::query($personal_course_list_sql, __FILE__, __LINE__);
+				$course_list_sql_result = Database::query($personal_course_list_sql);
 
 				while ($result_row = Database::fetch_array($course_list_sql_result)) {
 					$result_row['s'] = 2;
@@ -1816,7 +1816,7 @@ class UserManager
 										LEFT JOIN $tbl_user as user ON user.user_id = session_course_user.id_user
 										WHERE session_course_user.id_user = $user_id  ORDER BY i";
 
-			$course_list_sql_result = Database::query($personal_course_list_sql, __FILE__, __LINE__);
+			$course_list_sql_result = Database::query($personal_course_list_sql);
 
 			while ($result_row = Database::fetch_array($course_list_sql_result)) {
 				$key = $result_row['id_session'].' - '.$result_row['k'];
@@ -1869,7 +1869,7 @@ class UserManager
 									AND scu.id_session = $session_id
 									$where_access_url
 									ORDER BY code";
-		$course_list_sql_result = Database::query($personal_course_list_sql, __FILE__, __LINE__);
+		$course_list_sql_result = Database::query($personal_course_list_sql);
 
 		if (Database::num_rows($course_list_sql_result)>0) {
 			while ($result_row = Database::fetch_array($course_list_sql_result)) {
@@ -1893,7 +1893,7 @@ class UserManager
 
 
 
-			$course_list_sql_result = Database::query($personal_course_list_sql, __FILE__, __LINE__);
+			$course_list_sql_result = Database::query($personal_course_list_sql);
 
 			if (Database::num_rows($course_list_sql_result)>0) {
 				while ($result_row = Database::fetch_array($course_list_sql_result)) {
@@ -1917,7 +1917,7 @@ class UserManager
 		$username = Database::escape_string($username);
 		$t_user = Database::get_main_table(TABLE_MAIN_USER);
 		$sql = "SELECT user_id FROM $t_user WHERE username = '$username'";
-		$res = Database::query($sql, __FILE__, __LINE__);
+		$res = Database::query($sql);
 		if ($res === false) { return false; }
 		if (Database::num_rows($res) !== 1) { return false; }
 		$row = Database::fetch_array($res);
@@ -1973,7 +1973,7 @@ class UserManager
         if (is_string($service_name) === false) { return false;}
         $t_api = Database::get_main_table(TABLE_MAIN_USER_API_KEY);
         $sql = "SELECT id, api_key FROM $t_api WHERE user_id = ".$user_id." AND api_service='".$api_service."';";
-        $res = Database::query($sql, __FILE__, __LINE__);
+        $res = Database::query($sql);
         if ($res === false) return false; //error during query
         $num = Database::num_rows($res);
         if ($num == 0) return false;
@@ -1998,7 +1998,7 @@ class UserManager
         $t_api = Database::get_main_table(TABLE_MAIN_USER_API_KEY);
         $md5 = md5((time() + ($user_id * 5)) - rand(10000, 10000)); //generate some kind of random key
         $sql = "INSERT INTO $t_api (user_id, api_key,api_service) VALUES ($user_id,'$md5','$service_name')";
-        $res = Database::query($sql, __FILE__, __LINE__);
+        $res = Database::query($sql);
         if ($res === false) return false; //error during query
         $num = Database::insert_id();
         return ($num == 0) ? false : $num;
@@ -2014,12 +2014,12 @@ class UserManager
         if ($key_id === false) return false;
         $t_api = Database::get_main_table(TABLE_MAIN_USER_API_KEY);
         $sql = "SELECT * FROM $t_api WHERE id = ".$key_id;
-        $res = Database::query($sql, __FILE__, __LINE__);
+        $res = Database::query($sql);
         if ($res === false) return false; //error during query
         $num = Database::num_rows($res);
         if ($num !== 1) return false;
         $sql = "DELETE FROM $t_api WHERE id = ".$key_id;
-        $res = Database::query($sql, __FILE__, __LINE__);
+        $res = Database::query($sql);
         if ($res === false) return false; //error during query
         return true;
     }
@@ -2037,7 +2037,7 @@ class UserManager
         if (is_string($service_name) === false) { return false; }
         $t_api = Database::get_main_table(TABLE_MAIN_USER_API_KEY);
         $sql = "SELECT id FROM $t_api WHERE user_id=".$user_id." AND api_service='".$api_service."'";
-        $res = Database::query($sql, __FILE__, __LINE__);
+        $res = Database::query($sql);
         $num = Database::num_rows($res);
         if ($num == 1) {
         	$id_key = Database::fetch_array($res, 'ASSOC');
@@ -2061,7 +2061,7 @@ class UserManager
         if (is_string($service_name) === false) { return false; }
         $t_api = Database::get_main_table(TABLE_MAIN_USER_API_KEY);
         $sql = "SELECT id FROM $t_api WHERE user_id=".$user_id." AND api_service='".$api_service."'";
-        $res = Database::query($sql, __FILE__, __LINE__);
+        $res = Database::query($sql);
         $row = Database::fetch_array($res, 'ASSOC');
         return $row['id'];
     }
@@ -2206,7 +2206,7 @@ class UserManager
 		//message in inbox
 		$sql_message_outbox = 'SELECT user_id from '.$table_user.' WHERE email="'.$email_administrator.'" ';
 		//$num_row_query = Database::num_rows($sql_message_outbox);
-		$res_message_outbox = Database::query($sql_message_outbox, __FILE__, __LINE__);
+		$res_message_outbox = Database::query($sql_message_outbox);
 		$array_users_administrator = array();
 		while ($row_message_outbox = Database::fetch_array($res_message_outbox, 'ASSOC')) {
 			$array_users_administrator[] = $row_message_outbox['user_id'];
@@ -2217,7 +2217,7 @@ class UserManager
 					" VALUES (".
 			 		"'".(int)$user_id."', '".(int)($array_users_administrator[$i])."', '4', '".date('Y-m-d H:i:s')."','".Database::escape_string($title)."','".Database::escape_string($content)."'".
 			 		")";
-			$rs = Database::query($sql_insert_outbox, __FILE__, __LINE__);
+			$rs = Database::query($sql_insert_outbox);
 		}
 	}
 
@@ -2255,7 +2255,7 @@ class UserManager
 		// all the information of the field
 		$sql = "SELECT id, tag from $table_user_tag
 				WHERE field_id = $field_id AND tag LIKE '$tag%' ORDER BY tag LIMIT $limit";
-		$result = Database::query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql);
 		$return = array();
 		if (Database::num_rows($result)>0) {
 			while ($row = Database::fetch_array($result,'ASSOC')) {
@@ -2277,7 +2277,7 @@ class UserManager
 		// all the information of the field
 		$sql = "SELECT count(*) count, tag FROM $table_user_tag_values  uv INNER JOIN $table_user_tag ut ON(ut.id = uv.tag_id)
 				WHERE field_id = $field_id GROUP BY tag_id ORDER BY count DESC LIMIT $limit";
-		$result = Database::query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql);
 		$return = array();
 		if (Database::num_rows($result)>0) {
 			while ($row = Database::fetch_array($result,'ASSOC')) {
@@ -2303,7 +2303,7 @@ class UserManager
 		// all the information of the field
 		$sql = "SELECT ut.id, tag,count FROM $table_user_tag ut INNER JOIN $table_user_tag_values uv ON (uv.tag_id=ut.ID)
 				WHERE field_id = $field_id AND user_id = $user_id ORDER BY tag";
-		$result = Database::query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql);
 		$return = array();
 		if (Database::num_rows($result)> 0) {
 			while ($row = Database::fetch_array($result,'ASSOC')) {
@@ -2331,7 +2331,7 @@ class UserManager
 		// all the information of the field
 		$sql = "SELECT ut.id, tag,count FROM $table_user_tag ut INNER JOIN $table_user_tag_values uv ON (uv.tag_id=ut.ID)
 				WHERE field_id = $field_id AND user_id = $user_id ORDER BY tag";
-		$result = Database::query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql);
 		$return = array();
 		if (Database::num_rows($result)> 0) {
 			while ($row = Database::fetch_array($result,'ASSOC')) {
@@ -2368,7 +2368,7 @@ class UserManager
 		$field_id = intval($field_id);
 		//with COLLATE latin1_bin to select query in a case sensitive mode
 		$sql = "SELECT id FROM $table_user_tag WHERE tag COLLATE latin1_bin  LIKE '$tag' AND field_id = $field_id";
-		$result = Database::query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql);
 		if (Database::num_rows($result)>0) {
 			$row = Database::fetch_array($result,'ASSOC');
 			return $row['id'];
@@ -2388,7 +2388,7 @@ class UserManager
 		$tag_id = intval($tag_id);
 		$field_id = intval($field_id);
 		$sql = "SELECT id FROM $table_user_tag WHERE id = '$tag_id' AND field_id = $field_id";
-		$result = Database::query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql);
 		if (Database::num_rows($result)>0) {
 			$row = Database::fetch_array($result,'ASSOC');
 			return $row['id'];
@@ -2432,11 +2432,11 @@ class UserManager
 			/*$new_tag_id = UserManager::get_tag_id_from_id($tag,$field_id);
 			if ($new_tag_id !== false) {
 				$sql = "UPDATE $table_user_tag SET count = count + 1 WHERE id  = $new_tag_id";
-				$result = Database::query($sql, __FILE__, __LINE__);
+				$result = Database::query($sql);
 				$last_insert_id = $new_tag_id;
 			} else {
 				$sql = "INSERT INTO $table_user_tag (tag, field_id,count) VALUES ('$tag','$field_id', count + 1)";
-				$result = Database::query($sql, __FILE__, __LINE__);
+				$result = Database::query($sql);
 				$last_insert_id = Database::get_last_insert_id();
 			}*/
 		} else {
@@ -2444,12 +2444,12 @@ class UserManager
 			if ($tag_id == 0) {
 				//the tag doesn't exist
 				$sql = "INSERT INTO $table_user_tag (tag, field_id,count) VALUES ('$tag','$field_id', count + 1)";
-				$result = Database::query($sql, __FILE__, __LINE__);
+				$result = Database::query($sql);
 				$last_insert_id = Database::get_last_insert_id();
 			} else {
 				//the tag exists we update it
 				$sql = "UPDATE $table_user_tag SET count = count + 1 WHERE id  = $tag_id";
-				$result = Database::query($sql, __FILE__, __LINE__);
+				$result = Database::query($sql);
 				$last_insert_id = $tag_id;
 			}
 		}
@@ -2457,11 +2457,11 @@ class UserManager
 		if (!empty($last_insert_id) && ($last_insert_id!=0)) {
 			//we insert the relationship user-tag
 			$sql_select ="SELECT tag_id FROM $table_user_tag_values WHERE user_id = $user_id AND tag_id = $last_insert_id ";
-			$result = Database::query($sql_select, __FILE__, __LINE__);
+			$result = Database::query($sql_select);
 			//if the relationship does not exist we create it
 			if (Database::num_rows($result)==0) {
 				$sql = "INSERT INTO $table_user_tag_values SET user_id = $user_id, tag_id = $last_insert_id";
-				$result = Database::query($sql, __FILE__, __LINE__);
+				$result = Database::query($sql);
 			}
 		}
 	}
@@ -2481,10 +2481,10 @@ class UserManager
 			foreach ($tags as $key=>$tag) {
 				if ($tag['count']>'0') {
 					$sql = "UPDATE $table_user_tag SET count = count - 1  WHERE id = $key ";
-					$result = Database::query($sql, __FILE__, __LINE__);
+					$result = Database::query($sql);
 				}
 				$sql = "DELETE FROM $table_user_tag_values WHERE user_id = $user_id AND tag_id = $key";
-				$result = Database::query($sql, __FILE__, __LINE__);
+				$result = Database::query($sql);
 			}
 
 		}
@@ -2519,7 +2519,7 @@ class UserManager
 	 	$table_admin = Database::get_main_table(TABLE_MAIN_ADMIN);
 
 	 	$sql = "SELECT email from $table_user as u, $table_admin as a WHERE u.user_id=a.user_id";
-	 	$result = Database::query($sql, __FILE__, __LINE__);
+	 	$result = Database::query($sql);
 		$return = array();
 		if (Database::num_rows($result)> 0) {
 			while ($row = Database::fetch_array($result,'ASSOC')) {
@@ -2560,7 +2560,7 @@ class UserManager
 				WHERE $where_field tag LIKE '$tag%' ORDER BY tag";
 		$sql .= " LIMIT $from,$number_of_items";
 
-		$result = Database::query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql);
 		$return = array();
 		if (Database::num_rows($result)> 0) {
 			while ($row = Database::fetch_array($result,'ASSOC')) {
@@ -2606,7 +2606,7 @@ class UserManager
 		//$sql .= " ORDER BY col$column $direction ";
 		$sql .= " LIMIT $from,$number_of_items";
 
-		$res = Database::query($sql, __FILE__, __LINE__);
+		$res = Database::query($sql);
 		if (Database::num_rows($res)> 0) {
 			while ($row = Database::fetch_array($res,'ASSOC')) {
 				if (!in_array($row['user_id'], $return)) {
@@ -2690,7 +2690,7 @@ class UserManager
 
 			$sql .= " ORDER BY col$column $direction ";
 			$sql .= " LIMIT $from,$number_of_items";
-			$res = Database::query($sql, __FILE__, __LINE__);
+			$res = Database::query($sql);
 
 			$users = array ();
 		    $t = time();
@@ -2751,7 +2751,7 @@ class UserManager
 		// Filter special courses
 		$sql_special_course = "SELECT course_code FROM $tbl_course_field_value tcfv INNER JOIN $tbl_course_field tcf ON " .
 				" tcfv.field_id =  tcf.id WHERE tcf.field_variable = 'special_course' AND tcfv.field_value = 1 ";
-		$special_course_result = Database::query($sql_special_course, __FILE__, __LINE__);
+		$special_course_result = Database::query($sql_special_course);
 		$code_special_courses = '';
 		if(Database::num_rows($special_course_result)>0) {
 			$special_course_list = array();
@@ -2775,7 +2775,7 @@ class UserManager
 											WHERE  $code_special_courses $where_access_url
 											GROUP BY course.code
 											ORDER BY user_course_category.sort,course.title,course_rel_user.sort ASC";
-			$course_list_sql_result = api_sql_query($course_list_sql, __FILE__, __LINE__);
+			$course_list_sql_result = api_sql_query($course_list_sql);
 			while ($result_row = Database::fetch_array($course_list_sql_result)) {
 				$course_list[] = $result_row;
 			}
@@ -2797,17 +2797,17 @@ class UserManager
 		$relation_type = intval($relation_type);
 
 		$sql = 'SELECT COUNT(*) as count FROM ' . $tbl_my_friend . ' WHERE friend_user_id=' .$friend_id.' AND user_id='.$my_user_id;
-		$result = Database::query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql);
 		$row = Database :: fetch_array($result, 'ASSOC');
 		$current_date=date('Y-m-d H:i:s');
 
 		if ($row['count'] == 0) {
 			$sql_i = 'INSERT INTO ' . $tbl_my_friend . '(friend_user_id,user_id,relation_type,last_edit)values(' . $friend_id . ','.$my_user_id.','.$relation_type.',"'.$current_date.'");';
-			Database::query($sql_i, __FILE__, __LINE__);
+			Database::query($sql_i);
 			return true;
 		} else {
 			$sql = 'SELECT COUNT(*) as count, relation_type  FROM ' . $tbl_my_friend . ' WHERE friend_user_id=' . $friend_id . ' AND user_id='.$my_user_id;
-			$result = Database::query($sql, __FILE__, __LINE__);
+			$result = Database::query($sql);
 			$row = Database :: fetch_array($result, 'ASSOC');
 			if ($row['count'] == 1) {
 				//only for the case of a RRHH
@@ -2816,7 +2816,7 @@ class UserManager
 				} else {
 					$sql_i = 'UPDATE ' . $tbl_my_friend . ' SET relation_type='.$relation_type.' WHERE friend_user_id=' . $friend_id.' AND user_id='.$my_user_id;
 				}
-				Database::query($sql_i, __FILE__, __LINE__);
+				Database::query($sql_i);
 				return true;
 			} else {
 				return false;
@@ -2841,21 +2841,21 @@ class UserManager
 			/*
 			$sql_delete_relationship1 = 'UPDATE ' . $tbl_my_friend .'  SET relation_type='.USER_RELATION_TYPE_DELETED.' WHERE friend_user_id='.$friend_id;
 			$sql_delete_relationship2 = 'UPDATE ' . $tbl_my_friend . ' SET relation_type='.USER_RELATION_TYPE_DELETED.' WHERE user_id=' . $friend_id;
-			Database::query($sql_delete_relationship1, __FILE__, __LINE__);
-			Database::query($sql_delete_relationship2, __FILE__, __LINE__);*/
+			Database::query($sql_delete_relationship1);
+			Database::query($sql_delete_relationship2);*/
 			$extra_condition = '';
 			if ($with_status_condition != '') {
 				$extra_condition = ' AND relation_type = '.intval($with_status_condition);
 			}
 			$sql_delete_relationship1 = 'DELETE FROM ' . $tbl_my_friend .'  WHERE friend_user_id='.$friend_id.' '.$extra_condition;
 			$sql_delete_relationship2 = 'DELETE FROM ' . $tbl_my_friend . ' WHERE user_id=' . $friend_id.' '.$extra_condition;
-			Database::query($sql_delete_relationship1, __FILE__, __LINE__);
-			Database::query($sql_delete_relationship2, __FILE__, __LINE__);
+			Database::query($sql_delete_relationship1);
+			Database::query($sql_delete_relationship2);
 
 		} else {
 			$user_id = api_get_user_id();
 			$sql = 'SELECT COUNT(*) as count FROM ' . $tbl_my_friend . ' WHERE user_id=' . $user_id . ' AND relation_type <>'.USER_RELATION_TYPE_DELETED.' AND friend_user_id='.$friend_id;
-			$result = Database::query($sql, __FILE__, __LINE__);
+			$result = Database::query($sql);
 			$row = Database :: fetch_array($result, 'ASSOC');
 			if ($row['count'] == 1) {
 				//Delete user rel user
@@ -2864,10 +2864,10 @@ class UserManager
 				//Delete user
 				$sql_ij = 'UPDATE ' . $tbl_my_friend . '  SET relation_type='.USER_RELATION_TYPE_DELETED.' WHERE user_id=' . $friend_id.' AND friend_user_id='.$user_id;
 				$sql_ji = 'UPDATE ' . $tbl_my_message . ' SET msg_status='.MESSAGE_STATUS_INVITATION_DENIED.' WHERE user_receiver_id=' . $friend_id.' AND user_sender_id='.$user_id.' AND update_date="0000-00-00 00:00:00" ';
-				Database::query($sql_i, __FILE__, __LINE__);
-				Database::query($sql_j, __FILE__, __LINE__);
-				Database::query($sql_ij, __FILE__, __LINE__);
-				Database::query($sql_ji, __FILE__, __LINE__);
+				Database::query($sql_i);
+				Database::query($sql_j);
+				Database::query($sql_ij);
+				Database::query($sql_ji);
 			}
 		}
 	}

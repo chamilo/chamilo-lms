@@ -100,7 +100,7 @@ if ($intro_editAllowed) {
 
 			if ( ! empty($intro_content) ) {
 				$sql = "REPLACE $TBL_INTRODUCTION SET id='$moduleId',intro_text='".Database::escape_string($intro_content)."'";
-				Database::query($sql,__FILE__,__LINE__);
+				Database::query($sql);
 				Display::display_confirmation_message(get_lang('IntroductionTextUpdated'),false);
 			} else {
 				$intro_cmdDel = true;	// got to the delete command
@@ -114,7 +114,7 @@ if ($intro_editAllowed) {
 	/* Delete Command */
 
 	if ($intro_cmdDel) {
-		Database::query("DELETE FROM $TBL_INTRODUCTION WHERE id='".$moduleId."'",__FILE__,__LINE__);
+		Database::query("DELETE FROM $TBL_INTRODUCTION WHERE id='".$moduleId."'");
 		Display::display_confirmation_message(get_lang('IntroductionTextDeleted'));
 	}
 
@@ -128,7 +128,7 @@ if ($intro_editAllowed) {
 /* Retrieves the module introduction text, if exist */
 
 $sql = "SELECT intro_text FROM $TBL_INTRODUCTION WHERE id='".$moduleId."'";
-$intro_dbQuery = Database::query($sql,__FILE__,__LINE__);
+$intro_dbQuery = Database::query($sql);
 $intro_dbResult = Database::fetch_array($intro_dbQuery);
 $intro_content = $intro_dbResult['intro_text'];
 
@@ -167,10 +167,10 @@ $course_description->set_session_id(api_get_session_id());
 $thematic_description = $course_description->get_data_by_description_type(8);
 $thematic_description_html = '';
 if (!empty($thematic_description)) {
-	$thematic_advance = get_lang('ThematicAdvance').'&nbsp;'.$course_description->get_progress_porcent(false,8);	
+	$thematic_advance = get_lang('ThematicAdvance').'&nbsp;'.$course_description->get_progress_porcent(false,8);
 	if (api_is_allowed_to_edit(null,true)) {
 		$thematic_advance = '<a href="'.api_get_path(WEB_CODE_PATH).'course_description/index.php?action=edit&'.api_get_cidreq().'&description_type=8'.'">'.get_lang('ThematicAdvance').'&nbsp;'.$course_description->get_progress_porcent(false,8).'</a>';
-	}	
+	}
 	$thematic_description_html = '<td valign="top" width="260px"><div class="thematic-postit">
 							  <div class="thematic-postit-top"><a class="thematic-postit-head" style="" href="#">'.Display::return_icon('postit_top.png').'</a></div>
 							  <div class="thematic-postit-center">
@@ -187,7 +187,7 @@ if ($intro_dispDefault) {
 	$intro_content = text_filter($intro_content); // parse [tex] codes
 	if (!empty($intro_content) || !empty($thematic_description_html))	{
 		echo "<table align='center' style='width: 80%;'><tr><td>$intro_content</td>$thematic_description_html</tr></table>";
-	} 
+	}
 }
 
 if ($intro_dispCommand) {

@@ -1,29 +1,5 @@
 <?php
-// $Id: tracking.lib.php 2007-28-02 15:51:53
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2004-2008 Dokeos SPRL
-	Copyright (c) 2003 Ghent University (UGent)
-	Copyright (c) 2001 Universite catholique de Louvain (UCL)
-	Copyright (c) various contributors
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
-	Mail: info@dokeos.com
-
-==============================================================================
-*/
+/* For licensing terms, see /license.txt */
 /**
 ==============================================================================
 *	This is the tracking library for Dokeos.
@@ -280,6 +256,14 @@ class Tracking {
 		return null;
 	}
 
+    /**
+     * Returns the average student progress in the learning paths of the given
+     * course.
+     * @param  int/array     Student id(s)
+     * @param  string  Course code
+     * @return double  Average progress of the user in this course
+     * @todo Add session management here
+     */
 	public static function get_avg_student_progress($student_id, $course_code) {
 		// protect datas
 		$course_code = addslashes($course_code);
@@ -289,8 +273,10 @@ class Tracking {
 			// table definition
 			$tbl_course_lp_view = Database :: get_course_table(TABLE_LP_VIEW, $a_course['db_name']);
 			$tbl_course_lp = Database :: get_course_table(TABLE_LP_MAIN, $a_course['db_name']);
+			// count the number of learning paths 
 			$count_lp = Database::fetch_row(Database::query("SELECT count(id) FROM $tbl_course_lp"));
 			$avg_progress = 0;
+			//if there is at least one learning path and one student
 			if (!empty($count_lp[0]) && !empty($student_id)) {
 				$condition_user = "";
 				if (is_array($student_id)) {
@@ -298,10 +284,21 @@ class Tracking {
 				} else {
 					$condition_user = " lp_view.user_id = '$student_id' AND ";
 				}
-				$sqlProgress = "SELECT SUM(progress) FROM $tbl_course_lp_view AS lp_view WHERE $condition_user lp_view.lp_id IN (SELECT id FROM $tbl_course_lp)";
-				$resultItem  = Database::query($sqlProgress);
-				$rowItem = Database::fetch_row($resultItem);
-				$avg_progress = round($rowItem[0] / $count_lp[0], 1);
+                // sum the progresses for each user and each learning path
+                // if we have 5 students and 3 learning paths, get the sum of
+                // 15 progresses
+                $sql_progress = "SELECT SUM(progress) FROM $tbl_course_lp_view AS lp_view ". 
+                                "WHERE $condition_user lp_view.lp_id IN (SELECT id FROM $tbl_course_lp)";                                
+                $result_item  = Database::query($sql_progress, __FILE__, __LINE__);
+                // total sum recovered in $rowItem
+                $row_item = Database::fetch_row($result_item);
+                // average progress = total sum divided by the number of LP*student
+                // if 5 students x 3 learning paths, divide by 15
+                $number_items = $count_lp[0];
+                if (is_array($student_id)) {
+                    $number_items = $count_lp[0] * count($student_id);
+                }                               
+                $avg_progress = round($row_item[0] / $number_items, 1); 
 				return $avg_progress;
 			}
 		}
@@ -311,8 +308,8 @@ class Tracking {
 
 	/**
 	 * This function gets:
-	 * 1. The score average from all SCORM Test items in all LP in a course-> All the answers / All the max score.
-	 * 2. The score average from all Tests (quiz) in all LP in a course-> All the answers / All the max score.
+	 * 1. The score average from all SCORM Test items in all LP in a course-> All the answers / All the max scores.
+	 * 2. The score average from all Tests (quiz) in all LP in a course-> All the answers / All the max scores.
 	 * 3. And finally it will return the average between 1. and 2.
 	 * This function does not take the results of a Test out of a LP
 	 *

@@ -47,8 +47,8 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE')) {
 	fclose($fh);
 
 	$sys_course_path = $pathForm.'courses/';
-	$perm = api_get_setting('permissions_for_new_directories');
-	$perm = octdec(!empty($perm) ? $perm : '0770');
+
+	$perm = api_get_permissions_for_new_directories();
 
 	//$old_umask = umask(0); // This function is not thread-safe.
 

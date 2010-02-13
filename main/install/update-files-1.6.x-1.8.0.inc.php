@@ -77,8 +77,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE')) {
 	error_log('Getting courses for files updates: '.$sql, 0);
 	$result = mysql_query($sql);
 
-	$perm = api_get_setting('permissions_for_new_directories');
-	$perm = octdec(!empty($perm) ? $perm : '0770');
+	$perm = api_get_permissions_for_new_directories();
 
 	//$old_umask = umask(0); // This function is not thread-safe.
 

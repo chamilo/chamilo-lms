@@ -92,6 +92,9 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE')) {
 	while ($row = mysql_fetch_object($dblistres)) {
     	$dblist[] = $row->Database;
 	}
+
+	$perm = api_get_permissions_for_new_directories();
+
 	/*
 	-----------------------------------------------------------
 		Normal upgrade procedure:
@@ -163,7 +166,6 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE')) {
 			$image_repository = file_exists($dir.$file) ? $dir.$file : $dir.$user_id.'/'.$file;
 
 			if (!is_dir($dir.$user_id)) {
-				$perm = octdec(!empty($perm) ? $perm : '0777');
 				@mkdir($dir.$user_id, $perm);
 			}
 

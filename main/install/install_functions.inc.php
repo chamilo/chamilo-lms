@@ -564,14 +564,11 @@ function display_requirements($installType, $badUpdatePath, $updatePath = '', $u
 
 		$error = false;
 
-		$perm = api_get_setting('permissions_for_new_directories');
-		$perm = octdec(!empty($perm) ? $perm : '0770');
-
-		$perm_file = api_get_setting('permissions_for_new_files');
-		$perm_file = octdec(!empty($perm_file) ? $perm_file : '0660');
-
 		//First, attempt to set writing permissions if we don't have them yet
-		//0xxx is an octal number, this is the required format
+
+		$perm = api_get_permissions_for_new_directories();
+		$perm_file = api_get_permissions_for_new_files();
+
 		$notwritable = array();
         $curdir = getcwd();
 

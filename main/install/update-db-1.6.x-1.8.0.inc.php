@@ -37,15 +37,14 @@
 */
 
 //load helper functions
-require_once("install_upgrade.lib.php");
+require_once 'install_upgrade.lib.php';
 
 //remove memory and time limits as much as possible as this might be a long process...
-if(function_exists('ini_set'))
-{
-	ini_set('memory_limit',-1);
-	ini_set('max_execution_time',0);
-}else{
-	error_log('Update-db script: could not change memory and time limits',0);
+if (function_exists('ini_set')) {
+	ini_set('memory_limit', -1);
+	ini_set('max_execution_time', 0);
+} else {
+	error_log('Update-db script: could not change memory and time limits', 0);
 }
 
 /*
@@ -55,11 +54,10 @@ if(function_exists('ini_set'))
 */
 
 //check if we come from index.php or update_courses.php - otherwise display error msg
-if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
-{
+if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE')) {
 	//check if the current Dokeos install is elligible for update
-	if (empty ($updateFromConfigFile) || !file_exists($_POST['updatePath'].$updateFromConfigFile) || !in_array(get_config_param('clarolineVersion'), $update_from_version_6))
-	{
+	if (empty ($updateFromConfigFile) || !file_exists($_POST['updatePath'].$updateFromConfigFile) || !in_array(get_config_param('clarolineVersion'), $update_from_version_6)) {
+
 		echo '<strong>'.get_lang('Error').' !</strong> Dokeos '.implode('|', $updateFromVersion).' '.get_lang('HasNotBeenFound').'.<br /><br />
 								'.get_lang('PleasGoBackToStep1').'.
 							    <p><button type="submit" class="back" name="step1" value="&lt; '.get_lang('Back').'">'.get_lang('Back').'</button></p>
@@ -72,8 +70,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 	//actually gets the param from
 	$_configuration['db_glue'] = get_config_param('dbGlu');
 
-	if ($singleDbForm)
-	{
+	if ($singleDbForm) {
 		$_configuration['table_prefix'] = get_config_param('courseTablePrefix');
 		$_configuration['main_database'] = get_config_param('mainDbName');
 		$_configuration['db_prefix'] = get_config_param('dbNamePrefix');
@@ -81,20 +78,17 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 
 	$dbScormForm = eregi_replace('[^a-z0-9_-]', '', $dbScormForm);
 
-	if (!empty ($dbPrefixForm) && !ereg('^'.$dbPrefixForm, $dbScormForm))
-	{
+	if (!empty ($dbPrefixForm) && !ereg('^'.$dbPrefixForm, $dbScormForm)) {
 		$dbScormForm = $dbPrefixForm.$dbScormForm;
 	}
 
-	if (empty ($dbScormForm) || $dbScormForm == 'mysql' || $dbScormForm == $dbPrefixForm)
-	{
+	if (empty ($dbScormForm) || $dbScormForm == 'mysql' || $dbScormForm == $dbPrefixForm) {
 		$dbScormForm = $dbPrefixForm.'scorm';
 	}
 	$res = @mysql_connect($dbHostForm, $dbUsernameForm, $dbPassForm);
 
 	//if error on connection to the database, show error and exit
-	if ($res === false)
-	{
+	if ($res === false) {
 		//$no = mysql_errno();
 		//$msg = mysql_error();
 
@@ -111,8 +105,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 		exit ();
 	}
 
-	// The system has not been designed to use special SQL modes that were introduced since MySQL 5
-	@mysql_query("set session sql_mode='';");
+	@mysql_query("set session sql_mode='';"); // Disabling special SQL modes (MySQL 5)
 
 	$dblistres = mysql_list_dbs();
 	$dblist = array();
@@ -129,48 +122,45 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 	// that we want to change the main databases as well...
 	$only_test = false;
 	$log = 0;
-	if (defined('DOKEOS_INSTALL'))
-	{
-		if ($singleDbForm)
-		{
-			if(empty($dbStatsForm)) $dbStatsForm = $dbNameForm;
-			if(empty($dbScormForm)) $dbScormForm = $dbNameForm;
-			if(empty($dbUserForm)) $dbUserForm = $dbNameForm;
+
+	if (defined('DOKEOS_INSTALL')) {
+
+		if ($singleDbForm) {
+			if (empty($dbStatsForm)) $dbStatsForm = $dbNameForm;
+			if (empty($dbScormForm)) $dbScormForm = $dbNameForm;
+			if (empty($dbUserForm)) $dbUserForm = $dbNameForm;
 		}
 		/**
 		 * Update the databases "pre" migration
 		 */
-		include ("../lang/english/create_course.inc.php");
+		include '../lang/english/create_course.inc.php';
 
-		if ($languageForm != 'english')
-		{
+		if ($languageForm != 'english') {
 			//languageForm has been escaped in index.php
-			include ("../lang/$languageForm/create_course.inc.php");
+			include '../lang/'.$languageForm.'/create_course.inc.php';
 		}
 
 		//get the main queries list (m_q_list)
-		$m_q_list = get_sql_file_contents('migrate-db-1.6.x-1.8.0-pre.sql','main');
-		if(count($m_q_list)>0)
-		{
+		$m_q_list = get_sql_file_contents('migrate-db-1.6.x-1.8.0-pre.sql', 'main');
+		if (count($m_q_list) > 0) {
 			//now use the $m_q_list
 			/**
 			 * We connect to the right DB first to make sure we can use the queries
 			 * without a database name
 			 */
-			if(strlen($dbNameForm)>40){
-				error_log('Database name '.$dbNameForm.' is too long, skipping',0);
-			}elseif(!in_array($dbNameForm,$dblist)){
-				error_log('Database '.$dbNameForm.' was not found, skipping',0);
-			}else{
+			if (strlen($dbNameForm) > 40) {
+				error_log('Database name '.$dbNameForm.' is too long, skipping', 0);
+			} elseif (!in_array($dbNameForm, $dblist)) {
+				error_log('Database '.$dbNameForm.' was not found, skipping', 0);
+			} else {
 				mysql_select_db($dbNameForm);
-				foreach($m_q_list as $query){
-					if($only_test){
-						error_log("mysql_query($dbNameForm,$query)",0);
-					}else{
+				foreach ($m_q_list as $query) {
+					if ($only_test) {
+						error_log("mysql_query($dbNameForm,$query)", 0);
+					} else {
 						$res = mysql_query($query);
-						if($log)
-						{
-							error_log("In $dbNameForm, executed: $query",0);
+						if ($log) {
+							error_log("In $dbNameForm, executed: $query", 0);
 						}
 					}
 				}
@@ -178,53 +168,51 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 		}
 
 		//get the stats queries list (s_q_list)
-		$s_q_list = get_sql_file_contents('migrate-db-1.6.x-1.8.0-pre.sql','stats');
-		if(count($s_q_list)>0)
-		{
+		$s_q_list = get_sql_file_contents('migrate-db-1.6.x-1.8.0-pre.sql', 'stats');
+		if (count($s_q_list) > 0) {
 			//now use the $s_q_list
 			/**
 			 * We connect to the right DB first to make sure we can use the queries
 			 * without a database name
 			 */
-			if(strlen($dbStatsForm)>40){
-				error_log('Database name '.$dbStatsForm.' is too long, skipping',0);
-			}elseif(!in_array($dbStatsForm,$dblist)){
-				error_log('Database '.$dbStatsForm.' was not found, skipping',0);
-			}else{
+			if (strlen($dbStatsForm) > 40){
+				error_log('Database name '.$dbStatsForm.' is too long, skipping', 0);
+			} elseif (!in_array($dbStatsForm,$dblist)){
+				error_log('Database '.$dbStatsForm.' was not found, skipping', 0);
+			} else {
 				mysql_select_db($dbStatsForm);
-				foreach($s_q_list as $query){
-					if($only_test){
-						error_log("mysql_query($dbStatsForm,$query)",0);
-					}else{
+				foreach($s_q_list as $query) {
+					if ($only_test) {
+						error_log("mysql_query($dbStatsForm,$query)", 0);
+					} else {
 						$res = mysql_query($query);
-						if($log)
-						{
-							error_log("In $dbStatsForm, executed: $query",0);
+						if ($log) {
+							error_log("In $dbStatsForm, executed: $query", 0);
 						}
 					}
 				}
 			}
 		}
+
 		//get the user queries list (u_q_list)
-		$u_q_list = get_sql_file_contents('migrate-db-1.6.x-1.8.0-pre.sql','user');
-		if(count($u_q_list)>0)
-		{
+		$u_q_list = get_sql_file_contents('migrate-db-1.6.x-1.8.0-pre.sql', 'user');
+		if (count($u_q_list) > 0) {
 			//now use the $u_q_list
 			/**
 			 * We connect to the right DB first to make sure we can use the queries
 			 * without a database name
 			 */
-			if(strlen($dbUserForm)>40){
-				error_log('Database name '.$dbUserForm.' is too long, skipping',0);
-			}elseif(!in_array($dbUserForm,$dblist)){
-				error_log('Database '.$dbUserForm.' was not found, skipping',0);
-			}else{
+			if (strlen($dbUserForm) > 40) {
+				error_log('Database name '.$dbUserForm.' is too long, skipping', 0);
+			} elseif (!in_array($dbUserForm, $dblist)){
+				error_log('Database '.$dbUserForm.' was not found, skipping', 0);
+			} else {
 				mysql_select_db($dbUserForm);
-				foreach($u_q_list as $query){
-					if($only_test){
-						error_log("mysql_query($dbUserForm,$query)",0);
-						error_log("In $dbUserForm, executed: $query",0);
-					}else{
+				foreach ($u_q_list as $query){
+					if ($only_test){
+						error_log("mysql_query($dbUserForm,$query)", 0);
+						error_log("In $dbUserForm, executed: $query", 0);
+					} else {
 						$res = mysql_query($query);
 					}
 				}
@@ -247,60 +235,52 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 	*/
 
 	$prefix = '';
-	if ($singleDbForm)
-	{
+	if ($singleDbForm) {
 		$prefix = $_configuration['table_prefix'];
 	}
+
 	//get the courses databases queries list (c_q_list)
-	$c_q_list = get_sql_file_contents('migrate-db-1.6.x-1.8.0-pre.sql','course');
-	if(count($c_q_list)>0)
-	{
+	$c_q_list = get_sql_file_contents('migrate-db-1.6.x-1.8.0-pre.sql', 'course');
+	if (count($c_q_list) > 0) {
+
 		//get the courses list
-		if(strlen($dbNameForm)>40){
-			error_log('Database name '.$dbNameForm.' is too long, skipping',0);
-		}elseif(!in_array($dbNameForm,$dblist)){
-				error_log('Database '.$dbNameForm.' was not found, skipping',0);
-		}else{
+		if (strlen($dbNameForm) > 40) {
+			error_log('Database name '.$dbNameForm.' is too long, skipping', 0);
+		} elseif (!in_array($dbNameForm, $dblist)) {
+			error_log('Database '.$dbNameForm.' was not found, skipping', 0);
+		} else {
 			mysql_select_db($dbNameForm);
 			$res = mysql_query("SELECT code,db_name,directory,course_language FROM course WHERE target_course_code IS NULL");
-			if($res===false){die('Error while querying the courses list in update_db-1.6.x-1.8.0.inc.php');}
-			if(mysql_num_rows($res)>0)
-			{
-				$i=0;
+			if ($res === false) { die('Error while querying the courses list in update_db-1.6.x-1.8.0.inc.php'); }
+			if (mysql_num_rows($res) > 0) {
+				$i = 0;
                 $list = array();
 				//while( ($i < MAX_COURSE_TRANSFER) && ($row = mysql_fetch_array($res)))
-				while($row = mysql_fetch_array($res))
-				{
+				while($row = mysql_fetch_array($res)) {
 					$list[] = $row;
 					$i++;
 				}
-				foreach($list as $row_course)
-				{
+				foreach($list as $row_course) {
 					//now use the $c_q_list
 					/**
 					 * We connect to the right DB first to make sure we can use the queries
 					 * without a database name
 					 */
-					if (!$singleDbForm) //otherwise just use the main one
-					{
+					if (!$singleDbForm) { //otherwise just use the main one
 						mysql_select_db($row_course['db_name']);
 					}
 
-					foreach($c_q_list as $query)
-					{
-						if ($singleDbForm) //otherwise just use the main one
-						{
-							$query = preg_replace('/^(UPDATE|ALTER TABLE|CREATE TABLE|DROP TABLE|INSERT INTO|DELETE FROM)\s+(\w*)(.*)$/',"$1 $prefix{$row_course['db_name']}_$2$3",$query);
+					foreach($c_q_list as $query) {
+						if ($singleDbForm) { //otherwise just use the main one
+							$query = preg_replace('/^(UPDATE|ALTER TABLE|CREATE TABLE|DROP TABLE|INSERT INTO|DELETE FROM)\s+(\w*)(.*)$/', "$1 $prefix{$row_course['db_name']}_$2$3", $query);
 						}
 
-						if($only_test)
-						{
-							error_log("mysql_query(".$row_course['db_name'].",$query)",0);
-						}else{
+						if ($only_test) {
+							error_log("mysql_query(".$row_course['db_name'].",$query)", 0);
+						} else {
 							$res = mysql_query($query);
-							if($log)
-							{
-								error_log("In ".$row_course['db_name'].", executed: $query",0);
+							if ($log) {
+								error_log("In ".$row_course['db_name'].", executed: $query", 0);
 							}
 						}
 					}
@@ -313,8 +293,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 							" WHERE cu.course_code = '".$row_course['code']."' " .
 								" AND u.user_id = cu.user_id";
 					$res_uc = mysql_query($sql_uc);
-					while($user_row = mysql_fetch_array($res_uc))
-					{
+					while($user_row = mysql_fetch_array($res_uc)) {
 						$users_list[$user_row['fn'].' '.$user_row['ln']] = $user_row['ui'];
 					}
 
@@ -326,16 +305,15 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 					//update forum tables (migrate from bb_ tables to forum_ tables)
 					//migrate categories
 					$prefix_course = $prefix;
-					if($singleDbForm)
-					{
+					if ($singleDbForm) {
 						$prefix_course = $prefix.$row_course['db_name']."_";
 					}
 
 					$sql_orig = "SELECT * FROM ".$prefix_course."bb_categories";
 					$res_orig = mysql_query($sql_orig);
 					$order = 1;
-					while($row = mysql_fetch_array($res_orig)){
-						$myorder = (empty($row['cat_order'])?$order:$row['cat_order']);
+					while ($row = mysql_fetch_array($res_orig)) {
+						$myorder = (empty($row['cat_order']) ? $order : $row['cat_order']);
 						$sql = "INSERT INTO ".$prefix_course."forum_category " .
 								"(cat_id,cat_title,cat_comment,cat_order,locked) VALUES " .
 								"('".$row['cat_id']."','".mysql_real_escape_string($row['cat_title'])."','','".$myorder."',0)";
@@ -349,10 +327,11 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 						$res = mysql_query($sql);
 						//error_log($sql,0);
 					}
+
 					$sql_orig = "SELECT * FROM ".$prefix_course."bb_forums ORDER BY forum_last_post_id desc";
 					$res_orig = mysql_query($sql_orig);
 					$order = 1;
-					while($row = mysql_fetch_array($res_orig)){
+					while ($row = mysql_fetch_array($res_orig)) {
 						$sql = "INSERT INTO ".$prefix_course."forum_forum " .
 								"(forum_id,forum_category,allow_edit,forum_comment," .
 								"forum_title," .
@@ -375,19 +354,16 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 						$res = mysql_query($sql);
 						//error_log($sql,0);
 					}
+
 					$sql_orig = "SELECT * FROM ".$prefix_course."bb_topics";
 					$res_orig = mysql_query($sql_orig);
-					while($row = mysql_fetch_array($res_orig)){
+					while ($row = mysql_fetch_array($res_orig)) {
 						$name = $row['prenom'].' '.$row['nom'];
 						//check if user id is reusable
-						if($row['topic_poster'] <= 1 )
-						{
-							if(isset($users_list[$name]))
-							{
+						if ($row['topic_poster'] <= 1) {
+							if (isset($users_list[$name])) {
 								$poster_id = $users_list[$name];
-							}
-							else
-							{
+							} else {
 								$poster_id = $row['topic_poster'];
 							}
 						}
@@ -413,19 +389,16 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 						$res = mysql_query($sql);
 						//error_log($sql,0);
 					}
+
 					$sql_orig = "SELECT * FROM ".$prefix_course."bb_posts bp, ".$prefix_course."bb_posts_text bpt WHERE bp.post_id = bpt.post_id";
 					$res_orig = mysql_query($sql_orig);
-					while($row = mysql_fetch_array($res_orig)){
+					while ($row = mysql_fetch_array($res_orig)) {
 						$name = $row['prenom'].' '.$row['nom'];
 						//check if user id is reusable
-						if($row['poster_id'] <= 0 )
-						{
-							if(isset($users_list[$name]))
-							{
+						if ($row['poster_id'] <= 0 ) {
+							if (isset($users_list[$name])) {
 								$poster_id = $users_list[$name];
-							}
-							else
-							{
+							} else {
 								$poster_id = $row['poster_id'];
 							}
 						}
@@ -456,7 +429,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 					$sql_orig = "SELECT id, tutor_id FROM ".$prefix_course."group_info";
 					$res_orig = mysql_query($sql_orig);
 					$order = 1;
-					while($row = mysql_fetch_array($res_orig)){
+					while ($row = mysql_fetch_array($res_orig)) {
 						$sql = "INSERT INTO ".$prefix_course."group_rel_tutor " .
 								"(user_id,group_id) VALUES " .
 								"('".$row['tutor_id']."','".$row['id']."')";
@@ -466,43 +439,40 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 			}
 		}
 	}
+
 	//load the old-scorm to new-scorm migration script
 	//TODO: deal with the fact that this should only act on MAX_COURSE_TRANSFER courses
-	if(!$only_test){
+	if (!$only_test){
 		include('update-db-scorm-1.6.x-1.8.0.inc.php');
 	}
-	if (defined('DOKEOS_INSTALL'))
-	{
-		if ($singleDbForm)
-		{
+	if (defined('DOKEOS_INSTALL')) {
+		if ($singleDbForm) {
 			if(empty($dbStatsForm)) $dbStatsForm = $dbNameForm;
 			if(empty($dbScormForm)) $dbScormForm = $dbNameForm;
 			if(empty($dbUserForm)) $dbUserForm = $dbNameForm;
 		}
 		//deal with migrate-db-1.6.x-1.8.0-post.sql
 		//get the main queries list (m_q_list)
-		$m_q_list = get_sql_file_contents('migrate-db-1.6.x-1.8.0-post.sql','main');
-		if(count($m_q_list)>0)
-		{
+		$m_q_list = get_sql_file_contents('migrate-db-1.6.x-1.8.0-post.sql', 'main');
+		if (count($m_q_list) > 0) {
 			//now use the $m_q_list
 			/**
 			 * We connect to the right DB first to make sure we can use the queries
 			 * without a database name
 			 */
-			if(strlen($dbNameForm)>40){
-				error_log('Database name '.$dbNameForm.' is too long, skipping',0);
-			}elseif(!in_array($dbNameForm,$dblist)){
-				error_log('Database '.$dbNameForm.' was not found, skipping',0);
-			}else{
+			if (strlen($dbNameForm) > 40) {
+				error_log('Database name '.$dbNameForm.' is too long, skipping', 0);
+			} elseif (!in_array($dbNameForm, $dblist)) {
+				error_log('Database '.$dbNameForm.' was not found, skipping', 0);
+			} else {
 				mysql_select_db($dbNameForm);
-				foreach($m_q_list as $query){
-					if($only_test){
-						error_log("mysql_query($dbNameForm,$query)",0);
-					}else{
+				foreach ($m_q_list as $query) {
+					if ($only_test){
+						error_log("mysql_query($dbNameForm,$query)", 0);
+					} else {
 						$res = mysql_query($query);
-						if($log)
-						{
-							error_log("In $dbNameForm, executed: $query",0);
+						if ($log) {
+							error_log("In $dbNameForm, executed: $query", 0);
 						}
 					}
 				}
@@ -510,56 +480,53 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 		}
 
 		//get the stats queries list (s_q_list)
-		$s_q_list = get_sql_file_contents('migrate-db-1.6.x-1.8.0-post.sql','stats');
-		if(count($s_q_list)>0)
-		{
+		$s_q_list = get_sql_file_contents('migrate-db-1.6.x-1.8.0-post.sql', 'stats');
+		if (count($s_q_list) > 0) {
 			//now use the $s_q_list
 			/**
 			 * We connect to the right DB first to make sure we can use the queries
 			 * without a database name
 			 */
-			if(strlen($dbStatsForm)>40){
-				error_log('Database name '.$dbStatsForm.' is too long, skipping',0);
-			}elseif(!in_array($dbNameForm,$dblist)){
-				error_log('Database '.$dbNameForm.' was not found, skipping',0);
-			}else{
+			if (strlen($dbStatsForm) > 40) {
+				error_log('Database name '.$dbStatsForm.' is too long, skipping', 0);
+			} elseif (!in_array($dbNameForm, $dblist)){
+				error_log('Database '.$dbNameForm.' was not found, skipping', 0);
+			} else {
 				mysql_select_db($dbStatsForm);
-				foreach($s_q_list as $query){
-					if($only_test){
-						error_log("mysql_query($dbStatsForm,$query)",0);
-					}else{
+				foreach ($s_q_list as $query) {
+					if ($only_test) {
+						error_log("mysql_query($dbStatsForm,$query)", 0);
+					} else {
 						$res = mysql_query($query);
-						if($log)
-						{
-							error_log("In $dbStatsForm, executed: $query",0);
+						if ($log) {
+							error_log("In $dbStatsForm, executed: $query", 0);
 						}
 					}
 				}
 			}
 		}
+
 		//get the user queries list (u_q_list)
-		$u_q_list = get_sql_file_contents('migrate-db-1.6.x-1.8.0-post.sql','user');
-		if(count($u_q_list)>0)
-		{
+		$u_q_list = get_sql_file_contents('migrate-db-1.6.x-1.8.0-post.sql', 'user');
+		if (count($u_q_list) > 0) {
 			//now use the $u_q_list
 			/**
 			 * We connect to the right DB first to make sure we can use the queries
 			 * without a database name
 			 */
-			if(strlen($dbUserForm)>40){
-				error_log('Database name '.$dbUserForm.' is too long, skipping',0);
-			}elseif(!in_array($dbUserForm,$dblist)){
-				error_log('Database '.$dbUserForm.' was not found, skipping',0);
-			}else{
+			if (strlen($dbUserForm) > 40) {
+				error_log('Database name '.$dbUserForm.' is too long, skipping', 0);
+			} elseif (!in_array($dbUserForm,$dblist)) {
+				error_log('Database '.$dbUserForm.' was not found, skipping', 0);
+			} else {
 				mysql_select_db($dbUserForm);
-				foreach($u_q_list as $query){
-					if($only_test){
-						error_log("mysql_query($dbUserForm,$query)",0);
-					}else{
+				foreach ($u_q_list as $query) {
+					if ($only_test) {
+						error_log("mysql_query($dbUserForm,$query)", 0);
+					} else {
 						$res = mysql_query($query);
-						if($log)
-						{
-							error_log("In $dbUserForm, executed: $query",0);
+						if ($log) {
+							error_log("In $dbUserForm, executed: $query", 0);
 						}
 					}
 				}
@@ -567,57 +534,49 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 		}
 		//the SCORM database should need a drop in the post-migrate part. However, we will keep these tables a bit more, just in case...
 	}
+
 	//get the courses databases queries list (c_q_list)
-	$c_q_list = get_sql_file_contents('migrate-db-1.6.x-1.8.0-post.sql','course');
-	if(count($c_q_list)>0)
-	{
+	$c_q_list = get_sql_file_contents('migrate-db-1.6.x-1.8.0-post.sql', 'course');
+	if (count($c_q_list) > 0) {
 		//get the courses list
-		if(strlen($dbNameForm)>40){
-			error_log('Database name '.$dbNameForm.' is too long, skipping',0);
-		}elseif(!in_array($dbNameForm,$dblist)){
-				error_log('Database '.$dbNameForm.' was not found, skipping',0);
-		}else{
+		if (strlen($dbNameForm) > 40) {
+			error_log('Database name '.$dbNameForm.' is too long, skipping', 0);
+		} elseif (!in_array($dbNameForm,$dblist)) {
+			error_log('Database '.$dbNameForm.' was not found, skipping', 0);
+		} else {
 			mysql_select_db($dbNameForm);
 			$res = mysql_query("SELECT code,db_name,directory,course_language FROM course WHERE target_course_code IS NULL");
-			if($res===false){die('Error while querying the courses list in update_db-1.6.x-1.8.0.inc.php');}
-			if(mysql_num_rows($res)>0)
-			{
-				$i=0;
+			if ($res === false) { die('Error while querying the courses list in update_db-1.6.x-1.8.0.inc.php'); }
+			if (mysql_num_rows($res) > 0) {
+				$i = 0;
 				//while( ($i < MAX_COURSE_TRANSFER) && ($row = mysql_fetch_array($res)))
-				while($row = mysql_fetch_array($res))
-				{
+				while ($row = mysql_fetch_array($res)) {
 					$list[] = $row;
 					$i++;
 				}
-				foreach($list as $row)
-				{
+				foreach ($list as $row) {
 					//now use the $c_q_list
 					/**
 					 * We connect to the right DB first to make sure we can use the queries
 					 * without a database name
 					 */
 					$prefix_course = $prefix;
-					if($singleDbForm)
-					{
+					if ($singleDbForm) {
 						$prefix_course = $prefix.$row['db_name']."_";
-					}else{
+					} else {
 						mysql_select_db($row['db_name']);
 					}
 
-					foreach($c_q_list as $query)
-					{
-						if ($singleDbForm) //otherwise just use the main one
-						{
+					foreach($c_q_list as $query) {
+						if ($singleDbForm) { //otherwise just use the main one
 							$query = preg_replace('/^(UPDATE|ALTER TABLE|CREATE TABLE|DROP TABLE|INSERT INTO|DELETE FROM)\s+(\w*)(.*)$/',"$1 $prefix$2$3",$query);
 						}
-						if($only_test)
-						{
-							error_log("mysql_query(".$row['db_name'].",$query)",0);
-						}else{
+						if ($only_test) {
+							error_log("mysql_query(".$row['db_name'].",$query)", 0);
+						} else {
 							$res = mysql_query($query);
-							if($log)
-							{
-								error_log("In ".$row['db_name'].", executed: $query",0);
+							if ($log) {
+								error_log("In ".$row['db_name'].", executed: $query", 0);
 							}
 						}
 					}
@@ -629,19 +588,15 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 	// upgrade user categories sort
 	$table_user_categories = $dbUserForm.'.user_course_category';
 
-
 	$sql = 'SELECT * FROM '.$table_user_categories.' ORDER BY user_id, title';
-
 	$rs = Database::query($sql);
 
 	$sort = 0;
 	$old_user = 0;
-	while($cat = Database :: fetch_array($rs))
-	{
-        if($old_user != $cat['user_id'])
-        {
-                $old_user = $cat['user_id'];
-                $sort = 0;
+	while ($cat = Database::fetch_array($rs)) {
+        if ($old_user != $cat['user_id']) {
+            $old_user = $cat['user_id'];
+            $sort = 0;
         }
         $sort++;
         $sql = 'UPDATE '.$table_user_categories.' SET
@@ -650,10 +605,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
         Database::query($sql);
 	}
 
-
-}
-else
-{
+} else {
 	echo 'You are not allowed here !';
 }
-?>
+

@@ -102,8 +102,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 		exit ();
 	}
 
-	// The system has not been designed to use special SQL modes that were introduced since MySQL 5
-	@mysql_query("set session sql_mode='';");
+	@mysql_query("set session sql_mode='';"); // Disabling special SQL modes (MySQL 5)
 
 	/*
 	-----------------------------------------------------------

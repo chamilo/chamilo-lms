@@ -45,15 +45,14 @@ if (mysql_errno() > 0) {
 	exit();
 }
 
-// The system has not been designed to use special SQL modes that were introduced since MySQL 5
-@mysql_query("set session sql_mode='';");
+@mysql_query("set session sql_mode='';"); // Disabling special SQL modes (MySQL 5)
 
 // Initialization of the database encoding to be used.
 mysql_query("SET SESSION character_set_server='utf8';");
 mysql_query("SET SESSION collation_server='utf8_general_ci';");
 mysql_query("SET CHARACTER SET 'utf8';");
 
-if ($urlForm[strlen($urlForm)-1] != '/') {
+if ($urlForm[strlen($urlForm) - 1] != '/') {
 	$urlForm = $urlForm.'/';
 }
 
@@ -92,15 +91,15 @@ $mysqlStatsDb = $dbStatsForm;
 $mysqlUserDb = $dbUserForm;
 
 if (empty($mysqlMainDb) || $mysqlMainDb == 'mysql' || $mysqlMainDb == $dbPrefixForm) {
-	$mysqlMainDb=$dbPrefixForm.'main';
+	$mysqlMainDb = $dbPrefixForm.'main';
 }
 
 if (empty($mysqlStatsDb) || $mysqlStatsDb == 'mysql' || $mysqlStatsDb == $dbPrefixForm) {
-	$mysqlStatsDb=$dbPrefixForm.'stats';
+	$mysqlStatsDb = $dbPrefixForm.'stats';
 }
 
 if (empty($mysqlUserDb) || $mysqlUserDb == 'mysql' || $mysqlUserDb == $dbPrefixForm) {
-	$mysqlUserDb=$dbPrefixForm.'user';
+	$mysqlUserDb = $dbPrefixForm.'user';
 }
 
 $result = mysql_query("SHOW VARIABLES LIKE 'datadir'") or die(mysql_error());

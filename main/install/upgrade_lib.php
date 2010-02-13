@@ -44,8 +44,8 @@
 * - migrate-db-1.6.x-1.8.0-pre.sql
 * @todo remove code duplication in this function
 */
-function upgrade_16x_to_180($values)
-{
+function upgrade_16x_to_180($values) {
+
 	$is_single_database = $values['database_single'];
 	$main_database = $values['database_main_db'];
 	$tracking_database = $values['database_tracking'];
@@ -58,36 +58,30 @@ function upgrade_16x_to_180($values)
 
 	//MAIN database section
 	//Get the list of queries to upgrade the main database
-	$main_query_list = get_sql_file_contents('migrate-db-1.6.x-1.8.0-pre.sql','main');
-	if(count($main_query_list) > 0)
-	{
+	$main_query_list = get_sql_file_contents('migrate-db-1.6.x-1.8.0-pre.sql', 'main');
+	if (count($main_query_list) > 0) {
 		mysql_select_db($main_database);
-		foreach($main_query_list as $this_query)
-		{
+		foreach ($main_query_list as $this_query) {
 			mysql_query($this_query);
 		}
 	}
 
 	//TRACKING database section
 	//Get the list of queries to upgrade the statistics/tracking database
-	$tracking_query_list = get_sql_file_contents('migrate-db-1.6.x-1.8.0-pre.sql','stats');
-	if(count($tracking_query_list) > 0)
-	{
+	$tracking_query_list = get_sql_file_contents('migrate-db-1.6.x-1.8.0-pre.sql', 'stats');
+	if (count($tracking_query_list) > 0) {
 		mysql_select_db($tracking_database);
-		foreach($tracking_query_list as $this_query)
-		{
+		foreach ($tracking_query_list as $this_query) {
 			mysql_query($this_query);
 		}
 	}
 
 	//USER database section
 	//Get the list of queries to upgrade the user database
-	$user_query_list = get_sql_file_contents('migrate-db-1.6.x-1.8.0-pre.sql','user');
-	if(count($user_query_list) > 0)
-	{
+	$user_query_list = get_sql_file_contents('migrate-db-1.6.x-1.8.0-pre.sql', 'user');
+	if (count($user_query_list) > 0) {
 		mysql_select_db($user_database);
-		foreach($user_query_list as $this_query)
-		{
+		foreach ($user_query_list as $this_query) {
 			mysql_query($this_query);
 		}
 	}
@@ -98,14 +92,12 @@ function upgrade_16x_to_180($values)
 	*/
 	$prefix = '';
     global $singleDbForm, $_configuration;
-	if ($singleDbForm)
-	{
+	if ($singleDbForm) {
 		$prefix = $_configuration['table_prefix'];
 	}
 	//get the course databases queries list (c_q_list)
-	$course_query_list = get_sql_file_contents('migrate-db-1.6.x-1.8.0-pre.sql','course');
-	if(count($course_query_list) > 0)
-	{
+	$course_query_list = get_sql_file_contents('migrate-db-1.6.x-1.8.0-pre.sql', 'course');
+	if (count($course_query_list) > 0) {
 		//upgrade course databases
 	}
 
@@ -119,65 +111,52 @@ function upgrade_16x_to_180($values)
 		POST SECTION
 		UPGRADES TO GENERAL DATABASES after course upgrades
 	*/
-	$main_query_list = get_sql_file_contents('migrate-db-1.6.x-1.8.0-post.sql','main');
-	if(count($main_query_list) > 0)
-	{
+	$main_query_list = get_sql_file_contents('migrate-db-1.6.x-1.8.0-post.sql', 'main');
+	if (count($main_query_list) > 0) {
 		mysql_select_db($main_database);
-		foreach($main_query_list as $this_query)
-		{
+		foreach ($main_query_list as $this_query) {
 			mysql_query($this_query);
 		}
 	}
 
-	$tracking_query_list = get_sql_file_contents('migrate-db-1.6.x-1.8.0-post.sql','stats');
-	$tracking_query_list = get_sql_file_contents('migrate-db-1.6.x-1.8.0-pre.sql','stats');
-	if(count($tracking_query_list) > 0)
-	{
+	$tracking_query_list = get_sql_file_contents('migrate-db-1.6.x-1.8.0-post.sql', 'stats');
+	$tracking_query_list = get_sql_file_contents('migrate-db-1.6.x-1.8.0-pre.sql', 'stats');
+	if (count($tracking_query_list) > 0) {
 		mysql_select_db($tracking_database);
-		foreach($tracking_query_list as $this_query)
-		{
+		foreach ($tracking_query_list as $this_query) {
 			mysql_query($this_query);
 		}
 	}
 
-	$user_query_list = get_sql_file_contents('migrate-db-1.6.x-1.8.0-post.sql','user');
-	if(count($user_query_list) > 0)
-	{
+	$user_query_list = get_sql_file_contents('migrate-db-1.6.x-1.8.0-post.sql', 'user');
+	if (count($user_query_list) > 0) {
 		mysql_select_db($user_database);
-		foreach($user_query_list as $this_query)
-		{
+		foreach ($user_query_list as $this_query) {
 			mysql_query($this_query);
 		}
 	}
 
 	$prefix = '';
-	if ($singleDbForm)
-	{
+	if ($singleDbForm) {
 		$prefix = $_configuration['table_prefix'];
 	}
 	//get the course databases queries list (c_q_list)
-	$course_query_list = get_sql_file_contents('migrate-db-1.6.x-1.8.0-pre.sql','course');
-	if(count($course_query_list) > 0)
-	{
+	$course_query_list = get_sql_file_contents('migrate-db-1.6.x-1.8.0-pre.sql', 'course');
+	if (count($course_query_list) > 0) {
 		//upgrade course databases
 		mysql_select_db($main_database);
 		$sql_result = mysql_query("SELECT code,db_name,directory,course_language FROM course WHERE target_course_code IS NULL");
-		if(mysql_num_rows($sql_result) > 0)
-		{
-			while($row = mysql_fetch_array($sql_result))
-			{
+		if (mysql_num_rows($sql_result) > 0) {
+			while ($row = mysql_fetch_array($sql_result)) {
 				$course_list[] = $row;
 			}
 			//for each course in the course list...
-			foreach($course_list as $this_course)
-			{
+			foreach ($course_list as $this_course) {
 				mysql_select_db($this_course['db_name']);
 				//... execute the list of course update queries
-				foreach($course_query_list as $this_query)
-				{
-					if ($is_single_database) //otherwise just use the main one
-					{
-						$query = preg_replace('/^(UPDATE|ALTER TABLE|CREATE TABLE|DROP TABLE|INSERT INTO|DELETE FROM)\s+(\w*)(.*)$/',"$1 $prefix$2$3",$query);
+				foreach ($course_query_list as $this_query) {
+					if ($is_single_database) { //otherwise just use the main one
+						$query = preg_replace('/^(UPDATE|ALTER TABLE|CREATE TABLE|DROP TABLE|INSERT INTO|DELETE FROM)\s+(\w*)(.*)$/', "$1 $prefix$2$3", $query);
 					}
 					mysql_query($this_query);
 				}
@@ -193,14 +172,10 @@ function upgrade_16x_to_180($values)
 * - update-db-1.8.0-1.8.2.inc.php
 * - migrate-db-1.8.0-1.8.2-pre.sql
 */
-function upgrade_180_to_182($values)
-{
+function upgrade_180_to_182($values) {
 
 }
 
-function upgrade_182_to_183($values)
-{
+function upgrade_182_to_183($values) {
 	//no database/file structure changes needed?
 }
-
-?>

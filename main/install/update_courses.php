@@ -1,5 +1,8 @@
 <?php //$id: $
 /* For licensing terms, see /dokeos_license.txt */
+
+// TODO: Ivan, 13-FEB-2010: Is this file really needed?
+
 /**
 ==============================================================================
 * GOAL: Updates courses separately
@@ -30,8 +33,8 @@ require '../lang/english/install.inc.php';
 //load for get_config_param()
 require_once 'install_functions.inc.php';
 
-define('DOKEOS_COURSE_UPDATE',1);
-define('MAX_COURSE_TRANSFER',100);
+define('DOKEOS_COURSE_UPDATE', 1);
+define('MAX_COURSE_TRANSFER', 100);
 
 error_reporting(E_COMPILE_ERROR | E_ERROR | E_CORE_ERROR);
 
@@ -39,7 +42,7 @@ error_reporting(E_COMPILE_ERROR | E_ERROR | E_CORE_ERROR);
 
 $update_path=trim(stripslashes($_GET['update_path']));
 
-$update_from_version=array('1.5','1.5.4','1.5.5');
+$update_from_version = array('1.5', '1.5.4', '1.5.5');
 
 /*
 ==============================================================================
@@ -50,59 +53,51 @@ $update_from_version=array('1.5','1.5.4','1.5.5');
 ==============================================================================
 */
 
-$updateFromConfigFile=''; // leave empty
-$badUpdatePath=false;
+$updateFromConfigFile = ''; // leave empty
+$badUpdatePath = false;
 
-if($_POST['step2'])
-{
-	if(empty($_POST['updatePath']))
-	{
-		$_POST['step1']=1;
-	}
-	else
-	{
-		if($_POST['updatePath'][strlen($_POST['updatePath'])-1] != '/')
-		{
-			$_POST['updatePath'].='/';
+if ($_POST['step2']) {
+
+	if (empty($_POST['updatePath'])) {
+
+		$_POST['step1'] = 1;
+
+	} else {
+
+		if ($_POST['updatePath'][strlen($_POST['updatePath'])-1] != '/') {
+			$_POST['updatePath'] .= '/';
 		}
 
-		if(!file_exists($_POST['updatePath']))
-		{
-			$badUpdatePath=true;
-
-			$_POST['step2']=0;
-		}
-		elseif(!in_array(get_config_param('clarolineVersion'),$update_from_version))
-		{
-			$badUpdatePath=true;
-
-			$_POST['step2']=0;
-		}
-		else
-		{
-			$urlAppendPath=str_replace('/main/install/update_courses.php','',api_get_self());
-		  	$urlForm='http://'.$_SERVER['HTTP_HOST'].$urlAppendPath.'/';
-
-			$singleDbForm=get_config_param('singleDbEnabled');
-			$dbNameForm=get_config_param('mainDbName');
-			$dbHostForm=get_config_param('dbHost');
-			$dbUsernameForm=get_config_param('dbLogin');
-			$dbPassForm=get_config_param('dbPass');
+		if (!file_exists($_POST['updatePath'])) {
+			$badUpdatePath = true;
+			$_POST['step2'] = 0;
+		} elseif (!in_array(get_config_param('clarolineVersion'), $update_from_version)) {
+			$badUpdatePath = true;
+			$_POST['step2'] = 0;
+		} else {
+			$urlAppendPath = str_replace('/main/install/update_courses.php', '', api_get_self());
+		  	$urlForm = 'http://'.$_SERVER['HTTP_HOST'].$urlAppendPath.'/'; // What about https? See api_get_path().
+			$singleDbForm = get_config_param('singleDbEnabled');
+			$dbNameForm = get_config_param('mainDbName');
+			$dbHostForm = get_config_param('dbHost');
+			$dbUsernameForm = get_config_param('dbLogin');
+			$dbPassForm = get_config_param('dbPass');
 		}
 	}
-}
-elseif($_POST['step1'])
-{
-	$_POST['updatePath']='';
+
+} elseif ($_POST['step1']) {
+
+	$_POST['updatePath'] = '';
 }
 ?>
 
 <html>
 <head>
+<?php /* There is no metadata about current language and encoding. */ ?>
 <title>-- Dokeos course update -- version <?php echo $dokeos_version; ?></title>
 <link rel="stylesheet" href="../css/chamilo/default.css" type="text/css">
 </head>
-<body bgcolor="white" dir="<?php echo $text_dir ?>">
+<body bgcolor="white" dir="<?php echo $text_dir; ?>">
 
 <form method="post" action="<?php echo api_get_self(); ?>">
 <table cellpadding="6" cellspacing="0" border="0" width="650" bgcolor="#E6E6E6" align="center">
@@ -129,8 +124,8 @@ elseif($_POST['step1'])
 ==============================================================================
 */
 
-if($_POST['step2'])
-{
+if ($_POST['step2']) {
+
 	include('update_db.inc.php');
 	include('update_files.inc.php');
 ?>
@@ -162,8 +157,7 @@ if($_POST['step2'])
 ==============================================================================
 */
 
-else
-{
+else {
 	?>
 		<h2>Step 1 of 2 &ndash; Configuration</h2>
 
@@ -172,8 +166,7 @@ else
 		<strong>Notice:</strong> Please run this update script only if you've just updated (incompletely) Dokeos <?php echo implode('&nbsp;|&nbsp;',$update_from_version); ?> to Dokeos <?php echo $dokeos_version; ?>!
 		<br /><br />
 	<?php
-	if($badUpdatePath)
-	{
+	if ($badUpdatePath) {
 		?>
 			<br /><br />
 			<div style="background-color:white; color:red; text-align:center; font-weight:bold;">
@@ -181,9 +174,7 @@ else
 			Dokeos <?php echo implode('|',$update_from_version); ?> has not been found in that directory.
 			</div>
 		<?php
-	}
-	else
-	{
+	} else {
 		echo '<br />';
 	}
 	?>

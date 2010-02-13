@@ -1,4 +1,7 @@
 <?php
+
+// TODO: Ivan, 13-FEB-2010: Is this file really needed?
+
 /*
 ==============================================================================
 	Dokeos - elearning and course management software
@@ -76,60 +79,48 @@ function fill_document_table($dir)
 
 	$documentPath = $newPath.'courses/'.$course.'/document';
 
-	if (!@ $opendir = opendir($dir))
-	{
+	if (!@ $opendir = opendir($dir)) {
 		return false;
 	}
 
-	while ($readdir = readdir($opendir))
-	{
-		if ($readdir != '..' && $readdir != '.' && $readdir != '.htaccess')
-		{
+	while ($readdir = readdir($opendir))  {
+
+		if ($readdir != '..' && $readdir != '.' && $readdir != '.htaccess') {
+
 			$path = str_replace($documentPath, '', $dir.'/'.$readdir);
 			$file_date = date("Y-m-d H:i:s", filemtime($dir.'/'.$readdir));
 
-			if (is_file($dir.'/'.$readdir))
-			{
+			if (is_file($dir.'/'.$readdir)) {
+
 				$file_size = filesize($dir.'/'.$readdir);
 
 				$result = mysql_query("SELECT id,visibility FROM `$mysql_base_course".$_configuration['db_glue']."document` WHERE path='".addslashes($path)."' LIMIT 0,1");
 
-				if (list ($id, $visibility) = mysql_fetch_row($result))
-				{
+				if (list ($id, $visibility) = mysql_fetch_row($result)) {
 					mysql_query("UPDATE `$mysql_base_course".$_configuration['db_glue']."document` SET filetype='file',title='".addslashes($readdir)."',size='$file_size' WHERE id='$id' AND path='".addslashes($path)."'");
-				}
-				else
-				{
+				} else {
 					mysql_query("INSERT INTO `$mysql_base_course".$_configuration['db_glue']."document`(path,filetype,title,size) VALUES('".addslashes($path)."','file','".addslashes($readdir)."','$file_size')");
-
 					$id = mysql_insert_id();
 				}
 
 				$visibility = ($visibility == 'v') ? 1 : 0;
-
 				mysql_query("INSERT INTO `$mysql_base_course".$_configuration['db_glue']."item_property`(tool,ref,visibility,lastedit_type,to_group_id,insert_date,lastedit_date) VALUES('document','$id','$visibility','DocumentAdded','0','".$file_date."','".$file_date."')");
-			}
-			elseif (is_dir($dir.'/'.$readdir))
-			{
+
+			} elseif (is_dir($dir.'/'.$readdir)) {
+
 				$result = mysql_query("SELECT id,visibility FROM `$mysql_base_course".$_configuration['db_glue']."document` WHERE path='".addslashes($path)."' LIMIT 0,1");
 
-				if (list ($id, $visibility) = mysql_fetch_row($result))
-				{
+				if (list ($id, $visibility) = mysql_fetch_row($result)) {
 					mysql_query("UPDATE `$mysql_base_course".$_configuration['db_glue']."document` SET filetype='folder',title='".addslashes($readdir)."' WHERE id='$id' AND path='".addslashes($path)."'");
-				}
-				else
-				{
+				} else {
 					mysql_query("INSERT INTO `$mysql_base_course".$_configuration['db_glue']."document`(path,filetype,title) VALUES('".addslashes($path)."','folder','".addslashes($readdir)."')");
-
 					$id = mysql_insert_id();
 				}
 
 				$visibility = ($visibility == 'v') ? 1 : 0;
-
 				mysql_query("INSERT INTO `$mysql_base_course".$_configuration['db_glue']."item_property`(tool,ref,visibility, lastedit_type, to_group_id,insert_date,lastedit_date) VALUES('document','$id','$visibility','FolderCreated','0','".$file_date."','".$file_date."')");
 
-				if (!fill_document_table($dir.'/'.$readdir))
-				{
+				if (!fill_document_table($dir.'/'.$readdir)) {
 					return false;
 				}
 			}
@@ -147,33 +138,26 @@ function fill_document_table($dir)
 ==============================================================================
 */
 
-if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
-{
+if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE')) {
+
 	$newPath = str_replace('\\', '/', realpath('../..')).'/';
 	$oldPath = $_POST['updatePath'];
 
 	$perm = api_get_setting('permissions_for_new_directories');
-	$perm = octdec(!empty($perm)?$perm:'0770');
+	$perm = octdec(!empty($perm) ? $perm : '0770');
 
-	foreach ($coursePath as $key => $course)
-	{
+	foreach ($coursePath as $key => $course) {
 		$mysql_base_course = $courseDB[$key];
-
 		@ unlink($oldPath.$course.'/document/.htaccess');
-
 		@ unlink($oldPath.$course.'/group/index.php');
 
-		if ($fp = @ fopen($oldPath.$course.'/group/index.php', 'w'))
-		{
+		if ($fp = @ fopen($oldPath.$course.'/group/index.php', 'w')) {
 			fputs($fp, '<html></html>');
-
 			fclose($fp);
 		}
-
 		@ unlink($oldPath.$course.'/index.php');
 
-		if ($fp = @ fopen($oldPath.$course.'/index.php', 'w'))
-		{
+		if ($fp = @ fopen($oldPath.$course.'/index.php', 'w')) {
 			fputs($fp, '<?php
 															$cidReq = "'.$key.'";
 															$dbname = "'.str_replace($dbPrefixForm, '', $mysql_base_course).'";
@@ -186,25 +170,19 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 
 		@ mkdir($oldPath.$course.'/temp', $perm);
 		@ chmod($oldPath.$course.'/temp', $perm);
-
 		@ rename($oldPath.$course, $newPath.'courses/'.$course);
 
 		// Move group documents to document folder of the course
 		$group_dir = $newPath.'courses/'.$course.'/group';
 
-		if ($dir = @ opendir($group_dir))
-		{
-			while (($entry = readdir($dir)) !== false)
-			{
-				if ($entry != '.' && $entry != '..' && is_dir($group_dir.'/'.$entry))
-				{
+		if ($dir = @ opendir($group_dir)) {
+			while (($entry = readdir($dir)) !== false) {
+				if ($entry != '.' && $entry != '..' && is_dir($group_dir.'/'.$entry)) {
 					$from_dir = $group_dir.'/'.$entry;
 					$to_dir = $newPath.'courses/'.$course.'/document/'.$entry;
-
 					@ rename($from_dir, $to_dir);
 				}
 			}
-
 			closedir($dir);
 		}
 
@@ -216,25 +194,28 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 		$sql = "SELECT d.id AS doc_id, g.id AS group_id FROM `$mysql_base_course".$_configuration['db_glue']."group_info` g,`$mysql_base_course".$_configuration['db_glue']."document` d WHERE path LIKE CONCAT(g.secret_directory,'%')";
 		$res = mysql_query($sql);
 
-		while ($group_doc = mysql_fetch_object($res))
-		{
+		while ($group_doc = mysql_fetch_object($res)) {
 			$sql = "UPDATE `$mysql_base_course".$_configuration['db_glue']."item_property` SET to_group_id = '".$group_doc->group_id."', visibility = '1' WHERE ref = '".$group_doc->doc_id."' AND tool = '".TOOL_DOCUMENT."'";
 			mysql_query($sql);
 		}
 	}
 
-	if (defined('DOKEOS_INSTALL'))
-	{
+	if (defined('DOKEOS_INSTALL')) {
+
 		// Write the Dokeos config file
 		write_dokeos_config_file($newPath.'main/inc/conf/configuration.php');
+
 		// Write a distribution file with the config as a backup for the admin
 		write_dokeos_config_file($newPath.'main/inc/conf/configuration.dist.php');
+
 		// Write a .htaccess file in the course repository
 		write_courses_htaccess_file($urlAppendPath);
 
 		require_once ('../inc/lib/fileManage.lib.php');
+
 		// First remove the upload/users directory in the new installation
 		removeDir($newPath.'main/upload/users');
+
 		// Move the old user images to the new installation
 		@ rename($oldPath.'main/img/users', $newPath.'main/upload/users');
 
@@ -243,9 +224,6 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 			unlink($oldPath.'main/inc/conf/configuration.php');
 		}
 	}
-}
-else
-{
+} else {
 	echo 'You are not allowed here !';
 }
-?>

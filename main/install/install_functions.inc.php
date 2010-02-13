@@ -38,7 +38,7 @@ function check_extension($extension_name, $return_success = 'Yes', $return_failu
 	if (extension_loaded($extension_name)) {
 		return '<strong><font color="green">'.$return_success.'</font></strong>';
 	} else {
-		if ($optional === true) {
+		if ($optional) {
 			return '<strong><font color="#ff9900">'.$return_failure.'</font></strong>';
 		} else {
 			return '<strong><font color="red">'.$return_failure.'</font></strong>';
@@ -76,14 +76,14 @@ function get_php_setting($val) {
 /**
  * This function checks if the given folder is writable
  */
-function check_writable($folder,$suggestion=false) {
+function check_writable($folder, $suggestion = false) {
 	if (is_writable('../'.$folder)) {
 		return '<strong><font color="green">'.get_lang('Writable').'</font></strong>';
 	} else {
-		if ($suggestion == true) {
-		  return '<strong><font color="#ff9900">'.get_lang('NotWritable').'</font></strong>';
+		if ($suggestion) {
+			return '<strong><font color="#ff9900">'.get_lang('NotWritable').'</font></strong>';
 		} else {
-          return '<strong><font color="red">'.get_lang('NotWritable').'</font></strong>';
+			return '<strong><font color="red">'.get_lang('NotWritable').'</font></strong>';
 		}
 	}
 }
@@ -109,8 +109,7 @@ function file_to_array($filename) {
 	$fp = fopen($filename, 'rb');
 	$buffer = fread($fp, filesize($filename));
 	fclose($fp);
-	$result = explode('<br />', nl2br($buffer));
-	return $result;
+	return explode('<br />', nl2br($buffer));
 }
 
 /**
@@ -124,120 +123,98 @@ function file_to_array($filename) {
  * @return  string  the value of the parameter
  * @author Olivier Brouckaert
  */
-function get_config_param($param,$updatePath='')
-{
+function get_config_param($param, $updatePath = '') {
 	global $configFile, $updateFromConfigFile;
+
 	//look if we already have the queried param
-	if(is_array($configFile) && isset($configFile[$param]))
-	{
+	if (is_array($configFile) && isset($configFile[$param])) {
 		return $configFile[$param];
 	}
-	if(empty($updatePath) && !empty($_POST['updatePath']))
-	{
+	if (empty($updatePath) && !empty($_POST['updatePath'])) {
 		$updatePath = $_POST['updatePath'];
 	}
 	$updatePath = realpath($updatePath).'/';
 	$updateFromInstalledVersionFile = '';
 
-	if(empty($updateFromConfigFile)) //if update from previous install was requested
-	{
+	if (empty($updateFromConfigFile)) { //if update from previous install was requested
 		//try to recover old config file from dokeos 1.8.x
-		if(file_exists($updatePath.'main/inc/conf/configuration.php'))
-		{
+		if (file_exists($updatePath.'main/inc/conf/configuration.php')) {
 			$updateFromConfigFile='main/inc/conf/configuration.php';
-		}
-		elseif(file_exists($updatePath.'claroline/inc/conf/claro_main.conf.php'))
-		{
+		} elseif (file_exists($updatePath.'claroline/inc/conf/claro_main.conf.php')) {
 			$updateFromConfigFile='claroline/inc/conf/claro_main.conf.php';
-		}
-		//give up recovering
-		else
-		{
+		} else { //give up recovering
 			error_log('Could not find config file in '.$updatePath.' in get_config_param()',0);
 			return null;
 		}
 	}
-	if(file_exists($updatePath.'main/inc/installedVersion.inc.php'))
-	{
+
+	if (file_exists($updatePath.'main/inc/installedVersion.inc.php')) {
+
 		$updateFromInstalledVersionFile = $updatePath.'main/inc/installedVersion.inc.php';
-	}
-	//the param was not found in global vars, so look into the old config file
-	elseif(file_exists($updatePath.$updateFromConfigFile))
-	{
+
+	} elseif (file_exists($updatePath.$updateFromConfigFile)) { //the param was not found in global vars, so look into the old config file
+
 		//make sure the installedVersion file is read first so it is overwritten
 		//by the config file if the config file contains the version (from 1.8.4)
 		$temp2 = array();
-		if(file_exists($updatePath.$updateFromInstalledVersionFile))
-		{
+		if (file_exists($updatePath.$updateFromInstalledVersionFile)) {
 			$temp2 = file_to_array($updatePath.$updateFromInstalledVersionFile);
 		}
-		$configFile=array();
-		$temp=file_to_array($updatePath.$updateFromConfigFile);
-		$temp = array_merge($temp,$temp2);
-		$val='';
+		$configFile = array();
+		$temp = file_to_array($updatePath.$updateFromConfigFile);
+		$temp = array_merge($temp, $temp2);
+		$val = '';
 
 		//parse the config file (TODO clarify why it has to be so complicated)
-		foreach($temp as $enreg)
-		{
-			if(strstr($enreg,'='))
-			{
-				$enreg=explode('=',$enreg);
+		foreach ($temp as $enreg) {
+			if (strstr($enreg, '=')) {
+				$enreg = explode('=', $enreg);
 				$enreg[0] = trim($enreg[0]);
-				if($enreg[0][0] == '$')
-				{
-					list($enreg[1])=explode(' //',$enreg[1]);
+				if ($enreg[0][0] == '$') {
+					list($enreg[1]) = explode(' //', $enreg[1]);
 
-					$enreg[0]=trim(str_replace('$','',$enreg[0]));
-					$enreg[1]=str_replace('\"','"',ereg_replace('(^"|"$)','',substr(trim($enreg[1]),0,-1)));
-					$enreg[1]=str_replace('\'','"',ereg_replace('(^\'|\'$)','',$enreg[1]));
-					if(strtolower($enreg[1]) == 'true')
-					{
-						$enreg[1]=1;
+					$enreg[0] = trim(str_replace('$', '', $enreg[0]));
+					$enreg[1] = str_replace('\"', '"', ereg_replace('(^"|"$)', '', substr(trim($enreg[1]), 0, -1)));
+					$enreg[1] = str_replace('\'', '"', ereg_replace('(^\'|\'$)', '', $enreg[1]));
+					if (strtolower($enreg[1]) == 'true') {
+						$enreg[1] = 1;
 					}
-					if(strtolower($enreg[1]) == 'false')
-					{
-						$enreg[1]=0;
-					}
-					else
-					{
+					if (strtolower($enreg[1]) == 'false') {
+						$enreg[1] = 0;
+					} else {
 						$implode_string=' ';
 
-						if(!strstr($enreg[1],'." ".') && strstr($enreg[1],'.$'))
-						{
-							$enreg[1]=str_replace('.$','." ".$',$enreg[1]);
-							$implode_string='';
+						if (!strstr($enreg[1], '." ".') && strstr($enreg[1], '.$')) {
+							$enreg[1] = str_replace('.$', '." ".$', $enreg[1]);
+							$implode_string = '';
 						}
 
-						$tmp=explode('." ".',$enreg[1]);
+						$tmp = explode('." ".', $enreg[1]);
 
-						foreach($tmp as $tmp_key=>$tmp_val)
-						{
-							if(eregi('^\$[a-z_][a-z0-9_]*$',$tmp_val))
-							{
-								$tmp[$tmp_key]=get_config_param(str_replace('$','',$tmp_val));
+						foreach ($tmp as $tmp_key => $tmp_val) {
+							if (eregi('^\$[a-z_][a-z0-9_]*$', $tmp_val)) {
+								$tmp[$tmp_key] = get_config_param(str_replace('$', '', $tmp_val));
 							}
 						}
 
-						$enreg[1]=implode($implode_string,$tmp);
+						$enreg[1] = implode($implode_string, $tmp);
 					}
 
-					$configFile[$enreg[0]]=$enreg[1];
+					$configFile[$enreg[0]] = $enreg[1];
 
-					$a=explode("'",$enreg[0]);
-					$key_tmp=$a[1];
-					if($key_tmp== $param)
-					{
-						$val=$enreg[1];
+					$a = explode("'", $enreg[0]);
+					$key_tmp = $a[1];
+					if ($key_tmp == $param) {
+						$val = $enreg[1];
 					}
 				}
 			}
 		}
 
 		return $val;
-	}
-	else
-	{
-		error_log('Config array could not be found in get_config_param()',0);
+
+	} else {
+		error_log('Config array could not be found in get_config_param()', 0);
 		return null;
 	}
 }
@@ -252,12 +229,12 @@ function get_config_param($param,$updatePath='')
  * @return	mixed	The parameter value or null if not found
  */
 function get_config_param_from_db($host, $login, $pass, $db_name, $param = '') {
-	$mydb = mysql_connect($host, $login, $pass);
 
-	// The system has not been designed to use special SQL modes that were introduced since MySQL 5
-	@mysql_query("set session sql_mode='';");
+	$mydb = mysql_connect($host, $login, $pass);
+	@mysql_query("set session sql_mode='';"); // Disabling special SQL modes (MySQL 5)
 
 	$myconnect = mysql_select_db($db_name);
+
 	$sql = "SELECT * FROM settings_current WHERE variable = '$param'";
 	$res = mysql_query($sql);
 	if ($res === false) {
@@ -273,12 +250,14 @@ function get_config_param_from_db($host, $login, $pass, $db_name, $param = '') {
 }
 
 /**
+ * TODO: The main API is accessible here. Then we could use a function for this purpose from there?
+ *
  *	Return a list of language directories.
  *	@todo function does not belong here, move to code library,
  *	also see infocours.php which contains similar function
  */
 function get_language_folder_list($dirname) {
-	if ($dirname[strlen($dirname)-1] != '/') {
+	if ($dirname[strlen($dirname) - 1] != '/') {
 		$dirname .= '/';
 	}
 	$handle = opendir($dirname);
@@ -309,13 +288,13 @@ function get_language_folder_list($dirname) {
  */
 function display_language_selection_box() {
 	//get language list
-	$dirname = '../lang/';
+	$dirname = '../lang/'; // TODO: Check api_get_path() and use it.
 	$language_list = get_language_folder_list($dirname);
 	sort($language_list);
 	//Reduce the number of languages shown to only show those with higher than 90% translation in DLTT
 	//This option can be easily removed later on. The aim is to test people response to less choice
 	//$language_to_display = $language_list;
-	$language_to_display = array('asturian','bulgarian','english','italian','french','slovenian','slovenian_unicode','spanish');
+	$language_to_display = array('asturian', 'bulgarian', 'english', 'italian', 'french', 'slovenian', 'slovenian_unicode', 'spanish');
 
 	//display
 	echo "\t\t<select name=\"language_list\">\n";
@@ -657,7 +636,7 @@ function display_requirements($installType, $badUpdatePath, $updatePath = '', $u
 		?>
 		<p align="center">
 		<button type="submit" name="step1" class="back" onclick="window.location='index.php';return false;" value="&lt; <?php echo get_lang('Previous'); ?>" ><?php echo get_lang('Previous'); ?></button>
-		<button type="submit" name="step2_install" class="add" value="<?php echo get_lang("NewInstallation"); ?>" <?php if($error) if($error)echo 'disabled="disabled"'; ?> ><?php echo get_lang('NewInstallation'); ?></button>
+		<button type="submit" name="step2_install" class="add" value="<?php echo get_lang("NewInstallation"); ?>" <?php if ($error) echo 'disabled="disabled"'; ?> ><?php echo get_lang('NewInstallation'); ?></button>
 		<input type="hidden" name="is_executable" id="is_executable" value="-" />
 		<?php
 		//real code
@@ -724,24 +703,19 @@ function display_license_agreement() {
 function display_database_parameter($install_type, $parameter_name, $form_field_name, $parameter_value, $extra_notice, $display_when_update = true, $tr_attribute = '') {
 	echo "<tr ".$tr_attribute.">\n";
 	echo "<td>$parameter_name&nbsp;&nbsp;</td>\n";
+
 	if ($install_type == INSTALL_TYPE_UPDATE && $display_when_update) {
-		echo '<td><input type="hidden" name="'.$form_field_name.'" id="'.$form_field_name.'" value="'.htmlentities($parameter_value).'" />'.$parameter_value."</td>\n";
+
+		echo '<td><input type="hidden" name="'.$form_field_name.'" id="'.$form_field_name.'" value="'.api_htmlentities($parameter_value).'" />'.$parameter_value."</td>\n";
+
 	} else {
-		if ($form_field_name == 'dbPassForm') {
-			$inputtype = 'password';
-		} else {
-			$inputtype = 'text';
-		}
 
-		//Slightly limit the length of the database prefix to avoid
-		//having to cut down the databases names later on
-		if ($form_field_name == 'dbPrefixForm') {
-			$maxlength = '15';
-		} else {
-			$maxlength = MAX_FORM_FIELD_LENGTH;
-		}
+		$inputtype = $form_field_name == 'dbPassForm' ? 'password' : 'text';
 
-		echo '<td><input type="'.$inputtype.'" size="'.DATABASE_FORM_FIELD_DISPLAY_LENGTH.'" maxlength="'.$maxlength.'" name="'.$form_field_name.'" id="'.$form_field_name.'" value="'.htmlentities($parameter_value).'" />'."</td>\n";
+		//Slightly limit the length of the database prefix to avoid having to cut down the databases names later on
+		$maxlength = $form_field_name == 'dbPrefixForm' ? '15' : MAX_FORM_FIELD_LENGTH;
+
+		echo '<td><input type="'.$inputtype.'" size="'.DATABASE_FORM_FIELD_DISPLAY_LENGTH.'" maxlength="'.$maxlength.'" name="'.$form_field_name.'" id="'.$form_field_name.'" value="'.api_htmlentities($parameter_value).'" />'."</td>\n";
 		echo "<td>$extra_notice</td>\n";
 	}
 	echo "</tr>\n";
@@ -753,9 +727,11 @@ function display_database_parameter($install_type, $parameter_name, $form_field_
  * or multiple databases, tracking or not...
  */
 function display_database_settings_form($installType, $dbHostForm, $dbUsernameForm, $dbPassForm, $dbPrefixForm, $enableTrackingForm, $singleDbForm, $dbNameForm, $dbStatsForm, $dbScormForm, $dbUserForm) {
+
 	if ($installType == 'update') {
 		global $_configuration, $update_from_version_6;
-		if (in_array($_POST['old_version'],$update_from_version_6)) {
+
+		if (in_array($_POST['old_version'], $update_from_version_6)) {
 	        $dbHostForm		= get_config_param('dbHost');
             $dbUsernameForm	= get_config_param('dbLogin');
             $dbPassForm		= get_config_param('dbPass');
@@ -790,15 +766,13 @@ function display_database_settings_form($installType, $dbHostForm, $dbUsernameFo
 			}
 		}
 		if (empty($dbUserForm)) {
-			if ($singleDbForm) {
-				$dbUserForm = $dbNameForm;
-			} else {
-				$dbUserForm = $dbPrefixForm.'chamilo_user';
-			}
+			$dbUserForm = $singleDbForm ? $dbNameForm : $dbPrefixForm.'chamilo_user';
 		}
 		echo '<h2>' . display_step_sequence() .get_lang('DBSetting') . '</h2>';
 		echo get_lang('DBSettingUpgradeIntro');
+
 	} else {
+
 		if (empty($dbPrefixForm)) { //make sure there is a default value for db prefix
 			$dbPrefixForm = 'chamilo_';
 		}
@@ -826,22 +800,27 @@ function display_database_settings_form($installType, $dbHostForm, $dbUsernameFo
 
 	</tr>
 	<?php
+
 	//database user username
 	$example_login = get_lang('EG').' root';
 	display_database_parameter($installType, get_lang('DBLogin'), 'dbUsernameForm', $dbUsernameForm, $example_login);
+
 	//database user password
 	$example_password = get_lang('EG').' '.api_generate_password();
 	display_database_parameter($installType, get_lang('DBPassword'), 'dbPassForm', $dbPassForm, $example_password);
+
 	//database prefix
 	display_database_parameter($installType, get_lang('DbPrefixForm'), 'dbPrefixForm', $dbPrefixForm, get_lang('DbPrefixCom'));
+
 	//fields for the four standard Chamilo databases
 	echo '<tr><td colspan="3"><a href="" onclick="javascript: show_hide_option();return false;" id="optionalparameters"><img style="vertical-align:middle;" src="../img/div_show.gif" alt="show-hide" /> '.get_lang('OptionalParameters', '').'</a></td></tr>';
 	display_database_parameter($installType, get_lang('MainDB'), 'dbNameForm', $dbNameForm, '&nbsp;', null, 'id="optional_param1" style="display:none;"');
 	display_database_parameter($installType, get_lang('StatDB'), 'dbStatsForm', $dbStatsForm, '&nbsp;', null, 'id="optional_param2" style="display:none;"');
-	if ($installType == 'update' && in_array($_POST['old_version'],$update_from_version_6)) {
+	if ($installType == 'update' && in_array($_POST['old_version'], $update_from_version_6)) {
 		display_database_parameter($installType, get_lang('ScormDB'), 'dbScormForm', $dbScormForm, '&nbsp;', null, 'id="optional_param3" style="display:none;"');
 	}
 	display_database_parameter($installType, get_lang('UserDB'), 'dbUserForm', $dbUserForm, '&nbsp;', null, 'id="optional_param4" style="display:none;"');
+
 	?>
 	<tr id="optional_param5" style="display:none;">
 	  <td><?php echo get_lang('EnableTracking'); ?> </td>
@@ -860,7 +839,7 @@ function display_database_settings_form($installType, $dbHostForm, $dbUsernameFo
 	<tr id="optional_param6" style="display:none;">
 	  <td><?php echo get_lang('SingleDb'); ?> </td>
 
-	  <?php if($installType == 'update'): ?>
+	  <?php if ($installType == 'update'): ?>
 	  <td><input type="hidden" name="singleDbForm" value="<?php echo $singleDbForm; ?>" /><?php echo $singleDbForm ? get_lang('One') : get_lang('Several'); ?></td>
 	  <?php else: ?>
 	  <td>
@@ -947,14 +926,16 @@ function display_configuration_settings_form($installType, $urlForm, $languageFo
 	//First parameter: language
 	echo "<tr>\n";
 	echo '<td>'.get_lang('MainLang')."&nbsp;&nbsp;</td>\n";
+
 	if ($installType == 'update') {
+
 		echo '<td><input type="hidden" name="languageForm" value="'.api_htmlentities($languageForm, ENT_QUOTES).'" />'.$languageForm."</td>\n";
 
 	} else { // new installation
 
 		echo '<td>';
 
-		$array_lang = array('asturian','english','italian','french','slovenian','spanish');
+		$array_lang = array('asturian', 'bulgarian', 'english', 'italian', 'french', 'slovenian', 'spanish');
 
 		////Only display Language have 90% + // TODO: Ivan: Is this policy actual? I am going to change it.
 		echo "\t\t<select name=\"languageForm\">\n";
@@ -1076,7 +1057,7 @@ function display_configuration_settings_form($installType, $urlForm, $languageFo
 	  <td><?php echo get_lang('AllowSelfReg'); ?> :</td>
 
 	  <?php if ($installType == 'update'): ?>
-	  <td><input type="hidden" name="allowSelfReg" value="<?php echo $allowSelfReg; ?>" /><?php echo $allowSelfReg? get_lang('Yes') : get_lang('No'); ?></td>
+	  <td><input type="hidden" name="allowSelfReg" value="<?php echo $allowSelfReg; ?>" /><?php echo $allowSelfReg ? get_lang('Yes') : get_lang('No'); ?></td>
 	  <?php else: ?>
 	  <td>
 		<input class="checkbox" type="radio" name="allowSelfReg" value="1" id="allowSelfReg1" <?php echo $allowSelfReg ? 'checked="checked" ' : ''; ?>/> <label for="allowSelfReg1"><?php echo get_lang('Yes').' '.get_lang('Recommended'); ?></label>
@@ -1151,15 +1132,11 @@ function test_db_connect($dbHostForm, $dbUsernameForm, $dbPassForm, $singleDbFor
 		}
 	} elseif ($singleDbForm == 0) {
 		$res = @mysql_connect($dbHostForm, $dbUsernameForm, $dbPassForm);
-		if ($res === false) {
-			return $res;
-		}
 		if ($res !== false) {
-			// The system has not been designed to use special SQL modes that were introduced since MySQL 5
-			@mysql_query("set session sql_mode='';");
-			$multipleDbCheck = @mysql_query("CREATE DATABASE ".$dbPrefixForm."test_dokeos_connection");
+			@mysql_query("set session sql_mode='';"); // Disabling special SQL modes (MySQL 5)
+			$multipleDbCheck = @mysql_query("CREATE DATABASE ".$dbPrefixForm."test_chamilo_connection");
 			if ($multipleDbCheck !== false) {
-				$multipleDbCheck = @mysql_query("DROP DATABASE IF EXISTS ".$dbPrefixForm."test_dokeos_connection");
+				$multipleDbCheck = @mysql_query("DROP DATABASE IF EXISTS ".$dbPrefixForm."test_chamilo_connection");
 				if ($multipleDbCheck !== false) {
 					$dbConnect = 1;
 				} else {

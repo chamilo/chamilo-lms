@@ -33,8 +33,7 @@ require_once api_get_path(LIBRARY_PATH).'database.lib.php';
 */
 
 /**
- * We assume this function is called from install scripts that reside inside
- * the install folder.
+ * We assume this function is called from install scripts that reside inside the install folder.
  */
 function set_file_folder_permissions() {
 	@chmod('.', 0755); //set permissions on install dir
@@ -72,6 +71,7 @@ function write_courses_htaccess_file($url_append) {
  * @param string $path Path to the config file
  */
 function write_dokeos_config_file($path) {
+
 	global $dbHostForm;
 	global $dbUsernameForm;
 	global $dbPassForm;
@@ -92,11 +92,13 @@ function write_dokeos_config_file($path) {
 	global $session_lifetime;
 	global $new_version;
 	global $new_version_stable;
+
+	// TODO: api_get_path() to be tested here.
     $seek = array('\\', '//');
     $destroy = array('/', '/');
 	$rootSys = str_replace($seek, $destroy, realpath($pathForm).'/');
-
 	$file_path = dirname(__FILE__).'/'.DOKEOS_CONFIG_FILENAME;
+
 	$content = file_get_contents($file_path);
 	$config['{DATE_GENERATED}'] = date('r');
 	$config['{DATABASE_HOST}'] = $dbHostForm;
@@ -112,7 +114,7 @@ function write_dokeos_config_file($path) {
 	$config['{DATABASE_SCORM}'] = (($singleDbForm && empty($dbScormForm)) ? $dbNameForm : $dbScormForm);
 	$config['{DATABASE_PERSONAL}'] =(($singleDbForm && empty($dbUserForm)) ?  $dbNameForm : $dbUserForm);
 	$config['{ROOT_WEB}'] = $urlForm;
-	$config['{ROOT_SYS}'] = str_replace('\\', '/', $rootSys);
+	$config['{ROOT_SYS}'] = $rootSys;
 	$config['{URL_APPEND_PATH}'] = $urlAppendPath;
 	$config['{PLATFORM_LANGUAGE}'] = $languageForm;
 	$config['{SECURITY_KEY}'] = md5(uniqid(rand().time()));
@@ -121,6 +123,7 @@ function write_dokeos_config_file($path) {
 	$config['SESSION_LIFETIME'] = $session_lifetime;
 	$config['{NEW_VERSION}'] = $new_version;
 	$config['NEW_VERSION_STABLE'] = trueFalse($new_version_stable);
+
 	foreach ($config as $key => $value) {
 		$content = str_replace($key, $value, $content);
 	}
@@ -141,9 +144,9 @@ function write_dokeos_config_file($path) {
 						Please go back to step 5.
 					    <p><input type="submit" name="step5" value="&lt; Back" /></p>
 					    </td></tr></table></form></body></html>';
-
 		exit ();
 	}
+
 	fwrite($fp, $content);
 	fclose($fp);
 }
@@ -344,22 +347,23 @@ function get_sql_file_contents($file, $section, $print_errors = true) {
 	}
 	if (!in_array($section, array('main', 'user', 'stats', 'scorm', 'course'))) {
 		$error = "Section '$section' is not authorized in get_sql_file_contents()";
-		if($print_errors) echo $error;
+		if ($print_errors) echo $error;
 		return false;
 	}
 	$filepath = getcwd().'/'.$file;
 	if (!is_file($filepath) or !is_readable($filepath)) {
 		$error = "File $filepath not found or not readable in get_sql_file_contents()";
-		if($print_errors) echo $error;
+		if ($print_errors) echo $error;
 		return false;
 	}
 	//read the file in an array
 	$file_contents = file($filepath);
 	if (!is_array($file_contents) or count($file_contents) < 1) {
 		$error = "File $filepath looks empty in get_sql_file_contents()";
-		if($print_errors) echo $error;
+		if ($print_errors) echo $error;
 		return false;
 	}
+
 	//prepare the resulting array
 	$section_contents = array();
 	$record = false;
@@ -373,14 +377,14 @@ function get_sql_file_contents($file, $section, $print_errors = true) {
 					$record = true;
 				} else {
 					//we have another section's header. If we were recording, stop now and exit loop
-					if ($record == true) {
+					if ($record) {
 						break;
 					}
 					$record = false;
 				}
 			}
 		} else {
-			if ($record == true) {
+			if ($record) {
 				if (!empty($line)) {
 					$section_contents[] = $line;
 				}
@@ -391,6 +395,7 @@ function get_sql_file_contents($file, $section, $print_errors = true) {
 	return $section_contents;
 }
 
+// TODO: Maybe within the main API there is already a suitable function?
 function my_directory_to_array($directory) {
 	$array_items = array();
 	if ($handle = opendir($directory)) {

@@ -187,7 +187,7 @@ if ($_POST['step2_install'] || $_POST['step2_update_8'] || $_POST['step2_update_
 			}
 		}
 	}
-} elseif($_POST['step1']) {
+} elseif ($_POST['step1']) {
 	$_POST['updatePath'] = '';
 	$installType = '';
 	$updateFromConfigFile = '';
@@ -244,7 +244,9 @@ if (!isset($_GET['running'])) {
 	$singleDbForm = 0;
 	$encryptPassForm = 'md5';
 	$session_lifetime = 360000;
+
 } else {
+
 	foreach($_POST as $key => $val) {
 		$magic_quotes_gpc = ini_get('magic_quotes_gpc') ? true : false;
 		if (is_string($val)) {
@@ -253,7 +255,7 @@ if (!isset($_GET['running'])) {
 			}
 			$val = trim($val);
 			$_POST[$key] = $val;
-		} elseif(is_array($val)) {
+		} elseif (is_array($val)) {
 			foreach ($val as $key2 => $val2) {
 				if ($magic_quotes_gpc) {
 					$val2 = stripslashes($val2);
@@ -603,7 +605,7 @@ if ($_POST['step2']) {
 
 	</blockquote>
 
-	<?php if($installType == 'new'): ?>
+	<?php if ($installType == 'new'): ?>
 	<div style="background-color:#FFFFFF">
 	<p align="center"><strong><font color="red">
 	<?php echo get_lang('Warning');?> !<br />
@@ -620,10 +622,12 @@ if ($_POST['step2']) {
 	</table>
 
 <?php
-} elseif($_POST['step6']) {
+} elseif ($_POST['step6']) {
 
 	//STEP 6 : INSTALLATION PROCESS
+
 	if ($installType == 'update') {
+
 		if (empty($my_old_version)) { $my_old_version = '1.8.6'; } //we guess
 		$_configuration['main_database'] = $dbNameForm;
 		//$urlAppendPath = get_config_param('urlAppend');
@@ -674,7 +678,9 @@ if ($_POST['step2']) {
             default:
 				break;
 		}
+
 	} else {
+
 		include 'install_db.inc.php';
 		include 'install_files.inc.php';
 	}

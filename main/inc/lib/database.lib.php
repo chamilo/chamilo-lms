@@ -955,31 +955,49 @@ class Database {
 			$connection = null;
 		}
 		if (!($result = $use_default_connection ? @mysql_query($query) : @mysql_query($query, $connection))) {
-			// Ivan, 12-FEB-2010: Seeking a way for elimination of the parameters $file and $line.
-			// We ccould retrieve even more information, see http://php.net/manual/en/function.debug-backtrace.php
-			$backtrace = debug_backtrace();
+			$backtrace = debug_backtrace(); // Retrieving information about the caller statement.
+			if (isset($backtrace[0])) {
+				$caller = & $backtrace[0];
+			} else {
+				$caller = array();
+			}
+			if (isset($backtrace[1])) {
+				$owner = & $backtrace[1];
+			} else {
+				$owner = array();
+			}
 			if (empty($file)) {
-				$file = $backtrace[0]['file'];
+				$file = $caller['file'];
 			}
 			if (empty($line)) {
-				$line = $backtrace[0]['line'];
+				$line = $caller['line'];
 			}
-			//
+			$type = $owner['type'];
+			$function = $owner['function'];
+			$class = $owner['class'];
 			$server_type = api_get_setting('server_type');
 			if (!empty($line) && !empty($server_type) && $server_type != 'production') {
-				echo '<pre>' .
+				$info = '<pre>' .
 					'<strong>DATABASE ERROR #'.self::errno($connection).':</strong><br /> ' .
-					self::remove_XSS(self::error($connection)) .
-					'<br />' .
+					self::remove_XSS(self::error($connection)) . '<br />' .
 					'<strong>QUERY       :</strong><br /> ' .
-					self::remove_XSS($query) .
-					'<br />' .
+					self::remove_XSS($query) . '<br />' .
 					'<strong>FILE        :</strong><br /> ' .
-					(empty($file) ? ' unknown ' : $file) .
-					'<br />' .
+					(empty($file) ? ' unknown ' : $file) . '<br />' .
 					'<strong>LINE        :</strong><br /> ' .
-					(empty($line) ? ' unknown ' : $line) .
-					'</pre>';
+					(empty($line) ? ' unknown ' : $line) . '<br />';
+				if (empty($type)) {
+					if (!empty($function)) {
+						$info .= '<strong>FUNCTION    :</strong><br /> ' . $function;
+					}
+				} else {
+					if (!empty($class) && !empty($function)) {
+						$info .= '<strong>CLASS       :</strong><br /> ' . $class . '<br />';
+						$info .= '<strong>METHOD      :</strong><br /> ' . $function;
+					}
+				}
+				$info .= '</pre>';
+				echo $info;
 			}
 		}
 		return $result;

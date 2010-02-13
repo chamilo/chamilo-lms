@@ -44,6 +44,15 @@ session_start();
 require '../inc/lib/main_api.lib.php';
 require api_get_path(LIBRARY_PATH).'database.lib.php';
 
+// The function api_get_setting() might be called within the installation scripts.
+// We need to provide some limited support for it through initialization of the
+// global array-type variable $_setting.
+$_setting = array(
+	'server_type' => 'production',
+	'permissions_for_new_directories' => '0770',
+	'permissions_for_new_files' => '0660'
+);
+
 // Loading language files.
 require api_get_path(SYS_LANG_PATH).'english/trad4all.inc.php';
 require api_get_path(SYS_LANG_PATH).'english/install.inc.php';

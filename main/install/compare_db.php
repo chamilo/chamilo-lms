@@ -114,7 +114,7 @@ foreach ($bases_new as $num_base => $base) {
 				$fields_new = array();
 
 				//list the new fields in a enumeration array
-				foreach($table['field_names'] as $dummy_key => $dummy_field) {
+				foreach ($table['field_names'] as $dummy_key => $dummy_field) {
 					$fields_new[] = $dummy_key;
 				}
 
@@ -135,7 +135,7 @@ foreach ($bases_new as $num_base => $base) {
 							}
 						}
 						//only record the whole stuff if the string is not empty
-						if(strlen($modif_field) > 0) {
+						if (strlen($modif_field) > 0) {
 							$modif_fields[$row_old[0]] .= substr($modif_field, 0, -1);
 						}
 					}

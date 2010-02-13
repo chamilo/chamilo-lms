@@ -3,8 +3,8 @@
 
 /**
 ==============================================================================
-*	Interface for assigning users to Human Resources Manager 
-*	@package chamilo.admin 	
+*	Interface for assigning users to Human Resources Manager
+*	@package chamilo.admin
 ==============================================================================
 */
 
@@ -51,8 +51,8 @@ if(isset($_GET['add_type']) && $_GET['add_type']!=''){
 	$add_type = Security::remove_XSS($_REQUEST['add_type']);
 }
 
-if (!api_is_platform_admin()) {	
-	api_not_allowed(true);	
+if (!api_is_platform_admin()) {
+	api_not_allowed(true);
 }
 
 function search_users($needle,$type) {
@@ -71,16 +71,16 @@ function search_users($needle,$type) {
 		if (count($assigned_users_id) > 0) {
 			$without_assigned_users = " AND user_id NOT IN(".implode(',',$assigned_users_id).")";
 		}
-		
+
 		$sql = "SELECT user_id, username, lastname, firstname FROM $tbl_user user
 				WHERE  ".(api_sort_by_first_name() ? 'firstname' : 'lastname')." LIKE '$needle%'  AND user_id NOT IN ($user_anonymous, $current_user_id, $hrm_id) $without_assigned_users";
-		$rs	= Database::query($sql,__FILE__,__LINE__);
+		$rs	= Database::query($sql);
 
 		$user_list = array();
 		$return .= '<select id="origin" name="NoAssignedUsersList[]" multiple="multiple" size="20" style="width:340px;">';
 		while($user = Database :: fetch_array($rs)) {
 			$user_list[] = $user['id'];
-			$person_name = api_get_person_name($user['firstname'], $user['lastname']);			
+			$person_name = api_get_person_name($user['firstname'], $user['lastname']);
 			$return .= '<option value="'.$user['user_id'].'" title="'.htmlspecialchars($person_name,ENT_QUOTES).'">'.$person_name.' ('.$user['username'].')</option>';
 		}
 		$return .= '</select>';
@@ -93,7 +93,7 @@ function search_users($needle,$type) {
 $xajax -> processRequests();
 $htmlHeadXtra[] = $xajax->getJavascript('../inc/lib/xajax/');
 $htmlHeadXtra[] = '
-<script type="text/javascript">	
+<script type="text/javascript">
 <!--
 function moveItem(origin , destination) {
 	for(var i = 0 ; i<origin.options.length ; i++) {
@@ -131,7 +131,7 @@ function valide() {
 	var options = document.getElementById("destination").options;
 	for (i = 0 ; i<options.length ; i++) {
 		options[i].selected = true;
-	}		
+	}
 	document.forms.formulaire.submit();
 }
 function remove_item(origin) {
@@ -142,7 +142,7 @@ function remove_item(origin) {
 		}
 	}
 }
--->	
+-->
 </script>';
 
 $formSent=0;
@@ -150,7 +150,7 @@ $errorMsg = $firstLetterUser = '';
 $UserList = array();
 
 $msg = '';
-if (intval($_POST['formSent']) == 1) {	
+if (intval($_POST['formSent']) == 1) {
 	$user_list = $_POST['UsersList'];
 	$affected_rows = UserManager::suscribe_users_to_hr_manager($hrm_id,$user_list);
 	if ($affected_rows)	{
@@ -170,7 +170,7 @@ $assigned_users_id = array_keys($assigned_users_to_hrm);
 $without_assigned_users = '';
 if (count($assigned_users_id) > 0) {
 	$without_assigned_users = " user_id NOT IN(".implode(',',$assigned_users_id).") AND ";
-} 
+}
 
 $search_user = '';
 if (isset($_POST['firstLetterUser'])) {
@@ -180,7 +180,7 @@ if (isset($_POST['firstLetterUser'])) {
 
 $sql = "SELECT user_id, username, lastname, firstname FROM $tbl_user user
 		WHERE  $without_assigned_users user_id NOT IN ($user_anonymous, $current_user_id, $hrm_id) $search_user ";
-$result	= Database::query($sql,__FILE__,__LINE__);
+$result	= Database::query($sql);
 
 ?>
 <form name="formulaire" method="post" action="<?php echo api_get_self(); ?>?user=<?php echo $hrm_id ?>" style="margin:0px;" <?php if($ajax_search){echo ' onsubmit="valide();"';}?>>
@@ -193,8 +193,8 @@ if(!empty($msg)) {
 <table border="0" cellpadding="5" cellspacing="0" width="100%" align="center">
 <tr>
 	<td align="left"></td>
-	<td align="left"></td>	
-	<td width="" align="center"> &nbsp;	</td>	
+	<td align="left"></td>
+	<td width="" align="center"> &nbsp;	</td>
 </tr>
 <tr>
   <td width="45%" align="center"><b><?php echo get_lang('UserListInPlatform') ?> :</b></td>
@@ -208,7 +208,7 @@ if(!empty($msg)) {
      <select name="firstLetterUser" onchange = "xajax_search_users(this.value,'multiple')">
       <option value="%">--</option>
       <?php
-      echo Display :: get_alphabet_options($_POST['firstLetterUser']);      
+      echo Display :: get_alphabet_options($_POST['firstLetterUser']);
       ?>
      </select>
 </td>
@@ -226,7 +226,7 @@ if(!empty($msg)) {
 	<?php } ?>
 	</select></div>
   </td>
-  
+
   <td width="10%" valign="middle" align="center">
   <?php
   if ($ajax_search) {
@@ -256,7 +256,7 @@ if(!empty($msg)) {
 			$person_name = api_get_person_name($enreg['firstname'], $enreg['lastname']);
 	?>
 		<option value="<?php echo $enreg['user_id']; ?>" <?php echo 'title="'.htmlspecialchars($person_name,ENT_QUOTES).'"'; ?>><?php echo $person_name.' ('.$enreg['username'].')'; ?></option>
-	<?php } 
+	<?php }
 	}?>
   </select></td>
 </tr>

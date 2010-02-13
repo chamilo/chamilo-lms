@@ -273,7 +273,7 @@ class Tracking {
 			// table definition
 			$tbl_course_lp_view = Database :: get_course_table(TABLE_LP_VIEW, $a_course['db_name']);
 			$tbl_course_lp = Database :: get_course_table(TABLE_LP_MAIN, $a_course['db_name']);
-			// count the number of learning paths 
+			// count the number of learning paths
 			$count_lp = Database::fetch_row(Database::query("SELECT count(id) FROM $tbl_course_lp"));
 			$avg_progress = 0;
 			//if there is at least one learning path and one student
@@ -287,9 +287,9 @@ class Tracking {
                 // sum the progresses for each user and each learning path
                 // if we have 5 students and 3 learning paths, get the sum of
                 // 15 progresses
-                $sql_progress = "SELECT SUM(progress) FROM $tbl_course_lp_view AS lp_view ". 
-                                "WHERE $condition_user lp_view.lp_id IN (SELECT id FROM $tbl_course_lp)";                                
-                $result_item  = Database::query($sql_progress, __FILE__, __LINE__);
+                $sql_progress = "SELECT SUM(progress) FROM $tbl_course_lp_view AS lp_view ".
+                                "WHERE $condition_user lp_view.lp_id IN (SELECT id FROM $tbl_course_lp)";
+                $result_item  = Database::query($sql_progress);
                 // total sum recovered in $rowItem
                 $row_item = Database::fetch_row($result_item);
                 // average progress = total sum divided by the number of LP*student
@@ -297,8 +297,8 @@ class Tracking {
                 $number_items = $count_lp[0];
                 if (is_array($student_id)) {
                     $number_items = $count_lp[0] * count($student_id);
-                }                               
-                $avg_progress = round($row_item[0] / $number_items, 1); 
+                }
+                $avg_progress = round($row_item[0] / $number_items, 1);
 				return $avg_progress;
 			}
 		}

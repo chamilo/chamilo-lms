@@ -3,8 +3,8 @@
 
 /**
 ==============================================================================
-*	Interface for assigning courses to Human Resources Manager 
-*	@package chamilo.admin 	
+*	Interface for assigning courses to Human Resources Manager
+*	@package chamilo.admin
 ==============================================================================
 */
 
@@ -52,8 +52,8 @@ if(isset($_GET['add_type']) && $_GET['add_type']!=''){
 	$add_type = Security::remove_XSS($_REQUEST['add_type']);
 }
 
-if (!api_is_platform_admin()) {	
-	api_not_allowed(true);	
+if (!api_is_platform_admin()) {
+	api_not_allowed(true);
 }
 
 function search_courses($needle,$type) {
@@ -67,23 +67,23 @@ function search_courses($needle,$type) {
 		$needle = api_convert_encoding($needle, $charset, 'utf-8');
 
 		$assigned_courses_to_hrm = CourseManager::get_assigned_courses_to_hr_manager($hrm_id);
-		$assigned_courses_code = array_keys($assigned_courses_to_hrm);		
+		$assigned_courses_code = array_keys($assigned_courses_to_hrm);
 		foreach ($assigned_courses_code as &$value) {
 			$value = "'".$value."'";
 		}
-		$without_assigned_courses = '';	
+		$without_assigned_courses = '';
 		if (count($assigned_courses_code) > 0) {
 			$without_assigned_courses = " AND c.code NOT IN(".implode(',',$assigned_courses_code).")";
 		}
-		
+
 		$sql = "SELECT c.code, c.title FROM $tbl_course c
 				WHERE  c.code LIKE '$needle%' $without_assigned_courses ";
-		$rs	= Database::query($sql,__FILE__,__LINE__);
-		
+		$rs	= Database::query($sql);
+
 		$course_list = array();
 		$return .= '<select id="origin" name="NoAssignedCoursesList[]" multiple="multiple" size="20" style="width:340px;">';
 		while($course = Database :: fetch_array($rs)) {
-			$course_list[] = $course['id'];						
+			$course_list[] = $course['id'];
 			$return .= '<option value="'.$course['code'].'" title="'.htmlspecialchars($course['title'],ENT_QUOTES).'">'.$course['title'].' ('.$course['code'].')</option>';
 		}
 		$return .= '</select>';
@@ -96,7 +96,7 @@ function search_courses($needle,$type) {
 $xajax -> processRequests();
 $htmlHeadXtra[] = $xajax->getJavascript('../inc/lib/xajax/');
 $htmlHeadXtra[] = '
-<script type="text/javascript">	
+<script type="text/javascript">
 <!--
 function moveItem(origin , destination) {
 	for(var i = 0 ; i<origin.options.length ; i++) {
@@ -134,7 +134,7 @@ function valide() {
 	var options = document.getElementById("destination").options;
 	for (i = 0 ; i<options.length ; i++) {
 		options[i].selected = true;
-	}		
+	}
 	document.forms.formulaire.submit();
 }
 function remove_item(origin) {
@@ -145,7 +145,7 @@ function remove_item(origin) {
 		}
 	}
 }
--->	
+-->
 </script>';
 
 $formSent=0;
@@ -153,12 +153,12 @@ $errorMsg = $firstLetterCourse = '';
 $UserList = array();
 
 $msg = '';
-if (intval($_POST['formSent']) == 1) {		
+if (intval($_POST['formSent']) == 1) {
 	$courses_list = $_POST['CoursesList'];
 	$affected_rows = CourseManager::suscribe_courses_to_hr_manager($hrm_id,$courses_list);
 	if ($affected_rows)	{
 		$msg = get_lang('AssignedCoursesHasBeenUpdatedSuccesslly');
-	}	
+	}
 }
 
 // display the dokeos header
@@ -168,12 +168,12 @@ echo '<div class="row"><div class="form_header">'.get_lang('AssignedCoursesTo').
 // *******************
 
 $assigned_courses_to_hrm = CourseManager::get_assigned_courses_to_hr_manager($hrm_id);
-$assigned_courses_code = array_keys($assigned_courses_to_hrm);		
+$assigned_courses_code = array_keys($assigned_courses_to_hrm);
 foreach ($assigned_courses_code as &$value) {
 	$value = "'".$value."'";
 }
 
-$without_assigned_courses = '';	
+$without_assigned_courses = '';
 if (count($assigned_courses_code) > 0) {
 	$without_assigned_courses = " AND c.code NOT IN(".implode(',',$assigned_courses_code).")";
 }
@@ -186,7 +186,7 @@ if (isset($_POST['firstLetterCourse'])) {
 
 $sql 	= " SELECT c.code, c.title FROM $tbl_course c
 			WHERE  c.code LIKE '$needle' $without_assigned_courses ";
-$result	= Database::query($sql,__FILE__,__LINE__);
+$result	= Database::query($sql);
 
 ?>
 <form name="formulaire" method="post" action="<?php echo api_get_self(); ?>?user=<?php echo $hrm_id ?>" style="margin:0px;" <?php if($ajax_search){echo ' onsubmit="valide();"';}?>>
@@ -199,8 +199,8 @@ if(!empty($msg)) {
 <table border="0" cellpadding="5" cellspacing="0" width="100%" align="center">
 <tr>
 	<td align="left"></td>
-	<td align="left"></td>	
-	<td width="" align="center"> &nbsp;	</td>	
+	<td align="left"></td>
+	<td width="" align="center"> &nbsp;	</td>
 </tr>
 <tr>
   <td width="45%" align="center"><b><?php echo get_lang('CoursesListInPlatform') ?> :</b></td>
@@ -214,7 +214,7 @@ if(!empty($msg)) {
      <select name="firstLetterCourse" onchange = "xajax_search_courses(this.value,'multiple')">
       <option value="%">--</option>
       <?php
-      echo Display :: get_alphabet_options($_POST['firstLetterCourse']);      
+      echo Display :: get_alphabet_options($_POST['firstLetterCourse']);
       ?>
      </select>
 </td>
@@ -225,13 +225,13 @@ if(!empty($msg)) {
 	<div id="ajax_list_courses_multiple">
 	<select id="origin" name="NoAssignedCoursesList[]" multiple="multiple" size="20" style="width:340px;">
 	<?php
-	while ($enreg = Database::fetch_array($result)) {		
+	while ($enreg = Database::fetch_array($result)) {
 	?>
 		<option value="<?php echo $enreg['code']; ?>" <?php echo 'title="'.htmlspecialchars($enreg['title'],ENT_QUOTES).'"';?>><?php echo $enreg['title'].' ('.$enreg['code'].')'; ?></option>
 	<?php } ?>
 	</select></div>
   </td>
-  
+
   <td width="10%" valign="middle" align="center">
   <?php
   if ($ajax_search) {
@@ -257,10 +257,10 @@ if(!empty($msg)) {
   <select id='destination' name="CoursesList[]" multiple="multiple" size="20" style="width:320px;">
 	<?php
 	if (is_array($assigned_courses_to_hrm)) {
-		foreach($assigned_courses_to_hrm as $enreg) {			
+		foreach($assigned_courses_to_hrm as $enreg) {
 	?>
 		<option value="<?php echo $enreg['code']; ?>" <?php echo 'title="'.htmlspecialchars($enreg['title'],ENT_QUOTES).'"'; ?>><?php echo $enreg['title'].' ('.$enreg['code'].')'; ?></option>
-	<?php } 
+	<?php }
 	}?>
   </select></td>
 </tr>

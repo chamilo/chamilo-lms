@@ -452,7 +452,7 @@ function create_event_exercice($exo_id)
 {
 	global $_user, $_cid, $_configuration;
 	$TABLETRACK_EXERCICES = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
-	$TBL_EXERCICES = Database::get_course_table(TABLE_QUIZ);
+	$TBL_EXERCICES = Database::get_course_table(TABLE_QUIZ_TEST);
 	$reallyNow = time();
 	if (isset($_user['user_id']) && $_user['user_id']!='') {
 		$user_id = "'".$_user['user_id']."'";

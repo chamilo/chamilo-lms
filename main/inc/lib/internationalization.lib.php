@@ -776,7 +776,7 @@ function api_htmlentities($string, $quote_style = ENT_COMPAT, $encoding = null) 
 		$encoding = _api_mb_internal_encoding();
 	}
 	if (!api_is_utf8($encoding) && _api_html_entity_supports($encoding)) {
-		return htmlentities((string)$string, $quote_style, $encoding);
+		return htmlentities($string, $quote_style, $encoding);
 	}
 	if (_api_mb_supports($encoding)) {
 		if (!api_is_utf8($encoding)) {

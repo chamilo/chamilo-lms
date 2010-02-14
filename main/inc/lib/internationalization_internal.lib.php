@@ -469,6 +469,7 @@ function &_api_parse_character_map($name) {
  * @author Ivan Tcholakov, August 2009, adaptation for the Dokeos LMS.
 */
 function _api_utf8_to_unicode($string) {
+	if (!is_string($string)) { $string = (string)$string; } // A quick workaround after testing.
 	$state = 0;			// cached expected number of octets after the current octet
 						// until the beginning of the next UTF8 character sequence
 	$codepoint  = 0;	// cached Unicode character

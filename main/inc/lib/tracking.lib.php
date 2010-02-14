@@ -278,28 +278,29 @@ class Tracking {
 			$avg_progress = 0;
 			//if there is at least one learning path and one student
 			if (!empty($count_lp[0]) && !empty($student_id)) {
-				$condition_user = "";
-				if (is_array($student_id)) {
-					$condition_user = " lp_view.user_id IN (".implode(',',$student_id).") AND ";
-				} else {
-					$condition_user = " lp_view.user_id = '$student_id' AND ";
-				}
-                // sum the progresses for each user and each learning path
-                // if we have 5 students and 3 learning paths, get the sum of
-                // 15 progresses
-                $sql_progress = "SELECT SUM(progress) FROM $tbl_course_lp_view AS lp_view ".
-                                "WHERE $condition_user lp_view.lp_id IN (SELECT id FROM $tbl_course_lp)";
-                $result_item  = Database::query($sql_progress);
-                // total sum recovered in $rowItem
-                $row_item = Database::fetch_row($result_item);
-                // average progress = total sum divided by the number of LP*student
-                // if 5 students x 3 learning paths, divide by 15
-                $number_items = $count_lp[0];
+                $condition_user = "";
                 if (is_array($student_id)) {
-                    $number_items = $count_lp[0] * count($student_id);
+                    $$r = array_walk($student_id,'intval');
+                    $condition_user = " lp_view.user_id IN (".implode(',',$student_id).") AND ";
+                } else {
+                    $student_id = intval($student_id);
+                    $condition_user = " lp_view.user_id = '$student_id' AND ";
                 }
-                $avg_progress = round($row_item[0] / $number_items, 1);
-				return $avg_progress;
+                // Get last view for each student (in case of multi-attempt)  
+                $sql_maxes = "SELECT MAX(view_count), id, progress FROM $tbl_course_lp_view WHERE $condition_user 1=1 GROUP BY user_id";
+                $res_maxes = Database::query($sql_maxes);
+                $sum = $number_items = 0;
+                while ($row_maxes = Database::fetch_array($res_maxes)) {
+                    $sum += $row_maxes[2];
+                    $number_items++;
+                }
+                if ($number_items == 0) {
+                    return 0; //not necessary to return something else if there is no view
+                }
+                // average progress = total sum divided by the number of views
+                // summed up.
+                $avg_progress = round($sum / $number_items, 1); 
+                return $avg_progress;
 			}
 		}
 		return null;

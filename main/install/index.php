@@ -155,7 +155,7 @@ if ($_POST['step2_install'] || $_POST['step2_update_8'] || $_POST['step2_update_
 		$installType = 'update';
 		if ($_POST['step2_update_8']) {
 			$emptyUpdatePath = false;
-			if(empty($_POST['updatePath'])) {
+			if (empty($_POST['updatePath'])) {
 				$proposedUpdatePath = $_SERVER['DOCUMENT_ROOT'];
 			} else {
 				$proposedUpdatePath = $_POST['updatePath'];
@@ -164,7 +164,7 @@ if ($_POST['step2_install'] || $_POST['step2_update_8'] || $_POST['step2_update_
 				$proposedUpdatePath .= '/';
 			}
 			if (file_exists($proposedUpdatePath)) {
-				if (in_array($my_old_version,$update_from_version_8)) {
+				if (in_array($my_old_version, $update_from_version_8)) {
 					$_POST['step2'] = 1;
 				} else {
 					$badUpdatePath = true;
@@ -177,7 +177,7 @@ if ($_POST['step2_install'] || $_POST['step2_update_8'] || $_POST['step2_update_
 				$_POST['step1'] = 1;
 			} else {
 				$emptyUpdatePath = false;
-				if(substr($_POST['updatePath'], -1) != '/') {
+				if (substr($_POST['updatePath'], -1) != '/') {
 					$_POST['updatePath'] .= '/';
 				}
 
@@ -256,7 +256,7 @@ if (!isset($_GET['running'])) {
 
 } else {
 
-	foreach($_POST as $key => $val) {
+	foreach ($_POST as $key => $val) {
 		$magic_quotes_gpc = ini_get('magic_quotes_gpc') ? true : false;
 		if (is_string($val)) {
 			if ($magic_quotes_gpc) {

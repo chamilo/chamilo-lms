@@ -48,7 +48,7 @@ require api_get_path(LIBRARY_PATH).'database.lib.php';
 // We need to provide some limited support for it through initialization of the
 // global array-type variable $_setting.
 $_setting = array(
-	'server_type' => 'production',
+	'server_type' => 'production', // 'production' | 'test'
 	'permissions_for_new_directories' => '0770',
 	'permissions_for_new_files' => '0660'
 );
@@ -564,7 +564,7 @@ if ($_POST['step2']) {
 
 	<?php echo get_lang('DBHost').' : '.$dbHostForm; ?><br />
 	<?php echo get_lang('DBLogin').' : '.$dbUsernameForm; ?><br />
-	<?php echo get_lang('DBPassword').' : '.str_repeat('*', strlen($dbPassForm)); ?><br />
+	<?php echo get_lang('DBPassword').' : '.str_repeat('*', api_strlen($dbPassForm)); ?><br />
 	<?php if (!empty($dbPrefixForm)) echo get_lang('DbPrefixForm').' : '.$dbPrefixForm.'<br />'; ?>
 	<?php echo get_lang('MainDB').' : <strong>'.$dbNameForm; ?></strong><?php if ($installType == 'new') echo ' (<font color="#cc0033">'.get_lang('ReadWarningBelow').'</font>)'; ?><br />
 	<?php

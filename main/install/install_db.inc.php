@@ -26,18 +26,18 @@ if (!defined('DOKEOS_INSTALL')) {
 
 set_file_folder_permissions();
 
-@mysql_connect($dbHostForm, $dbUsernameForm, $dbPassForm);
+@Database::connect(array('server' => $dbHostForm, 'username' => $dbUsernameForm, 'password' => $dbPassForm));
 
-if (mysql_errno() > 0) {
-	$no = mysql_errno();
-	$msg = mysql_error();
+if (Database::errno() > 0) {
+	$no = Database::errno();
+	$msg = Database::error();
 
 	echo '<hr />['.$no.'] &ndash; '.$msg.'<hr />
 	The MySQL server doesn\'t work or login / pass is bad.<br /><br />
 	Please check these values:<br /><br />
 	<strong>host</strong> : '.$dbHostForm.'<br />
 	<strong>user</strong> : '.$dbUsernameForm.'<br />
-	<strong>password</strong> : '.str_repeat('*', strlen($dbPassForm)).'<br /><br />
+	<strong>password</strong> : '.str_repeat('*', api_strlen($dbPassForm)).'<br /><br />
 	Please go back to step 3.
 	<p><button type="submit" class="back" name="step3" value="&lt; Back" >Back</button></p>
 	</td></tr></table></form></body></html>';
@@ -45,12 +45,13 @@ if (mysql_errno() > 0) {
 	exit();
 }
 
-@mysql_query("set session sql_mode='';"); // Disabling special SQL modes (MySQL 5)
+// Disabling special SQL modes (MySQL 5)
+Database::query("set session sql_mode='';");
 
 // Initialization of the database encoding to be used.
-mysql_query("SET SESSION character_set_server='utf8';");
-mysql_query("SET SESSION collation_server='utf8_general_ci';");
-mysql_query("SET CHARACTER SET 'utf8';");
+Database::query("SET SESSION character_set_server='utf8';");
+Database::query("SET SESSION collation_server='utf8_general_ci';");
+Database::query("SET CHARACTER SET 'utf8';");
 
 if ($urlForm[strlen($urlForm) - 1] != '/') {
 	$urlForm = $urlForm.'/';
@@ -102,15 +103,15 @@ if (empty($mysqlUserDb) || $mysqlUserDb == 'mysql' || $mysqlUserDb == $dbPrefixF
 	$mysqlUserDb = $dbPrefixForm.'user';
 }
 
-$result = mysql_query("SHOW VARIABLES LIKE 'datadir'") or die(mysql_error());
+$result = Database::query("SHOW VARIABLES LIKE 'datadir'") or die(Database::error());
 
-$mysqlRepositorySys = mysql_fetch_array($result);
+$mysqlRepositorySys = Database::fetch_array($result);
 $mysqlRepositorySys = $mysqlRepositorySys['Value'];
 
 if (!$singleDbForm) {
-	mysql_query("DROP DATABASE IF EXISTS `$mysqlMainDb`") or die(mysql_error());
+	Database::query("DROP DATABASE IF EXISTS `$mysqlMainDb`") or die(Database::error());
 }
-mysql_query("CREATE DATABASE IF NOT EXISTS `$mysqlMainDb`") or die(mysql_error());
+Database::query("CREATE DATABASE IF NOT EXISTS `$mysqlMainDb`") or die(Database::error());
 
 if($mysqlStatsDb == $mysqlMainDb && $mysqlUserDb == $mysqlMainDb) {
 	$singleDbForm = true;
@@ -122,8 +123,8 @@ if($mysqlStatsDb == $mysqlMainDb && $mysqlUserDb == $mysqlMainDb) {
 if ($mysqlStatsDb != $mysqlMainDb) {
 	if (!$singleDbForm) {
 		// multi DB mode AND tracking has its own DB so create it
-		mysql_query("DROP DATABASE IF EXISTS `$mysqlStatsDb`") or die(mysql_error());
-		mysql_query("CREATE DATABASE `$mysqlStatsDb`") or die(mysql_error());
+		Database::query("DROP DATABASE IF EXISTS `$mysqlStatsDb`") or die(Database::error());
+		Database::query("CREATE DATABASE `$mysqlStatsDb`") or die(Database::error());
 	} else {
 		// single DB mode so $mysqlStatsDb MUST BE the SAME than $mysqlMainDb
 		$mysqlStatsDb = $mysqlMainDb;
@@ -136,8 +137,8 @@ if ($mysqlStatsDb != $mysqlMainDb) {
 if ($mysqlUserDb != $mysqlMainDb) {
 	if (!$singleDbForm) {
 		// multi DB mode AND user data has its own DB so create it
-		mysql_query("DROP DATABASE IF EXISTS `$mysqlUserDb`") or die(mysql_error());
-		mysql_query("CREATE DATABASE `$mysqlUserDb`") or die(mysql_error());
+		Database::query("DROP DATABASE IF EXISTS `$mysqlUserDb`") or die(Database::error());
+		Database::query("CREATE DATABASE `$mysqlUserDb`") or die(Database::error());
 	} else {
 		// single DB mode so $mysqlUserDb MUST BE the SAME than $mysqlMainDb
 		$mysqlUserDb = $mysqlMainDb;
@@ -153,7 +154,7 @@ if ($languageForm != 'english') {
 /**
 * creating the tables of the main database
 */
-mysql_select_db($mysqlMainDb) or die(mysql_error());
+Database::select_db($mysqlMainDb) or die(Database::error());
 
 $installation_settings['{ORGANISATIONNAME}'] = $institutionForm;
 $installation_settings['{ORGANISATIONURL}'] = $institutionUrlForm;
@@ -176,7 +177,7 @@ load_main_database($installation_settings);
 * creating the tables of the tracking database
 */
 
-mysql_select_db($mysqlStatsDb) or die(mysql_error());
+Database::select_db($mysqlStatsDb) or die(Database::error());
 
 load_database_script('dokeos_stats.sql');
 
@@ -188,6 +189,6 @@ fill_track_countries_table($track_countries_table);
 * this is where the personal agenda items are storen, the user defined course categories (sorting of my courses)
 */
 
-mysql_select_db($mysqlUserDb) or die(mysql_error());
+Database::select_db($mysqlUserDb) or die(Database::error());
 
 load_database_script('dokeos_user.sql');

@@ -589,29 +589,6 @@ function display_upgrade_header($text_dir, $dokeos_version, $install_type, $upda
 	<?php
 }
 
-/**
- *	TODO: Copy/paste again. Find an existing function for this job.
- *	Return a list of language directories.
- *	@todo function does not belong here, move to code library,
- *	also see infocours.php which contains similar function
- */
-function get_language_folder_list() {
-	$dirname = dirname(__FILE__).'/../lang';
-	if ($dirname[strlen($dirname) - 1] != '/')
-		$dirname .= '/';
-	$handle = opendir($dirname);
-	while ($entries = readdir($handle)) {
-		if ($entries == '.' || $entries == '..' || $entries == '.svn')
-			continue;
-		if (is_dir($dirname.$entries)) {
-			$language_list[$entries] = api_ucfirst($entries);
-		}
-	}
-	closedir($handle);
-	asort($language_list);
-	return $language_list;
-}
-
 function display_installation_overview() {
 	echo '<div id="installation_steps">';
 	echo '<img src="../img/bluelogo.gif" hspace="10" vspace="10" alt="Dokeos logo" />';

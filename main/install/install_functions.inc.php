@@ -231,50 +231,17 @@ function get_config_param($param, $updatePath = '') {
  */
 function get_config_param_from_db($host, $login, $pass, $db_name, $param = '') {
 
-	$mydb = mysql_connect($host, $login, $pass);
-	@mysql_query("set session sql_mode='';"); // Disabling special SQL modes (MySQL 5)
+	Database::connect(array('server' => $host, 'username' => $login, 'password' => $pass));
+	Database::query("set session sql_mode='';"); // Disabling special SQL modes (MySQL 5)
+	Database::select_db($db_name);
 
-	$myconnect = mysql_select_db($db_name);
-
-	$sql = "SELECT * FROM settings_current WHERE variable = '$param'";
-	$res = mysql_query($sql);
-	if ($res === false) {
-		return null;
-	}
-
-	if (mysql_num_rows($res) > 0) {
-		$row = mysql_fetch_array($res);
-		$value = $row['selected_value'];
-		return $value;
+	if (($res = Database::query("SELECT * FROM settings_current WHERE variable = '$param'")) !== false) {
+		if (Database::num_rows($res) > 0) {
+			$row = Database::fetch_array($res);
+			return $row['selected_value'];
+		}
 	}
 	return null;
-}
-
-/**
- * TODO: The main API is accessible here. Then we could use a function for this purpose from there?
- *
- *	Return a list of language directories.
- *	@todo function does not belong here, move to code library,
- *	also see infocours.php which contains similar function
- */
-function get_language_folder_list($dirname) {
-	if ($dirname[strlen($dirname) - 1] != '/') {
-		$dirname .= '/';
-	}
-	$handle = opendir($dirname);
-	$language_list = array();
-
-	while ($entries = readdir($handle)) {
-		if ($entries == '.' || $entries == '..' || $entries=='CVS'  || $entries == '.svn') {
-			continue;
-		}
-		if (is_dir($dirname.$entries)) {
-			$language_list[] = $entries;
-		}
-	}
-
-	closedir($handle);
-	return $language_list;
 }
 
 /*
@@ -284,34 +251,38 @@ function get_language_folder_list($dirname) {
 */
 
 /**
- *	Displays a form (drop down menu) so the user can select
- *	his/her preferred language.
+ *	Displays a drop down box for selection the preferred language.
  */
 function display_language_selection_box() {
-	//get language list
-	$language_list = get_language_folder_list(api_get_path(SYS_LANG_PATH));
-	sort($language_list);
-	//Reduce the number of languages shown to only show those with higher than 90% translation in DLTT
-	//This option can be easily removed later on. The aim is to test people response to less choice
-	//$language_to_display = $language_list;
+	// Reading language list.
+	$language_list = get_language_folder_list();
+
+	/*
+	// Reduction of the number of languages shown. Enable this fragment of code for customization purposes.
+	// Modify the language list according to your preference. Don't exclude the 'english' item.
 	$language_to_display = array('asturian', 'bulgarian', 'english', 'italian', 'french', 'slovenian', 'slovenian_unicode', 'spanish');
+	foreach ($language_list as $key => & $value) {
+		if (!in_array($key, $language_to_display)) {
+			unset($language_list[$key]);
+		}
+	}
+	*/
 
-	//display
-	echo "\t\t<select name=\"language_list\">\n";
-
+	// The default selection, it may be customized too.
 	$default_language = 'english';
-	foreach ($language_to_display as $key => $value) {
-		if ($value == $default_language) {
+
+	// Displaying the box.
+	echo "\t\t<select name=\"language_list\">\n";
+	foreach ($language_list as $key => $value) {
+		if ($key == $default_language) {
 			$option_end = ' selected="selected">';
 		} else {
 			$option_end = '>';
 		}
-		echo "\t\t\t<option value=\"$value\"$option_end";
-
-		echo api_ucfirst($value);
+		echo "\t\t\t<option value=\"$key\"$option_end";
+		echo $value;
 		echo "</option>\n";
 	}
-
 	echo "\t\t</select>\n";
 }
 

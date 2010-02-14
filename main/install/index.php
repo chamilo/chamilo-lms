@@ -40,7 +40,6 @@ if (!function_exists('version_compare') || version_compare( phpversion(), REQUIR
 session_start();
 
 // Including necessary core libraries.
-//@include '../inc/installedVersion.inc.php';  //TODO: This line is to be removed.
 require '../inc/lib/main_api.lib.php';
 require api_get_path(LIBRARY_PATH).'database.lib.php';
 
@@ -155,14 +154,7 @@ if ($_POST['step2_install'] || $_POST['step2_update_8'] || $_POST['step2_update_
 		$installType = 'update';
 		if ($_POST['step2_update_8']) {
 			$emptyUpdatePath = false;
-			if (empty($_POST['updatePath'])) {
-				$proposedUpdatePath = $_SERVER['DOCUMENT_ROOT'];
-			} else {
-				$proposedUpdatePath = $_POST['updatePath'];
-			}
-			if (substr($proposedUpdatePath,-1) != '/') {
-				$proposedUpdatePath .= '/';
-			}
+			$proposedUpdatePath = api_add_trailing_slash(empty($_POST['updatePath']) ? $_SERVER['DOCUMENT_ROOT'] : $_POST['updatePath']);
 			if (file_exists($proposedUpdatePath)) {
 				if (in_array($my_old_version, $update_from_version_8)) {
 					$_POST['step2'] = 1;
@@ -177,10 +169,7 @@ if ($_POST['step2_install'] || $_POST['step2_update_8'] || $_POST['step2_update_
 				$_POST['step1'] = 1;
 			} else {
 				$emptyUpdatePath = false;
-				if (substr($_POST['updatePath'], -1) != '/') {
-					$_POST['updatePath'] .= '/';
-				}
-
+				$_POST['updatePath'] = api_add_trailing_slash($_POST['updatePath']);
 				if (file_exists($_POST['updatePath'])) {
 					//1.6.x
 					$my_old_version = get_config_param('clarolineVersion', $_POST['updatePath']);
@@ -547,7 +536,7 @@ if ($_POST['step2']) {
 	}
 	display_configuration_settings_form($installType, $urlForm, $languageForm, $emailForm, $adminFirstName, $adminLastName, $adminPhoneForm, $campusForm, $institutionForm, $institutionUrlForm, $encryptPassForm, $allowSelfReg, $allowSelfRegProf, $loginForm, $passForm);
 
-} elseif($_POST['step5']) {
+} elseif ($_POST['step5']) {
 
 	//STEP 6 : LAST CHECK BEFORE INSTALL
 ?>

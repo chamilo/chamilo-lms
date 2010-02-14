@@ -69,8 +69,7 @@ function check_php_setting($php_setting, $recommended_value, $return_success = f
  * @author Joomla <http://www.joomla.org>
  */
 function get_php_setting($val) {
-	$r = ini_get($val) == '1' ? 1 : 0;
-	return $r ? 'ON' : 'OFF';
+	return ini_get($val) == '1' ? 'ON' : 'OFF';
 }
 
 /**
@@ -95,7 +94,7 @@ function check_writable($folder, $suggestion = false) {
  * @return  string  the string "true" or "false"
  * @author Christophe Gesché
  */
-function trueFalse($var) {
+function true_false($var) {
 	return $var ? 'true' : 'false';
 }
 
@@ -136,14 +135,16 @@ function get_config_param($param, $updatePath = '') {
 	$updatePath = realpath($updatePath).'/';
 	$updateFromInstalledVersionFile = '';
 
-	if (empty($updateFromConfigFile)) { //if update from previous install was requested
+	if (empty($updateFromConfigFile)) {
+		//if update from previous install was requested
 		//try to recover old config file from dokeos 1.8.x
 		if (file_exists($updatePath.'main/inc/conf/configuration.php')) {
-			$updateFromConfigFile='main/inc/conf/configuration.php';
+			$updateFromConfigFile = 'main/inc/conf/configuration.php';
 		} elseif (file_exists($updatePath.'claroline/inc/conf/claro_main.conf.php')) {
-			$updateFromConfigFile='claroline/inc/conf/claro_main.conf.php';
-		} else { //give up recovering
-			error_log('Could not find config file in '.$updatePath.' in get_config_param()',0);
+			$updateFromConfigFile = 'claroline/inc/conf/claro_main.conf.php';
+		} else {
+			//give up recovering
+			error_log('Could not find config file in '.$updatePath.' in get_config_param()', 0);
 			return null;
 		}
 	}
@@ -288,8 +289,7 @@ function get_language_folder_list($dirname) {
  */
 function display_language_selection_box() {
 	//get language list
-	$dirname = '../lang/'; // TODO: Check api_get_path() and use it.
-	$language_list = get_language_folder_list($dirname);
+	$language_list = get_language_folder_list(api_get_path(SYS_LANG_PATH));
 	sort($language_list);
 	//Reduce the number of languages shown to only show those with higher than 90% translation in DLTT
 	//This option can be easily removed later on. The aim is to test people response to less choice

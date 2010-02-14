@@ -259,12 +259,13 @@ class Tracking {
     /**
      * Returns the average student progress in the learning paths of the given
      * course.
-     * @param  int/array     Student id(s)
-     * @param  string  Course code
+     * @param   int/array     Student id(s)
+     * @param   string  Course code
+     * @param   int     Session id (optional). Defaults to 0 (=no session filter)
      * @return double  Average progress of the user in this course
      * @todo Add session management here
      */
-	public static function get_avg_student_progress($student_id, $course_code) {
+	public static function get_avg_student_progress($student_id, $course_code, $session_id = 0) {
 		// protect datas
 		$course_code = addslashes($course_code);
 		// get the informations of the course
@@ -274,10 +275,20 @@ class Tracking {
 			$tbl_course_lp_view = Database :: get_course_table(TABLE_LP_VIEW, $a_course['db_name']);
 			$tbl_course_lp = Database :: get_course_table(TABLE_LP_MAIN, $a_course['db_name']);
 			// count the number of learning paths
-			$count_lp = Database::fetch_row(Database::query("SELECT count(id) FROM $tbl_course_lp"));
+			$session_id = intval($session_id);
+			$condition_session = " lp.session_id = $session_id ";
+			if ($session_id != 0) {
+				$condition_session .= " OR lp.session_id = 0";
+			}
+			$res_count_lp = Database::query("SELECT id FROM $tbl_course_lp lp WHERE $condition_session");
+			$count_lp = Database::num_rows($res_count_lp);
+			$lp_id = array();
+			while ($row_lp = Database::fetch_array($res_count_lp)) {
+				$lp_id[] = $row_lp[0];
+			}
 			$avg_progress = 0;
 			//if there is at least one learning path and one student
-			if (!empty($count_lp[0]) && !empty($student_id)) {
+			if ($count_lp>0 && !empty($student_id)) {
                 $condition_user = "";
                 if (is_array($student_id)) {
                     $$r = array_walk($student_id,'intval');
@@ -286,8 +297,13 @@ class Tracking {
                     $student_id = intval($student_id);
                     $condition_user = " lp_view.user_id = '$student_id' AND ";
                 }
-                // Get last view for each student (in case of multi-attempt)  
-                $sql_maxes = "SELECT MAX(view_count), id, progress FROM $tbl_course_lp_view WHERE $condition_user 1=1 GROUP BY user_id";
+                // Get last view for each student (in case of multi-attempt)
+                // Also filter on LPs of this session  
+                $sql_maxes = "SELECT MAX(view_count), id, progress ".
+                        "FROM $tbl_course_lp_view lp_view ".
+                        "WHERE $condition_user ".
+                        "lp_view.lp_id IN (".implode(',',$lp_id).") ".
+                        "GROUP BY user_id";
                 $res_maxes = Database::query($sql_maxes);
                 $sum = $number_items = 0;
                 while ($row_maxes = Database::fetch_array($res_maxes)) {

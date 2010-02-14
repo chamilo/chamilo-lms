@@ -19,7 +19,7 @@ require_once 'install_upgrade.lib.php';
 
 // This page can only be access through including from the install script.
 
-if (!defined('DOKEOS_INSTALL')) {
+if (!defined('SYSTEM_INSTALLATION')) {
 	echo 'You are not allowed here!';
 	exit;
 }

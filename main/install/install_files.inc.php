@@ -15,7 +15,7 @@
 ==============================================================================
 */
 
-if (defined('DOKEOS_INSTALL')) {
+if (defined('SYSTEM_INSTALLATION')) {
 
 	// Write the system config file
 	write_dokeos_config_file('../inc/conf/configuration.php');

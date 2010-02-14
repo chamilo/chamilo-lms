@@ -27,13 +27,13 @@
 * IMPORTANT: This script has to be included by install/index.php or
 * update_courses.php
 *
-* DOKEOS_INSTALL is defined in the install/index.php (means that we are in
+* SYSTEM_INSTALLATION is defined in the install/index.php (means that we are in
 * the regular upgrade process)
 *
 * DOKEOS_COURSE_UPDATE is defined in update_courses.php (means we are
 * executing update_courses.php to update courses separately)
 *
-* When DOKEOS_INSTALL or DOKEOS_COURSE_UPDATE are defined, do for every course:
+* When SYSTEM_INSTALLATION or DOKEOS_COURSE_UPDATE are defined, do for every course:
 * - create a new set of directories that reflect the new tools offered by 1.8
 * - record an item_property for each directory added
 *
@@ -67,7 +67,7 @@ function insert_db($db_name, $folder_name, $text) {
 ==============================================================================
 */
 
-if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE')) {
+if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
 
 	$sys_course_path = $pathForm.'courses/';
 	//$tbl_course = Database :: get_main_table(TABLE_MAIN_COURSE);
@@ -192,7 +192,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE')) {
 	rename($updatePath.'claroline/upload/video', $pathForm.'main/upload/video');
 
 	/*
-	if (defined('DOKEOS_INSTALL')) {
+	if (defined('SYSTEM_INSTALLATION')) {
 		//nothing to do this time
 	}
 	*/

@@ -62,7 +62,7 @@ require '../lang/english/install.inc.php';
 require_once 'install_upgrade.lib.php';
 require_once 'upgrade_lib.php';
 
-define('DOKEOS_INSTALL', 1);
+define('SYSTEM_INSTALLATION', 1);
 define('MAX_COURSE_TRANSFER', 100);
 define('INSTALL_TYPE_UPDATE', 'update');
 define('FORM_FIELD_DISPLAY_LENGTH', 40);

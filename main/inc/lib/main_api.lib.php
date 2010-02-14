@@ -2557,20 +2557,21 @@ function api_get_languages_combo($name = 'language') {
  *   @return void Display the box directly
  */
 function api_display_language_form($hide_if_no_choice = false) {
-	$platformLanguage = api_get_setting('platformLanguage');
-	$dirname = api_get_path(SYS_PATH).'main/lang/'; // TODO: this line is probably no longer needed
+
 	// retrieve a complete list of all the languages.
 	$language_list = api_get_languages();
 	if (count($language_list['name']) <= 1 && $hide_if_no_choice) {
 		return; //don't show any form
 	}
+
 	// the the current language of the user so that his/her language occurs as selected in the dropdown menu
 	if (isset($_SESSION['user_language_choice'])) {
 		$user_selected_language = $_SESSION['user_language_choice'];
 	}
-	if (!isset($user_selected_language)) {
-		$user_selected_language = $platformLanguage;
+	if (empty($user_selected_language)) {
+		$user_selected_language = api_get_setting('platformLanguage');
 	}
+
 	$original_languages = $language_list['name'];
 	$folder = $language_list['folder']; // this line is probably no longer needed
 ?>

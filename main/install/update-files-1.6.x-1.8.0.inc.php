@@ -170,9 +170,9 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
 	//umask($old_umask); // This function is not thread-safe.
 
 	// Write the Dokeos config file
-	write_dokeos_config_file('../inc/conf/configuration.php');
+	write_system_config_file('../inc/conf/configuration.php');
 	// Write a distribution file with the config as a backup for the admin
-	write_dokeos_config_file('../inc/conf/configuration.dist.php');
+	write_system_config_file('../inc/conf/configuration.dist.php');
 	// Write a .htaccess file in the course repository
 	write_courses_htaccess_file($urlAppendPath);
 	copy($updatePath.'claroline/inc/conf/add_course.conf.php', $pathForm.'main/inc/conf/add_course.conf.php');

@@ -246,7 +246,7 @@ if (!isset($_GET['running'])) {
 } else {
 
 	foreach ($_POST as $key => $val) {
-		$magic_quotes_gpc = ini_get('magic_quotes_gpc') ? true : false;
+		$magic_quotes_gpc = ini_get('magic_quotes_gpc');
 		if (is_string($val)) {
 			if ($magic_quotes_gpc) {
 				$val = stripslashes($val);
@@ -589,7 +589,7 @@ if ($_POST['step2']) {
 	?>
 	<?php echo get_lang('AdminPhone').' : '.$adminPhoneForm; ?><br />
 
-	<?php if($installType == 'new'): ?>
+	<?php if ($installType == 'new'): ?>
 	<?php echo get_lang('AdminLogin').' : <strong>'.$loginForm; ?></strong><br />
 	<?php echo get_lang('AdminPass').' : <strong>'.$passForm; /* TODO: Maybe this password should be hidden too? */ ?></strong><br /><br />
 	<?php else: ?>
@@ -606,7 +606,7 @@ if ($_POST['step2']) {
 	<?php if ($installType == 'new'): ?>
 	<div style="background-color:#FFFFFF">
 	<p align="center"><strong><font color="red">
-	<?php echo get_lang('Warning');?> !<br />
+	<?php echo get_lang('Warning'); ?> !<br />
 	<?php echo get_lang('TheInstallScriptWillEraseAllTables'); ?>
 	</font></strong></p>
 	</div>

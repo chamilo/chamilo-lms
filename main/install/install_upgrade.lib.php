@@ -19,10 +19,10 @@
 		CONSTANTS
 ==============================================================================
 */
-define("DOKEOS_MAIN_DATABASE_FILE", "dokeos_main.sql");
+define("SYSTEM_MAIN_DATABASE_FILE", "dokeos_main.sql");
 define("COUNTRY_DATA_FILENAME", "country_data.csv");
 define("COURSES_HTACCESS_FILENAME", "htaccess.dist");
-define("DOKEOS_CONFIG_FILENAME", "configuration.dist.php");
+define("SYSTEM_CONFIG_FILENAME", "configuration.dist.php");
 
 require_once api_get_path(LIBRARY_PATH).'database.lib.php';
 
@@ -70,7 +70,7 @@ function write_courses_htaccess_file($url_append) {
  * Write the main system config file
  * @param string $path Path to the config file
  */
-function write_dokeos_config_file($path) {
+function write_system_config_file($path) {
 
 	global $dbHostForm;
 	global $dbUsernameForm;
@@ -93,13 +93,9 @@ function write_dokeos_config_file($path) {
 	global $new_version;
 	global $new_version_stable;
 
-	// TODO: api_get_path() to be tested here.
-    $seek = array('\\', '//');
-    $destroy = array('/', '/');
-	$rootSys = str_replace($seek, $destroy, realpath($pathForm).'/');
-	$file_path = dirname(__FILE__).'/'.DOKEOS_CONFIG_FILENAME;
+	$root_sys = api_add_trailing_slash(str_replace('\\', '/', realpath($pathForm)));
+	$content = file_get_contents(dirname(__FILE__).'/'.SYSTEM_CONFIG_FILENAME);
 
-	$content = file_get_contents($file_path);
 	$config['{DATE_GENERATED}'] = date('r');
 	$config['{DATABASE_HOST}'] = $dbHostForm;
 	$config['{DATABASE_USER}'] = $dbUsernameForm;
@@ -114,7 +110,7 @@ function write_dokeos_config_file($path) {
 	$config['{DATABASE_SCORM}'] = (($singleDbForm && empty($dbScormForm)) ? $dbNameForm : $dbScormForm);
 	$config['{DATABASE_PERSONAL}'] =(($singleDbForm && empty($dbUserForm)) ?  $dbNameForm : $dbUserForm);
 	$config['{ROOT_WEB}'] = $urlForm;
-	$config['{ROOT_SYS}'] = $rootSys;
+	$config['{ROOT_SYS}'] = $root_sys;
 	$config['{URL_APPEND_PATH}'] = $urlAppendPath;
 	$config['{PLATFORM_LANGUAGE}'] = $languageForm;
 	$config['{SECURITY_KEY}'] = md5(uniqid(rand().time()));
@@ -164,7 +160,7 @@ function load_main_database($installation_settings, $db_script = '') {
 	if (!empty($db_script)) {
 		$dokeos_main_sql_file_string = file_get_contents($db_script);
 	} else {
-		$dokeos_main_sql_file_string = file_get_contents(DOKEOS_MAIN_DATABASE_FILE);
+		$dokeos_main_sql_file_string = file_get_contents(SYSTEM_MAIN_DATABASE_FILE);
 	}
 
 	//replace symbolic parameters with user-specified values

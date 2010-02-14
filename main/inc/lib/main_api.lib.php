@@ -331,7 +331,6 @@ function api_get_path($path_type, $path = null) {
 		WEB_PATH => '',
 		SYS_PATH => '',
 		REL_PATH => '',
-		REL_SYS_PATH => '',
 		WEB_SERVER_ROOT_PATH => '',
 		SYS_SERVER_ROOT_PATH => '',
 		WEB_COURSE_PATH => '',
@@ -3137,11 +3136,11 @@ function api_chmod_R($path, $filemode) {
 	 */
 	function parse_info_file($filename) {
 	  $info = array();
-	
+
 	  if (!file_exists($filename)) {
 	    return $info;
 	  }
-	
+
 	  $data = file_get_contents($filename);
 	  if (preg_match_all('
 	    @^\s*                           # Start at the beginning of a line, ignoring leading whitespace
@@ -3163,12 +3162,12 @@ function api_chmod_R($path, $filemode) {
 	        $$var = isset($match[++$i]) ? $match[$i] : '';
 	      }
 	      $value = stripslashes(substr($value1, 1, -1)) . stripslashes(substr($value2, 1, -1)) . $value3;
-	
+
 	      // Parse array syntax
 	      $keys = preg_split('/\]?\[/', rtrim($key, ']'));
 	      $last = array_pop($keys);
 	      $parent = &$info;
-	
+
 	      // Create nested arrays
 	      foreach ($keys as $key) {
 	        if ($key == '') {
@@ -3179,12 +3178,12 @@ function api_chmod_R($path, $filemode) {
 	        }
 	        $parent = &$parent[$key];
 	      }
-	
+
 	      // Handle PHP constants
 	      if (defined($value)) {
 	        $value = constant($value);
 	      }
-	
+
 	      // Insert actual value
 	      if ($last == '') {
 	        $last = count($parent);

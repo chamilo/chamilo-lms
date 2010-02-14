@@ -2,7 +2,7 @@
 /* For licensing terms, see /chamilo_license.txt */
 /**
 ==============================================================================
-*	Install the Dokeos database
+*	Install the Chamilo database
 *	Notice : This script has to be included by index.php
 *
 *	@package chamilo.install
@@ -17,7 +17,7 @@ require_once 'install_upgrade.lib.php';
 ==============================================================================
 */
 
-//this page can only be access through including from the install script.
+// This page can only be access through including from the install script.
 
 if (!defined('DOKEOS_INSTALL')) {
 	echo 'You are not allowed here!';
@@ -53,9 +53,7 @@ Database::query("SET SESSION character_set_server='utf8';");
 Database::query("SET SESSION collation_server='utf8_general_ci';");
 Database::query("SET CHARACTER SET 'utf8';");
 
-if ($urlForm[strlen($urlForm) - 1] != '/') {
-	$urlForm = $urlForm.'/';
-}
+$urlForm = api_add_trailing_slash($urlForm);
 
 switch ($encryptPassForm) {
 	case 'md5' :
@@ -69,36 +67,34 @@ switch ($encryptPassForm) {
 		break;
 }
 
-$dbPrefixForm = eregi_replace('[^a-z0-9_-]', '', $dbPrefixForm);
+$dbPrefixForm = preg_replace('/[^a-zA-Z0-9_-]/', '', $dbPrefixForm);
 
-$dbNameForm = eregi_replace('[^a-z0-9_-]', '', $dbNameForm);
-$dbStatsForm = eregi_replace('[^a-z0-9_-]', '', $dbStatsForm);
-$dbUserForm = eregi_replace('[^a-z0-9_-]', '', $dbUserForm);
-
-if (!empty($dbPrefixForm) && !ereg('^'.$dbPrefixForm, $dbNameForm)) {
+$dbNameForm = preg_replace('/[^a-zA-Z0-9_-]/', '', $dbNameForm);
+if (!empty($dbPrefixForm) && strpos($dbNameForm, $dbPrefixForm) !== 0) {
 	$dbNameForm = $dbPrefixForm.$dbNameForm;
 }
 
-if (!empty($dbPrefixForm) && !ereg('^'.$dbPrefixForm, $dbStatsForm)) {
+$dbStatsForm = preg_replace('/[^a-zA-Z0-9_-]/', '', $dbStatsForm);
+if (!empty($dbPrefixForm) && strpos($dbStatsForm, $dbPrefixForm) !== 0) {
 	$dbStatsForm = $dbPrefixForm.$dbStatsForm;
 }
 
-if (!empty($dbPrefixForm) && !ereg('^'.$dbPrefixForm, $dbUserForm)) {
+$dbUserForm = preg_replace('/[^a-zA-Z0-9_-]/', '', $dbUserForm);
+if (!empty($dbPrefixForm) && strpos($dbUserForm, $dbPrefixForm) !== 0) {
 	$dbUserForm = $dbPrefixForm.$dbUserForm;
 }
 
 $mysqlMainDb = $dbNameForm;
-$mysqlStatsDb = $dbStatsForm;
-$mysqlUserDb = $dbUserForm;
-
 if (empty($mysqlMainDb) || $mysqlMainDb == 'mysql' || $mysqlMainDb == $dbPrefixForm) {
 	$mysqlMainDb = $dbPrefixForm.'main';
 }
 
+$mysqlStatsDb = $dbStatsForm;
 if (empty($mysqlStatsDb) || $mysqlStatsDb == 'mysql' || $mysqlStatsDb == $dbPrefixForm) {
 	$mysqlStatsDb = $dbPrefixForm.'stats';
 }
 
+$mysqlUserDb = $dbUserForm;
 if (empty($mysqlUserDb) || $mysqlUserDb == 'mysql' || $mysqlUserDb == $dbPrefixForm) {
 	$mysqlUserDb = $dbPrefixForm.'user';
 }
@@ -113,13 +109,13 @@ if (!$singleDbForm) {
 }
 Database::query("CREATE DATABASE IF NOT EXISTS `$mysqlMainDb`") or die(Database::error());
 
-if($mysqlStatsDb == $mysqlMainDb && $mysqlUserDb == $mysqlMainDb) {
+if ($mysqlStatsDb == $mysqlMainDb && $mysqlUserDb == $mysqlMainDb) {
 	$singleDbForm = true;
 }
 
 /**
-* CREATING THE STATISTICS DATABASE
-*/
+ * CREATING THE STATISTICS DATABASE
+ */
 if ($mysqlStatsDb != $mysqlMainDb) {
 	if (!$singleDbForm) {
 		// multi DB mode AND tracking has its own DB so create it
@@ -132,8 +128,8 @@ if ($mysqlStatsDb != $mysqlMainDb) {
 }
 
 /**
-* CREATING THE USER DATABASE
-*/
+ * CREATING THE USER DATABASE
+ */
 if ($mysqlUserDb != $mysqlMainDb) {
 	if (!$singleDbForm) {
 		// multi DB mode AND user data has its own DB so create it
@@ -145,15 +141,15 @@ if ($mysqlUserDb != $mysqlMainDb) {
 	}
 }
 
-include '../lang/english/create_course.inc.php';
+include api_get_path(SYS_LANG_PATH).'english/create_course.inc.php';
 
 if ($languageForm != 'english') {
-	include '../lang/'.$languageForm.'/create_course.inc.php';
+	include api_get_path(SYS_LANG_PATH).$languageForm.'/create_course.inc.php';
 }
 
 /**
-* creating the tables of the main database
-*/
+ * creating the tables of the main database
+ */
 Database::select_db($mysqlMainDb) or die(Database::error());
 
 $installation_settings['{ORGANISATIONNAME}'] = $institutionForm;
@@ -174,8 +170,8 @@ $installation_settings['{HASHFUNCTIONMODE}'] = $encryptPassForm;
 load_main_database($installation_settings);
 
 /**
-* creating the tables of the tracking database
-*/
+ * creating the tables of the tracking database
+ */
 
 Database::select_db($mysqlStatsDb) or die(Database::error());
 
@@ -185,9 +181,9 @@ $track_countries_table = "track_c_countries";
 fill_track_countries_table($track_countries_table);
 
 /**
-* creating the tables of the USER database
-* this is where the personal agenda items are storen, the user defined course categories (sorting of my courses)
-*/
+ * creating the tables of the USER database
+ * this is where the personal agenda items are storen, the user defined course categories (sorting of my courses)
+ */
 
 Database::select_db($mysqlUserDb) or die(Database::error());
 

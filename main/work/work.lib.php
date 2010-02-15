@@ -1,5 +1,5 @@
 <?php //$Id: work.lib.php 22357 2009-07-24 17:44:17Z juliomontoya $
-/* For licensing terms, see /dokeos_license.txt */
+/* For licensing terms, see /license.txt */
 /**
 *	@package dokeos.work
 * 	@author Thomas, Hugues, Christophe - original version
@@ -911,11 +911,12 @@ function build_work_directory_selector($folders,$curdirpath,$group_dir='')
  * @param string $move_file
  * @return string html form
  */
-function build_work_move_to_selector($folders,$curdirpath,$move_file,$group_dir='')
+function build_work_move_to_selector($folders, $curdirpath, $move_file, $group_dir='')
 {
 	//gets file title
-	$tbl_work = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
-	$sql = "SELECT title FROM $tbl_work WHERE id ='".(int)$move_file."'";
+	$move_file	= intval($move_file);
+	$tbl_work	= Database::get_course_table(TABLE_STUDENT_PUBLICATION);
+	$sql 		= "SELECT title FROM $tbl_work WHERE id ='".$move_file."'";
 	$result = Database::query($sql);
 	$title = Database::fetch_row($result);
 	global $gradebook;
@@ -1034,10 +1035,11 @@ function create_unexisting_work_directory($base_work_dir,$desired_dir_name)
  * @return	integer	-1 on error
  */
 function del_dir($base_work_dir,$dir,$id) {
+	$id = intval($id);	
 	if(empty($dir) or $dir=='/') {
 		return -1;
 	}
-	$check = Security::check_abs_path($base_work_dir.$dir,$base_work_dir);
+	$check = Security::check_abs_path($base_work_dir.$dir, $base_work_dir);
 	if (!$check || !is_dir($base_work_dir.$dir)) {
 		return -1;
 	}
@@ -1054,7 +1056,9 @@ function del_dir($base_work_dir,$dir,$id) {
 	if (api_get_setting('permanently_remove_deleted_files') == 'true'){
 		my_delete($base_work_dir.$dir);
 	} else {
-		rename($base_work_dir.$dir, $base_work_dir.$new_dir);
+		if (file_exists($base_work_dir.$dir)) {
+			rename($base_work_dir.$dir, $base_work_dir.$new_dir);
+		}
 	}
 }
 

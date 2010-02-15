@@ -158,19 +158,19 @@ function write_system_config_file($path) {
  */
 function load_main_database($installation_settings, $db_script = '') {
 	if (!empty($db_script)) {
-		$dokeos_main_sql_file_string = file_get_contents($db_script);
+		$sql_text = file_get_contents($db_script);
 	} else {
-		$dokeos_main_sql_file_string = file_get_contents(SYSTEM_MAIN_DATABASE_FILE);
+		$sql_text = file_get_contents(SYSTEM_MAIN_DATABASE_FILE);
 	}
 
 	//replace symbolic parameters with user-specified values
 	foreach ($installation_settings as $key => $value) {
-		$dokeos_main_sql_file_string = str_replace($key, Database::escape_string($value), $dokeos_main_sql_file_string);
+		$sql_text = str_replace($key, Database::escape_string($value), $sql_text);
 	}
 
 	//split in array of sql strings
 	$sql_instructions = array();
-	$success = split_sql_file($sql_instructions, $dokeos_main_sql_file_string);
+	$success = split_sql_file($sql_instructions, $sql_text);
 
 	//execute the sql instructions
 	$count = count($sql_instructions);
@@ -185,11 +185,11 @@ function load_main_database($installation_settings, $db_script = '') {
  * @param	string	Name of the file containing the SQL script inside the install directory
  */
 function load_database_script($db_script) {
-	$dokeos_sql_file_string = file_get_contents($db_script);
+	$sql_text = file_get_contents($db_script);
 
 	//split in array of sql strings
 	$sql_instructions = array();
-	$success = split_sql_file($sql_instructions, $dokeos_sql_file_string);
+	$success = split_sql_file($sql_instructions, $sql_text);
 
 	//execute the sql instructions
 	$count = count($sql_instructions);

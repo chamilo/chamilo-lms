@@ -253,7 +253,7 @@ function get_config_param_from_db($host, $login, $pass, $db_name, $param = '') {
 /**
  *	Displays a drop down box for selection the preferred language.
  */
-function display_language_selection_box() {
+function display_language_selection_box($name = 'language_list', $default_language = 'english') {
 	// Reading language list.
 	$language_list = get_language_folder_list();
 
@@ -268,11 +268,26 @@ function display_language_selection_box() {
 	}
 	*/
 
-	// The default selection, it may be customized too.
-	$default_language = 'english';
+	// Sanity checks due to the possibility for customizations.
+	if (!is_array($language_list) || empty($language_list)) {
+		$language_list = array('english' => 'English');
+	}
+
+	// Sorting again, if it is necessary.
+	//asort($language_list);
+
+	// More sanity checks.
+	if (!array_key_exists($default_language, $language_list)) {
+		if (array_key_exists('english', $language_list)) {
+			$default_language = 'english';
+		} else {
+			$language_keys = array_keys($language_list);
+			$default_language = $language_keys[0];
+		}
+	}
 
 	// Displaying the box.
-	echo "\t\t<select name=\"language_list\">\n";
+	echo "\t\t<select name=\"$name\">\n";
 	foreach ($language_list as $key => $value) {
 		if ($key == $default_language) {
 			$option_end = ' selected="selected">';
@@ -295,7 +310,7 @@ function display_language_selection() { ?>
 	<h2><?php echo display_step_sequence(); ?><?php echo get_lang('InstallationLanguage'); ?></h2>
 	<p><?php echo get_lang('PleaseSelectInstallationProcessLanguage'); ?>:</p>
 	<form id="lang_form" method="post" action="<?php echo api_get_self(); ?>">
-<?php display_language_selection_box(); ?>
+<?php display_language_selection_box('language_list', api_get_interface_language()); ?>
 	<button type="submit" name="step1" class="next" value="<?php get_lang('Next'); ?> &gt;"><?php echo get_lang('Next'); ?></button>
 	<input type="hidden" name="is_executable" id="is_executable" value="-" />
 	</form>
@@ -903,44 +918,8 @@ function display_configuration_settings_form($installType, $urlForm, $languageFo
 
 		echo '<td>';
 
-		$array_lang = array('asturian', 'bulgarian', 'english', 'italian', 'french', 'slovenian', 'spanish');
+		display_language_selection_box('languageForm', $languageForm);
 
-		////Only display Language have 90% + // TODO: Ivan: Is this policy actual? I am going to change it.
-		echo "\t\t<select name=\"languageForm\">\n";
-
-		foreach ($array_lang as $key => $value)	{
-			echo '<option value="'.$value.'"';
-			if ($value == $languageForm) {
-				echo ' selected="selected"';
-			}
-			echo ">$value</option>\n";
-		}
-
-		echo "\t\t</select>\n";
-
-		//Display all language
-		/*echo "<select name=\"languageForm\">\n";
-		$dirname = '../lang/';
-
-		if ($dir = @opendir($dirname)) {
-			$lang_files = array();
-			while (($file = readdir($dir)) !== false) {
-				if($file != '.' && $file != '..' && $file != 'CVS' && $file != '.svn' && is_dir($dirname.$file)){
-					array_push($lang_files, $file);
-				}
-			}
-			closedir($dir);
-		}
-		sort($lang_files);
-
-		foreach ($lang_files as $file) {
-			echo '<option value="'.$file.'"';
-			if ($file == $languageForm) {
-				echo ' selected="selected"';
-			}
-			echo ">$file</option>\n";
-		}
-		echo '</select>';*/
 		echo "</td>\n";
 	}
 	echo "</tr>\n";

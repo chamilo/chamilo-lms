@@ -53,6 +53,7 @@ $_setting = array(
 );
 
 // Loading language files.
+// TODO: It would be nice browser's intrface language to be detected at this point.
 require api_get_path(SYS_LANG_PATH).'english/trad4all.inc.php';
 require api_get_path(SYS_LANG_PATH).'english/install.inc.php';
 if (!empty($_POST['language_list'])) {
@@ -202,14 +203,14 @@ if ($installType == 'update' && in_array($my_old_version, $update_from_version_8
 
 if (!isset($_GET['running'])) {
 
-	$dbHostForm		='localhost';
-	$dbUsernameForm	='root';
-	$dbPassForm		='';
- 	$dbPrefixForm	='';
-	$dbNameForm		='chamilo_main';
-	$dbStatsForm	='chamilo_stats';
-	$dbScormForm	='chamilo_scorm';
-	$dbUserForm		='chamilo_user';
+	$dbHostForm		= 'localhost';
+	$dbUsernameForm	= 'root';
+	$dbPassForm		= '';
+ 	$dbPrefixForm	= '';
+	$dbNameForm		= 'chamilo_main';
+	$dbStatsForm	= 'chamilo_stats';
+	$dbScormForm	= 'chamilo_scorm';
+	$dbUserForm		= 'chamilo_user';
 
 	// Extract the path to append to the url if Chamilo is not installed on the web root directory.
 	$urlAppendPath = api_remove_trailing_slash(api_get_path(REL_PATH));
@@ -232,16 +233,18 @@ if (!isset($_GET['running'])) {
 	$institutionForm    = 'My Organisation';
 	$institutionUrlForm = 'http://www.chamilo.org';
 	$languageForm	    = 'english';
+	// TODO: A better choice to be tested:
+	//$languageForm	    = api_get_interface_language();
 
-	$checkEmailByHashSent = 0;
+	$checkEmailByHashSent	= 0;
 	$ShowEmailnotcheckedToStudent = 1;
-	$userMailCanBeEmpty = 1;
-	$allowSelfReg = 1;
-	$allowSelfRegProf = 1;
-	$enableTrackingForm = 1;
-	$singleDbForm = 0;
-	$encryptPassForm = 'md5';
-	$session_lifetime = 360000;
+	$userMailCanBeEmpty		= 1;
+	$allowSelfReg			= 1;
+	$allowSelfRegProf		= 1;
+	$enableTrackingForm		= 1;
+	$singleDbForm			= 0;
+	$encryptPassForm		= 'md5';
+	$session_lifetime		= 360000;
 
 } else {
 

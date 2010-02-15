@@ -121,11 +121,12 @@ function file_to_array($filename) {
  * @param	string	If we want to give the path rather than take it from POST
  * @return  string  the value of the parameter
  * @author Olivier Brouckaert
+ * @author Reworked by Ivan Tcholakov, 2010
  */
 function get_config_param($param, $updatePath = '') {
 	global $configFile, $updateFromConfigFile;
 
-	//look if we already have the queried param
+	// Look if we already have the queried parameter.
 	if (is_array($configFile) && isset($configFile[$param])) {
 		return $configFile[$param];
 	}
@@ -136,14 +137,14 @@ function get_config_param($param, $updatePath = '') {
 	$updateFromInstalledVersionFile = '';
 
 	if (empty($updateFromConfigFile)) {
-		//if update from previous install was requested
-		//try to recover old config file from dokeos 1.8.x
+		// If update from previous install was requested,
+		// try to recover old config file from dokeos 1.8.x.
 		if (file_exists($updatePath.'main/inc/conf/configuration.php')) {
 			$updateFromConfigFile = 'main/inc/conf/configuration.php';
 		} elseif (file_exists($updatePath.'claroline/inc/conf/claro_main.conf.php')) {
 			$updateFromConfigFile = 'claroline/inc/conf/claro_main.conf.php';
 		} else {
-			//give up recovering
+			// Give up recovering.
 			error_log('Could not find config file in '.$updatePath.' in get_config_param()', 0);
 			return null;
 		}
@@ -153,60 +154,93 @@ function get_config_param($param, $updatePath = '') {
 
 		$updateFromInstalledVersionFile = $updatePath.'main/inc/installedVersion.inc.php';
 
-	} elseif (file_exists($updatePath.$updateFromConfigFile)) { //the param was not found in global vars, so look into the old config file
+	} elseif (file_exists($updatePath.$updateFromConfigFile)) {
 
-		//make sure the installedVersion file is read first so it is overwritten
-		//by the config file if the config file contains the version (from 1.8.4)
-		$temp2 = array();
+		// The parameter was not found among the global variables, so look into the old configuration file.
+
+		// Make sure the installedVersion file is read first so it is overwritten
+		// by the config file if the config file contains the version (from 1.8.4).
+		$config_data_2 = array();
 		if (file_exists($updatePath.$updateFromInstalledVersionFile)) {
-			$temp2 = file_to_array($updatePath.$updateFromInstalledVersionFile);
+			$config_data_2 = file_to_array($updatePath.$updateFromInstalledVersionFile);
 		}
 		$configFile = array();
-		$temp = file_to_array($updatePath.$updateFromConfigFile);
-		$temp = array_merge($temp, $temp2);
+		$config_data = file_to_array($updatePath.$updateFromConfigFile);
+		$config_data = array_merge($config_data, $config_data_2);
 		$val = '';
 
-		//parse the config file (TODO clarify why it has to be so complicated)
-		foreach ($temp as $enreg) {
-			if (strstr($enreg, '=')) {
-				$enreg = explode('=', $enreg);
-				$enreg[0] = trim($enreg[0]);
-				if ($enreg[0][0] == '$') {
-					list($enreg[1]) = explode(' //', $enreg[1]);
+		// Parse the configuration file, statement by statement (line by line, actually).
+		foreach ($config_data as $php_statement) {
 
-					$enreg[0] = trim(str_replace('$', '', $enreg[0]));
-					$enreg[1] = str_replace('\"', '"', ereg_replace('(^"|"$)', '', substr(trim($enreg[1]), 0, -1)));
-					$enreg[1] = str_replace('\'', '"', ereg_replace('(^\'|\'$)', '', $enreg[1]));
-					if (strtolower($enreg[1]) == 'true') {
-						$enreg[1] = 1;
-					}
-					if (strtolower($enreg[1]) == 'false') {
-						$enreg[1] = 0;
+			if (strpos($php_statement, '=') !== false) {
+				// Variable assignment statement have been detected (probably).
+				// It is expected to be as follows:
+				// $variable = 'some_value'; // A comment that is not mandatory.
+
+				// Split the statement into its left and right sides.
+				$php_statement = explode('=', $php_statement);
+				$variable = trim($php_statement[0]);
+				$value = $php_statement[1];
+
+				if (substr($variable, 0, 1) == '$') {
+					// We have for sure a php variable assignment detected.
+
+					// On the left side: Retrieve the pure variable's name
+					$variable = trim(str_replace('$', '', $variable));
+
+					// On the right side: Remove the comment, if it exists.
+					list($value) = explode(' //', $value);
+					// Remove extra whitespace, if any. Remove the trailing semicolon (;).
+					$value = substr(trim($value), 0, -1);
+					// Remove surroundig quotes, restore escaped quotes.
+					$value = str_replace('\"', '"', preg_replace('/^"|"$/', '', $value));
+					$value = str_replace('\'', '"', preg_replace('/^\'|\'$/', '', $value));
+
+					if (strtolower($value) == 'true') {
+
+						// A boolean true value have been recognized.
+						$value = 1;
+
+					} elseif (strtolower($value) == 'false') {
+
+						// A boolean false value have been recognized.
+						$value = 0;
+
 					} else {
-						$implode_string=' ';
 
-						if (!strstr($enreg[1], '." ".') && strstr($enreg[1], '.$')) {
-							$enreg[1] = str_replace('.$', '." ".$', $enreg[1]);
+						// Probably we have a string value, but also we have to check
+						// possible string concatenations that may include string values
+						// and other configuration variables. I this case we have to
+						// get the calculated result of the concatenation.
+						$implode_string = ' ';
+						if (!strstr($value, '." ".') && strstr($value, '.$')) {
+							// Yes, there is concatenation, insert a special separator string.
+							$value = str_replace('.$', '." ".$', $value);
 							$implode_string = '';
 						}
 
-						$tmp = explode('." ".', $enreg[1]);
+						// Split the concatenated values, if they are more than one.
+						$sub_strings = explode('." ".', $value);
 
-						foreach ($tmp as $tmp_key => $tmp_val) {
-							if (eregi('^\$[a-z_][a-z0-9_]*$', $tmp_val)) {
-								$tmp[$tmp_key] = get_config_param(str_replace('$', '', $tmp_val));
+						// Seek for variables and retrieve their values.
+						foreach ($sub_strings as $key => & $sub_string) {
+							if (preg_match('/^\$[a-zA-Z_][a-zA-Z0-9_]*$/', $sub_string)) {
+								// A variable has been detected, read it by recursive call.
+								$sub_string = get_config_param(str_replace('$', '', $sub_string));
 							}
 						}
 
-						$enreg[1] = implode($implode_string, $tmp);
+						// Concatenate everything into the final, the calculated string value.
+						$value = implode($implode_string, $sub_strings);
 					}
 
-					$configFile[$enreg[0]] = $enreg[1];
+					// Cache the result value.
+					$configFile[$variable] = $value;
 
-					$a = explode("'", $enreg[0]);
+					$a = explode("'", $variable);
 					$key_tmp = $a[1];
 					if ($key_tmp == $param) {
-						$val = $enreg[1];
+						$val = $value;
 					}
 				}
 			}

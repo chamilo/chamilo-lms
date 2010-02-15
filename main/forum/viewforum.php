@@ -289,7 +289,10 @@ if ($my_action == 'liststd' AND isset($_GET['content']) AND isset($_GET['id']) A
 // if the user is not a course administrator and the forum is hidden
 // then the user is not allowed here.
 if (!api_is_allowed_to_edit(false,true) AND ($current_forum_category['visibility']==0 OR $current_forum['visibility']==0)) {
-	forum_not_allowed_here();
+	$forum_allow = forum_not_allowed_here();
+	if ($forum_allow === false) {
+		exit;
+	}
 }
 
 if ($origin == 'learnpath') {

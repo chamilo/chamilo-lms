@@ -4710,9 +4710,10 @@ class learnpath {
 				}
 			} else {
 				if ($arrLP[$i]['item_type'] != 'dokeos_chapter' && $arrLP[$i]['item_type'] != 'dokeos_module' && $arrLP[$i]['item_type'] != 'dir') {
+					
 					$return .= ' <input type="file" name="mp3file' . $arrLP[$i]['id'] . '" id="mp3file" />';
 					if (!empty ($arrLP[$i]['audio'])) {
-						$return .= '<br /><input type="checkbox" name="removemp3' . $arrLP[$i]['id'] . '" id="checkbox' . $arrLP[$i]['id'] . '" />' . get_lang('RemoveAudio');
+						$return .= '<br />'.Security::remove_XSS($arrLP[$i]['audio']).'<input type="checkbox" name="removemp3' . $arrLP[$i]['id'] . '" id="checkbox' . $arrLP[$i]['id'] . '" />' . get_lang('RemoveAudio');
 					}
 				}
 			}

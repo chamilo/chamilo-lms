@@ -263,7 +263,6 @@ class Tracking {
      * @param   string  Course code
      * @param   int     Session id (optional). Defaults to 0 (=no session filter)
      * @return double  Average progress of the user in this course
-     * @todo Add session management here
      */
 	public static function get_avg_student_progress($student_id, $course_code, $session_id = 0) {
 		// protect datas
@@ -334,8 +333,10 @@ class Tracking {
 	 * @param Course id
 	 * @param Array limit average to listed lp ids
 	 * @return string value (number %) Which represents a round integer explain in got in 3.
+	 * @todo Manage sessions
 	 */
 	public static function get_avg_student_score($student_id, $course_code, $lp_ids=array()) {
+		// get global tables names
 		$course_table = Database :: get_main_table(TABLE_MAIN_COURSE);
 		$course_user_table = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 		$table_session_course_user = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
@@ -345,187 +346,143 @@ class Tracking {
 		$course = CourseManager :: get_course_information($course_code);
 
 		if (!empty($course['db_name'])) {
-
+            // get course tables names
 			$tbl_quiz_questions= Database :: get_course_table(TABLE_QUIZ_QUESTION,$course['db_name']);
 			$lp_table = Database :: get_course_table(TABLE_LP_MAIN,$course['db_name']);
 			$lp_item_table = Database  :: get_course_table(TABLE_LP_ITEM,$course['db_name']);
 			$lp_view_table = Database  :: get_course_table(TABLE_LP_VIEW,$course['db_name']);
 			$lp_item_view_table = Database  :: get_course_table(TABLE_LP_ITEM_VIEW,$course['db_name']);
 
+			// Compose a filter based on optional learning paths list given
 			$condition_lp = "";
 			if(count($lp_ids) > 0) {
 				$condition_lp =" WHERE id IN(".implode(',',$lp_ids).") ";
 			}
+            // Check the real number of LPs corresponding to the filter in the
+            // database (and if no list was given, get them all)
+			$res_row_lp = Database::query("SELECT DISTINCT(id) FROM $lp_table $condition_lp");
+			$count_row_lp = Database::num_rows($res_row_lp);
+			$lp_list = array();
+			while ($row_lp = Database::fetch_array($res_row_lp)) {
+				$lp_list[] = $row_lp[0];
+			}
 
-			$count_row_lp = Database::fetch_row(Database::query("SELECT count(*) FROM $lp_table $condition_lp"));
-
+			// Init local variables that will be used through the calculation
 			$lp_scorm_score_total = 0;
-			$lp_scorm_weighting_total = 0;
 			$lp_scorm_result_score_total = 0;
 			$lp_scorm_loop=0;
 			$lp_count = 0;
 			$progress = 0;
 
-			if (!empty($count_row_lp[0]) && !empty($student_id)) {
+			// prepare filter on users
+            $condition_user1 = "";
+            if (is_array($student_id)) {
+                array_walk($student_id,'intval');
+                $condition_user1 =" AND user_id IN (".implode(',',$student_id).") ";
+            } else {
+                $condition_user1 =" AND user_id = '$student_id' ";
+            }
+			
+			if ($count_row_lp>0 && !empty($student_id)) {
 
-				$condition_user1 = "";
-				if (is_array($student_id)) {
-					$condition_user1 =" AND user_id IN (".implode(',',$student_id).") ";
-				} else {
-					$condition_user1 =" AND user_id = '$student_id' ";
-				}
-
-				$sql = "SELECT max(id) as id, lp_id, user_id FROM $lp_view_table WHERE lp_id IN (SELECT id FROM $lp_table $condition_lp) $condition_user1 GROUP BY lp_id,user_id";
+				// Get all views through learning paths filter
+				$sql = "SELECT MAX(view_count) as vc, id, progress, lp_id, user_id ".
+				        "FROM $lp_view_table ".
+				        "WHERE lp_id IN (".implode(',',$lp_list).") ".
+				        "$condition_user1 GROUP BY lp_id,user_id";
 				$rs_last_lp_view_id = Database::query($sql);
-
+                
+				$count_views = 0;
 				$score_of_scorm_calculate = 0;
 				if (Database::num_rows($rs_last_lp_view_id) > 0) {
+    				// Cycle through each line of the results (grouped by lp_id, user_id) 
 					while ($row_lp_view = Database::fetch_array($rs_last_lp_view_id)) {
 
 						$lp_view_id = $row_lp_view['id'];
-						// we get the progress
-						$sql='SELECT progress FROM '.$lp_view_table.' WHERE id="'.$lp_view_id.'"';
+						$progress = $row_lp_view['progress'];
+						$lp_id = $row_lp_view['lp_id'];
+						$user_id = $row_lp_view['user_id'];
+						
+						// For the currently analysed view, get the score and 
+						// max_score of each item if it is a sco or a TOOL_QUIZ 
+						$sql_max_score = "SELECT lp_iv.score as score,lp_i.max_score, lp_i.path, lp_i.item_type , lp_i.id as iid".
+						          "	FROM $lp_item_view_table as lp_iv ".
+						          "	INNER JOIN $lp_item_table as lp_i ".
+						          "	ON lp_i.id = lp_iv.lp_item_id ".
+						          "	AND (lp_i.item_type='sco' ". 
+						          " OR lp_i.item_type='".TOOL_QUIZ."') ".
+						          " WHERE lp_view_id='$lp_view_id'";
 
-						$rs = Database::query($sql);
-						$progress = Database::result($rs,0,'progress');
+						$res_max_score = Database::query($sql_max_score);
+						$count_total_loop = 0;
+						$num_rows_max_score = Database::num_rows($res_max_score);
 
-						// item's list of an scorm
-						$sql_max_score='SELECT lp_iv.score as score,lp_i.max_score
-								FROM '.$lp_item_view_table.' as lp_iv
-								INNER JOIN '.$lp_item_table.' as lp_i
-									ON lp_i.id = lp_iv.lp_item_id
-									AND lp_i.item_type="sco"
-								WHERE lp_view_id="'.$lp_view_id.'"';
-
-						$res_max_score=Database::query($sql_max_score);
-						$count_total_loop=0;
-						$num_rows_max_score=Database::num_rows($res_max_score);
-
-						if ($num_rows_max_score==1) {
-							while ($row_max_score=Database::fetch_array($res_max_score)) {
-								if ($row_max_score['max_score']==0) {
-	                                //when there's no max score, we assume 100 as the max score, as the SCORM 1.2 says that the value should always be between 0 and 100.
-	                       			$lp_scorm_result_score_total+=($row_max_score['score']/100);
-									$current_value = $row_max_score['score']/100;
-
-								} else {
-									$lp_scorm_result_score_total+=($row_max_score['score']/$row_max_score['max_score']);
-									$current_value = $row_max_score['score']/$row_max_score['max_score'];
+						// Go through each scorable element of this view
+						while ($row_max_score = Database::fetch_array($res_max_score)) {
+							$max_score = $row_max_score['max_score'];
+							$score = $row_max_score['score'];
+                            if ($row_max_score['item_type'] == 'sco') {
+                                // Check if it is sco (easier to get max_score)
+                            	//when there's no max score, we assume 100 as the max score, as the SCORM 1.2 says that the value should always be between 0 and 100.
+								if ($max_score==0) {
+									$max_score = 100;
 								}
-								$count_total_loop++;
-							}
-						} elseif ($num_rows_max_score > 1) {
-							while ($row_max_score=Database::fetch_array($res_max_score)) {
-								if ($row_max_score['max_score']==0) {
-									$lp_scorm_result_score_total+=($row_max_score['score']/100);
-									$current_value = $row_max_score['score']/100;
-								} else {
-	                                //when there's no max score, we assume 100 as the max score, as the SCORM 1.2 says that the value should always be between 0 and 100.
-									$lp_scorm_result_score_total+=($row_max_score['score']/$row_max_score['max_score']);
-									$current_value = $row_max_score['score']/$row_max_score['max_score'];
-								}
-								$count_total_loop++;
-							}
+								$lp_scorm_result_score_total += ($score/$max_score);
+								$current_value = $score/$max_score;
+                            } else { 
+                            	// Case of a TOOL_QUIZ element
+                                $item_id = $row_max_score['iid'];
+                                $item_path = $row_max_score['path'];
+                                // Get last attempt to this exercise  through 
+                                // the current lp for the current user
+                                $sql_last_attempt = "SELECT exe_id FROM $tbl_stats_exercices ".
+		                           " WHERE exe_exo_id = '$item_path' ".
+		                           " AND exe_user_id = '$user_id' ".
+		                           // " AND orig_lp_id = '$lp_id' ". //lp_id is already defined by the item_id
+		                           " AND orig_lp_item_id = '$item_id' ".
+		                           " AND exe_cours_id = '$course_code' ".
+		                           " ORDER BY exe_date DESC limit 1";
+		                        $result_last_attempt = Database::query($sql_last_attempt);
+		                        $num = Database :: num_rows($result_last_attempt);
+		                        if ($num > 0 ) {
+                                    $id_last_attempt = Database :: result($result_last_attempt, 0, 0);
+	                                   
+	                                // Within the last attempt number tracking, get the sum of
+	                                // the max_scores of all questions that it was
+	                                // made of (we need to make this call dynamic
+	                                // because of random questions selection)
+			                        $sql = "SELECT SUM(t.ponderation) as maxscore ".
+			                           " FROM ( SELECT distinct question_id, marks, ponderation ".
+			                           " FROM $tbl_stats_attempts AS at " .
+			                           " INNER JOIN  $tbl_quiz_questions AS q ".
+			                           " ON (q.id = at.question_id) ".
+			                           " WHERE exe_id ='$id_last_attempt' ) AS t";
+			                        $res_max_score_bis = Database::query($sql);
+			                        $row_max_score_bis = Database :: fetch_array($res_max_score_bis);
+			                        if (!empty($row_max_score_bis['maxscore'])) {
+			                        	$max_score = $row_max_score_bis['maxscore'];
+			                        }
+			                        $lp_scorm_result_score_total += ($score/$max_score);
+	                                $current_value = $score/$max_score;
+		                        } else {
+		                        	//$lp_scorm_result_score_total += 0;
+		                        }
+		                    }
+							$count_items++;
 						}
-
-						if ($num_rows_max_score > 0 && ($progress > 0 || $current_value > 0 )) {
-							$lp_count++;
-						}
-
-						if ($count_total_loop==0) {
-							$count_total_loop=1;
-						}
-						$score_of_scorm_calculate=round((($lp_scorm_result_score_total/$count_total_loop)*100),2);
-
+						$score_of_scorm_calculate += round((($lp_scorm_result_score_total/$count_items)*100),2);
+                        $count_views++;
 					}
 				}
 
-				if(count($lp_ids)==0 ) {
-					$score_of_scorm_calculate=round((($score_of_scorm_calculate/$count_row_lp[0])),2);
+				if ( $count_views > 0 ) {
+					$score_of_scorm_calculate = round(($score_of_scorm_calculate/$count_views),2);
 				}
-
-				$lp_scorm_score_total = $score_of_scorm_calculate;
-
-				$condition_user2 = "";
-				if (is_array($student_id)) {
-					$condition_user2 =" lp_view.user_id IN (".implode(',',$student_id).") AND ";
-				} else {
-					$condition_user2 =" lp_view.user_id = '$student_id' AND ";
-				}
-
-				//Path is the exercise id
-				$sql = "SELECT lp_view.id as lp_view_id, lp_view.lp_id as lp_id, lp_item.path, lp_item.id as item_id, lp_item.max_score, lp_view.user_id as user_id
-				FROM $lp_view_table lp_view
-				INNER JOIN $lp_item_table lp_item ON lp_item.lp_id = lp_view.lp_id AND item_type='".TOOL_QUIZ."'
-				WHERE $condition_user2 lp_view.lp_id IN (SELECT id FROM $lp_table $condition_lp)";;
-
-				$rsItems = Database::query($sql);
-
-				$total_score = $total_weighting = 0;
-				if (Database::num_rows($rsItems) > 0) {
-					while ($item = Database::fetch_array($rsItems)) {
-
-						$lp_view_id = $item['lp_view_id'];
-						$lp_item_id = $item['item_id'];
-						$lp_id = $item['lp_id'];
-						$user_id = $item['user_id'];
-
-						// we take the score from a LP because we have lp_view_id
-						$sql = "SELECT score FROM $lp_item_view_table WHERE lp_item_id = '$lp_item_id' and lp_view_id = '$lp_view_id'
-						ORDER BY view_count DESC limit 1";
-
-						$rsScores = Database::query($sql);
-						// Real max score - this was implemented because of the random exercises
-				 		$sql_last_attempt = 'SELECT exe_id FROM '. $tbl_stats_exercices. ' ' .
-				 							'WHERE exe_exo_id="' .$item['path']. '" AND exe_user_id="' . $user_id . '" AND orig_lp_id = "'.$lp_id.'" AND orig_lp_item_id = "'.$lp_item_id.'" AND exe_cours_id="' . $course_code . '" ORDER BY exe_date DESC limit 1';
-
-						$resultLastAttempt = Database::query($sql_last_attempt);
-						$num = Database :: num_rows($resultLastAttempt);
-						if ($num > 0){
-							if ($num > 1){
-								while ($rowLA = Database :: fetch_row($resultLastAttempt)) {
-									$id_last_attempt = $rowLA[0];
-								}
-							} else {
-								$id_last_attempt = Database :: result($resultLastAttempt, 0, 0);
-							}
-						}
-
-						$sql = "SELECT SUM(t.ponderation) as maxscore from ( SELECT distinct question_id, marks,ponderation FROM $tbl_stats_attempts as at " .
-					  	"INNER JOIN  $tbl_quiz_questions as q  on(q.id = at.question_id) where exe_id ='$id_last_attempt' ) as t";
-
-						$result = Database::query($sql);
-						$row_max_score = Database :: fetch_array($result);
-						$maxscore = $row_max_score['maxscore'];
-						if ($maxscore=='') {
-							$maxscore = $item['max_score'];
-						}
-						if(Database::num_rows($rsScores)>0) {
-							$total_score = Database::result($rsScores, 0, 0);
-							$total_weighting += $maxscore;
-							if($total_weighting>0 && $maxscore>0) {
-								$lp_scorm_score_total += ($total_score/$maxscore)*100;
-								$lp_scorm_weighting_total+=100;
-							}
-						}
-					}
-				}
-			}
-			$totalScore = $lp_scorm_score_total;
-			$pourcentageScore = 0;
-			if($lp_scorm_weighting_total>0) {
-				//i.e 10.52
-				$pourcentageScore = round( (($totalScore * 100) / $lp_scorm_weighting_total),2);
-				return $pourcentageScore;
-			} elseif ($score_of_scorm_calculate>0) {
-				//echo '<br>'.$score_of_scorm_calculate;
-				return $score_of_scorm_calculate;
-			} else {
-				return null;
+                return $score_of_scorm_calculate;
 			}
 		}
+		return null;
 	}
-
 
 	/**
 	 * gets the list of students followed by coach

@@ -560,7 +560,6 @@ Display :: display_introduction_section(TOOL_STUDENTPUBLICATION);
 	 ---------------------*/
 	if (!empty ($_REQUEST['new_dir'])) {
 
-
 		if (api_get_session_id()!=0 && api_is_allowed_to_session_edit(false,true)==false) {
 			api_not_allowed();
 		}
@@ -704,8 +703,8 @@ Display :: display_introduction_section(TOOL_STUDENTPUBLICATION);
 			api_not_allowed();
 		}
 
-		$delete_directory=$_REQUEST['delete_dir'];
-		$id=$_REQUEST['delete2'];
+		$delete_directory	= $_REQUEST['delete_dir'];
+		$id					= $_REQUEST['delete2'];
 		del_dir($base_work_dir . '/', $delete_directory,$id);
 
 		Display :: display_confirmation_message(get_lang('DirDeleted') . ': '.$delete_directory);
@@ -715,7 +714,7 @@ Display :: display_introduction_section(TOOL_STUDENTPUBLICATION);
 		if (api_get_session_id()!=0 && api_is_allowed_to_session_edit(false,true)==false) {
 			api_not_allowed();
 		}
-		$delete_2=$_REQUEST['delete2'];
+		$delete_2 = intval($_REQUEST['delete2']);
 		// gets calendar_id from student_publication_assigment
 		$sql = "SELECT add_to_calendar FROM $TSTDPUBASG WHERE publication_id ='$delete_2'";
 		$res = Database::query($sql);
@@ -737,10 +736,10 @@ Display :: display_introduction_section(TOOL_STUDENTPUBLICATION);
 	 ----------------------- */
 	if (!empty ($_REQUEST['move'])) {
 		$folders = array();
-		$sql = "SELECT url FROM $work_table  WHERE url LIKE '/%' AND post_group_id = '".(empty($_SESSION['toolgroup'])?0:$_SESSION['toolgroup'])."'";
+		$sql = "SELECT url FROM $work_table  WHERE url LIKE '/%' AND post_group_id = '".(empty($_SESSION['toolgroup'])?0:intval($_SESSION['toolgroup']))."'";
 		$res = Database::query($sql);
 		while($folder = Database::fetch_array($res)) {
-		$folders[] = substr($folder['url'],1,(strlen($folder['url'])-1));
+			$folders[] = substr($folder['url'],1,(strlen($folder['url'])-1));
 		}
 		echo build_work_move_to_selector($folders, $cur_dir_path, $_REQUEST['move']);
 	}
@@ -1528,8 +1527,8 @@ if (!$display_upload_form && !$display_tool_options) {
 			 		$add_query = '';
 			}
 		}
-		isset($_GET['cidreq'])?$cidreq = Security::Remove_XSS($_GET['cidreq']):$cidreq='';
-		isset($_GET['curdirpath'])?$curdirpath = Security::Remove_XSS($_GET['curdirpath']):$curdirpath='';
+		isset($_GET['cidreq'])?$cidreq = Security::remove_XSS($_GET['cidreq']):$cidreq='';
+		isset($_GET['curdirpath'])?$curdirpath = Security::remove_XSS($_GET['curdirpath']):$curdirpath='';
 		isset($_REQUEST['filter'])?$filter = (int)$_REQUEST['filter']:$filter='';
 
 		if ($origin != 'learnpath') {

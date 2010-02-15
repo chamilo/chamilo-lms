@@ -223,13 +223,13 @@ function display_studentsdelete_form()
 function display_user_link_work($user_id, $name='')
 {
 	global $_otherusers;
-
-	if ($user_id<>0) {
-
+	$user_id = intval($user_id);
+	
+	if ($user_id <> 0) {
 		$table_user = Database::get_main_table(TABLE_MAIN_USER);
-		$sql="SELECT * FROM $table_user WHERE user_id='".Database::escape_string($user_id)."'";
-		$result=Database::query($sql);
-		$row=Database::fetch_array($result);
+		$sql	= "SELECT user_id, firstname, lastname  FROM $table_user WHERE user_id='".Database::escape_string($user_id)."'";
+		$result	= Database::query($sql);
+		$row	= Database::fetch_array($result);
 		if ($name=='') {
 			return "<a href=\"../user/userInfo.php?cidReq=".api_get_course_id()."&gradebook=$gradebook&origin=&uInfo=".$row['user_id']."\">".api_get_person_name($row['firstname'], $row['lastname'])."</a>";
 		} else {
@@ -359,7 +359,7 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 
 	} else {
 		if (!empty($_SESSION['toolgroup'])) {
-			$group_query = " WHERE post_group_id = '".$_SESSION['toolgroup']."' "; // set to select only messages posted by the user's group
+			$group_query = " WHERE post_group_id = '".intval($_SESSION['toolgroup'])."' "; // set to select only messages posted by the user's group
 			$subdirs_query = "AND url NOT LIKE BINARY '$sub_course_dir%/%' AND url LIKE BINARY '$sub_course_dir%'";
 		} else {
 			$group_query = " WHERE post_group_id = '0' ";

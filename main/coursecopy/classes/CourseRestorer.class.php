@@ -372,9 +372,8 @@ class CourseRestorer
 									break;
 
 						} // end switch
-					} // end if file exists
-					else
-					{
+					} else { // end if file exists
+					
 						//make sure the source file actually exists
 						//echo $this->course->backup_path.'/'.$document->path;
 						if(is_file($this->course->backup_path.'/'.$document->path) && is_readable($this->course->backup_path.'/'.$document->path) && is_dir(dirname($path.$document->path)) && is_writeable(dirname($path.$document->path)))
@@ -1175,8 +1174,8 @@ class CourseRestorer
 	function restore_learnpaths($session_id = 0)
 	{
 		if ($this->course->has_resources(RESOURCE_LEARNPATH)) {
-			$table_main 	= Database :: get_course_table(TABLE_LP_MAIN, $this->course->destination_db);
-			$table_item 	= Database :: get_course_table(TABLE_LP_ITEM, $this->course->destination_db);
+			$table_main 	= Database::get_course_table(TABLE_LP_MAIN, $this->course->destination_db);
+			$table_item 	= Database::get_course_table(TABLE_LP_ITEM, $this->course->destination_db);
 			$table_tool 	= Database::get_course_table(TABLE_TOOL_LIST, $this->course->destination_db);
 
 			$resources = $this->course->resources;
@@ -1201,7 +1200,7 @@ class CourseRestorer
 								"prevent_reinit = '".Database::escape_string($lp->prevent_reinit)."', " .
 								"force_commit = '".Database::escape_string($lp->force_commit)."', " .
 								"content_maker = '".Database::escape_string($lp->content_maker)."', " .
-								"display_order = '".Database::escape_string($lp->display_order)."', " .
+								"display_order = '".Database::escape_string($lp->display_order)."', " .								
 								"js_lib= '".Database::escape_string($lp->js_lib)."', " .
 								"content_license= '".Database::escape_string($lp->content_license)."', " .
 								"debug= '".Database::escape_string($lp->debug)."' $condition_session ";
@@ -1270,6 +1269,7 @@ class CourseRestorer
 							"display_order = '".Database::escape_string($item['display_order'])."', " .
 							"prerequisite = '".Database::escape_string($item['prerequisite'])."', " .
 							"parameters='".Database::escape_string($item['parameters'])."', " .
+							"audio='".Database::escape_string($item['audio'])."', " .
 							"launch_data = '".Database::escape_string($item['launch_dataprereq_type'])."'";
 
 					Database::query($sql);

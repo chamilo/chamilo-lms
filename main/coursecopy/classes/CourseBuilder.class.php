@@ -1,5 +1,5 @@
 <?php
-/* For licensing terms, see /dokeos_license.txt */
+/* For licensing terms, see /license.txt */
 
 require_once 'Course.class.php';
 require_once 'Event.class.php';
@@ -138,9 +138,9 @@ class CourseBuilder
 			$session_id = intval($session_id);
 
 			if (!empty($this->course->type) && $this->course->type=='partial') {
-        		$sql = 'SELECT * FROM '.$table_doc.' d, '.$table_prop.' p WHERE tool = \''.TOOL_DOCUMENT.'\' AND p.ref = d.id AND p.visibility != 2 AND path NOT LIKE \'/images/gallery%\' AND session_id = '.$session_id.' ORDER BY path';
+        		$sql = 'SELECT d.id, d.path, d.comment, d.title, d.filetype, d.size FROM '.$table_doc.' d, '.$table_prop.' p WHERE tool = \''.TOOL_DOCUMENT.'\' AND p.ref = d.id AND p.visibility != 2 AND path NOT LIKE \'/images/gallery%\' AND session_id = '.$session_id.' ORDER BY path';
 			} else {
-	        	$sql = 'SELECT * FROM '.$table_doc.' d, '.$table_prop.' p WHERE tool = \''.TOOL_DOCUMENT.'\' AND p.ref = d.id AND p.visibility != 2 AND session_id = '.$session_id.' ORDER BY path';
+	        	$sql = 'SELECT d.id, d.path, d.comment, d.title, d.filetype, d.size FROM '.$table_doc.' d, '.$table_prop.' p WHERE tool = \''.TOOL_DOCUMENT.'\' AND p.ref = d.id AND p.visibility != 2 AND session_id = '.$session_id.' ORDER BY path';
 			}
 
 			$db_result = Database::query($sql);
@@ -155,9 +155,9 @@ class CourseBuilder
 			$table_prop = Database :: get_course_table(TABLE_ITEM_PROPERTY);
 
 			if (!empty($this->course->type) && $this->course->type=='partial')
-        	$sql = 'SELECT * FROM '.$table_doc.' d, '.$table_prop.' p WHERE tool = \''.TOOL_DOCUMENT.'\' AND p.ref = d.id AND p.visibility != 2 AND path  NOT LIKE \'/images/gallery%\' AND d.session_id = 0 ORDER BY path';
+        		$sql = 'SELECT d.id, d.path, d.comment, d.title, d.filetype, d.size FROM '.$table_doc.' d, '.$table_prop.' p WHERE tool = \''.TOOL_DOCUMENT.'\' AND p.ref = d.id AND p.visibility != 2 AND path  NOT LIKE \'/images/gallery%\' AND d.session_id = 0 ORDER BY path';
 	        else
-	        	$sql = 'SELECT * FROM '.$table_doc.' d, '.$table_prop.' p WHERE tool = \''.TOOL_DOCUMENT.'\' AND p.ref = d.id AND p.visibility != 2 AND d.session_id = 0 ORDER BY path';
+	        	$sql = 'SELECT d.id, d.path, d.comment, d.title, d.filetype, d.size  FROM '.$table_doc.' d, '.$table_prop.' p WHERE tool = \''.TOOL_DOCUMENT.'\' AND p.ref = d.id AND p.visibility != 2 AND d.session_id = 0 ORDER BY path';
 
 			$db_result = Database::query($sql);
 			while ($obj = Database::fetch_object($db_result))
@@ -240,11 +240,11 @@ class CourseBuilder
 			$table = Database :: get_course_table(TABLE_LINK,$course_info['dbName']);
 			$table_prop = Database :: get_course_table(TABLE_ITEM_PROPERTY,$course_info['dbName']);
 			$session_id = intval($session_id);
-			$sql = "SELECT * FROM $table l, $table_prop p WHERE p.ref=l.id AND p.tool = '".TOOL_LINK."' AND p.visibility != 2  AND session_id = '$session_id' ORDER BY l.display_order";
+			$sql = "SELECT  l.id, l.title, l.url, l.description, l.category_id, l.on_homepage  FROM $table l, $table_prop p WHERE p.ref=l.id AND p.tool = '".TOOL_LINK."' AND p.visibility != 2  AND session_id = '$session_id' ORDER BY l.display_order";
 		} else {
 			$table = Database :: get_course_table(TABLE_LINK);
 			$table_prop = Database :: get_course_table(TABLE_ITEM_PROPERTY);
-			$sql = "SELECT * FROM $table l, $table_prop p WHERE p.ref=l.id AND p.tool = '".TOOL_LINK."' AND p.visibility != 2 AND l.session_id = 0 ORDER BY l.display_order";
+			$sql = "SELECT l.id, l.title, l.url, l.description, l.category_id, l.on_homepage  FROM $table l, $table_prop p WHERE p.ref=l.id AND p.tool = '".TOOL_LINK."' AND p.visibility != 2 AND l.session_id = 0 ORDER BY l.display_order";
 		}
 
 		$db_result = Database::query($sql);
@@ -568,34 +568,34 @@ class CourseBuilder
 			$db_items = Database::query($sql_items);
 			while ($obj_item = Database::fetch_object($db_items))
 			{
-				$item['id'] = $obj_item->id;
-				$item['item_type'] = $obj_item->item_type;
-				$item['ref'] = $obj_item->ref;
-				$item['title'] = $obj_item->title;
-				$item['description'] = $obj_item->description;
-				$item['path'] = $obj_item->path;
-				$item['min_score'] = $obj_item->min_score;
-				$item['max_score'] = $obj_item->max_score;
-				$item['mastery_score'] = $obj_item->mastery_score;
+				$item['id']				= $obj_item->id;
+				$item['item_type'] 		= $obj_item->item_type;
+				$item['ref'] 			= $obj_item->ref;
+				$item['title'] 			= $obj_item->title;
+				$item['description'] 	= $obj_item->description;
+				$item['path'] 			= $obj_item->path;
+				$item['min_score'] 		= $obj_item->min_score;
+				$item['max_score'] 		= $obj_item->max_score;
+				$item['mastery_score'] 	= $obj_item->mastery_score;
 				$item['parent_item_id'] = $obj_item->parent_item_id;
 				$item['previous_item_id'] = $obj_item->previous_item_id;
-				$item['next_item_id'] = $obj_item->next_item_id;
-				$item['display_order'] = $obj_item->display_order;
-				$item['prerequisite'] = $obj_item->prerequisite;
-				$item['parameters'] = $obj_item->parameters;
-				$item['launch_data'] = $obj_item->launch_data;
+				$item['next_item_id'] 	= $obj_item->next_item_id;
+				$item['display_order'] 	= $obj_item->display_order;
+				$item['prerequisite']	 = $obj_item->prerequisite;
+				$item['parameters'] 	= $obj_item->parameters;
+				$item['launch_data'] 	= $obj_item->launch_data;
+				//adding audio data
+				$item['audio'] 	= $obj_item->audio;
+				
 				$items[] = $item;
 			}
 
 			$sql_tool = "SELECT id FROM ".$table_tool." WHERE (link LIKE '%lp_controller.php%lp_id=".$obj->id."%' and image='scormbuilder.gif') AND visibility='1'";
 			$db_tool = Database::query($sql_tool);
 
-			if(Database::num_rows($db_tool))
-			{
+			if(Database::num_rows($db_tool)) {
 				$visibility='1';
-			}
-			else
-			{
+			} else {
 				$visibility='0';
 			}
 

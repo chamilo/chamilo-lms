@@ -1,5 +1,5 @@
 <?php
-/* For licensing terms, see /dokeos_license.txt */
+/* For licensing terms, see /license.txt */
 /**
 ==============================================================================
 *	This script displays a form for registering new users.
@@ -9,7 +9,7 @@
 // name of the language file that needs to be included
 $language_file = array('registration', 'admin');
 
-require '../inc/global.inc.php';
+require_once '../inc/global.inc.php';
 
 require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
@@ -572,8 +572,12 @@ if ($form->validate()) {
 		$action_url = "../create_course/add_course.php";
 		$button_text = get_lang('CourseCreate');
 	} else {
+		if (api_get_setting('allow_students_to_browse_courses') == 'true') 
+			$action_url = "courses.php?action=subscribe";
+		else 
+			$action_url = api_get_path(WEB_PATH).'user_portal.php';			
 		echo "<p>", get_lang('NowGoChooseYourCourses'), ".</p>\n";
-		$action_url = "courses.php?action=subscribe";
+		
 		$button_text = get_lang('Next');
 	}
 	// ?uidReset=true&uidReq=$_user['user_id']

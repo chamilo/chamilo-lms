@@ -17,6 +17,7 @@ require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
 require_once api_get_path(LIBRARY_PATH).'course.lib.php';
 require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpath.class.php';
 require_once api_get_path(SYS_CODE_PATH).'mySpace/myspace.lib.php';
+require_once api_get_path(LIBRARY_PATH).'attendance.lib.php';
 
 $htmlHeadXtra[] = '<script type="text/javascript">
 
@@ -104,13 +105,14 @@ if (isset ($_GET['details'])) {
 						"name" => get_lang("MyStudents")
 					);
 					$interbreadcrumb[] = array (
-						"url" => "myStudents.php?student=" . Security :: remove_XSS($_GET['student']),
+						"url" => "myStudents.php?student=" . Security :: remove_XSS($_GET['student']),						
 						"name" => get_lang("StudentDetails")
 					);
 				}
 			}
 	$nameTools = get_lang("DetailsStudentInCourse");
 } else {
+		
 	if (!empty ($_GET['origin']) && $_GET['origin'] == 'resume_session') {
 		$interbreadcrumb[] = array (
 			'url' => '../admin/index.php',
@@ -447,7 +449,7 @@ if (!empty ($_GET['student'])) {
 													<?php echo get_lang('TimeSpentInTheCourse') ?>
 												</td>
 						<td align="left">
-													<?php echo $time_spent_on_the_course ?>
+													<?php echo  $time_spent_on_the_course ?>
 												</td>
 											</tr>
 											<tr>
@@ -1050,6 +1052,9 @@ if (!empty ($_GET['student'])) {
 				<?php echo get_lang('Time'); ?>
 			</th>
 			<th>
+				<?php echo get_lang('AttendanceFaults'); ?>
+			</th>
+			<th>
 				<?php echo get_lang('Progress'); ?>
 			</th>
 			<th>
@@ -1074,13 +1079,26 @@ if (!empty ($_GET['student'])) {
 			$csv_content[] = array (
 				get_lang('Course', ''),
 				get_lang('Time', ''),
+				get_lang('AttendanceFaults', ''),
 				get_lang('Progress', ''),
 				get_lang('Score', '')
 			);
+			
+			$attendance = new Attendance();  
+			
 			foreach ($courses as $course_code) {
 				if (CourseManager :: is_user_subscribed_in_course($student_id, $course_code, true)) {
 					$course_info = CourseManager :: get_course_information($course_code);
 					$time_spent_on_course = api_time_to_hms(Tracking :: get_time_spent_on_the_course($info_user['user_id'], $course_code));
+					
+					// get average of faults in attendances by student	 			
+		 			$results_faults_avg = $attendance->get_faults_average_by_course($student_id, $course_code);	 	
+		 			if (!empty($results_faults_avg)) {
+		 				$attendances_faults_avg = '<a title="'.get_lang('GoAttendance').'" href="'.api_get_path(WEB_CODE_PATH).'attendance/index.php?cidReq='.$course_code.'&student_id='.$student_id.'">'.$results_faults_avg['faults'].'/'.$results_faults_avg['total'].' ('.$results_faults_avg['porcent'].'%)</a>';	 				
+		 			} else {
+		 				$attendances_faults_avg = '0%';
+		 			}	 	
+					
 					$progress = Tracking :: get_avg_student_progress($info_user['user_id'], $course_code);
 					$score = Tracking :: get_avg_student_score($info_user['user_id'], $course_code);
 					$progress = empty($progress) ? '0%' : $progress.'%';
@@ -1100,8 +1118,11 @@ if (!empty ($_GET['student'])) {
 												' . $time_spent_on_course . '
 											</td>
 											<td align="right">
-												' . $progress . '
+												'. $attendances_faults_avg . '
 											</td>
+											<td align="right">
+												' . $progress . '
+											</td>											
 											<td align="right">
 												' . $score . '
 											</td>';

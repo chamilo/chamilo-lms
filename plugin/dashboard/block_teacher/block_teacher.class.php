@@ -28,8 +28,12 @@ class BlockTeacher extends Block {
 	 * Controller
 	 */
     public function __construct ($user_id) {    	
-    	$this->user_id  = $user_id;     	
-    	$this->teachers = UserManager::get_assigned_users_to_hr_manager($user_id, COURSEMANAGER);
+    	$this->user_id  = $user_id;
+    	if (api_is_platform_admin()) {
+    		$this->teachers = UserManager::get_user_list(array('status' => COURSEMANAGER));
+    	} else if (api_is_drh()) {
+    		$this->teachers = UserManager::get_users_followed_by_drh($user_id, COURSEMANAGER);
+    	}     	    	
     	$this->path 	= 'block_teacher';  	
     }
     
@@ -44,9 +48,13 @@ class BlockTeacher extends Block {
     	    	
     	$column = 1;
     	$data   = array();
-
-		$teacher_content_html = $this->get_teachers_content_html();
-
+		
+		if (api_is_platform_admin()) {
+			$teacher_content_html = $this->get_teachers_content_html_for_platform_admin();
+		} else if (api_is_drh()) {
+			$teacher_content_html = $this->get_teachers_content_html_for_drh();
+		}
+		
 		$html = '        		
 			            <li class="widget color-blue" id="intro">
 			                <div class="widget-head">
@@ -70,24 +78,21 @@ class BlockTeacher extends Block {
  	 * This method return a content html, it's used inside get_block method for showing it inside dashboard interface
  	 * @return string  content html
  	 */
-    public function get_teachers_content_html() {
+    public function get_teachers_content_html_for_platform_admin() {
  	
 	 	$teachers = $this->teachers;
 		$content = ''; 		
 		$content = '<div style="margin:10px;">';
-		$content .= '<h3><font color="#000">'.get_lang('TeachersOverview').'</font></h3>';
+		$content .= '<h3><font color="#000">'.get_lang('YourTeachers').'</font></h3>';
 		 		
 		if (count($teachers) > 0) {
-	 		$teachers_table = '<div style="margin:10px;margin-bottom:20px;"><table class="data_table" width:"80%">'; 		
+	 		$teachers_table = '<table class="data_table" width:"95%">'; 		
 	 		$teachers_table .= '
 								<tr>		
 									<th>'.get_lang('FirtName').'</th>
 									<th>'.get_lang('LastName').'</th>
 									<th>'.get_lang('TimeSpentOnThePlatform').'</th>					
-									<th>'.get_lang('LastConnexion').'</th>
-									<th>'.get_lang('NbStudents').'</th>
-									<th>'.get_lang('CountCours').'</th>
-									<th>'.get_lang('NumberOfSessions').'</th>					
+									<th>'.get_lang('LastConnexion').'</th>													
 								</tr>								
 							';
 	 		
@@ -98,10 +103,7 @@ class BlockTeacher extends Block {
 	 			$firtname = $teacher['firstname'];
 	 			$lastname = $teacher['lastname'];
 	 			$time_on_platform = api_time_to_hms(Tracking :: get_time_spent_on_the_platform($teacher_id));
-	 			$last_connection = Tracking :: get_last_connection_date($teacher_id);
-	 			$nb_students = count(Tracking :: get_student_followed_by_coach($teacher_id));
-				$nb_courses = count(Tracking :: get_courses_followed_by_coach($teacher_id));
-				$nb_sessions = count(Tracking :: get_sessions_coached_by_user($teacher_id));
+	 			$last_connection = Tracking :: get_last_connection_date($teacher_id);	 			
 				
 				if ($i%2 == 0) $class_tr = 'row_odd';
 			    else $class_tr = 'row_even';
@@ -111,24 +113,21 @@ class BlockTeacher extends Block {
 										<td>'.$firtname.'</td>
 										<td>'.$lastname.'</td>
 										<td>'.$time_on_platform.'</td>					
-										<td>'.$last_connection.'</td>
-										<td>'.$nb_students.'</td>
-										<td>'.$nb_courses.'</td>
-										<td>'.$nb_sessions.'</td>					
+										<td>'.$last_connection.'</td>															
 									</tr>								
 									';				
 	 			$i++;
 	 		}
-	 		$teachers_table .= '</table></div>';
+	 		$teachers_table .= '</table>';
 		} else {
-			$teachers_table .= '<div style="margin:20px">'.get_lang('ThereAreNoInformationAboutTeachers').'</div>';
+			$teachers_table .= get_lang('ThereAreNoInformationAboutTeachers');
 		}
 	 	
 	 	
 	 	$content .= $teachers_table;
  		
  		if (count($teachers) > 0) {
-			$content .= '<div style="text-align:right;margin:10px;"><a href="#">'.get_lang('SeeMore').'</a></div>';
+			$content .= '<div style="text-align:right;margin:10px;"><a href="'.api_get_path(WEB_CODE_PATH).'mySpace/index.php?view=admin">'.get_lang('SeeMore').'</a></div>';
 		}
 
 		$content .= '</div>';	
@@ -136,6 +135,60 @@ class BlockTeacher extends Block {
  		return $content;
  	
 	}
+	
+	public function get_teachers_content_html_for_drh() {  		
+  		
+  		$teachers = $this->teachers;
+ 		$content = ''; 		
+ 		$content = '<div style="margin:10px;">';
+ 		$content .= '<h3><font color="#000">'.get_lang('YourTeachers').'</font></h3>';
+ 		 		
+ 		if (count($teachers) > 0) {
+	 		$teachers_table = '<table class="data_table" width:"95%">'; 		
+	 		$teachers_table .= '
+								<tr>		
+									<th>'.get_lang('FirtName').'</th>
+									<th>'.get_lang('LastName').'</th>
+									<th>'.get_lang('Time').'</th>														
+									<th>'.get_lang('Email').'</th>
+								</tr>								
+							';
+	 		
+	 		$i = 1;
+	 		foreach ($teachers as $teacher) {
+	 			
+	 			$teacher_id = $teacher['user_id'];
+	 			$firstname  = $teacher['firstname'];
+	 			$lastname   = $teacher['lastname'];
+	 			$time_on_platform = api_time_to_hms(Tracking :: get_time_spent_on_the_platform($teacher_id));
+	 			$email		= $teacher['email'];
+	 			
+	 			if ($i%2 == 0) $class_tr = 'row_odd';
+	    		else $class_tr = 'row_even';
+	    		$teachers_table .= '<tr class="'.$class_tr.'">
+										<td>'.$firstname.'</td>
+										<td>'.$lastname.'</td>										
+										<td>'.$time_on_platform.'</td>
+										<td>'.$email.'</td>
+									</tr>';
+	 			
+	 			$i++;		
+	 		}
+	 		$teachers_table .= '</table>';
+ 		} else {
+ 			$teachers_table .= get_lang('ThereAreNoInformationAboutTeachers');
+ 		}
+  		
+  		$content .= $teachers_table;
+ 		
+ 		if (count($teachers) > 0) {
+			$content .= '<div style="text-align:right;margin:10px;"><a href="'.api_get_path(WEB_CODE_PATH).'mySpace/teachers.php">'.get_lang('SeeMore').'</a></div>';
+		}
+		$content .= '</div>';
+
+  		return $content;	
+  		
+  	}
  
     /**
 	 * Get number of sessions  

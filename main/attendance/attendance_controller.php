@@ -156,18 +156,24 @@
 	 * @param string action
 	 * @param int	 attendance id
 	 */
-	public function attendance_sheet($action,$attendance_id) {		
+	public function attendance_sheet($action, $attendance_id, $student_id = 0) {		
 		$attendance = new Attendance();				        
 		$data = array();
 		$data['attendance_id'] = $attendance_id;
 		$data['users_in_course'] = $attendance->get_users_rel_course($attendance_id);
 		$data['attendant_calendar'] = $attendance->get_attendance_calendar($attendance_id);
-		
+
 		if (api_is_allowed_to_edit(null, true)) {
 			$data['users_presence'] = $attendance->get_users_attendance_sheet($attendance_id);	
 		} else {
-			$data['users_presence'] = $attendance->get_users_attendance_sheet($attendance_id, api_get_user_id());
-			$data['faults'] = $attendance->get_faults_of_user(api_get_user_id(), $attendance_id);
+			if (!empty($student_id)) {
+				$user_id = intval($student_id);
+			} else {
+				$user_id = api_get_user_id();	
+			}						
+			$data['users_presence'] = $attendance->get_users_attendance_sheet($attendance_id, $user_id);
+			$data['faults'] = $attendance->get_faults_of_user($user_id, $attendance_id);
+			$data['user_id'] = $user_id;			
 		}
 				
 		$data['next_attendance_calendar_id'] = $attendance->get_next_attendance_calendar_id($attendance_id);
@@ -175,6 +181,8 @@
 		if (strtoupper($_SERVER['REQUEST_METHOD']) == "POST") {	
 			$presences = array();
 			$check_values = array();
+			$users_present = array();
+
 			if (isset($_POST['check_presence'])) {
 				$presences = $_POST['check_presence'];
 				$calendar_tmp = array();
@@ -186,12 +194,23 @@
 					if (in_array($calendar_id, $calendar_tmp)) {
 						$check_values[$calendar_id][] = $user_id;		
 					}
-				}					
-			}			
-			foreach ($check_values as $cal_id => $value) {
-				$users_present = $value;				
-				$affected_rows = $attendance->attendance_sheet_add($cal_id,$users_present,$attendance_id);								
-			}			
+				}
+				// save when is present at least one user
+				foreach ($check_values as $cal_id => $value) {
+					$users_present = $value;				
+					$affected_rows = $attendance->attendance_sheet_add($cal_id,$users_present,$attendance_id);								
+				}
+								
+			} else {
+				// save attendance done with all absents students				
+				if (isset($_POST['datetime_column'])) {
+					foreach ($_POST['datetime_column'] as $key=>$date_time_col) {
+						$cal_id = $key;
+						$affected_rows = $attendance->attendance_sheet_add($cal_id,$users_present,$attendance_id);
+					}	
+				}
+			}		
+					
 			$data['users_in_course'] = $attendance->get_users_rel_course($attendance_id);
 			$data['attendant_calendar'] = $attendance->get_attendance_calendar($attendance_id);
 			$data['users_presence'] = $attendance->get_users_attendance_sheet($attendance_id);

@@ -12,6 +12,7 @@ $cidReset = true;
 
 require_once '../inc/global.inc.php';
 require_once api_get_path(SYS_CODE_PATH).'mySpace/myspace.lib.php';
+require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
 
 $this_section = "session_my_space";
 
@@ -21,7 +22,38 @@ api_block_anonymous_users();
 $interbreadcrumb[] = array ("url" => "index.php", "name" => get_lang('MySpace'));
 Display :: display_header($nameTools);
 
-api_display_tool_title($nameTools);
+$formateurs = array();
+if (api_is_drh()) {
+
+	// followed teachers by drh
+	$formateurs = UserManager::get_users_followed_by_drh($_user['user_id'], COURSEMANAGER);
+	 
+	$menu_items[] = '<a href="index.php?view=drh_students">'.get_lang('Learners').'</a>';
+	$menu_items[] = get_lang('Trainers');
+	$menu_items[] = '<a href="course.php">'.get_lang('Trainings').'</a>';
+	$menu_items[] = '<a href="session.php">'.get_lang('Sessions').'</a>';
+		
+	echo '<div class="actions-title" style ="font-size:10pt;">';
+	$nb_menu_items = count($menu_items);
+	if ($nb_menu_items > 1) {
+		foreach ($menu_items as $key => $item) {
+			echo $item;
+			if ($key != $nb_menu_items - 1) {
+				echo '&nbsp;|&nbsp;';
+			}
+		}
+	}	
+	if (count($formateurs) > 0) {
+		echo '&nbsp;&nbsp;<a href="javascript: void(0);" onclick="javascript: window.print()"><img align="absbottom" src="../img/printmgr.gif">&nbsp;'.get_lang('Print').'</a> ';
+		echo '<a href="'.api_get_self().'?export=xls"><img align="absbottom" src="../img/excel.gif">&nbsp;'.get_lang('ExportAsXLS').'</a>';	
+	}
+	echo '</div>';
+	echo '<br />';
+}
+
+if (!api_is_drh()) {
+	api_display_tool_title($nameTools);
+}
 
 // Database Table Definitions
 $tbl_course 			= Database :: get_main_table(TABLE_MAIN_COURSE);
@@ -42,19 +74,26 @@ if (isset($_POST['export'])) {
 }
 $sort_by_first_name = api_sort_by_first_name();
 
-$order_clause = $sort_by_first_name ? ' ORDER BY firstname, lastname' : ' ORDER BY lastname, firstname';
-if (isset($_GET["teacher_id"]) && $_GET["teacher_id"] != 0) {
-	$teacher_id = intval($_GET["teacher_id"]);
-	$sql_formateurs = "SELECT user_id,lastname,firstname,email
-		FROM $tbl_user
-		WHERE user_id='$teacher_id'".$order_clause;
-} else {
-	$sql_formateurs = "SELECT user_id,lastname,firstname,email
-		FROM $tbl_user
-		WHERE status = 1".$order_clause;
+if (!api_is_drh()) {
+	$order_clause = $sort_by_first_name ? ' ORDER BY firstname, lastname' : ' ORDER BY lastname, firstname';
+	if (isset($_GET["teacher_id"]) && $_GET["teacher_id"] != 0) {
+		$teacher_id = intval($_GET["teacher_id"]);
+		$sql_formateurs = "SELECT user_id,lastname,firstname,email
+			FROM $tbl_user
+			WHERE user_id='$teacher_id'".$order_clause;
+	} else {
+		$sql_formateurs = "SELECT user_id,lastname,firstname,email
+			FROM $tbl_user
+			WHERE status = 1".$order_clause;
+	}
+	
+	$result_formateurs = Database::query($sql_formateurs);
+	if (Database::num_rows($result_formateurs) > 0) {
+		while ($row_formateurs = Database::fetch_array($result_formateurs)) {
+			$formateurs[] = $row_formateurs;	
+		}
+	}
 }
-
-$result_formateurs = Database::query($sql_formateurs);
 
 if ($is_western_name_order) {
 	echo '<table class="data_table"><tr><th>'.get_lang('FirstName').'</th><th>'.get_lang('LastName').'</th><th>'.get_lang('Email').'</th><th>'.get_lang('AdminCourses').'</th><th>'.get_lang('Students').'</th></tr>';
@@ -73,15 +112,14 @@ $header[] = get_lang('Email', '');
 
 $data = array();
 
-if (Database::num_rows($result_formateurs) > 0) {
+if (count($formateurs) > 0) {
 
 	$i = 1;
-	while ($formateurs = Database::fetch_array($result_formateurs)) {
-
-		$user_id = $formateurs["user_id"];
-		$lastname = $formateurs["lastname"];
-		$firstname = $formateurs["firstname"];
-		$email = $formateurs["email"];
+	foreach ($formateurs as $formateur) {
+		$user_id = $formateur["user_id"];
+		$lastname = $formateur["lastname"];
+		$firstname = $formateur["firstname"];
+		$email = $formateur["email"];
 
 		if ($i % 2 == 0) {
 			$css_class = "row_odd";
@@ -120,12 +158,14 @@ if (Database::num_rows($result_formateurs) > 0) {
 }
 echo '</table>';
 
-if (isset($_POST['export'])) {
+if (isset($_POST['export']) || (api_is_drh() && isset($_GET['export']))) {
 	export_csv($header, $data, 'teachers.csv');
 }
 
 echo "<br /><br />";
-echo "<form method='post' action='teachers.php'><input type='submit' name='export' value='".get_lang('exportExcel')."'/><form>";
+if (!api_is_drh()) {
+	echo "<form method='post' action='teachers.php'><input type='submit' name='export' value='".get_lang('exportExcel')."'/><form>";
+}
 
 /*
 ==============================================================================

@@ -12,6 +12,7 @@ $cidReset = true;
 
 require '../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'tracking.lib.php';
+require_once api_get_path(LIBRARY_PATH).'sessionmanager.lib.php';
 require_once api_get_path(LIBRARY_PATH).'export.lib.inc.php';
 
 api_block_anonymous_users();
@@ -76,8 +77,36 @@ if (isset($_GET['id_coach']) && $_GET['id_coach'] != '') {
 } else {
 	$id_coach = $_user['user_id'];
 }
+		
+if (api_is_drh()) {
 
-$a_sessions = Tracking :: get_sessions_coached_by_user($id_coach);
+	$a_sessions = SessionManager::get_sessions_followed_by_drh($_user['user_id']);
+	
+	$menu_items[] = '<a href="index.php?view=drh_students">'.get_lang('Learners').'</a>';
+	$menu_items[] = '<a href="teachers.php">'.get_lang('Trainers').'</a>';
+	$menu_items[] = '<a href="course.php">'.get_lang('Trainings').'</a>';
+	$menu_items[] = get_lang('Sessions');
+		
+	echo '<div class="actions-title" style ="font-size:10pt;">';
+	$nb_menu_items = count($menu_items);
+	if ($nb_menu_items > 1) {
+		foreach ($menu_items as $key => $item) {
+			echo $item;
+			if ($key != $nb_menu_items - 1) {
+				echo '&nbsp;|&nbsp;';
+			}
+		}
+	}		
+	if (count($a_sessions) > 0) {
+		echo '&nbsp;&nbsp;<a href="javascript: void(0);" onclick="javascript: window.print()"><img align="absbottom" src="../img/printmgr.gif">&nbsp;'.get_lang('Print').'</a> ';
+		echo '<a href="'.api_get_self().'?export=csv"><img align="absbottom" src="../img/excel.gif">&nbsp;'.get_lang('ExportAsCSV').'</a>';	
+	}
+	echo '</div>';
+		
+} else {
+	$a_sessions = Tracking :: get_sessions_coached_by_user($id_coach);
+}
+
 $nb_sessions = count($a_sessions);
 
 if ($export_csv) {
@@ -85,21 +114,24 @@ if ($export_csv) {
 }
 
 if ($nb_sessions > 0) {
-	echo '<div align="right">
-			<a href="javascript: void(0);" onclick="javascript: window.print();"><img align="absbottom" src="../img/printmgr.gif">&nbsp;'.get_lang('Print').'</a>
-			<a href="'.api_get_self().'?export=csv"><img align="absbottom" src="../img/excel.gif">&nbsp;'.get_lang('ExportAsCSV').'</a>
-		  </div>';
+	
+	if (!api_is_drh()) {
+		echo '<div align="right">
+				<a href="javascript: void(0);" onclick="javascript: window.print();"><img align="absbottom" src="../img/printmgr.gif">&nbsp;'.get_lang('Print').'</a>
+				<a href="'.api_get_self().'?export=csv"><img align="absbottom" src="../img/excel.gif">&nbsp;'.get_lang('ExportAsCSV').'</a>
+			  </div>';
+	}
 	$table = new SortableTable('tracking', 'count_sessions_coached');
 	$table -> set_header(0, get_lang('Title'));
-	$table -> set_header(1, get_lang('Status'));
-	$table -> set_header(2, get_lang('Date'));
-	$table -> set_header(3, get_lang('Details'), false);
+	//$table -> set_header(1, get_lang('Status'));
+	$table -> set_header(1, get_lang('Date'));
+	$table -> set_header(2, get_lang('Details'), false);
 
 	$all_data = array();
 	foreach ($a_sessions as $session) {
 		$row = array();
 		$row[] = $session['name'];
-		$row[] = $session['status'];
+		//$row[] = $session['status'];
 
 		if ($session['date_start'] != '0000-00-00' && $session['date_end'] != '0000-00-00') {
 			$row[] = get_lang('From').' '.format_locale_date(get_lang('DateFormatLongWithoutDay'), strtotime($session['date_start'])).' '.get_lang('To').' '.format_locale_date(get_lang('DateFormatLongWithoutDay'), strtotime($session['date_end']));
@@ -137,7 +169,7 @@ if ($nb_sessions > 0) {
 		$table -> addRow($row);
 	}
 
-	$table -> setColAttributes(3, array('align' => 'center'));
+	$table -> setColAttributes(2, array('align' => 'center'));
 	$table -> display();
 
 	if ($export_csv) {

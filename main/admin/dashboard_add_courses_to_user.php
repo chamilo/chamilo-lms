@@ -66,7 +66,7 @@ function search_courses($needle,$type) {
 		$charset = api_get_setting('platform_charset');
 		$needle = api_convert_encoding($needle, $charset, 'utf-8');
 
-		$assigned_courses_to_hrm = CourseManager::get_assigned_courses_to_hr_manager($hrm_id);
+		$assigned_courses_to_hrm = CourseManager::get_courses_followed_by_drh($hrm_id);
 		$assigned_courses_code = array_keys($assigned_courses_to_hrm);
 		foreach ($assigned_courses_code as &$value) {
 			$value = "'".$value."'";
@@ -167,7 +167,7 @@ echo '<div class="row"><div class="form_header">'.get_lang('AssignedCoursesTo').
 
 // *******************
 
-$assigned_courses_to_hrm = CourseManager::get_assigned_courses_to_hr_manager($hrm_id);
+$assigned_courses_to_hrm = CourseManager::get_courses_followed_by_drh($hrm_id);
 $assigned_courses_code = array_keys($assigned_courses_to_hrm);
 foreach ($assigned_courses_code as &$value) {
 	$value = "'".$value."'";

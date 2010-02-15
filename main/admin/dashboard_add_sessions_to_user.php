@@ -67,7 +67,7 @@ function search_sessions($needle,$type) {
 		$charset = api_get_setting('platform_charset');
 		$needle = api_convert_encoding($needle, $charset, 'utf-8');
 
-		$assigned_sessions_to_hrm = SessionManager::get_assigned_sessions_to_hr_manager($hrm_id);
+		$assigned_sessions_to_hrm = SessionManager::get_sessions_followed_by_drh($hrm_id);
 
 		$assigned_sessions_id = array_keys($assigned_sessions_to_hrm);
 
@@ -170,7 +170,7 @@ echo '<div class="row"><div class="form_header">'.get_lang('AssignedSessionsTo')
 
 // *******************
 
-$assigned_sessions_to_hrm = SessionManager::get_assigned_sessions_to_hr_manager($hrm_id);
+$assigned_sessions_to_hrm = SessionManager::get_sessions_followed_by_drh($hrm_id);
 $assigned_sessions_id = array_keys($assigned_sessions_to_hrm);
 $without_assigned_sessions = '';
 if (count($assigned_sessions_id) > 0) {

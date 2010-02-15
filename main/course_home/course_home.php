@@ -162,7 +162,6 @@ if ($is_speacialcourse==true){
 	}
 }
 
-
 /*
 -----------------------------------------------------------
 	Is the user allowed here?

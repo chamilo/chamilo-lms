@@ -95,7 +95,7 @@ function rsort_users($a, $b)
  ===============================================================================
  */
 
-if ($isCoach || api_is_platform_admin() || $_user['status'] == DRH) {
+if ($isCoach || api_is_platform_admin() || api_is_drh()) {
 
 	if ($export_csv) {
 		$is_western_name_order = api_is_western_name_order(PERSON_NAME_DATA_EXPORT);
@@ -103,13 +103,45 @@ if ($isCoach || api_is_platform_admin() || $_user['status'] == DRH) {
 		$is_western_name_order = api_is_western_name_order();
 	}
 	$sort_by_first_name = api_sort_by_first_name();
-
-	echo '<div align="left" style="float:left"><h4>'.$title.'</h4></div>
-		  <div align="right">
-			<a href="javascript: void(0);" onclick="javascript: window.print();"><img align="absbottom" src="../img/printmgr.gif">&nbsp;'.get_lang('Print').'</a>
-			<a href="'.api_get_self().'?export=csv"><img align="absbottom" src="../img/excel.gif">&nbsp;'.get_lang('ExportAsCSV').'</a>
-		  </div><div class="clear"></div>';
-
+	
+	if (api_is_drh()) {
+		
+		if (!isset($_GET['id_session'])) {			
+			$students = array_keys(UserManager::get_users_followed_by_drh($_user['user_id'], STUDENT));			
+			$courses_of_the_platform = CourseManager :: get_real_course_list();
+			foreach ($courses_of_the_platform as $course) {
+				$courses[$course['code']] = $course['code'];
+			}			
+		}
+		
+		$menu_items[] = get_lang('Learners');
+		$menu_items[] = '<a href="teachers.php">'.get_lang('Trainers').'</a>';
+		$menu_items[] = '<a href="course.php">'.get_lang('Trainings').'</a>';
+		$menu_items[] = '<a href="session.php">'.get_lang('Sessions').'</a>';
+			
+		echo '<div class="actions-title" style ="font-size:10pt;">';
+		$nb_menu_items = count($menu_items);
+		if ($nb_menu_items > 1) {
+			foreach ($menu_items as $key => $item) {
+				echo $item;
+				if ($key != $nb_menu_items - 1) {
+					echo '&nbsp;|&nbsp;';
+				}
+			}
+		}		
+		if (count($students) > 0) {
+			echo '&nbsp;&nbsp;<a href="javascript: void(0);" onclick="javascript: window.print()"><img align="absbottom" src="../img/printmgr.gif">&nbsp;'.get_lang('Print').'</a> ';
+			echo '<a href="'.api_get_self().'?export=csv"><img align="absbottom" src="../img/excel.gif">&nbsp;'.get_lang('ExportAsCSV').'</a>';	
+		}
+		echo '</div>';
+	} else {
+		echo '<div align="left" style="float:left"><h4>'.$title.'</h4></div>
+			  <div align="right">
+				<a href="javascript: void(0);" onclick="javascript: window.print();"><img align="absbottom" src="../img/printmgr.gif">&nbsp;'.get_lang('Print').'</a>
+				<a href="'.api_get_self().'?export=csv"><img align="absbottom" src="../img/excel.gif">&nbsp;'.get_lang('ExportAsCSV').'</a>
+			  </div><div class="clear"></div>';
+	}
+	
 	if (isset($_GET['id_coach'])) {
 		$coach_id = intval($_GET['id_coach']);
 	} else {
@@ -120,14 +152,7 @@ if ($isCoach || api_is_platform_admin() || $_user['status'] == DRH) {
 		if ($isCoach) {
 			$courses = Tracking :: get_courses_followed_by_coach($coach_id);
 			$students = Tracking :: get_student_followed_by_coach($coach_id);
-		}
-		elseif ($_user['status'] == DRH) {
-			$students = Tracking :: get_student_followed_by_drh($_user['user_id']);
-			$courses_of_the_platform = CourseManager :: get_real_course_list();
-			foreach ($courses_of_the_platform as $course) {
-				$courses[$course['code']] = $course['code'];
-			}
-		}
+		}		
 	} else {
 		$students = Tracking :: get_student_followed_by_coach_in_a_session($_GET['id_session'], $coach_id);
 	}
@@ -264,7 +289,7 @@ if ($isCoach || api_is_platform_admin() || $_user['status'] == DRH) {
 		$table -> setColAttributes(9, array('align' => 'center'));
 		$table -> display();
 	} else {
-		echo get_lang('NoStudent');
+		echo '<p>'.get_lang('NoStudent').'</p>';
 	}
 
 	// send the csv file if asked

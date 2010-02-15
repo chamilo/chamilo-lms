@@ -1055,11 +1055,11 @@ class SessionManager {
 	}
 
 	/**
-	 * Get assigned sessions to human resources manager
-	 * @param int	Human resources manager id
-	 * @return array assigned sessions
+	 * Get sessions followed by human resources manager
+	 * @param int		Human resources manager id
+	 * @return array 	sessions
 	 */
-	public static function get_assigned_sessions_to_hr_manager($hr_manager_id) {
+	public static function get_sessions_followed_by_drh($hr_manager_id) {
 
 		// Database Table Definitions
 		$tbl_session 			= 	Database::get_main_table(TABLE_MAIN_SESSION);

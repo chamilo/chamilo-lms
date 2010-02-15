@@ -65,7 +65,7 @@ function search_users($needle,$type) {
 		$charset = api_get_setting('platform_charset');
 		$needle = api_convert_encoding($needle, $charset, 'utf-8');
 
-		$assigned_users_to_hrm = UserManager::get_assigned_users_to_hr_manager($hrm_id);
+		$assigned_users_to_hrm = UserManager::get_users_followed_by_drh($hrm_id);
 		$assigned_users_id = array_keys($assigned_users_to_hrm);
 		$without_assigned_users = '';
 		if (count($assigned_users_id) > 0) {
@@ -164,8 +164,7 @@ echo '<div class="row"><div class="form_header">'.get_lang('AssignedUsersTo').'&
 
 // *******************
 
-$assigned_users_to_hrm = UserManager::get_assigned_users_to_hr_manager($hrm_id);
-
+$assigned_users_to_hrm = UserManager::get_users_followed_by_drh($hrm_id);
 $assigned_users_id = array_keys($assigned_users_to_hrm);
 $without_assigned_users = '';
 if (count($assigned_users_id) > 0) {

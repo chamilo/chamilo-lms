@@ -71,7 +71,7 @@ if (isset($descriptions) && count($descriptions) > 0) {
 		$progress = (isset($description['progress'])?$description['progress'].'%':'');
 		
 		if ($description['description_type'] == THEMATIC_ADVANCE) {
-			
+			echo '<a name="thematic_advance"></a>';
 			echo get_lang('ThematicAdvance').' : '.$description['title'].' - '.$progress;
 		} else {
 			echo $description['title'];

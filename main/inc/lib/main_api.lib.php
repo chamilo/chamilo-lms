@@ -1741,6 +1741,15 @@ function api_is_session_admin() {
 }
 
 /**
+ * Check if the current user is a human resources manager 
+ * @return boolean True if current user is a human resources manager
+ */
+function api_is_drh() {
+	global $_user;
+	return $_user['status'] == DRH;
+}
+
+/**
  * This function check is a session is assigned into a category
  * @param int	- session id
  * @param string - category name

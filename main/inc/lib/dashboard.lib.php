@@ -7,11 +7,13 @@
  * @package chamilo.dashboard
  */
 
+// required files
+require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
+
 /**
  * DashboardManager can be used to manage dashboard
  * @package chamilo.dashboard
  */
-
 class DashboardManager
 {
 	/**
@@ -42,7 +44,7 @@ class DashboardManager
 		echo '<th>'.get_lang('Description').'</th>';
 		echo '</tr>';
 
-		$disabled_block_data = self::get_block_data_without_plugin();
+		$disabled_blocks_data = self::get_block_data_without_plugin();
 
 		// We display all the possible enabled or disabled plugins
 		foreach ($possibleplugins as $testplugin) {
@@ -68,16 +70,14 @@ class DashboardManager
 				}
 			echo '</tr>';
 		}
-
+		
 		// display all disabled block data
-		if (count($disabled_block_data) > 0) {
-			foreach ($disabled_block_data as $disabled_block) {
+		if (count($disabled_blocks_data) > 0) {
+			foreach ($disabled_blocks_data as $disabled_block) {
 				echo '<tr style="background-color:#eee">';
-				echo '<td><center><input type="checkbox" name="disabled_block" value="true" disabled /></center>';
+				echo '<td><center><input type="checkbox" name="disabled_block" value="true" checked disabled /></center>';
 				for ($j = 0 ; $j < count($table_cols); $j++) {
-
 					if (isset($disabled_block[strtolower($table_cols[$j])])) {
-
 						if ($j == 2) {
 							echo '<td>';
 			    				echo '<font color="#aaa">'.$disabled_block[$table_cols[$j]].'</font><br />';
@@ -88,8 +88,6 @@ class DashboardManager
 			    				echo '<font color="#aaa">'.$disabled_block[$table_cols[$j]].'</font>';
 			    			echo '</td>';
 						}
-
-
 			    	} else {
 			    		echo '<td>&nbsp;</td>';
 			    	}
@@ -97,7 +95,7 @@ class DashboardManager
 				echo '</tr>';
 			}
 		}
-
+		
 		echo '</table>';
 		echo '<br />';
 		echo '<button class="save" type="submit" name="submit_dashboard_plugins" value="'.get_lang('EnableDashboardPlugins').'">'.get_lang('EnableDashboardPlugins').'</button></form>';
@@ -141,30 +139,73 @@ class DashboardManager
 		$dashboard_pluginpath = api_get_path(SYS_PLUGIN_PATH).'dashboard/';
 		$possibleplugins = self::get_posible_dashboard_plugins_path();
 
-		$condition_path = '';
 		if (count($possibleplugins) > 0) {
-			$tmp_possibleplugins = $possibleplugins;
-			foreach ($tmp_possibleplugins as &$plugins) {
-				$plugins = "'".$plugins."'";
-			}
-			$condition_path = ' WHERE path IN('.implode(',',$tmp_possibleplugins).')';
+			
+			$selected_plugins = array_intersect(array_keys($plugin_paths),$possibleplugins);
+			$not_selected_plugins = array_diff($possibleplugins,array_keys($plugin_paths));
 
-			// clean block table for adding paths
-			$sql = "SELECT id FROM $tbl_block $condition_path ";
-			$rs  = Database::query($sql);
-			if (Database::num_rows($rs) > 0) {
-				$sql_del = "DELETE FROM $tbl_block $condition_path ";
-				Database::query($sql_del);
+			// get blocks id from not selected path			
+			$not_selected_blocks_id = array();
+			foreach ($not_selected_plugins as $plugin) {
+				$block_data = self::get_enabled_dashboard_blocks($plugin);
+				if (!empty($block_data[$plugin])) {
+					$not_selected_blocks_id[] = $block_data[$plugin]['id'];
+				}
+			}
+						
+			/* clean not selected plugins for extra user data and block data */
+			// clean from extra user data
+			$field_variable = 'dashboard';
+			$extra_user_data = UserManager::get_extra_user_data_by_field_variable($field_variable);			
+			foreach ($extra_user_data as $key => $user_data) {
+				$user_id = $key;
+				$user_block_data = self::get_user_block_data($user_id);
+				$user_block_id   = array_keys($user_block_data);
+
+				// clean disabled block data
+				foreach ($user_block_id as $block_id) {					
+					if (in_array($block_id, $not_selected_blocks_id)) {
+						unset($user_block_data[$block_id]);
+					}
+				}
+				
+				// get columns and blocks id for updating extra user data
+				$columns = array();
+				$user_blocks_id = array();
+				foreach ($user_block_data as $data) {
+					$user_blocks_id[$data['block_id']] = true;
+					$columns[$data['block_id']] = $data['column'];
+				}
+
+				// update extra user blocks data
+				$upd_extra_field = self::store_user_blocks($user_id, $user_blocks_id, $columns);
+				
+			}
+			
+			// clean from block data
+			if (!empty($not_selected_blocks_id)) {
+				$sql_check = "SELECT id FROM $tbl_block WHERE id IN(".implode(',',$not_selected_blocks_id).")";
+				$rs_check = Database::query($sql_check);
+				if (Database::num_rows($rs_check) > 0) {
+					$del = "DELETE FROM $tbl_block WHERE id IN(".implode(',',$not_selected_blocks_id).")";
+					Database::query($del);
+				}
 			}
 
-			// get selected plugins
-			$selected_plugins = array();
-			if (!empty($plugin_paths)) {
-				$selected_plugins = array_intersect(array_keys($plugin_paths),$possibleplugins);
-			}
-
-			if (count($selected_plugins) > 0) {
-				foreach ($selected_plugins as $testplugin) {
+			
+			// store selected plugins
+			foreach ($selected_plugins as $testplugin) {
+				$selected_path = Database::escape_string($testplugin);
+				
+				// check if the path already stored inside block table for updating or adding it
+				$sql = "SELECT path FROM $tbl_block WHERE path = '$selected_path'";
+				$rs	 = Database::query($sql);
+				if (Database::num_rows($rs) > 0) {
+					// update
+					$upd = "UPDATE $tbl_block SET active = 1 WHERE path = '$selected_path'";
+					Database::query($upd);
+				} else {
+					// insert
 					$plugin_info_file = $dashboard_pluginpath.$testplugin."/$testplugin.info";
 					$plugin_info = array();
 					if (file_exists($plugin_info_file)) {
@@ -190,13 +231,14 @@ class DashboardManager
 						$plugin_controller = Database::escape_string($plugin_info['controller']);
 					}
 
-					$sql_ins = "INSERT INTO $tbl_block(name, description, path, controller) VALUES ('$plugin_name', '$plugin_description', '$plugin_path', '$plugin_controller')";
-					Database::query($sql_ins);
-					$affected_rows = Database::affected_rows();
-
+					$ins = "INSERT INTO $tbl_block(name, description, path, controller) VALUES ('$plugin_name', '$plugin_description', '$plugin_path', '$plugin_controller')";
+					Database::query($ins);
 				}
-			}
+				$affected_rows = Database::affected_rows();
+			}	
+							
 		}
+				
 		return $affected_rows;
 	}
 
@@ -242,7 +284,6 @@ class DashboardManager
 				} else {
 						$active = 1;
 				}
-
 				// update active
 				$upd = "UPDATE $tbl_block SET active = '$active' WHERE path = '".$row['path']."'";
 				Database::query($upd);
@@ -272,10 +313,10 @@ class DashboardManager
 		$condition_path = '';
 		if (!empty($path)) {
 			$path = Database::escape_string($path);
-			$condition_path = ' WHERE path = "'.$path.'" ';
+			$condition_path = ' AND path = "'.$path.'" ';
 		}
 
-		$sql = "SELECT * FROM $tbl_block $condition_path WHERE active = 1";
+		$sql = "SELECT * FROM $tbl_block WHERE active = 1 $condition_path ";
 		$rs  = Database::query($sql);
 		$block_data = array();
 		if (Database::num_rows($rs) > 0) {
@@ -293,6 +334,7 @@ class DashboardManager
 	 */
 	public static function display_user_dashboard_list($user_id) {
 
+		$block_data_without_plugin = self::get_block_data_without_plugin();
 		$enabled_dashboard_plugins = self::get_enabled_dashboard_blocks();
 		$user_block_data = self::get_user_block_data($user_id);
 

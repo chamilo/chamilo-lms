@@ -49,7 +49,7 @@ if (empty($extension) || !file_exists($archive_path.$archive_file)) {
 
 $content_type = '';
 
-if (in_array(strtolower($extension), array('xml','csv')) && api_is_platform_admin(true)) {
+if (in_array(strtolower($extension), array('xml','csv')) && (api_is_platform_admin(true) || api_is_drh())) {
 	$content_type = 'application/force-download';
 }
 elseif (strtolower($extension) == 'zip' && $_cid && $is_courseAdmin) {

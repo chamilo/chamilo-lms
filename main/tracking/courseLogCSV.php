@@ -105,7 +105,7 @@ $interbreadcrumb[] = array ("url" => api_get_self()."?view=0000000", "name" => g
 include(api_get_path(LIBRARY_PATH)."statsUtils.lib.inc.php");
 include("../resourcelinker/resourcelinker.inc.php");
 
-$is_allowedToTrack = $is_courseAdmin || $is_platformAdmin;
+$is_allowedToTrack = $is_courseAdmin || $is_platformAdmin || api_is_drh();
 
 /*
 ==============================================================================

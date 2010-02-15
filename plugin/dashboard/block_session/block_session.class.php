@@ -30,8 +30,12 @@ class BlockSession extends Block {
 	 */
     public function __construct ($user_id) {
     	$this->user_id 	= $user_id;
-    	$this->sessions = SessionManager::get_assigned_sessions_to_hr_manager($user_id);
-    	$this->path 	= 'block_session';
+    	if (api_is_platform_admin()) {
+    		$this->sessions = SessionManager::get_sessions_list();
+    	} else if (api_is_drh()) {
+    		$this->sessions = SessionManager::get_sessions_followed_by_drh($user_id);	
+    	}    	
+    	$this->path = 'block_session';
     }
 
     /**
@@ -54,7 +58,6 @@ class BlockSession extends Block {
 			                    <h3>'.get_lang('SessionsInformation').'</h3>
 			                    <div class="widget-actions"><a onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset)).'\')) return false;" href="index.php?action=disable_block&path='.$this->path.'">'.Display::return_icon('close.gif',get_lang('Close')).'</a></div>
 			                </div>
-
 			                <div class="widget-content">
 							'.$content.'
 			                </div>
@@ -77,80 +80,42 @@ class BlockSession extends Block {
 		$sessions = $this->sessions;
 
 		$content = '<div style="margin:10px;">';
-		$content .= '<h3><font color="#000">'.get_lang('YourTrainingsSessionList').'</font></h3>';
-
-		if (count($sessions) > 0) {
+		$content .= '<h3><font color="#000">'.get_lang('YourSessionsList').'</font></h3>';
+		
+		if (count($sessions) > 0) {			
+			$sessions_table = '<table class="data_table" width:"95%">';
+ 			$sessions_table .= '<tr>								
+									<th >'.get_lang('Title').'</th>
+									<th >'.get_lang('Date').'</th>								
+								</tr>';
+			$i = 1;
 			foreach ($sessions as $session) {
 
 				$session_id = intval($session['id']);
-				$content .= '<div style="margin-top:10px;"><strong>'.$session['name'].'</strong> - '.get_lang('From').' '.$session['date_start'].' '.get_lang('To').' '.$session['date_end'].'</div>';
-				$courses = Tracking ::get_courses_list_from_session($session_id);
-
-				$courses_table = '';
-				if (count($courses)) {
-					$courses_table = '<div style="margin:10px;margin-bottom:20px;"><table class="data_table" width:"95%">';
-		 			$courses_table .= '<tr>
-										<th>'.get_lang('Course').'</th>
-										<th width="10%">'.get_lang('Time').'</th>
-										<th width="10%">'.get_lang('Progress').'</th>
-										<th width="10%">'.get_lang('Score').'</th>
-										<th width="10%">'.get_lang('TematicAdvance').'</th>
-									</tr>';
-					$i = 1;
-					foreach ($courses as $course) {
-
-						$course_code = Database::escape_string($course['course_code']);
-						$course_info = CourseManager :: get_course_information($course_code);
-
-						$tbl_session_course_user 	= Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-
-						// students directly subscribed to the course
-						$sql = "SELECT id_user  FROM $tbl_session_course_user srcu WHERE  srcu. course_code='$course_code'";
-						$rs = Database::query($sql);
-						$users = array();
-						while ($row = Database::fetch_array($rs)) {
-							$users[] = $row['id_user'];
-						}
-
-						$time_spent_on_course = api_time_to_hms(Tracking :: get_time_spent_on_the_course($users, $course_code));
-						$progress = Tracking :: get_avg_student_progress($users, $course_code);
-						$score = Tracking :: get_avg_student_score($users, $course_code);
-						$progress = empty($progress) ? '0%' : $progress.'%';
-						$score = empty($score) ? '0%' : $score.'%';
-
-						$tematic_advance_progress = 0;
-						$course_description = new CourseDescription();
-						$course_description->set_session_id($session_id);
-						$tematic_advance = $course_description->get_data_by_description_type(8, $course_code);
-
-						if (!empty($tematic_advance)) {
-							$tematic_advance_progress = $tematic_advance['progress'];
-						}
-
-						if ($i%2 == 0) $class_tr = 'row_odd';
-			    		else $class_tr = 'row_even';
-
-						$courses_table .= '<tr class="'.$class_tr.'">
-												<td align="right">'.$course_info['title'].'</td>
-												<td align="right">'.$time_spent_on_course.'</td>
-												<td align="right">'.$progress.'</td>
-												<td align="right">'.$score.'</td>
-												<td align="right">'.$tematic_advance_progress.'%</td>
-										   </tr>';
-						$i++;
-					}
-					$courses_table .= '</table></div>';
+				$title = $session['name'];		
+				if ($session['date_start'] != '0000-00-00' && $session['date_end'] != '0000-00-00') {
+					$date = get_lang('From').' '.format_locale_date(get_lang('DateFormatLongWithoutDay'), strtotime($session['date_start'])).' '.get_lang('To').' '.format_locale_date(get_lang('DateFormatLongWithoutDay'), strtotime($session['date_end']));
 				} else {
-					$courses_table .= '<div style="margin:10px;">'.get_lang('ThereAreNoCoursesInformationsInsideThisSession').'</div>';
+					$date = ' - ';
 				}
-				$content .= $courses_table;
+	 			
+				if ($i%2 == 0) $class_tr = 'row_odd';
+	    		else $class_tr = 'row_even';
+
+				$sessions_table .= '<tr class="'.$class_tr.'">
+										<td align="right">'.$title.'</td>
+										<td align="right">'.$date.'</td>										
+								   </tr>';
+				$i++;
 			}
+			$sessions_table .= '</table>';
+			$content .= $sessions_table; 
 		} else {
-			$content .= '<div style="margin:20px;">'.get_lang('ThereAreNoInformationsAboutYoursSessions').'</div>';
+			$content .= get_lang('ThereAreNoInformationsAboutYoursSessions');
 		}
 
 		if (count($sessions) > 0) {
-			$content .= '<div style="text-align:right;margin-top:10px;"><a href="#">'.get_lang('SeeMore').'</a></div>';
+			$content .= '<div style="text-align:right;margin-top:10px;"><a href="'.api_get_path(WEB_CODE_PATH).'mySpace/session.php">'.get_lang('SeeMore').'</a></div>';
 		}
 
 		$content .= '</div>';

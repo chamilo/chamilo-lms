@@ -28,8 +28,12 @@ class BlockCourse extends Block {
 	 * Constructor
 	 */
     public function __construct ($user_id) {
-    	$this->user_id = $user_id;
-    	$this->courses = CourseManager::get_assigned_courses_to_hr_manager($user_id);
+    	$this->user_id = $user_id;    	
+    	if (api_is_platform_admin()) {
+    		$this->courses = CourseManager::get_real_course_list();
+    	} else if (api_is_drh()) {
+    		$this->courses = CourseManager::get_courses_followed_by_drh($user_id);	
+    	}
     	$this->path = 'block_course';
     }
 
@@ -71,16 +75,14 @@ class BlockCourse extends Block {
  	public function get_content_html() {
 
  		$course_data = $this->get_course_information_data();
- 		$content = '';
+ 		$content = '<div style="margin:10px;">';
+ 		$content .= '<h3><font color="#000">'.get_lang('YourCourseList').'</font></h3>'; 		
  		if (!empty($course_data)) {
 	    	$data_table = '<table class="data_table" width:"95%">';
 	    	$data_table .= '<tr>
 	    						<th>'.get_lang('CourseTitle').'</th>
 	    						<th width="10%">'.get_lang('NbStudents').'</th>
-	    						<th width="10%">'.get_lang('AvgTimeSpentInTheCourse').'</th>
-	    						<th width="10%">'.get_lang('AvgStudentsProgress').'</th>
-	    						<th width="10%">'.get_lang('AvgCourseScore').'</th>
-	    						<th width="10%">'.get_lang('AvgExercisesScore').'</th>
+	    						<th width="10%">'.get_lang('AvgTimeSpentInTheCourse').'</th>	    						
 	    						<th width="10%">'.get_lang('ThematicAdvance').'</th>
 	    					</tr>';
 	    	$i = 1;
@@ -97,12 +99,10 @@ class BlockCourse extends Block {
 	    	$data_table .= '</table>';
 		} else {
 			$data_table .= get_lang('ThereAreNoInformationsAboutYoursCourses');
-		}
-
-		$content .= '<div style="margin:15px;"><h3>'.get_lang('YourCourseList').'</h3>';
+		}		
 		$content .= $data_table;
 		if (!empty($course_data)) {
-			$content .= '<div style="text-align:right;margin-top:10px;"><a href="#">'.get_lang('SeeMore').'</a></div>';
+			$content .= '<div style="text-align:right;margin-top:10px;"><a href="'.api_get_path(WEB_CODE_PATH).'mySpace/course.php">'.get_lang('SeeMore').'</a></div>';
 		}
 		$content .= '</div>';
 
@@ -128,7 +128,8 @@ class BlockCourse extends Block {
 		$a_course_students  = array();
 		$course_data = array();
 		$courses = $this->courses;
-
+		$course_description = new CourseDescription();
+		
 		foreach ($courses as $row_course) {
 
 			$course_code = $row_course['code'];
@@ -144,38 +145,25 @@ class BlockCourse extends Block {
 			if (count($users) > 0) {
 				$nb_students_in_course = count($users);
 				$avg_time_spent_in_course  = Tracking::get_time_spent_on_the_course($users, $course_code);
-				$avg_progress_in_course = Tracking::get_avg_student_progress($users, $course_code);
-				$avg_score_in_course = Tracking :: get_avg_student_score($users, $course_code);
-				$avg_score_in_exercise = Tracking::get_avg_student_exercise_score($users, $course_code);
-
-				$avg_time_spent_in_course = api_time_to_hms($avg_time_spent_in_course / $nb_students_in_course);
-				$avg_progress_in_course = round($avg_progress_in_course / $nb_students_in_course, 2);
-				$avg_score_in_course = round($avg_score_in_course / $nb_students_in_course, 2);
-				$avg_score_in_exercise = round($avg_score_in_exercise / $nb_students_in_course, 2);
 			} else {
 				$avg_time_spent_in_course = null;
-				$avg_progress_in_course = null;
-				$avg_score_in_course = null;
-				$avg_score_in_exercise = null;
 			}
 
-			$tematic_advance_progress = 0;
-			$course_description = new CourseDescription();
+			$tematic_advance_progress = 0;			
 			$course_description->set_session_id(0);
 			$tematic_advance = $course_description->get_data_by_description_type(8, $course_code);
 
 			if (!empty($tematic_advance)) {
-				$tematic_advance_progress = $tematic_advance['progress'];
+				$tematic_advance_progress = '<a title="'.get_lang('GoToThematicAdvance').'" href="'.api_get_path(WEB_CODE_PATH).'course_description/?cidReq='.$course_code.'#thematic_advance">'.$tematic_advance['progress'].'%</a>';
+			} else {
+				$tematic_advance_progress = '0%';
 			}
 
 			$table_row = array();
 			$table_row[] = $row_course['title'];
 			$table_row[] = $nb_students_in_course;
-			$table_row[] = $avg_time_spent_in_course;
-			$table_row[] = is_null($avg_progress_in_course) ? '' : $avg_progress_in_course.'%';
-			$table_row[] = is_null($avg_score_in_course) ? '' : $avg_score_in_course.'%';
-			$table_row[] = is_null($avg_score_in_exercise) ? '' : $avg_score_in_exercise.'%';
-			$table_row[] = $tematic_advance_progress.'%';
+			$table_row[] = $avg_time_spent_in_course;			
+			$table_row[] = $tematic_advance_progress;
 			$course_data[] = $table_row;
 		}
 

@@ -37,6 +37,7 @@ class DashboardController { // extends Controller {
 		$data = array();		
 		$user_id = $this->user_id;
 		
+		$block_data_without_plugin = DashboardManager::get_block_data_without_plugin();
 		$dashboard_blocks = DashboardManager::get_enabled_dashboard_blocks();
 		$user_block_data  = DashboardManager::get_user_block_data($user_id);		
 		$user_blocks_id = array_keys($user_block_data);

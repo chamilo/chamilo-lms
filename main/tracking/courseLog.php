@@ -35,7 +35,7 @@ if (isset($_GET['from']) && $_GET['from'] == 'myspace') {
 }
 
 // access restrictions
-$is_allowedToTrack = $is_courseAdmin || $is_platformAdmin || $is_courseCoach || $is_sessionAdmin;
+$is_allowedToTrack = $is_courseAdmin || $is_platformAdmin || $is_courseCoach || $is_sessionAdmin || api_is_drh();
 
 if (!$is_allowedToTrack) {
 	Display :: display_header(null);

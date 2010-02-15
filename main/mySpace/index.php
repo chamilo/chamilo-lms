@@ -15,6 +15,7 @@ require_once '../inc/global.inc.php';
 // including additional libraries
 require_once api_get_path(LIBRARY_PATH).'tracking.lib.php';
 require_once api_get_path(LIBRARY_PATH).'course.lib.php';
+require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
 require_once api_get_path(LIBRARY_PATH).'export.lib.inc.php';
 
 // the section (for the tabs)
@@ -124,6 +125,7 @@ if (api_is_allowed_to_create_course()) {
 		}
 	}
 }
+
 if ($is_coach) {
 	if ($nb_teacher_courses == 0 && !$is_platform_admin) {
 		$view = 'coach';
@@ -135,6 +137,7 @@ if ($is_coach) {
 		$menu_items[] = '<a href="'.api_get_self().'?view=coach">'.get_lang('CoachInterface').'</a>';
 	}
 }
+
 if ($is_platform_admin) {
 	if (!$is_coach && $nb_teacher_courses == 0) {
 		$view = 'admin';
@@ -146,24 +149,27 @@ if ($is_platform_admin) {
 		$menu_items[] = '<a href="'.api_get_self().'?view=admin">'.get_lang('AdminInterface').'</a>';
 	}
 }
-if ($_user['status'] == DRH) {
-	$view = 'drh';
-	$title = get_lang('DrhInterface');
-	$menu_items[] = '<a href="'.api_get_self().'?view=drh">'.get_lang('DrhInterface').'</a>';
+
+if (api_is_drh()) {
+	$view = 'drh_students';	
+	$menu_items[] = get_lang('Learners');
+	$menu_items[] = '<a href="teachers.php">'.get_lang('Trainers').'</a>';
+	$menu_items[] = '<a href="course.php">'.get_lang('Trainings').'</a>';
+	$menu_items[] = '<a href="session.php">'.get_lang('Sessions').'</a>';
 }
 
-echo '<div class="actions">';
+echo '<div class="actions-title" style ="font-size:10pt;">';
 $nb_menu_items = count($menu_items);
 if ($nb_menu_items > 1) {
 	foreach ($menu_items as $key => $item) {
 		echo $item;
 		if ($key != $nb_menu_items - 1) {
-			echo ' | ';
+			echo '&nbsp;|&nbsp;';
 		}
 	}
 }
 
-echo '&nbsp;<a href="javascript: void(0);" onclick="javascript: window.print()"><img align="absbottom" src="../img/printmgr.gif">&nbsp;'.get_lang('Print').'</a> ';
+echo '&nbsp;&nbsp;<a href="javascript: void(0);" onclick="javascript: window.print()"><img align="absbottom" src="../img/printmgr.gif">&nbsp;'.get_lang('Print').'</a> ';
 if ($view == 'admin') {
 	echo (isset($_GET['display']) &&  $_GET['display'] == 'useroverview')? '<a href="'.api_get_self().'?display=useroverview&export=csv&view='.$view.'"><img align="absbottom" src="../img/csv.gif">&nbsp;'.get_lang('ExportAsCSV').'</a>' : '';
 } else {
@@ -172,9 +178,10 @@ if ($view == 'admin') {
 echo '</div>';
 echo '<h4>'.$title.'</h4>';
 
-if ($_user['status'] == DRH && $view == 'drh') {
-	$students = Tracking :: get_student_followed_by_drh($_user['user_id']);
-	$courses_of_the_platform = CourseManager :: get_real_course_list();
+if (api_is_drh() && $view == 'drh_students') {
+	// get data for human resources manager
+	$students = array_keys(UserManager::get_users_followed_by_drh($_user['user_id'], STUDENT));
+	$courses_of_the_platform = CourseManager :: get_real_course_list();	
 	foreach ($courses_of_the_platform as $course) {
 		$courses[$course['code']] = $course['code'];
 	}
@@ -185,9 +192,9 @@ if ($is_coach && $view == 'coach') {
 	$courses = Tracking :: get_courses_followed_by_coach($_user['user_id']);
 }
 
-if ($view == 'coach' || $view == 'drh') {
-	$nb_students = count($students);
+if ($view == 'coach' || $view == 'drh_students') {
 
+	$nb_students = count($students);
 	$total_time_spent = 0;
 	$total_courses = 0;
 	$avg_total_progress = 0;
@@ -335,11 +342,12 @@ if ($view == 'coach' || $view == 'drh') {
 						'.(is_null($nb_assignments) ? '' : round($nb_assignments, 2)).'
 					</td>
 				</tr>
-			</table>
+			</table><br />					
 			<a href="student.php">'.get_lang('SeeStudentList').'</a>
 		 </div>';
 	}
 }
+
 if ($view == 'coach') {
 	/****************************************
 	 * Infos about sessions of the coach

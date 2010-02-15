@@ -39,6 +39,34 @@ class Attendance
 		return $obj->total_number_of_items;
 	}
 
+	
+	/**
+	 * Get attendance list 
+	 * @param   string  course code (optional)
+	 * @param   int     session id (optional)
+	 * @return  array	attendances list
+	 */
+	function get_attendances_list($course_code = '', $session_id = 0) {		
+		// initializing database table and variables
+		$tbl_attendance = Database :: get_course_table(TABLE_ATTENDANCE);
+		$session_id = intval($session_id);
+		$data = array();
+		if (!empty($course_code)) {
+			$course_info = api_get_course_info($course_code);
+			$tbl_attendance = Database :: get_course_table(TABLE_ATTENDANCE, $course_info['dbName']);
+		}
+		
+		// get attendance data
+		$sql = "SELECT * FROM $tbl_attendance WHERE session_id='$session_id'";
+		$rs  = Database::query($sql);
+		if (Database::num_rows($rs) > 0){
+			while ($row = Database::fetch_array($rs)) {
+				$data[$row['id']] = $row;
+			}
+		}
+		return $data;		
+	}
+
 	/**
 	 * Get the attendaces to display on the current page (fill the sortable-table)
 	 * @param   int     offset of first user to recover
@@ -73,7 +101,13 @@ class Attendance
 		}
 
 		while ($attendance = Database::fetch_row($res)) {
-			$attendance[1] = '<a href="index.php?'.api_get_cidreq().'&action=attendance_sheet_list&attendance_id='.$attendance[0].$param_gradebook.'">'.$attendance[1].'</a>';
+
+			$student_param = '';
+			if (api_is_drh() && ($_GET['student_id'])) {
+				$student_param = '&student_id='.Security::remove_XSS($_GET['student_id']);	
+			}
+			
+			$attendance[1] = '<a href="index.php?'.api_get_cidreq().'&action=attendance_sheet_list&attendance_id='.$attendance[0].$param_gradebook.$student_param.'">'.$attendance[1].'</a>';
 			$attendance[3] = '<center>'.$attendance[3].'</center>';
 			if (api_is_allowed_to_edit(null, true)) {
 				$actions  = '';
@@ -247,7 +281,8 @@ class Attendance
 
 		foreach ($a_course_users as $key =>  $value) {
 			$uid = intval($value['user_id']);
-			if ($uid <= 1) continue;
+			$status = $value['status'];
+			if ($uid <= 1 || $status == DRH) continue;
 			if (!empty($attendance_id)) {
 				$attendance_id = intval($attendance_id);
 				$user_faults = $this->get_faults_of_user($uid, $attendance_id);
@@ -409,13 +444,16 @@ class Attendance
 	 * @return 	array  results containing number of faults, total done attendance, porcent of faults and color depend on result (red, orange)
 	 */
 	public function get_faults_of_user($user_id, $attendance_id) {
-		$tbl_attendance_result 	= Database::get_course_table(TABLE_ATTENDANCE_RESULT);
+		
+		// initializing database table and variables
+		$tbl_attendance_result 	= Database::get_course_table(TABLE_ATTENDANCE_RESULT);				
 		$user_id = intval($user_id);
 		$attendance_id = intval($attendance_id);
 		$results = array();
 		$attendance_data 		= $this->get_attendance_by_id($attendance_id);
 		$total_done_attendance 	= $attendance_data['attendance_qualify_max'];
 		$attendance_user_score  = $this->get_user_score($user_id, $attendance_id);
+				
 		// calculate results
 		$faults = $total_done_attendance-$attendance_user_score;
 		$faults = $faults > 0 ? $faults:0;
@@ -431,6 +469,92 @@ class Attendance
 		}
 		$results['color_bar'] = $color_bar;
 		return $results;
+	}
+	
+	/**
+	 * Get results of faults average for all courses by user
+	 * @param	int	   user id 
+	 * @return 	array  results containing number of faults, total done attendance, porcent of faults and color depend on result (red, orange)
+	 */
+	public function get_faults_average_inside_courses($user_id) {
+		
+		// get all courses of current user
+		$courses = CourseManager::get_courses_list_by_user_id($user_id, true);
+		$user_id = intval($user_id);		
+		
+		$results = array();
+		$total_faults = $total_weight = $porcent = 0;
+		foreach ($courses as $course) {
+			
+			$course_code = $course['code'];
+			$course_info = api_get_course_info($course_code);
+			$tbl_attendance_result 	= Database::get_course_table(TABLE_ATTENDANCE_RESULT, $course_info['dbName']);
+			$attendances_by_course = $this->get_attendances_list($course_code);						
+			foreach ($attendances_by_course as $attendance) {					
+				// get total faults and total weight											
+				$attendance_id = $attendance['id'];				
+				$total_done_attendance 	= $attendance['attendance_qualify_max'];				
+				$sql = "SELECT score FROM $tbl_attendance_result WHERE user_id='$user_id' AND attendance_id='$attendance_id'";
+				$rs = Database::query($sql);
+				$score = 0;
+				if (Database::num_rows($rs) > 0) {
+					$row = Database::fetch_array($rs);
+					$score = $row['score'];
+				}
+				$faults = $total_done_attendance-$score;
+				$faults = $faults > 0 ? $faults:0;
+				$total_faults += $faults;
+				$total_weight += $total_done_attendance;														
+			}
+		}
+
+		$porcent = $total_weight > 0 ?round(($total_faults*100)/$total_weight,0):0;
+		$results['faults'] 	= $total_faults;
+		$results['total']	= $total_weight;
+		$results['porcent'] = $porcent;
+		return $results;
+
+	}
+	
+	/**
+	 * Get results of faults average by course
+	 * @param	int	   user id 
+	 * @return 	array  results containing number of faults, total done attendance, porcent of faults and color depend on result (red, orange)
+	 */
+	public function get_faults_average_by_course($user_id, $course_code) {
+
+		
+		// Database tables and variables
+		$course_info = api_get_course_info($course_code);
+		$tbl_attendance_result 	= Database::get_course_table(TABLE_ATTENDANCE_RESULT, $course_info['dbName']);		
+		$user_id = intval($user_id);				
+		$results = array();
+		$total_faults = $total_weight = $porcent = 0;
+		$attendances_by_course = $this->get_attendances_list($course_code);						
+		
+		foreach ($attendances_by_course as $attendance) {					
+			// get total faults and total weight											
+			$attendance_id = $attendance['id'];				
+			$total_done_attendance 	= $attendance['attendance_qualify_max'];				
+			$sql = "SELECT score FROM $tbl_attendance_result WHERE user_id='$user_id' AND attendance_id='$attendance_id'";
+			$rs = Database::query($sql);
+			$score = 0;
+			if (Database::num_rows($rs) > 0) {
+				$row = Database::fetch_array($rs);
+				$score = $row['score'];
+			}
+			$faults = $total_done_attendance-$score;
+			$faults = $faults > 0 ? $faults:0;
+			$total_faults += $faults;
+			$total_weight += $total_done_attendance;														
+		}
+			
+		$porcent = $total_weight > 0 ?round(($total_faults*100)/$total_weight,0):0;
+		$results['faults'] 	= $total_faults;
+		$results['total']	= $total_weight;
+		$results['porcent'] = $porcent;
+		return $results;
+
 	}
 
 	/**

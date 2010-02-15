@@ -13,6 +13,7 @@ require '../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'tracking.lib.php';
 require_once api_get_path(LIBRARY_PATH).'export.lib.inc.php';
 require_once api_get_path(LIBRARY_PATH).'course.lib.php';
+require_once api_get_path(LIBRARY_PATH).'course_description.lib.php';
 
 $this_section = "session_my_space";
 $id_session = intval($_GET['id_session']);
@@ -58,6 +59,33 @@ if (api_get_setting('add_users_by_coach') == 'true') {
 
 Display :: display_header($nameTools);
 
+$a_courses = array();
+if (api_is_drh()) {
+	
+	$a_courses = array_keys(CourseManager::get_courses_followed_by_drh($_user['user_id']));
+
+	$menu_items[] = '<a href="index.php?view=drh_students">'.get_lang('Learners').'</a>';
+	$menu_items[] = '<a href="teachers.php">'.get_lang('Teachers').'</a>';
+	$menu_items[] = get_lang('Trainings');
+	$menu_items[] = '<a href="session.php">'.get_lang('Sessions').'</a>';
+		
+	echo '<div class="actions-title" style ="font-size:10pt;">';
+	$nb_menu_items = count($menu_items);
+	if ($nb_menu_items > 1) {
+		foreach ($menu_items as $key => $item) {
+			echo $item;
+			if ($key != $nb_menu_items - 1) {
+				echo '&nbsp;|&nbsp;';
+			}
+		}
+	}	
+	if (count($a_courses) > 0) {
+		echo '&nbsp;&nbsp;<a href="javascript: void(0);" onclick="javascript: window.print()"><img align="absbottom" src="../img/printmgr.gif">&nbsp;'.get_lang('Print').'</a> ';		
+	}
+	echo '</div>';
+	echo '<br />';
+}
+
 // Database Table Definitions
 $tbl_course 				= Database :: get_main_table(TABLE_MAIN_COURSE);
 $tbl_user_course 			= Database :: get_main_table(TABLE_MAIN_COURSE_USER);
@@ -82,24 +110,29 @@ if ($show_import_icon) {
 	echo "</div><br />";
 }
 
-$a_courses = Tracking :: get_courses_followed_by_coach($_user['user_id'], $id_session);
+if (!api_is_drh()) {	
+	$a_courses = Tracking :: get_courses_followed_by_coach($_user['user_id'], $id_session);
+} 
+
 $nb_courses = count($a_courses);
 
 $table = new SortableTable('tracking_list_course', 'count_courses');
 $table -> set_header(0, get_lang('CourseTitle'), false, 'align="center"');
 $table -> set_header(1, get_lang('NbStudents'), false);
 $table -> set_header(2, get_lang('TimeSpentInTheCourse'), false);
-$table -> set_header(3, get_lang('AvgStudentsProgress'), false);
-$table -> set_header(4, get_lang('AvgCourseScore'), false);
+$table -> set_header(3, get_lang('ThematicAdvance'), false);
+$table -> set_header(4, get_lang('AvgStudentsProgress'), false);
+$table -> set_header(5, get_lang('AvgCourseScore'), false);
 //$table -> set_header(5, get_lang('AvgExercisesScore'), false);// no code for this?
-$table -> set_header(5, get_lang('AvgMessages'), false);
-$table -> set_header(6, get_lang('AvgAssignments'), false);
-$table -> set_header(7, get_lang('Details'), false);
+$table -> set_header(6, get_lang('AvgMessages'), false);
+$table -> set_header(7, get_lang('AvgAssignments'), false);
+$table -> set_header(8, get_lang('Details'), false);
 
 $csv_header[] = array(
 	get_lang('CourseTitle', ''),
 	get_lang('NbStudents', ''),
 	get_lang('TimeSpentInTheCourse', ''),
+	get_lang('ThematicAdvance', ''),
 	get_lang('AvgStudentsProgress', ''),
 	get_lang('AvgCourseScore', ''),
 	//get_lang('AvgExercisesScore', ''),
@@ -149,11 +182,24 @@ if (is_array($a_courses)) {
 			$avg_messages_in_course = null;
 			$avg_assignments_in_course = null;
 		}
+		
+		$tematic_advance_progress = 0;
+		$course_description = new CourseDescription();
+		$course_description->set_session_id(0);
+		$tematic_advance = $course_description->get_data_by_description_type(8, $course_code);
 
+		if (!empty($tematic_advance)) {
+			$tematic_advance_csv = $tematic_advance_progress.'%';
+			$tematic_advance_progress = '<a title="'.get_lang('GoToThematicAdvance').'" href="'.api_get_path(WEB_CODE_PATH).'course_description/?cidReq='.$course_code.'#thematic_advance">'.$tematic_advance['progress'].'%</a>';
+		} else {
+			$tematic_advance_progress = '0%';
+		}
+		
 		$table_row = array();
 		$table_row[] = $course['title'];
 		$table_row[] = $nb_students_in_course;
 		$table_row[] = $avg_time_spent_in_course;
+		$table_row[] = $tematic_advance_progress;
 		$table_row[] = is_null($avg_progress_in_course) ? '' : $avg_progress_in_course.'%';
 		$table_row[] = is_null($avg_score_in_course) ? '' : $avg_score_in_course.'%';
 		$table_row[] = $avg_messages_in_course;
@@ -164,6 +210,7 @@ if (is_array($a_courses)) {
 			$course['title'],
 			$nb_students_in_course,
 			$avg_time_spent_in_course,
+			$tematic_advance_csv,
 			is_null($avg_progress_in_course) ? null : $avg_progress_in_course.'%',
 			is_null($avg_score_in_course) ? null : $avg_score_in_course.'%',
 			$avg_messages_in_course,

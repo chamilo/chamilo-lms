@@ -140,9 +140,6 @@ $dbl_click_id = 0; // used to avoid double-click
 $is_allowed_to_edit = api_is_allowed_to_edit(null,true);
 $group_member_with_upload_rights = false;
 
-
-
-
 //if the group id is set, we show them group documents
 if(isset($_SESSION['_gid']) && $_SESSION['_gid']!='')
 {
@@ -640,10 +637,10 @@ if($is_allowed_to_edit || $group_member_with_upload_rights) // TEACHER ONLY
 		$user_id = api_get_user_id();
 
 		// create the template_thumbnails folder in the upload folder (if needed)
-		if (!is_dir(api_get_path(SYS_CODE_PATH).'upload/template_thumbnails/')) {
-			@mkdir(api_get_path(SYS_CODE_PATH).'upload/template_thumbnails/', api_get_permissions_for_new_directories());
+		if (!is_dir(api_get_path(SYS_PATH).'courses/'.$_course['path'].'/upload/template_thumbnails/')) {
+			@mkdir(api_get_path(SYS_PATH).'courses/'.$_course['path'].'/upload/template_thumbnails/', api_get_permissions_for_new_directories());
 		}
-
+	var_dump(api_get_path(SYS_PATH).'courses/'.$_course['path'].'/upload/template_thumbnails/');
 		// upload the file
 		if (!empty($_FILES['template_image']['name'])) {
 
@@ -655,7 +652,7 @@ if($is_allowed_to_edit || $group_member_with_upload_rights) // TEACHER ONLY
 				$new_file_name = $_course['sysCode'].'-'.add_ext_on_mime(stripslashes($_FILES['template_image']['name']), $_FILES['template_image']['type']);
 
 				// upload dir
-				$upload_dir = api_get_path(SYS_CODE_PATH).'upload/template_thumbnails/';
+				$upload_dir = api_get_path(SYS_PATH).'courses/'.$_course['path'].'/upload/template_thumbnails/';
 
 				// resize image to max default and end upload
 				require_once (api_get_path(LIBRARY_PATH).'image.lib.php');

@@ -164,6 +164,7 @@ function load_personal_templates($user_id=0) {
 			WHERE user_id='".Database::escape_string($user_id)."'
 			AND course_code='".Database::escape_string(api_get_course_id())."'
 			AND document.id = template.ref_doc";
+
 	$result_template = Database::query($sql);
 	while ($row = Database::fetch_array($result_template))
 	{
@@ -172,7 +173,7 @@ function load_personal_templates($user_id=0) {
 
 		if (!empty($row['image']))
 		{
-			$image = api_get_path(WEB_CODE_PATH).'upload/template_thumbnails/'.$row['image'];
+			$image = api_get_path(WEB_PATH).'courses/'.$_course['path'].'/upload/template_thumbnails/'.$row['image'];
 		} else {
 			$image = api_get_path(WEB_PATH).'home/default_platform_document/template_thumb/noimage.gif';
 		}

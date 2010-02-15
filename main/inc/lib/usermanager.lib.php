@@ -39,8 +39,6 @@ define('USER_RELATION_TYPE_ENEMY',		5); // should be deprecated is useless
 define('USER_RELATION_TYPE_DELETED',	6);
 define('USER_RELATION_TYPE_RRHH',		7);
 
-
-
 class UserManager
 {
 	private function __construct () {
@@ -1559,7 +1557,28 @@ class UserManager
 		}
 		return $result_data;
 	}
-
+	
+	/**
+	 * Get extra user data by field variable
+	 * @param string	field variable
+	 * @return array	data
+	 */
+	public static function get_extra_user_data_by_field_variable($field_variable) {
+		
+		$tbl_user_field_values = Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
+		$extra_information_by_variable = self::get_extra_field_information_by_name($field_variable);
+		$field_id = intval($extra_information_by_variable['id']);
+		$data = array();
+		$sql = "SELECT * FROM $tbl_user_field_values WHERE field_id='$field_id'";
+		$rs  = Database::query($sql);
+		if (Database::num_rows($rs) > 0) {
+			while ($row = Database::fetch_array($rs)) {
+				$user_id = $row['user_id'];
+				$data[$user_id] = $row;
+			}
+		}
+		return $data;
+	}
 
 	/**
 	 * Gives a list of [session_category][session_id] for the current user.
@@ -2871,71 +2890,71 @@ class UserManager
 			}
 		}
 	}
-
-
+		
 	/**
-	 * get assigned users to human resource manager
-	 * @param int  	hr_manager id
-	 * @param int	status (optional)
-	 * @return array assigned users
+	 * get users folloewd by human resource manager
+	 * @param int  		hr_dept id
+	 * @param int		user status (optional)
+	 * @return array 	users
 	 */
-	public static function get_assigned_users_to_hr_manager($hr_manager_id, $status = 0) {
+	public static function get_users_followed_by_drh($hr_dept_id, $user_status = 0) {
 
 		// Database Table Definitions
 		$tbl_user 			= 	Database::get_main_table(TABLE_MAIN_USER);
 		$tbl_user_rel_user 	= 	Database::get_main_table(TABLE_MAIN_USER_REL_USER);
-
-		$hr_manager_id = intval($hr_manager_id);
+		
+		$hr_dept_id = intval($hr_dept_id);		
 		$assigned_users_to_hrm = array();
-
+		
 		$condition_status = '';
 		if (!empty($status)) {
-			$status = intval($status);
+			$status = intval($status);			
 			$condition_status = ' WHERE u.status = '.$status;
 		}
-
+		
 		$sql = "SELECT u.user_id, u.username, u.lastname, u.firstname FROM $tbl_user u
-				 INNER JOIN $tbl_user_rel_user uru ON uru.user_id = u.user_id AND friend_user_id = '$hr_manager_id' AND relation_type = '1'";
-		$rs_assigned_users = Database::query($sql);
+				 INNER JOIN $tbl_user_rel_user uru ON uru.user_id = u.user_id AND friend_user_id = '$hr_dept_id' AND relation_type = '".USER_RELATION_TYPE_RRHH."' $condition_status";
+		$rs_assigned_users = Database::query($sql, __FILE__, __LINE__);
 		if (Database::num_rows($rs_assigned_users) > 0) {
 			while ($row_assigned_users = Database::fetch_array($rs_assigned_users))	{
-				$assigned_users_to_hrm[$row_assigned_users['user_id']] = $row_assigned_users;
+				$assigned_users_to_hrm[$row_assigned_users['user_id']] = $row_assigned_users; 
 			}
-		}
+		}		
 		return $assigned_users_to_hrm;
+		
 	}
 
 	/**
 	  * Subscribes users to human resource manager (Dashboard feature)
-	  *	@param	int 		User id
+	  *	@param	int 		hr dept id
 	  * @param	array		Users id
-	  * @param	int			Relation type
+	  * @param	int			affected rows
 	  **/
-	public static function suscribe_users_to_hr_manager($hr_manager_id,$user_list) {
+	public static function suscribe_users_to_hr_manager($hr_dept_id, $users_id) {
 
 		// Database Table Definitions
 		$tbl_user 			= 	Database::get_main_table(TABLE_MAIN_USER);
 		$tbl_user_rel_user 	= 	Database::get_main_table(TABLE_MAIN_USER_REL_USER);
 
-		$hr_manager_id = intval($hr_manager_id);
-		$affected_rows = 0;
-		//Deleting assigned users to hrm_id
-	   	$sql = "SELECT user_id FROM $tbl_user_rel_user WHERE friend_user_id = $hr_manager_id AND relation_type = 1";
-		$result = Database::query($sql);
-
+		$hr_dept_id = intval($hr_dept_id);
+		$affected_rows = 0;			
+		//Deleting assigned users to hrm_id			
+	   	$sql = "SELECT user_id FROM $tbl_user_rel_user WHERE friend_user_id = $hr_dept_id AND relation_type = '".USER_RELATION_TYPE_RRHH."' ";
+		$result = Database::query($sql,__FILE__,__LINE__);
+		
 		if (Database::num_rows($result) > 0) {
-			$sql = "DELETE FROM $tbl_user_rel_user WHERE friend_user_id = $hr_manager_id AND relation_type = 1 ";
-			Database::query($sql);
+			$sql = "DELETE FROM $tbl_user_rel_user WHERE friend_user_id = $hr_dept_id AND relation_type = '".USER_RELATION_TYPE_RRHH."' ";
+			Database::query($sql,__FILE__,__LINE__);					
 		}
-
+		
 		// inserting new user list
-		if (is_array($user_list)) {
-			foreach ($user_list as $user_id) {
+		if (is_array($users_id)) {
+			foreach ($users_id as $user_id) {
 				$user_id = intval($user_id);
-				$insert_sql = "INSERT IGNORE INTO $tbl_user_rel_user(user_id, friend_user_id, relation_type) VALUES('$user_id', $hr_manager_id, '1')";
-				Database::query($insert_sql);
+				$insert_sql = "INSERT IGNORE INTO $tbl_user_rel_user(user_id, friend_user_id, relation_type) VALUES('$user_id', $hr_dept_id, '".USER_RELATION_TYPE_RRHH."')";
+				Database::query($insert_sql,__FILE__,__LINE__);
 				$affected_rows = Database::affected_rows();
-			}
+			}			
 		}
 		return $affected_rows;
 

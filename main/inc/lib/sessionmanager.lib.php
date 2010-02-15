@@ -1,14 +1,29 @@
 <?php //$id: $
-/* For licensing terms, see /dokeos_license.txt */
+/* For licensing terms, see /license.txt */
+/**
+==============================================================================
+* This is the session library for Chamilo.
+* All main sessions functions should be placed here.
+* @package chamilo.library
+==============================================================================
+*/
+
+/* LIBRARIES */
+require_once 'display.lib.php';
+
+/* CONSTANTS */
+
+// Relation type between sessions
+define('SESSION_RELATION_TYPE_RRHH',	1);
+
 /**
 ==============================================================================
 *	This class provides methods for sessions management.
 *	Include/require it in your code to use its features.
 *
-*	@package dokeos.library
+*	@package chamilo.library
 ==============================================================================
 */
-require_once 'display.lib.php';
 class SessionManager {
 	private function __construct() {
 
@@ -1033,11 +1048,11 @@ class SessionManager {
 		$affected_rows = 0;
 
 		//Deleting assigned sessions to hrm_id
-	   	$sql = "SELECT id_session FROM $tbl_session_rel_user WHERE id_user = $hr_manager_id AND relation_type = '1'";
+	   	$sql = "SELECT id_session FROM $tbl_session_rel_user WHERE id_user = $hr_manager_id AND relation_type = '".SESSION_RELATION_TYPE_RRHH."' ";
 		$result = Database::query($sql);
 
 		if (Database::num_rows($result) > 0) {
-			$sql = "DELETE FROM $tbl_session_rel_user WHERE id_user = $hr_manager_id AND relation_type = '1' ";
+			$sql = "DELETE FROM $tbl_session_rel_user WHERE id_user = $hr_manager_id AND relation_type = '".SESSION_RELATION_TYPE_RRHH."' ";
 			Database::query($sql);
 		}
 
@@ -1045,7 +1060,7 @@ class SessionManager {
 		if (is_array($sessions_list)) {
 			foreach ($sessions_list as $session_id) {
 				$session_id = intval($session_id);
-				$insert_sql = "INSERT IGNORE INTO $tbl_session_rel_user(id_session, id_user, relation_type) VALUES($session_id, $hr_manager_id, '1')";
+				$insert_sql = "INSERT IGNORE INTO $tbl_session_rel_user(id_session, id_user, relation_type) VALUES($session_id, $hr_manager_id, '".SESSION_RELATION_TYPE_RRHH."')";
 				Database::query($insert_sql);
 				$affected_rows = Database::affected_rows();
 			}
@@ -1069,7 +1084,7 @@ class SessionManager {
 		$assigned_sessions_to_hrm = array();
 
 		$sql = "SELECT * FROM $tbl_session s
-				 INNER JOIN $tbl_session_rel_user sru ON sru.id_session = s.id AND sru.id_user = '$hr_manager_id' AND sru.relation_type = '1'";
+				 INNER JOIN $tbl_session_rel_user sru ON sru.id_session = s.id AND sru.id_user = '$hr_manager_id' AND sru.relation_type = '".SESSION_RELATION_TYPE_RRHH."' ";
 
 		$rs_assigned_sessions = Database::query($sql);
 		if (Database::num_rows($rs_assigned_sessions) > 0) {

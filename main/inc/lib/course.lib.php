@@ -19,7 +19,7 @@
 * if target_course_code was 0 , this was changed to NULL.
 * There are probably some places left with the wrong code.
 *
-* @package dokeos.library
+* @package chamilo.library
 ==============================================================================
 */
 
@@ -121,6 +121,8 @@ define('NOT_VISIBLE_SUBSCRIPTION_ALLOWED', 1);
 define('VISIBLE_SUBSCRIPTION_ALLOWED', 2);
 define('VISIBLE_NO_SUBSCRIPTION_ALLOWED', 3);
 
+// Relation type between courses
+define('COURSE_RELATION_TYPE_RRHH',	1);
 
 /*
 -----------------------------------------------------------
@@ -2159,11 +2161,11 @@ class CourseManager {
 		$affected_rows = 0;
 
 		//Deleting assigned courses to hrm_id
-	   	$sql = "SELECT course_code FROM $tbl_course_rel_user WHERE user_id = $hr_manager_id AND relation_type = 1";
+	   	$sql = "SELECT course_code FROM $tbl_course_rel_user WHERE user_id = $hr_manager_id AND status = ".DRH." AND relation_type = '".COURSE_RELATION_TYPE_RRHH."' ";
 		$result = Database::query($sql);
 
 		if (Database::num_rows($result) > 0) {
-			$sql = "DELETE FROM $tbl_course_rel_user WHERE user_id = $hr_manager_id AND relation_type = 1 ";
+			$sql = "DELETE FROM $tbl_course_rel_user WHERE user_id = $hr_manager_id AND status = ".DRH."  AND relation_type = '".COURSE_RELATION_TYPE_RRHH."' ";
 			Database::query($sql);
 		}
 
@@ -2171,9 +2173,11 @@ class CourseManager {
 		if (is_array($courses_list)) {
 			foreach ($courses_list as $course_code) {
 				$course_code = Database::escape_string($course_code);
-				$insert_sql = "INSERT IGNORE INTO $tbl_course_rel_user(course_code, user_id, relation_type) VALUES('$course_code', $hr_manager_id, '1')";
+				$insert_sql = "INSERT IGNORE INTO $tbl_course_rel_user(course_code, user_id, status, relation_type) VALUES('$course_code', $hr_manager_id, '".DRH."', '".COURSE_RELATION_TYPE_RRHH."')";
 				Database::query($insert_sql);
-				$affected_rows = Database::affected_rows();
+				if (Database::affected_rows()) {
+					$affected_rows++;
+				}
 			}
 		}
 		return $affected_rows;
@@ -2181,23 +2185,21 @@ class CourseManager {
 	}
 
 	/**
-	 * get assigned courses to human resources manager
+	 * get courses followed by human resources manager
 	 * @param int 		human resources manager id
-	 * @return array	assigned courses
+	 * @return array	courses
 	 */
-	public static function get_assigned_courses_to_hr_manager($hr_manager_id) {
+	public static function get_courses_followed_by_drh($hr_dept_id) {
 
 		// Database Table Definitions
 		$tbl_course 			= 	Database::get_main_table(TABLE_MAIN_COURSE);
 		$tbl_course_rel_user 	= 	Database::get_main_table(TABLE_MAIN_COURSE_USER);
 
-		$hr_manager_id = intval($hr_manager_id);
-
+		$hr_dept_id = intval($hr_dept_id);
 		$assigned_courses_to_hrm = array();
 
-		/* @todo relation_type field should be changed by status = 4(DRH) */
 		$sql = "SELECT * FROM $tbl_course c
-				 INNER JOIN $tbl_course_rel_user cru ON cru.course_code = c.code AND cru.user_id = '$hr_manager_id' AND relation_type = '1'";
+				 INNER JOIN $tbl_course_rel_user cru ON cru.course_code = c.code AND cru.user_id = '$hr_dept_id' AND status = ".DRH." AND relation_type = '".COURSE_RELATION_TYPE_RRHH."' ";
 
 		$rs_assigned_courses = Database::query($sql);
 		if (Database::num_rows($rs_assigned_courses) > 0) {

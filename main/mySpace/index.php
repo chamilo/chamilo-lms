@@ -237,11 +237,11 @@ if ($view == 'coach' || $view == 'drh_students') {
 			}
 		}
 		// average progress of the student
-		$avg_student_progress = $avg_student_progress / $nb_courses_student;
+		$avg_student_progress = $nb_courses_student ?$avg_student_progress / $nb_courses_student:0;
 		$avg_total_progress += $avg_student_progress;
 
 		// average test results of the student
-		$avg_student_score = $avg_student_score / $nb_courses_student;
+		$avg_student_score = $avg_student_score?$avg_student_score / $nb_courses_student:0;
 		$avg_results_to_exercises += $avg_student_score;
 	}
 

@@ -56,6 +56,21 @@ class CourseRecycler
 		$table_tool_intro = Database::get_course_table(TABLE_TOOL_INTRO);
 		$table_linked_resources = Database :: get_course_table(TABLE_LINKED_RESOURCES);
 		$table_item_properties = Database::get_course_table(TABLE_ITEM_PROPERTY);
+						
+		$this->recycle_link_categories();
+		$this->recycle_links();
+		$this->recycle_forums();
+		$this->recycle_events();
+		$this->recycle_announcements();
+		$this->recycle_documents();	
+		$this->recycle_forum_categories();
+		$this->recycle_quizzes();
+		$this->recycle_surveys();
+		$this->recycle_learnpaths();
+		$this->recycle_cours_description();
+		$this->recycle_wiki();
+		$this->recycle_glossary();
+		
 		foreach ($this->course->resources as $type => $resources)
 		{
 			foreach ($resources as $id => $resource)
@@ -74,19 +89,8 @@ class CourseRecycler
 				}
 			}
 		}
-		$this->recycle_links();
-		$this->recycle_link_categories();
-		$this->recycle_events();
-		$this->recycle_announcements();
-		$this->recycle_documents();
-		$this->recycle_forums();
-		$this->recycle_forum_categories();
-		$this->recycle_quizzes();
-		$this->recycle_surveys();
-		$this->recycle_learnpaths();
-		$this->recycle_cours_description();
-		$this->recycle_wiki();
-		$this->recycle_glossary();
+
+		
 	}
 	/**
 	 * Delete documents

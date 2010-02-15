@@ -640,7 +640,6 @@ if($is_allowed_to_edit || $group_member_with_upload_rights) // TEACHER ONLY
 		if (!is_dir(api_get_path(SYS_PATH).'courses/'.$_course['path'].'/upload/template_thumbnails/')) {
 			@mkdir(api_get_path(SYS_PATH).'courses/'.$_course['path'].'/upload/template_thumbnails/', api_get_permissions_for_new_directories());
 		}
-	var_dump(api_get_path(SYS_PATH).'courses/'.$_course['path'].'/upload/template_thumbnails/');
 		// upload the file
 		if (!empty($_FILES['template_image']['name'])) {
 

@@ -568,34 +568,34 @@ class CourseBuilder
 			$db_items = Database::query($sql_items);
 			while ($obj_item = Database::fetch_object($db_items))
 			{
-				$item['id'] = $obj_item->id;
-				$item['item_type'] = $obj_item->item_type;
-				$item['ref'] = $obj_item->ref;
-				$item['title'] = $obj_item->title;
-				$item['description'] = $obj_item->description;
-				$item['path'] = $obj_item->path;
-				$item['min_score'] = $obj_item->min_score;
-				$item['max_score'] = $obj_item->max_score;
-				$item['mastery_score'] = $obj_item->mastery_score;
+				$item['id']				= $obj_item->id;
+				$item['item_type'] 		= $obj_item->item_type;
+				$item['ref'] 			= $obj_item->ref;
+				$item['title'] 			= $obj_item->title;
+				$item['description'] 	= $obj_item->description;
+				$item['path'] 			= $obj_item->path;
+				$item['min_score'] 		= $obj_item->min_score;
+				$item['max_score'] 		= $obj_item->max_score;
+				$item['mastery_score'] 	= $obj_item->mastery_score;
 				$item['parent_item_id'] = $obj_item->parent_item_id;
 				$item['previous_item_id'] = $obj_item->previous_item_id;
-				$item['next_item_id'] = $obj_item->next_item_id;
-				$item['display_order'] = $obj_item->display_order;
-				$item['prerequisite'] = $obj_item->prerequisite;
-				$item['parameters'] = $obj_item->parameters;
-				$item['launch_data'] = $obj_item->launch_data;
+				$item['next_item_id'] 	= $obj_item->next_item_id;
+				$item['display_order'] 	= $obj_item->display_order;
+				$item['prerequisite']	 = $obj_item->prerequisite;
+				$item['parameters'] 	= $obj_item->parameters;
+				$item['launch_data'] 	= $obj_item->launch_data;
+				//adding audio data
+				$item['audio'] 	= $obj_item->audio;
+				
 				$items[] = $item;
 			}
 
 			$sql_tool = "SELECT id FROM ".$table_tool." WHERE (link LIKE '%lp_controller.php%lp_id=".$obj->id."%' and image='scormbuilder.gif') AND visibility='1'";
 			$db_tool = Database::query($sql_tool);
 
-			if(Database::num_rows($db_tool))
-			{
+			if(Database::num_rows($db_tool)) {
 				$visibility='1';
-			}
-			else
-			{
+			} else {
 				$visibility='0';
 			}
 

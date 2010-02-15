@@ -56,10 +56,24 @@ class CourseRecycler
 		$table_tool_intro = Database::get_course_table(TABLE_TOOL_INTRO);
 		$table_linked_resources = Database :: get_course_table(TABLE_LINKED_RESOURCES);
 		$table_item_properties = Database::get_course_table(TABLE_ITEM_PROPERTY);
-		foreach ($this->course->resources as $type => $resources)
-		{
-			foreach ($resources as $id => $resource)
-			{
+		
+		$this->recycle_links();
+		$this->recycle_link_categories();
+		$this->recycle_events();
+		$this->recycle_announcements();
+		$this->recycle_documents();		
+		$this->recycle_forums(); //@todo does not work yet
+		$this->recycle_forum_categories();
+		$this->recycle_quizzes();
+		$this->recycle_surveys();
+		$this->recycle_learnpaths();
+		$this->recycle_cours_description();
+		$this->recycle_wiki();
+		$this->recycle_glossary();
+		
+		
+		foreach ($this->course->resources as $type => $resources) {			
+			foreach ($resources as $id => $resource) {
 				$sql = "DELETE FROM ".$table_linked_resources." WHERE (source_type = '".$type."' AND source_id = '".$id."') OR (resource_type = '".$type."' AND resource_id = '".$id."')  ";
 				Database::query($sql);
 				if(is_numeric($id))
@@ -74,19 +88,7 @@ class CourseRecycler
 				}
 			}
 		}
-		$this->recycle_links();
-		$this->recycle_link_categories();
-		$this->recycle_events();
-		$this->recycle_announcements();
-		$this->recycle_documents();
-		$this->recycle_forums();
-		$this->recycle_forum_categories();
-		$this->recycle_quizzes();
-		$this->recycle_surveys();
-		$this->recycle_learnpaths();
-		$this->recycle_cours_description();
-		$this->recycle_wiki();
-		$this->recycle_glossary();
+
 	}
 	/**
 	 * Delete documents

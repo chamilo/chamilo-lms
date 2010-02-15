@@ -240,7 +240,13 @@ if ($slide_id !== "all") {
 		echo '</tr>';
 		echo '<tr>';
 		echo '<td align="center">';
-		echo "<a href='slideshow.php?slide_id=".$next_slide."&curdirpath=$pathurl'><img src='download.php?doc_url=$path/".$image_files_only[$slide]."' alt='".$image_files_only[$slide]."' border='0'".$height_width_tags."></a>";
+		if ($slide < $total_slides -1 and $slide_id <> "all") {
+			echo "<a href='slideshow.php?slide_id=".$next_slide."&curdirpath=$pathurl'>";	
+		} else {
+			echo "<a href='slideshow.php?slide_id=0&curdirpath=$pathurl'>";
+		}
+		echo "<img src='download.php?doc_url=$path/".$image_files_only[$slide]."' alt='".$image_files_only[$slide]."' border='0'".$height_width_tags.">";
+		echo "</a>";
 		echo '</td>';
 		echo '</tr>';
 		echo '<tr>';
@@ -290,14 +296,21 @@ if ($slide_id !== "all") {
 		echo '<table align="center" border="0">';
 		echo '<tr>';
 		echo '<td align="center" >';
-
+		if ($slide == 0){
+			$imgp = 'slide_previous_na.png';
+			$first = '<img src="'.api_get_path(WEB_IMG_PATH).'slide_first_na.png">';
+		} else {
+			$imgp = 'slide_previous.png';
+			$first = '<a href="slideshow.php?slide_id=0&curdirpath='.$pathurl.'"><img src="'.api_get_path(WEB_IMG_PATH).'slide_first.png" title="'.get_lang('FirstSlide').'" alt="'.get_lang('FirstSlide').'">&nbsp;&nbsp;</a>';
+		}
 		// first slide
-		echo '<a href="slideshow.php?slide_id=0&curdirpath='.$pathurl.'"><img src="'.api_get_path(WEB_IMG_PATH).'slide_first.png" title="'.get_lang('FirstSlide').'" alt="'.get_lang('FirstSlide').'">&nbsp;&nbsp;</a>';
+		echo $first;
 		// previous slide
 		if ($slide > 0) {
 			echo '<a href="slideshow.php?slide_id='.$previous_slide.'&amp;curdirpath='.$pathurl.'">';
 		}
-		echo '<img src="'.api_get_path(WEB_IMG_PATH).'slide_previous.png" title="'.get_lang('Previous').'" alt="'.get_lang('Previous').'">';
+
+		echo '<img src="'.api_get_path(WEB_IMG_PATH).$imgp.'" title="'.get_lang('Previous').'" alt="'.get_lang('Previous').'">';
 		if ($slide > 0) {
 			echo "</a> ";
 		}
@@ -310,12 +323,21 @@ if ($slide_id !== "all") {
 			echo "<a href='slideshow.php?slide_id=".$next_slide."&curdirpath=$pathurl'>";
 
 		}
-		echo '<img src="'.api_get_path(WEB_IMG_PATH).'slide_next.png" title="'.get_lang('Next').'" alt="'.get_lang('Next').'">';
+		
+		if ($slide == $total_slides-1){
+			$imgn = 'slide_next_na.png';
+			$last = '<img src="'.api_get_path(WEB_IMG_PATH).'slide_last_na.png" title="'.get_lang('LastSlide').'" alt="'.get_lang('LastSlide').'">';
+		} else {
+			$imgn = 'slide_next.png';
+			$last = '<a href="slideshow.php?slide_id='.($total_slides-1).'&curdirpath='.$pathurl.'"><img src="'.api_get_path(WEB_IMG_PATH).'slide_last.png" title="'.get_lang('LastSlide').'" alt="'.get_lang('LastSlide').'"></a>';
+		}
+		
+		echo '<img src="'.api_get_path(WEB_IMG_PATH).$imgn.'" title="'.get_lang('Next').'" alt="'.get_lang('Next').'">';
 		if ($slide > 0) {
 			echo '</a>';
 		}
 		// last slide
-		echo '&nbsp;&nbsp;<a href="slideshow.php?slide_id='.($total_slides-1).'&curdirpath='.$pathurl.'"><img src="'.api_get_path(WEB_IMG_PATH).'slide_last.png" title="'.get_lang('LastSlide').'" alt="'.get_lang('LastSlide').'"></a>';
+		echo '&nbsp;&nbsp;'.$last;
 		echo '</td>';
 		echo '</tr>';
 		echo '</table>';

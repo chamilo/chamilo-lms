@@ -252,7 +252,7 @@ class CourseSelectForm
 						$condition_session = ' AND d.session_id ='.$session_id;
 					}
 
-					$sql = 'SELECT * FROM '.$table_doc.' d, '.$table_prop.' p WHERE tool = \''.TOOL_DOCUMENT.'\' AND p.ref = d.id AND p.visibility != 2 AND id = '.$resource_item.$condition_session.' ORDER BY path';
+					$sql = 'SELECT * FROM '.$table_doc.' d, '.$table_prop.' p WHERE tool = \''.TOOL_DOCUMENT.'\' AND p.ref = d.id AND p.visibility != 2 AND p.id = '.$resource_item.$condition_session.' ORDER BY path';
 					$db_result = Database::query($sql);
 					while ($obj = Database::fetch_object($db_result)) {
 						$doc = new Document($obj->id, $obj->path, $obj->comment, $obj->title, $obj->filetype, $obj->size);

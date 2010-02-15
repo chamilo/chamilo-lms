@@ -656,7 +656,9 @@ if ($owner_id == $_user['user_id'] || api_is_platform_admin() || $is_allowed_to_
 
 	$read_only_flag=$_POST['readonly'];
 
-	$defaults['texte'] = $texte;
+	// Desactivation of IE proprietary commenting tags inside the text before loading it on the online editor.
+	// This fix has been proposed by Hubert Borderiou, see Bug #573, http://support.chamilo.org/issues/573
+	$defaults['texte'] = str_replace('<!--[', '<!-- [', $texte);
 
 	//if($extension == 'htm' || $extension == 'html')
 	// HotPotatoes tests are html files, but they should not be edited in order their functionality to be preserved.

@@ -29,10 +29,10 @@
 * Updates the Dokeos files from an older version
 * IMPORTANT: This script has to be included by install/index.php and update_courses.php
 *
-* DOKEOS_INSTALL is defined in the install/index.php
+* SYSTEM_INSTALLATION is defined in the install/index.php
 * DOKEOS_COURSE_UPDATE is defined in update_courses.php
 *
-* When DOKEOS_INSTALL or DOKEOS_COURSE_UPDATE is defined, do for every course:
+* When SYSTEM_INSTALLATION or DOKEOS_COURSE_UPDATE is defined, do for every course:
 * - remove the .htaccess in the document folder
 * - remove the index.php in the group folder
 * - write a new group/index.php file, make it an empty html file
@@ -46,7 +46,7 @@
 * - remove the visibility field from the document table
 * - update the item properties of the group documents
 *
-* Additionally, when DOKEOS_INSTALL is defined
+* Additionally, when SYSTEM_INSTALLATION is defined
 * - write a config file, configuration.php, with important settings
 * - write a .htaccess file (with instructions for Apache) in the courses directory
 * - remove the new main/upload/users directory and rename the main/img/users
@@ -138,7 +138,7 @@ function fill_document_table($dir)
 ==============================================================================
 */
 
-if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE')) {
+if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
 
 	$newPath = str_replace('\\', '/', realpath('../..')).'/';
 	$oldPath = $_POST['updatePath'];
@@ -199,13 +199,13 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE')) {
 		}
 	}
 
-	if (defined('DOKEOS_INSTALL')) {
+	if (defined('SYSTEM_INSTALLATION')) {
 
 		// Write the Dokeos config file
-		write_dokeos_config_file($newPath.'main/inc/conf/configuration.php');
+		write_system_config_file($newPath.'main/inc/conf/configuration.php');
 
 		// Write a distribution file with the config as a backup for the admin
-		write_dokeos_config_file($newPath.'main/inc/conf/configuration.dist.php');
+		write_system_config_file($newPath.'main/inc/conf/configuration.dist.php');
 
 		// Write a .htaccess file in the course repository
 		write_courses_htaccess_file($urlAppendPath);

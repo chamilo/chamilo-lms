@@ -331,45 +331,46 @@ function _api_clean_person_name($person_name) {
  * @param string $from_encoding				The encoding that $string is being converted from.
  * @return string							Returns the converted string.
  */
-function _api_convert_encoding($string, $to_encoding, $from_encoding) {
+function _api_convert_encoding(&$string, $to_encoding, $from_encoding) {
+	$str = (string)$string;
 	static $character_map = array();
 	static $utf8_compatible = array('UTF-8', 'US-ASCII');
-	if (empty($string)) {
-		return $string;
+	if (empty($str)) {
+		return $str;
 	}
 	$to_encoding = api_refine_encoding_id($to_encoding);
 	$from_encoding = api_refine_encoding_id($from_encoding);
 	if (api_equal_encodings($to_encoding, $from_encoding)) {
-		return $string;
+		return $str;
 	}
 	if ($to_encoding == 'HTML-ENTITIES') {
-		return api_htmlentities($string, ENT_QUOTES, $from_encoding);
+		return api_htmlentities($str, ENT_QUOTES, $from_encoding);
 	}
 	if ($from_encoding == 'HTML-ENTITIES') {
-		return api_html_entity_decode($string, ENT_QUOTES, $to_encoding);
+		return api_html_entity_decode($str, ENT_QUOTES, $to_encoding);
 	}
 	$to = _api_get_character_map_name($to_encoding);
 	$from = _api_get_character_map_name($from_encoding);
 	if (empty($to) || empty($from) || $to == $from || (in_array($to, $utf8_compatible) && in_array($from, $utf8_compatible))) {
-		return $string;
+		return $str;
 	}
 	if (!isset($character_map[$to])) {
 		$character_map[$to] = &_api_parse_character_map($to);
 	}
 	if ($character_map[$to] === false) {
-		return $string;
+		return $str;
 	}
 	if (!isset($character_map[$from])) {
 		$character_map[$from] = &_api_parse_character_map($from);
 	}
 	if ($character_map[$from] === false) {
-		return $string;
+		return $str;
 	}
 	if ($from != 'UTF-8') {
-		$len = api_byte_count($string);
+		$len = api_byte_count($str);
 		$codepoints = array();
 		for ($i = 0; $i < $len; $i++) {
-			$ord = ord($string[$i]);
+			$ord = ord($str[$i]);
 			if ($ord > 127) {
 				if (isset($character_map[$from]['local'][$ord])) {
 					$codepoints[] = $character_map[$from]['local'][$ord];
@@ -381,7 +382,7 @@ function _api_convert_encoding($string, $to_encoding, $from_encoding) {
 			}
 		}
 	} else {
-		$codepoints = _api_utf8_to_unicode($string);
+		$codepoints = _api_utf8_to_unicode($str);
 	}
 	if ($to != 'UTF-8') {
 		foreach ($codepoints as $i => &$codepoint) {
@@ -395,11 +396,11 @@ function _api_convert_encoding($string, $to_encoding, $from_encoding) {
 				$codepoint = chr($codepoint);
 			}
 		}
-		$string = implode($codepoints);
+		$str = implode($codepoints);
 	} else {
-		$string = _api_utf8_from_unicode($codepoints);
+		$str = _api_utf8_from_unicode($codepoints);
 	}
-	return $string;
+	return $str;
 }
 
 /**
@@ -468,16 +469,16 @@ function &_api_parse_character_map($name) {
  * @link http://hsivonen.iki.fi/php-utf8/
  * @author Ivan Tcholakov, August 2009, adaptation for the Dokeos LMS.
 */
-function _api_utf8_to_unicode($string) {
-	if (!is_string($string)) { $string = (string)$string; } // A quick workaround after testing.
+function _api_utf8_to_unicode(&$string) {
+	$str = (string)$string;
 	$state = 0;			// cached expected number of octets after the current octet
 						// until the beginning of the next UTF8 character sequence
 	$codepoint  = 0;	// cached Unicode character
 	$bytes = 1;			// cached expected number of octets in the current sequence
 	$result = array();
-	$len = api_byte_count($string);
+	$len = api_byte_count($str);
 	for ($i = 0; $i < $len; $i++) {
-		$byte = ord($string[$i]);
+		$byte = ord($str[$i]);
 		if ($state == 0) {
 			// When state is zero we expect either a US-ASCII character or a multi-octet sequence.
 			if (0 == (0x80 & ($byte))) {

@@ -19,10 +19,10 @@
 		CONSTANTS
 ==============================================================================
 */
-define("DOKEOS_MAIN_DATABASE_FILE", "dokeos_main.sql");
+define("SYSTEM_MAIN_DATABASE_FILE", "dokeos_main.sql");
 define("COUNTRY_DATA_FILENAME", "country_data.csv");
 define("COURSES_HTACCESS_FILENAME", "htaccess.dist");
-define("DOKEOS_CONFIG_FILENAME", "configuration.dist.php");
+define("SYSTEM_CONFIG_FILENAME", "configuration.dist.php");
 
 require_once api_get_path(LIBRARY_PATH).'database.lib.php';
 
@@ -46,8 +46,8 @@ function set_file_folder_permissions() {
  */
 function fill_track_countries_table($track_countries_table) {
 	$file_path = dirname(__FILE__).'/'.COUNTRY_DATA_FILENAME;
-	$add_country_sql = "LOAD DATA INFILE '".mysql_real_escape_string($file_path)."' INTO TABLE $track_countries_table FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '\'';";
-	@ mysql_query($add_country_sql);
+	$add_country_sql = "LOAD DATA INFILE '".Database::escape_string($file_path)."' INTO TABLE $track_countries_table FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '\'';";
+	@ Database::query($add_country_sql);
 }
 
 /**
@@ -70,7 +70,7 @@ function write_courses_htaccess_file($url_append) {
  * Write the main system config file
  * @param string $path Path to the config file
  */
-function write_dokeos_config_file($path) {
+function write_system_config_file($path) {
 
 	global $dbHostForm;
 	global $dbUsernameForm;
@@ -93,19 +93,15 @@ function write_dokeos_config_file($path) {
 	global $new_version;
 	global $new_version_stable;
 
-	// TODO: api_get_path() to be tested here.
-    $seek = array('\\', '//');
-    $destroy = array('/', '/');
-	$rootSys = str_replace($seek, $destroy, realpath($pathForm).'/');
-	$file_path = dirname(__FILE__).'/'.DOKEOS_CONFIG_FILENAME;
+	$root_sys = api_add_trailing_slash(str_replace('\\', '/', realpath($pathForm)));
+	$content = file_get_contents(dirname(__FILE__).'/'.SYSTEM_CONFIG_FILENAME);
 
-	$content = file_get_contents($file_path);
 	$config['{DATE_GENERATED}'] = date('r');
 	$config['{DATABASE_HOST}'] = $dbHostForm;
 	$config['{DATABASE_USER}'] = $dbUsernameForm;
 	$config['{DATABASE_PASSWORD}'] = $dbPassForm;
-	$config['TRACKING_ENABLED'] = trueFalse($enableTrackingForm);
-	$config['SINGLE_DATABASE'] = trueFalse($singleDbForm);
+	$config['TRACKING_ENABLED'] = true_false($enableTrackingForm);
+	$config['SINGLE_DATABASE'] = true_false($singleDbForm);
 	$config['{COURSE_TABLE_PREFIX}'] = ($singleDbForm ? 'crs_' : '');
 	$config['{DATABASE_GLUE}'] = ($singleDbForm ? '_' : '`.`');
 	$config['{DATABASE_PREFIX}'] = $dbPrefixForm;
@@ -114,7 +110,7 @@ function write_dokeos_config_file($path) {
 	$config['{DATABASE_SCORM}'] = (($singleDbForm && empty($dbScormForm)) ? $dbNameForm : $dbScormForm);
 	$config['{DATABASE_PERSONAL}'] =(($singleDbForm && empty($dbUserForm)) ?  $dbNameForm : $dbUserForm);
 	$config['{ROOT_WEB}'] = $urlForm;
-	$config['{ROOT_SYS}'] = $rootSys;
+	$config['{ROOT_SYS}'] = $root_sys;
 	$config['{URL_APPEND_PATH}'] = $urlAppendPath;
 	$config['{PLATFORM_LANGUAGE}'] = $languageForm;
 	$config['{SECURITY_KEY}'] = md5(uniqid(rand().time()));
@@ -122,7 +118,7 @@ function write_dokeos_config_file($path) {
 
 	$config['SESSION_LIFETIME'] = $session_lifetime;
 	$config['{NEW_VERSION}'] = $new_version;
-	$config['NEW_VERSION_STABLE'] = trueFalse($new_version_stable);
+	$config['NEW_VERSION_STABLE'] = true_false($new_version_stable);
 
 	foreach ($config as $key => $value) {
 		$content = str_replace($key, $value, $content);
@@ -162,25 +158,25 @@ function write_dokeos_config_file($path) {
  */
 function load_main_database($installation_settings, $db_script = '') {
 	if (!empty($db_script)) {
-		$dokeos_main_sql_file_string = file_get_contents($db_script);
+		$sql_text = file_get_contents($db_script);
 	} else {
-		$dokeos_main_sql_file_string = file_get_contents(DOKEOS_MAIN_DATABASE_FILE);
+		$sql_text = file_get_contents(SYSTEM_MAIN_DATABASE_FILE);
 	}
 
 	//replace symbolic parameters with user-specified values
 	foreach ($installation_settings as $key => $value) {
-		$dokeos_main_sql_file_string = str_replace($key, mysql_real_escape_string($value), $dokeos_main_sql_file_string);
+		$sql_text = str_replace($key, Database::escape_string($value), $sql_text);
 	}
 
 	//split in array of sql strings
 	$sql_instructions = array();
-	$success = split_sql_file($sql_instructions, $dokeos_main_sql_file_string);
+	$success = split_sql_file($sql_instructions, $sql_text);
 
 	//execute the sql instructions
 	$count = count($sql_instructions);
 	for ($i = 0; $i < $count; $i++) {
 		$this_sql_query = $sql_instructions[$i]['query'];
-		mysql_query($this_sql_query);
+		Database::query($this_sql_query);
 	}
 }
 
@@ -189,17 +185,17 @@ function load_main_database($installation_settings, $db_script = '') {
  * @param	string	Name of the file containing the SQL script inside the install directory
  */
 function load_database_script($db_script) {
-	$dokeos_sql_file_string = file_get_contents($db_script);
+	$sql_text = file_get_contents($db_script);
 
 	//split in array of sql strings
 	$sql_instructions = array();
-	$success = split_sql_file($sql_instructions, $dokeos_sql_file_string);
+	$success = split_sql_file($sql_instructions, $sql_text);
 
 	//execute the sql instructions
 	$count = count($sql_instructions);
 	for ($i = 0; $i < $count; $i++) {
 		$this_sql_query = $sql_instructions[$i]['query'];
-		mysql_query($this_sql_query);
+		Database::query($this_sql_query);
 	}
 }
 
@@ -226,8 +222,8 @@ function split_sql_file(&$ret, $sql) {
     $sql_len      = strlen($sql);
     $char         = '';
     $string_start = '';
-    $in_string    = FALSE;
-    $nothing      = TRUE;
+    $in_string    = false;
+    $nothing      = true;
     $time0        = time();
 
     for ($i = 0; $i < $sql_len; ++$i) {
@@ -242,21 +238,21 @@ function split_sql_file(&$ret, $sql) {
                 // returned array
                 if (!$i) {
                     $ret[] = $sql;
-                    return TRUE;
+                    return true;
                 }
                 // Backquotes or no backslashes before quotes: it's indeed the
                 // end of the string -> exit the loop
-                else if ($string_start == '`' || $sql[$i-1] != '\\') {
+                elseif ($string_start == '`' || $sql[$i - 1] != '\\') {
                     $string_start      = '';
-                    $in_string         = FALSE;
+                    $in_string         = false;
                     break;
                 }
                 // one or more Backslashes before the presumed end of string...
                 else {
                     // ... first checks for escaped backslashes
                     $j                     = 2;
-                    $escaped_backslash     = FALSE;
-                    while ($i-$j > 0 && $sql[$i-$j] == '\\') {
+                    $escaped_backslash     = false;
+                    while ($i - $j > 0 && $sql[$i - $j] == '\\') {
                         $escaped_backslash = !$escaped_backslash;
                         $j++;
                     }
@@ -264,7 +260,7 @@ function split_sql_file(&$ret, $sql) {
                     // string -> exit the loop
                     if ($escaped_backslash) {
                         $string_start  = '';
-                        $in_string     = FALSE;
+                        $in_string     = false;
                         break;
                     }
                     // ... else loop
@@ -276,39 +272,39 @@ function split_sql_file(&$ret, $sql) {
         } // end if (in string)
 
         // lets skip comments (/*, -- and #)
-        else if (($char == '-' && $sql_len > $i + 2 && $sql[$i + 1] == '-' && $sql[$i + 2] <= ' ') || $char == '#' || ($char == '/' && $sql_len > $i + 1 && $sql[$i + 1] == '*')) {
+        elseif (($char == '-' && $sql_len > $i + 2 && $sql[$i + 1] == '-' && $sql[$i + 2] <= ' ') || $char == '#' || ($char == '/' && $sql_len > $i + 1 && $sql[$i + 1] == '*')) {
             $i = strpos($sql, $char == '/' ? '*/' : "\n", $i);
             // didn't we hit end of string?
-            if ($i === FALSE) {
+            if ($i === false) {
                 break;
             }
             if ($char == '/') $i++;
         }
 
         // We are not in a string, first check for delimiter...
-        else if ($char == ';') {
+        elseif ($char == ';') {
             // if delimiter found, add the parsed part to the returned array
             $ret[]      = array('query' => substr($sql, 0, $i), 'empty' => $nothing);
-            $nothing    = TRUE;
+            $nothing    = true;
             $sql        = ltrim(substr($sql, min($i + 1, $sql_len)));
             $sql_len    = strlen($sql);
             if ($sql_len) {
                 $i      = -1;
             } else {
                 // The submited statement(s) end(s) here
-                return TRUE;
+                return true;
             }
-        } // end else if (is delimiter)
+        } // end elseif (is delimiter)
 
         // ... then check for start of a string,...
-        else if (($char == '"') || ($char == '\'') || ($char == '`')) {
-            $in_string    = TRUE;
-            $nothing      = FALSE;
+        elseif (($char == '"') || ($char == '\'') || ($char == '`')) {
+            $in_string    = true;
+            $nothing      = false;
             $string_start = $char;
-        } // end else if (is start of string)
+        } // end elseif (is start of string)
 
         elseif ($nothing) {
-            $nothing = FALSE;
+            $nothing = false;
         }
 
         // loic1: send a fake header each 30 sec. to bypass browser timeout
@@ -324,8 +320,8 @@ function split_sql_file(&$ret, $sql) {
         $ret[] = array('query' => $sql, 'empty' => $nothing);
     }
 
-    return TRUE;
-} // end of the 'PMA_splitSqlFile()' function
+    return true;
+} // end of the 'split_sql_file()' function
 
 /**
  * Get an SQL file's contents
@@ -371,7 +367,7 @@ function get_sql_file_contents($file, $section, $print_errors = true) {
 		if (substr($line, 0, 2) == '--') {
 			//This is a comment. Check if section name, otherwise ignore
 			$result = array();
-			if (preg_match('/^-- xx([A-Z]*)xx/', $line,$result)) {	//we got a section name here
+			if (preg_match('/^-- xx([A-Z]*)xx/', $line, $result)) {	//we got a section name here
 				if ($result[1] == strtoupper($section)) {
 					//we have the section we are looking for, start recording
 					$record = true;
@@ -393,6 +389,29 @@ function get_sql_file_contents($file, $section, $print_errors = true) {
 	}
 	//now we have our section's SQL statements group ready, return
 	return $section_contents;
+}
+
+/**
+ *	Returns a list of language directories.
+ */
+function get_language_folder_list() {
+	$result = array();
+	$exceptions = array('.', '..', 'CVS', '.svn');
+	$search       = array('_latin',   '_unicode',   '_corporate',   '_org'  , '_KM',   '_');
+	$replace_with = array(' (Latin)', ' (unicode)', ' (corporate)', ' (org)', ' (KM)', ' ');
+	$dirname = api_get_path(SYS_LANG_PATH);
+	$handle = opendir($dirname);
+	while ($entries = readdir($handle)) {
+		if (in_array($entries, $exceptions)) {
+			continue;
+		}
+		if (is_dir($dirname.$entries)) {
+			$result[$entries] = ucwords(str_replace($search, $replace_with, $entries));
+		}
+	}
+	closedir($handle);
+	asort($result);
+	return $result;
 }
 
 // TODO: Maybe within the main API there is already a suitable function?
@@ -430,10 +449,10 @@ function add_document_180($_course, $path, $filetype, $filesize, $title, $commen
     VALUES ('$path','$filetype','$filesize','".
     Database::escape_string($title)."', '$comment')";
     if (Database::query($sql)) {
-        //display_message("Added to database (id ".mysql_insert_id().")!");
-        return mysql_insert_id();
+        //display_message("Added to database (id ".Database::insert_id().")!");
+        return Database::insert_id();
     } else {
-        //display_error("The uploaded file could not be added to the database (".mysql_error().")!");
+        //display_error("The uploaded file could not be added to the database (".Database::error().")!");
         return false;
     }
 }

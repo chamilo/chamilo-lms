@@ -15,13 +15,13 @@
 ==============================================================================
 */
 
-if (defined('DOKEOS_INSTALL')) {
+if (defined('SYSTEM_INSTALLATION')) {
 
 	// Write the system config file
-	write_dokeos_config_file('../inc/conf/configuration.php');
+	write_system_config_file('../inc/conf/configuration.php');
 
 	// Write a distribution file with the config as a backup for the admin
-	write_dokeos_config_file('../inc/conf/configuration.dist.php');
+	write_system_config_file('../inc/conf/configuration.dist.php');
 
 	// Write a .htaccess file in the course repository
 	write_courses_htaccess_file($urlAppendPath);

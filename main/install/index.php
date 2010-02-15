@@ -40,7 +40,6 @@ if (!function_exists('version_compare') || version_compare( phpversion(), REQUIR
 session_start();
 
 // Including necessary core libraries.
-//@include '../inc/installedVersion.inc.php';  //TODO: This line is to be removed.
 require '../inc/lib/main_api.lib.php';
 require api_get_path(LIBRARY_PATH).'database.lib.php';
 
@@ -54,6 +53,7 @@ $_setting = array(
 );
 
 // Loading language files.
+// TODO: It would be nice browser's intrface language to be detected at this point.
 require api_get_path(SYS_LANG_PATH).'english/trad4all.inc.php';
 require api_get_path(SYS_LANG_PATH).'english/install.inc.php';
 if (!empty($_POST['language_list'])) {
@@ -91,7 +91,7 @@ require_once 'install_upgrade.lib.php'; //also defines constants
 require_once 'install_functions.inc.php';
 
 // Some constants
-define('DOKEOS_INSTALL', 1);
+define('SYSTEM_INSTALLATION', 1);
 define('MAX_COURSE_TRANSFER', 100);
 define('INSTALL_TYPE_UPDATE', 'update');
 define('FORM_FIELD_DISPLAY_LENGTH', 40);
@@ -155,14 +155,7 @@ if ($_POST['step2_install'] || $_POST['step2_update_8'] || $_POST['step2_update_
 		$installType = 'update';
 		if ($_POST['step2_update_8']) {
 			$emptyUpdatePath = false;
-			if (empty($_POST['updatePath'])) {
-				$proposedUpdatePath = $_SERVER['DOCUMENT_ROOT'];
-			} else {
-				$proposedUpdatePath = $_POST['updatePath'];
-			}
-			if (substr($proposedUpdatePath,-1) != '/') {
-				$proposedUpdatePath .= '/';
-			}
+			$proposedUpdatePath = api_add_trailing_slash(empty($_POST['updatePath']) ? $_SERVER['DOCUMENT_ROOT'] : $_POST['updatePath']);
 			if (file_exists($proposedUpdatePath)) {
 				if (in_array($my_old_version, $update_from_version_8)) {
 					$_POST['step2'] = 1;
@@ -177,10 +170,7 @@ if ($_POST['step2_install'] || $_POST['step2_update_8'] || $_POST['step2_update_
 				$_POST['step1'] = 1;
 			} else {
 				$emptyUpdatePath = false;
-				if (substr($_POST['updatePath'], -1) != '/') {
-					$_POST['updatePath'] .= '/';
-				}
-
+				$_POST['updatePath'] = api_add_trailing_slash($_POST['updatePath']);
 				if (file_exists($_POST['updatePath'])) {
 					//1.6.x
 					$my_old_version = get_config_param('clarolineVersion', $_POST['updatePath']);
@@ -213,14 +203,14 @@ if ($installType == 'update' && in_array($my_old_version, $update_from_version_8
 
 if (!isset($_GET['running'])) {
 
-	$dbHostForm		='localhost';
-	$dbUsernameForm	='root';
-	$dbPassForm		='';
- 	$dbPrefixForm	='';
-	$dbNameForm		='chamilo_main';
-	$dbStatsForm	='chamilo_stats';
-	$dbScormForm	='chamilo_scorm';
-	$dbUserForm		='chamilo_user';
+	$dbHostForm		= 'localhost';
+	$dbUsernameForm	= 'root';
+	$dbPassForm		= '';
+ 	$dbPrefixForm	= '';
+	$dbNameForm		= 'chamilo_main';
+	$dbStatsForm	= 'chamilo_stats';
+	$dbScormForm	= 'chamilo_scorm';
+	$dbUserForm		= 'chamilo_user';
 
 	// Extract the path to append to the url if Chamilo is not installed on the web root directory.
 	$urlAppendPath = api_remove_trailing_slash(api_get_path(REL_PATH));
@@ -243,21 +233,23 @@ if (!isset($_GET['running'])) {
 	$institutionForm    = 'My Organisation';
 	$institutionUrlForm = 'http://www.chamilo.org';
 	$languageForm	    = 'english';
+	// TODO: A better choice to be tested:
+	//$languageForm	    = api_get_interface_language();
 
-	$checkEmailByHashSent = 0;
+	$checkEmailByHashSent	= 0;
 	$ShowEmailnotcheckedToStudent = 1;
-	$userMailCanBeEmpty = 1;
-	$allowSelfReg = 1;
-	$allowSelfRegProf = 1;
-	$enableTrackingForm = 1;
-	$singleDbForm = 0;
-	$encryptPassForm = 'md5';
-	$session_lifetime = 360000;
+	$userMailCanBeEmpty		= 1;
+	$allowSelfReg			= 1;
+	$allowSelfRegProf		= 1;
+	$enableTrackingForm		= 1;
+	$singleDbForm			= 0;
+	$encryptPassForm		= 'md5';
+	$session_lifetime		= 360000;
 
 } else {
 
 	foreach ($_POST as $key => $val) {
-		$magic_quotes_gpc = ini_get('magic_quotes_gpc') ? true : false;
+		$magic_quotes_gpc = ini_get('magic_quotes_gpc');
 		if (is_string($val)) {
 			if ($magic_quotes_gpc) {
 				$val = stripslashes($val);
@@ -547,7 +539,7 @@ if ($_POST['step2']) {
 	}
 	display_configuration_settings_form($installType, $urlForm, $languageForm, $emailForm, $adminFirstName, $adminLastName, $adminPhoneForm, $campusForm, $institutionForm, $institutionUrlForm, $encryptPassForm, $allowSelfReg, $allowSelfRegProf, $loginForm, $passForm);
 
-} elseif($_POST['step5']) {
+} elseif ($_POST['step5']) {
 
 	//STEP 6 : LAST CHECK BEFORE INSTALL
 ?>
@@ -600,7 +592,7 @@ if ($_POST['step2']) {
 	?>
 	<?php echo get_lang('AdminPhone').' : '.$adminPhoneForm; ?><br />
 
-	<?php if($installType == 'new'): ?>
+	<?php if ($installType == 'new'): ?>
 	<?php echo get_lang('AdminLogin').' : <strong>'.$loginForm; ?></strong><br />
 	<?php echo get_lang('AdminPass').' : <strong>'.$passForm; /* TODO: Maybe this password should be hidden too? */ ?></strong><br /><br />
 	<?php else: ?>
@@ -617,7 +609,7 @@ if ($_POST['step2']) {
 	<?php if ($installType == 'new'): ?>
 	<div style="background-color:#FFFFFF">
 	<p align="center"><strong><font color="red">
-	<?php echo get_lang('Warning');?> !<br />
+	<?php echo get_lang('Warning'); ?> !<br />
 	<?php echo get_lang('TheInstallScriptWillEraseAllTables'); ?>
 	</font></strong></p>
 	</div>

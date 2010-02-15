@@ -62,7 +62,7 @@ require '../lang/english/install.inc.php';
 require_once 'install_upgrade.lib.php';
 require_once 'upgrade_lib.php';
 
-define('DOKEOS_INSTALL', 1);
+define('SYSTEM_INSTALLATION', 1);
 define('MAX_COURSE_TRANSFER', 100);
 define('INSTALL_TYPE_UPDATE', 'update');
 define('FORM_FIELD_DISPLAY_LENGTH', 40);
@@ -587,29 +587,6 @@ function display_upgrade_header($text_dir, $dokeos_version, $install_type, $upda
 		<div id="header3">&nbsp;</div>
 	</div>
 	<?php
-}
-
-/**
- *	TODO: Copy/paste again. Find an existing function for this job.
- *	Return a list of language directories.
- *	@todo function does not belong here, move to code library,
- *	also see infocours.php which contains similar function
- */
-function get_language_folder_list() {
-	$dirname = dirname(__FILE__).'/../lang';
-	if ($dirname[strlen($dirname) - 1] != '/')
-		$dirname .= '/';
-	$handle = opendir($dirname);
-	while ($entries = readdir($handle)) {
-		if ($entries == '.' || $entries == '..' || $entries == '.svn')
-			continue;
-		if (is_dir($dirname.$entries)) {
-			$language_list[$entries] = api_ucfirst($entries);
-		}
-	}
-	closedir($handle);
-	asort($language_list);
-	return $language_list;
 }
 
 function display_installation_overview() {

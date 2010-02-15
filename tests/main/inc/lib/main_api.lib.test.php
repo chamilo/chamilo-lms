@@ -49,7 +49,6 @@ class TestMainApi extends UnitTestCase {
 		WEB_PATH => '',
 		SYS_PATH => '',
 		REL_PATH => '',
-		REL_SYS_PATH => '',
 		WEB_SERVER_ROOT_PATH => '',
 		SYS_SERVER_ROOT_PATH => '',
 		WEB_COURSE_PATH => '',

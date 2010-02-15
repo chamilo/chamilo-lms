@@ -239,7 +239,6 @@ define('TABLE_USER_COURSE_CATEGORY', 'user_course_category');
 // @TODO: Are these MAIN tables or course tables?
 // @TODO: Probably these constants are obsolete.
 define('TABLE_MAIN_SURVEY', 'survey');
-define('TABLE_MAIN_GROUP', 'survey_group');
 define('TABLE_MAIN_SURVEYQUESTION', 'questions');
 
 // Survey

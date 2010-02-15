@@ -331,7 +331,6 @@ function api_get_path($path_type, $path = null) {
 		WEB_PATH => '',
 		SYS_PATH => '',
 		REL_PATH => '',
-		REL_SYS_PATH => '',
 		WEB_SERVER_ROOT_PATH => '',
 		SYS_SERVER_ROOT_PATH => '',
 		WEB_COURSE_PATH => '',
@@ -2557,20 +2556,21 @@ function api_get_languages_combo($name = 'language') {
  *   @return void Display the box directly
  */
 function api_display_language_form($hide_if_no_choice = false) {
-	$platformLanguage = api_get_setting('platformLanguage');
-	$dirname = api_get_path(SYS_PATH).'main/lang/'; // TODO: this line is probably no longer needed
+
 	// retrieve a complete list of all the languages.
 	$language_list = api_get_languages();
 	if (count($language_list['name']) <= 1 && $hide_if_no_choice) {
 		return; //don't show any form
 	}
+
 	// the the current language of the user so that his/her language occurs as selected in the dropdown menu
 	if (isset($_SESSION['user_language_choice'])) {
 		$user_selected_language = $_SESSION['user_language_choice'];
 	}
-	if (!isset($user_selected_language)) {
-		$user_selected_language = $platformLanguage;
+	if (empty($user_selected_language)) {
+		$user_selected_language = api_get_setting('platformLanguage');
 	}
+
 	$original_languages = $language_list['name'];
 	$folder = $language_list['folder']; // this line is probably no longer needed
 ?>
@@ -3136,11 +3136,11 @@ function api_chmod_R($path, $filemode) {
 	 */
 	function parse_info_file($filename) {
 	  $info = array();
-	
+
 	  if (!file_exists($filename)) {
 	    return $info;
 	  }
-	
+
 	  $data = file_get_contents($filename);
 	  if (preg_match_all('
 	    @^\s*                           # Start at the beginning of a line, ignoring leading whitespace
@@ -3162,12 +3162,12 @@ function api_chmod_R($path, $filemode) {
 	        $$var = isset($match[++$i]) ? $match[$i] : '';
 	      }
 	      $value = stripslashes(substr($value1, 1, -1)) . stripslashes(substr($value2, 1, -1)) . $value3;
-	
+
 	      // Parse array syntax
 	      $keys = preg_split('/\]?\[/', rtrim($key, ']'));
 	      $last = array_pop($keys);
 	      $parent = &$info;
-	
+
 	      // Create nested arrays
 	      foreach ($keys as $key) {
 	        if ($key == '') {
@@ -3178,12 +3178,12 @@ function api_chmod_R($path, $filemode) {
 	        }
 	        $parent = &$parent[$key];
 	      }
-	
+
 	      // Handle PHP constants
 	      if (defined($value)) {
 	        $value = constant($value);
 	      }
-	
+
 	      // Insert actual value
 	      if ($last == '') {
 	        $last = count($parent);

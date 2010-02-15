@@ -3243,10 +3243,11 @@ function api_is_valid_utf8(&$string) {
 	// wrongly detected as UTF-8. Possibly, there would be problems with other
 	// languages too. An alternative implementation will be used.
 
-	$len = api_byte_count($string);
+	$str = (string)$string;
+	$len = api_byte_count($str);
 	$i = 0;
 	while ($i < $len) {
-		$byte1 = ord($string[$i++]);		// Here the current character begins. Its size is
+		$byte1 = ord($str[$i++]);		// Here the current character begins. Its size is
 											// determined by the senior bits in the first byte.
 
 		if (($byte1 & 0x80) == 0x00) {		// 0xxxxxxx
@@ -3267,7 +3268,7 @@ function api_is_valid_utf8(&$string) {
 				return false;				// Here the string ends unexpectedly.
 			}
 
-			if (!((ord($string[$i++]) & 0xC0) == 0x80))
+			if (!((ord($str[$i++]) & 0xC0) == 0x80))
 				return false;				// Invalid second byte, invalid string.
 		}
 
@@ -3280,13 +3281,13 @@ function api_is_valid_utf8(&$string) {
 			if ($i == $len) {
 				return false;				// Unexpected end of the string.
 			}
-			if (!((ord($string[$i++]) & 0xC0) == 0x80)) {
+			if (!((ord($str[$i++]) & 0xC0) == 0x80)) {
 				return false;				// Invalid second byte.
 			}
 			if ($i == $len) {
 				return false;				// Unexpected end of the string.
 			}
-			if (!((ord($string[$i++]) & 0xC0) == 0x80)) {
+			if (!((ord($str[$i++]) & 0xC0) == 0x80)) {
 				return false;				// Invalid third byte, invalid string.
 			}
 		}
@@ -3300,19 +3301,19 @@ function api_is_valid_utf8(&$string) {
 			if ($i == $len) {
 				return false;
 			}
-			if (!((ord($string[$i++]) & 0xC0) == 0x80)) {
+			if (!((ord($str[$i++]) & 0xC0) == 0x80)) {
 				return false;
 			}
 			if ($i == $len) {
 				return false;
 			}
-			if (!((ord($string[$i++]) & 0xC0) == 0x80)) {
+			if (!((ord($str[$i++]) & 0xC0) == 0x80)) {
 				return false;
 			}
 			if ($i == $len) {
 				return false;
 			}
-			if (!((ord($string[$i++]) & 0xC0) == 0x80)) {
+			if (!((ord($str[$i++]) & 0xC0) == 0x80)) {
 				return false;
 			}
 		}
@@ -3326,25 +3327,25 @@ function api_is_valid_utf8(&$string) {
 			if ($i == $len) {
 				return false;
 			}
-			if (!((ord($string[$i++]) & 0xC0) == 0x80)) {
+			if (!((ord($str[$i++]) & 0xC0) == 0x80)) {
 				return false;
 			}
 			if ($i == $len) {
 				return false;
 			}
-			if (!((ord($string[$i++]) & 0xC0) == 0x80)) {
+			if (!((ord($str[$i++]) & 0xC0) == 0x80)) {
 				return false;
 			}
 			if ($i == $len) {
 				return false;
 			}
-			if (!((ord($string[$i++]) & 0xC0) == 0x80)) {
+			if (!((ord($str[$i++]) & 0xC0) == 0x80)) {
 				return false;
 			}
 			if ($i == $len) {
 				return false;
 			}
-			if (!((ord($string[$i++]) & 0xC0) == 0x80)) {
+			if (!((ord($str[$i++]) & 0xC0) == 0x80)) {
 				return false;
 			}
 		}
@@ -3358,31 +3359,31 @@ function api_is_valid_utf8(&$string) {
 			if ($i == $len) {
 				return false;
 			}
-			if (!((ord($string[$i++]) & 0xC0) == 0x80)) {
+			if (!((ord($str[$i++]) & 0xC0) == 0x80)) {
 				return false;
 			}
 			if ($i == $len) {
 				return false;
 			}
-			if (!((ord($string[$i++]) & 0xC0) == 0x80)) {
+			if (!((ord($str[$i++]) & 0xC0) == 0x80)) {
 				return false;
 			}
 			if ($i == $len) {
 				return false;
 			}
-			if (!((ord($string[$i++]) & 0xC0) == 0x80)) {
+			if (!((ord($str[$i++]) & 0xC0) == 0x80)) {
 				return false;
 			}
 			if ($i == $len) {
 				return false;
 			}
-			if (!((ord($string[$i++]) & 0xC0) == 0x80)) {
+			if (!((ord($str[$i++]) & 0xC0) == 0x80)) {
 				return false;
 			}
 			if ($i == $len) {
 				return false;
 			}
-			if (!((ord($string[$i++]) & 0xC0) == 0x80)) {
+			if (!((ord($str[$i++]) & 0xC0) == 0x80)) {
 				return false;
 			}
 		}
@@ -3428,17 +3429,21 @@ function api_is_valid_ascii(&$string) {
  * @link http://php.net/manual/en/function.str-getcsv.php   (exists as of PHP 5 >= 5.3.0)
  */
 function & api_str_getcsv(& $string, $delimiter = ',', $enclosure = '"', $escape = '\\') {
+	$delimiter = (string)$delimiter;
 	if (api_byte_count($delimiter) > 1) { $delimiter = $delimiter[1]; }
+	$enclosure = (string)$enclosure;
 	if (api_byte_count($enclosure) > 1) { $enclosure = $enclosure[1]; }
+	$escape = (string)$escape;
 	if (api_byte_count($escape) > 1) { $escape = $escape[1]; }
-	$len = api_byte_count($string);
+	$str = (string)$string;
+	$len = api_byte_count($str);
 	$enclosed = false;
 	$escaped = false;
 	$value = '';
 	$result = array();
 
 	for ($i = 0; $i < $len; $i++) {
-		$char = $string[$i];
+		$char = $str[$i];
 		if ($char == $escape) {
 			if (!$escaped) {
 				$escaped = true;
@@ -3448,7 +3453,7 @@ function & api_str_getcsv(& $string, $delimiter = ',', $enclosure = '"', $escape
 		$escaped = false;
 		switch ($char) {
 			case $enclosure:
-				if ($enclosed && $string[$i + 1] == $enclosure) {
+				if ($enclosed && $str[$i + 1] == $enclosure) {
 					$value .= $char;
 					$i++;
 				} else {

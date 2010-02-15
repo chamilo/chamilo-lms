@@ -69,8 +69,7 @@ function check_php_setting($php_setting, $recommended_value, $return_success = f
  * @author Joomla <http://www.joomla.org>
  */
 function get_php_setting($val) {
-	$r = ini_get($val) == '1' ? 1 : 0;
-	return $r ? 'ON' : 'OFF';
+	return ini_get($val) == '1' ? 'ON' : 'OFF';
 }
 
 /**
@@ -95,7 +94,7 @@ function check_writable($folder, $suggestion = false) {
  * @return  string  the string "true" or "false"
  * @author Christophe Gesché
  */
-function trueFalse($var) {
+function true_false($var) {
 	return $var ? 'true' : 'false';
 }
 
@@ -122,11 +121,12 @@ function file_to_array($filename) {
  * @param	string	If we want to give the path rather than take it from POST
  * @return  string  the value of the parameter
  * @author Olivier Brouckaert
+ * @author Reworked by Ivan Tcholakov, 2010
  */
 function get_config_param($param, $updatePath = '') {
 	global $configFile, $updateFromConfigFile;
 
-	//look if we already have the queried param
+	// Look if we already have the queried parameter.
 	if (is_array($configFile) && isset($configFile[$param])) {
 		return $configFile[$param];
 	}
@@ -136,14 +136,16 @@ function get_config_param($param, $updatePath = '') {
 	$updatePath = realpath($updatePath).'/';
 	$updateFromInstalledVersionFile = '';
 
-	if (empty($updateFromConfigFile)) { //if update from previous install was requested
-		//try to recover old config file from dokeos 1.8.x
+	if (empty($updateFromConfigFile)) {
+		// If update from previous install was requested,
+		// try to recover old config file from dokeos 1.8.x.
 		if (file_exists($updatePath.'main/inc/conf/configuration.php')) {
-			$updateFromConfigFile='main/inc/conf/configuration.php';
+			$updateFromConfigFile = 'main/inc/conf/configuration.php';
 		} elseif (file_exists($updatePath.'claroline/inc/conf/claro_main.conf.php')) {
-			$updateFromConfigFile='claroline/inc/conf/claro_main.conf.php';
-		} else { //give up recovering
-			error_log('Could not find config file in '.$updatePath.' in get_config_param()',0);
+			$updateFromConfigFile = 'claroline/inc/conf/claro_main.conf.php';
+		} else {
+			// Give up recovering.
+			error_log('Could not find config file in '.$updatePath.' in get_config_param()', 0);
 			return null;
 		}
 	}
@@ -152,60 +154,93 @@ function get_config_param($param, $updatePath = '') {
 
 		$updateFromInstalledVersionFile = $updatePath.'main/inc/installedVersion.inc.php';
 
-	} elseif (file_exists($updatePath.$updateFromConfigFile)) { //the param was not found in global vars, so look into the old config file
+	} elseif (file_exists($updatePath.$updateFromConfigFile)) {
 
-		//make sure the installedVersion file is read first so it is overwritten
-		//by the config file if the config file contains the version (from 1.8.4)
-		$temp2 = array();
+		// The parameter was not found among the global variables, so look into the old configuration file.
+
+		// Make sure the installedVersion file is read first so it is overwritten
+		// by the config file if the config file contains the version (from 1.8.4).
+		$config_data_2 = array();
 		if (file_exists($updatePath.$updateFromInstalledVersionFile)) {
-			$temp2 = file_to_array($updatePath.$updateFromInstalledVersionFile);
+			$config_data_2 = file_to_array($updatePath.$updateFromInstalledVersionFile);
 		}
 		$configFile = array();
-		$temp = file_to_array($updatePath.$updateFromConfigFile);
-		$temp = array_merge($temp, $temp2);
+		$config_data = file_to_array($updatePath.$updateFromConfigFile);
+		$config_data = array_merge($config_data, $config_data_2);
 		$val = '';
 
-		//parse the config file (TODO clarify why it has to be so complicated)
-		foreach ($temp as $enreg) {
-			if (strstr($enreg, '=')) {
-				$enreg = explode('=', $enreg);
-				$enreg[0] = trim($enreg[0]);
-				if ($enreg[0][0] == '$') {
-					list($enreg[1]) = explode(' //', $enreg[1]);
+		// Parse the configuration file, statement by statement (line by line, actually).
+		foreach ($config_data as $php_statement) {
 
-					$enreg[0] = trim(str_replace('$', '', $enreg[0]));
-					$enreg[1] = str_replace('\"', '"', ereg_replace('(^"|"$)', '', substr(trim($enreg[1]), 0, -1)));
-					$enreg[1] = str_replace('\'', '"', ereg_replace('(^\'|\'$)', '', $enreg[1]));
-					if (strtolower($enreg[1]) == 'true') {
-						$enreg[1] = 1;
-					}
-					if (strtolower($enreg[1]) == 'false') {
-						$enreg[1] = 0;
+			if (strpos($php_statement, '=') !== false) {
+				// Variable assignment statement have been detected (probably).
+				// It is expected to be as follows:
+				// $variable = 'some_value'; // A comment that is not mandatory.
+
+				// Split the statement into its left and right sides.
+				$php_statement = explode('=', $php_statement);
+				$variable = trim($php_statement[0]);
+				$value = $php_statement[1];
+
+				if (substr($variable, 0, 1) == '$') {
+					// We have for sure a php variable assignment detected.
+
+					// On the left side: Retrieve the pure variable's name
+					$variable = trim(str_replace('$', '', $variable));
+
+					// On the right side: Remove the comment, if it exists.
+					list($value) = explode(' //', $value);
+					// Remove extra whitespace, if any. Remove the trailing semicolon (;).
+					$value = substr(trim($value), 0, -1);
+					// Remove surroundig quotes, restore escaped quotes.
+					$value = str_replace('\"', '"', preg_replace('/^"|"$/', '', $value));
+					$value = str_replace('\'', '"', preg_replace('/^\'|\'$/', '', $value));
+
+					if (strtolower($value) == 'true') {
+
+						// A boolean true value have been recognized.
+						$value = 1;
+
+					} elseif (strtolower($value) == 'false') {
+
+						// A boolean false value have been recognized.
+						$value = 0;
+
 					} else {
-						$implode_string=' ';
 
-						if (!strstr($enreg[1], '." ".') && strstr($enreg[1], '.$')) {
-							$enreg[1] = str_replace('.$', '." ".$', $enreg[1]);
+						// Probably we have a string value, but also we have to check
+						// possible string concatenations that may include string values
+						// and other configuration variables. I this case we have to
+						// get the calculated result of the concatenation.
+						$implode_string = ' ';
+						if (!strstr($value, '." ".') && strstr($value, '.$')) {
+							// Yes, there is concatenation, insert a special separator string.
+							$value = str_replace('.$', '." ".$', $value);
 							$implode_string = '';
 						}
 
-						$tmp = explode('." ".', $enreg[1]);
+						// Split the concatenated values, if they are more than one.
+						$sub_strings = explode('." ".', $value);
 
-						foreach ($tmp as $tmp_key => $tmp_val) {
-							if (eregi('^\$[a-z_][a-z0-9_]*$', $tmp_val)) {
-								$tmp[$tmp_key] = get_config_param(str_replace('$', '', $tmp_val));
+						// Seek for variables and retrieve their values.
+						foreach ($sub_strings as $key => & $sub_string) {
+							if (preg_match('/^\$[a-zA-Z_][a-zA-Z0-9_]*$/', $sub_string)) {
+								// A variable has been detected, read it by recursive call.
+								$sub_string = get_config_param(str_replace('$', '', $sub_string));
 							}
 						}
 
-						$enreg[1] = implode($implode_string, $tmp);
+						// Concatenate everything into the final, the calculated string value.
+						$value = implode($implode_string, $sub_strings);
 					}
 
-					$configFile[$enreg[0]] = $enreg[1];
+					// Cache the result value.
+					$configFile[$variable] = $value;
 
-					$a = explode("'", $enreg[0]);
+					$a = explode("'", $variable);
 					$key_tmp = $a[1];
 					if ($key_tmp == $param) {
-						$val = $enreg[1];
+						$val = $value;
 					}
 				}
 			}
@@ -230,50 +265,17 @@ function get_config_param($param, $updatePath = '') {
  */
 function get_config_param_from_db($host, $login, $pass, $db_name, $param = '') {
 
-	$mydb = mysql_connect($host, $login, $pass);
-	@mysql_query("set session sql_mode='';"); // Disabling special SQL modes (MySQL 5)
+	Database::connect(array('server' => $host, 'username' => $login, 'password' => $pass));
+	Database::query("set session sql_mode='';"); // Disabling special SQL modes (MySQL 5)
+	Database::select_db($db_name);
 
-	$myconnect = mysql_select_db($db_name);
-
-	$sql = "SELECT * FROM settings_current WHERE variable = '$param'";
-	$res = mysql_query($sql);
-	if ($res === false) {
-		return null;
-	}
-
-	if (mysql_num_rows($res) > 0) {
-		$row = mysql_fetch_array($res);
-		$value = $row['selected_value'];
-		return $value;
+	if (($res = Database::query("SELECT * FROM settings_current WHERE variable = '$param'")) !== false) {
+		if (Database::num_rows($res) > 0) {
+			$row = Database::fetch_array($res);
+			return $row['selected_value'];
+		}
 	}
 	return null;
-}
-
-/**
- * TODO: The main API is accessible here. Then we could use a function for this purpose from there?
- *
- *	Return a list of language directories.
- *	@todo function does not belong here, move to code library,
- *	also see infocours.php which contains similar function
- */
-function get_language_folder_list($dirname) {
-	if ($dirname[strlen($dirname) - 1] != '/') {
-		$dirname .= '/';
-	}
-	$handle = opendir($dirname);
-	$language_list = array();
-
-	while ($entries = readdir($handle)) {
-		if ($entries == '.' || $entries == '..' || $entries=='CVS'  || $entries == '.svn') {
-			continue;
-		}
-		if (is_dir($dirname.$entries)) {
-			$language_list[] = $entries;
-		}
-	}
-
-	closedir($handle);
-	return $language_list;
 }
 
 /*
@@ -283,35 +285,53 @@ function get_language_folder_list($dirname) {
 */
 
 /**
- *	Displays a form (drop down menu) so the user can select
- *	his/her preferred language.
+ *	Displays a drop down box for selection the preferred language.
  */
-function display_language_selection_box() {
-	//get language list
-	$dirname = '../lang/'; // TODO: Check api_get_path() and use it.
-	$language_list = get_language_folder_list($dirname);
-	sort($language_list);
-	//Reduce the number of languages shown to only show those with higher than 90% translation in DLTT
-	//This option can be easily removed later on. The aim is to test people response to less choice
-	//$language_to_display = $language_list;
+function display_language_selection_box($name = 'language_list', $default_language = 'english') {
+	// Reading language list.
+	$language_list = get_language_folder_list();
+
+	/*
+	// Reduction of the number of languages shown. Enable this fragment of code for customization purposes.
+	// Modify the language list according to your preference. Don't exclude the 'english' item.
 	$language_to_display = array('asturian', 'bulgarian', 'english', 'italian', 'french', 'slovenian', 'slovenian_unicode', 'spanish');
+	foreach ($language_list as $key => & $value) {
+		if (!in_array($key, $language_to_display)) {
+			unset($language_list[$key]);
+		}
+	}
+	*/
 
-	//display
-	echo "\t\t<select name=\"language_list\">\n";
+	// Sanity checks due to the possibility for customizations.
+	if (!is_array($language_list) || empty($language_list)) {
+		$language_list = array('english' => 'English');
+	}
 
-	$default_language = 'english';
-	foreach ($language_to_display as $key => $value) {
-		if ($value == $default_language) {
+	// Sorting again, if it is necessary.
+	//asort($language_list);
+
+	// More sanity checks.
+	if (!array_key_exists($default_language, $language_list)) {
+		if (array_key_exists('english', $language_list)) {
+			$default_language = 'english';
+		} else {
+			$language_keys = array_keys($language_list);
+			$default_language = $language_keys[0];
+		}
+	}
+
+	// Displaying the box.
+	echo "\t\t<select name=\"$name\">\n";
+	foreach ($language_list as $key => $value) {
+		if ($key == $default_language) {
 			$option_end = ' selected="selected">';
 		} else {
 			$option_end = '>';
 		}
-		echo "\t\t\t<option value=\"$value\"$option_end";
-
-		echo api_ucfirst($value);
+		echo "\t\t\t<option value=\"$key\"$option_end";
+		echo $value;
 		echo "</option>\n";
 	}
-
 	echo "\t\t</select>\n";
 }
 
@@ -324,7 +344,7 @@ function display_language_selection() { ?>
 	<h2><?php echo display_step_sequence(); ?><?php echo get_lang('InstallationLanguage'); ?></h2>
 	<p><?php echo get_lang('PleaseSelectInstallationProcessLanguage'); ?>:</p>
 	<form id="lang_form" method="post" action="<?php echo api_get_self(); ?>">
-<?php display_language_selection_box(); ?>
+<?php display_language_selection_box('language_list', api_get_interface_language()); ?>
 	<button type="submit" name="step1" class="next" value="<?php get_lang('Next'); ?> &gt;"><?php echo get_lang('Next'); ?></button>
 	<input type="hidden" name="is_executable" id="is_executable" value="-" />
 	</form>
@@ -932,44 +952,8 @@ function display_configuration_settings_form($installType, $urlForm, $languageFo
 
 		echo '<td>';
 
-		$array_lang = array('asturian', 'bulgarian', 'english', 'italian', 'french', 'slovenian', 'spanish');
+		display_language_selection_box('languageForm', $languageForm);
 
-		////Only display Language have 90% + // TODO: Ivan: Is this policy actual? I am going to change it.
-		echo "\t\t<select name=\"languageForm\">\n";
-
-		foreach ($array_lang as $key => $value)	{
-			echo '<option value="'.$value.'"';
-			if ($value == $languageForm) {
-				echo ' selected="selected"';
-			}
-			echo ">$value</option>\n";
-		}
-
-		echo "\t\t</select>\n";
-
-		//Display all language
-		/*echo "<select name=\"languageForm\">\n";
-		$dirname = '../lang/';
-
-		if ($dir = @opendir($dirname)) {
-			$lang_files = array();
-			while (($file = readdir($dir)) !== false) {
-				if($file != '.' && $file != '..' && $file != 'CVS' && $file != '.svn' && is_dir($dirname.$file)){
-					array_push($lang_files, $file);
-				}
-			}
-			closedir($dir);
-		}
-		sort($lang_files);
-
-		foreach ($lang_files as $file) {
-			echo '<option value="'.$file.'"';
-			if ($file == $languageForm) {
-				echo ' selected="selected"';
-			}
-			echo ">$file</option>\n";
-		}
-		echo '</select>';*/
 		echo "</td>\n";
 	}
 	echo "</tr>\n";

@@ -43,6 +43,10 @@ session_start();
 require '../inc/lib/main_api.lib.php';
 require api_get_path(LIBRARY_PATH).'database.lib.php';
 
+// Including specialized libraries for the installation procedure.
+require_once 'install_upgrade.lib.php'; //also defines constants
+require_once 'install_functions.inc.php';
+
 // The function api_get_setting() might be called within the installation scripts.
 // We need to provide some limited support for it through initialization of the
 // global array-type variable $_setting.
@@ -52,21 +56,27 @@ $_setting = array(
 	'permissions_for_new_files' => '0660'
 );
 
-// Loading language files.
-// TODO: It would be nice browser's intrface language to be detected at this point.
-require api_get_path(SYS_LANG_PATH).'english/trad4all.inc.php';
-require api_get_path(SYS_LANG_PATH).'english/install.inc.php';
+// Determination of the language during the installation procedure.
 if (!empty($_POST['language_list'])) {
 	$search = array('../', '\\0');
 	$install_language = str_replace($search, '', urldecode($_POST['language_list']));
-	if (!is_dir(api_get_path(SYS_LANG_PATH).$install_language)) {
-		$install_language = 'english';
-	}
-	include_once api_get_path(SYS_LANG_PATH).$install_language.'/trad4all.inc.php';
-	include_once api_get_path(SYS_LANG_PATH).$install_language.'/install.inc.php';
 	api_session_register('install_language');
 } elseif (isset($_SESSION['install_language']) && $_SESSION['install_language']) {
 	$install_language = $_SESSION['install_language'];
+} else {
+	// Trying to switch to the browser's language, it is covenient for most of the cases.
+	$install_language = detect_browser_language();
+}
+
+// Language validation.
+if (!array_key_exists($install_language, get_language_folder_list())) {
+	$install_language = 'english';
+}
+
+// Loading language files.
+require api_get_path(SYS_LANG_PATH).'english/trad4all.inc.php';
+require api_get_path(SYS_LANG_PATH).'english/install.inc.php';
+if ($install_language != 'english') {
 	include_once api_get_path(SYS_LANG_PATH).$install_language.'/trad4all.inc.php';
 	include_once api_get_path(SYS_LANG_PATH).$install_language.'/install.inc.php';
 }
@@ -85,10 +95,6 @@ api_set_internationalization_default_encoding($charset);
 
 // Page encoding initialization.
 header('Content-Type: text/html; charset='. api_get_system_encoding());
-
-// Specialized libraries for the installation procedure.
-require_once 'install_upgrade.lib.php'; //also defines constants
-require_once 'install_functions.inc.php';
 
 // Some constants
 define('SYSTEM_INSTALLATION', 1);
@@ -232,9 +238,9 @@ if (!isset($_GET['running'])) {
 	$adminPhoneForm	= '(000) 001 02 03';
 	$institutionForm    = 'My Organisation';
 	$institutionUrlForm = 'http://www.chamilo.org';
-	$languageForm	    = 'english';
 	// TODO: A better choice to be tested:
-	//$languageForm	    = api_get_interface_language();
+	//$languageForm	    = 'english';
+	$languageForm	    = api_get_interface_language();
 
 	$checkEmailByHashSent	= 0;
 	$ShowEmailnotcheckedToStudent = 1;
@@ -355,7 +361,7 @@ if ($encryptPassForm == '1') {
 				document.getElementById('optional_param5').style.display = '';
 				document.getElementById('optional_param6').style.display = '';
 				init_visibility = 1;
-				document.getElementById('optionalparameters').innerHTML='<img style="vertical-align:middle;" src="../img/div_hide.gif" alt="" /> <?php echo get_lang('OptionalParameters'); ?>';
+				document.getElementById('optionalparameters').innerHTML='<img style="vertical-align:middle;" src="../img/div_hide.gif" alt="" /> <?php echo get_lang('OptionalParameters', ''); ?>';
 			} else {
 				document.getElementById('optional_param1').style.display = 'none';
 				document.getElementById('optional_param2').style.display = 'none';
@@ -365,7 +371,7 @@ if ($encryptPassForm == '1') {
 				document.getElementById('optional_param4').style.display = 'none';
 				document.getElementById('optional_param5').style.display = 'none';
 				document.getElementById('optional_param6').style.display = 'none';
-				document.getElementById('optionalparameters').innerHTML='<img style="vertical-align:middle;" src="../img/div_show.gif" alt="" /> <?php echo get_lang('OptionalParameters'); ?>';
+				document.getElementById('optionalparameters').innerHTML='<img style="vertical-align:middle;" src="../img/div_show.gif" alt="" /> <?php echo get_lang('OptionalParameters', ''); ?>';
 				init_visibility = 0;
 			}
 		}

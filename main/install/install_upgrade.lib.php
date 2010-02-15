@@ -392,25 +392,114 @@ function get_sql_file_contents($file, $section, $print_errors = true) {
 }
 
 /**
- *	Returns a list of language directories.
+ * Tries to detect browser's language.
+ * @return string		Returns a language identificator, i.e. 'english', 'spanish', ...
  */
-function get_language_folder_list() {
-	$result = array();
-	$exceptions = array('.', '..', 'CVS', '.svn');
-	$search       = array('_latin',   '_unicode',   '_corporate',   '_org'  , '_KM',   '_');
-	$replace_with = array(' (Latin)', ' (unicode)', ' (corporate)', ' (org)', ' (KM)', ' ');
-	$dirname = api_get_path(SYS_LANG_PATH);
-	$handle = opendir($dirname);
-	while ($entries = readdir($handle)) {
-		if (in_array($entries, $exceptions)) {
-			continue;
-		}
-		if (is_dir($dirname.$entries)) {
-			$result[$entries] = ucwords(str_replace($search, $replace_with, $entries));
+function detect_browser_language() {
+	static $language_index = array(
+		'ar' => 'arabic',
+		'ast' => 'asturian',
+		'bg' => 'bulgarian',
+		'bs' => 'bosnian',
+		'ca' => 'catalan',
+		'zh' => 'simpl_chinese',
+		'zh-tw' => 'trad_chinese',
+		'cs' => 'czech',
+		'da' => 'danish',
+		'prs' => 'dari',
+		'de' => 'german',
+		'el' => 'greek',
+		'en' => 'english',
+		'es' => 'spanish',
+		'eo' => 'esperanto',
+		'eu' => 'euskera',
+		'fa' => 'persian',
+		'fr' => 'french',
+		'fur' => 'friulian',
+		'gl' => 'galician',
+		'ka' => 'georgian',
+		'hr' => 'croatian',
+		'he' => 'hebrew',
+		'id' => 'indonesian',
+		'it' => 'italian',
+		'ko' => 'korean',
+		'lv' => 'latvian',
+		'lt' => 'lithuanian',
+		'mk' => 'macedonian',
+		'hu' => 'hungarian',
+		'ms' => 'malay',
+		'nl' => 'dutch',
+		'ja' => 'japanese',
+		'no' => 'norwegian',
+		'oc' => 'occitan',
+		'ps' => 'pashto',
+		'pl' => 'polish',
+		'pt' => 'portuguese',
+		'pt-br' => 'brazilian',
+		'ro' => 'romanian',
+		'qu' => 'quechua_cusco',
+		'ru' => 'russian',
+		'sk' => 'slovak',
+		'sl' => 'slovenian',
+		'sr' => 'serbian',
+		'fi' => 'finnish',
+		'sv' => 'swedish',
+		'th' => 'thai',
+		'tr' => 'turkce',
+		'uk' => 'ukrainian',
+		'vi' => 'vietnamese',
+		'sw' => 'swahili',
+		'yo' => 'yoruba'
+	);
+
+	$system_available_languages = & get_language_folder_list();
+
+	$accept_languages = strtolower(str_replace('_', '-', $_SERVER['HTTP_ACCEPT_LANGUAGE']));
+
+	foreach ($language_index as $code => $language) {
+		if (strpos($accept_languages, $code) === 0) {
+			if (!empty($system_available_languages[$language])) {
+				return $language;
+			}
 		}
 	}
-	closedir($handle);
-	asort($result);
+
+	$user_agent = strtolower(str_replace('_', '-', $_SERVER['HTTP_USER_AGENT']));
+
+	foreach ($language_index as $code => $language) {
+		if (preg_match("/[[( ]{$code}[;,_-)]/", $user_agent)) {
+			if (!empty($system_available_languages[$language])) {
+				return $language;
+			}
+		}
+	}
+
+	return 'english';
+}
+
+/**
+ *	Returns a list of language directories.
+ */
+function & get_language_folder_list() {
+	static $result;
+	if (!is_array($result)) {
+		$result = array();
+		$exceptions = array('.', '..', 'CVS', '.svn');
+		$search       = array('_latin',   '_unicode',   '_corporate',   '_org'  , '_KM',   '_');
+		$replace_with = array(' (Latin)', ' (unicode)', ' (corporate)', ' (org)', ' (KM)', ' ');
+		$dirname = api_get_path(SYS_LANG_PATH);
+		$handle = opendir($dirname);
+		while ($entries = readdir($handle)) {
+			if (in_array($entries, $exceptions)) {
+				continue;
+			}
+			if (is_dir($dirname.$entries)) {
+				$result[$entries] = ucwords(str_replace($search, $replace_with, $entries));
+			}
+		}
+		closedir($handle);
+		asort($result);
+	}
 	return $result;
 }
 

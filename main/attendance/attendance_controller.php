@@ -56,7 +56,7 @@
 			$check = Security::check_token();        		
     		if ($check) {
     			$attendance->set_name($_POST['title']);
-    			$attendance->set_description($_POST['title']);
+    			$attendance->set_description($_POST['description']);
     			$attendance->set_attendance_qualify_title($_POST['attendance_qualify_title']);
     			$attendance->set_attendance_weight($_POST['attendance_weight']);
     			$link_to_gradebook = false;    			    			

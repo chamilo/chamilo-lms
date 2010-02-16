@@ -796,7 +796,7 @@ function display_extra_profile_fields_filter()
 	}
 
 	echo '<form id="subscribe_user_filter" name="subscribe_user_filter" method="get" action="'.api_get_self().'?api_get_cidreq" style="float:left;">';
-	echo '	<input type="hidden" name="type" id="type" value="'.Security::Remove_XSS($_REQUEST['type']).'" />';
+	echo '	<input type="hidden" name="type" id="type" value="'.Security::remove_XSS($_REQUEST['type']).'" />';
 	echo   '<select name="subscribe_user_filter_value" id="subscribe_user_filter_value">'.$return.'</select>';
 	echo   '<button type="submit" name="submit_filter" id="submit_filter" value="" class="search">'.get_lang('Filter').'</button>';
 	echo '</form>';

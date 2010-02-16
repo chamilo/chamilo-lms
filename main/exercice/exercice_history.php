@@ -56,7 +56,7 @@ $is_allowedToEdit = api_is_allowed_to_edit(null,true);
 $is_tutor = api_is_allowed_to_edit(true);
 
 if(!$is_allowedToEdit){
-	header('Location: /main/exercice/exercice.php?cidReq='.Security::Remove_XSS($_GET['cidReq']));
+	header('Location: /main/exercice/exercice.php?cidReq='.Security::remove_XSS($_GET['cidReq']));
 	exit;
 }
 

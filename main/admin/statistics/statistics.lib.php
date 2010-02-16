@@ -397,7 +397,7 @@ class Statistics
 		if (!isset($_GET['date_diff'])) {
 			$defaults['date_diff'] = 60;
 		} else {
-			$defaults['date_diff'] = Security::Remove_XSS($_GET['date_diff']);
+			$defaults['date_diff'] = Security::remove_XSS($_GET['date_diff']);
 		}
 		$form->setDefaults($defaults);
 		$form->display();

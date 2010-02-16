@@ -7604,37 +7604,34 @@ class learnpath {
 		$return .= '<th width="70" height="24" style="border:1px solid gray; background-color:#F0F0F0;">' . get_lang('Minimum') . '</th>';
 		$return .= '<th width="70" height="24" style="border:1px solid gray; background-color:#F0F0F0;">' . get_lang('Maximum') . '</th>';
 		$return .= '</tr>';
-		//$return .= '<tr >';
-		//$return .= '<td class="radio" style="border:1px solid gray;border-collapse:collapse;">';
-		//$return .= '<input checked="checked" id="idNone" name="prerequisites" style="margin-left:0; margin-right:10px;" type="radio" />';
-		//$return .= '<label for="idNone">' . get_lang('None') . '</label>';
-		//$return .= '</td><td colspan="2" />';
-		//$return .= '</tr>';
+		
+		//Adding the none option to the prerequisites see http://www.chamilo.org/es/node/146	
+		$return .= '<tr >';
+		$return .= '<td colspan="3" class="radio" style="border:1px solid gray;border-collapse:collapse;">';
+		$return .= '<input checked="checked" id="idNone" name="prerequisites" style="margin-left:0; margin-right:10px;" type="radio" />';
+		$return .= '<label for="idNone">' . get_lang('None') . '</label>';
+		$return .= '</td><td />';
+		$return .= '</tr>';
 
-		$sql = "
-					SELECT *
-					FROM " . $tbl_lp_item . "
-					WHERE
-						lp_id = " . $this->lp_id;
-
+		$sql 	= "SELECT * FROM " . $tbl_lp_item . " WHERE lp_id = " . $this->lp_id;
 		$result = Database::query($sql);
 		$arrLP = array ();
 		while ($row = Database :: fetch_array($result)) {
 			$arrLP[] = array (
-				'id' => $row['id'],
-				'item_type' => $row['item_type'],
-				'title' => api_convert_encoding($row['title'], $charset, $this->encoding),
-				'ref' => $row['ref'],
-				'description' => $row['description'],
-				'parent_item_id' => $row['parent_item_id'],
-				'previous_item_id' => $row['previous_item_id'],
-				'next_item_id' => $row['next_item_id'],
-				'max_score' => $row['max_score'],
-				'min_score' => $row['min_score'],
-				'mastery_score' => $row['mastery_score'],
-				'prerequisite' => $row['prerequisite'],
-				'next_item_id' => $row['next_item_id'],
-				'display_order' => $row['display_order']
+				'id' 				=> $row['id'],
+				'item_type' 		=> $row['item_type'],
+				'title' 			=> api_convert_encoding($row['title'], $charset, $this->encoding),
+				'ref' 				=> $row['ref'],
+				'description' 		=> $row['description'],
+				'parent_item_id' 	=> $row['parent_item_id'],
+				'previous_item_id'	=> $row['previous_item_id'],
+				'next_item_id' 		=> $row['next_item_id'],
+				'max_score' 		=> $row['max_score'],
+				'min_score' 		=> $row['min_score'],
+				'mastery_score' 	=> $row['mastery_score'],
+				'prerequisite' 		=> $row['prerequisite'],
+				'next_item_id' 		=> $row['next_item_id'],
+				'display_order' 	=> $row['display_order']
 			);
 			if ($row['ref'] == $preq_id) {
 				$preq_mastery = $row['mastery_score'];

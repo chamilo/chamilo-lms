@@ -67,19 +67,19 @@ switch ($encryptPassForm) {
 		break;
 }
 
-$dbPrefixForm = preg_replace('/[^a-zA-Z0-9_-]/', '', $dbPrefixForm);
+$dbPrefixForm = preg_replace('/[^a-zA-Z0-9_\-]/', '', $dbPrefixForm);
 
-$dbNameForm = preg_replace('/[^a-zA-Z0-9_-]/', '', $dbNameForm);
+$dbNameForm = preg_replace('/[^a-zA-Z0-9_\-]/', '', $dbNameForm);
 if (!empty($dbPrefixForm) && strpos($dbNameForm, $dbPrefixForm) !== 0) {
 	$dbNameForm = $dbPrefixForm.$dbNameForm;
 }
 
-$dbStatsForm = preg_replace('/[^a-zA-Z0-9_-]/', '', $dbStatsForm);
+$dbStatsForm = preg_replace('/[^a-zA-Z0-9_\-]/', '', $dbStatsForm);
 if (!empty($dbPrefixForm) && strpos($dbStatsForm, $dbPrefixForm) !== 0) {
 	$dbStatsForm = $dbPrefixForm.$dbStatsForm;
 }
 
-$dbUserForm = preg_replace('/[^a-zA-Z0-9_-]/', '', $dbUserForm);
+$dbUserForm = preg_replace('/[^a-zA-Z0-9_\-]/', '', $dbUserForm);
 if (!empty($dbPrefixForm) && strpos($dbUserForm, $dbPrefixForm) !== 0) {
 	$dbUserForm = $dbPrefixForm.$dbUserForm;
 }

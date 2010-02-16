@@ -1741,7 +1741,7 @@ function api_is_session_admin() {
 }
 
 /**
- * Check if the current user is a human resources manager 
+ * Check whether the current user is a human resources manager
  * @return boolean True if current user is a human resources manager
  */
 function api_is_drh() {
@@ -3940,7 +3940,7 @@ function replace_dangerous_char($filename, $strict = 'loose') {
 	$filename = str_replace($search, $replace, $filename);
 	if ($strict == 'strict') {
 		$filename = str_replace($search_strict, $replace_strict, $filename);
-		$filename = preg_replace('/[^0-9A-Za-z_.-]/', '', $filename);
+		$filename = preg_replace('/[^0-9A-Za-z_.\-]/', '', $filename);
 	}
 	// Length is limited, so the file name to be acceptable by some operating systems.
 	return substr($filename, 0, 250);

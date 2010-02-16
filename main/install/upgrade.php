@@ -703,7 +703,7 @@ function get_config_param($param, $path) {
 					list ($enreg[1]) = explode(' //', $enreg[1]);
 
 					$enreg[0] = trim(str_replace('$', '', $enreg[0]));
-					$enreg[1] = str_replace('\"', '"', ereg_replace('(^"|"$)', '', substr(trim($enreg[1]), 0, -1)));
+					$enreg[1] = str_replace('\"', '"', preg_replace('/^"|"$/', '', substr(trim($enreg[1]), 0, -1)));
 
 					if (strtolower($enreg[1]) == 'true') {
 						$enreg[1] = 1;
@@ -721,7 +721,7 @@ function get_config_param($param, $path) {
 						$tmp = explode('." ".', $enreg[1]);
 
 						foreach ($tmp as $tmp_key => $tmp_val) {
-							if (eregi('^\$[a-z_][a-z0-9_]*$', $tmp_val)) {
+							if (preg_match('/^\$[a-zA-Z_][a-zA-Z0-9_]*$/', $tmp_val)) {
 								$tmp[$tmp_key] = get_config_param(str_replace('$', '', $tmp_val), $path);
 							}
 						}

@@ -613,7 +613,7 @@ if (!$_GET['view'] OR $_GET['view']=='sent' OR $dropbox_cnf['sent_received_tabs'
 			$dropbox_file_data[]='<a href="dropbox_download.php?'.api_get_cidreq().'&id='.$dropbox_file->id.'&amp;action=download">'.Display::return_icon('filesave.gif',get_lang('Save'), array('style'=>'float:right;')).'</a><a href="dropbox_download.php?'.api_get_cidreq().'&id='.$dropbox_file->id.'">'.$dropbox_file->title.'</a><br>'.$dropbox_file->description;
 			$dropbox_file_data[]=ceil(($dropbox_file->filesize)/1024).' '.get_lang('kB');
 			foreach ($dropbox_file->recipients as $recipient) {
-				$receivers_celldata=display_user_link($recipient['user_id'], $recipient['name']).', '.$receivers_celldata;
+				$receivers_celldata=display_user_link_work($recipient['user_id'], $recipient['name']).', '.$receivers_celldata;
 			}
 			$receivers_celldata = trim(trim($receivers_celldata), ','); // Removing the trailing comma.
 			$dropbox_file_data[]=$receivers_celldata;

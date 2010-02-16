@@ -14,7 +14,6 @@
 ==============================================================================
 */
 
-
 //load helper functions
 require_once 'install_upgrade.lib.php';
 require_once '../inc/lib/image.lib.php';
@@ -59,11 +58,11 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
 
 	$dbScormForm = preg_replace('/[^a-zA-Z0-9_\-]/', '', $dbScormForm);
 
-	if (!empty ($dbPrefixForm) && strpos($dbScormForm, $dbPrefixForm) !== 0) {
+	if (!empty($dbPrefixForm) && strpos($dbScormForm, $dbPrefixForm) !== 0) {
         $dbScormForm = $dbPrefixForm.$dbScormForm;
     }
 
-    if (empty ($dbScormForm) || $dbScormForm == 'mysql' || $dbScormForm == $dbPrefixForm) {
+    if (empty($dbScormForm) || $dbScormForm == 'mysql' || $dbScormForm == $dbPrefixForm) {
         $dbScormForm = $dbPrefixForm.'scorm';
     }
 
@@ -149,29 +148,26 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
         //
 
 
-        // now clean the deprecated id_coach field from the session_rel_course
-        // table
+        // now clean the deprecated id_coach field from the session_rel_course table
         /*
-        $m_q_list = get_sql_file_contents('migrate-db-'.$old_file_version.'-'.$new_file_version.'-post.sql','main');
-        if(count($m_q_list)>0)
-        {
+        $m_q_list = get_sql_file_contents('migrate-db-'.$old_file_version.'-'.$new_file_version.'-post.sql', 'main');
+        if (count($m_q_list) > 0) {
             //now use the $m_q_list
             // We connect to the right DB first to make sure we can use the queries
             // without a database name
-            if(strlen($dbNameForm)>40){
-                error_log('Database name '.$dbNameForm.' is too long, skipping',0);
-            }elseif(!in_array($dbNameForm,$dblist)){
-                error_log('Database '.$dbNameForm.' was not found, skipping',0);
-            }else{
+            if (strlen($dbNameForm) > 40) {
+                error_log('Database name '.$dbNameForm.' is too long, skipping', 0);
+            } elseif (!in_array($dbNameForm, $dblist)) {
+                error_log('Database '.$dbNameForm.' was not found, skipping', 0);
+            } else {
                 Database::select_db($dbNameForm);
-                foreach($m_q_list as $query){
-                    if($only_test){
-                        error_log("Database::query($dbNameForm,$query)",0);
-                    }else{
+                foreach ($m_q_list as $query) {
+                    if ($only_test) {
+                        error_log("Database::query($dbNameForm,$query)", 0);
+                    } else {
                         $res = Database::query($query);
-                        if($log)
-                        {
-                            error_log("In $dbNameForm, executed: $query",0);
+                        if ($log) {
+                            error_log("In $dbNameForm, executed: $query", 0);
                         }
                     }
                 }
@@ -276,8 +272,8 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
             if (Database::num_rows($res) > 0) {
                 $i = 0;
                 $list = array();
-                //while( ($i < MAX_COURSE_TRANSFER) && ($row = Database::fetch_array($res)))
-                while($row = Database::fetch_array($res)) {
+                //while (($i < MAX_COURSE_TRANSFER) && ($row = Database::fetch_array($res)))
+                while ($row = Database::fetch_array($res)) {
                     $list[] = $row;
                     $i++;
                 }
@@ -291,7 +287,7 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
                         Database::select_db($row_course['db_name']);
                     }
 
-                    foreach($c_q_list as $query) {
+                    foreach ($c_q_list as $query) {
                         if ($singleDbForm) { //otherwise just use the main one
                             $query = preg_replace('/^(UPDATE|ALTER TABLE|CREATE TABLE|DROP TABLE|INSERT INTO|DELETE FROM)\s+(\w*)(.*)$/', "$1 $prefix{$row_course['db_name']}_$2$3", $query);
                         }

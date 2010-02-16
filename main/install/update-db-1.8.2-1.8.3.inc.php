@@ -77,11 +77,11 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
 
 	$dbScormForm = preg_replace('/[^a-zA-Z0-9_\-]/', '', $dbScormForm);
 
-	if (!empty ($dbPrefixForm) && strpos($dbScormForm, $dbPrefixForm) !== 0) {
+	if (!empty($dbPrefixForm) && strpos($dbScormForm, $dbPrefixForm) !== 0) {
 		$dbScormForm = $dbPrefixForm.$dbScormForm;
 	}
 
-	if (empty ($dbScormForm) || $dbScormForm == 'mysql' || $dbScormForm == $dbPrefixForm) {
+	if (empty($dbScormForm) || $dbScormForm == 'mysql' || $dbScormForm == $dbPrefixForm) {
 		$dbScormForm = $dbPrefixForm.'scorm';
 	}
 
@@ -136,7 +136,7 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
 		}
 
 		//get the main queries list (m_q_list)
-		$m_q_list = get_sql_file_contents('migrate-db-1.8.2-1.8.3-pre.sql','main');
+		$m_q_list = get_sql_file_contents('migrate-db-1.8.2-1.8.3-pre.sql', 'main');
 		if (count($m_q_list) > 0) {
 			//now use the $m_q_list
 			/**

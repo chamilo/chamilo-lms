@@ -56,7 +56,7 @@ if (function_exists('ini_set')) {
 //check if we come from index.php or update_courses.php - otherwise display error msg
 if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
 	//check if the current Dokeos install is elligible for update
-	if (empty ($updateFromConfigFile) || !file_exists($_POST['updatePath'].$updateFromConfigFile) || !in_array(get_config_param('clarolineVersion'), $update_from_version_6)) {
+	if (empty($updateFromConfigFile) || !file_exists($_POST['updatePath'].$updateFromConfigFile) || !in_array(get_config_param('clarolineVersion'), $update_from_version_6)) {
 
 		echo '<strong>'.get_lang('Error').' !</strong> Dokeos '.implode('|', $updateFromVersion).' '.get_lang('HasNotBeenFound').'.<br /><br />
 								'.get_lang('PleasGoBackToStep1').'.
@@ -78,11 +78,11 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
 
 	$dbScormForm = preg_replace('/[^a-zA-Z0-9_\-]/', '', $dbScormForm);
 
-	if (!empty ($dbPrefixForm) && strpos($dbScormForm, $dbPrefixForm) !== 0) {
+	if (!empty($dbPrefixForm) && strpos($dbScormForm, $dbPrefixForm) !== 0) {
 		$dbScormForm = $dbPrefixForm.$dbScormForm;
 	}
 
-	if (empty ($dbScormForm) || $dbScormForm == 'mysql' || $dbScormForm == $dbPrefixForm) {
+	if (empty($dbScormForm) || $dbScormForm == 'mysql' || $dbScormForm == $dbPrefixForm) {
 		$dbScormForm = $dbPrefixForm.'scorm';
 	}
 
@@ -254,11 +254,11 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
 				$i = 0;
                 $list = array();
 				//while( ($i < MAX_COURSE_TRANSFER) && ($row = Database::fetch_array($res)))
-				while($row = Database::fetch_array($res)) {
+				while ($row = Database::fetch_array($res)) {
 					$list[] = $row;
 					$i++;
 				}
-				foreach($list as $row_course) {
+				foreach ($list as $row_course) {
 					//now use the $c_q_list
 					/**
 					 * We connect to the right DB first to make sure we can use the queries
@@ -268,7 +268,7 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
 						Database::select_db($row_course['db_name']);
 					}
 
-					foreach($c_q_list as $query) {
+					foreach ($c_q_list as $query) {
 						if ($singleDbForm) { //otherwise just use the main one
 							$query = preg_replace('/^(UPDATE|ALTER TABLE|CREATE TABLE|DROP TABLE|INSERT INTO|DELETE FROM)\s+(\w*)(.*)$/', "$1 $prefix{$row_course['db_name']}_$2$3", $query);
 						}
@@ -291,7 +291,7 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
 							" WHERE cu.course_code = '".$row_course['code']."' " .
 								" AND u.user_id = cu.user_id";
 					$res_uc = Database::query($sql_uc);
-					while($user_row = Database::fetch_array($res_uc)) {
+					while ($user_row = Database::fetch_array($res_uc)) {
 						$users_list[$user_row['fn'].' '.$user_row['ln']] = $user_row['ui'];
 					}
 
@@ -445,9 +445,9 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
 	}
 	if (defined('SYSTEM_INSTALLATION')) {
 		if ($singleDbForm) {
-			if(empty($dbStatsForm)) $dbStatsForm = $dbNameForm;
-			if(empty($dbScormForm)) $dbScormForm = $dbNameForm;
-			if(empty($dbUserForm)) $dbUserForm = $dbNameForm;
+			if (empty($dbStatsForm)) $dbStatsForm = $dbNameForm;
+			if (empty($dbScormForm)) $dbScormForm = $dbNameForm;
+			if (empty($dbUserForm)) $dbUserForm = $dbNameForm;
 		}
 		//deal with migrate-db-1.6.x-1.8.0-post.sql
 		//get the main queries list (m_q_list)
@@ -567,7 +567,7 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
 
 					foreach($c_q_list as $query) {
 						if ($singleDbForm) { //otherwise just use the main one
-							$query = preg_replace('/^(UPDATE|ALTER TABLE|CREATE TABLE|DROP TABLE|INSERT INTO|DELETE FROM)\s+(\w*)(.*)$/',"$1 $prefix$2$3",$query);
+							$query = preg_replace('/^(UPDATE|ALTER TABLE|CREATE TABLE|DROP TABLE|INSERT INTO|DELETE FROM)\s+(\w*)(.*)$/', "$1 $prefix$2$3", $query);
 						}
 						if ($only_test) {
 							error_log("Database::query(".$row['db_name'].",$query)", 0);
@@ -604,6 +604,7 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
 	}
 
 } else {
-	echo 'You are not allowed here !';
-}
 
+	echo 'You are not allowed here !';
+
+}

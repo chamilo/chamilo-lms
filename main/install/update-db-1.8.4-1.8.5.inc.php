@@ -14,7 +14,6 @@
 ==============================================================================
 */
 
-
 //load helper functions
 require_once 'install_upgrade.lib.php';
 
@@ -58,11 +57,11 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
 
 	$dbScormForm = preg_replace('/[^a-zA-Z0-9_\-]/', '', $dbScormForm);
 
-	if (!empty ($dbPrefixForm) && strpos($dbScormForm, $dbPrefixForm) !== 0) {
+	if (!empty($dbPrefixForm) && strpos($dbScormForm, $dbPrefixForm) !== 0) {
 		$dbScormForm = $dbPrefixForm.$dbScormForm;
 	}
 
-	if (empty ($dbScormForm) || $dbScormForm == 'mysql' || $dbScormForm == $dbPrefixForm) {
+	if (empty($dbScormForm) || $dbScormForm == 'mysql' || $dbScormForm == $dbPrefixForm) {
 		$dbScormForm = $dbPrefixForm.'scorm';
 	}
 
@@ -184,7 +183,7 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
 				error_log('Database '.$dbUserForm.' was not found, skipping', 0);
 			} else {
 				Database::select_db($dbUserForm);
-				foreach($u_q_list as $query){
+				foreach ($u_q_list as $query){
 					if ($only_test) {
 						error_log("Database::query($dbUserForm,$query)", 0);
 						error_log("In $dbUserForm, executed: $query", 0);
@@ -272,7 +271,7 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
 					$mysql = "SELECT * FROM $mytable WHERE min_score != 0 AND prerequisite != ''";
 					$myres = Database::query($query);
 
-					if ($myres!==false && Database::num_rows($myres) > 0) {
+					if ($myres !== false && Database::num_rows($myres) > 0) {
 						while ($myrow = Database::fetch_array($myres)) {
 							if (is_numeric($myrow['prerequisite'])) {
 								$mysql2 = "UPDATE $mytable SET mastery_score = '".$myrow['min_score']."' WHERE id = '".$myrow['prerequisite']."'";

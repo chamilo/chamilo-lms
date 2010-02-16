@@ -36,6 +36,7 @@
 * @package chamilo.install
 ==============================================================================
 */
+
 require_once '../inc/lib/main_api.lib.php';
 require_once '../inc/lib/fileUpload.lib.php';
 require_once '../inc/lib/database.lib.php';
@@ -49,10 +50,10 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
 	$found_stable = false;
 	foreach ($file as $line) {
 		$ignore = false;
-		if(stristr($line, '$_configuration[\'dokeos_version\']')) {
+		if (stristr($line, '$_configuration[\'dokeos_version\']')) {
 			$found_version = true;
 			$line = '$_configuration[\'dokeos_version\'] = \''.$new_version.'\';'."\r\n";
-		} elseif(stristr($line, '$_configuration[\'dokeos_stable\']')) {
+		} elseif (stristr($line, '$_configuration[\'dokeos_stable\']')) {
 			$found_stable = true;
 			$line = '$_configuration[\'dokeos_stable\'] = '.($new_version_stable ? 'true' : 'false').';'."\r\n";
 		} elseif (stristr($line, '?>')) {
@@ -67,7 +68,7 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
 		fwrite($fh, '$_configuration[\'dokeos_version\'] = \''.$new_version.'\';'."\r\n");
 	}
 	if (!$found_stable) {
-		fwrite($fh, '$_configuration[\'dokeos_stable\'] = '.($new_version_stable?'true':'false').';'."\r\n");
+		fwrite($fh, '$_configuration[\'dokeos_stable\'] = '.($new_version_stable ? 'true' : 'false').';'."\r\n");
 	}
 	fwrite($fh, '?>');
 	fclose($fh);

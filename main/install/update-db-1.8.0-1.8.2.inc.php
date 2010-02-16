@@ -77,7 +77,7 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
 
 	$dbScormForm = preg_replace('/[^a-zA-Z0-9_\-]/', '', $dbScormForm);
 
-	if (!empty ($dbPrefixForm) && strpos($dbScormForm, $dbPrefixForm) !== 0) {
+	if (!empty($dbPrefixForm) && strpos($dbScormForm, $dbPrefixForm) !== 0) {
 		$dbScormForm = $dbPrefixForm.$dbScormForm;
 	}
 
@@ -253,7 +253,7 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
 					$list[] = $row;
 					$i++;
 				}
-				foreach($list as $row_course) {
+				foreach ($list as $row_course) {
 					//now use the $c_q_list
 					/**
 					 * We connect to the right DB first to make sure we can use the queries
@@ -263,9 +263,9 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
 						Database::select_db($row_course['db_name']);
 					}
 
-					foreach($c_q_list as $query) {
+					foreach ($c_q_list as $query) {
 						if ($singleDbForm) { //otherwise just use the main one
-							$query = preg_replace('/^(UPDATE|ALTER TABLE|CREATE TABLE|DROP TABLE|INSERT INTO|DELETE FROM)\s+(\w*)(.*)$/',"$1 $prefix{$row_course['db_name']}_$2$3",$query);
+							$query = preg_replace('/^(UPDATE|ALTER TABLE|CREATE TABLE|DROP TABLE|INSERT INTO|DELETE FROM)\s+(\w*)(.*)$/', "$1 $prefix{$row_course['db_name']}_$2$3", $query);
 						}
 
 						if ($only_test) {

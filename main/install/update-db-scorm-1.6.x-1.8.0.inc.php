@@ -5,6 +5,7 @@
  * @package chamilo.scorm
  * @author Yannick Warnier <ywarnier@beeznest.org>
  */
+
 /**
  * Include mandatory libraries
  */
@@ -354,7 +355,7 @@ foreach ($courses_id_full_table_prefix_list as $course_code => $db) {
         if ($row['lp_id'] != $lp_id) {
             //apply changes to the database and clean tool arrays
             $last = 0;
-            foreach($order_item as $order_id => $item_id) {
+            foreach ($order_item as $order_id => $item_id) {
                 $next = 0;
                 if (!empty($order_item[$order_id+1])) {
                     $next = $order_item[$order_id+1];
@@ -608,11 +609,11 @@ if ($loglevel > 0) { error_log("Now starting migration of scorm tables from glob
 
 $scorm_main = $dbScormForm.'.'.TABLE_SCORM_MAIN;
 $scorm_item = $dbScormForm.'.'.TABLE_SCORM_SCO_DATA;
-//$lp_main  = Database::get_course_table(TABLE_LEARNPATH_MAIN,$db);
+//$lp_main = Database::get_course_table(TABLE_LEARNPATH_MAIN,$db);
 $course_pref = $table_prefix;
-$lp_ids     = array();
-$lp_item_ids    = array();
-$lp_item_refs   = array();
+$lp_ids = array();
+$lp_item_ids = array();
+$lp_item_refs = array();
 $lp_course = array();
 $lp_course_code = array();
 $scorm_lp_paths = array();
@@ -626,7 +627,7 @@ $res_crs = Database::query($sql_crs);
 $num = Database::num_rows($res_crs);
 
 //prepare an array that will contain course codes and for each course code a list of lps [by path prefixed by '/']
-$scorms =array();
+$scorms = array();
 $course_code_swap = '';
 $scormdocuments_lps = array();
 while ($course_row = Database::fetch_array($res_crs)) {
@@ -680,7 +681,7 @@ while ($course_row = Database::fetch_array($res_crs)) {
                 if ($loglevel > 2) { error_log("  Trying subdirectories...", 0); }
                 $dh = opendir($courses_dir);
                 while ($entry = readdir($dh)) {
-                    if (substr($entry, 0, 1)!='.') {
+                    if (substr($entry, 0, 1) != '.') {
                         if (is_dir($courses_dir."/".$entry)) {
                             if (is_file($courses_dir."/".$entry."/imsmanifest.xml")) {
                                 if ($loglevel > 2) { error_log(".  .. and found $courses_dir/$entry/imsmanifest.xml!", 0); }
@@ -1167,7 +1168,7 @@ foreach ($scorms as $my_course_code => $paths_list) {
                     $new_id = $lp_item_refs[$in_id][$subarray['identifier']];
                     $next = 0;
                     $dsp = $subarray['rel_order'];
-                    if ($subarray['level']>$level) {
+                    if ($subarray['level'] > $level) {
                         //getting one level deeper, just consult
                         $parent_id = $previous;
                         array_push($stock,$previous);

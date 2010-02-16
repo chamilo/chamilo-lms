@@ -191,12 +191,6 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
 	error_log('Renaming '.$updatePath.'claroline/upload/video to '.$pathForm.'main/upload/video', 0);
 	rename($updatePath.'claroline/upload/video', $pathForm.'main/upload/video');
 
-	/*
-	if (defined('SYSTEM_INSTALLATION')) {
-		//nothing to do this time
-	}
-	*/
-
 } else {
 
 	echo 'You are not allowed here !';

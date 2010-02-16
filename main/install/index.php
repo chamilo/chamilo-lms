@@ -17,6 +17,20 @@
 
 /*
 ==============================================================================
+		CONSTANTS
+==============================================================================
+*/
+
+define('SYSTEM_INSTALLATION', 1);
+define('MAX_COURSE_TRANSFER', 100);
+define('INSTALL_TYPE_UPDATE', 'update');
+define('FORM_FIELD_DISPLAY_LENGTH', 40);
+define('DATABASE_FORM_FIELD_DISPLAY_LENGTH', 25);
+define('MAX_FORM_FIELD_LENGTH', 80);
+define('DEFAULT_LANGUAGE', 'english'); // TODO: To be examined.
+
+/*
+==============================================================================
 		PHP VERSION CHECK
 ==============================================================================
 */
@@ -95,15 +109,6 @@ api_set_internationalization_default_encoding($charset);
 
 // Page encoding initialization.
 header('Content-Type: text/html; charset='. api_get_system_encoding());
-
-// Some constants
-define('SYSTEM_INSTALLATION', 1);
-define('MAX_COURSE_TRANSFER', 100);
-define('INSTALL_TYPE_UPDATE', 'update');
-define('FORM_FIELD_DISPLAY_LENGTH', 40);
-define('DATABASE_FORM_FIELD_DISPLAY_LENGTH', 25);
-define('MAX_FORM_FIELD_LENGTH', 80);
-define('DEFAULT_LANGUAGE', 'english'); // TODO: To be examined.
 
 // Setting the error reporting levels.
 error_reporting(E_COMPILE_ERROR | E_ERROR | E_CORE_ERROR);

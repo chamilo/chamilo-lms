@@ -402,12 +402,11 @@ function api_get_path($path_type, $path = null) {
 
 		//
 		// Support for the installation process.
-		// Developers might use the function api_fet_path() directly or indirectly (this is difficult to be traced), at the moment when
+		// Developers might use the function api_get_path() directly or indirectly (this is difficult to be traced), at the moment when
 		// configuration has not been created yet. This is why this function should be upgraded to return correct results in this case.
 		//
-		if (!file_exists($include_path_sys.'/conf/configuration.php')) {
-			$requested_page_rel = api_get_self();
-			if (($pos = strpos($requested_page_rel, 'main/install')) !== false) {
+		if (defined('SYSTEM_INSTALLATION') && SYSTEM_INSTALLATION) {
+			if (($pos = strpos(($requested_page_rel = api_get_self()), 'main/install')) !== false) {
 				$root_rel = substr($requested_page_rel, 0, $pos);
 				// See http://www.mediawiki.org/wiki/Manual:$wgServer
 				$server_protocol = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') ? 'https' : 'http';

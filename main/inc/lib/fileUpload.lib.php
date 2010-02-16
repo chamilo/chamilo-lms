@@ -1393,20 +1393,28 @@ function create_unexisting_directory($_course,$user_id,$to_group_id,$to_user_id,
 	}
 
 	if (mkdir($base_work_dir.$desired_dir_name.$nb, api_get_permissions_for_new_directories(), true))
-	{
-		$document_id = add_document($_course, $desired_dir_name.$nb,'folder',0,$title);
-		if ($document_id)
-		{
-			//update document item_property
-			$current_session_id = api_get_session_id();
-			if ($visibility !== '') {
-				$visibilities = array(0 => 'invisible', 1 => 'visible', 2 => 'delete');
-				api_item_property_update($_course,TOOL_DOCUMENT,$document_id,$visibilities[$visibility],$user_id,$to_group_id,$to_user_id,null,null,$current_session_id);
-			} else {
-				api_item_property_update($_course,TOOL_DOCUMENT,$document_id,'FolderCreated',$user_id,$to_group_id,$to_user_id,null,null,$current_session_id);
-			}
-			return $desired_dir_name.$nb;
-		}
+	{					
+		// check if pathname already exists inside document table
+		$tbl_document = Database::get_course_table(TABLE_DOCUMENT, $_course['dbName']);
+		$sql = "SELECT path FROM $tbl_document WHERE path='".$desired_dir_name.$nb."'";
+		$rs  = Database::query($sql); 
+		if (Database::num_rows($rs) == 0) {
+			$document_id = add_document($_course, $desired_dir_name.$nb,'folder',0,$title);		
+			if ($document_id)
+			{
+				//update document item_property
+				$current_session_id = api_get_session_id();
+				if ($visibility !== '') {
+					$visibilities = array(0 => 'invisible', 1 => 'visible', 2 => 'delete');
+					api_item_property_update($_course,TOOL_DOCUMENT,$document_id,$visibilities[$visibility],$user_id,$to_group_id,$to_user_id,null,null,$current_session_id);
+				} else {
+					api_item_property_update($_course,TOOL_DOCUMENT,$document_id,'FolderCreated',$user_id,$to_group_id,$to_user_id,null,null,$current_session_id);
+				}
+				return $desired_dir_name.$nb;
+			}	
+		} else {
+			return false;
+		}		
 	}
 	else
 	{

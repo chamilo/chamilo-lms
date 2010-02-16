@@ -344,7 +344,7 @@ class SessionManager {
 		$session_info = api_get_session_info($id_session);
 		$session_name = $session_info['name'];
 
-	   	$sql = "SELECT id_user FROM $tbl_session_rel_user WHERE id_session='$id_session'";
+	   	$sql = "SELECT id_user FROM $tbl_session_rel_user WHERE id_session='$id_session' AND relation_type<>".SESSION_RELATION_TYPE_RRHH."";
 		$result = Database::query($sql);
 		$existingUsers = array();
 		while($row = Database::fetch_array($result)){
@@ -433,7 +433,7 @@ class SessionManager {
 		}
 		// delete users from the session
 		if ($empty_users===true){
-			Database::query("DELETE FROM $tbl_session_rel_user WHERE id_session = $id_session");
+			Database::query("DELETE FROM $tbl_session_rel_user WHERE id_session = $id_session AND relation_type<>".SESSION_RELATION_TYPE_RRHH."");
 		}
 			// insert missing users into session
 		$nbr_users = 0;
@@ -517,7 +517,7 @@ class SessionManager {
 		// get list of users subscribed to this session
 		$sql="SELECT id_user
 			FROM $tbl_session_rel_user
-			WHERE id_session = $id_session";
+			WHERE id_session = $id_session AND relation_type<>".SESSION_RELATION_TYPE_RRHH."";
 		$result=Database::query($sql);
 		$user_list=Database::store_result($result);
 

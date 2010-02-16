@@ -1624,7 +1624,7 @@ class UserManager
 
 		$sessions_sql = "SELECT DISTINCT id, session_category_id
 								FROM $tbl_session_user, $tbl_session
-								WHERE id_session=id AND id_user=$user_id $condition_date_end
+								WHERE id_session=id AND id_user=$user_id AND relation_type<>".SESSION_RELATION_TYPE_RRHH." $condition_date_end
 								ORDER BY session_category_id, date_start, date_end";
 
 		$result = Database::query($sessions_sql);
@@ -1736,7 +1736,7 @@ class UserManager
 		// get the list of sessions where the user is subscribed as student
 		$sessions_sql = "SELECT DISTINCT id, name, date_start, date_end
 								FROM $tbl_session_user, $tbl_session
-								WHERE id_session=id AND id_user=$user_id
+								WHERE id_session=id AND id_user=$user_id AND relation_type<>".SESSION_RELATION_TYPE_RRHH."
 								AND (date_start <= CURDATE() AND date_end >= CURDATE() OR date_start='0000-00-00')
 								ORDER BY date_start, date_end, name";
 		$result = Database::query($sessions_sql);
@@ -1747,7 +1747,7 @@ class UserManager
 		// get the list of sessions where the user is subscribed as student where visibility = SESSION_VISIBLE_READ_ONLY = 1  SESSION_VISIBLE = 2
 		$sessions_out_date_sql = "SELECT DISTINCT id, name, date_start, date_end
 								FROM $tbl_session_user, $tbl_session
-								WHERE id_session=id AND id_user=$user_id
+								WHERE id_session=id AND id_user=$user_id AND relation_type<>".SESSION_RELATION_TYPE_RRHH."
 								AND (date_end <= CURDATE() AND date_end<>'0000-00-00') AND (visibility = ".SESSION_VISIBLE_READ_ONLY." || visibility = ".SESSION_VISIBLE.")
 								ORDER BY date_start, date_end, name";
 		$result_out_date = Database::query($sessions_out_date_sql);

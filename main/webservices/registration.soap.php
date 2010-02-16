@@ -4095,7 +4095,7 @@ function DokeosWSSuscribeUsersToSession($params){
 			continue;
 	  	}
 
-	   	$sql = "SELECT id_user FROM $tbl_session_rel_user WHERE id_session='$id_session'";
+	   	$sql = "SELECT id_user FROM $tbl_session_rel_user WHERE id_session='$id_session' AND relation_type<>".SESSION_RELATION_TYPE_RRHH."";
 		$result = Database::query($sql);
 		$existingUsers = array();
 		while($row = Database::fetch_array($result)){
@@ -4311,7 +4311,7 @@ function DokeosWSUnsuscribeUsersFromSession($params) {
 			continue;
 	  	}
 
-	   	$sql = "SELECT id_user FROM $tbl_session_rel_user WHERE id_session='$id_session'";
+	   	$sql = "SELECT id_user FROM $tbl_session_rel_user WHERE id_session='$id_session' AND relation_type<>".SESSION_RELATION_TYPE_RRHH."";
 		$result = Database::query($sql);
 		$existingUsers = array();
 		while($row = Database::fetch_array($result)){
@@ -4352,7 +4352,7 @@ function DokeosWSUnsuscribeUsersFromSession($params) {
 
 		foreach ($usersList as $enreg_user) {
 	        $enreg_user = Database::escape_string($enreg_user);
-			$delete_sql = "DELETE FROM $tbl_session_rel_user WHERE id_session = '$id_session' AND id_user ='$enreg_user'";
+			$delete_sql = "DELETE FROM $tbl_session_rel_user WHERE id_session = '$id_session' AND id_user ='$enreg_user' AND relation_type<>".SESSION_RELATION_TYPE_RRHH."";
 			Database::query($delete_sql);
 			$return = Database::affected_rows();
 		}
@@ -4558,7 +4558,7 @@ function DokeosWSSuscribeCoursesToSession($params) {
 		// get list of users subscribed to this session
 		$sql="SELECT id_user
 			FROM $tbl_session_rel_user
-			WHERE id_session = '$id_session'";
+			WHERE id_session = '$id_session' AND relation_type<>".SESSION_RELATION_TYPE_RRHH."";
 		$result=Database::query($sql);
 		$user_list=Database::store_result($result);
 

@@ -153,7 +153,7 @@ if (api_is_allowed_to_edit()) {
 			$sql = 'SELECT '.$tbl_user.'.user_id
 					FROM '.$tbl_user.' user
 					INNER JOIN '.$tbl_session_rel_user.' reluser
-					ON user.user_id = reluser.id_user
+					ON user.user_id = reluser.id_user AND reluser.relation_type<>'.SESSION_RELATION_TYPE_RRHH.'
 					INNER JOIN '.$tbl_session_rel_course.' rel_course
 					ON rel_course.id_session = reluser.id_session
 					WHERE user.user_id = "'.$user_id.'"

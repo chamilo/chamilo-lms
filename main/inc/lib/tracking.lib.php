@@ -525,7 +525,7 @@ class Tracking {
 
 			$sql = "SELECT distinct	srcru.id_user
 								FROM $tbl_session_course_user AS srcru, $tbl_session_user sru
-								WHERE srcru.id_user = sru.id_user AND srcru.id_session = sru.id_session AND srcru.course_code='$course_code' AND srcru.id_session='$id_session'";
+								WHERE srcru.id_user = sru.id_user AND sru.relation_type<>".SESSION_RELATION_TYPE_RRHH." AND srcru.id_session = sru.id_session AND srcru.course_code='$course_code' AND srcru.id_session='$id_session'";
 
 			$rs = Database::query($sql);
 

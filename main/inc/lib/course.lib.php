@@ -319,14 +319,14 @@ class CourseManager {
 					// Delete in table session_rel_user
 					Database::query("DELETE FROM ".Database::get_main_table(TABLE_MAIN_SESSION_USER)."
 									 WHERE id_session ='".$my_session_id."'
-									 AND id_user='$uid'");
+									 AND id_user='$uid' AND relation_type<>".SESSION_RELATION_TYPE_RRHH."");
 				}
 
 			}
 
 			// Update the table session
 			$row = Database::fetch_array(Database::query("SELECT COUNT(*) FROM ".Database::get_main_table(TABLE_MAIN_SESSION_USER)."
-					WHERE id_session = '".$my_session_id."'"));
+					WHERE id_session = '".$my_session_id."' AND relation_type<>".SESSION_RELATION_TYPE_RRHH."  "));
 			$count = $row[0]; // number of users by session
 			$result = Database::query("UPDATE ".Database::get_main_table(TABLE_MAIN_SESSION)." SET nbr_users = '$count'
 					WHERE id = '".$my_session_id."'");
@@ -397,7 +397,7 @@ class CourseManager {
 				// Check whether the user has not already been stored in the session_rel_user table
 				if (Database::num_rows(@Database::query("SELECT * FROM ".Database::get_main_table(TABLE_MAIN_SESSION_USER)."
 						WHERE id_session ='".$_SESSION['id_session']."'
-						AND id_user = '".$user_id."'")) > 0) {
+						AND id_user = '".$user_id."' AND relation_type<>".SESSION_RELATION_TYPE_RRHH." ")) > 0) {
 					return false;
 				}
 			}
@@ -414,7 +414,7 @@ class CourseManager {
 					id_user = '".$user_id."'");
 
 			// Update the table session
-			$row = Database::fetch_array(@Database::query("SELECT COUNT(*) FROM ".Database::get_main_table(TABLE_MAIN_SESSION_USER)." WHERE id_session = '".$_SESSION['id_session']."'"));
+			$row = Database::fetch_array(@Database::query("SELECT COUNT(*) FROM ".Database::get_main_table(TABLE_MAIN_SESSION_USER)." WHERE id_session = '".$_SESSION['id_session']."' AND relation_type<>".SESSION_RELATION_TYPE_RRHH.""));
 			$count = $row[0]; // number of users by session
 			$result = @Database::query("UPDATE ".Database::get_main_table(TABLE_MAIN_SESSION)." SET nbr_users = '$count' WHERE id = '".$_SESSION['id_session']."'");
 

@@ -734,8 +734,8 @@ class Blog {
 				// Prepare data
 				$blog_post_id = $blog_post['post_id'];
 				$blog_post_text = make_clickable(stripslashes($blog_post['full_text']));
-				$blog_post_date = api_ucfirst(format_locale_date($dateFormatLong,strtotime($blog_post['date_creation'])));
-				$blog_post_time = date('H:i',strtotime($blog_post['date_creation']));
+				$blog_post_date = api_get_local_time($blog_post['date_creation'], $dateFormatLong, null, date_default_timezone_get());
+				$blog_post_time = api_get_local_time($blog_post['date_creation'], 'H:i', null, date_default_timezone_get());
 
 				// Create an introduction text (but keep FULL sentences)
 				$limit = 100; //nmbr of words in introduction text

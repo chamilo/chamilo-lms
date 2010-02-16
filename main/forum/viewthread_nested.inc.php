@@ -69,7 +69,7 @@ foreach ($rows as $post) {
 		echo '<br />'.display_user_image($post['user_id'],$name,$origin).'<br />';
 	}
 	echo display_user_link($post['user_id'], $name, $origin).'<br />';
-	echo $post['post_date'].'<br /><br />';
+	echo api_get_local_time($post['post_date'], null, null, date_default_timezone_get()).'<br /><br />';
 	// get attach id
 	$attachment_list=get_attachment($post['post_id']);
 	$id_attach = !empty($attachment_list)?$attachment_list['id']:'';

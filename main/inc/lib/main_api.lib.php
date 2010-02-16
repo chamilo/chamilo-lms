@@ -4467,3 +4467,51 @@ function api_send_mail($to, $subject, $message, $additional_headers = null, $add
 	$mail->ClearAddresses();
 	return 1;
 }
+
+/**
+ * Returns the local time in a format given as an argument
+ * @param string The time to be converted
+ * @param string The format to be used. The default format is DATETIME
+ * @param string The timezone to be converted to. If null, the timezone will be determined based on user preference, or timezone chosen by the admin for the platform.
+ * @param string The timezone to be converted from. If null, UTC will be assumed.
+ * @return string The converted time
+ * 
+ * @author Guillaume Viguier <guillaume.viguier@beeznest.com>
+ */
+function api_get_local_time($time, $format=null, $to_timezone=null, $from_timezone=null) {
+	// Determining the timezone to be converted from
+	if ($from_timezone === null) {
+		$from_timezone = 'UTC';
+	}
+	// Determining the timezone to be converted to
+	if ($to_timezone === null) {
+		// First, get the default timezone of the server
+		$to_timezone = date_default_timezone_get();
+		// Second, see if a timezone has been chosen for the platform
+		$timezone_value = api_get_setting('timezone_value', 'timezones');
+		if ($timezone_value !== null) {
+			$to_timezone = $timezone_value;
+		}
+		// TODO: Get the timezone based on user preference
+	}
+	// Determine the format
+	if ($format === null) {
+		$format = 'Y-m-d H:i:s';
+	}
+	// If time is a timestamp, convert it to a string
+	if (is_int($time)) {
+		$time = date("Y-m-d H:i:s", $time);
+	}
+	try {
+		$date = new DateTime($time, new DateTimezone($from_timezone));
+		$date->setTimezone(new DateTimeZone($to_timezone));
+		// In the following case, the format is an internal Chamilo format, so we are using api_format_date
+		if (is_int($format) || strpos($format, '%') !== false) {
+			return api_format_date($format, strtotime($date->format("Y-m-d H:i:s")));
+		} else {	
+			return $date->format($format);
+		}
+	} catch (Exception $e) {
+		return null;
+	}
+}

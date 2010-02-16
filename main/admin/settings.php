@@ -261,6 +261,7 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
 			 */
 			case "select":
 				$form->addElement('select', $row['variable'], get_lang($row['comment']), call_user_func('select_'.$row['variable']), $hideme);
+				$default_values[$row['variable']] = $row['selected_value'];
 				break;
 		}
 	}

@@ -217,7 +217,7 @@ class GradebookDataGenerator
 		if (!isset($date) || empty($date)) {
 			return '';
 		} else {
-			return date("j/n/Y g:i", $date);
+			return api_get_local_time((int)$date, null, null, date_default_timezone_get());
 		}
 	}
 }

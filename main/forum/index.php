@@ -422,7 +422,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'notify' AND isset($_GET['conte
 						echo "\t\t<td nowrap=\"nowrap\">";
 
 						if (!empty($forum['last_post_id'])) {
-							echo $forum['last_post_date']."<br /> ".get_lang('By').' '.display_user_link($poster_id, $name);
+							echo api_get_local_time($forum['last_post_date'], null, null, date_default_timezone_get())."<br /> ".get_lang('By').' '.display_user_link($poster_id, $name);
 						}
 						echo "</td>\n";
 						echo "\t\t<td nowrap=\"nowrap\" align=\"center\">";

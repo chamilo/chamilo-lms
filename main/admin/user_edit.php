@@ -82,6 +82,8 @@ $user_data = Database::fetch_array($res, 'ASSOC');
 $user_data['platform_admin'] = is_null($user_data['is_admin']) ? 0 : 1;
 $user_data['send_mail'] = 0;
 $user_data['old_password'] = $user_data['password'];
+//Convert the registration date of the user
+$user_data['registration_date'] = api_get_local_time($user_data['registration_date'], null, null, date_default_timezone_get());
 unset($user_data['password']);
 
 $user_data = array_merge($user_data, Usermanager :: get_extra_user_data($user_id, true));

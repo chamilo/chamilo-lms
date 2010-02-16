@@ -60,7 +60,7 @@ foreach ($rows as $row) {
 	} else {
 		echo $name. '<br />';
 	}
-	echo $row['post_date'].'<br /><br />';
+	echo api_get_local_time($row['post_date'], null, null, date_default_timezone_get()).'<br /><br />';
 	// get attach id
 	$attachment_list=get_attachment($row['post_id']);
 	$id_attach = !empty($attachment_list)?$attachment_list['id']:'';

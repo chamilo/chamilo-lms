@@ -298,15 +298,15 @@ class Tracking {
                 }
                 // Get last view for each student (in case of multi-attempt)
                 // Also filter on LPs of this session  
-                $sql_maxes = "SELECT MAX(view_count), id, progress ".
+                $sql_maxes = "SELECT MAX(view_count), progress ".
                         "FROM $tbl_course_lp_view lp_view ".
                         "WHERE $condition_user ".
                         "lp_view.lp_id IN (".implode(',',$lp_id).") ".
-                        "GROUP BY user_id";
+                        "GROUP BY lp_id, user_id";
                 $res_maxes = Database::query($sql_maxes);
                 $sum = $number_items = 0;
                 while ($row_maxes = Database::fetch_array($res_maxes)) {
-                    $sum += $row_maxes[2];
+                    $sum += $row_maxes[1];
                     $number_items++;
                 }
                 if ($number_items == 0) {

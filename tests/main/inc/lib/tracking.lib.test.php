@@ -157,13 +157,24 @@ class TestTracking extends UnitTestCase {
 	 function testget_avg_student_progress() {
 		require_once (api_get_path(LIBRARY_PATH) . 'course.lib.php');
 		global $_user,$_course;
-	 	$student_id=$_user;
-	 	$course_code=$_course;
 	 	$this->tracking = new Tracking();
-	 	$res=$this->tracking->get_avg_student_progress($student_id, $course_code);
-	 	$this->assertTrue(is_object($this->tracking));
-		if(!is_numeric($res))$this->assertTrue(is_null($res));
-		//var_dump($res);
+	 	$res = $this->tracking->get_avg_student_progress($_user['user_id'], $_course['cidReq']);
+		$this->assertWithinMargin(0,100,$res);
+	 	$res = $this->tracking->get_avg_student_progress($_user['user_id'], $_course['cidReq'], $_session['id_session']);
+		$this->assertWithinMargin(0,100,$res);
+	 	$res = $this->tracking->get_avg_student_progress(null, $_course['cidReq']);
+		$this->assertNull($res);
+		$res = $this->tracking->get_avg_student_progress(array(1,2,3), $_course['cidReq']);
+		$this->assertWithinMargin(0,100,$res);
+		// manda un usuario que no existe para entrar en condicion de retorno de 0
+		$res = $this->tracking->get_avg_student_progress(500, $_course['cidReq']);
+		$this->assertEqual(0,$res);
+	 	$res = $this->tracking->get_avg_student_progress($_user['user_id'], $_course['cidReq'], 0);
+		$this->assertWithinMargin(0,100,$res);
+	 	$res = $this->tracking->get_avg_student_progress($_user['user_id'], $_course['cidReq'], 1);
+		$this->assertWithinMargin(0,100,$res);
+	 	$res = $this->tracking->get_avg_student_progress($_user['user_id'], $_course['cidReq'], 5000);
+		$this->assertWithinMargin(0,100,$res);
 	 }
 
 	 function testget_avg_student_score() {

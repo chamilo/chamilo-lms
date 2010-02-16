@@ -31,7 +31,9 @@
 */
 
 $language_file = array ('chat');
-include('../inc/global.inc.php');
+
+require_once '../inc/global.inc.php';
+
 $nameTools=get_lang('Chat');
 if ($_GET["origin"] != 'whoisonline') {
 	api_protect_course_script(true);

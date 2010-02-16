@@ -32,9 +32,9 @@
 define('FRAME','online');
 $language_file = array ('chat');
 
-include('../inc/global.inc.php');
-include('../inc/lib/course.lib.php');
-include('../inc/lib/usermanager.lib.php');
+require_once '../inc/global.inc.php';
+require_once api_get_path(LIBRARY_PATH).'course.lib.php';
+require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
 
 $course = api_get_course_id();
 $group_id = intval($_SESSION['_gid']);

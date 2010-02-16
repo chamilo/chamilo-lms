@@ -12,12 +12,12 @@ if (isset($_SESSION['gradebook'])) {
 	$param_gradebook = '&gradebook='.$_SESSION['gradebook'];
 }
 echo '<div class="actions" style="margin-bottom:30px">';
-echo '<a href="index?'.api_get_cidreq().'&action=attendance_sheet_list&attendance_id='.$attendance_id.$param_gradebook.'">'.Display::return_icon('check.gif',get_lang('AttendanceSheet')).' '.get_lang('AttendanceSheet').'</a>';
+echo '<a href="index.php?'.api_get_cidreq().'&action=attendance_sheet_list&attendance_id='.$attendance_id.$param_gradebook.'">'.Display::return_icon('check.gif',get_lang('AttendanceSheet')).' '.get_lang('AttendanceSheet').'</a>';
 if ($action == 'calendar_add') {
-	echo '<a href="index?'.api_get_cidreq().'&action=calendar_list&attendance_id='.$attendance_id.$param_gradebook.'">'.Display::return_icon('calendar_up.gif',get_lang('AttendanceCalendarList')).' '.get_lang('GoToAttendanceCalendarList').'</a>';
+	echo '<a href="index.php?'.api_get_cidreq().'&action=calendar_list&attendance_id='.$attendance_id.$param_gradebook.'">'.Display::return_icon('calendar_up.gif',get_lang('AttendanceCalendarList')).' '.get_lang('GoToAttendanceCalendarList').'</a>';
 } else {
-	echo '<a href="index?'.api_get_cidreq().'&action=calendar_add&attendance_id='.$attendance_id.$param_gradebook.'">'.Display::return_icon('calendar_add.png',get_lang('AddDateAndTime')).' '.get_lang('AddDateAndTime').'</a>';
-	echo '<a onclick="javascript:if(!confirm(\''.get_lang('AreYouSureToDeleteAllDates').'\')) return false;" href="index?'.api_get_cidreq().'&action=calendar_all_delete&attendance_id='.$attendance_id.$param_gradebook.'">'.Display::return_icon('calendar_delete.png',get_lang('CleanCalendar')).' '.get_lang('CleanCalendar').'</a>';	
+	echo '<a href="index.php?'.api_get_cidreq().'&action=calendar_add&attendance_id='.$attendance_id.$param_gradebook.'">'.Display::return_icon('calendar_add.png',get_lang('AddDateAndTime')).' '.get_lang('AddDateAndTime').'</a>';
+	echo '<a onclick="javascript:if(!confirm(\''.get_lang('AreYouSureToDeleteAllDates').'\')) return false;" href="index.php?'.api_get_cidreq().'&action=calendar_all_delete&attendance_id='.$attendance_id.$param_gradebook.'">'.Display::return_icon('calendar_delete.png',get_lang('CleanCalendar')).' '.get_lang('CleanCalendar').'</a>';	
 }
 echo '</div>';
 
@@ -62,8 +62,8 @@ if (isset($action) && $action == 'calendar_add') {
 				} else {
 					echo Display::return_icon('lp_calendar_event.png',get_lang('DateTime')).' '.$calendar['date_time'].'&nbsp;';
 					echo '<span style="margin-left:20px;">';
-					echo '<a href="index?'.api_get_cidreq().'&action=calendar_edit&calendar_id='.intval($calendar['id']).'&attendance_id='.$attendance_id.$param_gradebook.'">'.Display::return_icon('edit.gif', get_lang('Edit'), array('style'=>'vertical-align:middle')).'</a>&nbsp;';
-					echo '<a onclick="javascript:if(!confirm(\''.get_lang('AreYouSureToDelete').'\')) return false;" href="index?'.api_get_cidreq().$param_gradebook.'&action=calendar_delete&calendar_id='.intval($calendar['id']).'&attendance_id='.$attendance_id.'">'.Display::return_icon('delete.gif', get_lang('Delete'), array('style'=>'vertical-align:middle')).'</a>';
+					echo '<a href="index.php?'.api_get_cidreq().'&action=calendar_edit&calendar_id='.intval($calendar['id']).'&attendance_id='.$attendance_id.$param_gradebook.'">'.Display::return_icon('edit.gif', get_lang('Edit'), array('style'=>'vertical-align:middle')).'</a>&nbsp;';
+					echo '<a onclick="javascript:if(!confirm(\''.get_lang('AreYouSureToDelete').'\')) return false;" href="index.php?'.api_get_cidreq().$param_gradebook.'&action=calendar_delete&calendar_id='.intval($calendar['id']).'&attendance_id='.$attendance_id.'">'.Display::return_icon('delete.gif', get_lang('Delete'), array('style'=>'vertical-align:middle')).'</a>';
 					echo '</span>';	
 				}	
 			echo '</div>';

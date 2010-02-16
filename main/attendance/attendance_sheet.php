@@ -13,7 +13,7 @@ if (api_is_allowed_to_edit(null, true)) {
 		$param_gradebook = '&gradebook='.$_SESSION['gradebook'];
 	}
 	echo '<div class="actions" style="margin-bottom:30px">';
-	echo '<a href="index?'.api_get_cidreq().'&action=calendar_list&attendance_id='.$attendance_id.$param_gradebook.'">'.Display::return_icon('calendar_up.gif',get_lang('AttendanceCalendar')).' '.get_lang('AttendanceCalendar').'</a>';	
+	echo '<a href="index.php?'.api_get_cidreq().'&action=calendar_list&attendance_id='.$attendance_id.$param_gradebook.'">'.Display::return_icon('calendar_up.gif',get_lang('AttendanceCalendar')).' '.get_lang('AttendanceCalendar').'</a>';	
 	echo '</div>';
 
 	$message_information = get_lang('informationAttendanceSheet');
@@ -27,7 +27,7 @@ if (api_is_allowed_to_edit(null, true)) {
 
 	if (count($users_in_course) > 0) { 
 	?>
-	<form method="post" action="index?action=attendance_sheet_add&<?php echo api_get_cidreq().$param_gradebook ?>&attendance_id=<?php echo $attendance_id?>" >
+	<form method="post" action="index.php?action=attendance_sheet_add&<?php echo api_get_cidreq().$param_gradebook ?>&attendance_id=<?php echo $attendance_id?>" >
 	<div class="attendance-sheet-content" style="width:100%;background-color:#E1E1E1;border:1px solid gray;margin-top:20px;">
 		
 		<div class="attendance-users-table" style="width:450px;float:left;">
@@ -85,7 +85,7 @@ if (api_is_allowed_to_edit(null, true)) {
 							<th height="60px" style="padding:5px;"><?php echo '<span style="font-size:10px;">'.$datetime.'<br /><input type="checkbox" name="datetime_column['.$calendar['id'].']" id="datetime_column_'.$calendar['id'].'" '.$checked_date.'/></span>' ?></th>
 					<?php }					
 					} else { ?>
-						<th height="60px" style="padding:5px;"><span><a href="index?<?php echo api_get_cidreq() ?>&action=calendar_list&attendance_id=<?php echo $attendance_id.$param_gradebook ?>">
+						<th height="60px" style="padding:5px;"><span><a href="index.php?<?php echo api_get_cidreq() ?>&action=calendar_list&attendance_id=<?php echo $attendance_id.$param_gradebook ?>">
 						<?php echo Display::return_icon('calendar_up.gif',get_lang('AttendanceCalendar')).' '.get_lang('GoToAttendanceCalendar') ?></a></span></th>
 					<?php } ?>
 				</tr>			

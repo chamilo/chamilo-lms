@@ -116,19 +116,29 @@ $param_gradebook = '';
 if (isset($_SESSION['gradebook'])) {
 	$param_gradebook = '&gradebook='.$gradebook;
 }
+
+$student_param = '';
+if (api_is_drh() && isset($_GET['student_id'])) {			
+	$student_id = intval($_GET['student_id']);
+	$student_param = '&student_id='.$student_id;
+	$student_info  = api_get_user_info($student_id);
+	$student_name  =  api_get_person_name($student_info['firstname'],$student_info['lastname']);
+	$interbreadcrumb[] = array ('url' => '/main/mySpace/myStudents.php?&student='.$student_id, 'name' => $student_name);	
+}
+
 if (!empty($gradebook)) {
 	$interbreadcrumb[] = array ('url' => '/main/gradebook/index.php', 'name' => get_lang('Gradebook'));	
 }
-$interbreadcrumb[] = array ('url' => 'index.php?action=attendance_list'.$param_gradebook, 'name' => get_lang('Attendance'));
+$interbreadcrumb[] = array ('url' => 'index.php?action=attendance_list'.$param_gradebook.$student_param, 'name' => get_lang('Attendance'));
 if($action == 'attendance_add') $interbreadcrumb[] = array ('url' => '#', 'name' => get_lang('CreateANewAttendance'));
 if($action == 'attendance_edit') $interbreadcrumb[] = array ('url' => '#', 'name' => get_lang('Edit'));
 if($action == 'attendance_sheet_list' || $action == 'attendance_sheet_add') $interbreadcrumb[] = array ('url' => '#', 'name' => $attendance_data['name']);
 if($action == 'calendar_list' || $action == 'calendar_edit' || $action == 'calendar_delete' || $action == 'calendar_all_delete') {
-	$interbreadcrumb[] = array ('url' => 'index?'.api_get_cidreq().'&action=attendance_sheet_list&attendance_id='.$attendance_id.$param_gradebook, 'name' => $attendance_data['name']);
+	$interbreadcrumb[] = array ('url' => 'index.php?'.api_get_cidreq().'&action=attendance_sheet_list&attendance_id='.$attendance_id.$param_gradebook, 'name' => $attendance_data['name']);
 	$interbreadcrumb[] = array ('url' => '#', 'name' => get_lang('AttendanceCalendar'));	
 }
 if($action == 'calendar_add') {
-	$interbreadcrumb[] = array ('url' => 'index?'.api_get_cidreq().'&action=attendance_sheet_list&attendance_id='.$attendance_id.$param_gradebook, 'name' => $attendance_data['name']);
+	$interbreadcrumb[] = array ('url' => 'index.php?'.api_get_cidreq().'&action=attendance_sheet_list&attendance_id='.$attendance_id.$param_gradebook, 'name' => $attendance_data['name']);
 	$interbreadcrumb[] = array ('url' => '#', 'name' => get_lang('AddDateAndTime'));	
 }
 
@@ -136,6 +146,8 @@ if($action == 'calendar_add') {
 if (isset($_POST['action']) && $_POST['action'] == 'attendance_delete_select') {
 	$attendance_controller->attendance_delete($_POST['id']);
 }
+
+
 
 // distpacher actions to controller
 switch ($action) {	
@@ -147,7 +159,7 @@ switch ($action) {
 										break;
 	case 'attendance_delete'		:	$attendance_controller->attendance_delete($attendance_id);
 										break;									
-	case 'attendance_sheet_list'	:	$attendance_controller->attendance_sheet($action, $attendance_id);
+	case 'attendance_sheet_list'	:	$attendance_controller->attendance_sheet($action, $attendance_id, $student_id);
 										break;
 	case 'attendance_sheet_add' 	:	$attendance_controller->attendance_sheet($action, $attendance_id);
 										break;	

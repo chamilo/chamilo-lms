@@ -83,12 +83,13 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
 	if (empty ($dbScormForm) || $dbScormForm == 'mysql' || $dbScormForm == $dbPrefixForm) {
 		$dbScormForm = $dbPrefixForm.'scorm';
 	}
-	$res = @mysql_connect($dbHostForm, $dbUsernameForm, $dbPassForm);
+
+	$res = @Database::connect(array('server' => $dbHostForm, 'username' => $dbUsernameForm, 'password' => $dbPassForm));
 
 	//if error on connection to the database, show error and exit
 	if ($res === false) {
-		//$no = mysql_errno();
-		//$msg = mysql_error();
+		//$no = Database::errno();
+		//$msg = Database::error();
 
 		//echo '<hr />['.$no.'] - '.$msg.'<hr />';
 		echo					get_lang('DBServerDoesntWorkOrLoginPassIsWrong').'.<br /><br />' .
@@ -102,13 +103,10 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
 		exit ();
 	}
 
-	@mysql_query("set session sql_mode='';"); // Disabling special SQL modes (MySQL 5)
+	@Database::query("set session sql_mode='';"); // Disabling special SQL modes (MySQL 5)
 
-	$dblistres = mysql_list_dbs();
-	$dblist = array();
-	while ($row = mysql_fetch_object($dblistres)) {
-    	$dblist[] = $row->Database;
-	}
+	$dblist = Database::get_databases();
+
 	/*
 	-----------------------------------------------------------
 		Normal upgrade procedure:
@@ -149,12 +147,12 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
 			} elseif (!in_array($dbNameForm, $dblist)) {
 				error_log('Database '.$dbNameForm.' was not found, skipping', 0);
 			} else {
-				mysql_select_db($dbNameForm);
+				Database::select_db($dbNameForm);
 				foreach ($m_q_list as $query) {
 					if ($only_test) {
-						error_log("mysql_query($dbNameForm, $query)", 0);
+						error_log("Database::query($dbNameForm, $query)", 0);
 					} else {
-						$res = mysql_query($query);
+						$res = Database::query($query);
 						if ($log) {
 							error_log("In $dbNameForm, executed: $query", 0);
 						}
@@ -177,12 +175,12 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
 			} elseif (!in_array($dbStatsForm, $dblist)) {
 				error_log('Database '.$dbStatsForm.' was not found, skipping', 0);
 			} else {
-				mysql_select_db($dbStatsForm);
+				Database::select_db($dbStatsForm);
 				foreach ($s_q_list as $query) {
 					if ($only_test) {
-						error_log("mysql_query($dbStatsForm,$query)", 0);
+						error_log("Database::query($dbStatsForm,$query)", 0);
 					} else {
-						$res = mysql_query($query);
+						$res = Database::query($query);
 						if ($log) {
 							error_log("In $dbStatsForm, executed: $query", 0);
 						}
@@ -203,13 +201,13 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
 			} elseif (!in_array($dbUserForm, $dblist)){
 				error_log('Database '.$dbUserForm.' was not found, skipping', 0);
 			} else {
-				mysql_select_db($dbUserForm);
+				Database::select_db($dbUserForm);
 				foreach ($u_q_list as $query) {
 					if ($only_test) {
-						error_log("mysql_query($dbUserForm,$query)", 0);
+						error_log("Database::query($dbUserForm,$query)", 0);
 						error_log("In $dbUserForm, executed: $query", 0);
 					} else {
-						$res = mysql_query($query);
+						$res = Database::query($query);
 					}
 				}
 			}
@@ -243,14 +241,14 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
 		} elseif (!in_array($dbNameForm, $dblist)) {
 			error_log('Database '.$dbNameForm.' was not found, skipping', 0);
 		} else {
-			mysql_select_db($dbNameForm);
-			$res = mysql_query("SELECT code,db_name,directory,course_language FROM course WHERE target_course_code IS NULL");
+			Database::select_db($dbNameForm);
+			$res = Database::query("SELECT code,db_name,directory,course_language FROM course WHERE target_course_code IS NULL");
 			if ($res === false) { die('Error while querying the courses list in update_db-1.8.3-1.8.4.inc.php'); }
-			if (mysql_num_rows($res) > 0) {
+			if (Database::num_rows($res) > 0) {
 				$i = 0;
                 $list = array();
-				//while( ($i < MAX_COURSE_TRANSFER) && ($row = mysql_fetch_array($res)))
-				while ($row = mysql_fetch_array($res)) {
+				//while( ($i < MAX_COURSE_TRANSFER) && ($row = Database::fetch_array($res)))
+				while ($row = Database::fetch_array($res)) {
 					$list[] = $row;
 					$i++;
 				}
@@ -261,7 +259,7 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
 					 * without a database name
 					 */
 					if (!$singleDbForm) { //otherwise just use the main one
-						mysql_select_db($row_course['db_name']);
+						Database::select_db($row_course['db_name']);
 					}
 
 					foreach ($c_q_list as $query) {
@@ -270,9 +268,9 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
 						}
 
 						if ($only_test) {
-							error_log("mysql_query(".$row_course['db_name'].",$query)", 0);
+							error_log("Database::query(".$row_course['db_name'].",$query)", 0);
 						} else {
-							$res = mysql_query($query);
+							$res = Database::query($query);
 							if ($log) {
 								error_log("In ".$row_course['db_name'].", executed: $query", 0);
 							}
@@ -285,15 +283,15 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
 					}
 
 					$sql_ip = "SELECT * FROM ".$prefix_course."item_property WHERE tool='learnpath'";
-					$res_ip = mysql_query($sql_ip);
+					$res_ip = Database::query($sql_ip);
 					$paths = array();
-					while ($row_ip = mysql_fetch_array($res_ip)) {
+					while ($row_ip = Database::fetch_array($res_ip)) {
 						$paths[] = $row_ip['ref'];
 					}
 					$sql_lp = "SELECT * FROM ".$prefix_course."lp";
-					$res_lp = mysql_query($sql_lp);
+					$res_lp = Database::query($sql_lp);
 	    			$tbl_tool = $prefix_course."tool";
-					while ($row_lp = mysql_fetch_array($res_lp)) {
+					while ($row_lp = Database::fetch_array($res_lp)) {
 						$time = date("Y-m-d H:i:s", time());
 						$vis = 'v';
 						$input = stripslashes($row_lp['name']);
@@ -306,20 +304,20 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
 							//the path is already in item_property, check the visibility is the
 							//same as the homepage tool's
 							$res2 = Database::query($sql2);
-							if (mysql_num_rows($res2) > 0) {
-								$row2 = mysql_fetch_array($res2);
+							if (Database::num_rows($res2) > 0) {
+								$row2 = Database::fetch_array($res2);
 								$vis = $row2['visibility'];
 							}
 							$visi = array('v' => 1, 'i' => 0);
 							if ($visi[$vis] != $row_ip['visibility']) {
 								$sql_upd = "UPDATE ".$prefix_course."item_propery SET visibility=".$visi[$vis]." WHERE tool='learnpath' AND ref='".$row_lp['id']."'";
-								$res_upd = mysql_query($sql_upd);
+								$res_upd = Database::query($sql_upd);
 							}
 						} else {
 							//the path is not in item_property, insert it
 							$res2 = Database::query($sql2);
-							if (mysql_num_rows($res2) > 0) {
-								$row2 = mysql_fetch_array($res2);
+							if (Database::num_rows($res2) > 0) {
+								$row2 = Database::fetch_array($res2);
 								$vis = $row2['visibility'];
 							}
 							$visi = array('v' => 1, 'i' => 0);
@@ -328,7 +326,7 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
 									"(tool,ref,insert_date,last_edit_date,insert_user_id,lastedit_type,lastedit_user_id,visibility)" .
 									"VALUES" .
 									"('learnpath',".$row_lp['id'].",'$time','$time',1,'learnpathAdded',1,".$visi[$vis].")";
-							$res_ins = mysql_query($sql_ins);
+							$res_ins = Database::query($sql_ins);
 						}
 					}
 				}

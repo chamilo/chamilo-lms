@@ -52,14 +52,14 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
 
 	//$old_umask = umask(0); // This function is not thread-safe.
 
-	$link = mysql_connect($dbHostForm, $dbUsernameForm, $dbPassForm);
-	mysql_select_db($dbNameForm, $link);
+	$link = Database::connect(array('server' => $dbHostForm, 'username' => $dbUsernameForm, 'password' => $dbPassForm));
+	Database::select_db($dbNameForm, $link);
 	$db_name = $dbNameForm;
 	$sql = "SELECT * FROM $db_name.course";
 	error_log('Getting courses for files updates: '.$sql, 0);
-	$result = mysql_query($sql);
+	$result = Database::query($sql);
 
-	while ($courses_directories = mysql_fetch_array($result)) {
+	while ($courses_directories = Database::fetch_array($result)) {
 		$currentCourseRepositorySys = $sys_course_path.$courses_directories['directory'].'/';
 		//upload > announcements
 		if (!is_dir($currentCourseRepositorySys."upload/announcements")){

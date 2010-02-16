@@ -65,12 +65,13 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
 	if (empty ($dbScormForm) || $dbScormForm == 'mysql' || $dbScormForm == $dbPrefixForm) {
 		$dbScormForm = $dbPrefixForm.'scorm';
 	}
-	$res = @mysql_connect($dbHostForm, $dbUsernameForm, $dbPassForm);
+
+	$res = @Database::connect(array('server' => $dbHostForm, 'username' => $dbUsernameForm, 'password' => $dbPassForm));
 
 	//if error on connection to the database, show error and exit
 	if ($res === false) {
-		//$no = mysql_errno();
-		//$msg = mysql_error();
+		//$no = Database::errno();
+		//$msg = Database::error();
 
 		//echo '<hr />['.$no.'] - '.$msg.'<hr />';
 		echo					get_lang('DBServerDoesntWorkOrLoginPassIsWrong').'.<br /><br />' .
@@ -84,13 +85,10 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
 		exit ();
 	}
 
-	@mysql_query("set session sql_mode='';"); // Disabling special SQL modes (MySQL 5)
+	@Database::query("set session sql_mode='';"); // Disabling special SQL modes (MySQL 5)
 
-	$dblistres = mysql_list_dbs();
-	$dblist = array();
-	while ($row = mysql_fetch_object($dblistres)) {
-    	$dblist[] = $row->Database;
-	}
+	$dblist = Database::get_databases();
+
 	/*
 	-----------------------------------------------------------
 		Normal upgrade procedure:
@@ -131,12 +129,12 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
 			} elseif (!in_array($dbNameForm, $dblist)) {
 				error_log('Database '.$dbNameForm.' was not found, skipping', 0);
 			} else {
-				mysql_select_db($dbNameForm);
+				Database::select_db($dbNameForm);
 				foreach ($m_q_list as $query) {
 					if ($only_test) {
-						error_log("mysql_query($dbNameForm,$query)", 0);
+						error_log("Database::query($dbNameForm,$query)", 0);
 					} else {
-						$res = mysql_query($query);
+						$res = Database::query($query);
 						if ($log) {
 							error_log("In $dbNameForm, executed: $query", 0);
 						}
@@ -159,12 +157,12 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
 			} elseif (!in_array($dbStatsForm, $dblist)) {
 				error_log('Database '.$dbStatsForm.' was not found, skipping', 0);
 			} else {
-				mysql_select_db($dbStatsForm);
+				Database::select_db($dbStatsForm);
 				foreach ($s_q_list as $query) {
 					if ($only_test) {
-						error_log("mysql_query($dbStatsForm,$query)", 0);
+						error_log("Database::query($dbStatsForm,$query)", 0);
 					} else {
-						$res = mysql_query($query);
+						$res = Database::query($query);
 						if ($log) {
 							error_log("In $dbStatsForm, executed: $query", 0);
 						}
@@ -185,13 +183,13 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
 			} elseif (!in_array($dbUserForm, $dblist)) {
 				error_log('Database '.$dbUserForm.' was not found, skipping', 0);
 			} else {
-				mysql_select_db($dbUserForm);
+				Database::select_db($dbUserForm);
 				foreach($u_q_list as $query){
 					if ($only_test) {
-						error_log("mysql_query($dbUserForm,$query)", 0);
+						error_log("Database::query($dbUserForm,$query)", 0);
 						error_log("In $dbUserForm, executed: $query", 0);
 					} else {
-						$res = mysql_query($query);
+						$res = Database::query($query);
 					}
 				}
 			}
@@ -227,16 +225,16 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
 		} elseif (!in_array($dbNameForm, $dblist)) {
 			error_log('Database '.$dbNameForm.' was not found, skipping', 0);
 		} else {
-			mysql_select_db($dbNameForm);
-			$res = mysql_query("SELECT code,db_name,directory,course_language FROM course WHERE target_course_code IS NULL ORDER BY code");
+			Database::select_db($dbNameForm);
+			$res = Database::query("SELECT code,db_name,directory,course_language FROM course WHERE target_course_code IS NULL ORDER BY code");
 
 			if ($res === false) { die('Error while querying the courses list in update_db-1.8.4-1.8.5.inc.php'); }
 
-			if (mysql_num_rows($res) > 0) {
+			if (Database::num_rows($res) > 0) {
 				$i = 0;
                 $list = array();
-				//while( ($i < MAX_COURSE_TRANSFER) && ($row = mysql_fetch_array($res)))
-				while($row = mysql_fetch_array($res)) {
+				//while( ($i < MAX_COURSE_TRANSFER) && ($row = Database::fetch_array($res)))
+				while($row = Database::fetch_array($res)) {
 					$list[] = $row;
 					$i++;
 				}
@@ -247,7 +245,7 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
 					 * without a database name
 					 */
 					if (!$singleDbForm) { //otherwise just use the main one
-						mysql_select_db($row_course['db_name']);
+						Database::select_db($row_course['db_name']);
 					}
 
 					foreach ($c_q_list as $query) {
@@ -256,9 +254,9 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
 						}
 
 						if ($only_test) {
-							error_log("mysql_query(".$row_course['db_name'].",$query)", 0);
+							error_log("Database::query(".$row_course['db_name'].",$query)", 0);
 						} else {
-							$res = mysql_query($query);
+							$res = Database::query($query);
 							if ($log) {
 								error_log("In ".$row_course['db_name'].", executed: $query", 0);
 							}
@@ -272,17 +270,17 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
 					}
 
 					$mysql = "SELECT * FROM $mytable WHERE min_score != 0 AND prerequisite != ''";
-					$myres = mysql_query($query);
+					$myres = Database::query($query);
 
-					if ($myres!==false && mysql_num_rows($myres) > 0) {
-						while ($myrow = mysql_fetch_array($myres)) {
+					if ($myres!==false && Database::num_rows($myres) > 0) {
+						while ($myrow = Database::fetch_array($myres)) {
 							if (is_numeric($myrow['prerequisite'])) {
 								$mysql2 = "UPDATE $mytable SET mastery_score = '".$myrow['min_score']."' WHERE id = '".$myrow['prerequisite']."'";
-								$myres2 = mysql_query($mysql2);
+								$myres2 = Database::query($mysql2);
 								//echo $mysql2."<br />";
 								if ($myres2 !== false) {
 									$mysql3 = "UPDATE $mytable SET min_score = 0 WHERE id = '".$myrow['id']."'";
-									$myres3 = mysql_query($mysql3);
+									$myres3 = Database::query($mysql3);
 									//echo $mysql3."<br />";
 								}
 							}
@@ -305,8 +303,8 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
 					$only_dir = array();
 
 					$sql_select = "SELECT filetype FROM " . $my_course_table . " WHERE  filetype = 'folder'";
-					$result = mysql_query($sql_select);
-					$num_row = mysql_num_rows($result);
+					$result = Database::query($sql_select);
+					$num_row = Database::num_rows($result);
 
 					// check if there are already folder registered
 					if ($num_row == 0) {
@@ -324,7 +322,7 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
 											filetype	= 'folder',
 											post_group_id 	= '0',
 											sent_date	= '0000-00-00 00:00:00' ";
-							mysql_query($sql_insert_all);
+							Database::query($sql_insert_all);
 						}
 					}
 

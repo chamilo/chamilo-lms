@@ -1106,18 +1106,17 @@ function display_after_install_message($installType, $nbr_courses) {
 function test_db_connect($dbHostForm, $dbUsernameForm, $dbPassForm, $singleDbForm, $dbPrefixForm) {
 	$dbConnect = -1;
 	if ($singleDbForm == 1) {
-		if(@mysql_connect($dbHostForm, $dbUsernameForm, $dbPassForm) !== false) {
+		if (@Database::connect(array('server' => $dbHostForm, 'username' => $dbUsernameForm, 'password' => $dbPassForm)) !== false) {
 			$dbConnect = 1;
 		} else {
 			$dbConnect = -1;
 		}
 	} elseif ($singleDbForm == 0) {
-		$res = @mysql_connect($dbHostForm, $dbUsernameForm, $dbPassForm);
-		if ($res !== false) {
-			@mysql_query("set session sql_mode='';"); // Disabling special SQL modes (MySQL 5)
-			$multipleDbCheck = @mysql_query("CREATE DATABASE ".$dbPrefixForm."test_chamilo_connection");
+		if (@Database::connect(array('server' => $dbHostForm, 'username' => $dbUsernameForm, 'password' => $dbPassForm)) !== false) {
+			@Database::query("set session sql_mode='';"); // Disabling special SQL modes (MySQL 5)
+			$multipleDbCheck = @Database::query("CREATE DATABASE ".$dbPrefixForm."test_chamilo_connection");
 			if ($multipleDbCheck !== false) {
-				$multipleDbCheck = @mysql_query("DROP DATABASE IF EXISTS ".$dbPrefixForm."test_chamilo_connection");
+				$multipleDbCheck = @Database::query("DROP DATABASE IF EXISTS ".$dbPrefixForm."test_chamilo_connection");
 				if ($multipleDbCheck !== false) {
 					$dbConnect = 1;
 				} else {

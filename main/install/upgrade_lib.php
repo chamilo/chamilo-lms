@@ -60,9 +60,9 @@ function upgrade_16x_to_180($values) {
 	//Get the list of queries to upgrade the main database
 	$main_query_list = get_sql_file_contents('migrate-db-1.6.x-1.8.0-pre.sql', 'main');
 	if (count($main_query_list) > 0) {
-		mysql_select_db($main_database);
+		Database::select_db($main_database);
 		foreach ($main_query_list as $this_query) {
-			mysql_query($this_query);
+			Database::query($this_query);
 		}
 	}
 
@@ -70,9 +70,9 @@ function upgrade_16x_to_180($values) {
 	//Get the list of queries to upgrade the statistics/tracking database
 	$tracking_query_list = get_sql_file_contents('migrate-db-1.6.x-1.8.0-pre.sql', 'stats');
 	if (count($tracking_query_list) > 0) {
-		mysql_select_db($tracking_database);
+		Database::select_db($tracking_database);
 		foreach ($tracking_query_list as $this_query) {
-			mysql_query($this_query);
+			Database::query($this_query);
 		}
 	}
 
@@ -80,9 +80,9 @@ function upgrade_16x_to_180($values) {
 	//Get the list of queries to upgrade the user database
 	$user_query_list = get_sql_file_contents('migrate-db-1.6.x-1.8.0-pre.sql', 'user');
 	if (count($user_query_list) > 0) {
-		mysql_select_db($user_database);
+		Database::select_db($user_database);
 		foreach ($user_query_list as $this_query) {
-			mysql_query($this_query);
+			Database::query($this_query);
 		}
 	}
 
@@ -113,26 +113,26 @@ function upgrade_16x_to_180($values) {
 	*/
 	$main_query_list = get_sql_file_contents('migrate-db-1.6.x-1.8.0-post.sql', 'main');
 	if (count($main_query_list) > 0) {
-		mysql_select_db($main_database);
+		Database::select_db($main_database);
 		foreach ($main_query_list as $this_query) {
-			mysql_query($this_query);
+			Database::query($this_query);
 		}
 	}
 
 	$tracking_query_list = get_sql_file_contents('migrate-db-1.6.x-1.8.0-post.sql', 'stats');
 	$tracking_query_list = get_sql_file_contents('migrate-db-1.6.x-1.8.0-pre.sql', 'stats');
 	if (count($tracking_query_list) > 0) {
-		mysql_select_db($tracking_database);
+		Database::select_db($tracking_database);
 		foreach ($tracking_query_list as $this_query) {
-			mysql_query($this_query);
+			Database::query($this_query);
 		}
 	}
 
 	$user_query_list = get_sql_file_contents('migrate-db-1.6.x-1.8.0-post.sql', 'user');
 	if (count($user_query_list) > 0) {
-		mysql_select_db($user_database);
+		Database::select_db($user_database);
 		foreach ($user_query_list as $this_query) {
-			mysql_query($this_query);
+			Database::query($this_query);
 		}
 	}
 
@@ -144,21 +144,21 @@ function upgrade_16x_to_180($values) {
 	$course_query_list = get_sql_file_contents('migrate-db-1.6.x-1.8.0-pre.sql', 'course');
 	if (count($course_query_list) > 0) {
 		//upgrade course databases
-		mysql_select_db($main_database);
-		$sql_result = mysql_query("SELECT code,db_name,directory,course_language FROM course WHERE target_course_code IS NULL");
-		if (mysql_num_rows($sql_result) > 0) {
-			while ($row = mysql_fetch_array($sql_result)) {
+		Database::select_db($main_database);
+		$sql_result = Database::query("SELECT code,db_name,directory,course_language FROM course WHERE target_course_code IS NULL");
+		if (Database::num_rows($sql_result) > 0) {
+			while ($row = Database::fetch_array($sql_result)) {
 				$course_list[] = $row;
 			}
 			//for each course in the course list...
 			foreach ($course_list as $this_course) {
-				mysql_select_db($this_course['db_name']);
+				Database::select_db($this_course['db_name']);
 				//... execute the list of course update queries
 				foreach ($course_query_list as $this_query) {
 					if ($is_single_database) { //otherwise just use the main one
 						$query = preg_replace('/^(UPDATE|ALTER TABLE|CREATE TABLE|DROP TABLE|INSERT INTO|DELETE FROM)\s+(\w*)(.*)$/', "$1 $prefix$2$3", $query);
 					}
-					mysql_query($this_query);
+					Database::query($this_query);
 				}
 			}
 		}

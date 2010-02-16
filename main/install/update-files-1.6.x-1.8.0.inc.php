@@ -71,17 +71,17 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
 
 	$sys_course_path = $pathForm.'courses/';
 	//$tbl_course = Database :: get_main_table(TABLE_MAIN_COURSE);
-	mysql_select_db($dbNameForm);
+	Database::select_db($dbNameForm);
 	$db_name = $dbNameForm;
 	$sql = "SELECT * FROM course";
 	error_log('Getting courses for files updates: '.$sql, 0);
-	$result = mysql_query($sql);
+	$result = Database::query($sql);
 
 	$perm = api_get_permissions_for_new_directories();
 
 	//$old_umask = umask(0); // This function is not thread-safe.
 
-	while ($courses_directories = mysql_fetch_array($result)) {
+	while ($courses_directories = Database::fetch_array($result)) {
 
 		$currentCourseRepositorySys = $sys_course_path.$courses_directories["directory"]."/";
 		$db_name = $courses_directories["db_name"];

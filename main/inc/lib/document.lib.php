@@ -540,7 +540,7 @@ class DocumentManager {
 		if ($result && Database::num_rows($result) != 0)
 		{
 			while ($row = Database::fetch_array($result,'ASSOC'))
-				//while ($row = Database::fetch_array($result,MYSQL_NUM))
+				//while ($row = Database::fetch_array($result, 'NUM'))
 			{
 
 				if($row['filetype']=='file' && pathinfo($row['path'],PATHINFO_EXTENSION)=='html'){

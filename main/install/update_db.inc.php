@@ -81,13 +81,14 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE'))
 	{
 		$dbScormForm = $dbPrefixForm.'scorm';
 	}
-	@mysql_connect($dbHostForm, $dbUsernameForm, $dbPassForm);
+
+	@Database::connect(array('server' => $dbHostForm, 'username' => $dbUsernameForm, 'password' => $dbPassForm));
 
 	//if error on connection to the database, show error and exit
-	if (mysql_errno() > 0)
+	if (Database::errno() > 0)
 	{
-		$no = mysql_errno();
-		$msg = mysql_error();
+		$no = Database::errno();
+		$msg = Database::error();
 
 		echo '<hr />['.$no.'] - '.$msg.'<hr />
 								'.get_lang('DBServerDoesntWorkOrLoginPassIsWrong').'.<br /><br />
@@ -102,7 +103,7 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE'))
 		exit ();
 	}
 
-	@mysql_query("set session sql_mode='';"); // Disabling special SQL modes (MySQL 5)
+	@Database::query("set session sql_mode='';"); // Disabling special SQL modes (MySQL 5)
 
 	/*
 	-----------------------------------------------------------
@@ -136,19 +137,19 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE'))
 			 * We connect to the right DB first to make sure we can use the queries
 			 * without a database name
 			 */
-			mysql_select_db($dbNameForm);
+			Database::select_db($dbNameForm);
 			foreach($m_q_list as $query){
 				if($only_test){
-					echo "mysql_query($dbNameForm,$query)<br />";
+					echo "Database::query($dbNameForm,$query)<br />";
 				}else{
-					$res = mysql_query($query);
+					$res = Database::query($query);
 				}
 			}
 		}
 		//manual updates in here
 		//update all registration_date, expiration_date and active fields
 		//$sql_upd = "UPDATE user SET registration_date=NOW()";
-		//$res_upd = mysql_query($sql_upd);
+		//$res_upd = Database::query($sql_upd);
 		//end of manual updates
 
 		//get the stats queries list (s_q_list)
@@ -160,12 +161,12 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE'))
 			 * We connect to the right DB first to make sure we can use the queries
 			 * without a database name
 			 */
-			mysql_select_db($dbStatsForm);
+			Database::select_db($dbStatsForm);
 			foreach($s_q_list as $query){
 				if($only_test){
-					echo "mysql_query($dbStatsForm,$query)<br />";
+					echo "Database::query($dbStatsForm,$query)<br />";
 				}else{
-					$res = mysql_query($query);
+					$res = Database::query($query);
 				}
 			}
 		}
@@ -178,12 +179,12 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE'))
 			 * We connect to the right DB first to make sure we can use the queries
 			 * without a database name
 			 */
-			mysql_select_db($dbUserForm);
+			Database::select_db($dbUserForm);
 			foreach($u_q_list as $query){
 				if($only_test){
-					echo "mysql_query($dbUserForm,$query)<br />";
+					echo "Database::query($dbUserForm,$query)<br />";
 				}else{
-					$res = mysql_query($query);
+					$res = Database::query($query);
 				}
 			}
 		}
@@ -205,13 +206,13 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE'))
 		$installation_settings['allow_teacher_self_registration'] = $allowSelfRegProf;
 		$installation_settings['admin_phone_form'] = $adminPhoneForm;
 
-		//mysql_query("INSERT INTO `$dbNameForm`.`course_module` (`name`,`link`,`image`,`row`,`column`,`position`) VALUES
+		//Database::query("INSERT INTO `$dbNameForm`.`course_module` (`name`,`link`,`image`,`row`,`column`,`position`) VALUES
 		//								('AddedLearnpath', NULL, 'scormbuilder.gif', 0, 0, 'external'),
 		//								('".TOOL_BACKUP."', 'coursecopy/backup.php' , 'backup.gif', 2, 1, 'courseadmin'),
 		//								('".TOOL_COPY_COURSE_CONTENT."', 'coursecopy/copy_course.php' , 'copy.gif', 2, 2, 'courseadmin'),
 		//								('".TOOL_RECYCLE_COURSE."', 'coursecopy/recycle_course.php' , 'recycle.gif', 2, 3, 'courseadmin')");
 		//...
-		//mysql_query("UPDATE `$dbNameForm`.`course_module` SET name='".TOOL_LEARNPATH."' WHERE link LIKE 'scorm/%'");
+		//Database::query("UPDATE `$dbNameForm`.`course_module` SET name='".TOOL_LEARNPATH."' WHERE link LIKE 'scorm/%'");
 		*/
 	}
 
@@ -233,12 +234,12 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE'))
 	if(count($c_q_list)>0)
 	{
 		//get the courses list
-		mysql_select_db($dbNameForm);
-		$res = mysql_query("SELECT code,db_name,directory,course_language FROM course WHERE target_course_code IS NULL");
+		Database::select_db($dbNameForm);
+		$res = Database::query("SELECT code,db_name,directory,course_language FROM course WHERE target_course_code IS NULL");
 		if($res===false){die('Error while querying the courses list in update_db.inc.php');}
-		if(mysql_num_rows($res)>0)
+		if(Database::num_rows($res)>0)
 		{
-			while($row = mysql_fetch_array($res))
+			while($row = Database::fetch_array($res))
 			{
 				$list[] = $row;
 			}
@@ -249,14 +250,14 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE'))
 				 * We connect to the right DB first to make sure we can use the queries
 				 * without a database name
 				 */
-				mysql_select_db($row['db_name']);
+				Database::select_db($row['db_name']);
 				foreach($c_q_list as $query)
 				{
 					if($only_test)
 					{
-						echo "mysql_query(".$row['db_name'].",$query)<br />";
+						echo "Database::query(".$row['db_name'].",$query)<br />";
 					}else{
-						$res = mysql_query($query);
+						$res = Database::query($query);
 					}
 				}
 				//update course manually
@@ -267,17 +268,17 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE'))
 				//update forum tables (migrate from bb_ tables to forum_ tables)
 				//migrate categories
 				$sql_orig = "SELECT * FROM bb_categories";
-				$res_orig = mysql_query($sql_orig);
-				while($row = mysql_fetch_array($res_orig)){
+				$res_orig = Database::query($sql_orig);
+				while($row = Database::fetch_array($res_orig)){
 					$sql = "INSERT INTO forum_category " .
 							"(cat_id,cat_title,cat_comment,cat_order,locked) VALUES " .
 							"('".$row['cat_id']."','".$row['cat_title']."','','".$row['cat_order']."',0)";
-					$res = mysql_query($sql);
+					$res = Database::query($sql);
 				}
 				$sql_orig = "SELECT * FROM bb_forums ORDER BY forum_last_post_id desc";
-				$res_orig = mysql_query($sql_orig);
+				$res_orig = Database::query($sql_orig);
 				$order = 1;
-				while($row = mysql_fetch_array($res_orig)){
+				while($row = Database::fetch_array($res_orig)){
 					$sql = "INSERT INTO forum_forum " .
 							"(forum_id,forum_category,allow_edit,forum_comment," .
 							"forum_title," .
@@ -289,12 +290,12 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE'))
 							"'".$row['forum_last_post_id']."','".$row['forum_topics']."'," .
 							"0,'".$row['forum_posts']."'," .
 							"1,$order)";
-					$res = mysql_query($sql);
+					$res = Database::query($sql);
 					$order++;
 				}
 				$sql_orig = "SELECT * FROM bb_topics";
-				$res_orig = mysql_query($sql_orig);
-				while($row = mysql_fetch_array($res_orig)){
+				$res_orig = Database::query($sql_orig);
+				while($row = Database::fetch_array($res_orig)){
 					//convert time from varchar to datetime
 					$time = $row['topic_time'];
 					$name = $row['prenom']." ".$row['nom'];
@@ -307,11 +308,11 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE'))
 							"0,'".$row['topic_replies']."',0,'".$row['topic_title']."'," .
 							"'$name','$time','".$row['topic_last_post_id']."'," .
 							"'".$row['topic_views']."')";
-					$res = mysql_query($sql);
+					$res = Database::query($sql);
 				}
 				$sql_orig = "SELECT * FROM bb_posts, bb_posts_text WHERE bb_posts.post_id = bb_posts_text.post_id";
-				$res_orig = mysql_query($sql_orig);
-				while($row = mysql_fetch_array($res_orig)){
+				$res_orig = Database::query($sql_orig);
+				while($row = Database::fetch_array($res_orig)){
 					//convert time from varchar to datetime
 					$time = $row['post_time'];
 					$name = $row['prenom']." ".$row['nom'];
@@ -324,7 +325,7 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE'))
 							"'".$row['poster_id']."','".$row['parent_id']."',1," .
 							"'".$row['post_title']."','$name', '".$row['post_text']."'," .
 							"'$time',0)";
-					$res = mysql_query($sql);
+					$res = Database::query($sql);
 				}
 			}
 		}
@@ -336,21 +337,21 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE'))
 	$courseDB = array ();
 	$nbr_courses = 0;
 
-	if ($result = mysql_query("SELECT code,db_name,directory,course_language FROM `$dbNameForm`.`course` WHERE target_course_code IS NULL"))
+	if ($result = Database::query("SELECT code,db_name,directory,course_language FROM `$dbNameForm`.`course` WHERE target_course_code IS NULL"))
 	{
 		$i = 0;
 
-		$nbr_courses = mysql_num_rows($result);
+		$nbr_courses = Database::num_rows($result);
 
-		while ($i < MAX_COURSE_TRANSFER && (list ($course_code, $mysql_base_course, $directory, $languageCourse) = mysql_fetch_row($result)))
+		while ($i < MAX_COURSE_TRANSFER && (list ($course_code, $db_base_course, $directory, $languageCourse) = Database::fetch_row($result)))
 		{
 			if (!file_exists($newPath.'courses/'.$directory))
 			{
 				if ($singleDbForm)
 				{
-					$prefix = $_configuration['table_prefix'].$mysql_base_course.$_configuration['db_glue'];
+					$prefix = $_configuration['table_prefix'].$db_base_course.$_configuration['db_glue'];
 
-					$mysql_base_course = $dbNameForm.'`.`'.$_configuration['table_prefix'].$mysql_base_course;
+					$db_base_course = $dbNameForm.'`.`'.$_configuration['table_prefix'].$db_base_course;
 				}
 				else
 				{
@@ -358,7 +359,7 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE'))
 				}
 
 				$coursePath[$course_code] = $directory;
-				$courseDB[$course_code] = $mysql_base_course;
+				$courseDB[$course_code] = $db_base_course;
 
 				include ("../lang/english/create_course.inc.php");
 
@@ -372,11 +373,11 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE'))
 
 				// Set item-properties of dropbox files
 				/*
-				$sql = "SELECT * FROM `$mysql_base_course".$_configuration['db_glue']."dropbox_file` f, `".$_configuration['db_glue']."_base_course".$_configuration['db_glue']."dropbox_post` p WHERE f.id = p.file_id";
-				$res = mysql_query($sql);
-				while ($obj = mysql_fetch_object($res))
+				$sql = "SELECT * FROM `$db_base_course".$_configuration['db_glue']."dropbox_file` f, `".$_configuration['db_glue']."_base_course".$_configuration['db_glue']."dropbox_post` p WHERE f.id = p.file_id";
+				$res = Database::query($sql);
+				while ($obj = Database::fetch_object($res))
 				{
-					$sql = "INSERT INTO `$mysql_base_course".$_configuration['db_glue']."item_property` SET ";
+					$sql = "INSERT INTO `$db_base_course".$_configuration['db_glue']."item_property` SET ";
 					$sql .= " tool = '".TOOL_DROPBOX."', ";
 					$sql .= " insert_date = '".$obj->upload_date."', ";
 					$sql .= " lastedit_date = '".$obj->last_upload_date."', ";
@@ -385,7 +386,7 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE'))
 					$sql .= " to_group_id = '0', ";
 					$sql .= " to_user_id = '".$obj->dest_user_id."', ";
 					$sql .= " insert_user_id = '".$obj->uploader_id."'";
-					mysql_query($sql);
+					Database::query($sql);
 				}
 				*/
 
@@ -422,14 +423,14 @@ function store_forumcategory($values)
 	global $_user;
 
 	// find the max cat_order. The new forum category is added at the end => max cat_order + &
-	$sql="SELECT MAX(cat_order) as sort_max FROM ".mysql_real_escape_string($table_categories);
+	$sql="SELECT MAX(cat_order) as sort_max FROM ".Database::escape_string($table_categories);
 	$result=Database::query($sql);
-	$row=mysql_fetch_array($result);
+	$row=Database::fetch_array($result);
 	$new_max=$row['sort_max']+1;
 
-	$sql="INSERT INTO ".$table_categories." (cat_title, cat_comment, cat_order) VALUES ('".mysql_real_escape_string($values['forum_category_title'])."','".mysql_real_escape_string($values['forum_category_comment'])."','".mysql_real_escape_string($new_max)."')";
+	$sql="INSERT INTO ".$table_categories." (cat_title, cat_comment, cat_order) VALUES ('".Database::real_escape_string($values['forum_category_title'])."','".Database::escape_string($values['forum_category_comment'])."','".Database::escape_string($new_max)."')";
 	Database::query($sql);
-	$last_id=mysql_insert_id();
+	$last_id=Database::insert_id();
 	api_item_property_update($_course, TOOL_FORUM_CATEGORY, $last_id,"ForumCategoryAdded", $_user['user_id']);
 	return array('id'=>$last_id,'title'=>$values['forum_category_title']) ;
 }
@@ -446,28 +447,28 @@ function store_forum($values)
 	global $_user;
 
 	// find the max forum_order for the given category. The new forum is added at the end => max cat_order + &
-	$sql="SELECT MAX(forum_order) as sort_max FROM ".$table_forums." WHERE forum_category=".mysql_real_escape_string($values['forum_category']);
+	$sql="SELECT MAX(forum_order) as sort_max FROM ".$table_forums." WHERE forum_category=".Database::escape_string($values['forum_category']);
 	$result=Database::query($sql);
-	$row=mysql_fetch_array($result);
+	$row=Database::fetch_array($result);
 	$new_max=$row['sort_max']+1;
 
 
 	$sql="INSERT INTO ".$table_forums."
 				(forum_title, forum_comment, forum_category, allow_anonymous, allow_edit, approval_direct_post, allow_attachments, allow_new_threads, default_view, forum_of_group, forum_group_public_private, forum_order)
-				VALUES ('".mysql_real_escape_string($values['forum_title'])."',
-					'".mysql_real_escape_string($values['forum_comment'])."',
-					'".mysql_real_escape_string($values['forum_category'])."',
-					'".mysql_real_escape_string($values['allow_anonymous_group']['allow_anonymous'])."',
-					'".mysql_real_escape_string($values['students_can_edit_group']['students_can_edit'])."',
-					'".mysql_real_escape_string($values['approval_direct_group']['approval_direct'])."',
-					'".mysql_real_escape_string($values['allow_attachments_group']['allow_attachments'])."',
-					'".mysql_real_escape_string($values['allow_new_threads_group']['allow_new_threads'])."',
-					'".mysql_real_escape_string($values['default_view_type_group']['default_view_type'])."',
-					'".mysql_real_escape_string($values['group_forum'])."',
-					'".mysql_real_escape_string($values['public_private_group_forum_group']['public_private_group_forum'])."',
-					'".mysql_real_escape_string($new_max)."')";
+				VALUES ('".Database::escape_string($values['forum_title'])."',
+					'".Database::escape_string($values['forum_comment'])."',
+					'".Database::escape_string($values['forum_category'])."',
+					'".Database::escape_string($values['allow_anonymous_group']['allow_anonymous'])."',
+					'".Database::escape_string($values['students_can_edit_group']['students_can_edit'])."',
+					'".Database::escape_string($values['approval_direct_group']['approval_direct'])."',
+					'".Database::escape_string($values['allow_attachments_group']['allow_attachments'])."',
+					'".Database::escape_string($values['allow_new_threads_group']['allow_new_threads'])."',
+					'".Database::escape_string($values['default_view_type_group']['default_view_type'])."',
+					'".Database::escape_string($values['group_forum'])."',
+					'".Database::escape_string($values['public_private_group_forum_group']['public_private_group_forum'])."',
+					'".Database::escape_string($new_max)."')";
 	Database::query($sql);
-	$last_id=mysql_insert_id();
+	$last_id=Database::insert_id();
 	api_item_property_update($_course, TOOL_FORUM, $last_id,"ForumCategoryAdded", $_user['user_id']);
 	return array('id'=>$last_id, 'title'=>$values['forum_title']);
 }
@@ -488,15 +489,15 @@ function store_thread($values)
 
 	// We first store an entry in the forum_thread table because the thread_id is used in the forum_post table
 	$sql="INSERT INTO $table_threads (thread_title, forum_id, thread_poster_id, thread_poster_name, thread_views, thread_date, thread_sticky)
-			VALUES ('".mysql_real_escape_string($values['post_title'])."',
-					'".mysql_real_escape_string($values['forum_id'])."',
-					'".mysql_real_escape_string($values['user_id'])."',
-					'".mysql_real_escape_string($values['poster_name'])."',
-					'".mysql_real_escape_string($values['topic_views'])."',
-					'".mysql_real_escape_string($values['post_date'])."',
-					'".mysql_real_escape_string($values['thread_sticky'])."')";
+			VALUES ('".Database::escape_string($values['post_title'])."',
+					'".Database::escape_string($values['forum_id'])."',
+					'".Database::escape_string($values['user_id'])."',
+					'".Database::escape_string($values['poster_name'])."',
+					'".Database::escape_string($values['topic_views'])."',
+					'".Database::escape_string($values['post_date'])."',
+					'".Database::escape_string($values['thread_sticky'])."')";
 	$result=Database::query($sql);
-	$last_thread_id=mysql_insert_id();
+	$last_thread_id=Database::insert_id();
 	api_item_property_update($_course, TOOL_FORUM_THREAD, $last_thread_id,"ForumThreadAdded", $_user['user_id']);
 	// if the forum properties tell that the posts have to be approved we have to put the whole thread invisible
 	// because otherwise the students will see the thread and not the post in the thread.
@@ -527,12 +528,12 @@ function migrate_threads_of_forum($phpbb_forum_id, $new_forum_id)
 
 	$sql_phpbb_threads="SELECT forum.*, users.user_id
 							FROM $phpbb_threads forum, $table_users users
-							WHERE forum_id='".mysql_real_escape_string($phpbb_forum_id)."'
+							WHERE forum_id='".Database::escape_string($phpbb_forum_id)."'
 							AND forum.nom=users.lastname AND forum.prenom=users.firstname
 							";
 	$result_phpbb_threads=Database::query($sql_phpbb_threads);
 	$threads_counter=0;
-	while ($row_phpbb_threads=mysql_fetch_array($result_phpbb_threads))
+	while ($row_phpbb_threads=Database::fetch_array($result_phpbb_threads))
 	{
 		$values['post_title']=$row_phpbb_threads['topic_title'];
 		$values['forum_id']=$new_forum_id;
@@ -553,9 +554,9 @@ function migrate_threads_of_forum($phpbb_forum_id, $new_forum_id)
 
 	// Now we update the forum_forum table with the total number of posts for the given forum.
 	$sql="UPDATE $table_forums
-			SET forum_posts='".mysql_real_escape_string($posts_counter)."',
-			forum_threads='".mysql_real_escape_string($threads_counter)."'
-			WHERE forum_id='".mysql_real_escape_string($new_forum_id)."'";
+			SET forum_posts='".Database::escape_string($posts_counter)."',
+			forum_threads='".Database::escape_string($threads_counter)."'
+			WHERE forum_id='".Database::escape_string($new_forum_id)."'";
 	//echo $sql;
 	$result=Database::query($sql);
 	return array("threads"=>$threads_counter, "posts"=>$posts_counter);
@@ -586,10 +587,10 @@ function migrate_posts_of_thread($phpbb_thread_id, $new_forum_thread_id, $new_fo
 						WHERE posts.post_id=posts_text.post_id
 						AND posts.nom=users.lastname
 						AND posts.prenom=users.firstname
-						AND posts.topic_id='".mysql_real_escape_string($phpbb_thread_id)."'
+						AND posts.topic_id='".Database::escape_string($phpbb_thread_id)."'
 						";
 	$result_phpbb_posts=Database::query($sql_phpbb_posts);
-	while($row_phpbb_posts=mysql_fetch_array($result_phpbb_posts))
+	while($row_phpbb_posts=Database::fetch_array($result_phpbb_posts))
 	{
 		$values=array();
 		$values['post_title']=$row_phpbb_posts['post_title'];
@@ -604,26 +605,26 @@ function migrate_posts_of_thread($phpbb_thread_id, $new_forum_thread_id, $new_fo
 
 		// We first store an entry in the forum_post table
 		$sql="INSERT INTO $table_posts (post_title, post_text, thread_id, forum_id, poster_id,  post_date, post_notification, post_parent_id, visible)
-				VALUES ('".mysql_real_escape_string($values['post_title'])."',
-						'".mysql_real_escape_string($values['post_text'])."',
-						'".mysql_real_escape_string($values['thread_id'])."',
-						'".mysql_real_escape_string($values['forum_id'])."',
-						'".mysql_real_escape_string($values['user_id'])."',
-						'".mysql_real_escape_string($values['post_date'])."',
-						'".mysql_real_escape_string($values['post_notification'])."',
-						'".mysql_real_escape_string($values['post_parent_id'])."',
-						'".mysql_real_escape_string($values['visible'])."')";
+				VALUES ('".Database::escape_string($values['post_title'])."',
+						'".Database::escape_string($values['post_text'])."',
+						'".Database::escape_string($values['thread_id'])."',
+						'".Database::escape_string($values['forum_id'])."',
+						'".Database::escape_string($values['user_id'])."',
+						'".Database::escape_string($values['post_date'])."',
+						'".Database::escape_string($values['post_notification'])."',
+						'".Database::escape_string($values['post_parent_id'])."',
+						'".Database::escape_string($values['visible'])."')";
 		$result=Database::query($sql);
 		$post_counter++;
-		$last_post_id=mysql_insert_id();
+		$last_post_id=Database::insert_id();
 
 
 		// We check if there added resources and if so we update them
 		if (in_array($row_phpbb_posts['post_id'],$added_resources))
 		{
 			$sql_update_added_resource="UPDATE $table_added_resources
-					SET source_type='forum_post', source_id='".mysql_real_escape_string($last_post_id)."'
-					WHERE source_type='".mysql_real_escape_string(TOOL_BB_POST)."' AND source_id='".mysql_real_escape_string($row_phpbb_posts['post_id'])."'";
+					SET source_type='forum_post', source_id='".Database::escape_string($last_post_id)."'
+					WHERE source_type='".Database::escape_string(TOOL_BB_POST)."' AND source_id='".Database::escape_string($row_phpbb_posts['post_id'])."'";
 			echo $sql_update_added_resource;
 			$result=Database::query($sql_update_added_resource);
 		}
@@ -632,9 +633,9 @@ function migrate_posts_of_thread($phpbb_thread_id, $new_forum_thread_id, $new_fo
 	}
 
 	// update the thread_last_post of the post table AND the
-	$sql="UPDATE $table_threads SET thread_last_post='".mysql_real_escape_string($last_post_id)."',
-			thread_replies='".mysql_real_escape_string($post_counter-1)."'
-			WHERE thread_id='".mysql_real_escape_string($new_forum_thread_id)."'";
+	$sql="UPDATE $table_threads SET thread_last_post='".Database::escape_string($last_post_id)."',
+			thread_replies='".Database::escape_string($post_counter-1)."'
+			WHERE thread_id='".Database::escape_string($new_forum_thread_id)."'";
 	//echo $sql;
 	$result=Database::query($sql);
 	//echo $sql;
@@ -652,9 +653,9 @@ function get_added_resources()
 	$return_array=array();
 
 	// TODO: now we also migrate the added resources.
-	$sql_added_resources="SELECT * FROM $table_added_resources WHERE source_type='".mysql_real_escape_string(TOOL_BB_POST)."'";
+	$sql_added_resources="SELECT * FROM $table_added_resources WHERE source_type='".Database::escape_string(TOOL_BB_POST)."'";
 	$result=Database::query($sql_added_resources);
-	while ($row=mysql_fetch_array($result))
+	while ($row=Database::fetch_array($result))
 	{
 		$return_array[]=$row['source_id'];
 	}
@@ -670,10 +671,10 @@ function get_forumcategory_id_by_name($forum_category_name)
 {
 	global $table_categories;
 
-	$sql="SELECT cat_id FROM $table_categories WHERE cat_title='".mysql_real_escape_string($forum_category_name)."'";
+	$sql="SELECT cat_id FROM $table_categories WHERE cat_title='".Database::escape_string($forum_category_name)."'";
 	//echo $sql;
 	$result=Database::query($sql);
-	$row=mysql_fetch_array($result);
+	$row=Database::fetch_array($result);
 	//echo $row['cat_id'];
 	return $row['cat_id'];
 }

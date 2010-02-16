@@ -317,13 +317,7 @@ class Page_DatabaseSettings extends HTML_QuickForm_Page {
 class ValidateDatabaseConnection extends HTML_QuickForm_Rule {
 
 	public function validate($parameters) {
-		$db_host = $parameters[0];
-		$db_user = $parameters[1];
-		$db_password = $parameters[2];
-		if (mysql_connect($db_host, $db_user, $db_password)) {
-			return true;
-		}
-		return false;
+		return Database::connect(array('server' => $parameters[0], 'username' => $parameters[1], 'password' => $parameters[2])) !== false;
 	}
 }
 

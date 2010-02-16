@@ -64,7 +64,7 @@ $courses_id_list = array();
 $courses_id_full_table_prefix_list = array();
 $courses_dir_list = array();
 
-mysql_select_db($dbNameForm);
+Database::select_db($dbNameForm);
 
 $sql = "SELECT * FROM course";
 $res = Database::query($sql);
@@ -118,13 +118,13 @@ foreach ($courses_id_full_table_prefix_list as $course_code => $db) {
 
     //migrate learnpaths
     $sql_test = "SELECT * FROM $my_new_lp";
-    $res_test = mysql_query($sql_test);
+    $res_test = Database::query($sql_test);
     $sql_lp = "SELECT * FROM $lp_main";
     if ($loglevel > 1) { error_log("$sql_lp", 0); }
-    $res_lp = mysql_query($sql_lp);
+    $res_lp = Database::query($sql_lp);
     if (!$res_lp or !$res_test) {
         if ($loglevel > 1) {
-            error_log("+++Problem querying DB $lp_main+++ skipping (".mysql_error().")", 0);
+            error_log("+++Problem querying DB $lp_main+++ skipping (".Database::error().")", 0);
             if (!$res_test) {
                 error_log("This might be due to no existing table in the destination course", 0);
             }
@@ -136,8 +136,8 @@ foreach ($courses_id_full_table_prefix_list as $course_code => $db) {
         //echo "Treating lp id : ".$row['learnpath_id']."<br />\n";
         $ins_lp_sql = "INSERT INTO $my_new_lp (lp_type,name,description,display_order,content_maker) " .
                 "VALUES (1," .
-                        "'".mysql_real_escape_string($row['learnpath_name'])."'," .
-                        "'".mysql_real_escape_string($row['learnpath_description'])."',$dsp_ord,'Dokeos')";
+                        "'".Database::escape_string($row['learnpath_name'])."'," .
+                        "'".Database::escape_string($row['learnpath_description'])."',$dsp_ord,'Dokeos')";
         $ins_lp_res = Database::query($ins_lp_sql);
         $in_id = Database::insert_id();
         if (empty($in_id) or $in_id == false) die('Could not insert lp: '.$ins_lp_sql);
@@ -162,8 +162,8 @@ foreach ($courses_id_full_table_prefix_list as $course_code => $db) {
         //TODO build path for this chapter (although there is no real path for any chapter)
         //TODO find out how to calculate the "next_item_id" with the "ordre" field
         $my_lp_item = $my_new_lp_item;
-        $myname = mysql_real_escape_string($row['chapter_name']);
-        $mydesc = mysql_real_escape_string($row['chapter_description']);
+        $myname = Database::escape_string($row['chapter_name']);
+        $mydesc = Database::escape_string($row['chapter_description']);
         $ins_lp_sql = "INSERT INTO $my_new_lp_item (" .
                 "lp_id," .
                 "item_type," .
@@ -324,8 +324,8 @@ foreach ($courses_id_full_table_prefix_list as $course_code => $db) {
                     "'".$lp_ids[$parent_lps[$row['chapter_id']]]."'," . //insert new learnpath ID
                     "'$type'," .
                     "'$ref', " .
-                    "'".mysql_real_escape_string($row['title'])."'," .
-                    "'".mysql_real_escape_string($row['description'])."'," .
+                    "'".Database::escape_string($row['title'])."'," .
+                    "'".Database::escape_string($row['description'])."'," .
                     "'$ref'," .
                     "".$my_parent_id."," .
                     "'$prereq_id'," .
@@ -572,7 +572,7 @@ foreach ($courses_id_full_table_prefix_list as $course_code => $db) {
         }
         if ($intrp != $row_i['intro_text']) {
             //echo "<pre>Replacing ".$row_i['intro_text']."\n by \n ".$intro."</pre><br />\n";
-            $sql_upd = "update $tbl_intro set intro_text = '".mysql_real_escape_string($intro)."' WHERE id = 'course_homepage' AND intro_text = '".mysql_real_escape_string($row_i['intro_text'])."'";
+            $sql_upd = "update $tbl_intro set intro_text = '".Database::escape_string($intro)."' WHERE id = 'course_homepage' AND intro_text = '".Database::escape_string($row_i['intro_text'])."'";
             //echo $sql_upd."<br />\n";
             fwrite($fh,"$sql_upd\n");
             fwrite($fh_revert,"UPDATE $tbl_intro set intro_text = '".$row_i['intro_text']."' WHERE id = 'course_homepage' AND intro_text = '$intro';\n");
@@ -618,7 +618,7 @@ $lp_course_code = array();
 $scorm_lp_paths = array();
 
 //avoid empty dokeosCourse fields as they potentially break the rest
-mysql_select_db($dbNameForm);
+Database::select_db($dbNameForm);
 $course_main = TABLE_MAIN_COURSE;
 $sql_crs = "SELECT * FROM $course_main WHERE target_course_code IS NULL";
 if ($loglevel > 0) { error_log("$sql_crs", 0); }
@@ -883,7 +883,7 @@ foreach ($scorms as $my_course_code => $paths_list) {
         while ($scormItem = Database::fetch_array($res_items)) {
             $my_sco_id      = $scormItem['scoId']; //the index for display??? (check that)
             $my_identifier  = $scormItem['scoIdentifier']; //the scorm item path/name
-            $my_title       = mysql_real_escape_string($scormItem['scoTitle']);
+            $my_title       = Database::escape_string($scormItem['scoTitle']);
             $my_status      = $scormItem['status'];
             $my_student     = $scormItem['studentId'];
             $my_score       = $scormItem['score'];
@@ -1028,7 +1028,7 @@ foreach ($scorms as $my_course_code => $paths_list) {
         while ($scormItem = Database::fetch_array($res_items)) {
             $my_sco_id      = $scormItem['scoId']; //the index for display??? (check that)
             $my_identifier  = $scormItem['scoIdentifier']; //the scorm item path/name
-            $my_title       = mysql_real_escape_string($scormItem['scoTitle']);
+            $my_title       = Database::escape_string($scormItem['scoTitle']);
             $my_status      = $scormItem['status'];
             $my_student     = $scormItem['studentId'];
             $my_score       = $scormItem['score'];
@@ -1138,9 +1138,9 @@ foreach ($scorms as $my_course_code => $paths_list) {
         //$my_new_lp_view = $db_name.$new_lp_view;
         //$my_new_lp_item_view = $db_name.$new_lp_item_view;
         //$sel_sql = "SELECT * FROM $my_new_lp WHERE id = $in_id";
-        //$res = @mysql_query($sel_sql);
+        //$res = @Database::query($sel_sql);
         //if (!$res) {
-        //  echo "Error selecting lp: $sel_sql - ".mysql_error()."<br />\n";
+        //  echo "Error selecting lp: $sel_sql - ".Database::error()."<br />\n";
         //}
         $lp_details = array();
         //while($row = Database::fetch_array($res)) {
@@ -1268,7 +1268,7 @@ foreach ($scorms as $my_course_code => $paths_list) {
         }
         if ($intro != $row_i['intro_text']) {
             //echo "<pre>Replacing ".$row_i['intro_text']."\n by \n ".$intro."</pre><br />\n";
-            $sql_upd = "update $tbl_intro set intro_text = '".mysql_real_escape_string($intro)."' WHERE id = 'course_homepage' AND intro_text = '".mysql_real_escape_string($row_i['intro_text'])."'";
+            $sql_upd = "update $tbl_intro set intro_text = '".Database::escape_string($intro)."' WHERE id = 'course_homepage' AND intro_text = '".Database::escape_string($row_i['intro_text'])."'";
             //echo $sql_upd."<br />\n";
             fwrite($fh, $sql_upd."\n");
             fwrite($fh_revert, "UPDATE $tbl_intro set intro_text = '".$row_i['intro_text']."' WHERE id = 'course_homepage' AND intro_text = '$intro';\n");

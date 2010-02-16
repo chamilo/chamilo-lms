@@ -75,7 +75,7 @@
 */
 function fill_document_table($dir)
 {
-	global $newPath, $course, $mysql_base_course, $_configuration;
+	global $newPath, $course, $db_base_course, $_configuration;
 
 	$documentPath = $newPath.'courses/'.$course.'/document';
 
@@ -94,31 +94,31 @@ function fill_document_table($dir)
 
 				$file_size = filesize($dir.'/'.$readdir);
 
-				$result = mysql_query("SELECT id,visibility FROM `$mysql_base_course".$_configuration['db_glue']."document` WHERE path='".addslashes($path)."' LIMIT 0,1");
+				$result = Database::query("SELECT id,visibility FROM `$db_base_course".$_configuration['db_glue']."document` WHERE path='".addslashes($path)."' LIMIT 0,1");
 
-				if (list ($id, $visibility) = mysql_fetch_row($result)) {
-					mysql_query("UPDATE `$mysql_base_course".$_configuration['db_glue']."document` SET filetype='file',title='".addslashes($readdir)."',size='$file_size' WHERE id='$id' AND path='".addslashes($path)."'");
+				if (list ($id, $visibility) = Database::fetch_row($result)) {
+					Database::query("UPDATE `$db_base_course".$_configuration['db_glue']."document` SET filetype='file',title='".addslashes($readdir)."',size='$file_size' WHERE id='$id' AND path='".addslashes($path)."'");
 				} else {
-					mysql_query("INSERT INTO `$mysql_base_course".$_configuration['db_glue']."document`(path,filetype,title,size) VALUES('".addslashes($path)."','file','".addslashes($readdir)."','$file_size')");
-					$id = mysql_insert_id();
+					Database::query("INSERT INTO `$db_base_course".$_configuration['db_glue']."document`(path,filetype,title,size) VALUES('".addslashes($path)."','file','".addslashes($readdir)."','$file_size')");
+					$id =Database::insert_id();
 				}
 
 				$visibility = ($visibility == 'v') ? 1 : 0;
-				mysql_query("INSERT INTO `$mysql_base_course".$_configuration['db_glue']."item_property`(tool,ref,visibility,lastedit_type,to_group_id,insert_date,lastedit_date) VALUES('document','$id','$visibility','DocumentAdded','0','".$file_date."','".$file_date."')");
+				Database::query("INSERT INTO `$db_base_course".$_configuration['db_glue']."item_property`(tool,ref,visibility,lastedit_type,to_group_id,insert_date,lastedit_date) VALUES('document','$id','$visibility','DocumentAdded','0','".$file_date."','".$file_date."')");
 
 			} elseif (is_dir($dir.'/'.$readdir)) {
 
-				$result = mysql_query("SELECT id,visibility FROM `$mysql_base_course".$_configuration['db_glue']."document` WHERE path='".addslashes($path)."' LIMIT 0,1");
+				$result = Database::query("SELECT id,visibility FROM `$db_base_course".$_configuration['db_glue']."document` WHERE path='".addslashes($path)."' LIMIT 0,1");
 
-				if (list ($id, $visibility) = mysql_fetch_row($result)) {
-					mysql_query("UPDATE `$mysql_base_course".$_configuration['db_glue']."document` SET filetype='folder',title='".addslashes($readdir)."' WHERE id='$id' AND path='".addslashes($path)."'");
+				if (list ($id, $visibility) = Database::fetch_row($result)) {
+					Database::query("UPDATE `$db_base_course".$_configuration['db_glue']."document` SET filetype='folder',title='".addslashes($readdir)."' WHERE id='$id' AND path='".addslashes($path)."'");
 				} else {
-					mysql_query("INSERT INTO `$mysql_base_course".$_configuration['db_glue']."document`(path,filetype,title) VALUES('".addslashes($path)."','folder','".addslashes($readdir)."')");
-					$id = mysql_insert_id();
+					Database::query("INSERT INTO `$db_base_course".$_configuration['db_glue']."document`(path,filetype,title) VALUES('".addslashes($path)."','folder','".addslashes($readdir)."')");
+					$id = Database::insert_id();
 				}
 
 				$visibility = ($visibility == 'v') ? 1 : 0;
-				mysql_query("INSERT INTO `$mysql_base_course".$_configuration['db_glue']."item_property`(tool,ref,visibility, lastedit_type, to_group_id,insert_date,lastedit_date) VALUES('document','$id','$visibility','FolderCreated','0','".$file_date."','".$file_date."')");
+				Database::query("INSERT INTO `$db_base_course".$_configuration['db_glue']."item_property`(tool,ref,visibility, lastedit_type, to_group_id,insert_date,lastedit_date) VALUES('document','$id','$visibility','FolderCreated','0','".$file_date."','".$file_date."')");
 
 				if (!fill_document_table($dir.'/'.$readdir)) {
 					return false;
@@ -146,7 +146,7 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
 	$perm = api_get_permissions_for_new_directories();
 
 	foreach ($coursePath as $key => $course) {
-		$mysql_base_course = $courseDB[$key];
+		$db_base_course = $courseDB[$key];
 		@ unlink($oldPath.$course.'/document/.htaccess');
 		@ unlink($oldPath.$course.'/group/index.php');
 
@@ -159,7 +159,7 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
 		if ($fp = @ fopen($oldPath.$course.'/index.php', 'w')) {
 			fputs($fp, '<?php
 															$cidReq = "'.$key.'";
-															$dbname = "'.str_replace($dbPrefixForm, '', $mysql_base_course).'";
+															$dbname = "'.str_replace($dbPrefixForm, '', $db_base_course).'";
 
 															include("../../main/course_home/course_home.php");
 															?>');
@@ -187,15 +187,15 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
 
 		fill_document_table($newPath.'courses/'.$course.'/document');
 
-		mysql_query("ALTER TABLE `$mysql_base_course".$_configuration['db_glue']."document` DROP `visibility`");
+		Database::query("ALTER TABLE `$db_base_course".$_configuration['db_glue']."document` DROP `visibility`");
 
 		// Update item_properties of group documents
-		$sql = "SELECT d.id AS doc_id, g.id AS group_id FROM `$mysql_base_course".$_configuration['db_glue']."group_info` g,`$mysql_base_course".$_configuration['db_glue']."document` d WHERE path LIKE CONCAT(g.secret_directory,'%')";
-		$res = mysql_query($sql);
+		$sql = "SELECT d.id AS doc_id, g.id AS group_id FROM `$db_base_course".$_configuration['db_glue']."group_info` g,`$db_base_course".$_configuration['db_glue']."document` d WHERE path LIKE CONCAT(g.secret_directory,'%')";
+		$res = Database::query($sql);
 
-		while ($group_doc = mysql_fetch_object($res)) {
-			$sql = "UPDATE `$mysql_base_course".$_configuration['db_glue']."item_property` SET to_group_id = '".$group_doc->group_id."', visibility = '1' WHERE ref = '".$group_doc->doc_id."' AND tool = '".TOOL_DOCUMENT."'";
-			mysql_query($sql);
+		while ($group_doc = Database::fetch_object($res)) {
+			$sql = "UPDATE `$db_base_course".$_configuration['db_glue']."item_property` SET to_group_id = '".$group_doc->group_id."', visibility = '1' WHERE ref = '".$group_doc->doc_id."' AND tool = '".TOOL_DOCUMENT."'";
+			Database::query($sql);
 		}
 	}
 

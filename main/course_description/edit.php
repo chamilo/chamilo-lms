@@ -24,7 +24,7 @@ echo '<div class="actions" style="margin-bottom:30px">';
 ksort($categories);
 foreach ($categories as $id => $title) {
 	if ($i==ADD_BLOCK) {
-		echo '<a href="index?'.api_get_cidreq().'&action=add">'.Display::return_icon($default_description_icon[$id], $title, array('height'=>'22')).' '.$title.'</a>';
+		echo '<a href="index.php?'.api_get_cidreq().'&action=add">'.Display::return_icon($default_description_icon[$id], $title, array('height'=>'22')).' '.$title.'</a>';
 		break;
 	} else {
 		echo '<a href="index.php?action=edit&'.api_get_cidreq().'&description_type='.$id.'">'.Display::return_icon($default_description_icon[$id], $title, array('height'=>'22')).' '.$title.'</a>&nbsp;&nbsp;';
@@ -49,7 +49,7 @@ if ($description_type >= ADD_BLOCK) {
 $form = new FormValidator('course_description','POST','index.php?action=edit&description_type='.$description_type.'&'.api_get_cidreq(),'','style="width: 100%;"');
 if ($description_type == THEMATIC_ADVANCE) {
 	$form->addElement('html','<div class="row">
-						  <div class="form_header"><table width="100%"><tr><td>'.get_lang('ThematicAdvance').'</td><td align="right"><a href="index?action=history&description_type='.$description_type.'">'.Display::return_icon('lp_dir.png',get_lang('ThematicAdvanceHistory'),array('style'=>'vertical-align:middle;hspace:6')).' '.get_lang('ThematicAdvanceHistory').'</a></td></tr></table>						  
+						  <div class="form_header"><table width="100%"><tr><td>'.get_lang('ThematicAdvance').'</td><td align="right"><a href="index.php?action=history&description_type='.$description_type.'">'.Display::return_icon('lp_dir.png',get_lang('ThematicAdvanceHistory'),array('style'=>'vertical-align:middle;hspace:6')).' '.get_lang('ThematicAdvanceHistory').'</a></td></tr></table>						  
 						  </div>');
 } else {
 	$form->addElement('header','',$header);

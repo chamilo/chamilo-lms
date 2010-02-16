@@ -37,7 +37,7 @@ define('USER_RELATION_TYPE_FRIEND',		3);
 define('USER_RELATION_TYPE_GOODFRIEND',	4); // should be deprecated is useless
 define('USER_RELATION_TYPE_ENEMY',		5); // should be deprecated is useless
 define('USER_RELATION_TYPE_DELETED',	6);
-define('USER_RELATION_TYPE_RRHH',		7);
+define('USER_RELATION_TYPE_RRHH',		7); 
 
 class UserManager
 {
@@ -198,7 +198,7 @@ class UserManager
 		$table_session_course_user = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
 		// Unsubscribe the user from all groups in all his courses
-		$sql = "SELECT * FROM $table_course c, $table_course_user cu WHERE cu.user_id = '".$user_id."' AND c.code = cu.course_code";
+		$sql = "SELECT * FROM $table_course c, $table_course_user cu WHERE cu.user_id = '".$user_id."' AND relation_type<>".COURSE_RELATION_TYPE_RRHH." AND c.code = cu.course_code";
 		$res = Database::query($sql);
 		while ($course = Database::fetch_object($res)) {
 			$table_group = Database :: get_course_table(TABLE_GROUP_USER, $course->db_name);
@@ -1724,7 +1724,7 @@ class UserManager
 				LEFT JOIN ".$tbl_user_course_category." user_course_category
 					ON course_rel_user.user_course_cat = user_course_category.id
 				$join_access_url
-			WHERE  course_rel_user.user_id = '".$user_id."'  $where_access_url
+			WHERE  course_rel_user.user_id = '".$user_id."' AND course_rel_user.relation_type<>".COURSE_RELATION_TYPE_RRHH."  $where_access_url
 										ORDER BY user_course_category.sort, course_rel_user.sort, course.title ASC";
 
 		$course_list_sql_result = api_sql_query($personal_course_list_sql);
@@ -2815,7 +2815,7 @@ class UserManager
 		$my_user_id = intval($my_user_id);
 		$relation_type = intval($relation_type);
 
-		$sql = 'SELECT COUNT(*) as count FROM ' . $tbl_my_friend . ' WHERE friend_user_id=' .$friend_id.' AND user_id='.$my_user_id;
+		$sql = 'SELECT COUNT(*) as count FROM ' . $tbl_my_friend . ' WHERE friend_user_id=' .$friend_id.' AND user_id='.$my_user_id.' AND relation_type <> '.USER_RELATION_TYPE_RRHH.' ';
 		$result = Database::query($sql);
 		$row = Database :: fetch_array($result, 'ASSOC');
 		$current_date=date('Y-m-d H:i:s');
@@ -2825,7 +2825,7 @@ class UserManager
 			Database::query($sql_i);
 			return true;
 		} else {
-			$sql = 'SELECT COUNT(*) as count, relation_type  FROM ' . $tbl_my_friend . ' WHERE friend_user_id=' . $friend_id . ' AND user_id='.$my_user_id;
+			$sql = 'SELECT COUNT(*) as count, relation_type  FROM ' . $tbl_my_friend . ' WHERE friend_user_id=' . $friend_id . ' AND user_id='.$my_user_id.' AND relation_type <> '.USER_RELATION_TYPE_RRHH.' ';
 			$result = Database::query($sql);
 			$row = Database :: fetch_array($result, 'ASSOC');
 			if ($row['count'] == 1) {
@@ -2866,14 +2866,14 @@ class UserManager
 			if ($with_status_condition != '') {
 				$extra_condition = ' AND relation_type = '.intval($with_status_condition);
 			}
-			$sql_delete_relationship1 = 'DELETE FROM ' . $tbl_my_friend .'  WHERE friend_user_id='.$friend_id.' '.$extra_condition;
-			$sql_delete_relationship2 = 'DELETE FROM ' . $tbl_my_friend . ' WHERE user_id=' . $friend_id.' '.$extra_condition;
+			$sql_delete_relationship1 = 'DELETE FROM ' . $tbl_my_friend .'  WHERE relation_type <> '.USER_RELATION_TYPE_RRHH.' AND friend_user_id='.$friend_id.' '.$extra_condition;
+			$sql_delete_relationship2 = 'DELETE FROM ' . $tbl_my_friend . ' WHERE relation_type <> '.USER_RELATION_TYPE_RRHH.' AND user_id=' . $friend_id.' '.$extra_condition;
 			Database::query($sql_delete_relationship1);
 			Database::query($sql_delete_relationship2);
 
 		} else {
 			$user_id = api_get_user_id();
-			$sql = 'SELECT COUNT(*) as count FROM ' . $tbl_my_friend . ' WHERE user_id=' . $user_id . ' AND relation_type <>'.USER_RELATION_TYPE_DELETED.' AND friend_user_id='.$friend_id;
+			$sql = 'SELECT COUNT(*) as count FROM ' . $tbl_my_friend . ' WHERE user_id=' . $user_id . ' AND relation_type NOT IN('.USER_RELATION_TYPE_DELETED.', '.USER_RELATION_TYPE_RRHH.') AND friend_user_id='.$friend_id;
 			$result = Database::query($sql);
 			$row = Database :: fetch_array($result, 'ASSOC');
 			if ($row['count'] == 1) {

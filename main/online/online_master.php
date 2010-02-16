@@ -44,7 +44,7 @@ $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
 $tbl_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 $tbl_online_link=Database::get_course_table(TABLE_ONLINE_LINK);
 
-$query="SELECT t1.user_id,username,picture_uri,t2.status FROM $tbl_user t1,$tbl_course_user t2 WHERE t1.user_id=t2.user_id AND course_code='$_cid' AND (t1.user_id='".$_user['user_id']."' OR t2.status='1')";
+$query="SELECT t1.user_id,username,picture_uri,t2.status FROM $tbl_user t1,$tbl_course_user t2 WHERE t1.user_id=t2.user_id AND t2.relation_type<>".COURSE_RELATION_TYPE_RRHH." AND course_code='$_cid' AND (t1.user_id='".$_user['user_id']."' OR t2.status='1')";
 $result=Database::query($query);
 
 while($row=Database::fetch_array($result))

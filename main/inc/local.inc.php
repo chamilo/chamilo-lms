@@ -157,6 +157,9 @@ The course id is stored in $_cid session variable.
 		variables should be initialised here
 ==============================================================================
 */
+
+require_once (api_get_path(LIBRARY_PATH).'course.lib.php');
+
 // verified if exists the username and password in session current
 if (isset($_SESSION['info_current_user'][1]) && isset($_SESSION['info_current_user'][2])) {
 	require_once (api_get_path(LIBRARY_PATH).'usermanager.lib.php');
@@ -918,7 +921,7 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) { // ses
 
 	    	$course_user_table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 	        $sql = "SELECT * FROM $course_user_table
-	               WHERE user_id  = '".$_user['user_id']."'
+	               WHERE user_id  = '".$_user['user_id']."' AND relation_type<>".COURSE_RELATION_TYPE_RRHH."
 	               AND course_code = '$cidReq'";
 
 	        $result = Database::query($sql);
@@ -944,7 +947,7 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) { // ses
 			$tbl_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 
  			$sql = "SELECT * FROM ".$tbl_course_user."
-               WHERE user_id  = '".$_user['user_id']."'
+               WHERE user_id  = '".$_user['user_id']."' AND relation_type<>".COURSE_RELATION_TYPE_RRHH."
                AND course_code = '$cidReq'";
 
 	        $result = Database::query($sql);

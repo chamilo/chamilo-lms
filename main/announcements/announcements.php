@@ -663,7 +663,7 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 				    		$sqlmail = "SELECT user.user_id, user.email, user.lastname, user.firstname
 					                     FROM $tbl_course_user, $tbl_user
 					                     WHERE course_code='".Database::escape_string($_course['sysCode'])."'
-					                     AND course_rel_user.user_id = user.user_id";
+					                     AND course_rel_user.user_id = user.user_id AND relation_type <>".COURSE_RELATION_TYPE_RRHH." ";
 			    		} else {
 			    			$sqlmail = "SELECT user.user_id, user.email, user.lastname, user.firstname
 					                     FROM $tbl_user

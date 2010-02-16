@@ -169,7 +169,7 @@ Display :: display_header($nameTools);
 function is_teacher($course_code) {
 	global $_user;
 	$tbl_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
-	$sql = "SELECT 1 FROM $tbl_course_user WHERE user_id='" . $_user["user_id"] . "' AND course_code='" . Database :: escape_string($course_code) . "' AND status='1'";
+	$sql = "SELECT 1 FROM $tbl_course_user WHERE user_id='" . $_user["user_id"] . "' AND relation_type<>".COURSE_RELATION_TYPE_RRHH." AND course_code='" . Database :: escape_string($course_code) . "' AND status='1'";
 	$result = Database::query($sql);
 	if (Database :: result($result) != 1) {
 		return true;
@@ -253,7 +253,7 @@ if (!empty ($_GET['student'])) {
 	}
 
 	$avg_student_progress = $avg_student_score = $nb_courses = 0;
-	$sql = 'SELECT course_code FROM ' . $tbl_course_user . ' WHERE user_id=' . Database :: escape_string($info_user['user_id']);
+	$sql = 'SELECT course_code FROM ' . $tbl_course_user . ' WHERE relation_type<>'.COURSE_RELATION_TYPE_RRHH.' AND user_id=' . Database :: escape_string($info_user['user_id']);
 	$rs = Database::query($sql);
 	$courses = array ();
 	while ($row = Database :: fetch_array($rs)) {

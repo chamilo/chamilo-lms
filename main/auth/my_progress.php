@@ -34,7 +34,7 @@ $tbl_course_lp_item 		= Database :: get_course_table(TABLE_LP_ITEM);
 $tbl_course_quiz 			= Database :: get_course_table(TABLE_QUIZ_TEST);
 
 // get course list
-$sql = 'SELECT course_code FROM '.$tbl_course_user.' WHERE user_id='.intval($_user['user_id']);
+$sql = 'SELECT course_code FROM '.$tbl_course_user.' WHERE user_id='.intval($_user['user_id']).' AND relation_type<>'.COURSE_RELATION_TYPE_RRHH.' ';
 $rs = Database::query($sql);
 $courses = array();
 while($row = Database :: fetch_array($rs)) {

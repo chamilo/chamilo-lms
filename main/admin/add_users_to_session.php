@@ -92,7 +92,7 @@ function search_users($needle,$type)
 		if (!empty($id_session)) {
 		$id_session = Database::escape_string($id_session);
 			// check id_user from session_rel_user table
-			$sql = 'SELECT id_user FROM '.$tbl_session_rel_user.' WHERE id_session ="'.(int)$id_session.'"';
+			$sql = 'SELECT id_user FROM '.$tbl_session_rel_user.' WHERE id_session ="'.(int)$id_session.'" AND relation_type<>'.SESSION_RELATION_TYPE_RRHH.' ';
 			$res = Database::query($sql);
 			$user_ids = array();
 			if (Database::num_rows($res) > 0) {

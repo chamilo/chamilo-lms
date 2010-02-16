@@ -229,12 +229,16 @@ define('WEB_AJAX_PATH', 'WEB_AJAX_PATH');
 define('TO_WEB', 'TO_WEB');
 define('TO_SYS', 'TO_SYS');
 define('TO_REL', 'TO_REL');
+
 // Paths to regidtered specific resource files (scripts, players, etc.)
 define('FLASH_PLAYER_AUDIO', '{FLASH_PLAYER_AUDIO}');
 define('FLASH_PLAYER_VIDEO', '{FLASH_PLAYER_VIDEO}');
 define('SCRIPT_SWFOBJECT', '{SCRIPT_SWFOBJECT}');
 define('SCRIPT_ASCIIMATHML', '{SCRIPT_ASCIIMATHML}');
 
+// Relations type with Human resources manager
+define('COURSE_RELATION_TYPE_RRHH',	1);
+define('SESSION_RELATION_TYPE_RRHH', 1);
 
 /*
 ==============================================================================
@@ -772,7 +776,7 @@ function api_get_user_courses($userid, $fetch_session = true) {
 									FROM    $t_course       cc,
 											$t_course_user   cu
 									WHERE cc.code = cu.course_code
-									AND   cu.user_id = '".$userid."'";
+									AND   cu.user_id = '".$userid."' AND cu.relation_type<>".COURSE_RELATION_TYPE_RRHH." ";
 	$result = Database::query($sql_select_courses);
 	if ($result === false) { return array(); }
 	while ($row = Database::fetch_array($result)) {
@@ -2740,7 +2744,7 @@ function api_return_html_area($name, $content = '', $height = '', $width = '100%
  */
 function api_max_sort_value($user_course_category, $user_id) {
 	$tbl_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-	$sql_max = "SELECT max(sort) as max_sort FROM $tbl_course_user WHERE user_id='".$user_id."' AND user_course_cat='".$user_course_category."'";
+	$sql_max = "SELECT max(sort) as max_sort FROM $tbl_course_user WHERE user_id='".$user_id."' AND relation_type<>".COURSE_RELATION_TYPE_RRHH." AND user_course_cat='".$user_course_category."'";
 	$result_max = Database::query($sql_max);
 	if (Database::num_rows($result_max) == 1) {
 		$row_max = Database::fetch_array($result_max);
@@ -3705,7 +3709,7 @@ function api_is_course_visible_for_user($userid = null, $cid = null) {
 
 		$sql = "SELECT tutor_id, status
 				FROM $course_user_table
-				WHERE user_id  = '$userid'
+				WHERE user_id  = '$userid' AND relation_type<>".COURSE_RELATION_TYPE_RRHH."
 				AND   course_code = '$cid'
 				LIMIT 1";
 
@@ -3736,7 +3740,9 @@ function api_is_course_visible_for_user($userid = null, $cid = null) {
 				WHERE
 					user_id  = '$userid'
 				AND
-					course_code = '$cid'
+					relation_type <> '".COURSE_RELATION_TYPE_RRHH."'
+				AND
+					course_code = '$cid'				
 				LIMIT 1";
 
 		$result = Database::query($sql);
@@ -4133,7 +4139,7 @@ function api_is_valid_secret_key($original_key_secret, $security_key) {
  */
 function api_is_user_of_course($course_id, $user_id) {
 	$tbl_course_rel_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-	$sql = 'SELECT user_id FROM '.$tbl_course_rel_user.' WHERE course_code="'.Database::escape_string($course_id).'" AND user_id="'.Database::escape_string($user_id).'"';
+	$sql = 'SELECT user_id FROM '.$tbl_course_rel_user.' WHERE course_code="'.Database::escape_string($course_id).'" AND user_id="'.Database::escape_string($user_id).'" AND relation_type<>'.COURSE_RELATION_TYPE_RRHH.' ';
 	$result = Database::query($sql);
 	return Database::num_rows($result) == 1;
 }

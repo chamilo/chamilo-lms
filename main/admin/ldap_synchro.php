@@ -181,7 +181,7 @@ foreach($Sessions as $session){
 		}
 		$sql = "SELECT COUNT(id_user) as nbUsers " .
 				"FROM $tbl_session_rel_user " .
-				"WHERE id_session='$id_session'";
+				"WHERE id_session='$id_session' AND relation_type<>".SESSION_RELATION_TYPE_RRHH."";
 		$rs = Database::query($sql);
 		list($nbr_users) = Database::fetch_array($rs);
 		$sql = "UPDATE $tbl_session SET nbr_users=$nbr_users WHERE id='$id_session'";

@@ -121,8 +121,7 @@ define('NOT_VISIBLE_SUBSCRIPTION_ALLOWED', 1);
 define('VISIBLE_SUBSCRIPTION_ALLOWED', 2);
 define('VISIBLE_NO_SUBSCRIPTION_ALLOWED', 3);
 
-// Relation type between courses
-define('COURSE_RELATION_TYPE_RRHH',	1);
+
 
 /*
 -----------------------------------------------------------
@@ -335,7 +334,7 @@ class CourseManager {
 		} else {
 
 			Database::query("DELETE FROM ".Database::get_main_table(TABLE_MAIN_COURSE_USER)."
-					WHERE user_id IN (".$user_ids.") AND course_code = '".$course_code."'");
+					WHERE user_id IN (".$user_ids.") AND relation_type<>".COURSE_RELATION_TYPE_RRHH." AND course_code = '".$course_code."'");
 
 			// add event to system log
 			$time = time();
@@ -376,7 +375,7 @@ class CourseManager {
 		// Check whether the user has not been already subscribed to the course.
 		if (empty($_SESSION['id_session'])) {
 			if (Database::num_rows(@Database::query("SELECT * FROM ".Database::get_main_table(TABLE_MAIN_COURSE_USER)."
-					WHERE user_id = '$user_id' AND course_code = '$course_code'")) > 0) {
+					WHERE user_id = '$user_id' AND relation_type<>".COURSE_RELATION_TYPE_RRHH." AND course_code = '$course_code'")) > 0) {
 				return false; // The user has been already subscribed to the course.
 			}
 		}
@@ -465,7 +464,7 @@ class CourseManager {
 		}
 
 		// Check whether the user has already been subscribed to this course.
-		if (Database::num_rows(Database::query("SELECT * FROM ".$course_user_table." WHERE user_id = '$user_id' AND course_code = '$course_code'")) > 0) {
+		if (Database::num_rows(Database::query("SELECT * FROM ".$course_user_table." WHERE user_id = '$user_id' AND relation_type<>".COURSE_RELATION_TYPE_RRHH." AND course_code = '$course_code'")) > 0) {
 			return false; // The user has been subscribed to the course.
 		}
 
@@ -616,7 +615,7 @@ class CourseManager {
 
 		//is the user registered in the real course?
 		$result = Database::fetch_array(Database::query("SELECT * FROM ".Database::get_main_table(TABLE_MAIN_COURSE_USER)."
-				WHERE user_id = '$user_id' AND course_code = '$real_course_real_code'"));
+				WHERE user_id = '$user_id' AND relation_type<>".COURSE_RELATION_TYPE_RRHH." AND course_code = '$real_course_real_code'"));
 		$user_is_registered_in_real_course = !empty($result);
 
 		//get a list of virtual courses linked to the current real course and to which the current user is subscribed
@@ -786,7 +785,7 @@ class CourseManager {
 		$course_code = Database::escape_string($course_code);
 
 		$result = Database::fetch_array(Database::query("SELECT * FROM ".Database::get_main_table(TABLE_MAIN_COURSE_USER)."
-				WHERE user_id = $user_id AND course_code = '$course_code'"));
+				WHERE user_id = $user_id AND relation_type<>".COURSE_RELATION_TYPE_RRHH." AND course_code = '$course_code'"));
 		if (!empty($result)) {
 			return true; // The user has been registered in this course.
 		}
@@ -854,7 +853,7 @@ class CourseManager {
 					FROM ".Database::get_main_table(TABLE_MAIN_COURSE)." course
 					LEFT JOIN ".Database::get_main_table(TABLE_MAIN_COURSE_USER)." course_user
 					ON course.code = course_user.course_code
-					WHERE course_user.user_id = '$user_id' AND ( course.code = '$course_code' OR target_course_code = '$course_code')"));
+					WHERE course_user.user_id = '$user_id' AND course_user.relation_type<>".COURSE_RELATION_TYPE_RRHH." AND ( course.code = '$course_code' OR target_course_code = '$course_code')"));
 			return !empty($result);
 		}
 
@@ -935,7 +934,7 @@ class CourseManager {
 
 		if ($session_id == 0) {
 			$sql .= ' LEFT JOIN '.Database::get_main_table(TABLE_MAIN_COURSE_USER).' as course_rel_user
-						ON user.user_id = course_rel_user.user_id
+						ON user.user_id = course_rel_user.user_id AND course_rel_user.relation_type<>'.COURSE_RELATION_TYPE_RRHH.'
 						AND course_rel_user.course_code="'.$course_code.'"';
 			$where[] = ' course_rel_user.course_code IS NOT NULL ';
 		}
@@ -1127,7 +1126,7 @@ class CourseManager {
 				FROM ".Database::get_main_table(TABLE_MAIN_COURSE)." course
 				LEFT JOIN ".Database::get_main_table(TABLE_MAIN_COURSE_USER)." course_user
 				ON course.code = course_user.course_code
-				WHERE course.target_course_code = '$real_course_code' AND course_user.user_id = '$user_id'");
+				WHERE course.target_course_code = '$real_course_code' AND course_user.user_id = '$user_id' AND course_user.relation_type<>".COURSE_RELATION_TYPE_RRHH." ");
 
 		while ($result = Database::fetch_array($sql_result)) {
 			$result_array[] = $result;
@@ -1552,6 +1551,7 @@ class CourseManager {
 		$result = Database::query('SELECT course.code as code, course.title as title, cu.sort as sort FROM '.$TABLECOURSUSER.' as cu, '.$TABLECOURSE.' as course
 				WHERE course.code = cu.course_code
 				AND user_id = "'.$user_id.'"
+				AND cu.relation_type<>'.COURSE_RELATION_TYPE_RRHH.'
 				AND user_course_cat=0 ORDER BY cu.sort');
 
 		$course_title_precedent = '';
@@ -1571,10 +1571,10 @@ class CourseManager {
 				$course_sort = $courses['sort'];
 
 				if ($counter == 0) {
-					$sql = 'UPDATE '.$TABLECOURSUSER.' SET sort = sort+1 WHERE user_id= "'.$user_id.'" AND user_course_cat="0" AND sort > "'.$course_sort.'"';
+					$sql = 'UPDATE '.$TABLECOURSUSER.' SET sort = sort+1 WHERE user_id= "'.$user_id.'" AND relation_type<>'.COURSE_RELATION_TYPE_RRHH.' AND user_course_cat="0" AND sort > "'.$course_sort.'"';
 					$course_sort++;
 				} else {
-					$sql = 'UPDATE '.$TABLECOURSUSER.' SET sort = sort+1 WHERE user_id= "'.$user_id.'" AND user_course_cat="0" AND sort >= "'.$course_sort.'"';
+					$sql = 'UPDATE '.$TABLECOURSUSER.' SET sort = sort+1 WHERE user_id= "'.$user_id.'" AND relation_type<>'.COURSE_RELATION_TYPE_RRHH.' AND user_course_cat="0" AND sort >= "'.$course_sort.'"';
 				}
 
 				Database::query($sql);

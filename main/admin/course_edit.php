@@ -279,11 +279,11 @@ if( $form->validate())
 		foreach($teachers as $key){
 
 			//We check if the teacher is already subscribed in this course
-			$sql_select_teacher = 'SELECT 1 FROM '.$course_user_table.' WHERE user_id = "'.$key.'" AND course_code = "'.$course_code.'"';
+			$sql_select_teacher = 'SELECT 1 FROM '.$course_user_table.' WHERE user_id = "'.$key.'" AND course_code = "'.$course_code.'" ';
 			$result = Database::query($sql_select_teacher);
 
 			if(Database::num_rows($result) == 1){
-				$sql = 'UPDATE '.$course_user_table.' SET status = "1" WHERE course_code = "'.$course_code.'" AND user_id = "'.$key.'"';
+				$sql = 'UPDATE '.$course_user_table.' SET status = "1" WHERE course_code = "'.$course_code.'" AND user_id = "'.$key.'"  ';
 			}
 			else{
 				$sql = "INSERT INTO ".$course_user_table . " SET

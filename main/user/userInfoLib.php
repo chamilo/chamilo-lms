@@ -476,7 +476,7 @@ function get_main_user_info($user_id, $courseCode)
 	                u.email, u.picture_uri picture, cu.role,
 	                cu.status status, cu.tutor_id
 	        FROM    $table_user u, $table_course_user cu
-	        WHERE   u.user_id = cu.user_id
+	        WHERE   u.user_id = cu.user_id AND cu.relation_type<>".COURSE_RELATION_TYPE_RRHH."
 	        AND     u.user_id = '$user_id'
 	        AND     cu.course_code = '$courseCode'";
 

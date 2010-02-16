@@ -284,7 +284,7 @@ function remove_user_from_course($user_id, $course_code) {
 	// we check (once again) if the user is not course administrator
 	// because the course administrator cannot unsubscribe himself
 	// (s)he can only delete the course
-	$sql_check = "SELECT * FROM $tbl_course_user WHERE user_id='".$user_id."' AND course_code='".$course_code."' AND status='1'";
+	$sql_check = "SELECT * FROM $tbl_course_user WHERE user_id='".$user_id."' AND course_code='".$course_code."' AND status='1' ";
 	$result_check = Database::query($sql_check);
 	$number_of_rows = Database::num_rows($result_check);
 	if ($number_of_rows > 0) {
@@ -586,7 +586,7 @@ function delete_course_category($id) {
 	$TABLECOURSUSER = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 	$id = intval($id);
 	$sql_delete = "DELETE FROM $tucc WHERE id='".$id."' and user_id='".$_user['user_id']."'";
-	$sql_update = "UPDATE $TABLECOURSUSER SET user_course_cat='0' WHERE user_course_cat='".$id."' AND user_id='".$_user['user_id']."'";
+	$sql_update = "UPDATE $TABLECOURSUSER SET user_course_cat='0' WHERE user_course_cat='".$id."' AND user_id='".$_user['user_id']."' AND relation_type<>".COURSE_RELATION_TYPE_RRHH." ";
 	Database::query($sql_delete);
 	Database::query($sql_update);
 	return get_lang('CourseCategoryDeleted');
@@ -668,7 +668,7 @@ function store_changecoursecategory($course_code, $newcategory) {
 	$TABLECOURSUSER = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 
 	$max_sort_value = api_max_sort_value($newcategory, $_user['user_id']); // max_sort_value($newcategory);
-	$sql = "UPDATE $TABLECOURSUSER SET user_course_cat='".$newcategory."', sort='".($max_sort_value + 1)."' WHERE course_code='".$course_code."' AND user_id='".$_user['user_id']."'";
+	$sql = "UPDATE $TABLECOURSUSER SET user_course_cat='".$newcategory."', sort='".($max_sort_value + 1)."' WHERE course_code='".$course_code."' AND user_id='".$_user['user_id']."' AND relation_type<>".COURSE_RELATION_TYPE_RRHH." ";
 	$result = Database::query($sql);
 	return get_lang('EditCourseCategorySucces');
 }
@@ -708,8 +708,8 @@ function move_course($direction, $course2move, $category) {
 	}
 
 	if (count($target_course) > 0 && count($source_course) > 0) {
-		$sql_update1 = "UPDATE $TABLECOURSUSER SET sort='".$target_course['sort']."' WHERE course_code='".$source_course['code']."' AND user_id='".$_user['user_id']."'";
-		$sql_update2 = "UPDATE $TABLECOURSUSER SET sort='".$source_course['sort']."' WHERE course_code='".$target_course['code']."' AND user_id='".$_user['user_id']."'";
+		$sql_update1 = "UPDATE $TABLECOURSUSER SET sort='".$target_course['sort']."' WHERE course_code='".$source_course['code']."' AND user_id='".$_user['user_id']."' AND relation_type<>".COURSE_RELATION_TYPE_RRHH." ";
+		$sql_update2 = "UPDATE $TABLECOURSUSER SET sort='".$source_course['sort']."' WHERE course_code='".$target_course['code']."' AND user_id='".$_user['user_id']."' AND relation_type<>".COURSE_RELATION_TYPE_RRHH." ";
 		Database::query($sql_update2);
 		Database::query($sql_update1);
 		return get_lang('CourseSortingDone');
@@ -844,8 +844,9 @@ function display_courses_in_category($user_category_id, $showicons) {
 		                        FROM    $TABLECOURS       course,
 										$TABLECOURSUSER  course_rel_user
 		                        WHERE course.code = course_rel_user.course_code
-		                        AND   course_rel_user.user_id = '".$_user['user_id']."'
-		                        AND course_rel_user.user_course_cat='".$user_category_id."' $without_special_courses
+		                        AND  course_rel_user.user_id = '".$_user['user_id']."'
+		                        AND  course_rel_user.relation_type <> ".COURSE_RELATION_TYPE_RRHH."
+		                        AND  course_rel_user.user_course_cat='".$user_category_id."' $without_special_courses
 		                        ORDER BY course_rel_user.user_course_cat, course_rel_user.sort ASC";
 	$result = Database::query($sql_select_courses);
 	$number_of_courses = Database::num_rows($result);
@@ -1132,6 +1133,7 @@ function get_courses_of_user($user_id) {
 		                        FROM    $TABLECOURS       course,
 										$TABLECOURSUSER  course_rel_user
 		                        WHERE course.code = course_rel_user.course_code
+		                        AND   course_rel_user.relation_type<>".COURSE_RELATION_TYPE_RRHH."
 		                        AND   course_rel_user.user_id = '".$user_id."' $without_special_courses
 		                        ORDER BY course_rel_user.sort ASC";
 	$result = Database::query($sql_select_courses);

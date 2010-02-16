@@ -142,10 +142,10 @@ if($is_allowedToTrack && $_configuration['tracking_enabled'])
     	$tempView[6] = '0';
 
         //--------------------------------BEGIN users in this course
-        $sql = "SELECT $TABLECOURSUSER.`user_id`, $table_user.`lastname`, $table_user.`firstname`
+        $sql = "SELECT $TABLECOURSUSER.user_i, $table_user.lastname, $table_user.firstname
                     FROM $TABLECOURSUSER, $table_user
-                    WHERE $TABLECOURSUSER.course_code = '".$_cid."' AND $TABLECOURSUSER.`user_id` = $table_user.`user_id`
-                    ORDER BY $table_user.`lastname`";
+                    WHERE $TABLECOURSUSER.course_code = '".$_cid."' AND $TABLECOURSUSER.user_id = $table_user.user_id AND $TABLECOURSUSER.relation_type<>".COURSE_RELATION_TYPE_RRHH."
+                    ORDER BY $table_user.lastname";
         $results = getManyResults3Col($sql);
 
         //BUGFIX: get visual code instead of real course code. Scormpaths use the visual code... (should be fixed in future versions)
@@ -232,7 +232,7 @@ if($is_allowedToTrack && $_configuration['tracking_enabled'])
 
         $sql = "SELECT count(*)
                     FROM $TABLECOURSUSER
-                    WHERE course_code = '".$_cid."'";
+                    WHERE course_code = '".$_cid."' AND relation_type<>".COURSE_RELATION_TYPE_RRHH."";
         $count = getOneResult($sql);
 
 		$title_line = get_lang('CountUsers')." ; ".$count."\n";

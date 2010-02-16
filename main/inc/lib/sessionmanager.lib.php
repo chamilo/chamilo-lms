@@ -11,11 +11,6 @@
 /* LIBRARIES */
 require_once 'display.lib.php';
 
-/* CONSTANTS */
-
-// Relation type between sessions
-define('SESSION_RELATION_TYPE_RRHH',	1);
-
 /**
 ==============================================================================
 *	This class provides methods for sessions management.

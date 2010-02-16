@@ -325,7 +325,7 @@ if ( isset( $_GET['mailingIndex']))  // examine or send
 		$sel = "SELECT u.user_id, u.lastname, u.firstname, cu.status
 				FROM `".$_configuration['main_database']."`.`user` u
 				LEFT JOIN $course_user cu
-				ON cu.user_id = u.user_id AND cu.course_code = '".$_course['sysCode']."'";
+				ON cu.user_id = u.user_id AND cu.relation_type<>".COURSE_RELATION_TYPE_RRHH." AND cu.course_code = '".$_course['sysCode']."'";
 		$sel .= " WHERE u.".dropbox_cnf("mailingWhere".$var)." = '";
 
         function getUser($thisRecip)

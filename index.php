@@ -855,6 +855,7 @@ function get_courses_of_user($user_id) {
 										$table_course_user  course_rel_user
 								WHERE course.code = course_rel_user.course_code
 								AND   course_rel_user.user_id = '".$user_id."'
+								AND course_rel_user.relation_type<>".COURSE_RELATION_TYPE_RRHH."
 								ORDER BY course_rel_user.sort ASC";
 	$result = Database::query($sql_select_courses);
 	while ($row = Database::fetch_array($result)) {

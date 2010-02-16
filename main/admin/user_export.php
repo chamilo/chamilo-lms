@@ -100,7 +100,7 @@ if ($form->validate())
 					u.official_code	AS OfficialCode,
 					u.phone		AS Phone";
 	if (strlen($course_code) > 0) {
-		$sql .= " FROM $user_table u, $course_user_table cu WHERE u.user_id = cu.user_id AND course_code = '$course_code' ORDER BY lastname,firstname";
+		$sql .= " FROM $user_table u, $course_user_table cu WHERE u.user_id = cu.user_id AND course_code = '$course_code' AND cu.relation_type<>".COURSE_RELATION_TYPE_RRHH." ORDER BY lastname,firstname";
 		$filename = 'export_users_'.$course_code.'_'.date('Y-m-d_H-i-s');
 	} else {
 		global $_configuration;

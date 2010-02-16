@@ -71,7 +71,7 @@ class SocialManager extends UserManager {
 		$tbl_my_friend_relation_type = Database :: get_main_table(TABLE_MAIN_USER_FRIEND_RELATION_TYPE);
 		$tbl_my_friend = Database :: get_main_table(TABLE_MAIN_USER_REL_USER);
 		$sql= 'SELECT rt.id as id FROM '.$tbl_my_friend_relation_type.' rt ' .
-			  'WHERE rt.id=(SELECT uf.relation_type FROM '.$tbl_my_friend.' uf WHERE  user_id='.((int)$user_id).' AND friend_user_id='.((int)$user_friend).')';
+			  'WHERE rt.id=(SELECT uf.relation_type FROM '.$tbl_my_friend.' uf WHERE  user_id='.((int)$user_id).' AND friend_user_id='.((int)$user_friend).' AND uf.relation_type <> '.USER_RELATION_TYPE_RRHH.' )';
 		$res=Database::query($sql);
 		$row=Database::fetch_array($res,'ASSOC');
 		if (Database::num_rows($res)>0) {
@@ -95,7 +95,7 @@ class SocialManager extends UserManager {
 		$list_ids_friends=array();
 		$tbl_my_friend = Database :: get_main_table(TABLE_MAIN_USER_REL_USER);
 		$tbl_my_user = Database :: get_main_table(TABLE_MAIN_USER);
-		$sql='SELECT friend_user_id FROM '.$tbl_my_friend.' WHERE relation_type<>6 AND friend_user_id<>'.((int)$user_id).' AND user_id='.((int)$user_id);
+		$sql='SELECT friend_user_id FROM '.$tbl_my_friend.' WHERE relation_type NOT IN ('.USER_RELATION_TYPE_DELETED.', '.USER_RELATION_TYPE_RRHH.') AND friend_user_id<>'.((int)$user_id).' AND user_id='.((int)$user_id);
 		if (isset($id_group) && $id_group>0) {
 			$sql.=' AND relation_type='.$id_group;
 		}

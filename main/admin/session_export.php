@@ -158,7 +158,7 @@ if ($_POST['formSent'] )
 			//users
 			$sql = "SELECT DISTINCT $tbl_user.username FROM $tbl_user
 					INNER JOIN $tbl_session_user
-						ON $tbl_user.user_id = $tbl_session_user.id_user
+						ON $tbl_user.user_id = $tbl_session_user.id_user AND $tbl_session_user.relation_type<>".SESSION_RELATION_TYPE_RRHH."
 						AND $tbl_session_user.id_session = '".$row['id']."'";
 
 			$rsUsers = Database::query($sql);
@@ -219,7 +219,7 @@ if ($_POST['formSent'] )
 				// rel user courses
 				$sql = "SELECT DISTINCT u.username
 						FROM $tbl_session_course_user scu
-						INNER JOIN $tbl_session_user su ON scu.id_user = su.id_user AND scu.id_session = su.id_session
+						INNER JOIN $tbl_session_user su ON scu.id_user = su.id_user AND scu.id_session = su.id_session AND su.relation_type<>".SESSION_RELATION_TYPE_RRHH."
 						INNER JOIN $tbl_user u
 						ON scu.id_user = u.user_id
 						AND scu.course_code='".$rowCourses['code']."'

@@ -222,7 +222,8 @@ function get_personal_course_list($user_id) {
 										course_rel_user.user_course_cat user_course_cat
 										FROM    ".$main_course_table."       course,".$main_course_user_table."   course_rel_user
 										WHERE course.code = course_rel_user.course_code"."
-										AND   course_rel_user.user_id = '".$user_id."'
+										AND   course_rel_user.user_id = '".$user_id."' 
+										AND course_rel_user.relation_type<>".COURSE_RELATION_TYPE_RRHH."
 										ORDER BY course_rel_user.user_course_cat, course_rel_user.sort ASC,i";
 
 	$course_list_sql_result = Database::query($personal_course_list_sql);
@@ -437,6 +438,7 @@ function display_courses_in_category($user_category_id) {
 										$TABLECOURSUSER  course_rel_user
 		                        WHERE course.code = course_rel_user.course_code
 		                        AND   course_rel_user.user_id = '".$_user['user_id']."'
+		                        AND course_rel_user.relation_type<>".COURSE_RELATION_TYPE_RRHH."
 		                        AND course_rel_user.user_course_cat='".$user_category_id."' $without_special_courses
 		                        ORDER BY course_rel_user.user_course_cat, course_rel_user.sort ASC";
 	$result = Database::query($sql_select_courses);

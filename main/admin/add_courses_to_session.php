@@ -121,7 +121,7 @@ if ($_POST['formSent']) {
 
 	$sql="SELECT id_user
 		FROM $tbl_session_rel_user
-		WHERE id_session = $id_session";
+		WHERE id_session = $id_session AND relation_type=".COURSE_RELATION_TYPE_RRHH." ";
 	$result=Database::query($sql);
 	$UserList=Database::store_result($result);
 

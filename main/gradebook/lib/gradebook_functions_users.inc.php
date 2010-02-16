@@ -133,7 +133,7 @@ function find_students($mask= '') {
 	$sql .= ' OR user.firstname LIKE '."'%" . $mask . "%')";
 
 	if (!api_is_platform_admin()) {
-		$sql .= ' AND user.user_id = cru.user_id' . ' AND cru.course_code in' . ' (SELECT course_code' . ' FROM ' . $tbl_cru . ' WHERE user_id = ' . api_get_user_id() . ' AND status = ' . COURSEMANAGER . ')';
+		$sql .= ' AND user.user_id = cru.user_id AND cru.relation_type<>'.COURSE_RELATION_TYPE_RRHH.' ' . ' AND cru.course_code in' . ' (SELECT course_code' . ' FROM ' . $tbl_cru . ' WHERE user_id = ' . api_get_user_id() . ' AND status = ' . COURSEMANAGER . ')';
 	}
 	$sql .= ' ORDER BY lastname';
 	$result= Database::query($sql);

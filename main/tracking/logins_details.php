@@ -104,7 +104,7 @@ if( ( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse ) && $_configura
     {
         $sql = "SELECT `u`.`firstname`,`u`.`lastname`, `u`.`email`
                     FROM $TABLECOURSUSER cu , $TABLEUSER u
-                    WHERE `cu`.`user_id` = `u`.`user_id`
+                    WHERE `cu`.`user_id` = `u`.`user_id` AND cu.relation_type<>".COURSE_RELATION_TYPE_RRHH."
                         AND `cu`.`course_code` = '$_cid'
                         AND `u`.`user_id` = '$uInfo'";
     }

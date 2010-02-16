@@ -193,7 +193,7 @@ class Tracking {
 
 		$sql = 'SELECT DISTINCT course_code
 						FROM ' . $tbl_course_rel_user . '
-						WHERE user_id = ' . $user_id;
+						WHERE user_id = ' . $user_id.' AND relation_type<>'.COURSE_RELATION_TYPE_RRHH;
 		$rs = Database::query($sql);
 		$nb_courses = Database::num_rows($rs);
 
@@ -1120,7 +1120,7 @@ class Tracking {
 		if ($since == 'never') {
 			$sql = 'SELECT course_user.user_id FROM '.$table_course_rel_user.' course_user
 						LEFT JOIN '. $tbl_track_login.' stats_login
-						ON course_user.user_id = stats_login.user_id'.
+						ON course_user.user_id = stats_login.user_id AND relation_type<>'.COURSE_RELATION_TYPE_RRHH.' '.
 						$inner.'
 					WHERE course_user.course_code = \''.Database::escape_string($course_code).'\'
 					AND stats_login.login_course_date IS NULL

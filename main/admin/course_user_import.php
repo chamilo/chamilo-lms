@@ -75,7 +75,7 @@ function save_data($users_courses) {
 		$res = Database::query($sql);
 		$obj = Database::fetch_object($res);
 		$user_id = $obj->user_id;
-		$sql = "SELECT * FROM $course_user_table cu WHERE cu.user_id = $user_id";
+		$sql = "SELECT * FROM $course_user_table cu WHERE cu.user_id = $user_id AND cu.relation_type<>".COURSE_RELATION_TYPE_RRHH." ";
 		$res = Database::query($sql);
 		$db_subscriptions = array();
 		while($obj = Database::fetch_object($res)) {

@@ -121,7 +121,7 @@ if (api_is_allowed_to_edit()) {
 					// users directly subscribed to the course
 					$table_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 					$sql_query = "SELECT DISTINCT user.user_id, ".($is_western_name_order ? "user.firstname, user.lastname" : "user.lastname, user.firstname").", user.email, user.official_code
-						FROM $table_course_user as course_user, $table_users as user WHERE `course_code` = '$currentCourseID' AND course_user.user_id = user.user_id ".($sort_by_first_name ? "ORDER BY user.firstname, user.lastname" : "ORDER BY user.lastname, user.firstname");
+						FROM $table_course_user as course_user, $table_users as user WHERE `course_code` = '$currentCourseID' AND course_user.relation_type<>".COURSE_RELATION_TYPE_RRHH." AND course_user.user_id = user.user_id ".($sort_by_first_name ? "ORDER BY user.firstname, user.lastname" : "ORDER BY user.lastname, user.firstname");
 					$rs = Database::query($sql_query);
 					while ($user = Database::fetch_array($rs, 'ASSOC')) {
 						$data[] = $user;

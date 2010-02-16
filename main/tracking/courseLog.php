@@ -240,7 +240,7 @@ if ($_GET['studentlist'] == 'false') {
 	if (Database::num_rows($rs) > 0) {
 		// gets course actual administrators
 		$sql = "SELECT user.user_id FROM $table_user user, $TABLECOURSUSER course_user
-			WHERE course_user.user_id=user.user_id AND course_user.course_code='".api_get_course_id()."' AND course_user.status <> '1' ";
+			WHERE course_user.user_id=user.user_id AND course_user.course_code='".api_get_course_id()."' AND course_user.status <> '1' AND course_user.relation_type<>".COURSE_RELATION_TYPE_RRHH." ";
 		$res = Database::query($sql);
 
 		$student_ids = array();

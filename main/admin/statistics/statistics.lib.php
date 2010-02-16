@@ -55,7 +55,7 @@ class Statistics
 		$sql = "SELECT COUNT(DISTINCT(user_id)) AS number FROM $user_table WHERE status = ".intval(Database::escape_string($status))." ";
 		if (isset ($category_code))
 		{
-			$sql = "SELECT COUNT(DISTINCT(cu.user_id)) AS number FROM $course_user_table cu, $course_table c WHERE cu.status = ".intval(Database::escape_string($status))." AND c.code = cu.course_code AND c.category_code = '".Database::escape_string($category_code)."'";
+			$sql = "SELECT COUNT(DISTINCT(cu.user_id)) AS number FROM $course_user_table cu, $course_table c WHERE cu.status = ".intval(Database::escape_string($status))." AND c.code = cu.course_code AND c.category_code = '".Database::escape_string($category_code)."'  ";
 		}
 		$res = Database::query($sql);
 		$obj = Database::fetch_object($res);
@@ -470,7 +470,7 @@ class Statistics
 		$user_friend_table = Database::get_main_table(TABLE_MAIN_USER_REL_USER);
 		$user_table = Database::get_main_table(TABLE_MAIN_USER);
 		$sql = "SELECT lastname, firstname, username, COUNT(friend_user_id) AS count_friend
-					FROM ".$user_friend_table." uf LEFT JOIN ".$user_table." u ON uf.user_id = u.user_id
+					FROM ".$user_friend_table." uf LEFT JOIN ".$user_table." u ON uf.user_id = u.user_id WHERE uf.relation_type <> '".USER_RELATION_TYPE_RRHH."'
 				GROUP BY uf.user_id";
 		$res = Database::query($sql);
 		$list_friends = array();

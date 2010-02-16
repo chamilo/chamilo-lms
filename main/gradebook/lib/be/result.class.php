@@ -109,7 +109,7 @@ class Result
 				if (api_get_session_id()) {
 					$sql_course_rel_user = 'SELECT course_code,id_user,status FROM '.$tbl_session_rel_course_user.' WHERE status=0 AND course_code="'.api_get_course_id().' AND id_session='.api_get_session_id().'"';
 				} else {
-					$sql_course_rel_user = 'SELECT course_code,user_id,status FROM '.$tbl_course_rel_course.' WHERE status="5" AND course_code="'.api_get_course_id().'"; ';
+					$sql_course_rel_user = 'SELECT course_code,user_id,status FROM '.$tbl_course_rel_course.' WHERE status="'.STUDENT.'" AND course_code="'.api_get_course_id().'"; ';
 				}
 
 				$res_course_rel_user=Database::query($sql_course_rel_user);

@@ -201,7 +201,7 @@ if( ( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse ) && $_configura
 			if(api_get_setting('use_session_mode')) {
 				$sql = "SELECT count(user_id)
 						FROM $TABLECOURSUSER
-						WHERE course_code = '".Database::escape_string($_cid)."'";
+						WHERE course_code = '".Database::escape_string($_cid)."' AND relation_type<>".COURSE_RELATION_TYPE_RRHH."";
 			} else {
 				$sql = "SELECT count(id_user)
 						FROM $tbl_session_course_user
@@ -251,7 +251,7 @@ if( ( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse ) && $_configura
 			// list of users in this course
 			$sql = "SELECT u.user_id, u.firstname,u.lastname
 						FROM $TABLECOURSUSER cu , $TABLEUSER u
-						WHERE cu.user_id = u.user_id
+						WHERE cu.user_id = u.user_id AND cu.relation_type<>".COURSE_RELATION_TYPE_RRHH."
 							AND cu.course_code = '".Database::escape_string($_cid)."'
 						LIMIT $offset,$step";
 		}

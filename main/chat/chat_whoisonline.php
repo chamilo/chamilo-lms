@@ -73,7 +73,7 @@ if (!empty($course))
 
 	if(empty($session_id))
 	{
-		$query="SELECT DISTINCT t1.user_id,username,firstname,lastname,picture_uri,t3.status FROM $tbl_user t1,$tbl_chat_connected t2,$tbl_course_user t3 WHERE t1.user_id=t2.user_id AND t3.user_id=t2.user_id AND t3.course_code = '".$_course['sysCode']."' AND t2.last_connection>'".$date_inter."' $extra_condition ORDER BY username";
+		$query="SELECT DISTINCT t1.user_id,username,firstname,lastname,picture_uri,t3.status FROM $tbl_user t1,$tbl_chat_connected t2,$tbl_course_user t3 WHERE t1.user_id=t2.user_id AND t3.user_id=t2.user_id AND t3.relation_type<>".COURSE_RELATION_TYPE_RRHH." AND t3.course_code = '".$_course['sysCode']."' AND t2.last_connection>'".$date_inter."' $extra_condition ORDER BY username";
 		$result=Database::query($query);
 		$Users=Database::store_result($result);
 	}

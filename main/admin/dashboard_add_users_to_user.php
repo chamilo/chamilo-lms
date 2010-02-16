@@ -34,7 +34,6 @@ $interbreadcrumb[] = array('url' => 'user_list.php','name' => get_lang('UserList
 
 // Database Table Definitions
 $tbl_user 			= 	Database::get_main_table(TABLE_MAIN_USER);
-$tbl_user_rel_user 	= 	Database::get_main_table(TABLE_MAIN_USER_REL_USER);
 
 // setting the name of the tool
 $tool_name= get_lang('AssignUsersToHumanResourcesManager');
@@ -56,7 +55,7 @@ if (!api_is_platform_admin()) {
 }
 
 function search_users($needle,$type) {
-	global $tbl_user, $tbl_user_rel_user, $user_anonymous, $current_user_id, $hrm_id;
+	global $tbl_user, $user_anonymous, $current_user_id, $hrm_id;
 
 	$xajax_response = new XajaxResponse();
 	$return = '';

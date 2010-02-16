@@ -213,7 +213,7 @@ echo '</blockquote>';
 /**
  * Show the courses in which this user is subscribed
  */
-$sql = 'SELECT * FROM '.$table_course_user.' cu, '.$table_course.' c WHERE cu.user_id = '.$user['user_id'].' AND cu.course_code = c.code';
+$sql = 'SELECT * FROM '.$table_course_user.' cu, '.$table_course.' c WHERE cu.user_id = '.$user['user_id'].' AND cu.course_code = c.code AND cu.relation_type <> '.COURSE_RELATION_TYPE_RRHH.' ';
 $res = Database::query($sql);
 if (Database::num_rows($res) > 0)
 {

@@ -760,7 +760,7 @@ function export_tracking_user_overview() {
 	// the other lines (the data)
 	foreach ($user_data as $key => $user) {
 		// getting all the courses of the user
-		$sql = "SELECT * FROM $tbl_course_user WHERE user_id = '".Database::escape_string($user[4])."'";
+		$sql = "SELECT * FROM $tbl_course_user WHERE user_id = '".Database::escape_string($user[4])."' AND relation_type<>".COURSE_RELATION_TYPE_RRHH." ";
 		$result = Database::query($sql);
 		while ($row = Database::fetch_row($result)) {
 			$csv_row = array();
@@ -955,7 +955,7 @@ function course_info_tracking_filter($user_id, $url_params, $row) {
 	$tbl_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 
 	// getting all the courses of the user
-	$sql = "SELECT * FROM $tbl_course_user WHERE user_id = '".Database::escape_string($user_id)."'";
+	$sql = "SELECT * FROM $tbl_course_user WHERE user_id = '".Database::escape_string($user_id)."' AND relation_type<>".COURSE_RELATION_TYPE_RRHH." ";
 	$result = Database::query($sql);
 	while ($row = Database::fetch_row($result)) {
 		$return .= '<tr>';

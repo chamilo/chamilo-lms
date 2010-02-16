@@ -94,7 +94,7 @@ if($_GET['action'] == 'delete')
 	}
 
 	if (!empty($_GET['user'])) {
-		Database::query("DELETE FROM $tbl_session_rel_user WHERE id_session='$id_session' AND id_user=".intval($_GET['user']));
+		Database::query("DELETE FROM $tbl_session_rel_user WHERE relation_type<>".SESSION_RELATION_TYPE_RRHH." AND id_session='$id_session' AND id_user=".intval($_GET['user']));
 		$nbr_affected_rows=Database::affected_rows();
 		Database::query("UPDATE $tbl_session SET nbr_users=nbr_users-$nbr_affected_rows WHERE id='$id_session'");
 
@@ -215,7 +215,7 @@ else {
 
 		$sql = " SELECT count(*) FROM $tbl_session_rel_user sru, $tbl_session_rel_course_rel_user srcru
 				WHERE srcru.id_user = sru.id_user AND srcru.id_session = sru.id_session AND srcru.course_code = '".Database::escape_string($course['code'])."'
-				AND srcru.id_session = '".intval($id_session)."'";
+				AND sru.relation_type<>".SESSION_RELATION_TYPE_RRHH." AND srcru.id_session = '".intval($id_session)."'";
 
 		$rs = Database::query($sql);
 		$course['nbr_users'] = Database::result($rs,0,0);
@@ -284,7 +284,7 @@ else {
 	$sql = 'SELECT '.$tbl_user.'.user_id, lastname, firstname, username
 			FROM '.$tbl_user.'
 			INNER JOIN '.$tbl_session_rel_user.'
-				ON '.$tbl_user.'.user_id = '.$tbl_session_rel_user.'.id_user
+				ON '.$tbl_user.'.user_id = '.$tbl_session_rel_user.'.id_user AND '.$tbl_session_rel_user.'.relation_type<>'.SESSION_RELATION_TYPE_RRHH.'
 				AND '.$tbl_session_rel_user.'.id_session = '.$id_session.$order_clause;
 
 	$result=Database::query($sql);

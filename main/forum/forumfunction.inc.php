@@ -1555,6 +1555,7 @@ function get_thread_users_details($thread_id, $db_name = null) {
 			  FROM $t_posts , $t_users user, $t_course_user course_user
 			  WHERE poster_id = user.user_id
 			  AND user.user_id = course_user.user_id
+			  AND course_user.relation_type<>".COURSE_RELATION_TYPE_RRHH."
 			  AND thread_id = '".Database::escape_string($thread_id)."'
 			  AND course_user.status NOT IN('1')
 			  AND course_code = '".api_get_course_id()."'";
@@ -1587,6 +1588,7 @@ function get_thread_users_qualify($thread_id, $db_name = null) {
 						     post.poster_id = user.user_id
 						     AND post.poster_id = qualify.user_id
 						     AND user.user_id = course_user.user_id
+						     AND course_user.relation_type<>".COURSE_RELATION_TYPE_RRHH."
 						     AND qualify.thread_id = '".Database::escape_string($thread_id)."'
 						     AND course_user.status not in('1')
 						     AND course_code = '".api_get_course_id()."'
@@ -1626,6 +1628,7 @@ function get_thread_users_not_qualify($thread_id, $db_name = null) {
 			  WHERE post.poster_id = user.user_id
 			  AND user.user_id NOT IN (".$cad.")
 			  AND user.user_id = course_user.user_id
+			  AND course_user.relation_type<>".COURSE_RELATION_TYPE_RRHH."
 			  AND post.thread_id = '".Database::escape_string($thread_id)."'
 			  AND course_user.status not in('1')
 			  AND course_code = '".api_get_course_id()."'";

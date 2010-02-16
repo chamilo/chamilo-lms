@@ -2905,11 +2905,11 @@ class UserManager
 		
 		$hr_dept_id = intval($hr_dept_id);		
 		$assigned_users_to_hrm = array();
-		
+
 		$condition_status = '';
-		if (!empty($status)) {
+		if (!empty($user_status)) {
 			$status = intval($status);			
-			$condition_status = ' WHERE u.status = '.$status;
+			$condition_status = ' AND u.status = '.$user_status;
 		}
 		
 		$sql = "SELECT u.user_id, u.username, u.lastname, u.firstname FROM $tbl_user u

@@ -13,6 +13,7 @@ $cidReset = true;
 require_once '../inc/global.inc.php';
 require_once api_get_path(SYS_CODE_PATH).'mySpace/myspace.lib.php';
 require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
+require_once api_get_path(LIBRARY_PATH).'tracking.lib.php';
 
 $this_section = "session_my_space";
 
@@ -95,20 +96,25 @@ if (!api_is_drh()) {
 	}
 }
 
+$a_last_week = get_last_week();
+$last_week 	 = date('Y-m-d',$a_last_week[0]).' '.get_lang('To').' '.date('Y-m-d', $a_last_week[6]);
+
 if ($is_western_name_order) {
-	echo '<table class="data_table"><tr><th>'.get_lang('FirstName').'</th><th>'.get_lang('LastName').'</th><th>'.get_lang('Email').'</th><th>'.get_lang('AdminCourses').'</th><th>'.get_lang('Students').'</th></tr>';
+	echo '<table class="data_table"><tr><th>'.get_lang('FirstName').'</th><th>'.get_lang('LastName').'</th><th width="100px">'.get_lang('TimeSpentLastWeek').'<br />'.$last_week.'</th><th>'.get_lang('Email').'</th><th>'.get_lang('AdminCourses').'</th><th>'.get_lang('Students').'</th></tr>';
 } else {
-	echo '<table class="data_table"><tr><th>'.get_lang('LastName').'</th><th>'.get_lang('FirstName').'</th><th>'.get_lang('Email').'</th><th>'.get_lang('AdminCourses').'</th><th>'.get_lang('Students').'</th></tr>';
+	echo '<table class="data_table"><tr><th>'.get_lang('LastName').'</th><th>'.get_lang('FirstName').'</th><th>'.get_lang('TimeSpentLastWeek').'<br />'.$last_week.'</th><th>'.get_lang('Email').'</th><th>'.get_lang('AdminCourses').'</th><th>'.get_lang('Students').'</th></tr>';
 }
 
 if ($is_western_name_order) {
-	$header[] = get_lang('FirstName', '');
-	$header[] = get_lang('LastName', '');
+	$header[] = get_lang('FirstName');
+	$header[] = get_lang('LastName');
 } else {
-	$header[] = get_lang('LastName', '');
-	$header[] = get_lang('FirstName', '');
+	$header[] = get_lang('LastName');
+	$header[] = get_lang('FirstName');
 }
-$header[] = get_lang('Email', '');
+
+$header[] = get_lang('TimeSpentLastWeek');
+$header[] = get_lang('Email');
 
 $data = array();
 
@@ -144,12 +150,15 @@ if (count($formateurs) > 0) {
 			$data[$user_id]["lastname"] = $lastname;
 			$data[$user_id]["firstname"] = $firstname;
 		}
+		
+		$time_on_platform = api_time_to_hms(Tracking :: get_time_spent_on_the_platform($user_id,true));
+		$data[$user_id]["timespentlastweek"] = $time_on_platform;
 		$data[$user_id]["email"] = $email;
 
 		if ($is_western_name_order) {
-			echo '<tr class="'.$css_class.'"><td>'.$firstname.'</td><td>'.$lastname.'</td><td><a href="mailto:'.$email.'">'.$email.'</a></td><td><a href="course.php?user_id='.$user_id.'"><img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a></td><td><a href="student.php?user_id='.$user_id.'"><img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a></td></tr>';
+			echo '<tr class="'.$css_class.'"><td>'.$firstname.'</td><td>'.$lastname.'</td><td align="right">'.$time_on_platform.'</td><td align="right"><a href="mailto:'.$email.'">'.$email.'</a></td><td align="right"><a href="course.php?user_id='.$user_id.'"><img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a></td><td align="right"><a href="student.php?user_id='.$user_id.'"><img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a></td></tr>';
 		} else {
-			echo '<tr class="'.$css_class.'"><td>'.$lastname.'</td><td>'.$firstname.'</td><td><a href="mailto:'.$email.'">'.$email.'</a></td><td><a href="course.php?user_id='.$user_id.'"><img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a></td><td><a href="student.php?user_id='.$user_id.'"><img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a></td></tr>';
+			echo '<tr class="'.$css_class.'"><td>'.$lastname.'</td><td>'.$firstname.'</td><td align="right">'.$time_on_platform.'</td><td align="right"><a href="mailto:'.$email.'">'.$email.'</a></td><td align="right"><a href="course.php?user_id='.$user_id.'"><img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a></td><td align="right"><a href="student.php?user_id='.$user_id.'"><img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a></td></tr>';
 		}
 	}
 } else {

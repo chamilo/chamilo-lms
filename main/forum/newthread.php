@@ -154,19 +154,31 @@ if($origin=='learnpath') {
 // I have split this is several pieces for clarity.
 
 if (!api_is_allowed_to_edit(false,true) && (($current_forum_category['visibility']==0 || $current_forum['visibility']==0))) {
-	forum_not_allowed_here();
+	$forum_allow = forum_not_allowed_here();
+	if ($forum_allow === false) {
+		exit;
+	}
 }
 // 2. the forumcategory or forum is locked (locked <>0) and the user is not a course manager
 if (!api_is_allowed_to_edit(false,true) AND ($current_forum_category['locked']<>0 OR $current_forum['locked']<>0)) {
-	forum_not_allowed_here();
+	$forum_allow = forum_not_allowed_here();
+	if ($forum_allow === false) {
+		exit;
+	}
 }
 // 3. new threads are not allowed and the user is not a course manager
 if (!api_is_allowed_to_edit(false,true) AND $current_forum['allow_new_threads']<>1) {
-	forum_not_allowed_here();
+	$forum_allow = forum_not_allowed_here();
+	if ($forum_allow === false) {
+		exit;
+	}
 }
 // 4. anonymous posts are not allowed and the user is not logged in
 if (!$_user['user_id']  AND $current_forum['allow_anonymous']<>1) {
-	forum_not_allowed_here();
+	$forum_allow = forum_not_allowed_here();
+	if ($forum_allow === false) {
+		exit;
+	}
 }
 
 /*

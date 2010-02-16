@@ -639,7 +639,7 @@ function store_forum($values) {
 *
 * @todo write the code for the cascading deletion of the forums inside a forum category and also the threads and replies inside these forums
 * @todo config setting for recovery or not (see also the documents tool: real delete or not).
-*
+* @return void
 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 * @version february 2006, dokeos 1.8
 */
@@ -706,8 +706,8 @@ function delete_forum_forumcategory_thread($content, $id) {
 * @version february 2006
 */
 function delete_post($post_id) {
-	global $table_posts;
-	global $table_threads;
+	$table_posts 		= Database :: get_course_table(TABLE_FORUM_POST);
+	$table_threads 		= Database :: get_course_table(TABLE_FORUM_THREAD);
 	$post_id = intval($post_id);
 
 	// get parent_post_id of deleted post
@@ -755,8 +755,7 @@ function delete_post($post_id) {
 * @version february 2006, dokeos 1.8
 */
 function check_if_last_post_of_thread($thread_id) {
-	global $table_posts;
-
+	$table_posts	= Database :: get_course_table(TABLE_FORUM_POST);
 	$sql="SELECT * FROM $table_posts WHERE thread_id='".Database::escape_string($thread_id)."' ORDER BY post_date DESC";
 	$result=Database::query($sql);
 	if ( Database::num_rows($result)>0 ) {
@@ -899,7 +898,7 @@ function display_up_down_icon($content, $id, $list) {
 * @todo check if api_item_property_update returns true or false => returnmessage depends on it.
 * @todo move to itemmanager
 *
-* @return
+* @return string language variable
 *
 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 * @version february 2006, dokeos 1.8
@@ -929,10 +928,10 @@ function change_visibility($content, $id, $target_visibility) {
 * @version february 2006, dokeos 1.8
 */
 function change_lock_status($content, $id, $action) {
-	global $table_categories;
-	global $table_forums;
-	global $table_threads;
-	global $table_posts;
+	$table_categories 		= Database :: get_course_table(TABLE_FORUM_CATEGORY);
+	$table_forums 			= Database :: get_course_table(TABLE_FORUM);
+	$table_threads 			= Database :: get_course_table(TABLE_FORUM_THREAD);
+	$table_posts 			= Database :: get_course_table(TABLE_FORUM_POST);
 
 	// Determine the relevant table
 	if ($content=='forumcategory') {
@@ -1062,7 +1061,7 @@ function move_up_down($content, $direction, $id) {
 * This function returns a piece of html code that make the links grey (=invisible for the student)
 *
 * @param boolean 0/1: 0 = invisible, 1 = visible
-* @return string
+* @return string language variable
 *
 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 * @version february 2006, dokeos 1.8
@@ -1168,11 +1167,11 @@ function get_forums_in_category($cat_id)
 * @version february 2006, dokeos 1.8
 */
 function get_forums($id='') {
-	global $table_forums;
-	global $table_threads;
-	global $table_posts;
-	global $table_item_property;
-	global $table_users;
+$table_forums 			= Database :: get_course_table(TABLE_FORUM);
+$table_threads 			= Database :: get_course_table(TABLE_FORUM_THREAD);
+$table_posts 			= Database :: get_course_table(TABLE_FORUM_POST);
+$table_item_property 	= Database :: get_course_table(TABLE_ITEM_PROPERTY);
+$table_users 			= Database :: get_main_table(TABLE_MAIN_USER);
 
 	// **************** GETTING ALL THE FORUMS ************************* //
 
@@ -1328,11 +1327,11 @@ function get_forums($id='') {
 * @version february 2006, dokeos 1.8
 */
 function get_last_post_information($forum_id, $show_invisibles=false) {
-	global $table_forums;
-	global $table_threads;
-	global $table_posts;
-	global $table_item_property;
-	global $table_users;
+	$table_forums 			= Database :: get_course_table(TABLE_FORUM);
+	$table_threads 			= Database :: get_course_table(TABLE_FORUM_THREAD);
+	$table_posts 			= Database :: get_course_table(TABLE_FORUM_POST);
+	$table_item_property 	= Database :: get_course_table(TABLE_ITEM_PROPERTY);
+	$table_users 			= Database :: get_main_table(TABLE_MAIN_USER);
 
 	$sql="SELECT post.post_id, post.forum_id, post.poster_id, post.poster_name, post.post_date, users.lastname, users.firstname, post.visible, thread_properties.visibility AS thread_visibility, forum_properties.visibility AS forum_visibility
 				FROM $table_posts post, $table_users users, $table_item_property thread_properties,  $table_item_property forum_properties
@@ -1506,9 +1505,8 @@ function icon($image_url,$alt='',$title='') {
 * @version february 2006, dokeos 1.8
 */
 function get_post_information($post_id) {
-	global $table_posts;
-	global $table_users;
-
+	$table_posts 	= Database :: get_course_table(TABLE_FORUM_POST);
+	$table_users 	= Database :: get_main_table(TABLE_MAIN_USER);
 	$sql="SELECT * FROM ".$table_posts."posts, ".$table_users." users WHERE posts.poster_id=users.user_id AND posts.post_id='".Database::escape_string($post_id)."'";
 	$result=Database::query($sql);
 	$row=Database::fetch_array($result);
@@ -1697,8 +1695,7 @@ function get_forumcategory_information($cat_id) {
 * @version february 2006, dokeos 1.8
 */
 function count_number_of_forums_in_category($cat_id) {
-	global $table_forums;
-
+	$table_forums 	= Database :: get_course_table(TABLE_FORUM);
 	$sql="SELECT count(*) AS number_of_forums FROM ".$table_forums." WHERE forum_category='".Database::escape_string($cat_id)."'";
 	$result=Database::query($sql);
 	$row=Database::fetch_array($result);
@@ -2522,8 +2519,8 @@ function store_edit_post($values) {
 /**
 * This function displays the firstname and lastname of the user as a link to the user tool.
 *
-* @param
-* @return
+* @param string names
+* @return string HTML
 *
 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 * @version february 2006, dokeos 1.8
@@ -2608,7 +2605,7 @@ function update_thread($thread_id, $last_post_id,$post_date) {
 function forum_not_allowed_here() {
 	Display :: display_error_message(get_lang('NotAllowedHere'));
 	Display :: display_footer();
-	exit;
+	return false;
 }
 
 /**
@@ -2731,14 +2728,13 @@ function get_post_topics_of_forum($forum_id) {
 *
 * @param $post_id the id of the post that will be deleted
 * @param $action make the post visible or invisible
-* @return
+* @return string language variable
 *
 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 * @version february 2006, dokeos 1.8
 */
 function approve_post($post_id, $action) {
-	global $table_posts;
-
+	$table_posts 	= Database :: get_course_table(TABLE_FORUM_POST);
 	if ($action=='invisible') {
 		$visibility_value=0;
 	}
@@ -3172,7 +3168,7 @@ function prepare4display($input='') {
 
 /**
  * Display the search form for the forum and display the search results
- *
+ * @return void display an HTML search results
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
  * @version march 2008, dokeos 1.8.5
  */
@@ -3205,12 +3201,17 @@ function forum_search() {
 }
 /**
  * Display the search results
- *
+ * @param string 
+ * @return void display the results
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
  * @version march 2008, dokeos 1.8.5
  */
 function display_forum_search_results($search_term) {
-	global $table_categories, $table_forums, $table_threads, $table_posts;
+	$table_categories 		= Database :: get_course_table(TABLE_FORUM_CATEGORY);
+	$table_forums 			= Database :: get_course_table(TABLE_FORUM);
+	$table_threads 			= Database :: get_course_table(TABLE_FORUM_THREAD);
+	$table_posts 			= Database :: get_course_table(TABLE_FORUM_POST);
+
 	global $origin;
 	$gradebook=Security::remove_XSS($_GET['gradebook']);
 	// defining the search strings as an array
@@ -3228,12 +3229,11 @@ function display_forum_search_results($search_term) {
 
 	$sql = "SELECT * FROM $table_posts posts
 				WHERE ".implode(' AND ',$search_restriction)."
-				/*AND posts.thread_id = threads.thread_id*/
 				GROUP BY posts.post_id";
 
 	// getting all the information of the forum categories
 	$forum_categories_list=get_forum_categories();
-
+	
 	// getting all the information of the forums
 	$forum_list=get_forums();
 
@@ -3359,7 +3359,8 @@ function add_forum_attachment_file($file_comment,$last_id) {
  * This function edit a attachment file into forum
  * @param string  a comment about file
  * @param int Post Id
- *  @param int attachment file Id
+ * @param int attachment file Id
+ * @return void
  */
 function edit_forum_attachment_file($file_comment,$post_id,$id_attach) {
 
@@ -3661,7 +3662,7 @@ function get_notifications($content,$id) {
  * @since May 2008, dokeos 1.8.5
  */
 function send_notifications($forum_id=0, $thread_id=0, $post_id=0) {
-	global $_course;
+	global $_course,$_user;
 
 	// the content of the mail
 	$email_subject = get_lang('NewForumPost')." - ".$_course['official_code'];
@@ -3750,7 +3751,7 @@ function get_notifications_of_user($user_id = 0, $force = false) {
 * @version octubre 2008, dokeos 1.8
 */
 function count_number_of_post_in_thread($thread_id) {
-	global $table_posts;
+	$table_posts 	= Database :: get_course_table(TABLE_FORUM_POST);
 	$sql = "SELECT * FROM $table_posts WHERE thread_id='".Database::escape_string($thread_id)."' ";
 	$result = Database::query($sql);
 	return count(Database::store_result($result));
@@ -3765,7 +3766,7 @@ function count_number_of_post_in_thread($thread_id) {
 * @version octubre 2008, dokeos 1.8
 */
 function count_number_of_post_for_user_thread($thread_id, $user_id) {
-	global $table_posts;
+	$table_posts 	= Database :: get_course_table(TABLE_FORUM_POST);
 	$sql = "SELECT * FROM $table_posts WHERE thread_id='".Database::escape_string($thread_id)."'
 																			AND poster_id = '".Database::escape_string($user_id)."' ";
 	$result = Database::query($sql);

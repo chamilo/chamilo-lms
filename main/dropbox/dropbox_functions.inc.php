@@ -1073,7 +1073,7 @@ function store_add_dropbox()
 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 * @version march 2006
 */
-function display_user_link($user_id, $name='')
+function display_user_link_work($user_id, $name='')
 {
 	global $_otherusers;
 
@@ -1129,7 +1129,7 @@ function feedback($array)
 */
 function format_feedback($feedback)
 {
-	$output.=display_user_link($feedback['author_user_id']);
+	$output.=display_user_link_work($feedback['author_user_id']);
 	$output.='&nbsp;&nbsp;['.$feedback['feedback_date'].']<br />';
 	$output.='<div style="padding-top:6px">'.nl2br($feedback['feedback']).'</div><hr size="1" noshade/><br />';
 	return $output;

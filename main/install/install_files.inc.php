@@ -1,5 +1,5 @@
 <?php // $Id: install_files.inc.php 22577 2009-08-03 04:31:24Z yannoo $
-/* For licensing terms, see /chamilo_license.txt */
+/* For licensing terms, see /license.txt */
 /**
 ==============================================================================
 * Install the Chamilo files

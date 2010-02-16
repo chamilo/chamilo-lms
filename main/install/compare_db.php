@@ -1,11 +1,11 @@
 <?php // $Id: compare_db.php 22577 2009-08-03 04:31:24Z yannoo $
-/* For licensing terms, see /dokeos_license.txt */
+/* For licensing terms, see /license.txt */
 /**
 ==============================================================================
 *	This script allows you to know which tables have been modified
 *	between two versions of Dokeos databases.
 *
-*	@package dokeos.install
+*	@package chamilo.install
 ==============================================================================
 */
 

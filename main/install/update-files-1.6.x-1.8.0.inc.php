@@ -37,7 +37,7 @@
 * - create a new set of directories that reflect the new tools offered by 1.8
 * - record an item_property for each directory added
 *
-* @package dokeos.install
+* @package chamilo.install
 ==============================================================================
 */
 

@@ -2,7 +2,7 @@
 /**
  * Script handling the migration between an old Dokeos platform (<1.8.0) to
  * setup the new database system (4 scorm tables inside the course's database)
- * @package dokeos.scorm
+ * @package chamilo.scorm
  * @author Yannick Warnier <ywarnier@beeznest.org>
  */
 /**

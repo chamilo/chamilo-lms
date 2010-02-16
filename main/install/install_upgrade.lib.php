@@ -1,5 +1,5 @@
 <?php //$id: $
-/* For licensing terms, see /chamilo_license.txt */
+/* For licensing terms, see /license.txt */
 /**
 ==============================================================================
 * This file contains functions used by the install and upgrade scripts.

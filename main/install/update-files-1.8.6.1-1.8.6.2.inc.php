@@ -1,12 +1,12 @@
 <?php
-/* See license terms in /dokeos_license.txt */
+/* See license terms in /license.txt */
 /**
 ==============================================================================
 * Updates the Dokeos files from version 1.8.6.1 to version 1.8.6.2
 * This script operates only in the case of an update, and only to change the
 * active version number (and other things that might need a change) in the
 * current configuration file.
-* @package dokeos.install
+* @package chamilo.install
 ==============================================================================
 */
 require_once '../inc/lib/main_api.lib.php';

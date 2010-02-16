@@ -1,5 +1,5 @@
 <?php
-/* See license terms in /dokeos_license.txt */
+/* See license terms in /license.txt */
 /**
 ==============================================================================
 * Updates the Dokeos files from version 1.8.5 to version 1.8.6
@@ -12,7 +12,7 @@
 * Being in configuration.php, it benefits from the configuration.dist.php
 * advantages that a new version doesn't overwrite it, thus letting the old
 * version be available until the end of the installation.
-* @package dokeos.install
+* @package chamilo.install
 ==============================================================================
 */
 require_once '../inc/lib/main_api.lib.php';

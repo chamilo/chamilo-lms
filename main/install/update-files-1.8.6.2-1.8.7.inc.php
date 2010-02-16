@@ -1,5 +1,5 @@
 <?php
-/* See license terms in /chamilo_license.txt */
+/* See license terms in /license.txt */
 /**
 ==============================================================================
 * Updates the Chamilo files from version 1.8.6.2 to version 1.8.7

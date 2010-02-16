@@ -1,11 +1,11 @@
 <?php // $Id: update-db-1.8.4-1.8.5.inc.php 19471 2009-03-31 23:28:53Z cvargas1 $
-/* See license terms in /dokeos_license.txt */
+/* See license terms in /license.txt */
 /**
 ==============================================================================
 * Update the Dokeos database from an older version
 * Notice : This script has to be included by index.php or update_courses.php
 *
-* @package dokeos.install
+* @package chamilo.install
 * @todo
 * - conditional changing of tables. Currently we execute for example
 * ALTER TABLE `$dbNameForm`.`cours` instructions without checking wether this is necessary.

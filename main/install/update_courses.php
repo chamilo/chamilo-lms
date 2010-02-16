@@ -1,5 +1,5 @@
 <?php //$id: $
-/* For licensing terms, see /dokeos_license.txt */
+/* For licensing terms, see /license.txt */
 
 // TODO: Ivan, 13-FEB-2010: Is this file really needed?
 
@@ -13,7 +13,7 @@
 *
 * To update the rest of the courses you need to run this script.
 *
-* @package dokeos.install
+* @package chamilo.install
 * @todo remove duplication: MAX_COURSE_TRANSFER is defined here and
 * also in install.index.php
 ==============================================================================

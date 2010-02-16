@@ -2,7 +2,7 @@
 
 // TODO: Ivan, 13-FEB-2010: Is this file needed? It looks like unfinished business.
 
-/* For licensing terms, see /dokeos_license.txt */
+/* For licensing terms, see /license.txt */
 /**
 ==============================================================================
 * In this file we're working on a well-organised upgrade script to
@@ -27,7 +27,7 @@
 * - ability to let old databases remain and clone them for new install so
 * Dokeos admins can have old and new version running side by side
 *
-* @package dokeos.install
+* @package chamilo.install
 ==============================================================================
 */
 /*

@@ -54,7 +54,7 @@
 * - rename the old configuration.php to configuration.php.old,
 *   or if this fails delete the old configuration.php
 *
-* @package dokeos.install
+* @package chamilo.install
 ==============================================================================
 */
 /*

@@ -27,7 +27,7 @@
 * Update the Dokeos database from an older version
 * Notice : This script has to be included by index.php or update_courses.php
 *
-* @package dokeos.install
+* @package chamilo.install
 * @todo
 * - conditional changing of tables. Currently we execute for example
 * ALTER TABLE `$dbNameForm`.`cours` instructions without checking wether this is necessary.

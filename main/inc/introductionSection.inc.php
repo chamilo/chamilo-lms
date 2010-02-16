@@ -162,31 +162,42 @@ if ($intro_dispForm) {
 	echo '</div>';
 }
 
-$course_description = new CourseDescription();
-$course_description->set_session_id(api_get_session_id());
-$thematic_description = $course_description->get_data_by_description_type(8);
+$style_introduction_section = '';
 $thematic_description_html = '';
-if (!empty($thematic_description)) {
-	$thematic_advance = get_lang('ThematicAdvance').'&nbsp;'.$course_description->get_progress_porcent(false,8);
-	if (api_is_allowed_to_edit(null,true)) {
-		$thematic_advance = '<a href="'.api_get_path(WEB_CODE_PATH).'course_description/index.php?action=edit&'.api_get_cidreq().'&description_type=8'.'">'.get_lang('ThematicAdvance').'&nbsp;'.$course_description->get_progress_porcent(false,8).'</a>';
-	}
-	$thematic_description_html = '<td valign="top" width="260px"><div class="thematic-postit">
-							  <div class="thematic-postit-top"><a class="thematic-postit-head" style="" href="#">'.Display::return_icon('postit_top.png').'</a></div>
-							  <div class="thematic-postit-center">
-							  	<h3>'.$thematic_advance.'</h3>
-								'.$thematic_description['description_title'].'
-								<p>'.$thematic_description['description_content'].'</p>
-							  </div>
-							  <div  class="thematic-postit-bottom">'.Display::return_icon('postit_bottom.png').'</div>
-							  </div></td>';
+if ($tool==TOOL_COURSE_HOMEPAGE && !isset($_GET['intro_cmdEdit'])) {
+	
+	$course_description = new CourseDescription();
+	$course_description->set_session_id(api_get_session_id());
+	$thematic_description = $course_description->get_data_by_description_type(8);
+		
+	if (!empty($thematic_description)) {
+		
+		$style_introduction_section = 'style="width:70%;float:left;margin-left:80px;"';
+		
+		$thematic_advance = get_lang('ThematicAdvance').'&nbsp;'.$course_description->get_progress_porcent(false,8);
+		if (api_is_allowed_to_edit(null,true)) {
+			$thematic_advance = '<a href="'.api_get_path(WEB_CODE_PATH).'course_description/index.php?action=edit&'.api_get_cidreq().'&description_type=8'.'">'.get_lang('ThematicAdvance').'&nbsp;'.$course_description->get_progress_porcent(false,8).'</a>';
+		}
+		
+		$thematic_description_html = '<div style="width:20%;float:left;font-size:10pt;"><div class="thematic-postit">
+								  <div class="thematic-postit-top"><a class="thematic-postit-head" style="" href="#">'.Display::return_icon('postit_top.png').'</a></div>
+								  <div class="thematic-postit-center">
+								  	<h3>'.$thematic_advance.'</h3>
+									'.$thematic_description['description_title'].'
+									<p>'.$thematic_description['description_content'].'</p>
+								  </div>
+								  <div  class="thematic-postit-bottom">'.Display::return_icon('postit_bottom.png').'</div>
+								  </div></div>';
+		
+	}	
 }
 
+echo '<div '.$style_introduction_section.'>';
 if ($intro_dispDefault) {
 	//$intro_content = make_clickable($intro_content); // make url in text clickable
 	$intro_content = text_filter($intro_content); // parse [tex] codes
 	if (!empty($intro_content) || !empty($thematic_description_html))	{
-		echo "<table align='center' style='width: 80%;'><tr><td>$intro_content</td>$thematic_description_html</tr></table>";
+		echo "<table><tr><td>$intro_content</td></tr></table>";
 	}
 }
 
@@ -219,4 +230,10 @@ if ($intro_dispCommand) {
 	}
 
 }
+echo '</div>';
+
+echo $thematic_description_html;
+
+echo '<div class="clear"></div>';
+
 ?>

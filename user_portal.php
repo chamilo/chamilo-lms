@@ -268,6 +268,7 @@ function get_personal_course_list($user_id) {
 function display_special_courses ($user_id) {
 
 		$user_id = intval($user_id);
+		$user_info = api_get_user_info($user_id);
 		$special_course_list = array();
 
 		$tbl_course 				= Database::get_main_table(TABLE_MAIN_COURSE);
@@ -326,7 +327,7 @@ function display_special_courses ($user_id) {
 					if (($course['status'] == 5 && !api_is_coach()) || empty($course['status'])) {
 						$status_icon=Display::return_icon('course.gif', get_lang('Course')).' '.Display::return_icon('students.gif', get_lang('Status').': '.get_lang('Student'),array('style'=>'width:11px; height:11px'));
 					}
-					$progress_thematic_icon = get_thematic_progress_icon($course['db_name']);
+					$progress_thematic_icon = '<a href="'.api_get_path(WEB_CODE_PATH).'course_description/index.php?action=edit&cidReq='.$course['code'].'&description_type=8'.'">'.get_thematic_progress_icon($course['db_name']).'</a>';
 					echo "\t<tr>\n";
 					echo "\t\t<td>\n";
 
@@ -462,7 +463,7 @@ function display_courses_in_category($user_category_id) {
 		if (($course['status'] == STUDENT && !api_is_coach()) || empty($course['status'])) {
 			$status_icon=Display::return_icon('course.gif', get_lang('Course')).' '.Display::return_icon('students.gif', get_lang('Status').': '.get_lang('Student'),array('style'=>'width:11px; height:11px'));
 		}
-		$progress_thematic_icon = get_thematic_progress_icon($course['db_name']);
+		$progress_thematic_icon = '<a href="'.api_get_path(WEB_CODE_PATH).'course_description/index.php?action=edit&cidReq='.$course['code'].'&description_type=8'.'">'.get_thematic_progress_icon($course['db_name']).'</a>';
 		echo "\t<tr>\n";
 		echo "\t\t<td>\n";
 
@@ -543,8 +544,8 @@ function display_courses_in_category($user_category_id) {
 		$progress = $row['progress'];
 		$image = 'level_'.$progress.'.png';
 		$title = $row['progress'].'%';
-	}
-	$img = Display::return_icon($image,get_lang('ThematicAdvance'),array('style'=>'vertical-align:middle')).'&nbsp;'.$title;
+		$img = Display::return_icon($image,get_lang('ThematicAdvance'),array('style'=>'vertical-align:middle')).'&nbsp;<span>'.$title.'</span>';
+	}	
 	return $img;
  }
 
@@ -784,7 +785,7 @@ function get_logged_user_course_html($course, $session_id = 0, $class='courses')
 	} else {
 		$result .= $course_display_title." "." ".get_lang('CourseClosed')."";
 	}
-	$progress_thematic_icon = get_thematic_progress_icon($course_database,$session_id);
+	$progress_thematic_icon = '<a href="'.api_get_path(WEB_CODE_PATH).'course_description/index.php?action=edit&cidReq='.$course['code'].'&description_type=8'.'">'.get_thematic_progress_icon($course_database, $session_id).'</a>';
 	$result .= '&nbsp;&nbsp;<span>'.$progress_thematic_icon.'</span>';
 	// show the course_code and teacher if chosen to display this
 	if (api_get_setting('display_coursecode_in_courselist') == 'true' || api_get_setting('display_teacher_in_courselist') == 'true') {

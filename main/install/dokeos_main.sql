@@ -217,7 +217,7 @@ CREATE TABLE course_field (
     field_visible tinyint default 0,
     field_changeable tinyint default 0,
     field_filter tinyint default 0,
-    tms TIMESTAMP,
+    tms DATETIME NOT NULL default '0000-00-00 00:00:00',
     PRIMARY KEY(id)
 );
 
@@ -231,7 +231,7 @@ CREATE TABLE course_field_values(
     course_code varchar(40) NOT NULL,
     field_id int NOT NULL,
     field_value text,
-    tms TIMESTAMP,
+    tms DATETIME NOT NULL default '0000-00-00 00:00:00',
     PRIMARY KEY(id)
 );
 
@@ -517,7 +517,7 @@ CREATE TABLE session_field (
     field_visible tinyint default 0,
     field_changeable tinyint default 0,
     field_filter tinyint default 0,
-    tms TIMESTAMP,
+    tms DATETIME NOT NULL default '0000-00-00 00:00:00',
     PRIMARY KEY(id)
 );
 
@@ -527,7 +527,7 @@ CREATE TABLE session_field_values(
     session_id int NOT NULL,
     field_id int NOT NULL,
     field_value text,
-    tms TIMESTAMP,
+    tms DATETIME NOT NULL default '0000-00-00 00:00:00',
     PRIMARY KEY(id)
 );
 
@@ -1162,7 +1162,7 @@ CREATE TABLE user_field (
 	field_visible tinyint default 0,
 	field_changeable tinyint default 0,
 	field_filter tinyint default 0,
-	tms	TIMESTAMP,
+	tms	DATETIME NOT NULL default '0000-00-00 00:00:00',
 	PRIMARY KEY(id)
 );
 DROP TABLE IF EXISTS user_field_options;
@@ -1172,7 +1172,7 @@ CREATE TABLE user_field_options (
 	option_value	text,
 	option_display_text varchar(64),
 	option_order int,
-	tms	TIMESTAMP,
+	tms	DATETIME NOT NULL default '0000-00-00 00:00:00',
 	PRIMARY KEY (id)
 );
 DROP TABLE IF EXISTS user_field_values;
@@ -1181,7 +1181,7 @@ CREATE TABLE user_field_values(
 	user_id	int	unsigned NOT NULL,
 	field_id int NOT NULL,
 	field_value	text,
-	tms TIMESTAMP,
+	tms DATETIME NOT NULL default '0000-00-00 00:00:00',
 	PRIMARY KEY(id)
 );
 
@@ -1226,7 +1226,7 @@ CREATE TABLE access_url(
 	description text,
 	active	int unsigned not null default 0,
 	created_by	int	not null,
-	tms TIMESTAMP,
+	tms DATETIME NOT NULL default '0000-00-00 00:00:00',
 	PRIMARY KEY (id)
 );
 

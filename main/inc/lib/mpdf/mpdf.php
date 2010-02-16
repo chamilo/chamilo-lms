@@ -27024,9 +27024,9 @@ function AdjustHTML($html,$directionality='ltr',$usepre=true, $tabSpaces=8) {
 	$html = str_replace('</ttz><ttz>','|',$html);
 	$html = str_replace('</tta><tta>','|',$html);
 
-	// Modified by Ivan Tcholakov, 28-JAN-2010.
+	// Modified by Ivan Tcholakov, 16-FEB-2010.
 	//$html = mb_eregi_replace('/<br \/>\s*/is',"<br />",$html); // mPDF 3.0 changed from ereg_
-	$html = api_eregi_replace('/<br \/>\s*/is',"<br />",$html); // mPDF 3.0 changed from ereg_
+	$html = preg_replace('/<br \/>\s*/is',"<br />",$html); // mPDF 3.0 changed from ereg_
 	//
 	if ($usepre) //used to keep \n on content inside <pre> and inside <textarea>
  	{

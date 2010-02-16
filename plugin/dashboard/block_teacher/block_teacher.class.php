@@ -127,7 +127,7 @@ class BlockTeacher extends Block {
 	 	$content .= $teachers_table;
  		
  		if (count($teachers) > 0) {
-			$content .= '<div style="text-align:right;margin:10px;"><a href="'.api_get_path(WEB_CODE_PATH).'mySpace/index.php?view=admin">'.get_lang('SeeMore').'</a></div>';
+			$content .= '<div style="text-align:right;margin-top:10px;"><a href="'.api_get_path(WEB_CODE_PATH).'mySpace/index.php?view=admin">'.get_lang('SeeMore').'</a></div>';
 		}
 
 		$content .= '</div>';	
@@ -141,16 +141,18 @@ class BlockTeacher extends Block {
   		$teachers = $this->teachers;
  		$content = ''; 		
  		$content = '<div style="margin:10px;">';
- 		$content .= '<h3><font color="#000">'.get_lang('YourTeachers').'</font></h3>';
- 		 		
- 		if (count($teachers) > 0) {
+ 		$content .= '<h3><font color="#000">'.get_lang('YourTeachers').'</font></h3>'; 		
+ 		 		 		 	
+ 		if (count($teachers) > 0) { 			
+ 			$a_last_week = get_last_week();
+ 			$last_week 	 = date('Y-m-d',$a_last_week[0]).' '.get_lang('To').' '.date('Y-m-d', $a_last_week[6]);
+ 			
 	 		$teachers_table = '<table class="data_table" width:"95%">'; 		
 	 		$teachers_table .= '
 								<tr>		
 									<th>'.get_lang('FirtName').'</th>
 									<th>'.get_lang('LastName').'</th>
-									<th>'.get_lang('Time').'</th>														
-									<th>'.get_lang('Email').'</th>
+									<th>'.get_lang('TimeSpentLastWeek').'<br />'.$last_week.'</th>														
 								</tr>								
 							';
 	 		
@@ -160,16 +162,15 @@ class BlockTeacher extends Block {
 	 			$teacher_id = $teacher['user_id'];
 	 			$firstname  = $teacher['firstname'];
 	 			$lastname   = $teacher['lastname'];
-	 			$time_on_platform = api_time_to_hms(Tracking :: get_time_spent_on_the_platform($teacher_id));
-	 			$email		= $teacher['email'];
-	 			
+
+	 			$time_on_platform = api_time_to_hms(Tracking :: get_time_spent_on_the_platform($teacher_id,true));
+	 				 			
 	 			if ($i%2 == 0) $class_tr = 'row_odd';
 	    		else $class_tr = 'row_even';
 	    		$teachers_table .= '<tr class="'.$class_tr.'">
 										<td>'.$firstname.'</td>
 										<td>'.$lastname.'</td>										
-										<td>'.$time_on_platform.'</td>
-										<td>'.$email.'</td>
+										<td align="right">'.$time_on_platform.'</td>										
 									</tr>';
 	 			
 	 			$i++;		
@@ -182,7 +183,7 @@ class BlockTeacher extends Block {
   		$content .= $teachers_table;
  		
  		if (count($teachers) > 0) {
-			$content .= '<div style="text-align:right;margin:10px;"><a href="'.api_get_path(WEB_CODE_PATH).'mySpace/teachers.php">'.get_lang('SeeMore').'</a></div>';
+			$content .= '<div style="text-align:right;margin-top:10px;"><a href="'.api_get_path(WEB_CODE_PATH).'mySpace/teachers.php">'.get_lang('SeeMore').'</a></div>';
 		}
 		$content .= '</div>';
 

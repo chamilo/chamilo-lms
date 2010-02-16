@@ -432,4 +432,25 @@ function float_format($number, $flag = 1)
 	}
 }
 
+/**
+ * Function to obtain last week timestamps
+ * @return array  times for every day inside week 
+ */
+function get_last_week() {
+    $week = date('W');
+    $year = date('Y');
+   
+    $lastweek=$week-1;   
+    if ($lastweek==0){
+        $week = 52;
+        $year--;
+    }
+       
+    $lastweek=sprintf("%02d", $lastweek);
+    for ($i=1;$i<=7;$i++){
+        $arrdays[] = strtotime("$year". "W$lastweek"."$i");
+    }
+    return $arrdays;
+}
+
 ?>

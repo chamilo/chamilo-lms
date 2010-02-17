@@ -2,6 +2,11 @@
 
 class TestForumFunction extends UnitTestCase {
 	
+	public function __construct() {
+		// The constructor acts like a global setUp for the class			
+		require_once api_get_path(SYS_TEST_PATH).'setup.inc.php';
+	}
+	
 	/**
 	 * This function add a attachment file into forum
 	 * @param string  a comment about file
@@ -1321,5 +1326,10 @@ class TestForumFunction extends UnitTestCase {
 		 $this->assertTrue(is_string($res));
 		 //var_dump($res); 	
 	 }
+	 
+	 public function __destruct() {
+		// The destructor acts like a global tearDown for the class			
+		require_once api_get_path(SYS_TEST_PATH).'teardown.inc.php';			
+	}
 }
 ?>

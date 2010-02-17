@@ -29,6 +29,7 @@ $language_file = array('forum','document');
 // including the global dokeos file
 require_once '../inc/global.inc.php';
 require_once '../gradebook/lib/gradebook_functions.inc.php';
+
 // the section (tabs)
 $this_section=SECTION_COURSES;
 
@@ -36,10 +37,10 @@ $this_section=SECTION_COURSES;
 api_protect_course_script(true);
 
 // including additional library scripts
-require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
-include_once (api_get_path(LIBRARY_PATH).'groupmanager.lib.php');
-$nameTools=get_lang('Forum');
+require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
+require_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
 
+$nameTools	= get_lang('Forum');
 
 /*
 -----------------------------------------------------------
@@ -89,28 +90,28 @@ $current_forum_category=get_forumcategory_information($current_forum['forum_cate
 */
 
 if (isset($_SESSION['gradebook'])){
-	$gradebook=	$_SESSION['gradebook'];
+	$gradebook = Security::remove_XSS($_SESSION['gradebook']);
 }
 
 if (!empty($gradebook) && $gradebook=='view') {
 	$interbreadcrumb[]= array (
-			'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
+			'url' => '../gradebook/'.Security::remove_XSS($_SESSION['gradebook_dest']),
 			'name' => get_lang('Gradebook')
 		);
 }
 
 if (!empty($_GET['gidReq'])) {
-	$toolgroup = Database::escape_string($_GET['gidReq']);
+	$toolgroup = intval($_GET['gidReq']);
 	api_session_register('toolgroup');
 }
 
+$session_toolgroup = 0;
 if (!empty($_SESSION['toolgroup'])) {
-
-	$_clean['toolgroup']=(int)$_SESSION['toolgroup'];
-	$group_properties  = GroupManager :: get_group_properties($_clean['toolgroup']);
+	$session_toolgroup = intval($_SESSION['toolgroup']);
+	$group_properties  = GroupManager :: get_group_properties($session_toolgroup);
 	$interbreadcrumb[] = array ("url" => "../group/group.php", "name" => get_lang('Groups'));
-	$interbreadcrumb[] = array ("url"=>"../group/group_space.php?gidReq=".$_SESSION['toolgroup'], "name"=> get_lang('GroupSpace').' ('.$group_properties['name'].')');
-	$interbreadcrumb[]=array("url" => "viewforum.php?origin=".$origin."&amp;gidReq=".$_SESSION['toolgroup']."&forum=".Security::remove_XSS($_GET['forum']),"name" => $current_forum['forum_title']);
+	$interbreadcrumb[] = array ("url"=>"../group/group_space.php?gidReq=".$session_toolgroup, "name"=> get_lang('GroupSpace').' ('.$group_properties['name'].')');
+	$interbreadcrumb[]=array("url" => "viewforum.php?origin=".$origin."&amp;gidReq=".$session_toolgroup."&forum=".Security::remove_XSS($_GET['forum']),"name" => $current_forum['forum_title']);
 	$interbreadcrumb[]=array("url" => "newthread.php?origin=".$origin."&forum=".Security::remove_XSS($_GET['forum']),"name" => get_lang('NewTopic'));
 } else {
 	$interbreadcrumb[]=array("url" => "index.php?gradebook=$gradebook","name" => $nameTools);
@@ -124,9 +125,9 @@ if (!empty($_SESSION['toolgroup'])) {
 -----------------------------------------------------------
 */
 if (isset($_POST['add_resources']) AND $_POST['add_resources']==get_lang('Resources')) {
-	$_SESSION['formelements']=$_POST;
-	$_SESSION['origin']=$_SERVER['REQUEST_URI'];
-	$_SESSION['breadcrumbs']=$interbreadcrumb;
+	$_SESSION['formelements']	= $_POST;
+	$_SESSION['origin']			= $_SERVER['REQUEST_URI'];
+	$_SESSION['breadcrumbs']	= $interbreadcrumb;
 	header("Location: ../resourcelinker/resourcelinker.php");
 }
 
@@ -136,7 +137,7 @@ if (isset($_POST['add_resources']) AND $_POST['add_resources']==get_lang('Resour
 -----------------------------------------------------------
 */
 if($origin=='learnpath') {
-	include(api_get_path(INCLUDE_PATH).'reduced_header.inc.php');
+	require_once api_get_path(INCLUDE_PATH).'reduced_header.inc.php';
 } else {
 	Display :: display_header(null);
 	//api_display_tool_title($nameTools);
@@ -191,7 +192,7 @@ handle_forum_and_forumcategories();
 echo '<div class="actions">';
 echo '<span style="float:right;">'.search_link().'</span>';
 echo '<a href="index.php?gradebook='.$gradebook.'">'.Display::return_icon('back.png',get_lang('BackToForumOverview')).' '.get_lang('BackToForumOverview').'</a>';
-echo '<a href="viewforum.php?forum='.Security::remove_XSS($_GET['forum']).'&amp;gidReq='.$_SESSION['toolgroup'].'">'.Display::return_icon('forum.gif',get_lang('BackToForum')).' '.get_lang('BackToForum').'</a>';
+echo '<a href="viewforum.php?forum='.Security::remove_XSS($_GET['forum']).'&amp;gidReq='.$session_toolgroup.'">'.Display::return_icon('forum.gif',get_lang('BackToForum')).' '.get_lang('BackToForum').'</a>';
 echo '</div>';
 
 /*

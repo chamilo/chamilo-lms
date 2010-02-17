@@ -24,7 +24,7 @@ ALTER TABLE course DROP PRIMARY KEY , ADD UNIQUE KEY code (code);
 ALTER TABLE course ADD id int NOT NULL auto_increment PRIMARY KEY FIRST;
 CREATE TABLE block (id INT NOT NULL auto_increment, name VARCHAR(255) NULL, description TEXT NULL, path VARCHAR(255) NOT NULL, controller VARCHAR(100) NOT NULL, active TINYINT NOT NULL default 1, PRIMARY KEY(id));
 ALTER TABLE block ADD UNIQUE(path);
-INSERT INTO user_field(field_type, field_variable, field_display_text, field_visible, field_changeable) VALUES(1, 'dashboard', 'dashboard', 0, 0);
+INSERT INTO user_field(field_type, field_variable, field_display_text, field_visible, field_changeable) VALUES(1, 'dashboard', 'Dashboard', 0, 0);
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES('show_tabs', 'dashboard', 'checkbox', 'Platform', 'true', 'ShowTabsTitle','ShowTabsComment',NULL,'TabsDashboard', 1);
 
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES('users_can_change_timezone', 'timezones', 'radio', 'Timezones', 'true', 'AllowUsersTimezoneTitle','AllowUsersTimezoneComment',NULL,'Timezones', 1);

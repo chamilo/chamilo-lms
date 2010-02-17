@@ -33,8 +33,9 @@
  **************************************************************************
  */
 
-$rows=get_posts($_GET['thread']); // note: this has to be cleaned first
-$rows=calculate_children($rows);
+$rows	= get_posts($_GET['thread']); // note: this has to be cleaned first
+$rows	= calculate_children($rows);
+
 
 if ($_GET['post']) {
 	$display_post_id	= intval($_GET['post']); // note: this has to be cleaned first
@@ -62,8 +63,7 @@ $thread_structure="<div class=\"structure\">".get_lang('Structure')."</div>";
 $counter=0;
 $count=0;
 $prev_next_array=array();
-foreach ($rows as $post)
-{
+foreach ($rows as $post) {
 	$counter++;
 	$indent=$post['indent_cnt']*'20';
 	$thread_structure.= "<div style=\"margin-left: ".$indent."px;\">";
@@ -159,8 +159,7 @@ echo '</center>';
 //--------------------------------------------------------------------------------------------
 
 // the style depends on the status of the message: approved or not
-if ($rows[$display_post_id]['visible']=='0')
-{
+if ($rows[$display_post_id]['visible']=='0') {
 	$titleclass='forum_message_post_title_2_be_approved';
 	$messageclass='forum_message_post_text_2_be_approved';
 	$leftclass='forum_message_left_2_be_approved';
@@ -281,9 +280,8 @@ echo "\t\t<td class=\"$titleclass\">".prepare4display(Security::remove_XSS($rows
 echo "\t</tr>\n";
 
 // The post message
-
 echo "\t<tr>\n";
-echo "\t\t<td class=\"$messageclass\">".prepare4display(Security::remove_XSS($rows[$display_post_id]['post_text']), STUDENT)."</td>\n";
+echo "\t\t<td class=\"$messageclass\">".prepare4display(Security::remove_XSS($rows[$display_post_id]['post_text'], STUDENT))."</td>\n";
 echo "\t</tr>\n";
 
 // The check if there is an attachment

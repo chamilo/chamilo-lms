@@ -302,7 +302,7 @@ class CourseDescription
 		$question[5]= get_lang('CourseMaterialQuestions');
 		$question[6]= get_lang('HumanAndTechnicalResourcesQuestions');
 		$question[7]= get_lang('AssessmentQuestions');
-		$question[8]= get_lang('thematicAdvanceQuestions');
+		$question[8]= get_lang('ThematicAdvanceQuestions');
 		return $question;
 	}
 

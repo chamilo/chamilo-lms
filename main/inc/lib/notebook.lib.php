@@ -197,10 +197,12 @@ class NotebookManager
 		while ($row = Database::fetch_array($result)) {
 			//validacion when belongs to a session
 			$session_img = api_get_session_image($row['session_id'], $_user['status']);
+			$creation_date = api_get_local_time($row['creation_date'], null, null, date_default_timezone_get());
+			$update_date = api_get_local_time($row['update_date'], null, null, date_default_timezone_get());
 			echo '<div class="sectiontitle">';
-			echo '<span style="float: right;"> ('.get_lang('CreationDate').': '.date_to_str_ago($row['creation_date']).'&nbsp;&nbsp;<span class="dropbox_date">'.$row['creation_date'].'</span>';
+			echo '<span style="float: right;"> ('.get_lang('CreationDate').': '.date_to_str_ago($creation_date).'&nbsp;&nbsp;<span class="dropbox_date">'.$creation_date.'</span>';
 			if ($row['update_date'] <> $row['creation_date']) {
-				echo ', '.get_lang('UpdateDate').': '.date_to_str_ago($row['update_date']).'&nbsp;&nbsp;<span class="dropbox_date">'.$row['update_date'].'</span>';
+				echo ', '.get_lang('UpdateDate').': '.date_to_str_ago($update_date).'&nbsp;&nbsp;<span class="dropbox_date">'.$update_date.'</span>';
 			}
 			echo ')</span>';
 			echo $row['title'] . $session_img;

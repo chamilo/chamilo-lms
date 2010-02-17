@@ -3477,6 +3477,7 @@ function get_day_agendaitems($courses_dbs, $month, $year, $day)
 		{
 			// in the display_daycalendar function we use $i (ranging from 0 to 47) for each halfhour
 			// we want to know for each agenda item for this day to wich halfhour it must be assigned
+			$item['start_date'] = api_get_local_time($item['start_date'], null, null, date_default_timezone_get());
 			list ($datepart, $timepart) = split(" ", $item['start_date']);
 			list ($year, $month, $day) = explode("-", $datepart);
 			list ($hours, $minutes, $seconds) = explode(":", $timepart);

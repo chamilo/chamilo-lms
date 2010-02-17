@@ -718,6 +718,7 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 			}
 
 			if ($direc_date!='' && $direc_date!='0000-00-00 00:00:00') {
+				$direc_date = api_get_local_time($direc_date, null, null, date_default_timezone_get());
 				$my_direc_date = api_ucfirst(format_locale_date($dateFormatShort,strtotime($direc_date))).'&nbsp;&nbsp;&nbsp;&nbsp;';
 				$my_direc_date .= ucfirst(strftime($timeNoSecFormat,strtotime($direc_date)));
 				$row[]= date_to_str_ago($direc_date).'<br /><span class="dropbox_date">'.$my_direc_date.'</span>'.'<!--uts='.strtotime($direc_date).'-->';
@@ -779,8 +780,9 @@ function display_student_publications_list($work_dir,$sub_course_dir,$currentCou
 			$row[]= build_document_icon_tag('file',$work->url);
 			$row[]= '<a href="download.php?file='.$url.'"'.$class.'><img src="../img/filesave.gif" style="float:right;" alt="'.get_lang('Save').'" title="'.get_lang('Save').'" />'.$work->title.'</a><br />'.$work->description;
 			$row[]= display_user_link_work($row2['insert_user_id'],$work->author).$qualification_string;// $work->author;
-			$sent_date = api_ucfirst(format_locale_date($dateFormatShort,strtotime($work->sent_date))).'&nbsp;&nbsp;&nbsp;&nbsp;';
-			$sent_date .= ucfirst(strftime($timeNoSecFormat,strtotime($work->sent_date)));
+			$work_sent_date = api_get_local_time($work->sent_date, null, null, date_default_timezone_get());
+			$sent_date = api_ucfirst(format_locale_date($dateFormatShort,strtotime($work_sent_date))).'&nbsp;&nbsp;&nbsp;&nbsp;';
+			$sent_date .= ucfirst(strftime($timeNoSecFormat,strtotime($work_sent_date)));
 			$row[]= date_to_str_ago($work->sent_date).$add_string.'<br><span class="dropbox_date">'.$sent_date.'</span>'.'<!--uts='.strtotime($work->sent_date).'-->';
 
 			if( $is_allowed_to_edit) {

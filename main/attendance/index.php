@@ -66,17 +66,45 @@ $htmlHeadXtra[] = '<link rel="stylesheet" href="'.api_get_path(WEB_LIBRARY_PATH)
 $htmlHeadXtra[] = '<script language="javascript">
 		
 			$(function() {	
+									
+				$("table th img").click(function() {
+					
+					var col_id = this.id;
+					var col_split = col_id.split("_");							
+					var calendar_id = col_split[2];
+					var class_img = $(this).attr("class");
+					
+					if (class_img == "img_unlock") {
+						$("#checkbox_head_"+calendar_id).attr("disabled",true);
+						$(".row_odd td.checkboxes_col_"+calendar_id).css({"background-color":"#F2F2F2"});
+						$(".row_even td.checkboxes_col_"+calendar_id).css({"background-color":"#FFF"});
+						$(".checkboxes_col_"+calendar_id+" input:checkbox").attr("disabled",true);							 						
+						$(this).attr("src","'.api_get_path(WEB_CODE_PATH).'img/lock.gif");
+						$(this).attr("class","img_lock");
+						$("#hidden_input_"+calendar_id).attr("value","");
+						$("#hidden_input_"+calendar_id).attr("disabled",true);
+						return false;
+					} else {
+						$("#checkbox_head_"+calendar_id).attr("disabled",false);
+						$(".checkboxes_col_"+calendar_id).css({"background-color":"#e1e1e1"});
+						$(".checkboxes_col_"+calendar_id+" input:checkbox").attr("disabled",false);						
+						$(this).attr("src","'.api_get_path(WEB_CODE_PATH).'img/unlock.gif");
+						$(this).attr("class","img_unlock");												
+						$("#hidden_input_"+calendar_id).attr("disabled",false);
+						$("#hidden_input_"+calendar_id).attr("value",calendar_id);						
+						return false;
+					}	
+					
+				});	
+				
 				$("table th input:checkbox").click(function() {
 					var col_id = this.id;
 					var col_split = col_id.split("_");							
 					var calendar_id = col_split[2];
 					if ($("#"+col_id).is(":checked")) {
-						$(".checkboxes_col_"+calendar_id).css({"background-color":"#e1e1e1"});
-						$(".checkboxes_col_"+calendar_id+" input:checkbox").attr("disabled",false);
-					} else {
-						$(".row_odd td.checkboxes_col_"+calendar_id).css({"background-color":"#F2F2F2"});
-						$(".row_even td.checkboxes_col_"+calendar_id).css({"background-color":"#FFF"});
-						$(".checkboxes_col_"+calendar_id+" input:checkbox").attr("disabled",true);
+						$(".checkboxes_col_"+calendar_id+" input:checkbox").attr("checked",true);
+					} else {						
+						$(".checkboxes_col_"+calendar_id+" input:checkbox").attr("checked",false);
 					}
 				});
 					

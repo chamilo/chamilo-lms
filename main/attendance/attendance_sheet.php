@@ -34,7 +34,7 @@ if (api_is_allowed_to_edit(null, true)) {
 	
 			<table class="data_table" width="100%">
 				<tr class="row_odd" >	
-					<th height="60px" width="35px" ><?php echo get_lang('Order')?></th>
+					<th height="65px" width="35px" ><?php echo get_lang('Order')?></th>
 					<th width="45px" ><?php echo get_lang('Photo')?></th>
 					<th><?php echo get_lang('LastName')?></th>
 					<th><?php echo get_lang('FirstName')?></th>
@@ -70,22 +70,27 @@ if (api_is_allowed_to_edit(null, true)) {
 				<?php			
 					if (count($attendant_calendar) > 0 ) {
 						foreach ($attendant_calendar as $calendar) {												
-							//$datetime = explode(' ',$calendar['date_time']);
+
 							$date = $calendar['date'];
 							$time = $calendar['time'];
 							$datetime = $date.'<br />'.$time;
-							$checked_date = '';						
+														
+							$img_lock = Display::return_icon('lock.gif',get_lang('DateLock'),array('class'=>'img_lock','id'=>'datetime_column_'.$calendar['id']));													
 							if (!empty($calendar['done_attendance'])){
 								$datetime = '<font color="blue">'.$date.'<br />'.$time.'</font>';
-							}						
+							}
+							$disabled_check = 'disabled';
+							$input_hidden = '<input type="hidden" id="hidden_input_'.$calendar['id'].'" name="hidden_input[]" value="" disabled />';						
 							if ($next_attendance_calendar_id == $calendar['id']) {
-								$checked_date = 'checked';
-							}													
-					?>
-							<th height="60px" style="padding:5px;"><?php echo '<span style="font-size:10px;">'.$datetime.'<br /><input type="checkbox" name="datetime_column['.$calendar['id'].']" id="datetime_column_'.$calendar['id'].'" '.$checked_date.'/></span>' ?></th>
+								$input_hidden = '<input type="hidden" id="hidden_input_'.$calendar['id'].'" name="hidden_input[]" value="'.$calendar['id'].'" />';
+								$disabled_check = '';
+								$img_lock = Display::return_icon('unlock.gif',get_lang('DateUnlock'),array('class'=>'img_unlock','id'=>'datetime_column_'.$calendar['id']));
+							}										
+					?>							
+							<th height="65px" style="padding:1px 5px;" ><?php echo '<center><div style="font-size:10px;min-width:80px;width:80px;">'.$datetime.'&nbsp;<span id="attendance_lock" style="cursor:pointer">'.$img_lock.'</span><br /><input type="checkbox" id="checkbox_head_'.$calendar['id'].'" '.$disabled_check.' checked />'.$input_hidden.'</div></center>' ?></th>
 					<?php }					
 					} else { ?>
-						<th height="60px" style="padding:5px;"><span><a href="index.php?<?php echo api_get_cidreq() ?>&action=calendar_list&attendance_id=<?php echo $attendance_id.$param_gradebook ?>">
+						<th height="65px" style="padding:5px;"><span><a href="index.php?<?php echo api_get_cidreq() ?>&action=calendar_list&attendance_id=<?php echo $attendance_id.$param_gradebook ?>">
 						<?php echo Display::return_icon('calendar_up.gif',get_lang('AttendanceCalendar')).' '.get_lang('GoToAttendanceCalendar') ?></a></span></th>
 					<?php } ?>
 				</tr>			
@@ -116,7 +121,7 @@ if (api_is_allowed_to_edit(null, true)) {
 									$disabled = '';
 								}
 					?>
-							<td height="50px" style="<?php echo $style_td ?>" class="checkboxes_col_<?php echo $calendar['id'] ?>"><center><input type="checkbox" name="check_presence[]" value="cal_<?php echo $calendar['id'] ?>_user_<?php echo $user['user_id'] ?>"  <?php echo $disabled.' '.$checked ?> /><span class="<?php echo 'anchor_'.$calendar['id'] ?>"></span></center></td>
+							<td height="50px" style="<?php echo $style_td ?>" class="checkboxes_col_<?php echo $calendar['id'] ?>"><center><input type="checkbox" name="check_presence[<?php echo $calendar['id'] ?>][]" value="<?php echo $user['user_id'] ?>"  <?php echo $disabled.' '.$checked ?> /><span class="<?php echo 'anchor_'.$calendar['id'] ?>"></span></center></td>
 							
 					<?php 	} 
 						} else { ?>
@@ -143,13 +148,15 @@ if (api_is_allowed_to_edit(null, true)) {
 	// View for students
 ?>	
 	<h3><?php echo get_lang('AttendanceSheetReport') ?></h3>
-	<div>
-		<table width="200px;">
-		<tr>
-			<td><?php echo get_lang('Faults').': ' ?></td><td><center><div class="attendance-faults-bar" style="background-color:<?php echo (!empty($faults['color_bar'])?$faults['color_bar']:'none') ?>"><?php echo $faults['faults'].'/'.$faults['total'].' ('.$faults['faults_porcent'].'%)' ?></div></center></td>
-		</tr>	
-		</table>
-	</div>
+	<?php if(!empty($users_presence)) { ?>
+		<div>
+			<table width="200px;">
+			<tr>
+				<td><?php echo get_lang('Faults').': ' ?></td><td><center><div class="attendance-faults-bar" style="background-color:<?php echo (!empty($faults['color_bar'])?$faults['color_bar']:'none') ?>"><?php echo $faults['faults'].'/'.$faults['total'].' ('.$faults['faults_porcent'].'%)' ?></div></center></td>
+			</tr>	
+			</table>
+		</div>
+	<?php } ?>
 	<div>
 	<br />
 	<center>
@@ -159,15 +166,21 @@ if (api_is_allowed_to_edit(null, true)) {
 					<th><?php echo get_lang('Attendance')?></th>				
 				</tr>
 				<?php 
-				$i = 0;
-				foreach($users_presence[$user_id] as $presence) { 
-					$class = '';
-					if ($i%2==0) {$class = 'row_even';}
-					else {$class = 'row_odd';}	
+				
+				if (!empty($users_presence)) {
+					$i = 0;
+					foreach($users_presence[$user_id] as $presence) { 
+						$class = '';
+						if ($i%2==0) {$class = 'row_even';}
+						else {$class = 'row_odd';}	
+					?>
+					<tr class="<?php echo $class ?>"><td><?php echo Display::return_icon('lp_calendar_event.png',get_lang('DateTime')).' '.$presence['date_time'] ?></td><td><center><?php echo $presence['presence']?Display::return_icon('checkbox_on.gif',get_lang('Presence')):Display::return_icon('checkbox_off.gif',get_lang('Presence')) ?></center></td></tr>					
+				<?php } 
+				} else { ?>
+				<tr><td colspan="2"><center><?php echo get_lang('YouDoNotHaveDoneAttendance')?></center></td></tr>	
+				<?php }
+				
 				?>
-				<tr class="<?php echo $class ?>"><td><?php echo Display::return_icon('lp_calendar_event.png',get_lang('DateTime')).' '.$presence['date_time'] ?></td><td><center><?php echo $presence['presence']?Display::return_icon('checkbox_on.gif',get_lang('Presence')):Display::return_icon('checkbox_off.gif',get_lang('Presence')) ?></center></td></tr>	
-					
-				<?php } ?>
 		</table>			
 	</center>
 	</div>

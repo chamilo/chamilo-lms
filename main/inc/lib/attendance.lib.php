@@ -2,7 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * This file contains class used like library provides functions for attendance tool. It's also used like model to attendance_controller (MVC pattern)
+ * This file contains class used like library, provides functions for attendance tool. It's also used like model to attendance_controller (MVC pattern)
  * @author Christian Fasanando <christian1827@gmail.com>
  * @package chamilo.attendance
  */
@@ -779,7 +779,7 @@ class Attendance
 
 	/**
 	 * buid a string datetime from array
-	 * @param	array	array containing data e.g: e.g: $array('Y'=>'2010',  'F' => '02', 'd' => '10', 'H' => '12', 'i' => '30')
+	 * @param	array	array containing data e.g: $array('Y'=>'2010',  'F' => '02', 'd' => '10', 'H' => '12', 'i' => '30')
 	 * @return	string	date and time e.g: '2010-02-10 12:30:00'
 	 */
 	public function build_datetime_from_array($array) {

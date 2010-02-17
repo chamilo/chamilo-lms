@@ -179,38 +179,17 @@
 		$data['next_attendance_calendar_id'] = $attendance->get_next_attendance_calendar_id($attendance_id);
 		
 		if (strtoupper($_SERVER['REQUEST_METHOD']) == "POST") {	
-			$presences = array();
-			$check_values = array();
-			$users_present = array();
 
-			if (isset($_POST['check_presence'])) {
-				$presences = $_POST['check_presence'];
-				$calendar_tmp = array();
-				foreach ($presences as $presence) {						
-					$presence_split = explode('_',$presence);
-					$calendar_id = $presence_split[1];
-					$user_id = $presence_split[3];
-					$calendar_tmp[] = $calendar_id;					
-					if (in_array($calendar_id, $calendar_tmp)) {
-						$check_values[$calendar_id][] = $user_id;		
+			if (isset($_POST['hidden_input'])) {
+				foreach ($_POST['hidden_input'] as $cal_id) {
+					$users_present = array();
+					if (isset($_POST['check_presence'][$cal_id])) {
+						$users_present = $_POST['check_presence'][$cal_id];
 					}
+					$affected_rows = $attendance->attendance_sheet_add($cal_id,$users_present,$attendance_id);					
 				}
-				// save when is present at least one user
-				foreach ($check_values as $cal_id => $value) {
-					$users_present = $value;				
-					$affected_rows = $attendance->attendance_sheet_add($cal_id,$users_present,$attendance_id);								
-				}
-								
-			} else {
-				// save attendance done with all absents students				
-				if (isset($_POST['datetime_column'])) {
-					foreach ($_POST['datetime_column'] as $key=>$date_time_col) {
-						$cal_id = $key;
-						$affected_rows = $attendance->attendance_sheet_add($cal_id,$users_present,$attendance_id);
-					}	
-				}
-			}		
-					
+			}
+
 			$data['users_in_course'] = $attendance->get_users_rel_course($attendance_id);
 			$data['attendant_calendar'] = $attendance->get_attendance_calendar($attendance_id);
 			$data['users_presence'] = $attendance->get_users_attendance_sheet($attendance_id);

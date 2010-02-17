@@ -162,7 +162,7 @@ if ($intro_dispForm) {
 	echo '</div>';
 }
 
-$style_introduction_section = '';
+$style_introduction_section = 'style="margin-left:10%;margin-right:10%;"';
 $thematic_description_html = '';
 if ($tool==TOOL_COURSE_HOMEPAGE && !isset($_GET['intro_cmdEdit'])) {
 	
@@ -172,7 +172,7 @@ if ($tool==TOOL_COURSE_HOMEPAGE && !isset($_GET['intro_cmdEdit'])) {
 		
 	if (!empty($thematic_description)) {
 		
-		$style_introduction_section = 'style="width:70%;float:left;margin-left:80px;"';
+		$style_introduction_section = 'style="width:65%;float:left;margin-left:10%;"';
 		
 		$thematic_advance = get_lang('ThematicAdvance').'&nbsp;'.$course_description->get_progress_porcent(false,8);
 		if (api_is_allowed_to_edit(null,true)) {

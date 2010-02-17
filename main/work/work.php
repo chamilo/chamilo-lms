@@ -1259,7 +1259,9 @@ if ($is_course_member) {
 		if (!empty ($error_message)) {
 			Display :: display_error_message($error_message);
 		}
-		if ($submitGroupWorkUrl) {
+		$show_progress_bar = false;
+		
+		if ($submitGroupWorkUrl) { 
 			// For user comming from group space to publish his work
 			$realUrl = str_replace($_configuration['root_sys'], $_configuration['root_web'], str_replace("\\", "/", realpath($submitGroupWorkUrl)));
 			$form->addElement('hidden', 'newWorkUrl', $submitGroupWorkUrl);
@@ -1281,6 +1283,7 @@ if ($is_course_member) {
 		} else {
 			// else standard upload option
 			$form->addElement('file', 'file', get_lang('UploadADocument'), 'size="40" onchange="updateDocumentTitle(this.value)"');
+			$show_progress_bar = true;			
 		}
 
 		$titleWork = $form->addElement('text', 'title', get_lang("TitleWork"), 'id="file_upload"  style="width: 350px;"');
@@ -1334,8 +1337,11 @@ if ($is_course_member) {
 		if (!empty($_POST['submitWork']) || $edit) {
 			$form->addElement('style_submit_button', 'cancelForm', get_lang('Cancel'),'class="cancel"');
 		}
-
-		$form->add_real_progress_bar('uploadWork', 'DownloadFile');
+		
+		if ($show_progress_bar) {		
+			$form->add_real_progress_bar('uploadWork', 'file');
+		}
+		
 		$form->setDefaults($defaults);
 		//$form->addRule('file', '<div class="required">'.get_lang('ThisFieldIsRequired'), 'required');
 		$form->display();

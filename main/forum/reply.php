@@ -1,25 +1,5 @@
 <?php
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2006-2008 Dokeos SPRL
-	Copyright (c) 2006 Ghent University (UGent)
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact address: Dokeos, 108 rue du Corbeau, B-1030 Brussels, Belgium
-	Mail: info@dokeos.com
-==============================================================================
-*/
+/* For licensing terms, see /license.txt */
 
 /**
 *	These files are a complete rework of the forum. The database structure is
@@ -46,7 +26,7 @@
 $language_file = array('forum','document');
 
 // including the global dokeos file
-require '../inc/global.inc.php';
+require_once '../inc/global.inc.php';
 
 // the section (tabs)
 $this_section=SECTION_COURSES;
@@ -56,8 +36,8 @@ api_protect_course_script(true);
 
 
 // including additional library scripts
-require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
-include_once (api_get_path(LIBRARY_PATH).'groupmanager.lib.php');
+require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
+require_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
 $nameTools=get_lang('Forum');
 
 $origin = '';
@@ -71,7 +51,7 @@ if(isset($_GET['origin'])) {
 	Including necessary files
 -----------------------------------------------------------
 */
-require 'forumconfig.inc.php';
+require_once 'forumconfig.inc.php';
 require_once 'forumfunction.inc.php';
 
 
@@ -94,6 +74,7 @@ $htmlHeadXtra[] = '<script>
 		MAIN DISPLAY SECTION
 ==============================================================================
 */
+
 /*
 -----------------------------------------------------------
 	Retrieving forum and forum categorie information
@@ -102,9 +83,9 @@ $htmlHeadXtra[] = '<script>
 // we are getting all the information about the current forum and forum category.
 // note pcool: I tried to use only one sql statement (and function) for this
 // but the problem is that the visibility of the forum AND forum cateogory are stored in the item_property table
-$current_thread=get_thread_information(Security::remove_XSS($_GET['thread'])); // note: this has to be validated that it is an existing thread
-$current_forum=get_forum_information($current_thread['forum_id']); // note: this has to be validated that it is an existing forum.
-$current_forum_category=get_forumcategory_information(Security::remove_XSS($current_forum['forum_category']));
+$current_thread	= get_thread_information($_GET['thread']); // note: this has to be validated that it is an existing thread
+$current_forum	= get_forum_information($current_thread['forum_id']); // note: this has to be validated that it is an existing forum.
+$current_forum_category = get_forumcategory_information(Security::remove_XSS($current_forum['forum_category']));
 
 /*
 -----------------------------------------------------------
@@ -112,12 +93,12 @@ $current_forum_category=get_forumcategory_information(Security::remove_XSS($curr
 -----------------------------------------------------------
 */
 if (isset($_SESSION['gradebook'])){
-	$gradebook=	$_SESSION['gradebook'];
+	$gradebook = Security::remove_XSS($_SESSION['gradebook']);
 }
 
-if (!empty($gradebook) && $gradebook=='view') {
+if (!empty($gradebook) && $gradebook == 'view') {
 	$interbreadcrumb[]= array (
-			'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
+			'url' => '../gradebook/'.Security::remove_XSS($_SESSION['gradebook_dest']),
 			'name' => get_lang('Gradebook')
 		);
 }
@@ -229,7 +210,7 @@ echo '</table>';
 
 // the form for the reply
 $my_action   = isset($_GET['action']) ? Security::remove_XSS($_GET['action']) : '';
-$my_post     = isset($_GET['post']) ? Security::remove_XSS($_GET['post']) : '';
+$my_post     = isset($_GET['post']) ?   Security::remove_XSS($_GET['post']) : '';
 $my_elements = isset($_SESSION['formelements']) ? $_SESSION['formelements'] : '';
 $values=show_add_post_form(Security::remove_XSS($my_action,$my_post, $my_elements)); // note: this has to be cleaned first
 

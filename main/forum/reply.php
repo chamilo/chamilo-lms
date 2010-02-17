@@ -215,7 +215,7 @@ $my_elements = isset($_SESSION['formelements']) ? $_SESSION['formelements'] : ''
 $values=show_add_post_form(Security::remove_XSS($my_action,$my_post, $my_elements)); // note: this has to be cleaned first
 
 if (!empty($values) AND isset($_POST['SubmitPost'])) {
-	store_reply($values);
+	store_reply(Security::remove_XSS($values));
 }
 
 /*

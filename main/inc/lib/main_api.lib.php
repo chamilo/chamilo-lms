@@ -4510,10 +4510,14 @@ function api_get_local_time($time, $format=null, $to_timezone=null, $from_timezo
 		if ($timezone_value !== null) {
 			$to_timezone = $timezone_value;
 		}
-		// Third, get the timezone based on user preference, if it exists
-		$timezone_user = UserManager::get_extra_user_data_by_field($_user['user_id'],'timezone');
-		if ($timezone_user['timezone'] != null) {
-			$to_timezone = $timezone_user['timezone'];
+		// If allowed by the administrator
+		$use_users_timezone = api_get_setting('use_users_timezone', 'timezones');
+		if ($use_users_timezone == 'true') {
+			// Get the timezone based on user preference, if it exists
+			$timezone_user = UserManager::get_extra_user_data_by_field($_user['user_id'],'timezone');
+			if ($timezone_user['timezone'] != null) {
+				$to_timezone = $timezone_user['timezone'];
+			}
 		}
 	}
 	// Determine the format

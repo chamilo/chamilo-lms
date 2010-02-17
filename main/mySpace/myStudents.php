@@ -419,10 +419,11 @@ if (!empty ($_GET['student'])) {
 									</td>
 								</tr>
 <?php
-// Display timezone if the user selected one
+// Display timezone if the user selected one and if the admin allows the use of user's timezone
 $timezone = null;
 $timezone_user = UserManager::get_extra_user_data_by_field($info_user['user_id'],'timezone');
-if ($timezone_user['timezone'] != null) {
+$use_users_timezone = api_get_setting('use_users_timezone', 'timezones');
+if ($timezone_user['timezone'] != null && $use_users_timezone == 'true') {
 	$timezone = $timezone_user['timezone'];
 }
 if ($timezone !== null) {

@@ -105,15 +105,12 @@ foreach ($rows as $post) {
 		$post_image.=icon('../img/forumnotification.gif',get_lang('YouWillBeNotified'));
 	}
 	// The post title
-	echo "\t\t<td class=\"$titleclass\">".prepare4display($post['post_title'])."</td>\n";
+	echo "\t\t<td class=\"$titleclass\">".prepare4display(Security::remove_XSS($post['post_title'], STUDENT))."</td>\n";
 	echo "\t</tr>\n";
 
-	// The post message
-	
-	$post['post_text']= Security::remove_XSS($post['post_text'], STUDENT);
-	
+	// The post message		
 	echo "\t<tr>\n";
-	echo "\t\t<td class=\"$messageclass\">".prepare4display($post['post_text'])."</td>\n";
+	echo "\t\t<td class=\"$messageclass\">".prepare4display(Security::remove_XSS($post['post_text'], STUDENT))."</td>\n";
 	echo "\t</tr>\n";
 
 

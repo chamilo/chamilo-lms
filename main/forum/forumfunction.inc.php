@@ -1526,13 +1526,15 @@ function get_post_information($post_id) {
 function get_thread_information($thread_id) {
 	global $table_threads;
 	global $table_item_property;
+	
+	$thread_id = intval($thread_id);
 
-	$sql="SELECT * FROM ".$table_threads." threads, ".$table_item_property." item_properties
+	$sql	="SELECT * FROM ".$table_threads." threads, ".$table_item_property." item_properties
 			WHERE item_properties.tool='".TOOL_FORUM_THREAD."'
 			AND item_properties.ref='".Database::escape_string($thread_id)."'
 			AND threads.thread_id='".Database::escape_string($thread_id)."'";
-	$result=Database::query($sql);
-	$row=Database::fetch_array($result);
+	$result	= Database::query($sql);
+	$row	= Database::fetch_array($result);
 	return $row;
 }
 
@@ -1650,6 +1652,7 @@ function get_thread_users_not_qualify($thread_id, $db_name = null) {
 function get_forum_information($forum_id) {
 	global $table_forums;
 	global $table_item_property;
+	$forum_id = intval($forum_id);
 
 	$sql="SELECT * FROM ".$table_forums." forums, ".$table_item_property." item_properties
 			WHERE item_properties.tool='".TOOL_FORUM."'
@@ -1868,7 +1871,9 @@ function show_add_post_form($action='', $id='', $form_values='') {
 	global $_user;
 	global $origin;
 	global $charset;
+	
 	$gradebook=Security::remove_XSS($_GET['gradebook']);
+	
 	// setting the class and text of the form title and submit button
 	if ($_GET['action']=='quote'){
 		$class='save';
@@ -2201,6 +2206,7 @@ function current_qualify_of_thread($thread_id,$session_id) {
 * @version february 2006, dokeos 1.8
 */
 function store_reply($values) {
+	
 	global $table_threads;
 	global $table_posts;
 	global $forum_table_attachment;
@@ -2327,6 +2333,7 @@ function show_edit_post_form($current_post, $current_thread, $current_forum, $fo
 	global $forum_setting;
 	global $_user;
 	global $origin;
+	
 	$gradebook=Security::remove_XSS($_GET['gradebook']);
 
 	// initiate the object
@@ -2396,12 +2403,13 @@ function show_edit_post_form($current_post, $current_thread, $current_forum, $fo
 	$form->addElement('textarea','file_comment',get_lang('FileComment'),array ('rows' => 4, 'cols' => 34));
 	$form->applyFilter('file_comment', 'html_filter');
 	$form->addElement('html','</div><br /><br />');
+	
 	if ($current_forum['allow_attachments']=='1' OR api_is_allowed_to_edit(null,true)) {
 		if (empty($form_values) AND !isset($_POST['SubmitPost'])) {
 			//edit_added_resources('forum_post',$current_post['post_id']);
 		}
 		//$form->add_resource_button();
-		$values = $form->exportValues();
+		$values = $form->exportValues();		
 	}
 
 	$form->addElement('style_submit_button', 'SubmitPost', get_lang('ModifyThread'), 'class="save"');
@@ -2452,6 +2460,7 @@ function store_edit_post($values) {
 	global $table_threads;
 	global $table_posts;
 	global $origin;
+	
 	$gradebook=Security::remove_XSS($_GET['gradebook']);
 	// first we check if the change affects the thread and if so we commit the changes (sticky and post_title=thread_title are relevant)
 	//if (array_key_exists('is_first_post_of_thread',$values)  AND $values['is_first_post_of_thread']=='1') {
@@ -2465,10 +2474,11 @@ function store_edit_post($values) {
 		Database::query($sql);
 	//}
 	// update the post_title and the post_text
-	$sql="UPDATE $table_posts SET post_title='".Database::escape_string(Security::remove_XSS($values['post_title']))."',
-				post_text='".Database::escape_string(Security::remove_XSS(stripslashes(api_html_entity_decode($values['post_text'])),COURSEMANAGERLOWSECURITY))."',
-				post_notification='".Database::escape_string(isset($values['post_notification'])?$values['post_notification']:null)."'
-				WHERE post_id='".Database::escape_string($values['post_id'])."'";
+	$sql="UPDATE $table_posts SET
+			post_title='".Database::escape_string($values['post_title'])."',
+			post_text='".Database::escape_string($values['post_text'])."',
+			post_notification='".Database::escape_string(isset($values['post_notification'])?$values['post_notification']:null)."'
+			WHERE post_id='".Database::escape_string($values['post_id'])."'";
 	Database::query($sql);
 
 	if (!empty($values['remove_attach'])) {
@@ -3142,6 +3152,7 @@ function store_move_thread($values) {
 function prepare4display($input='') {
 	$highlightcolors = array('yellow', '#33CC33','#3399CC', '#9999FF', '#33CC33');
 	if (!is_array($input)) {
+		//search for contents
 		if (!empty($_GET['search'])) {
 			if (strstr($_GET['search'],'+')) {
 				$search_terms = explode('+',$_GET['search']);
@@ -3154,6 +3165,7 @@ function prepare4display($input='') {
 				$counter++;
 			}
 		}
+		
 		return api_html_entity_decode(stripslashes($input));
 	} else {
 		/*foreach ($input as $key=>$value)

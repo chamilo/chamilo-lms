@@ -33,8 +33,9 @@
  **************************************************************************
  */
 
-$rows=get_posts($_GET['thread']); // note: this has to be cleaned first
-$rows=calculate_children($rows);
+$rows	= get_posts($_GET['thread']); // note: this has to be cleaned first
+$rows	= calculate_children($rows);
+
 
 if ($_GET['post']) {
 	$display_post_id	= intval($_GET['post']); // note: this has to be cleaned first
@@ -62,8 +63,7 @@ $thread_structure="<div class=\"structure\">".get_lang('Structure')."</div>";
 $counter=0;
 $count=0;
 $prev_next_array=array();
-foreach ($rows as $post)
-{
+foreach ($rows as $post) {
 	$counter++;
 	$indent=$post['indent_cnt']*'20';
 	$thread_structure.= "<div style=\"margin-left: ".$indent."px;\">";
@@ -79,7 +79,7 @@ foreach ($rows as $post)
 	$thread_structure.= $post_image;
 	if ($_GET['post']==$post['post_id'] OR ($counter==1 AND !isset($_GET['post'])))
 	{
-		$thread_structure.='<strong>'.prepare4display($post['post_title']).'</strong></div>';
+		$thread_structure.='<strong>'.prepare4display(Security::remove_XSS($post['post_title'],STUDENT)).'</strong></div>';
 		$prev_next_array[]=$post['post_id'];
 	}
 	else
@@ -93,7 +93,7 @@ foreach ($rows as $post)
 			$class='';
 		}
 		$count_loop=($count==0)?'&id=1' : '';
-		$thread_structure.= "<a href=\"viewthread.php?".api_get_cidreq()."&forum=".Security::remove_XSS($_GET['forum'])."&amp;thread=".Security::remove_XSS($_GET['thread'])."&amp;post=".$post['post_id']."&amp;origin=$origin$count_loop\" $class>".prepare4display($post['post_title'])."</a></div>\n";
+		$thread_structure.= "<a href=\"viewthread.php?".api_get_cidreq()."&forum=".Security::remove_XSS($_GET['forum'])."&amp;thread=".Security::remove_XSS($_GET['thread'])."&amp;post=".$post['post_id']."&amp;origin=$origin$count_loop\" $class>".prepare4display(Security::remove_XSS($post['post_title'],STUDENT))."</a></div>\n";
 		$prev_next_array[]=$post['post_id'];
 	}
 	$count++;
@@ -159,8 +159,7 @@ echo '</center>';
 //--------------------------------------------------------------------------------------------
 
 // the style depends on the status of the message: approved or not
-if ($rows[$display_post_id]['visible']=='0')
-{
+if ($rows[$display_post_id]['visible']=='0') {
 	$titleclass='forum_message_post_title_2_be_approved';
 	$messageclass='forum_message_post_text_2_be_approved';
 	$leftclass='forum_message_left_2_be_approved';
@@ -277,13 +276,12 @@ if ($rows[$display_post_id]['post_notification']=='1' AND $rows[$display_post_id
 	$post_image.=icon('../img/forumnotification.gif',get_lang('YouWillBeNotified'));
 }
 // The post title
-echo "\t\t<td class=\"$titleclass\">".prepare4display(Security::remove_XSS($rows[$display_post_id]['post_title']))."</td>\n";
+echo "\t\t<td class=\"$titleclass\">".prepare4display(Security::remove_XSS($rows[$display_post_id]['post_title'], STUDENT))."</td>\n";
 echo "\t</tr>\n";
 
 // The post message
-
 echo "\t<tr>\n";
-echo "\t\t<td class=\"$messageclass\">".prepare4display(Security::remove_XSS($rows[$display_post_id]['post_text']), STUDENT)."</td>\n";
+echo "\t\t<td class=\"$messageclass\">".prepare4display(Security::remove_XSS($rows[$display_post_id]['post_text'], STUDENT))."</td>\n";
 echo "\t</tr>\n";
 
 // The check if there is an attachment

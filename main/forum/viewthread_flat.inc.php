@@ -107,17 +107,12 @@ foreach ($rows as $row) {
 		$post_image.=icon('../img/forumnotification.gif',get_lang('YouWillBeNotified'));
 	}
 	// The post title
-	echo "\t\t<td class=\"$titleclass\">".prepare4display($row['post_title'])."</td>\n";
+	echo "\t\t<td class=\"$titleclass\">".prepare4display(Security::remove_XSS($row['post_title'], STUDENT))."</td>\n";
 	echo "\t</tr>\n";
-
-
 	
 	// The post message
-	//we can see now the html tags
-	$row['post_text']= Security::remove_XSS($row['post_text'], STUDENT);
-	
 	echo "\t<tr>\n";
-	echo "\t\t<td class=\"$messageclass\">".prepare4display($row['post_text'])."</td>\n";
+	echo "\t\t<td class=\"$messageclass\">".prepare4display(Security::remove_XSS($row['post_text'], STUDENT))."</td>\n";
 	echo "\t</tr>\n";
 
 	// The check if there is an attachment

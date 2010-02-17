@@ -25,30 +25,70 @@ define('SYSTEM_CONFIG_FILENAME', 'configuration.dist.php');
 
 /*
 ==============================================================================
-		DATABASE FUNCTIONS
+		COMMON PURPOSE FUNCTIONS
 ==============================================================================
 */
 
 /**
- * Connecting to the databse server - the common routine.
+ * This function checks if a php extension exists or not and returns an HTML status string.
+ *
+ * @param 	string  Name of the PHP extension to be checked
+ * @param 	string  Text to show when extension is available (defaults to 'Yes')
+ * @param	string	Text to show when extension is available (defaults to 'No')
+ * @param	boolean	Whether this extension is optional (in this case show unavailable text in orange rather than red)
+ * @return	string	HTML string reporting the status of this extension. Language-aware.
+ * @author 	Christophe Gesché
+ * @author 	Patrick Cool <patrick.cool@UGent.be>, Ghent University
+ * @author	Yannick Warnier <yannick.warnier@dokeos.com>
+ * @version Dokeos 1.8.1, May 2007
  */
-function database_server_connect() {
-	global $dbHostForm, $dbUsernameForm, $dbPassForm;
-	if (($res = @Database::connect(array('server' => $dbHostForm, 'username' => $dbUsernameForm, 'password' => $dbPassForm))) === false) {
-		$no = Database::errno();
-		$msg = Database::error();
-		echo '<hr />#'.$no.': '.$msg.'<hr />';
-		echo get_lang('DBServerDoesntWorkOrLoginPassIsWrong').'.<br /><br />'.
-			get_lang('PleaseCheckTheseValues').' :<br /><br />'.
-			'<strong>'.get_lang('DBHost').'</strong> : '.$dbHostForm.'<br />'.
-			'<strong>'.get_lang('DBLogin').'</strong> : '.$dbUsernameForm.'<br />'.
-			'<strong>'.get_lang('DBPassword').'</strong> : '.$dbPassForm.'<br /><br />'.
-			get_lang('PleaseGoBackToStep').' '. (defined('SYSTEM_INSTALLATION') ? '3' : '1').'.'.
-			'<p><button type="submit" class="back" name="step'. (defined('SYSTEM_INSTALLATION') ? '3' : '1').'" value="&lt; '.get_lang('Back').'">'.get_lang('Back').'</button></p>'.
-			'</td></tr></table></form></body></html>';
-		exit ();
+function check_extension($extension_name, $return_success = 'Yes', $return_failure = 'No', $optional = false) {
+	if (extension_loaded($extension_name)) {
+		return '<strong><font color="green">'.$return_success.'</font></strong>';
+	} else {
+		if ($optional) {
+			return '<strong><font color="#ff9900">'.$return_failure.'</font></strong>';
+		} else {
+			return '<strong><font color="red">'.$return_failure.'</font></strong>';
+		}
 	}
-	@Database::query("set session sql_mode='';"); // Disabling special SQL modes (MySQL 5)
+}
+
+/**
+ * This function checks whether a php setting matches the recommended value
+ *
+ * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+ * @version Dokeos 1.8, august 2006
+ */
+function check_php_setting($php_setting, $recommended_value, $return_success = false, $return_failure = false) {
+	$current_php_value = get_php_setting($php_setting);
+	if ($current_php_value == $recommended_value) {
+		return '<strong><font color="green">'.$current_php_value.' '.$return_success.'</font></strong>';
+	} else {
+		return '<strong><font color="red">'.$current_php_value.' '.$return_failure.'</font></strong>';
+	}
+}
+
+/**
+ * Returns a textual value ('ON' or 'OFF') based on a requester 2-state ini- configuration setting.
+ *
+ * @param string $val a php ini value
+ * @return boolean: ON or OFF
+ * @author Joomla <http://www.joomla.org>
+ */
+function get_php_setting($val) {
+	return ini_get($val) == '1' ? 'ON' : 'OFF';
+}
+
+/**
+ * This function returns a string "true" or "false" according to the passed parameter.
+ *
+ * @param integer  $var  The variable to present as text
+ * @return  string  the string "true" or "false"
+ * @author Christophe Gesché
+ */
+function true_false($var) {
+	return $var ? 'true' : 'false';
 }
 
 /**
@@ -64,21 +104,131 @@ function remove_memory_and_time_limits() {
 }
 
 /**
+ * Detects browser's language.
+ * @return string		Returns a language identificator, i.e. 'english', 'spanish', ...
+ * @author Ivan Tcholakov, 2010
+ */
+function detect_browser_language() {
+	static $language_index = array(
+		'ar' => 'arabic',
+		'ast' => 'asturian',
+		'bg' => 'bulgarian',
+		'bs' => 'bosnian',
+		'ca' => 'catalan',
+		'zh' => 'simpl_chinese',
+		'zh-tw' => 'trad_chinese',
+		'cs' => 'czech',
+		'da' => 'danish',
+		'prs' => 'dari',
+		'de' => 'german',
+		'el' => 'greek',
+		'en' => 'english',
+		'es' => 'spanish',
+		'eo' => 'esperanto',
+		'eu' => 'euskera',
+		'fa' => 'persian',
+		'fr' => 'french',
+		'fur' => 'friulian',
+		'gl' => 'galician',
+		'ka' => 'georgian',
+		'hr' => 'croatian',
+		'he' => 'hebrew',
+		'id' => 'indonesian',
+		'it' => 'italian',
+		'ko' => 'korean',
+		'lv' => 'latvian',
+		'lt' => 'lithuanian',
+		'mk' => 'macedonian',
+		'hu' => 'hungarian',
+		'ms' => 'malay',
+		'nl' => 'dutch',
+		'ja' => 'japanese',
+		'no' => 'norwegian',
+		'oc' => 'occitan',
+		'ps' => 'pashto',
+		'pl' => 'polish',
+		'pt' => 'portuguese',
+		'pt-br' => 'brazilian',
+		'ro' => 'romanian',
+		'qu' => 'quechua_cusco',
+		'ru' => 'russian',
+		'sk' => 'slovak',
+		'sl' => 'slovenian',
+		'sr' => 'serbian',
+		'fi' => 'finnish',
+		'sv' => 'swedish',
+		'th' => 'thai',
+		'tr' => 'turkce',
+		'uk' => 'ukrainian',
+		'vi' => 'vietnamese',
+		'sw' => 'swahili',
+		'yo' => 'yoruba'
+	);
+
+	$system_available_languages = & get_language_folder_list();
+
+	$accept_languages = strtolower(str_replace('_', '-', $_SERVER['HTTP_ACCEPT_LANGUAGE']));
+	foreach ($language_index as $code => $language) {
+		if (strpos($accept_languages, $code) === 0) {
+			if (!empty($system_available_languages[$language])) {
+				return $language;
+			}
+		}
+	}
+
+	$user_agent = strtolower(str_replace('_', '-', $_SERVER['HTTP_USER_AGENT']));
+	foreach ($language_index as $code => $language) {
+		if (preg_match("/[[( ]{$code}[;,_-)]/", $user_agent)) {
+			if (!empty($system_available_languages[$language])) {
+				return $language;
+			}
+		}
+	}
+
+	return 'english';
+}
+
+/*
+==============================================================================
+		FILESYSTEM RELATED FUNCTIONS
+==============================================================================
+*/
+
+/**
+ * This function checks if the given folder is writable
+ */
+function check_writable($folder, $suggestion = false) {
+	if (is_writable('../'.$folder)) {
+		return '<strong><font color="green">'.get_lang('Writable').'</font></strong>';
+	} else {
+		if ($suggestion) {
+			return '<strong><font color="#ff9900">'.get_lang('NotWritable').'</font></strong>';
+		} else {
+			return '<strong><font color="red">'.get_lang('NotWritable').'</font></strong>';
+		}
+	}
+}
+
+/**
+ * This function is similar to the core file() function, except that it
+ * works with line endings in Windows (which is not the case of file())
+ * @param	string	File path
+ * @return	array	The lines of the file returned as an array
+ */
+function file_to_array($filename) {
+	$fp = fopen($filename, 'rb');
+	$buffer = fread($fp, filesize($filename));
+	fclose($fp);
+	return explode('<br />', nl2br($buffer));
+}
+
+/**
  * We assume this function is called from install scripts that reside inside the install folder.
  */
 function set_file_folder_permissions() {
 	@chmod('.', 0755); //set permissions on install dir
 	@chmod('..', 0755); //set permissions on parent dir of install dir
 	@chmod('country_data.csv.csv', 0755);
-}
-
-/**
- * Fills the countries table with a list of countries.
- */
-function fill_track_countries_table($track_countries_table) {
-	$file_path = dirname(__FILE__).'/'.COUNTRY_DATA_FILENAME;
-	$add_country_sql = "LOAD DATA INFILE '".Database::escape_string($file_path)."' INTO TABLE $track_countries_table FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '\'';";
-	@ Database::query($add_country_sql);
 }
 
 /**
@@ -179,6 +329,291 @@ function write_system_config_file($path) {
 }
 
 /**
+ * Returns a list of language directories.
+ */
+function & get_language_folder_list() {
+	static $result;
+	if (!is_array($result)) {
+		$result = array();
+		$exceptions = array('.', '..', 'CVS', '.svn');
+		$search       = array('_latin',   '_unicode',   '_corporate',   '_org'  , '_KM',   '_');
+		$replace_with = array(' (Latin)', ' (unicode)', ' (corporate)', ' (org)', ' (KM)', ' ');
+		$dirname = api_get_path(SYS_LANG_PATH);
+		$handle = opendir($dirname);
+		while ($entries = readdir($handle)) {
+			if (in_array($entries, $exceptions)) {
+				continue;
+			}
+			if (is_dir($dirname.$entries)) {
+				$result[$entries] = ucwords(str_replace($search, $replace_with, $entries));
+			}
+		}
+		closedir($handle);
+		asort($result);
+	}
+	return $result;
+}
+
+/**
+ * TODO: my_directory_to_array() - maybe within the main API there is already a suitable function?
+ */
+function my_directory_to_array($directory) {
+	$array_items = array();
+	if ($handle = opendir($directory)) {
+		while (false !== ($file = readdir($handle))) {
+			if ($file != "." && $file != "..") {
+				if (is_dir($directory. "/" . $file)) {
+					$array_items = array_merge($array_items, my_directory_to_array($directory. '/' . $file));
+					$file = $directory . "/" . $file;
+					$array_items[] = preg_replace("/\/\//si", '/', $file);
+				}
+			}
+		}
+		closedir($handle);
+	}
+	return $array_items;
+}
+
+/**
+ * This function returns the value of a parameter from the configuration file
+ *
+ * WARNING - this function relies heavily on global variables $updateFromConfigFile
+ * and $configFile, and also changes these globals. This can be rewritten.
+ *
+ * @param 	string  $param  the parameter of which the value is returned
+ * @param	string	If we want to give the path rather than take it from POST
+ * @return  string  the value of the parameter
+ * @author Olivier Brouckaert
+ * @author Reworked by Ivan Tcholakov, 2010
+ */
+function get_config_param($param, $updatePath = '') {
+	global $configFile, $updateFromConfigFile;
+
+	// Look if we already have the queried parameter.
+	if (is_array($configFile) && isset($configFile[$param])) {
+		return $configFile[$param];
+	}
+	if (empty($updatePath) && !empty($_POST['updatePath'])) {
+		$updatePath = $_POST['updatePath'];
+	}
+	$updatePath = realpath($updatePath).'/';
+	$updateFromInstalledVersionFile = '';
+
+	if (empty($updateFromConfigFile)) {
+		// If update from previous install was requested,
+		// try to recover old config file from dokeos 1.8.x.
+		if (file_exists($updatePath.'main/inc/conf/configuration.php')) {
+			$updateFromConfigFile = 'main/inc/conf/configuration.php';
+		} elseif (file_exists($updatePath.'claroline/inc/conf/claro_main.conf.php')) {
+			$updateFromConfigFile = 'claroline/inc/conf/claro_main.conf.php';
+		} else {
+			// Give up recovering.
+			error_log('Could not find config file in '.$updatePath.' in get_config_param()', 0);
+			return null;
+		}
+	}
+
+	if (file_exists($updatePath.'main/inc/installedVersion.inc.php')) {
+
+		$updateFromInstalledVersionFile = $updatePath.'main/inc/installedVersion.inc.php';
+
+	} elseif (file_exists($updatePath.$updateFromConfigFile)) {
+
+		// The parameter was not found among the global variables, so look into the old configuration file.
+
+		// Make sure the installedVersion file is read first so it is overwritten
+		// by the config file if the config file contains the version (from 1.8.4).
+		$config_data_2 = array();
+		if (file_exists($updatePath.$updateFromInstalledVersionFile)) {
+			$config_data_2 = file_to_array($updatePath.$updateFromInstalledVersionFile);
+		}
+		$configFile = array();
+		$config_data = file_to_array($updatePath.$updateFromConfigFile);
+		$config_data = array_merge($config_data, $config_data_2);
+		$val = '';
+
+		// Parse the configuration file, statement by statement (line by line, actually).
+		foreach ($config_data as $php_statement) {
+
+			if (strpos($php_statement, '=') !== false) {
+				// Variable assignment statement have been detected (probably).
+				// It is expected to be as follows:
+				// $variable = 'some_value'; // A comment that is not mandatory.
+
+				// Split the statement into its left and right sides.
+				$php_statement = explode('=', $php_statement);
+				$variable = trim($php_statement[0]);
+				$value = $php_statement[1];
+
+				if (substr($variable, 0, 1) == '$') {
+					// We have for sure a php variable assignment detected.
+
+					// On the left side: Retrieve the pure variable's name
+					$variable = trim(str_replace('$', '', $variable));
+
+					// On the right side: Remove the comment, if it exists.
+					list($value) = explode(' //', $value);
+					// Remove extra whitespace, if any. Remove the trailing semicolon (;).
+					$value = substr(trim($value), 0, -1);
+					// Remove surroundig quotes, restore escaped quotes.
+					$value = str_replace('\"', '"', preg_replace('/^"|"$/', '', $value));
+					$value = str_replace('\'', '"', preg_replace('/^\'|\'$/', '', $value));
+
+					if (strtolower($value) == 'true') {
+
+						// A boolean true value have been recognized.
+						$value = 1;
+
+					} elseif (strtolower($value) == 'false') {
+
+						// A boolean false value have been recognized.
+						$value = 0;
+
+					} else {
+
+						// Probably we have a string value, but also we have to check
+						// possible string concatenations that may include string values
+						// and other configuration variables. I this case we have to
+						// get the calculated result of the concatenation.
+						$implode_string = ' ';
+						if (!strstr($value, '." ".') && strstr($value, '.$')) {
+							// Yes, there is concatenation, insert a special separator string.
+							$value = str_replace('.$', '." ".$', $value);
+							$implode_string = '';
+						}
+
+						// Split the concatenated values, if they are more than one.
+						$sub_strings = explode('." ".', $value);
+
+						// Seek for variables and retrieve their values.
+						foreach ($sub_strings as $key => & $sub_string) {
+							if (preg_match('/^\$[a-zA-Z_][a-zA-Z0-9_]*$/', $sub_string)) {
+								// A variable has been detected, read it by recursive call.
+								$sub_string = get_config_param(str_replace('$', '', $sub_string));
+							}
+						}
+
+						// Concatenate everything into the final, the calculated string value.
+						$value = implode($implode_string, $sub_strings);
+					}
+
+					// Cache the result value.
+					$configFile[$variable] = $value;
+
+					$a = explode("'", $variable);
+					$key_tmp = $a[1];
+					if ($key_tmp == $param) {
+						$val = $value;
+					}
+				}
+			}
+		}
+
+		return $val;
+
+	} else {
+		error_log('Config array could not be found in get_config_param()', 0);
+		return null;
+	}
+}
+
+/*
+==============================================================================
+		DATABASE RELATED FUNCTIONS
+==============================================================================
+*/
+
+/**
+ * Gets a configuration parameter from the database. Returns returns null on failure.
+ * @param	string	DB Host
+ * @param	string	DB login
+ * @param	string	DB pass
+ * @param	string	DB name
+ * @param	string 	Name of param we want
+ * @return	mixed	The parameter value or null if not found
+ */
+function get_config_param_from_db($host, $login, $pass, $db_name, $param = '') {
+
+	Database::connect(array('server' => $host, 'username' => $login, 'password' => $pass));
+	Database::query("set session sql_mode='';"); // Disabling special SQL modes (MySQL 5)
+	Database::select_db($db_name);
+
+	if (($res = Database::query("SELECT * FROM settings_current WHERE variable = '$param'")) !== false) {
+		if (Database::num_rows($res) > 0) {
+			$row = Database::fetch_array($res);
+			return $row['selected_value'];
+		}
+	}
+	return null;
+}
+
+/**
+ * Connects to the database server.
+ */
+function database_server_connect() {
+	global $dbHostForm, $dbUsernameForm, $dbPassForm;
+	if (($res = @Database::connect(array('server' => $dbHostForm, 'username' => $dbUsernameForm, 'password' => $dbPassForm))) === false) {
+		$no = Database::errno();
+		$msg = Database::error();
+		echo '<hr />#'.$no.': '.$msg.'<hr />';
+		echo get_lang('DBServerDoesntWorkOrLoginPassIsWrong').'.<br /><br />'.
+			get_lang('PleaseCheckTheseValues').' :<br /><br />'.
+			'<strong>'.get_lang('DBHost').'</strong> : '.$dbHostForm.'<br />'.
+			'<strong>'.get_lang('DBLogin').'</strong> : '.$dbUsernameForm.'<br />'.
+			'<strong>'.get_lang('DBPassword').'</strong> : '.$dbPassForm.'<br /><br />'.
+			get_lang('PleaseGoBackToStep').' '. (defined('SYSTEM_INSTALLATION') ? '3' : '1').'.'.
+			'<p><button type="submit" class="back" name="step'. (defined('SYSTEM_INSTALLATION') ? '3' : '1').'" value="&lt; '.get_lang('Back').'">'.get_lang('Back').'</button></p>'.
+			'</td></tr></table></form></body></html>';
+		exit ();
+	}
+	@Database::query("set session sql_mode='';"); // Disabling special SQL modes (MySQL 5)
+}
+
+/**
+ * In step 3. Tests establishing connection to the database server. Tests also the possibility for multiple databases configuration.
+ * @return int		1 when there is no problem;
+ * 					0 when a new database is impossible to be created, then the multiple databases configuration is impossible too;
+ * 					-1 when there is no connection established.
+ */
+function test_db_connect($dbHostForm, $dbUsernameForm, $dbPassForm, $singleDbForm, $dbPrefixForm) {
+	$dbConnect = -1;
+	if ($singleDbForm == 1) {
+		if (@Database::connect(array('server' => $dbHostForm, 'username' => $dbUsernameForm, 'password' => $dbPassForm)) !== false) {
+			$dbConnect = 1;
+		} else {
+			$dbConnect = -1;
+		}
+	} elseif ($singleDbForm == 0) {
+		if (@Database::connect(array('server' => $dbHostForm, 'username' => $dbUsernameForm, 'password' => $dbPassForm)) !== false) {
+			@Database::query("set session sql_mode='';"); // Disabling special SQL modes (MySQL 5)
+			$multipleDbCheck = @Database::query("CREATE DATABASE ".$dbPrefixForm."test_chamilo_connection");
+			if ($multipleDbCheck !== false) {
+				$multipleDbCheck = @Database::query("DROP DATABASE IF EXISTS ".$dbPrefixForm."test_chamilo_connection");
+				if ($multipleDbCheck !== false) {
+					$dbConnect = 1;
+				} else {
+					$dbConnect = 0;
+				}
+			} else {
+				$dbConnect = 0;
+			}
+		} else {
+			$dbConnect = -1;
+		}
+	}
+	return $dbConnect; //return "1"if no problems, "0" if, in case of multiDB we can't create a new DB and "-1" if there is no connection.
+}
+
+/**
+ * Fills the countries table with a list of countries.
+ */
+function fill_track_countries_table($track_countries_table) {
+	$file_path = dirname(__FILE__).'/'.COUNTRY_DATA_FILENAME;
+	$add_country_sql = "LOAD DATA INFILE '".Database::escape_string($file_path)."' INTO TABLE $track_countries_table FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '\'';";
+	@ Database::query($add_country_sql);
+}
+
+/**
  * Creates the structure of the main database and fills it
  * with data. Placeholder symbols in the main database file
  * have to be replaced by the settings entered by the user during installation.
@@ -232,19 +667,13 @@ function load_database_script($db_script) {
 
 /**
  * Function copied and adapted from phpMyAdmin 2.6.0 PMA_splitSqlFile (also GNU GPL)
- *
  * Removes comment lines and splits up large sql files into individual queries
- *
  * Last revision: September 23, 2001 - gandon
- *
  * @param   array    the splitted sql commands
  * @param   string   the sql commands
  * @param   integer  the MySQL release number (because certains php3 versions
  *                   can't get the value of a constant from within a function)
- *
  * @return  boolean  always true
- *
- * @access  public
  */
 function split_sql_file(&$ret, $sql) {
     // do not trim, see bug #1030644
@@ -423,136 +852,6 @@ function get_sql_file_contents($file, $section, $print_errors = true) {
 }
 
 /**
- * Tries to detect browser's language.
- * @return string		Returns a language identificator, i.e. 'english', 'spanish', ...
- */
-function detect_browser_language() {
-	static $language_index = array(
-		'ar' => 'arabic',
-		'ast' => 'asturian',
-		'bg' => 'bulgarian',
-		'bs' => 'bosnian',
-		'ca' => 'catalan',
-		'zh' => 'simpl_chinese',
-		'zh-tw' => 'trad_chinese',
-		'cs' => 'czech',
-		'da' => 'danish',
-		'prs' => 'dari',
-		'de' => 'german',
-		'el' => 'greek',
-		'en' => 'english',
-		'es' => 'spanish',
-		'eo' => 'esperanto',
-		'eu' => 'euskera',
-		'fa' => 'persian',
-		'fr' => 'french',
-		'fur' => 'friulian',
-		'gl' => 'galician',
-		'ka' => 'georgian',
-		'hr' => 'croatian',
-		'he' => 'hebrew',
-		'id' => 'indonesian',
-		'it' => 'italian',
-		'ko' => 'korean',
-		'lv' => 'latvian',
-		'lt' => 'lithuanian',
-		'mk' => 'macedonian',
-		'hu' => 'hungarian',
-		'ms' => 'malay',
-		'nl' => 'dutch',
-		'ja' => 'japanese',
-		'no' => 'norwegian',
-		'oc' => 'occitan',
-		'ps' => 'pashto',
-		'pl' => 'polish',
-		'pt' => 'portuguese',
-		'pt-br' => 'brazilian',
-		'ro' => 'romanian',
-		'qu' => 'quechua_cusco',
-		'ru' => 'russian',
-		'sk' => 'slovak',
-		'sl' => 'slovenian',
-		'sr' => 'serbian',
-		'fi' => 'finnish',
-		'sv' => 'swedish',
-		'th' => 'thai',
-		'tr' => 'turkce',
-		'uk' => 'ukrainian',
-		'vi' => 'vietnamese',
-		'sw' => 'swahili',
-		'yo' => 'yoruba'
-	);
-
-	$system_available_languages = & get_language_folder_list();
-
-	$accept_languages = strtolower(str_replace('_', '-', $_SERVER['HTTP_ACCEPT_LANGUAGE']));
-
-	foreach ($language_index as $code => $language) {
-		if (strpos($accept_languages, $code) === 0) {
-			if (!empty($system_available_languages[$language])) {
-				return $language;
-			}
-		}
-	}
-
-	$user_agent = strtolower(str_replace('_', '-', $_SERVER['HTTP_USER_AGENT']));
-
-	foreach ($language_index as $code => $language) {
-		if (preg_match("/[[( ]{$code}[;,_-)]/", $user_agent)) {
-			if (!empty($system_available_languages[$language])) {
-				return $language;
-			}
-		}
-	}
-
-	return 'english';
-}
-
-/**
- *	Returns a list of language directories.
- */
-function & get_language_folder_list() {
-	static $result;
-	if (!is_array($result)) {
-		$result = array();
-		$exceptions = array('.', '..', 'CVS', '.svn');
-		$search       = array('_latin',   '_unicode',   '_corporate',   '_org'  , '_KM',   '_');
-		$replace_with = array(' (Latin)', ' (unicode)', ' (corporate)', ' (org)', ' (KM)', ' ');
-		$dirname = api_get_path(SYS_LANG_PATH);
-		$handle = opendir($dirname);
-		while ($entries = readdir($handle)) {
-			if (in_array($entries, $exceptions)) {
-				continue;
-			}
-			if (is_dir($dirname.$entries)) {
-				$result[$entries] = ucwords(str_replace($search, $replace_with, $entries));
-			}
-		}
-		closedir($handle);
-		asort($result);
-	}
-	return $result;
-}
-
-// TODO: Maybe within the main API there is already a suitable function?
-function my_directory_to_array($directory) {
-	$array_items = array();
-	if ($handle = opendir($directory)) {
-		while (false !== ($file = readdir($handle))) {
-			if ($file != "." && $file != "..") {
-				if (is_dir($directory. "/" . $file)) {
-					$array_items = array_merge($array_items, my_directory_to_array($directory. '/' . $file));
-					$file = $directory . "/" . $file;
-					$array_items[] = preg_replace("/\/\//si", '/', $file);
-				}
-			}
-		}
-		closedir($handle);
-	}
-	return $array_items;
-}
-
-/**
  * Adds a new document to the database - specific to version 1.8.0
  *
  * @param array $_course
@@ -577,7 +876,11 @@ function add_document_180($_course, $path, $filetype, $filesize, $title, $commen
     }
 }
 
-//--------------------------------------------------------------------------
+/*
+==============================================================================
+		DISPLAY FUNCTIONS
+==============================================================================
+*/
 
 /**
  * This function prints class=active_step $current_step=$param
@@ -601,271 +904,7 @@ function display_step_sequence() {
 }
 
 /**
- * This function checks if a php extension exists or not and returns an HTML
- * status string.
- *
- * @param 	string  Name of the PHP extension to be checked
- * @param 	string  Text to show when extension is available (defaults to 'Yes')
- * @param	string	Text to show when extension is available (defaults to 'No')
- * @param	boolean	Whether this extension is optional (in this case show unavailable text in orange rather than red)
- * @return	string	HTML string reporting the status of this extension. Language-aware.
- * @author 	Christophe Gesché
- * @author 	Patrick Cool <patrick.cool@UGent.be>, Ghent University
- * @author	Yannick Warnier <yannick.warnier@dokeos.com>
- * @version Dokeos 1.8.1, May 2007
- */
-function check_extension($extension_name, $return_success = 'Yes', $return_failure = 'No', $optional = false) {
-	if (extension_loaded($extension_name)) {
-		return '<strong><font color="green">'.$return_success.'</font></strong>';
-	} else {
-		if ($optional) {
-			return '<strong><font color="#ff9900">'.$return_failure.'</font></strong>';
-		} else {
-			return '<strong><font color="red">'.$return_failure.'</font></strong>';
-		}
-	}
-}
-
-/**
- * This function checks whether a php setting matches the recommended value
- *
- * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
- * @version Dokeos 1.8, august 2006
- */
-function check_php_setting($php_setting, $recommended_value, $return_success = false, $return_failure = false) {
-	$current_php_value = get_php_setting($php_setting);
-	if ($current_php_value == $recommended_value) {
-		return '<strong><font color="green">'.$current_php_value.' '.$return_success.'</font></strong>';
-	} else {
-		return '<strong><font color="red">'.$current_php_value.' '.$return_failure.'</font></strong>';
-	}
-}
-
-/**
- * Returns a textual value ('ON' or 'OFF') based on a requester 2-state ini- configuration setting.
- *
- * @param string $val a php ini value
- * @return boolean: ON or OFF
- * @author Joomla <http://www.joomla.org>
- */
-function get_php_setting($val) {
-	return ini_get($val) == '1' ? 'ON' : 'OFF';
-}
-
-/**
- * This function checks if the given folder is writable
- */
-function check_writable($folder, $suggestion = false) {
-	if (is_writable('../'.$folder)) {
-		return '<strong><font color="green">'.get_lang('Writable').'</font></strong>';
-	} else {
-		if ($suggestion) {
-			return '<strong><font color="#ff9900">'.get_lang('NotWritable').'</font></strong>';
-		} else {
-			return '<strong><font color="red">'.get_lang('NotWritable').'</font></strong>';
-		}
-	}
-}
-
-/**
- * This function returns a string "true" or "false" according to the passed parameter.
- *
- * @param integer  $var  The variable to present as text
- * @return  string  the string "true" or "false"
- * @author Christophe Gesché
- */
-function true_false($var) {
-	return $var ? 'true' : 'false';
-}
-
-/**
- * This function is similar to the core file() function, except that it
- * works with line endings in Windows (which is not the case of file())
- * @param	string	File path
- * @return	array	The lines of the file returned as an array
- */
-function file_to_array($filename) {
-	$fp = fopen($filename, 'rb');
-	$buffer = fread($fp, filesize($filename));
-	fclose($fp);
-	return explode('<br />', nl2br($buffer));
-}
-
-/**
- * This function returns the value of a parameter from the configuration file
- *
- * WARNING - this function relies heavily on global variables $updateFromConfigFile
- * and $configFile, and also changes these globals. This can be rewritten.
- *
- * @param 	string  $param  the parameter of which the value is returned
- * @param	string	If we want to give the path rather than take it from POST
- * @return  string  the value of the parameter
- * @author Olivier Brouckaert
- * @author Reworked by Ivan Tcholakov, 2010
- */
-function get_config_param($param, $updatePath = '') {
-	global $configFile, $updateFromConfigFile;
-
-	// Look if we already have the queried parameter.
-	if (is_array($configFile) && isset($configFile[$param])) {
-		return $configFile[$param];
-	}
-	if (empty($updatePath) && !empty($_POST['updatePath'])) {
-		$updatePath = $_POST['updatePath'];
-	}
-	$updatePath = realpath($updatePath).'/';
-	$updateFromInstalledVersionFile = '';
-
-	if (empty($updateFromConfigFile)) {
-		// If update from previous install was requested,
-		// try to recover old config file from dokeos 1.8.x.
-		if (file_exists($updatePath.'main/inc/conf/configuration.php')) {
-			$updateFromConfigFile = 'main/inc/conf/configuration.php';
-		} elseif (file_exists($updatePath.'claroline/inc/conf/claro_main.conf.php')) {
-			$updateFromConfigFile = 'claroline/inc/conf/claro_main.conf.php';
-		} else {
-			// Give up recovering.
-			error_log('Could not find config file in '.$updatePath.' in get_config_param()', 0);
-			return null;
-		}
-	}
-
-	if (file_exists($updatePath.'main/inc/installedVersion.inc.php')) {
-
-		$updateFromInstalledVersionFile = $updatePath.'main/inc/installedVersion.inc.php';
-
-	} elseif (file_exists($updatePath.$updateFromConfigFile)) {
-
-		// The parameter was not found among the global variables, so look into the old configuration file.
-
-		// Make sure the installedVersion file is read first so it is overwritten
-		// by the config file if the config file contains the version (from 1.8.4).
-		$config_data_2 = array();
-		if (file_exists($updatePath.$updateFromInstalledVersionFile)) {
-			$config_data_2 = file_to_array($updatePath.$updateFromInstalledVersionFile);
-		}
-		$configFile = array();
-		$config_data = file_to_array($updatePath.$updateFromConfigFile);
-		$config_data = array_merge($config_data, $config_data_2);
-		$val = '';
-
-		// Parse the configuration file, statement by statement (line by line, actually).
-		foreach ($config_data as $php_statement) {
-
-			if (strpos($php_statement, '=') !== false) {
-				// Variable assignment statement have been detected (probably).
-				// It is expected to be as follows:
-				// $variable = 'some_value'; // A comment that is not mandatory.
-
-				// Split the statement into its left and right sides.
-				$php_statement = explode('=', $php_statement);
-				$variable = trim($php_statement[0]);
-				$value = $php_statement[1];
-
-				if (substr($variable, 0, 1) == '$') {
-					// We have for sure a php variable assignment detected.
-
-					// On the left side: Retrieve the pure variable's name
-					$variable = trim(str_replace('$', '', $variable));
-
-					// On the right side: Remove the comment, if it exists.
-					list($value) = explode(' //', $value);
-					// Remove extra whitespace, if any. Remove the trailing semicolon (;).
-					$value = substr(trim($value), 0, -1);
-					// Remove surroundig quotes, restore escaped quotes.
-					$value = str_replace('\"', '"', preg_replace('/^"|"$/', '', $value));
-					$value = str_replace('\'', '"', preg_replace('/^\'|\'$/', '', $value));
-
-					if (strtolower($value) == 'true') {
-
-						// A boolean true value have been recognized.
-						$value = 1;
-
-					} elseif (strtolower($value) == 'false') {
-
-						// A boolean false value have been recognized.
-						$value = 0;
-
-					} else {
-
-						// Probably we have a string value, but also we have to check
-						// possible string concatenations that may include string values
-						// and other configuration variables. I this case we have to
-						// get the calculated result of the concatenation.
-						$implode_string = ' ';
-						if (!strstr($value, '." ".') && strstr($value, '.$')) {
-							// Yes, there is concatenation, insert a special separator string.
-							$value = str_replace('.$', '." ".$', $value);
-							$implode_string = '';
-						}
-
-						// Split the concatenated values, if they are more than one.
-						$sub_strings = explode('." ".', $value);
-
-						// Seek for variables and retrieve their values.
-						foreach ($sub_strings as $key => & $sub_string) {
-							if (preg_match('/^\$[a-zA-Z_][a-zA-Z0-9_]*$/', $sub_string)) {
-								// A variable has been detected, read it by recursive call.
-								$sub_string = get_config_param(str_replace('$', '', $sub_string));
-							}
-						}
-
-						// Concatenate everything into the final, the calculated string value.
-						$value = implode($implode_string, $sub_strings);
-					}
-
-					// Cache the result value.
-					$configFile[$variable] = $value;
-
-					$a = explode("'", $variable);
-					$key_tmp = $a[1];
-					if ($key_tmp == $param) {
-						$val = $value;
-					}
-				}
-			}
-		}
-
-		return $val;
-
-	} else {
-		error_log('Config array could not be found in get_config_param()', 0);
-		return null;
-	}
-}
-
-/**
- * Get the config param from the database. If not found, return null
- * @param	string	DB Host
- * @param	string	DB login
- * @param	string	DB pass
- * @param	string	DB name
- * @param	string 	Name of param we want
- * @return	mixed	The parameter value or null if not found
- */
-function get_config_param_from_db($host, $login, $pass, $db_name, $param = '') {
-
-	Database::connect(array('server' => $host, 'username' => $login, 'password' => $pass));
-	Database::query("set session sql_mode='';"); // Disabling special SQL modes (MySQL 5)
-	Database::select_db($db_name);
-
-	if (($res = Database::query("SELECT * FROM settings_current WHERE variable = '$param'")) !== false) {
-		if (Database::num_rows($res) > 0) {
-			$row = Database::fetch_array($res);
-			return $row['selected_value'];
-		}
-	}
-	return null;
-}
-
-/*
-==============================================================================
-		DISPLAY FUNCTIONS
-==============================================================================
-*/
-
-/**
- *	Displays a drop down box for selection the preferred language.
+ * Displays a drop down box for selection the preferred language.
  */
 function display_language_selection_box($name = 'language_list', $default_language = 'english') {
 	// Reading language list.
@@ -1653,7 +1692,7 @@ function display_configuration_settings_form($installType, $urlForm, $languageFo
  */
 function display_after_install_message($installType, $nbr_courses) {
 	?>
-	<h2><?php echo display_step_sequence() . get_lang("CfgSetting"); ?></h2>
+	<h2><?php echo display_step_sequence() . get_lang('CfgSetting'); ?></h2>
 
 	<?php echo get_lang('FirstUseTip'); ?>
 
@@ -1675,39 +1714,4 @@ function display_after_install_message($installType, $nbr_courses) {
 	</form>
 	<a class="portal" href="../../index.php"><?php echo get_lang('GoToYourNewlyCreatedPortal'); ?></a>
 	<?php
-}
-
-/**
- * In step 3. Tests establishing connection to the database server. Tests also the possibility for multiple databases configuration.
- * @return int		1 when there is no problem;
- * 					0 when a new database is impossible to be created, then the multiple databases configuration is impossible too;
- * 					-1 when there is no connection established.
- */
-function test_db_connect($dbHostForm, $dbUsernameForm, $dbPassForm, $singleDbForm, $dbPrefixForm) {
-	$dbConnect = -1;
-	if ($singleDbForm == 1) {
-		if (@Database::connect(array('server' => $dbHostForm, 'username' => $dbUsernameForm, 'password' => $dbPassForm)) !== false) {
-			$dbConnect = 1;
-		} else {
-			$dbConnect = -1;
-		}
-	} elseif ($singleDbForm == 0) {
-		if (@Database::connect(array('server' => $dbHostForm, 'username' => $dbUsernameForm, 'password' => $dbPassForm)) !== false) {
-			@Database::query("set session sql_mode='';"); // Disabling special SQL modes (MySQL 5)
-			$multipleDbCheck = @Database::query("CREATE DATABASE ".$dbPrefixForm."test_chamilo_connection");
-			if ($multipleDbCheck !== false) {
-				$multipleDbCheck = @Database::query("DROP DATABASE IF EXISTS ".$dbPrefixForm."test_chamilo_connection");
-				if ($multipleDbCheck !== false) {
-					$dbConnect = 1;
-				} else {
-					$dbConnect = 0;
-				}
-			} else {
-				$dbConnect = 0;
-			}
-		} else {
-			$dbConnect = -1;
-		}
-	}
-	return $dbConnect; //return "1"if no problems, "0" if, in case of multiDB we can't create a new DB and "-1" if there is no connection.
 }

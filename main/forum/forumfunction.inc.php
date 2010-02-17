@@ -2229,8 +2229,8 @@ function store_reply($values) {
 	if ($upload_ok) {
 		// We first store an entry in the forum_post table
 		$sql="INSERT INTO $table_posts (post_title, post_text, thread_id, forum_id, poster_id, post_date, post_notification, post_parent_id, visible)
-				VALUES ('".Database::escape_string(Security::remove_XSS($values['post_title']))."',
-						'".Database::escape_string(isset($values['post_text']) ? Security::remove_XSS(stripslashes(api_html_entity_decode($values['post_text'])),COURSEMANAGERLOWSECURITY) : null)."',
+				VALUES ('".Database::escape_string($values['post_title'])."',
+						'".Database::escape_string(isset($values['post_text']) ? (api_html_entity_decode($values['post_text'])) : null)."',
 						'".Database::escape_string($values['thread_id'])."',
 						'".Database::escape_string($values['forum_id'])."',
 						'".Database::escape_string($_user['user_id'])."',
@@ -2265,7 +2265,7 @@ function store_reply($values) {
 				// Storing the attachments if any
 				if ($result) {
 					$sql='INSERT INTO '.$forum_table_attachment.'(filename,comment, path, post_id,size) '.
-						 "VALUES ( '".Database::escape_string($file_name)."', '".Database::escape_string($comment)."', '".Database::escape_string($new_file_name)."' , '".$new_post_id."', '".$_FILES['user_upload']['size']."' )";
+						 "VALUES ( '".Database::escape_string($file_name)."', '".Database::escape_string($comment)."', '".Database::escape_string($new_file_name)."' , '".$new_post_id."', '".intval($_FILES['user_upload']['size'])."' )";
 					$result=Database::query($sql);
 					$message.=' / '.get_lang('FileUploadSucces');
 					$last_id=Database::insert_id();

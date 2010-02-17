@@ -103,7 +103,8 @@ class Tracking {
 		if(Database::num_rows($rs)>0)
 		{
 			if ($first_login_date = Database::result($rs, 0, 0)) {
-				return format_locale_date(get_lang('DateFormatLongWithoutDay'), strtotime($first_login_date));
+				$first_login_date_local = api_get_local_time($first_login_date, null, null, date_default_timezone_get());
+				return format_locale_date(get_lang('DateFormatLongWithoutDay'), strtotime($first_login_date_local));
 			}
 		}
 		return false;
@@ -120,6 +121,7 @@ class Tracking {
 		{
 			if ($last_login_date = Database::result($rs, 0, 0))
 			{
+				$last_login_date = api_get_local_time($last_login_date, null, null, date_default_timezone_get());
 				if ($return_timestamp)
 				{
 					return strtotime($last_login_date);
@@ -163,6 +165,7 @@ class Tracking {
 		if(Database::num_rows($rs)>0)
 		{
 			if ($first_login_date = Database::result($rs, 0, 0)) {
+				$first_login_date = api_get_local_time($first_login_date, null, null, date_default_timezone_get());
 				return format_locale_date(get_lang('DateFormatLongWithoutDay'), strtotime($first_login_date));
 			}
 		}
@@ -180,6 +183,7 @@ class Tracking {
 		if(Database::num_rows($rs)>0)
 		{
 			if ($last_login_date = Database::result($rs, 0, 0)) {
+				$last_login_date = api_get_local_time($last_login_date, null, null, date_default_timezone_get());
 				$timestamp = strtotime($last_login_date);
 				$currentTimestamp = mktime();
 				//If the last connection is > than 7 days, the text is red
@@ -1048,7 +1052,7 @@ class Tracking {
 
 			$rs = Database::query($sql);
 			$row = Database::fetch_array($rs);
-			$last_connection = $row['access_date'];
+			$last_connection = api_get_local_time($row['access_date'], null, null, date_default_timezone_get());
 			if (!empty($last_connection)) {
 				$date_format_long = format_locale_date(get_lang('DateFormatLongWithoutDay'), strtotime($last_connection));
 				$time = explode(' ',$last_connection);
@@ -1343,7 +1347,7 @@ class TrackingCourseLog {
 
 				$row[1] = get_lang($row[1]);
 
-				$row[5] = api_ucfirst(format_locale_date($dateTimeFormatLong, strtotime($row['col5'])));
+				$row[5] = api_ucfirst(api_get_local_time($row['col5'], $dateTimeFormatLong, null, date_default_timezone_get()));
 
 				$row[4] = '';
 				if ($table_name['table_name'] == 'document') {
@@ -1724,7 +1728,7 @@ class TrackingUserLog {
 	*/
 	function display_exercise_tracking_info($view, $user_id, $course_id)
 	{
-		global $TABLECOURSE_EXERCICES, $TABLETRACK_EXERCICES;
+		global $TABLECOURSE_EXERCICES, $TABLETRACK_EXERCICES, $dateTimeFormatLong;
 		if(substr($view,1,1) == '1')
 		{
 			$new_view = substr_replace($view,'0',1,1);
@@ -1770,7 +1774,7 @@ class TrackingUserLog {
 
 			if (is_array($results)) {
 				for($i = 0; $i < sizeof($results); $i++) {
-					$display_date = format_locale_date(get_lang('dateTimeFormatLong'), $results[$i][3]);
+					$display_date = api_get_local_time($results[$i][3], $dateTimeFormatLong, null, date_default_timezone_get());
 					echo "<tr>\n";
 					echo "<td class='content'>".$results[$i][0]."</td>\n";
 					echo "<td class='content'>".$display_date."</td>\n";
@@ -1788,7 +1792,7 @@ class TrackingUserLog {
 					$title = GetQuizName($hpresults[$i][0],'');
 					if ($title == '')
 						$title = basename($hpresults[$i][0]);
-					$display_date = format_locale_date(get_lang('dateTimeFormatLong'), $hpresults[$i][3]);
+					$display_date = api_get_local_time($hpresults[$i][3], $dateTimeFormatLong, null, date_default_timezone_get());
 	?>
 					<tr>
 						<td class="content"><?php echo $title; ?></td>
@@ -1856,7 +1860,8 @@ class TrackingUserLog {
 			if (is_array($results)) {
 				for($j = 0 ; $j < count($results) ; $j++) {
 					$pathToFile = api_get_path(WEB_COURSE_PATH).$_course['path']."/".$results[$j][3];
-					$timestamp = strtotime($results[$j][0]);
+					$upload_date = api_get_local_time($results[$j][0], null, null, date_default_timezone_get());
+					$timestamp = strtotime($upload_date);
 					$beautifulDate = format_locale_date($dateTimeFormatLong,$timestamp);
 					echo "<tr>";
 					echo "<td class='content'>"
@@ -2055,7 +2060,7 @@ class TrackingUserLogCSV {
 	*/
 	function display_exercise_tracking_info($view, $user_id, $course_id)
 	{
-		global $TABLECOURSE_EXERCICES, $TABLETRACK_EXERCICES, $TABLETRACK_HOTPOTATOES;
+		global $TABLECOURSE_EXERCICES, $TABLETRACK_EXERCICES, $TABLETRACK_HOTPOTATOES, $dateTimeFormatLong;
 		if(substr($view,1,1) == '1')
 		{
 			$new_view = substr_replace($view,'0',1,1);
@@ -2087,7 +2092,7 @@ class TrackingUserLogCSV {
 			{
 				for($i = 0; $i < sizeof($results); $i++)
 				{
-					$display_date = format_locale_date(get_lang('dateTimeFormatLong'), $results[$i][3]);
+					$display_date = api_get_local_time($results[$i][3], $dateTimeFormatLong, null, date_default_timezone_get());
 					$line .= $results[$i][0].";".$display_date.";".$results[$i][1]." / ".$results[$i][2]."\n";
 				}
 			}
@@ -2105,8 +2110,9 @@ class TrackingUserLogCSV {
 
 					if ($title == '')
 						$title = basename($hpresults[$i][0]);
+						
+					$display_date = api_get_local_time($hpresults[$i][3], $dateTimeFormatLong, null, date_default_timezone_get());
 
-					$display_date = format_locale_date(get_lang('dateTimeFormatLong'), $hpresults[$i][3]);
 					$line .= $title.';'.$display_date.';'.$hpresults[$i][1].'/'.$hpresults[$i][2]."\n";
 				}
 			}
@@ -2155,7 +2161,8 @@ class TrackingUserLogCSV {
 				for($j = 0 ; $j < count($results) ; $j++)
 				{
 					$pathToFile = api_get_path(WEB_COURSE_PATH).$_course['path']."/".$results[$j][3];
-					$timestamp = strtotime($results[$j][0]);
+					$upload_date = api_get_local_time($results[$j][0], null, null, date_default_timezone_get());
+					$timestamp = strtotime($upload_date);
 					$beautifulDate = format_locale_date($dateTimeFormatLong,$timestamp);
 					$line .= $results[$j][1].";".$results[$j][2].";".$beautifulDate."\n";
 				}

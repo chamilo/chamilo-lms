@@ -738,6 +738,7 @@ function display_agenda_items()
     while($myrow=Database::fetch_array($result))
     {
     	$is_repeated = !empty($myrow['parent_event_id']);
+    	$myrow["start_date"] = api_get_local_time($myrow["start_date"], null, null, date_default_timezone_get());
 	    echo '<table class="data_table">',"\n";
         /*--------------------------------------------------
         		display: the month bar
@@ -822,6 +823,7 @@ function display_agenda_items()
     	echo "\t\t<td>";
     	if ($myrow["end_date"]<>"0000-00-00 00:00:00")
     	{
+			$myrow["end_date"] = api_get_local_time($myrow["end_date"], null, null, date_default_timezone_get());
     		echo get_lang("EndTimeWindow").": ";
     		echo api_ucfirst(format_locale_date($dateFormatLong,strtotime($myrow["end_date"])))."&nbsp;&nbsp;&nbsp;";
     		echo ucfirst(strftime($timeNoSecFormat,strtotime($myrow["end_date"])))."";
@@ -1009,6 +1011,7 @@ function display_one_agenda_item($agenda_id)
 	echo "\t<tr>\n";
 
 	// highlight: if a date in the small calendar is clicked we highlight the relevant items
+	$myrow["start_date"] = api_get_local_time($myrow["start_date"], null, null, date_default_timezone_get());
 	$db_date=(int)date("d",strtotime($myrow["start_date"])).date("n",strtotime($myrow["start_date"])).date("Y",strtotime($myrow["start_date"]));
 	if ($_GET["day"].$_GET["month"].$_GET["year"] <>$db_date)
 	{
@@ -1065,6 +1068,7 @@ function display_one_agenda_item($agenda_id)
 	echo ucfirst(strftime($timeNoSecFormat,strtotime($myrow["start_date"])))."";
 	echo "</td>\n";
 	echo "\t\t<td>".get_lang("EndTime").": ";
+	$myrow["end_date"] = api_get_local_time($myrow["end_date"], null, null, date_default_timezone_get());
 	echo api_ucfirst(format_locale_date($dateFormatLong,strtotime($myrow["end_date"])))."&nbsp;&nbsp;&nbsp;";
 	echo ucfirst(strftime($timeNoSecFormat,strtotime($myrow["end_date"])))."";
 	echo "</td>\n";
@@ -1674,6 +1678,7 @@ function get_agendaitems($month, $year)
     $result = Database::query($sqlquery);
 	while ($item = Database::fetch_array($result))
 	{
+		$item['start_date'] = api_get_local_time($item['start_date'], null, null, date_default_timezone_get());
 		$agendaday = date('j',strtotime($item['start_date']));
 		$time= date('H:i',strtotime($item['start_date']));
 		$URL = $portal_url.'main/admin/agenda.php?day='.$agendaday."&amp;month=".$month."&amp;year=".$year; // RH  //Patrick Cool: to highlight the relevant agenda item
@@ -1996,6 +2001,7 @@ function get_day_agendaitems($courses_dbs, $month, $year, $day)
 		{
 			// in the display_daycalendar function we use $i (ranging from 0 to 47) for each halfhour
 			// we want to know for each agenda item for this day to wich halfhour it must be assigned
+			$item['start_date'] = api_get_local_time($item['start_date'], null, null, date_default_timezone_get());
 			list ($datepart, $timepart) = split(" ", $item['start_date']);
 			list ($year, $month, $day) = explode("-", $datepart);
 			list ($hours, $minutes, $seconds) = explode(":", $timepart);
@@ -2105,6 +2111,7 @@ function get_week_agendaitems($courses_dbs, $month, $year, $week = '')
 
 		while ($item = Database::fetch_array($result))
 		{
+			$item['start_date'] = api_get_local_time($item['start_date'], null, null, date_default_timezone_get());
 			$agendaday = date("j",strtotime($item['start_date']));
 			$time= date("H:i",strtotime($item['start_date']));
 
@@ -2191,7 +2198,7 @@ function get_repeated_events_day_view($course_info,$start=0,$end=0,$params)
 		while($row = Database::fetch_array($res))
 		{
 			$orig_start = $row['orig_start'];
-			$orig_end = $row['orig_end'];
+			$orig_end = $row['orig_start'];
 			$repeat_type = $row['cal_type'];
 			switch($repeat_type)
 			{

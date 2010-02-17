@@ -284,8 +284,8 @@ if ($show_announcement_list)
 		$row = array ();
 		$row[] = $announcement->id;
 		$row[] = Display::return_icon(($announcement->visible ? 'accept.png' : 'exclamation.png'), ($announcement->visible ? get_lang('AnnouncementAvailable') : get_lang('AnnouncementNotAvailable')));
-		$row[] = $announcement->date_start;
-		$row[] = $announcement->date_end;
+		$row[] = api_get_local_time($announcement->date_start, null, null, date_default_timezone_get());
+		$row[] = api_get_local_time($announcement->date_end, null, null, date_default_timezone_get());
 		$row[] = "<a href=\"?id=".$announcement->id."&amp;person=".VISIBLE_TEACHER."&amp;action=". ($announcement->visible_teacher ? 'make_invisible' : 'make_visible')."\">".Display::return_icon(($announcement->visible_teacher  ? 'visible.gif' : 'invisible.gif'), get_lang('show_hide'))."</a>";
 		$row[] = "<a href=\"?id=".$announcement->id."&amp;person=".VISIBLE_STUDENT."&amp;action=". ($announcement->visible_student  ? 'make_invisible' : 'make_visible')."\">".Display::return_icon(($announcement->visible_student  ? 'visible.gif' : 'invisible.gif'), get_lang('show_hide'))."</a>";
 		$row[] = "<a href=\"?id=".$announcement->id."&amp;person=".VISIBLE_GUEST."&amp;action=". ($announcement->visible_guest ? 'make_invisible' : 'make_visible')."\">".Display::return_icon(($announcement->visible_guest  ? 'visible.gif' : 'invisible.gif'), get_lang('show_hide'))."</a>";

@@ -144,7 +144,7 @@ load_main_database($installation_settings);
 
 Database::select_db($mysqlStatsDb) or die(Database::error());
 
-load_database_script('dokeos_stats.sql');
+load_database_script('db_stats.sql');
 
 $track_countries_table = "track_c_countries";
 fill_track_countries_table($track_countries_table);
@@ -156,4 +156,4 @@ fill_track_countries_table($track_countries_table);
 
 Database::select_db($mysqlUserDb) or die(Database::error());
 
-load_database_script('dokeos_user.sql');
+load_database_script('db_user.sql');

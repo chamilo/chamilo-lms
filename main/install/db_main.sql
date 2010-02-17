@@ -1,6 +1,6 @@
 -- MySQL dump 10.9
 --
--- Host: localhost    Database: dokeos_main
+-- Host: localhost    Database: chamilo_main
 -- ------------------------------------------------------
 -- Server version	4.1.14
 
@@ -198,7 +198,7 @@ CREATE TABLE course_category (
 
 /*!40000 ALTER TABLE course_category DISABLE KEYS */;
 LOCK TABLES course_category WRITE;
-INSERT INTO course_category VALUES (1,'Language skills','LANG',NULL,1,0,'TRUE','TRUE'),(2,'PC Skills','PC',NULL,2,0,'TRUE','TRUE'),(3,'Projects','PROJ',NULL,3,0,'TRUE','TRUE');
+INSERT INTO course_category VALUES (1,'Language skills','LANG',NULL,1,0,'TRUE','TRUE'),(2,'PC Skills','PC',NULL,2,0,'TRUE','TRUE'),(3,'Projects','PROJ',NULL,3,0,'TRUE','TRUE'),(4,'Demo','DEMO',NULL,4,0,'TRUE','TRUE');
 UNLOCK TABLES;
 /*!40000 ALTER TABLE course_category ENABLE KEYS */;
 
@@ -243,7 +243,7 @@ CREATE TABLE course_field_values(
 DROP TABLE IF EXISTS course_module;
 CREATE TABLE course_module (
   id int unsigned NOT NULL auto_increment,
-  name varchar(100) NOT NULL,
+  name varchar(255) NOT NULL,
   link varchar(255) NOT NULL,
   image varchar(100) default NULL,
   `row` int unsigned NOT NULL default '0',
@@ -369,48 +369,48 @@ LOCK TABLES language WRITE;
 INSERT INTO language (original_name, english_name, isocode, dokeos_folder, available) VALUES
 ('Arabija (el)','arabic','ar','arabic',0),
 ('Asturian','asturian','ast','asturian',0),
-('Balgarski','bulgarian','bg','bulgarian',1),
-('Bosanski','bosnian','bs','bosnian',1),
+('Bulgarian','bulgarian','bg','bulgarian',1),
+('Bosanski','bosnian','bs','bosnian',0),
 ('Catal&agrave;','catalan','ca','catalan',0),
 ('Chinese (simplified)','simpl_chinese','zh','simpl_chinese',0),
 ('Chinese (traditional)','trad_chinese','zh-TW','trad_chinese',0),
 ('Czech','czech','cs','czech',0),
 ('Dansk','danish','da','danish',0),
 ('Dari','dari','prs','dari',0),
-('Deutsch','german','de','german',1),
+('Deutsch','german','de','german',0),
 ('Ellinika','greek','el','greek',0),
 ('English','english','en','english',1),
-('Espa&ntilde;ol','spanish','es','spanish',1),
+('Espa&ntilde;ol','spanish','es','spanish',0),
 ('Esperanto','esperanto','eo','esperanto',0),
 ('Euskara','euskera','eu','euskera',0),
 ('Farsi','persian','fa','persian',0),
-('Fran&ccedil;ais','french','fr','french',1),
+('Fran&ccedil;ais','french','fr','french',0),
 ('Friulian','friulian','fur','friulian',0),
 ('Galego','galician','gl','galician',0),
 ('Georgian','georgian','ka','georgian',0),
 ('Hrvatski','croatian','hr','croatian',0),
 ('Hebrew','hebrew','he','hebrew',0),
-('Indonesia (Bahasa I.)','indonesian','id','indonesian',1),
-('Italiano','italian','it','italian',1),
+('Indonesia (Bahasa I.)','indonesian','id','indonesian',0),
+('Italiano','italian','it','italian',0),
 ('Korean','korean','ko','korean',0),
 ('Latvian','latvian','lv','latvian',0),
 ('Lithuanian','lithuanian','lt','lithuanian',0),
 ('Macedonian','macedonian','mk','macedonian',0),
-('Magyar','hungarian','hu','hungarian',1),
+('Magyar','hungarian','hu','hungarian',0),
 ('Melayu (Bahasa M.)','malay','ms','malay',0),
-('Nederlands','dutch','nl','dutch',1),
+('Nederlands','dutch','nl','dutch',0),
 ('Nihongo','japanese','ja','japanese',0),
 ('Norsk','norwegian','no','norwegian',0),
 ('Occitan','occitan','oc','occitan',0),
 ('Pashto','pashto','ps','pashto',0),
 ('Polski','polish','pl','polish',0),
-('Portugu&ecirc;s (Portugal)','portuguese','pt','portuguese',1),
-('Portugu&ecirc;s (Brazil)','brazilian','pt-BR','brazilian',1),
+('Portugu&ecirc;s (Portugal)','portuguese','pt','portuguese',0),
+('Portugu&ecirc;s (Brazil)','brazilian','pt-BR','brazilian',0),
 ('Romanian','romanian','ro','romanian',0),
 ('Runasimi','quechua_cusco','qu','quechua_cusco',0),
 ('Russkij','russian','ru','russian',0),
 ('Slovak','slovak','sk','slovak',0),
-('Slovenscina','slovenian','sl','slovenian',1),
+('Slovenscina','slovenian','sl','slovenian',0),
 ('Srpski','serbian','sr','serbian',0),
 ('Suomi','finnish','fi','finnish',0),
 ('Svenska','swedish','sv','swedish',0),
@@ -1263,7 +1263,7 @@ CREATE TABLE access_url_rel_session (
 --
 CREATE TABLE IF NOT EXISTS sys_calendar (
   id int unsigned NOT NULL auto_increment,
-  title varchar(200) NOT NULL,
+  title varchar(255) NOT NULL,
   content text,
   start_date datetime NOT NULL default '0000-00-00 00:00:00',
   end_date datetime NOT NULL default '0000-00-00 00:00:00',
@@ -2310,7 +2310,7 @@ CREATE TABLE session_category (
 
 CREATE TABLE tag (
 	id int NOT NULL auto_increment,
-	tag char(80) NOT NULL,
+	tag varchar(255) NOT NULL,
 	field_id int NOT NULL,
 	count int NOT NULL,
 	PRIMARY KEY  (id)
@@ -2320,7 +2320,7 @@ CREATE TABLE tag (
 CREATE TABLE user_rel_tag (
 	id int NOT NULL auto_increment,
 	user_id int NOT NULL,
-	tag_id int NOT NULL,  
+	tag_id int NOT NULL,
 	PRIMARY KEY  (id)
 );
 

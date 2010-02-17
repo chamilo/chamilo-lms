@@ -12,7 +12,7 @@
 	-------------
 	-> version 2.2 : Patrick Cool, patrick.cool@ugent.be, november 2004
 	Personal Agenda added. The user can add personal agenda items. The items
-	are stored in a dokeos_user database because it is not course or platform
+	are stored in a chamilo_user database because it is not course or platform
 	based. A personal agenda view was also added. This lists all the personal
 	agenda items of that user.
 

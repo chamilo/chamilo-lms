@@ -52,14 +52,14 @@ class TestInstallUpgrade extends UnitTestCase{
 		$installation_settings['{PLATFORM_AUTH_SOURCE}'] = PLATFORM_AUTH_SOURCE;
 		$installation_settings['{ADMINLANGUAGE}'] = 'spanish';
 		$installation_settings['{HASHFUNCTIONMODE}'] = 'md5';
-		$db_script = $chamilo_path_folder.'install/dokeos_main.sql';
+		$db_script = $chamilo_path_folder.'install/db_main.sql';
 		$res = load_main_database($installation_settings,$db_script);
 		$this->assertFalse($res);
 	}
 */
 	public function testLoadDatabaseScript() {
 		$chamilo_path_folder= api_get_path(SYS_PATH);
-		$db_script= $chamilo_path_folder.'main/install/dokeos_stats.sql';
+		$db_script= $chamilo_path_folder.'main/install/db_stats.sql';
 		$res = load_database_script($db_script);
 		$this->assertTrue(is_null($res));
 	}

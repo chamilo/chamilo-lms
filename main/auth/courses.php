@@ -593,7 +593,7 @@ function delete_course_category($id) {
 }
 
 /**
- * stores the user course category in the dokeos_user database
+ * stores the user course category in the chamilo_user database
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  * @return string a language variable saying that the user course category was stored
 */
@@ -1207,7 +1207,7 @@ function display_edit_course_category_form($edit_course_category) {
 }
 
 /**
- * Updates the user course category in the dokeos_user database
+ * Updates the user course category in the chamilo_user database
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  * @return string a language variable saying that the user course category was stored
 */

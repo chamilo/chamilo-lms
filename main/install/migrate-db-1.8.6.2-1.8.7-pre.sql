@@ -44,6 +44,8 @@ ALTER TABLE access_url CHANGE tms tms DATETIME NOT NULL default '0000-00-00 00:0
 INSERT INTO user_field(field_type, field_variable, field_display_text, field_visible, field_changeable) VALUES(11, 'timezone', 'Timezone', 0, 0);
 UPDATE settings_current SET selected_value = '1.8.7.10365' WHERE variable = 'dokeos_database_version';
 
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('course_create_active_tools','attendances','checkbox','Tools','true','CourseCreateActiveToolsTitle','CourseCreateActiveToolsComment',NULL,'Attendances', 0);
+
 -- xxSTATSxx
 CREATE TABLE track_e_item_property(id int NOT NULL auto_increment PRIMARY KEY, course_id int NOT NULL, item_property_id int NOT NULL, title varchar(255), content text, progress int NOT NULL default 0, lastedit_date datetime NOT NULL default '0000-00-00 00:00:00', lastedit_user_id int  NOT NULL, session_id int NOT NULL default 0);
 ALTER TABLE track_e_item_property ADD INDEX (course_id, item_property_id, session_id);

@@ -32,7 +32,7 @@ echo '</div>';
 if($dashboard_view == 'blocks') {
 	
 	if (isset($msg)) {		
-		//Display::display_confirmation_message(get_lang('BlocksHaveBeenUpdatedSuccesslly'));		
+		//Display::display_confirmation_message(get_lang('BlocksHaveBeenUpdatedSuccessfully'));		
 	}
 	
 	if (count($blocks) > 0) {
@@ -85,7 +85,7 @@ if($dashboard_view == 'blocks') {
 } else {
 	// block dashboard list
 	if (isset($success)) {		
-		Display::display_confirmation_message(get_lang('BlocksHaveBeenUpdatedSuccesslly'));		
+		Display::display_confirmation_message(get_lang('BlocksHaveBeenUpdatedSuccessfully'));		
 	}
 	
 	$user_id = api_get_user_id();

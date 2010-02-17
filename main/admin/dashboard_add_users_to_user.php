@@ -153,7 +153,7 @@ if (intval($_POST['formSent']) == 1) {
 	$user_list = $_POST['UsersList'];
 	$affected_rows = UserManager::suscribe_users_to_hr_manager($hrm_id,$user_list);
 	if ($affected_rows)	{
-		$msg = get_lang('AssignedUsersHasBeenUpdatedSuccesslly');
+		$msg = get_lang('AssignedUsersHaveBeenUpdatedSuccessfully');
 	}
 }
 

@@ -4032,20 +4032,24 @@ function api_get_access_url_from_user($user_id) {
 }
 
 /**
- * @author florespaz@bidsoftperu.com
- * @param integer $user_id
- * @param string $course_code
- * @return integer status
+ * Gets the status of a user in a course
+ * @param	int 	user_id
+ * @param	string 	course_code
+ * @return	int 	user status
  */
 function api_get_status_of_user_in_course ($user_id, $course_code) {
 	$tbl_rel_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
-	$user_id 	 = Database::escape_string(intval($user_id));
-	$course_code = Database::escape_string($course_code);
-	$sql = 'SELECT status FROM '.$tbl_rel_course_user.'
-		WHERE user_id='.$user_id.' AND course_code="'.$course_code.'";';
-	$result = Database::query($sql);
-	$row_status = Database::fetch_array($result, 'ASSOC');
-	return $row_status['status'];
+	if (!empty($user_id) && !empty($course_code)) {
+		$user_id 	 = Database::escape_string(intval($user_id));
+		$course_code = Database::escape_string($course_code);
+		$sql = 'SELECT status FROM '.$tbl_rel_course_user.'
+			WHERE user_id='.$user_id.' AND course_code="'.$course_code.'";';
+		$result = Database::query($sql);
+		$row_status = Database::fetch_array($result, 'ASSOC');
+		return $row_status['status'];
+	} else {
+		return 0;
+	}
 }
 
 /**

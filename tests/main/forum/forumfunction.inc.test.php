@@ -9,12 +9,12 @@ class TestForumFunction extends UnitTestCase {
 	 * @return void
 	 */
 	 function testadd_forum_attachment_file() {
-	 global $_course;
-	 $file_comment='testcoment';
-	 $last_id = 1;
-	 $res = add_forum_attachment_file($file_comment,$last_id);
-	 $this->assertTrue(is_null($res));
-	 //var_dump($res); 	
+		 global $_course;
+		 $file_comment='testcoment';
+		 $last_id = 1;
+		 $res = add_forum_attachment_file($file_comment,$last_id);
+		 $this->assertTrue(is_null($res));
+		 //var_dump($res); 	
 	 }
 	 
 	 /**
@@ -26,11 +26,11 @@ class TestForumFunction extends UnitTestCase {
 	*/
 	
 	 function testapprove_post() {
-	 $action= 'invisible';
-	 $post_id = 1;
-	 $res = approve_post($post_id, $action);
-	 $this->assertTrue(is_string($res));
-	 //var_dump($res); 	
+		 $action= 'invisible';
+		 $post_id = 1;
+		 $res = approve_post($post_id, $action);
+		 $this->assertTrue(is_string($res));
+		 //var_dump($res); 	
 	 }
 	 
 	 /**
@@ -44,12 +44,12 @@ class TestForumFunction extends UnitTestCase {
 	*/
 	
 	 function testchange_lock_status() {
-	 $content = 'testcontent';
-	 $action= 'invisible';
-	 $id = 1;
-	 $res = change_lock_status($content, $id, $action);
-	 $this->assertTrue(is_string($res));
-	 //var_dump($res); 	
+		 $content = 'testcontent';
+		 $action= 'invisible';
+		 $id = 1;
+		 $res = change_lock_status($content, $id, $action);
+		 $this->assertTrue(is_string($res));
+		 //var_dump($res); 	
 	 }
 	 
 	 /**
@@ -65,28 +65,28 @@ class TestForumFunction extends UnitTestCase {
 	*/
 	
 	function testchange_visibility() {
-	 $content= 'testcontent';
-	 $target_visibility = 1;
-	 $id = 1;
-	 $res = change_visibility($content, $id, $target_visibility);
-	 $this->assertTrue(is_string($res));
-	 //var_dump($res); 	
+		 $content= 'testcontent';
+		 $target_visibility = 1;
+		 $id = 1;
+		 $res = change_visibility($content, $id, $target_visibility);
+		 $this->assertTrue(is_string($res));
+		 //var_dump($res); 	
 	 }
 	 
 	 /**
 	* This function gets the all information of the last (=most recent) post of the thread
 	* This can be done by sorting the posts that have the field thread_id=$thread_id and sort them by post_date
 	* @param $thread_id the id of the thread we want to know the last post of.
-	* @return an bool array if there is a last post found, false if there is no post entry linked to that thread => thread will be deleted
+	* @return an bool or array if there is a last post found, false if there is no post entry linked to that thread => thread will be deleted
 	*/
 	
 	function testcheck_if_last_post_of_thread() {
-	 $thread_id = 1;
-	 $res = check_if_last_post_of_thread($thread_id);
-	 if(!is_bool($res)){
-	  $this->assertTrue(is_array($res));
-	 }
-	 //var_dump($res); 	
+		 $thread_id = 1;
+		 $res = check_if_last_post_of_thread($thread_id);
+		 if(!is_bool($res)) {
+		  $this->assertTrue(is_array($res));
+		 }
+		 //var_dump($res); 	
 	 }
 	 
 	 /**
@@ -96,10 +96,10 @@ class TestForumFunction extends UnitTestCase {
 	*/
 	
 	function testclass_visible_invisible() {
-	 $current_visibility_status = 0;
-	 $res = class_visible_invisible($current_visibility_status);
-	 $this->assertTrue(is_string($res));
-	 //var_dump($res); 	
+		 $current_visibility_status = 0;
+		 $res = class_visible_invisible($current_visibility_status);
+		 $this->assertTrue(is_string($res));
+		 //var_dump($res); 	
 	 }
 	 
 	 /**
@@ -111,10 +111,10 @@ class TestForumFunction extends UnitTestCase {
 	*/
 	
 	function testcount_number_of_forums_in_category() {
-	 $cat_id = 1;
-	 $res = count_number_of_forums_in_category($cat_id);
-	 $this->assertTrue(is_numeric($res));
-	 //var_dump($res); 	
+		 $cat_id = 1;
+		 $res = count_number_of_forums_in_category($cat_id);
+		 $this->assertTrue(is_numeric($res));
+		 //var_dump($res); 	
 	 }
 	 
 	 /**
@@ -125,11 +125,11 @@ class TestForumFunction extends UnitTestCase {
 	*/
 	
 	function testcount_number_of_post_for_user_thread() {
-	 $thread_id = 1;
-	 $user_id = 1;
-	 $res = count_number_of_post_for_user_thread($thread_id, $user_id);
-	 $this->assertTrue(is_numeric($res));
-	 //var_dump($res); 	
+		 $thread_id = 1;
+		 $user_id = 1;
+		 $res = count_number_of_post_for_user_thread($thread_id, $user_id);
+		 $this->assertTrue(is_numeric($res));
+		 //var_dump($res); 	
 	 }
 	
 	/**
@@ -139,10 +139,10 @@ class TestForumFunction extends UnitTestCase {
 	*/
 	
 	function testcount_number_of_post_in_thread() {
-	 $thread_id = 1;
-	 $res = count_number_of_post_in_thread($thread_id);
-	 $this->assertTrue(is_numeric($res));
-	 //var_dump($res); 	
+		 $thread_id = 1;
+		 $res = count_number_of_post_in_thread($thread_id);
+		 $this->assertTrue(is_numeric($res));
+		 //var_dump($res); 	
 	 }
 	 
 	 /**
@@ -152,11 +152,11 @@ class TestForumFunction extends UnitTestCase {
 	*/
 	
 	function testcount_number_of_user_in_course() {
-	 global $cidReq;
-	 $course_id = $cidReq;
-	 $res = count_number_of_user_in_course($course_id);
-	 $this->assertTrue(is_numeric($res));
-	 //var_dump($res); 	
+		 global $cidReq;
+		 $course_id = $cidReq;
+		 $res = count_number_of_user_in_course($course_id);
+		 $this->assertTrue(is_numeric($res));
+		 //var_dump($res); 	
 	 }
 	 
 	 /**
@@ -164,18 +164,1097 @@ class TestForumFunction extends UnitTestCase {
 	*  This function show current thread qualify .
 	* @param integer contains the information the current thread id
 	* @param integer contains the information the current session id
-	* @return void	
+	* @return array or null if is empty
 	*/
 	
 	function testcurrent_qualify_of_thread() {
-	 $thread_id = 1;
-	 $session_id = 1;
-	 $res = current_qualify_of_thread($thread_id,$session_id);
-	 $this->assertTrue(is_null($res));
-	 //var_dump($res); 	
+		 $thread_id = 1;
+		 $session_id = 1;
+		 $res = current_qualify_of_thread($thread_id,$session_id);
+		 $this->assertTrue(is_null($res));
+		 //var_dump($res); 	
 	 }
 	 
 	 /**
+	 * Display the search results
+	 * @return void HTML - display the results
+	 */
+	 
+	 function testdisplay_forum_search_results() {
+		 global $origin;
+		 $search_term = 'testterm';
+		 ob_start();
+		 $res = display_forum_search_results($search_term);
+		 ob_end_clean();
+		 $this->assertTrue(is_null($res));
+		 //var_dump($res); 	
+	 }
+	 
+	 /**
+	* This function takes care of the display of the lock icon
+	* @param $content what is it that we want to (un)lock: forum category, forum, thread, post
+	* @param $id the id of the content we want to (un)lock
+	* @param $current_visibility_status what is the current status of the visibility (0 = invisible, 1 = visible)
+	* @return void display the lock HTML.
+	*/
+	 
+	 function testdisplay_lock_unlock_icon() {
+		 $content = 'testterm';
+		 $id = 1;
+		 $current_lock_status = 0;
+		 ob_start();
+		 $res = display_lock_unlock_icon($content, $id, $current_lock_status, $additional_url_parameters='');
+		 ob_end_clean();
+		 $this->assertTrue(is_null($res));
+		 //var_dump($res); 	
+	 }
+	 
+	 /**
+	* This function takes care of the display of the up and down icon
+	* @param $content what is it that we want to make (in)visible: forum category, forum, thread, post
+	* @param $id is the id of the item we want to display the icons for
+	* @param $list is an array of all the items. All items in this list should have an up and down icon except for the first (no up icon) and the last (no down icon)
+	* 		 The key of this $list array is the id of the item.
+	* @return void HTML
+	*/
+	
+	function testdisplay_up_down_icon() {
+		 $content = 'testcontent';
+		 $id = 1;
+		 $list = array('test');
+		 ob_start();
+		 $res = display_up_down_icon($content, $id, $list);
+		 ob_end_clean();
+		 $this->assertTrue(is_null($res));
+		 //var_dump($res); 	
+	 }
+	 
+	 /**
+	* This function displays the user image from the profile, with a link to the user's details.
+	* @param 	int 	User's database ID
+	* @param 	str 	User's name
+	* @return 	string 	An HTML with the anchor and the image of the user
+	*/
+	
+	function testdisplay_user_image() {
+		 $name = 'testcontent';
+		 $user_id = 1;
+		 $res = display_user_image($user_id,$name, $origin='');
+		 $this->assertTrue(is_string($res));
+		 //var_dump($res); 	
+	 }
+	 
+	 /**
+	* This function displays the firstname and lastname of the user as a link to the user tool.
+	* @param string 
+	* @return string HTML
+	*/
+	
+	function testdisplay_user_link() {
+		 $name = 'testcontent';
+		 $user_id = 1;
+		 $res = display_user_link($user_id, $name, $origin='');
+		 $this->assertTrue(is_string($res));
+		 //var_dump($res); 	
+	 }
+	 
+	/**
+	* This function takes care of the display of the visibility icon
+	* @param $content what is it that we want to make (in)visible: forum category, forum, thread, post
+	* @param $id the id of the content we want to make invisible
+	* @param $current_visibility_status what is the current status of the visibility (0 = invisible, 1 = visible)
+	* @return void string HTML 
+	*/
+	
+	function testdisplay_visible_invisible_icon() {
+		 $content = 'testcontent';
+		 $current_visibility_status = 0;
+		 $id = 1;
+		 ob_start();
+		 $res = display_visible_invisible_icon($content, $id, $current_visibility_status, $additional_url_parameters='');
+		 ob_end_clean();
+		 $this->assertTrue(is_null($res));
+		 //var_dump($res); 	
+	 }
+	 
+	 /**
+	 * This function edit a attachment file into forum
+	 * @param string  a comment about file
+	 * @param int Post Id
+	 * @param int attachment file Id
+	 * @return void
+	 */
+	 
+	 function testedit_forum_attachment_file() {
+		 $file_comment = 'testcontent';
+		 $id_attach = 1;
+		 $post_id = 1;
+		 $res = edit_forum_attachment_file($file_comment,$post_id,$id_attach);
+		 $this->assertTrue(is_null($res));
+		 //var_dump($res); 	
+	}
+	 
+	 /**
+	 * Display the search form for the forum and display the search results
+	 * @return void display an HTML search results
+	 */
+	 
+	 function testforum_search() {
+		ob_start();
+		$res = forum_search();
+		ob_end_clean();
+		$this->assertTrue(is_null($res));
+		//var_dump($res); 	
+	 }
+	 
+	 /** This function gets all the post written by an user
+	 * @param int user id
+	 * @param string db course name
+	 * @return string
+	 */
+	 
+	 function testget_all_post_from_user() {
+		global $_course;
+		$course_db = $_course['dbName'];
+		$user_id = 1;
+		$res = get_all_post_from_user($user_id, $course_db);
+		$this->assertTrue(is_string($res));
+		//var_dump($res); 	
+	 }
+	 
+	 /**
+	 * Show a list with all the attachments according to the post's id
+	 * @param the post's id
+	 * @return array with the post info
+	 */
+	 
+	 function testget_attachment() {
+		$post_id = 1;
+		$res = get_attachment($post_id);
+		$this->assertTrue(is_array($res));
+		//var_dump($res); 	
+	 }
+	 
+	 /**
+	* Retrieve all the information off the forum categories (or one specific) for the current course.
+	* The categories are sorted according to their sorting order (cat_order
+	* @param $id default ''. When an id is passed we only find the information about that specific forum category. If no id is passed we get all the forum categories.
+	* @return an array containing all the information about all the forum categories
+	*/
+	
+	function testget_forum_categories() {
+		$res = get_forum_categories($id='');
+		$this->assertTrue(is_array($res));
+		//var_dump($res); 	
+	 }
+	
+	/**
+	* This function retrieves all the information of a given forum_id
+	* @param $forum_id integer that indicates the forum
+	* @return array returns
+	* @deprecated this functionality is now moved to get_forums($forum_id)
+	*/
+	/*
+	function testget_forum_information() {
+		$forum_id = 1;
+		$res = get_forum_information($forum_id);
+		$this->assertTrue(is_array($res));
+		//var_dump($res); 	
+	 }*/
+	 
+	 /**
+	* This function retrieves all the information of a given forumcategory id
+	* @param $forum_id integer that indicates the forum
+	* @return array returns if there are category
+	* @return bool returns if there aren't category
+	*/
+	
+	function testget_forumcategory_information() {
+		$cat_id = 1;
+		$res = get_forumcategory_information($cat_id);
+		if(!is_bool($res)){
+			$this->assertTrue(is_array($res));
+		} else {
+			$this->assertTrue(is_bool($res));
+		}
+		//var_dump($res); 	
+	 }
+	
+	/**
+	* Retrieve all the forums (regardless of their category) or of only one. The forums are sorted according to the forum_order.
+	* Since it does not take the forum category into account there probably will be two or more forums that have forum_order=1, ...
+	* @return an array containing all the information about the forums (regardless of their category)
+	* @todo check $sql4 because this one really looks fishy.
+	*/
+	
+	function testget_forums() {
+		$res = get_forums($id='');
+		if(!is_bool($res)){
+			$this->assertTrue(is_array($res));
+		} else {
+			$this->assertTrue(is_bool($res));
+		}
+		//var_dump($res); 	
+	 }
+	 
+	 /**
+	* This function retrieves all the fora in a given forum category
+	* @param integer $cat_id the id of the forum category
+	* @return an array containing all the information about the forums (regardless of their category)
+	*/
+	
+	function testget_forums_in_category() {
+		$cat_id = 1;
+		$res = get_forums_in_category($cat_id);
+		if(!is_bool($res)){
+			$this->assertTrue(is_array($res));
+		} else {
+			$this->assertTrue(is_bool($res));
+		}
+		//var_dump($res); 	
+	 }
+	 
+	 /**
+	 * This function gets all the forum information of the all the forum of the group
+	 * @param integer $group_id the id of the group we need the fora of (see forum.forum_of_group)
+	 * @return array
+	 * @todo this is basically the same code as the get_forums function. Consider merging the two.
+	 */
+	 
+	 function testget_forums_of_group() {
+		$group_id = 1;
+		$res = get_forums_of_group($group_id);
+		if(!is_null($res)){
+			$this->assertTrue(is_array($res));
+		} else {
+			$this->assertTrue(is_null($res));
+		}
+		//var_dump($res); 	
+	 }
+	 
+	  /**
+	*
+	*  This function get qualify historical.
+	* @param integer contains the information the current user id
+	* @param integer contains the information the current thread id
+	* @param boolean contains the information of option to run
+	* @return array()
+	*/
+	
+	function testget_historical_qualify() {
+		$user_id = 1;
+		$thread_id = 1;
+		$opt = true;
+		$res = get_historical_qualify($user_id,$thread_id,$opt);
+		if(!is_null($res)){
+			$this->assertTrue(is_array($res));
+		} else {
+			$this->assertTrue(is_null($res));
+		}
+		//var_dump($res); 	
+	 }
+	 
+	 /**
+	* This functions gets all the last post information of a certain forum
+	* @param $forum_id the id of the forum we want to know the last post information of.
+	* @param $show_invisibles
+	* @return array containing all the information about the last post (last_post_id, last_poster_id, last_post_date, last_poster_name, last_poster_lastname, last_poster_firstname)
+	*/
+	
+	function testget_last_post_information() {
+		$forum_id = 1;
+		$res = get_last_post_information($forum_id, $show_invisibles=false);
+		if(!is_null($res)){
+			$this->assertTrue(is_array($res));
+		} else {
+			$this->assertTrue(is_null($res));
+		}
+		//var_dump($res); 	
+	 }
+	 
+	  /** This function get the name of an thread by id
+	 * @param int thread_id
+	 * @return String
+	 **/
+	 
+	 function testget_name_thread_by_id() {
+		$thread_id = 1;
+		$res = get_name_thread_by_id($thread_id);
+		if(!is_null($res)){
+			$this->assertTrue(is_string($res));
+		} else {
+			$this->assertTrue(is_null($res));
+		}
+		//var_dump($res); 	
+	 }
+	 
+	 /** This function get the name of an user by id
+	 * @param user_id int
+	 * return String
+	 */
+	 
+	 function testget_name_user_by_id() {
+		$user_id = 1;
+		$res = get_name_user_by_id($user_id);
+		if(!is_null($res)){
+			$this->assertTrue(is_string($res));
+		} else {
+			$this->assertTrue(is_null($res));
+		}
+		//var_dump($res); 	
+	 }
+	 
+	 /**
+	 * This function retrieves all the email adresses of the users who wanted to be notified
+	 * about a new post in a certain forum or thread
+	 * @param string $content does the user want to be notified about a forum or about a thread
+	 * @param integer $id the id of the forum or thread
+	 * @return array
+	 */
+	 
+	  function testget_notifications() {
+		$id = 1;
+		$content = 'test message notified';
+		$res = get_notifications($content,$id);
+		if(!is_null($res)){
+			$this->assertTrue(is_array($res));
+		} else {
+			$this->assertTrue(is_null($res));
+		}
+		//var_dump($res); 	
+	 }
+	 
+	 /**
+	 * Get all the notification subscriptions of the user
+	 * = which forums and which threads does the user wants to be informed of when a new
+	 * post is added to this thread
+	 * @param integer $user_id the user_id of a user (default = 0 => the current user)
+	 * @param boolean $force force get the notification subscriptions (even if the information is already in the session
+	 * @return array
+	 */
+	 
+	 function testget_notifications_of_user() {
+		$res = get_notifications_of_user($user_id = 0, $force = false);
+		if(!is_null($res)){
+			$this->assertTrue(is_string($res));
+		} else {
+			$this->assertTrue(is_null($res));
+		}
+		//var_dump($res); 	
+	 }
+	 
+	 /**
+	* This function retrieves all the information of a post
+	* @param $forum_id integer that indicates the forum
+	* @return array returns
+	*/
+	
+	function testget_post_information() {
+		$post_id = 1;
+		$res = get_post_information($post_id);
+		if(!is_null($res)){
+			$this->assertTrue(is_array($res));
+		} else {
+			$this->assertTrue(is_null($res));
+		}
+		//var_dump($res); 	
+	 }
+	 
+	 /**
+	* With this function we find the number of posts and topics in a given forum.
+	* @param int
+	* @return array
+	* @todo consider to call this function only once and let it return an array where the key is the forum id and the value is an array with number_of_topics and number of post
+	* as key of this array and the value as a value. This could reduce the number of queries needed (especially when there are more forums)
+	* @todo consider merging both in one query.
+	* @deprecated the counting mechanism is now inside the function get_forums
+	*/
+	/*
+	function testget_post_topics_of_forum() {
+		$forum_id = 1;
+		$res = get_post_topics_of_forum($forum_id);
+		if(!is_null($res)){
+			$this->assertTrue(is_array($res));
+		} else {
+			$this->assertTrue(is_null($res));
+		}
+		//var_dump($res); 	
+	 }*/
+	 
+	 /**
+	* Retrieve all posts of a given thread
+	* @param int $thread_id integer that indicates the forum
+	* @return an array containing all the information about the posts of a given thread
+	*/
+	
+	function testget_posts() {
+		$thread_id = 1;
+		$res = get_posts($thread_id);
+		if(!is_null($res)){
+			$this->assertTrue(is_array($res));
+		} else {
+			$this->assertTrue(is_null($res));
+		}
+		//var_dump($res); 	
+	 }
+	 
+	 /**
+	* This function retrieves information of statistical
+	* @param 	int Thread ID
+	* @param 	int User ID
+	* @param 	int Course ID
+	* @return	array the information of statistical
+	*/
+	
+	function testget_statistical_information() {
+		$thread_id = 1;
+		$user_id = 1;
+		$course_id = 'COURSETEST' ;
+		$res = get_statistical_information($thread_id, $user_id, $course_id);
+		if(!is_null($res)){
+			$this->assertTrue(is_array($res));
+		} else {
+			$this->assertTrue(is_null($res));
+		}
+		//var_dump($res); 	
+	 }
+	
+	/**
+	* This function retrieves all the information of a thread
+	* @param $forum_id integer that indicates the forum
+	* @return array returns
+	*/
+	
+	function testget_thread_information() {
+		$thread_id = 1;
+		$res = get_thread_information($thread_id);
+		if(!is_bool($res)){
+			$this->assertTrue(is_array($res));
+		} else {
+			$this->assertTrue(is_bool($res));
+		}
+		//var_dump($res); 	
+	 }
+
+	 /**
+	* This function return the posts inside a thread from a given user
+	* @param 	course code
+	* @param 	int Thread ID
+	* @param 	int User ID
+	* @return	int the number of post inside a thread
+	*/
+
+	function testget_thread_user_post() {
+		global $_course;
+		$thread_id = 1;
+		$course_db = $_course['dbName'];
+		$user_id = 1;
+		$res = get_thread_user_post($course_db, $thread_id, $user_id );
+		if(!is_null($res)){
+			$this->assertTrue(is_array($res));
+		} else {
+			$this->assertTrue(is_null($res));
+		}
+		//var_dump($res); 	
+	 }
+	 /**
+	  * @param string
+	  * @param int
+	  * @param int 
+	  * @param int
+	  * @return void
+	  */
+	 function testget_thread_user_post_limit() {
+	 	global $_course;
+		$thread_id = 1;
+		$course_db = $_course['dbName'];
+		$user_id = 1;
+		$res = get_thread_user_post_limit($course_db, $thread_id, $user_id, $limit=10);
+		if(!is_null($res)){
+			$this->assertTrue(is_array($res));
+		} else {
+			$this->assertTrue(is_null($res));
+		}
+		//var_dump($res); 	
+	 }
+	 
+	 /**
+	* This function retrieves forum thread users details
+	* @param 	int Thread ID
+	* @param	string	Course DB name (optional)
+	* @return	resource Array of type ([user_id=>w,lastname=>x,firstname=>y,thread_id=>z],[])
+	*/
+	
+	 function testget_thread_users_details() {
+		$thread_id = 1;
+		$res = get_thread_users_details($thread_id, $db_name = null);
+		if(!is_null($res)){
+			$this->assertTrue(is_resource($res));
+		} else {
+			$this->assertTrue(is_null($res));
+		}
+		//var_dump($res); 	
+	 }
+	 
+	 /**
+	* This function retrieves forum thread users not qualify
+	* @param 	int Thread ID
+	* @param	string	Course DB name (optional)
+	* @return	array Array of type ([user_id=>w,lastname=>x,firstname=>y,thread_id=>z],[])
+	*/
+	 
+	 function testget_thread_users_not_qualify() {
+		$thread_id = 1;
+		$res = get_thread_users_not_qualify($thread_id, $db_name = null);
+		if(!is_null($res)){
+			$this->assertTrue(is_resource($res));
+		} else {
+			$this->assertTrue(is_null($res));
+		}
+		//var_dump($res); 	
+	 }
+	 
+	 /**
+	* This function retrieves forum thread users qualify
+	* @param 	int Thread ID
+	* @param	string	Course DB name (optional)
+	* @return	array Array of type ([user_id=>w,lastname=>x,firstname=>y,thread_id=>z],[])
+	*/
+	 
+	 function testget_thread_users_qualify() {
+		$thread_id = 1;
+		$res = get_thread_users_qualify($thread_id, $db_name = null);
+		if(!is_bool($res)){
+			$this->assertTrue(is_resource($res));
+		} else {
+			$this->assertTrue(is_bool($res));
+		}
+		//var_dump($res); 	
+	 }
+	 
+	 /**
+	* Retrieve all the threads of a given forum
+	* @param int forum id
+	* @return an array containing all the information about the threads
+	*/
+	
+	function testget_threads() {
+		$forum_id = 1;
+		$res = get_threads($forum_id);
+		if(!is_bool($res)){
+			$this->assertTrue(is_array($res));
+		} else {
+			$this->assertTrue(is_bool($res));
+		}
+		//var_dump($res); 	
+	 }
+	 
+	 /**
+	* This function retrieves all the unapproved messages for a given forum
+	* This is needed to display the icon that there are unapproved messages in that thread (only the courseadmin can see this)
+	* @param $forum_id the forum where we want to know the unapproved messages of
+	* @return array returns
+	*/
+	
+	function testget_unaproved_messages() {
+		$forum_id = 1;
+		$res = get_unaproved_messages($forum_id);
+		if(!is_bool($res)){
+			$this->assertTrue(is_array($res));
+		} else {
+			$this->assertTrue(is_bool($res));
+		}
+		//var_dump($res); 	
+	 }
+	 
+	 /**
+	* This function is used to find all the information about what's new in the forum tool
+	* @return void
+	*/
+	
+	function testget_whats_new() {
+		$res = get_whats_new();
+		$this->assertTrue(is_null($res));
+		//var_dump($res); 	
+	 }
+	 
+	 /**
+	* This function handles all the forum and forumcategories actions. This is a wrapper for the
+	* forum and forum categories. All this code code could go into the section where this function is
+	* called but this make the code there cleaner.
+	* @return void
+	*/
+	
+	function testhandle_forum_and_forumcategories() {
+		$res = handle_forum_and_forumcategories();
+		$this->assertTrue(is_null($res));
+		//var_dump($res); 	
+	 }
+	 
+	 /**
+	* This function is called whenever something is made visible because there might be new posts and the user might have indicated that (s)he wanted
+	* to be informed about the new posts by mail.
+	* @param string
+	* @param int
+	* @return string language variable
+	*/
+	
+	function testhandle_mail_cue() {
+		$content = 'test content';
+		$id = 1;
+		$res = handle_mail_cue($content, $id);
+		$this->assertTrue(is_string($res));
+		//var_dump($res); 	
+	 }
+	 
+	 /**
+	* This function return the html syntax for the image
+	* @param $image_url The url of the image (absolute or relative)
+	* @param $alt The alt text (when the images cannot be displayed). http://www.w3.org/TR/html4/struct/objects.html#adef-alt
+	* @param $title The title of the image. Most browsers display this as 'tool tip'. http://www.w3.org/TR/html4/struct/global.html#adef-title
+	* @todo this is the same as the Display::xxx function, so it can be removed => all calls have to be changed also
+	* @return string url image
+	*/
+	
+	function testicon() {
+		$image_url = api_get_path(WEB_IMG_PATH).'test.png';
+		$res = icon($image_url,$alt='',$title='');
+		$this->assertTrue(is_string($res));
+		//var_dump($res); 	
+	 }
+	 
+	 /**
+	* The thread view counter gets increased every time someone looks at the thread
+	* @param int 
+	* @return void
+	*/
+	
+	function testincrease_thread_view() {
+		$thread_id = 1;
+		$res = increase_thread_view($thread_id);
+		$this->assertTrue(is_null($res));
+		//var_dump($res); 	
+	 }
+	 
+	 /**
+	* This function displays the form for moving a post message to a different (already existing) or a new thread.
+	* @return void HTML
+	*/
+	
+	function testmove_post_form() {
+		ob_start();
+		$res = move_post_form();
+		ob_end_clean();
+		$this->assertTrue(is_null($res));
+		//var_dump($res); 	
+	 }
+	 
+	 /**
+	* This function displays the form for moving a thread to a different (already existing) forum
+	* @return void HTML
+	*/
+	
+	function testmove_thread_form() {
+		ob_start();
+		$res = move_thread_form();
+		ob_end_clean();
+		$this->assertTrue(is_null($res));
+		//var_dump($res); 	
+	 }
+	 
+	 /**
+	* This function moves a forum or a forum category up or down
+	* @param $content what is it that we want to make (in)visible: forum category, forum, thread, post
+	* @param $direction do we want to move it up or down.
+	* @param $id the id of the content we want to make invisible
+	* @todo consider removing the table_item_property calls here but this can prevent unwanted side effects when a forum does not have an entry in
+	* 		the item_property table but does have one in the forum table.
+	* @return string language variable
+	*/
+	
+	function testmove_up_down() {
+		$content = 'test content';
+		$direction = 'test direction';
+		$id = 1;
+		$res = move_up_down($content, $direction, $id);
+		$this->assertTrue(is_string($res));
+		//var_dump($res); 	
+	 }
+	 
+	 /**
+	* Prepares a string or an array of strings for display by stripping slashes
+	* @param mixed	String or array of strings
+	* @return mixed String or array of strings
+	*/
+	
+	function testprepare4display() {
+		$res = prepare4display($input='');
+		$this->assertTrue(is_string($res));
+		//var_dump($res); 	
+	 }
+	 
+	 /**
+	 * Return the link to the forum search page
+	 */
+	 
+	 function testsearch_link() {
+		$res = search_link();
+		$this->assertTrue(is_string($res));
+		//var_dump($res); 	
+	 }
+	 
+	 /**
+	* This function sends the mails for the mail notification
+	* @param array
+	* @param array
+	* @return void
+	*/
+	
+	function testsend_mail() {
+		$res = send_mail($user_info=array(), $thread_information=array());
+		$this->assertTrue(is_null($res));
+		//var_dump($res); 	
+	 }
+	 
+	 /**
+	* This function sends the notification mails to everybody who stated that they wanted to be informed when a new post
+	* was added to a given thread.
+	* @param int  id thread
+	* @param array reply information
+	* @return void
+	*/
+	
+	function testsend_notification_mails() {
+		$thread_id = 1; 
+		$reply_info = array('test');
+		$res = send_notification_mails($thread_id, $reply_info);
+		$this->assertTrue(is_null($res));
+		//var_dump($res); 	
+	 }
+	 
+	 /**
+	 * Get all the users who need to receive a notification of a new post (those subscribed to
+	 * the forum or the thread)
+	 * @param integer $forum_id the id of the forum
+	 * @param integer $thread_id the id of the thread
+	 * @param integer $post_id the id of the post
+	 * @return bool
+	 */
+	 
+	 function testsend_notifications() {
+		$res = send_notifications($forum_id=0, $thread_id=0, $post_id=0);
+		$this->assertTrue(is_bool($res));
+		//var_dump($res); 	
+	 }
+	 
+	 /**
+	 * This function stores which users have to be notified of which forums or threads
+	 * @param string $content does the user want to be notified about a forum or about a thread
+	 * @param integer $id the id of the forum or thread
+	 * @return string language variable
+	 */
+	 
+	 function testset_notification() {
+	 	$content = 'test content';
+	 	$id = 1;
+		$res = set_notification($content,$id, $add_only = false);
+		$this->assertTrue(is_string($res));
+		//var_dump($res); 	
+	 }
+	 
+	 /**
+	* This function displays the form that is used to add a forum category.
+	* @param array
+	* @return void HTML
+	*/
+	
+	 function testshow_add_forum_form() {
+	 	ob_start();
+		$res = show_add_forum_form($inputvalues=array());
+		ob_end_clean();
+		$this->assertTrue(is_null($res));
+		//var_dump($res); 	
+	 }
+	 
+	 /**
+	* This function displays the form that is used to add a forum category.
+	* @param array input values
+	* @return void HTML
+	*/
+	
+	function testshow_add_forumcategory_form() {
+	 	ob_start();
+		$res = show_add_forumcategory_form($inputvalues=array());
+		ob_end_clean();
+		$this->assertTrue(is_null($res));
+		//var_dump($res); 	
+	 }
+	 
+	 /**
+	* This function displays the form that is used to add a post. This can be a new thread or a reply.
+	* @param $action is the parameter that determines if we are
+	*					1. newthread: adding a new thread (both empty) => No I-frame
+	*					2. replythread: Replying to a thread ($action = replythread) => I-frame with the complete thread (if enabled)
+	*					3. replymessage: Replying to a message ($action =replymessage) => I-frame with the complete thread (if enabled) (I first thought to put and I-frame with the message only)
+	* 					4. quote: Quoting a message ($action= quotemessage) => I-frame with the complete thread (if enabled). The message will be in the reply. (I first thought not to put an I-frame here)
+	* @return void HTML
+	*/
+	 
+	function testshow_add_post_form() {
+	 	ob_start();
+		$res = show_add_post_form($action='', $id='', $form_values='');
+		ob_end_clean();
+		$this->assertTrue(is_null($res));
+		//var_dump($res); 	
+	 }
+	 
+	 /**
+	* This function displays the form that is used to edit a forum category.
+	* This is more or less a copy from the show_add_forumcategory_form function with the only difference that is uses
+	* some default values. I tried to have both in one function but this gave problems with the handle_forum_and_forumcategories function
+	* (storing was done twice)
+	* @param array
+	* @return void HTML
+	*/
+	
+	function testshow_edit_forumcategory_form() {
+	 	ob_start();
+		$res = show_edit_forumcategory_form($inputvalues=array());
+		ob_end_clean();
+		$this->assertTrue(is_null($res));
+		//var_dump($res); 	
+	 }
+	 
+	 /**
+	* This function displays the form that is used to edit a post. This can be a new thread or a reply.
+	* @param array contains all the information about the current post
+	* @param array contains all the information about the current thread
+	* @param array contains all info about the current forum (to check if attachments are allowed)
+	* @param array contains the default values to fill the form
+	* @return void
+	*/
+	
+	function testshow_edit_post_form() {
+	 	ob_start();
+	 	$current_post = array('test');
+	 	$current_thread = array('test2');
+	 	$current_forum = array('test3');
+		$res = show_edit_post_form($current_post, $current_thread, $current_forum, $form_values='',$id_attach=0);
+		ob_end_clean();
+		$this->assertTrue(is_null($res));
+		//var_dump($res); 	
+	 }
+
+	/**
+	* This function show qualify.
+	* @param string contains the information of option to run
+	* @param string contains the information the current course id
+	* @param integer contains the information the current forum id
+	* @param integer contains the information the current user id
+	* @param integer contains the information the current thread id
+	* @return integer qualify
+	* @example $option=1 obtained the qualification of the current thread
+	*/
+	
+	function testshow_qualify() {
+	 	$option =  1;
+	 	$couser_id = 1;
+	 	$forum_id = 1;
+	 	$user_id = 1;
+	 	$thread_id = 1;
+		$res = show_qualify($option,$couser_id,$forum_id,$user_id,$thread_id);
+		if(!is_numeric($res)){
+			$this->assertTrue(is_null($res));
+		} else {
+			$this->assertTrue(is_numeric($res));
+		}
+		//var_dump($res); 	
+	 }
+
+	/**
+	* This function stores the edit of a post in the forum_post table.
+	* @param array 
+	* @return void HTML
+	*/
+	
+	function teststore_edit_post() {
+		$values = array('test');
+		ob_start();
+		$res = store_edit_post($values);
+		ob_end_clean();
+		$this->assertTrue(is_null($res));
+		//var_dump($res); 	
+	 }
+	 
+	 /**
+	* This function stores the forum in the database. The new forum is added to the end.
+	* @param array
+	* @return string language variable
+	*/
+	
+	function teststore_forum() {
+		$values = array('test');
+		ob_start();
+		$res = store_forum($values);
+		ob_end_clean();
+		$this->assertTrue(is_string($res));
+		//var_dump($res); 	
+	 }
+	 
+	 /**
+	* This function stores the forum category in the database. The new category is added to the end.
+	* @param array
+	* @return void HMTL language variable
+	*/
+	
+	function teststore_forumcategory() {
+		$values = array('test');
+		ob_start();
+		$res = store_forumcategory($values);
+		ob_end_clean();
+		$this->assertTrue(is_null($res));
+		//var_dump($res); 	
+	 }
+	 
+	 /**
+	*
+	* @param array
+	* @return string HTML language variable 
+	*/
+	
+	function teststore_move_post() {
+		$values = array('test');
+		ob_start();
+		$res = store_move_post($values);
+		ob_end_clean();
+		$this->assertTrue(is_string($res));
+		//var_dump($res); 	
+	 }
+	 
+	 /**
+	* @param array
+	* @return string HTML language variable 
+	*/
+	
+	function teststore_move_thread() {
+		$values = array('test');
+		ob_start();
+		$res = store_move_thread($values);
+		ob_end_clean();
+		$this->assertTrue(is_string($res));
+		//var_dump($res); 	
+	 }
+	 
+	 /**
+	*
+	*  This function store qualify historical.
+	* @param boolean contains the information of option to run
+	* @param string contains the information the current course id
+	* @param integer contains the information the current forum id
+	* @param integer contains the information the current user id
+	* @param integer contains the information the current thread id
+	* @param integer contains the information the current qualify
+	* @return void
+	* @example $option=1 obtained the qualification of the current thread
+	*/
+	
+	function teststore_qualify_historical() {
+		$option = 1;
+		$couser_id = 1;
+		$forum_id = 1;
+		$user_id = 1;
+		$thread_id = 1;
+		$current_qualify = 1;
+		$qualify_user_id = 1;
+		$res = store_qualify_historical($option,$couser_id,$forum_id,$user_id,$thread_id,$current_qualify,$qualify_user_id);
+		$this->assertTrue(is_null($res));
+		//var_dump($res); 	
+	 }
+	 
+	 /**
+	* This function stores a reply in the forum_post table.
+	* It also updates the forum_threads table (thread_replies +1 , thread_last_post, thread_date)
+	*/
+	
+	function teststore_reply() {
+		$values = array('test');
+		ob_start();
+		$res = store_reply($values);
+		ob_end_clean();
+		$this->assertTrue(is_null($res));
+		//var_dump($res); 	
+	 }
+	 
+	 /**
+	 * @param integer contains the information of user id
+	 * @param integer contains the information of thread id
+	 * @param integer contains the information of thread qualify
+	 * @param integer contains the information of user id of qualifier
+	 * @param integer contains the information of time
+	 * @param integer contains the information of session id
+	 * @return Array() optional
+	 **/
+	 
+ 	 function teststore_theme_qualify() {
+		$user_id = 1;
+		$thread_id = 1;
+		$qualify_time = 1;
+		$res = store_theme_qualify($user_id,$thread_id,$thread_qualify=0,$qualify_user_id=0,$qualify_time,$session_id=null);
+		if(!is_bool($res)) {
+			$this->assertTrue(is_array($res));
+		} else {
+			$this->assertTrue(is_bool($res));
+		}
+		//var_dump($res); 	
+	 }
+ 
+	 /**
+	* This function stores a new thread. This is done through an entry in the forum_thread table AND
+	* in the forum_post table because. The threads are also stored in the item_property table. (forum posts are not (yet))
+	* @param array
+	* @return void HTML
+	*/
+	
+	function teststore_thread() {
+		$values = array();
+		ob_start();
+		$res = store_thread($values);
+		ob_end_clean();
+		$this->assertTrue(is_null($res));
+		//var_dump($res); 	
+	 }
+
+
+	/**
+	* The relies counter gets increased every time somebody replies to the thread
+	* @param
+	* @return void
+	*/
+	
+	function testupdate_thread() {
+		$thread_id = 1;
+		$last_post_id = 1;
+		$post_date = 1;
+		$res = update_thread($thread_id, $last_post_id,$post_date);
+		$this->assertTrue(is_null($res));
+		//var_dump($res); 	
+	}
+	
+ 
+ 	 /**
+	* This function is called when the user is not allowed in this forum/thread/...
+	* @return bool display message of "not allowed"
+	*/
+	
+	function testforum_not_allowed_here() {
+		 ob_start();
+		 $res = forum_not_allowed_here();
+		 ob_end_clean();
+		 $this->assertTrue(is_bool($res));
+		 //var_dump($res); 	
+	 }
+	 
+	  /**
 	 * Delete the all the attachments from the DB and the file according to the post's id or attach id(optional)
 	 * @param post id
 	 * @param attach id (optional)
@@ -183,11 +1262,11 @@ class TestForumFunction extends UnitTestCase {
 	 */
 	 
 	 function testdelete_attachment() {
-	 global $_course;
-	 $post_id = 1;
-	 $res = delete_attachment($post_id,$id_attach=0);
-	 $this->assertTrue(is_null($res));
-	 //var_dump($res); 	
+		 global $_course;
+		 $post_id = 1;
+		 $res = delete_attachment($post_id,$id_attach=0);
+		 $this->assertTrue(is_null($res));
+		 //var_dump($res); 	
 	 }
 	 
 	 /**
@@ -204,11 +1283,11 @@ class TestForumFunction extends UnitTestCase {
 	*/
 	
 	function testdelete_forum_forumcategory_thread() {
-	 $content= 'testcontent';
-	 $id = 1;
-	 $res = delete_forum_forumcategory_thread($content, $id);
-	 $this->assertTrue(is_null($res));
-	 //var_dump($res); 	
+		 $content= 'testcontent';
+		 $id = 1;
+		 $res = delete_forum_forumcategory_thread($content, $id);
+		 $this->assertTrue(is_null($res));
+		 //var_dump($res); 	
 	 }
 	 
 	 /**
@@ -218,10 +1297,10 @@ class TestForumFunction extends UnitTestCase {
 	*/
 	 
 	 function testdelete_forum_image() {
-	 $forum_id = 1;
-	 $res = delete_forum_image($forum_id);
-	 $this->assertTrue(is_bool($res));
-	 //var_dump($res); 	
+		 $forum_id = 1;
+		 $res = delete_forum_image($forum_id);
+		 $this->assertTrue(is_bool($res));
+		 //var_dump($res); 	
 	 }
 	
 	/**
@@ -235,200 +1314,12 @@ class TestForumFunction extends UnitTestCase {
 	*/
 		
 	 function testdelete_post() {
-	 $table_posts 			= Database :: get_course_table(TABLE_FORUM_POST);
-	 $table_threads 		= Database :: get_course_table(TABLE_FORUM_THREAD);
-	 $post_id = 1;
-	 $res = delete_post($post_id);
-	 $this->assertTrue(is_string($res));
-	 //var_dump($res); 	
+		 $table_posts 			= Database :: get_course_table(TABLE_FORUM_POST);
+		 $table_threads 		= Database :: get_course_table(TABLE_FORUM_THREAD);
+		 $post_id = 1;
+		 $res = delete_post($post_id);
+		 $this->assertTrue(is_string($res));
+		 //var_dump($res); 	
 	 }
-	 
-	 /**
-	 * Display the search results
-	 * @return void HTML
-	 */
-	 
-	 function testdisplay_forum_search_results() {
-	 global $origin;
-	 $search_term = 'testterm';
-	 ob_start();
-	 $res = display_forum_search_results($search_term);
-	 ob_end_clean();
-	 $this->assertTrue(is_null($res));
-	 //var_dump($res); 	
-	 }
-	 
-	 /**
-	* This function takes care of the display of the lock icon
-	* @param $content what is it that we want to (un)lock: forum category, forum, thread, post
-	* @param $id the id of the content we want to (un)lock
-	* @param $current_visibility_status what is the current status of the visibility (0 = invisible, 1 = visible)
-	* @return void display the lock HTML.
-	*/
-	 
-	 function testdisplay_lock_unlock_icon() {
-	 $content = 'testterm';
-	 $id = 1;
-	 $current_lock_status = 0;
-	 ob_start();
-	 $res = display_lock_unlock_icon($content, $id, $current_lock_status, $additional_url_parameters='');
-	 ob_end_clean();
-	 $this->assertTrue(is_null($res));
-	 //var_dump($res); 	
-	 }
-	 
-	 /**
-	* This function takes care of the display of the up and down icon
-	* @param $content what is it that we want to make (in)visible: forum category, forum, thread, post
-	* @param $id is the id of the item we want to display the icons for
-	* @param $list is an array of all the items. All items in this list should have an up and down icon except for the first (no up icon) and the last (no down icon)
-	* 		 The key of this $list array is the id of the item.
-	* @return void HTML
-	*/
-	
-	function testdisplay_up_down_icon() {
-	 $content = 'testcontent';
-	 $id = 1;
-	 $list = array('test');
-	 ob_start();
-	 $res = display_up_down_icon($content, $id, $list);
-	 ob_end_clean();
-	 $this->assertTrue(is_null($res));
-	 //var_dump($res); 	
-	 }
-	 
-	 /**
-	* This function displays the user image from the profile, with a link to the user's details.
-	* @param 	int 	User's database ID
-	* @param 	str 	User's name
-	* @return 	string 	An HTML with the anchor and the image of the user
-	*/
-	
-	function testdisplay_user_image() {
-	 $name = 'testcontent';
-	 $user_id = 1;
-	 $res = display_user_image($user_id,$name, $origin='');
-	 $this->assertTrue(is_string($res));
-	 //var_dump($res); 	
-	 }
-	 
-	 /**
-	* This function displays the firstname and lastname of the user as a link to the user tool.
-	* @param string 
-	* @return string HTML
-	*/
-	
-	function testdisplay_user_link() {
-	 $name = 'testcontent';
-	 $user_id = 1;
-	 $res = display_user_link($user_id, $name, $origin='');
-	 $this->assertTrue(is_string($res));
-	 //var_dump($res); 	
-	 }
-	 
-	/**
-	* This function takes care of the display of the visibility icon
-	* @param $content what is it that we want to make (in)visible: forum category, forum, thread, post
-	* @param $id the id of the content we want to make invisible
-	* @param $current_visibility_status what is the current status of the visibility (0 = invisible, 1 = visible)
-	* @return void string HTML 
-	*/
-	
-	function testdisplay_visible_invisible_icon() {
-	 $content = 'testcontent';
-	 $current_visibility_status = 0;
-	 $id = 1;
-	 ob_start();
-	 $res = display_visible_invisible_icon($content, $id, $current_visibility_status, $additional_url_parameters='');
-	 ob_end_clean();
-	 $this->assertTrue(is_null($res));
-	 //var_dump($res); 	
-	 }
-	 
-	 /**
-	 * This function edit a attachment file into forum
-	 * @param string  a comment about file
-	 * @param int Post Id
-	 * @param int attachment file Id
-	 * @return void
-	 */
-	 
-	 function testedit_forum_attachment_file() {
-	 $file_comment = 'testcontent';
-	 $id_attach = 1;
-	 $post_id = 1;
-	 $res = edit_forum_attachment_file($file_comment,$post_id,$id_attach);
-	 $this->assertTrue(is_null($res));
-	 //var_dump($res); 	
-	 }
-	 
-	 /**
-	* This function is called when the user is not allowed in this forum/thread/...
-	* @return bool display message of "not allowed"
-	*/
-	
-	function testforum_not_allowed_here() {
-	 ob_start();
-	 $res = forum_not_allowed_here();
-	 ob_end_clean();
-	 $this->assertTrue(is_bool($res));
-	 //var_dump($res); 	
-	 }
-	 
-	 /**
-	 * Display the search form for the forum and display the search results
-	 * @return void display an HTML search results
-	 */
-	 
-	 function testforum_search() {
-	 ob_start();
-	 $res = forum_search();
-	 ob_end_clean();
-	 $this->assertTrue(is_null($res));
-	 //var_dump($res); 	
-	 }
-	 
-	 /** This function gets all the post written by an user
-	 * @param int user id
-	 * @param string db course name
-	 * @return string
-	 */
-	 
-	
-	
- 
- 
-	
-	
-	 
-	 
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	 
-		
- 
-	 
-	
-	
-	
 }
 ?>

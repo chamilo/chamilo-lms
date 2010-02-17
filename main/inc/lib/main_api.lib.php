@@ -4494,6 +4494,30 @@ function api_get_timezones() {
 }
 
 /**
+ * Returns the given date as a DATETIME in UTC timezone. This function should be used before entering any date in the DB.
+ * 
+ * @param mixed The date to be converted (can be a string supported by date() or a timestamp)
+ * @return string The DATETIME in UTC to be inserted in the DB, or null if the format of the argument is not supported
+ * 
+ * @author Guillaume Viguier <guillaume.viguier@beeznest.com>
+ */
+function api_get_utc_datetime($time) {
+	$from_timezone = date_default_timezone_get();
+	$to_timezone = 'UTC';
+	// If time is a timestamp, convert it to a string
+	if (is_int($time)) {
+		$time = date("Y-m-d H:i:s", $time);
+	}
+	try {
+		$date = new DateTime($time, new DateTimezone($from_timezone));
+		$date->setTimezone(new DateTimeZone($to_timezone));
+		return $date->format("Y-m-d H:i:s");
+	} catch (Exception $e) {
+		return null;
+	}
+}
+
+/**
  * Returns the local time in a format given as an argument
  * @param string The time to be converted
  * @param string The format to be used. The default format is DATETIME

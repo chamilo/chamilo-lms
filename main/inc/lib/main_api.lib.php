@@ -4469,6 +4469,23 @@ function api_send_mail($to, $subject, $message, $additional_headers = null, $add
 }
 
 /**
+ * Returns an alphabetized list of timezones in an associative array that can be used to populate a select
+ * 
+ * @return array List of timezone identifiers
+ * 
+ * @author Guillaume Viguier <guillaume.viguier@beeznest.com>
+ */
+function api_get_timezones() {
+	$timezone_identifiers = DateTimeZone::listIdentifiers();
+	sort($timezone_identifiers);
+	$out = array();
+	foreach($timezone_identifiers as $tz) {
+		$out[$tz] = $tz;
+	}
+	return $out;
+}
+
+/**
  * Returns the local time in a format given as an argument
  * @param string The time to be converted
  * @param string The format to be used. The default format is DATETIME
@@ -4479,6 +4496,7 @@ function api_send_mail($to, $subject, $message, $additional_headers = null, $add
  * @author Guillaume Viguier <guillaume.viguier@beeznest.com>
  */
 function api_get_local_time($time, $format=null, $to_timezone=null, $from_timezone=null) {
+	global $_user;
 	// Determining the timezone to be converted from
 	if ($from_timezone === null) {
 		$from_timezone = 'UTC';
@@ -4492,7 +4510,11 @@ function api_get_local_time($time, $format=null, $to_timezone=null, $from_timezo
 		if ($timezone_value !== null) {
 			$to_timezone = $timezone_value;
 		}
-		// TODO: Get the timezone based on user preference
+		// Third, get the timezone based on user preference, if it exists
+		$timezone_user = UserManager::get_extra_user_data_by_field($_user['user_id'],'timezone');
+		if ($timezone_user['timezone'] != null) {
+			$to_timezone = $timezone_user['timezone'];
+		}
 	}
 	// Determine the format
 	if ($format === null) {

@@ -40,6 +40,8 @@ ALTER TABLE session_field_values CHANGE tms tms DATETIME NOT NULL default '0000-
 ALTER TABLE user_field_options CHANGE tms tms DATETIME NOT NULL default '0000-00-00 00:00:00';
 ALTER TABLE user_field_values CHANGE tms tms DATETIME NOT NULL default '0000-00-00 00:00:00';
 ALTER TABLE access_url CHANGE tms tms DATETIME NOT NULL default '0000-00-00 00:00:00';
+
+INSERT INTO user_field(field_type, field_variable, field_display_text, field_visible, field_changeable) VALUES(11, 'timezone', 'Timezone', 0, 0);
 UPDATE settings_current SET selected_value = '1.8.7.10365' WHERE variable = 'dokeos_database_version';
 
 -- xxSTATSxx

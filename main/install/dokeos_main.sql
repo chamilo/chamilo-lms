@@ -2394,3 +2394,4 @@ PRIMARY KEY(id)
 ALTER TABLE block ADD UNIQUE(path);
 
 INSERT INTO user_field(field_type, field_variable, field_display_text, field_visible, field_changeable) VALUES(1, 'dashboard', 'dashboard', 0, 0);
+INSERT INTO user_field(field_type, field_variable, field_display_text, field_visible, field_changeable) VALUES(11, 'timezone', 'Timezone', 0, 0);

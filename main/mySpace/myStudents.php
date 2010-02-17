@@ -418,7 +418,27 @@ if (!empty ($_GET['student'])) {
 ?>
 									</td>
 								</tr>
-							</table>
+<?php
+// Display timezone if the user selected one
+$timezone = null;
+$timezone_user = UserManager::get_extra_user_data_by_field($info_user['user_id'],'timezone');
+if ($timezone_user['timezone'] != null) {
+	$timezone = $timezone_user['timezone'];
+}
+if ($timezone !== null) {
+?>
+	<tr>
+		<td>
+		<?php
+			echo get_lang('Timezone') . ' : ';
+			echo $timezone;
+		?>
+		</td>
+	</tr>
+<?php
+}
+?>
+</table>
 						</td>
 						<td class="borderLeft" width="35%" valign="top">
 

@@ -21,6 +21,7 @@ define('USER_FIELD_TYPE_DATETIME', 7);
 define('USER_FIELD_TYPE_DOUBLE_SELECT', 8);
 define('USER_FIELD_TYPE_DIVIDER', 9);
 define('USER_FIELD_TYPE_TAG', 10);
+define('USER_FIELD_TYPE_TIMEZONE', 11);
 
 //User image sizes
 define('USER_IMAGE_SIZE_ORIGINAL',	1);

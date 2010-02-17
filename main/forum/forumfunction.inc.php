@@ -726,7 +726,7 @@ function delete_post($post_id) {
     //delete attachment file about this post id
     delete_attachment($post_id);
 
-    $last_post_of_thread=check_if_last_post_of_thread(strval(intval($_GET['thread'])));
+    $last_post_of_thread=check_if_last_post_of_thread(intval($_GET['thread']));
 
     if (is_array($last_post_of_thread)) {
         // Decreasing the number of replies for this thread and also changing the last post information

@@ -172,7 +172,7 @@ class TestForumFunction extends UnitTestCase {
 		 $session_id = 1;
 		 $res = current_qualify_of_thread($thread_id,$session_id);
 		 $this->assertTrue(is_null($res));
-		 var_dump($res); 	
+		 //var_dump($res); 	
 	 }
 	 
 	 /**

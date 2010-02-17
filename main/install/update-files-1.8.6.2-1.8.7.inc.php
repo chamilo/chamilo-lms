@@ -12,10 +12,6 @@
 ==============================================================================
 */
 
-require_once '../inc/lib/main_api.lib.php';
-require_once '../inc/lib/fileUpload.lib.php';
-require_once '../inc/lib/database.lib.php';
-
 if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
 
 	// Start coding here...

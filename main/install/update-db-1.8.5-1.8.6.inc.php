@@ -18,19 +18,8 @@
 ==============================================================================
 */
 
-// Load helper functions
-require_once '../inc/lib/image.lib.php';
-
 $old_file_version = '1.8.5';
 $new_file_version = '1.8.6';
-
-// Remove memory and time limits as much as possible as this might be a long process...
-if (function_exists('ini_set')) {
-	ini_set('memory_limit', -1);
-	ini_set('max_execution_time', 0);
-} else {
-	error_log('Update-db script: could not change memory and time limits', 0);
-}
 
 /*
 ==============================================================================
@@ -41,7 +30,7 @@ if (function_exists('ini_set')) {
 // Check if we come from index.php or update_courses.php - otherwise display error msg
 if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
 
-	//check if the current Dokeos install is elligible for update
+	// Check if the current Dokeos install is elligible for update
 	if (!file_exists('../inc/conf/configuration.php')) {
 		echo '<strong>'.get_lang('Error').' !</strong> Dokeos '.implode('|', $updateFromVersion).' '.get_lang('HasNotBeenFound').'.<br /><br />
 								'.get_lang('PleasGoBackToStep1').'.
@@ -67,12 +56,6 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
 	if (empty($dbScormForm) || $dbScormForm == 'mysql' || $dbScormForm == $dbPrefixForm) {
 		$dbScormForm = $dbPrefixForm.'scorm';
 	}
-
-	database_server_connect();
-
-	$dblist = Database::get_databases();
-
-	$perm = api_get_permissions_for_new_directories();
 
 	/*
 	-----------------------------------------------------------

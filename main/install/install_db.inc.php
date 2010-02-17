@@ -22,15 +22,6 @@ if (!defined('SYSTEM_INSTALLATION')) {
 	exit;
 }
 
-set_file_folder_permissions();
-
-database_server_connect();
-
-// Initialization of the database encoding to be used.
-Database::query("SET SESSION character_set_server='utf8';");
-Database::query("SET SESSION collation_server='utf8_general_ci';");
-Database::query("SET CHARACTER SET 'utf8';");
-
 $urlForm = api_add_trailing_slash($urlForm);
 
 switch ($encryptPassForm) {

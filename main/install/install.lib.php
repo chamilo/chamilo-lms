@@ -52,6 +52,18 @@ function database_server_connect() {
 }
 
 /**
+ * Removes memory and time limits as much as possible.
+ */
+function remove_memory_and_time_limits() {
+	if (function_exists('ini_set')) {
+		ini_set('memory_limit', -1);
+		ini_set('max_execution_time', 0);
+	} else {
+		error_log('Update-db script: could not change memory and time limits', 0);
+	}
+}
+
+/**
  * We assume this function is called from install scripts that reside inside the install folder.
  */
 function set_file_folder_permissions() {
@@ -1152,7 +1164,7 @@ function display_requirements($installType, $badUpdatePath, $updatePath = '', $u
 
 		$error = false;
 
-		//First, attempt to set writing permissions if we don't have them yet
+		// First, attempt to set writing permissions if we don't have them yet
 
 		$perm = api_get_permissions_for_new_directories();
 		$perm_file = api_get_permissions_for_new_files();

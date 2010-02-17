@@ -18,14 +18,6 @@
 ==============================================================================
 */
 
-// Remove memory and time limits as much as possible as this might be a long process...
-if (function_exists('ini_set')) {
-	ini_set('memory_limit', -1);
-	ini_set('max_execution_time', 0);
-} else {
-	error_log('Update-db script: could not change memory and time limits', 0);
-}
-
 /*
 ==============================================================================
 		MAIN CODE
@@ -60,10 +52,6 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
 	if (empty($dbScormForm) || $dbScormForm == 'mysql' || $dbScormForm == $dbPrefixForm) {
 		$dbScormForm = $dbPrefixForm.'scorm';
 	}
-
-	database_server_connect();
-
-	$dblist = Database::get_databases();
 
 	/*
 	-----------------------------------------------------------

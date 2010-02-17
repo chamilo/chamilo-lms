@@ -11,21 +11,14 @@
 /**
  * Include mandatory libraries
  */
-require_once '../inc/lib/main_api.lib.php';
-require_once '../inc/lib/database.lib.php';
-require_once '../inc/lib/document.lib.php';
-//require_once '../inc/lib/fileDisplay.lib.php';
-//require_once '../inc/lib/fileUpload.lib.php'; //replace_dangerous_char()
-require_once '../inc/lib/fileManage.lib.php'; //check_name_exists()
-//include_once '../inc/lib/pclzip/pclzip.lib.php';
-require_once '../newscorm/learnpath.class.php';
-require_once '../newscorm/scorm.class.php';
-
-ini_set('max_execution_time', 0);
+require_once api_get_path(LIBRARY_PATH).'document.lib.php';
+require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php'; //check_name_exists()
+require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpath.class.php';
+require_once api_get_path(SYS_CODE_PATH).'newscorm/scorm.class.php';
 
 $loglevel = 0;
 
-//get table prefix from $prefix variable declared in update-db-....inc.php
+// Get table prefix from $prefix variable declared in update-db-....inc.php
 $table_prefix = $prefix;
 $sys_course_path = $pathForm.'courses/';
 $upd_course_path = $proposedUpdatePath.'courses/';

@@ -637,6 +637,17 @@ if ($_POST['step2']) {
 
 	if ($installType == 'update') {
 
+		require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
+		require_once api_get_path(LIBRARY_PATH).'image.lib.php';
+
+		remove_memory_and_time_limits();
+		database_server_connect();
+
+		// Inializing global variables that are to be used by the included scripts.
+		$dblist = Database::get_databases();
+		$perm = api_get_permissions_for_new_directories();
+		$perm_file = api_get_permissions_for_new_files();
+
 		if (empty($my_old_version)) { $my_old_version = '1.8.6'; } //we guess
 		$_configuration['main_database'] = $dbNameForm;
 		//$urlAppendPath = get_config_param('urlAppend');
@@ -689,6 +700,14 @@ if ($_POST['step2']) {
 		}
 
 	} else {
+
+		set_file_folder_permissions();
+		database_server_connect();
+
+		// Initialization of the database encoding to be used.
+		Database::query("SET SESSION character_set_server='utf8';");
+		Database::query("SET SESSION collation_server='utf8_general_ci';");
+		Database::query("SET CHARACTER SET 'utf8';");
 
 		include 'install_db.inc.php';
 		include 'install_files.inc.php';

@@ -18,10 +18,6 @@
 ==============================================================================
 */
 
-require_once '../inc/lib/main_api.lib.php';
-require_once '../inc/lib/fileUpload.lib.php';
-require_once '../inc/lib/database.lib.php';
-
 if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
 
 	// Edit the configuration file
@@ -55,8 +51,6 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
 	}
 	fwrite($fh, '?>');
 	fclose($fh);
-
-	$perm = api_get_permissions_for_new_directories();
 
 	//// Ccreate a specific directory for global thumbails
 	// home > default_platform_document > template_thumb

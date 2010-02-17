@@ -18,10 +18,6 @@
 ==============================================================================
 */
 
-require_once '../inc/lib/main_api.lib.php';
-require_once '../inc/lib/fileUpload.lib.php';
-require_once '../inc/lib/database.lib.php';
-
 if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
 
 	// Edit the configuration file
@@ -70,8 +66,6 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
 	$sql = "SELECT * FROM $db_name.course";
 	error_log('Getting courses for files updates: '.$sql, 0);
 	$result = Database::query($sql);
-
-	$perm = api_get_permissions_for_new_directories();
 
 	while ($courses_directories = Database::fetch_array($result)) {
 

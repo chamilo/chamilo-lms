@@ -12,11 +12,8 @@
 ==============================================================================
 */
 
-require_once '../inc/lib/main_api.lib.php';
-require_once '../inc/lib/fileUpload.lib.php';
-require_once '../inc/lib/database.lib.php';
-
 if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
+
 	// Edit the configuration file
 	$file = file('../inc/conf/configuration.php');
 	$fh = fopen('../inc/conf/configuration.php', 'w');

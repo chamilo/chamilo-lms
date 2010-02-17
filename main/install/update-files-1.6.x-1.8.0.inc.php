@@ -22,8 +22,6 @@
 ==============================================================================
 */
 
-require_once '../inc/lib/fileUpload.lib.php';
-
 /*
 ==============================================================================
 		FUNCTIONS
@@ -54,8 +52,6 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
 	$sql = "SELECT * FROM course";
 	error_log('Getting courses for files updates: '.$sql, 0);
 	$result = Database::query($sql);
-
-	$perm = api_get_permissions_for_new_directories();
 
 	while ($courses_directories = Database::fetch_array($result)) {
 

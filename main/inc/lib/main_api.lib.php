@@ -224,6 +224,7 @@ define('LIBRARY_PATH', 'LIBRARY_PATH');
 define('CONFIGURATION_PATH', 'CONFIGURATION_PATH');
 define('WEB_LIBRARY_PATH', 'WEB_LIBRARY_PATH');
 define('WEB_AJAX_PATH', 'WEB_AJAX_PATH');
+define('SYS_TEST_PATH', 'SYS_TEST_PATH');
 
 // Constants for requesting path conversion.
 define('TO_WEB', 'TO_WEB');
@@ -313,6 +314,7 @@ require_once dirname(__FILE__).'/internationalization.lib.php';
  * 	api_get_path(WEB_LIBRARY_PATH)				http://www.mychamilo.org/chamilo/main/inc/lib/
  * 	api_get_path(LIBRARY_PATH)					/var/www/chamilo/main/inc/lib/
  * 	api_get_path(CONFIGURATION_PATH)			/var/www/chamilo/main/inc/conf/
+ *  api_get_path(SYS_TEST_PATH)					/var/www/chamilo/tests/
  *
  *	This is how we retrieve paths of "registerd" resource files (scripts, players, etc.):
  *	api_get_path(TO_WEB, FLASH_PLAYER_AUDIO)	http://www.mychamilo.org/chamilo/main/inc/lib/mediaplayer/player.swf
@@ -355,7 +357,8 @@ function api_get_path($path_type, $path = null) {
 		LIBRARY_PATH => 'inc/lib/',
 		CONFIGURATION_PATH => 'inc/conf/',
 		WEB_LIBRARY_PATH => 'inc/lib/',
-		WEB_AJAX_PATH => 'inc/ajax/'
+		WEB_AJAX_PATH => 'inc/ajax/',
+		SYS_TEST_PATH => 'tests/'
 	);
 
 	static $resource_paths = array(
@@ -472,6 +475,7 @@ function api_get_path($path_type, $path = null) {
 		$paths[WEB_PLUGIN_PATH] 	= $paths[WEB_PATH].$paths[WEB_PLUGIN_PATH];
 		$paths[SYS_ARCHIVE_PATH] 	= $paths[SYS_PATH].$paths[SYS_ARCHIVE_PATH];
 		$paths[WEB_ARCHIVE_PATH] 	= $paths[WEB_PATH].$paths[WEB_ARCHIVE_PATH];
+		$paths[SYS_TEST_PATH] 		= $paths[SYS_PATH].$paths[SYS_TEST_PATH];
 		// A change as of Chamilo 1.8.6.2
 		// Calculation in the previous way does not rely on configuration settings and in some cases gives unexpected results.
 		//$paths[INCLUDE_PATH] = $include_path_sys; // Old behaviour, Dokeos 1.8.6.1.

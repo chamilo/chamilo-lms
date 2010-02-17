@@ -483,8 +483,10 @@ class Tracking {
 		                    }
 							$count_items++;
 						}
-						$score_of_scorm_calculate += round((($lp_scorm_result_score_total/$count_items)*100),2);
+						
+						$score_of_scorm_calculate += $count_items?round((($lp_scorm_result_score_total/$count_items)*100),2):0;						
                         $count_views++;
+                        
 					}
 				}
 

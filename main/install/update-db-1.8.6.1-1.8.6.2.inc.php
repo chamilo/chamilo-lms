@@ -1,26 +1,30 @@
-<?php // $Id: $
-/* See license terms in /license.txt */
+<?php
+/* For licensing terms, see /license.txt */
 /**
 ==============================================================================
-* Update the Dokeos database from an older version
-* Notice : This script has to be included by index.php or update_courses.php
+* Chamilo LMS
+*
+* Update the Chamilo database from an older Dokeos version
+* Notice : This script has to be included by index.php
+* or update_courses.php (deprecated).
 *
 * @package chamilo.install
 * @todo
 * - conditional changing of tables. Currently we execute for example
-* ALTER TABLE `$dbNameForm`.`cours` instructions without checking wether this is necessary.
+* ALTER TABLE `$dbNameForm`.`cours`
+* instructions without checking wether this is necessary.
 * - reorganise code into functions
 * @todo use database library
 ==============================================================================
 */
 
-//load helper functions
+// Load helper functions
 require_once '../inc/lib/image.lib.php';
 
 $old_file_version = '1.8.6.1';
 $new_file_version = '1.8.6.2';
 
-//remove memory and time limits as much as possible as this might be a long process...
+// Remove memory and time limits as much as possible as this might be a long process...
 if (function_exists('ini_set')) {
 	ini_set('memory_limit', -1);
 	ini_set('max_execution_time', 0);
@@ -34,10 +38,10 @@ if (function_exists('ini_set')) {
 ==============================================================================
 */
 
-//check if we come from index.php or update_courses.php - otherwise display error msg
+// Check if we come from index.php or update_courses.php - otherwise display error msg
 if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
 
-	//check if the current Dokeos install is elligible for update
+	// Check if the current Dokeos install is elligible for update
 	if (!file_exists('../inc/conf/configuration.php')) {
 		echo '<strong>'.get_lang('Error').' !</strong> Dokeos '.implode('|', $updateFromVersion).' '.get_lang('HasNotBeenFound').'.<br /><br />
 								'.get_lang('PleasGoBackToStep1').'.
@@ -74,7 +78,7 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
 		start by updating main, statistic, user databases
 	-----------------------------------------------------------
 	*/
-	//if this script has been included by index.php, not update_courses.php, so
+	// If this script has been included by index.php, not update_courses.php, so
 	// that we want to change the main databases as well...
 	$only_test = false;
 	$log = 0;
@@ -91,14 +95,14 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
 		include '../lang/english/create_course.inc.php';
 
 		if ($languageForm != 'english') {
-			//languageForm has been escaped in index.php
+			// languageForm has been escaped in index.php
 			include '../lang/'.$languageForm.'/create_course.inc.php';
 		}
 
-		//get the main queries list (m_q_list)
+		// Get the main queries list (m_q_list)
 		$m_q_list = get_sql_file_contents('migrate-db-'.$old_file_version.'-'.$new_file_version.'-pre.sql', 'main');
 		if (count($m_q_list) > 0) {
-			//now use the $m_q_list
+			// Now use the $m_q_list
 			/**
 			 * We connect to the right DB first to make sure we can use the queries
 			 * without a database name
@@ -140,7 +144,7 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
 					// session_rel_course_rel_user table
 					while ($row = Database::fetch_array($res)) {
 
-						// chech if coach is a student
+						// Check whether coach is a student
 						$sql = "SELECT 1 FROM session_rel_course_rel_user
 									 WHERE id_session='{$row[id_session]}' AND course_code='{$row[course_code]}' AND id_user='{$row[id_coach]}'";
 						$rs  =	Database::query($sql);
@@ -200,11 +204,10 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
 
 			}
 		}
-		// now clean the deprecated id_coach field from the session_rel_course
-		// table
+		// Now clean the deprecated id_coach field from the session_rel_course table
         $m_q_list = get_sql_file_contents('migrate-db-'.$old_file_version.'-'.$new_file_version.'-post.sql', 'main');
         if (count($m_q_list) > 0) {
-            //now use the $m_q_list
+            // Now use the $m_q_list
             /**
              * We connect to the right DB first to make sure we can use the queries
              * without a database name
@@ -228,11 +231,11 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
             }
         }
 
-		//get the stats queries list (s_q_list)
+		// Get the stats queries list (s_q_list)
 		$s_q_list = get_sql_file_contents('migrate-db-'.$old_file_version.'-'.$new_file_version.'-pre.sql', 'stats');
 
 		if (count($s_q_list) > 0) {
-			//now use the $s_q_list
+			// Now use the $s_q_list
 			/**
 			 * We connect to the right DB first to make sure we can use the queries
 			 * without a database name
@@ -255,10 +258,10 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
 				}
 			}
 		}
-		//get the user queries list (u_q_list)
+		// Get the user queries list (u_q_list)
 		$u_q_list = get_sql_file_contents('migrate-db-'.$old_file_version.'-'.$new_file_version.'-pre.sql', 'user');
 		if (count($u_q_list) > 0) {
-			//now use the $u_q_list
+			// Now use the $u_q_list
 			/**
 			 * We connect to the right DB first to make sure we can use the queries
 			 * without a database name
@@ -279,7 +282,7 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
 				}
 			}
 		}
-		//the SCORM database doesn't need a change in the pre-migrate part - ignore
+		// The SCORM database doesn't need a change in the pre-migrate part - ignore
 	}
 
 
@@ -301,11 +304,11 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
 		$prefix =  get_config_param ('table_prefix');
 	}
 
-	//get the courses databases queries list (c_q_list)
+	// Get the courses databases queries list (c_q_list)
 	$c_q_list = get_sql_file_contents('migrate-db-'.$old_file_version.'-'.$new_file_version.'-pre.sql', 'course');
 
 	if (count($c_q_list) > 0) {
-		//get the courses list
+		// Get the courses list
 		if (strlen($dbNameForm) > 40) {
 			error_log('Database name '.$dbNameForm.' is too long, skipping', 0);
 		} elseif (!in_array($dbNameForm, $dblist)) {
@@ -319,13 +322,13 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
 			if (Database::num_rows($res) > 0) {
 				$i = 0;
                 $list = array();
-				//while( ($i < MAX_COURSE_TRANSFER) && ($row = Database::fetch_array($res)))
+				//while(($i < MAX_COURSE_TRANSFER) && ($row = Database::fetch_array($res)))
 				while ($row = Database::fetch_array($res)) {
 					$list[] = $row;
 					$i++;
 				}
 				foreach ($list as $row_course) {
-					//now use the $c_q_list
+					// Now use the $c_q_list
 					/**
 					 * We connect to the right DB first to make sure we can use the queries
 					 * without a database name
@@ -335,7 +338,7 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
 					}
 
 					foreach ($c_q_list as $query) {
-						if ($singleDbForm) { //otherwise just use the main one
+						if ($singleDbForm) {
 							$query = preg_replace('/^(UPDATE|ALTER TABLE|CREATE TABLE|DROP TABLE|INSERT INTO|DELETE FROM)\s+(\w*)(.*)$/', "$1 $prefix{$row_course['db_name']}_$2$3", $query);
 						}
 
@@ -349,7 +352,7 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
 						}
 					}
 
-					// fill description type into course_description table
+					// Fill description type into course_description table
 
 					$t_course_description = $row_course['db_name'].".course_description";
 
@@ -357,7 +360,7 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
                         $t_course_description = "$prefix{$row_course['db_name']}_course_description";
                     }
 
-					// get all ids and update description_type field with them from course_description table
+					// Get all ids and update description_type field with them from course_description table
 					$sql_sel = "SELECT id FROM $t_course_description";
 					$rs_sel = Database::query($sql_sel);
 

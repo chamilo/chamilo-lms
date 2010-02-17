@@ -1,28 +1,9 @@
-<?php //$Id: update-files-1.8.3-1.8.4.inc.php 19996 2009-04-22 22:11:14Z cvargas1 $
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2004-2007 Dokeos S.A.
-	Copyright (c) 2003 Ghent University (UGent)
-	Copyright (c) 2001 Universite catholique de Louvain (UCL)
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact address: Dokeos, 44 rue des palais, B-1030 Brussels, Belgium
-	Mail: info@dokeos.com
-==============================================================================
-*/
+<?php
+/* For licensing terms, see /license.txt */
 /**
 ==============================================================================
+* Chamilo LMS
+*
 * Updates the Dokeos files from version 1.8.3 to version 1.8.4
 * This script operates only in the case of an update, and only to change the
 * active version number (and other things that might need a change) in the
@@ -43,7 +24,7 @@ require_once '../inc/lib/database.lib.php';
 
 if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
 
-	// Edit the Dokeos config file
+	// Edit the configuration file
 	$file = file('../inc/conf/configuration.php');
 	$fh = fopen('../inc/conf/configuration.php', 'w');
 	$found_version = false;
@@ -57,7 +38,7 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
 			$found_stable = true;
 			$line = '$_configuration[\'dokeos_stable\'] = '.($new_version_stable ? 'true' : 'false').';'."\r\n";
 		} elseif (stristr($line, '?>')) {
-			//ignore the line
+			// Ignore the line
 			$ignore = true;
 		}
 		if (!$ignore) {

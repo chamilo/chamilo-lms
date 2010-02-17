@@ -1,7 +1,9 @@
 <?php
-/* See license terms in /license.txt */
+/* For licensing terms, see /license.txt */
 /**
 ==============================================================================
+* Chamilo LMS
+*
 * Updates the Dokeos files from version 1.8.6 to version 1.8.6.1
 * This script operates only in the case of an update, and only to change the
 * active version number (and other things that might need a change) in the
@@ -22,7 +24,7 @@ require_once '../inc/lib/database.lib.php';
 
 if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
 
-	// Edit the Dokeos config file
+	// Edit the configuration file
 	$file = file('../inc/conf/configuration.php');
 	$fh = fopen('../inc/conf/configuration.php', 'w');
 	$found_version = false;
@@ -56,10 +58,8 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
 
 	$perm = api_get_permissions_for_new_directories();
 
-	//$old_umask = umask(0); // This function is not thread-safe.
-
-	////create a specific directory for global thumbails
-	//home > default_platform_document > template_thumb
+	//// Ccreate a specific directory for global thumbails
+	// home > default_platform_document > template_thumb
 	if (!is_dir($pathForm.'home/default_platform_document/template_thumb')) {
 		mkdir($pathForm.'home/default_platform_document/template_thumb', $perm);
 	}

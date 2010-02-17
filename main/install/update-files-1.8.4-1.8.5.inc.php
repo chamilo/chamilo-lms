@@ -1,7 +1,9 @@
-<?php //$Id: update-files-1.8.4-1.8.5.inc.php 16083 2008-08-27 20:33:01Z juliomontoya $
-/* See license terms in /license.txt */
+<?php
+/* For licensing terms, see /license.txt */
 /**
 ==============================================================================
+* Chamilo LMS
+*
 * Updates the Dokeos files from version 1.8.4 to version 1.8.5
 * This script operates only in the case of an update, and only to change the
 * active version number (and other things that might need a change) in the
@@ -22,7 +24,7 @@ require_once '../inc/lib/database.lib.php';
 
 if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
 
-	// Edit the Dokeos config file
+	// Edit the configuration file
 	$file = file('../inc/conf/configuration.php');
 	$fh = fopen('../inc/conf/configuration.php', 'w');
 	$found_version = false;
@@ -36,7 +38,7 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
 			$found_stable = true;
 			$line = '$_configuration[\'dokeos_stable\'] = '.($new_version_stable ? 'true' : 'false').';'."\r\n";
 		} elseif (stristr($line, '?>')) {
-			//ignore the line
+			// Ignore the line
 			$ignore = true;
 		}
 		if (!$ignore) {

@@ -1,43 +1,25 @@
 <?php
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2004-2007 Dokeos S.A.
-	Copyright (c) 2003 Ghent University (UGent)
-	Copyright (c) 2001 Universite catholique de Louvain (UCL)
-	Copyright (c) various contributors
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact address: Dokeos, 44 rue des palais, B-1030 Brussels, Belgium
-	Mail: info@dokeos.com
-==============================================================================
-*/
+/* For licensing terms, see /license.txt */
 /**
 ==============================================================================
-* Update the Dokeos database from an older version
-* Notice : This script has to be included by index.php or update_courses.php
+* Chamilo LMS
+*
+* Update the Chamilo database from an older Dokeos version
+* Notice : This script has to be included by index.php
+* or update_courses.php (deprecated).
 *
 * @package chamilo.install
 * @todo
 * - conditional changing of tables. Currently we execute for example
-* ALTER TABLE `$dbNameForm`.`cours` instructions without checking wether this is necessary.
+* ALTER TABLE `$dbNameForm`.`cours`
+* instructions without checking wether this is necessary.
 * - reorganise code into functions
 * @todo use database library
 ==============================================================================
 */
 
-//remove memory and time limits as much as possible as this might be a long process...
-if( function_exists('ini_set')) {
+// Remove memory and time limits as much as possible as this might be a long process...
+if (function_exists('ini_set')) {
 	ini_set('memory_limit', -1);
 	ini_set('max_execution_time', 0);
 } else {
@@ -53,7 +35,7 @@ if( function_exists('ini_set')) {
 //check if we come from index.php or update_courses.php - otherwise display error msg
 if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
 
-	//check if the current Dokeos install is elligible for update
+	// Check if the current Dokeos install is elligible for update
 	if (!file_exists('../inc/conf/configuration.php')) {
 		echo '<strong>'.get_lang('Error').' !</strong> Dokeos '.implode('|', $updateFromVersion).' '.get_lang('HasNotBeenFound').'.<br /><br />
 								'.get_lang('PleasGoBackToStep1').'.
@@ -90,7 +72,7 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
 		start by updating main, statistic, user databases
 	-----------------------------------------------------------
 	*/
-	//if this script has been included by index.php, not update_courses.php, so
+	// If this script has been included by index.php, not update_courses.php, so
 	// that we want to change the main databases as well...
 	$only_test = false;
 	$log = 0;
@@ -107,14 +89,14 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
 		include '../lang/english/create_course.inc.php';
 
 		if ($languageForm != 'english') {
-			//languageForm has been escaped in index.php
+			// languageForm has been escaped in index.php
 			include '../lang/'.$languageForm.'/create_course.inc.php';
 		}
 
-		//get the main queries list (m_q_list)
+		// get the main queries list (m_q_list)
 		$m_q_list = get_sql_file_contents('migrate-db-1.8.2-1.8.3-pre.sql', 'main');
 		if (count($m_q_list) > 0) {
-			//now use the $m_q_list
+			// Now use the $m_q_list
 			/**
 			 * We connect to the right DB first to make sure we can use the queries
 			 * without a database name
@@ -138,11 +120,11 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
 			}
 		}
 
-		//get the stats queries list (s_q_list)
+		// Get the stats queries list (s_q_list)
 		$s_q_list = get_sql_file_contents('migrate-db-1.8.2-1.8.3-pre.sql', 'stats');
 
 		if (count($s_q_list) > 0) {
-			//now use the $s_q_list
+			// Now use the $s_q_list
 			/**
 			 * We connect to the right DB first to make sure we can use the queries
 			 * without a database name
@@ -165,10 +147,10 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
 				}
 			}
 		}
-		//get the user queries list (u_q_list)
+		// Get the user queries list (u_q_list)
 		$u_q_list = get_sql_file_contents('migrate-db-1.8.2-1.8.3-pre.sql', 'user');
 		if (count($u_q_list) > 0) {
-			//now use the $u_q_list
+			// Now use the $u_q_list
 			/**
 			 * We connect to the right DB first to make sure we can use the queries
 			 * without a database name
@@ -189,7 +171,7 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
 				}
 			}
 		}
-		//the SCORM database doesn't need a change in the pre-migrate part - ignore
+		// The SCORM database doesn't need a change in the pre-migrate part - ignore
 	}
 
 	/*
@@ -209,10 +191,10 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
 	if ($singleDbForm) {
 		$prefix = $_configuration['table_prefix'];
 	}
-	//get the courses databases queries list (c_q_list)
+	// Get the courses databases queries list (c_q_list)
 	$c_q_list = get_sql_file_contents('migrate-db-1.8.2-1.8.3-pre.sql', 'course');
 	if (count($c_q_list) > 0) {
-		//get the courses list
+		// Get the courses list
 		if (strlen($dbNameForm) > 40) {
 			error_log('Database name '.$dbNameForm.' is too long, skipping', 0);
 		} elseif (!in_array($dbNameForm, $dblist)) {
@@ -224,13 +206,13 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
 			if (Database::num_rows($res) > 0) {
 				$i = 0;
                 $list = array();
-				//while( ($i < MAX_COURSE_TRANSFER) && ($row = Database::fetch_array($res)))
+				//while(($i < MAX_COURSE_TRANSFER) && ($row = Database::fetch_array($res)))
 				while ($row = Database::fetch_array($res)) {
 					$list[] = $row;
 					$i++;
 				}
 				foreach ($list as $row_course) {
-					//now use the $c_q_list
+					// Now use the $c_q_list
 					/**
 					 * We connect to the right DB first to make sure we can use the queries
 					 * without a database name

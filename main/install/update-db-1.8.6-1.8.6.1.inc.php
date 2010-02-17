@@ -1,14 +1,18 @@
-<?php // $Id: $
-/* See license terms in /license.txt */
+<?php
+/* For licensing terms, see /license.txt */
 /**
 ==============================================================================
-* Update the Dokeos database from an older version
-* Notice : This script has to be included by index.php or update_courses.php
+* Chamilo LMS
+*
+* Update the Chamilo database from an older Dokeos version
+* Notice : This script has to be included by index.php
+* or update_courses.php (deprecated).
 *
 * @package chamilo.install
 * @todo
 * - conditional changing of tables. Currently we execute for example
-* ALTER TABLE `$dbNameForm`.`cours` instructions without checking wether this is necessary.
+* ALTER TABLE `$dbNameForm`.`cours`
+* instructions without checking wether this is necessary.
 * - reorganise code into functions
 * @todo use database library
 ==============================================================================
@@ -20,7 +24,7 @@ require_once '../inc/lib/image.lib.php';
 $old_file_version = '1.8.6';
 $new_file_version = '1.8.6.1';
 
-//remove memory and time limits as much as possible as this might be a long process...
+// Remove memory and time limits as much as possible as this might be a long process...
 if (function_exists('ini_set')) {
 	ini_set('memory_limit', -1);
 	ini_set('max_execution_time', 0);
@@ -74,7 +78,7 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
 		start by updating main, statistic, user databases
 	-----------------------------------------------------------
 	*/
-	//if this script has been included by index.php, not update_courses.php, so
+	// If this script has been included by index.php, not update_courses.php, so
 	// that we want to change the main databases as well...
 	$only_test = false;
 	$log = 0;
@@ -98,7 +102,7 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
 		//get the main queries list (m_q_list)
 		$m_q_list = get_sql_file_contents('migrate-db-'.$old_file_version.'-'.$new_file_version.'-pre.sql', 'main');
 		if (count($m_q_list) > 0) {
-			//now use the $m_q_list
+			// Now use the $m_q_list
 			/**
 			 * We connect to the right DB first to make sure we can use the queries
 			 * without a database name
@@ -123,11 +127,11 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
 		}
 
 
-		//get the stats queries list (s_q_list)
+		// Get the stats queries list (s_q_list)
 		$s_q_list = get_sql_file_contents('migrate-db-'.$old_file_version.'-'.$new_file_version.'-pre.sql', 'stats');
 
 		if (count($s_q_list) > 0) {
-			//now use the $s_q_list
+			// Now use the $s_q_list
 			/**
 			 * We connect to the right DB first to make sure we can use the queries
 			 * without a database name
@@ -150,10 +154,10 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
 				}
 			}
 		}
-		//get the user queries list (u_q_list)
+		// Get the user queries list (u_q_list)
 		$u_q_list = get_sql_file_contents('migrate-db-'.$old_file_version.'-'.$new_file_version.'-pre.sql', 'user');
 		if (count($u_q_list) > 0) {
-			//now use the $u_q_list
+			// Now use the $u_q_list
 			/**
 			 * We connect to the right DB first to make sure we can use the queries
 			 * without a database name
@@ -174,7 +178,7 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
 				}
 			}
 		}
-		//the SCORM database doesn't need a change in the pre-migrate part - ignore
+		// The SCORM database doesn't need a change in the pre-migrate part - ignore
 	}
 
 	/*
@@ -195,11 +199,11 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
 		$prefix =  get_config_param ('table_prefix');
 	}
 
-	//get the courses databases queries list (c_q_list)
+	// Get the courses databases queries list (c_q_list)
 	$c_q_list = get_sql_file_contents('migrate-db-'.$old_file_version.'-'.$new_file_version.'-pre.sql', 'course');
 
 	if (count($c_q_list) > 0) {
-		//get the courses list
+		// Get the courses list
 		if (strlen($dbNameForm) > 40) {
 			error_log('Database name '.$dbNameForm.' is too long, skipping', 0);
 		} elseif (!in_array($dbNameForm, $dblist)) {
@@ -213,13 +217,13 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
 			if (Database::num_rows($res) > 0) {
 				$i = 0;
                 $list = array();
-				//while( ($i < MAX_COURSE_TRANSFER) && ($row = Database::fetch_array($res)))
+				//while(($i < MAX_COURSE_TRANSFER) && ($row = Database::fetch_array($res)))
 				while ($row = Database::fetch_array($res)) {
 					$list[] = $row;
 					$i++;
 				}
 				foreach ($list as $row_course) {
-					//now use the $c_q_list
+					// Now use the $c_q_list
 					/**
 					 * We connect to the right DB first to make sure we can use the queries
 					 * without a database name
@@ -229,7 +233,7 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
 					}
 
 					foreach ($c_q_list as $query) {
-						if ($singleDbForm) { //otherwise just use the main one
+						if ($singleDbForm) {
 							$query = preg_replace('/^(UPDATE|ALTER TABLE|CREATE TABLE|DROP TABLE|INSERT INTO|DELETE FROM)\s+(\w*)(.*)$/', "$1 $prefix{$row_course['db_name']}_$2$3", $query);
 						}
 
@@ -251,12 +255,12 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
                         $t_wiki_conf = "$prefix{$row_course['db_name']}_wiki_conf";
                     }
 
-                    //update correct page_id to wiki table, actually only store 0
+                    // Update correct page_id to wiki table, actually only store 0
                     $query = "SELECT id, reflink FROM $t_wiki";
                     $res_page = Database::query($query);
                     $wiki_id = $reflink = array();
 
-					if (Database::num_rows($res_page) > 0 ) {
+					if (Database::num_rows($res_page) > 0) {
 	                    while ($row_page = Database::fetch_row($res_page)) {
 	                    	$wiki_id[] = $row_page[0];
 	                    	$reflink[] = $row_page[1];
@@ -274,7 +278,7 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
 	                    }
                     }
 
-                    //insert page_id into wiki_conf table, actually this table is empty
+                    // Insert page_id into wiki_conf table, actually this table is empty
 				   	$query = "SELECT DISTINCT page_id FROM $t_wiki ORDER BY page_id";
 				   	$myres_wiki = Database::query($query);
 

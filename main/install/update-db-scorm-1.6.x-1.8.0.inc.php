@@ -1,5 +1,7 @@
-<?php //$id: $
+<?php
+/* For licensing terms, see /license.txt */
 /**
+ * Chamilo LMS
  * Script handling the migration between an old Dokeos platform (<1.8.0) to
  * setup the new database system (4 scorm tables inside the course's database)
  * @package chamilo.scorm
@@ -89,8 +91,8 @@ if ($loglevel > 0) { error_log("Tables created/deleted for all courses", 0); }
  * The migration needs to take all data from the original learnpath tables and add them to the new
  * lp, lp_view, lp_item and lp_item_view tables
  */
-//MIGRATING LEARNPATHS
-//test only one course
+// MIGRATING LEARNPATHS
+// Test only one course
 foreach ($courses_id_full_table_prefix_list as $course_code => $db) {
     if (strlen($courses_id_list[$course_code]) > 40) {
         error_log('Database '.$courses_id_list[$course_code].' is too long, skipping', 0);
@@ -117,7 +119,7 @@ foreach ($courses_id_full_table_prefix_list as $course_code => $db) {
     $my_new_lp_view = $db.$new_lp_view;
     $my_new_lp_item_view = $db.$new_lp_item_view;
 
-    //migrate learnpaths
+    // Migrate learnpaths
     $sql_test = "SELECT * FROM $my_new_lp";
     $res_test = Database::query($sql_test);
     $sql_lp = "SELECT * FROM $lp_main";
@@ -149,19 +151,18 @@ foreach ($courses_id_full_table_prefix_list as $course_code => $db) {
     //echo "<pre>lp_ids:".print_r($lp_ids,true)."</pre>\n";
 
 
-    //MIGRATING LEARNPATH CHAPTERS
+    // MIGRATING LEARNPATH CHAPTERS
     $sql_lp_chap = "ALTER TABLE $lp_chap ADD INDEX ( parent_chapter_id, display_order )";
     $res_lp_chap = Database::query($sql_lp_chap);
 
     $sql_lp_chap = "SELECT * FROM $lp_chap ORDER BY parent_chapter_id, display_order";
     //echo "$sql_lp_chap<br />\n";
     $res_lp_chap = Database::query($sql_lp_chap);
-    while($row = Database::fetch_array($res_lp_chap))
-    {
+    while ($row = Database::fetch_array($res_lp_chap)) {
         //echo "Treating chapter id : ".$row['id']."<br />\n";
 
-        //TODO build path for this chapter (although there is no real path for any chapter)
-        //TODO find out how to calculate the "next_item_id" with the "ordre" field
+        //TODO: Build path for this chapter (although there is no real path for any chapter)
+        //TODO: Find out how to calculate the "next_item_id" with the "ordre" field
         $my_lp_item = $my_new_lp_item;
         $myname = Database::escape_string($row['chapter_name']);
         $mydesc = Database::escape_string($row['chapter_description']);
@@ -195,7 +196,7 @@ foreach ($courses_id_full_table_prefix_list as $course_code => $db) {
     }
     //echo "<pre>parent_lps:".print_r($parent_lps,true)."</pre>\n";
 
-    //Now one loop to update the parent_chapter_ids
+    // Now one loop to update the parent_chapter_ids
     foreach ($parent_chaps as $old_chap => $old_parent_chap) {
         if ($old_parent_chap != 0) {
             $new_chap = $lp_chap_items[$old_chap];
@@ -210,7 +211,7 @@ foreach ($courses_id_full_table_prefix_list as $course_code => $db) {
     }
     unset($parent_chaps);
 
-    //Now one loop to set the next_item_id and the previous_item_id
+    // Now one loop to set the next_item_id and the previous_item_id
     foreach ($ordered_chaps as $parent_chap) {
         $last = 0;
         foreach ($ordered_chaps[$parent_chap] as $order => $new_id) {
@@ -232,9 +233,9 @@ foreach ($courses_id_full_table_prefix_list as $course_code => $db) {
     }
     unset($ordered_chaps);
 
-    //migrate learnpath_items
-    //TODO define this array thanks to types defined in the learnpath_building scripts
-    //TODO set order correctly
+    // Migrate learnpath_items
+    // TODO: Define this array thanks to types defined in the learnpath_building scripts
+    // TODO: Set order correctly
     $type_trans = array(
         'document'  => TOOL_DOCUMENT,
         'exercise'  => TOOL_QUIZ,
@@ -261,7 +262,7 @@ foreach ($courses_id_full_table_prefix_list as $course_code => $db) {
 
     );
 
-    //MIGRATING LEARNPATH ITEMS
+    // MIGRATING LEARNPATH ITEMS
     $sql_lp_item = "ALTER TABLE $lp_item ADD INDEX ( chapter_id, display_order)";
     $res_lp_item = Database::query($sql_lp_item);
     $sql_lp_item = "SELECT * FROM $lp_item ORDER BY chapter_id, display_order";
@@ -271,23 +272,23 @@ foreach ($courses_id_full_table_prefix_list as $course_code => $db) {
         //echo "Treating chapter ".$row['chapter_id'].", item ".$row['id']."<br />\n";
         $type = $type_trans[$row['item_type']];
         $ref = $row['item_id'];
-        //TODO build item path
-        //TODO calculate "next_item_id" with the "ordre" field
-        //prepare prereqs
-        //prerequisites in Dokeos 1.6 is only authorised on previous items, so
-        //we know that we are gonna talk about an item that has already been passed
-        //through here - if none found, print message
+        //TODO: Build item path
+        //TODO: Calculate "next_item_id" with the "ordre" field
+        // Prepare prereqs
+        // Prerequisites in Dokeos 1.6 is only authorised on previous items, so
+        // We know that we are gonna talk about an item that has already been passed
+        // through here - if none found, print message
         $prereq_id = '';
         if (!empty($row['prereq_id'])) {
             switch ($row['prereq_type']) {
                 case 'c':
-                    //chapter-type prereq
+                    // chapter-type prereq
                     $prereq_id = $lp_chap_items[$row['prereq_id']];
                     if (empty($prereq_id) && $loglevel > 1) { error_log("Could not find prereq chapter ".$row['prereq_id'], 0); }
                     break;
                 case 'i':
                 default:
-                    //item type prereq
+                    // item type prereq
                     $prereq_id = $lp_items[$parent_lps[$row['chapter_id']]][$row['prereq_id']];
                     if (empty($prereq_id) && $loglevel > 1) { error_log("Could not find prereq item ".$row['prereq_id'], 0); }
                     break;
@@ -310,7 +311,7 @@ foreach ($courses_id_full_table_prefix_list as $course_code => $db) {
             $title = $row['title'];
         }
         if (isset($lp_ids[$parent_lps[$row['chapter_id']]])) {
-        	//if there is a parent learnpath
+        	// If there is a parent learnpath
             $ins_lp_sql = "INSERT INTO $my_new_lp_item (" .
                     "lp_id," .
                     "item_type," .
@@ -322,7 +323,7 @@ foreach ($courses_id_full_table_prefix_list as $course_code => $db) {
                     "prerequisite," .
                     "display_order" .
                     ") VALUES (" .
-                    "'".$lp_ids[$parent_lps[$row['chapter_id']]]."'," . //insert new learnpath ID
+                    "'".$lp_ids[$parent_lps[$row['chapter_id']]]."'," . // Insert new learnpath ID
                     "'$type'," .
                     "'$ref', " .
                     "'".Database::escape_string($row['title'])."'," .
@@ -341,7 +342,7 @@ foreach ($courses_id_full_table_prefix_list as $course_code => $db) {
         }
     }
     //echo "<pre>lp_items:".print_r($lp_items,true)."</pre>\n";
-    // complete next_item_id field by going through the new table and looking at parent_id and display_order
+    // Complete next_item_id field by going through the new table and looking at parent_id and display_order
     $order_sql = "ALTER TABLE $my_new_lp_item ADD INDEX (lp_id, parent_item_id, display_order)";
     $order_res = Database::query($order_sql);
     $order_sql = "SELECT * FROM $my_new_lp_item ORDER by lp_id ASC, parent_item_id ASC, display_order ASC";
@@ -353,7 +354,7 @@ foreach ($courses_id_full_table_prefix_list as $course_code => $db) {
     while ($row = Database::fetch_array($order_res)) {
         //print_r($row);
         if ($row['lp_id'] != $lp_id) {
-            //apply changes to the database and clean tool arrays
+            // Apply changes to the database and clean tool arrays
             $last = 0;
             foreach ($order_item as $order_id => $item_id) {
                 $next = 0;
@@ -375,7 +376,7 @@ foreach ($courses_id_full_table_prefix_list as $course_code => $db) {
             $order_item[] = $row['id'];
         }
     }
-    //process the last LP stack
+    // Process the last LP stack
     $last = 0;
     foreach ($order_item as $order_id => $item_id) {
         $next = 0;
@@ -393,7 +394,7 @@ foreach ($courses_id_full_table_prefix_list as $course_code => $db) {
 
     //echo "</pre>\n";
 
-    //MIGRATING THE learnpath_user TABLE (results)
+    // MIGRATING THE learnpath_user TABLE (results)
     $mysql = "ALTER TABLE $my_new_lp_item_view ADD INDEX (lp_view_id)";
     $myres = Database::query($mysql);
     $sql_lp_user = "ALTER TABLE $lp_user ADD INDEX (user_id, learnpath_id, learnpath_item_id)";
@@ -406,14 +407,14 @@ foreach ($courses_id_full_table_prefix_list as $course_code => $db) {
     $lp_view = 0;
     while ($row = Database::fetch_array($res_lp_user)) {
         if ($row['user_id']!=$user_id  OR $row['learnpath_id']!=$learnpath_id) {  //the user has changed or this is the first
-            //insert a new lp_view
+            // Insert a new lp_view
             $last = 0;
             if (!empty($lp_chaps_list[$row['learnpath_id']][0])) {
                 $last = $lp_chaps_list[$row['learnpath_id']][0];
             }
             if (empty($lp_ids[$row['learnpath_id']])) {
-                //this can be ignored as it means there was an LP before, this user
-                //used it, but now it's been removed
+                // This can be ignored as it means there was an LP before, this user
+                // used it, but now it's been removed
                 //echo "Somehow we also miss a lp_ids[".$row['learnpath_id']."] here<br />\n";
                 $incoherences ++;
             } else {
@@ -424,10 +425,10 @@ foreach ($courses_id_full_table_prefix_list as $course_code => $db) {
                         "view_count," .
                         "last_item" .
                         ")VALUES(" .
-                        "".$mylpid."," . //new learnpath id
-                        "".$row['user_id']."," . //user IDs stay the same
+                        "".$mylpid."," . // new learnpath id
+                        "".$row['user_id']."," . // user IDs stay the same
                         "1," .
-                        "".$last."" . //use the first chapter from this learnpath
+                        "".$last."" . // Use the first chapter from this learnpath
                         ")";
                 //echo $sql_ins_view;
                 $res_ins_view = Database::query($sql_ins_view);
@@ -437,12 +438,12 @@ foreach ($courses_id_full_table_prefix_list as $course_code => $db) {
                 $lp_view = $in_id;
             }
         }
-        //insert the record into lp_item_view
-        //TODO fix the whole in here (missing one item at least)
+        // Insert the record into lp_item_view
+        // TODO: fix the whole in here (missing one item at least)
         $my_new_lp_item_id = $lp_items[$learnpath_id][$row['learnpath_item_id']];
         if (empty($my_new_lp_item_id)) {
-            //this can be ignored safely as it just means a user used a learnpath_item
-            //before it was removed from items - maybe fix that in Dokeos?
+            // This can be ignored safely as it just means a user used a learnpath_item
+            // before it was removed from items - maybe fix that in Dokeos?
             //echo "Somehow we miss lp_items[".$learnpath_id."][".$row['learnpath_item_id']."] here...<br />";
             $incoherences ++;
         } else {
@@ -471,7 +472,7 @@ foreach ($courses_id_full_table_prefix_list as $course_code => $db) {
             //echo $sql_ins_iv;
             $res_ins_iv = Database::query($sql_ins_iv);
         }
-        //UPDATE THE LP_VIEW progress
+        // UPDATE THE LP_VIEW progress
         $mysql = "SELECT count(distinct(lp_item_id)) FROM $my_new_lp_item_view WHERE lp_view_id = ".$lp_view." AND status IN ('passed','completed','succeeded','browsed','failed')";
         $myres = Database::query($mysql);
         $myrow = Database::fetch_array($myres);
@@ -489,7 +490,7 @@ foreach ($courses_id_full_table_prefix_list as $course_code => $db) {
 
     /**
      * Move prerequisites
-     * TODO integrate prerequisites migration into learnpath_item migration
+     * TODO: Integrate prerequisites migration into learnpath_item migration
      */
 
     $msg = '';
@@ -501,14 +502,14 @@ foreach ($courses_id_full_table_prefix_list as $course_code => $db) {
      * update the links to newscorm/lp_controller.php?action=view&lp_id=x)
      * Only normal learnpaths were visible from the homepage so we only need to update here
      */
-    //MIGRATING LEARNPATH LINKS ON COURSES HOMEPAGES
+    // MIGRATING LEARNPATH LINKS ON COURSES HOMEPAGES
     $tbl_tool = $db.TABLE_TOOL_LIST;
     $sql_tool = "SELECT * FROM $tbl_tool WHERE image='scormbuilder.gif' AND link LIKE '%learnpath_handler%'";
     $res_tool = Database::query($sql_tool);
     while ($row_tool = Database::fetch_array($res_tool)) {
         $name = $row_tool['name'];
         $link = $row_tool['link'];
-        //get old lp_id from there
+        // Get old lp_id from there
         $matches = array();
         if (preg_match('/learnpath_id=(\d+)$/', $link,$matches)) {
             $old_lp_id = $matches[1];
@@ -517,7 +518,7 @@ foreach ($courses_id_full_table_prefix_list as $course_code => $db) {
                     "SET link='newscorm/lp_controller.php?action=view&lp_id=$new_lp_id' " .
                     "WHERE id = ".$row_tool['id'];
             error_log('New LP - Migration - Updating tool table: '.$sql_tool_upd, 0);
-            //make sure there is a way of retrieving which links were updated (to revert)
+            // Make sure there is a way of retrieving which links were updated (to revert)
             fwrite($fh,$sql_tool_upd." AND link ='$link'");
             fwrite($fh_revert, "UPDATE $tbl_tool SET link='$link' WHERE id=".$row_tool['id']." AND link ='newscorm/lp_controller.php?action=view&lp_id=$new_lp_id';\n");
             //echo $sql_tool_upd." (and link='$link')<br />\n";
@@ -538,7 +539,7 @@ foreach ($courses_id_full_table_prefix_list as $course_code => $db) {
                 //echo "Removing link $link from tools<br />";
                 $sql_tool_upd = "DELETE FROM $tbl_tool WHERE id = ".$row_tool['id'];
                 error_log('New LP - Migration - Updating tool table (dead link): '.$sql_tool_upd, 0);
-                //make sure there is a way of retrieving which links were updated (to revert)
+                // Make sure there is a way of retrieving which links were updated (to revert)
                 fwrite($fh, $sql_tool_upd." AND link ='$link'");
                 fwrite($fh_revert, "INSERT INTO $tbl_tool (link) VALUES ('$link');\n");
                 //echo $sql_tool_upd." (and link='$link')<br />\n";
@@ -618,7 +619,7 @@ $lp_course = array();
 $lp_course_code = array();
 $scorm_lp_paths = array();
 
-//avoid empty dokeosCourse fields as they potentially break the rest
+// Avoid empty dokeosCourse fields as they potentially break the rest
 Database::select_db($dbNameForm);
 $course_main = TABLE_MAIN_COURSE;
 $sql_crs = "SELECT * FROM $course_main WHERE target_course_code IS NULL";
@@ -626,17 +627,17 @@ if ($loglevel > 0) { error_log("$sql_crs", 0); }
 $res_crs = Database::query($sql_crs);
 $num = Database::num_rows($res_crs);
 
-//prepare an array that will contain course codes and for each course code a list of lps [by path prefixed by '/']
+// Prepare an array that will contain course codes and for each course code a list of lps [by path prefixed by '/']
 $scorms = array();
 $course_code_swap = '';
 $scormdocuments_lps = array();
 while ($course_row = Database::fetch_array($res_crs)) {
 
     if ($loglevel > 0) { error_log("Now dealing with course ".$course_row['code']."...", 0); }
-    //check the validity of this new course
+    // Check the validity of this new course
     $my_course_code = $course_row['code'];
 
-    //reinit the scormdocuments list
+    // Reinit the scormdocuments list
     //$scormdocuments_lps = array();
     $db_name = $courses_id_full_table_prefix_list[$my_course_code];
     if (strlen($courses_id_list[$course_code]) > 40) {
@@ -651,33 +652,32 @@ while ($course_row = Database::fetch_array($res_crs)) {
     $res_scodoc = Database::query($sql_scodoc);
     while ($row_scodoc = Database::fetch_array($res_scodoc)) {
 
-        //check if there's more than one slash in total
+        // Check if there's more than one slash in total
         if (strpos($row_scodoc['path'], '/', 1) === false) {
             $tmp_path = $row_scodoc['path'];
             if ($loglevel > 1) { error_log("++Now opening $tmp_path", 0); }
 
-            //add a prefixing slash if there is none
+            // Add a prefixing slash if there is none
             if (substr($tmp_path, 0, 1) != '/') {
                 $tmp_path = '/'.$tmp_path;
             }
 
-            //if the path is just a slash, empty it
+            // If the path is just a slash, empty it
             if ($tmp_path == '/') {
                 $tmp_path = '';
             }
 
-            //there is only one 'slash' sign at the beginning,
-            //or none at all, so we assume
-            //it is a main directory that should be taken as path
+            // There is only one 'slash' sign at the beginning, or none at all, so we assume
+            // it is a main directory that should be taken as path.
             $courses_dir = $sys_course_path.''.$courses_dir_list[$my_course_code].'/scorm'.$tmp_path;
             if (!is_dir($courses_dir)) {
                 //echo "Scormdocument path $my_content_id: $tmp_path doesn't exist in ".$sys_course_path.$courses_dir_list[$my_course_code]."/scorm, skipping<br />\n";
                 continue;
-                //avoid if contentTitle is not the name of an existing directory
+                // Avoid if contentTitle is not the name of an existing directory
             } elseif (!is_file($courses_dir."/imsmanifest.xml")) {
-                //if the imsmanifest file was not found there
+                // If the imsmanifest file was not found there
                 if ($loglevel > 2) { error_log("  !!imsmanifest.xml  not found at scormdocument's $courses_dir/imsmanifest.xml, skipping", 0); }
-                //try subdirectories on one level depth
+                // Try subdirectories on one level depth
                 if ($loglevel > 2) { error_log("  Trying subdirectories...", 0); }
                 $dh = opendir($courses_dir);
                 while ($entry = readdir($dh)) {
@@ -701,7 +701,7 @@ while ($course_row = Database::fetch_array($res_crs)) {
     }
 
 
-    //Because certain people with no admin skills had fun adding direct links to SCORM
+    // Because certain people with no admin skills had fun adding direct links to SCORM
     // from the courses introductions, we have to check for SCORM packages from there too...
     $tbl_intro = $db_name.TABLE_TOOL_INTRO;
     $sql_i = "SELECT * FROM $tbl_intro WHERE id='course_homepage'";
@@ -715,7 +715,7 @@ while ($course_row = Database::fetch_array($res_crs)) {
         $pattern = '@scorm/showinframes\.php([^\s"\']*)file=([^\s"\'&]*)@';
         if (preg_match_all($pattern, $intro, $matches, PREG_SET_ORDER)) {
             if (count($matches) < 1) {
-                //skip
+                // Skip
             } else {
                 //echo "Found matches in $tbl_intro<br />";
                 foreach ($matches as $match) {
@@ -725,18 +725,18 @@ while ($course_row = Database::fetch_array($res_crs)) {
                     if (!empty($mymatch) && (strtolower(substr($mymatch, -15)) == 'imsmanifest.xml') && is_file(realpath(urldecode($mymatch)))) {
 
                         //echo $mymatch." seems ok<br />";
-                        //found a new scorm course in the old directory
+                        // Found a new scorm course in the old directory
                         $courses_dir = $upd_course_path.''.$courses_dir_list[$my_course_code].'/scorm';
-                        //check if the file is in the current course path, otherwise just forget about it
-                        //as it would be too difficult to migrate
+                        // Check if the file is in the current course path, otherwise just forget about it
+                        // as it would be too difficult to migrate
                         //echo "Comparing $mymatch with $courses_dir<br />";
                         if (strpos($mymatch, $courses_dir) !== false) {
-                            //remove the course dir up to /scorm from this path
+                            // Remove the course dir up to /scorm from this path
                             $entry = substr($mymatch, strlen($courses_dir));
-                            //remove the /imsmanifest.xml from the end of the path
+                            // Remove the /imsmanifest.xml from the end of the path
                             $entry = substr($entry, 0, -16);
-                            //if $entry was /var/www/dokeos/courses/ABC/scorm/tralala/imsmanifest.xml,
-                            //$entry is now /tralala
+                            // If $entry was /var/www/dokeos/courses/ABC/scorm/tralala/imsmanifest.xml,
+                            // $entry is now /tralala
                             //echo "Checking if manifest exists in ".$courses_dir.$entry."/imsmanifest.xml<br />";
                             if (is_file($courses_dir.$entry."/imsmanifest.xml")) {
                                 //echo "found $courses_dir/$entry/imsmanifest.xml!<br />";
@@ -756,7 +756,7 @@ while ($course_row = Database::fetch_array($res_crs)) {
         }
     }
 
-    //prepare the new course's space in the scorms array
+    // Prepare the new course's space in the scorms array
     $scorms[$my_course_code] = array();
 
     $sql_paths = "SELECT * FROM $scorm_main WHERE dokeosCourse = '".$my_course_code."'";
@@ -764,7 +764,7 @@ while ($course_row = Database::fetch_array($res_crs)) {
     $res_paths = Database::query($sql_paths);
     $num = Database::num_rows($res_paths);
     while ($scorm_row = Database::fetch_array($res_paths)) {
-        //check if this is a new course
+        // Check if this is a new course
         $my_content_id = $scorm_row['contentId'];
         $my_path = $scorm_row['contentTitle'];
         if (substr($my_path, 0, 1) != '/') {
@@ -777,7 +777,7 @@ while ($course_row = Database::fetch_array($res_crs)) {
         if (!is_dir($courses_dir = $sys_course_path.''.$courses_dir_list[$my_course_code].'/scorm'.$my_path)) {
             if ($loglevel > 1) { error_log("Path $my_content_id: $my_path doesn't exist in ".$sys_course_path.$courses_dir_list[$my_course_code]."/scorm, skipping", 0); }
             continue;
-            //avoid if contentTitle is not the name of an existing directory
+            // Avoid if contentTitle is not the name of an existing directory
         } elseif (!is_file($sys_course_path.$courses_dir_list[$my_course_code].'/scorm'.$my_path."/imsmanifest.xml")) {
             if ($loglevel > 1) { error_log("!!imsmanifest.xml not found at ".$sys_course_path.$courses_dir_list[$my_course_code].'/scorm'.$my_path."/imsmanifest.xml, skipping", 0); }
             continue;
@@ -786,11 +786,11 @@ while ($course_row = Database::fetch_array($res_crs)) {
             $scorms[$my_course_code][$my_path] = $my_content_id;
         }
     }
-    //check if all the lps from scormdocuments_lps are already in the course array,
-    //otherwise add them (and set ID of 0 so no tracking will be available)
+    // Check if all the lps from scormdocuments_lps are already in the course array,
+    // otherwise add them (and set ID of 0 so no tracking will be available)
     foreach ($scormdocuments_lps as $path) {
         if (!in_array($path,array_keys($scorms[$my_course_code]))) {
-            //add it (-1 means no ID)
+            // Add it (-1 means no ID)
             if ($loglevel > 1) { error_log("** Scormdocument path $path wasn't recorded yet. Added.", 0); }
             $scorms[$my_course_code][$path] = -1;
         }
@@ -820,16 +820,16 @@ foreach ($scorms as $my_course_code => $paths_list) {
     if ($loglevel > 1) { error_log("Migrating lp $my_path from course $my_course_code...", 0); }
     $i_count ++;
     //error_log('New LP - Migration script - Content '.$i_count.' on '.$num.' (course '.$scorm['dokeosCourse'].')',0);
-    //check if there is no embedded learnpaths into other learnpaths (one root-level and another embedded)
+    // Check whether there is no embedded learnpaths into other learnpaths (one root-level and another embedded)
     $embedded = false;
     foreach ($course_lp_done as $tmp_lp) {
         if (empty($tmp_lp)) {
-            $tmp_lp = '/'; //allows finding the lp as a subitem, otherwise strstr returns false
+            $tmp_lp = '/'; // Allows finding the lp as a subitem, otherwise strstr returns false
         }
         if (strstr($my_path, $tmp_lp) === false) {
-            //let it be
+            // Let it be
         } else {
-            //this lp is embedded inside another lp who's imsmanifest exists, so prevent from parsing
+            // This lp is embedded inside another lp who's imsmanifest exists, so prevent from parsing
             if ($loglevel > 1) { error_log("LP $my_path is embedded into $tmp_lp, ignoring...", 0); }
             $embedded = true;
             continue;
@@ -846,7 +846,7 @@ foreach ($scorms as $my_course_code => $paths_list) {
 
     if ($loglevel > 1) { error_log("Try importing LP $my_path from imsmanifest first as it is more reliable", 0); }
 
-    //Setup the ims path (path to the imsmanifest.xml file)
+    // Setup the ims path (path to the imsmanifest.xml file)
     //echo "Looking for course with code ".$lp_course_code[$my_content_id]." (using $my_content_id)<br />\n";
     //$courses_dir = $sys_course_path.$courses_dir_list[$my_course_code];
     $courses_dir = $upd_course_path.$courses_dir_list[$my_course_code];
@@ -857,19 +857,19 @@ foreach ($scorms as $my_course_code => $paths_list) {
     if (is_file($ims)){
         //echo "Path $ims exists, importing...(line ".__LINE__.")<br />";
         $oScorm = new scorm();
-        //check if imsmanifest.xml exists at this location. If not, ignore the imsmanifest.
-        //That should have been done before already, now.
+        // Check whether imsmanifest.xml exists at this location. If not, ignore the imsmanifest.
+        // That should have been done before already, now.
         if ($loglevel > 1) { error_log("Found imsmanifest ($ims), importing...", 0); }
         if (!empty($sco_middle_path)) { $oScorm->subdir = $sco_middle_path; } //this sets the subdir for the scorm package inside the scorm dir
-        //parse manifest file
+        // Parse manifest file
         $manifest = $oScorm->parse_manifest($ims);
-        //the title is already escaped in the method
+        // The title is already escaped in the method
         $oScorm->import_manifest($my_course_code);
-        //TODO add code to update the path in that new lp created, as it probably uses / where
-        //$sco_path_temp should be used...
-        $lp_ids[$my_content_id] = $oScorm->lp_id; //contains the old LP ID => the new LP ID
+        //TODO: Add code to update the path in that new lp created, as it probably uses / where
+        // $sco_path_temp should be used...
+        $lp_ids[$my_content_id] = $oScorm->lp_id; // Contains the old LP ID => the new LP ID
         if ($loglevel > 1) { error_log(" @@@ Created scorm lp ".$oScorm->lp_id." from imsmanifest [".$ims."] in course $my_course_code", 0); }
-        $lp_course[$my_content_id] = $courses_id_list[$my_course_code]; //contains the old learnpath ID => the course DB name
+        $lp_course[$my_content_id] = $courses_id_list[$my_course_code]; // Contains the old learnpath ID => the course DB name
         $lp_course_code[$my_content_id] = $my_course_code;
         $max_dsp_lp++;
 
@@ -902,12 +902,12 @@ foreach ($scorms as $my_course_code => $paths_list) {
              * Check if a view is needed
              */
             if ($my_score != '' and $my_status != 'not attempted') {
-                //it is worth creating an lp_view and an lp_item_view - otherwise not
+                // It is worth creating an lp_view and an lp_item_view - otherwise not
                 $sel_sqlb = "SELECT * FROM $my_new_lp_view " .
                         "WHERE lp_id = ".$lp_ids[$my_content_id]." AND user_id = $my_student";
                 $sel_resb = Database::query($sel_sqlb);
                 if (Database::num_rows($sel_resb) > 0) {
-                    //dont insert
+                    // Don't insert
                     $rowb = Database::fetch_array($sel_resb);
                     $view_insert_id = $rowb['id'];
                 } else {
@@ -982,29 +982,29 @@ foreach ($scorms as $my_course_code => $paths_list) {
         if (empty($in_id) or $in_id == false) die('Could not insert scorm lp: '.$sql_ins);
         //echo "&nbsp;&nbsp;Inserted item $in_id<br />\n";
         $lp_ids[$my_content_id] = $in_id; //contains the old LP ID => the new LP ID
-        $lp_course[$my_content_id] = $courses_id_list[$my_course_code]; //contains the old learnpath ID => the course DB name
+        $lp_course[$my_content_id] = $courses_id_list[$my_course_code]; // Contains the old learnpath ID => the course DB name
         $lp_course_code[$my_content_id] = $my_course_code;
         $max_dsp_lp++;
 
-        //Setup the ims path (path to the imsmanifest.xml file)
+        // Setup the ims path (path to the imsmanifest.xml file)
         //echo "Looking for course with code ".$lp_course_code[$my_content_id]." (using $my_content_id)<br />\n";
         $courses_dir = $sys_course_path.$courses_dir_list[$lp_course_code[$my_content_id]];
         //$scorm_lp_paths[$my_content_id]['path'] = str_replace(' ', '\\ ', $scorm_lp_paths[$my_content_id]['path']);
         $sco_path_temp = ($scorm_lp_paths[$my_content_id]['path'] == '/') ? '' : $scorm_lp_paths[$my_content_id]['path'];
         $scorm_lp_paths[$my_content_id]['ims'] = $courses_dir.'/scorm'.$sco_path_temp.'/imsmanifest.xml';
 
-        //generate an imsmanifest object to get more info about the learnpath from the file
+        // Generate an imsmanifest object to get more info about the learnpath from the file
         $oScorm = new scorm();
-        //check if imsmanifest.xml exists at this location. If not, ignore the imsmanifest.
-        //That should have been done before already, now.
+        // Check whether imsmanifest.xml exists at this location. If not, ignore the imsmanifest.
+        // That should have been done before already, now.
         if (!is_file($scorm_lp_paths[$my_content_id]['ims'])) {
             if ($loglevel > 1) { error_log("!!! imsmanifest file not found at ".$scorm_lp_paths[$my_content_id]['ims'].' for old lp '.$my_content_id.' and new '.$lp_ids[$my_content_id], 0); }
             $manifest = false;
         } else {
             //echo "Parsing ".$scorm_lp_paths[$my_content_id]['ims']."<br />\n";
-            //parse manifest file
+            // Parse manifest file
             $manifest = $oScorm->parse_manifest($scorm_lp_paths[$my_content_id]['ims']);
-            //the title is already escaped in the method
+            // The title is already escaped in the method
             //$my_lp_title = api_convert_encoding($oScorm->get_title(),'ISO-8859-1',$oScorm->manifest_encoding);
             $my_lp_title = api_convert_encoding($oScorm->get_title(), 'ISO-8859-1', 'UTF-8');  // TODO: This "magic" conversion to be checked.
             if (!empty($my_lp_title)) {
@@ -1027,7 +1027,7 @@ foreach ($scorms as $my_course_code => $paths_list) {
         //echo "$sql_items<br />\n";
         $res_items = Database::query($sql_items);
         while ($scormItem = Database::fetch_array($res_items)) {
-            $my_sco_id      = $scormItem['scoId']; //the index for display??? (check that)
+            $my_sco_id      = $scormItem['scoId']; // The index for display??? (check that)
             $my_identifier  = $scormItem['scoIdentifier']; //the scorm item path/name
             $my_title       = Database::escape_string($scormItem['scoTitle']);
             $my_status      = $scormItem['status'];
@@ -1053,7 +1053,7 @@ foreach ($scorms as $my_course_code => $paths_list) {
             //echo $sel_sql."<br />\n";
             $sel_res = Database::query($sel_sql);
             if (Database::num_rows($sel_res) > 0) {
-                //this item already exists, reuse
+                // This item already exists, reuse
                 $row = Database::fetch_array($sel_res);
                 $item_insert_id = $row['lp_id'];
             } else {
@@ -1080,12 +1080,12 @@ foreach ($scorms as $my_course_code => $paths_list) {
              * Check if a view is needed
              */
             if ($my_score != '' and $my_status != 'not attempted') {
-                //it is worth creating an lp_view and an lp_item_view - otherwise not
+                // It is worth creating an lp_view and an lp_item_view - otherwise not
                 $sel_sqlb = "SELECT * FROM $my_new_lp_view " .
                         "WHERE lp_id = ".$lp_ids[$my_content_id]." AND user_id = $my_student";
                 $sel_resb = Database::query($sel_sqlb);
                 if (Database::num_rows($sel_resb) > 0) {
-                    //dont insert
+                    // Don't insert
                     $rowb = Database::fetch_array($sel_resb);
                     $view_insert_id = $rowb['id'];
                 } else {
@@ -1113,7 +1113,7 @@ foreach ($scorms as $my_course_code => $paths_list) {
                 $ins_res = Database::query($ins_sql);
             }
         }
-        //UPDATE THE LP_VIEW progress
+        // UPDATE THE LP_VIEW progress
         if (!empty($view_insert_id)) {
             $sql = "SELECT count(distinct(lp_item_id)) FROM $my_new_lp_item_view WHERE lp_view_id = ".$view_insert_id." AND status IN ('passed','completed','succeeded','browsed','failed')";
             $myres = Database::query($sql);
@@ -1144,13 +1144,13 @@ foreach ($scorms as $my_course_code => $paths_list) {
         //  echo "Error selecting lp: $sel_sql - ".Database::error()."<br />\n";
         //}
         $lp_details = array();
-        //while($row = Database::fetch_array($res)) {
+        //while ($row = Database::fetch_array($res)) {
             $ordered_list = array();
             $mylist = array();
             foreach ($oScorm->organizations as $org) {
-                //There should be only one organization (generally)
-                //and if there are more, we are not supposed to have been
-                //able to manage them before the new tool, so ignore
+                // There should be only one organization (generally)
+                // and if there are more, we are not supposed to have been
+                // able to manage them before the new tool, so ignore
                 if (count($ordered_list) > 0) {
                     break;
                 }
@@ -1161,24 +1161,24 @@ foreach ($scorms as $my_course_code => $paths_list) {
             $level = 0;
             $parent_id = 0;
             foreach ($ordered_list as $index => $subarray) {
-                //$subarray is an array representing one item and that contains info like
-                //identifier, level, rel_order, prerequisites, title, masteryscore, etc.
+                // $subarray is an array representing one item and that contains info like
+                // identifier, level, rel_order, prerequisites, title, masteryscore, etc.
                 //echo "<pre>Lookin for ".$subarray['identifier']." ".print_r($lp_item_refs,true)."</pre>\n";
                 if (!empty($lp_item_refs[$in_id][$subarray['identifier']])) {
                     $new_id = $lp_item_refs[$in_id][$subarray['identifier']];
                     $next = 0;
                     $dsp = $subarray['rel_order'];
                     if ($subarray['level'] > $level) {
-                        //getting one level deeper, just consult
+                        // Getting one level deeper, just consult
                         $parent_id = $previous;
                         array_push($stock,$previous);
                         $level = $subarray['level'];
                     } elseif ($subarray['level'] == $level) {
-                        //we are on the same level, going to the next id
+                        // We are on the same level, going to the next id
                         //array_pop($stock);
                         //array_push($stock, $new_id);
                     } else {
-                        //getting back from one level deeper
+                        // Getting back from one level deeper
                         array_pop($stock);
                         $parent_id = array_pop($stock);
                         array_push($stock, $parent_id);
@@ -1190,17 +1190,17 @@ foreach ($scorms as $my_course_code => $paths_list) {
                     $path = $oScorm->get_res_path($subarray['identifierref']);
                     $update_path = '';
                     if (!empty($path)) {
-                        //if new path is not empty, update
+                        // If new path is not empty, update
                         $update_path = "path = '$path', ";
                     }
                     $type = $oScorm->get_res_type($subarray['identifierref']);
                     $update_type = '';
                     if (!empty($type)) {
-                        //if type is defined, update
+                        // If type is defined, update
                         $update_type = "item_type = '$type', ";
                     }
                     if (empty($path)) {
-                        //if path is empty, it is a dir anyway
+                        // If path is empty, it is a dir anyway
                         $update_type = "item_type = 'dir', ";
                     }
                     $prereq = $subarray['prerequisites'];
@@ -1209,7 +1209,7 @@ foreach ($scorms as $my_course_code => $paths_list) {
                         $update_prereq = "prerequisite = '$prereq', ";
                     }
 
-                    //we had previous data about this element, update
+                    // We had previous data about this element, update
                     $sql2 = "UPDATE $my_new_lp_item " .
                             "SET parent_item_id = $parent_id, " .
                             "previous_item_id = $previous, " .
@@ -1230,7 +1230,7 @@ foreach ($scorms as $my_course_code => $paths_list) {
              * See scorm_migrate_hometools.php
              */
         //}
-    //end of case where $my_content_id != -1
+    // end of case where $my_content_id != -1
 
     }
 
@@ -1251,7 +1251,7 @@ foreach ($scorms as $my_course_code => $paths_list) {
         if (preg_match_all($pattern, $intro, $out, PREG_SET_ORDER)) {
             foreach ($out as $results) {
                 //echo "---> replace ".'/'.$results[0].'/ by newscorm/lp_controller.php'.$results[1].'action=view&lp_id='.$lp_ids[$my_content_id];
-                //$intro = preg_replace('/scorm\/scormdocument\.php([^\s"\']*)openDir='.$enc_path.'([\\"\'\s&])/','newscorm/lp_controller.php'.$results[1].'action=view&lp_id='.$lp_ids[$my_content_id], $intro);
+                //$intro = preg_replace('/scorm\/scormdocument\.php([^\s"\']*)openDir='.$enc_path.'([\\"\'\s&])/', 'newscorm/lp_controller.php'.$results[1].'action=view&lp_id='.$lp_ids[$my_content_id], $intro);
                 $intro = preg_replace('@claroline/scorm/scormdocument\.php([^\s"\']*)openDir='.$enc_path.'([^\s"\']*)@','main/newscorm/lp_controller.php'.$results[1].'action=view&lp_id='.$lp_ids[$my_content_id], $intro);
             }
         } else {
@@ -1261,7 +1261,7 @@ foreach ($scorms as $my_course_code => $paths_list) {
         if (preg_match_all($pattern, $intro, $out, PREG_SET_ORDER)) {
             foreach ($out as $results) {
                 //echo "---> replace ".'/'.$results[0].'/ by newscorm/lp_controller.php'.$results[1].'action=view&lp_id='.$lp_ids[$my_content_id];
-                //$intro = preg_replace('/scorm\/showinframes\.php([^\s"\']*)file=([^\s"\']*)'.$enc_path.'/','newscorm/lp_controller.php'.$results[1].'action=view&lp_id='.$lp_ids[$my_content_id], $intro);
+                //$intro = preg_replace('/scorm\/showinframes\.php([^\s"\']*)file=([^\s"\']*)'.$enc_path.'/', 'newscorm/lp_controller.php'.$results[1].'action=view&lp_id='.$lp_ids[$my_content_id], $intro);
                 $intro = preg_replace('@claroline/scorm/showinframes\.php([^\s"\']*)file=([^\s"\'&]*)'.$enc_path.'([^\s"\']*)@','main/newscorm/lp_controller.php'.$results[1].'action=view&lp_id='.$lp_ids[$my_content_id], $intro);
             }
         } else {

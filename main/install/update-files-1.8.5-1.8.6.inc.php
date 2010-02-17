@@ -1,7 +1,9 @@
 <?php
-/* See license terms in /license.txt */
+/* For licensing terms, see /license.txt */
 /**
 ==============================================================================
+* Chamilo LMS
+*
 * Updates the Dokeos files from version 1.8.5 to version 1.8.6
 * This script operates only in the case of an update, and only to change the
 * active version number (and other things that might need a change) in the
@@ -22,7 +24,7 @@ require_once '../inc/lib/database.lib.php';
 
 if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
 
-	// Edit the Dokeos config file
+	// Edit the configuration file
 	$file = file('../inc/conf/configuration.php');
 	$fh = fopen('../inc/conf/configuration.php', 'w');
 	$found_version = false;
@@ -38,7 +40,7 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
 		} elseif (stristr($line,'$userPasswordCrypted')) {
 			$line = '$userPasswordCrypted 									= \''.($userPasswordCrypted).'\';'."\r\n";
 		} elseif (stristr($line, '?>')) {
-			//ignore the line
+			// Ignore the line
 			$ignore = true;
 		}
 		if (!$ignore) {
@@ -57,17 +59,19 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
 	$sys_course_path = $pathForm.'courses/';
 
 	//$tbl_course = Database :: get_main_table(TABLE_MAIN_COURSE);
-	//linking
-	$res = @Database::connect(array('server' => $dbHostForm, 'username' => $dbUsernameForm, 'password' => $dbPassForm));
-	Database::select_db($dbNameForm, $link);
+
+	//// Linking (The following line is disabled, connection has been already done)
+	//$res = @Database::connect(array('server' => $dbHostForm, 'username' => $dbUsernameForm, 'password' => $dbPassForm));
+
+	//Database::select_db($dbNameForm, $link);
+	Database::select_db($dbNameForm);
+
 	$db_name = $dbNameForm;
 	$sql = "SELECT * FROM $db_name.course";
 	error_log('Getting courses for files updates: '.$sql, 0);
 	$result = Database::query($sql);
 
 	$perm = api_get_permissions_for_new_directories();
-
-	//$old_umask = umask(0); // This function is not thread-safe.
 
 	while ($courses_directories = Database::fetch_array($result)) {
 
@@ -80,41 +84,41 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
 			error_log('Directory '.$origCRS.' does not exist. Skipping.', 0);
 			continue;
 		}
-		//move everything to the new hierarchy (from old path to new path)
+		// Move everything to the new hierarchy (from old path to new path)
 		error_log('Renaming '.$origCRS.' to '.$sys_course_path.$courses_directories['directory'], 0);
 		rename($origCRS,$sys_course_path.$courses_directories['directory']);
 		error_log('Creating dirs in '.$currentCourseRepositorySys, 0);
 
-		//DOCUMENT FOLDER
+		// DOCUMENT FOLDER
 
-        //document > shared_folder
+        // document > shared_folder
         if (!is_dir($currentCourseRepositorySys."document/shared_folder")) {
             mkdir($currentCourseRepositorySys."document/shared_folder", $perm);
         }
 
-		//UPLOAD FOLDER
+		// UPLOAD FOLDER
 
-		//upload > forum > images
+		// upload > forum > images
 		if (!is_dir($currentCourseRepositorySys."upload/forum/images")) {
 			mkdir($currentCourseRepositorySys."upload/forum/images", $perm);
 		}
 
-		//upload > learning_path
+		// upload > learning_path
 		if (!is_dir($currentCourseRepositorySys."upload/learning_path")) {
 			mkdir($currentCourseRepositorySys."upload/learning_path", $perm);
 		}
 
-		//upload > learning_path > images
+		// upload > learning_path > images
 		if (!is_dir($currentCourseRepositorySys."upload/learning_path/images")) {
 			mkdir($currentCourseRepositorySys."upload/learning_path/images", $perm);
 		}
 
-		//upload > calendar
+		// upload > calendar
 		if (!is_dir($currentCourseRepositorySys."upload/calendar")) {
 			mkdir($currentCourseRepositorySys."upload/calendar", $perm);
 		}
 
-		//upload > calendar > images
+		// upload > calendar > images
 		if (!is_dir($currentCourseRepositorySys."upload/calendar/images")) {
 			mkdir($currentCourseRepositorySys."upload/calendar/images", $perm);
 		}

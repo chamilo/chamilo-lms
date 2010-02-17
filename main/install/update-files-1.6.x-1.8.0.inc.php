@@ -1,31 +1,12 @@
-<?php //$Id: update-files-1.6.x-1.8.0.inc.php 17420 2008-12-22 11:50:15Z ivantcholakov $
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2004-2007 Dokeos S.A.
-	Copyright (c) 2003 Ghent University (UGent)
-	Copyright (c) 2001 Universite catholique de Louvain (UCL)
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact address: Dokeos, 44 rue des palais, B-1030 Brussels, Belgium
-	Mail: info@dokeos.com
-==============================================================================
-*/
+<?php
+/* For licensing terms, see /license.txt */
 /**
 ==============================================================================
+* Chamilo LMS
+*
 * Updates the Dokeos files from version 1.6.x to version 1.8.0
 * IMPORTANT: This script has to be included by install/index.php or
-* update_courses.php
+* update_courses.php (deprecated)
 *
 * SYSTEM_INSTALLATION is defined in the install/index.php (means that we are in
 * the regular upgrade process)
@@ -76,8 +57,6 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
 
 	$perm = api_get_permissions_for_new_directories();
 
-	//$old_umask = umask(0); // This function is not thread-safe.
-
 	while ($courses_directories = Database::fetch_array($result)) {
 
 		$currentCourseRepositorySys = $sys_course_path.$courses_directories["directory"]."/";
@@ -88,66 +67,66 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
 			error_log('Directory '.$origCRS.' does not exist. Skipping.', 0);
 			continue;
 		}
-		//move everything to the new hierarchy (from old path to new path)
+		// Move everything to the new hierarchy (from old path to new path)
 		error_log('Renaming '.$origCRS.' to '.$sys_course_path.$courses_directories["directory"], 0);
 		rename($origCRS,$sys_course_path.$courses_directories["directory"]);
 		error_log('Creating dirs in '.$currentCourseRepositorySys, 0);
 
-		//FOLDER DOCUMENT
+		// FOLDER DOCUMENT
 
-		//document > audio
+		// document > audio
 		if (!is_dir($currentCourseRepositorySys."document/audio")) {
 			mkdir($currentCourseRepositorySys."document/audio", $perm);
 			insert_db($db_name, "audio", get_lang('Audio'));
 		}
 
-		//document > flash
+		// document > flash
 		if (!is_dir($currentCourseRepositorySys."document/flash")) {
 			mkdir($currentCourseRepositorySys."document/flash", $perm);
 			insert_db($db_name,"flash",get_lang('Flash'));
 		}
 
-		//document > images
+		// document > images
 		if (!is_dir($currentCourseRepositorySys."document/images")) {
 			mkdir($currentCourseRepositorySys."document/images", $perm);
 			insert_db($db_name,"images",get_lang('Images'));
 		}
 
-		//document > video
+		// document > video
 		if (!is_dir($currentCourseRepositorySys."document/video")) {
 			mkdir($currentCourseRepositorySys."document/video", $perm);
 			insert_db($db_name,"video",get_lang('Video'));
 		}
 
-		//document > video > flv
+		// document > video > flv
 		if (!is_dir($currentCourseRepositorySys."document/video/flv")) {
 			mkdir($currentCourseRepositorySys."document/video/flv", $perm);
 			insert_db($db_name,"video",get_lang('Video')." (flv)");
 		}
 
-		//FOLDER UPLOAD
+		// FOLDER UPLOAD
 
-		//upload
+		// upload
 		if (!is_dir($currentCourseRepositorySys."upload")) {
 			mkdir($currentCourseRepositorySys."upload", $perm);
 		}
 
-		//upload > blog
+		// upload > blog
 		if (!is_dir($currentCourseRepositorySys."upload/blog")) {
 			mkdir($currentCourseRepositorySys."upload/blog", $perm);
 		}
 
-		//upload > forum
+		// upload > forum
 		if (!is_dir($currentCourseRepositorySys."upload/forum")) {
 			mkdir($currentCourseRepositorySys."upload/forum", $perm);
 		}
 
-		//upload > test
+		// upload > test
 		if (!is_dir($currentCourseRepositorySys."upload/test")) {
 			mkdir($currentCourseRepositorySys."upload/test", $perm);
 		}
 
-		//Updating index file in courses directories to change claroline/ into main/
+		// Updating index file in courses directories to change claroline/ into main/
 		$content = '<?php'."\n".
 				'$cidReq="'.$courses_directories['code'].'";'."\n" .
 				'$dbname="'.$courses_directories['db_name'].'";'."\n" .
@@ -163,8 +142,6 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
 			error_log('Could not open file '.$currentCourseRepositorySys.'index.php', 0);
 		}
 	}
-
-	//umask($old_umask); // This function is not thread-safe.
 
 	// Write the Dokeos config file
 	write_system_config_file('../inc/conf/configuration.php');

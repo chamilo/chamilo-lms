@@ -1,42 +1,24 @@
 <?php
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2004-2008 Dokeos SPRL
-	Copyright (c) 2003 Ghent University (UGent)
-	Copyright (c) 2001 Universite catholique de Louvain (UCL)
-	Copyright (c) various contributors
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
-	Mail: info@dokeos.com
-==============================================================================
-*/
+/* For licensing terms, see /license.txt */
 /**
 ==============================================================================
-* Update the Dokeos database from an older version
-* Notice : This script has to be included by index.php or update_courses.php
+* Chamilo LMS
+*
+* Update the Chamilo database from an older Dokeos version
+* Notice : This script has to be included by index.php
+* or update_courses.php (deprecated).
 *
 * @package chamilo.install
 * @todo
 * - conditional changing of tables. Currently we execute for example
-* ALTER TABLE `$dbNameForm`.`cours` instructions without checking wether this is necessary.
+* ALTER TABLE `$dbNameForm`.`cours`
+* instructions without checking wether this is necessary.
 * - reorganise code into functions
 * @todo use database library
 ==============================================================================
 */
 
-//remove memory and time limits as much as possible as this might be a long process...
+// Remove memory and time limits as much as possible as this might be a long process...
 if (function_exists('ini_set')) {
 	ini_set('memory_limit', -1);
 	ini_set('max_execution_time', 0);
@@ -50,16 +32,15 @@ if (function_exists('ini_set')) {
 ==============================================================================
 */
 
-//check if we come from index.php or update_courses.php - otherwise display error msg
+// Check if we come from index.php or update_courses.php - otherwise display error msg
 if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
-	//check if the current Dokeos install is elligible for update
+	// Check if the current Dokeos install is elligible for update
 	if (empty($updateFromConfigFile) || !file_exists($_POST['updatePath'].$updateFromConfigFile) || !in_array(get_config_param('clarolineVersion'), $update_from_version_6)) {
 
 		echo '<strong>'.get_lang('Error').' !</strong> Dokeos '.implode('|', $updateFromVersion).' '.get_lang('HasNotBeenFound').'.<br /><br />
 								'.get_lang('PleasGoBackToStep1').'.
 							    <p><button type="submit" class="back" name="step1" value="&lt; '.get_lang('Back').'">'.get_lang('Back').'</button></p>
 							    </td></tr></table></form></body></html>';
-
 		exit ();
 	}
 
@@ -91,7 +72,7 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
 		start by updating main, statistic, user databases
 	-----------------------------------------------------------
 	*/
-	//if this script has been included by index.php, not update_courses.php, so
+	// If this script has been included by index.php, not update_courses.php, so
 	// that we want to change the main databases as well...
 	$only_test = false;
 	$log = 0;
@@ -109,14 +90,14 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
 		include '../lang/english/create_course.inc.php';
 
 		if ($languageForm != 'english') {
-			//languageForm has been escaped in index.php
+			// languageForm has been escaped in index.php
 			include '../lang/'.$languageForm.'/create_course.inc.php';
 		}
 
 		//get the main queries list (m_q_list)
 		$m_q_list = get_sql_file_contents('migrate-db-1.6.x-1.8.0-pre.sql', 'main');
 		if (count($m_q_list) > 0) {
-			//now use the $m_q_list
+			// Now use the $m_q_list
 			/**
 			 * We connect to the right DB first to make sure we can use the queries
 			 * without a database name
@@ -140,10 +121,10 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
 			}
 		}
 
-		//get the stats queries list (s_q_list)
+		// Get the stats queries list (s_q_list)
 		$s_q_list = get_sql_file_contents('migrate-db-1.6.x-1.8.0-pre.sql', 'stats');
 		if (count($s_q_list) > 0) {
-			//now use the $s_q_list
+			// Now use the $s_q_list
 			/**
 			 * We connect to the right DB first to make sure we can use the queries
 			 * without a database name
@@ -154,7 +135,7 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
 				error_log('Database '.$dbStatsForm.' was not found, skipping', 0);
 			} else {
 				Database::select_db($dbStatsForm);
-				foreach($s_q_list as $query) {
+				foreach ($s_q_list as $query) {
 					if ($only_test) {
 						error_log("Database::query($dbStatsForm,$query)", 0);
 					} else {
@@ -167,10 +148,10 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
 			}
 		}
 
-		//get the user queries list (u_q_list)
+		// Get the user queries list (u_q_list)
 		$u_q_list = get_sql_file_contents('migrate-db-1.6.x-1.8.0-pre.sql', 'user');
 		if (count($u_q_list) > 0) {
-			//now use the $u_q_list
+			// Now use the $u_q_list
 			/**
 			 * We connect to the right DB first to make sure we can use the queries
 			 * without a database name
@@ -191,7 +172,7 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
 				}
 			}
 		}
-		//the SCORM database doesn't need a change in the pre-migrate part - ignore
+		// The SCORM database doesn't need a change in the pre-migrate part - ignore.
 	}
 
 	/*
@@ -212,11 +193,11 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
 		$prefix = $_configuration['table_prefix'];
 	}
 
-	//get the courses databases queries list (c_q_list)
+	// Get the courses databases queries list (c_q_list)
 	$c_q_list = get_sql_file_contents('migrate-db-1.6.x-1.8.0-pre.sql', 'course');
 	if (count($c_q_list) > 0) {
 
-		//get the courses list
+		// Get the courses list
 		if (strlen($dbNameForm) > 40) {
 			error_log('Database name '.$dbNameForm.' is too long, skipping', 0);
 		} elseif (!in_array($dbNameForm, $dblist)) {
@@ -228,23 +209,23 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
 			if (Database::num_rows($res) > 0) {
 				$i = 0;
                 $list = array();
-				//while( ($i < MAX_COURSE_TRANSFER) && ($row = Database::fetch_array($res)))
+				//while(($i < MAX_COURSE_TRANSFER) && ($row = Database::fetch_array($res)))
 				while ($row = Database::fetch_array($res)) {
 					$list[] = $row;
 					$i++;
 				}
 				foreach ($list as $row_course) {
-					//now use the $c_q_list
+					// Now use the $c_q_list
 					/**
 					 * We connect to the right DB first to make sure we can use the queries
 					 * without a database name
 					 */
-					if (!$singleDbForm) { //otherwise just use the main one
+					if (!$singleDbForm) { // otherwise just use the main one
 						Database::select_db($row_course['db_name']);
 					}
 
 					foreach ($c_q_list as $query) {
-						if ($singleDbForm) { //otherwise just use the main one
+						if ($singleDbForm) {
 							$query = preg_replace('/^(UPDATE|ALTER TABLE|CREATE TABLE|DROP TABLE|INSERT INTO|DELETE FROM)\s+(\w*)(.*)$/', "$1 $prefix{$row_course['db_name']}_$2$3", $query);
 						}
 
@@ -258,8 +239,8 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
 						}
 					}
 
-					//prepare reusable users list to avoid repetition of the SQL query, but only select
-					//users from the current course to avoid blowing the memory limit
+					// Prepare reusable users list to avoid repetition of the SQL query, but only select
+					// users from the current course to avoid blowing the memory limit
 					$users_list = array();
 					$sql_uc = "SELECT u.user_id as ui, u.firstname as fn, u.lastname as ln " .
 							" FROM $dbNameForm.user u, $dbNameForm.course_rel_user cu " .
@@ -270,13 +251,13 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
 						$users_list[$user_row['fn'].' '.$user_row['ln']] = $user_row['ui'];
 					}
 
-					//update course manually
-					//update group_category.forum_state ?
-					//update group_info.tutor_id (put it in group_tutor table?) ?
-					//update group_info.forum_state, forum_id ?
+					// Update course manually
+					// Update group_category.forum_state ?
+					// Update group_info.tutor_id (put it in group_tutor table?) ?
+					// Update group_info.forum_state, forum_id ?
 
-					//update forum tables (migrate from bb_ tables to forum_ tables)
-					//migrate categories
+					// Update forum tables (migrate from bb_ tables to forum_ tables)
+					// Migrate categories
 					$prefix_course = $prefix;
 					if ($singleDbForm) {
 						$prefix_course = $prefix.$row_course['db_name']."_";
@@ -294,7 +275,7 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
 						$lastcatid = Database::insert_id();
 						//error_log($sql,0);
 						$order ++;
-						//add item_property - forum categories were not put into item_properties before
+						// Add item_property - forum categories were not put into item_properties before
 						$sql = "INSERT INTO ".$prefix_course."item_property (tool,insert_user_id,ref,lastedit_type,lastedit_user_id,visibility) " .
 								"VALUES ('forum_category','1','$lastcatid','ForumCategoryAdded','1','1')";
 						$res = Database::query($sql);
@@ -321,7 +302,7 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
 						$lastforumid = Database::insert_id();
 						$order++;
 
-						//add item_property - forums were not put into item_properties before
+						// Add item_property - forums were not put into item_properties before
 						$sql = "INSERT INTO ".$prefix_course."item_property (tool,insert_user_id,ref,lastedit_type,lastedit_user_id,visibility) " .
 								"VALUES ('forum','1','$lastforumid','ForumAdded','1','1')";
 						$res = Database::query($sql);
@@ -332,7 +313,7 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
 					$res_orig = Database::query($sql_orig);
 					while ($row = Database::fetch_array($res_orig)) {
 						$name = $row['prenom'].' '.$row['nom'];
-						//check if user id is reusable
+						// Check whether user id is reusable
 						if ($row['topic_poster'] <= 1) {
 							if (isset($users_list[$name])) {
 								$poster_id = $users_list[$name];
@@ -340,7 +321,7 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
 								$poster_id = $row['topic_poster'];
 							}
 						}
-						//convert time from varchar to datetime
+						// Convert time from varchar to datetime
 						$time = $row['topic_time'];
 						$name = Database::escape_string($name);
 						$sql = "INSERT INTO ".$prefix_course."forum_thread " .
@@ -356,7 +337,7 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
 						$res = Database::query($sql);
 						$lastthreadid = Database::insert_id();
 
-						//add item_property - forum threads were not put into item_properties before
+						// Add item_property - forum threads were not put into item_properties before
 						$sql = "INSERT INTO ".$prefix_course."item_property (tool,insert_user_id,ref,lastedit_type,lastedit_user_id,visibility) " .
 								"VALUES ('forum_thread','1','$lastthreadid','ForumThreadAdded','1','1')";
 						$res = Database::query($sql);
@@ -367,7 +348,7 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
 					$res_orig = Database::query($sql_orig);
 					while ($row = Database::fetch_array($res_orig)) {
 						$name = $row['prenom'].' '.$row['nom'];
-						//check if user id is reusable
+						// Check whether user id is reusable
 						if ($row['poster_id'] <= 0 ) {
 							if (isset($users_list[$name])) {
 								$poster_id = $users_list[$name];
@@ -375,7 +356,7 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
 								$poster_id = $row['poster_id'];
 							}
 						}
-						//convert time from varchar to datetime
+						// Convert time from varchar to datetime
 						$time = $row['post_time'];
 						$name = Database::escape_string($name);
 						$sql = "INSERT INTO ".$prefix_course."forum_post " .
@@ -391,7 +372,7 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
 						$res = Database::query($sql);
 						$lastpostid = Database::insert_id();
 
-						//add item_property - forum threads were not put into item_properties before
+						// Add item_property - forum threads were not put into item_properties before
 						$sql = "INSERT INTO ".$prefix_course."item_property(tool,insert_user_id,ref,lastedit_type,lastedit_user_id,visibility) " .
 								"VALUES ('forum_post','1','$lastpostid','ForumPostAdded','1','1')";
 						$res = Database::query($sql);
@@ -413,8 +394,8 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
 		}
 	}
 
-	//load the old-scorm to new-scorm migration script
-	//TODO: deal with the fact that this should only act on MAX_COURSE_TRANSFER courses
+	// Load the old-scorm to new-scorm migration script
+	// TODO: Deal with the fact that this should only act on MAX_COURSE_TRANSFER courses
 	if (!$only_test){
 		include('update-db-scorm-1.6.x-1.8.0.inc.php');
 	}
@@ -424,11 +405,11 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
 			if (empty($dbScormForm)) $dbScormForm = $dbNameForm;
 			if (empty($dbUserForm)) $dbUserForm = $dbNameForm;
 		}
-		//deal with migrate-db-1.6.x-1.8.0-post.sql
-		//get the main queries list (m_q_list)
+		// Deal with migrate-db-1.6.x-1.8.0-post.sql
+		// Get the main queries list (m_q_list)
 		$m_q_list = get_sql_file_contents('migrate-db-1.6.x-1.8.0-post.sql', 'main');
 		if (count($m_q_list) > 0) {
-			//now use the $m_q_list
+			// Now use the $m_q_list
 			/**
 			 * We connect to the right DB first to make sure we can use the queries
 			 * without a database name
@@ -452,10 +433,10 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
 			}
 		}
 
-		//get the stats queries list (s_q_list)
+		// Get the stats queries list (s_q_list)
 		$s_q_list = get_sql_file_contents('migrate-db-1.6.x-1.8.0-post.sql', 'stats');
 		if (count($s_q_list) > 0) {
-			//now use the $s_q_list
+			// Now use the $s_q_list
 			/**
 			 * We connect to the right DB first to make sure we can use the queries
 			 * without a database name
@@ -479,7 +460,7 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
 			}
 		}
 
-		//get the user queries list (u_q_list)
+		// Get the user queries list (u_q_list)
 		$u_q_list = get_sql_file_contents('migrate-db-1.6.x-1.8.0-post.sql', 'user');
 		if (count($u_q_list) > 0) {
 			//now use the $u_q_list
@@ -505,13 +486,13 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
 				}
 			}
 		}
-		//the SCORM database should need a drop in the post-migrate part. However, we will keep these tables a bit more, just in case...
+		// The SCORM database should need a drop in the post-migrate part. However, we will keep these tables a bit more, just in case...
 	}
 
-	//get the courses databases queries list (c_q_list)
+	// Get the courses databases queries list (c_q_list)
 	$c_q_list = get_sql_file_contents('migrate-db-1.6.x-1.8.0-post.sql', 'course');
 	if (count($c_q_list) > 0) {
-		//get the courses list
+		// Get the courses list
 		if (strlen($dbNameForm) > 40) {
 			error_log('Database name '.$dbNameForm.' is too long, skipping', 0);
 		} elseif (!in_array($dbNameForm, $dblist)) {
@@ -528,7 +509,7 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
 					$i++;
 				}
 				foreach ($list as $row) {
-					//now use the $c_q_list
+					// Now use the $c_q_list
 					/**
 					 * We connect to the right DB first to make sure we can use the queries
 					 * without a database name
@@ -558,7 +539,7 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
 		}
 	}
 
-	// upgrade user categories sort
+	// Upgrade user categories sort
 	$table_user_categories = $dbUserForm.'.user_course_category';
 
 	$sql = 'SELECT * FROM '.$table_user_categories.' ORDER BY user_id, title';

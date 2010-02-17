@@ -1,26 +1,30 @@
-<?php // $Id: update-db-1.8.5-1.8.6.inc.php 22197 2009-07-17 17:49:44Z ivantcholakov $
-/* See license terms in /license.txt */
+<?php
+/* For licensing terms, see /license.txt */
 /**
 ==============================================================================
-* Update the Dokeos database from an older version
-* Notice : This script has to be included by index.php or update_courses.php
+* Chamilo LMS
+*
+* Update the Chamilo database from an older Dokeos version
+* Notice : This script has to be included by index.php
+* or update_courses.php (deprecated).
 *
 * @package chamilo.install
 * @todo
 * - conditional changing of tables. Currently we execute for example
-* ALTER TABLE `$dbNameForm`.`cours` instructions without checking wether this is necessary.
+* ALTER TABLE `$dbNameForm`.`cours`
+* instructions without checking wether this is necessary.
 * - reorganise code into functions
 * @todo use database library
 ==============================================================================
 */
 
-//load helper functions
+// Load helper functions
 require_once '../inc/lib/image.lib.php';
 
 $old_file_version = '1.8.5';
 $new_file_version = '1.8.6';
 
-//remove memory and time limits as much as possible as this might be a long process...
+// Remove memory and time limits as much as possible as this might be a long process...
 if (function_exists('ini_set')) {
 	ini_set('memory_limit', -1);
 	ini_set('max_execution_time', 0);
@@ -34,7 +38,7 @@ if (function_exists('ini_set')) {
 ==============================================================================
 */
 
-//check if we come from index.php or update_courses.php - otherwise display error msg
+// Check if we come from index.php or update_courses.php - otherwise display error msg
 if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
 
 	//check if the current Dokeos install is elligible for update
@@ -76,7 +80,7 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
 		start by updating main, statistic, user databases
 	-----------------------------------------------------------
 	*/
-	//if this script has been included by index.php, not update_courses.php, so
+	// If this script has been included by index.php, not update_courses.php, so
 	// that we want to change the main databases as well...
 	$only_test = false;
 	$log = 0;
@@ -93,11 +97,11 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
 		include '../lang/english/create_course.inc.php';
 
 		if ($languageForm != 'english') {
-			//languageForm has been escaped in index.php
+			// languageForm has been escaped in index.php
 			include '../lang/'.$languageForm.'/create_course.inc.php';
 		}
 
-		//get the main queries list (m_q_list)
+		// Get the main queries list (m_q_list)
 		$m_q_list = get_sql_file_contents('migrate-db-'.$old_file_version.'-'.$new_file_version.'-pre.sql', 'main');
 		if (count($m_q_list) > 0) {
 			//now use the $m_q_list
@@ -165,7 +169,7 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
 
 					$type = $picture_infos[2];
 
-					// original picture
+					// Original picture
 					$big_temp = new image($image_repository);
 
 					    switch (!empty($type)) {
@@ -193,7 +197,7 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
 			$res = Database::query($sql);
 		}
 
-		//Since the parser of the migration DB  does not work for this kind of inserts (HTML) we move it here
+		// Since the parser of the migration DB  does not work for this kind of inserts (HTML) we move it here
 
 		$sql = 'INSERT INTO '.$dbNameForm.'.system_template (title, comment, image, content) VALUES
 		(\'TemplateTitleCourseTitle\', \'TemplateTitleCourseTitleDescription\', \'coursetitle.gif\', \'
@@ -1032,12 +1036,11 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
             }
         }
 
-
-		//get the stats queries list (s_q_list)
+		// Get the stats queries list (s_q_list)
 		$s_q_list = get_sql_file_contents('migrate-db-'.$old_file_version.'-'.$new_file_version.'-pre.sql', 'stats');
 
 		if (count($s_q_list) > 0) {
-			//now use the $s_q_list
+			// Now use the $s_q_list
 			/**
 			 * We connect to the right DB first to make sure we can use the queries
 			 * without a database name
@@ -1060,10 +1063,10 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
 				}
 			}
 		}
-		//get the user queries list (u_q_list)
+		// Get the user queries list (u_q_list)
 		$u_q_list = get_sql_file_contents('migrate-db-'.$old_file_version.'-'.$new_file_version.'-pre.sql', 'user');
 		if (count($u_q_list) > 0) {
-			//now use the $u_q_list
+			// Now use the $u_q_list
 			/**
 			 * We connect to the right DB first to make sure we can use the queries
 			 * without a database name
@@ -1084,7 +1087,7 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
 				}
 			}
 		}
-		//the SCORM database doesn't need a change in the pre-migrate part - ignore
+		// The SCORM database doesn't need a change in the pre-migrate part - ignore
 	}
 
 
@@ -1106,11 +1109,11 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
 		$prefix = get_config_param ('table_prefix');
 	}
 
-	//get the courses databases queries list (c_q_list)
+	// Get the courses databases queries list (c_q_list)
 	$c_q_list = get_sql_file_contents('migrate-db-'.$old_file_version.'-'.$new_file_version.'-pre.sql', 'course');
 
 	if (count($c_q_list) > 0) {
-		//get the courses list
+		// Get the courses list
 		if (strlen($dbNameForm) > 40) {
 			error_log('Database name '.$dbNameForm.' is too long, skipping', 0);
 		} elseif (!in_array($dbNameForm, $dblist)) {
@@ -1124,13 +1127,13 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
 			if (Database::num_rows($res) > 0) {
 				$i = 0;
                 $list = array();
-				//while( ($i < MAX_COURSE_TRANSFER) && ($row = Database::fetch_array($res)))
+				//while(($i < MAX_COURSE_TRANSFER) && ($row = Database::fetch_array($res)))
 				while ($row = Database::fetch_array($res)) {
 					$list[] = $row;
 					$i++;
 				}
 				foreach ($list as $row_course) {
-					//now use the $c_q_list
+					// Now use the $c_q_list
 					/**
 					 * We connect to the right DB first to make sure we can use the queries
 					 * without a database name
@@ -1161,7 +1164,7 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
                         $t_d = "$prefix{$row_course['db_name']}_document";
                         $t_ip = "$prefix{$row_course['db_name']}_item_property";
                     }
-                    // shared documents folder
+                    // Shared documents folder
                     $query = "INSERT INTO $t_d (path,title,filetype,size) VALUES ('/shared_folder','".get_lang('SharedDocumentsDirectory')."','folder','0')";
                     $myres = Database::query($query);
                     if ($myres !== false) {

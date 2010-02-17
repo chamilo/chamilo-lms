@@ -8,9 +8,8 @@
 *
 *	It load:
 *	- require_once
-*	- constructs
 *   - creation course
-*	- session
+*	- sessions
 *	- api_allow_edit
 *	- api_session
 *
@@ -25,6 +24,7 @@
  * 		 if these are really configuration then we can make require_once in each tests.
  * @todo use this file to load the setup in each file test.
  * @todo check for duplication of require with test_suite.php
+ * @author aportugal
  */
 /*
 ==============================================================================
@@ -95,9 +95,9 @@ ob_end_clean();
 	Table definitions
 -----------------------------------------------------------
 */
-$table_course = Database::get_main_table(TABLE_MAIN_COURSE);
-$course_table = Database::get_main_table(TABLE_MAIN_COURSE);
-$course_cat_table = Database::get_main_table(TABLE_MAIN_CATEGORY);
+$table_course 		= Database::get_main_table(TABLE_MAIN_COURSE);
+$course_table 		= Database::get_main_table(TABLE_MAIN_COURSE);
+$course_cat_table 	= Database::get_main_table(TABLE_MAIN_CATEGORY);
 
 /*
 ==============================================================================
@@ -193,5 +193,3 @@ $_SESSION['show'] = showall;
 -----------------------------------------------------------
 */  
 $_user['user_id'] = $_SESSION['_user']['user_id'];
-
-

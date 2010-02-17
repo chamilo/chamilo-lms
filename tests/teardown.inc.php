@@ -17,6 +17,7 @@
 *
 *	@todo rewrite code to separate display, logic, database code
 *	@package chamilo.main
+*	@author aportugal
 ==============================================================================
 */
 
@@ -28,18 +29,18 @@
  */
  
 /*
------------------------------------------------------------
-	Included libraries
------------------------------------------------------------
-*/
-require_once(api_get_path(LIBRARY_PATH).'course.lib.php');
-
-/*
 ==============================================================================
 		MAIN CODE
 ==============================================================================
 */
 $code = 'COURSETEST';
+
+/*
+-----------------------------------------------------------
+	Delete the course
+-----------------------------------------------------------
+*/
+
 $res = CourseManager::delete_course($code);
 $path = api_get_path(SYS_PATH).'archive';
 if ($handle = opendir($path)) {
@@ -52,24 +53,31 @@ if ($handle = opendir($path)) {
 	}
 	closedir($handle);
 }
-	
-	
-	
-	
-	
-		$dirname = api_get_path(SYS_LANG_PATH);
-		$perm_dir = substr(sprintf('%o', fileperms($dirname)), -4);
-		if ($perm_dir != '0777') {
-			$msg = "Error";
-			$this->assertTrue(is_string($msg));
-		} else {
-			$path = $dirname.'upload';
-			$filemode = '0777';
-			$res = api_chmod_R($path, $filemode);
-			unlink($path);
-			$this->assertTrue($res || IS_WINDOWS_OS); // We know, it does not work for Windows.
-		}
-	/*	
+
+/*
+-----------------------------------------------------------
+	Check api session destroy
+-----------------------------------------------------------
+*/
+
+if (!headers_sent()) {
+	$res=api_session_destroy();
+}
+
+/*
+$dirname = api_get_path(SYS_LANG_PATH);
+$perm_dir = substr(sprintf('%o', fileperms($dirname)), -4);
+if ($perm_dir != '0777') {
+	$msg = "Error";
+	$this->assertTrue(is_string($msg));
+} else {
+	$path = $dirname.'upload';
+	$filemode = '0777';
+	$res = api_chmod_R($path, $filemode);
+	unlink($path);
+	}
+
+		
 		function testApiIsAllowed(){
 	    global $_course, $_user;
 	  	$tool= 'full';
@@ -147,13 +155,7 @@ if ($handle = opendir($path)) {
 		ob_end_clean();
 	}
 	
-	function testApiSessionDestroy(){
-		 if (!headers_sent()) {
-			$res=api_session_destroy();
-		 }
-		$this->assertTrue(is_null($res));
-		//var_dump($res);
-	}
+	
 	
 		function testApiSessionStart(){
 		if (!headers_sent()) {

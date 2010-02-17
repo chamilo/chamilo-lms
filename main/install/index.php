@@ -53,13 +53,10 @@ if (!function_exists('version_compare') || version_compare( phpversion(), REQUIR
 
 session_start();
 
-// Including necessary core libraries.
-require '../inc/lib/main_api.lib.php';
-require api_get_path(LIBRARY_PATH).'database.lib.php';
-
-// Including specialized libraries for the installation procedure.
-require_once 'install_upgrade.lib.php'; //also defines constants
-require_once 'install_functions.inc.php';
+// Including necessary libraries.
+require_once '../inc/lib/main_api.lib.php';
+require_once api_get_path(LIBRARY_PATH).'database.lib.php';
+require_once 'install.lib.php';
 
 // The function api_get_setting() might be called within the installation scripts.
 // We need to provide some limited support for it through initialization of the

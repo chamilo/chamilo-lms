@@ -14,9 +14,6 @@
 ==============================================================================
 */
 
-//load helper functions
-require_once 'install_upgrade.lib.php';
-
 $old_file_version = '1.8.4';
 $new_file_version = '1.8.5';
 
@@ -45,8 +42,6 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
 		exit ();
 	}
 
-	//get_config_param() comes from install_functions.inc.php and
-	//actually gets the param from
 	$_configuration['db_glue'] = get_config_param('dbGlu');
 
 	if ($singleDbForm) {

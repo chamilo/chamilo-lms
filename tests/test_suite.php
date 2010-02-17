@@ -45,7 +45,6 @@ require_once $maindir.'admin/statistics/statistics.lib.php';
 require_once $maindir.'dropbox/dropbox_class.inc.php';
 require_once $maindir.'dropbox/dropbox_functions.inc.php';
 require_once $maindir.'survey/survey.lib.php';
-require_once $maindir.'install/install_upgrade.lib.php';
 require_once $maindir.'exercice/export/scorm/scorm_classes.php';
 require_once $maindir.'exercice/export/qti2/qti2_classes.php';
 require_once $maindir.'exercice/export/exercise_import.inc.php';
@@ -53,11 +52,15 @@ require_once $maindir.'exercice/exercise_result.class.php';
 require_once $libdir.'exercise_show_functions.lib.php';
 require_once $maindir.'exercice/answer.class.php';
 require_once $maindir.'exercice/exercise.class.php';
-//require_once $maindir.'exercice/exercise.lib.php';
 require_once $maindir.'exercice/fill_blanks.class.php';
 require_once $maindir.'exercice/freeanswer.class.php';
 require_once $maindir.'forum/forumfunction.inc.php';
 require_once $libdir.'fileManage.lib.php';
+
+/**Problem with this file to test objects*/
+//require_once $maindir.'exercice/exercise.lib.php';
+
+
 
 
 class TestsSuite extends TestSuite {
@@ -135,8 +138,7 @@ class TestsSuite extends TestSuite {
     function TestsSuite() {
     	$this->setUp();
     	$this->TestSuite('All tests suite');
-		/*$this->addTestFile(dirname(__FILE__).'/main/install/install_upgrade.lib.test.php');
-		$this->addTestFile(dirname(__FILE__).'/main/inc/lib/database.lib.test.php');
+/*		$this->addTestFile(dirname(__FILE__).'/main/inc/lib/database.lib.test.php');
 		$this->addTestFile(dirname(__FILE__).'/main/inc/lib/add_course.lib.inc.test.php');
 		$this->addTestFile(dirname(__FILE__).'/main/inc/lib/course.lib.test.php');
 		$this->addTestFile(dirname(__FILE__).'/main/inc/banner.lib.test.php');
@@ -209,22 +211,32 @@ class TestsSuite extends TestSuite {
         $this->addTestFile(dirname(__FILE__).'/main/inc/lib/debug.lib.inc.test.php');//this file need be to the finish of the tests
        */ 
        
-        //This files has metadata, are deprecated, are not implemented and is not available for the test.
+        /**This file was removed, now the functions was moved to install.lib*/
+		//require_once $maindir.'install/install_upgrade.lib.php';
+		//$this->addTestFile(dirname(__FILE__).'/main/install/install_upgrade.lib.test.php');
+       
+        /**This files has metadata*/
         //$this->addTestFile(dirname(__FILE__).'/main/inc/lib/xht.lib.test.php');
 	    //$this->addTestFile(dirname(__FILE__).'/main/inc/lib/xmd.lib.test.php');
+	    
+	    /**This files are not used and is not finished implement*/
 	    //$this->addTestFile(dirname(__FILE__).'/main/exercice/export/qti/qti_classes.test.php');
 		//$this->addTestFile(dirname(__FILE__).'/main/exercice/export/qti2/qti2_export.test.php');
 		//$this->addTestFile(dirname(__FILE__).'/main/exercice/export/exercise_import.inc.test.php');
 		//$this->addTestFile(dirname(__FILE__).'/main/exercice/export/scorm/scorm_export.test.php');
 		
-		/**EJERCICIOS**/
+		
+		/**EXERCISES**/
 		//$this->addTestFile(dirname(__FILE__).'/main/exercice/answer.class.test.php');
 		//$this->addTestFile(dirname(__FILE__).'/main/exercice/exercise_result.class.test.php');
 		//$this->addTestFile(dirname(__FILE__).'/main/inc/lib/exercise_show_functions.lib.test.php');
 		//$this->addTestFile(dirname(__FILE__).'/main/exercice/exercise.class.test.php');
-		//$this->addTestFile(dirname(__FILE__).'/main/exercice/exercise.lib.test.php');falta
-	  	//$this->addTestFile(dirname(__FILE__).'/main/exercice/fill_blanks.class.test.php');falta
-	  	//$this->addTestFile(dirname(__FILE__).'/main/exercice/freeanswer.class.test.php');falta
+		
+		/**This files have problem with class and call objects*/
+		//$this->addTestFile(dirname(__FILE__).'/main/exercice/exercise.lib.test.php');
+	  	//$this->addTestFile(dirname(__FILE__).'/main/exercice/fill_blanks.class.test.php');
+	  	//$this->addTestFile(dirname(__FILE__).'/main/exercice/freeanswer.class.test.php');
+	  	
 	  	
 	  	/**FORUM*/
 	  	$this->addTestFile(dirname(__FILE__).'/main/forum/forumfunction.inc.test.php');

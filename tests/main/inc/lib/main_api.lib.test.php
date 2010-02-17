@@ -616,7 +616,7 @@ class TestMainApi extends UnitTestCase {
 			$filemode = '0777';
 			$res = api_chmod_R($path, $filemode);
 			unlink($path);
-			$this->assertTrue($res);
+			$this->assertTrue($res || IS_WINDOWS_OS); // We know, it does not work for Windows.
 		}
 	}
 

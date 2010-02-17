@@ -379,6 +379,10 @@ class GlossaryManager {
 			if (api_is_allowed_to_edit(null,true)) {
 				$array[5] = $data[5];
 			}
+			
+			// Date treatment for timezones
+			$array[3] = api_get_local_time($array[3], null, null, date_default_timezone_get());
+			$array[4] = api_get_local_time($array[4], null, null, date_default_timezone_get());
 
 			$return[] = $array;
 		}

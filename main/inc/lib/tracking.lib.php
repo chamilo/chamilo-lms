@@ -15,14 +15,23 @@ class Tracking {
 	/**
 	 * Calculates the time spent on the platform by a user
 	 * @param integer $user_id the user id
+	 * @param bool	  optionally show time spent last week
 	 * @return timestamp $nb_seconds
 	 */
-	public static function get_time_spent_on_the_platform($user_id) {
+	public static function get_time_spent_on_the_platform($user_id, $last_week = false) {
 
 		$tbl_track_login = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_LOGIN);
 
+		$cond_last_week = '';
+		if ($last_week) {			
+			$a_last_week = get_last_week();			
+			$fday_last_week = date('Y-m-d H:i:s',$a_last_week[0]);
+			$lday_last_week = date('Y-m-d H:i:s',$a_last_week[6]);
+			$cond_last_week = ' AND (login_date >= "'.$fday_last_week.'" AND login_date <= "'.$lday_last_week.'") ';	
+		}
+		
 		$sql = 'SELECT login_date, logout_date FROM ' . $tbl_track_login . '
-						WHERE login_user_id = ' . intval($user_id);
+						WHERE login_user_id = ' . intval($user_id).$cond_last_week;
 
 		$rs = Database::query($sql);
 

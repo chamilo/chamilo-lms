@@ -859,15 +859,9 @@ function delete_template($id)
  * 
  * @return array List of timezone identifiers
  * 
- * @author Guillaume Viguier <guillaume@viguierjust.com>
+ * @author Guillaume Viguier <guillaume.viguier@beeznest.com>
  * @since Chamilo 1.8.7
  */
 function select_timezone_value() {
-	$timezone_identifiers = DateTimeZone::listIdentifiers();
-	sort($timezone_identifiers);
-	$out = array();
-	foreach($timezone_identifiers as $tz) {
-		$out[$tz] = $tz;
-	}
-	return $out;
+	return api_get_timezones();
 }

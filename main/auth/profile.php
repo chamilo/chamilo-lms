@@ -430,6 +430,10 @@ foreach ($extra as $id => $field_details) {
           	});
 EOF;
 			break;
+		case USER_FIELD_TYPE_TIMEZONE:
+			$form->addElement('select', 'extra_'.$field_details[1], $field_details[3], api_get_timezones(), '');
+			if ($field_details[7] == 0)	$form->freeze('extra_'.$field_details[1]);
+			break;
 	}
 }
 

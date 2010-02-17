@@ -41,10 +41,7 @@
 ==============================================================================
 */
 
-require_once '../inc/lib/main_api.lib.php';
 require_once '../inc/lib/fileUpload.lib.php';
-require_once '../inc/lib/database.lib.php';
-require_once 'install_upgrade.lib.php';
 
 /*
 ==============================================================================

@@ -50,8 +50,7 @@ $(document).ready(function () {
 * This function handles all the forum and forumcategories actions. This is a wrapper for the
 * forum and forum categories. All this code code could go into the section where this function is
 * called but this make the code there cleaner.
-* @param
-* @return
+* @return void
 *
 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 * @version february 2006, dokeos 1.8
@@ -1524,12 +1523,10 @@ function get_post_information($post_id) {
 * @version february 2006, dokeos 1.8
 */
 function get_thread_information($thread_id) {
-	global $table_threads;
-	global $table_item_property;
-	
+	$table_item_property 	= Database :: get_course_table(TABLE_ITEM_PROPERTY);
+	$table_threads 			= Database :: get_course_table(TABLE_FORUM_THREAD);
 	$thread_id = intval($thread_id);
-
-	$sql	="SELECT * FROM ".$table_threads." threads, ".$table_item_property." item_properties
+	$sql="SELECT * FROM ".$table_threads." threads, ".$table_item_property." item_properties
 			WHERE item_properties.tool='".TOOL_FORUM_THREAD."'
 			AND item_properties.ref='".Database::escape_string($thread_id)."'
 			AND threads.thread_id='".Database::escape_string($thread_id)."'";
@@ -1650,10 +1647,9 @@ function get_thread_users_not_qualify($thread_id, $db_name = null) {
 * @deprecated this functionality is now moved to get_forums($forum_id)
 */
 function get_forum_information($forum_id) {
-	global $table_forums;
-	global $table_item_property;
+	$table_forums 			= Database :: get_course_table(TABLE_FORUM);
+	$table_item_property 	= Database :: get_course_table(TABLE_ITEM_PROPERTY);
 	$forum_id = intval($forum_id);
-
 	$sql="SELECT * FROM ".$table_forums." forums, ".$table_item_property." item_properties
 			WHERE item_properties.tool='".TOOL_FORUM."'
 			AND item_properties.ref='".Database::escape_string($forum_id)."'
@@ -1861,7 +1857,7 @@ function store_thread($values) {
 *					2. replythread: Replying to a thread ($action = replythread) => I-frame with the complete thread (if enabled)
 *					3. replymessage: Replying to a message ($action =replymessage) => I-frame with the complete thread (if enabled) (I first thought to put and I-frame with the message only)
 * 					4. quote: Quoting a message ($action= quotemessage) => I-frame with the complete thread (if enabled). The message will be in the reply. (I first thought not to put an I-frame here)
-*
+* @return void HMTL
 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 * @version february 2006, dokeos 1.8
 */
@@ -2205,18 +2201,21 @@ function current_qualify_of_thread($thread_id,$session_id) {
 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 * @version february 2006, dokeos 1.8
 */
-function store_reply($values) {
+function store_reply($values) {	
 	
-	global $table_threads;
-	global $table_posts;
-	global $forum_table_attachment;
 	global $_user;
 	global $_course;
 	global $current_forum;
 	global $origin;
+	
+	$table_threads 			= Database :: get_course_table(TABLE_FORUM_THREAD);
+	$forum_table_attachment = Database :: get_course_table(TABLE_FORUM_ATTACHMENT);
+	$table_posts 			= Database :: get_course_table(TABLE_FORUM_POST);
+	
 	$gradebook=Security::remove_XSS($_GET['gradebook']);
 
 	$post_date=date('Y-m-d H:i:s');
+	
 	if ($current_forum['approval_direct_post']=='1' AND !api_is_allowed_to_edit(null,true)) {
 		$visible=0; // the post is not approved yet.
 	} else {
@@ -2450,16 +2449,18 @@ function show_edit_post_form($current_post, $current_thread, $current_forum, $fo
 /**
 * This function stores the edit of a post in the forum_post table.
 *
-* @param
-* @return
+* @param array
+* @return void HTML
 *
 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 * @version february 2006, dokeos 1.8
 */
 function store_edit_post($values) {
-	global $table_threads;
-	global $table_posts;
 	global $origin;
+
+	$table_threads 	= Database :: get_course_table(TABLE_FORUM_THREAD);
+	$table_posts 	= Database :: get_course_table(TABLE_FORUM_POST);
+	
 	
 	$gradebook=Security::remove_XSS($_GET['gradebook']);
 	// first we check if the change affects the thread and if so we commit the changes (sticky and post_title=thread_title are relevant)

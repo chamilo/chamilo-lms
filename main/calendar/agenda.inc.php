@@ -443,8 +443,8 @@ function display_monthcalendar($month, $year)
 						foreach ($agenda_item as $key=>$value) {
 							$month_start_date = (int)substr($value['start_date'],5,2);
 							if ($month == $month_start_date) {
-								$start_time= date("H:i",strtotime($value['start_date']));
-								$end_time= date("H:i",strtotime($value['end_date']));
+								$start_time = api_get_local_time($value['start_date'], "H:i", null, date_default_timezone_get());
+								$end_time = api_get_local_time($value['end_date'], "H:i", null, date_default_timezone_get());
 
 								if ($value['end_date']=='0000-00-00 00:00:00'){
 									$dayheader .= '<br />'.get_lang("Work").'<br />';
@@ -2139,14 +2139,14 @@ function display_agenda_items()
          --------------------------------------------------*/
     	echo "<tr class='row_odd'>";
     	echo "\t\t<td>".get_lang("StartTimeWindow").": ";
-    	echo api_ucfirst(format_locale_date($dateFormatLong,strtotime($myrow["start_date"])))."&nbsp;&nbsp;&nbsp;";
-    	echo api_ucfirst(strftime($timeNoSecFormat,strtotime($myrow["start_date"])))."";
+    	echo api_ucfirst(api_get_local_time($myrow['start_date'], $dateFormatLong, null, date_default_timezone_get()))."&nbsp;&nbsp;&nbsp;";
+    	echo api_ucfirst(api_get_local_time($myrow['start_date'], $timeNoSecFormat, null, date_default_timezone_get()))."";
     	echo "</td>\n";
     	echo "\t\t<td>";
     	if ($myrow["end_date"]<>"0000-00-00 00:00:00") {
     		echo get_lang("EndTimeWindow").": ";
-    		echo api_ucfirst(format_locale_date($dateFormatLong,strtotime($myrow["end_date"])))."&nbsp;&nbsp;&nbsp;";
-    		echo api_ucfirst(strftime($timeNoSecFormat,strtotime($myrow["end_date"])))."";
+    		echo api_ucfirst(api_get_local_time($myrow['end_date'], $dateFormatLong, null, date_default_timezone_get()))."&nbsp;&nbsp;&nbsp;";
+			echo api_ucfirst(api_get_local_time($myrow['end_date'], $timeNoSecFormat, null, date_default_timezone_get()))."";
     	}
     	echo "</td>\n";
 
@@ -2432,12 +2432,12 @@ function display_one_agenda_item($agenda_id)
 	  --------------------------------------------------*/
 	echo "\t<tr class='row_odd'>\n";
 	echo "\t\t<td>".get_lang("StartTime").": ";
-	echo api_ucfirst(format_locale_date($dateFormatLong,strtotime($myrow["start_date"])))."&nbsp;&nbsp;&nbsp;";
-	echo api_ucfirst(strftime($timeNoSecFormat,strtotime($myrow["start_date"])))."";
+	echo api_ucfirst(api_get_local_time($myrow['start_date'], $dateFormatLong, null, date_default_timezone_get()))."&nbsp;&nbsp;&nbsp;";
+    echo api_ucfirst(api_get_local_time($myrow['start_date'], $timeNoSecFormat, null, date_default_timezone_get()))."";
 	echo "</td>\n";
 	echo "\t\t<td>".get_lang("EndTime").": ";
-	echo api_ucfirst(format_locale_date($dateFormatLong,strtotime($myrow["end_date"])))."&nbsp;&nbsp;&nbsp;";
-	echo api_ucfirst(strftime($timeNoSecFormat,strtotime($myrow["end_date"])))."";
+	echo api_ucfirst(api_get_local_time($myrow['end_date'], $dateFormatLong, null, date_default_timezone_get()))."&nbsp;&nbsp;&nbsp;";
+    echo api_ucfirst(api_get_local_time($myrow['end_date'], $timeNoSecFormat, null, date_default_timezone_get()))."";
 	echo "</td>\n";
 
 	/*--------------------------------------------------
@@ -3118,7 +3118,7 @@ function get_agendaitems($month, $year)
 	while ($item = Database::fetch_array($result))
 	{
 		$agendaday = date('j',strtotime($item['start_date']));
-		$time= date('H:i',strtotime($item['start_date']));
+		$time = api_get_local_time($item['start_date'], 'H:i', null, date_default_timezone_get());
 		$URL = $root_url.'main/calendar/agenda.php?cidReq='.$mycourse['id']."&amp;day=$agendaday&amp;month=$month&amp;year=$year#$agendaday"; // RH  //Patrick Cool: to highlight the relevant agenda item
 		$items[$agendaday][$item['start_time']] .= '<i>'.$time.'</i> <a href="'.$URL.'" title="'.$mycourse['name'].'">'.$mycourse['official_code'].'</a> '.$item['title'].'<br />';
 	}
@@ -3603,7 +3603,7 @@ function get_week_agendaitems($courses_dbs, $month, $year, $week = '')
 		while ($item = Database::fetch_array($result))
 		{
 			$agendaday = date("j",strtotime($item['start_date']));
-			$time= date("H:i",strtotime($item['start_date']));
+			$time = api_get_local_time($item['start_date'], "H:i", null, date_default_timezone_get());
 
 			if ($setting_agenda_link == 'coursecode')
 			{

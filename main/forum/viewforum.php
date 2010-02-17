@@ -430,7 +430,7 @@ if(is_array($threads)) {
 
 			// if the last post is invisible and it is not the teacher who is looking then we have to find the last visible post of the thread
 			if (($row['visible']=='1' OR api_is_allowed_to_edit(false,true)) && $origin!='learnpath') {
-				$last_post=$row['thread_date']." ".get_lang('By').' '.display_user_link($row['last_poster_user_id'], $name);
+				$last_post=api_get_local_time($row['thread_date'], null, null, date_default_timezone_get())." ".get_lang('By').' '.display_user_link($row['last_poster_user_id'], $name);
 			} elseif ($origin!='learnpath') {
 				$last_post_sql="SELECT post.*, user.firstname, user.lastname FROM $table_posts post, $table_users user WHERE post.poster_id=user.user_id AND visible='1' AND thread_id='".$row['thread_id']."' ORDER BY post_id DESC";
 				$last_post_result=Database::query($last_post_sql);

@@ -14,9 +14,6 @@
 ==============================================================================
 */
 
-//load helper functions
-require_once 'install_upgrade.lib.php';
-
 $old_file_version = '1.8.4';
 $new_file_version = '1.8.5';
 
@@ -45,8 +42,6 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
 		exit ();
 	}
 
-	//get_config_param() comes from install_functions.inc.php and
-	//actually gets the param from
 	$_configuration['db_glue'] = get_config_param('dbGlu');
 
 	if ($singleDbForm) {
@@ -65,26 +60,7 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
 		$dbScormForm = $dbPrefixForm.'scorm';
 	}
 
-	$res = @Database::connect(array('server' => $dbHostForm, 'username' => $dbUsernameForm, 'password' => $dbPassForm));
-
-	//if error on connection to the database, show error and exit
-	if ($res === false) {
-		//$no = Database::errno();
-		//$msg = Database::error();
-
-		//echo '<hr />['.$no.'] - '.$msg.'<hr />';
-		echo					get_lang('DBServerDoesntWorkOrLoginPassIsWrong').'.<br /><br />' .
-				'				'.get_lang('PleaseCheckTheseValues').' :<br /><br />
-							    <strong>'.get_lang('DBHost').'</strong> : '.$dbHostForm.'<br />
-								<strong>'.get_lang('DBLogin').'</strong> : '.$dbUsernameForm.'<br />
-								<strong>'.get_lang('DBPassword').'</strong> : '.$dbPassForm.'<br /><br />
-								'.get_lang('PleaseGoBackToStep').' '. (defined('SYSTEM_INSTALLATION') ? '3' : '1').'.
-							    <p><button type="submit" class="back" name="step'. (defined('SYSTEM_INSTALLATION') ? '3' : '1').'" value="&lt; '.get_lang('Back').'">'.get_lang('Back').'</button></p>
-							    </td></tr></table></form></body></html>';
-		exit ();
-	}
-
-	@Database::query("set session sql_mode='';"); // Disabling special SQL modes (MySQL 5)
+	database_server_connect();
 
 	$dblist = Database::get_databases();
 

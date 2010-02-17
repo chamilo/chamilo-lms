@@ -803,6 +803,7 @@ if(isset($docs_and_folders) && is_array($docs_and_folders))
 
 		//last edit date
 		$last_edit_date=$id['lastedit_date'];
+		$last_edit_date=api_get_local_time($last_edit_date, null, null, date_default_timezone_get());
 		$display_date = date_to_str_ago($last_edit_date).'<br><span class="dropbox_date">'.$last_edit_date.'</span>';
 		$row[] = $invisibility_span_open.$display_date.$invisibility_span_close.'<!--uts='.strtotime($last_edit_date).'-->';
 

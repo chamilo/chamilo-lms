@@ -1194,10 +1194,12 @@ if($is_special > 0):
 		if (!$not_ends_on) {
 			define('ASSIGNMENT_EXPIRES',$time_expires);
 		}
-		$ends_on = api_ucfirst(format_locale_date($dateFormatLong,strtotime($homework['ends_on']))).' ';
-		$ends_on .= ucfirst(strftime($timeNoSecFormat,strtotime($homework['ends_on'])));
-		$expires_on = api_ucfirst(format_locale_date($dateFormatLong,strtotime($homework['expires_on']))).' ';
-		$expires_on .= ucfirst(strftime($timeNoSecFormat,strtotime($homework['expires_on'])));
+		$ends_on_datetime = api_get_local_time($homework['ends_on'], null, null, date_default_timezone_get());
+		$ends_on = api_ucfirst(format_locale_date($dateFormatLong,strtotime($ends_on_datetime))).' ';
+		$ends_on .= ucfirst(strftime($timeNoSecFormat,strtotime($ends_on_datetime)));
+		$expires_on_datetime = api_get_local_time($homework['expires_on'], null, null, date_default_timezone_get());
+		$expires_on = api_ucfirst(format_locale_date($dateFormatLong,strtotime($expires_on_datetime))).' ';
+		$expires_on .= ucfirst(strftime($timeNoSecFormat,strtotime($expires_on_datetime)));
 		if($has_ended) {
 			display_action_links($cur_dir_path, $always_show_tool_options,true);
 			Display :: display_error_message(get_lang('EndDateAlreadyPassed').' '.$ends_on);

@@ -24,12 +24,12 @@ ALTER TABLE course DROP PRIMARY KEY , ADD UNIQUE KEY code (code);
 ALTER TABLE course ADD id int NOT NULL auto_increment PRIMARY KEY FIRST;
 CREATE TABLE block (id INT NOT NULL auto_increment, name VARCHAR(255) NULL, description TEXT NULL, path VARCHAR(255) NOT NULL, controller VARCHAR(100) NOT NULL, active TINYINT NOT NULL default 1, PRIMARY KEY(id));
 ALTER TABLE block ADD UNIQUE(path);
-INSERT INTO user_field(field_type, field_variable, field_display_text, field_visible, field_changeable) VALUES(1, 'dashboard', 'dashboard', 0, 0);
+INSERT INTO user_field(field_type, field_variable, field_display_text, field_visible, field_changeable) VALUES(1, 'dashboard', 'Dashboard', 0, 0);
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES('show_tabs', 'dashboard', 'checkbox', 'Platform', 'true', 'ShowTabsTitle','ShowTabsComment',NULL,'TabsDashboard', 1);
 
-INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES('users_can_change_timezone', 'timezones', 'radio', 'Timezones', 'true', 'AllowUsersTimezoneTitle','AllowUsersTimezoneComment',NULL,'Timezones', 1);
-INSERT INTO settings_options (variable, value, display_text) VALUES ('users_can_change_timezone', 'true', 'Yes');
-INSERT INTO settings_options (variable, value, display_text) VALUES ('users_can_change_timezone', 'false', 'No');
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES('use_users_timezone', 'timezones', 'radio', 'Timezones', 'true', 'UseUsersTimezoneTitle','UseUsersTimezoneComment',NULL,'Timezones', 1);
+INSERT INTO settings_options (variable, value, display_text) VALUES ('use_users_timezone', 'true', 'Yes');
+INSERT INTO settings_options (variable, value, display_text) VALUES ('use_users_timezone', 'false', 'No');
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES('timezone_value', 'timezones', 'select', 'Timezones', 'UTC', 'TimezoneValueTitle','TimezoneValueComment',NULL,'Timezones', 1);
 
 ALTER TABLE user_field CHANGE tms tms DATETIME NOT NULL default '0000-00-00 00:00:00';
@@ -40,6 +40,8 @@ ALTER TABLE session_field_values CHANGE tms tms DATETIME NOT NULL default '0000-
 ALTER TABLE user_field_options CHANGE tms tms DATETIME NOT NULL default '0000-00-00 00:00:00';
 ALTER TABLE user_field_values CHANGE tms tms DATETIME NOT NULL default '0000-00-00 00:00:00';
 ALTER TABLE access_url CHANGE tms tms DATETIME NOT NULL default '0000-00-00 00:00:00';
+
+INSERT INTO user_field(field_type, field_variable, field_display_text, field_visible, field_changeable) VALUES(11, 'timezone', 'Timezone', 0, 0);
 UPDATE settings_current SET selected_value = '1.8.7.10365' WHERE variable = 'dokeos_database_version';
 
 -- xxSTATSxx

@@ -255,6 +255,9 @@ function get_connections_to_course($user_id, $course_code) {
 
         $login_date = $row['login_course_date'];
         $logout_date = $row['logout_course_date'];
+        
+        $login_date = api_get_local_time($login_date, null, null, date_default_timezone_get());
+        $logout_date = api_get_local_time($logout_date, null, null, date_default_timezone_get());
 
         $timestamp_login_date = strtotime($login_date);
         $timestamp_logout_date = strtotime($logout_date);

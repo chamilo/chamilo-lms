@@ -212,6 +212,7 @@ function type_filter($type)
 	$types[USER_FIELD_TYPE_DOUBLE_SELECT] 		= get_lang('FieldTypeDoubleSelect');
 	$types[USER_FIELD_TYPE_DIVIDER] 			= get_lang('FieldTypeDivider');
 	$types[USER_FIELD_TYPE_TAG] 				= get_lang('FieldTypeTag');
+	$types[USER_FIELD_TYPE_TIMEZONE]			= get_lang('FieldTypeTimezone');
 	return $types[$type];
 }
 

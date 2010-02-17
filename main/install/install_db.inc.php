@@ -9,8 +9,6 @@
 ==============================================================================
 */
 
-require_once 'install_upgrade.lib.php';
-
 /*
 ==============================================================================
 		MAIN CODE
@@ -26,27 +24,7 @@ if (!defined('SYSTEM_INSTALLATION')) {
 
 set_file_folder_permissions();
 
-@Database::connect(array('server' => $dbHostForm, 'username' => $dbUsernameForm, 'password' => $dbPassForm));
-
-if (Database::errno() > 0) {
-	$no = Database::errno();
-	$msg = Database::error();
-
-	echo '<hr />['.$no.'] &ndash; '.$msg.'<hr />
-	The MySQL server doesn\'t work or login / pass is bad.<br /><br />
-	Please check these values:<br /><br />
-	<strong>host</strong> : '.$dbHostForm.'<br />
-	<strong>user</strong> : '.$dbUsernameForm.'<br />
-	<strong>password</strong> : '.str_repeat('*', api_strlen($dbPassForm)).'<br /><br />
-	Please go back to step 3.
-	<p><button type="submit" class="back" name="step3" value="&lt; Back" >Back</button></p>
-	</td></tr></table></form></body></html>';
-
-	exit();
-}
-
-// Disabling special SQL modes (MySQL 5)
-Database::query("set session sql_mode='';");
+database_server_connect();
 
 // Initialization of the database encoding to be used.
 Database::query("SET SESSION character_set_server='utf8';");

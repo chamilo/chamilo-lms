@@ -462,7 +462,7 @@ if ($_GET['view']=='received' OR $dropbox_cnf['sent_received_tabs']==false) {
 			$dropbox_file_data[]=$dropbox_file->author;
 			//$dropbox_file_data[]=$dropbox_file->description;
 
-			$dropbox_file_data[]=date_to_str_ago($dropbox_file->last_upload_date).'<br><span class="dropbox_date">'.$dropbox_file->last_upload_date.'</span>';
+			$dropbox_file_data[]=date_to_str_ago(api_get_local_time($dropbox_file->last_upload_date, null, null, date_default_timezone_get())).'<br><span class="dropbox_date">'.api_get_local_time($dropbox_file->last_upload_date, null, null, date_default_timezone_get()).'</span>';
 
 			$action_icons=check_number_feedback($dropbox_file->id, $number_feedback).' '.get_lang('Feedback').'
 									<a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category='.Security::remove_XSS($_GET['view_received_category']).'&amp;view_sent_category='.Security::remove_XSS($_GET['view_sent_category']).'&amp;view='.Security::remove_XSS($_GET['view']).'&amp;action=viewfeedback&amp;id='.$dropbox_file->id.'">'.Display::return_icon('comment_bubble.gif',get_lang('Comment')).'</a>
@@ -617,7 +617,7 @@ if (!$_GET['view'] OR $_GET['view']=='sent' OR $dropbox_cnf['sent_received_tabs'
 			}
 			$receivers_celldata = trim(trim($receivers_celldata), ','); // Removing the trailing comma.
 			$dropbox_file_data[]=$receivers_celldata;
-			$dropbox_file_data[]=date_to_str_ago($dropbox_file->last_upload_date).'<br><span class="dropbox_date">'.$dropbox_file->last_upload_date.'</span>';
+			$dropbox_file_data[]=date_to_str_ago(api_get_local_time($dropbox_file->last_upload_date, null, null, date_default_timezone_get())).'<br><span class="dropbox_date">'.api_get_local_time($dropbox_file->last_upload_date, null, null, date_default_timezone_get()).'</span>';
 
 			//$dropbox_file_data[]=$dropbox_file->author;
 			$receivers_celldata='';

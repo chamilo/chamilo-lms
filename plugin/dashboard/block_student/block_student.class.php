@@ -133,7 +133,7 @@ class BlockStudent extends Block {
  		$content .= $students_table;
  		
  		if (count($students) > 0) {
-			$content .= '<div style="text-align:right;margin-top:10px;"><a href="'.api_get_path(WEB_CODE_PATH).'mySpace/student.php">'.get_lang('SeeMore').'</a></div>';
+			$content .= '<div style="text-align:right;margin-top:10px;"><a href="'.api_get_path(WEB_CODE_PATH).'mySpace/index.php?view=admin&display=useroverview">'.get_lang('SeeMore').'</a></div>';
 		}
 		$content .= '</div>';
 

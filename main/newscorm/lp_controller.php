@@ -26,6 +26,28 @@ $language_file[] = 'learnpath';
 $language_file[] = 'resourcelinker';
 $language_file[] = 'registration';
 
+
+
+// including the global file
+require_once '../inc/global.inc.php';
+
+$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js" type="text/javascript" language="javascript"></script>'; //jQuery
+if (api_get_setting('show_glossary_in_documents') == 'ismanual' || api_get_setting('show_glossary_in_documents') == 'isautomatic' ) {
+	$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.frameready.js" type="text/javascript" language="javascript"></script>';
+	$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.highlight.js" type="text/javascript" language="javascript"></script>';
+}
+
+$htmlHeadXtra[] = '<script type="text/javascript">
+function setFocus(){
+$("#idTitle").focus();
+}
+$(window).load(function () {
+  setFocus();
+});
+</script>';
+
+
+
 //flag to allow for anonymous user - needs to be set before global.inc.php
 $use_anonymous = true;
 

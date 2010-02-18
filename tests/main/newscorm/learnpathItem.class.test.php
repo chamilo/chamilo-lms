@@ -3,7 +3,7 @@ require_once(api_get_path(SYS_CODE_PATH).'newscorm/learnpathItem.class.php');
 require_once(api_get_path(SYS_CODE_PATH).'newscorm/learnpath.class.php');
 
 
-class TestScorm extends UnitTestCase {
+class TestLearnpathItem extends UnitTestCase {
 	
 	
 	public function TestScorm() {

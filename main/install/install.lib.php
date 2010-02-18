@@ -40,18 +40,23 @@ function is_already_installed_system() {
 	global $new_version;
 
 	if (empty($new_version)) {
-		return true;
+		return true; // Must be initialized.
+	}
+
+	if (is_array($_POST) && count($_POST) > 0) {
+		return false; // Running installation.
 	}
 
 	$current_config_file = str_replace('\\', '/', realpath('../inc/conf/configuration.php'));
 	if (!file_exists($current_config_file)) {
-		return false;
+		return false; // Configuration file does not exist, install the system.
 	}
 	require $current_config_file;
 
-	 // Careful, if/when the name 'dokeos_version' is changed. Check this then.
+	// Careful, if/when the name 'dokeos_version' is changed. Check this then.
 	$current_version = $_configuration['dokeos_version'];
 
+	// If the current version is old, upgrading is assumed as intended.
 	return empty($current_version) ? false : ($new_version == $current_version);
 }
 

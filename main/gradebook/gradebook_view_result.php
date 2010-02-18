@@ -39,7 +39,7 @@ require_once ('lib/fe/resulttable.class.php');
 require_once ('lib/fe/exportgradebook.php');
 require_once ('lib/scoredisplay.class.php');
 require_once (api_get_path(LIBRARY_PATH).'ezpdf/class.ezpdf.php');
-require_once api_get_path(SYS_CODE_PATH).'gradebook/gradebook_function.php';
+require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/gradebook_functions.inc.php';
 
 api_block_anonymous_users();
 block_students();

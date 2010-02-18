@@ -34,7 +34,7 @@ require_once ('lib/fe/linkform.class.php');
 require_once ('lib/gradebook_data_generator.class.php');
 require_once ('lib/fe/gradebooktable.class.php');
 require_once ('lib/fe/displaygradebook.php');
-require_once api_get_path(SYS_CODE_PATH).'gradebook/gradebook_function.php';
+require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/gradebook_functions.inc.php';
 
 api_block_anonymous_users();
 if (!api_is_allowed_to_create_course()) {

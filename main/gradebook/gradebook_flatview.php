@@ -14,7 +14,7 @@ require_once 'lib/fe/flatviewtable.class.php';
 require_once 'lib/fe/displaygradebook.php';
 require_once 'lib/fe/exportgradebook.php';
 require_once 'lib/scoredisplay.class.php';
-require_once api_get_path(SYS_CODE_PATH).'gradebook/gradebook_function.php';
+require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/gradebook_functions.inc.php';
 
 //require_once api_get_path(LIBRARY_PATH).'ezpdf/class.ezpdf.php'; // This is the old library for pdf-export (non UTF-8 compatible).
 define('_MPDF_PATH', api_get_path(LIBRARY_PATH).'mpdf/');

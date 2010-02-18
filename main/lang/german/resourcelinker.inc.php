@@ -1,58 +1,59 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$ResourceAdded = "Unterlagen hinzugefügt. Sie können jetzt zum Pfad zurück kehren oder weiter Unterlagen hinzufügen.";
+$ResourceAdded = "Unterlagen hinzugefÃ¼gt. Sie kÃ¶nnen jetzt zum Pfad zurÃ¼ck kehren oder weiter Unterlagen hinzufÃ¼gen.";
 $LearningPath = "Lernpfad";
 $LevelUp = "Stufe nach oben";
-$AddIt = "hinzufügen";
+$AddIt = "hinzufÃ¼gen";
 $MainCategory = "Haupt Kategorie";
-$lang_delete_added_resources = "Lösche die angefügten Unterlagen";
-$AddToLinks = "Den Links des Kurses hinzufügen";
-$DontAdd = "nicht hinzufügen";
-$lang_show_all_added_resources = "Zeige alle angefügten Unterlagen";
-$ResourcesAdded = "Neue Unterlagen angefügt";
-$BackTo = "Zurück nach";
+$lang_delete_added_resources = "LÃ¶sche die angefÃ¼gten Unterlagen";
+$AddToLinks = "Den Links des Kurses hinzufÃ¼gen";
+$DontAdd = "nicht hinzufÃ¼gen";
+$lang_show_all_added_resources = "Zeige alle angefÃ¼gten Unterlagen";
+$ResourcesAdded = "Neue Unterlagen angefÃ¼gt";
+$BackTo = "ZurÃ¼ck nach";
 $ExternalResources = "Externe Unterlagen";
 $CourseResources = "Kursunterlagen";
 $ExternalLink = "Externer Link";
-$DropboxAdd = "Die Dropbox-Seite diesem Kapitel hinzufügen.";
-$AddAssignmentPage = "Die Anwenderunterlagen diesem Kapitel hinzufügen.";
-$Exercise = "Übungen";
+$DropboxAdd = "Die Dropbox-Seite diesem Kapitel hinzufÃ¼gen.";
+$AddAssignmentPage = "Die Anwenderunterlagen diesem Kapitel hinzufÃ¼gen.";
+$Exercise = "Ãœbungen";
 $Link = "Links";
 $AdValvas = "Anzeigen";
 $Document = "Dokumente";
-$ShowDelete = "Anzeigen / Löschen";
-$IntroductionText = "Einführungstext";
+$ShowDelete = "Anzeigen / LÃ¶schen";
+$IntroductionText = "EinfÃ¼hrungstext";
 $CourseDescription = "Kurs-Beschreibung";
 $Groups = "Gruppen";
 $Users = "Nutzer";
-$IntroductionTextAdd = "Eine Seite mit dem Einführungstext zu diesem Kapitel hinzufügen.";
-$CourseDescriptionAdd = "Eine Seite mit der Kurs-Beschreibung zu diesem Kapitel hinzufügen.";
-$GroupsAdd = "Die Gruppen-Seite zu diesem Kapitel hinzufügen.";
-$UsersAdd = "Die Nutzer-Seite zu diesem Kapitel hinzufügen.";
+$IntroductionTextAdd = "Eine Seite mit dem EinfÃ¼hrungstext zu diesem Kapitel hinzufÃ¼gen.";
+$CourseDescriptionAdd = "Eine Seite mit der Kurs-Beschreibung zu diesem Kapitel hinzufÃ¼gen.";
+$GroupsAdd = "Die Gruppen-Seite zu diesem Kapitel hinzufÃ¼gen.";
+$UsersAdd = "Die Nutzer-Seite zu diesem Kapitel hinzufÃ¼gen.";
 $ExportableCourseResources = "Exportierbares Kurs-Material";
 $DokeosRelatedCourseMaterial = "Chamilo-bezogenes Kurs-Material";
 $LinkTarget = "Link-Ziel";
 $SameWindow = "Im selben Fenster";
 $NewWindow = "In neuem Fenster";
 $StepDeleted1 = "Dieses";
-$StepDeleted2 = "Element wurde gelöscht.";
-$Modify = "ändern";
+$StepDeleted2 = "Element wurde gelÃ¶scht.";
+$Modify = "Ã¤ndern";
 $Chapter = "Kapitel";
 $NoAgendaItems = "Keine Agenda vorhanden";
-$AgendaAdd = "Agenda hinzufügen";
+$AgendaAdd = "Agenda hinzufÃ¼gen";
 $UserGroupFilter = "Nutzergruppen Filter";
 $AgendaSortChronologicallyUp = "Agenda chronologisch aufsteigend sortieren";
 $ShowCurrent = "Aktuelle Agenda anzeigen";
-$ModifyCalendarItem = "Agenda Eintrag ändern";
+$ModifyCalendarItem = "Agenda Eintrag Ã¤ndern";
 $ItemTitle = "Titel";
 $Detail = "Detail";
-$EditSuccess = "Änderungen waren erfolgreich";
-$AddCalendarItem = "Agenda Eintrag hinzufügen";
-$AddAnn = "Ankündigung hinzufügen";
-$ForumAddNewTopic = "Forum: Neues Thema hinzufügen";
+$EditSuccess = "Ã„nderungen waren erfolgreich";
+$AddCalendarItem = "Agenda Eintrag hinzufÃ¼gen";
+$AddAnn = "AnkÃ¼ndigung hinzufÃ¼gen";
+$ForumAddNewTopic = "Forum: Neues Thema hinzufÃ¼gen";
 $ForumEditTopic = "Forum: Thema bearbeiten";
 $ExerciseAnswers = "Tests: Antworten";
 $ForumReply = "Forum: Antwort";
-$AgendaSortChronologicallyDown = "Agenda chronologisch sortieren (abwärts)";
+$AgendaSortChronologicallyDown = "Agenda chronologisch sortieren (abwÃ¤rts)";
 ?>

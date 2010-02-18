@@ -1,15 +1,16 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $MessageEmptyMessageOrSubject = "Please provide a subject or message";
-$Inbox  = "Inbox";
+$Inbox = "Inbox";
 $Messages = "Messages";
 $SendMessage = "Send message";
 $NewMessage = "New message";
 $ComposeMessage = "Compose message";
 $DeleteSelectedMessages = "Delete selected messages";
 $SelectAll = "Select all";
-$DeselectAll  = "Deselect all";
+$DeselectAll = "Deselect all";
 $ReplyToMessage = "Reply";
 $BackToInbox = "Back to inbox";
 $MessageSentTo = "The message has been sent to";
@@ -25,13 +26,12 @@ $SelectedMessagesDeleted = "The selected messages have been deleted";
 $EnterTitle = "Please enter a title";
 $TypeYourMessage = "Type your message here";
 $MessageDeleted = "The message has been deleted";
-$ConfirmDeleteMessage = "Are you sure you want to delete the selected message? ";
+$ConfirmDeleteMessage = "Are you sure you want to delete the selected message?";
 $DeleteMessage = "Delete message";
 $ReadMessage = "Read message";
 $SendInviteMessage = "Send invitation message";
 $SendMessageInvitation = "Are you sure that you wish to send these invitations ?";
 $MessageTool = "Messages tool";
-$SendMessage = "Send message";
 $WriteAMessage = "Write a message";
 $AlreadyReadMessage = "Message already read";
 $UnReadMessage = "Message without reading";

@@ -1,20 +1,28 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$TermAddNew = "Prida&#357; nový výraz";
-$TermName = "Výraz";
-$TermDefinition = "Definícia výrazu";
-$TermDeleted = "Výraz odstránený";
-$TermUpdated = "Výraz aktualizovaný";
-$TermConfirmDelete = "Naozaj chcete zmaza&#357; tento výraz";
-$TermAddButton = "Prida&#357; tento výraz";
-$TermUpdateButton = "Aktualizova&#357; výraz";
-$TermEdit = "Upravi&#357; výraz";
-$TermDeleteAction = "Zmaza&#357; výraz";
+$TermAddNew = "Prida&#357; novÃ½ vÃ½raz";
+$TermName = "VÃ½raz";
+$TermDefinition = "DefinÃ­cia vÃ½razu";
+$TermDeleted = "VÃ½raz odstrÃ¡nenÃ½";
+$TermUpdated = "VÃ½raz aktualizovanÃ½";
+$TermConfirmDelete = "Naozaj chcete zmaza&#357; tento vÃ½raz";
+$TermAddButton = "Prida&#357; tento vÃ½raz";
+$TermUpdateButton = "Aktualizova&#357; vÃ½raz";
+$TermEdit = "Upravi&#357; vÃ½raz";
+$TermDeleteAction = "Zmaza&#357; vÃ½raz";
 $OrderBy = "Usporiada&#357; pod&#318;a";
-$CreationDate = "Dátum vytvorenia";
-$UpdateDate = "Dátum aktualizácie";
-$TermAdded = "Výraz pridaný";
-$YouMustEnterATermName = "Musíte zada&#357; výraz";
-$YouMustEnterATermDefinition = "Musíte zada&#357; definíciu výrazu";
+$CreationDate = "DÃ¡tum vytvorenia";
+$UpdateDate = "DÃ¡tum aktualizÃ¡cie";
+$PreSelectedOrder = "";
+$TermAdded = "VÃ½raz pridanÃ½";
+$YouMustEnterATermName = "MusÃ­te zada&#357; vÃ½raz";
+$YouMustEnterATermDefinition = "MusÃ­te zada&#357; definÃ­ciu vÃ½razu";
+$TableView = "";
+$GlossaryTermAlreadyExistsYouShouldEditIt = "";
+$GlossaryManagement = "";
+$TermMoved = "";
+$ShowGlossaryInExtraToolsTitle = "";
+$ShowGlossaryInExtraToolsComment = "";
 ?>

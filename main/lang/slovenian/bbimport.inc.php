@@ -1,23 +1,24 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$langViewCourseMaterialImport  = "Poglej material teèaja kot bo uvožen";
-$langViewExternalLinksImport  = "Poglej zunanje povezave, kot bodo uvožene";
-$langViewForumImport  = "Poglej forum, kot bo uvožen";
-$langImportCourseMaterial  = "Uvozi material teèaja (Blackboard orodje \"Material teèaja\")";
-$langImportExternalLinks  = "Uvozi povezave (Blackboard orodje \"Zunanje povezave\")";
-$langImportForum  = "Uvozi forume (Blackboard orodje \"Razprave\")";
-$langToolInfo  = "To orodje je namenjeno uvozu teèajev Blackboard 5.5 (Material teèaja, razprave, in zunanje povezave). ";
-$langToolName = "Uvoz teèajev Blackboard ";
-$langSelectCoursePackage = "Izberi teèaj";
-$langPackageAlreadySelected = "Teèaj je že izbran";
-$langFirstSelectPackage = "Najprej je potrebno izbrati teèaj in ga odpreti predenj nadaljujete z izvozom.";
-$langCourseToMigrate = "Teèaj za pretvorbo";
-$langSelectPackage = "Izberite teèaj";
-$langOpenPackageForImporting = "Odpri ta teèaj za uvoz";
+$langViewCourseMaterialImport = "Poglej material teÄaja kot bo uvoÅ¾en";
+$langViewExternalLinksImport = "Poglej zunanje povezave, kot bodo uvoÅ¾ene";
+$langViewForumImport = "Poglej forum, kot bo uvoÅ¾en";
+$langImportCourseMaterial = "Uvozi material teÄaja (Blackboard orodje \\"Material teÄaja\\")";
+$langImportExternalLinks = "Uvozi povezave (Blackboard orodje \\"Zunanje povezave\\")";
+$langImportForum = "Uvozi forume (Blackboard orodje \\"Razprave\\")";
+$langToolInfo = "To orodje je namenjeno uvozu teÄajev Blackboard 5.5 (Material teÄaja, razprave, in zunanje povezave).";
+$langToolName = "Uvoz teÄajev Blackboard";
+$langSelectCoursePackage = "Izberi teÄaj";
+$langPackageAlreadySelected = "TeÄaj je Å¾e izbran";
+$langFirstSelectPackage = "Najprej je potrebno izbrati teÄaj in ga odpreti predenj nadaljujete z izvozom.";
+$langCourseToMigrate = "TeÄaj za pretvorbo";
+$langSelectPackage = "Izberite teÄaj";
+$langOpenPackageForImporting = "Odpri ta teÄaj za uvoz";
 $langInformation = "Informacije o procesu uvoza";
-$langChooseImportOptions = "Izberite možnosti uvoza";
-$langCheckWhatIsImported = "Preverite lahko, kaj se bo uvozilo, predenj se dejansko priène postopek uvoza";
-$langStartImporting = "Prièenjam uvažati";
+$langChooseImportOptions = "Izberite moÅ¾nosti uvoza";
+$langCheckWhatIsImported = "Preverite lahko, kaj se bo uvozilo, predenj se dejansko priÄne postopek uvoza";
+$langStartImporting = "PriÄenjam uvaÅ¾ati";
 $langImport = "Uvoz";
 ?>

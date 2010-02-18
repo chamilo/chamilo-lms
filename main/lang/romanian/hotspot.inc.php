@@ -1,5 +1,6 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $select = "Alege";
 $square = "patrat";
@@ -18,4 +19,7 @@ $labelPolyMenu = "Inchide poligonul";
 $triesleft = "Incercari ramase";
 $exeFinished = "Toate intrebarile sunt definite. Acum puteti rearanja spatiile.";
 $nextAnswer = "Apasa pe:&done=done";
+$delineation = "";
+$labelDelineationMenu = "";
+$oar = "";
 ?>

@@ -1,27 +1,32 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$langActivate = "Näytä";
+$langActivate = "NÃ¤ytÃ¤";
 $langDeactivate = "Piilota";
-$langInLnk  = "Piilotetut työkalut ja linkit";
-$langDelLk = "Haluatko varmasti poistaa tämän linkin?";
-$langCourseCreate  = "Luo kurssille nettisivu";
-$langNameOfTheLink  = "Linkin nimi";
-$lang_main_categories_list                  = "Aihealueet";
+$langInLnk = "Piilotetut tyÃ¶kalut ja linkit";
+$langDelLk = "Haluatko varmasti poistaa tÃ¤mÃ¤n linkin?";
+$langCourseCreate = "Luo kurssille nettisivu";
+$langNameOfTheLink = "Linkin nimi";
+$lang_main_categories_list = "Aihealueet";
 $langCourseAdminOnly = "Ainoastaan opettajille";
-$PlatformAdminOnly = "Ainoastaan ylläpitäjille";
+$PlatformAdminOnly = "Ainoastaan yllÃ¤pitÃ¤jille";
 $langCombinedCourse = "Yhdistetty kurssi";
-$ToolIsNowVisible = "Työkalu on nyt nähtävillä";
-$ToolIsNowHidden = "Työkalu on nyt piilotettu";
-$EditLink = "Muokkaa linkkiä";
+$ToolIsNowVisible = "TyÃ¶kalu on nyt nÃ¤htÃ¤villÃ¤";
+$ToolIsNowHidden = "TyÃ¶kalu on nyt piilotettu";
+$EditLink = "Muokkaa linkkiÃ¤";
 $Blog_management = "Projektien hallinta";
 $Forum = "Keskustelut";
-$Course_maintenance = "Kurssin ylläpito";
+$Course_maintenance = "Kurssin yllÃ¤pito";
 $TOOL_SURVEY = "Kyselyt";
-$GreyIcons = "Työkalut";
+$GreyIcons = "TyÃ¶kalut";
 $Interaction = "Vuorovaikutus";
 $Authoring = "Julkaiseminen";
-$Administration = "Ylläpito";
-$IntroductionTextUpdated = "Esittely teksti on päivitetty";
+$Administration = "YllÃ¤pito";
+$IntroductionTextUpdated = "Esittely teksti on pÃ¤ivitetty";
 $IntroductionTextDeleted = "Esitttely teksti poistettu";
+$SessionIdentifier = "";
+$SessionName = "";
+$SessionCategory = "";
+$SessionData = "";
 ?>

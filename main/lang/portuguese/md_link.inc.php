@@ -1,46 +1,47 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$langMdCallingTool = "LigaÁıes/links";
-$langMdTitle = "Nome da ligaÁ„o/link";
-$langMdDescription = "DescriÁ„o da ligaÁ„o/link";
+$langMdCallingTool = "Liga√ß√µes/links";
+$langMdTitle = "Nome da liga√ß√£o/link";
+$langMdDescription = "Descri√ß√£o da liga√ß√£o/link";
 $langMdCoverage = "Universal";
 $langMdCopyright = "Universidade de Ghent";
-$nameTools = "vari·vel de idioma obsoleta";
-$langTool = "Metadados das ligaÁıes/links";
-$langNoScript = "O script n„o se encontra activado no seu browser, por favor ignore no ecr„ a parte abaixo deste texto, n„o ir· funcionar ... ";
-$langLanguageTip = "o idioma sobre o qual este objecto de aprendizagem foi construido ";
+$nameTools = "vari√°vel de idioma obsoleta";
+$langTool = "Metadados das liga√ß√µes/links";
+$langNoScript = "O script n√£o se encontra activado no seu browser, por favor ignore no ecr√£ a parte abaixo deste texto, n√£o ir√° funcionar ...";
+$langLanguageTip = "o idioma sobre o qual este objecto de aprendizagem foi construido";
 $langIdentifier = "Identificador";
-$langIdentifierTip = "identificaÁ„o ˙nica para este objecto de aprendizagem, composto de letras, dÌgitos, _-.()\'!*";
-$langTitleTip = "tÌtulo ou nome, e idioma desse tÌtulo ou nome ";
-$langDescriptionTip = "descriÁ„o ou coment·rio, e idioma utilizado para descrever este objecto de aprendizagem ";
+$langIdentifierTip = "identifica√ß√£o √∫nica para este objecto de aprendizagem, composto de letras, d√≠gitos, _-.()\'!*";
+$langTitleTip = "t√≠tulo ou nome, e idioma desse t√≠tulo ou nome";
+$langDescriptionTip = "descri√ß√£o ou coment√°rio, e idioma utilizado para descrever este objecto de aprendizagem";
 $langKeyword = "Palavras-chave";
-$langKeywordTip = "separar por vÌrgulas (letras, dÌgitos, -.)";
+$langKeywordTip = "separar por v√≠rgulas (letras, d√≠gitos, -.)";
 $langCoverage = "Categoria";
-$langCoverageTip = "nome da categoria, cfr. LigaÁıes/links";
-$langKwNote = "Se modificar o idioma da descriÁ„o, n„o adicione palavras-chave ao mesmo tempo.";
-$langClickKw = "Clique numa palavra-chave da lista para seleccionar ou desceleccionar ";
-$langKwHelp = "<br/> Clique no bot„o \'+\' para abrir, no bot„o \'-\' para fechar, no bot„o \'++\' para abrir todos, no bot„o \'--\' para fechar todos.<br/> <br/> Elimine todas as palavras-chave seleccionadas fechando a ·rvore e abrindo-a novamente com o bot„o \'+\'.<br/> Alt-clique \'+\' procura a palavra-chave original na ·rvore.<br/> <br/> Alt-clique palavra-chave selecciona uma palavra-chave sem termos alargados ou descelecciona uma palavra-chave com termos alargados.<br/> <br/> Se modificar o idioma da descriÁ„o , n„o adicione palavras-chave ao mesmo tempo.<br/> <br/>";
+$langCoverageTip = "nome da categoria, cfr. Liga√ß√µes/links";
+$langKwNote = "Se modificar o idioma da descri√ß√£o, n√£o adicione palavras-chave ao mesmo tempo.";
+$langClickKw = "Clique numa palavra-chave da lista para seleccionar ou desceleccionar";
+$langKwHelp = "<br/> Clique no bot√£o \'+\' para abrir, no bot√£o \'-\' para fechar, no bot√£o \'++\' para abrir todos, no bot√£o \'--\' para fechar todos.<br/> <br/> Elimine todas as palavras-chave seleccionadas fechando a √°rvore e abrindo-a novamente com o bot√£o \'+\'.<br";
 $langLocation = "URL/URI";
 $langLocationTip = "clicar para abrir objecto";
 $langStore = "Armazenar";
 $langDeleteAll = "Eliminar todos os metadados";
 $langConfirmDelete = "Tem a *certeza* que deseja eliminar todos os metadados?";
 $langWorkOn = "em";
-$langNotInDB = "n„o existe essa categoria de Links/ligaÁıes ";
+$langNotInDB = "n√£o existe essa categoria de Links/liga√ß√µes";
 $langManifestSyntax = "(erro de sintaxe no ficheiro manifest ...)";
 $langEmptyManifest = "(esvaziar ficheiro manifest ...)";
-$langNoManifest = "(n„o existe ficheiro manifest ...)";
-$langNotFolder = "n„o È possÌvel, n„o È uma pasta/directÛrio ...";
+$langNoManifest = "(n√£o existe ficheiro manifest ...)";
+$langNotFolder = "n√£o √© poss√≠vel, n√£o √© uma pasta/direct√≥rio ...";
 $langContinue = "Continue com";
 $langCreate = "Criar MDEs";
 $langRemove = "Remover MDEs";
 $langAllRemovedFor = "Removidas todas as entradas para a categoria";
 $langRemainingFor = "Removidas as entradas obsoletas para a categoria";
-$langIndex = "Õndice de palavras";
-$langTotalMDEs = "N˙mero total de entradas de LigaÁıes/Links MD:";
+$langIndex = "√çndice de palavras";
+$langTotalMDEs = "N√∫mero total de entradas de Liga√ß√µes/Links MD:";
 $langMainMD = "Abrir MDE Principal";
-$langOrElse = "Seleccionar uma categoria de ligaÁıes/links";
+$langOrElse = "Seleccionar uma categoria de liga√ß√µes/links";
 $langWarningDups = "- nomes de categorias duplicadas foram removidas da lista!";
-$langSLC = "Trabalhar com a categoria denominada links/ligaÁıes";
+$langSLC = "Trabalhar com a categoria denominada links/liga√ß√µes";
 ?>

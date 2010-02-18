@@ -1,47 +1,48 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $langMdCallingTool = "Dokument";
 $langMdTitle = "Learning Object Titel";
-$langMdDescription = "För att lagra denna information, tryck Lagra";
+$langMdDescription = "FÃ¶r att lagra denna information, tryck Lagra";
 $langMdCoverage = "ex. Filosofie kandidat ...";
-$langMdCopyright = "ex. under förutsättning att källan är känd";
+$langMdCopyright = "ex. under fÃ¶rutsÃ¤ttning att kÃ¤llan Ã¤r kÃ¤nd";
 $langTool = "Dokument Metadata";
-$langNoScript = "Skripthantering är inte aktivt i den webläsare, var vänlig ignorera skärmdelen nedanför denna text, det kommer inte att fungera...";
-$langPressAgain = "Tryck \"Lagra\" igen...";
-$langLanguageTip = "det språk som detta Learning object var skrivet i.";
+$langNoScript = "Skripthantering Ã¤r inte aktivt i den weblÃ¤sare, var vÃ¤nlig ignorera skÃ¤rmdelen nedanfÃ¶r denna text, det kommer inte att fungera...";
+$langPressAgain = "Tryck \\"Lagra\\" igen...";
+$langLanguageTip = "det sprÃ¥k som detta Learning object var skrivet i.";
 $langIdentifier = "Identifierare";
-$langIdentifierTip = "unik identifiering för detta learning object, sammansatt av bokstäver, siffror, _-.()\'!*";
-$langTitleTip = "titel eller namn och språket på titeln eller namn.";
-$langDescriptionTip = "beskrivning eller kommentar, och språket som används för att beskriva detta learning object";
+$langIdentifierTip = "unik identifiering fÃ¶r detta learning object, sammansatt av bokstÃ¤ver, siffror, _-.()\'!*";
+$langTitleTip = "titel eller namn och sprÃ¥ket pÃ¥ titeln eller namn.";
+$langDescriptionTip = "beskrivning eller kommentar, och sprÃ¥ket som anvÃ¤nds fÃ¶r att beskriva detta learning object";
 $langKeyword = "Nyckelord";
-$langKeywordTip = "separerad av komma (bokstäver, siffror, -.)";
-$langCoverage = "Täckning";
+$langKeywordTip = "separerad av komma (bokstÃ¤ver, siffror, -.)";
+$langCoverage = "TÃ¤ckning";
 $langCoverageTip = "tex. examen i xxx:yyy";
-$langKwNote = "Om du ändrar språkbeskrivning, lägg inte till nyckelord samtidigt.";
-$langClickKw = "Klicka på ett nyckelord i trädet för att välja eller välja bort.";
-$langKwHelp = "<br/> Klicka \'+\' knappen för att öppna, \'-\' knappen för att stänga, \'++\' knappen för att öppna alla, \'--\' knappen för att stänga alla.<br/> <br/> Ta bort alla valda nyckelord genom att  stänga trädet och öppna det igen med \'+\' knappen.<br/> Alt-klick \'+\' söker original nyckelord i träden.<br/> <br/> Alt-click nyckelord väljer ett nyckelord utan bredare sökning eller avaktiverar en bredare sökning.<br/> <br/>Om du ändrar språket på beskrivningen, lägg inte till nya nyckelord på samma gång.<br/> <br/>";
-$langRights = "Användar rättigheter";
+$langKwNote = "Om du Ã¤ndrar sprÃ¥kbeskrivning, lÃ¤gg inte till nyckelord samtidigt.";
+$langClickKw = "Klicka pÃ¥ ett nyckelord i trÃ¤det fÃ¶r att vÃ¤lja eller vÃ¤lja bort.";
+$langKwHelp = "<br/> Klicka \'+\' knappen fÃ¶r att Ã¶ppna, \'-\' knappen fÃ¶r att stÃ¤nga, \'++\' knappen fÃ¶r att Ã¶ppna alla, \'--\' knappen fÃ¶r att stÃ¤nga alla.<br/> <br/> Ta bort alla valda nyckelord genom att  stÃ¤nga trÃ¤det och Ã¶ppna det igen med \'+\' knappen.<br/> Alt-";
+$langRights = "AnvÃ¤ndar rÃ¤ttigheter";
 $langRightsTip = "beskriv i ord";
 $langVersion = "Version";
 $langVersionTip = "nummer eller beskrivning";
-$langStatusTip = "välj från lista";
+$langStatusTip = "vÃ¤lj frÃ¥n lista";
 $langCreatedSize = "Skapad, storlek";
-$langCreatedSizeTip = "ÅÅÅÅ-MM-DD när den skapades, storlek i octets (bytes)";
+$langCreatedSizeTip = "Ã…Ã…Ã…Ã…-MM-DD nÃ¤r den skapades, storlek i octets (bytes)";
 $langAuthorTip = "i VCARD format";
 $langFormat = "Format";
-$langFormatTip = "välj från lista";
+$langFormatTip = "vÃ¤lj frÃ¥n lista";
 $langLocation = "URL/URI";
-$langLocationTip = "klicka för att öppna object";
+$langLocationTip = "klicka fÃ¶r att Ã¶ppna object";
 $langStore = "Lagra";
 $langDeleteAll = "Radera alla Metadata";
 $langConfirmDelete = "Vill du *verkligen* radera alla metadata?";
-$langCourseKwds = "Detta dokument innehåller kursens nyckelord";
-$langSearch = "Sök";
+$langCourseKwds = "Detta dokument innehÃ¥ller kursens nyckelord";
+$langSearch = "SÃ¶k";
 $langSearchCrit = "Ett ord per rad!";
 $langStatuses = ":draft:draft,, final:final,, revised:revised,, unavailable:unavailable";
 $langCosts = ":nej:fri, ingen avgift,, ja:inte fri, avgift";
 $langCopyrights = ":ja:copyright,, nej:ingen copyright";
-$langFormats = ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP";
-$langLngResTypes = ":exercise:övning,, simulation:simulering,, questionnaire:frågeställningar,, diagram:diagram,, figure:figur,, graph:graf,, index:index,, slide:slide,, table:bordläggning,, narrative text:berättartext,, exam:examen,, experiment:experiment,, problem statement:problemställning,, self assessment:självbedömning,, lecture:föreläsning";
+$langFormats = ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, a";
+$langLngResTypes = ":exercise:Ã¶vning,, simulation:simulering,, questionnaire:frÃ¥gestÃ¤llningar,, diagram:diagram,, figure:figur,, graph:graf,, index:index,, slide:slide,, table:bordlÃ¤ggning,, narrative text:berÃ¤ttartext,, exam:examen,, experiment:experiment,, problem statemen";
 ?>

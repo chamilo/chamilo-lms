@@ -1,5 +1,6 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $TermAddNew = "Adauga termen nou";
 $TermName = "Numele termenului";
@@ -15,6 +16,13 @@ $OrderBy = "Ordonare dupa";
 $CreationDate = "Data creerii";
 $UpdateDate = "Data actualizarii";
 $PreSelectedOrder = "Ordoneaza dupa selectie";
+$TermAdded = "";
+$YouMustEnterATermName = "";
+$YouMustEnterATermDefinition = "";
 $TableView = "Vezi tabelul";
-$GlossaryManagement  = "Gestiunea glosarului";
+$GlossaryTermAlreadyExistsYouShouldEditIt = "";
+$GlossaryManagement = "Gestiunea glosarului";
+$TermMoved = "";
+$ShowGlossaryInExtraToolsTitle = "";
+$ShowGlossaryInExtraToolsComment = "";
 ?>

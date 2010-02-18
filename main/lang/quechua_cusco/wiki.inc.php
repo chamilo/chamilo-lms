@@ -1,5 +1,6 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $WikiSearchResults = "Resultados de la búsqueda en el Wiki";
 $Wiki = "Wiki";
@@ -11,7 +12,7 @@ $AllPages = "Llipin raphikuna";
 $AddNew = "Yapay hoq raphita";
 $ChangesStored = "Hoqkuna yapasqaykiqa allchasqaña";
 $NewWikiSaved = "Musuq Wiki haykuchisqaqa allchasqañan. Kunanqa qhawariwaq kaypi q\'apispa:";
-$DefaultContent = " <br/> <br/> <p align=\"center\"> <img src=\"%swiki/wcollaborative.png\" alt=\"Mr. Chamilo\" title=\"Wiraqocha Chamilo\" /></p> <p align=\"center\">Qallarinapaqqa ruwapay kay raphita hinallataq pichay kay qelqata</p> ";
+$DefaultContent = " <br/> <br/> <p align=\\"center\\"> <img src=\\"%swiki/wcollaborative.png\\" alt=\\"Mr. Chamilo\\" title=\\"Wiraqocha Chamilo\\" /></p> <p align=\\"center\\">Qallarinapaqqa ruwapay kay raphita hinallataq pichay kay qelqata</p>";
 $CourseWikiPages = "Yachachinaq Wiki raphinkuna";
 $GroupWikiPages = "Huñusqaq Wiki raphinkuna";
 $NoWikiPageTitle = "T\'ijrapaykunaqa manan allchakunkuchu. Sutinchay kay raphita";
@@ -89,13 +90,12 @@ $AssignmentDesc = "Llank\'ayna yachachiqpa churasqan";
 $WikiDiffAddedTex = "Qelqa yapasqa";
 $WikiDiffDeletedTex = "Qelqa pichasqa";
 $WordsDiff = "simi simimanta";
-$LinesDiff = "seq\'e seq\'eman ";
+$LinesDiff = "seq\'e seq\'eman";
 $MustSelectPage = "Ñaupaqqa ajllariwaq hoq raphita";
 $Export2ZIP = "Apachiy ZIP khipuman";
 $HidePage = "Pakay raphita";
 $ShowPage = "Qhawachiy raphita";
 $GoAndEditMainPage = "Wiki qallarichinapaqqa riy raphi qallariyninman chaypitaq ruwapay";
-$DiscussNotAvailable = "Rimanakuy mana kashanchu";
 $UnlockDiscuss = "Ama harkaychu rimanakuyta";
 $LockDiscuss = "Harkay rimanakuyta";
 $HideDiscuss = "Pakay rimanakuyta";
@@ -145,8 +145,7 @@ $Changes = "t\'ijraykuna";
 $MostActiveUsers = "Aswan llank\'aq haykuqmasikuna";
 $Contributions = "aypachisqakuna";
 $UserContributions = "Haykuqmasiq aypachisqakunan";
-$MostActiveUsers = "Aswan llank\'aq haykuqmasikuna";
-$WarningDeleteMainPage = "Aman pichawaqchu Wkiq Raphi Qallariyninta, chayñintin ima ukhunmanpas kaykunan.<br> Munashankipuni pichayta chayqa ama qonqankichu hoqmanta kay Raphi Qallariy kamariyta, mana kamarinki chayqa hokaq haykuqmasikunaqa mana atinqakuchu Wikiman yapayta musuq raphikunataqa.";
+$WarningDeleteMainPage = "Aman pichawaqchu Wkiq Raphi Qallariyninta, chayñintin ima ukhunmanpas kaykunan.<br> Munashankipuni pichayta chayqa ama qonqankichu hoqmanta kay Raphi Qallariy kamariyta, mana kamarinki chayqa hokaq haykuqmasikunaqa mana atinqakuchu Wikiman yapayta musuq r";
 $ConvertToLastVersion = "Kay versión nisqata qepa kaq nisqaman churanapaqqa kaypi q\'apiy";
 $Restore = "Allinchay";
 $CurrentVersion = "Kunan kaq versión";
@@ -154,4 +153,27 @@ $LastVersion = "Qepa kaq versión";
 $PageRestored = "Raphiqa allinchasqaña. Qhawariwaq kapi q\'apispa";
 $RestoredFromVersion = "Raphi allinchasqa kay versión nisqamanta";
 $HWiki = "Ayuda: Wiki";
+$FirstSelectOnepage = "";
+$DefineTask = "";
+$ThisPageisBeginEditedBy = "";
+$ThisPageisBeginEditedTryLater = "";
+$EditedByAnotherUser = "";
+$WarningMaxEditingTime = "";
+$TheTaskDoesNotBeginUntil = "";
+$TheDeadlineHasBeenCompleted = "";
+$HasReachedMaxNumWords = "";
+$HasReachedMaxiNumVersions = "";
+$DescriptionOfTheTask = "";
+$OtherSettings = "";
+$NMaxWords = "";
+$NMaxVersion = "";
+$Feedback = "";
+$AddFeedback = "";
+$Feedback1 = "";
+$Feedback2 = "";
+$Feedback3 = "";
+$FProgress = "";
+$PutATimeLimit = "";
+$StandardTask = "";
+$ThePageHasBeenExportedToDocArea = "";
 ?>

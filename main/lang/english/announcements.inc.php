@@ -1,5 +1,6 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $Announcement = "Announcements";
 $langAnnEmpty = "Announcements list has been cleared up";
@@ -17,24 +18,24 @@ $langOn = "On";
 $langRegUser = "registered users of the site";
 $langUnvalid = "have unvalid or no email address";
 $langModifAnn = "Modifies this announcement";
-$langModify    = "Edit";
-$langDelete    = "delete";
-$langTitle     = "Subject";
-$langHelp      = "help";
-$langOk        = "Validate";
-$langAddIntro  = "Add an introduction text ";
-$langBackList  = "Return to the list";
-$langSelMess   = "Warnings to some users";
-$EmailTitle  = "Subject";
-$langUserlist  = "List of groups and users";
-$langSelectedUsers  = "Selected Users";
-$langSubmit  = "Submit";
-$langPleaseEnterMessage  = "You must introduce the message text.";
-$langPleaseSelectUsers  = "You must select some users.";
+$langModify = "Edit";
+$langDelete = "delete";
+$langTitle = "Subject";
+$langHelp = "help";
+$langOk = "Validate";
+$langAddIntro = "Add an introduction text";
+$langBackList = "Return to the list";
+$langSelMess = "Warnings to some users";
+$EmailTitle = "Subject";
+$langUserlist = "List of groups and users";
+$langSelectedUsers = "Selected Users";
+$langSubmit = "Submit";
+$langPleaseEnterMessage = "You must introduce the message text.";
+$langPleaseSelectUsers = "You must select some users.";
 $Teachersubject = "Message sent to users";
-$langMessages  = "Messages";
-$langMessageToSelectedUsers  = "Messages to selected users";
-$langIntroText  = "To send a message, select groups of users (see G) or single users from the list on the left.";
+$langMessages = "Messages";
+$langMessageToSelectedUsers = "Messages to selected users";
+$langIntroText = "To send a message, select groups of users (see G) or single users from the list on the left.";
 $langDown = "down";
 $langMsgSent = "The message has been sent to the selected learners";
 $langSelUser = "selected users of the site";

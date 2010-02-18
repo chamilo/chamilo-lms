@@ -1,27 +1,28 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$langLinkSite = "Link/ligaÁ„o a uma p·gina web";
-$langSubTitle = "Adiciona uma link/ligaÁ„o para uma p·gina na p·gina inicial do curso. Para criar a link/ligaÁ„o, dever· ir atÈ a p·gina que pretende, copiar o URL da barra de endereÁos no topo da janela do browser de navegaÁ„o e col·-lo no campo \"Link/LigaÁ„o\" abaixo.";
-$langAddPage            = "Adicionar uma p·gina";
-$langSendPage           = "P·gina a enviar";
-$langCouldNot           = "O ficheiro n„o pode ser enviado";
-$langOkSentLink         = "A sua ligaÁ„o/link foi adicionada. Encontra-se agora acessÌvel a partir da <a href=\"%s/index.php\">P·gina inicial</a>";
-$langTooBig             = "N„o escolheu o ficheiro que pretende enviar, ou ent„o È demasiado grande";
-$langExplanation        = "A p·gina deve estar em formato HTML (p. e. \"my_page.htm\"). Ser· acessÌvel atravÈs duma link/ligaÁ„o na p·gina inicial. Se desejar enviar documentos que n„o sejam HTML (PDF, Word, Power Point, VÌdeo, etc.) utilize a <a href=../document/document.php>ferramenta Documentos</a>";
-$langPgTitle            = "TÌtulo da p·gina";
-$langNoLinkURL          = "Por favor, escreva a ligaÁ„o/link da URL";
-$langLinkTarget = "Link/ligaÁ„o destino";
+$langLinkSite = "Link/liga√ß√£o a uma p√°gina web";
+$langSubTitle = "Adiciona uma link/liga√ß√£o para uma p√°gina na p√°gina inicial do curso. Para criar a link/liga√ß√£o, dever√° ir at√© a p√°gina que pretende, copiar o URL da barra de endere√ßos no topo da janela do browser de navega√ß√£o e col√°-lo no campo \\"Link/Liga√ß√£o\\" abaixo.";
+$langAddPage = "Adicionar uma p√°gina";
+$langSendPage = "P√°gina a enviar";
+$langCouldNot = "O ficheiro n√£o pode ser enviado";
+$langOkSentLink = "A sua liga√ß√£o/link foi adicionada. Encontra-se agora acess√≠vel a partir da <a href=\\"%s/index.php\\">P√°gina inicial</a>";
+$langTooBig = "N√£o escolheu o ficheiro que pretende enviar, ou ent√£o √© demasiado grande";
+$langExplanation = "A p√°gina deve estar em formato HTML (p. e. \\"my_page.htm\\"). Ser√° acess√≠vel atrav√©s duma link/liga√ß√£o na p√°gina inicial. Se desejar enviar documentos que n√£o sejam HTML (PDF, Word, Power Point, V√≠deo, etc.) utilize a <a href=../document/document.php>ferra";
+$langPgTitle = "T√≠tulo da p√°gina";
+$langNoLinkURL = "Por favor, escreva a liga√ß√£o/link da URL";
+$langLinkTarget = "Link/liga√ß√£o destino";
 $langSameWindow = "Na mesma janela";
 $langNewWindow = "Numa nova janela";
-$langAdded = "A ligaÁ„o/link for adicionada";
-$langAddLink = "Adicionar uma link/ligaÁ„o";
-$langNoLinkName = "Por favor, escreva o nome da ligaÁ„o/link";
-$langEditLink = "Editar link/ligaÁ„o";
+$langAdded = "A liga√ß√£o/link for adicionada";
+$langAddLink = "Adicionar uma link/liga√ß√£o";
+$langNoLinkName = "Por favor, escreva o nome da liga√ß√£o/link";
+$langEditLink = "Editar link/liga√ß√£o";
 $langChangePress = "Modifique e clique em OK";
-$langLinkChanged = "Link/ligaÁ„o da p·gina inicial do curso modificada. Utilize o menu de links/ligaÁıes de navegaÁ„o (breadcrumb) no topo para regressar ‡ p·gina inicial.";
-$NoLinkName = "LigaÁ„o/link sem nome";
-$NoLinkURL = "LigaÁ„o/link sem endereÁo URL";
-$LinkChanged = "LigaÁ„o/link modificada";
-$OkSentLink = "A ligaÁ„o/link foi enviada";
+$langLinkChanged = "Link/liga√ß√£o da p√°gina inicial do curso modificada. Utilize o menu de links/liga√ß√µes de navega√ß√£o (breadcrumb) no topo para regressar √† p√°gina inicial.";
+$NoLinkName = "Liga√ß√£o/link sem nome";
+$NoLinkURL = "Liga√ß√£o/link sem endere√ßo URL";
+$LinkChanged = "Liga√ß√£o/link modificada";
+$OkSentLink = "A liga√ß√£o/link foi enviada";
 ?>

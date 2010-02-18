@@ -1,27 +1,32 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $langActivate = "aktivera";
 $langDeactivate = "deaktivera";
-$langInLnk  = "Deaktiverade länkar";
-$langDelLk = "Vill du verkligen radera denna länk?";
-$langCourseCreate  = "Skapa en webbkurs";
-$langNameOfTheLink  = "Namn på länken";
-$lang_main_categories_list                  = "Huvudkategorilista";
-$langCourseAdminOnly = "Enbart lärare";
-$PlatformAdminOnly = "Enbart plattformsadministratörer";
+$langInLnk = "Deaktiverade lÃ¤nkar";
+$langDelLk = "Vill du verkligen radera denna lÃ¤nk?";
+$langCourseCreate = "Skapa en webbkurs";
+$langNameOfTheLink = "Namn pÃ¥ lÃ¤nken";
+$lang_main_categories_list = "Huvudkategorilista";
+$langCourseAdminOnly = "Enbart lÃ¤rare";
+$PlatformAdminOnly = "Enbart plattformsadministratÃ¶rer";
 $langCombinedCourse = "Kombinerad kurs";
-$ToolIsNowVisible = "Verktyget är nu synligt";
-$ToolIsNowHidden = "Verktyget är nu osynligt";
-$EditLink = "Ändra länk";
+$ToolIsNowVisible = "Verktyget Ã¤r nu synligt";
+$ToolIsNowHidden = "Verktyget Ã¤r nu osynligt";
+$EditLink = "Ã„ndra lÃ¤nk";
 $Blog_management = "Blogghantering";
 $Forum = "Forum";
-$Course_maintenance = "Kursunderhåll";
-$TOOL_SURVEY = "Enkäter";
-$GreyIcons = "Verktygslåda";
+$Course_maintenance = "KursunderhÃ¥ll";
+$TOOL_SURVEY = "EnkÃ¤ter";
+$GreyIcons = "VerktygslÃ¥da";
 $Interaction = "Interaktion";
 $Authoring = "Redigera";
 $Administration = "Administrering";
 $IntroductionTextUpdated = "Introduktionstexten har uppdaterats";
 $IntroductionTextDeleted = "Introduktionstexten har tagits bort";
+$SessionIdentifier = "";
+$SessionName = "";
+$SessionCategory = "";
+$SessionData = "";
 ?>

@@ -1,5 +1,6 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $AgendaAdd = "Dodaj nowy element agendy";
 $ShowAllEvents = "Poka&#380; wszystkie elementy agendy";
@@ -10,11 +11,11 @@ $Month = "Miesi&#261;c";
 $Year = "Rok";
 $Hour = "godzina";
 $Minutes = "minut";
-$Detail = "Szczegó&#322;y";
+$Detail = "SzczegÃ³&#322;y";
 $EditSuccess = "Element agendy zosta&#322; wyedytowany";
 $AddSuccess = "Element zosta&#322; dodany do agendy";
 $AgendaDeleteSuccess = "Element agendy zosta&#322; usuni&#281;ty";
-$NoAgendaItems = "Brak elementów";
+$NoAgendaItems = "Brak elementÃ³w";
 $lang_september = "Wrzesie&#324;";
 $langClassName = "Nazwa klasy";
 $lang_agenda = "Agenda";
@@ -32,7 +33,7 @@ $langOldToNew = "stary do nowego";
 $langNewToOld = "nowy do starego";
 $langNow = "teraz";
 $langAddEvent = "dodaj zdarzenie";
-$langDetail = "szczegó&#322;";
+$langDetail = "szczegÃ³&#322;";
 $MonthView = "Widok miesi&#261;ca";
 $WeekView = "Widok tygodnia";
 $DayView = "Widok dnia";
@@ -45,30 +46,33 @@ $ModifyPersonalCalendarItem = "Modyfikuj osobisty element agendy";
 $PeronalAgendaItemAdded = "Nowy element zosta&#322; dodany do agendy";
 $PeronalAgendaItemEdited = "Element agendy zosta&#322; wyedytowany";
 $PeronalAgendaItemDeleted = "Element agendy zosta&#322; usuni&#281;ty";
-$ViewPersonalItem = "Poka&#380; osobiste elementy ";
-$UserGroupFilter = "Filtr grup/u&#380;ytkowników";
+$ViewPersonalItem = "Poka&#380; osobiste elementy";
+$UserGroupFilter = "Filtr grup/u&#380;ytkownikÃ³w";
 $ShowAll = "Poka&#380; wszystko";
 $Print = "Drukuj";
-$MyTextHere = "mój tekst tutaj";
+$MyTextHere = "mÃ³j tekst tutaj";
 $CopiedAsAnnouncement = "Kopiowanie jako og&#322;oszenie";
-$NewAnnouncement = "Nowe og&#322;oszenie ";
-$AddAnnouncement = "Dodaj jako og&#322;oszenie ";
+$NewAnnouncement = "Nowe og&#322;oszenie";
+$AddAnnouncement = "Dodaj jako og&#322;oszenie";
 $UpcomingEvent = "Nadchodz&#261;ce wydarzenia";
 $RepeatedEvent = "Powtarzaj&#261;ce si&#281; zdarzenia";
-$RepeatType = "Powtórz typ";
+$RepeatType = "PowtÃ³rz typ";
 $RepeatDaily = "Dzienny";
 $RepeatWeekly = "Tygodniowy";
 $RepeatMonthlyByDate = "Miesi&#281;czny, po dacie";
 $RepeatMonthlyByDay = "Miesi&#281;czny, po dniu";
 $RepeatMonthlyByDayR = "Miesi&#281;czny, po dniu, ograniczony";
 $RepeatYearly = "Roczny";
-$RepeatEnd = "Powtórz dat&#281; zako&#324;czenia";
+$RepeatEnd = "PowtÃ³rz dat&#281; zako&#324;czenia";
 $RepeatedEventViewOriginalEvent = "Wy&#347;wietl oryginalne zdarzenie";
-$ICalFileImport = "Import plików iCal/ics";
+$ICalFileImport = "Import plikÃ³w iCal/ics";
 $AllUsersOfThePlatform = "Wszyscy u&#380;ytkownicy platformy";
 $GlobalEvent = "Globalne zdarzenie";
+$ModifyEvent = "";
 $EndDateCannotBeBeforeTheStartDate = "Data zako&#324;czenia nie mo&#380;e by&#263; wcze&#347;niejsza ni&#380; data rozpocz&#281;cia";
-$AgendaSortChronologicallyUp = "Sortuj Agend&#281; chronologicznie (góra)";
-$AgendaSortChronologicallyDown = "Sortuj Agend&#281; chronologicznie (dó&#322;)";
-$ItemForUserSelection = "Lista wyboru u&#380;ytkowników";
+$AgendaSortChronologicallyUp = "Sortuj Agend&#281; chronologicznie (gÃ³ra)";
+$AgendaSortChronologicallyDown = "Sortuj Agend&#281; chronologicznie (dÃ³&#322;)";
+$ItemForUserSelection = "Lista wyboru u&#380;ytkownikÃ³w";
+$IsNotiCalFormatFile = "";
+$RepeatEvent = "";
 ?>

@@ -1,29 +1,30 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $NewNote = "Nova napomena";
 $Note = "Napomena";
 $NoteDeleted = "Napomena je obrisana";
-$NoteUpdated = "Napomena je ažurirana";
+$NoteUpdated = "Napomena je aÂžurirana";
 $NoteCreated = "Napomena je kreirana";
-$YouMustWriteANote = "Molim vas napišite napomenu";
+$YouMustWriteANote = "Molim vas napiÂšite napomenu";
 $SaveNote = "Sa&#269;uvaj napomenu";
-$WriteYourNoteHere = "Klikni ovde da napišeš novu napomenu";
-$SearchByTitle = "Traži po naslovu";
-$WriteTheTitleHere = "Napiši naslov ovde";
+$WriteYourNoteHere = "Klikni ovde da napiÂšeÂš novu napomenu";
+$SearchByTitle = "TraÂži po naslovu";
+$WriteTheTitleHere = "NapiÂši naslov ovde";
 $UpdateDate = "Poslednje modifikacije";
-$NoteAddNew = "Dodaj novu napomenu u moju li&#269;nu beležnicu";
+$NoteAddNew = "Dodaj novu napomenu u moju li&#269;nu beleÂžnicu";
 $OrderByCreationDate = "Sortiraj po datumu kreiranja";
 $OrderByModificationDate = "Sortiraj po datumu modifikacije";
 $OrderByTitle = "Sortiraj po naslovu";
 $NoteTitle = "Naslov napomene";
 $NoteComment = "Detalji napomene";
 $NoteAdded = "Napomena je dodata";
-$NoteConfirmDelete = "Da li ste sigurni da želite da obrišete ovu napomenu";
+$NoteConfirmDelete = "Da li ste sigurni da Âželite da obriÂšete ovu napomenu";
 $AddNote = "Kreiraj napomenu";
 $ModifyNote = "Izmeni moje li&#269;ne napomene";
 $BackToNoteList = "Nazad na listu napomena";
-$NotebookManagement = "Notebook menadžment";
+$NotebookManagement = "Notebook menadÂžment";
 $BackToNotesList = "Nazad na listu napomena";
 $NotesSortedByTitleAsc = "Napomene sortirane po naslovu usponu";
 $NotesSortedByTitleDESC = "Napomene sortirane po naslovu dole";

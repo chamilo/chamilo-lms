@@ -1,12 +1,13 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $langTool = "Metadatos";
-$langClickKw = "Calque enriba la palabra clave nel árbol pa seleicionala o deseleicionala.";
-$langKwHelp = "<br/>Calque nel botón \'+\' p\'abrir, nel botón \'-\' pa pesllar, nel botón \'++\' p\'abrir too, nel botón \'--\' pa pesllar too.<br/>Deseleicionar toles palabres clave seleicionaes cerrando l\'árbol y volviéndolu abrir col botón \'+\'.<br/>Alt-clic \'+\' vuelve seleicionar les palabres clave seleicionaes enantes.<br/><br/>Alt-clic palabra clave, niega esa palabra clave.";
+$langClickKw = "Calque enriba la palabra clave nel Ã¡rbol pa seleicionala o deseleicionala.";
+$langKwHelp = "<br/>Calque nel botÃ³n \'+\' p\'abrir, nel botÃ³n \'-\' pa pesllar, nel botÃ³n \'++\' p\'abrir too, nel botÃ³n \'--\' pa pesllar too.<br/>Deseleicionar toles palabres clave seleicionaes cerrando l\'Ã¡rbol y volviÃ©ndolu abrir col botÃ³n \'+\'.<br/>Alt-clic \'+\'";
 $langAdvanced = "Avanzada";
 $langSearch = "Buscar";
-$langSearchCrit = "¡ Use l\'área d\'embaxo pa los descriptores, una palabra per ringlera !";
+$langSearchCrit = "Â¡ Use l\'Ã¡rea d\'embaxo pa los descriptores, una palabra per ringlera !";
 $langNoKeywords = "Esti cursu nun tien palabres clave";
 $langKwCacheProblem = "La palabra clave nun se pue abrir";
 $langCourseKwds = "palabres clave del cursu";

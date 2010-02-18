@@ -1,5 +1,6 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $nameTools = "variable de idioma obsoleta";
 $langMdCallingTool = "Yachanakuna - SCORM";

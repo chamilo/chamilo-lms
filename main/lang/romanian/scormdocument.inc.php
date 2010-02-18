@@ -1,5 +1,6 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $langChapter = "Capitol";
 $langDocumentList = "Lista documentelor";
@@ -9,8 +10,8 @@ $langEditDocument = "Editeaza document";
 $langCreateDocument = "Creaza document";
 $langMissingImagesDetected = "S-au detectat imagini pierdute";
 $langPublish = "Publica";
-$langScormcontentstudent = "Acesta este un curs in format Scorm. Daca doresti sa il lansezi : apasa aici  <input type=button name=scormbutton value=\'Lanseaza \' onclick=\'openscorm()\'>";
-$langScormcontent = "Acesta este un continut Scorm<br><input type=button name=scormbutton value=\'Lanseaza \' onclick=\'openscorm()\'>";
+$langScormcontentstudent = "Acesta este un curs in format Scorm. Daca doresti sa il lansezi : apasa aici  <input type=button name=scormbutton value=\'LanseazaÂ \' onclick=\'openscorm()\'>";
+$langScormcontent = "Acesta este un continut Scorm<br><input type=button name=scormbutton value=\'LanseazaÂ \' onclick=\'openscorm()\'>";
 $langDownloadAndZipEnd = "Arhiva zip a fost uploadata si dezarhivata";
 $langZipNoPhp = "Arhiva zip nu poate contine fisiere .PHP";
 $langGroupForumLink = "Forumul grupului";
@@ -45,7 +46,7 @@ $langBuilder = "Creator cale de invatare";
 $lang_edit_learnpath = "Editeaza nume/descriere";
 $lang_add_title_and_desc = "Redenumeste si adauga descrierea";
 $lang_add_learnpath = "Creaza o Cale de Invatare Chamilo";
-$lang_learnpath_added = "Noua cale de invatare a fost creata cu succes. Acuma îi poti adauga module. Apasa pe nume si editeaza-l.";
+$lang_learnpath_added = "Noua cale de invatare a fost creata cu succes. Acuma Ã®i poti adauga module. Apasa pe nume si editeaza-l.";
 $lang_delete_learnpath = "Sterge calea de invatare";
 $lang_learnpath_edited = "Calea de invatare a fost creata cu succes";
 $lang_learnpath_deleted = "Calea de invatare si toate modulele ei sunt sterse";

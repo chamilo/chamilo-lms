@@ -1,7 +1,8 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$Tools  = "Tool";
+$Tools = "Tool";
 $SendWork = "Dokumen yg di-upload";
 $langTooBig = "Anda tidak memilih file atau file anda terlalu besar.";
 $langListDeleted = "Semua daftar telah dihapus.";
@@ -27,5 +28,63 @@ $langFileExists = "File sudah ada sebelumnya";
 $CreateDirectory = "Buat direktori";
 $langCurrentDir = "folder aktif";
 $UploadADocument = "Upload dokumen";
-$EditToolOptions = "Edit pilihan Tool ";
+$EditToolOptions = "Edit pilihan Tool";
+$DocumentDeleted = "";
+$SendMailBody = "";
+$DirDelete = "";
+$ValidateChanges = "";
+$FolderUpdated = "";
+$EndsAt = "";
+$QualificationOfAssignment = "";
+$MakeQualifiable = "";
+$QualificationNumberOver = "";
+$WeightInTheGradebook = "";
+$DatesAvailables = "";
+$ExpiresAt = "";
+$AddToCalendar = "";
+$DirectoryCreated = "";
+$Assignment = "";
+$AdvancedParameters = "";
+$ExpiryDateToSendWorkIs = "";
+$EnableExpiryDate = "";
+$EnableEndDate = "";
+$IsNotPosibleSaveTheDocument = "";
+$EndDateCannotBeBeforeTheExpireDate = "";
+$SelectAFilter = "";
+$FilterByNotExpired = "";
+$FilterAssignments = "";
+$WeightNecessary = "";
+$QualificationOver = "";
+$ExpiryDateAlreadyPassed = "";
+$EndDateAlreadyPassed = "";
+$MoveXTo = "";
+$QualificationMustNotBeMoreThanQualificationOver = "";
+$ModifyDirectory = "";
+$DeleteAllFiles = "";
+$BackToWorksList = "";
+$EditMedia = "";
+$AllFilesInvisible = "";
+$FileInvisible = "";
+$AllFilesVisible = "";
+$FileVisible = "";
+$ButtonCreateAssignment = "";
+$AssignmentName = "";
+$CreateAssignment = "";
+$FolderEdited = "";
+$UpdateWork = "";
+$MakeAllPapersInvisible = "";
+$MakeAllPapersVisible = "";
+$TheDocumentHasBeenDeleted = "";
+$YouAreNotAllowedToDeleteThisDocument = "";
+$StudentAllowedToDeleteOwnPublication = "";
+$ConfirmYourChoiceDeleteAllfiles = "";
+$WorkName = "";
+$ReminderToSubmitPendingTask = "";
+$MessageConfirmSendingOfTask = "";
+$DataSent = "";
+$DownloadLink = "";
+$ViewUsersWithTask = "";
+$ReminderMessage = "";
+$DateSent = "";
+$ViewUsersWithoutTask = "";
 ?>

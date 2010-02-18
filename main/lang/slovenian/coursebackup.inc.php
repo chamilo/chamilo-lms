@@ -1,50 +1,51 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$langSelectOptionForBackup = "Izberite monosti arhiviranja";
-$langLetMeSelectItems = "Dovoli mi izbrati posamezne komponente teèaja";
-$langCreateFullBackup = "Ustvari popolno arhivsko kopijo tega teèaja";
+$langSelectOptionForBackup = "Izberite moÅ¾nosti arhiviranja";
+$langLetMeSelectItems = "Dovoli mi izbrati posamezne komponente teÄaja";
+$langCreateFullBackup = "Ustvari popolno arhivsko kopijo tega teÄaja";
 $langCreateBackup = "Ustvari arhivsko kopijo";
-$langBackupCreated  = "Arhivska kopija teèaja je bila ustvarjena. Prenos datoteke se bo prièel v naslednjih trenutkih. Èe se prenos datoteke ne priène samodejno, kliknite na naslednjo povezavo";
+$langBackupCreated = "Arhivska kopija teÄaja je bila ustvarjena. Prenos datoteke se bo priÄel v naslednjih trenutkih. ÄŒe se prenos datoteke ne priÄne samodejno, kliknite na naslednjo povezavo";
 $langSelectBackupFile = "izberi datoteko z arhivom";
 $langImportBackup = "Uvozi arhiv";
 $langImportFullBackup = "Uvozi celoten arhiv";
-$langImportFinished = "Uvoz konèan";
+$langImportFinished = "Uvoz konÄan";
 $langEvents = "Dogodki";
 $langAnnouncements = "Obvestila";
-$langDocuments  = "Dokumenti";
+$langDocuments = "Dokumenti";
 $langTests = "Vaje";
-$langLearnpaths = "Uène poti";
-$langCopyCourse = "Kopiranje vsebin teèaja";
+$langLearnpaths = "UÄne poti";
+$langCopyCourse = "Kopiranje vsebin teÄaja";
 $langSelectItemsToCopy = "Izberi elemente za kopiranje";
-$langCopyFinished = "Kopiranje konèano";
+$langCopyFinished = "Kopiranje konÄano";
 $langFullRecycle = "Popolno recikliranje";
-$langRecycleCourse = "Recikliranje vsebin teèaja";
-$langRecycleFinished = "Recikliranje konèano";
-$langRecycleWarning = "Opozorilo: z uporabo tega orodja boste odstranili nekatere dele teèaja. Odstranjenih vsebin ni mogoèe povrniti. Svetujemo vam da predhodno naredite <a href=\"create_backup.php\">rezervno kopijo</a>.";
-$langSameFilename = "Kaj naj storim z uvoeno datoteko, ki ima enako ime kot obstojeèa datoteka?";
+$langRecycleCourse = "Recikliranje vsebin teÄaja";
+$langRecycleFinished = "Recikliranje konÄano";
+$langRecycleWarning = "Opozorilo: z uporabo tega orodja boste odstranili nekatere dele teÄaja. Odstranjenih vsebin ni mogoÄe povrniti. Svetujemo vam da predhodno naredite <a href=\\"create_backup.php\\">rezervno kopijo</a>.";
+$langSameFilename = "Kaj naj storim z uvoÅ¾eno datoteko, ki ima enako ime kot obstojeÄa datoteka?";
 $langSameFilenameSkip = "Izpusti datoteko z enakim imenom";
 $langSameFilenameRename = "Preimenuj datoteko z enakim imenom (npr. datoteka.pdf postane datoteka_1.pdf)";
-$langSameFilenameOverwrite = "Prepiši obstojeèo datoteko";
-$langSelectDestinationCourse = "Izberi ciljni teèaj";
-$langFullCopy  = "Popolno kopiranje";
-$langCourseDescription = "Opis teèaja";
-$langNoResourcesToBackup = "Ne ostaja noben vsebinski element, ki bi bil vkljuèen v arhiv.";
-$langNoResourcesInBackupFile = "V arhivu ni nobenih vsebinskih elementov teèaja.";
+$langSameFilenameOverwrite = "PrepiÅ¡i obstojeÄo datoteko";
+$langSelectDestinationCourse = "Izberi ciljni teÄaj";
+$langFullCopy = "Popolno kopiranje";
+$langCourseDescription = "Opis teÄaja";
+$langNoResourcesToBackup = "Ne ostaja noben vsebinski element, ki bi bil vkljuÄen v arhiv.";
+$langNoResourcesInBackupFile = "V arhivu ni nobenih vsebinskih elementov teÄaja.";
 $langSelectResources = "Izberi elemente";
-$langNoResourcesToRecycles = "Ne ostaja noben vsebinski element, ki bi lahko bil vkljuèen v recikliranje.";
-$langIncludeQuestionPool = "Vkljuèi zalogo vprašanj";
+$langNoResourcesToRecycles = "Ne ostaja noben vsebinski element, ki bi lahko bil vkljuÄen v recikliranje.";
+$langIncludeQuestionPool = "VkljuÄi zalogo vpraÅ¡anj";
 $langLocalFile = "lokalna datoteka";
-$langServerFile = "datoteka na streniku";
+$langServerFile = "datoteka na streÅ¾niku";
 $langNoBackupsAvailable = "Noben arhiv ni na voljo";
-$langNoDestinationCoursesAvailable = "Noben ciljni teèaj ni na voljo";
+$langNoDestinationCoursesAvailable = "Noben ciljni teÄaj ni na voljo";
 $langBackup = "Arhiviranje";
-$langImportBackupInfo = "Uvozi arhivsko datoteko. Daje monost uvoza arhivske datoteke iz lokalnega pogona ali povrnitev vsebin iz arhivske datoteke predhodno shranjene na streniku.";
-$langCreateBackupInfo = "Ustvari vsebino arhivske datoteke. Izbrati je mono posamezne elemente, ki bodo vkljuèeni v arhiv.";
+$langImportBackupInfo = "Uvozi arhivsko datoteko. Daje moÅ¾nost uvoza arhivske datoteke iz lokalnega pogona ali povrnitev vsebin iz arhivske datoteke predhodno shranjene na streÅ¾niku.";
+$langCreateBackupInfo = "Ustvari vsebino arhivske datoteke. Izbrati je moÅ¾no posamezne elemente, ki bodo vkljuÄeni v arhiv.";
 $ToolIntro = "Predstavitev orodja";
-$UploadError = "Nalaganje je bilo neuspešno. Preverite najveèjo dovoljeno dolino datoteke in pravice za dostop do mape, kamor nalagate.";
-$DocumentsWillBeAddedToo = "Pripadajaèi dokumenti bodo tudi dodani";
-$ToExportLearnpathWithQuizYouHaveToSelectQuiz = "V primeru, da elite izvoziti uèno pot, ki vsebuje teste/vaje, morate zagotoviti, da so ustrezni testi/vaje vkljuèeni v izvoz; izberete jih iz seznama testov.";
-$ArchivesDirectoryNotWriteableContactAdmin = "Arhivska mapa, ki jo uporablja to orodje, ne omogoèa pisalnega dostopa. Prosim da se obrnete na upravitelja platforme.";
-$DestinationCourse = "Ciljni teèaj";
+$UploadError = "Nalaganje je bilo neuspeÅ¡no. Preverite najveÄjo dovoljeno dolÅ¾ino datoteke in pravice za dostop do mape, kamor nalagate.";
+$DocumentsWillBeAddedToo = "PripadajaÄi dokumenti bodo tudi dodani";
+$ToExportLearnpathWithQuizYouHaveToSelectQuiz = "V primeru, da Å¾elite izvoziti uÄno pot, ki vsebuje teste/vaje, morate zagotoviti, da so ustrezni testi/vaje vkljuÄeni v izvoz; izberete jih iz seznama testov.";
+$ArchivesDirectoryNotWriteableContactAdmin = "Arhivska mapa, ki jo uporablja to orodje, ne omogoÄa pisalnega dostopa. Prosim da se obrnete na upravitelja platforme.";
+$DestinationCourse = "Ciljni teÄaj";
 ?>

@@ -1,5 +1,6 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $lang_new_item = "naujas įrašas įdėtas";
 $lang_title_notification = "Nuo Jūsų paskutinio vizito";
@@ -16,4 +17,20 @@ $lang_new_groupforum_topic = "grupės forume įrašyta nauja tema";
 $lang_new_dropbox_file = "gautas naujas failas";
 $lang_update_dropbox_file = "Jūsų failų saugykloje esantis failas atnaujintas";
 $ForumCategoryAdded = "Forum category added";
+$LearnpathAdded = "";
+$GlossaryAdded = "";
+$QuizQuestionAdded = "";
+$QuizQuestionUpdated = "";
+$QuizQuestionDeleted = "";
+$QuizUpdated = "";
+$QuizAdded = "";
+$QuizDeleted = "";
+$DocumentInvisible = "";
+$DocumentVisible = "";
+$CourseDescriptionAdded = "";
+$WikiAdded = "";
+$SurveyAdded = "";
+$NotebookAdded = "";
+$NotebookUpdated = "";
+$NotebookDeleted = "";
 ?>

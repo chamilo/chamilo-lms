@@ -1,46 +1,47 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$langMdCallingTool = "Hivatkozások";
-$langMdTitle = "Hivatkozás neve";
-$langMdDescription = "Hivatkozás meghatározása";
-$langMdCoverage = "Univerzális";
+$langMdCallingTool = "HivatkozÃ¡sok";
+$langMdTitle = "HivatkozÃ¡s neve";
+$langMdDescription = "HivatkozÃ¡s meghatÃ¡rozÃ¡sa";
+$langMdCoverage = "UniverzÃ¡lis";
 $langMdCopyright = "Ghent Egyetem";
-$nameTools = "elavult nyelvi változó";
-$langTool = "Hivatkozások Metaadat";
-$langNoScript = "A parancsértelmez&#337; nincs engedélyezve böngész&#337;jén, kérjük, hagyja figyelmen kívül az alábbi szöveget, Önnek ez nem fog m&#369;ködni...";
-$langLanguageTip = "az a nyelv, amelyben ez a tanulási objektum készült";
-$langIdentifier = "Azonosító";
-$langIdentifierTip = "a tanulási objektum egyedi azonosítója, állhat számok, bet&#369;k, _-.()\'!* karakterek kombinációja";
-$langTitleTip = "cím vagy elnevezés, és ezek nyelve";
-$langDescriptionTip = "leírás vagy megjegyzés, és az ehhez használt nyelv";
+$nameTools = "elavult nyelvi vÃ¡ltozÃ³";
+$langTool = "HivatkozÃ¡sok Metaadat";
+$langNoScript = "A parancsÃ©rtelmez&#337; nincs engedÃ©lyezve bÃ¶ngÃ©sz&#337;jÃ©n, kÃ©rjÃ¼k, hagyja figyelmen kÃ­vÃ¼l az alÃ¡bbi szÃ¶veget, Ã–nnek ez nem fog m&#369;kÃ¶dni...";
+$langLanguageTip = "az a nyelv, amelyben ez a tanulÃ¡si objektum kÃ©szÃ¼lt";
+$langIdentifier = "AzonosÃ­tÃ³";
+$langIdentifierTip = "a tanulÃ¡si objektum egyedi azonosÃ­tÃ³ja, Ã¡llhat szÃ¡mok, bet&#369;k, _-.()\'!* karakterek kombinÃ¡ciÃ³ja";
+$langTitleTip = "cÃ­m vagy elnevezÃ©s, Ã©s ezek nyelve";
+$langDescriptionTip = "leÃ­rÃ¡s vagy megjegyzÃ©s, Ã©s az ehhez hasznÃ¡lt nyelv";
 $langKeyword = "Kulcsszavak";
-$langKeywordTip = "vessz&#337;vel elválasztva (bet&#369;k, számok, -.)";
-$langCoverage = "Kategória";
-$langCoverageTip = "kategórianév, cfr. hivatkozások";
-$langKwNote = "Ha megváltoztatja a leírás nyelvét, ne adjon hozzá vele egy id&#337;ben kulcsszavakat";
-$langClickKw = "Kattintson a fában a kulcsszóra a kijelöléshez/kijelölés megsz&#369;ntetéséhez";
-$langKwHelp = "<br/> Kattintson a \'+\' gombra a megnyitáshoz, , a \'-\' gombra a bezáráshoz, a \'++\' gombra az összes kinyitásához, a \'--\' gombra az összes bezéréséhoz.<br/> <br/> Az összes kijelölés megsz&#369;ntetéséhez zárja be az egész fát, majd kattintson újra a kinyitás (\'+\') gombra.<br/> Alt-click \'+\' használatával kereshet&#337;ek az eredetileg kijelölt kucsszavakat a fában. <br/> <br/> Alt-click a kulcsszóra: keyword selects a keyword without broader terms or deselects a keyword with broader terms.<br/> <br/> A leírás nyelvének megváltoztatásával egy id&#337;ben ne adjon meg kulcsszavakat.<br/> <br/>";
+$langKeywordTip = "vessz&#337;vel elvÃ¡lasztva (bet&#369;k, szÃ¡mok, -.)";
+$langCoverage = "KategÃ³ria";
+$langCoverageTip = "kategÃ³rianÃ©v, cfr. hivatkozÃ¡sok";
+$langKwNote = "Ha megvÃ¡ltoztatja a leÃ­rÃ¡s nyelvÃ©t, ne adjon hozzÃ¡ vele egy id&#337;ben kulcsszavakat";
+$langClickKw = "Kattintson a fÃ¡ban a kulcsszÃ³ra a kijelÃ¶lÃ©shez/kijelÃ¶lÃ©s megsz&#369;ntetÃ©sÃ©hez";
+$langKwHelp = "<br/> Kattintson a \'+\' gombra a megnyitÃ¡shoz, , a \'-\' gombra a bezÃ¡rÃ¡shoz, a \'++\' gombra az Ã¶sszes kinyitÃ¡sÃ¡hoz, a \'--\' gombra az Ã¶sszes bezÃ©rÃ©sÃ©hoz.<br/> <br/> Az Ã¶sszes kijelÃ¶lÃ©s megsz&#369;ntetÃ©sÃ©hez zÃ¡rja be az egÃ©sz fÃ¡t, majd kattintson Ãºjra";
 $langLocation = "URL/URI";
-$langLocationTip = "kattintson ide az objektum megnyitásához";
-$langStore = "Tárol";
-$langDeleteAll = "Az összes metaadat törlése";
-$langConfirmDelete = "*Biztosan* törölni akarja az összes metaadatot?";
+$langLocationTip = "kattintson ide az objektum megnyitÃ¡sÃ¡hoz";
+$langStore = "TÃ¡rol";
+$langDeleteAll = "Az Ã¶sszes metaadat tÃ¶rlÃ©se";
+$langConfirmDelete = "*Biztosan* tÃ¶rÃ¶lni akarja az Ã¶sszes metaadatot?";
 $langWorkOn = "itt:";
-$langNotInDB = "nincs ilyen Hivatkozások kategória";
-$langManifestSyntax = "(nyelvtani hiba a manifest fájlban...)";
-$langEmptyManifest = "(üres manifest fájl...)";
-$langNoManifest = "(nincs manifest fájl...)";
-$langNotFolder = "nem lehetséges, ez nem egy mappa...";
-$langContinue = "Folytatás mivel:";
-$langCreate = "Metaadat bejegyzés létrehozása";
-$langRemove = "Metaadat bejegyzések törlése";
-$langAllRemovedFor = "Az összes bejegyzés eltávolítva a következ&#337; kategóriában:";
-$langRemainingFor = "Elavult bejegyzések eltávolítva a következ&#337; kategóriában:";
-$langIndex = "Szavak indexelése";
-$langTotalMDEs = "A hivatkozások metaadat bejegyzéseinek száma összesen:";
-$langMainMD = "F&#337; metaadat bejegyzés megnyitása";
-$langOrElse = "Egy hivatkozások kategória kiválsaztása";
-$langWarningDups = "- megkett&#337;zött kategórianevek el lettek távolítva a listából!";
-$langSLC = "Munka a következ&#337; nev&#369; Hivatkozások kategóriával:";
+$langNotInDB = "nincs ilyen HivatkozÃ¡sok kategÃ³ria";
+$langManifestSyntax = "(nyelvtani hiba a manifest fÃ¡jlban...)";
+$langEmptyManifest = "(Ã¼res manifest fÃ¡jl...)";
+$langNoManifest = "(nincs manifest fÃ¡jl...)";
+$langNotFolder = "nem lehetsÃ©ges, ez nem egy mappa...";
+$langContinue = "FolytatÃ¡s mivel:";
+$langCreate = "Metaadat bejegyzÃ©s lÃ©trehozÃ¡sa";
+$langRemove = "Metaadat bejegyzÃ©sek tÃ¶rlÃ©se";
+$langAllRemovedFor = "Az Ã¶sszes bejegyzÃ©s eltÃ¡volÃ­tva a kÃ¶vetkez&#337; kategÃ³riÃ¡ban:";
+$langRemainingFor = "Elavult bejegyzÃ©sek eltÃ¡volÃ­tva a kÃ¶vetkez&#337; kategÃ³riÃ¡ban:";
+$langIndex = "Szavak indexelÃ©se";
+$langTotalMDEs = "A hivatkozÃ¡sok metaadat bejegyzÃ©seinek szÃ¡ma Ã¶sszesen:";
+$langMainMD = "F&#337; metaadat bejegyzÃ©s megnyitÃ¡sa";
+$langOrElse = "Egy hivatkozÃ¡sok kategÃ³ria kivÃ¡lsaztÃ¡sa";
+$langWarningDups = "- megkett&#337;zÃ¶tt kategÃ³rianevek el lettek tÃ¡volÃ­tva a listÃ¡bÃ³l!";
+$langSLC = "Munka a kÃ¶vetkez&#337; nev&#369; HivatkozÃ¡sok kategÃ³riÃ¡val:";
 ?>

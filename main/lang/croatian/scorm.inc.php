@@ -1,5 +1,6 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $langScormVersion = "verzija";
 $langScormRestarted = "Sve su lekcije sada nepotpune.";
@@ -11,33 +12,33 @@ $langScormScore = "Rezultat";
 $langScormLessonTitle = "Naslov lekcije";
 $langScormStatus = "Status";
 $langScormToEnter = "Za ulaz";
-$langScormFirstNeedTo = "prvo morate dovršiti";
+$langScormFirstNeedTo = "prvo morate dovrÂšiti";
 $langScormThisStatus = "Ova je lekcija sada";
 $langScormClose = "Okon&#269;aj";
 $langScormRestart = "Kreni ponovno";
-$langScormCompstatus = "Dovršeno";
-$langScormIncomplete = "Nedovršeno";
-$langScormPassed = "Uspješno dovršeno";
-$langScormFailed = "Neuspješno";
+$langScormCompstatus = "DovrÂšeno";
+$langScormIncomplete = "NedovrÂšeno";
+$langScormPassed = "UspjeÂšno dovrÂšeno";
+$langScormFailed = "NeuspjeÂšno";
 $langScormPrevious = "Prethodno";
 $langScormNext = "Sljede&#263;e";
 $langScormTitle = "Program za pokretanje sustava Chamilo Scorm";
 $langScormMystatus = "Moj status";
-$langScormNoItems = "Ovaj sadržaj nema elemenata.";
-$langScormNoStatus = "Ovaj sadržaj nema status";
-$langScormLoggedout = "odjavljen iz okruženja Scorm";
+$langScormNoItems = "Ovaj sadrÂžaj nema elemenata.";
+$langScormNoStatus = "Ovaj sadrÂžaj nema status";
+$langScormLoggedout = "odjavljen iz okruÂženja Scorm";
 $langScormCloseWindow = "Zatvori prozore";
 $ScormBrowsed = "Pregledan";
 $langScormExitFullScreen = "Natrag u standardni prikaz";
 $langScormFullScreen = "Prikaz preko cijelog zaslona";
-$langScormNotAttempted = "Bez pokušaja";
+$langScormNotAttempted = "Bez pokuÂšaja";
 $langCharset = "Skup znakova";
 $langLocal = "Lokalni";
 $langRemote = "Udaljeni";
-$langAutodetect = "Automatsko pronalaženje";
-$langAccomplishedStepsTotal = "Ukupno izvršenih koraka";
+$langAutodetect = "Automatsko pronalaÂženje";
+$langAccomplishedStepsTotal = "Ukupno izvrÂšenih koraka";
 $langUnknown = "Nepoznat";
-$AreYouSureToDeleteSteps = "Jeste li sigurni da želite obrisati odabrane korake?";
+$AreYouSureToDeleteSteps = "Jeste li sigurni da Âželite obrisati odabrane korake?";
 $Origin = "Izvor";
 $Local = "Lokalni";
 $Remote = "Udaljeni";
@@ -45,11 +46,12 @@ $FileToUpload = "SCORM ili AICC datoteka za u&#269;itavanje";
 $ContentMaker = "Stvaranje kolegija (alat)";
 $ContentProximity = "Lokacija kolegija";
 $UploadLocalFileFromGarbageDir = "U&#269;itaj datoteku iz direktorija main/garbage";
-$ThisItemIsNotExportable = "Ovaj element nije trenutno kompatibilan sa SCORM formatom, zato ga ne možete prenositi.";
+$ThisItemIsNotExportable = "Ovaj element nije trenutno kompatibilan sa SCORM formatom, zato ga ne moÂžete prenositi.";
 $MoveCurrentChapter = "Pomakni trenutno pogavlje";
 $GenericScorm = "Generi&#269;ki SCORM";
-$UnknownPackageFormat = "Format datoteke nije prepoznat. Provjerite da je datoteka dobro generirana i da nema grešaka. Problemi mogu nastati zbog dodatnih uklju&#269;enih ZIP opcija ili veli&#269;ine datoteke. Ukoliko niste sigurni u ZIP, probajte generirati ZIP datoteku sa što manje dodatnih opcija.";
-$Attempt = "Pokušaj";
+$UnknownPackageFormat = "Format datoteke nije prepoznat. Provjerite da je datoteka dobro generirana i da nema greÂšaka. Problemi mogu nastati zbog dodatnih uklju&#269;enih ZIP opcija ili veli&#269;ine datoteke. Ukoliko niste sigurni u ZIP, probajte generirati ZIP datoteku sa Âšto m";
+$Attempt = "PokuÂšaj";
 $MoveTheCurrentForum = "Premjesti trenutni forum";
-$WarningWhenEditingScorm = "Upozorenje !<br/>Kada izmjenite trenutni SCORM korak, može do&#263;i do promjene izvješ&#263;ivanja Puta u&#269;enja ili do greške samog koraka.";
+$WarningWhenEditingScorm = "Upozorenje !<br/>Kada izmjenite trenutni SCORM korak, moÂže do&#263;i do promjene izvjeÂš&#263;ivanja Puta u&#269;enja ili do greÂške samog koraka.";
+$AdditionalProfileField = "";
 ?>

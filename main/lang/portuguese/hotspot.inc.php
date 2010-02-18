@@ -1,24 +1,25 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $select = "Validar";
 $square = "Quadrado";
 $circle = "Elipse";
-$poly = "Polígono";
-$status1 = "Desenhe um hotspot (área clicável).";
-$status2_poly = "Utilize o botão direito do rato para fechar o polígono.";
-$status2_other = "Libertar o botão do rato para guardar o hotspot (área clicável).";
-$status3 = "Hotspot (área clicável) guardado";
+$poly = "PolÃ­gono";
+$status1 = "Desenhe um hotspot (Ã¡rea clicÃ¡vel).";
+$status2_poly = "Utilize o botÃ£o direito do rato para fechar o polÃ­gono.";
+$status2_other = "Libertar o botÃ£o do rato para guardar o hotspot (Ã¡rea clicÃ¡vel).";
+$status3 = "Hotspot (Ã¡rea clicÃ¡vel) guardado";
 $exercise_status_1 = "Responda clicando na imagem abaixo";
 $exercise_status_2 = "Validar respostas";
 $exercise_status_3 = "Estado: Pergunta encerrada";
 $showUserPoints = "Mostrar/Esconder cliques do utilizador";
-$showHotspots = "Mostrar / Esconder hotspots (áreas clicáveis)";
-$labelPolyMenu = "Fechar polígono";
+$showHotspots = "Mostrar / Esconder hotspots (Ã¡reas clicÃ¡veis)";
+$labelPolyMenu = "Fechar polÃ­gono";
 $triesleft = "Tentativas restantes";
-$exeFinished = "Clique no botão abaixo para validar as suas respostas.";
+$exeFinished = "Clique no botÃ£o abaixo para validar as suas respostas.";
 $nextAnswer = "Clique agora em: &done=done";
-$delineation = "Delimitação";
-$labelDelineationMenu = "Fechar delimitação";
-$oar = "Área em risco";
+$delineation = "DelimitaÃ§Ã£o";
+$labelDelineationMenu = "Fechar delimitaÃ§Ã£o";
+$oar = "Ãrea em risco";
 ?>

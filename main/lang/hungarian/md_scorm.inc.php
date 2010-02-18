@@ -1,37 +1,38 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$nameTools = "elavult nyelvi változó";
-$langMdCallingTool = "Tanulási program - Scorm";
+$nameTools = "elavult nyelvi vÃ¡ltozÃ³";
+$langMdCallingTool = "TanulÃ¡si program - Scorm";
 $langTool = "SCORM metaadat-m&#369;veletek";
-$langNotInDB = "nem található Chamilo adatbázis bejegyzés.";
-$langManifestSyntax = "(nyelvtani hiba a manifest fájlban)";
-$langEmptyManifest = "(üres manifest fájl)";
-$langNoManifest = "(nincs manifest fájl)";
-$langNotFolder = "nem lehetséges, mert ez nem egy mappa...";
-$langUploadHtt = "HTT fájl feltöltése";
-$langHttFileNotFound = "Az új HTT fájlt nem lehetett megnyitni (pl. üres, túl nagy)";
-$langHttOk = "Az új HTT fájl feltöltve";
-$langHttNotOk = "HTT fájl feltöltése sikertelen";
-$langRemoveHtt = "HTT fájl eltávolítása";
-$langHttRmvOk = "HTT fájl el lett távolítva";
-$langHttRmvNotOk = "HTT fájl eltávolítása sikertelen";
-$langImport = "Metaadatok létrehozása az imsmanifest.xml alapján";
-$langRemove = "Metaadat bejegyzések törlése";
-$langAllRemovedFor = "Az összes bejegyzés törölve ";
-$langIndex = "Szavak indexelése a PhpDig-gel";
-$langTotalMDEs = "SCORM Metaadat bejegyzések száma összesen:";
-$langMainMD = "F&#337; metaadat bejegyzés megnyitása";
+$langNotInDB = "nem talÃ¡lhatÃ³ Chamilo adatbÃ¡zis bejegyzÃ©s.";
+$langManifestSyntax = "(nyelvtani hiba a manifest fÃ¡jlban)";
+$langEmptyManifest = "(Ã¼res manifest fÃ¡jl)";
+$langNoManifest = "(nincs manifest fÃ¡jl)";
+$langNotFolder = "nem lehetsÃ©ges, mert ez nem egy mappa...";
+$langUploadHtt = "HTT fÃ¡jl feltÃ¶ltÃ©se";
+$langHttFileNotFound = "Az Ãºj HTT fÃ¡jlt nem lehetett megnyitni (pl. Ã¼res, tÃºl nagy)";
+$langHttOk = "Az Ãºj HTT fÃ¡jl feltÃ¶ltve";
+$langHttNotOk = "HTT fÃ¡jl feltÃ¶ltÃ©se sikertelen";
+$langRemoveHtt = "HTT fÃ¡jl eltÃ¡volÃ­tÃ¡sa";
+$langHttRmvOk = "HTT fÃ¡jl el lett tÃ¡volÃ­tva";
+$langHttRmvNotOk = "HTT fÃ¡jl eltÃ¡volÃ­tÃ¡sa sikertelen";
+$langImport = "Metaadatok lÃ©trehozÃ¡sa az imsmanifest.xml alapjÃ¡n";
+$langRemove = "Metaadat bejegyzÃ©sek tÃ¶rlÃ©se";
+$langAllRemovedFor = "Az Ã¶sszes bejegyzÃ©s tÃ¶rÃ¶lve";
+$langIndex = "Szavak indexelÃ©se a PhpDig-gel";
+$langTotalMDEs = "SCORM Metaadat bejegyzÃ©sek szÃ¡ma Ã¶sszesen:";
+$langMainMD = "F&#337; metaadat bejegyzÃ©s megnyitÃ¡sa";
 $langLines = "sor";
-$langPlay = "index.php lejátszása";
-$langNonePossible = "Nem lehet metaadat m&#369;veleteket végezni";
-$langOrElse = "Scorm mappa vagy Scorm mappa azonosító kiválasztása";
-$langWorkWith = "Scorm könyvtár felhasználása";
-$langSDI = "... SCORM mappa SCORM mappa azonosítóval (manifest feldarabolása vagy üresen hagyása)";
-$langRoot = "gyökér";
-$langSplitData = "Manifest és metaadat bejegyzés darabolása, ha van ilyen:";
-$langMffNotOk = "A manifest fájl cseréje sikertelen";
-$langMffOk = "A manifest fájl ki lett cserélve";
-$langMffFileNotFound = "Az új manifest fájlt nem lehetett megnyitni (pl. üres, túl nagy)";
-$langUploadMff = "Manifest fájl cseréje";
+$langPlay = "index.php lejÃ¡tszÃ¡sa";
+$langNonePossible = "Nem lehet metaadat m&#369;veleteket vÃ©gezni";
+$langOrElse = "Scorm mappa vagy Scorm mappa azonosÃ­tÃ³ kivÃ¡lasztÃ¡sa";
+$langWorkWith = "Scorm kÃ¶nyvtÃ¡r felhasznÃ¡lÃ¡sa";
+$langSDI = "... SCORM mappa SCORM mappa azonosÃ­tÃ³val (manifest feldarabolÃ¡sa vagy Ã¼resen hagyÃ¡sa)";
+$langRoot = "gyÃ¶kÃ©r";
+$langSplitData = "Manifest Ã©s metaadat bejegyzÃ©s darabolÃ¡sa, ha van ilyen:";
+$langMffNotOk = "A manifest fÃ¡jl cserÃ©je sikertelen";
+$langMffOk = "A manifest fÃ¡jl ki lett cserÃ©lve";
+$langMffFileNotFound = "Az Ãºj manifest fÃ¡jlt nem lehetett megnyitni (pl. Ã¼res, tÃºl nagy)";
+$langUploadMff = "Manifest fÃ¡jl cserÃ©je";
 ?>

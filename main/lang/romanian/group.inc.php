@@ -1,5 +1,6 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $langNewGroupCreate = "Creaza grup/grupuri noi";
 $langGroupCreation = "Creare de grupuri noi";
@@ -39,11 +40,11 @@ $langPrivate = "privat";
 $langPublic = "public";
 $langPropModify = "Modifica setarile";
 $langState = "Stat";
-$langGroupFilledGroups = "Grupurile au fost umplute (sau completate) de utilizatorii prezenti in lista \"Utilizatori\".";
-$langSubscribed  = "utilizatorii inregistrati in acest curs";
-$langStudentsNotInThisGroups  = "Utilizatori neprezenti in acest grup";
-$langQtyOfUserCanSubscribe_PartBeforeNumber  = "Un utilizator poate fi membru a maximum";
-$langQtyOfUserCanSubscribe_PartAfterNumber  = " grupuri";
+$langGroupFilledGroups = "Grupurile au fost umplute (sau completate) de utilizatorii prezenti in lista \\"Utilizatori\\".";
+$langSubscribed = "utilizatorii inregistrati in acest curs";
+$langStudentsNotInThisGroups = "Utilizatori neprezenti in acest grup";
+$langQtyOfUserCanSubscribe_PartBeforeNumber = "Un utilizator poate fi membru a maximum";
+$langQtyOfUserCanSubscribe_PartAfterNumber = "Â grupuri";
 $langGroupLimit = "Limita";
 $CreateGroup = "Creeaza grup(uri)";
 $ProceedToCreateGroup = "Mergi mai departe cu crearea unui grup";
@@ -67,7 +68,7 @@ $langNoGroupsAvailable = "Nici un grup disponibil";
 $langGroupsFromVirtualCourses = "Cursuri virtuale";
 $NotAvailable = "Nu este disponibil";
 $CreateSubgroups = "Creaza subgrupuri";
-$CreateSubgroupsInfo = "Aceasta optiune iti permite sa creezi grupuri noi bazate pe un grup existent. Indica numarul dorit de grupuri si alege un grup existent. Numarul indicat de grupuri va fi creat iar toti membrii vor fi inscrisi in acele grupuri noi. Grupul existent ramane neschimbat.";
+$CreateSubgroupsInfo = "Aceasta optiune iti permite sa creezi grupuri noi bazate pe un grup existent. Indica numarul dorit de grupuri si alege un grup existent. Numarul indicat de grupuri va fi creat iar toti membrii vor fi inscrisi in acele grupuri noi. Grupul existent ramane n";
 $CreateNumberOfGroups = "Creaza";
 $WithUsersFrom = "grupuri cu membrii din";
 $CategoryDeleted = "Categoria este stearsa";
@@ -92,4 +93,5 @@ $GroupsFromClassesInfo = "Utilizand aceasta optiune, puteti crea grupuri bazate 
 $Group = "Grup";
 $ForumOfGroup = "Forumul grupului:";
 $BackToGroupList = "Inapoi la lista de grupuri.";
+$EditGroupCategory = "";
 ?>

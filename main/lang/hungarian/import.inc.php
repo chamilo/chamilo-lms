@@ -1,16 +1,17 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$langPgTitle = "Az oldal címe";
-$langExplanation = "Az oldal HTML formátumú kell, hogy legyen (pl. \"oldalam.htm\"). A Honlapról elérhetõ lesz. Ha nem HTML dokumentumokat akar küldeni (PDF, Word, Power Point, Video, stb.) használja a <a href=../document/document.php>Dokumentumok eszközt</a>";
-$langTooBig = "Nem választott ki feltölteni egy file-t sem vagy túl nagy.";
-$langCouldNot = "A file-t nem lehet feltölteni.";
-$langNotAllowed = "Nem engedélyezett";
-$langAddPageToSite = "Oldal hozzáadása a kurzushoz";
-$langCouldNotSendPage = "Ez az oldal nem HTML formátumú és nem lehet feltölteni. Ha nem HTML dokumentumokat akar küldeni (PDF, Word, Power Point, Video, stb.) használja a <a href=../document/document.php>Dokumentumok eszközt</a>";
-$langSendPage = "Feltöltendõ oldal";
-$langPageTitleModified = "Az oldal címe megváltoztatva";
-$langPageAdded = "Oldal hozzáadva";
-$langAddPage = "Oldalt hozzáadása";
-$Choose = "Kiválaszt";
+$langPgTitle = "Az oldal cÃ­me";
+$langExplanation = "Az oldal HTML formÃ¡tumÃº kell, hogy legyen (pl. \\"oldalam.htm\\"). A HonlaprÃ³l elÃ©rhetÃµ lesz. Ha nem HTML dokumentumokat akar kÃ¼ldeni (PDF, Word, Power Point, Video, stb.) hasznÃ¡lja a <a href=../document/document.php>Dokumentumok eszkÃ¶zt</a>";
+$langTooBig = "Nem vÃ¡lasztott ki feltÃ¶lteni egy file-t sem vagy tÃºl nagy.";
+$langCouldNot = "A file-t nem lehet feltÃ¶lteni.";
+$langNotAllowed = "Nem engedÃ©lyezett";
+$langAddPageToSite = "Oldal hozzÃ¡adÃ¡sa a kurzushoz";
+$langCouldNotSendPage = "Ez az oldal nem HTML formÃ¡tumÃº Ã©s nem lehet feltÃ¶lteni. Ha nem HTML dokumentumokat akar kÃ¼ldeni (PDF, Word, Power Point, Video, stb.) hasznÃ¡lja a <a href=../document/document.php>Dokumentumok eszkÃ¶zt</a>";
+$langSendPage = "FeltÃ¶ltendÃµ oldal";
+$langPageTitleModified = "Az oldal cÃ­me megvÃ¡ltoztatva";
+$langPageAdded = "Oldal hozzÃ¡adva";
+$langAddPage = "Oldalt hozzÃ¡adÃ¡sa";
+$Choose = "KivÃ¡laszt";
 ?>

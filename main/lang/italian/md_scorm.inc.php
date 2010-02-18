@@ -1,5 +1,6 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $nameTools = "variabili non utilizzate";
 $langMdCallingTool = "Moduli Scorm";
@@ -7,15 +8,15 @@ $langTool = "Operazioni metadata Scorm";
 $langNotInDB = "non ci sono informazioni nel Database";
 $langManifestSyntax = "(errore di sintassi nel manifest...)";
 $langEmptyManifest = "(manifest vuoto...)";
-$langNoManifest = "(non c\'è il manifest...)";
+$langNoManifest = "(non c\'Ã¨ il manifest...)";
 $langNotFolder = "non sono possibili, non si tratta di una cartella...";
 $langUploadHtt = "Carica un file HTT";
-$langHttFileNotFound = "Il nuovo file HTT non può essere aperto (vuoto? troppo pesante?...) ";
-$langHttOk = "Il nuovo file HTT è stato caricato";
-$langHttNotOk = "Il caricamento del file HTT è fallito";
+$langHttFileNotFound = "Il nuovo file HTT non puÃ² essere aperto (vuoto? troppo pesante?...)";
+$langHttOk = "Il nuovo file HTT Ã¨ stato caricato";
+$langHttNotOk = "Il caricamento del file HTT Ã¨ fallito";
 $langRemoveHtt = "Elimina il file HTT";
-$langHttRmvOk = "Il file HTT è stato eliminato";
-$langHttRmvNotOk = "Non è stato possibile eliminare il file HTT";
+$langHttRmvOk = "Il file HTT Ã¨ stato eliminato";
+$langHttRmvNotOk = "Non Ã¨ stato possibile eliminare il file HTT";
 $langImport = "Crea MDE dal manifest";
 $langRemove = "Elimina gli MDE";
 $langAllRemovedFor = "Tutte le voci sono state eliminate";
@@ -30,8 +31,8 @@ $langWorkWith = "Lavora con le cartelle Scorm";
 $langSDI = "...Cartella Scorm con SD-id (dividi il manifest o lascialo vuoto)";
 $langRoot = "root";
 $langSplitData = "Dividi il manifest e il #MDe, se ce ne sono";
-$langMffNotOk = "Non è stato possibile sostituire il file manifest";
-$langMffOk = "Il file manifest è stato sostituito";
-$langMffFileNotFound = "Il nuovo manifest non può essere aperto (vuoto? molto grande)...";
+$langMffNotOk = "Non Ã¨ stato possibile sostituire il file manifest";
+$langMffOk = "Il file manifest Ã¨ stato sostituito";
+$langMffFileNotFound = "Il nuovo manifest non puÃ² essere aperto (vuoto? molto grande)...";
 $langUploadMff = "Sostituisci il file manifest";
 ?>

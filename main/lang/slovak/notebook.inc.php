@@ -1,23 +1,35 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$NewNote = "Nová poznámka";
-$Note = "Poznámka";
-$NoteDeleted = "Poznámka zmazaná";
-$NoteUpdated = "Poznámka aktualizovaná";
-$NoteCreated = "Poznámka vytvorená";
-$YouMustWriteANote = "Prosím napíšte poznámku";
-$SaveNote = "Uloži&#357; poznámku";
-$WriteYourNoteHere = "Pre napísanie novej poznámky kliknite sem";
-$SearchByTitle = "Vyh&#318;ada&#357; pod&#318;a názvu";
-$WriteTheTitleHere = "Napíšte názov sem";
-$UpdateDate = "Posledná zmena";
-$NoteAddNew = "Prida&#357; novú poznámku";
-$OrderByCreationDate = "Zoradi&#357; pod&#318;a dátumu vytvorenia";
-$OrderByModificationDate = "Zoradi&#357; pod&#318;a dátumu zmeny";
-$OrderByTitle = "Zoradi&#357; pod&#318;a názvu";
-$NoteTitle = "Názov poznámky";
-$NoteComment = "Detaily poznámky";
-$NoteAdded = "Poznámka pridaná";
-$NoteConfirmDelete = "Naozaj chcete zmaza&#357; túto poznámku";
+$NewNote = "NovÃ¡ poznÃ¡mka";
+$Note = "PoznÃ¡mka";
+$NoteDeleted = "PoznÃ¡mka zmazanÃ¡";
+$NoteUpdated = "PoznÃ¡mka aktualizovanÃ¡";
+$NoteCreated = "PoznÃ¡mka vytvorenÃ¡";
+$YouMustWriteANote = "ProsÃ­m napÃ­Âšte poznÃ¡mku";
+$SaveNote = "UloÂži&#357; poznÃ¡mku";
+$WriteYourNoteHere = "Pre napÃ­sanie novej poznÃ¡mky kliknite sem";
+$SearchByTitle = "Vyh&#318;ada&#357; pod&#318;a nÃ¡zvu";
+$WriteTheTitleHere = "NapÃ­Âšte nÃ¡zov sem";
+$UpdateDate = "PoslednÃ¡ zmena";
+$NoteAddNew = "Prida&#357; novÃº poznÃ¡mku";
+$OrderByCreationDate = "Zoradi&#357; pod&#318;a dÃ¡tumu vytvorenia";
+$OrderByModificationDate = "Zoradi&#357; pod&#318;a dÃ¡tumu zmeny";
+$OrderByTitle = "Zoradi&#357; pod&#318;a nÃ¡zvu";
+$NoteTitle = "NÃ¡zov poznÃ¡mky";
+$NoteComment = "Detaily poznÃ¡mky";
+$NoteAdded = "PoznÃ¡mka pridanÃ¡";
+$NoteConfirmDelete = "Naozaj chcete zmaza&#357; tÃºto poznÃ¡mku";
+$AddNote = "";
+$ModifyNote = "";
+$BackToNoteList = "";
+$NotebookManagement = "";
+$BackToNotesList = "";
+$NotesSortedByTitleAsc = "";
+$NotesSortedByTitleDESC = "";
+$NotesSortedByUpdateDateAsc = "";
+$NotesSortedByUpdateDateDESC = "";
+$NotesSortedByCreationDateAsc = "";
+$NotesSortedByCreationDateDESC = "";
 ?>

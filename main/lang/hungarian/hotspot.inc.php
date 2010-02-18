@@ -1,21 +1,25 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$select = "Kiválaszt";
-$square = "Négyzet";
+$select = "KivÃ¡laszt";
+$square = "NÃ©gyzet";
 $circle = "Elipszis";
 $poly = "Poligon";
-$status1 = "Hotspot rajzolása";
-$status2_poly = "Használja a jobb egérgombot a poligon bezárásához";
-$status2_other = "Engedje fel az egérgombot a hotspot mentéséhez";
+$status1 = "Hotspot rajzolÃ¡sa";
+$status2_poly = "HasznÃ¡lja a jobb egÃ©rgombot a poligon bezÃ¡rÃ¡sÃ¡hoz";
+$status2_other = "Engedje fel az egÃ©rgombot a hotspot mentÃ©sÃ©hez";
 $status3 = "Hotspot mentve";
-$exercise_status_1 = "Státusz: a kérdés még nincs lezárva";
-$exercise_status_2 = "Kattintson a kérdésre adott válaszok elküldéséhez";
-$exercise_status_3 = "Státusz: befejezett kérdés";
-$showUserPoints = "Felhasználók kattintásának mutatása/elrejtése";
-$showHotspots = "Hotspot mutatása/elrejtése";
-$labelPolyMenu = "Poligon zárása";
-$triesleft = "Hátralév&#337; próbálkozások";
-$exeFinished = "Minden választ megadott. Most már elhelyezheti a forrópontokat, vagy továbbléphet.";
+$exercise_status_1 = "StÃ¡tusz: a kÃ©rdÃ©s mÃ©g nincs lezÃ¡rva";
+$exercise_status_2 = "Kattintson a kÃ©rdÃ©sre adott vÃ¡laszok elkÃ¼ldÃ©sÃ©hez";
+$exercise_status_3 = "StÃ¡tusz: befejezett kÃ©rdÃ©s";
+$showUserPoints = "FelhasznÃ¡lÃ³k kattintÃ¡sÃ¡nak mutatÃ¡sa/elrejtÃ©se";
+$showHotspots = "Hotspot mutatÃ¡sa/elrejtÃ©se";
+$labelPolyMenu = "Poligon zÃ¡rÃ¡sa";
+$triesleft = "HÃ¡tralÃ©v&#337; prÃ³bÃ¡lkozÃ¡sok";
+$exeFinished = "Minden vÃ¡laszt megadott. Most mÃ¡r elhelyezheti a forrÃ³pontokat, vagy tovÃ¡bblÃ©phet.";
 $nextAnswer = "Most kattintson erre: &done=done";
+$delineation = "";
+$labelDelineationMenu = "";
+$oar = "";
 ?>

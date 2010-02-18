@@ -1,22 +1,23 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$langOnlineConference  = "Conferenza";
-$langWash  = "Ripulisci";
-$langReset  = "Riparti";
-$langSave  = "Salva";
-$langRefresh  = "Aggiorna";
-$langIsNowInYourDocDir  = "si trova ora nella sezione Documenti. <br><B>Il documento è visibile</B>";
-$langCopyFailed  = "Stampa non effettuata";
-$langTypeMessage  = "Per favore, scrivi il tuo messaggio !";
-$langConfirmReset  = "Vuoi veramente cancellare tutti i messaggi ?";
-$langHasResetChat  = "ha fatto ripartire la Chat";
-$langNoOnlineConference  = "In questo momento non ci sono incontri online ...";
-$langMediaFile  = "Streaming audio o video in diretta";
-$langContentFile  = "Presentazione";
-$langListOfParticipants  = "Elenco dei partecipanti";
-$langYourPicture  = "La tua fotografia";
-$langOnlineDescription  = "Descrizione dell\'incontro online";
+$langOnlineConference = "Conferenza";
+$langWash = "Ripulisci";
+$langReset = "Riparti";
+$langSave = "Salva";
+$langRefresh = "Aggiorna";
+$langIsNowInYourDocDir = "si trova ora nella sezione Documenti. <br><B>Il documento Ã¨ visibile</B>";
+$langCopyFailed = "Stampa non effettuata";
+$langTypeMessage = "Per favore, scrivi il tuo messaggio !";
+$langConfirmReset = "Vuoi veramente cancellare tutti i messaggi ?";
+$langHasResetChat = "ha fatto ripartire la Chat";
+$langNoOnlineConference = "In questo momento non ci sono incontri online ...";
+$langMediaFile = "Streaming audio o video in diretta";
+$langContentFile = "Presentazione";
+$langListOfParticipants = "Elenco dei partecipanti";
+$langYourPicture = "La tua fotografia";
+$langOnlineDescription = "Descrizione dell\'incontro online";
 $langOnlyCheckForImportantQuestion = "Per favore, segna la casella solo per domande importanti!";
 $langQuestion = "domanda";
 $langClearList = "Cancella i messaggi";
@@ -31,8 +32,8 @@ $langWelcomeToOnlineConf = "Benvenuti nella <b>Videoconferenza</b>";
 $langNoLinkAvailable = "Non ci sono collegamenti disponibili";
 $langChat_reset_by = "Fai ripartire la chat";
 $OrFile = "O importa";
-$langCallSent = "La chiamata in chat è stata inviata: sono in attesa di consenso da parte della persona che hai chiamato";
-$langChatDenied = "Il consenso alla chat è stato negato da parte della persona che hai chiamato";
+$langCallSent = "La chiamata in chat Ã¨ stata inviata: sono in attesa di consenso da parte della persona che hai chiamato";
+$langChatDenied = "Il consenso alla chat Ã¨ stato negato da parte della persona che hai chiamato";
 $Send = "Invia";
 $Connected = "Connessi";
 $Think = "Penso...";
@@ -56,7 +57,7 @@ $Arrow = "Freccia";
 $Question = "Domanda";
 $Idea = "Idea";
 $AskPermissionSpeak = "Chiedo la parola";
-$GiveTheFloorTo = "Dò la parola a";
+$GiveTheFloorTo = "DÃ² la parola a";
 $Pause = "Pausa";
 $Stop = "Stop";
 ?>

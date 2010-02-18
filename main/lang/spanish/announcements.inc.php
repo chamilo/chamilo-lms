@@ -1,40 +1,41 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $Announcement = "Anuncios";
 $langAnnEmpty = "Los anuncios han sido borrados";
 $AnnouncementModified = "El anuncio ha sido modificado";
-$AnnouncementAdded = "El anuncio ha sido a馻dido";
+$AnnouncementAdded = "El anuncio ha sido a帽adido";
 $AnnouncementDeleted = "El anuncio ha sido borrado";
 $AnnouncementPublishedOn = "Publicado el";
-$AddAnnouncement = "A馻dir un anuncio";
+$AddAnnouncement = "A帽adir un anuncio";
 $langContent = "Contenido";
 $AnnouncementDeleteAll = "Eliminar todos los anuncios";
 $professorMessage = "Mensaje del profesor";
 $langEmailSent = "y enviado a los estudiantes registrados";
-$EmailOption = "Enviar este anuncio por correo electr髇ico";
+$EmailOption = "Enviar este anuncio por correo electr贸nico";
 $langOn = "Hay";
 $langRegUser = "usuarios inscritos en el curso";
-$langUnvalid = "tienen una direcci髇 de correo inv醠ida o una direcci髇 de correo sin especificar";
+$langUnvalid = "tienen una direcci贸n de correo inv谩lida o una direcci贸n de correo sin especificar";
 $langModifAnn = "Modificar este anuncio";
-$langModify    = "modificar";
-$langDelete    = "Eliminar";
-$langTitle     = "T韙ulo";
-$langHelp      = "ayuda";
-$langOk        = "Aceptar";
-$langAddIntro  = "A馻dir un texto de introducci髇";
-$langBackList  = "Volver a la lista";
-$langSelMess   = "Advertencia a algunos usuarios";
-$EmailTitle  = "T韙ulo del anuncio";
-$langUserlist  = "Lista de usuarios";
-$langSelectedUsers  = "Usuarios seleccionados";
-$langSubmit  = "Enviar";
-$langPleaseEnterMessage  = "Debe introducir el texto del mensaje.";
-$langPleaseSelectUsers  = "Debe seleccionar alg鷑 usuario.";
+$langModify = "modificar";
+$langDelete = "Eliminar";
+$langTitle = "T铆tulo";
+$langHelp = "ayuda";
+$langOk = "Aceptar";
+$langAddIntro = "A帽adir un texto de introducci贸n";
+$langBackList = "Volver a la lista";
+$langSelMess = "Advertencia a algunos usuarios";
+$EmailTitle = "T铆tulo del anuncio";
+$langUserlist = "Lista de usuarios";
+$langSelectedUsers = "Usuarios seleccionados";
+$langSubmit = "Enviar";
+$langPleaseEnterMessage = "Debe introducir el texto del mensaje.";
+$langPleaseSelectUsers = "Debe seleccionar alg煤n usuario.";
 $Teachersubject = "Mensaje enviado a sus estudiantes";
-$langMessages  = "Mensajes:";
-$langMessageToSelectedUsers  = "Enviar mensajes a determinados usuarios";
-$langIntroText  = "Para mandar un mensaje, seleccione los grupos de usuarios (marcados con una G delante)o a usuarios individuales (marcados con una U) de la lista de la izquierda.";
+$langMessages = "Mensajes:";
+$langMessageToSelectedUsers = "Enviar mensajes a determinados usuarios";
+$langIntroText = "Para mandar un mensaje, seleccione los grupos de usuarios (marcados con una G delante)o a usuarios individuales (marcados con una U) de la lista de la izquierda.";
 $langDown = "Bajar";
 $langMsgSent = "El mensaje ha sido enviado a los alumnos seleccionados";
 $langSelUser = "seleccionar usuarios";
@@ -49,9 +50,9 @@ $NoAnnouncements = "No hay anuncios";
 $SelectEverybody = "Seleccionar Todos";
 $SelectedUsersGroups = "grupo de usuarios seleccionados";
 $LearnerMessage = "Mensaje de un alumno";
-$TitleIsRequired = "El t韙ulo es obligatorio";
-$AnnounceSentByEmail = "Anuncio enviado por correo electr髇ico";
-$AnnounceSentToUserSelection = "Anuncio enviado a una selecci髇 de usuarios";
+$TitleIsRequired = "El t铆tulo es obligatorio";
+$AnnounceSentByEmail = "Anuncio enviado por correo electr贸nico";
+$AnnounceSentToUserSelection = "Anuncio enviado a una selecci贸n de usuarios";
 $SendAnnouncement = "Enviar anuncio";
 $ModifyAnnouncement = "Modificar anuncio";
 $ButtonPublishAnnouncement = "Enviar anuncio";

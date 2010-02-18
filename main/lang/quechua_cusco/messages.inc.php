@@ -1,14 +1,16 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$Inbox  = "Willana ch\'askiq";
+$MessageEmptyMessageOrSubject = "";
+$Inbox = "Willana ch\'askiq";
 $Messages = "Usqay willanakuna";
 $SendMessage = "Apachiy willanakunata";
 $NewMessage = "Musuq willana";
 $ComposeMessage = "Qelqay";
 $DeleteSelectedMessages = "Pichay ajllasqa willaykunata";
 $SelectAll = "Ajllay llipinta";
-$DeselectAll  = "Amaña ajllaychu";
+$DeselectAll = "Amaña ajllaychu";
 $ReplyToMessage = "Kutichiy";
 $BackToInbox = "Kutiy willana ch\'askiqman";
 $MessageSentTo = "Willanaqa payman apachikun";
@@ -30,9 +32,9 @@ $ReadMessage = "Ñawinchay";
 $SendInviteMessage = "Apachiy mink\'aq willanata";
 $SendMessageInvitation = "Cheqaychu kashanki mink\'ay willanata apachinapaq ajllasqa haykuqmasikunaman ?";
 $MessageTool = "Willanamanta llank\'ana";
-$SendMessage = "Apachiy willanakunata";
 $WriteAMessage = "Qelqay hoq willanata";
 $AlreadyReadMessage = "Willana ñawinchasqa";
 $UnReadMessage = "Willana mana ñawinchasqa";
 $MessageSent = "Willana apachisqa";
+$YouShouldWriteAMessage = "";
 ?>

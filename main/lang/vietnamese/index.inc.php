@@ -1,17 +1,75 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$langInvalidId = "<small>Không đăng nhập được.Nếu bạn chưa phải thành viên, hãy <a href=claroline/auth/inscription.php>đăng ký ở đây</a></small></font color>";
-$langWelcome = "courses are freely available below. Other  courses requirea username and a password, which you can obtain by clicking on \'registration\'. Professorscan create course websites clicking on registration too, but selecting then\'Create course sites (professors)\'.";
+$langInvalidId = "<small>KhÃŽng ÄÄng nháº­p ÄÆ°á»£c.Náº¿u báº¡n chÆ°a pháº£i thÃ nh viÃªn, hÃ£y <a href=claroline/auth/inscription.php>ÄÄng kÃœ á» ÄÃ¢y</a></small></font color>";
+$langWelcome = "courses are freely available below. Other  courses requirea username and a password, which you can obtain by clicking on \'registration\'. Professorscan create course websites clicking on registration too, but selecting then\'Create course sites (professo";
 $langPass = "Password";
 $langEnter = "Enter";
-$langReg = "Đăng ký";
+$langReg = "ÄÄng kÃœ";
+$langMenu = "";
 $langAdvises = "Advises";
-$langOtherCourses = "Danh mục khoá học";
-$langSupportForum = "Diễn đàn hỗ trợ";
-$langCategories  = "Danh mục website theo chủ đề";
-$langBackToHomePage  = "Trở về trang chủ";
-$lang_No_course_publicly_available  = "Chưa có khoá học nào.";
-$langLostPassword  = "Quên mật khẩu";
-$lang_edit_my_course_list  = "Tham gia các khoá học";
+$langCourseDoesntExist = "";
+$langGetCourseFromOldPortal = "";
+$langOtherCourses = "Danh má»¥c khoÃ¡ há»c";
+$langSupportForum = "Diá»n ÄÃ n há» trá»£";
+$langCategories = "Danh má»¥c website theo chá»§ Äá»";
+$langBackToHomePage = "Trá» vá» trang chá»§";
+$lang_No_course_publicly_available = "ChÆ°a cÃ³ khoÃ¡ há»c nÃ o.";
+$langLostPassword = "QuÃªn máº­t kháº©u";
+$lang_edit_my_course_list = "Tham gia cÃ¡c khoÃ¡ há»c";
+$langAgenda = "";
+$langValvas = "";
+$langUp = "";
+$langCatList = "";
+$langCourseList = "";
+$langHelptwo = "";
+$langRegAll = "";
+$EussMenu = "";
+$Opinio = "";
+$Intranet = "";
+$Englin = "";
+$langInvalidForSelfRegistration = "";
+$langSubCat = "";
+$langMenuGeneral = "";
+$langMenuUser = "";
+$langMenuAdmin = "";
+$langUsersOnLineList = "";
+$langTotalOnLine = "";
+$langRefresh = "";
+$langMe = "";
+$langSystemAnnouncements = "";
+$langHelpMaj = "";
+$langNotRegistered = "";
+$langAdmin = "";
+$Login = "";
+$langRegisterForCourse = "";
+$langUnregisterForCourse = "";
+$langCombinedCourse = "";
+$Platform = "";
+$Refresh = "";
+$TotalOnLine = "";
+$langCourseClosed = "";
+$ViewOpenCourses = "";
+$langCompetences = "";
+$langDiplomas = "";
+$langTeach = "";
+$langProductions = "";
+$langSendChatRequest = "";
+$langRequestDenied = "";
+$UsageDatacreated = "";
+$SessionView = "";
+$CourseView = "";
+$DropboxFileAdded = "";
+$NewMessageInForum = "";
+$FolderCreated = "";
+$LinkAdded = "";
+$AnnouncementAdded = "";
+$AgendaAdded = "";
+$Messages = "";
+$Inbox = "";
+$Comppose = "";
+$PendingInvitations = "";
+$YouDoNotHaveAnySessionInItsHistory = "";
+$PortalHomepageDefaultIntroduction = "";
 ?>

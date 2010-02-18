@@ -1,8 +1,9 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $langPgTitle = "Raphiq sutinchaynin";
-$langExplanation = "Kay raphiqa HTML nisqapin kanman (kay hinata \"noqaq_raphiy.htm\"). Wataqqa rikurimunqa yachachinaq raphi qallariyninpi. Sichus munanki khipu mana HTML apachiytaqa (PDF, Power Point, Word...) Hapipay kayta <a href=../document/document.php>Qelqa khipununa</a>";
+$langExplanation = "Kay raphiqa HTML nisqapin kanman (kay hinata \\"noqaq_raphiy.htm\\"). Wataqqa rikurimunqa yachachinaq raphi qallariyninpi. Sichus munanki khipu mana HTML apachiytaqa (PDF, Power Point, Word...) Hapipay kayta <a href=../document/document.php>Qelqa khipununa<";
 $langTooBig = "Apachinapaqqa manaraq ajllankichu khiputa utaq khipuqa sinchi hatunmi";
 $langCouldNot = "Khipuqa mana atikunraqchu apachikuyta";
 $langNotAllowed = "Mana reqsisqachu kashanki manuchakuq hina kay yachachinapiqa";

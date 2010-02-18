@@ -1,5 +1,6 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $langToolName = "Urmariri";
 $TrackingDisabled = "Urmarirea a fost dezactivata de catre administratotrul sistemului";
@@ -122,7 +123,7 @@ $langAccess = "Acces";
 $langCountries = "Tari";
 $langProviders = "Provideri";
 $langOS = "OS";
-$langBrowsers = "Browsers ";
+$langBrowsers = "Browsers";
 $langReferers = "Mentiuni";
 $langAccessExplain = "(Cand un utilizator deschide indexul unui portal)";
 $langTotalPlatformAccess = "Total";
@@ -217,6 +218,7 @@ $FirstLogin = "Prima logare";
 $AccessDetails = "Detalii de acces";
 $DateAndTimeOfAccess = "Data si ora de acces";
 $Duration = "Durata";
+$WrongDatasForTimeSpentOnThePlatform = "";
 $DisplayCoaches = "Vizualizare coach";
 $DisplayUserOverview = "Situatia utilizatorului";
 $ExportUserOverviewOptions = "Exporta optiunile interfetei utilizatorului";
@@ -228,6 +230,23 @@ $TotalExercisesScorePercentage = "Scorul total al exercitiilor";
 $ForumForumsNumber = "Numarul de forumuri";
 $ForumThreadsNumber = "Numarul de discutii";
 $ForumPostsNumber = "Numarul de mesaje";
+$ChatConnectionsDuringLastXDays = "";
+$ChatLastConnection = "";
 $CourseInformation = "Informatia cursului";
 $NoAdditionalFieldsWillBeExported = "Rubricile extra nu au fost exportate";
+$langSendNotification = "";
+$TimeOfActiveByTraining = "";
+$AvgAllUsersInAllCourses = "";
+$AvgExercisesScore = "";
+$TrainingTime = "";
+$CourseProgress = "";
+$ViewMinus = "";
+$ResourcesTracking = "";
+$SelectFieldToAdd = "";
+$AddAdditionalProfileField = "";
+$ConfigureExtensions = "";
+$DashboardBlocks = "";
+$DashboardList = "";
+$YouHaveNotEnabledBlocks = "";
+$BlocksHaveBeenUpdatedSuccessfully = "";
 ?>

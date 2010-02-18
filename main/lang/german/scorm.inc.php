@@ -1,55 +1,57 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $langScormVersion = "Version";
-$langScormRestarted = "Alle Lern-Einheiten sind nun unvollständig.";
+$langScormRestarted = "Alle Lern-Einheiten sind nun unvollstÃ¤ndig.";
 $langScormNoNext = "Dies ist die letzte Lern-Einheit.";
 $langScormNoPrev = "Dies ist die erste Lern-Einheit.";
 $langScormTime = "Zeit";
-$langScormNoOrder = "Es gibt keine vorgeschriebene Reihenfolge. Sie können daher Einheiten frei auswählen.";
+$langScormNoOrder = "Es gibt keine vorgeschriebene Reihenfolge. Sie kÃ¶nnen daher Einheiten frei auswÃ¤hlen.";
 $langScormScore = "Punkte";
 $langScormLessonTitle = "Titel der Lern-Einheit";
 $langScormStatus = "Status";
 $langScormToEnter = "Um einzutreten";
-$langScormFirstNeedTo = "müssen Sie zunächst fertigstellen";
+$langScormFirstNeedTo = "mÃ¼ssen Sie zunÃ¤chst fertigstellen";
 $langScormThisStatus = "Die Lern-Einheit ist nun";
 $langScormClose = "Terminieren";
 $langScormRestart = "Neustarten";
 $langScormCompstatus = "Abgeschlossen";
-$langScormIncomplete = "Unvollständig";
+$langScormIncomplete = "UnvollstÃ¤ndig";
 $langScormPassed = "Bestanden";
 $langScormFailed = "Nicht bestanden";
-$langScormPrevious = "Zurück";
+$langScormPrevious = "ZurÃ¼ck";
 $langScormNext = "Weiter";
 $langScormTitle = "Chamilo Scorm Player";
 $langScormMystatus = "Mein Status";
-$langScormNoItems = "Dieser Inhalt enthält keine Elemente.";
-$langScormNoStatus = "Für diesen Inhalt gibt es keinen Status";
+$langScormNoItems = "Dieser Inhalt enthÃ¤lt keine Elemente.";
+$langScormNoStatus = "FÃ¼r diesen Inhalt gibt es keinen Status";
 $langScormLoggedout = "Aus dem Scorm Bereich abgemeldet";
-$langScormCloseWindow = "Fenster schließen";
+$langScormCloseWindow = "Fenster schlieÃŸen";
 $ScormBrowsed = "angesehen";
-$langScormExitFullScreen = "Zurück zum normalen Bildschirm";
+$langScormExitFullScreen = "ZurÃ¼ck zum normalen Bildschirm";
 $langScormFullScreen = "Vollbild";
 $langScormNotAttempted = "Nicht versucht";
 $langCharset = "Zeichensatz";
 $langLocal = "lokal";
 $langRemote = "entfernt";
 $langAutodetect = "automatisch finden";
-$langAccomplishedStepsTotal = "Anzahl erledigte Schritte ";
+$langAccomplishedStepsTotal = "Anzahl erledigte Schritte";
 $langUnknown = "unbekannt";
-$AreYouSureToDeleteSteps = "Sind Sie sicher, dass Sie diese Schritte löschen möchen?";
+$AreYouSureToDeleteSteps = "Sind Sie sicher, dass Sie diese Schritte lÃ¶schen mÃ¶chen?";
 $Origin = "Ursprung";
-$Local = "Lokal ";
+$Local = "Lokal";
 $Remote = "Entfernt";
-$FileToUpload = "Datei für Upload";
+$FileToUpload = "Datei fÃ¼r Upload";
 $ContentMaker = "Ersteller des Inhalts";
-$ContentProximity = "Ähnlichkeit des Inhalts";
+$ContentProximity = "Ã„hnlichkeit des Inhalts";
 $UploadLocalFileFromGarbageDir = "Lokale Datei von Haupt/Garbage Verzeichnis hochladen";
 $ThisItemIsNotExportable = "Dieses Object ist zur Zeit nicht Scorm kompatibel. Aus diesem Grund kann es nicht exportiert werden.";
 $MoveCurrentChapter = "Das aktive Kapitel verschieben";
 $GenericScorm = "Generic Scorm";
-$UnknownPackageFormat = "Das Format des Paktes wird nicht erkannt. Vergewissen Sie sich, dass es korrekt formatiert ist und keine Fehler enthält. Probleme kann es geben durch proprietäre ZIP Formate oder die Übetragung langer Dateien. Bei Unklarheiten bzgl. ZIP, versuchen Sie es bitte mit minimalen ZIP Funktionen.";
+$UnknownPackageFormat = "Das Format des Paktes wird nicht erkannt. Vergewissen Sie sich, dass es korrekt formatiert ist und keine Fehler enthÃ¤lt. Probleme kann es geben durch proprietÃ¤re ZIP Formate oder die Ãœbetragung langer Dateien. Bei Unklarheiten bzgl. ZIP, versuchen Sie es";
 $Attempt = "Versuch";
 $MoveTheCurrentForum = "Das bestehende Forum verschieben";
-$WarningWhenEditingScorm = "Warnung!<br>Wenn man den Inhalt eines Scorm Schrittes bearbeitet, kann man den Bericht des Lernpfads ändern oder den Schritt beschädigen";
+$WarningWhenEditingScorm = "Warnung!<br>Wenn man den Inhalt eines Scorm Schrittes bearbeitet, kann man den Bericht des Lernpfads Ã¤ndern oder den Schritt beschÃ¤digen";
+$AdditionalProfileField = "";
 ?>

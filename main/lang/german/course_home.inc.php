@@ -1,13 +1,14 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $langActivate = "Anzeigen";
 $langDeactivate = "Verstecken";
-$langInLnk  = "Versteckte Tools und Links";
-$langDelLk = "Wollen Sie diesen Link wirklich löschen?";
-$langCourseCreate  = "Einen Kurs einrichten";
-$langNameOfTheLink  = "Name des Links";
-$lang_main_categories_list                  = "Haupt-Kategorieliste";
+$langInLnk = "Versteckte Tools und Links";
+$langDelLk = "Wollen Sie diesen Link wirklich lÃ¶schen?";
+$langCourseCreate = "Einen Kurs einrichten";
+$langNameOfTheLink = "Name des Links";
+$lang_main_categories_list = "Haupt-Kategorieliste";
 $langCourseAdminOnly = "Nur Kursleiter";
 $PlatformAdminOnly = "Nur Administratoren";
 $langCombinedCourse = "Kombinierter Kurs";
@@ -23,5 +24,9 @@ $Interaction = "Interaktion";
 $Authoring = "Erstellen";
 $Administration = "Verwaltung";
 $IntroductionTextUpdated = "Der Einleitungstext wurde aktualisiert";
-$IntroductionTextDeleted = "Einleitungstext wurde gelöscht";
+$IntroductionTextDeleted = "Einleitungstext wurde gelÃ¶scht";
+$SessionIdentifier = "";
+$SessionName = "";
+$SessionCategory = "";
+$SessionData = "";
 ?>

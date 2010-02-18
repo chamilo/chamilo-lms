@@ -1,18 +1,36 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$lang_new_item = "à¾ÔèÁÃÒÂ¡ÒÃáÅéÇ";
-$lang_title_notification = "¹ÑºµÑé§áµè¤Ø³à¢éÒÁÒ¤ÃÑé§ÊØ´·éÒÂ";
-$lang_update_agenda = "»ÃÑº»ÃØ§¡ÓË¹´¡ÒÃ·ÕèÁÕÍÂÙèáÅéÇ";
-$lang_new_agenda = "à¾ÔèÁ¡ÓË¹´¡ÒÃãËÁèáÅéÇ";
-$lang_update_announcements = "ä´é»ÃÑº»ÃØ§»ÃÐ¡ÒÈ·ÕèÁÕÍÂÙèà´ÔÁãËéáÅéÇ";
-$lang_new_announcements = "à¾ÔèÁ»ÃÐ¡ÒÈãËÁèáÅéÇ";
-$lang_new_document = "ä´éà¾ÔèÁàÍ¡ÊÒÃãËÁèáÅéÇ";
-$lang_new_exercise = "áºº·´ÊÍºãËÁè ÊÒÁÒÃ¶ãªé§Ò¹ä´éáÅÇ";
-$lang_update_link = "ä´é»ÃÑº»ÃØ§ ÃÒÂ¡ÒÃàª×èÍÁâÂ§¢éÍÁÙÅãËéáÅéÇ";
-$lang_new_link = "à¾ÔèÁ¡ÒÃàª×èÍÁâÂ§ãËÁèáÅéÇ";
-$lang_new_forum_topic = "ä´éà¾ÔèÁËÑÇ¢éÍãËÁèãËéáÅéÇ";
-$lang_new_groupforum_topic = "ä´éà¾ÔèÁËÑÇ¢éÍãËÁèã¹¡ÅØèÁÍÀÔ»ÃÒÂáÅéÇ";
-$lang_new_dropbox_file = "ä´éÃÑºä¿ÅìãËÁè";
-$lang_update_dropbox_file = "»ÃÑº»ÃØ§ä¿Åìã¹¡ÅèÍ§Êè§§Ò¹¢Í§¤Ø³áÅéÇ";
+$lang_new_item = "Ã Å¸Ã”Ã¨ÃÃƒÃ’Ã‚Â¡Ã’ÃƒÃ¡Ã…Ã©Ã‡";
+$lang_title_notification = "Â¹Ã‘ÂºÂµÃ‘Ã©Â§Ã¡ÂµÃ¨â‚¬Ã˜Â³Ã Â¢Ã©Ã’ÃÃ’â‚¬ÃƒÃ‘Ã©Â§ÃŠÃ˜Å½Â·Ã©Ã’Ã‚";
+$lang_update_agenda = "Â»ÃƒÃ‘ÂºÂ»ÃƒÃ˜Â§Â¡Ã“Ã‹Â¹Å½Â¡Ã’ÃƒÂ·Ã•Ã¨ÃÃ•ÃÃ‚Ã™Ã¨Ã¡Ã…Ã©Ã‡";
+$lang_new_agenda = "Ã Å¸Ã”Ã¨ÃÂ¡Ã“Ã‹Â¹Å½Â¡Ã’ÃƒÃ£Ã‹ÃÃ¨Ã¡Ã…Ã©Ã‡";
+$lang_update_announcements = "Ã¤Å½Ã©Â»ÃƒÃ‘ÂºÂ»ÃƒÃ˜Â§Â»ÃƒÃÂ¡Ã’ÃˆÂ·Ã•Ã¨ÃÃ•ÃÃ‚Ã™Ã¨Ã Å½Ã”ÃÃ£Ã‹Ã©Ã¡Ã…Ã©Ã‡";
+$lang_new_announcements = "Ã Å¸Ã”Ã¨ÃÂ»ÃƒÃÂ¡Ã’ÃˆÃ£Ã‹ÃÃ¨Ã¡Ã…Ã©Ã‡";
+$lang_new_document = "Ã¤Å½Ã©Ã Å¸Ã”Ã¨ÃÃ ÃÂ¡ÃŠÃ’ÃƒÃ£Ã‹ÃÃ¨Ã¡Ã…Ã©Ã‡";
+$lang_new_exercise = "Ã¡ÂºÂºÂ·Å½ÃŠÃÂºÃ£Ã‹ÃÃ¨ ÃŠÃ’ÃÃ’ÃƒÂ¶Ã£ÂªÃ©Â§Ã’Â¹Ã¤Å½Ã©Ã¡Ã…Ã‡";
+$lang_update_link = "Ã¤Å½Ã©Â»ÃƒÃ‘ÂºÂ»ÃƒÃ˜Â§ ÃƒÃ’Ã‚Â¡Ã’ÃƒÃ ÂªÃ—Ã¨ÃÃÃ¢Ã‚Â§Â¢Ã©ÃÃÃ™Ã…Ã£Ã‹Ã©Ã¡Ã…Ã©Ã‡";
+$lang_new_link = "Ã Å¸Ã”Ã¨ÃÂ¡Ã’ÃƒÃ ÂªÃ—Ã¨ÃÃÃ¢Ã‚Â§Ã£Ã‹ÃÃ¨Ã¡Ã…Ã©Ã‡";
+$lang_new_forum_topic = "Ã¤Å½Ã©Ã Å¸Ã”Ã¨ÃÃ‹Ã‘Ã‡Â¢Ã©ÃÃ£Ã‹ÃÃ¨Ã£Ã‹Ã©Ã¡Ã…Ã©Ã‡";
+$lang_new_groupforum_topic = "Ã¤Å½Ã©Ã Å¸Ã”Ã¨ÃÃ‹Ã‘Ã‡Â¢Ã©ÃÃ£Ã‹ÃÃ¨Ã£Â¹Â¡Ã…Ã˜Ã¨ÃÃÃ€Ã”Â»ÃƒÃ’Ã‚Ã¡Ã…Ã©Ã‡";
+$lang_new_dropbox_file = "Ã¤Å½Ã©ÃƒÃ‘ÂºÃ¤Â¿Ã…Ã¬Ã£Ã‹ÃÃ¨";
+$lang_update_dropbox_file = "Â»ÃƒÃ‘ÂºÂ»ÃƒÃ˜Â§Ã¤Â¿Ã…Ã¬Ã£Â¹Â¡Ã…Ã¨ÃÂ§ÃŠÃ¨Â§Â§Ã’Â¹Â¢ÃÂ§â‚¬Ã˜Â³Ã¡Ã…Ã©Ã‡";
+$ForumCategoryAdded = "";
+$LearnpathAdded = "";
+$GlossaryAdded = "";
+$QuizQuestionAdded = "";
+$QuizQuestionUpdated = "";
+$QuizQuestionDeleted = "";
+$QuizUpdated = "";
+$QuizAdded = "";
+$QuizDeleted = "";
+$DocumentInvisible = "";
+$DocumentVisible = "";
+$CourseDescriptionAdded = "";
+$WikiAdded = "";
+$SurveyAdded = "";
+$NotebookAdded = "";
+$NotebookUpdated = "";
+$NotebookDeleted = "";
 ?>

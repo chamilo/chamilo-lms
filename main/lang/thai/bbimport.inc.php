@@ -1,23 +1,24 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$langViewCourseMaterialImport  = "�ٷ�Ѿ�ҡâͧ����Ԫҷ��ж١�������";
-$langViewExternalLinksImport  = "����¡��������§��¹͡ ���ж١�������";
-$langViewForumImport  = "�١����Ի��� ���ж١�������";
-$langImportCourseMaterial  = "����ҷ�Ѿ�ҡ�����Ԫ�(����ͧ��ͧ͢ Blackboard \"Course Material\")";
-$langImportExternalLinks  = "�������¡��������§(����ͧ��ͧ͢ Blackboard \"External Links\")";
-$langImportForum  = "����ҡ����Ի���(����ͧ��ͧ͢ Blackboard \"Discussion Board\")";
-$langToolInfo  = "����ͧ��͹��������ԪҢͧ Blackboard 5.5(Course Material, Discussion Board, and External Links)";
-$langToolName = "���������ԪҨҡ Blackboard ";
-$langSelectCoursePackage = "���͡�ش����Ԫ�";
-$langPackageAlreadySelected = "�س���͡�ش�Ԫҹ������";
-$langFirstSelectPackage = "�س��ͧ���͡�ش�Ԫ�����Դ��͹�����ա�ù���� ";
-$langCourseToMigrate = "�����͹����Ԫ�";
-$langSelectPackage = "���͡ᾤࡨ";
-$langOpenPackageForImporting = "�Դᾤࡨ���͡�ù����";
-$langInformation = "����������ǡѺ�Ըա�ù����";
-$langChooseImportOptions = "���͡�ҧ���͡���س�й����";
-$langCheckWhatIsImported = "�س��õ�Ǩ�ͺ��¡��������º���¡�͹������ӡ�ù����";
-$langStartImporting = "�������ù����";
-$langImport = "�����";
+$langViewCourseMaterialImport = "ŽÙ·ÃÑŸÂÒ¡Ã¢Í§ÃÒÂÇÔªÒ·ÕèšÐ¶Ù¡¹Óà¢éÒÁÒ";
+$langViewExternalLinksImport = "ŽÙÃÒÂ¡ÒÃàª×èÍÁâÂ§ÀÒÂ¹Í¡ ·ÕèšÐ¶Ù¡¹Óà¢éÒÁÒ";
+$langViewForumImport = "ŽÙ¡ÒÃÍÀÔ»ÃÒÂ ·ÕèšÐ¶Ù¡¹Óà¢éÒÁÒ";
+$langImportCourseMaterial = "¹Óà¢éÒ·ÃÑŸÂÒ¡ÃÃÒÂÇÔªÒ(à€Ã×èÍ§Á×Í¢Í§ Blackboard \\"Course Material\\")";
+$langImportExternalLinks = "¹Óà¢éÒÃÒÂ¡ÒÃàª×èÍÁâÂ§(à€Ã×èÍ§Á×Í¢Í§ Blackboard \\"External Links\\")";
+$langImportForum = "¹Óà¢éÒ¡ÒÃÍÀÔ»ÃÒÂ(à€Ã×èÍ§Á×Í¢Í§ Blackboard \\"Discussion Board\\")";
+$langToolInfo = "à€Ã×èÍ§Á×Í¹Óà¢éÒÃÒÂÇÔªÒ¢Í§ Blackboard 5.5(Course Material, Discussion Board, and External Links)";
+$langToolName = "¹Óà¢éÒÃÒÂÇÔªÒšÒ¡ Blackboard";
+$langSelectCoursePackage = "àÅ×Í¡ªØŽÃÒÂÇÔªÒ";
+$langPackageAlreadySelected = "€Ø³àÅ×Í¡ªØŽÇÔªÒ¹ÕéáÅéÇ";
+$langFirstSelectPackage = "€Ø³µéÍ§àÅ×Í¡ªØŽÇÔªÒáÅÐà»ÔŽ¡èÍ¹·ÕèšÐÁÕ¡ÒÃ¹Óà¢éÒ";
+$langCourseToMigrate = "ÂéÒÂâÍ¹ÃÒÂÇÔªÒ";
+$langSelectPackage = "àÅ×Í¡áŸ€à¡š";
+$langOpenPackageForImporting = "à»ÔŽáŸ€à¡šàŸ×èÍ¡ÒÃ¹Óà¢éÒ";
+$langInformation = "¢éÍÁÙÅà¡ÕèÂÇ¡ÑºÇÔžÕ¡ÒÃ¹Óà¢éÒ";
+$langChooseImportOptions = "àÅ×Í¡·Ò§àÅ×Í¡·Õè€Ø³šÐ¹Óà¢éÒ";
+$langCheckWhatIsImported = "€Ø³€ÇÃµÃÇšÊÍºÃÒÂ¡ÒÃãËéàÃÕÂºÃéÍÂ¡èÍ¹àÃÔèÁ·Ó¡ÒÃ¹Óà¢éÒ";
+$langStartImporting = "àÃÔèÁ¡ÒÃ¹Óà¢éÒ";
+$langImport = "¹Óà¢éÒ";
 ?>

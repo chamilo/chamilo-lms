@@ -1,18 +1,19 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $langTool = "Metadata";
-$langClickKw = "Klicka på ett nyckelord i \"trädet\" för att markera eller avmarkera.";
-$langKwHelp = "<br/> Klicka \'+\' knappen för att öppna, \'-\' knappen för att stänga, \'++\' knappen för att öppna allt, \'--\' knappen för att stänga allt.<br/> <br/> Avmarkera alla valda nyckelord genom att stänga \"trädet\" och öppna igen med \'+\' knappen.<br/> Alt-klick \'+\' återväljer tidigare valda nyckelord.<br/> <br/> Alt-klick nyckelord ignorerar nyckelord.<br/>";
+$langClickKw = "Klicka pÃ¥ ett nyckelord i \\"trÃ¤det\\" fÃ¶r att markera eller avmarkera.";
+$langKwHelp = "<br/> Klicka \'+\' knappen fÃ¶r att Ã¶ppna, \'-\' knappen fÃ¶r att stÃ¤nga, \'++\' knappen fÃ¶r att Ã¶ppna allt, \'--\' knappen fÃ¶r att stÃ¤nga allt.<br/> <br/> Avmarkera alla valda nyckelord genom att stÃ¤nga \\"trÃ¤det\\" och Ã¶ppna igen med \'+\' knappen.<br/> Alt";
 $langAdvanced = "Avancerad";
-$langSearch = "Sök";
-$langSearchCrit = "Använd utrymmet nedan för beskrivning, ett ord per rad!";
+$langSearch = "SÃ¶k";
+$langSearchCrit = "AnvÃ¤nd utrymmet nedan fÃ¶r beskrivning, ett ord per rad!";
 $langNoKeywords = "Denna kurs har inget nyckelord";
-$langKwCacheProblem = "Nyckelords \"cache\" kan inte öppnas";
+$langKwCacheProblem = "Nyckelords \\"cache\\" kan inte Ã¶ppnas";
 $langCourseKwds = "kurs nyckelord";
-$langKwdsInMD = "nyckelord som används i MD";
+$langKwdsInMD = "nyckelord som anvÃ¤nds i MD";
 $langKwdRefs = "nyckelords referenser";
 $langNonCourseKwds = "Icke-kurs nyckelord";
-$langKwdsUse = "Kurs nyckelord (fet = ej använd)";
+$langKwdsUse = "Kurs nyckelord (fet = ej anvÃ¤nd)";
 $langTotalMDEs = "Totalt antal av MD inmatningar:";
 ?>

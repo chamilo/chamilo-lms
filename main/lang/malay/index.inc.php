@@ -1,18 +1,75 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $langInvalidId = "ID Pengguna dan Katalaluan anda tidak sah.Sila login semula atau <a href=claroline/auth/inscription.php>daftar</a> sebagai pengguna baru.</font color>";
-$langWelcome = "terdapat subjek-subjek yang dipaparkan secara umum dibawah ini. Subjek-subjek lain memerlukan ID Pengguna dan Katalaluan. Anda boleh dapatkannya dengan hanya mengklik pada pautan \'Daftar\'.Para pensyarah juga boleh mendaftar dengan mengklik pada pautan yang sama dan memilih status keahlian sebagai \'Pensyarah\'.";
+$langWelcome = "terdapat subjek-subjek yang dipaparkan secara umum dibawah ini. Subjek-subjek lain memerlukan ID Pengguna dan Katalaluan. Anda boleh dapatkannya dengan hanya mengklik pada pautan \'Daftar\'.Para pensyarah juga boleh mendaftar dengan mengklik pada pautan y";
 $langPass = "Katalaluan";
 $langEnter = "Masuk";
 $langReg = "Daftar";
-$langMenu  = ":: Menu ::";
+$langMenu = ":: Menu ::";
 $langAdvises = "Nasihat";
+$langCourseDoesntExist = "";
+$langGetCourseFromOldPortal = "";
 $langOtherCourses = "Senarai Subjek";
 $langSupportForum = "Forum Sokongan";
-$langCategories  = "Pusat Pengajian";
-$langBackToHomePage  = "Kembali ke Menu Utama";
-$lang_No_course_publicly_available  = "Tiada subjek yang disediakan untuk paparan umum.";
-$langLostPassword  = "Lupa Katalaluan";
-$lang_edit_my_course_list  = "Kemaskini Senarai Subjek";
+$langCategories = "Pusat Pengajian";
+$langBackToHomePage = "Kembali ke Menu Utama";
+$lang_No_course_publicly_available = "Tiada subjek yang disediakan untuk paparan umum.";
+$langLostPassword = "Lupa Katalaluan";
+$lang_edit_my_course_list = "Kemaskini Senarai Subjek";
+$langAgenda = "";
+$langValvas = "";
+$langUp = "";
+$langCatList = "";
+$langCourseList = "";
+$langHelptwo = "";
+$langRegAll = "";
+$EussMenu = "";
+$Opinio = "";
+$Intranet = "";
+$Englin = "";
+$langInvalidForSelfRegistration = "";
+$langSubCat = "";
+$langMenuGeneral = "";
+$langMenuUser = "";
+$langMenuAdmin = "";
+$langUsersOnLineList = "";
+$langTotalOnLine = "";
+$langRefresh = "";
+$langMe = "";
+$langSystemAnnouncements = "";
+$langHelpMaj = "";
+$langNotRegistered = "";
+$langAdmin = "";
+$Login = "";
+$langRegisterForCourse = "";
+$langUnregisterForCourse = "";
+$langCombinedCourse = "";
+$Platform = "";
+$Refresh = "";
+$TotalOnLine = "";
+$langCourseClosed = "";
+$ViewOpenCourses = "";
+$langCompetences = "";
+$langDiplomas = "";
+$langTeach = "";
+$langProductions = "";
+$langSendChatRequest = "";
+$langRequestDenied = "";
+$UsageDatacreated = "";
+$SessionView = "";
+$CourseView = "";
+$DropboxFileAdded = "";
+$NewMessageInForum = "";
+$FolderCreated = "";
+$LinkAdded = "";
+$AnnouncementAdded = "";
+$AgendaAdded = "";
+$Messages = "";
+$Inbox = "";
+$Comppose = "";
+$PendingInvitations = "";
+$YouDoNotHaveAnySessionInItsHistory = "";
+$PortalHomepageDefaultIntroduction = "";
 ?>

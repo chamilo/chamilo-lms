@@ -1,13 +1,19 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$langTool = "Metadáta";
-$langAdvanced = "Pokro&#269;ilý";
+$langTool = "MetadÃ¡ta";
+$langClickKw = "";
+$langKwHelp = "";
+$langAdvanced = "Pokro&#269;ilÃ½";
 $langSearch = "Vyh&#318;ada&#357;";
-$langNoKeywords = "Tento kurz nemá k&#318;ú&#269;ové slová";
-$langKwCacheProblem = "Zásoba k&#318;ú&#269;ových slov nemôže by&#357; otvorená";
-$langCourseKwds = "k&#318;ú&#269;ové slová kurzu";
-$langKwdsInMD = "k&#318;ú&#269;ové slová použité v MD";
-$langKwdsUse = "K&#318;ú&#269;ové slová kurzu (tu&#269;né = nepoužívané)";
-$langTotalMDEs = "Celkový po&#269;et MD záznamov:";
+$langSearchCrit = "";
+$langNoKeywords = "Tento kurz nemÃ¡ k&#318;Ãº&#269;ovÃ© slovÃ¡";
+$langKwCacheProblem = "ZÃ¡soba k&#318;Ãº&#269;ovÃ½ch slov nemÃ´Âže by&#357; otvorenÃ¡";
+$langCourseKwds = "k&#318;Ãº&#269;ovÃ© slovÃ¡ kurzu";
+$langKwdsInMD = "k&#318;Ãº&#269;ovÃ© slovÃ¡ pouÂžitÃ© v MD";
+$langKwdRefs = "";
+$langNonCourseKwds = "";
+$langKwdsUse = "K&#318;Ãº&#269;ovÃ© slovÃ¡ kurzu (tu&#269;nÃ© = nepouÂžÃ­vanÃ©)";
+$langTotalMDEs = "CelkovÃ½ po&#269;et MD zÃ¡znamov:";
 ?>

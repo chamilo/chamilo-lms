@@ -1,35 +1,36 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$lang_new_item = "nouvel élément ajouté";
-$lang_title_notification = "Depuis votre dernière visite";
-$lang_update_agenda = "événements mis à jour";
-$lang_new_agenda = "nouvel événement ajouté";
-$lang_update_announcements = "annonces mises à jour";
-$lang_new_announcements = "nouvelles annonces ajoutées";
-$lang_new_document = "nouveaux documents ajoutés";
-$lang_new_exercise = "nouveau test ou activé";
-$lang_update_link = "liens mis à jour";
-$lang_new_link = "nouveau lien ajouté";
-$lang_new_forum_topic = "nouveau sujet ajouté";
-$lang_new_groupforum_topic = "nouveau sujet ajouté dans un forum de groupe";
-$lang_new_dropbox_file = "nouveau document reçu";
-$lang_update_dropbox_file = "document de la section de partage de fichier a été mis à jour";
-$ForumCategoryAdded = "Dossier ajouté";
-$LearnpathAdded = "Cours ajouté";
-$GlossaryAdded = "Nouveau terme ajouté dans le glossaire";
-$QuizQuestionAdded = "Nouvelle question ajoutée à l\'exercice";
-$QuizQuestionUpdated = "Question mise à jour dans l\'exercice";
-$QuizQuestionDeleted = "Question supprimée de l\'exercice";
-$QuizUpdated = "Exercice mis à jour";
-$QuizAdded = "Exercice ajouté";
-$QuizDeleted = "Exercice supprimé";
+$lang_new_item = "nouvel Ã©lÃ©ment ajoutÃ©";
+$lang_title_notification = "Depuis votre derniÃ¨re visite";
+$lang_update_agenda = "Ã©vÃ©nements mis Ã  jour";
+$lang_new_agenda = "nouvel Ã©vÃ©nement ajoutÃ©";
+$lang_update_announcements = "annonces mises Ã  jour";
+$lang_new_announcements = "nouvelles annonces ajoutÃ©es";
+$lang_new_document = "nouveaux documents ajoutÃ©s";
+$lang_new_exercise = "nouveau test ou activÃ©";
+$lang_update_link = "liens mis Ã  jour";
+$lang_new_link = "nouveau lien ajoutÃ©";
+$lang_new_forum_topic = "nouveau sujet ajoutÃ©";
+$lang_new_groupforum_topic = "nouveau sujet ajoutÃ© dans un forum de groupe";
+$lang_new_dropbox_file = "nouveau document reÃ§u";
+$lang_update_dropbox_file = "document de la section de partage de fichier a Ã©tÃ© mis Ã  jour";
+$ForumCategoryAdded = "Dossier ajoutÃ©";
+$LearnpathAdded = "Cours ajoutÃ©";
+$GlossaryAdded = "Nouveau terme ajoutÃ© dans le glossaire";
+$QuizQuestionAdded = "Nouvelle question ajoutÃ©e Ã  l\'exercice";
+$QuizQuestionUpdated = "Question mise Ã  jour dans l\'exercice";
+$QuizQuestionDeleted = "Question supprimÃ©e de l\'exercice";
+$QuizUpdated = "Exercice mis Ã  jour";
+$QuizAdded = "Exercice ajoutÃ©";
+$QuizDeleted = "Exercice supprimÃ©";
 $DocumentInvisible = "Document rendu invisible";
 $DocumentVisible = "Document rendu visible";
-$CourseDescriptionAdded = "Description de cours ajoutée";
-$WikiAdded = "Wiki ajouté";
-$SurveyAdded = "Enquête ajoutée";
-$NotebookAdded = "Note ajoutée";
-$NotebookUpdated = "Note mise à jour";
-$NotebookDeleted = "Note supprimée";
+$CourseDescriptionAdded = "Description de cours ajoutÃ©e";
+$WikiAdded = "Wiki ajoutÃ©";
+$SurveyAdded = "EnquÃªte ajoutÃ©e";
+$NotebookAdded = "Note ajoutÃ©e";
+$NotebookUpdated = "Note mise Ã  jour";
+$NotebookDeleted = "Note supprimÃ©e";
 ?>

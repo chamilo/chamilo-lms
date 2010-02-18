@@ -1,5 +1,6 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $langToolName = "Reporting";
 $TrackingDisabled = "Reporting has been disabled by system administrator.";
@@ -212,4 +213,40 @@ $NoLearningPath = "No SCORM courses";
 $SessionCourses = "Session of courses";
 $NoUsersInCourseTracking = "Here you will find the tracking for your students subscribed in this course.";
 $AvgTimeSpentInTheCourse = "Average time spent in course";
+$RemindInactiveUser = "";
+$FirstLogin = "";
+$AccessDetails = "";
+$DateAndTimeOfAccess = "";
+$Duration = "";
+$WrongDatasForTimeSpentOnThePlatform = "";
+$DisplayCoaches = "";
+$DisplayUserOverview = "";
+$ExportUserOverviewOptions = "";
+$FollowingFieldsWillAlsoBeExported = "";
+$TotalExercisesScoreObtained = "";
+$TotalExercisesScorePossible = "";
+$TotalExercisesAnswered = "";
+$TotalExercisesScorePercentage = "";
+$ForumForumsNumber = "";
+$ForumThreadsNumber = "";
+$ForumPostsNumber = "";
+$ChatConnectionsDuringLastXDays = "";
+$ChatLastConnection = "";
+$CourseInformation = "";
+$NoAdditionalFieldsWillBeExported = "";
+$langSendNotification = "";
+$TimeOfActiveByTraining = "";
+$AvgAllUsersInAllCourses = "";
+$AvgExercisesScore = "";
+$TrainingTime = "";
+$CourseProgress = "";
+$ViewMinus = "";
+$ResourcesTracking = "";
+$SelectFieldToAdd = "";
+$AddAdditionalProfileField = "";
+$ConfigureExtensions = "";
+$DashboardBlocks = "";
+$DashboardList = "";
+$YouHaveNotEnabledBlocks = "";
+$BlocksHaveBeenUpdatedSuccessfully = "";
 ?>

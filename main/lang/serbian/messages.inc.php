@@ -1,39 +1,40 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $MessageEmptyMessageOrSubject = "Navedite temu ili poruku";
-$Inbox  = "Inbox";
+$Inbox = "Inbox";
 $Messages = "Poruke";
-$SendMessage = "Pošalji poruku";
+$SendMessage = "PoÂšalji poruku";
 $NewMessage = "Nova poruka";
 $ComposeMessage = "Nova poruka";
 $DeleteSelectedMessages = "Brisanje izabrane poruke";
 $SelectAll = "Izaberi sve";
-$DeselectAll  = "Poništite sve";
+$DeselectAll = "PoniÂštite sve";
 $ReplyToMessage = "Odgovoriti";
 $BackToInbox = "Nazad u inbox";
 $MessageSentTo = "Poruka je poslata";
-$SendMessageTo = "Pošalji";
+$SendMessageTo = "PoÂšalji";
 $Myself = "mene";
 $From = "Od";
 $To = "Za";
 $Date = "Datum";
-$ErrorSendingMessage = " Došlo je do pogreške prilikom pokušaja slanja poruke. ";
-$SureYouWantToDeleteSelectedMessages = "Jeste li sigurni da želite obrisati ozna&#269;ene poruke? ";
+$InvalidMessageId = "";
+$ErrorSendingMessage = " DoÂšlo je do pogreÂške prilikom pokuÂšaja slanja poruke.";
+$SureYouWantToDeleteSelectedMessages = "Jeste li sigurni da Âželite obrisati ozna&#269;ene poruke?";
 $SelectedMessagesDeleted = " Ozna&#269;ene poruke su obrisane";
 $EnterTitle = "Molimo unesite naslov";
 $TypeYourMessage = "Otkucajte svoju poruku ovde";
 $MessageDeleted = "Poruka je izbrisana";
-$ConfirmDeleteMessage = "Jeste li sigurni da li želite da izbrišete odabrane poruke?";
-$DeleteMessage = "Izbriši poruku";
+$ConfirmDeleteMessage = "Jeste li sigurni da li Âželite da izbriÂšete odabrane poruke?";
+$DeleteMessage = "IzbriÂši poruku";
 $ReadMessage = "Pro&#269;itajte poruku";
-$SendInviteMessage = "Pošalji pozivnicu";
-$SendMessageInvitation = "Jeste li sigurni da želite da pošaljete ove pozivnice?";
+$SendInviteMessage = "PoÂšalji pozivnicu";
+$SendMessageInvitation = "Jeste li sigurni da Âželite da poÂšaljete ove pozivnice?";
 $MessageTool = "Alat za poruke";
-$SendMessage = "Pošalji poruku";
-$WriteAMessage = "Napišite poruku";
+$WriteAMessage = "NapiÂšite poruku";
 $AlreadyReadMessage = "Poruka je vec&#769; pro&#269;itana";
 $UnReadMessage = "Poruka bez &#269;itanja";
 $MessageSent = "Poruka poslata";
-$YouShouldWriteAMessage = "Trebalo bi da napišete poruku";
+$YouShouldWriteAMessage = "Trebalo bi da napiÂšete poruku";
 ?>

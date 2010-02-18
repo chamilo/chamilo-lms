@@ -1,36 +1,63 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$langOnlineConference  = "การสัมมนาออนไลน์";
-$langWash  = "ลบกระดานคำสนทนา";
-$langReset  = "เริ่มสนทนาใหม่";
-$langSave  = "&#3610;&#3633;&#3609;&#3607;&#3638;&#3585;&#3585;&#3634;&#3619;&#3626;&#3609;&#3607;&#3609;&#3634;";
-$langRefresh  = "กะพริบหน้าจอใหม่";
-$langIsNowInYourDocDir  = "ในส่วนจอภาพของคุณ นี่คือข้อความที่คุณเห็น";
-$langCopyFailed  = "การพิมพ์ล้มเหลว";
-$langTypeMessage  = "กรุณาพิมพ์ข้อความ ";
-$langConfirmReset  = "คุณต้องการลบข้อความทั้งหมดหรือไม่ ";
-$langHasResetChat  = "ได้เริ่มสนทนาใหม่ ";
-$langNoOnlineConference  = "ยังไม่มีการสัมมนาในขณะนี้ ";
-$langMediaFile  = "ถ่ายทอดสดการบรรยายหรือใช้ระบบ video streaming ";
-$langContentFile  = "การนำเสนอ ";
-$langListOfParticipants  = "รายชื่อของผู้เข้าร่วม";
-$langYourPicture  = "รูปภาพของคุณ ";
-$langOnlineDescription  = "รายละเอียดการสัมมนา";
-$langOnlyCheckForImportantQuestion = "โปรดคลิ๊กทำเครื่องหมายในกรอบสี่เหลี่ยม หากเป็นคำถามสำคัญ ";
-$langQuestion = "คำถามสำคัญ";
-$langClearList = "ลบข้อความสนทนาทั้งหมด คลิกที่นี่ ";
-$langWhiteBoard = "การนำเสนอ";
-$langTextEditorDefault = "<b>เนื้อหาหรือการนำเสนอ(Presenting White Board)</b> ";
-$langStreaming = "สตรีมมิ่ง ";
-$langStreamURL = "ที่อยู่ไฟล์สตรีมมิ่ง ";
-$langStreamType = "ชนิดไฟล์สตรีมมิ่ง ";
-$langLinkName = "ชื่อเชื่อมโยง";
-$langLinkURL = "เว็ปไซท์ที่เชื่อมโยง ";
-$langWelcomeToOnlineConf = "<b>ขอต้อนรับสู่การสัมมนาออนไลน์</b>";
-$langNoLinkAvailable = "ไม่มีการเชื่อมโยง";
-$langChat_reset_by = "เริ่มต้นสนทนาใหม่";
-$OrFile = "หรือไฟล์";
-$langCallSent = "ได้ส่งข้อความไปขอเชิญมาร่วมสนทนาออนไลน์แล้ว กรุณารอจนกว่าจะได้รับการตรวจสอบและตอบรับกลับจากผู้ที่คุณเชิญไป ";
-$langChatDenied = "คุณถูกปฏิเสธจากบุคคลที่คุณเชิญ ";
+$langOnlineConference = "ยกร’รรร‘รรยนร’รรยนรคร…ยนรฌ";
+$langWash = "ร…ยบยกรรลฝร’ยนโฌร“รยนยทยนร’";
+$langReset = "ร รร”รจรรยนยทยนร’รฃรรรจ";
+$langSave = "&#3610;&#3633;&#3609;&#3607;&#3638;&#3585;&#3585;&#3634;&#3619;&#3626;&#3609;&#3607;&#3609;&#3634;";
+$langRefresh = "ยกรลธรร”ยบรยนรฉร’ลกรรฃรรรจ";
+$langIsNowInYourDocDir = "รฃยนรรจรยนลกรร€ร’ลธยขรยงโฌรยณ ยนร•รจโฌร—รยขรฉรโฌรร’รยทร•รจโฌรยณร รรงยน";
+$langCopyFailed = "ยกร’รลธร”รลธรฌร…รฉรร รร…ร";
+$langTypeMessage = "ยกรรยณร’ลธร”รลธรฌยขรฉรโฌรร’ร";
+$langConfirmReset = "โฌรยณยตรฉรยงยกร’รร…ยบยขรฉรโฌรร’รยทร‘รฉยงรรลฝรรร—รรครรจ";
+$langHasResetChat = "รคลฝรฉร รร”รจรรยนยทยนร’รฃรรรจ";
+$langNoOnlineConference = "รร‘ยงรครรจรร•ยกร’รรร‘รรยนร’รฃยนยขยณรยนร•รฉ";
+$langMediaFile = "ยถรจร’รยทรลฝรลฝยกร’รยบรรรร’รรรร—รรฃยชรฉรรยบยบ video streaming";
+$langContentFile = "ยกร’รยนร“ร รยนร";
+$langListOfParticipants = "รร’รยชร—รจรยขรยงล’รรฉร ยขรฉร’รรจรร";
+$langYourPicture = "รรยปร€ร’ลธยขรยงโฌรยณ";
+$langOnlineDescription = "รร’รร…รร รร•รลฝยกร’รรร‘รรยนร’";
+$langOnlyCheckForImportantQuestion = "รขยปรลฝโฌร…ร”รชยกยทร“ร โฌรร—รจรยงรรร’รรฃยนยกรรยบรร•รจร รร…ร•รจรร รร’ยกร ยปรงยนโฌร“ยถร’รรร“โฌร‘ยญ";
+$langQuestion = "โฌร“ยถร’รรร“โฌร‘ยญ";
+$langClearList = "ร…ยบยขรฉรโฌรร’รรยนยทยนร’ยทร‘รฉยงรรลฝ โฌร…ร”ยกยทร•รจยนร•รจ";
+$langWhiteBoard = "ยกร’รยนร“ร รยนร";
+$langTextEditorDefault = "<b>ร ยนร—รฉรรร’รรร—รยกร’รยนร“ร รยนร(Presenting White Board)</b>";
+$langStreaming = "รยตรร•รรร”รจยง";
+$langStreamURL = "ยทร•รจรรรรจรคยฟร…รฌรยตรร•รรร”รจยง";
+$langStreamType = "ยชยนร”ลฝรคยฟร…รฌรยตรร•รรร”รจยง";
+$langLinkName = "ยชร—รจรร ยชร—รจรรรขรยง";
+$langLinkURL = "ร รรงยปรคยซยทรฌยทร•รจร ยชร—รจรรรขรยง";
+$langWelcomeToOnlineConf = "<b>ยขรยตรฉรยนรร‘ยบรรรจยกร’รรร‘รรยนร’รรยนรคร…ยนรฌ</b>";
+$langNoLinkAvailable = "รครรจรร•ยกร’รร ยชร—รจรรรขรยง";
+$langChat_reset_by = "ร รร”รจรยตรฉยนรยนยทยนร’รฃรรรจ";
+$OrFile = "รรร—รรคยฟร…รฌ";
+$langCallSent = "รคลฝรฉรรจยงยขรฉรโฌรร’รรคยปยขรร ยชร”ยญรร’รรจรรรยนยทยนร’รรยนรคร…ยนรฌรกร…รฉร ยกรรยณร’รรลกยนยกรรจร’ลกรรคลฝรฉรร‘ยบยกร’รยตรรลกรรยบรกร…รยตรยบรร‘ยบยกร…ร‘ยบลกร’ยกล’รรฉยทร•รจโฌรยณร ยชร”ยญรคยป";
+$langChatDenied = "โฌรยณยถรยกยปยฏร”ร รลพลกร’ยกยบรโฌโฌร…ยทร•รจโฌรยณร ยชร”ยญ";
+$Send = "";
+$Connected = "";
+$Think = "";
+$BigGrin = "";
+$Amazing = "";
+$Confused = "";
+$Cool = "";
+$Surprised = "";
+$Hand = "";
+$Wink = "";
+$Neutral = "";
+$Angry = "";
+$Avid = "";
+$Redface = "";
+$Sad = "";
+$Silence = "";
+$Silenced = "";
+$Smile = "";
+$Exclamation = "";
+$Arrow = "";
+$Question = "";
+$Idea = "";
+$AskPermissionSpeak = "";
+$GiveTheFloorTo = "";
+$Pause = "";
+$Stop = "";
 ?>

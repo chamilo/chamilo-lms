@@ -1,5 +1,6 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $langNewGroupCreate = "Buat group baru";
 $langGroupCreation = "Pembuatan group baru";
@@ -40,11 +41,13 @@ $langPublic = "publik";
 $langPropModify = "Ubah seting";
 $langState = "Keadaan";
 $langGroupFilledGroups = "Groups telah diisi (atau dilengkapi) oleh siswa yang ada dalam daftar \'User\'.";
-$langSubscribed  = "orang terdaftar dalam mata kuliah ini";
-$langStudentsNotInThisGroups  = "User tidak dalam group ini";
-$langQtyOfUserCanSubscribe_PartBeforeNumber  = "Seorang user dapat menjadi anggota maksimum ";
-$langQtyOfUserCanSubscribe_PartAfterNumber  = " group";
+$langSubscribed = "orang terdaftar dalam mata kuliah ini";
+$langStudentsNotInThisGroups = "User tidak dalam group ini";
+$langQtyOfUserCanSubscribe_PartBeforeNumber = "Seorang user dapat menjadi anggota maksimum";
+$langQtyOfUserCanSubscribe_PartAfterNumber = "Â group";
 $langGroupLimit = "Batas";
+$CreateGroup = "";
+$ProceedToCreateGroup = "";
 $langStudentRegAllowed = "Siswa diijinkan untuk mendaftar sendiri dalam group";
 $langGroupAllowStudentUnregistration = "User diijinkan mengundurkan diri dari group";
 $langAllGroups = "Semua group";
@@ -65,9 +68,9 @@ $langNoGroupsAvailable = "Tidak ada group yang tersedia";
 $langGroupsFromVirtualCourses = "Mata Kuliah Virtual";
 $NotAvailable = "Tidak tersedia";
 $CreateSubgroups = "Buat subgroup";
-$CreateSubgroupsInfo = "Opsi ini memungkinkan anda untuk membuat group baru berdasarkan group yang sudah ada.   Dengan memberikan jumlah group yang diinginkan dan memilih group yang sudah ada,  jumlah group yang diinginkan dibuat dan semua anggota group yang sudah ada akan terdaftar pada group baru tersebut.  Group sebelumnya yang sudah ada tidak berubah.";
+$CreateSubgroupsInfo = "Opsi ini memungkinkan anda untuk membuat group baru berdasarkan group yang sudah ada.   Dengan memberikan jumlah group yang diinginkan dan memilih group yang sudah ada,  jumlah group yang diinginkan dibuat dan semua anggota group yang sudah ada akan terda";
 $CreateNumberOfGroups = "Buat";
-$WithUsersFrom = "group dengan anggota dari ";
+$WithUsersFrom = "group dengan anggota dari";
 $CategoryDeleted = "Kategori tersebut dihapus";
 $Empty = "Kosong";
 $FillGroup = "tambah user";
@@ -87,4 +90,8 @@ $GroupAnnouncements = "Pengumuman";
 $NoCategoriesDefined = "Tidak terdapat kategori";
 $GroupsFromClasses = "Kelompok dari klas";
 $GroupsFromClassesInfo = "Menggunakan opsi ini, anda dapat membuat kelompok berdasarkan kelas-kelas yang terdaftar di mata kuliah anda.";
+$Group = "";
+$ForumOfGroup = "";
+$BackToGroupList = "";
+$EditGroupCategory = "";
 ?>

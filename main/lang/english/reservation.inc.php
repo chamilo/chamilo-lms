@@ -1,5 +1,6 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $ReservationPeriodToSmall = "The reservation period is to short.";
 $BookingSystem = "Booking system";
@@ -34,6 +35,8 @@ $DeleteBookingPeriod = "Remove this booking period";
 $BookingPeriodEdited = "The booking period has been edited";
 $BookingPeriodDateOverlap = "A part of the booking period is already in use in the period from #START# until #END#";
 $BookingPeriodSubscribeUntilAfterStart = "The subscribe until date is greater then the startdate";
+$RepeatFor = "Repeat every";
+$RepeatUntil = "Repeat until";
 $BookingPeriodPast = "Its not possible to make reservations before the current time";
 $ReservationMaxUsersOverrun = "The are already more people subscribed then the Max Users you selected";
 $AddNewBookingPeriod = "Add a new booking period";
@@ -63,13 +66,11 @@ $ReservationTresspassing = "This reservation is already full, you are not allowe
 $ReservationOutOfDate = "The date you have choosen is already in use and/or is not the reservation period from #START# until #END#";
 $ReservationAlready = "You already booked this resource";
 $ReservationMadeTitle = "Your booking of #ITEM# was successfull";
-$ReservationMadeMessage = "Dear Sir/Madam,\\n\\nYour booking for #ITEM# from #START# until #END# is successfull. ";
+$ReservationMadeMessage = "Dear Sir/Madam,\\n\\nYour booking for #ITEM# from #START# until #END# is successfull.";
 $ReservationDeleteTitle = "A booking period of #NAME# has been deleted";
 $ReservationDeleteMessage = "Dear Sir/Madam,\\nThe reservation period of #NAME# from #START# until #END# has been removed";
 $OutPeriod = "Out period";
-$ReservationFromUntilError = "The booking period from #START# until #END# hasn\'t been made because a part of the booking period is already taken\\n ";
-$RepeatFor = "Repeat every";
-$RepeatUntil = "Repeat until";
+$ReservationFromUntilError = "The booking period from #START# until #END# hasn\'t been made because a part of the booking period is already taken\\n";
 $Recurrence = "Recurrence";
 $NoRecurrence = "No recurrence";
 $UntilRecurrence = "Use recurrence";
@@ -116,7 +117,7 @@ $ReservationForItemAccepted = "Dear Sir/Madam,\\n\\nYour reservation for #ITEM# 
 $ReservationForItemDenied = "Dear Sir/Madam,\\n\\nYour booking for #ITEM# from #BEGIN till #END has been rejected";
 $ReservationCancelled = "Reservation cancelled, #NAME# is temporary unavailable";
 $ReservationActive = "Reservation is active again, #NAME# is available again";
-$ReservationUnavailable = "Dear Sir/Madam,\\n\\nResource #NAME# is temporarily unavailable so your booking from #BEGIN# till #END# has been cancelled.\\nYou will get an email when it is available again. ";
+$ReservationUnavailable = "Dear Sir/Madam,\\n\\nResource #NAME# is temporarily unavailable so your booking from #BEGIN# till #END# has been cancelled.\\nYou will get an email when it is available again.";
 $ReservationAvailable = "Dear Sir/Madam,\\n\\nWe wish to inform you that #NAME# is available again so your reservation from #BEGIN# till #END# is active again.";
 $Resources = "Resources";
 $EditBookingPeriod = "Edit booking period";

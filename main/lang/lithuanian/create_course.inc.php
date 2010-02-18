@@ -1,5 +1,6 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $langProfessors = "Dėstytojai";
 $langExplanation = "Kai tik nuspausite TAIP, bus sukurtas visas tinklapis su Forumu, Darbotvarke, Dokumentų tvarkykle. Kaip kurso vadovas, galėsite keisti viso kurso turinį pagal savo poreikius.";
@@ -16,7 +17,7 @@ $langNoPsychology = "No. Socratic irony is not a matter of psychology, it concer
 $langAdmitError = "Admit one\'s own errors to invite one\'s interlocutor to do the same.";
 $langNoSeduction = "No. Socratic irony is not a seduction strategy or a method based on the example.";
 $langForce = "Compell one\'s interlocutor, by a series of questions and sub-questions, to admit he doesn\'t know what he claims to know.";
-$langIndeed = "Indeed. Socratic irony is an interrogative method. The Greek \"eirotao\" means \"ask questions\"";
+$langIndeed = "Indeed. Socratic irony is an interrogative method. The Greek \\"eirotao\\" means \\"ask questions\\"";
 $langContradiction = "Use the Principle of Non Contradiction to force one\'s interlocutor into a dead end.";
 $langNotFalse = "This answer is not false. It is true that the revelation of the interlocutor\'s ignorance means showing the contradictory conclusions where lead his premisses.";
 $langAgenda = "Darbotvarkė";
@@ -26,7 +27,7 @@ $langAnnouncements = "Pranešimai";
 $langAddPageHome = "Įkrauti puslapį ir nuorodą į titulinį";
 $langLinkSite = "Įrašyti nuorodą";
 $langModifyInfo = "Kurso nustatymai";
-$langCourseDesc  = "Kurso aprašymas";
+$langCourseDesc = "Kurso aprašymas";
 $langAgendaTitle = "Tuesday the 11th of December - First meeting. Room: LIN 18";
 $langAgendaText = "General introduction to project management";
 $langMicro = "Street interviews";
@@ -49,7 +50,7 @@ $langEx = "pvz. <i>Innovation management</i>";
 $langFac = "Kategorija";
 $langTargetFac = "This is the department or any other category where the course is delivered";
 $langMax = "max. 20 simbolių, pvz. <i>INNOV21</i>";
-$langDoubt = "Jei nežinote kokį kodą rašyti, peržvelkite ";
+$langDoubt = "Jei nežinote kokį kodą rašyti, peržvelkite";
 $langProgram = "kurso programą</a>. Jei Jūsų kursas neturi kodo, rašykite susijusį žodį, pvz. <i>INNOVATION</i> jei kursas yra apie Innovation Management";
 $langScormtool = "Mokymosi medžiaga";
 $langScormbuildertool = "Scorm kūrimo įrankis";
@@ -58,9 +59,9 @@ $langOnlineConference = "Konferencija";
 $langAgendaCreationTitle = "Kurso sukūrimas";
 $langAgendaCreationContenu = "Kursas sukurtas.";
 $langOnlineDescription = "Tai konferencijų įrankio apibrėžimo pavyzdys";
-$langDropbox  = "Failų saugykla";
-$langOnly  = "Tik";
-$langRandomLanguage  = "Shuffle selection in aivailable languages";
+$langDropbox = "Failų saugykla";
+$langOnly = "Tik";
+$langRandomLanguage = "Shuffle selection in aivailable languages";
 $langImages = "Paveikslėliai";
 $langAudio = "Audio";
 $langFlash = "Flash";
@@ -98,4 +99,11 @@ $ExampleForumCategory = "Forumo kategorijos pavyzdys";
 $ExampleForum = "Forumo pavyzdys";
 $ExampleThread = "Diskusijos pavyzdys";
 $ExampleThreadContent = "Turinio pavyzdys";
+$IntroductionWiki = "";
+$CreateCourseArea = "";
+$CreateCourse = "";
+$Create = "";
+$MessageOfNewCourseToAdmin = "";
+$NewCourseCreatedIn = "";
+$ExplicationTrainers = "";
 ?>

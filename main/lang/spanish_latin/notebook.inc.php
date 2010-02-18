@@ -1,5 +1,6 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $NewNote = "Nueva nota";
 $Note = "Nota";
@@ -8,21 +9,27 @@ $NoteUpdated = "Nota actualizada";
 $NoteCreated = "Nota creada";
 $YouMustWriteANote = "Por favor, escriba una nota";
 $SaveNote = "Guardar nota";
-$WriteYourNoteHere = "Cliquee aquí para escribir una nueva nota";
-$SearchByTitle = "Búsqueda por título";
-$WriteTheTitleHere = "Escriba el título aquí";
-$UpdateDate = "Fecha de actualización";
-$NoteAddNew = "Añadir una nota en mi agenda personal";
-$OrderByCreationDate = "Ordenar por fecha de creación";
-$OrderByModificationDate = "Ordenar por fecha de la última modificación";
-$OrderByTitle = "Ordenar por título";
-$NoteTitle = "Título de nota";
+$WriteYourNoteHere = "Cliquee aquÃ­ para escribir una nueva nota";
+$SearchByTitle = "BÃºsqueda por tÃ­tulo";
+$WriteTheTitleHere = "Escriba el tÃ­tulo aquÃ­";
+$UpdateDate = "Fecha de actualizaciÃ³n";
+$NoteAddNew = "AÃ±adir una nota en mi agenda personal";
+$OrderByCreationDate = "Ordenar por fecha de creaciÃ³n";
+$OrderByModificationDate = "Ordenar por fecha de la Ãºltima modificaciÃ³n";
+$OrderByTitle = "Ordenar por tÃ­tulo";
+$NoteTitle = "TÃ­tulo de nota";
 $NoteComment = "Detalles de nota";
-$NoteAdded = "Nota añadida";
-$NoteConfirmDelete = "¿Realmente desea eliminar esta nota?";
+$NoteAdded = "Nota aÃ±adida";
+$NoteConfirmDelete = "Â¿Realmente desea eliminar esta nota?";
 $AddNote = "Crear nota";
 $ModifyNote = "Editar mi agenda personal";
 $BackToNoteList = "Regresar a la lista de notas";
-$NotebookManagement = "Administración de la agenda";
-$NotesSortedByTitleAsc = "Notas en orden ascendente por título";
+$NotebookManagement = "AdministraciÃ³n de la agenda";
+$BackToNotesList = "";
+$NotesSortedByTitleAsc = "Notas en orden ascendente por tÃ­tulo";
+$NotesSortedByTitleDESC = "";
+$NotesSortedByUpdateDateAsc = "";
+$NotesSortedByUpdateDateDESC = "";
+$NotesSortedByCreationDateAsc = "";
+$NotesSortedByCreationDateDESC = "";
 ?>

@@ -1,5 +1,6 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $ResourceAdded = "Resource added. You can now go back to the path or add more resources.";
 $LearningPath = "Courses";
@@ -35,7 +36,7 @@ $DokeosRelatedCourseMaterial = "Chamilo related course resources";
 $LinkTarget = "Link\'s target";
 $SameWindow = "In the same window";
 $NewWindow = "In a new window";
-$StepDeleted1 = "This ";
+$StepDeleted1 = "This";
 $StepDeleted2 = "item was deleted in that tool.";
 $Modify = "Edit";
 $Chapter = "Section";

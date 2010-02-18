@@ -1,5 +1,6 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $langScormVersion = "versión nisqa";
 $langScormRestarted = "Llapan imaymanakunaqa manaraq hunt\'asqachu.";
@@ -39,7 +40,7 @@ $langAccomplishedStepsTotal = "Lliw imaymanakunamanta ruwasqa";
 $langUnknown = "Mana reqsisqa";
 $AreYouSureToDeleteSteps = "Cheqaqchu munanki kay imaymanakunata mañuchiyta ?";
 $Origin = "Paqariynin";
-$Local = "Kay k\'iti ";
+$Local = "Kay k\'iti";
 $Remote = "Waq k\'iti";
 $FileToUpload = "Khipu apachinapaq";
 $ContentMaker = "Ima kaqkunata kamachiq";
@@ -48,8 +49,9 @@ $UploadLocalFileFromGarbageDir = "Apachiy kay k\'itiq khiputa, wayaqa main/garba
 $ThisItemIsNotExportable = "Kay imaymanaqa manan apakunchu SCORM nisqawan. Chayrayku mana apachikunmanchu allchanapaqqa.";
 $MoveCurrentChapter = "Kuyuchiy kunan kaq chitinchayta sutichasqata";
 $GenericScorm = "SCORM genérico nisqa";
-$UnknownPackageFormat = "Khipuqa mana reqsichikunchu. Ama hina kaychu hoqmanta qhawariy, ichapas waqllisqa kashan. waqlliyqa Zip khipupipas kanman utaq khipu sinchi hatunraykupas. Ichapas ZIP nisqata huch\'uyyachiypi  ama nishuta huch\'uyyachiywaqchu. ";
+$UnknownPackageFormat = "Khipuqa mana reqsichikunchu. Ama hina kaychu hoqmanta qhawariy, ichapas waqllisqa kashan. waqlliyqa Zip khipupipas kanman utaq khipu sinchi hatunraykupas. Ichapas ZIP nisqata huch\'uyyachiypi  ama nishuta huch\'uyyachiywaqchu.";
 $Attempt = "Mallina";
 $MoveTheCurrentForum = "Kuyurichiy kunan kaq rimarinaman";
 $WarningWhenEditingScorm = "¡ Paqtataq ! <br /> Sichus scorm nisqapi ima kasqanta ruwapayanki, ichapas waqllichiwaq yachachinata utaq imaymana kasqatapas.";
+$AdditionalProfileField = "";
 ?>

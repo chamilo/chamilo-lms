@@ -1,5 +1,6 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $ResourceAdded = "Sumberdaya ditambah. Anda kini dapat kembali ke path atau menambahkan sumberdaya lain.";
 $LearningPath = "Learning Path";
@@ -21,7 +22,7 @@ $Exercise = "Quiz";
 $Link = "Link";
 $AdValvas = "Ad Valvas";
 $Document = "Dokument";
-$ShowDelete = "Tampilkan / Hapus ";
+$ShowDelete = "Tampilkan / Hapus";
 $IntroductionText = "Teks Pengantar";
 $CourseDescription = "Deskripsi Mata Kuliah";
 $Groups = "Group";
@@ -54,4 +55,5 @@ $ForumAddNewTopic = "Forum: tambah topik baru";
 $ForumEditTopic = "Forum: edit topik";
 $ExerciseAnswers = "Latihan: Jawaban";
 $ForumReply = "Forum: reply";
+$AgendaSortChronologicallyDown = "";
 ?>

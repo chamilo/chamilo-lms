@@ -1,46 +1,47 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $langMdCallingTool = "Links";
 $langMdTitle = "Linknavn";
 $langMdDescription = "Linkbeskrivelse";
 $langMdCoverage = "Generel (universal)";
 $langMdCopyright = "Ghent Universitet";
-$nameTools = "Forældet sprogvariabel";
+$nameTools = "ForÃ¦ldet sprogvariabel";
 $langTool = "Metadatalinks";
-$langNoScript = "Script er ikke aktiveret i din browser, ignorerer venligst skærmbillede nedenfor denne tekst, det vil ikke fungere...";
-$langLanguageTip = "sproget, som denne læringssti anvender";
-$langIdentifier = "Identificér";
-$langIdentifierTip = "unik identifikation for dette læringsobjekt opbygget af bogstaver, tal, _-,()\'!*";
+$langNoScript = "Script er ikke aktiveret i din browser, ignorerer venligst skÃ¦rmbillede nedenfor denne tekst, det vil ikke fungere...";
+$langLanguageTip = "sproget, som denne lÃ¦ringssti anvender";
+$langIdentifier = "IdentificÃ©r";
+$langIdentifierTip = "unik identifikation for dette lÃ¦ringsobjekt opbygget af bogstaver, tal, _-,()\'!*";
 $langTitleTip = "titel eller navn, og sproget for titel eller navn";
-$langDescriptionTip = "beskrivelse eller kommentar og sprog brugt til beskrivelse af dette læringsplansobjekt";
-$langKeyword = "Nøgleord";
+$langDescriptionTip = "beskrivelse eller kommentar og sprog brugt til beskrivelse af dette lÃ¦ringsplansobjekt";
+$langKeyword = "NÃ¸gleord";
 $langKeywordTip = "del ved kommaer (bogstaver, tal, -.)";
 $langCoverage = "Kategori";
-$langCoverageTip = "categoryname, cfr. Links ";
-$langKwNote = "Hvis du ændrer sporgbeskrivelsen, så tilføj ikke nøglord samtidig med.";
-$langClickKw = "Klik på et nøgleord i mappestrukturen for at vælge eller fravælge nøgleordet";
-$langKwHelp = "<br/> Klik på \'+\' knappen for at åbne, klik på \'-\' knappen for at lukke, klik 2 gange på \'++\' knappen for at åbne alt, klik 2 gange på \'--\' knappen for at lukke alt.<br/> <br/> Fravælg alle valgte nøgleord ved at lukke \"træet\" og åbn det igen ved at klikke på \'+\' knappen.<br/> Alt-klik \'+\' søger på originale nøgleord i \"træet\".<br/> <br/> Alt-klik nøgleord vælger et nøgleord uden yderligere begreber eller fravælg et nøgleord uden yderlgere begreber.<br/> <br/> Hvis du ændrer sprogbeskrivelsen, så tilføj ikke nøgleord på samme tid.<br/> <br/> ";
+$langCoverageTip = "categoryname, cfr. Links";
+$langKwNote = "Hvis du Ã¦ndrer sporgbeskrivelsen, sÃ¥ tilfÃ¸j ikke nÃ¸glord samtidig med.";
+$langClickKw = "Klik pÃ¥ et nÃ¸gleord i mappestrukturen for at vÃ¦lge eller fravÃ¦lge nÃ¸gleordet";
+$langKwHelp = "<br/> Klik pÃ¥ \'+\' knappen for at Ã¥bne, klik pÃ¥ \'-\' knappen for at lukke, klik 2 gange pÃ¥ \'++\' knappen for at Ã¥bne alt, klik 2 gange pÃ¥ \'--\' knappen for at lukke alt.<br/> <br/> FravÃ¦lg alle valgte nÃ¸gleord ved at lukke \\"trÃ¦et\\" og Ã¥bn det igen ve";
 $langLocation = "URL/URI";
-$langLocationTip = "klik her for at åbne objektet";
+$langLocationTip = "klik her for at Ã¥bne objektet";
 $langStore = "Gem";
 $langDeleteAll = "Slet alle metadata";
-$langConfirmDelete = "Ønsker du virkeligt at slette alle metadata?!!";
+$langConfirmDelete = "Ã˜nsker du virkeligt at slette alle metadata?!!";
 $langWorkOn = "med";
 $langNotInDB = "linkkategorien findes ikke";
 $langManifestSyntax = "(syntaksfejl i manifestfil...)";
-$langEmptyManifest = "(tøm manifestfil...)";
+$langEmptyManifest = "(tÃ¸m manifestfil...)";
 $langNoManifest = "(ingen manifestfil...";
 $langNotFolder = "er ikke muligt, det er ikke en mappe...";
-$langContinue = "Fortsæt med";
+$langContinue = "FortsÃ¦t med";
 $langCreate = "Opret MDE\'er";
 $langRemove = "Fjern MDE\'er";
-$langAllRemovedFor = "Alle indtastninger er slettet ";
-$langRemainingFor = "Forældede indtasterne er blevet flyttet til kategori";
+$langAllRemovedFor = "Alle indtastninger er slettet";
+$langRemainingFor = "ForÃ¦ldede indtasterne er blevet flyttet til kategori";
 $langIndex = "Index ord";
 $langTotalMDEs = "Total antal links MD indtastninger";
-$langMainMD = "Åbn MDE";
-$langOrElse = "Vælg linkkategori";
+$langMainMD = "Ã…bn MDE";
+$langOrElse = "VÃ¦lg linkkategori";
 $langWarningDups = "- dublikerede kategorinavne er slettet fra listen";
-$langSLC = "Arbejd med kategori-links benævnt";
+$langSLC = "Arbejd med kategori-links benÃ¦vnt";
 ?>

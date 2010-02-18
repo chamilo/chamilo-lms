@@ -1,18 +1,19 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $langTool = "Metapodatki";
-$langClickKw = "Za izbiro ali preklic izbire, klikni na kljuèno besedo v drevesu.";
-$langKwHelp = "<br/> Klik na \'+\' za odpiranje, \'-\' za zapiranje, \'++\' odpre vse, \'--\' zapre vse.<br/> <br/> Poèisti izbrane kljuène besede s tem, da zaprete drevo in ga ponovno odprete s \'+\' .<br/> Alt-klik \'+\' poišèe originalne kljune besede v drevesu.<br/> <br/> Alt-klik kljuèna beseda izbere kljuèno besedo brez širšega pomena ali pa preklièe izbiro.<br/> <br/> V primeru, da spreminjate opisni jezik, hkrati ne dodajajte kljuènih besed.<br/> <br/>";
+$langClickKw = "Za izbiro ali preklic izbire, klikni na kljuÄno besedo v drevesu.";
+$langKwHelp = "<br/> Klik na \'+\' za odpiranje, \'-\' za zapiranje, \'++\' odpre vse, \'--\' zapre vse.<br/> <br/> PoÄisti izbrane kljuÄne besede s tem, da zaprete drevo in ga ponovno odprete s \'+\' .<br/> Alt-klik \'+\' poiÅ¡Äe originalne kljune besede v drevesu.<br/>";
 $langAdvanced = "Napredno";
 $langSearch = "Iskanje";
 $langSearchCrit = "Le ena beseda na vrstico!";
-$langNoKeywords = "Ta teèaj ne vsebuje nobenih kljuènih besed";
-$langKwCacheProblem = "Medpomnilnika kljuènih besed ni mogoèe odpreti";
-$langCourseKwds = "kljuène besede teèaja";
-$langKwdsInMD = "kljuène besede uporabljene v MD";
-$langKwdRefs = "reference kljuènih besed";
-$langNonCourseKwds = "Kljuène besede, ki niso del teèaja";
-$langKwdsUse = "Kljuène besede teèaja (mastno=ni v uporabi)";
-$langTotalMDEs = "Skupno število MD vnosov:";
+$langNoKeywords = "Ta teÄaj ne vsebuje nobenih kljuÄnih besed";
+$langKwCacheProblem = "Medpomnilnika kljuÄnih besed ni mogoÄe odpreti";
+$langCourseKwds = "kljuÄne besede teÄaja";
+$langKwdsInMD = "kljuÄne besede uporabljene v MD";
+$langKwdRefs = "reference kljuÄnih besed";
+$langNonCourseKwds = "KljuÄne besede, ki niso del teÄaja";
+$langKwdsUse = "KljuÄne besede teÄaja (mastno=ni v uporabi)";
+$langTotalMDEs = "Skupno Å¡tevilo MD vnosov:";
 ?>

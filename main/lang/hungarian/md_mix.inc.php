@@ -1,18 +1,19 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $langTool = "Metaadat";
-$langClickKw = "Kattintson a fastruktúrában egy kulcsszóra a kijelöléshez/megsz&#369;ntetéshez.";
-$langKwHelp = "<br/> KAttintson a \'+\' gombra a megnyitáshoz, a \'-\' gombra a bezáráshoz, a \'++\' gombra az összes megnyitásához, a \'--\' gombra az összes bezárásához.<br/> <br/> Az összes kulcsszó kiválasztásának megsz&#369;ntetéséhez zárja össze az egész fát, és nyissa szét újra a \'+\' gombbal.<br/> Alt-click \'+\' újra kiválasztja az el&#337;z&#337;leg választott kulcsszavakat.<br/> <br/> Alt-click kattintva a kulcsszóra megsz&#369;nteti annak kijelöltségét.<br/>";
-$langAdvanced = "Haladó";
-$langSearch = "Keresés";
-$langSearchCrit = "Soronként egy szóval írja le az alábbi területre a kulcsszavait.";
+$langClickKw = "Kattintson a fastruktÃºrÃ¡ban egy kulcsszÃ³ra a kijelÃ¶lÃ©shez/megsz&#369;ntetÃ©shez.";
+$langKwHelp = "<br/> KAttintson a \'+\' gombra a megnyitÃ¡shoz, a \'-\' gombra a bezÃ¡rÃ¡shoz, a \'++\' gombra az Ã¶sszes megnyitÃ¡sÃ¡hoz, a \'--\' gombra az Ã¶sszes bezÃ¡rÃ¡sÃ¡hoz.<br/> <br/> Az Ã¶sszes kulcsszÃ³ kivÃ¡lasztÃ¡sÃ¡nak megsz&#369;ntetÃ©sÃ©hez zÃ¡rja Ã¶ssze az egÃ©sz fÃ¡t, Ã©s n";
+$langAdvanced = "HaladÃ³";
+$langSearch = "KeresÃ©s";
+$langSearchCrit = "SoronkÃ©nt egy szÃ³val Ã­rja le az alÃ¡bbi terÃ¼letre a kulcsszavait.";
 $langNoKeywords = "A kurzusnak nincsenek kulcsszavai";
-$langKwCacheProblem = "A kulcsszó-gyorsítótárat nem lehet megnyitni";
+$langKwCacheProblem = "A kulcsszÃ³-gyorsÃ­tÃ³tÃ¡rat nem lehet megnyitni";
 $langCourseKwds = "A kurzus kulcsszavai";
-$langKwdsInMD = "Kulcsszavak használatban a MD-ben.";
-$langKwdRefs = "Kulcsszó beállítások";
+$langKwdsInMD = "Kulcsszavak hasznÃ¡latban a MD-ben.";
+$langKwdRefs = "KulcsszÃ³ beÃ¡llÃ­tÃ¡sok";
 $langNonCourseKwds = "Nem-kurzus kulcsszavak";
-$langKwdsUse = "Kurzus kulcsszavak (kövérített = nem használt)";
-$langTotalMDEs = "Összes MD bejegyzések száma:";
+$langKwdsUse = "Kurzus kulcsszavak (kÃ¶vÃ©rÃ­tett = nem hasznÃ¡lt)";
+$langTotalMDEs = "Ã–sszes MD bejegyzÃ©sek szÃ¡ma:";
 ?>

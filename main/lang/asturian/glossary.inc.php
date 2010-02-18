@@ -1,27 +1,28 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $TermAddNew = "Amestar terminu nuevu";
-$TermName = "Nome del términu";
-$TermDefinition = "Definición";
-$TermDeleted = "Términu esborráu";
-$TermUpdated = "Términu actualizáu";
-$TermConfirmDelete = "¿ De verdá quier esborrar esti términu ?";
-$TermAddButton = "Amestar esti términu";
-$TermUpdateButton = "Actualizar términu";
-$TermEdit = "Editar términu";
-$TermDeleteAction = "Esborrar términu";
+$TermName = "Nome del tÃ©rminu";
+$TermDefinition = "DefiniciÃ³n";
+$TermDeleted = "TÃ©rminu esborrÃ¡u";
+$TermUpdated = "TÃ©rminu actualizÃ¡u";
+$TermConfirmDelete = "Â¿ De verdÃ¡ quier esborrar esti tÃ©rminu ?";
+$TermAddButton = "Amestar esti tÃ©rminu";
+$TermUpdateButton = "Actualizar tÃ©rminu";
+$TermEdit = "Editar tÃ©rminu";
+$TermDeleteAction = "Esborrar tÃ©rminu";
 $OrderBy = "Ordenar por";
-$CreationDate = "Fecha de creación";
-$UpdateDate = "Última modificación";
-$PreSelectedOrder = "Ordenar por seleición";
-$TermAdded = "Términu amestáu";
-$YouMustEnterATermName = "Usté tien d\'escribir un nome de términu";
-$YouMustEnterATermDefinition = "Tien d\'escribir un definición del términu";
+$CreationDate = "Fecha de creaciÃ³n";
+$UpdateDate = "Ãšltima modificaciÃ³n";
+$PreSelectedOrder = "Ordenar por seleiciÃ³n";
+$TermAdded = "TÃ©rminu amestÃ¡u";
+$YouMustEnterATermName = "UstÃ© tien d\'escribir un nome de tÃ©rminu";
+$YouMustEnterATermDefinition = "Tien d\'escribir un definiciÃ³n del tÃ©rminu";
 $TableView = "Ver cuadru";
-$GlossaryTermAlreadyExistsYouShouldEditIt = "Esti terminu del glosariu ya esiste, por favor, camudálu por otru nome";
-$GlossaryManagement  = "Alministración de glosariu";
-$TermMoved = "El términu movíose";
-$ShowGlossaryInExtraToolsTitle = "Amuesa los términos del glosariu nes ferramientes lleiciones y exercicios";
-$ShowGlossaryInExtraToolsComment = "Dende equí puedes configurar cómo amestar los términos del glosariu en ferramientes como leiciones y exercicios";
+$GlossaryTermAlreadyExistsYouShouldEditIt = "Esti terminu del glosariu ya esiste, por favor, camudÃ¡lu por otru nome";
+$GlossaryManagement = "AlministraciÃ³n de glosariu";
+$TermMoved = "El tÃ©rminu movÃ­ose";
+$ShowGlossaryInExtraToolsTitle = "Amuesa los tÃ©rminos del glosariu nes ferramientes lleiciones y exercicios";
+$ShowGlossaryInExtraToolsComment = "Dende equÃ­ puedes configurar cÃ³mo amestar los tÃ©rminos del glosariu en ferramientes como leiciones y exercicios";
 ?>

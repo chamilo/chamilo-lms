@@ -1,27 +1,32 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $langActivate = "Activar";
 $langDeactivate = "Desactivar";
-$langInLnk  = "Ligazóns desactivadas";
-$langDelLk = "¿Estás seguro de que queres desactivar esta ligazón?";
-$langCourseCreate  = "Crear un Curso";
-$langNameOfTheLink  = "Nome da ligazón";
-$lang_main_categories_list                  = "Lista de categorías principais";
-$langCourseAdminOnly = "Só profesores";
-$PlatformAdminOnly = "Só administradores da plataforma";
+$langInLnk = "LigazÃ³ns desactivadas";
+$langDelLk = "Â¿EstÃ¡s seguro de que queres desactivar esta ligazÃ³n?";
+$langCourseCreate = "Crear un Curso";
+$langNameOfTheLink = "Nome da ligazÃ³n";
+$lang_main_categories_list = "Lista de categorÃ­as principais";
+$langCourseAdminOnly = "SÃ³ profesores";
+$PlatformAdminOnly = "SÃ³ administradores da plataforma";
 $langCombinedCourse = "Curso combinado";
-$ToolIsNowVisible = "A ferramenta é agora visible";
-$ToolIsNowHidden = "A ferramenta é agora invisible";
-$EditLink = "Editar ligazón";
-$Blog_management = "Xestión do blog";
+$ToolIsNowVisible = "A ferramenta Ã© agora visible";
+$ToolIsNowHidden = "A ferramenta Ã© agora invisible";
+$EditLink = "Editar ligazÃ³n";
+$Blog_management = "XestiÃ³n do blog";
 $Forum = "Foros";
 $Course_maintenance = "Mantemento do curso";
 $TOOL_SURVEY = "Enquisas";
 $GreyIcons = "Ferramentas";
-$Interaction = "Interacción";
-$Authoring = "Creación de contidos";
-$Administration = "Administración";
+$Interaction = "InteracciÃ³n";
+$Authoring = "CreaciÃ³n de contidos";
+$Administration = "AdministraciÃ³n";
 $IntroductionTextUpdated = "Actualizouse a mensaxe introdutoria";
-$IntroductionTextDeleted = "Texto de introdución eliminado.";
+$IntroductionTextDeleted = "Texto de introduciÃ³n eliminado.";
+$SessionIdentifier = "Identificador da sesiÃ³n";
+$SessionName = "Nome da sesiÃ³n";
+$SessionCategory = "CategorÃ­a da sesiÃ³n";
+$SessionData = "Datos da sesiÃ³n";
 ?>

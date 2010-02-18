@@ -1,25 +1,26 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$GeneralDescription = "Všeobecná charakteristika";
-$GeneralDescriptionQuestions = "Aké je miesto kurzu v programe? Sú nejaké predpoklady? Ako je kurz spojený s inými kurzami?";
-$GeneralDescriptionInformation = "Opísa&#357; kurz (po&#269;et hodín, oficiálny kód, miesto, kde sa to koná) a lektora (meno, priezvisko, kancelária, telefón, e-mail...).";
+$GeneralDescription = "VÂšeobecnÃ¡ charakteristika";
+$GeneralDescriptionQuestions = "AkÃ© je miesto kurzu v programe? SÃº nejakÃ© predpoklady? Ako je kurz spojenÃ½ s inÃ½mi kurzami?";
+$GeneralDescriptionInformation = "OpÃ­sa&#357; kurz (po&#269;et hodÃ­n, oficiÃ¡lny kÃ³d, miesto, kde sa to konÃ¡) a lektora (meno, priezvisko, kancelÃ¡ria, telefÃ³n, e-mail...).";
 $Objectives = "Ciele";
-$ObjectivesInformation = "Prezentácia globálnych a podrobných cie&#318;ov kurzu.";
-$ObjectivesQuestions = "&#268;o budú môc&#357; používatelia urobi&#357; na konci kurzu. &#268;o majú vytvori&#357; po&#269;as kurzu?";
-$Topics = "Témy";
-$TopicsInformation = "Zoznam tém zahrnutých do kurzu. Dôležitos&#357; každej témy. Úrove&#328; obtiažnosti. Štruktúra a vzájomná závislos&#357; rôznych &#269;astí.";
-$TopicsQuestions = "Ako kurz postupuje? Na &#269;o majú da&#357; používatelia pozor? Boli identifikované problémy v pochopení v rôznych kapitolách? Ko&#318;ko &#269;asu treba venova&#357; jednotlivým &#269;astiam kurzu?";
+$ObjectivesInformation = "PrezentÃ¡cia globÃ¡lnych a podrobnÃ½ch cie&#318;ov kurzu.";
+$ObjectivesQuestions = "&#268;o budÃº mÃ´c&#357; pouÂžÃ­vatelia urobi&#357; na konci kurzu. &#268;o majÃº vytvori&#357; po&#269;as kurzu?";
+$Topics = "TÃ©my";
+$TopicsInformation = "Zoznam tÃ©m zahrnutÃ½ch do kurzu. DÃ´leÂžitos&#357; kaÂždej tÃ©my. Ãšrove&#328; obtiaÂžnosti. ÂŠtruktÃºra a vzÃ¡jomnÃ¡ zÃ¡vislos&#357; rÃ´znych &#269;astÃ­.";
+$TopicsQuestions = "Ako kurz postupuje? Na &#269;o majÃº da&#357; pouÂžÃ­vatelia pozor? Boli identifikovanÃ© problÃ©my v pochopenÃ­ v rÃ´znych kapitolÃ¡ch? Ko&#318;ko &#269;asu treba venova&#357; jednotlivÃ½m &#269;astiam kurzu?";
 $Methodology = "Metodika";
-$MethodologyQuestions = "Aké metódy a aktivity môžu pomôc&#357; pri dosahovaní cie&#318;ov kurzu? Pod&#318;a akého harmonogramu?";
-$MethodologyInformation = "Prezentácia aktivít (konferencie, práce, skupinové výskumy, laboratóriá...).";
-$CourseMaterial = "Študijný materiál";
-$CourseMaterialQuestions = "Je tam u&#269;ebnica, zborník dokumentov, bibliografia, zoznam odkazov na internete?";
-$CourseMaterialInformation = "Krátky popis materiálov kurzu.";
-$HumanAndTechnicalResources = "&#317;udské zdroje a technické zabezpe&#269;enie";
-$HumanAndTechnicalResourcesQuestions = "Sú tam lektori, tútori, technická pomoc, asistenti, po&#269;íta&#269;ové u&#269;ebne?";
-$HumanAndTechnicalResourcesInformation = "Krátky popis identifikácie rôznych kontaktných osôb a dostupných technických prostriedkov.";
-$Assessment  = "Hodnotenie";
-$AssessmentQuestions = "Ako budú používatelia hodnotení? Je možné rozvíja&#357; stratégie na zvládnutie témy?";
-$AssessmentInformation = "Príklad skúškových otázok. Kritériá úspechu. Tipy a triky.";
+$MethodologyQuestions = "AkÃ© metÃ³dy a aktivity mÃ´Âžu pomÃ´c&#357; pri dosahovanÃ­ cie&#318;ov kurzu? Pod&#318;a akÃ©ho harmonogramu?";
+$MethodologyInformation = "PrezentÃ¡cia aktivÃ­t (konferencie, prÃ¡ce, skupinovÃ© vÃ½skumy, laboratÃ³riÃ¡...).";
+$CourseMaterial = "ÂŠtudijnÃ½ materiÃ¡l";
+$CourseMaterialQuestions = "Je tam u&#269;ebnica, zbornÃ­k dokumentov, bibliografia, zoznam odkazov na internete?";
+$CourseMaterialInformation = "KrÃ¡tky popis materiÃ¡lov kurzu.";
+$HumanAndTechnicalResources = "&#317;udskÃ© zdroje a technickÃ© zabezpe&#269;enie";
+$HumanAndTechnicalResourcesQuestions = "SÃº tam lektori, tÃºtori, technickÃ¡ pomoc, asistenti, po&#269;Ã­ta&#269;ovÃ© u&#269;ebne?";
+$HumanAndTechnicalResourcesInformation = "KrÃ¡tky popis identifikÃ¡cie rÃ´znych kontaktnÃ½ch osÃ´b a dostupnÃ½ch technickÃ½ch prostriedkov.";
+$Assessment = "Hodnotenie";
+$AssessmentQuestions = "Ako budÃº pouÂžÃ­vatelia hodnotenÃ­? Je moÂžnÃ© rozvÃ­ja&#357; stratÃ©gie na zvlÃ¡dnutie tÃ©my?";
+$AssessmentInformation = "PrÃ­klad skÃºÂškovÃ½ch otÃ¡zok. KritÃ©riÃ¡ Ãºspechu. Tipy a triky.";
 ?>

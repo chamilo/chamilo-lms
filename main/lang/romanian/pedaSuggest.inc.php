@@ -1,5 +1,6 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $GeneralDescription = "Descriere generala";
 $GeneralDescriptionQuestions = "Care este locul cursului in prgram? Exista cerinte de indeplinit? Cum este cursul in relatie cu alte cursuri?";
@@ -14,12 +15,12 @@ $Methodology = "Metodologie";
 $MethodologyQuestions = "Ce metode si ce activitati il vor ajuta sa atinga obiectivele cursului? Pe parcursul carui calendar?";
 $MethodologyInformation = "Prezentarea activitatilor (conferinta, hartii, cercetarile grupului, laboratoare...).";
 $CourseMaterial = "Materialul cursului";
-$CourseMaterialQuestions = "Exista o carte a cursului, o colectie de hârtii, o bibliografie, o legatura pe internet?";
+$CourseMaterialQuestions = "Exista o carte a cursului, o colectie de hÃ¢rtii, o bibliografie, o legatura pe internet?";
 $CourseMaterialInformation = "Scurta descriere a materialelor cursului.";
 $HumanAndTechnicalResources = "Resurse umane si tehnice";
 $HumanAndTechnicalResourcesQuestions = "Sunt profesori, tutori, serviciu de asistenta tehnica, asistenti sociali, sali de calculatoare?";
 $HumanAndTechnicalResourcesInformation = "Scurta descriere a diferitelor persoane de contact si dispozitivelor tehnice disponibile.";
-$Assessment  = "Evaluare";
-$AssessmentQuestions = "Cum vor fi utilizatorii evaluati? Exista si alte strategii suplimentare pentru o intelegere cat mai buna a acestui subiect de discutie? ";
+$Assessment = "Evaluare";
+$AssessmentQuestions = "Cum vor fi utilizatorii evaluati? Exista si alte strategii suplimentare pentru o intelegere cat mai buna a acestui subiect de discutie?";
 $AssessmentInformation = "Exemple de intrebari la examen. Crieteriu de succes. Indicatii si trucuri.";
 ?>

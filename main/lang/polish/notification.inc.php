@@ -1,5 +1,6 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $lang_new_item = "Nowy punkt zosta&#322; dodany";
 $lang_title_notification = "Od ostatniej wizyty";
@@ -17,4 +18,19 @@ $lang_new_dropbox_file = "otrzymano nowy plik";
 $lang_update_dropbox_file = "plik w Twojej skrzynce nadawczej zosta&#322; zaktualizowany";
 $ForumCategoryAdded = "Kategoria forum zosta&#322;a dodana";
 $LearnpathAdded = "&#346;cie&#380;ka nauki zosta&#322;a dodana";
+$GlossaryAdded = "";
+$QuizQuestionAdded = "";
+$QuizQuestionUpdated = "";
+$QuizQuestionDeleted = "";
+$QuizUpdated = "";
+$QuizAdded = "";
+$QuizDeleted = "";
+$DocumentInvisible = "";
+$DocumentVisible = "";
+$CourseDescriptionAdded = "";
+$WikiAdded = "";
+$SurveyAdded = "";
+$NotebookAdded = "";
+$NotebookUpdated = "";
+$NotebookDeleted = "";
 ?>

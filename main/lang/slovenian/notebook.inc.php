@@ -1,34 +1,35 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$NewNote = "Nova beležka";
-$Note = "Beležka";
-$NoteDeleted = "Beležka je bila odstranjena";
-$NoteUpdated = "Beležka je bila ažurirana";
-$NoteCreated = "Beležka je bila ustvarjena";
-$YouMustWriteANote = "Prosim, vpišite vsebino beležke";
-$SaveNote = "Shrani beležko";
-$WriteYourNoteHere = "Kliknite tukaj za zapis nove beležke";
-$SearchByTitle = "Išèi po naslovu";
+$NewNote = "Nova beleÅ¾ka";
+$Note = "BeleÅ¾ka";
+$NoteDeleted = "BeleÅ¾ka je bila odstranjena";
+$NoteUpdated = "BeleÅ¾ka je bila aÅ¾urirana";
+$NoteCreated = "BeleÅ¾ka je bila ustvarjena";
+$YouMustWriteANote = "Prosim, dodajte zapis v beleÅ¾ko";
+$SaveNote = "Shrani beleÅ¾ko";
+$WriteYourNoteHere = "Tule zapiÅ¡ite svojo beleÅ¾ko";
+$SearchByTitle = "IÅ¡Äi po naslovu";
 $WriteTheTitleHere = "Tule dodaj naslov";
 $UpdateDate = "Zadnja sprememba";
 $NoteAddNew = "Dodaj novo";
 $OrderByCreationDate = "Po datumu nastanka";
 $OrderByModificationDate = "Po datumu spremembe";
 $OrderByTitle = "Po naslovu";
-$NoteTitle = "Naslov beležke";
-$NoteComment = "Podrobnosti beležke";
-$NoteAdded = "Beležka je bila dodana";
-$NoteConfirmDelete = "Ste preprièani, da želite odstraniti beležko?";
-$AddNote = "Dodaj beležko";
-$ModifyNote = "Spremeni beležko";
-$BackToNoteList = "Nazaj na seznam beležk";
-$NotebookManagement = "Upravljanje beležk";
-$BackToNotesList = "Nazaj na seznam beležk";
-$NotesSortedByTitleAsc = "Po naslovu narašèajoèe";
-$NotesSortedByTitleDESC = "Po naslovu padajoèe";
-$NotesSortedByUpdateDateAsc = "Po datumu zadnje spremembe narašèajoèa";
-$NotesSortedByUpdateDateDESC = "Po datumu zadnje spremembe padajoèe";
-$NotesSortedByCreationDateAsc = "Po datumu nastanka narašèajoèe";
-$NotesSortedByCreationDateDESC = "Po datumu nastanka padajoèe";
+$NoteTitle = "Naslov beleÅ¾ke";
+$NoteComment = "Podrobnosti beleÅ¾ke";
+$NoteAdded = "BeleÅ¾ka je bila dodana";
+$NoteConfirmDelete = "Ste prepriÄani, da Å¾elite odstraniti beleÅ¾ko?";
+$AddNote = "Dodaj beleÅ¾ko";
+$ModifyNote = "Spremeni beleÅ¾ko";
+$BackToNoteList = "Nazaj na seznam beleÅ¾k";
+$NotebookManagement = "Upravljanje beleÅ¾k";
+$BackToNotesList = "Nazaj na seznam beleÅ¾k";
+$NotesSortedByTitleAsc = "Po naslovu naraÅ¡ÄajoÄe";
+$NotesSortedByTitleDESC = "Po naslovu padajoÄe";
+$NotesSortedByUpdateDateAsc = "Po datumu aÅ¾uriranja naraÅ¡ÄajoÄe";
+$NotesSortedByUpdateDateDESC = "Po datumu aÅ¾uriranja padajoÄe";
+$NotesSortedByCreationDateAsc = "Po datumu nastanka naraÅ¡ÄajoÄe";
+$NotesSortedByCreationDateDESC = "Po datumu nastanka padajoÄe";
 ?>

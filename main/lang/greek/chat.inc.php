@@ -1,12 +1,63 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$langWash  = "Καθάρισμα";
-$langSave  = "Αποθήκευση";
-$langRefresh  = "Ανανέωση";
-$langIsNowInYourDocDir  = "είναι τώρα στο εργαλείο των εγγράφων. <br><B>Το αρχείο είναι ορατό</B>";
-$langCopyFailed  = "Η εκτύπωση απέτυχε";
-$langTypeMessage  = "Πληκτρολογήστε το μήνυμά σας παρακάτω";
-$langQuestion = "Ερώτηση";
-$langLinkName = "Όνομα συνδέσμου";
+$langOnlineConference = "";
+$langWash = "ΓΓ΅Γ¨ΓΓ±Γ©Γ³Γ¬Γ΅";
+$langReset = "";
+$langSave = "ΓΓ°Γ―Γ¨ΓΓªΓ¥ΓµΓ³Γ§";
+$langRefresh = "ΓΓ­Γ΅Γ­ΓΓΉΓ³Γ§";
+$langIsNowInYourDocDir = "Γ¥ΓΓ­Γ΅Γ© Γ΄ΓΎΓ±Γ΅ Γ³Γ΄Γ― Γ¥Γ±Γ£Γ΅Γ«Γ¥ΓΓ― Γ΄ΓΉΓ­ Γ¥Γ£Γ£Γ±ΓΓ¶ΓΉΓ­. <br><B>Γ”Γ― Γ΅Γ±Γ·Γ¥ΓΓ― Γ¥ΓΓ­Γ΅Γ© Γ―Γ±Γ΅Γ΄ΓΌ</B>";
+$langCopyFailed = "Γ‡ Γ¥ΓªΓ΄Γ½Γ°ΓΉΓ³Γ§ Γ΅Γ°ΓΓ΄ΓµΓ·Γ¥";
+$langTypeMessage = "ΓΓ«Γ§ΓªΓ΄Γ±Γ―Γ«Γ―Γ£ΓΓ³Γ΄Γ¥ Γ΄Γ― Γ¬ΓΓ­ΓµΓ¬Γ Γ³Γ΅Γ² Γ°Γ΅Γ±Γ΅ΓªΓΓ΄ΓΉ";
+$langConfirmReset = "";
+$langHasResetChat = "";
+$langNoOnlineConference = "";
+$langMediaFile = "";
+$langContentFile = "";
+$langListOfParticipants = "";
+$langYourPicture = "";
+$langOnlineDescription = "";
+$langOnlyCheckForImportantQuestion = "";
+$langQuestion = "Γ…Γ±ΓΎΓ΄Γ§Γ³Γ§";
+$langClearList = "";
+$langWhiteBoard = "";
+$langTextEditorDefault = "";
+$langStreaming = "";
+$langStreamURL = "";
+$langStreamType = "";
+$langLinkName = "Ε’Γ­Γ―Γ¬Γ΅ Γ³ΓµΓ­Γ¤ΓΓ³Γ¬Γ―Γµ";
+$langLinkURL = "";
+$langWelcomeToOnlineConf = "";
+$langNoLinkAvailable = "";
+$langChat_reset_by = "";
+$OrFile = "";
+$langCallSent = "";
+$langChatDenied = "";
+$Send = "";
+$Connected = "";
+$Think = "";
+$BigGrin = "";
+$Amazing = "";
+$Confused = "";
+$Cool = "";
+$Surprised = "";
+$Hand = "";
+$Wink = "";
+$Neutral = "";
+$Angry = "";
+$Avid = "";
+$Redface = "";
+$Sad = "";
+$Silence = "";
+$Silenced = "";
+$Smile = "";
+$Exclamation = "";
+$Arrow = "";
+$Question = "";
+$Idea = "";
+$AskPermissionSpeak = "";
+$GiveTheFloorTo = "";
+$Pause = "";
+$Stop = "";
 ?>

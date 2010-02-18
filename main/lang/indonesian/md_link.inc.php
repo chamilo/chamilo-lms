@@ -1,5 +1,6 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $langMdCallingTool = "Link";
 $langMdTitle = "Nama Link";
@@ -20,7 +21,7 @@ $langCoverage = "Kategori";
 $langCoverageTip = "nama kategori, cfr. Link";
 $langKwNote = "Jika anda mengubah bahasa deskripsi, jangan tambahkan kata kunci pada saat yang sama.";
 $langClickKw = "Klik sebuh kata kunci pada tree untuk memilih atau membatalkan pilihan.";
-$langKwHelp = "<br/> Klik tombol \'+\' untuk membuka, tombol  \'-\' untuk menutup, tombol  \'++\' untuk membuka semua, tombol \'--\' untuk menutup semua.<br/> <br/> Bersihkan semua kata kunci yang terpilih dengan menuutp dan membukanya kembali dengan tombol \'+\' <br/> Alt-click \'+\' cari kata kunci original dalam tree.<br/> <br/> Alt-click pada kata kunci  tanpa teminologi atau batalkan pilihan (deselect) suatu keyword dengan terminologi yang lebih luas.<br/> <br/> Jika anda mengubah bahasa deskrips, jangan tambahkan kata kunci pada saat yang sama.<br/> <br/>";
+$langKwHelp = "<br/> Klik tombol \'+\' untuk membuka, tombol  \'-\' untuk menutup, tombol  \'++\' untuk membuka semua, tombol \'--\' untuk menutup semua.<br/> <br/> Bersihkan semua kata kunci yang terpilih dengan menuutp dan membukanya kembali dengan tombol \'+\' <br/>";
 $langLocation = "URL/URI";
 $langLocationTip = "klik untuk membuka obyek";
 $langStore = "Simpan";

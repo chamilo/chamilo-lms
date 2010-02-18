@@ -1,12 +1,13 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $langTool = "Metadatos";
-$langClickKw = "Haga clic sobre la palabra clave en el árbol para seleccionarla o deseleccionarla.";
-$langKwHelp = "<br/> Clic en el botón \'+\' para abrir, en el botón \'-\' cerrar, en el botón \'++\' para abrir todo, en el botón \'--\' para cerrar todo.<br/> <br/> Desechar todas las palabras clave seleccionadas cerrando el árbol y abriéndolo de nuevo con el botón \'+\'.<br/> Alt-clic \'+\' vuelve a seleccionar las palabras clave seleccionada con anterioridad.<br/> <br/> Alt-clic palabra clave, niega esa palabra clave.<br/>";
+$langClickKw = "Haga clic sobre la palabra clave en el Ã¡rbol para seleccionarla o deseleccionarla.";
+$langKwHelp = "<br/> Clic en el botÃ³n \'+\' para abrir, en el botÃ³n \'-\' cerrar, en el botÃ³n \'++\' para abrir todo, en el botÃ³n \'--\' para cerrar todo.<br/> <br/> Desechar todas las palabras clave seleccionadas cerrando el Ã¡rbol y abriÃ©ndolo de nuevo con el botÃ³n \'+";
 $langAdvanced = "Avanzada";
 $langSearch = "Buscar";
-$langSearchCrit = "¡ Use el área inferior para los descriptores, una palabra por línea !";
+$langSearchCrit = "Â¡ Use el Ã¡rea inferior para los descriptores, una palabra por lÃ­nea !";
 $langNoKeywords = "Este curso no tiene palabras clave";
 $langKwCacheProblem = "La palabra clave no puede ser abierta";
 $langCourseKwds = "palabras clave del curso";

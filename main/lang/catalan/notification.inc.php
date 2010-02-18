@@ -1,5 +1,6 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $lang_new_item = "new item added";
 $lang_title_notification = "Since your last visit";
@@ -18,15 +19,15 @@ $lang_update_dropbox_file = "un arxiu dels seus documents compartits ha estat ac
 $ForumCategoryAdded = "s\'ha afegit una nova categoria de foro";
 $LearnpathAdded = "Curs afegit";
 $GlossaryAdded = "Nou terme afegit al glossari";
-$QuizQuestionAdded = "Nova qüestió afegida en l\'exercici";
-$QuizQuestionUpdated = "Nova qüestió actualitzada en l\'exercici";
-$QuizQuestionDeleted = "Nova qüestió eliminada en l\'exercici";
+$QuizQuestionAdded = "Nova qÃ¼estiÃ³ afegida en l\'exercici";
+$QuizQuestionUpdated = "Nova qÃ¼estiÃ³ actualitzada en l\'exercici";
+$QuizQuestionDeleted = "Nova qÃ¼estiÃ³ eliminada en l\'exercici";
 $QuizUpdated = "Exercici actualitzat";
 $QuizAdded = "Exercici afegit";
 $QuizDeleted = "Exercici eliminat";
 $DocumentInvisible = "Document invisible";
 $DocumentVisible = "Document visible";
-$CourseDescriptionAdded = "Descripció del curs afegit";
+$CourseDescriptionAdded = "DescripciÃ³ del curs afegit";
 $WikiAdded = "Wiki afegit";
 $SurveyAdded = "Enquesta afegida";
 $NotebookAdded = "Nota afegida";

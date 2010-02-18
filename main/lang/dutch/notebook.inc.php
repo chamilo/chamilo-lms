@@ -1,5 +1,6 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $NewNote = "Nieuwe notitie";
 $Note = "Notitie";
@@ -8,6 +9,8 @@ $NoteUpdated = "Notitie aangepast";
 $NoteCreated = "Notitie aangemaakt";
 $YouMustWriteANote = "Gelieve een notitie te schrijven";
 $SaveNote = "Notitie opslaan";
+$WriteYourNoteHere = "";
+$SearchByTitle = "";
 $WriteTheTitleHere = "Typ de titel hier";
 $UpdateDate = "Meest recente aanpassing";
 $NoteAddNew = "Voeg nieuwe notitie toe in mijn persoonlijke notitieblok";

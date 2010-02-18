@@ -1,38 +1,63 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$langOnlineConference  = "Konference";
-$langWash  = "Ryd";
-$langReset  = "Nulstil";
-$langSave  = "Gem";
-$langRefresh  = "Opdater";
-$langIsNowInYourDocDir  = "er nu i dokumentmappen. <br><B>Filen er synlig</B>";
-$langCopyFailed  = "Udskrift mislykkedes";
-$langTypeMessage  = "Indtast venligst din meddelelse!";
-$langConfirmReset  = "Ønsker du virkelig at slette alle meddelelser?";
-$langHasResetChat  = "har nulstillet chatten";
-$langNoOnlineConference  = "Der er i øjeblikket ingen konference...";
-$langMediaFile  = "Live lyd eller video streaming";
-$langContentFile  = "Præsentation";
-$langListOfParticipants  = "Deltagerliste";
-$langYourPicture  = "Dit billede";
-$langOnlineDescription  = "Konferencebeskrivelse";
-$langOnlyCheckForImportantQuestion = "Klik kun i denne boks hvis dit spørgsmål er vigtigt!";
-$langQuestion = "spørgsmål";
+$langOnlineConference = "Konference";
+$langWash = "Ryd";
+$langReset = "Nulstil";
+$langSave = "Gem";
+$langRefresh = "Opdater";
+$langIsNowInYourDocDir = "er nu i dokumentmappen. <br><B>Filen er synlig</B>";
+$langCopyFailed = "Udskrift mislykkedes";
+$langTypeMessage = "Indtast venligst din meddelelse!";
+$langConfirmReset = "Ã˜nsker du virkelig at slette alle meddelelser?";
+$langHasResetChat = "har nulstillet chatten";
+$langNoOnlineConference = "Der er i Ã¸jeblikket ingen konference...";
+$langMediaFile = "Live lyd eller video streaming";
+$langContentFile = "PrÃ¦sentation";
+$langListOfParticipants = "Deltagerliste";
+$langYourPicture = "Dit billede";
+$langOnlineDescription = "Konferencebeskrivelse";
+$langOnlyCheckForImportantQuestion = "Klik kun i denne boks hvis dit spÃ¸rgsmÃ¥l er vigtigt!";
+$langQuestion = "spÃ¸rgsmÃ¥l";
 $langClearList = "Ryd listen";
 $langWhiteBoard = "Opslagstavle";
-$langTextEditorDefault = "<h2>Tekstbehandling</h2>Klip og indsæt her fra MS Word® og rediger derefter. De deltagende vil se dine ændringer live.";
+$langTextEditorDefault = "<h2>Tekstbehandling</h2>Klip og indsÃ¦t her fra MS WordÂ® og rediger derefter. De deltagende vil se dine Ã¦ndringer live.";
 $langStreaming = "Streaming";
 $langStreamURL = "Stream URL";
 $langStreamType = "Stream type";
 $langLinkName = "Link navn";
 $langLinkURL = "Link URL";
 $langWelcomeToOnlineConf = "Velkommen til denne <b>Online Konference</b>";
-$langNoLinkAvailable = "Der er ikke et tilgængeligt link";
+$langNoLinkAvailable = "Der er ikke et tilgÃ¦ngeligt link";
 $langChat_reset_by = "nulstil/ryd chat";
 $OrFile = "Eller fil";
-$langCallSent = "Anmodning om chat er blevet afsendt. Venter på svar fra bruger";
+$langCallSent = "Anmodning om chat er blevet afsendt. Venter pÃ¥ svar fra bruger";
 $langChatDenied = "Dit anmodning blev afvist";
 $Send = "Send";
 $Connected = "Deltager i chatten";
+$Think = "";
+$BigGrin = "";
+$Amazing = "";
+$Confused = "";
+$Cool = "";
+$Surprised = "";
+$Hand = "";
+$Wink = "";
+$Neutral = "";
+$Angry = "";
+$Avid = "";
+$Redface = "";
+$Sad = "";
+$Silence = "";
+$Silenced = "";
+$Smile = "";
+$Exclamation = "";
+$Arrow = "";
+$Question = "";
+$Idea = "";
+$AskPermissionSpeak = "";
+$GiveTheFloorTo = "";
+$Pause = "";
+$Stop = "";
 ?>

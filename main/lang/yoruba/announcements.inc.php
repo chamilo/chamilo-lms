@@ -1,4 +1,59 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
+$Announcement = "";
+$langAnnEmpty = "";
+$AnnouncementModified = "";
+$AnnouncementAdded = "";
+$AnnouncementDeleted = "";
+$AnnouncementPublishedOn = "";
+$AddAnnouncement = "";
+$langContent = "";
+$AnnouncementDeleteAll = "";
+$professorMessage = "";
+$langEmailSent = "";
+$EmailOption = "";
+$langOn = "";
+$langRegUser = "";
+$langUnvalid = "";
+$langModifAnn = "";
+$langModify = "";
+$langDelete = "";
+$langTitle = "";
+$langHelp = "";
+$langOk = "";
+$langAddIntro = "";
+$langBackList = "";
+$langSelMess = "";
+$EmailTitle = "";
+$langUserlist = "";
+$langSelectedUsers = "";
+$langSubmit = "";
+$langPleaseEnterMessage = "";
+$langPleaseSelectUsers = "";
+$Teachersubject = "";
+$langMessages = "";
+$langMessageToSelectedUsers = "";
+$langIntroText = "";
+$langDown = "";
+$langMsgSent = "";
+$langSelUser = "";
+$langMessageToSelectedGroups = "";
+$langSelectedGroups = "";
+$langMsg = "";
+$langYes = "";
+$MsgText = "";
+$AnnouncementDeletedAll = "";
+$AnnouncementMoved = "";
+$NoAnnouncements = "";
+$SelectEverybody = "";
+$SelectedUsersGroups = "";
+$LearnerMessage = "";
+$TitleIsRequired = "";
+$AnnounceSentByEmail = "";
+$AnnounceSentToUserSelection = "";
+$SendAnnouncement = "";
+$ModifyAnnouncement = "";
+$ButtonPublishAnnouncement = "";
 ?>

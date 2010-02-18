@@ -1,5 +1,6 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $langNewGroupCreate = "Kamay huñusqakunata";
 $langGroupCreation = "Huñusqakuna kamarina";
@@ -40,11 +41,13 @@ $langPublic = "Llapan runakunapaq";
 $langPropModify = "T\'ijrapay kamachinata";
 $langState = "Ima kay";
 $langGroupFilledGroups = "Huñusqakunaqa ña hunt\'achikunku sinrimanta haykuqmasikunawan.";
-$langSubscribed  = "kay yachachinapi haykuqmasikuna qelqachikusqa";
-$langStudentsNotInThisGroups  = "Haykuqmasikunaqa manan kay huñusqamantachu";
-$langQtyOfUserCanSubscribe_PartBeforeNumber  = "Haykuqmasiqa masimasikunman kay yupasqallaman ";
-$langQtyOfUserCanSubscribe_PartAfterNumber  = "  huñusqakuna";
+$langSubscribed = "kay yachachinapi haykuqmasikuna qelqachikusqa";
+$langStudentsNotInThisGroups = "Haykuqmasikunaqa manan kay huñusqamantachu";
+$langQtyOfUserCanSubscribe_PartBeforeNumber = "Haykuqmasiqa masimasikunman kay yupasqallaman";
+$langQtyOfUserCanSubscribe_PartAfterNumber = "  huñusqakuna";
 $langGroupLimit = "Tukuna";
+$CreateGroup = "";
+$ProceedToCreateGroup = "";
 $langStudentRegAllowed = "Yachaqekunaqa huñukunkuman mayqen Huñusqakunaman munaspa";
 $langGroupAllowStudentUnregistration = "Haykuqmasikunapuni qechunkuman qelqachikusqata mayqen huñusqamantapas";
 $langAllGroups = "Llipin huñusqakuna";
@@ -90,4 +93,5 @@ $GroupsFromClassesInfo = "Huñusqakuna rak\'isqamanta willa";
 $Group = "Huñusqa";
 $ForumOfGroup = "Huñusqaq k\'itirimanan";
 $BackToGroupList = "Volver a la lista de grupos";
+$EditGroupCategory = "";
 ?>

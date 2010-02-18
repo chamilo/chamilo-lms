@@ -1,14 +1,25 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $select = "Potvrdi";
 $square = "Kvadrat";
 $circle = "Elipsa";
 $poly = "Poligon";
-$status2_poly = "Koristi desni klik da zatvoriš poligon";
-$status2_other = "Pusti dugme miša da sa&#269;uvaš hotspot";
+$status1 = "";
+$status2_poly = "Koristi desni klik da zatvoriÂš poligon";
+$status2_other = "Pusti dugme miÂša da sa&#269;uvaÂš hotspot";
 $status3 = "Hotspot sa&#269;uvan";
 $exercise_status_1 = "Odgovori klikom na sliku ispod";
 $exercise_status_2 = "Potvrdi odgovore";
+$exercise_status_3 = "";
+$showUserPoints = "";
+$showHotspots = "";
 $labelPolyMenu = "Zatvori poligon";
+$triesleft = "";
+$exeFinished = "";
+$nextAnswer = "";
+$delineation = "";
+$labelDelineationMenu = "";
+$oar = "";
 ?>

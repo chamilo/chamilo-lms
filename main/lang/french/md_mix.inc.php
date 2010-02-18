@@ -1,18 +1,19 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$langTool = "Métadonnées";
-$langClickKw = "Cliquez sur un mot-clé dans l\'arborescence pour le sélectionner ou le désélectionner";
-$langKwHelp = "<br/> Cliquez sur le bouton \'+\' pour ouvrir, sur le bouton \'-\' pour fermer, sur le bouton \'++\' pour tout ouvrir, sur le bouton \'--\' pour tout fermer. <br/> <br/> Désélectionnez tous les mots-clés en fermant l\'arborescence et en l\'ouvrant de nouveau par le bouton \'+\'. <br/> Alt-click \'+\' sélectionne de nouveau les mots-clés. <br/> <br/> Alt-click sur un mot-clé l\'annule.<br/>";
-$langAdvanced = "Avancé";
+$langTool = "MÃ©tadonnÃ©es";
+$langClickKw = "Cliquez sur un mot-clÃ© dans l\'arborescence pour le sÃ©lectionner ou le dÃ©sÃ©lectionner";
+$langKwHelp = "<br/> Cliquez sur le bouton \'+\' pour ouvrir, sur le bouton \'-\' pour fermer, sur le bouton \'++\' pour tout ouvrir, sur le bouton \'--\' pour tout fermer. <br/> <br/> DÃ©sÃ©lectionnez tous les mots-clÃ©s en fermant l\'arborescence et en l\'ouvrant de nouv";
+$langAdvanced = "AvancÃ©";
 $langSearch = "Recherche";
 $langSearchCrit = "Un mot par ligne!";
-$langNoKeywords = "Aucun mot-clé pour décrire ce cours";
-$langKwCacheProblem = "Le cache des mots-clés ne peut être ouvert";
-$langCourseKwds = "mots-clés du cours";
-$langKwdsInMD = "mots-clés utilisés dans les métadonnées";
-$langKwdRefs = "Références des mots clés";
-$langNonCourseKwds = "Mots clés hors cours";
-$langKwdsUse = "Mots-clés du cours (en gras = non utilisés)";
-$langTotalMDEs = "Nombre total d\'entrées de Métadonnées";
+$langNoKeywords = "Aucun mot-clÃ© pour dÃ©crire ce cours";
+$langKwCacheProblem = "Le cache des mots-clÃ©s ne peut Ãªtre ouvert";
+$langCourseKwds = "mots-clÃ©s du cours";
+$langKwdsInMD = "mots-clÃ©s utilisÃ©s dans les mÃ©tadonnÃ©es";
+$langKwdRefs = "RÃ©fÃ©rences des mots clÃ©s";
+$langNonCourseKwds = "Mots clÃ©s hors cours";
+$langKwdsUse = "Mots-clÃ©s du cours (en gras = non utilisÃ©s)";
+$langTotalMDEs = "Nombre total d\'entrÃ©es de MÃ©tadonnÃ©es";
 ?>

@@ -1,35 +1,51 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$langLinkName = "Όνομα συνδέσμου";
-$langLinkAdd = "Προσθήκη συνδέσμου ";
-$langLinkAdded = "Ο σύνδεσμος προστέθηκε";
-$langLinkMod = "Τροποποίηση συνδέσμου";
-$langLinkModded = "Ο σύνδεσμος τροποποιήθηκε";
-$langLinkDel = "Διαγραφή συνδέσμου";
-$langLinkDeleted = "Ο σύνδεσμος διαγράφτηκε";
-$langLinkDelconfirm = "Θέλετε να διαγράψετε το σύνδεσμο;";
-$langAllLinksDel = "Διαγραφή όλων συνδέσμων αυτής της κατηγορίας";
-$langCategoryName = "Όνομα κατηγορίας";
-$langCategoryAdd = "Προσθήκη κατηγορίας";
-$langCategoryAdded = "Η κατηγορία προστέθηκε";
-$langCategoryModded = "Η κατηγορία τροποποιήθηκε";
-$langCategoryDel = "Διαγραφή κατηγορίας";
-$langCategoryDeleted = "Η κατηγορία και όλοι οι σύνδεσμοι της διαγράφτηκαν";
-$langCategoryDelconfirm = "Θέλετε να διαγράψετε τη κατηγορία; Θα διαγράψετε και όλους τους συνδέσμους της";
-$langAllCategoryDel = "Διαγραφή όλων των καταλόγων και όλων των συνδέσμων";
-$langGiveURL = "Δώστε το URL του συνδέσμου";
-$langGiveCategoryName = "Δώστε το όνομα της κατηγορίας";
-$langNoCategory = "Καμιά κατηγορία";
-$showall = "Ανοίξτε όλες τις κατηγορίες";
-$shownone = "Κλείστε όλες τις κατηγορίες";
-$langListDeleted = "Ο κατάλογος έχει διαγραφτεί";
-$langAddLink = "Προσθήκη συνδέσμου";
-$langDelList = "Διαγραφή ολόκληρου του καταλόγου";
-$langCsvImport = "Εισαγωγή αρχείου CSV";
-$langLinkUpdated = "Ο σύνδεσμος τροποποιήθηκε";
-$langAll_Link_Deleted = "Ο σύνδεσμος διαγράφτηκε";
-$langOnHomepage = "Στη κέντρικη σελίδα";
-$langShowLinkOnHomepage = "Εικονίδιο στην άρχικη σελίδα";
-$langCsvImport = "Εισαγωγή αρχείου CSV";
+$LinkMoved = "";
+$langLinkName = "Ε’Γ­Γ―Γ¬Γ΅ Γ³ΓµΓ­Γ¤ΓΓ³Γ¬Γ―Γµ";
+$langLinkAdd = "ΓΓ±Γ―Γ³Γ¨ΓΓªΓ§ Γ³ΓµΓ­Γ¤ΓΓ³Γ¬Γ―Γµ";
+$langLinkAdded = "Γ Γ³Γ½Γ­Γ¤Γ¥Γ³Γ¬Γ―Γ² Γ°Γ±Γ―Γ³Γ΄ΓΓ¨Γ§ΓªΓ¥";
+$langLinkMod = "Γ”Γ±Γ―Γ°Γ―Γ°Γ―ΓΓ§Γ³Γ§ Γ³ΓµΓ­Γ¤ΓΓ³Γ¬Γ―Γµ";
+$langLinkModded = "Γ Γ³Γ½Γ­Γ¤Γ¥Γ³Γ¬Γ―Γ² Γ΄Γ±Γ―Γ°Γ―Γ°Γ―Γ©ΓΓ¨Γ§ΓªΓ¥";
+$langLinkDel = "Γ„Γ©Γ΅Γ£Γ±Γ΅Γ¶Γ Γ³ΓµΓ­Γ¤ΓΓ³Γ¬Γ―Γµ";
+$langLinkDeleted = "Γ Γ³Γ½Γ­Γ¤Γ¥Γ³Γ¬Γ―Γ² Γ¤Γ©Γ΅Γ£Γ±ΓΓ¶Γ΄Γ§ΓªΓ¥";
+$langLinkDelconfirm = "ΓΓΓ«Γ¥Γ΄Γ¥ Γ­Γ΅ Γ¤Γ©Γ΅Γ£Γ±ΓΓΈΓ¥Γ΄Γ¥ Γ΄Γ― Γ³Γ½Γ­Γ¤Γ¥Γ³Γ¬Γ―;";
+$langAllLinksDel = "Γ„Γ©Γ΅Γ£Γ±Γ΅Γ¶Γ ΓΌΓ«ΓΉΓ­ Γ³ΓµΓ­Γ¤ΓΓ³Γ¬ΓΉΓ­ Γ΅ΓµΓ΄ΓΓ² Γ΄Γ§Γ² ΓªΓ΅Γ΄Γ§Γ£Γ―Γ±ΓΓ΅Γ²";
+$langCategoryName = "Ε’Γ­Γ―Γ¬Γ΅ ΓªΓ΅Γ΄Γ§Γ£Γ―Γ±ΓΓ΅Γ²";
+$langCategoryAdd = "ΓΓ±Γ―Γ³Γ¨ΓΓªΓ§ ΓªΓ΅Γ΄Γ§Γ£Γ―Γ±ΓΓ΅Γ²";
+$langCategoryAdded = "Γ‡ ΓªΓ΅Γ΄Γ§Γ£Γ―Γ±ΓΓ΅ Γ°Γ±Γ―Γ³Γ΄ΓΓ¨Γ§ΓªΓ¥";
+$langCategoryModded = "Γ‡ ΓªΓ΅Γ΄Γ§Γ£Γ―Γ±ΓΓ΅ Γ΄Γ±Γ―Γ°Γ―Γ°Γ―Γ©ΓΓ¨Γ§ΓªΓ¥";
+$langCategoryDel = "Γ„Γ©Γ΅Γ£Γ±Γ΅Γ¶Γ ΓªΓ΅Γ΄Γ§Γ£Γ―Γ±ΓΓ΅Γ²";
+$langCategoryDeleted = "Γ‡ ΓªΓ΅Γ΄Γ§Γ£Γ―Γ±ΓΓ΅ ΓªΓ΅Γ© ΓΌΓ«Γ―Γ© Γ―Γ© Γ³Γ½Γ­Γ¤Γ¥Γ³Γ¬Γ―Γ© Γ΄Γ§Γ² Γ¤Γ©Γ΅Γ£Γ±ΓΓ¶Γ΄Γ§ΓªΓ΅Γ­";
+$langCategoryDelconfirm = "ΓΓΓ«Γ¥Γ΄Γ¥ Γ­Γ΅ Γ¤Γ©Γ΅Γ£Γ±ΓΓΈΓ¥Γ΄Γ¥ Γ΄Γ§ ΓªΓ΅Γ΄Γ§Γ£Γ―Γ±ΓΓ΅; ΓΓ΅ Γ¤Γ©Γ΅Γ£Γ±ΓΓΈΓ¥Γ΄Γ¥ ΓªΓ΅Γ© ΓΌΓ«Γ―ΓµΓ² Γ΄Γ―ΓµΓ² Γ³ΓµΓ­Γ¤ΓΓ³Γ¬Γ―ΓµΓ² Γ΄Γ§Γ²";
+$langAllCategoryDel = "Γ„Γ©Γ΅Γ£Γ±Γ΅Γ¶Γ ΓΌΓ«ΓΉΓ­ Γ΄ΓΉΓ­ ΓªΓ΅Γ΄Γ΅Γ«ΓΌΓ£ΓΉΓ­ ΓªΓ΅Γ© ΓΌΓ«ΓΉΓ­ Γ΄ΓΉΓ­ Γ³ΓµΓ­Γ¤ΓΓ³Γ¬ΓΉΓ­";
+$langGiveURL = "Γ„ΓΎΓ³Γ΄Γ¥ Γ΄Γ― URL Γ΄Γ―Γµ Γ³ΓµΓ­Γ¤ΓΓ³Γ¬Γ―Γµ";
+$langGiveCategoryName = "Γ„ΓΎΓ³Γ΄Γ¥ Γ΄Γ― ΓΌΓ­Γ―Γ¬Γ΅ Γ΄Γ§Γ² ΓªΓ΅Γ΄Γ§Γ£Γ―Γ±ΓΓ΅Γ²";
+$langNoCategory = "ΓΓ΅Γ¬Γ©Γ ΓªΓ΅Γ΄Γ§Γ£Γ―Γ±ΓΓ΅";
+$showall = "ΓΓ­Γ―ΓΓ®Γ΄Γ¥ ΓΌΓ«Γ¥Γ² Γ΄Γ©Γ² ΓªΓ΅Γ΄Γ§Γ£Γ―Γ±ΓΓ¥Γ²";
+$shownone = "ΓΓ«Γ¥ΓΓ³Γ΄Γ¥ ΓΌΓ«Γ¥Γ² Γ΄Γ©Γ² ΓªΓ΅Γ΄Γ§Γ£Γ―Γ±ΓΓ¥Γ²";
+$langListDeleted = "Γ ΓªΓ΅Γ΄ΓΓ«Γ―Γ£Γ―Γ² ΓΓ·Γ¥Γ© Γ¤Γ©Γ΅Γ£Γ±Γ΅Γ¶Γ΄Γ¥Γ";
+$langAddLink = "ΓΓ±Γ―Γ³Γ¨ΓΓªΓ§ Γ³ΓµΓ­Γ¤ΓΓ³Γ¬Γ―Γµ";
+$langDelList = "Γ„Γ©Γ΅Γ£Γ±Γ΅Γ¶Γ Γ―Γ«ΓΌΓªΓ«Γ§Γ±Γ―Γµ Γ΄Γ―Γµ ΓªΓ΅Γ΄Γ΅Γ«ΓΌΓ£Γ―Γµ";
+$langModifyLink = "";
+$langCsvImport = "Γ…Γ©Γ³Γ΅Γ£ΓΉΓ£Γ Γ΅Γ±Γ·Γ¥ΓΓ―Γµ CSV";
+$langCsvFileNotFound = "";
+$langCsvFileNoSeps = "";
+$langCsvFileNoURL = "";
+$langCsvFileLine1 = "";
+$langCsvLinesFailed = "";
+$langCsvLinesOld = "";
+$langCsvLinesNew = "";
+$langCsvExplain = "";
+$langLinkUpdated = "Γ Γ³Γ½Γ­Γ¤Γ¥Γ³Γ¬Γ―Γ² Γ΄Γ±Γ―Γ°Γ―Γ°Γ―Γ©ΓΓ¨Γ§ΓªΓ¥";
+$langAll_Link_Deleted = "Γ Γ³Γ½Γ­Γ¤Γ¥Γ³Γ¬Γ―Γ² Γ¤Γ©Γ΅Γ£Γ±ΓΓ¶Γ΄Γ§ΓªΓ¥";
+$langOnHomepage = "Γ“Γ΄Γ§ ΓªΓΓ­Γ΄Γ±Γ©ΓªΓ§ Γ³Γ¥Γ«ΓΓ¤Γ΅";
+$langShowLinkOnHomepage = "Γ…Γ©ΓªΓ―Γ­ΓΓ¤Γ©Γ― Γ³Γ΄Γ§Γ­ ΓΓ±Γ·Γ©ΓªΓ§ Γ³Γ¥Γ«ΓΓ¤Γ΅";
+$General = "";
+$SearchFeatureDoIndexLink = "";
+$langSaveLink = "";
+$langSaveCategory = "";
+$BackToLinksOverview = "";
+$AddTargetOfLinkOnHomepage = "";
 ?>

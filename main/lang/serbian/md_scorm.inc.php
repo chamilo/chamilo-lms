@@ -1,11 +1,12 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $nameTools = "zastarele jezi&#269;ke varijable";
-$langMdCallingTool = "Putanja u&#269;enja – Scorm";
+$langMdCallingTool = "Putanja u&#269;enja Â– Scorm";
 $langTool = "Scorm MD operacije";
 $langNotInDB = "nema unosa baze Chamiloa";
-$langManifestSyntax = "(greška u sintaksi manifest fajla...)";
+$langManifestSyntax = "(greÂška u sintaksi manifest fajla...)";
 $langEmptyManifest = "(prazan manifest fajl...)";
 $langNoManifest = "(nema manifest fajla...)";
 $langNotFolder = "nemogu&#263;e, to nije folder...";
@@ -18,9 +19,9 @@ $langHttRmvOk = "HTT fajl je uklonjen";
 $langHttRmvNotOk = "Uklanjanje HTT fajla nije uspelo";
 $langImport = "Kreiranje MDE-a iz manifest";
 $langRemove = "Ukloni MDE";
-$langAllRemovedFor = "Svi unosi su uklonjeni za ";
+$langAllRemovedFor = "Svi unosi su uklonjeni za";
 $langIndex = "Indeks re&#269;i sa PhpDig";
-$langTotalMDEs = "Kona&#269;an broj MD unosa: ";
+$langTotalMDEs = "Kona&#269;an broj MD unosa:";
 $langMainMD = "Otvori glavni MDE";
 $langLines = "linije";
 $langPlay = "Pokreni index.php";
@@ -28,8 +29,8 @@ $langNonePossible = "MD operacije nisu mogu&#263;e";
 $langOrElse = "Selektujte Scorm  direktorijum ili ID Scorm direktorijuma";
 $langWorkWith = "Rad sa Scorm  direktorujumom";
 $langSDI = "... Scorm Direktorijum sa SD-id (i podeli manifest  ili ga ostavi praznog)";
-$langRoot = "root ";
-$langSplitData = "Podeli manifests i #MDe ako ih ima: ";
+$langRoot = "root";
+$langSplitData = "Podeli manifests i #MDe ako ih ima:";
 $langMffNotOk = "Zamena manifest fajla nije uspela";
 $langMffOk = "Manifest fajl je zamenjen";
 $langMffFileNotFound = "Novi manifest fajl nije mogao da se otvori (ili je prazan ili je preveliki)";

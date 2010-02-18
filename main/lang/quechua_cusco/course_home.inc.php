@@ -1,13 +1,14 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $langActivate = "Kancharichiy";
 $langDeactivate = "Wañurichiy";
-$langInLnk  = "Wataquna wañuchisqa";
+$langInLnk = "Wataquna wañuchisqa";
 $langDelLk = " Cheqaychu munanki wañuchiyta kay llank\'anata ?";
-$langCourseCreate  = "Kamachiy huy yachachinata";
-$langNameOfTheLink  = "Wataq sutin";
-$lang_main_categories_list                  = "Kuraq mitakuna jupachasqa";
+$langCourseCreate = "Kamachiy huy yachachinata";
+$langNameOfTheLink = "Wataq sutin";
+$lang_main_categories_list = "Kuraq mitakuna jupachasqa";
 $langCourseAdminOnly = "Yachachiqkunalla";
 $PlatformAdminOnly = "Plataforma nisqamanta kamachiqkunalla";
 $langCombinedCourse = "Yachachina chaqrosqa";
@@ -24,4 +25,8 @@ $Authoring = "Kamay ukhupi ima kaqkunata";
 $Administration = "Kamachina";
 $IntroductionTextUpdated = "Qelqa haykuyqa kunanchisqaña";
 $IntroductionTextDeleted = "Qelqa haykuyqa chinkachisqaña";
+$SessionIdentifier = "";
+$SessionName = "";
+$SessionCategory = "";
+$SessionData = "";
 ?>

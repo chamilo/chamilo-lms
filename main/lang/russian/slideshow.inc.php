@@ -1,21 +1,24 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$lang_height = "Height";
-$lang_resizing_comment = "resize the image to the following dimensions (in pixels)";
-$lang_width = "Width";
-$lang_resizing = "RESIZE";
-$lang_no_resizing_comment = "Show all images in their original size. No resizing is done. Scrollbars will automatically appear if the image is larger than your monitor size.";
-$lang_show_thumbnails = "Show Thumbnails";
-$lang_click_thumbnails = "Click on one of the thumbnails";
-$lang_set_slideshow_options = "Set Slideshow Options";
-$lang_slideshow_options = "Slideshow Options";
-$lang_no_resizing = "NO RESIZING (default)";
-$lang_exit_slideshow = "Exit Slideshow";
-$SlideShow = "Slideshow";
-$lang_previous_slide = "Previous Slide";
-$lang_next_slide = "Next Slide";
-$lang_image = "Image";
-$lang_of = "of";
-$lang_view_slideshow = "View Slideshow";
+$lang_height = "Высота";
+$lang_resizing_comment = "изменить размер изображения до следующих размеров (в пикселях)";
+$lang_width = "Ширина";
+$lang_resizing = "ИЗМЕНИТЬ РАЗМЕРЫ";
+$lang_no_resizing_comment = "Показать все изображения в их истинных размерах. Изменения размеров не выполнено. Управляющая линейка с бегунком появиться автоматически, если изображение превысит размеры монитора.";
+$lang_show_thumbnails = "Показать контрольные изображения";
+$lang_click_thumbnails = "Щелкнуть по одному из контрольных изображений";
+$lang_set_slideshow_options = "Задать настройки Показа слайдов";
+$lang_slideshow_options = "Настройки Показа слайдов";
+$lang_no_resizing = "НЕ ИЗМЕНЯТЬ РАЗМЕРЫ (по умолчанию)";
+$lang_exit_slideshow = "Выйти из Показа слайдов";
+$SlideShow = "Показ слайдов";
+$lang_previous_slide = "Предыдущий слайд";
+$lang_next_slide = "Следующий слайд";
+$lang_image = "Изображение";
+$lang_of = " о, об, из, от...";
+$lang_view_slideshow = "Просмотр Показа слайдов";
+$FirstSlide = "";
+$LastSlide = "";
 ?>

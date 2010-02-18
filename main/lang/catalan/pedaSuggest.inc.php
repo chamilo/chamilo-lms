@@ -1,25 +1,26 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$GeneralDescription = "Descripció general";
-$GeneralDescriptionQuestions = "Quin és el paper i funció del curs en el programa? Es requereixen activitats prèvies? Quina relació té aquest curs amb uns altres?";
-$GeneralDescriptionInformation = "Descripció del curs (nombre d\'hores, codi, lloc on es desenvolupa...). Professor (nom, cognoms, despatx, telèfon, e-mail...). ";
+$GeneralDescription = "DescripciÃ³ general";
+$GeneralDescriptionQuestions = "Quin Ã©s el paper i funciÃ³ del curs en el programa? Es requereixen activitats prÃ¨vies? Quina relaciÃ³ tÃ© aquest curs amb uns altres?";
+$GeneralDescriptionInformation = "DescripciÃ³ del curs (nombre d\'hores, codi, lloc on es desenvolupa...). Professor (nom, cognoms, despatx, telÃ¨fon, e-mail...).";
 $Objectives = "Objectius";
-$ObjectivesInformation = "Presentació dels objectius globals i específics del curs";
-$ObjectivesQuestions = "Què vol que els estudiants sàpiguen fer al finalitzar el curs? Quins objectius aniran aconseguint  durant el mateix?";
+$ObjectivesInformation = "PresentaciÃ³ dels objectius globals i especÃ­fics del curs";
+$ObjectivesQuestions = "QuÃ¨ vol que els estudiants sÃ piguen fer al finalitzar el curs? Quins objectius aniran aconseguint  durant el mateix?";
 $Topics = "Continguts";
-$TopicsInformation = "Llista de continguts del curs. Importància de cada contingut. Nivell de dificultat. Estructura i interdependència entre els seus apartats. ";
-$TopicsQuestions = "Quin serà el desenvolupament del curs? On han de prestar especial atenció els estudiants? Hi ha problemes identificats en la comprensió d\'alguns capítols? Quant ha de dedicar-se a cada part del curs? ";
+$TopicsInformation = "Llista de continguts del curs. ImportÃ ncia de cada contingut. Nivell de dificultat. Estructura i interdependÃ¨ncia entre els seus apartats.";
+$TopicsQuestions = "Quin serÃ  el desenvolupament del curs? On han de prestar especial atenciÃ³ els estudiants? Hi ha problemes identificats en la comprensiÃ³ d\'alguns capÃ­tols? Quant ha de dedicar-se a cada part del curs?";
 $Methodology = "Metodologia";
-$MethodologyQuestions = "Quins mètodes i activitats ajudaran a arribar a els objectius del curs? Quin és el calendari?";
-$MethodologyInformation = "Presentació de les activitats (conferències, disertacions, investigacions en grup, laboratoris...)";
+$MethodologyQuestions = "Quins mÃ¨todes i activitats ajudaran a arribar a els objectius del curs? Quin Ã©s el calendari?";
+$MethodologyInformation = "PresentaciÃ³ de les activitats (conferÃ¨ncies, disertacions, investigacions en grup, laboratoris...)";
 $CourseMaterial = "Materials";
-$CourseMaterialQuestions = "Existeix una guia del curs, una col·lecció de documents, una bibliografia, una llista d\'enllaços d\'Internet ?";
-$CourseMaterialInformation = "Breu descripció dels materials del curs";
-$HumanAndTechnicalResources = "Recursos humans i tècnics";
-$HumanAndTechnicalResourcesQuestions = "Qui són els professors, tutors, servei d\'assistència tècnica, assistents socials, etc ? Quins són els recursos físics dels quals disposa el curs: sala d\'ordinadors, etc ? ";
-$HumanAndTechnicalResourcesInformation = "Breu descripció de les persones de contacte i dels recursos tècnics disponibles. ";
-$Assessment  = "Avaluació";
-$AssessmentQuestions = "Com van a ser avaluats els estudiants? Quins són les estratègies perquè aquests acabin dominant la matèria? ";
-$AssessmentInformation = "Exemples de les preguntes d\'examen. Criteris d\'avaluació. Pistes i trucs.";
+$CourseMaterialQuestions = "Existeix una guia del curs, una colÂ·lecciÃ³ de documents, una bibliografia, una llista d\'enllaÃ§os d\'Internet ?";
+$CourseMaterialInformation = "Breu descripciÃ³ dels materials del curs";
+$HumanAndTechnicalResources = "Recursos humans i tÃ¨cnics";
+$HumanAndTechnicalResourcesQuestions = "Qui sÃ³n els professors, tutors, servei d\'assistÃ¨ncia tÃ¨cnica, assistents socials, etc ? Quins sÃ³n els recursos fÃ­sics dels quals disposa el curs: sala d\'ordinadors, etc ?";
+$HumanAndTechnicalResourcesInformation = "Breu descripciÃ³ de les persones de contacte i dels recursos tÃ¨cnics disponibles.";
+$Assessment = "AvaluaciÃ³";
+$AssessmentQuestions = "Com van a ser avaluats els estudiants? Quins sÃ³n les estratÃ¨gies perquÃ¨ aquests acabin dominant la matÃ¨ria?";
+$AssessmentInformation = "Exemples de les preguntes d\'examen. Criteris d\'avaluaciÃ³. Pistes i trucs.";
 ?>

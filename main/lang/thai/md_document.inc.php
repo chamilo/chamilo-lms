@@ -1,47 +1,48 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$langMdCallingTool = "เอกสาร Documents";
-$langMdTitle = "วัตถุประสงค์การเรียน Learning Object Title";
-$langMdDescription = "กดปุ่มจัดเก็บ(restore) To store this information, press Store";
-$langMdCoverage = "เช่น ปริญญา e.g. Bachelor of ...";
+$langMdCallingTool = "ร รยกรร’ร Documents";
+$langMdTitle = "รร‘ยตยถรยปรรรยงโฌรฌยกร’รร รร•รยน Learning Object Title";
+$langMdDescription = "ยกลฝยปรรจรลกร‘ลฝร ยกรงยบ(restore) To store this information, press Store";
+$langMdCoverage = "ร ยชรจยน ยปรร”ยญยญร’ e.g. Bachelor of ...";
 $langMdCopyright = "e.g. provided the source is acknowledged";
-$langTool = "เอกสาร Metadata";
-$langNoScript = "โปรแกรมดูอินเตอร์เน็ตที่ท่านใช้อยู่นี้ ไม่ได้อนุญาตให้อ่านคำสั่งนี้ ให้ข้ามไป Script is not enabled in your browser, please ignore the screen part below this text, it won\'t work...";
-$langPressAgain = "จัดเก็บอีกครั้ง Press \'Store\' again...";
+$langTool = "ร รยกรร’ร Metadata";
+$langNoScript = "รขยปรรกยกรรลฝรรร”ยนร ยตรรรฌร ยนรงยตยทร•รจยทรจร’ยนรฃยชรฉรรรรจยนร•รฉ รครรจรคลฝรฉรยนรยญร’ยตรฃรรฉรรจร’ยนโฌร“รร‘รจยงยนร•รฉ รฃรรฉยขรฉร’รรคยป Script is not enabled in your browser, please ignore the screen part below this text, it won\'t work...";
+$langPressAgain = "ลกร‘ลฝร ยกรงยบรร•ยกโฌรร‘รฉยง Press \'Store\' again...";
 $langLanguageTip = "the language in which this learning object was made";
-$langIdentifier = "ตัวบ่งชี้ Identifier";
+$langIdentifier = "ยตร‘รยบรจยงยชร•รฉ Identifier";
 $langIdentifierTip = "unique identification for this learning object, composed of letters, digits, _-.()\'!*";
 $langTitleTip = "title or name, and language of that title or name";
-$langDescriptionTip = "อธิบายแสดงความคิดเห็น description or comment, and language used for describing this learning object";
-$langKeyword = "คำสำคัญ Keywords";
-$langKeywordTip = "แยกคำด้วยเครื่องหมาย , separate by commas (letters, digits, -.)";
-$langCoverage = "ครอบคลุม Coverage";
-$langCoverageTip = "ตัวอย่างปริญญาของ for example bachelor of xxx: yyy";
+$langDescriptionTip = "รลพร”ยบร’รรกรลฝยงโฌรร’รโฌร”ลฝร รรงยน description or comment, and language used for describing this learning object";
+$langKeyword = "โฌร“รร“โฌร‘ยญ Keywords";
+$langKeywordTip = "รกรยกโฌร“ลฝรฉรรร โฌรร—รจรยงรรร’ร , separate by commas (letters, digits, -.)";
+$langCoverage = "โฌรรยบโฌร…รร Coverage";
+$langCoverageTip = "ยตร‘รรรรจร’ยงยปรร”ยญยญร’ยขรยง for example bachelor of xxx: yyy";
 $langKwNote = "If you change the description language, do not add keywords at the same time.";
 $langClickKw = "Click a keyword in the tree to select or deselect it.";
-$langKwHelp = "<br/>คลิกปุ่มบวก \'+\' เพื่อเปิด,ลบ \'-\' เพื่อปิด, \'++\' button to open all, \'--\' button to close all..<br/> <br/> Clear all selected keywords by closing the tree and opening it again with the \'+\' button.<br/> Alt-click \'+\' searches the original keywords in the tree.<br/> <br/> Alt-click keyword selects a keyword without broader terms or deselects a keyword with broader terms.<br/> <br/> If you change the description language, do not add keywords at the same time.<br/> <br/> ";
-$langRights = "ใช้สิทธิ์ Usage Rights";
-$langRightsTip = "อธิบายความ describe in words";
-$langVersion = "รุ่น Version";
-$langVersionTip = "หรือคำบรรยาย number or description";
-$langStatusTip = "เลือกจากรายการ select from list";
-$langCreatedSize = "สร้างแล้ว ขนาด Created, size";
-$langCreatedSizeTip = "พศ.-เดือน-วัน when created, size in octets (bytes)";
+$langKwHelp = "<br/>โฌร…ร”ยกยปรรจรยบรยก \'+\' ร ลธร—รจรร ยปร”ลฝ,ร…ยบ \'-\' ร ลธร—รจรยปร”ลฝ, \'++\' button to open all, \'--\' button to close all..<br/> <br/> Clear all selected keywords by closing the tree and opening it again with the \'+\' button.<br/> Alt-click \'+\' searches the original k";
+$langRights = "รฃยชรฉรร”ยทลพร”รฌ Usage Rights";
+$langRightsTip = "รลพร”ยบร’รโฌรร’ร describe in words";
+$langVersion = "รรรจยน Version";
+$langVersionTip = "รรร—รโฌร“ยบรรรร’ร number or description";
+$langStatusTip = "ร ร…ร—รยกลกร’ยกรร’รยกร’ร select from list";
+$langCreatedSize = "รรรฉร’ยงรกร…รฉร ยขยนร’ลฝ Created, size";
+$langCreatedSizeTip = "ลธร.-ร ลฝร—รยน-รร‘ยน when created, size in octets (bytes)";
 $langAuthorTip = "in VCARD format";
-$langFormat = "รูปแบบ Format";
-$langFormatTip = "เลือกจากรายการ select from list";
+$langFormat = "รรยปรกยบยบ Format";
+$langFormatTip = "ร ร…ร—รยกลกร’ยกรร’รยกร’ร select from list";
 $langLocation = "URL/URI";
-$langLocationTip = "คลิกเปิด click to open object";
-$langStore = "จัดเก็บ Store";
-$langDeleteAll = "ลบ metadata ทั้งหมด";
-$langConfirmDelete = "คุณต้องการที่จะลบ metadata ทั้งหมดจริงๆใช่หรือไม่";
-$langCourseKwds = "เอกสารนี้มีคำสำคัญของวิชา ";
-$langSearch = "ค้นหา Search";
-$langSearchCrit = "หนึ่งคำต่อบรรทัด! One word per line!";
-$langStatuses = "ร่าง:ร่าง,งานสำเร็จ:งานสำเร็จ,แก้ไขใหม่:แก้ไขใหม่,ยังไม่ได้:ยังไม่ได้ :draft:draft,, final:final,, revised:revised,, unavailable:unavailable";
-$langCosts = ":ไม่:ฟรี,ไม่มีราคา,,ใช่:ไม่ฟรี,ราคา:no:free, no cost,, yes:not free, cost";
-$langCopyrights = ":ใช่ :ลิขสิทธิ์,, ไม่:ไม่มีลิขสิทธิ์ :yes:copyright,, no:no copyright";
-$langFormats = ":text/plain;tis-620:text/plain;tis-620,, text/plain;utf-8:text/plain;utf-8,, text/html;tis-620 1:text/html;tis-620,, text/html;windows-874:text/html;windows-874,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;tis-620 :XML;tis-620,, application/xml;windows-874:XML;windows-874,, application/zip:ZIP";
-$langLngResTypes = ":แบบฝึกหัด:แบบฝึกหัด,, simulation:simulation,, questionnaire:questionnaire,, diagram:diagram,, figure:figure,, graph:graf,, index:index,, slide:slide,, table:table,, narrative text:narrative text,, exam:exam,, experiment:experiment,, problem statement:problem statement,, self assessment:self assessment,, lecture:lecture";
+$langLocationTip = "โฌร…ร”ยกร ยปร”ลฝ click to open object";
+$langStore = "ลกร‘ลฝร ยกรงยบ Store";
+$langDeleteAll = "ร…ยบ metadata ยทร‘รฉยงรรลฝ";
+$langConfirmDelete = "โฌรยณยตรฉรยงยกร’รยทร•รจลกรร…ยบ metadata ยทร‘รฉยงรรลฝลกรร”ยงรฆรฃยชรจรรร—รรครรจ";
+$langCourseKwds = "ร รยกรร’รยนร•รฉรร•โฌร“รร“โฌร‘ยญยขรยงรร”ยชร’";
+$langSearch = "โฌรฉยนรร’ Search";
+$langSearchCrit = "รยนร–รจยงโฌร“ยตรจรยบรรยทร‘ลฝ! One word per line!";
+$langStatuses = "รรจร’ยง:รรจร’ยง,ยงร’ยนรร“ร รรงลก:ยงร’ยนรร“ร รรงลก,รกยกรฉรคยขรฃรรรจ:รกยกรฉรคยขรฃรรรจ,รร‘ยงรครรจรคลฝรฉ:รร‘ยงรครรจรคลฝรฉ :draft:draft,, final:final,, revised:revised,, unavailable:unavailable";
+$langCosts = ":รครรจ:ยฟรร•,รครรจรร•รร’โฌร’,,รฃยชรจ:รครรจยฟรร•,รร’โฌร’:no:free, no cost,, yes:not free, cost";
+$langCopyrights = ":รฃยชรจ :ร…ร”ยขรร”ยทลพร”รฌ,, รครรจ:รครรจรร•ร…ร”ยขรร”ยทลพร”รฌ :yes:copyright,, no:no copyright";
+$langFormats = ":text/plain;tis-620:text/plain;tis-620,, text/plain;utf-8:text/plain;utf-8,, text/html;tis-620 1:text/html;tis-620,, text/html;windows-874:text/html;windows-874,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,,";
+$langLngResTypes = ":รกยบยบล“ร–ยกรร‘ลฝ:รกยบยบล“ร–ยกรร‘ลฝ,, simulation:simulation,, questionnaire:questionnaire,, diagram:diagram,, figure:figure,, graph:graf,, index:index,, slide:slide,, table:table,, narrative text:narrative text,, exam:exam,, experiment:experiment,, problem statement:pro";
 ?>

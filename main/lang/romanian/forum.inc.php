@@ -1,5 +1,6 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $ForumDeleted = "Forum sters";
 $ForumCategoryDeleted = "Categorie in forum stearsa";
@@ -87,23 +88,56 @@ $PrevMessage = "Mesajul anterior";
 $FirstMessage = "Primul mesaj";
 $LastMessage = "Ultimul mesaj";
 $ForumSearch = "Cauta in forum";
-$SearchTerm  = "Termenul de cautare";
+$SearchTerm = "Termenul de cautare";
 $ForumSearchResults = "Rezultatele cautarii in forum";
 $ForumSearchInformation = "Cautati pe mai multe cuvinte folosind semnul +";
 $YouWillBeNotifiedOfNewPosts = "Veti fi notificati asupra postarilor noi prin e-mail";
 $YouWillNoLongerBeNotifiedOfNewPosts = "Nu veti mai fi notificat asupra noilor postari prin email";
 $AddImage = "Adauga imagine";
+$QualifyThread = "";
+$ThreadUsersList = "";
 $StudentList = "Lista cursistilor";
+$QualifyThisThread = "";
 $CourseUsers = "Utilizatori in training";
 $PostsNumber = "numar mesaje";
+$NumberOfPostsForThisUser = "";
+$AveragePostPerUser = "";
+$QualificationChangesHistory = "";
+$MoreRecent = "";
+$Older = "";
 $OrderBy = "Sorteaza dupa";
+$WhoChanged = "";
+$NoteChanged = "";
+$DateChanged = "";
+$ViewComentPost = "";
+$AllStudents = "";
+$StudentsQualified = "";
+$StudentsNotQualified = "";
+$NamesAndLastNames = "";
+$MaxScore = "";
+$QualificationCanNotBeGreaterThanMaxScore = "";
 $ThreadStatistics = "Statisticile discutiei";
 $Thread = "Discutie";
 $NotifyMe = "Tine-ma la curent cu noutatile";
+$ConfirmUserQualification = "";
 $NotChanged = "Neschimbat";
+$TitleColumnGradebook = "";
+$QualifyThreadGradebook = "";
+$QualifyWeight = "";
 $QualifyNumeric = "Rezultat";
+$AlterQualifyThread = "";
+$ForumMoved = "";
+$YouMustAssignWeightOfQualification = "";
+$DeleteAttachmentFile = "";
 $EditAnAttachment = "Modifica atasamentul";
+$SeeForum = "";
+$CreateForum = "";
+$ModifyForum = "";
+$CreateThread = "";
+$ModifyThread = "";
 $EditForum = "Schimbare forum";
 $BackToForum = "Inapoi la forum";
 $BackToForumOverview = "Inapoi la forum";
+$BackToThread = "";
+$ForumcategoryLocked = "";
 ?>

@@ -1,5 +1,6 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $AgendaAdd = "Aggiungi evento";
 $ShowAllEvents = "Tutti gli eventi";
@@ -28,8 +29,8 @@ $langHour = "Ora";
 $hour_default = "Ora di default";
 $langMinute = "minuti";
 $langLasting = "durata";
-$langOldToNew = "Prima i più vecchi";
-$langNewToOld = "Prima i più recenti";
+$langOldToNew = "Prima i piÃ¹ vecchi";
+$langNewToOld = "Prima i piÃ¹ recenti";
 $langNow = "adesso";
 $langAddEvent = "Aggiungi evento";
 $langDetail = "dettagli";
@@ -50,11 +51,11 @@ $UserGroupFilter = "Filtra sulla base dei gruppi/utenti";
 $ShowAll = "Mostra tutto";
 $Print = "Stampa";
 $MyTextHere = "Scrivi il testo";
-$CopiedAsAnnouncement = "Copiato come avviso ";
+$CopiedAsAnnouncement = "Copiato come avviso";
 $NewAnnouncement = " Nuovo avviso";
-$AddAnnouncement = "Aggiungi come avviso ";
+$AddAnnouncement = "Aggiungi come avviso";
 $UpcomingEvent = "Prossimo evento";
-$RepeatedEvent = "Evento ripetuto ";
+$RepeatedEvent = "Evento ripetuto";
 $RepeatType = "Tipo di ripetizione";
 $RepeatDaily = "Ogni giorno";
 $RepeatWeekly = "Ogni settimana";
@@ -68,10 +69,10 @@ $ICalFileImport = "Importa un file iCal/ics";
 $AllUsersOfThePlatform = "Tutti gli utenti";
 $GlobalEvent = "Evento globale";
 $ModifyEvent = "Modifica evento";
-$EndDateCannotBeBeforeTheStartDate = "La data finale non può precedere quella iniziale";
+$EndDateCannotBeBeforeTheStartDate = "La data finale non puÃ² precedere quella iniziale";
 $AgendaSortChronologicallyUp = "Ascendente";
 $AgendaSortChronologicallyDown = "Discendente";
 $ItemForUserSelection = "Elenco selezione utenti";
-$IsNotiCalFormatFile = "Il file non è in formato iCal";
+$IsNotiCalFormatFile = "Il file non Ã¨ in formato iCal";
 $RepeatEvent = "Evento ripetuto";
 ?>

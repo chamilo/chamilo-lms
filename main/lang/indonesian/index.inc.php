@@ -1,27 +1,28 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $langInvalidId = "Login gagal - nama user atau password salah.";
-$langWelcome = "Beberapa mata kuliah tersedia bebas di bawah ini. Yang lainnya membutuhkan nama user dan password, yang dapat diperoleh dengan meng-klik \'pendaftaran\'. Pengajar dapat membuat situs mata kuliah dengan mengklik pendaftaran juga, tetapi dengan memilih \'Buat situs mata kuliah (pengajar)\'.";
+$langWelcome = "Beberapa mata kuliah tersedia bebas di bawah ini. Yang lainnya membutuhkan nama user dan password, yang dapat diperoleh dengan meng-klik \'pendaftaran\'. Pengajar dapat membuat situs mata kuliah dengan mengklik pendaftaran juga, tetapi dengan memilih \'Bu";
 $langPass = "Password";
 $langEnter = "Enter";
 $langReg = "Pendaftaran";
-$langMenu  = "Menu";
+$langMenu = "Menu";
 $langAdvises = "Saran";
 $langCourseDoesntExist = "<b>Peringatan:</b> Mata Kuliah ini tidak ada";
 $langGetCourseFromOldPortal = "klik di sini untuk memperoleh mata kuliah ini dari portal lama anda";
 $langOtherCourses = "Daftar mata kuliah";
 $langSupportForum = "Forum dukungan";
-$langCategories  = "Kategori";
-$langBackToHomePage  = "Kembali ke home page";
-$lang_No_course_publicly_available  = "Tidak ada mata kuliah tersedia untuk umum.";
-$langLostPassword  = "Lupa Password";
-$lang_edit_my_course_list  = "Edit daftar mata kuliah-ku";
-$langAgenda  = "Agenda event berikutnya";
-$langValvas  = "Pengumuman terakhir";
-$langUp  = "level sebelumnya";
-$langCatList  = "Kategori";
-$langCourseList  = "Daftar Mata Kuliah";
+$langCategories = "Kategori";
+$langBackToHomePage = "Kembali ke home page";
+$lang_No_course_publicly_available = "Tidak ada mata kuliah tersedia untuk umum.";
+$langLostPassword = "Lupa Password";
+$lang_edit_my_course_list = "Edit daftar mata kuliah-ku";
+$langAgenda = "Agenda event berikutnya";
+$langValvas = "Pengumuman terakhir";
+$langUp = "level sebelumnya";
+$langCatList = "Kategori";
+$langCourseList = "Daftar Mata Kuliah";
 $langHelptwo = "Pertolongan";
 $langRegAll = "daftar";
 $EussMenu = "menu";
@@ -59,4 +60,16 @@ $langRequestDenied = "Panggilan ditolak.";
 $UsageDatacreated = "Penggunaan data yang dibuat";
 $SessionView = "Tampilkan mata kuliah diurut menurut sesi";
 $CourseView = "Tampilkan daftar lengkap mata kuliah";
+$DropboxFileAdded = "";
+$NewMessageInForum = "";
+$FolderCreated = "";
+$LinkAdded = "";
+$AnnouncementAdded = "";
+$AgendaAdded = "";
+$Messages = "";
+$Inbox = "";
+$Comppose = "";
+$PendingInvitations = "";
+$YouDoNotHaveAnySessionInItsHistory = "";
+$PortalHomepageDefaultIntroduction = "";
 ?>

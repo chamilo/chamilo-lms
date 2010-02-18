@@ -1,15 +1,17 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$langPgTitle = "¥Ú¡¼¥¸¥¿¥¤¥È¥ë";
-$langExplanation = "¥Ú¡¼¥¸¤ÏHTML¥Õ¥©¡¼¥Þ¥Ã¥È¤Ç¤Ê¤±¤ì¤Ð¤¤¤±¤Þ¤»¤ó¡£(e.g. \"my_page.htm\"). ¥Ú¡¼¥¸¤Ï¥Û¡¼¥à¥Ú¡¼¥¸¤«¤é¥ê¥ó¥¯¤µ¤ì¤Þ¤¹¡£¤â¤·HTML¤Ç¤Ï¤Ê¤¤Ê¸½ñ¤òÁ÷¿®¤·¤¿¤¤»þ¤Ï(PDF, Word, Power Point, Video, ¤Ê¤É) ¼¡¤Î¥Ä¡¼¥ë¤òÍÑ¤¤¤Æ²¼¤µ¤¤ <a href";
-$langTooBig = "¥Õ¥¡¥¤¥ë¤¬Âç¤­¤¹¤®¤ë¤Î¤Ç¡¢ÁªÂò¤Ç¤­¤Þ¤»¤ó¡£";
-$langCouldNot = "¥Õ¥¡¥¤¥ë¤¬Á÷¤ì¤Þ¤»¤ó¤Ç¤·¤¿¡£";
-$langNotAllowed = "¤³¤Î¥³¡¼¥¹¼õ¹Ö¤¬µö²Ä¤µ¤ì¤Æ¤¤¤Þ¤»¤ó";
-$langAddPageToSite = "¥Ú¡¼¥¸¤ò²Ã¤¨¤ë";
-$langCouldNotSendPage = "¤³¤Î¥Õ¥¡¥¤¥ë¤Ï HTML¥Õ¥©¡¼¥Þ¥Ã¥È¤Ç¤Ï¤Ê¤¤¤Î¤Ç¡¢ÃÙ¤ì¤Þ¤»¤ó¤Ç¤·¤¿¡£PDF, Word, Power Point, Video, ¤Ê¤É¤ÎÊ¸½ñ¤òÁ÷¤ê¤¿¤¤¤Î¤Ç¤¢¤ì¤Ð¼¡¤Î¥ê¥ó¥¯¤òÍøÍÑ²¼¤µ¤¤<a href";
-$langSendPage = "¥Ú¡¼¥¸¤òÁ÷¤ë";
-$langPageTitleModified = "¶µ»Õ¤¬¥Ú¡¼¥¸¥¿¥¤¥È¥ë¤òÊÑ¹¹¤·¤Þ¤·¤¿";
-$langPageAdded = "¥Ú¡¼¥¸¤ò²Ã¤¨¤Þ¤·¤¿";
-$langAddPage = "¥Ú¡¼¥¸¤ò²Ã¤¨¤ë";
+$langPgTitle = "ãƒšã€–ã‚¸ã‚¿ã‚¤ãƒˆãƒ«";
+$langExplanation = "ãƒšã€–ã‚¸ã¯HTMLãƒ•ã‚©ã€–ãƒžãƒƒãƒˆã§ãªã‘ã‚Œã°ã„ã‘ã¾ã›ã‚“ã€‚(e.g. \\"my_page.htm\\"). ãƒšã€–ã‚¸ã¯ãƒ›ã€–ãƒ ãƒšã€–ã‚¸ã‹ã‚‰ãƒªãƒ³ã‚¯ã•ã‚Œã¾ã™ã€‚ã‚‚ã—HTMLã§ã¯ãªã„çŸ¢ä»Šã‚’æµæ…¨ã—ãŸã„ç®•ã¯(PDF, Word, Power Point, Video, ãªã©) è‚Œã®ãƒ„ã€–ãƒ«ã‚’è„±ã„ã¦å¸ƒã•ã„ <a href";
+$langTooBig = "ãƒ•ã‚¡ã‚¤ãƒ«ãŒç»œãã™ãŽã‚‹ã®ã§ã€è”ä¹°ã§ãã¾ã›ã‚“ã€‚";
+$langCouldNot = "ãƒ•ã‚¡ã‚¤ãƒ«ãŒæµã‚Œã¾ã›ã‚“ã§ã—ãŸã€‚";
+$langNotAllowed = "ã“ã®ã‚³ã€–ã‚¹å‡æ€ªãŒé’“æã•ã‚Œã¦ã„ã¾ã›ã‚“";
+$langAddPageToSite = "ãƒšã€–ã‚¸ã‚’è£ãˆã‚‹";
+$langCouldNotSendPage = "ã“ã®ãƒ•ã‚¡ã‚¤ãƒ«ã¯ HTMLãƒ•ã‚©ã€–ãƒžãƒƒãƒˆã§ã¯ãªã„ã®ã§ã€è§…ã‚Œã¾ã›ã‚“ã§ã—ãŸã€‚PDF, Word, Power Point, Video, ãªã©ã®çŸ¢ä»Šã‚’æµã‚ŠãŸã„ã®ã§ã‚ã‚Œã°è‚Œã®ãƒªãƒ³ã‚¯ã‚’ç½‘è„±å¸ƒã•ã„<a href";
+$langSendPage = "ãƒšã€–ã‚¸ã‚’æµã‚‹";
+$langPageTitleModified = "å…œå¾½ãŒãƒšã€–ã‚¸ã‚¿ã‚¤ãƒˆãƒ«ã‚’æƒæž„ã—ã¾ã—ãŸ";
+$langPageAdded = "ãƒšã€–ã‚¸ã‚’è£ãˆã¾ã—ãŸ";
+$langAddPage = "ãƒšã€–ã‚¸ã‚’è£ãˆã‚‹";
+$Choose = "";
 ?>

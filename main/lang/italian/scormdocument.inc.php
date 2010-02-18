@@ -1,5 +1,6 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $langChapter = "Capitolo";
 $langDocumentList = "Elenco dei documenti";
@@ -9,20 +10,20 @@ $langEditDocument = "Modifica";
 $langCreateDocument = "Crea un documento";
 $langMissingImagesDetected = "Individuate immagini mancanti";
 $langPublish = "Pubblica";
-$langScormcontentstudent = "Questo è un modulo didattico in formato Scorm. Se volete farlo partire, cliccate qui : <input type=button name=scormbutton value=\'Inizia\' onclick=\'openscorm()\'>";
-$langScormcontent = "Questo è un oggetto Scorm<br><input type=button name=scormbutton value=\'Inizia\' onclick=\'openscorm()\'>";
-$langDownloadAndZipEnd = " Il file .zip è stato inviato e scompattato";
-$langZipNoPhp = "L\'archivio ZIP non può contenere dei file con estensione .php";
+$langScormcontentstudent = "Questo Ã¨ un modulo didattico in formato Scorm. Se volete farlo partire, cliccate qui : <input type=button name=scormbutton value=\'Inizia\' onclick=\'openscorm()\'>";
+$langScormcontent = "Questo Ã¨ un oggetto Scorm<br><input type=button name=scormbutton value=\'Inizia\' onclick=\'openscorm()\'>";
+$langDownloadAndZipEnd = " Il file .zip Ã¨ stato inviato e scompattato";
+$langZipNoPhp = "L\'archivio ZIP non puÃ² contenere dei file con estensione .php";
 $langGroupForumLink = "Forum del gruppo";
 $langGroupSpace = "Spazio di lavoro del gruppo";
-$langNotScormContent = "Il file ZIP non è in formato SCORM";
+$langNotScormContent = "Il file ZIP non Ã¨ in formato SCORM";
 $langNoText = "Immetti il testo o il contenuto HTML";
 $langNoFileName = "Immetti il nome del file!";
-$langMaxFileSize = "La dimensione massima è di";
+$langMaxFileSize = "La dimensione massima Ã¨ di";
 $langFileName = "Nome del file";
-$langFileError = "Il file da caricare non è valido.";
-$langDown = "Giù";
-$langViMod = "Visibilità modificata";
+$langFileError = "Il file da caricare non Ã¨ valido.";
+$langDown = "GiÃ¹";
+$langViMod = "VisibilitÃ  modificata";
 $langAddComment = "Aggiungi/modifica un commento";
 $langImpossible = "Non &egrave possibile effettuare l\'operazione";
 $langNewDir = "Nome della nuova cartella";
@@ -39,20 +40,20 @@ $langRename = "Rinomina";
 $langCopy = "Copia";
 $langNameDir = "Nome della nuova cartella";
 $langDownloadFile = "Carica un file Scorm / AICC sul server";
-$learning_path_access = "Fai click! su \"Crea un modulo didattico\' per eliminare/modificare/mostrare/nascondere/creare/aggiungere un modulo didattico.";
+$learning_path_access = "Fai click! su \\"Crea un modulo didattico\' per eliminare/modificare/mostrare/nascondere/creare/aggiungere un modulo didattico.";
 $langRoot = "root";
 $langBuilder = "Creazione di moduli didattici";
 $lang_edit_learnpath = "Modifica titolo/descrizione";
 $lang_add_title_and_desc = "Modifica Titolo/Descrizione.";
 $lang_add_learnpath = "Crea un nuovo modulo didattico";
-$lang_learnpath_added = "Il nuovo modulo didattico è stato creato. Puoi aggiungere dei contenuti o cliccare sul nome per modificarlo.";
+$lang_learnpath_added = "Il nuovo modulo didattico Ã¨ stato creato. Puoi aggiungere dei contenuti o cliccare sul nome per modificarlo.";
 $lang_delete_learnpath = "Elimina il modulo didattico";
-$lang_learnpath_edited = "Il modulo didattico è stato correttamente modificato";
-$lang_learnpath_deleted = "Il modulo didattico (con tutti i suoi contenuti) è stato eliminato";
+$lang_learnpath_edited = "Il modulo didattico Ã¨ stato correttamente modificato";
+$lang_learnpath_deleted = "Il modulo didattico (con tutti i suoi contenuti) Ã¨ stato eliminato";
 $lang_no_publish = "Nascondi ai corsisti";
 $lang_publish = "Mostra ai corsisti";
-$lang_no_published = "ora è invisibile ai corsisti";
-$lang_published = "ora è accessibile ai corsisti";
+$lang_no_published = "ora Ã¨ invisibile ai corsisti";
+$lang_published = "ora Ã¨ accessibile ai corsisti";
 $lang_description = "descrizione";
 $lang_title = "titolo";
 $langScormBuilder = "Editor Scorm";

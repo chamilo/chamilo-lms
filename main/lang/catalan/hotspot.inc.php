@@ -1,24 +1,25 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $select = "Seleccionar";
 $square = "Quadrat";
-$circle = "El·lipse";
-$poly = "Polígon";
+$circle = "ElÂ·lipse";
+$poly = "PolÃ­gon";
 $status1 = "Dibuixar una zona interactiva";
-$status2_poly = "Utilitzeu el botó dret del ratolí per tancar el polígon";
-$status2_other = "Deixeu anar el botó del ratolí per guardar la zona interactiva";
+$status2_poly = "Utilitzeu el botÃ³ dret del ratolÃ­ per tancar el polÃ­gon";
+$status2_other = "Deixeu anar el botÃ³ del ratolÃ­ per guardar la zona interactiva";
 $status3 = "Zona interactiva guardada";
 $exercise_status_1 = "Estatus: Pregunta sense contestar";
 $exercise_status_2 = "Validar les respostes";
 $exercise_status_3 = "Estatus: Pregunta contestada";
 $showUserPoints = "Mostrar/Ocultar clics";
 $showHotspots = "Mostrar/Ocultar zones interactives";
-$labelPolyMenu = "Tancar polígon";
+$labelPolyMenu = "Tancar polÃ­gon";
 $triesleft = "Intents restants";
 $exeFinished = "Totes les zones han estat seleccionades. Ara podeu modificar les vostres respostes o clicar per validar.";
 $nextAnswer = "Ara cliqueu a: &done=done";
-$delineation = "Delimitació";
-$labelDelineationMenu = "Tancar delimitació";
-$oar = "àrea de risc";
+$delineation = "DelimitaciÃ³";
+$labelDelineationMenu = "Tancar delimitaciÃ³";
+$oar = "Ã rea de risc";
 ?>

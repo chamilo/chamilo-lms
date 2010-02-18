@@ -1,15 +1,17 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$langPgTitle = "ชื่อเรื่อง";
-$langExplanation = "เอกสารต้องอยุ่ในรูปแบบ HTML format (เช่น \"my_page.htm\")  จึงจะสามารถ link จากหน้าแรกได้  หากท่านต้องการส่งเอกสารที่ไม่เป็น HTML  (เช่น PDF, Word, Power Point, Video, etc.) เลือกใช้ <a href=../document/document.php>เครื่องมือจัดการเอกสาร</a>";
-$langTooBig = "ท่านไม่ได้เลือกไฟล์ใดๆเพื่อส่ง หรือไฟล์มีขนาดใหญ่เกินไป";
-$langCouldNot = "ไม่สามารถส่งข้อมูลได้";
-$langNotAllowed = "ไม่อนุญาต";
-$langAddPageToSite = "เพิ่มเติมรายวิชา";
-$langCouldNotSendPage = "ไฟล์ไม่อยู่ในรูปแบบ HTML format ทำให้ไม่สามารถส่งได้ หากท่านต้องการส่งเอกสารที่ไม่เป็น HTML (เช่นPDF, Word, Power Point, Video, etc.) เลือกใช้<a href=../document/document.php>เครื่องมือจัดการเอกสาร</a>";
-$langSendPage = "หน้าที่ส่ง";
-$langPageTitleModified = "ชื่อวิชาของหน้านี้ถูกปรับปรุงแล้ว";
-$langPageAdded = "เพิ่มเรียบร้อย";
-$langAddPage = "เพิ่มเติมรายวิชา";
+$langPgTitle = "ยชร—รจรร รร—รจรยง";
+$langExplanation = "ร รยกรร’รยตรฉรยงรรรรจรฃยนรรยปรกยบยบ HTML format (ร ยชรจยน \\"my_page.htm\\")  ลกร–ยงลกรรร’รร’รยถ link ลกร’ยกรยนรฉร’รกรยกรคลฝรฉ  รร’ยกยทรจร’ยนยตรฉรยงยกร’รรรจยงร รยกรร’รยทร•รจรครรจร ยปรงยน HTML  (ร ยชรจยน PDF, Word, Power Point, Video, etc.) ร ร…ร—รยกรฃยชรฉ <a href=../document/document.php>ร โฌรร—รจรยงรร—รลกร‘ลฝยกร’รร รยกรร’ร</a>";
+$langTooBig = "ยทรจร’ยนรครรจรคลฝรฉร ร…ร—รยกรคยฟร…รฌรฃลฝรฆร ลธร—รจรรรจยง รรร—รรคยฟร…รฌรร•ยขยนร’ลฝรฃรยญรจร ยกร”ยนรคยป";
+$langCouldNot = "รครรจรร’รร’รยถรรจยงยขรฉรรรร…รคลฝรฉ";
+$langNotAllowed = "รครรจรยนรยญร’ยต";
+$langAddPageToSite = "ร ลธร”รจรร ยตร”รรร’รรร”ยชร’";
+$langCouldNotSendPage = "รคยฟร…รฌรครรจรรรรจรฃยนรรยปรกยบยบ HTML format ยทร“รฃรรฉรครรจรร’รร’รยถรรจยงรคลฝรฉ รร’ยกยทรจร’ยนยตรฉรยงยกร’รรรจยงร รยกรร’รยทร•รจรครรจร ยปรงยน HTML (ร ยชรจยนPDF, Word, Power Point, Video, etc.) ร ร…ร—รยกรฃยชรฉ<a href=../document/document.php>ร โฌรร—รจรยงรร—รลกร‘ลฝยกร’รร รยกรร’ร</a>";
+$langSendPage = "รยนรฉร’ยทร•รจรรจยง";
+$langPageTitleModified = "ยชร—รจรรร”ยชร’ยขรยงรยนรฉร’ยนร•รฉยถรยกยปรร‘ยบยปรรยงรกร…รฉร";
+$langPageAdded = "ร ลธร”รจรร รร•รยบรรฉรร";
+$langAddPage = "ร ลธร”รจรร ยตร”รรร’รรร”ยชร’";
+$Choose = "";
 ?>

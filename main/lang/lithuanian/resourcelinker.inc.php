@@ -1,5 +1,6 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $ResourceAdded = "Resursas įdėtas. Dabar galite eiti atgal arba įdėti daugiau resursų.";
 $LearningPath = "Mokymosi medžiaga";
@@ -35,7 +36,7 @@ $DokeosRelatedCourseMaterial = "Chamilo related course resources";
 $LinkTarget = "Nuoroda";
 $SameWindow = "Tame pačiame lange";
 $NewWindow = "Naujame lange";
-$StepDeleted1 = "Šis ";
+$StepDeleted1 = "Šis";
 $StepDeleted2 = "įrašas ištrintas šiame įrankyje.";
 $Modify = "redaguoti";
 $Chapter = "Skyrius";

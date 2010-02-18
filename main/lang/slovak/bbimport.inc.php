@@ -1,23 +1,24 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$langViewCourseMaterialImport  = "Zobrazi&#357; materiál kurzu tak, ako bude naimportovaný";
-$langViewExternalLinksImport  = "Zobrazi&#357; externé odkazy tak, ako budú naimportované";
-$langViewForumImport  = "Zobrazi&#357; fórum tak, ako bude naimportované";
-$langImportCourseMaterial  = "Import materiálu kurzu (nástroj Blackboard-u \"Materiál kurzu\")";
-$langImportExternalLinks  = "Import odkazov (nástroj Blackboard-u \"Externé odkazy\")";
-$langImportForum  = "Import fór (nástroj Blackboard-u \"Diskusné fórum\")";
-$langToolInfo  = "Tento nástroj importuje kurzy z Blackboard-u 5.5 (Materiál kurzu, Diskusné fórum a Externé odkazy)";
+$langViewCourseMaterialImport = "Zobrazi&#357; materiÃ¡l kurzu tak, ako bude naimportovanÃ½";
+$langViewExternalLinksImport = "Zobrazi&#357; externÃ© odkazy tak, ako budÃº naimportovanÃ©";
+$langViewForumImport = "Zobrazi&#357; fÃ³rum tak, ako bude naimportovanÃ©";
+$langImportCourseMaterial = "Import materiÃ¡lu kurzu (nÃ¡stroj Blackboard-u \\"MateriÃ¡l kurzu\\")";
+$langImportExternalLinks = "Import odkazov (nÃ¡stroj Blackboard-u \\"ExternÃ© odkazy\\")";
+$langImportForum = "Import fÃ³r (nÃ¡stroj Blackboard-u \\"DiskusnÃ© fÃ³rum\\")";
+$langToolInfo = "Tento nÃ¡stroj importuje kurzy z Blackboard-u 5.5 (MateriÃ¡l kurzu, DiskusnÃ© fÃ³rum a ExternÃ© odkazy)";
 $langToolName = "Importova&#357; kurzy z Blackboard-u";
-$langSelectCoursePackage = "Vybra&#357; balík kurzu";
-$langPackageAlreadySelected = "Balík už máte vybraný";
-$langFirstSelectPackage = "Predtým ako budete pokra&#269;ova&#357; v importovaní musíte najskôr vybra&#357; a otvori&#357; balík.";
+$langSelectCoursePackage = "Vybra&#357; balÃ­k kurzu";
+$langPackageAlreadySelected = "BalÃ­k uÂž mÃ¡te vybranÃ½";
+$langFirstSelectPackage = "PredtÃ½m ako budete pokra&#269;ova&#357; v importovanÃ­ musÃ­te najskÃ´r vybra&#357; a otvori&#357; balÃ­k.";
 $langCourseToMigrate = "Kurz na s&#357;ahovanie";
-$langSelectPackage = "Vyber balík";
-$langOpenPackageForImporting = "Otvori&#357; tento balík pre import";
-$langInformation = "Informácie o priebehu importu";
-$langChooseImportOptions = "Zvo&#318;te možnosti svojho importu";
-$langCheckWhatIsImported = "Pred za&#269;atím importu sa môžete pozrie&#357; na to, &#269;o bude importované ";
-$langStartImporting = "Štart importovania";
+$langSelectPackage = "Vyber balÃ­k";
+$langOpenPackageForImporting = "Otvori&#357; tento balÃ­k pre import";
+$langInformation = "InformÃ¡cie o priebehu importu";
+$langChooseImportOptions = "Zvo&#318;te moÂžnosti svojho importu";
+$langCheckWhatIsImported = "Pred za&#269;atÃ­m importu sa mÃ´Âžete pozrie&#357; na to, &#269;o bude importovanÃ©";
+$langStartImporting = "ÂŠtart importovania";
 $langImport = "Import";
 ?>

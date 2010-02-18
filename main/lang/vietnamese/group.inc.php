@@ -1,5 +1,6 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $langNewGroupCreate = "Create new group(s)";
 $langGroupCreation = "New groups creation";
@@ -40,9 +41,57 @@ $langPublic = "public";
 $langPropModify = "Modify settings";
 $langState = "State";
 $langGroupFilledGroups = "Groups have been filled (or completed) by students present in the \'Users\' list.";
-$langSubscribed  = "people registered in this course";
-$langStudentsNotInThisGroups  = "Users not in this group";
-$langQtyOfUserCanSubscribe_PartBeforeNumber  = "A user can be member of maximum ";
-$langQtyOfUserCanSubscribe_PartAfterNumber  = " groups";
+$langSubscribed = "people registered in this course";
+$langStudentsNotInThisGroups = "Users not in this group";
+$langQtyOfUserCanSubscribe_PartBeforeNumber = "A user can be member of maximum";
+$langQtyOfUserCanSubscribe_PartAfterNumber = "Â groups";
+$langGroupLimit = "";
+$CreateGroup = "";
+$ProceedToCreateGroup = "";
 $langStudentRegAllowed = "Students are allowed to self-register in groups";
+$langGroupAllowStudentUnregistration = "";
+$langAllGroups = "";
+$langStudentUnsubscribe = "";
+$langStudentDeletesHimself = "";
+$langDefaultSettingsForNewGroups = "";
+$langSelectedGroupsDeleted = "";
+$langSelectedGroupsEmptied = "";
+$langGroupEmptied = "";
+$langSelectedGroupsFilled = "";
+$langGroupSelfUnRegInf = "";
+$langSameForAll = "";
+$langNoLimit = "";
+$langPleaseEnterValidNumber = "";
+$langCreateGroupsFromVirtualCourses = "";
+$langCreateGroupsFromVirtualCoursesInfo = "";
+$langNoGroupsAvailable = "";
+$langGroupsFromVirtualCourses = "";
+$NotAvailable = "";
+$CreateSubgroups = "";
+$CreateSubgroupsInfo = "";
+$CreateNumberOfGroups = "";
+$WithUsersFrom = "";
+$CategoryDeleted = "";
+$Empty = "";
+$FillGroup = "";
+$EmptyGroup = "";
+$MaxGroupsPerUserInvalid = "";
+$GroupOverview = "";
+$GroupCategory = "";
+$NoTitleGiven = "";
+$InvalidMaxNumberOfMembers = "";
+$CategoryOrderChanged = "";
+$Wiki = "";
+$CategoryCreated = "";
+$GroupTutors = "";
+$GroupWork = "";
+$GroupCalendar = "";
+$GroupAnnouncements = "";
+$NoCategoriesDefined = "";
+$GroupsFromClasses = "";
+$GroupsFromClassesInfo = "";
+$Group = "";
+$ForumOfGroup = "";
+$BackToGroupList = "";
+$EditGroupCategory = "";
 ?>

@@ -1,5 +1,6 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $GeneralDescription = "Llipin nisqasqay";
 $GeneralDescriptionQuestions = "Iman yachachinaq ruwaynin kay programapi ? Munakunchu ñaupaq ruwanakunata ? Ima masichay kan kay yachachinawan hoqkunawan ?";
@@ -19,7 +20,7 @@ $CourseMaterialInformation = "Yachachinaq llank\'anakunamanta pisi nisqasqay.";
 $HumanAndTechnicalResources = "Runakunamanta mana runakunamanta yachaypas yanapaysinakuna";
 $HumanAndTechnicalResourcesQuestions = "Pikunan yachachiqkuna, pusaqkuna, yanapakuy técnica nisqa, yanapakuy social, hoqkunawan ? Yachachinamantari  manqan yanapay hapinapaq kan: wasi computadora nisqakunawan, hoqkunapas ?";
 $HumanAndTechnicalResourcesInformation = "Yanapaysinakuna hapinapaq técnicos nisqamanta  runa sispamasikunamantawan pisi nisqayta.";
-$Assessment  = "Chaninchana";
+$Assessment = "Chaninchana";
 $AssessmentQuestions = "Imaynatan yachaqekunapaq chaninchay kanqa ? Iman kashan paykuna yachachinata atinankupaq ?";
 $AssessmentInformation = "Tapukunamanta qhawarichina. Imakunamanta chaninchay. Ima yupipaykuna.";
 ?>

@@ -1,5 +1,6 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $lang_new_item = "noul obiect adaugat";
 $lang_title_notification = "De la ultima ta vizita";
@@ -17,4 +18,19 @@ $lang_new_dropbox_file = "fisier nou primit";
 $lang_update_dropbox_file = "fisierul din dropbox tau a fost actualizat";
 $ForumCategoryAdded = "Adauga categorie forum";
 $LearnpathAdded = "Adauga curs";
+$GlossaryAdded = "";
+$QuizQuestionAdded = "";
+$QuizQuestionUpdated = "";
+$QuizQuestionDeleted = "";
+$QuizUpdated = "";
+$QuizAdded = "";
+$QuizDeleted = "";
+$DocumentInvisible = "";
+$DocumentVisible = "";
+$CourseDescriptionAdded = "";
+$WikiAdded = "";
+$SurveyAdded = "";
+$NotebookAdded = "";
+$NotebookUpdated = "";
+$NotebookDeleted = "";
 ?>

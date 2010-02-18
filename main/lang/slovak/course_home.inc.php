@@ -1,27 +1,32 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$langActivate = "Ukáž";
+$langActivate = "UkÃ¡Âž";
 $langDeactivate = "Schovaj";
-$langInLnk  = "Skryté nástroje a odkazy";
+$langInLnk = "SkrytÃ© nÃ¡stroje a odkazy";
 $langDelLk = "Naozaj zmaza&#357; odkaz?";
-$langCourseCreate  = "Vytvor  webstránku kurzu";
-$langNameOfTheLink  = "Názov pre odkaz";
-$lang_main_categories_list                  = "Zoznam hlavných kategórii";
+$langCourseCreate = "Vytvor  webstrÃ¡nku kurzu";
+$langNameOfTheLink = "NÃ¡zov pre odkaz";
+$lang_main_categories_list = "Zoznam hlavnÃ½ch kategÃ³rii";
 $langCourseAdminOnly = "Len pre lektorov";
-$PlatformAdminOnly = "Len pre platformových administrátorov";
-$langCombinedCourse = "Kombinovaný kurz";
-$ToolIsNowVisible = "Nástroj je teraz vidite&#318;ný";
-$ToolIsNowHidden = "Nástroj je teraz nevidite&#318;ný";
+$PlatformAdminOnly = "Len pre platformovÃ½ch administrÃ¡torov";
+$langCombinedCourse = "KombinovanÃ½ kurz";
+$ToolIsNowVisible = "NÃ¡stroj je teraz vidite&#318;nÃ½";
+$ToolIsNowHidden = "NÃ¡stroj je teraz nevidite&#318;nÃ½";
 $EditLink = "Uprav odkaz";
-$Blog_management = "Správa blogov";
-$Forum = "Fórum";
+$Blog_management = "SprÃ¡va blogov";
+$Forum = "FÃ³rum";
 $Course_maintenance = "Spravova&#357; kurz";
 $TOOL_SURVEY = "Ankety";
-$GreyIcons = "Sada nástrojov";
+$GreyIcons = "Sada nÃ¡strojov";
 $Interaction = "Interakcie";
 $Authoring = "Autori";
-$Administration = "Administrácia";
-$IntroductionTextUpdated = "Úvodný text bol aktualizovaný";
-$IntroductionTextDeleted = "Úvodný text je zmazaný";
+$Administration = "AdministrÃ¡cia";
+$IntroductionTextUpdated = "ÃšvodnÃ½ text bol aktualizovanÃ½";
+$IntroductionTextDeleted = "ÃšvodnÃ½ text je zmazanÃ½";
+$SessionIdentifier = "";
+$SessionName = "";
+$SessionCategory = "";
+$SessionData = "";
 ?>

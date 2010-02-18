@@ -1,21 +1,24 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$lang_height = "Szélesség";
-$lang_resizing_comment = "Kép átméretezése a következ&#337; kiterjedésre (pixelben)";
-$lang_width = "Hosszúság";
-$lang_resizing = "Átméretezés";
-$lang_no_resizing_comment = "Minden kép eredeti méretben látszik. Nem lett átméretezés végrehajtva. Ha a kép nagyobb, mint a képerny&#337; mérete, gördít&#337;sáv fog megjelenni automatikusan.";
-$lang_show_thumbnails = "Bélyegképek mutatása";
-$lang_click_thumbnails = "Kattintson a bélyegképek egyikére";
-$lang_set_slideshow_options = "Diavetítés tulajdonságainak beállítása";
-$lang_slideshow_options = "Diavetítés tulajdonságai";
-$lang_no_resizing = "NINCS ÁTMÉRETEZÉS (alapértelmezett)";
-$lang_exit_slideshow = "Kilépés a diavetítésb&#337;l";
-$SlideShow = "Diavetítés";
+$lang_height = "SzÃ©lessÃ©g";
+$lang_resizing_comment = "KÃ©p Ã¡tmÃ©retezÃ©se a kÃ¶vetkez&#337; kiterjedÃ©sre (pixelben)";
+$lang_width = "HosszÃºsÃ¡g";
+$lang_resizing = "ÃtmÃ©retezÃ©s";
+$lang_no_resizing_comment = "Minden kÃ©p eredeti mÃ©retben lÃ¡tszik. Nem lett Ã¡tmÃ©retezÃ©s vÃ©grehajtva. Ha a kÃ©p nagyobb, mint a kÃ©perny&#337; mÃ©rete, gÃ¶rdÃ­t&#337;sÃ¡v fog megjelenni automatikusan.";
+$lang_show_thumbnails = "BÃ©lyegkÃ©pek mutatÃ¡sa";
+$lang_click_thumbnails = "Kattintson a bÃ©lyegkÃ©pek egyikÃ©re";
+$lang_set_slideshow_options = "DiavetÃ­tÃ©s tulajdonsÃ¡gainak beÃ¡llÃ­tÃ¡sa";
+$lang_slideshow_options = "DiavetÃ­tÃ©s tulajdonsÃ¡gai";
+$lang_no_resizing = "NINCS ÃTMÃ‰RETEZÃ‰S (alapÃ©rtelmezett)";
+$lang_exit_slideshow = "KilÃ©pÃ©s a diavetÃ­tÃ©sb&#337;l";
+$SlideShow = "DiavetÃ­tÃ©s";
 $lang_previous_slide = "El&#337;z&#337; dia";
-$lang_next_slide = "Következ&#337; dia";
-$lang_image = "Kép";
+$lang_next_slide = "KÃ¶vetkez&#337; dia";
+$lang_image = "KÃ©p";
 $lang_of = "/";
-$lang_view_slideshow = "Diavetítés megtekintése";
+$lang_view_slideshow = "DiavetÃ­tÃ©s megtekintÃ©se";
+$FirstSlide = "";
+$LastSlide = "";
 ?>

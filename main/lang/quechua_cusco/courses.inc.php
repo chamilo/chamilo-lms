@@ -1,32 +1,36 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$lang_already_enrolled                      = "ña qelqachikunkiña";
-$lang_my_personnal_course_list              = "Yachachinakunamanta noqaq sinriy";
-$lang_course_enrollment                     = "Yachachinamanta haykuqmasi";
-$lang_course_not_available                  = "Kay yachachinaqa manan hap\'ipanapaqchu utaq mana kanchu.";
-$lang_enroll                                = "Qelqachikuy";
-$lang_enroll_to_a_new_course                = "Qelqachikuy hoq yachachinapi";
-$lang_my_present_course_list                = "Yachachinakunaymanta kuna kaq sinriy";
-$lang_no_course_to_enroll_in_this_category  = "Kay mitapiqa mana kanchu yachachinakuna qelqachikunaykipaq.";
-$lang_or_search_from_the_course_code        = "Utaq maskhay yachachinaq chinpunwan";
-$lang_search                                = "Maskhay";
-$lang_select_course_among_categories        = "Ajllay mitakunamanta yachachinata";
-$lang_select_course_in                      = "Ajllay hoq yachachinata kay nisqapi ";
-$lang_select_course_in_search_results       = "Ajllay hoq yachachinata maskhaypi rikurisqakunamanta";
-$lang_unsubscribe                           = "Horqoy wañuchiy hoq qelqachikuyta";
-$lang_back_to_my_home_page                  = "Kutiy raphi qallariyniyman";
-$lang_back_to_my_personnal_course_list      = "Kutiy yachachinakunaq sinriyman";
-$langTitular  = "Sutinchayniyuq";
-$langBackToListOfThisUser  = "Kutiy haykuqmasikuna sinriman";
-$langAdministrationTools  = "Kamachinaq llank\'anakuna";
-$lang_back_to_parent_category               = "Kutiy kuraq wichay mitaman";
-$lang_back_to_course_selection              = "Kutiy yachachinaq ajllanaman";
-$lang_up  = "Kutiy kuraq wichay mitaman";
-$langCatList  = "Mitakuna";
-$langCourseList  = "Yachachinakuna";
+$lang_already_enrolled = "ña qelqachikunkiña";
+$lang_my_personnal_course_list = "Yachachinakunamanta noqaq sinriy";
+$lang_course_enrollment = "Yachachinamanta haykuqmasi";
+$lang_course_not_available = "Kay yachachinaqa manan hap\'ipanapaqchu utaq mana kanchu.";
+$lang_enroll = "Qelqachikuy";
+$lang_enroll_to_a_new_course = "Qelqachikuy hoq yachachinapi";
+$lang_my_present_course_list = "Yachachinakunaymanta kuna kaq sinriy";
+$lang_no_course_to_enroll_in_this_category = "Kay mitapiqa mana kanchu yachachinakuna qelqachikunaykipaq.";
+$lang_or_search_from_the_course_code = "Utaq maskhay yachachinaq chinpunwan";
+$lang_search = "Maskhay";
+$lang_select_course_among_categories = "Ajllay mitakunamanta yachachinata";
+$lang_select_course_in = "Ajllay hoq yachachinata kay nisqapi";
+$lang_select_course_in_search_results = "Ajllay hoq yachachinata maskhaypi rikurisqakunamanta";
+$lang_unsubscribe = "Horqoy wañuchiy hoq qelqachikuyta";
+$lang_back_to_my_home_page = "Kutiy raphi qallariyniyman";
+$lang_back_to_my_personnal_course_list = "Kutiy yachachinakunaq sinriyman";
+$langTitular = "Sutinchayniyuq";
+$langBackToListOfThisUser = "Kutiy haykuqmasikuna sinriman";
+$langAdministrationTools = "Kamachinaq llank\'anakuna";
+$lang_back_to_parent_category = "Kutiy kuraq wichay mitaman";
+$lang_back_to_course_selection = "Kutiy yachachinaq ajllanaman";
+$lang_up = "Kutiy kuraq wichay mitaman";
+$langCatList = "Mitakuna";
+$langCourseList = "Yachachinakuna";
 $Subscribe = "Qelqachikuway";
 $AlreadySubscribed = "Ña qelqachisqa kashanki";
+$CodeMandatory = "";
+$CourseCategoryMandatory = "";
+$TeacherMandatory = "";
 $CourseCategoryStored = "Mitaqa kamarisqaña";
 $langWithoutTimeLimits = "Mana pacha tukukuyniyuq";
 $lang_back_to_main_category_list = "Kutiy mitakunaq kuraq sinrinman";
@@ -42,7 +46,7 @@ $langManage = "Campus nisqaq kamachiynin";
 $langEnrollToCourseSuccessful = "Yachachinapi qelqachikusqaykiqa ña ruwakunña";
 $langSubCat = "ukhu-mitakuna";
 $langUnsubscribeNotAllowed = "Kay yachachinapiqa kikin haykuqmasikuna qelqachikusqankuta manan qechukunkumanchu.";
-$langCourseAdminUnsubscribeNotAllowed  = "Qanqa kashanki kay yachachinamanta kamachiq";
+$langCourseAdminUnsubscribeNotAllowed = "Qanqa kashanki kay yachachinamanta kamachiq";
 $CourseManagement = "Yachachinakuyniypa Kamachinay";
 $SortMyCourses = "Allichay yachachinaykunata";
 $SubscribeToCourse = "Qelqachiway hoq yachachinapi";
@@ -72,4 +76,11 @@ $CourseCategoryEditStored = "Mita kunanyachisqa";
 $buttonCreateCourseCategory = "Kamay yachachinaq hoq mitanta";
 $buttonSaveCategory = "Allachay mitata";
 $buttonChangeCategory = "T\'ijray mitata";
+$SessionName = "";
+$SessionCategory = "";
+$Expand = "";
+$Collapse = "";
+$CourseDetails = "";
+$GroupPendingInvitations = "";
+$Compose = "";
 ?>

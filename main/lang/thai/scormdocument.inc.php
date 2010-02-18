@@ -1,64 +1,65 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$langChapter = "บทที่";
-$langDocumentList = "รายการเอกสาร";
-$langOrganisationList = "รายชื่อหน่วยงาน";
-$langEditTOC = "แก้ไขสารบัญ";
-$langEditDocument = "แก้ไขเอกสาร";
-$langCreateDocument = "สร้างเอกสาร";
-$langMissingImagesDetected = "ตรวจพบว่า ขาดภาพประกอบ";
-$langPublish = "เผยแพร่";
-$langScormcontentstudent = "นี่คือรูปแบบเอกสารหลักสูตรตามมาตรฐานสกอร์ม. หากต้องการเปิดให้คลิกที่นี่: <input type=button name=scormbutton value=\'Launch it !\' onclick=\'openscorm()\'>";
-$langScormcontent = "นี่คือเนื้อหาสกอร์ม คลิกเปิด<br><input type=button name=scormbutton value=\'Launch it !\' onclick=\'openscorm()\'>";
-$langDownloadAndZipEnd = "ไฟล์zipได้โอนย้ายและได้คืนสภาพไฟล์เดิมให้แล้ว";
-$langZipNoPhp = "ไฟล์zipไม่สามารถบรรจุไฟล์.php";
-$langGroupForumLink = "กลุ่มอภิปราย";
-$langGroupSpace = "พื้นที่กลุ่ม";
-$langNotScormContent = "ไม่ใช่ไฟล์ .zip ตามแบบมาตรฐานScorm";
-$langNoText = "กรุณาพิมพ์เนื้อหาหรือนำเข้าไฟล์เอกสารhtmlของคุณ";
-$langNoFileName = "ไม่มีชื่อไฟล์";
-$langMaxFileSize = "ขนาดไฟล์ใหญ่สุดคือ";
-$langFileName = "ชื่อไฟล์";
-$langFileError = "ไฟล์ที่จะโอนย้ายขึ้น ไม่สมบูรณ์";
-$langDown = "เลื่อนลง";
-$langViMod = "แก้ไขให้สามารถมองเห็นได้แล้ว";
-$langAddComment = "เพิ่มข้อคิดเห็น";
-$langImpossible = "ไม่สามารถดำเนินการได้";
-$langNewDir = "ชื่อแฟ้มใหม่";
-$langTo = "ถึง";
-$langNoSpace = "การโอนย้ายไฟล์ขึ้นระบบล้มเหลว พื้นที่ในแฟ้มเก็บงานไม่เพียงพอ";
-$langDownloadEnd = "การโอนย้ายไฟล์เสร็จเรียบร้อย";
-$langFileExists = "ไม่สามารถดำเนินการได้<br>เพราะมีที่เก็บไฟล์และชื่อนี้แล้ว";
-$langDocCopied = "สำเนาเอกสารแล้ว";
-$langDocDeleted = "ได้ลบแผนการเรียนตามแบบมตรฐานของScormแล้ว";
-$langElRen = "เปลี่ยนชื่อ EI ???";
-$langDirMv = "แฟ้มเก็บงานของเรา";
-$langComMod = "โหมดคำสั่ง?????";
-$langRename = "เปลี่ยนชื่อ";
-$langCopy = "ทำสำเนา";
-$langNameDir = "ชื่อแฟ้มเก็บงานใหม่";
-$langDownloadFile = "โอนย้ายไฟล์zipวิชา ของ IMSหรือ Scorm";
-$learning_path_access = "คลิกที่คำว่า \'create learning path\' เพื่อทำการ ลบ/แก้ไข/แสดง/ซ่อน/สร้าง/เพิ่ม learning path";
+$langChapter = "ยบยทยทร•รจ";
+$langDocumentList = "รร’รยกร’รร รยกรร’ร";
+$langOrganisationList = "รร’รยชร—รจรรยนรจรรยงร’ยน";
+$langEditTOC = "รกยกรฉรคยขรร’รยบร‘ยญ";
+$langEditDocument = "รกยกรฉรคยขร รยกรร’ร";
+$langCreateDocument = "รรรฉร’ยงร รยกรร’ร";
+$langMissingImagesDetected = "ยตรรลกลธยบรรจร’ ยขร’ลฝร€ร’ลธยปรรยกรยบ";
+$langPublish = "ร ล’รรกลธรรจ";
+$langScormcontentstudent = "ยนร•รจโฌร—รรรยปรกยบยบร รยกรร’รรร…ร‘ยกรรยตรยตร’รรร’ยตรยฐร’ยนรยกรรรฌร. รร’ยกยตรฉรยงยกร’รร ยปร”ลฝรฃรรฉโฌร…ร”ยกยทร•รจยนร•รจ: <input type=button name=scormbutton value=\'Launchย itย !\' onclick=\'openscorm()\'>";
+$langScormcontent = "ยนร•รจโฌร—รร ยนร—รฉรรร’รยกรรรฌร โฌร…ร”ยกร ยปร”ลฝ<br><input type=button name=scormbutton value=\'Launchย itย !\' onclick=\'openscorm()\'>";
+$langDownloadAndZipEnd = "รคยฟร…รฌzipรคลฝรฉรขรยนรรฉร’รรกร…รรคลฝรฉโฌร—ยนรร€ร’ลธรคยฟร…รฌร ลฝร”รรฃรรฉรกร…รฉร";
+$langZipNoPhp = "รคยฟร…รฌzipรครรจรร’รร’รยถยบรรลกรรคยฟร…รฌ.php";
+$langGroupForumLink = "ยกร…รรจรรร€ร”ยปรร’ร";
+$langGroupSpace = "ลธร—รฉยนยทร•รจยกร…รรจร";
+$langNotScormContent = "รครรจรฃยชรจรคยฟร…รฌ .zip ยตร’รรกยบยบรร’ยตรยฐร’ยนScorm";
+$langNoText = "ยกรรยณร’ลธร”รลธรฌร ยนร—รฉรรร’รรร—รยนร“ร ยขรฉร’รคยฟร…รฌร รยกรร’รhtmlยขรยงโฌรยณ";
+$langNoFileName = "รครรจรร•ยชร—รจรรคยฟร…รฌ";
+$langMaxFileSize = "ยขยนร’ลฝรคยฟร…รฌรฃรยญรจรรลฝโฌร—ร";
+$langFileName = "ยชร—รจรรคยฟร…รฌ";
+$langFileError = "รคยฟร…รฌยทร•รจลกรรขรยนรรฉร’รยขร–รฉยน รครรจรรยบรรยณรฌ";
+$langDown = "ร ร…ร—รจรยนร…ยง";
+$langViMod = "รกยกรฉรคยขรฃรรฉรร’รร’รยถรรยงร รรงยนรคลฝรฉรกร…รฉร";
+$langAddComment = "ร ลธร”รจรยขรฉรโฌร”ลฝร รรงยน";
+$langImpossible = "รครรจรร’รร’รยถลฝร“ร ยนร”ยนยกร’รรคลฝรฉ";
+$langNewDir = "ยชร—รจรรกยฟรฉรรฃรรรจ";
+$langTo = "ยถร–ยง";
+$langNoSpace = "ยกร’รรขรยนรรฉร’รรคยฟร…รฌยขร–รฉยนรรยบยบร…รฉรร รร…ร ลธร—รฉยนยทร•รจรฃยนรกยฟรฉรร ยกรงยบยงร’ยนรครรจร ลธร•รยงลธร";
+$langDownloadEnd = "ยกร’รรขรยนรรฉร’รรคยฟร…รฌร รรรงลกร รร•รยบรรฉรร";
+$langFileExists = "รครรจรร’รร’รยถลฝร“ร ยนร”ยนยกร’รรคลฝรฉ<br>ร ลธรร’รรร•ยทร•รจร ยกรงยบรคยฟร…รฌรกร…รยชร—รจรยนร•รฉรกร…รฉร";
+$langDocCopied = "รร“ร ยนร’ร รยกรร’รรกร…รฉร";
+$langDocDeleted = "รคลฝรฉร…ยบรกล’ยนยกร’รร รร•รยนยตร’รรกยบยบรยตรยฐร’ยนยขรยงScormรกร…รฉร";
+$langElRen = "ร ยปร…ร•รจรยนยชร—รจร EI ???";
+$langDirMv = "รกยฟรฉรร ยกรงยบยงร’ยนยขรยงร รร’";
+$langComMod = "รขรรลฝโฌร“รร‘รจยง?????";
+$langRename = "ร ยปร…ร•รจรยนยชร—รจร";
+$langCopy = "ยทร“รร“ร ยนร’";
+$langNameDir = "ยชร—รจรรกยฟรฉรร ยกรงยบยงร’ยนรฃรรรจ";
+$langDownloadFile = "รขรยนรรฉร’รรคยฟร…รฌzipรร”ยชร’ ยขรยง IMSรรร—ร Scorm";
+$learning_path_access = "โฌร…ร”ยกยทร•รจโฌร“รรจร’ \'create learning path\' ร ลธร—รจรยทร“ยกร’ร ร…ยบ/รกยกรฉรคยข/รกรลฝยง/ยซรจรยน/รรรฉร’ยง/ร ลธร”รจร learning path";
 $langRoot = "root";
-$langBuilder = "ตัวสร้างแผนการเรียน";
-$lang_edit_learnpath = "แก้ไขชื่อ/คำอธิบาย";
-$lang_add_title_and_desc = "เปลี่ยนชื่อและเพิ่มคำอธิบาย";
-$lang_add_learnpath = "สร้างแผนการเรียนในระบบ";
-$lang_learnpath_added = "ได้สร้างองค์ประกอบการเรียนรู้ของวิชาใหม่เรียบร้อยแล้ว คุณสามารถเพิ่มบทเรียนเข้าไปได้ โดยการคลิกที่ชื่อรายการนั้นๆ";
-$lang_delete_learnpath = "ลบแผนการเรียน";
-$lang_learnpath_edited = "ได้แก้ไขแผนการเรียนเรียบร้อยแล้ว";
-$lang_learnpath_deleted = "ได้ลบแผนการเรียนและหน่วยการเรียนรู้ในแผนเรียบร้อยแล้ว";
-$lang_no_publish = "ยังไม่ให้ผู้เรียนมองเห็น";
-$lang_publish = "ผู้เรียนมองเห็นได้";
-$lang_no_published = "ทำการซ่อนไม่ให้ผู้เรียนมองแห็น เรียบร้อยแล้ว";
-$lang_published = "ให้ผู้เรียนสามารถเข้าไปเรียนได้แล้ว";
-$lang_description = "คำอธิบาย";
-$lang_title = "ชื่อเรื่อง";
-$langScormBuilder = "ตัวสร้างเอกสารตามแบบมาตรฐานScorm";
-$langCreateDoc = "สร้างเอกสาร";
-$langOrganiseDocuments = "จัดระบบเอกสาร";
-$langUncompress = "ไม่บีบอัดไฟล์";
-$ExportShort = "ส่งออกไฟล์";
-$progress = "ความก้าวหน้า";
+$langBuilder = "ยตร‘รรรรฉร’ยงรกล’ยนยกร’รร รร•รยน";
+$lang_edit_learnpath = "รกยกรฉรคยขยชร—รจร/โฌร“รลพร”ยบร’ร";
+$lang_add_title_and_desc = "ร ยปร…ร•รจรยนยชร—รจรรกร…รร ลธร”รจรโฌร“รลพร”ยบร’ร";
+$lang_add_learnpath = "รรรฉร’ยงรกล’ยนยกร’รร รร•รยนรฃยนรรยบยบ";
+$lang_learnpath_added = "รคลฝรฉรรรฉร’ยงรยงโฌรฌยปรรยกรยบยกร’รร รร•รยนรรรฉยขรยงรร”ยชร’รฃรรรจร รร•รยบรรฉรรรกร…รฉร โฌรยณรร’รร’รยถร ลธร”รจรยบยทร รร•รยนร ยขรฉร’รคยปรคลฝรฉ รขลฝรยกร’รโฌร…ร”ยกยทร•รจยชร—รจรรร’รยกร’รยนร‘รฉยนรฆ";
+$lang_delete_learnpath = "ร…ยบรกล’ยนยกร’รร รร•รยน";
+$lang_learnpath_edited = "รคลฝรฉรกยกรฉรคยขรกล’ยนยกร’รร รร•รยนร รร•รยบรรฉรรรกร…รฉร";
+$lang_learnpath_deleted = "รคลฝรฉร…ยบรกล’ยนยกร’รร รร•รยนรกร…รรยนรจรรยกร’รร รร•รยนรรรฉรฃยนรกล’ยนร รร•รยบรรฉรรรกร…รฉร";
+$lang_no_publish = "รร‘ยงรครรจรฃรรฉล’รรฉร รร•รยนรรยงร รรงยน";
+$lang_publish = "ล’รรฉร รร•รยนรรยงร รรงยนรคลฝรฉ";
+$lang_no_published = "ยทร“ยกร’รยซรจรยนรครรจรฃรรฉล’รรฉร รร•รยนรรยงรกรรงยน ร รร•รยบรรฉรรรกร…รฉร";
+$lang_published = "รฃรรฉล’รรฉร รร•รยนรร’รร’รยถร ยขรฉร’รคยปร รร•รยนรคลฝรฉรกร…รฉร";
+$lang_description = "โฌร“รลพร”ยบร’ร";
+$lang_title = "ยชร—รจรร รร—รจรยง";
+$langScormBuilder = "ยตร‘รรรรฉร’ยงร รยกรร’รยตร’รรกยบยบรร’ยตรยฐร’ยนScorm";
+$langCreateDoc = "รรรฉร’ยงร รยกรร’ร";
+$langOrganiseDocuments = "ลกร‘ลฝรรยบยบร รยกรร’ร";
+$langUncompress = "รครรจยบร•ยบรร‘ลฝรคยฟร…รฌ";
+$ExportShort = "รรจยงรรยกรคยฟร…รฌ";
+$progress = "โฌรร’รยกรฉร’รรยนรฉร’";
 ?>

@@ -1,18 +1,19 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$langScormVersion = "versão";
-$langScormRestarted = "Todas as etapas estão incompletas.";
-$langScormNoNext = "Essa é a última etapa.";
-$langScormNoPrev = "Essa é a primeira etapa.";
+$langScormVersion = "versÃ£o";
+$langScormRestarted = "Todas as etapas estÃ£o incompletas.";
+$langScormNoNext = "Essa Ã© a Ãºltima etapa.";
+$langScormNoPrev = "Essa Ã© a primeira etapa.";
 $langScormTime = "Tempo";
-$langScormNoOrder = "Não há uma ordem pré-definida, você pode clicar em qualquer etapa.";
-$langScormScore = "Pontuação";
-$langScormLessonTitle = "Título da etapa";
+$langScormNoOrder = "NÃ£o hÃ¡ uma ordem prÃ©-definida, vocÃª pode clicar em qualquer etapa.";
+$langScormScore = "PontuaÃ§Ã£o";
+$langScormLessonTitle = "TÃ­tulo da etapa";
 $langScormStatus = "Status";
 $langScormToEnter = "Para entrar na etapa";
-$langScormFirstNeedTo = "você precisa primeiro completar a etapa";
-$langScormThisStatus = "Essa etapa no momento está";
+$langScormFirstNeedTo = "vocÃª precisa primeiro completar a etapa";
+$langScormThisStatus = "Essa etapa no momento estÃ¡";
 $langScormClose = "Concluir";
 $langScormRestart = "Reiniciar";
 $langScormCompstatus = "Completa";
@@ -20,12 +21,12 @@ $langScormIncomplete = "Incompleta";
 $langScormPassed = "Aprovado";
 $langScormFailed = "Reprovada";
 $langScormPrevious = "Anterior";
-$langScormNext = "Próxima";
+$langScormNext = "PrÃ³xima";
 $langScormTitle = "Player Scorm do Chamilo";
 $langScormMystatus = "Meu status";
-$langScormNoItems = "Este conteúdo não possui nenhum ítem.";
-$langScormNoStatus = "Nenhum status para esse conteúdo";
-$langScormLoggedout = "desconectado da área Scorm";
+$langScormNoItems = "Este conteÃºdo nÃ£o possui nenhum Ã­tem.";
+$langScormNoStatus = "Nenhum status para esse conteÃºdo";
+$langScormLoggedout = "desconectado da Ã¡rea Scorm";
 $langScormCloseWindow = "Fechar janelas";
 $ScormBrowsed = "Exibir";
 $langScormExitFullScreen = "Voltar para a tela normal";
@@ -37,19 +38,20 @@ $langRemote = "Remoto";
 $langAutodetect = "Auto-detecta";
 $langAccomplishedStepsTotal = "Total de etapas realizadas";
 $langUnknown = "Desconhecido";
-$AreYouSureToDeleteSteps = "Você tem certeza que deseja apagar estas etapas?";
+$AreYouSureToDeleteSteps = "VocÃª tem certeza que deseja apagar estas etapas?";
 $Origin = "Origem";
 $Local = "Local";
 $Remote = "Remoto";
 $FileToUpload = "Arquivo para envio";
-$ContentMaker = "Criação de conteúdos";
-$ContentProximity = "Situação do Conteúdo";
+$ContentMaker = "CriaÃ§Ã£o de conteÃºdos";
+$ContentProximity = "SituaÃ§Ã£o do ConteÃºdo";
 $UploadLocalFileFromGarbageDir = "Enviar arquivo a partir do diretorio principal/reciclagem";
-$ThisItemIsNotExportable = "Este item, neste momento, não é compatível com Scorm. Por isso não é exportável.";
-$MoveCurrentChapter = "Mover capítulo atual";
-$GenericScorm = "Scorm genérico";
-$UnknownPackageFormat = "O formato do pacote não foi reconhecido. Por favor, verifique se o pacote contém erros. Alguns problemas são devidos ao formato do programa ZIP ou à transferência de arquivos longos. Em caso de dúvida, evite usar arquivos zipados.";
+$ThisItemIsNotExportable = "Este item, neste momento, nÃ£o Ã© compatÃ­vel com Scorm. Por isso nÃ£o Ã© exportÃ¡vel.";
+$MoveCurrentChapter = "Mover capÃ­tulo atual";
+$GenericScorm = "Scorm genÃ©rico";
+$UnknownPackageFormat = "O formato do pacote nÃ£o foi reconhecido. Por favor, verifique se o pacote contÃ©m erros. Alguns problemas sÃ£o devidos ao formato do programa ZIP ou Ã  transferÃªncia de arquivos longos. Em caso de dÃºvida, evite usar arquivos zipados.";
 $Attempt = "Tentativa";
-$MoveTheCurrentForum = "Mover este fórum";
-$WarningWhenEditingScorm = "Atenção !<br /> Quando altera o conteúdo de uma etapa SCORM, as estatísticas ficam alteradas e a etapa da Rota de aprendizagem inutilizada.";
+$MoveTheCurrentForum = "Mover este fÃ³rum";
+$WarningWhenEditingScorm = "AtenÃ§Ã£o !<br /> Quando altera o conteÃºdo de uma etapa SCORM, as estatÃ­sticas ficam alteradas e a etapa da Rota de aprendizagem inutilizada.";
+$AdditionalProfileField = "";
 ?>

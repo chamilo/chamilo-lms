@@ -1,46 +1,47 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$langMdCallingTool = "ÃÒÂ¡ÒÃàª×èÍÁâÂ§";
-$langMdTitle = "ª×èÍ¡ÒÃàª×èÍÁâÂ§";
-$langMdDescription = "Í¸ÔºÒÂ¡ÒÃàª×èÍÁâÂ§";
-$langMdCoverage = "ÊÒ¡Å";
+$langMdCallingTool = "ÃƒÃ’Ã‚Â¡Ã’ÃƒÃ ÂªÃ—Ã¨ÃÃÃ¢Ã‚Â§";
+$langMdTitle = "ÂªÃ—Ã¨ÃÂ¡Ã’ÃƒÃ ÂªÃ—Ã¨ÃÃÃ¢Ã‚Â§";
+$langMdDescription = "ÃÅ¾Ã”ÂºÃ’Ã‚Â¡Ã’ÃƒÃ ÂªÃ—Ã¨ÃÃÃ¢Ã‚Â§";
+$langMdCoverage = "ÃŠÃ’Â¡Ã…";
 $langMdCopyright = "Ghent University";
 $nameTools = "obsolete language variable";
-$langTool = "¡ÒÃàª×èÍÁâÂ§µèÍ Metadata";
-$langNoScript = "Ê¤ÃÔê»¤ÓÊÑè§¹Õé â»Ãá¡ÃÁ´ÙàÇç»ä«·ìäÁèä´é¡ÓË¹´ãËéãªé§Ò¹ ¨Ö§ãªé§Ò¹äÁèä´é ¡ÃØ³ÒÂ¡àÅÔ¡¤ÓÊÑè§¹Õé";
+$langTool = "Â¡Ã’ÃƒÃ ÂªÃ—Ã¨ÃÃÃ¢Ã‚Â§ÂµÃ¨Ã Metadata";
+$langNoScript = "ÃŠâ‚¬ÃƒÃ”ÃªÂ»â‚¬Ã“ÃŠÃ‘Ã¨Â§Â¹Ã•Ã© Ã¢Â»ÃƒÃ¡Â¡ÃƒÃÅ½Ã™Ã Ã‡Ã§Â»Ã¤Â«Â·Ã¬Ã¤ÃÃ¨Ã¤Å½Ã©Â¡Ã“Ã‹Â¹Å½Ã£Ã‹Ã©Ã£ÂªÃ©Â§Ã’Â¹ Å¡Ã–Â§Ã£ÂªÃ©Â§Ã’Â¹Ã¤ÃÃ¨Ã¤Å½Ã© Â¡ÃƒÃ˜Â³Ã’Ã‚Â¡Ã Ã…Ã”Â¡â‚¬Ã“ÃŠÃ‘Ã¨Â§Â¹Ã•Ã©";
 $langLanguageTip = "the language in which this learning object was made";
-$langIdentifier = "µÑÇºè§ªÕé";
+$langIdentifier = "ÂµÃ‘Ã‡ÂºÃ¨Â§ÂªÃ•Ã©";
 $langIdentifierTip = "unique identification for this learning object, composed of letters, digits, _-.()\'!*";
 $langTitleTip = "title or name, and language of that title or name";
 $langDescriptionTip = "description or comment, and language used for describing this learning object";
-$langKeyword = "¤ÓÊÓ¤Ñ­";
-$langKeywordTip = "áÂ¡¤Óâ´Âà¤Ã×èÍ§ËÁÒÂ¤ÍÁÁèÒ ,";
-$langCoverage = "»ÃÐàÀ·/ËÁÇ´";
+$langKeyword = "â‚¬Ã“ÃŠÃ“â‚¬Ã‘Â­";
+$langKeywordTip = "Ã¡Ã‚Â¡â‚¬Ã“Ã¢Å½Ã‚Ã â‚¬ÃƒÃ—Ã¨ÃÂ§Ã‹ÃÃ’Ã‚â‚¬ÃÃÃÃ¨Ã’ ,";
+$langCoverage = "Â»ÃƒÃÃ Ã€Â·/Ã‹ÃÃ‡Å½";
 $langCoverageTip = "categoryname, cfr. Links";
 $langKwNote = "If you change the description language, do not add keywords at the same time.";
 $langClickKw = "Click a keyword in the tree to select or deselect it.";
-$langKwHelp = "<br/> Click \'+\' button to open, \'-\' button to close, \'++\' button to open all, \'--\' button to close all.<br/> <br/> Clear all selected keywords by closing the tree and opening it again with the \'+\' button.<br/> Alt-click \'+\' searches the original keywords in the tree.<br/> <br/> Alt-click keyword selects a keyword without broader terms or deselects a keyword with broader terms.<br/> <br/> If you change the description language, do not add keywords at the same time.<br/> <br/> ";
+$langKwHelp = "<br/> Click \'+\' button to open, \'-\' button to close, \'++\' button to open all, \'--\' button to close all.<br/> <br/> Clear all selected keywords by closing the tree and opening it again with the \'+\' button.<br/> Alt-click \'+\' searches the origin";
 $langLocation = "URL/URI";
-$langLocationTip = "¤ÅÔ¡à¾×èÍà»Ô´";
-$langStore = "¨Ñ´à¡çº";
-$langDeleteAll = "Åº metadata ·Ñé§ËÁ´";
-$langConfirmDelete = "¤Ø³µéÍ§¡ÒÃ·Õè¨ÐÅº metadata ·Ñé§ËÁ´ËÃ×ÍäÁè";
-$langWorkOn = "à»Ô´";
-$langNotInDB = "äÁèÁÕ»ÃÐàÀ·ÃÒÂ¡ÒÃàª×èÍÁâÂ§";
+$langLocationTip = "â‚¬Ã…Ã”Â¡Ã Å¸Ã—Ã¨ÃÃ Â»Ã”Å½";
+$langStore = "Å¡Ã‘Å½Ã Â¡Ã§Âº";
+$langDeleteAll = "Ã…Âº metadata Â·Ã‘Ã©Â§Ã‹ÃÅ½";
+$langConfirmDelete = "â‚¬Ã˜Â³ÂµÃ©ÃÂ§Â¡Ã’ÃƒÂ·Ã•Ã¨Å¡ÃÃ…Âº metadata Â·Ã‘Ã©Â§Ã‹ÃÅ½Ã‹ÃƒÃ—ÃÃ¤ÃÃ¨";
+$langWorkOn = "Ã Â»Ã”Å½";
+$langNotInDB = "Ã¤ÃÃ¨ÃÃ•Â»ÃƒÃÃ Ã€Â·ÃƒÃ’Ã‚Â¡Ã’ÃƒÃ ÂªÃ—Ã¨ÃÃÃ¢Ã‚Â§";
 $langManifestSyntax = "(syntax error in manifest file...)";
-$langEmptyManifest = "äÁèÁÕä¿Åì¢éÍÁÙÅ";
-$langNoManifest = "äÁèÁÕä¿Åì¢éÍÁÙÅ";
-$langNotFolder = "à»ç¹ä»äÁèä´é äÁèÁÕá¿éÁ";
-$langContinue = "µèÍä»´éÇÂ";
-$langCreate = "ÊÃéÒ§ MDEs";
-$langRemove = "àÍÒ MDEs ÍÍ¡";
-$langAllRemovedFor = "àÍÒÃÒÂ¡ÒÃ·ÕèÁÕã¹»ÃÐàÀ·ÍÍ¡ä»";
-$langRemainingFor = "àÍÒÃÒÂ¡ÒÃ·ÕèÅéÒËÅÑ§ÍÍ¡¨Ò¡»ÃÐàÀ·";
-$langIndex = "´Ñª¹Õ¤Ó";
-$langTotalMDEs = "ÃÇÁ¨Ó¹Ç¹¡ÒÃàª×èÍÁâÂ§·ÕèÁÕ¢Í§ MD";
-$langMainMD = "à»Ô´ÃÒÂ¡ÒÃËÅÑ¡ MDE";
-$langOrElse = "àÅ×Í¡»ÃÐàÀ·¡ÒÃàª×èÍÁâÂ§";
-$langWarningDups = "ÊÓà¹Òª×èÍ»ÃÐàÀ·ä´éàÍÒÍÍ¡¨Ò¡ÃÒÂ¡ÒÃáÅéÇ";
-$langSLC = "ãªé§Ò¹ÃèÇÁ¡Ñºª×èÍ¢Í§»ÃÐàÀ·";
+$langEmptyManifest = "Ã¤ÃÃ¨ÃÃ•Ã¤Â¿Ã…Ã¬Â¢Ã©ÃÃÃ™Ã…";
+$langNoManifest = "Ã¤ÃÃ¨ÃÃ•Ã¤Â¿Ã…Ã¬Â¢Ã©ÃÃÃ™Ã…";
+$langNotFolder = "Ã Â»Ã§Â¹Ã¤Â»Ã¤ÃÃ¨Ã¤Å½Ã© Ã¤ÃÃ¨ÃÃ•Ã¡Â¿Ã©Ã";
+$langContinue = "ÂµÃ¨ÃÃ¤Â»Å½Ã©Ã‡Ã‚";
+$langCreate = "ÃŠÃƒÃ©Ã’Â§ MDEs";
+$langRemove = "Ã ÃÃ’ MDEs ÃÃÂ¡";
+$langAllRemovedFor = "Ã ÃÃ’ÃƒÃ’Ã‚Â¡Ã’ÃƒÂ·Ã•Ã¨ÃÃ•Ã£Â¹Â»ÃƒÃÃ Ã€Â·ÃÃÂ¡Ã¤Â»";
+$langRemainingFor = "Ã ÃÃ’ÃƒÃ’Ã‚Â¡Ã’ÃƒÂ·Ã•Ã¨Ã…Ã©Ã’Ã‹Ã…Ã‘Â§ÃÃÂ¡Å¡Ã’Â¡Â»ÃƒÃÃ Ã€Â·";
+$langIndex = "Å½Ã‘ÂªÂ¹Ã•â‚¬Ã“";
+$langTotalMDEs = "ÃƒÃ‡ÃÅ¡Ã“Â¹Ã‡Â¹Â¡Ã’ÃƒÃ ÂªÃ—Ã¨ÃÃÃ¢Ã‚Â§Â·Ã•Ã¨ÃÃ•Â¢ÃÂ§ MD";
+$langMainMD = "Ã Â»Ã”Å½ÃƒÃ’Ã‚Â¡Ã’ÃƒÃ‹Ã…Ã‘Â¡ MDE";
+$langOrElse = "Ã Ã…Ã—ÃÂ¡Â»ÃƒÃÃ Ã€Â·Â¡Ã’ÃƒÃ ÂªÃ—Ã¨ÃÃÃ¢Ã‚Â§";
+$langWarningDups = "ÃŠÃ“Ã Â¹Ã’ÂªÃ—Ã¨ÃÂ»ÃƒÃÃ Ã€Â·Ã¤Å½Ã©Ã ÃÃ’ÃÃÂ¡Å¡Ã’Â¡ÃƒÃ’Ã‚Â¡Ã’ÃƒÃ¡Ã…Ã©Ã‡";
+$langSLC = "Ã£ÂªÃ©Â§Ã’Â¹ÃƒÃ¨Ã‡ÃÂ¡Ã‘ÂºÂªÃ—Ã¨ÃÂ¢ÃÂ§Â»ÃƒÃÃ Ã€Â·";
 ?>

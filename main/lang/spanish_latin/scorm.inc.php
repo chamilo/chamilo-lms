@@ -1,19 +1,20 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$langScormVersion = "versión";
-$langScormRestarted = "Todas las lecciones están por completar.";
-$langScormNoNext = "Esta es la última lección.";
-$langScormNoPrev = "Esta es la primera lección.";
+$langScormVersion = "versiÃ³n";
+$langScormRestarted = "Todas las lecciones estÃ¡n por completar.";
+$langScormNoNext = "Esta es la Ãºltima lecciÃ³n.";
+$langScormNoPrev = "Esta es la primera lecciÃ³n.";
 $langScormTime = "Tiempo";
-$langScormNoOrder = "No hay un orden definido, puede acceder a cualquier lección.";
+$langScormNoOrder = "No hay un orden definido, puede acceder a cualquier lecciÃ³n.";
 $langScormScore = "Puntaje";
-$langScormLessonTitle = "Título de la lección";
+$langScormLessonTitle = "TÃ­tulo de la lecciÃ³n";
 $langScormStatus = "Estatus";
 $langScormToEnter = "Entrar";
 $langScormFirstNeedTo = "Primero necesita finalizar";
-$langScormThisStatus = "Esta lección está";
-$langScormClose = "Cerrar aplicación";
+$langScormThisStatus = "Esta lecciÃ³n estÃ¡";
+$langScormClose = "Cerrar aplicaciÃ³n";
 $langScormRestart = "Reiniciar";
 $langScormCompstatus = "Completada";
 $langScormIncomplete = "Incompleta";
@@ -25,8 +26,8 @@ $langScormTitle = "Visualizador de contenidos Scorm";
 $langScormMystatus = "Mi estatus";
 $langScormNoItems = "Este contenido no tiene elementos";
 $langScormNoStatus = "No hay estatus para este contenido";
-$langScormLoggedout = "Ha salido del área Scorm";
-$langScormCloseWindow = "Está seguro de que terminó?";
+$langScormLoggedout = "Ha salido del Ã¡rea Scorm";
+$langScormCloseWindow = "EstÃ¡ seguro de que terminÃ³?";
 $ScormBrowsed = "Visto";
 $langScormExitFullScreen = "Volver a la pantalla normal";
 $langScormFullScreen = "Pantalla completa";
@@ -37,7 +38,7 @@ $langRemote = "Remoto";
 $langAutodetect = "Autodetectar";
 $langAccomplishedStepsTotal = "Total de etapas realizadas";
 $langUnknown = "Desconocido";
-$AreYouSureToDeleteSteps = "¿ Está seguro de querer borrar estos pasos ?";
+$AreYouSureToDeleteSteps = "Â¿ EstÃ¡ seguro de querer borrar estos pasos ?";
 $Origin = "Origen";
 $Local = "Local";
 $Remote = "Remoto";
@@ -45,4 +46,12 @@ $FileToUpload = "Archivo a enviar";
 $ContentMaker = "Creador de contenidos";
 $ContentProximity = "Proximidad del contenido";
 $UploadLocalFileFromGarbageDir = "Enviar archivo local desde el directorio main/garbage";
+$ThisItemIsNotExportable = "";
+$MoveCurrentChapter = "";
+$GenericScorm = "";
+$UnknownPackageFormat = "";
+$Attempt = "";
+$MoveTheCurrentForum = "";
+$WarningWhenEditingScorm = "";
+$AdditionalProfileField = "";
 ?>

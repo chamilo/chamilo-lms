@@ -1,5 +1,6 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $TermAddNew = "Aggiungi una voce";
 $TermName = "Voce";
@@ -19,9 +20,9 @@ $TermAdded = "Voce aggiunta";
 $YouMustEnterATermName = "Devi immettere il termine da definire";
 $YouMustEnterATermDefinition = "Devi immettere la definizione del termine";
 $TableView = "Vista tabella";
-$GlossaryTermAlreadyExistsYouShouldEditIt = "Voce del glossario già definita: cambia il nome";
-$GlossaryManagement  = "Gestione glossario";
-$TermMoved = "La voce è stata spostata";
+$GlossaryTermAlreadyExistsYouShouldEditIt = "Voce del glossario giÃ  definita: cambia il nome";
+$GlossaryManagement = "Gestione glossario";
+$TermMoved = "La voce Ã¨ stata spostata";
 $ShowGlossaryInExtraToolsTitle = "Mostra le definizioni del glossario in test e moduli";
-$ShowGlossaryInExtraToolsComment = "Qui puoi configurare la possibilità di usare il glossario anche in test, moduli didattici ecc.";
+$ShowGlossaryInExtraToolsComment = "Qui puoi configurare la possibilitÃ  di usare il glossario anche in test, moduli didattici ecc.";
 ?>

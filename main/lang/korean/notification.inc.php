@@ -1,5 +1,6 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $lang_new_item = "&#49352; &#54637;&#47785;&#51060; &#52628;&#44032;&#46104;&#50632;&#49845;&#45768;&#45796;";
 $lang_title_notification = "&#47560;&#51648;&#47561; &#48169;&#47928;&#51004;&#47196;&#48512;&#53552;";
@@ -15,4 +16,21 @@ $lang_new_forum_topic = "&#49352; &#51452;&#51228;&#44032; &#52628;&#44032;&#461
 $lang_new_groupforum_topic = "&#49352; &#51452;&#51228;&#44032; &#44536;&#47353; &#54252;&#47100;&#50640; &#52628;&#44032;&#46104;&#50632;&#49845;&#45768;&#45796;";
 $lang_new_dropbox_file = "&#49352; &#54028;&#51068;&#51060; &#48155;&#50500;&#46308;&#50668;&#51276;&#49845;&#45768;&#45796;";
 $lang_update_dropbox_file = "dropbox&#51032; &#54028;&#51068;&#51060; &#50629;&#45936;&#51060;&#53944; &#46104;&#50632;&#49845;&#45768;&#45796;";
+$ForumCategoryAdded = "";
+$LearnpathAdded = "";
+$GlossaryAdded = "";
+$QuizQuestionAdded = "";
+$QuizQuestionUpdated = "";
+$QuizQuestionDeleted = "";
+$QuizUpdated = "";
+$QuizAdded = "";
+$QuizDeleted = "";
+$DocumentInvisible = "";
+$DocumentVisible = "";
+$CourseDescriptionAdded = "";
+$WikiAdded = "";
+$SurveyAdded = "";
+$NotebookAdded = "";
+$NotebookUpdated = "";
+$NotebookDeleted = "";
 ?>

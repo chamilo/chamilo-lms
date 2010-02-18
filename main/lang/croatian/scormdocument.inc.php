@@ -1,24 +1,25 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $langChapter = "Poglavlje";
 $langDocumentList = "Popis dokumenata";
-$langOrganisationList = "Popis sadržaja";
+$langOrganisationList = "Popis sadrÂžaja";
 $langEditTOC = "Uredi kazalo";
 $langEditDocument = "Uredi dokument";
 $langCreateDocument = "Izradi dokument";
 $langMissingImagesDetected = "Otkriven izostanak slika";
 $langPublish = "Objavi";
-$langScormcontentstudent = "Ovo je kolegij formata Scorm. Želite li ga pokrenuti, kliknite ovdje: <input type=button name=scormbutton value=\'Pokreni !\' onclick=\'openscorm()\'>";
-$langScormcontent = "Ovo je sadržaj formata Scorm<br><input type=button name=scormbutton value=Pokreni ! onclick=\'openscorm()\'>";
+$langScormcontentstudent = "Ovo je kolegij formata Scorm. ÂŽelite li ga pokrenuti, kliknite ovdje: <input type=button name=scormbutton value=\'PokreniÂ !\' onclick=\'openscorm()\'>";
+$langScormcontent = "Ovo je sadrÂžaj formata Scorm<br><input type=button name=scormbutton value=PokreniÂ ! onclick=\'openscorm()\'>";
 $langDownloadAndZipEnd = "Datoteka zip u&#269;itana i dekomprimirana";
-$langZipNoPhp = "Ova datoteka zip ne smije sadržavati datoteke .PHP";
+$langZipNoPhp = "Ova datoteka zip ne smije sadrÂžavati datoteke .PHP";
 $langGroupForumLink = "Forum skupine";
-$langGroupSpace = "Okruženje skupine";
+$langGroupSpace = "OkruÂženje skupine";
 $langNotScormContent = "Ovo nije datoteka scorm zip!";
-$langNoText = "Molim upišite tekst/sadržaj HTML-a";
+$langNoText = "Molim upiÂšite tekst/sadrÂžaj HTML-a";
 $langNoFileName = "Datoteka nema imena";
-$langMaxFileSize = "Najve&#263;a dopuštena veli&#269;ina datoteke je";
+$langMaxFileSize = "Najve&#263;a dopuÂštena veli&#269;ina datoteke je";
 $langFileName = "Ime datoteke";
 $langFileError = "Datoteka za prijenos nije valjana.";
 $langDown = "Dolje";
@@ -27,8 +28,8 @@ $langAddComment = "Dodaj opasku";
 $langImpossible = "Nemogu&#263;a radnja";
 $langNewDir = "Ime nove mape";
 $langTo = "u";
-$langNoSpace = "Prijenos nije uspio. U vašoj mapi nema dovoljno diskovnog prostora";
-$langDownloadEnd = "Prijenos je dovršen";
+$langNoSpace = "Prijenos nije uspio. U vaÂšoj mapi nema dovoljno diskovnog prostora";
+$langDownloadEnd = "Prijenos je dovrÂšen";
 $langFileExists = "Nemogu&#263;a radnja.<br>Put s tim imenom ve&#263; postoji.";
 $langDocCopied = "Dokument preslikan";
 $langDocDeleted = "Put u&#269;enja formata Scorm izbrisan";
@@ -45,12 +46,12 @@ $langBuilder = "Program za izradu puteva u&#269;enja";
 $lang_edit_learnpath = "Uredi ime/opis";
 $lang_add_title_and_desc = "Preimenuj i dodaj opis";
 $lang_add_learnpath = "Izradi put u&#269;enja u sustavu Chamilo";
-$lang_learnpath_added = "Novi put u&#269;enja uspješno je izra&#273;en. Sada mu možete dodati poglavlja. Kliknite na njegov naziv kako biste ga uredili.";
-$lang_delete_learnpath = "Izbriši put u&#269;enja";
-$lang_learnpath_edited = "Put u&#269;enja uspješno je ure&#273;en";
+$lang_learnpath_added = "Novi put u&#269;enja uspjeÂšno je izra&#273;en. Sada mu moÂžete dodati poglavlja. Kliknite na njegov naziv kako biste ga uredili.";
+$lang_delete_learnpath = "IzbriÂši put u&#269;enja";
+$lang_learnpath_edited = "Put u&#269;enja uspjeÂšno je ure&#273;en";
 $lang_learnpath_deleted = "Put u&#269;enja i sva njegova poglavlja su izbrisani";
 $lang_no_publish = "Skrij od studenata";
-$lang_publish = "Prikaži studentima";
+$lang_publish = "PrikaÂži studentima";
 $lang_no_published = "je sad skriven od studenata";
 $lang_published = "je dostupan studentima";
 $lang_description = "opis";

@@ -1,26 +1,28 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$langLinkSite = "Ìí¼ÓÁ´½Ó";
-$langSubTitle = "Îª¿Î³ÌÖ÷Ò³²Ëµ¥Ìí¼Óµ½ÍøÕ¾, ÍøÒ³»òÕßÈÎºÎµÄÍøÖ·µÄÁ´½Ó. ÌáÊ¾:Èç¹ûÄúÐèÒªÔö¼ÓÒ»¸öµ½Ä³Ò»ÍøÒ³µÄÁ´½Ó,¿ÉÒÔÏÈ·ÃÎÊÄÇ¸öÍøÒ³,¸´ÖÆä¯ÀÀÆ÷ÉÏ²¿µØÖ·À¸ÀïµÄµØÖ·,È»ºóÌí¼Óµ½ÏÂÃæµÄ\"Á´½Ó\"À¸. ";
-$langAddPage            = "Ôö¼ÓÒ»¸öÒ³Ãæ";
-$langSendPage           = "ÒªÉÏ´«µÄÒ³Ãæ";
-$langCouldNot           = "ÎÄ¼þÉÏ´«Ê§°Ü";
-$langTooBig             = "ÄãÃ»ÓÐÑ¡Ôñ·¢ËÍÈÎºÎÎÄ¼þ, »òÕßÎÄ¼þÌ«´ó";
-$langExplanation        = "Õâ¸öÒ³Ãæ±ØÐëÊÇHTML ¸ñÊ½ (ÀýÈç: \"my_page.htm\"). Ëü½«ÔÚÖ÷Ò³ÉÏÔö¼ÓÒ»¸öÁ´½Ó. ¼ÙÈçÄãÒª·¢ËÍÒ»¸ö²»ÊÇhtmlµÄÎÄ¼þ, ¶øÊÇÆäËüÎÄµµ (PDF, Word, Power Point, Video, µÈ.) ÇëÊ¹ÓÃ<a href=../document/document.php>ÎÄµµ¹¤¾ß</a>";
-$langPgTitle            = "ÍøÒ³±êÌâ";
-$langNoLinkURL          = "ÇëÊäÈëÁ´½ÓµØÖ·";
-$langLinkTarget = "Á´½ÓÄ¿±ê";
-$langSameWindow = "ÔÚÍ¬Ò»¸ö´°¿ÚÖÐ";
-$langNewWindow = "ÔÚÐÂµÄ´°¿Ú";
-$langAdded = "Á´½ÓÒÑÌí¼Ó";
-$langAddLink = "Ìí¼ÓÒ»¸öÁ´½Ó";
-$langNoLinkName = "ÇëÊäÈëÁ´½ÓÃû³Æ";
-$langEditLink = "±à¼­¿Î³ÌÖ÷Ò³Á´½Ó";
-$langChangePress = "ÐÞ¸Ä²¢°´ È·¶¨";
-$langLinkChanged = "¿Î³ÌÖ÷Ò³Á´½ÓÒÑ¸ü¸Ä. ÇëÊ¹ÓÃÉÏÃæµÄ²Ëµ¥·µ»ØÖ÷Ò³.";
-$NoLinkName = "&#26080;&#36830;&#25509;&#21517;";
-$NoLinkURL = "&#27809;&#26377;&#36830;&#25509;&#32593;&#22336;";
-$LinkChanged = "&#36830;&#25509;&#34987;&#20462;&#25913;";
-$OkSentLink = "&#36830;&#25509;&#24050;&#34987;&#21457;&#36865;";
+$langLinkSite = "æ·»åŠ é“¾æŽ¥";
+$langSubTitle = "ä¸ºè¯¾ç¨‹ä¸»é¡µèœå•æ·»åŠ ç½‘ç«™ã€ç½‘é¡µæˆ–è€…ä»»ä½•çš„ç½‘å€é“¾æŽ¥ã€‚æç¤ºï¼šå¦‚æžœæ‚¨éœ€è¦å¢žåŠ ä¸€ä¸ªåˆ°æŸä¸€ç½‘é¡µçš„é“¾æŽ¥ï¼Œå¯ä»¥å…ˆè®¿é—®é‚£ä¸ªç½‘é¡µï¼Œå¤åˆ¶æµè§ˆå™¨ä¸Šéƒ¨åœ°å€æ é‡Œçš„åœ°å€ï¼Œç„¶åŽæ·»åŠ åˆ°ä¸‹é¢çš„\\"é“¾æŽ¥\\"æ ã€‚";
+$langAddPage = "å¢žåŠ ä¸€ä¸ªé¡µé¢";
+$langSendPage = "è¦ä¸Šä¼ çš„é¡µé¢";
+$langCouldNot = "æ–‡ä»¶ä¸Šä¼ å¤±è´¥";
+$langOkSentLink = "è¿žæŽ¥å·²è¢«å‘é€";
+$langTooBig = "ä½ æ²¡æœ‰é€‰æ‹©ä»»ä½•æ–‡ä»¶ï¼Œæˆ–è€…æ–‡ä»¶å¤ªå¤§";
+$langExplanation = "è¿™ä¸ªé¡µé¢å¿…é¡»æ˜¯ HTML æ ¼å¼ï¼ˆä¾‹å¦‚: \\"my_page.htm\\"ï¼‰ï¼Œå®ƒå°†åœ¨ä¸»é¡µä¸Šå¢žåŠ ä¸€ä¸ªé“¾æŽ¥ï¼Œå‡å¦‚ä½ è¦å‘é€ä¸€ä¸ªä¸æ˜¯ html çš„æ–‡ä»¶ï¼Œè€Œæ˜¯å…¶å®ƒæ–‡æ¡£ï¼ˆPDFã€Wordã€PowerPointã€Videoç­‰)ï¼Œè¯·ä½¿ç”¨<a href=../document/document.php>æ–‡æ¡£å·¥å…·</a>";
+$langPgTitle = "ç½‘é¡µæ ‡é¢˜";
+$langNoLinkURL = "æ²¡æœ‰è¿žæŽ¥ç½‘å€";
+$langLinkTarget = "é“¾æŽ¥ç›®æ ‡";
+$langSameWindow = "åœ¨åŒä¸€ä¸ªçª—å£";
+$langNewWindow = "åœ¨æ–°çš„çª—å£";
+$langAdded = "é“¾æŽ¥å·²æ·»åŠ ";
+$langAddLink = "æ·»åŠ ä¸€ä¸ªé“¾æŽ¥";
+$langNoLinkName = "æ— è¿žæŽ¥å";
+$langEditLink = "ç¼–è¾‘è¯¾ç¨‹ä¸»é¡µé“¾æŽ¥";
+$langChangePress = "ä¿®æ”¹å¹¶æŒ‰ç¡®å®š";
+$langLinkChanged = "è¿žæŽ¥å·²è¢«ä¿®æ”¹";
+$NoLinkName = "";
+$NoLinkURL = "";
+$LinkChanged = "";
+$OkSentLink = "";
 ?>

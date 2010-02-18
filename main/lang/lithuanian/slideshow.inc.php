@@ -1,5 +1,6 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $lang_height = "Aukštis";
 $lang_resizing_comment = "resize the image to the following dimensions (in pixels)";
@@ -18,4 +19,6 @@ $lang_next_slide = "Kita skaidrė";
 $lang_image = "Paveikslėlis";
 $lang_of = "išjungta";
 $lang_view_slideshow = "Rodyti skaidres";
+$FirstSlide = "";
+$LastSlide = "";
 ?>

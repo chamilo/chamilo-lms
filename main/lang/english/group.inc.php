@@ -1,11 +1,12 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $langNewGroupCreate = "Create new group(s)";
 $langGroupCreation = "New groups creation";
 $langCreate = "Create";
 $langNewGroups = "new group(s)";
-$langMax = "Seats limit ";
+$langMax = "Seats limit";
 $langGroupPlacesThis = "seats (optional)";
 $langGroupsAdded = "group(s) has (have) been added";
 $langGroupDel = "Group deleted";
@@ -40,10 +41,10 @@ $langPublic = "public";
 $langPropModify = "Edit settings";
 $langState = "State";
 $langGroupFilledGroups = "Groups have been filled (or completed) by users present in the \'Users\' list.";
-$langSubscribed  = "users registered in this training";
-$langStudentsNotInThisGroups  = "Users not in this group";
-$langQtyOfUserCanSubscribe_PartBeforeNumber  = "A user can be member of maximum ";
-$langQtyOfUserCanSubscribe_PartAfterNumber  = " groups";
+$langSubscribed = "users registered in this training";
+$langStudentsNotInThisGroups = "Users not in this group";
+$langQtyOfUserCanSubscribe_PartBeforeNumber = "A user can be member of maximum";
+$langQtyOfUserCanSubscribe_PartAfterNumber = "Â groups";
 $langGroupLimit = "Limit";
 $CreateGroup = "Create group(s)";
 $ProceedToCreateGroup = "Proceed to create group(s)";
@@ -67,7 +68,7 @@ $langNoGroupsAvailable = "No groups available";
 $langGroupsFromVirtualCourses = "Virtual courses";
 $NotAvailable = "Not available";
 $CreateSubgroups = "Create subgroups";
-$CreateSubgroupsInfo = "This option allows you to create new groups based on an existing group. Provide the desired number of groups and choose an existing group. The given number of groups will be created and all members of the existing group will be subscribed in those new groups. The existing group remains unchanged.";
+$CreateSubgroupsInfo = "This option allows you to create new groups based on an existing group. Provide the desired number of groups and choose an existing group. The given number of groups will be created and all members of the existing group will be subscribed in those new gro";
 $CreateNumberOfGroups = "Create number of groups";
 $WithUsersFrom = "groups with members from";
 $CategoryDeleted = "The category is deleted";
@@ -90,7 +91,7 @@ $NoCategoriesDefined = "No categories defined";
 $GroupsFromClasses = "Groups from classes";
 $GroupsFromClassesInfo = "Using this option, you can create groups based on the classes subscribed to your course.";
 $Group = "Group";
-$ForumOfGroup = "Forum of group: ";
+$ForumOfGroup = "Forum of group:";
 $BackToGroupList = "Back to Groups list";
 $EditGroupCategory = "Edit group category";
 ?>

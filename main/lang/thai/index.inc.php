@@ -1,59 +1,75 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$langInvalidId = "การเข้าสู่ระบบล้มเหลว รหัสผู้ใช้และระหัสผ่านไม่ถูกต้อง";
-$langWelcome = "รายวิชาที่เปิดให้เลือกเรียนได้ทุกคนอยู่ด้านล่าง รายวิชาอื่นนอกเหนือจากนี้ ต้องการชื่อผู้ใช้และรหัสผ่าน  ซึ่งท่านสามารถได้จากการ \'ลงทะเบียน\'   สำหรับอาจารย์ สามารถสร้างรายวิชาของท่านได้ โดยคลิกที่หน้าลงทะเบียนเช่นกัน แต่ให้เลือก\'สร้างรายวิชา\'";
-$langPass = "รหัสผ่าน";
-$langEnter = "ตกลง";
-$langReg = "ลงทะเบียน";
-$langMenu  = "เมนู";
-$langAdvises = "แนะนำ";
-$langCourseDoesntExist = "<b>คำเตือน: </b> ไม่มีรายวิชานี้";
-$langGetCourseFromOldPortal = "คลิกที่นี่เพื่อรับวิชานี้ จากระบบควบคุมเดิมของท่าน ";
-$langOtherCourses = "รายชื่อรายวิชา";
-$langSupportForum = "อภิปรายปรึกษา";
-$langCategories  = "ประเภทรายวิชา";
-$langBackToHomePage  = "กลับไปที่หน้าแรก";
-$lang_No_course_publicly_available  = "ยังไม่มีวิชาที่เปิดเพื่อสาธารณะ";
-$langLostPassword  = "แจ้งลืมรหัสผ่าน";
-$lang_edit_my_course_list  = "สร้างสารบัญวิชาของเรา";
-$langAgenda  = "กำหนดการต่อไป";
-$langValvas  = "ประกาศที่ผ่านมา";
-$langUp  = "ระดับที่ผ่านมา";
-$langCatList  = "ประเภทรายวิชา";
-$langCourseList  = "รายวิชา";
-$langHelptwo = "ระบบช่วยเหลือ";
-$langRegAll = "ลงทะเบียน";
-$EussMenu = "รายการเชื่อมโยง";
-$Opinio = "ความคิดเห็น";
-$Intranet = "เครือข่ายภายใน";
-$Englin = "อังกฤษ";
-$langInvalidForSelfRegistration = "การเข้าสู่ระบบล้มเหลว หากยังไม่ลงทะเบียน กรุณาคลิกที่<a href=claroline/auth/inscription.php>แบบฟอร์มการลงทะเบียนนี้</a>";
-$langSubCat = "หัวข้อย่อย";
-$langMenuGeneral = "รายการเชื่อมโยงทั่วไป";
-$langMenuUser = "เมนูของผู้เข้าใช้ระบบ";
-$langMenuAdmin = "ระบบการจัดการ";
-$langUsersOnLineList = "รายชื่อผู้ใช้ที่กำลังใช้งานระบบ";
-$langTotalOnLine = "กำลังใช้งานระบบทั้งสิ้น";
-$langRefresh = "กะพริบหน้าจอใหม่";
-$langMe = "ตัวเรา";
-$langSystemAnnouncements = "ประกาศข่าวภายใน";
-$langHelpMaj = "ระบบช่วยเหลือ";
-$langNotRegistered = "ยังไม่ลงทะเบียน";
-$langAdmin = "ระบบ";
-$Login = "เข้าระบบ";
-$langRegisterForCourse = "ลงทะเบียนวิชา";
-$langUnregisterForCourse = "ถอนการลงทะเบียนวิชา";
-$langCombinedCourse = "บูรณาการวิชา";
-$Platform = "ระบบ";
-$Refresh = "ล้างหน้าจอใหม่";
-$TotalOnLine = "จำนวนผู้ที่กำลังใช้งานระบบรวมทั้งสิ้น";
-$langCourseClosed = "ยังไม่เปิดวิชา";
-$ViewOpenCourses = "ดูวิชาที่เปิดเรียน";
-$langCompetences = "ความสามารถพิเศษ";
-$langDiplomas = "คุณวุฒิ";
-$langTeach = "วิชาที่สามารถสอนได้";
-$langProductions = "ผลงาน";
-$langSendChatRequest = "ส่งข้อความเชิญร่วมสนทนาออนไลน์";
-$langRequestDenied = "ไม่รับคำเชิญ";
+$langInvalidId = "ยกร’รร ยขรฉร’รรรจรรยบยบร…รฉรร รร…ร รรร‘รล’รรฉรฃยชรฉรกร…รรรรร‘รล’รจร’ยนรครรจยถรยกยตรฉรยง";
+$langWelcome = "รร’รรร”ยชร’ยทร•รจร ยปร”ลฝรฃรรฉร ร…ร—รยกร รร•รยนรคลฝรฉยทรยกโฌยนรรรรจลฝรฉร’ยนร…รจร’ยง รร’รรร”ยชร’รร—รจยนยนรยกร รยนร—รลกร’ยกยนร•รฉ ยตรฉรยงยกร’รยชร—รจรล’รรฉรฃยชรฉรกร…รรรร‘รล’รจร’ยน  ยซร–รจยงยทรจร’ยนรร’รร’รยถรคลฝรฉลกร’ยกยกร’ร \'ร…ยงยทรร ยบร•รยน\'   รร“รรร‘ยบรร’ลกร’รรรฌ รร’รร’รยถรรรฉร’ยงรร’รรร”ยชร’ยขรยงยทรจร’ยนรคลฝรฉ รขลฝรโฌร…ร”ยกยทร•รจรยนรฉร’ร…ยงยทรร ยบร•รยนร ยชรจยนยกร‘ยน รกยตรจรฃรรฉร ร…ร—รยก\'รรรฉร’ยงรร’รรร”ยชร’\'";
+$langPass = "รรร‘รล’รจร’ยน";
+$langEnter = "ยตยกร…ยง";
+$langReg = "ร…ยงยทรร ยบร•รยน";
+$langMenu = "ร รยนร";
+$langAdvises = "รกยนรยนร“";
+$langCourseDoesntExist = "<b>โฌร“ร ยตร—รยน: </b> รครรจรร•รร’รรร”ยชร’ยนร•รฉ";
+$langGetCourseFromOldPortal = "โฌร…ร”ยกยทร•รจยนร•รจร ลธร—รจรรร‘ยบรร”ยชร’ยนร•รฉ ลกร’ยกรรยบยบโฌรยบโฌรรร ลฝร”รยขรยงยทรจร’ยน";
+$langOtherCourses = "รร’รยชร—รจรรร’รรร”ยชร’";
+$langSupportForum = "รร€ร”ยปรร’รยปรร–ยกรร’";
+$langCategories = "ยปรรร ร€ยทรร’รรร”ยชร’";
+$langBackToHomePage = "ยกร…ร‘ยบรคยปยทร•รจรยนรฉร’รกรยก";
+$lang_No_course_publicly_available = "รร‘ยงรครรจรร•รร”ยชร’ยทร•รจร ยปร”ลฝร ลธร—รจรรร’ลพร’รยณร";
+$langLostPassword = "รกลกรฉยงร…ร—รรรร‘รล’รจร’ยน";
+$lang_edit_my_course_list = "รรรฉร’ยงรร’รยบร‘ยญรร”ยชร’ยขรยงร รร’";
+$langAgenda = "ยกร“รยนลฝยกร’รยตรจรรคยป";
+$langValvas = "ยปรรยกร’รยทร•รจล’รจร’ยนรร’";
+$langUp = "รรลฝร‘ยบยทร•รจล’รจร’ยนรร’";
+$langCatList = "ยปรรร ร€ยทรร’รรร”ยชร’";
+$langCourseList = "รร’รรร”ยชร’";
+$langHelptwo = "รรยบยบยชรจรรร รร…ร—ร";
+$langRegAll = "ร…ยงยทรร ยบร•รยน";
+$EussMenu = "รร’รยกร’รร ยชร—รจรรรขรยง";
+$Opinio = "โฌรร’รโฌร”ลฝร รรงยน";
+$Intranet = "ร โฌรร—รยขรจร’รร€ร’รรฃยน";
+$Englin = "รร‘ยงยกรร";
+$langInvalidForSelfRegistration = "ยกร’รร ยขรฉร’รรรจรรยบยบร…รฉรร รร…ร รร’ยกรร‘ยงรครรจร…ยงยทรร ยบร•รยน ยกรรยณร’โฌร…ร”ยกยทร•รจ<a href=claroline/auth/inscription.php>รกยบยบยฟรรรฌรยกร’รร…ยงยทรร ยบร•รยนยนร•รฉ</a>";
+$langSubCat = "รร‘รยขรฉรรรจรร";
+$langMenuGeneral = "รร’รยกร’รร ยชร—รจรรรขรยงยทร‘รจรรคยป";
+$langMenuUser = "ร รยนรยขรยงล’รรฉร ยขรฉร’รฃยชรฉรรยบยบ";
+$langMenuAdmin = "รรยบยบยกร’รลกร‘ลฝยกร’ร";
+$langUsersOnLineList = "รร’รยชร—รจรล’รรฉรฃยชรฉยทร•รจยกร“ร…ร‘ยงรฃยชรฉยงร’ยนรรยบยบ";
+$langTotalOnLine = "ยกร“ร…ร‘ยงรฃยชรฉยงร’ยนรรยบยบยทร‘รฉยงรร”รฉยน";
+$langRefresh = "ยกรลธรร”ยบรยนรฉร’ลกรรฃรรรจ";
+$langMe = "ยตร‘รร รร’";
+$langSystemAnnouncements = "ยปรรยกร’รยขรจร’รร€ร’รรฃยน";
+$langHelpMaj = "รรยบยบยชรจรรร รร…ร—ร";
+$langNotRegistered = "รร‘ยงรครรจร…ยงยทรร ยบร•รยน";
+$langAdmin = "รรยบยบ";
+$Login = "ร ยขรฉร’รรยบยบ";
+$langRegisterForCourse = "ร…ยงยทรร ยบร•รยนรร”ยชร’";
+$langUnregisterForCourse = "ยถรยนยกร’รร…ยงยทรร ยบร•รยนรร”ยชร’";
+$langCombinedCourse = "ยบรรยณร’ยกร’รรร”ยชร’";
+$Platform = "รรยบยบ";
+$Refresh = "ร…รฉร’ยงรยนรฉร’ลกรรฃรรรจ";
+$TotalOnLine = "ลกร“ยนรยนล’รรฉยทร•รจยกร“ร…ร‘ยงรฃยชรฉยงร’ยนรรยบยบรรรยทร‘รฉยงรร”รฉยน";
+$langCourseClosed = "รร‘ยงรครรจร ยปร”ลฝรร”ยชร’";
+$ViewOpenCourses = "ลฝรรร”ยชร’ยทร•รจร ยปร”ลฝร รร•รยน";
+$langCompetences = "โฌรร’รรร’รร’รยถลธร”ร รร";
+$langDiplomas = "โฌรยณรรยฒร”";
+$langTeach = "รร”ยชร’ยทร•รจรร’รร’รยถรรยนรคลฝรฉ";
+$langProductions = "ล’ร…ยงร’ยน";
+$langSendChatRequest = "รรจยงยขรฉรโฌรร’รร ยชร”ยญรรจรรรยนยทยนร’รรยนรคร…ยนรฌ";
+$langRequestDenied = "รครรจรร‘ยบโฌร“ร ยชร”ยญ";
+$UsageDatacreated = "";
+$SessionView = "";
+$CourseView = "";
+$DropboxFileAdded = "";
+$NewMessageInForum = "";
+$FolderCreated = "";
+$LinkAdded = "";
+$AnnouncementAdded = "";
+$AgendaAdded = "";
+$Messages = "";
+$Inbox = "";
+$Comppose = "";
+$PendingInvitations = "";
+$YouDoNotHaveAnySessionInItsHistory = "";
+$PortalHomepageDefaultIntroduction = "";
 ?>

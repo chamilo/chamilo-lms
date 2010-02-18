@@ -1,105 +1,218 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$MoveTo = "ย้ายไป";
-$langDownloadFile = "อัพโหลดข้อมูลไปที่เครื่องแม่ข่าย";
-$langNameDir = "ชื่อแฟ้มเก็บไฟล์ใหม่";
-$langSize = "ขนาด";
-$langRename = "เปลี่ยนชื่อ";
-$langCopy = "ทำสำเนา";
-$langTo = "ไปยัง";
-$langNoSpace = "การอัพโหลดล้มเหลว มีเนื้อที่ไม่พอในไดเร็กทอรีของท่าน";
-$langDownloadEnd = "สิ้นสุดการอัพโหลด";
-$langFileExists = "ไม่สามารถปฏิบัติได้<br>มีไฟล์ชื่อนี้อยู่แล้ว";
-$langImpossible = "ไม่สามารถปฏิบัติได้";
-$langAddComment = "เพิ่ม/ปรับปรุงหมายเหตุที่";
-$langDocCopied = "ย้ายเอกสารแล้ว";
-$langDocDeleted = "ลบเอกสารแล้ว";
-$langElRen = "เปลี่ยนชื่อแล้ว";
-$langDirMv = "ย้ายdirectory เรียบร้อย";
-$langComMod = "แก้ไขข้อคิดเห็นแล้ว";
-$langViMod = "ปรับปรุงการให้เห็นเอกสารแล้ว";
-$langGroupSpace = "พื้นที่กลุ่ม";
-$langGroupSpaceLink = "พื้นที่กลุ่ม";
-$langGroupForumLink = "กลุ่มอภิปราย";
-$langZipNoPhp = "ไฟล์ zip ไม่สามารถบรรจุ PHP filesได้";
-$langUncompress = "ขยายไฟล์บีบอัดบนเครื่องแม่ข่าย";
-$langDownloadAndZipEnd = " ส่งข้อมูลไฟล์บีบอัดและทำการขยายเรียบร้อยแล้ว";
+$MoveTo = "รรฉร’รรคยป";
+$langDownloadFile = "รร‘ลธรขรร…ลฝยขรฉรรรร…รคยปยทร•รจร โฌรร—รจรยงรกรรจยขรจร’ร";
+$langNameDir = "ยชร—รจรรกยฟรฉรร ยกรงยบรคยฟร…รฌรฃรรรจ";
+$langSize = "ยขยนร’ลฝ";
+$langRename = "ร ยปร…ร•รจรยนยชร—รจร";
+$langCopy = "ยทร“รร“ร ยนร’";
+$langTo = "รคยปรร‘ยง";
+$langNoSpace = "ยกร’รรร‘ลธรขรร…ลฝร…รฉรร รร…ร รร•ร ยนร—รฉรยทร•รจรครรจลธรรฃยนรคลฝร รรงยกยทรรร•ยขรยงยทรจร’ยน";
+$langDownloadEnd = "รร”รฉยนรรลฝยกร’รรร‘ลธรขรร…ลฝ";
+$langFileExists = "รครรจรร’รร’รยถยปยฏร”ยบร‘ยตร”รคลฝรฉ<br>รร•รคยฟร…รฌยชร—รจรยนร•รฉรรรรจรกร…รฉร";
+$langImpossible = "รครรจรร’รร’รยถยปยฏร”ยบร‘ยตร”รคลฝรฉ";
+$langAddComment = "ร ลธร”รจร/ยปรร‘ยบยปรรยงรรร’รร รยตรยทร•รจ";
+$langDocCopied = "รรฉร’รร รยกรร’รรกร…รฉร";
+$langDocDeleted = "ร…ยบร รยกรร’รรกร…รฉร";
+$langElRen = "ร ยปร…ร•รจรยนยชร—รจรรกร…รฉร";
+$langDirMv = "รรฉร’รdirectory ร รร•รยบรรฉรร";
+$langComMod = "รกยกรฉรคยขยขรฉรโฌร”ลฝร รรงยนรกร…รฉร";
+$langViMod = "ยปรร‘ยบยปรรยงยกร’รรฃรรฉร รรงยนร รยกรร’รรกร…รฉร";
+$langGroupSpace = "ลธร—รฉยนยทร•รจยกร…รรจร";
+$langGroupSpaceLink = "ลธร—รฉยนยทร•รจยกร…รรจร";
+$langGroupForumLink = "ยกร…รรจรรร€ร”ยปรร’ร";
+$langZipNoPhp = "รคยฟร…รฌ zip รครรจรร’รร’รยถยบรรลกร PHP filesรคลฝรฉ";
+$langUncompress = "ยขรร’รรคยฟร…รฌยบร•ยบรร‘ลฝยบยนร โฌรร—รจรยงรกรรจยขรจร’ร";
+$langDownloadAndZipEnd = " รรจยงยขรฉรรรร…รคยฟร…รฌยบร•ยบรร‘ลฝรกร…รยทร“ยกร’รยขรร’รร รร•รยบรรฉรรรกร…รฉร";
 $langRoot = "root";
-$langCreateDoc = "สร้างเอกสาร";
-$langDown = "ลง:Down";
-$langFileError = "ไฟล์ที่จะโอนย้ายขึ้นระบบ(Upload)ไม่ถูกต้องสมบูรณ์";
-$langMaxFileSize = "ขนาดไฟล์ใหญ่สุดคือ";
-$langFileName = "ชื่อไฟล์";
-$langNoFileName = "กรุณาใส่ชื่อไฟล์";
-$langNoText = "กรุณาพิมพ์ข้อความ/หรือไฟล์เนื้อหารูปแบบเอกสาร html:Please type your text / HTML content";
-$langAreYouSureToDelete  = "ท่านแน่ใจหรือว่าต้องการลบ";
-$langScormcontent = "นี่คือเนื้อหาScorm<br><input type=button name=scormbutton value=\'Launch it !\' onclick=\'openscorm()\'>";
-$langScormcontentstudent = "คือวิชาตามมาตรฐานscorm. เข้าอ่านและใช้งานคลิกที่นี่: <input type=button name=scormbutton value=\'Launch it !\' onclick=\'openscorm()\'>";
-$langPublish  = "ตีพิมพ์";
-$langMissingImagesDetected  = "พบว่า ภาพหายไป";
-$langCreateDocument = "สร้างเอกสาร";
-$langEditDocument = "แก้ไข";
-$langDocuments  = "เอกสาร";
-$langOrganiseDocuments  = "สร้างสารบัญเนื้อหา";
-$langEditTOC  = "แก้ไขสารบัญเนื้อหา";
-$langChapter  = "บทที่";
-$langDocumentList  = "รายชื่อเอกสารทั้งหมด";
-$langOrganisationList  = "สารบัญเนื้อหา";
-$langCreationSucces  = "สร้างสารบัญเนื้อหาแล้ว";
-$langCanViewOrganisation  = "คุณสามารถเข้าดูโครงสร้างการจัดการระบบ";
-$langHere  = "ที่นี่";
-$langViewDocument  = "ดู";
-$langHtmlTitle  = "สารบัญเนื้อหา";
-$langAddToTOC  = "เพิ่มสารบัญ";
-$langAddChapter  = "เพิ่มบท:Add chapter";
-$langReady  = "จัดเรียงสารบัญ";
-$langStoreDocuments  = "จัดเก็บเอกสาร";
-$langTocDown  = "ลง";
-$langTocUp  = "ขึ้น";
-$lang_cut_paste_link = "ขยายเต็มจอ";
-$langCreatePath = "สร้างเส้นทางเข้าถึงไฟล์(Path)";
-$langAddMetadata = "ดู/แก้ไข Metadata";
-$langGoMetadata = "ไปที่";
-$langQuotaForThisCourseIs = "โควต้าของวิชานี้";
-$langDel = "ลบ";
-$langUp = "ขึ้น";
-$langDate = "วันที่";
-$ShowCourseQuotaUse = "แสดงโควต้าวิชา";
-$CourseCurrentlyUses = "วิชานี้ใช้ไป";
-$MaximumAllowedQuota = "คุณมีพื้นที่จำกัดคือ";
-$PercentageQuotaInUse = "จำนวนเปอร์เซ็นต์ที่คุณใช้ไป";
-$PercentageQuotaFree = "จำนวนเปอร์เซ็นต์ที่เหลือ";
-$CurrentDirectory = "แฟ้มเก็บงานปัจจุบัน";
-$UplUploadDocument = "โอนย้ายเอกสารขึ้นระบบ(Upload)";
-$UplPartialUpload = "โอนย้ายไฟล์ได้เพียงบางส่วน";
-$UplExceedMaxPostSize = "ไฟล์มีขนาดใหญ่เกินที่อนุญาตไว้";
-$UplExceedMaxServerUpload = "การโอนย้ายไฟล์มีขนาดเกินกว่าที่เครื่องแม่ข่ายบริการกำหนดไว้";
-$UplFileTooBig = "ไฟล์มีขนาดใหญ่เกินที่กำหนดให้";
-$UplUploadFailed = "การโอนย้ายไฟล์ขึ้นสู่ระบบ ล้มเหลว!";
-$UplUnableToSaveFile = "ไม่อนุญาตให้ทำการโอนย้ายไฟล์ขึ้นสู่ระบบ";
-$UplNotEnoughSpace = "พื้นที่ไม่พอให้โอนย้ายไฟล์เข้า";
-$UplNoSCORMContent = "ไม่พบเอกสารScorm";
-$UplZipExtractSuccess = "แตกไฟล์zipเรียบร้อยแล้ว";
-$UplZipCorrupt = "ไม่สามารถแตกคืนสภาพไฟล์ได้(ไฟล์มีปัญหา)";
-$UplAlreadyExists = "มีอยู่แล้ว";
-$UplFileSavedAs = "บันทึกไฟล์เป็น(save as)";
-$UplFileOverwritten = "บันทึกทับแล้ว";
-$CannotCreateDir = "ไม่สามารถสร้างแฟ้มเก็บงานได้";
-$UplUpload = "โอนย้ายไฟล์ขึ้นระบบ";
-$UplWhatIfFileExists = "หากไฟล์มีอยู่แล้ว";
-$UplDoNothing = "ไม่ได้ทำอะไร";
-$UplDoNothingLong = "ไม่ต้องโอนย้ายไฟล์ หากมีไฟล์เดิมอยู่แล้ว";
-$UplOverwrite = "บันทึกทับ";
-$UplOverwriteLong = "บันทึกทับไฟล์ที่มีอยู่แล้ว";
-$UplRename = "เปลี่ยนชื่อ";
-$UplRenameLong = "ให้เปลี่ยนชื่อไฟล์ที่โอนย้ายขึ้นนี้ หากมีไฟล์ที่มีชื่อเดียวกันอยู่ก่อนแล้ว";
+$langCreateDoc = "รรรฉร’ยงร รยกรร’ร";
+$langDown = "ร…ยง:Down";
+$langFileError = "รคยฟร…รฌยทร•รจลกรรขรยนรรฉร’รยขร–รฉยนรรยบยบ(Upload)รครรจยถรยกยตรฉรยงรรยบรรยณรฌ";
+$langMaxFileSize = "ยขยนร’ลฝรคยฟร…รฌรฃรยญรจรรลฝโฌร—ร";
+$langFileName = "ยชร—รจรรคยฟร…รฌ";
+$langNoFileName = "ยกรรยณร’รฃรรจยชร—รจรรคยฟร…รฌ";
+$langNoText = "ยกรรยณร’ลธร”รลธรฌยขรฉรโฌรร’ร/รรร—รรคยฟร…รฌร ยนร—รฉรรร’รรยปรกยบยบร รยกรร’ร html:Please type your text / HTML content";
+$langAreYouSureToDelete = "ยทรจร’ยนรกยนรจรฃลกรรร—รรรจร’ยตรฉรยงยกร’รร…ยบ";
+$langScormcontent = "ยนร•รจโฌร—รร ยนร—รฉรรร’Scorm<br><input type=button name=scormbutton value=\'Launchย itย !\' onclick=\'openscorm()\'>";
+$langScormcontentstudent = "โฌร—รรร”ยชร’ยตร’รรร’ยตรยฐร’ยนscorm. ร ยขรฉร’รรจร’ยนรกร…รรฃยชรฉยงร’ยนโฌร…ร”ยกยทร•รจยนร•รจ: <input type=button name=scormbutton value=\'Launchย itย !\' onclick=\'openscorm()\'>";
+$langPublish = "ยตร•ลธร”รลธรฌ";
+$langMissingImagesDetected = "ลธยบรรจร’ ร€ร’ลธรร’รรคยป";
+$langCreateDocument = "รรรฉร’ยงร รยกรร’ร";
+$langEditDocument = "รกยกรฉรคยข";
+$langDocuments = "ร รยกรร’ร";
+$langOrganiseDocuments = "รรรฉร’ยงรร’รยบร‘ยญร ยนร—รฉรรร’";
+$langEditTOC = "รกยกรฉรคยขรร’รยบร‘ยญร ยนร—รฉรรร’";
+$langChapter = "ยบยทยทร•รจ";
+$langDocumentList = "รร’รยชร—รจรร รยกรร’รยทร‘รฉยงรรลฝ";
+$langOrganisationList = "รร’รยบร‘ยญร ยนร—รฉรรร’";
+$langCreationSucces = "รรรฉร’ยงรร’รยบร‘ยญร ยนร—รฉรรร’รกร…รฉร";
+$langCanViewOrganisation = "โฌรยณรร’รร’รยถร ยขรฉร’ลฝรรขโฌรยงรรรฉร’ยงยกร’รลกร‘ลฝยกร’รรรยบยบ";
+$langHere = "ยทร•รจยนร•รจ";
+$langViewDocument = "ลฝร";
+$langHtmlTitle = "รร’รยบร‘ยญร ยนร—รฉรรร’";
+$langAddToTOC = "ร ลธร”รจรรร’รยบร‘ยญ";
+$langAddChapter = "ร ลธร”รจรยบยท:Add chapter";
+$langReady = "ลกร‘ลฝร รร•รยงรร’รยบร‘ยญ";
+$langStoreDocuments = "ลกร‘ลฝร ยกรงยบร รยกรร’ร";
+$langTocDown = "ร…ยง";
+$langTocUp = "ยขร–รฉยน";
+$lang_cut_paste_link = "ยขรร’รร ยตรงรลกร";
+$langCreatePath = "รรรฉร’ยงร รรฉยนยทร’ยงร ยขรฉร’ยถร–ยงรคยฟร…รฌ(Path)";
+$SendDocument = "";
+$ThisFolderCannotBeDeleted = "";
+$ChangeVisibility = "";
+$VisibilityCannotBeChanged = "";
+$DocumentCannotBeMoved = "";
+$langOogieConversionPowerPoint = "";
+$langWelcomeOogieSubtitle = "";
+$langAddMetadata = "ลฝร/รกยกรฉรคยข Metadata";
+$langGoMetadata = "รคยปยทร•รจ";
+$langQuotaForThisCourseIs = "รขโฌรยตรฉร’ยขรยงรร”ยชร’ยนร•รฉ";
+$langDel = "ร…ยบ";
+$langUp = "ยขร–รฉยน";
+$langDate = "รร‘ยนยทร•รจ";
+$ShowCourseQuotaUse = "รกรลฝยงรขโฌรยตรฉร’รร”ยชร’";
+$CourseCurrentlyUses = "รร”ยชร’ยนร•รฉรฃยชรฉรคยป";
+$MaximumAllowedQuota = "โฌรยณรร•ลธร—รฉยนยทร•รจลกร“ยกร‘ลฝโฌร—ร";
+$PercentageQuotaInUse = "ลกร“ยนรยนร ยปรรรฌร ยซรงยนยตรฌยทร•รจโฌรยณรฃยชรฉรคยป";
+$PercentageQuotaFree = "ลกร“ยนรยนร ยปรรรฌร ยซรงยนยตรฌยทร•รจร รร…ร—ร";
+$CurrentDirectory = "รกยฟรฉรร ยกรงยบยงร’ยนยปร‘ลกลกรยบร‘ยน";
+$UplUploadDocument = "รขรยนรรฉร’รร รยกรร’รยขร–รฉยนรรยบยบ(Upload)";
+$UplPartialUpload = "รขรยนรรฉร’รรคยฟร…รฌรคลฝรฉร ลธร•รยงยบร’ยงรรจรยน";
+$UplExceedMaxPostSize = "รคยฟร…รฌรร•ยขยนร’ลฝรฃรยญรจร ยกร”ยนยทร•รจรยนรยญร’ยตรครรฉ";
+$UplExceedMaxServerUpload = "ยกร’รรขรยนรรฉร’รรคยฟร…รฌรร•ยขยนร’ลฝร ยกร”ยนยกรรจร’ยทร•รจร โฌรร—รจรยงรกรรจยขรจร’รยบรร”ยกร’รยกร“รยนลฝรครรฉ";
+$UplFileTooBig = "รคยฟร…รฌรร•ยขยนร’ลฝรฃรยญรจร ยกร”ยนยทร•รจยกร“รยนลฝรฃรรฉ";
+$UplUploadFailed = "ยกร’รรขรยนรรฉร’รรคยฟร…รฌยขร–รฉยนรรรจรรยบยบ ร…รฉรร รร…ร!";
+$UplUnableToSaveFile = "รครรจรยนรยญร’ยตรฃรรฉยทร“ยกร’รรขรยนรรฉร’รรคยฟร…รฌยขร–รฉยนรรรจรรยบยบ";
+$UplNotEnoughSpace = "ลธร—รฉยนยทร•รจรครรจลธรรฃรรฉรขรยนรรฉร’รรคยฟร…รฌร ยขรฉร’";
+$UplNoSCORMContent = "รครรจลธยบร รยกรร’รScorm";
+$UplZipExtractSuccess = "รกยตยกรคยฟร…รฌzipร รร•รยบรรฉรรรกร…รฉร";
+$UplZipCorrupt = "รครรจรร’รร’รยถรกยตยกโฌร—ยนรร€ร’ลธรคยฟร…รฌรคลฝรฉ(รคยฟร…รฌรร•ยปร‘ยญรร’)";
+$UplAlreadyExists = "รร•รรรรจรกร…รฉร";
+$UplFileSavedAs = "ยบร‘ยนยทร–ยกรคยฟร…รฌร ยปรงยน(save as)";
+$UplFileOverwritten = "ยบร‘ยนยทร–ยกยทร‘ยบรกร…รฉร";
+$CannotCreateDir = "รครรจรร’รร’รยถรรรฉร’ยงรกยฟรฉรร ยกรงยบยงร’ยนรคลฝรฉ";
+$UplUpload = "รขรยนรรฉร’รรคยฟร…รฌยขร–รฉยนรรยบยบ";
+$UplWhatIfFileExists = "รร’ยกรคยฟร…รฌรร•รรรรจรกร…รฉร";
+$UplDoNothing = "รครรจรคลฝรฉยทร“รรรคร";
+$UplDoNothingLong = "รครรจยตรฉรยงรขรยนรรฉร’รรคยฟร…รฌ รร’ยกรร•รคยฟร…รฌร ลฝร”รรรรรจรกร…รฉร";
+$UplOverwrite = "ยบร‘ยนยทร–ยกยทร‘ยบ";
+$UplOverwriteLong = "ยบร‘ยนยทร–ยกยทร‘ยบรคยฟร…รฌยทร•รจรร•รรรรจรกร…รฉร";
+$UplRename = "ร ยปร…ร•รจรยนยชร—รจร";
+$UplRenameLong = "รฃรรฉร ยปร…ร•รจรยนยชร—รจรรคยฟร…รฌยทร•รจรขรยนรรฉร’รยขร–รฉยนยนร•รฉ รร’ยกรร•รคยฟร…รฌยทร•รจรร•ยชร—รจรร ลฝร•รรยกร‘ยนรรรรจยกรจรยนรกร…รฉร";
 $Metadata = "Metadata";
-$DocumentQuota = "โควต้าเอกสาร";
-$NoDocsInFolder = "ไม่มีเอกสารในแฟ้มนี้";
-$UploadTo = "โอนย้ายไฟขึ้นไปที่";
-$fileModified = "แก้ไขไฟล์แล้ว";
-$DocumentsOverview = "เอกสารแนะนำ";
-$ViewSlideshow = "ดูภาพสไลด์";
-$Options = "เลือกกำหนดตั้งค่า";
+$DocumentQuota = "รขโฌรยตรฉร’ร รยกรร’ร";
+$NoDocsInFolder = "รครรจรร•ร รยกรร’รรฃยนรกยฟรฉรยนร•รฉ";
+$UploadTo = "รขรยนรรฉร’รรคยฟยขร–รฉยนรคยปยทร•รจ";
+$fileModified = "รกยกรฉรคยขรคยฟร…รฌรกร…รฉร";
+$DocumentsOverview = "ร รยกรร’รรกยนรยนร“";
+$ViewSlideshow = "ลฝรร€ร’ลธรรคร…ลฝรฌ";
+$Options = "ร ร…ร—รยกยกร“รยนลฝยตร‘รฉยงโฌรจร’";
+$WelcomeOogieConverter = "";
+$ConvertToLP = "";
+$AdvancedSettings = "";
+$File = "";
+$DocDeleteError = "";
+$ViModProb = "";
+$DirDeleted = "";
+$TemplateName = "";
+$TemplateDescription = "";
+$DocumentSetAsTemplate = "";
+$DocumentUnsetAsTemplate = "";
+$AddAsTemplate = "";
+$RemoveAsTemplate = "";
+$ReadOnly = "";
+$ReadOnlyFile = "";
+$FileNotFound = "";
+$TemplateTitleFirstPage = "";
+$TemplateTitleFirstPageDescription = "";
+$TemplateTitleDedicatory = "";
+$TemplateTitleDedicatoryDescription = "";
+$TemplateTitlePreface = "";
+$TemplateTitlePrefaceDescription = "";
+$TemplateTitleIntroduction = "";
+$TemplateTitleIntroductionDescription = "";
+$TemplateTitlePlan = "";
+$TemplateTitlePlanDescription = "";
+$TemplateTitleMrDokeos = "";
+$TemplateTitleMrDokeosDescription = "";
+$TemplateTitleTeacher = "";
+$TemplateTitleTeacherDescription = "";
+$TemplateTitleProduction = "";
+$TemplateTitleProductionDescription = "";
+$TemplateTitleAnalyze = "";
+$TemplateTitleAnalyzeDescription = "";
+$TemplateTitleSynthetize = "";
+$TemplateTitleSynthetizeDescription = "";
+$TemplateTitleText = "";
+$TemplateTitleTextDescription = "";
+$TemplateTitleLeftImage = "";
+$TemplateTitleLeftImageDescription = "";
+$TemplateTitleTextCentered = "";
+$TemplateTitleTextCenteredDescription = "";
+$TemplateTitleComparison = "";
+$TemplateTitleComparisonDescription = "";
+$TemplateTitleDiagram = "";
+$TemplateTitleDiagramDescription = "";
+$TemplateTitleImage = "";
+$TemplateTitleImageDescription = "";
+$TemplateTitleFlash = "";
+$TemplateTitleFlashDescription = "";
+$TemplateTitleAudio = "";
+$TemplateTitleAudioDescription = "";
+$TemplateTitleSchema = "";
+$TemplateTitleSchemaDescription = "";
+$TemplateTitleVideo = "";
+$TemplateTitleVideoDescription = "";
+$TemplateTitleVideoFullscreen = "";
+$TemplateTitleVideoFullscreenDescription = "";
+$TemplateTitleTable = "";
+$TemplateTitleTableDescription = "";
+$TemplateTitleAssigment = "";
+$TemplateTitleAssigmentDescription = "";
+$TemplateTitleResources = "";
+$TemplateTitleResourcesDescription = "";
+$TemplateTitleBibliography = "";
+$TemplateTitleBibliographyDescription = "";
+$TemplateTitleFAQ = "";
+$TemplateTitleFAQDescription = "";
+$TemplateTitleGlossary = "";
+$TemplateTitleGlossaryDescription = "";
+$TemplateTitleEvaluation = "";
+$TemplateTitleEvaluationDescription = "";
+$TemplateTitleCertificate = "";
+$TemplateTitleCertificateDescription = "";
+$TemplateTitleCheckList = "";
+$TemplateTitleCourseTitle = "";
+$TemplateTitleLeftList = "";
+$TemplateTitleLeftListDescription = "";
+$TemplateTitleCheckListDescription = "";
+$TemplateTitleCourseTitleDescription = "";
+$TemplateTitleRightList = "";
+$TemplateTitleRightListDescription = "";
+$TemplateTitleLeftRightList = "";
+$TemplateTitleLeftRightListDescription = "";
+$TemplateTitleDesc = "";
+$TemplateTitleDescDescription = "";
+$TemplateTitleObjectives = "";
+$TemplateTitleObjectivesDescription = "";
+$TemplateTitleCycle = "";
+$TemplateTitleCycleDescription = "";
+$TemplateTitleLearnerWonder = "";
+$TemplateTitleLearnerWonderDescription = "";
+$TemplateTitleTimeline = "";
+$TemplateTitleTimelineDescription = "";
+$TemplateTitleStopAndThink = "";
+$TemplateTitleListLeftListDescription = "";
+$TemplateTitleStopAndThinkDescription = "";
+$CreateTheDocument = "";
+$CreateTemplate = "";
+$SharedFolder = "";
+$CreateFolder = "";
+$HelpDefaultDirDocuments = "";
+$HelpSharedFolder = "";
+$TemplateImage = "";
+$MoveElement = "";
 ?>

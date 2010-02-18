@@ -1,5 +1,6 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $ResourceAdded = "Risorsa aggiunta";
 $LearningPath = "Moduli didattici";
@@ -8,7 +9,7 @@ $AddIt = "Aggiungi";
 $MainCategory = "categoria principale";
 $lang_delete_added_resources = "Cancella tutte le risorse aggiunte";
 $AddToLinks = "Aggiungi ai collegamenti del corso";
-$DontAdd = "non è stato aggiunto";
+$DontAdd = "non Ã¨ stato aggiunto";
 $lang_show_all_added_resources = "Mostra tutte le risorse aggiunte";
 $ResourcesAdded = "Risorse aggiunte";
 $BackTo = "Vai a";
@@ -36,23 +37,23 @@ $LinkTarget = "Destinazione del collegamento";
 $SameWindow = "Nella stessa finestra";
 $NewWindow = "In una nuova finestra";
 $StepDeleted1 = "Questa";
-$StepDeleted2 = "parte è stata eliminata nello strumento";
+$StepDeleted2 = "parte Ã¨ stata eliminata nello strumento";
 $Modify = "Modifica";
 $Chapter = "Capitolo";
 $NoAgendaItems = "Non ci sono voci nell\'agenda";
-$AgendaAdd = "Aggiungi un evento ";
+$AgendaAdd = "Aggiungi un evento";
 $UserGroupFilter = "Filtro gruppo utente";
 $AgendaSortChronologicallyUp = "Ordine cronologico (su)";
 $ShowCurrent = "Mostra gli eventi correnti";
 $ModifyCalendarItem = "Modifica la voce nell\'Agenda";
 $ItemTitle = "Titolo";
 $Detail = "Dettagli";
-$EditSuccess = "La modifica è stata effettuata";
+$EditSuccess = "La modifica Ã¨ stata effettuata";
 $AddCalendarItem = "Aggiungi una voce all\'Agenda";
 $AddAnn = "Aggiungi un avviso";
 $ForumAddNewTopic = "Forum: nuovo argomento";
 $ForumEditTopic = "Forum: modifica argomento";
 $ExerciseAnswers = "Test: Risposte";
 $ForumReply = "Forum: rispondi";
-$AgendaSortChronologicallyDown = "Ordine cronologico (giù)";
+$AgendaSortChronologicallyDown = "Ordine cronologico (giÃ¹)";
 ?>

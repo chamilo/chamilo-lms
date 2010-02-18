@@ -1,5 +1,6 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $langChapter = "Section";
 $langDocumentList = "Documents list";
@@ -9,8 +10,8 @@ $langEditDocument = "Edit document";
 $langCreateDocument = "Validate";
 $langMissingImagesDetected = "Missing images detected";
 $langPublish = "Publish";
-$langScormcontentstudent = "This is a SCORM course. If you would like to play it, click here : <input type=button name=scormbutton value=\'Launch it !\' onclick=\'openscorm()\'>";
-$langScormcontent = "This is a Scorm content<br><input type=button name=scormbutton value=\'Launch it !\' onclick=\'openscorm()\'>";
+$langScormcontentstudent = "This is a SCORM course. If you would like to play it, click here : <input type=button name=scormbutton value=\'LaunchÂ itÂ !\' onclick=\'openscorm()\'>";
+$langScormcontent = "This is a Scorm content<br><input type=button name=scormbutton value=\'LaunchÂ itÂ !\' onclick=\'openscorm()\'>";
 $langDownloadAndZipEnd = " Zip file uploaded and uncompressed";
 $langZipNoPhp = "The zip file can not contain .PHP files";
 $langGroupForumLink = "Group forum";

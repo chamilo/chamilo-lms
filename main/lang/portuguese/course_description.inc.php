@@ -1,19 +1,20 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$langCourseProgram  = "DescriÁ„o";
-$langThisCourseDescriptionIsEmpty  = "Ainda existe qualquer descriÁ„o do curso.";
-$langEditCourseProgram  = "Criar ou editar uma descriÁ„o.";
-$QuestionPlan  = "Ajuda";
-$langInfo2Say  = "InformaÁ„o a comunicar aos utilizadores";
-$langOuAutreTitre  = "TÌtulo";
-$langNewBloc  = "Outro";
-$langAddCat  = "Adicionar uma categoria";
-$langAdd  = "Adicionar";
-$langValid  = "Validar";
-$langBackAndForget  = "Cancelar";
-$CourseDescriptionUpdated = "A descriÁ„o foi actualizada";
-$CourseDescriptionDeleted = "A descriÁ„o do curso foi apagada";
-$CourseDescriptionIntro = "Para criar uma descriÁ„o, clique na rubrica e preencha o campo associado.<br><br>Clique OK para continuar.";
-$langSaveDescription = "Guardar descriÁ„o";
+$langCourseProgram = "Descri√ß√£o";
+$langThisCourseDescriptionIsEmpty = "Ainda existe qualquer descri√ß√£o do curso.";
+$langEditCourseProgram = "Criar ou editar uma descri√ß√£o.";
+$QuestionPlan = "Ajuda";
+$langInfo2Say = "Informa√ß√£o a comunicar aos utilizadores";
+$langOuAutreTitre = "T√≠tulo";
+$langNewBloc = "Outro";
+$langAddCat = "Adicionar uma categoria";
+$langAdd = "Adicionar";
+$langValid = "Validar";
+$langBackAndForget = "Cancelar";
+$CourseDescriptionUpdated = "A descri√ß√£o foi actualizada";
+$CourseDescriptionDeleted = "A descri√ß√£o do curso foi apagada";
+$CourseDescriptionIntro = "Para criar uma descri√ß√£o, clique na rubrica e preencha o campo associado.<br><br>Clique OK para continuar.";
+$langSaveDescription = "Guardar descri√ß√£o";
 ?>

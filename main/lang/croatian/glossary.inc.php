@@ -1,25 +1,28 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $TermAddNew = "Dodaj novi pojam";
 $TermName = "Pojam - naziv";
 $TermDefinition = "Pojam - definicija";
 $TermDeleted = "Pojam je uklonjen";
-$TermUpdated = "Pojam je ažuriran";
-$TermConfirmDelete = "Želite li sigurno ukloniti ovaj pojam";
+$TermUpdated = "Pojam je aÂžuriran";
+$TermConfirmDelete = "ÂŽelite li sigurno ukloniti ovaj pojam";
 $TermAddButton = "Spremi pojam";
-$TermUpdateButton = "Ažuriraj pojam";
+$TermUpdateButton = "AÂžuriraj pojam";
 $TermEdit = "Uredi pojam";
-$TermDeleteAction = "Obriši pojam";
+$TermDeleteAction = "ObriÂši pojam";
 $OrderBy = "Sortiraj prema";
 $CreationDate = "Nadnevak spremanja";
-$UpdateDate = "Ažuriran";
+$UpdateDate = "AÂžuriran";
 $PreSelectedOrder = "Ure&#273;eno prema odabiru";
 $TermAdded = "Pojam dodan";
 $YouMustEnterATermName = "Morate unijeti pojam";
 $YouMustEnterATermDefinition = "Morate unijeti definiciju pojma";
 $TableView = "Tabelarni prikaz";
 $GlossaryTermAlreadyExistsYouShouldEditIt = "Ovaj pojam ve&#263; postoji. Molim promijenite naziv pojma.";
-$GlossaryManagement  = "Upravljanje rje&#269;nikom";
-$TermMoved = "Pojam je premješten";
+$GlossaryManagement = "Upravljanje rje&#269;nikom";
+$TermMoved = "Pojam je premjeÂšten";
+$ShowGlossaryInExtraToolsTitle = "";
+$ShowGlossaryInExtraToolsComment = "";
 ?>

@@ -1,30 +1,31 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $langInvalidId = "Identificativo non valido";
-$langWelcome = " corsi qui sotto sono di libero accesso. Gli altri corsi richiedonoun Nome utente e una Password che si puÚ ottenere cliccando sulla opzione \'iscrizione\'. I docenti e i collaboratori non iscritti possono creare un nuovo corso cliccando sull\'opzione \'iscrizione\' e poi \"Crea un corso\' (se la funzione Ë abilitata.";
+$langWelcome = " corsi qui sotto sono di libero accesso. Gli altri corsi richiedonoun Nome utente e una Password che si pu√≤ ottenere cliccando sulla opzione \'iscrizione\'. I docenti e i collaboratori non iscritti possono creare un nuovo corso cliccando sull\'opzione \'i";
 $langPass = "Password";
 $langEnter = "Entra";
 $langReg = "Registrazione";
-$langMenu  = "Menu";
+$langMenu = "Menu";
 $langAdvises = "Annunci";
 $langCourseDoesntExist = "<b>Attenzione!</b> Il corso non esiste";
 $langGetCourseFromOldPortal = "clicca qui per prelevare il corso dal vecchio portale";
 $langOtherCourses = "Elenco dei corsi";
 $langSupportForum = "Forum della piattaforma";
-$langCategories  = "Categorie";
-$langBackToHomePage  = "categorie";
-$lang_No_course_publicly_available  = "Accesso riservato agli iscritti";
-$langLostPassword  = "Recupera la password";
-$lang_edit_my_course_list  = "Elenco dei corsi";
-$langAgenda  = "Prossimi eventi in agenda";
-$langValvas  = "Novit‡";
-$langUp  = "Livello superiore";
-$langCatList  = "Categorie";
-$langCourseList  = "Corsi";
+$langCategories = "Categorie";
+$langBackToHomePage = "categorie";
+$lang_No_course_publicly_available = "Accesso riservato agli iscritti";
+$langLostPassword = "Recupera la password";
+$lang_edit_my_course_list = "Elenco dei corsi";
+$langAgenda = "Prossimi eventi in agenda";
+$langValvas = "Novit√†";
+$langUp = "Livello superiore";
+$langCatList = "Categorie";
+$langCourseList = "Corsi";
 $langHelptwo = "Aiuto";
 $langRegAll = "Iscrivi";
-$EussMenu = "Men˘";
+$EussMenu = "Men√π";
 $Opinio = "Opinione";
 $Intranet = "Intranet";
 $Englin = "Inglese";
@@ -37,7 +38,7 @@ $langUsersOnLineList = "Elenco degli utenti on-line";
 $langTotalOnLine = "On-line in totale";
 $langRefresh = "aggiorna la pagina";
 $langMe = "me stesso";
-$langSystemAnnouncements = "Novit‡";
+$langSystemAnnouncements = "Novit√†";
 $langHelpMaj = "Aiuto";
 $langNotRegistered = "Non sei ancora iscritto";
 $langAdmin = "Amministratore della piattaforma";
@@ -48,7 +49,7 @@ $langCombinedCourse = "Corso associato -";
 $Platform = "Piattaforma";
 $Refresh = "Aggiorna";
 $TotalOnLine = "totale utenti collegati";
-$langCourseClosed = "(il corso Ë temporaneamente chiuso)";
+$langCourseClosed = "(il corso √® temporaneamente chiuso)";
 $ViewOpenCourses = "Visualizza i corsi aperti alla registrazione";
 $langCompetences = "Competenze";
 $langDiplomas = "Certificati e diplomi";
@@ -65,9 +66,13 @@ $FolderCreated = "Nuova cartella creata";
 $LinkAdded = "Nuovo collegamento aggiunto";
 $AnnouncementAdded = "Avviso aggiunto";
 $AgendaAdded = "Voce nell\'agenda aggiunta";
-$YouDoNotHaveAnySessionInItsHistory = "Non ci sono tue sessioni nello storico";
 $Messages = "Messaggi";
 $Inbox = "Posta in entrata";
 $Comppose = "Componi";
 $PendingInvitations = "Inviti in attesa";
+$YouDoNotHaveAnySessionInItsHistory = "Non ci sono tue sessioni nello storico";
+$PortalHomepageDefaultIntroduction = "<p>&nbsp;</p>
+<p><span class=\"Apple-style-span\" style=\"font-family: arial, verdana, helvetica, sans-serif; \">
+<h2 style=\"font-size: 18px; \">Congratulazioni! Hai installato con successo il tuo portale per l'e-learning!</h2>
+<p style=\"font-size: 12px; \">";
 ?>

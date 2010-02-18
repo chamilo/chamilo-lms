@@ -1,5 +1,6 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $ForumDeleted = "Forum deleted";
 $ForumCategoryDeleted = "Forum category deleted";
@@ -14,7 +15,7 @@ $Message = "message";
 $NoForumInThisCategory = "There are no forums in this category";
 $InForumCategory = "Create in category";
 $AllowAnonymousPosts = "Allow anonymous posts?";
-$StudentsCanEdit = "Can users edit their own posts? ";
+$StudentsCanEdit = "Can users edit their own posts?";
 $ApprovalDirect = "Approval / Direct Post";
 $AllowNewThreads = "Allow users to start new threads";
 $DefaultViewType = "Default view type";
@@ -24,7 +25,7 @@ $PublicPrivateGroupForum = "Public or private group forum?";
 $Public = "For all learners";
 $Private = "For group members only";
 $NewPostStored = "Your message has been saved";
-$ReturnTo = "You can now return to the ";
+$ReturnTo = "You can now return to the";
 $Or = "or";
 $ReplyToThread = "Reply to this thread";
 $ReplyToMessage = "Reply to this message";
@@ -36,7 +37,7 @@ $LastPost = "Latest post";
 $Quoting = "Quoting";
 $NotifyByEmail = "Notify me by e-mail when somebody replies";
 $StickyPost = "This is a sticky message (appears always on top and has a special sticky icon)";
-$ReplyShort = "Re: ";
+$ReplyShort = "Re:";
 $DeletePost = "Are you sure you want to delete this post? Deleting this post will also delete the replies on this post. Please check the threaded view to see which posts will also be deleted";
 $Locked = "Locked: students can no longer post new messages in this forum category, forum or thread but they can still read the messages that were already posted";
 $Unlocked = "Unlocked: students can post new messages in this forum category, forum or thread";
@@ -87,7 +88,7 @@ $PrevMessage = "Previous message";
 $FirstMessage = "First message";
 $LastMessage = "Last message";
 $ForumSearch = "Search in the Forum";
-$SearchTerm  = "Search term";
+$SearchTerm = "Search term";
 $ForumSearchResults = "Forum search results";
 $ForumSearchInformation = "You search on multiple words by using the + sign";
 $YouWillBeNotifiedOfNewPosts = "You will be notified of new posts by e-mail.";

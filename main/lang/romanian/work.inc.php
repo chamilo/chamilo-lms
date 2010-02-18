@@ -1,7 +1,8 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$Tools  = "Unelte";
+$Tools = "Unelte";
 $SendWork = "Incarcati fisierul";
 $langTooBig = "Nu ati selectat nici un fisier, sau acesta este prea mare.";
 $langListDeleted = "Lista a fost stearsa";
@@ -51,11 +52,11 @@ $IsNotPosibleSaveTheDocument = "Documentul nu a putut fi salvat";
 $EndDateCannotBeBeforeTheExpireDate = "Data de terminare nu poate fi inainte o data de expirare.";
 $SelectAFilter = "Selecteaz&#259; un filtru";
 $FilterByNotExpired = "Filtrarea: inca nu e terminata";
-$FilterAssignments = "Filtreaza ";
+$FilterAssignments = "Filtreaza";
 $WeightNecessary = "E nevoie sa dati un scor minim.";
 $QualificationOver = "Scorul";
 $ExpiryDateAlreadyPassed = "Data de inchidere e expirata.";
-$EndDateAlreadyPassed = "Data de închidere este expirata.";
+$EndDateAlreadyPassed = "Data de Ã®nchidere este expirata.";
 $MoveXTo = "Plaseaza la";
 $QualificationMustNotBeMoreThanQualificationOver = "Scorul nu poate fi mai mare decat scorul maxim.";
 $ModifyDirectory = "Modifica folderul.";
@@ -73,4 +74,17 @@ $FolderEdited = "Dosarul a fost modificat";
 $UpdateWork = "sarcina de lucru";
 $MakeAllPapersInvisible = "Faceti toate documentele invizibile";
 $MakeAllPapersVisible = "Faceti toate documentele vizibile";
+$TheDocumentHasBeenDeleted = "";
+$YouAreNotAllowedToDeleteThisDocument = "";
+$StudentAllowedToDeleteOwnPublication = "";
+$ConfirmYourChoiceDeleteAllfiles = "";
+$WorkName = "";
+$ReminderToSubmitPendingTask = "";
+$MessageConfirmSendingOfTask = "";
+$DataSent = "";
+$DownloadLink = "";
+$ViewUsersWithTask = "";
+$ReminderMessage = "";
+$DateSent = "";
+$ViewUsersWithoutTask = "";
 ?>

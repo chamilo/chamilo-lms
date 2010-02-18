@@ -1,8 +1,9 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $nameTools = "obsolete language var";
-$langMdCallingTool = "Cours ";
+$langMdCallingTool = "Cours";
 $langTool = "Scorm MD Operations";
 $langNotInDB = "no Chamilo DB entry";
 $langManifestSyntax = "(syntax error in manifest file...)";
@@ -20,7 +21,7 @@ $langImport = "Create MDEs from manifest";
 $langRemove = "Remove MDEs";
 $langAllRemovedFor = "All entries removed for";
 $langIndex = "Index Words with PhpDig";
-$langTotalMDEs = "Total number of Scorm MD entries: ";
+$langTotalMDEs = "Total number of Scorm MD entries:";
 $langMainMD = "Open Main MDE";
 $langLines = "lines";
 $langPlay = "Play index.php";
@@ -29,7 +30,7 @@ $langOrElse = "Select a Scorm Directory or a Scorm Directory id";
 $langWorkWith = "Work with Scorm Directory";
 $langSDI = "... Scorm Directory with SD-id (and split manifest - or leave empty)";
 $langRoot = "root";
-$langSplitData = "Split manifests, and #MDe, if any: ";
+$langSplitData = "Split manifests, and #MDe, if any:";
 $langMffNotOk = "Manifest file replace has failed";
 $langMffOk = "Manifest file has been replaced";
 $langMffFileNotFound = "New manifest file could not be opened (e.g. empty, too big)";

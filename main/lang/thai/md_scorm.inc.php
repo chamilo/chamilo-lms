@@ -1,37 +1,38 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$nameTools = "ÀÒÉÒ·ÕèÅéÒÊÁÑÂ obsolete language var";
-$langMdCallingTool = "¡ÒÃà¢éÒàÃÕÂ¹ - Scorm";
+$nameTools = "Ã€Ã’Ã‰Ã’Â·Ã•Ã¨Ã…Ã©Ã’ÃŠÃÃ‘Ã‚ obsolete language var";
+$langMdCallingTool = "Â¡Ã’ÃƒÃ Â¢Ã©Ã’Ã ÃƒÃ•Ã‚Â¹ - Scorm";
 $langTool = "Scorm MD Operations";
-$langNotInDB = "äÁèÁÕÃÒÂ¡ÒÃ°Ò¹¢éÍÁÙÅ¢Í§Dokeos";
-$langManifestSyntax = "â¤Ã§ÊÃéÒ§ÊÓ¤Ñ­¢Í§ä¿ÅìàÊÕÂËÒÂ";
-$langEmptyManifest = "ä¿ÅìäÁèÁÕ¢éÍÁÙÅ";
-$langNoManifest = "ä¿ÅìäÁèÁÕ¢éÍÁÙÅ";
-$langNotFolder = "à»ç¹ä»äÁèä´é äÁèÁÕá¿éÁ";
-$langUploadHtt = "âÍ¹ÂéÒÂä¿Åì HTT ¢Öé¹ÃÐºº";
-$langHttFileNotFound = "ä¿ÅìHTTäÁèÊÒÁÒÃ¶à»Ô´ä´é(ÍÒ¨à»ç¹ä¿Åìà»ÅèÒËÃ×ÍÁÕ¢¹Ò´ãË­èà¡Ô¹¾Ô¡Ñ´)";
-$langHttOk = "·Ó¡ÒÃâÍ¹ÂéÒÂä¿ÅìHTTãËÁèà¢éÒÃÐººáÅéÇ";
-$langHttNotOk = "¡ÒÃâÍ¹ÂéÒÂä¿Åì HTT ÅéÁàËÅÇ";
-$langRemoveHtt = "àÍÒä¿ÅìHTTÍÍ¡";
-$langHttRmvOk = "àÍÒä¿ÅìHTTÍÍ¡áÅéÇ";
-$langHttRmvNotOk = "ÂÑ§àÍÒä¿Åì HTT ÍÍ¡äÁèä´é";
-$langImport = "ÊÃéÒ§MDEs¨Ò¡ÃÒÂ¡ÒÃ·ÕèÁÕÍÂÙè";
-$langRemove = "àÍÒ MDEsÍÍ¡";
-$langAllRemovedFor = "ÃÒÂ¡ÒÃ·Ñé§ËÁ´àÍÒÍÍ¡à¾×èÍ ";
-$langIndex = "ÊÃéÒ§´Ñª¹Õ´éÇÂ PhpDig";
-$langTotalMDEs = "ÃÇÁÃÒÂ¡ÒÃ·Ñé§ËÁ´¢Í§Scorm MD·ÕèÁÕà¢éÒÁÒ";
-$langMainMD = "à»Ô´ÃÒÂ¡ÒÃËÅÑ¡MDE";
-$langLines = "ºÃÃ·Ñ´";
-$langPlay = "à»Ô´ä¿Åì index.php";
-$langNonePossible = "äÁèÁÕ MD¡çäÁèÊÒÁÒÃ¶´Óà¹Ô¹¡ÒÃä´é ";
-$langOrElse = "àÅ×Í¡ÊÁØ´ºÑ­ªÕÃÒÂª×èÍËÃ×ÍÃËÑÊºÑ­ªÕÃÒÂª×èÍ¢Í§Scorm ";
-$langWorkWith = "ãªé§Ò¹ÃèÇÁ¡ÑºÊÁØ´ºÑ­ªÕÃÒÂª×èÍ¢Í§Scorm";
-$langSDI = "...ÊÁØ´ºÑ­ªÕÃÒÂª×èÍ¢Í§Scorm ¡ÑºÃËÑÊ SD(áÂ¡ÃÒÂ¡ÒÃ·ÕèÁÕËÃ×Í»ÅèÍÂÇèÒ§äÇé) ";
+$langNotInDB = "Ã¤ÃÃ¨ÃÃ•ÃƒÃ’Ã‚Â¡Ã’ÃƒÂ°Ã’Â¹Â¢Ã©ÃÃÃ™Ã…Â¢ÃÂ§Dokeos";
+$langManifestSyntax = "Ã¢â‚¬ÃƒÂ§ÃŠÃƒÃ©Ã’Â§ÃŠÃ“â‚¬Ã‘Â­Â¢ÃÂ§Ã¤Â¿Ã…Ã¬Ã ÃŠÃ•Ã‚Ã‹Ã’Ã‚";
+$langEmptyManifest = "Ã¤Â¿Ã…Ã¬Ã¤ÃÃ¨ÃÃ•Â¢Ã©ÃÃÃ™Ã…";
+$langNoManifest = "Ã¤Â¿Ã…Ã¬Ã¤ÃÃ¨ÃÃ•Â¢Ã©ÃÃÃ™Ã…";
+$langNotFolder = "Ã Â»Ã§Â¹Ã¤Â»Ã¤ÃÃ¨Ã¤Å½Ã© Ã¤ÃÃ¨ÃÃ•Ã¡Â¿Ã©Ã";
+$langUploadHtt = "Ã¢ÃÂ¹Ã‚Ã©Ã’Ã‚Ã¤Â¿Ã…Ã¬ HTT Â¢Ã–Ã©Â¹ÃƒÃÂºÂº";
+$langHttFileNotFound = "Ã¤Â¿Ã…Ã¬HTTÃ¤ÃÃ¨ÃŠÃ’ÃÃ’ÃƒÂ¶Ã Â»Ã”Å½Ã¤Å½Ã©(ÃÃ’Å¡Ã Â»Ã§Â¹Ã¤Â¿Ã…Ã¬Ã Â»Ã…Ã¨Ã’Ã‹ÃƒÃ—ÃÃÃ•Â¢Â¹Ã’Å½Ã£Ã‹Â­Ã¨Ã Â¡Ã”Â¹Å¸Ã”Â¡Ã‘Å½)";
+$langHttOk = "Â·Ã“Â¡Ã’ÃƒÃ¢ÃÂ¹Ã‚Ã©Ã’Ã‚Ã¤Â¿Ã…Ã¬HTTÃ£Ã‹ÃÃ¨Ã Â¢Ã©Ã’ÃƒÃÂºÂºÃ¡Ã…Ã©Ã‡";
+$langHttNotOk = "Â¡Ã’ÃƒÃ¢ÃÂ¹Ã‚Ã©Ã’Ã‚Ã¤Â¿Ã…Ã¬ HTT Ã…Ã©ÃÃ Ã‹Ã…Ã‡";
+$langRemoveHtt = "Ã ÃÃ’Ã¤Â¿Ã…Ã¬HTTÃÃÂ¡";
+$langHttRmvOk = "Ã ÃÃ’Ã¤Â¿Ã…Ã¬HTTÃÃÂ¡Ã¡Ã…Ã©Ã‡";
+$langHttRmvNotOk = "Ã‚Ã‘Â§Ã ÃÃ’Ã¤Â¿Ã…Ã¬ HTT ÃÃÂ¡Ã¤ÃÃ¨Ã¤Å½Ã©";
+$langImport = "ÃŠÃƒÃ©Ã’Â§MDEsÅ¡Ã’Â¡ÃƒÃ’Ã‚Â¡Ã’ÃƒÂ·Ã•Ã¨ÃÃ•ÃÃ‚Ã™Ã¨";
+$langRemove = "Ã ÃÃ’ MDEsÃÃÂ¡";
+$langAllRemovedFor = "ÃƒÃ’Ã‚Â¡Ã’ÃƒÂ·Ã‘Ã©Â§Ã‹ÃÅ½Ã ÃÃ’ÃÃÂ¡Ã Å¸Ã—Ã¨Ã";
+$langIndex = "ÃŠÃƒÃ©Ã’Â§Å½Ã‘ÂªÂ¹Ã•Å½Ã©Ã‡Ã‚ PhpDig";
+$langTotalMDEs = "ÃƒÃ‡ÃÃƒÃ’Ã‚Â¡Ã’ÃƒÂ·Ã‘Ã©Â§Ã‹ÃÅ½Â¢ÃÂ§Scorm MDÂ·Ã•Ã¨ÃÃ•Ã Â¢Ã©Ã’ÃÃ’";
+$langMainMD = "Ã Â»Ã”Å½ÃƒÃ’Ã‚Â¡Ã’ÃƒÃ‹Ã…Ã‘Â¡MDE";
+$langLines = "ÂºÃƒÃƒÂ·Ã‘Å½";
+$langPlay = "Ã Â»Ã”Å½Ã¤Â¿Ã…Ã¬ index.php";
+$langNonePossible = "Ã¤ÃÃ¨ÃÃ• MDÂ¡Ã§Ã¤ÃÃ¨ÃŠÃ’ÃÃ’ÃƒÂ¶Å½Ã“Ã Â¹Ã”Â¹Â¡Ã’ÃƒÃ¤Å½Ã©";
+$langOrElse = "Ã Ã…Ã—ÃÂ¡ÃŠÃÃ˜Å½ÂºÃ‘Â­ÂªÃ•ÃƒÃ’Ã‚ÂªÃ—Ã¨ÃÃ‹ÃƒÃ—ÃÃƒÃ‹Ã‘ÃŠÂºÃ‘Â­ÂªÃ•ÃƒÃ’Ã‚ÂªÃ—Ã¨ÃÂ¢ÃÂ§Scorm";
+$langWorkWith = "Ã£ÂªÃ©Â§Ã’Â¹ÃƒÃ¨Ã‡ÃÂ¡Ã‘ÂºÃŠÃÃ˜Å½ÂºÃ‘Â­ÂªÃ•ÃƒÃ’Ã‚ÂªÃ—Ã¨ÃÂ¢ÃÂ§Scorm";
+$langSDI = "...ÃŠÃÃ˜Å½ÂºÃ‘Â­ÂªÃ•ÃƒÃ’Ã‚ÂªÃ—Ã¨ÃÂ¢ÃÂ§Scorm Â¡Ã‘ÂºÃƒÃ‹Ã‘ÃŠ SD(Ã¡Ã‚Â¡ÃƒÃ’Ã‚Â¡Ã’ÃƒÂ·Ã•Ã¨ÃÃ•Ã‹ÃƒÃ—ÃÂ»Ã…Ã¨ÃÃ‚Ã‡Ã¨Ã’Â§Ã¤Ã‡Ã©)";
 $langRoot = "root";
-$langSplitData = "áÂ¡ÃÒÂ¡ÒÃ·ÕèÁÕ,áÅÐ#MDe ¶éÒÁÕ";
-$langMffNotOk = "¡ÒÃá·¹·ÕèÃÒÂ¡ÒÃ·ÕèÁÕ ÅéÁàËÅÇ";
-$langMffOk = "ä´éá·¹·ÕèÃÒÂ¡ÒÃ·ÕèÁÕàÃÕÂºÃéÍÂáÅéÇ";
-$langMffFileNotFound = "ä¿ÅìÃÒÂ¡ÒÃãËÁèäÁèÊÒÁÒÃ¶à»Ô´ä´é à¾ÃÒÐà»ç¹ä¿Åì·ÕèäÁèÁÕ¢éÍÁÙÅËÃ×ÍÁÕ¢¹Ò´à¡Ô¹¾Ô¡Ñ´";
-$langUploadMff = "á·¹·Õèä¿Åì";
+$langSplitData = "Ã¡Ã‚Â¡ÃƒÃ’Ã‚Â¡Ã’ÃƒÂ·Ã•Ã¨ÃÃ•,Ã¡Ã…Ã#MDe Â¶Ã©Ã’ÃÃ•";
+$langMffNotOk = "Â¡Ã’ÃƒÃ¡Â·Â¹Â·Ã•Ã¨ÃƒÃ’Ã‚Â¡Ã’ÃƒÂ·Ã•Ã¨ÃÃ• Ã…Ã©ÃÃ Ã‹Ã…Ã‡";
+$langMffOk = "Ã¤Å½Ã©Ã¡Â·Â¹Â·Ã•Ã¨ÃƒÃ’Ã‚Â¡Ã’ÃƒÂ·Ã•Ã¨ÃÃ•Ã ÃƒÃ•Ã‚ÂºÃƒÃ©ÃÃ‚Ã¡Ã…Ã©Ã‡";
+$langMffFileNotFound = "Ã¤Â¿Ã…Ã¬ÃƒÃ’Ã‚Â¡Ã’ÃƒÃ£Ã‹ÃÃ¨Ã¤ÃÃ¨ÃŠÃ’ÃÃ’ÃƒÂ¶Ã Â»Ã”Å½Ã¤Å½Ã© Ã Å¸ÃƒÃ’ÃÃ Â»Ã§Â¹Ã¤Â¿Ã…Ã¬Â·Ã•Ã¨Ã¤ÃÃ¨ÃÃ•Â¢Ã©ÃÃÃ™Ã…Ã‹ÃƒÃ—ÃÃÃ•Â¢Â¹Ã’Å½Ã Â¡Ã”Â¹Å¸Ã”Â¡Ã‘Å½";
+$langUploadMff = "Ã¡Â·Â¹Â·Ã•Ã¨Ã¤Â¿Ã…Ã¬";
 ?>

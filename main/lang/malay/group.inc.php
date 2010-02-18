@@ -1,11 +1,12 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $langNewGroupCreate = "Bina kumpulan baru";
 $langGroupCreation = "Bina Kumpulan Baru";
 $langCreate = "Bina";
 $langNewGroups = "kumpulan baru";
-$langMax = "Keahlian Maksimum ";
+$langMax = "Keahlian Maksimum";
 $langGroupPlacesThis = "orang pelajar";
 $langGroupsAdded = "Kumpulan baru telah dibina";
 $langGroupDel = "Satu kumpulan dipadam";
@@ -40,9 +41,57 @@ $langPublic = "Umum";
 $langPropModify = "Ubahsuai Kumpulan";
 $langState = "Status";
 $langGroupFilledGroups = "Kumpulan ini telah dipenuhkan oleh Pelajar yang berada dalam senarai Pelajar Berdaftar.";
-$langSubscribed  = "Pelajar berdaftar untuk subjek ini";
-$langStudentsNotInThisGroups  = "Pelajar bukan dalam kumpulan ini";
-$langQtyOfUserCanSubscribe_PartBeforeNumber  = "Pelajar boleh menjadi ahli kepada maksimum ";
-$langQtyOfUserCanSubscribe_PartAfterNumber  = " kumpulan";
+$langSubscribed = "Pelajar berdaftar untuk subjek ini";
+$langStudentsNotInThisGroups = "Pelajar bukan dalam kumpulan ini";
+$langQtyOfUserCanSubscribe_PartBeforeNumber = "Pelajar boleh menjadi ahli kepada maksimum";
+$langQtyOfUserCanSubscribe_PartAfterNumber = "Â kumpulan";
+$langGroupLimit = "";
+$CreateGroup = "";
+$ProceedToCreateGroup = "";
 $langStudentRegAllowed = "Pelajar dibenarkan untuk mendaftar-sendiri ke kumpulan ini";
+$langGroupAllowStudentUnregistration = "";
+$langAllGroups = "";
+$langStudentUnsubscribe = "";
+$langStudentDeletesHimself = "";
+$langDefaultSettingsForNewGroups = "";
+$langSelectedGroupsDeleted = "";
+$langSelectedGroupsEmptied = "";
+$langGroupEmptied = "";
+$langSelectedGroupsFilled = "";
+$langGroupSelfUnRegInf = "";
+$langSameForAll = "";
+$langNoLimit = "";
+$langPleaseEnterValidNumber = "";
+$langCreateGroupsFromVirtualCourses = "";
+$langCreateGroupsFromVirtualCoursesInfo = "";
+$langNoGroupsAvailable = "";
+$langGroupsFromVirtualCourses = "";
+$NotAvailable = "";
+$CreateSubgroups = "";
+$CreateSubgroupsInfo = "";
+$CreateNumberOfGroups = "";
+$WithUsersFrom = "";
+$CategoryDeleted = "";
+$Empty = "";
+$FillGroup = "";
+$EmptyGroup = "";
+$MaxGroupsPerUserInvalid = "";
+$GroupOverview = "";
+$GroupCategory = "";
+$NoTitleGiven = "";
+$InvalidMaxNumberOfMembers = "";
+$CategoryOrderChanged = "";
+$Wiki = "";
+$CategoryCreated = "";
+$GroupTutors = "";
+$GroupWork = "";
+$GroupCalendar = "";
+$GroupAnnouncements = "";
+$NoCategoriesDefined = "";
+$GroupsFromClasses = "";
+$GroupsFromClassesInfo = "";
+$Group = "";
+$ForumOfGroup = "";
+$BackToGroupList = "";
+$EditGroupCategory = "";
 ?>

@@ -1,27 +1,32 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$langActivate = "Prikaži";
+$langActivate = "PrikaÅ¾i";
 $langDeactivate = "Skrij";
-$langInLnk  = "Skrita orodja in povezave";
-$langDelLk = "Ali res želiš odstraniti to povezavo?";
-$langCourseCreate  = "Tvori spletno stran teèaja";
-$langNameOfTheLink  = "Ime povezave";
-$lang_main_categories_list                  = "Seznam glavnih kategorij";
-$langCourseAdminOnly = "Le uèitelji";
+$langInLnk = "Skrita orodja in povezave";
+$langDelLk = "Ali res Å¾eliÅ¡ odstraniti to povezavo?";
+$langCourseCreate = "Tvori spletno stran teÄaja";
+$langNameOfTheLink = "Ime povezave";
+$lang_main_categories_list = "Seznam glavnih kategorij";
+$langCourseAdminOnly = "Le uÄitelji";
 $PlatformAdminOnly = "Le upravitelji platforme";
-$langCombinedCourse = "Združeni teèaji";
+$langCombinedCourse = "ZdruÅ¾eni teÄaji";
 $ToolIsNowVisible = "Orodje je sedaj vidno";
 $ToolIsNowHidden = "Orodje je sedaj nevidno";
 $EditLink = "Uredi povezavo";
 $Blog_management = "Upravljanje blogov";
 $Forum = "Forumi";
-$Course_maintenance = "Upravljanje teèajev";
-$TOOL_SURVEY = "Evalvacijski vprašalniki";
+$Course_maintenance = "Upravljanje teÄajev";
+$TOOL_SURVEY = "Evalvacijski vpraÅ¡alniki";
 $GreyIcons = "Orodjarna";
 $Interaction = "Interakcijska orodja";
 $Authoring = "Avtorska orodja";
 $Administration = "Upravljanje";
-$IntroductionTextUpdated = "Uvodno besedilo je bilo ažurirano";
+$IntroductionTextUpdated = "Uvodno besedilo je bilo aÅ¾urirano";
 $IntroductionTextDeleted = "Uvodno besedilo je bilo odstranjeno";
+$SessionIdentifier = "Identifikator seje";
+$SessionName = "Ime seje";
+$SessionCategory = "Kategorija seje";
+$SessionData = "Podatki seje";
 ?>

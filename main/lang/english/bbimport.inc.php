@@ -1,13 +1,14 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$langViewCourseMaterialImport  = "View training material as it will be imported";
-$langViewExternalLinksImport  = "View external links as they will be imported";
-$langViewForumImport  = "View forum as it will be imported";
-$langImportCourseMaterial  = "Import course material (Blackboard tool \"Course Material\")";
-$langImportExternalLinks  = "Import links (Blackboard tool \"External Links\")";
-$langImportForum  = "Import forums (Blackboard tool \"Discussion Board\")";
-$langToolInfo  = "This tool imports Blackboard 5.5 courses (Course Material, Discussion Board, and External Links)";
+$langViewCourseMaterialImport = "View training material as it will be imported";
+$langViewExternalLinksImport = "View external links as they will be imported";
+$langViewForumImport = "View forum as it will be imported";
+$langImportCourseMaterial = "Import course material (Blackboard tool \\"Course Material\\")";
+$langImportExternalLinks = "Import links (Blackboard tool \\"External Links\\")";
+$langImportForum = "Import forums (Blackboard tool \\"Discussion Board\\")";
+$langToolInfo = "This tool imports Blackboard 5.5 courses (Course Material, Discussion Board, and External Links)";
 $langToolName = "Import Blackboard courses";
 $langSelectCoursePackage = "Select a course package";
 $langPackageAlreadySelected = "You have already selected a package";

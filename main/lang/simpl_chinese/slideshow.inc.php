@@ -1,21 +1,24 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$lang_height = "¸ß¶È";
-$lang_resizing_comment = "½«Í¼ÏñµÄ³ß´ç¸Ä±àÎªÏÂÃæµÄ³ß´ç(ÓÃÏñËØ±íÊ¾)";
-$lang_width = "¿í¶È";
-$lang_resizing = "ÖØÐÂ¶¨Òå³ß´ç";
-$lang_no_resizing_comment = "ÏÔÊ¾ËùÓÐÍ¼ÏñµÄÔ­Ê¼³ß´ç, Ã»ÓÐÖØÐÂ¶¨Òå³ß´ç, Èç¹ûÍ¼Ïñ´óÓÚÏÔÊ¾Æ÷µÄ³ß´ç¹ö¶¯Ìõ½«×Ô¶¯ÏÔÊ¾.";
-$lang_show_thumbnails = "ÏÔÊ¾ÂÔÍ¼";
-$lang_click_thumbnails = "µã»÷ÂÔÍ¼µÄÆäÖÐÖ®Ò»";
-$lang_set_slideshow_options = "»ÃµÆÉèÖÃ";
-$lang_slideshow_options = "»ÃµÆÑ¡Ïî";
-$lang_no_resizing = "²»¿ÉÖØÐÂ¶¨Òå³ß´ç(Ä¬ÈÏ)";
-$lang_exit_slideshow = "ÍË³ö»ÃµÆ";
-$SlideShow = "»ÃµÆ";
-$lang_previous_slide = "ÉÏÒ»ÕÅ";
-$lang_next_slide = "ÏÂÒ»ÕÅ";
-$lang_image = "Í¼Ïñ";
-$lang_of = "µÄ";
-$lang_view_slideshow = "²é¿´»ÃµÆ";
+$lang_height = "é«˜åº¦";
+$lang_resizing_comment = "å°†å›¾åƒçš„å°ºå¯¸æ”¹ç¼–ä¸ºä¸‹é¢çš„å°ºå¯¸(ç”¨åƒç´ è¡¨ç¤º)";
+$lang_width = "å®½åº¦";
+$lang_resizing = "é‡æ–°å®šä¹‰å°ºå¯¸";
+$lang_no_resizing_comment = "æ˜¾ç¤ºæ‰€æœ‰å›¾åƒçš„åŽŸå§‹å°ºå¯¸, æ²¡æœ‰é‡æ–°å®šä¹‰å°ºå¯¸, å¦‚æžœå›¾åƒå¤§äºŽæ˜¾ç¤ºå™¨çš„å°ºå¯¸æ»šåŠ¨æ¡å°†è‡ªåŠ¨æ˜¾ç¤º.";
+$lang_show_thumbnails = "æ˜¾ç¤ºç•¥å›¾";
+$lang_click_thumbnails = "ç‚¹å‡»ç•¥å›¾çš„å…¶ä¸­ä¹‹ä¸€";
+$lang_set_slideshow_options = "å¹»ç¯è®¾ç½®";
+$lang_slideshow_options = "å¹»ç¯é€‰é¡¹";
+$lang_no_resizing = "ä¸å¯é‡æ–°å®šä¹‰å°ºå¯¸(é»˜è®¤)";
+$lang_exit_slideshow = "é€€å‡ºå¹»ç¯";
+$SlideShow = "";
+$lang_previous_slide = "ä¸Šä¸€å¼ ";
+$lang_next_slide = "ä¸‹ä¸€å¼ ";
+$lang_image = "å›¾åƒ";
+$lang_of = "çš„";
+$lang_view_slideshow = "æŸ¥çœ‹å¹»ç¯";
+$FirstSlide = "";
+$LastSlide = "";
 ?>

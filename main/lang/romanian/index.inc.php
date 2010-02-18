@@ -1,27 +1,28 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $langInvalidId = "Autentificare esuata - nume de utilizator gresit sau parola incorecta.";
-$langWelcome = "Cursurile gratuite sunt listate mai jos. Celelalte cursuri necesita nume de utilizator si parola, care pot fi obtinute prin click pe \"Inregistrare\". Profesorii pot crea zone de curs prin click pe \"Inregistrare\" si apoi pe \"Creaza zona de curs\"";
+$langWelcome = "Cursurile gratuite sunt listate mai jos. Celelalte cursuri necesita nume de utilizator si parola, care pot fi obtinute prin click pe \\"Inregistrare\\". Profesorii pot crea zone de curs prin click pe \\"Inregistrare\\" si apoi pe \\"Creaza zona de curs\\"";
 $langPass = "Parola";
 $langEnter = "Trimite";
 $langReg = "Inregistrare";
-$langMenu  = "Meniu";
+$langMenu = "Meniu";
 $langAdvises = "Sfaturi";
 $langCourseDoesntExist = "<b>Avertizare: </b> Cursul solicitat nu exista";
 $langGetCourseFromOldPortal = "apasa aici pentru a obtine cursul de pe portalul vechi";
 $langOtherCourses = "Lista cursurilor";
 $langSupportForum = "Forum de suport";
-$langCategories  = "Categorii";
-$langBackToHomePage  = "Inapoi la pagina de start";
-$lang_No_course_publicly_available  = "Nu exista cursuri publice";
-$langLostPassword  = "Ai uitat parola?";
-$lang_edit_my_course_list  = "Editeaza lista de cursuri";
-$langAgenda  = "Evenimente viitoare";
-$langValvas  = "Ultimele anunturi";
-$langUp  = "nivelul anterior";
-$langCatList  = "Categorii";
-$langCourseList  = "Cursuri";
+$langCategories = "Categorii";
+$langBackToHomePage = "Inapoi la pagina de start";
+$lang_No_course_publicly_available = "Nu exista cursuri publice";
+$langLostPassword = "Ai uitat parola?";
+$lang_edit_my_course_list = "Editeaza lista de cursuri";
+$langAgenda = "Evenimente viitoare";
+$langValvas = "Ultimele anunturi";
+$langUp = "nivelul anterior";
+$langCatList = "Categorii";
+$langCourseList = "Cursuri";
 $langHelptwo = "Ajutor";
 $langRegAll = "inregistrare";
 $EussMenu = "meniu";
@@ -65,4 +66,10 @@ $FolderCreated = "Creaza un nou folder";
 $LinkAdded = "Adauga link";
 $AnnouncementAdded = "Adauga anunt";
 $AgendaAdded = "Adauga agendei";
+$Messages = "";
+$Inbox = "";
+$Comppose = "";
+$PendingInvitations = "";
+$YouDoNotHaveAnySessionInItsHistory = "";
+$PortalHomepageDefaultIntroduction = "";
 ?>

@@ -1,5 +1,6 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $PublishSurvey = "Reqsipachiy tapukuyta";
 $CompareQuestions = "Kuskachay tapukunata";
@@ -128,7 +129,7 @@ $CourseUsers = "Yachachinaq haykuqmasikuna";
 $SurveyPublication = "Tapukuypa reqsipachikuynin";
 $AdditonalUsers = "Haykuqmasikuna yapachasqaku";
 $MailText = "E-chaskiq qelqan";
-$UseLinkSyntax = "Haykuqmasikuna ajllasqaykiqa chaskinqaku huj e-chaskita wichaypi qelqasqaykiwan, hinallataq huj wataqtawan q\'apispa tapukuyta hunt\'achinankupaq.Sichus munanki kay waskaq churayta may qelqasqaykipi, chayqa churanki haqnata ** wataq **. Mana churanki kikin kasqanta chayqa wataqqa churakunqa e-chaskiq qelqa tukukuyninpi";
+$UseLinkSyntax = "Haykuqmasikuna ajllasqaykiqa chaskinqaku huj e-chaskita wichaypi qelqasqaykiwan, hinallataq huj wataqtawan q\'apispa tapukuyta hunt\'achinankupaq.Sichus munanki kay waskaq churayta may qelqasqaykipi, chayqa churanki haqnata ** wataq **. Mana churanki kiki";
 $DetailedReportByUser = "Sapanka haykuqmasimanta willay";
 $DetailedReportByQuestion = "Sapanka tapumanta willay";
 $ComparativeReportDetail = "Kay willapiqa iskay taputa kuskachawaq.";
@@ -137,7 +138,6 @@ $DetailedReportByUserDetail = "Kay willapiqa qhawawaq hoq haykuqmasiq llipin kut
 $DetailedReportByQuestionDetail = "Kay willapiqa qhawakun sapanqa tapumanta miraynin. Qhawachikunpaqpas llanp\'u hamut\'aspalla yupaykunamanta wanki qhawachiqmanta ima.";
 $ReminderResendToAllUsers = "Apachiy llapan haykuqmasikuna ajllasqaman. Mana chayqa ajllay kay casilla nisqata, e-chaskitaqa haykuqmasikuna yapachisqaykillan chaskinqaku.";
 $Multiplechoice = "Askha ajllay";
-$Multipleresponse = "Askha kutichiy";
 $Score = "Markana";
 $Shared = "T\'aqapasqa";
 $Invite = "Mink\'asqakuna";
@@ -201,4 +201,6 @@ $ModifyQuestionSurvey = "T\'ijrapay tapuyta";
 $BackToSurvey = "Volver a la encuesta";
 $UpdateInformation = "Actualización de información";
 $PleaseFillSurvey = "Por favor, llene la encuesta";
+$ReportingOverview = "";
+$ThereAreNotQuestionsForthisSurvey = "";
 ?>

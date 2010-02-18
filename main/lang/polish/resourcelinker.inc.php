@@ -1,5 +1,6 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $ResourceAdded = "Resource added. You can now go back to the path or add more resources.";
 $LearningPath = "Learning Path";
@@ -29,7 +30,7 @@ $Users = "U&#380;ytkownicy";
 $IntroductionTextAdd = "Dodaj stron&#281; zawieraj&#261;c&#261; tekst wprowadzaj&#261;cy do tego rozdzia&#322;u.";
 $CourseDescriptionAdd = "Dodaj stron&#281; zawieraj&#261;c&#261; opis tego rozdzia&#322;u kursu.";
 $GroupsAdd = "Dodaj do tego rozdzia&#322;u stron&#281; zawieraj&#261;c&#261; grupy.";
-$UsersAdd = "Dodaj do tego rozdzia&#322;u stron&#281; zawieraj&#261;c&#261; u&#380;ytkowników.";
+$UsersAdd = "Dodaj do tego rozdzia&#322;u stron&#281; zawieraj&#261;c&#261; u&#380;ytkownikÃ³w.";
 $ExportableCourseResources = "Eksportowalne zasoby kursu";
 $DokeosRelatedCourseMaterial = "Zasoby kursu zwi&#261;zane z Chamilo\'em";
 $LinkTarget = "Cel linka";
@@ -39,14 +40,14 @@ $StepDeleted1 = "Ten";
 $StepDeleted2 = "element w tym narz&#281;dziu zosta&#322; skasowany.";
 $Modify = "modyfikuj";
 $Chapter = "Rozdzia&#322;";
-$NoAgendaItems = "Nie ma &#380;adnych elementów Agendy";
+$NoAgendaItems = "Nie ma &#380;adnych elementÃ³w Agendy";
 $AgendaAdd = "Dodaj element Agendy";
-$UserGroupFilter = "Filtr grupowy u&#380;ytkowników";
+$UserGroupFilter = "Filtr grupowy u&#380;ytkownikÃ³w";
 $AgendaSortChronologicallyUp = "Sortuj Agend&#281; chronologicznie (rosn&#261;co)";
 $ShowCurrent = "Poka&#380; bie&#380;&#261;ce elementy Agendy";
 $ModifyCalendarItem = "Modyfikuj element Agendy";
 $ItemTitle = "Tytu&#322;";
-$Detail = "Szczegó&#322;y";
+$Detail = "SzczegÃ³&#322;y";
 $EditSuccess = "Edycja powiod&#322;a si&#281;";
 $AddCalendarItem = "Dodaj element Agendy";
 $AddAnn = "Dodaj og&#322;oszenie";

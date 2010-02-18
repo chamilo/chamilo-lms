@@ -1,5 +1,6 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $langProfessors = "Profesori";
 $langExplanation = "Odata ce vei apasa OK,un site de internet cu Forum, Agenda, Document manager etc. va fi creat. Contul tau, in calitate de creator al siteului iti permite sa-l modifici dupa cerintele tale.";
@@ -16,7 +17,7 @@ $langNoPsychology = "Nu. Ironia socratica nu e o problema de psihologie, necesit
 $langAdmitError = "Admite eroarea proprie de a invita interlocutorul sa procedeze la fel.";
 $langNoSeduction = "Nu. Ironia socratica nu este o strategie de seductie sau o metoda bazata pe exemple.";
 $langForce = "Determina interlocultorul, printr-o serie de intrebari si sub-intrebari sa admita ca nu stie ceea ce afirma ca stie.";
-$langIndeed = "Ironie socratica este metoda interogativa. Grecescul \"eirotao\" se traduce prin \"a pune intrebari\".";
+$langIndeed = "Ironie socratica este metoda interogativa. Grecescul \\"eirotao\\" se traduce prin \\"a pune intrebari\\".";
 $langContradiction = "Utilizeaza principiul non-contradictiei pentru a forta interlocutorul catre un sfarsit de drum.";
 $langNotFalse = "Acest raspuns nu este fals. Este adevarat ca dezvaluirea ignorantei interlocutorului inseamna a arata conditiile contradictorii determinate de premisele sale.";
 $langAgenda = "Agenda";
@@ -26,12 +27,12 @@ $langAnnouncements = "Anunturi";
 $langAddPageHome = "Trimite pe server pagina si link-ul catre Pagina Principala.";
 $langLinkSite = "Adauga un link";
 $langModifyInfo = "Setarile cursului";
-$langCourseDesc  = "Descrierea cursului";
+$langCourseDesc = "Descrierea cursului";
 $langAgendaTitle = "Marti 11 decembrie- Prima intalnire. Camera: LIN 18";
 $langAgendaText = "Introducere generala in managementul proiectelor";
 $langMicro = "Interviuri de strada";
 $langGoogle = "Motor de cautare rapid si puternic";
-$langIntroductionText = "Acesta este un text introductiv. Pentru a-l inlocui cu textul tau, apasa pe \"iconita creion\" de alaturi (numai pentru administratorii de curs).";
+$langIntroductionText = "Acesta este un text introductiv. Pentru a-l inlocui cu textul tau, apasa pe \\"iconita creion\\" de alaturi (numai pentru administratorii de curs).";
 $langIntroductionTwo = "Aceasta pagina permite utilizatorilor si grupurilor sa publice documente.";
 $langCourseDescription = "Scrie aici descrierea ce va aparea in lista cursului.";
 $langProfessor = "Profesor";
@@ -58,9 +59,9 @@ $langOnlineConference = "Conferinta";
 $langAgendaCreationTitle = "Creatia cursului";
 $langAgendaCreationContenu = "Cursul a fost creat in momentula cesta.";
 $langOnlineDescription = "Acesta este un exemplu de descriere pentru unealta de Conferinta";
-$langDropbox  = "Cutie postala";
-$langOnly  = "Doar";
-$langRandomLanguage  = "Amesteca selectia in limbile disponibile";
+$langDropbox = "Cutie postala";
+$langOnly = "Doar";
+$langRandomLanguage = "Amesteca selectia in limbile disponibile";
 $langImages = "Imagini";
 $langAudio = "Audio";
 $langFlash = "Flash";
@@ -98,8 +99,11 @@ $ExampleForumCategory = "Exemplu de categorie in forum";
 $ExampleForum = "Exemplu de forum";
 $ExampleThread = "Exemplu de cale";
 $ExampleThreadContent = "Exemplu de continut";
-$IntroductionWiki = "Cuvantul Wiki este prescurtarea de la WikiWikiWeb. Wikiwiki este un cuvant in hawaiana ce inseamna rapid sau viteza. Intr-un wiki, utilizatorii pot scrie paginile impreuna. Daca o persoana scrie ceva gresit, o alta persoana o poate corecta. Urmatoarea persoana poate adauga ceva nou. De aceea, pagina devine din ce in ce mai buna pe masura ce este modificata.";
+$IntroductionWiki = "Cuvantul Wiki este prescurtarea de la WikiWikiWeb. Wikiwiki este un cuvant in hawaiana ce inseamna rapid sau viteza. Intr-un wiki, utilizatorii pot scrie paginile impreuna. Daca o persoana scrie ceva gresit, o alta persoana o poate corecta. Urmatoarea per";
 $CreateCourseArea = "Faceti acest training";
 $CreateCourse = "Creati training";
-$Create = "Creeaz&#259; ";
+$Create = "Creeaz&#259;";
+$MessageOfNewCourseToAdmin = "";
+$NewCourseCreatedIn = "";
+$ExplicationTrainers = "";
 ?>

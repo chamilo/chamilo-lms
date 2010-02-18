@@ -1,7 +1,8 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$Tools  = "Llank\'anakuna";
+$Tools = "Llank\'anakuna";
 $SendWork = "Apachiy qelqa khiputa";
 $langTooBig = "Manaraq ajllankichu hoq khipu apachinapaq utaq khipuqa sinchi hatunmi.";
 $langListDeleted = "Sinriqa tukuy kayninpi wañuchikun.";
@@ -70,4 +71,20 @@ $ButtonCreateAssignment = "Crear";
 $AssignmentName = "Nombre de la tarea";
 $CreateAssignment = "Crear una tarea";
 $FolderEdited = "Tarea modificada";
+$UpdateWork = "";
+$MakeAllPapersInvisible = "";
+$MakeAllPapersVisible = "";
+$TheDocumentHasBeenDeleted = "";
+$YouAreNotAllowedToDeleteThisDocument = "";
+$StudentAllowedToDeleteOwnPublication = "";
+$ConfirmYourChoiceDeleteAllfiles = "";
+$WorkName = "";
+$ReminderToSubmitPendingTask = "";
+$MessageConfirmSendingOfTask = "";
+$DataSent = "";
+$DownloadLink = "";
+$ViewUsersWithTask = "";
+$ReminderMessage = "";
+$DateSent = "";
+$ViewUsersWithoutTask = "";
 ?>

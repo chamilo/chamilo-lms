@@ -1,9 +1,10 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $AgendaAdd = "Ierakst&#299;t jaunu notikumu pl&#257;not&#257;j&#257;";
 $ShowAllEvents = "Par&#257;d&#299;t visus notikumus";
-$ShowCurrent = "Par&#257;d&#299;t š&#299; m&#275;neša notikumus";
+$ShowCurrent = "Par&#257;d&#299;t Âš&#299; m&#275;neÂša notikumus";
 $AddCalendarItem = "Ierakst&#299;t jaunu notikumu pl&#257;not&#257;j&#257;";
 $Day = "Diena";
 $Month = "M&#275;nesis";
@@ -14,7 +15,7 @@ $Detail = "S&#299;k&#257;k";
 $EditSuccess = "Notikums pl&#257;not&#257;j&#257; tika izlabots";
 $AddSuccess = "Notikums pl&#257;not&#257;ja tika ierakst&#299;ts";
 $AgendaDeleteSuccess = "Notikums no pl&#257;not&#257;ja tika izdz&#275;sts";
-$NoAgendaItems = "Šeit nav neviena ieraksta ";
+$NoAgendaItems = "ÂŠeit nav neviena ieraksta";
 $lang_september = "Septembris";
 $langClassName = "Klases nosaukums";
 $lang_agenda = "Pl&#257;not&#257;js";
@@ -30,10 +31,10 @@ $langMinute = "min&#363;te";
 $langLasting = "ilgums";
 $langOldToNew = "no vec&#257;k&#257; uz jaun&#257;ko";
 $langNewToOld = "no jaun&#257;k&#257; uz vec&#257;ko";
-$langNow = "šobr&#299;d";
+$langNow = "Âšobr&#299;d";
 $langAddEvent = "Pievienot jaunu ierakstu";
 $langDetail = "s&#299;k&#257;k";
-$MonthView = "M&#275;neša griezum&#257;";
+$MonthView = "M&#275;neÂša griezum&#257;";
 $WeekView = "Ned&#275;&#316;as griezum&#257;";
 $DayView = "Dienas griezum&#257;";
 $AddPersonalItem = "Ierakst&#299;t person&#299;gu ierakstu";
@@ -49,4 +50,29 @@ $ViewPersonalItem = "Par&#257;d&#299;t person&#299;gos ierakstus";
 $UserGroupFilter = "Grupu un lietot&#257;ju filtrs";
 $ShowAll = "R&#257;d&#299;t visus";
 $Print = "Druk&#257;t";
+$MyTextHere = "";
+$CopiedAsAnnouncement = "";
+$NewAnnouncement = "";
+$AddAnnouncement = "";
+$UpcomingEvent = "";
+$RepeatedEvent = "";
+$RepeatType = "";
+$RepeatDaily = "";
+$RepeatWeekly = "";
+$RepeatMonthlyByDate = "";
+$RepeatMonthlyByDay = "";
+$RepeatMonthlyByDayR = "";
+$RepeatYearly = "";
+$RepeatEnd = "";
+$RepeatedEventViewOriginalEvent = "";
+$ICalFileImport = "";
+$AllUsersOfThePlatform = "";
+$GlobalEvent = "";
+$ModifyEvent = "";
+$EndDateCannotBeBeforeTheStartDate = "";
+$AgendaSortChronologicallyUp = "";
+$AgendaSortChronologicallyDown = "";
+$ItemForUserSelection = "";
+$IsNotiCalFormatFile = "";
+$RepeatEvent = "";
 ?>

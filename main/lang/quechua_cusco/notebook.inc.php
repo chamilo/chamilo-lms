@@ -1,5 +1,6 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $NewNote = "Musuq willay";
 $Note = "Willay";
@@ -19,9 +20,16 @@ $OrderByTitle = "Allichay sapa sutichayninmanta";
 $NoteTitle = "Willaymanta sutinchaynin";
 $NoteComment = "Willaymanta ima rimaykuna";
 $NoteAdded = "Willay yapasqa";
-$NoteConfirmDelete = "Cheqaychu pichayta munanki willayta? ";
+$NoteConfirmDelete = "Cheqaychu pichayta munanki willayta?";
 $AddNote = "Yapay willayta";
 $ModifyNote = "T\'ijrapay willayta";
 $BackToNoteList = "Regresar a la lista de anotaciones";
 $NotebookManagement = "Administración de nota personal";
+$BackToNotesList = "";
+$NotesSortedByTitleAsc = "";
+$NotesSortedByTitleDESC = "";
+$NotesSortedByUpdateDateAsc = "";
+$NotesSortedByUpdateDateDESC = "";
+$NotesSortedByCreationDateAsc = "";
+$NotesSortedByCreationDateDESC = "";
 ?>

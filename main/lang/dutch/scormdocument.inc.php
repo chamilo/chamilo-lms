@@ -1,5 +1,6 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $langChapter = "Hoofdstuk";
 $langDocumentList = "Lijst van alle documenten";
@@ -9,8 +10,8 @@ $langEditDocument = "Wijzigen";
 $langCreateDocument = "Nieuw document";
 $langMissingImagesDetected = "Ontbrekende beelden gedetecteerd";
 $langPublish = "Publiceren";
-$langScormcontentstudent = "Dit is een cursus in SCORM-formaat. Als u deze wilt afspelen, klik dan hier: <input type=\"button\" name=\"scormbutton\" value=\"Afspelen\" onclick=\"openscorm()\" />";
-$langScormcontent = "Dit is een SCORM-pakket.<br /><input type=\"button\" name=\"scormbutton\" value=\"Afspelen\" onclick=\"openscorm()\" />";
+$langScormcontentstudent = "Dit is een cursus in SCORM-formaat. Als u deze wilt afspelen, klik dan hier: <input type=\\"button\\" name=\\"scormbutton\\" value=\\"Afspelen\\" onclick=\\"openscorm()\\" />";
+$langScormcontent = "Dit is een SCORM-pakket.<br /><input type=\\"button\\" name=\\"scormbutton\\" value=\\"Afspelen\\" onclick=\\"openscorm()\\" />";
 $langDownloadAndZipEnd = "Het .zip bestand is opgestuurd en uitgepakt.";
 $langZipNoPhp = "Het .zip bestand mag geen PHP-bestanden bevatten.";
 $langGroupForumLink = "Groepsforum";
@@ -28,7 +29,7 @@ $langImpossible = "Operatie is onmogelijk.";
 $langNewDir = "Naam van de nieuwe map";
 $langTo = "naar";
 $langNoSpace = "Het uploaden is mislukt. Er is onvoldoende ruimte in uw map.";
-$langDownloadEnd = "Het uploaden is beëindigd.";
+$langDownloadEnd = "Het uploaden is beÃ«indigd.";
 $langFileExists = "Onmogelijk.<br />Er bestaat al een bestand met dezelfde naam.";
 $langDocCopied = "Document is gekopieerd.";
 $langDocDeleted = "Document is verwijderd.";
@@ -44,7 +45,7 @@ $langRoot = "basis";
 $langBuilder = "Leerpad aanmaken";
 $lang_edit_learnpath = "Wijzig naam en beschrijving";
 $lang_add_title_and_desc = "Hernoem en voeg beschrijving toe";
-$lang_add_learnpath = "Creëer een Chamiloleerpad";
+$lang_add_learnpath = "CreÃ«er een Chamiloleerpad";
 $lang_learnpath_added = "Het nieuwe leerpad is aangemaakt. U kan er nu modules aan toevoegen. Klik op de naam van het leerpad om het te bewerken.";
 $lang_delete_learnpath = "Verwijder het leerpad";
 $lang_learnpath_edited = "Het leerpad is gewijzigd.";

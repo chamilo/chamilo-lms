@@ -1,5 +1,6 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $Camera = "Videocamera";
 $Microphone = "Microfono";
@@ -10,7 +11,7 @@ $Play = "Play";
 $Stop = "Stop";
 $Record = "Registrazione";
 $NoFileAvailable = "Non ci sono file disponibili";
-$RecordingOnlyForTeachers = "La registrazione è riservata ai docenti";
+$RecordingOnlyForTeachers = "La registrazione Ã¨ riservata ai docenti";
 $UsersNow = "Utenti collegati:";
 $StartConference = "Avvia la videoconferenza";
 $MyName = "Il mio nome";
@@ -23,16 +24,16 @@ $CreateNewPoll = "Crea un nuovo sondaggio";
 $Question = "Domanda:";
 $PollType = "Tipo di domanda:";
 $Create = "Crea";
-$InfoConnectedUsersGetNotifiedOfThisPoll = "Nota: ogni utente connesso riceverà un avviso di nuovo sondaggio.";
-$YesNo = "Sì/No";
+$InfoConnectedUsersGetNotifiedOfThisPoll = "Nota: ogni utente connesso riceverÃ  un avviso di nuovo sondaggio.";
+$YesNo = "SÃ¬/No";
 $Numeric1To10 = "Numero 1-10";
 $Poll = "Sondaggio";
 $YouHaveToBecomeModeratorOfThisRoomToStartPolls = "Per creare sondaggi devi diventare moderatore.";
 $YourVoteHasBeenSent = "Voto inviato";
-$YouAlreadyVotedForThisPoll = "Hai già votato!";
+$YouAlreadyVotedForThisPoll = "Hai giÃ  votato!";
 $VoteButton = "Vota!";
 $YourAnswer = "La tua scelta:";
-$Yes = "Sì";
+$Yes = "SÃ¬";
 $No = "No";
 $WantsToKnow = "vuol sapere:";
 $PollResults = "Risultati del sondaggio";
@@ -41,9 +42,9 @@ $Result = "Risultato:";
 $ThereIsNoPoll = "Non ci sono sondaggi.";
 $MeetingMode = "Videoconferenza (4 persone al massimo)";
 $ConferenceMaxSeats = "Videolezione (50 persone al massimo)";
-$Mode = "Modalità";
+$Mode = "ModalitÃ ";
 $RemainingSeats = "Posti liberi";
-$AlreadyIn = "Già connessi";
+$AlreadyIn = "GiÃ  connessi";
 $CheckIn = "Controllo";
 $TheModeratorHasLeft = "Il moderatore ha lasciato la sala";
 $SystemMessage = "Messaggio di sistema";
@@ -89,7 +90,7 @@ $Rejected = "Rifiutato";
 $ChangeModerator = "Cambia moderatore";
 $YouAreNotModeratingThisCourse = "Non sei il moderatore del corso.";
 $Moderator = "Moderatore";
-$ThisRoomIsFullPleaseTryAgain = "La sala è piena: ritenta più tardi, grazie!";
+$ThisRoomIsFullPleaseTryAgain = "La sala Ã¨ piena: ritenta piÃ¹ tardi, grazie!";
 $Loading = "Caricamento";
 $PleaseWaitWhileLoadingImage = "Attendi il caricamento dell\'immagine, prego";
 $SynchronisingConferenceMembers = "Sto sincronizzando gli utenti connessi";

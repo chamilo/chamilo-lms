@@ -1,7 +1,8 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$Tools  = "Alat Bantu";
+$Tools = "Alat Bantu";
 $SendWork = "Muatnaik Tugasan";
 $langTooBig = "Anda tidak memilih sebarang fail/saiz fail terlalu besar.";
 $langListDeleted = "Keseluruhan senarai telah dipadam.";
@@ -15,4 +16,75 @@ $langWorkDelete = "Padam";
 $langWorkModify = "Ubahsuai";
 $langWorkConfirmDelete = "Anda pasti untuk padam tugasan ini";
 $langAllFiles = "Semua fail";
+$lang_default_upload = "";
+$lang_new_visible = "";
+$lang_new_unvisible = "";
+$lang_doc_unvisible = "";
+$langDelLk = "";
+$langMustBeRegisteredUser = "";
+$langListDel = "";
+$langNameDir = "";
+$langFileExists = "";
+$CreateDirectory = "";
+$langCurrentDir = "";
+$UploadADocument = "";
+$EditToolOptions = "";
+$DocumentDeleted = "";
+$SendMailBody = "";
+$DirDelete = "";
+$ValidateChanges = "";
+$FolderUpdated = "";
+$EndsAt = "";
+$QualificationOfAssignment = "";
+$MakeQualifiable = "";
+$QualificationNumberOver = "";
+$WeightInTheGradebook = "";
+$DatesAvailables = "";
+$ExpiresAt = "";
+$AddToCalendar = "";
+$DirectoryCreated = "";
+$Assignment = "";
+$AdvancedParameters = "";
+$ExpiryDateToSendWorkIs = "";
+$EnableExpiryDate = "";
+$EnableEndDate = "";
+$IsNotPosibleSaveTheDocument = "";
+$EndDateCannotBeBeforeTheExpireDate = "";
+$SelectAFilter = "";
+$FilterByNotExpired = "";
+$FilterAssignments = "";
+$WeightNecessary = "";
+$QualificationOver = "";
+$ExpiryDateAlreadyPassed = "";
+$EndDateAlreadyPassed = "";
+$MoveXTo = "";
+$QualificationMustNotBeMoreThanQualificationOver = "";
+$ModifyDirectory = "";
+$DeleteAllFiles = "";
+$BackToWorksList = "";
+$EditMedia = "";
+$AllFilesInvisible = "";
+$FileInvisible = "";
+$AllFilesVisible = "";
+$FileVisible = "";
+$ButtonCreateAssignment = "";
+$AssignmentName = "";
+$CreateAssignment = "";
+$FolderEdited = "";
+$UpdateWork = "";
+$MakeAllPapersInvisible = "";
+$MakeAllPapersVisible = "";
+$TheDocumentHasBeenDeleted = "";
+$YouAreNotAllowedToDeleteThisDocument = "";
+$StudentAllowedToDeleteOwnPublication = "";
+$ConfirmYourChoiceDeleteAllfiles = "";
+$WorkName = "";
+$ReminderToSubmitPendingTask = "";
+$MessageConfirmSendingOfTask = "";
+$DataSent = "";
+$DownloadLink = "";
+$ViewUsersWithTask = "";
+$ReminderMessage = "";
+$DateSent = "";
+$ViewUsersWithoutTask = "";
 ?>

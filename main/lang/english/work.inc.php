@@ -1,7 +1,8 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$Tools  = "Tools";
+$Tools = "Tools";
 $SendWork = "Upload paper";
 $langTooBig = "You haven\'t selected a file or the file is too big.";
 $langListDeleted = "The whole list has been deleted.";
@@ -73,9 +74,9 @@ $FolderEdited = "Folder edited";
 $UpdateWork = "Update this task";
 $MakeAllPapersInvisible = "Make all papers invisible";
 $MakeAllPapersVisible = "Make all papers visible";
-$StudentAllowedToDeleteOwnPublication = "Allow learners to delete their own publications";
 $TheDocumentHasBeenDeleted = "The document has been deleted.";
 $YouAreNotAllowedToDeleteThisDocument = "You are not allowed to delete this document";
+$StudentAllowedToDeleteOwnPublication = "Allow learners to delete their own publications";
 $ConfirmYourChoiceDeleteAllfiles = "Please confirm your choice. This will delete all files without possibility of recovery";
 $WorkName = "Assignment name";
 $ReminderToSubmitPendingTask = "Please remember you still have to send an assignment";

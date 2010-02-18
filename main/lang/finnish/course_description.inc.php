@@ -1,19 +1,20 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$langCourseProgram  = "Kurssin kuvaus";
-$langThisCourseDescriptionIsEmpty  = "Kurssin kuvausta ei ole vielä tehty.";
-$langEditCourseProgram  = "Luo ja muokkaa kurssin kuvausta";
-$QuestionPlan  = "Kysymyksiä opettajalle";
-$langInfo2Say  = "Käyttäjille annettava informaatio";
-$langOuAutreTitre  = "Otsikko";
-$langNewBloc  = "Muu";
-$langAddCat  = "Lisää aihe";
-$langAdd  = "Lisää";
-$langValid  = "Voimassaoleva";
-$langBackAndForget  = "Peruuta";
-$CourseDescriptionUpdated = "Kurssin kuvaus on päivitetty";
+$langCourseProgram = "Kurssin kuvaus";
+$langThisCourseDescriptionIsEmpty = "Kurssin kuvausta ei ole vielÃ¤ tehty.";
+$langEditCourseProgram = "Luo ja muokkaa kurssin kuvausta";
+$QuestionPlan = "KysymyksiÃ¤ opettajalle";
+$langInfo2Say = "KÃ¤yttÃ¤jille annettava informaatio";
+$langOuAutreTitre = "Otsikko";
+$langNewBloc = "Muu";
+$langAddCat = "LisÃ¤Ã¤ aihe";
+$langAdd = "LisÃ¤Ã¤";
+$langValid = "Voimassaoleva";
+$langBackAndForget = "Peruuta";
+$CourseDescriptionUpdated = "Kurssin kuvaus on pÃ¤ivitetty";
 $CourseDescriptionDeleted = "Kurssin kuvaus on poistettu";
-$CourseDescriptionIntro = "Luodaksesi kurssikuvauksen, klikkaa otsikkoa ja täytä oikea kenttä.Klikkaa sitten OK ja täytä seuraava otsikko.";
+$CourseDescriptionIntro = "Luodaksesi kurssikuvauksen, klikkaa otsikkoa ja tÃ¤ytÃ¤ oikea kenttÃ¤.Klikkaa sitten OK ja tÃ¤ytÃ¤ seuraava otsikko.";
 $langSaveDescription = "Tallenna kuvaus";
 ?>

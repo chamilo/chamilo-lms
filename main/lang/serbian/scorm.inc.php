@@ -1,40 +1,57 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $langScormVersion = "verzija";
-$langScormRestarted = "Sve lekcije su za sada nedovršene.";
+$langScormRestarted = "Sve lekcije su za sada nedovrÂšene.";
 $langScormNoNext = "ovo je poslednja lekcija";
 $langScormNoPrev = "Ovo je prva lekcija";
 $langScormTime = "Vreme";
-$langScormNoOrder = "Nije zadat redosled, možete da kliknete na bilo koju lekciju.";
+$langScormNoOrder = "Nije zadat redosled, moÂžete da kliknete na bilo koju lekciju.";
 $langScormScore = "Rezultat";
 $langScormLessonTitle = "Naslov lekcije";
 $langScormStatus = "Status";
 $langScormToEnter = "Za unos";
-$langScormFirstNeedTo = "potrebno Vam je prvo izvršenje ";
+$langScormFirstNeedTo = "potrebno Vam je prvo izvrÂšenje";
 $langScormThisStatus = "Ova lekcija je sad";
-$langScormClose = "Završi";
+$langScormClose = "ZavrÂši";
 $langScormRestart = "Restartuj";
-$langScormCompstatus = "Završena";
-$langScormIncomplete = "Nezavršena";
+$langScormCompstatus = "ZavrÂšena";
+$langScormIncomplete = "NezavrÂšena";
 $langScormPassed = "Pre&#273;ena";
 $langScormFailed = "Nije uspelo";
 $langScormPrevious = "Prethodna";
 $langScormNext = "Naredna";
 $langScormTitle = "Alat za pokretanje Scorm formata";
 $langScormMystatus = "Moj status";
-$langScormNoItems = "Ovaj sadržaj nema stavke.";
-$langScormNoStatus = "Nema statusa za ovaj sadržaj";
-$langScormLoggedout = "odjavljen iz Scorm okruženja";
+$langScormNoItems = "Ovaj sadrÂžaj nema stavke.";
+$langScormNoStatus = "Nema statusa za ovaj sadrÂžaj";
+$langScormLoggedout = "odjavljen iz Scorm okruÂženja";
 $langScormCloseWindow = "Zatvori prozor";
 $ScormBrowsed = "Pregledan";
 $langScormExitFullScreen = "Nazad na normalan ekran";
 $langScormFullScreen = "Full screen";
-$langScormNotAttempted = "Bez pokušaja";
+$langScormNotAttempted = "Bez pokuÂšaja";
 $langCharset = "Skup znakova (character set)";
 $langLocal = "Lokalni";
 $langRemote = "Udaljeni";
-$langAutodetect = "Automatsko pronalaženje";
-$langAccomplishedStepsTotal = "Ukupno izvršenih koraka";
+$langAutodetect = "Automatsko pronalaÂženje";
+$langAccomplishedStepsTotal = "Ukupno izvrÂšenih koraka";
 $langUnknown = "Nepoznat";
+$AreYouSureToDeleteSteps = "";
+$Origin = "";
+$Local = "";
+$Remote = "";
+$FileToUpload = "";
+$ContentMaker = "";
+$ContentProximity = "";
+$UploadLocalFileFromGarbageDir = "";
+$ThisItemIsNotExportable = "";
+$MoveCurrentChapter = "";
+$GenericScorm = "";
+$UnknownPackageFormat = "";
+$Attempt = "";
+$MoveTheCurrentForum = "";
+$WarningWhenEditingScorm = "";
+$AdditionalProfileField = "";
 ?>

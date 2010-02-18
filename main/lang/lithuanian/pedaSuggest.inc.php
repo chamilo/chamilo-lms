@@ -1,5 +1,6 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $GeneralDescription = "Apibūdinimas";
 $GeneralDescriptionQuestions = "Koks kurso vaidmuo studijų modulyje? Ar yra kokių išankstinių reikalavimų? Kaip šis kursas siejasi su kitais kursais?";
@@ -19,7 +20,7 @@ $CourseMaterialInformation = "Trumpas kurso medžiagos aprašymas.";
 $HumanAndTechnicalResources = "Žmogiškieji ir techniniai resursai";
 $HumanAndTechnicalResourcesQuestions = "Ar kurse yra dėstytojai, kuratoriai, techninė pagalba, socialiniai padėjėjai, kompiuterių klasės?";
 $HumanAndTechnicalResourcesInformation = "Trumpas kontaktinių asmenų ir techninių galimybių aprašymas.";
-$Assessment  = "Įvertinimas";
+$Assessment = "Įvertinimas";
 $AssessmentQuestions = "Kaip bus vertinami kurso vartotojų pasiekimai? Ar yra strategija tobulinti kurso temas, įvertinimo kriterijus?";
 $AssessmentInformation = "Egzaminų klausimų pavyzdžiai. Vertinimo kriterijai. Įvairios pastabos ir patarimai.";
 ?>

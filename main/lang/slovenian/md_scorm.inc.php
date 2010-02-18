@@ -1,37 +1,38 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$nameTools = "Scorm Manifest Metadata";
-$langMdCallingTool = "Uèna pot - Scorm";
+$nameTools = "nerabljena jez. variabla";
+$langMdCallingTool = "UÄna pot - Scorm";
 $langTool = "Scorm MD operacije";
 $langNotInDB = "ni vnosa v Chamilo podatkovno bazo";
-$langManifestSyntax = "(sintaktièna napaka v manifest datoteki)";
+$langManifestSyntax = "(sintaktiÄna napaka v manifest datoteki)";
 $langEmptyManifest = "(prazna manifest datoteka...)";
 $langNoManifest = "(ni manifest datoteke...)";
-$langNotFolder = "ni možno, ni mapa ...";
+$langNotFolder = "ni moÅ¾no, ni mapa ...";
 $langUploadHtt = "Prenesi (upload) HTT datoteko";
-$langHttFileNotFound = "Nove HTT datoteke ni mogoèe odpreti (prazna, prevelika)";
-$langHttOk = "Nova HTT datoteka je bila prenešena";
-$langHttNotOk = "prenos HTT datoteke ni bil uspešen";
+$langHttFileNotFound = "Nove HTT datoteke ni mogoÄe odpreti (prazna, prevelika)";
+$langHttOk = "Nova HTT datoteka je bila preneÅ¡ena";
+$langHttNotOk = "prenos HTT datoteke ni bil uspeÅ¡en";
 $langRemoveHtt = "Odstrani HTT datoteko";
 $langHttRmvOk = "HTT datoteka je bila odstranjena";
-$langHttRmvNotOk = "Odstranitev HTT datoteke ni bila uspešna";
+$langHttRmvNotOk = "Odstranitev HTT datoteke ni bila uspeÅ¡na";
 $langImport = "Uvozi imsmanifest.xml";
 $langRemove = "Odstrani MDE-je";
 $langAllRemovedFor = "Vsi vnosi odstranjeni za";
 $langIndex = "Indeksiraj besede z PhpDig";
-$langTotalMDEs = "Skupno število Scorm MDD vnosov:";
+$langTotalMDEs = "Skupno Å¡tevilo Scorm MDD vnosov:";
 $langMainMD = "Odpri glavni MDE";
 $langLines = "vrstic";
-$langPlay = "Zaženi index.php";
-$langNonePossible = "Nobena MD operacija ni možna";
+$langPlay = "ZaÅ¾eni index.php";
+$langNonePossible = "Nobena MD operacija ni moÅ¾na";
 $langOrElse = "Izberi Scorm mapo ali ID Scorm mape";
 $langWorkWith = "Operacije s Scorm mapo";
 $langSDI = "... Scorm mapa z SD-ID (in deljen manifest - ali pusti prazno)";
 $langRoot = "koren";
-$langSplitData = "Deljen manifest, in #MDe, èe obstaja:";
+$langSplitData = "Deljen manifest, in #MDe, Äe obstaja:";
 $langMffNotOk = "Zamenjava manifest datoteke ni uspela";
 $langMffOk = "Manifest datoteka je bila zamenjana";
-$langMffFileNotFound = "Novo manifest datoteko ni mogoèe odpreti (lahko je prazna, prevelika)";
+$langMffFileNotFound = "Novo manifest datoteko ni mogoÄe odpreti (lahko je prazna, prevelika)";
 $langUploadMff = "Nadomesti manifest datoteko";
 ?>

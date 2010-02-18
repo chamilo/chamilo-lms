@@ -1,16 +1,17 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $langLinkSite = "Web nisqapaq waskhana";
-$langSubTitle = "Yapay ukhu utaq hawa waskhanata yachachinaq raphi qallariyninman. Chay ruwanapaqqa, raphiman rispa, URL nisqata kikinchapa ratachiy wanp\'unapi \"Waskhana\" uranpi kasqata.";
-$langAddPage            = "Yapay raphita";
-$langSendPage           = "Raphi apachinapaq";
-$langCouldNot           = "Khipuqa mana atikunchu apachikuyta";
-$langOkSentLink         = "Waskhanaqa apachikunña. Kunan kashanña hap\'ipanapaq kaypi <a href=\"%s/index.php\">Yachachinaq raphi qallariynin</a>";
-$langTooBig             = "Manan ajllankichu khipu apachinapaq utan sinchi hatunmi khipuqa";
-$langExplanation        = "Raphiqa kanman HTML nisqapi (ej. \"my_page.htm\"). Waskhachakunqa raphi qallariymanl. HTML nisqamanta hoqniraq khiputa apachinapaqqa (PDF, Word, Power Point, Video, etc.) hap\'ipay kayta <a href=../document/document.php>Qelqa khipu llank\'ana</a>";
-$langPgTitle            = "Raphiq sutinchaynin";
-$langNoLinkURL          = "Haykuchiy wakhachanaq may riyninta";
+$langSubTitle = "Yapay ukhu utaq hawa waskhanata yachachinaq raphi qallariyninman. Chay ruwanapaqqa, raphiman rispa, URL nisqata kikinchapa ratachiy wanp\'unapi \\"Waskhana\\" uranpi kasqata.";
+$langAddPage = "Yapay raphita";
+$langSendPage = "Raphi apachinapaq";
+$langCouldNot = "Khipuqa mana atikunchu apachikuyta";
+$langOkSentLink = "Waskhanaqa apachikunña. Kunan kashanña hap\'ipanapaq kaypi <a href=\\"%s/index.php\\">Yachachinaq raphi qallariynin</a>";
+$langTooBig = "Manan ajllankichu khipu apachinapaq utan sinchi hatunmi khipuqa";
+$langExplanation = "Raphiqa kanman HTML nisqapi (ej. \\"my_page.htm\\"). Waskhachakunqa raphi qallariymanl. HTML nisqamanta hoqniraq khiputa apachinapaqqa (PDF, Word, Power Point, Video, etc.) hap\'ipay kayta <a href=../document/document.php>Qelqa khipu llank\'ana</a>";
+$langPgTitle = "Raphiq sutinchaynin";
+$langNoLinkURL = "Haykuchiy wakhachanaq may riyninta";
 $langLinkTarget = "Waskhanaq chayanan";
 $langSameWindow = "Kikin  whawarinapi";
 $langNewWindow = "Musuq whawarinapi";

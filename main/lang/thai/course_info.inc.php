@@ -1,81 +1,116 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$ModifInfo = "ตั้งค่าวิชา";
-$langModifDone = "ได้แก้ไขข้อมูลแล้ว";
-$langDelCourse = "ลบรายวิชานี้";
-$langProfessors = "อาจารย์ผู้สอน";
-$langFaculty = "ประเภท";
-$langConfidentiality = "ความลับ";
-$langPublic = "บุคคลทั่วไปเข้าโฮมเพจได้โดยไม่ต้องใช้รหัส";
-$langUnsubscription = "ถอนการสมัคร";
-$langPrivOpen = "แบบสิทธิเฉพาะ,เปิดการลงทะเบียน ";
-$langPrivate = "สิทธิ์เฉพาะ(เข้าใช้ได้เฉพาะผู้ที่อยู่ใน<a href=../user/user.php>บัญชีรายชื่อ</a>)";
-$langForbidden = "ไม่อนุญาต";
-$CourseAccessConfigTip = "โดยปกติแล้วการเปิดวิชาจะเป็นแบบสาธารณะ แต่คุณสามารถกำหนดค่าระดับความลับของเนื้อหาหรือข้อมูลได้";
-$langOpenToTheWorld = "แบบสาธารณะ:เปิดให้เรียนได้ทั่วโลก";
-$OpenToThePlatform = "แบบสาธารณะ โดยอนุญาตเฉพาะผู้ทึลงทะเบียนเป็นผู้ใช้ในระบบ";
-$langOpenToThePlatform = "แบบสาธารณะ โดยอนุญาตเฉพาะผู้ทึลงทะเบียนเป็นผู้ใช้ในระบบ ";
-$langTipLang  = "ภาษาที่กำหนดใช้นี้ จะใช้แสดงผลตรงกับภาษาที่กำหนดไว้ และกับทุกคนที่เข้าใช้โฮมเพจวิชานี้";
-$langVid = "วิดีทัศน์";
-$langWork = "การสนับสนุน";
-$langProgramMenu = "ปฏิทินการศึกษา";
-$langAnnouncement = "ประกาศ";
-$langExercise = "แบบทดสอบ";
-$langStats = "สถิติ";
-$langUplPage = "หน้าโอนย้ายไฟล์และเชื่อมต่อไปหน้าโฮมเพจ";
-$langLinkSite = "เพิ่มการเชื่อมโยงต่อไปหน้าโฮมเพจ";
-$langCourse = "ขอบข่าย";
-$langHasDel = "ลบแล้ว";
-$langBackHome = "กลับไปที่โฮมเพจของ";
-$langByDel = "การลบในที่นี้ จะเป็นการลบเอกสารที่มีทั้งหมดรวมทั้งรายชื่อสมาชิกในรายวิชาแบบถาวร(ห้ามเอาออกในที่อื่น)<p>คุณต้องการลบออกจริงๆหรือไม่?";
-$langY = "ใช่";
-$langN = "ไม่";
-$langDepartmentUrl  = "ที่อยู่เว็ปไซท์ของหน่วยงาน";
-$langDepartmentUrlName  = "หน่วยงาน";
-$langBackupCourse = "เก็บรวบรวมเอกสารของรายวิชา";
-$langModifGroups = "กลุ่ม";
-$langProfessor = "อาจารย์ผู้สอน";
-$langGroups  = "กลุ่มเรียน";
-$langDescriptionCours   = "คำอธิบายรายวิชา";
-$langArchiveCourse  = "สำรองข้อมูลรายวิชา";
-$langRestoreCourse  = "กู้คืนรายวิชา";
-$langRestore = "กู้คืน";
-$langCreatedIn  = "สร้างใน";
-$langCreateMissingDirectories  = "การสร้างยังไม่มีแฟ้ม";
-$langCopyDirectoryCourse  = "ทำสำเนาไฟล์ของรายวิชา";
-$langDisk_free_space  = "ลบไฟล์ขยะ";
-$langBuildTheCompressedFile  = "การสำรองข้อมูล";
-$langFileCopied  = "ทำสำเนาไฟล์แล้ว";
-$langArchiveLocation = "ที่เก็บรวบรวมเอกสาร";
-$langSizeOf  = "ขนาดของ";
-$langArchiveName  = "ชื่อที่เก็บรวบรวมเอกสาร";
-$langBackupSuccesfull  = "การสำรองข้อมูลเสร็จเรียบร้อย";
-$langBUCourseDataOfMainBase  = "สำรองข้อมูลและฐานข้อมูลหลักของ";
-$langBUUsersInMainBase  = "สำรองข้อมูลและฐานข้อมูลของผู้ใช้";
-$langBUAnnounceInMainBase = "สำรองข้อมูลและฐานข้อมูลของประกาศ";
-$langBackupOfDataBase = "สำรองฐานข้อมูล";
-$langCreationDate  = "สร้างแล้ว";
-$langExpirationDate   = "วันหมดอายุ";
-$langPostPone  = "เลื่อนไป";
-$langLastEdit  = "แก้ไขครั้งล่าสุด";
-$langLastVisit  = "เข้ามาครั้งล่าสุด";
-$langSubscription = "การสมัครเข้า";
-$langCourseAccess = "การเข้าเรียนวิชา";
-$langConfirmBackup = "คุณต้องการสำรองแผนการเรียนของรายวิชาใช่หรือไม่?";
-$langCreateSite = "สร้างขอบข่ายรายวิชา";
-$langRestoreDescription = "การคืนสภาพวิชาที่จัดเก็บไว้ ให้เลือกรายวิชาที่ถูกจัดเก็บไว้<br><br>ให้คลิกที่ \"Restore\"เพื่อแตกไฟล์ทั้งหมดกลับคืนมาเป็นรายวิชาปกติ ";
-$langRestoreNotice = "คำสั่งนี้ยังไม่อนุญาตให้กู้คืนชื่อผู้ใช้โดยอัตโนมัติ แต่ไฟล์ได้จัดเก็บเป็นไฟล์ \"users.csv\" ซึ่งก็เพียงพอที่ผู้บริหารจัดการระบบ สามารถจะจัดการต่อด้วยตัวเองได้โดยง่าย";
-$langAvailableArchives = "รายการเอกสารที่จัดเก็บไว้ในสารบบ ";
-$langNoArchive = "ไม่มีการเลือกรายการสารบบใดๆ ";
-$langArchiveNotFound = "ค้นไม่พบเอกสารรวมในสารบบ";
-$langArchiveUncompressed = "เอกสารที่เก็บรวบรวมไว้ในสารบบได้ทำการกู้และคืนสภาพพร้อมใช้แล้ว";
-$langCsvPutIntoDocTool = "ไฟล์ \"users.csv\"ได้จัดการเรียบร้อยแล้ว";
-$langBackH = "กลับไปหน้าโฮมเพจ";
-$langOtherCategory = "ประเภทอื่น";
-$langAllowedToUnsubscribe = "ผู้ใช้สามารถถอนวิชาเองได้";
-$langNotAllowedToUnsubscribe = "ผู้ใช้ไม่ได้รับอนุญาตให้ถอนวิชาด้วยตัวเอง";
-$langCourseVisibilityClosed = "ปิดวิชาแล้ว สามารถเข้าได้เฉพาะหน้าบริหารรายวิชา";
-$CourseVisibilityClosed = "ปิด-ไม่ให้เข้าในวิชานี้";
-$CourseVisibilityModified = "การแก้ไข(มีรายละเอียดการตั้งค่าอีกมากที่ต้องกำหนดผ่านทางระบบกำหนดสิทธิ์) ";
+$ModifInfo = "ยตร‘รฉยงโฌรจร’รร”ยชร’";
+$langModifDone = "รคลฝรฉรกยกรฉรคยขยขรฉรรรร…รกร…รฉร";
+$langDelCourse = "ร…ยบรร’รรร”ยชร’ยนร•รฉ";
+$langProfessors = "รร’ลกร’รรรฌล’รรฉรรยน";
+$langFaculty = "ยปรรร ร€ยท";
+$langConfidentiality = "โฌรร’รร…ร‘ยบ";
+$langPublic = "ยบรโฌโฌร…ยทร‘รจรรคยปร ยขรฉร’รขรรร ลธลกรคลฝรฉรขลฝรรครรจยตรฉรยงรฃยชรฉรรร‘ร";
+$langUnsubscription = "ยถรยนยกร’รรรร‘โฌร";
+$langPrivOpen = "รกยบยบรร”ยทลพร”ร ยฉลธร’ร,ร ยปร”ลฝยกร’รร…ยงยทรร ยบร•รยน";
+$langPrivate = "รร”ยทลพร”รฌร ยฉลธร’ร(ร ยขรฉร’รฃยชรฉรคลฝรฉร ยฉลธร’รล’รรฉยทร•รจรรรรจรฃยน<a href=../user/user.php>ยบร‘ยญยชร•รร’รยชร—รจร</a>)";
+$langForbidden = "รครรจรยนรยญร’ยต";
+$CourseAccessConfigTip = "รขลฝรยปยกยตร”รกร…รฉรยกร’รร ยปร”ลฝรร”ยชร’ลกรร ยปรงยนรกยบยบรร’ลพร’รยณร รกยตรจโฌรยณรร’รร’รยถยกร“รยนลฝโฌรจร’รรลฝร‘ยบโฌรร’รร…ร‘ยบยขรยงร ยนร—รฉรรร’รรร—รยขรฉรรรร…รคลฝรฉ";
+$langOpenToTheWorld = "รกยบยบรร’ลพร’รยณร:ร ยปร”ลฝรฃรรฉร รร•รยนรคลฝรฉยทร‘รจรรขร…ยก";
+$OpenToThePlatform = "รกยบยบรร’ลพร’รยณร รขลฝรรยนรยญร’ยตร ยฉลธร’รล’รรฉยทร–ร…ยงยทรร ยบร•รยนร ยปรงยนล’รรฉรฃยชรฉรฃยนรรยบยบ";
+$langOpenToThePlatform = "รกยบยบรร’ลพร’รยณร รขลฝรรยนรยญร’ยตร ยฉลธร’รล’รรฉยทร–ร…ยงยทรร ยบร•รยนร ยปรงยนล’รรฉรฃยชรฉรฃยนรรยบยบ";
+$langTipLang = "ร€ร’รร’ยทร•รจยกร“รยนลฝรฃยชรฉยนร•รฉ ลกรรฃยชรฉรกรลฝยงล’ร…ยตรยงยกร‘ยบร€ร’รร’ยทร•รจยกร“รยนลฝรครรฉ รกร…รยกร‘ยบยทรยกโฌยนยทร•รจร ยขรฉร’รฃยชรฉรขรรร ลธลกรร”ยชร’ยนร•รฉ";
+$langVid = "รร”ลฝร•ยทร‘รยนรฌ";
+$langWork = "ยกร’รรยนร‘ยบรยนรยน";
+$langProgramMenu = "ยปยฏร”ยทร”ยนยกร’รรร–ยกรร’";
+$langAnnouncement = "ยปรรยกร’ร";
+$langExercise = "รกยบยบยทลฝรรยบ";
+$langStats = "รยถร”ยตร”";
+$langUplPage = "รยนรฉร’รขรยนรรฉร’รรคยฟร…รฌรกร…รร ยชร—รจรรยตรจรรคยปรยนรฉร’รขรรร ลธลก";
+$langLinkSite = "ร ลธร”รจรยกร’รร ยชร—รจรรรขรยงยตรจรรคยปรยนรฉร’รขรรร ลธลก";
+$langCourse = "ยขรยบยขรจร’ร";
+$langHasDel = "ร…ยบรกร…รฉร";
+$langBackHome = "ยกร…ร‘ยบรคยปยทร•รจรขรรร ลธลกยขรยง";
+$langByDel = "ยกร’รร…ยบรฃยนยทร•รจยนร•รฉ ลกรร ยปรงยนยกร’รร…ยบร รยกรร’รยทร•รจรร•ยทร‘รฉยงรรลฝรรรยทร‘รฉยงรร’รยชร—รจรรรร’ยชร”ยกรฃยนรร’รรร”ยชร’รกยบยบยถร’รร(รรฉร’รร รร’รรยกรฃยนยทร•รจรร—รจยน)<p>โฌรยณยตรฉรยงยกร’รร…ยบรรยกลกรร”ยงรฆรรร—รรครรจ?";
+$langY = "รฃยชรจ";
+$langN = "รครรจ";
+$langDepartmentUrl = "ยทร•รจรรรรจร รรงยปรคยซยทรฌยขรยงรยนรจรรยงร’ยน";
+$langDepartmentUrlName = "รยนรจรรยงร’ยน";
+$langBackupCourse = "ร ยกรงยบรรยบรรรร รยกรร’รยขรยงรร’รรร”ยชร’";
+$langModifGroups = "ยกร…รรจร";
+$langProfessor = "รร’ลกร’รรรฌล’รรฉรรยน";
+$langGroups = "ยกร…รรจรร รร•รยน";
+$langDescriptionCours = "โฌร“รลพร”ยบร’รรร’รรร”ยชร’";
+$langArchiveCourse = "รร“รรยงยขรฉรรรร…รร’รรร”ยชร’";
+$langRestoreCourse = "ยกรรฉโฌร—ยนรร’รรร”ยชร’";
+$langRestore = "ยกรรฉโฌร—ยน";
+$langCreatedIn = "รรรฉร’ยงรฃยน";
+$langCreateMissingDirectories = "ยกร’รรรรฉร’ยงรร‘ยงรครรจรร•รกยฟรฉร";
+$langCopyDirectoryCourse = "ยทร“รร“ร ยนร’รคยฟร…รฌยขรยงรร’รรร”ยชร’";
+$langDisk_free_space = "ร…ยบรคยฟร…รฌยขรร";
+$langBuildTheCompressedFile = "ยกร’รรร“รรยงยขรฉรรรร…";
+$langFileCopied = "ยทร“รร“ร ยนร’รคยฟร…รฌรกร…รฉร";
+$langArchiveLocation = "ยทร•รจร ยกรงยบรรยบรรรร รยกรร’ร";
+$langSizeOf = "ยขยนร’ลฝยขรยง";
+$langArchiveName = "ยชร—รจรยทร•รจร ยกรงยบรรยบรรรร รยกรร’ร";
+$langBackupSuccesfull = "ยกร’รรร“รรยงยขรฉรรรร…ร รรรงลกร รร•รยบรรฉรร";
+$langBUCourseDataOfMainBase = "รร“รรยงยขรฉรรรร…รกร…รยฐร’ยนยขรฉรรรร…รร…ร‘ยกยขรยง";
+$langBUUsersInMainBase = "รร“รรยงยขรฉรรรร…รกร…รยฐร’ยนยขรฉรรรร…ยขรยงล’รรฉรฃยชรฉ";
+$langBUAnnounceInMainBase = "รร“รรยงยขรฉรรรร…รกร…รยฐร’ยนยขรฉรรรร…ยขรยงยปรรยกร’ร";
+$langBackupOfDataBase = "รร“รรยงยฐร’ยนยขรฉรรรร…";
+$langCreationDate = "รรรฉร’ยงรกร…รฉร";
+$langExpirationDate = "รร‘ยนรรลฝรร’รร";
+$langPostPone = "ร ร…ร—รจรยนรคยป";
+$langLastEdit = "รกยกรฉรคยขโฌรร‘รฉยงร…รจร’รรลฝ";
+$langLastVisit = "ร ยขรฉร’รร’โฌรร‘รฉยงร…รจร’รรลฝ";
+$langSubscription = "ยกร’รรรร‘โฌรร ยขรฉร’";
+$langCourseAccess = "ยกร’รร ยขรฉร’ร รร•รยนรร”ยชร’";
+$langConfirmBackup = "โฌรยณยตรฉรยงยกร’รรร“รรยงรกล’ยนยกร’รร รร•รยนยขรยงรร’รรร”ยชร’รฃยชรจรรร—รรครรจ?";
+$langCreateSite = "รรรฉร’ยงยขรยบยขรจร’รรร’รรร”ยชร’";
+$langRestoreDescription = "ยกร’รโฌร—ยนรร€ร’ลธรร”ยชร’ยทร•รจลกร‘ลฝร ยกรงยบรครรฉ รฃรรฉร ร…ร—รยกรร’รรร”ยชร’ยทร•รจยถรยกลกร‘ลฝร ยกรงยบรครรฉ<br><br>รฃรรฉโฌร…ร”ยกยทร•รจ \\"Restore\\"ร ลธร—รจรรกยตยกรคยฟร…รฌยทร‘รฉยงรรลฝยกร…ร‘ยบโฌร—ยนรร’ร ยปรงยนรร’รรร”ยชร’ยปยกยตร”";
+$langRestoreNotice = "โฌร“รร‘รจยงยนร•รฉรร‘ยงรครรจรยนรยญร’ยตรฃรรฉยกรรฉโฌร—ยนยชร—รจรล’รรฉรฃยชรฉรขลฝรรร‘ยตรขยนรร‘ยตร” รกยตรจรคยฟร…รฌรคลฝรฉลกร‘ลฝร ยกรงยบร ยปรงยนรคยฟร…รฌ \\"users.csv\\" ยซร–รจยงยกรงร ลธร•รยงลธรยทร•รจล’รรฉยบรร”รร’รลกร‘ลฝยกร’รรรยบยบ รร’รร’รยถลกรลกร‘ลฝยกร’รยตรจรลฝรฉรรยตร‘รร รยงรคลฝรฉรขลฝรยงรจร’ร";
+$langAvailableArchives = "รร’รยกร’รร รยกรร’รยทร•รจลกร‘ลฝร ยกรงยบรครรฉรฃยนรร’รยบยบ";
+$langNoArchive = "รครรจรร•ยกร’รร ร…ร—รยกรร’รยกร’รรร’รยบยบรฃลฝรฆ";
+$langArchiveNotFound = "โฌรฉยนรครรจลธยบร รยกรร’รรรรรฃยนรร’รยบยบ";
+$langArchiveUncompressed = "ร รยกรร’รยทร•รจร ยกรงยบรรยบรรรรครรฉรฃยนรร’รยบยบรคลฝรฉยทร“ยกร’รยกรรฉรกร…รโฌร—ยนรร€ร’ลธลธรรฉรรรฃยชรฉรกร…รฉร";
+$langCsvPutIntoDocTool = "รคยฟร…รฌ \\"users.csv\\"รคลฝรฉลกร‘ลฝยกร’รร รร•รยบรรฉรรรกร…รฉร";
+$langBackH = "ยกร…ร‘ยบรคยปรยนรฉร’รขรรร ลธลก";
+$langOtherCategory = "ยปรรร ร€ยทรร—รจยน";
+$langAllowedToUnsubscribe = "ล’รรฉรฃยชรฉรร’รร’รยถยถรยนรร”ยชร’ร รยงรคลฝรฉ";
+$langNotAllowedToUnsubscribe = "ล’รรฉรฃยชรฉรครรจรคลฝรฉรร‘ยบรยนรยญร’ยตรฃรรฉยถรยนรร”ยชร’ลฝรฉรรยตร‘รร รยง";
+$langCourseVisibilityClosed = "ยปร”ลฝรร”ยชร’รกร…รฉร รร’รร’รยถร ยขรฉร’รคลฝรฉร ยฉลธร’รรยนรฉร’ยบรร”รร’รรร’รรร”ยชร’";
+$CourseVisibilityClosed = "ยปร”ลฝ-รครรจรฃรรฉร ยขรฉร’รฃยนรร”ยชร’ยนร•รฉ";
+$CourseVisibilityModified = "ยกร’รรกยกรฉรคยข(รร•รร’รร…รร รร•รลฝยกร’รยตร‘รฉยงโฌรจร’รร•ยกรร’ยกยทร•รจยตรฉรยงยกร“รยนลฝล’รจร’ยนยทร’ยงรรยบยบยกร“รยนลฝรร”ยทลพร”รฌ)";
+$WorkEmailAlert = "";
+$WorkEmailAlertActivate = "";
+$WorkEmailAlertDeactivate = "";
+$DropboxEmailAlert = "";
+$DropboxEmailAlertActivate = "";
+$DropboxEmailAlertDeactivate = "";
+$AllowUserEditAgenda = "";
+$AllowUserEditAgendaActivate = "";
+$AllowUserEditAgendaDeactivate = "";
+$AllowUserEditAnnouncement = "";
+$AllowUserEditAnnouncementActivate = "";
+$AllowUserEditAnnouncementDeactivate = "";
+$OrInTime = "";
+$CourseRegistrationPassword = "";
+$langDescriptionDeleteCourse = "";
+$langDescriptionCopyCourse = "";
+$DescriptionRecycleCourse = "";
+$QuizEmailAlert = "";
+$QuizEmailAlertActivate = "";
+$QuizEmailAlertDeactivate = "";
+$AllowUserImageForum = "";
+$AllowUserImageForumActivate = "";
+$AllowUserImageForumDeactivate = "";
+$AllowLearningPathTheme = "";
+$AllowLearningPathThemeAllow = "";
+$AllowLearningPathThemeDisallow = "";
+$ConfigChat = "";
+$AllowOpenchatWindow = "";
+$AllowOpenChatWindowActivate = "";
+$AllowOpenChatWindowDeactivate = "";
+$NewUserEmailAlert = "";
+$NewUserEmailAlertEnable = "";
+$NewUserEmailAlertToTeacharAndTutor = "";
+$NewUserEmailAlertDisable = "";
 ?>

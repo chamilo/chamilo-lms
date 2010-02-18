@@ -1,19 +1,20 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$langScormVersion = "versión";
-$langScormRestarted = "Todas as unidades están incompletas.";
-$langScormNoNext = "Esta é a última unidade.";
-$langScormNoPrev = "Esta é a primeira unidade.";
+$langScormVersion = "versiÃ³n";
+$langScormRestarted = "Todas as unidades estÃ¡n incompletas.";
+$langScormNoNext = "Esta Ã© a Ãºltima unidade.";
+$langScormNoPrev = "Esta Ã© a primeira unidade.";
 $langScormTime = "Hora";
 $langScormNoOrder = "Non hai unha orde preestablecida, podes facer click en calquera unidade.";
-$langScormScore = "Puntuación";
-$langScormLessonTitle = "Título da unidade";
+$langScormScore = "PuntuaciÃ³n";
+$langScormLessonTitle = "TÃ­tulo da unidade";
 $langScormStatus = "Estado";
 $langScormToEnter = "Entrar";
 $langScormFirstNeedTo = "debes primeiro rematar";
-$langScormThisStatus = "Esta unidade está agora";
-$langScormClose = "fechar a aplicación";
+$langScormThisStatus = "Esta unidade estÃ¡ agora";
+$langScormClose = "fechar a aplicaciÃ³n";
 $langScormRestart = "Reiniciar";
 $langScormCompstatus = "Completo";
 $langScormIncomplete = "Incompleto";
@@ -21,12 +22,12 @@ $langScormPassed = "Aprobado";
 $langScormFailed = "Suspenso";
 $langScormPrevious = "Previo";
 $langScormNext = "Seguinte";
-$langScormTitle = " » Visor de contidos Scorm de Chamilo « ";
+$langScormTitle = " Â» Visor de contidos Scorm de Chamilo Â«";
 $langScormMystatus = "Estado";
-$langScormNoItems = "Este contido non contén elementos.";
+$langScormNoItems = "Este contido non contÃ©n elementos.";
 $langScormNoStatus = "Este contido non ten estado";
 $langScormLoggedout = "Saiches de Chamilo, esta fiestra cerrarase.";
-$langScormCloseWindow = "Estás seguro de que remataches?";
+$langScormCloseWindow = "EstÃ¡s seguro de que remataches?";
 $ScormBrowsed = "Visto";
 $langScormExitFullScreen = "Voltar a pantalla normal";
 $langScormFullScreen = "Pantalla completa";
@@ -36,7 +37,7 @@ $langLocal = "Local";
 $langRemote = "Remoto";
 $langAutodetect = "Auto-detectar";
 $langAccomplishedStepsTotal = "Total de etapas realizadas";
-$langUnknown = "Descoñecido";
+$langUnknown = "DescoÃ±ecido";
 $AreYouSureToDeleteSteps = "Ten certeza de querer eliminar estes pasos?";
 $Origin = "Orixe";
 $Local = "Local";
@@ -45,11 +46,12 @@ $FileToUpload = "Ficheiro para enviar";
 $ContentMaker = "Creador de Contidos";
 $ContentProximity = "Proximidade de Contido";
 $UploadLocalFileFromGarbageDir = "Enviar ficheiro local desde o directorio principal/lixo";
-$ThisItemIsNotExportable = "Este elemento non é compatible con Scorm polo de agora. Esta é a razón de por que non é exportable.";
-$MoveCurrentChapter = "Mover o capítulo actual";
-$GenericScorm = "SCORM xenérico";
-$UnknownPackageFormat = "O formato do paquete non pode ser recoñecido. Por favor, cerciórese de que estea ben creado e de que non conteña erros. Os problemas poden deberse ao formato ZIP ou á transferencia de ficheiros moi longos. Se non está seguro do ficheiro ZIP use o mínimo de funcionalidades ao comprimir.";
+$ThisItemIsNotExportable = "Este elemento non Ã© compatible con Scorm polo de agora. Esta Ã© a razÃ³n de por que non Ã© exportable.";
+$MoveCurrentChapter = "Mover o capÃ­tulo actual";
+$GenericScorm = "SCORM xenÃ©rico";
+$UnknownPackageFormat = "O formato do paquete non pode ser recoÃ±ecido. Por favor, cerciÃ³rese de que estea ben creado e de que non conteÃ±a erros. Os problemas poden deberse ao formato ZIP ou Ã¡ transferencia de ficheiros moi longos. Se non estÃ¡ seguro do ficheiro ZIP use o mÃ­nimo d";
 $Attempt = "Intento";
 $MoveTheCurrentForum = "Mover o foro actual";
-$WarningWhenEditingScorm = "¡ Aviso ! <br /> Se edita o contido de un paso scorm, pode alterar o informe da secuencia de aprendizaxe ou danar o paso";
+$WarningWhenEditingScorm = "Â¡ Aviso ! <br /> Se edita o contido de un paso scorm, pode alterar o informe da secuencia de aprendizaxe ou danar o paso";
+$AdditionalProfileField = "";
 ?>

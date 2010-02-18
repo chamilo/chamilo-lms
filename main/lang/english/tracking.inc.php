@@ -1,5 +1,6 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $langToolName = "Reporting";
 $TrackingDisabled = "Reporting has been disabled by system administrator.";
@@ -244,4 +245,8 @@ $ResourcesTracking = "Report on resource";
 $SelectFieldToAdd = "Select user profile field to add";
 $AddAdditionalProfileField = "Add user profile field";
 $ConfigureExtensions = "Configure extensions";
+$DashboardBlocks = "Dashboard blocks";
+$DashboardList = "Dashboard list";
+$YouHaveNotEnabledBlocks = "You haven't enabled any block";
+$BlocksHaveBeenUpdatedSuccessfully = "The blocks have been updated";
 ?>

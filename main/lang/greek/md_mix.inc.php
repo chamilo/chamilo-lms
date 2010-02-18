@@ -1,5 +1,19 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$langSearch = "Αναζήτηση";
+$langTool = "";
+$langClickKw = "";
+$langKwHelp = "";
+$langAdvanced = "";
+$langSearch = "ΓΓ­Γ΅Γ¦ΓΓ΄Γ§Γ³Γ§";
+$langSearchCrit = "";
+$langNoKeywords = "";
+$langKwCacheProblem = "";
+$langCourseKwds = "";
+$langKwdsInMD = "";
+$langKwdRefs = "";
+$langNonCourseKwds = "";
+$langKwdsUse = "";
+$langTotalMDEs = "";
 ?>

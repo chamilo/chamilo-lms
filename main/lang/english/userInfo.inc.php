@@ -1,5 +1,6 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $langLineNumber = "Line Number";
 $langLine = "line";
@@ -22,7 +23,7 @@ $langIsNow = "is from now on";
 $langInC = "in this training";
 $langFilled = "Not all fields were filled";
 $langUserNo = "User No";
-$langTaken = "is already in use. Please select a different ";
+$langTaken = "is already in use. Please select a different";
 $langTutor = "Coach";
 $langUnreg = "Unsubscribe";
 $langGroupUserManagement = "Groups management";
@@ -138,7 +139,7 @@ $IamAModerator = "I am a moderator";
 $ThisIsACloseGroup = "This is a closed group";
 $IamAReader = "I am a reader";
 $UserChangeToReader = "User updated to reader";
-$AddModerator = "Add moderator";
+$AddModerator = "Add as moderator";
 $UserDeleted = "User deleted";
 $JoinGroup = "Join group";
 $YouShouldJoinTheGroup = "You should join the group";
@@ -174,7 +175,6 @@ $InvitationReceived = "Invitation received";
 $InvitationSent = "Invitation sent";
 $YouAlreadySentAnInvitation = "You already sent an invitation";
 $AllowSendMessageToAllPlatformUsersTitle = "Allow users to send message to all platform users";
-$InvitationDenied = "Invitation denied";
 $UserAdded = "User added";
 $FilesSizeExceedsX = "Files size exceeds";
 $YouShouldWriteASubject = "You should write a subject";
@@ -188,8 +188,7 @@ $ClickHereToSeeMessageGroup = "Click here to see group message";
 $OrCopyPasteTheFollowingUrl = "Or copy/paste the following url";
 $ThereIsANewMessageInTheGroupX = "There is a new message in group %s";
 $UserIsAlreadySubscribedToThisGroup = "User is already subscribed to this group";
-$AddNormalUser = "Add as simple user ";
-$AddModerator = "Add as moderator";
+$AddNormalUser = "Add as simple user";
 $DenyEntry = "Deny access";
 $YouNeedToHaveFriendsInYourSocialNetwork = "You need to have friends in your social network";
 $SeeAllMyGroups = "See all my groups";

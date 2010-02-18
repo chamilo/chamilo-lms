@@ -1,5 +1,6 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $langToolName = "Statistieken";
 $TrackingDisabled = "Statistieken zijn uitgeschakeld door de platformbeheerder.";
@@ -23,7 +24,7 @@ $langLinksAccess = "Links";
 $langDocumentsAccess = "Documenten";
 $langScormAccess = "Leerpad &ndash; cursussen in SCORM-formaat";
 $langLinksDetails = "Links die door de student bekeken werden";
-$langWorksDetails = "Publicaties die geüpload werden door de studenten";
+$langWorksDetails = "Publicaties die geÃ¼pload werden door de studenten";
 $langLoginsDetails = "Klik op de naam v.e. maand voor meer informatie";
 $langDocumentsDetails = "Documenten gedownload door de student";
 $langExercicesDetails = "Scores van gemaakte oefeningen";
@@ -137,7 +138,7 @@ $langAllRight = "Geen speciale gevallen";
 $langDefcon = "Er komen speciale gevallen voor!";
 $langNULLValue = "Leeg (of NULL)";
 $langTrafficDetails = "Trafiekdetails";
-$langSeeIndividualTracking = "Zie de <a href=\"../user/user.php\">gebruikersmodule</a> voor individuele statistieken.";
+$langSeeIndividualTracking = "Zie de <a href=\\"../user/user.php\\">gebruikersmodule</a> voor individuele statistieken.";
 $langPathNeverOpenedByAnybody = "Dit pad is nog nooit geopend door iemand.";
 $SynthesisView = "Samenvattende tabel";
 $Visited = "Doorlopen";
@@ -217,10 +218,11 @@ $FirstLogin = "Eerste login";
 $AccessDetails = "Toegangsdetails";
 $DateAndTimeOfAccess = "Datum en tijd van toegang";
 $Duration = "Duur";
+$WrongDatasForTimeSpentOnThePlatform = "";
 $DisplayCoaches = "Coaches overzicht";
 $DisplayUserOverview = "gebruikersoverzicht";
 $ExportUserOverviewOptions = "Export opties voor het gebruiksersoverzicht";
-$FollowingFieldsWillAlsoBeExported = "De volgende velden worden mee geëxporteerd";
+$FollowingFieldsWillAlsoBeExported = "De volgende velden worden mee geÃ«xporteerd";
 $TotalExercisesScoreObtained = "Totaal behaalde score van de oefeningen";
 $TotalExercisesScorePossible = "Totaal mogelijke score van de oefeningen";
 $TotalExercisesAnswered = "Aantal oefeningen beantwoord";
@@ -228,9 +230,23 @@ $TotalExercisesScorePercentage = "Procentuele totale score van de oefeningen";
 $ForumForumsNumber = "Aantal fora";
 $ForumThreadsNumber = "aantal discussies";
 $ForumPostsNumber = "Aantal berichten";
+$ChatConnectionsDuringLastXDays = "";
+$ChatLastConnection = "";
 $CourseInformation = "Training informatie";
-$NoAdditionalFieldsWillBeExported = "De extra velden worden niet geëxporteerd";
+$NoAdditionalFieldsWillBeExported = "De extra velden worden niet geÃ«xporteerd";
+$langSendNotification = "";
+$TimeOfActiveByTraining = "";
+$AvgAllUsersInAllCourses = "";
+$AvgExercisesScore = "";
+$TrainingTime = "";
 $CourseProgress = "Voortgang";
+$ViewMinus = "";
+$ResourcesTracking = "";
 $SelectFieldToAdd = "Kies het gebruikersprofiel veld om toe te voegen";
 $AddAdditionalProfileField = "Voeg het veld van het gebruikersprofiel toe";
+$ConfigureExtensions = "";
+$DashboardBlocks = "";
+$DashboardList = "";
+$YouHaveNotEnabledBlocks = "";
+$BlocksHaveBeenUpdatedSuccessfully = "";
 ?>

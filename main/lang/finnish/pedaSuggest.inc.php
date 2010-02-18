@@ -1,10 +1,26 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $GeneralDescription = "Yleinen kuvaus";
+$GeneralDescriptionQuestions = "";
+$GeneralDescriptionInformation = "";
 $Objectives = "Tavoitteet";
+$ObjectivesInformation = "";
+$ObjectivesQuestions = "";
 $Topics = "Aiheet";
-$Methodology = "Menetelmä";
+$TopicsInformation = "";
+$TopicsQuestions = "";
+$Methodology = "MenetelmÃ¤";
+$MethodologyQuestions = "";
+$MethodologyInformation = "";
 $CourseMaterial = "Kurssimateriaali";
-$Assessment  = "Arviointi";
+$CourseMaterialQuestions = "";
+$CourseMaterialInformation = "";
+$HumanAndTechnicalResources = "";
+$HumanAndTechnicalResourcesQuestions = "";
+$HumanAndTechnicalResourcesInformation = "";
+$Assessment = "Arviointi";
+$AssessmentQuestions = "";
+$AssessmentInformation = "";
 ?>

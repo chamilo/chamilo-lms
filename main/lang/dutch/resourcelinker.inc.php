@@ -1,5 +1,6 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $ResourceAdded = "Materiaal toegevoegd. Keer nu terug naar het pad of voeg meer materiaal toe.";
 $LearningPath = "Leerpad";
@@ -16,7 +17,7 @@ $ExternalResources = "Extern materiaal";
 $CourseResources = "Cursusmateriaal";
 $ExternalLink = "Externe link";
 $DropboxAdd = "Voeg de dropboxpagina toe aan dit hoofdstuk.";
-$AddAssignmentPage = "Voeg de geüploade studentenpublicaties toe aan dit hoofdstuk.";
+$AddAssignmentPage = "Voeg de geÃ¼ploade studentenpublicaties toe aan dit hoofdstuk.";
 $Exercise = "Oefening";
 $Link = "Link";
 $AdValvas = "Ad valvas";

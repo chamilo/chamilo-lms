@@ -1,5 +1,6 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $langScormVersion = "wersja";
 $langScormRestarted = "Wszystkie lekcje s&#261; teraz niekompletne.";
@@ -22,12 +23,35 @@ $langScormFailed = "Niezaliczony";
 $langScormPrevious = "Poprzedni";
 $langScormNext = "Nast&#281;pny";
 $langScormTitle = "Gracz Chamilo Scorm";
-$langScormMystatus = "M骿 status";
-$langScormNoItems = "Nie ma tu &#380;adnych element體. ";
+$langScormMystatus = "M贸j status";
+$langScormNoItems = "Nie ma tu &#380;adnych element贸w.";
 $langScormNoStatus = "Ta zawarto&#347;&#263; nie posiada statusu";
 $langScormLoggedout = "Wylogowany(-a) z obszaru Scorm";
 $langScormCloseWindow = "Zamknij okna";
-$langScormExitFullScreen = "Powr髏 do standardowego ekranu";
+$ScormBrowsed = "";
+$langScormExitFullScreen = "Powr贸t do standardowego ekranu";
 $langScormFullScreen = "pe&#322;ny ekran";
-$langScormNotAttempted = "Nie pr骲owano";
+$langScormNotAttempted = "Nie pr贸bowano";
+$langCharset = "";
+$langLocal = "";
+$langRemote = "";
+$langAutodetect = "";
+$langAccomplishedStepsTotal = "";
+$langUnknown = "";
+$AreYouSureToDeleteSteps = "";
+$Origin = "";
+$Local = "";
+$Remote = "";
+$FileToUpload = "";
+$ContentMaker = "";
+$ContentProximity = "";
+$UploadLocalFileFromGarbageDir = "";
+$ThisItemIsNotExportable = "";
+$MoveCurrentChapter = "";
+$GenericScorm = "";
+$UnknownPackageFormat = "";
+$Attempt = "";
+$MoveTheCurrentForum = "";
+$WarningWhenEditingScorm = "";
+$AdditionalProfileField = "";
 ?>

@@ -1,5 +1,6 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $langMdCallingTool = "Povezave";
 $langMdTitle = "Ime povezave";
@@ -8,37 +9,37 @@ $langMdCoverage = "Univerzalen";
 $langMdCopyright = "Neka ustanova";
 $nameTools = "zastarana jezikovna variabla";
 $langTool = "Metapodatki povezav";
-$langNoScript = "Izvajanje skript v vašem brskalniku je onemogoèeno. Zanemarite vsebino zaslona pod tem besedilom, ne bo delovalo...";
-$langLanguageTip = "jezik, v katerem je napisan ta uèni objekt";
+$langNoScript = "Izvajanje skript v vaÅ¡em brskalniku je onemogoÄeno. Zanemarite vsebino zaslona pod tem besedilom, ne bo delovalo...";
+$langLanguageTip = "jezik, v katerem je napisan ta uÄni objekt";
 $langIdentifier = "Identifikator";
-$langIdentifierTip = "enolièna identifikacija tega uènega objekta, sestavljena iz èrk, digitov, _-.()\'!*";
+$langIdentifierTip = "enoliÄna identifikacija tega uÄnega objekta, sestavljena iz Ärk, digitov, _-.()\'!*";
 $langTitleTip = "naslov ali ime, in jezik naslova oz. imena";
-$langDescriptionTip = "opi ali komentar, in jezik, uporaabljen za opisovanje tega uènega objekta";
-$langKeyword = "Kljuène besede";
-$langKeywordTip = "loèi z vejicami (èrkami, digiti,-.)";
+$langDescriptionTip = "opi ali komentar, in jezik, uporaabljen za opisovanje tega uÄnega objekta";
+$langKeyword = "KljuÄne besede";
+$langKeywordTip = "loÄi z vejicami (Ärkami, digiti,-.)";
 $langCoverage = "Kategorija";
 $langCoverageTip = "ime kategorije, npt. Povezave";
-$langKwNote = "Pri spremembi opisnega jezika hkrati ne dodajaj kljuènih besed.";
-$langClickKw = "Kliknite kljuèno besedo v drevesu za izbiro oz. preklic izbire.";
-$langKwHelp = "<br/>Klik na \'+\' za odpiranje, \'-\' za zapiranje, \'++\' odpre vse, \'--\' zapre vse.<br/> <br/> Poèisti izbrane kljuène besede s tem, da zaprete drevo in ga ponovno odprete s \'+\' .<br/> <br/>Alt-klik \'+\' poišèe originalne kljune besede v drevesu.<br/><br/> Alt-klik kljuèna beseda izbere kljuèno besedo brez širšega pomena ali pa preklièe izbiro.<br/> <br/> V primeru, da spreminjate opisni jezik, hkrati ne dodajajte kljuènih besed.<br/> <br/>";
+$langKwNote = "Pri spremembi opisnega jezika hkrati ne dodajaj kljuÄnih besed.";
+$langClickKw = "Kliknite kljuÄno besedo v drevesu za izbiro oz. preklic izbire.";
+$langKwHelp = "<br/>Klik na \'+\' za odpiranje, \'-\' za zapiranje, \'++\' odpre vse, \'--\' zapre vse.<br/> <br/> PoÄisti izbrane kljuÄne besede s tem, da zaprete drevo in ga ponovno odprete s \'+\' .<br/> <br/>Alt-klik \'+\' poiÅ¡Äe originalne kljune besede v drevesu.<";
 $langLocation = "URL/URI";
 $langLocationTip = "klikni za odpiranje objekta";
 $langStore = "Shrani";
 $langDeleteAll = "Odstrani vse metapodatke";
-$langConfirmDelete = "Ali *resnièno* elite odstraniti vse metapodatke?";
+$langConfirmDelete = "Ali *resniÄno* Å¾elite odstraniti vse metapodatke?";
 $langWorkOn = "na dan";
 $langNotInDB = "taka kategorija povezav ne obstaja";
-$langManifestSyntax = "(sintaktièna napaka v manifest datoteki)";
+$langManifestSyntax = "(sintaktiÄna napaka v manifest datoteki)";
 $langEmptyManifest = "(prazna manifest datoteka)";
 $langNoManifest = "(ni manifest datoteke)";
-$langNotFolder = "ni mono, to ni mapa...";
+$langNotFolder = "ni moÅ¾no, to ni mapa...";
 $langContinue = "Nadaljuj z";
 $langCreate = "Ustvari MDE-je";
 $langRemove = "Odstrani MDE-je";
 $langAllRemovedFor = "Vsi vnosi so bili odstranjeni za kategorijo";
 $langRemainingFor = "(zastareli) vnosi odstranjeni za kategorijo";
 $langIndex = "Indeksiraj besede - Indeks besed (md_link)";
-$langTotalMDEs = "Skupno število MD vnosov povezav:";
+$langTotalMDEs = "Skupno Å¡tevilo MD vnosov povezav:";
 $langMainMD = "Odpri glavni MDE";
 $langOrElse = "Izberi kategorijo povezav";
 $langWarningDups = "- podvojena imena kategorij so bila odstranjena iz seznama!";

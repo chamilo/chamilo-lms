@@ -1,27 +1,28 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $TermAddNew = "Nouveau terme";
 $TermName = "Terme";
-$TermDefinition = "Définition";
-$TermDeleted = "Terme supprimé";
-$TermUpdated = "Terme mis à jour";
+$TermDefinition = "DÃ©finition";
+$TermDeleted = "Terme supprimÃ©";
+$TermUpdated = "Terme mis Ã  jour";
 $TermConfirmDelete = "Supprimer ce terme";
 $TermAddButton = "Ajouter ce terme";
 $TermUpdateButton = "Enregistrer les modifications";
 $TermEdit = "Modifier le terme";
 $TermDeleteAction = "Supprimer ce terme";
 $OrderBy = "Trier par";
-$CreationDate = "Date création";
+$CreationDate = "Date crÃ©ation";
 $UpdateDate = "Date modification";
-$PreSelectedOrder = "Prédéfini";
-$TermAdded = "Terme ajouté";
+$PreSelectedOrder = "PrÃ©dÃ©fini";
+$TermAdded = "Terme ajoutÃ©";
 $YouMustEnterATermName = "Veuillez entrer un terme";
-$YouMustEnterATermDefinition = "Veuillez entrer la définition du terme";
+$YouMustEnterATermDefinition = "Veuillez entrer la dÃ©finition du terme";
 $TableView = "Tableau";
-$GlossaryTermAlreadyExistsYouShouldEditIt = "Ce terme de glossaire existe déjà. Veuillez modifier le nom du terme.";
-$GlossaryManagement  = "Gestion du glossaire";
-$TermMoved = "Le terme a été déplacé";
+$GlossaryTermAlreadyExistsYouShouldEditIt = "Ce terme de glossaire existe dÃ©jÃ . Veuillez modifier le nom du terme.";
+$GlossaryManagement = "Gestion du glossaire";
+$TermMoved = "Le terme a Ã©tÃ© dÃ©placÃ©";
 $ShowGlossaryInExtraToolsTitle = "Afficher les termes du glossaires dans les outils extra";
 $ShowGlossaryInExtraToolsComment = "Afficher les termes du glossaire dans les outils extra comme les parcours et les exercices";
 ?>

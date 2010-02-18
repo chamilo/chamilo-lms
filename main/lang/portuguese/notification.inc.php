@@ -1,34 +1,35 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $lang_new_item = "novo item adicionado";
-$lang_title_notification = "Desde a última visita";
+$lang_title_notification = "Desde a Ãºltima visita";
 $lang_update_agenda = "evento actualizado";
 $lang_new_agenda = "evento adicionado";
-$lang_update_announcements = "actualizado o anúncio existente ";
-$lang_new_announcements = "novo anúncio adicionado ";
-$lang_new_document = "novo(s) documentos(s) adicionado ";
-$lang_new_exercise = "novo exercício activado";
-$lang_update_link = "actualizada a ligação/link existente";
-$lang_new_link = "nova ligação/link adicionada";
-$lang_new_forum_topic = "novo tópico adicionado";
-$lang_new_groupforum_topic = "novo tópico adicionado ao grupo do fórum";
+$lang_update_announcements = "actualizado o anÃºncio existente";
+$lang_new_announcements = "novo anÃºncio adicionado";
+$lang_new_document = "novo(s) documentos(s) adicionado";
+$lang_new_exercise = "novo exercÃ­cio activado";
+$lang_update_link = "actualizada a ligaÃ§Ã£o/link existente";
+$lang_new_link = "nova ligaÃ§Ã£o/link adicionada";
+$lang_new_forum_topic = "novo tÃ³pico adicionado";
+$lang_new_groupforum_topic = "novo tÃ³pico adicionado ao grupo do fÃ³rum";
 $lang_new_dropbox_file = "novo ficheiro recebido";
 $lang_update_dropbox_file = "um ficheiro na caixa de entrega foi actualizado";
-$ForumCategoryAdded = "Categoria fórum adicionada";
+$ForumCategoryAdded = "Categoria fÃ³rum adicionada";
 $LearnpathAdded = "Curso adicionado";
-$GlossaryAdded = "Adicionado um novo termo ao Glossário";
-$QuizQuestionAdded = "Adicionada uma nova pergunta ao questionário";
-$QuizQuestionUpdated = "Actualizada a nova pergunta no Questionário";
-$QuizQuestionDeleted = "Eliminada a nova pergunta no Questionário";
-$QuizUpdated = "Questionário actualizado";
-$QuizAdded = "Questionário adicionado";
-$QuizDeleted = "Questionário eliminado";
-$DocumentInvisible = "Documento invisível";
-$DocumentVisible = "Documento visível";
-$CourseDescriptionAdded = "Descrição do curso adicionada";
+$GlossaryAdded = "Adicionado um novo termo ao GlossÃ¡rio";
+$QuizQuestionAdded = "Adicionada uma nova pergunta ao questionÃ¡rio";
+$QuizQuestionUpdated = "Actualizada a nova pergunta no QuestionÃ¡rio";
+$QuizQuestionDeleted = "Eliminada a nova pergunta no QuestionÃ¡rio";
+$QuizUpdated = "QuestionÃ¡rio actualizado";
+$QuizAdded = "QuestionÃ¡rio adicionado";
+$QuizDeleted = "QuestionÃ¡rio eliminado";
+$DocumentInvisible = "Documento invisÃ­vel";
+$DocumentVisible = "Documento visÃ­vel";
+$CourseDescriptionAdded = "DescriÃ§Ã£o do curso adicionada";
 $WikiAdded = "Wiki adicionado";
-$SurveyAdded = "Inquérito adicionado";
+$SurveyAdded = "InquÃ©rito adicionado";
 $NotebookAdded = "Nota adicionada";
 $NotebookUpdated = "Nota actualizada";
 $NotebookDeleted = "Nota eliminada";

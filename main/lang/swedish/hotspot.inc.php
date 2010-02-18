@@ -1,9 +1,25 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$select = "Välj";
+$select = "VÃ¤lj";
 $square = "Kvadrat";
 $circle = "Elips";
 $poly = "Polygon";
-$status2_poly = "Högerklicka för att stänga polygonen.";
+$status1 = "";
+$status2_poly = "HÃ¶gerklicka fÃ¶r att stÃ¤nga polygonen.";
+$status2_other = "";
+$status3 = "";
+$exercise_status_1 = "";
+$exercise_status_2 = "";
+$exercise_status_3 = "";
+$showUserPoints = "";
+$showHotspots = "";
+$labelPolyMenu = "";
+$triesleft = "";
+$exeFinished = "";
+$nextAnswer = "";
+$delineation = "";
+$labelDelineationMenu = "";
+$oar = "";
 ?>

@@ -1,5 +1,6 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $ResourceAdded = "Yanapasina yapasqa. Kunanqa ña kutiyta atinki yachanakunaman utaq astawan yapay yanapaysinakunata.";
 $LearningPath = "Yachanakuna";

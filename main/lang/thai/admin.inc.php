@@ -1,444 +1,1140 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$AdminBy  = "&#3610;&#3619;&#3636;&#3627;&#3634;&#3619;&#3619;&#3632;&#3610;&#3610;&#3650;&#3604;&#3618;";
-$AdministrationTools  = "&#3585;&#3634;&#3619;&#3592;&#3633;&#3604;&#3585;&#3634;&#3619;";
-$State  = "&#3626;&#3606;&#3634;&#3609;&#3632;&#3586;&#3629;&#3591;&#3619;&#3632;&#3610;&#3610;";
-$Statistiques  = "&#3626;&#3606;&#3636;&#3605;&#3636;";
+$AdminBy = "&#3610;&#3619;&#3636;&#3627;&#3634;&#3619;&#3619;&#3632;&#3610;&#3610;&#3650;&#3604;&#3618;";
+$AdministrationTools = "&#3585;&#3634;&#3619;&#3592;&#3633;&#3604;&#3585;&#3634;&#3619;";
+$State = "&#3626;&#3606;&#3634;&#3609;&#3632;&#3586;&#3629;&#3591;&#3619;&#3632;&#3610;&#3610;";
+$Statistiques = "&#3626;&#3606;&#3636;&#3605;&#3636;";
 $VisioHostLocal = "&#3648;&#3588;&#3619;&#3639;&#3656;&#3629;&#3591;&#3649;&#3617;&#3656;&#3586;&#3656;&#3634;&#3618;&#3610;&#3619;&#3636;&#3585;&#3634;&#3619;&#3611;&#3619;&#3632;&#3594;&#3640;&#3617;&#3629;&#3629;&#3609;&#3652;&#3621;&#3609;&#3660;";
-$VisioRTMPIsWeb = "&#3649;&#3617;&#3657;&#3623;&#3656;&#3634;&#3650;&#3611;&#3619;&#3650;&#3605;&#3588;&#3629;&#3621;&#3586;&#3629;&#3591; videoconference &#3609;&#3633;&#3657;&#3609;&#3605;&#3657;&#3656;&#3629;&#3591;&#3586;&#3638;&#3657;&#3609;&#3629;&#3618;&#3641;&#3656;&#3585;&#3633;&#3610;&#3648;&#3623;&#3655;&#3610; (&#3612;&#3636;&#3604;&#3648;&#3623;&#3621;&#3634;&#3652;&#3611;&#3617;&#3634;&#3585;)";
-$langUsed       = "&#3651;&#3594;&#3657;&#3649;&#3621;&#3657;&#3623;";
-$langPresent   = "&#3585;&#3634;&#3619;&#3605;&#3619;&#3623;&#3592;&#3626;&#3629;&#3610;";
-$langMissing    = "&#3627;&#3634;&#3618;&#3652;&#3611;";
-$langExist      = "&#3617;&#3637;&#3629;&#3618;&#3641;&#3656;&#3649;&#3621;&#3657;&#3623;";
-$DisplayTeacherInCourselistTitle = "เนเธชเธ”เธเธเธทเนเธญเธเธนเนเธชเธญเธเนเธเธฃเธฒเธขเธงเธดเธเธฒ";
-$DisplayTeacherInCourselistComment = "แสดงชื่อผู้สอนในรายวิชาที่มีการแสดงความคิดเห็น";
-$DisplayCourseCodeInCourselistComment = "แสดงรหัสรายวิชาในรายวิชาที่มีการแสดงความคิดเห็น ";
-$DisplayCourseCodeInCourselistTitle = "แสดงรหัสรายวิชาในชื่อรายวิชา";
-$ThereAreNoVirtualCourses = "ยังไม่มีการเปิดรายวิชาในภาษานี้ ";
-$ConfigureHomePage = "ตั้งค่าหน้าแรกของเว็ปไซท์";
-$CourseCreateActiveToolsTitle = "ให้หน่วยการเรียนใช้งานได้เมื่อมีการสร้างรายวิชาขึ้นใหม่";
-$CourseCreateActiveToolsComment = "เครื่องมือใดจะใช้งานได้เป็นค่าเริ่มต้นโดยปริยาย ต่อเมื่อมีการสร้างรายวิชาแล้ว ";
-$langCourseBackup = "ทำการสำรองข้อมูลรายวิชานี้";
-$langCourseTitular = "อาจารย์ผู้สอน";
-$langCourseTitle = "ชื่อรายวิชา ";
-$langCourseFaculty = "ประเภทรายวิชา ";
-$langCourseDepartment = "หลักสูตรภาควิชา/หมวดวิชา";
-$langCourseDepartmentURL = "ที่อยู่เว็ปไซท์ของหน่วยงาน";
-$langCourseLanguage = "ภาษาที่ใช้ในรายวิชา ";
-$langCourseAccess = "การเข้าเรียนในวิชา";
-$langCourseSubscription = "การสมัครเข้าเรียน ";
-$langPublicAccess = "เปิดให้เข้าเรียนแบบสาธารณะ ";
-$langPrivateAccess = "เปิดให้เข้าเรียนเป็นส่วนบุคคล ";
-$langDBManagementOnlyForServerAdmin = "การบริหารจัดการระบบฐานข้อมูล อนุญาตเฉพาะผู้บริหารเครื่องแม่ข่ายบริการ";
-$langShowUsersOfCourse = "แสดงชื่อสมาชิกที่สมัครเข้าเรียนในรายวิชา ";
-$langShowClassesOfCourse = "แสดงชื่อหมู่เรียนที่สมัครเรียนในรายวิชานี้ ";
-$langShowGroupsOfCourse = "แสดงกลุ่มของรายวิชา ";
-$langPhone = "โทรศัพท์ ";
-$langPhoneNumber = "เบอร์โทรศัพท์ ";
-$langActions = "สิทธิฐานะ";
-$langAddToCourse = "เพิ่มเข้าในรายวิชา";
-$langDeleteFromPlatform = "เอาออกจากระบบบริหารจัดการ";
-$langDeleteCourse = "ลบรายวิชาที่เลือก";
-$langDeleteFromCourse = "ถอดถอนการสมัครรายวิชา";
-$langDeleteSelectedClasses = "ลบหมู่เรียนที่เลือก";
-$langDeleteSelectedGroups = "ลบกลุ่มเรียนที่เลือก";
-$langAdministrator = "ผู้ดูแลระบบ";
-$langAddPicture = "ใส่ภาพ";
-$langChangePicture = "เปลี่ยนภาพ";
-$langDeletePicture = "ลบภาพ";
-$langAddUsers = "เพิ่มชื่อผู้ใช้";
-$langAddGroups = "เพิ่มกลุ่มเรียน";
-$langAddClasses = "เพิ่มหมู่เรียน";
-$langExportUsers = "ส่งออกรายชื่อผู้ใช้";
-$langKeyword = "คำสำคัญ";
-$langGroupName = "ชื่อกลุ่ม";
-$langGroupTutor = "กลุ่มผู้ช่วยสอน";
-$langGroupDescription = "รายละเอียดกลุ่ม";
-$langNumberOfParticipants = "จำนวนผู้ร่วมงาน";
-$langNumberOfUsers = "จำนวนสมาชิกผู้ใช้";
-$langMaximum = "มากที่สุด";
-$langMaximumOfParticipants = "จำนวนผู้ร่วมงานมากที่สุด";
-$langParticipants = "ผู้ร่วมงาน";
-$langFirstLetterClass = "อักษรนำหน้า(หมู่เรียน)";
-$langFirstLetterUser = "อักษรนำหน้า(นามสกุล)";
-$langFirstLetterCourse = "อักษรนำหน้า(รัหสวิชา)";
-$langModifyUserInfo = "แก้ไขข้อมูลสมาชิก";
-$langModifyClassInfo = "แก้ไขข้อมูลหมู่เรียน";
-$langModifyGroupInfo = "แก้ไขข้อมูลกลุ่มเรียน";
-$langModifyCourseInfo = "แก้ไขข้อมูลรายวิชา";
-$langPleaseEnterClassName = "กรุณาใส่ชื่อหมู่เรียน!";
-$langPleaseEnterLastName = "กรุณาใส่นามสกุลของผู้ใช้";
-$langPleaseEnterFirstName = "กรุณาใส่ชื่อของผู้ใช้";
-$langPleaseEnterValidEmail = "กรุณาใส่ที่อยู่อีเมลให้ถูกต้องและสมบูรณ์แบบ";
-$langPleaseEnterValidLogin = "กรุณาใส่ชื่อผู้ใช้ให้ถูกต้อง";
-$langPleaseEnterCourseCode = "กรุณาใส่รหัสวิชา";
-$langPleaseEnterTitularName = "กรุณาใส่ชื่ออาจารย์ผู้สอน";
-$langPleaseEnterCourseTitle = "กรุณาใส่ชื่อวิชา";
-$langAcceptedPictureFormats = "รูปแบบไฟล์ภาพที่ระบบยอมรับและแสดงผลได้คือสกุล .jpg .png .gif";
-$langLoginAlreadyTaken = "ชื่อผู้ใช้ที่ตั้งนี้ มีผู้อื่นใช้แล้ว";
-$langImportUserListXMLCSV = "นำเข้ารายชื่อผู้ใช้จากไฟล์รูปแบบ xml/csv ";
-$langExportUserListXMLCSV = "ส่งออกรายชื่อผู้ใช้เป็นไฟล์รูปแบบ xml/csv";
-$langOnlyUsersFromCourse = "เฉพาะผู้ใช้ในรายวิชา";
-$langAddClassesToACourse = "เพิ่มหมู่เรียนในรายวิชา";
-$langAddUsersToACourse = "เพิ่มผู้ใช้เข้ารายวิชา";
-$langAddUsersToAClass = "เพิ่มผู้ใช้ในหมู่เรียน";
-$langAddUsersToAGroup = "เพิ่มผู้ใช้เข้ากลุ่ม";
-$langAtLeastOneClassAndOneCourse = "คุณต้องเลือกอย่างน้อย 1 หมู่เรียนและ 1 รายวิชา";
-$AtLeastOneUser = "คุณต้องเลือกอย่างน้อย 1 ผู้ใช้";
-$langAtLeastOneUserAndOneCourse = "คุณต้องเลือกอย่างน้อย 1 ผู้ใช้และ 1 รายวิชา";
-$langClassList = "รายชื่อหมู่เรียน";
-$langUserList = "รายชื่อผู้ใช้";
-$langCourseList = "รายชื่อวิชา";
-$langAddToThatCourse = "เพิ่มเข้าไปในรายวิชานี้";
-$langAddToClass = "เพิ่มเข้าในหมู่เรียน";
-$langRemoveFromClass = "เอาออกจากหมู่เรียน";
-$langAddToGroup = "เพิ่มเข้าในกลุ่ม";
-$langRemoveFromGroup = "เอาออกจากกลุ่ม";
-$langUsersOutsideClass = "ผู้ใช้ที่ไม่สังกัดหมู่เรียน";
-$langUsersInsideClass = "ผู้ใช้สังกัดหมู่เรียน";
-$langUsersOutsideGroup = "ผู้ใช้ที่ไม่สังกัดกลุ่ม";
-$langUsersInsideGroup = "ผู้ใช้ที่สังกัดในกลุ่ม";
-$langImportFileLocation = "ที่อยู่ของไฟล์ csv/xml";
-$langFileType = "ประเภทไฟล์";
-$langOutputFileType = "ประเภทไฟล์ส่งออก";
-$langMustUseSeparator = "ต้องใช้เครื่องหมาย ; เป็นตัวคั่น";
-$langCSVMustLookLike = "ไฟล์ csv ต้องดูเหมือนอย่างนี้ ";
-$langXMLMustLookLike = "ไฟล์ xml ต้องดูเหมือนอย่างนี้";
-$langMandatoryFields = "รูปแบบคำสั่ง<strong>bold</strong>คือให้เป็นตัวหนา";
-$langNotXML = "ไฟล์ที่ระบุนี้ไม่ใช่รูปแบบของไฟล์ xml";
-$langNotCSV = "ไฟล์ที่ระบุไม่ใช่ไฟล์รูปแบบ csv ";
-$langNoNeededData = "ไฟล์ที่ระบุ ไม่มีข้อมูลที่ตรงกับความต้องการ";
-$langMaxImportUsers = "อนุญาตให้นำเข้ารายชื่อผู้ใช้ได้ครั้งละไม่เกิน 500 คน";
-$langAdminDatabases = "ฐานข้อมูล(phpMyAdmin)";
-$langAdminUsers = "ผู้ใช้ในระบบ";
-$langAdminClasses = "หมู่เรียน";
-$langAdminGroups = "กลุ่มผู้ใช้";
-$langAdminCourses = "รายวิชา";
-$langAdminCategories = "ประเภทรายวิชา";
-$langSubscribeUserGroupToCourse = "รับลงทะเบียนผู้ใช้/กลุ่มเข้าในรายวิชา";
-$langAddACategory = "เพิ่มเติมประเภท";
-$langInto = "เข้าใน";
-$langNoCategories = "ยังไม่มีการจัดประเภท";
-$langAllowCoursesInCategory = "อนุญาตให้เพิ่มรายวิชาในประเภทนี้";
-$langGoToForum = "ไปที่การอภิปราย";
-$langCategoryCode = "รหัสประเภท";
-$langCategoryName = "ชื่อประเภท";
-$langCategories = "ประเภทวิชา";
-$langEditNode  = "แก้ไขประเภทนี้";
-$langOpenNode  = "เปิดประเภทนี้";
-$langDeleteNode  = "ลบประเภทนี้";
-$langAddChildNode  = "เพิ่มหัวข้อย่อยในประเภท";
-$langViewChildren  = "ดูแผนผังโครงสร้างไฟล์ย่อย";
-$langTreeRebuildedIn  = "สร้างโครงสร้างไฟล์รูปแบบแผนภูมิต้นไม้ ใหม่ใน ";
-$langTreeRecountedIn  = "นับแผนภูมิโครงสร้างไฟล์แบบต้นไม้ ใหม่ใน";
-$langRebuildTree = "สร้างโครงสร้างไฟล์รูปแบบแผนภูมิต้นไม้ ใหม่";
-$langRefreshNbChildren = "กะพริบจอดูแผนผังโครงสร้างไฟล์ย่อยใหม่";
-$langShowTree  = "แสดงโครงสร้างไฟล์รูปแบบแผนภูมิต้นไม้";
-$langBack  = "ย้อนกลับไปหน้าที่ผ่านมา";
-$langLogDeleteCat   = "ลบประเภท";
-$langRecountChildren  = "นับดูแผนผังโครงสร้างไฟล์ย่อยใหม่";
-$langUpInSameLevel  = "ปรับมาระดับเดียวกัน";
-$langSeconds = "วินาที";
-$langMailTo  = "ส่งอีเมลถึง";
-$lang_no_access_here  = "ห้ามเข้า";
-$lang_php_info  = "ข้อมูลเกี่ยวกับระบบ";
-$langAddAdminInApache  = "เพิ่มผู้ดูแลระบบ";
-$langAddFaculties  = "เพิ่มประเภท";
-$langSearchACourse   = "ค้นหารายวิชา";
-$langSearchAUser   = "ค้นหาผู้ใช้";
-$langTechnicalTools  = "เทคนิค";
-$langConfig  = "ตั้งค่าระบบ";
-$langLogIdentLogoutComplete  = "บันทึกการเข้าใช้งานระบบ";
-$langLimitUsersListDefaultMax = "แสดงจำนวนสมาชิกในรายการแถบเลื่อนไว้มากที่สุด";
-$PageAfterLoginTitle = "หน้าที่แสดงเมื่อเข้าใช้ระบบ";
-$PageAfterLoginComment = "หน้าที่ให้เห็นเฉพาะสมาชิกที่กำลังเชื่อมต่อ";
-$DokeosAdminWebLinks = "เชื่อมโยงเว็ป Chamilo ";
-$GlobalRole = "Global Role";
-$langNomOutilTodo = "สิ่งควรปรับปรุง";
-$langNomPageAdmin = "การบริหารจัดการระบบ";
-$langSysInfo = "แสดงรายละเอียดสถานะของระบบ";
-$langDiffTranslation = "เปรียบเทียบการแปล";
-$langStatOf = "สถิติของ ";
-$langSpeeSubscribe = "ลงทะเบียนด่วนเป็นผู้ตรวจสอบวิชา";
-$langLogIdentLogout = "แสดงรายการเข้าสู่ระบบ";
-$langServerStatus = "สถานะของ MySQL server";
-$langDataBase = "ฐานข้อมูล";
-$langRun = "งาน";
-$langClient = "ลูกข่ายรับบริการ MySql ";
-$langServer = "เครื่องแม่ข่ายบริการ MySql ";
-$langtitulary = "เจ้าของ";
-$langUpgradeBase = "ปรับปรุงฐานข้อมูล";
-$langManage = "สำนักงานบริหาร";
-$langErrorsFound = "พบข้อผิดพลาด";
-$langMaintenance = "การดูแลรักษา";
-$langUpgrade = "ปรับรุ่น Chamilo";
-$langWebsite = "เว็ปไซท์Dokeos";
-$langDocumentation = "การจัดเอกสาร";
-$langContribute = "สนับสนุน";
-$langInfoServer = "ข้อมูลแม่ข่ายบริการ";
-$langOtherCategory = "ประเภทอื่น";
-$langSendMailToUsers = "ส่งอีเมลถึงผู้ใช้ในระบบ";
-$langExampleXMLFile = "ตัวอย่างของไฟล์ xml";
-$langExampleCSVFile = "ตัวอย่างไฟล์ CSV";
-$langCourseSystemCode = "รหัสระบบ";
-$langCourseVisualCode = "รหัสที่มองเห็น";
-$langSystemCode = "รหัสระบบ";
-$langVisualCode = "รหัสที่มองเห็น";
-$langAddCourse = "สร้างรายวิชา";
-$langAdminManageVirtualCourses = "บริหารรายวิชาเสมือน";
-$langAdminCreateVirtualCourse = "สร้างรายวิชาเสมือน";
-$langAdminCreateVirtualCourseExplanation = "รายวิชาเสมือนจะร่วมใช้ไฟล์และพื้นที่เก็บไฟล์กับรายวิชาจริง";
-$langRealCourseCode = "รหัสวิชาจริง";
-$langCourseCreationSucceeded = "ได้สร้างรายวิชาเรียบร้อยแล้ว";
-$langYourDokeosUses = "ติดตั้ง Chamilo ตามที่แสดงค่านี้ ";
-$langOnTheHardDisk = "อยู่ในฮาร์ดดิสก์";
-$langIsVirtualCourse = "เป็นวิชาเสมือน";
-$langSystemAnnouncements = "ประกาศข่าวภายในระบบ";
-$langAddAnnouncement = "เพิ่มประกาศใหม่";
-$langAnnouncementAdded = "ได้เพิ่มประกาศแล้ว";
-$langAnnouncementUpdated = "ปรับแก้ประกาศแล้ว";
-$langAnnouncementDeleted = "ลบประกาศแล้ว";
-$langContent = "เนื้อหา";
-$langStudent = "ผู้เรียน";
-$Guest = "บุคคลทั่วไป";
-$langLoginAsThisUserColumnName = "เข้าสู่ระบบด้วยชื่อ";
-$langLoginAsThisUser = "เข้าสู่ระบบ";
-$DontResetPassword = "อย่าตั้งรหัสผ่านใหม่";
-$ParticipateInCommunityDevelopment = "ร่วมพัฒนา";
-$langCourseAdmin = "ผู้จัดการวิชา";
-$langOtherCourses = "รายวิชาอื่น";
-$PlatformLanguageTitle = "ภาษาของระบบ";
-$ServerStatusComment = "การทราบชนิดของเครื่องแม่ข่าย ก็เพื่อสามารถกำหนดค่าทางเลือก และสมรรถนะของการปรับปรุงคุณภาพและคุณสมบัติเครื่อง ให้มีความสามารถแปลคำสั่งได้ตรงกับหน้าที่การใช้งานที่ต้องการ";
-$ServerStatusTitle = "ชนิดของเครื่องแม่ข่าย";
-$PlatformLanguages = "ภาษาคำสั่งของระบบ";
-$PlatformLanguagesExplanation = "การเลือกภาษาจากเมนูในหน้าแรกของโฮมเพจ จะเป็นการเลือกใช้คำสั่งภาษาที่เลือกทั้งระบบ";
-$OriginalName = "ชื่อภาษาเดิม";
-$EnglishName = "ชื่อภาษาอังกฤษ";
-$DokeosFolder = "ชื่อในแฟ้มของDokeos ";
-$Properties = "ปรับเปลี่ยน";
-$DokeosConfigSettings = "แก้ไขตั้งค่าระบบ Chamilo";
-$SettingsStored = "เก็บค่าที่แก้ไขแล้ว";
-$InstitutionTitle = "ชื่อหน่วยงาน";
-$InstitutionComment = "ชื่อของหน่วยงาน(จะปรากฏที่หัวมุมบนด้านขวามือ)";
-$InstitutionUrlTitle = "เว็ปไซท์หน่วยงาน";
-$InstitutionUrlComment = "ชื่อเว็ปไซท์ของหน่วยงาน(เป็นชื่อที่เชื่อมโยงและปรากฏอยู่ด้านบนขวา)";
-$SiteNameTitle = "ตั้งชื่อหัวเรื่องของระบบ";
-$SiteNameComment = "ชื่อเว็ปไซท์Dokeosของคุณ(จะปรากฏชื่อบนแถบด้านบน) ";
-$emailAdministratorTitle = "อีเมลของผู้ดูแลระบบ";
-$emailAdministratorComment = "อีเมลของผู้จัดการระบบ(จะปรากฏในแถบล่างมุมซ้าย)";
-$administratorSurnameTitle = "นามสกุลของผู้จัดการระบบ";
-$administratorSurnameComment = "ชื่อของผุ้จัดการระบบ(จะปรากฏที่ท้ายหน้าโฮมเพจมุมซ้ายล่าง)";
-$administratorNameTitle = "ชื่อผู้จัดการระบบ";
-$administratorNameComment = "ชื่อผู้จัดการระบบ(จะปรากฏที่ท้ายหน้าโฮมเพจมุมล่างซ้าย)";
-$ShowAdministratorDataTitle = "ข้อมูลและรุ่นของระบบที่จะแสดงที่ท้ายล่างของโฮมเพจ";
-$ShowAdministratorDataComment = "แสดงข้อมูลและรุ่นของระบบที่ท้ายหน้าโฮมเพจ";
-$HomepageViewTitle = "ดูโฮมเพจ";
-$HomepageViewComment = "คุณต้องการให้โฮมเพจวิชามีรูปแบบตามนี้";
-$HomepageViewDefault = "ซ่อนเครื่องมือที่ควบคุมการแสดงผลแบบ 2 คอลัมน์";
-$HomepageViewFixed = "จัดหน้าโฮมเพจแบบ 3 คอลัมน์ หากปุ่มเครื่องมือเป็นสีเทาแสดงว่ายังไม่ถูกกำหนดให้ใช้งาน";
-$Yes = "ใช่";
-$No = "ไม่";
-$ShowToolShortcutsTitle = "เครื่องมือลัด";
-$ShowToolShortcutsComment = "แสดงเครื่องมือลัดไว้ในป้ายประกาศ";
-$ShowStudentViewTitle = "หน้าจอผู้เรียน";
-$ShowStudentViewComment = "ให้แสดงผลหน้าจอของผู้เรียน<b>การกำหนดใช้คำสั่งนี้ก็เพื่อให้ผู้สอนทราบว่า หน้าจอของผู้เรียนจะปรากฏรายการใดแสดงให้เห็นบ้าง";
-$AllowGroupCategories = "ประเภทกลุ่ม";
-$AllowGroupCategoriesComment = "อนุญาตให้ผู้จัดการวิชาสร้างประเภทรายการในบทเรียนได้";
-$PlatformLanguageComment = "คุณสามารถกำหนดภาษาของระบบไว้ในส่วนต่างๆได้ เพียงคัดลอกคำสั่งเชื่อมโยงนี้ไปไว้ในที่ต้องการ<a href=\"languages.php\">ภาษาระบบของDokeos</a>";
-$PlatformLanguageTitle = "ภาษาของระบบ";
-$ProductionServer = "เครื่องแม่ข่ายบริการจริง";
-$TestServer = "เครื่องแม่ข่ายบริการจำลอง";
-$ShowOnlineTitle = "ผู้ที่กำลังร่วมใช้งาน";
-$AsPlatformLanguage = "เป็นภาษาของระบบ";
-$ShowOnlineComment = "ให้แสดงจำนวนผู้ที่กำลังใช้งานระบบ";
-$AllowNameChangeTitle = "อนุญาตให้เปลี่ยนชื่อในแฟ้มประวัติได้";
-$AllowNameChangeComment = "ให้ผู้ใช้เปลี่ยนแปลงชื่อและนามสกุลได้หรือไม่";
-$DefaultDocumentQuotumTitle = "พื้นที่เก็บเอกสาร";
-$DefaultDocumentQuotumComment = "การควบคุมโควต้าเอกสาร สามารถกำหนดเองได้โดยพิมพ์ค่าตัวเลขเป็นจำนวนไบท์ ลงในช่องกำหนดตามที่ต้องการ เส้นทางการเข้าถึงการกำหนดค่าโควต้าคือไปที่ : การบริหารจัดการ> รายวิชา> ใส่ค่าที่ต้องการ ";
-$ProfileChangesTitle = "ประวัติ";
-$ProfileChangesComment = "อนุญาตให้เปลี่ยนแปลงแฟ้มส่วนบุคคลในส่วนใด";
-$RegistrationRequiredFormsTitle = "การลงทะเบียน: บังคับต้องกรอกรายการในช่องที่มี * กำกับ";
-$RegistrationRequiredFormsComment = "เขตข้อมูลที่ต้องการ (besides name, first name, login and password)";
-$DefaultGroupQuotumTitle = "ค่าเริ่มต้นของโควตากลุ่ม";
-$DefaultGroupQuotumComment = "โควต้าเอกสารกลุ่ม (What is the default quotum for a groups documents tool?)";
-$AllowLostPasswordTitle = "ลืมรหัสผ่าน";
-$AllowLostPasswordComment = "อนุญาตให้ผู้ใช้ร้องขอรหัสที่ลืมได้หรือไม่";
-$AllowRegistrationTitle = "การลงทะเบียน";
-$AllowRegistrationComment = "อนุญาตให้ผู้ใช้สร้างชื่อใหม่ได้หรือไม่";
-$AllowRegistrationAsTeacherTitle = "ลงทะเบียนเป็นอาจารย์ผู้สอน";
-$AllowRegistrationAsTeacherComment = "อนุญาตให้ผู้สมัครเป็นผู้ใช้ใหม่มีสิทธิฐานะเป็นผู้สอนได้เลยหรือไม่";
-$PlatformLanguage = "ระบบภาษา";
-$CourseQuota = "มีพื้นที่เก็บไฟล์ของวิชาในระบบให้เป็นจำนวน(ไบท์)";
-$EditNotice = "แก้ไขการแจ้งข่าว";
-$General = "เมนูรายการเชื่อมโยง";
-$LostPassword = "ลืมรหัสผ่าน";
-$Registration = "การลงทะเบียน";
-$Password = "รหัสผ่าน";
-$InsertLink = "เพิ่มการเชื่อมโยง";
-$EditNews = "แก้ไขข่าว";
-$EditCategories = "แก้ไขประเภท";
-$EditHomePage = "แก้ไขหน้าโฮมเพจ";
-$AllowUserHeadingsComment = "ผู้บริหารวิชาสามารถเพิ่มเติมรายละเอียดข้อมูลของผู้เรียน/ผู้ใช้(User)";
-$Platform = "ระบบ";
-$Course = "รายวิชา";
-$Languages = "ภาษา";
-$Privacy = "ส่วนตัว";
-$NoticeTitle = "แจ้งข่าวเรื่อง";
-$NoticeText = "ข้อความที่แจ้งให้ทราบ";
-$LinkName = "ข้อความที่เชื่อมโยง";
-$LinkURL = "ที่อยู่รายการที่เชื่อมโยง";
-$OpenInNewWindow = "เปิดเป็นหน้าจอใหม่";
-$langLimitUsersListDefaultMaxComment = "ในหน้าจอการอนุญาตเพิ่มผู้เรียนเข้าชั้นนั้นIn the screens allowing addition of users to courses or classes, if the first non-filtered list contains more than this number of users, then default to the first letter (A)";
-$Plugins = "โปรแกรมเสริม";
-$Info = "ข้อมูล";
-$UserAdded = "เพิ่มผู้ใช้แล้ว";
-$NoSearchResults = "ไม่พบรายการที่ค้นหา";
-$UserDeleted = "ลบชื่อผู้ใช้แล้ว";
-$NoClassesForThisCourse = "ยังไม่มีหมู่เรียนใดสมัครเรียนวิชานี้";
-$CourseUsage = "การเข้าเรียนในรายวิชา";
-$NoCoursesForThisUser = "ผู้ใช้นี้ยังไม่ได้สมัครเข้าเรียน";
-$NoClassesForThisUser = "ผู้ใช้นี้ไม่ได้สมัครเข้าในหมู่เรียน";
-$NoCoursesForThisClass = "หมู่เรียนนี้ยังไม่ได้สมัครเรียน";
-$langOpenToTheWorld = "เปิด ให้เรียนฟรี";
-$OpenToThePlatform = "เปิดวิชาให้เรียนเฉพาะผู้ที่ลงทะเบียนสมาชิกในระบบ";
-$langPrivate = "เปิดเป็นวิชาเรียนเฉพาะกลุ่มบุคคลที่ระบุชื่อ";
-$langCourseVisibilityClosed = "ปิดวิชา อนุญาตใช้เฉพาะผู้บริหารวิชา ";
-$langSubscription = "การสมัคร";
-$langUnsubscription = "ถอนการสมัคร";
-$CourseAccessConfigTip = "โดยปกติการเปิดวิชาครั้งแรกจะให้เป็นแบบสาธารณะคือใครก็เข้าเรียนได้ แต่อย่างไรก็ตาม สามารถกำหนดค่าระดับการรักษาความปลอดภัยของข้อมูลได้";
-$Tool = "เครื่องมือ";
-$NumberOfItems = "จำนวนในแต่ละรายการ";
-$DocumentsAndFolders = "แฟ้มเก็บเอกสาร";
-$Learnpath = "แผนการเรียน";
-$Exercises = "แบบทดสอบ";
-$AllowPersonalAgendaTitle  = "กำหนดการส่วนตัว";
-$AllowPersonalAgendaComment  = "ผู้ใช้สามารถเพิ่มเติมกำหนดการของตัวเองเข้าได้หรือไม่ ";
-$CurrentValue = "ปัจจุบันใช้คำสั่งของระบบเป็นภาษา";
-$CourseDescription = "คำอธิบายรายวิชา";
-$OnlineConference = "การสัมมนาออนไลน์";
-$Chat = "สนทนาออนไลน์";
-$Quiz = "แบบทดสอบ";
-$Announcements = "ประกาศข่าว";
-$Links = "การเชื่อมโยง";
-$LearningPath = "แผนการเรียน";
-$Documents = "เอกสาร";
-$UserPicture = "รูปภาพ";
-$officialcode = "รหัสประจำตัว";
-$Login = "เข้าสู่ระบบ";
-$UserPassword = "รหัสผ่าน";
-$SubscriptionAllowed = "รับการสมัครแล้ว";
-$UnsubscriptionAllowed = "อนุมัติให้ถอนการสมัคร ";
-$AllowedToUnsubscribe = "อนุญาต";
-$NotAllowedToUnsubscribe = "ไม่อนุญาต";
-$AddDummyContentToCourse = "เพิ่มผังรายการเนื้อหา(ตัวอย่าง)ในรายวิชา";
-$DummyCourseCreator = "สร้างผังรายการเนื้อหาวิชา";
-$DummyCourseDescription = "จะเป็นการเพิ่มผังรายการเนื้อหา(ตัวอย่าง)เข้าไปในรายวิชา : เพื่อทดสอบดูเท่านั้น";
-$AvailablePlugins = "นี่คือรายการโปรแกรมเสริม(plugins)ที่มีติดตั้งอยู่ในระบบ คุณสามารถทำการโอนไฟล์ลงมาติดตั้งเพิ่มเติมได้จาก<a href=\"http://www.chamilo.org/extensions/index.php?section=plugins\">http://www.chamilo.org/extensions/index.php?section=plugins</a>";
-$CreateVirtualCourse = "สร้างรายวิชาเสมือน";
-$DisplayListVirtualCourses = "แสดงรายชื่อรายวิชาเสมือน";
-$LinkedToRealCourseCode = "เชื่อมสู่รหัสวิชาจริง : Linked to real course code";
-$AttemptedCreationVirtualCourse = "ต้องการสร้างรายวิชาเสมือน";
-$WantedCourseCode = "ต้องใส่รหัสวิชา";
-$ResetPassword = "ตั้งรหัสผ่านใหม่";
-$CheckToSendNewPassword = "ตรวจเพื่อส่งรหัสผ่านใหม่";
-$AutoGeneratePassword = "ตั้งรหัสผ่านให้โดยอัตโนมัติ";
-$UseDocumentTitleTitle = "ใช้ชื่อเรื่องเป็นชื่อเอกสาร";
-$UseDocumentTitleComment = "จะใช้ชื่อเรื่องของเอกสารเป็นการตั้งชื่อให้แก่ไฟล์เอกสาร";
-$StudentPublications = "ผลงาน/การบ้านของผู้เรียน";
-$PermanentlyRemoveFilesTitle = "ไฟล์ที่ลบไม่สามารถกู้คืนได้อีก";
-$PermanentlyRemoveFilesComment = "การลบไฟล์ด้วยเครื่องมือของโปรแกรมจะเป็นการลบอย่างถาวร. ไฟล์จะไม่สามารถกู้คืนได้";
-$ClassName = "ชื่อหมู่เรียน";
-$DropboxMaxFilesizeTitle = "กล่องรับส่งงาน:รับขนาดไฟล์ได้สูงสุด";
-$DropboxMaxFilesizeComment = "ขนาดไฟล์ใหญ่สุดที่เท่าไร ที่กล่องรับส่งงานรับเข้าได้";
-$DropboxAllowOverwriteTitle = "กล่องรับส่งงาน:สามารถบันทึกทับไฟล์เดิมได้";
-$DropboxAllowOverwriteComment = "ชื่อเอกสารเดิมที่จัดเก็บในระบบสามารถบันทึกทับกันได้ เมื่อมีการโอนย้ายไฟล์เข้าเก็บในแฟ้มเก็บงานเดียวกัน หากคุณยอมรับ ไฟล์เดิมจะถูกบันทึกเป็นไฟล์ใหม่ล่าสุดแทน";
-$DropboxAllowJustUploadTitle = "กล่องรับส่งงาน: โอนย้ายขึ้นเก็บในส่วนของตัวเอง";
-$DropboxAllowJustUploadComment = "อนุญาตให้อาจารย์หรือผู้เรียนโอนย้ายไฟล์เอกสารขึ้นเก็บในพื้นที่ของตนเองได้เป็นอิสระ โดยไม่ต้องแจ้งใคร : Allow teachers and student to upload documents to their own dropbox without sending them to anyone (=sending the documents to themselves)";
-$DropboxAllowStudentToStudentTitle = "กล่องรับส่งงาน:ผู้เรียน<->ผู้เรียน";
-$DropboxAllowStudentToStudentComment = "การอนุญาตให้ผู้เรียนส่งไฟล์แลกเปลี่ยนถึงกันและกันได้ อาจารย์ควรพิจารณาอนุญาตและคาดหมายถึงพฤติกรรมการส่งไฟล์ระหว่างกันนั้น เป็นไฟล์ที่จะเป็นประโยชน์หรือไม่ เช่นอาจจะส่งไฟล์ที่เป็นเพลง mp3 หรือแลก/ลอกไฟล์การบ้านกัน หากไม่อนุญาต ผู้เรียนจะส่งงานให้ได้เฉพาะอาจารย์ผู้สอนเท่านั้น";
-$DropboxAllowMailingTitle = "กล่องรับส่งงาน:อนุญาตให้ส่งอีเมล";
-$DropboxAllowMailingComment = "กำหนดให้ส่งอีเมล์เอกสารไปให้ผู้เรียนเป็นรายบุคคล";
-$UserListHasBeenExported = "ได้ส่งออกบัญชีชื่อผู้ใช้แล้ว";
-$ClickHereToDownloadTheFile = "คลิกที่นี่เพื่อโอนย้ายไฟล์ลงมา(Download)";
-$administratorTelephoneTitle = "เบอร์โทรศัพท์ผู้บริหารระบบ";
-$administratorTelephoneComment = "เบอร์โทรศัพท์ของผู้จัดการระบบ";
-$SendMailToNewUser = "ส่งอีเมลให้ผู้ใช้คนใหม่";
-$ExtendedProfileTitle = "ส่วนเพิ่มเติมแฟ้มประวัติ";
-$ExtendedProfileComment = "หากตั้งค่าให้เป็น\"ใช่\"ผู้สมัครในสิทธิฐานะอาจารย์ผู้สอนต้องกรอกข้อมูลเพิ่มเติมในช่องของ ความสามารถพิเศษ คุณวุฒิ และวิชาที่สามารถสอนได้ และข้อมูลส่วนตัวที่สามารถเปิดเผยได้ ";
-$Classes = "หมู่เรียน";
-$UserUnsubscribed = "ถอดถอนการสมัครของผู้ใช้แล้ว";
-$CannotUnsubscribeUserFromCourse  = "ผู้ใช้ไม่สามารถถอนวิชาได้เอง ต้องแจ้งผู้บริหารจัดการวิชาดำเนินการให้";
-$InvalidStartDate = "กำหนดวันเริ่มต้นไม่ถูกต้อง";
-$InvalidEndDate = "กำหนดวันสุดท้ายไม่ถูกต้อง";
-$DateFormatLabel = "วัน/เดือน/ปี/ชั่วโมง:นาที";
-$HomePageFilesNotWritable = "ไฟล์โฮมเพจไม่สามารถบันทึกได้";
-$PleaseEnterNoticeText = "กรุณาพิมพ์ ข้อความที่จะแจ้งให้ทราบ";
-$PleaseEnterNoticeTitle = "กรุณาพิมพ์ชื่อเรื่อง เรื่องที่แจ้งให้ทราบ";
-$PleaseEnterLinkName = "กรุณาแจ้ง ชื่อการเชื่อมโยง";
-$InsertThisLink = "ใส่การเชื่อมโยงนี้";
-$FirstPlace = "ก่อนรายการ";
-$After = "หลังรายการ";
-$DropboxAllowGroupTitle = "กล่องรับส่งงาน:ของกลุ่ม";
-$DropboxAllowGroupComment = "ผู้ใช้งานในระบบสามารถส่งไฟล์ให้กันได้";
-$ClassDeleted = "ลบหมู่เรียนแล้ว";
-$ClassesDeleted = "ลบหมู่เรียนแล้ว";
-$NoUsersInClass = "ไม่มีผู้เรียนในหมู่เรียนนี้";
-$UsersAreSubscibedToCourse = "เพิ่มชื่อผู้สมัครเรียนตามรายการที่เลือก เข้าไปในรายวิชา";
-$InvalidTitle = "กรุณาใส่ชื่อเรื่อง";
-$CatCodeAlreadyUsed = "ประเภทนี้มีแล้ว";
-$PleaseEnterCategoryInfo = "โปรดใส่รหัสและชื่อประเภท";
-$DokeosHomepage  = "เชื่อมโยงไปที่เวปไซท์ Chamilo";
-$DokeosForum  = "เข้าร่วมกลุ่มอภิปรายกับ www.chamilo.org";
-$RegisterYourPortal  = "แจ้งลงทะเบียนเว็ปไซท์ของเราไว้ที่ Chamilo";
-$DokeosExtensions  = "ดาวน์โหลดโปรแกรมเสริมจากเว็ปไซท์ของ Chamilo";
-$ShowNavigationMenuTitle = "แสดงเมนูซ้าย";
-$ShowNavigationMenuComment = "จะใช้เมนูซ้าย?";
-$LoginAs = "เข้าใช้ระบบด้วยชื่อ";
-$ImportClassListCSV = "นำเข้ารายชื่อผู้เรียนด้วยไฟล์ CSV";
-$ShowOnlineWorld = "แสดงจำนวนผู้ที่กำลังเข้าใช้งานในหน้าที่กำลังดูอยู่ปัจจุบัน(เห็นทุกคน)";
-$ShowOnlineUsers = "แสดงจำนวนผู้ที่กำลังเข้าใช้งานในทุกหน้า(เห็นเฉพาะผู้ที่เข้าสู่ระบบแล้ว)";
-$ShowOnlineCourse = "แสดงจำนวนผู้ที่กำลังเข้าใช้งานในรายวิชา";
-$ShowNavigationMenuTitle = "แสดงเมนูนำทางวิชา";
-$ShowNavigationMenuComment = "แสดงเมนูนำทางทำให้ง่ายต่อการเข้าไปในรายวิชาต่างๆ";
-$ShowIconsInNavigationsMenuTitle = "แสดงสัญรูปในเมนูนำทาง";
-$SeeAllRolesAllLocationsForSpecificRight = "ดูกฏระเบียบที่ใช้สิทธิ์เฉพาะทั้งหมด";
-$SeeAllRightsAllRolesForSpecificLocation = "ดูสิทธิ์และกฏระเบียบที่ใช้เฉพาะทั้งหมด";
-$ClassesUnsubscribed = "ได้ถอดถอนกลุ่มเรียนที่เลือกไว้ ออกจากวิชาแล้ว";
-$ClassesSubscribed = "ได้รับกลุ่มเรียนที่เลือกไว้ เข้าในรายวิชาแล้ว";
-$RoleId = "รหัสระเบียบ";
-$RoleName = "ชื่อระเบียบ";
-$RoleType = "ประเภท";
-$RightValueModified = "ได้เปลี่ยนแปลงค่าแล้ว";
-$MakeAvailable = "ทำให้ใช้งานได้";
-$MakeUnavailable = "ทำให้ยังใช้งานไม่ได้";
-$Stylesheets = "รูปแบบเอกสาร ";
-$DefaultDokeosStyle = "รูปแบบค่าเริ่มต้นของโดคีอส ";
-$ShowIconsInNavigationsMenuComment = "ให้แสดงเมนูนำทางด้วยสัญรูปที่แตกต่างหรือไม่ ";
-$Plugin = " โปรแกรมเสริม  ";
-$MainMenu = "เมนูหลัก";
-$MainMenuLogged = "เมนูหลักเมื่อเข้าระบบ";
-$Banner = "ป้ายโฆษณา";
+$VisioRTMPIsWeb = "&#3649;&#3617;&#3657;&#3623;&#3656;&#3634;&#3650;&#3611;&#3619;&#3650;&#3605;&#3588;&#3629;&#3621;&#3586;&#3629;&#3591; videoconference &#3609;&#3633;&#3657;&#3609;&#3605;&#3657;&#3656;&#3629;&#3591;&#3586;&#3638;&#3657;&#3609;&#3629;&#3618;&#3641;&#3656;";
+$ShowBackLinkOnTopOfCourseTreeComment = "";
+$langUsed = "&#3651;&#3594;&#3657;&#3649;&#3621;&#3657;&#3623;";
+$langPresent = "&#3585;&#3634;&#3619;&#3605;&#3619;&#3623;&#3592;&#3626;&#3629;&#3610;";
+$langMissing = "&#3627;&#3634;&#3618;&#3652;&#3611;";
+$langExist = "&#3617;&#3637;&#3629;&#3618;&#3641;&#3656;&#3649;&#3621;&#3657;&#3623;";
+$ShowBackLinkOnTopOfCourseTree = "";
+$ShowNumberOfCourses = "";
+$DisplayTeacherInCourselistTitle = "ร ยนยร ลพยชร ลพย”ร ลพยร ลพยร ลพยทร ยนยร ลพยญร ลพยร ลพยนร ยนยร ลพยชร ลพยญร ลพยร ยนยร ลพยร ลพยฃร ลพยฒร ลพยขร ลพยงร ลพลฝร ลพยร ลพยฒ";
+$DisplayTeacherInCourselistComment = "รกรลฝยงยชร—รจรล’รรฉรรยนรฃยนรร’รรร”ยชร’ยทร•รจรร•ยกร’รรกรลฝยงโฌรร’รโฌร”ลฝร รรงยน";
+$DisplayCourseCodeInCourselistComment = "รกรลฝยงรรร‘รรร’รรร”ยชร’รฃยนรร’รรร”ยชร’ยทร•รจรร•ยกร’รรกรลฝยงโฌรร’รโฌร”ลฝร รรงยน";
+$DisplayCourseCodeInCourselistTitle = "รกรลฝยงรรร‘รรร’รรร”ยชร’รฃยนยชร—รจรรร’รรร”ยชร’";
+$ThereAreNoVirtualCourses = "รร‘ยงรครรจรร•ยกร’รร ยปร”ลฝรร’รรร”ยชร’รฃยนร€ร’รร’ยนร•รฉ";
+$ConfigureHomePage = "ยตร‘รฉยงโฌรจร’รยนรฉร’รกรยกยขรยงร รรงยปรคยซยทรฌ";
+$CourseCreateActiveToolsTitle = "รฃรรฉรยนรจรรยกร’รร รร•รยนรฃยชรฉยงร’ยนรคลฝรฉร รร—รจรรร•ยกร’รรรรฉร’ยงรร’รรร”ยชร’ยขร–รฉยนรฃรรรจ";
+$CourseCreateActiveToolsComment = "ร โฌรร—รจรยงรร—รรฃลฝลกรรฃยชรฉยงร’ยนรคลฝรฉร ยปรงยนโฌรจร’ร รร”รจรยตรฉยนรขลฝรยปรร”รร’ร ยตรจรร รร—รจรรร•ยกร’รรรรฉร’ยงรร’รรร”ยชร’รกร…รฉร";
+$SearchUsers = "";
+$CreateUser = "";
+$ModifyInformation = "";
+$ModifyUser = "";
+$buttonEditUserField = "";
+$ModifyCoach = "";
+$ModifyThisSession = "";
+$ExportSession = "";
+$ImportSession = "";
+$langCourseBackup = "ยทร“ยกร’รรร“รรยงยขรฉรรรร…รร’รรร”ยชร’ยนร•รฉ";
+$langCourseTitular = "รร’ลกร’รรรฌล’รรฉรรยน";
+$langCourseTitle = "ยชร—รจรรร’รรร”ยชร’";
+$langCourseFaculty = "ยปรรร ร€ยทรร’รรร”ยชร’";
+$langCourseDepartment = "รร…ร‘ยกรรยตรร€ร’โฌรร”ยชร’/รรรลฝรร”ยชร’";
+$langCourseDepartmentURL = "ยทร•รจรรรรจร รรงยปรคยซยทรฌยขรยงรยนรจรรยงร’ยน";
+$langCourseLanguage = "ร€ร’รร’ยทร•รจรฃยชรฉรฃยนรร’รรร”ยชร’";
+$langCourseAccess = "ยกร’รร ยขรฉร’ร รร•รยนรฃยนรร”ยชร’";
+$langCourseSubscription = "ยกร’รรรร‘โฌรร ยขรฉร’ร รร•รยน";
+$langPublicAccess = "ร ยปร”ลฝรฃรรฉร ยขรฉร’ร รร•รยนรกยบยบรร’ลพร’รยณร";
+$langPrivateAccess = "ร ยปร”ลฝรฃรรฉร ยขรฉร’ร รร•รยนร ยปรงยนรรจรยนยบรโฌโฌร…";
+$langDBManagementOnlyForServerAdmin = "ยกร’รยบรร”รร’รลกร‘ลฝยกร’รรรยบยบยฐร’ยนยขรฉรรรร… รยนรยญร’ยตร ยฉลธร’รล’รรฉยบรร”รร’รร โฌรร—รจรยงรกรรจยขรจร’รยบรร”ยกร’ร";
+$langShowUsersOfCourse = "รกรลฝยงยชร—รจรรรร’ยชร”ยกยทร•รจรรร‘โฌรร ยขรฉร’ร รร•รยนรฃยนรร’รรร”ยชร’";
+$langShowClassesOfCourse = "รกรลฝยงยชร—รจรรรรรจร รร•รยนยทร•รจรรร‘โฌรร รร•รยนรฃยนรร’รรร”ยชร’ยนร•รฉ";
+$langShowGroupsOfCourse = "รกรลฝยงยกร…รรจรยขรยงรร’รรร”ยชร’";
+$langPhone = "รขยทรรร‘ลธยทรฌ";
+$langPhoneNumber = "ร ยบรรรฌรขยทรรร‘ลธยทรฌ";
+$langActions = "รร”ยทลพร”ยฐร’ยนร";
+$langAddToCourse = "ร ลธร”รจรร ยขรฉร’รฃยนรร’รรร”ยชร’";
+$langDeleteFromPlatform = "ร รร’รรยกลกร’ยกรรยบยบยบรร”รร’รลกร‘ลฝยกร’ร";
+$langDeleteCourse = "ร…ยบรร’รรร”ยชร’ยทร•รจร ร…ร—รยก";
+$langDeleteFromCourse = "ยถรลฝยถรยนยกร’รรรร‘โฌรรร’รรร”ยชร’";
+$langDeleteSelectedClasses = "ร…ยบรรรรจร รร•รยนยทร•รจร ร…ร—รยก";
+$langDeleteSelectedGroups = "ร…ยบยกร…รรจรร รร•รยนยทร•รจร ร…ร—รยก";
+$langAdministrator = "ล’รรฉลฝรรกร…รรยบยบ";
+$langAddPicture = "รฃรรจร€ร’ลธ";
+$langChangePicture = "ร ยปร…ร•รจรยนร€ร’ลธ";
+$langDeletePicture = "ร…ยบร€ร’ลธ";
+$langAddUsers = "ร ลธร”รจรยชร—รจรล’รรฉรฃยชรฉ";
+$langAddGroups = "ร ลธร”รจรยกร…รรจรร รร•รยน";
+$langAddClasses = "ร ลธร”รจรรรรรจร รร•รยน";
+$langExportUsers = "รรจยงรรยกรร’รยชร—รจรล’รรฉรฃยชรฉ";
+$langKeyword = "โฌร“รร“โฌร‘ยญ";
+$langGroupName = "ยชร—รจรยกร…รรจร";
+$langGroupTutor = "ยกร…รรจรล’รรฉยชรจรรรรยน";
+$langGroupDescription = "รร’รร…รร รร•รลฝยกร…รรจร";
+$langNumberOfParticipants = "ลกร“ยนรยนล’รรฉรรจรรยงร’ยน";
+$langNumberOfUsers = "ลกร“ยนรยนรรร’ยชร”ยกล’รรฉรฃยชรฉ";
+$langMaximum = "รร’ยกยทร•รจรรลฝ";
+$langMaximumOfParticipants = "ลกร“ยนรยนล’รรฉรรจรรยงร’ยนรร’ยกยทร•รจรรลฝ";
+$langParticipants = "ล’รรฉรรจรรยงร’ยน";
+$langFirstLetterClass = "รร‘ยกรรยนร“รยนรฉร’(รรรรจร รร•รยน)";
+$langFirstLetterUser = "รร‘ยกรรยนร“รยนรฉร’(ยนร’รรยกรร…)";
+$langFirstLetterCourse = "รร‘ยกรรยนร“รยนรฉร’(รร‘รรรร”ยชร’)";
+$langModifyUserInfo = "รกยกรฉรคยขยขรฉรรรร…รรร’ยชร”ยก";
+$langModifyClassInfo = "รกยกรฉรคยขยขรฉรรรร…รรรรจร รร•รยน";
+$langModifyGroupInfo = "รกยกรฉรคยขยขรฉรรรร…ยกร…รรจรร รร•รยน";
+$langModifyCourseInfo = "รกยกรฉรคยขยขรฉรรรร…รร’รรร”ยชร’";
+$langPleaseEnterClassName = "ยกรรยณร’รฃรรจยชร—รจรรรรรจร รร•รยน!";
+$langPleaseEnterLastName = "ยกรรยณร’รฃรรจยนร’รรยกรร…ยขรยงล’รรฉรฃยชรฉ";
+$langPleaseEnterFirstName = "ยกรรยณร’รฃรรจยชร—รจรยขรยงล’รรฉรฃยชรฉ";
+$langPleaseEnterValidEmail = "ยกรรยณร’รฃรรจยทร•รจรรรรจรร•ร รร…รฃรรฉยถรยกยตรฉรยงรกร…รรรยบรรยณรฌรกยบยบ";
+$langPleaseEnterValidLogin = "ยกรรยณร’รฃรรจยชร—รจรล’รรฉรฃยชรฉรฃรรฉยถรยกยตรฉรยง";
+$langPleaseEnterCourseCode = "ยกรรยณร’รฃรรจรรร‘รรร”ยชร’";
+$langPleaseEnterTitularName = "ยกรรยณร’รฃรรจยชร—รจรรร’ลกร’รรรฌล’รรฉรรยน";
+$langPleaseEnterCourseTitle = "ยกรรยณร’รฃรรจยชร—รจรรร”ยชร’";
+$langAcceptedPictureFormats = "รรยปรกยบยบรคยฟร…รฌร€ร’ลธยทร•รจรรยบยบรรรรร‘ยบรกร…รรกรลฝยงล’ร…รคลฝรฉโฌร—รรยกรร… .jpg .png .gif";
+$langLoginAlreadyTaken = "ยชร—รจรล’รรฉรฃยชรฉยทร•รจยตร‘รฉยงยนร•รฉ รร•ล’รรฉรร—รจยนรฃยชรฉรกร…รฉร";
+$langImportUserListXMLCSV = "ยนร“ร ยขรฉร’รร’รยชร—รจรล’รรฉรฃยชรฉลกร’ยกรคยฟร…รฌรรยปรกยบยบ xml/csv";
+$langExportUserListXMLCSV = "รรจยงรรยกรร’รยชร—รจรล’รรฉรฃยชรฉร ยปรงยนรคยฟร…รฌรรยปรกยบยบ xml/csv";
+$langOnlyUsersFromCourse = "ร ยฉลธร’รล’รรฉรฃยชรฉรฃยนรร’รรร”ยชร’";
+$langAddClassesToACourse = "ร ลธร”รจรรรรรจร รร•รยนรฃยนรร’รรร”ยชร’";
+$langAddUsersToACourse = "ร ลธร”รจรล’รรฉรฃยชรฉร ยขรฉร’รร’รรร”ยชร’";
+$langAddUsersToAClass = "ร ลธร”รจรล’รรฉรฃยชรฉรฃยนรรรรจร รร•รยน";
+$langAddUsersToAGroup = "ร ลธร”รจรล’รรฉรฃยชรฉร ยขรฉร’ยกร…รรจร";
+$langAtLeastOneClassAndOneCourse = "โฌรยณยตรฉรยงร ร…ร—รยกรรรจร’ยงยนรฉรร 1 รรรรจร รร•รยนรกร…ร 1 รร’รรร”ยชร’";
+$AtLeastOneUser = "โฌรยณยตรฉรยงร ร…ร—รยกรรรจร’ยงยนรฉรร 1 ล’รรฉรฃยชรฉ";
+$langAtLeastOneUserAndOneCourse = "โฌรยณยตรฉรยงร ร…ร—รยกรรรจร’ยงยนรฉรร 1 ล’รรฉรฃยชรฉรกร…ร 1 รร’รรร”ยชร’";
+$langClassList = "รร’รยชร—รจรรรรรจร รร•รยน";
+$langUserList = "รร’รยชร—รจรล’รรฉรฃยชรฉ";
+$langCourseList = "รร’รยชร—รจรรร”ยชร’";
+$langAddToThatCourse = "ร ลธร”รจรร ยขรฉร’รคยปรฃยนรร’รรร”ยชร’ยนร•รฉ";
+$langAddToClass = "ร ลธร”รจรร ยขรฉร’รฃยนรรรรจร รร•รยน";
+$langRemoveFromClass = "ร รร’รรยกลกร’ยกรรรรจร รร•รยน";
+$langAddToGroup = "ร ลธร”รจรร ยขรฉร’รฃยนยกร…รรจร";
+$langRemoveFromGroup = "ร รร’รรยกลกร’ยกยกร…รรจร";
+$langUsersOutsideClass = "ล’รรฉรฃยชรฉยทร•รจรครรจรร‘ยงยกร‘ลฝรรรรจร รร•รยน";
+$langUsersInsideClass = "ล’รรฉรฃยชรฉรร‘ยงยกร‘ลฝรรรรจร รร•รยน";
+$langUsersOutsideGroup = "ล’รรฉรฃยชรฉยทร•รจรครรจรร‘ยงยกร‘ลฝยกร…รรจร";
+$langUsersInsideGroup = "ล’รรฉรฃยชรฉยทร•รจรร‘ยงยกร‘ลฝรฃยนยกร…รรจร";
+$langImportFileLocation = "ยทร•รจรรรรจยขรยงรคยฟร…รฌ csv/xml";
+$langFileType = "ยปรรร ร€ยทรคยฟร…รฌ";
+$langOutputFileType = "ยปรรร ร€ยทรคยฟร…รฌรรจยงรรยก";
+$langMustUseSeparator = "ยตรฉรยงรฃยชรฉร โฌรร—รจรยงรรร’ร ; ร ยปรงยนยตร‘รโฌร‘รจยน";
+$langCSVMustLookLike = "รคยฟร…รฌ csv ยตรฉรยงลฝรร รรร—รยนรรรจร’ยงยนร•รฉ";
+$langXMLMustLookLike = "รคยฟร…รฌ xml ยตรฉรยงลฝรร รรร—รยนรรรจร’ยงยนร•รฉ";
+$langMandatoryFields = "รรยปรกยบยบโฌร“รร‘รจยง<strong>bold</strong>โฌร—รรฃรรฉร ยปรงยนยตร‘รรยนร’";
+$langNotXML = "รคยฟร…รฌยทร•รจรรยบรยนร•รฉรครรจรฃยชรจรรยปรกยบยบยขรยงรคยฟร…รฌ xml";
+$langNotCSV = "รคยฟร…รฌยทร•รจรรยบรรครรจรฃยชรจรคยฟร…รฌรรยปรกยบยบ csv";
+$langNoNeededData = "รคยฟร…รฌยทร•รจรรยบร รครรจรร•ยขรฉรรรร…ยทร•รจยตรยงยกร‘ยบโฌรร’รยตรฉรยงยกร’ร";
+$langMaxImportUsers = "รยนรยญร’ยตรฃรรฉยนร“ร ยขรฉร’รร’รยชร—รจรล’รรฉรฃยชรฉรคลฝรฉโฌรร‘รฉยงร…รรครรจร ยกร”ยน 500 โฌยน";
+$langAdminDatabases = "ยฐร’ยนยขรฉรรรร…(phpMyAdmin)";
+$langAdminUsers = "ล’รรฉรฃยชรฉรฃยนรรยบยบ";
+$langAdminClasses = "รรรรจร รร•รยน";
+$langAdminGroups = "ยกร…รรจรล’รรฉรฃยชรฉ";
+$langAdminCourses = "รร’รรร”ยชร’";
+$langAdminCategories = "ยปรรร ร€ยทรร’รรร”ยชร’";
+$langSubscribeUserGroupToCourse = "รร‘ยบร…ยงยทรร ยบร•รยนล’รรฉรฃยชรฉ/ยกร…รรจรร ยขรฉร’รฃยนรร’รรร”ยชร’";
+$langAddACategory = "ร ลธร”รจรร ยตร”รยปรรร ร€ยท";
+$langInto = "ร ยขรฉร’รฃยน";
+$langNoCategories = "รร‘ยงรครรจรร•ยกร’รลกร‘ลฝยปรรร ร€ยท";
+$langAllowCoursesInCategory = "รยนรยญร’ยตรฃรรฉร ลธร”รจรรร’รรร”ยชร’รฃยนยปรรร ร€ยทยนร•รฉ";
+$langGoToForum = "รคยปยทร•รจยกร’รรร€ร”ยปรร’ร";
+$langCategoryCode = "รรร‘รยปรรร ร€ยท";
+$langCategoryName = "ยชร—รจรยปรรร ร€ยท";
+$langCategories = "ยปรรร ร€ยทรร”ยชร’";
+$langEditNode = "รกยกรฉรคยขยปรรร ร€ยทยนร•รฉ";
+$langOpenNode = "ร ยปร”ลฝยปรรร ร€ยทยนร•รฉ";
+$langDeleteNode = "ร…ยบยปรรร ร€ยทยนร•รฉ";
+$langAddChildNode = "ร ลธร”รจรรร‘รยขรฉรรรจรรรฃยนยปรรร ร€ยท";
+$langViewChildren = "ลฝรรกล’ยนล’ร‘ยงรขโฌรยงรรรฉร’ยงรคยฟร…รฌรรจรร";
+$langTreeRebuildedIn = "รรรฉร’ยงรขโฌรยงรรรฉร’ยงรคยฟร…รฌรรยปรกยบยบรกล’ยนร€รรร”ยตรฉยนรครรฉ รฃรรรจรฃยน";
+$langTreeRecountedIn = "ยนร‘ยบรกล’ยนร€รรร”รขโฌรยงรรรฉร’ยงรคยฟร…รฌรกยบยบยตรฉยนรครรฉ รฃรรรจรฃยน";
+$langRebuildTree = "รรรฉร’ยงรขโฌรยงรรรฉร’ยงรคยฟร…รฌรรยปรกยบยบรกล’ยนร€รรร”ยตรฉยนรครรฉ รฃรรรจ";
+$langRefreshNbChildren = "ยกรลธรร”ยบลกรลฝรรกล’ยนล’ร‘ยงรขโฌรยงรรรฉร’ยงรคยฟร…รฌรรจรรรฃรรรจ";
+$langShowTree = "รกรลฝยงรขโฌรยงรรรฉร’ยงรคยฟร…รฌรรยปรกยบยบรกล’ยนร€รรร”ยตรฉยนรครรฉ";
+$langBack = "รรฉรยนยกร…ร‘ยบรคยปรยนรฉร’ยทร•รจล’รจร’ยนรร’";
+$langLogDeleteCat = "ร…ยบยปรรร ร€ยท";
+$langRecountChildren = "ยนร‘ยบลฝรรกล’ยนล’ร‘ยงรขโฌรยงรรรฉร’ยงรคยฟร…รฌรรจรรรฃรรรจ";
+$langUpInSameLevel = "ยปรร‘ยบรร’รรลฝร‘ยบร ลฝร•รรยกร‘ยน";
+$langSeconds = "รร”ยนร’ยทร•";
+$langMailTo = "รรจยงรร•ร รร…ยถร–ยง";
+$lang_no_access_here = "รรฉร’รร ยขรฉร’";
+$lang_php_info = "ยขรฉรรรร…ร ยกร•รจรรยกร‘ยบรรยบยบ";
+$langAddAdminInApache = "ร ลธร”รจรล’รรฉลฝรรกร…รรยบยบ";
+$langAddFaculties = "ร ลธร”รจรยปรรร ร€ยท";
+$langSearchACourse = "โฌรฉยนรร’รร’รรร”ยชร’";
+$langSearchAUser = "โฌรฉยนรร’ล’รรฉรฃยชรฉ";
+$langTechnicalTools = "ร ยทโฌยนร”โฌ";
+$langConfig = "ยตร‘รฉยงโฌรจร’รรยบยบ";
+$langLogIdentLogoutComplete = "ยบร‘ยนยทร–ยกยกร’รร ยขรฉร’รฃยชรฉยงร’ยนรรยบยบ";
+$langLimitUsersListDefaultMax = "รกรลฝยงลกร“ยนรยนรรร’ยชร”ยกรฃยนรร’รยกร’รรกยถยบร ร…ร—รจรยนรครรฉรร’ยกยทร•รจรรลฝ";
+$NoTimeLimits = "";
+$GeneralCoach = "";
+$GeneralProperties = "";
+$CourseCoach = "";
+$UsersNumber = "";
+$DokeosClassic = "";
+$PublicAdmin = "";
+$PageAfterLoginTitle = "รยนรฉร’ยทร•รจรกรลฝยงร รร—รจรร ยขรฉร’รฃยชรฉรรยบยบ";
+$PageAfterLoginComment = "รยนรฉร’ยทร•รจรฃรรฉร รรงยนร ยฉลธร’รรรร’ยชร”ยกยทร•รจยกร“ร…ร‘ยงร ยชร—รจรรยตรจร";
 $DokeosAdminWebLinks = "Chamilo Web";
-$ImageResizeTitle = "ปรับขนาดภาพของสมาชิกที่ส่งขึ้น";
-$ImageResizeComment = "ภาพของสมาชิกสามารถปรับขนาดได้ในระหว่างหารส่งไฟล์ขึ้น หากระบบสามารถคอมพายล์ใช้คำสั่งภาษาPHP ร่วมกับ<a href=\"http://php.net/manual/en/ref.image.php\" target=\"_blank\">GD library</a>. ได้ หากไม่คอมพายล์ใช้งาน การตั้งค่าปรับขนาดของภาพจะไม่เกิดผลกับภาพแต่อย่างใด ";
-$MaxImageWidthTitle = "ขนาดภาพกว้างมากที่สุด";
+$TabsMyProfile = "";
+$GlobalRole = "Global Role";
+$langNomOutilTodo = "รร”รจยงโฌรรยปรร‘ยบยปรรยง";
+$langNomPageAdmin = "ยกร’รยบรร”รร’รลกร‘ลฝยกร’รรรยบยบ";
+$langSysInfo = "รกรลฝยงรร’รร…รร รร•รลฝรยถร’ยนรยขรยงรรยบยบ";
+$langDiffTranslation = "ร ยปรร•รยบร ยทร•รยบยกร’รรกยปร…";
+$langStatOf = "รยถร”ยตร”ยขรยง";
+$langSpeeSubscribe = "ร…ยงยทรร ยบร•รยนลฝรจรยนร ยปรงยนล’รรฉยตรรลกรรยบรร”ยชร’";
+$langLogIdentLogout = "รกรลฝยงรร’รยกร’รร ยขรฉร’รรรจรรยบยบ";
+$langServerStatus = "รยถร’ยนรยขรยง MySQL server";
+$langDataBase = "ยฐร’ยนยขรฉรรรร…";
+$langRun = "ยงร’ยน";
+$langClient = "ร…รยกยขรจร’รรร‘ยบยบรร”ยกร’ร MySql";
+$langServer = "ร โฌรร—รจรยงรกรรจยขรจร’รยบรร”ยกร’ร MySql";
+$langtitulary = "ร ลกรฉร’ยขรยง";
+$langUpgradeBase = "ยปรร‘ยบยปรรยงยฐร’ยนยขรฉรรรร…";
+$langManage = "รร“ยนร‘ยกยงร’ยนยบรร”รร’ร";
+$langErrorsFound = "ลธยบยขรฉรล’ร”ลฝลธร…ร’ลฝ";
+$langMaintenance = "ยกร’รลฝรรกร…รร‘ยกรร’";
+$langUpgrade = "ยปรร‘ยบรรรจยน Chamilo";
+$langWebsite = "ร รรงยปรคยซยทรฌDokeos";
+$langDocumentation = "ยกร’รลกร‘ลฝร รยกรร’ร";
+$langContribute = "รยนร‘ยบรยนรยน";
+$langInfoServer = "ยขรฉรรรร…รกรรจยขรจร’รยบรร”ยกร’ร";
+$langOtherCategory = "ยปรรร ร€ยทรร—รจยน";
+$langSendMailToUsers = "รรจยงรร•ร รร…ยถร–ยงล’รรฉรฃยชรฉรฃยนรรยบยบ";
+$langExampleXMLFile = "ยตร‘รรรรจร’ยงยขรยงรคยฟร…รฌ xml";
+$langExampleCSVFile = "ยตร‘รรรรจร’ยงรคยฟร…รฌ CSV";
+$langCourseSystemCode = "รรร‘รรรยบยบ";
+$langCourseVisualCode = "รรร‘รยทร•รจรรยงร รรงยน";
+$langSystemCode = "รรร‘รรรยบยบ";
+$langVisualCode = "รรร‘รยทร•รจรรยงร รรงยน";
+$langAddCourse = "รรรฉร’ยงรร’รรร”ยชร’";
+$langAdminManageVirtualCourses = "ยบรร”รร’รรร’รรร”ยชร’ร รรร—รยน";
+$langAdminCreateVirtualCourse = "รรรฉร’ยงรร’รรร”ยชร’ร รรร—รยน";
+$langAdminCreateVirtualCourseExplanation = "รร’รรร”ยชร’ร รรร—รยนลกรรรจรรรฃยชรฉรคยฟร…รฌรกร…รลธร—รฉยนยทร•รจร ยกรงยบรคยฟร…รฌยกร‘ยบรร’รรร”ยชร’ลกรร”ยง";
+$langRealCourseCode = "รรร‘รรร”ยชร’ลกรร”ยง";
+$langCourseCreationSucceeded = "รคลฝรฉรรรฉร’ยงรร’รรร”ยชร’ร รร•รยบรรฉรรรกร…รฉร";
+$langYourDokeosUses = "ยตร”ลฝยตร‘รฉยง Chamilo ยตร’รยทร•รจรกรลฝยงโฌรจร’ยนร•รฉ";
+$langOnTheHardDisk = "รรรรจรฃยนรร’รรฌลฝลฝร”รยกรฌ";
+$langIsVirtualCourse = "ร ยปรงยนรร”ยชร’ร รรร—รยน";
+$langSystemAnnouncements = "ยปรรยกร’รยขรจร’รร€ร’รรฃยนรรยบยบ";
+$langAddAnnouncement = "ร ลธร”รจรยปรรยกร’รรฃรรรจ";
+$langAnnouncementAdded = "รคลฝรฉร ลธร”รจรยปรรยกร’รรกร…รฉร";
+$langAnnouncementUpdated = "ยปรร‘ยบรกยกรฉยปรรยกร’รรกร…รฉร";
+$langAnnouncementDeleted = "ร…ยบยปรรยกร’รรกร…รฉร";
+$langContent = "ร ยนร—รฉรรร’";
+$PermissionsForNewFiles = "";
+$PermissionsForNewFilesComment = "";
+$langStudent = "ล’รรฉร รร•รยน";
+$Guest = "ยบรโฌโฌร…ยทร‘รจรรคยป";
+$langLoginAsThisUserColumnName = "ร ยขรฉร’รรรจรรยบยบลฝรฉรรยชร—รจร";
+$langLoginAsThisUser = "ร ยขรฉร’รรรจรรยบยบ";
+$SelectPicture = "";
+$DontResetPassword = "รรรจร’ยตร‘รฉยงรรร‘รล’รจร’ยนรฃรรรจ";
+$ParticipateInCommunityDevelopment = "รรจรรลธร‘ยฒยนร’";
+$langCourseAdmin = "ล’รรฉลกร‘ลฝยกร’รรร”ยชร’";
+$langOtherCourses = "รร’รรร”ยชร’รร—รจยน";
+$PlatformLanguageTitle = "ร€ร’รร’ยขรยงรรยบยบ";
+$ServerStatusComment = "ยกร’รยทรร’ยบยชยนร”ลฝยขรยงร โฌรร—รจรยงรกรรจยขรจร’ร ยกรงร ลธร—รจรรร’รร’รยถยกร“รยนลฝโฌรจร’ยทร’ยงร ร…ร—รยก รกร…รรรรรยถยนรยขรยงยกร’รยปรร‘ยบยปรรยงโฌรยณร€ร’ลธรกร…รโฌรยณรรยบร‘ยตร”ร โฌรร—รจรยง รฃรรฉรร•โฌรร’รรร’รร’รยถรกยปร…โฌร“รร‘รจยงรคลฝรฉยตรยงยกร‘ยบรยนรฉร’ยทร•รจยกร’รรฃยชรฉยงร’ยนยทร•รจยตรฉรยงยกร’ร";
+$ServerStatusTitle = "ยชยนร”ลฝยขรยงร โฌรร—รจรยงรกรรจยขรจร’ร";
+$PlatformLanguages = "ร€ร’รร’โฌร“รร‘รจยงยขรยงรรยบยบ";
+$PlatformLanguagesExplanation = "ยกร’รร ร…ร—รยกร€ร’รร’ลกร’ยกร รยนรรฃยนรยนรฉร’รกรยกยขรยงรขรรร ลธลก ลกรร ยปรงยนยกร’รร ร…ร—รยกรฃยชรฉโฌร“รร‘รจยงร€ร’รร’ยทร•รจร ร…ร—รยกยทร‘รฉยงรรยบยบ";
+$OriginalName = "ยชร—รจรร€ร’รร’ร ลฝร”ร";
+$EnglishName = "ยชร—รจรร€ร’รร’รร‘ยงยกรร";
+$DokeosFolder = "ยชร—รจรรฃยนรกยฟรฉรยขรยงDokeos";
+$Properties = "ยปรร‘ยบร ยปร…ร•รจรยน";
+$DokeosConfigSettings = "รกยกรฉรคยขยตร‘รฉยงโฌรจร’รรยบยบ Chamilo";
+$SettingsStored = "ร ยกรงยบโฌรจร’ยทร•รจรกยกรฉรคยขรกร…รฉร";
+$InstitutionTitle = "ยชร—รจรรยนรจรรยงร’ยน";
+$InstitutionComment = "ยชร—รจรยขรยงรยนรจรรยงร’ยน(ลกรยปรร’ยกยฏยทร•รจรร‘รรรรยบยนลฝรฉร’ยนยขรร’รร—ร)";
+$InstitutionUrlTitle = "ร รรงยปรคยซยทรฌรยนรจรรยงร’ยน";
+$InstitutionUrlComment = "ยชร—รจรร รรงยปรคยซยทรฌยขรยงรยนรจรรยงร’ยน(ร ยปรงยนยชร—รจรยทร•รจร ยชร—รจรรรขรยงรกร…รยปรร’ยกยฏรรรรจลฝรฉร’ยนยบยนยขรร’)";
+$SiteNameTitle = "ยตร‘รฉยงยชร—รจรรร‘รร รร—รจรยงยขรยงรรยบยบ";
+$SiteNameComment = "ยชร—รจรร รรงยปรคยซยทรฌDokeosยขรยงโฌรยณ(ลกรยปรร’ยกยฏยชร—รจรยบยนรกยถยบลฝรฉร’ยนยบยน)";
+$emailAdministratorTitle = "รร•ร รร…ยขรยงล’รรฉลฝรรกร…รรยบยบ";
+$emailAdministratorComment = "รร•ร รร…ยขรยงล’รรฉลกร‘ลฝยกร’รรรยบยบ(ลกรยปรร’ยกยฏรฃยนรกยถยบร…รจร’ยงรรรยซรฉร’ร)";
+$administratorSurnameTitle = "ยนร’รรยกรร…ยขรยงล’รรฉลกร‘ลฝยกร’รรรยบยบ";
+$administratorSurnameComment = "ยชร—รจรยขรยงล’รรฉลกร‘ลฝยกร’รรรยบยบ(ลกรยปรร’ยกยฏยทร•รจยทรฉร’รรยนรฉร’รขรรร ลธลกรรรยซรฉร’รร…รจร’ยง)";
+$administratorNameTitle = "ยชร—รจรล’รรฉลกร‘ลฝยกร’รรรยบยบ";
+$administratorNameComment = "ยชร—รจรล’รรฉลกร‘ลฝยกร’รรรยบยบ(ลกรยปรร’ยกยฏยทร•รจยทรฉร’รรยนรฉร’รขรรร ลธลกรรรร…รจร’ยงยซรฉร’ร)";
+$ShowAdministratorDataTitle = "ยขรฉรรรร…รกร…รรรรจยนยขรยงรรยบยบยทร•รจลกรรกรลฝยงยทร•รจยทรฉร’รร…รจร’ยงยขรยงรขรรร ลธลก";
+$ShowAdministratorDataComment = "รกรลฝยงยขรฉรรรร…รกร…รรรรจยนยขรยงรรยบยบยทร•รจยทรฉร’รรยนรฉร’รขรรร ลธลก";
+$HomepageViewTitle = "ลฝรรขรรร ลธลก";
+$HomepageViewComment = "โฌรยณยตรฉรยงยกร’รรฃรรฉรขรรร ลธลกรร”ยชร’รร•รรยปรกยบยบยตร’รยนร•รฉ";
+$HomepageViewDefault = "ยซรจรยนร โฌรร—รจรยงรร—รยทร•รจโฌรยบโฌรรยกร’รรกรลฝยงล’ร…รกยบยบ 2 โฌรร…ร‘รยนรฌ";
+$HomepageViewFixed = "ลกร‘ลฝรยนรฉร’รขรรร ลธลกรกยบยบ 3 โฌรร…ร‘รยนรฌ รร’ยกยปรรจรร โฌรร—รจรยงรร—รร ยปรงยนรร•ร ยทร’รกรลฝยงรรจร’รร‘ยงรครรจยถรยกยกร“รยนลฝรฃรรฉรฃยชรฉยงร’ยน";
+$Yes = "รฃยชรจ";
+$No = "รครรจ";
+$ShowToolShortcutsTitle = "ร โฌรร—รจรยงรร—รร…ร‘ลฝ";
+$ShowToolShortcutsComment = "รกรลฝยงร โฌรร—รจรยงรร—รร…ร‘ลฝรครรฉรฃยนยปรฉร’รยปรรยกร’ร";
+$ShowStudentViewTitle = "รยนรฉร’ลกรล’รรฉร รร•รยน";
+$ShowStudentViewComment = "รฃรรฉรกรลฝยงล’ร…รยนรฉร’ลกรยขรยงล’รรฉร รร•รยน<b>ยกร’รยกร“รยนลฝรฃยชรฉโฌร“รร‘รจยงยนร•รฉยกรงร ลธร—รจรรฃรรฉล’รรฉรรยนยทรร’ยบรรจร’ รยนรฉร’ลกรยขรยงล’รรฉร รร•รยนลกรยปรร’ยกยฏรร’รยกร’รรฃลฝรกรลฝยงรฃรรฉร รรงยนยบรฉร’ยง";
+$AllowGroupCategories = "ยปรรร ร€ยทยกร…รรจร";
+$AllowGroupCategoriesComment = "รยนรยญร’ยตรฃรรฉล’รรฉลกร‘ลฝยกร’รรร”ยชร’รรรฉร’ยงยปรรร ร€ยทรร’รยกร’รรฃยนยบยทร รร•รยนรคลฝรฉ";
+$PlatformLanguageComment = "โฌรยณรร’รร’รยถยกร“รยนลฝร€ร’รร’ยขรยงรรยบยบรครรฉรฃยนรรจรยนยตรจร’ยงรฆรคลฝรฉ ร ลธร•รยงโฌร‘ลฝร…รยกโฌร“รร‘รจยงร ยชร—รจรรรขรยงยนร•รฉรคยปรครรฉรฃยนยทร•รจยตรฉรยงยกร’ร<a href=\\"languages.php\\">ร€ร’รร’รรยบยบยขรยงDokeos</a>";
+$ProductionServer = "ร โฌรร—รจรยงรกรรจยขรจร’รยบรร”ยกร’รลกรร”ยง";
+$TestServer = "ร โฌรร—รจรยงรกรรจยขรจร’รยบรร”ยกร’รลกร“ร…รยง";
+$ShowOnlineTitle = "ล’รรฉยทร•รจยกร“ร…ร‘ยงรรจรรรฃยชรฉยงร’ยน";
+$AsPlatformLanguage = "ร ยปรงยนร€ร’รร’ยขรยงรรยบยบ";
+$ShowOnlineComment = "รฃรรฉรกรลฝยงลกร“ยนรยนล’รรฉยทร•รจยกร“ร…ร‘ยงรฃยชรฉยงร’ยนรรยบยบ";
+$AllowNameChangeTitle = "รยนรยญร’ยตรฃรรฉร ยปร…ร•รจรยนยชร—รจรรฃยนรกยฟรฉรยปรรรร‘ยตร”รคลฝรฉ";
+$AllowNameChangeComment = "รฃรรฉล’รรฉรฃยชรฉร ยปร…ร•รจรยนรกยปร…ยงยชร—รจรรกร…รยนร’รรยกรร…รคลฝรฉรรร—รรครรจ";
+$DefaultDocumentQuotumTitle = "ลธร—รฉยนยทร•รจร ยกรงยบร รยกรร’ร";
+$DefaultDocumentQuotumComment = "ยกร’รโฌรยบโฌรรรขโฌรยตรฉร’ร รยกรร’ร รร’รร’รยถยกร“รยนลฝร รยงรคลฝรฉรขลฝรลธร”รลธรฌโฌรจร’ยตร‘รร ร…ยขร ยปรงยนลกร“ยนรยนรคยบยทรฌ ร…ยงรฃยนยชรจรยงยกร“รยนลฝยตร’รยทร•รจยตรฉรยงยกร’ร ร รรฉยนยทร’ยงยกร’รร ยขรฉร’ยถร–ยงยกร’รยกร“รยนลฝโฌรจร’รขโฌรยตรฉร’โฌร—รรคยปยทร•รจ : ยกร’รยบรร”รร’รลกร‘ลฝยกร’ร> รร’รรร”ยชร’> รฃรรจโฌรจร’ยทร•รจยตรฉรยงยกร’ร";
+$ProfileChangesTitle = "ยปรรรร‘ยตร”";
+$ProfileChangesComment = "รยนรยญร’ยตรฃรรฉร ยปร…ร•รจรยนรกยปร…ยงรกยฟรฉรรรจรยนยบรโฌโฌร…รฃยนรรจรยนรฃลฝ";
+$RegistrationRequiredFormsTitle = "ยกร’รร…ยงยทรร ยบร•รยน: ยบร‘ยงโฌร‘ยบยตรฉรยงยกรรยกรร’รยกร’รรฃยนยชรจรยงยทร•รจรร• * ยกร“ยกร‘ยบ";
+$RegistrationRequiredFormsComment = "ร ยขยตยขรฉรรรร…ยทร•รจยตรฉรยงยกร’ร (besides name, first name, login and password)";
+$DefaultGroupQuotumTitle = "โฌรจร’ร รร”รจรยตรฉยนยขรยงรขโฌรยตร’ยกร…รรจร";
+$DefaultGroupQuotumComment = "รขโฌรยตรฉร’ร รยกรร’รยกร…รรจร (What is the default quotum for a groups documents tool?)";
+$AllowLostPasswordTitle = "ร…ร—รรรร‘รล’รจร’ยน";
+$AllowLostPasswordComment = "รยนรยญร’ยตรฃรรฉล’รรฉรฃยชรฉรรฉรยงยขรรรร‘รยทร•รจร…ร—รรคลฝรฉรรร—รรครรจ";
+$AllowRegistrationTitle = "ยกร’รร…ยงยทรร ยบร•รยน";
+$AllowRegistrationComment = "รยนรยญร’ยตรฃรรฉล’รรฉรฃยชรฉรรรฉร’ยงยชร—รจรรฃรรรจรคลฝรฉรรร—รรครรจ";
+$AllowRegistrationAsTeacherTitle = "ร…ยงยทรร ยบร•รยนร ยปรงยนรร’ลกร’รรรฌล’รรฉรรยน";
+$AllowRegistrationAsTeacherComment = "รยนรยญร’ยตรฃรรฉล’รรฉรรร‘โฌรร ยปรงยนล’รรฉรฃยชรฉรฃรรรจรร•รร”ยทลพร”ยฐร’ยนรร ยปรงยนล’รรฉรรยนรคลฝรฉร ร…รรรร—รรครรจ";
+$PlatformLanguage = "รรยบยบร€ร’รร’";
+$Tuning = "";
+$SplitUsersUploadDirectory = "";
+$SplitUsersUploadDirectoryComment = "";
+$CourseQuota = "รร•ลธร—รฉยนยทร•รจร ยกรงยบรคยฟร…รฌยขรยงรร”ยชร’รฃยนรรยบยบรฃรรฉร ยปรงยนลกร“ยนรยน(รคยบยทรฌ)";
+$EditNotice = "รกยกรฉรคยขยกร’รรกลกรฉยงยขรจร’ร";
+$General = "ร รยนรรร’รยกร’รร ยชร—รจรรรขรยง";
+$LostPassword = "ร…ร—รรรร‘รล’รจร’ยน";
+$Registration = "ยกร’รร…ยงยทรร ยบร•รยน";
+$Password = "รรร‘รล’รจร’ยน";
+$InsertLink = "ร ลธร”รจรยกร’รร ยชร—รจรรรขรยง";
+$EditNews = "รกยกรฉรคยขยขรจร’ร";
+$EditCategories = "รกยกรฉรคยขยปรรร ร€ยท";
+$EditHomePage = "รกยกรฉรคยขรยนรฉร’รขรรร ลธลก";
+$AllowUserHeadingsComment = "ล’รรฉยบรร”รร’รรร”ยชร’รร’รร’รยถร ลธร”รจรร ยตร”รรร’รร…รร รร•รลฝยขรฉรรรร…ยขรยงล’รรฉร รร•รยน/ล’รรฉรฃยชรฉ(User)";
+$Platform = "รรยบยบ";
+$Course = "รร’รรร”ยชร’";
+$Languages = "ร€ร’รร’";
+$Privacy = "รรจรยนยตร‘ร";
+$NoticeTitle = "รกลกรฉยงยขรจร’รร รร—รจรยง";
+$NoticeText = "ยขรฉรโฌรร’รยทร•รจรกลกรฉยงรฃรรฉยทรร’ยบ";
+$LinkName = "ยขรฉรโฌรร’รยทร•รจร ยชร—รจรรรขรยง";
+$LinkURL = "ยทร•รจรรรรจรร’รยกร’รยทร•รจร ยชร—รจรรรขรยง";
+$OpenInNewWindow = "ร ยปร”ลฝร ยปรงยนรยนรฉร’ลกรรฃรรรจ";
+$langLimitUsersListDefaultMaxComment = "รฃยนรยนรฉร’ลกรยกร’รรยนรยญร’ยตร ลธร”รจรล’รรฉร รร•รยนร ยขรฉร’ยชร‘รฉยนยนร‘รฉยนIn the screens allowing addition of users to courses or classes, if the first non-filtered list contains more than this number of users, then default to the first letter (A)";
+$Plugins = "รขยปรรกยกรรร รรร”ร";
+$HideDLTTMarkupComment = "";
+$Info = "ยขรฉรรรร…";
+$UserAdded = "ร ลธร”รจรล’รรฉรฃยชรฉรกร…รฉร";
+$NoSearchResults = "รครรจลธยบรร’รยกร’รยทร•รจโฌรฉยนรร’";
+$UserDeleted = "ร…ยบยชร—รจรล’รรฉรฃยชรฉรกร…รฉร";
+$NoClassesForThisCourse = "รร‘ยงรครรจรร•รรรรจร รร•รยนรฃลฝรรร‘โฌรร รร•รยนรร”ยชร’ยนร•รฉ";
+$CourseUsage = "ยกร’รร ยขรฉร’ร รร•รยนรฃยนรร’รรร”ยชร’";
+$NoCoursesForThisUser = "ล’รรฉรฃยชรฉยนร•รฉรร‘ยงรครรจรคลฝรฉรรร‘โฌรร ยขรฉร’ร รร•รยน";
+$NoClassesForThisUser = "ล’รรฉรฃยชรฉยนร•รฉรครรจรคลฝรฉรรร‘โฌรร ยขรฉร’รฃยนรรรรจร รร•รยน";
+$NoCoursesForThisClass = "รรรรจร รร•รยนยนร•รฉรร‘ยงรครรจรคลฝรฉรรร‘โฌรร รร•รยน";
+$langOpenToTheWorld = "ร ยปร”ลฝ รฃรรฉร รร•รยนยฟรร•";
+$OpenToThePlatform = "ร ยปร”ลฝรร”ยชร’รฃรรฉร รร•รยนร ยฉลธร’รล’รรฉยทร•รจร…ยงยทรร ยบร•รยนรรร’ยชร”ยกรฃยนรรยบยบ";
+$langPrivate = "ร ยปร”ลฝร ยปรงยนรร”ยชร’ร รร•รยนร ยฉลธร’รยกร…รรจรยบรโฌโฌร…ยทร•รจรรยบรยชร—รจร";
+$langCourseVisibilityClosed = "ยปร”ลฝรร”ยชร’ รยนรยญร’ยตรฃยชรฉร ยฉลธร’รล’รรฉยบรร”รร’รรร”ยชร’";
+$langSubscription = "ยกร’รรรร‘โฌร";
+$langUnsubscription = "ยถรยนยกร’รรรร‘โฌร";
+$CourseAccessConfigTip = "รขลฝรยปยกยตร”ยกร’รร ยปร”ลฝรร”ยชร’โฌรร‘รฉยงรกรยกลกรรฃรรฉร ยปรงยนรกยบยบรร’ลพร’รยณรโฌร—รรฃโฌรยกรงร ยขรฉร’ร รร•รยนรคลฝรฉ รกยตรจรรรจร’ยงรครยกรงยตร’ร รร’รร’รยถยกร“รยนลฝโฌรจร’รรลฝร‘ยบยกร’รรร‘ยกรร’โฌรร’รยปร…รลฝร€ร‘รยขรยงยขรฉรรรร…รคลฝรฉ";
+$Tool = "ร โฌรร—รจรยงรร—ร";
+$NumberOfItems = "ลกร“ยนรยนรฃยนรกยตรจร…รรร’รยกร’ร";
+$DocumentsAndFolders = "รกยฟรฉรร ยกรงยบร รยกรร’ร";
+$Learnpath = "รกล’ยนยกร’รร รร•รยน";
+$Exercises = "รกยบยบยทลฝรรยบ";
+$AllowPersonalAgendaTitle = "ยกร“รยนลฝยกร’รรรจรยนยตร‘ร";
+$AllowPersonalAgendaComment = "ล’รรฉรฃยชรฉรร’รร’รยถร ลธร”รจรร ยตร”รยกร“รยนลฝยกร’รยขรยงยตร‘รร รยงร ยขรฉร’รคลฝรฉรรร—รรครรจ";
+$CurrentValue = "ยปร‘ลกลกรยบร‘ยนรฃยชรฉโฌร“รร‘รจยงยขรยงรรยบยบร ยปรงยนร€ร’รร’";
+$CourseDescription = "โฌร“รลพร”ยบร’รรร’รรร”ยชร’";
+$OnlineConference = "ยกร’รรร‘รรยนร’รรยนรคร…ยนรฌ";
+$Chat = "รยนยทยนร’รรยนรคร…ยนรฌ";
+$Quiz = "รกยบยบยทลฝรรยบ";
+$Announcements = "ยปรรยกร’รยขรจร’ร";
+$Links = "ยกร’รร ยชร—รจรรรขรยง";
+$LearningPath = "รกล’ยนยกร’รร รร•รยน";
+$Documents = "ร รยกรร’ร";
+$UserPicture = "รรยปร€ร’ลธ";
+$officialcode = "รรร‘รยปรรลกร“ยตร‘ร";
+$Login = "ร ยขรฉร’รรรจรรยบยบ";
+$UserPassword = "รรร‘รล’รจร’ยน";
+$SubscriptionAllowed = "รร‘ยบยกร’รรรร‘โฌรรกร…รฉร";
+$UnsubscriptionAllowed = "รยนรรร‘ยตร”รฃรรฉยถรยนยกร’รรรร‘โฌร";
+$AllowedToUnsubscribe = "รยนรยญร’ยต";
+$NotAllowedToUnsubscribe = "รครรจรยนรยญร’ยต";
+$AddDummyContentToCourse = "ร ลธร”รจรล’ร‘ยงรร’รยกร’รร ยนร—รฉรรร’(ยตร‘รรรรจร’ยง)รฃยนรร’รรร”ยชร’";
+$DummyCourseCreator = "รรรฉร’ยงล’ร‘ยงรร’รยกร’รร ยนร—รฉรรร’รร”ยชร’";
+$DummyCourseDescription = "ลกรร ยปรงยนยกร’รร ลธร”รจรล’ร‘ยงรร’รยกร’รร ยนร—รฉรรร’(ยตร‘รรรรจร’ยง)ร ยขรฉร’รคยปรฃยนรร’รรร”ยชร’ : ร ลธร—รจรยทลฝรรยบลฝรร ยทรจร’ยนร‘รฉยน";
+$AvailablePlugins = "ยนร•รจโฌร—รรร’รยกร’รรขยปรรกยกรรร รรร”ร(plugins)ยทร•รจรร•ยตร”ลฝยตร‘รฉยงรรรรจรฃยนรรยบยบ โฌรยณรร’รร’รยถยทร“ยกร’รรขรยนรคยฟร…รฌร…ยงรร’ยตร”ลฝยตร‘รฉยงร ลธร”รจรร ยตร”รรคลฝรฉลกร’ยก<a href=\\"http://www.chamilo.org/extensions/index.php?section=plugins\\">http://www.chamilo.org/extensions/index.php?section=plugins</a>";
+$CreateVirtualCourse = "รรรฉร’ยงรร’รรร”ยชร’ร รรร—รยน";
+$DisplayListVirtualCourses = "รกรลฝยงรร’รยชร—รจรรร’รรร”ยชร’ร รรร—รยน";
+$LinkedToRealCourseCode = "ร ยชร—รจรรรรรจรรร‘รรร”ยชร’ลกรร”ยง : Linked to real course code";
+$AttemptedCreationVirtualCourse = "ยตรฉรยงยกร’รรรรฉร’ยงรร’รรร”ยชร’ร รรร—รยน";
+$WantedCourseCode = "ยตรฉรยงรฃรรจรรร‘รรร”ยชร’";
+$ResetPassword = "ยตร‘รฉยงรรร‘รล’รจร’ยนรฃรรรจ";
+$CheckToSendNewPassword = "ยตรรลกร ลธร—รจรรรจยงรรร‘รล’รจร’ยนรฃรรรจ";
+$AutoGeneratePassword = "ยตร‘รฉยงรรร‘รล’รจร’ยนรฃรรฉรขลฝรรร‘ยตรขยนรร‘ยตร”";
+$UseDocumentTitleTitle = "รฃยชรฉยชร—รจรร รร—รจรยงร ยปรงยนยชร—รจรร รยกรร’ร";
+$UseDocumentTitleComment = "ลกรรฃยชรฉยชร—รจรร รร—รจรยงยขรยงร รยกรร’รร ยปรงยนยกร’รยตร‘รฉยงยชร—รจรรฃรรฉรกยกรจรคยฟร…รฌร รยกรร’ร";
+$StudentPublications = "ล’ร…ยงร’ยน/ยกร’รยบรฉร’ยนยขรยงล’รรฉร รร•รยน";
+$PermanentlyRemoveFilesTitle = "รคยฟร…รฌยทร•รจร…ยบรครรจรร’รร’รยถยกรรฉโฌร—ยนรคลฝรฉรร•ยก";
+$PermanentlyRemoveFilesComment = "ยกร’รร…ยบรคยฟร…รฌลฝรฉรรร โฌรร—รจรยงรร—รยขรยงรขยปรรกยกรรลกรร ยปรงยนยกร’รร…ยบรรรจร’ยงยถร’รร. รคยฟร…รฌลกรรครรจรร’รร’รยถยกรรฉโฌร—ยนรคลฝรฉ";
+$ClassName = "ยชร—รจรรรรรจร รร•รยน";
+$DropboxMaxFilesizeTitle = "ยกร…รจรยงรร‘ยบรรจยงยงร’ยน:รร‘ยบยขยนร’ลฝรคยฟร…รฌรคลฝรฉรรยงรรลฝ";
+$DropboxMaxFilesizeComment = "ยขยนร’ลฝรคยฟร…รฌรฃรยญรจรรลฝยทร•รจร ยทรจร’รคร ยทร•รจยกร…รจรยงรร‘ยบรรจยงยงร’ยนรร‘ยบร ยขรฉร’รคลฝรฉ";
+$DropboxAllowOverwriteTitle = "ยกร…รจรยงรร‘ยบรรจยงยงร’ยน:รร’รร’รยถยบร‘ยนยทร–ยกยทร‘ยบรคยฟร…รฌร ลฝร”รรคลฝรฉ";
+$DropboxAllowOverwriteComment = "ยชร—รจรร รยกรร’รร ลฝร”รยทร•รจลกร‘ลฝร ยกรงยบรฃยนรรยบยบรร’รร’รยถยบร‘ยนยทร–ยกยทร‘ยบยกร‘ยนรคลฝรฉ ร รร—รจรรร•ยกร’รรขรยนรรฉร’รรคยฟร…รฌร ยขรฉร’ร ยกรงยบรฃยนรกยฟรฉรร ยกรงยบยงร’ยนร ลฝร•รรยกร‘ยน รร’ยกโฌรยณรรรรร‘ยบ รคยฟร…รฌร ลฝร”รลกรยถรยกยบร‘ยนยทร–ยกร ยปรงยนรคยฟร…รฌรฃรรรจร…รจร’รรลฝรกยทยน";
+$DropboxAllowJustUploadTitle = "ยกร…รจรยงรร‘ยบรรจยงยงร’ยน: รขรยนรรฉร’รยขร–รฉยนร ยกรงยบรฃยนรรจรยนยขรยงยตร‘รร รยง";
+$DropboxAllowJustUploadComment = "รยนรยญร’ยตรฃรรฉรร’ลกร’รรรฌรรร—รล’รรฉร รร•รยนรขรยนรรฉร’รรคยฟร…รฌร รยกรร’รยขร–รฉยนร ยกรงยบรฃยนลธร—รฉยนยทร•รจยขรยงยตยนร รยงรคลฝรฉร ยปรงยนรร”รรร รขลฝรรครรจยตรฉรยงรกลกรฉยงรฃโฌร : Allow teachers and student to upload documents to their own dropbox without sending them to anyone (=sending the documents to themselves)";
+$DropboxAllowStudentToStudentTitle = "ยกร…รจรยงรร‘ยบรรจยงยงร’ยน:ล’รรฉร รร•รยน<->ล’รรฉร รร•รยน";
+$DropboxAllowStudentToStudentComment = "ยกร’รรยนรยญร’ยตรฃรรฉล’รรฉร รร•รยนรรจยงรคยฟร…รฌรกร…ยกร ยปร…ร•รจรยนยถร–ยงยกร‘ยนรกร…รยกร‘ยนรคลฝรฉ รร’ลกร’รรรฌโฌรรลธร”ลกร’รยณร’รยนรยญร’ยตรกร…รโฌร’ลฝรรร’รยถร–ยงลธรยตร”ยกรรรยกร’รรรจยงรคยฟร…รฌรรรรรจร’ยงยกร‘ยนยนร‘รฉยน ร ยปรงยนรคยฟร…รฌยทร•รจลกรร ยปรงยนยปรรรขรยชยนรฌรรร—รรครรจ ร ยชรจยนรร’ลกลกรรรจยงรคยฟร…รฌยทร•รจร ยปรงยนร ลธร…ยง mp3 รรร—รรกร…ยก/ร…รยกรคยฟร…รฌยกร’รยบรฉร’ยนยกร‘ยน รร’ยกรครรจรยนรยญร’ยต ล’รรฉร รร•รยนลกรรรจยงยงร’ยนรฃรรฉรคลฝรฉร ยฉลธร’รรร’";
+$DropboxAllowMailingTitle = "ยกร…รจรยงรร‘ยบรรจยงยงร’ยน:รยนรยญร’ยตรฃรรฉรรจยงรร•ร รร…";
+$DropboxAllowMailingComment = "ยกร“รยนลฝรฃรรฉรรจยงรร•ร รร…รฌร รยกรร’รรคยปรฃรรฉล’รรฉร รร•รยนร ยปรงยนรร’รยบรโฌโฌร…";
+$PermissionsForNewDirs = "";
+$PermissionsForNewDirsComment = "";
+$UserListHasBeenExported = "รคลฝรฉรรจยงรรยกยบร‘ยญยชร•ยชร—รจรล’รรฉรฃยชรฉรกร…รฉร";
+$ClickHereToDownloadTheFile = "โฌร…ร”ยกยทร•รจยนร•รจร ลธร—รจรรขรยนรรฉร’รรคยฟร…รฌร…ยงรร’(Download)";
+$administratorTelephoneTitle = "ร ยบรรรฌรขยทรรร‘ลธยทรฌล’รรฉยบรร”รร’รรรยบยบ";
+$administratorTelephoneComment = "ร ยบรรรฌรขยทรรร‘ลธยทรฌยขรยงล’รรฉลกร‘ลฝยกร’รรรยบยบ";
+$SendMailToNewUser = "รรจยงรร•ร รร…รฃรรฉล’รรฉรฃยชรฉโฌยนรฃรรรจ";
+$ExtendedProfileTitle = "รรจรยนร ลธร”รจรร ยตร”รรกยฟรฉรยปรรรร‘ยตร”";
+$ExtendedProfileComment = "รร’ยกยตร‘รฉยงโฌรจร’รฃรรฉร ยปรงยน\\"รฃยชรจ\\"ล’รรฉรรร‘โฌรรฃยนรร”ยทลพร”ยฐร’ยนรรร’ลกร’รรรฌล’รรฉรรยนยตรฉรยงยกรรยกยขรฉรรรร…ร ลธร”รจรร ยตร”รรฃยนยชรจรยงยขรยง โฌรร’รรร’รร’รยถลธร”ร รร โฌรยณรรยฒร” รกร…รรร”ยชร’ยทร•รจรร’รร’รยถรรยนรคลฝรฉ รกร…รยขรฉรรรร…รรจรยนยตร‘รยทร•รจรร’รร’รยถร ยปร”ลฝร ล’รรคลฝรฉ";
+$Classes = "รรรรจร รร•รยน";
+$UserUnsubscribed = "ยถรลฝยถรยนยกร’รรรร‘โฌรยขรยงล’รรฉรฃยชรฉรกร…รฉร";
+$CannotUnsubscribeUserFromCourse = "ล’รรฉรฃยชรฉรครรจรร’รร’รยถยถรยนรร”ยชร’รคลฝรฉร รยง ยตรฉรยงรกลกรฉยงล’รรฉยบรร”รร’รลกร‘ลฝยกร’รรร”ยชร’ลฝร“ร ยนร”ยนยกร’รรฃรรฉ";
+$InvalidStartDate = "ยกร“รยนลฝรร‘ยนร รร”รจรยตรฉยนรครรจยถรยกยตรฉรยง";
+$InvalidEndDate = "ยกร“รยนลฝรร‘ยนรรลฝยทรฉร’รรครรจยถรยกยตรฉรยง";
+$DateFormatLabel = "รร‘ยน/ร ลฝร—รยน/ยปร•/ยชร‘รจรรขรยง:ยนร’ยทร•";
+$HomePageFilesNotWritable = "รคยฟร…รฌรขรรร ลธลกรครรจรร’รร’รยถยบร‘ยนยทร–ยกรคลฝรฉ";
+$PleaseEnterNoticeText = "ยกรรยณร’ลธร”รลธรฌ ยขรฉรโฌรร’รยทร•รจลกรรกลกรฉยงรฃรรฉยทรร’ยบ";
+$PleaseEnterNoticeTitle = "ยกรรยณร’ลธร”รลธรฌยชร—รจรร รร—รจรยง ร รร—รจรยงยทร•รจรกลกรฉยงรฃรรฉยทรร’ยบ";
+$PleaseEnterLinkName = "ยกรรยณร’รกลกรฉยง ยชร—รจรยกร’รร ยชร—รจรรรขรยง";
+$InsertThisLink = "รฃรรจยกร’รร ยชร—รจรรรขรยงยนร•รฉ";
+$FirstPlace = "ยกรจรยนรร’รยกร’ร";
+$After = "รร…ร‘ยงรร’รยกร’ร";
+$DropboxAllowGroupTitle = "ยกร…รจรยงรร‘ยบรรจยงยงร’ยน:ยขรยงยกร…รรจร";
+$DropboxAllowGroupComment = "ล’รรฉรฃยชรฉยงร’ยนรฃยนรรยบยบรร’รร’รยถรรจยงรคยฟร…รฌรฃรรฉยกร‘ยนรคลฝรฉ";
+$ClassDeleted = "ร…ยบรรรรจร รร•รยนรกร…รฉร";
+$ClassesDeleted = "ร…ยบรรรรจร รร•รยนรกร…รฉร";
+$NoUsersInClass = "รครรจรร•ล’รรฉร รร•รยนรฃยนรรรรจร รร•รยนยนร•รฉ";
+$UsersAreSubscibedToCourse = "ร ลธร”รจรยชร—รจรล’รรฉรรร‘โฌรร รร•รยนยตร’รรร’รยกร’รยทร•รจร ร…ร—รยก ร ยขรฉร’รคยปรฃยนรร’รรร”ยชร’";
+$InvalidTitle = "ยกรรยณร’รฃรรจยชร—รจรร รร—รจรยง";
+$CatCodeAlreadyUsed = "ยปรรร ร€ยทยนร•รฉรร•รกร…รฉร";
+$PleaseEnterCategoryInfo = "รขยปรลฝรฃรรจรรร‘รรกร…รยชร—รจรยปรรร ร€ยท";
+$DokeosHomepage = "ร ยชร—รจรรรขรยงรคยปยทร•รจร รยปรคยซยทรฌ Chamilo";
+$DokeosForum = "ร ยขรฉร’รรจรรยกร…รรจรรร€ร”ยปรร’รยกร‘ยบ www.chamilo.org";
+$RegisterYourPortal = "รกลกรฉยงร…ยงยทรร ยบร•รยนร รรงยปรคยซยทรฌยขรยงร รร’รครรฉยทร•รจ Chamilo";
+$DokeosExtensions = "ลฝร’รยนรฌรขรร…ลฝรขยปรรกยกรรร รรร”รลกร’ยกร รรงยปรคยซยทรฌยขรยง Chamilo";
+$ShowNavigationMenuTitle = "รกรลฝยงร รยนรยนร“ยทร’ยงรร”ยชร’";
+$ShowNavigationMenuComment = "รกรลฝยงร รยนรยนร“ยทร’ยงยทร“รฃรรฉยงรจร’รยตรจรยกร’รร ยขรฉร’รคยปรฃยนรร’รรร”ยชร’ยตรจร’ยงรฆ";
+$LoginAs = "ร ยขรฉร’รฃยชรฉรรยบยบลฝรฉรรยชร—รจร";
+$ImportClassListCSV = "ยนร“ร ยขรฉร’รร’รยชร—รจรล’รรฉร รร•รยนลฝรฉรรรคยฟร…รฌ CSV";
+$ShowOnlineWorld = "รกรลฝยงลกร“ยนรยนล’รรฉยทร•รจยกร“ร…ร‘ยงร ยขรฉร’รฃยชรฉยงร’ยนรฃยนรยนรฉร’ยทร•รจยกร“ร…ร‘ยงลฝรรรรรจยปร‘ลกลกรยบร‘ยน(ร รรงยนยทรยกโฌยน)";
+$ShowOnlineUsers = "รกรลฝยงลกร“ยนรยนล’รรฉยทร•รจยกร“ร…ร‘ยงร ยขรฉร’รฃยชรฉยงร’ยนรฃยนยทรยกรยนรฉร’(ร รรงยนร ยฉลธร’รล’รรฉยทร•รจร ยขรฉร’รรรจรรยบยบรกร…รฉร)";
+$ShowOnlineCourse = "รกรลฝยงลกร“ยนรยนล’รรฉยทร•รจยกร“ร…ร‘ยงร ยขรฉร’รฃยชรฉยงร’ยนรฃยนรร’รรร”ยชร’";
+$ShowIconsInNavigationsMenuTitle = "รกรลฝยงรร‘ยญรรยปรฃยนร รยนรยนร“ยทร’ยง";
+$SeeAllRolesAllLocationsForSpecificRight = "ลฝรยกยฏรรร ยบร•รยบยทร•รจรฃยชรฉรร”ยทลพร”รฌร ยฉลธร’รยทร‘รฉยงรรลฝ";
+$SeeAllRightsAllRolesForSpecificLocation = "ลฝรรร”ยทลพร”รฌรกร…รยกยฏรรร ยบร•รยบยทร•รจรฃยชรฉร ยฉลธร’รยทร‘รฉยงรรลฝ";
+$ClassesUnsubscribed = "รคลฝรฉยถรลฝยถรยนยกร…รรจรร รร•รยนยทร•รจร ร…ร—รยกรครรฉ รรยกลกร’ยกรร”ยชร’รกร…รฉร";
+$ClassesSubscribed = "รคลฝรฉรร‘ยบยกร…รรจรร รร•รยนยทร•รจร ร…ร—รยกรครรฉ ร ยขรฉร’รฃยนรร’รรร”ยชร’รกร…รฉร";
+$RoleId = "รรร‘รรรร ยบร•รยบ";
+$RoleName = "ยชร—รจรรรร ยบร•รยบ";
+$RoleType = "ยปรรร ร€ยท";
+$RightValueModified = "รคลฝรฉร ยปร…ร•รจรยนรกยปร…ยงโฌรจร’รกร…รฉร";
+$MakeAvailable = "ยทร“รฃรรฉรฃยชรฉยงร’ยนรคลฝรฉ";
+$MakeUnavailable = "ยทร“รฃรรฉรร‘ยงรฃยชรฉยงร’ยนรครรจรคลฝรฉ";
+$Stylesheets = "รรยปรกยบยบร รยกรร’ร";
+$DefaultDokeosStyle = "รรยปรกยบยบโฌรจร’ร รร”รจรยตรฉยนยขรยงรขลฝโฌร•รร";
+$ShowIconsInNavigationsMenuComment = "รฃรรฉรกรลฝยงร รยนรยนร“ยทร’ยงลฝรฉรรรร‘ยญรรยปยทร•รจรกยตยกยตรจร’ยงรรร—รรครรจ";
+$Plugin = " รขยปรรกยกรรร รรร”ร";
+$MainMenu = "ร รยนรรร…ร‘ยก";
+$MainMenuLogged = "ร รยนรรร…ร‘ยกร รร—รจรร ยขรฉร’รรยบยบ";
+$Banner = "ยปรฉร’รรขล รยณร’";
+$ImageResizeTitle = "ยปรร‘ยบยขยนร’ลฝร€ร’ลธยขรยงรรร’ยชร”ยกยทร•รจรรจยงยขร–รฉยน";
+$ImageResizeComment = "ร€ร’ลธยขรยงรรร’ยชร”ยกรร’รร’รยถยปรร‘ยบยขยนร’ลฝรคลฝรฉรฃยนรรรรรจร’ยงรร’รรรจยงรคยฟร…รฌยขร–รฉยน รร’ยกรรยบยบรร’รร’รยถโฌรรลธร’รร…รฌรฃยชรฉโฌร“รร‘รจยงร€ร’รร’PHP รรจรรยกร‘ยบ<a href=\\"http://php.net/manual/en/ref.image.php\\" target=\\"_blank\\">GD library</a>. รคลฝรฉ รร’ยกรครรจโฌรรลธร’รร…รฌรฃยชรฉยงร’ยน ยกร’รยตร‘รฉยงโฌรจร’ยปรร‘ยบยขยนร’ลฝยขรยงร€ร’ลธลกรรครรจร ยกร”ลฝล’ร…ยกร‘ยบร€ร’ลธรกยตรจรรรจ";
+$MaxImageWidthTitle = "ยขยนร’ลฝร€ร’ลธยกรรฉร’ยงรร’ยกยทร•รจรรลฝ";
 $MaxImageWidthComment = "Maximum width in pixels of a user image. This setting only applies if user images are set to be resized on upload.";
-$MaxImageHeightTitle = "ความสูงของภาพใหญ่สุดที่กำหนด";
+$MaxImageHeightTitle = "โฌรร’รรรยงยขรยงร€ร’ลธรฃรยญรจรรลฝยทร•รจยกร“รยนลฝ";
 $MaxImageHeightComment = "Maximum height in pixels of a user image. This setting only applies if user images are set to be resized on upload.";
-$YourVersionNotUpToDate = "เวอร์ชั่นที่คุณใช้ยังไม่ได้ปรับเป็นรุ่นใหม่";
-$YourVersionIs = "เวอร์ชั่นของคุณคือ";
-$PleaseVisitDokeos = "กรุณาไปที่เว็ปไซท์ของโดคีออส";
-$VersionUpToDate = "เวอร์ชั่นที่คุณใช้เป็นรุ่นปัจจุบัน";
-$ConnectSocketError = "การเชื่อมต่อทาง Socket เกิดความผิดพลาด";
-$SocketFunctionsDisabled = "ไม่สามารถใช้การเชื่อมต่อทาง Socket ได้";
-$ShowEmailAddresses = "แสดงชื่อที่อยู่อีเมล";
-$ShowEmailAddressesComment = "แสดงชื่อที่อยู่อีเมล";
-$langphone = "โทรศัพท์";
-$langActiveExtensions = "เปิดใช้งาน";
-$langVisioconf = "กรประชุมสัมมนาออนไลน์";
-$ServerStatistics = "สถิติของเครื่องแม่ข่ายบริการ";
+$YourVersionNotUpToDate = "ร รรรรฌยชร‘รจยนยทร•รจโฌรยณรฃยชรฉรร‘ยงรครรจรคลฝรฉยปรร‘ยบร ยปรงยนรรรจยนรฃรรรจ";
+$YourVersionIs = "ร รรรรฌยชร‘รจยนยขรยงโฌรยณโฌร—ร";
+$PleaseVisitDokeos = "ยกรรยณร’รคยปยทร•รจร รรงยปรคยซยทรฌยขรยงรขลฝโฌร•รรร";
+$VersionUpToDate = "ร รรรรฌยชร‘รจยนยทร•รจโฌรยณรฃยชรฉร ยปรงยนรรรจยนยปร‘ลกลกรยบร‘ยน";
+$ConnectSocketError = "ยกร’รร ยชร—รจรรยตรจรยทร’ยง Socket ร ยกร”ลฝโฌรร’รล’ร”ลฝลธร…ร’ลฝ";
+$SocketFunctionsDisabled = "รครรจรร’รร’รยถรฃยชรฉยกร’รร ยชร—รจรรยตรจรยทร’ยง Socket รคลฝรฉ";
+$ShowEmailAddresses = "รกรลฝยงยชร—รจรยทร•รจรรรรจรร•ร รร…";
+$ShowEmailAddressesComment = "รกรลฝยงยชร—รจรยทร•รจรรรรจรร•ร รร…";
+$LatestVersionIs = "";
+$langConfigureExtensions = "";
+$langActiveExtensions = "ร ยปร”ลฝรฃยชรฉยงร’ยน";
+$langVisioconf = "ยกรยปรรยชรรรร‘รรยนร’รรยนรคร…ยนรฌ";
+$langVisioconfDescription = "";
+$langPpt2lp = "";
+$langPpt2lpDescription = "";
+$langBandWidthStatistics = "";
+$langBandWidthStatisticsDescription = "";
+$ServerStatistics = "รยถร”ยตร”ยขรยงร โฌรร—รจรยงรกรรจยขรจร’รยบรร”ยกร’ร";
+$langServerStatisticsDescription = "";
+$SearchEngine = "";
+$langSearchEngineDescription = "";
+$langListSession = "";
+$AddSession = "";
+$langImportSessionListXMLCSV = "";
+$ExportSessionListXMLCSV = "";
+$SessionName = "";
 $langNbCourses = "&#3619;&#3627;&#3633;&#3626;&#3585;&#3619;&#3632;&#3610;&#3623;&#3609;&#3623;&#3636;&#3594;&#3634;";
-$DateStart = "เริ่มวันที่";
-$DateEnd = "ถึงวันที่";
+$DateStart = "ร รร”รจรรร‘ยนยทร•รจ";
+$DateEnd = "ยถร–ยงรร‘ยนยทร•รจ";
+$CoachName = "";
+$SessionList = "";
+$SessionNameIsRequired = "";
+$NextStep = "";
+$keyword = "";
+$Confirm = "";
+$UnsubscribeUsersFromCourse = "";
+$MissingClassName = "";
+$ClassNameExists = "";
+$ImportCSVFileLocation = "";
+$ClassesCreated = "";
+$ErrorsWhenImportingFile = "";
+$ServiceActivated = "";
+$ActivateExtension = "";
+$InvalidExtension = "";
+$VersionCheckExplanation = "";
+$AfterApproval = "";
+$StudentViewEnabledTitle = "";
+$StudentViewEnabledComment = "";
+$TimeLimitWhosonlineTitle = "";
+$TimeLimitWhosonlineComment = "";
+$ExampleMaterialCourseCreationTitle = "";
+$ExampleMaterialCourseCreationComment = "";
+$AccountValidDurationTitle = "";
+$AccountValidDurationComment = "";
+$UseSessionModeTitle = "";
+$UseSessionModeComment = "";
+$HomepageViewActivity = "";
+$HomepageView2column = "";
+$HomepageView3column = "";
+$AllowUserHeadings = "";
+$IconsOnly = "";
+$TextOnly = "";
+$IconsText = "";
+$EnableToolIntroductionTitle = "";
+$EnableToolIntroductionComment = "";
+$BreadCrumbsCourseHomepageTitle = "";
+$BreadCrumbsCourseHomepageComment = "";
+$Comment = "";
+$Version = "";
+$LoginPageMainArea = "";
+$LoginPageMenu = "";
+$CampusHomepageMainArea = "";
+$CampusHomepageMenu = "";
+$MyCoursesMainArea = "";
+$MyCoursesMenu = "";
+$Header = "";
+$Footer = "";
+$PublicPagesComplyToWAITitle = "";
+$PublicPagesComplyToWAIComment = "";
+$VersionCheck = "";
+$Active = "";
+$Inactive = "";
+$SessionOverview = "";
+$SubscribeUserIfNotAllreadySubscribed = "";
+$UnsubscribeUserIfSubscriptionIsNotInFile = "";
+$DeleteSelectedSessions = "";
+$CourseListInSession = "";
+$UnsubscribeCoursesFromSession = "";
+$NbUsers = "";
+$SubscribeUsersToSession = "";
+$UserListInPlatform = "";
+$UserListInSession = "";
+$CourseListInPlatform = "";
+$Host = "";
+$UserOnHost = "";
+$FtpPassword = "";
+$PathToLzx = "";
+$WCAGContent = "";
+$SubscribeCoursesToSession = "";
+$DateStartSession = "";
+$DateEndSession = "";
+$EditSession = "";
+$VideoConferenceUrl = "";
+$VideoClassroomUrl = "";
+$ReconfigureExtension = "";
+$ServiceReconfigured = "";
+$ChooseNewsLanguage = "";
+$Ajax_course_tracking_refresh = "";
+$Ajax_course_tracking_refresh_comment = "";
+$EditLink = "";
+$FinishSessionCreation = "";
+$VisioRTMPPort = "";
+$SessionNameAlreadyExists = "";
+$NoClassesHaveBeenCreated = "";
+$ThisFieldShouldBeNumeric = "";
+$UserLocked = "";
+$UserUnlocked = "";
+$CannotDeleteUser = "";
+$SelectedUsersDeleted = "";
+$SomeUsersNotDeleted = "";
+$ExternalAuthentication = "";
+$RegistrationDate = "";
+$UserUpdated = "";
+$HomePageFilesNotReadable = "";
+$Choose = "";
+$ModifySessionCourse = "";
+$CourseSessionList = "";
+$SelectACoach = "";
+$UserNameUsedTwice = "";
+$UserNameNotAvailable = "";
+$UserNameTooLong = "";
+$WrongStatus = "";
+$ClassNameNotAvailable = "";
+$FileImported = "";
+$WhichSessionToExport = "";
+$AllSessions = "";
+$CodeDoesNotExists = "";
+$UnknownUser = "";
+$UnknownStatus = "";
+$SessionDeleted = "";
+$CourseDoesNotExist = "";
+$UserDoesNotExist = "";
+$ButProblemsOccured = "";
+$UsernameTooLongWasCut = "";
+$NoInputFile = "";
+$StudentStatusWasGivenTo = "";
+$WrongDate = "";
+$ThisIsAutomaticEmailNoReply = "";
+$YouWillSoonReceiveMailFromCoach = "";
+$SlideSize = "";
+$EphorusPlagiarismPrevention = "";
+$CourseTeachers = "";
+$UnknownTeacher = "";
+$HideDLTTMarkup = "";
+$ListOfCoursesOfSession = "";
+$UnsubscribeSelectedUsersFromSession = "";
+$ShowDifferentCourseLanguageComment = "";
+$ShowEmptyCourseCategoriesComment = "";
+$ShowEmptyCourseCategories = "";
+$XMLNotValid = "";
+$ForTheSession = "";
+$AllowEmailEditorTitle = "";
+$AllowEmailEditorComment = "";
+$AddCSVHeader = "";
+$YesAddCSVHeader = "";
+$ListOfUsersSubscribedToCourse = "";
+$NumberOfCourses = "";
+$ShowDifferentCourseLanguage = "";
+$VisioRTMPTunnelPort = "";
+$name = "";
+$Security = "";
+$UploadExtensionsListType = "";
+$UploadExtensionsListTypeComment = "";
+$Blacklist = "";
+$Whitelist = "";
+$UploadExtensionsBlacklist = "";
+$UploadExtensionsWhitelist = "";
+$UploadExtensionsBlacklistComment = "";
+$UploadExtensionsWhitelistComment = "";
+$UploadExtensionsSkip = "";
+$UploadExtensionsSkipComment = "";
+$UploadExtensionsReplaceBy = "";
+$UploadExtensionsReplaceByComment = "";
+$Remove = "";
+$Rename = "";
+$ShowNumberOfCoursesComment = "";
+$EphorusDescription = "";
+$EphorusLeadersInAntiPlagiarism = "";
+$EphorusClickHereForInformationsAndPrices = "";
+$NameOfTheSession = "";
+$NoSessionsForThisUser = "";
+$DisplayCategoriesOnHomepageTitle = "";
+$DisplayCategoriesOnHomepageComment = "";
+$ShowTabsTitle = "";
+$ShowTabsComment = "";
+$DefaultForumViewTitle = "";
+$DefaultForumViewComment = "";
+$TabsMyCourses = "";
+$TabsCampusHomepage = "";
+$TabsReporting = "";
+$TabsPlatformAdministration = "";
+$NoCoursesForThisSession = "";
+$NoUsersForThisSession = "";
+$LastNameMandatory = "";
+$FirstNameMandatory = "";
+$EmailMandatory = "";
+$TabsMyAgenda = "";
+$NoticeWillBeNotDisplayed = "";
+$LetThoseFieldsEmptyToHideTheNotice = "";
+$Ppt2lpVoiceRecordingNeedsRed5 = "";
+$PlatformCharsetTitle = "";
+$PlatformCharsetComment = "";
+$ExtendedProfileRegistrationTitle = "";
+$ExtendedProfileRegistrationComment = "";
+$ExtendedProfileRegistrationRequiredTitle = "";
+$ExtendedProfileRegistrationRequiredComment = "";
+$NoReplyEmailAddress = "";
+$NoReplyEmailAddressComment = "";
+$SurveyEmailSenderNoReply = "";
+$SurveyEmailSenderNoReplyComment = "";
+$CourseCoachEmailSender = "";
+$NoReplyEmailSender = "";
+$Flat = "";
+$Threaded = "";
+$Nested = "";
+$OpenIdAuthenticationComment = "";
+$VersionCheckEnabled = "";
+$InstallDirAccessibleSecurityThreat = "";
+$GradebookActivation = "";
+$GradebookActivationComment = "";
+$UserTheme = "";
+$UserThemeSelection = "";
+$UserThemeSelectionComment = "";
+$AllowurlfopenIsSetToOff = "";
+$VisioHost = "";
+$VisioPort = "";
+$VisioPassword = "";
+$Port = "";
+$EphorusClickHereForADemoAccount = "";
+$ManageUserFields = "";
+$UserFields = "";
+$AddUserField = "";
+$FieldLabel = "";
+$FieldType = "";
+$FieldTitle = "";
+$FieldDefaultValue = "";
+$FieldOrder = "";
+$FieldVisibility = "";
+$FieldChangeability = "";
+$FieldTypeText = "";
+$FieldTypeTextarea = "";
+$FieldTypeRadio = "";
+$FieldTypeSelect = "";
+$FieldTypeSelectMultiple = "";
+$FieldAdded = "";
+$GradebookScoreDisplayColoring = "";
+$GradebookScoreDisplayColoringComment = "";
+$TabsGradebookEnableColoring = "";
+$GradebookScoreDisplayCustom = "";
+$GradebookScoreDisplayCustomComment = "";
+$TabsGradebookEnableCustom = "";
+$GradebookScoreDisplayColorSplit = "";
+$GradebookScoreDisplayColorSplitComment = "";
+$GradebookScoreDisplayUpperLimit = "";
+$GradebookScoreDisplayUpperLimitComment = "";
+$TabsGradebookEnableUpperLimit = "";
+$AddUserFields = "";
+$FieldPossibleValues = "";
+$FieldPossibleValuesComment = "";
+$FieldTypeDate = "";
+$FieldTypeDatetime = "";
+$UserFieldsAddHelp = "";
+$AllowCourseThemeTitle = "";
+$AllowCourseThemeComment = "";
+$DisplayMiniMonthCalendarTitle = "";
+$DisplayMiniMonthCalendarComment = "";
+$DisplayUpcomingEventsTitle = "";
+$DisplayUpcomingEventsComment = "";
+$NumberOfUpcomingEventsTitle = "";
+$NumberOfUpcomingEventsComment = "";
+$ShowClosedCoursesTitle = "";
+$ShowClosedCoursesComment = "";
+$LDAPConnectionError = "";
+$LDAP = "";
+$LDAPEnableTitle = "";
+$LDAPEnableComment = "";
+$LDAPMainServerAddressTitle = "";
+$LDAPMainServerAddressComment = "";
+$LDAPMainServerPortTitle = "";
+$LDAPMainServerPortComment = "";
+$LDAPDomainTitle = "";
+$LDAPDomainComment = "";
+$LDAPReplicateServerAddressTitle = "";
+$LDAPReplicateServerAddressComment = "";
+$LDAPReplicateServerPortTitle = "";
+$LDAPReplicateServerPortComment = "";
+$LDAPSearchTermTitle = "";
+$LDAPSearchTermComment = "";
+$LDAPVersionTitle = "";
+$LDAPVersionComment = "";
+$LDAPVersion2 = "";
+$LDAPVersion3 = "";
+$LDAPFilledTutorFieldTitle = "";
+$LDAPFilledTutorFieldComment = "";
+$LDAPAuthenticationLoginTitle = "";
+$LDAPAuthenticationLoginComment = "";
+$LDAPAuthenticationPasswordTitle = "";
+$LDAPAuthenticationPasswordComment = "";
+$LDAPImport = "";
+$EmailNotifySubscription = "";
+$DontUncheck = "";
+$AllSlashNone = "";
+$LDAPImportUsersSteps = "";
+$EnterStepToAddToYourSession = "";
+$ToDoThisYouMustEnterYearDepartmentAndStep = "";
+$FollowEachOfTheseStepsStepByStep = "";
+$RegistrationYearExample = "";
+$SelectDepartment = "";
+$RegistrationYear = "";
+$SelectStepAcademicYear = "";
+$ErrorExistingStep = "";
+$ErrorStepNotFoundOnLDAP = "";
+$StepDeletedSuccessfully = "";
+$StepUsersDeletedSuccessfully = "";
+$NoStepForThisSession = "";
+$DeleteStepUsers = "";
+$ImportStudentsOfAllSteps = "";
+$ImportLDAPUsersIntoPlatform = "";
+$NoUserInThisSession = "";
+$SubscribeSomeUsersToThisSession = "";
+$EnterStudentsToSubscribeToCourse = "";
+$ToDoThisYouMustEnterYearComponentAndComponentStep = "";
+$SelectComponent = "";
+$Component = "";
+$SelectStudents = "";
+$LDAPUsersAdded = "";
+$NoUserAdded = "";
+$ImportLDAPUsersIntoCourse = "";
+$ImportLDAPUsersAndStepIntoSession = "";
+$LDAPSynchroImportUsersAndStepsInSessions = "";
+$TabsMyGradebook = "";
+$LDAPUsersAddedOrUpdated = "";
+$SearchLDAPUsers = "";
+$SelectCourseToImportUsersTo = "";
+$ImportLDAPUsersIntoSession = "";
+$LDAPSelectFilterOnUsersOU = "";
+$LDAPOUAttributeFilter = "";
+$SelectSessionToImportUsersTo = "";
+$VisioUseRtmptTitle = "";
+$VisioUseRtmptComment = "";
+$UploadNewStylesheet = "";
+$NameStylesheet = "";
+$StylesheetAdded = "";
+$LDAPFilledTutorFieldValueTitle = "";
+$LDAPFilledTutorFieldValueComment = "";
+$IsNotWritable = "";
+$FieldMovedDown = "";
+$CannotMoveField = "";
+$FieldMovedUp = "";
+$FieldShown = "";
+$CannotShowField = "";
+$FieldHidden = "";
+$CannotHideField = "";
+$FieldMadeChangeable = "";
+$CannotMakeFieldChangeable = "";
+$FieldMadeUnchangeable = "";
+$CannotMakeFieldUnchangeable = "";
+$FieldDeleted = "";
+$CannotDeleteField = "";
+$AddUsersByCoachTitle = "";
+$AddUsersByCoachComment = "";
+$UserFieldsSortOptions = "";
+$FieldOptionMovedUp = "";
+$CannotMoveFieldOption = "";
+$FieldOptionMovedDown = "";
+$DefineSessionOptions = "";
+$DaysBefore = "";
+$DaysAfter = "";
+$SessionAddTypeUnique = "";
+$SessionAddTypeMultiple = "";
+$EnableSearchTitle = "";
+$EnableSearchComment = "";
+$SearchASession = "";
+$ActiveSession = "";
+$AddUrl = "";
+$ShowSessionCoachTitle = "";
+$ShowSessionCoachComment = "";
+$ExtendRightsForCoachTitle = "";
+$ExtendRightsForCoachComment = "";
+$ExtendRightsForCoachOnSurveyComment = "";
+$ExtendRightsForCoachOnSurveyTitle = "";
+$CannotDeleteUserBecauseOwnsCourse = "";
+$AllowUsersToCreateCoursesTitle = "";
+$AllowUsersToCreateCoursesComment = "";
+$AllowStudentsToBrowseCoursesComment = "";
+$YesWillDeletePermanently = "";
+$NoWillDeletePermanently = "";
+$SelectAResponsible = "";
+$ThereIsNotStillAResponsible = "";
+$AllowStudentsToBrowseCoursesTitle = "";
+$SharedSettingIconComment = "";
+$GlobalAgenda = "";
+$AdvancedFileManagerTitle = "";
+$AdvancedFileManagerComment = "";
+$ScormAndLPProgressTotalAverage = "";
+$MultipleAccessURLs = "";
+$SearchShowUnlinkedResultsTitle = "";
+$SearchShowUnlinkedResultsComment = "";
+$SearchHideUnlinkedResults = "";
+$SearchShowUnlinkedResults = "";
+$Templates = "";
+$HideCampusFromPublicDokeosPlatformsList = "";
+$EnableVersionCheck = "";
+$AllowMessageToolTitle = "";
+$AllowReservationTitle = "";
+$AllowReservationComment = "";
+$ConfigureResourceType = "";
+$ConfigureMultipleAccessURLs = "";
+$URLAdded = "";
+$URLAlreadyAdded = "";
+$AreYouSureYouWantToSetThisLanguageAsThePortalDefault = "";
+$CurrentLanguagesPortal = "";
+$EditUsersToURL = "";
+$AddUsersToURL = "";
+$URLList = "";
+$AddToThatURL = "";
+$SelectUrl = "";
+$UserListInURL = "";
+$UsersWereEdited = "";
+$AtLeastOneUserAndOneURL = "";
+$UsersBelongURL = "";
+$LPTestScore = "";
+$ScormAndLPTestTotalAverage = "";
+$ImportUsersToACourse = "";
+$ImportCourses = "";
+$ManageUsers = "";
+$ManageCourses = "";
+$UserListIn = "";
+$URLInactive = "";
+$URLActive = "";
+$EditUsers = "";
+$EditCourses = "";
+$CourseListIn = "";
+$AddCoursesToURL = "";
+$EditCoursesToURL = "";
+$AddCoursesToThatURL = "";
+$EnablePlugins = "";
+$AtLeastOneCourseAndOneURL = "";
+$ClickToRegisterAdmin = "";
+$AdminShouldBeRegisterInSite = "";
+$URLNotConfiguredPleaseChangedTo = "";
+$AdminUserRegisteredToThisURL = "";
+$CoursesWereEdited = "";
+$URLEdited = "";
+$AddSessionToURL = "";
+$FirstLetterSession = "";
+$EditSessionToURL = "";
+$AddSessionsToThatURL = "";
+$SessionBelongURL = "";
+$ManageSessions = "";
+$AllowMessageToolComment = "";
+$AllowSocialToolTitle = "";
+$AllowSocialToolComment = "";
+$SetLanguageAsDefault = "";
+$FieldFilter = "";
+$FilterOn = "";
+$FilterOff = "";
+$FieldFilterSetOn = "";
+$FieldFilterSetOff = "";
+$buttonAddUserField = "";
+$UsersSubscribedToFollowingCoursesBecauseOfVirtualCourses = "";
+$TheFollowingCoursesAlreadyUseThisVisualCode = "";
+$UsersSubscribedToBecauseVisualCode = "";
+$UsersUnsubscribedFromBecauseVisualCode = "";
+$FilterUsers = "";
+$SeveralCoursesSubscribedToSessionBecauseOfSameVisualCode = "";
+$CoachIsRequired = "";
+$EncryptMethodUserPass = "";
+$AddTemplate = "";
+$TemplateImageComment100x70 = "";
+$TemplateAdded = "";
+$TemplateDeleted = "";
+$EditTemplate = "";
+$FileImportedJustUsersThatAreNotRegistered = "";
+$YouMustImportAFileAccordingToSelectedOption = "";
+$ShowEmailOfTeacherOrTutorTitle = "";
+$ShowEmailOfTeacherOrTutorComent = "";
+$Created = "";
+$AddSystemAnnouncement = "";
+$EditSystemAnnouncement = "";
+$LPProgressScore = "";
+$TotalTimeByCourse = "";
+$LastTimeTheCourseWasUsed = "";
+$AnnouncementAvailable = "";
+$AnnouncementNotAvailable = "";
+$Searching = "";
+$AddLDAPUsers = "";
+$Academica = "";
+$AddNews = "";
+$SearchDatabaseOpeningError = "";
+$SearchDatabaseVersionError = "";
+$SearchDatabaseModifiedError = "";
+$SearchDatabaseLockError = "";
+$SearchDatabaseCreateError = "";
+$SearchDatabaseCorruptError = "";
+$SearchNetworkTimeoutError = "";
+$SearchOtherXapianError = "";
+$SearchXapianModuleNotInstaled = "";
+$FieldRemoved = "";
+$TheNewSubLanguageHasBeenAdd = "";
+$DeleteSubLanguage = "";
+$CreateSubLanguageForLanguage = "";
+$DeleteSubLanguageFromLanguage = "";
+$CreateSubLanguage = "";
+$RegisterTermsOfSubLanguageForLanguage = "";
+$AddTermsOfThisSubLanguage = "";
+$LoadLanguageFile = "";
+$AllowUseSubLanguageTitle = "";
+$AllowUseSubLanguageComment = "";
+$AddWordForTheSubLanguage = "";
+$TemplateEdited = "";
+$SubLanguage = "";
+$LanguageIsNowVisible = "";
+$LanguageIsNowHidden = "";
+$LanguageDirectoryNotWriteableContactAdmin = "";
+$ShowGlossaryInDocumentsTitle = "";
+$ShowGlossaryInDocumentsComment = "";
+$ShowGlossaryInDocumentsIsAutomatic = "";
+$ShowGlossaryInDocumentsIsManual = "";
+$ShowGlossaryInDocumentsIsNone = "";
+$LanguageVariable = "";
+$ToExportDocumentsWithGlossaryYouHaveToSelectGlossary = "";
+$ShowTutorDataTitle = "";
+$ShowTutorDataComment = "";
+$ShowTeacherDataTitle = "";
+$ShowTeacherDataComment = "";
+$TermsAndConditions = "";
+$HTMLText = "";
+$PageLink = "";
+$DisplayTermsConditions = "";
+$AllowTermsAndConditionsTitle = "";
+$AllowTermsAndConditionsComment = "";
+$Load = "";
+$AllVersions = "";
+$EditTermsAndConditions = "";
+$Changes = "";
+$ExplainChanges = "";
+$TermAndConditionNotSaved = "";
+$TheSubLanguageHasBeenRemoved = "";
+$AddTermsAndConditions = "";
+$TermAndConditionSaved = "";
+$Visibility = "";
+$SessionCategory = "";
+$ListSessionCategory = "";
+$AddSessionCategory = "";
+$SessionCategoryName = "";
+$EditSessionCategory = "";
+$SessionCategoryAdded = "";
+$SessionCategoryUpdate = "";
+$SessionCategoryDelete = "";
+$SessionCategoryNameIsRequired = "";
+$ThereIsNotStillASession = "";
+$SelectASession = "";
+$OriginCoursesFromSession = "";
+$DestinationCoursesFromSession = "";
+$CopyCourseFromSessionToSessionExplanation = "";
+$TypeOfCopy = "";
+$CopyFromCourseInSessionToAnotherSession = "";
+$YouMustSelectACourseFromOriginalSession = "";
+$MaybeYouWantToDeleteThisUserFromSession = "";
+$EditSessionCoursesByUser = "";
+$CoursesUpdated = "";
+$CurrentCourses = "";
+$CoursesToAvoid = "";
+$EditSessionCourses = "";
+$SessionVisibility = "";
+$BlockCoursesForThisUser = "";
+$LanguageFile = "";
+$ShowCoursesDescriptionsInCatalogTitle = "";
+$ShowCoursesDescriptionsInCatalogComment = "";
+$StylesheetNotHasBeenAdded = "";
+$AddSessionsInCategories = "";
+$ItIsRecommendedInstallImagickExtension = "";
+$EditSpecificSearchField = "";
+$FieldName = "";
+$SpecialExports = "";
+$SpecialCreateFullBackup = "";
+$SpecialLetMeSelectItems = "";
+$CreateBackup = "";
+$AllowCoachsToEditInsideTrainingSessions = "";
+$AllowCoachsToEditInsideTrainingSessionsComment = "";
+$ShowSessionDataTitle = "";
+$ShowSessionDataComment = "";
+$SubscribeSessionsToCategory = "";
+$SessionListInPlatform = "";
+$SessionListInCategory = "";
+$ToExportSpecialSelect = "";
+$ErrorMsgSpecialExport = "";
+$ConfigureInscription = "";
+$MsgErrorSessionCategory = "";
+$NumberOfSession = "";
+$DeleteSelectedSessionCategory = "";
+$DeleteSelectedFullSessionCategory = "";
+$EditTopRegister = "";
+$InsertTabs = "";
+$EditTabs = "";
+$BabyOrange = "";
+$BlueLagoon = "";
+$CoolBlue = "";
+$Corporate = "";
+$CosmicCampus = "";
+$DeliciousBordeaux = "";
+$DokeosClassic2D = "";
+$DokeosBlue = "";
+$EmpireGreen = "";
+$FruityOrange = "";
+$Medical = "";
+$RoyalPurple = "";
+$SilverLine = "";
+$SoberBrown = "";
+$SteelGrey = "";
+$TastyOlive = "";
+$ExportCourses = "";
+$IsAdministrator = "";
+$IsNotAdministrator = "";
+$AddTimeLimit = "";
+$EditTimeLimit = "";
+$TheTimeLimitsAreReferential = "";
+$ShowGlossaryInExtraToolsTitle = "";
+$ShowGlossaryInExtraToolsComment = "";
+$FieldTypeTag = "";
+$SendEmailToAdminTitle = "";
+$SendEmailToAdminComment = "";
+$UserTag = "";
+$SelectSession = "";
+$GroupPermissions = "";
+$SpecialCourse = "";
+$MathMimetexTitle = "";
+$MathMimetexComment = "";
+$MathASCIImathMLTitle = "";
+$MathASCIImathMLComment = "";
+$YoutubeForStudentsTitle = "";
+$YoutubeForStudentsComment = "";
+$BlockCopyPasteForStudentsTitle = "";
+$BlockCopyPasteForStudentsComment = "";
+$MoreButtonsForMaximizedModeTitle = "";
+$MoreButtonsForMaximizedModeComment = "";
+$Editor = "";
+$GoToCourseAfterLoginTitle = "";
+$GoToCourseAfterLoginComment = "";
+$GroupList = "";
+$AllowStudentsDownloadFoldersTitle = "";
+$AllowStudentsDownloadFoldersComment = "";
+$AllowStudentsToCreateGroupsInSocialTitle = "";
+$AllowStudentsToCreateGroupsInSocialComment = "";
+$AllowSendMessageToAllPlatformUsersTitle = "";
+$AllowSendMessageToAllPlatformUsersComment = "";
+$TabsSocial = "";
+$MessageMaxUploadFilesizeTitle = "";
+$MessageMaxUploadFilesizeComment = "";
+$AddAdditionalProfileField = "";
+$Username = "";
+$ChamiloHomepage = "";
+$ChamiloForum = "";
+$ChamiloExtensions = "";
+$ImpossibleToContactVersionServerPleaseTryAgain = "";
+$ChamiloGreen = "";
+$ChamiloRed = "";
+$MessagesSent = "";
+$MessagesReceived = "";
+$CountFriends = "";
+$ThisPluginHasbeenDeletedFromDashboardPluginDirectory = "";
+$EnableDashboardPlugins = "";
+$CoursesListInPlatform = "";
+$AssignedCoursesListToHumanResourceManager = "";
+$AssignedCoursesTo = "";
+$AssignCoursesToHumanResourcesManager = "";
+$TimezoneValueTitle = "";
+$TimezoneValueComment = "";
+$UseUsersTimezoneTitle = "";
+$UseUsersTimezoneComment = "";
+$FieldTypeTimezone = "";
+$AssignedSessionsHaveBeenUpdatedSuccessfully = "";
+$AssignedCoursesHaveBeenUpdatedSuccessfully = "";
+$AssignedUsersHaveBeenUpdatedSuccessfully = "";
 ?>

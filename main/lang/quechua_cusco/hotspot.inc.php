@@ -1,5 +1,6 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $select = "Ajllay";
 $square = "Tawa k\'uchu";
@@ -20,4 +21,5 @@ $exeFinished = "Llipin k\'itikuna ajllasqaña. Kunanqa ichapas hoqmanta churawaq
 $nextAnswer = "Clicta ruway kay patapi:  &done=done";
 $delineation = "Saywana";
 $labelDelineationMenu = "Wisqay saywanata";
+$oar = "";
 ?>

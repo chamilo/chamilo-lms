@@ -1,5 +1,6 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $langNewGroupCreate = "Sukurti naują grupę(es)";
 $langGroupCreation = "Naujos grupės kūrimas";
@@ -23,8 +24,7 @@ $langGroupMembers = "Grupės nariai";
 $langEditGroup = "Redaguoti šią grupę";
 $Optional = "(nebūtina)";
 $langGroupSettingsModified = "Grupės nustatymai modifikuoti";
-$langGroupTooMuchMembers = "Number proposed exceeds max. that you allowed (you can modify it below). 
-				Group composition has not been modified";
+$langGroupTooMuchMembers = "Number proposed exceeds max. that you allowed (you can modify it below";
 $langGroupTutor = "Kuratorius";
 $langGroupNoTutor = "(nėra)";
 $langGroupNone = "(nėra)";
@@ -41,11 +41,13 @@ $langPublic = "vieša";
 $langPropModify = "Keisti nustatymus";
 $langState = "Būsena";
 $langGroupFilledGroups = "Groups have been filled (or completed) by users present in the \'Users\' list.";
-$langSubscribed  = "šiame kurse registruoti vartotojai";
-$langStudentsNotInThisGroups  = "Nesantys šioje grupėje vartotojai";
-$langQtyOfUserCanSubscribe_PartBeforeNumber  = "A user can be member of maximum ";
-$langQtyOfUserCanSubscribe_PartAfterNumber  = "grupės";
+$langSubscribed = "šiame kurse registruoti vartotojai";
+$langStudentsNotInThisGroups = "Nesantys šioje grupėje vartotojai";
+$langQtyOfUserCanSubscribe_PartBeforeNumber = "A user can be member of maximum";
+$langQtyOfUserCanSubscribe_PartAfterNumber = "grupės";
 $langGroupLimit = "Limitas";
+$CreateGroup = "";
+$ProceedToCreateGroup = "";
 $langStudentRegAllowed = "Studentai gali patys prisiregistruoti prie grupės";
 $langGroupAllowStudentUnregistration = "Vartotojams leidžiama patiems išsiregistruoti iš grupių";
 $langAllGroups = "Visos grupės";
@@ -66,7 +68,7 @@ $langNoGroupsAvailable = "Grupių nėra";
 $langGroupsFromVirtualCourses = "Virtualūs kursai";
 $NotAvailable = "Nėra";
 $CreateSubgroups = "Sukurti pogrupius";
-$CreateSubgroupsInfo = "Ši opcija leidžia sukurti naujas grupes iš jau esančių grupių narių. Nurodykite norimą pogrupių skaičių ir išsirinkite grupę. Bus sukurta nurodytas skaičius grupių iš eamos grupės narių, ir jie visi bus priregistruoti prie naujų grupių. Esanti grupė nebus sukurta.";
+$CreateSubgroupsInfo = "Ši opcija leidžia sukurti naujas grupes iš jau esančių grupių narių. Nurodykite norimą pogrupių skaičių ir išsirinkite grupę. Bus sukurta nurodytas skaičius grupių iš eamos grupės narių, ir jie visi bus priregistruoti prie naujų grupių. Esanti grupė nebus";
 $CreateNumberOfGroups = "Sukurti";
 $WithUsersFrom = "groups with members from";
 $CategoryDeleted = "kategorija ištrinta";
@@ -89,4 +91,7 @@ $NoCategoriesDefined = "Jokia kategorija nenurodyta";
 $GroupsFromClasses = "Grupės iš klasių";
 $GroupsFromClassesInfo = "Naudojant šį nustatymą, galite sukurti grupes iš klasių, prisirašiusių prie Jūsų kurso.";
 $Group = "Group";
+$ForumOfGroup = "";
+$BackToGroupList = "";
+$EditGroupCategory = "";
 ?>

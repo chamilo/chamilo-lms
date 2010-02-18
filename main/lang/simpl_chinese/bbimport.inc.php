@@ -1,23 +1,24 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$langViewCourseMaterialImport  = "²é¿´½«Òªµ¼ÈëµÄ¿Î³Ì²ÄÁÏ";
-$langViewExternalLinksImport  = "²é¿´½«Òªµ¼ÈëµÄÍâ²¿Á´½Ó";
-$langViewForumImport  = "²é¿´½«Òªµ¼ÈëµÄÂÛÌ³";
-$langImportCourseMaterial  = "µ¼Èë¿Î³Ì²ÄÁÏ£¨±Ï²©¹¤¾ß¡°¿Î³Ì²ÄÁÏ¡±£©";
-$langImportExternalLinks  = "µ¼ÈëÁ´½Ó£¨±Ï²©¹¤¾ß¡°Íâ²¿Á´½Ó¡±£©";
-$langImportForum  = "µ¼ÈëÂÛÌ³£¨±Ï²©¹¤¾ß¡°ÌÖÂÛ°å¡±£©";
-$langToolInfo  = "Õâ¸ö¹¤¾ßµ¼ÈëBlackboard 5.5 ¿Î³Ì£¨¿Î³Ì²ÄÁÏ£¬ÌÖÂÛ°åºÍÍâ²¿Á´½Ó£©";
-$langToolName = "µ¼ÈëBlackboard¿Î³Ì";
-$langSelectCoursePackage = "Ñ¡Ôñ¿Î³Ì°ü";
-$langPackageAlreadySelected = "ÄãÒÑ¾­Ñ¡ÔñÁË¿Î³Ì°ü";
-$langFirstSelectPackage = "Äã±ØÐëÊ×ÏÈÑ¡ÔñÒ»¸ö°ü, È»ºóÔÚ´¦Àíµ¼ÈëÇ°´ò¿ªËü.";
-$langCourseToMigrate = "Ç¨ÒÆµÄ¿Î³Ì";
-$langSelectPackage = "Ñ¡Ôñ°ü";
-$langOpenPackageForImporting = "µ¼ÈëÊ±´ò¿ªÕâ¸ö°ü";
-$langInformation = "µ¼Èë´¦ÀíµÄÐÅÏ¢";
-$langChooseImportOptions = "Ñ¡ÔñÄãµÄµ¼ÈëÑ¡Ïî";
-$langCheckWhatIsImported = "¿ªÊ¼µ¼ÈëÇ°, Çë²é¿´Òªµ¼ÈëµÄÄÚÈÝ";
-$langStartImporting = "¿ªÊ¼µ¼Èë";
-$langImport = "µ¼Èë";
+$langViewCourseMaterialImport = "æŸ¥çœ‹è¦å¯¼å…¥çš„è¯¾ç¨‹ææ–™";
+$langViewExternalLinksImport = "æŸ¥çœ‹è¦å¯¼å…¥çš„å¤–éƒ¨é“¾æŽ¥";
+$langViewForumImport = "æŸ¥çœ‹è¦å¯¼å…¥çš„è®ºå›";
+$langImportCourseMaterial = "å¯¼å…¥è¯¾ç¨‹ææ–™ï¼ˆæ¯•åšå·¥å…·â€œè¯¾ç¨‹ææ–™â€ï¼‰";
+$langImportExternalLinks = "å¯¼å…¥é“¾æŽ¥ï¼ˆæ¯•åšå·¥å…·â€œå¤–éƒ¨é“¾æŽ¥â€ï¼‰";
+$langImportForum = "å¯¼å…¥è®ºå›ï¼ˆæ¯•åšå·¥å…·â€œè®¨è®ºæ¿â€ï¼‰";
+$langToolInfo = "è¿™ä¸ªå·¥å…·å¯¼å…¥æ¯•åš 5.5 è¯¾ç¨‹ï¼ˆè¯¾ç¨‹ææ–™ï¼Œè®¨è®ºæ¿å’Œå¤–éƒ¨é“¾æŽ¥ï¼‰";
+$langToolName = "å¯¼å…¥æ¯•åšè¯¾ç¨‹";
+$langSelectCoursePackage = "é€‰æ‹©è¯¾ç¨‹åŒ…";
+$langPackageAlreadySelected = "ä½ å·²ç»é€‰æ‹©äº†è¯¾ç¨‹åŒ…";
+$langFirstSelectPackage = "ä½ å¿…é¡»é¦–å…ˆé€‰æ‹©ä¸€ä¸ªåŒ…ï¼Œç„¶åŽåœ¨å¤„ç†å¯¼å…¥å‰æ‰“å¼€å®ƒã€‚";
+$langCourseToMigrate = "è¿ç§»çš„è¯¾ç¨‹";
+$langSelectPackage = "é€‰æ‹©åŒ…";
+$langOpenPackageForImporting = "å¯¼å…¥æ—¶æ‰“å¼€è¿™ä¸ªåŒ…";
+$langInformation = "å¯¼å…¥å¤„ç†çš„ä¿¡æ¯";
+$langChooseImportOptions = "é€‰æ‹©ä½ çš„å¯¼å…¥é€‰é¡¹";
+$langCheckWhatIsImported = "å¼€å§‹å¯¼å…¥å‰ï¼Œè¯·æŸ¥çœ‹è¦å¯¼å…¥çš„å†…å®¹";
+$langStartImporting = "å¼€å§‹å¯¼å…¥";
+$langImport = "å¯¼å…¥";
 ?>

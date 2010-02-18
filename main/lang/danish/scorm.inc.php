@@ -1,43 +1,44 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $langScormVersion = "version";
 $langScormRestarted = "Alle trin er nu nulstillet.";
 $langScormNoNext = "Dette er det sidste trin.";
-$langScormNoPrev = "Dette er det først trin.";
+$langScormNoPrev = "Dette er det fÃ¸rst trin.";
 $langScormTime = "Tid";
-$langScormNoOrder = "Der er ingen specifik rækkefølge. Du kan klikke på et vilkårligt trin.";
+$langScormNoOrder = "Der er ingen specifik rÃ¦kkefÃ¸lge. Du kan klikke pÃ¥ et vilkÃ¥rligt trin.";
 $langScormScore = "Score";
-$langScormLessonTitle = "Titel på trin";
+$langScormLessonTitle = "Titel pÃ¥ trin";
 $langScormStatus = "Status";
-$langScormToEnter = "For at kunne gå til";
-$langScormFirstNeedTo = "skal du først færdiggøre";
+$langScormToEnter = "For at kunne gÃ¥ til";
+$langScormFirstNeedTo = "skal du fÃ¸rst fÃ¦rdiggÃ¸re";
 $langScormThisStatus = "Dette trin er nu";
 $langScormClose = "Afbryd";
 $langScormRestart = "Genstartet";
-$langScormCompstatus = "Fuldført";
-$langScormIncomplete = "Ikke fuldført";
-$langScormPassed = "Bestået";
-$langScormFailed = "Ikke bestået";
+$langScormCompstatus = "FuldfÃ¸rt";
+$langScormIncomplete = "Ikke fuldfÃ¸rt";
+$langScormPassed = "BestÃ¥et";
+$langScormFailed = "Ikke bestÃ¥et";
 $langScormPrevious = "Forrige";
-$langScormNext = "Næste";
+$langScormNext = "NÃ¦ste";
 $langScormTitle = "Chamilo Scorm afspiller";
 $langScormMystatus = "Min status";
 $langScormNoItems = "Dette indhold har ingen objekter.";
 $langScormNoStatus = "Ingen status for dette indhold";
-$langScormLoggedout = "logget ud af Scorm området";
+$langScormLoggedout = "logget ud af Scorm omrÃ¥det";
 $langScormCloseWindow = "Luk vinduer";
 $ScormBrowsed = "Gennemset/ browsed";
 $langScormExitFullScreen = "Tilbage til normal visning";
-$langScormFullScreen = "Fuldskærm";
-$langScormNotAttempted = "Ikke forsøgt";
+$langScormFullScreen = "FuldskÃ¦rm";
+$langScormNotAttempted = "Ikke forsÃ¸gt";
 $langCharset = "Bogstavpar";
 $langLocal = "Lokal";
 $langRemote = "Fjern";
 $langAutodetect = "Auto-opdage";
-$langAccomplishedStepsTotal = "Antal gennemførte trin";
+$langAccomplishedStepsTotal = "Antal gennemfÃ¸rte trin";
 $langUnknown = "Ukendt";
-$AreYouSureToDeleteSteps = "Er du sikker på, at du vil slette disse trin?";
+$AreYouSureToDeleteSteps = "Er du sikker pÃ¥, at du vil slette disse trin?";
 $Origin = "Oprindelig";
 $Local = "Lokal";
 $Remote = "Fjern";
@@ -45,11 +46,12 @@ $FileToUpload = "SCORM eller AICC fil, der skal uploades";
 $ContentMaker = "Orindelige kursusside";
 $ContentProximity = "Kursussidens placering";
 $UploadLocalFileFromGarbageDir = "Upload lokal fril fra hovedmappe";
-$ThisItemIsNotExportable = "Dette element er pt. ikke SCORM kompatibelt. Derfor kan det ikke eksporteres. ";
+$ThisItemIsNotExportable = "Dette element er pt. ikke SCORM kompatibelt. Derfor kan det ikke eksporteres.";
 $MoveCurrentChapter = "Flyt det aktuelle kapitel";
-$GenericScorm = "Fælles SCORM";
-$UnknownPackageFormat = "Formatet kan ikke genkendes. Venligst undersøg, at det er udviklet korrekt og ikke indeholder fejl. Problemerne kan skyldes Zip-formatet eller overførsel af for store filer. Hvis du er usikker vedr. Zip, kan du forsøge at anvende standard zip-indstillingerne i dit program til dette.";
-$Attempt = "Forsøg";
+$GenericScorm = "FÃ¦lles SCORM";
+$UnknownPackageFormat = "Formatet kan ikke genkendes. Venligst undersÃ¸g, at det er udviklet korrekt og ikke indeholder fejl. Problemerne kan skyldes Zip-formatet eller overfÃ¸rsel af for store filer. Hvis du er usikker vedr. Zip, kan du forsÃ¸ge at anvende standard zip-indstillinge";
+$Attempt = "ForsÃ¸g";
 $MoveTheCurrentForum = "Flyt det aktuelle forum";
-$WarningWhenEditingScorm = "Advarsel!</br> Når du redigerer indholdet i et SCORM-baseret trin, forandrer du evt. læringsstien eller ødelægger det pågældende trin.";
+$WarningWhenEditingScorm = "Advarsel!</br> NÃ¥r du redigerer indholdet i et SCORM-baseret trin, forandrer du evt. lÃ¦ringsstien eller Ã¸delÃ¦gger det pÃ¥gÃ¦ldende trin.";
+$AdditionalProfileField = "";
 ?>

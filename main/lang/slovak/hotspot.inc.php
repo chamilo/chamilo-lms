@@ -1,20 +1,25 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $select = "Vybra&#357;";
-$square = "Štvorec";
+$square = "ÂŠtvorec";
 $circle = "Elipsa";
-$poly = "Mnohouholník";
+$poly = "MnohouholnÃ­k";
 $status1 = "Kresli&#357; hotspot.";
-$status2_other = "Pre uloženie hotspotu pustite tla&#269;idlo myši.";
-$status3 = "Hotspot uložený";
-$exercise_status_1 = "Stav: Otázka zatia&#318; nedokon&#269;ená";
+$status2_poly = "";
+$status2_other = "Pre uloÂženie hotspotu pustite tla&#269;idlo myÂši.";
+$status3 = "Hotspot uloÂženÃ½";
+$exercise_status_1 = "Stav: OtÃ¡zka zatia&#318; nedokon&#269;enÃ¡";
 $exercise_status_2 = "Potvrdi&#357; odpovede";
-$exercise_status_3 = "Stav: Otázka dokon&#269;ená";
-$showUserPoints = "Ukáza&#357;/Skry&#357; kliky používate&#318;a";
-$showHotspots = "Ukáza&#357; / Skry&#357; hotspoty";
-$labelPolyMenu = "Ukon&#269;i&#357; mnohouholník";
+$exercise_status_3 = "Stav: OtÃ¡zka dokon&#269;enÃ¡";
+$showUserPoints = "UkÃ¡za&#357;/Skry&#357; kliky pouÂžÃ­vate&#318;a";
+$showHotspots = "UkÃ¡za&#357; / Skry&#357; hotspoty";
+$labelPolyMenu = "Ukon&#269;i&#357; mnohouholnÃ­k";
+$triesleft = "";
+$exeFinished = "";
 $nextAnswer = "Teraz kliknite na: &done=done";
 $delineation = "Zobrazenie";
 $labelDelineationMenu = "Ukon&#269;i&#357; zobrazenie";
+$oar = "";
 ?>

@@ -1,5 +1,6 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $langShouldBeCSVFormat = "Fisierul este in format CSV. Nu adaugati spatii. Structura treubie sa fie exact ca :";
 $langTracking = "Urmarire";
@@ -9,9 +10,11 @@ $langUpdateImage = "Schimba imaginea";
 $langImageWrong = "Fisierul trebuie sa fie mai mic de";
 $langAddImage = "Imagine";
 $langCourseManager = "Profesor";
+$NewPass = "";
+$CurrentPasswordEmptyOrIncorrect = "";
 $password_request = "Ai solicitat resetarea parolei. Daca nu ai facut aceasta solicitare ignora acest email. Pentru a reseta parola click pe link.";
 $YourPasswordHasBeenEmailed = "Parola ti-a fost trimisa pe email.";
-$lang_enter_email_and_well_send_you_password = "Introdu adresa de email pe care ai folosit-o la inregistrare si iti vom trimite parola. ";
+$lang_enter_email_and_well_send_you_password = "Introdu adresa de email pe care ai folosit-o la inregistrare si iti vom trimite parola.";
 $langLogin = "Log In";
 $langAction = "Actiune";
 $langPreserved = "Pastrat";
@@ -35,7 +38,7 @@ $langGiveAdmin = "Fa-l administrator";
 $langUserNumber = "numar";
 $langDownloadUserList = "Incarca lista";
 $langSend = "Trimite";
-$langUserAddExplanation = "fiecare linie din fisier trebuie sa includa doar 5 campuri : <b>Nume   Prenume   Logare   Parola   E-mail </b> separate de taburi in aceasta ordine. Utilizatorii vor primii un e-mail de confirmare cu login/parola.";
+$langUserAddExplanation = "fiecare linie din fisier trebuie sa includa doar 5 campuri : <b>NumeÂ Â Â PrenumeÂ Â Â LogareÂ Â Â ParolaÂ Â Â E-mail </b> separate de taburi in aceasta ordine. Utilizatorii vor primii un e-mail de confirmare cu login/parola.";
 $langUserMany = "Importa lista utilizatorilor din fisier CSV / XML";
 $langOneByOne = "Adauga manual utilizatori";
 $langNow = "acum";
@@ -77,8 +80,8 @@ $langSettings = "cu urmatoarele setari: *Nume de utilizator*:";
 $langYouAreReg = "Te-ai inregistrat pe";
 $langYourReg = "Inregistrarea ta la";
 $langUserFree = "Acest nume de utilizator este deja folosit. Foloseste butonul BACK al browser-ului pentru a alege alt nume.";
-$langEmptyFields = "Ai lasat campuri necompletate. Foloseste butonul BACK al browserului pentru a mai încerca o data.";
-$langPassTwice = "Ai scris doua parole diferite. Foloseste butonul BACK al browserului pentru a mai încerca o data.";
+$langEmptyFields = "Ai lasat campuri necompletate. Foloseste butonul BACK al browserului pentru a mai Ã®ncerca o data.";
+$langPassTwice = "Ai scris doua parole diferite. Foloseste butonul BACK al browserului pentru a mai Ã®ncerca o data.";
 $langRegAdmin = "Creaza zone de curs";
 $langRegStudent = "Urmeaza cursuri";
 $langConfirmation = "Confirmare";
@@ -152,5 +155,25 @@ $PictureUploaded = "Fotografia a fost actualizata";
 $ProductionUploaded = "Fisierul dvs. de productie este incarcat.";
 $FolderUpdated = "Dosarul a fost actualizat.";
 $UsersRegistered = "Acesti utilizatori sunt inscrisi la curs";
+$UserAlreadyRegisterByOtherCreator = "";
+$UserCreatedPlatform = "";
+$UserInSession = "";
+$UserNotAdded = "";
+$NoSessionId = "";
 $NoUsersRead = "Va rugam sa controlati XML/CVS";
+$UserImportFileMessage = "";
+$UserAlreadyRegisteredByOtherCreator = "";
+$NewUserInTheCourse = "";
+$MessageNewUserInTheCourse = "";
+$EditNormalProfile = "";
+$EditExtendProfile = "";
+$EditInformation = "";
+$RegisterUser = "";
+$IHaveReadAndAgree = "";
+$ByClickingRegisterYouAgreeTermsAndConditions = "";
+$User = "";
+$LostPass = "";
+$EnterEmailUserAndWellSendYouPassword = "";
+$NoUserAccountWithThisEmailAddress = "";
+$WithTheFollowingSettings = "";
 ?>

@@ -1,39 +1,40 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$MessageEmptyMessageOrSubject = "Adja meg az üzenet tárgyát vagy szövegét";
-$Inbox  = "Beérkez&#337; üzenetek";
-$Messages = "Üzenetek";
-$SendMessage = "Üzenet küldése";
-$NewMessage = "Új üzenet";
-$ComposeMessage = "Üzenet írása";
-$DeleteSelectedMessages = "Kijelölt üzenetek törlése";
-$SelectAll = "Összes kijelölése";
-$DeselectAll  = "Összes kijelölés megszüntetése";
-$ReplyToMessage = "Válasz";
-$BackToInbox = "Vissza a bejöv&#337; üzenetekhez";
-$MessageSentTo = "Az üzenet az alábbi címzett számára elküldésre került:";
-$SendMessageTo = "Elküld";
+$MessageEmptyMessageOrSubject = "Adja meg az Ã¼zenet tÃ¡rgyÃ¡t vagy szÃ¶vegÃ©t";
+$Inbox = "BeÃ©rkez&#337; Ã¼zenetek";
+$Messages = "Ãœzenetek";
+$SendMessage = "Ãœzenet kÃ¼ldÃ©se";
+$NewMessage = "Ãšj Ã¼zenet";
+$ComposeMessage = "Ãœzenet Ã­rÃ¡sa";
+$DeleteSelectedMessages = "KijelÃ¶lt Ã¼zenetek tÃ¶rlÃ©se";
+$SelectAll = "Ã–sszes kijelÃ¶lÃ©se";
+$DeselectAll = "Ã–sszes kijelÃ¶lÃ©s megszÃ¼ntetÃ©se";
+$ReplyToMessage = "VÃ¡lasz";
+$BackToInbox = "Vissza a bejÃ¶v&#337; Ã¼zenetekhez";
+$MessageSentTo = "Az Ã¼zenet az alÃ¡bbi cÃ­mzett szÃ¡mÃ¡ra elkÃ¼ldÃ©sre kerÃ¼lt:";
+$SendMessageTo = "ElkÃ¼ld";
 $Myself = "magamnak";
-$From = "Feladó";
-$To = "Címzett";
-$Date = "Dátum";
-$InvalidMessageId = "A megválaszolní kívánt üzenet azonosítója érvénytelen.";
-$ErrorSendingMessage = "Az üzenet elküldése közben hiba lépett fel.";
-$SureYouWantToDeleteSelectedMessages = "Biztos benne, hogy törölni kívánja a kiválasztott üzenetet?";
-$SelectedMessagesDeleted = "A kiválasztott üzenetek törlésre kerültek";
-$EnterTitle = "Adjon meg egy címet";
-$TypeYourMessage = "Írja ide az üzenetét";
-$MessageDeleted = "Az üzenete törölve";
-$ConfirmDeleteMessage = "Biztosan törölni akarja a kiválasztott üzenetet?";
-$DeleteMessage = "Üzenet törlése";
-$ReadMessage = "Üzenet elolvasása";
-$SendInviteMessage = "Meghívó üzenet küldése";
-$SendMessageInvitation = "Biztosan el akarja küldeni ezeket a meghívásokat?";
-$MessageTool = "Üzenetek eszköz";
-$SendMessage = "Üzenet küldése";
-$WriteAMessage = "Üzenet írása";
-$AlreadyReadMessage = "Elolvasott üzenet";
-$UnReadMessage = "Elolvasatlan üzenet";
-$MessageSent = "Az üzenet elküldve";
+$From = "FeladÃ³";
+$To = "CÃ­mzett";
+$Date = "DÃ¡tum";
+$InvalidMessageId = "A megvÃ¡laszolnÃ­ kÃ­vÃ¡nt Ã¼zenet azonosÃ­tÃ³ja Ã©rvÃ©nytelen.";
+$ErrorSendingMessage = "Az Ã¼zenet elkÃ¼ldÃ©se kÃ¶zben hiba lÃ©pett fel.";
+$SureYouWantToDeleteSelectedMessages = "Biztos benne, hogy tÃ¶rÃ¶lni kÃ­vÃ¡nja a kivÃ¡lasztott Ã¼zenetet?";
+$SelectedMessagesDeleted = "A kivÃ¡lasztott Ã¼zenetek tÃ¶rlÃ©sre kerÃ¼ltek";
+$EnterTitle = "Adjon meg egy cÃ­met";
+$TypeYourMessage = "Ãrja ide az Ã¼zenetÃ©t";
+$MessageDeleted = "Az Ã¼zenete tÃ¶rÃ¶lve";
+$ConfirmDeleteMessage = "Biztosan tÃ¶rÃ¶lni akarja a kivÃ¡lasztott Ã¼zenetet?";
+$DeleteMessage = "Ãœzenet tÃ¶rlÃ©se";
+$ReadMessage = "Ãœzenet elolvasÃ¡sa";
+$SendInviteMessage = "MeghÃ­vÃ³ Ã¼zenet kÃ¼ldÃ©se";
+$SendMessageInvitation = "Biztosan el akarja kÃ¼ldeni ezeket a meghÃ­vÃ¡sokat?";
+$MessageTool = "Ãœzenetek eszkÃ¶z";
+$WriteAMessage = "Ãœzenet Ã­rÃ¡sa";
+$AlreadyReadMessage = "Elolvasott Ã¼zenet";
+$UnReadMessage = "Elolvasatlan Ã¼zenet";
+$MessageSent = "Az Ã¼zenet elkÃ¼ldve";
+$YouShouldWriteAMessage = "";
 ?>

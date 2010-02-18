@@ -1,9 +1,10 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$TermAddNew = "Adicionar novo termo ao glossário";
+$TermAddNew = "Adicionar novo termo ao glossÃ¡rio";
 $TermName = "Termo";
-$TermDefinition = "Definição do termo";
+$TermDefinition = "DefiniÃ§Ã£o do termo";
 $TermDeleted = "Termo removido";
 $TermUpdated = "Termo actualizado";
 $TermConfirmDelete = "Deseja mesmo eliminar este termo?";
@@ -12,16 +13,16 @@ $TermUpdateButton = "Actualizar termo";
 $TermEdit = "Editar termo";
 $TermDeleteAction = "Eliminar termo";
 $OrderBy = "Ordenar por";
-$CreationDate = "Data de criação";
+$CreationDate = "Data de criaÃ§Ã£o";
 $UpdateDate = "Actualizado";
-$PreSelectedOrder = "Pré-definido";
+$PreSelectedOrder = "PrÃ©-definido";
 $TermAdded = "Termo adicionado";
 $YouMustEnterATermName = "Tem de introduzir um termo";
-$YouMustEnterATermDefinition = "Tem de introduzir a definição de um termo";
+$YouMustEnterATermDefinition = "Tem de introduzir a definiÃ§Ã£o de um termo";
 $TableView = "Visualizar tabela";
-$GlossaryTermAlreadyExistsYouShouldEditIt = "Este termo do glossário já existe. Por favor modifique o nome do termo.";
-$GlossaryManagement  = "Gestão do glossário";
+$GlossaryTermAlreadyExistsYouShouldEditIt = "Este termo do glossÃ¡rio jÃ¡ existe. Por favor modifique o nome do termo.";
+$GlossaryManagement = "GestÃ£o do glossÃ¡rio";
 $TermMoved = "O termo foi movido";
-$ShowGlossaryInExtraToolsTitle = "Apresentar o glossário de termos nas ferramentas extra";
-$ShowGlossaryInExtraToolsComment = "Neste local pode configurar como adicionar o glossário de termos nas ferramentas extras como um percurso/caminho de aprendizagem e ferramenta de exercício";
+$ShowGlossaryInExtraToolsTitle = "Apresentar o glossÃ¡rio de termos nas ferramentas extra";
+$ShowGlossaryInExtraToolsComment = "Neste local pode configurar como adicionar o glossÃ¡rio de termos nas ferramentas extras como um percurso/caminho de aprendizagem e ferramenta de exercÃ­cio";
 ?>

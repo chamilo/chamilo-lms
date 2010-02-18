@@ -1,25 +1,28 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$TermAddNew = "Dodaj novo besedo";
-$TermName = "Beseda";
-$TermDefinition = "Pomen besede";
-$TermDeleted = "Beseda je bila odstranjena";
-$TermUpdated = "Beseda je bila a�urirana";
-$TermConfirmDelete = "Resni�no �elite odstraniti to besedo";
-$TermAddButton = "Dodaj to besedo";
-$TermUpdateButton = "A�uriraj besedo";
-$TermEdit = "Uredi besedo";
-$TermDeleteAction = "Odstrani besedo";
-$OrderBy = "Urejeno po";
+$TermAddNew = "Dodaj nov pomenski termin";
+$TermName = "Ime termina";
+$TermDefinition = "Definicija termina";
+$TermDeleted = "Termin je bil odstranjen";
+$TermUpdated = "Termin je bil ažuriran";
+$TermConfirmDelete = "Ali resnično želite odstraniti ta termin";
+$TermAddButton = "Dodaj ta termin";
+$TermUpdateButton = "Ažuriraj termin";
+$TermEdit = "Uredi termin";
+$TermDeleteAction = "Odstrani termin";
+$OrderBy = "Razvrščeno po";
 $CreationDate = "Datum kreiranja";
 $UpdateDate = "Datum zadnje spremembe";
-$PreSelectedOrder = "Urejeno z izbiro";
-$TermAdded = "Beseda je bila dodana";
-$YouMustEnterATermName = "Vnesti je potrebno besedo";
-$YouMustEnterATermDefinition = "Vnesti je potrebno pomen besede";
-$TableView = "Prika�i kot tabelo";
-$GlossaryTermAlreadyExistsYouShouldEditIt = "Ta beseda �e obstaja. Spremenite prosim ime besede.";
-$GlossaryManagement  = "Upravljanje glosarija";
-$TermMoved = "Izraz je bil prestavljen";
+$PreSelectedOrder = "Razvrščanje z izbiro";
+$TermAdded = "Termin je bil dodan";
+$YouMustEnterATermName = "Vstaviti morate vsebino termina";
+$YouMustEnterATermDefinition = "Vstaviti morate definicijo termina";
+$TableView = "Pogled tabele";
+$GlossaryTermAlreadyExistsYouShouldEditIt = "Ta termin je že dodan. Izberite drugo ime termina.";
+$GlossaryManagement = "Upravljanje glosarija";
+$TermMoved = "Izraz je bil premaknjen";
+$ShowGlossaryInExtraToolsTitle = "Prikaži termine slovarja v dodatnih orodjih";
+$ShowGlossaryInExtraToolsComment = "Od tu lahko nastavite način dodajanja terminov slovarja v dodatnih orodjih, kot so npr. učna pot, testi, ...";
 ?>

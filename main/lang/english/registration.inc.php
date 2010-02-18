@@ -1,5 +1,6 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $langShouldBeCSVFormat = "File should be CSV format. Do not add spaces. Structure should be exactly :";
 $langTracking = "Reporting";
@@ -22,10 +23,10 @@ $langAdded = "Added";
 $langConfirmUnsubscribe = "Confirm user unsubscription";
 $langCourseName = "Training name";
 $langSubscribe = "Subscribe";
-$langSee = "Go to";
+$langSee = "GoÂ to";
 $langLastVisits = "My latest visits";
 $langIfYouWantToAddManyUsers = "If you want to add a list of users in			your training, please contact your web administrator.";
-$langPassTooEasy = "this password  is too simple. Use a pass like this ";
+$langPassTooEasy = "this password  is too simple. Use a pass like this";
 $langGroupUserManagement = "Groups management";
 $langAddedToCourse = "has been registered to your training";
 $langUserAlreadyRegistered = "A user with same name is already registered	in this training.";
@@ -37,7 +38,7 @@ $langGiveAdmin = "Make admin";
 $langUserNumber = "number";
 $langDownloadUserList = "Upload the list";
 $langSend = "Send request for a new password";
-$langUserAddExplanation = "Every line of file to send will necessarily and only include 5 fields: <b>First name   LastName   Login   Password   Email</b> separated by tabs and in this order. Users will receive email confirmation with login/password.";
+$langUserAddExplanation = "Every line of file to send will necessarily and only include 5 fields: <b>First nameÂ Â Â LastNameÂ Â Â LoginÂ Â Â PasswordÂ Â Â Email</b> separated by tabs and in this order. Users will receive email confirmation with login/password.";
 $langUserMany = "Import a users list";
 $langOneByOne = "Add user manually";
 $langNow = "now";
@@ -52,7 +53,7 @@ $langTheU = "The user";
 $langRegYou = "has registered you to this training";
 $langOneResp = "One of the trainingdministrators";
 $langTaken = "is already in use. Choose another one.";
-$langUserNo = "The login you chose ";
+$langUserNo = "The login you chose";
 $langFilled = "You have left some fields empty.";
 $langInC = "in this training";
 $langRole = "Description";
@@ -74,7 +75,7 @@ $langManager = "Manager";
 $langFormula = "Yours sincerely";
 $langProblem = "In case of trouble, contact us.";
 $langIs = "is";
-$langAddress = "The address of ";
+$langAddress = "The address of";
 $langSettings = "with the following settings : \\nLogin :";
 $langYouAreReg = "You are registered on";
 $langYourReg = "Your registration on";
@@ -147,7 +148,7 @@ $SubscribeUserToCourseAsTeacher = "Enroll trainers";
 $SendMessage = "Send message";
 $PasswordEncryptedForSecurity = "Your password is encrypted for security reasons. Thus, after pressing the link an e-mail will be sent to you again with your password.";
 $UsersUnsubscribed = "The selected users have been unsubscribed from the training";
-$SystemUnableToSendEmailContact = "Portal unable to send email contact ";
+$SystemUnableToSendEmailContact = "Portal unable to send email contact";
 $OpenIDCouldNotBeFoundPleaseRegister = "This OpenID could not be found in our database. Please register for a new account. If you have already an account with us, please edit your profile inside your account to add this OpenID";
 $UsernameMaxXCharacters = "The login needs to be maximum %s characters long";
 $PictureUploaded = "Your picture has been uploaded";
@@ -156,12 +157,12 @@ $FolderUpdated = "Folder updated";
 $UsersRegistered = "These users have been registered into the training";
 $UserAlreadyRegisterByOtherCreator = "User already register by other coach.";
 $UserCreatedPlatform = "User created in portal";
-$UserInSession = "User added into the session ";
+$UserInSession = "User added into the session";
 $UserNotAdded = "User not added.";
 $NoSessionId = "The session was not identified";
 $NoUsersRead = "Please verify your XML/CVS file";
 $UserImportFileMessage = "If in the XML/CVS file the logins are missing, the firstname and the lastname will merge to create a login, i.e Julio Montoya into jmontoya";
-$UserAlreadyRegisteredByOtherCreator = "User already register by other coach. ";
+$UserAlreadyRegisteredByOtherCreator = "User already register by other coach.";
 $NewUserInTheCourse = "New user in the training";
 $MessageNewUserInTheCourse = "There is a new user in the training";
 $EditNormalProfile = "Edit normal profile";

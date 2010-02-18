@@ -1,6 +1,10 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
+$ModifyEvaluation = "";
+$CreateLink = "";
+$AddResultNoStudents = "";
 $FlatView = "Vizualizare simpla";
 $ScoreEdit = "Editare regulilor pentru scoruri";
 $ScoreColor = "Culoarea scorului";
@@ -117,6 +121,74 @@ $CategoryEdited = "Categorie actualizata";
 $OnlyNumbers = "Doar numere";
 $IncorrectData = "Date incorecte";
 $Resource = "Resursa";
+$PleaseEnableScoringSystem = "";
+$AllResultDeleted = "";
+$ImportNoFile = "";
+$ProblemUploadingFile = "";
+$AllResultsEdited = "";
+$UserInfoDoesNotMatch = "";
+$ScoreDoesNotMatch = "";
 $FileUploadComplete = "Fisier incarcat cu succes";
 $NoResultsAvailable = "Nici un rezultat disponibil";
+$CannotChangeTheMaxNote = "";
+$GradebookWeightUpdated = "";
+$ChooseItem = "";
+$AverageResultsVsResource = "";
+$ToViewGraphScoreRuleMustBeEnabled = "";
+$GradebookPreviousWeight = "";
+$AddAssessment = "";
+$FolderView = "";
+$GradebookSkillsRanking = "";
+$SaveScoringRules = "";
+$AttachCertificate = "";
+$GradebookSeeListOfStudentsCertificates = "";
+$CreateCertificate = "";
+$UploadCertificate = "";
+$CertificateName = "";
+$CertificateOverview = "";
+$CreateCertificateWithTags = "";
+$ViewPresenceSheets = "";
+$ViewEvaluations = "";
+$NewPresenceSheet = "";
+$NewPresenceStep1 = "";
+$TitlePresenceSheet = "";
+$Trainer = "";
+$PresenceSheetCreatedBy = "";
+$SavePresence = "";
+$NewPresenceStep2 = "";
+$NoCertificateAvailable = "";
+$SaveCertificate = "";
+$CertificateNotRemoved = "";
+$CertificateRemoved = "";
+$NoDefaultCertificate = "";
+$DefaultCertificate = "";
+$PreviewCertificate = "";
+$IsDefaultCertificate = "";
+$ImportPresences = "";
+$AddPresences = "";
+$DeletePresences = "";
+$GradebookListOfStudentsCertificates = "";
+$NewPresence = "";
+$EditPresence = "";
+$SavedEditPresence = "";
+$PresenceSheetFormatExplanation = "";
+$ValidatePresenceSheet = "";
+$BackTo = "";
+$PresenceSheet = "";
+$PresenceSheets = "";
+$Evaluations = "";
+$SaveEditPresence = "";
+$Training = "";
+$Present = "";
+$Numero = "";
+$PresentAbsent = "";
+$ExampleXLSFile = "";
+$NoResultsInPresenceSheet = "";
+$EditPresences = "";
+$TotalWeightMustNotBeMoreThan = "";
+$ThereIsNotACertificateAvailableByDefault = "";
+$CertificateMinimunScoreIsRequiredAndMustNotBeMoreThan = "";
+$LinkMod = "";
+$EditLink = "";
+$CategoryDeleted = "";
 ?>

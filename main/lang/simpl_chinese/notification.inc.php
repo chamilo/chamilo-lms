@@ -1,18 +1,36 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$lang_new_item = "Ìí¼ÓÐÂÏîÄ¿";
-$lang_title_notification = "×ÔÉÏ´Î·ÃÎÊÒÔÀ´";
-$lang_update_agenda = "ÏÖÓÐÈÕ³ÌÏîÄ¿¸üÐÂ";
-$lang_new_agenda = "ÐÂµÄÈÕ³ÌÏîÄ¿ÒÑÌí¼Ó";
-$lang_update_announcements = "ÏÖÓÐ¹«¸æÒÑ¸üÐÂ";
-$lang_new_announcements = "ÐÂ¹«¸æÒÑÌí¼Ó";
-$lang_new_document = "ÐÂÎÄµµÒÑÌí¼Ó";
-$lang_new_exercise = "ÐÂÁ·Ï°ÒÑ¿ÉÊ¹ÓÃ";
-$lang_update_link = "ÏÖÓÐÁ´½ÓÐÅÏ¢ÒÑ¸üÐÂ";
-$lang_new_link = "ÐÂÁ´½ÓÒÑÌí¼Ó";
-$lang_new_forum_topic = "ÐÂÖ÷ÌâÒÑÌí¼Ó";
-$lang_new_groupforum_topic = "ÒÑÌí¼ÓÐÂ»°Ìâµ½×éÂÛÌ³";
-$lang_new_dropbox_file = "ÐÂÎÄµµÒÑÊÕµ½";
-$lang_update_dropbox_file = "Í¶µÝÏäÖÐµÄÎÄ¼þÒÑ¸üÐÂ";
+$lang_new_item = "æ·»åŠ æ–°é¡¹ç›®";
+$lang_title_notification = "è‡ªä¸Šæ¬¡è®¿é—®ä»¥æ¥";
+$lang_update_agenda = "çŽ°æœ‰æ—¥ç¨‹é¡¹ç›®æ›´æ–°";
+$lang_new_agenda = "æ–°çš„æ—¥ç¨‹é¡¹ç›®å·²æ·»åŠ ";
+$lang_update_announcements = "çŽ°æœ‰å…¬å‘Šå·²æ›´æ–°";
+$lang_new_announcements = "æ–°å…¬å‘Šå·²æ·»åŠ ";
+$lang_new_document = "æ–°æ–‡æ¡£å·²æ·»åŠ ";
+$lang_new_exercise = "æ–°ç»ƒä¹ å·²å¯ä½¿ç”¨";
+$lang_update_link = "çŽ°æœ‰é“¾æŽ¥ä¿¡æ¯å·²æ›´æ–°";
+$lang_new_link = "æ–°é“¾æŽ¥å·²æ·»åŠ ";
+$lang_new_forum_topic = "æ–°ä¸»é¢˜å·²æ·»åŠ ";
+$lang_new_groupforum_topic = "å·²æ·»åŠ æ–°è¯é¢˜åˆ°ç»„è®ºå›";
+$lang_new_dropbox_file = "æ–°æ–‡æ¡£å·²æ”¶åˆ°";
+$lang_update_dropbox_file = "æŠ•é€’ç®±ä¸­çš„æ–‡ä»¶å·²æ›´æ–°";
+$ForumCategoryAdded = "";
+$LearnpathAdded = "";
+$GlossaryAdded = "";
+$QuizQuestionAdded = "";
+$QuizQuestionUpdated = "";
+$QuizQuestionDeleted = "";
+$QuizUpdated = "";
+$QuizAdded = "";
+$QuizDeleted = "";
+$DocumentInvisible = "";
+$DocumentVisible = "";
+$CourseDescriptionAdded = "";
+$WikiAdded = "";
+$SurveyAdded = "";
+$NotebookAdded = "";
+$NotebookUpdated = "";
+$NotebookDeleted = "";
 ?>

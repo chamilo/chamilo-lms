@@ -1,5 +1,6 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $ResourceAdded = "Resurse adaugate. Te poti intoarce sau adauga mai multe resurse.";
 $LearningPath = "Calea de Invatare";

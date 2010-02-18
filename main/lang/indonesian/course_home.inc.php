@@ -1,13 +1,14 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $langActivate = "Aktifkan";
 $langDeactivate = "Non-aktifkan";
-$langInLnk  = "Non-aktif link";
+$langInLnk = "Non-aktif link";
 $langDelLk = "Apakah anda sungguh-sungguh ingin menghapus link ini?";
-$langCourseCreate  = "Buat situs mata kuliah";
-$langNameOfTheLink  = "Judul link";
-$lang_main_categories_list                  = "Daftar kategori utama";
+$langCourseCreate = "Buat situs mata kuliah";
+$langNameOfTheLink = "Judul link";
+$lang_main_categories_list = "Daftar kategori utama";
 $langCourseAdminOnly = "Hanya untuk Pengajar";
 $PlatformAdminOnly = "Hanya untuk Administrator Platform";
 $langCombinedCourse = "Mata kuliah gabungan";
@@ -22,4 +23,10 @@ $GreyIcons = "Kotak Tool";
 $Interaction = "Interaksi";
 $Authoring = "Authoring";
 $Administration = "Administrasi";
+$IntroductionTextUpdated = "";
+$IntroductionTextDeleted = "";
+$SessionIdentifier = "";
+$SessionName = "";
+$SessionCategory = "";
+$SessionData = "";
 ?>

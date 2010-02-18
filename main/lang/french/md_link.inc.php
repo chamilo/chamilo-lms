@@ -1,46 +1,47 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $langMdCallingTool = "Liens";
 $langMdTitle = "Nom du lien";
 $langMdDescription = "Description du lien";
 $langMdCoverage = "Universel";
-$langMdCopyright = "UniversitÈ de Gand";
-$nameTools = "variable dÈsuËte de langage";
+$langMdCopyright = "Universit√© de Gand";
+$nameTools = "variable d√©su√®te de langage";
 $langTool = "Liens Metadata";
-$langNoScript = "Le script n\'est pas permis dans votre navigateur, svp ignorer l\'Ècran au-dessous de ce texte, il ne fonctionnera pas...";
-$langLanguageTip = "Langue utilisÈe pour cet Objet d\'Apprentissage";
+$langNoScript = "Le script n\'est pas permis dans votre navigateur, svp ignorer l\'√©cran au-dessous de ce texte, il ne fonctionnera pas...";
+$langLanguageTip = "Langue utilis√©e pour cet Objet d\'Apprentissage";
 $langIdentifier = "Login";
-$langIdentifierTip = "seule identification pour cet objet d\'apprentissage, composÈe de lettres, chiffres, _-.()\'!*";
+$langIdentifierTip = "seule identification pour cet objet d\'apprentissage, compos√©e de lettres, chiffres, _-.()\'!*";
 $langTitleTip = "titre ou nom, et langage de ce titre ou nom";
-$langDescriptionTip = "description, commentaires et langue utilisÈs pour dÈcrire cet Objet d\'Apprentissage";
-$langKeyword = "Mots clÈs";
-$langKeywordTip = "sÈparer par des virgules (lettres, chiffres, )";
-$langCoverage = "CatÈgorie";
-$langCoverageTip = "Nom de catÈgorie";
-$langKwNote = "Si vous modifiez la langue utilisÈe pour la description, n\'ajoutez pas de mot-clÈ en mÍme temps";
-$langClickKw = "Cliquez sur un mot-clÈ dans l\'arborescence pour le sÈlectionner ou le dÈsÈlectionner.";
-$langKwHelp = "<br/> Cliquez sur le bouton + pour ouvrir, sur le bouton - pour fermer, sur le bouton ++ pour les ouvrir tous.<br/> <br/> Effacez tous les mots-clÈs en fermant l\'arborescence et pour l\'ouvrir, encore le bouton +. <br/>Alt-clic + recherche les mots-clÈs initiaux dans l\'arborescence.<br/> <br/> Alt-click mot-clÈ choisit un mot-clÈ sans  limite plus large ou dÈsÈlectionne un mot-clÈ avec des  limites plus larges.<br/> <br/> Si vous changez le langage de description, n\'ajoutez pas de mots-clÈs en mÍme temps.<br/> <br/>";
+$langDescriptionTip = "description, commentaires et langue utilis√©s pour d√©crire cet Objet d\'Apprentissage";
+$langKeyword = "Mots cl√©s";
+$langKeywordTip = "s√©parer par des virgules (lettres, chiffres, )";
+$langCoverage = "Cat√©gorie";
+$langCoverageTip = "Nom de cat√©gorie";
+$langKwNote = "Si vous modifiez la langue utilis√©e pour la description, n\'ajoutez pas de mot-cl√© en m√™me temps";
+$langClickKw = "Cliquez sur un mot-cl√© dans l\'arborescence pour le s√©lectionner ou le d√©s√©lectionner.";
+$langKwHelp = "<br/> Cliquez sur le bouton + pour ouvrir, sur le bouton - pour fermer, sur le bouton ++ pour les ouvrir tous.<br/> <br/> Effacez tous les mots-cl√©s en fermant l\'arborescence et pour l\'ouvrir, encore le bouton +. <br/>Alt-clic + recherche les mots-cl√©s";
 $langLocation = "Adresse URL";
 $langLocationTip = "Cliquez pour ouvrir l\'objet";
-$langStore = "Mettre en mÈmoire";
+$langStore = "Mettre en m√©moire";
 $langDeleteAll = "supprimer tous les Metadata";
-$langConfirmDelete = " tes-vous *certain* de vouloir effacer toutes les mÈtadonnÈes ?";
+$langConfirmDelete = "√ätes-vous *certain* de vouloir effacer toutes les m√©tadonn√©es ?";
 $langWorkOn = "sur";
-$langNotInDB = "Cette catÈgorie n\'a pas pu Ítre trouvÈe";
+$langNotInDB = "Cette cat√©gorie n\'a pas pu √™tre trouv√©e";
 $langManifestSyntax = "(erreur de syntaxe dans le fichier manifeste...)";
 $langEmptyManifest = "(le fichier manifeste est vide...)";
 $langNoManifest = "(pas de fichier manifeste...)";
-$langNotFolder = "est impossible, ce n\'est pas un rÈpertoire...";
+$langNotFolder = "est impossible, ce n\'est pas un r√©pertoire...";
 $langContinue = "Continuer avec";
-$langCreate = "CrÈer des entrÈes de MÈtadonnÈes";
-$langRemove = "Supprimer des entrÈes de MÈtadonnÈes";
-$langAllRemovedFor = "Toutes les entrÈes ont ÈtÈ retirÈes de la catÈgorie";
-$langRemainingFor = "les entrÈes obsolËtes ont ÈtÈ supprimÈes de la catÈgorie";
+$langCreate = "Cr√©er des entr√©es de M√©tadonn√©es";
+$langRemove = "Supprimer des entr√©es de M√©tadonn√©es";
+$langAllRemovedFor = "Toutes les entr√©es ont √©t√© retir√©es de la cat√©gorie";
+$langRemainingFor = "les entr√©es obsol√®tes ont √©t√© supprim√©es de la cat√©gorie";
 $langIndex = "Index";
-$langTotalMDEs = "Nombre total d\'entrÈes de MÈtadonnÈes";
+$langTotalMDEs = "Nombre total d\'entr√©es de M√©tadonn√©es";
 $langMainMD = "Ouvrir le MDE principal";
-$langOrElse = "SÈlectionnez une catÈgorie de liens";
-$langWarningDups = "- les noms de dossiers en double seront retirÈs de la liste !";
-$langSLC = "Travailler avec un dossier de liens nommÈ";
+$langOrElse = "S√©lectionnez une cat√©gorie de liens";
+$langWarningDups = "- les noms de dossiers en double seront retir√©s de la liste !";
+$langSLC = "Travailler avec un dossier de liens nomm√©";
 ?>

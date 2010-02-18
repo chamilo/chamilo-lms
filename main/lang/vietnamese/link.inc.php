@@ -1,13 +1,51 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$langLinkName = "Tên liên kết";
-$langLinkAdd = "Đã tạo liên kết mới";
-$langLinkMod = "Đã sửa liên kết";
-$langLinkDel = "Đã xoá liên kết";
-$langGiveURL = "Xin nhập địa chỉ URL";
-$langListDeleted = "Danh sách đã bị xoá";
-$langAddLink = "Thêm liên kết mới";
-$langDelList = "Xoá toàn bộ danh sách";
-$langModifyLink = "Sửa liên kết";
+$LinkMoved = "";
+$langLinkName = "TÃªn liÃªn káº¿t";
+$langLinkAdd = "ÄÃ£ táº¡o liÃªn káº¿t má»i";
+$langLinkAdded = "";
+$langLinkMod = "ÄÃ£ sá»­a liÃªn káº¿t";
+$langLinkModded = "";
+$langLinkDel = "ÄÃ£ xoÃ¡ liÃªn káº¿t";
+$langLinkDeleted = "";
+$langLinkDelconfirm = "";
+$langAllLinksDel = "";
+$langCategoryName = "";
+$langCategoryAdd = "";
+$langCategoryAdded = "";
+$langCategoryModded = "";
+$langCategoryDel = "";
+$langCategoryDeleted = "";
+$langCategoryDelconfirm = "";
+$langAllCategoryDel = "";
+$langGiveURL = "Xin nháº­p Äá»a chá» URL";
+$langGiveCategoryName = "";
+$langNoCategory = "";
+$showall = "";
+$shownone = "";
+$langListDeleted = "Danh sÃ¡ch ÄÃ£ bá» xoÃ¡";
+$langAddLink = "ThÃªm liÃªn káº¿t má»i";
+$langDelList = "XoÃ¡ toÃ n bá» danh sÃ¡ch";
+$langModifyLink = "Sá»­a liÃªn káº¿t";
+$langCsvImport = "";
+$langCsvFileNotFound = "";
+$langCsvFileNoSeps = "";
+$langCsvFileNoURL = "";
+$langCsvFileLine1 = "";
+$langCsvLinesFailed = "";
+$langCsvLinesOld = "";
+$langCsvLinesNew = "";
+$langCsvExplain = "";
+$langLinkUpdated = "";
+$langAll_Link_Deleted = "";
+$langOnHomepage = "";
+$langShowLinkOnHomepage = "";
+$General = "";
+$SearchFeatureDoIndexLink = "";
+$langSaveLink = "";
+$langSaveCategory = "";
+$BackToLinksOverview = "";
+$AddTargetOfLinkOnHomepage = "";
 ?>

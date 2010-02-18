@@ -1,34 +1,35 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $NewNote = "Nouvelle note";
 $Note = "Note";
-$NoteDeleted = "Note supprimée";
-$NoteUpdated = "Note mise à jour";
-$NoteCreated = "Note créée";
-$YouMustWriteANote = "Veuillez écrire une note";
+$NoteDeleted = "Note supprimÃ©e";
+$NoteUpdated = "Note mise Ã  jour";
+$NoteCreated = "Note crÃ©Ã©e";
+$YouMustWriteANote = "Veuillez Ã©crire une note";
 $SaveNote = "Enregistrer cette note";
-$WriteYourNoteHere = "Cliquez ici pour écrire une nouvelle note";
+$WriteYourNoteHere = "Cliquez ici pour Ã©crire une nouvelle note";
 $SearchByTitle = "Rechercher par titre";
 $WriteTheTitleHere = "Entrez le titre ici";
-$UpdateDate = "Dernière modification";
+$UpdateDate = "DerniÃ¨re modification";
 $NoteAddNew = "Ajouter une note dans mon carnet personnel";
-$OrderByCreationDate = "Par date de création";
+$OrderByCreationDate = "Par date de crÃ©ation";
 $OrderByModificationDate = "Par date de modif.";
 $OrderByTitle = "Par titre";
 $NoteTitle = "Note";
 $NoteComment = "Contenu";
-$NoteAdded = "Note ajoutée";
-$NoteConfirmDelete = "Êtes-vous certain de vouloir supprimer cette note";
+$NoteAdded = "Note ajoutÃ©e";
+$NoteConfirmDelete = "ÃŠtes-vous certain de vouloir supprimer cette note";
 $AddNote = "Enregistrer la note";
 $ModifyNote = "Modifier la note";
-$BackToNoteList = "Retour à la liste de notes";
+$BackToNoteList = "Retour Ã  la liste de notes";
 $NotebookManagement = "Gestion du cahier de notes";
-$BackToNotesList = "Retourner à la liste";
-$NotesSortedByTitleAsc = "Notes triées par titre (ascendant)";
-$NotesSortedByTitleDESC = "Notes triées par titre (descendant)";
-$NotesSortedByUpdateDateAsc = "Notes triées par date de modification (ascendant)";
-$NotesSortedByUpdateDateDESC = "Notes triées par date de modification (descendante)";
-$NotesSortedByCreationDateAsc = "Notes triées par date de création (ascendant)";
-$NotesSortedByCreationDateDESC = "Notes triées par date de création (descendant)";
+$BackToNotesList = "Retourner Ã  la liste";
+$NotesSortedByTitleAsc = "Notes triÃ©es par titre (ascendant)";
+$NotesSortedByTitleDESC = "Notes triÃ©es par titre (descendant)";
+$NotesSortedByUpdateDateAsc = "Notes triÃ©es par date de modification (ascendant)";
+$NotesSortedByUpdateDateDESC = "Notes triÃ©es par date de modification (descendante)";
+$NotesSortedByCreationDateAsc = "Notes triÃ©es par date de crÃ©ation (ascendant)";
+$NotesSortedByCreationDateDESC = "Notes triÃ©es par date de crÃ©ation (descendant)";
 ?>

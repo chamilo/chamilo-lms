@@ -1,6 +1,10 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
+$PublishSurvey = "";
+$CompareQuestions = "";
+$InformationUpdated = "";
 $SurveyTitle = "Titlul anchetei";
 $SurveyIntroduction = "Sondaj introductiv";
 $CreateNewSurvey = "Creaza o noua ancheta";
@@ -88,7 +92,7 @@ $AddAnswer = "Arata variantele de raspunsuri";
 $DisplayAnswersHorVert = "Specificati optiunile:";
 $AnswerOptions = "Variante de raspuns";
 $YesNo = "Da/Nu";
-$MultipleResponse = "Mai multe variante de raspunsuri";
+$MultipleResponse = "Mai multe variante de raspuns";
 $Open = "Deschis";
 $Dropdown = "Lista derulanta";
 $Pagebreak = "Sfarsitul paginii";
@@ -125,16 +129,15 @@ $CourseUsers = "Utilizatorii acestui curs";
 $SurveyPublication = "Publicarea anchetei";
 $AdditonalUsers = "Utilizatori extra";
 $MailText = "Textul mailului";
-$UseLinkSyntax = "Utilizatorii selectionati vor primi un e-mail cu textul scris de mai sus, precum si un link pe care trebuie sa faca clic pentru a completa ancheta. Daca doriti acest link undeva in text trebuie sa tastati ** link-ul ** (steluta steluta link steluta steluta). Acesta este apoi inlocuit automat de catre link unic. Daca **link** nu se adauga textului, atunci textul este adaugat la sfarsitul mailului.";
+$UseLinkSyntax = "Utilizatorii selectionati vor primi un e-mail cu textul scris de mai sus, precum si un link pe care trebuie sa faca clic pentru a completa ancheta. Daca doriti acest link undeva in text trebuie sa tastati ** link-ul ** (steluta steluta link steluta stelut";
 $DetailedReportByUser = "Raport detaliat al utilizatorului";
 $DetailedReportByQuestion = "Raport detaliat pe intrebare";
 $ComparativeReportDetail = "Cu acest raport puteti compara raspunsurile.";
-$CompleteReportDetail = "Acest raport ofera o imagine de ansamblu a tuturor raspunsurilor tuturor utilizatorilor cu privire la toate problemele. Puteti schimba raportul doar adaugand cateva intrebari in raport. Informatiile pe care le vezi pot fi, de asemenea, exportate catre un fisier CSV, astfel incat sa puteti procesa rezultatele intr-o aplicatie statica.";
+$CompleteReportDetail = "Acest raport ofera o imagine de ansamblu a tuturor raspunsurilor tuturor utilizatorilor cu privire la toate problemele. Puteti schimba raportul doar adaugand cateva intrebari in raport. Informatiile pe care le vezi pot fi, de asemenea, exportate catre un";
 $DetailedReportByUserDetail = "In acest raport aveti o evaluare a tuturor raspunsurilor unui anumit utilizator.";
 $DetailedReportByQuestionDetail = "In acest raport puteti vedea rezultatele fiecarei intrebari";
 $ReminderResendToAllUsers = "Aceasta este o atentionare pentru invitatie. Fiecare utilizator va primi un mail. Daca nu accesati aceasta optiune vor primi mailul doar utilizatorii noi.";
 $Multiplechoice = "Mai multe variante";
-$Multipleresponse = "Mai multe variante de raspuns";
 $Score = "Rezultat";
 $Shared = "Impartit";
 $Invite = "Invita";
@@ -162,6 +165,9 @@ $PeopleAnswered = "Persoane care au raspuns";
 $AnonymousSurveyCannotKnowWhoAnswered = "Aceasta ancheta e anonima. Nu puteti vedea cine a raspuns.";
 $IllegalSurveyId = "Numarul anchetei este necunoscut";
 $SurveyQuestionMoved = "Intrebarea a fost mutata";
+$IdenticalSurveycodeWarning = "";
+$ThisSurveyCodeSoonExistsInThisLanguage = "";
+$SurveyUserAnswersHaveBeenRemovedSuccessfully = "";
 $DeleteSurveyByUser = "Anuleaza raspunsurile acestui utilizator";
 $SelectType = "Selecteaza tipul";
 $Conditional = "Conditionat";
@@ -180,10 +186,21 @@ $Condition = "Conditie";
 $Primary = "primar";
 $Secondary = "Secundar";
 $CourseSettings = "Setarile cursului";
+$PleaseChooseACondition = "";
+$ChooseDifferentCategories = "";
 $Version = "Versiune";
 $Normal = "Normal";
+$NoLogOfDuration = "";
 $AutoInviteLink = "Utilizatorii neinvitati pot folosi acest link pentru a face ancheta:";
+$CompleteTheSurveysQuestions = "";
+$SurveysDeleted = "";
 $RemindUnanswered = "Trimite o atentionare doar persoanelor care nu au raspuns";
 $ModifySurvey = "Modifica ancheta";
+$CreateQuestionSurvey = "";
+$ModifyQuestionSurvey = "";
+$BackToSurvey = "";
+$UpdateInformation = "";
+$PleaseFillSurvey = "";
 $ReportingOverview = "Raportul de ansamblu";
+$ThereAreNotQuestionsForthisSurvey = "";
 ?>

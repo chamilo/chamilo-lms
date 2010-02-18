@@ -1,27 +1,28 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$langLinkSite = "Länk till en sajt (webbplats)";
-$langSubTitle = "Lägger sig till menyn på kursens hemsida som en länk till en sajt, en sida eller valfri URL. Tips: om du vill lägga till en länk till en sida, gå till den sidan, kopiera och klistra sedan in länkens address, som du hittar i URL-fältet högst upp i din webbläsare, i \"länk\"-fältet nedan.";
-$langAddPage            = "Lägg till en sida";
-$langSendPage           = "Sida att sända";
-$langCouldNot           = "Filen kunde inte sändas";
-$langOkSentLink         = "Din länk är nu skickad.<p>Den är nu tillgänglig från <a href=\"../..//index.php\">Kurshemsidan</a>";
-$langTooBig             = "Du valde ingen fil att sända, eller så var den för stor";
-$langExplanation        = "Sidan måste vara i HTML-format (eg. \"my_page.html\"). Den kommer att länka till från Hemsidan. Om du vill sända icke HTML-dokument (PDF, Word, Power Point, Video, etc.) använd <a href=../document/document.php>Dokumentverkyget</a>";
-$langPgTitle            = "Sidans titel";
-$langNoLinkURL          = "Var vänlig skriv länkens URL";
-$langLinkTarget = "Länkens mål";
-$langSameWindow = "I samma fönster";
-$langNewWindow = "I ett nytt fönster";
-$langAdded = "Länken är tillagd";
-$langAddLink = "Lägg till en länk";
-$langNoLinkName = "Var vänlig skriv länkens namn";
-$langEditLink = "Ändra Kurshemsidans länk";
-$langChangePress = "Ändra och tryck OK";
-$langLinkChanged = "Kurshemsidans länk är ändrad. Använd brödtextmenyn ovan för att komma till hemsidan.";
-$NoLinkName = "Ingen länkbeskrivning";
+$langLinkSite = "LÃ¤nk till en sajt (webbplats)";
+$langSubTitle = "LÃ¤gger sig till menyn pÃ¥ kursens hemsida som en lÃ¤nk till en sajt, en sida eller valfri URL. Tips: om du vill lÃ¤gga till en lÃ¤nk till en sida, gÃ¥ till den sidan, kopiera och klistra sedan in lÃ¤nkens address, som du hittar i URL-fÃ¤ltet hÃ¶gst upp i din webb";
+$langAddPage = "LÃ¤gg till en sida";
+$langSendPage = "Sida att sÃ¤nda";
+$langCouldNot = "Filen kunde inte sÃ¤ndas";
+$langOkSentLink = "Din lÃ¤nk Ã¤r nu skickad.<p>Den Ã¤r nu tillgÃ¤nglig frÃ¥n <a href=\\"../..//index.php\\">Kurshemsidan</a>";
+$langTooBig = "Du valde ingen fil att sÃ¤nda, eller sÃ¥ var den fÃ¶r stor";
+$langExplanation = "Sidan mÃ¥ste vara i HTML-format (eg. \\"my_page.html\\"). Den kommer att lÃ¤nka till frÃ¥n Hemsidan. Om du vill sÃ¤nda icke HTML-dokument (PDF, Word, Power Point, Video, etc.) anvÃ¤nd <a href=../document/document.php>Dokumentverkyget</a>";
+$langPgTitle = "Sidans titel";
+$langNoLinkURL = "Var vÃ¤nlig skriv lÃ¤nkens URL";
+$langLinkTarget = "LÃ¤nkens mÃ¥l";
+$langSameWindow = "I samma fÃ¶nster";
+$langNewWindow = "I ett nytt fÃ¶nster";
+$langAdded = "LÃ¤nken Ã¤r tillagd";
+$langAddLink = "LÃ¤gg till en lÃ¤nk";
+$langNoLinkName = "Var vÃ¤nlig skriv lÃ¤nkens namn";
+$langEditLink = "Ã„ndra Kurshemsidans lÃ¤nk";
+$langChangePress = "Ã„ndra och tryck OK";
+$langLinkChanged = "Kurshemsidans lÃ¤nk Ã¤r Ã¤ndrad. AnvÃ¤nd brÃ¶dtextmenyn ovan fÃ¶r att komma till hemsidan.";
+$NoLinkName = "Ingen lÃ¤nkbeskrivning";
 $NoLinkURL = "Ingen URL";
-$LinkChanged = "Länk ändrad";
-$OkSentLink = "Länken är skickad";
+$LinkChanged = "LÃ¤nk Ã¤ndrad";
+$OkSentLink = "LÃ¤nken Ã¤r skickad";
 ?>

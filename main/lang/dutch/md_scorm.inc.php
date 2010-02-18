@@ -1,5 +1,6 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $nameTools = "verouderde taalvariabele";
 $langMdCallingTool = "Leerpad &ndash; SCORM";
@@ -11,7 +12,7 @@ $langNoManifest = "(geenmanifest bestand&hellip;)";
 $langNotFolder = "zijn niet mogelijk, het is geen map&hellip;";
 $langUploadHtt = "Upload HTT-bestand";
 $langHttFileNotFound = "Nieuw HTT-bestand kan niet geopend worden (bv. leeg, te groot).";
-$langHttOk = "Het nieuwe HTT-bestand is geüpload.";
+$langHttOk = "Het nieuwe HTT-bestand is geÃ¼pload.";
 $langHttNotOk = "Het uploaden van het HTT-bestand is mislukt.";
 $langRemoveHtt = "Verwijder HTT-bestand";
 $langHttRmvOk = "Het HTT-bestand is verwijderd.";

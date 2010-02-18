@@ -1,5 +1,6 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $langNewGroupCreate = "Krei nova(j)n grupo(j)n";
 $langGroupCreation = "Kreo de novaj grupoj";
@@ -28,7 +29,7 @@ $langGroupTutor = "Gvidisto";
 $langGroupNoTutor = "(neniu)";
 $langGroupNone = "(neniu)";
 $langGroupNoneMasc = "(neniu)";
-$langAddTutors = "Mastrumi liston de akompanantoj ";
+$langAddTutors = "Mastrumi liston de akompanantoj";
 $langMyGroup = "mia grupo";
 $langOneMyGroups = "mia superrigardo";
 $langGroupSelfRegistration = "Registrado";
@@ -40,11 +41,13 @@ $langPublic = "publika";
 $langPropModify = "Modifi agorda&#309;ojn";
 $langState = "Stato";
 $langGroupFilledGroups = "Grupoj estas plenigitaj (a&#365; kompletigitaj) far de uzuloj de la listo \'Uzuloj\'.";
-$langSubscribed  = "uzuloj registritaj en tiu &#265;i kurso";
-$langStudentsNotInThisGroups  = "Uzuloj ne en tiu &#265;i grupo";
-$langQtyOfUserCanSubscribe_PartBeforeNumber  = "Uzulo rajtas membri al maksimume ";
-$langQtyOfUserCanSubscribe_PartAfterNumber  = " grupoj";
+$langSubscribed = "uzuloj registritaj en tiu &#265;i kurso";
+$langStudentsNotInThisGroups = "Uzuloj ne en tiu &#265;i grupo";
+$langQtyOfUserCanSubscribe_PartBeforeNumber = "Uzulo rajtas membri al maksimume";
+$langQtyOfUserCanSubscribe_PartAfterNumber = "Â grupoj";
 $langGroupLimit = "Limo";
+$CreateGroup = "";
+$ProceedToCreateGroup = "";
 $langStudentRegAllowed = "Lernantoj rajtas sin registri en grupojn";
 $langGroupAllowStudentUnregistration = "Lernantoj rajtas sin malregistri el grupoj";
 $langAllGroups = "&#264;iuj grupoj";
@@ -65,7 +68,7 @@ $langNoGroupsAvailable = "Neniuj grupoj disponeblaj";
 $langGroupsFromVirtualCourses = "Virtualaj kursoj";
 $NotAvailable = "Ne disponebla";
 $CreateSubgroups = "Krei subgrupojn";
-$CreateSubgroupsInfo = "Tiu agorda&#309;o ebligas kreadon de novaj grupoj la&#365; jam ekzistanta grupo. Donu la deziratan nombron da grupoj kaj elektu la ekzistantan grupon. La novaj grupoj krei&#285;os kaj &#265;iuj membroj de la ekzistanta grupo estos registritaj en la novajn grupojn. La ekzistantaj grupoj ne &#349;an&#285;i&#285;os.";
+$CreateSubgroupsInfo = "Tiu agorda&#309;o ebligas kreadon de novaj grupoj la&#365; jam ekzistanta grupo. Donu la deziratan nombron da grupoj kaj elektu la ekzistantan grupon. La novaj grupoj krei&#285;os kaj &#265;iuj membroj de la ekzistanta grupo estos registritaj en la novajn";
 $CreateNumberOfGroups = "Krei";
 $WithUsersFrom = "grupojn kun membroj el";
 $CategoryDeleted = "Tiu &#265;i kategorio estas forigita";
@@ -87,4 +90,8 @@ $GroupAnnouncements = "Anoncoj";
 $NoCategoriesDefined = "Neniu kategorio estas difinita";
 $GroupsFromClasses = "Grupoj sur bazo de klasoj";
 $GroupsFromClassesInfo = "Uzante &#265;i tiun opcion vi povas ekfari grupojn sur bazo de klasoj enskribitaj en via kurso";
+$Group = "";
+$ForumOfGroup = "";
+$BackToGroupList = "";
+$EditGroupCategory = "";
 ?>

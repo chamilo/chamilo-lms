@@ -1,23 +1,24 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$ResourceAdded = "Ressourcen er tilføjet. Du kan vælge at vende tilbage til læringsstien eller tilføje flere ressourcer.";
-$LearningPath = "Læringssti";
+$ResourceAdded = "Ressourcen er tilfÃ¸jet. Du kan vÃ¦lge at vende tilbage til lÃ¦ringsstien eller tilfÃ¸je flere ressourcer.";
+$LearningPath = "LÃ¦ringssti";
 $LevelUp = "Et niveau op";
-$AddIt = "Tilføj";
+$AddIt = "TilfÃ¸j";
 $MainCategory = "Hovedkategori";
-$lang_delete_added_resources = "Slet tilføjede ressourcer";
-$AddToLinks = "Tilføj til kursussidens links";
-$DontAdd = "tilføj ikke";
-$lang_show_all_added_resources = "Vis alle tilføjede ressourcer";
-$ResourcesAdded = "Ressourcerne er blevet tilføjet";
+$lang_delete_added_resources = "Slet tilfÃ¸jede ressourcer";
+$AddToLinks = "TilfÃ¸j til kursussidens links";
+$DontAdd = "tilfÃ¸j ikke";
+$lang_show_all_added_resources = "Vis alle tilfÃ¸jede ressourcer";
+$ResourcesAdded = "Ressourcerne er blevet tilfÃ¸jet";
 $BackTo = "Tilbage til";
 $ExternalResources = "Eksterne ressourcer";
-$CourseResources = "Ressourcer på kursussiden";
+$CourseResources = "Ressourcer pÃ¥ kursussiden";
 $ExternalLink = "Eksternt link";
-$DropboxAdd = "Tilføj Dueslaget til dette kapitel";
-$AddAssignmentPage = "Tilføj værktøjet Afleveringer til dette kapitel";
-$Exercise = "Øvelser";
+$DropboxAdd = "TilfÃ¸j Dueslaget til dette kapitel";
+$AddAssignmentPage = "TilfÃ¸j vÃ¦rktÃ¸jet Afleveringer til dette kapitel";
+$Exercise = "Ã˜velser";
 $Link = "Links";
 $AdValvas = "Meddelelser";
 $Document = "Dokument";
@@ -26,33 +27,33 @@ $IntroductionText = "Introduktionstekst";
 $CourseDescription = "Kursusbeskrivelse";
 $Groups = "Grupper";
 $Users = "Deltagere";
-$IntroductionTextAdd = "Tilføj en side med introduktionstekst til dette kapitel.";
-$CourseDescriptionAdd = "Tilføj en side med kursusbeskrivelsen i dette kapitel.";
-$GroupsAdd = "Tilføj Grupper til dette kapitel.";
-$UsersAdd = "Tilføj Deltagerlisten til dette kapitel.";
+$IntroductionTextAdd = "TilfÃ¸j en side med introduktionstekst til dette kapitel.";
+$CourseDescriptionAdd = "TilfÃ¸j en side med kursusbeskrivelsen i dette kapitel.";
+$GroupsAdd = "TilfÃ¸j Grupper til dette kapitel.";
+$UsersAdd = "TilfÃ¸j Deltagerlisten til dette kapitel.";
 $ExportableCourseResources = "Eksporterbare kursusressourcer";
 $DokeosRelatedCourseMaterial = "Systemrelaterede kursusressourcer";
-$LinkTarget = "Linket åbnes i";
+$LinkTarget = "Linket Ã¥bnes i";
 $SameWindow = "Samme vindue";
 $NewWindow = "Nyt vindue";
 $StepDeleted1 = "Dette";
-$StepDeleted2 = "object blev slettet i det værktøj.";
+$StepDeleted2 = "object blev slettet i det vÃ¦rktÃ¸j.";
 $Modify = "modificer";
 $Chapter = "Kapitel";
 $NoAgendaItems = "Der er ingen kalenderarrangementer";
-$AgendaAdd = "Tilføj et arrangement";
+$AgendaAdd = "TilfÃ¸j et arrangement";
 $UserGroupFilter = "Filtrer grupper";
-$AgendaSortChronologicallyUp = "Sorter kalenderen efter mest aktuelle arrangementer (seneste først)";
-$ShowCurrent = "Vis nuværende kalenderarrangementer";
+$AgendaSortChronologicallyUp = "Sorter kalenderen efter mest aktuelle arrangementer (seneste fÃ¸rst)";
+$ShowCurrent = "Vis nuvÃ¦rende kalenderarrangementer";
 $ModifyCalendarItem = "Rediger arrangement";
 $ItemTitle = "Titel";
 $Detail = "Detaljer";
 $EditSuccess = "Redigering gemt korrekt";
-$AddCalendarItem = "Tilføj arrangement";
-$AddAnn = "Tilføj meddelelse";
-$ForumAddNewTopic = "Forum: Tilføj nyt emne";
+$AddCalendarItem = "TilfÃ¸j arrangement";
+$AddAnn = "TilfÃ¸j meddelelse";
+$ForumAddNewTopic = "Forum: TilfÃ¸j nyt emne";
 $ForumEditTopic = "Forum: Rediger emne";
-$ExerciseAnswers = "Øvelse: Svar";
+$ExerciseAnswers = "Ã˜velse: Svar";
 $ForumReply = "Forum: Svar";
 $AgendaSortChronologicallyDown = "Sorter kalenderen kronologisk";
 ?>

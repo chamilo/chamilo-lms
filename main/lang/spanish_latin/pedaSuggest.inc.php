@@ -1,25 +1,26 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$GeneralDescription = "Descripción General";
-$GeneralDescriptionQuestions = "¿ Cuál es el papel y función del curso en el programa ? ¿ Se requieren actividades previas ? ¿ Qué relación tiene este curso con otros ?";
-$GeneralDescriptionInformation = "Describe el curso (número de horas, código, lugar donde se desarrolla...). Profesor (nombre, apellidos, despacho, teléfono, e-mail...). ";
+$GeneralDescription = "DescripciÃ³n General";
+$GeneralDescriptionQuestions = "Â¿ CuÃ¡l es el papel y funciÃ³n del curso en el programa ? Â¿ Se requieren actividades previas ? Â¿ QuÃ© relaciÃ³n tiene este curso con otros ?";
+$GeneralDescriptionInformation = "Describe el curso (nÃºmero de horas, cÃ³digo, lugar donde se desarrolla...). Profesor (nombre, apellidos, despacho, telÃ©fono, e-mail...).";
 $Objectives = "Objetivos";
-$ObjectivesInformation = "Presentación de los objetivos globales y específicos del curso";
-$ObjectivesQuestions = "¿ Qué quiere que los estudiantes sepan hacer al finalizar el curso ? ¿ Qué objetivos irán alcanzando durante el mismo ? ¿Qué habilidades desarrollarán ?";
-$Topics = "Tópicos";
+$ObjectivesInformation = "PresentaciÃ³n de los objetivos globales y especÃ­ficos del curso";
+$ObjectivesQuestions = "Â¿ QuÃ© quiere que los estudiantes sepan hacer al finalizar el curso ? Â¿ QuÃ© objetivos irÃ¡n alcanzando durante el mismo ? Â¿QuÃ© habilidades desarrollarÃ¡n ?";
+$Topics = "TÃ³picos";
 $TopicsInformation = "Lista de contenidos del curso. Importancia de cada contenido. Nivel de dificultad. Estructura e interdependencia entre sus apartados.";
-$TopicsQuestions = "¿ Cuál será el desarrollo del curso ? ¿ Dónde deben prestar especial atención los estudiantes ? ¿ Hay problemas identificados en la comprensión de algunos capítulos ? ¿ Cuánto debe dedicarse a cada parte del curso ?";
-$Methodology = "Metodología";
-$MethodologyQuestions = "¿ Qué métodos y actividades ayudarán a alcanzar los objetivos del curso ? ¿ Cuál es el calendario ?";
-$MethodologyInformation = "Presentación de las actividades (conferencias, disertaciones, investigaciones en grupo, laboratorios...).";
+$TopicsQuestions = "Â¿ CuÃ¡l serÃ¡ el desarrollo del curso ? Â¿ DÃ³nde deben prestar especial atenciÃ³n los estudiantes ? Â¿ Hay problemas identificados en la comprensiÃ³n de algunos capÃ­tulos ? Â¿ CuÃ¡nto debe dedicarse a cada parte del curso ?";
+$Methodology = "MetodologÃ­a";
+$MethodologyQuestions = "Â¿ QuÃ© mÃ©todos y actividades ayudarÃ¡n a alcanzar los objetivos del curso ? Â¿ CuÃ¡l es el calendario ?";
+$MethodologyInformation = "PresentaciÃ³n de las actividades (conferencias, disertaciones, investigaciones en grupo, laboratorios...).";
 $CourseMaterial = "Materiales del curso";
-$CourseMaterialQuestions = "¿ Existe una guía del curso, una colección de documentos, una bibliografía, una lista de enlaces de Internet ?";
-$CourseMaterialInformation = "Breve descripción de los materiales del curso.";
-$HumanAndTechnicalResources = "Recursos humanos y técnicos";
-$HumanAndTechnicalResourcesQuestions = "¿ Dispone de profesores, tutores, servicio de asistencia técnica, asistentes sociales, salas de computadoras ?";
-$HumanAndTechnicalResourcesInformation = "Breve descripción de las personas de contacto y de los recursos técnicos disponibles.";
-$Assessment  = "Asignaciones";
-$AssessmentQuestions = "¿ Cómo van a ser evaluados los estudiantes ? ¿ Cuáles son las estrategias para que éstos acaben dominando la materia ?";
-$AssessmentInformation = "Ejemplos de las preguntas de examen. Criterios de evaluación. Pistas y trucos.";
+$CourseMaterialQuestions = "Â¿ Existe una guÃ­a del curso, una colecciÃ³n de documentos, una bibliografÃ­a, una lista de enlaces de Internet ?";
+$CourseMaterialInformation = "Breve descripciÃ³n de los materiales del curso.";
+$HumanAndTechnicalResources = "Recursos humanos y tÃ©cnicos";
+$HumanAndTechnicalResourcesQuestions = "Â¿ Dispone de profesores, tutores, servicio de asistencia tÃ©cnica, asistentes sociales, salas de computadoras ?";
+$HumanAndTechnicalResourcesInformation = "Breve descripciÃ³n de las personas de contacto y de los recursos tÃ©cnicos disponibles.";
+$Assessment = "Asignaciones";
+$AssessmentQuestions = "Â¿ CÃ³mo van a ser evaluados los estudiantes ? Â¿ CuÃ¡les son las estrategias para que Ã©stos acaben dominando la materia ?";
+$AssessmentInformation = "Ejemplos de las preguntas de examen. Criterios de evaluaciÃ³n. Pistas y trucos.";
 ?>

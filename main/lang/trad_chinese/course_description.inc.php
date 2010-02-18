@@ -1,15 +1,20 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$langCourseProgram  = "&#35506;&#31243;&#31777;&#20171;";
-$langThisCourseDescriptionIsEmpty  = "&#36889;&#38272;&#35506;&#31243;&#30446;&#21069;&#36996;&#27794;&#26377;&#35506;&#31243;&#35498;&#26126;";
-$langEditCourseProgram  = "&#21109;&#24314;&#21644;&#32232;&#36655;&#35506;&#31243;&#31777;&#20171;";
-$QuestionPlan  = "&#21069;&#23566;&#21839;&#38988;";
-$langInfo2Say  = "&#30332;&#36865;&#32102;&#20351;&#29992;&#32773;&#30340;&#20449;&#24687;";
-$langOuAutreTitre  = "&#20027;&#38988;";
-$langNewBloc  = "&#20854;&#20182;";
-$langAddCat  = "&#26032;&#22686;&#30446;&#37636;";
-$langAdd  = "&#22686;&#21152;";
-$langValid  = "&#21487;&#29992;&#30340;";
-$langBackAndForget  = "&#36820;&#22238;&#20006;&#21462;&#28040;";
+$langCourseProgram = "課程介紹";
+$langThisCourseDescriptionIsEmpty = "本課程目前沒有簡介";
+$langEditCourseProgram = "創建和編輯課程簡介";
+$QuestionPlan = "向老師提問";
+$langInfo2Say = "發送給用戶的訊息";
+$langOuAutreTitre = "標題";
+$langNewBloc = "其他內容";
+$langAddCat = "添加分類";
+$langAdd = "添加";
+$langValid = "可用的";
+$langBackAndForget = "返回和取消";
+$CourseDescriptionUpdated = "已更新課程簡介";
+$CourseDescriptionDeleted = "已刪除課程簡介";
+$CourseDescriptionIntro = "要建立課程簡介，在標頭按下後填寫各欄資料。<br><br> 按確定後可再按另一標頭，編寫另一項課程簡介。";
+$langSaveDescription = "";
 ?>

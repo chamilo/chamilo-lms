@@ -1,23 +1,24 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$langViewCourseMaterialImport  = "&#26597;&#30475;&#23559;&#35201;&#23566;&#20837;&#30340;&#35506;&#31243;&#26448;&#26009;";
-$langViewExternalLinksImport  = "&#26597;&#30475;&#23559;&#35201;&#23566;&#20837;&#30340;&#22806;&#37096;&#37832;&#25509;";
-$langViewForumImport  = "&#26597;&#30475;&#23559;&#35201;&#23566;&#20837;&#30340;&#35542;&#22727;";
-$langImportCourseMaterial  = "&#23566;&#20837;&#35506;&#31243;&#26448;&#26009;&#65288;Blackboard &#24037;&#20855;&#12300;&#35506;&#31243;&#26448;&#26009;&#12301;&#65289;";
-$langImportExternalLinks  = "&#23566;&#20837;&#37832;&#25509;&#65288;Blackboard&#24037;&#20855;&#12300;&#22806;&#37096;&#37832;&#25509;&#12301;&#65289;";
-$langImportForum  = "&#23566;&#20837;&#35542;&#22727;&#65288;Blackboard &#24037;&#20855;&#12300;&#35342;&#35542;&#26495;&#12301;&#65289;";
-$langToolInfo  = " &#36889;&#20491;&#24037;&#20855;&#23566;&#20837;Blackboard 5.5 &#35506;&#31243;&#65288;&#35506;&#31243;&#26448;&#26009;&#65292;&#35342;&#35542;&#26495;&#21644;&#22806;&#37096;&#37832;&#25509;&#65289;";
-$langToolName = "&#23566;&#20837;Blackboard&#35506;&#31243;";
-$langSelectCoursePackage = "&#36984;&#25799;&#35506;&#31243;package";
-$langPackageAlreadySelected = "&#20320;&#24050;&#32147;&#36984;&#25799;&#20102;&#35506;&#31243;package";
-$langFirstSelectPackage = "&#20320;&#24517;&#38920;&#39318;&#20808;&#36984;&#25799;&#19968;&#20491;package&#65292;&#28982;&#24460;&#22312;&#34389;&#29702;&#23566;&#20837;&#21069;&#25171;&#38283;&#23427;";
-$langCourseToMigrate = "&#36983;&#31227;&#30340;&#35506;&#31243;";
-$langSelectPackage = "&#36984;&#25799;package";
-$langOpenPackageForImporting = "&#23566;&#20837;&#26178;&#25171;&#38283;&#36889;&#20491;package";
-$langInformation = "&#23566;&#20837;&#34389;&#29702;&#30340;&#20449;&#24687;";
-$langChooseImportOptions = "&#36984;&#25799;&#20320;&#30340;&#23566;&#20837;&#36984;&#38917;";
-$langCheckWhatIsImported = "&#23566;&#20837;&#36942;&#31243;&#38283;&#22987;&#21069;&#65292;&#20320;&#33021;&#26680;&#26597;&#30475;&#20160;&#40636;&#23559;&#35201;&#23566;&#20837;";
-$langStartImporting = "&#38283;&#22987;&#23566;&#20837;";
-$langImport = "&#23566;&#20837;";
+$langViewCourseMaterialImport = "檢視要匯入的課程材料";
+$langViewExternalLinksImport = "檢視要匯入的外部鏈接";
+$langViewForumImport = "檢視要匯入的論壇";
+$langImportCourseMaterial = "匯入課程材料（畢博工具“課程材料”）";
+$langImportExternalLinks = "匯入鏈接（畢博工具“外部鏈接”）";
+$langImportForum = "匯入論壇（畢博工具“討論板”）";
+$langToolInfo = "這個工具匯入畢博 5.5 課程（課程材料，討論板和外部鏈接）";
+$langToolName = "匯入畢博課程";
+$langSelectCoursePackage = "選擇課程包";
+$langPackageAlreadySelected = "你已經選擇了課程包";
+$langFirstSelectPackage = "你必須首先選擇一個包，然後在處理匯入前打開它。";
+$langCourseToMigrate = "遷移的課程";
+$langSelectPackage = "選擇包";
+$langOpenPackageForImporting = "匯入時打開這個包";
+$langInformation = "匯入處理的訊息";
+$langChooseImportOptions = "選擇你的匯入選項";
+$langCheckWhatIsImported = "開始匯入前，請檢視要匯入的內容";
+$langStartImporting = "開始匯入";
+$langImport = "匯入";
 ?>

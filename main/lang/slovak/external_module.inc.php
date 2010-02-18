@@ -1,25 +1,28 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$langLinkSite = "Odkaz na web str·nku";
-$langAddPage            = "Prida&#357; str·nku";
-$langSendPage           = "Str·nka na na&#269;Ìtanie";
-$langCouldNot           = "S˙bor nie je moûnÈ na&#269;Ìta&#357;";
-$langTooBig             = "Bu&#271; ste nevybrali s˙bor na zaslanie, alebo je ve&#318;mi ve&#318;k˝";
-$langExplanation        = "Str·nka musÌ by&#357; v HTML form·te (napr. \"moja_str·nka.htm\"). Bude dostupn· z domovskej str·nky. Ak chcete posla&#357; dokument v inom form·te ako HTML (PDF, Word, Power Point, Video, etc.) pouûite n·stroj <a href=../document/document.php>Documenty</a>";
-$langPgTitle            = "N·zov str·nky";
-$langNoLinkURL          = "ProsÌm zadajte URL odkazu";
+$langLinkSite = "Odkaz na web str√°nku";
+$langSubTitle = "";
+$langAddPage = "Prida&#357; str√°nku";
+$langSendPage = "Str√°nka na na&#269;√≠tanie";
+$langCouldNot = "S√∫bor nie je mo¬ûn√© na&#269;√≠ta&#357;";
+$langOkSentLink = "";
+$langTooBig = "Bu&#271; ste nevybrali s√∫bor na zaslanie, alebo je ve&#318;mi ve&#318;k√Ω";
+$langExplanation = "Str√°nka mus√≠ by&#357; v HTML form√°te (napr. \\"moja_str√°nka.htm\\"). Bude dostupn√° z domovskej str√°nky. Ak chcete posla&#357; dokument v inom form√°te ako HTML (PDF, Word, Power Point, Video, etc.) pou¬ûite n√°stroj <a href=../document/document.php>Documenty</";
+$langPgTitle = "N√°zov str√°nky";
+$langNoLinkURL = "Pros√≠m zadajte URL odkazu";
 $langLinkTarget = "Cie&#318; odkazu";
 $langSameWindow = "V rovnakom okne";
 $langNewWindow = "V novom okne";
-$langAdded = "Odkaz bol pridan˝";
+$langAdded = "Odkaz bol pridan√Ω";
 $langAddLink = "Prida&#357; odkaz";
-$langNoLinkName = "ProsÌm zadajte n·zov odkazu";
-$langEditLink = "Upravi&#357; odkaz na domovsk˙ str·nku kurzu";
+$langNoLinkName = "Pros√≠m zadajte n√°zov odkazu";
+$langEditLink = "Upravi&#357; odkaz na domovsk√∫ str√°nku kurzu";
 $langChangePress = "Zmeni&#357; a stla&#269;i&#357; OK";
-$langLinkChanged = "Odkaz na domovsk˙ str·nku kurzu zmenen˝. Na n·vrat na domovsk˙ str·nku pouûite menu vyööie. ";
-$NoLinkName = "Odkaz bez n·zvu";
+$langLinkChanged = "Odkaz na domovsk√∫ str√°nku kurzu zmenen√Ω. Na n√°vrat na domovsk√∫ str√°nku pou¬ûite menu vy¬ö¬öie.";
+$NoLinkName = "Odkaz bez n√°zvu";
 $NoLinkURL = "Odkaz bez URL";
-$LinkChanged = "Odkaz upraven˝";
-$OkSentLink = "Odkaz bol poslan˝";
+$LinkChanged = "Odkaz upraven√Ω";
+$OkSentLink = "Odkaz bol poslan√Ω";
 ?>

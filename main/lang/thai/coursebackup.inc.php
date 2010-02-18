@@ -1,45 +1,51 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$langSelectOptionForBackup = "กรุณาเลือกค่าและวิธีการสำรองข้อมูล";
-$langLetMeSelectItems = "เลือกส่วนประกอบของรายวิชา";
-$langCreateFullBackup = "ทำการสำรองข้อมูลของวิชานี้";
-$langCreateBackup = "ทำการสำรองข้อมูล";
-$langBackupCreated  = "การสำรองข้อมูลเสร็จสิ้นแล้ว อีกสักครู่ระบบจะให้โอนย้ายไฟล์ลงมาให้โดยอัตโนมัติ หากระบบไม่ทำงานต่อให้ท่านคลิกที่ Linkเพื่อดาวน์โหลดเอง";
-$langSelectBackupFile = "เลือกไฟล์ที่ต้องการสำรองข้อมูล";
-$langImportBackup = "นำข้อมูลสำรองเข้าในระบบ";
-$langImportFullBackup = "นำเข้าไฟล์ที่สำรองไว้ทั้งชุด";
-$langImportFinished = "การนำเข้าเรียบร้อยแล้ว";
-$langEvents = "เหตุการณ์";
-$langAnnouncements = "ประกาศ";
-$langDocuments  = "เอกสาร";
-$langTests = "แบบทดสอบ";
-$langLearnpaths = "ลำดับการเรียน";
-$langCopyCourse = "ทำสำเนารายวิชา";
-$langSelectItemsToCopy = "เลือกรายการเพื่อทำสำเนา";
-$langCopyFinished = "ทำสำเนาเรียบร้อยแล้ว";
-$langFullRecycle = "นำกลับมาใช้ใหม่ทั้งหมด";
-$langRecycleCourse = "นำวิชากลับมาเปิดใช้ใหม่อีก";
-$langRecycleFinished = "การนำวิชากลับมาเปิดเรียนใหม่ เรียบร้อยแล้ว";
-$langRecycleWarning = "คำเตือน:การใช้คำสั่งนี้ จะเป็นการลบบางส่วนของวิชา ซึ่งอาจมีข้อผิดพลาด ขอแนะนำให้คุณทำการa <a href=\"create_backup.php\">สำรองข้อมูล</a>ก่อนใช้คำสั่งนี้เพื่อทำการนำรายวิชากลับมาใช้ใหม่อีก";
-$langSameFilename = "สิ่งควรระวังเมื่อนำเข้าไฟล์ คือชื่อไฟล์ที่เหมือนกันกับที่มีอยู่ในระบบ";
-$langSameFilenameSkip = "ข้ามไฟล์ที่มีชื่อเดียวกัน";
-$langSameFilenameRename = "เปลี่ยนชื่อไฟล์(เช่น prachid.pdf เป็น prachid_1.pdf)";
-$langSameFilenameOverwrite = "บันทึกทับไฟล์เดิม";
-$langSelectDestinationCourse = "เลือกไปที่รายวิชา";
-$langFullCopy  = "สำเนาอย่างสมบูรณ์";
-$langCourseDescription = "คำอธิบายรายวิชา";
-$langNoResourcesToBackup = "ไม่มีข้อมูลที่จะสำรอง";
-$langNoResourcesInBackupFile = "ไม่มีข้อมูลในไฟล์ที่สำรองไว้";
-$langSelectResources = "เลือกแหล่งข้อมูล";
-$langNoResourcesToRecycles = "ไม่มีข้อมูลที่จะนำกลับมาใช้ใหม่ได้";
-$langIncludeQuestionPool = "รวมแบบสอบถาม";
-$langLocalFile = "ไฟล์ในเครื่อง";
-$langServerFile = "ไฟล์ในเครื่องแม่ข่าย";
-$langNoBackupsAvailable = "ไม่มีข้อมูลสำรอง";
-$langNoDestinationCoursesAvailable = "ไม่มีรายวิชาที่ต้องการ";
-$langBackup = "สำรอง";
-$langImportBackupInfo = "การนำเข้าไฟล์ข้อมูลที่สำรองไว้ สามารถนำเข้าจากไฟล์ที่สำรองไว้ในเครื่องแม่ข่ายหรือจากเครื่องที่ท่านใช้งานอยู่";
-$langCreateBackupInfo = "การสำรองรายวิชา คุณสามารถเลือกเนื้อหาวิชาที่จะสำรองเก็บไว้ได้";
-$ToolIntro = "แนะนำเครื่องมือ";
+$langSelectOptionForBackup = "ยกรรยณร’ร ร…ร—รยกโฌรจร’รกร…รรร”ลพร•ยกร’รรร“รรยงยขรฉรรรร…";
+$langLetMeSelectItems = "ร ร…ร—รยกรรจรยนยปรรยกรยบยขรยงรร’รรร”ยชร’";
+$langCreateFullBackup = "ยทร“ยกร’รรร“รรยงยขรฉรรรร…ยขรยงรร”ยชร’ยนร•รฉ";
+$langCreateBackup = "ยทร“ยกร’รรร“รรยงยขรฉรรรร…";
+$langBackupCreated = "ยกร’รรร“รรยงยขรฉรรรร…ร รรรงลกรร”รฉยนรกร…รฉร รร•ยกรร‘ยกโฌรรรจรรยบยบลกรรฃรรฉรขรยนรรฉร’รรคยฟร…รฌร…ยงรร’รฃรรฉรขลฝรรร‘ยตรขยนรร‘ยตร” รร’ยกรรยบยบรครรจยทร“ยงร’ยนยตรจรรฃรรฉยทรจร’ยนโฌร…ร”ยกยทร•รจ Linkร ลธร—รจรลฝร’รยนรฌรขรร…ลฝร รยง";
+$langSelectBackupFile = "ร ร…ร—รยกรคยฟร…รฌยทร•รจยตรฉรยงยกร’รรร“รรยงยขรฉรรรร…";
+$langImportBackup = "ยนร“ยขรฉรรรร…รร“รรยงร ยขรฉร’รฃยนรรยบยบ";
+$langImportFullBackup = "ยนร“ร ยขรฉร’รคยฟร…รฌยทร•รจรร“รรยงรครรฉยทร‘รฉยงยชรลฝ";
+$langImportFinished = "ยกร’รยนร“ร ยขรฉร’ร รร•รยบรรฉรรรกร…รฉร";
+$langEvents = "ร รยตรยกร’รยณรฌ";
+$langAnnouncements = "ยปรรยกร’ร";
+$langDocuments = "ร รยกรร’ร";
+$langTests = "รกยบยบยทลฝรรยบ";
+$langLearnpaths = "ร…ร“ลฝร‘ยบยกร’รร รร•รยน";
+$langCopyCourse = "ยทร“รร“ร ยนร’รร’รรร”ยชร’";
+$langSelectItemsToCopy = "ร ร…ร—รยกรร’รยกร’รร ลธร—รจรยทร“รร“ร ยนร’";
+$langCopyFinished = "ยทร“รร“ร ยนร’ร รร•รยบรรฉรรรกร…รฉร";
+$langFullRecycle = "ยนร“ยกร…ร‘ยบรร’รฃยชรฉรฃรรรจยทร‘รฉยงรรลฝ";
+$langRecycleCourse = "ยนร“รร”ยชร’ยกร…ร‘ยบรร’ร ยปร”ลฝรฃยชรฉรฃรรรจรร•ยก";
+$langRecycleFinished = "ยกร’รยนร“รร”ยชร’ยกร…ร‘ยบรร’ร ยปร”ลฝร รร•รยนรฃรรรจ ร รร•รยบรรฉรรรกร…รฉร";
+$langRecycleWarning = "โฌร“ร ยตร—รยน:ยกร’รรฃยชรฉโฌร“รร‘รจยงยนร•รฉ ลกรร ยปรงยนยกร’รร…ยบยบร’ยงรรจรยนยขรยงรร”ยชร’ ยซร–รจยงรร’ลกรร•ยขรฉรล’ร”ลฝลธร…ร’ลฝ ยขรรกยนรยนร“รฃรรฉโฌรยณยทร“ยกร’รa <a href=\\"create_backup.php\\">รร“รรยงยขรฉรรรร…</a>ยกรจรยนรฃยชรฉโฌร“รร‘รจยงยนร•รฉร ลธร—รจรยทร“ยกร’รยนร“รร’รรร”ยชร’ยกร…ร‘ยบรร’รฃยชรฉรฃรรรจรร•ยก";
+$langSameFilename = "รร”รจยงโฌรรรรรร‘ยงร รร—รจรยนร“ร ยขรฉร’รคยฟร…รฌ โฌร—รยชร—รจรรคยฟร…รฌยทร•รจร รรร—รยนยกร‘ยนยกร‘ยบยทร•รจรร•รรรรจรฃยนรรยบยบ";
+$langSameFilenameSkip = "ยขรฉร’รรคยฟร…รฌยทร•รจรร•ยชร—รจรร ลฝร•รรยกร‘ยน";
+$langSameFilenameRename = "ร ยปร…ร•รจรยนยชร—รจรรคยฟร…รฌ(ร ยชรจยน prachid.pdf ร ยปรงยน prachid_1.pdf)";
+$langSameFilenameOverwrite = "ยบร‘ยนยทร–ยกยทร‘ยบรคยฟร…รฌร ลฝร”ร";
+$langSelectDestinationCourse = "ร ร…ร—รยกรคยปยทร•รจรร’รรร”ยชร’";
+$langFullCopy = "รร“ร ยนร’รรรจร’ยงรรยบรรยณรฌ";
+$langCourseDescription = "โฌร“รลพร”ยบร’รรร’รรร”ยชร’";
+$langNoResourcesToBackup = "รครรจรร•ยขรฉรรรร…ยทร•รจลกรรร“รรยง";
+$langNoResourcesInBackupFile = "รครรจรร•ยขรฉรรรร…รฃยนรคยฟร…รฌยทร•รจรร“รรยงรครรฉ";
+$langSelectResources = "ร ร…ร—รยกรกรร…รจยงยขรฉรรรร…";
+$langNoResourcesToRecycles = "รครรจรร•ยขรฉรรรร…ยทร•รจลกรยนร“ยกร…ร‘ยบรร’รฃยชรฉรฃรรรจรคลฝรฉ";
+$langIncludeQuestionPool = "รรรรกยบยบรรยบยถร’ร";
+$langLocalFile = "รคยฟร…รฌรฃยนร โฌรร—รจรยง";
+$langServerFile = "รคยฟร…รฌรฃยนร โฌรร—รจรยงรกรรจยขรจร’ร";
+$langNoBackupsAvailable = "รครรจรร•ยขรฉรรรร…รร“รรยง";
+$langNoDestinationCoursesAvailable = "รครรจรร•รร’รรร”ยชร’ยทร•รจยตรฉรยงยกร’ร";
+$langBackup = "รร“รรยง";
+$langImportBackupInfo = "ยกร’รยนร“ร ยขรฉร’รคยฟร…รฌยขรฉรรรร…ยทร•รจรร“รรยงรครรฉ รร’รร’รยถยนร“ร ยขรฉร’ลกร’ยกรคยฟร…รฌยทร•รจรร“รรยงรครรฉรฃยนร โฌรร—รจรยงรกรรจยขรจร’รรรร—รลกร’ยกร โฌรร—รจรยงยทร•รจยทรจร’ยนรฃยชรฉยงร’ยนรรรรจ";
+$langCreateBackupInfo = "ยกร’รรร“รรยงรร’รรร”ยชร’ โฌรยณรร’รร’รยถร ร…ร—รยกร ยนร—รฉรรร’รร”ยชร’ยทร•รจลกรรร“รรยงร ยกรงยบรครรฉรคลฝรฉ";
+$ToolIntro = "รกยนรยนร“ร โฌรร—รจรยงรร—ร";
+$UploadError = "";
+$DocumentsWillBeAddedToo = "";
+$ToExportLearnpathWithQuizYouHaveToSelectQuiz = "";
+$ArchivesDirectoryNotWriteableContactAdmin = "";
+$DestinationCourse = "";
 ?>

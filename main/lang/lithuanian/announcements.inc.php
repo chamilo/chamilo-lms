@@ -1,5 +1,6 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $Announcement = "Skelbimai";
 $langAnnEmpty = "Skelbimų sąrašas ištrintas";
@@ -17,24 +18,24 @@ $langOn = "Įjungta";
 $langRegUser = "registruoti vartotojai";
 $langUnvalid = "turi neteisingą arba neegzistuojantį el. pašto adresą";
 $langModifAnn = "Redaguoti šį skelbimą";
-$langModify    = "redaguoti";
-$langDelete    = "trinti";
-$langTitle     = "Pavadinimas";
-$langHelp      = "pagalba";
-$langOk        = "Taip";
-$langAddIntro  = "Įdėti įžanginį tekstą ";
-$langBackList  = "Grįžti į sąrašą";
-$langSelMess   = "Įspėjimai vartotojams";
-$EmailTitle  = "Šio laiško tema";
-$langUserlist  = "Grupių ir vartotojų sąrašas";
-$langSelectedUsers  = "Išrinkti vartotojai";
-$langSubmit  = "Tvirtinti";
-$langPleaseEnterMessage  = "Jūs turite įrašyti žinutės tekstą.";
-$langPleaseSelectUsers  = "Jūs turite išrinkti vartotoją.";
-$Teachersubject = "Žinutė nusiųsta jūsų studentams ";
-$langMessages  = "Žinutės";
-$langMessageToSelectedUsers  = "Žinutės išrinktiems vartotojams";
-$langIntroText  = "Žinutės išsiuntimui išrinkite vartotojų grupę (pažymeta raide G) arba atskirus vartotojus iš sarašo kairėje.";
+$langModify = "redaguoti";
+$langDelete = "trinti";
+$langTitle = "Pavadinimas";
+$langHelp = "pagalba";
+$langOk = "Taip";
+$langAddIntro = "Įdėti įžanginį tekstą";
+$langBackList = "Grįžti į sąrašą";
+$langSelMess = "Įspėjimai vartotojams";
+$EmailTitle = "Šio laiško tema";
+$langUserlist = "Grupių ir vartotojų sąrašas";
+$langSelectedUsers = "Išrinkti vartotojai";
+$langSubmit = "Tvirtinti";
+$langPleaseEnterMessage = "Jūs turite įrašyti žinutės tekstą.";
+$langPleaseSelectUsers = "Jūs turite išrinkti vartotoją.";
+$Teachersubject = "Žinutė nusiųsta jūsų studentams";
+$langMessages = "Žinutės";
+$langMessageToSelectedUsers = "Žinutės išrinktiems vartotojams";
+$langIntroText = "Žinutės išsiuntimui išrinkite vartotojų grupę (pažymeta raide G) arba atskirus vartotojus iš sarašo kairėje.";
 $langDown = "žemyn";
 $langMsgSent = "Žinutė išsiųsta pasirinktiems studentams";
 $langSelUser = "išrinkti varotojai";
@@ -48,4 +49,11 @@ $AnnouncementMoved = "Skelbimas perkeltas";
 $NoAnnouncements = "Skelbimų nėra.";
 $SelectEverybody = "Išrinti bet ka";
 $SelectedUsersGroups = "parinktos vartotojų grupės";
+$LearnerMessage = "";
+$TitleIsRequired = "";
+$AnnounceSentByEmail = "";
+$AnnounceSentToUserSelection = "";
+$SendAnnouncement = "";
+$ModifyAnnouncement = "";
+$ButtonPublishAnnouncement = "";
 ?>

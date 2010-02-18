@@ -1,5 +1,6 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$langScormBuilder = "��������ҧ�ٻẺ�ҵðҹscorm";
+$langScormBuilder = "â»Ãá¡ÃÁÊÃéÒ§ÃÙ»áººÁÒµÃ°Ò¹scorm";
 ?>

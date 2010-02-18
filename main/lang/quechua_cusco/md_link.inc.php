@@ -1,5 +1,6 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $langMdCallingTool = "Waskhanakuna";
 $langMdTitle = "Waskhanaq sutin";
@@ -20,7 +21,7 @@ $langCoverage = "Mita";
 $langCoverageTip = "mitaq sutin, cfr. Waskhanakuna";
 $langKwNote = "Sichus t\'ijranki ima nisqasqamanta simita, ama yapaychu ancha simikunata chay ruwashaspaqa.";
 $langClickKw = "Q\'apiy acha simi sach\'api kaqta ajllanapaq utaq saqellanapaqpas.";
-$langKwHelp = "<br/>Kichanapaqqa kayta q\'apiy \'+\' ,wisqanapaqqa kayta \'-\', llipinta kichanapaqtaq kayta \'++\' , hinallataq llipinta wisqanapaqtaq kayta \'--\' .<br/>Sach\'amanta ancha simikunata hoqmanta ajllanapaqqa wisqaspa hoqmanta kicharuy kaywan \'+\'.<br/> Alt-clic \'+\'  ancha simikunata maskhan sach\'api <br/> Alt-clic ancha simikuna  ajllan sapa sapamanata chupachayuqta utaq manapas.<br/><br/> nisqaypi simita t\'ijraspaqa, manan atinkichu yapayta ancha simiita kiki pachapiqa<br/> <br/> ";
+$langKwHelp = "<br/>Kichanapaqqa kayta q\'apiy \'+\' ,wisqanapaqqa kayta \'-\', llipinta kichanapaqtaq kayta \'++\' , hinallataq llipinta wisqanapaqtaq kayta \'--\' .<br/>Sach\'amanta ancha simikunata hoqmanta ajllanapaqqa wisqaspa hoqmanta kicharuy kaywan \'+\'.<br/> A";
 $langLocation = "URL/URI";
 $langLocationTip = "q\'apiy imaymanata kichanapaqqa";
 $langStore = "Waqaychay";

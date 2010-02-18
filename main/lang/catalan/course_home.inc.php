@@ -1,30 +1,32 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $langActivate = "Activa";
 $langDeactivate = "Desactiva";
-$langInLnk  = "Enllaços desactivats";
-$langDelLk = "Voleu realment esborrar aquest enllaç?";
-$langCourseCreate  = "Crear un curs web";
-$langNameOfTheLink  = "Nom de l\'enllaç";
-$lang_main_categories_list                  = "Llista de categories principal";
-$langCourseAdminOnly = "Només professors";
-$PlatformAdminOnly = "Només administradors";
+$langInLnk = "EnllaÃ§os desactivats";
+$langDelLk = "Voleu realment esborrar aquest enllaÃ§?";
+$langCourseCreate = "Crear un curs web";
+$langNameOfTheLink = "Nom de l\'enllaÃ§";
+$lang_main_categories_list = "Llista de categories principal";
+$langCourseAdminOnly = "NomÃ©s professors";
+$PlatformAdminOnly = "NomÃ©s administradors";
 $langCombinedCourse = "Curs combinat";
-$ToolIsNowVisible = "L\'eina és actualment visible";
-$ToolIsNowHidden = "L\'eina és actualment no visible";
-$EditLink = "Editar enllaç";
-$Blog_management = "Gestió de blocs";
-$Forum = "Fòrums";
+$ToolIsNowVisible = "L\'eina Ã©s actualment visible";
+$ToolIsNowHidden = "L\'eina Ã©s actualment no visible";
+$EditLink = "Editar enllaÃ§";
+$Blog_management = "GestiÃ³ de blocs";
+$Forum = "FÃ²rums";
 $Course_maintenance = "Manteniment del curs";
 $TOOL_SURVEY = "Enquestes";
 $GreyIcons = "Caixa d\'eines";
-$Interaction = "Interacció";
-$Authoring = "Creació de continguts";
-$Administration = "Administració";
-$IntroductionTextUpdated = "El text d\'introducció ha estat actualitzat";
-$IntroductionTextDeleted = "El text d\'introducció ha estat eliminat";
-$SessionIdentifier = "Identificador de la sesión";
-$SessionName = "Nom de la sessió ";
-$SessionCategory = "Categoria de la sessió ";
+$Interaction = "InteracciÃ³";
+$Authoring = "CreaciÃ³ de continguts";
+$Administration = "AdministraciÃ³";
+$IntroductionTextUpdated = "El text d\'introducciÃ³ ha estat actualitzat";
+$IntroductionTextDeleted = "El text d\'introducciÃ³ ha estat eliminat";
+$SessionIdentifier = "Identificador de la sesiÃ³n";
+$SessionName = "Nom de la sessiÃ³";
+$SessionCategory = "Categoria de la sessiÃ³";
+$SessionData = "";
 ?>

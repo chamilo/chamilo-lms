@@ -1,5 +1,6 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $PublishSurvey = "Publish survey";
 $CompareQuestions = "Compare questions";
@@ -23,7 +24,7 @@ $CreateInAnotherLanguage = "Create this survey in another language";
 $ExportInExcel = "Export in Excel format";
 $ComparativeResults = "Comparative results";
 $SelectDataYouWantToCompare = "Select the data you want to compare";
-$OrCopyPasteUrl = "Or copy paste the link into the url bar of your browser : ";
+$OrCopyPasteUrl = "Or copy paste the link into the url bar of your browser :";
 $ClickHereToOpenSurvey = "Click here to take the survey";
 $SurveyNotShared = "No Surveys have been shared yet";
 $ViewSurvey = "View survey";
@@ -39,7 +40,7 @@ $CourseName = "Training name";
 $SurveysOfAllCourses = "Survey(s) of all training";
 $PleaseSelectAChoice = "Please make a choice";
 $ThereAreNoQuestionsInTheDatabase = "There are no questions in the database";
-$UpdateQuestionType = "Update Question Type : ";
+$UpdateQuestionType = "Update Question Type :";
 $AddAnotherQuestion = "Add new question";
 $IsShareSurvey = "Share survey with others";
 $Proceed = "Proceed";
@@ -51,7 +52,7 @@ $PleaseSelectFourDefault = "Please Select at least Four Default Answers.";
 $PleaseFillDefaultText = "Please fill default text";
 $ModifySurveyInformation = "Edit survey information";
 $ViewQuestions = "View questions";
-$CreateSurvey = "Create survey ";
+$CreateSurvey = "Create survey";
 $FinishSurvey = "Finish survey";
 $QuestionsAdded = "Questions are added";
 $DeleteSurvey = "Delete survey";
@@ -91,17 +92,17 @@ $AddAnswer = "Add option";
 $DisplayAnswersHorVert = "Display";
 $AnswerOptions = "Answer options";
 $YesNo = "Yes / No";
-$MultipleResponse = "Multiple Response";
+$MultipleResponse = "Multiple answers";
 $Open = "Open";
 $Dropdown = "Dropdown";
 $Pagebreak = "Page end (separate questions)";
-$QuestionNumber = "N°";
+$QuestionNumber = "NÂ°";
 $NumberOfOptions = "Options";
 $SurveyInvitations = "Survey invitations";
 $InvitationCode = "Invitation code";
 $InvitationDate = "Invitation date";
 $Answered = "Answered";
-$AdditonalUsersComment = "You can invite additional users to fill the survey. To do so you can type their email adresses here separated by , or ; ";
+$AdditonalUsersComment = "You can invite additional users to fill the survey. To do so you can type their email adresses here separated by , or ;";
 $MailTitle = "Mail subject";
 $InvitationsSend = "invitations sent.";
 $SurveyDeleted = "The survey has been deleted.";
@@ -128,16 +129,15 @@ $CourseUsers = "Learners";
 $SurveyPublication = "Publication of the survey";
 $AdditonalUsers = "Additional users";
 $MailText = "Email message";
-$UseLinkSyntax = "The selected users will receive an email with the text above and a unique link that they have to click to fill the survey. If you want to put the link somewhere in your text you have to put the following text wherever you want in your text: **link** (star star link star star). This will then automatically be replaced by the unique link. If you do not add **link** to your text then the email link will be added to the end of the mail";
+$UseLinkSyntax = "The selected users will receive an email with the text above and a unique link that they have to click to fill the survey. If you want to put the link somewhere in your text you have to put the following text wherever you want in your text: **link** (star";
 $DetailedReportByUser = "Detailed report by user";
 $DetailedReportByQuestion = "Detailed report by question";
 $ComparativeReportDetail = "In this report you can compare two questions.";
 $CompleteReportDetail = "In this report you get an overview of all the answers of all users on all questions. You also have the option to see only a selection of questions. You can export the results in CSV format and use this for processing in a statistical application";
 $DetailedReportByUserDetail = "In this report you can see all the answers a specific user has given.";
-$DetailedReportByQuestionDetail = "In this report you see the results question by question. Basic statistical analysis and graphics are provided ";
+$DetailedReportByQuestionDetail = "In this report you see the results question by question. Basic statistical analysis and graphics are provided";
 $ReminderResendToAllUsers = "Remind all users of the survey. If you do not check this checkbox only the newly added users will receive an email.";
 $Multiplechoice = "Multiple choice";
-$Multipleresponse = "Multiple answers";
 $Score = "Score";
 $Shared = "Shared";
 $Invite = "Invite";

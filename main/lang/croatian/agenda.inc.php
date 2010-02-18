@@ -1,9 +1,10 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $AgendaAdd = "Dodaj novi element u raspored";
-$ShowAllEvents = "Prikaži sve elemente rasporeda";
-$ShowCurrent = "Prikaži elemente rasporeda u teku&#263;em mjesecu";
+$ShowAllEvents = "PrikaÂži sve elemente rasporeda";
+$ShowCurrent = "PrikaÂži elemente rasporeda u teku&#263;em mjesecu";
 $AddCalendarItem = "Dodaj novi element u raspored";
 $Day = "Dan";
 $Month = "Mjesec";
@@ -42,12 +43,12 @@ $Date = "Nadnevak";
 $Time = "Vrijeme";
 $AddPersonalCalendarItem = "Dodaj osobni element u raspored";
 $ModifyPersonalCalendarItem = "Izmijeni osobni element u rasporedu";
-$PeronalAgendaItemAdded = "Vaš osobni elemnt uspješno je dodan u raspored";
-$PeronalAgendaItemEdited = "Vaš osobni element uspješno je izmijenjen u rasporedu";
-$PeronalAgendaItemDeleted = "Vaš osobni element uspješno je izbrisan iz rasporeda";
-$ViewPersonalItem = "Prikaži osobne elemente";
+$PeronalAgendaItemAdded = "VaÂš osobni elemnt uspjeÂšno je dodan u raspored";
+$PeronalAgendaItemEdited = "VaÂš osobni element uspjeÂšno je izmijenjen u rasporedu";
+$PeronalAgendaItemDeleted = "VaÂš osobni element uspjeÂšno je izbrisan iz rasporeda";
+$ViewPersonalItem = "PrikaÂži osobne elemente";
 $UserGroupFilter = "Filtar prema grupama/korisnicima";
-$ShowAll = "Prikaži sve";
+$ShowAll = "PrikaÂži sve";
 $Print = "Tiskanje";
 $MyTextHere = "moj tekst ovdje";
 $CopiedAsAnnouncement = "Preslikano kao obavijest";
@@ -61,16 +62,16 @@ $RepeatWeekly = "Tjedno";
 $RepeatMonthlyByDate = "Mjese&#269;no, prema nadnevku";
 $RepeatMonthlyByDay = "Mjese&#269;no, prema danu";
 $RepeatMonthlyByDayR = "Mjese&#269;no, prema danu, ograni&#269;en";
-$RepeatYearly = "Godišnje";
+$RepeatYearly = "GodiÂšnje";
 $RepeatEnd = "Ponovi zaklju&#269;ni nadnevak";
 $RepeatedEventViewOriginalEvent = "Pogledaj po&#269;etni doga&#273;aj";
 $ICalFileImport = "Preuzmi iCal/ics dokument";
 $AllUsersOfThePlatform = "Svi korisnici sustava";
 $GlobalEvent = "Globalni doga&#273;aj";
 $ModifyEvent = "Uredi element";
-$EndDateCannotBeBeforeTheStartDate = "Zaklju&#269;ni nadnevak ne može biti prije nadnevka po&#269;etka ";
-$AgendaSortChronologicallyUp = "Sortiraj zapise rasporeda kronološki uzlazno";
-$AgendaSortChronologicallyDown = "Sortiraj zapise rasporeda kronološki silazno";
+$EndDateCannotBeBeforeTheStartDate = "Zaklju&#269;ni nadnevak ne moÂže biti prije nadnevka po&#269;etka";
+$AgendaSortChronologicallyUp = "Sortiraj zapise rasporeda kronoloÂški uzlazno";
+$AgendaSortChronologicallyDown = "Sortiraj zapise rasporeda kronoloÂški silazno";
 $ItemForUserSelection = "Korisni&#269;ki popis odabira";
 $IsNotiCalFormatFile = "Ova datoteka nije u formatu iCal";
 $RepeatEvent = "Ponovi doga&#273;aj";

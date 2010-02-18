@@ -1,5 +1,6 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $MyTasks = "Moje teme";
 $FavoriteBlogs = "Moji odabrani blogovi";
@@ -17,11 +18,11 @@ $FirstPostText = "Ovo je prvi &#269;lanak u ovom blogu. Sada svi pimatelji ovog 
 $AddNewComment = "Dodaj novi komentar";
 $ReplyToThisComment = "Odgovori na ovaj komentar";
 $ManageTasks = "Upravljaj zadacima";
-$ManageMembers = "Upi쉏 / Ispi쉏 korisnika u ovom blogu";
-$Register = "Upi쉏 se za ovaj blog";
-$UnRegister = "Ispi쉏 se za ovaj blog";
-$SubscribeMembers = "Upi쉏 korisnike";
-$UnsubscribeMembers = "Ispi쉏 korisnike";
+$ManageMembers = "Upi혳i / Ispi혳i korisnika u ovom blogu";
+$Register = "Upi혳i se za ovaj blog";
+$UnRegister = "Ispi혳i se za ovaj blog";
+$SubscribeMembers = "Upi혳i korisnike";
+$UnsubscribeMembers = "Ispi혳i korisnike";
 $RightsManager = "Upravljanje korisni&#269;kim pravima";
 $ManageRights = "Upravljane ulogom i pravima ovog korisnika u ovom blogu";
 $Task = "Zadatak";
@@ -36,7 +37,7 @@ $AddTasks = "Dodaj novi temu";
 $AssignTask = "Dodijeli temu";
 $AssignTasks = "Dodijeli teme";
 $EditTask = "Uredi ovu temu";
-$DeleteTask = "Obri쉏 ovu temu";
+$DeleteTask = "Obri혳i ovu temu";
 $DeleteSystemTask = "Nije mogu&#263;e obrisati sistemski ugra&#273;enu temu.";
 $SelectUser = "Korisnik";
 $SelectTask = "Tema";
@@ -48,19 +49,19 @@ $AssignedTasks = "Dodijeljene teme";
 $ArticleManager = "Ure&#273;iva&#269; &#269;lanaka";
 $CommentManager = "Ure&#273;iva&#269; komentara";
 $BlogManager = "Ure&#273;iva&#269; bloga";
-$ReadMore = "Pro&#269;itaj vi쉋...";
-$DeleteThisArticle = "Obri쉏 ovaj &#269;lanak";
+$ReadMore = "Pro&#269;itaj vi혳e...";
+$DeleteThisArticle = "Obri혳i ovaj &#269;lanak";
 $EditThisPost = "Uredi ovaj &#269;lanak";
-$DeleteThisComment = "Obri쉏 ovaj komentar";
-$NoArticles = "Trenutno ne postoji niti jedan &#269;lanak u ovom blogu. Ukoliko ste tvorac ovog bloga odaberite poveznicu \"novi &#269;lanak\" da ga napi쉋te.";
-$NoTasks = "Nemate trenutno niti jedan zadatak.";
+$DeleteThisComment = "Obri혳i ovaj komentar";
+$NoArticles = "Trenutno ne postoji niti jedan &#269;lanak u ovom blogu. Ukoliko ste tvorac ovog bloga odaberite poveznicu \\"novi &#269;lanak\\" da ga napi혳ete.";
+$NoTasks = "Nema zadatka";
 $Rating = "Ocjena";
 $RateThis = "Ocjeni ovaj &#269;lanak";
 $SelectTaskArticle = "Odaberi &#269;lanak za ovaj zadatak";
-$ExecuteThisTask = "Izvr쉏 ovaj zadatak";
+$ExecuteThisTask = "Izvr혳i ovaj zadatak";
 $WrittenBy = "Napisao";
 $InBlog = "U blogu";
-$ViewPostsOfThisDay = "Pogledaj dana쉗je &#269;lanke ";
+$ViewPostsOfThisDay = "Pogledaj dana혳nje &#269;lanke";
 $PostsOf = "&#268;lanak";
 $NoArticleMatches = "Nije prona&#273;en niti jedan &#269;lanak. Provjerite pravopis rije&#269;i ili unesite drugi kriterij pretrage.";
 $SaveProject = "Spremi blog";
@@ -71,7 +72,7 @@ $langTask1Desc = "Opis teme 1";
 $langTask2Desc = "Opis teme 2";
 $langTask3Desc = "Opis teme 3";
 $blog_management = "Upravljanje Blogom";
-$langWelcome = "Dobro do쉕i !";
+$langWelcome = "Dobro do혳li !";
 $langModule = "Modul";
 $langUserHasPermissionNot = "Korisnik nema prava";
 $langUserHasPermission = "Korisnik ima prava";
@@ -80,8 +81,7 @@ $langUserHasPermissionByRoleGroup = "Korisnik ima prava grupe kojoj pripada";
 $EditPost = "Uredi &#269;lanak";
 $AddBlog = "Dodaj novi blog";
 $EditBlog = "Uredi naslov i podnaslov";
-$DeleteBlog = "Obri쉏 ovaj blog";
-$NoTasks = "Nema zadatka";
+$DeleteBlog = "Obri혳i ovaj blog";
 $Shared = "Zajedni&#269;ko";
 $PermissionGrantedByGroupOrRole = "Pristup dozvoljen od grupe ili uloge";
 $Reader = "&#268;itatelj";
@@ -100,4 +100,6 @@ $TaskDeleted = "Zadatak je obrisan.";
 $TaskAssignmentDeleted = "Zadani zadatak je obrisan.";
 $CommentDeleted = "Komentar je obrisan.";
 $RatingAdded = "Ocjena je dodana";
+$BlogPosts = "";
+$BlogComments = "";
 ?>

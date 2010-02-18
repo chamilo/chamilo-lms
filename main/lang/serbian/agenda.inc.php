@@ -1,10 +1,11 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $AgendaAdd = "Dodaj novu stavku u Agendu";
-$ShowAllEvents = "Prikaži sve stavke iz Agende";
-$ShowCurrent = "Prikaži stavke iz teku&#263;eg meseca";
-$AddCalendarItem = "Dodaj novu stavku u Agendu ";
+$ShowAllEvents = "PrikaÂži sve stavke iz Agende";
+$ShowCurrent = "PrikaÂži stavke iz teku&#263;eg meseca";
+$AddCalendarItem = "Dodaj novu stavku u Agendu";
 $Day = "Dan";
 $Month = "Mesec";
 $Year = "Godina";
@@ -42,17 +43,17 @@ $Date = "Datum";
 $Time = "Vreme";
 $AddPersonalCalendarItem = "Dodaj li&#269;nu stavku u Agendu";
 $ModifyPersonalCalendarItem = "Modifikuj li&#269;nu stavku";
-$PeronalAgendaItemAdded = "Li&#269;na stavka je uspešno dodata u Agendu";
-$PeronalAgendaItemEdited = "Li&#269;na stavka je uspešno izmenjena u Agendi ";
-$PeronalAgendaItemDeleted = "Li&#269;na stavka je uspešno izbrisana iz Agende ";
+$PeronalAgendaItemAdded = "Li&#269;na stavka je uspeÂšno dodata u Agendu";
+$PeronalAgendaItemEdited = "Li&#269;na stavka je uspeÂšno izmenjena u Agendi";
+$PeronalAgendaItemDeleted = "Li&#269;na stavka je uspeÂšno izbrisana iz Agende";
 $ViewPersonalItem = "Pregledaj li&#269;ne stavke";
 $UserGroupFilter = "Filter za grupe/korisnike";
-$ShowAll = "Prikaži sve";
-$Print = "Štampanje";
+$ShowAll = "PrikaÂži sve";
+$Print = "ÂŠtampanje";
 $MyTextHere = "moj tekst ovde";
-$CopiedAsAnnouncement = "Kopirano kao obaveštenje";
-$NewAnnouncement = "Novo obaveštenje";
-$AddAnnouncement = "Dodaj kao obaveštenje";
+$CopiedAsAnnouncement = "Kopirano kao obaveÂštenje";
+$NewAnnouncement = "Novo obaveÂštenje";
+$AddAnnouncement = "Dodaj kao obaveÂštenje";
 $UpcomingEvent = "Nastupaju&#263;i doga&#273;aj";
 $RepeatedEvent = "Pnovljeni doga&#273;aj";
 $RepeatType = "Vrsta ponavaljanja";
@@ -61,17 +62,17 @@ $RepeatWeekly = "Sedmi&#269;no";
 $RepeatMonthlyByDate = "Mese&#269;no, po datumu";
 $RepeatMonthlyByDay = "Mese&#269;no, po danu";
 $RepeatMonthlyByDayR = "Mese&#269;no, po danu, ograni&#269;en";
-$RepeatYearly = "Godišnje";
-$RepeatEnd = "Ponovi završni datum";
+$RepeatYearly = "GodiÂšnje";
+$RepeatEnd = "Ponovi zavrÂšni datum";
 $RepeatedEventViewOriginalEvent = "Pogledaj originalni doga&#273;aj";
-$ICalFileImport = "Uvezi iCal/ics Outlook dokument ";
+$ICalFileImport = "Uvezi iCal/ics Outlook dokument";
 $AllUsersOfThePlatform = "Svi korisnici sistema";
 $GlobalEvent = "Globalni dogadjaj";
 $ModifyEvent = "Uredi dogadjaj";
-$EndDateCannotBeBeforeTheStartDate = "Datum kraja  ne može biti pre datuma po&#269;etka ";
+$EndDateCannotBeBeforeTheStartDate = "Datum kraja  ne moÂže biti pre datuma po&#269;etka";
 $AgendaSortChronologicallyUp = "Sortiraj zapise rasporeda po rastucem nizu";
 $AgendaSortChronologicallyDown = "Sortiraj zapise rasporeda po opadajucem";
 $ItemForUserSelection = "Selekcija korisnika";
-$IsNotiCalFormatFile = "Ova datoteka nije u formatu iCal ";
+$IsNotiCalFormatFile = "Ova datoteka nije u formatu iCal";
 $RepeatEvent = "Ponovi dogadjaj";
 ?>

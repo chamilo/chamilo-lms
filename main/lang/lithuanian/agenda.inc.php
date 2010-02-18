@@ -1,5 +1,6 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $AgendaAdd = "Pridėti naują darbotvarkės įrašą";
 $ShowAllEvents = "Rodyti viską";
@@ -53,4 +54,25 @@ $MyTextHere = "mano tekstas čia";
 $CopiedAsAnnouncement = "Copied as announcement";
 $NewAnnouncement = "New announcement";
 $AddAnnouncement = "Add as an announcement";
+$UpcomingEvent = "";
+$RepeatedEvent = "";
+$RepeatType = "";
+$RepeatDaily = "";
+$RepeatWeekly = "";
+$RepeatMonthlyByDate = "";
+$RepeatMonthlyByDay = "";
+$RepeatMonthlyByDayR = "";
+$RepeatYearly = "";
+$RepeatEnd = "";
+$RepeatedEventViewOriginalEvent = "";
+$ICalFileImport = "";
+$AllUsersOfThePlatform = "";
+$GlobalEvent = "";
+$ModifyEvent = "";
+$EndDateCannotBeBeforeTheStartDate = "";
+$AgendaSortChronologicallyUp = "";
+$AgendaSortChronologicallyDown = "";
+$ItemForUserSelection = "";
+$IsNotiCalFormatFile = "";
+$RepeatEvent = "";
 ?>

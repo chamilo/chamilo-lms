@@ -1,21 +1,22 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$ResourceAdded = "Ressource ajoutée. Vous pouvez maintenant retourner vers le cours ou ajouter d\'autres ressources.";
+$ResourceAdded = "Ressource ajoutÃ©e. Vous pouvez maintenant retourner vers le cours ou ajouter d\'autres ressources.";
 $LearningPath = "Cours";
 $LevelUp = "Monter";
 $AddIt = "Ajouter";
-$MainCategory = "catégorie principale";
+$MainCategory = "catÃ©gorie principale";
 $lang_delete_added_resources = "Annuler l\'ajout des ressources";
 $AddToLinks = "Ajouter aux Liens du cours";
 $DontAdd = "Ne pas ajouter";
-$lang_show_all_added_resources = "Montrer les ressources ajoutées";
-$ResourcesAdded = "Ressources ajoutées";
-$BackTo = "Retourner à:";
+$lang_show_all_added_resources = "Montrer les ressources ajoutÃ©es";
+$ResourcesAdded = "Ressources ajoutÃ©es";
+$BackTo = "Retourner Ã :";
 $ExternalResources = "Ressources externes";
 $CourseResources = "Ressources du cours";
 $ExternalLink = "Lien externe";
-$DropboxAdd = "Ajouter le partage de documents à ce module.";
+$DropboxAdd = "Ajouter le partage de documents Ã  ce module.";
 $AddAssignmentPage = "Ajouter un lien vers Travaux";
 $Exercise = "Tests";
 $Link = "Liens";
@@ -26,33 +27,33 @@ $IntroductionText = "Texte d\'introduction";
 $CourseDescription = "Description du cours";
 $Groups = "Groupes";
 $Users = "Utilisateurs";
-$IntroductionTextAdd = "Ajouter la page contenant le texte d\'introduction à ce chapitre";
-$CourseDescriptionAdd = "Ajouter la page contenant la description du cours à ce chapitre";
-$GroupsAdd = "Ajouter la page de Groupes à ce chapitre.";
-$UsersAdd = "Ajouter la page Utilisateurs à ce chapitre";
+$IntroductionTextAdd = "Ajouter la page contenant le texte d\'introduction Ã  ce chapitre";
+$CourseDescriptionAdd = "Ajouter la page contenant la description du cours Ã  ce chapitre";
+$GroupsAdd = "Ajouter la page de Groupes Ã  ce chapitre.";
+$UsersAdd = "Ajouter la page Utilisateurs Ã  ce chapitre";
 $ExportableCourseResources = "Ressources exportables au format SCORM";
 $DokeosRelatedCourseMaterial = "Ressources non exportables au format SCORM";
 $LinkTarget = "Cible du lien";
-$SameWindow = "Dans la même fenêtre";
-$NewWindow = "Dans une nouvelle fenêtre";
+$SameWindow = "Dans la mÃªme fenÃªtre";
+$NewWindow = "Dans une nouvelle fenÃªtre";
 $StepDeleted1 = "Ce";
-$StepDeleted2 = "(article) a été supprimé de cet outil. ";
-$Modify = "Modifié";
+$StepDeleted2 = "(article) a Ã©tÃ© supprimÃ© de cet outil.";
+$Modify = "ModifiÃ©";
 $Chapter = "Chapitre";
-$NoAgendaItems = "Evènements";
-$AgendaAdd = "Ajouter un nouvel événement";
+$NoAgendaItems = "EvÃ¨nements";
+$AgendaAdd = "Ajouter un nouvel Ã©vÃ©nement";
 $UserGroupFilter = "Filtrer par groupe/utilisateur";
-$AgendaSortChronologicallyUp = "Afficher les événements (du plus ancien au plus récent)";
-$ShowCurrent = "Afficher les événements courants";
-$ModifyCalendarItem = "Modifier les événements de l\'agenda";
-$ItemTitle = "Titre de l\'événement";
-$Detail = "Détails de l\'événement";
-$EditSuccess = "Modifié avec succès";
-$AddCalendarItem = "Ajouter un nouvel événement";
+$AgendaSortChronologicallyUp = "Afficher les Ã©vÃ©nements (du plus ancien au plus rÃ©cent)";
+$ShowCurrent = "Afficher les Ã©vÃ©nements courants";
+$ModifyCalendarItem = "Modifier les Ã©vÃ©nements de l\'agenda";
+$ItemTitle = "Titre de l\'Ã©vÃ©nement";
+$Detail = "DÃ©tails de l\'Ã©vÃ©nement";
+$EditSuccess = "ModifiÃ© avec succÃ¨s";
+$AddCalendarItem = "Ajouter un nouvel Ã©vÃ©nement";
 $AddAnn = "Ajouter une annonce";
 $ForumAddNewTopic = "Forum: ajouter un nouveau message";
 $ForumEditTopic = "Forum: modifier le message";
-$ExerciseAnswers = "Test: Réponses";
-$ForumReply = "Forum: répondre";
-$AgendaSortChronologicallyDown = "Afficher les événements (du plus récent au plus ancien)";
+$ExerciseAnswers = "Test: RÃ©ponses";
+$ForumReply = "Forum: rÃ©pondre";
+$AgendaSortChronologicallyDown = "Afficher les Ã©vÃ©nements (du plus rÃ©cent au plus ancien)";
 ?>

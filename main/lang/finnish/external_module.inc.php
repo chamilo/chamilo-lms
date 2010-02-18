@@ -1,14 +1,28 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$langLinkSite = "Lisää linkki sivustoon";
-$langSubTitle = "Lisää linkki kurssin kotisivulle.";
-$langAddPage            = "Lisää sivu";
-$langSendPage           = "Tallennettava sivu";
-$langCouldNot           = "Tiedostoa ei voitu tallentaa";
-$langTooBig             = "Et valinnut mitään tallennettavaksi tai se on liian iso";
-$langAdded = "Linkki on lisätty";
-$langAddLink = "Lisää linkki";
+$langLinkSite = "LisÃ¤Ã¤ linkki sivustoon";
+$langSubTitle = "LisÃ¤Ã¤ linkki kurssin kotisivulle.";
+$langAddPage = "LisÃ¤Ã¤ sivu";
+$langSendPage = "Tallennettava sivu";
+$langCouldNot = "Tiedostoa ei voitu tallentaa";
+$langOkSentLink = "";
+$langTooBig = "Et valinnut mitÃ¤Ã¤n tallennettavaksi tai se on liian iso";
+$langExplanation = "";
+$langPgTitle = "";
+$langNoLinkURL = "";
+$langLinkTarget = "";
+$langSameWindow = "";
+$langNewWindow = "";
+$langAdded = "Linkki on lisÃ¤tty";
+$langAddLink = "LisÃ¤Ã¤ linkki";
 $langNoLinkName = "Linkin nimi";
-$langEditLink = "Muokkaa linkkiä";
+$langEditLink = "Muokkaa linkkiÃ¤";
+$langChangePress = "";
+$langLinkChanged = "";
+$NoLinkName = "";
+$NoLinkURL = "";
+$LinkChanged = "";
+$OkSentLink = "";
 ?>

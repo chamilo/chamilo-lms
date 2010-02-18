@@ -1,27 +1,32 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$langActivate = "Gør aktiv/ synlig for deltagerne";
-$langDeactivate = "Gør passiv/ skjul for deltagerne";
-$langInLnk  = "Ikke aktive funktioner og links";
-$langDelLk = "Er du sikkert på, at du vil slettet dette link?";
-$langCourseCreate  = "Opret kursusside";
-$langNameOfTheLink  = "Navn på link";
-$lang_main_categories_list                  = "Hovedkategoriliste";
+$langActivate = "GÃ¸r aktiv/ synlig for deltagerne";
+$langDeactivate = "GÃ¸r passiv/ skjul for deltagerne";
+$langInLnk = "Ikke aktive funktioner og links";
+$langDelLk = "Er du sikkert pÃ¥, at du vil slettet dette link?";
+$langCourseCreate = "Opret kursusside";
+$langNameOfTheLink = "Navn pÃ¥ link";
+$lang_main_categories_list = "Hovedkategoriliste";
 $langCourseAdminOnly = "Kun undervisere";
 $PlatformAdminOnly = "Kun platformsadministratorer";
 $langCombinedCourse = "Kombineret kursus";
-$ToolIsNowVisible = "Værktøjet er nu synligt";
-$ToolIsNowHidden = "Værktøjet er nu skjult";
+$ToolIsNowVisible = "VÃ¦rktÃ¸jet er nu synligt";
+$ToolIsNowHidden = "VÃ¦rktÃ¸jet er nu skjult";
 $EditLink = "Rediger link";
 $Blog_management = "Administration af blogs";
 $Forum = "Diskussionsfora";
 $Course_maintenance = "Kursusvedligeholdelse";
 $TOOL_SURVEY = "Evalueringer";
-$GreyIcons = "Værktøjskasse";
+$GreyIcons = "VÃ¦rktÃ¸jskasse";
 $Interaction = "Interaktion";
 $Authoring = "Distribution";
 $Administration = "Administration";
 $IntroductionTextUpdated = "Introduktionsteksten er opdateret";
 $IntroductionTextDeleted = "Introduktionsteksten er slettet";
+$SessionIdentifier = "";
+$SessionName = "";
+$SessionCategory = "";
+$SessionData = "";
 ?>

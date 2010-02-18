@@ -1,8 +1,9 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $langProfessors = "Yachachiqkuna";
-$langExplanation = "Chaskiy nisqa q\'apiqtiykiqa ruwachikunqa yachachinapa web  k\'itin, kay imaymana llank\'anakunayuq: qelqa khipukuna kamachiq, yachanakuna formato SCORM nisqapi kamachiq, yachanakuna qhawachiq; tapukuy ruwachinapaq hinallataq llank\'ay apachinapaq, K\'itirimanapi chat nispapipas rimarinakunapaq, willanata ima willayta apachinapaqpas, kanqapas ruwana, videonispapi rimarinakuy hinallataq qelqanapaq pizarra digital nisqa,huñusqa llank\'anapaq, ima tapukuykuna ruwanapaq yachaqekunata qatipanapaqpas, hoqkunatawan.Kay k\'iti kamachispaq atipanki t\'ijrapayta ima munasqaykiman.";
+$langExplanation = "Chaskiy nisqa q\'apiqtiykiqa ruwachikunqa yachachinapa web  k\'itin, kay imaymana llank\'anakunayuq: qelqa khipukuna kamachiq, yachanakuna formato SCORM nisqapi kamachiq, yachanakuna qhawachiq; tapukuy ruwachinapaq hinallataq llank\'ay apachinapaq, K\'iti";
 $langEmpty = "Manan hunt\'achinkichu llapan kanchakunata.<br>wanp\'uqninkipi kutispa hoqmanta qallariy.<br> Sichus mana reqsinki yachachiyniykiq chinp\'unta, chayqa tapurikuy yachachinaq programanta";
 $langCodeTaken = "Kay chinp\'uqa hoq yachachina hap\'ishan.<br>Wanp\'uqniykipi kutispa hoqmanta qallariy.";
 $langFormula = "Atentamente";
@@ -16,7 +17,7 @@ $langNoPsychology = "No. La ironía socrática no se aplica al terreno de la psi
 $langAdmitError = "Reconocer los propios errores para invitar al interlocutor a hacer lo mismo.";
 $langNoSeduction = "No. No se trata de una estrategia de seducción o de un método por ejemplo.";
 $langForce = "Forzar  al interlocutor, por medio de una serie de cuestiones y subcuestiones, a que reconozca que no sabe lo que pretende saber.";
-$langIndeed = "Correcto. La ironía socrática es un método interrogativo. El término griego \"eirotao\" significa , por otro lado, \"interrogar\".";
+$langIndeed = "Correcto. La ironía socrática es un método interrogativo. El término griego \\"eirotao\\" significa , por otro lado, \\"interrogar\\".";
 $langContradiction = "Utilizar el principio de no contradicción para llevar al interlocutor a un callejón sin salida.";
 $langNotFalse = "Esta respuesta no es falsa. Es exacto que la puesta en evidencia de la ignorancia del interlocutor se realiza poniendo en evidencia las contradicciones en que desembocan sus tesis.";
 $langAgenda = "Ruwana";
@@ -26,7 +27,7 @@ $langAnnouncements = "Willaykuna";
 $langAddPageHome = "Apachiy hoq raphita chaymantataq wakhanachiy raphi qallariqman";
 $langLinkSite = "Raphi qallariymanta yapay hoq waskhanata Internerman";
 $langModifyInfo = "Yachachinaq nisqaynin";
-$langCourseDesc  = "Yachachinaq nisqaynin";
+$langCourseDesc = "Yachachinaq nisqaynin";
 $langAgendaTitle = "Martes 11 diciembre 14h00 : Primera reunión - Lugar: Sur 18";
 $langAgendaText = "Llipin aykuchiy gestión de proyectos nisqaman";
 $langMicro = "K\'ijllukunapi tapurikuy";
@@ -58,14 +59,14 @@ $langOnlineConference = "Online nisqapi Rimarinakuy";
 $langAgendaCreationTitle = "Yachachinaq kamachiynin";
 $langAgendaCreationContenu = "Yachachinaqa kay pachapin kamaychikun";
 $langOnlineDescription = "Kay qhawarichiyqa llank\'ana Rimarinakuy Online nispa nisqayninpan";
-$langDropbox  = "T\'aqapay qelqa khipukunata";
-$langOnly  = "Sapalla";
-$langRandomLanguage  = "Ajllasqa simikuna kasqamanta";
+$langDropbox = "T\'aqapay qelqa khipukunata";
+$langOnly = "Sapalla";
+$langRandomLanguage = "Ajllasqa simikuna kasqamanta";
 $langImages = "Wankikuna";
 $langAudio = "Uyarina";
 $langFlash = "Flash";
 $langForumLanguage = "inglés";
-$langNewCourse = "Musuq Yachachina ";
+$langNewCourse = "Musuq Yachachina";
 $langAddNewCourse = "Kamay musuq yachachinata";
 $langRestoreCourse = "Allinyachiy hoq yachachinata";
 $langOtherProperties = "Khipuq hokaq ima kapuqninkuna";
@@ -98,8 +99,11 @@ $ExampleForumCategory = "K\'itirimanakunaq mitanpa qhawarichiymi";
 $ExampleForum = "K\'itirimana qhawarichiymi";
 $ExampleThread = "Seqachinakuy rimanamanata qhawarichiymi";
 $ExampleThreadContent = "Ima kaqkunamanata qhawarichiymi";
-$IntroductionWiki = "Wiki simiqa WikiWikiWeb niqamantan huch\'uyyachisqa. Wikiwiki simiqa Hawai suyumantan, chaypiqa ninatas ninku ima Ustayta. Wikipiqa haykuqmasiykikuna atinqaku raphi qelqayta. Sichus hoq runa mana allintachu qelqanqa, hamuq runalla allinchallanman. Kay qepa runapas atillanqan musuq imaymanakunata raphiman yapayta. Hinatan allinta ruwachikunqa sapa yapaypi sapa t\'ijraypi.";
+$IntroductionWiki = "Wiki simiqa WikiWikiWeb niqamantan huch\'uyyachisqa. Wikiwiki simiqa Hawai suyumantan, chaypiqa ninatas ninku ima Ustayta. Wikipiqa haykuqmasiykikuna atinqaku raphi qelqayta. Sichus hoq runa mana allintachu qelqanqa, hamuq runalla allinchallanman. Kay qep";
 $CreateCourseArea = "Kamay yachachinaq k\'itinta";
 $CreateCourse = "Kamay yachachinata";
 $Create = "Kamay";
+$MessageOfNewCourseToAdmin = "";
+$NewCourseCreatedIn = "";
+$ExplicationTrainers = "";
 ?>

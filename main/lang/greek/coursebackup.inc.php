@@ -1,6 +1,51 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$langAnnouncements = "Ανακοινώσεις";
-$langCourseDescription = "περιγραφή στο κατάλογο μαθημάτων";
+$langSelectOptionForBackup = "";
+$langLetMeSelectItems = "";
+$langCreateFullBackup = "";
+$langCreateBackup = "";
+$langBackupCreated = "";
+$langSelectBackupFile = "";
+$langImportBackup = "";
+$langImportFullBackup = "";
+$langImportFinished = "";
+$langEvents = "";
+$langAnnouncements = "ΓΓ­Γ΅ΓªΓ―Γ©Γ­ΓΎΓ³Γ¥Γ©Γ²";
+$langDocuments = "";
+$langTests = "";
+$langLearnpaths = "";
+$langCopyCourse = "";
+$langSelectItemsToCopy = "";
+$langCopyFinished = "";
+$langFullRecycle = "";
+$langRecycleCourse = "";
+$langRecycleFinished = "";
+$langRecycleWarning = "";
+$langSameFilename = "";
+$langSameFilenameSkip = "";
+$langSameFilenameRename = "";
+$langSameFilenameOverwrite = "";
+$langSelectDestinationCourse = "";
+$langFullCopy = "";
+$langCourseDescription = "Γ°Γ¥Γ±Γ©Γ£Γ±Γ΅Γ¶Γ Γ³Γ΄Γ― ΓªΓ΅Γ΄ΓΓ«Γ―Γ£Γ― Γ¬Γ΅Γ¨Γ§Γ¬ΓΓ΄ΓΉΓ­";
+$langNoResourcesToBackup = "";
+$langNoResourcesInBackupFile = "";
+$langSelectResources = "";
+$langNoResourcesToRecycles = "";
+$langIncludeQuestionPool = "";
+$langLocalFile = "";
+$langServerFile = "";
+$langNoBackupsAvailable = "";
+$langNoDestinationCoursesAvailable = "";
+$langBackup = "";
+$langImportBackupInfo = "";
+$langCreateBackupInfo = "";
+$ToolIntro = "";
+$UploadError = "";
+$DocumentsWillBeAddedToo = "";
+$ToExportLearnpathWithQuizYouHaveToSelectQuiz = "";
+$ArchivesDirectoryNotWriteableContactAdmin = "";
+$DestinationCourse = "";
 ?>

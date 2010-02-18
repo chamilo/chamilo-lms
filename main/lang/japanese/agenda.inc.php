@@ -1,5 +1,6 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $AgendaAdd = "Add new Agenda Item";
 $ShowAllEvents = "Show All Agenda Items";
@@ -17,4 +18,61 @@ $AgendaDeleteSuccess = "The agenda item has been deleted";
 $NoAgendaItems = "There are no Agenda Items";
 $lang_september = "September";
 $langClassName = "&#12463;&#12521;&#12473;&#21517;";
+$lang_agenda = "";
+$ModifyCalendarItem = "";
+$ItemTitle = "";
+$langDay = "";
+$month_default = "";
+$langYear = "";
+$year_default = "";
+$langHour = "";
+$hour_default = "";
+$langMinute = "";
+$langLasting = "";
+$langOldToNew = "";
+$langNewToOld = "";
+$langNow = "";
+$langAddEvent = "";
+$langDetail = "";
+$MonthView = "";
+$WeekView = "";
+$DayView = "";
+$AddPersonalItem = "";
+$Week = "";
+$Date = "";
+$Time = "";
+$AddPersonalCalendarItem = "";
+$ModifyPersonalCalendarItem = "";
+$PeronalAgendaItemAdded = "";
+$PeronalAgendaItemEdited = "";
+$PeronalAgendaItemDeleted = "";
+$ViewPersonalItem = "";
+$UserGroupFilter = "";
+$ShowAll = "Show All Agenda Items";
+$Print = "";
+$MyTextHere = "";
+$CopiedAsAnnouncement = "";
+$NewAnnouncement = "";
+$AddAnnouncement = "";
+$UpcomingEvent = "";
+$RepeatedEvent = "";
+$RepeatType = "";
+$RepeatDaily = "";
+$RepeatWeekly = "";
+$RepeatMonthlyByDate = "";
+$RepeatMonthlyByDay = "";
+$RepeatMonthlyByDayR = "";
+$RepeatYearly = "";
+$RepeatEnd = "";
+$RepeatedEventViewOriginalEvent = "";
+$ICalFileImport = "";
+$AllUsersOfThePlatform = "";
+$GlobalEvent = "";
+$ModifyEvent = "";
+$EndDateCannotBeBeforeTheStartDate = "";
+$AgendaSortChronologicallyUp = "";
+$AgendaSortChronologicallyDown = "";
+$ItemForUserSelection = "";
+$IsNotiCalFormatFile = "";
+$RepeatEvent = "";
 ?>

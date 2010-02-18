@@ -1,5 +1,6 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $Announcement = "Anunturi";
 $langAnnEmpty = "Lista cu anunturi a fost stearsa";
@@ -17,24 +18,24 @@ $langOn = "Pornit";
 $langRegUser = "utilizatori inregistrati";
 $langUnvalid = "au adresa de mail incorecta sau inexistenta";
 $langModifAnn = "Modifica acest anunt";
-$langModify    = "modifica";
-$langDelete    = "sterge";
-$langTitle     = "Titlu";
-$langHelp      = "ajutor";
-$langOk        = "OK";
-$langAddIntro  = "Adauga un text introductiv";
-$langBackList  = "Intoarce-te la lista";
-$langSelMess   = "Avertismente unor utilizatori";
-$EmailTitle  = "Subiectul acestui mail";
-$langUserlist  = "Lista de grupuri si utilizatori";
-$langSelectedUsers  = "Utilizatorii alesi";
-$langSubmit  = "Trimite";
-$langPleaseEnterMessage  = "Trebuie sa introduci mesajul text";
-$langPleaseSelectUsers  = "Trebuie sa alegi niste utilizatori";
+$langModify = "modifica";
+$langDelete = "sterge";
+$langTitle = "Titlu";
+$langHelp = "ajutor";
+$langOk = "OK";
+$langAddIntro = "Adauga un text introductiv";
+$langBackList = "Intoarce-te la lista";
+$langSelMess = "Avertismente unor utilizatori";
+$EmailTitle = "Subiectul acestui mail";
+$langUserlist = "Lista de grupuri si utilizatori";
+$langSelectedUsers = "Utilizatorii alesi";
+$langSubmit = "Trimite";
+$langPleaseEnterMessage = "Trebuie sa introduci mesajul text";
+$langPleaseSelectUsers = "Trebuie sa alegi niste utilizatori";
 $Teachersubject = "Mesaj trimis catre studentii tai";
-$langMessages  = "Mesaje";
-$langMessageToSelectedUsers  = "Mesaje catre utilizatorii alesi";
-$langIntroText  = "Pentru a trimite un mesaj, alege grupuri de utilizatori (marcat cu G in fata) sau un singur utilizator din partea stanga a listei.";
+$langMessages = "Mesaje";
+$langMessageToSelectedUsers = "Mesaje catre utilizatorii alesi";
+$langIntroText = "Pentru a trimite un mesaj, alege grupuri de utilizatori (marcat cu G in fata) sau un singur utilizator din partea stanga a listei.";
 $langDown = "jos";
 $langMsgSent = "Mesajul a fost trimis catre studenti alesi";
 $langSelUser = "userii selectati ai site-ului";

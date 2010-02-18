@@ -1,7 +1,8 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$ResourceAdded = "Liitteet on lisätty. Voit nyt palata oppimispolkuun tai lisätä uusia liitteitä.";
+$ResourceAdded = "Liitteet on lisÃ¤tty. Voit nyt palata oppimispolkuun tai lisÃ¤tÃ¤ uusia liitteitÃ¤.";
 $LearningPath = "Learning Path";
 $LevelUp = "level up";
 $AddIt = "Add it";
@@ -21,29 +22,38 @@ $Exercise = "Test";
 $Link = "Link";
 $AdValvas = "Ad Valvas";
 $Document = "Document";
-$ExportableCourseResources = "Siirrettäviä kurssimateriaaleja";
-$DokeosRelatedCourseMaterial = "Dokeokseen liittyviä kurssimateriaaleja";
+$ShowDelete = "";
+$IntroductionText = "";
+$CourseDescription = "";
+$Groups = "";
+$Users = "";
+$IntroductionTextAdd = "";
+$CourseDescriptionAdd = "";
+$GroupsAdd = "";
+$UsersAdd = "";
+$ExportableCourseResources = "SiirrettÃ¤viÃ¤ kurssimateriaaleja";
+$DokeosRelatedCourseMaterial = "Dokeokseen liittyviÃ¤ kurssimateriaaleja";
 $LinkTarget = "Linkin kohde";
 $SameWindow = "Samassa ikkunassa";
 $NewWindow = "Uudessa ikkunassa";
-$StepDeleted1 = "Tämä";
-$StepDeleted2 = "on poistettu tässä työkalussa.";
+$StepDeleted1 = "TÃ¤mÃ¤";
+$StepDeleted2 = "on poistettu tÃ¤ssÃ¤ tyÃ¶kalussa.";
 $Modify = "Muokkaa";
 $Chapter = "Kappale";
-$NoAgendaItems = "Kalenterimerkintöjä ei ole";
-$AgendaAdd = "Lisää merkintä";
-$UserGroupFilter = "Ryhmä valitsin";
-$AgendaSortChronologicallyUp = "Järjestä merkinnät järjesteykseen (vanhin ensin)";
-$ShowCurrent = "Näytä kalenterimerkinnät";
-$ModifyCalendarItem = "Muokka kalenterimerkintää";
+$NoAgendaItems = "KalenterimerkintÃ¶jÃ¤ ei ole";
+$AgendaAdd = "LisÃ¤Ã¤ merkintÃ¤";
+$UserGroupFilter = "RyhmÃ¤ valitsin";
+$AgendaSortChronologicallyUp = "JÃ¤rjestÃ¤ merkinnÃ¤t jÃ¤rjesteykseen (vanhin ensin)";
+$ShowCurrent = "NÃ¤ytÃ¤ kalenterimerkinnÃ¤t";
+$ModifyCalendarItem = "Muokka kalenterimerkintÃ¤Ã¤";
 $ItemTitle = "Nimi";
 $Detail = "Yksityiskohdat";
 $EditSuccess = "Muokkaus onnistui";
-$AddCalendarItem = "Lisää kalenterimerkintä";
-$AddAnn = "Lisää ilmoitus";
-$ForumAddNewTopic = "Foorumi: lisää uusi aihe";
+$AddCalendarItem = "LisÃ¤Ã¤ kalenterimerkintÃ¤";
+$AddAnn = "LisÃ¤Ã¤ ilmoitus";
+$ForumAddNewTopic = "Foorumi: lisÃ¤Ã¤ uusi aihe";
 $ForumEditTopic = "Foorumi: muokkaa aihetta";
-$ExerciseAnswers = "Tehtävä: Vastaus";
+$ExerciseAnswers = "TehtÃ¤vÃ¤: Vastaus";
 $ForumReply = "Foorumi: vastaus";
-$AgendaSortChronologicallyDown = "Järjestä merkinnät järjesteykseen (uusin ensin) ";
+$AgendaSortChronologicallyDown = "JÃ¤rjestÃ¤ merkinnÃ¤t jÃ¤rjesteykseen (uusin ensin)";
 ?>

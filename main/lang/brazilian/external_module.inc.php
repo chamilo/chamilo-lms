@@ -1,27 +1,28 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$langLinkSite = "Link para uma p·gina da web";
-$langSubTitle = "Adiciona um link para uma p·gina na p·gina principal do seu curso. Para fazer isso, v· atÈ a p·gina, copie a URL da barra de endereÁo no topo do seu navegador, e cole-a no campo \"Link\" abaixo.";
-$langAddPage            = "Adicionar uma p·gina";
-$langSendPage           = "P·gina a ser publicada";
-$langCouldNot           = "O arquivo n„o pode ser enviado";
-$langOkSentLink         = "O seu link foi adicionado. Encontra-se agora acessÌvel a partir de <a href=%s/index.php\">P·gina Principal</a>";
-$langTooBig             = "N„o foi selecionado nenhum arquivo para enviar, ou ele È muito grande";
-$langExplanation        = "A p·gina precisa estar no formato HTML (ex. \\minha_pagina.htm\\). Ser· acessÌvel atravÈs do link colocado na p·gina inicial. Se vocÍ quiser enviar documentos em outros formatos (PDF, Word, Power Point, VÌdeo, etc.) utilize a <a href=../document/document.php>Ferramenta Documentos</a>";
-$langPgTitle            = "TÌtulo da p·gina";
-$langNoLinkURL          = "Por favor, informe a URL do link";
+$langLinkSite = "Link para uma p√°gina da web";
+$langSubTitle = "Adiciona um link para uma p√°gina na p√°gina principal do seu curso. Para fazer isso, v√° at√© a p√°gina, copie a URL da barra de endere√ßo no topo do seu navegador, e cole-a no campo \\"Link\\" abaixo.";
+$langAddPage = "Adicionar uma p√°gina";
+$langSendPage = "P√°gina a ser publicada";
+$langCouldNot = "O arquivo n√£o pode ser enviado";
+$langOkSentLink = "O seu link foi adicionado. Encontra-se agora acess√≠vel a partir de <a href=%s/index.php\\">P√°gina Principal</a>";
+$langTooBig = "N√£o foi selecionado nenhum arquivo para enviar, ou ele √© muito grande";
+$langExplanation = "A p√°gina precisa estar no formato HTML (ex. \\minha_pagina.htm\\). Ser√° acess√≠vel atrav√©s do link colocado na p√°gina inicial. Se voc√™ quiser enviar documentos em outros formatos (PDF, Word, Power Point, V√≠deo, etc.) utilize a <a href=../document/document.";
+$langPgTitle = "T√≠tulo da p√°gina";
+$langNoLinkURL = "Por favor, informe a URL do link";
 $langLinkTarget = "Destino do link";
 $langSameWindow = "Na mesma janela";
 $langNewWindow = "Em uma nova janela";
 $langAdded = "O link foi adicionado";
 $langAddLink = "Adicione um link";
 $langNoLinkName = "Por favor, informe um nome para o link";
-$langEditLink = "Editar Link da p·gina inicial do Curso";
+$langEditLink = "Editar Link da p√°gina inicial do Curso";
 $langChangePress = "Modifique e pressione OK";
-$langLinkChanged = "Link da p·gina inicial do Curso modificada. Use o menu auxiliar abaixo para retornar para a p·gina inicial.";
+$langLinkChanged = "Link da p√°gina inicial do Curso modificada. Use o menu auxiliar abaixo para retornar para a p√°gina inicial.";
 $NoLinkName = "Link sem nome";
-$NoLinkURL = "Link sem endereÁo (URL)";
+$NoLinkURL = "Link sem endere√ßo (URL)";
 $LinkChanged = "Link alterado";
 $OkSentLink = "O link foi enviado";
 ?>

@@ -1,27 +1,28 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$langLinkSite = "Lier à un site";
-$langSubTitle = "Ajoute un lien vers une page sur le sommaire de votre cours. Pour ce faire, allez sur cette page, copiez son URL qui se trouve dans la barre d\'adresse de votre navigateur, et insérez-la dans le champ \"Lien\" ci-dessous.";
-$langAddPage            = "Ajouter une page";
-$langSendPage           = "Page à envoyer";
-$langCouldNot           = "Le fichier ne peut être envoyé";
-$langOkSentLink         = "Votre lien a été ajouté. <p>Il est à présent accessible depuis le <a href=\"%s/index.php\">sommaire du cours</a>";
-$langTooBig             = "Vous n\'avez choisi aucun fichier à envoyer, ou celui-ci est trop gros";
-$langExplanation        = "La page doit être au format HTML (ex. \"ma_page.htm\"). Elle devra pouvoir être accessible depuis le sommaire de votre cours. Si vous souhaitez envoyer un document non HTML (PDF, Word, Power Point, Video, etc.) utilisez <a href=\"../document/document.php\">l\'outil de documents</a>.";
-$langPgTitle            = "Titre de la page";
-$langNoLinkURL          = "Veuillez introduire l\'adresse du lien";
+$langLinkSite = "Lier Ã  un site";
+$langSubTitle = "Ajoute un lien vers une page sur le sommaire de votre cours. Pour ce faire, allez sur cette page, copiez son URL qui se trouve dans la barre d\'adresse de votre navigateur, et insÃ©rez-la dans le champ \\"Lien\\" ci-dessous.";
+$langAddPage = "Ajouter une page";
+$langSendPage = "Page Ã  envoyer";
+$langCouldNot = "Le fichier ne peut Ãªtre envoyÃ©";
+$langOkSentLink = "Votre lien a Ã©tÃ© ajoutÃ©. <p>Il est Ã  prÃ©sent accessible depuis le <a href=\\"%s/index.php\\">sommaire du cours</a>";
+$langTooBig = "Vous n\'avez choisi aucun fichier Ã  envoyer, ou celui-ci est trop gros";
+$langExplanation = "La page doit Ãªtre au format HTML (ex. \\"ma_page.htm\\"). Elle devra pouvoir Ãªtre accessible depuis le sommaire de votre cours. Si vous souhaitez envoyer un document non HTML (PDF, Word, Power Point, Video, etc.) utilisez <a href=\\"../document/document.php\";
+$langPgTitle = "Titre de la page";
+$langNoLinkURL = "Veuillez introduire l\'adresse du lien";
 $langLinkTarget = "Destination du lien";
-$langSameWindow = "Dans la même fenêtre";
-$langNewWindow = "Dans une nouvelle fenêtre";
-$langAdded = "Le lien a été ajouté";
+$langSameWindow = "Dans la mÃªme fenÃªtre";
+$langNewWindow = "Dans une nouvelle fenÃªtre";
+$langAdded = "Le lien a Ã©tÃ© ajoutÃ©";
 $langAddLink = "Ajouter un lien";
 $langNoLinkName = "Veuillez introduire le nom du lien";
 $langEditLink = "Modifier le lien Page d\'accueil";
 $langChangePress = "Changez et appuyez sur OK";
-$langLinkChanged = "Lien \"Accueil\" modifié. Utilisez le menu de navigation horizontal ci-dessus pour retourner à l\'accueil";
+$langLinkChanged = "Lien \\"Accueil\\" modifiÃ©. Utilisez le menu de navigation horizontal ci-dessus pour retourner Ã  l\'accueil";
 $NoLinkName = "Pas de nom de lien";
 $NoLinkURL = "Pas d\'URL de lien";
-$LinkChanged = "Le lien a été modifié";
-$OkSentLink = "Le lien a été envoyé";
+$LinkChanged = "Le lien a Ã©tÃ© modifiÃ©";
+$OkSentLink = "Le lien a Ã©tÃ© envoyÃ©";
 ?>

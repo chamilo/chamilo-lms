@@ -1,47 +1,48 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $langMdCallingTool = "Dokumentumok";
-$langMdTitle = "Tanulási objektum címe";
-$langMdDescription = "Az információ tárolásához kattintson a Tárolás gombra";
-$langMdCoverage = "pl. Kandidátus";
-$langMdCopyright = "pl. a forrás mellékelése megengedett";
+$langMdTitle = "TanulÃ¡si objektum cÃ­me";
+$langMdDescription = "Az informÃ¡ciÃ³ tÃ¡rolÃ¡sÃ¡hoz kattintson a TÃ¡rolÃ¡s gombra";
+$langMdCoverage = "pl. KandidÃ¡tus";
+$langMdCopyright = "pl. a forrÃ¡s mellÃ©kelÃ©se megengedett";
 $langTool = "Dokumentum metaadat";
-$langNoScript = "A parancsértelmez&#337; nincs engedélyezve a böngész&#337;jén, kérjük, ne vegye figyelembe az alábbi szöveget, nem fog m&#369;ködni...";
-$langPressAgain = "Kattintson újra a Tárolás\' gombra";
-$langLanguageTip = "a tanulási objektumban használt nyelv";
-$langIdentifier = "Azonosító";
-$langIdentifierTip = "A tanulási objektum egyedi azonosítója összeállítva bet&#369;kb&#337;l, számokból, _-.()\'!* karakterekb&#337;l";
-$langTitleTip = "cím vagy elnevezés, és ezek nyelve";
-$langDescriptionTip = "Megjegyzés leírása, és a tanulási objektum leírásához használt nyelv";
+$langNoScript = "A parancsÃ©rtelmez&#337; nincs engedÃ©lyezve a bÃ¶ngÃ©sz&#337;jÃ©n, kÃ©rjÃ¼k, ne vegye figyelembe az alÃ¡bbi szÃ¶veget, nem fog m&#369;kÃ¶dni...";
+$langPressAgain = "Kattintson Ãºjra a TÃ¡rolÃ¡s\' gombra";
+$langLanguageTip = "a tanulÃ¡si objektumban hasznÃ¡lt nyelv";
+$langIdentifier = "AzonosÃ­tÃ³";
+$langIdentifierTip = "A tanulÃ¡si objektum egyedi azonosÃ­tÃ³ja Ã¶sszeÃ¡llÃ­tva bet&#369;kb&#337;l, szÃ¡mokbÃ³l, _-.()\'!* karakterekb&#337;l";
+$langTitleTip = "cÃ­m vagy elnevezÃ©s, Ã©s ezek nyelve";
+$langDescriptionTip = "MegjegyzÃ©s leÃ­rÃ¡sa, Ã©s a tanulÃ¡si objektum leÃ­rÃ¡sÃ¡hoz hasznÃ¡lt nyelv";
 $langKeyword = "Kulcsszavak";
-$langKeywordTip = "elválastztva vessz&#337;kkel (bet&#369;k, számok, -.)";
+$langKeywordTip = "elvÃ¡lastztva vessz&#337;kkel (bet&#369;k, szÃ¡mok, -.)";
 $langCoverage = "Terjedelem";
-$langCoverageTip = "például xxx kandidátusa";
-$langKwNote = "Ha megváltoztatja a leírás nyelvét, ne adjon hozzá ezzel egy id&#337;ben kulcsszavakat.";
-$langClickKw = "Kattintson a kulcsszóra a fa struktúrában a kiválasztáshoz/kijelölés megsz&#369;ntetéséhez.";
-$langKwHelp = "<p><br>Kattintson a \'+\' gombra a megnyitáshoz, , a \'-\' gombra a bezéréshoz, a \'++\' gombra az összes kinyitásához, a \'--\' gombra az összes bezárásához.<br><br>A kulcsszavak kijelölésének megsz&#369;ntetéséhez zérja be teljesen a fastruktúrát és nyissa ki újra a \'+\' gombbal.<br>Alt gomb lenyomása közben a \'+\' gombra kattintva kereshet&#337;k az eredeti kulcsszavak a fában.<br><br>Alt gomb lenyomása közbeni kattintással lehet kiválastrani a kulcsszavakat anélkül, hogy b&#337;vítenénk a kifejezéseket, vagy megsz&#369;ntetni a kulcsszó kijelölését a fogalmak b&#337;vítésével. </p><p><br>Ha megváltoztatja a leírás nyelvét, nem adjon hozzá kulcsszavakat vele egyid&#337;ben.<br></p>";
-$langRights = "Használati jogok";
-$langRightsTip = "leírás szavakkal";
-$langVersion = "Verzió";
-$langVersionTip = "szám vagy leírás";
-$langStatusTip = "kiválasztás a listából";
-$langCreatedSize = "Létrehozva, méret";
-$langCreatedSizeTip = "YYYY-MM-DD mikor jött létre, méret (bájtokban)";
-$langAuthorTip = "VCARD formátumban";
-$langFormat = "Formátum";
-$langFormatTip = "kiválasztás a listáról";
+$langCoverageTip = "pÃ©ldÃ¡ul xxx kandidÃ¡tusa";
+$langKwNote = "Ha megvÃ¡ltoztatja a leÃ­rÃ¡s nyelvÃ©t, ne adjon hozzÃ¡ ezzel egy id&#337;ben kulcsszavakat.";
+$langClickKw = "Kattintson a kulcsszÃ³ra a fa struktÃºrÃ¡ban a kivÃ¡lasztÃ¡shoz/kijelÃ¶lÃ©s megsz&#369;ntetÃ©sÃ©hez.";
+$langKwHelp = "<p><br>Kattintson a \'+\' gombra a megnyitÃ¡shoz, , a \'-\' gombra a bezÃ©rÃ©shoz, a \'++\' gombra az Ã¶sszes kinyitÃ¡sÃ¡hoz, a \'--\' gombra az Ã¶sszes bezÃ¡rÃ¡sÃ¡hoz.<br><br>A kulcsszavak kijelÃ¶lÃ©sÃ©nek megsz&#369;ntetÃ©sÃ©hez zÃ©rja be teljesen a fastruktÃºrÃ¡t Ã©s nyi";
+$langRights = "HasznÃ¡lati jogok";
+$langRightsTip = "leÃ­rÃ¡s szavakkal";
+$langVersion = "VerziÃ³";
+$langVersionTip = "szÃ¡m vagy leÃ­rÃ¡s";
+$langStatusTip = "kivÃ¡lasztÃ¡s a listÃ¡bÃ³l";
+$langCreatedSize = "LÃ©trehozva, mÃ©ret";
+$langCreatedSizeTip = "YYYY-MM-DD mikor jÃ¶tt lÃ©tre, mÃ©ret (bÃ¡jtokban)";
+$langAuthorTip = "VCARD formÃ¡tumban";
+$langFormat = "FormÃ¡tum";
+$langFormatTip = "kivÃ¡lasztÃ¡s a listÃ¡rÃ³l";
 $langLocation = "URL/URI";
-$langLocationTip = "kattintson ide az objektum megnyitásához";
-$langStore = "Tárol";
-$langDeleteAll = "Az összes metaadat törlése";
-$langConfirmDelete = "*Biztosan* törölni akarja az összes metaadatot?";
+$langLocationTip = "kattintson ide az objektum megnyitÃ¡sÃ¡hoz";
+$langStore = "TÃ¡rol";
+$langDeleteAll = "Az Ã¶sszes metaadat tÃ¶rlÃ©se";
+$langConfirmDelete = "*Biztosan* tÃ¶rÃ¶lni akarja az Ã¶sszes metaadatot?";
 $langCourseKwds = "Ez a dokumentum tartalmazza a kurzus kulcsszavait";
-$langSearch = "Keresés";
-$langSearchCrit = "Soronként egy szó!";
-$langStatuses = ":draft:vázlat,, final:végleges,, revised:javított,, unavailable:nem elérhet&#337;";
+$langSearch = "KeresÃ©s";
+$langSearchCrit = "SoronkÃ©nt egy szÃ³!";
+$langStatuses = ":draft:vÃ¡zlat,, final:vÃ©gleges,, revised:javÃ­tott,, unavailable:nem elÃ©rhet&#337;";
 $langCosts = "no: szabad,  ingyenes,, yes: nem szabad,  fizet&#337;s";
-$langCopyrights = ":yes:jogvédett,, no:nem jogvédett";
-$langFormats = ":text/plain;iso-8859-2:text/plain;iso-8859-2,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-2:text/html;iso-8859-2,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-2:XML;iso-8859-2,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP";
-$langLngResTypes = ":exercise:feladat,, simulation:szimuláció,, questionnaire:kérd&#337;ív,, diagram:diagram,, figure:ábra,, graph:grafikon,, index:tárgymutató,, slide:dia,, table:tábla,, narrative text:narrátor szöveg,, exam:teszt,, experiment:kísérlet,, problem statement:probléma megállapítás,, self assessment:önértékelés,, lecture:el&#337;adó";
+$langCopyrights = ":yes:jogvÃ©dett,, no:nem jogvÃ©dett";
+$langFormats = ":text/plain;iso-8859-2:text/plain;iso-8859-2,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-2:text/html;iso-8859-2,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, a";
+$langLngResTypes = ":exercise:feladat,, simulation:szimulÃ¡ciÃ³,, questionnaire:kÃ©rd&#337;Ã­v,, diagram:diagram,, figure:Ã¡bra,, graph:grafikon,, index:tÃ¡rgymutatÃ³,, slide:dia,, table:tÃ¡bla,, narrative text:narrÃ¡tor szÃ¶veg,, exam:teszt,, experiment:kÃ­sÃ©rlet,, problem statement:p";
 ?>

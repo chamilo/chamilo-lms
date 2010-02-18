@@ -1,5 +1,6 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $ModifyEvaluation = "Save assessment";
 $CreateLink = "Add this learning activity to the assessment";
@@ -85,7 +86,7 @@ $ResultAdded = "Result added";
 $EvaluationStatistics = "Evaluation statistics";
 $ExportResult = "PDF Report";
 $EditResult = "Mark learners";
-$GradebookWelcomeMessage = "Welcome to the Assessments tool. This tool allows you to assess competences in your organization. Generate Competences Reports by merging the score of various learning activities including classroom and online activities. This will typically fit in a blended learning environment.";
+$GradebookWelcomeMessage = "Welcome to the Assessments tool. This tool allows you to assess competences in your organization. Generate Competences Reports by merging the score of various learning activities including classroom and online activities. This will typically fit in a blen";
 $CreateAllCat = "Create all the training categories";
 $AddAllCat = "Added all categories";
 $StatsStudent = "Statistics of";
@@ -170,7 +171,7 @@ $GradebookListOfStudentsCertificates = "Gradebook list of students certificates"
 $NewPresence = "New presence";
 $EditPresence = "Edit presence";
 $SavedEditPresence = "Saved edit presence";
-$PresenceSheetFormatExplanation = "You should use the presence sheet that you can download above. This presence sheet contains a list of all the trainees in this training. The first column of the XLS file is the official code of the trainee, followed by the lastname and the firstname. You should only change the 4th column and note 0 = absent, 1 = present";
+$PresenceSheetFormatExplanation = "You should use the presence sheet that you can download above. This presence sheet contains a list of all the trainees in this training. The first column of the XLS file is the official code of the trainee, followed by the lastname and the firstname. You";
 $ValidatePresenceSheet = "Validate presence sheet";
 $BackTo = "Back to";
 $PresenceSheet = "Presence sheet";

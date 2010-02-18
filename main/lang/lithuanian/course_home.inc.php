@@ -1,13 +1,14 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $langActivate = "Rodyti";
 $langDeactivate = "Slėpti";
-$langInLnk  = "Paslėpti įrankiai ir nuorodos";
+$langInLnk = "Paslėpti įrankiai ir nuorodos";
 $langDelLk = "Ar tikrai norite ištrinti šią nuorodą?";
-$langCourseCreate  = "Sukurti kurso tinklapį";
-$langNameOfTheLink  = "Nuorodos pavadinimas";
-$lang_main_categories_list                  = "Pagrindinis kategorijų sąrašas";
+$langCourseCreate = "Sukurti kurso tinklapį";
+$langNameOfTheLink = "Nuorodos pavadinimas";
+$lang_main_categories_list = "Pagrindinis kategorijų sąrašas";
 $langCourseAdminOnly = "tik dėstytojams";
 $PlatformAdminOnly = "tik sistemos administratoriams";
 $langCombinedCourse = "Kombinuotas kursas";
@@ -24,4 +25,8 @@ $Authoring = "Kūrimas";
 $Administration = "Administravimas";
 $IntroductionTextUpdated = "Paaiškinamasis tekstas atnaujintas";
 $IntroductionTextDeleted = "Introduction text deleted";
+$SessionIdentifier = "";
+$SessionName = "";
+$SessionCategory = "";
+$SessionData = "";
 ?>

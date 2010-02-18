@@ -1,7 +1,8 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$Tools  = "Įrankiai";
+$Tools = "Įrankiai";
 $SendWork = "Įkrauti failą";
 $langTooBig = "Jūs nepasirinkote failo arba failas per didelis.";
 $langListDeleted = "Visas sąrašas ištrintas.";
@@ -32,4 +33,58 @@ $DocumentDeleted = "Dokumentas ištrintas";
 $SendMailBody = "Jūsų kurso publikacijose vartotojas patalpino dokumentą.";
 $DirDelete = "Ištrinti katalogą";
 $ValidateChanges = "Patikrinti pakeitimus";
+$FolderUpdated = "";
+$EndsAt = "";
+$QualificationOfAssignment = "";
+$MakeQualifiable = "";
+$QualificationNumberOver = "";
+$WeightInTheGradebook = "";
+$DatesAvailables = "";
+$ExpiresAt = "";
+$AddToCalendar = "";
+$DirectoryCreated = "";
+$Assignment = "";
+$AdvancedParameters = "";
+$ExpiryDateToSendWorkIs = "";
+$EnableExpiryDate = "";
+$EnableEndDate = "";
+$IsNotPosibleSaveTheDocument = "";
+$EndDateCannotBeBeforeTheExpireDate = "";
+$SelectAFilter = "";
+$FilterByNotExpired = "";
+$FilterAssignments = "";
+$WeightNecessary = "";
+$QualificationOver = "";
+$ExpiryDateAlreadyPassed = "";
+$EndDateAlreadyPassed = "";
+$MoveXTo = "";
+$QualificationMustNotBeMoreThanQualificationOver = "";
+$ModifyDirectory = "";
+$DeleteAllFiles = "";
+$BackToWorksList = "";
+$EditMedia = "";
+$AllFilesInvisible = "";
+$FileInvisible = "";
+$AllFilesVisible = "";
+$FileVisible = "";
+$ButtonCreateAssignment = "";
+$AssignmentName = "";
+$CreateAssignment = "";
+$FolderEdited = "";
+$UpdateWork = "";
+$MakeAllPapersInvisible = "";
+$MakeAllPapersVisible = "";
+$TheDocumentHasBeenDeleted = "";
+$YouAreNotAllowedToDeleteThisDocument = "";
+$StudentAllowedToDeleteOwnPublication = "";
+$ConfirmYourChoiceDeleteAllfiles = "";
+$WorkName = "";
+$ReminderToSubmitPendingTask = "";
+$MessageConfirmSendingOfTask = "";
+$DataSent = "";
+$DownloadLink = "";
+$ViewUsersWithTask = "";
+$ReminderMessage = "";
+$DateSent = "";
+$ViewUsersWithoutTask = "";
 ?>

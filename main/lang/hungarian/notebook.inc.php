@@ -1,28 +1,35 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$NewNote = "Új feljegyzés";
+$NewNote = "Ãšj feljegyzÃ©s";
 $Note = "Jegyzet";
-$NoteDeleted = "Jegyzet törölve";
-$NoteUpdated = "Jegyzet módosítva";
-$NoteCreated = "Jegyzet létrehozva";
-$YouMustWriteANote = "Kérem, adja meg jegyzetét";
-$SaveNote = "Jegyzet mentése";
-$WriteYourNoteHere = "Új jegyzet írásához kattintson ide";
-$SearchByTitle = "Keresés cím szerint";
-$WriteTheTitleHere = "Adja meg a címet";
-$UpdateDate = "Utolsó módosítás";
-$NoteAddNew = "Új jegyzet írása a személyes jegyzetfüzetbe";
-$OrderByCreationDate = "Rendezés létrehozás dátuma szerint";
-$OrderByModificationDate = "Rendezés utolsó módosítás dátuma szerint";
-$OrderByTitle = "Rendezés cím szerint";
-$NoteTitle = "Jegyzet címe";
-$NoteComment = "Jegyzet részletei";
-$NoteAdded = "Jegyzet hozzáadva";
-$NoteConfirmDelete = "Biztosan törölni akarja ezt a jegyzetet?";
-$AddNote = "Jegyzet létrehozása";
-$ModifyNote = "Személyes jegyzetem szerkesztése";
-$BackToNoteList = "Vissza a jegyzetlistához";
-$NotebookManagement = "Jegyzetfüzetek kezelése";
-$BackToNotesList = "Vissza a jegyzetlistához";
+$NoteDeleted = "Jegyzet tÃ¶rÃ¶lve";
+$NoteUpdated = "Jegyzet mÃ³dosÃ­tva";
+$NoteCreated = "Jegyzet lÃ©trehozva";
+$YouMustWriteANote = "KÃ©rem, adja meg jegyzetÃ©t";
+$SaveNote = "Jegyzet mentÃ©se";
+$WriteYourNoteHere = "Ãšj jegyzet Ã­rÃ¡sÃ¡hoz kattintson ide";
+$SearchByTitle = "KeresÃ©s cÃ­m szerint";
+$WriteTheTitleHere = "Adja meg a cÃ­met";
+$UpdateDate = "UtolsÃ³ mÃ³dosÃ­tÃ¡s";
+$NoteAddNew = "Ãšj jegyzet Ã­rÃ¡sa a szemÃ©lyes jegyzetfÃ¼zetbe";
+$OrderByCreationDate = "RendezÃ©s lÃ©trehozÃ¡s dÃ¡tuma szerint";
+$OrderByModificationDate = "RendezÃ©s utolsÃ³ mÃ³dosÃ­tÃ¡s dÃ¡tuma szerint";
+$OrderByTitle = "RendezÃ©s cÃ­m szerint";
+$NoteTitle = "Jegyzet cÃ­me";
+$NoteComment = "Jegyzet rÃ©szletei";
+$NoteAdded = "Jegyzet hozzÃ¡adva";
+$NoteConfirmDelete = "Biztosan tÃ¶rÃ¶lni akarja ezt a jegyzetet?";
+$AddNote = "Jegyzet lÃ©trehozÃ¡sa";
+$ModifyNote = "SzemÃ©lyes jegyzetem szerkesztÃ©se";
+$BackToNoteList = "Vissza a jegyzetlistÃ¡hoz";
+$NotebookManagement = "JegyzetfÃ¼zetek kezelÃ©se";
+$BackToNotesList = "Vissza a jegyzetlistÃ¡hoz";
+$NotesSortedByTitleAsc = "";
+$NotesSortedByTitleDESC = "";
+$NotesSortedByUpdateDateAsc = "";
+$NotesSortedByUpdateDateDESC = "";
+$NotesSortedByCreationDateAsc = "";
+$NotesSortedByCreationDateDESC = "";
 ?>

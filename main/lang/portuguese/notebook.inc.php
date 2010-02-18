@@ -1,5 +1,6 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $NewNote = "Nova nota";
 $Note = "Nota";
@@ -9,26 +10,26 @@ $NoteCreated = "Nota criada";
 $YouMustWriteANote = "Por favor escrever uma nota.";
 $SaveNote = "Guardar nota";
 $WriteYourNoteHere = "Cliique aqui para escrever uma nova nota";
-$SearchByTitle = "Pesquisar por título";
-$WriteTheTitleHere = "Escreva aqui o título";
-$UpdateDate = "Última modificação";
+$SearchByTitle = "Pesquisar por tÃ­tulo";
+$WriteTheTitleHere = "Escreva aqui o tÃ­tulo";
+$UpdateDate = "Ãšltima modificaÃ§Ã£o";
 $NoteAddNew = "Adicionar uma nova nota no meus bloco de notas pessoal";
-$OrderByCreationDate = "Ordenar por data de criação";
-$OrderByModificationDate = "Ordenar por data da última modificação";
-$OrderByTitle = "Ordenar por título";
-$NoteTitle = "Título da nota";
+$OrderByCreationDate = "Ordenar por data de criaÃ§Ã£o";
+$OrderByModificationDate = "Ordenar por data da Ãºltima modificaÃ§Ã£o";
+$OrderByTitle = "Ordenar por tÃ­tulo";
+$NoteTitle = "TÃ­tulo da nota";
 $NoteComment = "Detalhes da nota";
 $NoteAdded = "Nota acrescentada";
 $NoteConfirmDelete = "Tema certeza que deseja eliminar esta nota";
 $AddNote = "Criar nota";
 $ModifyNote = "Editar a minha nota pessoal";
-$BackToNoteList = "Voltar à lista das notas";
-$NotebookManagement = "Gestão do bloco de notas";
-$BackToNotesList = "Regressar à lista das notas";
-$NotesSortedByTitleAsc = "Notas ordenadas de forma ascendente pelo título";
-$NotesSortedByTitleDESC = "Notas ordenadas de forma descendente pelo título";
-$NotesSortedByUpdateDateAsc = "Notas ordenadas de forma ascendente pela data de actualização";
-$NotesSortedByUpdateDateDESC = "Notas ordenadas de forma descendente pela data de actualização";
-$NotesSortedByCreationDateAsc = "Notas ordenadas de forma ascendente pela data de criação";
-$NotesSortedByCreationDateDESC = "Notas ordenadas de forma descendente pela data de criação";
+$BackToNoteList = "Voltar Ã  lista das notas";
+$NotebookManagement = "GestÃ£o do bloco de notas";
+$BackToNotesList = "Regressar Ã  lista das notas";
+$NotesSortedByTitleAsc = "Notas ordenadas de forma ascendente pelo tÃ­tulo";
+$NotesSortedByTitleDESC = "Notas ordenadas de forma descendente pelo tÃ­tulo";
+$NotesSortedByUpdateDateAsc = "Notas ordenadas de forma ascendente pela data de actualizaÃ§Ã£o";
+$NotesSortedByUpdateDateDESC = "Notas ordenadas de forma descendente pela data de actualizaÃ§Ã£o";
+$NotesSortedByCreationDateAsc = "Notas ordenadas de forma ascendente pela data de criaÃ§Ã£o";
+$NotesSortedByCreationDateDESC = "Notas ordenadas de forma descendente pela data de criaÃ§Ã£o";
 ?>

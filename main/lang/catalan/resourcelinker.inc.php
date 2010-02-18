@@ -1,7 +1,8 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$ResourceAdded = "Recurs afegit. Vostè ara pot tornar a cursos o afegir més recursos";
+$ResourceAdded = "Recurs afegit. VostÃ¨ ara pot tornar a cursos o afegir mÃ©s recursos";
 $LearningPath = "Itinerari d\'aprenentatge";
 $LevelUp = "nivell superior";
 $AddIt = "Afegir";
@@ -23,36 +24,36 @@ $AdValvas = "Ad Valvas";
 $Document = "Document";
 $ShowDelete = "Mostrar/eliminar";
 $IntroductionText = "Introduir text";
-$CourseDescription = "Descripció del curs";
+$CourseDescription = "DescripciÃ³ del curs";
 $Groups = "Grups";
 $Users = "Usuaris";
-$IntroductionTextAdd = "Afegeixi una pàgina que conté el text d\'introducció a aquest capítol.";
-$CourseDescriptionAdd = "Afegeixi una pàgina que conté la descripció de curs a aquest capítol.";
-$GroupsAdd = "Afegeixi la pàgina de Grups a aquest capítol.";
-$UsersAdd = "Afegeixi la pàgina d\'Usuaris a aquest capítol.";
+$IntroductionTextAdd = "Afegeixi una pÃ gina que contÃ© el text d\'introducciÃ³ a aquest capÃ­tol.";
+$CourseDescriptionAdd = "Afegeixi una pÃ gina que contÃ© la descripciÃ³ de curs a aquest capÃ­tol.";
+$GroupsAdd = "Afegeixi la pÃ gina de Grups a aquest capÃ­tol.";
+$UsersAdd = "Afegeixi la pÃ gina d\'Usuaris a aquest capÃ­tol.";
 $ExportableCourseResources = "Recursos de curs exportables";
 $DokeosRelatedCourseMaterial = "Chamilo relacionava recursos de curs";
-$LinkTarget = "Destí d\'enllaç";
+$LinkTarget = "DestÃ­ d\'enllaÃ§";
 $SameWindow = "A la mateixa finestra";
 $NewWindow = "A una nova finestra";
 $StepDeleted1 = "Aquest";
 $StepDeleted2 = "l\'element fou suprimit en aquesta eina";
 $Modify = "modificar";
-$Chapter = "Capítol";
+$Chapter = "CapÃ­tol";
 $NoAgendaItems = "No hi ha elements a l\'agenda";
 $AgendaAdd = "Afegir un element a l\'agenda";
 $UserGroupFilter = "Filtrar per grups d\'usuaris";
 $AgendaSortChronologicallyUp = "Ordenar l\'agenda cronologicament (adalt)";
 $ShowCurrent = "Ordenar els elements de l\'agenda";
 $ModifyCalendarItem = "Modificar els elements de l\'agenda";
-$ItemTitle = "Títol";
+$ItemTitle = "TÃ­tol";
 $Detail = "Detalls";
-$EditSuccess = "L\'edició ha estat exitosa";
+$EditSuccess = "L\'ediciÃ³ ha estat exitosa";
 $AddCalendarItem = "Afegir element a l\'agenda";
 $AddAnn = "Afegir un anunci";
-$ForumAddNewTopic = "Fòrum: afegir un nou tòpic";
+$ForumAddNewTopic = "FÃ²rum: afegir un nou tÃ²pic";
 $ForumEditTopic = "Foro: editar un tema";
 $ExerciseAnswers = "Exercici: respostes";
 $ForumReply = "Foro: respondre";
-$AgendaSortChronologicallyDown = "Ordenar l\'agenda del més recent al més antic";
+$AgendaSortChronologicallyDown = "Ordenar l\'agenda del mÃ©s recent al mÃ©s antic";
 ?>

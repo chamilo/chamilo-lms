@@ -1,5 +1,6 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $MyTasks = "Miaj taskoj";
 $FavoriteBlogs = "Mia &#349;atataj blogoj";
@@ -22,7 +23,7 @@ $Register = "Enskribi en &#265;i tiun blogon";
 $UnRegister = "Malenskribi sin el &#265;i tiu blogo";
 $SubscribeMembers = "Enskribi uzantojn";
 $UnsubscribeMembers = "Malenskribi uzantojn";
-$RightsManager = "Mastrumi uzantajn rajtojn ";
+$RightsManager = "Mastrumi uzantajn rajtojn";
 $ManageRights = "Kontroli la rajtojn kaj rolojn de la uzantoj en &#265;i tiu blogo";
 $Task = "Tasko";
 $Tasks = "Taskoj";
@@ -63,6 +64,7 @@ $InBlog = "en &#265;i tiu blogo";
 $ViewPostsOfThisDay = "Rigardi al la hodia&#365;aj artikoloj";
 $PostsOf = "Artikoloj de";
 $NoArticleMatches = "Ni ne trovis artikolojn respondajn al viaj ser&#265;kriterioj. Bonvolu fari pli vastan ser&#265;peton.";
+$SaveProject = "";
 $langTask1 = "Tasko 1";
 $langTask2 = "Tasko 2";
 $langTask3 = "Tasko 3";
@@ -80,4 +82,24 @@ $EditPost = "&#348;an&#285;i artikolon";
 $AddBlog = "Fari novan blogon";
 $EditBlog = "Redakti titolon kaj subtitolon";
 $DeleteBlog = "Vi&#349;i &#265;i tiun blogon";
+$Shared = "";
+$PermissionGrantedByGroupOrRole = "";
+$Reader = "";
+$SeeBlog = "";
+$BlogDeleted = "";
+$BlogEdited = "";
+$BlogStored = "";
+$CommentCreated = "";
+$BlogAdded = "";
+$TaskCreated = "";
+$TaskEdited = "";
+$TaskAssigned = "";
+$AssignedTaskEdited = "";
+$UserRegistered = "";
+$TaskDeleted = "";
+$TaskAssignmentDeleted = "";
+$CommentDeleted = "";
+$RatingAdded = "";
+$BlogPosts = "";
+$BlogComments = "";
 ?>

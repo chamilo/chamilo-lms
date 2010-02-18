@@ -1,5 +1,6 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $nameTools = "&#50424;&#47784;&#50630;&#45716; &#50616;&#50612; &#48320;&#49688;";
 $langMdCallingTool = "Learning path - Scorm";
@@ -29,7 +30,7 @@ $langOrElse = "&#49828;&#53092; &#46356;&#47113;&#53664;&#47532; &#46608;&#45716
 $langWorkWith = "&#49828;&#53092; &#46356;&#47113;&#53664;&#47532;&#50640;&#49436; &#46041;&#51089;";
 $langSDI = ".....SD-id&#50752; &#49828;&#53092; &#46356;&#47113;&#53664;&#47532;(and split manifest - or leave empty)";
 $langRoot = "root";
-$langSplitData = "Split manifests, and #MDe, if any: ";
+$langSplitData = "Split manifests, and #MDe, if any:";
 $langMffNotOk = "Manifest &#54028;&#51068; &#44368;&#52404;&#44032; &#49892;&#54056;&#54616;&#50688;&#49845;&#45768;&#45796;";
 $langMffOk = "Manifest &#54028;&#51068;&#51060; &#44368;&#52404;&#46104;&#50632;&#49845;&#45768;&#45796;";
 $langMffFileNotFound = "&#49352; Manifest &#54028;&#51068;&#51012; &#50676; &#49688;&#44032; &#50630;&#49845;&#45768;&#45796; (e.g. &#48708;&#50612;&#51080;&#44144;&#45208;, &#45320;&#47924; &#53373;&#45768;&#45796;)";

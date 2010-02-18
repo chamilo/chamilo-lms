@@ -1,8 +1,10 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $ModifyEvaluation = "T\'ijray chaninchanata";
 $CreateLink = "Kamay waskhanata";
+$AddResultNoStudents = "";
 $FlatView = "P\'alta qhawariy";
 $ScoreEdit = "Ruwapay markana kamachiykunanpaq";
 $ScoreColor = "Markaq llinphin";
@@ -48,17 +50,7 @@ $Landscape = "Horizontal";
 $FilterCategory = "Suysuy sapanka chaninchanata";
 $DeleteAll = "Pichay llapanta";
 $ScoringUpdated = "Marka kunanyachisqa";
-$CertificateWCertifiesStudentXFinishedCourseYWithGradeZ = "%s certifica que\\
-\\
- %s \\
-\\
-ha realizado el curso \\
-\\
- \'%s\' \\
-\\
-con la calificación de\\
-\\
- \'%s\'";
+$CertificateWCertifiesStudentXFinishedCourseYWithGradeZ = "%s certifica que";
 $CertificateMinScore = "Puntuación mínima de certificación";
 $CategoryAdded = "Mita yapasqa";
 $InViMod = "Este apartado ya no es visible";
@@ -148,4 +140,55 @@ $AddAssessment = "Añadir evaluación";
 $FolderView = "Principal Evaluaciones";
 $GradebookSkillsRanking = "Clasificación de habilidades";
 $SaveScoringRules = "Guardar reglas de puntuación";
+$AttachCertificate = "";
+$GradebookSeeListOfStudentsCertificates = "";
+$CreateCertificate = "";
+$UploadCertificate = "";
+$CertificateName = "";
+$CertificateOverview = "";
+$CreateCertificateWithTags = "";
+$ViewPresenceSheets = "";
+$ViewEvaluations = "";
+$NewPresenceSheet = "";
+$NewPresenceStep1 = "";
+$TitlePresenceSheet = "";
+$Trainer = "";
+$PresenceSheetCreatedBy = "";
+$SavePresence = "";
+$NewPresenceStep2 = "";
+$NoCertificateAvailable = "";
+$SaveCertificate = "";
+$CertificateNotRemoved = "";
+$CertificateRemoved = "";
+$NoDefaultCertificate = "";
+$DefaultCertificate = "";
+$PreviewCertificate = "";
+$IsDefaultCertificate = "";
+$ImportPresences = "";
+$AddPresences = "";
+$DeletePresences = "";
+$GradebookListOfStudentsCertificates = "";
+$NewPresence = "";
+$EditPresence = "";
+$SavedEditPresence = "";
+$PresenceSheetFormatExplanation = "";
+$ValidatePresenceSheet = "";
+$BackTo = "";
+$PresenceSheet = "";
+$PresenceSheets = "";
+$Evaluations = "";
+$SaveEditPresence = "";
+$Training = "";
+$Present = "";
+$Numero = "";
+$PresentAbsent = "";
+$ExampleXLSFile = "";
+$NoResultsInPresenceSheet = "";
+$EditPresences = "";
+$TotalWeightMustNotBeMoreThan = "";
+$ThereIsNotACertificateAvailableByDefault = "";
+$CertificateMinimunScoreIsRequiredAndMustNotBeMoreThan = "";
+$LinkMod = "";
+$EditLink = "";
+$CategoryDeleted = "";
 ?>

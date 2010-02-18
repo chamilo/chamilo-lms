@@ -1,5 +1,6 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $lang_new_item = "nieuw item toegevoegd";
 $lang_title_notification = "Sinds uw vorig bezoek";
@@ -28,7 +29,7 @@ $DocumentInvisible = "Document werd onzichtbaar gemaakt";
 $DocumentVisible = "Document werd zichtbaar gemaakt";
 $CourseDescriptionAdded = "Cursusomschrijving toegevoegd";
 $WikiAdded = "Wiki toegevoegt";
-$SurveyAdded = "Enquête toegevoegd";
+$SurveyAdded = "EnquÃªte toegevoegd";
 $NotebookAdded = "Notitie toegevoegd";
 $NotebookUpdated = "Notitie aangepast";
 $NotebookDeleted = "Notitie verwijderd";

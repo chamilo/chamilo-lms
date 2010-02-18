@@ -1,27 +1,28 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $langLinkSite = "Link zu einer Webseite";
-$langSubTitle = "F¸gt dem Hauptmen¸ Ihrer Seminarhomepage einen Link zu einer Seite oder einer beliebigen URL zu. Hinweis: Wenn Sie einen Link auf eine Seite hinzuf¸gen mˆchten, gehen Sie zu dieser Seite, kopieren Sie die Adresse und f¸gen sie in das \"Hyperlink\" Feld unten ein.";
-$langAddPage            = "Seite hinzuf¸gen";
-$langSendPage           = "Seite hochladen";
-$langCouldNot           = "Datei kann nicht hochgeladen werden";
-$langOkSentLink         = "Der Link wurde hinzugef¸gt und ist nun auf der <a href=\"%s/index.php\">Homepage</a> verf¸gbar";
-$langTooBig             = "Sie haben keine Datei ausgew‰hlt oder die Datei ist zu groﬂ";
-$langExplanation        = "Die Seite muﬂ im HTML-Format vorliegen (z.B. \"seite.htm\"). Sie wird von der Startseite verlinkt. Dokumente in anderen Formaten (PDF, Word, Power Point, Video, etc.) kˆnnen als <a href=../document/document.php>Dokument</a> hinterlegt werden";
-$langPgTitle            = "Seitenname";
-$langNoLinkURL          = "Bitte geben Sie die Link-URL an";
+$langSubTitle = "F√ºgt dem Hauptmen√º Ihrer Seminarhomepage einen Link zu einer Seite oder einer beliebigen URL zu. Hinweis: Wenn Sie einen Link auf eine Seite hinzuf√ºgen m√∂chten, gehen Sie zu dieser Seite, kopieren Sie die Adresse und f√ºgen sie in das \\"Hyperlink\\" Feld un";
+$langAddPage = "Seite hinzuf√ºgen";
+$langSendPage = "Seite hochladen";
+$langCouldNot = "Datei kann nicht hochgeladen werden";
+$langOkSentLink = "Der Link wurde hinzugef√ºgt und ist nun auf der <a href=\\"%s/index.php\\">Homepage</a> verf√ºgbar";
+$langTooBig = "Sie haben keine Datei ausgew√§hlt oder die Datei ist zu gro√ü";
+$langExplanation = "Die Seite mu√ü im HTML-Format vorliegen (z.B. \\"seite.htm\\"). Sie wird von der Startseite verlinkt. Dokumente in anderen Formaten (PDF, Word, Power Point, Video, etc.) k√∂nnen als <a href=../document/document.php>Dokument</a> hinterlegt werden";
+$langPgTitle = "Seitenname";
+$langNoLinkURL = "Bitte geben Sie die Link-URL an";
 $langLinkTarget = "Link-Ziel";
 $langSameWindow = "Im selben Fenster";
 $langNewWindow = "In neuem Fenster";
-$langAdded = "Link wurde hinzugef¸gt";
-$langAddLink = "Link hinzuf¸gen";
-$langNoLinkName = "Bitte Namen f¸r Link eingeben";
-$langEditLink = "Link ‰ndern";
-$langChangePress = "ƒndern und OK klicken";
-$langLinkChanged = "Link f¸r die Kurs Homepage  hat sich ge‰ndert. Benutzen Sie die \"breadcrumb\" Navigation, um zur Homepage des Kurses zu gelangen.";
-$NoLinkName = "Name f¸r Link fehlt";
-$NoLinkURL = "Keine URL f¸r Link";
+$langAdded = "Link wurde hinzugef√ºgt";
+$langAddLink = "Link hinzuf√ºgen";
+$langNoLinkName = "Bitte Namen f√ºr Link eingeben";
+$langEditLink = "Link √§ndern";
+$langChangePress = "√Ñndern und OK klicken";
+$langLinkChanged = "Link f√ºr die Kurs Homepage  hat sich ge√§ndert. Benutzen Sie die \\"breadcrumb\\" Navigation, um zur Homepage des Kurses zu gelangen.";
+$NoLinkName = "Name f√ºr Link fehlt";
+$NoLinkURL = "Keine URL f√ºr Link";
 $LinkChanged = "Link wurde bearbeitet";
 $OkSentLink = "Link wurde versendet";
 ?>

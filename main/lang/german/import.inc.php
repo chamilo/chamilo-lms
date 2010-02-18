@@ -1,16 +1,17 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $langPgTitle = "Seitentitel";
-$langExplanation = "Die Seite muss im HTML-Format vorliegen (z.B. \"my_page.htm\"). Es wird von der Homepage verkn¸pft. Wenn Sie Dokumente verkn¸pfen mˆchten, die nicht im HTML Format vorliegen (PDF, Word, Power Point, Video, etc.) benutzen Sie bitte <a href=../document/document.php>das Werkzeug Dokumente</a>";
-$langTooBig = "Sie haben keine Datei ausgew‰hlt, oder Sie ist zu groﬂ.";
+$langExplanation = "Die Seite muss im HTML-Format vorliegen (z.B. \\"my_page.htm\\"). Es wird von der Homepage verkn√ºpft. Wenn Sie Dokumente verkn√ºpfen m√∂chten, die nicht im HTML Format vorliegen (PDF, Word, Power Point, Video, etc.) benutzen Sie bitte <a href=../document/docu";
+$langTooBig = "Sie haben keine Datei ausgew√§hlt, oder Sie ist zu gro√ü.";
 $langCouldNot = "Datei konnte nicht hochgeladen werden";
 $langNotAllowed = "Nicht erlaubt";
-$langAddPageToSite = "Eine Seite hinzuf¸gen";
-$langCouldNotSendPage = "Diese Datei hat kein HTML Format und konnte daher nicht verschickt werden. Wenn Sie Dokumente versenden mˆchten, die nicht im HTML Format vorliegen (z.B. PDF, Word, Power Point, Video, usw.) benutzen Sie bitte <a href=../document/document.php>das Werkzeug Dokumente</a>";
+$langAddPageToSite = "Eine Seite hinzuf√ºgen";
+$langCouldNotSendPage = "Diese Datei hat kein HTML Format und konnte daher nicht verschickt werden. Wenn Sie Dokumente versenden m√∂chten, die nicht im HTML Format vorliegen (z.B. PDF, Word, Power Point, Video, usw.) benutzen Sie bitte <a href=../document/document.php>das Werkzeug";
 $langSendPage = "Seite senden";
-$langPageTitleModified = "Der Titel der Seite wurde ver‰ndert";
-$langPageAdded = "Seite wurde hinzugef¸gt";
-$langAddPage = "Seite hinzuf¸gen";
+$langPageTitleModified = "Der Titel der Seite wurde ver√§ndert";
+$langPageAdded = "Seite wurde hinzugef√ºgt";
+$langAddPage = "Seite hinzuf√ºgen";
 $Choose = "Suchen";
 ?>

@@ -1,5 +1,6 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $lang_new_item = "musuq ruway yapakusqa";
 $lang_title_notification = "Qepa watukusqaykimanta";
@@ -18,4 +19,18 @@ $lang_update_dropbox_file = "hoq khipu khipuykikuna t\'aqapasqaykimanta kunanyac
 $ForumCategoryAdded = "yapachikunña k\'itirimarinamanta hoq mita";
 $LearnpathAdded = "Yachana yapasqa";
 $GlossaryAdded = "Musuq simi yaspasqa Glosario nisqaman";
+$QuizQuestionAdded = "";
+$QuizQuestionUpdated = "";
+$QuizQuestionDeleted = "";
+$QuizUpdated = "";
+$QuizAdded = "";
+$QuizDeleted = "";
+$DocumentInvisible = "";
+$DocumentVisible = "";
+$CourseDescriptionAdded = "";
+$WikiAdded = "";
+$SurveyAdded = "";
+$NotebookAdded = "";
+$NotebookUpdated = "";
+$NotebookDeleted = "";
 ?>

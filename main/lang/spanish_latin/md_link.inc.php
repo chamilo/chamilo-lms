@@ -1,46 +1,47 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $langMdCallingTool = "Enlaces";
 $langMdTitle = "Nombre del enlace";
-$langMdDescription = "Descripción del enlace";
+$langMdDescription = "DescripciÃ³n del enlace";
 $langMdCoverage = "Universal";
 $langMdCopyright = "Universidad de Gante";
 $nameTools = "variable de idioma obsoleta";
 $langTool = "Metadatos del enlace";
-$langNoScript = "El script no está activado en su navegador, por favor ignore lo que se vea debajo de este texto, no funcionará";
+$langNoScript = "El script no estÃ¡ activado en su navegador, por favor ignore lo que se vea debajo de este texto, no funcionarÃ¡";
 $langLanguageTip = "el idioma en el cual este objeto de aprendizaje fue hecho";
 $langIdentifier = "Identificador";
-$langIdentifierTip = "identificación única para este objeto de aprendizaje, compuesto de letras, dígitos, _-.()\'!*";
-$langTitleTip = "título o nombre e idioma del título o nombre";
-$langDescriptionTip = "descripción o comentario e idioma usado para describir el objeto de aprendizaje";
+$langIdentifierTip = "identificaciÃ³n Ãºnica para este objeto de aprendizaje, compuesto de letras, dÃ­gitos, _-.()\'!*";
+$langTitleTip = "tÃ­tulo o nombre e idioma del tÃ­tulo o nombre";
+$langDescriptionTip = "descripciÃ³n o comentario e idioma usado para describir el objeto de aprendizaje";
 $langKeyword = "Palabras Clave";
 $langKeywordTip = "separado por comas (letras, digitos, -.)";
-$langCoverage = "Categoría";
-$langCoverageTip = "nombre de categoría";
-$langKwNote = "Si ud cambia el idioma de descripción, no añada palabras clave al mismo tiempo";
-$langClickKw = "Haga clic en una palabra clave del árbol para seleccionarla o deseleccionarla.";
-$langKwHelp = "<br/>Haga clic en el botón \'+\' para abrir, en el botón \'-\' para cerrar, en el botón \'++\' para abrir todo, en el botón \'--\' para cerrarlo todo.<br/><br/>Deseleccione todas las palabras clave cerrando el árbol y abriéndolo de nuevo con el botón \'+\'.Alt-clic \'+\' busca las palabras claves originales en el árbol.<br/><br/>Alt-clic selecciona las palabras clave una a una, con o sin términos más amplios.<br/><br/>Si cambia de idioma de descripción, no podrá añadir palabras clave al mismo tiempo.<br/> <br/>";
+$langCoverage = "CategorÃ­a";
+$langCoverageTip = "nombre de categorÃ­a";
+$langKwNote = "Si ud cambia el idioma de descripciÃ³n, no aÃ±ada palabras clave al mismo tiempo";
+$langClickKw = "Haga clic en una palabra clave del Ã¡rbol para seleccionarla o deseleccionarla.";
+$langKwHelp = "<br/>Haga clic en el botÃ³n \'+\' para abrir, en el botÃ³n \'-\' para cerrar, en el botÃ³n \'++\' para abrir todo, en el botÃ³n \'--\' para cerrarlo todo.<br/><br/>Deseleccione todas las palabras clave cerrando el Ã¡rbol y abriÃ©ndolo de nuevo con el botÃ³n \'+\";
 $langLocation = "URL/URI";
 $langLocationTip = "haga clic para abrir el objeto";
 $langStore = "Almacenar";
 $langDeleteAll = "Borrar todos los metadatos";
-$langConfirmDelete = "Está *seguro* de querer borrar todos los metadatos ?";
+$langConfirmDelete = "EstÃ¡ *seguro* de querer borrar todos los metadatos ?";
 $langWorkOn = "en";
-$langNotInDB = "no existe esta categoría para el enlace";
-$langManifestSyntax = "(error de sintáxis en el archivo Manifest...)";
-$langEmptyManifest = "(el archivo Manifest está vacío...)";
-$langNoManifest = "(no existe el archivo Manifest...) ";
-$langNotFolder = "no es posible, esto no es una carpeta ... ";
+$langNotInDB = "no existe esta categorÃ­a para el enlace";
+$langManifestSyntax = "(error de sintÃ¡xis en el archivo Manifest...)";
+$langEmptyManifest = "(el archivo Manifest estÃ¡ vacÃ­o...)";
+$langNoManifest = "(no existe el archivo Manifest...)";
+$langNotFolder = "no es posible, esto no es una carpeta ...";
 $langContinue = "Continuar con";
-$langCreate = "Crear Entradas de Meta Datos (MDE) ";
-$langRemove = "Borrar Entradas de Meta Datos (MDE) ";
-$langAllRemovedFor = "Todas las entradas han sido removidas de la categoría ";
-$langRemainingFor = "entradas obsoletas quitadas por categoría ";
-$langIndex = "Índice de palabras ";
-$langTotalMDEs = "Total de Entradas de Meta Datos (MD) de Enlaces ";
-$langMainMD = "Abrir la página principal de Entradas de Meta Datos (MDE)";
-$langOrElse = "Seleccione una categoría de Enlaces ";
-$langWarningDups = "¡ - los nombres de categoría duplicados serán retirados de la lista ! ";
-$langSLC = "Trabajar con la categoría de Enlaces nombrada ";
+$langCreate = "Crear Entradas de Meta Datos (MDE)";
+$langRemove = "Borrar Entradas de Meta Datos (MDE)";
+$langAllRemovedFor = "Todas las entradas han sido removidas de la categorÃ­a";
+$langRemainingFor = "entradas obsoletas quitadas por categorÃ­a";
+$langIndex = "Ãndice de palabras";
+$langTotalMDEs = "Total de Entradas de Meta Datos (MD) de Enlaces";
+$langMainMD = "Abrir la pÃ¡gina principal de Entradas de Meta Datos (MDE)";
+$langOrElse = "Seleccione una categorÃ­a de Enlaces";
+$langWarningDups = "Â¡ - los nombres de categorÃ­a duplicados serÃ¡n retirados de la lista !";
+$langSLC = "Trabajar con la categorÃ­a de Enlaces nombrada";
 ?>

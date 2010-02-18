@@ -1,5 +1,6 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $MyTasks = "Llank\'aynaykuna";
 $FavoriteBlogs = "Ancha munasqay blogs";
@@ -63,6 +64,7 @@ $InBlog = "blog nisqapi";
 $ViewPostsOfThisDay = "Qhaway kay p\'unchaypa qelqachakunata";
 $PostsOf = "Qelqachakuna kaymanta";
 $NoArticleMatches = "Imayna maskhasqaykiqa manan kanchu qelqachakuna. Ichapas mana allintachu qelqarunki utaq manan allin chiniyuqchu maskhasqaykiqa. Hoqmanta qhawaspa allinchay maskhasqaykita tarinaykipaq.";
+$SaveProject = "";
 $langTask1 = "Llank\'ayna 1";
 $langTask2 = "Llank\'ayna 2";
 $langTask3 = "Llank\'ayna 3";
@@ -80,7 +82,6 @@ $EditPost = "Ruwapay qelqachata";
 $AddBlog = "Kamariy hoq blog nisqata";
 $EditBlog = "Ruwapay sutinchayninta sullk\'a stinchaynintawan";
 $DeleteBlog = "Pichay kay blog nisqata";
-$NoTasks = "Mana llank\'aynakunayuq";
 $Shared = "T\'aqapasqa";
 $PermissionGrantedByGroupOrRole = "Huñichay huñusqamanta qosqa";
 $Reader = "Lector";
@@ -99,4 +100,6 @@ $TaskDeleted = "La tarea ha sido eliminada";
 $TaskAssignmentDeleted = "La asignación de la tarea ha sido eliminada";
 $CommentDeleted = "El comentario ha sido eliminado";
 $RatingAdded = "La calificación ha sido añadida.";
+$BlogPosts = "";
+$BlogComments = "";
 ?>

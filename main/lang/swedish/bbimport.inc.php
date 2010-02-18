@@ -1,23 +1,24 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$langViewCourseMaterialImport  = "Visa kursmaterial som det kommer att importeras";
-$langViewExternalLinksImport  = "Visa externa länkar som det kommer att importeras";
-$langViewForumImport  = "Visa forum som det kommer att importeras";
-$langImportCourseMaterial  = "Importera kursmaterial (Blackboard verktyg \"Kurs Material\")";
-$langImportExternalLinks  = "Importera länkar (Blackboard verktyg \"Externa Länkar\")";
-$langImportForum  = "Importera forum (Blackboard verktyg \"Diskussions plats\")";
-$langToolInfo  = "Detta verktyg importerar Blackboard 5.5 kurser (Kursmaterial, diskussions plats och externa länkar)";
+$langViewCourseMaterialImport = "Visa kursmaterial som det kommer att importeras";
+$langViewExternalLinksImport = "Visa externa lÃ¤nkar som det kommer att importeras";
+$langViewForumImport = "Visa forum som det kommer att importeras";
+$langImportCourseMaterial = "Importera kursmaterial (Blackboard verktyg \\"Kurs Material\\")";
+$langImportExternalLinks = "Importera lÃ¤nkar (Blackboard verktyg \\"Externa LÃ¤nkar\\")";
+$langImportForum = "Importera forum (Blackboard verktyg \\"Diskussions plats\\")";
+$langToolInfo = "Detta verktyg importerar Blackboard 5.5 kurser (Kursmaterial, diskussions plats och externa lÃ¤nkar)";
 $langToolName = "Importera Blackboard kurser";
-$langSelectCoursePackage = "Välj ett kurspaket";
+$langSelectCoursePackage = "VÃ¤lj ett kurspaket";
 $langPackageAlreadySelected = "Du har redan valt ett paket";
-$langFirstSelectPackage = "Du måste först välja ett paket och öppna det innan du kan fortsätta att importera.";
+$langFirstSelectPackage = "Du mÃ¥ste fÃ¶rst vÃ¤lja ett paket och Ã¶ppna det innan du kan fortsÃ¤tta att importera.";
 $langCourseToMigrate = "Kurs att flytta";
-$langSelectPackage = "Välj ett paket";
-$langOpenPackageForImporting = "Öppna detta paket för att importera";
+$langSelectPackage = "VÃ¤lj ett paket";
+$langOpenPackageForImporting = "Ã–ppna detta paket fÃ¶r att importera";
 $langInformation = "Information om import process";
-$langChooseImportOptions = "Gör dina importval";
-$langCheckWhatIsImported = "Du kan välja att se vad som kommer att importeras Innan du startar att importera";
+$langChooseImportOptions = "GÃ¶r dina importval";
+$langCheckWhatIsImported = "Du kan vÃ¤lja att se vad som kommer att importeras Innan du startar att importera";
 $langStartImporting = "Starta att importera";
 $langImport = "Importera";
 ?>

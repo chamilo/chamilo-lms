@@ -1,15 +1,16 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $MessageEmptyMessageOrSubject = "Gelieve een onderwerp of bericht in te vullen";
-$Inbox  = "Inbox";
+$Inbox = "Inbox";
 $Messages = "Bericht";
-$SendMessage = "Verzend bericht";
+$SendMessage = "Verstuur bericht";
 $NewMessage = "Nieuw bericht";
 $ComposeMessage = "Bericht opstellen";
 $DeleteSelectedMessages = "Verwijder geselecteerde berichten";
 $SelectAll = "Selecteer alle";
-$DeselectAll  = "Selecteer geen";
+$DeselectAll = "Selecteer geen";
 $ReplyToMessage = "Antwoord";
 $BackToInbox = "Terug naar inbox";
 $MessageSentTo = "Het bericht is verzonden naar";
@@ -31,7 +32,6 @@ $ReadMessage = "Lees bericht";
 $SendInviteMessage = "Verstuur uitnodiging";
 $SendMessageInvitation = "Ben je zeker dat je deze uitnodigingen wil versturen ?";
 $MessageTool = "Berichtenmodule";
-$SendMessage = "Verstuur bericht";
 $WriteAMessage = "Schrijf een bericht";
 $AlreadyReadMessage = "Bericht reeds gelezen";
 $UnReadMessage = "Ongelezen bericht";

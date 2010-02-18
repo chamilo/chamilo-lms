@@ -1,5 +1,6 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $MyTasks = "My tasks";
 $FavoriteBlogs = "My projects";
@@ -53,7 +54,7 @@ $DeleteThisArticle = "Delete this task";
 $EditThisPost = "Edit this task";
 $DeleteThisComment = "Delete this comment";
 $NoArticles = "There are no tasks in this project. If you are the manager of this project, click on  link \'New task\' to write an task.";
-$NoTasks = "You have no task to do at this time.";
+$NoTasks = "No tasks";
 $Rating = "Rating";
 $RateThis = "Rate this task";
 $SelectTaskArticle = "Select a task for this role";
@@ -81,7 +82,6 @@ $EditPost = "Edit a task";
 $AddBlog = "Create a new project";
 $EditBlog = "Edit a project";
 $DeleteBlog = "Delete this project";
-$NoTasks = "No tasks";
 $Shared = "Shared";
 $PermissionGrantedByGroupOrRole = "Permission granted by group or role";
 $Reader = "Reader";

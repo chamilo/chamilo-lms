@@ -1,13 +1,14 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$langViewCourseMaterialImport  = "&#48520;&#47084;&#50732; &#44368;&#50977; &#51088;&#47308; &#48372;&#44592; ";
-$langViewExternalLinksImport  = "&#48520;&#47084;&#50732; &#50808;&#48512; &#47553;&#53356; &#48372;&#44592; ";
-$langViewForumImport  = "&#48520;&#47084;&#50732; &#54252;&#47100; &#48372;&#44592;";
-$langImportCourseMaterial  = "&#44284;&#51221; &#51088;&#47308; &#44032;&#51256;&#50724;&#44592;(Blackboard tool \"Course Material\") ";
-$langImportExternalLinks  = "&#47553;&#53356; &#44032;&#51256;&#50724;&#44592; ( blackboard tool \"External Links\")";
-$langImportForum  = "&#54252;&#47100; &#44032;&#51256;&#50724;&#44592; (Blackboard tool \"Discussion Board\")";
-$langToolInfo  = "&#51060; &#53812;&#51008; Blackboard 5.5 &#44284;&#51221;&#51012; &#44032;&#51256;&#50741;&#45768;&#45796;  (Course Material, Discussion Board, and External Links)";
+$langViewCourseMaterialImport = "&#48520;&#47084;&#50732; &#44368;&#50977; &#51088;&#47308; &#48372;&#44592;";
+$langViewExternalLinksImport = "&#48520;&#47084;&#50732; &#50808;&#48512; &#47553;&#53356; &#48372;&#44592;";
+$langViewForumImport = "&#48520;&#47084;&#50732; &#54252;&#47100; &#48372;&#44592;";
+$langImportCourseMaterial = "&#44284;&#51221; &#51088;&#47308; &#44032;&#51256;&#50724;&#44592;(Blackboard tool \\"Course Material\\")";
+$langImportExternalLinks = "&#47553;&#53356; &#44032;&#51256;&#50724;&#44592; ( blackboard tool \\"External Links\\")";
+$langImportForum = "&#54252;&#47100; &#44032;&#51256;&#50724;&#44592; (Blackboard tool \\"Discussion Board\\")";
+$langToolInfo = "&#51060; &#53812;&#51008; Blackboard 5.5 &#44284;&#51221;&#51012; &#44032;&#51256;&#50741;&#45768;&#45796;  (Course Material, Discussion Board, and External Links)";
 $langToolName = "Blackboard &#44284;&#51221; &#44032;&#51256;&#50724;&#44592;";
 $langSelectCoursePackage = "&#44284;&#51221; &#54056;&#53412;&#51648; &#49440;&#53469;";
 $langPackageAlreadySelected = "&#51060;&#48120; &#49440;&#53469;&#54620; &#54056;&#53412;&#51648;&#51077;&#45768;&#45796;";

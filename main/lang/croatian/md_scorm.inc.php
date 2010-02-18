@@ -1,11 +1,12 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$nameTools = "suvišna jezi&#269;na odrednica";
+$nameTools = "suviÂšna jezi&#269;na odrednica";
 $langMdCallingTool = "Put u&#269;enja - Scorm";
 $langTool = "Operacije Scorm MD";
 $langNotInDB = "nema unosa u bazi podataka Chamilo";
-$langManifestSyntax = "(sintakti&#269;ka greška u datoteci manifesta...)";
+$langManifestSyntax = "(sintakti&#269;ka greÂška u datoteci manifesta...)";
 $langEmptyManifest = "(datoteka manifesta prazna...)";
 $langNoManifest = "(nema datoteke manifesta...)";
 $langNotFolder = "nije mogu&#263;e, to nije mapa...";

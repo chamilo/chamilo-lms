@@ -1,22 +1,23 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $select = "Escoyer";
-$square = "Cuadr醬";
+$square = "Cuadr谩u";
 $circle = "Elipse";
-$poly = "Pol韌onu";
+$poly = "Pol铆gonu";
 $status1 = "Dibuxar una zona interautiva";
-$status2_poly = "Use\'l bot髇 derechu del rat髇 pa cerrar el pol韌onu.";
-$status2_other = "Suelte\'l bot髇 del rat髇 pa guardar zona interautiva.";
+$status2_poly = "Use\'l bot贸n derechu del rat贸n pa cerrar el pol铆gonu.";
+$status2_other = "Suelte\'l bot贸n del rat贸n pa guardar zona interautiva.";
 $status3 = "Zona interautiva guardada";
 $exercise_status_1 = "Estatus: Entruga ensin contestar";
-$exercise_status_2 = "Confirmar la mio seleici髇";
+$exercise_status_2 = "Confirmar la mio seleici贸n";
 $exercise_status_3 = "Estatus: Entruga contestada";
 $showUserPoints = "Amosar / Esconder clicks";
 $showHotspots = "Amosar / Esconder zones interautives";
-$labelPolyMenu = "Cerrar pol韌onu";
+$labelPolyMenu = "Cerrar pol铆gonu";
 $triesleft = "Intentos que queden";
-$exeFinished = "T醤 seleicionaes toles zones. Agora pue volver asignar les sos rempuestes o calcar nel bot髇 d\'embaxu y dar por acabada la entruga.";
+$exeFinished = "T谩n seleicionaes toles zones. Agora pue volver asignar les sos rempuestes o calcar nel bot贸n d\'embaxu y dar por acabada la entruga.";
 $nextAnswer = "Calque enriba: &done=done";
 $delineation = "Llende";
 $labelDelineationMenu = "Cerrar llende";

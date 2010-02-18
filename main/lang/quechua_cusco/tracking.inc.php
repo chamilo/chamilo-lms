@@ -1,5 +1,6 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $langToolName = "Yupanakuna";
 $TrackingDisabled = "Qatipayqa wañuchikun kay k\'iti kamachiqninwan";
@@ -66,7 +67,7 @@ $langTotal = "Llipin";
 $langHour = "Tuy";
 $langDay = "P\'unchay";
 $langLittleHour = "h.";
-$langLast31days = "Qepa 31 p\'unchaykunapi ";
+$langLast31days = "Qepa 31 p\'unchaykunapi";
 $langLast7days = "Qepa 7 p\'unchaykunapi";
 $langThisday = "Kay  p\'unchaypi";
 $langLogins = "Logins";
@@ -160,7 +161,7 @@ $MyLearnpath = "Yachanay";
 $Time = "Pacha";
 $Score = "Marka";
 $LastConnexion = "Qepa hap\'inachiy";
-$ConnectionTime = "Hap\'inachikuymanta hayka pacha ";
+$ConnectionTime = "Hap\'inachikuymanta hayka pacha";
 $ConnectionsToThisCourse = "Kay yachachinaman hap\'inachikuykuna";
 $StudentTutors = "Yachaqeq pusaqninkuna";
 $StudentSessions = "Yachaqeq seseiones nisqankuna";
@@ -239,4 +240,13 @@ $AvgAllUsersInAllCourses = "Promedio para todos los usuarios en todas las leccio
 $AvgExercisesScore = "Puntuación media de los ejercicios";
 $TrainingTime = "Tiempo en el curso";
 $CourseProgress = "Progreso de lección";
+$ViewMinus = "";
+$ResourcesTracking = "";
+$SelectFieldToAdd = "";
+$AddAdditionalProfileField = "";
+$ConfigureExtensions = "";
+$DashboardBlocks = "";
+$DashboardList = "";
+$YouHaveNotEnabledBlocks = "";
+$BlocksHaveBeenUpdatedSuccessfully = "";
 ?>

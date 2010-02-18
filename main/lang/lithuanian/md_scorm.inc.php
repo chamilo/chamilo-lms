@@ -1,5 +1,6 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $nameTools = "nebevartojamas kalbos kintamasis";
 $langMdCallingTool = "Mokymosi medžiaga - Scorm";
@@ -20,7 +21,7 @@ $langImport = "Sukurti MDEs iš manifest failo";
 $langRemove = "Pašalinti MDEs";
 $langAllRemovedFor = "Visi įrašai pašalinti";
 $langIndex = "Index Words with PhpDig";
-$langTotalMDEs = "Iš viso Scorm MD įaršų: ";
+$langTotalMDEs = "Iš viso Scorm MD įaršų:";
 $langMainMD = "Atidaryti pagrindinį MDE";
 $langLines = "eilutės";
 $langPlay = "Paleisti index.php";
@@ -29,7 +30,7 @@ $langOrElse = "Parinkti Scorm katalogą arba Scorm katalogo ID";
 $langWorkWith = "Darbas su Scorm katalogu";
 $langSDI = "... Scorm Directory with SD-id (and split manifest - or leave empty)";
 $langRoot = "root";
-$langSplitData = "Split manifests, and #MDe, if any: ";
+$langSplitData = "Split manifests, and #MDe, if any:";
 $langMffNotOk = "Manifest file replace has failed";
 $langMffOk = "Manifest file has been replaced";
 $langMffFileNotFound = "New manifest file could not be opened (e.g. empty, too big)";

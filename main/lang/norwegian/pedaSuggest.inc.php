@@ -1,11 +1,26 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $GeneralDescription = "Generell beskrivelse";
-$Objectives = "Målsettning";
+$GeneralDescriptionQuestions = "";
+$GeneralDescriptionInformation = "";
+$Objectives = "MÃ¥lsettning";
+$ObjectivesInformation = "";
+$ObjectivesQuestions = "";
 $Topics = "Emner";
+$TopicsInformation = "";
+$TopicsQuestions = "";
 $Methodology = "Metode";
+$MethodologyQuestions = "";
+$MethodologyInformation = "";
 $CourseMaterial = "Kurs materiell";
+$CourseMaterialQuestions = "";
+$CourseMaterialInformation = "";
 $HumanAndTechnicalResources = "Menneskelige og tekniske ressurser";
-$Assessment  = "Eksamen";
+$HumanAndTechnicalResourcesQuestions = "";
+$HumanAndTechnicalResourcesInformation = "";
+$Assessment = "Eksamen";
+$AssessmentQuestions = "";
+$AssessmentInformation = "";
 ?>

@@ -1,158 +1,359 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$langExercice = "Ẻ���ͺ";
-$langActivate = "�Դ";
-$langDeactivate = "�Դ";
-$langNoEx = "��й���ѧ����ա���ͺ";
-$langNewEx = "Ẻ���ͺ����";
-$langQuestion = "�Ӷ��";
-$langQuestions = "�Ӷ��������";
-$langAnswers = "������͡�ͺ";
-$langTrue = "�١��ͧ";
-$langAnswer = "�ӵͺ";
-$langResult = "��ṹ";
-$langNoResult = "�ѧ����ռŤ�ṹ";
-$langYourResults = "�Ť�ṹ�ͧ�س";
-$langStudentResults = "��ṹ���ͺ�ͧ������¹";
-$langExerciseType = "�������ͧẺ���ͺ";
-$langExerciseName = "����Ẻ���ͺ";
-$langExerciseDescription = "�Ӫ��ᨧ";
-$langSimpleExercise = "�˹�����ǡѹ";
-$langSequentialExercise = "�Ӷ�����ǵ��˹��˹��(���§����ӴѺ)";
-$langRandomQuestions = "�����Ӷ��";
-$langGiveExerciseName = "��駪���Ẻ���ͺ";
-$langSound = "������§�����Դշ�ȹ�";
-$langDeleteSound = "ź������§�����Դշ�ȹ�";
-$langNoAnswer = "�ѧ����դӵͺ";
-$langGoBackToQuestionPool = "��Ѻ价��Ẻ�ͺ���";
-$langGoBackToQuestionList = "��Ѻ价����¡�äӶ��";
-$langQuestionAnswers = "�ͺ�Ӷ��";
-$langUsedInSeveralExercises = "����͹! �Ӷ����Фӵͺ��� �ж١���Ẻ���ͺ���ªش. �س��ͧ��÷�������������";
-$langModifyInAllExercises = "㹷ءẺ���ͺ";
-$langModifyInThisExercise = "���Ẻ���ͺ�����ҹ��";
-$langAnswerType = "�ӵͺ������";
-$langMultipleSelect = "Ẻ�ù��(����ö�ͺ�����¢��)";
-$langFillBlanks = "�����㹪�ͧ��ҧ";
-$langMatching = "Ẻ�Ѻ���";
-$langAddPicture = "����Ҿ(�ء�����Ҿ��ͧ�� .GIF, .JPG ��� .PNG)";
-$langReplacePicture = "᷹����ٻ�Ҿ";
-$langDeletePicture = "ź�ٻ�Ҿ��Сͺ";
-$langQuestionDescription = "��������������";
-$langGiveQuestion = "��سҾ����Ӷ��";
-$langWeightingForEachBlank = "�������㹪�ͧ��ҧ";
-$langUseTagForBlank = "�����ǧ��纻ա���Դ���ǻԴ [...]��ͤӵͺ���ǹ����ҹ͸Ժ�µͺ�Ӷ��㹾�鹷���Թ���ҷ���˹���ҧ������  ";
-$langQuestionWeighting = "����ṹ";
-$langMoreAnswers = "����������͡�ͺ";
-$langLessAnswers = "ź������͡�ͺ";
-$langMoreElements = "������ǹ��Сͺ";
-$langLessElements = "ź��ǹ��Сͺ";
-$langTypeTextBelow = "��سҾ����ӵͺ��ҹ��ҧ";
-$langDefaultTextInBlanks = "[��е��ҡ���]�Ѵ�������Żл�����[�ԨԵ���Ż�]";
-$langDefaultMatchingOptA = "�ҡ";
-$langDefaultMatchingOptB = "�ٴ�";
-$langDefaultMakeCorrespond1 = "�ԴҢͧ�س���";
-$langDefaultMakeCorrespond2 = "��ôҢͧ�س���";
-$langDefineOptions = "��س����ӨӡѴ�����������";
-$langMakeCorrespond = "����͡�Ѻ������١��ͧ";
-$langFillLists = "���������ͧ��¡�â�ҧ��ҧ���";
-$langGiveText = "��سҾ�����ͤ���";
-$langDefineBlanks = "������͸Ժ�µͺŧ�����ͧ����ǧ��纻ա��[...]���ҧ���� 1 ���";
-$langGiveAnswers = "��سҾ����ӵͺ";
-$langChooseGoodAnswer = "��س��礤ӵͺ���١��ͧ";
-$langChooseGoodAnswers = "��س����͡��˹���� ��˹�觤ӵͺ�������¤ӵͺ";
-$langQuestionList = "��¡�äӶ���ͧẺ���ͺ";
-$langMoveUp = "����͹���";
-$langMoveDown = "����͹ŧ";
-$langGetExistingQuestion = "���͡�Ӷ������ըҡ�ҹ������";
-$langFinishTest = "�ͺ����";
-$langQuestionPool = "��ѧ����ͺ";
-$langOrphanQuestions = "Ẻ���ͺ�¡�ش";
-$langNoQuestion = "����դӶ��㹵͹���";
-$langAllExercises = "Ẻ���ͺ������";
-$langFilter = "��ǡ�ͧ����";
-$langGoBackToEx = "��Ѻ价��Ẻ���ͺ";
-$langReuse = "������ա";
-$langExerciseManagement = "��èѴ���Ẻ���ͺ";
-$langQuestionManagement = "��èѴ��� �Ӷ��/�ӵͺ";
-$langQuestionNotFound = "��辺�Ӷ��";
-$langExerciseNotFound = "��辺Ẻ���ͺ�����ͧ������";
-$langAlreadyAnswered = "�س�ͺ�Ӷ�������";
-$langElementList = "��¡�û�Сͺ";
-$langScore = "��ṹ";
-$langCorrespondsTo = "�ʹ���ͧ�Ѻ";
-$langExpectedChoice = "������͡�ͺ���١��ͧ";
-$langYourTotalScore = "��ṹ����ͧ�س���";
-$langEvalSet = "ࡳ���û����Թ��";
-$langActive = "�Դ";
-$langInactive = "�Դ";
-$langQuestCreate = "���ҧ�Ӷ��";
-$langExRecord = "��ѹ�֡Ẻ���ͺ�ͧ�س����";
-$langBackModif = "��Ѻ价��˹����䢤Ӷ��";
-$langDoEx = "��Ẻ���ͺ";
-$langDefScor = "͸Ժ��ࡳ���û����Թ��";
-$langCreateModif = "���ҧ/��䢤Ӷ��";
-$langSub = "��������ͧ�ͧ";
-$langMyAnswer = "�ӵͺ�ͧ���";
-$langMorA = "����������͡�ͺ";
-$langLesA = "ź������͡�ͺ";
-$langRecEx = "�ѹ�֡Ẻ���ͺ";
-$langRecQu = "�ѹ�֡�Ӷ��";
-$langRecAns = "�ѹ�֡�ӵͺ";
-$langIntroduction = "�ӹ�";
-$langTitleAssistant = "��Ǫ������ҧẺ���ͺ";
-$langQuesList = "��¡�äӶ��";
-$langSaveEx = "�ѹ�֡Ẻ���ͺ";
-$langFinish = "�������";
-$langCancel = "¡��ԡ";
-$langQImage = "�ٻ�Ҿ-�Ӷ��";
-$langAddQ = "�����Ӷ��";
-$langDoAnEx = "��Ẻ���ͺ";
-$langGenerator = "��ª���Ẻ���ͺ";
-$langChoice = "���س���͡";
-$langCorrect = "���";
-$langPossAnsw = "�ӹǹ�ӵͺ���˹�觤Ӷ��";
-$langStudAnsw = "�ӹǹ��õͺ�Դ�ͧ�ѡ�֡��";
-$langDetermine = "����ҳ��ä�ṹ�ͧ��ҹ�Ѻ���ҧ��ҹ��ҧ ��ԡ����� \"��ŧ\"";
-$langNonNumber = "����դ�ҵ���Ţ";
-$langReplaced = "�й����᷹������ 0";
-$langSuperior = "����ҡ�Թ���� 20";
-$langRep20 = "�й����᷹���¤�� 20";
-$langDefault = "���������� *";
-$langDefComment = "* ��Ҥس��ԡ�� \"����������\", ����Ţ�����Ңͧ��ҹ �ж١ź������ҧ����";
-$langScoreGet = "Numbers in black = ��ṹ";
-$langShowScor = "�ʴ���ṹ���ѡ�֡�Ҵ� : ";
-$langStep1 = "��鹷��1";
-$langStep2 = "��鹷�� 2";
-$langTake = "����� take";
-$langAmong = "�����ҧ among";
-$langImportHotPotatoesQuiz = "�����Ẻ���ͺ�ҡ HotPotatoes Tests";
-$langHotPotatoesTests = "�����Ẻ���ͺ HotPotatoes Tests";
-$langDownloadFile = "�͹����������ͺ�ͧHotPotatoes�������� html ���� zip ����������ͧ������";
-$langDownloadImg = "�͹��������ٻ�Ҿ����������ͧ������";
-$langDownloadEnd = "�͹������� html ���º����";
-$langNoSpace = "����͹���������� �վ�鹷�����������ҹ";
-$langZipNoPhp = "��� zip �������ö������� php��";
-$langNoImg = "Ẻ���ͺ������ٻ�Ҿ";
-$langImgNote_st = "<br>�س�ѧ��ͧ�͹������� You still have to upload ";
-$langImgNote_en = "�ٻ�Ҿ";
-$langDocDeleted = "ź�͡�������";
-$langViMod = "��Ѻ������ͧ������� Visibility modified";
-$langNameNotEqual = "���ҹ���١��ͧ/����ó�";
-$langIndice = "�Ѫ�� Index";
-$langIndices = "�Ѫ��Index";
-$langDateExo = "�ѹ���";
-$langShowQuestion = "�ʴ��Ӷ��";
-$langUnknownExercise = "������ѡẺ�֡�Ѵ";
-$langReuseQuestion = "��Ӷ������ա Reuse the question";
-$langCreateExercise = "���ҧẺ�֡�Ѵ Create Exercise";
-$langCreateQuestion = "��駤Ӷ��";
-$langCreateAnswers = "��駤ӵͺ";
-$langModifyExercise = "���Ẻ�֡�Ѵ";
-$langModifyAnswers = "��䢤ӵͺ";
-$langForExercise = "����ѺẺ�֡�Ѵ for exercise";
-$langUseExistantQuestion = "��Ӷ�������������� Use an existing question";
-$freeAnswer = "�ͺ�Ӷ��Ẻ�ѵ���";
-$notCorrectedYet = "�ӵͺ����ѧ���Ѻ��Ҷ١��ͧ �س�����ṹ�� 0 ��觡���繼ŵ�ͤ�ṹ������� This answer has not yet been corrected. Meanwhile, your score for this question is set to 0, affecting the total score.";
+$langExercice = "áºº·ŽÊÍº";
+$langActivate = "à»ÔŽ";
+$langDeactivate = "»ÔŽ";
+$langNoEx = "¢³Ð¹ÕéÂÑ§äÁèÁÕ¡ÒÃÊÍº";
+$langNewEx = "áºº·ŽÊÍºãËÁè";
+$langQuestion = "€Ó¶ÒÁ";
+$langQuestions = "€Ó¶ÒÁ·Ñé§ËÁŽ";
+$langAnswers = "µÑÇàÅ×Í¡µÍº";
+$langTrue = "¶Ù¡µéÍ§";
+$langAnswer = "€ÓµÍº";
+$langResult = "€Ðá¹¹";
+$langNoResult = "ÂÑ§äÁèÁÕŒÅ€Ðá¹¹";
+$langYourResults = "ŒÅ€Ðá¹¹¢Í§€Ø³";
+$langStudentResults = "€Ðá¹¹ŒÅÊÍº¢Í§ŒÙéàÃÕÂ¹";
+$langExerciseType = "»ÃÐàÀ·¢Í§áºº·ŽÊÍº";
+$langExerciseName = "ª×èÍáºº·ŽÊÍº";
+$langExerciseDescription = "€ÓªÕéáš§";
+$langSimpleExercise = "ã¹Ë¹éÒàŽÕÂÇ¡Ñ¹";
+$langSequentialExercise = "€Ó¶ÒÁàŽÕÂÇµèÍË¹Öè§Ë¹éÒ(àÃÕÂ§µÒÁÅÓŽÑº)";
+$langRandomQuestions = "ÊØèÁ€Ó¶ÒÁ";
+$langGiveExerciseName = "µÑé§ª×èÍáºº·ŽÊÍº";
+$langSound = "ä¿ÅìàÊÕÂ§ËÃ×ÍÇÔŽÕ·ÑÈ¹ì";
+$langDeleteSound = "Åºä¿ÅìàÊÕÂ§ËÃ×ÍÇÔŽÕ·ÑÈ¹ì";
+$langNoAnswer = "ÂÑ§äÁèÁÕ€ÓµÍº";
+$langGoBackToQuestionPool = "¡ÅÑºä»·ÕèáººÊÍº¶ÒÁ";
+$langGoBackToQuestionList = "¡ÅÑºä»·ÕèÃÒÂ¡ÒÃ€Ó¶ÒÁ";
+$langQuestionAnswers = "µÍº€Ó¶ÒÁ";
+$langUsedInSeveralExercises = "€Óàµ×Í¹! €Ó¶ÒÁáÅÐ€ÓµÍº¹Õé šÐ¶Ù¡ãªéã¹áºº·ŽÊÍºËÅÒÂªØŽ. €Ø³µéÍ§¡ÒÃ·ÕèšÐá¡éä¢ËÃ×ÍäÁè";
+$langModifyInAllExercises = "ã¹·Ø¡áºº·ŽÊÍº";
+$langModifyInThisExercise = "ãªéã¹áºº·ŽÊÍº¹Õéà·èÒ¹Ñé¹";
+$langAnswerType = "€ÓµÍº»ÃÐàÀ·";
+$langMultipleSelect = "áºº»Ã¹ÑÂ(ÊÒÁÒÃ¶µÍºäŽéËÅÒÂ¢éÍ)";
+$langFillBlanks = "àµÔÁ€Óã¹ªèÍ§ÇèÒ§";
+$langMatching = "áººšÑº€Ùè";
+$langAddPicture = "ãÊèÀÒŸ(ÊØ¡Åä¿ÅìÀÒŸµéÍ§à»ç¹ .GIF, .JPG áÅÐ .PNG)";
+$langReplacePicture = "á·¹·ÕèÃÙ»ÀÒŸ";
+$langDeletePicture = "ÅºÃÙ»ÀÒŸ»ÃÐ¡Íº";
+$langQuestionDescription = "€ÇÒÁàËç¹àŸÔèÁàµÔÁ";
+$langGiveQuestion = "¡ÃØ³ÒŸÔÁŸì€Ó¶ÒÁ";
+$langWeightingForEachBlank = "š§àµÔÁ€Óã¹ªèÍ§ÇèÒ§";
+$langUseTagForBlank = "ãËéãªéÇ§àÅçº»Õ¡¡Òà»ÔŽáÅéÇ»ÔŽ [...]¢éÍ€ÓµÍºã¹ÊèÇ¹·Õè·èÒ¹ÍžÔºÒÂµÍº€Ó¶ÒÁã¹Ÿ×é¹·Õèà¡Ô¹¡ÇèÒ·Õè¡ÓË¹ŽÇèÒ§äÇéãËé";
+$langQuestionWeighting = "ãËé€Ðá¹¹";
+$langMoreAnswers = "àŸÔèÁµÑÇàÅ×Í¡µÍº";
+$langLessAnswers = "ÅºµÑÇàÅ×Í¡µÍº";
+$langMoreElements = "àŸÔèÁÊèÇ¹»ÃÐ¡Íº";
+$langLessElements = "ÅºÊèÇ¹»ÃÐ¡Íº";
+$langTypeTextBelow = "¡ÃØ³ÒŸÔÁŸì€ÓµÍºŽéÒ¹ÅèÒ§";
+$langDefaultTextInBlanks = "[»ÃÐµÔÁÒ¡ÃÃÁ]šÑŽÍÂÙèã¹ÈÔÅ»Ð»ÃÐàÀ·[ÇÔšÔµÃÈÔÅ»ì]";
+$langDefaultMatchingOptA = "ÁÒ¡";
+$langDefaultMatchingOptB = "ŽÙŽÕ";
+$langDefaultMakeCorrespond1 = "ºÔŽÒ¢Í§€Ø³€×Í";
+$langDefaultMakeCorrespond2 = "ÁÒÃŽÒ¢Í§€Ø³€×Í";
+$langDefineOptions = "¡ÃØ³ÒãËé€ÓšÓ¡ÑŽ€ÇÒÁàŸÔèÁàµÔÁ";
+$langMakeCorrespond = "š§àÅÍ¡šÑº€ÙèãËé¶Ù¡µéÍ§";
+$langFillLists = "š§àµÔÁ€Óã¹ÊÍ§ÃÒÂ¡ÒÃ¢éÒ§ÅèÒ§¹Õé";
+$langGiveText = "¡ÃØ³ÒŸÔÁŸì¢éÍ€ÇÒÁ";
+$langDefineBlanks = "ŸÔÁŸì€ÓÍžÔºÒÂµÍºÅ§ã¹à€Ã×èÍ§ËÁÒÂÇ§àÅçº»Õ¡¡Ò[...]ÍÂèÒ§¹éÍÂ 1 áËè§";
+$langGiveAnswers = "¡ÃØ³ÒŸÔÁŸì€ÓµÍº";
+$langChooseGoodAnswer = "¡ÃØ³Òàªç€€ÓµÍº·Õè¶Ù¡µéÍ§";
+$langChooseGoodAnswers = "¡ÃØ³ÒàÅ×Í¡¡ÓË¹ŽÇèÒ ÁÕË¹Öè§€ÓµÍºËÃ×ÍËÅÒÂ€ÓµÍº";
+$langQuestionList = "ÃÒÂ¡ÒÃ€Ó¶ÒÁ¢Í§áºº·ŽÊÍº";
+$langMoveUp = "àÅ×èÍ¹¢Öé¹";
+$langMoveDown = "àÅ×èÍ¹Å§";
+$langGetExistingQuestion = "àÅ×Í¡€Ó¶ÒÁ·ÕèÁÕšÒ¡°Ò¹¢éÍÁÙÅ";
+$langFinishTest = "ÊÍºàÊÃçš";
+$langQuestionPool = "€ÅÑ§¢éÍÊÍº";
+$langOrphanQuestions = "áºº·ŽÊÍºáÂ¡ªØŽ";
+$langNoQuestion = "äÁèÁÕ€Ó¶ÒÁã¹µÍ¹¹Õé";
+$langAllExercises = "áºº·ŽÊÍº·Ñé§ËÁŽ";
+$langFilter = "µÑÇ¡ÃÍ§€é¹ËÒ";
+$langGoBackToEx = "¡ÅÑºä»·Õèáºº·ŽÊÍº";
+$langReuse = "¹Óä»ãªéÍÕ¡";
+$langExerciseManagement = "¡ÒÃšÑŽ¡ÒÃáºº·ŽÊÍº";
+$langQuestionManagement = "¡ÒÃšÑŽ¡ÒÃ €Ó¶ÒÁ/€ÓµÍº";
+$langQuestionNotFound = "äÁèŸº€Ó¶ÒÁ";
+$langExerciseNotFound = "äÁèŸºáºº·ŽÊÍºËÃ×ÍÁÍ§äÁèàËç¹";
+$langAlreadyAnswered = "€Ø³µÍº€Ó¶ÒÁä»áÅéÇ";
+$langElementList = "ÃÒÂ¡ÒÃ»ÃÐ¡Íº";
+$langScore = "€Ðá¹¹";
+$langCorrespondsTo = "ÊÍŽ€ÅéÍ§¡Ñº";
+$langExpectedChoice = "µÑÇàÅ×Í¡µÍº·Õè¶Ù¡µéÍ§";
+$langYourTotalScore = "€Ðá¹¹ÃÇÁ¢Í§€Ø³€×Í";
+$ReachedMaxAttemptsAdmin = "";
+$langExerciseAdded = "";
+$Build = "";
+$langEvalSet = "à¡³±ì¡ÒÃ»ÃÐàÁÔ¹ŒÅ";
+$langActive = "à»ÔŽ";
+$langInactive = "»ÔŽ";
+$langQuestCreate = "ÊÃéÒ§€Ó¶ÒÁ";
+$langExRecord = "äŽéºÑ¹·Ö¡áºº·ŽÊÍº¢Í§€Ø³áÅéÇ";
+$langBackModif = "¡ÅÑºä»·ÕèË¹éÒá¡éä¢€Ó¶ÒÁ";
+$langDoEx = "·Óáºº·ŽÊÍº";
+$langDefScor = "ÍžÔºÒÂà¡³±ì¡ÒÃ»ÃÐàÁÔ¹ŒÅ";
+$langCreateModif = "ÊÃéÒ§/á¡éä¢€Ó¶ÒÁ";
+$langSub = "ª×èÍàÃ×èÍ§ÃÍ§";
+$langMyAnswer = "€ÓµÍº¢Í§àÃÒ";
+$langMorA = "àŸÔèÁµÑÇàÅ×Í¡µÍº";
+$langLesA = "ÅºµÑÇàÅ×Í¡µÍº";
+$langRecEx = "ºÑ¹·Ö¡áºº·ŽÊÍº";
+$langRecQu = "ºÑ¹·Ö¡€Ó¶ÒÁ";
+$langRecAns = "ºÑ¹·Ö¡€ÓµÍº";
+$langIntroduction = "€Ó¹Ó";
+$langTitleAssistant = "µÑÇªèÇÂÊÃéÒ§áºº·ŽÊÍº";
+$langQuesList = "ÃÒÂ¡ÒÃ€Ó¶ÒÁ";
+$langSaveEx = "ºÑ¹·Ö¡áºº·ŽÊÍº";
+$langFinish = "àÊÃçšÊÔé¹";
+$langCancel = "Â¡àÅÔ¡";
+$langQImage = "ÃÙ»ÀÒŸ-€Ó¶ÒÁ";
+$langAddQ = "àŸÔèÁ€Ó¶ÒÁ";
+$langDoAnEx = "·Óáºº·ŽÊÍº";
+$langGenerator = "ÃÒÂª×èÍáºº·ŽÊÍº";
+$langChoice = "·Õè€Ø³àÅ×Í¡";
+$langCorrect = "à©ÅÂ";
+$langPossAnsw = "šÓ¹Ç¹€ÓµÍºµèÍË¹Öè§€Ó¶ÒÁ";
+$langStudAnsw = "šÓ¹Ç¹¡ÒÃµÍºŒÔŽ¢Í§¹Ñ¡ÈÖ¡ÉÒ";
+$langDetermine = "»ÃÐÁÒ³¡ÒÃ€Ðá¹¹¢Í§·èÒ¹¡ÑºµÒÃÒ§ŽéÒ¹ÅèÒ§ €ÅÔ¡àÁ×èÍ \\"µ¡Å§\\"";
+$langNonNumber = "äÁèÁÕ€èÒµÑÇàÅ¢";
+$langReplaced = "á¹Ð¹ÓãËéá·¹·ÕèŽéÇÂ 0";
+$langSuperior = "€èÒÁÒ¡à¡Ô¹¡ÇèÒ 20";
+$langRep20 = "á¹Ð¹ÓãËéá·¹ŽéÇÂ€èÒ 20";
+$langDefault = "€èÒàÃÔèÁµé¹ *";
+$langDefComment = "* ¶éÒ€Ø³€ÅÔ¡º¹ \\"€èÒàÃÔèÁµé¹\\", µÑÇàÅ¢€èÒà¡èÒ¢Í§·èÒ¹ šÐ¶Ù¡Åº·Ôé§ÍÂèÒ§¶ÒÇÃ";
+$langScoreGet = "Numbers in black = €Ðá¹¹";
+$langShowScor = "áÊŽ§€Ðá¹¹ãËé¹Ñ¡ÈÖ¡ÉÒŽÙ :";
+$langStep1 = "¢Ñé¹·Õè1";
+$langStep2 = "¢Ñé¹·Õè 2";
+$langTake = "àÃÔèÁ take";
+$langAmong = "ÃÐËÇèÒ§ among";
+$langImportHotPotatoesQuiz = "¹Óà¢éÒáºº·ŽÊÍºšÒ¡ HotPotatoes Tests";
+$langHotPotatoesTests = "¹Óà¢éÒáºº·ŽÊÍº HotPotatoes Tests";
+$langDownloadFile = "âÍ¹ÂéÒÂä¿Åì¢éÍÊÍº¢Í§HotPotatoes·Õèà»ç¹ä¿Åì html ËÃ×Í zip ¢Öé¹ÊÙèà€Ã×èÍ§áÁè¢èÒÂ";
+$langDownloadImg = "âÍ¹ÂéÒÂä¿ÅìÃÙ»ÀÒŸ¢Öé¹ÊÙèà€Ã×èÍ§áÁè¢èÒÂ";
+$langDownloadEnd = "âÍ¹ÂéÒÂä¿Åì html àÃÕÂºÃéÍÂ";
+$langNoSpace = "¡ÒÃâÍ¹ä¿ÅìÅéÁàËÅÇ ÁÕŸ×é¹·ÕèäÁèŸÍà¡çºä¿Åì§Ò¹";
+$langZipNoPhp = "ä¿Åì zip äÁèÊÒÁÒÃ¶ãÊèã¹ä¿Åì phpäŽé";
+$langNoImg = "áºº·ŽÊÍºäÁèÁÕÃÙ»ÀÒŸ";
+$langImgNote_st = "<br>€Ø³ÂÑ§µéÍ§âÍ¹ÂéÒÂä¿Åì You still have to upload";
+$langImgNote_en = "ÃÙ»ÀÒŸ";
+$langDocDeleted = "ÅºàÍ¡ÊÒÃáÅéÇ";
+$langViMod = "»ÃÑºá¡éãËéÁÍ§àËç¹áÅéÇ Visibility modified";
+$langNameNotEqual = "ä¿Åì§Ò¹äÁè¶Ù¡µéÍ§/ÊÁºÙÃ³ì";
+$langIndice = "ŽÑª¹Õ Index";
+$langIndices = "ŽÑª¹ÕIndex";
+$langDateExo = "ÇÑ¹·Õè";
+$langShowQuestion = "áÊŽ§€Ó¶ÒÁ";
+$langUnknownExercise = "äÁèÃÙéšÑ¡áººœÖ¡ËÑŽ";
+$langReuseQuestion = "ãªé€Ó¶ÒÁàŽÔÁÍÕ¡ Reuse the question";
+$langCreateExercise = "ÊÃéÒ§áººœÖ¡ËÑŽ Create Exercise";
+$langCreateQuestion = "µÑé§€Ó¶ÒÁ";
+$langCreateAnswers = "µÑé§€ÓµÍº";
+$langModifyExercise = "á¡éä¢áººœÖ¡ËÑŽ";
+$langModifyAnswers = "á¡éä¢€ÓµÍº";
+$langForExercise = "ÊÓËÃÑºáººœÖ¡ËÑŽ for exercise";
+$langUseExistantQuestion = "ãªé€Ó¶ÒÁàŽÔÁ·ÕèÁÕÍÂÙè Use an existing question";
+$freeAnswer = "µÍº€Ó¶ÒÁáººÍÑµ¹ÑÂ";
+$notCorrectedYet = "€ÓµÍº¹ÕéÂÑ§äÁè¹ÑºÇèÒ¶Ù¡µéÍ§ €Ø³šÐäŽé€Ðá¹¹à»ç¹ 0 «Öè§¡çšÐà»ç¹ŒÅµèÍ€Ðá¹¹ÃÇÁŽéÇÂ This answer has not yet been corrected. Meanwhile, your score for this question is set to 0, affecting the total score.";
 $adminHP = "Hot Potatoes Admin";
+$NewQu = "";
+$NoImage = "";
+$langAnswerHotspot = "";
+$langMinHotspot = "";
+$langMaxHotspot = "";
+$langHotspotError = "";
+$langMoreHotspots = "";
+$langLessHotspots = "";
+$langHotspotZones = "";
+$langNextQuestion = "";
+$langCorrectAnswer = "";
+$langHotspotHit = "";
+$langOnlyJPG = "";
+$langFinishThisTest = "";
+$langAllQuestions = "";
+$langModifyTitleDescription = "";
+$langModifyHotspots = "";
+$langHotspotNotDrawn = "";
+$langHotspotWeightingError = "";
+$langHotspotValidateError1 = "";
+$langHotspotValidateError2 = "";
+$langHotspotRequired = "";
+$langHotspotChoose = "";
+$Fault = "";
+$Hotspot = "";
+$ClickNumber = "";
+$HotspotGiveAnswers = "";
+$Addlimits = "";
+$AreYouSure = "";
+$StudentScore = "";
+$backtoTesthome = "";
+$Feedback = "";
+$MarkIsUpdated = "";
+$MarkInserted = "";
+$PleaseGiveAMark = "";
+$EditCommentsAndMarks = "";
+$AddComments = "";
+$Number = "";
+$Weighting = "";
+$ChooseQuestionType = "";
+$MatchesTo = "";
+$CorrectTest = "";
+$ViewTest = "";
+$State = "";
+$NotAttempted = "";
+$AddElem = "";
+$DelElem = "";
+$PlusAnswer = "";
+$LessAnswer = "";
+$YourScore = "";
+$Attempted = "";
+$AssignMarks = "";
+$Results = "";
+$ExerciseStored = "";
+$ChooseAtLeastOneCheckbox = "";
+$ExerciseEdited = "";
+$ExerciseDeleted = "";
+$ClickToCommentAndGiveFeedback = "";
+$OpenQuestionsAttempted = "";
+$AttemptDetails = "";
+$TestAttempted = "";
+$StudentName = "";
+$StudentEmail = "";
+$OpenQuestionsAttemptedAre = "";
+$CourseName = "";
+$UploadJpgPicture = "";
+$HotspotDescription = "";
+$ExamSheetVCC = "";
+$AttemptVCC = "";
+$ClickLinkToViewComment = "";
+$Regards = "";
+$AttemptVCCLong = "";
+$DearStudentEmailIntroduction = "";
+$ExerciseFinished = "";
+$ResultsEnabled = "";
+$ResultsDisabled = "";
+$ExportWithUserFields = "";
+$ExportWithoutUserFields = "";
+$DisableResults = "";
+$EnableResults = "";
+$ValidateAnswer = "";
+$FillInBlankSwitchable = "";
+$ReachedMaxAttempts = "";
+$AdvancedParameters = "";
+$RandomQuestionsToDisplay = "";
+$RandomQuestionsHelp = "";
+$ExerciseAttempts = "";
+$DoNotRandomize = "";
+$Infinite = "";
+$BackToExercisesList = "";
+$ViewScoreChangeHistory = "";
+$NoStartDate = "";
+$NoLogOfDuration = "";
+$EnableTimeLimits = "";
+$ExeStartTime = "";
+$ExeEndTime = "";
+$Value = "";
+$DeleteAttempt = "";
+$WithoutComment = "";
+$QuantityQuestions = "";
+$FilterExercices = "";
+$FilterByNotRevised = "";
+$FilterByRevised = "";
+$Duration = "";
+$ReachedTimeLimit = "";
+$TryAgain = "";
+$SeeTheory = "";
+$EndActivity = "";
+$NoFeedback = "";
+$DirectFeedback = "";
+$FeedbackType = "";
+$Scenario = "";
+$VisitUrl = "";
+$ExitTest = "";
+$DurationFormat = "";
+$Difficulty = "";
+$NewScore = "";
+$NewComment = "";
+$ExerciseNoStartedYet = "";
+$ExerciseNoStartedAdmin = "";
+$SelectTargetLP = "";
+$SelectTargetQuestion = "";
+$DirectFeedbackCantModifyTypeQuestion = "";
+$CantShowResults = "";
+$CantViewResults = "";
+$ShowCorrectedOnly = "";
+$ShowUnCorrectedOnly = "";
+$HideResultsToStudents = "";
+$ShowResultsToStudents = "";
+$ProcedToQuestions = "";
+$AddQuestionToExercise = "";
+$PresentationQuestions = "";
+$UniqueAnswer = "";
+$MultipleAnswer = "";
+$ReachedOneAttempt = "";
+$QuestionsPerPage = "";
+$QuestionsPerPageOne = "";
+$QuestionsPerPageAll = "";
+$EditIndividualComment = "";
+$ThankYouForPassingTheTest = "";
+$ExerciseAtTheEndOfTheTest = "";
+$EnrichQuestion = "";
+$langDefaultUniqueQuestion = "";
+$langDefaultUniqueAnswer1 = "";
+$langDefaultUniqueComment1 = "";
+$langDefaultUniqueAnswer2 = "";
+$langDefaultUniqueComment2 = "";
+$langDefaultMultipleQuestion = "";
+$langDefaultMultipleAnswer1 = "";
+$langDefaultMultipleComment1 = "";
+$langDefaultMultipleAnswer2 = "";
+$langDefaultMultipleComment2 = "";
+$langDefaultFillBlankQuestion = "";
+$langDefaultMathingQuestion = "";
+$langDefaultOpenQuestion = "";
+$langMoreHotspotsImage = "";
+$ReachedTimeLimitAdmin = "";
+$LastScoreTest = "";
+$BackToResultList = "";
+$EditingScoreCauseProblemsToExercisesInLP = "";
+$SelectExercice = "";
+$YouHaveToSelectATest = "";
+$HotspotDelineation = "";
+$CreateQuestions = "";
+$MoreOAR = "";
+$LessOAR = "";
+$LearnerIsInformed = "";
+$MinOverlap = "";
+$MaxExcess = "";
+$MaxMissing = "";
+$IfNoError = "";
+$LearnerHasNoMistake = "";
+$YourAnswer = "";
+$YourDelineation = "";
+$ResultIs = "";
+$Overlap = "";
+$Missing = "";
+$Excess = "";
+$Min = "";
+$Max = "";
+$Requirements = "";
+$OARHit = "";
+$TooManyIterationsPleaseTryUsingMoreStraightforwardPolygons = "";
+$Thresholds = "";
+$Delineation = "";
+$QuestionTypeDoesNotBelongToFeedbackTypeInExercise = "";
+$SessionIsReadOnly = "";
+$EnableTimerControl = "";
+$ExerciseTotalDurationInMinutes = "";
+$ToContinueUseMenu = "";
+$RandomAnswers = "";
+$NotMarkActivity = "";
+$YouHaveToCreateAtLeastOneAnswer = "";
+$ExerciseAttempted = "";
+$MultipleSelectCombination = "";
+$MultipleAnswerCombination = "";
+$ExerciceExpiredTimeMessage = "";
 ?>

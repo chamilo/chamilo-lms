@@ -1,23 +1,24 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$langViewCourseMaterialImport  = "Kurzusanyagok megtekintése úgy, ahogyan importálva lesznek";
-$langViewExternalLinksImport  = "Küls&#337; hivatkozások megtekintése úgy, ahogyan importálva lesznek";
-$langViewForumImport  = "Fórum megtekintése úgy, ahogyan importálva lesz";
-$langImportCourseMaterial  = "Kurzus anyagok importálása (A Blackboard \"Course Material\" eszköze)";
-$langImportExternalLinks  = "Hivatkozások importálása (A Blackboard \"External Links\" eszköze)";
-$langImportForum  = "Fórumok importálása (A Blackboard \"Discussion Board\" eszköze)";
-$langToolInfo  = "Ez az eszköz Blackboard 5.5 kurzusok importálására képes (Kurzus anyagok, vitafórum, küls&#337; hivatkozások)";
-$langToolName = "Blackboard kurzusok importálása";
-$langSelectCoursePackage = "Válasszon ki egy kurzuscsomagot";
-$langPackageAlreadySelected = "Már kiválasztott egy csomagot";
-$langFirstSelectPackage = "El&#337;ször ki kell választania és megnyitnia egy csomagot, miel&#337;tt importálni tudja";
-$langCourseToMigrate = "Kurzus költöztetése";
-$langSelectPackage = "Csomag kiválasztása";
-$langOpenPackageForImporting = "Csomag megnyitása importáláshoz";
-$langInformation = "Információk az importálási m&#369;veletr&#337;l";
-$langChooseImportOptions = "Adja meg az importálás beállításait";
-$langCheckWhatIsImported = "Ellen&#337;rizheti, hogy mi kerül importálásra, miel&#337;tt elindítja a m&#369;veletet";
-$langStartImporting = "Importálás elkezdése";
-$langImport = "Importálás";
+$langViewCourseMaterialImport = "Kurzusanyagok megtekintÃ©se Ãºgy, ahogyan importÃ¡lva lesznek";
+$langViewExternalLinksImport = "KÃ¼ls&#337; hivatkozÃ¡sok megtekintÃ©se Ãºgy, ahogyan importÃ¡lva lesznek";
+$langViewForumImport = "FÃ³rum megtekintÃ©se Ãºgy, ahogyan importÃ¡lva lesz";
+$langImportCourseMaterial = "Kurzus anyagok importÃ¡lÃ¡sa (A Blackboard \\"Course Material\\" eszkÃ¶ze)";
+$langImportExternalLinks = "HivatkozÃ¡sok importÃ¡lÃ¡sa (A Blackboard \\"External Links\\" eszkÃ¶ze)";
+$langImportForum = "FÃ³rumok importÃ¡lÃ¡sa (A Blackboard \\"Discussion Board\\" eszkÃ¶ze)";
+$langToolInfo = "Ez az eszkÃ¶z Blackboard 5.5 kurzusok importÃ¡lÃ¡sÃ¡ra kÃ©pes (Kurzus anyagok, vitafÃ³rum, kÃ¼ls&#337; hivatkozÃ¡sok)";
+$langToolName = "Blackboard kurzusok importÃ¡lÃ¡sa";
+$langSelectCoursePackage = "VÃ¡lasszon ki egy kurzuscsomagot";
+$langPackageAlreadySelected = "MÃ¡r kivÃ¡lasztott egy csomagot";
+$langFirstSelectPackage = "El&#337;szÃ¶r ki kell vÃ¡lasztania Ã©s megnyitnia egy csomagot, miel&#337;tt importÃ¡lni tudja";
+$langCourseToMigrate = "Kurzus kÃ¶ltÃ¶ztetÃ©se";
+$langSelectPackage = "Csomag kivÃ¡lasztÃ¡sa";
+$langOpenPackageForImporting = "Csomag megnyitÃ¡sa importÃ¡lÃ¡shoz";
+$langInformation = "InformÃ¡ciÃ³k az importÃ¡lÃ¡si m&#369;veletr&#337;l";
+$langChooseImportOptions = "Adja meg az importÃ¡lÃ¡s beÃ¡llÃ­tÃ¡sait";
+$langCheckWhatIsImported = "Ellen&#337;rizheti, hogy mi kerÃ¼l importÃ¡lÃ¡sra, miel&#337;tt elindÃ­tja a m&#369;veletet";
+$langStartImporting = "ImportÃ¡lÃ¡s elkezdÃ©se";
+$langImport = "ImportÃ¡lÃ¡s";
 ?>

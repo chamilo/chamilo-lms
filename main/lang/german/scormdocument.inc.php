@@ -1,5 +1,6 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $langChapter = "Kapitel";
 $langDocumentList = "Dokumentenliste";
@@ -8,8 +9,8 @@ $langEditTOC = "Inhalt editieren";
 $langEditDocument = "Bearbeiten";
 $langCreateDocument = "Dokument erstellen";
 $langMissingImagesDetected = "Fehlende Bilder festgestellt";
-$langPublish = "Veröffentlichen";
-$langScormcontentstudent = "Dies ist ein Scorm-unterstützter Kurs. Um die Inhalte wiederzugeben, klicken Sie hier: <input type=button name=scormbutton value=\'Starten\' onclick=\'openscorm()\'>";
+$langPublish = "VerÃ¶ffentlichen";
+$langScormcontentstudent = "Dies ist ein Scorm-unterstÃ¼tzter Kurs. Um die Inhalte wiederzugeben, klicken Sie hier: <input type=button name=scormbutton value=\'Starten\' onclick=\'openscorm()\'>";
 $langScormcontent = "Zur Wiedergabe dieser Scorm-Inhalte, klicken Sie bitte hier:<br><input type=button name=scormbutton value=\'Starten!\' onclick=\'openscorm()\'>";
 $langDownloadAndZipEnd = "ZIP-Datei hochgeladen und entpackt";
 $langZipNoPhp = "Die ZIP-Datei darf keine PHP-Dateien enthalten";
@@ -18,20 +19,20 @@ $langGroupSpace = "Gruppen-Bereich";
 $langNotScormContent = "Dies ist keine Scorm-ZIP-Datei!";
 $langNoText = "Bitte geben Sie Ihre Text- bzw. HTML-Inhalte ein";
 $langNoFileName = "Kein Dateiname vorhanden";
-$langMaxFileSize = "Die maximale Dateigröße beträgt";
+$langMaxFileSize = "Die maximale DateigrÃ¶ÃŸe betrÃ¤gt";
 $langFileName = "Dateiname";
-$langFileError = "Die hochzuladende Datei ist ungültig";
+$langFileError = "Die hochzuladende Datei ist ungÃ¼ltig";
 $langDown = "Nach unten";
-$langViMod = "Sichbarkeit verändert";
-$langAddComment = "Kommentar hinzufügen";
-$langImpossible = "Durchführung unmöglich";
+$langViMod = "Sichbarkeit verÃ¤ndert";
+$langAddComment = "Kommentar hinzufÃ¼gen";
+$langImpossible = "DurchfÃ¼hrung unmÃ¶glich";
 $langNewDir = "Name des neuen Verzeichnisses";
 $langTo = "an";
-$langNoSpace = "Hochladen fehlgeschlagen! In Ihrem Verzeichnis ist nicht genug Speicherplatz verfügbar.";
+$langNoSpace = "Hochladen fehlgeschlagen! In Ihrem Verzeichnis ist nicht genug Speicherplatz verfÃ¼gbar.";
 $langDownloadEnd = "Hochladen beendet";
-$langFileExists = "Durchführung nicht möglich.<br>Ein Pfad mit diesem Namen existiert bereits.";
+$langFileExists = "DurchfÃ¼hrung nicht mÃ¶glich.<br>Ein Pfad mit diesem Namen existiert bereits.";
 $langDocCopied = "Dokument kopiert";
-$langDocDeleted = "Scorm-unterstützer Lernpfad gelöscht";
+$langDocDeleted = "Scorm-unterstÃ¼tzer Lernpfad gelÃ¶scht";
 $langElRen = "EI umbenennen";
 $langDirMv = "Mein Verzeichnis";
 $langComMod = "Com Mod ????";
@@ -43,16 +44,16 @@ $learning_path_access = "Zugang zum Lernpfad";
 $langRoot = "Root";
 $langBuilder = "Lernpfad-Baukasten";
 $lang_edit_learnpath = "Name/Beschreibung bearbeiten";
-$lang_add_title_and_desc = "Umbenennen & Beschreibung hinzufügen";
+$lang_add_title_and_desc = "Umbenennen & Beschreibung hinzufÃ¼gen";
 $lang_add_learnpath = "Chamilo-Lernpfad erstellen";
-$lang_learnpath_added = "Der neue Lernpfad wurde erfolgreich erstellt. Es können nun Module hinzugefügt werden.";
-$lang_delete_learnpath = "Lernpfad löschen";
+$lang_learnpath_added = "Der neue Lernpfad wurde erfolgreich erstellt. Es kÃ¶nnen nun Module hinzugefÃ¼gt werden.";
+$lang_delete_learnpath = "Lernpfad lÃ¶schen";
 $lang_learnpath_edited = "Bearbeiten des Lernpfades erfolgreich";
-$lang_learnpath_deleted = "Der Lernpfad und alle enthaltenen Module wurden gelöscht";
-$lang_no_publish = "Unsichtbar für Teilnehmer";
-$lang_publish = "Sichbar für Teilnehmer";
-$lang_no_published = "ist nun für Teilnehmer unsichtbar";
-$lang_published = "ist nun für Teilnehmer zugänglich";
+$lang_learnpath_deleted = "Der Lernpfad und alle enthaltenen Module wurden gelÃ¶scht";
+$lang_no_publish = "Unsichtbar fÃ¼r Teilnehmer";
+$lang_publish = "Sichbar fÃ¼r Teilnehmer";
+$lang_no_published = "ist nun fÃ¼r Teilnehmer unsichtbar";
+$lang_published = "ist nun fÃ¼r Teilnehmer zugÃ¤nglich";
 $lang_description = "Beschreibung";
 $lang_title = "Titel";
 $langScormBuilder = "Scorm Entwickler";

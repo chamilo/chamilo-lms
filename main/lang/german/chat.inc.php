@@ -1,50 +1,51 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$langOnlineConference  = "Konferenz";
-$langWash  = "Löschen";
-$langReset  = "Zurücksetzen";
-$langSave  = "Speichern";
-$langRefresh  = "Aktualisieren";
-$langIsNowInYourDocDir  = "ist nun in Ihrem Dokumentenverzeichnis abgelegt. <br><B>Diese Datei ist sichtbar</B>";
-$langCopyFailed  = "Druck fehlgeschlagen";
-$langTypeMessage  = "Bitte geben Sie Ihre Mitteilung ein!";
-$langConfirmReset  = "Möchten sie wirklich alle Mitteilungen löschen?";
-$langHasResetChat  = "hat den Chat zurückgesetzt";
-$langNoOnlineConference  = "Zur Zeit findet keine Konferenz statt...";
-$langMediaFile  = "Live Audio- bzw. Video-Streaming";
-$langContentFile  = "Präsentation";
-$langListOfParticipants  = "Liste der Teilnehmer";
-$langYourPicture  = "Ihr Bild";
-$langOnlineDescription  = "Beschreibung der Konferenz";
-$langOnlyCheckForImportantQuestion = "Bitte nutzen Sie dieses Auswahlfeld nur, wenn Sie eine wichtige Frage stellen möchten!";
+$langOnlineConference = "Konferenz";
+$langWash = "LÃ¶schen";
+$langReset = "ZurÃ¼cksetzen";
+$langSave = "Speichern";
+$langRefresh = "Aktualisieren";
+$langIsNowInYourDocDir = "ist nun in Ihrem Dokumentenverzeichnis abgelegt. <br><B>Diese Datei ist sichtbar</B>";
+$langCopyFailed = "Druck fehlgeschlagen";
+$langTypeMessage = "Bitte geben Sie Ihre Mitteilung ein!";
+$langConfirmReset = "MÃ¶chten sie wirklich alle Mitteilungen lÃ¶schen?";
+$langHasResetChat = "hat den Chat zurÃ¼ckgesetzt";
+$langNoOnlineConference = "Zur Zeit findet keine Konferenz statt...";
+$langMediaFile = "Live Audio- bzw. Video-Streaming";
+$langContentFile = "PrÃ¤sentation";
+$langListOfParticipants = "Liste der Teilnehmer";
+$langYourPicture = "Ihr Bild";
+$langOnlineDescription = "Beschreibung der Konferenz";
+$langOnlyCheckForImportantQuestion = "Bitte nutzen Sie dieses Auswahlfeld nur, wenn Sie eine wichtige Frage stellen mÃ¶chten!";
 $langQuestion = "Frage";
 $langClearList = "Liste leeren";
 $langWhiteBoard = "Whiteboard";
-$langTextEditorDefault = "<h2>Textverarbeitung</h2>Fügen Sie hier Text per Kopieren+Einfügen aus Ms-Word® ein und bearbeiten Sie diesen. Teilnehmer können Ihre Aktionen live verfolgen.";
+$langTextEditorDefault = "<h2>Textverarbeitung</h2>FÃ¼gen Sie hier Text per Kopieren+EinfÃ¼gen aus Ms-WordÂ® ein und bearbeiten Sie diesen. Teilnehmer kÃ¶nnen Ihre Aktionen live verfolgen.";
 $langStreaming = "Streaming";
 $langStreamURL = "Stream-URL";
 $langStreamType = "Stream-Typ";
 $langLinkName = "Link-Name";
 $langLinkURL = "Link-URL";
 $langWelcomeToOnlineConf = "Willkommen zur <b>Online-Konferenz</b>";
-$langNoLinkAvailable = "Kein Link verfügbar";
-$langChat_reset_by = "Chat zurücksetzen";
+$langNoLinkAvailable = "Kein Link verfÃ¼gbar";
+$langChat_reset_by = "Chat zurÃ¼cksetzen";
 $OrFile = "oder Datei";
-$langCallSent = "Chat-Anfrage wurde gesendet. Warte auf Bestätigung Ihres Partners";
+$langCallSent = "Chat-Anfrage wurde gesendet. Warte auf BestÃ¤tigung Ihres Partners";
 $langChatDenied = "Ihre Anfrage wurde von Ihrem Partner abgewiesen";
 $Send = "Senden";
 $Connected = "verbunden";
-$Think = "grübeln";
+$Think = "grÃ¼beln";
 $BigGrin = "breitgrins";
 $Amazing = "begeistert";
 $Confused = "verwirrt";
 $Cool = "cool";
-$Surprised = "überrascht";
+$Surprised = "Ã¼berrascht";
 $Hand = "hallo";
 $Wink = "winke";
 $Neutral = "neutral";
-$Angry = "verärgert";
+$Angry = "verÃ¤rgert";
 $Avid = "begierig";
 $Redface = "rotwerd";
 $Sad = "traurig";
@@ -56,7 +57,7 @@ $Arrow = "pfeil";
 $Question = "fragezeichen";
 $Idea = "idee";
 $AskPermissionSpeak = "Um Erlaubnis bitten";
-$GiveTheFloorTo = "Fläche übergeben";
+$GiveTheFloorTo = "FlÃ¤che Ã¼bergeben";
 $Pause = "Pause";
 $Stop = "Stop";
 ?>

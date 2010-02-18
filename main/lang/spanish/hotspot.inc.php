@@ -1,24 +1,25 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $select = "Seleccionar";
 $square = "Cuadrado";
 $circle = "Elipse";
-$poly = "Pol韌ono";
+$poly = "Pol铆gono";
 $status1 = "Dibujar una zona interactiva.";
-$status2_poly = "Use el bot髇 derecho del rat髇 para cerrar el pol韌ono.";
-$status2_other = "Suelte el bot髇 del rat髇 para guardar la zona interactiva.";
+$status2_poly = "Use el bot贸n derecho del rat贸n para cerrar el pol铆gono.";
+$status2_other = "Suelte el bot贸n del rat贸n para guardar la zona interactiva.";
 $status3 = "Zona interactiva guardada";
 $exercise_status_1 = "Estatus: Pregunta sin contestar";
-$exercise_status_2 = "Confirmar mi selecci髇";
+$exercise_status_2 = "Confirmar mi selecci贸n";
 $exercise_status_3 = "Estatus: Pregunta contestada";
 $showUserPoints = "Mostrar/Ocultar clicks";
 $showHotspots = "Mostrar/Ocultar zonas interactivas";
-$labelPolyMenu = "Cerrar pol韌ono";
+$labelPolyMenu = "Cerrar pol铆gono";
 $triesleft = "Intentos restantes";
-$exeFinished = "Todas las zonas han sido seleccionadas. Ahora puede reasignar sus respuestas o pulsar el bot髇 inferior y dar por finalizada la pregunta.";
+$exeFinished = "Todas las zonas han sido seleccionadas. Ahora puede reasignar sus respuestas o pulsar el bot贸n inferior y dar por finalizada la pregunta.";
 $nextAnswer = "Haga clic sobre:  &done=done";
-$delineation = "Delimitaci髇";
-$labelDelineationMenu = "Cerrar delimitaci髇";
+$delineation = "Delimitaci贸n";
+$labelDelineationMenu = "Cerrar delimitaci贸n";
 $oar = "Zona de riesgo";
 ?>

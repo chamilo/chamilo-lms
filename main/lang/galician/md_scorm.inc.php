@@ -1,18 +1,19 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $nameTools = "variable de lingua obsoleta";
 $langMdCallingTool = "Itinerario de aprendizaxe - Scorm";
-$langTool = "Operacións MD Scorm";
+$langTool = "OperaciÃ³ns MD Scorm";
 $langNotInDB = "ningunha entrada na base de datos de Chamilo";
 $langManifestSyntax = "(erro de sintaxe no ficheiro de manifesto...)";
-$langEmptyManifest = "(ficheiro de manifesto vacío...)";
+$langEmptyManifest = "(ficheiro de manifesto vacÃ­o...)";
 $langNoManifest = "(ficheiro de manifesto inexistente...)";
-$langNotFolder = "non son posibles, non é un directorio...";
+$langNotFolder = "non son posibles, non Ã© un directorio...";
 $langUploadHtt = "Subir arquivo HTT";
-$langHttFileNotFound = "Non se puido abrir o arquivo HTT (por estar vacío, ou moi grande...)";
-$langHttOk = "Subíuse un novo arquivo HTT ";
-$langHttNotOk = "Fallou o envío do arquivo HTT";
+$langHttFileNotFound = "Non se puido abrir o arquivo HTT (por estar vacÃ­o, ou moi grande...)";
+$langHttOk = "SubÃ­use un novo arquivo HTT";
+$langHttNotOk = "Fallou o envÃ­o do arquivo HTT";
 $langRemoveHtt = "Eliminar arquivo HTT";
 $langHttRmvOk = "Eliminouse o ficheiro HTT";
 $langHttRmvNotOk = "O ficheiro HTT non puido ser eliminado";
@@ -20,18 +21,18 @@ $langImport = "Crear MDEs do manifesto";
 $langRemove = "Eliminar MDEs";
 $langAllRemovedFor = "Todas as entradas eliminadas para";
 $langIndex = "Indexar palabras con PhpDig";
-$langTotalMDEs = "Número total de entradas MD Scorm:";
+$langTotalMDEs = "NÃºmero total de entradas MD Scorm:";
 $langMainMD = "Abrir MDE principal";
-$langLines = "liñas";
+$langLines = "liÃ±as";
 $langPlay = "Executar index.php";
-$langNonePossible = "Non son posibles as operacións MD";
+$langNonePossible = "Non son posibles as operaciÃ³ns MD";
 $langOrElse = "Seleccione un directorio Scorm ou un ID de Directorio Scorm";
 $langWorkWith = "Traballar cun Directorio Scorm";
-$langSDI = "...Directorio Scorm cun id de SD (e divida o manifesto ou deixelo vacío)";
-$langRoot = "raíz";
+$langSDI = "...Directorio Scorm cun id de SD (e divida o manifesto ou deixelo vacÃ­o)";
+$langRoot = "raÃ­z";
 $langSplitData = "Dividir os manifestos, e #MDe, se hai:";
 $langMffNotOk = "Fallou o reemplazo do arquivo de manifesto";
-$langMffOk = "O ficheiro de manifesto foi substituído";
-$langMffFileNotFound = "Non se puido abrir o arquivo de manifesto (por estar vacío, ou moi grande)";
+$langMffOk = "O ficheiro de manifesto foi substituÃ­do";
+$langMffFileNotFound = "Non se puido abrir o arquivo de manifesto (por estar vacÃ­o, ou moi grande)";
 $langUploadMff = "substituir o ficheiro de manifesto";
 ?>

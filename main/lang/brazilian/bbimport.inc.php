@@ -1,23 +1,24 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$langViewCourseMaterialImport  = "Visualizar como será importado o material do curso";
-$langViewExternalLinksImport  = "Visualizar links externos da forma como eles foram importados";
-$langViewForumImport  = "Visualizar como será importado o fórum ";
-$langImportCourseMaterial  = "Importar material do curso (Ferramenta Blackboard \"Material do Curso\")";
-$langImportExternalLinks  = "Importar links (Ferramenta Blackboard \"Links Externos\")";
-$langImportForum  = "Importar fóruns (Ferramenta Blackboard \"Quadro de Discussões\")";
-$langToolInfo  = "Essa ferramenta importa cursos do Blackboard 5.5 (Material de Curso, Quadro de Discussões e Links Externos)";
+$langViewCourseMaterialImport = "Visualizar como serÃ¡ importado o material do curso";
+$langViewExternalLinksImport = "Visualizar links externos da forma como eles foram importados";
+$langViewForumImport = "Visualizar como serÃ¡ importado o fÃ³rum";
+$langImportCourseMaterial = "Importar material do curso (Ferramenta Blackboard \\"Material do Curso\\")";
+$langImportExternalLinks = "Importar links (Ferramenta Blackboard \\"Links Externos\\")";
+$langImportForum = "Importar fÃ³runs (Ferramenta Blackboard \\"Quadro de DiscussÃµes\\")";
+$langToolInfo = "Essa ferramenta importa cursos do Blackboard 5.5 (Material de Curso, Quadro de DiscussÃµes e Links Externos)";
 $langToolName = "Importar cursos do Blackboard";
 $langSelectCoursePackage = "Selecionar um pacote de curso";
-$langPackageAlreadySelected = "Você já selecionou um pacote";
-$langFirstSelectPackage = "É necessário selecionar primeiro um pacote e abrí-lo antes de poder prosseguir com a importação.";
+$langPackageAlreadySelected = "VocÃª jÃ¡ selecionou um pacote";
+$langFirstSelectPackage = "Ã‰ necessÃ¡rio selecionar primeiro um pacote e abrÃ­-lo antes de poder prosseguir com a importaÃ§Ã£o.";
 $langCourseToMigrate = "Migrar curso";
 $langSelectPackage = "Selecionar um pacote";
-$langOpenPackageForImporting = "Abrir esse pacote para importação";
-$langInformation = "Informação sobre o processo de importação";
-$langChooseImportOptions = "Escolha suas opções de importação";
-$langCheckWhatIsImported = "É necessário verificar o que será importado antes de iniciar o processo de importação";
-$langStartImporting = "Iniciar importação";
+$langOpenPackageForImporting = "Abrir esse pacote para importaÃ§Ã£o";
+$langInformation = "InformaÃ§Ã£o sobre o processo de importaÃ§Ã£o";
+$langChooseImportOptions = "Escolha suas opÃ§Ãµes de importaÃ§Ã£o";
+$langCheckWhatIsImported = "Ã‰ necessÃ¡rio verificar o que serÃ¡ importado antes de iniciar o processo de importaÃ§Ã£o";
+$langStartImporting = "Iniciar importaÃ§Ã£o";
 $langImport = "Importar";
 ?>

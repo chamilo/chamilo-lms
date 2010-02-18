@@ -1,9 +1,10 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $langTool = "Metadatos";
 $langClickKw = "Q\'apiy acha simi sach\'api kaqta ajllanapaq utaq saqellanapaqpas.";
-$langKwHelp = "<br/>Kichanapaqqa kayta q\'apiy \'+\', kisqanapaqqa kayta \'-\', llipinta kichanapaqtaq kayta \'++\' , hinallataq llipinta wisqanapaqtaq kayta \'--\' .<br/>Sach\'amanta ancha simikunata hoqmanta ajllanapaqqa wisqaspa hoqmanta kicharuy kaywan \'+\'.<br/> Alt-clic \'+\' ancha simikuna ñaupaq ajllasqata hoqmanta ajllan.<br/> <br/> Alt-clic ancha simiwanqa, kikin ancha simitasaqen.<br/>";
+$langKwHelp = "<br/>Kichanapaqqa kayta q\'apiy \'+\', kisqanapaqqa kayta \'-\', llipinta kichanapaqtaq kayta \'++\' , hinallataq llipinta wisqanapaqtaq kayta \'--\' .<br/>Sach\'amanta ancha simikunata hoqmanta ajllanapaqqa wisqaspa hoqmanta kicharuy kaywan \'+\'.<br/> A";
 $langAdvanced = "Ñaupachasqa";
 $langSearch = "Maskhay";
 $langSearchCrit = "Uray k\'itita hapiy ima nisqaypaqkunaqa, huj simillata pasa seq\'epi !";

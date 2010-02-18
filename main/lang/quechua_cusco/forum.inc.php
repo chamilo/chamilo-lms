@@ -1,5 +1,6 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $ForumDeleted = "K\'itirimana wañuchisqa";
 $ForumCategoryDeleted = "K\'itirimanaq mitayninkuna wañuchisqa";
@@ -87,7 +88,7 @@ $PrevMessage = "Ñaupaq willay";
 $FirstMessage = "Qallariq willay";
 $LastMessage = "Qepaq willay";
 $ForumSearch = "K\'itirimanakunapi maskhay";
-$SearchTerm  = "Simi maskhanapaq";
+$SearchTerm = "Simi maskhanapaq";
 $ForumSearchResults = "k\'itirimanakunapi maskhasqakuna";
 $ForumSearchInformation = "Askha simikunata maskhanapaqqa kay unanchata churawaq +";
 $YouWillBeNotifiedOfNewPosts = "Musuq willaykunaqa churakuqtin willakunqa e-chaskipi";
@@ -138,4 +139,5 @@ $EditForum = "Editar foro";
 $BackToForum = "Volver al foro";
 $BackToForumOverview = "Volver a la vista general del foro";
 $BackToThread = "Regresar a tema";
+$ForumcategoryLocked = "";
 ?>

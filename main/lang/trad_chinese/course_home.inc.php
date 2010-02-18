@@ -1,17 +1,32 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$langActivate = "&#39023;&#31034;";
-$langDeactivate = "&#38577;&#34255;";
-$langInLnk  = "&#38577;&#34255;&#30340;&#24037;&#20855;&#21450;&#36899;&#32080;";
-$langDelLk = "&#20320;&#30906;&#23450;&#35201;&#21034;&#38500;&#27492;&#36899;&#32080;&#21966;?";
-$langCourseCreate  = "&#24314;&#31435;&#35506;&#31243;&#32178;&#31449;";
-$langNameOfTheLink  = "&#36899;&#32080;&#21517;&#31281;";
-$lang_main_categories_list                  = "&#20027;&#20998;&#39006;&#21015;&#34920;";
-$langCourseAdminOnly = "&#25945;&#24107;&#23560;&#29992;";
-$PlatformAdminOnly = "&#31995;&#32113;&#31649;&#29702;&#32773;&#23560;&#29992;";
-$langCombinedCourse = "&#21512;&#20341;&#30340;&#35506;&#31243;";
-$ToolIsNowVisible = "&#27492;&#24037;&#20855;&#30446;&#21069;&#28858;&#39023;&#31034;&#30340;&#29376;&#24907;";
-$ToolIsNowHidden = "&#27492;&#24037;&#20855;&#30446;&#21069;&#28858;&#38577;&#34255;&#30340;&#29376;&#24907;";
-$EditLink = "&#32232;&#36655;&#36899;&#32080;";
+$langActivate = "公開";
+$langDeactivate = "隱藏";
+$langInLnk = "隱藏的工具";
+$langDelLk = "確定要移除這連結嗎?";
+$langCourseCreate = "創建課程";
+$langNameOfTheLink = "鏈接名稱";
+$lang_main_categories_list = "主分類清單";
+$langCourseAdminOnly = "教師";
+$PlatformAdminOnly = "只限平台管理員";
+$langCombinedCourse = "合併的課程";
+$ToolIsNowVisible = "這工具現已顯示";
+$ToolIsNowHidden = "這工具現已隱藏";
+$EditLink = "編輯連結";
+$Blog_management = "管理網誌";
+$Forum = "討論區";
+$Course_maintenance = "課程維護";
+$TOOL_SURVEY = "調查";
+$GreyIcons = "工具箱";
+$Interaction = "互動";
+$Authoring = "寫作";
+$Administration = "管理";
+$IntroductionTextUpdated = "已更新簡介文字";
+$IntroductionTextDeleted = "已刪除簡介文字";
+$SessionIdentifier = "";
+$SessionName = "";
+$SessionCategory = "";
+$SessionData = "";
 ?>

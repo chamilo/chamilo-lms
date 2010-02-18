@@ -1,5 +1,6 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $ResourceAdded = "Resource added. You can now go back to the path or add more resources.";
 $LearningPath = "Learning Path";
@@ -21,12 +22,38 @@ $Exercise = "Test";
 $Link = "Link";
 $AdValvas = "Ad Valvas";
 $Document = "Document";
-$IntroductionText = "Εισαγωγικό κείμενο";
-$CourseDescription = "περιγραφή στο κατάλογο μαθημάτων";
-$Groups = "Ομάδες Χρηστών";
-$Users = "Χρήστες";
-$Modify = "Τροποποίηση";
-$Detail = "Λεπτομέρειες";
-$EditSuccess = "Η διόρθωση των στοιχείων της εργασίας έγινε με επιτυχία!";
-$AddAnn = "Προσθήκη Ανακοίνωσης";
+$ShowDelete = "";
+$IntroductionText = "Γ…Γ©Γ³Γ΅Γ£ΓΉΓ£Γ©ΓªΓΌ ΓªΓ¥ΓΓ¬Γ¥Γ­Γ―";
+$CourseDescription = "Γ°Γ¥Γ±Γ©Γ£Γ±Γ΅Γ¶Γ Γ³Γ΄Γ― ΓªΓ΅Γ΄ΓΓ«Γ―Γ£Γ― Γ¬Γ΅Γ¨Γ§Γ¬ΓΓ΄ΓΉΓ­";
+$Groups = "ΓΓ¬ΓΓ¤Γ¥Γ² Γ—Γ±Γ§Γ³Γ΄ΓΎΓ­";
+$Users = "Γ—Γ±ΓΓ³Γ΄Γ¥Γ²";
+$IntroductionTextAdd = "";
+$CourseDescriptionAdd = "";
+$GroupsAdd = "";
+$UsersAdd = "";
+$ExportableCourseResources = "";
+$DokeosRelatedCourseMaterial = "";
+$LinkTarget = "";
+$SameWindow = "";
+$NewWindow = "";
+$StepDeleted1 = "";
+$StepDeleted2 = "";
+$Modify = "Γ”Γ±Γ―Γ°Γ―Γ°Γ―ΓΓ§Γ³Γ§";
+$Chapter = "";
+$NoAgendaItems = "";
+$AgendaAdd = "";
+$UserGroupFilter = "";
+$AgendaSortChronologicallyUp = "";
+$ShowCurrent = "";
+$ModifyCalendarItem = "";
+$ItemTitle = "";
+$Detail = "Γ‹Γ¥Γ°Γ΄Γ―Γ¬ΓΓ±Γ¥Γ©Γ¥Γ²";
+$EditSuccess = "Γ‡ Γ¤Γ©ΓΌΓ±Γ¨ΓΉΓ³Γ§ Γ΄ΓΉΓ­ Γ³Γ΄Γ―Γ©Γ·Γ¥ΓΓΉΓ­ Γ΄Γ§Γ² Γ¥Γ±Γ£Γ΅Γ³ΓΓ΅Γ² ΓΓ£Γ©Γ­Γ¥ Γ¬Γ¥ Γ¥Γ°Γ©Γ΄ΓµΓ·ΓΓ΅!";
+$AddCalendarItem = "";
+$AddAnn = "ΓΓ±Γ―Γ³Γ¨ΓΓªΓ§ ΓΓ­Γ΅ΓªΓ―ΓΓ­ΓΉΓ³Γ§Γ²";
+$ForumAddNewTopic = "";
+$ForumEditTopic = "";
+$ExerciseAnswers = "";
+$ForumReply = "";
+$AgendaSortChronologicallyDown = "";
 ?>

@@ -1,5 +1,6 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $LinkMoved = "Linkul este mutat";
 $langLinkName = "Numele linkului";
@@ -28,7 +29,7 @@ $langListDeleted = "Lista a fost stearsa";
 $langAddLink = "Adauga o legatura";
 $langDelList = "Sterge lista";
 $langModifyLink = "Modifica Legatura";
-$langCsvImport = "Importa un fisier CSV";
+$langCsvImport = "Importa CSV";
 $langCsvFileNotFound = "Fiserul CSV important nu poate fi deschis (e.g. gool, prea mare)";
 $langCsvFileNoSeps = "Fiserul CSV importat trebuiesa foloseasca , sau ; ca separator de lista";
 $langCsvFileNoURL = "Fiserul CSV importat trebuie sa aiba coloane URL si titlu";
@@ -36,11 +37,15 @@ $langCsvFileLine1 = "... - linia1 =";
 $langCsvLinesFailed = "a esuat  importarea unui link (fara URL sau fara titlu).";
 $langCsvLinesOld = "legatura existenta actualizata ( acelasi URL si categorie)";
 $langCsvLinesNew = "link nou creat.";
-$langCsvExplain = "Fisierul trebuie sa arate asa: <blockquote><pre> <b>URL</b>;categorie;<b>titlu</b>;descriere; <b>http://www.aaa.org/...</b>;Legaturi importante;<b>Nume 1</b>;Descriere 1; <b>http://www.bbb.net/...</b>;;<b>Nume 2</b>;\"Descriere 2\"; </pre></blockquote>";
+$langCsvExplain = "Fisierul trebuie sa arate asa: <blockquote><pre> <b>URL</b>;categorie;<b>titlu</b>;descriere; <b>http://www.aaa.org/...</b>;Legaturi importante;<b>Nume 1</b>;Descriere 1; <b>http://www.bbb.net/...</b>;;<b>Nume 2</b>;\\"Descriere 2\\"; </pre></blockquote>";
 $langLinkUpdated = "Linkul a fost actualizat";
 $langAll_Link_Deleted = "Linkul a fost sters";
 $langOnHomepage = "Arata linkul pe pagina principala";
 $langShowLinkOnHomepage = "Arata acest link ca o icoana pe pagina principala a cursului";
-$langCsvImport = "Importa CSV";
 $General = "Generalitati";
+$SearchFeatureDoIndexLink = "";
+$langSaveLink = "";
+$langSaveCategory = "";
+$BackToLinksOverview = "";
+$AddTargetOfLinkOnHomepage = "";
 ?>

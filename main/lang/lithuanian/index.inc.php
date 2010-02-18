@@ -1,27 +1,28 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $langInvalidId = "Prisijungimas nepavyko - neteisingas vartotojo vardas arba slaptažodis.";
 $langWelcome = "Žemiau pateikiami laisvai pasiekiami kursai. Kad pasiekti kitus kursus reikia vartotojo vardo ir slaptažodio, kuriuos galite gauti paspaudę ant \'registracija\'. Dėstytojai gali kurti kursus registruodamiesi, pasirinkdami \'Kurti kursus\'.";
 $langPass = "Slaptažodis";
 $langEnter = "Įeiti";
 $langReg = "Registracija";
-$langMenu  = "Meniu";
+$langMenu = "Meniu";
 $langAdvises = "Konsultacijos";
 $langCourseDoesntExist = "<b>Dėmesio:</b> Kursas neegzistuoja";
 $langGetCourseFromOldPortal = "click here to get this course from your old portal";
 $langOtherCourses = "Kursų sąrašas";
 $langSupportForum = "Palaikymo forumas";
-$langCategories  = "Kategorijos";
-$langBackToHomePage  = "Atgal";
-$lang_No_course_publicly_available  = "Nėra viešai prieinamų kursų.";
-$langLostPassword  = "Užmiršote slaptažodį";
-$lang_edit_my_course_list  = "Redaguoti mano kursų sąrašą";
-$langAgenda  = "Darbotvarkės įvykiai";
-$langValvas  = "Naujausi skelbimai";
-$langUp  = "ankstesnis lygis";
-$langCatList  = "Kategorijos";
-$langCourseList  = "Viešieji kursai";
+$langCategories = "Kategorijos";
+$langBackToHomePage = "Atgal";
+$lang_No_course_publicly_available = "Nėra viešai prieinamų kursų.";
+$langLostPassword = "Užmiršote slaptažodį";
+$lang_edit_my_course_list = "Redaguoti mano kursų sąrašą";
+$langAgenda = "Darbotvarkės įvykiai";
+$langValvas = "Naujausi skelbimai";
+$langUp = "ankstesnis lygis";
+$langCatList = "Kategorijos";
+$langCourseList = "Viešieji kursai";
 $langHelptwo = "Pagalba";
 $langRegAll = "registruotis";
 $EussMenu = "meniu";
@@ -44,7 +45,7 @@ $langAdmin = "Sistemos administratorius";
 $Login = "Prisijungti";
 $langRegisterForCourse = "Registruotis į kursą";
 $langUnregisterForCourse = "Išsiregistruoti iš kurso";
-$langCombinedCourse = "Sujungtas kursas - ";
+$langCombinedCourse = "Sujungtas kursas -";
 $Platform = "Platforma";
 $Refresh = "Perkauti";
 $TotalOnLine = "iš viso prisijungusių prie sistemos vartotojų";
@@ -65,4 +66,10 @@ $FolderCreated = "New folder created";
 $LinkAdded = "New link added";
 $AnnouncementAdded = "Announcement added";
 $AgendaAdded = "Agenda item added";
+$Messages = "";
+$Inbox = "";
+$Comppose = "";
+$PendingInvitations = "";
+$YouDoNotHaveAnySessionInItsHistory = "";
+$PortalHomepageDefaultIntroduction = "";
 ?>

@@ -1,8 +1,9 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $langProfessors = "Trainers";
-$langExplanation = "Once you click on \"Create a training\", a training is created with a section for Tests, Project based learning, Assessments, Courses, Dropbox, Agenda and much more. Logging in as trainer provides you with editing privileges for this training. ";
+$langExplanation = "Once you click on \\"Create a training\\", a training is created with a section for Tests, Project based learning, Assessments, Courses, Dropbox, Agenda and much more. Logging in as trainer provides you with editing privileges for this training.";
 $langEmpty = "You left some fields empty.<br>Use the <b>Back</b> button on your browser and try again.<br>If you ignore your training code, see the Training Program";
 $langCodeTaken = "This training code is already in use.  <br>Use the <b>Back</b> button on your browser and try again";
 $langFormula = "Yours sincerely";
@@ -16,7 +17,7 @@ $langNoPsychology = "No. Socratic irony is not a matter of psychology, it concer
 $langAdmitError = "Admit one\'s own errors to invite one\'s interlocutor to do the same.";
 $langNoSeduction = "No. Socratic irony is not a seduction strategy or a method based on the example.";
 $langForce = "Compell one\'s interlocutor, by a series of questions and sub-questions, to admit he doesn\'t know what he claims to know.";
-$langIndeed = "Indeed. Socratic irony is an interrogative method. The Greek \"eirotao\" means \"ask questions\"";
+$langIndeed = "Indeed. Socratic irony is an interrogative method. The Greek \\"eirotao\\" means \\"ask questions\\"";
 $langContradiction = "Use the Principle of Non Contradiction to force one\'s interlocutor into a dead end.";
 $langNotFalse = "This answer is not false. It is true that the revelation of the interlocutor\'s ignorance means showing the contradictory conclusions where lead his premisses.";
 $langAgenda = "Agenda";
@@ -26,7 +27,7 @@ $langAnnouncements = "Announcements";
 $langAddPageHome = "Upload page and link to Homepage";
 $langLinkSite = "Add a link";
 $langModifyInfo = "Settings";
-$langCourseDesc  = "Description";
+$langCourseDesc = "Description";
 $langAgendaTitle = "Tuesday the 11th of December - First meeting. Room: LIN 18";
 $langAgendaText = "General introduction to project management";
 $langMicro = "Street interviews";
@@ -58,9 +59,9 @@ $langOnlineConference = "Conference";
 $langAgendaCreationTitle = "Training creation";
 $langAgendaCreationContenu = "This training has been created on this moment.";
 $langOnlineDescription = "This is an example of description for the Conference tool";
-$langDropbox  = "Doc share";
-$langOnly  = "Only";
-$langRandomLanguage  = "Shuffle selection in aivailable languages";
+$langDropbox = "Doc share";
+$langOnly = "Only";
+$langRandomLanguage = "Shuffle selection in aivailable languages";
 $langImages = "Images";
 $langAudio = "Audio";
 $langFlash = "Flash";
@@ -98,7 +99,7 @@ $ExampleForumCategory = "Example Forum Category";
 $ExampleForum = "Example Forum";
 $ExampleThread = "Example Thread";
 $ExampleThreadContent = "Example content";
-$IntroductionWiki = "The word Wiki is short for WikiWikiWeb. Wikiwiki is a Hawaiian word, meaning \"fast\" or \"speed\". In a wiki, people write pages together. If one person writes something wrong, the next person can correct it. The next person can also add something new to the page. Because of this, the pages improve continuously.";
+$IntroductionWiki = "The word Wiki is short for WikiWikiWeb. Wikiwiki is a Hawaiian word, meaning \\"fast\\" or \\"speed\\". In a wiki, people write pages together. If one person writes something wrong, the next person can correct it. The next person can also add something new to";
 $CreateCourseArea = "Create this training";
 $CreateCourse = "Create a training";
 $Create = "Create";

@@ -1,27 +1,28 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $langInvalidId = "Haykuy mana atikunchu - haykuq sutin utaq qelqa pakasqan mana allinchu.";
-$langWelcome = "Urapin yachachinakunaqa qespisqallaña kashanku. Hoq yachachinakunaqa munankupuni  \'Haykuq sutin-ta\' hinallataq huj paka qelqatapas chay \'Qelqachikuy-pi\'  haykuspa. Yachachiqkunapas kamachinkuman yachachinata chay \'Qelqachikuy nisqanpi, ajllarispa   \'kamachiy yachachinata\'.";
+$langWelcome = "Urapin yachachinakunaqa qespisqallaña kashanku. Hoq yachachinakunaqa munankupuni  \'Haykuq sutin-ta\' hinallataq huj paka qelqatapas chay \'Qelqachikuy-pi\'  haykuspa. Yachachiqkunapas kamachinkuman yachachinata chay \'Qelqachikuy nisqanpi, ajllarispa   \";
 $langPass = "Qelqa pakay";
 $langEnter = "Haykuy";
 $langReg = "Suti qelqa";
-$langMenu  = "Ajllachiq";
+$langMenu = "Ajllachiq";
 $langAdvises = "Ima rimariykuna";
 $langCourseDoesntExist = "<b>Uyarinapaq :</b> Kay yachachinaqa mana kanchu";
 $langGetCourseFromOldPortal = "kaypi q\'apiy yachachina hap\'inapaq ñaupaq web raphimanta";
 $langOtherCourses = "Llapan yachachinakuna";
 $langSupportForum = "Rimarinakuy yanapanapaq";
-$langCategories  = "Mitakuna";
-$langBackToHomePage  = "Kutiy";
-$lang_No_course_publicly_available  = "Manan kanchu yachachikuna llapan llaqtakunapaqqa";
-$langLostPassword  = "Qonqarankichu qelqa pakaykita?";
-$lang_edit_my_course_list  = "Hoqmanta qelqay yupasqa yachachinakunata";
-$langAgenda  = "Ruway hamuqkuna";
-$langValvas  = "Qhepa willaykuna";
-$langUp  = "Kuraq t\'aqa";
-$langCatList  = "T\'aqachasqakuna";
-$langCourseList  = "Yachachinakuna";
+$langCategories = "Mitakuna";
+$langBackToHomePage = "Kutiy";
+$lang_No_course_publicly_available = "Manan kanchu yachachikuna llapan llaqtakunapaqqa";
+$langLostPassword = "Qonqarankichu qelqa pakaykita?";
+$lang_edit_my_course_list = "Hoqmanta qelqay yupasqa yachachinakunata";
+$langAgenda = "Ruway hamuqkuna";
+$langValvas = "Qhepa willaykuna";
+$langUp = "Kuraq t\'aqa";
+$langCatList = "T\'aqachasqakuna";
+$langCourseList = "Yachachinakuna";
 $langHelptwo = "Yanapay";
 $langRegAll = "Suti qelqa";
 $EussMenu = "ajllachiq";
@@ -64,5 +65,11 @@ $NewMessageInForum = "Churarikun huj willakuy k\'itirimanapii";
 $FolderCreated = "Hoq musuq wayaqan ruwachikun";
 $LinkAdded = "Churarikun huj musuq wataqwan";
 $AnnouncementAdded = "Churarikun huj willay";
-$AgendaAdded = "Yapachikun huj ruway ";
+$AgendaAdded = "Yapachikun huj ruway";
+$Messages = "";
+$Inbox = "";
+$Comppose = "";
+$PendingInvitations = "";
+$YouDoNotHaveAnySessionInItsHistory = "";
+$PortalHomepageDefaultIntroduction = "";
 ?>

@@ -1,6 +1,8 @@
 <?php
+require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be/gradebookitem.class.php';
 require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be/abstractlink.class.php';
 require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be/linkfactory.class.php';
+
 class TestAttendanceLink extends UnitTestCase {
 	
 	public function TestAttendanceLink() {

@@ -2966,7 +2966,31 @@ class UserManager
 		return $affected_rows;
 
 	}
-
+	
+	
+	/**
+	 * This function check if an user is followed by human resources manager
+	 * @param 	int 	User id 
+	 * @param	int		Human resources manager
+	 * @return	bool
+	 */
+	public static function is_user_followed_by_drh($user_id, $hr_dept_id) {
+		
+		// Database table and variables Definitions		
+		$tbl_user_rel_user 	= 	Database::get_main_table(TABLE_MAIN_USER_REL_USER);
+		$user_id 	= intval($user_id);
+		$hr_dept_id = intval($hr_dept_id);			
+		$result = false;
+		
+		$sql = "SELECT user_id FROM $tbl_user_rel_user WHERE user_id='$user_id' AND friend_user_id='$hr_dept_id' AND relation_type=".USER_RELATION_TYPE_RRHH." ";
+		$rs  = Database::query($sql);
+		if (Database::num_rows($rs) > 0) {
+			$result = true;	
+		}
+		
+		return $result;
+		
+	}
 
 
 }

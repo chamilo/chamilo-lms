@@ -166,7 +166,7 @@ Display::display_header($tool_name);
 //echo '<div class="row"><div class="form_header">'.get_lang('AssignedCoursesTo').'&nbsp;'.api_get_person_name($hrm_info['firstname'], $hrm_info['lastname']).'</div></div><br />';
 echo '<div class="actions" style="height:22px;">
 <span style="float: right;margin:0px;padding:0px;">
-<a href="dashboard_add_users_to_user.php?user='.$user_id.'">'.Display::return_icon('add_user_big.gif', get_lang('AssignUsers'), array('style'=>'vertical-align:middle')).' '.get_lang('AssignUsers').'</a>
+<a href="dashboard_add_users_to_user.php?user='.$hrm_id.'">'.Display::return_icon('add_user_big.gif', get_lang('AssignUsers'), array('style'=>'vertical-align:middle')).' '.get_lang('AssignUsers').'</a>
 <a href="dashboard_add_sessions_to_user.php?user='.$hrm_id.'">'.Display::return_icon('view_more_stats.gif', get_lang('AssignSessions'), array('style'=>'vertical-align:middle')).' '.get_lang('AssignSessions').'</a></span>
 <span style="vertical-align:middle">'.get_lang('AssignedUsersTo').'&nbsp;'.api_get_person_name($hrm_info['firstname'], $hrm_info['lastname']).'</span></div>';
 
@@ -255,7 +255,7 @@ if(!empty($msg)) {
   ?>
 	<br /><br /><br /><br /><br /><br />
 	<?php
-		echo '<button class="save" type="button" value="" onclick="valide()" >'.get_lang('AssignCoursesToHumanResourceManager').'</button>';
+		echo '<button class="save" type="button" value="" onclick="valide()" >'.get_lang('AssignCoursesToHumanResourcesManager').'</button>';
 	?>
   </td>
   <td width="45%" align="center">

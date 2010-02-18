@@ -38,7 +38,7 @@ if($dashboard_view == 'blocks') {
 	if (count($blocks) > 0) {
 		$columns = array();
 		// group content html by number of column
-		if (is_array($blocks) && count($blocks) > 0) {	
+		if (is_array($blocks)) {	
 			$tmp_columns = array();	
 			foreach ($blocks as $block) {		
 				$tmp_columns[] = $block['column'];		

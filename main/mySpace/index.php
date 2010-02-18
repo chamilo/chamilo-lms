@@ -152,9 +152,9 @@ if ($is_platform_admin) {
 
 if (api_is_drh()) {
 	$view = 'drh_students';	
-	$menu_items[] = get_lang('Learners');
+	$menu_items[] = get_lang('Students');
 	$menu_items[] = '<a href="teachers.php">'.get_lang('Trainers').'</a>';
-	$menu_items[] = '<a href="course.php">'.get_lang('Trainings').'</a>';
+	$menu_items[] = '<a href="course.php">'.get_lang('Courses').'</a>';
 	$menu_items[] = '<a href="session.php">'.get_lang('Sessions').'</a>';
 }
 

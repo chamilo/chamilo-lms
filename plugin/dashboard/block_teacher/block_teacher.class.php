@@ -89,7 +89,7 @@ class BlockTeacher extends Block {
 	 		$teachers_table = '<table class="data_table" width:"95%">'; 		
 	 		$teachers_table .= '
 								<tr>		
-									<th>'.get_lang('FirtName').'</th>
+									<th>'.get_lang('FirstName').'</th>
 									<th>'.get_lang('LastName').'</th>
 									<th>'.get_lang('TimeSpentOnThePlatform').'</th>					
 									<th>'.get_lang('LastConnexion').'</th>													
@@ -112,8 +112,8 @@ class BlockTeacher extends Block {
 									<tr class="'.$class_tr.'">		
 										<td>'.$firtname.'</td>
 										<td>'.$lastname.'</td>
-										<td>'.$time_on_platform.'</td>					
-										<td>'.$last_connection.'</td>															
+										<td align="right">'.$time_on_platform.'</td>					
+										<td align="right">'.$last_connection.'</td>															
 									</tr>								
 									';				
 	 			$i++;
@@ -150,7 +150,7 @@ class BlockTeacher extends Block {
 	 		$teachers_table = '<table class="data_table" width:"95%">'; 		
 	 		$teachers_table .= '
 								<tr>		
-									<th>'.get_lang('FirtName').'</th>
+									<th>'.get_lang('FirstName').'</th>
 									<th>'.get_lang('LastName').'</th>
 									<th>'.get_lang('TimeSpentLastWeek').'<br />'.$last_week.'</th>														
 								</tr>								

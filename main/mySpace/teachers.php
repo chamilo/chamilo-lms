@@ -29,9 +29,9 @@ if (api_is_drh()) {
 	// followed teachers by drh
 	$formateurs = UserManager::get_users_followed_by_drh($_user['user_id'], COURSEMANAGER);
 	 
-	$menu_items[] = '<a href="index.php?view=drh_students">'.get_lang('Learners').'</a>';
+	$menu_items[] = '<a href="index.php?view=drh_students">'.get_lang('Students').'</a>';
 	$menu_items[] = get_lang('Trainers');
-	$menu_items[] = '<a href="course.php">'.get_lang('Trainings').'</a>';
+	$menu_items[] = '<a href="course.php">'.get_lang('Courses').'</a>';
 	$menu_items[] = '<a href="session.php">'.get_lang('Sessions').'</a>';
 		
 	echo '<div class="actions-title" style ="font-size:10pt;">';

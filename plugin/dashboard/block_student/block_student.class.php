@@ -90,12 +90,12 @@ class BlockStudent extends Block {
 	 		$students_table = '<table class="data_table" width:"95%">'; 		
 	 		$students_table .= '
 								<tr>		
-									<th width="10%" rowspan="2">'.get_lang('FirtName').'</th>
+									<th width="10%" rowspan="2">'.get_lang('FirstName').'</th>
 									<th width="10%" rowspan="2">'.get_lang('LastName').'</th>														
-									<th width="30%" colspan="2">'.get_lang('TrainingInformations').'</th>
+									<th width="30%" colspan="2">'.get_lang('CourseInformation').'</th>
 								</tr>
 								<tr>
-									<th width="10%">'.get_lang('Training').'</th>
+									<th width="10%">'.get_lang('Courses').'</th>
 									<th width="10%">'.get_lang('Time').'</th>									
 								</tr>
 							';
@@ -109,18 +109,24 @@ class BlockStudent extends Block {
 				if ($i%2 == 0) $style = ' style="background-color:#F2F2F2" ';
 		    	else $style = ' style="background-color:#FFF" ';
 	 			$students_table .= '<tr '.$style.'>
-										<td rowspan="'.($count_courses+1).'">'.$student['firstname'].'</td>
-										<td rowspan="'.($count_courses+1).'">'.$student['lastname'].'</td>												
+										<td rowspan="'.(count($students)).'">'.$student['firstname'].'</td>
+										<td rowspan="'.(count($students)).'">'.$student['lastname'].'</td>												
 									</tr>';
 	 			
-	 			// courses information about the student 			
-	 			foreach ($courses_by_user as $course) { 				
-	 				$course_code = $course['code'];
-	 				$course_title = $course['title']; 				
-	 				$time = api_time_to_hms(Tracking :: get_time_spent_on_the_course($student['user_id'], $course_code));	 					 				
+	 			// courses information about the student	
+	 			if (!empty($courses_by_user)) {		
+		 			foreach ($courses_by_user as $course) { 				
+		 				$course_code = $course['code'];
+		 				$course_title = $course['title']; 				
+		 				$time = api_time_to_hms(Tracking :: get_time_spent_on_the_course($student['user_id'], $course_code));	 					 				
+		 				$students_table .= '<tr '.$style.'>
+											<td align="right">'.$course_title.'</td>
+											<td align="right">'.$time.'</td>											
+											</tr>';
+		 			}
+	 			} else {
 	 				$students_table .= '<tr '.$style.'>
-										<td>'.$course_title.'</td>
-										<td>'.$time.'</td>											
+											<td align="center" colspan="2"><i>'.get_lang('Empty').'</i></td>																						
 										</tr>';
 	 			}
 	 			$i++;	
@@ -152,7 +158,7 @@ class BlockStudent extends Block {
 	 		$students_table = '<table class="data_table" width:"95%">'; 		
 	 		$students_table .= '
 								<tr>		
-									<th>'.get_lang('FirtName').'</th>
+									<th>'.get_lang('FirstName').'</th>
 									<th>'.get_lang('LastName').'</th>														
 									<th>'.get_lang('AttendancesFaults').'</th>
 									<th>'.get_lang('Evaluations').'</th>

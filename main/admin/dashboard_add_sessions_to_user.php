@@ -170,7 +170,7 @@ Display::display_header($tool_name);
 
 echo '<div class="actions" style="height:22px;">
 <span style="float: right;margin:0px;padding:0px;">
-<a href="dashboard_add_users_to_user.php?user='.$user_id.'">'.Display::return_icon('add_user_big.gif', get_lang('AssignUsers'), array('style'=>'vertical-align:middle')).' '.get_lang('AssignUsers').'</a>
+<a href="dashboard_add_users_to_user.php?user='.$hrm_id.'">'.Display::return_icon('add_user_big.gif', get_lang('AssignUsers'), array('style'=>'vertical-align:middle')).' '.get_lang('AssignUsers').'</a>
 <a href="dashboard_add_courses_to_user.php?user='.$hrm_id.'">'.Display::return_icon('course_add.gif', get_lang('AssignCourses'), array('style'=>'vertical-align:middle')).' '.get_lang('AssignCourses').'</a></span>
 <span style="vertical-align:middle">'.get_lang('AssignedUsersTo').'&nbsp;'.api_get_person_name($hrm_info['firstname'], $hrm_info['lastname']).'</span></div>';
 
@@ -209,7 +209,7 @@ if(!empty($msg)) {
 <tr>
   <td width="45%" align="center"><b><?php echo get_lang('SessionsListInPlatform') ?> :</b></td>
   <td width="10%">&nbsp;</td>
-  <td align="center" width="45%"><b><?php echo get_lang('AssignedSessionsListToHumanResourceManager') ?> :</b></td>
+  <td align="center" width="45%"><b><?php echo get_lang('AssignedSessionsListToHumanResourcesManager') ?> :</b></td>
 </tr>
 
 <?php if($add_type == 'multiple') { ?>
@@ -254,7 +254,7 @@ if(!empty($msg)) {
   ?>
 	<br /><br /><br /><br /><br /><br />
 	<?php
-		echo '<button class="save" type="button" value="" onclick="valide()" >'.get_lang('AssignSessionsToHumanResourceManager').'</button>';
+		echo '<button class="save" type="button" value="" onclick="valide()" >'.get_lang('AssignSessionsToHumanResourcesManager').'</button>';
 	?>
   </td>
   <td width="45%" align="center">

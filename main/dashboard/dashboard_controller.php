@@ -42,24 +42,26 @@ class DashboardController { // extends Controller {
 		$user_block_data  = DashboardManager::get_user_block_data($user_id);		
 		$user_blocks_id = array_keys($user_block_data);
 
-		foreach ($dashboard_blocks as $block) {
+		if (!empty($dashboard_blocks)) {
+			foreach ($dashboard_blocks as $block) {
+				
+				// display only user blocks
+				if (!in_array($block['id'], $user_blocks_id)) continue;								 			
+				
+				$path = $block['path'];
+				$controller_class = $block['controller'];
+				$filename_controller = $path.'.class.php';			
+				$dashboard_plugin_path = api_get_path(SYS_PLUGIN_PATH).'dashboard/'.$path.'/';	
+				require_once $dashboard_plugin_path.$filename_controller;
+				$obj = new $controller_class($user_id);
+				$data_block[$path] = $obj->get_block();
+				// set user block column 
+				$data_block[$path]['column'] = $user_block_data[$block['id']]['column'];				
+			}
 			
-			// display only user blocks
-			if (!in_array($block['id'], $user_blocks_id)) continue;								 			
-			
-			$path = $block['path'];
-			$controller_class = $block['controller'];
-			$filename_controller = $path.'.class.php';			
-			$dashboard_plugin_path = api_get_path(SYS_PLUGIN_PATH).'dashboard/'.$path.'/';	
-			require_once $dashboard_plugin_path.$filename_controller;
-			$obj = new $controller_class($user_id);
-			$data_block[$path] = $obj->get_block();
-			// set user block column 
-			$data_block[$path]['column'] = $user_block_data[$block['id']]['column'];				
+			$data['blocks'] = $data_block; 
+			$data['dashboard_view'] = 'blocks';	
 		}
-		
-		$data['blocks'] = $data_block; 
-		$data['dashboard_view'] = 'blocks';	
 		
 		if ($msg) {
 			$data['msg'] = $msg;

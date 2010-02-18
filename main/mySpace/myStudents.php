@@ -154,7 +154,7 @@ if (isset ($_GET['details'])) {
 
 api_block_anonymous_users();
 
-if (!api_is_allowed_to_edit() && !api_is_coach() && $_user['status'] != DRH && $_user['status'] != SESSIONADMIN && !api_is_platform_admin(true)) {
+if (!api_is_allowed_to_edit() && !api_is_coach() && !api_is_drh() && $_user['status'] != SESSIONADMIN && !api_is_platform_admin(true)) {
 	api_not_allowed(true);
 }
 
@@ -219,7 +219,7 @@ if (!empty ($_GET['student'])) {
 
 	// infos about user
 	$info_user = UserManager :: get_user_info_by_id($student_id);
-	if ($_user['status'] == DRH && $info_user['hr_dept_id'] != $_user['user_id']) {
+	if (api_is_drh() && !UserManager::is_user_followed_by_drh($student_id, $_user['user_id'])) {
 		api_not_allowed();
 	}
 

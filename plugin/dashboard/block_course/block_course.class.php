@@ -81,9 +81,9 @@ class BlockCourse extends Block {
 	    	$data_table = '<table class="data_table" width:"95%">';
 	    	$data_table .= '<tr>
 	    						<th>'.get_lang('CourseTitle').'</th>
-	    						<th width="10%">'.get_lang('NbStudents').'</th>
-	    						<th width="10%">'.get_lang('AvgTimeSpentInTheCourse').'</th>	    						
-	    						<th width="10%">'.get_lang('ThematicAdvance').'</th>
+	    						<th width="20%">'.get_lang('NbStudents').'</th>
+	    						<th width="20%">'.get_lang('AvgTimeSpentInTheCourse').'</th>	    						
+	    						<th width="20%">'.get_lang('ThematicAdvance').'</th>
 	    					</tr>';
 	    	$i = 1;
 	    	foreach ($course_data as $course) {

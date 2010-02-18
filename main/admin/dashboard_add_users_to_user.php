@@ -202,7 +202,7 @@ if(!empty($msg)) {
 <tr>
   <td width="45%" align="center"><b><?php echo get_lang('UserListInPlatform') ?> :</b></td>
   <td width="10%">&nbsp;</td>
-  <td align="center" width="45%"><b><?php echo get_lang('AssignedUsersListToHumanResourceManager') ?> :</b></td>
+  <td align="center" width="45%"><b><?php echo get_lang('AssignedUsersListToHumanResourcesManager') ?> :</b></td>
 </tr>
 
 <?php if($add_type == 'multiple') { ?>
@@ -248,7 +248,7 @@ if(!empty($msg)) {
   ?>
 	<br /><br /><br /><br /><br /><br />
 	<?php
-		echo '<button class="save" type="button" value="" onclick="valide()" >'.get_lang('AssignUsersToHumanResourceManager').'</button>';
+		echo '<button class="save" type="button" value="" onclick="valide()" >'.get_lang('AssignUsersToHumanResourcesManager').'</button>';
 	?>
   </td>
   <td width="45%" align="center">

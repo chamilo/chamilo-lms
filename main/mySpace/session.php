@@ -82,9 +82,9 @@ if (api_is_drh()) {
 
 	$a_sessions = SessionManager::get_sessions_followed_by_drh($_user['user_id']);
 	
-	$menu_items[] = '<a href="index.php?view=drh_students">'.get_lang('Learners').'</a>';
+	$menu_items[] = '<a href="index.php?view=drh_students">'.get_lang('Students').'</a>';
 	$menu_items[] = '<a href="teachers.php">'.get_lang('Trainers').'</a>';
-	$menu_items[] = '<a href="course.php">'.get_lang('Trainings').'</a>';
+	$menu_items[] = '<a href="course.php">'.get_lang('Courses').'</a>';
 	$menu_items[] = get_lang('Sessions');
 		
 	echo '<div class="actions-title" style ="font-size:10pt;">';

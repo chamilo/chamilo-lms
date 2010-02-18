@@ -64,9 +64,9 @@ if (api_is_drh()) {
 	
 	$a_courses = array_keys(CourseManager::get_courses_followed_by_drh($_user['user_id']));
 
-	$menu_items[] = '<a href="index.php?view=drh_students">'.get_lang('Learners').'</a>';
+	$menu_items[] = '<a href="index.php?view=drh_students">'.get_lang('Students').'</a>';
 	$menu_items[] = '<a href="teachers.php">'.get_lang('Teachers').'</a>';
-	$menu_items[] = get_lang('Trainings');
+	$menu_items[] = get_lang('Courses');
 	$menu_items[] = '<a href="session.php">'.get_lang('Sessions').'</a>';
 		
 	echo '<div class="actions-title" style ="font-size:10pt;">';

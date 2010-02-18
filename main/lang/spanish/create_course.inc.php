@@ -3,7 +3,7 @@
 for more information: see languages.txt in the lang folder.
 */
 $langProfessors = "Profesores";
-$langExplanation = "Una vez que haya pulsado el botón \\"Crear curso\\" se creará el sitio web del curso, en el que dispondrá de múltiples herramientas que podrá configurar para dar al curso su aspecto definitivo: Test o Ejercicios, Proyectos o Blogs, Wikis, Tareas, Creador y";
+$langExplanation = "Una vez que haya pulsado el botón \"Crear curso\" se creará el sitio web del curso, en el que dispondrá de múltiples herramientas que podrá configurar para dar al curso su aspecto definitivo: Test o Ejercicios, Proyectos o Blogs, Wikis, Tareas, Creador y";
 $langEmpty = "No ha rellenado todos los campos.<br>Utilice el botón de retorno de su navegador y vuelva a empezar.<br>Si no conoce el código de su curso, consulte el programa del curso";
 $langCodeTaken = "Este código de curso ya es utilizado por otro curso.<br>Utilice el botón de retorno de su navegador y vuelva a empezar.";
 $langFormula = "Atentamente";
@@ -17,7 +17,7 @@ $langNoPsychology = "No. La ironía socrática no se aplica al terreno de la psi
 $langAdmitError = "Reconocer los propios errores para invitar al interlocutor a hacer lo mismo.";
 $langNoSeduction = "No. No se trata de una estrategia de seducción o de un método por ejemplo.";
 $langForce = "Forzar  al interlocutor, por medio de una serie de cuestiones y subcuestiones, a que reconozca que no sabe lo que pretende saber.";
-$langIndeed = "Correcto. La ironía socrática es un método interrogativo. El término griego \\"eirotao\\" significa , por otro lado, \\"interrogar\\".";
+$langIndeed = "Correcto. La ironía socrática es un método interrogativo. El término griego \"eirotao\" significa , por otro lado, \"interrogar\".";
 $langContradiction = "Utilizar el principio de no contradicción para llevar al interlocutor a un callejón sin salida.";
 $langNotFalse = "Esta respuesta no es falsa. Es exacto que la puesta en evidencia de la ignorancia del interlocutor se realiza poniendo en evidencia las contradicciones en que desembocan sus tesis.";
 $langAgenda = "Agenda";

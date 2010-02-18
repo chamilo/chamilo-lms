@@ -22,7 +22,7 @@ $langCopyFinished = "La copia ha finalizado";
 $langFullRecycle = "Reciclado completo";
 $langRecycleCourse = "Reciclar el curso";
 $langRecycleFinished = "El reciclado ha finalizado";
-$langRecycleWarning = "Atención: al usar esta herramienta puede eliminar partes del curso que luego no podrá recuperar. Le aconsejamos que antes realice una <a href=\\"create_backup.php\\">copia de seguridad</a>";
+$langRecycleWarning = "Atención: al usar esta herramienta puede eliminar partes del curso que luego no podrá recuperar. Le aconsejamos que antes realice una <a href=\"create_backup.php\">copia de seguridad</a>";
 $langSameFilename = "¿ Qué hacer con los ficheros importados que tengan el mismo nombre que otros existentes ?";
 $langSameFilenameSkip = "Saltar los ficheros con el mismo nombre";
 $langSameFilenameRename = "Renombrar el fichero (ej. archivo.pdf se convierte en  archivo_1.pdf)";
@@ -46,6 +46,6 @@ $ToolIntro = "Textos de introducción";
 $UploadError = "Error de envío, revise tamaño máximo del archivo y los permisos del directorio.";
 $DocumentsWillBeAddedToo = "Los documentos también serán añadidos";
 $ToExportLearnpathWithQuizYouHaveToSelectQuiz = "Si quiere exportar una lección que contenga ejercicios, tendrá que  asegurarse de que estos ejercicios han sido incluidos en la exportación; para eso tendrá que haberlos seleccionado en la lista de ejercicios.";
-$ArchivesDirectoryNotWriteableContactAdmin = "El directorio \\"archive\\" utilizado por esta herramienta no tiene habilitado los permisos de escritura. Contacte al administrador de la plataforma.";
+$ArchivesDirectoryNotWriteableContactAdmin = "El directorio \"archive\" utilizado por esta herramienta no tiene habilitado los permisos de escritura. Contacte al administrador de la plataforma.";
 $DestinationCourse = "Curso de destino";
 ?>

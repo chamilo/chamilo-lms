@@ -22,7 +22,7 @@ $langCopyFinished = "Copying is finished";
 $langFullRecycle = "Delete everything";
 $langRecycleCourse = "Empty this training";
 $langRecycleFinished = "Recycle is finished";
-$langRecycleWarning = "Warning: using this tool, you will delete learning objects in your training. There is no UNDO possible. We advise you to create a <a href=\\"create_backup.php\\">backup</a> before.";
+$langRecycleWarning = "Warning: using this tool, you will delete learning objects in your training. There is no UNDO possible. We advise you to create a <a href=\"create_backup.php\">backup</a> before.";
 $langSameFilename = "What should be done with imported files with the same file name as existing files?";
 $langSameFilenameSkip = "Skip same file name";
 $langSameFilenameRename = "Rename file (eg file.pdf becomes file_1.pdf)";

@@ -103,14 +103,15 @@ class BlockStudent extends Block {
 	 		$i = 1;
 	 		foreach ($students as $student) {
 	 			 			
-	 			$courses_by_user = CourseManager::get_courses_list_by_user_id($student['user_id'], true);
+	 			$courses_by_user = CourseManager::get_courses_list_by_user_id($student['user_id'], true);	 			
 	 			$count_courses = count($courses_by_user);
+				$rowspan = $count_courses?$count_courses+1:2;
 	
 				if ($i%2 == 0) $style = ' style="background-color:#F2F2F2" ';
 		    	else $style = ' style="background-color:#FFF" ';
 	 			$students_table .= '<tr '.$style.'>
-										<td rowspan="'.(count($students)).'">'.$student['firstname'].'</td>
-										<td rowspan="'.(count($students)).'">'.$student['lastname'].'</td>												
+										<td rowspan="'.$rowspan.'">'.$student['firstname'].'</td>
+										<td rowspan="'.$rowspan.'">'.$student['lastname'].'</td>												
 									</tr>';
 	 			
 	 			// courses information about the student	

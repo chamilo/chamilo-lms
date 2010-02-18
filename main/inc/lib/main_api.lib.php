@@ -1022,16 +1022,13 @@ function api_session_start($already_installed = true) {
 	global $storeSessionInDb;
 	global $_configuration;
 
-	/* causes too many problems and is not configurable dynamically
-	if($already_installed){
+	if ($already_installed) {
 		$session_lifetime = 360000;
-		if(isset($_configuration['session_lifetime']))
-		{
+		if (isset($_configuration['session_lifetime'])) {
 			$session_lifetime = $_configuration['session_lifetime'];
 		}
-		session_set_cookie_params($session_lifetime,api_get_path(REL_PATH));
-
-	}*/
+		//session_set_cookie_params($session_lifetime,api_get_path(REL_PATH));
+	}
 
 	if (is_null($storeSessionInDb)) {
 		$storeSessionInDb = false;
@@ -1046,8 +1043,10 @@ function api_session_start($already_installed = true) {
 	if ($already_installed) {
 		if (empty ($_SESSION['checkDokeosURL'])) {
 			$_SESSION['checkDokeosURL'] = api_get_path(WEB_PATH);
+			$_SESSION['session_expiry'] = time() + $session_lifetime;
 		} elseif ($_SESSION['checkDokeosURL'] != api_get_path(WEB_PATH)) {
 			api_session_clear();
+            $_SESSION['session_expiry'] = time() + $session_lifetime;
 		}
 	}
 }

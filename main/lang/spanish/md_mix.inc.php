@@ -4,7 +4,7 @@ for more information: see languages.txt in the lang folder.
 */
 $langTool = "Metadatos";
 $langClickKw = "Haga clic sobre la palabra clave en el árbol para seleccionarla o deseleccionarla.";
-$langKwHelp = "<br/> Clic en el botón \'+\' para abrir, en el botón \'-\' cerrar, en el botón \'++\' para abrir todo, en el botón \'--\' para cerrar todo.<br/> <br/> Desechar todas las palabras clave seleccionadas cerrando el árbol y abriéndolo de nuevo con el botón \'+";
+$langKwHelp = "<br/> Clic en el botón '+' para abrir, en el botón '-' cerrar, en el botón '++' para abrir todo, en el botón '--' para cerrar todo.<br/> <br/> Desechar todas las palabras clave seleccionadas cerrando el árbol y abriéndolo de nuevo con el botón '+";
 $langAdvanced = "Avanzada";
 $langSearch = "Buscar";
 $langSearchCrit = "¡ Use el área inferior para los descriptores, una palabra por línea !";

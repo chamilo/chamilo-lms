@@ -3,7 +3,7 @@
 for more information: see languages.txt in the lang folder.
 */
 $langInvalidId = "Acceso denegado - nombre de usuario o contraseña no válidos.";
-$langWelcome = "los cursos están libremente disponibles abajo. Otros cursos requieren un \'nombre de usuario\' y una contraseña, que se pueden obtener haciendo clic en \'Inscribirse\'. Los profesores pueden crear cursos en \'Inscribirse\', seleccionando la opción \'Crear";
+$langWelcome = "los cursos están libremente disponibles abajo. Otros cursos requieren un 'nombre de usuario' y una contraseña, que se pueden obtener haciendo clic en 'Inscribirse'. Los profesores pueden crear cursos en 'Inscribirse', seleccionando la opción 'Crear";
 $langPass = "Contraseña";
 $langEnter = "Entrar";
 $langReg = "Registro";

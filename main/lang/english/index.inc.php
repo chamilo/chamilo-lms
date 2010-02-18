@@ -3,7 +3,7 @@
 for more information: see languages.txt in the lang folder.
 */
 $langInvalidId = "Login failed - incorrect login or password.";
-$langWelcome = "training are freely available below. Other  training requirea login and a password, which you can obtain by clicking on \'registration\'. Trainerscan create training by clicking on registration too, but selecting then\'Create training\'.";
+$langWelcome = "training are freely available below. Other  training requirea login and a password, which you can obtain by clicking on 'registration'. Trainerscan create training by clicking on registration too, but selecting then'Create training'.";
 $langPass = "Pass";
 $langEnter = "Enter";
 $langReg = "Register";

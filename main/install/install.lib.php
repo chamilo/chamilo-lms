@@ -43,10 +43,6 @@ function is_already_installed_system() {
 		return true; // Must be initialized.
 	}
 
-	if (is_array($_POST) && count($_POST) > 0) {
-		return false; // Running installation.
-	}
-
 	$current_config_file = str_replace('\\', '/', realpath('../inc/conf/configuration.php'));
 	if (!file_exists($current_config_file)) {
 		return false; // Configuration file does not exist, install the system.

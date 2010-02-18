@@ -23,6 +23,7 @@ $SectionSystemRequirementsProblem = 'System requirements problem';
 $SectionInstallation = 'Installation';
 $SectionDatabaseUnavailable = 'Database is unavailable';
 $SectionTechnicalIssues = 'Technical issues';
+$SectionProtection = 'Protection measure';
 
 // Error code.
 $ErrorCode = 'Error code';
@@ -40,6 +41,10 @@ $InstallationDescription = 'Click to INSTALL Chamilo %s or read the installation
 // Error code 5.
 $DatabaseUnavailableTitle = 'Database is unavailable';
 $DatabaseUnavailableDescription = 'This portal is currently experiencing database issues. Please report this to the portal administrator. Thank you for your help.';
+
+// Error code 6.
+$AlreadyInstalledTitle = 'Chamilo has already been installed';
+$AlreadyInstalledDescription = 'The system has already been installed. In order its content to be protected you are not allowed to start the installation script again.';
 
 // Unspecified error.
 $TechnicalIssuesTitle = 'Technical issues';
@@ -126,6 +131,12 @@ if (is_int($global_error_code) && $global_error_code > 0) {
 			$global_error_message['section'] = $SectionDatabaseUnavailable;
 			$global_error_message['title'] = $DatabaseUnavailableTitle;
 			$global_error_message['description'] = $DatabaseUnavailableDescription;
+			break;
+
+		case 6:
+			$global_error_message['section'] = $SectionProtection;
+			$global_error_message['title'] = $AlreadyInstalledTitle;
+			$global_error_message['description'] = $AlreadyInstalledDescription;
 			break;
 
 		default:

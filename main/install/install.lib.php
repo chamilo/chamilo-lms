@@ -30,6 +30,32 @@ define('SYSTEM_CONFIG_FILENAME', 'configuration.dist.php');
 */
 
 /**
+ * This function detects whether the system has been already installed.
+ * It should be used for prevention from second running the installation
+ * script and as a result - destroying a production system.
+ * @return bool		The detected result;
+ * @author Ivan Tcholakov, 2010;
+ */
+function is_already_installed_system() {
+	global $new_version;
+
+	if (empty($new_version)) {
+		return true;
+	}
+
+	$current_config_file = str_replace('\\', '/', realpath('../inc/conf/configuration.php'));
+	if (!file_exists($current_config_file)) {
+		return false;
+	}
+	require $current_config_file;
+
+	 // Careful, if/when the name 'dokeos_version' is changed. Check this then.
+	$current_version = $_configuration['dokeos_version'];
+
+	return empty($current_version) ? false : ($new_version == $current_version);
+}
+
+/**
  * This function checks if a php extension exists or not and returns an HTML status string.
  *
  * @param 	string  Name of the PHP extension to be checked
@@ -396,7 +422,7 @@ function get_config_param($param, $updatePath = '') {
 	if (empty($updatePath) && !empty($_POST['updatePath'])) {
 		$updatePath = $_POST['updatePath'];
 	}
-	$updatePath = realpath($updatePath).'/';
+	$updatePath = api_add_trailing_slash(str_replace('\\', '/', realpath($updatePath)));
 	$updateFromInstalledVersionFile = '';
 
 	if (empty($updateFromConfigFile)) {
@@ -1696,7 +1722,7 @@ function display_after_install_message($installType, $nbr_courses) {
 
 	<?php echo get_lang('FirstUseTip'); ?>
 
-	<?php if ($installType == 'update' && $nbr_courses > MAX_COURSE_TRANSFER): ?>
+	<?php if (false && $installType == 'update' && $nbr_courses > MAX_COURSE_TRANSFER): ?>
 	<br /><br />
 	<font color="red"><strong><?php echo get_lang('Warning'); ?> :</strong> <?php printf(get_lang('YouHaveMoreThanXCourses'), MAX_COURSE_TRANSFER, MAX_COURSE_TRANSFER,'<a href="update_courses.php"><font color="red">', '</font></a>'); ?></font>
 	<?php endif; ?>

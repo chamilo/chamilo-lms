@@ -33,6 +33,8 @@
  **************************************************************************
  */
 
+require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';
+
 $rows	= get_posts($_GET['thread']); // note: this has to be cleaned first
 $rows	= calculate_children($rows);
 
@@ -315,40 +317,3 @@ echo "</table>";
 // --------------------------------------
 
 echo $thread_structure;
-
-
-/**
-* This function builds an array of all the posts in a given thread where the key of the array is the post_id
-* It also adds an element children to the array which itself is an array that contains all the id's of the first-level children
-* @return an array containing all the information on the posts of a thread
-* @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
-*/
-function calculate_children($rows) {
-	foreach($rows as $row)
-	{
-		$rows_with_children[$row["post_id"]]=$row;
-		$rows_with_children[$row["post_parent_id"]]["children"][]=$row["post_id"];
-	}
-	$rows=$rows_with_children;
-	$sorted_rows=array(0=>array());
-	_phorum_recursive_sort($rows, $sorted_rows);
-	unset($sorted_rows[0]);
-	return $sorted_rows;
-}
-
-function _phorum_recursive_sort($rows, &$threads, $seed=0, $indent=0) {
-	if($seed>0)
-	{
-		$threads[$rows[$seed]["post_id"]]=$rows[$seed];
-		$threads[$rows[$seed]["post_id"]]["indent_cnt"]=$indent;
-		$indent++;
-	}
-
-	if(isset($rows[$seed]["children"]))
-	{
-		foreach($rows[$seed]["children"] as $child)
-		{
-			_phorum_recursive_sort($rows, $threads, $child, $indent);
-		}
-	}
-}

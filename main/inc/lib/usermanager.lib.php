@@ -266,11 +266,14 @@ class UserManager
 				$url_id = api_get_current_access_url_id();
 			}
 			UrlManager::delete_url_rel_user($user_id, $url_id);
+		} else {
+			//we delete the user from the default url 
+			UrlManager::delete_url_rel_user($user_id, 1);
 		}
 
 		if (api_get_setting('allow_social_tool')=='true' ) {
 			require_once api_get_path(LIBRARY_PATH).'social.lib.php';
-			//Delete user from groups
+			//@todo Delete user from groups
 
 			//Delete from user friend lists
 			SocialManager::remove_user_rel_user($user_id,true);

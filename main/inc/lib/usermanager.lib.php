@@ -993,9 +993,15 @@ class UserManager
 				//we need to update the current record
 				$rowufv = Database::fetch_array($resufv);
 				if ($rowufv['field_value'] != $fvalues) {
-					$sqlu = "UPDATE $t_ufv SET field_value = '$fvalues', tms = FROM_UNIXTIME($tms) WHERE id = ".$rowufv['id'];
-					//error_log('UM::update_extra_field_value: '.$sqlu);
-					$resu = Database::query($sqlu);
+					// If the new field is empty, delete it
+					if ($fvalues == '') {
+						$sql_query = "DELETE FROM $t_ufv WHERE id = ".$rowufv['id'].";";
+					} else {
+						// Otherwise update it
+						$sql_query = "UPDATE $t_ufv SET field_value = '$fvalues', tms = FROM_UNIXTIME($tms) WHERE id = ".$rowufv['id'];
+					}
+					
+					$resu = Database::query($sql_query);
 					return($resu ? true : false);
 				}
 				return true;

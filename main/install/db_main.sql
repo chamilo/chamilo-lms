@@ -753,7 +753,7 @@ VALUES
 ('message_max_upload_filesize',NULL,'textfield','Tools','20971520','MessageMaxUploadFilesizeTitle','MessageMaxUploadFilesizeComment',NULL,NULL, 0),
 ('show_tabs', 'dashboard', 'checkbox', 'Platform', 'true', 'ShowTabsTitle', 'ShowTabsComment', NULL, 'TabsDashboard', 1),
 ('use_users_timezone', 'timezones', 'radio', 'Timezones', 'true', 'UseUsersTimezoneTitle','UseUsersTimezoneComment',NULL,'Timezones', 1),
-('timezone_value', 'timezones', 'select', 'Timezones', 'UTC', 'TimezoneValueTitle','TimezoneValueComment',NULL,'Timezones', 1),
+('timezone_value', 'timezones', 'select', 'Timezones', '', 'TimezoneValueTitle','TimezoneValueComment',NULL,'Timezones', 1),
 ('dokeos_database_version', NULL, 'textfield', NULL,'1.8.7.10483','DokeosDatabaseVersion','',NULL,NULL,0);
 
 
@@ -1183,12 +1183,13 @@ CREATE TABLE user_field_options (
 );
 DROP TABLE IF EXISTS user_field_values;
 CREATE TABLE user_field_values(
-	id	int	NOT NULL auto_increment,
+	id	bigint	NOT NULL auto_increment,
 	user_id	int	unsigned NOT NULL,
 	field_id int NOT NULL,
 	field_value	text,
 	tms DATETIME NOT NULL default '0000-00-00 00:00:00',
-	PRIMARY KEY(id)
+	PRIMARY KEY(id),
+	KEY user_id (user_id, field_id)
 );
 
 

@@ -30,7 +30,7 @@ INSERT INTO settings_current (variable, subkey, type, category, selected_value, 
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES('use_users_timezone', 'timezones', 'radio', 'Timezones', 'true', 'UseUsersTimezoneTitle','UseUsersTimezoneComment',NULL,'Timezones', 1);
 INSERT INTO settings_options (variable, value, display_text) VALUES ('use_users_timezone', 'true', 'Yes');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('use_users_timezone', 'false', 'No');
-INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES('timezone_value', 'timezones', 'select', 'Timezones', 'UTC', 'TimezoneValueTitle','TimezoneValueComment',NULL,'Timezones', 1);
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES('timezone_value', 'timezones', 'select', 'Timezones', '', 'TimezoneValueTitle','TimezoneValueComment',NULL,'Timezones', 1);
 
 ALTER TABLE user_field CHANGE tms tms DATETIME NOT NULL default '0000-00-00 00:00:00';
 ALTER TABLE course_field CHANGE tms tms DATETIME NOT NULL default '0000-00-00 00:00:00';
@@ -42,9 +42,13 @@ ALTER TABLE user_field_values CHANGE tms tms DATETIME NOT NULL default '0000-00-
 ALTER TABLE access_url CHANGE tms tms DATETIME NOT NULL default '0000-00-00 00:00:00';
 
 INSERT INTO user_field(field_type, field_variable, field_display_text, field_visible, field_changeable) VALUES(11, 'timezone', 'Timezone', 0, 0);
-UPDATE settings_current SET selected_value = '1.8.7.10483' WHERE variable = 'dokeos_database_version';
 
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('course_create_active_tools','attendances','checkbox','Tools','true','CourseCreateActiveToolsTitle','CourseCreateActiveToolsComment',NULL,'Attendances', 0);
+
+ALTER TABLE user_field_values CHANGE id id BIGINT NOT NULL AUTO_INCREMENT;
+ALTER TABLE user_field_values ADD INDEX (user_id, field_id);
+
+UPDATE settings_current SET selected_value = '1.8.7.10483' WHERE variable = 'dokeos_database_version';
 
 -- xxSTATSxx
 CREATE TABLE track_e_item_property(id int NOT NULL auto_increment PRIMARY KEY, course_id int NOT NULL, item_property_id int NOT NULL, title varchar(255), content text, progress int NOT NULL default 0, lastedit_date datetime NOT NULL default '0000-00-00 00:00:00', lastedit_user_id int  NOT NULL, session_id int NOT NULL default 0);

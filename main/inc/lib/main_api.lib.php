@@ -4489,7 +4489,9 @@ function api_get_timezones() {
 	foreach($timezone_identifiers as $tz) {
 		$out[$tz] = $tz;
 	}
-	return $out;
+	$null_option = array("" => "");
+	$result = array_merge($null_option, $out);
+	return $result;
 }
 
 /**
@@ -4538,7 +4540,7 @@ function api_get_local_time($time, $format=null, $to_timezone=null, $from_timezo
 		$to_timezone = date_default_timezone_get();
 		// Second, see if a timezone has been chosen for the platform
 		$timezone_value = api_get_setting('timezone_value', 'timezones');
-		if ($timezone_value !== null) {
+		if ($timezone_value != null) {
 			$to_timezone = $timezone_value;
 		}
 		// If allowed by the administrator

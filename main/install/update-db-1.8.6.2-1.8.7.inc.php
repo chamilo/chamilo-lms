@@ -111,41 +111,26 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
                         }
                     }
                 }
+                $tables = Database::get_tables($dbNameForm);
+                foreach ($tables as $table) {
+            	    $query = Database::query("ALTER TABLE `".$table."` CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;");
+                    $res = Database::query($query);
+                    if ($res === false) {
+                         error_log('Error in '.$query.': '.Database::error());
+                    }
+                }
+            	$query = Database::query("ALTER DATABASE `".$dbNameForm."` DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;");
+                $res = Database::query($query);
+                if ($res === false) {
+                     error_log('Error in '.$query.': '.Database::error());
+                }
             }
         }
         //
 
-
-        // now clean the deprecated id_coach field from the session_rel_course table
-        /*
-        $m_q_list = get_sql_file_contents('migrate-db-'.$old_file_version.'-'.$new_file_version.'-post.sql', 'main');
-        if (count($m_q_list) > 0) {
-            // Now use the $m_q_list
-            // We connect to the right DB first to make sure we can use the queries
-            // without a database name
-            if (strlen($dbNameForm) > 40) {
-                error_log('Database name '.$dbNameForm.' is too long, skipping', 0);
-            } elseif (!in_array($dbNameForm, $dblist)) {
-                error_log('Database '.$dbNameForm.' was not found, skipping', 0);
-            } else {
-                Database::select_db($dbNameForm);
-                foreach ($m_q_list as $query) {
-                    if ($only_test) {
-                        error_log("Database::query($dbNameForm,$query)", 0);
-                    } else {
-                        $res = Database::query($query);
-                        if ($log) {
-                            error_log("In $dbNameForm, executed: $query", 0);
-                        }
-                    }
-                }
-            }
-        }
-        */
-
-        //get the stats queries list (s_q_list)
+        // Get the stats queries list (s_q_list)
+        // Get the stats queries list (s_q_list)
         $s_q_list = get_sql_file_contents('migrate-db-'.$old_file_version.'-'.$new_file_version.'-pre.sql', 'stats');
-
         if (count($s_q_list) > 0) {
             // Now use the $s_q_list
             /**
@@ -171,8 +156,22 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
                         }
                     }
                 }
+                $tables = Database::get_tables($dbStatsForm);
+                foreach ($tables as $table) {
+            	    $query = Database::query("ALTER TABLE `".$table."` CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;");
+                    $res = Database::query($query);
+                    if ($res === false) {
+                         error_log('Error in '.$query.': '.Database::error());
+                    }
+                }
+                $query = Database::query("ALTER DATABASE `".$dbStatsForm."` DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;");
+                $res = Database::query($query);
+                if ($res === false) {
+                     error_log('Error in '.$query.': '.Database::error());
+                }
             }
         }
+
         // Get the user queries list (u_q_list)
         $u_q_list = get_sql_file_contents('migrate-db-'.$old_file_version.'-'.$new_file_version.'-pre.sql', 'user');
         if (count($u_q_list) > 0) {
@@ -197,6 +196,19 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
                             error_log('Error in '.$query.': '.Database::error());
                         }
                     }
+                }
+                $tables = Database::get_tables($dbUserForm);
+                foreach ($tables as $table) {
+            	    $query = Database::query("ALTER TABLE `".$table."` CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;");
+                    $res = Database::query($query);
+                    if ($res === false) {
+                         error_log('Error in '.$query.': '.Database::error());
+                    }
+                }
+                $query = Database::query("ALTER DATABASE `".$dbUserForm."` DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;");
+                $res = Database::query($query);
+                if ($res === false) {
+                     error_log('Error in '.$query.': '.Database::error());
                 }
             }
         }
@@ -224,10 +236,9 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
 
     // Get the courses databases queries list (c_q_list)
     $c_q_list = get_sql_file_contents('migrate-db-'.$old_file_version.'-'.$new_file_version.'-pre.sql', 'course');
-
     if (count($c_q_list) > 0) {
         // Get the courses list
-        if(strlen($dbNameForm) > 40) {
+        if (strlen($dbNameForm) > 40) {
             error_log('Database name '.$dbNameForm.' is too long, skipping', 0);
         } elseif(!in_array($dbNameForm, $dblist)) {
             error_log('Database '.$dbNameForm.' was not found, skipping', 0);
@@ -272,6 +283,22 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
                             }
                         }
                     }
+                    if (!$singleDbForm) {
+                        $tables = Database::get_tables($row_course['db_name']);
+                        foreach ($tables as $table) {
+            	            $query = Database::query("ALTER TABLE `".$table."` CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;");
+                            $res = Database::query($query);
+                            if ($res === false) {
+                                error_log('Error in '.$query.': '.Database::error());
+                            }
+                        }
+                    	$query = "ALTER DATABASE `".$row_course['db_name']."` DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;";
+                    	$res = Database::query($query);
+                        if ($res === false) {
+                            error_log('Error in '.$query.': '.Database::error());
+                        }
+                    }
+
                 }
             }
         }

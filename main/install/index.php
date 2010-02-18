@@ -641,7 +641,10 @@ if ($_POST['step2']) {
 		require_once api_get_path(LIBRARY_PATH).'image.lib.php';
 
 		remove_memory_and_time_limits();
+
 		database_server_connect();
+		// Initialization of the database connection encoding intentionaly is not done.
+		// This is the old style for connecting to the database server, that is implemented here.
 
 		// Inializing global variables that are to be used by the included scripts.
 		$dblist = Database::get_databases();
@@ -695,6 +698,15 @@ if ($_POST['step2']) {
             case '1.8.6.2':
                 include 'update-db-1.8.6.2-1.8.7.inc.php';
                 //include 'update-files-1.8.6.2-1.8.7.inc.php';
+
+                // After database conversion to UTF-8, new encoding initialization is necessary
+                // to be used for the next (hypothetical) upgrade 1.8.7 -> 1.8.7.1.
+                Database::query("SET SESSION character_set_server='utf8';");
+                Database::query("SET SESSION collation_server='utf8_general_ci';");
+                Database::query("SET CHARACTER SET 'utf8';");
+
+            case '1.8.7':
+
             default:
 				break;
 		}

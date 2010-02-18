@@ -226,7 +226,7 @@ function construct_selected_select_form($group_list=null, $user_list=null,$to_al
 			{
 				foreach($ref_array_users as $key=>$value){
 					if($value['user_id']==$id){
-						echo "\t\t<option value=\"".$groupuser."\">".api_get_person_name($value['firstName'], $value['lastName'])."</option>";
+						echo "\t\t<option value=\"".$groupuser."\">".api_get_person_name($value['firstname'], $value['lastname'])."</option>";
 						break;
 					}
 				}
@@ -622,7 +622,7 @@ function sent_to_form($sent_to_array)
 				foreach ($sent_to_array['users'] as $user_id)
 				{
 					$user_info = api_get_user_info($user_id);
-					$output.="\t<option value=\"\">".api_get_person_name($user_info['firstName'], $user_info['lastName'])."</option>\n";
+					$output.="\t<option value=\"\">".api_get_person_name($user_info['firstname'], $user_info['lastname'])."</option>\n";
 				}
 			}
 		}
@@ -635,7 +635,7 @@ function sent_to_form($sent_to_array)
 		if (isset($sent_to_array['users']) and is_array($sent_to_array['users']))
 		{
 			$user_info = api_get_user_info($sent_to_array['users'][0]);
-			echo api_get_person_name($user_info['firstName'], $user_info['lastName']);
+			echo api_get_person_name($user_info['firstname'], $user_info['lastname']);
 		}
 		if (isset($sent_to_array['groups']) and is_array($sent_to_array['groups']) and $sent_to_array['groups'][0]!==0)
 		{
@@ -990,11 +990,11 @@ function send_announcement_email($user_list, $course_code, $_course, $mail_title
 
 		$mail_body = '['.$_course['official_code'].'] - ['.$_course['name']."]\n";
 		$mail_body .= api_get_person_name($this_user['firstname'], $this_user['lastname'], null, PERSON_NAME_EMAIL_ADDRESS).' <'.$this_user["email"]."> \n\n".stripslashes($mail_title)."\n\n".trim(stripslashes(api_html_entity_decode(strip_tags(str_replace(array('<p>','</p>','<br />'),array('',"\n","\n"),$mail_content)), ENT_QUOTES, api_get_system_encoding())))." \n\n-- \n";
-		$mail_body .= api_get_person_name($_user['firstName'], $_user['lastName'], null, PERSON_NAME_EMAIL_ADDRESS).' ';
+		$mail_body .= api_get_person_name($_user['firstname'], $_user['lastname'], null, PERSON_NAME_EMAIL_ADDRESS).' ';
 		$mail_body .= '<'.$_user['mail'].">\n";
 		$mail_body .= $_course['official_code'].' '.$_course['name'];
 
-		@api_mail(api_get_person_name($this_user['firstname'], $this_user['lastname'], null, PERSON_NAME_EMAIL_ADDRESS), $this_user['email'], $mail_subject, $mail_body, api_get_person_name($_SESSION['_user']['firstName'], $_SESSION['_user']['lastName'], null, PERSON_NAME_EMAIL_ADDRESS), $_SESSION['_user']['mail']);
+		@api_mail(api_get_person_name($this_user['firstname'], $this_user['lastname'], null, PERSON_NAME_EMAIL_ADDRESS), $this_user['email'], $mail_subject, $mail_body, api_get_person_name($_SESSION['_user']['firstname'], $_SESSION['_user']['lastname'], null, PERSON_NAME_EMAIL_ADDRESS), $_SESSION['_user']['mail']);
 	}
 }
 

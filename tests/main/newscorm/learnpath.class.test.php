@@ -1,9 +1,9 @@
 <?php
 require_once(api_get_path(SYS_CODE_PATH).'newscorm/learnpath.class.php');
 
-class TestScorm extends UnitTestCase {
+class TestLearnpath extends UnitTestCase {
 	
-	function testAddItem() {
+	public function testAddItem() {
 		//ob_start();
 		$parent = 2;
 		$previous = 1;
@@ -25,7 +25,7 @@ class TestScorm extends UnitTestCase {
 	 	//var_dump($res);
 	}	
 		
-	function testAddLp() {
+	public function testAddLp() {
 		//ob_start();
 		$course = 'COURSETEST';
 		$name = '';
@@ -39,7 +39,7 @@ class TestScorm extends UnitTestCase {
 	 	//var_dump($res);
 	}
 
-	function testAppendMessage() {
+	public function testAppendMessage() {
 		//ob_start();
 		$string = '';
 		$res = learnpath::append_message($string);
@@ -48,7 +48,7 @@ class TestScorm extends UnitTestCase {
 	 	//var_dump($res);
 	}	
 	/*	
-	function testAutocompleteParents() {
+	public function testAutocompleteParents() {
 		//ob_start();
 		$item = 1;
 		
@@ -62,7 +62,7 @@ class TestScorm extends UnitTestCase {
 	 	var_dump($res);
 	}
 	*/
-	function testAutosave() {
+	public function testAutosave() {
 		//ob_start();
 		$res = learnpath::autosave();
 	 	$this->assertTrue(is_null($res));
@@ -70,7 +70,7 @@ class TestScorm extends UnitTestCase {
 	 	//var_dump($res);
 	}	
 		
-	function testBuildActionMenu() {
+	public function testBuildActionMenu() {
 		ob_start();
 		$res = learnpath::build_action_menu();
 	 	$this->assertTrue(is_null($res));
@@ -78,7 +78,7 @@ class TestScorm extends UnitTestCase {
 	 	//var_dump($res);
 	}
 /*
-	function testBuildTree() {
+	public function testBuildTree() {
 		//ob_start();
 		$course = 'COURSETEST';
 		$lp_id = 0;
@@ -90,7 +90,7 @@ class TestScorm extends UnitTestCase {
 	 	//var_dump($res);
 	}	
 	*/	
-	function testClearMessage() {
+	public function testClearMessage() {
 		//ob_start();
 		$res = learnpath::clear_message();
 	 	$this->assertTrue(is_null($res));
@@ -98,7 +98,7 @@ class TestScorm extends UnitTestCase {
 	 	//var_dump($res);
 	}
 
-	function testClose() {
+	public function testClose() {
 		//ob_start();
 		$res = learnpath::close();
 	 	$this->assertTrue(is_bool($res));
@@ -106,7 +106,7 @@ class TestScorm extends UnitTestCase {
 	 	//var_dump($res);
 	}	
 		
-	function testCreateDocument() {
+	public function testCreateDocument() {
 		//ob_start();
 		$_course = '';
 		$res = learnpath::create_document($_course);
@@ -115,7 +115,7 @@ class TestScorm extends UnitTestCase {
 	 	//var_dump($res);
 	}	
 /*	
-	function testCreateJs() {
+	public function testCreateJs() {
 		//ob_start();
 		$res = learnpath::create_js();
 	 	$this->assertTrue(is_string($res));
@@ -123,7 +123,7 @@ class TestScorm extends UnitTestCase {
 	 	//var_dump($res);
 	}	
 */		
-	function testCreatePath() {
+	public function testCreatePath() {
 		//ob_start();
 		$path = '';
 		$res = learnpath::create_path($path);
@@ -132,7 +132,7 @@ class TestScorm extends UnitTestCase {
 	 	//var_dump($res);
 	}
 
-	function testCreateTreeArray() {
+	public function testCreateTreeArray() {
 		//ob_start();
 		$array = '';
 		$parent = 0;
@@ -144,7 +144,7 @@ class TestScorm extends UnitTestCase {
 	 	//var_dump($res);
 	}	
 		
-	function testDisplayDocument() {
+	public function testDisplayDocument() {
 		//ob_start();
 		$id = 1;
 		$show_title = false;
@@ -156,7 +156,7 @@ class TestScorm extends UnitTestCase {
 	 	//var_dump($res);
 	}
 /*
-	function testDisplayDocumentForm() {
+	public function testDisplayDocumentForm() {
 		//ob_start();
 		$action = 'add';
 		$id = 0;
@@ -172,7 +172,7 @@ class TestScorm extends UnitTestCase {
 	 	//var_dump($res);
 	}	
 */		
-	function testDisplayEditItem() {
+	public function testDisplayEditItem() {
 		//ob_start();
 		$item_id = '';
 		$res = learnpath::display_edit_item($item_id);
@@ -181,7 +181,7 @@ class TestScorm extends UnitTestCase {
 	 	//var_dump($res);
 	}	
 	/*
-	function testDisplayForumForm() {
+	public function testDisplayForumForm() {
 		//ob_start();
 		$action = 'add';
 		$id = 0;
@@ -197,7 +197,7 @@ class TestScorm extends UnitTestCase {
 	 	//var_dump($res);
 	}	
 		
-	function testDisplayHotpotatoesForm() {
+	public function testDisplayHotpotatoesForm() {
 		//ob_start();
 		$action = 'add';
 		$id = 0;
@@ -213,7 +213,7 @@ class TestScorm extends UnitTestCase {
 	 	//var_dump($res);
 	}
 */
-	function testDisplayItem() {
+	public function testDisplayItem() {
 		//ob_start();
 		$item_id = '';
 		$iframe = true;
@@ -224,7 +224,7 @@ class TestScorm extends UnitTestCase {
 	 	//var_dump($res);
 	}	
 		
-/*	function testDisplayItemForm() {
+/*	public function testDisplayItemForm() {
 		//ob_start();
 		$item_type = '';
 		$title = '';
@@ -241,7 +241,7 @@ class TestScorm extends UnitTestCase {
 	 	//var_dump($res);
 	}
 
-	function testDisplayItemPrerequisitesForm() {
+	public function testDisplayItemPrerequisitesForm() {
 		//ob_start();
 		$item_id = '';
 		$course='COURSETEST';
@@ -255,7 +255,7 @@ class TestScorm extends UnitTestCase {
 	 	//var_dump($res);
 	}
 */	
-	function testDisplayItemSmallForm() {
+	public function testDisplayItemSmallForm() {
 		//ob_start();
 		$item_type = '';
 		$title = '';
@@ -266,7 +266,7 @@ class TestScorm extends UnitTestCase {
 	 	//var_dump($res);
 	}	
 /*		
-	function testDisplayLinkForm() {
+	public function testDisplayLinkForm() {
 		//ob_start();
 		$action = 'add';
 		$id = 0;
@@ -282,7 +282,7 @@ class TestScorm extends UnitTestCase {
 	 	//var_dump($res);
 	}	
 		
-	function testDisplayManipulate() {
+	public function testDisplayManipulate() {
 		//ob_start();
 		$item_id = '';
 		$item_type = TOOL_DOCUMENT;
@@ -292,7 +292,7 @@ class TestScorm extends UnitTestCase {
 	 	//var_dump($res);
 	}
 */
-	function testDisplayMoveItem() {
+	public function testDisplayMoveItem() {
 		//ob_start();
 		$item_id = '';
 		$res = learnpath::display_move_item($item_id);
@@ -301,7 +301,7 @@ class TestScorm extends UnitTestCase {
 	 	//var_dump($res);
 	}	
 /*		
-	function testDisplayQuizForm() {
+	public function testDisplayQuizForm() {
 		//ob_start();
 		$action = 'add';
 		$id = 0;
@@ -317,7 +317,7 @@ class TestScorm extends UnitTestCase {
 	 	//var_dump($res);
 	}	
 */	
-/*	function testDisplayResources() {
+/*	public function testDisplayResources() {
 		//ob_start();
 		$course='COURSETEST';
 		$lp_id=1;
@@ -330,7 +330,7 @@ class TestScorm extends UnitTestCase {
 	 	//var_dump($res);
 	}	
 		
-	function testDisplayStudentPublicationForm() {
+	public function testDisplayStudentPublicationForm() {
 		//ob_start();
 		$action = 'add';
 		$id = 0;
@@ -346,7 +346,7 @@ class TestScorm extends UnitTestCase {
 	 	//var_dump($res);
 	}
 
-	function testDisplayThreadForm() {
+	public function testDisplayThreadForm() {
 		//ob_start();
 		$action = 'add';
 		$id = 0;
@@ -362,7 +362,7 @@ class TestScorm extends UnitTestCase {
 	 	//var_dump($res);
 	}	
 */		
-	function testEditDocument() {
+	public function testEditDocument() {
 		//ob_start();
 		$_course='';
 		$res = learnpath::edit_document($_course);
@@ -371,7 +371,7 @@ class TestScorm extends UnitTestCase {
 	 	//var_dump($res);
 	}
 	
-	function testEditItem() {
+	public function testEditItem() {
 		//ob_start();
 		$id = '';
 		$parent = '';
@@ -387,7 +387,7 @@ class TestScorm extends UnitTestCase {
 	 	//var_dump($res);
 	}	
 		
-	function testEditItemPrereq() {
+	public function testEditItemPrereq() {
 		//ob_start();
 		$id = '';
 		$prerequisite_id = '';
@@ -399,7 +399,7 @@ class TestScorm extends UnitTestCase {
 	 	//var_dump($res);
 	}
 
-	function testEscapeString() {
+	public function testEscapeString() {
 		//ob_start();
 		$string = '';
 		$res = learnpath::escape_string($string);
@@ -408,7 +408,7 @@ class TestScorm extends UnitTestCase {
 	 	//var_dump($res);
 	}	
 		
-	function testExportLp() {
+	public function testExportLp() {
 		//ob_start();
 		$type = 'scorm';
 		$course = 'COURSETEST';
@@ -420,7 +420,7 @@ class TestScorm extends UnitTestCase {
 	 	//var_dump($res);
 	}
 
-	function testFirst() {
+	public function testFirst() {
 		//ob_start();
 		$res = learnpath::first();
 	 	$this->assertTrue(is_null($res));
@@ -428,7 +428,7 @@ class TestScorm extends UnitTestCase {
 	 	//var_dump($res);
 	}	
 		
-	function testGetAuthor() {
+	public function testGetAuthor() {
 		//ob_start();
 		$res = learnpath::get_author();
 	 	$this->assertTrue(is_string($res));
@@ -436,7 +436,7 @@ class TestScorm extends UnitTestCase {
 	 	//var_dump($res);
 	}	
 	
-	function testGetBrotherChapters() {
+	public function testGetBrotherChapters() {
 		//ob_start();
 		$id = '';
 		$res = learnpath::get_brother_chapters($id);
@@ -445,7 +445,7 @@ class TestScorm extends UnitTestCase {
 	 	//var_dump($res);
 	}	
 		
-	function testGetBrotherItems() {
+	public function testGetBrotherItems() {
 		//ob_start();
 		$id = '';
 		$res = learnpath::get_brother_items($id);
@@ -454,7 +454,7 @@ class TestScorm extends UnitTestCase {
 	 	//var_dump($res);
 	}
 /*
-	function testGetCommonIndexTermsByPrefix() {
+	public function testGetCommonIndexTermsByPrefix() {
 		//ob_start();
 		$prefix = '';
 		$res = learnpath::get_common_index_terms_by_prefix($prefix);
@@ -463,7 +463,7 @@ class TestScorm extends UnitTestCase {
 	 	//var_dump($res);
 	}	
 		
-	function testGetCompleteItemsCount() {
+	public function testGetCompleteItemsCount() {
 		//ob_start();
 		$res = learnpath::get_complete_items_count();
 	 	$this->assertTrue(is_numeric($res));
@@ -471,7 +471,7 @@ class TestScorm extends UnitTestCase {
 	 	//var_dump($res);
 	}
 */	
-	function testGetCurrentItemId() {
+	public function testGetCurrentItemId() {
 		//ob_start();
 		$res = learnpath::get_current_item_id();
 	 	$this->assertTrue(is_numeric($res));
@@ -479,7 +479,7 @@ class TestScorm extends UnitTestCase {
 	 	//var_dump($res);
 	}	
 		
-	function testGetDbProgress() {
+	public function testGetDbProgress() {
 		//ob_start();
 		$lp_id = 0;
 		$user_id = 1;
@@ -492,7 +492,7 @@ class TestScorm extends UnitTestCase {
 	 	//var_dump($res);
 	}
 
-	function testGetDocuments() {
+	public function testGetDocuments() {
 		//ob_start();
 		$course='COURSETEST';
 		$lp_id=1;
@@ -505,7 +505,7 @@ class TestScorm extends UnitTestCase {
 	 	//var_dump($res);
 	}	
 		
-	function testGetExercises() {
+	public function testGetExercises() {
 		//ob_start();
 		$res = learnpath::get_exercises();
 	 	$this->assertTrue(is_string($res));
@@ -513,7 +513,7 @@ class TestScorm extends UnitTestCase {
 	 	//var_dump($res);
 	}
 
-	function testGetExtension() {
+	public function testGetExtension() {
 		//ob_start();
 		$filename = 'file';
 		$res = learnpath::get_extension($filename);
@@ -522,7 +522,7 @@ class TestScorm extends UnitTestCase {
 	 	//var_dump($res);
 	}	
 		
-	function testGetFirstItemId() {
+	public function testGetFirstItemId() {
 		//ob_start();
 		$res = learnpath::get_first_item_id();
 	 	$this->assertTrue(is_numeric($res));
@@ -530,7 +530,7 @@ class TestScorm extends UnitTestCase {
 	 	//var_dump($res);
 	}	
 		
-	function testGetFlatOrderedItemsList() {
+	public function testGetFlatOrderedItemsList() {
 		//ob_start();
 		$lp = 1;
 		$parent = 0;
@@ -540,10 +540,10 @@ class TestScorm extends UnitTestCase {
 	 	//var_dump($res);
 	}	
 		/*
-	function testGetForums() {
+	public function testGetForums() {
 		//ob_start();
 		
-		//require_once api_get_path(WEB_PATH).('forum/forumfunction.inc.php');
+		//require_once api_get_path(WEB_PATH).('forum/forumpublic function.inc.php');
 		//require_once api_get_path(WEB_PATH).('forum/forumconfig.inc.php');
 		$course='COURSETEST';
 		$lp_id=1;
@@ -556,7 +556,7 @@ class TestScorm extends UnitTestCase {
 	 	//var_dump($res);
 	}
 
-	function testGetHtmlToc() {
+	public function testGetHtmlToc() {
 		//ob_start();
 		$course='COURSETEST';
 		$lp_id=1;
@@ -569,7 +569,7 @@ class TestScorm extends UnitTestCase {
 	 	//var_dump($res);
 	}	
 */		
-	function testGetId() {
+	public function testGetId() {
 		//ob_start();
 		$res = learnpath::get_id();
 	 	$this->assertTrue(is_numeric($res));
@@ -577,7 +577,7 @@ class TestScorm extends UnitTestCase {
 	 	//var_dump($res);
 	}
 	
-	function testGetInteractionsCountFromDb() {
+	public function testGetInteractionsCountFromDb() {
 		//ob_start();
 		$lp_iv_id = 0;
 		$res = learnpath::get_interactions_count_from_db($lp_iv_id);
@@ -586,7 +586,7 @@ class TestScorm extends UnitTestCase {
 	 	//var_dump($res);
 	}	
 /*		
-	function testGetItemsDetailsAsJs() {
+	public function testGetItemsDetailsAsJs() {
 		//ob_start();
 		$varname='olms.lms_item_types';
 		$res = learnpath::get_items_details_as_js($varname);
@@ -595,7 +595,7 @@ class TestScorm extends UnitTestCase {
 	 	//var_dump($res);
 	}
 
-	function testGetItemsStatusList() {
+	public function testGetItemsStatusList() {
 		//ob_start();
 		$res = learnpath::get_items_status_list();
 	 	$this->assertTrue(is_array($res));
@@ -603,7 +603,7 @@ class TestScorm extends UnitTestCase {
 	 	//var_dump($res);
 	}	
 		
-	function testGetIvInteractionsArray() {
+	public function testGetIvInteractionsArray() {
 		//ob_start();
 		$lp_iv_id = '';
 		$res = learnpath::get_iv_interactions_array($lp_iv_id);
@@ -612,7 +612,7 @@ class TestScorm extends UnitTestCase {
 	 	//var_dump($res);
 	}
 */
-	function testGetIvObjectivesArray() {
+	public function testGetIvObjectivesArray() {
 		//ob_start();
 		$lp_iv_id = 0;
 		$res = learnpath::get_iv_objectives_array($lp_iv_id);
@@ -621,7 +621,7 @@ class TestScorm extends UnitTestCase {
 	 	//var_dump($res);
 	}	
 	/*	
-	function testGetJsInfo() {
+	public function testGetJsInfo() {
 		//ob_start();
 		$item_id = '';
 		$course='COURSETEST';
@@ -635,7 +635,7 @@ class TestScorm extends UnitTestCase {
 	 	//var_dump($res);
 	}	*/
 	
-	function testGetJsLib() {
+	public function testGetJsLib() {
 		//ob_start();
 		$res = learnpath::get_js_lib();
 	 	$this->assertTrue(is_string($res));
@@ -643,7 +643,7 @@ class TestScorm extends UnitTestCase {
 	 	//var_dump($res);
 	}	
 		
-	function testGetLast() {
+	public function testGetLast() {
 		//ob_start();
 		$res = learnpath::get_last();
 	 	$this->assertTrue(is_null($res));
@@ -651,7 +651,7 @@ class TestScorm extends UnitTestCase {
 	 	//var_dump($res);
 	}
 
-	function testGetLink() {
+	public function testGetLink() {
 		//ob_start();
 		$type = 'http';
 		$item_id = null;
@@ -666,7 +666,7 @@ class TestScorm extends UnitTestCase {
 	 	//var_dump($res);
 	}	
 		
-	function testGetLinks() {
+	public function testGetLinks() {
 		//ob_start();
 		$res = learnpath::get_links();
 	 	$this->assertTrue(is_string($res));
@@ -674,7 +674,7 @@ class TestScorm extends UnitTestCase {
 	 	//var_dump($res);
 	}
 	
-	function testGetLpSessionId() {
+	public function testGetLpSessionId() {
 		//ob_start();
 		$res = learnpath::get_lp_session_id();
 	 	$this->assertTrue(is_numeric($res));
@@ -682,7 +682,7 @@ class TestScorm extends UnitTestCase {
 	 	//var_dump($res);
 	}	
 		
-	function testGetMaker() {
+	public function testGetMaker() {
 		//ob_start();
 		$res = learnpath::get_maker();
 	 	$this->assertTrue(is_string($res));
@@ -690,7 +690,7 @@ class TestScorm extends UnitTestCase {
 	 	//var_dump($res);
 	}
 
-	function testGetMediaplayer() {
+	public function testGetMediaplayer() {
 		//ob_start();
 		$autostart='true';
 		$res = learnpath::get_mediaplayer($autostart);
@@ -699,7 +699,7 @@ class TestScorm extends UnitTestCase {
 	 	//var_dump($res);
 	}	
 		
-	function testGetMessage() {
+	public function testGetMessage() {
 		//ob_start();
 		$res = learnpath::get_message();
 	 	$this->assertTrue(is_string($res));
@@ -707,7 +707,7 @@ class TestScorm extends UnitTestCase {
 	 	//var_dump($res);
 	}
 
-	function testGetName() {
+	public function testGetName() {
 		//ob_start();
 		$res = learnpath::get_name();
 	 	$this->assertTrue(is_string($res));
@@ -715,7 +715,7 @@ class TestScorm extends UnitTestCase {
 	 	//var_dump($res);
 	}	
 		
-	function testGetNavigationBar() {
+	public function testGetNavigationBar() {
 		//ob_start();
 		$course='COURSETEST';
 		$lp_id=1;
@@ -728,7 +728,7 @@ class TestScorm extends UnitTestCase {
 	 	//var_dump($res);
 	}	
 	
-	function testGetNextIndex() {
+	public function testGetNextIndex() {
 		//ob_start();
 		$res = learnpath::get_next_index();
 	 	$this->assertTrue(is_numeric($res));
@@ -736,7 +736,7 @@ class TestScorm extends UnitTestCase {
 	 	//var_dump($res);
 	}	
 		
-	function testGetNextItemId() {
+	public function testGetNextItemId() {
 		//ob_start();
 		$course='COURSETEST';
 		$lp_id=1;
@@ -749,7 +749,7 @@ class TestScorm extends UnitTestCase {
 	 	//var_dump($res);
 	}
 
-	function testGetObjectivesCountFromDb() {
+	public function testGetObjectivesCountFromDb() {
 		//ob_start();
 		$lp_iv_id = 0;
 		$res = learnpath::get_objectives_count_from_db($lp_iv_id);
@@ -758,7 +758,7 @@ class TestScorm extends UnitTestCase {
 	 	//var_dump($res);
 	}	
 	/*	
-	function testGetPackageType() {
+	public function testGetPackageType() {
 		//ob_start();
 		$file_path = '';
 		$file_name = '';
@@ -773,7 +773,7 @@ class TestScorm extends UnitTestCase {
 	 	//var_dump($res);
 	}*/
 	
-	function testGetPreviewImage() {
+	public function testGetPreviewImage() {
 		//ob_start();
 		$res = learnpath::get_preview_image();
 	 	$this->assertTrue(is_string($res));
@@ -781,7 +781,7 @@ class TestScorm extends UnitTestCase {
 	 	//var_dump($res);
 	}	
 		
-	function testGetPreviousIndex() {
+	public function testGetPreviousIndex() {
 		//ob_start();
 		$res = learnpath::get_previous_index();
 	 	$this->assertTrue(is_numeric($res));
@@ -789,7 +789,7 @@ class TestScorm extends UnitTestCase {
 	 	//var_dump($res);
 	}
 
-	function testGetPreviousItemId() {
+	public function testGetPreviousItemId() {
 		//ob_start();
 		$course='COURSETEST';
 		$lp_id=1;
@@ -802,7 +802,7 @@ class TestScorm extends UnitTestCase {
 	 	//var_dump($res);
 	}	
 		
-	function testGetProgress() {
+	public function testGetProgress() {
 		//ob_start();
 		$res = learnpath::get_progress();
 	 	$this->assertTrue(is_numeric($res));
@@ -810,7 +810,7 @@ class TestScorm extends UnitTestCase {
 	 	//var_dump($res);
 	}
 
-	function testGetProgressBar() {
+	public function testGetProgressBar() {
 		//ob_start();
 		$mode = '';
 		$percentage = -1;
@@ -827,7 +827,7 @@ class TestScorm extends UnitTestCase {
 	 	//var_dump($res);
 	}	
 		
-	function testGetProgressBarMode() {
+	public function testGetProgressBarMode() {
 		//ob_start();
 		$res = learnpath::get_progress_bar_mode();
 	 	$this->assertTrue(is_string($res));
@@ -835,7 +835,7 @@ class TestScorm extends UnitTestCase {
 	 	//var_dump($res);
 	}	
 	
-	function testGetProgressBarText() {
+	public function testGetProgressBarText() {
 		//ob_start();
 		$mode = '';
 		$add = 0;
@@ -850,7 +850,7 @@ class TestScorm extends UnitTestCase {
 	 	//var_dump($res);
 	}	
 		
-	function testGetProximity() {
+	public function testGetProximity() {
 		//ob_start();
 		$res = learnpath::get_proximity();
 	 	$this->assertTrue(is_string($res));
@@ -858,7 +858,7 @@ class TestScorm extends UnitTestCase {
 	 	//var_dump($res);
 	}
 
-	function testGetScormPrereqString() {
+	public function testGetScormPrereqString() {
 		//ob_start();
 		$item_id = 1;
 		$res = learnpath::get_scorm_prereq_string($item_id);
@@ -867,7 +867,7 @@ class TestScorm extends UnitTestCase {
 	 	//var_dump($res);
 	}	
 		
-	function testGetScormXmlNode() {
+	public function testGetScormXmlNode() {
 		//ob_start();
 		$children = 'children';
 		$id = 1;		
@@ -877,7 +877,7 @@ class TestScorm extends UnitTestCase {
 	 	//var_dump($res);
 	}
 	
-	function testGetStats() {
+	public function testGetStats() {
 		//ob_start();
 		$res = learnpath::get_stats();
 	 	$this->assertTrue(is_null($res));
@@ -885,7 +885,7 @@ class TestScorm extends UnitTestCase {
 	 	//var_dump($res);
 	}	
 		
-	function testGetStatsCourse() {
+	public function testGetStatsCourse() {
 		//ob_start();
 		$course = '';
 		$res = learnpath::get_stats_course($course);
@@ -894,7 +894,7 @@ class TestScorm extends UnitTestCase {
 	 	//var_dump($res);
 	}
 
-	function testGetStatsLp() {
+	public function testGetStatsLp() {
 		//ob_start();
 		$course = 'COURSETEST';
 		$lp = 1;
@@ -904,7 +904,7 @@ class TestScorm extends UnitTestCase {
 	 	//var_dump($res);
 	}	
 		
-	function testGetStatsLpUser() {
+	public function testGetStatsLpUser() {
 		//ob_start();
 		$course = 'COURSETEST';
 		$lp = 1;
@@ -915,7 +915,7 @@ class TestScorm extends UnitTestCase {
 	 	//var_dump($res);
 	}
 
-	function testGetStatsUser() {
+	public function testGetStatsUser() {
 		//ob_start();
 		$course = 'COURSETEST';
 		$user = 1;
@@ -925,7 +925,7 @@ class TestScorm extends UnitTestCase {
 	 	//var_dump($res);
 	}	
 		
-	function testGetStudentPublications() {
+	public function testGetStudentPublications() {
 		//ob_start();
 		$res = learnpath::get_student_publications();
 	 	$this->assertTrue(is_string($res));
@@ -933,7 +933,7 @@ class TestScorm extends UnitTestCase {
 	 	//var_dump($res);
 	}	
 	
-	function testGetTheme() {
+	public function testGetTheme() {
 		//ob_start();
 		$res = learnpath::get_theme();
 	 	$this->assertTrue(is_string($res));
@@ -941,7 +941,7 @@ class TestScorm extends UnitTestCase {
 	 	//var_dump($res);
 	}	
 	/*	
-	function testGetToc() {
+	public function testGetToc() {
 		//ob_start();
 		$res = learnpath::get_toc();
 	 	$this->assertTrue(is_array($res));
@@ -949,7 +949,7 @@ class TestScorm extends UnitTestCase {
 	 	//var_dump($res);
 	}
 */
-	function testGetTotalItemsCount() {
+	public function testGetTotalItemsCount() {
 		//ob_start();
 		$res = learnpath::get_total_items_count();
 	 	$this->assertTrue(is_numeric($res));
@@ -957,7 +957,7 @@ class TestScorm extends UnitTestCase {
 	 	//var_dump($res);
 	}	
 /*		
-	function testGetTotalItemsCountWithoutChapters() {
+	public function testGetTotalItemsCountWithoutChapters() {
 		//ob_start();
 		$res = learnpath::get_total_items_count_without_chapters();
 	 	$this->assertTrue(is_numeric($res));
@@ -965,7 +965,7 @@ class TestScorm extends UnitTestCase {
 	 	//var_dump($res);
 	}
 	*/
-	function testGetType() {
+	public function testGetType() {
 		//ob_start();
 		$get_name = false;
 		$res=learnpath::get_type($get_name) ;
@@ -974,7 +974,7 @@ class TestScorm extends UnitTestCase {
 	 	//var_dump($res);
 	}	
 		
-	function testGetTypeStatic() {
+	public function testGetTypeStatic() {
 		//ob_start();
 		$lp_id = 0;
 		$res = learnpath::get_type_static($lp_id);
@@ -983,7 +983,7 @@ class TestScorm extends UnitTestCase {
 	 	//var_dump($res);
 	}
 
-	function testGetUpdateQueue() {
+	public function testGetUpdateQueue() {
 		//ob_start();
 		$res = learnpath::get_update_queue();
 	 	$this->assertTrue(is_null($res));
@@ -991,7 +991,7 @@ class TestScorm extends UnitTestCase {
 	 	//var_dump($res);
 	}	
 		
-	function testGetUserId() {
+	public function testGetUserId() {
 		//ob_start();
 		$res = learnpath::get_user_id();
 	 	$this->assertTrue(is_bool($res));
@@ -999,7 +999,7 @@ class TestScorm extends UnitTestCase {
 	 	//var_dump($res);
 	}
 /*
-	function testGetView() {
+	public function testGetView() {
 		//ob_start();
 		$attempt_num = 0;
 		$course='COURSETEST';
@@ -1013,7 +1013,7 @@ class TestScorm extends UnitTestCase {
 	 	//var_dump($res);
 	}	
 	*/	
-	function testGetViewId() {
+	public function testGetViewId() {
 		//ob_start();
 		$course='COURSETEST';
 		$lp_id=1;
@@ -1026,7 +1026,7 @@ class TestScorm extends UnitTestCase {
 	 	//var_dump($res);
 	}	
 	/*
-	function testHasAudio() {
+	public function testHasAudio() {
 		//ob_start();
 		$res = learnpath::has_audio();
 	 	$this->assertTrue(is_bool($res));
@@ -1034,7 +1034,7 @@ class TestScorm extends UnitTestCase {
 	 	//var_dump($res);
 	}*/	
 		
-	function testLearnpath() {
+	public function testLearnpath() {
 		//ob_start();
 		$course = '';
 		$lp_id = '';
@@ -1045,7 +1045,7 @@ class TestScorm extends UnitTestCase {
 	 	//var_dump($res);
 	}
 
-	function testLog() {
+	public function testLog() {
 		//ob_start();
 		$msg = '';
 		$res = learnpath::log($msg);
@@ -1054,7 +1054,7 @@ class TestScorm extends UnitTestCase {
 	 	//var_dump($res);
 	}	
 		
-	function testMoveDown() {
+	public function testMoveDown() {
 		//ob_start();
 		$lp_id = 0;
 		$res = learnpath::move_down($lp_id);
@@ -1063,7 +1063,7 @@ class TestScorm extends UnitTestCase {
 	 	//var_dump($res);
 	}
 
-	function testMoveItem() {
+	public function testMoveItem() {
 		//ob_start();
 		$id = 1;
 		$direction = '';
@@ -1073,7 +1073,7 @@ class TestScorm extends UnitTestCase {
 	 	//var_dump($res);
 	}	
 		
-	function testMoveUp() {
+	public function testMoveUp() {
 		//ob_start();
 		$lp_id = 0;
 		$res = learnpath::move_up($lp_id);
@@ -1082,7 +1082,7 @@ class TestScorm extends UnitTestCase {
 	 	//var_dump($res);
 	}	
 	/*
-	function testNext() {
+	public function testNext() {
 		//ob_start();
 		$course='COURSETEST';
 		$lp_id=1;
@@ -1095,7 +1095,7 @@ class TestScorm extends UnitTestCase {
 	 	//var_dump($res);
 	}	*/
 		
-	function testOpen() {
+	public function testOpen() {
 		//ob_start();
 		$id = '';
 		$res = learnpath::open($id);
@@ -1104,7 +1104,7 @@ class TestScorm extends UnitTestCase {
 	 	//var_dump($res);
 	}
 /*
-	function testOverview() {
+	public function testOverview() {
 		//ob_start();
 		$course='COURSETEST';
 		$lp_id=1;
@@ -1117,7 +1117,7 @@ class TestScorm extends UnitTestCase {
 	 	//var_dump($res);
 	}	
 	*/	
-	function testPrerequisitesMatch() {
+	public function testPrerequisitesMatch() {
 		//ob_start();
 		$item = null;
 		$res = learnpath::prerequisites_match($item);
@@ -1126,7 +1126,7 @@ class TestScorm extends UnitTestCase {
 	 	//var_dump($res);
 	}
 /*
-	function testPrevious() {
+	public function testPrevious() {
 		//ob_start();
 		$course='COURSETEST';
 		$lp_id=1;
@@ -1139,7 +1139,7 @@ class TestScorm extends UnitTestCase {
 	 	//var_dump($res);
 	}	
 */		
-	/*function testRestart() {
+	/*public function testRestart() {
 		//ob_start();
 		$course='COURSETEST';
 		$lp_id=1;
@@ -1152,7 +1152,7 @@ class TestScorm extends UnitTestCase {
 	 	//var_dump($res);
 	}*/
 	
-	function testSaveCurrent() {
+	public function testSaveCurrent() {
 		//ob_start();
 		$res = learnpath::save_current();
 	 	$this->assertTrue(is_bool($res));
@@ -1160,7 +1160,7 @@ class TestScorm extends UnitTestCase {
 	 	//var_dump($res);
 	}
 	
-	function testSaveItem() {
+	public function testSaveItem() {
 		//ob_start();
 		$item_id = null;
 		$from_outside = true;
@@ -1175,7 +1175,7 @@ class TestScorm extends UnitTestCase {
 	 	//var_dump($res);
 	}
 	
-	function testSaveLast() {
+	public function testSaveLast() {
 		//ob_start();
 		$course='COURSETEST';
 		$lp_id=1;
@@ -1188,7 +1188,7 @@ class TestScorm extends UnitTestCase {
 	 	//var_dump($res);
 	}
 	/*
-	function testScormExport() {
+	public function testScormExport() {
 		//ob_start();
 		$course='COURSETEST';
 		$lp_id=1;
@@ -1201,7 +1201,7 @@ class TestScorm extends UnitTestCase {
 	 	//var_dump($res);
 	}
 */
-	function testSetAuthor() {
+	public function testSetAuthor() {
 		//ob_start();
 		$name = '';
 		$course='COURSETEST';
@@ -1215,7 +1215,7 @@ class TestScorm extends UnitTestCase {
 	 	//var_dump($res);
 	}
 	
-	function testSetCurrentItem() {
+	public function testSetCurrentItem() {
 		//ob_start();
 		$item_id = null;
 		$res = learnpath::set_current_item($item_id);
@@ -1224,7 +1224,7 @@ class TestScorm extends UnitTestCase {
 	 	//var_dump($res);
 	}
 	
-	function testSetEncoding() {
+	public function testSetEncoding() {
 		//ob_start();
 		$enc = 'ISO-8859-15';
 		$course='COURSETEST';
@@ -1238,7 +1238,7 @@ class TestScorm extends UnitTestCase {
 	 	//var_dump($res);
 	}
 	
-	function testSetErrorMsg() {
+	public function testSetErrorMsg() {
 		//ob_start();
 		$error = '';
 		$res = learnpath::set_error_msg($error);
@@ -1247,7 +1247,7 @@ class TestScorm extends UnitTestCase {
 	 	//var_dump($res);
 	}
 	
-	function testSetJslib() {
+	public function testSetJslib() {
 		//ob_start();
 		$lib = '';
 		$course='COURSETEST';
@@ -1261,7 +1261,7 @@ class TestScorm extends UnitTestCase {
 	 	//var_dump($res);
 	}
 
-	function testSetMaker() {
+	public function testSetMaker() {
 		//ob_start();
 		$name = '';
 		$res = learnpath::set_maker($name);
@@ -1270,7 +1270,7 @@ class TestScorm extends UnitTestCase {
 	 	//var_dump($res);
 	}
 	
-	function testSetName() {
+	public function testSetName() {
 		//ob_start();
 		$name = '';
 		$res = learnpath::set_name($name);
@@ -1279,7 +1279,7 @@ class TestScorm extends UnitTestCase {
 	 	//var_dump($res);
 	}
 	
-	function testSetPreviewImage() {
+	public function testSetPreviewImage() {
 		//ob_start();
 		$name = '';
 		$course='COURSETEST';
@@ -1293,7 +1293,7 @@ class TestScorm extends UnitTestCase {
 	 	//var_dump($res);
 	}
 	
-	function testSetPreviousItem() {
+	public function testSetPreviousItem() {
 		//ob_start();
 		$id = '';
 		$res = learnpath::set_previous_item($id);
@@ -1302,7 +1302,7 @@ class TestScorm extends UnitTestCase {
 	 	//var_dump($res);
 	}
 	
-	function testSetProximity() {
+	public function testSetProximity() {
 		//ob_start();
 		$name = '';
 		$res = learnpath::set_proximity($name);
@@ -1311,7 +1311,7 @@ class TestScorm extends UnitTestCase {
 	 	//var_dump($res);
 	}
 
-	function testSetTermsByPrefix() {
+	public function testSetTermsByPrefix() {
 		//ob_start();
 		$terms_string = '';
 		$prefix = '';
@@ -1321,7 +1321,7 @@ class TestScorm extends UnitTestCase {
 	 	//var_dump($res);
 	}
 	
-	function testSetTheme() {
+	public function testSetTheme() {
 		//ob_start();
 		$name = '';
 		$course='COURSETEST';
@@ -1335,7 +1335,7 @@ class TestScorm extends UnitTestCase {
 	 	//var_dump($res);
 	}
 	/*
-	function testSortTreeArray() {
+	public function testSortTreeArray() {
 		//ob_start();
 		$array = '';
 		$course='COURSETEST';
@@ -1349,7 +1349,7 @@ class TestScorm extends UnitTestCase {
 	 	//var_dump($res);
 	}
 	*/
-	function testStartCurrentItem() {
+	public function testStartCurrentItem() {
 		//ob_start();
 		$allow_new_attempt = false;
 		$res = learnpath::start_current_item($allow_new_attempt);
@@ -1358,7 +1358,7 @@ class TestScorm extends UnitTestCase {
 	 	//var_dump($res);
 	}
 	
-	function testStopPreviousItem() {
+	public function testStopPreviousItem() {
 		//ob_start();
 		$res = learnpath::stop_previous_item();
 	 	$this->assertTrue(is_bool($res));
@@ -1366,7 +1366,7 @@ class TestScorm extends UnitTestCase {
 	 	//var_dump($res);
 	}
 /*
-	function testTogglePublish() {
+	public function testTogglePublish() {
 		//ob_start();
 		$lp_id = '';
 		$set_visibility = 'v';
@@ -1376,7 +1376,7 @@ class TestScorm extends UnitTestCase {
 	 	//var_dump($res);
 	}
 	*/
-	function testToggleVisibility() {
+	public function testToggleVisibility() {
 		//ob_start();
 		$lp_id = '';
 		$set_visibility = 1;
@@ -1386,7 +1386,7 @@ class TestScorm extends UnitTestCase {
 	 	//var_dump($res);
 	}
 /*	
-	function testTreeArray() {
+	public function testTreeArray() {
 		//ob_start();
 		$array = '';
 		$res = learnpath::tree_array($array);
@@ -1395,7 +1395,7 @@ class TestScorm extends UnitTestCase {
 	 	//var_dump($res);
 	}
 */	
-	function testUpdateDefaultScormCommit() {
+	public function testUpdateDefaultScormCommit() {
 		//ob_start();
 		$course='COURSETEST';
 		$lp_id=1;
@@ -1408,7 +1408,7 @@ class TestScorm extends UnitTestCase {
 	 	//var_dump($res);
 	}
 	
-	function testUpdateDefaultViewMode() {
+	public function testUpdateDefaultViewMode() {
 		//ob_start();
 		$course='COURSETEST';
 		$lp_id=1;
@@ -1421,7 +1421,7 @@ class TestScorm extends UnitTestCase {
 	 	//var_dump($res);
 	}
 
-	function testUpdateDisplayOrder() {
+	public function testUpdateDisplayOrder() {
 		//ob_start();
 		$res = learnpath::update_display_order();
 	 	$this->assertTrue(is_bool($res));
@@ -1429,7 +1429,7 @@ class TestScorm extends UnitTestCase {
 	 	//var_dump($res);
 	}
 	
-	function testUpdateReinit() {
+	public function testUpdateReinit() {
 		//ob_start();
 		$course='COURSETEST';
 		$lp_id=1;
@@ -1442,7 +1442,7 @@ class TestScorm extends UnitTestCase {
 	 	//var_dump($res);
 	}
 	
-	function testUpdateScormDebug() {
+	public function testUpdateScormDebug() {
 		//ob_start();
 		$course='COURSETEST';
 		$lp_id=1;
@@ -1455,7 +1455,7 @@ class TestScorm extends UnitTestCase {
 	 	//var_dump($res);
 	}
 	
-	function testUploadImage() {
+	public function testUploadImage() {
 		//ob_start();
 		$image_array = '';
 		$res = learnpath::upload_image($image_array);
@@ -1464,7 +1464,7 @@ class TestScorm extends UnitTestCase {
 	 	//var_dump($res);
 	}
 /*
-	function testWriteResourcesTree() {
+	public function testWriteResourcesTree() {
 		//ob_start();
 		$resources_sorted = '';
 		$num = 0;
@@ -1473,7 +1473,7 @@ class TestScorm extends UnitTestCase {
 		//ob_end_clean();
 	 	//var_dump($res);
 	}
-	function testDelete() {
+	public function testDelete() {
 		//ob_start();
 		$course = null;
 		$id = null;
@@ -1489,7 +1489,7 @@ class TestScorm extends UnitTestCase {
 	 	//var_dump($res);
 	}*/
 	
-	function testDeleteChildrenItems() {
+	public function testDeleteChildrenItems() {
 		//ob_start();
 		$id = '';
 		$res = learnpath::delete_children_items($id);
@@ -1498,7 +1498,7 @@ class TestScorm extends UnitTestCase {
 	 	//var_dump($res);
 	}	
 		
-	function testDeleteItem() {
+	public function testDeleteItem() {
 		//ob_start();
 		$id = '';
 		$remove = 'keep';
@@ -1508,7 +1508,7 @@ class TestScorm extends UnitTestCase {
 	 	//var_dump($res);
 	}
 
-	function testDeleteLpImage() {
+	public function testDeleteLpImage() {
 		//ob_start();
 		$course='COURSETEST';
 		$lp_id=1;

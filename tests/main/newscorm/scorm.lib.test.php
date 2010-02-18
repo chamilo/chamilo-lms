@@ -1,16 +1,16 @@
 <?php
 require_once(api_get_path(SYS_CODE_PATH).'newscorm/scorm.lib.php');
 
-class TestScorm extends UnitTestCase {
+class TestScormLib extends UnitTestCase {
 
 /**
- * This function gets a list of scorm paths located in a given directory
+ * This public function gets a list of scorm paths located in a given directory
  * @param	string	Base directory path
  * @param	string	Current directory
  * @param	array	Reference to a list of paths that exist in the database
  * @return	array	Array(type=>array(),size=>array(),date=>array())
  */
-	function testget_scorm_paths_from_dir() {
+	public function testget_scorm_paths_from_dir() {
 		$basedir='';
 		$curdir='';
 		$attribute=array('abc');
@@ -23,9 +23,9 @@ class TestScorm extends UnitTestCase {
  * Detects the SCORM version from an imsmanifest.xml file
  * @param	string	Path to imsmanifest.xml
  * @return	string	SCORM version (1.0,1.1,1.2,1.3)
- * @todo Implement this function
+ * @todo Implement this public function
  */
-	function testget_scorm_version() {
+	public function testget_scorm_version() {
 		$path_name = api_get_path(SYS_COURSE_PATH);
 		$path=$path_name.'scorm/';
 		$res=get_scorm_version($path);
@@ -38,7 +38,7 @@ class TestScorm extends UnitTestCase {
  * @param       string          Dir path
  * @return      boolean True on success, false otherwise
  */
-	function testremovescormDirFalse() {
+	public function testremovescormDirFalse() {
 		$path_name = api_get_path(SYS_COURSE_PATH);
 		$dir=$path_name.'scorm/';
 		$res=removescormDir($dir);
@@ -46,7 +46,7 @@ class TestScorm extends UnitTestCase {
 		//var_dump($res);
 	}
 
-	function testremovescormDirTrue() {
+	public function testremovescormDirTrue() {
 		$path_name = api_get_path(SYS_COURSE_PATH);
 		$dir=$path_name.'scorm/';
 		$res=removescormDir($dir);
@@ -55,12 +55,12 @@ class TestScorm extends UnitTestCase {
 	}
 
 /**
- * This function removes a directory if it exists
+ * This public function removes a directory if it exists
  * @param               string          Dir path
  * @return      boolean True on success, false otherwise
  * @uses        removescormDir()        to actually remove the directory
  */
-	function testscorm_delete() {
+	public function testscorm_delete() {
 		require_once(api_get_path(LIBRARY_PATH).'/fileManage.lib.php');
 		$path_name = api_get_path(SYS_COURSE_PATH);
 		$file=$path_name.'scorm/';

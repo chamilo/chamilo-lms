@@ -2,9 +2,9 @@
 require_once(api_get_path(SYS_CODE_PATH).'newscorm/learnpath.class.php');
 require_once(api_get_path(SYS_CODE_PATH).'newscorm/scorm.class.php');
 
-class TestScorm extends UnitTestCase {
+class TestScormClass extends UnitTestCase {
 /*
-	function testScorm() {
+	public function testScorm() {
 		//ob_start();
 		$course_code = 'COURSETEST';
 		$resource_id = 1;
@@ -16,7 +16,7 @@ class TestScorm extends UnitTestCase {
 	 	//var_dump($res);
 	}*/
 
-	function testOpen() {
+	public function testOpen() {
 		//ob_start();
 		$id = 1;
 		$res = scorm::open($id);
@@ -25,7 +25,7 @@ class TestScorm extends UnitTestCase {
 		//var_dump($res);
 	}		
 	
-	function testParseManifest() {
+	public function testParseManifest() {
 		//ob_start();
 		$course_code = 'COURSETEST';
 		$resource_id = 1;
@@ -37,7 +37,7 @@ class TestScorm extends UnitTestCase {
 		//var_dump($res);
 	}	
 	
-	function testImportManifest() {
+	public function testImportManifest() {
 		//ob_start();
 		$course_code = 'COURSETEST';
 		$resource_id = 1;
@@ -49,7 +49,7 @@ class TestScorm extends UnitTestCase {
 		//var_dump($res);
 	}
 	/*
-	function testImportLocalPackage() {
+	public function testImportLocalPackage() {
 		//ob_start();
 		$course_code = 'COURSETEST';
 		$resource_id = 1;
@@ -61,7 +61,7 @@ class TestScorm extends UnitTestCase {
 		//var_dump($res);
 	}
 	
-	function testImportPackage() {
+	public function testImportPackage() {
 		//ob_start();
 		$course_code = 'COURSETEST';
 		$resource_id = 1;
@@ -73,7 +73,7 @@ class TestScorm extends UnitTestCase {
 		//var_dump($res);
 	}*/
 	
-	function testSetProximity() {
+	public function testSetProximity() {
 		//ob_start();
 		$course_code = 'COURSETEST';
 		$resource_id = 1;
@@ -85,7 +85,7 @@ class TestScorm extends UnitTestCase {
 		//var_dump($res);
 	}
 	
-	function testSetTheme() {
+	public function testSetTheme() {
 		//ob_start();
 		$course_code = 'COURSETEST';
 		$resource_id = 1;
@@ -97,7 +97,7 @@ class TestScorm extends UnitTestCase {
 		//var_dump($res);
 	}
 	
-	function testSetPreviewImage() {
+	public function testSetPreviewImage() {
 		//ob_start();
 		$course_code = 'COURSETEST';
 		$resource_id = 1;
@@ -109,7 +109,7 @@ class TestScorm extends UnitTestCase {
 		//var_dump($res);
 	}
 	
-	function testSetAuthor() {
+	public function testSetAuthor() {
 		//ob_start();
 		$course_code = 'COURSETEST';
 		$resource_id = 1;
@@ -121,7 +121,7 @@ class TestScorm extends UnitTestCase {
 		//var_dump($res);
 	}
 	
-	function testSetMaker() {
+	public function testSetMaker() {
 		//ob_start();
 		$course_code = 'COURSETEST';
 		$resource_id = 1;
@@ -133,7 +133,7 @@ class TestScorm extends UnitTestCase {
 		//var_dump($res);
 	}
 	
-	function testExportZip() {
+	public function testExportZip() {
 		//ob_start();
 		$course_code = 'COURSETEST';
 		$resource_id = 1;
@@ -145,7 +145,7 @@ class TestScorm extends UnitTestCase {
 		//var_dump($res);
 	}
 	
-	function testGetResPath() {
+	public function testGetResPath() {
 		//ob_start();
 		$res = scorm::get_res_path($id=1);
 		$this->assertTrue(is_string($res)); 
@@ -153,7 +153,7 @@ class TestScorm extends UnitTestCase {
 		//var_dump($res);
 	}
 	
-	function testGetResType() {
+	public function testGetResType() {
 		//ob_start();
 		$res = scorm::get_res_type($id = 1);
 		$this->assertTrue(is_string($res)); 
@@ -161,7 +161,7 @@ class TestScorm extends UnitTestCase {
 		//var_dump($res);
 	}
 	
-	function testGetTitle() {
+	public function testGetTitle() {
 		//ob_start();
 		$res = scorm::get_title();
 		$this->assertTrue(is_string($res)); 
@@ -169,7 +169,7 @@ class TestScorm extends UnitTestCase {
 		//var_dump($res);
 	}
 	
-	function testReimportManifest() {
+	public function testReimportManifest() {
 		ob_start();
 		$course_code = 'COURSETEST';
 		$resource_id = 1;

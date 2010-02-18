@@ -962,7 +962,7 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) { // ses
 
 	            api_session_register('_courseUser');
 	        }
-	        if (empty($is_courseAdmin)) { // this user has no status related to this course
+	        if (!isset($is_courseAdmin)) { // this user has no status related to this course
 		    	// is it the session coach or the session admin ?
 
 		    	$tbl_session = Database :: get_main_table(TABLE_MAIN_SESSION);

@@ -2,6 +2,10 @@
 
 class TestForumFunction extends UnitTestCase {
 	
+	public function TestForumFunction() {
+		$this->UnitTestCase('Test forum function');
+	}
+	
 	public function __construct() {
 		// The constructor acts like a global setUp for the class			
 		require_once api_get_path(SYS_TEST_PATH).'setup.inc.php';
@@ -13,7 +17,7 @@ class TestForumFunction extends UnitTestCase {
 	 * @param int last id from forum_post table
 	 * @return void
 	 */
-	 function testadd_forum_attachment_file() {
+	public function testadd_forum_attachment_file() {
 		 global $_course;
 		 $file_comment='testcoment';
 		 $last_id = 1;
@@ -30,7 +34,7 @@ class TestForumFunction extends UnitTestCase {
 	* @return string language variable
 	*/
 	
-	 function testapprove_post() {
+	public function testapprove_post() {
 		 $action= 'invisible';
 		 $post_id = 1;
 		 $res = approve_post($post_id, $action);
@@ -48,7 +52,7 @@ class TestForumFunction extends UnitTestCase {
 	* @todo move to itemmanager
 	*/
 	
-	 function testchange_lock_status() {
+	public function testchange_lock_status() {
 		 $content = 'testcontent';
 		 $action= 'invisible';
 		 $id = 1;
@@ -69,7 +73,7 @@ class TestForumFunction extends UnitTestCase {
 	* @return string language variable
 	*/
 	
-	function testchange_visibility() {
+	public function testchange_visibility() {
 		 $content= 'testcontent';
 		 $target_visibility = 1;
 		 $id = 1;
@@ -85,7 +89,7 @@ class TestForumFunction extends UnitTestCase {
 	* @return an bool or array if there is a last post found, false if there is no post entry linked to that thread => thread will be deleted
 	*/
 	
-	function testcheck_if_last_post_of_thread() {
+	public function testcheck_if_last_post_of_thread() {
 		 $thread_id = 1;
 		 $res = check_if_last_post_of_thread($thread_id);
 		 if(!is_bool($res)) {
@@ -100,7 +104,7 @@ class TestForumFunction extends UnitTestCase {
 	* @return string language variable
 	*/
 	
-	function testclass_visible_invisible() {
+	public function testclass_visible_invisible() {
 		 $current_visibility_status = 0;
 		 $res = class_visible_invisible($current_visibility_status);
 		 $this->assertTrue(is_string($res));
@@ -115,7 +119,7 @@ class TestForumFunction extends UnitTestCase {
 	* @return int the number of forums inside the given category
 	*/
 	
-	function testcount_number_of_forums_in_category() {
+	public function testcount_number_of_forums_in_category() {
 		 $cat_id = 1;
 		 $res = count_number_of_forums_in_category($cat_id);
 		 $this->assertTrue(is_numeric($res));
@@ -129,7 +133,7 @@ class TestForumFunction extends UnitTestCase {
 	* @return	int the number of post inside a thread user
 	*/
 	
-	function testcount_number_of_post_for_user_thread() {
+	public function testcount_number_of_post_for_user_thread() {
 		 $thread_id = 1;
 		 $user_id = 1;
 		 $res = count_number_of_post_for_user_thread($thread_id, $user_id);
@@ -143,7 +147,7 @@ class TestForumFunction extends UnitTestCase {
 	* @return	int the number of post inside a thread
 	*/
 	
-	function testcount_number_of_post_in_thread() {
+	public function testcount_number_of_post_in_thread() {
 		 $thread_id = 1;
 		 $res = count_number_of_post_in_thread($thread_id);
 		 $this->assertTrue(is_numeric($res));
@@ -156,7 +160,7 @@ class TestForumFunction extends UnitTestCase {
 	* @return	int the number of user register in course
 	*/
 	
-	function testcount_number_of_user_in_course() {
+	public function testcount_number_of_user_in_course() {
 		 global $cidReq;
 		 $course_id = $cidReq;
 		 $res = count_number_of_user_in_course($course_id);
@@ -172,7 +176,7 @@ class TestForumFunction extends UnitTestCase {
 	* @return array or null if is empty
 	*/
 	
-	function testcurrent_qualify_of_thread() {
+	public function testcurrent_qualify_of_thread() {
 		 $thread_id = 1;
 		 $session_id = 1;
 		 $res = current_qualify_of_thread($thread_id,$session_id);
@@ -185,7 +189,7 @@ class TestForumFunction extends UnitTestCase {
 	 * @return void HTML - display the results
 	 */
 	 
-	 function testdisplay_forum_search_results() {
+	 public function testdisplay_forum_search_results() {
 		 global $origin;
 		 $search_term = 'testterm';
 		 ob_start();
@@ -223,7 +227,7 @@ class TestForumFunction extends UnitTestCase {
 	* @return void HTML
 	*/
 	
-	function testdisplay_up_down_icon() {
+	public function testdisplay_up_down_icon() {
 		 $content = 'testcontent';
 		 $id = 1;
 		 $list = array('test');
@@ -241,7 +245,7 @@ class TestForumFunction extends UnitTestCase {
 	* @return 	string 	An HTML with the anchor and the image of the user
 	*/
 	
-	function testdisplay_user_image() {
+	public function testdisplay_user_image() {
 		 $name = 'testcontent';
 		 $user_id = 1;
 		 $res = display_user_image($user_id,$name, $origin='');
@@ -255,7 +259,7 @@ class TestForumFunction extends UnitTestCase {
 	* @return string HTML
 	*/
 	
-	function testdisplay_user_link() {
+	public function testdisplay_user_link() {
 		 $name = 'testcontent';
 		 $user_id = 1;
 		 $res = display_user_link($user_id, $name, $origin='');
@@ -271,7 +275,7 @@ class TestForumFunction extends UnitTestCase {
 	* @return void string HTML 
 	*/
 	
-	function testdisplay_visible_invisible_icon() {
+	public function testdisplay_visible_invisible_icon() {
 		 $content = 'testcontent';
 		 $current_visibility_status = 0;
 		 $id = 1;
@@ -290,7 +294,7 @@ class TestForumFunction extends UnitTestCase {
 	 * @return void
 	 */
 	 
-	 function testedit_forum_attachment_file() {
+	 public function testedit_forum_attachment_file() {
 		 $file_comment = 'testcontent';
 		 $id_attach = 1;
 		 $post_id = 1;
@@ -304,7 +308,7 @@ class TestForumFunction extends UnitTestCase {
 	 * @return void display an HTML search results
 	 */
 	 
-	 function testforum_search() {
+	 public function testforum_search() {
 		ob_start();
 		$res = forum_search();
 		ob_end_clean();
@@ -318,7 +322,7 @@ class TestForumFunction extends UnitTestCase {
 	 * @return string
 	 */
 	 
-	 function testget_all_post_from_user() {
+	 public function testget_all_post_from_user() {
 		global $_course;
 		$course_db = $_course['dbName'];
 		$user_id = 1;
@@ -333,7 +337,7 @@ class TestForumFunction extends UnitTestCase {
 	 * @return array with the post info
 	 */
 	 
-	 function testget_attachment() {
+	 public function testget_attachment() {
 		$post_id = 1;
 		$res = get_attachment($post_id);
 		$this->assertTrue(is_array($res));
@@ -347,7 +351,7 @@ class TestForumFunction extends UnitTestCase {
 	* @return an array containing all the information about all the forum categories
 	*/
 	
-	function testget_forum_categories() {
+	public function testget_forum_categories() {
 		$res = get_forum_categories($id='');
 		$this->assertTrue(is_array($res));
 		//var_dump($res); 	
@@ -374,7 +378,7 @@ class TestForumFunction extends UnitTestCase {
 	* @return bool returns if there aren't category
 	*/
 	
-	function testget_forumcategory_information() {
+	public function testget_forumcategory_information() {
 		$cat_id = 1;
 		$res = get_forumcategory_information($cat_id);
 		if(!is_bool($res)){
@@ -392,7 +396,7 @@ class TestForumFunction extends UnitTestCase {
 	* @todo check $sql4 because this one really looks fishy.
 	*/
 	
-	function testget_forums() {
+	public function testget_forums() {
 		$res = get_forums($id='');
 		if(!is_bool($res)){
 			$this->assertTrue(is_array($res));
@@ -408,7 +412,7 @@ class TestForumFunction extends UnitTestCase {
 	* @return an array containing all the information about the forums (regardless of their category)
 	*/
 	
-	function testget_forums_in_category() {
+	public function testget_forums_in_category() {
 		$cat_id = 1;
 		$res = get_forums_in_category($cat_id);
 		if(!is_bool($res)){
@@ -426,7 +430,7 @@ class TestForumFunction extends UnitTestCase {
 	 * @todo this is basically the same code as the get_forums function. Consider merging the two.
 	 */
 	 
-	 function testget_forums_of_group() {
+	 public function testget_forums_of_group() {
 		$group_id = 1;
 		$res = get_forums_of_group($group_id);
 		if(!is_null($res)){
@@ -446,7 +450,7 @@ class TestForumFunction extends UnitTestCase {
 	* @return array()
 	*/
 	
-	function testget_historical_qualify() {
+	public function testget_historical_qualify() {
 		$user_id = 1;
 		$thread_id = 1;
 		$opt = true;
@@ -466,7 +470,7 @@ class TestForumFunction extends UnitTestCase {
 	* @return array containing all the information about the last post (last_post_id, last_poster_id, last_post_date, last_poster_name, last_poster_lastname, last_poster_firstname)
 	*/
 	
-	function testget_last_post_information() {
+	public function testget_last_post_information() {
 		$forum_id = 1;
 		$res = get_last_post_information($forum_id, $show_invisibles=false);
 		if(!is_null($res)){
@@ -482,7 +486,7 @@ class TestForumFunction extends UnitTestCase {
 	 * @return String
 	 **/
 	 
-	 function testget_name_thread_by_id() {
+	 public function testget_name_thread_by_id() {
 		$thread_id = 1;
 		$res = get_name_thread_by_id($thread_id);
 		if(!is_null($res)){
@@ -498,7 +502,7 @@ class TestForumFunction extends UnitTestCase {
 	 * return String
 	 */
 	 
-	 function testget_name_user_by_id() {
+	 public function testget_name_user_by_id() {
 		$user_id = 1;
 		$res = get_name_user_by_id($user_id);
 		if(!is_null($res)){
@@ -517,7 +521,7 @@ class TestForumFunction extends UnitTestCase {
 	 * @return array
 	 */
 	 
-	  function testget_notifications() {
+	  public function testget_notifications() {
 		$id = 1;
 		$content = 'test message notified';
 		$res = get_notifications($content,$id);
@@ -538,7 +542,7 @@ class TestForumFunction extends UnitTestCase {
 	 * @return array
 	 */
 	 
-	 function testget_notifications_of_user() {
+	 public function testget_notifications_of_user() {
 		$res = get_notifications_of_user($user_id = 0, $force = false);
 		if(!is_null($res)){
 			$this->assertTrue(is_string($res));
@@ -554,7 +558,7 @@ class TestForumFunction extends UnitTestCase {
 	* @return array returns
 	*/
 	
-	function testget_post_information() {
+	public function testget_post_information() {
 		$post_id = 1;
 		$res = get_post_information($post_id);
 		if(!is_null($res)){
@@ -592,7 +596,7 @@ class TestForumFunction extends UnitTestCase {
 	* @return an array containing all the information about the posts of a given thread
 	*/
 	
-	function testget_posts() {
+	public function testget_posts() {
 		$thread_id = 1;
 		$res = get_posts($thread_id);
 		if(!is_null($res)){
@@ -611,7 +615,7 @@ class TestForumFunction extends UnitTestCase {
 	* @return	array the information of statistical
 	*/
 	
-	function testget_statistical_information() {
+	public function testget_statistical_information() {
 		$thread_id = 1;
 		$user_id = 1;
 		$course_id = 'COURSETEST' ;
@@ -649,7 +653,7 @@ class TestForumFunction extends UnitTestCase {
 	* @return	int the number of post inside a thread
 	*/
 
-	function testget_thread_user_post() {
+	public function testget_thread_user_post() {
 		global $_course;
 		$thread_id = 1;
 		$course_db = $_course['dbName'];
@@ -669,7 +673,7 @@ class TestForumFunction extends UnitTestCase {
 	  * @param int
 	  * @return void
 	  */
-	 function testget_thread_user_post_limit() {
+	 public function testget_thread_user_post_limit() {
 	 	global $_course;
 		$thread_id = 1;
 		$course_db = $_course['dbName'];
@@ -690,7 +694,7 @@ class TestForumFunction extends UnitTestCase {
 	* @return	resource Array of type ([user_id=>w,lastname=>x,firstname=>y,thread_id=>z],[])
 	*/
 	
-	 function testget_thread_users_details() {
+	 public function testget_thread_users_details() {
 		$thread_id = 1;
 		$res = get_thread_users_details($thread_id, $db_name = null);
 		if(!is_null($res)){
@@ -708,7 +712,7 @@ class TestForumFunction extends UnitTestCase {
 	* @return	array Array of type ([user_id=>w,lastname=>x,firstname=>y,thread_id=>z],[])
 	*/
 	 
-	 function testget_thread_users_not_qualify() {
+	 public function testget_thread_users_not_qualify() {
 		$thread_id = 1;
 		$res = get_thread_users_not_qualify($thread_id, $db_name = null);
 		if(!is_null($res)){
@@ -726,7 +730,7 @@ class TestForumFunction extends UnitTestCase {
 	* @return	array Array of type ([user_id=>w,lastname=>x,firstname=>y,thread_id=>z],[])
 	*/
 	 
-	 function testget_thread_users_qualify() {
+	 public function testget_thread_users_qualify() {
 		$thread_id = 1;
 		$res = get_thread_users_qualify($thread_id, $db_name = null);
 		if(!is_bool($res)){
@@ -743,7 +747,7 @@ class TestForumFunction extends UnitTestCase {
 	* @return an array containing all the information about the threads
 	*/
 	
-	function testget_threads() {
+	 public function testget_threads() {
 		$forum_id = 1;
 		$res = get_threads($forum_id);
 		if(!is_bool($res)){
@@ -754,14 +758,14 @@ class TestForumFunction extends UnitTestCase {
 		//var_dump($res); 	
 	 }
 	 
-	 /**
+	/**
 	* This function retrieves all the unapproved messages for a given forum
 	* This is needed to display the icon that there are unapproved messages in that thread (only the courseadmin can see this)
 	* @param $forum_id the forum where we want to know the unapproved messages of
 	* @return array returns
 	*/
 	
-	function testget_unaproved_messages() {
+	 public function testget_unaproved_messages() {
 		$forum_id = 1;
 		$res = get_unaproved_messages($forum_id);
 		if(!is_bool($res)){
@@ -772,12 +776,12 @@ class TestForumFunction extends UnitTestCase {
 		//var_dump($res); 	
 	 }
 	 
-	 /**
+	/**
 	* This function is used to find all the information about what's new in the forum tool
 	* @return void
 	*/
 	
-	function testget_whats_new() {
+	 public function testget_whats_new() {
 		$res = get_whats_new();
 		$this->assertTrue(is_null($res));
 		//var_dump($res); 	
@@ -790,7 +794,7 @@ class TestForumFunction extends UnitTestCase {
 	* @return void
 	*/
 	
-	function testhandle_forum_and_forumcategories() {
+	public function testhandle_forum_and_forumcategories() {
 		$res = handle_forum_and_forumcategories();
 		$this->assertTrue(is_null($res));
 		//var_dump($res); 	
@@ -804,7 +808,7 @@ class TestForumFunction extends UnitTestCase {
 	* @return string language variable
 	*/
 	
-	function testhandle_mail_cue() {
+	public function testhandle_mail_cue() {
 		$content = 'test content';
 		$id = 1;
 		$res = handle_mail_cue($content, $id);
@@ -821,7 +825,7 @@ class TestForumFunction extends UnitTestCase {
 	* @return string url image
 	*/
 	
-	function testicon() {
+	public function testicon() {
 		$image_url = api_get_path(WEB_IMG_PATH).'test.png';
 		$res = icon($image_url,$alt='',$title='');
 		$this->assertTrue(is_string($res));
@@ -834,7 +838,7 @@ class TestForumFunction extends UnitTestCase {
 	* @return void
 	*/
 	
-	function testincrease_thread_view() {
+	public function testincrease_thread_view() {
 		$thread_id = 1;
 		$res = increase_thread_view($thread_id);
 		$this->assertTrue(is_null($res));
@@ -846,7 +850,7 @@ class TestForumFunction extends UnitTestCase {
 	* @return void HTML
 	*/
 	
-	function testmove_post_form() {
+	public function testmove_post_form() {
 		ob_start();
 		$res = move_post_form();
 		ob_end_clean();
@@ -859,7 +863,7 @@ class TestForumFunction extends UnitTestCase {
 	* @return void HTML
 	*/
 	
-	function testmove_thread_form() {
+	public function testmove_thread_form() {
 		ob_start();
 		$res = move_thread_form();
 		ob_end_clean();
@@ -877,7 +881,7 @@ class TestForumFunction extends UnitTestCase {
 	* @return string language variable
 	*/
 	
-	function testmove_up_down() {
+	public function testmove_up_down() {
 		$content = 'test content';
 		$direction = 'test direction';
 		$id = 1;
@@ -892,7 +896,7 @@ class TestForumFunction extends UnitTestCase {
 	* @return mixed String or array of strings
 	*/
 	
-	function testprepare4display() {
+	public function testprepare4display() {
 		$res = prepare4display($input='');
 		$this->assertTrue(is_string($res));
 		//var_dump($res); 	
@@ -902,7 +906,7 @@ class TestForumFunction extends UnitTestCase {
 	 * Return the link to the forum search page
 	 */
 	 
-	 function testsearch_link() {
+	 public function testsearch_link() {
 		$res = search_link();
 		$this->assertTrue(is_string($res));
 		//var_dump($res); 	
@@ -915,7 +919,7 @@ class TestForumFunction extends UnitTestCase {
 	* @return void
 	*/
 	
-	function testsend_mail() {
+	public function testsend_mail() {
 		$res = send_mail($user_info=array(), $thread_information=array());
 		$this->assertTrue(is_null($res));
 		//var_dump($res); 	
@@ -929,7 +933,7 @@ class TestForumFunction extends UnitTestCase {
 	* @return void
 	*/
 	
-	function testsend_notification_mails() {
+	public function testsend_notification_mails() {
 		$thread_id = 1; 
 		$reply_info = array('test');
 		$res = send_notification_mails($thread_id, $reply_info);
@@ -946,7 +950,7 @@ class TestForumFunction extends UnitTestCase {
 	 * @return bool
 	 */
 	 
-	 function testsend_notifications() {
+	 public function testsend_notifications() {
 		$res = send_notifications($forum_id=0, $thread_id=0, $post_id=0);
 		$this->assertTrue(is_bool($res));
 		//var_dump($res); 	
@@ -959,7 +963,7 @@ class TestForumFunction extends UnitTestCase {
 	 * @return string language variable
 	 */
 	 
-	 function testset_notification() {
+	 public function testset_notification() {
 	 	$content = 'test content';
 	 	$id = 1;
 		$res = set_notification($content,$id, $add_only = false);
@@ -968,12 +972,12 @@ class TestForumFunction extends UnitTestCase {
 	 }
 	 
 	 /**
-	* This function displays the form that is used to add a forum category.
+	* This public function displays the form that is used to add a forum category.
 	* @param array
 	* @return void HTML
 	*/
 	
-	 function testshow_add_forum_form() {
+	 public function testshow_add_forum_form() {
 	 	ob_start();
 		$res = show_add_forum_form($inputvalues=array());
 		ob_end_clean();
@@ -982,12 +986,12 @@ class TestForumFunction extends UnitTestCase {
 	 }
 	 
 	 /**
-	* This function displays the form that is used to add a forum category.
+	* This public function displays the form that is used to add a forum category.
 	* @param array input values
 	* @return void HTML
 	*/
 	
-	function testshow_add_forumcategory_form() {
+	public function testshow_add_forumcategory_form() {
 	 	ob_start();
 		$res = show_add_forumcategory_form($inputvalues=array());
 		ob_end_clean();
@@ -996,7 +1000,7 @@ class TestForumFunction extends UnitTestCase {
 	 }
 	 
 	 /**
-	* This function displays the form that is used to add a post. This can be a new thread or a reply.
+	* This public function displays the form that is used to add a post. This can be a new thread or a reply.
 	* @param $action is the parameter that determines if we are
 	*					1. newthread: adding a new thread (both empty) => No I-frame
 	*					2. replythread: Replying to a thread ($action = replythread) => I-frame with the complete thread (if enabled)
@@ -1005,7 +1009,7 @@ class TestForumFunction extends UnitTestCase {
 	* @return void HTML
 	*/
 	 
-	function testshow_add_post_form() {
+	public function testshow_add_post_form() {
 	 	ob_start();
 		$res = show_add_post_form($action='', $id='', $form_values='');
 		ob_end_clean();
@@ -1014,15 +1018,15 @@ class TestForumFunction extends UnitTestCase {
 	 }
 	 
 	 /**
-	* This function displays the form that is used to edit a forum category.
-	* This is more or less a copy from the show_add_forumcategory_form function with the only difference that is uses
-	* some default values. I tried to have both in one function but this gave problems with the handle_forum_and_forumcategories function
+	* This public function displays the form that is used to edit a forum category.
+	* This is more or less a copy from the show_add_forumcategory_form public function with the only difference that is uses
+	* some default values. I tried to have both in one public function but this gave problems with the handle_forum_and_forumcategories public function
 	* (storing was done twice)
 	* @param array
 	* @return void HTML
 	*/
 	
-	function testshow_edit_forumcategory_form() {
+	public function testshow_edit_forumcategory_form() {
 	 	ob_start();
 		$res = show_edit_forumcategory_form($inputvalues=array());
 		ob_end_clean();
@@ -1031,7 +1035,7 @@ class TestForumFunction extends UnitTestCase {
 	 }
 	 
 	 /**
-	* This function displays the form that is used to edit a post. This can be a new thread or a reply.
+	* This public function displays the form that is used to edit a post. This can be a new thread or a reply.
 	* @param array contains all the information about the current post
 	* @param array contains all the information about the current thread
 	* @param array contains all info about the current forum (to check if attachments are allowed)
@@ -1039,7 +1043,7 @@ class TestForumFunction extends UnitTestCase {
 	* @return void
 	*/
 	
-	function testshow_edit_post_form() {
+	public function testshow_edit_post_form() {
 	 	ob_start();
 	 	$current_post = array('test');
 	 	$current_thread = array('test2');
@@ -1051,7 +1055,7 @@ class TestForumFunction extends UnitTestCase {
 	 }
 
 	/**
-	* This function show qualify.
+	* This public function show qualify.
 	* @param string contains the information of option to run
 	* @param string contains the information the current course id
 	* @param integer contains the information the current forum id
@@ -1061,7 +1065,7 @@ class TestForumFunction extends UnitTestCase {
 	* @example $option=1 obtained the qualification of the current thread
 	*/
 	
-	function testshow_qualify() {
+	public function testshow_qualify() {
 	 	$option =  1;
 	 	$couser_id = 1;
 	 	$forum_id = 1;
@@ -1075,14 +1079,35 @@ class TestForumFunction extends UnitTestCase {
 		}
 		//var_dump($res); 	
 	 }
+	 
+	/**
+	* This function builds an array of all the posts in a given thread where the key of the array is the post_id
+	* It also adds an element children to the array which itself is an array that contains all the id's of the first-level children
+	* @return an array containing all the information on the posts of a thread
+	*/
+
+	 public function testcalculate_children() {
+		$rows = array();
+		$res = calculate_children($rows);
+		$this->assertTrue(is_array($res));
+		//var_dump($res); 	
+	 }
+	 
+	 public function test_phorum_recursive_sort() {
+		$rows = array();
+		$res = _phorum_recursive_sort($rows, &$threads, $seed=0, $indent=0);
+		$this->assertTrue(is_null($res));
+		//var_dump($res); 	
+	 }
+	 
 
 	/**
-	* This function stores the edit of a post in the forum_post table.
+	* This public function stores the edit of a post in the forum_post table.
 	* @param array 
 	* @return void HTML
 	*/
 	
-	function teststore_edit_post() {
+	public function teststore_edit_post() {
 		$values = array('test');
 		ob_start();
 		$res = store_edit_post($values);
@@ -1092,12 +1117,12 @@ class TestForumFunction extends UnitTestCase {
 	 }
 	 
 	 /**
-	* This function stores the forum in the database. The new forum is added to the end.
+	* This public function stores the forum in the database. The new forum is added to the end.
 	* @param array
 	* @return string language variable
 	*/
 	
-	function teststore_forum() {
+	public function teststore_forum() {
 		$values = array('test');
 		ob_start();
 		$res = store_forum($values);
@@ -1107,12 +1132,12 @@ class TestForumFunction extends UnitTestCase {
 	 }
 	 
 	 /**
-	* This function stores the forum category in the database. The new category is added to the end.
+	* This public function stores the forum category in the database. The new category is added to the end.
 	* @param array
 	* @return void HMTL language variable
 	*/
 	
-	function teststore_forumcategory() {
+	public function teststore_forumcategory() {
 		$values = array('test');
 		ob_start();
 		$res = store_forumcategory($values);
@@ -1127,7 +1152,7 @@ class TestForumFunction extends UnitTestCase {
 	* @return string HTML language variable 
 	*/
 	
-	function teststore_move_post() {
+	public function teststore_move_post() {
 		$values = array('test');
 		ob_start();
 		$res = store_move_post($values);
@@ -1141,7 +1166,7 @@ class TestForumFunction extends UnitTestCase {
 	* @return string HTML language variable 
 	*/
 	
-	function teststore_move_thread() {
+	public function teststore_move_thread() {
 		$values = array('test');
 		ob_start();
 		$res = store_move_thread($values);
@@ -1152,7 +1177,7 @@ class TestForumFunction extends UnitTestCase {
 	 
 	 /**
 	*
-	*  This function store qualify historical.
+	*  This public function store qualify historical.
 	* @param boolean contains the information of option to run
 	* @param string contains the information the current course id
 	* @param integer contains the information the current forum id
@@ -1163,7 +1188,7 @@ class TestForumFunction extends UnitTestCase {
 	* @example $option=1 obtained the qualification of the current thread
 	*/
 	
-	function teststore_qualify_historical() {
+	public function teststore_qualify_historical() {
 		$option = 1;
 		$couser_id = 1;
 		$forum_id = 1;
@@ -1177,11 +1202,11 @@ class TestForumFunction extends UnitTestCase {
 	 }
 	 
 	 /**
-	* This function stores a reply in the forum_post table.
+	* This public function stores a reply in the forum_post table.
 	* It also updates the forum_threads table (thread_replies +1 , thread_last_post, thread_date)
 	*/
 	
-	function teststore_reply() {
+	public function teststore_reply() {
 		$values = array('test');
 		ob_start();
 		$res = store_reply($values);
@@ -1200,7 +1225,7 @@ class TestForumFunction extends UnitTestCase {
 	 * @return Array() optional
 	 **/
 	 
- 	 function teststore_theme_qualify() {
+ 	 public function teststore_theme_qualify() {
 		$user_id = 1;
 		$thread_id = 1;
 		$qualify_time = 1;
@@ -1214,13 +1239,13 @@ class TestForumFunction extends UnitTestCase {
 	 }
  
 	 /**
-	* This function stores a new thread. This is done through an entry in the forum_thread table AND
+	* This public function stores a new thread. This is done through an entry in the forum_thread table AND
 	* in the forum_post table because. The threads are also stored in the item_property table. (forum posts are not (yet))
 	* @param array
 	* @return void HTML
 	*/
 	
-	function teststore_thread() {
+	public function teststore_thread() {
 		$values = array();
 		ob_start();
 		$res = store_thread($values);
@@ -1236,7 +1261,7 @@ class TestForumFunction extends UnitTestCase {
 	* @return void
 	*/
 	
-	function testupdate_thread() {
+	public function testupdate_thread() {
 		$thread_id = 1;
 		$last_post_id = 1;
 		$post_date = 1;
@@ -1247,11 +1272,11 @@ class TestForumFunction extends UnitTestCase {
 	
  
  	 /**
-	* This function is called when the user is not allowed in this forum/thread/...
+	* This public function is called when the user is not allowed in this forum/thread/...
 	* @return bool display message of "not allowed"
 	*/
 	
-	function testforum_not_allowed_here() {
+	public function testforum_not_allowed_here() {
 		 ob_start();
 		 $res = forum_not_allowed_here();
 		 ob_end_clean();
@@ -1266,7 +1291,7 @@ class TestForumFunction extends UnitTestCase {
 	 * @return void
 	 */
 	 
-	 function testdelete_attachment() {
+	 public function testdelete_attachment() {
 		 global $_course;
 		 $post_id = 1;
 		 $res = delete_attachment($post_id,$id_attach=0);
@@ -1275,8 +1300,8 @@ class TestForumFunction extends UnitTestCase {
 	 }
 	 
 	 /**
-	* This function deletes a forum or a forum category
-	* This function currently does not delete the forums inside the category, nor the threads and replies inside these forums.
+	* This public function deletes a forum or a forum category
+	* This public function currently does not delete the forums inside the category, nor the threads and replies inside these forums.
 	* For the moment this is the easiest method and it has the advantage that it allows to recover fora that were acidently deleted
 	* when the forum category got deleted.
 	*
@@ -1287,7 +1312,7 @@ class TestForumFunction extends UnitTestCase {
 	* @todo config setting for recovery or not (see also the documents tool: real delete or not).
 	*/
 	
-	function testdelete_forum_forumcategory_thread() {
+	public function testdelete_forum_forumcategory_thread() {
 		 $content= 'testcontent';
 		 $id = 1;
 		 $res = delete_forum_forumcategory_thread($content, $id);
@@ -1296,12 +1321,12 @@ class TestForumFunction extends UnitTestCase {
 	 }
 	 
 	 /**
-	* This function deletes the forum image if exists
+	* This public function deletes the forum image if exists
 	* @param int forum id
 	* @return boolean true if success
 	*/
 	 
-	 function testdelete_forum_image() {
+	 public function testdelete_forum_image() {
 		 $forum_id = 1;
 		 $res = delete_forum_image($forum_id);
 		 $this->assertTrue(is_bool($res));
@@ -1309,22 +1334,22 @@ class TestForumFunction extends UnitTestCase {
 	 }
 	
 	/**
-	* This function deletes a forum post. This separate function is needed because forum posts do not appear in the item_property table (yet)
+	* This public function deletes a forum post. This separate public function is needed because forum posts do not appear in the item_property table (yet)
 	* and because deleting a post also has consequence on the posts that have this post as parent_id (they are also deleted).
 	* an alternative would be to store the posts also in item_property and mark this post as deleted (visibility = 2).
 	* We also have to decrease the number of replies in the thread table
 	* @return string language variable
 	* @param $post_id the id of the post that will be deleted
-	* @todo write recursive function that deletes all the posts that have this message as parent
+	* @todo write recursive public function that deletes all the posts that have this message as parent
 	*/
 		
-	 function testdelete_post() {
-		 $table_posts 			= Database :: get_course_table(TABLE_FORUM_POST);
-		 $table_threads 		= Database :: get_course_table(TABLE_FORUM_THREAD);
-		 $post_id = 1;
-		 $res = delete_post($post_id);
-		 $this->assertTrue(is_string($res));
-		 //var_dump($res); 	
+	 public function testdelete_post() {
+		$table_posts 			= Database :: get_course_table(TABLE_FORUM_POST);
+		$table_threads 		= Database :: get_course_table(TABLE_FORUM_THREAD);
+		$post_id = 1;
+		$res = delete_post($post_id);
+		$this->assertTrue(is_string($res));
+		//var_dump($res); 	
 	 }
 	 
 	 public function __destruct() {

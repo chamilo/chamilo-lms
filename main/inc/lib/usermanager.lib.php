@@ -259,15 +259,15 @@ class UserManager
 		$sqlv = "DELETE FROM $t_ufv WHERE user_id = $user_id";
 		$resv = Database::query($sqlv);
 
-		if ($_configuration['multiple_access_urls']) {
-			require_once api_get_path(LIBRARY_PATH).'urlmanager.lib.php';
+		require_once api_get_path(LIBRARY_PATH).'urlmanager.lib.php';		
+		if ($_configuration['multiple_access_urls']) {			
 			$url_id = 1;
 			if (api_get_current_access_url_id() != -1) {
 				$url_id = api_get_current_access_url_id();
 			}
 			UrlManager::delete_url_rel_user($user_id, $url_id);
 		} else {
-			//we delete the user from the default url 
+			//we delete the user from the url_id =1
 			UrlManager::delete_url_rel_user($user_id, 1);
 		}
 

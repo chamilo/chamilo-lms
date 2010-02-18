@@ -849,6 +849,8 @@ function api_get_user_info_from_username($username = '') {
 		// following lines obsolete (and the code cleaner and slimmer !!!
 		$user_info['firstName'] = $result_array['firstname'];
 		$user_info['lastName'] = $result_array['lastname'];
+		$user_info['firstname'] = $result_array['firstname'];
+		$user_info['lastname'] = $result_array['lastname'];
 		$user_info['mail'] = $result_array['email'];
 		$user_info['picture_uri'] = $result_array['picture_uri'];
 		$user_info['user_id'] = $result_array['user_id'];

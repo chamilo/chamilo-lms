@@ -273,7 +273,7 @@ function get_number_of_users() {
 						LEFT JOIN $course_user_table cu on u.user_id = cu.user_id and course_code='".$_SESSION['_course']['id']."'";
 
 				// we change the SQL when we have a filter
-				if (isset($_GET['subscribe_user_filter_value']) AND api_get_setting('ProfilingFilterAddingUsers') == 'true'){
+				if (isset($_GET['subscribe_user_filter_value']) AND !empty($_GET['subscribe_user_filter_value']) AND api_get_setting('ProfilingFilterAddingUsers') == 'true'){
 					$field_identification = explode('*',$_GET['subscribe_user_filter_value']);
 					$sql .=	"
 						LEFT JOIN $table_user_field_values field_values
@@ -304,7 +304,7 @@ function get_number_of_users() {
 	}
 
 	// when there is a keyword then we are searching and we have to change the SQL statement
-	if (isset ($_REQUEST['keyword'])) {
+	if (isset ($_GET['keyword']) AND !empty($_GET['keyword'])) {
 		$keyword = Database::escape_string(trim($_REQUEST['keyword']));
 		$sql .= " AND (firstname LIKE '%".$keyword."%' OR lastname LIKE '%".$keyword."%'   OR email LIKE '%".$keyword."%'  OR username LIKE '%".$keyword."%'  OR official_code LIKE '%".$keyword."%')";
 
@@ -374,7 +374,7 @@ function get_user_data($from, $number_of_items, $column, $direction) {
 					LEFT JOIN $tbl_session_rel_course_user cu on u.user_id = cu.id_user and course_code='".$_SESSION['_course']['id']."' AND id_session ='".$_SESSION["id_session"]."' ";
 
 			// applying the filter of the additional user profile fields
-			if (isset($_GET['subscribe_user_filter_value']) AND api_get_setting('ProfilingFilterAddingUsers') == 'true'){
+			if (isset($_GET['subscribe_user_filter_value']) AND !empty($_GET['subscribe_user_filter_value']) AND api_get_setting('ProfilingFilterAddingUsers') == 'true'){
 				$field_identification = explode('*',$_GET['subscribe_user_filter_value']);
 				$sql .=	"
 					LEFT JOIN $table_user_field_values field_values
@@ -402,7 +402,7 @@ function get_user_data($from, $number_of_items, $column, $direction) {
 				LEFT JOIN $course_user_table cu on u.user_id = cu.user_id and course_code='".$_SESSION['_course']['id']."'";
 
 				// applying the filter of the additional user profile fields
-				if (isset($_GET['subscribe_user_filter_value']) AND api_get_setting('ProfilingFilterAddingUsers') == 'true'){
+				if (isset($_GET['subscribe_user_filter_value']) AND !empty($_GET['subscribe_user_filter_value']) AND api_get_setting('ProfilingFilterAddingUsers') == 'true'){
 					$field_identification = explode('*',$_GET['subscribe_user_filter_value']);
 					$sql .=	"
 						LEFT JOIN $table_user_field_values field_values
@@ -435,7 +435,7 @@ function get_user_data($from, $number_of_items, $column, $direction) {
 						INNER JOIN  $tbl_url_rel_user as url_rel_user ON (url_rel_user.user_id = u.user_id) ";
 
 					// applying the filter of the additional user profile fields
-					if (isset($_GET['subscribe_user_filter_value']) AND api_get_setting('ProfilingFilterAddingUsers') == 'true'){
+					if (isset($_GET['subscribe_user_filter_value']) AND !empty($_GET['subscribe_user_filter_value']) AND api_get_setting('ProfilingFilterAddingUsers') == 'true'){
 						$field_identification = explode('*',$_GET['subscribe_user_filter_value']);
 						$sql .=	"
 							LEFT JOIN $table_user_field_values field_values
@@ -467,7 +467,7 @@ function get_user_data($from, $number_of_items, $column, $direction) {
 				LEFT JOIN $tbl_session_rel_course_user cu on u.user_id = cu.id_user and course_code='".$_SESSION['_course']['id']."' AND id_session ='".$_SESSION["id_session"]."' ";
 
 			// applying the filter of the additional user profile fields
-			if (isset($_GET['subscribe_user_filter_value'])){
+			if (isset($_GET['subscribe_user_filter_value']) AND !empty($_GET['subscribe_user_filter_value'])){
 				$field_identification = explode('*',$_GET['subscribe_user_filter_value']);
 				$sql .=	"
 					LEFT JOIN $table_user_field_values field_values
@@ -495,7 +495,7 @@ function get_user_data($from, $number_of_items, $column, $direction) {
 				LEFT JOIN $course_user_table cu on u.user_id = cu.user_id and course_code='".$_SESSION['_course']['id']."'";
 
 			// applying the filter of the additional user profile fields
-			if (isset($_GET['subscribe_user_filter_value'])){
+			if (isset($_GET['subscribe_user_filter_value']) AND !empty($_GET['subscribe_user_filter_value'])){
 				$field_identification = explode('*',$_GET['subscribe_user_filter_value']);
 				$sql .=	"
 					LEFT JOIN $table_user_field_values field_values
@@ -532,7 +532,7 @@ function get_user_data($from, $number_of_items, $column, $direction) {
 
 
 					// applying the filter of the additional user profile fields
-					if (isset($_GET['subscribe_user_filter_value']) AND api_get_setting('ProfilingFilterAddingUsers') == 'true'){
+					if (isset($_GET['subscribe_user_filter_value']) AND !empty($_GET['subscribe_user_filter_value']) AND api_get_setting('ProfilingFilterAddingUsers') == 'true'){
 						$field_identification = explode('*',$_GET['subscribe_user_filter_value']);
 						$sql .=	"
 							LEFT JOIN $table_user_field_values field_values

@@ -42,7 +42,7 @@ ALTER TABLE user_field_values CHANGE tms tms DATETIME NOT NULL default '0000-00-
 ALTER TABLE access_url CHANGE tms tms DATETIME NOT NULL default '0000-00-00 00:00:00';
 
 INSERT INTO user_field(field_type, field_variable, field_display_text, field_visible, field_changeable) VALUES(11, 'timezone', 'Timezone', 0, 0);
-UPDATE settings_current SET selected_value = '1.8.7.10365' WHERE variable = 'dokeos_database_version';
+UPDATE settings_current SET selected_value = '1.8.7.10483' WHERE variable = 'dokeos_database_version';
 
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('course_create_active_tools','attendances','checkbox','Tools','true','CourseCreateActiveToolsTitle','CourseCreateActiveToolsComment',NULL,'Attendances', 0);
 

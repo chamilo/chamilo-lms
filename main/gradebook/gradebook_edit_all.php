@@ -34,6 +34,7 @@ require_once ('lib/fe/linkform.class.php');
 require_once ('lib/gradebook_data_generator.class.php');
 require_once ('lib/fe/gradebooktable.class.php');
 require_once ('lib/fe/displaygradebook.php');
+require_once api_get_path(SYS_CODE_PATH).'gradebook/gradebook_function.php';
 
 api_block_anonymous_users();
 if (!api_is_allowed_to_create_course()) {
@@ -110,12 +111,6 @@ $table_evaluated[4] = array(TABLE_LP_MAIN, 'name','id', get_lang('Learnpath'));
 $table_evaluated[5] = array(TABLE_FORUM_THREAD, 'thread_title_qualify', 'thread_id', get_lang('Forum'));
 $table_evaluated[7] = array(TABLE_ATTENDANCE, 'attendance_title_qualify', 'id', get_lang('Attendance'));
 
-
-function get_table_type_course($type,$course) {
-	global $_configuration;
-	global $table_evaluated;
-	return Database::get_course_table($table_evaluated[$type][0],$_configuration['db_prefix'].$course);
-}
 $submitted=isset($_POST['submitted'])?$_POST['submitted']:'';
 if($submitted==1) {
 	Display :: display_confirmation_message(get_lang('GradebookWeightUpdated')) . '<br /><br />';

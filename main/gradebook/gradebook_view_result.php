@@ -39,6 +39,8 @@ require_once ('lib/fe/resulttable.class.php');
 require_once ('lib/fe/exportgradebook.php');
 require_once ('lib/scoredisplay.class.php');
 require_once (api_get_path(LIBRARY_PATH).'ezpdf/class.ezpdf.php');
+require_once api_get_path(SYS_CODE_PATH).'gradebook/gradebook_function.php';
+
 api_block_anonymous_users();
 block_students();
 
@@ -62,76 +64,12 @@ if ($eval[0]->get_category_id() < 0) {
 } else
 	$currentcat= Category :: load($eval[0]->get_category_id());
 	//load the result with the evaluation id
-function overwritescore($resid, $importscore, $eval_max) {
-	$result= Result :: load($resid);
-	if ($importscore > $eval_max) {
-		header('Location: gradebook_view_result.php?selecteval=' .Security::remove_XSS($_GET['selecteval']) . '&overwritemax=');
-		exit;
-	}
-	$result[0]->set_score($importscore);
-	$result[0]->save();
-	unset ($result);
-}
+
 if (isset ($_GET['selecteval'])) {
 	$allresults= Result :: load(null,null,$select_eval);
 	$iscourse= $currentcat[0]->get_course_code() == null ? 1 : 0;
 }
-/**
- * XML-parser: handle start of element
- */
-function element_start($parser, $data) {
-global $user;
-global $current_tag;
-	switch ($data) {
-	case 'Result' :
-		$user= array ();
-		break;
-	default :
-		$current_tag= $data;
-	}
-}
-/**
- * XML-parser: handle end of element
- */
-function element_end($parser, $data) {
-global $user;
-global $users;
-global $current_value;
-	switch ($data) {
-	case 'Result' :
-		$users[]= $user;
-		break;
-	default :
-		$user[$data]= $current_value;
-		break;
-	}
-}
-/**
- * XML-parser: handle character data
- */
-function character_data($parser, $data) {
-global $current_value;
-$current_value= $data;
-}
-/**
- * Read the XML-file
- * @param string $file Path to the XML-file
- * @return array All userinformation read from the file
- */
-function parse_xml_data($file) {
-	global $current_tag;
-	global $current_value;
-	global $user;
-	global $users;
-		$users= array ();
-		$parser= xml_parser_create();
-		xml_set_element_handler($parser, 'element_start', 'element_end');
-		xml_set_character_data_handler($parser, "character_data");
-		xml_parser_set_option($parser, XML_OPTION_CASE_FOLDING, false);
-		xml_parse($parser, file_get_contents($file));
-		xml_parser_free($parser);
-		return $users;
-}
+
 if (isset ($_GET['editres'])) {
 	$edit_res_xml=Security::remove_XSS($_GET['editres']);
 	$select_eval_edit=Security::remove_XSS($_GET['selecteval']);

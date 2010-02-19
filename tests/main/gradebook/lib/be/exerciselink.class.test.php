@@ -139,7 +139,7 @@ class TestExerciseLink extends UnitTestCase {
 
 	public function __destruct() {
 		// The destructor acts like a global tearDown for the class			
-		//require_once api_get_path(SYS_TEST_PATH).'teardown.inc.php';			
+		require_once api_get_path(SYS_TEST_PATH).'teardown.inc.php';			
 	}
 }
 ?>

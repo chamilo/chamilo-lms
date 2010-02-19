@@ -790,6 +790,61 @@ function api_get_user_courses($userid, $fetch_session = true) {
 }
 
 /**
+ * Formats user information into a standard array
+ * 
+ * @param array Non-standard user array
+ * @return array Standard user array
+ */
+function _api_format_user($user) {
+	$result = array();
+	if (isset($user['firstname']) AND isset($user['lastname'])) {
+		$firstname = $user['firstname'];
+		$lastname = $user['lastname'];
+	} else if (isset($user['firstName']) AND isset($user['lastName'])) {
+		$firstname = $user['firstName'];
+		$lastname = $user['lastName'];
+	}
+	
+	$result['firstname'] = $firstname;
+	$result['lastname']	= $lastname;
+
+	//Kept for historical reasons
+	$result['firstName'] = $firstname;
+	$result['lastName'] = $lastname;
+
+	if(isset($user['email'])) {
+		$result['mail'] = $user['email'];
+	} else {
+		$result['mail'] = $user['mail'];
+	}
+	$result['picture_uri'] = $user['picture_uri'];
+	$result['user_id'] = intval($user['user_id']);
+	$result['official_code'] = $user['official_code'];
+	$result['status'] = $user['status'];
+	$result['auth_source'] = $user['auth_source'];
+	$result['username'] = $user['username'];
+	$result['theme'] = $user['theme'];
+	$result['language'] = $user['language'];
+	if (!isset($user['lastLogin']) AND !isset($user['last_login'])) {
+		require_once api_get_path(LIBRARY_PATH).'/tracking.lib.php';
+		$timestamp = Tracking::get_last_connection_date($result['user_id'], false, true);
+		// Convert the timestamp back into a datetime
+		// NOTE: this timestamp has ALREADY been converted to the local timezone in the get_last_connection_date function
+		$last_login = date("Y-m-d H:i:s", $timestamp);
+	} else {
+		if (isset($user['lastLogin'])) {
+			$last_login = $user['lastLogin'];
+		} else {
+			$last_login = $user['last_login'];
+		}
+	}
+	$result['last_login'] = $last_login;
+	// Kept for historical reasons
+	$result['lastLogin'] = $last_login;
+	return $result;
+}
+
+/**
  * Find all the information about a user. If no paramater is passed you find all the information about the current user.
  * @param $user_id (integer): the id of the user
  * @return $user_info (array): user_id, lastname, firstname, username, email, ...
@@ -799,33 +854,14 @@ function api_get_user_courses($userid, $fetch_session = true) {
 function api_get_user_info($user_id = '') {
 	global $tbl_user;
 	if ($user_id == '') {
-		return $GLOBALS['_user'];
+		return _api_format_user($GLOBALS['_user']);
 	}
 	$sql = "SELECT * FROM ".Database :: get_main_table(TABLE_MAIN_USER)." WHERE user_id='".Database::escape_string($user_id)."'";
 	$result = Database::query($sql);
 	if (Database::num_rows($result) > 0) {
 		$result_array = Database::fetch_array($result);
-		// this is done so that it returns the same array-index-names
-		// ideally the names of the fields of the user table are renamed so that they match $_user (or vice versa)
-		// $_user should also contain every field of the user table (except password maybe). This would make the
-		// following lines obsolete (and the code cleaner and slimmer !!!
+		return _api_format_user($result_array);
 
-		$user_info['firstname']		= $result_array['firstname'];
-		$user_info['lastname']		= $result_array['lastname'];
-
-		//Kept for historical reasons
-		$user_info['firstName']		= $result_array['firstname'];
-		$user_info['lastName'] 		= $result_array['lastname'];
-
-		$user_info['mail'] 			= $result_array['email'];
-		$user_info['picture_uri'] 	= $result_array['picture_uri'];
-		$user_info['user_id'] 		= $result_array['user_id'];
-		$user_info['official_code'] = $result_array['official_code'];
-		$user_info['status']		= $result_array['status'];
-		$user_info['auth_source'] 	= $result_array['auth_source'];
-		$user_info['username'] 		= $result_array['username'];
-		$user_info['theme'] 		= $result_array['theme'];
-		return $user_info;
 	}
 	return false;
 }
@@ -843,23 +879,7 @@ function api_get_user_info_from_username($username = '') {
 	$result = Database::query($sql);
 	if (Database::num_rows($result) > 0) {
 		$result_array = Database::fetch_array($result);
-		// this is done so that it returns the same array-index-names
-		// ideally the names of the fields of the user table are renamed so that they match $_user (or vice versa)
-		// $_user should also contain every field of the user table (except password maybe). This would make the
-		// following lines obsolete (and the code cleaner and slimmer !!!
-		$user_info['firstName'] = $result_array['firstname'];
-		$user_info['lastName'] = $result_array['lastname'];
-		$user_info['firstname'] = $result_array['firstname'];
-		$user_info['lastname'] = $result_array['lastname'];
-		$user_info['mail'] = $result_array['email'];
-		$user_info['picture_uri'] = $result_array['picture_uri'];
-		$user_info['user_id'] = $result_array['user_id'];
-		$user_info['official_code'] = $result_array['official_code'];
-		$user_info['status'] = $result_array['status'];
-		$user_info['auth_source'] = $result_array['auth_source'];
-		$user_info['username'] = $result_array['username'];
-		$user_info['theme'] = $result_array['theme'];
-		return $user_info;
+		return _api_format_user($result_array);
 	}
 	return false;
 }

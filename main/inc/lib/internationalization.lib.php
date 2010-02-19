@@ -129,7 +129,7 @@ function get_lang($variable, $notrans = 'DLTT', $language = null) {
 	// Caching results from some API functions, for speed.
 	static $langpath;
 	if (!isset($langpath)) {
-		$langpath = api_get_path(SYS_CODE_PATH).'lang/';
+		$langpath = api_get_path(SYS_LANG_PATH);
 	}
 	static $test_server_mode;
 	if (!isset($test_server_mode)) {

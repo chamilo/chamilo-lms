@@ -100,15 +100,19 @@ function event_login()
 		return 0;
 	}
 	$reallyNow = time();
+    // jeankarim@cblue.be -- making sure that logout_date doesn't stay at its default NULL value
 	$sql = "INSERT INTO ".$TABLETRACK_LOGIN."
 				(login_user_id,
 				 login_ip,
-				 login_date)
+				 login_date,
+                 logout_date)
 				 VALUES
 					('".$_user['user_id']."',
 					'".Database::escape_string($_SERVER['REMOTE_ADDR'])."',
-					FROM_UNIXTIME(".$reallyNow."))";
-	$res = Database::query($sql,__FILE__,__LINE__);
+					FROM_UNIXTIME(".$reallyNow."),
+                    FROM_UNIXTIME(".$reallyNow."))";
+	
+    $res = Database::query($sql,__FILE__,__LINE__);
 }
 
 /**

@@ -856,11 +856,26 @@ if (isset($cidReset) && $cidReset) { // course session data refresh requested or
        	    $course_tracking_table = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
             $time = api_get_datetime();
 	   		//We select the last record for the current course in the course tracking table
-	   		$sql="SELECT course_access_id FROM $course_tracking_table WHERE user_id=".intval($_user ['user_id'])." ORDER BY login_course_date DESC LIMIT 0,1";
+            // jeankarim@cblue.be -- More restrictive SELECT, to make sure we're updating for the right course
+	   		$sql="SELECT course_access_id FROM $course_tracking_table WHERE user_id=".intval($_user ['user_id'])." AND course_code=".$_course['sysCode']." ORDER BY login_course_date DESC LIMIT 0,1";
 	   		$result=Database::query($sql,__FILE__,__LINE__);
 	   		if (Database::num_rows($result)>0) {
 		   		$i_course_access_id = Database::result($result,0,0);
+                // jeankarim@cblue.be -- Is the latest logout_date still relevant?
+                $sql_logout_date = "SELECT logout_date FROM $course_tracking_table WHERE user_id=".$_user['user_id']." AND course_code=".$_course['sysCode']." ORDER BY course_access_id DESC LIMIT 0,1";
+                $q_logout_date = Database::query($sql_logout_date);
+                $res_logout_date = convert_mysql_date(database::results($q_logout_date,0,'logout_date'));
+                if ($res_logout_date < time() - $_configuration['session_lifetime']) {
+                    // looks like it isn't, we should create a fresh entry
+		            $sql="INSERT INTO $course_tracking_table(course_code, user_id, login_course_date, logout_course_date, counter)" .
+							"VALUES('".$_course['sysCode']."', '".$_user['user_id']."', '$time', '$time', '1')";
 
+				    Database::query($sql,__FILE__,__LINE__);
+                    // now that it's created, we can get its ID and carry on
+                    $sql="SELECT course_access_id FROM $course_tracking_table WHERE user_id=".intval($_user ['user_id'])." AND course_code=     ".$_course['sysCode']." ORDER BY course_access_id DESC LIMIT 0,1";
+                    $result=Database::query($sql,__FILE__,__LINE__);
+                    $i_course_access_id = Database::result($result,0,0);
+                    }
 		   		//We update the course tracking table
 		   		$sql="UPDATE $course_tracking_table " .
 		   				"SET logout_course_date = '$time', " .

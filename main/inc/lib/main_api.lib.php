@@ -1025,6 +1025,11 @@ function api_session_start($already_installed = true) {
 			api_session_clear();
 		}
 	}
+
+    // jeankarim@cblue.be -- Keeping track of session startdates and cleaning startdates on old sessions that should have expired
+    if ( isset($_SESSION['starttime']) && $SESSION['starttime'] < time() - $_configuration['session_lifetime'] ) {
+        $_SESSION['starttime'] = time();
+        }
 }
 
 /**

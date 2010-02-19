@@ -1037,7 +1037,8 @@ class CourseManager {
 		$virtual_course_list = self::get_virtual_courses_linked_to_real_course($course_code);
 
 		//get users from real course
-		$user_list = self::get_user_list_from_course_code($course_code, $with_sessions, $session_id);
+		$user_list = self::get_user_list_from_course_code($course_code, $with_sessions, $session_id,'',api_get_setting('user_order_by'));
+
 		foreach ($user_list as $this_user) {
 			$complete_user_list[] = $this_user;
 		}
@@ -1045,7 +1046,7 @@ class CourseManager {
 		//get users from linked courses
 		foreach ($virtual_course_list as $this_course) {
 			$course_code = $this_course['code'];
-			$user_list = self::get_user_list_from_course_code($course_code, $with_sessions, $session_id);
+			$user_list = self::get_user_list_from_course_code($course_code, $with_sessions, $session_id,'',api_get_setting('user_order_by'));
 			foreach ($user_list as $this_user) {
 				$complete_user_list[] = $this_user;
 			}

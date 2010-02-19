@@ -1,4 +1,8 @@
 <?php
+require_once api_get_path(LIBRARY_PATH).'export.lib.inc.php';
+require_once api_get_path(LIBRARY_PATH).'tracking.lib.php';
+require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
+require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 
 class MySpace { 
 
@@ -240,8 +244,7 @@ class MySpace {
 	 */
 	function display_user_overview_export_options() {
 		// include the user manager and formvalidator library
-		require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
-		require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
+
 	
 		if ($_GET['export'] == 'options') {
 			// get all the defined extra fields
@@ -361,6 +364,8 @@ class MySpace {
 	 * @since October 2008
 	 */
 	function export_tracking_user_overview() {
+		
+		
 		// database table definitions
 		$tbl_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 	
@@ -403,7 +408,7 @@ class MySpace {
 		$csv_row[] = get_lang('LoginName');
 		$csv_row[] = get_lang('CourseCode');
 		// the additional user defined fields (only those that were selected to be exported)
-		require_once (api_get_path(LIBRARY_PATH).'usermanager.lib.php');
+		
 		$fields = UserManager::get_extra_fields(0, 50, 5, 'ASC');
 	
 		if (is_array($_SESSION['additional_export_fields'])) {
@@ -646,60 +651,10 @@ class MySpace {
 	 */
 	function get_user_overview_export_extra_fields($user_id) {
 		// include the user manager
-		require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
+
 		$extra_data = UserManager::get_extra_user_data($user_id, true);
 		return $extra_data;
 	}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 	/**
 	 * Checks if a username exist in the DB otherwise it create a "double"
 	 * i.e. if we look into for jmontoya but the user's name already exist we create the user jmontoya2

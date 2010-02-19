@@ -98,7 +98,7 @@ class ExerciseLink extends AbstractLink
     	$tbl_stats = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
 		$sql = 'SELECT count(exe_id) AS number FROM '.$tbl_stats
 				." WHERE exe_cours_id = '".$this->get_course_code()."'"
-				.' AND exe_exo_id = '.$this->get_ref_id();
+				.' AND exe_exo_id = '.(int)$this->get_ref_id();
     	$result = Database::query($sql);
 		$number=Database::fetch_row($result);
 		return ($number[0] != 0);
@@ -115,7 +115,7 @@ class ExerciseLink extends AbstractLink
     	$tbl_stats = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
     	$tbl_stats_e_attempt_recording = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING);
 
-		$sql = 'SELECT * FROM '.$tbl_stats.' WHERE exe_exo_id = '.$this->get_ref_id().' AND orig_lp_id = 0 AND orig_lp_item_id = 0';
+		$sql = 'SELECT * FROM '.$tbl_stats.' WHERE exe_exo_id = '.(int)$this->get_ref_id().' AND orig_lp_id = 0 AND orig_lp_item_id = 0';
 
 		if (isset($stud_id)){
 			$currect_course=api_get_course_id();
@@ -201,7 +201,7 @@ class ExerciseLink extends AbstractLink
      */
     public function is_valid_link() {
     	$sql = 'SELECT count(id) from '.$this->get_exercise_table()
-				.' WHERE id = '.$this->get_ref_id().' AND session_id='.api_get_session_id().'';
+				.' WHERE id = '.(int)$this->get_ref_id().' AND session_id='.api_get_session_id().'';
 		$result = Database::query($sql);
 		$number=Database::fetch_row($result);
 		return ($number[0] != 0);
@@ -255,7 +255,7 @@ class ExerciseLink extends AbstractLink
     		return false;
     	} elseif (!isset($this->exercise_data)) {
 			$sql = 'SELECT * from '.$this->get_exercise_table()
-					.' WHERE id = '.$this->get_ref_id().' AND session_id ='.api_get_session_id().'';
+					.' WHERE id = '.(int)$this->get_ref_id().' AND session_id ='.api_get_session_id().'';
 			$result = Database::query($sql);
 			$this->exercise_data=Database::fetch_array($result);
     	}

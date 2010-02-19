@@ -64,6 +64,10 @@ require_once $maindir.'exercice/freeanswer.class.php';
 require_once $maindir.'forum/forumfunction.inc.php';
 require_once $maindir.'gradebook/lib/be/attendancelink.class.php';
 require_once $maindir.'gradebook/lib/be/category.class.php';
+require_once $maindir.'gradebook/lib/be/dropboxlink.class.php';
+require_once $maindir.'gradebook/lib/be/evaluation.class.php';
+require_once $maindir.'gradebook/lib/be/exerciselink.class.php';
+
 
 /**Files inside '/../main/lib/' */
 require_once $libdir.'urlmanager.lib.php';

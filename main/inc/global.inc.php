@@ -136,7 +136,7 @@ while ($row = @Database::fetch_array($result)) {
 	$charset = $row[0];
 }
 if (empty($charset)) {
-	$charset = 'ISO-8859-15';
+	$charset = 'UTF-8';
 }
 // Preserving the value of the global variable $charset.
 $charset_initial_value = $charset;

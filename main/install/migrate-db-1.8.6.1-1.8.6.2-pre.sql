@@ -70,6 +70,9 @@ INSERT INTO settings_current (variable, subkey, type, category, selected_value, 
 INSERT INTO settings_options (variable, value, display_text) VALUES ('user_order_by','firstname','FirstName');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('user_order_by','lastname','LastName');
 
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('read_more_limit', NULL , 'textfield', 'Tools', '100', 'ReadMoreLimitTitle', 'ReadMoreLimitComment', NULL , NULL , '1');
+
+
 -- xxSTATSxx
 ALTER TABLE track_e_exercices ADD COLUMN expired_time_control datetime NOT NULL DEFAULT '0000-00-00 00:00:00';
 ALTER TABLE track_e_online ADD INDEX (course);

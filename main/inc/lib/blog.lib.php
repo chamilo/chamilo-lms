@@ -765,7 +765,7 @@ class Blog {
 				$blog_post_time = date('H:i',strtotime($blog_post['date_creation']));
 
 				// Create an introduction text (but keep FULL sentences)
-				$limit = 100; //nmbr of words in introduction text
+				$limit = api_get_setting('read_more_limit'); //nmbr of words in introduction text
 				$introduction_text = "";
 				$words = 0;
 				$tok = strtok(make_clickable(stripslashes($blog_post['full_text'])), " ");

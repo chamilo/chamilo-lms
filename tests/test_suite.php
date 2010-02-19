@@ -150,11 +150,12 @@ class TestsSuite extends TestSuite {
 	  	
 	  	/**FORUM*/
 	  	//$this->addFile(dirname(__FILE__).'/main/forum/forumfunction.inc.test.php');
-	  	$this->addFile(api_get_path(SYS_TEST_PATH).'main/forum/forumfunction.inc.test.php');
+	  //	$this->addFile(api_get_path(SYS_TEST_PATH).'main/forum/forumfunction.inc.test.php');
 	  	
 	    //$this->addTestFile(dirname(__FILE__).'/main/inc/lib/main_api.lib.test.php');      
         //$this->addTestFile(dirname(__FILE__).'/main/inc/lib/debug.lib.inc.test.php');
         
+        $this->addTestFile(dirname(__FILE__).'/main/newscorm/openoffice_presentation.class.test.php');
                 
 	    
     }

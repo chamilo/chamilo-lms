@@ -1,6 +1,6 @@
 <?php
 /*
- * For licensing terms, see /license.txt 
+ * For licensing terms, see /license.txt
  */
 /**
 ==============================================================================
@@ -334,7 +334,7 @@ function handle_stylesheets()
 function upload_stylesheet($values,$picture)
 {
 	// valid name for the stylesheet folder
-	$style_name = api_ereg_replace("[^A-Za-z0-9]", "", $values['name_stylesheet'] );
+	$style_name = api_preg_replace('/[^A-Za-z0-9]/', '', $values['name_stylesheet']);
 
 	// create the folder if needed
 	if (!is_dir(api_get_path(SYS_CODE_PATH).'css/'.$style_name.'/'))
@@ -856,9 +856,9 @@ function delete_template($id)
 
 /**
  * Returns the list of timezone identifiers used to populate the select
- * 
+ *
  * @return array List of timezone identifiers
- * 
+ *
  * @author Guillaume Viguier <guillaume.viguier@beeznest.com>
  * @since Chamilo 1.8.7
  */

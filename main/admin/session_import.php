@@ -551,7 +551,7 @@ if ($_POST['formSent']) {
 						}
 					} else {
 						foreach ($enreg as $tag_name) {
-							$tag_names[] = api_eregi_replace('[^a-z0-9_-]', '', $tag_name);
+							$tag_names[] = api_preg_replace('/[^a-zA-Z0-9_\-]/', '', $tag_name);
 						}
 						if (!in_array('SessionName', $tag_names) || !in_array('DateStart', $tag_names) || !in_array('DateEnd', $tag_names)) {
 							$error_message = get_lang('NoNeededData');

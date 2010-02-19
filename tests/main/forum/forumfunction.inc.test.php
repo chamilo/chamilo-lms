@@ -1,4 +1,7 @@
 <?php
+require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be/gradebookitem.class.php';
+require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be/abstractlink.class.php';
+require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be/evallink.class.php';
 
 class TestForumFunction extends UnitTestCase {
 	

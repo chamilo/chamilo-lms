@@ -22,12 +22,11 @@
 */
 
 define('SYSTEM_INSTALLATION', 1);
-define('MAX_COURSE_TRANSFER', 100);
+define('MAX_COURSE_TRANSFER', 100); // TODO: To be examined.
 define('INSTALL_TYPE_UPDATE', 'update');
 define('FORM_FIELD_DISPLAY_LENGTH', 40);
 define('DATABASE_FORM_FIELD_DISPLAY_LENGTH', 25);
 define('MAX_FORM_FIELD_LENGTH', 80);
-define('DEFAULT_LANGUAGE', 'english'); // TODO: To be examined.
 
 /*
 ==============================================================================
@@ -62,6 +61,7 @@ require_once 'install.lib.php';
 // We need to provide some limited support for it through initialization of the
 // global array-type variable $_setting.
 $_setting = array(
+	'platform_charset' => 'UTF-8',
 	'server_type' => 'production', // 'production' | 'test'
 	'permissions_for_new_directories' => '0770',
 	'permissions_for_new_files' => '0660'

@@ -1270,6 +1270,7 @@ class TestInternationalization extends UnitTestCase {
 	}
 
 	/*
+	// This test works. It has been disabled, because it is time-consuming.
 	public function test_api_detect_language() {
 		$encoding = 'UTF-8';
 		$strings = $this->language_strings;
@@ -1293,6 +1294,7 @@ class TestInternationalization extends UnitTestCase {
 	*/
 
 	/*
+	// This test works. It has been disabled, because it is time-consuming.
 	public function test_api_detect_encoding() {
 		$strings = $this->language_strings;
 		$is_test_ok = true;
@@ -1361,6 +1363,111 @@ class TestInternationalization extends UnitTestCase {
 		//var_dump('<pre>'.$res.'</pre>');
 	}
 
+	/*
+	// Enable the following test when you need to run it.
+	// Testing whether all the language files load successfully. This means that their php-syntax is correct.
+	public function test_all_the_language_files() {
+		$files = array( // Only files with these names will be loaded/tested.
+			'accessibility.inc.php',
+			'admin.inc.php',
+			'agenda.inc.php',
+			'announcements.inc.php',
+			'bbimport.inc.php',
+			'blog.inc.php',
+			'chat.inc.php',
+			'coursebackup.inc.php',
+			'courses.inc.php',
+			'course_description.inc.php',
+			'course_home.inc.php',
+			'course_info.inc.php',
+			'create_course.inc.php',
+			'document.inc.php',
+			'dropbox.inc.php',
+			'exercice.inc.php',
+			'external_module.inc.php',
+			'forum.inc.php',
+			'forum_admin.inc.php',
+			'glossary.inc.php',
+			'gradebook.inc.php',
+			'group.inc.php',
+			'help.inc.php',
+			'hotspot.inc.php',
+			'htmlarea.js.php',
+			'import.inc.php',
+			'index.inc.php',
+			'install.inc.php',
+			'learnpath.inc.php',
+			'link.inc.php',
+			'md_document.inc.php',
+			'md_link.inc.php',
+			'md_mix.inc.php',
+			'md_scorm.inc.php',
+			'messages.inc.php',
+			'myagenda.inc.php',
+			'notebook.inc.php',
+			'notification.inc.php',
+			'online_meeting.inc.php',
+			'pedaSuggest.inc.php',
+			'phpbb.inc.php',
+			'registration.inc.php',
+			'reservation.inc.php',
+			'resourcelinker.inc.php',
+			'scorm.inc.php',
+			'scormbuilder.inc.php',
+			'scormdocument.inc.php',
+			'slideshow.inc.php',
+			'survey.inc.php',
+			'survey_answer.inc.php',
+			'tracking.inc.php',
+			'trad4all.inc.php',
+			'userInfo.inc.php',
+			'videoconf.inc.php',
+			'wcag.inc.php',
+			'wiki.inc.php',
+			'work.inc.php'
+		);
+
+		$languages = test_get_language_folder_list();
+		$lang_dir = api_get_path(SYS_LANG_PATH);
+
+		foreach ($languages as $language) {
+			echo 'Language: <strong>'.ucwords($language).'</strong><br />';
+			echo '-------------------------------------------------------------------------<br />';
+			foreach ($files as $file) {
+				echo 'Loading '.$lang_dir.$language.'/<strong>'.$file.'</strong> ...<br />';
+				test_load_php_language_file($lang_dir.$language.'/'.$file);
+			}
+			echo '<br />';
+		}
+		$this->assertTrue(true); // Once we arrived here, the test is Ok.
+	}
+	*/
+
+}
+
+
+// An isolated namespace for testing whether language files load successfully.
+function test_load_php_language_file($filename) {
+	include $filename;
+}
+
+// A helper function.
+function test_get_language_folder_list() {
+	$result = array();
+	$exceptions = array('.', '..', 'CVS', '.svn');
+	$dirname = api_get_path(SYS_LANG_PATH);
+	$handle = opendir($dirname);
+	while ($entries = readdir($handle)) {
+		if (in_array($entries, $exceptions)) {
+			continue;
+		}
+		if (is_dir($dirname.$entries)) {
+			$result[] = $entries;
+		}
+	}
+	closedir($handle);
+	sort($result);
+	return $result;
 }
 
 ?>

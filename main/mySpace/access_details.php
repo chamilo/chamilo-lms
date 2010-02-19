@@ -24,6 +24,7 @@ require '../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'pchart/pData.class.php';
 require_once api_get_path(LIBRARY_PATH).'pchart/pChart.class.php';
 require_once api_get_path(LIBRARY_PATH).'pchart/pCache.class.php';
+require_once 'myspace.lib.php';
 
 // the section (for the tabs)
 $this_section = "session_my_space";
@@ -33,7 +34,7 @@ $this_section = "session_my_space";
 $user_id = Security::remove_XSS($_REQUEST['student']);
 $course_code = Security::remove_XSS($_REQUEST['course']);
 
-$connections = get_connections_to_course($user_id, $course_code);
+$connections = MySpace::get_connections_to_course($user_id, $course_code);
 if (api_is_xml_http_request()) {
 	$type  = Security::remove_XSS($_GET['type']);
 	$main_year = $main_month_year = $main_day = array();
@@ -219,88 +220,3 @@ echo ("</table>");
 */
 
 Display:: display_footer();
-
-
-/*
------------------------------------------------------------
-	Functions
------------------------------------------------------------
-*/
-
-/**
- * Gets the connections to a course as an array of login and logout time
- *
- * @param unknown_type $user_id
- * @param unknown_type $course_code
- * @return unknown
- */
-function get_connections_to_course($user_id, $course_code) {
-	// Database table definitions
-    $tbl_track_course 	= Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
-    $tbl_main			= Database :: get_main_table(TABLE_MAIN_COURSE);
-
-    $sql_query = 'SELECT visual_code as course_code FROM '.$tbl_main.' c WHERE code="'.Database::escape_string($course_code).'";';
-    $result = Database::query($sql_query);
-    $row_query = Database::fetch_array($result, 'ASSOC');
-    $course_true = isset($row_query['course_code']) ? $row_query['course_code']: $course_code;
-
-    $sql = 'SELECT login_course_date, logout_course_date FROM ' . $tbl_track_course . '
-    	WHERE user_id = ' . intval($user_id) . '
-    	AND course_code="' . Database::escape_string($course_true) . '" ORDER BY login_course_date ASC';
-
-    $rs = Database::query($sql);
-    $connections = array();
-
-    while ($row = Database::fetch_array($rs)) {
-
-        $login_date = $row['login_course_date'];
-        $logout_date = $row['logout_course_date'];
-        
-        $login_date = api_get_local_time($login_date, null, null, date_default_timezone_get());
-        $logout_date = api_get_local_time($logout_date, null, null, date_default_timezone_get());
-
-        $timestamp_login_date = strtotime($login_date);
-        $timestamp_logout_date = strtotime($logout_date);
-
-        $connections[] = array('login' => $timestamp_login_date, 'logout' => $timestamp_logout_date);
-    }
-    return $connections;
-}
-
-/**
- * TODO: Not used, to b deleted?
- * Enter description here...
- *
- * @param unknown_type $user_id
- * @param unknown_type $course_code
- * @param unknown_type $year
- * @param unknown_type $month
- * @param unknown_type $day
- * @return unknown
- */
-function get_connections_to_course_by_time($user_id, $course_code, $year = '', $month = '', $day = '') {
-	// Database table definitions
-    $tbl_track_course 		= Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
-    $tbl_main				= Database :: get_main_table(TABLE_MAIN_COURSE);
-
-    $sql_query = 'SELECT visual_code as course_code FROM '.$tbl_main.' c WHERE code="'.Database :: escape_string($course_code).'";';
-    $result = Database::query($sql_query);
-    $row_query = Database::fetch_array($result,'ASSOC');
-    $course_true = isset($row_query['course_code']) ? $row_query['course_code']: $course_code;
-
-    $sql = 'SELECT login_course_date, logout_course_date FROM ' . $tbl_track_course . '
-    				WHERE user_id = ' . intval($user_id) . '
-    				AND course_code="' . Database::escape_string($course_true) . '"
-    				ORDER BY login_course_date DESC';
-
-    $rs = Database::query($sql);
-    $connections = array();
-    while ($row = Database::fetch_array($rs)) {
-        $login_date = $row['login_course_date'];
-        $logout_date = $row['logout_course_date'];
-        $timestamp_login_date = strtotime($login_date);
-        $timestamp_logout_date = strtotime($logout_date);
-        $connections[] = array('login' => $timestamp_login_date, 'logout' => $timestamp_logout_date);
-    }
-    return $connections;
-}

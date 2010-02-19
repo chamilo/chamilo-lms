@@ -165,7 +165,8 @@ Display :: display_header($nameTools);
  * 	FUNCTIONS
  * ======================================================================================
  */
-
+ 
+/* Possible Deprecated
 function is_teacher($course_code) {
 	global $_user;
 	$tbl_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
@@ -177,7 +178,7 @@ function is_teacher($course_code) {
 		return false;
 	}
 }
-
+*/
 /*
  *===============================================================================
  *	MAIN CODE

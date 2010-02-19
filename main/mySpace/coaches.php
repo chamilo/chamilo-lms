@@ -44,6 +44,8 @@ $tbl_track_login 					= Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_
  	FUNCTIONS
  ===============================================================================
  */
+ 
+/*Posible Deprecated*/
 
 function is_coach() {
   	global $tbl_session_course;

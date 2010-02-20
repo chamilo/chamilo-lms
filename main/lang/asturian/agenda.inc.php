@@ -1,7 +1,4 @@
 <?php
-/*
-for more information: see languages.txt in the lang folder.
-*/
 $AgendaAdd = "Amestar un eventu";
 $ShowAllEvents = "Amosar tolos eventos";
 $ShowCurrent = "Amosar tolos eventos del mes";
@@ -12,14 +9,14 @@ $Year = "Añu";
 $Hour = "Hora";
 $Minutes = "Mintutos";
 $Detail = "Detalles";
-$EditSuccess = "L\'eventu modificóse";
-$AddSuccess = "L\'eventu amestóse a la axenda";
-$AgendaDeleteSuccess = "L\'eventu esborróse de la axenda";
+$EditSuccess = "L'eventu modificóse";
+$AddSuccess = "L'eventu amestóse a la axenda";
+$AgendaDeleteSuccess = "L'eventu esborróse de la axenda";
 $NoAgendaItems = "Nun hai eventos";
 $lang_september = "Setiembre";
 $langClassName = "Nome de la clase";
 $lang_agenda = "Axenda";
-$ModifyCalendarItem = "Cambiar un eventu de l\'axenda";
+$ModifyCalendarItem = "Cambiar un eventu de l'axenda";
 $ItemTitle = "Títulu del eventu";
 $langDay = "Día";
 $month_default = "mes por defeutu";
@@ -43,9 +40,9 @@ $Date = "Fecha";
 $Time = "Hora";
 $AddPersonalCalendarItem = "Amestar un eventu personal a la axenda";
 $ModifyPersonalCalendarItem = "Cambiar un eventu personal na axenda";
-$PeronalAgendaItemAdded = "L\'eventu personal amestóse a la so axenda";
-$PeronalAgendaItemEdited = "L\'eventu personal de la so axenda actualizóse";
-$PeronalAgendaItemDeleted = "L\'eventu personal esborróse de la so axenda";
+$PeronalAgendaItemAdded = "L'eventu personal amestóse a la so axenda";
+$PeronalAgendaItemEdited = "L'eventu personal de la so axenda actualizóse";
+$PeronalAgendaItemDeleted = "L'eventu personal esborróse de la so axenda";
 $ViewPersonalItem = "Ver los mios eventos personales";
 $UserGroupFilter = "Filtrar por grupos/usuarios";
 $ShowAll = "Amosar toos";
@@ -64,15 +61,14 @@ $RepeatMonthlyByDay = "Mensual, por día";
 $RepeatMonthlyByDayR = "Mensual, por día, restrinxíu";
 $RepeatYearly = "Añal";
 $RepeatEnd = "Acabar les repeticiones el";
-$RepeatedEventViewOriginalEvent = "Ver l\'eventu primeru";
+$RepeatedEventViewOriginalEvent = "Ver l'eventu primeru";
 $ICalFileImport = "Importar un ficheru iCal/ics";
 $AllUsersOfThePlatform = "Tolos usuarios de la Plataforma";
 $GlobalEvent = "Eventu global";
 $ModifyEvent = "Camudar eventu";
-$EndDateCannotBeBeforeTheStartDate = "Data final nun deberá ser menos que la data d\'aniciu";
+$EndDateCannotBeBeforeTheStartDate = "Data final nun deberá ser menos que la data d'aniciu";
 $AgendaSortChronologicallyUp = "Ordenar eventos (antigüos/recientes)";
 $AgendaSortChronologicallyDown = "Ordenar eventos (recientes/antigüos)";
-$ItemForUserSelection = "Eventu dirixíu a una seleición d\'usuarios";
+$ItemForUserSelection = "Eventu dirixíu a una seleición d'usuarios";
 $IsNotiCalFormatFile = "Nun ye un ficheru de formatu iCal";
 $RepeatEvent = "Repetir eventu";
-?>

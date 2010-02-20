@@ -1,7 +1,4 @@
 <?php
-/*
-for more information: see languages.txt in the lang folder.
-*/
 $langViewCourseMaterialImport = "查看要导入的课程材料";
 $langViewExternalLinksImport = "查看要导入的外部链接";
 $langViewForumImport = "查看要导入的论坛";
@@ -21,4 +18,3 @@ $langChooseImportOptions = "选择你的导入选项";
 $langCheckWhatIsImported = "开始导入前，请查看要导入的内容";
 $langStartImporting = "开始导入";
 $langImport = "导入";
-?>

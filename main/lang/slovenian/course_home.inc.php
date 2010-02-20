@@ -1,7 +1,4 @@
 <?php
-/*
-for more information: see languages.txt in the lang folder.
-*/
 $langActivate = "Prikaži";
 $langDeactivate = "Skrij";
 $langInLnk = "Skrita orodja in povezave";
@@ -27,6 +24,5 @@ $IntroductionTextUpdated = "Uvodno besedilo je bilo ažurirano";
 $IntroductionTextDeleted = "Uvodno besedilo je bilo odstranjeno";
 $SessionIdentifier = "Identifikator seje";
 $SessionName = "Ime seje";
-$SessionCategory = "Kategorija seje";
+$SessionCategory = "Kategorije sej";
 $SessionData = "Podatki seje";
-?>

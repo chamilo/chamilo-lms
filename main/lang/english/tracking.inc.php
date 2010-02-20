@@ -1,8 +1,5 @@
 <?php
-/*
-for more information: see languages.txt in the lang folder.
-*/
-$langToolName = "Reporting";
+$langToolName = "Import Blackboard courses";
 $TrackingDisabled = "Reporting has been disabled by system administrator.";
 $InactivesStudents = "Inactive users";
 $AverageTimeSpentOnThePlatform = "Time spent on portal";
@@ -19,7 +16,7 @@ $SeeSessionList = "See the sessions list";
 $langShowNone = "Show none";
 $langCourseStats = "Training Stats";
 $langToolsAccess = "Tools access";
-$langCourseAccess = "Access to this training";
+$langCourseAccess = "Training access";
 $langLinksAccess = "Links";
 $langDocumentsAccess = "Documents";
 $langScormAccess = "Courses";
@@ -60,12 +57,12 @@ $langWorkAuthors = "Authors";
 $langWorkDescription = "Description";
 $informationsAbout = "Tracking of";
 $langNoEmail = "No email address specified";
-$langNoResult = "No Result";
-$langCourse = "Training";
+$langNoResult = "There is no result yet";
+$langCourse = "The area ";
 $langHits = "Hits";
 $langTotal = "Total";
 $langHour = "Hour";
-$langDay = "Day";
+$langDay = "day";
 $langLittleHour = "h.";
 $langLast31days = "In the last 31 days";
 $langLast7days = "In the last 7 days";
@@ -159,7 +156,7 @@ $Success = "Success";
 $ExcelFormat = "Excel format";
 $MyLearnpath = "My learnpath";
 $Time = "Time";
-$Score = "Score";
+$Score = "Performance";
 $LastConnexion = "Latest login";
 $ConnectionTime = "Connection time";
 $ConnectionsToThisCourse = "Connections to this training";
@@ -178,7 +175,7 @@ $NoProduction = "No production";
 $NoComment = "No comment";
 $LatestLogin = "Latest";
 $TimeSpentOnThePlatform = "Time spent in portal";
-$Messages = "Posts";
+$Messages = "Messages";
 $AveragePostsInForum = "Posts in forum";
 $AverageAssignments = "Assignments";
 $Print = "Print";
@@ -245,8 +242,3 @@ $ResourcesTracking = "Report on resource";
 $SelectFieldToAdd = "Select user profile field to add";
 $AddAdditionalProfileField = "Add user profile field";
 $ConfigureExtensions = "Configure extensions";
-$DashboardBlocks = "Dashboard blocks";
-$DashboardList = "Dashboard list";
-$YouHaveNotEnabledBlocks = "You haven't enabled any block";
-$BlocksHaveBeenUpdatedSuccessfully = "The blocks have been updated";
-?>

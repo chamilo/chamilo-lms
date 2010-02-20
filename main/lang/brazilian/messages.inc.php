@@ -1,7 +1,4 @@
 <?php
-/*
-for more information: see languages.txt in the lang folder.
-*/
 $MessageEmptyMessageOrSubject = "Por favor preencha um assunto ou mensagem";
 $Inbox = "Caixa de Entrada";
 $Messages = "Mensagens";
@@ -11,7 +8,7 @@ $ComposeMessage = "Escrever mensagem";
 $DeleteSelectedMessages = "Apagar mensagens selecionadas";
 $SelectAll = "Selecionar tudo";
 $DeselectAll = "Anular seleção";
-$ReplyToMessage = "Responder";
+$ReplyToMessage = "Responder esta mensagem";
 $BackToInbox = "Voltar à caixa de entrada";
 $MessageSentTo = "A mensagem foi enviada para";
 $SendMessageTo = "Enviar para";
@@ -36,5 +33,3 @@ $WriteAMessage = "Escrever uma mensagem";
 $AlreadyReadMessage = "Esta mensagem já foi lida";
 $UnReadMessage = "Mensagem ainda não lida";
 $MessageSent = "Mensagem enviada";
-$YouShouldWriteAMessage = "";
-?>

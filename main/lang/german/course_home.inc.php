@@ -1,7 +1,4 @@
 <?php
-/*
-for more information: see languages.txt in the lang folder.
-*/
 $langActivate = "Anzeigen";
 $langDeactivate = "Verstecken";
 $langInLnk = "Versteckte Tools und Links";
@@ -25,8 +22,3 @@ $Authoring = "Erstellen";
 $Administration = "Verwaltung";
 $IntroductionTextUpdated = "Der Einleitungstext wurde aktualisiert";
 $IntroductionTextDeleted = "Einleitungstext wurde gelöscht";
-$SessionIdentifier = "";
-$SessionName = "";
-$SessionCategory = "";
-$SessionData = "";
-?>

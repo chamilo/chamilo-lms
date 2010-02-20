@@ -1,7 +1,4 @@
 <?php
-/*
-for more information: see languages.txt in the lang folder.
-*/
 $Announcement = "????";
 $langAnnEmpty = "お梦らせをすべて、猴近する";
 $AnnouncementModified = "お梦らせ饯赖";
@@ -17,43 +14,9 @@ $EmailOption = "Send this announcement by email to registered students";
 $langOn = "On";
 $langRegUser = "registered users of the site";
 $langUnvalid = "have unvalid or no email address";
-$langModifAnn = "";
 $langModify = "饯赖";
 $langDelete = "猴近";
 $langTitle = "タイトル";
 $langHelp = "へルプ";
 $langOk = "OK";
-$langAddIntro = "";
 $langBackList = "リストに提る";
-$langSelMess = "";
-$EmailTitle = "";
-$langUserlist = "";
-$langSelectedUsers = "";
-$langSubmit = "";
-$langPleaseEnterMessage = "";
-$langPleaseSelectUsers = "";
-$Teachersubject = "";
-$langMessages = "";
-$langMessageToSelectedUsers = "";
-$langIntroText = "";
-$langDown = "";
-$langMsgSent = "";
-$langSelUser = "";
-$langMessageToSelectedGroups = "";
-$langSelectedGroups = "";
-$langMsg = "";
-$langYes = "";
-$MsgText = "";
-$AnnouncementDeletedAll = "";
-$AnnouncementMoved = "";
-$NoAnnouncements = "";
-$SelectEverybody = "";
-$SelectedUsersGroups = "";
-$LearnerMessage = "";
-$TitleIsRequired = "";
-$AnnounceSentByEmail = "";
-$AnnounceSentToUserSelection = "";
-$SendAnnouncement = "";
-$ModifyAnnouncement = "";
-$ButtonPublishAnnouncement = "";
-?>

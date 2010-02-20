@@ -1,7 +1,4 @@
 <?php
-/*
-for more information: see languages.txt in the lang folder.
-*/
 $langCourseProgram = "Kurso aprašymas";
 $langThisCourseDescriptionIsEmpty = "Šis kursas dar neaprašytas.";
 $langEditCourseProgram = "Sukurti ir redaguoti kurso aprašymą";
@@ -16,5 +13,3 @@ $langBackAndForget = "Back and forget";
 $CourseDescriptionUpdated = "Kurso aprašymas atnaujintas";
 $CourseDescriptionDeleted = "Kurso aprašymas ištrintas";
 $CourseDescriptionIntro = "Kad sukurti kurso aprašymą, spustelėkite ant ikonos, teisingai užpildykite formą.";
-$langSaveDescription = "";
-?>

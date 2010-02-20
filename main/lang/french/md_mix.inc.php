@@ -1,19 +1,15 @@
 <?php
-/*
-for more information: see languages.txt in the lang folder.
-*/
-$langTool = "Métadonnées";
-$langClickKw = "Cliquez sur un mot-clé dans l\'arborescence pour le sélectionner ou le désélectionner";
-$langKwHelp = "<br/> Cliquez sur le bouton \'+\' pour ouvrir, sur le bouton \'-\' pour fermer, sur le bouton \'++\' pour tout ouvrir, sur le bouton \'--\' pour tout fermer. <br/> <br/> Désélectionnez tous les mots-clés en fermant l\'arborescence et en l\'ouvrant de nouv";
-$langAdvanced = "Avancé";
-$langSearch = "Recherche";
+$langTool = "Métadonnées document";
+$langClickKw = "Clic pour sélectionner ou annuler un mot clé.";
+$langKwHelp = "<br/>Clic '+' pour ouvrir, '-' pour fermer, '++' pour ouvrir tout, '--' pour tout fermer.<br/><br/>Pour annuler les choix prÃ©cÃ©dents, fermez l'arborescence et rÃ©-ouvrez-lÃ  avec '+'.<br/>Pour remettre les mots clÃ© originaux, ouvrez-lÃ  avec Alt-clic '+'.<br/><br/>Alt-clic mot clÃ© sÃ©lectionne un mot clÃ© sans termes plus large etannulle avec termes plus larges.<br/><br/>Si vous changez la langue de la description, n'ajoutez pas de nouveaux mots clé en même temps.<br/><br/>";
+$langAdvanced = "Construire";
+$langSearch = "Cherchez";
 $langSearchCrit = "Un mot par ligne!";
 $langNoKeywords = "Aucun mot-clé pour décrire ce cours";
 $langKwCacheProblem = "Le cache des mots-clés ne peut être ouvert";
-$langCourseKwds = "mots-clés du cours";
+$langCourseKwds = "Ce document contient les mots clé du cours";
 $langKwdsInMD = "mots-clés utilisés dans les métadonnées";
 $langKwdRefs = "Références des mots clés";
 $langNonCourseKwds = "Mots clés hors cours";
 $langKwdsUse = "Mots-clés du cours (en gras = non utilisés)";
-$langTotalMDEs = "Nombre total d\'entrées de Métadonnées";
-?>
+$langTotalMDEs = "Nombre total d'entrées de Métadonnées";

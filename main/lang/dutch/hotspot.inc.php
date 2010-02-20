@@ -1,7 +1,4 @@
 <?php
-/*
-for more information: see languages.txt in the lang folder.
-*/
 $select = "Kies";
 $square = "vierkant";
 $circle = "Ellips";
@@ -22,4 +19,3 @@ $nextAnswer = "Klik nu op: &done=done";
 $delineation = "Delineatie";
 $labelDelineationMenu = "Delineatie beëindigen";
 $oar = "Risicogebied";
-?>

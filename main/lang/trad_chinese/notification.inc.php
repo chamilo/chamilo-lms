@@ -1,7 +1,4 @@
 <?php
-/*
-for more information: see languages.txt in the lang folder.
-*/
 $lang_new_item = "添加新項目";
 $lang_title_notification = "自上次訪問以來";
 $lang_update_agenda = "現有日程項目更新";
@@ -18,19 +15,3 @@ $lang_new_dropbox_file = "新文檔已收到";
 $lang_update_dropbox_file = "投遞箱中的檔案已更新";
 $ForumCategoryAdded = "已新增討論區類別";
 $LearnpathAdded = "已新增學習路徑";
-$GlossaryAdded = "";
-$QuizQuestionAdded = "";
-$QuizQuestionUpdated = "";
-$QuizQuestionDeleted = "";
-$QuizUpdated = "";
-$QuizAdded = "";
-$QuizDeleted = "";
-$DocumentInvisible = "";
-$DocumentVisible = "";
-$CourseDescriptionAdded = "";
-$WikiAdded = "";
-$SurveyAdded = "";
-$NotebookAdded = "";
-$NotebookUpdated = "";
-$NotebookDeleted = "";
-?>

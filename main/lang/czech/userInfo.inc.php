@@ -1,31 +1,28 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
-*/
-$langLineNumber = "&#268;íslo &#345;ádku";
-$langLine = "&#345;ádek";
-$langLines = "&#345;ádky";
-$langLineOrLines = "&#345;ádek(ky)";
+<?php
+$langLineNumber = "ÄŒÃ­slo Å™Ã¡dku";
+$langLine = "Å™Ã¡dek";
+$langLines = "Å™Ã¡dky";
+$langLineOrLines = "Å™Ã¡dek(ky)";
 $langMoveUp = "Posunout nahoru";
-$langMoveDown = "Posunout dol&#367;";
-$langAddNewHeading = "P&#345;idat novı nadpis";
-$langCourseAdministratorOnly = "Pouze pro u&#269;itele";
+$langMoveDown = "Posunout dolÅ¯";
+$langAddNewHeading = "PÅ™idat novÃ½ nadpis";
+$langCourseAdministratorOnly = "Pouze pro uÄitele";
 $langDefineHeadings = "Definuj nadpisy";
-$langBackToUsersList = "Zp&#283;t na seznam uivatel&#367;";
-$langTracking = "Sledování";
-$langCourseManager = "U&#269;itel";
-$langModRight = "zm&#283;na práv na";
-$langNoAdmin = "od te&#271; nemá <b>ádné</b> práva na této stránce";
-$langAllAdmin = "od te&#271; má <b>veškeré</b> práva na této stránce";
-$langModRole = "Zm&#283;na role na";
+$langBackToUsersList = "ZpÄ›t na seznam uÅ¾ivatelÅ¯";
+$langTracking = "SledovÃ¡nÃ­";
+$langCourseManager = "UÄitel";
+$langModRight = "zmÄ›na prÃ¡v na";
+$langNoAdmin = "od teÄ nemÃ¡ <b>Å¾Ã¡dnÃ©</b> prÃ¡va na tÃ©to strÃ¡nce";
+$langAllAdmin = "od teÄ mÃ¡ <b>veÅ¡kerÃ©</b> prÃ¡va na tÃ©to strÃ¡nce";
+$langModRole = "ZmÄ›na role na";
 $langRole = "Role";
-$langIsNow = "je od te&#271;";
+$langIsNow = "je od teÄ";
 $langInC = "v tomto kurzu";
-$langFilled = "Ne všechny pole byli vypln&#283;nı";
-$langUserNo = "&#268;íslo uivatele";
-$langTaken = "je ji pouíváno. Zvolte prosím jiné";
-$langTutor = "Tutor (studijní vedoucí)";
-$langUnreg = "Odhlásit";
-$langGroupUserManagement = "Správa skupin";
-$langUnregister = "Neregistrovanı";
-$langAddAUser = "P&#345;idat uivatele";
-?>
+$langFilled = "Ne vÅ¡echny pole byli vyplnÄ›nÃ½";
+$langUserNo = "ÄŒÃ­slo uÅ¾ivatele";
+$langTaken = "je jiÅ¾ pouÅ¾Ã­vÃ¡no. Zvolte prosÃ­m jinÃ©";
+$langTutor = "Tutor (studijnÃ­ vedoucÃ­)";
+$langUnreg = "OdhlÃ¡sit";
+$langGroupUserManagement = "SprÃ¡va skupin";
+$langUnregister = "NeregistrovanÃ½";
+$langAddAUser = "PÅ™idat uÅ¾ivatele";

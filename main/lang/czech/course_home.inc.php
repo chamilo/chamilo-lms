@@ -1,27 +1,24 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
-*/
-$langActivate = "Uk·zat";
-$langDeactivate = "Skr˝t";
-$langInLnk  = "SkrytÈ n·stroje a odkazy";
+<?php
+$langActivate = "Uk√°zat";
+$langDeactivate = "Skr√Ωt";
+$langInLnk = "Skryt√© n√°stroje a odkazy";
 $langDelLk = "Opravdu chcete smazat tenhle odkaz?";
-$langCourseCreate  = "Vytvo&#345;it webovou str·nku kurzu";
-$langNameOfTheLink  = "JmÈno odkazu";
-$lang_main_categories_list                  = "Seznam hlavnÌch kategoriÌ";
-$langCourseAdminOnly = "Jen pro u&#269;itele";
-$PlatformAdminOnly = "Jen pro platformovÈ Administr·tory";
-$langCombinedCourse = "Kombinovan˝ kurz";
-$ToolIsNowVisible = "N·stroj je nynÌ viditeln˝.";
-$ToolIsNowHidden = "N·stroj je nynÌ neviditeln˝.";
-$EditLink = "Editovat odkaz";
-$Blog_management = "Administrace Blog&#367;";
-$Forum = "FÛra";
+$langCourseCreate = "Vytvo≈ôit webovou str√°nku kurzu";
+$langNameOfTheLink = "Jm√©no odkazu";
+$lang_main_categories_list = "Seznam hlavn√≠ch kategori√≠";
+$langCourseAdminOnly = "Jen pro uƒçitele";
+$PlatformAdminOnly = "Jen pro platformov√© Administr√°tory";
+$langCombinedCourse = "Kombinovan√Ω kurz";
+$ToolIsNowVisible = "N√°stroj je nyn√≠ viditeln√Ω.";
+$ToolIsNowHidden = "N√°stroj je nyn√≠ neviditeln√Ω.";
+$EditLink = "Upravit odkaz";
+$Blog_management = "Administrace Blog≈Ø";
+$Forum = "F√≥ra";
 $Course_maintenance = "Spravovat kurz";
-$TOOL_SURVEY = "Pr&#367;zkum";
-$GreyIcons = "Sada n·stroj&#367;";
+$TOOL_SURVEY = "Pr≈Øzkum";
+$GreyIcons = "Sada n√°stroj≈Ø";
 $Interaction = "Interakce";
-$Authoring = "Auto&#345;i";
+$Authoring = "Auto≈ôi";
 $Administration = "Administrace";
-$IntroductionTextUpdated = "⁄vodnÌ text aktualizov·n";
-$IntroductionTextDeleted = "⁄vodnÌ text smaz·n";
-?>
+$IntroductionTextUpdated = "√övodn√≠ text aktualizov√°n";
+$IntroductionTextDeleted = "√övodn√≠ text smaz√°n";

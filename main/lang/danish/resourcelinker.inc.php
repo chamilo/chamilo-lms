@@ -1,7 +1,4 @@
 <?php
-/*
-for more information: see languages.txt in the lang folder.
-*/
 $ResourceAdded = "Ressourcen er tilføjet. Du kan vælge at vende tilbage til læringsstien eller tilføje flere ressourcer.";
 $LearningPath = "Læringssti";
 $LevelUp = "Et niveau op";
@@ -40,20 +37,19 @@ $StepDeleted1 = "Dette";
 $StepDeleted2 = "object blev slettet i det værktøj.";
 $Modify = "modificer";
 $Chapter = "Kapitel";
-$NoAgendaItems = "Der er ingen kalenderarrangementer";
-$AgendaAdd = "Tilføj et arrangement";
-$UserGroupFilter = "Filtrer grupper";
+$NoAgendaItems = "Der er ingen aftaler";
+$AgendaAdd = "Tilføj ny kalenderaftale";
+$UserGroupFilter = "Filtrer på grupper/brugere";
 $AgendaSortChronologicallyUp = "Sorter kalenderen efter mest aktuelle arrangementer (seneste først)";
-$ShowCurrent = "Vis nuværende kalenderarrangementer";
-$ModifyCalendarItem = "Rediger arrangement";
-$ItemTitle = "Titel";
+$ShowCurrent = "Vis kalenderaftaler for indeværende måned";
+$ModifyCalendarItem = "Rediger aftale";
+$ItemTitle = "Titel på aftale";
 $Detail = "Detaljer";
-$EditSuccess = "Redigering gemt korrekt";
-$AddCalendarItem = "Tilføj arrangement";
+$EditSuccess = "Aftalen er blevet ændret";
+$AddCalendarItem = "Tilføj ny aftale";
 $AddAnn = "Tilføj meddelelse";
 $ForumAddNewTopic = "Forum: Tilføj nyt emne";
 $ForumEditTopic = "Forum: Rediger emne";
 $ExerciseAnswers = "Øvelse: Svar";
 $ForumReply = "Forum: Svar";
 $AgendaSortChronologicallyDown = "Sorter kalenderen kronologisk";
-?>

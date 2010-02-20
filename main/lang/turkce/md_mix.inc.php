@@ -1,18 +1,15 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
-*/
-$langTool = "Metadata";
-$langClickKw = "Se�mek veya iptal etmek i�in dallardaki bir kelimenin �zerine t&#305;klay&#305;n";
-$langKwHelp = "<br/> Click \'+\' button to open, \'-\' button to close, \'++\' button to open all, \'--\' button to close all.<br/> <br/> Clear all selected keywords by closing the tree and opening it again with the \'+\' button.<br/> Alt-click \'+\' re-selects the previously selected keywords.<br/> <br/> Alt-click keyword negates the keyword.<br/>";
-$langAdvanced = "Geli&#351;mi&#351;";
-$langSearch = "Ara&#351;t&#305;rma";
-$langSearchCrit = "a�&#305;klay&#305;c&#305; kelimeler i�in a&#351;a&#287;&#305;daki alan&#305; kullan&#305;n, her sat&#305;ra bir kelime !";
-$langNoKeywords = "Bu ders i�in anahtar kelime yok";
-$langKwCacheProblem = "Anahtar kelime �n belle&#287;i a�&#305;lam&#305;yor.";
-$langCourseKwds = "ders anahtar kelimeleri";
-$langKwdsInMD = "MD i�inde kullan&#305;lan anahtar kelimeler";
-$langKwdRefs = "anahtar kelime referanslar&#305;";
+<?php
+$langTool = "Belge Metadata";
+$langClickKw = "Seçmek veya seçimi iptal için bir anahtar kelimeye tıklayın";
+$langKwHelp = "<br/> Açmak için  '+' , kapamak için '-' , hepsini açmak için '++' , hepsini kapatmak için '--' düğmesine tıklayın.<br/> <br/> Clear all selected keywords by closing the tree and opening it again with the '+' button.<br/> Alt-click '+' searches the original keywords in the tree.<br/> <br/> Alt-click keyword selects a keyword without broader terms or deselects a keyword with broader terms.<br/> <br/> If you change the description language, do not add keywords at the same time.<br/> <br/> ";
+$langAdvanced = "Gelişmiş";
+$langSearch = "Araştır";
+$langSearchCrit = "Her satıra bir kelime!";
+$langNoKeywords = "Bu ders için anahtar kelime yok";
+$langKwCacheProblem = "Anahtar kelime ön belleği açılamıyor.";
+$langCourseKwds = "Bu belge ders anahtar kelimeleri içeriyor";
+$langKwdsInMD = "MD içinde kullanılan anahtar kelimeler";
+$langKwdRefs = "anahtar kelime referansları";
 $langNonCourseKwds = "Derse ait olmayan anahtar kelimeler";
-$langKwdsUse = "Ders anahtar kelimeleri (koyu = kullan&#305;lm&#305;yor)";
-$langTotalMDEs = "MD giri&#351;lerinin toplam say&#305;s&#305;:";
-?>
+$langKwdsUse = "Ders anahtar kelimeleri (koyu = kullanılmıyor)";
+$langTotalMDEs = "MD giriş bağlantılarının Toplam Sayısı:";

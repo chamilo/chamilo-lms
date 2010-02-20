@@ -1,7 +1,4 @@
 <?php
-/*
-for more information: see languages.txt in the lang folder.
-*/
 $GeneralDescription = "Descrição Geral";
 $GeneralDescriptionQuestions = "Qual é o lugar do curso no programa? Existem pré-requisitos? Como o curso é ligado a outros cursos?";
 $GeneralDescriptionInformation = "Descreva o curso (número de horas, código oficial, local onde acontecerá...) e o nome conhecido, primeiro do professor (, o escritório, Tel., E-mail...).";
@@ -23,4 +20,3 @@ $HumanAndTechnicalResourcesInformation = "Breve descrição da identidade dos re
 $Assessment = "Avaliação";
 $AssessmentQuestions = "Como os usuários serão avaliados? Existem estratégias a serem desenvolvidas para dominar o tópico?";
 $AssessmentInformation = "Exemplo das questões de prova. Critério de sucesso. Dicas e truques.";
-?>

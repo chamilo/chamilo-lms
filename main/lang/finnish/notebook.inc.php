@@ -1,18 +1,15 @@
 <?php
-/*
-for more information: see languages.txt in the lang folder.
-*/
 $NewNote = "Uusi muistiinpano";
 $Note = "Muistiinpano";
 $NoteDeleted = "Muistiinpano poistettu";
 $NoteUpdated = "Muistiinpano päivitetty";
 $NoteCreated = "Muistiinpano tehty";
 $YouMustWriteANote = "Kirjoita muistiinpano";
-$SaveNote = "Tallenna muistiinpano";
+$SaveNote = "Tallenna muistiinpano ";
 $WriteYourNoteHere = "Klikkaa kirjoittaaksesi uuden muistiinpanon";
 $SearchByTitle = "Etsi otsikolla";
 $WriteTheTitleHere = "Kirjoita otsikko tähän";
-$UpdateDate = "Muokattu viimeksi";
+$UpdateDate = "Muokkaus päivä";
 $NoteAddNew = "Lisää uusi muistiinpano";
 $OrderByCreationDate = "Järjestä luontipäivän mukaan";
 $OrderByModificationDate = "Järjestä muokkauspäivän mukaan";
@@ -22,14 +19,3 @@ $NoteComment = "Muistiinpanon yksityiskohdat";
 $NoteAdded = "Muistiinpano lisätty";
 $NoteConfirmDelete = "Haluatko varmasti poistaa tämän muistiinpanon?";
 $AddNote = "Lisää muistiinpano";
-$ModifyNote = "";
-$BackToNoteList = "";
-$NotebookManagement = "";
-$BackToNotesList = "";
-$NotesSortedByTitleAsc = "";
-$NotesSortedByTitleDESC = "";
-$NotesSortedByUpdateDateAsc = "";
-$NotesSortedByUpdateDateDESC = "";
-$NotesSortedByCreationDateAsc = "";
-$NotesSortedByCreationDateDESC = "";
-?>

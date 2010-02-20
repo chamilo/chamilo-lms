@@ -1,18 +1,15 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
-*/
+<?php
 $langTool = "Metadata";
-$langClickKw = "Pro zvolení nebo zrušení volby klikn&#283;te na klí&#269;ové slovo v stromu.";
-$langKwHelp = "<br/> Klikn&#283;te na \'+\' tla&#269;ítko pro otev&#345;ení, \'-\' tla&#269;ítko pro zav&#345;ení, \'++\' tla&#269;ítko pro otev&#345;ení všeho, \'--\' tla&#269;ítko pro zav&#345;ení všeho.<br/> <br/> Pro odzna&#269;ení všech vybranıch klí&#269;ovıch slov zav&#345;ete strom a op&#283;t jej otev&#345;te pomocí \'+\' tla&#269;ítka.<br/> Alt-klik \'+\' pro op&#283;tovné vybrání posledn&#283; vybranıch klí&#269;ovıch slov.<br/> <br/> Alt-klik na klí&#269;ové slovo neguje toto slovo.<br/>";
-$langAdvanced = "Pokro&#269;ilé";
+$langClickKw = "Pro zvolenÃ­ nebo zruÅ¡enÃ­ volby kliknÄ›te na klÃ­ÄovÃ© slovo v stromu.";
+$langKwHelp = "<br/> KliknÄ›te na '+' tlaÄÃ­tko pro otevÅ™enÃ­, '-' tlaÄÃ­tko pro zavÅ™enÃ­, '++' tlaÄÃ­tko pro otevÅ™enÃ­ vÅ¡eho, '--' tlaÄÃ­tko pro zavÅ™enÃ­ vÅ¡eho.<br/> <br/> Pro odznaÄenÃ­ vÅ¡ech vybranÃ½ch klÃ­ÄovÃ½ch slov zavÅ™ete strom a opÄ›t jej otevÅ™te pomocÃ­ '+' tlaÄÃ­tka.<br/> Alt-klik '+' pro opÄ›tovnÃ© vybrÃ¡nÃ­ poslednÄ› vybranÃ½ch klÃ­ÄovÃ½ch slov.<br/> <br/> Alt-klik na klÃ­ÄovÃ© slovo neguje toto slovo.<br/>";
+$langAdvanced = "PokroÄilÃ©";
 $langSearch = "Vyhledat";
-$langSearchCrit = "Pouijte spodní oblast pro popis slov, jedno slovo na &#345;ádek!";
-$langNoKeywords = "Tento kurz nemá klí&#269;ové slová";
-$langKwCacheProblem = "Zásoba klí&#269;ovıch slov nem&#367;e bıt otev&#345;ena";
-$langCourseKwds = "klí&#269;ová slova kurzu";
-$langKwdsInMD = "klí&#269;ová slova pouita v MD(metadata)";
-$langKwdRefs = "reference dle klí&#269;ovıch slov";
-$langNonCourseKwds = "Klí&#269;ové slová nepat&#345;ící kurzu";
-$langKwdsUse = "Klí&#269;ové slová (tu&#269;né = nepouité)";
-$langTotalMDEs = "Celkovı po&#269;et zápis&#367; do MD:";
-?>
+$langSearchCrit = "PouÅ¾ijte spodnÃ­ oblast pro popis slov, jedno slovo na Å™Ã¡dek!";
+$langNoKeywords = "Tento kurz nemÃ¡ klÃ­ÄovÃ© slovÃ¡";
+$langKwCacheProblem = "ZÃ¡soba klÃ­ÄovÃ½ch slov nemÅ¯Å¾e bÃ½t otevÅ™ena";
+$langCourseKwds = "klÃ­ÄovÃ¡ slova kurzu";
+$langKwdsInMD = "klÃ­ÄovÃ¡ slova pouÅ¾ita v MD(metadata)";
+$langKwdRefs = "reference dle klÃ­ÄovÃ½ch slov";
+$langNonCourseKwds = "KlÃ­ÄovÃ© slovÃ¡ nepatÅ™Ã­cÃ­ kurzu";
+$langKwdsUse = "KlÃ­ÄovÃ© slovÃ¡ (tuÄnÃ© = nepouÅ¾itÃ©)";
+$langTotalMDEs = "CelkovÃ½ poÄet zÃ¡pisÅ¯ do MD:";

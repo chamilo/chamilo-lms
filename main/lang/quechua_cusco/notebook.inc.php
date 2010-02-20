@@ -1,7 +1,4 @@
 <?php
-/*
-for more information: see languages.txt in the lang folder.
-*/
 $NewNote = "Musuq willay";
 $Note = "Willay";
 $NoteDeleted = "Willay pichachisqa";
@@ -12,24 +9,16 @@ $SaveNote = "Allchay willayta";
 $WriteYourNoteHere = "Qelqay willaykita kaypi";
 $SearchByTitle = "Maskhay suti sutichayninmanta";
 $WriteTheTitleHere = "Qelqay sutichayninta kaypi";
-$UpdateDate = "Kunanyachisqamanta p\'unchay";
+$UpdateDate = "Qepa t'jrapachisqan";
 $NoteAddNew = "Yapay willayta";
-$OrderByCreationDate = "Allichay sapa p\'unchay kamachisqamanta";
-$OrderByModificationDate = "Allichay sapa p\'unchay t\'ijrachisqamanta";
+$OrderByCreationDate = "Allichay sapa p'unchay kamachisqamanta";
+$OrderByModificationDate = "Allichay sapa p'unchay t'ijrachisqamanta";
 $OrderByTitle = "Allichay sapa sutichayninmanta";
 $NoteTitle = "Willaymanta sutinchaynin";
 $NoteComment = "Willaymanta ima rimaykuna";
 $NoteAdded = "Willay yapasqa";
-$NoteConfirmDelete = "Cheqaychu pichayta munanki willayta?";
+$NoteConfirmDelete = "Cheqaychu pichayta munanki willayta? ";
 $AddNote = "Yapay willayta";
-$ModifyNote = "T\'ijrapay willayta";
+$ModifyNote = "T'ijrapay willayta";
 $BackToNoteList = "Regresar a la lista de anotaciones";
 $NotebookManagement = "Administración de nota personal";
-$BackToNotesList = "";
-$NotesSortedByTitleAsc = "";
-$NotesSortedByTitleDESC = "";
-$NotesSortedByUpdateDateAsc = "";
-$NotesSortedByUpdateDateDESC = "";
-$NotesSortedByCreationDateAsc = "";
-$NotesSortedByCreationDateDESC = "";
-?>

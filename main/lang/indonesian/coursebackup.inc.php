@@ -1,7 +1,4 @@
 <?php
-/*
-for more information: see languages.txt in the lang folder.
-*/
 $langSelectOptionForBackup = "Silahkan pilih opsi backup.";
 $langLetMeSelectItems = "Biarkan saya memilih komponen mata kuliah";
 $langCreateFullBackup = "Buat backup lengkap mata kuliah ini";
@@ -22,7 +19,7 @@ $langCopyFinished = "Pengcopy-an selesai";
 $langFullRecycle = "Full recycle";
 $langRecycleCourse = "Recycle mata kuliah";
 $langRecycleFinished = "Recycle selesai";
-$langRecycleWarning = "Peringatan: dengan menggunakan tool ini, anda akan menghapus beberapa bagian mata kuliah anda.  Proses ini tidak dapat dibatalkan (Undo).  Kami sarankan anda untuk membuat <a href=\\"create_backup.php\\">backup</a> sebelum menggunakan tool rycycle ini.";
+$langRecycleWarning = "Peringatan: dengan menggunakan tool ini, anda akan menghapus beberapa bagian mata kuliah anda.  Proses ini tidak dapat dibatalkan (Undo).  Kami sarankan anda untuk membuat <a href=\"create_backup.php\">backup</a> sebelum menggunakan tool rycycle ini.";
 $langSameFilename = "Apa yang harus dilakukan terhadap file yang diimport yang memiliki nama sama dengan existing files?";
 $langSameFilenameSkip = "Lompati file dengan nama sama";
 $langSameFilenameRename = "Ganti nama file (misal  file.pdf menjadi file_1.pdf)";
@@ -43,9 +40,3 @@ $langBackup = "Backup";
 $langImportBackupInfo = "Import backup. Anda dapat meng-upload file backup dari drive local anda atau menggunakan file backup yang tersedia di server.";
 $langCreateBackupInfo = "Buat backup mata kuliah ini. Anda dapat memilih isi mata kuliah untuk dimasukkan dalam file backup.";
 $ToolIntro = "Tool Pengantar";
-$UploadError = "";
-$DocumentsWillBeAddedToo = "";
-$ToExportLearnpathWithQuizYouHaveToSelectQuiz = "";
-$ArchivesDirectoryNotWriteableContactAdmin = "";
-$DestinationCourse = "";
-?>

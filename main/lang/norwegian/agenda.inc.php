@@ -1,7 +1,4 @@
 <?php
-/*
-for more information: see languages.txt in the lang folder.
-*/
 $AgendaAdd = "Legg til ny oppføring i kalender";
 $ShowAllEvents = "Vis alle oppføringer i kalender";
 $ShowCurrent = "Vis oppføringer i kalender for inneværende måned";
@@ -50,29 +47,6 @@ $ViewPersonalItem = "Vis personlige oppføringer";
 $UserGroupFilter = "Filtrer på grupper / brukere";
 $ShowAll = "Vis alle";
 $Print = "Utskrift";
-$MyTextHere = "";
 $CopiedAsAnnouncement = "Kopiert som meddelelse";
 $NewAnnouncement = "Ny meddelelse";
 $AddAnnouncement = "Legg til som meddelelse";
-$UpcomingEvent = "";
-$RepeatedEvent = "";
-$RepeatType = "";
-$RepeatDaily = "";
-$RepeatWeekly = "";
-$RepeatMonthlyByDate = "";
-$RepeatMonthlyByDay = "";
-$RepeatMonthlyByDayR = "";
-$RepeatYearly = "";
-$RepeatEnd = "";
-$RepeatedEventViewOriginalEvent = "";
-$ICalFileImport = "";
-$AllUsersOfThePlatform = "";
-$GlobalEvent = "";
-$ModifyEvent = "";
-$EndDateCannotBeBeforeTheStartDate = "";
-$AgendaSortChronologicallyUp = "";
-$AgendaSortChronologicallyDown = "";
-$ItemForUserSelection = "";
-$IsNotiCalFormatFile = "";
-$RepeatEvent = "";
-?>

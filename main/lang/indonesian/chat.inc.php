@@ -1,7 +1,4 @@
 <?php
-/*
-for more information: see languages.txt in the lang folder.
-*/
 $langOnlineConference = "Konfrensi";
 $langWash = "Wash";
 $langReset = "Reset";
@@ -24,7 +21,7 @@ $langClearList = "Hapus daftar";
 $langWhiteBoard = "Papan tulis";
 $langTextEditorDefault = "<h2>Word processor</h2>Cut dan paste di sini dari  Ms-Word® kemudian edit.  Peserta dapat melihat modifikasi yang anda lakukan secara live.";
 $langStreaming = "Streaming";
-$langStreamURL = "URL Stream";
+$langStreamURL = "URL Stream ";
 $langStreamType = "Type Stream";
 $langLinkName = "Nama Link";
 $langLinkURL = "URL Link";
@@ -34,30 +31,3 @@ $langChat_reset_by = "reset chat";
 $OrFile = "Or file";
 $langCallSent = "Panggilan Chat  telah dikirim. Menunggu jawaban patner anda.";
 $langChatDenied = "Panggilan anda ditolak patner anda.";
-$Send = "";
-$Connected = "";
-$Think = "";
-$BigGrin = "";
-$Amazing = "";
-$Confused = "";
-$Cool = "";
-$Surprised = "";
-$Hand = "";
-$Wink = "";
-$Neutral = "";
-$Angry = "";
-$Avid = "";
-$Redface = "";
-$Sad = "";
-$Silence = "";
-$Silenced = "";
-$Smile = "";
-$Exclamation = "";
-$Arrow = "";
-$Question = "";
-$Idea = "";
-$AskPermissionSpeak = "";
-$GiveTheFloorTo = "";
-$Pause = "";
-$Stop = "";
-?>

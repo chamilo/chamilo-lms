@@ -1,7 +1,4 @@
 <?php
-/*
-for more information: see languages.txt in the lang folder.
-*/
 $MyTasks = "Mina uppgifter";
 $FavoriteBlogs = "Mina favorit bloggar";
 $Navigation = "Navigation";
@@ -53,7 +50,7 @@ $ReadMore = "Läs mer...";
 $DeleteThisArticle = "Ta bort blogginlägget";
 $EditThisPost = "Ändra denna post";
 $DeleteThisComment = "Radera denna kommentar";
-$NoArticles = "Just nu finns det inga inlägg i den här bloggen. Om du är ägare av bloggen, klicka på länken \'nytt inlägg\' för att skriva ett blogginlägg";
+$NoArticles = "Just nu finns det inga inlägg i den här bloggen. Om du är ägare av bloggen, klicka på länken 'nytt inlägg' för att skriva ett blogginlägg";
 $NoTasks = "Inga uppgifter";
 $Rating = "Gradering";
 $RateThis = "Gradera inlägget";
@@ -64,7 +61,6 @@ $InBlog = "I bloggen";
 $ViewPostsOfThisDay = "Visa dagens inlägg";
 $PostsOf = "Inlägg för";
 $NoArticleMatches = "Inga inlägg hittades. Kontrollera stavning eller gör annan sökning.";
-$SaveProject = "";
 $langTask1 = "Uppgift 1";
 $langTask2 = "Uppgift 2";
 $langTask3 = "Uppgift 3";
@@ -83,23 +79,3 @@ $AddBlog = "Skapa ny blogg";
 $EditBlog = "Ändra rubrik eller underrubrik";
 $DeleteBlog = "Ta bort den här bloggen";
 $Shared = "Delad";
-$PermissionGrantedByGroupOrRole = "";
-$Reader = "";
-$SeeBlog = "";
-$BlogDeleted = "";
-$BlogEdited = "";
-$BlogStored = "";
-$CommentCreated = "";
-$BlogAdded = "";
-$TaskCreated = "";
-$TaskEdited = "";
-$TaskAssigned = "";
-$AssignedTaskEdited = "";
-$UserRegistered = "";
-$TaskDeleted = "";
-$TaskAssignmentDeleted = "";
-$CommentDeleted = "";
-$RatingAdded = "";
-$BlogPosts = "";
-$BlogComments = "";
-?>

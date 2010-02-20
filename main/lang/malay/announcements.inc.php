@@ -1,7 +1,4 @@
 <?php
-/*
-for more information: see languages.txt in the lang folder.
-*/
 $Announcement = "Pengumuman";
 $langAnnEmpty = "Senarai pengumuman telah dipadam";
 $AnnouncementModified = "Pengumuman telah diubahsuai";
@@ -18,42 +15,4 @@ $langOn = "Terdapat";
 $langRegUser = "Pelajar berdaftar untuk subjek ini";
 $langUnvalid = "tidak sah/tiada alamat email";
 $langModifAnn = "Ubahsuai pengumuman ini";
-$langModify = "";
-$langDelete = "";
-$langTitle = "";
-$langHelp = "";
-$langOk = "";
-$langAddIntro = "";
-$langBackList = "";
-$langSelMess = "";
 $EmailTitle = "Tajuk Pengumuman";
-$langUserlist = "";
-$langSelectedUsers = "";
-$langSubmit = "";
-$langPleaseEnterMessage = "";
-$langPleaseSelectUsers = "";
-$Teachersubject = "";
-$langMessages = "";
-$langMessageToSelectedUsers = "";
-$langIntroText = "";
-$langDown = "";
-$langMsgSent = "";
-$langSelUser = "";
-$langMessageToSelectedGroups = "";
-$langSelectedGroups = "";
-$langMsg = "";
-$langYes = "";
-$MsgText = "";
-$AnnouncementDeletedAll = "";
-$AnnouncementMoved = "";
-$NoAnnouncements = "";
-$SelectEverybody = "";
-$SelectedUsersGroups = "";
-$LearnerMessage = "";
-$TitleIsRequired = "";
-$AnnounceSentByEmail = "";
-$AnnounceSentToUserSelection = "";
-$SendAnnouncement = "";
-$ModifyAnnouncement = "";
-$ButtonPublishAnnouncement = "";
-?>

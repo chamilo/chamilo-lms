@@ -1,7 +1,4 @@
 <?php
-/*
-for more information: see languages.txt in the lang folder.
-*/
 $MyTasks = "Sarcinile mele";
 $FavoriteBlogs = "Blogurile mele favorite";
 $Navigation = "Navigare";
@@ -53,7 +50,7 @@ $ReadMore = "Citeste mai multe...";
 $DeleteThisArticle = "Sterge acest articol";
 $EditThisPost = "Editeaza acest post";
 $DeleteThisComment = "Sterge acest comentariu";
-$NoArticles = "In acest moment nu exista articole in acest blog. Daca sunteti autorul acestui blog, click pe legatura \'articol nou\' pentru a scrie un nou articol.";
+$NoArticles = "In acest moment nu exista articole in acest blog. Daca sunteti autorul acestui blog, click pe legatura 'articol nou' pentru a scrie un nou articol.";
 $NoTasks = "Nu exista sarcini";
 $Rating = "Rating";
 $RateThis = "Noteaza acest articol";
@@ -100,6 +97,3 @@ $TaskDeleted = "Sarcina a fost stearsa";
 $TaskAssignmentDeleted = "Sarcina este eliminata.";
 $CommentDeleted = "Remarca a fost stearsa.";
 $RatingAdded = "Scorul a fost adaugat.";
-$BlogPosts = "";
-$BlogComments = "";
-?>

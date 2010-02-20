@@ -1,7 +1,4 @@
 <?php
-/*
-for more information: see languages.txt in the lang folder.
-*/
 $lang_new_item = "новый пункт добавлен";
 $lang_title_notification = "С момента Вашего последнего визита";
 $lang_update_agenda = "существующие пункты повестки дня обновлены";
@@ -18,19 +15,3 @@ $lang_new_dropbox_file = "новый файл получен";
 $lang_update_dropbox_file = "файл в Вашем ящике для сообщений обновлен";
 $ForumCategoryAdded = "Раздел форума добавлен";
 $LearnpathAdded = "Учебный план добавлен";
-$GlossaryAdded = "";
-$QuizQuestionAdded = "";
-$QuizQuestionUpdated = "";
-$QuizQuestionDeleted = "";
-$QuizUpdated = "";
-$QuizAdded = "";
-$QuizDeleted = "";
-$DocumentInvisible = "";
-$DocumentVisible = "";
-$CourseDescriptionAdded = "";
-$WikiAdded = "";
-$SurveyAdded = "";
-$NotebookAdded = "";
-$NotebookUpdated = "";
-$NotebookDeleted = "";
-?>

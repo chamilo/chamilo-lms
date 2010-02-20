@@ -1,26 +1,23 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
-*/
-$ReservationPeriodToSmall = "Rezervasyon süresi çok k&#305;sa";
+<?php
+$ReservationPeriodToSmall = "Rezervasyon sÃ¼resi Ã§ok kÄ±sa";
 $BookingSystem = "Rezervasyon Sistemi";
-$BookingPeriodList = "Rezervasy&#305;n süreleri listesi";
+$BookingPeriodList = "RezervasyÄ±n sÃ¼releri listesi";
 $BookingListView = "Rezervasyon listesi";
-$BookingCalendarView = "Rezervasyon takvim görüntüsü";
-$BookingPeriods = "&#304;&#351; Program&#305;";
+$BookingCalendarView = "Rezervasyon takvim gÃ¶rÃ¼ntÃ¼sÃ¼";
+$BookingPeriods = "Ä°ÅŸ ProgramÄ±";
 $ResourceList = "Kaynak Listesi";
-$GoToCalendarView = "Takvim görünümü";
-$GoToListView = "Liste görüntüsü";
-$ManageResources = "Kaynak yönetimi";
-$EditResource = "Kaynak düzenle";
+$GoToCalendarView = "Takvim gÃ¶rÃ¼nÃ¼mÃ¼";
+$GoToListView = "Liste gÃ¶rÃ¼ntÃ¼sÃ¼";
+$ManageResources = "Kaynak yÃ¶netimi";
+$EditResource = "Kaynak dÃ¼zenle";
 $BookIt = "Bir kaynak rezerve et";
 $GoTo = "Git";
-$NoTimePicker = "Zaman seçici yok";
-$TimePicker = "Zaman seçici";
-$ManageBookingPeriods = "Rezervasyon sürelerini yönet";
-$BookingPeriodToSmall = "Rezervasyon süresi çok k&#305;sa";
-$BookingPeriodToBig = "Rezervasyon süresi çok büyük";
-$DeleteSelectedBookingPeriod = "Seçili rezervasyon sürelerini sil";
-$EditNewBookingPeriod = "Rezervasyon süresini düzenle";
+$NoTimePicker = "Zaman seÃ§ici yok";
+$TimePicker = "Zaman seÃ§ici";
+$ManageBookingPeriods = "Rezervasyon sÃ¼relerini yÃ¶net";
+$BookingPeriodToSmall = "Rezervasyon sÃ¼resi Ã§ok kÄ±sa";
+$BookingPeriodToBig = "Rezervasyon sÃ¼resi Ã§ok bÃ¼yÃ¼k";
+$DeleteSelectedBookingPeriod = "SeÃ§ili rezervasyon sÃ¼relerini sil";
+$EditNewBookingPeriod = "Rezervasyon sÃ¼resini dÃ¼zenle";
 $BookingPeriodAdded = "Rezervasyon eklendi";
 $BookingPeriodDeleted = "Rezervasyon silindi";
-?>

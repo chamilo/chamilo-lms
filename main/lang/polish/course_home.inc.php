@@ -1,32 +1,24 @@
 <?php
-/*
-for more information: see languages.txt in the lang folder.
-*/
 $langActivate = "aktywuj";
 $langDeactivate = "deaktywuj";
-$langInLnk = "Nieaktywne &#322;&#261;cza";
-$langDelLk = "Czy rzeczywi&#347;cie chcesz usun&#261;&#263; ten odno&#347;nik?";
+$langInLnk = "Nieaktywne łącza";
+$langDelLk = "Czy rzeczywiście chcesz usunąć ten odnośnik?";
 $langCourseCreate = "Utwórz nowy kurs";
-$langNameOfTheLink = "Nazwa odno&#347;nika";
-$lang_main_categories_list = "Lista Wydzia³ów/kategorii";
-$langCourseAdminOnly = "Tylko dla prowadz&#261;cych";
+$langNameOfTheLink = "Nazwa odnośnika";
+$lang_main_categories_list = "Lista Wydziałów/kategorii";
+$langCourseAdminOnly = "Tylko dla prowadzących";
 $PlatformAdminOnly = "Tylko dla Administratorów platformy";
-$langCombinedCourse = "Kurs z&#322;o&#380;ony";
-$ToolIsNowVisible = "To narz&#281;dzie jest widoczne";
-$ToolIsNowHidden = "To narz&#281;dzie jest niewodoczne";
-$EditLink = "Edycja hiper&#322;&#261;cza";
-$Blog_management = "Zarz&#261;dzanie blogami";
+$langCombinedCourse = "Kurs złożony";
+$ToolIsNowVisible = "To narzędzie jest widoczne";
+$ToolIsNowHidden = "To narzędzie jest niewodoczne";
+$EditLink = "Edycja hiperłącza";
+$Blog_management = "Zarządzanie blogami";
 $Forum = "Fora";
-$Course_maintenance = "Zarz&#261;dzanie kursem";
+$Course_maintenance = "Zarządzanie kursem";
 $TOOL_SURVEY = "Ankiety";
-$GreyIcons = "Narz&#281;dzia";
-$Interaction = "Tylko dla prowadz&#261;cych";
-$Authoring = "Dost&#281;pne";
+$GreyIcons = "Narzędzia";
+$Interaction = "Tylko dla prowadzących";
+$Authoring = "Dostępne";
 $Administration = "Administracyjne";
-$IntroductionTextUpdated = "Tekst wprowadzaj&#261;cy zosta&#322; zaktualizowany";
-$IntroductionTextDeleted = "Tekst wprowadzaj&#261;cy usuni&#281;ty";
-$SessionIdentifier = "";
-$SessionName = "";
-$SessionCategory = "";
-$SessionData = "";
-?>
+$IntroductionTextUpdated = "Tekst wprowadzający został zaktualizowany";
+$IntroductionTextDeleted = "Tekst wprowadzający usunięty";

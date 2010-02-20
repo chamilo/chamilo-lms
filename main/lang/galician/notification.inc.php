@@ -1,7 +1,4 @@
 <?php
-/*
-for more information: see languages.txt in the lang folder.
-*/
 $lang_new_item = "novo evento engadido";
 $lang_title_notification = "desde a túa última visita";
 $lang_update_agenda = "evento da axenda actualizado";
@@ -16,21 +13,6 @@ $lang_new_forum_topic = "novo tema engadido";
 $lang_new_groupforum_topic = "novo tema engadido ó foro do grupo";
 $lang_new_dropbox_file = "recibiuse un novo ficheiro";
 $lang_update_dropbox_file = "Actualizouse un ficheiro do teu buzón de tarefas";
-$ForumCategoryAdded = "Engadiuse unha categoría ao foro";
+$ForumCategoryAdded = "Engadiuse a categoría de foro";
 $LearnpathAdded = "Itinerario de aprendizaxe engadido";
 $GlossaryAdded = "Novo termo engadido no Glosario";
-$QuizQuestionAdded = "";
-$QuizQuestionUpdated = "";
-$QuizQuestionDeleted = "";
-$QuizUpdated = "";
-$QuizAdded = "";
-$QuizDeleted = "";
-$DocumentInvisible = "";
-$DocumentVisible = "";
-$CourseDescriptionAdded = "";
-$WikiAdded = "";
-$SurveyAdded = "";
-$NotebookAdded = "";
-$NotebookUpdated = "";
-$NotebookDeleted = "";
-?>

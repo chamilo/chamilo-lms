@@ -1,7 +1,4 @@
 <?php
-/*
-for more information: see languages.txt in the lang folder.
-*/
 $lang_already_enrolled = "Yá ta matriculáu";
 $lang_my_personnal_course_list = "El mio llistáu personal de cursos";
 $lang_course_enrollment = "Usuariu del cursu";
@@ -16,16 +13,16 @@ $lang_select_course_among_categories = "Escoyer el cursu ente les categoríes";
 $lang_select_course_in = "Escoyer un cursu en";
 $lang_select_course_in_search_results = "Escoyer un cursu ente los resultaos de la busca";
 $lang_unsubscribe = "Anular matrícula";
-$lang_back_to_my_home_page = "Tornar a la mio páxina d\'entamu";
+$lang_back_to_my_home_page = "Tornar a la mio páxina d'entamu";
 $lang_back_to_my_personnal_course_list = "Tornar al mio llistáu personal de cursos";
 $langTitular = "Titular";
-$langBackToListOfThisUser = "Tornar al llistáu d\'usuarios";
-$langAdministrationTools = "Ferramientes d\'alministración";
+$langBackToListOfThisUser = "Tornar al llistáu d'usuarios";
+$langAdministrationTools = "Ferramientes d'alministración";
 $lang_back_to_parent_category = "Tornar a la categoría superior";
 $lang_back_to_course_selection = "Tornar a seleición de cursu";
 $lang_up = "Tornar a la categoría superior";
 $langCatList = "Categoríes";
-$langCourseList = "Cursos";
+$langCourseList = "Llistáu de cursos";
 $Subscribe = "Matriculame";
 $AlreadySubscribed = "Yá ta matriculáu";
 $CodeMandatory = "Códigu obligatoriu";
@@ -42,17 +39,17 @@ $langHideAndSubscribeOpen = "Esondíu / Abiertu";
 $langShowAndSubscribeOpen = "Visible / Abiertu";
 $langShowAndSubscribeClosed = "Visible / Peslláu";
 $langAdminThisUser = "Tornar a esti usuariu";
-$langManage = "Xestión del campus";
+$langManage = "Alministación del Portal";
 $langEnrollToCourseSuccessful = "La so matrícula nel cursu completóse";
 $langSubCat = "Sub-categoríes";
 $langUnsubscribeNotAllowed = "Nesti cursu nun se permite que los usuarios anulen la so matrícula ellos mesmos.";
-$langCourseAdminUnsubscribeNotAllowed = "Usté ye l\'alministrador d\'esti cursu";
+$langCourseAdminUnsubscribeNotAllowed = "Usté ye l'alministrador d'esti cursu";
 $CourseManagement = "Xestionar los mios cursos";
 $SortMyCourses = "Ordenar los mios cursos";
 $SubscribeToCourse = "Matriculame nun cursu";
 $UnsubscribeFromCourse = "Anular la mio matricula nun cursu";
 $CreateCourseCategory = "Crear una categoría de cursos";
-$CourseCategoryAbout2bedeleted = "¿ Ta seguru de querer esborrar esta categoría de cursu ? Los cursos d\'esta categoría van apaecer nel llistáu ensin pertenecer a una categoría";
+$CourseCategoryAbout2bedeleted = "¿ Ta seguru de querer esborrar esta categoría de cursu ? Los cursos d'esta categoría van apaecer nel llistáu ensin pertenecer a una categoría";
 $CourseCategories = "Categoríes de cursos";
 $CoursesInCategory = "Cursos nesta categoría";
 $SearchCourse = "Buscar cursos";
@@ -68,7 +65,7 @@ $YouAreNowUnsubscribed = "Yá nun ta matriculáu nesti cursu";
 $ViewOpenCourses = "Ver los cursos abiertos";
 $ErrorContactPlatformAdmin = "Hubo un erru desconocíu. Por favor, contaute col alministrador de la plataforma";
 $CourseRegistrationCodeIncorrect = "El códigu del cursu nun ye válidu";
-$CourseRequiresPassword = "El cursu necesita d\'una seña";
+$CourseRequiresPassword = "El cursu necesita d'una seña";
 $SubmitRegistrationCode = "Unviar el códigu de rexistru";
 $CourseCategoryDeleted = "Esborróse la categoría";
 $CategorySortingDone = "Les categoríes ordenárense";
@@ -83,4 +80,3 @@ $Collapse = "Plegar";
 $CourseDetails = "Descripción del cursu";
 $GroupPendingInvitations = "Invitaciones pendientes de grupu";
 $Compose = "Redautar";
-?>

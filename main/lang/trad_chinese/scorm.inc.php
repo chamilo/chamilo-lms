@@ -1,7 +1,4 @@
 <?php
-/*
-for more information: see languages.txt in the lang folder.
-*/
 $langScormVersion = "版本";
 $langScormRestarted = "所有課程還沒有完全結束.";
 $langScormNoNext = "這是最後一節課.";
@@ -45,13 +42,10 @@ $Remote = "遙距";
 $FileToUpload = "上傳 SCORM 或 AICC 檔案";
 $ContentMaker = "課程來源";
 $ContentProximity = "課程位置";
-$UploadLocalFileFromGarbageDir = "從本地主目錄/廢物箱上傳檔案";
+$UploadLocalFileFromGarbageDir = "從本地主目錄/廢物箱上傳檔案 ";
 $ThisItemIsNotExportable = "目前這項目不與 scorm 相容，所以不能匯出。";
 $MoveCurrentChapter = "移動當前章節";
 $GenericScorm = "泛常網路學習系統(Generic Scorm)";
 $UnknownPackageFormat = "未能確認檔案包格式，請檢查其中有否包含錯誤。問題或因 ZIP 檔案屬性而引致，若不確定，請嘗試使用最簡單的 ZIP 壓縮設定。";
 $Attempt = "嘗試";
 $MoveTheCurrentForum = "移動當前討論區";
-$WarningWhenEditingScorm = "";
-$AdditionalProfileField = "";
-?>

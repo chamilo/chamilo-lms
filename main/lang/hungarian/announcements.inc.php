@@ -1,17 +1,14 @@
 <?php
-/*
-for more information: see languages.txt in the lang folder.
-*/
 $Announcement = "Hirdetmények";
 $langAnnEmpty = "A hirdetménylista kiürítve";
 $AnnouncementModified = "Hirdetmény megváltoztatva";
 $AnnouncementAdded = "Hirdetmény hozzáadva";
 $AnnouncementDeleted = "Hirdetmény törölve";
 $AnnouncementPublishedOn = "Közzétéve:";
-$AddAnnouncement = "Hirdetmény hozzáadása";
+$AddAnnouncement = "Hozzáadás felhívásként";
 $langContent = "Tartalom";
 $AnnouncementDeleteAll = "Hirdetménylista kiürítése";
-$professorMessage = "Kurzusfelelõs üzenete";
+$professorMessage = "Kurzusfelelős üzenete";
 $langEmailSent = " és elküldve e-mailben a regisztrált hallgatóknak";
 $EmailOption = "Ennek a hirdetménynek az elküldése e-mailben a a regisztrált hallgatóknak";
 $langOn = "Be";
@@ -23,7 +20,7 @@ $langDelete = "töröl";
 $langTitle = "Cím";
 $langHelp = "súgó";
 $langOk = "OK";
-$langAddIntro = "Bejelentkezési szöveg hozzáadása";
+$langAddIntro = "Bejelentkezési szöveg hozzáadása ";
 $langBackList = "Vissza a listához";
 $langSelMess = "Néhány felhasználó figyelmeztetése";
 $EmailTitle = "E levél tárgya";
@@ -32,7 +29,7 @@ $langSelectedUsers = "Kiválasztott felhasználók";
 $langSubmit = "Elküld";
 $langPleaseEnterMessage = "Be kell vezesse az üzenet szövegét.";
 $langPleaseSelectUsers = "Néhány felhasználót ki kell választania.";
-$Teachersubject = "Üzenet elküdve a diákjainak";
+$Teachersubject = "Üzenet elküdve a diákjainak ";
 $langMessages = "Üzenetek";
 $langMessageToSelectedUsers = "Üzenetek a kiválasztott felhasználóknak";
 $langIntroText = "Üzenet küldéséhez válasszon ki felhasználói csoportokat (elöl egy G jelöli) vagy egyéni felhasználókat a bal oldali listából.";
@@ -50,10 +47,9 @@ $NoAnnouncements = "Nincsenek hirdetrmények";
 $SelectEverybody = "Mindenkit kiválaszt";
 $SelectedUsersGroups = "kiválasztott felhasználói csoportok";
 $LearnerMessage = "Üzenet egy tanulótól";
-$TitleIsRequired = "A címet kötelez&#337; megadni";
+$TitleIsRequired = "A címet kötelező megadni";
 $AnnounceSentByEmail = "A hirdetmény e-mailben elküldve";
 $AnnounceSentToUserSelection = "A hirdetmény elküldve a kiválasztott felhasználóknak";
 $SendAnnouncement = "Felhívás elküldése";
 $ModifyAnnouncement = "Felhívás szerkesztése";
 $ButtonPublishAnnouncement = "Felhívás elküldése";
-?>

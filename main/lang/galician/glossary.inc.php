@@ -1,7 +1,4 @@
 <?php
-/*
-for more information: see languages.txt in the lang folder.
-*/
 $TermAddNew = "Engadir un termo";
 $TermName = "Termo";
 $TermDefinition = "Definición";
@@ -12,7 +9,7 @@ $TermAddButton = "Engadir este termo";
 $TermUpdateButton = "Actualizar termo";
 $TermEdit = "Editar termo";
 $TermDeleteAction = "Eliminar termo";
-$OrderBy = " 	Ordenar por";
+$OrderBy = "Ordenar por";
 $CreationDate = "Data de creación";
 $UpdateDate = "Última modificación";
 $PreSelectedOrder = "Ordenar por selección";
@@ -23,6 +20,3 @@ $TableView = "Ver como tabla";
 $GlossaryTermAlreadyExistsYouShouldEditIt = "Este termo do glosario xa existe, por favor cámbieo por outro nome";
 $GlossaryManagement = "Administración do glosario";
 $TermMoved = "Moveuse o termo";
-$ShowGlossaryInExtraToolsTitle = "Amosar os termos do glosario nas ferramentas:leccións(scorm) e exercicios.";
-$ShowGlossaryInExtraToolsComment = "Desde aquí vostede pode configurar como engadir os termos do glosario en ferramentas como leccións(scorm) e exercicios.";
-?>

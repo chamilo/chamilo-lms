@@ -1,7 +1,4 @@
 <?php
-/*
-for more information: see languages.txt in the lang folder.
-*/
 $lang_already_enrolled = "уже записан";
 $lang_my_personnal_course_list = "Мой личный список курсов";
 $lang_course_enrollment = "Курсы пользователя";
@@ -25,14 +22,10 @@ $lang_back_to_parent_category = "Вернуться к основному (на�
 $lang_back_to_course_selection = "Вернуться к выбору курса";
 $lang_up = "Вернуться к основному (начальному) разделу";
 $langCatList = "Разделы";
-$langCourseList = "Курсы";
+$langCourseList = "Список курса";
 $Subscribe = "Подписаться";
 $AlreadySubscribed = "Уже подписан";
-$CodeMandatory = "";
-$CourseCategoryMandatory = "";
-$TeacherMandatory = "";
 $CourseCategoryStored = "Разделы курса созданы";
-$langWithoutTimeLimits = "Без ограничения времени";
 $lang_back_to_main_category_list = "Вернуться к главному списку разделов";
 $langAdded = "Добавлено";
 $langDeleted = "Удалено";
@@ -46,7 +39,7 @@ $langManage = "Управление порталом";
 $langEnrollToCourseSuccessful = "Вы зарегистрированы на курс";
 $langSubCat = "подразделы";
 $langUnsubscribeNotAllowed = "Нельзя отменить подписку для этого курса";
-$langCourseAdminUnsubscribeNotAllowed = "Для этого курса Вы являетесь его  администратором";
+$langCourseAdminUnsubscribeNotAllowed = "Для этого курса Вы являетесь его  администратором ";
 $CourseManagement = "Управление курсами";
 $SortMyCourses = "Сортировать мои курсы";
 $SubscribeToCourse = "Подписаться на курсы";
@@ -66,6 +59,7 @@ $CourseSortingDone = "Сортировка курса выполнена";
 $ExistingCourseCategories = "Существующие разделы курса";
 $YouAreNowUnsubscribed = "Подписка на курс аннулирована";
 $ViewOpenCourses = "Просмотреть открытые курсы";
+$langWithoutTimeLimits = "Без ограничения времени";
 $ErrorContactPlatformAdmin = "Произошла неизвестная ошибка. Пожалуйста, свяжитесь с администратором платформы";
 $CourseRegistrationCodeIncorrect = "Код курса не верен";
 $CourseRequiresPassword = "Необходим пароль для доступа на курс";
@@ -73,14 +67,3 @@ $SubmitRegistrationCode = "Предложить регистрационный �
 $CourseCategoryDeleted = "Раздел курса удален";
 $CategorySortingDone = "Сортировка разделов выполнена";
 $CourseCategoryEditStored = "Разделы обновлены";
-$buttonCreateCourseCategory = "";
-$buttonSaveCategory = "";
-$buttonChangeCategory = "";
-$SessionName = "";
-$SessionCategory = "";
-$Expand = "";
-$Collapse = "";
-$CourseDetails = "";
-$GroupPendingInvitations = "";
-$Compose = "";
-?>

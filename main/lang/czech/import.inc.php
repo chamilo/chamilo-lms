@@ -1,15 +1,12 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
-*/
-$langPgTitle = "Název stránky";
-$langExplanation = "Stránka musí bıt ve formátu HTML (nap&#345;. \"moje_stranka.htm\"). Bude spojená s Domácí stránkou. Jestli chcete poslat dokumenty které nejsou ve formátu HTML(PDF, Word, Power Point, Video, atd.) pouijte <a href=../document/document.php>Nástroj dokument&#367;</a>";
-$langTooBig = "Nevybrali jste ádnı soubor pro nahrání, nebo je soubor p&#345;íliš velikı.";
-$langCouldNot = "Soubor nem&#367;e bıt nahrán.";
+<?php
+$langPgTitle = "NÃ¡zev strÃ¡nky";
+$langExplanation = "JednÃ­m kliknutÃ­m na OK vytvoÅ™Ã­te webstrÃ¡nku s FÃ³rem, Agendou, SprÃ¡vou dokumentÅ¯ atd. VaÅ¡e pÅ™ihlÃ¡Å¡enÃ­, jako tvorce webstrÃ¡nky VÃ¡m umoÅ¾nÃ­ zmÄ›nit ji dle VaÅ¡Ã­ potÅ™eby.";
+$langTooBig = "Nevybrali jste Å¾Ã¡dnÃ½ soubor pro nahrÃ¡nÃ­, nebo je soubor pÅ™Ã­liÅ¡ velikÃ½.";
+$langCouldNot = "Soubor nemÅ¯Å¾e bÃ½t nahrÃ¡n.";
 $langNotAllowed = "Nedovoleno";
-$langAddPageToSite = "P&#345;idat stránku na místo";
-$langCouldNotSendPage = "Tento soubor není ve formátu HTML a nem&#367;e bıt nahrán. Jestli chcete poslat dokumenty které nejsou ve formátu HTML (PDF, Word, Power Point, Video, atd.) pouijte <a href=../document/document.php>Nástroj dokument&#367;</a>";
-$langSendPage = "Stránka pro nahrání(upload)";
-$langPageTitleModified = "Název stránky byl zm&#283;n&#283;n";
-$langPageAdded = "Stránka p&#345;idaná";
-$langAddPage = "P&#345;idat stránku";
-?>
+$langAddPageToSite = "PÅ™idat strÃ¡nku na mÃ­sto";
+$langCouldNotSendPage = "Tento soubor nenÃ­ ve formÃ¡tu HTML a nemÅ¯Å¾e bÃ½t nahrÃ¡n. Jestli chcete poslat dokumenty kterÃ© nejsou ve formÃ¡tu HTML (PDF, Word, Power Point, Video, atd.) pouÅ¾ijte <a href=../document/document.php>NÃ¡stroj dokumentÅ¯</a>";
+$langSendPage = "StrÃ¡nka pro nahrÃ¡nÃ­(upload)";
+$langPageTitleModified = "NÃ¡zev strÃ¡nky byl zmÄ›nÄ›n";
+$langPageAdded = "StrÃ¡nka pÅ™idanÃ¡";
+$langAddPage = "PÅ™idat strÃ¡nku";

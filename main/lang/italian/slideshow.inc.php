@@ -1,9 +1,6 @@
 <?php
-/*
-for more information: see languages.txt in the lang folder.
-*/
 $lang_height = "Altezza";
-$lang_resizing_comment = "ridimensiona l\'immagine con le seguenti dimensioni (in pixels)";
+$lang_resizing_comment = "ridimensiona l'immagine con le seguenti dimensioni (in pixels)";
 $lang_width = "Larghezza";
 $lang_resizing = "Ridimensiona";
 $lang_no_resizing_comment = "Mostra tutte le immagini nella loro dimensione originale. Se necessario, le barre di scorrimento appariranno automaticamente.";
@@ -21,4 +18,3 @@ $lang_of = "di";
 $lang_view_slideshow = "Mostra presentazione";
 $FirstSlide = "Prima diapositiva";
 $LastSlide = "Ultima diapositiva";
-?>

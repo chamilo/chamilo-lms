@@ -1,17 +1,14 @@
 <?php
-/*
-for more information: see languages.txt in the lang folder.
-*/
 $Tools = "Ferramentas";
 $SendWork = "Enviar arquivo";
-$langTooBig = "Você não selecionou nenhum arquivo ou o arquivo é muito grande.";
-$langListDeleted = "A lista inteira será apagada.";
+$langTooBig = "Não foi selecionado nenhum arquivo para enviar, ou ele é muito grande";
+$langListDeleted = "A lista foi deletada";
 $langDocModif = "título de artigo modificado";
 $langDocAdd = "Arquivo adicionado.";
 $langDocDel = "Arquivo deletado";
 $langTitleWork = "Título do Arquivo";
 $langAuthors = "Autores";
-$langDelList = "Deletar a lista toda";
+$langDelList = "Deletar lista";
 $langWorkDelete = "Deletar";
 $langWorkModify = "Modificar";
 $langWorkConfirmDelete = "Você realmente quer apagar esse arquivo";
@@ -20,11 +17,11 @@ $lang_default_upload = "Configurações padrão para a visibilidade de novos arq
 $lang_new_visible = "Novos documentos são visíveis à todos os usuários";
 $lang_new_unvisible = "Novos documentos são visíveis apenas para o(s) gerente(s) do curso";
 $lang_doc_unvisible = "Seu arquivo está visível apenas para o(s) professor(es) e não ficará visível para você.";
-$langDelLk = "Deletar Link";
+$langDelLk = "Você quer realmente apagar esse link?";
 $langMustBeRegisteredUser = "Apenas usuários registrados neste curso podem publicar documentos.";
 $langListDel = "Deletar lista";
-$langNameDir = "Renomear Diretório";
-$langFileExists = "Arquivo já existe";
+$langNameDir = "Nome do novo diretório";
+$langFileExists = "Operação impossível.<br>Um arquivo com o mesmo nome já existe.";
 $CreateDirectory = "Criar Diretório";
 $langCurrentDir = "Diretório atual";
 $UploadADocument = "Enviar um documento";
@@ -74,17 +71,3 @@ $FolderEdited = "Pasta editada";
 $UpdateWork = "Atualizar esta tarefa";
 $MakeAllPapersInvisible = "Tornar todos os trabalhos invisíveis";
 $MakeAllPapersVisible = "Tornar todos os trabalhos visíveis";
-$TheDocumentHasBeenDeleted = "";
-$YouAreNotAllowedToDeleteThisDocument = "";
-$StudentAllowedToDeleteOwnPublication = "";
-$ConfirmYourChoiceDeleteAllfiles = "";
-$WorkName = "";
-$ReminderToSubmitPendingTask = "";
-$MessageConfirmSendingOfTask = "";
-$DataSent = "";
-$DownloadLink = "";
-$ViewUsersWithTask = "";
-$ReminderMessage = "";
-$DateSent = "";
-$ViewUsersWithoutTask = "";
-?>

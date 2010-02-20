@@ -1,7 +1,4 @@
 <?php
-/*
-for more information: see languages.txt in the lang folder.
-*/
 $NewNote = "Új feljegyzés";
 $Note = "Jegyzet";
 $NoteDeleted = "Jegyzet törölve";
@@ -12,7 +9,7 @@ $SaveNote = "Jegyzet mentése";
 $WriteYourNoteHere = "Új jegyzet írásához kattintson ide";
 $SearchByTitle = "Keresés cím szerint";
 $WriteTheTitleHere = "Adja meg a címet";
-$UpdateDate = "Utolsó módosítás";
+$UpdateDate = "Módosítva";
 $NoteAddNew = "Új jegyzet írása a személyes jegyzetfüzetbe";
 $OrderByCreationDate = "Rendezés létrehozás dátuma szerint";
 $OrderByModificationDate = "Rendezés utolsó módosítás dátuma szerint";
@@ -26,10 +23,3 @@ $ModifyNote = "Személyes jegyzetem szerkesztése";
 $BackToNoteList = "Vissza a jegyzetlistához";
 $NotebookManagement = "Jegyzetfüzetek kezelése";
 $BackToNotesList = "Vissza a jegyzetlistához";
-$NotesSortedByTitleAsc = "";
-$NotesSortedByTitleDESC = "";
-$NotesSortedByUpdateDateAsc = "";
-$NotesSortedByUpdateDateDESC = "";
-$NotesSortedByCreationDateAsc = "";
-$NotesSortedByCreationDateDESC = "";
-?>

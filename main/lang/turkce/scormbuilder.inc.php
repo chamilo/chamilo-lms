@@ -1,5 +1,2 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
-*/
-$langScormBuilder = "Yol yap&#305;c&#305; - Scorm bi蔒m ders yap&#305;c&#305; ";
-?>
+<?php
+$langScormBuilder = "Yol yap覺c覺 - Scorm bi癟em ders yap覺c覺 ";

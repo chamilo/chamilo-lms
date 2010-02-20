@@ -1,7 +1,4 @@
 <?php
-/*
-for more information: see languages.txt in the lang folder.
-*/
 $langSelectOptionForBackup = "備份選項";
 $langLetMeSelectItems = "選擇課程組件";
 $langCreateFullBackup = "創建課程的完全備份";
@@ -22,7 +19,7 @@ $langCopyFinished = "複製完成";
 $langFullRecycle = "完全清空";
 $langRecycleCourse = "清空課程";
 $langRecycleFinished = "已完成清空";
-$langRecycleWarning = "警告: 使用這個工具可以刪除課程的某一部分，此操作不能撤銷，建議在使用這個清空工具時做一個<A href=\\"create_backup.php\\">備份</A>。";
+$langRecycleWarning = "警告: 使用這個工具可以刪除課程的某一部分，此操作不能撤銷，建議在使用這個清空工具時做一個<A href=\"create_backup.php\">備份</A>。";
 $langSameFilename = "如果匯入的檔案與現有檔案重名採取什麼方法？";
 $langSameFilenameSkip = "跳過同名檔案";
 $langSameFilenameRename = "重命名檔案（如︰file.pdf 重命名成file_1.dbf）";
@@ -45,7 +42,3 @@ $langCreateBackupInfo = "創建此課程的備份，你可以選擇放在備份�
 $ToolIntro = "工具簡介";
 $UploadError = "上傳失敗，請檢查上傳檔案大小上限及資料夾權限。";
 $DocumentsWillBeAddedToo = "文件會同時被加入";
-$ToExportLearnpathWithQuizYouHaveToSelectQuiz = "";
-$ArchivesDirectoryNotWriteableContactAdmin = "";
-$DestinationCourse = "";
-?>

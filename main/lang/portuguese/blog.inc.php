@@ -1,7 +1,4 @@
 <?php
-/*
-for more information: see languages.txt in the lang folder.
-*/
 $MyTasks = "As minhas tarefas";
 $FavoriteBlogs = "Os meus blogs";
 $Navigation = "Navegação";
@@ -53,7 +50,7 @@ $ReadMore = "Ler mais...";
 $DeleteThisArticle = "Eliminar este artigo";
 $EditThisPost = "Editar este artigo";
 $DeleteThisComment = "Eliminar este comentário";
-$NoArticles = "Não existem artigos neste blog. Se é o administrador deste blog, clique em \\"Novo artigo\\" para escrever um novo artigo.";
+$NoArticles = "Não existem artigos neste blog. Se é o administrador deste blog, clique em \"Novo artigo\" para escrever um novo artigo.";
 $NoTasks = "Sem tarefas";
 $Rating = "Classificação";
 $RateThis = "Classificar esta tarefa";
@@ -102,4 +99,3 @@ $CommentDeleted = "O comentário foi eliminado.";
 $RatingAdded = "A classificação foi adicionada.";
 $BlogPosts = "Artigos do Blog";
 $BlogComments = "Comentários do Blog";
-?>

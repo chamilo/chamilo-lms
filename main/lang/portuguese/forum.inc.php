@@ -1,11 +1,8 @@
 <?php
-/*
-for more information: see languages.txt in the lang folder.
-*/
 $ForumDeleted = "Fórum eliminado";
 $ForumCategoryDeleted = "Categoria Fórum eliminada";
 $ForumLocked = "Fórum bloqueado";
-$Forum = "Fórum";
+$Forum = "Fóruns";
 $AddForumCategory = "Adicionar categoria Fórum";
 $AddForum = "Acrescentar novo fórum";
 $Topics = "Tópicos";
@@ -41,9 +38,9 @@ $ReplyShort = "Re:";
 $DeletePost = "Tem a certeza que deseja eliminar este artigo? Ao eliminar este artigo também eliminará todas as respostas dadas a este artigo. Por favor, verifique a árvore de visualização para ver os artigos que também serão eliminados.";
 $Locked = "Bloqueado: os alunos não podem mais publicar novas mensagens nesta categoria do fórum, no fórum ou tópico, mas podem visualizar e ler as mensagens que já foram publicadas.";
 $Unlocked = "Desbloqueado: os alunos podem publicar novas mensagens nesta categoria do fórum, no fórum ou tópico.";
-$Flat = "Plano/línear";
-$Threaded = "Árvore";
-$Nested = "Hierarquizada";
+$Flat = "Plano";
+$Threaded = "Colunas";
+$Nested = "Hierarquias";
 $FlatView = "Visualização em Lista";
 $ThreadedView = "Visualização em Árvore";
 $NestedView = "Visualização Hierarquizada/Aninhada";
@@ -59,7 +56,7 @@ $ForGroup = "Para o Grupo";
 $ThreadLocked = "O tópico está bloqueado.";
 $NotAllowedHere = "Não tem autorização para aceder.";
 $ReplyAdded = "A resposta foi adicionada";
-$EditPost = "Editar Artigo";
+$EditPost = "Editar artigo";
 $EditPostStored = "O artigo foi modificado";
 $NewForumPost = "Novo artigo no fórum";
 $YouWantedToStayInformed = "Referiu que queria ser informado por e-mail quando alguém responde no tópico";
@@ -121,9 +118,7 @@ $Thread = "Tópico";
 $NotifyMe = "Notificar-me";
 $ConfirmUserQualification = "Confirmar selecção";
 $NotChanged = "Inalterado";
-$TitleColumnGradebook = "Cabeçalho da coluna no Relatório de Competências";
 $QualifyThreadGradebook = "Assinalar este tópico";
-$QualifyWeight = "Peso no Relatório";
 $QualifyNumeric = "Pontuação";
 $AlterQualifyThread = "Editar a pontuação do tópico";
 $ForumMoved = "O fórum foi movido";
@@ -140,4 +135,3 @@ $BackToForum = "Regressar ao fórum";
 $BackToForumOverview = "Regressar à vista geral do fórum";
 $BackToThread = "Regressar ao tópico";
 $ForumcategoryLocked = "Categoría do fórum bloqueada";
-?>

@@ -1,7 +1,4 @@
 <?php
-/*
-for more information: see languages.txt in the lang folder.
-*/
 $AgendaAdd = "Adicionar um evento";
 $ShowAllEvents = "Todos os eventos";
 $ShowCurrent = "Mês actual/corrente";
@@ -41,7 +38,7 @@ $AddPersonalItem = "Adicionar evento à Agenda";
 $Week = "Semana";
 $Date = "Data";
 $Time = "Hora";
-$AddPersonalCalendarItem = "Adicionar evento à Agenda";
+$AddPersonalCalendarItem = "Adicionar evento à Agenda ";
 $ModifyPersonalCalendarItem = "Editar evento pessoal";
 $PeronalAgendaItemAdded = "Evento adicionado";
 $PeronalAgendaItemEdited = "Evento guardado/salvado";
@@ -75,4 +72,3 @@ $AgendaSortChronologicallyDown = "Descendente";
 $ItemForUserSelection = "Lista de selecção de utilizadores";
 $IsNotiCalFormatFile = "Este ficheiro não está em formato iCal";
 $RepeatEvent = "Repetir evento";
-?>

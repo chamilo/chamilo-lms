@@ -1,28 +1,23 @@
 <?php
-/*
-for more information: see languages.txt in the lang folder.
-*/
-$langLinkSite = "Napravi link ka Web-u";
-$langSubTitle = "Dodaje link na po&#269;etnu stranicu vaeg kursa. Da biste uradili ovo, idite na tu stranicu, kopirajte njen URL u address bar na vrhu vaeg pretraiva&#269;a i prilepite ga u Link polje ispod.";
+$langLinkSite = "Dodaj link na početnu stranicu";
+$langSubTitle = "Dodaje link na početnu stranicu vašeg kursa. Da biste uradili ovo, idite na tu stranicu, kopirajte njen URL u address bar na vrhu vašeg pretraživača i prilepite ga u Link polje ispod.";
 $langAddPage = "Dodaj stranicu";
-$langSendPage = "Stranica za u&#269;itavanje na server";
-$langCouldNot = "Fajl nije mogao da se u&#269;ita na server";
-$langOkSentLink = "";
+$langSendPage = "Stranica za učitavanje na server";
+$langCouldNot = "Fajl nije mogao da se učita na server";
 $langTooBig = "Niste izabrali nijedan fajl za slanje ili je prevelik";
-$langExplanation = "Stranica mora da bude u HTML formatu (npr. moja_stranica.htm). Bi&#263;e napravljen link ka njoj sa po&#269;etne stranice. Ako elite da poaljete neto to nije u HTML formatu (PDF, Word, Power Point, Video, itd.) koristite <a href=../document/document";
+$langExplanation = "Kada kliknete na OK, Forum, Agenda, Organizator dokumenata i td. će biti kreiran. Kao osoba koja je kreirala sajt imate mogućnost da to modifikujete prema vašim potrebama.";
 $langPgTitle = "Naslov stranice";
 $langNoLinkURL = "Molim Vas unesite URL linka";
-$langLinkTarget = "Povezuje odredita";
+$langLinkTarget = "Povezuje odredišta";
 $langSameWindow = "U istom porzoru";
 $langNewWindow = "U novom porzoru";
-$langAdded = "Link je dodat";
+$langAdded = "Dodato";
 $langAddLink = "Dodavanje linka";
 $langNoLinkName = "Molim Vas, unesite ime linka";
-$langEditLink = "Izmeni link po&#269;etne stranice kursa";
+$langEditLink = "Izmeni link početne stranice kursa";
 $langChangePress = "Izmenite i kliknite na OK";
-$langLinkChanged = "Link po&#269;etne stranice kursa je promenjen. Koristite meni putanje iznad da se vratite na po&#269;etnu stranicu.";
+$langLinkChanged = "Link početne stranice kursa je promenjen. Koristite meni putanje iznad da se vratite na početnu stranicu.";
 $NoLinkName = "Link nema naziva";
 $NoLinkURL = "Nema URL linka";
-$LinkChanged = "Link je auriran";
+$LinkChanged = "Link je ažuriran";
 $OkSentLink = "Link je poslat";
-?>

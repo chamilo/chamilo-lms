@@ -1,7 +1,4 @@
 <?php
-/*
-for more information: see languages.txt in the lang folder.
-*/
 $langScormVersion = "版本";
 $langScormRestarted = "所有课程还没有完全结束.";
 $langScormNoNext = "这是最后一节课.";
@@ -28,7 +25,7 @@ $langScormNoItems = "此目录不含有任何项目.";
 $langScormNoStatus = "本内容没有状态";
 $langScormLoggedout = "退出 SCORM 区";
 $langScormCloseWindow = "关闭窗口";
-$ScormBrowsed = "";
+$ScormBrowsed = "已浏览";
 $langScormExitFullScreen = "返回普通屏幕";
 $langScormFullScreen = "全屏";
 $langScormNotAttempted = "未尝试";
@@ -38,20 +35,9 @@ $langRemote = "远距";
 $langAutodetect = "自动侦测";
 $langAccomplishedStepsTotal = "合计";
 $langUnknown = "未知";
-$AreYouSureToDeleteSteps = "";
-$Origin = "";
-$Local = "";
-$Remote = "";
-$FileToUpload = "";
-$ContentMaker = "";
-$ContentProximity = "";
-$UploadLocalFileFromGarbageDir = "";
-$ThisItemIsNotExportable = "";
-$MoveCurrentChapter = "";
-$GenericScorm = "";
-$UnknownPackageFormat = "";
-$Attempt = "";
-$MoveTheCurrentForum = "";
-$WarningWhenEditingScorm = "";
-$AdditionalProfileField = "";
-?>
+$AreYouSureToDeleteSteps = "你肯定要取消这些步骤吗？";
+$Origin = "原始";
+$Local = "本地";
+$Remote = "远距";
+$FileToUpload = "需要上传的文件";
+$ContentMaker = "内容创建者";

@@ -1,7 +1,4 @@
 <?php
-/*
-for more information: see languages.txt in the lang folder.
-*/
 $langSelectOptionForBackup = "Var vänlig välj ett säkerhets kopia alternativ.";
 $langLetMeSelectItems = "Låt mig välja kursdelar";
 $langCreateFullBackup = "Skapa en komplett säkerhetskopia av denna kurs.";
@@ -22,7 +19,7 @@ $langCopyFinished = "Kopiering avslutad";
 $langFullRecycle = "Full återanvändning";
 $langRecycleCourse = "Återanvänd kurs";
 $langRecycleFinished = "Återanvändning avslutad";
-$langRecycleWarning = "Varning: genom att använda detta verktyg,  kommer du att radera några delar ur din kurs. Detta kan inte göras ogjort. Vi råder dig att göra en <a href=\\"create_backup.php\\">säkerhetskopia</a> innan du använder detta återanvändningsverktyg.";
+$langRecycleWarning = "Varning: genom att använda detta verktyg,  kommer du att radera några delar ur din kurs. Detta kan inte göras ogjort. Vi råder dig att göra en <a href=\"create_backup.php\">säkerhetskopia</a> innan du använder detta återanvändningsverktyg.";
 $langSameFilename = "Vad vill du göra med importerade filer som har samma namn som redan existerande filer?";
 $langSameFilenameSkip = "Hoppa över filer med samma namn";
 $langSameFilenameRename = "Döp om fil (ex.fil.pdf till fil_1.pdf)";
@@ -47,5 +44,3 @@ $UploadError = "Misslyckades med filuppladdning. Kontrollera maximalt accepterad
 $DocumentsWillBeAddedToo = "Dokument kommer också att läggas till";
 $ToExportLearnpathWithQuizYouHaveToSelectQuiz = "Om du vill exportera ett kursmoment som innehåller ett test måste du vara noga med att välja de test som ska vara med i exporten i listan över test.";
 $ArchivesDirectoryNotWriteableContactAdmin = "Arkivmappen som verktyget använder är inte skrivbar. Kontakta administratören för din lärplattform.";
-$DestinationCourse = "";
-?>

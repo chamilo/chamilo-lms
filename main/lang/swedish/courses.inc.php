@@ -1,13 +1,10 @@
 <?php
-/*
-for more information: see languages.txt in the lang folder.
-*/
 $lang_already_enrolled = "deltar redan";
 $lang_my_personnal_course_list = "Min personliga kurslista";
 $lang_course_enrollment = "Användarnas kurser";
 $lang_course_not_available = "Denna kurs är inte tillgänglig eller finns inte.";
 $lang_enroll = "Gå med";
-$lang_enroll_to_a_new_course = "Gå med i en ny kurs";
+$lang_enroll_to_a_new_course = "Gå med i en ny kurs ";
 $lang_my_present_course_list = "Min nuvarande kurslista";
 $lang_no_course_to_enroll_in_this_category = "Ingen kurs att delta i under denna kategori.";
 $lang_or_search_from_the_course_code = "Eller sök efter kod";
@@ -25,12 +22,9 @@ $lang_back_to_parent_category = "Tillbaka till nuvarande kategori";
 $lang_back_to_course_selection = "Tillbaka till kursval";
 $lang_up = "Tillbaka till nuvarande kategori";
 $langCatList = "Kategorier";
-$langCourseList = "Kurser";
+$langCourseList = "Kurslista";
 $Subscribe = "Registrera";
 $AlreadySubscribed = "Redan registrerad";
-$CodeMandatory = "";
-$CourseCategoryMandatory = "";
-$TeacherMandatory = "";
 $CourseCategoryStored = "Kurskategorin är skapad";
 $langWithoutTimeLimits = "Utan tidsbegränsningar";
 $lang_back_to_main_category_list = "Tillbaka till huvudkategorilistan";
@@ -42,7 +36,7 @@ $langHideAndSubscribeOpen = "Gömd / Öppen";
 $langShowAndSubscribeOpen = "Synlig / Öppen";
 $langShowAndSubscribeClosed = "Synlig / Stängd";
 $langAdminThisUser = "Tillbaka till användare";
-$langManage = "Portalhantering";
+$langManage = "Hantera portal";
 $langEnrollToCourseSuccessful = "Du har blivit registrerad till kursen";
 $langSubCat = "underkategorier";
 $langUnsubscribeNotAllowed = "Otillåtet att registreras i denna kurs.";
@@ -73,14 +67,3 @@ $SubmitRegistrationCode = "Ange registreringskod";
 $CourseCategoryDeleted = "Kurskategorin borttagen";
 $CategorySortingDone = "Kategorisortering avslutad";
 $CourseCategoryEditStored = "Kategorin uppdaterad";
-$buttonCreateCourseCategory = "";
-$buttonSaveCategory = "";
-$buttonChangeCategory = "";
-$SessionName = "";
-$SessionCategory = "";
-$Expand = "";
-$Collapse = "";
-$CourseDetails = "";
-$GroupPendingInvitations = "";
-$Compose = "";
-?>

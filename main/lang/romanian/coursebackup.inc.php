@@ -1,7 +1,4 @@
 <?php
-/*
-for more information: see languages.txt in the lang folder.
-*/
 $langSelectOptionForBackup = "Te rog alege optiunea copiei de rezerva.";
 $langLetMeSelectItems = "Lasa-ma sa aleg componentele cursului";
 $langCreateFullBackup = "Creaza o copie de rezerva completa a acestui curs";
@@ -22,7 +19,7 @@ $langCopyFinished = "Copiere terminata";
 $langFullRecycle = "Refolosire totala";
 $langRecycleCourse = "Refoloseste cursul";
 $langRecycleFinished = "Reciclare terminata";
-$langRecycleWarning = "Avertisment: folosirea acestei unelte va determina stergere anumitor parti din cursul dumneavoastra.Nu se poate reface. Va sfatuim sa efectuati o <a href=\\"create_backup.php\\">copie de rezerva</a> inainte de a intrebuinta aceasta unealta de reciclare.";
+$langRecycleWarning = "Avertisment: folosirea acestei unelte va determina stergere anumitor parti din cursul dumneavoastra.Nu se poate reface. Va sfatuim sa efectuati o <a href=\"create_backup.php\">copie de rezerva</a> inainte de a intrebuinta aceasta unealta de reciclare.";
 $langSameFilename = "Ce trebuie sa se faca cu fisierele importate care au acelasi nume cu fisierele existente?";
 $langSameFilenameSkip = "A se ignora numele identic";
 $langSameFilenameRename = "Redenumirea fisierului (ex.: fisier.pdf devine fisier_1.pdf)";
@@ -48,4 +45,3 @@ $DocumentsWillBeAddedToo = "Se vor adauga si documente";
 $ToExportLearnpathWithQuizYouHaveToSelectQuiz = "Daca doriti sa exportati o cale de invatare ce contine un test, trebuie sa va asigurati ca testele respective vor fi adaugate in export deci, va trebui sa le selectati din lista de teste.";
 $ArchivesDirectoryNotWriteableContactAdmin = "Directorul cu arhivele utilizat de acest instrument este needitabil. Va rugam contactati administratorul platformei.";
 $DestinationCourse = "Cursul destinatie";
-?>

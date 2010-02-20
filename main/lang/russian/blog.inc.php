@@ -1,7 +1,4 @@
 <?php
-/*
-for more information: see languages.txt in the lang folder.
-*/
 $MyTasks = "Мои задания";
 $FavoriteBlogs = "Мои любимые блоги (дневники)";
 $Navigation = "Навигация";
@@ -53,7 +50,7 @@ $ReadMore = "Читать дополнительно...";
 $DeleteThisArticle = "Удалить эту статью";
 $EditThisPost = "Редактировать это послание";
 $DeleteThisComment = "Удалить этот комментарий";
-$NoArticles = "В настоящее время в этом блоге нет статей. Если Вы автор этого блога, щелкните на ссылку \\"новая статья\\" для того, чтобы ее написать.";
+$NoArticles = "В настоящее время в этом блоге нет статей. Если Вы автор этого блога, щелкните на ссылку \"новая статья\" для того, чтобы ее написать.";
 $NoTasks = "Нет заданий";
 $Rating = "Рейтинг";
 $RateThis = "Оценить эту статью";
@@ -64,7 +61,6 @@ $InBlog = "В блоге";
 $ViewPostsOfThisDay = "Просмотреть послания (статьи) сегодняшнего дня";
 $PostsOf = "Послания (статьи) от";
 $NoArticleMatches = "Статей не найдено. Проверьте правильность написания слов или попробуйте искать по-другому.";
-$SaveProject = "";
 $langTask1 = "Задание 1";
 $langTask2 = "Задание 2";
 $langTask3 = "Задание 3";
@@ -83,23 +79,3 @@ $AddBlog = "Создать новый блог";
 $EditBlog = "Редактировать заголовок и подзаголовок";
 $DeleteBlog = "Удалить этот блог";
 $Shared = "Совместный";
-$PermissionGrantedByGroupOrRole = "";
-$Reader = "";
-$SeeBlog = "";
-$BlogDeleted = "";
-$BlogEdited = "";
-$BlogStored = "";
-$CommentCreated = "";
-$BlogAdded = "";
-$TaskCreated = "";
-$TaskEdited = "";
-$TaskAssigned = "";
-$AssignedTaskEdited = "";
-$UserRegistered = "";
-$TaskDeleted = "";
-$TaskAssignmentDeleted = "";
-$CommentDeleted = "";
-$RatingAdded = "";
-$BlogPosts = "";
-$BlogComments = "";
-?>

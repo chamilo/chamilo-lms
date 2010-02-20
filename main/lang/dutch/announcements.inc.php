@@ -1,15 +1,12 @@
 <?php
-/*
-for more information: see languages.txt in the lang folder.
-*/
 $Announcement = "Aankondigingen";
 $langAnnEmpty = "Alle aankondigingen zijn verwijderd.";
 $AnnouncementModified = "De aankondiging is gewijzigd.";
 $AnnouncementAdded = "De aankondiging is toegevoegd.";
 $AnnouncementDeleted = "De aankondiging is verwijderd.";
 $AnnouncementPublishedOn = "Aangekondigd op";
-$AddAnnouncement = "Aankondiging toevoegen";
-$langContent = "Inhoud";
+$AddAnnouncement = "Toevoegen als aankondiging";
+$langContent = "Boodschap";
 $AnnouncementDeleteAll = "Alle aankondigingen verwijderen";
 $professorMessage = "Bericht van uw lesgever";
 $langEmailSent = " en per e-mail opgestuurd naar de ingeschreven studenten.";
@@ -35,7 +32,7 @@ $langPleaseSelectUsers = "Selecteer eerst gebruikers om de boodschap aan te vers
 $Teachersubject = "Aankondiging verzonden naar studenten.";
 $langMessages = "Berichten";
 $langMessageToSelectedUsers = "Berichten naar specifieke gebruikers of groepen";
-$langIntroText = "Selecteer eerst groepen (met een G vooraan) of gebruikers om het bericht aan te sturen, uit de lijst aan de linkerkant. Gebruik de controltoets om meerdere gebruikers tegelijk aan te duiden. Klik vervolgens op de \'>>\'-knop.";
+$langIntroText = "Selecteer eerst groepen (met een G vooraan) of gebruikers om het bericht aan te sturen, uit de lijst aan de linkerkant. Gebruik de controltoets om meerdere gebruikers tegelijk aan te duiden. Klik vervolgens op de '>>'-knop.";
 $langDown = "Omlaag";
 $langMsgSent = "Het bericht is verzonden.";
 $langSelUser = "gebruikers";
@@ -56,4 +53,3 @@ $AnnounceSentToUserSelection = "De aankondiging is gestuurd naar de geslecteerde
 $SendAnnouncement = "Stuur aankondiging";
 $ModifyAnnouncement = "Wijzig aankondiging";
 $ButtonPublishAnnouncement = "Plaats aankondiging";
-?>

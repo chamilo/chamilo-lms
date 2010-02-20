@@ -1,14 +1,11 @@
 <?php
-/*
-for more information: see languages.txt in the lang folder.
-*/
 $Announcement = "Anúncios";
 $langAnnEmpty = "A lista de anúncios foi eliminada";
 $AnnouncementModified = "O anúncio foi modificado";
 $AnnouncementAdded = "O anúncio foi aadicionado";
 $AnnouncementDeleted = "O anúncio foi eliminado";
 $AnnouncementPublishedOn = "Publicado em";
-$AddAnnouncement = "Adicionar anúncio";
+$AddAnnouncement = "Adicionar como anúncio";
 $langContent = "Conteúdo";
 $AnnouncementDeleteAll = "Eliminar todos os anúncios";
 $professorMessage = "Mensagem do instrutor";
@@ -56,4 +53,3 @@ $AnnounceSentToUserSelection = "Anúncio enviado para os utilizadores selecciona
 $SendAnnouncement = "Enviar anúncio";
 $ModifyAnnouncement = "Editar anúncio";
 $ButtonPublishAnnouncement = "Enviar anúncio";
-?>

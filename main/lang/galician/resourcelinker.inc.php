@@ -1,9 +1,6 @@
 <?php
-/*
-for more information: see languages.txt in the lang folder.
-*/
 $ResourceAdded = "Recursos engadido. Vostede agora pode volver ó itinerario ou engadir máis recursos.";
-$LearningPath = "Itinerario Formativo";
+$LearningPath = "Itinerario de aprendizaxe";
 $LevelUp = "nivel superior";
 $AddIt = "Engadir";
 $MainCategory = "categoría principal";
@@ -38,22 +35,21 @@ $SameWindow = "Na mesma xanela";
 $NewWindow = "Nunha xanela nova";
 $StepDeleted1 = "Este";
 $StepDeleted2 = "borrouse o elemento desta ferramenta.";
-$Modify = "Modificar /";
+$Modify = "Modificar / ";
 $Chapter = "Capítulo";
-$NoAgendaItems = "Non hai eventos na Axenda";
-$AgendaAdd = "Engadir un evento na Axenda";
-$UserGroupFilter = "Filtrar por grupos de usuarios";
-$AgendaSortChronologicallyUp = "Ordear a axenda cronoloxicamente (arriba)";
-$ShowCurrent = "Mostar os eventos actuais da axenda";
-$ModifyCalendarItem = "Modificar eventos da Axenda";
-$ItemTitle = "Título";
+$NoAgendaItems = "Non hai eventos na axenda";
+$AgendaAdd = "Engadir un novo evento";
+$UserGroupFilter = "Filtrar por grupos/usuarios";
+$AgendaSortChronologicallyUp = "Ordenar eventos (antigos / recentes)";
+$ShowCurrent = "Mostrar todos os eventos da axenda do mes en curso";
+$ModifyCalendarItem = "Modificar un evento da axenda";
+$ItemTitle = "Título do evento";
 $Detail = "Detalles";
-$EditSuccess = "Modificación realizada";
-$AddCalendarItem = "Engadir un evento á Axenda";
+$EditSuccess = "Evento da axenda editado";
+$AddCalendarItem = "Engadir un novo evento á axenda";
 $AddAnn = "Engadir un anuncio";
 $ForumAddNewTopic = "Foro: Engadir un tema";
 $ForumEditTopic = "Foro: editar un tema";
 $ExerciseAnswers = "Exercicio: Respostas";
 $ForumReply = "Foro: respostar";
-$AgendaSortChronologicallyDown = " 	Ordenar a axenda cronoloxicamente (do máis recente ao máis antigo)";
-?>
+$AgendaSortChronologicallyDown = "Ordenar eventos (recentes / antigos)";

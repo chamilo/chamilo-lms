@@ -1,7 +1,4 @@
 <?php
-/*
-for more information: see languages.txt in the lang folder.
-*/
 $langSelectOptionForBackup = "备份选项";
 $langLetMeSelectItems = "选择课程组件";
 $langCreateFullBackup = "创建课程的完全备份";
@@ -22,7 +19,7 @@ $langCopyFinished = "复制完成";
 $langFullRecycle = "完全清空";
 $langRecycleCourse = "清空课程";
 $langRecycleFinished = "已完成清空";
-$langRecycleWarning = "警告: 使用这个工具可以删除课程的某一部分，此操作不能撤销，建议在使用这个清空工具时做一个<A href=\\"create_backup.php\\">备份</A>。";
+$langRecycleWarning = "警告: 使用这个工具可以删除课程的某一部分，此操作不能撤销，建议在使用这个清空工具时做一个<A href=\"create_backup.php\">备份</A>。";
 $langSameFilename = "如果导入的文件与现有文件重名采取什么方法？";
 $langSameFilenameSkip = "跳过同名文件";
 $langSameFilenameRename = "重命名文件（如：file.pdf 重命名成file_1.dbf）";
@@ -42,10 +39,5 @@ $langNoDestinationCoursesAvailable = "没有目标课程可用";
 $langBackup = "备份";
 $langImportBackupInfo = "导入备份，你可以从本地磁盘上传备份文件或使用服务器上可用的备份文件。";
 $langCreateBackupInfo = "创建此课程的备份，你可以选择放在备份文件中课程内容。";
-$ToolIntro = "";
-$UploadError = "";
-$DocumentsWillBeAddedToo = "";
-$ToExportLearnpathWithQuizYouHaveToSelectQuiz = "";
-$ArchivesDirectoryNotWriteableContactAdmin = "";
-$DestinationCourse = "";
-?>
+$ToolIntro = "工具介绍";
+$UploadError = "上传文件错误，请检查文件大小的限制和相应权限";

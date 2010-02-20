@@ -1,7 +1,4 @@
 <?php
-/*
-for more information: see languages.txt in the lang folder.
-*/
 $AgendaAdd = "Lisää uusi merkintä";
 $ShowAllEvents = "Näytä kaikki kalenterimerkinnät";
 $ShowCurrent = "Näytä tämän kuun kalenterimerkinnät";
@@ -75,4 +72,3 @@ $AgendaSortChronologicallyDown = "Laskeva";
 $ItemForUserSelection = "Käyttäjien poiminta lista";
 $IsNotiCalFormatFile = "Tiedosto ei ole iCal formaatissa";
 $RepeatEvent = "Toista tapahtuma";
-?>

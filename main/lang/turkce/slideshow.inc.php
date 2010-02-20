@@ -1,21 +1,18 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
-*/
-$lang_height = "Y¸kseklik";
-$lang_resizing_comment = "gˆr¸nt¸y¸ &#351;u boyutlara gˆre ayarla (pixel olarak)";
-$lang_width = "Geni&#351;lik";
-$lang_resizing = "YEN&#304;DEN BOYUTLANDIR";
+<?php
+$lang_height = "Y√ºkseklik";
+$lang_resizing_comment = "g√∂r√ºnt√ºy√º ≈üu boyutlara g√∂re ayarla (pixel olarak)";
+$lang_width = "Geni≈ülik";
+$lang_resizing = "YENƒ∞DEN BOYUTLANDIR";
 $lang_no_resizing_comment = "Show all images in their original size. No resizing is done. Scrollbars will automatically appear if the image is larger than your monitor size.";
-$lang_show_thumbnails = "T&#305;rnak resimleri gˆster";
-$lang_click_thumbnails = "T&#305;rnak resimlerden birine t&#305;klay&#305;n";
-$lang_set_slideshow_options = "Slayt Gˆsterisi seÁeneklerini ayarla";
-$lang_slideshow_options = "Slayt Gˆsterisi seÁenekleri";
-$lang_no_resizing = "YEN&#304;DEN BOYUTLANDIRMA YOK (Varsay&#305;lan)";
-$lang_exit_slideshow = "Slayt gˆsterisinden Á&#305;k";
-$SlideShow = "Slayt Gˆsterisi";
-$lang_previous_slide = "÷nceki Slayt";
+$lang_show_thumbnails = "Tƒ±rnak resimleri g√∂ster";
+$lang_click_thumbnails = "Tƒ±rnak resimlerden birine tƒ±klayƒ±n";
+$lang_set_slideshow_options = "Slayt G√∂sterisi se√ßeneklerini ayarla";
+$lang_slideshow_options = "Slayt G√∂sterisi se√ßenekleri";
+$lang_no_resizing = "YENƒ∞DEN BOYUTLANDIRMA YOK (Varsayƒ±lan)";
+$lang_exit_slideshow = "Slayt g√∂sterisinden √ßƒ±k";
+$SlideShow = "Slayt G√∂sterisi";
+$lang_previous_slide = "√ñnceki Slayt";
 $lang_next_slide = "Sonraki Slayt";
 $lang_image = "Resim";
 $lang_of = "/";
-$lang_view_slideshow = "Slayt Gˆsterisini gˆr¸nt¸le";
-?>
+$lang_view_slideshow = "Slayt G√∂sterisini g√∂r√ºnt√ºle";

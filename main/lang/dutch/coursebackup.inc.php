@@ -1,7 +1,4 @@
 <?php
-/*
-for more information: see languages.txt in the lang folder.
-*/
 $langSelectOptionForBackup = "Selecteer een optie voor de back-up.";
 $langLetMeSelectItems = "Laat mij de cursusonderdelen selecteren.";
 $langCreateFullBackup = "Maak een volledige back-up van deze cursus.";
@@ -22,7 +19,7 @@ $langCopyFinished = "De geselecteerde cursusonderdelen zijn gekopieerd.";
 $langFullRecycle = "Verwijder alle cursusonderdelen van de cursus.";
 $langRecycleCourse = "Cursus leegmaken.";
 $langRecycleFinished = "Uw cursus is nu leeggemaakt.";
-$langRecycleWarning = "Waarschuwing: met deze functie zullen sommige delen van uw cursus verwijderd worden. Dit kan niet ongedaan gemaakt worden. We raden u aan eerst een <a href=\\"create_backup.php\\">back-up</a> te maken.";
+$langRecycleWarning = "Waarschuwing: met deze functie zullen sommige delen van uw cursus verwijderd worden. Dit kan niet ongedaan gemaakt worden. We raden u aan eerst een <a href=\"create_backup.php\">back-up</a> te maken.";
 $langSameFilename = "Wat moet er gebeuren met geïmporteerde bestanden met dezelfde bestandsnaam als bestaande bestanden?";
 $langSameFilenameSkip = "Bestanden overslaan";
 $langSameFilenameRename = "Bestanden hernoemen (bv. bestand.pdf wordt bestand_1.pdf)";
@@ -46,6 +43,5 @@ $ToolIntro = "Introductietekst";
 $UploadError = "Het uploaden is mislukt. Controleer de maximum bestandsgrootte en de folderrechten.";
 $DocumentsWillBeAddedToo = "Documenten worden ook toegevoegd";
 $ToExportLearnpathWithQuizYouHaveToSelectQuiz = "Als u een leerpad dat een oefening bevat wenst te exporteren dan dient u ervoor te zorgen dat deze oefeningen ook in de export zitten. U dient deze dus te selecteren in de lijst met oefeningen";
-$ArchivesDirectoryNotWriteableContactAdmin = "De archievenfolder die door deze functionaliteit gebruikt word is niet schrijfbaar. Gelieve contact op te nemen met uw platform beheerder.";
+$ArchivesDirectoryNotWriteableContactAdmin = "De archievenfolder die door deze functionaliteit gebruikt word is niet schrijfbaar. Gelieve contact op te nemen met uw platform beheerder. ";
 $DestinationCourse = "Doelcursus";
-?>

@@ -1,7 +1,4 @@
 <?php
-/*
-for more information: see languages.txt in the lang folder.
-*/
 $TermAddNew = "Neuen Begriff zum Wörterbuch hinzufügen";
 $TermName = "Begriff";
 $TermDefinition = "Begriffs-Definition";
@@ -12,7 +9,7 @@ $TermAddButton = "Begriff speichern";
 $TermUpdateButton = "Begriff aktualisieren";
 $TermEdit = "Begriff ändern";
 $TermDeleteAction = "Begriff löschen";
-$OrderBy = "Sortiere nach";
+$OrderBy = "sortiert nach";
 $CreationDate = "Erstellungs-Datum";
 $UpdateDate = "Aktualisiert";
 $PreSelectedOrder = "vor-definiert";
@@ -23,6 +20,3 @@ $TableView = "Tabellen-Ansicht";
 $GlossaryTermAlreadyExistsYouShouldEditIt = "Dieser Begriff existiert bereits im Wörterbuch. Bitte einen anderen Namen wählen.";
 $GlossaryManagement = "Verwaltung des Wörterbuchs";
 $TermMoved = "Der Begriff wurde verschoben.";
-$ShowGlossaryInExtraToolsTitle = "";
-$ShowGlossaryInExtraToolsComment = "";
-?>

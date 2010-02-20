@@ -1,7 +1,4 @@
 <?php
-/*
-for more information: see languages.txt in the lang folder.
-*/
 $langCourseProgram = "Penerangan Subjek";
 $langThisCourseDescriptionIsEmpty = "Subjek ini belum diberi penerangan";
 $langEditCourseProgram = "Bina/Ubahsuai Penerangan Subjek";
@@ -13,8 +10,3 @@ $langAddCat = "Tambah Penerangan";
 $langAdd = "Tambah";
 $langValid = "Proses";
 $langBackAndForget = "Kembali";
-$CourseDescriptionUpdated = "";
-$CourseDescriptionDeleted = "";
-$CourseDescriptionIntro = "";
-$langSaveDescription = "";
-?>

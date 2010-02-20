@@ -1,7 +1,4 @@
 <?php
-/*
-for more information: see languages.txt in the lang folder.
-*/
 $langActivate = "Активировать";
 $langDeactivate = "Сделать неактивным";
 $langInLnk = "Сделать неактивными инструменты и ссылки";
@@ -25,8 +22,3 @@ $Authoring = "Авторские документы";
 $Administration = "Администрация";
 $IntroductionTextUpdated = "Введение обновлено";
 $IntroductionTextDeleted = "Введение удалено";
-$SessionIdentifier = "";
-$SessionName = "";
-$SessionCategory = "";
-$SessionData = "";
-?>

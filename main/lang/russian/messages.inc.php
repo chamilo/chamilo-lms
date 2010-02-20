@@ -1,8 +1,4 @@
 <?php
-/*
-for more information: see languages.txt in the lang folder.
-*/
-$MessageEmptyMessageOrSubject = "";
 $Inbox = "Входящие";
 $Messages = "Сообщения";
 $SendMessage = "Отправить сообщение";
@@ -11,7 +7,7 @@ $ComposeMessage = "Написать сообщение";
 $DeleteSelectedMessages = "Удалить выделенные сообщения";
 $SelectAll = "Выбрать все";
 $DeselectAll = "Отменить выбор всех";
-$ReplyToMessage = "Ответить";
+$ReplyToMessage = "Ответить на это сообщение";
 $BackToInbox = "Вернуться во входящие";
 $MessageSentTo = "Сообщение отправлено";
 $SendMessageTo = "Отправить";
@@ -19,22 +15,7 @@ $Myself = "себе";
 $From = "От";
 $To = "Кому";
 $Date = "Дата";
-$InvalidMessageId = "ID ответного сообщения не действительно";
+$InvalidMessageId = "ID ответного сообщения не действительно ";
 $ErrorSendingMessage = "Произошла ошибка при отправлении сообщения";
 $SureYouWantToDeleteSelectedMessages = "Вы уверены, что хотите удалить выбранные сообщения?";
 $SelectedMessagesDeleted = "Выбранные сообщения удалены";
-$EnterTitle = "";
-$TypeYourMessage = "";
-$MessageDeleted = "";
-$ConfirmDeleteMessage = "";
-$DeleteMessage = "";
-$ReadMessage = "";
-$SendInviteMessage = "";
-$SendMessageInvitation = "";
-$MessageTool = "";
-$WriteAMessage = "";
-$AlreadyReadMessage = "";
-$UnReadMessage = "";
-$MessageSent = "";
-$YouShouldWriteAMessage = "";
-?>

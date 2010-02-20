@@ -1,7 +1,4 @@
 <?php
-/*
-for more information: see languages.txt in the lang folder.
-*/
 $LinkMoved = "Linkul este mutat";
 $langLinkName = "Numele linkului";
 $langLinkAdd = "Adauga un link";
@@ -18,7 +15,7 @@ $langCategoryAdded = "Categoria a fost adaugata";
 $langCategoryModded = "Categoria a fost modificata.";
 $langCategoryDel = "Sterge categoria";
 $langCategoryDeleted = "Categoria si toate linkurile ei au fost sterse.";
-$langCategoryDelconfirm = "Cand stergi o categorie, toate linkurile acelei categorii sunt deasemenea sterse.\\nSigur doresti sa stergi aceasta categorie si linkurile ei?";
+$langCategoryDelconfirm = "Cand stergi o categorie, toate linkurile acelei categorii sunt deasemenea sterse.nSigur doresti sa stergi aceasta categorie si linkurile ei?";
 $langAllCategoryDel = "Sterge toate categoriile si toate linkurile";
 $langGiveURL = "Te rog indica; URL linkului";
 $langGiveCategoryName = "Te rog indica numele categoriei";
@@ -26,7 +23,7 @@ $langNoCategory = "Fara categorie";
 $showall = "Deschide toate categoriile";
 $shownone = "Inchide toate categoriile";
 $langListDeleted = "Lista a fost stearsa";
-$langAddLink = "Adauga o legatura";
+$langAddLink = "Adauga un link";
 $langDelList = "Sterge lista";
 $langModifyLink = "Modifica Legatura";
 $langCsvImport = "Importa CSV";
@@ -37,15 +34,9 @@ $langCsvFileLine1 = "... - linia1 =";
 $langCsvLinesFailed = "a esuat  importarea unui link (fara URL sau fara titlu).";
 $langCsvLinesOld = "legatura existenta actualizata ( acelasi URL si categorie)";
 $langCsvLinesNew = "link nou creat.";
-$langCsvExplain = "Fisierul trebuie sa arate asa: <blockquote><pre> <b>URL</b>;categorie;<b>titlu</b>;descriere; <b>http://www.aaa.org/...</b>;Legaturi importante;<b>Nume 1</b>;Descriere 1; <b>http://www.bbb.net/...</b>;;<b>Nume 2</b>;\\"Descriere 2\\"; </pre></blockquote>";
+$langCsvExplain = "Fisierul trebuie sa arate asa: <blockquote><pre> <b>URL</b>;categorie;<b>titlu</b>;descriere; <b>http://www.aaa.org/...</b>;Legaturi importante;<b>Nume 1</b>;Descriere 1; <b>http://www.bbb.net/...</b>;;<b>Nume 2</b>;\"Descriere 2\"; </pre></blockquote>";
 $langLinkUpdated = "Linkul a fost actualizat";
 $langAll_Link_Deleted = "Linkul a fost sters";
 $langOnHomepage = "Arata linkul pe pagina principala";
 $langShowLinkOnHomepage = "Arata acest link ca o icoana pe pagina principala a cursului";
-$General = "Generalitati";
-$SearchFeatureDoIndexLink = "";
-$langSaveLink = "";
-$langSaveCategory = "";
-$BackToLinksOverview = "";
-$AddTargetOfLinkOnHomepage = "";
-?>
+$General = "general";

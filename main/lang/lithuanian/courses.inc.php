@@ -1,7 +1,4 @@
 <?php
-/*
-for more information: see languages.txt in the lang folder.
-*/
 $lang_already_enrolled = "jau užregistruotas";
 $lang_my_personnal_course_list = "Mano kursų sąrašas";
 $lang_course_enrollment = "Vartotojų kursai";
@@ -13,7 +10,7 @@ $lang_no_course_to_enroll_in_this_category = "Šioje kategorijoje nėra kursų, 
 $lang_or_search_from_the_course_code = "arba ieškoti pagal kodą";
 $lang_search = "Ieškoti";
 $lang_select_course_among_categories = "Ieškoti kurso tarp kategorijų";
-$lang_select_course_in = "Išrinkti kursą";
+$lang_select_course_in = "Išrinkti kursą ";
 $lang_select_course_in_search_results = "Išrinkti kursą paieškos rezultatuose";
 $lang_unsubscribe = "Atsisakyti";
 $lang_back_to_my_home_page = "Atgal į pradinį puslapį";
@@ -25,12 +22,9 @@ $lang_back_to_parent_category = "Atgal į tėvinę kategoriją";
 $lang_back_to_course_selection = "Atgal į kursų pasirinkimus";
 $lang_up = "Atgal į tėvinę kategoriją";
 $langCatList = "Kategorijos";
-$langCourseList = "Kursai";
+$langCourseList = "Kursų sąrašas";
 $Subscribe = "Užsisakyti";
 $AlreadySubscribed = "Jau užsisakytas";
-$CodeMandatory = "";
-$CourseCategoryMandatory = "";
-$TeacherMandatory = "";
 $CourseCategoryStored = "Kursų kategorija sukurta";
 $langWithoutTimeLimits = "Be laiko limitų";
 $lang_back_to_main_category_list = "Atgal į pagrindinį kategorijų sąrašą";
@@ -52,7 +46,7 @@ $SortMyCourses = "Rūšiuoti mano kursus";
 $SubscribeToCourse = "Užsiregistruoti kursuose";
 $UnsubscribeFromCourse = "Išsiregistruoti iš kursų";
 $CreateCourseCategory = "Sukurti kursų kategoriją";
-$CourseCategoryAbout2bedeleted = "Ar tikrai norite ištrinti šią kursų kategoriją? Iš šios kategorijos kursai bus perkelti";
+$CourseCategoryAbout2bedeleted = "Ar tikrai norite ištrinti šią kursų kategoriją? Iš šios kategorijos kursai bus perkelti ";
 $CourseCategories = "Kursų kategorijos";
 $CoursesInCategory = "Kursai kategorijoje";
 $SearchCourse = "Ieškoti kursų";
@@ -73,14 +67,3 @@ $SubmitRegistrationCode = "Patvirtinti registracijos kodą";
 $CourseCategoryDeleted = "Kursų kategorija ištrinta";
 $CategorySortingDone = "Kategorijos rūšiavimas baigtas";
 $CourseCategoryEditStored = "Kategorija atnaujinta";
-$buttonCreateCourseCategory = "";
-$buttonSaveCategory = "";
-$buttonChangeCategory = "";
-$SessionName = "";
-$SessionCategory = "";
-$Expand = "";
-$Collapse = "";
-$CourseDetails = "";
-$GroupPendingInvitations = "";
-$Compose = "";
-?>

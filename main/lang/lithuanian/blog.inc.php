@@ -1,7 +1,4 @@
 <?php
-/*
-for more information: see languages.txt in the lang folder.
-*/
 $MyTasks = "Mano užduotys";
 $FavoriteBlogs = "Mano favoritiniai dienoraščiai";
 $Navigation = "Navigacija";
@@ -53,18 +50,17 @@ $ReadMore = "Skaityti daugiau...";
 $DeleteThisArticle = "Ištrinti šį straipsnį";
 $EditThisPost = "Redaguoti šią žinutę";
 $DeleteThisComment = "Ištrinti šį komentarą";
-$NoArticles = "Šiuo metu bloge nėra straipsnių. Jei esate šio blogo autorius, naujo straipsnio įrašymui paspauskite \'naujas straipsnis\'.";
+$NoArticles = "Šiuo metu bloge nėra straipsnių. Jei esate šio blogo autorius, naujo straipsnio įrašymui paspauskite 'naujas straipsnis'.";
 $NoTasks = "Įrašų nėra";
 $Rating = "Reitingavimas";
 $RateThis = "Reitinguoti šį straipsnį";
 $SelectTaskArticle = "Išrinkti straipsnį šiai užduočiai";
 $ExecuteThisTask = "Vykdyti šią užduotį";
-$WrittenBy = "Parašė";
+$WrittenBy = "Parašė ";
 $InBlog = "Šiame bloge";
 $ViewPostsOfThisDay = "Rodyti šios dienos įrašus";
 $PostsOf = "Įrašai";
 $NoArticleMatches = "Jokio straipsnio nerasta. Bandykite dar kartą.";
-$SaveProject = "";
 $langTask1 = "1 užduotis";
 $langTask2 = "2 užduotis";
 $langTask3 = "3 užduotis";
@@ -83,23 +79,3 @@ $AddBlog = "Sukurti naują dienoraštį";
 $EditBlog = "Redaguoti antraštę ir poantraštę";
 $DeleteBlog = "Ištrinti šį dienoraštį";
 $Shared = "Padalinta";
-$PermissionGrantedByGroupOrRole = "";
-$Reader = "";
-$SeeBlog = "";
-$BlogDeleted = "";
-$BlogEdited = "";
-$BlogStored = "";
-$CommentCreated = "";
-$BlogAdded = "";
-$TaskCreated = "";
-$TaskEdited = "";
-$TaskAssigned = "";
-$AssignedTaskEdited = "";
-$UserRegistered = "";
-$TaskDeleted = "";
-$TaskAssignmentDeleted = "";
-$CommentDeleted = "";
-$RatingAdded = "";
-$BlogPosts = "";
-$BlogComments = "";
-?>

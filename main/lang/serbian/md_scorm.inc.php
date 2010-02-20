@@ -1,38 +1,34 @@
 <?php
-/*
-for more information: see languages.txt in the lang folder.
-*/
-$nameTools = "zastarele jezi&#269;ke varijable";
-$langMdCallingTool = "Putanja u&#269;enja  Scorm";
-$langTool = "Scorm MD operacije";
-$langNotInDB = "nema unosa baze Chamiloa";
-$langManifestSyntax = "(greka u sintaksi manifest fajla...)";
+$nameTools = "zastarele jezičke varijable";
+$langMdCallingTool = "Dokumenta";
+$langTool = "Dokument – Opisna definicuja ";
+$langNotInDB = "nema takve kategorije linkova";
+$langManifestSyntax = "(greška u sintaksi manifest fajla...)";
 $langEmptyManifest = "(prazan manifest fajl...)";
 $langNoManifest = "(nema manifest fajla...)";
-$langNotFolder = "nemogu&#263;e, to nije folder...";
-$langUploadHtt = "U&#269;itajte HTT fajl";
+$langNotFolder = "je nemoguće, nije folder...";
+$langUploadHtt = "Učitajte HTT fajl";
 $langHttFileNotFound = "novi HTT  fajl se nije otvorio (ili je prazan ili je prevelik)";
-$langHttOk = "Novi HTT fajl se u&#269;itao";
-$langHttNotOk = "U&#269;itavanje HTT fajla nije uspelo";
+$langHttOk = "Novi HTT fajl se učitao";
+$langHttNotOk = "Učitavanje HTT fajla nije uspelo";
 $langRemoveHtt = "Ukloni HTT fajl";
 $langHttRmvOk = "HTT fajl je uklonjen";
 $langHttRmvNotOk = "Uklanjanje HTT fajla nije uspelo";
-$langImport = "Kreiranje MDE-a iz manifest";
+$langImport = "Uvezi";
 $langRemove = "Ukloni MDE";
-$langAllRemovedFor = "Svi unosi su uklonjeni za";
-$langIndex = "Indeks re&#269;i sa PhpDig";
-$langTotalMDEs = "Kona&#269;an broj MD unosa:";
+$langAllRemovedFor = "Svi unosi su uklonjeni za kategoriju";
+$langIndex = "Indeks reči";
+$langTotalMDEs = "Ukupan broj linkova MD unosa:";
 $langMainMD = "Otvori glavni MDE";
 $langLines = "linije";
 $langPlay = "Pokreni index.php";
-$langNonePossible = "MD operacije nisu mogu&#263;e";
-$langOrElse = "Selektujte Scorm  direktorijum ili ID Scorm direktorijuma";
+$langNonePossible = "MD operacije nisu moguće";
+$langOrElse = "Odaberite kategoriju linkova";
 $langWorkWith = "Rad sa Scorm  direktorujumom";
 $langSDI = "... Scorm Direktorijum sa SD-id (i podeli manifest  ili ga ostavi praznog)";
 $langRoot = "root";
-$langSplitData = "Podeli manifests i #MDe ako ih ima:";
+$langSplitData = "Podeli manifests i #MDe ako ih ima: ";
 $langMffNotOk = "Zamena manifest fajla nije uspela";
 $langMffOk = "Manifest fajl je zamenjen";
 $langMffFileNotFound = "Novi manifest fajl nije mogao da se otvori (ili je prazan ili je preveliki)";
 $langUploadMff = "Zameni manifest fajl";
-?>

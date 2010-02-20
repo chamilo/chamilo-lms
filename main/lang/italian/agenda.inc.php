@@ -1,7 +1,4 @@
 <?php
-/*
-for more information: see languages.txt in the lang folder.
-*/
 $AgendaAdd = "Aggiungi evento";
 $ShowAllEvents = "Tutti gli eventi";
 $ShowCurrent = "Eventi del mese";
@@ -20,7 +17,7 @@ $lang_september = "Settembre";
 $langClassName = "Nome della Classe";
 $lang_agenda = "Agenda";
 $ModifyCalendarItem = "Modifica un evento";
-$ItemTitle = "Titolo dell\'evento";
+$ItemTitle = "Titolo dell'evento";
 $langDay = "giorno";
 $month_default = "Mese di default";
 $langYear = "Anno";
@@ -51,11 +48,11 @@ $UserGroupFilter = "Filtra sulla base dei gruppi/utenti";
 $ShowAll = "Mostra tutto";
 $Print = "Stampa";
 $MyTextHere = "Scrivi il testo";
-$CopiedAsAnnouncement = "Copiato come avviso";
+$CopiedAsAnnouncement = "Copiato come avviso ";
 $NewAnnouncement = " Nuovo avviso";
-$AddAnnouncement = "Aggiungi come avviso";
+$AddAnnouncement = "Aggiungi come avviso ";
 $UpcomingEvent = "Prossimo evento";
-$RepeatedEvent = "Evento ripetuto";
+$RepeatedEvent = "Evento ripetuto ";
 $RepeatType = "Tipo di ripetizione";
 $RepeatDaily = "Ogni giorno";
 $RepeatWeekly = "Ogni settimana";
@@ -64,7 +61,7 @@ $RepeatMonthlyByDay = "Ogni mese, per giorno";
 $RepeatMonthlyByDayR = "Ogni mese, per giorno, limitato";
 $RepeatYearly = "Ogni anno";
 $RepeatEnd = "Data finale della ripetizione";
-$RepeatedEventViewOriginalEvent = "Vedi l\'evento iniziale";
+$RepeatedEventViewOriginalEvent = "Vedi l'evento iniziale";
 $ICalFileImport = "Importa un file iCal/ics";
 $AllUsersOfThePlatform = "Tutti gli utenti";
 $GlobalEvent = "Evento globale";
@@ -75,4 +72,3 @@ $AgendaSortChronologicallyDown = "Discendente";
 $ItemForUserSelection = "Elenco selezione utenti";
 $IsNotiCalFormatFile = "Il file non è in formato iCal";
 $RepeatEvent = "Evento ripetuto";
-?>

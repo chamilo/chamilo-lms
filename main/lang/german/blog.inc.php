@@ -1,7 +1,4 @@
 <?php
-/*
-for more information: see languages.txt in the lang folder.
-*/
 $MyTasks = "Meine Aufgaben";
 $FavoriteBlogs = "Meine Blog-Favoriten";
 $Navigation = "Navigation";
@@ -53,17 +50,17 @@ $ReadMore = "weiterlesen";
 $DeleteThisArticle = "Diesen Artikel löschen";
 $EditThisPost = "Diese Nachricht bearbeiten";
 $DeleteThisComment = "Diesen Kommentar löschen";
-$NoArticles = "Aktuell sind keine Beiträge in diesem Blog. Sollten Sie der Inhaber dieses Blogs sein, klicken Sie bitte auf \'Neuer Artikel\', um einen zu verfassen.";
+$NoArticles = "Aktuell sind keine Beiträge in diesem Blog. Sollten Sie der Inhaber dieses Blogs sein, klicken Sie bitte auf 'Neuer Artikel', um einen zu verfassen.";
 $NoTasks = "Keine Aufgaben";
 $Rating = "Bewerten";
 $RateThis = "Diesen Beitrag bewerten";
 $SelectTaskArticle = "Artikel für Aufgabe auswählen";
 $ExecuteThisTask = "Diese Aufgabe ausführen";
-$WrittenBy = "Geschrieben von";
+$WrittenBy = "Geschrieben von ";
 $InBlog = "Im Blog";
 $ViewPostsOfThisDay = "Nachrichten von diesem Tag ansehen";
-$PostsOf = "Nachrichten von";
-$NoArticleMatches = "Kein passender Artikel gefunden";
+$PostsOf = "Nachrichten von ";
+$NoArticleMatches = "Kein passender Artikel gefunden ";
 $SaveProject = "Blog speichern";
 $langTask1 = "Aufgabe 1";
 $langTask2 = "Aufgabe 2";
@@ -82,7 +79,7 @@ $EditPost = "Artikel bearbeiten";
 $AddBlog = "Blog hinzufügen";
 $EditBlog = "Blog editieren";
 $DeleteBlog = "Blog löschen";
-$Shared = "Geteilt";
+$Shared = "Geteilt ";
 $PermissionGrantedByGroupOrRole = "Erlaubnis durch Gruppe oder Rolle";
 $Reader = "Leser";
 $SeeBlog = "siehe Blog";
@@ -100,6 +97,3 @@ $TaskDeleted = "Aufgabe wurde gelöscht";
 $TaskAssignmentDeleted = "Aufgabenzuweisung wurde gelöscht";
 $CommentDeleted = "Kommentar gelöscht";
 $RatingAdded = "Wertung hinzugefügt";
-$BlogPosts = "";
-$BlogComments = "";
-?>

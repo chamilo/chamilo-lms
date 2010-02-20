@@ -1,7 +1,4 @@
 <?php
-/*
-for more information: see languages.txt in the lang folder.
-*/
 $lang_already_enrolled = "Sie haben diesen Kurs bereits belegt";
 $lang_my_personnal_course_list = "Meine persönliche Kursliste";
 $lang_course_enrollment = "Kurse des Nutzers";
@@ -25,7 +22,7 @@ $lang_back_to_parent_category = "Zurück zur übergeordneten Kategorie";
 $lang_back_to_course_selection = "Zurück zur Kursauswahl";
 $lang_up = "Zurück zur übergeordneten Kategorie";
 $langCatList = "Kategorien";
-$langCourseList = "Kurse";
+$langCourseList = "Kursliste";
 $Subscribe = "Belegen";
 $AlreadySubscribed = "Bereits belegt";
 $CodeMandatory = "Code ist Pflichtfeld";
@@ -42,7 +39,7 @@ $langHideAndSubscribeOpen = "Versteckt / Geöffnet";
 $langShowAndSubscribeOpen = "Sichtbar / Geöffnet";
 $langShowAndSubscribeClosed = "Sichtbar / Geschlossen";
 $langAdminThisUser = "Zurück zum Nutzer";
-$langManage = "Verwaltung des Portals";
+$langManage = "Lernplattform verwalten";
 $langEnrollToCourseSuccessful = "Sie haben diesen Kurs belegt";
 $langSubCat = "Unterkategorien";
 $langUnsubscribeNotAllowed = "Abmelden von diesem Kurs ist nicht gestattet.";
@@ -57,7 +54,7 @@ $CourseCategories = "Kurskategorien";
 $CoursesInCategory = "Kurse in dieser Kategorie";
 $SearchCourse = "Kurse durchsuchen";
 $UpOneCategory = "<- eine Kategorie höher";
-$SearchResultsFor = "Suchergebnisse für:";
+$SearchResultsFor = "Suchergebnisse für: ";
 $ConfirmUnsubscribeFromCourse = "Wollen Sie sich wirklich von diesem Kurs abmelden";
 $NoCourseCategory = "Keine Kurskategorie vorhanden";
 $EditCourseCategorySucces = "Der Kurs wurde der Kategorie hinzugefügt";
@@ -76,11 +73,3 @@ $CourseCategoryEditStored = "Kategorie aktualisiert";
 $buttonCreateCourseCategory = "Kurskategorie speichern";
 $buttonSaveCategory = "Diese Kategorie speichern";
 $buttonChangeCategory = "Kategorie ändern";
-$SessionName = "";
-$SessionCategory = "";
-$Expand = "";
-$Collapse = "";
-$CourseDetails = "";
-$GroupPendingInvitations = "";
-$Compose = "";
-?>

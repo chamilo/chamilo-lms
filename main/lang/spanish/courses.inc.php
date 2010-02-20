@@ -1,7 +1,4 @@
 <?php
-/*
-for more information: see languages.txt in the lang folder.
-*/
 $lang_already_enrolled = "ya ha sido inscrito";
 $lang_my_personnal_course_list = "Mi lista personal de cursos";
 $lang_course_enrollment = "Usuario del curso";
@@ -13,7 +10,7 @@ $lang_no_course_to_enroll_in_this_category = "En esta categoría no hay cursos e
 $lang_or_search_from_the_course_code = "O busca por el código de curso";
 $lang_search = "Buscar";
 $lang_select_course_among_categories = "Seleccionar el curso entre las categorías";
-$lang_select_course_in = "Seleccionar un curso en";
+$lang_select_course_in = "Seleccionar un curso en ";
 $lang_select_course_in_search_results = "Seleccionar un curso entre los resultados de la búsqueda";
 $lang_unsubscribe = "Anular una inscripción";
 $lang_back_to_my_home_page = "Volver a mi página de inicio";
@@ -25,7 +22,7 @@ $lang_back_to_parent_category = "Volver a la categoría superior";
 $lang_back_to_course_selection = "Volver a la selección de curso";
 $lang_up = "Volver a la categoría superior";
 $langCatList = "Categorías";
-$langCourseList = "Cursos";
+$langCourseList = "Lista de cursos";
 $Subscribe = "Inscribirme";
 $AlreadySubscribed = "Ya está inscrito";
 $CodeMandatory = "Código obligatorio";
@@ -42,7 +39,7 @@ $langHideAndSubscribeOpen = "Oculto / Abierto";
 $langShowAndSubscribeOpen = "Visible / Abierto";
 $langShowAndSubscribeClosed = "Visible / Cerrado";
 $langAdminThisUser = "Volver a este usuario";
-$langManage = "Gestión del campus";
+$langManage = "Administrar la Plataforma";
 $langEnrollToCourseSuccessful = "Su inscripción en el curso se ha completado";
 $langSubCat = "sub-categorías";
 $langUnsubscribeNotAllowed = "En este curso no está permitido que los propios usuarios puedan anular su inscripción.";
@@ -83,4 +80,3 @@ $Collapse = "Contraer";
 $CourseDetails = "Descripción del curso";
 $GroupPendingInvitations = "Invitaciones pendientes de grupo";
 $Compose = "Redactar";
-?>

@@ -1,7 +1,4 @@
 <?php
-/*
-for more information: see languages.txt in the lang folder.
-*/
 $TermAddNew = "Nouveau terme";
 $TermName = "Terme";
 $TermDefinition = "Définition";
@@ -23,6 +20,5 @@ $TableView = "Tableau";
 $GlossaryTermAlreadyExistsYouShouldEditIt = "Ce terme de glossaire existe déjà. Veuillez modifier le nom du terme.";
 $GlossaryManagement = "Gestion du glossaire";
 $TermMoved = "Le terme a été déplacé";
-$ShowGlossaryInExtraToolsTitle = "Afficher les termes du glossaires dans les outils extra";
-$ShowGlossaryInExtraToolsComment = "Afficher les termes du glossaire dans les outils extra comme les parcours et les exercices";
-?>
+$ShowGlossaryInExtraToolsTitle = "Afficher les termes du glossaire dans les outils extra";
+$ShowGlossaryInExtraToolsComment = "Indiquez si vous désirez afficher les termes du glossaire dans les outils de parcours et exercices";

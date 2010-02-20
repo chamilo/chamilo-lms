@@ -1,7 +1,4 @@
 <?php
-/*
-for more information: see languages.txt in the lang folder.
-*/
 $langActivate = "Vis";
 $langDeactivate = "Skjul";
 $langInLnk = "Skjulte verktøy og lenker";
@@ -18,15 +15,8 @@ $EditLink = "Rediger lenke";
 $Blog_management = "Blog administrasjon";
 $Forum = "Forum";
 $Course_maintenance = "Kurs vedlikehold";
-$TOOL_SURVEY = "";
 $GreyIcons = "Verktøykasse";
 $Interaction = "Samhandling";
-$Authoring = "";
 $Administration = "Administrasjon";
 $IntroductionTextUpdated = "Introduksjonstekseten er oppdatert";
 $IntroductionTextDeleted = "Introduksjonsteksten er slettet";
-$SessionIdentifier = "";
-$SessionName = "";
-$SessionCategory = "";
-$SessionData = "";
-?>

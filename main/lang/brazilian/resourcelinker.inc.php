@@ -1,9 +1,6 @@
 <?php
-/*
-for more information: see languages.txt in the lang folder.
-*/
-$ResourceAdded = "Recurso adicionado. Você pode agora voltar para a rota e adicionar outros recursos.";
-$LearningPath = "Rota de Aprendizado";
+$ResourceAdded = "Recurso adicionado";
+$LearningPath = "Rota de aprendizagem";
 $LevelUp = "nível acima";
 $AddIt = "Adicioná-lo";
 $MainCategory = "categoria principal";
@@ -40,20 +37,19 @@ $StepDeleted1 = "Este";
 $StepDeleted2 = "o ítem foi apagado desta ferramenta.";
 $Modify = "modificar";
 $Chapter = "Capítulo";
-$NoAgendaItems = "Não há ítens na agenda";
-$AgendaAdd = "Adicionar um ítem na Agenda";
-$UserGroupFilter = "Filtro de grupos de usuários";
-$AgendaSortChronologicallyUp = "Ordenar a Agenda cronológicamente (acima)";
-$ShowCurrent = "Exibir ítens atuais da Agenda";
-$ModifyCalendarItem = "Alterar ítem da Agenda";
-$ItemTitle = "Título";
-$Detail = "Detalhes";
-$EditSuccess = "Editado com sucesso";
-$AddCalendarItem = "Adicionar ítem de agenda";
+$NoAgendaItems = "Não há eventos na agenda";
+$AgendaAdd = "Adicionar um novo evento";
+$UserGroupFilter = "Filtrar por grupos/usuários";
+$AgendaSortChronologicallyUp = "Ascendente";
+$ShowCurrent = "Mostrar eventos do mês";
+$ModifyCalendarItem = "Modificar um evento da Agenda";
+$ItemTitle = "Nome do evento";
+$Detail = "Detalhe";
+$EditSuccess = "O evento foi editado";
+$AddCalendarItem = "Adicionar um novo evento a agenda";
 $AddAnn = "Adicionar anúncio";
 $ForumAddNewTopic = "Fórum: adicionar novo tópico";
 $ForumEditTopic = "Fórum: editar tópico";
 $ExerciseAnswers = "Exercício: Respostas";
 $ForumReply = "Fórum: responder";
-$AgendaSortChronologicallyDown = "Publicar itens da Agenda cronologicamente (do mais recente para o mais antigo)";
-?>
+$AgendaSortChronologicallyDown = "Descendente";

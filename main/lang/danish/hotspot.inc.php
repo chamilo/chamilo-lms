@@ -1,7 +1,4 @@
 <?php
-/*
-for more information: see languages.txt in the lang folder.
-*/
 $select = "Vælg";
 $square = "Firkant";
 $circle = "Elipse";
@@ -18,8 +15,4 @@ $showHotspots = "Vis/skjul hotspots";
 $labelPolyMenu = "Afslut polygon";
 $triesleft = "Antal forsøg tilbage";
 $exeFinished = "Alle svar er afgivet. Du kan nu flytte rundt på hotspots eller klikke på knappen under billedet for at afslutte";
-$nextAnswer = "Klik nu på: &done=done";
-$delineation = "";
-$labelDelineationMenu = "";
-$oar = "";
-?>
+$nextAnswer = "Klik nu på: &done=done ";

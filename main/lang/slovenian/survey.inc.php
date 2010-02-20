@@ -1,7 +1,4 @@
 <?php
-/*
-for more information: see languages.txt in the lang folder.
-*/
 $PublishSurvey = "Objavi vprašalnik";
 $CompareQuestions = "Primerjaj vprašanja";
 $InformationUpdated = "Informacije so bile ažurirane";
@@ -44,7 +41,7 @@ $UpdateQuestionType = "Ažuriraj tip vprašanja :";
 $AddAnotherQuestion = "Dodaj novo vprašanje";
 $IsShareSurvey = "Deli evalvacijski vprašalnik z ostalimi";
 $Proceed = "Nadaljuj";
-$PleaseFillNumber = "Vnesite numeri&#269;ne vrednosti za uteži odgovorov.";
+$PleaseFillNumber = "Vnesite numerične vrednosti za uteži odgovorov.";
 $PleaseFillAllPoints = "Vnesite uteži (vrednosti) od 1 do 5.";
 $PleasFillAllAnswer = "Izpolnite vsa polja odgovorov.";
 $PleaseSelectFourTrue = "Izberite vsaj štiri pravilne odgovore.";
@@ -129,7 +126,7 @@ $CourseUsers = "Uporabniki tečaja";
 $SurveyPublication = "Objava evalvacijskih vprašalnikov";
 $AdditonalUsers = "Dodatni uporabniki";
 $MailText = "Besedilo e-sporočila";
-$UseLinkSyntax = "Izbrani uporabniki bodo prejeli e-sporočilo z gornjim besedilom in unikatno povezavo, ki ji morajo slediti, da bi izpolnili vprašalnik. V primeru, da želite povezavo v vašem lastnem besedilu, na mestu, kjer želite to povezavo, vnesite oznako **link** (zve";
+$UseLinkSyntax = "Izbrani uporabniki bodo prejeli e-sporočilo z gornjim besedilom in unikatno povezavo, ki ji morajo slediti, da bi izpolnili vprašalnik. V primeru, da želite povezavo v vašem lastnem besedilu, na mestu, kjer želite to povezavo, vnesite oznako **link** (zvezdica zvezdica link zvezdica zvezdica). Oznaka bo pri pošiljanju avtomatično nadomeščena z ustrezno povezavo. V primeru, da oznake v svojem besedilu ne boste vnesli, se bo povezava dodala na koncu vašega e-sporočila.";
 $DetailedReportByUser = "Podrobno poročilo po uporabnikih";
 $DetailedReportByQuestion = "Podrobno poročilo po vprašanjih";
 $ComparativeReportDetail = "V tem poročilu lahko medsebojno primerjate odgovore dveh vprašanj.";
@@ -138,8 +135,9 @@ $DetailedReportByUserDetail = "To poročilo vsebuje vse odogovore, ki jih je pod
 $DetailedReportByQuestionDetail = "To poročilo podaja odgovore na vprašanja po posameznih vprašanjih. Zagotavlja tudi osnovno statisnično analizo in prikaz z grafiko.";
 $ReminderResendToAllUsers = "Opomni vse uporabnike eval. vprašalnika. V primeru, da ne izberete te možnosti, bodo sporočilo prejeli le novo dodani uporabniki.";
 $Multiplechoice = "Večkratna izbira";
-$Score = "Rezultat";
-$Shared = "V skupni rabi";
+$Multipleresponse = "Večkratni odgovori";
+$Score = "Rangiranje";
+$Shared = "Skupna raba";
 $Invite = "Povabi";
 $MaximumScore = "Največji rezultat";
 $ViewInvited = "Poglej povabljene";
@@ -188,7 +186,7 @@ $Secondary = "Sekundarni";
 $CourseSettings = "Nastavitve tečaja";
 $PleaseChooseACondition = "Izberite pogoj";
 $ChooseDifferentCategories = "Izberite različne kategorije";
-$Version = "Verzija";
+$Version = "Različica";
 $Normal = "Normalno";
 $NoLogOfDuration = "Brez beleženja trajanja";
 $AutoInviteLink = "Uporabniki, ki niso vabljeni, lahko uporabijo to povezavo za dostop do vprašalnika";
@@ -202,5 +200,4 @@ $BackToSurvey = "Nazaj na vprašalnik";
 $UpdateInformation = "Ažuriraj informacije";
 $PleaseFillSurvey = "Prosim, izpolnite vprašalnik";
 $ReportingOverview = "Poročila - pregled";
-$ThereAreNotQuestionsForthisSurvey = "Ta vprašalnik ne vsebuje nobenih vprašanj";
-?>
+$ThereAreNotQuestionsForthisSurvey = "V tem vprašalniku trenutno ni vprašanj";

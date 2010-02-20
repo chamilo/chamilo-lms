@@ -1,13 +1,10 @@
 <?php
-/*
-for more information: see languages.txt in the lang folder.
-*/
 $langViewCourseMaterialImport = "Peržiūrėti importuojamą kursų medžiagą";
 $langViewExternalLinksImport = "Peržiūrėti importuojamas išorines nuorodas";
 $langViewForumImport = "Peržiūrėti importuojamą forumą";
-$langImportCourseMaterial = "Importuoti kursų medžiagą (Blackboard įrankis \\"Kursų medžiaga\\")";
-$langImportExternalLinks = "Importuoti nuorodas (Blackboard įrankis \\"Išorinės nuorodos\\")";
-$langImportForum = "Importuoti forumus (Blackboard įrankis \\"Diskusijų lenta\\")";
+$langImportCourseMaterial = "Importuoti kursų medžiagą (Blackboard įrankis \"Kursų medžiaga\")";
+$langImportExternalLinks = "Importuoti nuorodas (Blackboard įrankis \"Išorinės nuorodos\")";
+$langImportForum = "Importuoti forumus (Blackboard įrankis \"Diskusijų lenta\")";
 $langToolInfo = "Šis įrankis importuoja Blackboard 5.5 kursus (Teorinę kursų medžiagą, Diskusijas ir išorines nuorodas)";
 $langToolName = "Importuoti Blackboard kursą";
 $langSelectCoursePackage = "Išrinkti kursų archyvą";
@@ -21,4 +18,3 @@ $langChooseImportOptions = "Pasirinkite importo nustatymus";
 $langCheckWhatIsImported = "Jūs galite peržiūrėti, kas bus importuota";
 $langStartImporting = "Pradėti importavimą";
 $langImport = "Importuoti";
-?>

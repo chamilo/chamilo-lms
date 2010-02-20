@@ -1,6 +1,2 @@
 <?php
-/*
-for more information: see languages.txt in the lang folder.
-*/
-$langScormBuilder = "Tvorca u&#269;ebnej osnovy - tvorca kurzu formátu SCORM";
-?>
+$langScormBuilder = "Tvorca učebnej osnovy - tvorca kurzu formátu SCORM";

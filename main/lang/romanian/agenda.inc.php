@@ -1,7 +1,4 @@
 <?php
-/*
-for more information: see languages.txt in the lang folder.
-*/
 $AgendaAdd = "Adauga item nou";
 $ShowAllEvents = "Prezinta toti itemii";
 $ShowCurrent = "Prezinta itemii lunii curente";
@@ -75,4 +72,3 @@ $AgendaSortChronologicallyDown = "Ordine descrescatoare";
 $ItemForUserSelection = "Selecteaza utilizatorii";
 $IsNotiCalFormatFile = "Aceasta fisier nu este un fisier iCal.";
 $RepeatEvent = "Repeta evenimentul";
-?>

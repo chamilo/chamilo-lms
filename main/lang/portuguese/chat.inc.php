@@ -1,7 +1,4 @@
 <?php
-/*
-for more information: see languages.txt in the lang folder.
-*/
 $langOnlineConference = "Conferência";
 $langWash = "Limpar";
 $langReset = "Reeniciar";
@@ -60,4 +57,3 @@ $AskPermissionSpeak = "Pedir autorização para falar";
 $GiveTheFloorTo = "Dar a palavra a";
 $Pause = "Pausa";
 $Stop = "Parar";
-?>

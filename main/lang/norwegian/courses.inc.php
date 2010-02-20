@@ -1,7 +1,4 @@
 <?php
-/*
-for more information: see languages.txt in the lang folder.
-*/
 $lang_already_enrolled = "Allerede påmeldt";
 $lang_my_personnal_course_list = "Min personlige kursliste";
 $lang_course_enrollment = "Brukers kurs";
@@ -25,14 +22,10 @@ $lang_back_to_parent_category = "Tilbake til overordnet kategori";
 $lang_back_to_course_selection = "Tilbake til valg av kurs";
 $lang_up = "Tilbake til overordnet kategori";
 $langCatList = "Kategorier";
-$langCourseList = "Kurs";
+$langCourseList = "Liste kurs";
 $Subscribe = "Meld deg på her";
 $AlreadySubscribed = "Påmeldt";
-$CodeMandatory = "";
-$CourseCategoryMandatory = "";
-$TeacherMandatory = "";
 $CourseCategoryStored = "Kurskategori ble opprettet";
-$langWithoutTimeLimits = "";
 $lang_back_to_main_category_list = "Tilbake til listen med hovedkategorier";
 $langAdded = "Lagt til";
 $langDeleted = "Slettet";
@@ -42,7 +35,7 @@ $langHideAndSubscribeOpen = "Skjult / Åpen";
 $langShowAndSubscribeOpen = "Synlig / Åpen";
 $langShowAndSubscribeClosed = "Synlig / Lukket";
 $langAdminThisUser = "Tilbake til bruker";
-$langManage = "Portaladministrasjon";
+$langManage = "Administrer portal";
 $langEnrollToCourseSuccessful = "Du har blitt påmeldt til kurset";
 $langSubCat = "Underkategorier";
 $langUnsubscribeNotAllowed = "Avmelding er ikke tillatt for dette kurset";
@@ -73,14 +66,3 @@ $SubmitRegistrationCode = "Send registrering koden";
 $CourseCategoryDeleted = "Kategorien er slettet";
 $CategorySortingDone = "Kategoriene er sortete";
 $CourseCategoryEditStored = "Kategorien er oppdaterte";
-$buttonCreateCourseCategory = "";
-$buttonSaveCategory = "";
-$buttonChangeCategory = "";
-$SessionName = "";
-$SessionCategory = "";
-$Expand = "";
-$Collapse = "";
-$CourseDetails = "";
-$GroupPendingInvitations = "";
-$Compose = "";
-?>

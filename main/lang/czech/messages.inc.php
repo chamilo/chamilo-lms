@@ -1,23 +1,20 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
-*/
-$Inbox  = "VstupnÌ schr·nka (Inbox)";
-$Messages = "Zpr·vy";
-$SendMessage = "Poslat spr·vu";
-$NewMessage = "Nov· spr·va";
-$ComposeMessage = "Napsat spr·vu";
-$DeleteSelectedMessages = "Smazat vybranÈ spr·vy";
-$SelectAll = "Ozna&#269;it vöechno";
-$DeselectAll  = "Zruöit vöechno";
-$ReplyToMessage = "Odpov&#283;d&#283;t";
-$BackToInbox = "Zp&#283;t do vstupnÌ schr·nky";
-$MessageSentTo = "Zpr·va byla odesl·na na";
+<?php
+$Inbox = "Vstupn√≠ schr√°nka (Inbox)";
+$Messages = "Zpr√°vy";
+$SendMessage = "Poslat spr√°vu";
+$NewMessage = "Nov√° spr√°va";
+$ComposeMessage = "Napsat spr√°vu";
+$DeleteSelectedMessages = "Smazat vybran√© spr√°vy";
+$SelectAll = "Oznaƒçit v≈°echno";
+$DeselectAll = "Zru≈°it v≈°echno";
+$ReplyToMessage = "Odpovƒõdƒõt";
+$BackToInbox = "Zpƒõt do vstupn√≠ schr√°nky";
+$MessageSentTo = "Zpr√°va byla odesl√°na na";
 $SendMessageTo = "Odeslat na";
-$Myself = "mn&#283;";
+$Myself = "mnƒõ";
 $From = "Od";
 $To = "Komu";
 $Date = "Datum";
-$InvalidMessageId = "NeplatnÈ ID spr·vy pro odeslanÌ.";
-$ErrorSendingMessage = "P&#345;i pokusu o zasl·nÌ spr·vy nastala chyba.";
-$SureYouWantToDeleteSelectedMessages = "Opravdu chcete smazat vybranÈ spr·vy?";
-?>
+$InvalidMessageId = "Neplatn√© ID spr√°vy pro odeslan√≠.";
+$ErrorSendingMessage = "P≈ôi pokusu o zasl√°n√≠ spr√°vy nastala chyba.";
+$SureYouWantToDeleteSelectedMessages = "Opravdu chcete smazat vybran√© spr√°vy?";

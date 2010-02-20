@@ -1,7 +1,4 @@
 <?php
-/*
-for more information: see languages.txt in the lang folder.
-*/
 $NewNote = "Nova nota";
 $Note = "Nota";
 $NoteDeleted = "Nota apagada";
@@ -12,7 +9,7 @@ $SaveNote = "Salvar nota";
 $WriteYourNoteHere = "Clique aqui para escrever uma nova nota";
 $SearchByTitle = "Buscar por título";
 $WriteTheTitleHere = "Escreva o título aqui";
-$UpdateDate = "Última alteração";
+$UpdateDate = "Última modificação";
 $NoteAddNew = "Adicionar uma nova nota em meu caderno pessoal";
 $OrderByCreationDate = "Ordenar por data de criação";
 $OrderByModificationDate = "Ordenar por data de alteração";
@@ -32,4 +29,3 @@ $NotesSortedByUpdateDateAsc = "Notas ordenadas por data de modificação (ascend
 $NotesSortedByUpdateDateDESC = "Notas ordenadas por data de modificação (descendente)";
 $NotesSortedByCreationDateAsc = "Notas ordenadas por data de criação (ascendente)";
 $NotesSortedByCreationDateDESC = "Notas ordenadas por data de criação (descendente)";
-?>

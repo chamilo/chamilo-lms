@@ -1,7 +1,4 @@
 <?php
-/*
-for more information: see languages.txt in the lang folder.
-*/
 $PublishSurvey = "Publicar encuesta";
 $CompareQuestions = "Comparar preguntas";
 $InformationUpdated = "Información actualizada";
@@ -92,7 +89,7 @@ $AddAnswer = "Añadir opción";
 $DisplayAnswersHorVert = "Mostrar";
 $AnswerOptions = "Opciones de respuesta";
 $YesNo = "Si / No";
-$MultipleResponse = "Respuesta multiple";
+$MultipleResponse = "Respuesta múltiple";
 $Open = "Respuesta abierta";
 $Dropdown = "Lista desplegable";
 $Pagebreak = "Fin de página";
@@ -117,7 +114,7 @@ $SelectXAxis = "Seleccione la pregunta del eje X";
 $SelectYAxis = "Seleccione la pregunta del eje Y";
 $ComparativeReport = "Informe comparativo";
 $AllQuestionsOnOnePage = "Todas las preguntas serán mostradas en una página";
-$SelectUser = "Seleccionar usuario";
+$SelectUser = "Usuario";
 $SelectUserWhoFilledSurvey = "Seleccionar el usuario que completó la encuesta";
 $userreport = "Informe del usuario";
 $VisualRepresentation = "Gráfico";
@@ -125,21 +122,22 @@ $AbsoluteTotal = "Total global";
 $NextQuestion = "Pregunta siguiente";
 $PreviousQuestion = "Pregunta anterior";
 $PeopleWhoAnswered = "Personas que han elegido esta respuesta";
-$CourseUsers = "Usuarios del curso";
+$CourseUsers = "Usuarios del Curso";
 $SurveyPublication = "Publicación de la encuesta";
 $AdditonalUsers = "Usuarios adicionales";
 $MailText = "Texto del correo";
-$UseLinkSyntax = "Los usuarios que haya seleccionado recibirán un correo electrónico con el texto que ha escrito más arriba, así como un enlace que los usuarios tendrán que pulsar para cumplimentar la encuesta. Si desea introducir este enlace en algún lugar de su texto, de";
+$UseLinkSyntax = "Los usuarios que haya seleccionado recibirán un correo electrónico con el texto que ha escrito más arriba, así como un enlace que los usuarios tendrán que pulsar para cumplimentar la encuesta. Si desea introducir este enlace en algún lugar de su texto, debe insertar lo siguiente: ** enlace ** (asterisco asterisco enlace asterisco asterisco). Esta etiqueta será sustituida automáticamente por el enlace. Si no agrega el ** enlace ** a su texto,  el enlace se añadirá al final del correo";
 $DetailedReportByUser = "Informe detallado por usuario";
 $DetailedReportByQuestion = "Informe detallado por pregunta";
 $ComparativeReportDetail = "En este informe puede comparar dos preguntas.";
-$CompleteReportDetail = "En este informe se obtiene un sumario de las respuestas de todos los usuarios a todas las preguntas. También dispone de una opción para sólamente ver una selección de preguntas. Puede exportar los resultados a un archivo en formato de CSV para su utilizac";
+$CompleteReportDetail = "En este informe se obtiene un sumario de las respuestas de todos los usuarios a todas las preguntas. También dispone de una opción para sólamente ver una selección de preguntas. Puede exportar los resultados a un archivo en formato de CSV para su utilización en aplicaciones estadísticas.";
 $DetailedReportByUserDetail = "En este informe puede ver todas las respuestas de un usuario.";
 $DetailedReportByQuestionDetail = "En este informe se ven los resultados pregunta a pregunta. Proporciona un análisis estadístico básico y gráficos.";
 $ReminderResendToAllUsers = "Enviar a todos los usuarios seleccionados. Si no marca esta casilla, sólamente recibirán el correo electrónico los usuarios adicionales que haya añadido.";
 $Multiplechoice = "Elección multiple";
+$Multipleresponse = "Respuesta multiple";
 $Score = "Puntuación";
-$Shared = "Compartida";
+$Shared = "Compartido";
 $Invite = "Invitados";
 $MaximumScore = "Puntuación máxima";
 $ViewInvited = "Ver invitados";
@@ -185,7 +183,7 @@ $Personality = "Personalizar";
 $Condition = "Condición";
 $Primary = "Primero";
 $Secondary = "Segundo";
-$CourseSettings = "Configuración del curso";
+$CourseSettings = "Configuración de la lección";
 $PleaseChooseACondition = "Por favor elija una condición";
 $ChooseDifferentCategories = "Elija diferente categoria";
 $Version = "Versión";
@@ -203,4 +201,3 @@ $UpdateInformation = "Actualización de información";
 $PleaseFillSurvey = "Por favor, llene la encuesta";
 $ReportingOverview = "Sumario de informes";
 $ThereAreNotQuestionsForthisSurvey = "No hay preguntas para esta encuesta";
-?>

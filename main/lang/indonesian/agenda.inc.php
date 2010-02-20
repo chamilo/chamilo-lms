@@ -1,7 +1,4 @@
 <?php
-/*
-for more information: see languages.txt in the lang folder.
-*/
 $AgendaAdd = "Tambah Item Baru Agenda";
 $ShowAllEvents = "Tampilkan semua item Agenda";
 $ShowCurrent = "Tampilkan Item Agenda bulan ini";
@@ -50,29 +47,3 @@ $ViewPersonalItem = "Lihat Agenda Personal";
 $UserGroupFilter = "Filter groups/user";
 $ShowAll = "Tampilkan Semua";
 $Print = "Cetak";
-$MyTextHere = "";
-$CopiedAsAnnouncement = "";
-$NewAnnouncement = "";
-$AddAnnouncement = "";
-$UpcomingEvent = "";
-$RepeatedEvent = "";
-$RepeatType = "";
-$RepeatDaily = "";
-$RepeatWeekly = "";
-$RepeatMonthlyByDate = "";
-$RepeatMonthlyByDay = "";
-$RepeatMonthlyByDayR = "";
-$RepeatYearly = "";
-$RepeatEnd = "";
-$RepeatedEventViewOriginalEvent = "";
-$ICalFileImport = "";
-$AllUsersOfThePlatform = "";
-$GlobalEvent = "";
-$ModifyEvent = "";
-$EndDateCannotBeBeforeTheStartDate = "";
-$AgendaSortChronologicallyUp = "";
-$AgendaSortChronologicallyDown = "";
-$ItemForUserSelection = "";
-$IsNotiCalFormatFile = "";
-$RepeatEvent = "";
-?>

@@ -1,11 +1,8 @@
 <?php
-/*
-for more information: see languages.txt in the lang folder.
-*/
 $ForumDeleted = "Forum je bil odstranjen";
 $ForumCategoryDeleted = "Kategorija foruma je odstranjena";
 $ForumLocked = "Forum je zaklenjen";
-$Forum = "Forum";
+$Forum = "Forumi";
 $AddForumCategory = "Dodaj novo kategorijo foruma";
 $AddForum = "Dodaj nov forum";
 $Topics = "Teme";
@@ -25,7 +22,7 @@ $PublicPrivateGroupForum = "Javen ali privaten forum skupine ?";
 $Public = "Za vse tečajnike tega tečaja";
 $Private = "Le za člane skupine";
 $NewPostStored = "Sporočilo je bilo shranjeno";
-$ReturnTo = "Vrni se na";
+$ReturnTo = "Vrni se na ";
 $Or = "ali";
 $ReplyToThread = "Odgovori na to tematsko nit";
 $ReplyToMessage = "Odgovori na to sporočilo";
@@ -41,8 +38,8 @@ $ReplyShort = "Odg:";
 $DeletePost = "Resnično želite odstraniti to objavo ? Brisanje te objave odstrani tudi vse morebitne povezane odgovore. Preverite v pogledu tematske niti, katere objave bodo dejansko odstranjene.";
 $Locked = "Zaklenjeno: tečajniki ne morejo več objavljati sporočil v tej kategoriji forumov, v tem forumu ali tematski niti, lahko pa še vedno prebirajo že poslana sporočila";
 $Unlocked = "Odklenjeno: tečajniki lahko objavljajo sporočila v tej kategoriji forumov, v tem forumu oz. tematski niti";
-$Flat = "Plosko";
-$Threaded = "Tematska nit";
+$Flat = "Ravninsko";
+$Threaded = "Nitno";
 $Nested = "Gnezdeno";
 $FlatView = "Ravninski pogled";
 $ThreadedView = "Pogled tematske niti";
@@ -70,7 +67,7 @@ $MovePost = "Premakni objavo";
 $MoveToThread = "Premakni v nit";
 $ANewThread = "Nova nit";
 $Reply = "Odgovor";
-$DeleteForum = "Odstranim forum ?";
+$DeleteForum = "Odstranim forum ? ";
 $DeleteForumCategory = "Odstranim kategorijo foruma ?";
 $Lock = "Zakleni";
 $Unlock = "Odkleni";
@@ -121,9 +118,7 @@ $Thread = "Nit";
 $NotifyMe = "Obvesti me";
 $ConfirmUserQualification = "Potrdi uporabnikovo kvalifikacijo";
 $NotChanged = "Brez spremembe";
-$TitleColumnGradebook = "Naslov stolpca redovalnice";
 $QualifyThreadGradebook = "Kvalificiraj nit (redovalnica)";
-$QualifyWeight = "Utež za kvalifikacijo";
 $QualifyNumeric = "Numerična kvalifikacija";
 $AlterQualifyThread = "Spremeni kvalifikajsko nit";
 $ForumMoved = "Forum je bil prestavljen";
@@ -140,4 +135,3 @@ $BackToForum = "Nazaj na forum";
 $BackToForumOverview = "Nazaj na pregled forumov";
 $BackToThread = "Nazaj na nit";
 $ForumcategoryLocked = "Kategorija foruma je zaklenjena";
-?>

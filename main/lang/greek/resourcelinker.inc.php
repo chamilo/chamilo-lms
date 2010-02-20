@@ -1,9 +1,6 @@
 <?php
-/*
-for more information: see languages.txt in the lang folder.
-*/
 $ResourceAdded = "Resource added. You can now go back to the path or add more resources.";
-$LearningPath = "Learning Path";
+$LearningPath = "Εκπαιδευτική Διαδρομή";
 $LevelUp = "level up";
 $AddIt = "Add it";
 $MainCategory = "main category";
@@ -22,38 +19,11 @@ $Exercise = "Test";
 $Link = "Link";
 $AdValvas = "Ad Valvas";
 $Document = "Document";
-$ShowDelete = "";
-$IntroductionText = "Åéóáãùãéêü êåßìåíï";
-$CourseDescription = "ðåñéãñáöÞ óôï êáôÜëïãï ìáèçìÜôùí";
-$Groups = "ÏìÜäåò ×ñçóôþí";
-$Users = "×ñÞóôåò";
-$IntroductionTextAdd = "";
-$CourseDescriptionAdd = "";
-$GroupsAdd = "";
-$UsersAdd = "";
-$ExportableCourseResources = "";
-$DokeosRelatedCourseMaterial = "";
-$LinkTarget = "";
-$SameWindow = "";
-$NewWindow = "";
-$StepDeleted1 = "";
-$StepDeleted2 = "";
-$Modify = "Ôñïðïðïßçóç";
-$Chapter = "";
-$NoAgendaItems = "";
-$AgendaAdd = "";
-$UserGroupFilter = "";
-$AgendaSortChronologicallyUp = "";
-$ShowCurrent = "";
-$ModifyCalendarItem = "";
-$ItemTitle = "";
-$Detail = "ËåðôïìÝñåéåò";
-$EditSuccess = "Ç äéüñèùóç ôùí óôïé÷åßùí ôçò åñãáóßáò Ýãéíå ìå åðéôõ÷ßá!";
-$AddCalendarItem = "";
-$AddAnn = "ÐñïóèÞêç Áíáêïßíùóçò";
-$ForumAddNewTopic = "";
-$ForumEditTopic = "";
-$ExerciseAnswers = "";
-$ForumReply = "";
-$AgendaSortChronologicallyDown = "";
-?>
+$IntroductionText = "Εισαγωγικό κείμενο";
+$CourseDescription = "Περιγραφή Μαθήματος";
+$Groups = "Ομάδες Χρηστών";
+$Users = "Χρήστες";
+$Modify = "Τροποποίηση";
+$Detail = "Λεπτομέρεια";
+$EditSuccess = "Το γεγονός τροποποιήθηκε";
+$AddAnn = "Προσθήκη Ανακοίνωσης";

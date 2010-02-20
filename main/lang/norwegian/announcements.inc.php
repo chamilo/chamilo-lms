@@ -1,16 +1,12 @@
 <?php
-/*
-for more information: see languages.txt in the lang folder.
-*/
 $Announcement = "Annonseringer";
 $langAnnEmpty = "Annonseringslisten er nå ryddet opp";
 $AnnouncementModified = "Annonsering ble endret";
 $AnnouncementAdded = "Annonsering ble lagt til";
 $AnnouncementDeleted = "Annonsering ble slettet";
 $AnnouncementPublishedOn = "Publisert den";
-$AddAnnouncement = "Legg till annonsering";
+$AddAnnouncement = "Legg til som meddelelse";
 $langContent = "Innhold";
-$AnnouncementDeleteAll = "";
 $professorMessage = "Melding fra læreren";
 $langEmailSent = "og sendt som e-post til registrerte brukere";
 $EmailOption = "Send denne annonseringen som e-post til valgte grupper/brukere";
@@ -35,25 +31,9 @@ $langPleaseSelectUsers = "Du må velge noen brukere";
 $Teachersubject = "Melding sendt til dine studenter";
 $langMessages = "Meldinger";
 $langMessageToSelectedUsers = "Meldinger til valgte brukere";
-$langIntroText = "";
 $langDown = "ned";
-$langMsgSent = "";
-$langSelUser = "";
-$langMessageToSelectedGroups = "";
 $langSelectedGroups = "valgte grupper";
 $langMsg = "Meldinger";
 $langYes = "ja";
 $MsgText = "Melding";
-$AnnouncementDeletedAll = "";
-$AnnouncementMoved = "";
-$NoAnnouncements = "";
 $SelectEverybody = "Velg alle";
-$SelectedUsersGroups = "";
-$LearnerMessage = "";
-$TitleIsRequired = "";
-$AnnounceSentByEmail = "";
-$AnnounceSentToUserSelection = "";
-$SendAnnouncement = "";
-$ModifyAnnouncement = "";
-$ButtonPublishAnnouncement = "";
-?>

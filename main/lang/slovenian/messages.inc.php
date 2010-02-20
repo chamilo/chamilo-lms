@@ -1,9 +1,6 @@
 <?php
-/*
-for more information: see languages.txt in the lang folder.
-*/
 $MessageEmptyMessageOrSubject = "Prosim, podajte temo ali besedilo sporočila";
-$Inbox = "Prispela sporočila";
+$Inbox = "Prejeto";
 $Messages = "Sporočila";
 $SendMessage = "Pošlji sporočilo";
 $NewMessage = "Novo sporočilo";
@@ -11,7 +8,7 @@ $ComposeMessage = "Sestavi sporočilo";
 $DeleteSelectedMessages = "Odstrani izbrana sporočila";
 $SelectAll = "Izberi vse";
 $DeselectAll = "Izberi nobenega";
-$ReplyToMessage = "Odgovori";
+$ReplyToMessage = "Odgovori na to sporočilo";
 $BackToInbox = "Nazaj v Prispela sporočila";
 $MessageSentTo = "Sporočilo je bilo poslano k";
 $SendMessageTo = "Pošlji";
@@ -37,4 +34,3 @@ $AlreadyReadMessage = "Sporočilo je že bilo prebrano";
 $UnReadMessage = "Neprebrana sporočila";
 $MessageSent = "Sporočilo je bilo poslano";
 $YouShouldWriteAMessage = "Napisati morate sporočilo ...";
-?>

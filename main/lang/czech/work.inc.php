@@ -1,34 +1,31 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
-*/
-$Tools  = "N·stroje";
-$SendWork = "Uloû soubor na server (upload)";
-$langTooBig = "Nevybral jste soubor nebo je soubor p&#345;Ìliö velk˝.";
-$langListDeleted = "Cel˝ seznam byl smaz·n.";
-$langDocModif = "n·zev dokumentu upraven";
-$langDocAdd = "Soubor byl p&#345;idan˝ na seznam publikovan˝ch.";
-$langDocDel = "Soubor smaz·n";
-$langTitleWork = "N·zev souboru";
-$langAuthors = "Auto&#345;i";
-$langDelList = "Smazat cel˝ seznam";
-$langWorkDelete = "Vymaû";
+<?php
+$Tools = "N√°stroje";
+$SendWork = "Ulo≈æ soubor na server (upload)";
+$langTooBig = "Nevybrali jste ≈æ√°dn√Ω soubor pro nahr√°n√≠, nebo je soubor p≈ô√≠li≈° velik√Ω.";
+$langListDeleted = "Cel√Ω seznam byl smaz√°n.";
+$langDocModif = "n√°zev dokumentu upraven";
+$langDocAdd = "Soubor byl p≈ôidan√Ω na seznam publikovan√Ωch.";
+$langDocDel = "Soubor smaz√°n";
+$langTitleWork = "N√°zev souboru";
+$langAuthors = "Auto≈ôi";
+$langDelList = "Smazat cel√Ω seznam";
+$langWorkDelete = "Vyma≈æ";
 $langWorkModify = "Upravit";
-$langWorkConfirmDelete = "Skute&#269;n&#283; chcete smazat tento soubor";
-$langAllFiles = "Akce na veöker˝ch souborech";
-$lang_default_upload = "V˝chozÌ nastavenÌ viditelnosti nov&#283; zaslan˝ch soubor&#367;";
-$lang_new_visible = "NovÈ dokumenty jsou viditelnÈ pro vöechny uûivatele";
-$lang_new_unvisible = "NovÈ dokumenty jsou viditelnÈ pouze pro spr·vce kurzu";
-$lang_doc_unvisible = "V·ö soubor je viditeln˝ pouze pro u&#269;itele kurzu a proto V·m nebude zobrazen.";
-$langDelLk = "Vymazat odkaz";
-$langMustBeRegisteredUser = "Jen registovan˝ uûivatelÈ tohoto kurzu smÌ publikovat dokumenty.";
+$langWorkConfirmDelete = "Skuteƒçnƒõ chcete smazat tento soubor";
+$langAllFiles = "Akce na ve≈°ker√Ωch souborech";
+$lang_default_upload = "V√Ωchoz√≠ nastaven√≠ viditelnosti novƒõ zaslan√Ωch soubor≈Ø";
+$lang_new_visible = "Nov√© dokumenty jsou viditeln√© pro v≈°echny u≈æivatele";
+$lang_new_unvisible = "Nov√© dokumenty jsou viditeln√© pouze pro spr√°vce kurzu";
+$lang_doc_unvisible = "V√°≈° soubor je viditeln√Ω pouze pro uƒçitele kurzu a proto V√°m nebude zobrazen.";
+$langDelLk = "Opravdu chcete smazat tenhle odkaz?";
+$langMustBeRegisteredUser = "Jen registovan√Ω u≈æivatel√© tohoto kurzu sm√≠ publikovat dokumenty.";
 $langListDel = "Vymazat seznam";
-$langNameDir = "P&#345;emenuj sloûku";
-$langFileExists = "Soubor jiû existuje";
-$CreateDirectory = "Vytvo&#345;it sloûku";
-$langCurrentDir = "aktu·lnÌ sloûka";
-$UploadADocument = "Uloûit dokument na server ";
-$EditToolOptions = "Moûnosti n·stroje pro ˙pravu ";
-$DocumentDeleted = "Dokument smaz·n";
-$DirDelete = "Smazat adres·&#345;";
-$ValidateChanges = "Potvrdit zm&#283;ny";
-?>
+$langNameDir = "N√°zev nov√© slo≈æky";
+$langFileExists = "Operaci nen√≠ mo≈æn√© vykonat, proto≈æe soubor s takov√Ωm jm√©nem ji≈æ existuje.";
+$CreateDirectory = "Vytvo≈ôit slo≈æku";
+$langCurrentDir = "aktu√°ln√≠ slo≈æka";
+$UploadADocument = "Ulo≈æit dokument na server ";
+$EditToolOptions = "Mo≈ænosti n√°stroje pro √∫pravu ";
+$DocumentDeleted = "Dokument smaz√°n";
+$DirDelete = "Smazat adres√°≈ô";
+$ValidateChanges = "Potvrdit zmƒõny";

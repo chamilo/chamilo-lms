@@ -1,7 +1,4 @@
 <?php
-/*
-for more information: see languages.txt in the lang folder.
-*/
 $lang_already_enrolled = "already enrolled";
 $lang_my_personnal_course_list = "My training list";
 $lang_course_enrollment = "User training";
@@ -13,7 +10,7 @@ $lang_no_course_to_enroll_in_this_category = "No training available for enrollme
 $lang_or_search_from_the_course_code = "Or search by code of training";
 $lang_search = "Search";
 $lang_select_course_among_categories = "Select training among categories";
-$lang_select_course_in = "Select training in";
+$lang_select_course_in = "Select training in ";
 $lang_select_course_in_search_results = "Select training from search results";
 $lang_unsubscribe = "Unsubscribe";
 $lang_back_to_my_home_page = "Back to my home page";
@@ -25,7 +22,7 @@ $lang_back_to_parent_category = "Back to parent category";
 $lang_back_to_course_selection = "Back to training selection";
 $lang_up = "Back to parent category";
 $langCatList = "Categories";
-$langCourseList = "Training";
+$langCourseList = "Training list";
 $Subscribe = "Subscribe";
 $AlreadySubscribed = "Already subscribed";
 $CodeMandatory = "Code mandatory";
@@ -42,7 +39,7 @@ $langHideAndSubscribeOpen = "Hidden / Open";
 $langShowAndSubscribeOpen = "Visible / Open";
 $langShowAndSubscribeClosed = "Visible / Closed";
 $langAdminThisUser = "Back to user";
-$langManage = "Portal management";
+$langManage = "Manage Portal";
 $langEnrollToCourseSuccessful = "You have been registered to the training";
 $langSubCat = "sub-categories";
 $langUnsubscribeNotAllowed = "Unsubscribing is not allowed for this training.";
@@ -77,10 +74,9 @@ $buttonCreateCourseCategory = "Save training category";
 $buttonSaveCategory = "Save the category";
 $buttonChangeCategory = "Change category";
 $SessionName = "Session name";
-$SessionCategory = "Category of session";
+$SessionCategory = "Sessions categories";
 $Expand = "Expand";
 $Collapse = "Collapse";
 $CourseDetails = "Course description";
 $GroupPendingInvitations = "Group pending invitations";
 $Compose = "Compose";
-?>

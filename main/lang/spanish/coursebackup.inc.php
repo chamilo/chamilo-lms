@@ -1,7 +1,4 @@
 <?php
-/*
-for more information: see languages.txt in the lang folder.
-*/
 $langSelectOptionForBackup = "Por favor, seleccione una opción de copia de seguridad";
 $langLetMeSelectItems = "Seleccionar los componentes del curso";
 $langCreateFullBackup = "Crear una copia de seguridad completa de este curso";
@@ -48,4 +45,3 @@ $DocumentsWillBeAddedToo = "Los documentos también serán añadidos";
 $ToExportLearnpathWithQuizYouHaveToSelectQuiz = "Si quiere exportar una lección que contenga ejercicios, tendrá que  asegurarse de que estos ejercicios han sido incluidos en la exportación; para eso tendrá que haberlos seleccionado en la lista de ejercicios.";
 $ArchivesDirectoryNotWriteableContactAdmin = "El directorio \"archive\" utilizado por esta herramienta no tiene habilitado los permisos de escritura. Contacte al administrador de la plataforma.";
 $DestinationCourse = "Curso de destino";
-?>

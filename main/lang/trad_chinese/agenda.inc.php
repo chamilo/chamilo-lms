@@ -1,10 +1,7 @@
 <?php
-/*
-for more information: see languages.txt in the lang folder.
-*/
 $AgendaAdd = "新增日程項目";
 $ShowAllEvents = "顯示所有日程項目";
-$ShowCurrent = "顯示本月日程項目";
+$ShowCurrent = "顯示本月日程項目 ";
 $AddCalendarItem = "新增日程項目";
 $Day = "日";
 $Month = "月";
@@ -35,7 +32,7 @@ $langNow = "現下";
 $langAddEvent = "添加事件";
 $langDetail = "詳細內容";
 $MonthView = "檢視一個月";
-$WeekView = "檢視一週";
+$WeekView = "檢視一週 ";
 $DayView = "檢視一天";
 $AddPersonalItem = "加入個人項目";
 $Week = "週";
@@ -50,29 +47,6 @@ $ViewPersonalItem = "檢視個人項目";
 $UserGroupFilter = "過濾小組/使用者";
 $ShowAll = "顯示全部";
 $Print = "列印";
-$MyTextHere = "";
 $CopiedAsAnnouncement = "複製為公告";
 $NewAnnouncement = "新公告";
 $AddAnnouncement = "加入為新公告";
-$UpcomingEvent = "";
-$RepeatedEvent = "";
-$RepeatType = "";
-$RepeatDaily = "";
-$RepeatWeekly = "";
-$RepeatMonthlyByDate = "";
-$RepeatMonthlyByDay = "";
-$RepeatMonthlyByDayR = "";
-$RepeatYearly = "";
-$RepeatEnd = "";
-$RepeatedEventViewOriginalEvent = "";
-$ICalFileImport = "";
-$AllUsersOfThePlatform = "";
-$GlobalEvent = "";
-$ModifyEvent = "";
-$EndDateCannotBeBeforeTheStartDate = "";
-$AgendaSortChronologicallyUp = "";
-$AgendaSortChronologicallyDown = "";
-$ItemForUserSelection = "";
-$IsNotiCalFormatFile = "";
-$RepeatEvent = "";
-?>

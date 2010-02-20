@@ -1,14 +1,11 @@
 <?php
-/*
-for more information: see languages.txt in the lang folder.
-*/
 $Announcement = "Ilmoitukset";
 $langAnnEmpty = "Ilmoitusten lista on tyhjennetty";
 $AnnouncementModified = "Ilmoituksia on muutettu";
 $AnnouncementAdded = "Ilmoitus on lisätty";
 $AnnouncementDeleted = "Ilmoitus on poistettu";
-$AnnouncementPublishedOn = "Julkaistu";
-$AddAnnouncement = "Lisää ilmoitus";
+$AnnouncementPublishedOn = "Julkaistu ";
+$AddAnnouncement = "Lisää ilmoituksena";
 $langContent = "Sisältö";
 $AnnouncementDeleteAll = "Tyhjennä ilmoitusten lista";
 $professorMessage = "Viesti opettajaltasi";
@@ -56,4 +53,3 @@ $AnnounceSentToUserSelection = "Ilmoitus lähetetty valituille käyttäjille";
 $SendAnnouncement = "Lähetä ilmoitus";
 $ModifyAnnouncement = "Muokkaa ilmoitusta";
 $ButtonPublishAnnouncement = "Lähetä ilmoitus";
-?>

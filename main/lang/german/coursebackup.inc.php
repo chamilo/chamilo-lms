@@ -1,7 +1,4 @@
 <?php
-/*
-for more information: see languages.txt in the lang folder.
-*/
 $langSelectOptionForBackup = "Bitte wählen Sie eine Sicherungs-Option.";
 $langLetMeSelectItems = "Kurs Komponenten auswählen";
 $langCreateFullBackup = "Vollständiges Backup erstellen";
@@ -22,7 +19,7 @@ $langCopyFinished = "Kopieren abgeschlossen";
 $langFullRecycle = "Vollständiges Recyclen";
 $langRecycleCourse = "Kurs Recycle";
 $langRecycleFinished = "Recycle beendet";
-$langRecycleWarning = "Warnung: mit diesem Tool werden einige Teile des Kurses gelöscht. Dies ist irreversibel. Es empfiehlt sich, vorher ein <a href=\\"create_backup.php\\">Backup</a> anzulegen.";
+$langRecycleWarning = "Warnung: mit diesem Tool werden einige Teile des Kurses gelöscht. Dies ist irreversibel. Es empfiehlt sich, vorher ein <a href=\"create_backup.php\">Backup</a> anzulegen.";
 $langSameFilename = "Was soll mit importierten Dateien passieren, die gleichlautend sind?";
 $langSameFilenameSkip = "gleichlautende Dateien überspringen";
 $langSameFilenameRename = "Datei umbenennen (d.h. datei.pdf wird zu datei_1.pdf)";
@@ -48,4 +45,3 @@ $DocumentsWillBeAddedToo = "Dokmente werden ebenfalls hinzugefügt";
 $ToExportLearnpathWithQuizYouHaveToSelectQuiz = "Beim Exportieren eines Lernpfads mit einem Test, muss man sicher stellen, dass zugehörige Tests im Export inbegriffen sind, daher müssen diese aus der Liste der Tests ausgewählt werden.";
 $ArchivesDirectoryNotWriteableContactAdmin = "Das Verzeichnis des Archivs, das von diesem Tool benutzt wird, ist nicht beschreibbar. Bitte den Plattform Administrator benachrichtigen.";
 $DestinationCourse = "Ziel-Kurs";
-?>

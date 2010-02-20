@@ -1,12 +1,9 @@
 <?php
-/*
-for more information: see languages.txt in the lang folder.
-*/
 $langNewGroupCreate = "Neue Gruppe(n) erstellen";
 $langGroupCreation = "Neue Gruppen erstellen";
 $langCreate = "erstellen";
 $langNewGroups = "Neue Gruppe(n)";
-$langMax = "max.";
+$langMax = "max. 12 Buchstaben, z.B. <i>ABCDEF123456</i>";
 $langGroupPlacesThis = "Plätze (optional";
 $langGroupsAdded = "Gruppe(n) wurde(n) hinzugefügt";
 $langGroupDel = "Gruppe gelöscht";
@@ -18,14 +15,14 @@ $langGroupTools = "Tools";
 $langGroupDocument = "Dokumente";
 $langGroupPropertiesModified = "Gruppeneinstellungen wurden verändert";
 $langGroupSpace = "Gruppenbereich";
-$langGroupName = "Gruppenname";
+$langGroupName = "Name";
 $langGroupDescription = "Beschreibung";
 $langGroupMembers = "Mitglieder der Gruppe";
 $langEditGroup = "Diese Gruppe bearbeiten";
 $Optional = "(optional)";
 $langGroupSettingsModified = "Gruppeneinstellungen wurden verändert";
 $langGroupTooMuchMembers = "Die maximale Teilnehmerzahl wurde erreicht (Sie können die Zahl unten verändern). Gruppenzusammensetzung wurde nicht verändert";
-$langGroupTutor = "Trainer/in";
+$langGroupTutor = "Tutor";
 $langGroupNoTutor = "(kein)";
 $langGroupNone = "(keine)";
 $langGroupNoneMasc = "(keine)";
@@ -36,14 +33,14 @@ $langGroupSelfRegistration = "Registrierung";
 $langGroupSelfRegInf = "registrieren";
 $langRegIntoGroup = "Fügen Sie mich zu dieser Gruppe hinzu";
 $langGroupNowMember = "Sie sind nun Mitglied dieser Gruppe";
-$langPrivate = "privat";
-$langPublic = "öffentlich";
+$langPrivate = "Eingeschränkter Zugang, Einschreibung geschlossen (Die Seiten sind nur für angemeldete <a href=../user/user.php>Teilnehmer</a> zugänglich.)";
+$langPublic = "Öffentlicher Zugriff auch ohne Anmeldung möglich";
 $langPropModify = "Einstellungen verändern";
 $langState = "Status";
 $langGroupFilledGroups = "Gruppen wurden von den Teilnehmer/innen belegt.";
 $langSubscribed = "Teilnehmer/innen, die diesen Kurs belegt haben";
 $langStudentsNotInThisGroups = "Teilnehmer ist nicht in dieser Gruppe";
-$langQtyOfUserCanSubscribe_PartBeforeNumber = "Ein/e Teilnehmer/in kann höchstens in";
+$langQtyOfUserCanSubscribe_PartBeforeNumber = "Ein/e Teilnehmer/in kann höchstens in ";
 $langQtyOfUserCanSubscribe_PartAfterNumber = " Gruppen Mitglied sein";
 $langGroupLimit = "Gruppen-Limit";
 $CreateGroup = "Gruppe(n) erstellen";
@@ -63,15 +60,15 @@ $langSameForAll = "dasselbe für alle";
 $langNoLimit = "Keine Begrenzung";
 $langPleaseEnterValidNumber = "Bitte die gewünscht Anzahl an Gruppen eingeben";
 $langCreateGroupsFromVirtualCourses = "Gruppen aus allen Nutzen in den virtuellen Kursen einrichten";
-$langCreateGroupsFromVirtualCoursesInfo = "Dieser Kurs ist eine Kombination eines wirklichen Kurses mir einem oder mehreren virtuellen Kursen. Wenn Sie den folgenen Button klicken, werden neue Gruppen gemäß dieses(dieser) Kurse (virutellen Kurse) angelegt. Alle Teilnehmer werden in die Gruppen ein";
+$langCreateGroupsFromVirtualCoursesInfo = "Dieser Kurs ist eine Kombination eines wirklichen Kurses mir einem oder mehreren virtuellen Kursen. Wenn Sie den folgenen Button klicken, werden neue Gruppen gemäß dieses(dieser) Kurse (virutellen Kurse) angelegt. Alle Teilnehmer werden in die Gruppen eingeteilt.";
 $langNoGroupsAvailable = "Es sind keine Gruppen verfügbar";
 $langGroupsFromVirtualCourses = "Gruppe aus einem virtuellen Kurs";
 $NotAvailable = "nicht verfügbar";
 $CreateSubgroups = "Untergruppen erstellen";
-$CreateSubgroupsInfo = "Diese Option erlaubt es, neue Gruppen auf Basis von existierenden Gruppen zu erstellen. Die gewünschte Anzahl von Gruppen angeben und die existierende Gruppe auswählen. Die gewünschte Anzahl von Gruppen wird erstellt, und die Teilnehmer der existierenden";
+$CreateSubgroupsInfo = "Diese Option erlaubt es, neue Gruppen auf Basis von existierenden Gruppen zu erstellen. Die gewünschte Anzahl von Gruppen angeben und die existierende Gruppe auswählen. Die gewünschte Anzahl von Gruppen wird erstellt, und die Teilnehmer der existierenden Gruppe werden in den neuen Gruppen angemeldet. Die existierende Gruppe bleibt unverändert.";
 $CreateNumberOfGroups = "Anzahl Gruppen erstellen";
-$WithUsersFrom = "Gruppen mit Teilnehmern aus";
-$CategoryDeleted = "Kategorie wurde gelöscht.";
+$WithUsersFrom = "Gruppen mit Teilnehmern aus ";
+$CategoryDeleted = "Die Kategorie wurde gelöscht";
 $Empty = "Leer";
 $FillGroup = "Teilnehmer zu Gruppe hinzufügen";
 $EmptyGroup = "Alle Teilnehmer aus Gruppe abmelden";
@@ -93,5 +90,3 @@ $GroupsFromClassesInfo = "Mit dieser Option können Sie Gruppen auf der Grundlag
 $Group = "Gruppe";
 $ForumOfGroup = "Forum der Gruppe:";
 $BackToGroupList = "Zurück zur Gruppenliste";
-$EditGroupCategory = "";
-?>

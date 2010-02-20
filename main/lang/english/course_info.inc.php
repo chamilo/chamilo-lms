@@ -1,7 +1,4 @@
 <?php
-/*
-for more information: see languages.txt in the lang folder.
-*/
 $ModifInfo = "Settings";
 $langModifDone = "The information has been modified";
 $langDelCourse = "Delete the training area";
@@ -11,11 +8,11 @@ $langConfidentiality = "Confidentiality";
 $langPublic = "Public access from portal home page even without login";
 $langUnsubscription = "Unsubscribe";
 $langPrivOpen = "Private access, registration open";
-$langPrivate = "Private access - site accessible only to training members (see the <a href=../user/user.php>Users list</a>)";
+$langPrivate = " Private access (training reachable only by people on the users list)";
 $langForbidden = "Not allowed";
-$CourseAccessConfigTip = "By default your training is public. But you can define the level of confidentiality above.";
+$CourseAccessConfigTip = " By default your training is public. But you can define the level of confidentiality above.";
 $langOpenToTheWorld = "Open - access allowed for the whole world";
-$OpenToThePlatform = "Open - access allowed for users registered in portal";
+$OpenToThePlatform = " Open - access allowed for users registered on the platform";
 $langOpenToThePlatform = "Open - access allowed for users registered on the platform";
 $langTipLang = "This language will be valid for every visitor of your training's website.";
 $langVid = "Chamilo LIVE";
@@ -26,9 +23,9 @@ $langExercise = "Tests";
 $langStats = "Statistics";
 $langUplPage = "Upload page and link to Home Page";
 $langLinkSite = "Add link to page on Home Page";
-$langCourse = "The area";
+$langCourse = "The area ";
 $langHasDel = "has been deleted";
-$langBackHome = "Back to Home Page of";
+$langBackHome = "Back to Home Page of ";
 $langByDel = "Deleting this area will permanently delete all the content (documents, links...) it contains and unregister all its members (not remove them from other training). <p>Do you really want to delete the training?";
 $langY = "YES";
 $langN = "NO";
@@ -76,7 +73,7 @@ $langBackH = "back to homepage";
 $langOtherCategory = "Other category";
 $langAllowedToUnsubscribe = "Users are allowed to unsubscribe from this training";
 $langNotAllowedToUnsubscribe = "Users are not allowed to unsubscribe from this training";
-$langCourseVisibilityClosed = "Completely closed; the training is only accessible trainers.";
+$langCourseVisibilityClosed = " Completely closed: the training is only accessible to the trainers.";
 $CourseVisibilityClosed = "Closed - the training is only accessible to the trainers";
 $CourseVisibilityModified = "Modified (more detailed settings specified through roles-rights system)";
 $WorkEmailAlert = "Alert by e-mail on work submission";
@@ -113,4 +110,3 @@ $NewUserEmailAlert = "Notice by e-mail  to trainer of auto subscription of a new
 $NewUserEmailAlertEnable = "Enable the notice by e-mail  to trainer of auto subscription of a new user";
 $NewUserEmailAlertToTeacharAndTutor = "Enable the notice by e-mail  to trainer and tutors of auto subscription of a new user";
 $NewUserEmailAlertDisable = "Disable the email alert for the suscription of  new user in the training";
-?>

@@ -1,7 +1,4 @@
 <?php
-/*
-for more information: see languages.txt in the lang folder.
-*/
 $langScormVersion = "versie";
 $langScormRestarted = "Alle lessen zijn nu onvolledig.";
 $langScormNoNext = "Dit is de laatste les.";
@@ -53,5 +50,3 @@ $UnknownPackageFormat = "Het pakket kan niet worden herkend. Zorg er voor dat he
 $Attempt = "Poging";
 $MoveTheCurrentForum = "Verplaats het huidige forum";
 $WarningWhenEditingScorm = "Opgelet !<br /> Wanneer u de inhoud van een scorm-fase wijzigt, kunt u de weergave van het leerpad veranderen, of de stap beschadigen.";
-$AdditionalProfileField = "";
-?>

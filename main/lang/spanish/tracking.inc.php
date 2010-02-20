@@ -1,8 +1,5 @@
 <?php
-/*
-for more information: see languages.txt in the lang folder.
-*/
-$langToolName = "Estadísticas";
+$langToolName = "Importar cursos de Blackboard";
 $TrackingDisabled = "El seguimiento ha sido deshabilitado por el administrador del sistema.";
 $InactivesStudents = "Alumnos inactivos";
 $AverageTimeSpentOnThePlatform = "Tiempo medio de conexión a la plataforma";
@@ -19,7 +16,7 @@ $SeeSessionList = "Ver la lista de sesiones";
 $langShowNone = "No mostrar ninguno";
 $langCourseStats = "Estadísticas del curso";
 $langToolsAccess = "Accesos a las herramientas";
-$langCourseAccess = "Accesos a este curso";
+$langCourseAccess = "Acceso al curso";
 $langLinksAccess = "Enlaces";
 $langDocumentsAccess = "Documentos";
 $langScormAccess = "Lecciones - Cursos con formato SCORM";
@@ -60,8 +57,8 @@ $langWorkAuthors = "Autor";
 $langWorkDescription = "Descripción";
 $informationsAbout = "Seguimiento de";
 $langNoEmail = "No hay especificada una dirección de correo electrónico";
-$langNoResult = "No hay resultados";
-$langCourse = "Curso";
+$langNoResult = "Aún no hay resultados";
+$langCourse = "El curso ";
 $langHits = "Accesos";
 $langTotal = "Total";
 $langHour = "Hora";
@@ -158,7 +155,7 @@ $Tracks = "Seguimiento";
 $Success = "Calificación";
 $ExcelFormat = "Formato Excel";
 $MyLearnpath = "Mi lección";
-$Time = "Tiempo";
+$Time = "Hora";
 $Score = "Puntuación";
 $LastConnexion = "Última conexión";
 $ConnectionTime = "Tiempo de conexión";
@@ -178,7 +175,7 @@ $NoProduction = "Sin productos";
 $NoComment = "Sin comentarios";
 $LatestLogin = "Última conexión";
 $TimeSpentOnThePlatform = "Tiempo de permanencia en la plataforma";
-$Messages = "Mensajes en el foro";
+$Messages = "Mensajes";
 $AveragePostsInForum = "Número de mensajes en el foro";
 $AverageAssignments = "Número de tareas";
 $Print = "Imprimir";
@@ -245,8 +242,3 @@ $ResourcesTracking = "Informe sobre recursos";
 $SelectFieldToAdd = "Seleccionar un campo del perfil de usuario";
 $AddAdditionalProfileField = "Añadir un campo del perfil de usuario";
 $ConfigureExtensions = "Configurar los servicios";
-$DashboardBlocks = "";
-$DashboardList = "";
-$YouHaveNotEnabledBlocks = "";
-$BlocksHaveBeenUpdatedSuccessfully = "";
-?>

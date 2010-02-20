@@ -1,7 +1,4 @@
 <?php
-/*
-for more information: see languages.txt in the lang folder.
-*/
 $langOnlineConference = "Rimarinakuy";
 $langWash = "Pichay";
 $langReset = "Kuti qallariy";
@@ -14,15 +11,15 @@ $langConfirmReset = "Cheqaychu kashanki llipin willanakunata pichanaykipaq?";
 $langHasResetChat = "kuti qallarichikunmi Chat";
 $langNoOnlineConference = "Manan kunanqa rimarinakuyqa kashanchu...";
 $langMediaFile = "Uyarina utaq streaming de video nisqa";
-$langContentFile = "Presentación nisqa\\"";
+$langContentFile = "Presentación nisqa\"";
 $langListOfParticipants = "Kaypi ka";
 $langYourPicture = "Wankiyki";
 $langOnlineDescription = "Rimarinakuymanta Nisqaynin";
-$langOnlyCheckForImportantQuestion = "¡Ama hina kaychu, t\'oqsiy kay casilla nisqata ancha tapukuy tapurinallapaqmi!";
+$langOnlyCheckForImportantQuestion = "¡Ama hina kaychu, t'oqsiy kay casilla nisqata ancha tapukuy tapurinallapaqmi!";
 $langQuestion = "tapuna";
 $langClearList = "Pichay sinrita";
 $langWhiteBoard = "Qelqanapaq";
-$langTextEditorDefault = "<h2>Qelqa ruwaq</h2> kuchuspa kayman ratachiy kay Ms-Word ® nisqata chaymantataq ruwapay. Hokaqkunaqa rikunqaku ima t\'ijrapasqaykitapas.";
+$langTextEditorDefault = "<h2>Qelqa ruwaq</h2> kuchuspa kayman ratachiy kay Ms-Word ® nisqata chaymantataq ruwapay. Hokaqkunaqa rikunqaku ima t'ijrapasqaykitapas.";
 $langStreaming = "Streaming";
 $langStreamURL = "Flujo nisqapa URL";
 $langStreamType = "Imaniraq flujo nisqamanta";
@@ -32,7 +29,7 @@ $langWelcomeToOnlineConf = "Chayaykamullaysi <b>RI</b>";
 $langNoLinkAvailable = "Ni hoq waskhanapas kanchu";
 $langChat_reset_by = "kuti qallarichiy chat nisqata";
 $OrFile = "Utaq khipu";
-$langCallSent = "Rimapakunapaq mañakuyqa apachiku. Mayqan runaman mañakuyqa suyachikushanraq.";
+$langCallSent = "Rimapakunapaq mañakuyqa apachiku. Mayqan runaman mañakuyqa suyachikushanraq. ";
 $langChatDenied = "Waqyasqaykiqa mana chaskikunchu runa mañakusqayki";
 $Send = "Apachiy";
 $Connected = "Kaqkuna";
@@ -43,7 +40,7 @@ $Confused = "Musphasqa";
 $Cool = "Guay";
 $Surprised = "Utipasqa";
 $Hand = "Allillanchu";
-$Wink = "k\'illmiy";
+$Wink = "k'illmiy";
 $Neutral = "Mana piman sayapakuq";
 $Angry = "Phiñasqa";
 $Avid = "Rijcharisqa";
@@ -60,4 +57,3 @@ $AskPermissionSpeak = "Mañakuy rimanapaq";
 $GiveTheFloorTo = "Qoy rimanapaq";
 $Pause = "Utiy";
 $Stop = "Harkay";
-?>

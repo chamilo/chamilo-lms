@@ -1,7 +1,4 @@
 <?php
-/*
-for more information: see languages.txt in the lang folder.
-*/
 $langSelectOptionForBackup = "Please select a backup-option.";
 $langLetMeSelectItems = "Let me select learning objects";
 $langCreateFullBackup = "Create a complete backup of this training";
@@ -41,11 +38,10 @@ $langNoBackupsAvailable = "no backup is available";
 $langNoDestinationCoursesAvailable = "No destination training available";
 $langBackup = "Backup";
 $langImportBackupInfo = "Import a backup. You will be able to upload a backup file from you local drive or you can use a backup file available on the server.";
-$langCreateBackupInfo = "Create a backup. You can select the learning objects to integrate in the backup file.";
+$langCreateBackupInfo = "Create a backup. You can select the learning objects to integrate in the backup file. ";
 $ToolIntro = "Tool introduction";
 $UploadError = "Upload failed, please check maximum file size limits and folder rights.";
 $DocumentsWillBeAddedToo = "Documents will be added too";
 $ToExportLearnpathWithQuizYouHaveToSelectQuiz = "If you want to export a course containing a test, you have to make sure the corresponding tests are included in the export, so you have to select them in the list of tests.";
 $ArchivesDirectoryNotWriteableContactAdmin = "The archives directory, used by this tool, is not writeable. Please contact your platform administrator.";
 $DestinationCourse = "Target training";
-?>

@@ -1,7 +1,4 @@
 <?php
-/*
-for more information: see languages.txt in the lang folder.
-*/
 $langSelectOptionForBackup = "Izberite možnosti arhiviranja";
 $langLetMeSelectItems = "Dovoli mi izbrati posamezne komponente tečaja";
 $langCreateFullBackup = "Ustvari popolno arhivsko kopijo tega tečaja";
@@ -22,7 +19,7 @@ $langCopyFinished = "Kopiranje končano";
 $langFullRecycle = "Popolno recikliranje";
 $langRecycleCourse = "Recikliranje vsebin tečaja";
 $langRecycleFinished = "Recikliranje končano";
-$langRecycleWarning = "Opozorilo: z uporabo tega orodja boste odstranili nekatere dele tečaja. Odstranjenih vsebin ni mogoče povrniti. Svetujemo vam da predhodno naredite <a href=\\"create_backup.php\\">rezervno kopijo</a>.";
+$langRecycleWarning = "Opozorilo: z uporabo tega orodja boste odstranili nekatere dele tečaja. Odstranjenih vsebin ni mogoče povrniti. Svetujemo vam da predhodno naredite <a href=\"create_backup.php\">rezervno kopijo</a>.";
 $langSameFilename = "Kaj naj storim z uvoženo datoteko, ki ima enako ime kot obstoječa datoteka?";
 $langSameFilenameSkip = "Izpusti datoteko z enakim imenom";
 $langSameFilenameRename = "Preimenuj datoteko z enakim imenom (npr. datoteka.pdf postane datoteka_1.pdf)";
@@ -48,4 +45,3 @@ $DocumentsWillBeAddedToo = "Pripadajači dokumenti bodo tudi dodani";
 $ToExportLearnpathWithQuizYouHaveToSelectQuiz = "V primeru, da želite izvoziti učno pot, ki vsebuje teste/vaje, morate zagotoviti, da so ustrezni testi/vaje vključeni v izvoz; izberete jih iz seznama testov.";
 $ArchivesDirectoryNotWriteableContactAdmin = "Arhivska mapa, ki jo uporablja to orodje, ne omogoča pisalnega dostopa. Prosim da se obrnete na upravitelja platforme.";
 $DestinationCourse = "Ciljni tečaj";
-?>

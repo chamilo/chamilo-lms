@@ -1,7 +1,4 @@
 <?php
-/*
-for more information: see languages.txt in the lang folder.
-*/
 $AgendaAdd = "Add event";
 $ShowAllEvents = "All events";
 $ShowCurrent = "Current month";
@@ -75,4 +72,3 @@ $AgendaSortChronologicallyDown = "Descending";
 $ItemForUserSelection = "Users selection list";
 $IsNotiCalFormatFile = "This file is not in iCal format";
 $RepeatEvent = "Repeat event";
-?>

@@ -1,7 +1,4 @@
 <?php
-/*
-for more information: see languages.txt in the lang folder.
-*/
 $MyTasks = "Moja opravila";
 $FavoriteBlogs = "Moji priljubljeni blogi";
 $Navigation = "Navigacija";
@@ -53,7 +50,7 @@ $ReadMore = "Več...";
 $DeleteThisArticle = "Odstrani ta članek";
 $EditThisPost = "Uredi to objavo";
 $DeleteThisComment = "Odstrani ta komentar";
-$NoArticles = "Ta trenutek b logu ni člankov. V primeru, da ste avtor bloga, kliknite povezavo \'nov članek\' in ga napišite.";
+$NoArticles = "Ta trenutek b logu ni člankov. V primeru, da ste avtor bloga, kliknite povezavo 'nov članek' in ga napišite.";
 $NoTasks = "Ni opravil";
 $Rating = "Ocene";
 $RateThis = "Oceni";
@@ -102,4 +99,3 @@ $CommentDeleted = "Komentar je bil odstranjen";
 $RatingAdded = "Ocena je bila dodana.";
 $BlogPosts = "Blog: objave";
 $BlogComments = "Blog: komentarji";
-?>

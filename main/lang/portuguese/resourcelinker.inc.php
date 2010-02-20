@@ -1,8 +1,5 @@
 <?php
-/*
-for more information: see languages.txt in the lang folder.
-*/
-$ResourceAdded = "Recurso adicionado. Pode regressar ao caminho/atalho do curso ou adicionar mais recursos.";
+$ResourceAdded = "Recurso adicionado";
 $LearningPath = "Cursos";
 $LevelUp = "nível acima";
 $AddIt = "Adicioná-lo";
@@ -28,7 +25,7 @@ $CourseDescription = "Descrição do Curso";
 $Groups = "Grupos";
 $Users = "Utilizadores";
 $IntroductionTextAdd = "Adicionar uma página contendo o texto de introdução a esta secção.";
-$CourseDescriptionAdd = "Adicionar uma página contendo a descrição do curso a esta secção.";
+$CourseDescriptionAdd = "Adicionar uma página contendo a descrição do curso a esta secção. ";
 $GroupsAdd = "Adicionar a ferramenta de Grupos a esta secção.";
 $UsersAdd = "Adicionar a ferramenta de Utilizadores a esta secção.";
 $ExportableCourseResources = "Recursos do curso que podem ser exportados";
@@ -40,20 +37,19 @@ $StepDeleted1 = "Este";
 $StepDeleted2 = "item foi eliminado nessa ferramenta.";
 $Modify = "Editar";
 $Chapter = "Secção";
-$NoAgendaItems = "Não existem eventos na agenda";
+$NoAgendaItems = "Não existem quaisquer eventos";
 $AgendaAdd = "Adicionar um evento";
-$UserGroupFilter = "Utilizar o filtro do grupo";
-$AgendaSortChronologicallyUp = "Ordenar cronologicamente (ascendente)";
-$ShowCurrent = "Mês actual";
+$UserGroupFilter = "Filtrar grupos/utilizadores";
+$AgendaSortChronologicallyUp = "Ascendente";
+$ShowCurrent = "Mês actual/corrente";
 $ModifyCalendarItem = "Editar evento";
-$ItemTitle = "Título";
+$ItemTitle = "Nome do evento";
 $Detail = "Detalhes";
-$EditSuccess = "Edição concluída com sucesso";
-$AddCalendarItem = "Adicionar um evento";
+$EditSuccess = "Evento editado";
+$AddCalendarItem = "Adicionar um evento à agenda";
 $AddAnn = "Adicionar anúncio";
 $ForumAddNewTopic = "Fórum: adicionar novo tópico";
 $ForumEditTopic = "Fórum: editar tópico";
 $ExerciseAnswers = "Exercício: Respostas";
 $ForumReply = "Fórum: responder";
-$AgendaSortChronologicallyDown = "Ordenar cronologicamente (descendente)";
-?>
+$AgendaSortChronologicallyDown = "Descendente";

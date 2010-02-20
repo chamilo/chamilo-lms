@@ -1,7 +1,4 @@
 <?php
-/*
-for more information: see languages.txt in the lang folder.
-*/
 $ResourceAdded = "Resource added. You can now go back to the path or add more resources.";
 $LearningPath = "Learning Path";
 $LevelUp = "level up";
@@ -22,38 +19,3 @@ $Exercise = "Test";
 $Link = "Link";
 $AdValvas = "Ad Valvas";
 $Document = "Document";
-$ShowDelete = "";
-$IntroductionText = "";
-$CourseDescription = "";
-$Groups = "";
-$Users = "";
-$IntroductionTextAdd = "";
-$CourseDescriptionAdd = "";
-$GroupsAdd = "";
-$UsersAdd = "";
-$ExportableCourseResources = "";
-$DokeosRelatedCourseMaterial = "";
-$LinkTarget = "";
-$SameWindow = "";
-$NewWindow = "";
-$StepDeleted1 = "";
-$StepDeleted2 = "";
-$Modify = "";
-$Chapter = "";
-$NoAgendaItems = "";
-$AgendaAdd = "";
-$UserGroupFilter = "";
-$AgendaSortChronologicallyUp = "";
-$ShowCurrent = "";
-$ModifyCalendarItem = "";
-$ItemTitle = "";
-$Detail = "";
-$EditSuccess = "";
-$AddCalendarItem = "";
-$AddAnn = "";
-$ForumAddNewTopic = "";
-$ForumEditTopic = "";
-$ExerciseAnswers = "";
-$ForumReply = "";
-$AgendaSortChronologicallyDown = "";
-?>

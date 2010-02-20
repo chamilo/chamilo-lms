@@ -1,7 +1,4 @@
 <?php
-/*
-for more information: see languages.txt in the lang folder.
-*/
 $MyTasks = "Mijn taken";
 $FavoriteBlogs = "Mijn favoriete projecten";
 $Navigation = "Navigatie";
@@ -53,7 +50,7 @@ $ReadMore = "lees meer...";
 $DeleteThisArticle = "Dit artikel verwijderen";
 $EditThisPost = "Dit artikel wijzigen";
 $DeleteThisComment = "Deze commentaar verwijderen";
-$NoArticles = "Er is momenteel geen enkel artikel in dit project. Als u een auteur bent in dit project kunt u op de link \'Nieuw artikel\' klikken om een nieuw artikel te schrijven.";
+$NoArticles = "Er is momenteel geen enkel artikel in dit project. Als u een auteur bent in dit project kunt u op de link 'Nieuw artikel' klikken om een nieuw artikel te schrijven.";
 $NoTasks = "Geen taken";
 $Rating = "Score";
 $RateThis = "Geef een score aan dit artikel";
@@ -102,4 +99,3 @@ $CommentDeleted = "De opmerking is verwijderd.";
 $RatingAdded = "Een score is toegevoegd.";
 $BlogPosts = "Blog Posts";
 $BlogComments = "Blog commentaren";
-?>

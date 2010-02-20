@@ -1,7 +1,4 @@
 <?php
-/*
-for more information: see languages.txt in the lang folder.
-*/
 $langSelectOptionForBackup = "Por favor, selecione uma das opção de backup.";
 $langLetMeSelectItems = "Deixe-me selecionar os componentes do curso";
 $langCreateFullBackup = "Criar um backup de segurança completo deste curso";
@@ -22,7 +19,7 @@ $langCopyFinished = "Cópia concluída";
 $langFullRecycle = "Reciclagem total";
 $langRecycleCourse = "Reciclar curso";
 $langRecycleFinished = "A reciclagem está concluída";
-$langRecycleWarning = "Atenção: ao utilizar esta ferramenta, irá eliminar as rotas de aprendizagem do curso. Não será possível recuperá-los mais tarde. Aconselhamos previamente a realizar um <a href=\\"create_backup.php\\">backup</a>.";
+$langRecycleWarning = "Atenção: ao utilizar esta ferramenta, irá eliminar as rotas de aprendizagem do curso. Não será possível recuperá-los mais tarde. Aconselhamos previamente a realizar um <a href=\"create_backup.php\">backup</a>.";
 $langSameFilename = "O que fazer com os arquivos importados com o mesmo nome dos arquivos já existentes?";
 $langSameFilenameSkip = "Pular arquivos de mesmo nome";
 $langSameFilenameRename = "Renomear arquivo de mesmo nome";
@@ -48,4 +45,3 @@ $DocumentsWillBeAddedToo = "Os documentos serão adicionados";
 $ToExportLearnpathWithQuizYouHaveToSelectQuiz = "Se desejar exportar um curso juntamente com um exercício, deverá certificar-se de que os exercícios correspondentes estão incluídos na exportação, para isso deverá selecioná-los da lista de exercícios.";
 $ArchivesDirectoryNotWriteableContactAdmin = "O directório do arquivo utilizado por esta aplicação, não se encontra editável. Por favor, contacte o administrador da plataforma.";
 $DestinationCourse = "Curso destino";
-?>

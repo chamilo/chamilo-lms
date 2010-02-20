@@ -1,7 +1,4 @@
 <?php
-/*
-for more information: see languages.txt in the lang folder.
-*/
 $lang_already_enrolled = "já inscrito";
 $lang_my_personnal_course_list = "A minha lista de cursos";
 $lang_course_enrollment = "Cursos do utilizador";
@@ -13,7 +10,7 @@ $lang_no_course_to_enroll_in_this_category = "Não existem cursos nesta categori
 $lang_or_search_from_the_course_code = "Pesquise pelo nome ou pelo código do curso";
 $lang_search = "Pesquisar";
 $lang_select_course_among_categories = "Seleccione um curso das várias categorias existentes";
-$lang_select_course_in = "Seleccione um curso em";
+$lang_select_course_in = "Seleccione um curso em ";
 $lang_select_course_in_search_results = "Seleccione um curso a partir dos resultados da pesquisa";
 $lang_unsubscribe = "Anular/cancelar inscrição";
 $lang_back_to_my_home_page = "Voltar à minha página inicial";
@@ -25,7 +22,7 @@ $lang_back_to_parent_category = "Voltar à categoria principal";
 $lang_back_to_course_selection = "Voltar à selecção de cursos";
 $lang_up = "Voltar à categoria principal";
 $langCatList = "Categorias";
-$langCourseList = "Cursos";
+$langCourseList = "Lista de cursos";
 $Subscribe = "Aderir/inscrever-se";
 $AlreadySubscribed = "Já aderido/subscrito";
 $CodeMandatory = "Código obrigatório";
@@ -42,7 +39,7 @@ $langHideAndSubscribeOpen = "Oculto / Aberto";
 $langShowAndSubscribeOpen = "Visível / Aberto";
 $langShowAndSubscribeClosed = "Visível / Fechado";
 $langAdminThisUser = "Voltar ao utlizador";
-$langManage = "Gestão do portal";
+$langManage = "Gerir o Portal";
 $langEnrollToCourseSuccessful = "Foi registado no curso";
 $langSubCat = "sub-categorias";
 $langUnsubscribeNotAllowed = "Não é permitido anular/cancelar a inscrição neste curso";
@@ -56,7 +53,7 @@ $CourseCategoryAbout2bedeleted = "Tem a certeza que deseja eliminar esta categor
 $CourseCategories = "Categorias de cursos";
 $CoursesInCategory = "Cursos nesta categoria";
 $SearchCourse = "Pesquisar cursos";
-$UpOneCategory = "Uma categoria acima/um nível superior na categoria";
+$UpOneCategory = "Uma categoria acima/um nível superior na categoria ";
 $SearchResultsFor = "Resultados da pesquisa para:";
 $ConfirmUnsubscribeFromCourse = "Tem a certeza que deseja mesmo anular/cancelar a inscrição?";
 $NoCourseCategory = "Categoria de curso inexistente";
@@ -77,10 +74,7 @@ $buttonCreateCourseCategory = "Guardar/salvar categoria de curso";
 $buttonSaveCategory = "Guardar/salvar categoria";
 $buttonChangeCategory = "Editar/modificar categoria";
 $SessionName = "Nome da sessão";
-$SessionCategory = "Categoria da sessão";
+$SessionCategory = "Categorias das sessões";
 $Expand = "Expandir";
 $Collapse = "Recolher";
 $CourseDetails = "Descrição do curso";
-$GroupPendingInvitations = "";
-$Compose = "";
-?>

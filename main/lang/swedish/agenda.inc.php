@@ -1,7 +1,4 @@
 <?php
-/*
-for more information: see languages.txt in the lang folder.
-*/
 $AgendaAdd = "Lägg till kalenderpost";
 $ShowAllEvents = "Visa alla kalenderposter";
 $ShowCurrent = "Visa kalenderposter i aktuell månad";
@@ -66,13 +63,3 @@ $RepeatYearly = "Årsvis";
 $RepeatEnd = "Slutdatum för upprepning";
 $RepeatedEventViewOriginalEvent = "Visa ursprunglig händelse";
 $ICalFileImport = "Importera iCal/ics fil";
-$AllUsersOfThePlatform = "";
-$GlobalEvent = "";
-$ModifyEvent = "";
-$EndDateCannotBeBeforeTheStartDate = "";
-$AgendaSortChronologicallyUp = "";
-$AgendaSortChronologicallyDown = "";
-$ItemForUserSelection = "";
-$IsNotiCalFormatFile = "";
-$RepeatEvent = "";
-?>

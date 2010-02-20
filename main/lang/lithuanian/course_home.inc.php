@@ -1,7 +1,4 @@
 <?php
-/*
-for more information: see languages.txt in the lang folder.
-*/
 $langActivate = "Rodyti";
 $langDeactivate = "Slėpti";
 $langInLnk = "Paslėpti įrankiai ir nuorodos";
@@ -25,8 +22,3 @@ $Authoring = "Kūrimas";
 $Administration = "Administravimas";
 $IntroductionTextUpdated = "Paaiškinamasis tekstas atnaujintas";
 $IntroductionTextDeleted = "Introduction text deleted";
-$SessionIdentifier = "";
-$SessionName = "";
-$SessionCategory = "";
-$SessionData = "";
-?>

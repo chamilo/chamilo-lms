@@ -1,7 +1,4 @@
 <?php
-/*
-for more information: see languages.txt in the lang folder.
-*/
 $TermAddNew = "Añadir un término";
 $TermName = "Término";
 $TermDefinition = "Definición";
@@ -25,4 +22,3 @@ $GlossaryManagement = "Administración de glosario";
 $TermMoved = "El término se ha movido";
 $ShowGlossaryInExtraToolsTitle = "Muestra los términos del glosario en las herramientas lecciones(scorm) y ejercicios";
 $ShowGlossaryInExtraToolsComment = "Desde aquí usted puede configurar como añadir  los términos del glosario en herramientas como lecciones(scorm) y ejercicios";
-?>

@@ -1,37 +1,34 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
-*/
-$nameTools = "kullan&#305;lmayan lisan de&#287;i&#351;keni";
-$langMdCallingTool = "KURS - SCORM";
-$langTool = "Scorm MD i&#351;lemleri";
-$langNotInDB = "DB giri&#351;i yok";
-$langManifestSyntax = "(a�&#305;klama dosyas&#305;nda yaz&#305;m hatas&#305;...)";
-$langEmptyManifest = "(bo&#351; a�&#305;klama dosyas&#305;...)";
-$langNoManifest = "(a�&#305;klama dosyas&#305; yok...)";
-$langNotFolder = "m�mk�n de&#287;il, o bir klas�r de&#287;il...";
-$langUploadHtt = "HTT dosyas&#305; g�nder";
-$langHttFileNotFound = "Yeni HTT dosyas&#305; a�&#305;lamad&#305; (bo&#351;, �ok b�y�k vs)";
-$langHttOk = "Yeni HTT dosyas&#305; sisteme g�nderildi.";
-$langHttNotOk = "HTT dosya transferi ba&#351;ar&#305;s&#305;z";
-$langRemoveHtt = "HTT dosyas&#305; sil";
-$langHttRmvOk = "HTT dosyas&#305; silindi";
-$langHttRmvNotOk = "HTT dosya silme i&#351;lemi ba&#351;ar&#305;s&#305;z oldu";
-$langImport = "Listeden MDE olu&#351;tur";
+<?php
+$nameTools = "kullanılmayan lisan değişkeni";
+$langMdCallingTool = "Belgeler";
+$langTool = "Belge Metadata";
+$langNotInDB = "böyle bir bağlantı kategorisi yok";
+$langManifestSyntax = "(açıklama dosyasında yazım hatası...)";
+$langEmptyManifest = "(boş açıklama dosyası...)";
+$langNoManifest = "(açıklama dosyası yok...)";
+$langNotFolder = "mümkün değil, o bir klasör değil...";
+$langUploadHtt = "HTT dosyası gönder";
+$langHttFileNotFound = "Yeni HTT dosyası açılamadı (boş, çok büyük vs)";
+$langHttOk = "Yeni HTT dosyası sisteme gönderildi.";
+$langHttNotOk = "HTT dosya transferi başarısız";
+$langRemoveHtt = "HTT dosyası sil";
+$langHttRmvOk = "HTT dosyası silindi";
+$langHttRmvNotOk = "HTT dosya silme işlemi başarısız oldu";
+$langImport = "Dersleri Al";
 $langRemove = "MDE sil";
-$langAllRemovedFor = "All entries removed for";
-$langIndex = "Index Words with PhpDig";
-$langTotalMDEs = "Scorm MD giri&#351;leri toplam say&#305;s&#305;:";
-$langMainMD = "Ana MDE a�";
-$langLines = "sat&#305;r";
+$langAllRemovedFor = "kategorideki bütün girişler silindi";
+$langIndex = "Index Kelimeleri";
+$langTotalMDEs = "MD giriş bağlantılarının Toplam Sayısı:";
+$langMainMD = "Ana MDE aç";
+$langLines = "satır";
 $langPlay = "index.php yi oynat";
-$langNonePossible = "MD i&#351;lemleri m�mk�n de&#287;il";
-$langOrElse = "Bir Scorm Direkt�r� veya ID si se�";
-$langWorkWith = "Scorm Direkt�r� ile �al&#305;&#351;";
+$langNonePossible = "MD işlemleri mümkün değil";
+$langOrElse = "Bir bağlantı kategorisi seç";
+$langWorkWith = "Scorm Direktörü ile çalış";
 $langSDI = "... Scorm Directory with SD-id (and split manifest - or leave empty)";
 $langRoot = "ana dizin";
 $langSplitData = "Split manifests, and #MDe, if any: ";
-$langMffNotOk = "Liste dosyas&#305;n&#305; tekrar yerine koyma  i&#351;lemi ba&#351;ar&#305;s&#305;z oldu";
-$langMffOk = "Liste dosyas&#305; tekrar yerine konuldu";
-$langMffFileNotFound = "Yeni liste dosyas&#305; a�&#305;lam&#305;yor (bo&#351;, �ok b�y�k vs)";
-$langUploadMff = "Liste dosyas&#305;n&#305; tekrar yerine koy";
-?>
+$langMffNotOk = "Liste dosyasını tekrar yerine koyma  işlemi başarısız oldu";
+$langMffOk = "Liste dosyası tekrar yerine konuldu";
+$langMffFileNotFound = "Yeni liste dosyası açılamıyor (boş, çok büyük vs)";
+$langUploadMff = "Liste dosyasını tekrar yerine koy";

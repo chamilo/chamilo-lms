@@ -1,7 +1,4 @@
 <?php
-/*
-for more information: see languages.txt in the lang folder.
-*/
 $MyTasks = "Mine opgaver";
 $FavoriteBlogs = "Mine favorit blogs";
 $Navigation = "Navigation";
@@ -53,7 +50,7 @@ $ReadMore = "Læs mere...";
 $DeleteThisArticle = "Slet dette indlæg";
 $EditThisPost = "Rediger dette indlæg";
 $DeleteThisComment = "Slet denne kommentar";
-$NoArticles = "Der er pt. ingen indlæg i bloggen. Hvis du er forfatteren af denne blog, skal du klikke på linket \'nyt indlæg\' for at skrive et indlæg";
+$NoArticles = "Der er pt. ingen indlæg i bloggen. Hvis du er forfatteren af denne blog, skal du klikke på linket 'nyt indlæg' for at skrive et indlæg";
 $NoTasks = "Ingen opgaver";
 $Rating = "Vurdering";
 $RateThis = "Vurder denne artikel";
@@ -64,7 +61,6 @@ $InBlog = "I bloggen";
 $ViewPostsOfThisDay = "Se indlæg fra denne dag";
 $PostsOf = "Udgivet af";
 $NoArticleMatches = "Der blev ikke fundet et indlæg. Undersøg om ordet er stavet rigtigt eller forsøg at søge på andre ord";
-$SaveProject = "";
 $langTask1 = "Opgave 1";
 $langTask2 = "Opgave 2";
 $langTask3 = "Opgave 3";
@@ -83,23 +79,3 @@ $AddBlog = "Opret en ny blog";
 $EditBlog = "Rediger titlen og undertitlen";
 $DeleteBlog = "Slet denne blog";
 $Shared = "Delte";
-$PermissionGrantedByGroupOrRole = "";
-$Reader = "";
-$SeeBlog = "";
-$BlogDeleted = "";
-$BlogEdited = "";
-$BlogStored = "";
-$CommentCreated = "";
-$BlogAdded = "";
-$TaskCreated = "";
-$TaskEdited = "";
-$TaskAssigned = "";
-$AssignedTaskEdited = "";
-$UserRegistered = "";
-$TaskDeleted = "";
-$TaskAssignmentDeleted = "";
-$CommentDeleted = "";
-$RatingAdded = "";
-$BlogPosts = "";
-$BlogComments = "";
-?>

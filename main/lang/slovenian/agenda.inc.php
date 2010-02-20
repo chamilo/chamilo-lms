@@ -1,7 +1,4 @@
 <?php
-/*
-for more information: see languages.txt in the lang folder.
-*/
 $AgendaAdd = "Dodaj nov dogodek";
 $ShowAllEvents = "Prikaži vse";
 $ShowCurrent = "Prikaži dogodke tekočega meseca";
@@ -75,4 +72,3 @@ $AgendaSortChronologicallyDown = "Razvrsti zapise agende kronološko (padajoče)
 $ItemForUserSelection = "Izbira uporabnikov";
 $IsNotiCalFormatFile = "Datoteka ni v iCal obliki";
 $RepeatEvent = "Ponovi dogodek";
-?>

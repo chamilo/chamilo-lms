@@ -1,7 +1,4 @@
 <?php
-/*
-for more information: see languages.txt in the lang folder.
-*/
 $langSelectOptionForBackup = "Prašome parinkti archyvavimo nustatymus.";
 $langLetMeSelectItems = "Leisti parinkti kurso komponentus";
 $langCreateFullBackup = "Pilnai suarchyvuoti šį kursą";
@@ -22,7 +19,7 @@ $langCopyFinished = "Kopijavimas baigtas";
 $langFullRecycle = "Visiškai ištrinti";
 $langRecycleCourse = "Ištrinti kursą";
 $langRecycleFinished = "Ištrynimas baigtas";
-$langRecycleWarning = "Dėmesio: naudojant šį įrašą bus neatstatomai ištrintos kai kurios kurso dalys. Siūlome sukurti <a href=\\"create_backup.php\\">archyvą</a> prieš naudojant ištrynimo įrankį.";
+$langRecycleWarning = "Dėmesio: naudojant šį įrašą bus neatstatomai ištrintos kai kurios kurso dalys. Siūlome sukurti <a href=\"create_backup.php\">archyvą</a> prieš naudojant ištrynimo įrankį.";
 $langSameFilename = "Kokie veiksmai su importuotais failais tuo pačiu pavadinimu kaip egzistuojantys failai?";
 $langSameFilenameSkip = "Peršokti";
 $langSameFilenameRename = "Pervadinti failą (pvz.: file.pdf taps file_1.pdf)";
@@ -45,7 +42,3 @@ $langCreateBackupInfo = "Archyvuoti šį kursą. Galite išrinkti kursų turinį
 $ToolIntro = "Įrankio apibūdinimas";
 $UploadError = "Įkėlimas nepavyko, patikrinkite įrašymo teises ir maksimalų leistiną įkeliamų failų dydį.";
 $DocumentsWillBeAddedToo = "Documents will be added too";
-$ToExportLearnpathWithQuizYouHaveToSelectQuiz = "";
-$ArchivesDirectoryNotWriteableContactAdmin = "";
-$DestinationCourse = "";
-?>

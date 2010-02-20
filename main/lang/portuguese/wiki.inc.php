@@ -1,18 +1,15 @@
 <?php
-/*
-for more information: see languages.txt in the lang folder.
-*/
 $WikiSearchResults = "Resultados da pesquisa no Wiki";
-$Wiki = "Wiki";
+$Wiki = "Wiki do Grupo";
 $StartPage = "Página principal";
 $EditThisPage = "Editar esta página";
 $ShowPageHistory = "Histórico";
 $RecentChanges = "Últimas modificações";
 $AllPages = "Todas as páginas";
 $AddNew = "Adicionar nova página";
-$ChangesStored = "As suas modificações foram gravadas";
+$ChangesStored = "Áudio adicionado";
 $NewWikiSaved = "A página wiki foi gravada. Pode visualizá-la clicando em:";
-$DefaultContent = " <br/> <br/> <p align=\\"center\\"> <img src=\\"%swiki/wcollaborative.png\\" alt=\\"Mr. Chamilo\\" title=\\"Mr. Chamilo\\" /></p> <p align=\\"center\\">Para começar a editar esta página e remover este texto</p>";
+$DefaultContent = " <br/> <br/> <p align=\"center\"> <img src=\"%swiki/wcollaborative.png\" alt=\"Mr. Chamilo\" title=\"Mr. Chamilo\" /></p> <p align=\"center\">Para começar a editar esta página e remover este texto</p> ";
 $CourseWikiPages = "Páginas do Wiki";
 $GroupWikiPages = "Páginas do Wiki do grupo";
 $NoWikiPageTitle = "As suas modificações foram gravadas. Ainda falta atribuir um nome à página";
@@ -56,7 +53,7 @@ $AddOptionProtected = "A opção Adicionar foi protegida. Apenas Instrutores pod
 $AddOptionUnprotected = "A opção adicionar foi activada para todos os utilizadores do curso e membros do grupo";
 $NotifyChanges = "Notificar-me sobre modificações";
 $NotNotifyChanges = "Não notificar-me sobre modificações";
-$NotifyByEmail = "Notificar-me por e-mail quando esta página for editada";
+$NotifyByEmail = "Notificar-me por e-mail quando alguém responde";
 $CancelNotifyByEmail = "Não notificar-me por e-mail quando esta página for editada";
 $MostRecentVersionBy = "A última versão foi editada por";
 $Rating = "Classificação";
@@ -116,7 +113,7 @@ $OnlyEditPagesCourseManager = "A Página Principal pode apenas ser editada por u
 $AssignmentLinktoTeacherPage = "Acesso à página do instrutor";
 $HideDiscussExtra = "A discussão é agora apenas visível para instrutores";
 $ShowDiscussExtra = "A discussão é agora visível para todos os utilizadores";
-$LockDiscussExtra = "Apenas instrutores podem agora adicionar comentários a esta discussão";
+$LockDiscussExtra = "Apenas instrutores podem agora adicionar comentários a esta discussão ";
 $UnlockDiscussExtra = "Todos os membros podem agora adicionar comentários a esta discussão";
 $AssignmentDescExtra = "Esta página é uma tarefa/trabalho proposto por um instrutor";
 $AssignmentWorkExtra = "Esta página é um trabalho de um aluno";
@@ -141,11 +138,11 @@ $OrphanedPages = "Páginas orfãs";
 $WantedPages = "Páginas desejadas";
 $MostVisitedPages = "Páginas mais visitadas";
 $MostChangedPages = "Páginas mais modificadas";
-$Changes = "Modificações";
+$Changes = "Alterações";
 $MostActiveUsers = "Utilizadores mais activos";
 $Contributions = "Contribuições";
 $UserContributions = "Contribuições do utilizador";
-$WarningDeleteMainPage = "Não é recomendado eliminar a página inicial do Wiki porque é o principal acesso ao wiki. <br/> No entanto, caso seja necessário, deverá ser criada novamente a página inicial. Enquanto a operação não for realizada, os outros utilizadores não poderão adicio";
+$WarningDeleteMainPage = "Não é recomendado eliminar a página inicial do Wiki porque é o principal acesso ao wiki. <br/> No entanto, caso seja necessário, deverá ser criada novamente a página inicial. Enquanto a operação não for realizada, os outros utilizadores não poderão adicionar novas páginas.";
 $ConvertToLastVersion = "Para definir esta versão como última versão, clique em";
 $Restore = "Restaurar";
 $CurrentVersion = "Versão actual";
@@ -167,13 +164,11 @@ $DescriptionOfTheTask = "Descrição da tarefa/trabalho";
 $OtherSettings = "Outros requisitos";
 $NMaxWords = "Número máximo de palavras";
 $NMaxVersion = "Número máximo de versões";
-$Feedback = "Orientações";
-$AddFeedback = "Adicione mensagens de orientação na página associada ao progresso";
+$Feedback = "Feedback";
+$AddFeedback = "Adicione mensagens de orientação na página associada ao progresso ";
 $Feedback1 = "Primeira mensagem";
 $Feedback2 = "Segunda mensagem";
 $Feedback3 = "Terceira mensagem";
 $FProgress = "Progresso";
 $PutATimeLimit = "Definir um limite de tempo";
 $StandardTask = "Tarefa modelo/padrão";
-$ThePageHasBeenExportedToDocArea = "";
-?>

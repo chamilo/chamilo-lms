@@ -1,7 +1,4 @@
 <?php
-/*
-for more information: see languages.txt in the lang folder.
-*/
 $langSelectOptionForBackup = "Valitse varmistuksen tyyppi";
 $langLetMeSelectItems = "Valitsen kurssin komponentit";
 $langCreateFullBackup = "Tee täydellinen varmistus kurssista";
@@ -22,7 +19,7 @@ $langCopyFinished = "Kopiointi valmis";
 $langFullRecycle = "Käytä täysin uudelleen";
 $langRecycleCourse = "Käytä kurssi uudelleen";
 $langRecycleFinished = "Kurssin uudelleen käyttö valmis";
-$langRecycleWarning = "Varoitus: käyttämällä tätä työkalua, poistat joitain kurssin osia. Tätä ei voi perua. Suosittelemme tekemään <a href=\\"create_backup.php\\">varmistuksen</a> ennen kuin käytät tätä työkalua.";
+$langRecycleWarning = "Varoitus: käyttämällä tätä työkalua, poistat joitain kurssin osia. Tätä ei voi perua. Suosittelemme tekemään <a href=\"create_backup.php\">varmistuksen</a> ennen kuin käytät tätä työkalua.";
 $langSameFilename = "Mitä tehdään tuoduille tiedostoille jos saman niminen tiedosto on jo olemassa?";
 $langSameFilenameSkip = "Ohita saman niminen tiedosto";
 $langSameFilenameRename = "Nimeä tiedosto uudellen (esim file.pdf -> file_1.pdf)";
@@ -48,4 +45,3 @@ $DocumentsWillBeAddedToo = "Dokumentit lisätään myös";
 $ToExportLearnpathWithQuizYouHaveToSelectQuiz = "Jos haluat siirtää oppimispolun joka sisältää testin, sinun täytyy varmistaa että vastaavat testit on valittu siirtoon, joten sinun täytyy valita ne testien listalta.";
 $ArchivesDirectoryNotWriteableContactAdmin = "Varmistus kansioon ei voi kirjoittaa. Ota yhteyttä ympäristön ylläpitäjään.";
 $DestinationCourse = "Kohde kurssi";
-?>

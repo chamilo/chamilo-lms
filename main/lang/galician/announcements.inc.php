@@ -1,14 +1,11 @@
 <?php
-/*
-for more information: see languages.txt in the lang folder.
-*/
 $Announcement = "Anuncios";
 $langAnnEmpty = "Borráronse tódolos anuncios";
 $AnnouncementModified = "Modificouse o anuncio";
 $AnnouncementAdded = "Engadíuse o anuncio";
 $AnnouncementDeleted = "Borrouse o anuncio";
 $AnnouncementPublishedOn = "Publicado o";
-$AddAnnouncement = "Engadir un anuncio";
+$AddAnnouncement = "Engadir como un anuncio";
 $langContent = "Contido";
 $AnnouncementDeleteAll = "Borrar tódolos anuncios";
 $professorMessage = "Mensaxe do teu profesor";
@@ -32,7 +29,7 @@ $langSelectedUsers = "Usuarios seleccionados";
 $langSubmit = "Enviar";
 $langPleaseEnterMessage = "Debes introducir o texto da mensaxe.";
 $langPleaseSelectUsers = "Debes seleccionar algúns usuarios.";
-$Teachersubject = "Mensaxe enviada ós teus alumnos desde o LMS";
+$Teachersubject = "Mensaxe enviada ós teus alumnos desde o LMS ";
 $langMessages = "Mensaxes";
 $langMessageToSelectedUsers = "Mensaxes ós usuarios seleccionados";
 $langIntroText = "Para enviar unha mensaxe, selecciona os grupos de usuarios (sinalados con un G diante) ou a un só usuario (sinalado con un U) da lista da esquerda.";
@@ -51,9 +48,8 @@ $SelectEverybody = "Seleccionar Todos";
 $SelectedUsersGroups = "usuarios dos grupos seleccionados";
 $LearnerMessage = "Mensaxe dun alumno";
 $TitleIsRequired = "O título é obrigatorio";
-$AnnounceSentByEmail = "Anuncio enviado por correo electrónico";
+$AnnounceSentByEmail = "Anuncio enviado por correo electrónico ";
 $AnnounceSentToUserSelection = "Anuncio enviado a unha selección de usuarios";
 $SendAnnouncement = "Enviar anuncio";
 $ModifyAnnouncement = "Modificar anuncio";
 $ButtonPublishAnnouncement = "Enviar anuncio";
-?>

@@ -1,7 +1,4 @@
 <?php
-/*
-for more information: see languages.txt in the lang folder.
-*/
 $MyTasks = "我的任務";
 $FavoriteBlogs = "我喜愛的網誌";
 $Navigation = "導航";
@@ -24,7 +21,7 @@ $UnRegister = "取消註冊";
 $SubscribeMembers = "加入使用者";
 $UnsubscribeMembers = "取消使用者";
 $RightsManager = "管理使用者權限";
-$ManageRights = "管理本網誌使用者的角色及權限";
+$ManageRights = "管理本網誌使用者的角色及權限 ";
 $Task = "任務";
 $Tasks = "任務";
 $Member = "會員";
@@ -36,13 +33,13 @@ $AddTask = "新增任務";
 $AddTasks = "新增任務";
 $AssignTask = "委派任務";
 $AssignTasks = "委派任務";
-$EditTask = "編輯此任務";
-$DeleteTask = "刪除此任務";
+$EditTask = "編輯此任務 ";
+$DeleteTask = "刪除此任務 ";
 $DeleteSystemTask = "這是一個預設任務，你不能把它刪除";
 $SelectUser = "使用者";
-$SelectTask = "任務";
+$SelectTask = "任務 ";
 $SelectTargetDate = "日期";
-$TargetDate = "日期";
+$TargetDate = "日期 ";
 $Color = "色彩";
 $TaskList = "本網誌中的任務";
 $AssignedTasks = "已委派的任務";
@@ -64,7 +61,6 @@ $InBlog = "於網誌中";
 $ViewPostsOfThisDay = "閱讀今天張貼的文章";
 $PostsOf = "文章屬於";
 $NoArticleMatches = "找不到文章。請檢查串字或嘗試新的搜尋。";
-$SaveProject = "";
 $langTask1 = "任務 1";
 $langTask2 = "任務 2";
 $langTask3 = "任務3";
@@ -83,23 +79,3 @@ $AddBlog = "創建新網誌";
 $EditBlog = "編輯標題及副標題";
 $DeleteBlog = "刪除本網誌";
 $Shared = "已分享";
-$PermissionGrantedByGroupOrRole = "";
-$Reader = "";
-$SeeBlog = "";
-$BlogDeleted = "";
-$BlogEdited = "";
-$BlogStored = "";
-$CommentCreated = "";
-$BlogAdded = "";
-$TaskCreated = "";
-$TaskEdited = "";
-$TaskAssigned = "";
-$AssignedTaskEdited = "";
-$UserRegistered = "";
-$TaskDeleted = "";
-$TaskAssignmentDeleted = "";
-$CommentDeleted = "";
-$RatingAdded = "";
-$BlogPosts = "";
-$BlogComments = "";
-?>

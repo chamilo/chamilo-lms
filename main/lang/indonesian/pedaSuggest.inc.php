@@ -1,7 +1,4 @@
 <?php
-/*
-for more information: see languages.txt in the lang folder.
-*/
 $GeneralDescription = "Deskripsi Umum";
 $GeneralDescriptionQuestions = "Dimana tempat mata kuliah dalam program? Adakah pra-syarat? Bagaimana keterkaitan mata kulliah ini dengan mata kuliah lain?";
 $GeneralDescriptionInformation = "Deskripsi mata kuliah (jumlah jam, kode resmi, ruang ...) dan pengajar (nama,  kantor, telp., email ...).";
@@ -23,4 +20,3 @@ $HumanAndTechnicalResourcesInformation = "Deskripsi singkat identitas contact pe
 $Assessment = "Evaluasi";
 $AssessmentQuestions = "Bagaimana user akan divaluasi? Adakah strategi yang dikembangkan untuk menguasai topik tsb?";
 $AssessmentInformation = "Contoh pertanyaan ujian. Kreteria sukses. Tips dan trik.";
-?>

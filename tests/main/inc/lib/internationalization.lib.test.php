@@ -1392,7 +1392,7 @@ class TestInternationalization extends UnitTestCase {
 			'group.inc.php',
 			'help.inc.php',
 			'hotspot.inc.php',
-			'htmlarea.js.php',
+			//'htmlarea.js.php', // This file is not used.
 			'import.inc.php',
 			'index.inc.php',
 			'install.inc.php',

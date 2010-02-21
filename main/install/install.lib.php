@@ -50,10 +50,10 @@ function is_already_installed_system() {
 	require $current_config_file;
 
 	// Careful, if/when the name 'dokeos_version' is changed. Check this then.
-	$current_version = $_configuration['dokeos_version'];
+	$current_version = trim($_configuration['dokeos_version']);
 
-	// If the current version is old, upgrading is assumed as intended.
-	return empty($current_version) ? false : ($new_version == $current_version);
+	// If the current version is old, upgrading is assumed, the installer goes ahead.
+	return empty($current_version) ? false : version_compare($current_version, $new_version, '>=');
 }
 
 /**

@@ -1,7 +1,7 @@
 <?php
 /*
  * FCKeditor - The text editor for Internet - http://www.fckeditor.net
- * Copyright (C) 2003-2009 Frederico Caldeira Knabben
+ * Copyright (C) 2003-2010 Frederico Caldeira Knabben
  *
  * == BEGIN LICENSE ==
  *
@@ -27,7 +27,7 @@
 // Some language variables are needed.
 $language_file = array('create_course');
 
-// Loading the global initialization file, Dokeos LMS.
+// Loading the global initialization file, Chamilo LMS.
 require_once '../../../../../../global.inc.php';
 
 // Initialization of the repositories.

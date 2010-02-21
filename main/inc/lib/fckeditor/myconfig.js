@@ -1,10 +1,10 @@
 /*
- *	Dokeos - elearning and course management software
+ *	Chamilo LMS
  *
- *	Copyright (c) 2008-2009 Dokeos SPRL
+ *	Copyright (c) 2008-2010 Juan Carlos Raña
+ *	Copyright (c) 2008-2010 Ivan Tcholakov
  *	Copyright (c) 2008-2009 Julio Montoya
- *	Copyright (c) 2008-2009 Juan Carlos Raña
- *	Copyright (c) 2008-2009 Ivan Tcholakov
+ *	Copyright (c) 2008-2009 Dokeos SPRL
  *
  *	For a full list of contributors, see "credits.txt".
  *	The full license can be read in "license.txt".
@@ -15,9 +15,6 @@
  *	of the License, or (at your option) any later version.
  *
  *	See the GNU General Public License for more details.
- *
- * Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
- * Mail: info@dokeos.com
  */
 
 /*
@@ -48,7 +45,7 @@ FCKConfig.SmileyWindowHeight = 250 ;
 
 
 /*
- * Loading plugins integrated by the Dokeos team. To enable/disable them, see myconfig.php.
+ * Loading plugins integrated by the Chamilo team. To enable/disable them, see myconfig.php.
  */
 
 // This is a list of all supported by the online editor languages.

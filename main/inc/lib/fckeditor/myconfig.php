@@ -1,11 +1,11 @@
 <?php
 
 /*
- *	Dokeos - elearning and course management software
+ *	Chamilo LMS
  *
+ *	Copyright (c) 2009-2010 Juan Carlos Raña
+ *	Copyright (c) 2009-2010 Ivan Tcholakov
  *	Copyright (c) 2009 Dokeos SPRL
- *	Copyright (c) 2009 Juan Carlos Raña
- *	Copyright (c) 2009 Ivan Tcholakov
  *
  *	For a full list of contributors, see "credits.txt".
  *	The full license can be read in "license.txt".
@@ -16,9 +16,6 @@
  *	of the License, or (at your option) any later version.
  *
  *	See the GNU General Public License for more details.
- *
- * Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
- * Mail: info@dokeos.com
  */
 
 
@@ -57,10 +54,10 @@
  */
 
 // The following setting is the directory where the online editor's toobar definitions reside in correspondent php-files.
-// By default, the directory name is 'default' and it has been created at .../dokeos/main/inc/lib/fckeditor/toolbars/ .
+// By default, the directory name is 'default' and it has been created at .../chamilo/main/inc/lib/fckeditor/toolbars/ .
 // For using your customized toolbars, crate another directory, for example 'custom' at the same path, i.e.
-// create .../dokeos/main/inc/lib/fckeditor/toolbars/custom/ . Then, copy the original php-definition files
-// from .../dokeos/main/inc/lib/fckeditor/toolbars/default/ to the new one. Change the following configuration setting, so it to
+// create .../chamilo/main/inc/lib/fckeditor/toolbars/custom/ . Then, copy the original php-definition files
+// from .../chamilo/main/inc/lib/fckeditor/toolbars/default/ to the new one. Change the following configuration setting, so it to
 // point to the new directory:
 // $config['ToolbarSets']['Directory'] = 'custom';
 // Then, you may modify the newly copied toolbar definitions at your will, just keep correct php-syntax.
@@ -86,7 +83,7 @@ else
  * Plugins.
  */
 
-// customizations : This plugin has been developed by the Dokeos team for editor's integration within the system.
+// customizations : This plugin has been developed by the Chamilo team for editor's integration within the system.
 // The plugin should be loaded first, before all other plugins. Please, do not disable it.
 $config['LoadPlugin'][] = 'customizations';
 
@@ -104,7 +101,7 @@ $config['LoadPlugin'][] = 'prompt';
 // audio: Adds a dialog for inserting audio files (.mp3).
 $config['LoadPlugin'][] = 'audio';
 
-// glossary: this plugin add a term from glossary tool in Dokeos.
+// glossary: this plugin add a term from glossary tool in Chamilo.
 if (api_get_setting('show_glossary_in_documents') == 'ismanual') {
 	$config['LoadPlugin'][] = 'glossary';
 }

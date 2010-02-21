@@ -1,9 +1,9 @@
 /*
- *	Dokeos - elearning and course management software
+ *	Chamilo LMS
  *
- *	Copyright (c) 2008-2009 Dokeos SPRL
+ *	Copyright (c) 2008-2010 Ivan Tcholakov <ivantcholakov@gmail.com>
  *	Copyright (c) 2008-2009 Julio Montoya Armas <gugli100@gmail.com>
- *	Copyright (c) 2008-2009 Ivan Tcholakov <ivantcholakov@gmail.com>
+ *	Copyright (c) 2008-2009 Dokeos SPRL
  *
  *	For a full list of contributors, see "credits.txt".
  *	The full license can be read in "license.txt".
@@ -14,9 +14,6 @@
  *	of the License, or (at your option) any later version.
  *
  *	See the GNU General Public License for more details.
- *
- * Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
- * Mail: info@dokeos.com
  */
 
 
@@ -644,7 +641,7 @@ FCKToolbarItems.GetItem = function( itemName )
 }
 
 
-// A modification of the "Save" command in order "nice buttons" in Dokeos
+// A modification of the "Save" command in order "nice buttons" in Chamilo
 // forms to be supported (to be "clicked" when this command executes).
 FCKSaveCommand.prototype.Execute = function()
 {
@@ -678,7 +675,7 @@ FCKSaveCommand.prototype.Execute = function()
 				|| oForm.elements[i].getAttribute( 'name' ) == 'SaveWikiChange'
 				|| oForm.elements[i].getAttribute( 'name' ) == 'SaveWikiNew'
 				)
-				
+
 			{
 				try
 				{
@@ -2000,8 +1997,8 @@ FCK.ConvertUrl = function ( url, type, base )
 // Returns type of a given URL.
 // Returned values:
 // RELATIVE_URL ( returned for example for images/image.png )
-// SEMI_ABSOLUTE_URL ( /dokeos/courses/TEST/document/images/image.png )
-// ABSOLUTE_URL ( http://localhost/dokeos/courses/TEST/document/images/image.png )
+// SEMI_ABSOLUTE_URL ( /chamilo/courses/TEST/document/images/image.png )
+// ABSOLUTE_URL ( http://localhost/chamilo/courses/TEST/document/images/image.png )
 // '' - in case of error
 FCK.GetUrlType = function ( url )
 {
@@ -2028,7 +2025,7 @@ FCK.GetUrlType = function ( url )
 // Extracts the server base from a given URL.
 // If the URL is omited, the function returns the base of the server where LMS runs.
 // Example:
-//     Your site is http://www.mysite.org/dokeos
+//     Your site is http://www.mysite.org/chamilo
 //     The server base is http://www.mysite.org/
 FCK.GetServerBase = function ( url )
 {

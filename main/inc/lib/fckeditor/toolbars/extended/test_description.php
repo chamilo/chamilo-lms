@@ -1,6 +1,6 @@
 <?php
-// Dokeos - elearning and course management software
-// See license terms in dokeos/documentation/license.txt
+// Chamilo LMS
+// See license terms in chamilo/documentation/license.txt
 
 // Training tools
 // Test description

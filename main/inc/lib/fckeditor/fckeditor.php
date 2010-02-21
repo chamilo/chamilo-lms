@@ -1,7 +1,7 @@
 <?php
 /*
  * FCKeditor - The text editor for Internet - http://www.fckeditor.net
- * Copyright (C) 2003-2009 Frederico Caldeira Knabben
+ * Copyright (C) 2003-2010 Frederico Caldeira Knabben
  *
  * == BEGIN LICENSE ==
  *
@@ -25,7 +25,7 @@
  * instances in PHP pages on server side.
  */
 
-// Code about adaptation of the editor and its plugins has been added by the Dokeos team, February - July 2009.
+// Code about adaptation of the editor and its plugins has been added by the Chamilo team, 2009-2010.
 // For modifying configuration options see myconfig.php and myconfig.js.
 
 /**
@@ -159,7 +159,7 @@ class FCKeditor
 	 */
 	public function CreateHtml()
 	{
-		// Adaptation for the Dokeos LMS ---------------------------------------------------------
+		// Adaptation for the Chamilo LMS ---------------------------------------------------------
 
 		$this->BasePath = api_get_path(REL_PATH).'main/inc/lib/fckeditor/';
 

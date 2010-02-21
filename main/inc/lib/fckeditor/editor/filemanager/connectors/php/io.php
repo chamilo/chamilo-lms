@@ -1,7 +1,7 @@
 <?php
 /*
  * FCKeditor - The text editor for Internet - http://www.fckeditor.net
- * Copyright (C) 2003-2009 Frederico Caldeira Knabben
+ * Copyright (C) 2003-2010 Frederico Caldeira Knabben
  *
  * == BEGIN LICENSE ==
  *
@@ -221,7 +221,7 @@ function IsAllowedExt( $sExtension, $resourceType )
 	if ( count($arDenied) > 0 && in_array( $sExtension, $arDenied ) )
 		return false ;
 
-	// Adding a check using the Dokeos system's white or black list.
+	// Adding a check using the Chamilo system's white or black list.
 	if ( !filter_extension( $sExtension ) )
 		return false ;
 
@@ -270,7 +270,7 @@ function GetCurrentFolder()
 		SendError( 102, '' ) ;
 
 	if ( preg_match(",(/\.)|[[:cntrl:]]|(//)|(\\\\)|([\:\*\?\"\<\>\|]),", $sCurrentFolder))
-                SendError( 102, '' ) ;
+		SendError( 102, '' ) ;
 
 	return $sCurrentFolder ;
 }
@@ -323,13 +323,13 @@ function SendUploadResults( $errorNumber, $fileUrl = '', $fileName = '', $custom
 (function(){var d=document.domain;while (true){try{var A=window.parent.document.domain;break;}catch(e) {};d=d.replace(/.*?(?:\.|$)/,'');if (d.length==0) break;try{document.domain=d;}catch (e){break;}}})();
 EOF;
 
-        if ($errorNumber && $errorNumber != 201) {
-                $fileUrl = "";
-                $fileName = "";
-        }
+	if ($errorNumber && $errorNumber != 201) {
+		$fileUrl = "";
+		$fileName = "";
+	}
 
-        $rpl = array( '\\' => '\\\\', '"' => '\\"' ) ;
-        echo 'window.parent.OnUploadCompleted(' . $errorNumber . ',"' . strtr( $fileUrl, $rpl ) . '","' . strtr( $fileName, $rpl ) . '", "' . strtr( $customMsg, $rpl ) . '") ;' ;
+	$rpl = array( '\\' => '\\\\', '"' => '\\"' ) ;
+	echo 'window.parent.OnUploadCompleted(' . $errorNumber . ',"' . strtr( $fileUrl, $rpl ) . '","' . strtr( $fileName, $rpl ) . '", "' . strtr( $customMsg, $rpl ) . '") ;' ;
 	echo '</script>' ;
 	exit ;
 }

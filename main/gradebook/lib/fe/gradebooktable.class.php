@@ -151,10 +151,11 @@ class GradebookTable extends SortableTable
 			$invisibility_span_open = (api_is_allowed_to_create_course() && $item->is_visible() == '0') ? '<span class="invisible">' : '';
 			$invisibility_span_close = (api_is_allowed_to_create_course() && $item->is_visible() == '0') ? '</span>' : '';
 
-			if (($status_user==1 ||is_null($status_user)) && api_is_allowed_to_create_course() && ($_SESSION['studentview']<>'studentview') || (isset($_GET['isStudentView']) && $_GET['isStudentView']=='false')) {
+			if (/*($status_user==1 ||is_null($status_user)) && */api_is_allowed_to_create_course() && ($_SESSION['studentview']<>'studentview') || (isset($_GET['isStudentView']) && $_GET['isStudentView']=='false')) {
 				$row[] = $this->build_id_column ($item);
 			}
 
+			//$row[] = $this->build_id_column ($item);
 			$row[] = $this->build_type_column ($item);
 			$row[] = $invisibility_span_open . $this->build_name_link ($item) . $invisibility_span_close;
 			$row[] = $invisibility_span_open . $data[2] . $invisibility_span_close;

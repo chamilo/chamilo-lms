@@ -22,7 +22,6 @@
 */
 
 define('SYSTEM_INSTALLATION', 1);
-define('MAX_COURSE_TRANSFER', 100); // TODO: To be examined.
 define('INSTALL_TYPE_UPDATE', 'update');
 define('FORM_FIELD_DISPLAY_LENGTH', 40);
 define('DATABASE_FORM_FIELD_DISPLAY_LENGTH', 25);

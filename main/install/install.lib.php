@@ -1723,11 +1723,6 @@ function display_after_install_message($installType, $nbr_courses) {
 
 	<?php echo get_lang('FirstUseTip'); ?>
 
-	<?php if (false && $installType == 'update' && $nbr_courses > MAX_COURSE_TRANSFER): ?>
-	<br /><br />
-	<font color="red"><strong><?php echo get_lang('Warning'); ?> :</strong> <?php printf(get_lang('YouHaveMoreThanXCourses'), MAX_COURSE_TRANSFER, MAX_COURSE_TRANSFER,'<a href="update_courses.php"><font color="red">', '</font></a>'); ?></font>
-	<?php endif; ?>
-
 	<br /><br />
 	<?php
 	echo '<div class="warning-message">';

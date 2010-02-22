@@ -162,19 +162,6 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
 		// The SCORM database doesn't need a change in the pre-migrate part - ignore
 	}
 
-	/*
-	-----------------------------------------------------------
-		Update the Dokeos course databases
-		this part can be accessed in two ways:
-		- from the normal upgrade process
-		- from the script update_courses.php,
-		which is used to upgrade more than MAX_COURSE_TRANSFER courses
-
-		Every time this script is accessed, only
-		MAX_COURSE_TRANSFER courses are upgraded.
-	-----------------------------------------------------------
-	*/
-
 	$prefix = '';
 	if ($singleDbForm) {
 		$prefix = $_configuration['table_prefix'];
@@ -194,7 +181,6 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
 			if (Database::num_rows($res) > 0) {
 				$i = 0;
                 $list = array();
-				//while(($i < MAX_COURSE_TRANSFER) && ($row = Database::fetch_array($res)))
 				while ($row = Database::fetch_array($res)) {
 					$list[] = $row;
 					$i++;

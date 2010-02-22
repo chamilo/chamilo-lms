@@ -38,12 +38,20 @@ function display_drh_list(){
 	if(document.getElementById("status_select").value=='.STUDENT.')
 	{
 		document.getElementById("drh_list").style.display="block";
+		document.getElementById("check_admin").style.display="none";
+	}
+	else if (document.getElementById("status_select").value=='.COURSEMANAGER.')
+	{
+		document.getElementById("drh_list").style.display="none";
+		document.getElementById("drh_select").options[0].selected="selected";
+		document.getElementById("check_admin").style.display="block";	
 	}
 	else
 	{
 		document.getElementById("drh_list").style.display="none";
 		document.getElementById("drh_select").options[0].selected="selected";
-	}
+		document.getElementById("check_admin").style.display="none";
+}
 }
 
 function show_image(image,width,height) {
@@ -170,7 +178,13 @@ $group[] =& HTML_QuickForm::createElement('password', 'password', null, array('o
 $form->addGroup($group, 'password', null, '', false);
 
 // Status
-$status = api_get_status_langvars();
+// Status
+$status = array();
+$status[COURSEMANAGER] = get_lang('Teacher');
+$status[STUDENT] = get_lang('Learner');
+$status[DRH] = get_lang('Drh');
+$status[SESSIONADMIN] = get_lang('SessionsAdmin');
+
 $form->addElement('select', 'status', get_lang('Status'), $status, array('id' => 'status_select', 'onchange' => 'javascript: display_drh_list();'));
 
 //Language
@@ -198,8 +212,12 @@ if ($user_id != $_SESSION['_uid']) {
 	$group = array();
 	$group[] =& HTML_QuickForm::createElement('radio', 'platform_admin', null, get_lang('Yes'), 1);
 	$group[] =& HTML_QuickForm::createElement('radio', 'platform_admin', null, get_lang('No'), 0);
-	if ($user_data['status'] <> 5) {
-		$form->addGroup($group, 'admin', get_lang('PlatformAdmin'), '&nbsp;', false);
+	if ($user_data['status'] == 1) {
+		$form->addGroup($group, 'admin', get_lang('PlatformAdmin'), null, false);
+	} else {
+		$form->addElement('html', '<div id="check_admin" style="display:none">');
+		$form->addGroup($group, 'admin', get_lang('PlatformAdmin'), null, false);
+		$form->addElement('html', '</div>');
 	}
 }
 

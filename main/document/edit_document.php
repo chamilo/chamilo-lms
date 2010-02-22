@@ -721,11 +721,13 @@ if ($owner_id == $_user['user_id'] || api_is_platform_admin() || $is_allowed_to_
 }
 
 //for better navigation when a slide is been commented
-function nav_to_slideshow($slide_id)
-{
-		echo '<div class="actions">';
-		echo '<a href="'.api_get_path(WEB_PATH).'main/document/slideshow.php?slide_id='.$slide_id.'&curdirpath='.Security::remove_XSS(urlencode($_GET['curdirpath'])).'">'.Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('ViewSlideshow')).get_lang('BackTo').' '.get_lang('ViewSlideshow').'</a>';
-		echo '</div>';
+function nav_to_slideshow($slide_id) {
+	$path = Security::remove_XSS($_GET['curdirpath']);
+	$pathurl = urlencode($path);
+	echo '<div class="actions">';
+	echo '<a href="document.php?action=exit_slideshow&curdirpath='.$pathurl.'">'.Display::return_icon('back.png').get_lang('BackTo').' '.get_lang('DocumentsOverview').'</a>&nbsp;';
+	//echo '<a href="'.api_get_path(WEB_PATH).'main/document/slideshow.php?slide_id='.$slide_id.'&curdirpath='.Security::remove_XSS(urlencode($_GET['curdirpath'])).'">'.Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('ViewSlideshow')).get_lang('BackTo').' '.get_lang('ViewSlideshow').'</a>';
+	echo '</div>';
 }
 /*
 ==============================================================================

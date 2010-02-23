@@ -346,7 +346,7 @@ Display::display_header($nameTool);
 					<td valign="top" align="center">
 						<?php Display::display_icon('screenshot_ppt2lp.jpg', get_lang('Ppt2lp')); ?>
 					</td>
-					<!--td align="center" width="50%">
+					<td align="center" width="50%">
 						<form method="POST" action="<?php echo api_get_self(); ?>">
 						<?php
 
@@ -401,7 +401,7 @@ Display::display_header($nameTool);
 						echo '<br />';
 						?>
 						</form>
-					</td-->
+					</td>
 				</tr>
 			</table>
 		</div>

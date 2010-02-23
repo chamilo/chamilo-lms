@@ -1412,5 +1412,6 @@ EOD;
 
 echo '</div>'; // end of menu
 
+
 //footer
 Display :: display_footer();

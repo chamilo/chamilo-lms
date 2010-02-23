@@ -996,17 +996,16 @@ function api_get_course_info($course_code = null) {
 function api_session_start($already_installed = true) {
 	global $storeSessionInDb;
 	global $_configuration;
-
 	/* causes too many problems and is not configurable dynamically
-	if($already_installed){
-		$session_lifetime = 360000;
-		if(isset($_configuration['session_lifetime']))
-		{
-			$session_lifetime = $_configuration['session_lifetime'];
-		}
-		session_set_cookie_params($session_lifetime,api_get_path(REL_PATH));
+	   if($already_installed){
+	   $session_lifetime = 360000;
+	   if(isset($_configuration['session_lifetime']))
+	   {
+	   $session_lifetime = $_configuration['session_lifetime'];
+	   }
+	   session_set_cookie_params($session_lifetime,api_get_path(REL_PATH));
 
-	}*/
+	   }*/
 
 	if (is_null($storeSessionInDb)) {
 		$storeSessionInDb = false;
@@ -1018,6 +1017,9 @@ function api_session_start($already_installed = true) {
 	}
 	session_name('dk_sid');
 	session_start();
+	if (!isset($_SESSION['starttime'])) {
+		$_SESSION['starttime'] = time();
+	}
 	if ($already_installed) {
 		if (empty ($_SESSION['checkDokeosURL'])) {
 			$_SESSION['checkDokeosURL'] = api_get_path(WEB_PATH);
@@ -1026,10 +1028,10 @@ function api_session_start($already_installed = true) {
 		}
 	}
 
-    // jeankarim@cblue.be -- Keeping track of session startdates and cleaning startdates on old sessions that should have expired
-    if ( isset($_SESSION['starttime']) && $SESSION['starttime'] < time() - $_configuration['session_lifetime'] ) {
-        $_SESSION['starttime'] = time();
-        }
+	// jeankarim@cblue.be -- Keeping track of session startdates and cleaning startdates on old sessions that should have expired
+	if ( isset($_SESSION['starttime']) && $SESSION['starttime'] < time() - $_configuration['session_lifetime'] ) {
+		$_SESSION['starttime'] = time();
+	}
 }
 
 /**

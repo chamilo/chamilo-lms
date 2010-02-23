@@ -222,7 +222,7 @@ body {
 					<td>
 						<select name="uploadSize" id="uploadSize">
 						<?php for ($i = 0; $i < count($IMConfig['maxWidth']); $i++){ ?>
-								<option value="<?=$i?>"><?=$IMConfig['maxWidth'][$i] . " x " . $IMConfig['maxHeight'][$i]?></option>
+								<option value="<?php echo $i; ?>"><?php echo $IMConfig['maxWidth'][$i] . " x " . $IMConfig['maxHeight'][$i]?></option>
 						<?php } ?>
 						</select>
 					</td>

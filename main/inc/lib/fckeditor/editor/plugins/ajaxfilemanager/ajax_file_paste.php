@@ -1,4 +1,4 @@
-<?
+<?php
 		include_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . "inc" . DIRECTORY_SEPARATOR . "config.php");
 		$error = '';
 		$fileMoved = array();

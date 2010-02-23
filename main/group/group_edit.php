@@ -211,11 +211,10 @@ if (isset($_SESSION['id_session'])) {
 	$complete_user_list = CourseManager :: get_user_list_from_course_code($_course['id'],true,$_SESSION['id_session']);
 	$complete_user_list2 = CourseManager :: get_coach_list_from_course_code($_course['id'],$_SESSION['id_session']);
 	$complete_user_list = array_merge($complete_user_list,$complete_user_list2);
+	usort($complete_user_list, 'sort_users');
 } else {
-	$complete_user_list = CourseManager :: get_user_list_from_course_code($_course['id']);
+	$complete_user_list = CourseManager :: get_user_list_from_course_code($_course['id'],false, '','',api_get_setting('user_order_by'));
 }
-
-usort($complete_user_list, 'sort_users');
 
 
 $possible_users = array ();
@@ -324,7 +323,10 @@ if ($referer != 'group_space.php' && $referer != 'group.php') {
 	$referer = 'group.php';
 }
 if (isset($_POST['group_members'])) {
-	if (count($_POST['group_members'])<=$defaults['max_member']) {
+	// if it has been specified that there is a limit (contradictionary this is max_member_no_limit = 1) then we have to check if the limit 
+	// has been exceeded or not
+	if($_POST['max_member_no_limit'] == 1){
+		if (count($_POST['group_members'])<=$defaults['max_member'] AND $defaults['max_member_no_limit']) {
 		//
 	} else {
 				header('Location:group_edit.php?show_message='.get_lang('GroupTooMuchMembers'));

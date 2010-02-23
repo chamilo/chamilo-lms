@@ -41,10 +41,12 @@ include ('../inc/global.inc.php');
 
 // the section (for the tabs)
 $this_section = SECTION_COURSES;
+
 // access restriction
 if (!api_is_allowed_to_edit()) {
 	 api_not_allowed(true);
 }
+
 // including additional libraries
 require_once (api_get_path(LIBRARY_PATH).'course.lib.php');
 require_once (api_get_path(LIBRARY_PATH).'sortabletable.class.php');
@@ -228,7 +230,7 @@ function get_number_of_users() {
 						LEFT JOIN $course_user_table cu on u.user_id = cu.user_id and course_code='".$_SESSION['_course']['id']."'";
 						
 		// we change the SQL when we have a filter
-		if (isset($_GET['subscribe_user_filter_value']) AND api_get_setting('ProfilingFilterAddingUsers') == 'true'){
+		if (isset($_GET['subscribe_user_filter_value']) AND !empty($_GET['subscribe_user_filter_value']) AND api_get_setting('ProfilingFilterAddingUsers') == 'true'){
 			$field_identification = explode('*',$_GET['subscribe_user_filter_value']);
 			$sql .=	"
 				LEFT JOIN $table_user_field_values field_values 
@@ -262,7 +264,7 @@ function get_number_of_users() {
 	}
 
 	// when there is a keyword then we are searching and we have to change the SQL statement
-	if (isset ($_REQUEST['keyword'])) {
+	if (isset ($_GET['keyword']) AND !empty($_GET['keyword'])) {
 		$keyword = Database::escape_string($_REQUEST['keyword']);
 		$sql .= " AND (firstname LIKE '%".$keyword."%' OR lastname LIKE '%".$keyword."%'   OR email LIKE '%".$keyword."%'  OR username LIKE '%".$keyword."%'  OR official_code LIKE '%".$keyword."%')";
 		
@@ -333,7 +335,7 @@ function get_user_data($from, $number_of_items, $column, $direction) {
 					LEFT JOIN $tbl_session_rel_course_user cu on u.user_id = cu.id_user and course_code='".$_SESSION['_course']['id']."'";
 
 			// applying the filter of the additional user profile fields 	
-			if (isset($_GET['subscribe_user_filter_value']) AND api_get_setting('ProfilingFilterAddingUsers') == 'true'){
+			if (isset($_GET['subscribe_user_filter_value']) !empty($_GET['subscribe_user_filter_value']) AND api_get_setting('ProfilingFilterAddingUsers') == 'true'){
 				$field_identification = explode('*',$_GET['subscribe_user_filter_value']);
 				$sql .=	"
 					LEFT JOIN $table_user_field_values field_values 
@@ -361,7 +363,7 @@ function get_user_data($from, $number_of_items, $column, $direction) {
 				LEFT JOIN $course_user_table cu on u.user_id = cu.user_id and course_code='".$_SESSION['_course']['id']."'";
 				
 				// applying the filter of the additional user profile fields 	
-				if (isset($_GET['subscribe_user_filter_value']) AND api_get_setting('ProfilingFilterAddingUsers') == 'true'){
+				if (isset($_GET['subscribe_user_filter_value']) AND !empty($_GET['subscribe_user_filter_value']) AND api_get_setting('ProfilingFilterAddingUsers') == 'true'){
 					$field_identification = explode('*',$_GET['subscribe_user_filter_value']);
 					$sql .=	"
 						LEFT JOIN $table_user_field_values field_values 
@@ -399,7 +401,7 @@ function get_user_data($from, $number_of_items, $column, $direction) {
 
 
 					// applying the filter of the additional user profile fields 	
-					if (isset($_GET['subscribe_user_filter_value']) AND api_get_setting('ProfilingFilterAddingUsers') == 'true'){
+					if (isset($_GET['subscribe_user_filter_value']) AND !empty($_GET['subscribe_user_filter_value']) AND api_get_setting('ProfilingFilterAddingUsers') == 'true'){
 						$field_identification = explode('*',$_GET['subscribe_user_filter_value']);
 						$sql .=	"
 							LEFT JOIN $table_user_field_values field_values 
@@ -431,7 +433,7 @@ function get_user_data($from, $number_of_items, $column, $direction) {
 				LEFT JOIN $tbl_session_rel_course_user cu on u.user_id = cu.id_user and course_code='".$_SESSION['_course']['id']."'";
 				
 			// applying the filter of the additional user profile fields 	
-			if (isset($_GET['subscribe_user_filter_value'])){
+			if (isset($_GET['subscribe_user_filter_value']) AND !empty($_GET['subscribe_user_filter_value'])){
 				$field_identification = explode('*',$_GET['subscribe_user_filter_value']);
 				$sql .=	"
 					LEFT JOIN $table_user_field_values field_values 
@@ -458,7 +460,7 @@ function get_user_data($from, $number_of_items, $column, $direction) {
 				LEFT JOIN $course_user_table cu on u.user_id = cu.user_id and course_code='".$_SESSION['_course']['id']."'";
 				
 			// applying the filter of the additional user profile fields 	
-			if (isset($_GET['subscribe_user_filter_value'])){
+			if (isset($_GET['subscribe_user_filter_value']) AND !empty($_GET['subscribe_user_filter_value'])){
 				$field_identification = explode('*',$_GET['subscribe_user_filter_value']);
 				$sql .=	"
 					LEFT JOIN $table_user_field_values field_values 
@@ -495,7 +497,7 @@ function get_user_data($from, $number_of_items, $column, $direction) {
 
 
 					// applying the filter of the additional user profile fields 	
-					if (isset($_GET['subscribe_user_filter_value']) AND api_get_setting('ProfilingFilterAddingUsers') == 'true'){
+					if (isset($_GET['subscribe_user_filter_value']) AND !empty($_GET['subscribe_user_filter_value']) AND api_get_setting('ProfilingFilterAddingUsers') == 'true'){
 						$field_identification = explode('*',$_GET['subscribe_user_filter_value']);
 						$sql .=	"
 							LEFT JOIN $table_user_field_values field_values 
@@ -615,7 +617,7 @@ $sort_by_first_name = api_sort_by_first_name();
 echo '<div class="actions">';
 
 $actions .= '<a href="user.php">'.Display::return_icon('members.gif',get_lang('BackToUserList')).' '.get_lang('BackToUserList').'</a>';
-if ($_POST['keyword'])
+if ($_GET['keyword'] AND !empty($_GET['keyword']))
 {
 	$actions .= '<a href="subscribe_user.php?type='.Security::remove_XSS($_GET['type']).'">'.Display::return_icon('clean_group.gif').' '.get_lang('ClearSearchResults').'</a>';
 }
@@ -627,7 +629,7 @@ if (api_get_setting('ProfilingFilterAddingUsers') == 'true') {
 	display_extra_profile_fields_filter();
 }
 
-$form = new FormValidator('search_user', 'POST',api_get_self().'?type='.$_REQUEST['type'],'',null,false);
+$form = new FormValidator('search_user', 'GET',api_get_self().'?type='.$_REQUEST['type'],'',null,false);
 $renderer = & $form->defaultRenderer();
 $renderer->setElementTemplate('<span>{element}</span> ');
 $form->add_textfield('keyword', '', false);
@@ -762,10 +764,4 @@ function display_extra_profile_fields_filter()
 	echo   '<button type="submit" name="submit_filter" id="submit_filter" value="" class="search">'.get_lang('Filter').'</button>';
 	echo '</form>';
 
-}
-
-function debug($var) {
-	echo '<pre>';
-	print_r($var);
-	echo '</pre>';
 }

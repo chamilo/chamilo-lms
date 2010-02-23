@@ -768,11 +768,22 @@ class GroupManager {
 	 * Get all users from a given group
 	 * @param int $group_id The group
 	 */
-	public static function get_users ($group_id) {
+	public static function get_users ($group_id, $order_by='', $direction='ASC') {
+		// Database table definition
 		$group_user_table = Database :: get_course_table(TABLE_GROUP_USER);
-		$group_id = Database::escape_string($group_id);
-		$sql = "SELECT user_id FROM $group_user_table WHERE group_id = $group_id";
-		$res = Database::query($sql,__FILE__,__LINE__);
+		$table_user = Database::get_main_table(TABLE_MAIN_USER);
+
+		if (!empty($order_by) AND in_array($order_by, array('lastname', 'firstname', 'username', 'email', 'official_code'))){
+				$order_by_sql = 'ORDER BY user.'.$order_by.' '.$direction;
+			} else {
+				$order_by_sql = '';
+			}		
+		
+		$sql = "SELECT user.user_id FROM $group_user_table group_rel_user, $table_user user
+					WHERE group_rel_user.group_id = '".Database::escape_string($group_id)."'
+					AND group_rel_user.user_id = user.user_id
+					$order_by_sql";
+		$res = api_sql_query($sql,__FILE__,__LINE__);
 		$users = array ();
 		while ($obj = Database::fetch_object($res)) {
 			$users[] = $obj->user_id;

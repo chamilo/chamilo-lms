@@ -68,7 +68,7 @@ if( isset($_GET['action']))
 			$data = array();
 			foreach($groups as $index => $group)
 			{
-				$users = GroupManager::get_users($group['id']);
+				$users = GroupManager::get_users($group['id'],api_get_setting('user_order_by'));
 				foreach($users as $index => $user)
 				{
 					$row = array();
@@ -136,7 +136,7 @@ foreach($categories as $index => $category)
 		echo '<li>';
 		echo stripslashes($group['name']);
 		echo '<ul>';
-		$users = GroupManager::get_users($group['id']);
+		$users = GroupManager::get_users($group['id'],api_get_setting('user_order_by'));
 		foreach($users as $index => $user)
 		{
 			$user_info = api_get_user_info($user);

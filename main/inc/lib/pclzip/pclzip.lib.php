@@ -4434,7 +4434,7 @@ if (!function_exists('gzopen') && function_exists('gzopen64')) {
       //
       // --------------------------------------------------------------------------------
       // A patch about stored filenames with backslash directory separator (Windows style).
-      // Archives created by the utility IZArc 3.81 (possibly new versions too) need this patch. 
+      // Archives created by the utility IZArc 3.81 (possibly new versions too) need this patch.
       //$p_header['filename'] = fread($this->zip_fd, $p_header['filename_len']);
       $p_header['filename'] = str_replace("\\", '/', fread($this->zip_fd, $p_header['filename_len']));
       // --------------------------------------------------------------------------------

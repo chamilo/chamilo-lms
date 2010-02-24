@@ -237,6 +237,9 @@ define('FLASH_PLAYER_VIDEO', '{FLASH_PLAYER_VIDEO}');
 define('SCRIPT_SWFOBJECT', '{SCRIPT_SWFOBJECT}');
 define('SCRIPT_ASCIIMATHML', '{SCRIPT_ASCIIMATHML}');
 
+// Forcing PclZip library to use a custom temporary folder.
+define('PCLZIP_TEMPORARY_DIR', api_get_path(SYS_ARCHIVE_PATH));
+
 // Relations type with Human resources manager
 define('COURSE_RELATION_TYPE_RRHH',	1);
 define('SESSION_RELATION_TYPE_RRHH', 1);
@@ -791,7 +794,7 @@ function api_get_user_courses($userid, $fetch_session = true) {
 
 /**
  * Formats user information into a standard array
- * 
+ *
  * @param array Non-standard user array
  * @return array Standard user array
  */
@@ -804,7 +807,7 @@ function _api_format_user($user) {
 		$firstname = $user['firstName'];
 		$lastname = $user['lastName'];
 	}
-	
+
 	$result['firstname'] = $firstname;
 	$result['lastname']	= $lastname;
 
@@ -3766,7 +3769,7 @@ function api_is_course_visible_for_user($userid = null, $cid = null) {
 				AND
 					relation_type <> '".COURSE_RELATION_TYPE_RRHH."'
 				AND
-					course_code = '$cid'				
+					course_code = '$cid'
 				LIMIT 1";
 
 		$result = Database::query($sql);
@@ -4499,9 +4502,9 @@ function api_send_mail($to, $subject, $message, $additional_headers = null, $add
 
 /**
  * Returns an alphabetized list of timezones in an associative array that can be used to populate a select
- * 
+ *
  * @return array List of timezone identifiers
- * 
+ *
  * @author Guillaume Viguier <guillaume.viguier@beeznest.com>
  */
 function api_get_timezones() {
@@ -4518,10 +4521,10 @@ function api_get_timezones() {
 
 /**
  * Returns the given date as a DATETIME in UTC timezone. This function should be used before entering any date in the DB.
- * 
+ *
  * @param mixed The date to be converted (can be a string supported by date() or a timestamp)
  * @return string The DATETIME in UTC to be inserted in the DB, or null if the format of the argument is not supported
- * 
+ *
  * @author Guillaume Viguier <guillaume.viguier@beeznest.com>
  */
 function api_get_utc_datetime($time) {
@@ -4547,7 +4550,7 @@ function api_get_utc_datetime($time) {
  * @param string The timezone to be converted to. If null, the timezone will be determined based on user preference, or timezone chosen by the admin for the platform.
  * @param string The timezone to be converted from. If null, UTC will be assumed.
  * @return string The converted time
- * 
+ *
  * @author Guillaume Viguier <guillaume.viguier@beeznest.com>
  */
 function api_get_local_time($time, $format=null, $to_timezone=null, $from_timezone=null) {
@@ -4590,7 +4593,7 @@ function api_get_local_time($time, $format=null, $to_timezone=null, $from_timezo
 		// In the following case, the format is an internal Chamilo format, so we are using api_format_date
 		if (is_int($format) || strpos($format, '%') !== false) {
 			return api_format_date($format, strtotime($date->format("Y-m-d H:i:s")));
-		} else {	
+		} else {
 			return $date->format($format);
 		}
 	} catch (Exception $e) {

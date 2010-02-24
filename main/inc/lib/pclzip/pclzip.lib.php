@@ -4431,7 +4431,14 @@ if (!function_exists('gzopen') && function_exists('gzopen64')) {
 
     // ----- Get filename
     if ($p_header['filename_len'] != 0)
-      $p_header['filename'] = fread($this->zip_fd, $p_header['filename_len']);
+      //
+      // --------------------------------------------------------------------------------
+      // A patch about stored filenames with backslash directory separator (Windows style).
+      // Archives created by the utility IZArc 3.81 (possibly new versions too) need this patch. 
+      //$p_header['filename'] = fread($this->zip_fd, $p_header['filename_len']);
+      $p_header['filename'] = str_replace("\\", '/', fread($this->zip_fd, $p_header['filename_len']));
+      // --------------------------------------------------------------------------------
+      //
     else
       $p_header['filename'] = '';
 

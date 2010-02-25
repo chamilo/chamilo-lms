@@ -35,7 +35,7 @@ class DashboardManager
 
 		$table_cols = array('name', 'version', 'description');
 		echo '<h3>'.get_lang('DashboardPlugins').'</h3>';
-		echo '<form name="plugins" method="post" action="'.api_get_self().'?category='.$_GET['category'].'">';
+		echo '<form name="plugins" method="post" action="'.api_get_self().'?category='.Security::remove_XSS($_GET['category']).'">';
 		echo '<table class="data_table">';
 		echo '<tr>';
 		echo '<th width="50px">'.get_lang('Enabled').'</th>';

@@ -73,13 +73,14 @@ switch ($action) {
 			echo '';
 			break;
 		}
-
-		$my_current_friend		 = Security::remove_XSS($_POST['friend_id']);
-		$my_denied_current_friend= Security::remove_XSS($_POST['denied_friend_id']);
+		
+		//deprecated variables?
+		//$my_current_friend		 = Security::remove_XSS($_POST['friend_id']);
+		//$my_denied_current_friend= Security::remove_XSS($_POST['denied_friend_id']);
 		$my_delete_friend        = Security::remove_XSS($_POST['delete_friend_id']);
-		$friend_id_qualify       = Security::remove_XSS($_POST['user_id_friend_q']);
-		$type_friend_qualify     = Security::remove_XSS($_POST['type_friend_q']); //filtered?
-		$is_my_friend            = Security::remove_XSS($_POST['is_my_friend']); //filtered?
+		//$friend_id_qualify       = Security::remove_XSS($_POST['user_id_friend_q']);
+		//$type_friend_qualify     = Security::remove_XSS($_POST['type_friend_q']); //filtered?
+		//$is_my_friend            = Security::remove_XSS($_POST['is_my_friend']); //filtered?
 
 		if (isset($_POST['delete_friend_id'])) {
 			SocialManager::remove_user_rel_user($my_delete_friend);
@@ -137,31 +138,7 @@ switch ($action) {
 			$friend_html.='<br/></table>';
 		}
 		echo $friend_html;	
-		break;
-	case 'delete_friend':
-	
-		if (api_is_anonymous()){
-			echo '';
-			break;
-		}
-
-		$my_current_friend		 = Security::remove_XSS($_POST['friend_id']);
-		$my_denied_current_friend= Security::remove_XSS($_POST['denied_friend_id']);
-		$my_delete_friend        = Security::remove_XSS($_POST['delete_friend_id']);
-		$friend_id_qualify       = Security::remove_XSS($_POST['user_id_friend_q']);
-		$type_friend_qualify     = Security::remove_XSS($_POST['type_friend_q']); //filtered?
-		$is_my_friend            = Security::remove_XSS($_POST['is_my_friend']); //filtered?
-
-		if (isset($_POST['delete_friend_id'])) {
-			SocialManager::remove_user_rel_user($my_delete_friend);
-		}
-		/*
-		if(isset($_POST['user_id_friend_q']) && isset($_POST['type_friend_q'])) {
-			SocialManager::qualify_friend($friend_id_qualify,$type_friend_qualify);
-			echo api_xml_http_response_encode(get_lang('AttachContactsToGroupSuccesfuly'));
-		}*/		
-		break;
-		
+		break;		
 	case 'toogle_course':
 		if (api_is_anonymous()){
 			echo '';

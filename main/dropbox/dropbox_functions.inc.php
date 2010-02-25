@@ -186,7 +186,7 @@ function delete_category($action, $id)
 function display_move_form($part, $id, $target=array())
 {
 	echo '<div class="row"><div class="form_header">'.get_lang('MoveFileTo').'</div></div>';
-	echo '<form name="form1" method="post" action="'.api_get_self().'?view_received_category='.$_GET['view_received_category'].'&view_sent_category='.$_GET['view_sent_category'].'&view='.$_GET['view'].'">';
+	echo '<form name="form1" method="post" action="'.api_get_self().'?view_received_category='.Security::remove_XSS($_GET['view_received_category']).'&view_sent_category='.Security::remove_XSS($_GET['view_sent_category']).'&view='.Security::remove_XSS($_GET['view']).'">';
 	echo '<input type="hidden" name="id" value="'.Security::remove_XSS($id).'">';
 	echo '<input type="hidden" name="part" value="'.Security::remove_XSS($part).'">';
 	echo '
@@ -197,25 +197,21 @@ function display_move_form($part, $id, $target=array())
 				<div class="formw">';
 	echo '<select name="move_target">';
 	echo '<option value="0">'.get_lang('Root').'</option>';
-	foreach ($target as $key=>$category)
-	{
+	foreach ($target as $key=>$category) {
 		echo '<option value="'.$category['cat_id'].'">'.$category['cat_name'].'</option>';
 	}
 	echo  '</select>';
 	echo '	</div>
 			</div>';
 
-	echo '
-		<div class="row">
+	echo '<div class="row">
 			<div class="label">
 			</div>
 			<div class="formw">
 				<button class="next" type="submit" name="do_move" value="'.get_lang('Ok').'">'.get_lang('MoveFile').'</button>
 			</div>
-		</div>
-	';
+		</div>';
 	echo '</form>';
-
 	echo '<div style="clear: both;"></div>';
 }
 
@@ -242,8 +238,7 @@ function store_move($id, $target, $part)
 		{
 			$sql="UPDATE ".$dropbox_cnf["tbl_post"]." SET cat_id='".Database::escape_string($target)."'
 						WHERE dest_user_id='".Database::escape_string($_user['user_id'])."'
-						AND file_id='".Database::escape_string($id)."'
-						";
+						AND file_id='".Database::escape_string($id)."'";
 			Database::query($sql);
 			$return_message=get_lang('ReceivedFileMoved');
 		}
@@ -251,14 +246,11 @@ function store_move($id, $target, $part)
 		{
 			$sql="UPDATE ".$dropbox_cnf["tbl_file"]." SET cat_id='".Database::escape_string($target)."'
 						WHERE uploader_id='".Database::escape_string($_user['user_id'])."'
-						AND id='".Database::escape_string($id)."'
-						";
+						AND id='".Database::escape_string($id)."'";
 			Database::query($sql);
 			$return_message=get_lang('SentFileMoved');
 		}
-	}
-	else
-	{
+	} else {
 		$return_message=get_lang('NotMovedError');
 	}
 	return $return_message;
@@ -344,8 +336,7 @@ function get_dropbox_categories($filter='')
 	$sql="SELECT * FROM ".$dropbox_cnf['tbl_category']." WHERE user_id='".$_user['user_id']."' $condition_session";
 
 	$result=Database::query($sql);
-	while ($row=Database::fetch_array($result))
-	{
+	while ($row=Database::fetch_array($result)) {
 		if(($filter=='sent' AND $row['sent']==1) OR ($filter=='received' AND $row['received']==1) OR $filter=='')
 		{
 			$return_array[$row['cat_id']]=$row;
@@ -704,7 +695,7 @@ function display_add_form()
 * returns username or false if user isn't registered anymore
 * @todo check if this function is still necessary. There might be a library function for this.
 */
-function getUserNameFromId ( $id)  // RH: Mailing: return 'Mailing ' + id
+function getUserNameFromId ($id)  // RH: Mailing: return 'Mailing ' + id
 {
 	global $dropbox_cnf;
 
@@ -757,7 +748,7 @@ function isCourseMember( $user_id)
 * Checks if there are files in the dropbox_file table that aren't used anymore in dropbox_person table.
 * If there are, all entries concerning the file are deleted from the db + the file is deleted from the server
 */
-function removeUnusedFiles( )
+function removeUnusedFiles()
 {
     // select all files that aren't referenced anymore
     $sql = "SELECT DISTINCT f.id, f.filename
@@ -1109,9 +1100,7 @@ function display_user_link_work($user_id, $name='')
 */
 function feedback($array)
 {
-
-	foreach ($array as $key=>$value)
-	{
+	foreach ($array as $key=>$value) {
 		$output.=format_feedback($value);
 	}
 	$output.=feedback_form();
@@ -1258,8 +1247,7 @@ function zip_download ($array)
 	$temp_zip_file=$temp_zip_dir.'/'.$name;
 	$zip_folder=new PclZip($temp_zip_file);
 
-	foreach ($files as $key=>$value)
-	{
+	foreach ($files as $key=>$value) {
 		// met hernoemen van de files in de zip
 		$zip_folder->add(api_get_path(SYS_COURSE_PATH).$_course['path']."/dropbox/".$value['filename'],PCLZIP_OPT_REMOVE_PATH, api_get_path(SYS_COURSE_PATH).$_course['path']."/dropbox", PCLZIP_CB_PRE_ADD, 'my_pre_add_callback');
 		// zonder hernoemen van de files in de zip
@@ -1271,8 +1259,7 @@ function zip_download ($array)
 	$overview_file=$temp_zip_dir.'/overview.html';
 	$handle=fopen($overview_file,'w');
 	fwrite($handle,$overview_file_content);
-
-
+	
 	// send the zip file
 	DocumentManager::file_send_for_download($temp_zip_file,true,$name);
 	exit;
@@ -1285,10 +1272,8 @@ function zip_download ($array)
 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 * @version march 2006
 */
-function my_pre_add_callback($p_event, &$p_header)
-{
+function my_pre_add_callback($p_event, &$p_header) {
 	global $files;
-
 	$p_header['stored_filename']=$files[$p_header['stored_filename']]['title'];
 	return 1;
 }

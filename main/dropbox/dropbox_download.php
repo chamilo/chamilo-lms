@@ -1,5 +1,5 @@
 <?php //$id: $
-/* For licensing terms, see /dokeos_license.txt */
+/* For licensing terms, see /license.txt */
 /*
 ==============================================================================
 		INIT SECTION
@@ -11,19 +11,19 @@
 $language_file = "dropbox";
 
 // including the basic Dokeos initialisation file
-require("../inc/global.inc.php");
+require_once '../inc/global.inc.php';
 
 // the dropbox configuration parameters
-include_once('dropbox_config.inc.php');
+require_once 'dropbox_config.inc.php';
 
 // the dropbox file that contains additional functions
-include_once('dropbox_functions.inc.php');
+require_once 'dropbox_functions.inc.php';
 
 // the dropbox class
-require_once( "dropbox_class.inc.php");
+require_once 'dropbox_class.inc.php';
 
 //
-include_once(api_get_path(LIBRARY_PATH).'/document.lib.php');
+require_once api_get_path(LIBRARY_PATH).'/document.lib.php';
 
 
 /*
@@ -64,10 +64,9 @@ if ( isset($_GET['cat_id']) AND is_numeric($_GET['cat_id']) AND $_GET['action']=
 	}
 	if (!is_array($files_to_download) OR empty($files_to_download))
 	{
-		header ("location: index.php?view=".$_GET['sent_received']."&error=ErrorNoFilesInFolder");
+		header ("location: index.php?view=".Security::remove_XSS($_GET['sent_received'])."&error=ErrorNoFilesInFolder");
 		exit;
 	}
-
 	zip_download($files_to_download);
 	exit;
 }
@@ -124,7 +123,7 @@ if (!$allowed_to_download)
 // the user is allowed to download the file
 else
 {
-	$_SESSION['_seen'][$_course['id']][TOOL_DROPBOX][]=$_GET['id'];
+	$_SESSION['_seen'][$_course['id']][TOOL_DROPBOX][]=intval($_GET['id']);
 
 	$work = new Dropbox_work($_GET['id']);
 	$path = dropbox_cnf("sysPath") . "/" . $work -> filename; //path to file as stored on server
@@ -201,35 +200,6 @@ else
 
 
 
-
-
-
-
-
-// $Id: dropbox_download.php,v 1.10 2005/05/19 14:41:30 renehaentjens Exp $
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2004 Dokeos S.A.
-	Copyright (c) 2003 Ghent University (UGent)
-	Copyright (c) 2001 Universite catholique de Louvain (UCL)
-	Copyright (c) Jan Bols
-	Copyright (c) René Haentjens
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact: Dokeos, 181 rue Royale, B-1000 Brussels, Belgium, info@dokeos.com
-==============================================================================
-*/
 /**
 ==============================================================================
  * Dropbox module for Claroline

@@ -10,7 +10,7 @@ $my_idtextqualify   = isset($_REQUEST['idtextqualify']) ? Security::remove_XSS($
 $my_gradebook		= Security::remove_XSS($_GET['gradebook']);
 $to_origin			= Security::remove_XSS($_GET['origin']);
 
-$output = <<<FIN
+$output = <<<EOF
 <div class="forum-body-form">
  	<table>
  		<form id="forum-thread-qualify" name="forum-thread-qualify" action="forumqualify.php">
@@ -22,7 +22,7 @@ $output = <<<FIN
  		<input type="hidden" name="gradebook" value="{$my_gradebook}">
   		<input type="hidden" name="origin" value="{$to_origin}">
     	<tr>
-FIN;
+EOF;
 
 $output .= '
 			<td width="40%" class="forum-thread-header">'.get_lang('User').'&nbsp;:</td >

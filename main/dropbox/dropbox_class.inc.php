@@ -1,5 +1,5 @@
 <?php //$id: $
-/* For licensing terms, see /dokeos_license.txt */
+/* For licensing terms, see /license.txt */
 
 /**
  * Dropbox module for Dokeos
@@ -112,7 +112,7 @@ class Dropbox_Work {
 		$this->isOldWork = FALSE;
 		$sql="SELECT id, upload_date
 				FROM ".$dropbox_cnf["tbl_file"]."
-				WHERE filename = '".addslashes($this->filename)."'";
+				WHERE filename = '".Database::escape_string($this->filename)."'";
         $result = Database::query($sql);
 		$res = Database::fetch_array($result);
 		if ($res != FALSE) {
@@ -123,25 +123,25 @@ class Dropbox_Work {
 			$this->id = $res["id"];
 			$this->upload_date = $res["upload_date"];
 		    $sql = "UPDATE ".$dropbox_cnf["tbl_file"]."
-					SET filesize = '".addslashes($this->filesize)."'
-					, title = '".addslashes($this->title)."'
-					, description = '".addslashes($this->description)."'
-					, author = '".addslashes($this->author)."'
-					, last_upload_date = '".addslashes($this->last_upload_date)."'
-					WHERE id='".addslashes($this->id)."'";
+					SET filesize = '".Database::escape_string($this->filesize)."'
+					, title = '".Database::escape_string($this->title)."'
+					, description = '".Database::escape_string($this->description)."'
+					, author = '".Database::escape_string($this->author)."'
+					, last_upload_date = '".Database::escape_string($this->last_upload_date)."'
+					WHERE id='".Database::escape_string($this->id)."'";
 			$result = Database::query($sql);
 		} else {
 			$this->upload_date = $this->last_upload_date;
 			$sql="INSERT INTO ".$dropbox_cnf["tbl_file"]."
 				(uploader_id, filename, filesize, title, description, author, upload_date, last_upload_date, session_id)
-				VALUES ('".addslashes($this->uploader_id)."'
-						, '".addslashes($this->filename)."'
-						, '".addslashes($this->filesize)."'
-						, '".addslashes($this->title)."'
-						, '".addslashes($this->description)."'
-						, '".addslashes($this->author)."'
-						, '".addslashes($this->upload_date)."'
-						, '".addslashes($this->last_upload_date)."'
+				VALUES ('".Database::escape_string($this->uploader_id)."'
+						, '".Database::escape_string($this->filename)."'
+						, '".Database::escape_string($this->filesize)."'
+						, '".Database::escape_string($this->title)."'
+						, '".Database::escape_string($this->description)."'
+						, '".Database::escape_string($this->author)."'
+						, '".Database::escape_string($this->upload_date)."'
+						, '".Database::escape_string($this->last_upload_date)."'
 						, ".intval($_SESSION['id_session'])."
 						)";
 
@@ -152,8 +152,8 @@ class Dropbox_Work {
 		// insert entries into person table
 		$sql="INSERT INTO ".$dropbox_cnf["tbl_person"]."
 				(file_id, user_id)
-				VALUES ('".addslashes($this->id)."'
-						, '".addslashes($this->uploader_id)."'
+				VALUES ('".Database::escape_string($this->id)."'
+						, '".Database::escape_string($this->uploader_id)."'
 						)";
         $result = Database::query($sql);	//if work already exists no error is generated
 	}
@@ -165,14 +165,15 @@ class Dropbox_Work {
 	 */
 	function _createExistingWork ($id) {
 		global $_user,$dropbox_cnf;  // RH: Feedback
-
+		
 		// Do some sanity checks
 		settype($id, 'integer') or die(dropbox_lang("generalError")." (code 205)"); //set $id to correct type
-
+		$id	= intval($id);
+		
 		// get the data from DB
 		$sql="SELECT uploader_id, filename, filesize, title, description, author, upload_date, last_upload_date, cat_id
 				FROM ".$dropbox_cnf["tbl_file"]."
-				WHERE id='".addslashes($id)."'";
+				WHERE id='".Database::escape_string($id)."'";
         $result = Database::query($sql);
 		$res = Database::fetch_array($result, 'ASSOC');
 
@@ -289,14 +290,14 @@ class Dropbox_SentWork extends Dropbox_Work
 		foreach ($this->recipients as $rec) {
 			$sql="INSERT INTO ".$dropbox_cnf["tbl_post"]."
 				(file_id, dest_user_id, session_id)
-				VALUES ('".addslashes($this->id)."', '".addslashes($rec["id"])."', ".intval($_SESSION['id_session']).")";
+				VALUES ('".Database::escape_string($this->id)."', '".Database::escape_string($rec["id"])."', ".intval($_SESSION['id_session']).")";
 	        $result = Database::query($sql);	//if work already exists no error is generated
 
 			//insert entries into person table
 			$sql="INSERT INTO ".$dropbox_cnf["tbl_person"]."
 				(file_id, user_id)
-				VALUES ('".addslashes($this->id)."'
-						, '".addslashes($rec["id"])."'
+				VALUES ('".Database::escape_string($this->id)."'
+						, '".Database::escape_string($rec["id"])."'
 						)";
         	// RH: do not add recipient in person table if mailing zip or just upload
 			if (!$justSubmit) {
@@ -333,7 +334,7 @@ class Dropbox_SentWork extends Dropbox_Work
 		$this->recipients = array();  // RH: Feedback: added to SELECT
 		$sql="SELECT dest_user_id, feedback_date, feedback
 				FROM ".$dropbox_cnf["tbl_post"]."
-				WHERE file_id='".addslashes($id)."'";
+				WHERE file_id='".Database::escape_string($id)."'";
         $result = Database::query($sql);
 		while ($res = Database::fetch_array($result)) {
 			// check for deleted users
@@ -387,7 +388,7 @@ class Dropbox_Person
 		// find all entries where this person is the recipient
 		$sql = "SELECT r.file_id, r.cat_id
 				FROM $post_tbl r, $person_tbl p
-				WHERE r.dest_user_id = '".addslashes($this->userId)."'
+				WHERE r.dest_user_id = '".Database::escape_string($this->userId)."'
 					AND r.dest_user_id = p.user_id
 					AND r.file_id = p.file_id $condition_session";
 
@@ -403,7 +404,7 @@ class Dropbox_Person
 		// find all entries where this person is the sender/uploader
 		$sql = "SELECT f.id
 				FROM $file_tbl f, $person_tbl p
-				WHERE f.uploader_id = '".addslashes($this->userId)."'
+				WHERE f.uploader_id = '".Database::escape_string($this->userId)."'
 				AND f.uploader_id = p.user_id
 				AND f.id = p.file_id $condition_session";
 
@@ -529,6 +530,8 @@ class Dropbox_Person
 	 */
 	function deleteReceivedWorkFolder($id) {
 		global $dropbox_cnf;
+		$id = intval($id);
+		
 		$sql = "DELETE FROM ".$dropbox_cnf["tbl_file"]." where cat_id = '".$id."' ";
 		if(!Database::query($sql))		return false;
 		$sql = "DELETE FROM ".$dropbox_cnf["tbl_category"]." where cat_id = '".$id."' ";
@@ -543,6 +546,7 @@ class Dropbox_Person
 	 * @param integer $id
 	 */
 	function deleteReceivedWork ($id) {
+		$id = intval($id);
 		global $dropbox_cnf;
 		//id check
 		$found = false;
@@ -581,6 +585,8 @@ class Dropbox_Person
 	 * @param unknown_type $id
 	 */
 	function deleteSentWork ($id) {
+		$id = intval($id);
+		
 		global $dropbox_cnf;
 		//index check
 		$found = false;
@@ -610,6 +616,7 @@ class Dropbox_Person
 	 */
 	function updateFeedback($id, $text) {
 		global $_course, $dropbox_cnf;
+		$id = intval($id);
 
 		//id check
 		$found = false; $wi = -1;
@@ -629,7 +636,7 @@ class Dropbox_Person
 		$this->receivedWork[$wi]->feedback = $text;
 
 		Database::query("UPDATE ".$dropbox_cnf["tbl_post"]." SET feedback_date='".
-		    addslashes($feedback_date)."', feedback='".addslashes($text).
+		    Database::escape_string($feedback_date)."', feedback='".Database::escape_string($text).
 		    "' WHERE dest_user_id='".$this->userId."' AND file_id='".$id."'");
 
 		//update item_property (previously last_tooledit) table

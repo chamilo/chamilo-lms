@@ -1,27 +1,5 @@
 <?php // $Id: system_announcements.php 22243 2009-07-20 15:08:31Z ivantcholakov $
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2004-2008 Dokeos SPRL
-	Copyright (c) 2003 Ghent University (UGent)
-	Copyright (c) 2001 Universite catholique de Louvain (UCL)
-	Copyright (c) 2005 Bart Mollet, Hogeschool Gent
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
-	Mail: info@dokeos.com
-==============================================================================
-*/
+/* For licensing terms, see /license.txt */
 /**
 ==============================================================================
 *	This page allows the administrator to manage the system announcements.
@@ -40,13 +18,13 @@ $language_file = array ('admin', 'agenda');
 $cidReset = true;
 
 // including the global dokeos files
-include ('../inc/global.inc.php');
+require_once ('../inc/global.inc.php');
 
 // including additional libraries
 require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
-include (api_get_path(LIBRARY_PATH).'system_announcements.lib.php');
-include_once(api_get_path(LIBRARY_PATH).'WCAG/WCAG_rendering.php');
-require_once (api_get_path(LIBRARY_PATH).'mail.lib.inc.php');
+require_once api_get_path(LIBRARY_PATH).'system_announcements.lib.php';
+require_once api_get_path(LIBRARY_PATH).'WCAG/WCAG_rendering.php';
+require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
 
 // setting the section (for the tabs)
 $this_section=SECTION_PLATFORM_ADMIN;
@@ -60,9 +38,8 @@ $interbreadcrumb[] = array ("url" => 'index.php', "name" => get_lang('PlatformAd
 
 $tool_name = get_lang('SystemAnnouncements');
 
-if(empty($_GET['lang']))
-{
-    $_GET['lang']=$_SESSION['user_language_choice'];
+if(empty($_GET['lang'])) {
+    $_GET['lang']=	$_SESSION['user_language_choice'];
 }
 
 // displaying the header
@@ -74,8 +51,7 @@ Display :: display_header($tool_name);
 ==============================================================================
 */
 
-if($_GET['action'] != 'add' && $_GET['action'] != 'edit')
-{
+if($_GET['action'] != 'add' && $_GET['action'] != 'edit') {
 	echo '<div class="actions">';
 	echo '<a href="?action=add">'.Display::return_icon('announce_add.gif', get_lang('langAddAnnouncement')).get_lang('langAddAnnouncement').'</a>';
 	echo '</div>';
@@ -97,10 +73,9 @@ if (isset ($_GET['action']) && $_GET['action'] == 'make_visible')
 			break;
 	}
 }
-if (isset ($_GET['action']) && $_GET['action'] == 'make_invisible')
-{
-	switch ($_GET['person'])
-	{
+
+if (isset ($_GET['action']) && $_GET['action'] == 'make_invisible') {
+	switch ($_GET['person']) {
 		case VISIBLE_TEACHER :
 			SystemAnnouncementManager :: set_visibility($_GET['id'], VISIBLE_TEACHER, false);
 			break;
@@ -114,30 +89,25 @@ if (isset ($_GET['action']) && $_GET['action'] == 'make_invisible')
 }
 
 // Form was posted?
-if (isset ($_POST['action']))
-{
+if (isset ($_POST['action'])) {
 	$action_todo = true;
 }
 
 // Delete an announcement
-if (isset ($_GET['action']) && $_GET['action'] == 'delete')
-{
+if (isset ($_GET['action']) && $_GET['action'] == 'delete') {
 	SystemAnnouncementManager :: delete_announcement($_GET['id']);
 	Display :: display_confirmation_message(get_lang('AnnouncementDeleted'));
 }
 // Delete selected announcements
-if (isset ($_POST['action']) && $_POST['action'] == 'delete_selected')
-{
-	foreach($_POST['id'] as $index => $id)
-	{
+if (isset ($_POST['action']) && $_POST['action'] == 'delete_selected') {
+	foreach($_POST['id'] as $index => $id) {
 		SystemAnnouncementManager :: delete_announcement($id);
 	}
 	Display :: display_confirmation_message(get_lang('AnnouncementDeleted'));
 	$action_todo = false;
 }
 // Add an announcement
-if (isset ($_GET['action']) && $_GET['action'] == 'add')
-{
+if (isset ($_GET['action']) && $_GET['action'] == 'add') {
 	$values['action'] = 'add';
 	// Set default time window: NOW -> NEXT WEEK
 	$values['start'] = date('Y-m-d H:i:s');
@@ -145,24 +115,23 @@ if (isset ($_GET['action']) && $_GET['action'] == 'add')
 	$action_todo = true;
 }
 // Edit an announcement
-if (isset ($_GET['action']) && $_GET['action'] == 'edit')
-{
-	$announcement = SystemAnnouncementManager :: get_announcement($_GET['id']);
-	$values['id'] = $announcement->id;
-	$values['title'] = $announcement->title;
-	$values['content'] = $announcement->content;
-	$values['start'] = $announcement->date_start;
-	$values['end'] = $announcement->date_end;
-	$values['visible_teacher'] = $announcement->visible_teacher;
-	$values['visible_student'] = $announcement->visible_student ;
-	$values['visible_guest'] = $announcement->visible_guest ;
-	$values['lang'] = $announcement->lang;
-	$values['action'] = 'edit';
+if (isset ($_GET['action']) && $_GET['action'] == 'edit') {
+	
+	$announcement 				= SystemAnnouncementManager :: get_announcement($_GET['id']);
+	$values['id'] 				= $announcement->id;
+	$values['title'] 			= $announcement->title;
+	$values['content']			= $announcement->content;
+	$values['start'] 			= $announcement->date_start;
+	$values['end'] 				= $announcement->date_end;
+	$values['visible_teacher'] 	= $announcement->visible_teacher;
+	$values['visible_student'] 	= $announcement->visible_student ;
+	$values['visible_guest'] 	= $announcement->visible_guest ;
+	$values['lang'] 			= $announcement->lang;
+	$values['action']			= 'edit';
 	$action_todo = true;
 }
 
-if ($action_todo)
-{
+if ($action_todo) {
 	if (isset($_REQUEST['action']) && $_REQUEST['action'] == 'add') {
 		$form_title = get_lang('AddNews');
 	} elseif (isset($_REQUEST['action']) && $_REQUEST['action'] == 'edit') {
@@ -238,9 +207,7 @@ if ($action_todo)
 				if(SystemAnnouncementManager::add_announcement($values['title'],$values['content'],$values['start'],$values['end'],$values['visible_teacher'],$values['visible_student'],$values['visible_guest'], $values['lang'],$values['send_mail']))
 				{
 					Display :: display_confirmation_message(get_lang('AnnouncementAdded'));
-				}
-				else
-				{
+				} else {
 					$show_announcement_list = false;
 					$form->display();
 				}

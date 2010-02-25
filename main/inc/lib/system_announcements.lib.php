@@ -95,6 +95,7 @@ class SystemAnnouncementManager
 	public static function display_all_announcements($visible, $id = -1,$start = 0,$user_id='')
 	{
 		$user_selected_language = api_get_interface_language();
+		$start	= intval($start);		
 
 		$db_table = Database :: get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
 		$sql = "SELECT *, DATE_FORMAT(date_start,'%d-%m-%Y') AS display_date FROM ".$db_table."
@@ -170,11 +171,9 @@ class SystemAnnouncementManager
 		$prev = ((int)$_GET['start']-19);
 
 		if(!isset($_GET['start']) || $_GET['start'] == 0) {
-
 			if($nb_announcement > 20) {
 				echo '<a href="news_list.php?start='.$next.'">'.get_lang('NextBis').' >> </a>';
 			}
-
 		} else {
 			echo '<a href="news_list.php?start='.$prev.'"> << '.get_lang('Prev').'</a>';
 
@@ -182,7 +181,7 @@ class SystemAnnouncementManager
 				echo '<a href="news_list.php?start='.$next.'">'.get_lang('NextBis').' >> </a>';
 			}
 
-	}
+		}
 
 	}
 
@@ -231,8 +230,7 @@ class SystemAnnouncementManager
 		$sql = "SELECT *, IF( NOW() BETWEEN date_start AND date_end, '1', '0') AS visible FROM ".$db_table." ORDER BY date_start ASC";
 		$announcements = Database::query($sql);
 		$all_announcements = array();
-		while ($announcement = Database::fetch_object($announcements))
-		{
+		while ($announcement = Database::fetch_object($announcements)) {
 			$all_announcements[] = $announcement;
 		}
 		return $all_announcements;
@@ -246,7 +244,6 @@ class SystemAnnouncementManager
 	 */
 	public static function add_announcement($title, $content, $date_start, $date_end, $visible_teacher = 0, $visible_student = 0, $visible_guest = 0, $lang = null, $send_mail=0)
 	{
-
 		$a_dateS = explode(' ',$date_start);
 		$a_arraySD = explode('-',$a_dateS[0]);
 		$a_arraySH = explode(':',$a_dateS[1]);
@@ -277,7 +274,7 @@ class SystemAnnouncementManager
 		$content = Database::escape_string($content);
 		$lang = is_null($lang) ? 'NULL' : "'".Database::escape_string($lang)."'";
 		$sql = "INSERT INTO ".$db_table." (title,content,date_start,date_end,visible_teacher,visible_student,visible_guest, lang)
-												VALUES ('".$title."','".$content."','".$start."','".$end."','".$visible_teacher."','".$visible_student."','".$visible_guest."',".$lang.")";
+				VALUES ('".$title."','".$content."','".$start."','".$end."','".$visible_teacher."','".$visible_student."','".$visible_guest."',".$lang.")";
 		if ($send_mail==1) {
 			SystemAnnouncementManager::send_system_announcement_by_email($title, $content,$visible_teacher, $visible_student);
 		}
@@ -293,7 +290,6 @@ class SystemAnnouncementManager
 	 */
 	public static function update_announcement($id, $title, $content, $date_start, $date_end, $visible_teacher = 0, $visible_student = 0, $visible_guest = 0,$lang=null, $send_mail=0)
 	{
-
 		$a_dateS = explode(' ',$date_start);
 		$a_arraySD = explode('-',$a_dateS[0]);
 		$a_arraySH = explode(':',$a_dateS[1]);
@@ -332,11 +328,10 @@ class SystemAnnouncementManager
 	}
 	/**
 	 * Deletes an announcement
-	 * @param integer $id The identifier of the announcement that should be
-	 * deleted
+	 * @param 	int $id The identifier of the announcement that should be
+	 * @return	resource
 	 */
-	public static function delete_announcement($id)
-	{
+	public static function delete_announcement($id) {
 		$db_table = Database :: get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
 		$id = intval($id);
 		$sql = "DELETE FROM ".$db_table." WHERE id='".$id."'";
@@ -344,11 +339,10 @@ class SystemAnnouncementManager
 	}
 	/**
 	 * Gets an announcement
-	 * @param integer $id The identifier of the announcement that should be
-	 * deleted
+	 * @param 	int		$id The identifier of the announcement that should be
+	 * @return	object	Object of class StdClass or the required class, containing the query result row
 	 */
-	public static function get_announcement($id)
-	{
+	public static function get_announcement($id) {
 		$db_table = Database :: get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
 		$id = intval($id);
 		$sql = "SELECT * FROM ".$db_table." WHERE id='".$id."'";
@@ -357,41 +351,41 @@ class SystemAnnouncementManager
 	}
 	/**
 	 * Change the visibility of an announcement
-	 * @param integer $announcement_id
-	 * @param integer $user For who should the visibility be changed (possible
-	 * values are VISIBLE_TEACHER, VISIBLE_STUDENT, VISIBLE_GUEST)
+	 * @param 	int $announcement_id
+	 * @param 	int $user For who should the visibility be changed (possible values are VISIBLE_TEACHER, VISIBLE_STUDENT, VISIBLE_GUEST)
+	 * @return 	resource
 	 */
 	public static function set_visibility($announcement_id, $user, $visible)
 	{
-		$db_table = Database :: get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
-		$announcement_id = intval($announcement_id);
+		$db_table 			= Database::get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
+		$visible			= intval($visible);
+		$announcement_id 	= intval($announcement_id);
+		
 		$field = ($user == VISIBLE_TEACHER ? 'visible_teacher' : ($user == VISIBLE_STUDENT ? 'visible_student' : 'visible_guest'));
 		$sql = "UPDATE ".$db_table." SET ".$field." = '".$visible."' WHERE id='".$announcement_id."'";
 		return Database::query($sql);
 	}
 
-	public static function send_system_announcement_by_email($title,$content,$teacher, $student)
+	public static function send_system_announcement_by_email($title, $content, $teacher, $student)
 	{
 		global $_user;
 		global $_setting;
 		global $charset;
 		$user_table = Database :: get_main_table(TABLE_MAIN_USER);
-		if ($teacher<>0 AND $student == '0') {
-			$sql = "SELECT * FROM $user_table WHERE email<>'' AND status = '1'";
+		if ($teacher <> 0 AND $student == '0') {
+			$sql = "SELECT firstname, lastname, email, status FROM $user_table WHERE email<>'' AND status = '1'";
 		}
 		if ($teacher == '0' AND $student <> '0') {
-			$sql = "SELECT * FROM $user_table WHERE email<>'' AND status = '5'";
+			$sql = "SELECT firstname, lastname, email, status FROM $user_table WHERE email<>'' AND status = '5'";
 		}
 		if ($teacher<>'0' AND $student <> '0') {
-			$sql = "SELECT * FROM $user_table WHERE email<>''";
+			$sql = "SELECT firstname, lastname, email FROM $user_table WHERE email<>''";
 		}
 		if ($teacher == '0' AND $student == '0') {
 			return true;
 		}
-
 		$result = Database::query($sql);
-		while($row = Database::fetch_array($result,'ASSOC'))
-		{
+		while($row = Database::fetch_array($result,'ASSOC')) {	
 			@api_mail_html(api_get_person_name($row['firstname'], $row['lastname'], null, PERSON_NAME_EMAIL_ADDRESS), $row['email'], api_html_entity_decode(stripslashes($title), ENT_QUOTES, $charset), api_html_entity_decode(stripslashes(str_replace(array('\r\n', '\n', '\r'),'',$content)), ENT_QUOTES, $charset), api_get_person_name($_user['firstName'], $_user['lastName'], null, PERSON_NAME_EMAIL_ADDRESS), api_get_setting('emailAdministrator'), api_get_setting('emailAdministrator'));
 		}
 	}

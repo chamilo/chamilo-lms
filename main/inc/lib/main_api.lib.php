@@ -2366,6 +2366,8 @@ function api_item_property_update($_course, $tool, $item_id, $lastedit_type, $us
 	$time = date("Y-m-d H:i:s", $time);
 	if (!empty($session_id)) {
 		$session_id = intval($session_id);
+	} else {
+     	$session_id = api_get_session_id();
 	}
 
 	// Definition of tables

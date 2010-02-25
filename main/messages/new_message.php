@@ -15,7 +15,7 @@
 */
 // name of the language file that needs to be included
 $language_file= array('messages','userInfo');
-$cidReset=true;
+$cidReset	= true;
 require_once '../inc/global.inc.php';
 
 api_block_anonymous_users();
@@ -200,8 +200,14 @@ function manage_form ($default, $select_from_user_list = null) {
 	//$form->addElement('textarea','content', get_lang('Message'), array('cols' => 75,'rows'=>8));
 
 	if (isset($_GET['re_id'])) {
+		$message_reply_info = MessageManager::get_message_by_id($_GET['re_id']);
 		$form->addElement('hidden','re_id',Security::remove_XSS($_GET['re_id']));
 		$form->addElement('hidden','save_form','save_form');
+		
+		//adding reply mail
+		$user_reply_info = UserManager::get_user_info_by_id($message_reply_info['user_sender_id']);
+		$default['content']='<i><br /><br />'.api_get_person_name($user_reply_info['firstname'],$user_reply_info['lastname']).' '.get_lang('Wrote').' : '.api_html_entity_decode($message_reply_info['content'],ENT_QUOTES,$charset).'</i>';
+		
 	}
 	if (empty($group_id)) {
 		$form->addElement('html','<div class="row"><div class="label">'.get_lang('FilesAttachment').'</div><div class="formw">

@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langMdCallingTool = "Dokumenti";
 $langMdTitle = "Naslov učnega objekta";
 $langMdDescription = "Shrani te informacije s klikom na Shrani";
@@ -12,7 +15,7 @@ $langIdentifier = "Identifikator";
 $langIdentifierTip = "enolična identifikacija tega učnega objekta, sestavljena iz črk, digitov,_.()'!*";
 $langTitleTip = "naslov ali ime, in jezik naslova oz. imena";
 $langDescriptionTip = "opis ali komentar, in jezik uporabljen za opis tega učnega objekta";
-$langKeyword = "Ključna beseda";
+$langKeyword = "Ključne besede";
 $langKeywordTip = "loči z vejicami (črkami, digiti, -.)";
 $langCoverage = "Naslovna stran (platnica)";
 $langCoverageTip = "npr. bachelor of xxx: yyy";
@@ -42,3 +45,4 @@ $langCosts = "ne:brezplačno, brezplačno,, da:plačljivo, cena";
 $langCopyrights = ":yes:copyright,, no:no copyright";
 $langFormats = ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP";
 $langLngResTypes = ":exercise:exercise,, simulation:simulation,, questionnaire:questionnaire,, diagram:diagram,, figure:figure,, graph:graf,, index:index,, slide:slide,, table:table,, narrative text:narrative text,, exam:exam,, experiment:experiment,, problem statement:problem statement,, self assessment:self assessment,, lecture:lecture";
+?>

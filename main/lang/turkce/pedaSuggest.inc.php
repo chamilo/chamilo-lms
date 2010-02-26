@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $GeneralDescription = "Genel Açıklama";
 $GeneralDescriptionQuestions = "Dersin programdaki yeri neresi? Gerekli şeyler varmı? Ders diğer derslerle nasıl bir bağlantı içinde?";
 $GeneralDescriptionInformation = "Dersi tanımları (saatleri bilinen kodu, oda nerede oluyor...) ve öğretmen (isim, ofis, tel, email...).";
@@ -20,3 +23,4 @@ $HumanAndTechnicalResourcesInformation = "Değişik bağlantı kurulabilecek ki�
 $Assessment = "Değerlendirme";
 $AssessmentQuestions = "Kullanıcılar nasıl değerlendirilecek? Ana başlıklar düzenini geliştirirken bir strateji varmı?";
 $AssessmentInformation = "Örnek sınav soruları. Başarı ölçütleri. İpuçları.";
+?>

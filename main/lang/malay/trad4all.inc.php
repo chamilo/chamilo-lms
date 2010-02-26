@@ -1,6 +1,9 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $Remove = "Padam";
-$langEnter = "Kembali ke senarai subjek";
+$langEnter = "Masuk";
 $Description = "Penerangan";
 $Links = "Pautan";
 $langWorks = "Tugasan";
@@ -27,6 +30,7 @@ $UserName = "ID Pengguna";
 $langDear = "Terima kasih";
 $iso639_2_code = "en";
 $iso639_1_code = "eng";
+$charset = "iso-8859-1";
 $text_dir = "ltr";
 $left_font_family = "verdana, helvetica, arial, geneva, sans-serif";
 $right_font_family = "helvetica, arial, geneva, sans-serif";
@@ -40,7 +44,7 @@ $langYes = "Ya";
 $langNo = "Tidak";
 $Next = "Seterusnya";
 $langAllowed = "Dibenarkan";
-$langBackHome = "Kembali ke Laman Subjek ";
+$langBackHome = "Kembali ke Homepej";
 $langPropositions = "Cadangan untuk meningkatkan";
 $langMaj = "Kemaskini";
 $langModify = "Ubahsuai";
@@ -52,13 +56,13 @@ $langAdd = "Tambah";
 $langAddIntro = "Tambah pengenalan";
 $langBackList = "Kembali ke senarai";
 $langText = "Teks";
-$langEmpty = "Ruang kosong belum diisi sepenuhnya.<br>Use the <b>Back</b> button on your browser and try again.<br>If you ignore your course's code, see the Course Program";
+$langEmpty = "Kosong";
 $langConfirmYourChoice = "Anda pasti untuk memadam pilihan anda ?";
 $langAnd = "dan";
 $langChoice = "Pilihan anda";
 $langFinish = "Selesai";
 $langCancel = "Batal";
-$langNotAllowed = "Tidak dibenarkan";
+$langNotAllowed = "Anda tidak dibenarkan berada disini";
 $langManager = "Pentadbir Sistem";
 $langOptional = "Pilihan";
 $NextPage = "Laman seterusnya";
@@ -75,3 +79,4 @@ $langMyCourses = "Senarai Subjek";
 $langModifyProfile = "Kemaskini Butir Peribadi";
 $langMyStats = "Papar Statistik";
 $langLogout = "Keluar";
+?>

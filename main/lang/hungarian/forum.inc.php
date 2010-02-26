@@ -1,8 +1,11 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $ForumDeleted = "Fórum törölve";
 $ForumCategoryDeleted = "Fórum kategória törölve";
 $ForumLocked = "Fórum blokkolva";
-$Forum = "Fórumok";
+$Forum = "Fórum";
 $AddForumCategory = "Új fórum kategória hozzáadása";
 $AddForum = "Új fórum hozzáadása";
 $Topics = "Témák";
@@ -35,12 +38,12 @@ $Quoting = "Idézve";
 $NotifyByEmail = "Kérek email értesítést, ha valaki reagál";
 $StickyPost = "Ez egy ragadós üzenet (mindíg a lista eleján szerepel különleges ikonnal)";
 $ReplyShort = "Vá:";
-$DeletePost = "Biztos benne, hogy törölni szeretné ezt az üzenetet? Az üzenet törlésével a rá érkezett válaszokat is törölni fogja. A téma szerinti megjelenítés módban ellenőrizheti, hogy milyen üzeneteket töröl ezzel egyidejűleg.";
+$DeletePost = "Biztos benne, hogy törölni szeretné ezt az üzenetet? Az üzenet törlésével a rá érkezett válaszokat is törölni fogja. A téma szerinti megjelenítés módban ellen&#337;rizheti, hogy milyen üzeneteket töröl ezzel egyidej&#369;leg.";
 $Locked = "Zárolva: a hallgatók a továbbiakban nem küldhetnek üzeneteket erre a fórum kategóriára, de továbbra is olvashatják a korábban elküldött üzeneteket.";
 $Unlocked = "Nincs zárolva: a hallgatók küldhetnek új üzeneteket a kategóriára, fórumra, vagy témára";
 $Flat = "Alap";
 $Threaded = "Téma szerinti";
-$Nested = "Beágyazott";
+$Nested = "Kevert";
 $FlatView = "Alapnézet";
 $ThreadedView = "Témák szerint nézet";
 $NestedView = "Kevert nézet";
@@ -56,11 +59,11 @@ $ForGroup = "Csoportnak";
 $ThreadLocked = "Téma zárolva.";
 $NotAllowedHere = "Ide nem tekinthet be.";
 $ReplyAdded = "A válasz házzáadva";
-$EditPost = "Üzenet szerkesztése";
+$EditPost = "Üzenet Szerkesztése";
 $EditPostStored = "Az üzenet módosítva";
-$NewForumPost = "Új üzenet az alábbi fórumban: ";
-$YouWantedToStayInformed = "Email érteítést kért arra az esetre, ha valaki az alábbi témában reagál: ";
-$MessageHasToBeApproved = "Üzenetét engedélyezni kell, mielőtt a mások is hozzáférnek.";
+$NewForumPost = "Új üzenet az alábbi fórumban:";
+$YouWantedToStayInformed = "Email érteítést kért arra az esetre, ha valaki az alábbi témában reagál:";
+$MessageHasToBeApproved = "Üzenetét engedélyezni kell, miel&#337;tt a mások is hozzáférnek.";
 $AllowAttachments = "Csatolások engedélyezése";
 $EditForumCategory = "Fórum kategória szerkesztése";
 $MovePost = "Üzenet áthelyezése";
@@ -80,9 +83,9 @@ $MakeVisible = "Tegyük láthatóvá";
 $DeleteCompleteThread = "Törölni akarja az egész fórum szálat?";
 $PostDeletedSpecial = "A különleges üzenet törölve";
 $ThreadDeleted = "Szál törölve";
-$NextMessage = "Következő üzenet";
-$PrevMessage = "Előző üzenet";
-$FirstMessage = "Első üzenet";
+$NextMessage = "Következ&#337; üzenet";
+$PrevMessage = "El&#337;z&#337; üzenet";
+$FirstMessage = "Els&#337; üzenet";
 $LastMessage = "Utolsó üzenet";
 $ForumSearch = "Keresés a Fórumban";
 $SearchTerm = "Keresett szó";
@@ -90,3 +93,4 @@ $ForumSearchResults = "A  Fórumban keresés eredménye";
 $ForumSearchInformation = "Több szóra is kereshet, ha + jellel kezdi azokat";
 $YouWillBeNotifiedOfNewPosts = "E-mailben értesítést fog kapni az új hozzászólásokról.";
 $YouWillNoLongerBeNotifiedOfNewPosts = "Ezután e-mailben nem fog értesítést fog kapni az új hozzászólásokról.";
+?>

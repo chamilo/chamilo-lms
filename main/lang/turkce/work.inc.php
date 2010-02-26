@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $Tools = "Araçlar";
 $SendWork = "Belge yükle";
 $langTooBig = "Gönderilecek dosyayı seçmediniz veya dosya boyutu çok büyük";
@@ -71,7 +74,8 @@ $FolderEdited = "Düzenlenmiş klasör";
 $UpdateWork = "Bu işlem güncellendi";
 $MakeAllPapersInvisible = "Tüm sayfaları görünmez yap";
 $MakeAllPapersVisible = "Tüm sayfaları görünür yap";
-$StudentAllowedToDeleteOwnPublication = "Öğrencilerin kendi yayınlarını silmelerine izin ver";
 $TheDocumentHasBeenDeleted = "Belge silindi";
 $YouAreNotAllowedToDeleteThisDocument = "Bu belgeyi silmek için yetkiniz yok";
+$StudentAllowedToDeleteOwnPublication = "Öğrencilerin kendi yayınlarını silmelerine izin ver";
 $ConfirmYourChoiceDeleteAllfiles = "Lğtfen seçiminizi onaylayınız. Tüm dosyalar geri kurtarma şansı olmadan silinecektir.";
+?>

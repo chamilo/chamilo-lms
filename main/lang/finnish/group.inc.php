@@ -1,9 +1,12 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langNewGroupCreate = "Muodosta uusia ryhmiä";
 $langGroupCreation = "Uusien ryhmien muodostaminen";
 $langCreate = "muodosta";
 $langNewGroups = "uudet ryhmät";
-$langMax = "Korkeintaan 12 merkkiä, esimerkiksi <i>Luokka2121</i>";
+$langMax = "maks.";
 $langGroupPlacesThis = "paikkoja (valinnainen)";
 $langGroupsAdded = "ryhmät on lisätty";
 $langGroupDel = "Ryhmä poistettu";
@@ -33,14 +36,14 @@ $langGroupSelfRegistration = "Rekisteröityminen";
 $langGroupSelfRegInf = "rekisteröidy";
 $langRegIntoGroup = "Lisää minut tähän ryhmään";
 $langGroupNowMember = "Olet nyt tämän ryhmän jäsen.";
-$langPrivate = "Yksityinen pääsy, reisteröityminen suljettu (sisäänpääsy vain <a href=../user/user.php>käyttäjien listalta</a>)";
-$langPublic = "Avoin pääsy sivuston omalta sivulta ilman sisäänkirjautumista";
+$langPrivate = "yksityinen";
+$langPublic = "julkinen";
 $langPropModify = "Muokkaa asetuksia";
 $langState = "Tila";
 $langGroupFilledGroups = "Ryhmät on täydennetty käyttäjälistassa olevilla käyttäjillä.";
 $langSubscribed = "kurssille rekisteröityneet käyttäjät";
 $langStudentsNotInThisGroups = "Käyttäjät jotka eivät ole tässä ryhmässä";
-$langQtyOfUserCanSubscribe_PartBeforeNumber = "Käyttäjä voi kuulu maksimissaan ";
+$langQtyOfUserCanSubscribe_PartBeforeNumber = "Käyttäjä voi kuulu maksimissaan";
 $langQtyOfUserCanSubscribe_PartAfterNumber = " ryhmään";
 $langGroupLimit = "Rajoitus";
 $CreateGroup = "Luo ryhmä(t)";
@@ -63,3 +66,4 @@ $Empty = "Tyhjä";
 $FillGroup = "Lisää käyttäjiä";
 $GroupAnnouncements = "Ilmoitukset";
 $Group = "Ryhmä";
+?>

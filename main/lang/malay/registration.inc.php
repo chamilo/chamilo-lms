@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langCourseManager = "Pentadbir Subjek";
 $YourPasswordHasBeenEmailed = "Katalaluan telah diemaillkan kepada anda.";
 $lang_enter_email_and_well_send_you_password = "Nyatakan alamat email(yang diisi semasa pendaftaran)dan Pentadbir Sistem akan menghantar katalaluan anda secepat mungkin.";
@@ -6,7 +9,7 @@ $langLogin = "Melog Masuk";
 $langAction = "Tindakan";
 $langPreserved = "Pra Layan";
 $langDeleted = "Telah dipadam";
-$langAdded = "Tambahan";
+$langAdded = "Telah ditambah";
 $langConfirmUnsubscribe = "Sahkan Pengguna Yang Tidak Melanggan";
 $langCourseName = "Nama of subjek";
 $langSubscribe = "Melanggan";
@@ -25,21 +28,21 @@ $langGiveAdmin = "Jadikan sebagai Pentadbir";
 $langUserNumber = "Bilangan";
 $langDownloadUserList = "Senarai Muatnaik";
 $langSend = "Hantar";
-$langUserAddExplanation = "setiap baris fail yang ingin dihantar hanya memerlukan 5 medan iaitu: <b>Nama Bapa   Nama Anda   		ID Pengguna   Katalaluan 		  Email</b> dipisahkan dengan tab mengikut turutan ini..		Pengguna akan menerima email pengesahan beserta ID Pengguna dan Katalaluan.";
+$langUserAddExplanation = "setiap baris fail yang ingin dihantar hanya memerlukan 5 medan iaitu: <b>Nama Bapa   Nama Anda   		ID Pengguna   Katalaluan 		  Email</b> dipisahkan dengan tab mengikut turutan ini..		Pengguna akan menerima email pengesahan beserta ID Pengguna dan Katalal";
 $langUserMany = "Import senarai Pengguna menggunakan fail teks";
 $langOneByOne = "Tambah Pengguna secara manual";
 $langNow = "sekarang";
 $langTutor = "Tutor";
-$langTitular = "Titular";
+$langTitular = "Penulis";
 $langAddHereSomeCourses = "<font size=2 face='Arial, Helvetica'><big>Ubahsuai Senarai Subjek</big><br><br>Pilih Subjek yang ingin diikuti.<br>Tanda Subjek yang anda tidak ingin ikuti.<br> Kemudian klik OK pada bahagian bawah senarainya tersebut";
 $langStudent = "Pelajar";
 $langAddAU = "Tambah Ahli";
-$langAddedU = "telah ditambah. Email akan dihantar untuk memberikan ID Pengguna kepada Pelajar tersebut ";
+$langAddedU = "telah ditambah. Email akan dihantar untuk memberikan ID Pengguna kepada Pelajar tersebut";
 $langTheU = "Pengguna";
 $langRegYou = "telah mendaftarkan anda untuk mengikuti subjek ini";
 $langOneResp = "Satu daripada Subjek Pentadbir Subjek";
 $langTaken = "telah dugunakan oleh Pengguna lain. Sila pilih ID Pengguna yang lain";
-$langUserNo = "IP Pengguna yang anda pilih ";
+$langUserNo = "IP Pengguna yang anda pilih";
 $langFilled = "Anda telah meninggalkan.";
 $langInC = "dalam subjek ini";
 $langRole = "Peranan";
@@ -55,12 +58,11 @@ $langNowGoCreateYourCourse = "Sekarang anda boleh membina Laman Subjek";
 $langNowGoChooseYourCourses = "Sekarang anda boleh memilih Subjek yang anda ingin ikuti.";
 $langPersonalSettings = "Proses pendaftaran anda berjaya dilaksanakan. Maklumat Login (ID Pengguna & Katalaluan) akan dihantar kepada anda melalui e-mail</p>";
 $langManager = "Pentadbir Sistem";
-$langFormula = "Yours sincerely, your professor";
+$langFormula = "Yang Menjalankan Tugas";
 $langProblem = "Sebarang kesulitan, sila hubungi.";
 $langIs = "ialah";
-$langAddress = "Alamat ";
-$langSettings = "dengan maklumat seperti beriku:
-Username:";
+$langAddress = "Alamat";
+$langSettings = "dengan maklumat seperti berik";
 $langYouAreReg = "Anda telah berdaftar pada";
 $langYourReg = "Pendaftaran anda pada";
 $langUserFree = "ID Pengguna telah wujud. Sila daftar dengan ID Pengguna yang lain.";
@@ -88,3 +90,4 @@ $langUserProfileReg = "telah dikemaskini";
 $lang_no_user_account_with_this_email_address = "Tiada Akaun Pengguna yang menggunakan alamat email berikut.";
 $langCourses4User = "Subjek yang diikuti oleh Pelajar ini";
 $langCoursesByUser = "Subjek mengikut Pelajar";
+?>

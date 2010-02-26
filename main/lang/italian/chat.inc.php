@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langOnlineConference = "Conferenza";
 $langWash = "Ripulisci";
 $langReset = "Riparti";
@@ -14,7 +17,7 @@ $langMediaFile = "Streaming audio o video in diretta";
 $langContentFile = "Presentazione";
 $langListOfParticipants = "Elenco dei partecipanti";
 $langYourPicture = "La tua fotografia";
-$langOnlineDescription = "Descrizione dell'incontro online";
+$langOnlineDescription = "Descrizione dell\'incontro online";
 $langOnlyCheckForImportantQuestion = "Per favore, segna la casella solo per domande importanti!";
 $langQuestion = "domanda";
 $langClearList = "Cancella i messaggi";
@@ -40,7 +43,7 @@ $Confused = "Confuso";
 $Cool = "Indifferente";
 $Surprised = "Sorpreso";
 $Hand = "Ciao!";
-$Wink = "Strizzo l'occhio";
+$Wink = "Strizzo l\'occhio";
 $Neutral = "Neutrale";
 $Angry = "Arrabbiato";
 $Avid = "Appassionato";
@@ -57,3 +60,4 @@ $AskPermissionSpeak = "Chiedo la parola";
 $GiveTheFloorTo = "Dò la parola a";
 $Pause = "Pausa";
 $Stop = "Stop";
+?>

@@ -9,7 +9,7 @@ $langDropboxContent = "<p>El Baúl de tareas es una herramienta de administraci�
 $langHHome = "Ayuda página principal";
 $langHomeContent = "La mayoría de las rúbricas de iCampus están ya rellenadas con un corto texto o por un enlace dados por defecto, o por un ejemplo. A usted le corresponde el modificarlos.</p><p>As&iacute un corto texto aparece, bien a la vista, en la cabecera de vuestra we";
 $langHOnline = "Ayuda para Sistema de Conferencia en línea";
-$langOnlineContent = "<br><span style=\\\\"font-weight: bold;\\\\">Introducción</span><br> <br> <div style=\\\\"margin-left: 40px;\\\\">El sistema de Conferencia en línea de chamilo le permite de forma sencilla, enseñar, informar o reunir a más de 500 personas.<br> </div> <ul> <ul";
+$langOnlineContent = "<br><span style=\\"font-weight: bold;\\">Introducción</span><br> <br> <div style=\\"margin-left: 40px;\\">El sistema de Conferencia en línea de chamilo le permite de forma sencilla, enseñar, informar o reunir a más de 500 personas.<br> </div> <ul> <ul";
 $langHClar = "Ayuda: primeros pasos";
 $langHDoc = "Ayuda documentos";
 $langDocContent = "<p>El módulo de gestión de documentos funciona de manera semejante a la gestión de sus documentos en un ordenador. </p><p>Usted puede introducir documentos de todo tipo (HTML, Word, Powerpoint, Excel, Acrobat, Flash, Quicktime, etc.). Tenga en cuenta, sin";
@@ -47,8 +47,4 @@ $langClarContent2 = "Aquí, los profesores y los asitentes crean y administran l
 $langHGroups = "Ayuda: Grupos";
 $langGroupsContent = "Esta herramienta le permite crear áreas para grupos de estudiantes y asignarles dos herramientas de colaboración: un foro de debate y una sección de documentación común donde pueden compartir, subir y organizar sus propios archivos (independiente del módu";
 $langGuide = "Manual";
-$HSurvey = "";
-$SurveyContent = "";
-$HBlogs = "";
-$BlogsContent = "";
 ?>

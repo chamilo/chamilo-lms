@@ -1,11 +1,14 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $NewForumCreated = "Uusi foorumi luotu";
 $NewThreadCreated = "Uusi viestiketju luotu";
 $AddHotpotatoes = "Lisää HotPotatoes";
 $HideAttemptView = "Piilota yritykset";
 $ExtendAttemptView = "Näytä yritykset";
 $LearnPathAddedTitle = "Tervetuloa Dokeoksen kurssityökaluun!";
-$BuildComment = "Lisää oppimisobjekteja ja tehtäviä kurssiisi ";
+$BuildComment = "Lisää oppimisobjekteja ja tehtäviä kurssiisi";
 $BasicOverviewComment = "Lisää ääni kommentteja ja järjestä objekteja sisällysluettelossa";
 $DisplayComment = "Katso kurssia oppilaan näkökulmasta";
 $NewChapterComment = "Luku 1, Luku 2 tai Viikko 1, Viikko 2...";
@@ -141,11 +144,11 @@ $langEditCurrentExecice = "Muokkaa nykyistä testiä";
 $langUploadScorm = "Tuo SCORM kurssi";
 $langPowerPointConvert = "Chamilo RAPID";
 $langLPCreatedToContinue = "Jatkaaksesi lisää osio tai oppimisobjekti tai aktiviteetti kurssillesi.";
-$langLPCreatedAddChapterStep = "<html><body><p><big><img height=\"250\" width=\"250\" align=\"right\" src=\"images/gallery/mr_dokeos/animated/practicerAnim.gif\" alt=\"practicerAnim.gif\" />Tervetuola Chamilo kurssityökaluun!</big></p> <ul> <li><b>Muokkaa</b> : Lisää oppimisobjekteja ja aktiviteetteja  kurssiisi</li> <li><b>Järjestä</b> : Lisää ääni kommentteja ja muokkaa objektien järjestystä</li> <li><b>Näytä</b> : Katsele kurssia oppilaan näkökulmasta</li> <li><b>Lisää osio</b> : Luku 1, Luku 2 tai Viikko 1, Viikko 2...</li> <li><b>Lisää oppimisobjekti tai aktiviteetti</b> : aktiviteettejä, testejä, videoita, multimediaa</li> </ul> </html></body>";
+$langLPCreatedAddChapterStep = "<html><body><p><big><img height=\\"250\\" width=\\"250\\" align=\\"right\\" src=\\"images/gallery/mr_dokeos/animated/practicerAnim.gif\\" alt=\\"practicerAnim.gif\\" />Tervetuola Chamilo kurssityökaluun!</big></p> <ul> <li><b>Muokkaa</b> : Lisää oppimisobjekteja ja";
 $langPrerequisitesAdded = "Edellytykset tällä oppimisobjektille on lisätty.";
 $langAddEditPrerequisites = "Lisää/muokkaa edellytyksiä";
-$langMinimum = "minimi";
-$langMaximum = "maksimi";
+$langMinimum = "Minimi";
+$langMaximum = "Maksimi";
 $langNoDocuments = "Ei dokumentteja";
 $langNoExercisesAvailable = "Ei testejä saatavilla";
 $langNoLinksAvailable = "Ei linkkejä saatavilla";
@@ -191,8 +194,8 @@ $ChangesStored = "Ääni lisätty";
 $ViewScoreChangeHistory = "Näytä piste historia";
 $ImageWillResizeMsg = "Opiskelijan kuvan kokoa muutetaan jos tarpeen";
 $ImagePreview = "Kuvan esikatselu";
-$UplAlreadyExists = "on jo olemassa!";
-$UplUnableToSaveFile = "Tallennettavaa tiedostoa ei voitu tallentaa!";
+$UplAlreadyExists = "Tiedosto on jo olemassa";
+$UplUnableToSaveFile = "Tiedoston tallentaminen ei onnistunut";
 $UnknownPackageFormat = "Tiedoston muotoa ei tunnistettu. Tarkista että tämä on kelvollinen paketti.";
 $MoveDocument = "Siirrä dokumentti";
 $EditLPSettings = "Muokkaa kurssin asetuksia";
@@ -206,10 +209,11 @@ $langAddEdit = "Lisää / Muokkaa";
 $ModifyPrerequisites = "Tallenna edellytys asetukset";
 $CreateLearningPath = "Jatka >";
 $AddExercise = "Lisää testi kurssiin";
-$AddForum = "Lisää uusi keskustelualue";
+$AddForum = "Lisää keskustelualue";
 $LPCreateDocument = "Lisää dokumentti tähän kurssiin";
 $LPName = "Kurssin nimi";
 $CourseSettings = "Kurssin asetukset";
 $AddLinkToCourse = "Lisää linkki kurssiin";
 $AddAssignmentToCourse = "Lisää tehtävä kurssiin";
 $AddForumToCourse = "Lisää keskustelualue kurssiin";
+?>

@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langOnlineConference = "Konferenssi";
 $langWash = "Pese";
 $langReset = "Tyhjennä";
@@ -37,6 +40,7 @@ $Think = "Miettii";
 $BigGrin = "Iso virnistys";
 $Amazing = "Hämmästynyt";
 $Confused = "Hämmentynyt";
+$Cool = "Viileä";
 $Surprised = "Yllättynyt";
 $Hand = "Heippa";
 $Wink = "Silmänisku";
@@ -56,3 +60,4 @@ $AskPermissionSpeak = "Pyydä puhevuoro";
 $GiveTheFloorTo = "Anna puheenvuoro";
 $Pause = "Tauko";
 $Stop = "Pysäytä";
+?>

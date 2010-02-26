@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $NewForumCreated = "Det nye forum er tilføjet";
 $NewThreadCreated = "Den nye tråd i forummet er tilføjet";
 $lang_learning_path = "Læringssti";
@@ -64,7 +67,7 @@ $lang_prereq_deleted_error = "Er slettet!";
 $lang_none = "Ingen";
 $lang_forum_opened = "Det valgte forum er åbnet i et nyt vindue";
 $lang_link_opened = "Det valgte link er åbnet i et nyt vindue.";
-$lang_short_help = "Klik på plusset for at tilføje et trin; klik på blyant for at tilføje ny titel/beskrivelse; klik på ikonet med de to dokumenter for at tilføje betingelser. Du kan tjekke det , studerende kommer til at se ved at klikke Studerende. ";
+$lang_short_help = "Klik på plusset for at tilføje et trin; klik på blyant for at tilføje ny titel/beskrivelse; klik på ikonet med de to dokumenter for at tilføje betingelser. Du kan tjekke det , studerende kommer til at se ved at klikke Studerende.";
 $lang_prereq_not_complete = "betingelserne er ikke indfriet";
 $lang_author = "Forfatter";
 $lang_date = "Dato";
@@ -82,7 +85,7 @@ $langTitleManipulateLink = "Håndter det aktuelle link";
 $langTitleManipulateQuiz = "Håndter den aktuelle øvelse";
 $langTitleManipulateStudentPublication = "Håndter den aktuelle aflevering";
 $langEnterDataNewChapter = "Indtast informationerne om det nye kapitel";
-$langEnterDataNewModule = "Indtast informationerne om det nye kapitel ";
+$langEnterDataNewModule = "Indtast informationerne om det nye kapitel";
 $langCreateNewStep = "Opret et nyt trin";
 $langNewDocument = "Nyt dokument";
 $langUseAnExistingResource = "Eller anvend en eksisterende ressource";
@@ -139,8 +142,8 @@ $langLPCreatedToContinue = "For at fortsætte kan du tilføje et kapitel eller e
 $langLPCreatedAddChapterStep = "Du kan via menuen til venstre tilføje et kapitel eller et trin i din læringssti";
 $langPrerequisitesAdded = "Betingelserne til det aktuelle trin er blevet tilføjet";
 $langAddEditPrerequisites = "Tilføj/rediger betingelser";
-$langMinimum = "minimum";
-$langMaximum = "maks.";
+$langMinimum = "Minimum";
+$langMaximum = "Maksimum";
 $langNoDocuments = "Ingen dokumenter";
 $langNoExercisesAvailable = "Ingen tilgængelige øvelser";
 $langNoLinksAvailable = "Ingen tilgængeilge links";
@@ -179,3 +182,4 @@ $LatencyTimeSpent = "Tidsforbrug";
 $Result = "Resultat";
 $SplitStepsPerPage = "En side et trin";
 $SplitStepsPerChapter = "Et kapitel et trin";
+?>

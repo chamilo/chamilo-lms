@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langSelectOptionForBackup = "Por favor, seleccione unha opción de copia de seguridade";
 $langLetMeSelectItems = "Deixame seleccionar os componentes do curso";
 $langCreateFullBackup = "Crear unha copia de seguridade de este curso";
@@ -37,11 +40,12 @@ $langServerFile = "ficheiro no servidor";
 $langNoBackupsAvailable = "Non hai dispoñible ningunha copia de seguridade";
 $langNoDestinationCoursesAvailable = "Non hai ningún curso de destino dispoñible";
 $langBackup = "Copia de seguridade";
-$langImportBackupInfo = "Importar unha copia de seguridade. Poderá subir unha copia de seguridade dende o seu ordenador ou poderá usar un ficheiro de seguridade dispoñible no servidor. ";
+$langImportBackupInfo = "Importar unha copia de seguridade. Poderá subir unha copia de seguridade dende o seu ordenador ou poderá usar un ficheiro de seguridade dispoñible no servidor.";
 $langCreateBackupInfo = "Crear unha copia de seguridade do curso. Podes eleccionar os contidos do curso para poñer na copia.";
 $ToolIntro = "Introdución da ferramenta";
 $UploadError = "Fallou o envío. Comprobe os límites de tamaño de ficheiro e os permisos de escrita do directorio.";
 $DocumentsWillBeAddedToo = "Tamén se engadirán os documentos";
 $ToExportLearnpathWithQuizYouHaveToSelectQuiz = "Se quere exportar un itinerario de aprendizaxe que conteña exercicios, terá que asegurarse de que estes exercicios foron incluídos na exportación; para iso terá que telos seleccionado na lista de exercicios.";
-$ArchivesDirectoryNotWriteableContactAdmin = "O directorio \"archive\" utilizado por esta ferramenta non ten habilitado os permisos de escritura. Contacte co administrador da plataforma.";
+$ArchivesDirectoryNotWriteableContactAdmin = "O directorio \\"archive\\" utilizado por esta ferramenta non ten habilitado os permisos de escritura. Contacte co administrador da plataforma.";
 $DestinationCourse = "Curso de destino";
+?>

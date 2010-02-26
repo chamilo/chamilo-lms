@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langStudent = "student";
 $langAddAU = "ユ〖ザを裁える";
 $langAddedU = "has been added. An email has been sent to give him his username";
@@ -24,8 +27,7 @@ $langFormula = "Yours sincerely";
 $langProblem = "啼玛がおきたときは、息晚してください";
 $langIs = "は";
 $langAddress = "アドレス::";
-$langSettings = "肌の肋年です: 
- Username:";
+$langSettings = "肌の肋年で";
 $langYouAreReg = "You are registered on";
 $langYourReg = "判峡されました:";
 $langUserFree = "このユ〖ザ叹はすでに、戮の客がつかっています。ボタンで提って、侍の叹涟で判峡してください。";
@@ -37,3 +39,4 @@ $langConfirmation = "澄千";
 $langPass = "パスワ〖ド";
 $langSurname = "叹涟";
 $langRegistration = "判峡";
+?>

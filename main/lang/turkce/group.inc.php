@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langNewGroupCreate = "Yeni grup(lar) yarat";
 $langGroupCreation = "Yeni grup yaratma";
 $langCreate = "yarat";
@@ -53,19 +56,19 @@ $langStudentDeletesHimself = "Kaydınız silindi";
 $langDefaultSettingsForNewGroups = "Yeni gruplar için varsayılan ayarlar";
 $langSelectedGroupsDeleted = "Seçilen grupların hepsi silindi";
 $langSelectedGroupsEmptied = "Seçilen grupların hepsi boş";
-$langGroupEmptied = "Grup şimdi boş";
+$langGroupEmptied = "Grup &#351;imdi bo&#351;";
 $langSelectedGroupsFilled = "Seçilen grupların hepsi dolduruldu";
 $langGroupSelfUnRegInf = "kayıt sil";
 $langSameForAll = "hepsi için aynı";
 $langNoLimit = "Sınırsız";
 $langPleaseEnterValidNumber = "Lütfen istediğiniz grup sayısını yazınız";
 $langCreateGroupsFromVirtualCourses = "Sanal Derslerdeki bütün kullanıcılardan gruplar oluştur";
-$langCreateGroupsFromVirtualCoursesInfo = "Bu ders gerçek bir ders ile bir veya daha fazla sanal dersin birleşimidir.Eğer takip eden butona basarsanız, (sanal) derslere bağlı yeni gruplar oluşturulacak ve öğrencilerin hepsi bu gruplara kaydedilecektir.";
+$langCreateGroupsFromVirtualCoursesInfo = "Bu ders gerçek bir ders ile bir veya daha fazla sanal dersin birle&#351;imidir.E&#287;er takip eden butona basarsan&#305;z, (sanal) derslere ba&#287;l&#305; yeni gruplar olu&#351;turulacak ve ö&#287;rencilerin hepsi bu gruplara kaydedilecektir.";
 $langNoGroupsAvailable = "Kullanıma açık herhangi bir grup bulunmuyor";
 $langGroupsFromVirtualCourses = "Sanal Dersler";
 $NotAvailable = "Kullanımda değil";
 $CreateSubgroups = "Alt gruplar oluştur";
-$CreateSubgroupsInfo = "Bu seçenek var olan grup altında yeni grup oluşturmanıza izin verir. Grupların sayısını verin ve bir grup seçin. Verilen grup sayısı kadar grup oluşturulacak ve seçilen gruptaki tüm üyeler yeni grublara da dahil edilecek. Var olan grub değişmeden kalacak.";
+$CreateSubgroupsInfo = "Bu seçenek var olan grup alt&#305;nda yeni grup olu&#351;turman&#305;za izin verir. Gruplar&#305;n say&#305;s&#305;n&#305; verin ve bir grup seçin. Verilen grup say&#305;s&#305; kadar grup olu&#351;turulacak ve seçilen gruptaki tüm üyeler yeni grublara da";
 $CreateNumberOfGroups = "Oluştur";
 $WithUsersFrom = "groups with members from";
 $CategoryDeleted = "Kategori silindi";
@@ -90,3 +93,4 @@ $GroupsFromClassesInfo = "Bu seçenek ile dersinize kayıtlı sınıflardan grup
 $Group = "Grup";
 $ForumOfGroup = "Forumun Grubu:";
 $BackToGroupList = "Gruplar listesine dön";
+?>

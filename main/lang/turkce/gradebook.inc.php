@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $ModifyEvaluation = "Ödevi kaydet";
 $CreateLink = "Bu öğrenme aktivitesini ödeve ekle";
 $AddResultNoStudents = "Sonuçları ekleyecek hiç öğrenci yok";
@@ -82,7 +85,7 @@ $ResultAdded = "Sonuç eklendi";
 $EvaluationStatistics = "Değerlendirme istatistikleri";
 $ExportResult = "PDF Rapor";
 $EditResult = "Öğrencilere not ver";
-$GradebookWelcomeMessage = "Değerlendirme aracına hoş geldiniz. Bu araç kurumunuzdaki yetkinlikleri değerlendirmenize izin verir. sınıf ve online aktiviteler de dahil olmak üzere farklı öğrenme aktivitelerini kullanarak Yetkinlik Raporları oluşturur. Bu araç tipik olarak harmanlanmış öğrenme ortamına uyacaktır. ";
+$GradebookWelcomeMessage = "Değerlendirme aracına hoş geldiniz. Bu araç kurumunuzdaki yetkinlikleri değerlendirmenize izin verir. sınıf ve online aktiviteler de dahil olmak üzere farklı öğrenme aktivitelerini kullanarak Yetkinlik Raporları oluşturur. Bu araç tipik olarak harmanlanmış öğrenme ortamına uyacaktır.";
 $CreateAllCat = "Tüm eğitim kategorilerini oluştur";
 $AddAllCat = "Tüm kategoriler oluşturuldu";
 $StatsStudent = "İstatistikleri";
@@ -187,3 +190,4 @@ $CertificateMinimunScoreIsRequiredAndMustNotBeMoreThan = "Sertifika alt notu ger
 $LinkMod = "Kaydet";
 $EditLink = "Linki düzenle";
 $CategoryDeleted = "Kategori silindi";
+?>

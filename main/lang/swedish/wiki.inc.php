@@ -1,5 +1,8 @@
 <?php
-$Wiki = "Grupp wiki";
+/*
+for more information: see languages.txt in the lang folder.
+*/
+$Wiki = "Wiki";
 $StartPage = "Huvudsida";
 $EditThisPage = "Redigera den här sidan";
 $ShowPageHistory = "Historik";
@@ -8,7 +11,7 @@ $AllPages = "Alla sidor";
 $AddNew = "Lägg till sida";
 $ChangesStored = "Dina ändringar sparades";
 $NewWikiSaved = "Wikisidan sparades. Du kan se den på:";
-$DefaultContent = "<br/> <br/> <p align=\"center\"> <img src=\"%swiki/wcollaborative.png\" alt=\"Mr. Chamilo\" title=\"Mr. Chamilo\" /></p> <p align=\"center\">För att redigera sidan, klicka här --> </p>";
+$DefaultContent = "<br/> <br/> <p align=\\"center\\"> <img src=\\"%swiki/wcollaborative.png\\" alt=\\"Mr. Chamilo\\" title=\\"Mr. Chamilo\\" /></p> <p align=\\"center\\">För att redigera sidan, klicka här --> </p>";
 $CourseWikiPages = "Wikisidor";
 $GroupWikiPages = "Gruppera wikisidor";
 $NoWikiPageTitle = "Dina ändringar sparades. Du måste dessutom ge sidan ett namn";
@@ -29,5 +32,6 @@ $ShowThisPage = "Visa sidan";
 $OnlyEditPagesGroupMembers = "Endast kurs- och gruppmedlemmar kan redigera gruppwikin";
 $PageUnlockedExtra = "Sidan är oskyddad. Alla kurs- eller gruppmedlemmar kan redigera den.";
 $AddOptionProtected = "Möjligheten att lägga till sidor är endast för lärare i den här wikin. Men kurs- och gruppmedlemmar kan redigera sidor som redan finns.";
-$NotifyByEmail = "Meddela mig via e-post när någon svarar";
+$NotifyByEmail = "Meddela mig via e-post om sidan blir ändrad";
 $CancelNotifyByEmail = "Skicka inga meddelanden om ändringar på sidan";
+?>

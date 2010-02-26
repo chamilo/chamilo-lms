@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $ResourceAdded = "Liitteet on lisätty. Voit nyt palata oppimispolkuun tai lisätä uusia liitteitä.";
 $LearningPath = "Learning Path";
 $LevelUp = "level up";
@@ -29,18 +32,19 @@ $StepDeleted2 = "on poistettu tässä työkalussa.";
 $Modify = "Muokkaa";
 $Chapter = "Kappale";
 $NoAgendaItems = "Kalenterimerkintöjä ei ole";
-$AgendaAdd = "Lisää uusi merkintä";
-$UserGroupFilter = "Suodatin ryhmisä/kättäjissä";
-$AgendaSortChronologicallyUp = "Nouseva";
-$ShowCurrent = "Näytä tämän kuun kalenterimerkinnät";
-$ModifyCalendarItem = "Muokkaa merkintää";
-$ItemTitle = "Merkinnän otsikko";
+$AgendaAdd = "Lisää merkintä";
+$UserGroupFilter = "Ryhmä valitsin";
+$AgendaSortChronologicallyUp = "Järjestä merkinnät järjesteykseen (vanhin ensin)";
+$ShowCurrent = "Näytä kalenterimerkinnät";
+$ModifyCalendarItem = "Muokka kalenterimerkintää";
+$ItemTitle = "Nimi";
 $Detail = "Yksityiskohdat";
-$EditSuccess = "Merkintää on muokattu";
-$AddCalendarItem = "Lisää uusi merkintä";
+$EditSuccess = "Muokkaus onnistui";
+$AddCalendarItem = "Lisää kalenterimerkintä";
 $AddAnn = "Lisää ilmoitus";
 $ForumAddNewTopic = "Foorumi: lisää uusi aihe";
 $ForumEditTopic = "Foorumi: muokkaa aihetta";
 $ExerciseAnswers = "Tehtävä: Vastaus";
 $ForumReply = "Foorumi: vastaus";
-$AgendaSortChronologicallyDown = "Laskeva";
+$AgendaSortChronologicallyDown = "Järjestä merkinnät järjesteykseen (uusin ensin)";
+?>

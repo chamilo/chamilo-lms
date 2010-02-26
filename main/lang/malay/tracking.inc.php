@@ -1,17 +1,20 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langToolName = "Statistik";
 $TrackingDisabled = "Fungsi pengesanan telah dimatikan oleh Pentadbir Sistem.";
 $langShowNone = "Tiada Paparan";
 $langCourseStats = "Statistik Subjek";
 $langToolsAccess = "Capaian untuk Alat Bantu";
-$langCourseAccess = "Capaian Subjek";
+$langCourseAccess = "Capaian untuk Subjek";
 $langLinksAccess = "Pautan";
 $langDocumentsAccess = "Dokumen";
 $langLinksDetails = "Pautan yang dicapai oleh Pelajar";
-$langWorksDetails = "Tugasan/Dokumen yang dimuat naik oleh Pelajar ";
+$langWorksDetails = "Tugasan/Dokumen yang dimuat naik oleh Pelajar";
 $langLoginsDetails = "Klik nama bulan untuk keterangan lanjut";
-$langDocumentsDetails = "Dokumen yang dimuat turun oleh Pelajar ";
-$langExercicesDetails = "Markah latihan disiapkan oleh Pelajar ";
+$langDocumentsDetails = "Dokumen yang dimuat turun oleh Pelajar";
+$langExercicesDetails = "Markah latihan disiapkan oleh Pelajar";
 $langBackToList = "Kembali ke Senarai Pengguna";
 $langDetails = "Keterangan Lanjut";
 $langStatsOfCourse = "Statistik Subjek";
@@ -37,8 +40,8 @@ $langWorkAuthors = "Disediakan Oleh";
 $langWorkDescription = "Penerangan";
 $informationsAbout = "Pengesanan";
 $langNoEmail = "Alamat email tidak dinyatakan";
-$langNoResult = "Tiada keputusan carian";
-$langCourse = "Laman Subjek ";
+$langNoResult = "Tiada Keputusan";
+$langCourse = "Subjek";
 $langHits = "Hits";
 $langTotal = "Jumlah";
 $langHour = "Jam";
@@ -90,7 +93,7 @@ $langHardAndSoftUsed = "Countries Providers Browsers Os Referers";
 $langStrangeCases = "Kes Berasingan";
 $langStatsDatabaseLink = "Klik di sini";
 $langCountCours = "Nama Subjek";
-$langCountCourseByFaculte = "Bilangan subjek mengikut Pusat Pengajian ";
+$langCountCourseByFaculte = "Bilangan subjek mengikut Pusat Pengajian";
 $langCountCourseByLanguage = "Bilangan subjek mengikut Bahasa";
 $langCountCourseByVisibility = "Number of courses by visibility";
 $langCountUsersByCourse = "Bilangan Pengguna mengikut Subjek";
@@ -115,3 +118,4 @@ $langAllRight = "Tiada sesuatu yang luar biasa disini";
 $langDefcon = "Amaran, perkara luar biasa ditemui !!";
 $langNULLValue = "Kosong (atau Tiada Nilai)";
 $langTrafficDetails = "Keterangan Kesesakan";
+?>

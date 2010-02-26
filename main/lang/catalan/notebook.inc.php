@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $NewNote = "Nova nota";
 $Note = "Nota";
 $NoteDeleted = "Nota eliminada";
@@ -24,8 +27,9 @@ $BackToNoteList = "Tornar a la llista d'anotacions";
 $NotebookManagement = "Administració de nota personal";
 $BackToNotesList = "Tornar al llistat de notes";
 $NotesSortedByTitleAsc = "Notes en ordre ascendent per títol";
-$NotesSortedByTitleDESC = "Notes en ordre descendent per títol ";
-$NotesSortedByUpdateDateAsc = "Notes en ordre ascendent per data d'actualització ";
-$NotesSortedByUpdateDateDESC = "Notes en ordre descendent per data d'actualització ";
-$NotesSortedByCreationDateAsc = "Notes en ordre ascendent per data de creació ";
-$NotesSortedByCreationDateDESC = "Notes en ordre descendent per data de creació ";
+$NotesSortedByTitleDESC = "Notes en ordre descendent per títol";
+$NotesSortedByUpdateDateAsc = "Notes en ordre ascendent per data d'actualització";
+$NotesSortedByUpdateDateDESC = "Notes en ordre descendent per data d'actualització";
+$NotesSortedByCreationDateAsc = "Notes en ordre ascendent per data de creació";
+$NotesSortedByCreationDateDESC = "Notes en ordre descendent per data de creació";
+?>

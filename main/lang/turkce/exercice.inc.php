@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langExercice = "Deneme";
 $langActivate = "Göster";
 $langDeactivate = "Gizle";
@@ -119,7 +122,7 @@ $langRep20 = "has been introduced. It has been replaced by 20";
 $langDefault = "Varsayılan değerler *";
 $langDefComment = "* If you click on \"Default values\", your ancient values will be permanently deleted.";
 $langScoreGet = "Numbers in black = Score";
-$langShowScor = "Show scoring to students : ";
+$langShowScor = "Show scoring to students :";
 $langStep1 = "1. adım";
 $langStep2 = "2. adım";
 $langTake = "al";
@@ -151,9 +154,10 @@ $langModifyAnswers = "Cevapları düzenle";
 $langForExercise = "Alıştırma için";
 $langUseExistantQuestion = "Var olan bir soruyu kullan";
 $freeAnswer = "Serbest cevap";
-$notCorrectedYet = "Bu cevap henüz düzeltilmediği için toplam puanı da etkiliyecek şekilde puan karşılığı 0 hesaplandı";
+$notCorrectedYet = "Bu cevap henüz düzeltilmedi&#287;i için toplam puan&#305; da etkiliyecek &#351;ekilde puan kar&#351;&#305;l&#305;&#287;&#305; 0 hesapland&#305;";
 $adminHP = "Hot Potatoes Admin";
 $langCorrectAnswer = "Doğru cevap";
 $langAllQuestions = "Tüm sorular";
 $Min = "En az";
 $Max = "En fazla";
+?>

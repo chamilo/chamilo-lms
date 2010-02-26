@@ -1,8 +1,11 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $ForumDeleted = "Forum deleted";
 $ForumCategoryDeleted = "Forum category deleted";
 $ForumLocked = "Forum blocked";
-$Forum = "Forums";
+$Forum = "Forum";
 $AddForumCategory = "Add forum category";
 $AddForum = "Add a forum";
 $Topics = "Topics";
@@ -12,7 +15,7 @@ $Message = "message";
 $NoForumInThisCategory = "There are no forums in this category";
 $InForumCategory = "Create in category";
 $AllowAnonymousPosts = "Allow anonymous posts?";
-$StudentsCanEdit = "Can users edit their own posts? ";
+$StudentsCanEdit = "Can users edit their own posts?";
 $ApprovalDirect = "Approval / Direct Post";
 $AllowNewThreads = "Allow users to start new threads";
 $DefaultViewType = "Default view type";
@@ -22,7 +25,7 @@ $PublicPrivateGroupForum = "Public or private group forum?";
 $Public = "For all learners";
 $Private = "For group members only";
 $NewPostStored = "Your message has been saved";
-$ReturnTo = "You can now return to the ";
+$ReturnTo = "You can now return to the";
 $Or = "or";
 $ReplyToThread = "Reply to this thread";
 $ReplyToMessage = "Reply to this message";
@@ -34,7 +37,7 @@ $LastPost = "Latest post";
 $Quoting = "Quoting";
 $NotifyByEmail = "Notify me by e-mail when somebody replies";
 $StickyPost = "This is a sticky message (appears always on top and has a special sticky icon)";
-$ReplyShort = "Re: ";
+$ReplyShort = "Re:";
 $DeletePost = "Are you sure you want to delete this post? Deleting this post will also delete the replies on this post. Please check the threaded view to see which posts will also be deleted";
 $Locked = "Locked: students can no longer post new messages in this forum category, forum or thread but they can still read the messages that were already posted";
 $Unlocked = "Unlocked: students can post new messages in this forum category, forum or thread";
@@ -56,7 +59,7 @@ $ForGroup = "For Group";
 $ThreadLocked = "Thread is locked.";
 $NotAllowedHere = "You are not allowed here.";
 $ReplyAdded = "The reply has been added";
-$EditPost = "Edit a task";
+$EditPost = "Edit Post";
 $EditPostStored = "The post has been modified";
 $NewForumPost = "New Post in the forum";
 $YouWantedToStayInformed = "You stated that you wanted to be informed by e-mail whenever somebody replies on the thread";
@@ -118,7 +121,9 @@ $Thread = "Thread";
 $NotifyMe = "Notify me";
 $ConfirmUserQualification = "Confirm mark";
 $NotChanged = "Unchanged";
+$TitleColumnGradebook = "Column header in Competences Report";
 $QualifyThreadGradebook = "Mark this thread";
+$QualifyWeight = "Weight in Report";
 $QualifyNumeric = "Score";
 $AlterQualifyThread = "Edit thread score";
 $ForumMoved = "The forum has moved";
@@ -135,3 +140,4 @@ $BackToForum = "Back to forum";
 $BackToForumOverview = "Back to forum overview";
 $BackToThread = "Back to thread";
 $ForumcategoryLocked = "Forum category Locked";
+?>

@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $PublishSurvey = "Publicar encuesta";
 $CompareQuestions = "Comparar preguntas";
 $InformationUpdated = "Información actualizada";
@@ -89,7 +92,7 @@ $AddAnswer = "Añadir opción";
 $DisplayAnswersHorVert = "Mostrar";
 $AnswerOptions = "Opciones de respuesta";
 $YesNo = "Si / No";
-$MultipleResponse = "Respuesta múltiple";
+$MultipleResponse = "Respuesta multiple";
 $Open = "Respuesta abierta";
 $Dropdown = "Lista desplegable";
 $Pagebreak = "Fin de página";
@@ -114,7 +117,7 @@ $SelectXAxis = "Seleccione la pregunta del eje X";
 $SelectYAxis = "Seleccione la pregunta del eje Y";
 $ComparativeReport = "Informe comparativo";
 $AllQuestionsOnOnePage = "Todas las preguntas serán mostradas en una página";
-$SelectUser = "Usuario";
+$SelectUser = "Seleccionar usuario";
 $SelectUserWhoFilledSurvey = "Seleccionar el usuario que completó la encuesta";
 $userreport = "Informe del usuario";
 $VisualRepresentation = "Gráfico";
@@ -122,7 +125,7 @@ $AbsoluteTotal = "Total global";
 $NextQuestion = "Pregunta siguiente";
 $PreviousQuestion = "Pregunta anterior";
 $PeopleWhoAnswered = "Personas que han elegido esta respuesta";
-$CourseUsers = "Usuarios del Curso";
+$CourseUsers = "Usuarios del curso";
 $SurveyPublication = "Publicación de la encuesta";
 $AdditonalUsers = "Usuarios adicionales";
 $MailText = "Texto del correo";
@@ -130,14 +133,13 @@ $UseLinkSyntax = "Los usuarios que haya seleccionado recibirán un correo electr
 $DetailedReportByUser = "Informe detallado por usuario";
 $DetailedReportByQuestion = "Informe detallado por pregunta";
 $ComparativeReportDetail = "En este informe puede comparar dos preguntas.";
-$CompleteReportDetail = "En este informe se obtiene un sumario de las respuestas de todos los usuarios a todas las preguntas. También dispone de una opción para sólamente ver una selección de preguntas. Puede exportar los resultados a un archivo en formato de CSV para su utilización en aplicaciones estadísticas.";
+$CompleteReportDetail = "En este informe se obtiene un sumario de las respuestas de todos los usuarios a todas las preguntas. También dispone de una opción para sólamente ver una selección de preguntas. Puede exportar los resultados a un archivo en formato de CSV para su utilizac";
 $DetailedReportByUserDetail = "En este informe puede ver todas las respuestas de un usuario.";
 $DetailedReportByQuestionDetail = "En este informe se ven los resultados pregunta a pregunta. Proporciona un análisis estadístico básico y gráficos.";
 $ReminderResendToAllUsers = "Enviar a todos los usuarios seleccionados. Si no marca esta casilla, sólamente recibirán el correo electrónico los usuarios adicionales que haya añadido.";
 $Multiplechoice = "Elección multiple";
-$Multipleresponse = "Respuesta multiple";
 $Score = "Puntuación";
-$Shared = "Compartido";
+$Shared = "Compartida";
 $Invite = "Invitados";
 $MaximumScore = "Puntuación máxima";
 $ViewInvited = "Ver invitados";
@@ -183,7 +185,7 @@ $Personality = "Personalizar";
 $Condition = "Condición";
 $Primary = "Primero";
 $Secondary = "Segundo";
-$CourseSettings = "Configuración de la lección";
+$CourseSettings = "Configuración del curso";
 $PleaseChooseACondition = "Por favor elija una condición";
 $ChooseDifferentCategories = "Elija diferente categoria";
 $Version = "Versión";
@@ -201,3 +203,4 @@ $UpdateInformation = "Actualización de información";
 $PleaseFillSurvey = "Por favor, llene la encuesta";
 $ReportingOverview = "Sumario de informes";
 $ThereAreNotQuestionsForthisSurvey = "No hay preguntas para esta encuesta";
+?>

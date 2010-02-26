@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $PublishSurvey = "Публикуване на анкетата";
 $CompareQuestions = "Сравняване на въпросите";
 $InformationUpdated = "Информацията е обновена.";
@@ -21,7 +24,7 @@ $CreateInAnotherLanguage = "Създаване на анкетата на дру
 $ExportInExcel = "Експортиране в Excel формат";
 $ComparativeResults = "Съпоставими резултати";
 $SelectDataYouWantToCompare = "Изберете данните, които да се съпоставят";
-$OrCopyPasteUrl = "Или копирайте и поставете връзката в адресното поле на вашия браузър: ";
+$OrCopyPasteUrl = "Или копирайте и поставете връзката в адресното поле на вашия браузър:";
 $ClickHereToOpenSurvey = "Щракнете тук, за да отворите анкетата";
 $SurveyNotShared = "Още не са споделени анкети.";
 $ViewSurvey = "Преглеждане на анкетата";
@@ -37,7 +40,7 @@ $CourseName = "Име на курса";
 $SurveysOfAllCourses = "Анкета(и) за всички курсове";
 $PleaseSelectAChoice = "Моля, направете избор.";
 $ThereAreNoQuestionsInTheDatabase = "Няма въпроси в базата данни.";
-$UpdateQuestionType = "Промяна на типа на въпроса: ";
+$UpdateQuestionType = "Промяна на типа на въпроса:";
 $AddAnotherQuestion = "Нов въпрос";
 $IsShareSurvey = "Споделяне на анкетата с други";
 $Proceed = "Продължи";
@@ -135,7 +138,6 @@ $DetailedReportByUserDetail = "В тази справка можете да ви
 $DetailedReportByQuestionDetail = "В тази справка можете да видите резултатите, групирани по въпроси. Предоставят се опростен статистически анализ и графики.";
 $ReminderResendToAllUsers = "Напомняне на всички потребители за анкетата. <i>Ако не изберете това, само новите добавени потребители ще получат e-mail съобщение.<i/>";
 $Multiplechoice = "Избор на един отговор";
-$Multipleresponse = "Избор на няколко отговора";
 $Score = "Класация";
 $Shared = "Споделена";
 $Invite = "Покана";
@@ -146,7 +148,7 @@ $ViewUnanswered = "Виж неотговорилите";
 $DeleteSurveyQuestion = "Наистина ли искате да изтриете въпроса?";
 $YouAlreadyFilledThisSurvey = "Вече сте попълвали тази анкета.";
 $ClickHereToAnswerTheSurvey = "Щракнете тук, за да попълните анкетата.";
-$OrCopyPasteTheFollowingUrl = "или копирайте и вмъкнете сладната връзка: ";
+$OrCopyPasteTheFollowingUrl = "или копирайте и вмъкнете сладната връзка:";
 $UnknowUser = "Неизвестен потребител";
 $MoveDown = "Преместване надолу";
 $MoveUp = "Преместване нагоре";
@@ -200,3 +202,4 @@ $BackToSurvey = "Обратно към анкетата";
 $UpdateInformation = "Обновяване на информацията";
 $PleaseFillSurvey = "Моля, попълнете анкетата.";
 $ReportingOverview = "справките";
+?>

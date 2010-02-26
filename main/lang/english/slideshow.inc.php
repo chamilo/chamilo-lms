@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $lang_height = "Height";
 $lang_resizing_comment = "resize the image to the following dimensions (in pixels)";
 $lang_width = "Width";
@@ -18,3 +21,4 @@ $lang_of = "of";
 $lang_view_slideshow = "View Slideshow";
 $FirstSlide = "First slide";
 $LastSlide = "Last slide";
+?>

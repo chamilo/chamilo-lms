@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $ReservationPeriodToSmall = "El tiempu pa la reserva ye percurtiu.";
 $BookingSystem = "Sistema de reserves";
 $BookingPeriodList = "Llistáu de tiempu de reserva";
@@ -32,6 +35,8 @@ $DeleteBookingPeriod = "Esborrar esti tiempu de reserva";
 $BookingPeriodEdited = "El tiempu de reserva modificóse";
 $BookingPeriodDateOverlap = "Una parte del tiempu de reserva ta yá usándose dende #START# hasta #END#";
 $BookingPeriodSubscribeUntilAfterStart = "El plazu pa facer una reserva ye más grande que la fecha d'entamu";
+$RepeatFor = "Repetir cada";
+$RepeatUntil = "Repetir hasta";
 $BookingPeriodPast = "Nun se puen facer reserves enantes d'esti momentu";
 $ReservationMaxUsersOverrun = "Hai más reserves que'l másimu qu'escoyó.";
 $AddNewBookingPeriod = "Amestar un plazu nuevu de reserva";
@@ -66,8 +71,6 @@ $ReservationDeleteTitle = "Un períodu de reserva pa #NAME# quedó esborráu";
 $ReservationDeleteMessage = "Estimáu/ada, nnEl períodu de reserva de #NAME# de #START# a #END# esborróse";
 $OutPeriod = "Fuera de plazu";
 $ReservationFromUntilError = "El plazu de reserva de #START# a #END# nun se rexistró porque una parte d'esti períodu yá ta usándose.n";
-$RepeatFor = "Repetir cada";
-$RepeatUntil = "Repetir hasta";
 $Recurrence = "Recurrencia";
 $NoRecurrence = "Ensin recurrencia";
 $UntilRecurrence = "Usar recurrencia";
@@ -129,3 +132,4 @@ $Step1SelectResourceType = "Pasu 1: Seleiciona la triba de recursu";
 $Step2SelectResource = "Pasu 2: Seleiciona'l recursu";
 $Step3SelectBookingPeriod = "Pasu 3: Seleiciona'l períodu de reserva";
 $NoReservations = "Nun s'almiten reserves";
+?>

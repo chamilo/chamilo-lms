@@ -96,21 +96,4 @@ $CourseRegistrationPassword = "Contraseña de registro en el curso";
 $langDescriptionDeleteCourse = "Haga clic en este enlace para eliminar cualquier rastro del curso en el servidor...<br><br>¡ Esta funcionalidad debe ser usada con extrema precaución !";
 $langDescriptionCopyCourse = "Chamilo introduce la posibilidad de copiar, en parte o completamente, un curso en otro que inicialmente debe estar vacío.<br><br>La única condición es tener un curso que contenga algunos documentos, anuncios, foros... y un segundo curso que no contenga lo";
 $DescriptionRecycleCourse = "Esta herramienta vacía el curso de los elementos seleccionados, o todo el conjunto de los elementos que contiene. Quita los documentos, los foros, enlaces Este procedimiento puede realizarse al final de una formación, o de un año académico. ¡ Por supuest";
-$QuizEmailAlert = "";
-$QuizEmailAlertActivate = "";
-$QuizEmailAlertDeactivate = "";
-$AllowUserImageForum = "";
-$AllowUserImageForumActivate = "";
-$AllowUserImageForumDeactivate = "";
-$AllowLearningPathTheme = "";
-$AllowLearningPathThemeAllow = "";
-$AllowLearningPathThemeDisallow = "";
-$ConfigChat = "";
-$AllowOpenchatWindow = "";
-$AllowOpenChatWindowActivate = "";
-$AllowOpenChatWindowDeactivate = "";
-$NewUserEmailAlert = "";
-$NewUserEmailAlertEnable = "";
-$NewUserEmailAlertToTeacharAndTutor = "";
-$NewUserEmailAlertDisable = "";
 ?>

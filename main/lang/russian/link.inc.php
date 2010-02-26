@@ -1,31 +1,34 @@
 <?php
-$langLinkName = "Название ссылки";
-$langLinkAdd = "Добавить ссылку";
-$langLinkMod = "Изменить ссылку";
-$langLinkDel = "Удалить ссылку";
-$langGiveURL = "Пожалуйста, дайте ссылку на URL";
-$langListDeleted = "Список удален";
-$langAddLink = "Добавить ссылку";
-$langDelList = "Удалить список";
-$langModifyLink = "Изменить ссылку";
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $LinkMoved = "Ссылка перенесена";
+$langLinkName = "Имя ссылки";
+$langLinkAdd = "Добавить ссылку";
 $langLinkAdded = "Ссылка добавлена";
+$langLinkMod = "Изменить ссылку";
 $langLinkModded = "Ссылка изменена";
+$langLinkDel = "Удалить ссылку";
 $langLinkDeleted = "Ссылка удалена";
 $langLinkDelconfirm = "Вы хотите удалить эту ссылку?";
 $langAllLinksDel = "Удалить все ссылки в этом разделе";
-$langCategoryName = "Наименование категории";
+$langCategoryName = "Название раздела";
 $langCategoryAdd = "Добавить раздел";
 $langCategoryAdded = "Раздел добавлен";
 $langCategoryModded = "Раздел изменен";
 $langCategoryDel = "Удалить раздел";
 $langCategoryDeleted = "Раздел и все его ссылки удалены";
-$langCategoryDelconfirm = "Когда удаляете раздел, все ссылки этого раздела также удаляются.nВы действительно хотите удалить этот раздел и его ссылки?";
+$langCategoryDelconfirm = "Когда удаляете раздел, все ссылки этого раздела также удаляются.\\nВы действительно хотите удалить этот раздел и его ссылки?";
 $langAllCategoryDel = "Удалить все разделы и все ссылки";
+$langGiveURL = "Пожалуйста, дайте ссылку на URL";
 $langGiveCategoryName = "Пожалуйста, дайте название разделу";
 $langNoCategory = "Разделов нет";
 $showall = "Открыть все разделы";
 $shownone = "Закрыть все разделы";
+$langListDeleted = "Список удален";
+$langAddLink = "Добавить ссылку";
+$langDelList = "Удалить список";
+$langModifyLink = "Изменить ссылку";
 $langCsvImport = "CSV импорт";
 $langCsvFileNotFound = "Импортированный CSV файл не открывается (например, пуст, слишком большой)";
 $langCsvFileNoSeps = "Импортированный CSV файл должен использовать , или ; как разделитель списка";
@@ -39,4 +42,5 @@ $langLinkUpdated = "Ссылка обновлена";
 $langAll_Link_Deleted = "Ссылка удалена";
 $langOnHomepage = "Показывать ссылку на домашней странице";
 $langShowLinkOnHomepage = "Показывать эту ссылку в виде иконки на домашней странице курса";
-$General = "общий (основной)";
+$General = "Общий";
+?>

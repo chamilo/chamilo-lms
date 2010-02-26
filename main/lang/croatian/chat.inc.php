@@ -1,35 +1,39 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langOnlineConference = "Konferencija";
 $langWash = "Isperi";
 $langReset = "Resetiraj";
 $langSave = "Spremi";
-$langRefresh = "Osvježi";
-$langIsNowInYourDocDir = " se nalazi  u vašim dokumentima. <br><B>Datoteka je vidljiva</B>";
+$langRefresh = "Osvjei";
+$langIsNowInYourDocDir = " se nalazi  u vaim dokumentima. <br><B>Datoteka je vidljiva</B>";
 $langCopyFailed = "Tiskanje nije uspjelo";
 $langTypeMessage = "Molim unesite poruku!";
-$langConfirmReset = "Želite li doista izbrisati sve poruke?";
+$langConfirmReset = "elite li doista izbrisati sve poruke?";
 $langHasResetChat = "resetirao je Chat";
 $langNoOnlineConference = "Trenutno nema konferencija...";
-$langMediaFile = "Prijenos zvučnih ili vizualnih podataka uživo";
+$langMediaFile = "Prijenos zvu&#269;nih ili vizualnih podataka uivo";
 $langContentFile = "Prezentacija";
 $langListOfParticipants = "Popis sudionika";
-$langYourPicture = "Vaša slika";
+$langYourPicture = "Vaa slika";
 $langOnlineDescription = "Opis konferencije";
-$langOnlyCheckForImportantQuestion = "Molim označite ovaj okvir samo u slučaju važnoga pitanja!";
+$langOnlyCheckForImportantQuestion = "Molim ozna&#269;ite ovaj okvir samo u slu&#269;aju vanoga pitanja!";
 $langQuestion = "pitanje";
 $langClearList = "Isprazni popis";
-$langWhiteBoard = "Bijela ploča";
-$langTextEditorDefault = "<h2>Obrada teksta</h2> Izreži i zalijepi ovdje pomoću Ms-Word® potom uredi. Sudionici će vidjeti izmjene uživo.";
+$langWhiteBoard = "Bijela plo&#269;a";
+$langTextEditorDefault = "<h2>Obrada teksta</h2> Izrei i zalijepi ovdje pomo&#263;u Ms-Word® potom uredi. Sudionici &#263;e vidjeti izmjene uivo.";
 $langStreaming = "Prijenos (streaming)";
 $langStreamURL = "URL prijenosa podataka";
 $langStreamType = "Vrsta prijenosa podataka";
 $langLinkName = "Naziv poveznice";
 $langLinkURL = "URL poveznice";
-$langWelcomeToOnlineConf = "Dobrodošli na <b>Konferenciju uživo</b>";
+$langWelcomeToOnlineConf = "Dobrodoli na <b>Konferenciju uivo</b>";
 $langNoLinkAvailable = "Poveznice nedostupne";
 $langChat_reset_by = "resetiraj chat";
 $OrFile = "Ili datoteka";
-$langCallSent = "Poziv za chat je poslan. Pričekajte odobrenje sugovornika.";
+$langCallSent = "Poziv za chat je poslan. Pri&#269;ekajte odobrenje sugovornika.";
 $langChatDenied = "Sugovornik je odbio poziv.";
-$Send = "Pošalji";
+$Send = "Poalji";
 $Connected = "Povezan";
+?>

@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $ResourceAdded = "Resource added. You can now go back to the path or add more resources.";
 $LearningPath = "Learning Path";
 $LevelUp = "level up";
@@ -19,3 +22,4 @@ $Exercise = "Test";
 $Link = "Link";
 $AdValvas = "Ad Valvas";
 $Document = "Document";
+?>

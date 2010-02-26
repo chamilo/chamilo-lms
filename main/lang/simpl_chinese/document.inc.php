@@ -1,10 +1,12 @@
 <?php
-$MoveTo = "移到";
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langDownloadFile = "本地文件";
 $langNameDir = "目录名称";
 $langSize = "大小";
 $langRename = "重命名";
-$langCopy = "复制课程内容";
+$langCopy = "复制";
 $langTo = "到";
 $langNoSpace = "上传失败！超过最大上传文件大小或磁盘空间不足.";
 $langDownloadEnd = "上传结束";
@@ -58,50 +60,11 @@ $langTocUp = "向上";
 $lang_cut_paste_link = "全屏显示";
 $langCreatePath = "新建路径";
 $langOogieConversionPowerPoint = "Oogie : 幻灯片转换功能";
+$langWelcomeOogieSubtitle = "幻灯片到学习路径的转换器";
 $langAddMetadata = "查看/修改元数据";
 $langGoMetadata = "转到";
 $langQuotaForThisCourseIs = "这门课程的磁盘配额是";
 $langDel = "删除";
 $langUp = "向上";
 $langDate = "日期";
-$ShowCourseQuotaUse = "显示课程磁盘配额";
-$CourseCurrentlyUses = "这门课程正在使用";
-$MaximumAllowedQuota = "你的存储限制是";
-$PercentageQuotaInUse = "已用磁盘配额的百分比";
-$PercentageQuotaFree = "空闲磁盘配额的百分比";
-$CurrentDirectory = "当前目录";
-$UplUploadDocument = "上传文档";
-$UplPartialUpload = "仅部分文上传.";
-$UplExceedMaxPostSize = "文件大小超过限制:";
-$UplExceedMaxServerUpload = "上传的文件超过服务器允许的文件大小:";
-$UplFileTooBig = "文件太大无法上传.";
-$UplUploadFailed = "上传文件失败.";
-$UplUnableToSaveFile = "上传文件无法保存 (可能因为权限问题?)";
-$UplNotEnoughSpace = "磁盘空间不足, 无法此上传文件.";
-$UplNoSCORMContent = "没有发现SCORM内容.";
-$UplZipExtractSuccess = "成功解压ZIP文件.";
-$UplZipCorrupt = "不能解压zip文件 (文件损坏?)";
-$UplAlreadyExists = "已存在.";
-$UplFileSavedAs = "文件另存为";
-$UplFileOverwritten = "已覆盖.";
-$CannotCreateDir = "无法新建目录.";
-$UplUpload = "上传";
-$UplWhatIfFileExists = "如果文件已存在:";
-$UplDoNothing = "不操作";
-$UplDoNothingLong = "如果文件已存在不要上传";
-$UplOverwrite = "覆盖";
-$UplOverwriteLong = "覆盖现有文件";
-$UplRename = "重命名";
-$UplRenameLong = "如果存在重名, 重命名上传的文件";
-$Metadata = "元数据";
-$DocumentQuota = "文档磁盘配额";
-$NoDocsInFolder = "没有可显示的文档.";
-$UploadTo = "上传到";
-$fileModified = "文件已修改";
-$DocumentsOverview = "查看文档";
-$ViewSlideshow = "以幻灯片形式查看图像";
-$Options = "选项";
-$ConvertToLP = "转换为学习路线";
-$TemplateTitleCourseTitle = "课程标题";
-$CreateFolder = "创建文件夹";
-$langWelcomeOogieSubtitle = "幻灯片到学习路径的转换器";
+?>

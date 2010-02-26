@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langChapter = "Bölüm";
 $langDocumentList = "Belgelerin listesi";
 $langOrganisationList = "İçerik tablosu";
@@ -13,7 +16,7 @@ $langDownloadAndZipEnd = "zip dosyası sunucuya yüklendi ve açıldı";
 $langZipNoPhp = "The zip file can not contain .PHP files";
 $langGroupForumLink = "Grup forumu";
 $langGroupSpace = "Grup alanı";
-$langNotScormContent = "BU bir SCORM Zip dosyası değildir.";
+$langNotScormContent = "BU bir SCORM Zip dosyas&#305; de&#287;ildir.";
 $langNoText = "Lütfen metin veya HTML içeriğini yazın";
 $langNoFileName = "Lütfen dosya ismini yazınız";
 $langMaxFileSize = "En fazla dosya boyutu";
@@ -53,9 +56,10 @@ $lang_no_published = "yayınlanmadı";
 $lang_published = "yayınlandı";
 $lang_description = "açıklama";
 $lang_title = "başlık";
-$langScormBuilder = "Yol yapıcı - Scorm biçem ders yapıcı ";
+$langScormBuilder = "Yol yapıcı - Scorm biçem ders yapıcı";
 $langCreateDoc = "Yeni bir belge oluştur";
 $langOrganiseDocuments = "İçerik tablosu oluştur";
 $langUncompress = "zip dosyasını sunucuda aç";
 $ExportShort = "Export short";
 $progress = "İlerleme";
+?>

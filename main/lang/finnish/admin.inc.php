@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $AdminBy = "Ylläpito";
 $AdministrationTools = "Ylläpito";
 $State = "Syteemin tila";
@@ -38,3 +41,4 @@ $ServerStatusTitle = "Palvelin tyyppi";
 $Languages = "Kielet";
 $ClassDeleted = "Luokka on poistettu";
 $DokeosForum = "Chamilo Foorumi";
+?>

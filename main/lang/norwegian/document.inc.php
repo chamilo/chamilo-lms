@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $MoveTo = "Flytt til";
 $langDownloadFile = "Last opp fil til tjener";
 $langNameDir = "Navn på ny mappe";
@@ -13,3 +16,4 @@ $langCreateDocument = "Opprett ett dokument";
 $langDocuments = "Dokumenter";
 $CurrentDirectory = "Nåværende mappe";
 $UplOverwrite = "Overskrive";
+?>

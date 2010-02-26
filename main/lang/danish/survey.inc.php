@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $SurveyTitle = "Titel på evaluering";
 $SurveyIntroduction = "Introduktion til evalueringen";
 $CreateNewSurvey = "Opret evaluering";
@@ -30,7 +33,7 @@ $YourSurveyHasBeenPublished = "er blevet publiceret";
 $CreateFromExistingSurvey = "Opret på baggrund af en eksisterende evaluering";
 $Publish = "Publicer evaluering";
 $SearchASurvey = "Søg efter en evaluering";
-$CourseName = "Kursets navn";
+$CourseName = "Kursussidens navn";
 $SurveysOfAllCourses = "Evaluering(er) fra alle kursussider";
 $PleaseSelectAChoice = "Foretag venligst et valg";
 $ThereAreNoQuestionsInTheDatabase = "Der er ingen spørgsmål i databasen";
@@ -86,7 +89,7 @@ $AddAnswer = "Tilføj valg";
 $DisplayAnswersHorVert = "Vis valg";
 $AnswerOptions = "Svarmuligheder";
 $YesNo = "Ja/nej";
-$MultipleResponse = "Flere svar";
+$MultipleResponse = "Flere svarmuligheder";
 $Open = "åben";
 $Dropdown = "Dropdown/rul ned";
 $Pagebreak = "Side slut";
@@ -111,7 +114,7 @@ $SelectXAxis = "Vælg spørgsmålet på x-aksen";
 $SelectYAxis = "Vælg spørgsmålet på y-aksen";
 $ComparativeReport = "Komparativ rapport";
 $AllQuestionsOnOnePage = "Alle spørgsmål vises på en side";
-$SelectUser = "Bruger";
+$SelectUser = "Vælg deltager";
 $SelectUserWhoFilledSurvey = "Vælg deltager, som har udfyldt evalueringen";
 $userreport = "Deltagerrapport";
 $VisualRepresentation = "Grafik";
@@ -130,9 +133,8 @@ $ComparativeReportDetail = "Du kan sammenligne to spørgsmål i denne rapport.";
 $CompleteReportDetail = "I denne rapport kan du få et overblik over samtlige svar fra deltagerne på samtlige spørgsmål. Du har også mulighed for kun af se en del af spørgsmålene. Du kan eksportere resultatet til en CSV-fil.";
 $DetailedReportByUserDetail = "I denne rapport kan du se samtlige svar som en specifik deltager har afgivet.";
 $DetailedReportByQuestionDetail = "I denne rapport kan du se resultatet spørgsmål for spørgsmål. Almen statistisk analyse og grafik gives.";
-$ReminderResendToAllUsers = "Påmind deltagerne om evalueringen. Hvis du ikke sætter et flueben i feltet, vil kun nytilføjede deltagere modtage en e-mail. ";
+$ReminderResendToAllUsers = "Påmind deltagerne om evalueringen. Hvis du ikke sætter et flueben i feltet, vil kun nytilføjede deltagere modtage en e-mail.";
 $Multiplechoice = "Multiple choice";
-$Multipleresponse = "Flere svarmuligheder";
 $Score = "Resultat/værdi";
 $Shared = "Delte";
 $Invite = "Inviter";
@@ -158,3 +160,4 @@ $SurveyEmptied = "Svarene er fjernet";
 $SurveyNotAvailableYet = "Evalueringsskemaet er ikke tilgængeligt endnu. Forsøg venligst igen senere. Tak.";
 $PeopleAnswered = "respondenter";
 $AnonymousSurveyCannotKnowWhoAnswered = "Dette evalueringsskema er anonymt. Du kan ikke se hvem, der har besvaret det.";
+?>

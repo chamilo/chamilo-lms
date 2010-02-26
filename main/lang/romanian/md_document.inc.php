@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langMdCallingTool = "Documente";
 $langMdTitle = "Invatare titlu obiect";
 $langMdDescription = "Pntru memorarea acestei informatii, apasati Memorare";
@@ -11,8 +14,8 @@ $langLanguageTip = "limba in care a fost a fost creat acest obiect de invatare";
 $langIdentifier = "Identificator";
 $langIdentifierTip = "identificare unica pentru acest obiect de invatare, compusa din litere,cifre,  _-.()'!*";
 $langTitleTip = "titlu si nume, si limba a acelui titlu sau nume";
-$langDescriptionTip = "descriere sau comentarii si limba folosita pentru detalierea acestui obiect ";
-$langKeyword = "Cuvant cheie";
+$langDescriptionTip = "descriere sau comentarii si limba folosita pentru detalierea acestui obiect";
+$langKeyword = "Cuvinte cheie";
 $langKeywordTip = "separea prin virgula (litere, cifre, -.)";
 $langCoverage = "Acoperire";
 $langCoverageTip = "de exemplu absolvent al xxx: yyy";
@@ -42,3 +45,4 @@ $langCosts = ":nu:gratis,, da:contra cost";
 $langCopyrights = ":da:copyright,, nu:fara copyright";
 $langFormats = ":text/plain;iso-8859-2:text/plain;iso-8859-2,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-2:text/html;iso-8859-2,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-2:XML;iso-8859-2,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP";
 $langLngResTypes = "exercise:exercitiu,, simulation:simulare,, questionnaire:chestionare,, diagram:diagrama,, figure:figura,, graph:grafic,, index:index,, slide:slide,, table:tabel,, narrative text:text narativ,, exam:examen,, experiment:experiment,, problem statement:problema,, self assessment:realizari personale,, lecture:lectura";
+?>

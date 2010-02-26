@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langSelectOptionForBackup = "Valitse varmistuksen tyyppi";
 $langLetMeSelectItems = "Valitsen kurssin komponentit";
 $langCreateFullBackup = "Tee täydellinen varmistus kurssista";
@@ -45,3 +48,4 @@ $DocumentsWillBeAddedToo = "Dokumentit lisätään myös";
 $ToExportLearnpathWithQuizYouHaveToSelectQuiz = "Jos haluat siirtää oppimispolun joka sisältää testin, sinun täytyy varmistaa että vastaavat testit on valittu siirtoon, joten sinun täytyy valita ne testien listalta.";
 $ArchivesDirectoryNotWriteableContactAdmin = "Varmistus kansioon ei voi kirjoittaa. Ota yhteyttä ympäristön ylläpitäjään.";
 $DestinationCourse = "Kohde kurssi";
+?>

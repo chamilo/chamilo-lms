@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langScormVersion = "sürüm";
 $langScormRestarted = "Şimdilik tamamlanmamış dersler.";
 $langScormNoNext = "Bu son ders.";
@@ -10,7 +13,7 @@ $langScormLessonTitle = "Bölüm başlığı";
 $langScormStatus = "Durum";
 $langScormToEnter = "Giriş";
 $langScormFirstNeedTo = "Öncelikle tamamlamalısınız";
-$langScormThisStatus = "Şimdi bu ders";
+$langScormThisStatus = "&#350;imdi bu ders";
 $langScormClose = "Sonlandır";
 $langScormRestart = "Yeniden başlat";
 $langScormCompstatus = "tamamlandı";
@@ -21,8 +24,8 @@ $langScormPrevious = "Önceki";
 $langScormNext = "Sonraki";
 $langScormTitle = "Chamilo Scorm oyuncusu";
 $langScormMystatus = "Durumum";
-$langScormNoItems = "Bu başlık hiç bir alt başlık içermiyor.";
-$langScormNoStatus = "Bu başlık için durum yok";
+$langScormNoItems = "Bu ba&#351;l&#305;k hiç bir alt ba&#351;l&#305;k içermiyor.";
+$langScormNoStatus = "Bu ba&#351;l&#305;k için durum yok";
 $langScormLoggedout = "Scrom alanından çıkıldı.";
 $langScormCloseWindow = "Pencereleri kapat";
 $langScormExitFullScreen = "Normal ekrana dön";
@@ -38,3 +41,4 @@ $AreYouSureToDeleteSteps = "Bu adımları silmek istediğnizden emin misiniz?";
 $Origin = "Yönetim Aracı";
 $Local = "Yerel";
 $Remote = "Uzak";
+?>

@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langMdCallingTool = "Documentos";
 $langMdTitle = "Título do Objecto de Aprendizagem";
 $langMdDescription = "Para armazenar esta informação, clique em Armazenar";
@@ -12,7 +15,7 @@ $langIdentifier = "Identificador";
 $langIdentifierTip = "identificação única para este objecto de aprendizagem, composto de letras, dígitos, _-.()'!*";
 $langTitleTip = "título ou nome, e idioma desse título ou nome";
 $langDescriptionTip = "descrição ou comentário, e idioma utilizado para descrever este objecto de aprendizagem";
-$langKeyword = "Palavra-chave";
+$langKeyword = "Palavras-chave";
 $langKeywordTip = "separar por vírgulas (letras, dígitos, -.)";
 $langCoverage = "Cobertura";
 $langCoverageTip = "por exemplo bacharel em xxx: yyy";
@@ -42,3 +45,4 @@ $langCosts = ":no:free, no cost,, yes:not free, cost";
 $langCopyrights = ":yes:copyright,, no:não copyright";
 $langFormats = " :text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, audio/basic:audio/basic,, audio/midi:audio/midi,, audio/mpeg:audio/mpeg,, audio/x-wav:audio/x-wav,, image/gif:image/gif,, image/jpeg:image/jpeg,, image/png:image/png,, image/tiff:image/tiff,, video/mpeg:video/mpeg,, video/quicktime:video/quicktime,, video/x-msvideo:video/x-msvideo,, message/rfc822:message/rfc822,, inode/directory:inode/directory,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP";
 $langLngResTypes = ":exercise:exercício,, simulation:simulação,, questionnaire:questionário,, diagram:diagrama,, figure:figura,, graph:gráfico,, index:índice,, slide:slide,, table:tabela,, narrative text:texto narrativo,, exam:exame,, experiment:experiência,, problem statement:problema,, self assessment:auto-avaliação,, lecture:lição";
+?>

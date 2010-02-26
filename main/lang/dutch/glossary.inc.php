@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $TermAddNew = "Voeg een nieuw begrip toe";
 $TermName = "Begrip";
 $TermDefinition = "Verklaring";
@@ -9,7 +12,7 @@ $TermAddButton = "Begrip opslaan";
 $TermUpdateButton = "Begrip aanpassen";
 $TermEdit = "Begrip aanpassen";
 $TermDeleteAction = "Begrip verwijderen";
-$OrderBy = "sorteer op";
+$OrderBy = "Sorteer volgens";
 $CreationDate = "Aangemaakt";
 $UpdateDate = "geüpdated";
 $PreSelectedOrder = "Voorgedefinieerd";
@@ -22,3 +25,4 @@ $GlossaryManagement = "Beheer van begrippen";
 $TermMoved = "Het begrip werd verplaatst";
 $ShowGlossaryInExtraToolsTitle = "Tool begrippen uit het glossarium in andere modules";
 $ShowGlossaryInExtraToolsComment = "Mogen begrippen uit het cursusglossarium weergegeven worden in andere modules zoals bv. leerpaden en oefeningen ?";
+?>

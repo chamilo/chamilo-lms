@@ -1,6 +1,9 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $LinkMoved = "Linket er blevet flyttet";
-$langLinkName = "Link navn";
+$langLinkName = "Linknavn";
 $langLinkAdd = "Tilføj et link";
 $langLinkAdded = "Linket er nu tilføjet";
 $langLinkMod = "Rediger link";
@@ -15,7 +18,7 @@ $langCategoryAdded = "Kategorien er tilføjet";
 $langCategoryModded = "Kategorien er nu ændret";
 $langCategoryDel = "Slet kategori";
 $langCategoryDeleted = "Kategorien og tilhørende links er nu slettet";
-$langCategoryDelconfirm = "Når kategorien slettes, slettes ligeså kategoriens links.nVil du virkeligt slette denne kategori og kategoriens links?";
+$langCategoryDelconfirm = "Når kategorien slettes, slettes ligeså kategoriens links.\\nVil du virkeligt slette denne kategori og kategoriens links?";
 $langAllCategoryDel = "Slet alle kategorier og links";
 $langGiveURL = "Venligst angiv linkets URL";
 $langGiveCategoryName = "Skriv et kategorinavn";
@@ -39,3 +42,4 @@ $langLinkUpdated = "Linket er opdateret";
 $langAll_Link_Deleted = "Linket er slettet";
 $langOnHomepage = "Vis link på hjemmesiden";
 $langShowLinkOnHomepage = "Vis dette link som ikon på kursets hjemmeside";
+?>

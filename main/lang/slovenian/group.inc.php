@@ -1,9 +1,12 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langNewGroupCreate = "Tvorba novih skupin";
 $langGroupCreation = "Tvorba novih skupin";
 $langCreate = "tvori";
 $langNewGroups = "nove skupine";
-$langMax = "največ 12 znakov, na pr. <i>0506INNOV01</i>";
+$langMax = "največ";
 $langGroupPlacesThis = "mest (opcija)";
 $langGroupsAdded = "skupine so bile dodane";
 $langGroupDel = "Skupina odstranjena";
@@ -16,13 +19,13 @@ $langGroupDocument = "Dokumenti";
 $langGroupPropertiesModified = "Lastnosti skupine so spremenjene";
 $langGroupSpace = "Področje skupine";
 $langGroupName = "Ime skupine";
-$langGroupDescription = "Opis skupine";
+$langGroupDescription = "Opis";
 $langGroupMembers = "Člani skupine";
 $langEditGroup = "Uredi to skupino";
 $Optional = "(opcija)";
 $langGroupSettingsModified = "Lastnosti skupine spremenjene";
 $langGroupTooMuchMembers = "Število predlaganih presega največje dovoljeno (lahko ga spodaj spremeniš). 				Sestava skupine ni bila spremenjena";
-$langGroupTutor = "Tutor skupine";
+$langGroupTutor = "Inštruktor";
 $langGroupNoTutor = "(nihče)";
 $langGroupNone = "(nihče)";
 $langGroupNoneMasc = "(nihče)";
@@ -33,14 +36,14 @@ $langGroupSelfRegistration = "Registracija";
 $langGroupSelfRegInf = "vpiši";
 $langRegIntoGroup = "Dodaj me tej skupini";
 $langGroupNowMember = "Sedaj si član te skupine";
-$langPrivate = "Privaten dostop (vsebine so dostopne le osebam s spiska uporabnikov)";
-$langPublic = "Javni dostop z domače strani portala celo brez prijave";
+$langPrivate = "privaten";
+$langPublic = "javen";
 $langPropModify = "Spremeni lastnosti";
 $langState = "Stanje";
 $langGroupFilledGroups = "Skupine so napolnili uporabniki, ki se nahajajo v seznamu uporabnikov.";
 $langSubscribed = "osebe, vpisane v ta tečaj";
 $langStudentsNotInThisGroups = "Uporabniki, ki niso v tej skupini";
-$langQtyOfUserCanSubscribe_PartBeforeNumber = "Uporabnik je član največ ";
+$langQtyOfUserCanSubscribe_PartBeforeNumber = "Uporabnik je član največ";
 $langQtyOfUserCanSubscribe_PartAfterNumber = " skupin";
 $langGroupLimit = "Omejitev";
 $CreateGroup = "Ustvari skupine";
@@ -65,7 +68,7 @@ $langNoGroupsAvailable = "Nobena skupina ni na voljo";
 $langGroupsFromVirtualCourses = "Navidezni tečaji";
 $NotAvailable = "Ni na voljo";
 $CreateSubgroups = "Ustvari podskupine";
-$CreateSubgroupsInfo = "Ta možnost dovoljuje kreiranje novih skupin osnovanih na obstoječi skupini. Podajte želeno število skupin in izberite ustrezno skupino. Podano število skupin bo ustvarjeno in vsi člani obstoječe skupine bodo vpisani v nove skupine. Obstoječa skupina bo ostala nespremenjena.";
+$CreateSubgroupsInfo = "Ta možnost dovoljuje kreiranje novih skupin osnovanih na obstoječi skupini. Podajte želeno število skupin in izberite ustrezno skupino. Podano število skupin bo ustvarjeno in vsi člani obstoječe skupine bodo vpisani v nove skupine. Obstoječa skupina bo os";
 $CreateNumberOfGroups = "Ustvari";
 $WithUsersFrom = "skupine z uporabniki iz";
 $CategoryDeleted = "Kategorija je bila odstranjena";
@@ -91,3 +94,4 @@ $Group = "Skupina";
 $ForumOfGroup = "Forum skupine:";
 $BackToGroupList = "Nazaj na seznam skupin";
 $EditGroupCategory = "Uredi kategorijo skupine";
+?>

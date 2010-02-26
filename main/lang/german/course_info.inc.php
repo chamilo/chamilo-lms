@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $ModifInfo = "Kursinformation ändern";
 $langModifDone = "Information wurde geändert";
 $langDelCourse = "Kurs vollständig löschen";
@@ -6,13 +9,13 @@ $langProfessors = "Lehrer/innen";
 $langFaculty = "Bereich";
 $langConfidentiality = "Vertraulichkeit";
 $langPublic = "Öffentlicher Zugriff auch ohne Anmeldung möglich";
-$langUnsubscription = "Abmeldung";
+$langUnsubscription = "Abmelden";
 $langPrivOpen = "Eingeschränkter Zugang, Registrierung offen";
-$langPrivate = "Eingeschränkter Zugang, Einschreibung geschlossen (Die Seiten sind nur für angemeldete <a href=../user/user.php>Teilnehmer</a> zugänglich.)";
+$langPrivate = "Eingeschränkt - Belegung geschlossen (Zugang ist nur für angemeldete <a href=../user/user.php>Kursteilnemer</a> möglich)";
 $langForbidden = "Nicht erlaubt";
-$CourseAccessConfigTip = "In der Grundeinstellung ist ein Kurs auch anderen zugänglich.  Wenn Sie den Zugriff einschränken möchten, öffnen Sie die Einschreibung während einer Einschreibungsfrist (z.B. eine Woche) und bitten Sie die Teilnehmer/innen sich einzuschreiben. Im Anschluss sperren Sie die Einschreibung und überprüfen die Teilnehmerliste auf 'Trittbrettfahrer'.";
-$langOpenToTheWorld = "Offen - Zugang erlaubt für alle";
-$OpenToThePlatform = "Offen - Zugang für alle eingeschriebenen Nutzer";
+$CourseAccessConfigTip = "In der Grundeinstellung ist ein Kurs auch anderen zugänglich.  Wenn Sie den Zugriff einschränken möchten, öffnen Sie die Einschreibung während einer Einschreibungsfrist (z.B. eine Woche) und bitten Sie die Teilnehmer/innen sich einzuschreiben. Im Anschlus";
+$langOpenToTheWorld = "Offen - Zugang möglich für alle";
+$OpenToThePlatform = "Offen - Kurs ist zugänglich für Benutzer der Lernplattform";
 $langOpenToThePlatform = "Offen - Zugang möglich für alle eingeschriebenen Benutzer";
 $langTipLang = "Diese Sprache wird für alle Besucher Ihrer Webseite gültig sein.";
 $langVid = "Video";
@@ -25,8 +28,8 @@ $langUplPage = "Upload-Seite und Link zur Homepage";
 $langLinkSite = "Link zu einer  Website auf der Homepage einfügen";
 $langCourse = "Der Kurs";
 $langHasDel = "wurde gelöscht";
-$langBackHome = "Zurück zur Homepage von ";
-$langByDel = "Wenn der Kurs gelöscht wird, werden auch alle enthaltenen Dokumente und eingeschriebenen Teilnehmer/innen gelöscht. (Teilnehmer/innen werden jedoch nicht aus anderen Kursen entfernt).<br>Ebenso werden auch alle verlinkten virtuellen Kurse entfernt.<p>Soll der Kurs wirklich gelöscht werden?";
+$langBackHome = "Zurück zur Homepage von";
+$langByDel = "Wenn der Kurs gelöscht wird, werden auch alle enthaltenen Dokumente und eingeschriebenen Teilnehmer/innen gelöscht. (Teilnehmer/innen werden jedoch nicht aus anderen Kursen entfernt).<br>Ebenso werden auch alle verlinkten virtuellen Kurse entfernt.<p>Soll";
 $langY = "JA";
 $langN = "NEIN";
 $langDepartmentUrl = "Bereichs-URL";
@@ -58,11 +61,11 @@ $langExpirationDate = "Verfalldatum";
 $langPostPone = "zurück gestellt";
 $langLastEdit = "Letzte Bearbeitung";
 $langLastVisit = "Letzter Besuch";
-$langSubscription = "Einschreibung";
-$langCourseAccess = "Zugriff";
+$langSubscription = "Belegen";
+$langCourseAccess = "Kurszugang";
 $langConfirmBackup = "Soll wirklich ein Backup für diesen Kurs erstellt werden?";
 $langCreateSite = "Neuen Kurs anlegen";
-$langRestoreDescription = "Der Kurs ist in einer Archivdatei, die Sie unten auswählen können.<br><br>Wenn Sie auf \"Wiederherstellen\" klicken, wird das Archiv geöffnet und der Kurs wird wiederhergestellt.";
+$langRestoreDescription = "Der Kurs ist in einer Archivdatei, die Sie unten auswählen können.<br><br>Wenn Sie auf \\"Wiederherstellen\\" klicken, wird das Archiv geöffnet und der Kurs wird wiederhergestellt.";
 $langRestoreNotice = "Dieses Script erlaubt keine automatische Wiederherstellung der Nutzerdaten; die Daten werden aber in der Datei \"users.csv\" gesichert und können manuell durch den Administrator wiederhergestellt werden.";
 $langAvailableArchives = "Verfügbare Archiv-Liste";
 $langNoArchive = "Es wurde kein Archiv ausgewählt.";
@@ -91,8 +94,8 @@ $AllowUserEditAnnouncementDeactivate = "Erlaubnis fürs Editieren der Kurs Ankü
 $OrInTime = "oder in";
 $CourseRegistrationPassword = "Kennwort für Kursanmeldung";
 $langDescriptionDeleteCourse = "Klicken Sie auf diesen Link, um jegliche Spur von diesem Kurs vom Server zu entfernen.<br><br>Diese Funktionalität sollte mit äußerster Vorsicht benutzt werden!";
-$langDescriptionCopyCourse = "Chamilo bietet die Möglichkeit, einen Kurs teilweise oder ganz für einen neuen Kurs zu duplizieren, der zunächst leer sein kann.<br><br>Die einzige Bedingung ist, dass man einen Kurs hat, der einige Dokumente, Ankündigungen, Foren hat ... und einen zweiten Kurs hat, der die Elemente des ersten Kurses nicht hat!";
-$DescriptionRecycleCourse = "Mit diesem Werkzeug entfernt man ausgewählte Elemente aus einem Kurs oder den gesamten Kurs. Es entfernt Dokumente, Foren, Links ... Dieser Schritt kann am Ende einer Periode, eine akademischen Jahres vorgenommen werden. Natürlich sollte man vor dem \"Recycling\" ein komplettes Backup des Kurses anlegen !";
+$langDescriptionCopyCourse = "Chamilo bietet die Möglichkeit, einen Kurs teilweise oder ganz für einen neuen Kurs zu duplizieren, der zunächst leer sein kann.<br><br>Die einzige Bedingung ist, dass man einen Kurs hat, der einige Dokumente, Ankündigungen, Foren hat ... und einen zweite";
+$DescriptionRecycleCourse = "Mit diesem Werkzeug entfernt man ausgewählte Elemente aus einem Kurs oder den gesamten Kurs. Es entfernt Dokumente, Foren, Links ... Dieser Schritt kann am Ende einer Periode, eine akademischen Jahres vorgenommen werden. Natürlich sollte man vor dem \\"Rec";
 $QuizEmailAlert = "E-Mail Benachrichtigung für neues Quiz versendet";
 $QuizEmailAlertActivate = "E-Mail Versand aktivieren, wenn ein Benutzer Antworten auf ein neues Quiz einschickt";
 $QuizEmailAlertDeactivate = "E-Mail Benachrichtigung bei Antworten auf neues Quiz deaktivieren";
@@ -110,3 +113,4 @@ $NewUserEmailAlert = "Kursleiter per Email über neue Kursteilnehmer unterrichte
 $NewUserEmailAlertEnable = "Email-Benachrichtigung des Kursleiters über neue Kursteilnehmer aktivieren";
 $NewUserEmailAlertToTeacharAndTutor = "Email-Benachrichtigung für Kursleiter und Tutoren über neue Kursteilnehmer aktivieren";
 $NewUserEmailAlertDisable = "Email-Benachrichtigung über neue Kursteilnehmer deaktivieren";
+?>

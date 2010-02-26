@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $ReceivedFiles = "Gauti failai";
 $SentFiles = "Išsiųsti failai";
 $ReceivedTitle = "Antraštė";
@@ -49,3 +52,4 @@ $MailingJustUploadSelectNoOther = "Just Upload cannot be combined with other rec
 $NoFilesHere = "Failų nėra";
 $NewDropboxFileUploaded = "A new file has been sent in the dropbox tool";
 $NewDropboxFileUploadedContent = "A new file has been sent in the dropbox tool of your course";
+?>

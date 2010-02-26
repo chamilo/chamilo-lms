@@ -13,8 +13,4 @@ $langAddCat = "agregar categoría";
 $langAdd = "Agregar";
 $langValid = "Validar";
 $langBackAndForget = "Volver y descartar";
-$CourseDescriptionUpdated = "";
-$CourseDescriptionDeleted = "";
-$CourseDescriptionIntro = "";
-$langSaveDescription = "";
 ?>

@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $nameTools = "obsolete language variable";
 $langMdCallingTool = "Документи";
 $langTool = "Метаданни за документ";
@@ -18,7 +21,7 @@ $langImport = "Импортиране";
 $langRemove = "Премахване на записи с метаданни";
 $langAllRemovedFor = "Всички записи са премахнати от категорията";
 $langIndex = "Индексиране";
-$langTotalMDEs = "Брой записи с метаданни: ";
+$langTotalMDEs = "Брой записи с метаданни:";
 $langMainMD = "Отваряне на главния запис с метаданни";
 $langLines = "редове";
 $langPlay = "Стартиране на index.php";
@@ -27,8 +30,9 @@ $langOrElse = "Изберете категория връзки";
 $langWorkWith = "Работа със SCORM-директория";
 $langSDI = "... SCORM-директория със SD-id";
 $langRoot = "Главна папка";
-$langSplitData = "Разделяне на манифестите и записите с метаданни: ";
+$langSplitData = "Разделяне на манифестите и записите с метаданни:";
 $langMffNotOk = "Замяната на манифестния файл не е успешна.";
 $langMffOk = "Манифестният файл е заменен.";
 $langMffFileNotFound = "Новият манифестен файл не може да се отвори (може да е празен или да е прекалено голям)";
 $langUploadMff = "Замяна на манифестния файл";
+?>

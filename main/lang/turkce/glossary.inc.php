@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $TermAddNew = "Yeni terim ekle";
 $TermName = "Terim";
 $TermDefinition = "Terim tanımı";
@@ -21,3 +24,4 @@ $GlossaryTermAlreadyExistsYouShouldEditIt = "Bu terim zaten var. Lütfen terim a
 $GlossaryManagement = "Sözlük Yönetimi";
 $TermMoved = "Terim taşındı";
 $ShowGlossaryInExtraToolsTitle = "Teknik terimler sözlüğünü ekstra araçlarda göster";
+?>

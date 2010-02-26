@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langScormVersion = "versió";
 $langScormRestarted = "Totes les lliçons estan incomplertes ara";
 $langScormNoNext = "Aquesta és la darrera lliçó";
@@ -23,7 +26,7 @@ $langScormTitle = "Visualitzador de continguts DOKEOS";
 $langScormMystatus = "La meva situació";
 $langScormNoItems = "Aquest contingut no té elements";
 $langScormNoStatus = "No hi ha situació per aquest contingut";
-$langScormLoggedout = "Has sortit de l'àrea SCORM";
+$langScormLoggedout = "Has sortit de l\'àrea SCORM";
 $langScormCloseWindow = "Tancar finestres";
 $ScormBrowsed = "Vist";
 $langScormExitFullScreen = "Tornar a la pantalla normal";
@@ -33,7 +36,7 @@ $langCharset = "Joc de caràcters";
 $langLocal = "Local";
 $langRemote = "Remot";
 $langAutodetect = "Detecció automàtica";
-$langAccomplishedStepsTotal = "Total dels apartats realitzats ";
+$langAccomplishedStepsTotal = "Total dels apartats realitzats";
 $langUnknown = "Desconegut";
 $AreYouSureToDeleteSteps = "Està segur de voler eliminar aquests elements?";
 $Origin = "Origen";
@@ -43,10 +46,11 @@ $FileToUpload = "Arxiu a enviar";
 $ContentMaker = "Creador de continguts";
 $ContentProximity = "Localització del contingut";
 $UploadLocalFileFromGarbageDir = "Enviar arxiu local des del directori main/archive";
-$ThisItemIsNotExportable = "Aquest objecte d'aprenentatge no és compatible amb SCORM. Per aquesta raó no és exportable";
+$ThisItemIsNotExportable = "Aquest objecte d\'aprenentatge no és compatible amb SCORM. Per aquesta raó no és exportable";
 $MoveCurrentChapter = "Moure capítol actual";
 $GenericScorm = "SCORM genèric";
 $UnknownPackageFormat = "El format d'aquest paquet no ha estat reconegut. Per favor, comprovi aquest és un paquet vàlid";
 $Attempt = "Intent";
 $MoveTheCurrentForum = "Moure el foro actual";
-$WarningWhenEditingScorm = "Avís ! Si edita el contingut d'un element scorm, pot alterar l'informe de la seqüència d'aprenentatge o danyar l'objecte. ";
+$WarningWhenEditingScorm = "Avís ! Si edita el contingut d\'un element scorm, pot alterar l\'informe de la seqüència d\'aprenentatge o danyar l\'objecte.";
+?>

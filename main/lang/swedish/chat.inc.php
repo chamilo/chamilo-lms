@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langOnlineConference = "Konferens";
 $langWash = "Tvätta";
 $langReset = "Återställ";
@@ -33,3 +36,4 @@ $langCallSent = "Chattanrop har skickats. Väntar på godkännande från din par
 $langChatDenied = "Ditt anrop har blivit avvisat av din partner.";
 $Send = "Skicka";
 $Connected = "Ansluten";
+?>

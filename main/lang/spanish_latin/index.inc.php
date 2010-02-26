@@ -60,16 +60,4 @@ $langRequestDenied = "La llamada ha sido denegada";
 $UsageDatacreated = "Datos de uso creados";
 $SessionView = "Mostrar los cursos ordenados por sesiones";
 $CourseView = "Mostrar toda la lista de cursos";
-$DropboxFileAdded = "";
-$NewMessageInForum = "";
-$FolderCreated = "";
-$LinkAdded = "";
-$AnnouncementAdded = "";
-$AgendaAdded = "";
-$Messages = "";
-$Inbox = "";
-$Comppose = "";
-$PendingInvitations = "";
-$YouDoNotHaveAnySessionInItsHistory = "";
-$PortalHomepageDefaultIntroduction = "";
 ?>

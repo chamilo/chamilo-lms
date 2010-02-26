@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $AgendaAdd = "Pridėti naują darbotvarkės įrašą";
 $ShowAllEvents = "Rodyti viską";
 $ShowCurrent = "Rodyti šio mėnesio darbotvarkės įrašus";
@@ -51,3 +54,4 @@ $MyTextHere = "mano tekstas čia";
 $CopiedAsAnnouncement = "Copied as announcement";
 $NewAnnouncement = "New announcement";
 $AddAnnouncement = "Add as an announcement";
+?>

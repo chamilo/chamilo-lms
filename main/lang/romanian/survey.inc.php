@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $SurveyTitle = "Titlul anchetei";
 $SurveyIntroduction = "Sondaj introductiv";
 $CreateNewSurvey = "Creaza o noua ancheta";
@@ -86,7 +89,7 @@ $AddAnswer = "Arata variantele de raspunsuri";
 $DisplayAnswersHorVert = "Specificati optiunile:";
 $AnswerOptions = "Variante de raspuns";
 $YesNo = "Da/Nu";
-$MultipleResponse = "Mai multe variante de raspunsuri";
+$MultipleResponse = "Mai multe variante de raspuns";
 $Open = "Deschis";
 $Dropdown = "Lista derulanta";
 $Pagebreak = "Sfarsitul paginii";
@@ -111,7 +114,7 @@ $SelectXAxis = "Selectati intrebarea pentru intrebarea de pe axa X";
 $SelectYAxis = "Selectati intrebarea de pe axa Y";
 $ComparativeReport = "Compara raportul";
 $AllQuestionsOnOnePage = "Toate intrebarile se gasesc pe o singura pagina";
-$SelectUser = "Utilizator";
+$SelectUser = "Selecteaza un utilizator";
 $SelectUserWhoFilledSurvey = "Selectati un utilizator care a completat ancheta";
 $userreport = "Reportaj pe utilizator";
 $VisualRepresentation = "Grafic";
@@ -119,7 +122,7 @@ $AbsoluteTotal = "Totalul absolut";
 $NextQuestion = "Urmatoarea intrebare";
 $PreviousQuestion = "Intrebarea precedenta";
 $PeopleWhoAnswered = "Persoanele care au ales acest raspuns";
-$CourseUsers = "Utilizatori in training";
+$CourseUsers = "Utilizatorii acestui curs";
 $SurveyPublication = "Publicarea anchetei";
 $AdditonalUsers = "Utilizatori extra";
 $MailText = "Textul mailului";
@@ -127,14 +130,13 @@ $UseLinkSyntax = "Utilizatorii selectionati vor primi un e-mail cu textul scris 
 $DetailedReportByUser = "Raport detaliat al utilizatorului";
 $DetailedReportByQuestion = "Raport detaliat pe intrebare";
 $ComparativeReportDetail = "Cu acest raport puteti compara raspunsurile.";
-$CompleteReportDetail = "Acest raport ofera o imagine de ansamblu a tuturor raspunsurilor tuturor utilizatorilor cu privire la toate problemele. Puteti schimba raportul doar adaugand cateva intrebari in raport. Informatiile pe care le vezi pot fi, de asemenea, exportate catre un fisier CSV, astfel incat sa puteti procesa rezultatele intr-o aplicatie statica.";
+$CompleteReportDetail = "Acest raport ofera o imagine de ansamblu a tuturor raspunsurilor tuturor utilizatorilor cu privire la toate problemele. Puteti schimba raportul doar adaugand cateva intrebari in raport. Informatiile pe care le vezi pot fi, de asemenea, exportate catre un";
 $DetailedReportByUserDetail = "In acest raport aveti o evaluare a tuturor raspunsurilor unui anumit utilizator.";
 $DetailedReportByQuestionDetail = "In acest raport puteti vedea rezultatele fiecarei intrebari";
 $ReminderResendToAllUsers = "Aceasta este o atentionare pentru invitatie. Fiecare utilizator va primi un mail. Daca nu accesati aceasta optiune vor primi mailul doar utilizatorii noi.";
 $Multiplechoice = "Mai multe variante";
-$Multipleresponse = "Mai multe variante de raspuns";
-$Score = "Clasament";
-$Shared = "Partajat";
+$Score = "Rezultat";
+$Shared = "Impartit";
 $Invite = "Invita";
 $MaximumScore = "Scor maxim";
 $ViewInvited = "Arata invitatii";
@@ -170,7 +172,7 @@ $ShowFormProfile = "Arata formularul de profil";
 $PersonalityQuestion = "Schimba intrebarea";
 $YouNeedToCreateGroups = "Trebuie sa creati grupuri";
 $ManageGroups = "Manevreaza grupuri";
-$Create = "Creează ";
+$Create = "Creaza";
 $GroupCreatedSuccessfully = "Grupul este creat cu succes";
 $GroupNeedName = "Grupul trebuie sa aiba un nume";
 $Personality = "Personalizeaza";
@@ -184,3 +186,4 @@ $AutoInviteLink = "Utilizatorii neinvitati pot folosi acest link pentru a face a
 $RemindUnanswered = "Trimite o atentionare doar persoanelor care nu au raspuns";
 $ModifySurvey = "Modifica ancheta";
 $ReportingOverview = "Raportul de ansamblu";
+?>

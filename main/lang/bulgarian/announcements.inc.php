@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $Announcement = "Обяви";
 $langAnnEmpty = "Списъкът с обявите е празен.";
 $AnnouncementModified = "Обявата е променена.";
@@ -53,3 +56,4 @@ $AnnounceSentToUserSelection = "Обявата е изпратена до изб
 $SendAnnouncement = "Изпращане на обявата";
 $ModifyAnnouncement = "Редактиране на обявата";
 $ButtonPublishAnnouncement = "Изпращане на обявата";
+?>

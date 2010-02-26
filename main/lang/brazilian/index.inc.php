@@ -1,25 +1,28 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langInvalidId = "Acesso não autorizado.<BR> Nome do usuário ou senha incorretos.";
-$langWelcome = "Bem-Vindo !";
+$langWelcome = "Cursos da lista em baixo são de livre acesso. Os outros cursos exigem um nome de usuário e uma senha, que podem ser obtidos através de um \'registro\'. Os professores e os seus ajudantes podem criar cursos depois de se registrarem e em seguida, selecionan";
 $langPass = "Senha";
-$langEnter = "Voltar para a lista de cursos";
+$langEnter = "Entrar";
 $langReg = "Registro";
 $langMenu = "Menu";
 $langAdvises = "Avisos";
 $langCourseDoesntExist = "<b>Atenção :</b> Esse curso não existe";
 $langGetCourseFromOldPortal = "clique aqui para acessar esse curso a partir do seu antigo sistema";
-$langOtherCourses = "outros cursos";
+$langOtherCourses = "Lista de cursos";
 $langSupportForum = "Suporte do Fórum";
-$langCategories = "categorias";
+$langCategories = "Cursos";
 $langBackToHomePage = "Voltar para a página principal";
 $lang_No_course_publicly_available = "Nenhum curso público disponível.";
 $langLostPassword = "Lembrar a senha";
 $lang_edit_my_course_list = "Editar minha lista de cursos";
-$langAgenda = "Agenda";
+$langAgenda = "Próximos eventos da agenda";
 $langValvas = "Últimos anúncios";
-$langUp = "Acima";
+$langUp = "nível anterior";
 $langCatList = "Categorias";
-$langCourseList = "Lista de cursos";
+$langCourseList = "Cursos";
 $langHelptwo = "Ajuda";
 $langRegAll = "registrar";
 $EussMenu = "menu";
@@ -33,16 +36,16 @@ $langMenuUser = "Usuário";
 $langMenuAdmin = "Administrador da Plataforma";
 $langUsersOnLineList = "Lista de usuários online";
 $langTotalOnLine = "Total online";
-$langRefresh = "Atualizar";
+$langRefresh = "Atualizar página";
 $langMe = "eu";
-$langSystemAnnouncements = "Anúncios do Sistema";
+$langSystemAnnouncements = "Anúncios de Sistema";
 $langHelpMaj = "Ajuda";
 $langNotRegistered = "Não Registrado";
 $langAdmin = "Plataforma Administrador";
-$Login = "Nome de Usuário";
+$Login = "Login";
 $langRegisterForCourse = "Registrar-se em um novo curso";
 $langUnregisterForCourse = "Cancelar a inscrição no Cursos";
-$langCombinedCourse = "Curso combinado";
+$langCombinedCourse = "Curso combinado -";
 $Platform = "Plataforma";
 $Refresh = "Atualizar";
 $TotalOnLine = "total de usuários online";
@@ -60,6 +63,7 @@ $CourseView = "Mostrar a lista de todos os cursos disponíveis";
 $DropboxFileAdded = "Arquivo adicionado na Caixa de documentos compartilhados";
 $NewMessageInForum = "Nova mensagem publicada no fórum";
 $FolderCreated = "Criada nova pasta";
-$LinkAdded = "Avaliação adicionada";
-$AnnouncementAdded = "O anúncios foi adicionado";
+$LinkAdded = "Adicionado novo link";
+$AnnouncementAdded = "Anúncio adicionado";
 $AgendaAdded = "Acrescentado ítem na agenda";
+?>

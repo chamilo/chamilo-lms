@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langActivate = "Activar";
 $langDeactivate = "Desactivar";
 $langInLnk = "Enlaces desactivados";
@@ -26,3 +29,4 @@ $SessionIdentifier = "Identificador de la sesión";
 $SessionName = "Nombre de la sesión";
 $SessionCategory = "Categoría de la sesión";
 $SessionData = "Datos de la sesión";
+?>

@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $MyTasks = "Mine opgaver";
 $FavoriteBlogs = "Mine favorit blogs";
 $Navigation = "Navigation";
@@ -79,3 +82,4 @@ $AddBlog = "Opret en ny blog";
 $EditBlog = "Rediger titlen og undertitlen";
 $DeleteBlog = "Slet denne blog";
 $Shared = "Delte";
+?>

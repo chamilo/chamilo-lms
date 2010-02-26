@@ -1,5 +1,8 @@
 <?php
-$ResourceAdded = "Resurs je bil dodan";
+/*
+for more information: see languages.txt in the lang folder.
+*/
+$ResourceAdded = "Resurs dodan";
 $LearningPath = "Učna pot";
 $LevelUp = "nivo više";
 $AddIt = "Dodaj";
@@ -37,19 +40,20 @@ $StepDeleted1 = "Ta";
 $StepDeleted2 = "element je bil odstranjen v tem orodju.";
 $Modify = "spremeni";
 $Chapter = "Poglavje";
-$NoAgendaItems = "Trenutni tu ni nobenih zapisov agende";
-$AgendaAdd = "Dodaj nov dogodek";
-$UserGroupFilter = "Filter na skupini/uporabnikih";
-$AgendaSortChronologicallyUp = "Razvrsti zapise agende kronološko (naraščajoče)";
-$ShowCurrent = "Prikaži dogodke tekočega meseca";
+$NoAgendaItems = "Ni nobenih zapisov agende";
+$AgendaAdd = "Dodaj zapis agende";
+$UserGroupFilter = "Filter (uporabnik/skupina)";
+$AgendaSortChronologicallyUp = "Razvrsti zapise agende kronološko (naraščajo&#269;e)";
+$ShowCurrent = "Prikaži trenutne zapise agende";
 $ModifyCalendarItem = "Spremeni zapis agende";
-$ItemTitle = "Naslov dogodka";
+$ItemTitle = "Naslov";
 $Detail = "Podrobnosti";
-$EditSuccess = "Dogodek je bil spremenjen";
-$AddCalendarItem = "Dodaj nov dogodek";
+$EditSuccess = "Urejanje je bilo uspešno";
+$AddCalendarItem = "Dodaj zapis agende";
 $AddAnn = "Dodaj obvestilo";
 $ForumAddNewTopic = "Forum: dodaj novo temo";
 $ForumEditTopic = "Forum : uredi temo";
 $ExerciseAnswers = "Vaje & testi : Odgovori";
 $ForumReply = "Forum: odgovor";
-$AgendaSortChronologicallyDown = "Razvrsti zapise agende kronološko (padajoče)";
+$AgendaSortChronologicallyDown = "Uredi zapise agende kronološko (padajoče)";
+?>

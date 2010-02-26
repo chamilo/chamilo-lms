@@ -1,18 +1,22 @@
 <?php
-$lang_height = "ความสูง";
-$lang_resizing_comment = "ปรับขนาดภาพตามที่กำหนดนี้(หน่วยเป็นPixels)";
-$lang_width = "ความกว้าง";
-$lang_resizing = "ปรับขนาดใหม่";
-$lang_no_resizing_comment = "แสดงภาพทั้งหมดในขนาดจริง โดยไม่ต้องปรับขนาดใหม่ หากพื้นที่ไม่พอแสดงภาพจะขึ้นแถบเลื่อนดูภาพให้ ";
-$lang_show_thumbnails = "แสดงภาพขนาดเล็ก";
-$lang_click_thumbnails = "คลิกที่รูปเล็กที่ต้องการ";
-$lang_set_slideshow_options = "เลือกกำหนดตั้งค่า การแสดงภาพสไลด์";
-$lang_slideshow_options = "ตั้งค่าการแสดงภาพสไลด์";
-$lang_no_resizing = "ไม่ปรับขนาด ใช้ขนาดจริงเดิมของไฟล์";
-$lang_exit_slideshow = "ออกจากการแสดงภาพสไลด์";
-$SlideShow = "แสดงภาพไลด์";
-$lang_previous_slide = "ภาพที่ผ่านมา";
-$lang_next_slide = "ภาพต่อไป";
-$lang_image = "ภาพ";
-$lang_of = "ของ";
-$lang_view_slideshow = "ดูภาพไลด์";
+/*
+for more information: see languages.txt in the lang folder.
+*/
+$lang_height = "€ÇÒÁÊÙ§";
+$lang_resizing_comment = "»ÃÑº¢¹ÒŽÀÒŸµÒÁ·Õè¡ÓË¹Ž¹Õé(Ë¹èÇÂà»ç¹Pixels)";
+$lang_width = "€ÇÒÁ¡ÇéÒ§";
+$lang_resizing = "»ÃÑº¢¹ÒŽãËÁè";
+$lang_no_resizing_comment = "áÊŽ§ÀÒŸ·Ñé§ËÁŽã¹¢¹ÒŽšÃÔ§ âŽÂäÁèµéÍ§»ÃÑº¢¹ÒŽãËÁè ËÒ¡Ÿ×é¹·ÕèäÁèŸÍáÊŽ§ÀÒŸšÐ¢Öé¹á¶ºàÅ×èÍ¹ŽÙÀÒŸãËé";
+$lang_show_thumbnails = "áÊŽ§ÀÒŸ¢¹ÒŽàÅç¡";
+$lang_click_thumbnails = "€ÅÔ¡·ÕèÃÙ»àÅç¡·ÕèµéÍ§¡ÒÃ";
+$lang_set_slideshow_options = "àÅ×Í¡¡ÓË¹ŽµÑé§€èÒ ¡ÒÃáÊŽ§ÀÒŸÊäÅŽì";
+$lang_slideshow_options = "µÑé§€èÒ¡ÒÃáÊŽ§ÀÒŸÊäÅŽì";
+$lang_no_resizing = "äÁè»ÃÑº¢¹ÒŽ ãªé¢¹ÒŽšÃÔ§àŽÔÁ¢Í§ä¿Åì";
+$lang_exit_slideshow = "ÍÍ¡šÒ¡¡ÒÃáÊŽ§ÀÒŸÊäÅŽì";
+$SlideShow = "áÊŽ§ÀÒŸäÅŽì";
+$lang_previous_slide = "ÀÒŸ·ÕèŒèÒ¹ÁÒ";
+$lang_next_slide = "ÀÒŸµèÍä»";
+$lang_image = "ÀÒŸ";
+$lang_of = "¢Í§";
+$lang_view_slideshow = "ŽÙÀÒŸäÅŽì";
+?>

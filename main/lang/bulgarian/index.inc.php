@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langInvalidId = "Неуспешно идентифициране - неправилно потребителско име или неправилна парола.";
 $langWelcome = "Добре дошли!";
 $langPass = "Парола";
@@ -63,3 +66,4 @@ $FolderCreated = "Създадена е папка.";
 $LinkAdded = "Връзката е добавена.";
 $AnnouncementAdded = "Създадена е обява.";
 $AgendaAdded = "Добавено е събитие в програмата.";
+?>

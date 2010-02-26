@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $ModifInfo = "Configurações do curso";
 $langModifDone = "As informações foram modificadas";
 $langDelCourse = "Excluir toda a área do curso";
@@ -8,11 +11,11 @@ $langConfidentiality = "Confidencialidade";
 $langPublic = "Acesso público a partir da página inicial da plataforma mesmo sem fazer login";
 $langUnsubscription = "Cancelar inscrição";
 $langPrivOpen = "Acesso privado, inscrição aberta";
-$langPrivate = "Acesso Privado (acessível apenas para inscritos no curso)";
+$langPrivate = "Acesso Privado - acessível apenas para inscritos no curso <a href=../user/user.php>Lista de usuários</a>)";
 $langForbidden = "Não permitido";
-$CourseAccessConfigTip = "Seu curso é predefido como público. Podendo ser definido o nível de confidencialidade acima.";
+$CourseAccessConfigTip = "Por padrão seu curso é público. Mas você pode definir o nível de confidencialidade acima.";
 $langOpenToTheWorld = "Acesso Público - permitido acesso a todos (anónimos e incritos)";
-$OpenToThePlatform = "Acesso Público - acesso permitido para usuários que se inscreverão na plataforma";
+$OpenToThePlatform = "Acesso Público - acesso permitido para usuários registrados na plataforma";
 $langOpenToThePlatform = "Acesso Público - acesso permitido para usuários registrados na plataforma";
 $langTipLang = "Este idioma será válido para todos os visitantes da página inicial do seu curso.";
 $langVid = "Vídeo";
@@ -23,7 +26,7 @@ $langExercise = "Exercícios";
 $langStats = "Estatísticas";
 $langUplPage = "Enviar a página ou link para a página inicial";
 $langLinkSite = "Adicionar link a página inicial";
-$langCourse = "A área ";
+$langCourse = "A área";
 $langHasDel = "foi excluido";
 $langBackHome = "Voltar para a página inicial do";
 $langByDel = "Ao excluir essa área irá excluir permanentemente todos os conteúdos (documentos, links, ...) que ele contém e excluirá todos os usuários (não removendo-os de outros cursos).<p>Você quer realmente excluir este curso?";
@@ -58,11 +61,11 @@ $langExpirationDate = "Data de expiração";
 $langPostPone = "Colocar em espera";
 $langLastEdit = "Última edição";
 $langLastVisit = "Última visita";
-$langSubscription = "Inscrição";
-$langCourseAccess = "Acesso ao Curso";
+$langSubscription = "Os prorpios usuários podem inscrever-se";
+$langCourseAccess = "Acesso ao curso";
 $langConfirmBackup = "Você realmente quer fazer backup dessa área de curso?";
 $langCreateSite = "Criar um curso";
-$langRestoreDescription = "O curso está em um arquivo de backup que você pode selecionar abaixo. <br><br>Assim que você clicar em \"Restaur\", o arquivo irá ser descompactado e o curso será restaurado.";
+$langRestoreDescription = "O curso está em um arquivo de backup que você pode selecionar abaixo. <br><br>Assim que você clicar em \\"Restaur\\", o arquivo irá ser descompactado e o curso será restaurado.";
 $langRestoreNotice = "Esse script não permite ainda a restauração automática dos usuários, mas os dados salvos em \"users.csv\" são suficientes para que o adminitrador possa fazê-lo manualmente.";
 $langAvailableArchives = "Lista de arquivos disponíveis";
 $langNoArchive = "Nenhum arquivo foi selecionado";
@@ -73,7 +76,7 @@ $langBackH = "voltar para a página inicial";
 $langOtherCategory = "Outra categoria";
 $langAllowedToUnsubscribe = "Os usuários tem permissão para cancelar sua inscrição para esse curso";
 $langNotAllowedToUnsubscribe = "Os usuários não tem permissão para cancelar sua inscrição para esse curso";
-$langCourseVisibilityClosed = "Acesso Fechado - curso é acessível apenas ao administrador do curso.";
+$langCourseVisibilityClosed = "Completamente fechado; o curso estará acessível apenas para o administrador do curso.";
 $CourseVisibilityClosed = "Fechado - sem acesso para esse curso";
 $CourseVisibilityModified = "Modificado (maiores detalhes nas configurações do sitema de direitos/permissões do sistema)";
 $WorkEmailAlert = "Avisar por e-mail quando uma tarefa/trabalho for enviado";
@@ -110,3 +113,4 @@ $NewUserEmailAlert = "Notificar por e-mail o professor sobre uma incrição auto
 $NewUserEmailAlertEnable = "Ativar a notificação por e-mail o professor sobre uma incrição automática de um novo usuário";
 $NewUserEmailAlertToTeacharAndTutor = "Ativar a notificação por e-mail para professores e tutores sobre uma incrição automática de um novo usuário";
 $NewUserEmailAlertDisable = "Desativar o alerta por e-mail da incrição de um novo usuário no curso";
+?>

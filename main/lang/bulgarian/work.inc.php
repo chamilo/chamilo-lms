@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $Tools = "Инструменти";
 $SendWork = "Качване на документ";
 $langTooBig = "Не сте избрали файл за изпращане, или този е твърде голям.";
@@ -72,3 +75,4 @@ $UpdateWork = "Обновяване на задачата";
 $MakeAllPapersInvisible = "Скриване на всички документи";
 $MakeAllPapersVisible = "Показване на всички документи";
 $TheDocumentHasBeenDeleted = "Документът е изтрит.";
+?>

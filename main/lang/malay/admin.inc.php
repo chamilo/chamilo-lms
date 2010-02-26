@@ -1,5 +1,8 @@
 <?php
-$AdminBy = "Ditadbir oleh ";
+/*
+for more information: see languages.txt in the lang folder.
+*/
+$AdminBy = "Ditadbir oleh";
 $AdministrationTools = "Alat Bantu Pentadbiran";
 $State = "Status Sistem";
 $Statistiques = "Statistik";
@@ -20,14 +23,14 @@ $langNomOutilTodo = "Menguruskan Senarai Tugas";
 $langNomPageAdmin = "Pentadbiran";
 $langSysInfo = "Info tentang sistem";
 $langDiffTranslation = "Perbandingan Terjemahan";
-$langStatOf = "Statistik ";
+$langStatOf = "Statistik";
 $langSpeeSubscribe = "Quick subscribe as Course Checker";
 $langLogIdentLogout = "Senarai Login";
-$langServerStatus = "Status of MySQL server : ";
-$langDataBase = "Database ";
+$langServerStatus = "Status of MySQL server :";
+$langDataBase = "Database";
 $langRun = "work";
-$langClient = "MySql Client ";
-$langServer = "MySql Server ";
+$langClient = "MySql Client";
+$langServer = "MySql Server";
 $langtitulary = "Pemilik";
 $langUpgradeBase = "Menambah-baik Pangkalan Data";
 $langManage = "Menguruskan Kampus";
@@ -37,3 +40,4 @@ $langUpgrade = "Upgrade Claroline";
 $langWebsite = "Website Claroline";
 $langDocumentation = "Dokumentasi";
 $langContribute = "Sumbangan";
+?>

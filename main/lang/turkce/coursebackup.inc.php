@@ -1,9 +1,12 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langSelectOptionForBackup = "Lütfen bir yedekleme seçeneği seçiniz";
 $langLetMeSelectItems = "Ders elemanlarını ben seçeyim";
 $langCreateFullBackup = "Bu dersin tamamını yedekle";
 $langCreateBackup = "bir yedek oluştur";
-$langBackupCreated = "Ders yedeği oluşturuldu.Dosya indirme başlamak üzere, eğer dosya indirme başlamazsa ilgili bağlantıya tıklayın.";
+$langBackupCreated = "Ders yede&#287;i olu&#351;turuldu.Dosya indirme ba&#351;lamak üzere, e&#287;er dosya indirme ba&#351;lamazsa ilgili ba&#287;lant&#305;ya t&#305;klay&#305;n.";
 $langSelectBackupFile = "yedek dosyası seçin";
 $langImportBackup = "Yedek dosyasını sisteme yolla";
 $langImportFullBackup = "Tam Yedek dosyasını sisteme yolla";
@@ -45,3 +48,4 @@ $DocumentsWillBeAddedToo = "Belgeler de eklenecektir";
 $ToExportLearnpathWithQuizYouHaveToSelectQuiz = "Bir test içeren bir dersi dışa aktarmak isterseniz, ilgili testin dışa aktarılacağından emin olmalısınız. Bu yüzden test listesinden seçmeniz gerekir.";
 $ArchivesDirectoryNotWriteableContactAdmin = "Bu araç tarafından kullanılan arşiv dizininin yazma hakkı yok. Lütfen platform yöneticinizle bağlantı kurun";
 $DestinationCourse = "Hedef eğitim";
+?>

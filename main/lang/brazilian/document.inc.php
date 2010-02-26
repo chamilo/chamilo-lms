@@ -1,10 +1,13 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $MoveTo = "Mover para";
 $langDownloadFile = "Enviar arquivo para o servidor";
 $langNameDir = "Nome do novo diretório";
 $langSize = "Tamanho";
 $langRename = "Renomear";
-$langCopy = "Copiar conteúdo do Curso";
+$langCopy = "Copiar";
 $langTo = "para";
 $langNoSpace = "O envio falhou. Não há espaço em disco suficiente em seu diretório";
 $langDownloadEnd = "O envio terminou";
@@ -25,7 +28,7 @@ $langUncompress = "descompactar arquivos (.zip)";
 $langDownloadAndZipEnd = " Arquivo Zip enviado e descompactado";
 $langRoot = "raiz";
 $langCreateDoc = "Criar um documento";
-$langDown = "abaixo";
+$langDown = "Abaixo";
 $langFileError = "O arquivo a ser enviado não é válido.";
 $langMaxFileSize = "O tamanho máximo do arquivo é";
 $langFileName = "Nome do arquivo";
@@ -211,3 +214,4 @@ $CreateFolder = "Criar uma pasta";
 $HelpDefaultDirDocuments = "Este diretório contém arquivos predefinidos. Pode eliminar ou adicionar novos arquivos, mas se um arquivo está oculto quando é inserido num documento, os usuários não serão capazes de o visualizar nesse documento. Ao inserir um arquivo num documento, certifique-se primeiro que se encontra visível. Os diretórios podem permanecer ocultos.";
 $HelpSharedFolder = "Este diretório contém os arquivos que os usuários enviaram para um curso através do editor (não realizarado a partir da ferramenta de grupos). Por predefinição, serão visíveis para qualquer instrutor, mas estará oculto para outros usuários (desde que não visiveis aos arquivos diretamente). Se tornar o directório de um usuário visível, todos os outros usuários poderão visualizar o seu conteúdo.";
 $TemplateImage = "Imagem do modelo";
+?>

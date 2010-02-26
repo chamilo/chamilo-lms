@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langActivate = "Активиране";
 $langDeactivate = "Дезактивиране";
 $langInLnk = "Дезактивирани инструменти";
@@ -22,3 +25,4 @@ $Authoring = "Учебни материали";
 $Administration = "Администриране";
 $IntroductionTextUpdated = "Встъпителният текст е актуализиран.";
 $IntroductionTextDeleted = "Встъпителният текст е изтрит.";
+?>

@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langLineNumber = "Radnummer";
 $langLine = "rad";
 $langLines = "rader";
@@ -6,8 +9,8 @@ $langLineOrLines = "rad(er)";
 $langMoveUp = "Flytta upp";
 $langMoveDown = "Flytta ned";
 $langAddNewHeading = "Lägg till ny rubrik";
-$langCourseAdministratorOnly = "Lärare enbart";
-$langDefineHeadings = "Definiera överskrifter";
+$langCourseAdministratorOnly = "Endast för kursadministratörer";
+$langDefineHeadings = "Definiera rubriker";
 $langBackToUsersList = "Tillbaka till användarlistan";
 $langTracking = "Spårning";
 $langCourseManager = "Kursansvarig";
@@ -18,9 +21,9 @@ $langModRole = "Ändra rollen för";
 $langRole = "Roll";
 $langIsNow = "är från och med nu";
 $langInC = "i denna kurs";
-$langFilled = "Du har lämnat några fält tomma.";
-$langUserNo = "Användarnamnet som du valt ";
-$langTaken = "är redan upptaget. Välj ett annat.";
+$langFilled = "Alla fält var inte ifyllda";
+$langUserNo = "Användarnummer";
+$langTaken = "är redan använt. Var vänlig välj ett annat.";
 $langTutor = "Lärare";
 $langUnreg = "Avsluta prenumeration";
 $langGroupUserManagement = "Grupphantering";
@@ -62,7 +65,7 @@ $MyPersonalData = "Min personliga information";
 $AlterPersonalData = "Ändra personlig information";
 $Invites = "Inbjudningar";
 $ContactsGroups = "Gruppkontakter";
-$ErrorSendingMessage = "Det uppstod ett fel när meddelandet försökte skickas";
+$ErrorSendingMessage = "Ett fel uppstod när meddelandet skickades";
 $PendingInvitations = "Inbjudan avvaktar svar";
 $MyInbox = "Min inbox";
 $ViewSharedProfile = "Visa delad profil";
@@ -81,3 +84,4 @@ $ViewMySharedProfile = "Min delade profil";
 $UserStatistics = "Statistik för användaren";
 $EditUser = "Ändra användaren";
 $ViewUser = "Visa användaren";
+?>

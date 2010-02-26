@@ -1,7 +1,10 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langViewCourseMaterialImport = "Visualizar como irá ser importado o material do curso";
-$langViewExternalLinksImport = "Visualizar como irão ser importadas as ligações externas ";
-$langViewForumImport = "Visualizar como irá ser importado o fórum ";
+$langViewExternalLinksImport = "Visualizar como irão ser importadas as ligações externas";
+$langViewForumImport = "Visualizar como irá ser importado o fórum";
 $langImportCourseMaterial = "Importar o material do curso (Ferramenta do Blackboard \"Material do Curso\")";
 $langImportExternalLinks = "Importar ligações (Ferramenta \"Ligações Externas\" do Blackboard)";
 $langImportForum = "Importar fóruns (Ferramenta do Blackboard \"Quadro de Discussão\")";
@@ -18,3 +21,4 @@ $langChooseImportOptions = "Seleccione as suas opções de importação";
 $langCheckWhatIsImported = "Poderá verificar e ver o que irá ser importado antes de iniciar o processo de importação";
 $langStartImporting = "Iniciar importação";
 $langImport = "Importar";
+?>

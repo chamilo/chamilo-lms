@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $select = "Seleccionar";
 $square = "Rectángulo";
 $circle = "Elipse";
@@ -18,3 +21,4 @@ $exeFinished = "Identificáronse todas as respostas. Agora pode reasignar as sú
 $nextAnswer = "Agora faga clic en: &done=done";
 $delineation = "Delimitación";
 $labelDelineationMenu = "Cerrar delimitación";
+?>

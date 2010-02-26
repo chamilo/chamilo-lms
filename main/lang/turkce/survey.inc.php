@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $PublishSurvey = "Anketi Yayınla";
 $CompareQuestions = "Soruları Kıyasla";
 $InformationUpdated = "Bilgi Güncellendi";
@@ -135,7 +138,6 @@ $DetailedReportByUserDetail = "Bu raporda belirli kişii tarafından verilen tü
 $DetailedReportByQuestionDetail = "Bu raporda sonuçlar sorular bazında görünmektedir. Basit istatistiksel analiz ve grafik verilmektedir.";
 $ReminderResendToAllUsers = "Anketi tüm kullanıcalara hatırlatır. Eğer bu kutuyu işaretlemezseniz sadece yeni eklenen kullanıcılar e-posta alırlar";
 $Multiplechoice = "Çoktan seçmeli";
-$Multipleresponse = "Çoklu cevap";
 $Score = "Performans";
 $Shared = "Paylaşıldı";
 $Invite = "Davet et";
@@ -200,3 +202,4 @@ $BackToSurvey = "Ankete dön";
 $UpdateInformation = "Bilgiyi güncelle";
 $PleaseFillSurvey = "Lütfen anketi doldurun";
 $ReportingOverview = "Raporlama Görünümü";
+?>

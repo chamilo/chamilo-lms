@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $nameTools = "kullanılmayan lisan değişkeni";
 $langMdCallingTool = "Belgeler";
 $langTool = "Belge Metadata";
@@ -27,8 +30,9 @@ $langOrElse = "Bir bağlantı kategorisi seç";
 $langWorkWith = "Scorm Direktörü ile çalış";
 $langSDI = "... Scorm Directory with SD-id (and split manifest - or leave empty)";
 $langRoot = "ana dizin";
-$langSplitData = "Split manifests, and #MDe, if any: ";
+$langSplitData = "Split manifests, and #MDe, if any:";
 $langMffNotOk = "Liste dosyasını tekrar yerine koyma  işlemi başarısız oldu";
 $langMffOk = "Liste dosyası tekrar yerine konuldu";
 $langMffFileNotFound = "Yeni liste dosyası açılamıyor (boş, çok büyük vs)";
 $langUploadMff = "Liste dosyasını tekrar yerine koy";
+?>

@@ -1,30 +1,34 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langLineNumber = "Номер ряда";
 $langLine = "линия (строка)";
-$langLines = "строки";
+$langLines = "линии (строки)";
 $langLineOrLines = "линия(ии) (строка(и))";
-$langMoveUp = "Выше";
-$langMoveDown = "Ниже";
+$langMoveUp = "Подняться";
+$langMoveDown = "Опуститься";
 $langAddNewHeading = "Добавить новый заголовок";
-$langCourseAdministratorOnly = "только для преподавателя";
-$langDefineHeadings = "Определить заголовки (рубрики)";
+$langCourseAdministratorOnly = "Только преподаватель";
+$langDefineHeadings = "Определить заголовки";
 $langBackToUsersList = "Вернуться к списку пользователей";
-$langTracking = "Отчет";
+$langTracking = "Отслеживание";
 $langCourseManager = "Преподаватель";
 $langModRight = "изменить права";
 $langNoAdmin = "с настоящего момента <b>no</b> прав на этой странице";
 $langAllAdmin = "с настоящего момента <b>все</b> права на этой странице";
 $langModRole = "Изменить роль";
-$langRole = "Описание";
+$langRole = "Роль";
 $langIsNow = "с настоящего момента";
 $langInC = "на этом курсе";
-$langFilled = "Вы оставили незаполненными некоторые поля.";
-$langUserNo = "Имя пользователя, которое Вы выбрали";
-$langTaken = "уже используется. Выберите другой.";
-$langTutor = "Инструктор";
+$langFilled = "Не все поля заполнены";
+$langUserNo = "№ пользователя";
+$langTaken = "уже используется. Пожалуйста, выберите другое";
+$langTutor = "Инструктор (наставник)";
 $langUnreg = "Отказаться от подписки";
-$langGroupUserManagement = "Управление группами";
+$langGroupUserManagement = "Управление группой";
 $langUnregister = "Отказаться от регистрации";
 $langAddAUser = "Добавить пользователей";
-$UsersUnsubscribed = "Выбранные пользователи были выписаны с курса";
+$UsersUnsubscribed = "Выбранные пользователи были исключены из курса";
 $ThisStudentIsSubscribeThroughASession = "Этот студет подписан на этот курс через сессию. Вы не можете редактировать его информацию";
+?>

@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $Wiki = "Wiki";
 $StartPage = "Pääsivu";
 $EditThisPage = "Muokkaa tätä sivua";
@@ -6,9 +9,9 @@ $ShowPageHistory = "Historia";
 $RecentChanges = "Uusimmat muutokset";
 $AllPages = "Kaikki sivut";
 $AddNew = "Lisää uusi sivu";
-$ChangesStored = "Ääni lisätty";
+$ChangesStored = "Tekemäsi muutokset on tallennettu";
 $NewWikiSaved = "Uusi Wiki-kotisivu on tallennettu. Klikkaa tästä nähdäksesi:";
-$DefaultContent = "<br/> <br/> <p align=\"center\"> <img src=\"%swiki/wcollaborative.png\" alt=\"Mr. Chamilo\" title=\"Mr. Chamilo\" /></p> <p align=\"center\">Aloita muokkaamalla tätä sivua</p>";
+$DefaultContent = "<br/> <br/> <p align=\\"center\\"> <img src=\\"%swiki/wcollaborative.png\\" alt=\\"Mr. Chamilo\\" title=\\"Mr. Chamilo\\" /></p> <p align=\\"center\\">Aloita muokkaamalla tätä sivua</p>";
 $CourseWikiPages = "Kurssin Wiki sivut";
 $GroupWikiPages = "Ryhmän Wiki sivut";
 $NoWikiPageTitle = "Muutoksesi on tallennettu. Sivulle täytyy antaa vielä otsikko.";
@@ -45,7 +48,7 @@ $PageLockedExtra = "Tämä sivu on suojattu. Vain kurssiylläpitäjät voivat mu
 $PageUnlockedExtra = "Tätä sivua ei ole suojattu. Kaikki kurssin käyttäjät ja ryhmän jäsenet voivat muokata sitä.";
 $NotifyChanges = "Ilmoita minulle muutoksista";
 $NotNotifyChanges = "Älä ilmoita minulle muutoksista";
-$NotifyByEmail = "Ilmoita vastauksesta sähköpostilla";
+$NotifyByEmail = "Ilmoita minulle sähköpostilla kun tätä sivua on muokattu";
 $CancelNotifyByEmail = "Älä ilmoita minulle sähköpostilla kun tätä sivua on muutettu";
 $MostRecentVersionBy = "Viimeisintä versiota muokkasi";
 $NumComments = "Kommentteja tästä sivusta";
@@ -61,3 +64,4 @@ $EditedBy = "Muokkaaja:";
 $DeletedBy = "poistaja:";
 $GroupStandardMember = "Ryhmän jäsen";
 $ConfigDefault = "Oletus asetukset";
+?>

@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langActivate = "Näytä";
 $langDeactivate = "Piilota";
 $langInLnk = "Piilotetut työkalut ja linkit";
@@ -22,3 +25,4 @@ $Authoring = "Julkaiseminen";
 $Administration = "Ylläpito";
 $IntroductionTextUpdated = "Esittely teksti on päivitetty";
 $IntroductionTextDeleted = "Esitttely teksti poistettu";
+?>

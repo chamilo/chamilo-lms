@@ -1,8 +1,11 @@
 <?php
-$langInvalidId = "Sisäänkirjautuminen epäonnistui. Jos et ole rekisteröitynyt, niin täytä <a href='../auth/inscription.php'>rekisteröitymislomake</a></font color>";
-$langWelcome = "Tervetuloa!";
+/*
+for more information: see languages.txt in the lang folder.
+*/
+$langInvalidId = "Sisäänkirjautuminen epäonnistui. Jos et ole rekisteröitynyt, niin täytä <a href=\'../auth/inscription.php\'>rekisteröitymislomake</a></font color>";
+$langWelcome = "Tervetuloa.";
 $langPass = "Salasana";
-$langEnter = "Sisään.";
+$langEnter = "Sisään";
 $langReg = "Rekisteröinti";
 $langMenu = "Menu";
 $langAdvises = "Vinkit";
@@ -14,22 +17,22 @@ $langBackToHomePage = "Takaisin etusivulle";
 $lang_No_course_publicly_available = "Ei avoimia kursseja.";
 $langLostPassword = "Salasana hukassa";
 $lang_edit_my_course_list = "Muokkaa omat kurssini luetteloa";
-$langAgenda = "Kalenteri";
+$langAgenda = "Seuraava kalenterimerkintä";
 $langValvas = "Viimeinen ilmoitus";
-$langUp = "Ylös";
-$langCatList = "Aihealueet";
+$langUp = "edellinen taso";
+$langCatList = "Koulutusalat";
 $langCourseList = "Kurssit";
 $langHelptwo = "Apua";
 $EussMenu = "Valikko";
 $Englin = "Englanti";
 $langInvalidForSelfRegistration = "Kirjautuminen epäonnistui - jos et ole vielä rekisteröitynyt, tee se<a href=claroline/auth/inscription.php>rekisteröintilomakkeella</a>";
-$langSubCat = "alakategoriat";
+$langSubCat = "aihealueet";
 $langMenuGeneral = "Yleiset";
 $langMenuUser = "Käyttäjä";
 $langMenuAdmin = "Ympäristön ylläpitäjä";
 $langUsersOnLineList = "Tällä hetkellä kirjautuneina";
 $langTotalOnLine = "Tällä hetkellä käyttäjiä";
-$langRefresh = "Järjestä";
+$langRefresh = "päivitä sivu";
 $langSystemAnnouncements = "Järjestelmän tiedotus";
 $langHelpMaj = "Apua";
 $langNotRegistered = "Rekisteröitymätön";
@@ -51,5 +54,6 @@ $langRequestDenied = "Kutsu hylätty.";
 $NewMessageInForum = "Uusi viesti keskustelualueella";
 $FolderCreated = "Uusi kansio tehty";
 $LinkAdded = "Uusi linkki lisätty";
-$AnnouncementAdded = "Ilmoitus on lisätty";
+$AnnouncementAdded = "Ilmoitus lisätty";
 $AgendaAdded = "Tapahtuma lisätty";
+?>

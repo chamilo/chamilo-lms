@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $ReservationPeriodToSmall = "Doba rezervacije je prekratka.";
 $BookingSystem = "Sistem rezervacij";
 $BookingPeriodList = "Pogled seznama rezervacijskih obdobij";
@@ -32,6 +35,8 @@ $DeleteBookingPeriod = "Odstrani to rezervacijsko obdobje";
 $BookingPeriodEdited = "Rezervacijsko obdobje je bilo ažurirano";
 $BookingPeriodDateOverlap = "Del rezervacijskega obdobja je že v uporabi v obdobju od #START# do #END#";
 $BookingPeriodSubscribeUntilAfterStart = "Končni čas rezervacije je večji od njenega začetnega časa";
+$RepeatFor = "Ponovi vsak(ih)";
+$RepeatUntil = "Ponavljaj do";
 $BookingPeriodPast = "Rezervacije za nazaj (pred trenutnim časom) ni mogoče izvesti";
 $ReservationMaxUsersOverrun = "Trenutno več oseb vrši rezervacijo kot pa je izbrana vrednost največjega števila uporabnikov";
 $AddNewBookingPeriod = "Dodaj novo rezervacijsko obdobje";
@@ -46,7 +51,7 @@ $EditResourceType = "Uredi tip resursa";
 $DeleteResourceType = "Odstrani tip resursa";
 $DeleteSelectedCategories = "Odstrani izbrane rezervacijske elemente";
 $NoResourcesType = "Trenutni ni še nobenega tipa resursa";
-$ResourceType = "Vrsta vira";
+$ResourceType = "Tip resursa";
 $ResourceTypeExist = "Ta tip resursa že obstaja";
 $ResourceTypeHasItems = "Ta tip resursa vsebuje #NUM# elementov! Odstranitev je bila preklicana.";
 $ResourceTypeNotDeleted = "Nekateri tipi resursov niso bili odstranjeni, ker še vedno vsebujejo rezervacijske elemente";
@@ -66,8 +71,6 @@ $ReservationDeleteTitle = "Rezervacijsko obdobje #NAME# je bilo odstranjeno";
 $ReservationDeleteMessage = "Spoštovana ga./g.,n rezervacijsko obdobje #NAME# od #START# do #END# je bilo odstranjeno.";
 $OutPeriod = "Izven obdobja";
 $ReservationFromUntilError = "Rezervacijsko obdobje od #START# do #END# ni bilo ustvarjeno, ker je del obdobja že zasedenn";
-$RepeatFor = "Ponovi vsak(ih)";
-$RepeatUntil = "Ponavljaj do";
 $Recurrence = "Ponovitve";
 $NoRecurrence = "Brez ponovitev";
 $UntilRecurrence = "Uporabi ponovitve";
@@ -96,7 +99,7 @@ $AddNewResource = "Dodaj nov resurs";
 $ConfirmDeleteResource = "Ste prepričani, da želite trajno odstraniti ta resurs ?";
 $ResourceInactivated = "Resurs je bil onemogočen";
 $ResourceActivated = "Resurs je bil omogočen";
-$Resource = "Vir";
+$Resource = "Resurs";
 $OpenBooking = "Odpri rezervacije";
 $DeleteResource = "Odstrani resurs";
 $DeleteSelectedResources = "Odstrani izbrane resurse";
@@ -129,3 +132,4 @@ $Step1SelectResourceType = "Korak 1: Izberi tip resursa";
 $Step2SelectResource = "Korak 2: Izberi resurs";
 $Step3SelectBookingPeriod = "Korak 3: Izberi rezervacijsko obdobje";
 $NoReservations = "Ni rezervacij";
+?>

@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $lang_height = "Височина (пиксели) ";
 $lang_resizing_comment = "Да се преоразмерят изображенията в следните рамери:";
 $lang_width = "Широчина (пиксели)";
@@ -16,3 +19,4 @@ $lang_next_slide = "Следващо";
 $lang_image = "Изображение";
 $lang_of = "от";
 $lang_view_slideshow = "Старт на презентацията";
+?>

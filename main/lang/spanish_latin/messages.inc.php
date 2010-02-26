@@ -2,7 +2,6 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
-$MessageEmptyMessageOrSubject = "";
 $Inbox = "Bandeja de entrada";
 $Messages = "Mensajes";
 $SendMessage = "Enviar mensaje";
@@ -22,19 +21,4 @@ $Date = "Fecha";
 $InvalidMessageId = "El id del mensaje a contestar no es válido.";
 $ErrorSendingMessage = "Se ha producido un error mientras se intentaba enviar el mensaje.";
 $SureYouWantToDeleteSelectedMessages = "¿ Está seguro de querer borrar los mensajes seleccionados ?";
-$SelectedMessagesDeleted = "";
-$EnterTitle = "";
-$TypeYourMessage = "";
-$MessageDeleted = "";
-$ConfirmDeleteMessage = "";
-$DeleteMessage = "";
-$ReadMessage = "";
-$SendInviteMessage = "";
-$SendMessageInvitation = "";
-$MessageTool = "";
-$WriteAMessage = "";
-$AlreadyReadMessage = "";
-$UnReadMessage = "";
-$MessageSent = "";
-$YouShouldWriteAMessage = "";
 ?>

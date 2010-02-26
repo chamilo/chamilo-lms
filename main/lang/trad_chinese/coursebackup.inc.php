@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langSelectOptionForBackup = "備份選項";
 $langLetMeSelectItems = "選擇課程組件";
 $langCreateFullBackup = "創建課程的完全備份";
@@ -42,3 +45,4 @@ $langCreateBackupInfo = "創建此課程的備份，你可以選擇放在備份�
 $ToolIntro = "工具簡介";
 $UploadError = "上傳失敗，請檢查上傳檔案大小上限及資料夾權限。";
 $DocumentsWillBeAddedToo = "文件會同時被加入";
+?>

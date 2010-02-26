@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langActivate = "Show";
 $langDeactivate = "Hide";
 $langInLnk = "Hidden tools and links";
@@ -24,5 +27,6 @@ $IntroductionTextUpdated = "Intro was updated";
 $IntroductionTextDeleted = "Intro was deleted";
 $SessionIdentifier = "Identifier of session";
 $SessionName = "Session name";
-$SessionCategory = "Sessions categories";
-$SessionData = "Session's data";
+$SessionCategory = "Category of session";
+$SessionData = "Session\'s data";
+?>

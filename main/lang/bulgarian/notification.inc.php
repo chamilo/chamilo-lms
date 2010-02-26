@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $lang_new_item = "Ново";
 $lang_title_notification = "След последното ваше посещение";
 $lang_update_agenda = "Актуализирано е събитие в програмата";
@@ -30,3 +33,4 @@ $SurveyAdded = "Добавена е анкета.";
 $NotebookAdded = "Добавена е бележка.";
 $NotebookUpdated = "Бележката е редактирана.";
 $NotebookDeleted = "Бележката е изтрита.";
+?>

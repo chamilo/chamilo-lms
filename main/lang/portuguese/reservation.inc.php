@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $ReservationPeriodToSmall = "O período de reservas é demasiado curto.";
 $BookingSystem = "Sistema de Reservas";
 $BookingPeriodList = "Lista do período de Reservas";
@@ -20,18 +23,20 @@ $BookingPeriodToBig = "O período de reservas é demasiado longo.";
 $BookingPeriodTimePickerError1 = "Um período de reserva sem um temporizador não pode ser efectuado se, o tempo mínimo e máximo de um período de tempo for diferente de zero.";
 $BookingPeriodTimePickerError2 = "Um período de reserva com um temporizador não pode ser efectuado se, o tempo máximo for menor que o mínimo num período de tempo.";
 $BookingPeriodTimePickerError3 = "Um período de reserva com um temporizador não pode ser efectuado se, o tempo máximo do período de tempo não se encaixa entre a data de início e de fim.";
-$BookingPeriodHasSubscriptions = "O período de reserva possui #NUM# de reservas activas, não sendo possível editar o período de reserva ";
+$BookingPeriodHasSubscriptions = "O período de reserva possui #NUM# de reservas activas, não sendo possível editar o período de reserva";
 $TimePickerMaxUsers = "* Quando o temporizador se encontra em utilização, o número máximo de inscrições é ignorado.";
 $TimePickerMinMaxNull = "* Se os valores mínimo e máximo do temporizador for zero, o tempo pode ser definido como variável.";
 $DeleteSelectedBookingPeriod = "Eliminar os períodos de reserva seleccionados";
 $EditNewBookingPeriod = "Editar um período de reserva";
 $BookingPeriodAdded = "O período de reserva foi adicionado";
-$BookingPeriodDeleted = "O período de reserva foi eliminado ";
+$BookingPeriodDeleted = "O período de reserva foi eliminado";
 $ConfirmDeleteBookingPeriod = "Tem a certeza que deseja eliminar permanentemente este período de reserva?";
 $DeleteBookingPeriod = "Remover este período de reserva";
 $BookingPeriodEdited = "O período de reserva foi editado";
 $BookingPeriodDateOverlap = "Uma parte do período de reserva já está em utilização no período de #START# até #END#";
 $BookingPeriodSubscribeUntilAfterStart = "O inscrever-se até a data é superior à data de início";
+$RepeatFor = "Repetir cada";
+$RepeatUntil = "Repetir até";
 $BookingPeriodPast = "Não é possível efectuar reservas antes do horário definido";
 $ReservationMaxUsersOverrun = "Já se encontram mais pessoas inscritas do que o número máximo de utilizadores que seleccionados";
 $AddNewBookingPeriod = "Adicionar um novo período de reserva";
@@ -46,7 +51,7 @@ $EditResourceType = "Editar o tipo de recurso";
 $DeleteResourceType = "Eliminar o tipo de recurso";
 $DeleteSelectedCategories = "Eliminar os recursos seleccionados";
 $NoResourcesType = "Não existe tipo de recurso ainda";
-$ResourceType = "Categoria";
+$ResourceType = "Tipo de recurso";
 $ResourceTypeExist = "Este tipo de recurso já existe";
 $ResourceTypeHasItems = "O tipo de recurso tem #NUM# de itens ! A eliminação foi abortada";
 $ResourceTypeNotDeleted = "Algumas categoria não puderam ser removidas porque contém recursos";
@@ -66,10 +71,8 @@ $ReservationDeleteTitle = "O período de reserva de #NAME# foi eliminado";
 $ReservationDeleteMessage = "Exmo/a. Sr./Sra., nnO período de reserva para de #NAME# de #START# até #END# foi removido";
 $OutPeriod = "Fora de período";
 $ReservationFromUntilError = "Operíodo de reserva de #START# até #END# não foi efectuado porque uma parte do período de reserva já se encontra reservadon";
-$RepeatFor = "Repetir cada";
-$RepeatUntil = "Repetir até";
 $Recurrence = "Recorrência";
-$NoRecurrence = "Sem recorrência ";
+$NoRecurrence = "Sem recorrência";
 $UntilRecurrence = "Utilizar recorrência";
 $TimePickerLimitation = "* Quando o temporizador se encontra em utilização, a data de início e de fim deverão ser as mesmas.";
 $OverviewSubscriptions = "Vista geral das inscrições";
@@ -96,7 +99,7 @@ $AddNewResource = "Adicionar um novo recurso";
 $ConfirmDeleteResource = "Tem a certeza que deseja eliminar permanentemente este recurso?";
 $ResourceInactivated = "O recurso foi desactivado";
 $ResourceActivated = "O recurso foi activado";
-$Resource = "Avaliação";
+$Resource = "Recurso";
 $OpenBooking = "Reservas abertas";
 $DeleteResource = "Apagar recurso";
 $DeleteSelectedResources = "Eliminar os recursos seleccionados";
@@ -129,3 +132,4 @@ $Step1SelectResourceType = "Passo 1: Seleccione o tipo de recurso";
 $Step2SelectResource = "Passo 2: seleccione o recurso";
 $Step3SelectBookingPeriod = "Passo 3: seleccione o período de reserva";
 $NoReservations = "Não existem reservas";
+?>

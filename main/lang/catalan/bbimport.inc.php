@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langViewCourseMaterialImport = "Visualitzar el material del curs que serà importat";
 $langViewExternalLinksImport = "Viasulaitzar els enllaços externs que seran importats";
 $langViewForumImport = "Visualitzar el forum que serà importat";
@@ -13,8 +16,9 @@ $langFirstSelectPackage = "Heu de seleccionar un paquet i obrir-lo abans de cont
 $langCourseToMigrate = "Curs a transferir";
 $langSelectPackage = "Seleccionar un paquet";
 $langOpenPackageForImporting = "Obrir aquest paquet per a importar";
-$langInformation = "Informació sobre el pocès d'importació";
-$langChooseImportOptions = "Escolliu les vostres opcions d'importació";
-$langCheckWhatIsImported = "Podeu verificar per a veure que serà importat abans de començar el procés d'importació";
+$langInformation = "Informació sobre el pocès d\'importació";
+$langChooseImportOptions = "Escolliu les vostres opcions d\'importació";
+$langCheckWhatIsImported = "Podeu verificar per a veure que serà importat abans de començar el procés d\'importació";
 $langStartImporting = "Començar la importació";
 $langImport = "Importar";
+?>

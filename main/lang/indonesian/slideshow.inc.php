@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $lang_height = "Tinggi";
 $lang_resizing_comment = "ubah ukuran gambar ke dimensi berikut ini (dalam pixel)";
 $lang_width = "Lebar";
@@ -16,3 +19,4 @@ $lang_next_slide = "Slide Berikutnya";
 $lang_image = "Gambar";
 $lang_of = "dari";
 $lang_view_slideshow = "Lihat Slideshow";
+?>

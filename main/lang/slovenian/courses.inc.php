@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $lang_already_enrolled = "že vpisan";
 $lang_my_personnal_course_list = "Osebni seznam tečajev";
 $lang_course_enrollment = "Uporabnikov tečaj";
@@ -6,12 +9,11 @@ $lang_course_not_available = "Tečaj ni na voljo...";
 $lang_enroll = "Vpis";
 $lang_enroll_to_a_new_course = "Vpis v nov tečaj";
 $lang_my_present_course_list = "Seznam mojih trenutnih tečajev";
-$lang_no_course_to_enroll_in_this_category = "V tej kategoriji ni nobenega tečaja za vpis...
-";
+$lang_no_course_to_enroll_in_this_category = "V tej kategoriji ni nobenega tečaja za vpis.";
 $lang_or_search_from_the_course_code = " ali iskanje s pomočjo kode tečaja";
 $lang_search = "Iskanje";
 $lang_select_course_among_categories = "Izberi tečaj izmed kategorij";
-$lang_select_course_in = "Izberi tečaj v ";
+$lang_select_course_in = "Izberi tečaj v";
 $lang_select_course_in_search_results = "Izberi tečaj iz rezultata iskanja";
 $lang_unsubscribe = "Izpis";
 $lang_back_to_my_home_page = "Povratek na mojo domačo stran";
@@ -23,7 +25,7 @@ $lang_back_to_parent_category = "Povratek v nadrejeno kategorijo";
 $lang_back_to_course_selection = "Povratek na izbiro tečaja";
 $lang_up = "Povratek v nadrejeno kategorijo";
 $langCatList = "Kategorije";
-$langCourseList = "Seznam tečajev";
+$langCourseList = "Tečaji";
 $Subscribe = "Vpiši";
 $AlreadySubscribed = "Že vpisan";
 $CodeMandatory = "Zahtevano: koda";
@@ -75,8 +77,10 @@ $buttonCreateCourseCategory = "Ustvari kategorijo tečajev";
 $buttonSaveCategory = "Shrani kategorijo";
 $buttonChangeCategory = "Zamenjaj kategorijo";
 $SessionName = "Ime seje";
-$SessionCategory = "Kategorije sej";
+$SessionCategory = "Kategorija seje";
 $Expand = "Razširi";
 $Collapse = "Skrči";
 $CourseDetails = "Podrobnosti tečaja";
+$GroupPendingInvitations = "Čakajoča povabila skupine";
 $Compose = "Sestavi";
+?>

@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $lang_already_enrolled = "Allerede påmeldt";
 $lang_my_personnal_course_list = "Min personlige kursliste";
 $lang_course_enrollment = "Brukers kurs";
@@ -22,7 +25,7 @@ $lang_back_to_parent_category = "Tilbake til overordnet kategori";
 $lang_back_to_course_selection = "Tilbake til valg av kurs";
 $lang_up = "Tilbake til overordnet kategori";
 $langCatList = "Kategorier";
-$langCourseList = "Liste kurs";
+$langCourseList = "Kurs";
 $Subscribe = "Meld deg på her";
 $AlreadySubscribed = "Påmeldt";
 $CourseCategoryStored = "Kurskategori ble opprettet";
@@ -35,7 +38,7 @@ $langHideAndSubscribeOpen = "Skjult / Åpen";
 $langShowAndSubscribeOpen = "Synlig / Åpen";
 $langShowAndSubscribeClosed = "Synlig / Lukket";
 $langAdminThisUser = "Tilbake til bruker";
-$langManage = "Administrer portal";
+$langManage = "Portaladministrasjon";
 $langEnrollToCourseSuccessful = "Du har blitt påmeldt til kurset";
 $langSubCat = "Underkategorier";
 $langUnsubscribeNotAllowed = "Avmelding er ikke tillatt for dette kurset";
@@ -66,3 +69,4 @@ $SubmitRegistrationCode = "Send registrering koden";
 $CourseCategoryDeleted = "Kategorien er slettet";
 $CategorySortingDone = "Kategoriene er sortete";
 $CourseCategoryEditStored = "Kategorien er oppdaterte";
+?>

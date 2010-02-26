@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langSelectOptionForBackup = "Vælg venligst en backup-løsning.";
 $langLetMeSelectItems = "Lad mig vælge kursuskomponenterne";
 $langCreateFullBackup = "Lav en komplet backup af dette kursus";
@@ -42,3 +45,4 @@ $langCreateBackupInfo = "Lav en backup af dette kursus. Du kan vælge hvilket ku
 $ToolIntro = "Introduktioner til værktøjer på siden";
 $UploadError = "Upload lykkedes ikke. Venligst undersøg at filernes størrelse ikke overskrider begrænsningen, og at der ingen korrupte fil- og mappenavne er at finde";
 $DocumentsWillBeAddedToo = "Dokumenter tilføjes også";
+?>

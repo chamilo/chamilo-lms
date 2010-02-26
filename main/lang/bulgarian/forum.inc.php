@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $ForumDeleted = "Форумът е изтрит.";
 $ForumCategoryDeleted = "Категорията е изтрита.";
 $ForumLocked = "Форумът е блокиран.";
@@ -135,3 +138,4 @@ $BackToForum = "Обратно към форума";
 $BackToForumOverview = "Обратно към списъка с форуми";
 $BackToThread = "Обратно към темата";
 $ForumcategoryLocked = "Категорията форуми е заключена.";
+?>

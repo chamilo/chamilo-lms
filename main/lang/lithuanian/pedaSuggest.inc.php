@@ -1,11 +1,14 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $GeneralDescription = "Apibūdinimas";
 $GeneralDescriptionQuestions = "Koks kurso vaidmuo studijų modulyje? Ar yra kokių išankstinių reikalavimų? Kaip šis kursas siejasi su kitais kursais?";
 $GeneralDescriptionInformation = "Apibūdinkite kursą (valandų skaičius, oficialus kodas, kokiai auditorijai jis skirtas...) ir dėstytoją (vardas, pavardė, pareigos, telefonas, el. pašto adresas...).";
 $Objectives = "Tikslai";
 $ObjectivesInformation = "Išsamus tikslų pristatymas.";
 $ObjectivesQuestions = "Kokie siekiami tikslai? Ką studentai išmoks šio kurso eigoje? Ką jiems reiks padaryti, sukurti mokymosi eigoje pagal šį kursą?";
-$Topics = "Tema";
+$Topics = "Temos";
 $TopicsInformation = "Įtraukiamų į kursą temų sąrašas. Kiekvienos temos svarbumas. Sunkumo lygis. Struktūra ir ryšiai tarp atskirų kurso dalių";
 $TopicsQuestions = "Ko siekiama išmokyti kurso eigoje? Į kokius dalykus studentai turi kreipti didesnį dėmesį? Ar yra specifinių pastabų apie skirtingų kurso dalių įsisavinimo problemas? Kiek laiko studentas turi skirti skirtingoms kurso dalims?";
 $Methodology = "Metodai";
@@ -20,3 +23,4 @@ $HumanAndTechnicalResourcesInformation = "Trumpas kontaktinių asmenų ir techni
 $Assessment = "Įvertinimas";
 $AssessmentQuestions = "Kaip bus vertinami kurso vartotojų pasiekimai? Ar yra strategija tobulinti kurso temas, įvertinimo kriterijus?";
 $AssessmentInformation = "Egzaminų klausimų pavyzdžiai. Vertinimo kriterijai. Įvairios pastabos ir patarimai.";
+?>

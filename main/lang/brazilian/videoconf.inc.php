@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $Camera = "Webcam";
 $Microphone = "Microfone";
 $Name = "Nome";
@@ -18,11 +21,11 @@ $RefreshList = "Atualizar lista";
 $GoToTop = "Voltar ao início";
 $NewPoll = "Nova pesquisa";
 $CreateNewPoll = "Criar uma nova pesquisa para esta sala";
-$Question = "Pergunta";
+$Question = "Questão:";
 $PollType = "Tipo de pesquisa:";
 $Create = "Criar";
 $InfoConnectedUsersGetNotifiedOfThisPoll = "Informação: todos os uusários conectados nesta sala obterão uma notificação desta nova pesquisa.";
-$YesNo = "Sim / Não";
+$YesNo = "Sim/Não";
 $Numeric1To10 = "Numérica 1-10";
 $Poll = "Pesquisa";
 $YouHaveToBecomeModeratorOfThisRoomToStartPolls = "Deve ser Moderador nesta sala para poder criar pesquisas";
@@ -38,7 +41,7 @@ $SystemMessage = "Mensagem do sistema";
 $ChooseCam = "Selecionar webcam:";
 $OK = "OK";
 $ChangeSettings = "Alterar configurações";
-$Course = "Curso";
+$Course = "Curso:";
 $DontAskMeAgain = "Não perguntar novamente";
 $ShowConfirmationBeforeClearingWhiteboard = "Pedir confirmação antes de limpar quadro branco";
 $Redo = "Refazer";
@@ -55,3 +58,4 @@ $WaitingForParticipants = "À espera dos participantes";
 $Disconnected = "Desconectado";
 $MediumStroke = "Médio";
 $ThickStroke = "Grosso";
+?>

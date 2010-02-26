@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langActivate = "Vis";
 $langDeactivate = "Skjul";
 $langInLnk = "Skjulte verktøy og lenker";
@@ -20,3 +23,4 @@ $Interaction = "Samhandling";
 $Administration = "Administrasjon";
 $IntroductionTextUpdated = "Introduksjonstekseten er oppdatert";
 $IntroductionTextDeleted = "Introduksjonsteksten er slettet";
+?>

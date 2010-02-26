@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langScormVersion = "versión";
 $langScormRestarted = "Todas as unidades están incompletas.";
 $langScormNoNext = "Esta é a última unidade.";
@@ -19,7 +22,7 @@ $langScormPassed = "Aprobado";
 $langScormFailed = "Suspenso";
 $langScormPrevious = "Previo";
 $langScormNext = "Seguinte";
-$langScormTitle = " » Visor de contidos Scorm de Chamilo « ";
+$langScormTitle = " » Visor de contidos Scorm de Chamilo «";
 $langScormMystatus = "Estado";
 $langScormNoItems = "Este contido non contén elementos.";
 $langScormNoStatus = "Este contido non ten estado";
@@ -46,7 +49,8 @@ $UploadLocalFileFromGarbageDir = "Enviar ficheiro local desde o directorio princ
 $ThisItemIsNotExportable = "Este elemento non é compatible con Scorm polo de agora. Esta é a razón de por que non é exportable.";
 $MoveCurrentChapter = "Mover o capítulo actual";
 $GenericScorm = "SCORM xenérico";
-$UnknownPackageFormat = "O formato do paquete non pode ser recoñecido. Por favor, cerciórese de que estea ben creado e de que non conteña erros. Os problemas poden deberse ao formato ZIP ou á transferencia de ficheiros moi longos. Se non está seguro do ficheiro ZIP use o mínimo de funcionalidades ao comprimir.";
+$UnknownPackageFormat = "O formato do paquete non pode ser recoñecido. Por favor, cerciórese de que estea ben creado e de que non conteña erros. Os problemas poden deberse ao formato ZIP ou á transferencia de ficheiros moi longos. Se non está seguro do ficheiro ZIP use o mínimo d";
 $Attempt = "Intento";
 $MoveTheCurrentForum = "Mover o foro actual";
 $WarningWhenEditingScorm = "¡ Aviso ! <br /> Se edita o contido de un paso scorm, pode alterar o informe da secuencia de aprendizaxe ou danar o paso";
+?>

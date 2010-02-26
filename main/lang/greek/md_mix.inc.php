@@ -1,2 +1,6 @@
 <?php
-$langSearch = "Αναζήτηση";
+/*
+for more information: see languages.txt in the lang folder.
+*/
+$langSearch = "ÁíáæÞôçóç";
+?>

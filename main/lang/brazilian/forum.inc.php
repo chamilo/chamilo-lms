@@ -1,8 +1,11 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $ForumDeleted = "Fórum excluido";
 $ForumCategoryDeleted = "Categoria do fórum foi excluida";
 $ForumLocked = "Fórum bloqueado";
-$Forum = "Fóruns";
+$Forum = "Fórum";
 $AddForumCategory = "Adicionar uma nova categoria ao fórum";
 $AddForum = "Adicionar um novo fórum";
 $Topics = "Tópicos";
@@ -39,7 +42,7 @@ $DeletePost = "Tem certeza que deseja excluir esta mensagem? Ao excluila, apagar
 $Locked = "Bloqueado: os ususários não podem publicar mais mensagens nesta categoria, fórum ou discussões, mas podem visualizar e ler as mensagens publicadas.";
 $Unlocked = "Desbloqueado: os usuários podem publicar novas mensagens nesta categoria, fórum ou discussões.";
 $Flat = "Linear";
-$Threaded = "Hierarquia";
+$Threaded = "Encadeamento";
 $Nested = "Hierarquizada";
 $FlatView = "Vista Linear";
 $ThreadedView = "Visão Encadeada";
@@ -56,7 +59,7 @@ $ForGroup = "Para Grupo";
 $ThreadLocked = "Discussão bloqueada.";
 $NotAllowedHere = "Você não possui permissão";
 $ReplyAdded = "A resposta foi adicionada";
-$EditPost = "Editar artigo";
+$EditPost = "Editar Mensagem";
 $EditPostStored = "A mensagem foi alterada com sucesso";
 $NewForumPost = "Nova mensagem publicada no fórum";
 $YouWantedToStayInformed = "Você escolheu ser informado todas as vezes que alguém publicasse uma mensagem neste fórum";
@@ -118,7 +121,9 @@ $Thread = "Discussão";
 $NotifyMe = "Notifique-me";
 $ConfirmUserQualification = "Confirmar avaliação do usuário?";
 $NotChanged = "Inalterado";
+$TitleColumnGradebook = "Título da coluna no relatório de avaliação";
 $QualifyThreadGradebook = "Avaliar esta discussão";
+$QualifyWeight = "Peso da pontuação";
 $QualifyNumeric = "Pontuação";
 $AlterQualifyThread = "Editar a pontuação da discussão";
 $ForumMoved = "O fórum foi movido";
@@ -135,3 +140,4 @@ $BackToForum = "Voltar ao fórum";
 $BackToForumOverview = "Voltar a visão geral do fórum";
 $BackToThread = "Voltar a discussão";
 $ForumcategoryLocked = "Categoria de fórum Bloqueado";
+?>

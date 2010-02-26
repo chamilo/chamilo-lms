@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langScormVersion = "version";
 $langScormRestarted = "Alla lektioner är nu ofullständiga";
 $langScormNoNext = "Detta är den sista lektionen.";
@@ -44,3 +47,4 @@ $UnknownPackageFormat = "Paketets format känns inte igen. Se till att det är v
 $Attempt = "Försök";
 $MoveTheCurrentForum = "Flytta detta forum";
 $WarningWhenEditingScorm = "Varning!<br /> När du ändrar i innehållet för ett SCORM-steg kanske du ändrar rapportdelen för inlärningsvägen eller funktionen i steget.";
+?>

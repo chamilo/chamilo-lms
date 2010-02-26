@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langLinkName = "链接名称";
 $langLinkAdd = "添加链接";
 $langLinkAdded = "链接已添加。";
@@ -8,21 +11,19 @@ $langLinkDel = "删除链接";
 $langLinkDeleted = "链接已被删除。";
 $langLinkDelconfirm = "你要删除这个链接吗？";
 $langAllLinksDel = "删除这个分类中的所有链接";
-$langCategoryName = "分类名";
+$langCategoryName = "分类名称";
 $langCategoryAdd = "添加分类";
 $langCategoryAdded = "分类已添加。";
 $langCategoryModded = "分类已修改。";
 $langCategoryDel = "删除分类";
 $langCategoryDeleted = "分类及其中所有链接都已被删除。";
-$langCategoryDelconfirm = "当您删除分类时，分类中的所有链接也被删除，n确定要删除此分类及其链接吗？";
+$langCategoryDelconfirm = "当您删除分类时，分类中的所有链接也被删除，\\n确定要删除此分类及其链接吗？";
 $langAllCategoryDel = "删除所有分类及其链接";
 $langGiveURL = "请输入链接网址";
 $langGiveCategoryName = "请输入分类名称";
 $langNoCategory = "无分类";
-$showall = "打开所有分类";
-$shownone = "关闭所有分类";
 $langListDeleted = "列表已删除";
-$langAddLink = "添加一个链接";
+$langAddLink = "添加链接";
 $langDelList = "删除链接";
 $langModifyLink = "修改链接";
 $langCsvImport = "导入-CSV";
@@ -38,3 +39,4 @@ $langLinkUpdated = "链接已更新";
 $langAll_Link_Deleted = "链接已删除";
 $langOnHomepage = "主页中显示";
 $langShowLinkOnHomepage = "在课程主页将链接显示为一个图标";
+?>

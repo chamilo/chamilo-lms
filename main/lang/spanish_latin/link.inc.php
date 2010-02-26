@@ -2,7 +2,6 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
-$LinkMoved = "";
 $langLinkName = "Nombre del enlace";
 $langLinkAdd = "El enlace ha sido agregado";
 $langLinkAdded = "El enlace ha sido añadido";
@@ -42,10 +41,4 @@ $langLinkUpdated = "El enlace ha sido actualizado";
 $langAll_Link_Deleted = "El enlace ha sido eliminado";
 $langOnHomepage = "Mostrar el enlace en la página de inicio";
 $langShowLinkOnHomepage = "Mostrar este enlace como un ícono en la página de inicio";
-$General = "";
-$SearchFeatureDoIndexLink = "";
-$langSaveLink = "";
-$langSaveCategory = "";
-$BackToLinksOverview = "";
-$AddTargetOfLinkOnHomepage = "";
 ?>

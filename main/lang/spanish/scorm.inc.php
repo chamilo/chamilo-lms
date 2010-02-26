@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langScormVersion = "versión";
 $langScormRestarted = "Ningún objeto de aprendizaje ha sido completado.";
 $langScormNoNext = "Este es el último objeto de aprendizaje.";
@@ -46,8 +49,9 @@ $UploadLocalFileFromGarbageDir = "Enviar archivo local desde el directorio main/
 $ThisItemIsNotExportable = "Este objeto de aprendizaje no es compatible con SCORM. Por esta razón no es exportable.";
 $MoveCurrentChapter = "Mover el capítulo actual";
 $GenericScorm = "SCORM genérico";
-$UnknownPackageFormat = "El formato de este paquete no ha sido reconocido. Por favor, compruebe este es un paquete válido.";
+$UnknownPackageFormat = "El formato del paquete no puede ser reconocido. Por favor, cerciórese de que esté bien creado y de que no contenga errores. Los problemas pueden deberse al formato ZIP o a la transferencia de ficheros muy largos. Si no está seguro del fichero ZIP use el m";
 $Attempt = "Intento";
 $MoveTheCurrentForum = "Mover el foro actual";
 $WarningWhenEditingScorm = "¡ Aviso ! Si edita el contenido de un elemento scorm, puede alterar el informe de la secuencia de aprendizaje o dañar el objeto.";
 $AdditionalProfileField = "Añadir un campo del perfil de usuario";
+?>

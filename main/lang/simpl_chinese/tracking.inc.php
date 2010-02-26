@@ -1,17 +1,17 @@
 <?php
-$langToolName = "导入毕博课程";
-$TrackingDisabled = "系统管理员已禁止学习跟踪功能.";
-$InactivesStudents = "活动用户";
-$AverageTimeSpentOnThePlatform = "平均占用时间";
+/*
+for more information: see languages.txt in the lang folder.
+*/
+$langToolName = "使用情况";
 $langShowNone = "不显示";
 $langCourseStats = "课程统计";
 $langToolsAccess = "工具使用";
-$langCourseAccess = "课程访问";
+$langCourseAccess = "课程权限";
 $langLinksAccess = "链接";
 $langDocumentsAccess = "文档";
 $langScormAccess = "学习路径- Scorm 格式课程";
 $langLinksDetails = "用户链接";
-$langWorksDetails = "用户上传的作品命名为'作者' ";
+$langWorksDetails = "用户上传的作品命名为\'作者\'";
 $langLoginsDetails = "点击月名以游览更多资料";
 $langDocumentsDetails = "用户下载的文档";
 $langExercicesDetails = "测验成绩已完成";
@@ -45,14 +45,13 @@ $langScormNeverOpened = "该课程不向此用户开放.";
 $langWorkTitle = "标题";
 $langWorkAuthors = "作者";
 $langWorkDescription = "描述";
-$informationsAbout = "学习跟踪";
 $langNoEmail = "未提供电子邮件";
-$langNoResult = "没有结果";
-$langCourse = "网站";
+$langNoResult = "无结果";
+$langCourse = "课程";
 $langHits = "提示";
 $langTotal = "总计";
-$langHour = "时";
-$langDay = "日";
+$langHour = "小时";
+$langDay = "天";
 $langLittleHour = "时";
 $langLast31days = "在最后的31天内";
 $langLast7days = "在最后的7天内";
@@ -125,23 +124,7 @@ $langAllRight = "未发现问题";
 $langDefcon = "出现错误!!";
 $langNULLValue = "空(或NULL)";
 $langTrafficDetails = "流量明细";
-$langSeeIndividualTracking = "个别追踪请使用<A href=\"../user/user.php\">用户</A>工具.";
+$langSeeIndividualTracking = "个别追踪请使用<A href=\\"../user/user.php\\">用户</A>工具.";
 $langPathNeverOpenedByAnybody = "本路径从未开放.";
-$SynthesisView = "综合查看";
-$Visited = "已访问";
-$FirstAccess = "首次使用";
-$LastAccess = "最后使用";
-$MoyenneTest = "测验平均";
-$exportExcel = "输出至 Excel 格式";
-$MoyCourse = "课程平均";
-$MoyenneExamen = "测验平均";
-$MoySession = "session 平均";
-$TakenSessions = "被用 session";
-$FollowUp = "跟进";
-$Trainers = "导师";
-$Administrators = "管理员";
-$Tracks = "跟踪";
-$Success = "成功";
-$ExcelFormat = "Excel 格式";
-$MyLearnpath = "我的学习路径";
 $langProbationers = "学生";
+?>

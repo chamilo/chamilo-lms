@@ -1,11 +1,14 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $Announcement = "Tillkännagivanden";
 $langAnnEmpty = "Listan över tillkännagivanden har rensats";
 $AnnouncementModified = "Tillkännagivandet har modifierats";
 $AnnouncementAdded = "Tillkännagivande har lagts till";
 $AnnouncementDeleted = "Tillkännagivande har raderats";
-$AnnouncementPublishedOn = "Publicerat den ";
-$AddAnnouncement = "Lägg till som ett tillkännagivande";
+$AnnouncementPublishedOn = "Publicerat den";
+$AddAnnouncement = "Lägg till tillkännagivande";
 $langContent = "Innehåll";
 $AnnouncementDeleteAll = "Rensa upp listan över tillkännagivanden";
 $professorMessage = "Meddelande från din lärare";
@@ -47,3 +50,4 @@ $NoAnnouncements = "Det finns inga tillkännagivanden";
 $SelectEverybody = "Välj alla";
 $SelectedUsersGroups = "valda användargrupper";
 $LearnerMessage = "Meddelande från en användare";
+?>

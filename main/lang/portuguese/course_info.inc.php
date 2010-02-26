@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $ModifInfo = "Definições";
 $langModifDone = "A informação foi modificada";
 $langDelCourse = "Eliminar a área do curso";
@@ -8,12 +11,12 @@ $langConfidentiality = "Confidencialidade";
 $langPublic = "Acesso público a partir da página inicial do portal, sem necessidade realizar o login";
 $langUnsubscription = "Anular/cancelar inscrição";
 $langPrivOpen = "Acesso restrito, inscrição aberta";
-$langPrivate = "Acesso restrito (curso acessível apenas aos utilizadores da lista de utilizadores)";
+$langPrivate = "Acesso restrito - acessível apenas a utilizadores autorizados (visualizar a lista <a href=../user/user.php>Utilizadores</a>)";
 $langForbidden = "Não autorizado";
-$CourseAccessConfigTip = "Por pré-definição o seu curso é público. Mas pode definir o nível de confidencialidade acima.";
-$langOpenToTheWorld = "Aberto - permitido o acesso a todos os utilizadores";
-$OpenToThePlatform = "Aberto - permitido o acesso aos utilizadores registados na plataforma";
-$langOpenToThePlatform = "Aberto - acesso autorizado apenas a utilizadores registados na plataforma/sistema. ";
+$CourseAccessConfigTip = "Por pré-definição, o seu curso é público. Mas poderá definir o nível de confidencialidade acima.";
+$langOpenToTheWorld = "Aberto - acesso autorizado a todos os utilizadores";
+$OpenToThePlatform = "Aberto - acesso autorizado a utilizadores registados no portal.";
+$langOpenToThePlatform = "Aberto - acesso autorizado apenas a utilizadores registados na plataforma/sistema.";
 $langTipLang = "Esta idioma será válido para todos os visitantes do site do seu curso.";
 $langVid = "Vídeo";
 $langWork = "Contribuições";
@@ -26,7 +29,7 @@ $langLinkSite = "Adicionar uma ligação para página na página inicial";
 $langCourse = "O curso";
 $langHasDel = "foi eliminado";
 $langBackHome = "Voltar para a página inicial do";
-$langByDel = "Ao eliminar esta área, eliminará também de forma permanentemente todos os conteúdos associados (documentos, ligações...) e removerá todos os utilizadores nela registados (não os irá remover de outros cursos onde estejam registados).<p>Deseja realmente eliminar o curso?";
+$langByDel = "Ao eliminar esta área, eliminará também de forma permanentemente todos os conteúdos associados (documentos, ligações...) e removerá todos os utilizadores nela registados (não os irá remover de outros cursos onde estejam registados).<p>Deseja realmente eli";
 $langY = "SIM";
 $langN = "NÃO";
 $langDepartmentUrl = "URL do Departamento";
@@ -58,12 +61,12 @@ $langExpirationDate = "Data de validade";
 $langPostPone = "Adiar/colocar em espera";
 $langLastEdit = "Última edição";
 $langLastVisit = "Última visita";
-$langSubscription = "Inscrição";
+$langSubscription = "Subscrição";
 $langCourseAccess = "Acesso ao curso";
-$langConfirmBackup = "Deseja mesmo realizar um backup/cópia de segurança deste curso? ";
+$langConfirmBackup = "Deseja mesmo realizar um backup/cópia de segurança deste curso?";
 $langCreateSite = "Criar um curso";
-$langRestoreDescription = "O curso encontra-se num ficheiro arquivado que pode selecionar abaixo.<br><br>Assim que clicar em \"Restaurar\", o arquivo será descompactado e o curso recriado.";
-$langRestoreNotice = "Este script não permite ainda restaurar automaticamente os utilizadores, mas os dados guardados em \"users.csv\" são suficientes para que o administrador possa realizá-lo manualmente.";
+$langRestoreDescription = "O curso encontra-se num ficheiro arquivado que pode selecionar abaixo.<br><br>Assim que clicar em \\"Restaurar\\", o arquivo será descompactado e o curso recriado.";
+$langRestoreNotice = "Este script não permite ainda restaurar automaticamente os utilizadores, mas os dados guardados em \\"users.csv\\" são suficientes para que o administrador possa realizá-lo manualmente.";
 $langAvailableArchives = "Lista de arquivos disponíveis";
 $langNoArchive = "Nenhum arquivo foi seleccionado";
 $langArchiveNotFound = "O arquivo não foi encontrado";
@@ -73,7 +76,7 @@ $langBackH = "voltar à página inicial";
 $langOtherCategory = "Outra categoria";
 $langAllowedToUnsubscribe = "Os utilizadores estão autorizados a anular/cancelar a inscrição neste curso";
 $langNotAllowedToUnsubscribe = "Os utilizadores não estão autorizados a anular/cancelar a inscrição neste curso";
-$langCourseVisibilityClosed = "Completamente fechado: o curso encontra-se apenas acessível a instrutores.";
+$langCourseVisibilityClosed = "Completamente fechado - o curso é apenas acessível a instrutores.";
 $CourseVisibilityClosed = "Fechado - o curso é apenas acessível a instrutores.";
 $CourseVisibilityModified = "Modificado (definições mais detalhadas estão especificadas através do sistema de funções-permissões)";
 $WorkEmailAlert = "Alerta por e-mail após submissão de um trabalho";
@@ -110,3 +113,4 @@ $NewUserEmailAlert = "Notificar por e-mail o instrutor sobre uma incrição auto
 $NewUserEmailAlertEnable = "Activar a notificação por e-mail do instrutor sobre uma incrição automática de um novo utilizador";
 $NewUserEmailAlertToTeacharAndTutor = "Activar a notificação por e-mail para os instrutores e tutores sobre uma incrição automática de um novo utilizador";
 $NewUserEmailAlertDisable = "Desactivar o alerta por e-mail da incrição de um novo utilizador no curso";
+?>

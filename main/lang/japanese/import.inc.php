@@ -1,6 +1,9 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langPgTitle = "ペ〖ジタイトル";
-$langExplanation = "办搀OKをクリックすると、柴的技や徒年、矢今マネ〖ジャ〖烧のサイトが叫丸ます。サイト侯喇荚としてログインすると、サイトを饯赖することが叫丸ます。";
+$langExplanation = "ペ〖ジはHTMLフォ〖マットでなければいけません。(e.g. \\"my_page.htm\\"). ペ〖ジはホ〖ムペ〖ジからリンクされます。もしHTMLではない矢今を流慨したい箕は(PDF, Word, Power Point, Video, など) 肌のツ〖ルを脱いて布さい <a href";
 $langTooBig = "ファイルが络きすぎるので、联买できません。";
 $langCouldNot = "ファイルが流れませんでした。";
 $langNotAllowed = "このコ〖ス减怪が钓材されていません";
@@ -10,3 +13,4 @@ $langSendPage = "ペ〖ジを流る";
 $langPageTitleModified = "兜徽がペ〖ジタイトルを恃构しました";
 $langPageAdded = "ペ〖ジを裁えました";
 $langAddPage = "ペ〖ジを裁える";
+?>

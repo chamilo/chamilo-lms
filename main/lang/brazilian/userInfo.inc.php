@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langLineNumber = "Número da Linha";
 $langLine = "linha";
 $langLines = "linhas";
@@ -6,8 +9,8 @@ $langLineOrLines = "linha(s)";
 $langMoveUp = "Mover acima";
 $langMoveDown = "Mover abaixo";
 $langAddNewHeading = "Adicionar novo cabeçalho";
-$langCourseAdministratorOnly = "apenas professores";
-$langDefineHeadings = "Informar Cabeçalhos";
+$langCourseAdministratorOnly = "Apenas professores";
+$langDefineHeadings = "Definir Cabeçalhos";
 $langBackToUsersList = "Voltar para a lista de usuários";
 $langTracking = "Acompanhamento";
 $langCourseManager = "Professor";
@@ -15,18 +18,18 @@ $langModRight = "modificar direitos do";
 $langNoAdmin = "tem a partir de agora <b>nenhum</b> direito sobre essa página";
 $langAllAdmin = "tem a partir de agora <b>todos</b> os direitos sobre essa página";
 $langModRole = "Modificar papel do";
-$langRole = "A descrição";
+$langRole = "papel/status";
 $langIsNow = "está a partir de agora";
-$langInC = "para esse curso";
-$langFilled = "Você deixou alguns campos vazios.";
-$langUserNo = "O codinome que você escolheu ";
-$langTaken = "já está em uso. Escolha outro.";
+$langInC = "neste curso";
+$langFilled = "Nem todos os campos estão preenchidos";
+$langUserNo = "Usuário Não";
+$langTaken = "já esta sendo usado. Por favor selecione um diferente";
 $langTutor = "Tutor";
 $langUnreg = "Desinscrever-se";
-$langGroupUserManagement = "Gerenciamento de grupo";
+$langGroupUserManagement = "Administração de Grupo";
 $langUnregister = "Descadastrar-se";
 $langAddAUser = "Adicionar Usuários";
-$UsersUnsubscribed = "Os usuários selecionados foram desinscritos do curso";
+$UsersUnsubscribed = "Usuários não inscritos";
 $ThisStudentIsSubscribeThroughASession = "Este usuário está inscrito neste curso através da sessão. Não pode editar as suas informações.";
 $NoDataAvailable = "Dados não disponíveis";
 $AddToFriends = "Tem certeza que deseja adicionar este contato em sua lista de amigos ?";
@@ -62,7 +65,7 @@ $MyPersonalData = "Meus dados pessoais";
 $AlterPersonalData = "Alterar dados pessoais";
 $Invites = "Meus convidados";
 $ContactsGroups = "Grupo de contatos";
-$ErrorSendingMessage = "Houve um erro ao tentar enviar a mensagem.";
+$ErrorSendingMessage = "Ocorreu um erro ao enviar a mensagem";
 $PendingInvitations = "Convites pendentes";
 $MyInbox = "Caixa de entrada";
 $ViewSharedProfile = "Visualizar perfil compartilhado";
@@ -86,5 +89,6 @@ $NoFriendsInYourContactList = "Não existem amigos em sua lista de contatos";
 $TryAndFindSomeFriends = "Pesquise e adicione alguns amigos";
 $ClearSearchResults = "Sem resultados para a pesquisa";
 $SendInvitation = "Enviar convite";
-$SocialInvitationToFriends = "Convide para juntar-se ao meu grupo de amigos ";
+$SocialInvitationToFriends = "Convide para juntar-se ao meu grupo de amigos";
 $MyCertificates = "Meus certificados";
+?>

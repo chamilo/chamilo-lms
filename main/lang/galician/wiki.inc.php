@@ -1,5 +1,8 @@
 <?php
-$Wiki = "Wiki do grupo";
+/*
+for more information: see languages.txt in the lang folder.
+*/
+$Wiki = "Wiki";
 $StartPage = "Páxina principal";
 $EditThisPage = "Editar esta páxina";
 $ShowPageHistory = "Histórico";
@@ -8,7 +11,7 @@ $AllPages = "Tódalas páxinas";
 $AddNew = "Engadir nova páxina";
 $ChangesStored = "Os seus trocos foron gardados";
 $NewWikiSaved = "A nova páxina foi gardada. Pode visualizala facendo click en:";
-$DefaultContent = " <br/> <br/> <p align=\"center\"> <img src=\"%swiki/wcollaborative.png\" alt=\"Mr. Chamilo\" title=\"Mr. Chamilo\" /></p> <p align=\"center\">Para comezar, edite esta p�xina</p> ";
+$DefaultContent = " <br/> <br/> <p align=\\"center\\"> <img src=\\"%swiki/wcollaborative.png\\" alt=\\"Mr. Chamilo\\" title=\\"Mr. Chamilo\\" /></p> <p align=\\"center\\">Para comezar, edite esta pï¿œxina</p>";
 $CourseWikiPages = "Páxinas Wiki do curso";
 $GroupWikiPages = "Páxinas Wiki do grupo";
 $NoWikiPageTitle = "Os seus trocos foron gardados. Debe darlle un título á paxina";
@@ -20,7 +23,7 @@ $WikiDiffUnchangedLine = "Liña sen trocos";
 $DifferencesNew = "trocos na versión";
 $DifferencesOld = "antiga versión de";
 $Differences = "Diferenzas";
-$MostRecentVersion = "Vista da versión máis recente das selecionadas ";
+$MostRecentVersion = "Vista da versión máis recente das selecionadas";
 $Legend = "Lenda";
 $ShowDifferences = "Compare as versións selecionadas";
 $SearchPages = "Buscar páxinas";
@@ -52,7 +55,7 @@ $AddOptionProtected = "A opción engadir páxinas foi protexida. Só os profesor
 $AddOptionUnprotected = "A opción engadir páxinas foi activada para todos os membros do curso ou do grupo";
 $NotifyChanges = "Nofificar cambios";
 $NotNotifyChanges = "Non notificar cambios";
-$NotifyByEmail = "Gostaría de ser informado por email sempre que alguén responder a esta mensaxe";
+$NotifyByEmail = "Recibir unha notificación por correo electrónico cada vez que se modifique esta páxina";
 $CancelNotifyByEmail = "Non notificarme por email cando esta páxina sea modificada";
 $MostRecentVersionBy = "A última versión foi realizada por";
 $Rating = "Puntuación";
@@ -66,3 +69,4 @@ $MoreWikiOptions = "Máis opcións do Wiki";
 $DefaultTitle = "Páxina inicial";
 $DiscussNotAvailable = "Discusión non dispoñible";
 $LastVersion = "Última versión";
+?>

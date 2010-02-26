@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $ForumDeleted = "Tog bort forum";
 $ForumCategoryDeleted = "Tog bort forumkategorin";
 $ForumLocked = "Forumet stängt";
@@ -36,7 +39,7 @@ $ReplyShort = "Re:";
 $DeletePost = "Är du säker på att du vill ta bort inlägget? Om du tar bort det kommer också svaren att tas bort. Kontrollera i trådad vy vilka inlägg som kommer att tas bort med inlägget.";
 $Locked = "Låst: Användare kan inte längre göra nya inlägg i forumkategorin, forumet eller tråden, men de kan fortfarande läsa det som redan finns där.";
 $Unlocked = "Olåst: Användare kan göra nya inlägg i forumkategori, forum eller tråd.";
-$Flat = "Kronologiskt";
+$Flat = "Platt";
 $Threaded = "Trådat";
 $Nested = "Nästlat";
 $FlatView = "Platt vy";
@@ -57,3 +60,4 @@ $NewForumPost = "Nytt inlägg i forumet";
 $Reply = "Svara";
 $Lock = "Lås";
 $Unlock = "Lås upp";
+?>

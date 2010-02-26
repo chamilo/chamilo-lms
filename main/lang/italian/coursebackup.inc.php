@@ -1,12 +1,15 @@
 <?php
-$langSelectOptionForBackup = "Selezionare un'opzione di backup.";
+/*
+for more information: see languages.txt in the lang folder.
+*/
+$langSelectOptionForBackup = "Selezionare un\'opzione di backup.";
 $langLetMeSelectItems = "Fammi selezionare le parti del corso";
 $langCreateFullBackup = "Crea un backup completo del corso";
 $langCreateBackup = "Crea il backup";
 $langBackupCreated = "La copia di backup del corso è stata creata. Il download inizierà tra un momento. Se il download non parte automaticamente clicca sul seguente collegamento";
 $langSelectBackupFile = "Seleziona un file di backup";
 $langImportBackup = "Importa copia di backup";
-$langImportFullBackup = "Importa l'intero backup";
+$langImportFullBackup = "Importa l\'intero backup";
 $langImportFinished = "Importazione conclusa";
 $langEvents = "Eventi";
 $langAnnouncements = "Avvisi";
@@ -34,14 +37,15 @@ $langNoResourcesToRecycles = "Non ci sono risorse da mantenere nel riazzeramento
 $langIncludeQuestionPool = "Includi i sondaggi";
 $langLocalFile = "file locale";
 $langServerFile = "file del server";
-$langNoBackupsAvailable = "non c'è un backup disponibile";
+$langNoBackupsAvailable = "non c\'è un backup disponibile";
 $langNoDestinationCoursesAvailable = "Il corso destinazione non è disponibile";
 $langBackup = "Backup";
 $langImportBackupInfo = "Importa una copia di Backup di un corso (dal server o dal tuo computer)";
 $langCreateBackupInfo = "Crea la copia di backup del corso";
 $ToolIntro = "Testo introduttivo";
 $UploadError = "Caricamento fallito, controlla la dimensione dei file e i diritti di scrittura.";
-$DocumentsWillBeAddedToo = "Saranno aggiunti anche i documenti ";
+$DocumentsWillBeAddedToo = "Saranno aggiunti anche i documenti";
 $ToExportLearnpathWithQuizYouHaveToSelectQuiz = "Seleziona i test in elenco per includerli nella esportazione del modulo didattico";
-$ArchivesDirectoryNotWriteableContactAdmin = "La directory di archiviazione, usata dalla funzione, non è scrivibile. Se necessario, contatta l'amministratore di sistema.";
+$ArchivesDirectoryNotWriteableContactAdmin = "La directory di archiviazione, usata dalla funzione, non è scrivibile. Se necessario, contatta l\'amministratore di sistema.";
 $DestinationCourse = "Corso di destinazione";
+?>

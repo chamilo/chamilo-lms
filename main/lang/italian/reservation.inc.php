@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $ReservationPeriodToSmall = "Il periodo di prenotazione è troppo corto.";
 $BookingSystem = "Sistema di prenotazione";
 $BookingPeriodList = "Elenco dei periodi di prenotazione";
@@ -31,11 +34,13 @@ $ConfirmDeleteBookingPeriod = "Sei sicuro di voler eliminare definitivamente il 
 $DeleteBookingPeriod = "Rimuovi questo periodo di prenotazione";
 $BookingPeriodEdited = "Il periodo di prenotazione è stato modificato";
 $BookingPeriodDateOverlap = "Il periodo di prenotazione è in parte già utilizzato dal #START# al #END#";
-$BookingPeriodSubscribeUntilAfterStart = "La richiesta \"fino ad una certa data\" supera la data d'inizio";
+$BookingPeriodSubscribeUntilAfterStart = "La richiesta \\"fino ad una certa data\\" supera la data d\'inizio";
+$RepeatFor = "Ripeti ogni";
+$RepeatUntil = "Ripeti fino a";
 $BookingPeriodPast = "Non è possibile prenotare prima del momento attuale";
 $ReservationMaxUsersOverrun = "Ci sono più richieste del numero massimo previsto";
 $AddNewBookingPeriod = "Aggiungi un periodo di prenotazione";
-$BookingPeriodTimePickerLimitation = "Non è possibile effettuare prenotazioni con un timer se la data d'inizio e fine sono diverse";
+$BookingPeriodTimePickerLimitation = "Non è possibile effettuare prenotazioni con un timer se la data d\'inizio e fine sono diverse";
 $ResourceTypeName = "Nome del tipo di risorsa";
 $AddNewResourceType = "Aggiungi un nuovo tipo di risorsa";
 $ResourceTypeAdded = "Tipo di risorsa aggiunto";
@@ -62,12 +67,10 @@ $ReservationOutOfDate = "La data scelta è già usata e/o non è compresa nel pe
 $ReservationAlready = "Hai già prenotato questa risorsa";
 $ReservationMadeTitle = "Hai prenotato la risorsa #ITEM# con successo";
 $ReservationMadeMessage = "Cara/o utente nnLa tua prenotazione per la risorsa #ITEM# dal #START# al #END# è stata effettuata con successo";
-$ReservationDeleteTitle = "E' stato eliminato un periodo di prenotazione per la risorsa #NAME# ";
+$ReservationDeleteTitle = "E\' stato eliminato un periodo di prenotazione per la risorsa #NAME#";
 $ReservationDeleteMessage = "Cara/o utente nnLa tua prenotazione per la risorsa #ITEM# dal #START# al #END# è stata cancellata";
 $OutPeriod = "Fuori tempo";
 $ReservationFromUntilError = "Il periodo di prenotazione dal #START# al #END# non è stato accettato in quanto si sovrappone parzialmente con un altro periodo di prenotazione";
-$RepeatFor = "Ripeti ogni";
-$RepeatUntil = "Ripeti fino a";
 $Recurrence = "Ripetizione";
 $NoRecurrence = "Nessuna ripetizione";
 $UntilRecurrence = "Attiva una ripetizione";
@@ -82,10 +85,10 @@ $SubscribeUntil = "Riserva fino a";
 $SubscribeFrom = "Riserva da";
 $Notes = "Annotazioni";
 $SubscriptionPeriod = "Periodo di prenotazione";
-$NoPeriod = "Non c'è alcun periodo di prenotazione";
+$NoPeriod = "Non c\'è alcun periodo di prenotazione";
 $FixedPeriod = "Periodo fisso di prenotazione";
 $ResourceFilter = "Filtra la risorsa";
-$NoReservation = "Non c'è ancora un periodo di prenotazione";
+$NoReservation = "Non c\'è ancora un periodo di prenotazione";
 $MaxUsers = "Numero massimo di prenotazioni";
 $AutoAccept = "Accetta automaticamente gli utenti";
 $ResourceName = "Nome della risorsa";
@@ -106,7 +109,7 @@ $UnacceptedUsers = "Non si accettano utenti";
 $DeleteSubscriptions = "Eliminazione delle prenotazioni";
 $NoItems = "Non ci sono unità presenti";
 $ItemNotDeleted = "Alcune unità non sono state eliminate perché prenotate";
-$ItemHasReservations = "L'elemento ha ancora #NUM# prenotazioni/e attive/a";
+$ItemHasReservations = "L\'elemento ha ancora #NUM# prenotazioni/e attive/a";
 $NoItemsReservation = "Non ci sono più unità disponibili per questa risorsa";
 $ReservationAccepted = "La tua prenotazione per #ITEM# è stata accolta";
 $ReservationDenied = "La tua prenotazione per #ITEM# è stata rifiutata";
@@ -129,3 +132,4 @@ $Step1SelectResourceType = "Passo 1: seleziona il tipo di risorsa";
 $Step2SelectResource = "Passo 2: seleziona la risorsa";
 $Step3SelectBookingPeriod = "Passo 3: indica il periodo di prenotazione";
 $NoReservations = "Nessuna prenotazione";
+?>

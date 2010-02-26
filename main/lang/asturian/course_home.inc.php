@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langActivate = "Activar";
 $langDeactivate = "Desactivar";
 $langInLnk = "Enllaces desactivaos";
@@ -20,9 +23,10 @@ $GreyIcons = "Caxa de ferramientes";
 $Interaction = "Interaición";
 $Authoring = "Crear conteníos";
 $Administration = "Alministración";
-$IntroductionTextUpdated = "El testu d'entamu actualizóse";
-$IntroductionTextDeleted = "Testu d'entamu esborráu";
+$IntroductionTextUpdated = "El testu d\'entamu actualizóse";
+$IntroductionTextDeleted = "Testu d\'entamu esborráu";
 $SessionIdentifier = "Identificador de la sesión";
 $SessionName = "Nome de la sesión";
 $SessionCategory = "Categoría de la sesión";
 $SessionData = "Datos de la sesión";
+?>

@@ -1,6 +1,9 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $LinkMoved = "A ligação/link foi movida";
-$langLinkName = "Nome da ligação";
+$langLinkName = "Nome da ligação/link";
 $langLinkAdd = "Adicionar uma ligação/link";
 $langLinkAdded = "Foi adicionada uma ligação/link.";
 $langLinkMod = "Editar ligação/link";
@@ -23,7 +26,7 @@ $langNoCategory = "Geral";
 $showall = "Abrir todas as categorias";
 $shownone = "Fechar todas as categorias";
 $langListDeleted = "A lista foi eliminada";
-$langAddLink = "Adicionar uma link/ligação";
+$langAddLink = "Adicionar uma ligação/link";
 $langDelList = "Eliminar lista";
 $langModifyLink = "Editar ligação/link";
 $langCsvImport = "Importar ficheiro CSV";
@@ -39,9 +42,10 @@ $langLinkUpdated = "A ligação/link foi actualizada";
 $langAll_Link_Deleted = "A ligação/link foi eliminada";
 $langOnHomepage = "Apresentar ligação/link na página inicial dos cursos";
 $langShowLinkOnHomepage = "Apresentar esta ligação/link como um ícone na página inicial dos cursos";
-$General = "geral";
+$General = "Geral";
 $SearchFeatureDoIndexLink = "Indexar o título e a descrição da ligação/link?";
 $langSaveLink = "Guardar ligação";
 $langSaveCategory = "Guardar pasta/directório";
 $BackToLinksOverview = "Regressar à vista geral das ligações/links";
-$AddTargetOfLinkOnHomepage = "Seleccione o \"destino\" que a ligação/link na página inicial do curso irá apresentar ";
+$AddTargetOfLinkOnHomepage = "Seleccione o \"destino\" que a ligação/link na página inicial do curso irá apresentar";
+?>

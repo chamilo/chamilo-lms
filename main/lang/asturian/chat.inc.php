@@ -1,20 +1,23 @@
 <?php
-$langOnlineConference = "Conferencia 'on line'";
+/*
+for more information: see languages.txt in the lang folder.
+*/
+$langOnlineConference = "Conferencia \'on line\'";
 $langWash = "Esborrar";
 $langReset = "Volver aniciar";
 $langSave = "Guardar";
 $langRefresh = "Actualizar";
-$langIsNowInYourDocDir = "Yá s'alcuentra na seición documentos <br/><b>Esti archivu ta visible</b>";
-$langCopyFailed = "Hubo un fallu de la que se guardaba l'archivu";
-$langTypeMessage = "Por favor, escriba'l so mensaxe";
+$langIsNowInYourDocDir = "Yá s\'alcuentra na seición documentos <br/><b>Esti archivu ta visible</b>";
+$langCopyFailed = "Hubo un fallu de la que se guardaba l\'archivu";
+$langTypeMessage = "Por favor, escriba\'l so mensaxe";
 $langConfirmReset = "¿ Ta seguru de querer esborrar tolos mensaxes ?";
 $langHasResetChat = "Acaba de volver aniciar el Chat";
-$langNoOnlineConference = "Nun hai conferencia 'on line' nesti momentu...";
+$langNoOnlineConference = "Nun hai conferencia \'on line\' nesti momentu...";
 $langMediaFile = "Audiu en vivu o streaming de videu";
 $langContentFile = "Presentación";
 $langListOfParticipants = "Llistáu de participantes";
 $langYourPicture = "La so foto";
-$langOnlineDescription = "Descripción de la Conferencia 'on line'";
+$langOnlineDescription = "Descripción de la Conferencia \'on line\'";
 $langOnlyCheckForImportantQuestion = "Marque esti caxellu namás si quier facer una entruga importante";
 $langQuestion = "entruga";
 $langClearList = "Esborrar el llistáu";
@@ -25,11 +28,11 @@ $langStreamURL = "URL del stream";
 $langStreamType = "Tipu de stream";
 $langLinkName = "Nome del enllaz";
 $langLinkURL = "URL del enllaz";
-$langWelcomeToOnlineConf = "Bienveníu a la <b>Conferencia 'on line'</b>";
+$langWelcomeToOnlineConf = "Bienveníu a la <b>Conferencia \'on line\'</b>";
 $langNoLinkAvailable = "Nun hai enllaz nengún";
 $langChat_reset_by = "Volver aniciar el chat";
 $OrFile = "o archivu";
-$langCallSent = "Unvióse un pidimientu de chat. N'espera d'aprobación de la persona contautada.";
+$langCallSent = "Unvióse un pidimientu de chat. N\'espera d\'aprobación de la persona contautada.";
 $langChatDenied = "El so llamáu rechazóse. La persona contautada nun quier chatear con usté.";
 $Send = "Unviar";
 $Connected = "Coneutaos";
@@ -57,3 +60,4 @@ $AskPermissionSpeak = "Pidir la palabra";
 $GiveTheFloorTo = "Dar la palabra";
 $Pause = "Pausa";
 $Stop = "Parar";
+?>

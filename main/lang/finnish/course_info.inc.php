@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $ModifInfo = "Muuta kurssin tietoja";
 $langModifDone = "Tietoja on muutettu";
 $langDelCourse = "Poista kurssin koko sivusto";
@@ -10,7 +13,7 @@ $langUnsubscription = "Peruuta osallistuminen";
 $langPrivOpen = "Yksityinen pääsy, avoin rekisteröityminen";
 $langPrivate = "Yksityinen pääsy, reisteröityminen suljettu (sisäänpääsy vain <a href=../user/user.php>käyttäjien listalta</a>)";
 $langForbidden = "Ei sallittu";
-$CourseAccessConfigTip = "Oletuksena kurssille on pääsy vain rekisteröityneille henkilöille. Jos halutaan luottamuksellisuutta, niin helpointa on avata rekisteröinti yhden viikon ajaksi, pyytää opiskelijoita rekeisteröitymään ja sitten sulkea rekisteröinti ja tarkistaa mahdolliset tunkeutujat käyttjien listalta.";
+$CourseAccessConfigTip = "Oletuksena kurssille on pääsy vain rekisteröityneille henkilöille. Jos halutaan luottamuksellisuutta, niin helpointa on avata rekisteröinti yhden viikon ajaksi, pyytää opiskelijoita rekeisteröitymään ja sitten sulkea rekisteröinti ja tarkistaa mahdolliset";
 $langOpenToTheWorld = "Avoinna - kaikilla pääsy (myös vierailijat)";
 $OpenToThePlatform = "Avoinna - kaikki rekisteröityneet käyttäjät pääsevät";
 $langOpenToThePlatform = "Avoinna - kaikki ympäristöön rekisteröityneet käyttäjät pääsevät sisälle";
@@ -23,9 +26,9 @@ $langExercise = "Harjoitukset";
 $langStats = "Tilastot";
 $langUplPage = "Lataa sivu ja linkki omalle sivulle";
 $langLinkSite = "Lisää linkki omalle sivulle";
-$langCourse = "Sivusto ";
+$langCourse = "Sivusto";
 $langHasDel = "on poistettu";
-$langBackHome = "Takaisin oamlle sivulle: ";
+$langBackHome = "Takaisin oamlle sivulle:";
 $langByDel = "Tämän kurssin sivuston poistaminen poistaa lopullisesti kaikki dokumentit sekä poistaa opiskelijoiden rekisteröinnit, ei kuitenkaan muilta kursseilta.<p>Haluatko varmasti poistaa kurssin";
 $langY = "Kyllä";
 $langN = "Ei";
@@ -55,10 +58,10 @@ $langExpirationDate = "Vanhentumis pvm";
 $langLastEdit = "Viimeksi muokattu";
 $langLastVisit = "Viimeksi vierailtu";
 $langSubscription = "Kuvaus";
-$langCourseAccess = "Kurssi pääsy";
+$langCourseAccess = "Kurssille pääsy";
 $langConfirmBackup = "Haluatko todella tehdä kurssista varmuuskopion";
 $langCreateSite = "Luo kurssin sivusto";
-$langRestoreDescription = "Kurssi on varmuuskopiotiedostossa jonka voit valita alapuolelta.<br><br> Kun klikkaat \"Palauta\" varmuuskopio puretaan ja kurssi luodaan uudelleen.";
+$langRestoreDescription = "Kurssi on varmuuskopiotiedostossa jonka voit valita alapuolelta.<br><br> Kun klikkaat \\"Palauta\\" varmuuskopio puretaan ja kurssi luodaan uudelleen.";
 $langRestoreNotice = "Tämä toiminto ei vielä mahdollista käyttäjien palautusta, mutta \"users.csv\" tiedosta löytyvä data on riittävä pääkäyttäjälle uusien käyttäjien palauttamiseksi käsin.";
 $langAvailableArchives = "Käytettävissä olevat varmistukset";
 $langNoArchive = "Varmuuskopiota ei ole valittu";
@@ -76,8 +79,8 @@ $WorkEmailAlert = "Hälytys sähköpostilla työn palautuksesta";
 $WorkEmailAlertActivate = "Aktivoi sähköpostihälytys uuden työn palautuksesta";
 $WorkEmailAlertDeactivate = "Poista sähköpostihälytys uuden työn palautuksesta";
 $DropboxEmailAlert = "Hälytys sähköpostilla uudesta jaetusta tiedostosta";
-$DropboxEmailAlertActivate = " Kytke hälytys sähköpostilla uudesta jaetusta tiedostosta ";
-$DropboxEmailAlertDeactivate = "Poista hälytys sähköpostilla uudesta jaetusta tiedostosta ";
+$DropboxEmailAlertActivate = " Kytke hälytys sähköpostilla uudesta jaetusta tiedostosta";
+$DropboxEmailAlertDeactivate = "Poista hälytys sähköpostilla uudesta jaetusta tiedostosta";
 $AllowUserEditAgenda = "Salli käyttäjien muokata kurssiohjelmaa";
 $AllowUserEditAgendaActivate = "Aktivoi kurssiohjelman muokkasu käyttäjille";
 $AllowUserEditAgendaDeactivate = "Poista kurssiohjelman muokkasu käyttäjille";
@@ -105,3 +108,4 @@ $NewUserEmailAlert = "Ilmoitus sähköpostilla opettajalle kun uusi opiskelija i
 $NewUserEmailAlertEnable = "Aktivoi ilmoitus sähköpostilla opettajalle kun uusi opiskelija ilmoittautuu kurssille";
 $NewUserEmailAlertToTeacharAndTutor = "Poista ilmoitus sähköpostilla opettajalle kun uusi opiskelija ilmoittautuu kurssille";
 $NewUserEmailAlertDisable = "Estä sähköposti-ilmoitus uudesta käyttäjästä kurssilla";
+?>

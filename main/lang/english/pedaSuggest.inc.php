@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $GeneralDescription = "Description";
 $GeneralDescriptionQuestions = "What is the goal of the training? Are there prerequisites? How is this training connected to other training?";
 $GeneralDescriptionInformation = "Describe the training (number of hours, sser number, location) and trainer (name, office, Tel., e-mail, office hours . . . .).";
@@ -20,3 +23,4 @@ $HumanAndTechnicalResourcesInformation = "Identify and describe the different co
 $Assessment = "Assessment";
 $AssessmentQuestions = "How will learners be assessed? Are there strategies to develop in order to master the topic?";
 $AssessmentInformation = "Criteria for skills acquisition.";
+?>

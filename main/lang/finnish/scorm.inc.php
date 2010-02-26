@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langScormTime = "Aika";
 $langScormScore = "Tulos";
 $langScormClose = "Sulje";
@@ -13,3 +16,4 @@ $langScormExitFullScreen = "Palaa normaaliin näyttöön";
 $langScormFullScreen = "Koko näyttö";
 $langScormNotAttempted = "Aloittamatta";
 $langAccomplishedStepsTotal = "Suoritetut osat yhteensä";
+?>

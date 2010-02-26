@@ -1,6 +1,9 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $WikiSearchResults = "Rezultai iskanja Wiki";
-$Wiki = "Wiki skupine";
+$Wiki = "Wiki";
 $StartPage = "Glavna";
 $EditThisPage = "Uredi to stran";
 $ShowPageHistory = "Zgodovina";
@@ -9,7 +12,7 @@ $AllPages = "Vse strani";
 $AddNew = "Dodaj novo stran";
 $ChangesStored = "Spremembe so bile shranjene";
 $NewWikiSaved = "Nov vnos v Wiki je bil shranjen. Vidite ga lahko s klikom na :";
-$DefaultContent = " <br/> <br/> <p align=\"center\"> <img src=\"%swiki/wcollaborative.png\" alt=\"mr. Chamilo\" title=\"mr. Chamilo\" /></p> <p align=\"center\">Za začetek pričnite z urejanjem te strani</p> ";
+$DefaultContent = " <br/> <br/> <p align=\\"center\\"> <img src=\\"%swiki/wcollaborative.png\\" alt=\\"mr. Chamilo\\" title=\\"mr. Chamilo\\" /></p> <p align=\\"center\\">Za začetek pričnite z urejanjem te strani</p>";
 $CourseWikiPages = "Wiki strani tečaja";
 $GroupWikiPages = "Wiki strani skupin";
 $NoWikiPageTitle = "Tvoje spremembe so bile shranjene. Vpisati morate ime strani.";
@@ -19,7 +22,7 @@ $WikiDiffDeletedLine = "Vrstica je bila odstranjena";
 $WikiDiffMovedLine = "Vrstica je bila prestavljena";
 $WikiDiffUnchangedLine = "Vrstica brez sprememb";
 $DifferencesNew = "spremembe v različici";
-$DifferencesOld = "stara različica ";
+$DifferencesOld = "stara različica";
 $Differences = "Spremembe";
 $MostRecentVersion = "Pogled zadnje izbrane različice";
 $Legend = "Legenda";
@@ -53,10 +56,10 @@ $AddOptionProtected = "Možnost dodajanja je zaščitena. Le učitelji lahko dod
 $AddOptionUnprotected = "Možnost dodajanja je omogočena za vse tečajnike in člane skupin";
 $NotifyChanges = "Obvesti ob vsaki spremembi";
 $NotNotifyChanges = "Ne obveščaj ob spremebah";
-$NotifyByEmail = "V primeru odgovora me obvesti preko e-pošte";
+$NotifyByEmail = "Obvesti me po e-pošti, v primeru spremembe na tej strani";
 $CancelNotifyByEmail = "Ne obveščaj me po e-pošti, če bo vsebina na tej strani spremenjena";
 $MostRecentVersionBy = "Zadnja verzija je bila spremenjena s strani";
-$Rating = "Ocene";
+$Rating = "Ocena";
 $RatingMedia = "Povprečna ocena te strani je";
 $NumComments = "Komentarji na tej strani";
 $NumCommentsScore = "Število komentarjev na tej strani je";
@@ -138,11 +141,11 @@ $OrphanedPages = "Osirotele strani";
 $WantedPages = "Želene strani";
 $MostVisitedPages = "Najbolj obiskane strani";
 $MostChangedPages = "Najbolj spreminjane strani";
-$Changes = "Spremembe";
+$Changes = "spremembe";
 $MostActiveUsers = "Najbolj aktivni uporabniki";
 $Contributions = "prispevki";
 $UserContributions = "Uporabnikovi prispevki";
-$WarningDeleteMainPage = "Brisanje osnovne strani Wiki ni priporočljivo. Ta stran je namreč osnovna dostopna stran v hierarhiji vseh ostalih podstrani.<br />Če jo že morate odstrani, je ne pozabite  ponovno ustvari. Do kreiranja nove osnovne strani uporabniki ne bodo mogli dodajati novih strani !";
+$WarningDeleteMainPage = "Brisanje osnovne strani Wiki ni priporočljivo. Ta stran je namreč osnovna dostopna stran v hierarhiji vseh ostalih podstrani.<br />Če jo že morate odstrani, je ne pozabite  ponovno ustvari. Do kreiranja nove osnovne strani uporabniki ne bodo mogli dodajat";
 $ConvertToLastVersion = "Označite to različico kot zadnjo s klikom na";
 $Restore = "Obnovi";
 $CurrentVersion = "Trenutna različica";
@@ -164,7 +167,7 @@ $DescriptionOfTheTask = "Opis zadolžitve";
 $OtherSettings = "Ostale zahteve";
 $NMaxWords = "Največje število besed";
 $NMaxVersion = "Največje število različic";
-$Feedback = "Povratne informacije";
+$Feedback = "Napotki";
 $AddFeedback = "Dodaj sporočilo z napotki povezano z napredkom strani";
 $Feedback1 = "Prvo sporočilo";
 $Feedback2 = "Drugo sporočilo";
@@ -172,4 +175,5 @@ $Feedback3 = "Tretje sporočilo";
 $FProgress = "Napredek";
 $PutATimeLimit = "Nastavi časovno omejitev";
 $StandardTask = "Standardno opravilo";
-$ThePageHasBeenExportedToDocArea = "Stran je bila izvožena v področje dokumentov ";
+$ThePageHasBeenExportedToDocArea = "Stran je bila izvožena v področje dokumentov";
+?>

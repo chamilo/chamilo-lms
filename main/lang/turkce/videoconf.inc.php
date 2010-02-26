@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $Camera = "Kamera";
 $Microphone = "Mikrofon";
 $Name = "İsim";
@@ -54,3 +57,4 @@ $ThisRoomIsFullPleaseTryAgain = "Üzgünüz oda dolu. Lütfen daha sonra deneyin
 $Chat = "Sohbet";
 $Cancel = "Vazgeç";
 $Disconnected = "Bağlantı kesildi";
+?>

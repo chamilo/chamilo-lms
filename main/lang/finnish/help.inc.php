@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langHFor = "Apua - foorumit";
 $langForContent = "<p>Foorumi on työkalu keskustelua varten, kirjoitettua ja ajasta riippumatonta. Sähköposti on kahden henkilön välistä keskustelua, sitä vastoin foorumi mahdollistaa julkisen tai puolijulkisen keskustelun.</p><p>Teknisestä näkökulmasta katsoen oppilaat tarvitsevat vain selaimen osallistuakseen Clarolinen foorumeihin.<p><p>Voit organisoida foorumin, klikkaa ylläpito-työkalua. Keskustelut on organisoitu sarjaksi seuraavalla tavalla:</p><p><b>Kategoria > Foorumi > Aihe > Vastaukset</b></p><p>Sinun kannatta järjestää oppilaiden keskusteluja etukäteen luomalla kategoriat ja foorumit. Jätä oppilaiden osaksi luoda aiheet ja vastaukset.</p><p>Oletuksena Claroline-foorumi sisältää vain kategorian 'julkinen', esimerkkifoorumin ja esimerkkiaiheen</p><p>Sinun täytyy ensiksi poistaa esimerkkiaihe ja muokata ensimmäisen foorumin nimeä. Sitten voit luoda 'julkiseen' kategoriaan muita foorumeita, ryhmittäin tai teemoittain. Tämä riippuu omista näkemyksistäsi opetuksen suhteen.</p><p>Älä sekoita kategorioita ja foorumeita. Tyhjä kategoria ilman foorumeita ei näy opiskelijoille.</p><p>Kuvaus foorumista voi olla lista sen jäsenistä, määritys tavoitteista kurssilla, tehtävä, teema ja niin edelleen.</p>";
 $langHHome = "Apua - Kotisivu";
@@ -11,7 +14,8 @@ $langUserContent = "<p><b>Roolit</b></p><p>Rooleilla ei ole mitään tekemistä 
 $langClarContent3 = "<p><b>Opetuksen teoriaa</b></p><p>Opettajille: kurssin muokkaaminen internettiin on aina myös opetuksen teoriota koskettava kysymys.</p>";
 $langClarContent4 = "Claroline on käytössäsi auttaakseen sinua opetuksessasi.</p>";
 $langClarContent1 = "Virtuaalinen Kampus";
-$langClarContent2 = "Täällä opettajat ja ylläpitäjät luovat kurssien kotisivuja. Oppilaat lukevat (dokumentteja, esityslistoja, ilmoituksia) ja joskus tekevät harjoituksia, julkaisevat papereita, osallistuvat foorumien keskusteluihin ja niin edelleen.</p><p><b>Rekisteröinti</b></p><p>Jos olet opiskelija, rekisteröi itsesi valitsemalla 'Valitse kursseja (opiskelija)' ja sen jälkeen valitsemalla kurssit, joihin haluat osallistua.</p><p>Jos olet opettaja, niin sinunkin pitää rekisteröityä, mutta valitse 'Luo kurssien sivustot (opettaja)'. Sen jälkeen täytä lomake, johon tulee kurssin koodi, koulutusala ja kurssin otsikko. Kun olet hyväksynyt nämä, niin sinut ohjataan sivustolle, jonka juuri loit. Voit sen jälkeen muokata sivuston sisältöä ja järjestellä sivustoa omien vaatimuksiesi mukaan.</p><p>Jos haluat muutoksia sivustoon, lisää toimintoja, niin käytä 'Tee nämä'-toimintoa Kampuksen kotisivulla. Tiedot välittyvät ylläpitäjille. </p><p>Rekisteröityminen löytyy Kampuksen kotisivulta.</p><p><b>Sisäänkirjautuminen</b></p><p>Kun palaat kampukselle seuraavan kerran, niin kirjoita tunnuksesi ja salasanasi päästäksesi kurssille.";
+$langClarContent2 = "Täällä opettajat ja ylläpitäjät luovat kurssien kotisivuja. Oppilaat lukevat (dokumentteja, esityslistoja, ilmoituksia) ja joskus tekevät harjoituksia, julkaisevat papereita, osallistuvat foorumien keskusteluihin ja niin edelleen.</p><p><b>Rekisteröinti</";
 $langHGroups = "Ryhmät";
 $langGroupsContent = "Ryhmien sisältö";
 $langGuide = "Manuaali";
+?>

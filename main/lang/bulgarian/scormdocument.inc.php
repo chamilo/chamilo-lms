@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langChapter = "Модул";
 $langDocumentList = "Списък на всички документи";
 $langOrganisationList = "Съдържание";
@@ -59,3 +62,4 @@ $langOrganiseDocuments = "Създаване на съдържание";
 $langUncompress = "Разкомпресирай архива (ZIP) на сървъра";
 $ExportShort = "Експортиране (SCORM)";
 $progress = "Напредък";
+?>

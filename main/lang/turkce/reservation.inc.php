@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $ReservationPeriodToSmall = "Rezervasyon süresi çok kısa";
 $BookingSystem = "Rezervasyon Sistemi";
 $BookingPeriodList = "Rezervasyın süreleri listesi";
@@ -21,3 +24,4 @@ $DeleteSelectedBookingPeriod = "Seçili rezervasyon sürelerini sil";
 $EditNewBookingPeriod = "Rezervasyon süresini düzenle";
 $BookingPeriodAdded = "Rezervasyon eklendi";
 $BookingPeriodDeleted = "Rezervasyon silindi";
+?>

@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langNewGroupCreate = "Създаване на нова група(и)";
 $langGroupCreation = "Създаване на нова група(и)";
 $langCreate = "Създаване";
@@ -90,3 +93,4 @@ $GroupsFromClassesInfo = "Чрез тази опция имате възможн
 $Group = "Група";
 $ForumOfGroup = "Форум на групата:";
 $BackToGroupList = "Обратно към списъка с групите";
+?>

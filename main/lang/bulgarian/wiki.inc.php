@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $WikiSearchResults = "Резултати от търсенето";
 $Wiki = "Group wiki";
 $StartPage = "Главна страница";
@@ -150,3 +153,4 @@ $NMaxVersion = "Максимален брой версии";
 $FProgress = "Напредък";
 $PutATimeLimit = "Задаване на ограничение за време";
 $StandardTask = "Стандартна задача";
+?>

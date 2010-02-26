@@ -1,25 +1,28 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langInvalidId = "Fejl ved login.<BR>Hvis du ikke er registreret, brug <a href=claroline/auth/inscription.php>Registrering</a></font color>. <br><br>Du kan få tilsendt dine brugeroplysninger ved at klikke på linket Glemt brugeroplysninger.";
-$langWelcome = "Velkommen!";
+$langWelcome = "kurser er tilgængelige for alle interesserede. Andre kurser kræver, at du enten er logget ind eller står på kursussidens deltagerliste for at kunne se tilgå siden/siderne.";
 $langPass = "Adgangskode";
-$langEnter = "Tilbage til min kursusoversigt";
+$langEnter = "OK";
 $langReg = "Registrering";
 $langMenu = "Menu";
 $langAdvises = "Informere";
 $langCourseDoesntExist = "<b>Advarsel :</b> Dette kursus eksisterer ikke";
 $langGetCourseFromOldPortal = "Klik her for at hente dette kursusforløb fra den gamle portal";
-$langOtherCourses = "andre kurser";
+$langOtherCourses = "Kursusoversigt";
 $langSupportForum = "Hjælpeforum";
-$langCategories = "kategorier";
+$langCategories = "Kategorier";
 $langBackToHomePage = "Tilbage til kursusoversigten";
 $lang_No_course_publicly_available = "Der er ingen åbne kursussider tilgængelige.";
 $langLostPassword = "Glemt brugeroplysninger?";
 $lang_edit_my_course_list = "Rediger min kursusoversigt";
-$langAgenda = "Kalender";
+$langAgenda = "Kommende aftaler i kalenderen";
 $langValvas = "Seneste meddelelser";
-$langUp = "Op";
+$langUp = "Forrige niveau";
 $langCatList = "Kategorier";
-$langCourseList = "Oversigt over kursusside";
+$langCourseList = "Kurser";
 $langHelptwo = "Hjælp";
 $langRegAll = "Registrer";
 $EussMenu = "menu";
@@ -33,17 +36,17 @@ $langMenuUser = "Deltagere";
 $langMenuAdmin = "Systemadmin";
 $langUsersOnLineList = "Online deltagerliste";
 $langTotalOnLine = "Online i alt";
-$langRefresh = "Opdater";
+$langRefresh = "Opdatér side";
 $langMe = "mig";
 $langSystemAnnouncements = "Systemmeddelelser";
 $langHelpMaj = "Hjælp";
 $langNotRegistered = "Ikke registreret";
 $langAdmin = "Systemadmin";
-$Login = "Brugernavn";
+$Login = "Login";
 $langRegisterForCourse = "Tilmeld kursusside";
 $langUnregisterForCourse = "Afmeld kursusside";
-$langCombinedCourse = "Kombineret kursus";
-$Platform = "Platform";
+$langCombinedCourse = "Kombineret kursusforløb";
+$Platform = "System";
 $Refresh = "Opdatér";
 $TotalOnLine = "Brugere online i alt";
 $langCourseClosed = "(dette kursusforløb er p.t. lukket)";
@@ -61,5 +64,6 @@ $DropboxFileAdded = "Fil fra dueslag er tilføjet";
 $NewMessageInForum = "Der er skrevet et nyt indlæg i diskussionsforummet";
 $FolderCreated = "Ny mappe er oprettet";
 $LinkAdded = "Et nyt link er tilføjet";
-$AnnouncementAdded = "Meddelelsen er blevet tilføjet";
+$AnnouncementAdded = "Meddelelse er tilføjet";
 $AgendaAdded = "Aftale er tilføjet";
+?>

@@ -1,10 +1,13 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $MoveTo = "Siirrä";
 $langDownloadFile = "Lisää tiedostot palvelimelle.";
 $langNameDir = "Uuden hakemiston nimi";
 $langSize = "Koko";
 $langRename = "Nimeä uudelleen";
-$langCopy = "Kopioi kurssin sisältö";
+$langCopy = "Kopioi";
 $langTo = "Hakemistoon";
 $langNoSpace = "Lataus epäonnistui, hakemistossa ei ole riittävästi tilaa.";
 $langDownloadEnd = "Lataus on päättynyt";
@@ -25,9 +28,9 @@ $langUncompress = "Pura zip-tiedosto";
 $langDownloadAndZipEnd = "Zip-tiedosto tallennettu ja purettu";
 $langRoot = "root";
 $langCreateDoc = "Luo dokumentti";
-$langDown = "alas";
+$langDown = "Alas";
 $langFileError = "Tiedosto ei ole kelvollinen";
-$langMaxFileSize = "Maksimi tiedostokoko on ";
+$langMaxFileSize = "Maksimi tiedostokoko on";
 $langFileName = "Tiedoston nimi";
 $langNoFileName = "Ole hyvä ja anna tiedostolle nimi";
 $langNoText = "Ole hyvä ja kirjoita tekstiä tai HTML-sisältöä";
@@ -102,7 +105,7 @@ $fileModified = "Tiedostoa on muokattu";
 $DocumentsOverview = "dokumenttien esikatselu";
 $ViewSlideshow = "Katso kuvat diaesityksenä";
 $Options = "Vaihtoehdot";
-$WelcomeOogieConverter = "Tervetuloa Oogie PowerPoint muuntimeen<ul type=\"1\"><li>Hae kovalevyltä .ppt tai .odp tiedosto<li>Lataa se Oogieen. Se muunnetaan Scorm oppimispoluksi.<li>Voit sen jälkeen lisätä äänikommentteja jokaiseen diaan ja lisätä harjoituksia ja testejä diojen väliin.	";
+$WelcomeOogieConverter = "Tervetuloa Oogie PowerPoint muuntimeen<ul type=\"1\"><li>Hae kovalevyltä .ppt tai .odp tiedosto<li>Lataa se Oogieen. Se muunnetaan Scorm oppimispoluksi.<li>Voit sen jälkeen lisätä äänikommentteja jokaiseen diaan ja lisätä harjoituksia ja testejä diojen väliin.\t";
 $ConvertToLP = "Muunna oppimispoluksi";
 $AdvancedSettings = "Lisäasetukset";
 $File = "Tiedosto";
@@ -120,3 +123,4 @@ $ReadOnlyFile = "Tiedosto on vain luku";
 $FileNotFound = "Tiedostoa ei löytynyt";
 $TemplateTitleFirstPage = "Ensimmäinen sivu";
 $TemplateTitleFirstPageDescription = "Kurssisi ensimmäinen sivu";
+?>

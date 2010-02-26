@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langOnlineConference = "Konferencija";
 $langWash = "Valyti";
 $langReset = "Iš naujo";
@@ -33,3 +36,4 @@ $langCallSent = "Kvietimas išsiųstas. Laukiama patvirtinimo.";
 $langChatDenied = "Jūsų kvietimas atmestas.";
 $Send = "Siųsti";
 $Connected = "Prisijungęs";
+?>

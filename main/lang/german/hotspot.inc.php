@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $select = "Auswählen";
 $square = "Quadrat";
 $circle = "Elipse";
@@ -18,3 +21,4 @@ $exeFinished = "Alle Antworten sind definiert. Sie können jetzt die Hotspots ne
 $nextAnswer = "Jetzt klicke auf: &done=done";
 $delineation = "Skizze";
 $labelDelineationMenu = "Skizze schliessen";
+?>

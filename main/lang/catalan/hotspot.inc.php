@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $select = "Seleccionar";
 $square = "Quadrat";
 $circle = "El·lipse";
@@ -19,3 +22,4 @@ $nextAnswer = "Ara cliqueu a: &done=done";
 $delineation = "Delimitació";
 $labelDelineationMenu = "Tancar delimitació";
 $oar = "àrea de risc";
+?>

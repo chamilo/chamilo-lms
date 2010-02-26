@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $MyTasks = "As miñas tarefas";
 $FavoriteBlogs = "Os meus blogs favoritos";
 $Navigation = "Navegación";
@@ -11,7 +14,7 @@ $MemberManager = "Xestión de usuarios";
 $PostFullText = "Publicar texto completo";
 $ReadPost = "Ler mensaxe";
 $Home = "Principal";
-$FirstPostText = "Este é o primeiro artigo deste blog. Doravante, todas as persoas inscritas neste blog poden participar. ";
+$FirstPostText = "Este é o primeiro artigo deste blog. Doravante, todas as persoas inscritas neste blog poden participar.";
 $AddNewComment = "Engadir comentario";
 $ReplyToThisComment = "Contestar a este comentario";
 $ManageTasks = "Administrar tarefas";
@@ -56,7 +59,7 @@ $Rating = "Puntuación";
 $RateThis = "Avaliar";
 $SelectTaskArticle = "Seleccionar un artigo para esta tarefa";
 $ExecuteThisTask = "Executar esta tarefa";
-$WrittenBy = "Escrito por ";
+$WrittenBy = "Escrito por";
 $InBlog = "no blog";
 $ViewPostsOfThisDay = "Ver os artigos do día de hoxe";
 $PostsOf = "Artigos de";
@@ -99,3 +102,4 @@ $CommentDeleted = "Eliminouse o comentario";
 $RatingAdded = "Engadiuse a cualificación";
 $BlogPosts = "Artigos do blog";
 $BlogComments = "Comentarios dos artigos";
+?>

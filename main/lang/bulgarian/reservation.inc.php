@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $ReservationPeriodToSmall = "Периодът за резервация е много къс.";
 $BookingSystem = "Система за резервации";
 $BookingPeriods = "График на резервациите";
@@ -92,3 +95,4 @@ $Step1SelectResourceType = "Стъпка 1: Изберете вида ресур
 $Step2SelectResource = "Стъпка 2: Изберете ресурс.";
 $Step3SelectBookingPeriod = "Стъпка 3: Изберете периода за резервация.";
 $NoReservations = "Няма резервации.";
+?>

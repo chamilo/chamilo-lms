@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langInvalidId = "Giriş yapılamadı.Kullanıcı ismi veya şifre hatalı.<BR>Eğer kayıtlı değilseniz, <a href=claroline/auth/inscription.php> buradan kayıt olabilirsiniz</a></font color>";
 $langWelcome = "Hoş geldiniz!";
 $langPass = "Şifre";
@@ -31,7 +34,7 @@ $langSubCat = "alt kategori";
 $langMenuGeneral = "Genel";
 $langMenuUser = "Kullanıcı";
 $langMenuAdmin = "Yönetici platformu";
-$langUsersOnLineList = "Online kullanıcı listesi";
+$langUsersOnLineList = "Online kullan&#305;c&#305; listesi";
 $langTotalOnLine = "Toplam";
 $langRefresh = "Yenile";
 $langMe = "ben";
@@ -63,8 +66,9 @@ $FolderCreated = "Yeni klasör oluşturuldu";
 $LinkAdded = "Eklenen değerlendirme";
 $AnnouncementAdded = "Duyuru eklendi";
 $AgendaAdded = "Ajandaya eklendi";
-$YouDoNotHaveAnySessionInItsHistory = "Tarihçede kayıtlı eğitim sömestriniz yoktur.";
 $Messages = "Mesajlar";
 $Inbox = "Gelen Kutusu";
 $Comppose = "Oluştur";
 $PendingInvitations = "Bekleyen Davetler";
+$YouDoNotHaveAnySessionInItsHistory = "Tarihçede kayıtlı eğitim sömestriniz yoktur.";
+?>

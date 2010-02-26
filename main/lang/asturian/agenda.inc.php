@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $AgendaAdd = "Amestar un eventu";
 $ShowAllEvents = "Amosar tolos eventos";
 $ShowCurrent = "Amosar tolos eventos del mes";
@@ -9,14 +12,14 @@ $Year = "Añu";
 $Hour = "Hora";
 $Minutes = "Mintutos";
 $Detail = "Detalles";
-$EditSuccess = "L'eventu modificóse";
-$AddSuccess = "L'eventu amestóse a la axenda";
-$AgendaDeleteSuccess = "L'eventu esborróse de la axenda";
+$EditSuccess = "L\'eventu modificóse";
+$AddSuccess = "L\'eventu amestóse a la axenda";
+$AgendaDeleteSuccess = "L\'eventu esborróse de la axenda";
 $NoAgendaItems = "Nun hai eventos";
 $lang_september = "Setiembre";
 $langClassName = "Nome de la clase";
 $lang_agenda = "Axenda";
-$ModifyCalendarItem = "Cambiar un eventu de l'axenda";
+$ModifyCalendarItem = "Cambiar un eventu de l\'axenda";
 $ItemTitle = "Títulu del eventu";
 $langDay = "Día";
 $month_default = "mes por defeutu";
@@ -40,9 +43,9 @@ $Date = "Fecha";
 $Time = "Hora";
 $AddPersonalCalendarItem = "Amestar un eventu personal a la axenda";
 $ModifyPersonalCalendarItem = "Cambiar un eventu personal na axenda";
-$PeronalAgendaItemAdded = "L'eventu personal amestóse a la so axenda";
-$PeronalAgendaItemEdited = "L'eventu personal de la so axenda actualizóse";
-$PeronalAgendaItemDeleted = "L'eventu personal esborróse de la so axenda";
+$PeronalAgendaItemAdded = "L\'eventu personal amestóse a la so axenda";
+$PeronalAgendaItemEdited = "L\'eventu personal de la so axenda actualizóse";
+$PeronalAgendaItemDeleted = "L\'eventu personal esborróse de la so axenda";
 $ViewPersonalItem = "Ver los mios eventos personales";
 $UserGroupFilter = "Filtrar por grupos/usuarios";
 $ShowAll = "Amosar toos";
@@ -72,3 +75,4 @@ $AgendaSortChronologicallyDown = "Ordenar eventos (recientes/antigüos)";
 $ItemForUserSelection = "Eventu dirixíu a una seleición d'usuarios";
 $IsNotiCalFormatFile = "Nun ye un ficheru de formatu iCal";
 $RepeatEvent = "Repetir eventu";
+?>

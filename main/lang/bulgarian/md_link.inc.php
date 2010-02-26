@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langMdCallingTool = "Документи";
 $langMdTitle = "Наименование на обекта";
 $langMdDescription = "За да запишете тази информация, натиснете \"Записване\"";
@@ -36,8 +39,9 @@ $langRemove = "Премахване на записи с метаданни";
 $langAllRemovedFor = "Всички записи са премахнати от категорията";
 $langRemainingFor = "Остарелите записи с метаданни са премахнати от категорията";
 $langIndex = "Индексиране";
-$langTotalMDEs = "Брой записи с метаданни: ";
+$langTotalMDEs = "Брой записи с метаданни:";
 $langMainMD = "Отваряне на главния запис с метаданни";
 $langOrElse = "Изберете категория връзки";
 $langWarningDups = " - категориите с повтарящи се имена ще бъдат премахнати от списъка!";
 $langSLC = "Работа с категорията";
+?>

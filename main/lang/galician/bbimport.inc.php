@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langViewCourseMaterialImport = "Ver o material do curso tal e como será importado";
 $langViewExternalLinksImport = "Ver as ligazóns externas tal e como serán importadas";
 $langViewForumImport = "Ver o foro tal e como será importado";
@@ -9,7 +12,7 @@ $langToolInfo = "Esta ferramenta importa cursos de Blackboard 5.5 (Material do c
 $langToolName = "Importar cursos de Blackboard";
 $langSelectCoursePackage = "Seleccionar un paquete de curso";
 $langPackageAlreadySelected = "Xa seleccionou un paquete";
-$langFirstSelectPackage = "Primeiro ten que seleccionar un paquete e abrilo antes de poder importalo. ";
+$langFirstSelectPackage = "Primeiro ten que seleccionar un paquete e abrilo antes de poder importalo.";
 $langCourseToMigrate = "Curso para migrar";
 $langSelectPackage = "Seleccionar un paquete";
 $langOpenPackageForImporting = "Abrir este paquete para importar";
@@ -18,3 +21,4 @@ $langChooseImportOptions = "Escolla as opcións de importación";
 $langCheckWhatIsImported = "Pode comprobar o que vai ser importado antes de comezar co proceso";
 $langStartImporting = "Comezar a importar";
 $langImport = "Importar";
+?>

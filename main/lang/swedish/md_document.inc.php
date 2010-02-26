@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langMdCallingTool = "Dokument";
 $langMdTitle = "Learning Object Titel";
 $langMdDescription = "För att lagra denna information, tryck Lagra";
@@ -42,3 +45,4 @@ $langCosts = ":nej:fri, ingen avgift,, ja:inte fri, avgift";
 $langCopyrights = ":ja:copyright,, nej:ingen copyright";
 $langFormats = ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP";
 $langLngResTypes = ":exercise:övning,, simulation:simulering,, questionnaire:frågeställningar,, diagram:diagram,, figure:figur,, graph:graf,, index:index,, slide:slide,, table:bordläggning,, narrative text:berättartext,, exam:examen,, experiment:experiment,, problem statement:problemställning,, self assessment:självbedömning,, lecture:föreläsning";
+?>

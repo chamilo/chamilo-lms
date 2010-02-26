@@ -1,8 +1,11 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $ModifyEvaluation = "Salvar avaliação";
 $CreateLink = "Adicionar esta atividade com avaliação da aprendizagem";
 $AddResultNoStudents = "Adicionar esta atividade com avaliação da aprendizagem";
-$FlatView = "Vista Linear";
+$FlatView = "Visão linear";
 $ScoreEdit = "Editar regras de pontuação";
 $ScoreColor = "Cor da pontuação";
 $ScoringSystem = "Sistema de pontuação";
@@ -23,7 +26,7 @@ $CategoryName = "Nome da categoria";
 $CourseIndependent = "Curso independente";
 $CourseIndependentEvaluation = "Curso de avaliação independente";
 $EvaluationName = "Nome da avaliação";
-$Max = "Máximo";
+$Max = "Máx.";
 $DateEval = "Data da avaliação";
 $AddUserToEval = "Acrescentar usuários à avaliação";
 $NewSubCategory = "Nova subcategoria";
@@ -87,12 +90,12 @@ $GradebookWelcomeMessage = "Bem-vindo à Ferramenta Avaliação. Esta aplicaçã
 $CreateAllCat = "Criar todas as categorias do curso";
 $AddAllCat = "Adicionar categorias";
 $StatsStudent = "Estatísticas de";
-$Results = "Resultados e feedback";
+$Results = "Resultados";
 $Certificates = "Certificados";
 $Certificate = "Certificado";
 $ChooseUser = "Selecionar usuários para esta avaliação";
 $FirstLetter = "Primeira letra do sobrenome";
-$UserAdded = "O usuário foi adicionado";
+$UserAdded = "Usuário adicionado";
 $ResultEdited = "Resultado atualizado";
 $ChooseFormat = "Escolher formato";
 $OutputFileType = "Tipo de arquivo de saída";
@@ -103,7 +106,7 @@ $TotalUser = "Total do usuário";
 $AverageTotal = "Média total";
 $Evaluation = "Avaliação";
 $EvaluationAverage = "Média da avaliação";
-$EditCategory = "Editar esta categoria";
+$EditCategory = "Editar categoria";
 $EditAllWeights = "Editar todos os pesos";
 $GradebookQualificationTotal = "Total";
 $GradebookEvaluationDeleted = "A avaliação foi excluida";
@@ -149,3 +152,4 @@ $IsDefaultCertificate = "Certificado marcado como padrão";
 $BackTo = "Voltar para";
 $Numero = "N";
 $ThereIsNotACertificateAvailableByDefault = "Não existe nenhum Certificado marcado como padrão";
+?>

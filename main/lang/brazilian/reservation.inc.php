@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $ReservationPeriodToSmall = "O período de reserva é muito curto.";
 $BookingSystem = "Sistema de reservas";
 $BookingPeriodList = "Lista dos períodos de reserva";
@@ -26,6 +29,8 @@ $ConfirmDeleteBookingPeriod = "Tem certeza de que deseja remover este período d
 $DeleteBookingPeriod = "Remover esse período de reserva";
 $BookingPeriodEdited = "O período de reserva foi editado";
 $BookingPeriodDateOverlap = "Uma parte do período de reserva já está em uso no período de #START# até #END#";
+$RepeatFor = "Repetir cada";
+$RepeatUntil = "Repetir até";
 $BookingPeriodPast = "Não é possível fazer reservas antes do momento atual";
 $AddNewBookingPeriod = "Acrescentar um novo tempo de reserva";
 $ResourceTypeName = "Nome do tipo de recurso";
@@ -54,8 +59,6 @@ $ReservationAlready = "Você já reservou este recurso";
 $ReservationMadeTitle = "Sua reserva para #ITEM# foi feita com sucesso";
 $ReservationDeleteTitle = "Um período de reserva para #NAME# foi removido";
 $OutPeriod = "Fora do período";
-$RepeatFor = "Repetir cada";
-$RepeatUntil = "Repetir até";
 $Recurrence = "Recorrência";
 $NoRecurrence = "Sem recorrência";
 $UntilRecurrence = "Usar recorrência";
@@ -83,7 +86,7 @@ $AddNewResource = "Adicionar novo recurso";
 $ConfirmDeleteResource = "Tem certeza de que quer remover este recurso permanentemente?";
 $ResourceInactivated = "O recurso foi desabilitado";
 $ResourceActivated = "O recurso foi habilitado";
-$Resource = "Avaliação";
+$Resource = "Recurso";
 $OpenBooking = "Reservas habilitadas";
 $DeleteResource = "Apagar recurso";
 $DeleteSelectedResources = "Remover recursos selecionados";
@@ -110,3 +113,4 @@ $Step1SelectResourceType = "Passo 1: Selecione o tipo de recurso";
 $Step2SelectResource = "Passo 2: selecione o recurso";
 $Step3SelectBookingPeriod = "Passo 3: selecione o período de reserva";
 $NoReservations = "Sem reservas";
+?>

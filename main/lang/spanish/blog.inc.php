@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $MyTasks = "Mis tareas";
 $FavoriteBlogs = "Mis blogs favoritos";
 $Navigation = "Navegación";
@@ -50,7 +53,7 @@ $ReadMore = "Leer más...";
 $DeleteThisArticle = "Borrar este artículo";
 $EditThisPost = "Editar este artículo";
 $DeleteThisComment = "Borrar este comentario";
-$NoArticles = "No hay ningún artículo en el blog. Si Ud. es un autor en este blog, haga clic sobre el enlace 'nuevo artículo' para escribir uno.";
+$NoArticles = "No hay ningún artículo en el blog. Si Ud. es un autor en este blog, haga clic sobre el enlace \'nuevo artículo\' para escribir uno.";
 $NoTasks = "Sin tareas";
 $Rating = "Puntuación";
 $RateThis = "Puntuar este artículo";
@@ -99,3 +102,4 @@ $CommentDeleted = "El comentario ha sido eliminado";
 $RatingAdded = "La calificación ha sido añadida.";
 $BlogPosts = "Artículos del blog";
 $BlogComments = "Comentarios de los artículos";
+?>

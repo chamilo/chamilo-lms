@@ -1,17 +1,21 @@
 <?php
-$Announcement = "Thông báo";
-$langAnnEmpty = "Danh mục các thông báo đã được xoá";
-$AnnouncementModified = "Thông báo đã chỉnh sửa";
-$AnnouncementAdded = "ThĂ´ng bĂ¡o má»›i Ä‘Ă£ Ä‘Æ°á»£c Ä‘Æ°a vĂ o";
-$AnnouncementDeleted = "Thông báo đã bị xoá";
-$AnnouncementPublishedOn = "NgĂ y";
-$AddAnnouncement = "Tạo thông báo mới";
-$langContent = "Nội dung";
-$AnnouncementDeleteAll = "Xoá tất cả thông báo";
-$professorMessage = "Thư của giáo viên";
-$langEmailSent = " và đã gữi cho các học sinh có đăng ký";
-$EmailOption = "Gá»­i thĂ´ng bĂ¡o nĂ y cho cĂ¡c há»";
+/*
+for more information: see languages.txt in the lang folder.
+*/
+$Announcement = "ThÃŽng bÃ¡o";
+$langAnnEmpty = "Danh má»¥c cÃ¡c thÃŽng bÃ¡o ÄÃ£ ÄÆ°á»£c xoÃ¡";
+$AnnouncementModified = "ThÃŽng bÃ¡o ÄÃ£ chá»nh sá»­a";
+$AnnouncementAdded = "ThÃŽng bÃ¡o má»i ÄÃ£ ÄÆ°á»£c ÄÆ°a vÃ o";
+$AnnouncementDeleted = "ThÃŽng bÃ¡o ÄÃ£ bá» xoÃ¡";
+$AnnouncementPublishedOn = "NgÃ y";
+$AddAnnouncement = "Táº¡o thÃŽng bÃ¡o má»i";
+$langContent = "Ná»i dung";
+$AnnouncementDeleteAll = "XoÃ¡ táº¥t cáº£ thÃŽng bÃ¡o";
+$professorMessage = "ThÆ° cá»§a giÃ¡o viÃªn";
+$langEmailSent = " vÃ  ÄÃ£ gá»¯i cho cÃ¡c há»c sinh cÃ³ ÄÄng kÃœ";
+$EmailOption = "Gá»­i thÃŽng bÃ¡o nÃ y cho cÃ¡c há»c sinh cÃ³ ÄÄng kÃœ";
 $langOn = "On";
-$langRegUser = "người dùng đã đăng ký";
-$langUnvalid = "không có địa chỉ email hoặc địa chỉ email không hợp lệ";
-$langModifAnn = "Sửa thông báo này";
+$langRegUser = "ngÆ°á»i dÃ¹ng ÄÃ£ ÄÄng kÃœ";
+$langUnvalid = "khÃŽng cÃ³ Äá»a chá» email hoáº·c Äá»a chá» email khÃŽng há»£p lá»";
+$langModifAnn = "Sá»­a thÃŽng bÃ¡o nÃ y";
+?>

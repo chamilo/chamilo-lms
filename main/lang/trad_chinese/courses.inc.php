@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $lang_already_enrolled = "已經註冊";
 $lang_my_personnal_course_list = "我的課程清單";
 $lang_course_enrollment = "用戶的課程";
@@ -15,6 +18,7 @@ $lang_select_course_in_search_results = "在搜索結果中選擇課程";
 $lang_unsubscribe = "取消註冊";
 $lang_back_to_my_home_page = "返回我的主頁";
 $lang_back_to_my_personnal_course_list = "返回我的個人課程清單";
+$langTitular = "領導";
 $langBackToListOfThisUser = "返回到課程清單";
 $langAdministrationTools = "管理工具";
 $lang_back_to_parent_category = "返回上級分類";
@@ -25,6 +29,7 @@ $langCourseList = "課程清單";
 $Subscribe = "選修";
 $AlreadySubscribed = "已選修";
 $CourseCategoryStored = "已創建課程類別";
+$langWithoutTimeLimits = "沒有時間限制";
 $lang_back_to_main_category_list = "返回主分類清單";
 $langAdded = "添加";
 $langDeleted = "刪除";
@@ -34,7 +39,7 @@ $langHideAndSubscribeOpen = "隱藏/打開";
 $langShowAndSubscribeOpen = "顯示/打開";
 $langShowAndSubscribeClosed = "顯示/關閉";
 $langAdminThisUser = "返回用戶";
-$langManage = "管理入口";
+$langManage = "系統管理";
 $langEnrollToCourseSuccessful = "您已經註冊了該課程";
 $langSubCat = "子分類";
 $langUnsubscribeNotAllowed = "不允許取消註冊";
@@ -57,13 +62,12 @@ $SubscribingNotAllowed = "不允許選修";
 $CourseSortingDone = "已完成課程排序";
 $ExistingCourseCategories = "現有的課程類別";
 $YouAreNowUnsubscribed = "你已退修此課程";
-$langTitular = "領導";
-$langWithoutTimeLimits = "沒有時間限制";
 $ViewOpenCourses = "檢視公開課程";
 $ErrorContactPlatformAdmin = "發生不明錯誤，請聯絡系統管理員";
 $CourseRegistrationCodeIncorrect = "課程編號不正確";
 $CourseRequiresPassword = "課程需要密碼";
 $SubmitRegistrationCode = "提交註冊編號";
 $CourseCategoryDeleted = "課程類別被刪除";
-$CategorySortingDone = "已完成類別排序 ";
+$CategorySortingDone = "已完成類別排序";
 $CourseCategoryEditStored = "已更新類別";
+?>

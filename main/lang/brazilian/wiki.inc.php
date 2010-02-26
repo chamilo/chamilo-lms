@@ -1,15 +1,18 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $WikiSearchResults = "Resultados da busca no Wiki";
-$Wiki = "Wiki do Grupo";
+$Wiki = "Wiki";
 $StartPage = "Página principal";
 $EditThisPage = "Editar esta página";
 $ShowPageHistory = "Histórico";
 $RecentChanges = "Alterações recentes";
 $AllPages = "Todas as páginas";
 $AddNew = "Acrescentar nova página";
-$ChangesStored = "Áudio adicionado";
+$ChangesStored = "As alterações foram salvas";
 $NewWikiSaved = "A nova página foi salva. Você pode visualiza-la clicando aqui:";
-$DefaultContent = " <br/> <br/> <p align=\"center\"> <img src=\"%swiki/wcollaborative.png\" alt=\"Mr. Chamilo\" title=\"Mr. Chamilo\" /></p> <p align=\"center\">Para começar, edite esta página e apague este texto</p>";
+$DefaultContent = " <br/> <br/> <p align=\\"center\\"> <img src=\\"%swiki/wcollaborative.png\\" alt=\\"Mr. Chamilo\\" title=\\"Mr. Chamilo\\" /></p> <p align=\\"center\\">Para começar, edite esta página e apague este texto</p>";
 $CourseWikiPages = "Páginas Wiki do curso";
 $GroupWikiPages = "Páginas Wiki do grupo";
 $NoWikiPageTitle = "As alterações foram salvas. Você deve dar um título para esta página";
@@ -53,10 +56,10 @@ $AddOptionProtected = "A opção acrescentar páginas foi protegida. Somente pro
 $AddOptionUnprotected = "A opção acrescentar páginas foi ativada para todos os membros do curso e do grupo";
 $NotifyChanges = "Notificar alterações";
 $NotNotifyChanges = "Não notificar alterações";
-$NotifyByEmail = "Gostaria de ser informado por email sempre que alguém responder a esta mensagem";
+$NotifyByEmail = "Notificar-me por email quando esta página for alterada";
 $CancelNotifyByEmail = "Não notificar-me por email quando esta página for alterada";
 $MostRecentVersionBy = "A última versão foi editada por";
-$Rating = "Valor";
+$Rating = "Pontuar";
 $RatingMedia = "A média da pontuação desta página é";
 $NumComments = "Comentários feitos para esta página";
 $NumCommentsScore = "Número de comentários para esta página";
@@ -118,7 +121,7 @@ $UnlockDiscussExtra = "Agora todos os usuários podem acrescentar comentários a
 $AssignmentDescExtra = "Esta página é uma atividade proposta por um professor";
 $AssignmentWorkExtra = "Esta página é um trabalho de aluno";
 $NoAreSeeingTheLastVersion = "Atenção: está não é a versão mais recente desta página";
-$AssignmentFirstComToStudent = "Mude esta página para fazer seu trabalho sobre a tarefa proposta ";
+$AssignmentFirstComToStudent = "Mude esta página para fazer seu trabalho sobre a tarefa proposta";
 $AssignmentLinkstoStudentsPage = "Acessar aos trabalhos criados pelos alunos para realizar a tarefa proposta nesta página";
 $AllowLaterSends = "Permitir envios atrasados";
 $WikiStandBy = "Este Wiki aguarda que um professor o inicie";
@@ -138,7 +141,7 @@ $OrphanedPages = "Páginas órfãs";
 $WantedPages = "Páginas mais procuradas";
 $MostVisitedPages = "Páginas mais visitadas";
 $MostChangedPages = "Páginas com mais mudanças";
-$Changes = "Alterações";
+$Changes = "alterações";
 $MostActiveUsers = "Usuários mais ativos";
 $Contributions = "Contribuições";
 $UserContributions = "Contribuições do usuário";
@@ -154,21 +157,22 @@ $FirstSelectOnepage = "Por favor selecione uma página primeiro";
 $DefineTask = "Se você digita algum conteúdo na descrição, a página é considerada uma página especial para executar uma tarefa";
 $ThisPageisBeginEditedBy = "Neste momento, esta página está sendo editada por";
 $ThisPageisBeginEditedTryLater = "Por favor tente novamente depois. Se o usuário que está editando a página atualmente não salvar as alterações que está realizando, esta página ficará disponível para edição novamente";
-$EditedByAnotherUser = "Suas mudanças não serão salvas porque outro usuário modificou e salvou a página enquanto você estava editando ";
+$EditedByAnotherUser = "Suas mudanças não serão salvas porque outro usuário modificou e salvou a página enquanto você estava editando";
 $WarningMaxEditingTime = "Você tem 20 minutos para editar esta página. Depois deste tempo, se você não salvar a página, outro usuário poderá edita-la, e você poderá perder suas alterações";
 $TheTaskDoesNotBeginUntil = "Ainda não estamos na data prevista para o início";
-$TheDeadlineHasBeenCompleted = "Você excedeu o prazo final ";
-$HasReachedMaxNumWords = "Você excedeu o número de palavras permitido ";
-$HasReachedMaxiNumVersions = "Você excedeu o número de versões permitido ";
+$TheDeadlineHasBeenCompleted = "Você excedeu o prazo final";
+$HasReachedMaxNumWords = "Você excedeu o número de palavras permitido";
+$HasReachedMaxiNumVersions = "Você excedeu o número de versões permitido";
 $DescriptionOfTheTask = "Descrição da tarefa";
 $OtherSettings = "Outros pré-requisitos";
 $NMaxWords = "Número máximo de palavras";
 $NMaxVersion = "Número máximo de versões";
-$Feedback = "Feedback";
-$AddFeedback = "Insira mensagens de orientação associadas ao progresso na página ";
+$Feedback = "Orientações";
+$AddFeedback = "Insira mensagens de orientação associadas ao progresso na página";
 $Feedback1 = "Primeira mensagem";
 $Feedback2 = "Segunda mensagem";
 $Feedback3 = "Terceira mensagem";
 $FProgress = "Progresso";
-$PutATimeLimit = "Fixe um prazo ";
+$PutATimeLimit = "Fixe um prazo";
 $StandardTask = "Tarefa Padrão";
+?>

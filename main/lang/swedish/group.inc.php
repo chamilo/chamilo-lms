@@ -1,9 +1,12 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langNewGroupCreate = "Skapa ny(a) grupp(er)";
 $langGroupCreation = "Nya grupper att skapa";
 $langCreate = "skapa";
 $langNewGroups = "ny(a) grupp(er)";
-$langMax = "max. 12 tecken, e.g. <i>SV1201</i>";
+$langMax = "Max.";
 $langGroupPlacesThis = "platser (frivillig)";
 $langGroupsAdded = "grupp(erna) har lagts till";
 $langGroupDel = "Grupp raderad";
@@ -16,13 +19,13 @@ $langGroupDocument = "Dokument";
 $langGroupPropertiesModified = "Gruppinställningar har modifierats";
 $langGroupSpace = "Grupparea";
 $langGroupName = "Gruppnamn";
-$langGroupDescription = "Gruppbeskrivning";
+$langGroupDescription = "Beskrivning";
 $langGroupMembers = "Gruppmedlemmar";
 $langEditGroup = "Redigera denna grupp";
 $Optional = "(frivillig)";
 $langGroupSettingsModified = "Gruppinställningar har modifierats";
 $langGroupTooMuchMembers = "Antal föreslagna överstiger max. som är tillåtet (du kan modifiera de nedan). 				Gruppsammansättningen har not inte ändrats";
-$langGroupTutor = "Gruppens lärare";
+$langGroupTutor = "Lärare";
 $langGroupNoTutor = "(ingen)";
 $langGroupNone = "(ingen)";
 $langGroupNoneMasc = "(ingen)";
@@ -33,14 +36,14 @@ $langGroupSelfRegistration = "Registrering";
 $langGroupSelfRegInf = "registrera";
 $langRegIntoGroup = "Lägg till mig i denna grupp";
 $langGroupNowMember = "Du är nu medlem av denna grupp";
-$langPrivate = "Privat access (endast tillgänglig för personer på användarlistan)";
-$langPublic = "Publik åtkomst från campus hemsida även utan inloggning";
+$langPrivate = "privat";
+$langPublic = "publik";
 $langPropModify = "Modifiera inställningar";
 $langState = "Status";
-$langGroupFilledGroups = "Grupper har fyllts (eller kompletterats) med studenter från 'Användarlistan'.";
+$langGroupFilledGroups = "Grupper har fyllts (eller kompletterats) med studenter från \'Användarlistan\'.";
 $langSubscribed = "registrerad(e) deltagare i denna kurs";
 $langStudentsNotInThisGroups = "Användarna är ej i denna grupp";
-$langQtyOfUserCanSubscribe_PartBeforeNumber = "En användare kan max vara medlem i ";
+$langQtyOfUserCanSubscribe_PartBeforeNumber = "En användare kan max vara medlem i";
 $langQtyOfUserCanSubscribe_PartAfterNumber = " grupper";
 $langGroupLimit = "Begränsning";
 $langStudentRegAllowed = "Elever kan självregistrera sig i grupper";
@@ -63,7 +66,7 @@ $langNoGroupsAvailable = "Inga grupper tillgängliga";
 $langGroupsFromVirtualCourses = "Virtuella kurser";
 $NotAvailable = "Ej tillgänglig";
 $CreateSubgroups = "Skapa subgrupper (undergrupper)";
-$CreateSubgroupsInfo = "Detta alternativ ger dig möjlighet att skapa grupper baserat på existerande grupp. Ange ett antal grupper och välj en redan existerande grupp. Det angivna antalet grupper kommer att skapas och alla i de existerande grupperna kommer att bli prenumeranter i de nya grupperna. Den redan existerande gruppen kommer att förbli opåverkad.";
+$CreateSubgroupsInfo = "Detta alternativ ger dig möjlighet att skapa grupper baserat på existerande grupp. Ange ett antal grupper och välj en redan existerande grupp. Det angivna antalet grupper kommer att skapas och alla i de existerande grupperna kommer att bli prenumeranter i";
 $CreateNumberOfGroups = "Skapa";
 $WithUsersFrom = "grupper med medlemmar från";
 $CategoryDeleted = "Kategorin är raderad";
@@ -83,3 +86,4 @@ $GroupCalendar = "Kalender";
 $GroupAnnouncements = "Information";
 $Group = "Grupp";
 $ForumOfGroup = "Gruppforum:";
+?>

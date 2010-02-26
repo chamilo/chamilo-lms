@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $FlatView = "Flat View";
 $ScoreEdit = "Ergebnis Regeln bearbeiten";
 $ScoreColor = "Ergebnis Farbe";
@@ -68,7 +71,7 @@ $NoItemsSelected = "Keine Punkte ausgewählt";
 $DeletedCategories = "Gelöschte Kategorien";
 $DeletedEvaluations = "Gelöschte Beurteilungen";
 $DeletedLinks = "Gelöschte Links";
-$TotalItems = "Punkte gesamt ";
+$TotalItems = "Punkte gesamt";
 $LinkAdded = "Link hinzugefügt";
 $LinkDeleted = "Link gelöscht";
 $EditEvaluation = "Beurteilung bearbeiten";
@@ -84,12 +87,12 @@ $GradebookWelcomeMessage = "Willkommen zum Gradebook. Dieses Werkzeug ermöglich
 $CreateAllCat = "Alle Kurskategorien erstellen";
 $AddAllCat = "Alle Kategorien wurden hinzugefügt";
 $StatsStudent = "Statistiken für";
-$Results = "Ergebnisse";
+$Results = "Resultate";
 $Certificates = "Zertifikate";
 $Certificate = "Zertifikat";
 $ChooseUser = "Studenten für diese Beurteilung auswählen";
 $FirstLetter = "Erster Buchstabe des Nachnamens";
-$UserAdded = "Nutzer wurde hinzugefügt";
+$UserAdded = "Benutzer wurde hinzugefügt";
 $ResultEdited = "Ergebnis wurde bearbeitet";
 $ChooseFormat = "Format auswählen";
 $OutputFileType = "Dateiformat für Output";
@@ -97,6 +100,7 @@ $OverMax = "Der eingegebene Wert liegt über dem Maximalwert für diese Bewertun
 $MoreInfo = "Weitere Informationen";
 $ResultsPerUser = "Ergebnisse für Benutzer";
 $TotalUser = "Gesamtsumme für Benutzer";
-$AverageTotal = "Gesamtzahl für Durchschnitt ";
+$AverageTotal = "Gesamtzahl für Durchschnitt";
 $Evaluation = "Bewertung";
 $EvaluationAverage = "Durchschnitt für Bewertung";
+?>

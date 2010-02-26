@@ -1,14 +1,17 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $Tools = "Ferramentas";
 $SendWork = "Enviar arquivo";
-$langTooBig = "Não foi selecionado nenhum arquivo para enviar, ou ele é muito grande";
-$langListDeleted = "A lista foi deletada";
+$langTooBig = "Você não selecionou nenhum arquivo ou o arquivo é muito grande.";
+$langListDeleted = "A lista inteira será apagada.";
 $langDocModif = "título de artigo modificado";
 $langDocAdd = "Arquivo adicionado.";
 $langDocDel = "Arquivo deletado";
 $langTitleWork = "Título do Arquivo";
 $langAuthors = "Autores";
-$langDelList = "Deletar lista";
+$langDelList = "Deletar a lista toda";
 $langWorkDelete = "Deletar";
 $langWorkModify = "Modificar";
 $langWorkConfirmDelete = "Você realmente quer apagar esse arquivo";
@@ -17,11 +20,11 @@ $lang_default_upload = "Configurações padrão para a visibilidade de novos arq
 $lang_new_visible = "Novos documentos são visíveis à todos os usuários";
 $lang_new_unvisible = "Novos documentos são visíveis apenas para o(s) gerente(s) do curso";
 $lang_doc_unvisible = "Seu arquivo está visível apenas para o(s) professor(es) e não ficará visível para você.";
-$langDelLk = "Você quer realmente apagar esse link?";
+$langDelLk = "Deletar Link";
 $langMustBeRegisteredUser = "Apenas usuários registrados neste curso podem publicar documentos.";
 $langListDel = "Deletar lista";
-$langNameDir = "Nome do novo diretório";
-$langFileExists = "Operação impossível.<br>Um arquivo com o mesmo nome já existe.";
+$langNameDir = "Renomear Diretório";
+$langFileExists = "Arquivo já existe";
 $CreateDirectory = "Criar Diretório";
 $langCurrentDir = "Diretório atual";
 $UploadADocument = "Enviar um documento";
@@ -71,3 +74,4 @@ $FolderEdited = "Pasta editada";
 $UpdateWork = "Atualizar esta tarefa";
 $MakeAllPapersInvisible = "Tornar todos os trabalhos invisíveis";
 $MakeAllPapersVisible = "Tornar todos os trabalhos visíveis";
+?>

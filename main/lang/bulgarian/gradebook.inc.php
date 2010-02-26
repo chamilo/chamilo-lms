@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $ModifyEvaluation = "Запис на оценяването";
 $CreateLink = "Добавяне на учебната дейност към оценяването";
 $AddResultNoStudents = "Няма курсисти и резултати за";
@@ -175,3 +178,4 @@ $TotalWeightMustNotBeMoreThan = "Общото тегло не може да е �
 $ThereIsNotACertificateAvailableByDefault = "Няма сертификат по подразбиране.";
 $CertificateMinimunScoreIsRequiredAndMustNotBeMoreThan = "Минимален резултат се изисква за сертификата. Той не може да надвишава";
 $LinkMod = "Запис";
+?>

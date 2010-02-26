@@ -1,9 +1,12 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langNewGroupCreate = "Создать новую(ые) группу(ы)";
 $langGroupCreation = "Создание новых групп";
 $langCreate = "создать";
 $langNewGroups = "новая(ые) группа(ы)";
-$langMax = "макс. 20 знаков, например <i>ИННОВ21</i>";
+$langMax = "макс.";
 $langGroupPlacesThis = "места (по желанию)";
 $langGroupsAdded = "группа(ы) добавлена(ы)";
 $langGroupDel = "Группа удалена";
@@ -16,13 +19,13 @@ $langGroupDocument = "Документы";
 $langGroupPropertiesModified = "Настройки группы были изменены";
 $langGroupSpace = "Зона группы";
 $langGroupName = "Название группы";
-$langGroupDescription = "Описание группы";
+$langGroupDescription = "Описание";
 $langGroupMembers = "Члены группы";
 $langEditGroup = "Редактировать эту группу";
 $Optional = "(по желанию)";
 $langGroupSettingsModified = "Настройки группы изменены";
 $langGroupTooMuchMembers = "Число предложенных превышает макс. разрешенное (Вы можете это изменить ниже). Структура группы не изменена.";
-$langGroupTutor = "Руководитель группы";
+$langGroupTutor = "Инструктор";
 $langGroupNoTutor = "(никто)";
 $langGroupNone = "(никто)";
 $langGroupNoneMasc = "(никто)";
@@ -33,17 +36,16 @@ $langGroupSelfRegistration = "Регистрация";
 $langGroupSelfRegInf = "журнал регистрации";
 $langRegIntoGroup = "Добавить меня в эту группу";
 $langGroupNowMember = "Сейчас Вы член этой группы";
-$langPrivate = "Частный доступ (сайт доступен только людям из списка пользователей)";
-$langPublic = "Свободный доступ с домашней страницы портала без пароля";
+$langPrivate = "частный";
+$langPublic = "публичный";
 $langPropModify = "Изменить настройки";
 $langState = "Состояние";
-$langGroupFilledGroups = "Группы наполнены пользователями согласно списку \"Пользователи\"";
+$langGroupFilledGroups = "Группы наполнены пользователями согласно списку \\"Пользователи\\"";
 $langSubscribed = "зарегистрированные пользователи на этот курс";
 $langStudentsNotInThisGroups = "Пользователи не в этой группе";
 $langQtyOfUserCanSubscribe_PartBeforeNumber = "Пользователь может быть членом максимума";
-$langQtyOfUserCanSubscribe_PartAfterNumber = "═пЁя─я┐п©п©я▀";
-$langStudentRegAllowed = "Пользователям касательно саморегистрирования в группы";
 $langGroupLimit = "Ограничивать";
+$langStudentRegAllowed = "Пользователям касательно саморегистрирования в группы";
 $langGroupAllowStudentUnregistration = "Пользователям разрешено самостоятельно отменять регистрацию в группы";
 $langAllGroups = "Все группы";
 $langStudentUnsubscribe = "Выписать меня из группы";
@@ -63,7 +65,7 @@ $langNoGroupsAvailable = "Ни одна группа не доступна";
 $langGroupsFromVirtualCourses = "Виртуальные курсы";
 $NotAvailable = "Не доступен";
 $CreateSubgroups = "Создать подгруппы";
-$CreateSubgroupsInfo = "Эта опция позволяет Вам создавать новые группы, основываясь на уже существующих. Укажите желаемое количество групп и выберите существующую группу. Указанное количество групп будет создано и все члены существующей группы будут подписаны в эти новые группы. Существующая группа останется без изменения.";
+$CreateSubgroupsInfo = "Эта опция позволяет Вам создавать новые группы, основываясь на уже существующих. Укажите желаемое количество групп и выберите существующую группу. Указанное количество групп будет создано и все члены существующей группы будут подписаны в эти новые группы.";
 $CreateNumberOfGroups = "Создать";
 $WithUsersFrom = "группы с членами из";
 $CategoryDeleted = "Раздел удален";
@@ -87,3 +89,4 @@ $GroupsFromClasses = "Группы из классов";
 $GroupsFromClassesInfo = "Используя эту опцию, Вы можете создать группы, основанные на классах, подписанных на Ваш курс.";
 $Group = "Группа";
 $ForumOfGroup = "Форум группы:";
+?>

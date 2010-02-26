@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $WikiSearchResults = "WiKi Arama Sonuçları";
 $Wiki = "Grup Wiki";
 $StartPage = "Ana sayfa";
@@ -9,7 +12,7 @@ $AllPages = "Tüm sayfalar";
 $AddNew = "Yeni sayfa ekle";
 $ChangesStored = "Ayarlarınız kaydedildi";
 $NewWikiSaved = "Wiki sayfası kayıt edildi. Görmek için tıklayın:";
-$DefaultContent = "<br/> <br/> <p align=\"center\"> <img src=\"%swiki/wcollaborative.png\" alt=\"Mr. Chamilo\" title=\"Mr. Chamilo\" /></p> <p align=\"center\">Bu sayfayı düzenlemeye başlayın ve bu yazıyı silin.</p> ";
+$DefaultContent = "<br/> <br/> <p align=\"center\"> <img src=\"%swiki/wcollaborative.png\" alt=\"Mr. Chamilo\" title=\"Mr. Chamilo\" /></p> <p align=\"center\">Bu sayfayı düzenlemeye başlayın ve bu yazıyı silin.</p>";
 $CourseWikiPages = "Wiki sayfaları";
 $GroupWikiPages = "Wiki grubu sayfaları";
 $NoWikiPageTitle = "Ayarlarınız kaydedildi. Hala sayfaya bir isim verebilirsiniz.";
@@ -106,15 +109,15 @@ $LinksPagesFrom = "Bu sayfaya bağlı sayfalar";
 $DefineAssignmentPage = "Bu sayfayı kişisel ödev olarak tanımla";
 $AssignmentDescription = "Ödev tanımı";
 $UnlockRatingDiscussExtra = "Şimdi tüm üyeler bu sayfayı derecelendirebilir";
-$LockRatingDiscussExtra = "Şimdi sadece eğitimciler bu sayfayı derecelendirebilir ";
+$LockRatingDiscussExtra = "Şimdi sadece eğitimciler bu sayfayı derecelendirebilir";
 $HidePageExtra = "Şimdi sayfa sadece eğitimci tarafından görülebilir";
 $ShowPageExtra = "Şimdi sayfa tüm kullanıcılar tarafından görülebilir";
-$OnlyEditPagesCourseManager = "Anasayfa sadece bir eğitimci tarafından düzenlenebilir ";
+$OnlyEditPagesCourseManager = "Anasayfa sadece bir eğitimci tarafından düzenlenebilir";
 $AssignmentLinktoTeacherPage = "Eğitimci sayfasına erişim";
 $HideDiscussExtra = "Şimdi tartışma sadece eğitimciler tarafından görülebilir";
-$ShowDiscussExtra = "Şimdi tartışma tüm kullanıcılar tarafından görülebilir ";
+$ShowDiscussExtra = "Şimdi tartışma tüm kullanıcılar tarafından görülebilir";
 $LockDiscussExtra = "Şimdi sadece eğitimciler bu tartışmaya yorum ekleyebilir";
-$UnlockDiscussExtra = "Şimdi tüm üyeler bu tartışmaya yorum ekleyebilir ";
+$UnlockDiscussExtra = "Şimdi tüm üyeler bu tartışmaya yorum ekleyebilir";
 $AssignmentDescExtra = "Bu sayfa eğitimci tarafından önerilen ödevdir";
 $AssignmentWorkExtra = "Bu sayfa öğrenci çalışmasıdır";
 $NoAreSeeingTheLastVersion = "UYARI: Sayfanın son versiyonunu görüntülemiyorsunuz";
@@ -172,3 +175,4 @@ $Feedback3 = "Üçüncü Mesaj";
 $FProgress = "İlerleme";
 $PutATimeLimit = "Süre sınırı ayarla";
 $StandardTask = "Standart Görev";
+?>

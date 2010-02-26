@@ -1,18 +1,21 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langMdCallingTool = "Documents";
 $langMdTitle = "Learning Object Title";
 $langMdDescription = "To store this information, press Store";
 $langMdCoverage = "e.g. Bachelor of ...";
 $langMdCopyright = "e.g. provided the source is acknowledged";
 $langTool = "Document Metadata";
-$langNoScript = "Script is not enabled in your browser, please ignore the screen part below this text, it won't work...";
+$langNoScript = "Script is not enabled in your browser, please ignore the screen part below this text, it won\'t work...";
 $langPressAgain = "Press 'Store' again...";
 $langLanguageTip = "the language in which this learning object was made";
 $langIdentifier = "Identifier";
 $langIdentifierTip = "unique identification for this learning object, composed of letters, digits, _-.()'!*";
 $langTitleTip = "title or name, and language of that title or name";
 $langDescriptionTip = "description or comment, and language used for describing this learning object";
-$langKeyword = "Keyword";
+$langKeyword = "Keywords";
 $langKeywordTip = "separate by commas (letters, digits, -.)";
 $langCoverage = "Coverage";
 $langCoverageTip = "for example bachelor of xxx: yyy";
@@ -42,3 +45,4 @@ $langCosts = ":no:free, no cost,, yes:not free, cost";
 $langCopyrights = ":yes:copyright,, no:no copyright";
 $langFormats = ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP";
 $langLngResTypes = ":exercise:exercise,,      simulation:simulation,,      questionnaire:questionnaire,,      diagram:diagram,,      figure:figure,,      graph:graf,,      index:index,,      slide:slide,,      table:table,,      narrative text:narrative text,,      exam:exam,,      experiment:experiment,,      problem statement:problem statement,,      self assessment:self assessment,,      lecture:lecture";
+?>

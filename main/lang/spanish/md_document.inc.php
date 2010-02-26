@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langMdCallingTool = "Documentos";
 $langMdTitle = "Título del objeto de aprendizaje";
 $langMdDescription = "Para guardar esta información, presione Guardar";
@@ -12,7 +15,7 @@ $langIdentifier = "Identificador";
 $langIdentifierTip = "identificador único para este objeto de aprendizaje, compuesto de letras, números, _-.()'!*";
 $langTitleTip = "título o nombre, e idioma del título o del nombre";
 $langDescriptionTip = "descripción o comentario, e idioma usado para describir este objeto de aprendizaje";
-$langKeyword = "Palabra clave";
+$langKeyword = "Palabras clave";
 $langKeywordTip = "separar mediante comas (letras, dígitos, -.)";
 $langCoverage = "Destino";
 $langCoverageTip = "por ejemplo licenciado en xxx: yyy";
@@ -42,3 +45,4 @@ $langCosts = ":no:gratuito,, yes:no es gratuito, debe pagarse";
 $langCopyrights = ":sí:copyright,, no:sin copyright";
 $langFormats = ":text/plain;iso-8859-1:texto/plano;iso-8859-1,, text/plain;utf-8:texto/plano;utf-8,, text/html;iso-8859-1:texto/html;iso-8859-1,, text/html;utf-8:texto/html;utf-8,, inode/directory:Directorio,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP";
 $langLngResTypes = ":exercise:ejercicio,,      simulation:simulación,,      questionnaire:cuestionario,,      diagram:diagrama,,      figure:figura,,      graph:gráfico,,      index:índice,,      slide:diapositiva,,      table:tabla,,      narrative text:texto narrativo,,      exam:examen,,      experiment:experiencia,,      problem statement:problema,,      self assessment:autoevaluación,,      lecture:presentación";
+?>

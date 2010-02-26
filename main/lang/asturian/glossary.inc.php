@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $TermAddNew = "Amestar terminu nuevu";
 $TermName = "Nome del términu";
 $TermDefinition = "Definición";
@@ -22,3 +25,4 @@ $GlossaryManagement = "Alministración de glosariu";
 $TermMoved = "El términu movíose";
 $ShowGlossaryInExtraToolsTitle = "Amuesa los términos del glosariu nes ferramientes extres";
 $ShowGlossaryInExtraToolsComment = "Dende equí puedes configurar como amestar los términos del glosariu en ferramientes como lleiciones y exercicios";
+?>

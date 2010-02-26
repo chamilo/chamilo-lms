@@ -1,10 +1,13 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $MoveTo = "Flytta till";
 $langDownloadFile = "Ladda filen till servern";
 $langNameDir = "Namn på den nya mappen";
 $langSize = "Storlek";
 $langRename = "Byt namn";
-$langCopy = "Kopiera kursinnehållet";
+$langCopy = "Kopiera";
 $langTo = "till";
 $langNoSpace = "Uppladdningen har misslyckats. Det finns inte tillräckligt med diskutrymme i din mapp.";
 $langDownloadEnd = "Uppladdningen är klar.";
@@ -25,7 +28,7 @@ $langUncompress = "dekomprimera zippad (.ZIP) fil på servern";
 $langDownloadAndZipEnd = ".ZIP-fil uppladdad och dekomprimerad";
 $langRoot = "rot";
 $langCreateDoc = "Skapa ett dokument";
-$langDown = "ner";
+$langDown = "Ner";
 $langFileError = "Filen för uppladdning är inte tillåten.";
 $langMaxFileSize = "Max filstorlek är";
 $langFileName = "Filnamn";
@@ -95,7 +98,7 @@ $UplOverwriteLong = "Skriv över redan existerande fil";
 $UplRename = "Döp om";
 $UplRenameLong = "Döp om den uppladdade filen om den existerar";
 $Metadata = "Metadata";
-$DocumentQuota = "Dokument quota ";
+$DocumentQuota = "Dokument quota";
 $NoDocsInFolder = "Inga dokument i denna mapp!";
 $UploadTo = "Ladda upp till";
 $fileModified = "Filen är ändrad";
@@ -128,3 +131,4 @@ $TemplateTitleIntroduction = "Introduktion";
 $TemplateTitleIntroductionDescription = "Skriv in introduktionstexten";
 $TemplateTitlePlan = "Planering";
 $TemplateTitlePlanDescription = "Listar innehållet";
+?>

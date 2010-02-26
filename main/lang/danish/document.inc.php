@@ -1,10 +1,13 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $MoveTo = "Flyt til";
 $langDownloadFile = "Læg filen ud på serveren";
 $langNameDir = "Navn på den nye mappe";
 $langSize = "Størrelse";
 $langRename = "Omdøb";
-$langCopy = "Kopier kursusindhold";
+$langCopy = "Kopi";
 $langTo = "til";
 $langNoSpace = "Udlægningen mislykkedes. Enten fylder filen for meget, eller du har nået kursussidens loft for, hvor meget materialet på siden i alt må fylde.";
 $langDownloadEnd = "Udlægning er afsluttet";
@@ -25,7 +28,7 @@ $langUncompress = "udpak komprimeret fil (.zip) under den valgte mappe";
 $langDownloadAndZipEnd = " Zip fil er lagt ud og pakket ud";
 $langRoot = "rod";
 $langCreateDoc = "Opret et dokument";
-$langDown = "ned";
+$langDown = "Ned";
 $langFileError = "Filen, der ønskes overført, er ikke gyldig.";
 $langMaxFileSize = "Max fil størrelse er 20MB - ellers brug din lokale server";
 $langFileName = "Filnavn";
@@ -113,3 +116,4 @@ $TemplateName = "Navn på skabelon";
 $TemplateDescription = "Skabelonbeskrivelse";
 $DocumentSetAsTemplate = "Dokument der er valgt som ny skabelon";
 $DocumentUnsetAsTemplate = "Dokument fravalgt som skabelon";
+?>

@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $NewNote = "Nieuwe notitie";
 $Note = "Notitie";
 $NoteDeleted = "Notitie verwijderd";
@@ -7,7 +10,7 @@ $NoteCreated = "Notitie aangemaakt";
 $YouMustWriteANote = "Gelieve een notitie te schrijven";
 $SaveNote = "Notitie opslaan";
 $WriteTheTitleHere = "Typ de titel hier";
-$UpdateDate = "geüpdated";
+$UpdateDate = "Meest recente aanpassing";
 $NoteAddNew = "Voeg nieuwe notitie toe in mijn persoonlijke notitieblok";
 $OrderByCreationDate = "Sorteer volgens aanmaakdatum";
 $OrderByModificationDate = "Sorteer volgens wijzigingsdatum";
@@ -27,3 +30,4 @@ $NotesSortedByUpdateDateAsc = "Sorteer stijgend volgens wijzigingsdatum";
 $NotesSortedByUpdateDateDESC = "Sorteer aflopend volgens wijzigingsdatum";
 $NotesSortedByCreationDateAsc = "Sorteer stijgend volgens aanmaakdatum";
 $NotesSortedByCreationDateDESC = "Sorteer aflopend volgens aanmaakdatum";
+?>

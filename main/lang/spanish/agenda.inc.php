@@ -1,5 +1,8 @@
 <?php
-$AgendaAdd = "Añadir un nuevo evento ";
+/*
+for more information: see languages.txt in the lang folder.
+*/
+$AgendaAdd = "Añadir un nuevo evento";
 $ShowAllEvents = "Mostrar todos los eventos";
 $ShowCurrent = "Eventos del mes";
 $AddCalendarItem = "Añadir un nuevo evento a la agenda";
@@ -12,7 +15,7 @@ $Detail = "Detalles";
 $EditSuccess = "El evento ha sido modificado";
 $AddSuccess = "El evento ha sido añadido a la agenda";
 $AgendaDeleteSuccess = "El evento ha sido borrado de la agenda";
-$NoAgendaItems = "No hay eventos. ";
+$NoAgendaItems = "No hay eventos.";
 $lang_september = "Septiembre";
 $langClassName = "Nombre de la clase";
 $lang_agenda = "Agenda";
@@ -72,3 +75,4 @@ $AgendaSortChronologicallyDown = "Ordenar eventos (recientes / antiguos)";
 $ItemForUserSelection = "Evento dirigido a una selección de usuarios";
 $IsNotiCalFormatFile = "No es un archivo de formato iCal";
 $RepeatEvent = "Repetir evento";
+?>

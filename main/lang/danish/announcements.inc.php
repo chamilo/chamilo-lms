@@ -1,12 +1,15 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $Announcement = "Meddelelser";
 $langAnnEmpty = "Meddelelseslisten er ryddet";
 $AnnouncementModified = "Meddelelsen er blevet ændret";
 $AnnouncementAdded = "Meddelelsen er blevet tilføjet";
 $AnnouncementDeleted = "Meddelelsen er fjernet";
 $AnnouncementPublishedOn = "Publiceret på";
-$AddAnnouncement = "tilføj som en meddelelse";
-$langContent = "Indhold";
+$AddAnnouncement = "Tilføj meddelelse";
+$langContent = "indhold";
 $AnnouncementDeleteAll = "Ryd meddelelseslisten";
 $professorMessage = "Besked fra underviseren";
 $langEmailSent = " og sendt til studerende på deltagerlisten";
@@ -47,3 +50,4 @@ $NoAnnouncements = "Der er ingen meddelelser";
 $SelectEverybody = "Vælg alle";
 $SelectedUsersGroups = "valgte grupper";
 $LearnerMessage = "Besked fra student";
+?>

@@ -1,11 +1,14 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $Announcement = "Ankündigungen";
 $langAnnEmpty = "Die Liste der Ankündigungen wurde gelöscht";
 $AnnouncementModified = "Ankündigung wurde verändert";
 $AnnouncementAdded = "Ankündigung wurde hinzugefügt";
 $AnnouncementDeleted = "Ankündigung wurde gelöscht";
 $AnnouncementPublishedOn = "Veröffentlicht am";
-$AddAnnouncement = "Als Ankündigung hinzugefügt";
+$AddAnnouncement = "Ankündigung hinzufügen";
 $langContent = "Inhalt";
 $AnnouncementDeleteAll = "Liste der Ankündigungen löschen";
 $professorMessage = "Mitteilung von Lehrer/in";
@@ -13,7 +16,7 @@ $langEmailSent = "und per E-Mail an eingeschriebene Teilnehmer/innen gesendet";
 $EmailOption = "Diese Ankündigung per E-Mail an eingeschriebene Teilnehmer/innen senden";
 $langOn = "Am";
 $langRegUser = "registrierte Teilnehmer dieser Site";
-$langUnvalid = "haben eine ungültige oder keine E-Mail Adresse ";
+$langUnvalid = "haben eine ungültige oder keine E-Mail Adresse";
 $langModifAnn = "Diese Ankündigung verändern";
 $langModify = "ändern";
 $langDelete = "löschen";
@@ -53,3 +56,4 @@ $AnnounceSentToUserSelection = "Ankündigung wurde an die ausgewählten User ver
 $SendAnnouncement = "Ankündigung versenden";
 $ModifyAnnouncement = "Ankündigung ändern";
 $ButtonPublishAnnouncement = "Ankündigung versenden";
+?>

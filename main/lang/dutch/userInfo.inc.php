@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langLineNumber = "Lijnnummer";
 $langLine = "lijn";
 $langLines = "lijnen";
@@ -6,21 +9,21 @@ $langLineOrLines = "lijn(en)";
 $langMoveUp = "Omhoog";
 $langMoveDown = "Omlaag";
 $langAddNewHeading = "Voeg nieuwe hoofding toe";
-$langCourseAdministratorOnly = "Enkel voor cursusbeheerders";
-$langDefineHeadings = "Definieer aanvullende informatie";
+$langCourseAdministratorOnly = "Enkel voor cursusbeheerder";
+$langDefineHeadings = "Definieer hoofdingen";
 $langBackToUsersList = "Terug naar gebruikerslijst";
-$langTracking = "Statistieken";
+$langTracking = "Tracking";
 $langCourseManager = "Cursusbeheerder";
 $langModRight = "Beheersrechten wijzigen van";
 $langNoAdmin = "heeft vanaf nu <b>geen</b> beheersrecht op deze pagina.";
 $langAllAdmin = "heeft vanaf nu <b>alle</b> beheersrechten op deze pagina.";
 $langModRole = "Rol wijzigen van";
-$langRole = "Rol (facultatief)";
+$langRole = "Rol";
 $langIsNow = "is vanaf nu";
-$langInC = "in deze cursus ";
+$langInC = "in deze cursus";
 $langFilled = "U hebt niet alle velden ingevuld.";
-$langUserNo = "De gekozen gebruikersnaam";
-$langTaken = "is al in gebruik. Kies een ander.";
+$langUserNo = "De gebruikersnaam die u gekozen hebt";
+$langTaken = "is al in gebruik. Kies een andere naam.";
 $langTutor = "Begeleider (groepen)";
 $langUnreg = "Uitschrijven";
 $langGroupUserManagement = "Groepenbeheer";
@@ -73,3 +76,4 @@ $ViewMySharedProfile = "Mijn gedeeld profiel";
 $UserStatistics = "Statistieken van deze gebruiker";
 $EditUser = "Wijzig deze gebruiker";
 $ViewUser = "Bekijk deze gebruiker";
+?>

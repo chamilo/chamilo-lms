@@ -1,6 +1,9 @@
 <?php
-$langInvalidId = "Ogiltig inloggning. Om du inte är registrerad fyll i <a href='claroline/auth/inscription.php'>registreringsformuläret</a></font color>";
-$langWelcome = "Välkommen!";
+/*
+for more information: see languages.txt in the lang folder.
+*/
+$langInvalidId = "Ogiltig inloggning. Om du inte är registrerad fyll i <a href=\'claroline/auth/inscription.php\'>registreringsformuläret</a></font color>";
+$langWelcome = "fria kurser är tillgängliga nedan. Andra kurser kräver ett användarnamn och lösenord, vilket du kan erhålla genom att klicka på \'Registrering\'. Lärare kan skapa kurs genom att klicka på registrering också, men sedan välja \'Skapa kurs (lärare)\'.";
 $langPass = "Lösenord";
 $langEnter = "Stig in";
 $langReg = "Registrering";
@@ -8,18 +11,18 @@ $langMenu = "Meny";
 $langAdvises = "Rådgivning";
 $langCourseDoesntExist = "<b>Varning :</b> Denna kurs existerar inte.";
 $langGetCourseFromOldPortal = "klicka här för att hämta denna kurs från din gamla portal";
-$langOtherCourses = "andra kurser";
+$langOtherCourses = "Kurslista";
 $langSupportForum = "Supportforum";
-$langCategories = "kategorier";
+$langCategories = "Kategorier";
 $langBackToHomePage = "Tillbaka till hemsidan";
 $lang_No_course_publicly_available = "Inga publika kurser tillgängliga.";
 $langLostPassword = "Förlorat lösenordet";
 $lang_edit_my_course_list = "Redigera min kurslista";
-$langAgenda = "Agenda";
+$langAgenda = "Agenda nästa händelse";
 $langValvas = "Senaste tillkännagivanden";
-$langUp = "Upp";
+$langUp = "Tidigare nivå";
 $langCatList = "Kategorier";
-$langCourseList = "Kurslista";
+$langCourseList = "Kurser";
 $langHelptwo = "Hjälp";
 $langRegAll = "registrera";
 $EussMenu = "meny";
@@ -33,16 +36,16 @@ $langMenuUser = "Användare";
 $langMenuAdmin = "Plattformsadministratör";
 $langUsersOnLineList = "Uppkopplade, användarlista";
 $langTotalOnLine = "Totalt uppkopplade";
-$langRefresh = "Ladda om";
+$langRefresh = "ladda om sidan";
 $langMe = "jag";
 $langSystemAnnouncements = "Systemtillkännagivanden";
 $langHelpMaj = "Hjälp";
 $langNotRegistered = "Ej registrerad";
 $langAdmin = "Plattformsadministratör";
-$Login = "Inloggning";
+$Login = "Logga in";
 $langRegisterForCourse = "Registrering för kurs";
 $langUnregisterForCourse = "Avregistrering från kurs";
-$langCombinedCourse = "Kombinerad kurs";
+$langCombinedCourse = "Kombinerad kurs -";
 $Platform = "Plattform";
 $Refresh = "Ladda om";
 $TotalOnLine = "totala antal användare uppkopplade";
@@ -60,6 +63,7 @@ $CourseView = "Visa komplett kurslista";
 $DropboxFileAdded = "Fil inlagd i inlämningsmapp";
 $NewMessageInForum = "Nytt meddelande postat till forumet";
 $FolderCreated = "Ny mapp skapad";
-$LinkAdded = "Länk tillagd";
-$AnnouncementAdded = "Tillkännagivande har lagts till";
+$LinkAdded = "Ny länk skapad";
+$AnnouncementAdded = "Tillkännagivande skapat";
 $AgendaAdded = "Kalenderpost skapad";
+?>

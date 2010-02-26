@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langCourseProgram = "Descrizione del Corso";
 $langThisCourseDescriptionIsEmpty = "Questo corso non è stato ancora descritto";
 $langEditCourseProgram = "Crea o modifica la descrizione";
@@ -14,3 +17,4 @@ $CourseDescriptionUpdated = "Descrizione del corso aggiornata";
 $CourseDescriptionDeleted = "Descrizione del corso eliminata";
 $CourseDescriptionIntro = "Clicca sulla voce e compila il modulo per creare una descrizione.<br><br>Clicca Conferma per salvare.";
 $langSaveDescription = "Salva la descrizione";
+?>

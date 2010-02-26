@@ -1,8 +1,11 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $ForumDeleted = "Forum deleted";
 $ForumCategoryDeleted = "Forum category deleted";
 $ForumLocked = "Forum blocked";
-$Forum = "Forumai";
+$Forum = "Forumas";
 $AddForumCategory = "Sukurti naują forumo kategoriją";
 $AddForum = "Sukurti naują forumą";
 $Topics = "Tema";
@@ -12,7 +15,7 @@ $Message = "žinutė";
 $NoForumInThisCategory = "Šioje kategorijoje forumų nėra";
 $InForumCategory = "Sukurti kategoriją";
 $AllowAnonymousPosts = "Leisti anoniminius pranešimus?";
-$StudentsCanEdit = "Ar gali studentai redaguoti savo pranešimus? ";
+$StudentsCanEdit = "Ar gali studentai redaguoti savo pranešimus?";
 $ApprovalDirect = "Patvirtinimas / Tiesioginis pranešimas";
 $AllowNewThreads = "Leisti studentams rašyti temas";
 $DefaultViewType = "Peržiūros tipas pagal nutylėjimą";
@@ -22,7 +25,7 @@ $PublicPrivateGroupForum = "Viešas ar privatus grupės forumas?";
 $Public = "Visiems kurso nariams";
 $Private = "Tik grupės nariams";
 $NewPostStored = "Jūsų žinutė išsaugota";
-$ReturnTo = "Dabar galite grįžti ";
+$ReturnTo = "Dabar galite grįžti";
 $Or = "ar";
 $ReplyToThread = "Rašyti atsakymą šioje temoje";
 $ReplyToMessage = "Atsakyti į šią žinutę";
@@ -34,8 +37,8 @@ $LastPost = "Paskutinis pranešimas";
 $Quoting = "Citavimas";
 $NotifyByEmail = "Pranešti man el. paštu kai bus atsakymas į mano pranešimą";
 $StickyPost = "Svarbi žinutė (visada bus viršuje su specialia ikona)";
-$ReplyShort = "Re: ";
-$DeletePost = "Ar tikrai norite ištrinti šį pranešimą? Ištrinant pranešimą ištrinami ir visi atsakymai į jį. ";
+$ReplyShort = "Re:";
+$DeletePost = "Ar tikrai norite ištrinti šį pranešimą? Ištrinant pranešimą ištrinami ir visi atsakymai į jį.";
 $Locked = "Užrakinta: Studentai šioje kategorijoje, forume ar temoje negali rašyti naujų žinučių, bet gali jas skaityti";
 $Unlocked = "Atrakinti: Studentai gali rašyti naujas žinutes kategorijoje, forume ar temoje";
 $Flat = "Flat";
@@ -56,7 +59,7 @@ $ForGroup = "Grupei";
 $ThreadLocked = "Tema užrakinta.";
 $NotAllowedHere = "Priėjimas Jums draudžiamas.";
 $ReplyAdded = "Atsakymas įrašytas";
-$EditPost = "Redaguoti straipsnį";
+$EditPost = "Redaguoti pranešimą";
 $EditPostStored = "Pranešimas redaguotas";
 $NewForumPost = "Naujas pranešimas forume";
 $YouWantedToStayInformed = "Jūs nustatėte, kad gautumėte žinutę el. paštu kai bus atsakyta į Jūsų temą";
@@ -79,3 +82,4 @@ $ThreadCanBeFoundHere = "The thread can be found here";
 $MakeVisible = "Make Visible";
 $DeleteCompleteThread = "Delete complete thread?";
 $PostDeletedSpecial = "Special Post Deleted";
+?>

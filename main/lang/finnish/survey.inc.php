@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $PublishSurvey = "Julkaise kysely";
 $CompareQuestions = "Vertaa kysymyksiä";
 $InformationUpdated = "Tiedot päivitetty";
@@ -86,7 +89,7 @@ $AddAnswer = "Lisää vaihtoehto";
 $DisplayAnswersHorVert = "Näkymä";
 $AnswerOptions = "Vastaus vaihtoehdot";
 $YesNo = "Kyllä / Ei";
-$MultipleResponse = "Monivalinta";
+$MultipleResponse = "Useampi vastaus";
 $Open = "Avoin";
 $Dropdown = "Alasveto";
 $Pagebreak = "Sivun vaihto (jaa kysymykset)";
@@ -111,7 +114,7 @@ $SelectXAxis = "Valitse kysymys X-akselille";
 $SelectYAxis = "Valite kysymys Y-akselille";
 $ComparativeReport = "Vertaileva raportti";
 $AllQuestionsOnOnePage = "Tämä ruutu näyttää tarkan kopion lomakkeesta, seillaisena kuin käyttäjä sen täyttää";
-$SelectUser = "Käyttäjä";
+$SelectUser = "Valitse käyttäjä";
 $SelectUserWhoFilledSurvey = "Valitse kyselyn täyttänyt käyttäjä";
 $userreport = "Käyttäjä raportti";
 $VisualRepresentation = "Graafinen";
@@ -132,7 +135,6 @@ $DetailedReportByUserDetail = "Tässä raportissa näet kaikki vastaukset mitä 
 $DetailedReportByQuestionDetail = "Tässä raportissa näet tulokset kysymyksittäin. Perustilastot ja grafiikat näytetään myös.";
 $ReminderResendToAllUsers = "Muistuta kaikkia käyttäjiä kyselystä. Jos et valitse tätä ruutua ainoastaan lisätyt käyttäjät saavat sähköpostiviestin.";
 $Multiplechoice = "Monivalinta";
-$Multipleresponse = "Useampi vastaus";
 $Score = "Pisteet";
 $Shared = "Jaettu";
 $Invite = "Kutsu";
@@ -143,7 +145,7 @@ $ViewUnanswered = "Näytä ketkä eivät ole vastanneet";
 $DeleteSurveyQuestion = "Oletko varma että haluat poistaa kysymyksen?";
 $YouAlreadyFilledThisSurvey = "Olet jo vastannut tähän kyselyyn";
 $ClickHereToAnswerTheSurvey = "Klikkaa tästä vastataksesi kyselyyn";
-$OrCopyPasteTheFollowingUrl = "tai leikkaa ja liimaa seuraava osoite: ";
+$OrCopyPasteTheFollowingUrl = "tai leikkaa ja liimaa seuraava osoite:";
 $UnknowUser = "Tuntematon käyttäjä";
 $MoveDown = "Siirrä alas";
 $MoveUp = "Siirrä ylös";
@@ -190,3 +192,4 @@ $ModifyQuestionSurvey = "Muokkaa kysymystä";
 $BackToSurvey = "Takaisin kyselyyn";
 $UpdateInformation = "Päivitä tiedot";
 $PleaseFillSurvey = "Ole hyvä ja täytä kysely";
+?>

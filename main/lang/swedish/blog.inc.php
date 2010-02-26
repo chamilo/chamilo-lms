@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $MyTasks = "Mina uppgifter";
 $FavoriteBlogs = "Mina favorit bloggar";
 $Navigation = "Navigation";
@@ -50,7 +53,7 @@ $ReadMore = "Läs mer...";
 $DeleteThisArticle = "Ta bort blogginlägget";
 $EditThisPost = "Ändra denna post";
 $DeleteThisComment = "Radera denna kommentar";
-$NoArticles = "Just nu finns det inga inlägg i den här bloggen. Om du är ägare av bloggen, klicka på länken 'nytt inlägg' för att skriva ett blogginlägg";
+$NoArticles = "Just nu finns det inga inlägg i den här bloggen. Om du är ägare av bloggen, klicka på länken \'nytt inlägg\' för att skriva ett blogginlägg";
 $NoTasks = "Inga uppgifter";
 $Rating = "Gradering";
 $RateThis = "Gradera inlägget";
@@ -79,3 +82,4 @@ $AddBlog = "Skapa ny blogg";
 $EditBlog = "Ändra rubrik eller underrubrik";
 $DeleteBlog = "Ta bort den här bloggen";
 $Shared = "Delad";
+?>

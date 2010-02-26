@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $LinkMoved = "Povezava je bila prestavljena";
 $langLinkName = "Ime povezave";
 $langLinkAdd = "Dodaj povezavo";
@@ -8,14 +11,14 @@ $langLinkModded = "Povezava je bila spremenjena";
 $langLinkDel = "Odstrani povezavo";
 $langLinkDeleted = "Povezava je bila odstranjena";
 $langLinkDelconfirm = "Ali želiš odstraniti povezavo?";
-$langAllLinksDel = "Odstrani vse povezave v tej kategoriji ";
-$langCategoryName = "Naziv kategorije";
+$langAllLinksDel = "Odstrani vse povezave v tej kategoriji";
+$langCategoryName = "Ime kategorije";
 $langCategoryAdd = "Dodaj kategorijo";
 $langCategoryAdded = "Kategorija je bila dodana";
 $langCategoryModded = "Kategorija je bila spremenjena";
 $langCategoryDel = "Odstrani kategorijo";
 $langCategoryDeleted = "Kategorija in vse njene povezave so bile odstranjene";
-$langCategoryDelconfirm = "Z brisanjem kategorije se odstranijo tudi vse povezave v tej kategoriji.nDejansko želiš odstraniti kategorijo in vse njene povezave ?";
+$langCategoryDelconfirm = "Z brisanjem kategorije se odstranijo tudi vse povezave v tej kategoriji.\\nDejansko želiš odstraniti kategorijo in vse njene povezave ?";
 $langAllCategoryDel = "Odstrani vse kategorije in povezave";
 $langGiveURL = "Podaj povezavo (URL)";
 $langGiveCategoryName = "Podaj ime kategorije";
@@ -45,3 +48,4 @@ $langSaveLink = "Shrani povezavo";
 $langSaveCategory = "Shrani kategorijo";
 $BackToLinksOverview = "Nazaj na pregled povezav";
 $AddTargetOfLinkOnHomepage = "Izberite 'cilj', ki predstavlja povezavo na domači strani tečaja";
+?>

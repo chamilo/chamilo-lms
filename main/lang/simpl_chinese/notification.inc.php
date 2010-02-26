@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $lang_new_item = "添加新项目";
 $lang_title_notification = "自上次访问以来";
 $lang_update_agenda = "现有日程项目更新";
@@ -13,3 +16,4 @@ $lang_new_forum_topic = "新主题已添加";
 $lang_new_groupforum_topic = "已添加新话题到组论坛";
 $lang_new_dropbox_file = "新文档已收到";
 $lang_update_dropbox_file = "投递箱中的文件已更新";
+?>

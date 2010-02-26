@@ -1,6 +1,18 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $NewForumCreated = "Creouse o novo foro";
 $NewThreadCreated = "Creouse o novo tema no foro";
+$AddHotpotatoes = "Importar Hotpotatoes";
+$HideAttemptView = "Ocultar todos os intentos";
+$ExtendAttemptView = "Mostrar todos os intentos";
+$LearnPathAddedTitle = "Benvido á ferramenta de creación de contidos de Chamilo!";
+$BuildComment = "Engade obxectos de aprendizaxe e actividades ao teu curso.";
+$BasicOverviewComment = "Engade audio comentarios e ordea os obxectos de aprendizaxe nunha táboa de contidos.";
+$DisplayComment = "Ver lección con vista de estudante";
+$NewChapterComment = "Capítulo 1, Capítulo 2 our Semana 1, Semana 2...";
+$NewStepComment = "Engada tests, actividades y contidos multimedia";
 $lang_learning_path = "Itinerario formativo";
 $lang_learning_path_builder = "Construtor de itinerarios formativos";
 $lang_description = "descrición";
@@ -55,7 +67,7 @@ $lang_learnpath_module_deleted = "O módulo do itinerario de aprendizaxe e todos
 $lang_nochapters = "Non hai módulos engadidos.";
 $lang_add_learnpath_item = "Engadir pasos a este módulo";
 $lang_learnpath_item_deleted = "Borrouse o paso do itinerario de aprendizaxe.";
-$lang_assign_learnpath_items_to = "asigna este/estes pasos a un módulo do itinerario de aprendizaxe: ";
+$lang_assign_learnpath_items_to = "asigna este/estes pasos a un módulo do itinerario de aprendizaxe:";
 $lang_edit_learnpath_item = "Editar unha descripción/título adicional do paso";
 $lang_add_prereq = "Engadir/editar prerequisitos a este paso";
 $lang_delete_learnpath_item = "Borrar paso";
@@ -128,7 +140,7 @@ $langCreateTheDocument = "Crear o documento";
 $langMoveTheCurrentDocument = "Mover o documento actual";
 $langEditTheCurrentDocument = "Editar o documento actual";
 $langWarning = "Atención!";
-$langWarningEditingDocument = "Cando edite un documento existente na Rota de Aprendizaxe, a nova versión do documento non se sobrepón á máis antiga, senón que se garda como un documento novo. Se quere modificar un documento de maneira definitiva, pódeo facer coa ferramenta de documento.";
+$langWarningEditingDocument = "Cando edite un documento existente na Rota de Aprendizaxe, a nova versión do documento non se sobrepón á máis antiga, senón que se garda como un documento novo. Se quere modificar un documento de maneira definitiva, pódeo facer coa ferramenta de documento";
 $langDirectory = "Directorio";
 $langCreateTheExercise = "Crear o exercicio";
 $langMoveTheCurrentExercise = "Mover o exercicio actual";
@@ -139,7 +151,7 @@ $langLPCreatedToContinue = "Para continuar pode engadir un módulo, capítulo ou
 $langLPCreatedAddChapterStep = "Pode engadir un módulo, capítulo ou paso á rota de aprendizaxe desde o menú da esquerda.";
 $langPrerequisitesAdded = "Engadíronse os pré-requisitos para o paso actual.";
 $langAddEditPrerequisites = "Engadir/modificar pré-requisitos";
-$langMinimum = "mínimo";
+$langMinimum = " 	Mínimo";
 $langMaximum = "Máximo";
 $langNoDocuments = "Nengún documento";
 $langNoExercisesAvailable = "Non existen exercicios disponíbeis";
@@ -188,4 +200,6 @@ $OogieUnknownError = " 	A conversión fallou por unha razón descoñecida. <br /
 $OogieBadExtension = "O arquivo non ten unha extensión correcta.";
 $WoogieBadExtension = " Por favor, envíe só documentos de texto. A extensión do arquivo debe ser .doc, .docx ou ben .odt";
 $ShowAudioRecorder = "Mostrar o gravador de audio";
-$AddForum = "Engadir un novo foro";
+$ViewLearningPath = "Ver lección";
+$AddForum = "Agregar foro";
+?>

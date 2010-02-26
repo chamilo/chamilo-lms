@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langLinkSite = "Ana Sayfaya Bağlantı ekle";
 $langSubTitle = "Adds to your Course Homepage Main Menu a link to a site, a page or any URL. Tip: if you want to add a link to a page, go to that page, cut and paste its address in the URL bar on the top of your browser and insert it into the \"link\" field below.";
 $langAddPage = "Sayfa ekle";
@@ -22,3 +25,4 @@ $NoLinkName = "Bağlantı ismi yok";
 $NoLinkURL = "URL bağlantısı yok";
 $LinkChanged = "Bağlantı değiştirildi";
 $OkSentLink = "Bağlantı gönderildi";
+?>

@@ -1,9 +1,12 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langNewGroupCreate = "Opret ny gruppe(r)";
 $langGroupCreation = "Oprettelse af ny gruppe(r)";
 $langCreate = "opret";
 $langNewGroups = "ny gruppe(r)";
-$langMax = "max. 20 tegn, f.eks. <i>ROM2121</i>. Brug ikke <i>æ, ø, å</i>";
+$langMax = "max.";
 $langGroupPlacesThis = "antal (valgfri)";
 $langGroupsAdded = "gruppe(r) er blevet tilføjet";
 $langGroupDel = "Gruppen er slettet";
@@ -15,14 +18,14 @@ $langGroupTools = "Værktøjer";
 $langGroupDocument = "Dokumenter";
 $langGroupPropertiesModified = "Opsætning af gruppe er ændret";
 $langGroupSpace = "Gruppeområde";
-$langGroupName = "Gruppens navn";
-$langGroupDescription = "Beskrivelse af gruppen";
+$langGroupName = "Gruppenavn";
+$langGroupDescription = "Beskrivelse";
 $langGroupMembers = "Gruppemedlemmer";
 $langEditGroup = "Rediger denne gruppe";
 $Optional = "(valgfri)";
 $langGroupSettingsModified = "Opsætning af gruppe er ændret";
 $langGroupTooMuchMembers = "Antal foreslåede overstiger det max., som du tillod (du kan ændre det nedenfor). 				Gruppesammensætningen er ikke blevet ændret";
-$langGroupTutor = "Gruppens instruktor";
+$langGroupTutor = "Instruktor";
 $langGroupNoTutor = "(ingen)";
 $langGroupNone = "(ingen)";
 $langGroupNoneMasc = "(ingen)";
@@ -33,14 +36,14 @@ $langGroupSelfRegistration = "Tilmelding";
 $langGroupSelfRegInf = "tilmeld";
 $langRegIntoGroup = "Tilføj mig til denne gruppe";
 $langGroupNowMember = "Du er nu medlem af denne gruppe";
-$langPrivate = "Privat adgang - siden er kun tilgængelig for personer på deltagerlisten";
-$langPublic = "Åben adgang til kurset fra systemets forside selv uden login.";
+$langPrivate = "lukket gruppe";
+$langPublic = "åben gruppe";
 $langPropModify = "Rediger opsætning";
 $langState = "Tilstand";
 $langGroupFilledGroups = "Grupperne er blevet fyldt (eller udfyldte) af deltagerne, som optræder på deltagerlisten.";
 $langSubscribed = "deltagere tilmeldt dette kursus";
 $langStudentsNotInThisGroups = "Deltagere som ikke er i denne gruppe";
-$langQtyOfUserCanSubscribe_PartBeforeNumber = "En deltager kan højst være medlem af ";
+$langQtyOfUserCanSubscribe_PartBeforeNumber = "En deltager kan højst være medlem af";
 $langQtyOfUserCanSubscribe_PartAfterNumber = " gruppe";
 $langGroupLimit = "Begrænsning";
 $langStudentRegAllowed = "Deltagerne skal selv tilmelde sig grupperne";
@@ -86,3 +89,4 @@ $NoCategoriesDefined = "Der er ikke defineret kategorier";
 $GroupsFromClasses = "Grupper fra kurser";
 $GroupsFromClassesInfo = "Ved anvendelse af denne funktion kan du oprette grupper, der er baseret på deltagerne på kurussiden";
 $Group = "Gruppe";
+?>

@@ -1,5 +1,8 @@
 <?php
-$langToolName = "Importer Blackboard kurser";
+/*
+for more information: see languages.txt in the lang folder.
+*/
+$langToolName = "Rapportering";
 $TrackingDisabled = "System administrator har slått av rapportering.";
 $InactivesStudents = "Uaktive brukere";
 $AverageTimeSpentOnThePlatform = "Forbrukt tid i portalen";
@@ -16,10 +19,10 @@ $SeeSessionList = "Se oversikt over sesjoner";
 $langShowNone = "Vis ingen";
 $langCourseStats = "Kursstatistikk";
 $langToolsAccess = "Adgang til verktøyene";
-$langCourseAccess = "Kurs tilgang";
+$langCourseAccess = "Adgang til dette kurset";
 $langLinksAccess = "Lenker";
 $langDocumentsAccess = "Dokumenter";
-$langScormAccess = "Læringssti - SCORM ";
+$langScormAccess = "Læringssti - SCORM";
 $langLinksDetails = "Lenke detaljer";
 $langWorksDetails = "Innleverte oppgaver";
 $langLoginsDetails = "Klikk på månedens navn for flere detaljer";
@@ -62,7 +65,7 @@ $langCourse = "Kurs";
 $langHits = "Treff";
 $langTotal = "Totalt";
 $langHour = "Time";
-$langDay = "dag";
+$langDay = "Dag";
 $langLittleHour = "t.";
 $langLast31days = "I de siste 31 dager";
 $langLast7days = "I de siste 7 dager";
@@ -141,3 +144,4 @@ $CourseInformation = "Kursinformasjon";
 $AvgExercisesScore = "Poengsum test";
 $TrainingTime = "Forbrukt tid";
 $CourseProgress = "Progresjon";
+?>

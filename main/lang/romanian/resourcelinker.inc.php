@@ -1,6 +1,9 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $ResourceAdded = "Resurse adaugate. Te poti intoarce sau adauga mai multe resurse.";
-$LearningPath = "Cale";
+$LearningPath = "Calea de Invatare";
 $LevelUp = "nivel ridicat";
 $AddIt = "Adauga-l";
 $MainCategory = "categoria principala";
@@ -37,19 +40,20 @@ $StepDeleted1 = "Aceasta";
 $StepDeleted2 = "componenta a fost stearsa in aceea unealta.";
 $Modify = "modifica";
 $Chapter = "Capitol";
-$NoAgendaItems = "Nu exista itemi";
-$AgendaAdd = "Adauga item nou";
-$UserGroupFilter = "Filtreaza grupuri/utilizatori";
-$AgendaSortChronologicallyUp = "Ordine crescatoare";
-$ShowCurrent = "Prezinta itemii lunii curente";
-$ModifyCalendarItem = "Modifica item din Agenda";
-$ItemTitle = "Titlul itemului";
-$Detail = "Detaliu";
-$EditSuccess = "Itemul a fost editat";
-$AddCalendarItem = "Adauga item in agenda;";
+$NoAgendaItems = "Nu sunt componente in agenda";
+$AgendaAdd = "Adauga un component la agenda";
+$UserGroupFilter = "Filtru pentru grupul de utilizator";
+$AgendaSortChronologicallyUp = "Ordoneaza agenda dupa data (sus)";
+$ShowCurrent = "Arata componentele existente ale agendei";
+$ModifyCalendarItem = "Modifica componentul agendei";
+$ItemTitle = "Titlu";
+$Detail = "Detalii";
+$EditSuccess = "Editare reusita";
+$AddCalendarItem = "Adauga un component la agenda";
 $AddAnn = "Adauga anunt";
 $ForumAddNewTopic = "Forum: adauga un subiect de discutie nou";
 $ForumEditTopic = "Forum: editeaza subiectul de discutie";
 $ExerciseAnswers = "Exercitiu: Raspunsuri";
 $ForumReply = "Forum: raspunde";
-$AgendaSortChronologicallyDown = "Ordine descrescatoare";
+$AgendaSortChronologicallyDown = "Sorteaza agenda cronologic";
+?>

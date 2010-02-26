@@ -1,11 +1,14 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langOnlineConference = "Conferència en línia";
 $langWash = "Renta";
 $langReset = "Reiniciar";
 $langSave = "Guarda";
 $langRefresh = "Actualitza";
 $langIsNowInYourDocDir = "ara es troba a la vostra eina de document. <br><B>Aquest fitxer és visible</B>";
-$langCopyFailed = "Error d'impressió";
+$langCopyFailed = "Error d\'impressió";
 $langTypeMessage = "Escriviu el vostre missatge !";
 $langConfirmReset = "Esteu segur de voler esborrar tots els missatges ?";
 $langHasResetChat = "heu esborrat els missatges";
@@ -23,13 +26,14 @@ $langTextEditorDefault = "<h2>Editor de text</h2>Talleu i enganxeu aquí un text
 $langStreaming = "Streaming";
 $langStreamURL = "URL del stream";
 $langStreamType = "Tipus del stream";
-$langLinkName = "Nom de l'enllaç";
-$langLinkURL = "URL de l'enllaç";
+$langLinkName = "Nom de l\'enllaç";
+$langLinkURL = "URL de l\'enllaç";
 $langWelcomeToOnlineConf = "Benvingut a la <b>Conferència en línia</b>";
 $langNoLinkAvailable = "No hi ha enllaços disponibles";
 $langChat_reset_by = "Reiniciar el xat";
 $OrFile = "O el fitxer";
-$langCallSent = "S'ha enviat una demanda de \"xat\". En espera de l'aprovació de la persona contactada.";
+$langCallSent = "S\'ha enviat una demanda de \\"xat\\". En espera de l\'aprovació de la persona contactada.";
 $langChatDenied = "La vostra petició ha estat refusada per la persona contactada.";
 $Send = "Enviar";
 $Connected = "Connectat";
+?>

@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langSelectOptionForBackup = "Silahkan pilih opsi backup.";
 $langLetMeSelectItems = "Biarkan saya memilih komponen mata kuliah";
 $langCreateFullBackup = "Buat backup lengkap mata kuliah ini";
@@ -40,3 +43,4 @@ $langBackup = "Backup";
 $langImportBackupInfo = "Import backup. Anda dapat meng-upload file backup dari drive local anda atau menggunakan file backup yang tersedia di server.";
 $langCreateBackupInfo = "Buat backup mata kuliah ini. Anda dapat memilih isi mata kuliah untuk dimasukkan dalam file backup.";
 $ToolIntro = "Tool Pengantar";
+?>

@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langActivate = "Gør aktiv/ synlig for deltagerne";
 $langDeactivate = "Gør passiv/ skjul for deltagerne";
 $langInLnk = "Ikke aktive funktioner og links";
@@ -22,3 +25,4 @@ $Authoring = "Distribution";
 $Administration = "Administration";
 $IntroductionTextUpdated = "Introduktionsteksten er opdateret";
 $IntroductionTextDeleted = "Introduktionsteksten er slettet";
+?>

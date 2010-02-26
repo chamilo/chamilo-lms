@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langSelectOptionForBackup = "Te rog alege optiunea copiei de rezerva.";
 $langLetMeSelectItems = "Lasa-ma sa aleg componentele cursului";
 $langCreateFullBackup = "Creaza o copie de rezerva completa a acestui curs";
@@ -45,3 +48,4 @@ $DocumentsWillBeAddedToo = "Se vor adauga si documente";
 $ToExportLearnpathWithQuizYouHaveToSelectQuiz = "Daca doriti sa exportati o cale de invatare ce contine un test, trebuie sa va asigurati ca testele respective vor fi adaugate in export deci, va trebui sa le selectati din lista de teste.";
 $ArchivesDirectoryNotWriteableContactAdmin = "Directorul cu arhivele utilizat de acest instrument este needitabil. Va rugam contactati administratorul platformei.";
 $DestinationCourse = "Cursul destinatie";
+?>

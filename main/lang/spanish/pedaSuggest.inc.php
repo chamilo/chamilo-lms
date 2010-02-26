@@ -1,11 +1,14 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $GeneralDescription = "Descripción general";
-$GeneralDescriptionQuestions = "¿ Cuál es el papel y función del curso en el programa ? ¿ Se requieren actividades previas ? ¿ Qué relación tiene este curso con otros ? ";
+$GeneralDescriptionQuestions = "¿ Cuál es el papel y función del curso en el programa ? ¿ Se requieren actividades previas ? ¿ Qué relación tiene este curso con otros ?";
 $GeneralDescriptionInformation = "Descripción del curso (número de horas, código, lugar donde se desarrolla...). Profesor (nombre, apellidos, despacho, teléfono, e-mail...).";
 $Objectives = "Objetivos";
 $ObjectivesInformation = "Presentación de los objetivos globales y específicos del curso";
 $ObjectivesQuestions = "¿ Qué quiere que los estudiantes sepan hacer al finalizar el curso ? ¿ Qué objetivos irán alcanzando durante el mismo ?";
-$Topics = "Temas";
+$Topics = "Contenidos";
 $TopicsInformation = "Lista de contenidos del curso. Importancia de cada contenido. Nivel de dificultad. Estructura e interdependencia entre sus apartados.";
 $TopicsQuestions = "¿ Cuál será el desarrollo del curso ?  ¿ Dónde deben prestar especial atención los estudiantes ? ¿ Hay problemas identificados en la comprensión de algunos capítulos ?  ¿ Cuánto debe dedicarse a cada parte del curso ?";
 $Methodology = "Metodología";
@@ -20,3 +23,4 @@ $HumanAndTechnicalResourcesInformation = "Breve descripción de las personas de 
 $Assessment = "Evaluación";
 $AssessmentQuestions = "¿ Cómo van a ser evaluados los estudiantes ? ¿ Cuáles son las estrategias para que éstos acaben dominando la materia ?";
 $AssessmentInformation = "Ejemplos de las preguntas de examen. Criterios de evaluación. Pistas y trucos.";
+?>

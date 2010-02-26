@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $ModifInfo = "Settings";
 $langModifDone = "The information has been modified";
 $langDelCourse = "Delete the training area";
@@ -8,13 +11,13 @@ $langConfidentiality = "Confidentiality";
 $langPublic = "Public access from portal home page even without login";
 $langUnsubscription = "Unsubscribe";
 $langPrivOpen = "Private access, registration open";
-$langPrivate = " Private access (training reachable only by people on the users list)";
+$langPrivate = "Private access - site accessible only to training members (see the <a href=../user/user.php>Users list</a>)";
 $langForbidden = "Not allowed";
-$CourseAccessConfigTip = " By default your training is public. But you can define the level of confidentiality above.";
+$CourseAccessConfigTip = "By default your training is public. But you can define the level of confidentiality above.";
 $langOpenToTheWorld = "Open - access allowed for the whole world";
-$OpenToThePlatform = " Open - access allowed for users registered on the platform";
+$OpenToThePlatform = "Open - access allowed for users registered in portal";
 $langOpenToThePlatform = "Open - access allowed for users registered on the platform";
-$langTipLang = "This language will be valid for every visitor of your training's website.";
+$langTipLang = "This language will be valid for every visitor of your training\'s website.";
 $langVid = "Chamilo LIVE";
 $langWork = "Contributions";
 $langProgramMenu = "Training program";
@@ -23,9 +26,9 @@ $langExercise = "Tests";
 $langStats = "Statistics";
 $langUplPage = "Upload page and link to Home Page";
 $langLinkSite = "Add link to page on Home Page";
-$langCourse = "The area ";
+$langCourse = "The area";
 $langHasDel = "has been deleted";
-$langBackHome = "Back to Home Page of ";
+$langBackHome = "Back to Home Page of";
 $langByDel = "Deleting this area will permanently delete all the content (documents, links...) it contains and unregister all its members (not remove them from other training). <p>Do you really want to delete the training?";
 $langY = "YES";
 $langN = "NO";
@@ -62,7 +65,7 @@ $langSubscription = "Subscription";
 $langCourseAccess = "Training access";
 $langConfirmBackup = "Do you really want to backup this training?";
 $langCreateSite = "Create a training";
-$langRestoreDescription = "The training is in an archive file which you can select below.<br><br>Once you click on \"Restore\", the archive will be uncompressed and the training recreated.";
+$langRestoreDescription = "The training is in an archive file which you can select below.<br><br>Once you click on \\"Restore\\", the archive will be uncompressed and the training recreated.";
 $langRestoreNotice = "This script doesn't allow yet to automatically restore users, but data saved in \"users.csv\" are sufficient for the administrator to do it manually.";
 $langAvailableArchives = "Available archives list";
 $langNoArchive = "No archive has been selected";
@@ -73,7 +76,7 @@ $langBackH = "back to homepage";
 $langOtherCategory = "Other category";
 $langAllowedToUnsubscribe = "Users are allowed to unsubscribe from this training";
 $langNotAllowedToUnsubscribe = "Users are not allowed to unsubscribe from this training";
-$langCourseVisibilityClosed = " Completely closed: the training is only accessible to the trainers.";
+$langCourseVisibilityClosed = "Completely closed; the training is only accessible trainers.";
 $CourseVisibilityClosed = "Closed - the training is only accessible to the trainers";
 $CourseVisibilityModified = "Modified (more detailed settings specified through roles-rights system)";
 $WorkEmailAlert = "Alert by e-mail on work submission";
@@ -110,3 +113,4 @@ $NewUserEmailAlert = "Notice by e-mail  to trainer of auto subscription of a new
 $NewUserEmailAlertEnable = "Enable the notice by e-mail  to trainer of auto subscription of a new user";
 $NewUserEmailAlertToTeacharAndTutor = "Enable the notice by e-mail  to trainer and tutors of auto subscription of a new user";
 $NewUserEmailAlertDisable = "Disable the email alert for the suscription of  new user in the training";
+?>

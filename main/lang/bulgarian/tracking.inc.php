@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langToolName = "Импортиране на курсове от системата Blackboard";
 $TrackingDisabled = "Прегледът е изключен от администратора на системата.";
 $InactivesStudents = "Неактивни потребители";
@@ -58,7 +61,7 @@ $langWorkDescription = "Описание";
 $informationsAbout = "Относно";
 $langNoEmail = "Не е посочен адрес за електронна поща.";
 $langNoResult = "Все още няма резултати.";
-$langCourse = "Курсът ";
+$langCourse = "Курсът";
 $langHits = "Посещения";
 $langTotal = "Общо";
 $langHour = "Час";
@@ -209,7 +212,7 @@ $CoachStudents = "Курсисти на този инструктор";
 $NoLearningPath = "Няма SCORM-курсове.";
 $SessionCourses = "Сесия";
 $NoUsersInCourseTracking = "Тук ще виждате резултатите от посещенията на курсистите във Вашия курс.";
-$AvgTimeSpentInTheCourse = "Средно време, прекарано в курса ";
+$AvgTimeSpentInTheCourse = "Средно време, прекарано в курса";
 $RemindInactiveUser = "Подсещане на неактивен потребител";
 $FirstLogin = "Първо посещение";
 $AccessDetails = "Подробности";
@@ -239,3 +242,4 @@ $TrainingTime = "Време действие на курса";
 $CourseProgress = "Напредък";
 $ViewMinus = "Скриване";
 $ResourcesTracking = "Справка за учебната дейност";
+?>

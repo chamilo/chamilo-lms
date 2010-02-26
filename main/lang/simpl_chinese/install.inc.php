@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langStatDB = "日志数据库";
 $langEnableTracking = "启用日志";
 $langInstituteShortName = "你的组织简称";
@@ -20,8 +23,8 @@ $langAdminPass = "管理员密码(<FONT color=red>可以修改</FONT>)";
 $langEducationManager = "项目管理人";
 $langCampusName = "网站名称";
 $langDBSettingIntro = "安装脚本将创建 IILearn 的数据库，系统默认将使用多数据库模式，如果你的主机服务商只允许使用一个数据库，您应选择一个数据库的模式。";
-$langStep1 = "步骤一";
-$langStep2 = "步骤二";
+$langStep1 = "步骤1/7";
+$langStep2 = "步骤2/7";
 $langStep3 = "步骤3/7";
 $langStep4 = "步骤4/7";
 $langStep5 = "步骤5/7";
@@ -40,35 +43,10 @@ $langAllowSelfReg = "允许学生注册";
 $langRecommended = "(推荐)";
 $langScormDB = "Scorm 数据库";
 $langAdminLastName = "管理员姓氏";
-$langAdminFirstName = "管理员名字";
 $langAdminPhone = "管理员电话";
+$langAdminFirstName = "管理员名字";
 $langInstituteURL = "组织的网址";
 $langDokeosURL = "网址";
 $langUserDB = "用户数据库";
 $langInstallationLanguage = "安装语言";
-$ReadThoroughly = "详细阅读";
-$DokeosNeedFollowingOnServer = "为了让Dokeos正常运行, 你的主机必须安装以下";
-$WarningExistingDokeosInstallationDetected = "警告!<br />安装程序检查到您的系统内已有一Dokeos 平台.";
-$NewInstallation = "全新安装";
-$CheckDatabaseConnection = "检查数据库连接";
-$PrintOverview = "显示概况";
-$Installing = "安装";
-$of = "的";
-$Step = "步骤";
-$Of = "of";
-$MoreDetails = "要求更多详情";
-$ServerRequirements = "伺服器要求";
-$PHPVersion = "PHP 版本";
-$support = "支持";
-$PHPVersionOK = "PHP 版本能接受";
-$OK = "OK";
-$RecommendedSettings = "推荐设定";
-$RecommendedSettingsInfo = "伺服器的推荐设定。这些设定已出现在您的伺服器里的php.ini文件。";
-$Setting = "设定";
-$Actual = "当前";
-$DirectoryAndFilePermissions = "目录及文档许可";
-$NotWritable = "不可写";
-$Writable = "可写";
-$IAccept = "我接受";
-$InstallDokeos = "安装 Chamilo";
-$GoToYourNewlyCreatedPortal = "访问你新创建的入门网站。";
+?>

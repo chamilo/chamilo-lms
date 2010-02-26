@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langShouldBeCSVFormat = "檔案應該是CSV格式，請不要加空格，架構應該是︰";
 $langTracking = "學習進度";
 $langEnter2passToChange = "修改密碼請重複輸入兩次，否則保持為空。";
@@ -38,8 +41,8 @@ $langUserMany = "從CSV / XML 檔案匯入用戶表";
 $langOneByOne = "手工添加用戶";
 $langNow = "現下";
 $langTutor = "教師";
-$langTitular = "領導";
-$langAddHereSomeCourses = "<FONT face=\"Arial, Helvetica\" size=2><BIG>更新我的課程</BIG><BR><BR>選擇你要參與的課程，<BR>反選你要退出的課程，<BR>然後點擊清單下面確定按鈕. </FONT>";
+$langTitular = "必選";
+$langAddHereSomeCourses = "<FONT face=\\"Arial, Helvetica\\" size=2><BIG>更新我的課程</BIG><BR><BR>選擇你要參與的課程，<BR>反選你要退出的課程，<BR>然後點擊清單下面確定按鈕. </FONT>";
 $langStudent = "學生";
 $langImportUserList = "匯入用戶清單";
 $langAddAU = "添加一個用戶";
@@ -57,7 +60,7 @@ $langProfileReg = "您的個人訊息已經儲存。";
 $langEmailWrong = "郵件位址不正確，存在非法字符";
 $langUserTaken = "用戶名已經存在";
 $langFields = "您有些選項未填寫";
-$langAgain = "重試﹗ ";
+$langAgain = "重試﹗";
 $langPassTwo = "兩次輸入的密碼不同";
 $langViewProfile = "瀏覽註冊訊息";
 $langModifProfile = "修改註冊訊息";
@@ -67,8 +70,8 @@ $langNowGoChooseYourCourses = "點擊下一步來選擇您的課程︰";
 $langMailHasBeenSent = "郵件已經發送，裡麵包含用戶名和密碼，";
 $langPersonalSettings = "您已經成功註冊，";
 $langManager = "管理員";
-$langFormula = "你誠摯的";
-$langProblem = "遇到問題請聯繫我們: ";
+$langFormula = "誠摯的";
+$langProblem = "遇到問題請聯繫我們:";
 $langIs = "是";
 $langAddress = "位址";
 $langSettings = "下面是您的註冊訊息︰";
@@ -96,8 +99,8 @@ $langMember = "成員";
 $langLock = "鎖定";
 $langUnlock = "解鎖";
 $langHaveNoCourse = "沒有課程";
-$langManage = "管理入口";
-$langAdministrationTools = "管理工具";
+$langManage = "系統管理";
+$langAdministrationTools = "管理員工具";
 $langUserProfileReg = "用戶已註冊";
 $lang_no_user_account_with_this_email_address = "這個郵箱沒有註冊過";
 $langCourses4User = "課程用戶";
@@ -136,8 +139,9 @@ $YourAccountHasToBeApproved = "你的戶口已被批核";
 $ApprovalForNewAccount = "批核新戶口";
 $ManageUser = "管理使用者";
 $SubscribeUserToCourseAsTeacher = "於本課程加入教師用戶";
-$SendMessage = "傳送訊息";
+$SendMessage = "發送訊息";
 $PasswordEncryptedForSecurity = "因應安全理由，你的密碼已被加密。按下連結，你的密碼便會通過電郵傳送給你。";
 $UsersUnsubscribed = "已把選定使用者從本課程中取消";
 $SystemUnableToSendEmailContact = "系統未能發送電郵給聯絡人";
-$UsernameMaxXCharacters = "使用者名稱最長為 %s 字母 ";
+$UsernameMaxXCharacters = "使用者名稱最長為 %s 字母";
+?>

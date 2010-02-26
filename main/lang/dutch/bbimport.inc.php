@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langViewCourseMaterialImport = "Bekijk het cursusmateriaal zoals het geïmporteerd zal worden";
 $langViewExternalLinksImport = "Bekijk de externe links zoals ze geïmporteerd zullen worden";
 $langViewForumImport = "Bekijk de forums zoals ze geïmporteerd zullen worden";
@@ -18,3 +21,4 @@ $langChooseImportOptions = "Opties kiezen";
 $langCheckWhatIsImported = "U kunt eventueel kijken wat er geïmporteerd zal worden voor het importeren echt te starten.";
 $langStartImporting = "Start het importeren";
 $langImport = "Importeer";
+?>

@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $FlatView = "Плоскостной вид";
 $ScoreEdit = "Правила формирования результата";
 $ScoreColor = "Цвет результата";
@@ -16,7 +19,7 @@ $NewCategory = "Новый раздел";
 $NewEvaluation = "Новый процесс оценивания";
 $Weight = "Удельный вес";
 $PickACourse = "Выбрать курс";
-$CategoryName = "Имя раздела";
+$CategoryName = "Название раздела";
 $CourseIndependent = "Независимый курс";
 $CourseIndependentEvaluation = "Оценивание независимого курса";
 $EvaluationName = "Название процесса оценки";
@@ -44,4 +47,5 @@ $Landscape = "Пейзаж";
 $FilterCategory = "Фильтрующий раздел";
 $DeleteAll = "Удалить все";
 $ScoringUpdated = "Результат обновлен";
-$CertificateWCertifiesStudentXFinishedCourseYWithGradeZ = "% аттестованных, что нн % нн успешно закончили курс нн \"%\" нн с результатом нн \"%\" ";
+$CertificateWCertifiesStudentXFinishedCourseYWithGradeZ = "% аттестованных, что нн % нн успешно закончили курс нн \"%\" нн с результатом нн \"%\"";
+?>

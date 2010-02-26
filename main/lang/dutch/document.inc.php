@@ -1,10 +1,13 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $MoveTo = "Verplaats naar";
 $langDownloadFile = "Upload volgend bestand naar de server";
 $langNameDir = "Titel van nieuwe map";
 $langSize = "Grootte";
 $langRename = "Hernoemen";
-$langCopy = "Kopieer cursusinhoud";
+$langCopy = "Kopiëren";
 $langTo = "naar";
 $langNoSpace = "Het uploaden is niet geslaagd. Het opslagquotum voor uw cursus is overschreden, of er is niet genoeg ruimte op de harde schijf.";
 $langDownloadEnd = "Het uploaden is geslaagd.";
@@ -31,7 +34,7 @@ $langMaxFileSize = "Maximumbestandsgrootte is";
 $langFileName = "Bestandsnaam";
 $langNoFileName = "Gelieve een bestandsnaam op te geven.";
 $langNoText = "Typ de tekst/HTML-inhoud hier";
-$langAreYouSureToDelete = "Wil u dit document verwijderen: ";
+$langAreYouSureToDelete = "Wil u dit document verwijderen:";
 $langScormcontent = "Dit is een SCORM-pakket.<br /><input type=\"button\" name=\"scormbutton\" value=\"Afspelen\" onclick=\"openscorm()\" />";
 $langScormcontentstudent = "Dit is een cursus in SCORM-formaat. Om hem af te spelen, klik hier: <input type=\"button\" name=\"scormbutton\" value=\"Afspelen\" onclick=\"openscorm()\" />";
 $langPublish = "Publiceren";
@@ -45,13 +48,13 @@ $langChapter = "Hoofdstuk";
 $langDocumentList = "Lijst van alle documenten";
 $langOrganisationList = "Inhoudsopgave";
 $langCreationSucces = "De inhoudsopgave is aangemaakt.";
-$langCanViewOrganisation = "U kunt deze lezen: ";
+$langCanViewOrganisation = "U kunt deze lezen:";
 $langHere = "bekijk inhoudsopgave.";
 $langViewDocument = "Lezen";
 $langHtmlTitle = "Inhoudsopgave";
 $langAddToTOC = "Voeg element toe";
 $langAddChapter = "Voeg hoofdstuk toe";
-$langReady = "Klaar – maak de inhoudsopgave aan";
+$langReady = "Klaar &ndash; maak de inhoudsopgave aan";
 $langStoreDocuments = "Documenten opslaan";
 $langTocDown = "Omlaag";
 $langTocUp = "Omhoog";
@@ -88,7 +91,7 @@ $UplNoSCORMContent = "Geen SCORM-inhoud gevonden.";
 $UplZipExtractSuccess = "Het .zip bestand is uitgepakt.";
 $UplZipCorrupt = "Kan het .zip bestand niet uitpakken (bestand corrupt?).";
 $UplAlreadyExists = "bestaat reeds.";
-$UplFileSavedAs = "Bestand bewaard als ";
+$UplFileSavedAs = "Bestand bewaard als";
 $UplFileOverwritten = "werd overschreven.";
 $CannotCreateDir = "De map kan niet aangemaakt worden.";
 $UplUpload = "Uploaden";
@@ -203,10 +206,11 @@ $TemplateTitleTimeline = "Tijdslijn";
 $TemplateTitleTimelineDescription = "3 lijsten met een pijl die het verband aangeeft";
 $TemplateTitleStopAndThink = "Stop en denk na";
 $TemplateTitleListLeftListDescription = "Linker lijst met een lesgever";
-$TemplateTitleStopAndThinkDescription = "Een paginaopmaak die u aanzet om te stoppen en even na te denken. ";
+$TemplateTitleStopAndThinkDescription = "Een paginaopmaak die u aanzet om te stoppen en even na te denken.";
 $CreateTheDocument = "Document aanmaken";
 $CreateTemplate = "Sjabloon aanmaken";
 $SharedFolder = "Gedeelde folder";
 $CreateFolder = "Maak de folder aan";
 $TemplateImage = "Icoon voor het sjabloon";
 $MoveElement = "Verplaats element";
+?>

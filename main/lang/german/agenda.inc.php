@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $AgendaAdd = "Neuen Termin hinzufügen";
 $ShowAllEvents = "Alle Termine anzeigen";
 $ShowCurrent = "Termine in diesem Monat anzeigen";
@@ -47,7 +50,7 @@ $ViewPersonalItem = "Persönliche Agenda ansehen";
 $UserGroupFilter = "Filter für Gruppen/Nutzer";
 $ShowAll = "Alle zeigen";
 $Print = "Drucken";
-$MyTextHere = "mein Text folgt hier ";
+$MyTextHere = "mein Text folgt hier";
 $CopiedAsAnnouncement = "Als Ankündigung kopiert";
 $NewAnnouncement = "Neue Ankündigung";
 $AddAnnouncement = "Als Ankündigung hinzugefügt";
@@ -72,3 +75,4 @@ $AgendaSortChronologicallyDown = "absteigend";
 $ItemForUserSelection = "ausgewählte Objekte";
 $IsNotiCalFormatFile = "Diese Datei ist nicht im iCal-Format gespeichert";
 $RepeatEvent = "Termin wiederholen";
+?>

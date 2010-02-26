@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $MoveTo = "Преместване към";
 $langDownloadFile = "Качване на файл";
 $langNameDir = "Име на папката";
@@ -31,7 +34,7 @@ $langMaxFileSize = "Максималният размер на файла е";
 $langFileName = "Име на файла";
 $langNoFileName = "Моля, въведете името на файла.";
 $langNoText = "Моля, въведете текст (HTML).";
-$langAreYouSureToDelete = "Желаете ли да изтриете ";
+$langAreYouSureToDelete = "Желаете ли да изтриете";
 $langScormcontent = "Това е съдържание според стандарта SCORM<br/><input type='button' name='scormbutton' value='Стартиране' onclick='javascript:openscorm()'>";
 $langScormcontentstudent = "Това е курс според стандарта SCORM. За да го стартирате, щракнете тук: <input type='button' name='scormbutton' value='Стартиране' onclick='javascript:openscorm()'>";
 $langPublish = "Публикуване";
@@ -87,7 +90,7 @@ $UplNotEnoughSpace = "Няма достатъчно място, за да кач
 $UplNoSCORMContent = "Не е открито съдържание според стандарта SCORM.";
 $UplZipExtractSuccess = "ZIP-файлът е разкомпресиран успешно.";
 $UplZipCorrupt = "Не може да се разкомпресира ZIP-файла. Вероятно е повреден.";
-$UplAlreadyExists = " вече съществува. ";
+$UplAlreadyExists = " вече съществува.";
 $UplFileSavedAs = "Файлът е запазен като";
 $UplFileOverwritten = "беше презаписан.";
 $CannotCreateDir = "Не може да се създаде директория.";
@@ -211,3 +214,4 @@ $CreateFolder = "Създаване на папката";
 $HelpDefaultDirDocuments = "Тази директория е създадена по подразбиране за съхраняването на даден тип файлове. Можете да добавяте или изтривате файлове. Ако вмъквате файлове като обекти в други документи, първо направете тези файлове видими. В противе случай курсистите няма да могат да ги видят. Директорията може да остане скрита.";
 $HelpSharedFolder = "Тази директория съдържа файлове, които са създадени от курсистите при използване на текстовия редактор (това не важи за групи). По подразбиране вложените папки и файлове са видими за всеки инструктор, но са скрити за курсистите. Ако направите някоя от папките на курсистите видима, то останалите курсисти ще могат да видят нейното съдържание.";
 $TemplateImage = "Изображение на шаблона";
+?>

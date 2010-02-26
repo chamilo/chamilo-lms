@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $AgendaAdd = "Add new Agenda Item";
 $ShowAllEvents = "Show All Agenda Items";
 $ShowCurrent = "Show Agenda Items of current month";
@@ -14,3 +17,4 @@ $AddSuccess = "Agenda item added";
 $AgendaDeleteSuccess = "The agenda item has been deleted";
 $NoAgendaItems = "There are no Agenda Items";
 $lang_september = "September";
+?>

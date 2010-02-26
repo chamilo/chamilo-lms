@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $LinkMoved = "El enlace ha sido movido";
 $langLinkName = "Nombre del enlace";
 $langLinkAdd = "Añadir un enlace";
@@ -15,7 +18,7 @@ $langCategoryAdded = "La categoría ha sido añadida.";
 $langCategoryModded = "La categoría se ha modificado";
 $langCategoryDel = "Borrar categoría";
 $langCategoryDeleted = "Se ha eliminado la categoría y todos sus enlaces.";
-$langCategoryDelconfirm = "Al eliminar una categoría, también se eliminarán todos los enlaces que contenga. ¿Seguro que quiere eliminar esta categoría y todos sus enlaces?";
+$langCategoryDelconfirm = "Al eliminar una categoría, también se eliminarán todos los enlaces que contenga.\\ ¿Seguro que quiere eliminar esta categoría y todos sus enlaces?";
 $langAllCategoryDel = "Borrar todas las categorías y sus enlaces";
 $langGiveURL = "Por favor, ponga la URL";
 $langGiveCategoryName = "Por favor, ponga un nombre para la categoría";
@@ -39,9 +42,10 @@ $langLinkUpdated = "El enlace ha sido actualizado";
 $langAll_Link_Deleted = "El enlace ha sido borrado";
 $langOnHomepage = "¿ Mostrar el enlace en la página principal del curso";
 $langShowLinkOnHomepage = "Mostrar este enlace como un icono en la página principal del curso";
-$General = "general";
+$General = "General";
 $SearchFeatureDoIndexLink = "¿Indexar título y descripción?";
 $langSaveLink = "Guardar el enlace";
 $langSaveCategory = "Guardar la categoría";
 $BackToLinksOverview = "Regresar a la lista de enlaces";
 $AddTargetOfLinkOnHomepage = "Seleccione el modo (target) en que se mostrará el enlace en la página principal del curso";
+?>

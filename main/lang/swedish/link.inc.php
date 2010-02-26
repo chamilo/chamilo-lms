@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $LinkMoved = "Länken är flyttad";
 $langLinkName = "Länknamn";
 $langLinkAdd = "Länken har lagts till listan";
@@ -9,7 +12,7 @@ $langLinkDel = "Länk raderad";
 $langLinkDeleted = "Länken har raderats";
 $langLinkDelconfirm = "Vill du radera denna länk?";
 $langAllLinksDel = "Radera alla länkar i denna kategori";
-$langCategoryName = "Kategorinamn";
+$langCategoryName = "Kategori namn";
 $langCategoryAdd = "Lägg till kategori";
 $langCategoryAdded = "Kategorin har lagts till.";
 $langCategoryModded = "Kategorin har ändrats.";
@@ -23,7 +26,7 @@ $langNoCategory = "Ingen kategori";
 $showall = "Öppna alla kategorier";
 $shownone = "Stäng alla kategorier";
 $langListDeleted = "Listan har radrats";
-$langAddLink = "Lägg till en länk";
+$langAddLink = "Lägg till länk";
 $langDelList = "Radera hela listan";
 $langModifyLink = "Modifiera länk";
 $langCsvImport = "CSV import";
@@ -39,3 +42,4 @@ $langLinkUpdated = "Länken är uppdaterad";
 $langAll_Link_Deleted = "Länken är raderad";
 $langOnHomepage = "Visa länk på hemsidan";
 $langShowLinkOnHomepage = "Visa denna länk som en ikon på kursens hemsida";
+?>

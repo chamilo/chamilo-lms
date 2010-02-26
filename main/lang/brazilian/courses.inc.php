@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $lang_already_enrolled = "já inscrito";
 $lang_my_personnal_course_list = "Minha lista de cursos";
 $lang_course_enrollment = "Usuário do curso";
@@ -10,7 +13,7 @@ $lang_no_course_to_enroll_in_this_category = "Não existem cursos nesta categori
 $lang_or_search_from_the_course_code = "Pesquise pelo nome ou pelo código do curso";
 $lang_search = "Pesquisar";
 $lang_select_course_among_categories = "Selecionar curso a partir das categorias";
-$lang_select_course_in = "Selecionar curso em ";
+$lang_select_course_in = "Selecionar curso em";
 $lang_select_course_in_search_results = "Selecione um curso a partir dos resultados da pesquisa";
 $lang_unsubscribe = "Cancelar inscrição";
 $lang_back_to_my_home_page = "Voltar para a minha página inicial";
@@ -22,7 +25,7 @@ $lang_back_to_parent_category = "Voltar à categoria principal";
 $lang_back_to_course_selection = "Voltar para a seleção de cursos";
 $lang_up = "Voltar à categoria principal";
 $langCatList = "Categorias";
-$langCourseList = "Lista de cursos";
+$langCourseList = "Cursos";
 $Subscribe = "Inscrito";
 $AlreadySubscribed = "Já está inscrito";
 $CodeMandatory = "Código obrigatório";
@@ -39,7 +42,7 @@ $langHideAndSubscribeOpen = "Oculto / Aberto";
 $langShowAndSubscribeOpen = "Visível / Aberto";
 $langShowAndSubscribeClosed = "Visível / Fechado";
 $langAdminThisUser = "Voltar para o usuário";
-$langManage = "Gerenciar Portal";
+$langManage = "Gerenciamento da plataforma";
 $langEnrollToCourseSuccessful = "Sua inscrição no curso foi realizada";
 $langSubCat = "sub-categorias";
 $langUnsubscribeNotAllowed = "Não é permitido cancelar inscrição neste curso.";
@@ -78,3 +81,4 @@ $SessionCategory = "Sessão da categoria";
 $Expand = "Expandir";
 $Collapse = "Agrupar";
 $CourseDetails = "Detalhes do Curso";
+?>

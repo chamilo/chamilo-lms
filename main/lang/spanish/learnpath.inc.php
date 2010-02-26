@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $NewForumCreated = "El foro ha sido añadido";
 $NewThreadCreated = "El tema del foro ha sido añadido";
 $AddHotpotatoes = "Agregar hotpotatoes";
@@ -118,7 +121,7 @@ $lang_empty = "Esta lección no contiene ningún objeto de aprendizaje.";
 $langHotPotatoesFinished = "Este test HotPotatoes ha terminado.";
 $langCompletionLimit = "Límite de finalización (puntuación mínima)";
 $langPrereqToEnter = "Para entrar";
-$langPrereqFirstNeedTo = "primero necesita terminar ";
+$langPrereqFirstNeedTo = "primero necesita terminar";
 $langPrereqModuleMinimum1 = "Al menos falta 1 elemento";
 $langPrereqModuleMinimum2 = "establecido como requisito.";
 $langPrereqTestLimit1 = "debe alcanzar un mínimo";
@@ -145,11 +148,11 @@ $langEditCurrentExecice = "Editar el ejercicio actual";
 $langUploadScorm = "Importación SCORM y AICC";
 $langPowerPointConvert = "Conversión PowerPoint";
 $langLPCreatedToContinue = "Para continuar, añada a su lección una sección o un objeto de aprendizaje";
-$langLPCreatedAddChapterStep = "<html><body><p><big><img height=\"250\" width=\"250\" align=\"right\" src=\"images/gallery/mr_dokeos/animated/practicerAnim.gif\" alt=\"practicerAnim.gif\" />¡ Bienvenido a la herramienta de autor de Chamilo !</big></p> <ul> <li><b>Construir</b> : Añada objetos de aprendizaje a su lección</li> <li><b>Organizar</b> : Añada comentarios de audio y ordene sus objetos de aprendizaje en la tabla de contenidos</li> <li><b>Mostrar</b> : Vea la lección como la vería un estudiante</li> <li><b>Añadir una sección</b> : Capítulo 1, Capítulo 2 o Semana 1, Semana 2...</li> <li><b>Añadir un objeto de aprendizaje</b> : construya su lección paso a paso con documentos, ejercicios y actividades, contando con la ayuda de plantillas, mascotas y galerías multimedia</li> </ul> </html></body>";
+$langLPCreatedAddChapterStep = "<html><body><p><big><img height=\"250\" width=\"250\" align=\"right\" src=\"images/gallery/mr_dokeos/animated/practicerAnim.gif\" alt=\"practicerAnim.gif\" />¡ Bienvenido a la herramienta de autor de Chamilo !</big></p> <ul> <li><b>Construir</b> : Añada o";
 $langPrerequisitesAdded = "Los prerrequisitos de este objeto de aprendizaje han sido añadidos.";
 $langAddEditPrerequisites = "Añadir/Editar prerrequisitos";
-$langMinimum = "mínimo";
-$langMaximum = "máximo";
+$langMinimum = "Mínimo";
+$langMaximum = "Máximo";
 $langNoDocuments = "No hay documentos";
 $langNoExercisesAvailable = "No hay ejercicios disponibles";
 $langNoLinksAvailable = "No hay enlaces disponibles";
@@ -206,13 +209,13 @@ $UploadMp3audio = "Cargar audio";
 $UpdateAllAudioFragments = "Cargar todos los fragmentos de audio";
 $LeaveEmptyToKeepCurrentFile = "Dejar vacio para mantener el archivo actual";
 $RemoveAudio = "Quitar audio";
-$SaveAudio = "Guardar ";
+$SaveAudio = "Guardar";
 $ChangesStored = "Cambios almacenados";
-$ViewScoreChangeHistory = "Ver puntuacion de historial de cambio";
+$ViewScoreChangeHistory = "Ver la puntuacion del historial de cambios";
 $ImageWillResizeMsg = "La imagen sera ajustada a un tamaño predeterminado";
 $ImagePreview = "Vista previa de la imagen";
-$UplAlreadyExists = "¡ ya existe !";
-$UplUnableToSaveFile = "¡ El fichero enviado no puede ser guardado (¿problema de permisos?) !";
+$UplAlreadyExists = "Ya existe";
+$UplUnableToSaveFile = "Imposible de guardar el archivo";
 $UnknownPackageFormat = "El formato de este paquete no ha sido reconocido. Por favor, compruebe este es un paquete válido.";
 $MoveDocument = "Mover el documento";
 $EditLPSettings = "Cambiar parámetros de lección";
@@ -226,7 +229,7 @@ $langAddEdit = "Añadir / Editar";
 $ModifyPrerequisites = "Modificar los prerrequisitos";
 $CreateLearningPath = "Crear lección";
 $AddExercise = "Agregar el ejercicio a la lección";
-$AddForum = "Añadir un foro";
+$AddForum = "Agregar foro";
 $LPCreateDocument = "Crear un documento";
 $ObjectiveID = "ID del objetivo";
 $ObjectiveStatus = "Estatus del objetivo";
@@ -244,3 +247,4 @@ $SaveAudioAndOrganization = "Guardar audio y Organización";
 $UploadOnlyMp3Files = "Por favor, envíe sólo archivos mp3";
 $ModifyHotPotatoes = "Modificar hotpotatoes";
 $SaveHotpotatoes = "Guardar hotpotatoes";
+?>

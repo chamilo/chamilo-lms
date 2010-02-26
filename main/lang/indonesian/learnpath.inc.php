@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $lang_learning_path = "Learning Path";
 $lang_learning_path_builder = "Learning Path builder";
 $lang_description = "deskripsi";
@@ -53,7 +56,7 @@ $lang_learnpath_module_deleted = "Modul learning path dan semua tahapan di dalam
 $lang_nochapters = "Belum ada modul.";
 $lang_add_learnpath_item = "Tambah tahapan di modul ini";
 $lang_learnpath_item_deleted = "Tahapan learning path telah dihapus";
-$lang_assign_learnpath_items_to = "silahkan letakkan tahapan learning path ini ke modul: ";
+$lang_assign_learnpath_items_to = "silahkan letakkan tahapan learning path ini ke modul:";
 $lang_edit_learnpath_item = "Edit judul/deskripsi tambahan tahapan";
 $lang_add_prereq = "Tambah/edit prasyarat ke tahapan ini";
 $lang_delete_learnpath_item = "Hapus Tahapan";
@@ -62,7 +65,7 @@ $lang_prereq_deleted_error = "telah dihapus !";
 $lang_none = "TIDAK ADA";
 $lang_forum_opened = "Forum tersebut telah dibuka di jendela baru.";
 $lang_link_opened = "Link tersebut telah dibuka di jendela baru.";
-$lang_short_help = "Untuk menambah tahapan, klik tanda tambah; untuk menambah judul/deskripsi baru, klik pada pensil; untuk menambah prasyarat klik pada ikon dua dokumen. Anda dapat memeriksa apa yang akan tampak di layar siswa dengan mengklik Jendela Siswa di bagian atas layar.";
+$lang_short_help = "Untuk menambah tahapan, klik tanda tambah; untuk menambah judul/deskripsi baru, klik pada pensil; untuk menambah prasyarat klik pada ikon dua dokumen. Anda dapat memeriksa apa yang akan tampak di layar siswa dengan mengklik Jendela Siswa di bagian atas la";
 $lang_prereq_not_complete = "Prasyarat tidak lengkap.";
 $lang_author = "Pengarang";
 $lang_date = "Tanggal";
@@ -109,7 +112,7 @@ $langPrereqToEnter = "Untuk memasuki";
 $langPrereqFirstNeedTo = "anda pertama-tama butuh menyelesaikan";
 $langPrereqModuleMinimum1 = "Minimum 1 tahapan/langkah hilang dari";
 $langPrereqModuleMinimum2 = "yang merupakan set sebagai prasyarat.";
-$langPrereqTestLimit1 = "anda mesti mencapai minimum ";
+$langPrereqTestLimit1 = "anda mesti mencapai minimum";
 $langPrereqTestLimit2 = "poin dalam";
 $langPrereqTestLimitNow = "Sekarang anda memiliki :";
 $langLearnpathExitFullScreen = "kembali ke layar normal";
@@ -121,3 +124,4 @@ $langNoItemSelected = "Untuk menampilkan sesuatu disini, silahkan pilih sebuah i
 $langNewDocumentCreated = "Dokumen baru telah dibuat.";
 $langEditCurrentChapter = "Edit bab ini";
 $langCreateTheDocument = "Buat dokumen";
+?>

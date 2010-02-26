@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $ModifyEvaluation = "Evaluatie opslaan";
 $CreateLink = "Voeg deze activiteit toe aan de evaluatie";
 $AddResultNoStudents = "Er zijn geen studenten waarvoor resultaten toegevoegd kunnen worden";
@@ -87,12 +90,12 @@ $GradebookWelcomeMessage = "Welkom bij het puntenbriefje. Met deze functionalite
 $CreateAllCat = "Alle cursuscategorieën aanmaken";
 $AddAllCat = "Alle categorieën werden toegevoegd.";
 $StatsStudent = "Statistieken van";
-$Results = "resultaten";
+$Results = "Resultaten";
 $Certificates = "Certificaten";
 $Certificate = "Certificaat";
 $ChooseUser = "Kies gebruikers voor deze evaluatie.";
 $FirstLetter = "Eerste letter van de achternaam";
-$UserAdded = "De gebruiker is toegevoegd.";
+$UserAdded = "De gebruiker werd toegevoegd.";
 $ResultEdited = "De resultaten werden gewijzigd.";
 $ChooseFormat = "Kies het formaat.";
 $OutputFileType = "Bestandsformaat van de output";
@@ -103,7 +106,7 @@ $TotalUser = "Totaal van de gebruiker.";
 $AverageTotal = "Totaal gemiddelde";
 $Evaluation = "Evaluatie";
 $EvaluationAverage = "Gemiddelde van de evaluatie.";
-$EditCategory = "Deze categorie wijzigen";
+$EditCategory = "Bewerk categorie";
 $EditAllWeights = "Gewicht";
 $GradebookQualificationTotal = "Totaal";
 $GradebookEvaluationDeleted = "Evaluatie verwijderd";
@@ -115,3 +118,4 @@ $ResourceType = "Type";
 $GradebookWhoChangedItLog = "Wie heeft het aangepast";
 $FileUploadComplete = "Bestand met succes geüpload";
 $NoResultsAvailable = "Géén resultaten beschikbaar";
+?>

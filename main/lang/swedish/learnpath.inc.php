@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $NewForumCreated = "Det nya forumet har skapats";
 $NewThreadCreated = "Den nya forumtråden har skapats";
 $lang_learning_path = "Inlärningsväg";
@@ -64,7 +67,7 @@ $lang_prereq_deleted_error = "Har tagits bort!";
 $lang_none = "INGEN";
 $lang_forum_opened = "Det valda forumet har öppnats i ett nytt fönster.";
 $lang_link_opened = "Den valda länken har öppnats i ett nytt fönster.";
-$lang_short_help = "För att lägga till ett steg klicka på krysset; för att lägga till en ny titel/beskrivning klicka på pennan; för att lägga till förkunskaper klicka på ikonen med två dokument. Du kan kontrollera vad studenterna kommer att se genom att klicka på Studentvy ovan.";
+$lang_short_help = "För att lägga till ett steg klicka på krysset; för att lägga till en ny titel/beskrivning klicka på pennan; för att lägga till förkunskaper klicka på ikonen med två dokument. Du kan kontrollera vad studenterna kommer att se genom att klicka på Studentvy o";
 $lang_prereq_not_complete = "Förkunskaperna är inte kompletta";
 $lang_author = "Författare";
 $lang_date = "Datum";
@@ -99,3 +102,4 @@ $CreateTheLink = "Importera en länk";
 $MoveCurrentLink = "Flytta den aktuella länken";
 $EditCurrentLink = "Ändra den aktuella länken";
 $Url = "Url";
+?>

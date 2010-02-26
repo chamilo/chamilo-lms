@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $ModifyEvaluation = "Shrani ocenjevanje";
 $CreateLink = "Ustvari povezavo";
 $AddResultNoStudents = "Ni tečajnikov za dodajanje rezultatov";
@@ -23,7 +26,7 @@ $CategoryName = "Ime kategorije";
 $CourseIndependent = "Neodvisno od tečaja";
 $CourseIndependentEvaluation = "Ocenjevanje, neodvisno od tečaja";
 $EvaluationName = "Naziv ocenjevanja";
-$Max = "Največ";
+$Max = "Max";
 $DateEval = "Datum ocenjevanja";
 $AddUserToEval = "Dodaj uporabnike ocenjevanju";
 $NewSubCategory = "Nova podkategorija";
@@ -86,13 +89,13 @@ $EditResult = "Uredi rezultate";
 $GradebookWelcomeMessage = "Dobrodošli v orodje Redovalnica. To orodje med drugim omogoča določitev želenih ciljev (ocenjevanj) za tečaj ali skupino tečajev iz zmožnosti samih tečajev, vpeljavo zunanjega ocenjevanja v sistem, ...";
 $CreateAllCat = "Ustvari vse kategorije tečaja";
 $AddAllCat = "Dodane so bile vse kategorije";
-$StatsStudent = "Statistika za ";
-$Results = "Rezultati in povratne informacije";
+$StatsStudent = "Statistika za";
+$Results = "Rezultati";
 $Certificates = "Certifikati";
 $Certificate = "Certifikat";
 $ChooseUser = "Izberi uporabnike za to ocenjevanje";
 $FirstLetter = "Prva črka priimka";
-$UserAdded = "Uporabnik je bil dodan";
+$UserAdded = "Uporabnik dodan";
 $ResultEdited = "Rezultat je bil ažuriran";
 $ChooseFormat = "Izberi format";
 $OutputFileType = "Oblika izhodne datoteke";
@@ -103,7 +106,7 @@ $TotalUser = "Zbir za uporabnika";
 $AverageTotal = "Povprečje zbirov";
 $Evaluation = "Ocenjevanje";
 $EvaluationAverage = "Povprečje ocenjevanja";
-$EditCategory = "Uredi to kategorijo";
+$EditCategory = "Uredi kategorijo";
 $EditAllWeights = "Uredi vse uteži";
 $GradebookQualificationTotal = "Skupaj";
 $GradebookEvaluationDeleted = "Ocenjevanje je bilo uspešno odstranjeno";
@@ -138,7 +141,6 @@ $FolderView = "Domača stran ocenjevanja";
 $GradebookSkillsRanking = "Težavnost";
 $SaveScoringRules = "Shrani pravila ocenjevanja";
 $AttachCertificate = "Pripni certifikat";
-$DefaultCertificate = "Privzeti certifikat";
 $GradebookSeeListOfStudentsCertificates = "Poglej seznam pridobljenih certifikatov";
 $CreateCertificate = "Ustvari certifikat";
 $UploadCertificate = "Naloži certifikat";
@@ -159,6 +161,7 @@ $SaveCertificate = "Shrani certifikat";
 $CertificateNotRemoved = "Certifikat ne more biti odstranjen";
 $CertificateRemoved = "Certifikat je bil odstranjen";
 $NoDefaultCertificate = "Ni privzetega";
+$DefaultCertificate = "Privzeti certifikat";
 $PreviewCertificate = "Predogled certifikata";
 $IsDefaultCertificate = "Certifikat je nastavljen kot privzeti";
 $ImportPresences = "Uvozi prisotnost/prisotne";
@@ -186,5 +189,6 @@ $TotalWeightMustNotBeMoreThan = "Skupna utež ne more biti več kot";
 $ThereIsNotACertificateAvailableByDefault = "Noben privzeti certifikat ni na voljo";
 $CertificateMinimunScoreIsRequiredAndMustNotBeMoreThan = "Minimalen rezultat za doseganje certifikata je zahtevan in ne sme biti več kot";
 $LinkMod = "Shrani";
-$EditLink = "Uredi povezavo";
+$EditLink = "Spremeni povezavo k online aktivnosti";
 $CategoryDeleted = "Kategorija je bila odstranjena";
+?>

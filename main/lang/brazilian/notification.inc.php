@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $lang_new_item = "novo item adicionado";
 $lang_title_notification = "Desde sua última visita";
 $lang_update_agenda = "item de agenda atualizado";
@@ -13,7 +16,7 @@ $lang_new_forum_topic = "novo tópico adicionado";
 $lang_new_groupforum_topic = "novo tópico adicionado ao fórum do grupo";
 $lang_new_dropbox_file = "novo arquivo recebido";
 $lang_update_dropbox_file = "um arquivo na sua caixa de entrega foi atualizado";
-$ForumCategoryAdded = "A categoria do forum foi adicionada";
+$ForumCategoryAdded = "Acrescentada uma nova categoria no fórum";
 $LearnpathAdded = "Rota de Aprendizagem adicionada";
 $GlossaryAdded = "Adicionado um novo termo no Glossário";
 $QuizQuestionAdded = "Questão adicionada ao exercício";
@@ -22,7 +25,7 @@ $QuizQuestionDeleted = "Questão removida do exercício";
 $QuizUpdated = "Exercício atualizado";
 $QuizAdded = "Exercício adicionado";
 $QuizDeleted = "Exercício removido";
-$DocumentInvisible = "Documento invisível ";
+$DocumentInvisible = "Documento invisível";
 $DocumentVisible = "Documento visível";
 $CourseDescriptionAdded = "Descrição de Curso adicionada";
 $WikiAdded = "Wiki adicionado";
@@ -30,3 +33,4 @@ $SurveyAdded = "Questionário adicionado";
 $NotebookAdded = "Nota adicionada";
 $NotebookUpdated = "Nota atualizada";
 $NotebookDeleted = "Nota removida";
+?>

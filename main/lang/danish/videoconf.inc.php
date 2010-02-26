@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $Camera = "Kamera";
 $Microphone = "Mikrofon";
 $Name = "Navn";
@@ -18,11 +21,11 @@ $RefreshList = "Opdater listen";
 $GoToTop = "Gå til Top";
 $NewPoll = "Ny afstemning";
 $CreateNewPoll = "Opret ny afstemning";
-$Question = "Spørgsmål";
+$Question = "Spørgsmål:";
 $PollType = "Afstemningstype:";
 $Create = "Opret";
 $InfoConnectedUsersGetNotifiedOfThisPoll = "Info: Alle deltagere i konferencen vil modtage en besked om den nye afstemning";
-$YesNo = "Ja/nej";
+$YesNo = "Ja/Nej";
 $Numeric1To10 = "Numerisk 1-10";
 $Poll = "Afstemning";
 $YouHaveToBecomeModeratorOfThisRoomToStartPolls = "Du skal være moderator af konferencen for at kunne oprette afstemninger";
@@ -35,7 +38,7 @@ $No = "Nej";
 $WantsToKnow = "ønsker at vide:";
 $PollResults = "Resultat af afstemning";
 $Votes = "Stemmer:";
-$Result = "Resultat";
+$Result = "Resultat:";
 $ThereIsNoPoll = "Der er ingen afstemning";
 $MeetingMode = "Møde (maks. fire deltagere)";
 $ConferenceMaxSeats = "Konference (maks. 50 deltagere)";
@@ -51,14 +54,14 @@ $ChooseMic = "Vælg mikrofon:";
 $OK = "OK";
 $YouHaveToReconnectSoThatTheChangesTakeEffect = "Du skal opdatere forbindelsen for at se ændringerne";
 $ChangeSettings = "Kursusindstillinger";
-$Course = "Kursus";
+$Course = "Kursusside:";
 $CourseLanguage = "Sprog på kursusside:";
 $ConfirmClearWhiteboard = "Bekræft at Whiteboard skal ryddes";
 $ShouldWitheboardBeClearedBeforeNewImage = "Skal whiteboardet ryddes før jeg tilføjer et nyt billede?";
 $DontAskMeAgain = "Spørg mig ikke igen";
 $EditSettings = "Rediger indstillinger";
 $ShowConfirmationBeforeClearingWhiteboard = "Spørg før whiteboard ryddes";
-$UserInfo = "brugerinformation";
+$UserInfo = "Deltagerinfo";
 $ClearDrawArea = "Ryd tegneområde";
 $Undo = "Fortryd";
 $Redo = "Genskab";
@@ -74,7 +77,7 @@ $DeleteChosenItem = "Slet valgte genstand";
 $ApplyForModeration = "Ansøg om at blive moderator";
 $Apply = "Søg";
 $BecomeModerator = "Bliv moderator";
-$Close = "luk";
+$Close = "Luk";
 $Italic = "Kursiv";
 $Bold = "Fed";
 $Waiting = "Afventende";
@@ -91,3 +94,4 @@ $ThisRoomIsFullPleaseTryAgain = "Konferencen er fyldt - der er desværre ikke fl
 $Loading = "Loader...";
 $PleaseWaitWhileLoadingImage = "Vent venligst mens billedet loader";
 $SynchronisingConferenceMembers = "Synkroniser konferencens deltagere";
+?>

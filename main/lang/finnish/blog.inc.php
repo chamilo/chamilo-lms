@@ -1,6 +1,11 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $MyTasks = "Tehtäväni";
 $FavoriteBlogs = "Projektini";
+$Navigation = "Navigointi";
+$TopTen = "Top 10";
 $Subtitle = "Projektin kuvaus";
 $ThisBlog = "Tämä projekti";
 $NewPost = "Uusi tehtävä";
@@ -14,13 +19,21 @@ $AddNewComment = "Lisää kommentti";
 $ReplyToThisComment = "Vastaa";
 $ManageTasks = "Hallitse rooleja";
 $ManageMembers = "Liisä / poista käyttäjiä tähän projektiin";
+$Register = "Rekisteröidy";
+$UnRegister = "Poista rekisteröinti";
+$SubscribeMembers = "Valitse käyttäjiä";
+$UnsubscribeMembers = "Poista käyttäjiä";
+$RightsManager = "käyttöoikeuksienhallinta";
+$ManageRights = "Hallitse käyttäjien rooleja ja oikeuksia tässä projektissa";
 $Task = "Tehtävä";
 $Tasks = "Tehtävät";
 $Member = "Jäsen";
 $Members = "Jäsenet";
 $Role = "Rooli";
+$Rate = "Arvostele";
 $Roles = "Roolit";
 $AddTask = "Lisää uusi rooli";
+$AddTasks = "Lisää uusi rooli";
 $AssignTask = "Lisää rooli";
 $AssignTasks = "Lisää rooleja";
 $EditTask = "Muokkaa tätä tehtävää";
@@ -42,6 +55,7 @@ $EditThisPost = "Muokkaa tätä tehtävää";
 $DeleteThisComment = "Poista tämä kommentti";
 $NoArticles = "Tässä projektissa ei ole tehtäviä. Jos olet projektinpäällikkö, klikkaa linkkiä \"Uusi tehtävä\" lisätäksesi tehtävän.";
 $NoTasks = "Ei tehtäviä";
+$Rating = "Arvostelu";
 $RateThis = "Arvioi tämä tehtävä";
 $SelectTaskArticle = "Valitse tehtävä tälle roolille";
 $ExecuteThisTask = "Tehtävä minulle";
@@ -58,6 +72,7 @@ $langTask2Desc = "Tehtävän 2 kuvaus";
 $langTask3Desc = "Tehtävän 3 kuvaus";
 $blog_management = "Projektin hallinta";
 $langWelcome = "Tervetuloa!";
+$langModule = "Moduli";
 $langUserHasPermissionNot = "Käyttäjällä ei ole oikeuksia";
 $langUserHasPermission = "Käyttäjällä on oikeus";
 $langLegend = "Selitys";
@@ -67,6 +82,8 @@ $AddBlog = "Luo uusi projekti";
 $EditBlog = "Muokkaa projektia";
 $DeleteBlog = "Poista tämä projekti";
 $Shared = "Jaettu";
+$PermissionGrantedByGroupOrRole = "Ryhmälle tai roolille annettu oikeudet";
+$Reader = "Lukija";
 $BlogDeleted = "Projekti on poistettu";
 $BlogEdited = "Projektia on muokattu.";
 $BlogStored = "Projekti on lisätty.";
@@ -78,4 +95,8 @@ $TaskAssigned = "Tehtävä annettu.";
 $AssignedTaskEdited = "Annettua tehtävää muokattu.";
 $UserRegistered = "Käyttäjä on rekisteröity";
 $TaskDeleted = "Tehtävä on poistettu.";
+$TaskAssignmentDeleted = "Tehtävänanto on poistettu";
 $CommentDeleted = "Kommentti on poistettu.";
+$BlogPosts = "Blogi kirjoitukset";
+$BlogComments = "Blogin kommentit";
+?>

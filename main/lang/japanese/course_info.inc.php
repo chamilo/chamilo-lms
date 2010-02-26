@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $ModifInfo = "コ〖スの攫鼠を饯赖";
 $langModifDone = "攫鼠饯赖されました";
 $langDelCourse = "このコ〖スサイト链挛を猴近";
@@ -9,9 +12,7 @@ $langPublic = "ログインなしに、キャンパスペ〖ジからアクセ�
 $langPrivOpen = "判峡荚嘎年¨判峡は材墙です。";
 $langPrivate = "判峡荚嘎年¨判峡もできません。判峡されたユ〖ザ(<a href=../user/user.php>办枉</a> )のみ网脱材墙です。";
 $langForbidden = "钓材されていません";
-$CourseAccessConfigTip = "By default, you course is only accessible to you as its only registered user. IN case you want some confidentiality, 
-the simplest is to open registration during
-one week, ask the students to register themselves, then close registration and check possible intruders in the users list.";
+$CourseAccessConfigTip = "By default, you course is only accessible to you as its only registered user. IN case you want some confidentialit";
 $langOpenToTheWorld = "给倡¨链坤肠に给倡します。";
 $OpenToThePlatform = "给倡¨判峡されたユ〖ザに给倡します。";
 $langTipLang = "この咐胳は、あなたのコ〖スのウエブサイトの链ての爽啼荚の给脱咐胳です。";
@@ -30,3 +31,4 @@ $langByDel = "このコ〖スのウエブサイトを猴近すると、そこに
 $langY = "はい";
 $langN = "いいえ";
 $langBackH = "コ〖スのホ〖ムペ〖ジ";
+?>

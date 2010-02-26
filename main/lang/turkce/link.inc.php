@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $LinkMoved = "Bağlantı taşındı";
 $langLinkName = "Bağlantı ismi";
 $langLinkAdd = "Bağlantı ekle";
@@ -38,9 +41,10 @@ $langCsvExplain = "Dosya yapısı şöyle olmalıdır<blockquote> <b>URL</b>;kat
 $langLinkUpdated = "Link güncellendi";
 $langAll_Link_Deleted = "Bağlantı silindi";
 $langOnHomepage = "Bağlantıyı AnaSayfada göster";
-$langShowLinkOnHomepage = "Bu bağlantıyı Ders AnaSayfasında simge olarak göster";
+$langShowLinkOnHomepage = "Bu ba&#287;lant&#305;y&#305; Ders AnaSayfas&#305;nda simge olarak göster";
 $General = "Genel";
 $SearchFeatureDoIndexLink = "Indexte başlık ve açıklamalara bağlantı olsun mu?";
 $langSaveLink = "Bağlantıyı kaydet";
 $langSaveCategory = "Dizini kaydet";
 $BackToLinksOverview = "Bağlantı görünümüne geri dön";
+?>

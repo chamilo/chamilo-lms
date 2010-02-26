@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $LearningPath = "Læringssti";
 $LevelUp = "opp et nivå";
 $AddIt = "Legg til";
@@ -24,6 +27,7 @@ $NewWindow = "I et nytt vindu";
 $StepDeleted1 = "Denne";
 $Modify = "Modifiser";
 $Chapter = "Kapitell";
-$AgendaAdd = "Legg til ny oppføring i kalender";
-$ItemTitle = "Tittel for oppføring";
+$AgendaAdd = "Legg til en kalenderoppføring";
+$ItemTitle = "Tittel";
 $Detail = "Detaljer";
+?>

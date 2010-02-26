@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $AgendaAdd = "Új naptár-bejegyzés hozzáadása";
 $ShowAllEvents = "Az összes naptár bejegyzés megmutatása";
 $ShowCurrent = "Az ehavi naptár bejegyzések megmutatása";
@@ -26,8 +29,8 @@ $langHour = "Óra";
 $hour_default = "Óra";
 $langMinute = "Percek";
 $langLasting = "Tartam";
-$langOldToNew = "Legrégebbi előre";
-$langNewToOld = "Legújabb előre";
+$langOldToNew = "Legrégebbi elõre";
+$langNewToOld = "Legújabb elõre";
 $langNow = "Ma";
 $langAddEvent = "Esemény hozzáadása";
 $langDetail = "Részlet";
@@ -37,37 +40,38 @@ $DayView = "Napi nézet";
 $AddPersonalItem = "Személyes elem hozzáadása";
 $Week = "Hét";
 $Date = "Dátum";
-$Time = "Idő";
+$Time = "Id&#337;";
 $AddPersonalCalendarItem = "Személyes naptár elem hozzáadása";
 $ModifyPersonalCalendarItem = "Személyes naptár elem módosítása";
 $PeronalAgendaItemAdded = "A személyes naptár eleme hozzáadva.";
 $PeronalAgendaItemEdited = "A személyes naptár eleme módosítva.";
 $PeronalAgendaItemDeleted = "A személyes naptár eleme törölve.";
 $ViewPersonalItem = "Személyes elemek megtekintése";
-$UserGroupFilter = "Szűrő a csoportokon/felhasználókon";
+$UserGroupFilter = "Sz&#369;r&#337; a csoportokon/felhasználókon";
 $ShowAll = "Mutat mindet";
 $Print = "Nyomtat";
 $MyTextHere = "a szövegem helye";
 $CopiedAsAnnouncement = "Átmásolás felhívásként";
 $NewAnnouncement = "Új felhívás";
 $AddAnnouncement = "Hozzáadás felhívásként";
-$UpcomingEvent = "Következő esemény";
-$RepeatedEvent = "Megismétlődött esemény";
-$RepeatType = "Ismétlődés típusa";
+$UpcomingEvent = "Következ&#337; esemény";
+$RepeatedEvent = "Megismétl&#337;dött esemény";
+$RepeatType = "Ismétl&#337;dés típusa";
 $RepeatDaily = "Naponta";
 $RepeatWeekly = "Hetente";
 $RepeatMonthlyByDate = "Havonta, adott dátumkor";
 $RepeatMonthlyByDay = "Havonta, adott napon";
 $RepeatMonthlyByDayR = "Havonta adott napon, korlátozva";
 $RepeatYearly = "Évente";
-$RepeatEnd = "Ismétlődés és dátum";
+$RepeatEnd = "Ismétl&#337;dés és dátum";
 $RepeatedEventViewOriginalEvent = "Eredeti esemény megtekintése";
 $ICalFileImport = "iCal/ics állomány importálása";
 $AllUsersOfThePlatform = "A rendszer összes felhasználója";
 $GlobalEvent = "Globális esemény";
 $ModifyEvent = "Esemény szerkesztése";
 $EndDateCannotBeBeforeTheStartDate = "A befejezés dátuma nem lehet korábbi a kezdés dátumánál";
-$AgendaSortChronologicallyUp = "Növekvő sorrend";
-$AgendaSortChronologicallyDown = "Csökkenő sorrend";
+$AgendaSortChronologicallyUp = "Növekv&#337; sorrend";
+$AgendaSortChronologicallyDown = "Csökken&#337; sorrend";
 $ItemForUserSelection = "Felhasználó kiválasztása lista";
 $IsNotiCalFormatFile = "Ez az állomány nem iCal formátumú";
+?>

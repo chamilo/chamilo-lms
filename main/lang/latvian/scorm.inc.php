@@ -1,25 +1,34 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langScormVersion = "versija";
-$langScormRestarted = "Visas nodarbības tagad ir nepabeigtas.";
+$langScormRestarted = "Visas nodarb&#299;bas tagad ir nepabeigtas.";
+$langScormNoNext = "&#299; ir p&#275;d&#275;j&#257; nodarb&#299;ba.";
+$langScormNoPrev = "&#299; ir pirm&#257; nodarb&#299;ba.";
 $langScormTime = "Laiks";
-$langScormNoOrder = "Nav norādīta nekāda kārtība, Jūs varat klik";
-$langScormScore = "Rezultāts";
-$langScormLessonTitle = "Nodarbības nosaukums";
+$langScormNoOrder = "Nav nor&#257;d&#299;ta nek&#257;da k&#257;rt&#299;ba, J&#363;s varat klik&#311;in&#257;t uz jebkuras no lekcij&#257;m.";
+$langScormScore = "Rezult&#257;ts";
+$langScormLessonTitle = "Nodarb&#299;bas nosaukums";
 $langScormStatus = "Statuss";
-$langScormToEnter = "Lai piedalītos";
-$langScormFirstNeedTo = "Jums vispirms jāveic";
-$langScormClose = "Pārtraukt";
-$langScormRestart = "Sākt no jauna";
+$langScormToEnter = "Lai piedal&#299;tos";
+$langScormFirstNeedTo = "Jums vispirms j&#257;veic";
+$langScormThisStatus = "&#299; nodarb&#299;ba ir";
+$langScormClose = "P&#257;rtraukt";
+$langScormRestart = "S&#257;kt no jauna";
 $langScormCompstatus = "Pabeigts";
 $langScormIncomplete = "Nepabeigts";
-$langScormPassed = "Ieskaitīts";
-$langScormFailed = "Neieskaitīts";
-$langScormPrevious = "Iepriek";
-$langScormNext = "Nāko";
-$langScormTitle = "DOKEOS <i>Scorm</i> spēlētājs";
+$langScormPassed = "Ieskait&#299;ts";
+$langScormFailed = "Neieskait&#299;ts";
+$langScormPrevious = "Iepriek&#275;jais";
+$langScormNext = "N&#257;koais";
+$langScormTitle = "DOKEOS <i>Scorm</i> sp&#275;l&#275;t&#257;js";
 $langScormMystatus = "Mans statuss";
-$langScormLoggedout = "notika atteik";
-$langScormCloseWindow = "Aizvērt logus";
-$langScormExitFullScreen = "Atpakaļ pie normāl a izmēra ekrāna";
-$langScormFullScreen = "Skatīt pilnā ekrānā";
-$langScormNotAttempted = "Netika mēģināts";
+$langScormNoItems = "eit ierakstu nav.";
+$langScormNoStatus = "im objektam statuss nav pieejams";
+$langScormLoggedout = "notika atteikan&#257;s no <i>Scorm</i> sada&#316;as";
+$langScormCloseWindow = "Aizv&#275;rt logus";
+$langScormExitFullScreen = "Atpaka&#316; pie norm&#257;l a izm&#275;ra ekr&#257;na";
+$langScormFullScreen = "Skat&#299;t piln&#257; ekr&#257;n&#257;";
+$langScormNotAttempted = "Netika m&#275;&#291;in&#257;ts";
+?>

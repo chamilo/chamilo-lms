@@ -1,9 +1,12 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langNewGroupCreate = "Sukurti naują grupę(es)";
 $langGroupCreation = "Naujos grupės kūrimas";
 $langCreate = "sukurti";
 $langNewGroups = "nauja grupė(ės)";
-$langMax = "max. 20 simbolių, pvz. <i>INNOV21</i>";
+$langMax = "maks.";
 $langGroupPlacesThis = "seats (optional)";
 $langGroupsAdded = "Grupė(ės) įrašyta";
 $langGroupDel = "Grupė ištrinta";
@@ -15,15 +18,14 @@ $langGroupTools = "Įrankiai";
 $langGroupDocument = "Dokumentai";
 $langGroupPropertiesModified = "Grupės nustatymai modifikuoti";
 $langGroupSpace = "Grupės sritis";
-$langGroupName = "Grupės pavadinimas";
-$langGroupDescription = "Grupės apibūdinimas";
+$langGroupName = "Grupės vardas";
+$langGroupDescription = "Apibrėžimas";
 $langGroupMembers = "Grupės nariai";
 $langEditGroup = "Redaguoti šią grupę";
 $Optional = "(nebūtina)";
 $langGroupSettingsModified = "Grupės nustatymai modifikuoti";
-$langGroupTooMuchMembers = "Number proposed exceeds max. that you allowed (you can modify it below). 
-				Group composition has not been modified";
-$langGroupTutor = "Grupės kuratorius";
+$langGroupTooMuchMembers = "Number proposed exceeds max. that you allowed (you can modify it below";
+$langGroupTutor = "Kuratorius";
 $langGroupNoTutor = "(nėra)";
 $langGroupNone = "(nėra)";
 $langGroupNoneMasc = "(nėra)";
@@ -34,14 +36,14 @@ $langGroupSelfRegistration = "Registracija";
 $langGroupSelfRegInf = "rgistruoti";
 $langRegIntoGroup = "Įrašyti mane į šią grupę";
 $langGroupNowMember = "Nuo dabar Jūs esate šios grupės narys.";
-$langPrivate = " Privatus priėjimas vartotojams, esantiems vartotojų sąraše";
-$langPublic = "Viešas priėjimas iš portalo titulinio netgi neprisijungus prie sistemos";
+$langPrivate = "privati";
+$langPublic = "vieša";
 $langPropModify = "Keisti nustatymus";
 $langState = "Būsena";
-$langGroupFilledGroups = "Groups have been filled (or completed) by users present in the 'Users' list.";
+$langGroupFilledGroups = "Groups have been filled (or completed) by users present in the \'Users\' list.";
 $langSubscribed = "šiame kurse registruoti vartotojai";
 $langStudentsNotInThisGroups = "Nesantys šioje grupėje vartotojai";
-$langQtyOfUserCanSubscribe_PartBeforeNumber = "A user can be member of maximum ";
+$langQtyOfUserCanSubscribe_PartBeforeNumber = "A user can be member of maximum";
 $langQtyOfUserCanSubscribe_PartAfterNumber = "grupės";
 $langGroupLimit = "Limitas";
 $langStudentRegAllowed = "Studentai gali patys prisiregistruoti prie grupės";
@@ -64,10 +66,10 @@ $langNoGroupsAvailable = "Grupių nėra";
 $langGroupsFromVirtualCourses = "Virtualūs kursai";
 $NotAvailable = "Nėra";
 $CreateSubgroups = "Sukurti pogrupius";
-$CreateSubgroupsInfo = "Ši opcija leidžia sukurti naujas grupes iš jau esančių grupių narių. Nurodykite norimą pogrupių skaičių ir išsirinkite grupę. Bus sukurta nurodytas skaičius grupių iš eamos grupės narių, ir jie visi bus priregistruoti prie naujų grupių. Esanti grupė nebus sukurta.";
+$CreateSubgroupsInfo = "Ši opcija leidžia sukurti naujas grupes iš jau esančių grupių narių. Nurodykite norimą pogrupių skaičių ir išsirinkite grupę. Bus sukurta nurodytas skaičius grupių iš eamos grupės narių, ir jie visi bus priregistruoti prie naujų grupių. Esanti grupė nebus";
 $CreateNumberOfGroups = "Sukurti";
 $WithUsersFrom = "groups with members from";
-$CategoryDeleted = "Kategorija ištrinta.";
+$CategoryDeleted = "kategorija ištrinta";
 $Empty = "Tuščia";
 $FillGroup = "pridėti vartotojus";
 $EmptyGroup = "išregistruoti visus vartotojus";
@@ -87,3 +89,4 @@ $NoCategoriesDefined = "Jokia kategorija nenurodyta";
 $GroupsFromClasses = "Grupės iš klasių";
 $GroupsFromClassesInfo = "Naudojant šį nustatymą, galite sukurti grupes iš klasių, prisirašiusių prie Jūsų kurso.";
 $Group = "Group";
+?>

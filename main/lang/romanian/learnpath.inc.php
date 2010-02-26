@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $NewForumCreated = "Noul forum este facut";
 $NewThreadCreated = "Un nou forum thread a fost creat.";
 $LearnPathAddedTitle = "Bine ai venit in cursul Chamilo";
@@ -145,8 +148,8 @@ $langLPCreatedToContinue = "Pentru a continua puteti adauga un modul, capitol sa
 $langLPCreatedAddChapterStep = "Puteti adauga un modul, capitol sau pas caii de invatare din meniul din partea dreapta.";
 $langPrerequisitesAdded = "Cerintele premergatoare ale pasului curent au fost adaugate.";
 $langAddEditPrerequisites = "Adauga/modifica cerinte premergatoare";
-$langMinimum = "minim";
-$langMaximum = "maxim";
+$langMinimum = "Minim";
+$langMaximum = "Maxim";
 $langNoDocuments = "Nu sunt documente";
 $langNoExercisesAvailable = "Niciun exercitiu disponibil";
 $langNoLinksAvailable = "Nici o legatura disponibila";
@@ -154,7 +157,7 @@ $langNoItemsInLp = "Nu exista obiecte in calea de invatare in acest moment. Apas
 $FirstPosition = "Primul loc";
 $NewQuiz = "Test nou";
 $CreateTheForum = "Creeaza un forum";
-$AddLpIntro = "  <strong> Bine ati venit </ strong> pe cursul Chamilo. <br> Ai invatat pas cu pas cum sa creezi un curs. Structura de cursului va aparea intr-un meniu pe partea stanga a ferestrei. ";
+$AddLpIntro = "  <strong> Bine ati venit </ strong> pe cursul Chamilo. <br> Ai invatat pas cu pas cum sa creezi un curs. Structura de cursului va aparea intr-un meniu pe partea stanga a ferestrei.";
 $AddLpToStart = "Pentru inceput, dati un titlu cursului";
 $CreateTheLink = "Creaza un link";
 $MoveCurrentLink = "Muta acest link";
@@ -174,7 +177,7 @@ $CreateANewLink = "Creaza un nou link";
 $CreateANewForum = "Creeaza un forum nou";
 $LinkAdd = "Adauga link";
 $WoogieConversionPowerPoint = "Woogie: conversie Word";
-$WelcomeWoogieSubtitle = "Converteste un curs Word ";
+$WelcomeWoogieSubtitle = "Converteste un curs Word";
 $WelcomeWoogieConverter = "Bine ati venit la Woogie convertoare <ul type=\"1\"> <li> Alegeţi .doc,. sxw sau . odt fisier in <li> Actualizeaza in Woogie. Acesta este convertit intr-un curs <li> Apoi puteti adauga comentariu audio pentru fiecare pagina si veti putea testa si alte activitati intre pagini </ ul>";
 $WoogieError = "Eroare in timpul conversiei intr-un document Word. Controlati daca nu sunt semne speciale in numele documentului";
 $WordConvert = "Coversie in MS Word";
@@ -196,10 +199,10 @@ $WoogieBadExtension = "Va rugam sa incarcati doar fisiere text. Fisierul trebuie
 $ShowAudioRecorder = "Introduceti inregistrare audio din nou.";
 $SearchFeatureNotEnabledComment = "Full-text nu este activat in Chamilo. Va rugam sa luati contact cu administratorul Chamilo.";
 $UpdateAllAudioFragments = "Adauga fragment sonor";
-$SaveAudio = "Salvează ";
+$SaveAudio = "Salveaz&#259;";
 $ImagePreview = "Previzualizeaza imagine";
-$UplAlreadyExists = "deja exista.";
-$UplUnableToSaveFile = "Fiserul de transferat nu a putut fi salvat(poate o problema de permisie?)";
+$UplAlreadyExists = "Documentul exista deja";
+$UplUnableToSaveFile = "Nu este posibil sa pastrati acest document";
 $MoveDocument = "Muta documentul";
 $EditLPSettings = "Modifica setarile cursului";
 $SaveLPSettings = "Salveaza setarile cursului";
@@ -208,8 +211,9 @@ $HideAllAttempts = "Ascunde toate incercarile";
 $ShowAllAttemptsByExercise = "Arata toate incercarile";
 $ShowAttempt = "Arata incercarile";
 $ShowAndQualifyAttempt = "Arata si evalueaza incercarea";
-$langAddEdit = "Adauga/modifica";
+$langAddEdit = "Adauga / Modifica";
 $SaveSection = "Salveaza sectia";
 $AddLinkToCourse = "Adauga un link cursului";
 $AddAssignmentToCourse = "Adauga o sarcina la curs";
 $AddForumToCourse = "Adauga un forum cursului";
+?>

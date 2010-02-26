@@ -43,9 +43,4 @@ $langBackup = "Copia de seguridad";
 $langImportBackupInfo = "Usted puede  subir una copia de seguridad desde su ordenador o usar una copia de seguridad disponible en el servidor";
 $langCreateBackupInfo = "Puede seleccionar los contenidos del curso que constituirán la copia de seguridad";
 $ToolIntro = "Introducción de herramienta";
-$UploadError = "";
-$DocumentsWillBeAddedToo = "";
-$ToExportLearnpathWithQuizYouHaveToSelectQuiz = "";
-$ArchivesDirectoryNotWriteableContactAdmin = "";
-$DestinationCourse = "";
 ?>

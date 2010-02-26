@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langLineNumber = "Брой редове";
 $langLine = "ред";
 $langLines = "редове";
@@ -81,7 +84,7 @@ $UserStatistics = "Справка/статистика за потребител
 $EditUser = "Редактиране на потребителя";
 $ViewUser = "Преглед на информацията за потребителя";
 $RSSFeeds = "RSS новини";
-$NoFriendsInYourContactList = "Няма приятели в списъка с контакти. ";
+$NoFriendsInYourContactList = "Няма приятели в списъка с контакти.";
 $TryAndFindSomeFriends = "Опитайте да намерите приятели.";
 $ClearSearchResults = "Изчистване на резултатите от търсене";
 $SendInvitation = "Изпращане на покана";
@@ -107,6 +110,7 @@ $GroupList = "Групи";
 $GroupEdit = "Редактиране на групата";
 $Reply = "Отговор";
 $Moderator = "Модератор";
+$AddModerator = "Добавяне на модератор";
 $GroupMembers = "Членове на групата";
 $ReturnToInbox = "Към входящите съобщения";
 $LeaveGroup = "Напускане на групата";
@@ -115,4 +119,4 @@ $Topics = "Теми";
 $StatusInThisGroup = "Статус в групата";
 $GroupDescription = "Описание на групата";
 $MyProductions = "Моите работи";
-$AddModerator = "Добавяне на модератор";
+?>

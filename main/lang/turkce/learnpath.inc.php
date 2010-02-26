@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $lang_learning_path = "KURS";
 $lang_learning_path_builder = "Kurs Düzenleyicisi";
 $lang_description = "açıklama";
@@ -32,7 +35,7 @@ $langLearnpathTime = "Süre";
 $langLearnpathVersion = "versiyon";
 $langLearnpathRestarted = "Bütün bölümler tamamlanmadı.";
 $langLearnpathNoNext = "Son bölüm.";
-$langLearnpathNoPrev = "İlk bölüm.";
+$langLearnpathNoPrev = "&#304;lk bölüm.";
 $lang_add_learnpath = "Yeni bir KURS ekle";
 $lang_learnpath_added = "Yeni bir KURS oluşturuldu. Artı (+) işaretine tıklayarak bölümler ekleyebilirsiniz.";
 $lang_edit_learnpath = "kurs düzenle";
@@ -69,7 +72,7 @@ $lang_date = "Tarih";
 $lang_prerequisites_limit = "Ön şartlar (sınır)";
 $lang_loading = "Sayfa Yükleniyor, lütfen bekleyiniz...";
 $lang_empty = "Bu kurs herhangi bir basamak içermiyor";
-$langHotPotatoesFinished = "Bu HotPotatoes testi kapatılmıştır.";
+$langHotPotatoesFinished = "Bu HotPotatoes testi kapat&#305;lm&#305;&#351;t&#305;r.";
 $langCompletionLimit = "Tamamlama limiti (en az puan)";
 $langPrereqToEnter = "Giriş";
 $langPrereqFirstNeedTo = "Öncelikle tamamlamanız gerekli";
@@ -77,10 +80,11 @@ $langPrereqModuleMinimum1 = "En az 1 adım atlandı...";
 $langPrereqModuleMinimum2 = "Önkoşullar olarak ayarlananlar.";
 $langPrereqTestLimit1 = "minimuma ulaşmalısınız";
 $langPrereqTestLimit2 = "puanlar";
-$langPrereqTestLimitNow = "Now you have : ";
+$langPrereqTestLimitNow = "Now you have :";
 $langLearnpathExitFullScreen = "normal ekrana dön";
 $langLearnpathFullScreen = "tam ekran";
 $langItemMissing1 = "Kursun orijinalinde,";
 $langItemMissing2 = "burada bir sayfa (basamak) vardı.";
 $langDone = "Tamam";
 $langNoItemSelected = "Burada bir şey göstermek için yandaki menüden seçiminizi yapınız.";
+?>

@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langMdCallingTool = "Документи";
 $langMdTitle = "Наименование на обекта";
 $langMdDescription = "За да запишете тази информация, натиснете \"Записване\"";
@@ -42,3 +45,4 @@ $langCosts = ":no:без заплащане,, yes:срещу заплащане"
 $langCopyrights = ":yes:запазени права,, no:свободен";
 $langFormats = ":text/plain;windows-1251:text/plain;windows-1251,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;windows-1251,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;windows-1251:XML;windows-1251,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP";
 $langLngResTypes = ":exercise:тест (упражнение),,      simulation:симулация,,      questionnaire:въпросник,,      diagram:диаграма,,      figure:фигура,,      graph:графика,,      index:индекс,,      slide:слайд,,      table:таблица,,      narrative text:обзор,,      exam:изпит,,      experiment:експеримент,,      problem statement:постановка на проблем,,      self assessment:самостоятелно оценяване,,      lecture:лекция";
+?>

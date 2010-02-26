@@ -2,8 +2,8 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
-$langInvalidId = "Acesso não autorizado.<BR> Nome do usuário ou senha incorretos.";
-$langWelcome = "Cursos da lista em baixo são de livre acesso. Os outros cursos exigem um nome de usuário e uma senha, que podem ser obtidos através de um \'registro\'. Os professores e os seus ajudantes podem criar cursos depois de se registrarem e em seguida, selecionan";
+$langInvalidId = "Acesso não autorizado.<br /> Nome do usuário ou senha incorretos.";
+$langWelcome = "Cursos da lista em baixo são de livre acesso. Os outros cursos exigem um nome de usuário e uma senha, que podem ser obtidos através de um 'registro'. Os professores e os seus ajudantes podem criar cursos depois de se registrarem e em seguida, selecionan";
 $langPass = "Senha";
 $langEnter = "Entrar";
 $langReg = "Registro";

@@ -2,8 +2,8 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
-$langInvalidId = "Acceso no válido.<BR>Si usted no está registrado complete el <a href=\'claroline/auth/inscription.php\'>formulario de inscripción</a></font color>";
-$langWelcome = "Los cursos listados abajo son de acceso libre. Los otros cursos requieren un nombre de usuario y una contraseña, los cuales se pueden obtener mediante una \'inscripción\'. Los profesores y asistentes pueden crear cursos mediante la opción \'Inscripción\'.";
+$langInvalidId = "Acceso no válido.<br />Si usted no está registrado complete el <a href='claroline/auth/inscription.php'>formulario de inscripción</a></font color>";
+$langWelcome = "Los cursos listados abajo son de acceso libre. Los otros cursos requieren un nombre de usuario y una contraseña, los cuales se pueden obtener mediante una 'inscripción'. Los profesores y asistentes pueden crear cursos mediante la opción 'Inscripción'.";
 $langPass = "Contraseña";
 $langEnter = "Ingresar";
 $langReg = "Inscribirse";

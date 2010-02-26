@@ -3,7 +3,7 @@
 for more information: see languages.txt in the lang folder.
 */
 $langPgTitle = "Sidans titel";
-$langExplanation = "Filen måste skickas i HTML-format (e.g. \\"my_sida.html\\"). Den kommer att länkas till från hemsidan. Om du vill skicka upp icke HTML-dokument (PDF, Word, Power Point, Video, etc.) använder du <a href=../document/document.php>Dokumentverktyget</a>";
+$langExplanation = "Filen måste skickas i HTML-format (e.g. \"my_sida.html\"). Den kommer att länkas till från hemsidan. Om du vill skicka upp icke HTML-dokument (PDF, Word, Power Point, Video, etc.) använder du <a href=../document/document.php>Dokumentverktyget</a>";
 $langTooBig = "Du valde ingen fil att skicka eller filen är för stor";
 $langCouldNot = "Filen kunde inte skickas";
 $langNotAllowed = "Inte tillåtet";

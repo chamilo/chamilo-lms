@@ -3,13 +3,13 @@
 for more information: see languages.txt in the lang folder.
 */
 $langLinkSite = "Povezava na stran";
-$langSubTitle = "Doda povezavo iz glavnega menuja domače strani tečaja na poljubno stran oziroma poljuben URL. <p>Nasvet: če želite dodati povezavo na stran, pojdite na to stran, kopirajte \'naslov\' (URL) iz vrstice naslov vašega brskalnika in ga vstavite v polje \\"Povez";
+$langSubTitle = "Doda povezavo iz glavnega menuja domače strani tečaja na poljubno stran oziroma poljuben URL. <p>Nasvet: če želite dodati povezavo na stran, pojdite na to stran, kopirajte 'naslov' (URL) iz vrstice naslov vašega brskalnika in ga vstavite v polje \"Povez";
 $langAddPage = "Dodaj stran";
 $langSendPage = "Stran za prenos";
 $langCouldNot = "Datoteke ni bilo mogoče prenesti";
-$langOkSentLink = "Vaša povezava je bila prenešena.<p>Dostopna je z <a href=\\"../..//index.php\\">domače strani tečaja</a>";
+$langOkSentLink = "Vaša povezava je bila prenešena.<p>Dostopna je z <a href=\"../..//index.php\">domače strani tečaja</a>";
 $langTooBig = "Niste izbrali datoteke za prenos, ali pa je ta prevelika";
-$langExplanation = "Stran mora biti v HTML obliki (npr. \\"my_page.html\\"). Povezana bo z domače strani tečaja. Če želite prenesti dokumente, ki niso v HTML obliki (PDF, Word, Power Point, Video, etc.) uporabite orodje <a href=../document/document.php>dokumenti</a>";
+$langExplanation = "Stran mora biti v HTML obliki (npr. \"my_page.html\"). Povezana bo z domače strani tečaja. Če želite prenesti dokumente, ki niso v HTML obliki (PDF, Word, Power Point, Video, etc.) uporabite orodje <a href=../document/document.php>dokumenti</a>";
 $langPgTitle = "Naziv strani";
 $langNoLinkURL = "Vnesite povezavo (URL)";
 $langLinkTarget = "Cilj povezave";

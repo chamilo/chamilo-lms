@@ -4,8 +4,8 @@ for more information: see languages.txt in the lang folder.
 */
 $langProfessors = "Profesores";
 $langExplanation = "Una vez que haya pulsado el botón \"Crear curso\" se creará el sitio web del curso, en el que dispondrá de múltiples herramientas que podrá configurar para dar al curso su aspecto definitivo: Test o Ejercicios, Proyectos o Blogs, Wikis y Tareas";
-$langEmpty = "No ha rellenado todos los campos.<br>Utilice el botón de retorno de su navegador y vuelva a empezar.<br>Si no conoce el código de su curso, consulte el programa del curso";
-$langCodeTaken = "Este código de curso ya es utilizado por otro curso.<br>Utilice el botón de retorno de su navegador y vuelva a empezar.";
+$langEmpty = "No ha rellenado todos los campos.<br />Utilice el botón de retorno de su navegador y vuelva a empezar.<br />Si no conoce el código de su curso, consulte el programa del curso";
+$langCodeTaken = "Este código de curso ya es utilizado por otro curso.<br />Utilice el botón de retorno de su navegador y vuelva a empezar.";
 $langFormula = "Atentamente";
 $langMessage = "Cuando suprima este foro de pruebas, también suprimirá todos los mensajes que contenga.";
 $langExerciceEx = "Ejercicio de ejemplo";

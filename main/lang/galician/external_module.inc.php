@@ -7,9 +7,9 @@ $langSubTitle = "Engadir ó menú principal da súa páxina principal unha ligaz
 $langAddPage = "Engadir páxina";
 $langSendPage = "Páxina para enviar";
 $langCouldNot = "O arquivo non se pode enviar";
-$langOkSentLink = "Enviouse a ligazón.<p>Agora está accesible desde <a href=\\"../..//index.php\\">Páxina inicial do curso</a>";
+$langOkSentLink = "Enviouse a ligazón.<p>Agora está accesible desde <a href=\"../..//index.php\">Páxina inicial do curso</a>";
 $langTooBig = "Non seleccionaches o arquivo para enviar, ou é demasiado grande";
-$langExplanation = "A páxina debe estar en formato HTML (e.x. \\"paxina.htm\\"). Enlazaráse á páxina inicial. Se queres enviar documentos que non sexan HTML (PDF, Word, Power Point, Vídeo, etc.) utiliza a <a href=../document/document.php>ferramenta Documentos</a>";
+$langExplanation = "A páxina debe estar en formato HTML (e.x. \"paxina.htm\"). Enlazaráse á páxina inicial. Se queres enviar documentos que non sexan HTML (PDF, Word, Power Point, Vídeo, etc.) utiliza a <a href=../document/document.php>ferramenta Documentos</a>";
 $langPgTitle = "Título da páxina";
 $langNoLinkURL = "Introduza o enderezo da ligazón";
 $langLinkTarget = "Destino da ligazón";

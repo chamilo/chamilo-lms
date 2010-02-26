@@ -3,7 +3,7 @@
 for more information: see languages.txt in the lang folder.
 */
 $langPgTitle = "Naslov strani";
-$langExplanation = "Stran mora biti v obliki HTML(na pr. \\"moja_stran.htm\\"). Povezana bo z domače strani. Če želiš poslati več dokumentov, ki niso HTML (PDF, Word, Power Point, Video,...) uporabi orodje <a href=../document/document.php>dokumenti</a>";
+$langExplanation = "Stran mora biti v obliki HTML(na pr. \"moja_stran.htm\"). Povezana bo z domače strani. Če želiš poslati več dokumentov, ki niso HTML (PDF, Word, Power Point, Video,...) uporabi orodje <a href=../document/document.php>dokumenti</a>";
 $langTooBig = "Nisi izbral nobene datoteke za prenos, ali pa je ta prevelika";
 $langCouldNot = "Datoteke nisem mogel prenesti";
 $langNotAllowed = "Ni dovoljeno";

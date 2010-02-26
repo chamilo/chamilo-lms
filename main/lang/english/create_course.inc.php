@@ -3,23 +3,23 @@
 for more information: see languages.txt in the lang folder.
 */
 $langProfessors = "Trainers";
-$langExplanation = "Once you click on \\"Create a training\\", a training is created with a section for Tests, Project based learning, Assessments, Courses, Dropbox, Agenda and much more. Logging in as trainer provides you with editing privileges for this training.";
-$langEmpty = "You left some fields empty.<br>Use the <b>Back</b> button on your browser and try again.<br>If you ignore your training code, see the Training Program";
-$langCodeTaken = "This training code is already in use.  <br>Use the <b>Back</b> button on your browser and try again";
+$langExplanation = "Once you click on \"Create a training\", a training is created with a section for Tests, Project based learning, Assessments, Courses, Dropbox, Agenda and much more. Logging in as trainer provides you with editing privileges for this training.";
+$langEmpty = "You left some fields empty.<br />Use the <b>Back</b> button on your browser and try again.<br />If you ignore your training code, see the Training Program";
+$langCodeTaken = "This training code is already in use.  <br />Use the <b>Back</b> button on your browser and try again";
 $langFormula = "Yours sincerely";
 $langMessage = "When you remove the test forum, it will remove all messages in that forum too.";
 $langExerciceEx = "Sample test";
 $langAntique = "Irony";
 $langSocraticIrony = "Socratic irony is...";
 $langManyAnswers = "(more than one answer can be true)";
-$langRidiculise = "Ridiculise one\'s interlocutor in order to have him concede he is wrong.";
+$langRidiculise = "Ridiculise one's interlocutor in order to have him concede he is wrong.";
 $langNoPsychology = "No. Socratic irony is not a matter of psychology, it concerns argumentation.";
-$langAdmitError = "Admit one\'s own errors to invite one\'s interlocutor to do the same.";
+$langAdmitError = "Admit one's own errors to invite one's interlocutor to do the same.";
 $langNoSeduction = "No. Socratic irony is not a seduction strategy or a method based on the example.";
-$langForce = "Compell one\'s interlocutor, by a series of questions and sub-questions, to admit he doesn\'t know what he claims to know.";
+$langForce = "Compell one's interlocutor, by a series of questions and sub-questions, to admit he doesn't know what he claims to know.";
 $langIndeed = "Indeed. Socratic irony is an interrogative method. The Greek \"eirotao\" means \"ask questions\"";
-$langContradiction = "Use the Principle of Non Contradiction to force one\'s interlocutor into a dead end.";
-$langNotFalse = "This answer is not false. It is true that the revelation of the interlocutor\'s ignorance means showing the contradictory conclusions where lead his premisses.";
+$langContradiction = "Use the Principle of Non Contradiction to force one's interlocutor into a dead end.";
+$langNotFalse = "This answer is not false. It is true that the revelation of the interlocutor's ignorance means showing the contradictory conclusions where lead his premisses.";
 $langAgenda = "Agenda";
 $langVideo = "Video";
 $langCourseProgram = "Training program";

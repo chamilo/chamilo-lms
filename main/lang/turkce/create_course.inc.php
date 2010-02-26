@@ -4,8 +4,8 @@ for more information: see languages.txt in the lang folder.
 */
 $langProfessors = "Öğretmenler";
 $langExplanation = "OK tıkladığınızda, Forum, Gündem, Belge Yönetimi vs. araçlarla birlikte bu dersin sitesi yaratılır. Kullanıcı adınız ve şifrenizle giriş yaparak siteyi isteğiniz şekilde düzenleyebilirsiniz.";
-$langEmpty = "Bazı alanları boş bıraktınız.<br>Gezgininizin <b>Geri</b> düğmesini kullanarak doldurunuz.<br>Eğer ders kodunu yazmadıysanız Ders Programına bakınız";
-$langCodeTaken = "Bu ders kodu daha önce kullanýlmýþtýr. <br><b>Geri</b> dönerek baþka bir kod yazýnýz";
+$langEmpty = "Bazı alanları boş bıraktınız.<br />Gezgininizin <b>Geri</b> düğmesini kullanarak doldurunuz.<br />Eğer ders kodunu yazmadıysanız Ders Programına bakınız";
+$langCodeTaken = "Bu ders kodu daha önce kullanýlmýþtýr. <br /><b>Geri</b> dönerek baþka bir kod yazýnýz";
 $langFormula = "Merhaba, Ders Yetkilisi";
 $langMessage = "When you remove the test forum, it will remove all messages in that forum too.";
 $langExerciceEx = "Örnek Test";

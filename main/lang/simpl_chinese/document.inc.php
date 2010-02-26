@@ -34,7 +34,7 @@ $langFileName = "文件名";
 $langNoFileName = "请输入文件名";
 $langNoText = "请输入你的 text / HTML 内容";
 $langAreYouSureToDelete = "确定要删除";
-$langScormcontent = "这是Scorm格式内容<br><input type=button name=scormbutton value='启用' onclick='openscorm()'>";
+$langScormcontent = "这是Scorm格式内容<br /><input type=button name=scormbutton value='启用' onclick='openscorm()'>";
 $langScormcontentstudent = "这是Scorm格式课程，观看请点击此处: <input type=button name=scormbutton value='启用' onclick='openscorm()'>";
 $langPublish = "发布";
 $langMissingImagesDetected = "发现图片丢失";

@@ -4,8 +4,8 @@ for more information: see languages.txt in the lang folder.
 */
 $langProfessors = "Kursleiter";
 $langExplanation = "Wenn Sie OK geklickt haben, wird ein kompletter Kurs mit Forum, Agenda, Dokumentmanager usw. erstellt. Ihr Login, als Autor des Kurses, erlaubt Ihnen, die Seite für den Kurs entsprechend Ihrer Wünsche und Erfordernisse   zu bearbeiten";
-$langEmpty = "Einige Felder wurden leer gelassen.<br>Benutzen Sie den <b>\'Zurück\'</b> Button und versuchen Sie es erneut.<br>Wenn Sie den Kurscode ignorieren, schauen Sie sich bitte das Kursprogramm an";
-$langCodeTaken = "Dieser Kurscode wird bereits verwendet.<br>Benutzen Sie den Zurück-Button und versuchen Sie es erneut";
+$langEmpty = "Einige Felder wurden leer gelassen.<br />Benutzen Sie den <b>'Zurück'</b> Button und versuchen Sie es erneut.<br />Wenn Sie den Kurscode ignorieren, schauen Sie sich bitte das Kursprogramm an";
+$langCodeTaken = "Dieser Kurscode wird bereits verwendet.<br />Benutzen Sie den Zurück-Button und versuchen Sie es erneut";
 $langFormula = "Mit freundlichen Grüßen,";
 $langMessage = "Wenn Sie das Testforum entfernen, wird die aktuelle Meldung ebenfalls entfernt.";
 $langExerciceEx = "Beispielübung";

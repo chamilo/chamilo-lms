@@ -4,21 +4,21 @@ for more information: see languages.txt in the lang folder.
 */
 $langProfessors = "GiÃ¡o viÃªn";
 $langExplanation = "Sau khi báº¥m OK, má»t website sáºœ ÄÆ°á»£c táº¡o ra vá»i Äáº§y Äá»§ cÃ¡c chuyÃªn má»¥c. Báº¡n chá» cáº§n ÄÄng nháº­p vÃ  hiá»u chá»nh website theo Ãœ thÃ­ch.";
-$langEmpty = "Báº¡n cÃ²n chá»«a trá»ng ÃŽ.<br>Báº¥m nÃºt <b>Back</b>Äá» lÃ m láº¡i.<br>";
+$langEmpty = "Báº¡n cÃ²n chá»«a trá»ng ÃŽ.<br />Báº¥m nÃºt <b>Back</b>Äá» lÃ m láº¡i.<br />";
 $langCodeTaken = "MÃ£ nÃ y ÄÃ£ cÃ³ rá»i";
 $langMessage = "Khi báº¡n xoÃ¡, cÃ¡c bÃ i trong diá»n ÄÃ n cÅ©ng tá»± Äá»ng xoÃ¡ theo.";
 $langExerciceEx = "BÃ i táº­p máº«u";
 $langAntique = "History of Ancient Philosophy";
 $langSocraticIrony = "Socratic irony is...";
 $langManyAnswers = "(more than one answer can be true)";
-$langRidiculise = "Ridiculise one\'s interlocutor in order to have him concede he is wrong.";
+$langRidiculise = "Ridiculise one's interlocutor in order to have him concede he is wrong.";
 $langNoPsychology = "No. Socratic irony is not a matter of psychology, it concerns argumentation.";
-$langAdmitError = "Admit one\'s own errors to invite one\'s interlocutor to do the same.";
+$langAdmitError = "Admit one's own errors to invite one's interlocutor to do the same.";
 $langNoSeduction = "No. Socratic irony is not a seduction strategy or a method based on the example.";
-$langForce = "Compell one\'s interlocutor, by a series of questions and sub-questions, to admit he doesn\'t know what he claims to know.";
+$langForce = "Compell one's interlocutor, by a series of questions and sub-questions, to admit he doesn't know what he claims to know.";
 $langIndeed = "Indeed. Socratic irony is an interrogative method. The Greek \"eirotao\" means \"ask questions\"";
-$langContradiction = "Use the Principle of Non Contradiction to force one\'s interlocutor into a dead end.";
-$langNotFalse = "This answer is not false. It is true that the revelation of the interlocutor\'s ignorance means showing the contradictory conclusions where lead his premisses.";
+$langContradiction = "Use the Principle of Non Contradiction to force one's interlocutor into a dead end.";
+$langNotFalse = "This answer is not false. It is true that the revelation of the interlocutor's ignorance means showing the contradictory conclusions where lead his premisses.";
 $langAgenda = "Agenda (Lá»ch cÃŽng tÃ¡c)";
 $langVideo = "Video";
 $langCourseProgram = "ChÆ°Æ¡ng trÃ¬nh khoÃ¡ há»c";
@@ -60,13 +60,13 @@ $langDepartment = "TrÆ°á»ng/Khoa";
 $langDepartmentUrl = "Url";
 $langScoreShow = "Show scores";
 $langVisibility = "Visibility";
-$langVersionDb = "Version de la base de donnÃ©e lors de l\'archivage";
+$langVersionDb = "Version de la base de donnÃ©e lors de l'archivage";
 $langLastVisit = "Last visit";
 $langLastEdit = "Last contribution";
 $langExpire = "Expiration";
 $langChoseFile = "Select file";
 $langFtpFileTips = "Si le fichier est sur un ordinateur tiers et accessible par ftp";
 $langHttpFileTips = "Si le fichier est sur un ordinateur tiers et accessible par http";
-$langLocalFileTips = "Si le fichier est sur l\'espace de stockage des cours de ce campus";
+$langLocalFileTips = "Si le fichier est sur l'espace de stockage des cours de ce campus";
 $langPostFileTips = "Si le fichier est sur  votre ordinateur";
 ?>

@@ -15,6 +15,6 @@ $langValid = "Geçerli";
 $langBackAndForget = "İptal";
 $CourseDescriptionUpdated = "Ders tanımı güncellendi";
 $CourseDescriptionDeleted = "Ders tanımı silindi";
-$CourseDescriptionIntro = "Bir ders tanımı oluşturmak için başlığa tıklayıp doğru form alanını doldurun.<br><br> Daha sonra Tamam'a tıklayıp başka bir başlığı doldurun.";
+$CourseDescriptionIntro = "Bir ders tanımı oluşturmak için başlığa tıklayıp doğru form alanını doldurun.<br /><br /> Daha sonra Tamam'a tıklayıp başka bir başlığı doldurun.";
 $langSaveDescription = "Tanımı Kaydet";
 ?>

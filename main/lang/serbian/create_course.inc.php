@@ -4,8 +4,8 @@ for more information: see languages.txt in the lang folder.
 */
 $langProfessors = "Predava&#269;i";
 $langExplanation = "Kada kliknete na OK, Forum, Agenda, Organizator dokumenata i td. &#263;e biti kreiran. Kao osoba koja je kreirala sajt imate mogu&#263;nost da to modifikujete prema vaim potrebama.";
-$langEmpty = "Ostavili ste neka polja prazna..<br>Koristite <b>Back</b> dugme u vaem pretraiva&#269;u i pokuajte ponovo.<br>";
-$langCodeTaken = "Ovaj kod kursa je ve&#263; u upotrebi. <br>Koristit <b>Back</b> dugme u vaem pretraiva&#269;u i pokuajte ponovo.";
+$langEmpty = "Ostavili ste neka polja prazna..<br />Koristite <b>Back</b> dugme u vaem pretraiva&#269;u i pokuajte ponovo.<br />";
+$langCodeTaken = "Ovaj kod kursa je ve&#263; u upotrebi. <br />Koristit <b>Back</b> dugme u vaem pretraiva&#269;u i pokuajte ponovo.";
 $langFormula = "Srdacno vas";
 $langMessage = "Kada uklonite test forum ukloni&#263;ete i sve poruke u forumu tako&#273;e.";
 $langExerciceEx = "Uzorak testa";

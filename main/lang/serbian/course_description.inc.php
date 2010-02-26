@@ -15,6 +15,6 @@ $langValid = "Vae&#263;e";
 $langBackAndForget = "Nazad i zaboravi";
 $CourseDescriptionUpdated = "Opis kursa je auriran";
 $CourseDescriptionDeleted = "Opis kursa je obrisan";
-$CourseDescriptionIntro = "Da kreirate opis kursa, odaberite naslov i popunite polje. <br><br> kliknite OK za nastavak.";
+$CourseDescriptionIntro = "Da kreirate opis kursa, odaberite naslov i popunite polje. <br /><br /> kliknite OK za nastavak.";
 $langSaveDescription = "Snimi opis";
 ?>

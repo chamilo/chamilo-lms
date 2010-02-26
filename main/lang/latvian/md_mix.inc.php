@@ -4,7 +4,7 @@ for more information: see languages.txt in the lang folder.
 */
 $langTool = "META dati";
 $langClickKw = "Noklik&#311;ieniet uz atsl&#275;gv&#257;rda, lai to iez&#299;m&#275;tu vai atteiktos no iez&#299;m&#275;juma.";
-$langKwHelp = "<br/>Noklik";
+$langKwHelp = "<br />Noklik";
 $langAdvanced = "Papildus iesp&#275;jas";
 $langSearch = "Mekl&#275;t";
 $langSearchCrit = "Izmantojiet zem&#257;k esoo lauci&#326;u, lai nor&#257;d&#299;tu aprakstous v&#257;rdus, vienu v&#257;rdu katr&#257; rind&#257;!";

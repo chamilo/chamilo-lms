@@ -35,7 +35,7 @@ $langFileName = "Faila nosaukums";
 $langNoFileName = "L&#363;dzu, nor&#257;diet faila nosaukumu";
 $langNoText = "L&#363;dzu, ievadiet tekstu&#257;lo / HTML inform&#257;ciju";
 $langAreYouSureToDelete = "Vai tie&#257;m v&#275;laties dz&#275;st";
-$langScormcontent = "Pieeja <i>Scorm</i>  sistēmai<br><input type=button name=scormbutton value='Sākt darbu !' onclick='openscorm()'>";
+$langScormcontent = "Pieeja <i>Scorm</i>  sistēmai<br /><input type=button name=scormbutton value='Sākt darbu !' onclick='openscorm()'>";
 $langScormcontentstudent = "Pieeja <i>Scorm</i> formāta kursam. Pieejai klik";
 $langPublish = "Public&#275;t";
 $langMissingImagesDetected = "Konstat&#275;ti iztr&#363;kstoi att&#275;li";

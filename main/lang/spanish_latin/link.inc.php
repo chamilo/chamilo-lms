@@ -36,7 +36,7 @@ $langCsvFileLine1 = " 	... - línea 1 =";
 $langCsvLinesFailed = "falla al importar el enlace (no hay URL o título)";
 $langCsvLinesOld = "los enlaces existentes se han actualizado";
 $langCsvLinesNew = "nuevo(s) enlace(s) creados";
-$langCsvExplain = "El archivo debe presentar el siguiente formato: URL;categoría;título;descripción;http://www.aaa.org/...;Enlaces importantes;Nombre 1;Descripción 1;http://www.bbb.net/...;;Nombre 2;\\"Descripción 2\\";Si la \'URL\' y la \'categoría\' pertenecen a un enlace y";
+$langCsvExplain = "El archivo debe presentar el siguiente formato: URL;categoría;título;descripción;http://www.aaa.org/...;Enlaces importantes;Nombre 1;Descripción 1;http://www.bbb.net/...;;Nombre 2;\"Descripción 2\";Si la 'URL' y la 'categoría' pertenecen a un enlace y";
 $langLinkUpdated = "El enlace ha sido actualizado";
 $langAll_Link_Deleted = "El enlace ha sido eliminado";
 $langOnHomepage = "Mostrar el enlace en la página de inicio";

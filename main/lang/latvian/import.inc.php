@@ -3,7 +3,7 @@
 for more information: see languages.txt in the lang folder.
 */
 $langPgTitle = "Lapas virsraksts";
-$langExplanation = "Lapai ir j&#257;b&#363;t HTML form&#257;t&#257; (t.i., \\"manalapa.html\\"). Kursa m&#257;jas lap&#257; tiks ievietota hipersaite. Ja J&#363;s v&#275;laties ievietot ne HTML dokumentus (PDF, Word, Power Point, Video, utt.) izmantojiet <a href=../document/do";
+$langExplanation = "Lapai ir j&#257;b&#363;t HTML form&#257;t&#257; (t.i., \"manalapa.html\"). Kursa m&#257;jas lap&#257; tiks ievietota hipersaite. Ja J&#363;s v&#275;laties ievietot ne HTML dokumentus (PDF, Word, Power Point, Video, utt.) izmantojiet <a href=../document/do";
 $langTooBig = "J&#363;s neizv&#275;l&#275;j&#257;ties k&#257;du failu augupl&#257;d&#275;t, vai ar&#299; tas ir p&#257;r&#257;k liels.";
 $langCouldNot = "Failu nebija iesp&#275;jams augupl&#257;d&#275;t.";
 $langNotAllowed = "Nav at&#316;auts";

@@ -11,7 +11,7 @@ $AllPages = "Tódalas páxinas";
 $AddNew = "Engadir nova páxina";
 $ChangesStored = "Os seus trocos foron gardados";
 $NewWikiSaved = "A nova páxina foi gardada. Pode visualizala facendo click en:";
-$DefaultContent = " <br/> <br/> <p align=\\"center\\"> <img src=\\"%swiki/wcollaborative.png\\" alt=\\"Mr. Chamilo\\" title=\\"Mr. Chamilo\\" /></p> <p align=\\"center\\">Para comezar, edite esta pï¿œxina</p>";
+$DefaultContent = " <br /> <br /> <p align=\"center\"> <img src=\"%swiki/wcollaborative.png\" alt=\"Mr. Chamilo\" title=\"Mr. Chamilo\" /></p> <p align=\"center\">Para comezar, edite esta pï¿œxina</p>";
 $CourseWikiPages = "Páxinas Wiki do curso";
 $GroupWikiPages = "Páxinas Wiki do grupo";
 $NoWikiPageTitle = "Os seus trocos foron gardados. Debe darlle un título á paxina";

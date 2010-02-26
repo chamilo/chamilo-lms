@@ -35,7 +35,7 @@ $langFileName = "Ime fajla";
 $langNoFileName = "Molim Vas, unesite ime fajla";
 $langNoText = "Molim Vas, unesite va tekst/HTML sadraj";
 $langAreYouSureToDelete = "Da li ste sigurni da elite da obriete";
-$langScormcontent = "Ovo je Scorm sadržaj<br><input type=button name=scormbutton value='Startuj ga!' onclick='openscorm()'>";
+$langScormcontent = "Ovo je Scorm sadržaj<br /><input type=button name=scormbutton value='Startuj ga!' onclick='openscorm()'>";
 $langScormcontentstudent = "Ovo je kurs u Scorm formatu. Da biste ga pustili kliknite ovde: <input type=button name=scormbutton value='Startuj ga!' onclick='openscorm()'>";
 $langPublish = "Objavi";
 $langMissingImagesDetected = "Slike koje nedostaju su pronadjene";

@@ -3,7 +3,7 @@
 for more information: see languages.txt in the lang folder.
 */
 $langInvalidId = "Deze identificatie is niet geldig (verkeerde log-in of wachtwoord).";
-$langWelcome = "Cursussites hieronder hebben vrije toegang. De andere cursussen vereisen een gebruikersnaam en een wachtwoord. Die kunt u krijgen door een klik op \'Registratie\'. Lesgevers kunnen bij registratie aangeven dat ze cursussites wensen aan te maken.";
+$langWelcome = "Cursussites hieronder hebben vrije toegang. De andere cursussen vereisen een gebruikersnaam en een wachtwoord. Die kunt u krijgen door een klik op 'Registratie'. Lesgevers kunnen bij registratie aangeven dat ze cursussites wensen aan te maken.";
 $langPass = "Wachtwoord";
 $langEnter = "Log in";
 $langReg = "Registratie";
@@ -29,7 +29,7 @@ $EussMenu = "Menu";
 $Opinio = "Mening";
 $Intranet = "Intranet";
 $Englin = "Engels";
-$langInvalidForSelfRegistration = "Indien u nog niet ingeschreven bent, gelieve het <a href=\\"claroline/auth/inscription.php\\">registratieformulier</a> in te vullen.";
+$langInvalidForSelfRegistration = "Indien u nog niet ingeschreven bent, gelieve het <a href=\"claroline/auth/inscription.php\">registratieformulier</a> in te vullen.";
 $langSubCat = "subcategorieën";
 $langMenuGeneral = "Algemeen";
 $langMenuUser = "Gebruiker";
@@ -52,7 +52,7 @@ $TotalOnLine = "Aantal gebruikers online";
 $langCourseClosed = "(de cursus is niet toegankelijk)";
 $ViewOpenCourses = "Bekijk open cursussen";
 $langCompetences = "Competenties";
-$langDiplomas = "Diploma\'s";
+$langDiplomas = "Diploma's";
 $langTeach = "Waarin u kunt lesgeven";
 $langProductions = "Producties";
 $langSendChatRequest = "Zend een chatverzoek naar deze persoon";

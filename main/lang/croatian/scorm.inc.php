@@ -52,5 +52,5 @@ $GenericScorm = "Generi&#269;ki SCORM";
 $UnknownPackageFormat = "Format datoteke nije prepoznat. Provjerite da je datoteka dobro generirana i da nema grešaka. Problemi mogu nastati zbog dodatnih uključenih ZIP opcija ili veličine datoteke. Ukoliko niste sigurni u ZIP, probajte generirati ZIP datoteku sa što manje dodatnih opcija.";
 $Attempt = "Pokuaj";
 $MoveTheCurrentForum = "Premjesti trenutni forum";
-$WarningWhenEditingScorm = "Upozorenje !<br/>Kada izmjenite trenutni SCORM korak, moe do&#263;i do promjene izvje&#263;ivanja Puta u&#269;enja ili do greke samog koraka.";
+$WarningWhenEditingScorm = "Upozorenje !<br />Kada izmjenite trenutni SCORM korak, moe do&#263;i do promjene izvje&#263;ivanja Puta u&#269;enja ili do greke samog koraka.";
 ?>

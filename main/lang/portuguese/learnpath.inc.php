@@ -148,7 +148,7 @@ $langEditCurrentExecice = "Editar o exercício actual";
 $langUploadScorm = "Importar curso SCORM";
 $langPowerPointConvert = "Chamilo RAPID";
 $langLPCreatedToContinue = "Para continuar adicione uma secção ou um objecto de aprendizagem ou uma actividade ao curso.";
-$langLPCreatedAddChapterStep = "<html><body><p><big><img height=\\"250\\" width=\\"250\\" align=\\"right\\" src=\\"images/gallery/mr_dokeos/animated/practicerAnim.gif\\" alt=\\"practicerAnim.gif\\" />Bem-vindo à ferramenta de autoría de cursos do Chamilo !</big></p> <ul> <li><b>Construir</b> : Ad";
+$langLPCreatedAddChapterStep = "<html><body><p><big><img height=\"250\" width=\"250\" align=\"right\" src=\"images/gallery/mr_dokeos/animated/practicerAnim.gif\" alt=\"practicerAnim.gif\" />Bem-vindo à ferramenta de autoría de cursos do Chamilo !</big></p> <ul> <li><b>Construir</b> : Ad";
 $langPrerequisitesAdded = "Foram adicionados pré-requisitos para o objecto de aprendizagem actual.";
 $langAddEditPrerequisites = "Adicionar/editar pré-requisitos";
 $langMinimum = "Mínimo";
@@ -160,7 +160,7 @@ $langNoItemsInLp = "Não existem objectos de aprendizagem neste curso. Clique em
 $FirstPosition = "Primeira posição";
 $NewQuiz = "Novo exercício";
 $CreateTheForum = "Adicionar um fórum ao curso";
-$AddLpIntro = "<strong>Bem-vindo</strong> à ferramenta de autoría de cursos do Chamilo.<br/>Crie os seus cursos passo a passo. A tabela de conteúdos será exibida à esquerda.";
+$AddLpIntro = "<strong>Bem-vindo</strong> à ferramenta de autoría de cursos do Chamilo.<br />Crie os seus cursos passo a passo. A tabela de conteúdos será exibida à esquerda.";
 $AddLpToStart = "Para começar, atribua um título ao seu curso";
 $CreateTheLink = "Adicionar uma ligação/link ao curso";
 $MoveCurrentLink = "Mover a ligação/link actual";
@@ -201,7 +201,7 @@ $OogieBadExtension = "Por favor, envie apenas apresentações. A terminação do
 $WoogieBadExtension = "Por favor, envie apenas documentos de texto. A terminação do nome do ficheiro deverá ser .doc, .docx ou .odt";
 $ShowAudioRecorder = "Apresentar o gravador de áudio";
 $SearchFeatureNotEnabledComment = "A funcionalidade de pesquisa de texto integral no Chamilo não se encontra activado. Por favor entre em contacto com o administrador do Chamilo.";
-$SearchFeatureSearchExplanation = "Para pesquisar na base-de-dados do curso, por favor utilize a seguinte sintaxe:<br/>    <i>term tag:tag_name -exclude +include \"exact phrase\"</i><br/>Por exemplo:<br/>    <i>car tag:truck -ferrari +ford \"high consumption\".</i><br/> Desta forma irá apresentar todos os resultados para a palavra 'car' adicionada como 'truck', não incluindo a palavra 'ferrari' mas, incluindo a palavra 'ford' e a frase exacta 'high consumption'.";
+$SearchFeatureSearchExplanation = "Para pesquisar na base-de-dados do curso, por favor utilize a seguinte sintaxe:<br />    <i>term tag:tag_name -exclude +include \"exact phrase\"</i><br />Por exemplo:<br />    <i>car tag:truck -ferrari +ford \"high consumption\".</i><br /> Desta forma irá apresentar todos os resultados para a palavra 'car' adicionada como 'truck', não incluindo a palavra 'ferrari' mas, incluindo a palavra 'ford' e a frase exacta 'high consumption'.";
 $ViewLearningPath = "Visualizar curso";
 $SearchFeatureDocumentTagsIfIndexing = "Etiquetas/marcadores para adicionar ao documento, se a indexação";
 $ReturnToLearningPaths = "Regressar a Cursos";

@@ -4,8 +4,8 @@ for more information: see languages.txt in the lang folder.
 */
 $langProfessors = "Profesori";
 $langExplanation = "Odata ce vei apasa OK,un site de internet cu Forum, Agenda, Document manager etc. va fi creat. Contul tau, in calitate de creator al siteului iti permite sa-l modifici dupa cerintele tale.";
-$langEmpty = "Daca ai lasat unele campuri goale.<br>Foloseste butonul <b>Inapoi</b> al browserului si incearca din nou.<br>Daca ignori codul cursului tau, vezi Programul Cursului";
-$langCodeTaken = "Codul acestui curs este deja folosit. <br>Foloseste butonul <b>Inapoi</b> al browserului si incearca din nou.";
+$langEmpty = "Daca ai lasat unele campuri goale.<br />Foloseste butonul <b>Inapoi</b> al browserului si incearca din nou.<br />Daca ignori codul cursului tau, vezi Programul Cursului";
+$langCodeTaken = "Codul acestui curs este deja folosit. <br />Foloseste butonul <b>Inapoi</b> al browserului si incearca din nou.";
 $langFormula = "Cu stima";
 $langMessage = "Cand elimini testul forumului, se vor sterge toate mesajele existente in acel forum.";
 $langExerciceEx = "Test simplu";
@@ -32,7 +32,7 @@ $langAgendaTitle = "Marti 11 decembrie- Prima intalnire. Camera: LIN 18";
 $langAgendaText = "Introducere generala in managementul proiectelor";
 $langMicro = "Interviuri de strada";
 $langGoogle = "Motor de cautare rapid si puternic";
-$langIntroductionText = "Acesta este un text introductiv. Pentru a-l inlocui cu textul tau, apasa pe \\"iconita creion\\" de alaturi (numai pentru administratorii de curs).";
+$langIntroductionText = "Acesta este un text introductiv. Pentru a-l inlocui cu textul tau, apasa pe \"iconita creion\" de alaturi (numai pentru administratorii de curs).";
 $langIntroductionTwo = "Aceasta pagina permite utilizatorilor si grupurilor sa publice documente.";
 $langCourseDescription = "Scrie aici descrierea ce va aparea in lista cursului.";
 $langProfessor = "Profesor";

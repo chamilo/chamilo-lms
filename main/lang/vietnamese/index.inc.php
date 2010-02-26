@@ -3,7 +3,7 @@
 for more information: see languages.txt in the lang folder.
 */
 $langInvalidId = "<small>KhÃŽng ÄÄng nháº­p ÄÆ°á»£c.Náº¿u báº¡n chÆ°a pháº£i thÃ nh viÃªn, hÃ£y <a href=claroline/auth/inscription.php>ÄÄng kÃœ á» ÄÃ¢y</a></small></font color>";
-$langWelcome = "courses are freely available below. Other  courses requirea username and a password, which you can obtain by clicking on \'registration\'. Professorscan create course websites clicking on registration too, but selecting then\'Create course sites (professo";
+$langWelcome = "courses are freely available below. Other  courses requirea username and a password, which you can obtain by clicking on 'registration'. Professorscan create course websites clicking on registration too, but selecting then'Create course sites (professo";
 $langPass = "Password";
 $langEnter = "Enter";
 $langReg = "ÄÄng kÃœ";

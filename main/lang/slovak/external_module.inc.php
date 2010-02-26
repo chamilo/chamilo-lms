@@ -7,7 +7,7 @@ $langAddPage = "Prida&#357; stránku";
 $langSendPage = "Stránka na na&#269;ítanie";
 $langCouldNot = "Súbor nie je moné na&#269;íta&#357;";
 $langTooBig = "Bu&#271; ste nevybrali súbor na zaslanie, alebo je ve&#318;mi ve&#318;ký";
-$langExplanation = "Stránka musí by&#357; v HTML formáte (napr. \\"moja_stránka.htm\\"). Bude dostupná z domovskej stránky. Ak chcete posla&#357; dokument v inom formáte ako HTML (PDF, Word, Power Point, Video, etc.) pouite nástroj <a href=../document/document.php>Documenty</";
+$langExplanation = "Stránka musí by&#357; v HTML formáte (napr. \"moja_stránka.htm\"). Bude dostupná z domovskej stránky. Ak chcete posla&#357; dokument v inom formáte ako HTML (PDF, Word, Power Point, Video, etc.) pouite nástroj <a href=../document/document.php>Documenty</";
 $langPgTitle = "Názov stránky";
 $langNoLinkURL = "Prosím zadajte URL odkazu";
 $langLinkTarget = "Cie&#318; odkazu";

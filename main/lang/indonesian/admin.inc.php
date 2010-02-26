@@ -247,7 +247,7 @@ $No = "Tidak";
 $ShowToolShortcutsTitle = "Shortcut Tool";
 $ShowToolShortcutsComment = "Tampilkan shortcut tool di banner?";
 $ShowStudentViewTitle = "Tampilan terlihat Siswa";
-$ShowStudentViewComment = "Menyediakan fasilitas Tampilan Yang Terlihat Siswa? <br> Fitur ini memungkinkan pengajar melihat apa yang akan tampil terlihat siswa.";
+$ShowStudentViewComment = "Menyediakan fasilitas Tampilan Yang Terlihat Siswa? <br /> Fitur ini memungkinkan pengajar melihat apa yang akan tampil terlihat siswa.";
 $AllowGroupCategories = "Kategori-kategori Group";
 $AllowGroupCategoriesComment = "Ijinkan admin mata kuliah untuk membuat kategori dalam modul group?";
 $PlatformLanguageComment = "Anda dapat menentukan bahasa platform dalam bagian berbeda pada administrasi platform, yaitu pada: <a href=\"languages.php\">Bahasa Platform Chamilo</a>";

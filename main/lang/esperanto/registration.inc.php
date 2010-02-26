@@ -42,7 +42,7 @@ $langOneByOne = "Aldoni uzulon permane";
 $langNow = "nun";
 $langTutor = "Akompananto (de grupoj)";
 $langTitular = "Instruistoj";
-$langAddHereSomeCourses = "<font size=2 face='arial, helvetica'><big>miaj kursoj</big><br><br> Indiku la kursojn, kiujn vi volas viziti kaj tiujn, kiujn vi ne plu deziras viziti (ne eblas por kursoj, pri kiuj vi responsas). Sekve musklaku sur 'en ordo' sub la listo.";
+$langAddHereSomeCourses = "<font size=2 face='arial, helvetica'><big>miaj kursoj</big><br /><br /> Indiku la kursojn, kiujn vi volas viziti kaj tiujn, kiujn vi ne plu deziras viziti (ne eblas por kursoj, pri kiuj vi responsas). Sekve musklaku sur 'en ordo' sub la listo.";
 $langStudent = "studento";
 $langImportUserList = "Importi liston da uzuloj";
 $langAddAU = "Aldoni uzulojn";

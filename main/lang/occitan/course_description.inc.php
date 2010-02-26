@@ -15,5 +15,5 @@ $langValid = "Validar";
 $langBackAndForget = "En rÃšire e abandonar";
 $CourseDescriptionUpdated = "La descripcion dau cors es estada actualizada";
 $CourseDescriptionDeleted = "La descripcion au cors es estada eliminada";
-$CourseDescriptionIntro = "Per crear una descripcion de cors, clicatz subre una rubrica e emplissetz leis airaus dau formulari associat. <br> <br> Clicatz puei per Validar e emplir un autre airau.";
+$CourseDescriptionIntro = "Per crear una descripcion de cors, clicatz subre una rubrica e emplissetz leis airaus dau formulari associat. <br /> <br /> Clicatz puei per Validar e emplir un autre airau.";
 ?>

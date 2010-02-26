@@ -35,7 +35,7 @@ $langFileName = "Nome do ficheiro";
 $langNoFileName = "Por favor, introduce o nome do ficheiro";
 $langNoText = "Por favor, introduce o contido de texto / contido HTML";
 $langAreYouSureToDelete = "¿Está seguro de que quere borralo?";
-$langScormcontent = "Este é un contido Scorm<br><input type=button name=scormbutton value='Launch it !' onclick='openscorm()'>";
+$langScormcontent = "Este é un contido Scorm<br /><input type=button name=scormbutton value='Launch it !' onclick='openscorm()'>";
 $langScormcontentstudent = "Este é un curso con formato scorm. Se queres velo, fai click aquí: <input type=button name=scormbutton value='Launch it !' onclick='openscorm()'>";
 $langPublish = "Publicar";
 $langMissingImagesDetected = "Detectáronse imaxes que faltan";

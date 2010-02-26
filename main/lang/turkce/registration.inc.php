@@ -44,7 +44,7 @@ $langOneByOne = "Kullanıcı ekle";
 $langNow = "þimdi";
 $langTutor = "Eğitmen";
 $langTitular = "Sorumlu";
-$langAddHereSomeCourses = "<font size=2 face='Arial, Helvetica'><big>Ders listesini değiştir</big><br><br>Almak istediğiniz dersleri şeçiniz.<br>İstemediğiniz dersleri iptal ediniz.<br> Sonra listenin altındaki tamam tuşunu tıklayınız";
+$langAddHereSomeCourses = "<font size=2 face='Arial, Helvetica'><big>Ders listesini değiştir</big><br /><br />Almak istediğiniz dersleri şeçiniz.<br />İstemediğiniz dersleri iptal ediniz.<br /> Sonra listenin altındaki tamam tuşunu tıklayınız";
 $langStudent = "Öğrenci";
 $langImportUserList = "Kullanıcıların listesi içeri al";
 $langAddAU = "Kullanıcı ekle";

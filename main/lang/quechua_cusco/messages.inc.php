@@ -2,7 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
-$Inbox = "Willana ch\'askiq";
+$Inbox = "Willana ch'askiq";
 $Messages = "Usqay willanakuna";
 $SendMessage = "Apachiy willanakunata";
 $NewMessage = "Musuq willana";
@@ -11,7 +11,7 @@ $DeleteSelectedMessages = "Pichay ajllasqa willaykunata";
 $SelectAll = "Ajllay llipinta";
 $DeselectAll = "Amaña ajllaychu";
 $ReplyToMessage = "Kutichiy";
-$BackToInbox = "Kutiy willana ch\'askiqman";
+$BackToInbox = "Kutiy willana ch'askiqman";
 $MessageSentTo = "Willanaqa payman apachikun";
 $SendMessageTo = "Apachiy, payman";
 $Myself = "Noqapuni";
@@ -28,9 +28,9 @@ $MessageDeleted = "Willanaqa pichachikunña";
 $ConfirmDeleteMessage = "Cheqaychu kashanki kay willanata pichanaykipaq ?";
 $DeleteMessage = "Pichay willanata";
 $ReadMessage = "Ñawinchay";
-$SendInviteMessage = "Apachiy mink\'aq willanata";
-$SendMessageInvitation = "Cheqaychu kashanki mink\'ay willanata apachinapaq ajllasqa haykuqmasikunaman ?";
-$MessageTool = "Willanamanta llank\'ana";
+$SendInviteMessage = "Apachiy mink'aq willanata";
+$SendMessageInvitation = "Cheqaychu kashanki mink'ay willanata apachinapaq ajllasqa haykuqmasikunaman ?";
+$MessageTool = "Willanamanta llank'ana";
 $WriteAMessage = "Qelqay hoq willanata";
 $AlreadyReadMessage = "Willana ñawinchasqa";
 $UnReadMessage = "Willana mana ñawinchasqa";

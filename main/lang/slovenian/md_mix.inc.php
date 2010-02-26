@@ -4,7 +4,7 @@ for more information: see languages.txt in the lang folder.
 */
 $langTool = "Metapodatki";
 $langClickKw = "Za izbiro ali preklic izbire, klikni na ključno besedo v drevesu.";
-$langKwHelp = "<br/> Klik na '+' za odpiranje, '-' za zapiranje, '++' odpre vse, '--' zapre vse.<br/> <br/> Počisti izbrane ključne besede s tem, da zaprete drevo in ga ponovno odprete s '+' .<br/> Alt-klik '+' poišče originalne kljune besede v drevesu.<br/> <br/> Alt-klik ključna beseda izbere ključno besedo brez širšega pomena ali pa prekliče izbiro.<br/> <br/> V primeru, da spreminjate opisni jezik, hkrati ne dodajajte ključnih besed.<br/> <br/>";
+$langKwHelp = "<br /> Klik na '+' za odpiranje, '-' za zapiranje, '++' odpre vse, '--' zapre vse.<br /> <br /> Počisti izbrane ključne besede s tem, da zaprete drevo in ga ponovno odprete s '+' .<br /> Alt-klik '+' poišče originalne kljune besede v drevesu.<br /> <br /> Alt-klik ključna beseda izbere ključno besedo brez širšega pomena ali pa prekliče izbiro.<br /> <br /> V primeru, da spreminjate opisni jezik, hkrati ne dodajajte ključnih besed.<br /> <br />";
 $langAdvanced = "Napredno";
 $langSearch = "Iskanje";
 $langSearchCrit = "Le ena beseda na vrstico!";

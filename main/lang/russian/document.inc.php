@@ -35,7 +35,7 @@ $langFileName = "Имя файла";
 $langNoFileName = "Пожалуйста, введите имя файла";
 $langNoText = "Пожалуйста, введите свой текст (HTML)";
 $langAreYouSureToDelete = "Вы уверены, что хотите удалить";
-$langScormcontent = "п╜я┌п╬ я│п╬п╢п╣я─п╤п╦п╪п╬п╣ Scorm <br><input type=button name=scormbutton value='п÷я┐я│п╨══!' onclick='openscorm()'>";
+$langScormcontent = "п╜я┌п╬ я│п╬п╢п╣я─п╤п╦п╪п╬п╣ Scorm <br /><input type=button name=scormbutton value='п÷я┐я│п╨══!' onclick='openscorm()'>";
 $langScormcontentstudent = "п╜я┌п╬ п╨я┐я─я│ п╡ я└п╬я─п╪п╟я┌п╣ Scorm. п╖я┌п╬п╠я▀ п╫п╟я┤п╟я┌я▄, п╫п╟п╤п╪п╦я┌п╣ п╥п╢п╣я│я▄ : <input type=button name=scormbutton value='п÷я┐я│п╨══!' onclick='openscorm()'>";
 $langPublish = "Опубликовать";
 $langMissingImagesDetected = "Обнаружены недостающие изображения";

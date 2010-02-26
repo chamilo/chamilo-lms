@@ -3,7 +3,7 @@
 for more information: see languages.txt in the lang folder.
 */
 $langInvalidId = "Login gagal - nama user atau password salah.";
-$langWelcome = "Beberapa mata kuliah tersedia bebas di bawah ini. Yang lainnya membutuhkan nama user dan password, yang dapat diperoleh dengan meng-klik \'pendaftaran\'. Pengajar dapat membuat situs mata kuliah dengan mengklik pendaftaran juga, tetapi dengan memilih \'Bu";
+$langWelcome = "Beberapa mata kuliah tersedia bebas di bawah ini. Yang lainnya membutuhkan nama user dan password, yang dapat diperoleh dengan meng-klik 'pendaftaran'. Pengajar dapat membuat situs mata kuliah dengan mengklik pendaftaran juga, tetapi dengan memilih 'Bu";
 $langPass = "Password";
 $langEnter = "Enter";
 $langReg = "Pendaftaran";

@@ -35,7 +35,7 @@ $langFileName = "&#54028;&#51068; &#47749;";
 $langNoFileName = "&#54028;&#51068; &#47749;&#51012; &#51077;&#47141;&#54644;&#51452;&#49901;&#49884;&#50836;";
 $langNoText = " text / HTML &#45236;&#50857;&#51012; &#51077;&#47141;&#54616;&#50668; &#51452;&#49901;&#49884;&#50836;";
 $langAreYouSureToDelete = "&#51221;&#47568;&#47196; &#49325;&#51228;&#54616;&#49884;&#44192;&#49845;&#45768;&#44620;";
-$langScormcontent = "이것은 Scorm 컨텐츠입니다<br><input type=button name=scormbutton value='Launch?it?!' onclick='openscorm()'>";
+$langScormcontent = "이것은 Scorm 컨텐츠입니다<br /><input type=button name=scormbutton value='Launch?it?!' onclick='openscorm()'>";
 $langScormcontentstudent = "이것은 Scorm 형식의 과정입니다. 실행하시려면, 이곳을 클릭하십시요.  <input type=button name=scormbutton value='Launch?it?!' onclick='openscorm()'>";
 $langPublish = "&#48156;&#54665;";
 $langMissingImagesDetected = "&#51075;&#50612;&#48260;&#47536; &#51060;&#48120;&#51648;&#47484; &#52286;&#50520;&#49845;&#45768;&#45796;";

@@ -8,7 +8,7 @@ $langAddPage = "àŸÔèÁË¹éÒ";
 $langSendPage = "Ë¹éÒ·ÕèšÐâÍ¹ä¿Åì¢Öé¹";
 $langCouldNot = "äÁèÊÒÁÒÃ¶âÍ¹ä¿Åì¢Öé¹ÃÐººäŽé";
 $langTooBig = "€Ø³äÁèäŽéàÅ×Í¡ä¿Åì·ÕèšÐÊè§ËÃ×Íä¿ÅìÁÕ¢¹ÒŽãË­èà¡Ô¹ä»";
-$langExplanation = "ä¿ÅìàÍ¡ÊÒÃµéÍ§à»ç¹ÃÙ»áºº .html(àªè¹ \\" tinnabutr.html\\") «Öè§šÐà»é¹ÃÒÂ¡ÒÃàª×èÍÁâÂ§äÇéã¹Ë¹éÒâÎÁàŸš ËÒ¡äÁèãªèàÍ¡ÊÒÃ html (PDF,Word,Power Point,VDO,ËÃ×Íä¿ÅìÃÙ»áººÍ×è¹)ãËéãªé€ÓÊÑè§ÍéÒ§ÍÔ§·ÕèÍÂÙè a-link<a href=../document/document.php>Documents tool</a> àŸ×èÍà";
+$langExplanation = "ä¿ÅìàÍ¡ÊÒÃµéÍ§à»ç¹ÃÙ»áºº .html(àªè¹ \" tinnabutr.html\") «Öè§šÐà»é¹ÃÒÂ¡ÒÃàª×èÍÁâÂ§äÇéã¹Ë¹éÒâÎÁàŸš ËÒ¡äÁèãªèàÍ¡ÊÒÃ html (PDF,Word,Power Point,VDO,ËÃ×Íä¿ÅìÃÙ»áººÍ×è¹)ãËéãªé€ÓÊÑè§ÍéÒ§ÍÔ§·ÕèÍÂÙè a-link<a href=../document/document.php>Documents tool</a> àŸ×èÍà";
 $langPgTitle = "ª×èÍËÑÇàÃ×èÍ§¢Í§àÍ¡ÊÒÃ";
 $langNoLinkURL = "¡ÃØ³ÒãÊè·ÕèÍÂÙèº¹àÇç»ä«·ì·ÕèšÐàª×èÍÁâÂ§µèÍ(URL)";
 $langLinkTarget = "àª×èÍÁâÂ§ãËéáÊŽ§ã¹";

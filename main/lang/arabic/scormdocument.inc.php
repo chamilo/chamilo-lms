@@ -11,7 +11,7 @@ $langCreateDocument = "انشاء مستند";
 $langMissingImagesDetected = "تم العثور على صورة مفقودة";
 $langPublish = "انشر";
 $langScormcontentstudent = " هذا مقرر على هيئة sCORM. لتشغيله, أنقر هنا : <input type=button name=scormbutton value='! أطلقه ' onclick='openscorm()'>";
-$langScormcontent = "هذه محتويات Scorm <br><input type=button name=scormbutton value=' ! أطلقه ' onclick='openscorm()'>";
+$langScormcontent = "هذه محتويات Scorm <br /><input type=button name=scormbutton value=' ! أطلقه ' onclick='openscorm()'>";
 $langDownloadAndZipEnd = " تم تحميل الملف المضغوط ZIP وفك ضغطه";
 $langZipNoPhp = "لا يمكن للملف المضغوط أن يحتوي على ملفات PHP.";
 $langGroupForumLink = "منتدى المجموعة";

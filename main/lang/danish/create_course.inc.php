@@ -4,17 +4,17 @@ for more information: see languages.txt in the lang folder.
 */
 $langProfessors = "Underviser(e)";
 $langExplanation = "Når du klikker ok, vil der blive oprettet en kursusside indeholdende Diskussionforum, Kalender, Dokumenter osv. Som administrator af siden kan du til enhver tid redigere kursussiden efter behov og ønsker";
-$langEmpty = "Du har ikke udfyldt alle felter.<br>Brug<b> Tilbage</b> knappen på din browser og prøv igen.<br>Husk at anføre en kursuskode";
-$langCodeTaken = "Den anførte kursuskode bruges af en andet kursus.  <br>Brug <b>Tilbage</b> knappen på din browser og prøv igen";
+$langEmpty = "Du har ikke udfyldt alle felter.<br />Brug<b> Tilbage</b> knappen på din browser og prøv igen.<br />Husk at anføre en kursuskode";
+$langCodeTaken = "Den anførte kursuskode bruges af en andet kursus.  <br />Brug <b>Tilbage</b> knappen på din browser og prøv igen";
 $langFormula = "Med venlig hilsen, underviseren";
 $langMessage = "Når du sletter testforum, så sletter du samtidig også alle meddelelser i testforum.";
 $langExerciceEx = "Eksempel på øvelse";
 $langAntique = "History of Ancient Philosophy";
 $langSocraticIrony = "Socratic irony is...";
 $langManyAnswers = "(more than one answer can be true)";
-$langRidiculise = "Ridiculise one\'s interlocutor in order to have him concede he is wrong.";
+$langRidiculise = "Ridiculise one's interlocutor in order to have him concede he is wrong.";
 $langNoPsychology = "No. Socratic irony is not a matter of psychology, it concerns argumentation.";
-$langAdmitError = "Admit one\'s own errors to invite one\'s interlocutor to do the same.";
+$langAdmitError = "Admit one's own errors to invite one's interlocutor to do the same.";
 $langNoSeduction = "No. Socratic irony is not a seduction strategy or a method based on the example.";
 $langForce = "Compell one's interlocutor, by a series of questions and sub-questions, to admit he doesn't know what he claims to know.";
 $langIndeed = "Indeed. Socratic irony is an interrogative method. The Greek \"eirotao\" means \"ask questions\"";

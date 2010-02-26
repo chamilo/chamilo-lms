@@ -42,7 +42,7 @@ $langOneByOne = "àŸÔèÁª×èÍŒÙéãªéàÍ§(ŸÔÁŸìÃÒÂ¡ÒÃàÍ
 $langNow = "àŽÕëÂÇ¹Õé";
 $langTutor = "ŒÙéªèÇÂÊÍ¹";
 $langTitular = "ŒÙéà¢ÕÂ¹";
-$langAddHereSomeCourses = "<font size=2 face=\'Ms Sans Serif,Arial, Helvetica\'><big>¡ÒÃá¡éä¢ÃÒÂª×èÍÇÔªÒ</big><br><br>àÅ×Í¡ª×èÍÇÔªÒ·Õè€Ø³µéÍ§¡ÒÃ.<br>ÍÂèÒàÅ×Í¡àªç€ÃÒÂÇÔªÒËÒ¡€Ø³äÁèµéÍ§¡ÒÃ.<br> šÒ¡¹Ñé¹¡Ž»ØèÁ µ¡Å§";
+$langAddHereSomeCourses = "<font size=2 face='Ms Sans Serif,Arial, Helvetica'><big>¡ÒÃá¡éä¢ÃÒÂª×èÍÇÔªÒ</big><br /><br />àÅ×Í¡ª×èÍÇÔªÒ·Õè€Ø³µéÍ§¡ÒÃ.<br />ÍÂèÒàÅ×Í¡àªç€ÃÒÂÇÔªÒËÒ¡€Ø³äÁèµéÍ§¡ÒÃ.<br /> šÒ¡¹Ñé¹¡Ž»ØèÁ µ¡Å§";
 $langStudent = "ŒÙéàÃÕÂ¹";
 $langImportUserList = "¹Óà¢éÒÃÒÂª×èÍŒÙéãªé";
 $langAddAU = "àŸÔèÁŒÙéãªé";

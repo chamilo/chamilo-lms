@@ -4,8 +4,8 @@ for more information: see languages.txt in the lang folder.
 */
 $langProfessors = "Prowadz&#261;cy";
 $langExplanation = "Klikni&#281;cie OK spowoduje utworzenie stron kursu z Forum, Terminarzem, Obszarem dokumentów itd. Tylko Ty, jako twórca kursu mo&#380;esz te strony modyfikowa&#263;";
-$langEmpty = "Zostawi&#322;e&#347; niewype&#322;nione pola.<br>U&#380;yj przycisku Wstecz i spróbuj jeszcze raz.<br>Je&#347;li zignorujesz Kod kursu spójrz do Programu kursu";
-$langCodeTaken = "Kod kursu jest ju¿ podany.<br>U¿yj przycisku Wstecz i spróbuj jeszcze raz";
+$langEmpty = "Zostawi&#322;e&#347; niewype&#322;nione pola.<br />U&#380;yj przycisku Wstecz i spróbuj jeszcze raz.<br />Je&#347;li zignorujesz Kod kursu spójrz do Programu kursu";
+$langCodeTaken = "Kod kursu jest ju¿ podany.<br />U¿yj przycisku Wstecz i spróbuj jeszcze raz";
 $langFormula = "Z powa&#380;aniem";
 $langMessage = "Je&#380;li usuniesz Forum przyk&#322;adowe, skasujesz tak&#380;e bie&#380;&#261;c&#261; wiadomo&#347;&#263;.";
 $langExerciceEx = "Przyk&#322;adowe &#263;wiczenie";

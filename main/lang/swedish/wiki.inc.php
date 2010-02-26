@@ -11,7 +11,7 @@ $AllPages = "Alla sidor";
 $AddNew = "Lägg till sida";
 $ChangesStored = "Dina ändringar sparades";
 $NewWikiSaved = "Wikisidan sparades. Du kan se den på:";
-$DefaultContent = "<br/> <br/> <p align=\\"center\\"> <img src=\\"%swiki/wcollaborative.png\\" alt=\\"Mr. Chamilo\\" title=\\"Mr. Chamilo\\" /></p> <p align=\\"center\\">För att redigera sidan, klicka här --> </p>";
+$DefaultContent = "<br /> <br /> <p align=\"center\"> <img src=\"%swiki/wcollaborative.png\" alt=\"Mr. Chamilo\" title=\"Mr. Chamilo\" /></p> <p align=\"center\">För att redigera sidan, klicka här --> </p>";
 $CourseWikiPages = "Wikisidor";
 $GroupWikiPages = "Gruppera wikisidor";
 $NoWikiPageTitle = "Dina ändringar sparades. Du måste dessutom ge sidan ett namn";

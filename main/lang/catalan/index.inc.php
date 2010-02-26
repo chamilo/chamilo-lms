@@ -2,8 +2,8 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
-$langInvalidId = "Accés invàlid.<BR>Si no estàs enregistrat, utilitza el <a href=\'claroline/auth/inscription.php\'>formulari per enregistrar-te</a></font color>";
-$langWelcome = "els cursos són lliurement accessibles a sota. Altres cursos requereixen un nom d\'usuari i una contrasenya, que pots obtenir en fer click sobre \'Registre\'. Els professors poden crear llocs web de cursos en fer click sobre \'Registre\' també, però selecc";
+$langInvalidId = "Accés invàlid.<br />Si no estàs enregistrat, utilitza el <a href='claroline/auth/inscription.php'>formulari per enregistrar-te</a></font color>";
+$langWelcome = "els cursos són lliurement accessibles a sota. Altres cursos requereixen un nom d'usuari i una contrasenya, que pots obtenir en fer click sobre 'Registre'. Els professors poden crear llocs web de cursos en fer click sobre 'Registre' també, però selecc";
 $langPass = "Contrasenya";
 $langEnter = "Entrar";
 $langReg = "Registre";
@@ -18,15 +18,15 @@ $langBackToHomePage = "Torna enrera";
 $lang_No_course_publicly_available = "No hi ha cursos públics disponibles";
 $langLostPassword = "Contrasenya oblidada";
 $lang_edit_my_course_list = "Llista de cursos";
-$langAgenda = "Agenda d\'esdeveniments propers";
+$langAgenda = "Agenda d'esdeveniments propers";
 $langValvas = "Darrers anuncis";
 $langUp = "Nivell superior";
 $langCatList = "Categories";
 $langCourseList = "Cursos";
-$langHelptwo = "Ajuda d\'usuari";
+$langHelptwo = "Ajuda d'usuari";
 $langRegAll = "Registre";
 $EussMenu = "menú";
-$Opinio = "Dona\'ns la teva opinió";
+$Opinio = "Dona'ns la teva opinió";
 $Intranet = "Intranet";
 $Englin = "Anglès";
 $langInvalidForSelfRegistration = "Accés denegat. Si no està registrat ompli el <a href=claroline/auth/inscription.php>formulari de registre</a>";
@@ -34,7 +34,7 @@ $langSubCat = "subcategories";
 $langMenuGeneral = "General";
 $langMenuUser = "Usuari";
 $langMenuAdmin = "Administrador de la plataforma";
-$langUsersOnLineList = "Llista d\'usuaris en línia";
+$langUsersOnLineList = "Llista d'usuaris en línia";
 $langTotalOnLine = "Total connectats";
 $langRefresh = "actualitzar la pàgina";
 $langMe = "jo";
@@ -57,13 +57,13 @@ $langTeach = "Que pot ensenyar el/ella?";
 $langProductions = "Produccions";
 $langSendChatRequest = "Enviar una sol·licitud de xat a aquesta persona";
 $langRequestDenied = "Aquesta petició ha estat rebutjada";
-$UsageDatacreated = "Dades d\'utilització creades";
+$UsageDatacreated = "Dades d'utilització creades";
 $SessionView = "Mostrar els cursos ordenats per sessions";
 $CourseView = "Mostrar tota la llista de cursos";
-$DropboxFileAdded = "S\'ha enviat un fitxer a la bústia de compartició";
+$DropboxFileAdded = "S'ha enviat un fitxer a la bústia de compartició";
 $NewMessageInForum = "Un nou missatge ha estat publicat en el fòrum";
-$FolderCreated = "S\'ha creat un nou directori";
-$LinkAdded = "S\'ha afegit un nou enllaç";
-$AnnouncementAdded = "S\'ha afegit un nou anunci";
-$AgendaAdded = "S\'ha afegit un esdeveniment de l\'agenda";
+$FolderCreated = "S'ha creat un nou directori";
+$LinkAdded = "S'ha afegit un nou enllaç";
+$AnnouncementAdded = "S'ha afegit un nou anunci";
+$AgendaAdded = "S'ha afegit un esdeveniment de l'agenda";
 ?>

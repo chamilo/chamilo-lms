@@ -15,7 +15,7 @@ $langAdminEmail = "Email Äéá÷åéñéóôÞ";
 $langAdminName = "Œíïìá Äéá÷åéñéóôÞ";
 $langAdminSurname = "Åðþíõìï Äéá÷åéñéóôÞ";
 $langAdminLogin = "Œíïìá ×ñÞóôç ôïõ Äéá÷åéñéóôÞ";
-$langAdminPass = "Óõíèçìáôéêü ôïõ Äéá÷åéñéóôÞ(<font color=\\"red\\">you may want to change this</font>)";
+$langAdminPass = "Óõíèçìáôéêü ôïõ Äéá÷åéñéóôÞ(<font color=\"red\">you may want to change this</font>)";
 $langCampusName = "Œíïìá Ðëáôöüñìáò";
 $langDBSettingIntro = "Το πρόγραμμα εγκατάστασης θα δημιουργήσει την κύρια βάση δεδομένων του Chamilo.\t\t\t\tΈχετε υπ'όψιν σας ότι κατά τη λειτουργία της πλατφόρμας θα χρειαστεί να \t\t\t\tδημιουργηθούν νέες βάσεις δεδομένων (μία για κάθε μάθημα)";
 $langStep1 = "ÂÞìá 1 áðü 6 :";

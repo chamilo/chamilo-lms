@@ -4,7 +4,7 @@ for more information: see languages.txt in the lang folder.
 */
 $Tools = "Tools";
 $SendWork = "Upload paper";
-$langTooBig = "You haven\'t selected a file or the file is too big.";
+$langTooBig = "You haven't selected a file or the file is too big.";
 $langListDeleted = "The whole list has been deleted.";
 $langDocModif = "paper title modified";
 $langDocAdd = "The file has been added to the list of publications.";

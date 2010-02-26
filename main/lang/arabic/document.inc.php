@@ -35,7 +35,7 @@ $langFileName = "اسم الملف (بالإنجليزي)";
 $langNoFileName = "فضلا أدخل اسم الملف";
 $langNoText = "فضلا ادخل النص  الخاص بك بتنسيق - text / HTML";
 $langAreYouSureToDelete = "هل تريد الحذف حقا؟";
-$langScormcontent = "هذه محتويات Scorm <br><input type=button name=scormbutton value=' ! أطلقه ' onclick='openscorm()'>";
+$langScormcontent = "هذه محتويات Scorm <br /><input type=button name=scormbutton value=' ! أطلقه ' onclick='openscorm()'>";
 $langScormcontentstudent = " هذا مقرر على هيئة sCORM. لتشغيله, أنقر هنا : <input type=button name=scormbutton value='! أطلقه ' onclick='openscorm()'>";
 $langPublish = " نشر";
 $langMissingImagesDetected = "لقد تم إكتشاف بعض الصور المفقودة";

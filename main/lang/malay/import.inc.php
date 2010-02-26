@@ -3,7 +3,7 @@
 for more information: see languages.txt in the lang folder.
 */
 $langPgTitle = "Tajuk <i>page</i>";
-$langExplanation = "<i>Page<i/> anda mestilah dalam format HTML (e.g. \\"my_page.htm\\"). Ia akan dipautkan dari laman subjeke. Jika anda ingin menghantar fail  yang bukan dalam format HTML seperti (PDF, Word, Power Point, Video, etc.), sila gunakan <a href=../document/documen";
+$langExplanation = "<i>Page<i/> anda mestilah dalam format HTML (e.g. \"my_page.htm\"). Ia akan dipautkan dari laman subjeke. Jika anda ingin menghantar fail  yang bukan dalam format HTML seperti (PDF, Word, Power Point, Video, etc.), sila gunakan <a href=../document/documen";
 $langTooBig = "Anda tidak memilih sebarang fail untuk dihantar, atau fail anda terlalu besar";
 $langCouldNot = "Fail tidak dapat dihantar";
 $langNotAllowed = "Tidak dibenarkan";

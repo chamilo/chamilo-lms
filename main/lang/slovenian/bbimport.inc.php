@@ -5,9 +5,9 @@ for more information: see languages.txt in the lang folder.
 $langViewCourseMaterialImport = "Poglej material tečaja kot bo uvožen";
 $langViewExternalLinksImport = "Poglej zunanje povezave, kot bodo uvožene";
 $langViewForumImport = "Poglej forum, kot bo uvožen";
-$langImportCourseMaterial = "Uvozi material tečaja (Blackboard orodje \\"Material tečaja\\")";
-$langImportExternalLinks = "Uvozi povezave (Blackboard orodje \\"Zunanje povezave\\")";
-$langImportForum = "Uvozi forume (Blackboard orodje \\"Razprave\\")";
+$langImportCourseMaterial = "Uvozi material tečaja (Blackboard orodje \"Material tečaja\")";
+$langImportExternalLinks = "Uvozi povezave (Blackboard orodje \"Zunanje povezave\")";
+$langImportForum = "Uvozi forume (Blackboard orodje \"Razprave\")";
 $langToolInfo = "To orodje je namenjeno uvozu tečajev Blackboard 5.5 (Material tečaja, razprave, in zunanje povezave).";
 $langToolName = "Uvoz tečajev Blackboard";
 $langSelectCoursePackage = "Izberi tečaj";

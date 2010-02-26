@@ -3,7 +3,7 @@
 for more information: see languages.txt in the lang folder.
 */
 $langInvalidId = "Identificativo non valido";
-$langWelcome = " corsi qui sotto sono di libero accesso. Gli altri corsi richiedonoun Nome utente e una Password che si può ottenere cliccando sulla opzione \'iscrizione\'. I docenti e i collaboratori non iscritti possono creare un nuovo corso cliccando sull\'opzione \'i";
+$langWelcome = " corsi qui sotto sono di libero accesso. Gli altri corsi richiedonoun Nome utente e una Password che si può ottenere cliccando sulla opzione 'iscrizione'. I docenti e i collaboratori non iscritti possono creare un nuovo corso cliccando sull'opzione 'i";
 $langPass = "Password";
 $langEnter = "Entra";
 $langReg = "Registrazione";
@@ -57,15 +57,15 @@ $langTeach = "Cosa sa insegnare";
 $langProductions = "Prodotti";
 $langSendChatRequest = "Richiedi una chat con questa persona";
 $langRequestDenied = "Consenso negato";
-$UsageDatacreated = "Dati d\'impiego creati";
+$UsageDatacreated = "Dati d'impiego creati";
 $SessionView = "Mostra i corsi ordinandoli per sessione";
-$CourseView = "Mostra l\'elenco completo dei corsi";
+$CourseView = "Mostra l'elenco completo dei corsi";
 $DropboxFileAdded = "Aggiunto un file alla sezione Scambio files";
 $NewMessageInForum = "Nuovo messaggio inviato nel forum";
 $FolderCreated = "Nuova cartella creata";
 $LinkAdded = "Nuovo collegamento aggiunto";
 $AnnouncementAdded = "Avviso aggiunto";
-$AgendaAdded = "Voce nell\'agenda aggiunta";
+$AgendaAdded = "Voce nell'agenda aggiunta";
 $Messages = "Messaggi";
 $Inbox = "Posta in entrata";
 $Comppose = "Componi";

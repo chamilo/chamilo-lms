@@ -3,8 +3,8 @@
 for more information: see languages.txt in the lang folder.
 */
 $langProfessors = "Instruisto(j)";
-$langExplanation = "Kiam vi klakas sur \'en ordo\', kurspa&#285;o estas kreata kun interalie la eroj: forumo, ligiloj, ekzercoj, agendo kaj kursmaterialo. Ensalutinte vi poste povos &#349;an&#285;i la enhavon";
-$langEmpty = "Vi ne plenigis &#265;iujn kampojn. <br> Premu la RETRO-klavon kaj rekomencu.<br>Se vi ne scias vian kurskodon, vi povas rigardi al la kurslisto";
+$langExplanation = "Kiam vi klakas sur 'en ordo', kurspa&#285;o estas kreata kun interalie la eroj: forumo, ligiloj, ekzercoj, agendo kaj kursmaterialo. Ensalutinte vi poste povos &#349;an&#285;i la enhavon";
+$langEmpty = "Vi ne plenigis &#265;iujn kampojn. <br /> Premu la RETRO-klavon kaj rekomencu.<br />Se vi ne scias vian kurskodon, vi povas rigardi al la kurslisto";
 $langCodeTaken = "&#264;i-kurskodo jam estas uzita. Uzu la RETRO-klavon kaj rekomencu";
 $langFormula = "Afablajn salutojn, via instruisto";
 $langMessage = "Kiam vi forigas la testforumon, anka&#365; &#265;iu temo en &#285;i estas forigata.";

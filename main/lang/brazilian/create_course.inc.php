@@ -4,8 +4,8 @@ for more information: see languages.txt in the lang folder.
 */
 $langProfessors = "Professores";
 $langExplanation = "Após clicar em OK, será criado um curso com uma seção de testes/exercícios, projeto de rota de aprendizagem, avaliações, cursos, caixa de documentos compartilhados, Agenda e muito mais. Ao registar-se como professor será atribuídos privilégios para poder editar esse curso.";
-$langEmpty = "Alguns campos estão em branco.<br>Use o botão <b>Voltar</b> do seu navegador e tente novamente.<br>Se você ignorar o código do curso, consulte o Programa do Curso";
-$langCodeTaken = "Esse código de curso já está em uso.  <br>Use o botão <b>Voltar</b> do seu navegador e tente novamente";
+$langEmpty = "Alguns campos estão em branco.<br />Use o botão <b>Voltar</b> do seu navegador e tente novamente.<br />Se você ignorar o código do curso, consulte o Programa do Curso";
+$langCodeTaken = "Esse código de curso já está em uso.  <br />Use o botão <b>Voltar</b> do seu navegador e tente novamente";
 $langFormula = "Atenciosamente";
 $langMessage = "Quando você remover o fórum de teste, isso irá remover todas as mensagens contidas nele também.";
 $langExerciceEx = "Exercício de exemplo";

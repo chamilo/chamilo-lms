@@ -4,7 +4,7 @@ for more information: see languages.txt in the lang folder.
 */
 $langMdCallingTool = "Documenten";
 $langMdTitle = "Titel van het leerobject";
-$langMdDescription = "Om de gegevens te bewaren, druk op \\"Bewaren\\"";
+$langMdDescription = "Om de gegevens te bewaren, druk op \"Bewaren\"";
 $langMdCoverage = "bv. Bachelor in &hellip;";
 $langMdCopyright = "bv. met bronvermelding";
 $langTool = "Document Metadata";
@@ -16,12 +16,12 @@ $langIdentifierTip = "unieke identificatie van dit leerobject, bestaande uit let
 $langTitleTip = "titel of naam, en taal van de titel of naam";
 $langDescriptionTip = "beschrijving of commentaar, en taal gebruikt voor de beschrijving";
 $langKeyword = "Sleutelwoorden";
-$langKeywordTip = "met komma\'s ertussen (letters, cijfers, -.)";
+$langKeywordTip = "met komma's ertussen (letters, cijfers, -.)";
 $langCoverage = "Doelgebied";
 $langCoverageTip = "bv. Bachelor in xxx";
 $langKwNote = "Als u de taal van de beschrijving wil veranderen, voeg niet tegelijk nieuwe sleutelwoorden toe.";
 $langClickKw = "Klik om een sleutelwoord te kiezen of te annuleren.";
-$langKwHelp = "<br/>Klik '+' om te openen, '−' om te sluiten, '++' om alles te openen, '−−' om alles te sluiten.<br/><br/>Sluit de boomstructuur en open hem met '+' om eerdere keuzes te annuleren.<br/>Open hem met Alt-klik '+' om de originele sleutelwoorden terug te zetten.<br/><br/>Alt-klik sleutelwoord selecteert het sleutelwoord zonder omvattende concepten en annuleert een keuze met omvattende concepten.<br/><br/>Als u de taal van de beschrijving wil veranderen, voeg niet tegelijk nieuwe sleutelwoorden toe.<br/><br/>";
+$langKwHelp = "<br />Klik '+' om te openen, '−' om te sluiten, '++' om alles te openen, '−−' om alles te sluiten.<br /><br />Sluit de boomstructuur en open hem met '+' om eerdere keuzes te annuleren.<br />Open hem met Alt-klik '+' om de originele sleutelwoorden terug te zetten.<br /><br />Alt-klik sleutelwoord selecteert het sleutelwoord zonder omvattende concepten en annuleert een keuze met omvattende concepten.<br /><br />Als u de taal van de beschrijving wil veranderen, voeg niet tegelijk nieuwe sleutelwoorden toe.<br /><br />";
 $langRights = "Gebruiksvoorwaarden";
 $langRightsTip = "omschrijf met woorden";
 $langVersion = "Versie";

@@ -4,8 +4,8 @@ for more information: see languages.txt in the lang folder.
 */
 $langProfessors = "Opettaja(t)";
 $langExplanation = "Kun klikkaat Ok, niin sivustolle luodaan foorumi, esityslista, dokumenttien hallinta yms. Voit muuttaa sivustoa omalla tunnuksellasi.";
-$langEmpty = "Jätit joitain kenttiä tyhjäksi.<br>Mene takaisin ja yritä uudetaan.<br>Jos et huomannut kurssin koodia, katso kurssin ohjelmasta.";
-$langCodeTaken = "Tämä kurssi on jo käytössä.<br>Mene takaisin ja yritä uudetaan.";
+$langEmpty = "Jätit joitain kenttiä tyhjäksi.<br />Mene takaisin ja yritä uudetaan.<br />Jos et huomannut kurssin koodia, katso kurssin ohjelmasta.";
+$langCodeTaken = "Tämä kurssi on jo käytössä.<br />Mene takaisin ja yritä uudetaan.";
 $langFormula = "Sinun opettajasi:";
 $langMessage = "Kun poistat testifoorumin, poistat myös kaikki viestit.";
 $langExerciceEx = "Testitehtävä";

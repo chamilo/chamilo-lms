@@ -144,7 +144,7 @@ $langEditCurrentExecice = "Muokkaa nykyistä testiä";
 $langUploadScorm = "Tuo SCORM kurssi";
 $langPowerPointConvert = "Chamilo RAPID";
 $langLPCreatedToContinue = "Jatkaaksesi lisää osio tai oppimisobjekti tai aktiviteetti kurssillesi.";
-$langLPCreatedAddChapterStep = "<html><body><p><big><img height=\\"250\\" width=\\"250\\" align=\\"right\\" src=\\"images/gallery/mr_dokeos/animated/practicerAnim.gif\\" alt=\\"practicerAnim.gif\\" />Tervetuola Chamilo kurssityökaluun!</big></p> <ul> <li><b>Muokkaa</b> : Lisää oppimisobjekteja ja";
+$langLPCreatedAddChapterStep = "<html><body><p><big><img height=\"250\" width=\"250\" align=\"right\" src=\"images/gallery/mr_dokeos/animated/practicerAnim.gif\" alt=\"practicerAnim.gif\" />Tervetuola Chamilo kurssityökaluun!</big></p> <ul> <li><b>Muokkaa</b> : Lisää oppimisobjekteja ja";
 $langPrerequisitesAdded = "Edellytykset tällä oppimisobjektille on lisätty.";
 $langAddEditPrerequisites = "Lisää/muokkaa edellytyksiä";
 $langMinimum = "Minimi";

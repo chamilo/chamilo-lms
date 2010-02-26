@@ -334,7 +334,7 @@ $NotAllowedToUnsubscribe = "äÁèÍ¹Ø­Òµ";
 $AddDummyContentToCourse = "àŸÔèÁŒÑ§ÃÒÂ¡ÒÃà¹×éÍËÒ(µÑÇÍÂèÒ§)ã¹ÃÒÂÇÔªÒ";
 $DummyCourseCreator = "ÊÃéÒ§ŒÑ§ÃÒÂ¡ÒÃà¹×éÍËÒÇÔªÒ";
 $DummyCourseDescription = "šÐà»ç¹¡ÒÃàŸÔèÁŒÑ§ÃÒÂ¡ÒÃà¹×éÍËÒ(µÑÇÍÂèÒ§)à¢éÒä»ã¹ÃÒÂÇÔªÒ : àŸ×èÍ·ŽÊÍºŽÙà·èÒ¹Ñé¹";
-$AvailablePlugins = "¹Õè€×ÍÃÒÂ¡ÒÃâ»Ãá¡ÃÁàÊÃÔÁ(plugins)·ÕèÁÕµÔŽµÑé§ÍÂÙèã¹ÃÐºº €Ø³ÊÒÁÒÃ¶·Ó¡ÒÃâÍ¹ä¿ÅìÅ§ÁÒµÔŽµÑé§àŸÔèÁàµÔÁäŽéšÒ¡<a href=\\"http://www.chamilo.org/extensions/index.php?section=plugins\\">http://www.chamilo.org/extensions/index.php?section=plugins</a>";
+$AvailablePlugins = "¹Õè€×ÍÃÒÂ¡ÒÃâ»Ãá¡ÃÁàÊÃÔÁ(plugins)·ÕèÁÕµÔŽµÑé§ÍÂÙèã¹ÃÐºº €Ø³ÊÒÁÒÃ¶·Ó¡ÒÃâÍ¹ä¿ÅìÅ§ÁÒµÔŽµÑé§àŸÔèÁàµÔÁäŽéšÒ¡<a href=\"http://www.chamilo.org/extensions/index.php?section=plugins\">http://www.chamilo.org/extensions/index.php?section=plugins</a>";
 $CreateVirtualCourse = "ÊÃéÒ§ÃÒÂÇÔªÒàÊÁ×Í¹";
 $DisplayListVirtualCourses = "áÊŽ§ÃÒÂª×èÍÃÒÂÇÔªÒàÊÁ×Í¹";
 $LinkedToRealCourseCode = "àª×èÍÁÊÙèÃËÑÊÇÔªÒšÃÔ§ : Linked to real course code";

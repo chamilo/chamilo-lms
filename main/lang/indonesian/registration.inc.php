@@ -42,7 +42,7 @@ $langOneByOne = "Tambah user secara manual";
 $langNow = "sekarang";
 $langTutor = "Tutor";
 $langTitular = "Pengarang";
-$langAddHereSomeCourses = "<font size=2 face='Arial, Helvetica'><big>Ubah daftar mata kuliah</big><br><br>Periksa mata kuliah-mata kuliah yang akan diikuti.<br>Hilangkan tanda conteng pada mata kuliah yang tidak ingin diikuti lagi.<br> Kemudian klik Ok pada bagian bawah daftar";
+$langAddHereSomeCourses = "<font size=2 face='Arial, Helvetica'><big>Ubah daftar mata kuliah</big><br /><br />Periksa mata kuliah-mata kuliah yang akan diikuti.<br />Hilangkan tanda conteng pada mata kuliah yang tidak ingin diikuti lagi.<br /> Kemudian klik Ok pada bagian bawah daftar";
 $langStudent = "siswa";
 $langImportUserList = "Import daftar user";
 $langAddAU = "Tambah user";

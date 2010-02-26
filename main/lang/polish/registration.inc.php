@@ -42,7 +42,7 @@ $langOneByOne = "R&#281;czne dodawanie u&#380;ytkownika";
 $langNow = "teraz";
 $langTutor = "Trener";
 $langTitular = "Autor";
-$langAddHereSomeCourses = "<font size=2 face='Arial, Helvetica'><big>Modyfikuj listę kursów</big><br><br>Zaznacz kursy na które chcesz się zapisać. Odznacz kursy z których chcesz zrezygnować, potem kliknij OK na dole listy.";
+$langAddHereSomeCourses = "<font size=2 face='Arial, Helvetica'><big>Modyfikuj listę kursów</big><br /><br />Zaznacz kursy na które chcesz się zapisać. Odznacz kursy z których chcesz zrezygnować, potem kliknij OK na dole listy.";
 $langStudent = "student";
 $langImportUserList = "Importuj list&#281; u&#380;ytkowników";
 $langAddAU = "Dodaj u&#380;ytkownika";

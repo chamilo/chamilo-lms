@@ -44,7 +44,7 @@ $langOneByOne = "أضف مستخدم يدويا";
 $langNow = "الآن";
 $langTutor = "مدرب";
 $langTitular = "محرر";
-$langAddHereSomeCourses = "<font size=2 face='Arial, Helvetica'><big>Modify courses list</big><br><br>Check the courses you want to follow.<br>Uncheck the ones you don't want to follow anymore.<br> Then click Ok at the bottom of the list";
+$langAddHereSomeCourses = "<font size=2 face='Arial, Helvetica'><big>Modify courses list</big><br /><br />Check the courses you want to follow.<br />Uncheck the ones you don't want to follow anymore.<br /> Then click Ok at the bottom of the list";
 $langStudent = "الطالب";
 $langImportUserList = "استراد قائمة المستخدمين";
 $langAddAU = "أَضف مستخدم";

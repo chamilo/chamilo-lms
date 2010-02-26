@@ -3,7 +3,7 @@
 for more information: see languages.txt in the lang folder.
 */
 $langInvalidId = "Prihlásenie zlyhalo - nesprávne meno alebo heslo.";
-$langWelcome = "kurzy niie sú vo&#318;ne dostupné. &#270;alie kurzy vyadujú pouívate&#318;ské meno a heslo, ktoré získate klikom na \'registrácia\'. Lektori môu vytvori&#357; kurzový priestor tie klikom na registráciu a následným výberom monosti \'Vytvori&#357; p";
+$langWelcome = "kurzy niie sú vo&#318;ne dostupné. &#270;alie kurzy vyadujú pouívate&#318;ské meno a heslo, ktoré získate klikom na 'registrácia'. Lektori môu vytvori&#357; kurzový priestor tie klikom na registráciu a následným výberom monosti 'Vytvori&#357; p";
 $langPass = "Heslo";
 $langEnter = "Vstup";
 $langReg = "Registrácia";

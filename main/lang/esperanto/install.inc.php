@@ -19,7 +19,7 @@ $langAdminEmail = "Administratoro retpo&#349;tadreso";
 $langAdminName = "Administratora  nomo";
 $langAdminSurname = "Administratora familinomo";
 $langAdminLogin = "Administratora ensalutaj datumoj";
-$langAdminPass = "Administratora pasvorto (<font color=\\"red\\">prefere &#349;an&#285;enda</font>)";
+$langAdminPass = "Administratora pasvorto (<font color=\"red\">prefere &#349;an&#285;enda</font>)";
 $langEducationManager = "Projektgvidanto";
 $langCampusName = "Chamilo-Kampa Titolo";
 $langDBSettingIntro = "La instalskripto kreos la Chamilo-ĉef-datumbazo(j)n. Rimarku, ke Chamilo kreos plurajn datumbazojn. Se vi rajtas uzi nur unu datumbazon ĉe via gastiganta pernato, Chamilo ne funkcios, jes se vi ŝaltas la opcion \"Unu datumbazo\".";

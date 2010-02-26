@@ -3,7 +3,7 @@
 for more information: see languages.txt in the lang folder.
 */
 $langInvalidId = "Autentificare esuata - nume de utilizator gresit sau parola incorecta.";
-$langWelcome = "Cursurile gratuite sunt listate mai jos. Celelalte cursuri necesita nume de utilizator si parola, care pot fi obtinute prin click pe \\"Inregistrare\\". Profesorii pot crea zone de curs prin click pe \\"Inregistrare\\" si apoi pe \\"Creaza zona de curs\\"";
+$langWelcome = "Cursurile gratuite sunt listate mai jos. Celelalte cursuri necesita nume de utilizator si parola, care pot fi obtinute prin click pe \"Inregistrare\". Profesorii pot crea zone de curs prin click pe \"Inregistrare\" si apoi pe \"Creaza zona de curs\"";
 $langPass = "Parola";
 $langEnter = "Trimite";
 $langReg = "Inregistrare";

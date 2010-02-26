@@ -15,6 +15,6 @@ $langValid = "ZatwierdŒ";
 $langBackAndForget = "Zrezygnuj";
 $CourseDescriptionUpdated = "Opis kursu zosta&#322; uaktualniony";
 $CourseDescriptionDeleted = "Opis kursu zosta&#322; usuni&#281;ty";
-$CourseDescriptionIntro = "Aby utworzy&#263; opis kursu, kliknij na nag&#322;ówku i wype&#322;nij pole. <br><br>Nast&#281;pnie wybierz klawisz OK.";
+$CourseDescriptionIntro = "Aby utworzy&#263; opis kursu, kliknij na nag&#322;ówku i wype&#322;nij pole. <br /><br />Nast&#281;pnie wybierz klawisz OK.";
 $langSaveDescription = "Zapisz opis";
 ?>

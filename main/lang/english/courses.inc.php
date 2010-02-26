@@ -5,7 +5,7 @@ for more information: see languages.txt in the lang folder.
 $lang_already_enrolled = "already enrolled";
 $lang_my_personnal_course_list = "My training list";
 $lang_course_enrollment = "User training";
-$lang_course_not_available = "This training is not available or doesn\'t exist.";
+$lang_course_not_available = "This training is not available or doesn't exist.";
 $lang_enroll = "Enroll";
 $lang_enroll_to_a_new_course = "Enroll to a new training";
 $lang_my_present_course_list = "My training";

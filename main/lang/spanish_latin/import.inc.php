@@ -3,7 +3,7 @@
 for more information: see languages.txt in the lang folder.
 */
 $langPgTitle = "Título de la página";
-$langExplanation = "Esta página debe estar en formato HTML (por ejemplo \\"mi_pagina.htm\\"). Aparecerá  el enlace en la página principal de su sitio. Si usted desea enviar un documento que no está en formato HTML (PDF, Power Point, Word...) utilice la función <a href=../docum";
+$langExplanation = "Esta página debe estar en formato HTML (por ejemplo \"mi_pagina.htm\"). Aparecerá  el enlace en la página principal de su sitio. Si usted desea enviar un documento que no está en formato HTML (PDF, Power Point, Word...) utilice la función <a href=../docum";
 $langTooBig = "Usted no ha seleccionado ningún archivo para enviar, o el archivo es demasiado grande";
 $langCouldNot = "El archivo no pudo ser enviado";
 $langNotAllowed = "No permitido";

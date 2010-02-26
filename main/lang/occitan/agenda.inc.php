@@ -2,25 +2,25 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
-$AgendaAdd = "Ajustar una activitat nÃ²va a l\'agenda";
+$AgendaAdd = "Ajustar una activitat nÃ²va a l'agenda";
 $ShowAllEvents = "Veire totei leis activitats";
-$ShowCurrent = "Veire leis activitats d\'aquest mes";
-$AddCalendarItem = "Ajustar una anotacion nÃ²va a l\'agenda";
+$ShowCurrent = "Veire leis activitats d'aquest mes";
+$AddCalendarItem = "Ajustar una anotacion nÃ²va a l'agenda";
 $Day = "Jorn";
 $Month = "Mes";
 $Year = "An";
 $Hour = "Ora";
 $Minutes = "Minutas";
 $Detail = "Detalh";
-$EditSuccess = "L\'anotacion es estada editada";
-$AddSuccess = "L\'anotacion es estada ajustada a l\'agenda";
-$AgendaDeleteSuccess = "L\'anotation es estada eliminada de l\'agenda";
-$NoAgendaItems = "Ges d\'eveniments";
+$EditSuccess = "L'anotacion es estada editada";
+$AddSuccess = "L'anotacion es estada ajustada a l'agenda";
+$AgendaDeleteSuccess = "L'anotation es estada eliminada de l'agenda";
+$NoAgendaItems = "Ges d'eveniments";
 $lang_september = "Setembre";
 $langClassName = "Nom de la classa";
 $lang_agenda = "Agenda";
-$ModifyCalendarItem = "Modificar una anotacion de l\'agenda";
-$ItemTitle = "TÃ­tol de l\'anotacion";
+$ModifyCalendarItem = "Modificar una anotacion de l'agenda";
+$ItemTitle = "TÃ­tol de l'anotacion";
 $langDay = "Jorn";
 $month_default = "Mes per manca";
 $langYear = "An";
@@ -45,7 +45,7 @@ $AddPersonalCalendarItem = "Ajustar una anotacion personala";
 $ModifyPersonalCalendarItem = "Modificar una anotacion personala";
 $PeronalAgendaItemAdded = "Anotacion personala ajustada correctament";
 $PeronalAgendaItemEdited = "Anotacion personala editada correctament";
-$PeronalAgendaItemDeleted = "L\'endeveniment personau es estat eliminat de l\'agenda";
+$PeronalAgendaItemDeleted = "L'endeveniment personau es estat eliminat de l'agenda";
 $ViewPersonalItem = "Veire les anotacions personalas";
 $UserGroupFilter = "Filtrar per grops / usanciers";
 $ShowAll = "Mostrar tot";
@@ -64,6 +64,6 @@ $RepeatMonthlyByDay = "Mesadier, per jorn";
 $RepeatMonthlyByDayR = "Mesadier, per jorn, limitat";
 $RepeatYearly = "Annadier";
 $RepeatEnd = "Acabar lei repeticions";
-$RepeatedEventViewOriginalEvent = "Veire l\'anotacion iniciala";
+$RepeatedEventViewOriginalEvent = "Veire l'anotacion iniciala";
 $ICalFileImport = "Importar un fiquier iCal/ics";
 ?>

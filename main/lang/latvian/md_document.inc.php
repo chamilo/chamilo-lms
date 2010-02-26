@@ -4,7 +4,7 @@ for more information: see languages.txt in the lang folder.
 */
 $langMdCallingTool = "Dokumenti";
 $langMdTitle = "M&#257;c&#299;bu priekmeta nosaukums";
-$langMdDescription = "Lai saglab&#257;tu o inform&#257;ciju, klik&#311;iniet \\"Saglab&#257;t\\"";
+$langMdDescription = "Lai saglab&#257;tu o inform&#257;ciju, klik&#311;iniet \"Saglab&#257;t\"";
 $langMdCoverage = "t.i., ... bakalaurs";
 $langMdCopyright = "t.i., nor&#257;d&#299;tais avots ir apstiprin&#257;ts";
 $langTool = "Dokumenta META dati";
@@ -21,7 +21,7 @@ $langCoverage = "P&#257;rkl&#257;jums";
 $langCoverageTip = "piem&#275;ram, xxx:yyy bakalaurs";
 $langKwNote = "Ja J&#363;s nomainat apraksta valodu, l&#363;dzu, nepievienojiet atsl&#275;gv&#257;rdus vienlaic&#299;gi.";
 $langClickKw = "Noklik&#311;iniet uz atsl&#275;gas v&#257;rda aj&#257; kok&#257;, lai to iez&#299;m&#275;tu vai atteiktos no iez&#299;m&#275;juma.";
-$langKwHelp = "<br/>Noklik";
+$langKwHelp = "<br />Noklik";
 $langRights = "Lietoanas noteikumi";
 $langRightsTip = "aprakstiet ar v&#257;rdiem";
 $langVersion = "Versija";

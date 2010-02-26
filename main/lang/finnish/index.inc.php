@@ -2,7 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
-$langInvalidId = "Sisäänkirjautuminen epäonnistui. Jos et ole rekisteröitynyt, niin täytä <a href=\'../auth/inscription.php\'>rekisteröitymislomake</a></font color>";
+$langInvalidId = "Sisäänkirjautuminen epäonnistui. Jos et ole rekisteröitynyt, niin täytä <a href='../auth/inscription.php'>rekisteröitymislomake</a></font color>";
 $langWelcome = "Tervetuloa.";
 $langPass = "Salasana";
 $langEnter = "Sisään";

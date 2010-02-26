@@ -7,7 +7,7 @@ $langSubTitle = "Adiciona um link para uma página na página principal do seu c
 $langAddPage = "Adicionar uma página";
 $langSendPage = "Página a ser publicada";
 $langCouldNot = "O arquivo não pode ser enviado";
-$langOkSentLink = "O seu link foi adicionado. Encontra-se agora acessível a partir de <a href=%s/index.php\\">Página Principal</a>";
+$langOkSentLink = "O seu link foi adicionado. Encontra-se agora acessível a partir de <a href=%s/index.php\">Página Principal</a>";
 $langTooBig = "Não foi selecionado nenhum arquivo para enviar, ou ele é muito grande";
 $langExplanation = "Após clicar em OK, será criado um curso com uma seção de testes/exercícios, projeto de rota de aprendizagem, avaliações, cursos, caixa de documentos compartilhados, Agenda e muito mais. Ao registar-se como professor será atribuídos privilégios para poder editar esse curso.";
 $langPgTitle = "Título da página";

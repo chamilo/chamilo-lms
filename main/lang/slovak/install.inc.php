@@ -16,7 +16,7 @@ $langAdminEmail = "Email administrátora";
 $langAdminName = "Meno administrátora";
 $langAdminSurname = "Priezvisko administrátora";
 $langAdminLogin = "Prihlásenie administrátora";
-$langAdminPass = "Heslo administrátora (<font color=\\"red\\">môete ho zmeni&#357;</font>)";
+$langAdminPass = "Heslo administrátora (<font color=\"red\">môete ho zmeni&#357;</font>)";
 $langEducationManager = "Projektový manaér";
 $langCampusName = "Meno portálu";
 $langStep1 = "Etapa 1 zo 6";

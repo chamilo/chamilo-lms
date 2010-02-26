@@ -2,7 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
-$MessageEmptyMessageOrSubject = "Scrivi l\'oggetto del messaggio, prego";
+$MessageEmptyMessageOrSubject = "Scrivi l'oggetto del messaggio, prego";
 $Inbox = "In entrata";
 $Messages = "Messaggi";
 $SendMessage = "Invia il messaggio";
@@ -19,8 +19,8 @@ $Myself = "me stesso";
 $From = "Da";
 $To = "A";
 $Date = "Data";
-$InvalidMessageId = "L\'identificativo del messaggio cui rispondere non è valido";
-$ErrorSendingMessage = "C\'è stato un errore nel tentativo di spedire un messaggio";
+$InvalidMessageId = "L'identificativo del messaggio cui rispondere non è valido";
+$ErrorSendingMessage = "C'è stato un errore nel tentativo di spedire un messaggio";
 $SureYouWantToDeleteSelectedMessages = "Sei sicuro di voler eliminare i messaggi selezionati?";
 $SelectedMessagesDeleted = "I messaggi selezionati sono stati eliminati";
 $EnterTitle = "Metti un titolo";

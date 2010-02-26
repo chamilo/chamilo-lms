@@ -3,7 +3,7 @@
 for more information: see languages.txt in the lang folder.
 */
 $langPgTitle = "Seitentitel";
-$langExplanation = "Die Seite muss im HTML-Format vorliegen (z.B. \\"my_page.htm\\"). Es wird von der Homepage verknüpft. Wenn Sie Dokumente verknüpfen möchten, die nicht im HTML Format vorliegen (PDF, Word, Power Point, Video, etc.) benutzen Sie bitte <a href=../document/docu";
+$langExplanation = "Die Seite muss im HTML-Format vorliegen (z.B. \"my_page.htm\"). Es wird von der Homepage verknüpft. Wenn Sie Dokumente verknüpfen möchten, die nicht im HTML Format vorliegen (PDF, Word, Power Point, Video, etc.) benutzen Sie bitte <a href=../document/docu";
 $langTooBig = "Sie haben keine Datei ausgewählt, oder Sie ist zu groß.";
 $langCouldNot = "Datei konnte nicht hochgeladen werden";
 $langNotAllowed = "Nicht erlaubt";

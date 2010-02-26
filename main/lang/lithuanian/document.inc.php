@@ -35,7 +35,7 @@ $langFileName = "Failo vardas";
 $langNoFileName = "Prašome įrašyti failo vardą";
 $langNoText = "Prašome įrašyti tekstą / HTML turinį";
 $langAreYouSureToDelete = "Ar tikrai norite ištrinti";
-$langScormcontent = "Tai Scorm turinys<br><input type=button name=scormbutton value='Paleisti!' onclick='openscorm()'>";
+$langScormcontent = "Tai Scorm turinys<br /><input type=button name=scormbutton value='Paleisti!' onclick='openscorm()'>";
 $langScormcontentstudent = "Tai Scorm formato kursas. Jo peržiūrai spauskite čia : <input type=button name=scormbutton value='Paleisti!' onclick='openscorm()'>";
 $langPublish = "Publikuoti";
 $langMissingImagesDetected = "rastas neegzistuojantis paveikslėlis";

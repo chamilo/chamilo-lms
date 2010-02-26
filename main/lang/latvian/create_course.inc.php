@@ -4,8 +4,8 @@ for more information: see languages.txt in the lang folder.
 */
 $langProfessors = "Pasniedz&#275;ji";
 $langExplanation = "Tikl&#299;dz nospied&#299;siet OK, tiks izveidota kursa m&#257;jas lapa ar Forumu, Pl&#257;not&#257;ju, Dokumentu r&#299;ku, u.t.t. Piesakoties sit&#275;m&#257; ar savu lietot&#257;jv&#257;rdu un paroli, Tu var&#275;si veidot un labot o kursa m&#257;jas";
-$langEmpty = "Tu aizmirsi aizpild&#299;t daus laukus.<br>Spied <b>Atpaka&#316; (Back)</b> pogu p&#257;rl&#363;kprogramm&#257;, un aizpildi tos.<br>Ja tu neierakt&#299;ji kusa kodu, tad skaties Kursa Programmu";
-$langCodeTaken = "is kursa kods jau eksist&#275;. <br>Spied <b>Atpaka&#316; (Back)</b> pogu p&#257;rl&#363;kprogramm&#257; un ievadi citu.";
+$langEmpty = "Tu aizmirsi aizpild&#299;t daus laukus.<br />Spied <b>Atpaka&#316; (Back)</b> pogu p&#257;rl&#363;kprogramm&#257;, un aizpildi tos.<br />Ja tu neierakt&#299;ji kusa kodu, tad skaties Kursa Programmu";
+$langCodeTaken = "is kursa kods jau eksist&#275;. <br />Spied <b>Atpaka&#316; (Back)</b> pogu p&#257;rl&#363;kprogramm&#257; un ievadi citu.";
 $langFormula = "Ar sveicieniem";
 $langMessage = "Kad J&#363;s izdz&#275;s&#299;siet testa forumu, tad izdz&#275;s&#299;sies visas zi&#326;as aj&#257; testa forum&#257;.";
 $langExerciceEx = "Testa piem&#275;rs";

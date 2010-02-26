@@ -138,7 +138,7 @@ $langAllRight = "Geen speciale gevallen";
 $langDefcon = "Er komen speciale gevallen voor!";
 $langNULLValue = "Leeg (of NULL)";
 $langTrafficDetails = "Trafiekdetails";
-$langSeeIndividualTracking = "Zie de <a href=\\"../user/user.php\\">gebruikersmodule</a> voor individuele statistieken.";
+$langSeeIndividualTracking = "Zie de <a href=\"../user/user.php\">gebruikersmodule</a> voor individuele statistieken.";
 $langPathNeverOpenedByAnybody = "Dit pad is nog nooit geopend door iemand.";
 $SynthesisView = "Samenvattende tabel";
 $Visited = "Doorlopen";

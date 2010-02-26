@@ -4,7 +4,7 @@ for more information: see languages.txt in the lang folder.
 */
 $langMdCallingTool = "Dokumentoj";
 $langMdTitle = "Titolo de la lernobjekto";
-$langMdDescription = "Por konservi la datumojn, klaku sur \'Konservi\'";
+$langMdDescription = "Por konservi la datumojn, klaku sur 'Konservi'";
 $langMdCoverage = "ekz. bakala&#365;ro pri ...";
 $langMdCopyright = "ekz. kun mencio de fonto";
 $langTool = "Dokumentaj metadatumoj";
@@ -21,7 +21,7 @@ $langCoverage = "Celareo";
 $langCoverageTip = "ekz. bakala&#365;ro en ...";
 $langKwNote = "Se vi volas &#349;an&#285;i la lingvon de priskribo, ne samtempe aldonu novajn &#349;losilvortojn.";
 $langClickKw = "Musklaku sur &#349;losilvorton por elekti a&#365; nuligi &#285;in.";
-$langKwHelp = "<br/> Klaku sur '+' por malfermi, '-' por fermi, '++' por malfermi ĉion, '--' por fermi ĉion.<br/> <br/> Fermu la arbostrukturon kaj malfermu ĝin per '+' por nuligi antaŭajn elektojn.<br/> Malfermu per Alt-klaku '+' por remeti la originalajn ŝlosilvortojn.<br/> <br/> Alt-klako sur ŝlosilvorto elektas la ŝlosilvorton sen akompanantaj konceptoj akj nuligas elekton kun akompanantaj konceptoj.<br/> <br/> Se vi volas ŝanĝi la lingvon de la priskribo, ne samtempe aldonu novajn ŝlosilvortojn.<br/> <br/>";
+$langKwHelp = "<br /> Klaku sur '+' por malfermi, '-' por fermi, '++' por malfermi ĉion, '--' por fermi ĉion.<br /> <br /> Fermu la arbostrukturon kaj malfermu ĝin per '+' por nuligi antaŭajn elektojn.<br /> Malfermu per Alt-klaku '+' por remeti la originalajn ŝlosilvortojn.<br /> <br /> Alt-klako sur ŝlosilvorto elektas la ŝlosilvorton sen akompanantaj konceptoj akj nuligas elekton kun akompanantaj konceptoj.<br /> <br /> Se vi volas ŝanĝi la lingvon de la priskribo, ne samtempe aldonu novajn ŝlosilvortojn.<br /> <br />";
 $langRights = "Uzokondi&#265;oj";
 $langRightsTip = "priskribu per vortoj";
 $langVersion = "Versio";

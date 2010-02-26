@@ -34,7 +34,7 @@ $langFileName = "Názov súboru";
 $langNoFileName = "Zadajte prosím názov súboru";
 $langNoText = "Napíte prosím Vá text / HTML obsah";
 $langAreYouSureToDelete = "Naozaj to chcete zmaza&#357;?";
-$langScormcontent = "Toto je Scorm obsah<br><input type=button name=scormbutton value='Spustiť !' onclick='openscorm()'>";
+$langScormcontent = "Toto je Scorm obsah<br /><input type=button name=scormbutton value='Spustiť !' onclick='openscorm()'>";
 $langScormcontentstudent = "Toto je kurz formátu Scorm. Ak ho chcete prehrať, kliknite sem: <input type=button name=scormbutton value='Spustiť !' onclick='openscorm()'>";
 $langPublish = "Publikova&#357;";
 $langMissingImagesDetected = "Niektoré obrázky chýbajú";

@@ -4,8 +4,8 @@ for more information: see languages.txt in the lang folder.
 */
 $langProfessors = "Vezet&#337;k";
 $langExplanation = "Amint az OK-re kattint, létrejön az új kurzus honlapja fórummal, naptárral, dokumentum szerkeszt&#337;vel és az egyéb eszközökkel. A kurzus létrehozójaként vagy adminisztrátoraként kés&#337;bb igényei szerint testreszabhatja a kurzust.";
-$langEmpty = "Néhány mezõt üresen hagyott.<br>Használja a <b>Vissza</b> gombot a böngészõjén és próbálja újra.<br>Ha a kurzus kódot kihagyja, olvassa el a Kurzus Programot";
-$langCodeTaken = "Ez a kód már foglalt.  <br>Használja a <b>Vissza</b> gombot a böngészõjén és próbálja újra";
+$langEmpty = "Néhány mezõt üresen hagyott.<br />Használja a <b>Vissza</b> gombot a böngészõjén és próbálja újra.<br />Ha a kurzus kódot kihagyja, olvassa el a Kurzus Programot";
+$langCodeTaken = "Ez a kód már foglalt.  <br />Használja a <b>Vissza</b> gombot a böngészõjén és próbálja újra";
 $langFormula = "Üdvözlettel";
 $langMessage = "Amikor eltávolítja a teszt fórumot, az összes üzenet is elvész abban a fórumban.";
 $langExerciceEx = "Példa teszt";

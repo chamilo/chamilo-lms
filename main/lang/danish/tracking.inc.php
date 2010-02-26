@@ -138,7 +138,7 @@ $langAllRight = "Der er ingen mærkelige sager her";
 $langDefcon = "Ups, opdaget mærkelige sager !!";
 $langNULLValue = "Tom (eller nul)";
 $langTrafficDetails = "Trafikdetaljer";
-$langSeeIndividualTracking = "For individuel sporing se <a href=\\"../user/user.php\\">Bruger</a> værktøj.";
+$langSeeIndividualTracking = "For individuel sporing se <a href=\"../user/user.php\">Bruger</a> værktøj.";
 $langPathNeverOpenedByAnybody = "Denne sti har aldrig været åbnet af nogen.";
 $SynthesisView = "Vis syntese";
 $Visited = "Besøgt";

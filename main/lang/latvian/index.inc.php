@@ -3,7 +3,7 @@
 for more information: see languages.txt in the lang folder.
 */
 $langInvalidId = "Pieteikties neizdev&#257;s - nepareizs lietot&#257;jv&#257;rds vai parole.";
-$langWelcome = "Br&#299;vi pieejamo kursu saraksts.  P&#257;r&#275;jiem kursiem ir nepiecieams lietot&#257;jv&#257;rds un parole, kuru J&#363;s varat ieg&#363;t  noklik&#311;inot uz  \'re&#291;istr&#275;ties\'. Doc&#275;t&#257;ji var izveidot kursus re&#291;istr&#275;j";
+$langWelcome = "Br&#299;vi pieejamo kursu saraksts.  P&#257;r&#275;jiem kursiem ir nepiecieams lietot&#257;jv&#257;rds un parole, kuru J&#363;s varat ieg&#363;t  noklik&#311;inot uz  're&#291;istr&#275;ties'. Doc&#275;t&#257;ji var izveidot kursus re&#291;istr&#275;j";
 $langPass = "Parole";
 $langEnter = "Pieteikties (Enter)";
 $langReg = "Re&#291;istr&#257;cija";

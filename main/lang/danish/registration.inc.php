@@ -42,7 +42,7 @@ $langOneByOne = "Tilføj deltagerne manuelt";
 $langNow = "nu";
 $langTutor = "Instruktor";
 $langTitular = "Ophavsmand";
-$langAddHereSomeCourses = "<font size=2 face='Arial, Helvetica'><big>Ændre kursusoversigten</big><br><br>Sæt kryds ved de kurser, som du ønsker at følge.<br>Fjern afkrydsning på de kurser, du ikke længere ønsker at følge.<br> Klik derefter OK nederst i denne oversigt";
+$langAddHereSomeCourses = "<font size=2 face='Arial, Helvetica'><big>Ændre kursusoversigten</big><br /><br />Sæt kryds ved de kurser, som du ønsker at følge.<br />Fjern afkrydsning på de kurser, du ikke længere ønsker at følge.<br /> Klik derefter OK nederst i denne oversigt";
 $langStudent = "Deltager";
 $langImportUserList = "Importer en liste af deltagere";
 $langAddAU = "Tilføj en kursusdeltager";
@@ -133,7 +133,7 @@ $RequestSentToPlatformAdmin = "System kan ikke umiddelbart behandle henvendelsen
 $langphone = "Telefon";
 $Unreg = "Afmeld";
 $MyProgress = "Min progession";
-$ProgressIntroduction = "Start med at vælge en af nedenstående kursussider. <br/> Du kan se din progession for hver kursusside, som du er tilmeldt.";
+$ProgressIntroduction = "Start med at vælge en af nedenstående kursussider. <br /> Du kan se din progession for hver kursusside, som du er tilmeldt.";
 $Select = "Vælg";
 $NeverExpires = "Udløber aldrig";
 $On = "På";

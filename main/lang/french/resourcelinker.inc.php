@@ -2,12 +2,12 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
-$ResourceAdded = "Ressource ajoutée. Vous pouvez maintenant retourner vers le cours ou ajouter d\'autres ressources.";
+$ResourceAdded = "Ressource ajoutée. Vous pouvez maintenant retourner vers le cours ou ajouter d'autres ressources.";
 $LearningPath = "Cours";
 $LevelUp = "Monter";
 $AddIt = "Ajouter";
 $MainCategory = "catégorie principale";
-$lang_delete_added_resources = "Annuler l\'ajout des ressources";
+$lang_delete_added_resources = "Annuler l'ajout des ressources";
 $AddToLinks = "Ajouter aux Liens du cours";
 $DontAdd = "Ne pas ajouter";
 $lang_show_all_added_resources = "Montrer les ressources ajoutées";
@@ -23,11 +23,11 @@ $Link = "Liens";
 $AdValvas = "Annonces";
 $Document = "Documents";
 $ShowDelete = "Afficher / Modifier les ressources";
-$IntroductionText = "Texte d\'introduction";
+$IntroductionText = "Texte d'introduction";
 $CourseDescription = "Description du cours";
 $Groups = "Groupes";
 $Users = "Utilisateurs";
-$IntroductionTextAdd = "Ajouter la page contenant le texte d\'introduction à ce chapitre";
+$IntroductionTextAdd = "Ajouter la page contenant le texte d'introduction à ce chapitre";
 $CourseDescriptionAdd = "Ajouter la page contenant la description du cours à ce chapitre";
 $GroupsAdd = "Ajouter la page de Groupes à ce chapitre.";
 $UsersAdd = "Ajouter la page Utilisateurs à ce chapitre";
@@ -45,9 +45,9 @@ $AgendaAdd = "Ajouter un nouvel événement";
 $UserGroupFilter = "Filtrer par groupe/utilisateur";
 $AgendaSortChronologicallyUp = "Afficher les événements (du plus ancien au plus récent)";
 $ShowCurrent = "Afficher les événements courants";
-$ModifyCalendarItem = "Modifier les événements de l\'agenda";
-$ItemTitle = "Titre de l\'événement";
-$Detail = "Détails de l\'événement";
+$ModifyCalendarItem = "Modifier les événements de l'agenda";
+$ItemTitle = "Titre de l'événement";
+$Detail = "Détails de l'événement";
 $EditSuccess = "Modifié avec succès";
 $AddCalendarItem = "Ajouter un nouvel événement";
 $AddAnn = "Ajouter une annonce";

@@ -15,5 +15,5 @@ $langValid = "  متاح";
 $langBackAndForget = "  تراجع و انس الأمر";
 $CourseDescriptionUpdated = "  تم تحديث وصف المقرر";
 $CourseDescriptionDeleted = "  تم حذف وصف المقرر";
-$CourseDescriptionIntro = "  لإنشاء توصيف المقرر, أنقر على العنوان و قم بتعبئة الحقوق المناسبة. <br><br> بعدها انقر على موافق وقم بتعبئة عنوان أخر";
+$CourseDescriptionIntro = "  لإنشاء توصيف المقرر, أنقر على العنوان و قم بتعبئة الحقوق المناسبة. <br /><br /> بعدها انقر على موافق وقم بتعبئة عنوان أخر";
 ?>

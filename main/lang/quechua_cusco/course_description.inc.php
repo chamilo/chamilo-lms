@@ -15,6 +15,6 @@ $langValid = "Chaninchay";
 $langBackAndForget = "Kutispa qechuy ruwasqaykita";
 $CourseDescriptionUpdated = "Yachachinaq nisqayninqa kunanyachisqaña";
 $CourseDescriptionDeleted = "Yachachinaq nisqayninqa pichasqaña";
-$CourseDescriptionIntro = "Yachachinaq nisqayninta kamaynapaqqa q\'apillay mayninpi churayta munanki chaypi.";
+$CourseDescriptionIntro = "Yachachinaq nisqayninta kamaynapaqqa q'apillay mayninpi churayta munanki chaypi.";
 $langSaveDescription = "Ajllachay nisqayninta";
 ?>

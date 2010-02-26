@@ -3,7 +3,7 @@
 for more information: see languages.txt in the lang folder.
 */
 $langInvalidId = "Sikertelen belépés - helytelen felhasználói név vagy jelszó.";
-$langWelcome = "Az alábbi kurzusok szabadon elérhet&#337;ek. Más kurzusokhoz felhasználónév és jelszó szükséges, amit a \'regisztráció\'-ra kattintva lehet megszerezni. Oktatók  regisztrációk után is létrehozhatnak kurzusokat, amennyiben az oktató számára a \\"kurzus létr";
+$langWelcome = "Az alábbi kurzusok szabadon elérhet&#337;ek. Más kurzusokhoz felhasználónév és jelszó szükséges, amit a 'regisztráció'-ra kattintva lehet megszerezni. Oktatók  regisztrációk után is létrehozhatnak kurzusokat, amennyiben az oktató számára a \"kurzus létr";
 $langPass = "Jelszó";
 $langEnter = "Belépés";
 $langReg = "Regisztráció";

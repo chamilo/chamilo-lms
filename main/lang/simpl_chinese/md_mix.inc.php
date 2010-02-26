@@ -4,7 +4,7 @@ for more information: see languages.txt in the lang folder.
 */
 $langTool = "元数据";
 $langClickKw = "点击目录中的关键字进行选择或取消选择.";
-$langKwHelp = "点击 '+'按钮打开，'-'按钮关闭，'++'按钮打开所有，'--'按钮关闭所有，<BR><BR>通过关闭子目录取消对所有关键字的选择，再次打开点按钮'+'。<BR>按alt单击'+'在子目录中寻找原始关键字，<BR><BR>按alt单击选择一个没有broader terms 的关键字，或不选择它，<BR><BR>time. 如果您改变了描述语言，请不要同时加上关键字.<BR>";
+$langKwHelp = "点击 '+'按钮打开，'-'按钮关闭，'++'按钮打开所有，'--'按钮关闭所有，<br /><br />通过关闭子目录取消对所有关键字的选择，再次打开点按钮'+'。<br />按alt单击'+'在子目录中寻找原始关键字，<br /><br />按alt单击选择一个没有broader terms 的关键字，或不选择它，<br /><br />time. 如果您改变了描述语言，请不要同时加上关键字.<br />";
 $langAdvanced = "高级";
 $langSearch = "搜索";
 $langSearchCrit = "请在下面空格填入简介, 每行一字!";

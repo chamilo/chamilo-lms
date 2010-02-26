@@ -11,7 +11,7 @@ $langLinksAccess = "链接";
 $langDocumentsAccess = "文档";
 $langScormAccess = "学习路径- Scorm 格式课程";
 $langLinksDetails = "用户链接";
-$langWorksDetails = "用户上传的作品命名为\'作者\'";
+$langWorksDetails = "用户上传的作品命名为'作者'";
 $langLoginsDetails = "点击月名以游览更多资料";
 $langDocumentsDetails = "用户下载的文档";
 $langExercicesDetails = "测验成绩已完成";
@@ -124,7 +124,7 @@ $langAllRight = "未发现问题";
 $langDefcon = "出现错误!!";
 $langNULLValue = "空(或NULL)";
 $langTrafficDetails = "流量明细";
-$langSeeIndividualTracking = "个别追踪请使用<A href=\\"../user/user.php\\">用户</A>工具.";
+$langSeeIndividualTracking = "个别追踪请使用<A href=\"../user/user.php\">用户</A>工具.";
 $langPathNeverOpenedByAnybody = "本路径从未开放.";
 $langProbationers = "学生";
 ?>

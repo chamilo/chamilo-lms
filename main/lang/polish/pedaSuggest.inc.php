@@ -13,14 +13,14 @@ $TopicsInformation = "Lista tematów kursu. Istotno&#347;&#263; ka&#380;dego z t
 $TopicsQuestions = "W jaki sposób kurs przebiega? Na co powinna by&#263; zwrócona specjalna uwaga u&#380;ytkowników? Czy znane s&#261; problemy zwi&#261;zane ze zrozumieniem poszczególnych rozdzia&#322;ów kursu? Ile czasu powinno sie po&#347;wi&#281;ca&#263; na poszczególne";
 $Methodology = "Metodologia";
 $MethodologyQuestions = "Jakie metody i jakie zaj&#281;cia pozwol&#261; osi&#261;gn&#261;&#263; cel kursu? Wed&#322;ug jakiego harmonogramu?";
-$MethodologyInformation = "Przedstawienie zaj&#281;&#263; (konferencja, paper\'y, badanie grupowe, zaj&#281;cia praktyczne, ...)";
+$MethodologyInformation = "Przedstawienie zaj&#281;&#263; (konferencja, paper'y, badanie grupowe, zaj&#281;cia praktyczne, ...)";
 $CourseMaterial = "Materia&#322; kursu";
-$CourseMaterialQuestions = "Czy istnieje skrypt kursu, zbiór paper\'ów, bibliografia, lista linków internetowych?";
+$CourseMaterialQuestions = "Czy istnieje skrypt kursu, zbiór paper'ów, bibliografia, lista linków internetowych?";
 $CourseMaterialInformation = "Krótki opis materia&#322;ów wykorzystywanych w czasie kursu.";
 $HumanAndTechnicalResources = "Zasoby ludzkie i techniczne";
 $HumanAndTechnicalResourcesQuestions = "Czy s&#261; nauczyciele, wychowawcy, pomoc techniczna, pracownicy socjalni, sale komputerowe?";
 $HumanAndTechnicalResourcesInformation = "Krótki opis to&#380;samo&#347;ci poszczególnych osób kontaktowych oraz dost&#281;pnego sprz&#281;tu technicznego.";
 $Assessment = "Ocena";
 $AssessmentQuestions = "Jak u&#380;ytkownicy b&#281;d&#261; oceniani? Czy mo&#380;na wprowadzi&#263; jakie&#347; strategie aby pomóc opanowa&#263; temat?";
-$AssessmentInformation = "Przyk&#322;adowe pytania egzaminacyjne. Kryteria zaliczenia. Rady i pomocne \'sztuczki\'.";
+$AssessmentInformation = "Przyk&#322;adowe pytania egzaminacyjne. Kryteria zaliczenia. Rady i pomocne 'sztuczki'.";
 ?>

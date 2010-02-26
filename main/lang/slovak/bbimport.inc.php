@@ -5,9 +5,9 @@ for more information: see languages.txt in the lang folder.
 $langViewCourseMaterialImport = "Zobrazi&#357; materiál kurzu tak, ako bude naimportovaný";
 $langViewExternalLinksImport = "Zobrazi&#357; externé odkazy tak, ako budú naimportované";
 $langViewForumImport = "Zobrazi&#357; fórum tak, ako bude naimportované";
-$langImportCourseMaterial = "Import materiálu kurzu (nástroj Blackboard-u \\"Materiál kurzu\\")";
-$langImportExternalLinks = "Import odkazov (nástroj Blackboard-u \\"Externé odkazy\\")";
-$langImportForum = "Import fór (nástroj Blackboard-u \\"Diskusné fórum\\")";
+$langImportCourseMaterial = "Import materiálu kurzu (nástroj Blackboard-u \"Materiál kurzu\")";
+$langImportExternalLinks = "Import odkazov (nástroj Blackboard-u \"Externé odkazy\")";
+$langImportForum = "Import fór (nástroj Blackboard-u \"Diskusné fórum\")";
 $langToolInfo = "Tento nástroj importuje kurzy z Blackboard-u 5.5 (Materiál kurzu, Diskusné fórum a Externé odkazy)";
 $langToolName = "Importova&#357; kurzy z Blackboard-u";
 $langSelectCoursePackage = "Vybra&#357; balík kurzu";

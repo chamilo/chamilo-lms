@@ -16,9 +16,9 @@ $langFirstSelectPackage = "Heu de seleccionar un paquet i obrir-lo abans de cont
 $langCourseToMigrate = "Curs a transferir";
 $langSelectPackage = "Seleccionar un paquet";
 $langOpenPackageForImporting = "Obrir aquest paquet per a importar";
-$langInformation = "Informació sobre el pocès d\'importació";
-$langChooseImportOptions = "Escolliu les vostres opcions d\'importació";
-$langCheckWhatIsImported = "Podeu verificar per a veure que serà importat abans de començar el procés d\'importació";
+$langInformation = "Informació sobre el pocès d'importació";
+$langChooseImportOptions = "Escolliu les vostres opcions d'importació";
+$langCheckWhatIsImported = "Podeu verificar per a veure que serà importat abans de començar el procés d'importació";
 $langStartImporting = "Començar la importació";
 $langImport = "Importar";
 ?>

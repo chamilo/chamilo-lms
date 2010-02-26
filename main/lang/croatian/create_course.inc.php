@@ -4,8 +4,8 @@ for more information: see languages.txt in the lang folder.
 */
 $langProfessors = "Predava&#269;i";
 $langExplanation = "Kad pritisnete OK web stranice će biti izrađene, uključujući forum, raspored, upravljanje dokumentima, itd. Vašom prijavom, kao tvorcu web stranice, omogućava vam se izmjena stranice prema vlastitim zahtjevima.";
-$langEmpty = " Niste ispunili sve podatke.<br> Tipkom <b>Back</b> vratite se i pokuajte ponovno.<br>Ne sje&#263;ate li se ifre kolegija, pogledajte u Program kolegija";
-$langCodeTaken = "Ova ifra ve&#263; postoji.  <br> Tipkom <b>Back</b> vratite se i ispravite.<br>";
+$langEmpty = " Niste ispunili sve podatke.<br /> Tipkom <b>Back</b> vratite se i pokuajte ponovno.<br />Ne sje&#263;ate li se ifre kolegija, pogledajte u Program kolegija";
+$langCodeTaken = "Ova ifra ve&#263; postoji.  <br /> Tipkom <b>Back</b> vratite se i ispravite.<br />";
 $langFormula = "Sa tovanjem, Va predava&#269;";
 $langMessage = "Pri uklanjanju pokusnog foruma, uklonit &#263;e se i sve poruke u njemu";
 $langExerciceEx = "Uzorak vjebe";

@@ -145,5 +145,5 @@ $langMaximum = "Máximo";
 $langNoDocuments = "No hay documentos";
 $langNoExercisesAvailable = "No hay ejercicios disponibles";
 $langNoLinksAvailable = "No hay vínculos disponibles";
-$langNoItemsInLp = "No hay items en el itinerario de aprendizaje en este momento. Click en \\"Avanzado\\" para crear items en su itinerario de aprendizaje";
+$langNoItemsInLp = "No hay items en el itinerario de aprendizaje en este momento. Click en \"Avanzado\" para crear items en su itinerario de aprendizaje";
 ?>

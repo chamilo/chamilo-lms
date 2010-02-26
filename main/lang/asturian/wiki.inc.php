@@ -4,7 +4,7 @@ for more information: see languages.txt in the lang folder.
 */
 $WikiSearchResults = "Resultaos de la gueta nel Wiki";
 $Wiki = "Wiki";
-$StartPage = "Páxina d\'entamu del Wiki";
+$StartPage = "Páxina d'entamu del Wiki";
 $EditThisPage = "Editar esta páxina";
 $ShowPageHistory = "Historial de la páxina";
 $RecentChanges = "Cambios recientes";
@@ -12,7 +12,7 @@ $AllPages = "Toles páxines";
 $AddNew = "Amestar una páxina";
 $ChangesStored = "Los sos cambios guardárense";
 $NewWikiSaved = "La entrada nueva nel wiki guardóse. Pue vela calcando en:";
-$DefaultContent = "<br/> <br/> <p align=\\"center\\"> <img src=\\"%swiki/wcollaborative.png\\" alt=\\"Mr. Dokeos\\" title=\\"Mr. Chamilo\\" /></p> <p align=\\"center\\">Pa entamar edite esta páxina y esborre esti testu.</p>";
+$DefaultContent = "<br /> <br /> <p align=\"center\"> <img src=\"%swiki/wcollaborative.png\" alt=\"Mr. Dokeos\" title=\"Mr. Chamilo\" /></p> <p align=\"center\">Pa entamar edite esta páxina y esborre esti testu.</p>";
 $CourseWikiPages = "Páxines Wiki del cursu";
 $GroupWikiPages = "Páxines Wiki del grupu";
 $NoWikiPageTitle = "Los cambios nun se guardaren. Tien de poner un títulu a esta páxina";
@@ -56,7 +56,7 @@ $AddOptionProtected = "La posibilidá d'amestar páxines desactivóse. Dende ago
 $AddOptionUnprotected = "La posibilidá d'amestar páxines ta habilitada pa tolos miembros del Wiki.";
 $NotifyChanges = "Dar anuncia de cambios";
 $NotNotifyChanges = "Nun anunciar cambios";
-$NotifyByEmail = "L\'anuncia per corréu electrónicu de les modificaciones de la páxina ta habilitada.";
+$NotifyByEmail = "L'anuncia per corréu electrónicu de les modificaciones de la páxina ta habilitada.";
 $CancelNotifyByEmail = "La anuncia per corréu electrónicu de les modificaciones de la páxina ta deshabiliada.";
 $MostRecentVersionBy = "La postrer versión d'esta páxina fízola";
 $Rating = "Puntos";
@@ -145,7 +145,7 @@ $Changes = "cambios";
 $MostActiveUsers = "Usuarios más activos";
 $Contributions = "contribuciones";
 $UserContributions = "Contribuciones del usuariu";
-$WarningDeleteMainPage = "Nun se recomienda esborrar la Páxina d'entamu del Wiki porque ye la entrada primera a la estructura xerárquica.<br>Si, así y too, tien de la esborrar, nun escaeza volver crear esta Páxina d'entamu. Hasta que nun lo faiga los demás usuarios nun van poder amestar páxines nueves al Wiki.";
+$WarningDeleteMainPage = "Nun se recomienda esborrar la Páxina d'entamu del Wiki porque ye la entrada primera a la estructura xerárquica.<br />Si, así y too, tien de la esborrar, nun escaeza volver crear esta Páxina d'entamu. Hasta que nun lo faiga los demás usuarios nun van poder amestar páxines nueves al Wiki.";
 $ConvertToLastVersion = "Pa convertir esta versión na última calque en";
 $Restore = "Restaurar";
 $CurrentVersion = "Versión actual";

@@ -3,7 +3,7 @@
 for more information: see languages.txt in the lang folder.
 */
 $langInvalidId = "Prisijungimas nepavyko - neteisingas vartotojo vardas arba slaptažodis.";
-$langWelcome = "Žemiau pateikiami laisvai pasiekiami kursai. Kad pasiekti kitus kursus reikia vartotojo vardo ir slaptažodio, kuriuos galite gauti paspaudę ant \'registracija\'. Dėstytojai gali kurti kursus registruodamiesi, pasirinkdami \'Kurti kursus\'.";
+$langWelcome = "Žemiau pateikiami laisvai pasiekiami kursai. Kad pasiekti kitus kursus reikia vartotojo vardo ir slaptažodio, kuriuos galite gauti paspaudę ant 'registracija'. Dėstytojai gali kurti kursus registruodamiesi, pasirinkdami 'Kurti kursus'.";
 $langPass = "Slaptažodis";
 $langEnter = "Įeiti";
 $langReg = "Registracija";

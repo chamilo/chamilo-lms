@@ -3,7 +3,7 @@
 for more information: see languages.txt in the lang folder.
 */
 $langInvalidId = "登录失败 - 用户名/密码错误";
-$langWelcome = "下面的课程免费提供，其他课程需要用户名和密码。可以通过点击右侧“注册”按钮注册， 老师通过注册可以创建新的课程，请在填写注册表单时请选择\'创建课程(教师)\'。";
+$langWelcome = "下面的课程免费提供，其他课程需要用户名和密码。可以通过点击右侧“注册”按钮注册， 老师通过注册可以创建新的课程，请在填写注册表单时请选择'创建课程(教师)'。";
 $langPass = "密码";
 $langEnter = "进入";
 $langReg = "注册";

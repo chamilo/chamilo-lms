@@ -4,8 +4,8 @@ for more information: see languages.txt in the lang folder.
 */
 $langProfessors = "教師";
 $langExplanation = "點擊確定後，將創建您的課程，該課程具有課程論壇、教學計畫、講義材料管理等；登錄後您可以按照需要添加課程內容。";
-$langEmpty = "有些項目沒有填寫。<br><b>返回重試</b>。<br>如果不想填寫課程代碼，請參考教學大綱";
-$langCodeTaken = "這個課程代碼已被其他用戶佔用。<br><b>返回</b>重試";
+$langEmpty = "有些項目沒有填寫。<br /><b>返回重試</b>。<br />如果不想填寫課程代碼，請參考教學大綱";
+$langCodeTaken = "這個課程代碼已被其他用戶佔用。<br /><b>返回</b>重試";
 $langFormula = "你誠摯的";
 $langMessage = "移除論壇示例也將移除這條消息。";
 $langExerciceEx = "測驗示例";

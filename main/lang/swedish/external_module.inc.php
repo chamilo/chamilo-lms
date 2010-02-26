@@ -7,9 +7,9 @@ $langSubTitle = "Lägger sig till menyn på kursens hemsida som en länk till en
 $langAddPage = "Lägg till en sida";
 $langSendPage = "Sida att sända";
 $langCouldNot = "Filen kunde inte sändas";
-$langOkSentLink = "Din länk är nu skickad.<p>Den är nu tillgänglig från <a href=\\"../..//index.php\\">Kurshemsidan</a>";
+$langOkSentLink = "Din länk är nu skickad.<p>Den är nu tillgänglig från <a href=\"../..//index.php\">Kurshemsidan</a>";
 $langTooBig = "Du valde ingen fil att sända, eller så var den för stor";
-$langExplanation = "Sidan måste vara i HTML-format (eg. \\"my_page.html\\"). Den kommer att länka till från Hemsidan. Om du vill sända icke HTML-dokument (PDF, Word, Power Point, Video, etc.) använd <a href=../document/document.php>Dokumentverkyget</a>";
+$langExplanation = "Sidan måste vara i HTML-format (eg. \"my_page.html\"). Den kommer att länka till från Hemsidan. Om du vill sända icke HTML-dokument (PDF, Word, Power Point, Video, etc.) använd <a href=../document/document.php>Dokumentverkyget</a>";
 $langPgTitle = "Sidans titel";
 $langNoLinkURL = "Var vänlig skriv länkens URL";
 $langLinkTarget = "Länkens mål";

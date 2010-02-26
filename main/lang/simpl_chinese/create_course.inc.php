@@ -4,8 +4,8 @@ for more information: see languages.txt in the lang folder.
 */
 $langProfessors = "教师";
 $langExplanation = "点击确定后，将创建您的课程，该课程具有课程论坛、教学计划、讲义材料管理等；登录后您可以按照需要添加课程内容。";
-$langEmpty = "有些项目没有填写。<br><b>返回重试</b>。<br>如果不想填写课程代码，请参考教学大纲";
-$langCodeTaken = "这个课程代码已被其他用户占用。<br><b>返回</b>重试";
+$langEmpty = "有些项目没有填写。<br /><b>返回重试</b>。<br />如果不想填写课程代码，请参考教学大纲";
+$langCodeTaken = "这个课程代码已被其他用户占用。<br /><b>返回</b>重试";
 $langFormula = "你诚挚的";
 $langMessage = "移除论坛示例也将移除这条消息。";
 $langExerciceEx = "测验示例";

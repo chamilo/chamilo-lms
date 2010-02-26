@@ -34,7 +34,7 @@ $langOneByOne = "Tambah Pengguna secara manual";
 $langNow = "sekarang";
 $langTutor = "Tutor";
 $langTitular = "Penulis";
-$langAddHereSomeCourses = "<font size=2 face='Arial, Helvetica'><big>Ubahsuai Senarai Subjek</big><br><br>Pilih Subjek yang ingin diikuti.<br>Tanda Subjek yang anda tidak ingin ikuti.<br> Kemudian klik OK pada bahagian bawah senarainya tersebut";
+$langAddHereSomeCourses = "<font size=2 face='Arial, Helvetica'><big>Ubahsuai Senarai Subjek</big><br /><br />Pilih Subjek yang ingin diikuti.<br />Tanda Subjek yang anda tidak ingin ikuti.<br /> Kemudian klik OK pada bahagian bawah senarainya tersebut";
 $langStudent = "Pelajar";
 $langAddAU = "Tambah Ahli";
 $langAddedU = "telah ditambah. Email akan dihantar untuk memberikan ID Pengguna kepada Pelajar tersebut";

@@ -4,8 +4,8 @@ for more information: see languages.txt in the lang folder.
 */
 $langProfessors = "Lektori";
 $langExplanation = "Kliknutím na OK sa vytvorí stránka z agendou, fórom, meneérom dokumentov at&#271;. Prihlásenie vaím menom, ako tvorcom Vam umoní ju meni&#357; pod&#318;a potreby.";
-$langEmpty = "Nevyplnili ste niektore polí&#269;ka.<br>Pomocou gombíka  <b>Spä&#357;</b> vo vaom prehliada&#269;i sa vrá&#357;te a skúste to znovu.<br>If you ignore your course code, see the Course Program";
-$langCodeTaken = "Tento kód kurzu u bol pouitý. <br>Pouite tla&#269;idlo <b>Spä&#357;</b> vo Vaom prehliada&#269;i a skúste to znovu";
+$langEmpty = "Nevyplnili ste niektore polí&#269;ka.<br />Pomocou gombíka  <b>Spä&#357;</b> vo vaom prehliada&#269;i sa vrá&#357;te a skúste to znovu.<br />If you ignore your course code, see the Course Program";
+$langCodeTaken = "Tento kód kurzu u bol pouitý. <br />Pouite tla&#269;idlo <b>Spä&#357;</b> vo Vaom prehliada&#269;i a skúste to znovu";
 $langFormula = "S pozdravom";
 $langMessage = "Ke&#271; odstránite test fórum, odstránite aj vetky správy v tomto fóre.";
 $langExerciceEx = "Vzorový test";

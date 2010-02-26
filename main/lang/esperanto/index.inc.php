@@ -3,7 +3,7 @@
 for more information: see languages.txt in the lang folder.
 */
 $langInvalidId = "&#264;i-identigilo ne validas (misa ensaluto a&#365; pasvorto).";
-$langWelcome = "kursa(j) TTT(oj) &#265;i-suba(j) estas libere alirebla(j). La alaij kursoj postulas uzulan nomon kaj pasvorton. Tiujn vi povas ricevi per musklako sur \'Registri\'. Instruistoj povas indiki dum registrado, ke ili deziras krei kursajn TTTjn.";
+$langWelcome = "kursa(j) TTT(oj) &#265;i-suba(j) estas libere alirebla(j). La alaij kursoj postulas uzulan nomon kaj pasvorton. Tiujn vi povas ricevi per musklako sur 'Registri'. Instruistoj povas indiki dum registrado, ke ili deziras krei kursajn TTTjn.";
 $langPass = "Pasvorto";
 $langEnter = "Ensaluti";
 $langReg = "Registrado";
@@ -29,7 +29,7 @@ $EussMenu = "Menuo";
 $Opinio = "Opinio";
 $Intranet = "Interna reto  XX";
 $Englin = "angla";
-$langInvalidForSelfRegistration = "Se vi ankora&#365; ne ali&#285;is, bonvolu plenigi la <a href=\'claroline/auth/inscription.php\'>registran formularon </a>.";
+$langInvalidForSelfRegistration = "Se vi ankora&#365; ne ali&#285;is, bonvolu plenigi la <a href='claroline/auth/inscription.php'>registran formularon </a>.";
 $langSubCat = "sub-kategorioj";
 $langMenuGeneral = "&#284;enerala";
 $langMenuUser = "Uzulo";

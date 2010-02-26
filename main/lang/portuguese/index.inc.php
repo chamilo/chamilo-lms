@@ -3,7 +3,7 @@
 for more information: see languages.txt in the lang folder.
 */
 $langInvalidId = "O login/acesso falhou - login/acesso ou senha/password incorrectos.";
-$langWelcome = "os cursos abaixo encontram-se disponíveis gratuitamente. Outros cursos requerem um login/acesso e uma senha/password, que poderão ser obtidos clicando em \'registar-se\'. Os instrutores podem criar cursos clicando também em \'registar-se\', seleccionando";
+$langWelcome = "os cursos abaixo encontram-se disponíveis gratuitamente. Outros cursos requerem um login/acesso e uma senha/password, que poderão ser obtidos clicando em 'registar-se'. Os instrutores podem criar cursos clicando também em 'registar-se', seleccionando";
 $langPass = "Senha/password";
 $langEnter = "Aceder";
 $langReg = "Registar-se";

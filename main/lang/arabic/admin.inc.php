@@ -255,7 +255,7 @@ $No = " لا";
 $ShowToolShortcutsTitle = " أداة الاختصارات";
 $ShowToolShortcutsComment = " إظهار أداة الاختصارات على الراية؟";
 $ShowStudentViewTitle = " معاينة الطالب";
-$ShowStudentViewComment = " هذه الخاصية تسمح للمدرس بمشاهدة ما يشاهده الطالب <br> تمكين معاينة الطالب؟";
+$ShowStudentViewComment = " هذه الخاصية تسمح للمدرس بمشاهدة ما يشاهده الطالب <br /> تمكين معاينة الطالب؟";
 $AllowGroupCategories = " أصناف المجموعات";
 $AllowGroupCategoriesComment = " اسمح لمسئولي المقررات بإنشاء أصناف في وحدة المجموعات؟";
 $PlatformLanguageComment = " <a href=\"languages.php\">Dokeos Platform Languages</a> :يمكنك تحديد ركيزة اللغات في جزء مختلف من ركيزة الإدارة، هذا يعني";

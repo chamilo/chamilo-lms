@@ -4,7 +4,7 @@ for more information: see languages.txt in the lang folder.
 */
 $langTool = "Defincijski podatci";
 $langClickKw = "Kliknite na klju&#269;nu rije&#269; u strukturi kako biste je odabrali ili ponitili odabir.";
-$langKwHelp = "<br/> Pritisnite tipku '+' za otvaranje, tipku '-' za zatvaranje, tipku '++' za otvaranje svega, tipku '--' za zatvaranje svega.<br/> <br/> Uklonite sve odabrane ključne riječi zatvaranjem strukture i ponovnim otvaranjem iste pritiskom na tipku '+'.<br/> Istovremenim pritiskom tipki Alt i '+' pretražujete izvorne ključne riječi u strukturi.<br/> <br/> Istovremenim pritiskom na Alt i ključnu riječ odabirete ključnu riječ bez širih termina ili poništavate odabir ključne riječi sa širim terminima.<br/> <br/> Promijenite li jezik opisa, nemojte istovremeno dodavati ključne riječi.<br/> <br/>";
+$langKwHelp = "<br /> Pritisnite tipku '+' za otvaranje, tipku '-' za zatvaranje, tipku '++' za otvaranje svega, tipku '--' za zatvaranje svega.<br /> <br /> Uklonite sve odabrane ključne riječi zatvaranjem strukture i ponovnim otvaranjem iste pritiskom na tipku '+'.<br /> Istovremenim pritiskom tipki Alt i '+' pretražujete izvorne ključne riječi u strukturi.<br /> <br /> Istovremenim pritiskom na Alt i ključnu riječ odabirete ključnu riječ bez širih termina ili poništavate odabir ključne riječi sa širim terminima.<br /> <br /> Promijenite li jezik opisa, nemojte istovremeno dodavati ključne riječi.<br /> <br />";
 $langAdvanced = "Napredna";
 $langSearch = "Pretraga";
 $langSearchCrit = "Prostor nie uporabite za opisne rije&#269;i, jedna rije&#269; po retku!";

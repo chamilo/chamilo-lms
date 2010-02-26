@@ -3,7 +3,7 @@
 for more information: see languages.txt in the lang folder.
 */
 $langInvalidId = "Prijavljivanje nije uspelo  pogreno korisni&#269;ko ime ili lozinka";
-$langWelcome = "kursevi koji su navedeni dole su besplatni. Za ostale kurseve morate da imate korisni&#269;ko ime i lozinku, koju moete da dobijete klikom na \'registracija\'. Predava&#269;i mogu da kreiraju okruenje kursa klikom na registracija tako&#273;e, ali selekt";
+$langWelcome = "kursevi koji su navedeni dole su besplatni. Za ostale kurseve morate da imate korisni&#269;ko ime i lozinku, koju moete da dobijete klikom na 'registracija'. Predava&#269;i mogu da kreiraju okruenje kursa klikom na registracija tako&#273;e, ali selekt";
 $langPass = "Lozinka";
 $langEnter = "U&#273;i";
 $langReg = "Registracija";

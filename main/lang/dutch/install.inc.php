@@ -19,7 +19,7 @@ $langAdminEmail = "E-mailadres administrator";
 $langAdminName = "Naam administrator";
 $langAdminSurname = "Familienaam administrator";
 $langAdminLogin = "Inlognaam administrator";
-$langAdminPass = "Wachtwoord administrator (<font color=\\"red\\">aangewezen te wijzigen</font>)";
+$langAdminPass = "Wachtwoord administrator (<font color=\"red\">aangewezen te wijzigen</font>)";
 $langEducationManager = "Projectleider";
 $langCampusName = "Campustitel";
 $langDBSettingIntro = "Het installatiescript zal de Chamilodatabank(en) aanmaken. Merk op dat Chamilo standaard meerdere databanken aanmaakt. Als u enkel gebruik kan maken van één databank bij uw hosting provider, dan zal Chamilo niet kunnen werken met meerdere databanken en moet u de optie \"Eén databank\" aanduiden.";

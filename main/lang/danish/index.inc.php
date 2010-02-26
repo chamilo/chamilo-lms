@@ -2,7 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
-$langInvalidId = "Fejl ved login.<BR>Hvis du ikke er registreret, brug <a href=claroline/auth/inscription.php>Registrering</a></font color>. <br><br>Du kan få tilsendt dine brugeroplysninger ved at klikke på linket Glemt brugeroplysninger.";
+$langInvalidId = "Fejl ved login.<br />Hvis du ikke er registreret, brug <a href=claroline/auth/inscription.php>Registrering</a></font color>. <br /><br />Du kan få tilsendt dine brugeroplysninger ved at klikke på linket Glemt brugeroplysninger.";
 $langWelcome = "kurser er tilgængelige for alle interesserede. Andre kurser kræver, at du enten er logget ind eller står på kursussidens deltagerliste for at kunne se tilgå siden/siderne.";
 $langPass = "Adgangskode";
 $langEnter = "OK";

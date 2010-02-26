@@ -30,7 +30,7 @@ $langOneByOne = "&#50976;&#51200; &#51649;&#51217; &#46321;&#47197;";
 $langNow = "&#51648;&#44552;";
 $langTutor = "&#53916;&#53552;";
 $langTitular = "&#51200;&#51088;";
-$langAddHereSomeCourses = "<font size=2 face='Arial, Helvetica'><big>과정 목록 수정</big><br><br>수강하고 싶은 과정을 체크하십시오.<br>더 이상 수강하고싶지 않은 과정은 체크를 해제해주십시오.<br> 그 다음 리스트 하단의 Ok를 클릭하십시오.";
+$langAddHereSomeCourses = "<font size=2 face='Arial, Helvetica'><big>과정 목록 수정</big><br /><br />수강하고 싶은 과정을 체크하십시오.<br />더 이상 수강하고싶지 않은 과정은 체크를 해제해주십시오.<br /> 그 다음 리스트 하단의 Ok를 클릭하십시오.";
 $langStudent = "&#54617;&#49373;";
 $langImportUserList = "&#50976;&#51200; &#47785;&#47197; &#48520;&#47084;&#50724;&#44592;";
 $langAddAU = "&#50976;&#51200; &#52628;&#44032;";

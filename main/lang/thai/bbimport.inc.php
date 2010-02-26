@@ -5,9 +5,9 @@ for more information: see languages.txt in the lang folder.
 $langViewCourseMaterialImport = "ŽÙ·ÃÑŸÂÒ¡Ã¢Í§ÃÒÂÇÔªÒ·ÕèšÐ¶Ù¡¹Óà¢éÒÁÒ";
 $langViewExternalLinksImport = "ŽÙÃÒÂ¡ÒÃàª×èÍÁâÂ§ÀÒÂ¹Í¡ ·ÕèšÐ¶Ù¡¹Óà¢éÒÁÒ";
 $langViewForumImport = "ŽÙ¡ÒÃÍÀÔ»ÃÒÂ ·ÕèšÐ¶Ù¡¹Óà¢éÒÁÒ";
-$langImportCourseMaterial = "¹Óà¢éÒ·ÃÑŸÂÒ¡ÃÃÒÂÇÔªÒ(à€Ã×èÍ§Á×Í¢Í§ Blackboard \\"Course Material\\")";
-$langImportExternalLinks = "¹Óà¢éÒÃÒÂ¡ÒÃàª×èÍÁâÂ§(à€Ã×èÍ§Á×Í¢Í§ Blackboard \\"External Links\\")";
-$langImportForum = "¹Óà¢éÒ¡ÒÃÍÀÔ»ÃÒÂ(à€Ã×èÍ§Á×Í¢Í§ Blackboard \\"Discussion Board\\")";
+$langImportCourseMaterial = "¹Óà¢éÒ·ÃÑŸÂÒ¡ÃÃÒÂÇÔªÒ(à€Ã×èÍ§Á×Í¢Í§ Blackboard \"Course Material\")";
+$langImportExternalLinks = "¹Óà¢éÒÃÒÂ¡ÒÃàª×èÍÁâÂ§(à€Ã×èÍ§Á×Í¢Í§ Blackboard \"External Links\")";
+$langImportForum = "¹Óà¢éÒ¡ÒÃÍÀÔ»ÃÒÂ(à€Ã×èÍ§Á×Í¢Í§ Blackboard \"Discussion Board\")";
 $langToolInfo = "à€Ã×èÍ§Á×Í¹Óà¢éÒÃÒÂÇÔªÒ¢Í§ Blackboard 5.5(Course Material, Discussion Board, and External Links)";
 $langToolName = "¹Óà¢éÒÃÒÂÇÔªÒšÒ¡ Blackboard";
 $langSelectCoursePackage = "àÅ×Í¡ªØŽÃÒÂÇÔªÒ";

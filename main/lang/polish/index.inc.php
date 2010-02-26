@@ -2,7 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
-$langInvalidId = "Niew&#322;a&#347;ciwa nazwa u&#380;ytkownika. Je&#347;li nie jeste&#347; zarejestowany, wype&#322;nij <a href=\'claroline/auth/inscription.php\'>formularz rejestracyjny</a></font color>";
+$langInvalidId = "Niew&#322;a&#347;ciwa nazwa u&#380;ytkownika. Je&#347;li nie jeste&#347; zarejestowany, wype&#322;nij <a href='claroline/auth/inscription.php'>formularz rejestracyjny</a></font color>";
 $langWelcome = "kursów dost&#281;pnych bez ogranicze&#324; znajduje si&#281; poni&#380;ej. Inne kursy wymagaj&#261; podania Nazwy u&#380;ytkownika i has&#322;a. Nowy u&#380;ytkownik musi zarejestrowa&#263; si&#281; w serwerze (Rejestracja). Prowadz&#261;cy zaj&#281;cia m";
 $langPass = "Has&#322;o";
 $langEnter = "Wej&#347;cie";

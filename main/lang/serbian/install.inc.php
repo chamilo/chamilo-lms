@@ -19,7 +19,7 @@ $langAdminEmail = "E-mail administratora";
 $langAdminName = "Ime administratora";
 $langAdminSurname = "Prezime administratora";
 $langAdminLogin = "Korisni&#269;ko ime administratora";
-$langAdminPass = "Lozinka administratora (<font color=\\"red\\">moda &#263;ete ovo eleti da promenite</font>)";
+$langAdminPass = "Lozinka administratora (<font color=\"red\">moda &#263;ete ovo eleti da promenite</font>)";
 $langEducationManager = "Administrator projekta";
 $langCampusName = "Ime vaeg portala";
 $langDBSettingIntro = "Instalacioni skript &#263;e da kreira Chamiloovu glavnu bazu. Molim Vas, obratite panju da &#263;e Chamilo morati da kreira vie baza. Ako Vam va Hosting servis dozvoljava da koristite samo jednu bazu Chamilo ne&#263;e raditi osim ako ne odaberete opcij";
@@ -50,7 +50,7 @@ $langDokeosURL = "URL Chamiloa";
 $langUserDB = "Baza korisnika";
 $ReadThoroughly = "Pro&#269;itajte paljivo.";
 $DokeosNeedFollowingOnServer = "Da bi Chamilo radio potrebno je da imate slede&#263;e na vaem serveru:";
-$WarningExistingDokeosInstallationDetected = "Upozorenje!<br>Instaler je otkrio postoje&#263;u Chamilo platformu na vaem sistemu.";
+$WarningExistingDokeosInstallationDetected = "Upozorenje!<br />Instaler je otkrio postoje&#263;u Chamilo platformu na vaem sistemu.";
 $NewInstallation = "Nova Instalacija";
 $CheckDatabaseConnection = "Proveri konekciju sa bazom";
 ?>

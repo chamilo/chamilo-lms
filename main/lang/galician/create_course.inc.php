@@ -4,10 +4,10 @@ for more information: see languages.txt in the lang folder.
 */
 $langProfessors = "Profesor(es)";
 $langExplanation = "Unha vez que vostede prema OK, crearase unha web que incluirá Foro, Lista de ligazóns, Exercicios, Axenda, Lista de documentos... Por medio do seu código de identificación, vostede poderá modificar o seu contido";
-$langEmpty = "Vostede non cubriu todos os campos.<br>Utilice o botón de retorno do seu navegador e volte empezar.<br>Se vostede non coñece o código do seu curso, consulte o programa do curso";
-$langCodeTaken = "Este código do curso utilízase xa noutro curso.<br>Utilice o botón de retorno do seu navegador e volva empezar.";
+$langEmpty = "Vostede non cubriu todos os campos.<br />Utilice o botón de retorno do seu navegador e volte empezar.<br />Se vostede non coñece o código do seu curso, consulte o programa do curso";
+$langCodeTaken = "Este código do curso utilízase xa noutro curso.<br />Utilice o botón de retorno do seu navegador e volva empezar.";
 $langFormula = "Cordialmente, o voso profesor";
-$langMessage = "No momento en que vostede suprima o foro \\"Foro de probas\\", igualmente suprimirase este tema que non ten máis ca esta mensaxe.";
+$langMessage = "No momento en que vostede suprima o foro \"Foro de probas\", igualmente suprimirase este tema que non ten máis ca esta mensaxe.";
 $langExerciceEx = "Exemplo de exercicio";
 $langAntique = "Historia da filosofía clásica";
 $langSocraticIrony = "A ironía socrática consiste en...";
@@ -32,7 +32,7 @@ $langAgendaTitle = "Martes 11 de decembro 14h00 : curso de filosofía (1) - Loca
 $langAgendaText = "Introdución xeral á filosofía e explicación sobre o funcionamiento do curso";
 $langMicro = "Entrevistas na rúa";
 $langGoogle = "Potente motor de búsqueda";
-$langIntroductionText = "Este é o texto de introdución do seu curso. Para cambialo, faga clic en \\"modificar\\" (só administradores do curso).";
+$langIntroductionText = "Este é o texto de introdución do seu curso. Para cambialo, faga clic en \"modificar\" (só administradores do curso).";
 $langIntroductionTwo = "Esta páxina permite a cada estudante ou grupo de estudantes colocar un documento na web do curso. Envíe documentos en formato HTML unicamente se estes non conteñen imáxes.";
 $langCourseDescription = "Escriba aquí a descrición que aparecerá na lista dos cursos";
 $langProfessor = "Profesor";

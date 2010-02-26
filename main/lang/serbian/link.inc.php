@@ -37,7 +37,7 @@ $langCsvFileLine1 = "... - linija 1 =";
 $langCsvLinesFailed = "linija/e nije uspela da uveze link (nema URL-a ili nema naslova)";
 $langCsvLinesOld = "postoje&#263;i link/ovi su aurirani (isti URL i kategorija)";
 $langCsvLinesNew = "Novi link je kreiran.";
-$langCsvExplain = "Fajl treba da izgleda ovako: <blockquote><pre> <b>URL</b>;kategorija;<b>title</b>;opis; <b>http://www.aaa.org/...</b>;Važni linkovi;<b>Ime 1</b>;Opis 1; <b>http://www.bbb.net/...</b>;;<b>Ime  2</b>;\"Opis 2\"; </pre></blockquote> Ako su URL i kategorija ist kao i postojeći link, njegovo ime i opis su ažurni. U svim drugim slučajevima kreiran je novi link.<br><br> Bold = obavezno. polja mogu da budu bilokakvig redosleda a imena velikim ili malim slovima. Dodatna polja su dodata u opis. Separator: zarez ili tačka i zarez. Vrednosti mogu da budu citirane ali ne imena polja. Neki [b]HTML tagovi[/b] mogu da se uvezu u polje Opis.";
+$langCsvExplain = "Fajl treba da izgleda ovako: <blockquote><pre> <b>URL</b>;kategorija;<b>title</b>;opis; <b>http://www.aaa.org/...</b>;Važni linkovi;<b>Ime 1</b>;Opis 1; <b>http://www.bbb.net/...</b>;;<b>Ime  2</b>;\"Opis 2\"; </pre></blockquote> Ako su URL i kategorija ist kao i postojeći link, njegovo ime i opis su ažurni. U svim drugim slučajevima kreiran je novi link.<br /><br /> Bold = obavezno. polja mogu da budu bilokakvig redosleda a imena velikim ili malim slovima. Dodatna polja su dodata u opis. Separator: zarez ili tačka i zarez. Vrednosti mogu da budu citirane ali ne imena polja. Neki [b]HTML tagovi[/b] mogu da se uvezu u polje Opis.";
 $langLinkUpdated = "Link je auriran";
 $langAll_Link_Deleted = "Link je obrisan";
 $langOnHomepage = "Prikai link na po&#269;etnoj stranici";

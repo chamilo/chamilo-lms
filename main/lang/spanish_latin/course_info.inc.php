@@ -65,13 +65,13 @@ $langSubscription = "Subscripción";
 $langCourseAccess = "Accso al curso";
 $langConfirmBackup = "Realmente desea hacer una copia de resguardo del curso";
 $langCreateSite = "Crear un curso";
-$langRestoreDescription = "El curso está en un archivo que puedes seleccionar de abajo.<br><br>Cuando hagas clic en \\"Restaurar\\", el archivo se descomprimirá y el curso se creará de nuevo.";
-$langRestoreNotice = "Este script no permite automáticamente restaurar los usuarios, pero los datos guardados de los \\"usuarios.csv\\" son suficientes para el administrador.";
+$langRestoreDescription = "El curso está en un archivo que puedes seleccionar de abajo.<br /><br />Cuando hagas clic en \"Restaurar\", el archivo se descomprimirá y el curso se creará de nuevo.";
+$langRestoreNotice = "Este script no permite automáticamente restaurar los usuarios, pero los datos guardados de los \"usuarios.csv\" son suficientes para el administrador.";
 $langAvailableArchives = "Lista de archivos disponible";
 $langNoArchive = "No ha seleccionado ningún archivo";
 $langArchiveNotFound = "No se encontró ningún archivo";
 $langArchiveUncompressed = "Se descomprimió y se instaló el archivo";
-$langCsvPutIntoDocTool = "El archivo \\"usuarios.csv\\" se puso dentro de la herramienta documentos";
+$langCsvPutIntoDocTool = "El archivo \"usuarios.csv\" se puso dentro de la herramienta documentos";
 $langBackH = "Regresar a página de inicio";
 $langOtherCategory = "Otra categoría";
 $langAllowedToUnsubscribe = "Los usuarios pueden retirarse de este curso";
@@ -93,7 +93,7 @@ $AllowUserEditAnnouncementActivate = "Permitir la edición por los usuarios";
 $AllowUserEditAnnouncementDeactivate = "Desactivar la edición por los usuarios";
 $OrInTime = "o dentro";
 $CourseRegistrationPassword = "Contraseña de registro en el curso";
-$langDescriptionDeleteCourse = "Haga clic en este enlace para eliminar cualquier rastro del curso en el servidor...<br><br>¡ Esta funcionalidad debe ser usada con extrema precaución !";
-$langDescriptionCopyCourse = "Chamilo introduce la posibilidad de copiar, en parte o completamente, un curso en otro que inicialmente debe estar vacío.<br><br>La única condición es tener un curso que contenga algunos documentos, anuncios, foros... y un segundo curso que no contenga lo";
+$langDescriptionDeleteCourse = "Haga clic en este enlace para eliminar cualquier rastro del curso en el servidor...<br /><br />¡ Esta funcionalidad debe ser usada con extrema precaución !";
+$langDescriptionCopyCourse = "Chamilo introduce la posibilidad de copiar, en parte o completamente, un curso en otro que inicialmente debe estar vacío.<br /><br />La única condición es tener un curso que contenga algunos documentos, anuncios, foros... y un segundo curso que no contenga lo";
 $DescriptionRecycleCourse = "Esta herramienta vacía el curso de los elementos seleccionados, o todo el conjunto de los elementos que contiene. Quita los documentos, los foros, enlaces Este procedimiento puede realizarse al final de una formación, o de un año académico. ¡ Por supuest";
 ?>

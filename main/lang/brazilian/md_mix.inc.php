@@ -4,7 +4,7 @@ for more information: see languages.txt in the lang folder.
 */
 $langTool = "Metadados";
 $langClickKw = "Clique em uma palavra chave na árvore para selecioná-la ou deselecioná-la.";
-$langKwHelp = "<br/> Clique no botão '+' para abrir, no botão '-' para fechar, no botão '++' para abrir todos, no botão '--' para fechar todos.<br/> <br/> Limpe todas as palavras-chave selecionadas fechando a árvore e abrindo-a novamente com o botão '+'.<br/> Segurando o Alt e clicando no botão '+' pesquisa as palavras-chave originais na árvore.<br/> <br/> Segurando o Alt e clicando na palavra-chave seleciona uma palavra-chave sem termos abrangentes ou desmarca uma palavra-chave com termos abrangentes.<br/> <br/> Se você modificar a língua da descrição, não adicione palavras-chave ao mesmo tempo.<br/> <br/>";
+$langKwHelp = "<br /> Clique no botão '+' para abrir, no botão '-' para fechar, no botão '++' para abrir todos, no botão '--' para fechar todos.<br /> <br /> Limpe todas as palavras-chave selecionadas fechando a árvore e abrindo-a novamente com o botão '+'.<br /> Segurando o Alt e clicando no botão '+' pesquisa as palavras-chave originais na árvore.<br /> <br /> Segurando o Alt e clicando na palavra-chave seleciona uma palavra-chave sem termos abrangentes ou desmarca uma palavra-chave com termos abrangentes.<br /> <br /> Se você modificar a língua da descrição, não adicione palavras-chave ao mesmo tempo.<br /> <br />";
 $langAdvanced = "Avançado";
 $langSearch = "Procurar";
 $langSearchCrit = "Uma palavra por linha";

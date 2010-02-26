@@ -32,12 +32,12 @@ $langChoice = "联买";
 $langCorrect = "赖豺";
 $langPossAnsw = "啼に滦しての联买搀批腕眶";
 $langStudAnsw = "豺批荚の粗般眶";
-$langDetermine = "Determine yourself the scoring weight through editing the table below. Click then on \\"Ok\\"";
+$langDetermine = "Determine yourself the scoring weight through editing the table below. Click then on \"Ok\"";
 $langNonNumber = "A non numeric value in";
 $langReplaced = "has been introduced. It has been replaced by 0";
 $langSuperior = "A value bigger than 20 in";
 $langRep20 = "has been introduced. It has been replaced by 20";
 $langDefault = "Default values *";
-$langDefComment = "* If you click on \\"Default values\\", your ancient values will be permanently deleted.";
+$langDefComment = "* If you click on \"Default values\", your ancient values will be permanently deleted.";
 $langScoreGet = "Numbers in black";
 ?>

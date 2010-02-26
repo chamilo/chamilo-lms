@@ -9,7 +9,7 @@ $langDropboxContent = "<p>Apmaiņas kaste ir Satura pārvaldības rīks savstarp
 $langHHome = "Pal&#299;ginform&#257;cija par Kursa apraksta lapu";
 $langHomeContent = "<p>Kursa mājaslapā ir parādīti da˛ādi rīki: iepazīstina";
 $langHOnline = "Pal&#299;ginform&#257;cija par Tiesaistes Konferences sist&#275;mu";
-$langOnlineContent = "<br><span style=\"font-weight: bold;\">Ievads</span><br>  <br>  <div style=\"margin-left: 40px;\">Dokeos tie";
+$langOnlineContent = "<br /><span style=\"font-weight: bold;\">Ievads</span><br />  <br />  <div style=\"margin-left: 40px;\">Dokeos tie";
 $langHClar = "Pal&#299;ginform&#257;cija par Chamilo";
 $langHDoc = "Pal&#299;ginform&#257;cija par Dokumentiem";
 $langDocContent = "<p>Dokumentu rīks ir tāds pats kā datņu pārvaldnieks tavā datorā.</p><p>Tu vari izveidot vienkār";

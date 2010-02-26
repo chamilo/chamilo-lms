@@ -3,7 +3,7 @@
 for more information: see languages.txt in the lang folder.
 */
 $langInvalidId = "Innlogging feilet - ugyldig brukernavn og passord.";
-$langWelcome = "kursene nedenfor er fritt tilgjengelig. Andre kurs krever et brukernavn og et passord. Disse kan du gjøre tilgjengelig ved å klikke på \'registrering\'. Lærere kan opprette kursområder ved å klikke på registrering. Dette gjøres ved å velge \'Opprett kurso";
+$langWelcome = "kursene nedenfor er fritt tilgjengelig. Andre kurs krever et brukernavn og et passord. Disse kan du gjøre tilgjengelig ved å klikke på 'registrering'. Lærere kan opprette kursområder ved å klikke på registrering. Dette gjøres ved å velge 'Opprett kurso";
 $langPass = "Passord";
 $langEnter = "Logg inn";
 $langReg = "Registrering";

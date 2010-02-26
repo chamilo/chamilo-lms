@@ -4,7 +4,7 @@ for more information: see languages.txt in the lang folder.
 */
 $Announcement = "Willaykuna";
 $langAnnEmpty = "Willaykunaqa pichachikunkuña";
-$AnnouncementModified = "Willaqa t\'ijrapasqañan";
+$AnnouncementModified = "Willaqa t'ijrapasqañan";
 $AnnouncementAdded = "Willaqa yapachikunña";
 $AnnouncementDeleted = "Willayqa pichasqaña";
 $AnnouncementPublishedOn = "Reqsipachiy kay";
@@ -17,8 +17,8 @@ $EmailOption = "Apachiy e-chaskipi kay willanata yachachinaq haykuqmasikunaman";
 $langOn = "Kashan";
 $langRegUser = "yachachinapi qelqachikusqa haykuqmasikuna";
 $langUnvalid = "e-chaskiykiqa mana allinchu utaq manaraq churankichu ima e-chaskitapas";
-$langModifAnn = "T\'ijray kay willayta";
-$langModify = "t\'ijrapay";
+$langModifAnn = "T'ijray kay willayta";
+$langModify = "t'ijrapay";
 $langDelete = "Pichay";
 $langTitle = "Sutinchaynin";
 $langHelp = "yanapa";

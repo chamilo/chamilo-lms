@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langMdCallingTool = "Документи";
 $langMdTitle = "Наименование на обекта";
 $langMdDescription = "За да запишете тази информация, натиснете \"Записване\"";
@@ -18,7 +21,7 @@ $langCoverage = "Покрива";
 $langCoverageTip = "например: бакалавър по...";
 $langKwNote = "Ако променяте езика на описанието, не добавайте в същото време ключови думи.";
 $langClickKw = "Щракнете ключова дума от дървото, за да я изберете или за да я откажете.";
-$langKwHelp = "<br/>Предназначение на бутоните: \"+\" - за отваряне, \"-\" - за затваряне, \"++\" за отваряне на всички, \"--\" - за затваряне на всички.<br/><br/>Ако променяте езика на описанието, не добавяйте в същото време ключови думи.<br/><br/>";
+$langKwHelp = "<br />Предназначение на бутоните: \"+\" - за отваряне, \"-\" - за затваряне, \"++\" за отваряне на всички, \"--\" - за затваряне на всички.<br /><br />Ако променяте езика на описанието, не добавяйте в същото време ключови думи.<br /><br />";
 $langRights = "Права за ползване";
 $langRightsTip = "Опишете в свободен текст";
 $langVersion = "Версия";
@@ -42,3 +45,4 @@ $langCosts = ":no:без заплащане,, yes:срещу заплащане"
 $langCopyrights = ":yes:запазени права,, no:свободен";
 $langFormats = ":text/plain;windows-1251:text/plain;windows-1251,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;windows-1251,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;windows-1251:XML;windows-1251,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP";
 $langLngResTypes = ":exercise:тест (упражнение),,      simulation:симулация,,      questionnaire:въпросник,,      diagram:диаграма,,      figure:фигура,,      graph:графика,,      index:индекс,,      slide:слайд,,      table:таблица,,      narrative text:обзор,,      exam:изпит,,      experiment:експеримент,,      problem statement:постановка на проблем,,      self assessment:самостоятелно оценяване,,      lecture:лекция";
+?>

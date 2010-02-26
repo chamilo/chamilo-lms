@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $AgendaAdd = "Aggiungi evento";
 $ShowAllEvents = "Tutti gli eventi";
 $ShowCurrent = "Eventi del mese";
@@ -48,11 +51,11 @@ $UserGroupFilter = "Filtra sulla base dei gruppi/utenti";
 $ShowAll = "Mostra tutto";
 $Print = "Stampa";
 $MyTextHere = "Scrivi il testo";
-$CopiedAsAnnouncement = "Copiato come avviso ";
+$CopiedAsAnnouncement = "Copiato come avviso";
 $NewAnnouncement = " Nuovo avviso";
-$AddAnnouncement = "Aggiungi come avviso ";
+$AddAnnouncement = "Aggiungi come avviso";
 $UpcomingEvent = "Prossimo evento";
-$RepeatedEvent = "Evento ripetuto ";
+$RepeatedEvent = "Evento ripetuto";
 $RepeatType = "Tipo di ripetizione";
 $RepeatDaily = "Ogni giorno";
 $RepeatWeekly = "Ogni settimana";
@@ -72,3 +75,4 @@ $AgendaSortChronologicallyDown = "Discendente";
 $ItemForUserSelection = "Elenco selezione utenti";
 $IsNotiCalFormatFile = "Il file non è in formato iCal";
 $RepeatEvent = "Evento ripetuto";
+?>

@@ -1,14 +1,17 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $Tools = "Unelte";
 $SendWork = "Incarcati fisierul";
-$langTooBig = "Nu ai ales sa trimti nici un fisier, sau este prea mare.";
+$langTooBig = "Nu ati selectat nici un fisier, sau acesta este prea mare.";
 $langListDeleted = "Lista a fost stearsa";
 $langDocModif = "Titlul a fost modificat";
 $langDocAdd = "Fisierul a fost adaugat in lista celor publicate.";
 $langDocDel = "Fisierul este sters.";
 $langTitleWork = "Numele fisierului";
 $langAuthors = "Autor";
-$langDelList = "Sterge lista";
+$langDelList = "Sterge toata lista";
 $langWorkDelete = "Sterge";
 $langWorkModify = "Modifica";
 $langWorkConfirmDelete = "Sigur sterg acest fisier ?";
@@ -17,11 +20,11 @@ $lang_default_upload = "Setarile initiale de vizibilitate a fisierelor nou posta
 $lang_new_visible = "Noile documente sunt vizibile tuturor utilizatorilor";
 $lang_new_unvisible = "Noile documente sunt vizibile doar administratorului cursului";
 $lang_doc_unvisible = "Fisierele dumneavoastra sunt vizibile doar profesorului acestui curs si nu vor fi vizibile pentru dvs.";
-$langDelLk = "Chiar vrei sa stergi acest link?";
+$langDelLk = "Sterge linkul";
 $langMustBeRegisteredUser = "Numai utilizatorii inregistrati la acest curs pot publica documente.";
 $langListDel = "Sterge lista";
-$langNameDir = "Numele noului director";
-$langFileExists = "Operatia este imposibila, un fisier cu acelasi nume deja exista.";
+$langNameDir = "Redenumeste directorul";
+$langFileExists = "Fisierul exista";
 $CreateDirectory = "Creaza directorul";
 $langCurrentDir = "Director curent";
 $UploadADocument = "Incarcati documentul";
@@ -30,7 +33,7 @@ $DocumentDeleted = "Document sters";
 $SendMailBody = "Un utilizator a postat un document in instrumentul de publicare al studentilor din cursul dvs";
 $DirDelete = "Sterge directorul";
 $ValidateChanges = "Valideaza modificarile";
-$FolderUpdated = "Dosarul a fost actualizat.";
+$FolderUpdated = "Folder actualizat";
 $EndsAt = "Se termina la (inchidere completa)";
 $QualificationOfAssignment = "Calificare pentru tema";
 $MakeQualifiable = "Activare calificare";
@@ -47,9 +50,9 @@ $EnableExpiryDate = "Activare data limita";
 $EnableEndDate = "Activare data de final";
 $IsNotPosibleSaveTheDocument = "Documentul nu a putut fi salvat";
 $EndDateCannotBeBeforeTheExpireDate = "Data de terminare nu poate fi inainte o data de expirare.";
-$SelectAFilter = "Selectează un filtru";
+$SelectAFilter = "Selecteaz&#259; un filtru";
 $FilterByNotExpired = "Filtrarea: inca nu e terminata";
-$FilterAssignments = "Filtreaza ";
+$FilterAssignments = "Filtreaza";
 $WeightNecessary = "E nevoie sa dati un scor minim.";
 $QualificationOver = "Scorul";
 $ExpiryDateAlreadyPassed = "Data de inchidere e expirata.";
@@ -71,3 +74,4 @@ $FolderEdited = "Dosarul a fost modificat";
 $UpdateWork = "sarcina de lucru";
 $MakeAllPapersInvisible = "Faceti toate documentele invizibile";
 $MakeAllPapersVisible = "Faceti toate documentele vizibile";
+?>

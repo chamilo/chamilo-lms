@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $TermAddNew = "Добавяне на термин";
 $TermName = "Термин";
 $TermDefinition = "Дефиниция";
@@ -20,3 +23,4 @@ $TableView = "Показване като таблица";
 $GlossaryTermAlreadyExistsYouShouldEditIt = "Този термин вече съществува. Не може да се добавят други негови дефиниции.";
 $GlossaryManagement = "Терминологичен речник";
 $TermMoved = "Редът на термина е променен.";
+?>

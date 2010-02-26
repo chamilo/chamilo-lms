@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $ModifInfo = "Configuración del cursu";
 $langModifDone = "Les carauterístiques modificárense";
 $langDelCourse = "Esborrar el sitiu web d'esti cursu";
@@ -6,13 +9,13 @@ $langProfessors = "Profesores";
 $langFaculty = "Categoría";
 $langConfidentiality = "Confidencialidá";
 $langPublic = "Entrada pública ensin identificación (dende la páxina d'entamu del campus)";
-$langUnsubscription = "Anular matricula";
+$langUnsubscription = "Anular matrícula";
 $langPrivOpen = "Accesu priváu, matrícula abierta";
-$langPrivate = "Priváu - entrada permitida namás a los matriculaos nel cursu";
+$langPrivate = "Accesu priváu, matrícula cerrada (web acutada pa les persones qu'apaecen nel llistáu<a href=../user/user.php>usuarios</a>)";
 $langForbidden = "Usté ta ensin rexistrar como responsable d'esti cursu";
-$CourseAccessConfigTip = "Por defeutu el cursu ye públicu, pero definir el nivel de confidencialidá nos botones d'enriba.";
-$langOpenToTheWorld = "Abiertu - Entrada autorizada a tol mundu";
-$OpenToThePlatform = "Abiertu - entrada permitida namás a los usuarios rexistraos na plataforma";
+$CourseAccessConfigTip = "Por defeutu'l so cursu ye públicu, pero pue definir otru nivel de confidencialidá coles opciones qu'apaecen más enriba.";
+$langOpenToTheWorld = "Públicu - accesu permitíu a tol mundu";
+$OpenToThePlatform = "Públicu - accesu permitíu namás a usuarios rexistraos na plataforma";
 $langOpenToThePlatform = "Públicu - accesu permitíu namás a los usuarios rexistraos na plataforma";
 $langTipLang = "Esti va ser l'idioma que van ver los visitantes del cursu.";
 $langVid = "Videu";
@@ -58,11 +61,11 @@ $langExpirationDate = "Acabáu";
 $langPostPone = "Aplazáu";
 $langLastEdit = "Última edición";
 $langLastVisit = "Última visita";
-$langSubscription = "Matriculación";
+$langSubscription = "Los usuarios puen matriculase ellos mesmos";
 $langCourseAccess = "Entrada al cursu";
 $langConfirmBackup = "¿ De verdá quier facer una copia de seguridá del cursu ?";
 $langCreateSite = "Crear un cursu";
-$langRestoreDescription = "El cursu ta nun archivu que se pue seleicionar embaxu. <br><br>Si calca en 'Restaurar', l'archivu va descomprimise y el cursu va volver crease.";
+$langRestoreDescription = "El cursu ta nun archivu que se pue seleicionar embaxu. <br /><br />Si calca en 'Restaurar', l'archivu va descomprimise y el cursu va volver crease.";
 $langRestoreNotice = "Esti script nun permite restaurar de manera automática los usuarios, pero los datos guardaos de 'usuarios.csv' son bastantes pal alministrador.";
 $langAvailableArchives = "Llistáu d'archivos disponible";
 $langNoArchive = "Nun escoyó nengún archivu";
@@ -73,7 +76,7 @@ $langBackH = "tornar a la páxina d'entamu";
 $langOtherCategory = "Otra categoría";
 $langAllowedToUnsubscribe = "Los usuarios puen anular la so matrícula nesti cursu";
 $langNotAllowedToUnsubscribe = "Los usuarios nun puen anular la so matrícula nesti cursu";
-$langCourseVisibilityClosed = "Pelláu - entrada permitida namás al alministrador del cursu";
+$langCourseVisibilityClosed = "Peslláu. A esti cursu namás pue entrar l'alministrador del cursu";
 $CourseVisibilityClosed = "Peslláu - nun hai accesu a esti cursu";
 $CourseVisibilityModified = "Modificáu (axustes más detallaos especificaos pel traviés de roles-permisos del sistema)";
 $WorkEmailAlert = "Avisar per corréu electrónicu del unvíu d'un trabayu";
@@ -90,8 +93,8 @@ $AllowUserEditAnnouncementActivate = "Dar permisu pa que los usuarios editen les
 $AllowUserEditAnnouncementDeactivate = "Desactivar la edición d'anuncies polos usuarios";
 $OrInTime = "o dientro'l plazu";
 $CourseRegistrationPassword = "Seña de rexistru nel cursu";
-$langDescriptionDeleteCourse = "Calque equí pa esborrar dafechu'l cursu nel servidor....<br><br>Esta función debe usase con munchu cuidáu.";
-$langDescriptionCopyCourse = "Chamilo permite copiar, parcial o dafechu, un cursu n'otru. Pa facelo'l cursu de destín tien de tar vacíu. <br><br>La única condición ye tener un cursu que tenga dalgunos documentos, anuncies, foros... y un segundu cursu que nun tenga los elementos del primeru.";
+$langDescriptionDeleteCourse = "Calque equí pa esborrar dafechu'l cursu nel servidor....<br /><br />Esta función debe usase con munchu cuidáu.";
+$langDescriptionCopyCourse = "Chamilo permite copiar, parcial o dafechu, un cursu n'otru. Pa facelo'l cursu de destín tien de tar vacíu. <br /><br />La única condición ye tener un cursu que tenga dalgunos documentos, anuncies, foros... y un segundu cursu que nun tenga los elementos del primeru.";
 $DescriptionRecycleCourse = "Esta utilidá esanicia dafechu o parcialmente los conteníos de les distintes ferramientes d'un cursu. Esborra documentos, foros, enllaces.... Esta utilidá pue executase a la fin d'una aición formativa o d'un añu académicu. Enantes \"reciclar\" tenga cuidáu y faiga una copia seguridá completa del cursu.";
 $QuizEmailAlert = "Avisar per corréu electrónicu si s'unvía un exerciciu nuevu";
 $QuizEmailAlertActivate = "Activar l'avisu per corréu electrónicu de que s'unviaren les soluciones a un exerciciu.";
@@ -110,3 +113,4 @@ $NewUserEmailAlert = "Avisar per e-mail de qu'un usuariu nuevu automatriculóse.
 $NewUserEmailAlertEnable = "Activar l'avisu per e-mail pal profesor de qu'un usuariu nuevu automatriculóse.";
 $NewUserEmailAlertToTeacharAndTutor = "Activar l'avisu per e-mail pal profesor y pa los tutores de qu'un usuariu nuevu automatriculóse.";
 $NewUserEmailAlertDisable = "Desactivar l'avisu per e-mail de qu'un usuariu nuevu automatriculóse nel cursu.";
+?>

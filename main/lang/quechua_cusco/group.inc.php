@@ -1,9 +1,12 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langNewGroupCreate = "Kamay huñusqakunata";
 $langGroupCreation = "Huñusqakuna kamarina";
 $langCreate = "Kamay";
 $langNewGroups = "musuq(kuna) huñusqa(kuna)";
-$langMax = "askhaninpiqa 20 seq'ekunallata, qhawarichiy. <i>INNOV21</i>";
+$langMax = "Askha.";
 $langGroupPlacesThis = "plazakuna nisqa (munaspapas)";
 $langGroupsAdded = "huñusqa(kuna) kamarisqarisqaña";
 $langGroupDel = "Huñusqa pichasqa";
@@ -14,15 +17,15 @@ $langGroupAllowStudentRegistration = "Haykuqmasikunaqa huñukunkuman mayqen Huñ
 $langGroupTools = "Llank'ana";
 $langGroupDocument = "Qelqa khipukuna";
 $langGroupPropertiesModified = "Huñusqakunaq kamachiyninqa t'ijrapakunña";
-$langGroupSpace = "Huñusqaq k'itin";
-$langGroupName = "Huñusqaq sutin";
-$langGroupDescription = "Huñusqakunaq nisqaynin";
+$langGroupSpace = "Huñusqaq K'itin";
+$langGroupName = "Huñusqaq Sutin";
+$langGroupDescription = "Nisqaynin";
 $langGroupMembers = "Huñusqamanta huñumasikuna";
 $langEditGroup = "T'ijrapay kay huñusqata";
 $Optional = "(munaspapas)";
 $langGroupSettingsModified = "Huñusqaq kamachiynin t'ijrapasqaña";
 $langGroupTooMuchMembers = "Yupa churasqaykiqa sinchi askhan (urapi t'ijrapawaq). 				Huñusqaq ukhu kayninqa mana t'ijrachikunchu";
-$langGroupTutor = "Huñusqaq pusaqnin";
+$langGroupTutor = "Pusaq";
 $langGroupNoTutor = "(ni imapas)";
 $langGroupNone = "(ni imapas)";
 $langGroupNoneMasc = "(ni imapas)";
@@ -33,14 +36,14 @@ $langGroupSelfRegistration = "Qelqachikuna";
 $langGroupSelfRegInf = "qelqachikuy";
 $langRegIntoGroup = "Kay huñusqaman qelqachiway";
 $langGroupNowMember = "Kunanqa ña huñusqamanta huñusmasi kanki";
-$langPrivate = "Privado - acceso autorizado sólo para los miembros del curso";
-$langPublic = "Llapankunapaq haykuna mana reqsipachikuspa (raphi qallariymanta haykuna)";
+$langPrivate = "Hoq runakunallapaq";
+$langPublic = "Llapan runakunapaq";
 $langPropModify = "T'ijrapay kamachinata";
 $langState = "Ima kay";
 $langGroupFilledGroups = "Huñusqakunaqa ña hunt'achikunku sinrimanta haykuqmasikunawan.";
 $langSubscribed = "kay yachachinapi haykuqmasikuna qelqachikusqa";
 $langStudentsNotInThisGroups = "Haykuqmasikunaqa manan kay huñusqamantachu";
-$langQtyOfUserCanSubscribe_PartBeforeNumber = "Haykuqmasiqa masimasikunman kay yupasqallaman ";
+$langQtyOfUserCanSubscribe_PartBeforeNumber = "Haykuqmasiqa masimasikunman kay yupasqallaman";
 $langQtyOfUserCanSubscribe_PartAfterNumber = "  huñusqakuna";
 $langGroupLimit = "Tukuna";
 $langStudentRegAllowed = "Yachaqekunaqa huñukunkuman mayqen Huñusqakunaman munaspa";
@@ -66,7 +69,7 @@ $CreateSubgroups = "Kamariy ukhu-huñusqakunata";
 $CreateSubgroupsInfo = "Kayqa huñusqakunata kasqanmanta musuq huñusqakunata kamarinapaqmi. Niy hayka huñusqakunata munanki chaypitaq llipin qallariq masimasikunan qelqachikunqa. Huñusqa qallariqqa mana t'ijrachikunqachu.";
 $CreateNumberOfGroups = "Kamay";
 $WithUsersFrom = "huñusqakuna hayka huñuymasiyuq";
-$CategoryDeleted = "Mitaqa wañuchisqaña.";
+$CategoryDeleted = "Mitaqa pichasqaña";
 $Empty = "Qasichiy";
 $FillGroup = "Yapay haykuqmasikunata";
 $EmptyGroup = "Llapan haykuqmasikunaq qelqachikusqankuta amaña qelqachiychu";
@@ -88,3 +91,4 @@ $GroupsFromClassesInfo = "Huñusqakuna rak'isqamanta willa";
 $Group = "Huñusqa";
 $ForumOfGroup = "Huñusqaq k'itirimanan";
 $BackToGroupList = "Volver a la lista de grupos";
+?>

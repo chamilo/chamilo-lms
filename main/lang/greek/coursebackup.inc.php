@@ -1,3 +1,7 @@
 <?php
-$langAnnouncements = "Ανακοινώσεις";
-$langCourseDescription = "περιγραφή στο κατάλογο μαθημάτων";
+/*
+for more information: see languages.txt in the lang folder.
+*/
+$langAnnouncements = "Áíáêïéíþóåéò";
+$langCourseDescription = "ðåñéãñáöÞ óôï êáôÜëïãï ìáèçìÜôùí";
+?>

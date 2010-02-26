@@ -1,10 +1,13 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langOnlineConference = "Konference";
 $langWash = "Ryd";
 $langReset = "Nulstil";
 $langSave = "Gem";
 $langRefresh = "Opdater";
-$langIsNowInYourDocDir = "er nu i dokumentmappen. <br><B>Filen er synlig</B>";
+$langIsNowInYourDocDir = "er nu i dokumentmappen. <br /><B>Filen er synlig</B>";
 $langCopyFailed = "Udskrift mislykkedes";
 $langTypeMessage = "Indtast venligst din meddelelse!";
 $langConfirmReset = "Ønsker du virkelig at slette alle meddelelser?";
@@ -33,3 +36,4 @@ $langCallSent = "Anmodning om chat er blevet afsendt. Venter på svar fra bruger
 $langChatDenied = "Dit anmodning blev afvist";
 $Send = "Send";
 $Connected = "Deltager i chatten";
+?>

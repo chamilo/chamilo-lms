@@ -1,10 +1,13 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langOnlineConference = "Konferencija";
 $langWash = "Valyti";
 $langReset = "Iš naujo";
 $langSave = "Išsaugoti";
 $langRefresh = "Perkrauti";
-$langIsNowInYourDocDir = "dabar dokumentų įrankyje. <br><B>Šis failas matomas</B>";
+$langIsNowInYourDocDir = "dabar dokumentų įrankyje. <br /><B>Šis failas matomas</B>";
 $langCopyFailed = "Spausdinimas nepavyko";
 $langTypeMessage = "Prašome rašyti žinutes!";
 $langConfirmReset = "Ar tkrai norite ištrinti visas žinutes?";
@@ -33,3 +36,4 @@ $langCallSent = "Kvietimas išsiųstas. Laukiama patvirtinimo.";
 $langChatDenied = "Jūsų kvietimas atmestas.";
 $Send = "Siųsti";
 $Connected = "Prisijungęs";
+?>

@@ -1,6 +1,9 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $LinkMoved = "A ligação/link foi movida";
-$langLinkName = "Nome da ligação";
+$langLinkName = "Nome da ligação/link";
 $langLinkAdd = "Adicionar uma ligação/link";
 $langLinkAdded = "Foi adicionada uma ligação/link.";
 $langLinkMod = "Editar ligação/link";
@@ -23,7 +26,7 @@ $langNoCategory = "Geral";
 $showall = "Abrir todas as categorias";
 $shownone = "Fechar todas as categorias";
 $langListDeleted = "A lista foi eliminada";
-$langAddLink = "Adicionar uma link/ligação";
+$langAddLink = "Adicionar uma ligação/link";
 $langDelList = "Eliminar lista";
 $langModifyLink = "Editar ligação/link";
 $langCsvImport = "Importar ficheiro CSV";
@@ -34,14 +37,15 @@ $langCsvFileLine1 = "... - linha 1 =";
 $langCsvLinesFailed = "linha(s) que falhou a importar a ligação/link (nenhum URL ou nenhum título).";
 $langCsvLinesOld = "a ligação/link(s) existente foi actualizada (mesma URL e categoria).";
 $langCsvLinesNew = "nova ligação/link(s) criada.";
-$langCsvExplain = "O ficheiro deve ser semelhante: <blockquote><pre><b>URL</b>;categoria;<b>título</b>;descrição;<b>http://www.aaa.org/...</b>;/Links/ligações importantes;<b>Nome 1</b>;Descrição 1;<b>http://www.bbb.net/...</b>;;<b>Nome 2</b>;\"Descrição 2\"; </pre></blockquote> Se a URL e a categoria forem iguais aos de uma ligação existente, o título e descrição são actualizados. Em todos os outros casos é criada uma nova ligação.<br><br>Negrito (bold) = obrigatório. Os campos podem estar ordenados aleatoriamente, e os nomes em maiúsculas ou minúsculas. Os campos adicionais são adicionados à descrição. Separador: vírgula ou ponto e vírgula. Os valores podem ser citados entre \"\", excepto os nomes dos campos. Algumas <b>tags HTML</b> podem ser importadas na descrição do campo.";
+$langCsvExplain = "O ficheiro deve ser semelhante: <blockquote><pre><b>URL</b>;categoria;<b>título</b>;descrição;<b>http://www.aaa.org/...</b>;/Links/ligações importantes;<b>Nome 1</b>;Descrição 1;<b>http://www.bbb.net/...</b>;;<b>Nome 2</b>;\"Descrição 2\"; </pre></blockquote> Se a URL e a categoria forem iguais aos de uma ligação existente, o título e descrição são actualizados. Em todos os outros casos é criada uma nova ligação.<br /><br />Negrito (bold) = obrigatório. Os campos podem estar ordenados aleatoriamente, e os nomes em maiúsculas ou minúsculas. Os campos adicionais são adicionados à descrição. Separador: vírgula ou ponto e vírgula. Os valores podem ser citados entre \"\", excepto os nomes dos campos. Algumas <b>tags HTML</b> podem ser importadas na descrição do campo.";
 $langLinkUpdated = "A ligação/link foi actualizada";
 $langAll_Link_Deleted = "A ligação/link foi eliminada";
 $langOnHomepage = "Apresentar ligação/link na página inicial dos cursos";
 $langShowLinkOnHomepage = "Apresentar esta ligação/link como um ícone na página inicial dos cursos";
-$General = "geral";
+$General = "Geral";
 $SearchFeatureDoIndexLink = "Indexar o título e a descrição da ligação/link?";
 $langSaveLink = "Guardar ligação";
 $langSaveCategory = "Guardar pasta/directório";
 $BackToLinksOverview = "Regressar à vista geral das ligações/links";
-$AddTargetOfLinkOnHomepage = "Seleccione o \"destino\" que a ligação/link na página inicial do curso irá apresentar ";
+$AddTargetOfLinkOnHomepage = "Seleccione o \"destino\" que a ligação/link na página inicial do curso irá apresentar";
+?>

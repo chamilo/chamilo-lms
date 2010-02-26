@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $MyTasks = "Sarcinile mele";
 $FavoriteBlogs = "Blogurile mele favorite";
 $Navigation = "Navigare";
@@ -97,3 +100,4 @@ $TaskDeleted = "Sarcina a fost stearsa";
 $TaskAssignmentDeleted = "Sarcina este eliminata.";
 $CommentDeleted = "Remarca a fost stearsa.";
 $RatingAdded = "Scorul a fost adaugat.";
+?>

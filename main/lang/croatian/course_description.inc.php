@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langCourseProgram = "Opis kolegija";
 $langThisCourseDescriptionIsEmpty = "Ovaj kolegij nije opisan";
 $langEditCourseProgram = "Unesi i izmijeni opis kolegija";
@@ -10,7 +13,8 @@ $langAddCat = "Dodaj kategoriju";
 $langAdd = "Dodaj";
 $langValid = "Prihvati";
 $langBackAndForget = "Odustani";
-$CourseDescriptionUpdated = "Opis kolegija je ažuriran";
+$CourseDescriptionUpdated = "Opis kolegija je auriran";
 $CourseDescriptionDeleted = "Opis kolegija je izbrisan";
-$CourseDescriptionIntro = "Za unos opisa tečaja, odaberite (klik) naslov i popunite odgovarajuća polja.<br><br> Odaberite OK i po potrebi odaberite slijedeći naslov.";
+$CourseDescriptionIntro = "Za unos opisa te&#269;aja, odaberite (klik) naslov i popunite odgovaraju&#263;a polja.<br /><br /> Odaberite OK i po potrebi odaberite slijede&#263;i naslov.";
 $langSaveDescription = "Spremi opis";
+?>

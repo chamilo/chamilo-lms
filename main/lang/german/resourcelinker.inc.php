@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $ResourceAdded = "Unterlagen hinzugefügt. Sie können jetzt zum Pfad zurück kehren oder weiter Unterlagen hinzufügen.";
 $LearningPath = "Lernpfad";
 $LevelUp = "Stufe nach oben";
@@ -21,7 +24,7 @@ $AdValvas = "Anzeigen";
 $Document = "Dokumente";
 $ShowDelete = "Anzeigen / Löschen";
 $IntroductionText = "Einführungstext";
-$CourseDescription = "Kursbeschreibung";
+$CourseDescription = "Kurs-Beschreibung";
 $Groups = "Gruppen";
 $Users = "Nutzer";
 $IntroductionTextAdd = "Eine Seite mit dem Einführungstext zu diesem Kapitel hinzufügen.";
@@ -37,19 +40,20 @@ $StepDeleted1 = "Dieses";
 $StepDeleted2 = "Element wurde gelöscht.";
 $Modify = "ändern";
 $Chapter = "Kapitel";
-$NoAgendaItems = "Keine Einträge vorhanden";
-$AgendaAdd = "Neuen Termin hinzufügen";
-$UserGroupFilter = "Filter für Gruppen/Nutzer";
-$AgendaSortChronologicallyUp = "aufsteigend";
-$ShowCurrent = "Termine in diesem Monat anzeigen";
+$NoAgendaItems = "Keine Agenda vorhanden";
+$AgendaAdd = "Agenda hinzufügen";
+$UserGroupFilter = "Nutzergruppen Filter";
+$AgendaSortChronologicallyUp = "Agenda chronologisch aufsteigend sortieren";
+$ShowCurrent = "Aktuelle Agenda anzeigen";
 $ModifyCalendarItem = "Agenda Eintrag ändern";
-$ItemTitle = "Eintrag Titel";
+$ItemTitle = "Titel";
 $Detail = "Detail";
-$EditSuccess = "Eintrag wurde geändert";
-$AddCalendarItem = "Neuen Termin hinzufügen";
+$EditSuccess = "Änderungen waren erfolgreich";
+$AddCalendarItem = "Agenda Eintrag hinzufügen";
 $AddAnn = "Ankündigung hinzufügen";
 $ForumAddNewTopic = "Forum: Neues Thema hinzufügen";
 $ForumEditTopic = "Forum: Thema bearbeiten";
 $ExerciseAnswers = "Tests: Antworten";
 $ForumReply = "Forum: Antwort";
-$AgendaSortChronologicallyDown = "absteigend";
+$AgendaSortChronologicallyDown = "Agenda chronologisch sortieren (abwärts)";
+?>

@@ -1,8 +1,11 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $ModifyEvaluation = "Modifica le verifiche";
 $CreateLink = "Collega l'attività alla verifica";
 $AddResultNoStudents = "Non ci sono risultati associati a corsisti";
-$FlatView = "Vista piatta";
+$FlatView = "Per corsista";
 $ScoreEdit = "Regole assegnazione del livello";
 $ScoreColor = "Colore del livello";
 $ScoringSystem = "Corrispondenza punti - livello";
@@ -23,7 +26,7 @@ $CategoryName = "Nome della categoria";
 $CourseIndependent = "Non legata a un corso";
 $CourseIndependentEvaluation = "Verifica non legata a un corso";
 $EvaluationName = "Valutazione";
-$Max = "Massimo";
+$Max = "Punteggio";
 $DateEval = "Data della verifica";
 $AddUserToEval = "Aggiungi utenti alla verifica";
 $NewSubCategory = "Nuova sottocategoria";
@@ -86,13 +89,13 @@ $EditResult = "Modifica i risultati";
 $GradebookWelcomeMessage = "Benvenuti al registro delle verifiche. Questo strumento vi permette di determinare un'insieme di obiettivi rilevabili cui assegnare un punteggio (per uno o più corsi) e di aggiungere ulteriori valutazioni personalizzate.";
 $CreateAllCat = "Crea tutte le categorie di corso";
 $AddAllCat = "Categorie aggiunte";
-$StatsStudent = "Statistica di ";
+$StatsStudent = "Statistica di";
 $Results = "Risultati";
 $Certificates = "Certificati";
 $Certificate = "Certificato";
 $ChooseUser = "Scegli gli utenti per questa verifica";
 $FirstLetter = "Iniziale del cognome";
-$UserAdded = "L'utente è stato aggiunto";
+$UserAdded = "Utente aggiunto";
 $ResultEdited = "Risultato modificato";
 $ChooseFormat = "Scegli il formato";
 $OutputFileType = "File di output";
@@ -103,7 +106,7 @@ $TotalUser = "Totale per utente";
 $AverageTotal = "Media complessiva";
 $Evaluation = "Punteggio";
 $EvaluationAverage = "Valutazione media";
-$EditCategory = "Modifica questa categoria";
+$EditCategory = "Modifica la categoria";
 $EditAllWeights = "Modifica tutti i pesi";
 $GradebookQualificationTotal = "Totale";
 $GradebookEvaluationDeleted = "La verifica è stata eliminata come richiesto";
@@ -187,4 +190,5 @@ $ThereIsNotACertificateAvailableByDefault = "Non ci sono certificati di default 
 $CertificateMinimunScoreIsRequiredAndMustNotBeMoreThan = "Per il certificato è necessario un punteggio minimo non minore di";
 $LinkMod = "Salva";
 $EditLink = "Modifica il collegamento";
-$CategoryDeleted = "La categoria è stata eliminata.";
+$CategoryDeleted = "Categoria eliminata";
+?>

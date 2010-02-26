@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $ForumDeleted = "Forum eliminato";
 $ForumCategoryDeleted = "Categoria eliminata";
 $ForumLocked = "Forum bloccato";
@@ -56,7 +59,7 @@ $ForGroup = "Per il gruppo";
 $ThreadLocked = "La discussione è bloccata";
 $NotAllowedHere = "Non hai i permessi di accesso";
 $ReplyAdded = "La risposta è stata aggiunta";
-$EditPost = "Modifica l'articolo";
+$EditPost = "Modifica il messaggio";
 $EditPostStored = "Il messaggio è stato modificato";
 $NewForumPost = "Nuovo messaggio nel forum";
 $YouWantedToStayInformed = "Hai richiesto di ricevere via e-mail un avviso su eventuali risposte all'argomento";
@@ -87,7 +90,7 @@ $LastMessage = "Ultimo messaggio";
 $ForumSearch = "Cerca nel Forum";
 $SearchTerm = "Parola da cercare";
 $ForumSearchResults = "Risultati della ricerca";
-$ForumSearchInformation = "Per cercare più parole usa il simbolo + ";
+$ForumSearchInformation = "Per cercare più parole usa il simbolo +";
 $YouWillBeNotifiedOfNewPosts = "I nuovi messaggi ti verranno notificati via e-mail";
 $YouWillNoLongerBeNotifiedOfNewPosts = "I nuovi messaggi non ti verranno più notificati via e-mail";
 $AddImage = "Aggiungi immagine";
@@ -118,7 +121,9 @@ $Thread = "Argomento";
 $NotifyMe = "Notificami";
 $ConfirmUserQualification = "Conferma la valutazione dell'utente";
 $NotChanged = "Nessun cambiamento";
+$TitleColumnGradebook = "Intestazione di colonna del registro";
 $QualifyThreadGradebook = "Assegna il voto sull'argomento nel registro";
+$QualifyWeight = "Peso della valutazione";
 $QualifyNumeric = "Punteggio massimo";
 $AlterQualifyThread = "Modifica la valutazione della discussione";
 $ForumMoved = "Il forum è stato spostato";
@@ -135,3 +140,4 @@ $BackToForum = "Torna al forum";
 $BackToForumOverview = "Torna all'elenco dei forum";
 $BackToThread = "Torna all'argomento";
 $ForumcategoryLocked = "Categoria di forum bloccata";
+?>

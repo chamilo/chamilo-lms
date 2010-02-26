@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $MoveTo = "Taşınacağı Yer";
 $langDownloadFile = "Sunucuya dosya yükle";
 $langNameDir = "Yeni dizin adı";
@@ -8,7 +11,7 @@ $langCopy = "Ders içeriğini kopyala";
 $langTo = "kopyalanacağı yer";
 $langNoSpace = "Yükleme başarısız. Ya maksimum kotanızı aştınız yada yeterli alan yok.";
 $langDownloadEnd = "Yükleme tamamlandı";
-$langFileExists = "İşlem yapılamıyor.<br>Aynı isimde bir dosya var.";
+$langFileExists = "İşlem yapılamıyor.<br />Aynı isimde bir dosya var.";
 $langImpossible = "İşlem yapılamıyor";
 $langAddComment = "Yorum ekle/değiştir";
 $langDocCopied = "Belge kopyalandı";
@@ -32,7 +35,7 @@ $langFileName = "Dosya ismi";
 $langNoFileName = "Lütfen dosya ismini yazınız";
 $langNoText = "Lütfen metin veya HTML içeriğini yazın";
 $langAreYouSureToDelete = "Silmek istediğinizden emin misiniz?";
-$langScormcontent = "Bu bir SCORM dosyasıdır.<br><input type=button name=scormbutton value='Çalıştır !' onclick='openscorm()'>";
+$langScormcontent = "Bu bir SCORM dosyasıdır.<br /><input type=button name=scormbutton value='Çalıştır !' onclick='openscorm()'>";
 $langScormcontentstudent = "Bu ders SCORM formatındadır.Çalıştırmak için <input type=button name=scormbutton value='TIKLAYIN !' onclick='openscorm()'>";
 $langPublish = "Yayınla";
 $langMissingImagesDetected = "Resimler eksik";
@@ -66,12 +69,12 @@ $langOogieConversionPowerPoint = "Chamilo RAPID : PowerPoint çevrimi";
 $langWelcomeOogieSubtitle = "PowerPoint Sunumundan SCORM Derslerine Çevrim";
 $langAddMetadata = "Metadata görüntüle / Düzenle";
 $langGoMetadata = "Git";
-$langQuotaForThisCourseIs = "Bu dersin kotası";
+$langQuotaForThisCourseIs = "Bu dersin kotas&#305;";
 $langDel = "sil";
 $langUp = "Yukarı";
 $langDate = "Tarih";
 $ShowCourseQuotaUse = "Ders kotasını göster";
-$CourseCurrentlyUses = "Mevcut kullanım";
+$CourseCurrentlyUses = "Mevcut kullan&#305;m";
 $MaximumAllowedQuota = "Limitiniz";
 $PercentageQuotaInUse = "Kullanımdaki kota yüzdesi";
 $PercentageQuotaFree = "Kullanılabilir kota yüzdesi";
@@ -212,3 +215,4 @@ $HelpDefaultDirDocuments = "Bu dizin varsayılan arşivi içerir. Dosyaları tem
 $HelpSharedFolder = "Bu dizin diğer kullanıcıların (yada sizin) editör yardımıyla bir kurs için gönderdiğiniz dosyaları içerir (eğer grup aracından yapılmadıysa). Ön değer olarak öğretmenler tarafından görülebilir fakat diğer öğrenciler tarafından gizlenebilir (dosyalara doğrudan erişim izni olmak kaydıyla). Eğer bir kullanıcı dizini görünür ise diğer kullanıcılar dizinin tüm içeriğini görebilirler.";
 $TemplateImage = "Şanlon ikonu";
 $MoveElement = "Öğeyi taşı";
+?>

@@ -1,5 +1,8 @@
 <?php
-$ResourceAdded = "Yanapaysina yapasqa";
+/*
+for more information: see languages.txt in the lang folder.
+*/
+$ResourceAdded = "Yanapasina yapasqa. Kunanqa ña kutiyta atinki yachanakunaman utaq astawan yapay yanapaysinakunata.";
 $LearningPath = "Yachanakuna";
 $LevelUp = "kuraq t'aqa";
 $AddIt = "Yapay";
@@ -37,19 +40,20 @@ $StepDeleted1 = "Kayta";
 $StepDeleted2 = "imaynaqa pichakunña kay llank'anamanta.";
 $Modify = "t'ijrapay";
 $Chapter = "Sutichasqa";
-$NoAgendaItems = "Manan kanchu ruwaykuna. ";
-$AgendaAdd = "Yapay musuq ruwayta ";
-$UserGroupFilter = "Suysuy huñusqakunamanta/haykuqmasikunamanta";
-$AgendaSortChronologicallyUp = "Allichay ruwaykunata (ñaupaqkuna / chayraqkuna)";
-$ShowCurrent = "Killapi ruwaykuna";
-$ModifyCalendarItem = "T'ijrapay ruwanamanta hoq ruwayta";
-$ItemTitle = "Ruwaypa sutinchaynin";
+$NoAgendaItems = "Manan kanchu ruwaykuna Ruwanapi";
+$AgendaAdd = "Yapay hoq ruwayta Ruwanaman";
+$UserGroupFilter = "Suysuy haykuqmasikunaq huñusqankunata";
+$AgendaSortChronologicallyUp = "Allichay ruwanata ñaupaqmanta kunan kaqkama";
+$ShowCurrent = "Qhawachiy ruwanamanta kuna kaq ruwaykunata";
+$ModifyCalendarItem = "T'ijrapay ruwanapi ruwaykuna kaqta";
+$ItemTitle = "Sutinchaynin";
 $Detail = "Detalles";
-$EditSuccess = "Ruwayqa t'ijrapachikunña";
-$AddCalendarItem = "Yapay musuq ruwayta ruwanaman";
+$EditSuccess = "T'ijrapayqa ruwapakunña";
+$AddCalendarItem = "Yapay ruwanaman hoq ruwayta";
 $AddAnn = "Yapay hoq willayta";
 $ForumAddNewTopic = "K'itirimana: yapay rimanata";
 $ForumEditTopic = "K'itirimana: ruwapay rimanata";
 $ExerciseAnswers = "Llank'ayna: Kutichikuna";
 $ForumReply = "K'itirimana: kutichiy";
-$AgendaSortChronologicallyDown = "Allichay ruwaykunata (chayraqkuna / ñaupaqkuna)";
+$AgendaSortChronologicallyDown = "Allichay ruwanata kunan kaqmanta ñaupaqkama";
+?>

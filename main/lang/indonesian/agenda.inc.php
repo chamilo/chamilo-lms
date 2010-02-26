@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $AgendaAdd = "Tambah Item Baru Agenda";
 $ShowAllEvents = "Tampilkan semua item Agenda";
 $ShowCurrent = "Tampilkan Item Agenda bulan ini";
@@ -47,3 +50,4 @@ $ViewPersonalItem = "Lihat Agenda Personal";
 $UserGroupFilter = "Filter groups/user";
 $ShowAll = "Tampilkan Semua";
 $Print = "Cetak";
+?>

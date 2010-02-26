@@ -1,33 +1,37 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langMdCallingTool = "Dokumenty";
-$langMdTitle = "Názov vyučovacieho predmetu";
-$langMdDescription = "Pre uloženie tejto informácie stlačte Uložiť";
+$langMdTitle = "Názov vyu&#269;ovacieho predmetu";
+$langMdDescription = "Pre uloenie tejto informácie stla&#269;te Uloi&#357;";
 $langTool = "Metadáta dokumentu";
 $langPressAgain = "Znova stlačte \"Uložiť\" ...";
-$langLanguageTip = "jazyk, v ktorom bol vyučovací predmet vytvorený";
+$langLanguageTip = "jazyk, v ktorom bol vyu&#269;ovací predmet vytvorený";
 $langIdentifier = "Identifikátor";
 $langIdentifierTip = "jedinečná identifikácia vyučovacieho predmetu zložená z písmen, číslic, _-.()'!*";
 $langTitleTip = "názov alebo meno a jazyk tohto názvu alebo mena";
-$langDescriptionTip = "popis alebo komentár a jazyk použitý pre popis tohto vyučovacieho predmetu";
-$langKeyword = "Klúčové slová";
-$langKeywordTip = "rozdeliť čiarkami (písmená, číslice, -.)";
-$langKwNote = "Keď zmeníte jazyk popisu, nepridávajte súčasne kľúčové slová.";
-$langClickKw = "Pre označenie alebo zrušenie výberu kľúčového slova kliknite naň v štruktúre.  ";
-$langRights = "Používateľské práva";
-$langRightsTip = "opísať slovami";
+$langDescriptionTip = "popis alebo komentár a jazyk pouitý pre popis tohto vyu&#269;ovacieho predmetu";
+$langKeyword = "K&#318;ú&#269;ové slová";
+$langKeywordTip = "rozdeli&#357; &#269;iarkami (písmená, &#269;íslice, -.)";
+$langKwNote = "Ke&#271; zmeníte jazyk popisu, nepridávajte sú&#269;asne k&#318;ú&#269;ové slová.";
+$langClickKw = "Pre ozna&#269;enie alebo zruenie výberu k&#318;ú&#269;ového slova kliknite na&#328; v truktúre.";
+$langRights = "Pouívate&#318;ské práva";
+$langRightsTip = "opísa&#357; slovami";
 $langVersion = "Verzia";
-$langVersionTip = "číslo alebo popis";
-$langStatusTip = "vybrať zo zoznamu";
-$langCreatedSize = "Vytvorený, veľkosť";
-$langCreatedSizeTip = "RRRR-MM-DD vytvorenia, veľkosť v bytoch";
+$langVersionTip = "&#269;íslo alebo popis";
+$langStatusTip = "vybra&#357; zo zoznamu";
+$langCreatedSize = "Vytvorený, ve&#318;kos&#357;";
+$langCreatedSizeTip = "RRRR-MM-DD vytvorenia, ve&#318;kos&#357; v bytoch";
 $langAuthorTip = "vo formáte VCARD";
 $langFormat = "Formát";
-$langFormatTip = "vybrať zo zoznamu";
+$langFormatTip = "vybra&#357; zo zoznamu";
 $langLocation = "URL/URI";
 $langLocationTip = "Klikom otvoríte predmet";
-$langStore = "Uložiť";
-$langDeleteAll = "Zmazať všetky metadáta";
-$langConfirmDelete = "*Naozaj* chcete zmazať všetky metadáta?";
-$langCourseKwds = "Tento dokument obsahuje kľúčové slová kurzu";
-$langSearch = "Vyhľadať";
+$langStore = "Uloi&#357;";
+$langDeleteAll = "Zmaza&#357; vetky metadáta";
+$langConfirmDelete = "*Naozaj* chcete zmaza&#357; vetky metadáta?";
+$langCourseKwds = "Tento dokument obsahuje k&#318;ú&#269;ové slová kurzu";
+$langSearch = "Vyh&#318;ada&#357;";
 $langSearchCrit = "Jedno slovo v riadku!";
+?>

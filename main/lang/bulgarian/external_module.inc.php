@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langLinkSite = "Добави връзка към началната страница";
 $langSubTitle = "Добавя към началната страница на курса връзка към друг сайт, страница или ресурс.";
 $langAddPage = "Добавяне на страница";
@@ -22,3 +25,4 @@ $NoLinkName = "Връзката няма име.";
 $NoLinkURL = "Връзката няма интернет-адрес.";
 $LinkChanged = "Връзката е променена.";
 $OkSentLink = "Връзката е добавена.";
+?>

@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $lang_already_enrolled = "reeds ingeschreven";
 $lang_my_personnal_course_list = "Mijn cursuslijst";
 $lang_course_enrollment = "Inschrijven/uitschrijven voor cursussen";
@@ -10,7 +13,7 @@ $lang_no_course_to_enroll_in_this_category = "In deze categorie zijn geen cursus
 $lang_or_search_from_the_course_code = "Zoek op cursuscode";
 $lang_search = "Zoek";
 $lang_select_course_among_categories = "Selecteer een cursus uit de categorieën";
-$lang_select_course_in = "Selecteer een cursus van ";
+$lang_select_course_in = "Selecteer een cursus van";
 $lang_select_course_in_search_results = "Selecteer een cursus uit de zoekresultaten";
 $lang_unsubscribe = "Uitschrijven";
 $lang_back_to_my_home_page = "Terug naar mijn thuispagina";
@@ -22,7 +25,7 @@ $lang_back_to_parent_category = "Terug naar vorige categorie";
 $lang_back_to_course_selection = "Terug naar cursusselectie";
 $lang_up = "Terug naar vorige categorie";
 $langCatList = "Categorieën";
-$langCourseList = "Cursuslijst";
+$langCourseList = "Cursussen";
 $Subscribe = "Inschrijven";
 $AlreadySubscribed = "Reeds ingeschreven";
 $CodeMandatory = "Code is een verplicht veld";
@@ -80,3 +83,4 @@ $Collapse = "Verbergen";
 $CourseDetails = "Cursusomschrijving";
 $GroupPendingInvitations = "Zwevende uitnodigingen voor groep";
 $Compose = "Opstellen";
+?>

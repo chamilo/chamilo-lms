@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langScormVersion = "versi";
 $langScormRestarted = "Semua topik kini tidak lengkap.";
 $langScormNoNext = "Ini topik terakhir.";
@@ -35,3 +38,4 @@ $langRemote = "Remote/jauh";
 $langAutodetect = "Auto-detect";
 $langAccomplishedStepsTotal = "Jumlah total langkah yang telah dilakukan";
 $langUnknown = "Tidak diketahui";
+?>

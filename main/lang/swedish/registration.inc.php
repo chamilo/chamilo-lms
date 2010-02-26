@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langShouldBeCSVFormat = "Filen skall vara i CSV format. Lägg inte till mellanrum. Strukturen skall hållas exakt:";
 $langTracking = "Spårning";
 $langEnter2passToChange = "Skriv ditt lösenord 2 ggr för att ändra det, eller också lämnar du fälten tomma.";
@@ -14,7 +17,7 @@ $langLogin = "Logga in";
 $langAction = "Utför";
 $langPreserved = "Bevarad";
 $langDeleted = "Raderad";
-$langAdded = "Tillagd";
+$langAdded = "Lagts till";
 $langConfirmUnsubscribe = "Bekräfta avregistrering";
 $langCourseName = "Kursnamn";
 $langSubscribe = "Registrera";
@@ -38,17 +41,17 @@ $langUserMany = "Importera användarlista via textfil";
 $langOneByOne = "Lägg till användare manuellt";
 $langNow = "nu";
 $langTutor = "Lärare";
-$langTitular = "Ledare";
-$langAddHereSomeCourses = "<font size=2 face='Arial, Helvetica'><big>Ändra i kurslistan</big><br><br>Markera de kurser som du önskar följa.Avmarkera de kurser som du inte önska följa längre. Klicka därefter på Ok längst ner i kurslistan";
-$langStudent = "Student";
+$langTitular = "Titel";
+$langAddHereSomeCourses = "<font size=2 face='Arial, Helvetica'><big>Ändra i kurslistan</big><br /><br />Markera de kurser som du önskar följa.Avmarkera de kurser som du inte önska följa längre. Klicka därefter på Ok längst ner i kurslistan";
+$langStudent = "elev";
 $langImportUserList = "Importera en lista på användare";
 $langAddAU = "Lägg till en användare";
-$langAddedU = "har lagts till. Ett emejl har skickats ut för att ge personen ett användarnamn ";
+$langAddedU = "har lagts till. Ett emejl har skickats ut för att ge personen ett användarnamn";
 $langTheU = "Användaren";
 $langRegYou = "har registrerat dig på denna kurs";
 $langOneResp = "En av kursadministratörerna";
 $langTaken = "är redan upptaget. Välj ett annat.";
-$langUserNo = "Användarnamnet som du valt ";
+$langUserNo = "Användarnamnet som du valt";
 $langFilled = "Du har lämnat några fält tomma.";
 $langInC = "i denna kurs";
 $langRole = "Roll";
@@ -67,12 +70,11 @@ $langNowGoChooseYourCourses = "Du kan nu välja, i listan, de kurser du vill del
 $langMailHasBeenSent = "Ett e-post meddelande har skickats till dig för att hjälpa dig att komma ihåg ditt användarnamn och lösenord.";
 $langPersonalSettings = "Dina personliga inställningar har registrerats och emejlats till dig för att hjälpa dig komma ihåg användarnamn och lösenord.</p>Välj i listan vilka kurser som du vill deltaga i.";
 $langManager = "Ansvarig";
-$langFormula = "Önskar dig, din lärare";
+$langFormula = "Vänliga hälsningar";
 $langProblem = "I händelse av problem, kontakta oss.";
 $langIs = "är";
-$langAddress = "Adressen till ";
-$langSettings = "med följande inställningar:
-Användarnamn:";
+$langAddress = "Adressen till";
+$langSettings = "med följande inställninga";
 $langYouAreReg = "Du registrerades vid";
 $langYourReg = "Din registrering vid";
 $langUserFree = "Ditt användarnamn är redan upptaget. Använda webbläsaren tillbakaknapp och försök igen med ett annat.";
@@ -88,7 +90,7 @@ $langYourAccountParam = "Detta är lösenord och inloggningsnamn för ditt konto
 $langLoginRequest = "Inloggningsförfrågan";
 $langDefineHeadings = "Definiera överskrifter";
 $langCourseAdministratorOnly = "Lärare enbart";
-$langLostPassword = "Förlorat lösenordet";
+$langLostPassword = "Glömt lösenord";
 $langAdminOfCourse = "admin";
 $langSimpleUserOfCourse = "normal";
 $langIsTutor = "lärare";
@@ -97,8 +99,8 @@ $langMember = "registrerad";
 $langLock = "lås";
 $langUnlock = "lås upp";
 $langHaveNoCourse = "ingen kurs";
-$langManage = "Hantera portal";
-$langAdministrationTools = "Administratörsverktyg";
+$langManage = "Hantera plattformen";
+$langAdministrationTools = "Administratörs verktyg";
 $langUserProfileReg = "Användar e-portfolio har blivit registrerad";
 $lang_no_user_account_with_this_email_address = "Det existerar inget konto med denna e-post adress";
 $langCourses4User = "Användarens kurser";
@@ -150,3 +152,4 @@ $UsernameMaxXCharacters = "Användarnamnet kan vara max %s tecken långt";
 $PictureUploaded = "Din bild blev uppladdad";
 $ProductionUploaded = "Ditt arbetsprov blev uppladdat";
 $FolderUpdated = "Mappen uppdaterad";
+?>

@@ -1,10 +1,13 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langOnlineConference = "Conferència en línia";
 $langWash = "Renta";
 $langReset = "Reiniciar";
 $langSave = "Guarda";
 $langRefresh = "Actualitza";
-$langIsNowInYourDocDir = "ara es troba a la vostra eina de document. <br><B>Aquest fitxer és visible</B>";
+$langIsNowInYourDocDir = "ara es troba a la vostra eina de document. <br /><B>Aquest fitxer és visible</B>";
 $langCopyFailed = "Error d'impressió";
 $langTypeMessage = "Escriviu el vostre missatge !";
 $langConfirmReset = "Esteu segur de voler esborrar tots els missatges ?";
@@ -33,3 +36,4 @@ $langCallSent = "S'ha enviat una demanda de \"xat\". En espera de l'aprovació d
 $langChatDenied = "La vostra petició ha estat refusada per la persona contactada.";
 $Send = "Enviar";
 $Connected = "Connectat";
+?>

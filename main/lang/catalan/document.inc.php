@@ -1,14 +1,17 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $MoveTo = "Moure a";
 $langDownloadFile = "Pujar fitxer al servidor";
 $langNameDir = "Nom del nou directori";
 $langSize = "Mida";
 $langRename = "Reanomena";
-$langCopy = "Copiar el contingut del curs";
+$langCopy = "Copia";
 $langTo = "a";
 $langNoSpace = "La pujada de fitxers ha fallat. No hi ha prou espai en el vostre directori";
 $langDownloadEnd = "La pujada de fitxers ha finalitzat";
-$langFileExists = "Operació impossible.<br>Ja existeix un fitxer amb aquest nom.";
+$langFileExists = "Operació impossible.<br />Ja existeix un fitxer amb aquest nom.";
 $langImpossible = "Operació impossible";
 $langAddComment = "Afegeix/modifica un comentari a";
 $langDocCopied = "Document copiat";
@@ -25,14 +28,14 @@ $langUncompress = "descomprimeix el fitxer '.zip' en el servidor";
 $langDownloadAndZipEnd = "Fitxer zip pujat i descomprimit";
 $langRoot = "arrel";
 $langCreateDoc = "Crear un document";
-$langDown = "avall";
+$langDown = "Baixar";
 $langFileError = "L'arxiu que voleu pujar no és vàlid";
 $langMaxFileSize = "El tamany màxim de l'arxiu és";
 $langFileName = "Nom del fitxer";
 $langNoFileName = "Si us plau, entra el nom de l'arxiu";
 $langNoText = " Si us plau escrigui el seu text / contingut de HTML";
 $langAreYouSureToDelete = "Estàs segur que vols esborrar?";
-$langScormcontent = " Aquest és un contingut SCORM<br><input type=button name=scormbutton value='Començar' onclick='openscorm()'>";
+$langScormcontent = " Aquest és un contingut SCORM<br /><input type=button name=scormbutton value='Començar' onclick='openscorm()'>";
 $langScormcontentstudent = "Això és un curs amb format SCORM. Per voleu veure'l, feu clic aquí : <input type=button name=scormbutton value='Començar' onclick='openscorm()'>";
 $langPublish = "Publica";
 $langMissingImagesDetected = "Detectades imatges perdudes";
@@ -107,7 +110,7 @@ $fileModified = "El fitxer ha estat modificat";
 $DocumentsOverview = "llistat de documents";
 $ViewSlideshow = "Veure presentació d'imatges";
 $Options = "Opcions";
-$WelcomeOogieConverter = "Benvingut al convertidor de PowerPoint Oogie<br>1. Examineu el vostre disc dur i busqueu qualsevol fitxer amb les extensions *.ppt o *.odp<br>2. Envieu-lo a Oogie, que el transformarà en un Itinerari formatiu SCORM.<br>3. Podreu afegir comentaris d'àudio a cada diapositiva i inserir test d'avaluació entre diapositives.";
+$WelcomeOogieConverter = "Benvingut al convertidor de PowerPoint Oogie<br />1. Examineu el vostre disc dur i busqueu qualsevol fitxer amb les extensions *.ppt o *.odp<br />2. Envieu-lo a Oogie, que el transformarà en un Itinerari formatiu SCORM.<br />3. Podreu afegir comentaris d'àudio a cada diapositiva i inserir test d'avaluació entre diapositives.";
 $ConvertToLP = "Convertir en Itinerari formatiu";
 $AdvancedSettings = "Configuracions avançades";
 $File = "Fitxer";
@@ -208,6 +211,7 @@ $CreateTheDocument = "Guardar document";
 $CreateTemplate = "Crear plantilla";
 $SharedFolder = "Carpeta compartida";
 $CreateFolder = "Crear directori";
-$HelpDefaultDirDocuments = "Aquest directori conté els arxius subministrats per defecte. Pot eliminar o afegir altres arxius, però si un arxiu està ocult quan és inserit en un document web els estudiants tampoc podran veure'l aquí. Quan insereixi un arxiu en un document web faci'l visible prèviament. Els directoris poden seguir ocults. ";
-$HelpSharedFolder = "Aquest directori conté els arxius que els estudiants (i Vè.) envien a un curs a través de l'editor si no ho fan des de l'eina grups. Per defecte seran visibles per qualsevol professor, però estaran ocults per a altres estudiants tret que accedeixin a ells mitjançant un accés directe. Si fa visible el directori d'un estudiant altres estudiants podran veure tot el que contingui. ";
+$HelpDefaultDirDocuments = "Aquest directori conté els arxius subministrats per defecte. Pot eliminar o afegir altres arxius, però si un arxiu està ocult quan és inserit en un document web els estudiants tampoc podran veure'l aquí. Quan insereixi un arxiu en un document web faci'l visible prèviament. Els directoris poden seguir ocults.";
+$HelpSharedFolder = "Aquest directori conté els arxius que els estudiants (i Vè.) envien a un curs a través de l'editor si no ho fan des de l'eina grups. Per defecte seran visibles per qualsevol professor, però estaran ocults per a altres estudiants tret que accedeixin a ells mitjançant un accés directe. Si fa visible el directori d'un estudiant altres estudiants podran veure tot el que contingui.";
 $TemplateImage = "Imatge de la plantilla";
+?>

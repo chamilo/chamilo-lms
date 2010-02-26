@@ -1,34 +1,38 @@
 <?php
-$nameTools = "archaiczna zmienna językowa";
-$langMdCallingTool = "Dokumenty";
-$langTool = "Dokument Metadane";
-$langNotInDB = "nie ma takiej kategorii Linków";
-$langManifestSyntax = "(błąd składni w pliku ...)";
-$langEmptyManifest = "(pusty plik ...)";
-$langNoManifest = "(brak pliku ...)";
-$langNotFolder = "nie są możliwe, to nie katalog...";
-$langUploadHtt = "Załaduj plik HTT";
-$langHttFileNotFound = "Nie można było otworzyć nowego pliku HTT (np. pusty, zbyt duży) ";
-$langHttOk = "Nowy plik HTT został załadowany";
-$langHttNotOk = "Załadowanie pliku HTT nie powiodło się";
-$langRemoveHtt = "Usuń plik HTT";
-$langHttRmvOk = "Plik HTT został usunięty";
-$langHttRmvNotOk = "Usunięcie pliku HTT nie powiodło się";
-$langImport = "Importuj";
-$langRemove = "Usuń MDE";
-$langAllRemovedFor = "Wszystkie wpisy usunięte dla kategorii";
-$langIndex = "Indeksuj słowa";
-$langTotalMDEs = "Ogólna liczba wprowadzonych Linków MD";
-$langMainMD = "Otwórz główny MDE";
+/*
+for more information: see languages.txt in the lang folder.
+*/
+$nameTools = "przestarza&#322;a zmienna j&#281;zykowa";
+$langMdCallingTool = "&#346;cie&#380;ka nauki - Scorm";
+$langTool = "Operacje MD Scorm";
+$langNotInDB = "wpis niezgodny z DB Chamilo'a";
+$langManifestSyntax = "(b&#322;&#261;d sk&#322;adni w pliku...)";
+$langEmptyManifest = "(pusty plik...)";
+$langNoManifest = "(brak pliku...)";
+$langNotFolder = "nie s&#261; mo&#380;liwe, to nie jest katalog...";
+$langUploadHtt = "Za&#322;aduj plik HTT";
+$langHttFileNotFound = "Nie mo&#380;na by&#322;o otworzy&#263; nowego pliku HTT (np. pusty, zbyt du&#380;y)";
+$langHttOk = "Nowy plik HTT zosta&#322; za&#322;adowany";
+$langHttNotOk = "Za&#322;adowanie pliku HTT nie powiod&#322;o si&#281;";
+$langRemoveHtt = "Usu&#324; plik HTT";
+$langHttRmvOk = "Plik HTT zosta&#322; usuni&#281;ty";
+$langHttRmvNotOk = "Usuni&#281;cie pliku HTT nie powiod&#322;o si&#281;";
+$langImport = "Utwórz MDE z pokazanego";
+$langRemove = "Usu&#324; MDE";
+$langAllRemovedFor = "Wszystkie wpisy usuni&#281;te z powodu";
+$langIndex = "Indeksuj s&#322;owa za pomoc&#261; PhpDig";
+$langTotalMDEs = "Ogólna liczba wpisów Scorm MD";
+$langMainMD = "Otwórz g&#322;owny MDE";
 $langLines = "linie";
 $langPlay = "Uruchom index.php";
-$langNonePossible = "Nie można wykonać żadnych operacji MD";
-$langOrElse = "Wybierz kategorię Linków";
+$langNonePossible = "Nie mo&#380;na wykona&#263; &#380;adnych operacji MD";
+$langOrElse = "Wybierz katalog Scorm";
 $langWorkWith = "Pracuj z katalogiem Scorm";
 $langSDI = "... Katalog Scrom z id-Katalogu Scorm (i podziel pokazany - albo zostaw pusty)";
 $langRoot = "root";
-$langSplitData = "Podziel pokazany, i liczbę wpisów MDE, w przypadku:";
-$langMffNotOk = "Zamiana pokazanego pliku nie powiodła się";
-$langMffOk = "Pokazany plik zaostał zamieniony";
-$langMffFileNotFound = "Nowy pokazany plik nie mógł zostać otwarty (np. pusty, za duży)";
-$langUploadMff = "Zamień pokazany plik";
+$langSplitData = "Podziel pokazany, i liczb&#281; wpisów MDE, w przypadku:";
+$langMffNotOk = "Zamiana pokazanego pliku nie powiod&#322;a si&#281;";
+$langMffOk = "Pokazany plik zaosta&#322; zamieniony";
+$langMffFileNotFound = "Nowy pokazany plik nie móg&#322; zosta&#263; otwarty (np. pusty, za du&#380;y)";
+$langUploadMff = "Zamie&#324; pokazany plik";
+?>

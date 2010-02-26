@@ -1,5 +1,8 @@
 <?php
-$langToolName = "Importeren van Blackboardcursussen";
+/*
+for more information: see languages.txt in the lang folder.
+*/
+$langToolName = "Statistieken";
 $TrackingDisabled = "Statistieken zijn uitgeschakeld door de platformbeheerder.";
 $InactivesStudents = "Inactive studenten";
 $AverageTimeSpentOnThePlatform = "Gemiddelde tijd doorgebracht op het platform";
@@ -16,10 +19,10 @@ $SeeSessionList = "Bekijk de sessielijst";
 $langShowNone = "Toon niets";
 $langCourseStats = "Cursusstatistieken";
 $langToolsAccess = "Toegang tot modules";
-$langCourseAccess = "Toegang";
+$langCourseAccess = "Toegang tot deze cursus";
 $langLinksAccess = "Links";
 $langDocumentsAccess = "Documenten";
-$langScormAccess = "Leerpad – cursussen in SCORM-formaat";
+$langScormAccess = "Leerpad &ndash; cursussen in SCORM-formaat";
 $langLinksDetails = "Links die door de student bekeken werden";
 $langWorksDetails = "Publicaties die geüpload werden door de studenten";
 $langLoginsDetails = "Klik op de naam v.e. maand voor meer informatie";
@@ -57,12 +60,12 @@ $langWorkAuthors = "Auteurs";
 $langWorkDescription = "Beschrijving";
 $informationsAbout = "Tracken van";
 $langNoEmail = "Geen e-mailadres opgegeven";
-$langNoResult = "Er is nog geen resultaat.";
-$langCourse = "De cursus ";
+$langNoResult = "Geen resultaat";
+$langCourse = "Cursus";
 $langHits = "Hits";
 $langTotal = "Totaal";
-$langHour = "uur";
-$langDay = "dag";
+$langHour = "Uur";
+$langDay = "Dag";
 $langLittleHour = "u.";
 $langLast31days = "Laatste 31 dagen";
 $langLast7days = "Laatste 7 dagen";
@@ -231,3 +234,4 @@ $NoAdditionalFieldsWillBeExported = "De extra velden worden niet geëxporteerd";
 $CourseProgress = "Voortgang";
 $SelectFieldToAdd = "Kies het gebruikersprofiel veld om toe te voegen";
 $AddAdditionalProfileField = "Voeg het veld van het gebruikersprofiel toe";
+?>

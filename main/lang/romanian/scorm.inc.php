@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langScormVersion = "versiune";
 $langScormRestarted = "Toate lectiile sunt incomplete";
 $langScormNoNext = "Aceasta este ultima lectie";
@@ -41,7 +44,7 @@ $Local = "Local";
 $Remote = "La distanta";
 $FileToUpload = "Fisier de incarcat";
 $ContentMaker = "Creator de continut";
-$ContentProximity = "Vecinatatea continutului	";
+$ContentProximity = "Vecinatatea continutului";
 $UploadLocalFileFromGarbageDir = "Incarca fisierul local din folderul principal/gunoi";
 $ThisItemIsNotExportable = "Acest termen nu este compatibil in SCORM. Nu poate fi exportat.";
 $MoveCurrentChapter = "Mutati acest capitol";
@@ -50,3 +53,4 @@ $UnknownPackageFormat = "Pachetul nu poate fi recunoscut. Asigurati-va ca este c
 $Attempt = "Incercare";
 $MoveTheCurrentForum = "Muta forumul actual";
 $WarningWhenEditingScorm = "Atentie! In cazul in care schimati continutul SCORM, puteti provoca daune cursului.";
+?>

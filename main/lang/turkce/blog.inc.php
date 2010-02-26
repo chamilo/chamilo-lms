@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $MyTasks = "Görevlerim";
 $FavoriteBlogs = "Projelerim";
 $Navigation = "Yönlendirme";
@@ -55,12 +58,12 @@ $NoTasks = "Görev yok";
 $Rating = "Puanlama";
 $RateThis = "Bu görevi puanla";
 $SelectTaskArticle = "Bu rol için bir görev seçin";
-$ExecuteThisTask = "Benim için bir görev ";
+$ExecuteThisTask = "Benim için bir görev";
 $WrittenBy = "Yazan:";
 $InBlog = "Projede:";
 $ViewPostsOfThisDay = "Bugünkü görevleri göster";
 $PostsOf = "Görevler verildi:";
-$NoArticleMatches = "Görev bulunamadı. Kelime yazımına dikkat edin veya başka bir arama yapın ";
+$NoArticleMatches = "Görev bulunamadı. Kelime yazımına dikkat edin veya başka bir arama yapın";
 $SaveProject = "Projeyi kaydet";
 $langTask1 = "Görev 1";
 $langTask2 = "Görev 2";
@@ -99,3 +102,4 @@ $CommentDeleted = "Yorum silindi";
 $RatingAdded = "Derece eklendi";
 $BlogPosts = "Web günlüğü yazıları";
 $BlogComments = "Web günlüğü yorumları";
+?>

@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $lang_height = "Sayaynin";
 $lang_resizing_comment = "tajsachay wankita kay sayayman (pixeles nisqapi)";
 $lang_width = "Kinraynin";
@@ -16,3 +19,4 @@ $lang_next_slide = "Hamuq diapositiva nisqa";
 $lang_image = "Wanki";
 $lang_of = "kaypa";
 $lang_view_slideshow = "Qhawariy presentación nisqata";
+?>

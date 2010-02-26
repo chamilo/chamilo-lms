@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langChapter = "Модул";
 $langDocumentList = "Списък на всички документи";
 $langOrganisationList = "Съдържание";
@@ -8,7 +11,7 @@ $langCreateDocument = "Създаване на документ";
 $langMissingImagesDetected = "Липсват графични изображения.";
 $langPublish = "Публикуване";
 $langScormcontentstudent = "Това е курс според стандарта SCORM. За да го стартирате, щракнете тук: <input type='button' name='scormbutton' value='Стартиране' onclick='javascript:openscorm()'>";
-$langScormcontent = "Това е съдържание според стандарта SCORM<br/><input type='button' name='scormbutton' value='Стартиране' onclick='javascript:openscorm()'>";
+$langScormcontent = "Това е съдържание според стандарта SCORM<br /><input type='button' name='scormbutton' value='Стартиране' onclick='javascript:openscorm()'>";
 $langDownloadAndZipEnd = "ZIP-файлът е качен и разкомпресиран.";
 $langZipNoPhp = "ZIP-архивът не трябва да съдържа PHP-файлове.";
 $langGroupForumLink = "Форум на групата";
@@ -27,7 +30,7 @@ $langNewDir = "Име на папката";
 $langTo = "в";
 $langNoSpace = "Качването не е успешно. Няма достатъчно свободно място в папката.";
 $langDownloadEnd = "Качването е извършено.";
-$langFileExists = "Операцията не е възможна.<br/>Съществува файл със същото име.";
+$langFileExists = "Операцията не е възможна.<br />Съществува файл със същото име.";
 $langDocCopied = "Документът е копиран.";
 $langDocDeleted = "Документът е изтрит.";
 $langElRen = "Името на елемента е променено.";
@@ -59,3 +62,4 @@ $langOrganiseDocuments = "Създаване на съдържание";
 $langUncompress = "Разкомпресирай архива (ZIP) на сървъра";
 $ExportShort = "Експортиране (SCORM)";
 $progress = "Напредък";
+?>

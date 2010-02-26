@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $SurveyTitle = "Título da enquisa";
 $SurveyIntroduction = "Introdución á enquisa";
 $CreateNewSurvey = "Crear enquisa";
@@ -111,7 +114,7 @@ $SelectXAxis = "Seleccionar a preguntas no eixo X";
 $SelectYAxis = "Seleccionar a pregunta no eixo Y";
 $ComparativeReport = "Informe comparativo";
 $AllQuestionsOnOnePage = "Mostraranse todas as preguntas nunha páxina";
-$SelectUser = "Usuario";
+$SelectUser = "Seleccionar usuario";
 $SelectUserWhoFilledSurvey = "Seleccionar ao usuario que cubríu a enquisa";
 $userreport = "Informe de usuario";
 $VisualRepresentation = "Gráfico";
@@ -119,7 +122,7 @@ $AbsoluteTotal = "Total global";
 $NextQuestion = "Seguinte pregunta";
 $PreviousQuestion = "Pregunta anterior";
 $PeopleWhoAnswered = "Persoas que escolleron esta pregunta";
-$CourseUsers = "Usuarios do Curso";
+$CourseUsers = "Usuarios do curso";
 $SurveyPublication = "Publicación da enquisa";
 $AdditonalUsers = "Usuarios adicionais";
 $MailText = "Texto do correo electrónico";
@@ -127,13 +130,12 @@ $UseLinkSyntax = "Os usuarios seleccionados recibirán un correo electrónico co
 $DetailedReportByUser = "Informe detallado por usuario";
 $DetailedReportByQuestion = "Informe detallado por pregunta";
 $ComparativeReportDetail = "Neste informe pode comparar dúas preguntas.";
-$CompleteReportDetail = "Neste informe terá unha vista xera de todas as respostas de todos os usuarios acerca de todas as preguntas. Ten tamén a opción de ver somente unha selección das preguntas. Pode exportar os resultados en formato CVS e usalo para procesar mediante unha aplicación estatística";
+$CompleteReportDetail = "Neste informe terá unha vista xera de todas as respostas de todos os usuarios acerca de todas as preguntas. Ten tamén a opción de ver somente unha selección das preguntas. Pode exportar os resultados en formato CVS e usalo para procesar mediante unha apli";
 $DetailedReportByUserDetail = "Neste informe pode ver todas as preguntas dadas por un usuario específico.";
 $DetailedReportByQuestionDetail = "Neste informe pode ver os resultados pregunta por pregunta. Proporciónase unha análise estatística e gráfica básica.";
 $ReminderResendToAllUsers = "Lembrar a todos os usuarios da enquisa. Se non activa esta opción somente recibirán un correo electrónico os novos usuarios.";
 $Multiplechoice = "Opción múltipla";
-$Multipleresponse = "Resposta múltipla";
-$Score = "Puntuación";
+$Score = "Escala";
 $Shared = "Compartido";
 $Invite = "Invitados";
 $MaximumScore = "Puntuación máxima";
@@ -162,3 +164,4 @@ $IllegalSurveyId = "Identificador de enquisa descoñecido";
 $SurveyQuestionMoved = "Moveuse a pregunta";
 $IdenticalSurveycodeWarning = "Este código da enquisa xa existe. Probablemente isto sexa debido a que a enquisa tamén existe noutros idiomas. Os usuarios poderán elixir entre diferentes idiomas.";
 $ThisSurveyCodeSoonExistsInThisLanguage = "Este código de enquisa xa existe neste idioma";
+?>

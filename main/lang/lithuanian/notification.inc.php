@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $lang_new_item = "naujas įrašas įdėtas";
 $lang_title_notification = "Nuo Jūsų paskutinio vizito";
 $lang_update_agenda = "esamas darbotvarkės įrašas atnaujintas";
@@ -13,4 +16,5 @@ $lang_new_forum_topic = "nauja tema įrašyta";
 $lang_new_groupforum_topic = "grupės forume įrašyta nauja tema";
 $lang_new_dropbox_file = "gautas naujas failas";
 $lang_update_dropbox_file = "Jūsų failų saugykloje esantis failas atnaujintas";
-$ForumCategoryAdded = "Forumo kategorija įrašyta";
+$ForumCategoryAdded = "Forum category added";
+?>

@@ -1,34 +1,38 @@
 <?php
-$nameTools = "suvišna jezična odrednica";
-$langMdCallingTool = "Dokumenti";
-$langTool = "Definicijski podatci dokumenta";
-$langNotInDB = "nema takve kategorije poveznica";
-$langManifestSyntax = "(sintaktička pogreška u datoteci manifesta...)";
+/*
+for more information: see languages.txt in the lang folder.
+*/
+$nameTools = "suvina jezi&#269;na odrednica";
+$langMdCallingTool = "Put u&#269;enja - Scorm";
+$langTool = "Operacije Scorm MD";
+$langNotInDB = "nema unosa u bazi podataka Chamilo";
+$langManifestSyntax = "(sintakti&#269;ka greka u datoteci manifesta...)";
 $langEmptyManifest = "(datoteka manifesta prazna...)";
 $langNoManifest = "(nema datoteke manifesta...)";
-$langNotFolder = "nije moguće, to nije mapa...";
-$langUploadHtt = "Učitaj datoteku HTT";
-$langHttFileNotFound = "Nov datoteku HTT nije moguće otvoriti (npr. prazna, prevelika)";
-$langHttOk = "Nova datoteka HTT učitana";
+$langNotFolder = "nije mogu&#263;e, to nije mapa...";
+$langUploadHtt = "U&#269;itaj datoteku HTT";
+$langHttFileNotFound = "Nov datoteku HTT nije mogu&#263;e otvoriti (npr. prazna, prevelika)";
+$langHttOk = "Nova datoteka HTT u&#269;itana";
 $langHttNotOk = "Predaja datoteke HTT nije uspjela";
 $langRemoveHtt = "Ukloni datoteku HTT";
 $langHttRmvOk = "Datoteka HTT uklonjena";
 $langHttRmvNotOk = "Uklanjanje datoteke HTT nije uspjelo";
-$langImport = "Prijenos";
+$langImport = "Izradi datoteke MDE iz manifesta";
 $langRemove = "Ukloni datoteke MDE";
-$langAllRemovedFor = "Svi unosi uklonjeni iz kategorije";
-$langIndex = "Kazalo riječi";
-$langTotalMDEs = "Ukupan broj unosa MD za poveznice:";
+$langAllRemovedFor = "Uklonjeni svi unosi iz";
+$langIndex = "Ozna&#269;i rije&#269;i s PhpDig";
+$langTotalMDEs = "Ukupan broja unosa definicijskih podataka Scorm:";
 $langMainMD = "Otvori glavnu datoteku MDE";
 $langLines = "redci";
 $langPlay = "Pokreni index.php";
-$langNonePossible = "Nisu moguće operacije s definicijskim podatcima";
-$langOrElse = "Odaberi kategoriju poveznica";
+$langNonePossible = "Nisu mogu&#263;e operacije s definicijskim podatcima";
+$langOrElse = "Odaberi mapu Scorm ili identifikaciju mape Scorm";
 $langWorkWith = "Radi s mapom Scorm";
 $langSDI = "...mapa Scorm s identifikacijom SD-a (i razdijeli manifest - ili ostavi prazno)";
 $langRoot = "korijen";
 $langSplitData = "Razdijeli manifeste, i #MDe, ako postoje:";
 $langMffNotOk = "Zamjena datoteke manifesta nije uspjela";
 $langMffOk = "Datoteka manifesta je zamijenjena";
-$langMffFileNotFound = "Novu datoteku manifesta nije moguće otvoriti (npr. prazna, prevelika)";
+$langMffFileNotFound = "Novu datoteku manifesta nije mogu&#263;e otvoriti (npr. prazna, prevelika)";
 $langUploadMff = "Zamijeni datoteku manifesta";
+?>

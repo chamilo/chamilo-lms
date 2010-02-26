@@ -1,10 +1,13 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $MoveTo = "移到";
 $langDownloadFile = "上傳檔案至伺服器";
 $langNameDir = "新資料夾名稱";
 $langSize = "大小";
 $langRename = "重新命名";
-$langCopy = "複製課程內容";
+$langCopy = "複製";
 $langTo = "到";
 $langNoSpace = "上傳失敗﹗超過最大上傳檔案大小或磁片空間不足.";
 $langDownloadEnd = "上傳結束";
@@ -32,7 +35,7 @@ $langFileName = "檔案名";
 $langNoFileName = "請輸入檔案名";
 $langNoText = "請輸入你的 text / HTML 內容";
 $langAreYouSureToDelete = "確定要刪除";
-$langScormcontent = "這是Scorm格式內容<br><input type=button name=scormbutton value='啟用' onclick='openscorm()'>";
+$langScormcontent = "這是Scorm格式內容<br /><input type=button name=scormbutton value='啟用' onclick='openscorm()'>";
 $langScormcontentstudent = "這是Scorm格式課程，觀看請點擊此處: <input type=button name=scormbutton value='啟用' onclick='openscorm()'>";
 $langPublish = "發布";
 $langMissingImagesDetected = "發現圖片丟失";
@@ -57,6 +60,8 @@ $langTocDown = "向下";
 $langTocUp = "向上";
 $lang_cut_paste_link = "全屏顯示";
 $langCreatePath = "新建路徑";
+$langOogieConversionPowerPoint = "Oogie : 幻燈片轉換功能";
+$langWelcomeOogieSubtitle = "幻燈片到學習路徑的轉換器";
 $langAddMetadata = "檢視/修改元數據";
 $langGoMetadata = "轉到";
 $langQuotaForThisCourseIs = "這門課程的磁片配額是";
@@ -79,7 +84,7 @@ $UplUnableToSaveFile = "已上傳之檔案不能儲存(可能因權限問題?)";
 $UplNotEnoughSpace = "沒有足夠空間上傳此檔案";
 $UplNoSCORMContent = "找不到 SCORM 內容";
 $UplZipExtractSuccess = "壓縮檔已成功解壓";
-$UplZipCorrupt = "不能解壓文件（中斷文件？） ";
+$UplZipCorrupt = "不能解壓文件（中斷文件？）";
 $UplAlreadyExists = "已經存在";
 $UplFileSavedAs = "已另存檔為";
 $UplFileOverwritten = "已覆寫";
@@ -88,7 +93,7 @@ $UplUpload = "上傳";
 $UplWhatIfFileExists = "若檔案存在";
 $UplDoNothing = "不執行";
 $UplDoNothingLong = "若檔案已存在則不進行上傳";
-$UplOverwrite = "覆寫 ";
+$UplOverwrite = "覆寫";
 $UplOverwriteLong = "覆寫現存檔案";
 $UplRename = "重新命名";
 $UplRenameLong = "若檔案已存在則重新命名";
@@ -100,8 +105,6 @@ $fileModified = "檔案已被修訂";
 $DocumentsOverview = "檢視文件";
 $ViewSlideshow = "圖片庫";
 $Options = "選項";
-$langOogieConversionPowerPoint = "Oogie : 幻燈片轉換功能";
-$langWelcomeOogieSubtitle = "幻燈片到學習路徑的轉換器";
 $WelcomeOogieConverter = "歡迎使用投映版轉換器。<ul type=\"1\"><li>在你的電腦中搜尋 .ppt 或 .odp 檔<li>上傳至 Oogie，文件便會轉換為 Scorm 學習路徑。<li>這時你便可以在每頁投映片中加上聲音或文字旁白。";
 $ConvertToLP = "轉換為學習路徑";
 $AdvancedSettings = "進階設定";
@@ -112,4 +115,5 @@ $DirDeleted = "已刪除資料夾";
 $TemplateName = "範本名稱";
 $TemplateDescription = "範本描述";
 $DocumentSetAsTemplate = "設定文件為範本";
-$DocumentUnsetAsTemplate = "取消把文件設為範本 ";
+$DocumentUnsetAsTemplate = "取消把文件設為範本";
+?>

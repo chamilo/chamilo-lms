@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langScormVersion = "version";
 $langScormRestarted = "Alle trin er nu nulstillet.";
 $langScormNoNext = "Dette er det sidste trin.";
@@ -43,10 +46,11 @@ $FileToUpload = "SCORM eller AICC fil, der skal uploades";
 $ContentMaker = "Orindelige kursusside";
 $ContentProximity = "Kursussidens placering";
 $UploadLocalFileFromGarbageDir = "Upload lokal fril fra hovedmappe";
-$ThisItemIsNotExportable = "Dette element er pt. ikke SCORM kompatibelt. Derfor kan det ikke eksporteres. ";
+$ThisItemIsNotExportable = "Dette element er pt. ikke SCORM kompatibelt. Derfor kan det ikke eksporteres.";
 $MoveCurrentChapter = "Flyt det aktuelle kapitel";
 $GenericScorm = "Fælles SCORM";
 $UnknownPackageFormat = "Formatet kan ikke genkendes. Venligst undersøg, at det er udviklet korrekt og ikke indeholder fejl. Problemerne kan skyldes Zip-formatet eller overførsel af for store filer. Hvis du er usikker vedr. Zip, kan du forsøge at anvende standard zip-indstillingerne i dit program til dette.";
 $Attempt = "Forsøg";
 $MoveTheCurrentForum = "Flyt det aktuelle forum";
 $WarningWhenEditingScorm = "Advarsel!</br> Når du redigerer indholdet i et SCORM-baseret trin, forandrer du evt. læringsstien eller ødelægger det pågældende trin.";
+?>

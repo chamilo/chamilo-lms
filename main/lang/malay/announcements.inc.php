@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $Announcement = "Pengumuman";
 $langAnnEmpty = "Senarai pengumuman telah dipadam";
 $AnnouncementModified = "Pengumuman telah diubahsuai";
@@ -16,3 +19,4 @@ $langRegUser = "Pelajar berdaftar untuk subjek ini";
 $langUnvalid = "tidak sah/tiada alamat email";
 $langModifAnn = "Ubahsuai pengumuman ini";
 $EmailTitle = "Tajuk Pengumuman";
+?>

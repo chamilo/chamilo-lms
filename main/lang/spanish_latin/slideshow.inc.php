@@ -19,6 +19,4 @@ $lang_next_slide = "Siguiente Vista";
 $lang_image = "Imagen";
 $lang_of = "de";
 $lang_view_slideshow = "Ver Presentación";
-$FirstSlide = "";
-$LastSlide = "";
 ?>

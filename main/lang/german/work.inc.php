@@ -1,8 +1,11 @@
 <?php
-$Tools = "Werkzeuge";
+/*
+for more information: see languages.txt in the lang folder.
+*/
+$Tools = "Tools";
 $SendWork = "Dokument hochladen";
-$langTooBig = "Sie haben keine Datei ausgewählt oder die Datei ist zu groß";
-$langListDeleted = "Die Liste wurde gelöscht";
+$langTooBig = "Sie haben keine Datei ausgewählt, oder die Datei war zu gross.";
+$langListDeleted = "Die gesamte Liste wurde gelöscht.";
 $langDocModif = "Titel des Dokuments wurde verändert";
 $langDocAdd = "Dokument hinzugefügt";
 $langDocDel = "Dokument entfernt";
@@ -17,20 +20,20 @@ $lang_default_upload = "Standardeinstellung für die Sichbarkeit neu-veröffentl
 $lang_new_visible = "Neue Dokumente sind für alle Nutzer sichtbar";
 $lang_new_unvisible = "Neue Dokumente sind nur für den/die Kurs-Manager sichtbar";
 $lang_doc_unvisible = "Ihre Datei ist nur für den/die Trainer des Kurses sichbar und wird daher auch für Sie unsichtbar sein.";
-$langDelLk = "Wollen Sie diesen Link wirklich löschen?";
+$langDelLk = "Link löschen";
 $langMustBeRegisteredUser = "Nur registrierte Nutzer können Dokumente veröffentlichen.";
 $langListDel = "Liste löschen";
-$langNameDir = "Name des neuen Verzeichnisses";
-$langFileExists = "Aktion fehlgeschlagen.<br>Eine Datei mit dem gleichen Namen exisitiert bereits";
+$langNameDir = "Verzeichnis umbenennen";
+$langFileExists = "Datei existiert bereits";
 $CreateDirectory = "Verzeichnis erstellen";
 $langCurrentDir = "aktuelles Verzeichnis";
-$UploadADocument = "Upload eines Dokuments ";
+$UploadADocument = "Upload eines Dokuments";
 $EditToolOptions = "Optionen zum Editieren von Werkzeugen";
 $DocumentDeleted = "Dokument wurde gelöscht";
 $SendMailBody = "Ein Benutzer hat ein Dokument im Aufgaben Tool Deines Kurses veröffentlicht";
 $DirDelete = "Verzeichnis wurde gelöscht";
 $ValidateChanges = "Gültige Änderungen";
-$FolderUpdated = "Verzeichnis aktualisiert";
+$FolderUpdated = "Verzeichnis wurde aktualisiert";
 $EndsAt = "endet am (danach geschlossen)";
 $QualificationOfAssignment = "Aufgaben-Bewertung";
 $MakeQualifiable = "Beurteilung ermöglichen";
@@ -41,7 +44,7 @@ $ExpiresAt = "läuft ab am";
 $AddToCalendar = "Zum Kalender hinzufügen";
 $DirectoryCreated = "Verzeichnis erstellt";
 $Assignment = "Aufgaben";
-$AdvancedParameters = "Weitere Parameter";
+$AdvancedParameters = "weitere Parameter";
 $ExpiryDateToSendWorkIs = "Deadline für Aufgaben";
 $EnableExpiryDate = "Ablaufdatum ermöglichen";
 $EnableEndDate = "End-Datum aktivieren";
@@ -71,3 +74,4 @@ $FolderEdited = "Ordner geändert";
 $UpdateWork = "Diese Aufgabe aktualisieren";
 $MakeAllPapersInvisible = "Alle Dokumente unsichtbar machen";
 $MakeAllPapersVisible = "Alle Dokumente sichtbar machen";
+?>

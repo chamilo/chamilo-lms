@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langExercice = "Тест";
 $langActivate = "Активиране";
 $langDeactivate = "Дезактивиране";
@@ -122,7 +125,7 @@ $langRep20 = "е въведена. Тя е заместена с 20.";
 $langDefault = "Стойности по подразбиране *";
 $langDefComment = "* Ако изберете \"Стойности по подразбиране\", всички предишни стойности ще бъдат изтрити.";
 $langScoreGet = "Числата в черно = резултат";
-$langShowScor = "Покажи резултата на курсиста: ";
+$langShowScor = "Покажи резултата на курсиста:";
 $langStep1 = "Стъпка 1";
 $langStep2 = "Стъпка 2";
 $langTake = "вземи";
@@ -135,7 +138,7 @@ $langDownloadEnd = "Качването е извършено.";
 $langNoSpace = "Качването не е успешно. Няма достатъчно свободно място в папката.";
 $langZipNoPhp = "ZIP-архивът не трябва да съдържа PHP-файлове.";
 $langNoImg = "Тест без изображения";
-$langImgNote_st = "<br/> Все още трябва да качите";
+$langImgNote_st = "<br /> Все още трябва да качите";
 $langImgNote_en = "изображение(я) :";
 $langDocDeleted = "Документът е изтрит.";
 $langViMod = "Видимостта на файла е променена.";
@@ -290,8 +293,6 @@ $AddQuestionToExercise = "Добавяне на въпроса към теста
 $PresentationQuestions = "Показване";
 $UniqueAnswer = "Само един верен отговор";
 $MultipleAnswer = "Един или повече верни отговора";
-$FreeAnswer = "Свободен отговор";
-$HotSpot = "Горещи зони";
 $ReachedOneAttempt = "Не можете да преминете този тест, защото опитахте веднъж.";
 $QuestionsPerPage = "Въпроси на страница";
 $QuestionsPerPageOne = "Един";
@@ -344,3 +345,4 @@ $TooManyIterationsPleaseTryUsingMoreStraightforwardPolygons = "Твърде мн
 $Thresholds = "Прагови стойности";
 $Delineation = "Очертаване";
 $QuestionTypeDoesNotBelongToFeedbackTypeInExercise = "Типът въпрос не изисква преглед и оценяване от преподавател.";
+?>

@@ -1,8 +1,11 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $Tools = "Työkalut";
 $SendWork = "Lisää tiedosto";
-$langTooBig = "Et valinnut mitään tallennettavaksi tai se on liian iso";
-$langListDeleted = "Lista on poistettu";
+$langTooBig = "Et valinnut tiedostoa tai tiedosto on liian suuri.";
+$langListDeleted = "Koko lista on poistettu.";
 $langDocModif = "Tehtävän otsikko on muutettu";
 $langDocAdd = "Tehtävä on lisätty";
 $langDocDel = "Tehtävä on poistettu";
@@ -17,11 +20,11 @@ $lang_default_upload = "Oletusasetukset näkyvyydestä uusille tiedostoille";
 $lang_new_visible = "Uudet dokumentit ovat käyttäjien nähtävillä";
 $lang_new_unvisible = "Uudet dokumentit ovat ainoastaan kurssin opettajan nähtävillä";
 $lang_doc_unvisible = "Lähettämäsi tiedosto on ainoastaan kurssin opettajan nähtävillä ja siksi et näe sitä itse.";
-$langDelLk = "Haluatko varmasti poistaa tämän linkin?";
+$langDelLk = "Poista linkki";
 $langMustBeRegisteredUser = "Ainoastaan kurssin rekisteröityneet käyttäjät voivat julkaista dokumentteja.";
 $langListDel = "Poista lista";
-$langNameDir = "Uuden hakemiston nimi";
-$langFileExists = "Toiminto on mahdoton.<br>Samanniminen tiedosto on olemassa.";
+$langNameDir = "Nimeä hakemisto uudelleen";
+$langFileExists = "Tiedosto on jo olemassa";
 $CreateDirectory = "Luo hakemisto";
 $langCurrentDir = "Nykyinen kansio";
 $UploadADocument = "Tallenna dokumentti";
@@ -35,3 +38,4 @@ $AddToCalendar = "Lisää kalenteriin";
 $ButtonCreateAssignment = "Luo testi";
 $AssignmentName = "Testin nimi";
 $CreateAssignment = "Luo testi";
+?>

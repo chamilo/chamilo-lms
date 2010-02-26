@@ -1,16 +1,19 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langOnlineConference = "Conferinta";
 $langWash = "Sterge";
 $langReset = "Restart";
 $langSave = "Salveaza";
 $langRefresh = "Reactualizeara";
-$langIsNowInYourDocDir = "se afla acum in uneltele Document. <br><B>Acest fisier este vizibil</B>";
+$langIsNowInYourDocDir = "se afla acum in uneltele Document. <br /><B>Acest fisier este vizibil</B>";
 $langCopyFailed = "Tiparire esuata";
 $langTypeMessage = "Te rog scrie mesajul !";
 $langConfirmReset = "Esti sigur(a) ca doresti sa stergi toate mesajele?";
 $langHasResetChat = "Chatul s-a restartat";
 $langNoOnlineConference = "Nu este nici o conferinta pentru moment ...";
-$langMediaFile = "Live audio sau video ";
+$langMediaFile = "Live audio sau video";
 $langContentFile = "Prezentare";
 $langListOfParticipants = "Lista de participanti";
 $langYourPicture = "Fotografia ta";
@@ -57,3 +60,4 @@ $AskPermissionSpeak = "Cer permisiunea de a vorbi";
 $GiveTheFloorTo = "Dau cuvantul lui";
 $Pause = "Pauza";
 $Stop = "Stop";
+?>

@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $MyTasks = "Les meves tasques";
 $FavoriteBlogs = "Els meus blocs preferits";
 $Navigation = "Navegació";
@@ -15,7 +18,7 @@ $FirstPostText = "Aquest és el primer article d'aquest bloc. A partir d'ara, qu
 $AddNewComment = "Afegir un comentari";
 $ReplyToThisComment = "Afegir un comentari a aquest comentari";
 $ManageTasks = "Gestió de tasques a aquest bloc";
-$ManageMembers = "Inscriure/Desinscriure l'usuari a aquest blog ";
+$ManageMembers = "Inscriure/Desinscriure l'usuari a aquest blog";
 $Register = "Inscriure's a aquest blog";
 $UnRegister = "Desinscriure's d'aquest blog";
 $SubscribeMembers = "Inscriure usuaris";
@@ -35,7 +38,7 @@ $AssignTask = "Assignar una tasca";
 $AssignTasks = "Assignar una tasca";
 $EditTask = "Editar aquesta tasca";
 $DeleteTask = "Esborrar aquesta tasca";
-$DeleteSystemTask = "Aquesta és una tasca predefinida. No podeu esborrar tasques predefinides. ";
+$DeleteSystemTask = "Aquesta és una tasca predefinida. No podeu esborrar tasques predefinides.";
 $SelectUser = "Usuari";
 $SelectTask = "Tasca";
 $SelectTargetDate = "Data";
@@ -99,3 +102,4 @@ $CommentDeleted = "El comentari ha estat eliminat";
 $RatingAdded = "La qualificació ha estat afegida";
 $BlogPosts = "Articles en el blog";
 $BlogComments = "Comentaris dels blogs";
+?>

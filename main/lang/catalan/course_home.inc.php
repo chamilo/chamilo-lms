@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langActivate = "Activa";
 $langDeactivate = "Desactiva";
 $langInLnk = "Enllaços desactivats";
@@ -11,7 +14,7 @@ $PlatformAdminOnly = "Només administradors";
 $langCombinedCourse = "Curs combinat";
 $ToolIsNowVisible = "L'eina és actualment visible";
 $ToolIsNowHidden = "L'eina és actualment no visible";
-$EditLink = "Editar l'enllaç";
+$EditLink = "Editar enllaç";
 $Blog_management = "Gestió de blocs";
 $Forum = "Fòrums";
 $Course_maintenance = "Manteniment del curs";
@@ -25,3 +28,4 @@ $IntroductionTextDeleted = "El text d'introducció ha estat eliminat";
 $SessionIdentifier = "Identificador de la sesión";
 $SessionName = "Nom de la sessió";
 $SessionCategory = "Categoria de la sessió";
+?>

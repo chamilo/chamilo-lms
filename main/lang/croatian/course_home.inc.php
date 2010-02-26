@@ -1,12 +1,15 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langActivate = "Aktiviraj";
 $langDeactivate = "Deaktiviraj";
 $langInLnk = "Skriveni alati i poveznice";
-$langDelLk = "Želite li izbrisati poveznicu?";
+$langDelLk = "elite li izbrisati poveznicu?";
 $langCourseCreate = "Izradi web stranice kolegija";
 $langNameOfTheLink = "Naziv poveznice";
 $lang_main_categories_list = "Popis glavnih kategorija";
-$langCourseAdminOnly = "Samo predavači";
+$langCourseAdminOnly = "Samo predava&#269;i";
 $PlatformAdminOnly = "Samo nadzornici platforme";
 $langCombinedCourse = "Kombinirani kolegij";
 $ToolIsNowVisible = "Alat je sad vidljiv";
@@ -20,5 +23,6 @@ $GreyIcons = "Moduli";
 $Interaction = "Alati za interakciju";
 $Authoring = "Autorski alati";
 $Administration = "Alati za nadzor";
-$IntroductionTextUpdated = "Uvodni tekst je ažuriran";
+$IntroductionTextUpdated = "Uvodni tekst je auriran";
 $IntroductionTextDeleted = "Uvodni tekst je obrisan";
+?>

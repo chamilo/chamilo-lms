@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $ReceivedFiles = "Получени файлове";
 $SentFiles = "Изпратени файлове";
 $ReceivedTitle = "Заглавие";
@@ -54,3 +57,4 @@ $ErrorNoFilesInFolder = "Папката е празна.";
 $AddComment = "Добавяне на коментар";
 $SentCatgoryDeleted = "Папката е изтрита.";
 $ReceivedCatgoryDeleted = "Папката е изтрита.";
+?>

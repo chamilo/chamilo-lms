@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langSelectOptionForBackup = "Selezionare un'opzione di backup.";
 $langLetMeSelectItems = "Fammi selezionare le parti del corso";
 $langCreateFullBackup = "Crea un backup completo del corso";
@@ -41,7 +44,8 @@ $langImportBackupInfo = "Importa una copia di Backup di un corso (dal server o d
 $langCreateBackupInfo = "Crea la copia di backup del corso";
 $ToolIntro = "Testo introduttivo";
 $UploadError = "Caricamento fallito, controlla la dimensione dei file e i diritti di scrittura.";
-$DocumentsWillBeAddedToo = "Saranno aggiunti anche i documenti ";
+$DocumentsWillBeAddedToo = "Saranno aggiunti anche i documenti";
 $ToExportLearnpathWithQuizYouHaveToSelectQuiz = "Seleziona i test in elenco per includerli nella esportazione del modulo didattico";
 $ArchivesDirectoryNotWriteableContactAdmin = "La directory di archiviazione, usata dalla funzione, non è scrivibile. Se necessario, contatta l'amministratore di sistema.";
 $DestinationCourse = "Corso di destinazione";
+?>

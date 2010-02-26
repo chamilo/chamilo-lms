@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $lang_already_enrolled = "xa foi matriculado";
 $lang_my_personnal_course_list = "A miña lista persoal de cursos";
 $lang_course_enrollment = "Usuario do curso";
@@ -6,12 +9,11 @@ $lang_course_not_available = "Curso non dispoñible...";
 $lang_enroll = "Matricularse";
 $lang_enroll_to_a_new_course = "Matricularse nun curso novo";
 $lang_my_present_course_list = "A miña lista actual de cursos";
-$lang_no_course_to_enroll_in_this_category = "Non hai curso do que matricularse nesta categoría...
-";
+$lang_no_course_to_enroll_in_this_category = "Non hai curso do que matricularse nesta categoría.";
 $lang_or_search_from_the_course_code = "Ou busca polo código do curso";
 $lang_search = "Buscar";
 $lang_select_course_among_categories = "Selecciona-lo curso entre as categorías";
-$lang_select_course_in = "Seleccionar un curso en ";
+$lang_select_course_in = "Seleccionar un curso en";
 $lang_select_course_in_search_results = "Seleccionar un curso entre os resultados da búsqueda";
 $lang_unsubscribe = "Desubscribirse";
 $lang_back_to_my_home_page = "Voltar á miña páxina de inicio";
@@ -20,10 +22,10 @@ $langTitular = "Titular";
 $langBackToListOfThisUser = "Volver ó lista de usuarios";
 $langAdministrationTools = "Ferramentas de administración";
 $lang_back_to_parent_category = "Volver á categoría superior";
-$lang_back_to_course_selection = "Volver ó selección do curso ";
+$lang_back_to_course_selection = "Volver ó selección do curso";
 $lang_up = "Volver á categoría superior";
 $langCatList = "Categorías";
-$langCourseList = "Lista de cursos";
+$langCourseList = "Cursos";
 $Subscribe = "Inscribirse";
 $AlreadySubscribed = "xa subscrito";
 $CodeMandatory = "Código obrigatorio";
@@ -40,7 +42,7 @@ $langHideAndSubscribeOpen = "Oculto / Aberto";
 $langShowAndSubscribeOpen = "Visible / Aberto";
 $langShowAndSubscribeClosed = "Visible / Pechado";
 $langAdminThisUser = "Volver a este usuario";
-$langManage = "Xestionar LMS";
+$langManage = "Xestión do LMS";
 $langEnrollToCourseSuccessful = "Foi inscrito no curso";
 $langSubCat = "sub-categorías";
 $langUnsubscribeNotAllowed = "Non se permite a desubscrición deste curso.";
@@ -50,7 +52,7 @@ $SortMyCourses = "Ordenar os meus cursos";
 $SubscribeToCourse = "Subscribir a Cursos";
 $UnsubscribeFromCourse = "Desubscribir ós cursos";
 $CreateCourseCategory = "Crear unha categoría de cursos";
-$CourseCategoryAbout2bedeleted = "¿Seguro que quere eliminar esta categoría de cursos? Os cursos incluidos dentro desta categoría serán desplazados fora das categorías de cursos. ";
+$CourseCategoryAbout2bedeleted = "¿Seguro que quere eliminar esta categoría de cursos? Os cursos incluidos dentro desta categoría serán desplazados fora das categorías de cursos.";
 $CourseCategories = "Categorías de cursos";
 $CoursesInCategory = "Cursos nesta categoría";
 $SearchCourse = "Buscar cursos";
@@ -74,4 +76,11 @@ $CourseCategoryEditStored = "Categoría actualizada";
 $buttonCreateCourseCategory = "Crear unha categoría de cursos";
 $buttonSaveCategory = "Gardar categoría";
 $buttonChangeCategory = "Cambiar categoría";
+$SessionName = "Nome da sesión";
+$SessionCategory = "Categoría da sesión";
+$Expand = "Ampliar";
+$Collapse = "Contraer";
+$CourseDetails = "Descrición do curso";
+$GroupPendingInvitations = "Invitacións de grupo pendentes";
 $Compose = "Redactar";
+?>

@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langActivate = "Visualizar";
 $langDeactivate = "Ocultar/esconder";
 $langInLnk = "Ferramentas e ligações ocultas";
@@ -11,7 +14,7 @@ $PlatformAdminOnly = "Autorizado apenas a administradores da plataforma/sistema"
 $langCombinedCourse = "Curso combinado";
 $ToolIsNowVisible = "A ferramenta encontra-se agora visível.";
 $ToolIsNowHidden = "A ferramenta encontra-se agora invisível.";
-$EditLink = "Editar ligação/link";
+$EditLink = "Editar ligação";
 $Blog_management = "Blogs";
 $Forum = "Fóruns";
 $Course_maintenance = "Backup";
@@ -24,5 +27,6 @@ $IntroductionTextUpdated = "A introdução foi actualizada";
 $IntroductionTextDeleted = "A introdução foi eliminada";
 $SessionIdentifier = "Identificador da sessão";
 $SessionName = "Nome da sessão";
-$SessionCategory = "Categorias das sessões";
+$SessionCategory = "Categoria da sessão";
 $SessionData = "Dados da sessão";
+?>

@@ -23,10 +23,4 @@ $GreyIcons = "Caja de herramientas";
 $Interaction = "Interacción";
 $Authoring = "Creación de contenidos";
 $Administration = "Administración";
-$IntroductionTextUpdated = "";
-$IntroductionTextDeleted = "";
-$SessionIdentifier = "";
-$SessionName = "";
-$SessionCategory = "";
-$SessionData = "";
 ?>

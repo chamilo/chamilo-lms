@@ -1,6 +1,9 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $ResourceAdded = "Resursas įdėtas. Dabar galite eiti atgal arba įdėti daugiau resursų.";
-$LearningPath = "Teorinė kurso medžiaga";
+$LearningPath = "Mokymosi medžiaga";
 $LevelUp = "vienu lygmeniu į viršų";
 $AddIt = "Pridėti";
 $MainCategory = "pagrindinė kategorija";
@@ -33,23 +36,24 @@ $DokeosRelatedCourseMaterial = "Chamilo related course resources";
 $LinkTarget = "Nuoroda";
 $SameWindow = "Tame pačiame lange";
 $NewWindow = "Naujame lange";
-$StepDeleted1 = "Šis ";
+$StepDeleted1 = "Šis";
 $StepDeleted2 = "įrašas ištrintas šiame įrankyje.";
 $Modify = "redaguoti";
 $Chapter = "Skyrius";
-$NoAgendaItems = "Įrašų nėra";
-$AgendaAdd = "Pridėti naują darbotvarkės įrašą";
-$UserGroupFilter = "Filtruoti pagal grupes/įrašus";
+$NoAgendaItems = "Darbotvarkės įrašų nėra";
+$AgendaAdd = "Pridėti Darbotvarkės įrašą";
+$UserGroupFilter = "Vartotojų grupės filtras";
 $AgendaSortChronologicallyUp = "Rūšiuoti darbotvarkės įrašus chronologine tvarka (į viršų)";
-$ShowCurrent = "Rodyti šio mėnesio darbotvarkės įrašus";
-$ModifyCalendarItem = "Redaguoti įrašą";
-$ItemTitle = "Įrašo pavadinimas";
+$ShowCurrent = "Rodyti esamus darbotvarkės įrašus";
+$ModifyCalendarItem = "Redaguoti darbotvarkės įrašą";
+$ItemTitle = "Antraštė";
 $Detail = "Detalės";
-$EditSuccess = "Darbotvarkės įrašas buvo redaguotas";
-$AddCalendarItem = "Pridėti naują darbotvarkės įrašą";
+$EditSuccess = "Redagavimas sėkmingas";
+$AddCalendarItem = "Įrašyti darbotvarkės įrašą";
 $AddAnn = "Įrašyti pranešimą";
 $ForumAddNewTopic = "Forumas: įrašyti naują temą";
 $ForumEditTopic = "Forumas: redaguoti temą";
 $ExerciseAnswers = "Pratimas: Atsakymai";
 $ForumReply = "Forumas: atsakyti";
 $AgendaSortChronologicallyDown = "Rūšiuoti darbotvarkę chronologiškai (žemyn)";
+?>

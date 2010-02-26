@@ -1,5 +1,8 @@
 <?php
-$langLinkSite = "Adicionar link a página inicial";
+/*
+for more information: see languages.txt in the lang folder.
+*/
+$langLinkSite = "Link para uma página da web";
 $langSubTitle = "Adiciona um link para uma página na página principal do seu curso. Para fazer isso, vá até a página, copie a URL da barra de endereço no topo do seu navegador, e cole-a no campo \"Link\" abaixo.";
 $langAddPage = "Adicionar uma página";
 $langSendPage = "Página a ser publicada";
@@ -12,7 +15,7 @@ $langNoLinkURL = "Por favor, informe a URL do link";
 $langLinkTarget = "Destino do link";
 $langSameWindow = "Na mesma janela";
 $langNewWindow = "Em uma nova janela";
-$langAdded = "Adicionado";
+$langAdded = "O link foi adicionado";
 $langAddLink = "Adicione um link";
 $langNoLinkName = "Por favor, informe um nome para o link";
 $langEditLink = "Editar Link da página inicial do Curso";
@@ -22,3 +25,4 @@ $NoLinkName = "Link sem nome";
 $NoLinkURL = "Link sem endereço (URL)";
 $LinkChanged = "Link alterado";
 $OkSentLink = "O link foi enviado";
+?>

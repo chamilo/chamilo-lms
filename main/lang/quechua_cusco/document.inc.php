@@ -1,10 +1,13 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $MoveTo = "Kuyuchiy kayman";
 $langDownloadFile = "Apachiy hoq khiputa";
 $langNameDir = "Musuq wayaqaq sutin";
 $langSize = "Sayaynin";
 $langRename = "Sutichayay";
-$langCopy = "Kikinchay yachachinaq ima kaqninkunata";
+$langCopy = "Kikinchay";
 $langTo = "piman";
 $langNoSpace = "Apachiykiqa pantarun. Manan kanchu aswan k'iti wayaqaykipi";
 $langDownloadEnd = "Apachikuyqa ruwakunña";
@@ -32,7 +35,7 @@ $langFileName = "Khipuq sutin";
 $langNoFileName = "Ama hina kaychu, churay khipuq sutinta";
 $langNoText = "Ama hina kaychu, churay qelqasqata / HTML qelqasqata";
 $langAreYouSureToDelete = " Cheqaychu wañuchinki ?";
-$langScormcontent = "Kay ima kaqqa SCORM nisqan<br><input type=button name=scormbutton value='Qallariy' onclick='openscorm()'>";
+$langScormcontent = "Kay ima kaqqa SCORM nisqan<br /><input type=button name=scormbutton value='Qallariy' onclick='openscorm()'>";
 $langScormcontentstudent = "Kay yachachinaqa SCORM nisqan. Qhawariyta munaspaqa, kayta q'apiy: <input type=button name=scormbutton value='Qallariy' onclick='openscorm()'>";
 $langPublish = "Reqsipachiy";
 $langMissingImagesDetected = "Wanki pisi kayta rikurirun";
@@ -45,7 +48,7 @@ $langChapter = "Sutichasqa";
 $langDocumentList = "Llipin qelqa khipukunamanta yupachasqan";
 $langOrganisationList = "Llaqlla imaymanayuq";
 $langCreationSucces = "Kamarisqaña llaqlla  imaymanayuq.";
-$langCanViewOrganisation = "Ña qhawayta atinki imaykikunata allichasqata ";
+$langCanViewOrganisation = "Ña qhawayta atinki imaykikunata allichasqata";
 $langHere = "kaypi.";
 $langViewDocument = "Qhaway";
 $langHtmlTitle = "Llaqlla imaymanayuq";
@@ -103,7 +106,7 @@ $fileModified = "Khipuqa t'ijrapachisqaña";
 $DocumentsOverview = "qelqa khipukunamanta sinri";
 $ViewSlideshow = "Qhaway wankikuna rikuchiyta";
 $Options = "Imaymanakuna";
-$WelcomeOogieConverter = "Conversor de PowerPoint Oogie<br>1. Disco duro maskhay ima khipukuna kay tukukuqniyuqta *.ppt o *.odp<br>2. Apachiy Oogie nisqaman, Oogienisqataq t'ijrachinqa  Lecciones Scorm nisqa qhawanaman.<br>3. Atinki ima rimaykunata sapanqa diapositiva nisqaman yapayta hinallataq  test de evaluación nisqatapas.";
+$WelcomeOogieConverter = "Conversor de PowerPoint Oogie<br />1. Disco duro maskhay ima khipukuna kay tukukuqniyuqta *.ppt o *.odp<br />2. Apachiy Oogie nisqaman, Oogienisqataq t'ijrachinqa  Lecciones Scorm nisqa qhawanaman.<br />3. Atinki ima rimaykunata sapanqa diapositiva nisqaman yapayta hinallataq  test de evaluación nisqatapas.";
 $ConvertToLP = "Lecciones nisqaman t'ijrachiy";
 $AdvancedSettings = "Kamariychikuna ñaupachasqa";
 $File = "Khipu";
@@ -150,7 +153,7 @@ $TemplateTitleComparisonDescription = "Raphi 2 sukayuq";
 $TemplateTitleDiagram = "Diagrama explicativo nisqa";
 $TemplateTitleDiagramDescription = "Wankiwan ima nisqayninwan lloqeman";
 $TemplateTitleImage = "Wanki";
-$TemplateTitleImageDescription = "Raphi chulla wankillawan ";
+$TemplateTitleImageDescription = "Raphi chulla wankillawan";
 $TemplateTitleFlash = "Animación Flash nisqa";
 $TemplateTitleFlashDescription = "Animación + qelqa haykuchiywan";
 $TemplateTitleAudio = "Uyarina nisqayninwan";
@@ -207,3 +210,4 @@ $CreateFolder = "Kamay wayaqata";
 $HelpDefaultDirDocuments = "Kay wayaqapiqa kashan khipukuna kikin churakusqanmanta. Yapawaq utaq wañuchiwaq hoq kiphukunatapas, ichaqa hoq khipu pakasqa kanqa qelqa khipu web churakusqanpi chayqa yachaqekunapas mana rikunqakuchu. Sapa kuti khiputa qelqa-khipu web nisqaman haykuchispaqa rikurichiy.";
 $HelpSharedFolder = "Kay wayaqapiqa kashan yachaqekunaq khipunkuna (Kanpaqpas.) apachinku yachachinakunaman Editor nisqamanta utaq huñusqakunaq llank'anamanta.Kikinmantaqa qhawachikunqa llipin yachachiqkunapaq, yachaqekunpaqqa pakasqa kanqa ichapas qhawankuman acceso directo nisqamanta. Sichus rikurichinki hoq yachaqeq wayaqanta chayqa hokaq yachaqekunapas rikunqaku ima kasqanta.";
 $TemplateImage = "Yupiq wankin";
+?>

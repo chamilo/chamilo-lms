@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langLineNumber = "Linjenummer";
 $langLine = "linje";
 $langLines = "linjer";
@@ -9,7 +12,7 @@ $langAddNewHeading = "Legg til ny overskrift";
 $langCourseAdministratorOnly = "Kun for lærere";
 $langDefineHeadings = "Definer overskrifter";
 $langBackToUsersList = "Tilbake til brukerliste";
-$langTracking = "Statestikk";
+$langTracking = "Sporing";
 $langCourseManager = "Lærer";
 $langModRight = "endre rettigheter for";
 $langNoAdmin = "har fra nå av ingen rettigheter på denne side";
@@ -26,3 +29,4 @@ $langUnreg = "Avmeld";
 $langGroupUserManagement = "Gruppehåndtering";
 $langUnregister = "Avregistrer";
 $langAddAUser = "Legg til brukere";
+?>

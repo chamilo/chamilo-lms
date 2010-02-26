@@ -1,15 +1,18 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langOnlineConference = "Konferans";
 $langWash = "Temizle";
 $langReset = "Sıfırla";
 $langSave = "Mesaj gönder";
 $langRefresh = "Yenile";
-$langIsNowInYourDocDir = " belge araçlarınızdadır. <br><B>Bu dosya <u>görünür</u></B>";
+$langIsNowInYourDocDir = " belge araçlar&#305;n&#305;zdad&#305;r. <br /><B>Bu dosya <u>görünür</u></B>";
 $langCopyFailed = "Yazdırma işlemi tamamlanamadı";
 $langTypeMessage = "Lütfen mesajınızı yazınız!";
 $langConfirmReset = "Bütün mesajlari silmek istiyormusunuz?";
 $langHasResetChat = "Sohbet'i temizledi.";
-$langNoOnlineConference = "Şu anda herhangi bir konferans bulunmuyor...";
+$langNoOnlineConference = "&#350;u anda herhangi bir konferans bulunmuyor...";
 $langMediaFile = "Canlı ses veya resim akışı";
 $langContentFile = "Sunum";
 $langListOfParticipants = "Katılanların listesi";
@@ -19,7 +22,7 @@ $langOnlyCheckForImportantQuestion = "Bu kutuyu sadece ÖNEMLİ bir soru soraca�
 $langQuestion = "soru";
 $langClearList = "Listeyi temizle";
 $langWhiteBoard = "Beyaz Tahta";
-$langTextEditorDefault = "<h2>Kelime İşlemci</h2>MS Word dosyasından kesip buraya yapıştırın ve düzenleyin. Katılımcılar değişiklikleri canlı olarak izleyecektir. ";
+$langTextEditorDefault = "<h2>Kelime İşlemci</h2>MS Word dosyasından kesip buraya yapıştırın ve düzenleyin. Katılımcılar değişiklikleri canlı olarak izleyecektir.";
 $langStreaming = "Veri akışı";
 $langStreamURL = "Veri akışı URL";
 $langStreamType = "Veri akış türü";
@@ -57,3 +60,4 @@ $AskPermissionSpeak = "Konuşmak için izin iste";
 $GiveTheFloorTo = "Odayı ver";
 $Pause = "Durdurma";
 $Stop = "Dur";
+?>

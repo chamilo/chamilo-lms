@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $ModifInfo = "Kurso nustatymai";
 $langModifDone = "Informacija buvo atnaujinta";
 $langDelCourse = "Ištrinti visą kurso sritį";
@@ -6,13 +9,13 @@ $langProfessors = "Dėstytojai";
 $langFaculty = "Kategorija";
 $langConfidentiality = "Privatumas";
 $langPublic = "Viešas priėjimas iš portalo titulinio netgi neprisijungus prie sistemos";
-$langUnsubscription = "Išsiprenumeruoti";
+$langUnsubscription = "Atsisakyti";
 $langPrivOpen = "Privatus priėjimas, galima registracija";
-$langPrivate = " Privatus priėjimas vartotojams, esantiems vartotojų sąraše";
+$langPrivate = "Privatus priėjimas - tinklapis prieinamas tik kurso nariams (žiūrėti <a href=../user/user.php>Vartotojų sąrašas</a>)";
 $langForbidden = "Neleidžiama";
-$CourseAccessConfigTip = " Pagal nutylėjimą jūsų kursas yra viešas, bet galite nurodyti saugumo lygius aukščiau.";
-$langOpenToTheWorld = "Viešas priėjimas visiems lankytojams";
-$OpenToThePlatform = " Atviras priėjimas vartotojams, priregistruotiems sistemoje";
+$CourseAccessConfigTip = "Pagal nutylėjimą jūsų kursas viešas, bet Jūs galte nustatyti priėjimo teises žemiau.";
+$langOpenToTheWorld = "Atvira - priėjimas leidžiamas bet kam";
+$OpenToThePlatform = "Atvira - priėjimas leidžiamas prisiregistravusiems sistemoje vartotojams";
 $langOpenToThePlatform = "Atvira - priėjimas leidžiamas prisiregistravusiems sistemoje vartotojams";
 $langTipLang = "Ši kalba bus prieinama kiekvienam jūsų kurso lankytojui.";
 $langVid = "Video";
@@ -23,9 +26,9 @@ $langExercise = "Testai";
 $langStats = "Statistika";
 $langUplPage = "Įrašyti puslapį ir nuorodą į titulinį";
 $langLinkSite = "Įrašyti nuorodą į puslapį tituliniame";
-$langCourse = "Sritis ";
+$langCourse = "Sritis";
 $langHasDel = "ištrinta";
-$langBackHome = "atgal į titulinį ";
+$langBackHome = "atgal į titulinį";
 $langByDel = "Šios srities ištrynimas neatstatomai panaikins visą turinį (dokumentus, nuorodas...) išregistruos visus narius (jie liks kitose srityse). Tai taip pat ištrins visus virtualius kursus, susijusius su šia kurso sritimi.<p>Ar tikrai norite ištrinti kursą?";
 $langY = "TAIP";
 $langN = "NE";
@@ -58,12 +61,11 @@ $langExpirationDate = "Galiojimo pasibaigimo data";
 $langPostPone = "Post pone";
 $langLastEdit = "Paskutinis redagavimas";
 $langLastVisit = "Paskutinis vizitas";
-$langSubscription = "Prenumeruotis";
-$langCourseAccess = "Priėjimas prie kurso";
+$langSubscription = "Užsisakymas";
+$langCourseAccess = "Priįjimas prie kurso";
 $langConfirmBackup = "Ar tikrai norite sukurti kurso srities atsarginę kopiją?";
 $langCreateSite = "Sukurti kurso sritį";
-$langRestoreDescription = "Kursas yra archyve, kurį galite pasirinkti viršuje.<br><br>
-Kai tik nuspausite \"Atkurti\", archyvas bus išskleistas ir kursas atkurtas.";
+$langRestoreDescription = "Kursas yra archyve, kurį galite pasirinkti viršuje.<br /><b";
 $langRestoreNotice = "This script doesn't allow yet to automatically restore users, but data saved in \"users.csv\" are sufficient for the administrator to do it manually.";
 $langAvailableArchives = "Esamų archyvų sąrašas";
 $langNoArchive = "Joks archyvas neparinktas";
@@ -74,7 +76,7 @@ $langBackH = "atgal į titulinį";
 $langOtherCategory = "Kita kategorija";
 $langAllowedToUnsubscribe = "Vartotojams leidžiama išsiprenumeruoti iš šio kurso";
 $langNotAllowedToUnsubscribe = "Vartotojams neleidžiama išsiprenumeruoti iš šio kurso";
-$langCourseVisibilityClosed = " Priėjimas uždarytas; gali prieiti tik kurso vadovas.";
+$langCourseVisibilityClosed = "Visiškai uždarytas; prie kurso gali prieiti tik kurso vadovas ir kuratoriai.";
 $CourseVisibilityClosed = "Uždarytas; prie kurso gali prieiti tik kurso vadovas ir kuratoriai..";
 $CourseVisibilityModified = "Modifikuota";
 $WorkEmailAlert = "Perspėti e-mailu naujo dokumento pateikimo atveju";
@@ -90,6 +92,7 @@ $AllowUserEditAnnouncementActivate = "Įjungti redagavimo galimybę vartotojams"
 $AllowUserEditAnnouncementDeactivate = "Išjungti redagavimo galimybę vartotojams";
 $OrInTime = "Or in";
 $CourseRegistrationPassword = "Kurso registracijos slaptažodis";
-$langDescriptionDeleteCourse = "Visiškai neatstatomai ištrina kursą ir jo dokumentus.<br><br>Elkitės atidžiai!";
+$langDescriptionDeleteCourse = "Visiškai neatstatomai ištrina kursą ir jo dokumentus.<br /><br />Elkitės atidžiai!";
 $langDescriptionCopyCourse = "Galimybė dublikuoti visą arba dalį kurso.";
 $DescriptionRecycleCourse = "Šis įrankis ištrina kurso dokumentus, forumo įrašus, nuorodas ir t.t. Patogu panaudoti pvz.: kartą į metus. Prieš tai išsaugokite atsarginę kurso dokumentų kopiją!";
+?>

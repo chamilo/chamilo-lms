@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $MyTasks = "Mis tareas";
 $FavoriteBlogs = "Mis blogs favoritos";
 $Navigation = "Navegación";
@@ -99,3 +102,4 @@ $CommentDeleted = "El comentario ha sido eliminado";
 $RatingAdded = "La calificación ha sido añadida.";
 $BlogPosts = "Artículos del blog";
 $BlogComments = "Comentarios de los artículos";
+?>

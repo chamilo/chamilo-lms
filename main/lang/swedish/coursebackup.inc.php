@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langSelectOptionForBackup = "Var vänlig välj ett säkerhets kopia alternativ.";
 $langLetMeSelectItems = "Låt mig välja kursdelar";
 $langCreateFullBackup = "Skapa en komplett säkerhetskopia av denna kurs.";
@@ -44,3 +47,4 @@ $UploadError = "Misslyckades med filuppladdning. Kontrollera maximalt accepterad
 $DocumentsWillBeAddedToo = "Dokument kommer också att läggas till";
 $ToExportLearnpathWithQuizYouHaveToSelectQuiz = "Om du vill exportera ett kursmoment som innehåller ett test måste du vara noga med att välja de test som ska vara med i exporten i listan över test.";
 $ArchivesDirectoryNotWriteableContactAdmin = "Arkivmappen som verktyget använder är inte skrivbar. Kontakta administratören för din lärplattform.";
+?>

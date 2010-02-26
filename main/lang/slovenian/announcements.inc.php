@@ -1,11 +1,14 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $Announcement = "Obvestila";
 $langAnnEmpty = "Seznam obvestil je bil izpraznjen";
 $AnnouncementModified = "Obvestilo je bilo spremenjeno";
 $AnnouncementAdded = "Obvestilo je bilo dodano";
 $AnnouncementDeleted = "Obvestilo je bilo odstranjeno";
-$AnnouncementPublishedOn = "Objavljeno ";
-$AddAnnouncement = "Dodano kot obvestilo";
+$AnnouncementPublishedOn = "Objavljeno";
+$AddAnnouncement = "Dodaj obvestilo";
 $langContent = "Vsebina";
 $AnnouncementDeleteAll = "Odstrani seznam obvestil";
 $professorMessage = "Obvestilo učitelja";
@@ -20,7 +23,7 @@ $langDelete = "odstrani";
 $langTitle = "Naslov";
 $langHelp = "pomoč";
 $langOk = "OK";
-$langAddIntro = "Dodaj uvodno besedilo ";
+$langAddIntro = "Dodaj uvodno besedilo";
 $langBackList = "Vrni se na seznam";
 $langSelMess = "Opozorila izbranim uporabnikom";
 $EmailTitle = "Predmet";
@@ -29,7 +32,7 @@ $langSelectedUsers = "Izbrani uporabniki";
 $langSubmit = "Pošlji";
 $langPleaseEnterMessage = "Vnesti je potrebno besedilo sporočila.";
 $langPleaseSelectUsers = "Izbrati je potrebno nekaj uporabnikov.";
-$Teachersubject = "Sporočilo odposlano vašim uporabnikom ";
+$Teachersubject = "Sporočilo odposlano vašim uporabnikom";
 $langMessages = "Sporočila";
 $langMessageToSelectedUsers = "Sporočila izbranim uporabnikom";
 $langIntroText = "Za pošiljanje sporočila, izberite skupino uporabnikov (označenih z G) ali posamezne uporabnike s seznama na levi.";
@@ -53,3 +56,4 @@ $AnnounceSentToUserSelection = "Obvestila poslana izbranim uporabnikom";
 $SendAnnouncement = "Pošlji obvestilo";
 $ModifyAnnouncement = "Spremeni obvestilo";
 $ButtonPublishAnnouncement = "Pošlji obvestilo";
+?>

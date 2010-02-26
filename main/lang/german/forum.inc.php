@@ -1,8 +1,11 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $ForumDeleted = "Forum wurde gelöscht";
 $ForumCategoryDeleted = "Forum Kategorie wurde gelöscht";
 $ForumLocked = "Forum ist gesperrt";
-$Forum = "Foren";
+$Forum = "Forum";
 $AddForumCategory = "Neue Forums-Kategorie hinzufügen";
 $AddForum = "Neues Forum hinzufügen";
 $Topics = "Themen";
@@ -22,8 +25,8 @@ $PublicPrivateGroupForum = "Öffentliches oder privates Gruppen-Forum?";
 $Public = "Für alle Kursteilnehmer";
 $Private = "Nur für Mitglieder der Gruppe";
 $NewPostStored = "Die Nachricht wurde gespeichert";
-$ReturnTo = "Sie können nun zurückgehen zu ";
-$Or = "oder ";
+$ReturnTo = "Sie können nun zurückgehen zu";
+$Or = "oder";
 $ReplyToThread = "Zu diesem Thema antworten";
 $ReplyToMessage = "Auf diese Nachricht antworten";
 $QuoteMessage = "Nachricht zitieren";
@@ -39,8 +42,8 @@ $DeletePost = "Wollen Sie die Nachricht wirklich löschen? Beim Löschen der Nac
 $Locked = "Geschlossen:  Es können keine neuen Beiträge in dieser Forum-Kategorie, diesem Forum oder dem Thema hinzugefügt werden; alle bisherigen Nachrichten können jedoch weiter gelesen werden.";
 $Unlocked = "Offen: Neue Beiträge können in dieser Forums-Kategorie, diesem Forum oder Thema geschrieben werden";
 $Flat = "Flat";
-$Threaded = "Als Thread";
-$Nested = "verschachtelt";
+$Threaded = "Threaded";
+$Nested = "Nested";
 $FlatView = "Flat View";
 $ThreadedView = "Threaded View";
 $NestedView = "Nested View";
@@ -56,7 +59,7 @@ $ForGroup = "Für Gruppe";
 $ThreadLocked = "Thema ist geschlossen";
 $NotAllowedHere = "Sie haben hier keinen Zugang";
 $ReplyAdded = "Antwort wurde hinzugefügt";
-$EditPost = "Artikel bearbeiten";
+$EditPost = "Beitrag editieren";
 $EditPostStored = "Beitrag wurde geändert";
 $NewForumPost = "Neuer Beitrag in diesem Forum";
 $YouWantedToStayInformed = "Sie haben angegeben, dass Sie per E-Mail informiert werden wollen, wenn jemand zu diesem Thema antwortet";
@@ -118,7 +121,9 @@ $Thread = "Thread";
 $NotifyMe = "Benachrichtigung senden";
 $ConfirmUserQualification = "Kennzeichnung bestätigen";
 $NotChanged = "Unverändert";
+$TitleColumnGradebook = "Spaltenüberschrift im Kompetenz-Report";
 $QualifyThreadGradebook = "Diesen Thread kennzeichnen";
+$QualifyWeight = "Gewichtung im Report";
 $QualifyNumeric = "Wertung";
 $AlterQualifyThread = "Thread-Wertung bearbeiten";
 $ForumMoved = "Das Forum wurde verschoben";
@@ -134,3 +139,4 @@ $EditForum = "Forum bearbeiten";
 $BackToForum = "Zurück zum Forum";
 $BackToForumOverview = "Zurück zur Forums-Übersicht";
 $BackToThread = "Zurück zum Thread";
+?>

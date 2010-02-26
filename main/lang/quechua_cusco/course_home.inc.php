@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langActivate = "Kancharichiy";
 $langDeactivate = "Wañurichiy";
 $langInLnk = "Wataquna wañuchisqa";
@@ -11,7 +14,7 @@ $PlatformAdminOnly = "Plataforma nisqamanta kamachiqkunalla";
 $langCombinedCourse = "Yachachina chaqrosqa";
 $ToolIsNowVisible = "Kunanqa llank'anaqa qhawachikun";
 $ToolIsNowHidden = "Kunanqa llank'anaqa mana qhawachikunchu";
-$EditLink = "Ruwapay wayaqta";
+$EditLink = "Wataqta qelqay";
 $Blog_management = "Blogs nisqakunata kamaynapaq";
 $Forum = "Rimarinakuykuna";
 $Course_maintenance = "Yachachinamanta uywaynin";
@@ -22,3 +25,4 @@ $Authoring = "Kamay ukhupi ima kaqkunata";
 $Administration = "Kamachina";
 $IntroductionTextUpdated = "Qelqa haykuyqa kunanchisqaña";
 $IntroductionTextDeleted = "Qelqa haykuyqa chinkachisqaña";
+?>

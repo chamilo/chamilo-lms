@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $PublishSurvey = "Pubblica il questionario";
 $CompareQuestions = "Confronta le risposte";
 $InformationUpdated = "Informazione aggiornata";
@@ -73,7 +76,7 @@ $EditSurvey = "Modifica il questionario";
 $OrReturnToSurveyOverview = "O ritornare all'elenco dei questionari";
 $SurveyParametersMissingUseCopyPaste = "Mancano parametri nel collegamento. Copia e incolla le informazioni";
 $WrongInvitationCode = "Codice di invito errato";
-$SurveyFinished = "Hai completato il questionario. ";
+$SurveyFinished = "Hai completato il questionario.";
 $SurveyPreview = "Vedi il questionario";
 $InvallidSurvey = "Questionario non valido";
 $AddQuestion = "Aggiungi una domanda";
@@ -89,7 +92,7 @@ $AddAnswer = "Aggiungi un'opzione";
 $DisplayAnswersHorVert = "Mostra";
 $AnswerOptions = "Opzioni della domanda";
 $YesNo = "Sì/No";
-$MultipleResponse = "Risp.multipla";
+$MultipleResponse = "Risp. multipla";
 $Open = "Risp.libera";
 $Dropdown = "Scorrimento";
 $Pagebreak = "Nuova pag.";
@@ -114,7 +117,7 @@ $SelectXAxis = "Seleziona la domanda sull'asse X";
 $SelectYAxis = "Seleziona la domanda sull'asse Y";
 $ComparativeReport = "Report comparativo";
 $AllQuestionsOnOnePage = "Domande poste di seguito su una singola pagina";
-$SelectUser = "Utente";
+$SelectUser = "Seleziona l'utente";
 $SelectUserWhoFilledSurvey = "Seleziona l'utente che ha riempito il questionario";
 $userreport = "Report utente";
 $VisualRepresentation = "Grafico";
@@ -135,9 +138,8 @@ $DetailedReportByUserDetail = "Questo report mostra le risposte di uno specifico
 $DetailedReportByQuestionDetail = "Questo report mostra i risultati raggruppati per domanda. Viene fornita un'analisi statistica di base.";
 $ReminderResendToAllUsers = "Invia a tutti gli utenti un collegamento al questionario. Se non spunti l'opzione l'email verrà inviata solo ai nuovi utenti.";
 $Multiplechoice = "Risp.singola";
-$Multipleresponse = "Risp. multipla";
-$Score = "Punteggi";
-$Shared = "Condivisione";
+$Score = "Punteggio";
+$Shared = "Condiviso";
 $Invite = "Invita";
 $MaximumScore = "Punteggio massimo";
 $ViewInvited = "Vedi gli invitati";
@@ -183,12 +185,12 @@ $Personality = "Personalizza";
 $Condition = "Condizione";
 $Primary = "Primario";
 $Secondary = "Secondario";
-$CourseSettings = "Configurazione del modulo";
+$CourseSettings = "Configurazione del corso";
 $PleaseChooseACondition = "Scegli una condizione";
 $ChooseDifferentCategories = "Scegli categorie diverse";
 $Version = "Versione";
 $Normal = "Normale";
-$NoLogOfDuration = "Nessuna registrazione della durata";
+$NoLogOfDuration = "Nessuno storico della durata";
 $AutoInviteLink = "Questo collegamento permette a utenti senza invito di accedere al questionario:";
 $CompleteTheSurveysQuestions = "Completa i quesiti del questionario";
 $SurveysDeleted = "Questionari eliminati";
@@ -201,3 +203,4 @@ $UpdateInformation = "Aggiorna informazione";
 $PleaseFillSurvey = "Riempi il questionario, grazie.";
 $ReportingOverview = "Report di sintesi";
 $ThereAreNotQuestionsForthisSurvey = "Non ci sono domande nel questionario";
+?>

@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $FlatView = "平排檢視";
 $ScoreColor = "積分顏色";
 $ScoringSystem = "計分系統";
@@ -14,7 +17,7 @@ $RootCat = "根分類";
 $NewCategory = "新分類";
 $NewEvaluation = "新評估";
 $PickACourse = "選擇一門課程";
-$CategoryName = "類別名稱";
+$CategoryName = "分類名稱";
 $CourseIndependent = "獨立課程";
 $CourseIndependentEvaluation = "獨立課程評估";
 $Max = "最大";
@@ -32,9 +35,10 @@ $DokeosStudentPublications = "Chamilo 學員作品";
 $DokeosLearningPaths = "Chamilo 學習路徑";
 $ChooseExercise = "選擇練習";
 $AddResult = "加入結果";
-$BackToOverview = "返回概覽頁面 ";
+$BackToOverview = "返回概覽頁面";
 $ExportPDF = "輸出 PDF 檔";
 $Print = "列印";
 $DeleteAll = "刪除全部";
 $ScoringUpdated = "已更新積分";
 $CertificateWCertifiesStudentXFinishedCourseYWithGradeZ = "%s 證明nn %s nn成功完成 nn '%s' nn課程，等第為nn '%s'";
+?>

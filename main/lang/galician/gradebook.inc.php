@@ -1,7 +1,11 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $ModifyEvaluation = "Modificar avaliación";
 $CreateLink = "Crear enlace";
-$FlatView = "Vista Lineal";
+$AddResultNoStudents = "Non hai estudantes para engadir resultados";
+$FlatView = "Vista plana";
 $ScoreEdit = "Editar as regras de puntuación";
 $ScoreColor = "Cor da puntuación";
 $ScoringSystem = "Sistema de puntuación";
@@ -64,7 +68,7 @@ $ExampleCSVFile = "Ficheiro CSV de exemplo";
 $ExampleXMLFile = "Ficheiro XML de exemplo";
 $OverwriteScores = "Sobrescribir puntuacións";
 $IgnoreErrors = "Ignorar erros";
-$ItemsVisible = "Fixéronse visibles os elementos ";
+$ItemsVisible = "Fixéronse visibles os elementos";
 $ItemsInVisible = "Fixéronse invisibles os elementos";
 $NoItemsSelected = "Non hai seleccionado ningún elemento";
 $DeletedCategories = "Categorías eliminadas";
@@ -91,7 +95,7 @@ $Certificates = "Certificados";
 $Certificate = "Certificado";
 $ChooseUser = "Seleccionar usuarios para esta avaliación";
 $FirstLetter = "Primeira letra do apelido";
-$UserAdded = "Engadiuse o usuario";
+$UserAdded = "Usuario engadido";
 $ResultEdited = "Resultado actualizado";
 $ChooseFormat = "Escoller formato";
 $OutputFileType = "Tipo de ficheiro de saída";
@@ -102,4 +106,15 @@ $TotalUser = "Total por usuario";
 $AverageTotal = "Media total";
 $Evaluation = "Avaliación";
 $EvaluationAverage = "Media da avaliación";
+$EditCategory = "Configurar a avaliación do curso";
+$EditAllWeights = "Editar ponderacións";
+$GradebookQualificationTotal = "Total";
+$GradebookEvaluationDeleted = "O compoñente da avaliación foi eliminado";
+$GradebookQualifyLog = "Historial da avaliación";
+$GradebookNameLog = "Compoñente da avaliación";
+$GradebookDescriptionLog = "Descrición da avaliación";
+$GradebookVisibilityLog = "Visibilidade";
+$ResourceType = "Tipo";
+$GradebookWhoChangedItLog = "Modificado por";
 $Resource = "Recurso";
+?>

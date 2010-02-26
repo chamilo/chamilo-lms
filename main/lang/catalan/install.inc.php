@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langStatDB = "Base de dades de seguiment. Útil només si hi ha vàries bases de dades.";
 $langEnableTracking = "Permetre seguiment";
 $langInstituteShortName = "Nom curt de la institució";
@@ -20,12 +23,12 @@ $langAdminPass = "Contrasenya de l'administrador (<font color=\"red\">és recoma
 $langEducationManager = "Responsable de continguts";
 $langCampusName = "Nom de la plataforma";
 $langDBSettingIntro = "Les rutines d'instal·lació crearan les principals bases de dades de Chamilo. Si us plau, recordi que Chamilo necessitarà crear diverses bases de dades. Si només teniu accés a una base de dades en el vostre servidor, Chamilo no funcionarà a no ser que escolliu l'opció 'Una base de dades'";
-$langStep1 = "Pas 1";
-$langStep2 = "Pas 2";
-$langStep3 = "Pas 3 de 6 ";
-$langStep4 = "Pas 4 de 6 ";
-$langStep5 = "Pas 5 de 6 ";
-$langStep6 = "Pas 6 de 6 ";
+$langStep1 = "Pas 1 de 6";
+$langStep2 = "Pas 2 de 6";
+$langStep3 = "Pas 3 de 6";
+$langStep4 = "Pas 4 de 6";
+$langStep5 = "Pas 5 de 6";
+$langStep6 = "Pas 6 de 6";
 $langCfgSetting = "Paràmetres de configuració";
 $langDBSetting = "Detalls de la base de dades MySQL";
 $langMainLang = "Idioma principal";
@@ -42,3 +45,4 @@ $langScormDB = "Base de dades SCORM";
 $langAdminLastName = "Cognoms de l'administrador";
 $langAdminPhone = "Telèfon de l'administrador";
 $OK = "D'acord";
+?>

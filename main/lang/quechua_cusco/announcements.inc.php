@@ -1,11 +1,14 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $Announcement = "Willaykuna";
 $langAnnEmpty = "Willaykunaqa pichachikunkuña";
 $AnnouncementModified = "Willaqa t'ijrapasqañan";
 $AnnouncementAdded = "Willaqa yapachikunña";
 $AnnouncementDeleted = "Willayqa pichasqaña";
 $AnnouncementPublishedOn = "Reqsipachiy kay";
-$AddAnnouncement = "Yapay willay hina";
+$AddAnnouncement = "Yapay hoq willayta";
 $langContent = "Ima kaqkuna";
 $AnnouncementDeleteAll = "Pichay llipin willaykunata";
 $professorMessage = "Yachachiq willanan";
@@ -53,3 +56,4 @@ $AnnounceSentToUserSelection = "Willay, ajllasqa huñusqaman apachisqa";
 $SendAnnouncement = "Enviar anuncio";
 $ModifyAnnouncement = "Modificar anuncio";
 $ButtonPublishAnnouncement = "Enviar anuncio";
+?>

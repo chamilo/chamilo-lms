@@ -1,8 +1,11 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langProfessors = "Öğretmenler";
 $langExplanation = "OK tıkladığınızda, Forum, Gündem, Belge Yönetimi vs. araçlarla birlikte bu dersin sitesi yaratılır. Kullanıcı adınız ve şifrenizle giriş yaparak siteyi isteğiniz şekilde düzenleyebilirsiniz.";
-$langEmpty = "Bazı alanları boş bıraktınız.<br>Gezgininizin <b>Geri</b> düğmesini kullanarak doldurunuz.<br>Eğer ders kodunu yazmadıysanız Ders Programına bakınız";
-$langCodeTaken = "Bu ders kodu daha önce kullanılmıştır. <br><b>Geri</b> dönerek başka bir kod yazınız";
+$langEmpty = "Bazı alanları boş bıraktınız.<br />Gezgininizin <b>Geri</b> düğmesini kullanarak doldurunuz.<br />Eğer ders kodunu yazmadıysanız Ders Programına bakınız";
+$langCodeTaken = "Bu ders kodu daha önce kullanýlmýþtýr. <br /><b>Geri</b> dönerek baþka bir kod yazýnýz";
 $langFormula = "Merhaba, Ders Yetkilisi";
 $langMessage = "When you remove the test forum, it will remove all messages in that forum too.";
 $langExerciceEx = "Örnek Test";
@@ -29,8 +32,8 @@ $langAgendaTitle = "Tuesday the 11th of December - First lesson : Newton 18";
 $langAgendaText = "General introduction to philosophy and methodology principles";
 $langMicro = "Street interviews";
 $langGoogle = "Quick and powerfull search engine";
-$langIntroductionText = "Burası dersinizin önsöz bölümüdür. Değiştirmek için aşağıdaki <b>değiştir</b> bağlantısını kullanınız.";
-$langIntroductionTwo = "Bu sayfada herhangi bir öğrenci veya grup, dersin web sitesine ödev, belge, metin vs. gibi dosyalar yükleyebilirler. HTML dosyaları resimsiz olmalıdır.";
+$langIntroductionText = "Burasý dersinizin önsöz bölümüdür. Deðiþtirmek için aþaðýdaki <b>deðiþtir</b> baðlantýsýný kullanýnýz.";
+$langIntroductionTwo = "Bu sayfada herhangi bir öðrenci veya grup, dersin web sitesine ödev, belge, metin vs. gibi dosyalar yükleyebilirler. HTML dosyalarý resimsiz olmalýdýr.";
 $langCourseDescription = "Ders açıklaması";
 $langProfessor = "Öğretmen";
 $langAnnouncementEx = "This is an example of announcement. Only the profesor and other administrators of the course can publish announcements.";
@@ -47,7 +50,7 @@ $langEx = "e.g. <i>Edebiyat Tarihi</i>";
 $langFac = "Kategori";
 $langTargetFac = "Dersin verildiği fakülte, bölüm veya okul";
 $langMax = "en çok 12 harf olmalıdır, ara verilmez ve (ş,Ş,ğ,Ğ,İ,ı,Ç,ç,Ö,ö,Ü,ü) Türkçe harfler kullanılmaz. Örnek: <i>FIZIK601</i>";
-$langDoubt = "Ders kodunu okulunuzun web sitesinde bulabilirsiniz, ";
+$langDoubt = "Ders kodunu okulunuzun web sitesinde bulabilirsiniz,";
 $langProgram = "Ders Programı</a>. If your course has no code, whatever the reason, invent one. For instance <i>INNOVATION</i> if the course is about Innovation Management";
 $langScormtool = "KURS";
 $langScormbuildertool = "Scorm Yol oluşturucu";
@@ -103,3 +106,4 @@ $Create = "Oluştur";
 $MessageOfNewCourseToAdmin = "Bu mesaj platformda yeni bir ders yaratıldığı için bilgilendirme amaçlıdır.";
 $NewCourseCreatedIn = "Yeni dersin yaratıldığı yer";
 $ExplicationTrainers = "Eğitmen şu an için ayarladı. Ancak ayarlarınızı daha sonra eğitim ayarlarından değiştirebilirsiniz.";
+?>

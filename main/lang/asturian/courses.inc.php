@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $lang_already_enrolled = "Yá ta matriculáu";
 $lang_my_personnal_course_list = "El mio llistáu personal de cursos";
 $lang_course_enrollment = "Usuariu del cursu";
@@ -22,7 +25,7 @@ $lang_back_to_parent_category = "Tornar a la categoría superior";
 $lang_back_to_course_selection = "Tornar a seleición de cursu";
 $lang_up = "Tornar a la categoría superior";
 $langCatList = "Categoríes";
-$langCourseList = "Llistáu de cursos";
+$langCourseList = "Cursos";
 $Subscribe = "Matriculame";
 $AlreadySubscribed = "Yá ta matriculáu";
 $CodeMandatory = "Códigu obligatoriu";
@@ -39,7 +42,7 @@ $langHideAndSubscribeOpen = "Esondíu / Abiertu";
 $langShowAndSubscribeOpen = "Visible / Abiertu";
 $langShowAndSubscribeClosed = "Visible / Peslláu";
 $langAdminThisUser = "Tornar a esti usuariu";
-$langManage = "Alministación del Portal";
+$langManage = "Xestión del campus";
 $langEnrollToCourseSuccessful = "La so matrícula nel cursu completóse";
 $langSubCat = "Sub-categoríes";
 $langUnsubscribeNotAllowed = "Nesti cursu nun se permite que los usuarios anulen la so matrícula ellos mesmos.";
@@ -80,3 +83,4 @@ $Collapse = "Plegar";
 $CourseDetails = "Descripción del cursu";
 $GroupPendingInvitations = "Invitaciones pendientes de grupu";
 $Compose = "Redautar";
+?>

@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $lang_height = "Altu";
 $lang_resizing_comment = "cambiar dimensiones de la imaxe a esti tamañu (en píxeles)";
 $lang_width = "Anchu";
@@ -18,3 +21,4 @@ $lang_of = "de";
 $lang_view_slideshow = "Ver presentación";
 $FirstSlide = "Primer diapositiva";
 $LastSlide = "Cabera diapositiva";
+?>

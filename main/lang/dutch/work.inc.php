@@ -1,14 +1,17 @@
 <?php
-$Tools = "Functies";
+/*
+for more information: see languages.txt in the lang folder.
+*/
+$Tools = "Tools";
 $SendWork = "Document opsturen";
-$langTooBig = "U hebt geen bestand gekozen op te verzenden, of het bestand is te groot.";
-$langListDeleted = "Lijst is verwijderd.";
+$langTooBig = "U hebt geen bestand gekozen om op te sturen of het bestand is te groot.";
+$langListDeleted = "De lijst is volledig verwijderd.";
 $langDocModif = "Het document is gewijzigd.";
 $langDocAdd = "Het document is toegevoegd.";
 $langDocDel = "Het document is verwijderd.";
 $langTitleWork = "Titel van het werk voluit";
 $langAuthors = "Auteurs";
-$langDelList = "Verwijder lijst";
+$langDelList = "Lijst volledig verwijderen";
 $langWorkDelete = "Verwijderen";
 $langWorkModify = "Wijzigen";
 $langWorkConfirmDelete = "Bent u zeker dat u dit bestand wilt verwijderen?";
@@ -17,11 +20,11 @@ $lang_default_upload = "Standaardinstelling voor de zichtbaarheid van opgestuurd
 $lang_new_visible = "Nieuwe documenten zijn voor alle gebruikers zichtbaar";
 $lang_new_unvisible = "Nieuwe documenten zijn enkel voor de cursusbeheerder(s) zichtbaar";
 $lang_doc_unvisible = "Uw lesgever heeft er voor gekozen het document enkel zichtbaar te maken voor cursusbeheerders, bijgevolg zal het voor u niet zichtbaar zijn.";
-$langDelLk = "Wilt u deze link verwijderen?";
+$langDelLk = "Link verwijderen";
 $langMustBeRegisteredUser = "U moet geregistreerd zijn voor deze cursus om werk te kunnen publiceren.";
 $langListDel = "Verwijder lijst";
-$langNameDir = "Titel van nieuwe map";
-$langFileExists = "Onmogelijk.<br />Er bestaat al een bestand met dezelfde naam.";
+$langNameDir = "Map hernoemen";
+$langFileExists = "Map bestaat reeds";
 $CreateDirectory = "Map aanmaken";
 $langCurrentDir = "huidige map";
 $UploadADocument = "Een document uploaden";
@@ -30,7 +33,7 @@ $DocumentDeleted = "Het document is verwijderd";
 $SendMailBody = "Een gebruiker postte een document in de publicaties-tool van uw cursus.";
 $DirDelete = "Verwijder folder";
 $ValidateChanges = "Valideer wijzigingen";
-$FolderUpdated = "De folder werd geüpdated.";
+$FolderUpdated = "Map bijgewerkt";
 $EndsAt = "Eindigt op (volledig gesloten)";
 $QualificationOfAssignment = "Score van de opdracht";
 $MakeQualifiable = "Evaluaties activeren";
@@ -73,3 +76,4 @@ $MakeAllPapersInvisible = "Maak alle documenten onzichtbaar";
 $MakeAllPapersVisible = "Maak alle documenten zichtbaar";
 $TheDocumentHasBeenDeleted = "Het bestand is verwijderd.";
 $YouAreNotAllowedToDeleteThisDocument = "U hebt onvoldoende rechten om dit document te verwijderen";
+?>

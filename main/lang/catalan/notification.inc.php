@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $lang_new_item = "new item added";
 $lang_title_notification = "Since your last visit";
 $lang_update_agenda = "existing agenda item updated";
@@ -13,7 +16,7 @@ $lang_new_forum_topic = "new topic added";
 $lang_new_groupforum_topic = "new topic added to group forum";
 $lang_new_dropbox_file = "nou arxiu rebut";
 $lang_update_dropbox_file = "un arxiu dels seus documents compartits ha estat actualitzat";
-$ForumCategoryAdded = "La categoria del fòrum ha estat afegida";
+$ForumCategoryAdded = "s'ha afegit una nova categoria de foro";
 $LearnpathAdded = "Curs afegit";
 $GlossaryAdded = "Nou terme afegit al glossari";
 $QuizQuestionAdded = "Nova qüestió afegida en l'exercici";
@@ -30,3 +33,4 @@ $SurveyAdded = "Enquesta afegida";
 $NotebookAdded = "Nota afegida";
 $NotebookUpdated = "Nota actualitzada";
 $NotebookDeleted = "Nota eliminada";
+?>

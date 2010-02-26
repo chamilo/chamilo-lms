@@ -1,6 +1,9 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $ResourceAdded = "Recurs afegit. Vostè ara pot tornar a cursos o afegir més recursos";
-$LearningPath = "Itinerari formatiu";
+$LearningPath = "Itinerari d'aprenentatge";
 $LevelUp = "nivell superior";
 $AddIt = "Afegir";
 $MainCategory = "Categoria principal";
@@ -9,7 +12,7 @@ $AddToLinks = "Add to the course links";
 $DontAdd = "do not add";
 $lang_show_all_added_resources = "Show all added resources";
 $ResourcesAdded = "Added new resources";
-$BackTo = "Tornar a";
+$BackTo = "Back to";
 $ExternalResources = "External resources";
 $CourseResources = "Course resources";
 $ExternalLink = "External link";
@@ -37,19 +40,20 @@ $StepDeleted1 = "Aquest";
 $StepDeleted2 = "l'element fou suprimit en aquesta eina";
 $Modify = "modificar";
 $Chapter = "Capítol";
-$NoAgendaItems = "No hi ha esdeveniments";
-$AgendaAdd = "Afegir una nova activitat a l'agenda";
-$UserGroupFilter = "Filtrar per grups / usuaris";
-$AgendaSortChronologicallyUp = "Ordenar esdeveniments (antics/recents)";
-$ShowCurrent = "Veure les activitats d'aquest mes";
-$ModifyCalendarItem = "Modificar una anotació de l'agenda";
-$ItemTitle = "Títol de l'anotació";
-$Detail = "Detall";
-$EditSuccess = "L'anotació ha estat editada";
-$AddCalendarItem = "Afegir una nova anotació a l'agenda ";
+$NoAgendaItems = "No hi ha elements a l'agenda";
+$AgendaAdd = "Afegir un element a l'agenda";
+$UserGroupFilter = "Filtrar per grups d'usuaris";
+$AgendaSortChronologicallyUp = "Ordenar l'agenda cronologicament (adalt)";
+$ShowCurrent = "Ordenar els elements de l'agenda";
+$ModifyCalendarItem = "Modificar els elements de l'agenda";
+$ItemTitle = "Títol";
+$Detail = "Detalls";
+$EditSuccess = "L'edició ha estat exitosa";
+$AddCalendarItem = "Afegir element a l'agenda";
 $AddAnn = "Afegir un anunci";
 $ForumAddNewTopic = "Fòrum: afegir un nou tòpic";
 $ForumEditTopic = "Foro: editar un tema";
 $ExerciseAnswers = "Exercici: respostes";
 $ForumReply = "Foro: respondre";
-$AgendaSortChronologicallyDown = "Ordenar events (recents/antics)";
+$AgendaSortChronologicallyDown = "Ordenar l'agenda del més recent al més antic";
+?>

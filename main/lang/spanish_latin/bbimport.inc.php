@@ -5,9 +5,9 @@ for more information: see languages.txt in the lang folder.
 $langViewCourseMaterialImport = "Ver material de curso como será importado";
 $langViewExternalLinksImport = "Ver enlaces externos como serán importados";
 $langViewForumImport = "Ver el foro como será importado";
-$langImportCourseMaterial = "Importar material del curso (Herramienta Blackboard \\"Material del Curso\\")";
-$langImportExternalLinks = "Enlaces Importados (Herramienta Blackboard \\"Enlaces Externos\\")";
-$langImportForum = "Importar foros (Herramienta Blackboard \\"Foro de Discusión\\")";
+$langImportCourseMaterial = "Importar material del curso (Herramienta Blackboard \"Material del Curso\")";
+$langImportExternalLinks = "Enlaces Importados (Herramienta Blackboard \"Enlaces Externos\")";
+$langImportForum = "Importar foros (Herramienta Blackboard \"Foro de Discusión\")";
 $langToolInfo = "Esta herramienta importa cursos de Blackboard 5.5 (Material de Cursos, Foro de Discusión y Enlaces Externos)";
 $langToolName = "Importar cursos de Blackboard";
 $langSelectCoursePackage = "Seleccione un paquete de curso";

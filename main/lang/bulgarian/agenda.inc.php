@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $AgendaAdd = "Добавяне на събитие";
 $ShowAllEvents = "Покажи всички събития";
 $ShowCurrent = "Събитията от този месец";
@@ -72,3 +75,4 @@ $AgendaSortChronologicallyDown = "Сортиране на програмата �
 $ItemForUserSelection = "Избиране на потребители";
 $IsNotiCalFormatFile = "Файлът не е в iCal формат.";
 $RepeatEvent = "Повторение на събитието";
+?>

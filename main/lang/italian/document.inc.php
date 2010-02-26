@@ -1,14 +1,17 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $MoveTo = "Sposta verso";
 $langDownloadFile = "Carica il documento";
 $langNameDir = "Nome della nuova cartella";
 $langSize = "Dimensione";
 $langRename = "Rinomina";
-$langCopy = "Copia il corso";
+$langCopy = "Copia";
 $langTo = "verso";
 $langNoSpace = "Documento non caricato. Spazio insufficiente nella cartella";
 $langDownloadEnd = "Documento caricato";
-$langFileExists = "Non è possibile effettuare l'operazione.<br>Esiste gi&agrave un elemento con questo nome.";
+$langFileExists = "Non è possibile effettuare l'operazione.<br />Esiste gi&agrave un elemento con questo nome.";
 $langImpossible = "Non è possibile effettuare l'operazione";
 $langAddComment = "Aggiungi/Modifica un commento";
 $langDocCopied = "Documento copiato";
@@ -25,14 +28,14 @@ $langUncompress = "Estrai l'archivio compresso (.ZIP)";
 $langDownloadAndZipEnd = " L'archivio .ZIP è stato caricato ed estratto";
 $langRoot = "root";
 $langCreateDoc = "Crea un documento";
-$langDown = "giù";
+$langDown = "Scendi";
 $langFileError = "Il documento da caricare non è valido.";
 $langMaxFileSize = "La dimensione massima del documento è";
 $langFileName = "Nome del file";
 $langNoFileName = "Per favore, immetti il nome del file";
 $langNoText = "Immetti il testo o il contenuto HTML";
-$langAreYouSureToDelete = "Siete sicuri di voler eliminare ";
-$langScormcontent = "Questo è un corso Scorm<br><input type=button name=scormbutton value='Inizia' onclick='openscorm()'>";
+$langAreYouSureToDelete = "Siete sicuri di voler eliminare";
+$langScormcontent = "Questo è un corso Scorm<br /><input type=button name=scormbutton value='Inizia' onclick='openscorm()'>";
 $langScormcontentstudent = "Questo è un corso in formato Scorm. Se volete farlo partire, cliccate qui : <input type=button name=scormbutton value='Inizia' onclick='openscorm()'>";
 $langPublish = "Pubblica";
 $langMissingImagesDetected = "Individuate immagini mancanti";
@@ -66,7 +69,7 @@ $langOogieConversionPowerPoint = "Oogie: conversione da Presentazione";
 $langWelcomeOogieSubtitle = "Strumento di conversione da Presentazione a Modulo didattico";
 $langAddMetadata = "Vedi/Modifica i Metadati";
 $langGoMetadata = "Vai ai Metadati";
-$langQuotaForThisCourseIs = "Le dimensioni massime del corso sono ";
+$langQuotaForThisCourseIs = "Le dimensioni massime del corso sono";
 $langDel = "elimina";
 $langUp = "Su";
 $langDate = "Data";
@@ -87,8 +90,8 @@ $UplNotEnoughSpace = "Non c'è spazio sufficiente per ricevere il file!";
 $UplNoSCORMContent = "Non è stato individuato un contenuto SCORM!";
 $UplZipExtractSuccess = "Files estratti correttamente dall'archivio zip";
 $UplZipCorrupt = "Impossibile estrarre i files (file zip rovinato?)";
-$UplAlreadyExists = "esiste gia! ";
-$UplFileSavedAs = "File salvato come ";
+$UplAlreadyExists = "esiste gia!";
+$UplFileSavedAs = "File salvato come";
 $UplFileOverwritten = "è stato sovrascritto.";
 $CannotCreateDir = "Impossibile creare una cartella!";
 $UplUpload = "Carica";
@@ -107,7 +110,7 @@ $fileModified = "Il file è stato modificato";
 $DocumentsOverview = "Elenco dei documenti";
 $ViewSlideshow = "Presentazione immagini";
 $Options = "Opzioni";
-$WelcomeOogieConverter = "Benvenuti in Oogie, strumento di conversione di presentazioni<br>1. Esplora il tuo disco rigido e cerca un file .ppt o .odp<br>2. Caricalo su Oogie: verrà trasformato in pacchetto SCORM<br>3. Naviga nel pacchetto: potrai aggiungere in ogni pagina commenti audio ed inserire pagine con test.";
+$WelcomeOogieConverter = "Benvenuti in Oogie, strumento di conversione di presentazioni<br />1. Esplora il tuo disco rigido e cerca un file .ppt o .odp<br />2. Caricalo su Oogie: verrà trasformato in pacchetto SCORM<br />3. Naviga nel pacchetto: potrai aggiungere in ogni pagina commenti audio ed inserire pagine con test.";
 $ConvertToLP = "Converti in Modulo didattico";
 $AdvancedSettings = "Configurazione avanzata";
 $File = "File";
@@ -212,3 +215,4 @@ $HelpDefaultDirDocuments = "Questa cartella contiene per default l'archivio dei 
 $HelpSharedFolder = "La cartella contiene i documenti caricati da te e dai corsisti nel corso della creazione di un nuovo documento attraverso l'editor. Fanno eccezione i documenti creati nei gruppi. Per default le cartelle individuali risultano visibili ai docenti ma non ai corsisti se non attraverso i documenti stessi; rendendo visibile una cartella, essa sarà visibile da chiunque.";
 $TemplateImage = "Immagine del modello";
 $MoveElement = "Sposta l'elemento";
+?>

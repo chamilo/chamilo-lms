@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $WikiSearchResults = "Резултати от търсенето";
 $Wiki = "Group wiki";
 $StartPage = "Главна страница";
@@ -9,7 +12,7 @@ $AllPages = "Всички страници";
 $AddNew = "Добавяне на страница";
 $ChangesStored = "Промените са записани.";
 $NewWikiSaved = "Новата wiki начална страница е записана. Можете да я видите като щракнете на:";
-$DefaultContent = "<br/> <br/> <p align=\"center\"> <img src=\"%swiki/wcollaborative.png\" alt=\"Mr. Chamilo\" title=\"Mr. Chamilo\" /></p> <p align=\"center\">Като начало започнете да редактирате тази страница.</p>";
+$DefaultContent = "<br /> <br /> <p align=\"center\"> <img src=\"%swiki/wcollaborative.png\" alt=\"Mr. Chamilo\" title=\"Mr. Chamilo\" /></p> <p align=\"center\">Като начало започнете да редактирате тази страница.</p>";
 $CourseWikiPages = "Страници на курса";
 $GroupWikiPages = "Страници на групата";
 $NoWikiPageTitle = "Вашите промени са записани. Все още е необходимо да се даде заглавие на страницата.";
@@ -150,3 +153,4 @@ $NMaxVersion = "Максимален брой версии";
 $FProgress = "Напредък";
 $PutATimeLimit = "Задаване на ограничение за време";
 $StandardTask = "Стандартна задача";
+?>

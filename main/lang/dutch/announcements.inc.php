@@ -1,12 +1,15 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $Announcement = "Aankondigingen";
 $langAnnEmpty = "Alle aankondigingen zijn verwijderd.";
 $AnnouncementModified = "De aankondiging is gewijzigd.";
 $AnnouncementAdded = "De aankondiging is toegevoegd.";
 $AnnouncementDeleted = "De aankondiging is verwijderd.";
 $AnnouncementPublishedOn = "Aangekondigd op";
-$AddAnnouncement = "Toevoegen als aankondiging";
-$langContent = "Boodschap";
+$AddAnnouncement = "Aankondiging toevoegen";
+$langContent = "Inhoud";
 $AnnouncementDeleteAll = "Alle aankondigingen verwijderen";
 $professorMessage = "Bericht van uw lesgever";
 $langEmailSent = " en per e-mail opgestuurd naar de ingeschreven studenten.";
@@ -53,3 +56,4 @@ $AnnounceSentToUserSelection = "De aankondiging is gestuurd naar de geslecteerde
 $SendAnnouncement = "Stuur aankondiging";
 $ModifyAnnouncement = "Wijzig aankondiging";
 $ButtonPublishAnnouncement = "Plaats aankondiging";
+?>

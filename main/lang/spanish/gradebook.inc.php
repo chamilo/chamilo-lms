@@ -1,8 +1,11 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $ModifyEvaluation = "Guardar";
 $CreateLink = "Crear";
 $AddResultNoStudents = "No hay estudiantes para añadir resultados";
-$FlatView = "Vista plana";
+$FlatView = "Informe por usuario";
 $ScoreEdit = "Editar las reglas de puntuación";
 $ScoreColor = "Color de la puntuación";
 $ScoringSystem = "Sistema de puntuación";
@@ -19,11 +22,11 @@ $NewCategory = "Nueva calificación";
 $NewEvaluation = "Crear un componente de evaluación presencial";
 $Weight = "Ponderación";
 $PickACourse = "Seleccionar un curso";
-$CategoryName = "Nombre de la categoría";
+$CategoryName = "Nombre de la evaluación";
 $CourseIndependent = "Independiente del curso";
 $CourseIndependentEvaluation = "Evaluación independiente de un curso";
 $EvaluationName = "Componente de evaluación";
-$Max = "Maximum";
+$Max = "Máx";
 $DateEval = "Fecha de evaluación";
 $AddUserToEval = "Añadir alumnos a la evaluación";
 $NewSubCategory = "Nueva subcalificación";
@@ -83,7 +86,7 @@ $ResultAdded = "Resultado añadido";
 $EvaluationStatistics = "Estadísticas de evaluación";
 $ExportResult = "Exportar resultados";
 $EditResult = "Editar resultados";
-$GradebookWelcomeMessage = "Bienvenido a la herramienta Evaluaciones. Esta herramienta le permite evaluar las competencias de su organización. Generar informes de competencias mediante la fusión de la puntuación de las distintas actividades, como las realizadas en el aula y las actividades en línea. Este es el entorno típico de los sistemas de aprendizaje mixto.";
+$GradebookWelcomeMessage = "Bienvenido a la herramienta Evaluaciones. Esta herramienta le permite evaluar las competencias de su organización. Generar informes de competencias mediante la fusión de la puntuación de las distintas actividades, como las realizadas en el aula y las acti";
 $CreateAllCat = "Generar calificaciones para todos mis cursos";
 $AddAllCat = "Se han añadido todas las calificaciones";
 $StatsStudent = "Estadísticas de";
@@ -92,7 +95,7 @@ $Certificates = "Certificados";
 $Certificate = "Certificado";
 $ChooseUser = "Seleccionar usuarios para esta evaluación";
 $FirstLetter = "Primera letra del apellido";
-$UserAdded = "El usuario ha sido añadido";
+$UserAdded = "Usuario añadido";
 $ResultEdited = "Resultado actualizado";
 $ChooseFormat = "Escoger formato";
 $OutputFileType = "Tipo de fichero de salida";
@@ -103,7 +106,7 @@ $TotalUser = "Total por usuario";
 $AverageTotal = "Media total";
 $Evaluation = "Componente de evaluación";
 $EvaluationAverage = "Media de la evaluación";
-$EditCategory = "Editar esta categoría";
+$EditCategory = "Configurar la evaluación del curso";
 $EditAllWeights = "Editar ponderaciones";
 $GradebookQualificationTotal = "Total";
 $GradebookEvaluationDeleted = "El componente de evaluación ha sido eliminado";
@@ -186,5 +189,6 @@ $TotalWeightMustNotBeMoreThan = "Peso total no debe ser mayor que";
 $ThereIsNotACertificateAvailableByDefault = "No hay un certificado disponible por defecto";
 $CertificateMinimunScoreIsRequiredAndMustNotBeMoreThan = "La puntuación mínima para certificado es requerida y no debe ser mayor que";
 $LinkMod = "Guardar";
-$EditLink = "Editar enlace";
-$CategoryDeleted = "La categoría ha sido eliminada.";
+$EditLink = "Modificar componente de evaluación";
+$CategoryDeleted = "La evaluación del curso ha sido eliminada";
+?>

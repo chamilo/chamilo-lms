@@ -1,9 +1,12 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langNewGroupCreate = "Nieuwe groep(en) aanmaken";
 $langGroupCreation = "Nieuwe groepen aanmaken";
 $langCreate = "aanmaken";
 $langNewGroups = "nieuwe groep(en)";
-$langMax = "max. 20 lettertekens, bv. <i>ROM2121</i>";
+$langMax = "Maximum";
 $langGroupPlacesThis = "plaatsen (facultatief)";
 $langGroupsAdded = "groep(en) werd(en) toegevoegd.";
 $langGroupDel = "De groep is verwijderd.";
@@ -15,14 +18,14 @@ $langGroupTools = "Functies";
 $langGroupDocument = "Documenten";
 $langGroupPropertiesModified = "De groepseigenschappen zijn gewijzigd.";
 $langGroupSpace = "Groepsruimte";
-$langGroupName = "Groepsnaam";
-$langGroupDescription = "Beschrijving groep";
+$langGroupName = "Naam van de groep";
+$langGroupDescription = "Beschrijving";
 $langGroupMembers = "Deelnemer(s) van deze groep";
 $langEditGroup = "Deze groep wijzigen";
 $Optional = "(facultatief)";
 $langGroupSettingsModified = "Parameters van deze groep zijn gewijzigd.";
 $langGroupTooMuchMembers = "Het aantal deelnemers overschrijdt het maximumaantal dat u bepaald had. De samenstelling van de groep werd niet gewijzigd. U kan het maximumaantal hieronder wijzigen.";
-$langGroupTutor = "Groepsbegeleider";
+$langGroupTutor = "Begeleider";
 $langGroupNoTutor = "(geen)";
 $langGroupNone = "(geen)";
 $langGroupNoneMasc = "(geen)";
@@ -33,14 +36,14 @@ $langGroupSelfRegistration = "Inschrijven";
 $langGroupSelfRegInf = "inschrijven";
 $langRegIntoGroup = "Inschrijven in deze groep";
 $langGroupNowMember = "U bent nu deelnemer van deze groep.";
-$langPrivate = "Beperkte toegang, gesloten registratie (site voorbehouden voor mensen die in de gebruikerslijst staan)";
-$langPublic = "Vrije toegang (vanaf de startpagina, zonder identificatiecode)";
+$langPrivate = "privé";
+$langPublic = "publiek";
 $langPropModify = "Eigenschappen wijzigen";
 $langState = "Status";
 $langGroupFilledGroups = "De groepen werden aangevuld met de gebruikers uit de lijst 'Gebruikers'.";
 $langSubscribed = "gebruiker(s) ingeschreven voor de cursus";
 $langStudentsNotInThisGroups = "Deelnemer(s) niet in deze groep";
-$langQtyOfUserCanSubscribe_PartBeforeNumber = "Een gebruiker kan slechts deelnemer zijn van maximum ";
+$langQtyOfUserCanSubscribe_PartBeforeNumber = "Een gebruiker kan slechts deelnemer zijn van maximum";
 $langQtyOfUserCanSubscribe_PartAfterNumber = " groepen.";
 $langGroupLimit = "Begrenzing";
 $CreateGroup = "Groep(en) aanmaken";
@@ -88,5 +91,6 @@ $NoCategoriesDefined = "Geen categorieën gedefinieerd";
 $GroupsFromClasses = "Groepen op basis van klassen";
 $GroupsFromClassesInfo = "Gebruik makend van deze optie, kan u groepen aanmaken op basis van de klassen die ingeschreven zijn in uw cursus.";
 $Group = "Groep";
-$ForumOfGroup = "forum van groep: ";
+$ForumOfGroup = "forum van groep:";
 $BackToGroupList = "terug naar de groepenlijst";
+?>

@@ -22,7 +22,7 @@ $langCopyFinished = "La copia ha finalizado";
 $langFullRecycle = "Reciclado completo";
 $langRecycleCourse = "Reciclar el curso";
 $langRecycleFinished = "El reciclado ha finalizado";
-$langRecycleWarning = "Cuidado: utilizando esta herramienta, Usted puede borrar algunas partes del curso, no siendo posible recuperarlas posteriormente. Le aconsejamos que realice una <a href=\\"create_backup.php\\">copia de seguridad</a> antes de usar esta herramienta";
+$langRecycleWarning = "Cuidado: utilizando esta herramienta, Usted puede borrar algunas partes del curso, no siendo posible recuperarlas posteriormente. Le aconsejamos que realice una <a href=\"create_backup.php\">copia de seguridad</a> antes de usar esta herramienta";
 $langSameFilename = "¿Qué hacer con los ficheros importados con el mismo nombre que otros existentes ?";
 $langSameFilenameSkip = "Saltar los ficheros con el mismo nombre";
 $langSameFilenameRename = "Renombrar el fichero (ej. archivo.pdf se convierte en  archivo_1.pdf)";
@@ -43,9 +43,4 @@ $langBackup = "Copia de seguridad";
 $langImportBackupInfo = "Usted puede  subir una copia de seguridad desde su ordenador o usar una copia de seguridad disponible en el servidor";
 $langCreateBackupInfo = "Puede seleccionar los contenidos del curso que constituirán la copia de seguridad";
 $ToolIntro = "Introducción de herramienta";
-$UploadError = "";
-$DocumentsWillBeAddedToo = "";
-$ToExportLearnpathWithQuizYouHaveToSelectQuiz = "";
-$ArchivesDirectoryNotWriteableContactAdmin = "";
-$DestinationCourse = "";
 ?>

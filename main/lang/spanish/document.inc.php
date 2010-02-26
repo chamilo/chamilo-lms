@@ -1,10 +1,13 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $MoveTo = "Mover a";
 $langDownloadFile = "Enviar un archivo";
 $langNameDir = "Nombre del nuevo directorio";
 $langSize = "Tamaño";
 $langRename = "Renombrar";
-$langCopy = "Copiar el contenido del curso";
+$langCopy = "Copiar";
 $langTo = "a";
 $langNoSpace = "El envio ha fallado. No hay suficiente espacio en su directorio";
 $langDownloadEnd = "Se ha realizado el envío";
@@ -20,7 +23,7 @@ $langViMod = "Visibilidad modificada";
 $langGroupSpace = "Área de grupo";
 $langGroupSpaceLink = "Área de grupo";
 $langGroupForumLink = "Foro de grupo";
-$langZipNoPhp = "El archivo zip no puede contener archivos con formato .PHP ";
+$langZipNoPhp = "El archivo zip no puede contener archivos con formato .PHP";
 $langUncompress = "Descomprimir el archivo (.zip) en el servidor";
 $langDownloadAndZipEnd = " El archivo zip ha sido enviado y descomprimido en el servidor";
 $langRoot = "raíz";
@@ -32,7 +35,7 @@ $langFileName = "Nombre del archivo";
 $langNoFileName = "Por favor, introduzca el nombre del archivo";
 $langNoText = "Por favor, introduzca el contenido de texto / contenido HTML";
 $langAreYouSureToDelete = "¿ Está seguro de querer eliminar";
-$langScormcontent = "Este es un contenido SCORM<br><input type=button name=scormbutton value='Comenzar' onclick='openscorm()'>";
+$langScormcontent = "Este es un contenido SCORM<br /><input type=button name=scormbutton value='Comenzar' onclick='openscorm()'>";
 $langScormcontentstudent = "Este es un curso con formato SCORM. Si quiere verlo, haga clic aquí: <input type=button name=scormbutton value='Comenzar' onclick='openscorm()'>";
 $langPublish = "Publicar";
 $langMissingImagesDetected = "Se ha detectado que faltan imágenes";
@@ -45,7 +48,7 @@ $langChapter = "Capítulo";
 $langDocumentList = "Lista de todos los documentos";
 $langOrganisationList = "Tabla de contenidos";
 $langCreationSucces = "Se ha creado la tabla de contenidos.";
-$langCanViewOrganisation = "Ya puede ver la organización de sus contenidos ";
+$langCanViewOrganisation = "Ya puede ver la organización de sus contenidos";
 $langHere = "aquí.";
 $langViewDocument = "Ver";
 $langHtmlTitle = "Tabla de contenidos";
@@ -76,7 +79,7 @@ $MaximumAllowedQuota = "Su límite de espacio de almacenamiento es de";
 $PercentageQuotaInUse = "Porcentaje de espacio ocupado";
 $PercentageQuotaFree = "Porcentaje de espacio libre";
 $CurrentDirectory = "Directorio actual";
-$UplUploadDocument = "Enviar un documento";
+$UplUploadDocument = "Subir un documento";
 $UplPartialUpload = "Sólo se ha enviado parcialmente el archivo.";
 $UplExceedMaxPostSize = "El tamaño del fichero excede el máximo permitido en la configuración:";
 $UplExceedMaxServerUpload = "El archivo enviado excede el máximo de tamaño permitido por el servidor:";
@@ -107,7 +110,7 @@ $fileModified = "El archivo ha sido modificado";
 $DocumentsOverview = "lista de documentos";
 $ViewSlideshow = "Ver presentación de imágenes";
 $Options = "Opciones";
-$WelcomeOogieConverter = "Bienvenido al conversor de PowerPoint Oogie<br>1. Examine su disco duro y busque cualquier archivo con las extensiones *.ppt o *.odp<br>2. Envíelo a Oogie, que lo transformará en un vizualizador de Lecciones Scorm.<br>3.  Podrá añadir comentarios de audio a cada diapositiva e insertar test de evaluación entre diapositivas.";
+$WelcomeOogieConverter = "Bienvenido al conversor de PowerPoint Oogie<br />1. Examine su disco duro y busque cualquier archivo con las extensiones *.ppt o *.odp<br />2. Envíelo a Oogie, que lo transformará en un vizualizador de Lecciones Scorm.<br />3.  Podrá añadir comentarios de audio a cada diapositiva e insertar test de evaluación entre diapositivas.";
 $ConvertToLP = "Convertir en Lecciones";
 $AdvancedSettings = "Configuraciones avanzadas";
 $File = "Archivo";
@@ -154,7 +157,7 @@ $TemplateTitleComparisonDescription = "Página con 2 columnas";
 $TemplateTitleDiagram = "Diagrama explicativo";
 $TemplateTitleDiagramDescription = "Imagen a la izquierda y un comentario a la izquierda";
 $TemplateTitleImage = "Imagen";
-$TemplateTitleImageDescription = "Página con solo una imagen ";
+$TemplateTitleImageDescription = "Página con solo una imagen";
 $TemplateTitleFlash = "Animación Flash";
 $TemplateTitleFlashDescription = "Animación + texto introductivo";
 $TemplateTitleAudio = "Audio con comentario";
@@ -212,3 +215,4 @@ $HelpDefaultDirDocuments = "Este directorio contiene los archivos suministrados 
 $HelpSharedFolder = "Este directorio contiene los archivos que los estudiantes (y Ud.) envían a un curso a través del editor si no lo hacen desde la herramienta grupos. Por defecto serán visibles por cualquier profesor, pero estarán ocultos para otros estudiantes salvo que accedan a ellos mediante un acceso directo. Si hace visible el directorio de un estudiante otros estudiantes podrán ver todo lo que contenga.";
 $TemplateImage = "Imagen de la plantilla";
 $MoveElement = "Mover elemento";
+?>

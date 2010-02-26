@@ -1,9 +1,12 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $Camera = "Kamera";
 $Microphone = "Mikrofon";
 $Name = "Namn";
 $DeleteStream = "Avsluta strömning";
-$Progress = "Framsteg";
+$Progress = "Förlopp";
 $Play = "Spela";
 $Stop = "Stopp";
 $Record = "Spela in";
@@ -49,14 +52,14 @@ $ChooseMic = "Välj mikrofon:";
 $OK = "OK";
 $YouHaveToReconnectSoThatTheChangesTakeEffect = "Du måste koppla upp dig igen för att ändringarna ska ge effekt.";
 $ChangeSettings = "Ändra inställningar";
-$Course = "Kurs";
+$Course = "Kurs:";
 $CourseLanguage = "Välj språk:";
 $ConfirmClearWhiteboard = "Godkänn rensning av whiteboard";
 $ShouldWitheboardBeClearedBeforeNewImage = "Ska whiteboarden rensas innan jag lägger till en ny bild?";
 $DontAskMeAgain = "Fråga mig inte igen";
 $EditSettings = "Ändra inställningar";
 $ShowConfirmationBeforeClearingWhiteboard = "Fråga efter bekräftelse innan whiteboard rensas";
-$UserInfo = "användarinformation";
+$UserInfo = "Användarinfo";
 $ClearDrawArea = "Rensa ritytan";
 $Undo = "Ångra";
 $Redo = "Gör om";
@@ -70,7 +73,7 @@ $Elipse = "Elips";
 $Arrow = "Pil";
 $DeleteChosenItem = "Radera den valda resursen";
 $BecomeModerator = "Bli moderator";
-$Close = "stäng";
+$Close = "Stäng";
 $Italic = "Kursiv";
 $Bold = "Fet";
 $Waiting = "Väntar";
@@ -91,7 +94,7 @@ $Learner = "Student";
 $Chat = "Chatt";
 $Slides = "Bilder";
 $WaitingForParticipants = "Väntar på deltagare";
-$Send = "Skicka";
+$Send = "Importera fil";
 $Browse = "Bläddra";
 $Cancel = "Avbryt";
 $ChooseFile = "Välj en fil att importera";
@@ -100,3 +103,4 @@ $Disconnected = "Bortkopplad";
 $FineStroke = "Tunn";
 $MediumStroke = "Medium";
 $ThickStroke = "Bred";
+?>

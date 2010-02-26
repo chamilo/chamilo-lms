@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $LinkMoved = "Linkul este mutat";
 $langLinkName = "Numele linkului";
 $langLinkAdd = "Adauga un link";
@@ -15,7 +18,7 @@ $langCategoryAdded = "Categoria a fost adaugata";
 $langCategoryModded = "Categoria a fost modificata.";
 $langCategoryDel = "Sterge categoria";
 $langCategoryDeleted = "Categoria si toate linkurile ei au fost sterse.";
-$langCategoryDelconfirm = "Cand stergi o categorie, toate linkurile acelei categorii sunt deasemenea sterse.nSigur doresti sa stergi aceasta categorie si linkurile ei?";
+$langCategoryDelconfirm = "Cand stergi o categorie, toate linkurile acelei categorii sunt deasemenea sterse.\nSigur doresti sa stergi aceasta categorie si linkurile ei?";
 $langAllCategoryDel = "Sterge toate categoriile si toate linkurile";
 $langGiveURL = "Te rog indica; URL linkului";
 $langGiveCategoryName = "Te rog indica numele categoriei";
@@ -23,7 +26,7 @@ $langNoCategory = "Fara categorie";
 $showall = "Deschide toate categoriile";
 $shownone = "Inchide toate categoriile";
 $langListDeleted = "Lista a fost stearsa";
-$langAddLink = "Adauga un link";
+$langAddLink = "Adauga o legatura";
 $langDelList = "Sterge lista";
 $langModifyLink = "Modifica Legatura";
 $langCsvImport = "Importa CSV";
@@ -39,4 +42,5 @@ $langLinkUpdated = "Linkul a fost actualizat";
 $langAll_Link_Deleted = "Linkul a fost sters";
 $langOnHomepage = "Arata linkul pe pagina principala";
 $langShowLinkOnHomepage = "Arata acest link ca o icoana pe pagina principala a cursului";
-$General = "general";
+$General = "Generalitati";
+?>

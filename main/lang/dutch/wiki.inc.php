@@ -1,6 +1,9 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $WikiSearchResults = "Wiki zoekresultaten";
-$Wiki = "Groepswiki";
+$Wiki = "Wiki";
 $StartPage = "Startpagina";
 $EditThisPage = "Deze pagina wijzigen";
 $ShowPageHistory = "Geschiedenis";
@@ -8,12 +11,12 @@ $RecentChanges = "Recenten aanpassingen";
 $AllPages = "Alle paginas";
 $AddNew = "Nieuwe pagina toevoegen";
 $ChangesStored = "Uw wijzigingen zijn opgeslagen.";
-$NewWikiSaved = "De nieuwe wiki startpagina is bewaard. U kunt het bekijken op: ";
-$DefaultContent = " <br/> <br/> <p align=\"center\"> <img src=\"%swiki/wcollaborative.png\" alt=\"Mr. Chamilo\" title=\"Mr. Chamilo\" /></p> <p align=\"center\">Om te beginnen wijzig deze pagina</p> ";
+$NewWikiSaved = "De nieuwe wiki startpagina is bewaard. U kunt het bekijken op:";
+$DefaultContent = " <br /> <br /> <p align=\"center\"> <img src=\"%swiki/wcollaborative.png\" alt=\"Mr. Chamilo\" title=\"Mr. Chamilo\" /></p> <p align=\"center\">Om te beginnen wijzig deze pagina</p>";
 $CourseWikiPages = "Wiki paginas van de cursus";
 $GroupWikiPages = "Wiki paginas van de groep";
 $NoWikiPageTitle = "Uw wijzigingen werde bewaard. U dient nog een titel te geven aan de pagina";
-$WikiPageTitleExist = "Deze paginatitel bestaad reeds, om de inhoud te wijzigen klik hier: ";
+$WikiPageTitleExist = "Deze paginatitel bestaad reeds, om de inhoud te wijzigen klik hier:";
 $WikiDiffAddedLine = "De lijn werd toegevoegd";
 $WikiDiffDeletedLine = "De lijn werd verwijderd";
 $WikiDiffMovedLine = "De lijn werd verplaatst";
@@ -45,7 +48,7 @@ $ConfirmDeletePage = "Bent u zeker dat u deze pagina wenst te verwijderen inclus
 $AlsoSearchContent = "Zoek ook in de inhoud";
 $PageLocked = "De pagina is beschermd";
 $PageUnlocked = "De pagina is niet beschermd";
-$PageLockedExtra = "Deze pagina is beschermd. Enkel cursusbeheerders kunnen deze pagina wijzigen. ";
+$PageLockedExtra = "Deze pagina is beschermd. Enkel cursusbeheerders kunnen deze pagina wijzigen.";
 $PageUnlockedExtra = "Deze pagina in niet beschermd. Alle cursusisten en groepsleden kunnen deze pagina wijzigen";
 $ShowAddOption = "Functionaliteit om toe te voegen weergeven";
 $HideAddOption = "Functionaliteit om toe te voegen verbergen";
@@ -53,7 +56,7 @@ $AddOptionProtected = "Functionaliteit om toe te voegen is beschermd. Enkel de c
 $AddOptionUnprotected = "De functionaliteit om toe te voegen is afgezet voor alle cursusgebruikers en groupsleden";
 $NotifyChanges = "Breng me op de hoogte van wijzigingen";
 $NotNotifyChanges = "Breng me niet op de hoogte van wijzigingen";
-$NotifyByEmail = "Hou me via e-mail op de hoogte als iemand antwoordt";
+$NotifyByEmail = "Breng me op de hoogte als deze pagina gewijzigd wordt";
 $CancelNotifyByEmail = "Breng me niet op de hoogte als deze pagina gewijzigd wordt";
 $MostRecentVersionBy = "De meest recente versie werd gewijzigd door";
 $Rating = "Score";
@@ -105,13 +108,13 @@ $EmailWikiChanges = "Hou me op de hoogte van wijzigingen in de wiki";
 $EmailWikipageModified = "De wiki pagina is gewijzigd.";
 $EmailWikiPageAdded = "De pagina is toegevoegd.";
 $EmailWikipageDedeleted = "Een pagina werd verwijderd uit de Wiki";
-$EmailWikiChangesExt_2 = "Als u niet meer op de hoogte gehouden wenst te worden van de wijzigingen in deze wiki kiest u de tabs <strong>Recente wijzigingen</strong>, <strong>Huidige pagina</strong>, <strong>Discussie</strong> en klikt u op de knop. ";
+$EmailWikiChangesExt_2 = "Als u niet meer op de hoogte gehouden wenst te worden van de wijzigingen in deze wiki kiest u de tabs <strong>Recente wijzigingen</strong>, <strong>Huidige pagina</strong>, <strong>Discussie</strong> en klikt u op de knop.";
 $Visits = "bezoeken";
 $OrphanedPages = "Weespaginas";
 $WantedPages = "Gevraagde paginas";
 $MostVisitedPages = "Meest bezochte paginas";
 $MostChangedPages = "Meest gewijzigde paginas";
-$Changes = "Veranderingen";
+$Changes = "wijzigingen";
 $MostActiveUsers = "Meest actieve gebruikers";
 $Contributions = "Bijdragen";
 $UserContributions = "Bijdragen van gebruikers";
@@ -132,10 +135,11 @@ $DescriptionOfTheTask = "Beschrijving van de opdracht";
 $OtherSettings = "Andere eisen";
 $NMaxWords = "Maximum aantal woorden";
 $NMaxVersion = "Maximum aantal versies";
-$Feedback = "Feedback";
+$Feedback = "Richtlijnen";
 $AddFeedback = "Voeg begeleidende berichten toe die betrekking hebben op de vooruitgang in de pagina";
 $Feedback1 = "Eerste bericht";
 $Feedback2 = "Tweede bericht";
 $Feedback3 = "Derde bericht";
 $FProgress = "Vooruitgang";
 $PutATimeLimit = "Stel een tijdslimiet in";
+?>

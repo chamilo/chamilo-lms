@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $AdminBy = "Ipinfunni nipase";
 $AdministrationTools = "Ipinfunni";
 $State = "Ipo nipa ero";
@@ -25,3 +28,4 @@ $langCourseSubscription = "ifi oruko sile fun ise";
 $langPublicAccess = "ayefun gbogbo enia";
 $langPrivateAccess = "aye fun enia kan";
 $langAddPicture = "Fi aworan si";
+?>

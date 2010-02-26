@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $PublishSurvey = "Reqsipachiy tapukuyta";
 $CompareQuestions = "Kuskachay tapukunata";
 $InformationUpdated = "Información actualizada";
@@ -60,7 +63,7 @@ $QuestionByType = "Ima niraqmanta tapukuna";
 $SelectQuestionByType = "Ajllay ima niraqmanta hoq taputa";
 $PleaseEnterAQuestion = "Ama hinakaychu, haykuchiy hoq taputa";
 $NoOfQuestions = "Hayka tapukuykuna";
-$Question = "Tapuy";
+$Question = "Tapu";
 $ThisCodeAlradyExists = "Kay chinpuqa ña kashan";
 $SaveAndExit = "Allchaspa lloqsiy";
 $ViewAnswers = "Qhawariy kutichikuykunata";
@@ -114,7 +117,7 @@ $SelectXAxis = "X kasqapi taputa ajllay";
 $SelectYAxis = "Y kasqapi taputa ajllay";
 $ComparativeReport = "Willa kikinchay";
 $AllQuestionsOnOnePage = "Llapan tapukuna qhawarichikunqaku hoq raphipi";
-$SelectUser = "Haykuqmasi";
+$SelectUser = "Ajllay haykuqmasita";
 $SelectUserWhoFilledSurvey = "Ajllay haykuqmasita, manqen tapukuyta hunt'achisqata";
 $userreport = "Haykuqmasiq willan";
 $VisualRepresentation = "Wanki";
@@ -122,7 +125,7 @@ $AbsoluteTotal = "Lliw muyu";
 $NextQuestion = "Hamuq tapu";
 $PreviousQuestion = "Ñaupaq tapu";
 $PeopleWhoAnswered = "Kay kutichita ajllaq runakuna";
-$CourseUsers = "Yachachinamanta haykuqmasin";
+$CourseUsers = "Yachachinaq haykuqmasikuna";
 $SurveyPublication = "Tapukuypa reqsipachikuynin";
 $AdditonalUsers = "Haykuqmasikuna yapachasqaku";
 $MailText = "E-chaskiq qelqan";
@@ -135,8 +138,7 @@ $DetailedReportByUserDetail = "Kay willapiqa qhawawaq hoq haykuqmasiq llipin kut
 $DetailedReportByQuestionDetail = "Kay willapiqa qhawakun sapanqa tapumanta miraynin. Qhawachikunpaqpas llanp'u hamut'aspalla yupaykunamanta wanki qhawachiqmanta ima.";
 $ReminderResendToAllUsers = "Apachiy llapan haykuqmasikuna ajllasqaman. Mana chayqa ajllay kay casilla nisqata, e-chaskitaqa haykuqmasikuna yapachisqaykillan chaskinqaku.";
 $Multiplechoice = "Askha ajllay";
-$Multipleresponse = "Askha kutichiy";
-$Score = "Puntuación";
+$Score = "Markana";
 $Shared = "T'aqapasqa";
 $Invite = "Mink'asqakuna";
 $MaximumScore = "Askha markana";
@@ -183,12 +185,12 @@ $Personality = "Runakikinyachiy";
 $Condition = "Ima kay";
 $Primary = "Huj ñeqe";
 $Secondary = "Iskay ñeqe";
-$CourseSettings = "Configuración de la lección";
+$CourseSettings = "Yachachinaq kamachiynin";
 $PleaseChooseACondition = "Ama hina kaychu ajllay ima kayta";
 $ChooseDifferentCategories = "Ajllay hoq mitata";
 $Version = "Versión";
 $Normal = "Llanp'u kay";
-$NoLogOfDuration = "Ningún registro de duración";
+$NoLogOfDuration = "Mana ni hoq qelqapaychu unay kanchu";
 $AutoInviteLink = "Haykuqmasikunaqa manan mink'asqachu, kay wasqasqaman riwaq tapukuyta ruwanapaq:";
 $CompleteTheSurveysQuestions = "Hunt'achiy tapukunata tapukuyman";
 $SurveysDeleted = "Tapukuykuna pichasqa";
@@ -199,3 +201,4 @@ $ModifyQuestionSurvey = "T'ijrapay tapuyta";
 $BackToSurvey = "Volver a la encuesta";
 $UpdateInformation = "Actualización de información";
 $PleaseFillSurvey = "Por favor, llene la encuesta";
+?>

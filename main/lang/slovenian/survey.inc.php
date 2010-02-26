@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $PublishSurvey = "Objavi vprašalnik";
 $CompareQuestions = "Primerjaj vprašanja";
 $InformationUpdated = "Informacije so bile ažurirane";
@@ -41,7 +44,7 @@ $UpdateQuestionType = "Ažuriraj tip vprašanja :";
 $AddAnotherQuestion = "Dodaj novo vprašanje";
 $IsShareSurvey = "Deli evalvacijski vprašalnik z ostalimi";
 $Proceed = "Nadaljuj";
-$PleaseFillNumber = "Vnesite numerične vrednosti za uteži odgovorov.";
+$PleaseFillNumber = "Vnesite numeri&#269;ne vrednosti za uteži odgovorov.";
 $PleaseFillAllPoints = "Vnesite uteži (vrednosti) od 1 do 5.";
 $PleasFillAllAnswer = "Izpolnite vsa polja odgovorov.";
 $PleaseSelectFourTrue = "Izberite vsaj štiri pravilne odgovore.";
@@ -135,9 +138,8 @@ $DetailedReportByUserDetail = "To poročilo vsebuje vse odogovore, ki jih je pod
 $DetailedReportByQuestionDetail = "To poročilo podaja odgovore na vprašanja po posameznih vprašanjih. Zagotavlja tudi osnovno statisnično analizo in prikaz z grafiko.";
 $ReminderResendToAllUsers = "Opomni vse uporabnike eval. vprašalnika. V primeru, da ne izberete te možnosti, bodo sporočilo prejeli le novo dodani uporabniki.";
 $Multiplechoice = "Večkratna izbira";
-$Multipleresponse = "Večkratni odgovori";
-$Score = "Rangiranje";
-$Shared = "Skupna raba";
+$Score = "Rezultat";
+$Shared = "V skupni rabi";
 $Invite = "Povabi";
 $MaximumScore = "Največji rezultat";
 $ViewInvited = "Poglej povabljene";
@@ -186,7 +188,7 @@ $Secondary = "Sekundarni";
 $CourseSettings = "Nastavitve tečaja";
 $PleaseChooseACondition = "Izberite pogoj";
 $ChooseDifferentCategories = "Izberite različne kategorije";
-$Version = "Različica";
+$Version = "Verzija";
 $Normal = "Normalno";
 $NoLogOfDuration = "Brez beleženja trajanja";
 $AutoInviteLink = "Uporabniki, ki niso vabljeni, lahko uporabijo to povezavo za dostop do vprašalnika";
@@ -200,4 +202,5 @@ $BackToSurvey = "Nazaj na vprašalnik";
 $UpdateInformation = "Ažuriraj informacije";
 $PleaseFillSurvey = "Prosim, izpolnite vprašalnik";
 $ReportingOverview = "Poročila - pregled";
-$ThereAreNotQuestionsForthisSurvey = "V tem vprašalniku trenutno ni vprašanj";
+$ThereAreNotQuestionsForthisSurvey = "Ta vprašalnik ne vsebuje nobenih vprašanj";
+?>

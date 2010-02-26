@@ -1,8 +1,11 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $ForumDeleted = "Foro eliminado";
 $ForumCategoryDeleted = "Categoría de foro eliminada";
 $ForumLocked = "Foro cerrado";
-$Forum = "Foros";
+$Forum = "Foro";
 $AddForumCategory = "Engadir unha categoría nova ao foro";
 $AddForum = "Engadir un novo foro";
 $Topics = "Temas";
@@ -38,9 +41,9 @@ $ReplyShort = "Re:";
 $DeletePost = "Ten a certeza de que desexa eliminar esta mensaxe? Ao apagala, borrará igualmente todas as respostas. Por favor, verifique na visión en árbore as mensaxes que serán eliminadas";
 $Locked = "Bloqueado: os estudantes non poden publicar máis mensaxes nesta categoría, foro ou tema, mais poden visualizar e ler as mensaxes publicadas";
 $Unlocked = "Desbloquado: os estudantes poden publciar novas mensaxes nesta categoría, foro ou tema";
-$Flat = "Plana";
-$Threaded = "Arborescente";
-$Nested = "Anidada";
+$Flat = "Lineal";
+$Threaded = "Árbore";
+$Nested = "Hierarquizada";
 $FlatView = "Vista Lineal";
 $ThreadedView = "Vista en Árbore";
 $NestedView = "Vista Hierarquizada";
@@ -56,7 +59,7 @@ $ForGroup = "Para Grupo";
 $ThreadLocked = "A discusión está bloqueada.";
 $NotAllowedHere = "Vostede non ten permisos aquí.";
 $ReplyAdded = "Engadiuse a resposta";
-$EditPost = "Modificar o artigo";
+$EditPost = "Modificar Mensaxe";
 $EditPostStored = "Modificouse a mensaxe";
 $NewForumPost = "Nova mensaxe publicada no foro";
 $YouWantedToStayInformed = "Vostede solicitou recibir información por e-mail cada vez que alguén publique unha mensaxe nesta discusión";
@@ -88,7 +91,7 @@ $ForumSearch = "Buscar nos foros";
 $SearchTerm = "Palabra a buscar";
 $ForumSearchResults = "resultados da procura nos foros";
 $ForumSearchInformation = "Pode buscar varias palabras usando o signo +";
-$YouWillBeNotifiedOfNewPosts = "As novas mensaxes seranlle notificadas por correo electrónico ";
+$YouWillBeNotifiedOfNewPosts = "As novas mensaxes seranlle notificadas por correo electrónico";
 $YouWillNoLongerBeNotifiedOfNewPosts = "As novas mensaxes xa non se lle notificarán por correo electrónico";
 $AddImage = "Agregar imaxe";
 $QualifyThread = "Calificar o tema";
@@ -118,7 +121,9 @@ $Thread = "Tema";
 $NotifyMe = "Notificarme";
 $ConfirmUserQualification = "Confirmar a cualificación de usuario?";
 $NotChanged = "Non hai cambios";
+$TitleColumnGradebook = "Título no caderno de cualificacións";
 $QualifyThreadGradebook = "Cualificar no caderno de cualificacións";
+$QualifyWeight = "Peso da cualificación";
 $QualifyNumeric = "Cualificación numérica sobre";
 $AlterQualifyThread = "Editar a cualificación do tema";
 $ForumMoved = "Moveuse o foro";
@@ -134,3 +139,5 @@ $EditForum = "Editar foro";
 $BackToForum = "Volver ó foro";
 $BackToForumOverview = "Volver á vista xeral do foro";
 $BackToThread = "Regresar ó tema";
+$ForumcategoryLocked = "Categoría de foro bloqueada";
+?>

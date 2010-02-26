@@ -1,12 +1,15 @@
 <?php
-$lang_already_enrolled = "zaten kayıtlı.";
+/*
+for more information: see languages.txt in the lang folder.
+*/
+$lang_already_enrolled = "zaten kay&#305;tl&#305;.";
 $lang_my_personnal_course_list = "Ders listem";
 $lang_course_enrollment = "Kullanıcının dersleri";
-$lang_course_not_available = "Bu ders kullanımda değil veya mevcut değil.";
+$lang_course_not_available = "Bu ders kullan&#305;mda de&#287;il veya mevcut de&#287;il.";
 $lang_enroll = "KAYIT OL";
 $lang_enroll_to_a_new_course = "Yeni bir derse kaydol";
 $lang_my_present_course_list = "Geçerli ders listem";
-$lang_no_course_to_enroll_in_this_category = "Bu kategoride kayıt olunacak ders bulunmuyor.";
+$lang_no_course_to_enroll_in_this_category = "Bu kategoride kay&#305;t olunacak ders bulunmuyor.";
 $lang_or_search_from_the_course_code = "veya KODu ile araştır";
 $lang_search = "Araştır";
 $lang_select_course_among_categories = "Kategorilerden ders seç";
@@ -79,3 +82,4 @@ $Expand = "Genişlet";
 $Collapse = "Daralt";
 $CourseDetails = "Kurs detayları";
 $GroupPendingInvitations = "Bekleyen Grup Davetleri";
+?>

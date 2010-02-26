@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langScormVersion = "Version";
 $langScormRestarted = "Alle Lern-Einheiten sind nun unvollständig.";
 $langScormNoNext = "Dies ist die letzte Lern-Einheit.";
@@ -33,11 +36,11 @@ $langCharset = "Zeichensatz";
 $langLocal = "lokal";
 $langRemote = "entfernt";
 $langAutodetect = "automatisch finden";
-$langAccomplishedStepsTotal = "Anzahl erledigte Schritte ";
+$langAccomplishedStepsTotal = "Anzahl erledigte Schritte";
 $langUnknown = "unbekannt";
 $AreYouSureToDeleteSteps = "Sind Sie sicher, dass Sie diese Schritte löschen möchen?";
 $Origin = "Ursprung";
-$Local = "Lokal ";
+$Local = "Lokal";
 $Remote = "Entfernt";
 $FileToUpload = "Datei für Upload";
 $ContentMaker = "Ersteller des Inhalts";
@@ -46,7 +49,8 @@ $UploadLocalFileFromGarbageDir = "Lokale Datei von Haupt/Garbage Verzeichnis hoc
 $ThisItemIsNotExportable = "Dieses Object ist zur Zeit nicht Scorm kompatibel. Aus diesem Grund kann es nicht exportiert werden.";
 $MoveCurrentChapter = "Das aktive Kapitel verschieben";
 $GenericScorm = "Generic Scorm";
-$UnknownPackageFormat = "Das Format des Paktes wird nicht erkannt. Vergewissen Sie sich, dass es korrekt formatiert ist und keine Fehler enthält. Probleme kann es geben durch proprietäre ZIP Formate oder die Übetragung langer Dateien. Bei Unklarheiten bzgl. ZIP, versuchen Sie es bitte mit minimalen ZIP Funktionen.";
+$UnknownPackageFormat = "Das Format des Paktes wird nicht erkannt. Vergewissen Sie sich, dass es korrekt formatiert ist und keine Fehler enthält. Probleme kann es geben durch proprietäre ZIP Formate oder die Übetragung langer Dateien. Bei Unklarheiten bzgl. ZIP, versuchen Sie es";
 $Attempt = "Versuch";
 $MoveTheCurrentForum = "Das bestehende Forum verschieben";
-$WarningWhenEditingScorm = "Warnung!<br>Wenn man den Inhalt eines Scorm Schrittes bearbeitet, kann man den Bericht des Lernpfads ändern oder den Schritt beschädigen";
+$WarningWhenEditingScorm = "Warnung!<br />Wenn man den Inhalt eines Scorm Schrittes bearbeitet, kann man den Bericht des Lernpfads ändern oder den Schritt beschädigen";
+?>

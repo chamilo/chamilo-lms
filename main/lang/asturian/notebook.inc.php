@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $NewNote = "Avisu nuevu";
 $Note = "Avisu";
 $NoteDeleted = "Avisu esborráu";
@@ -29,3 +32,4 @@ $NotesSortedByUpdateDateAsc = "Notes ordenaes por fecha d'anovamientu (antigües
 $NotesSortedByUpdateDateDESC = "Notes ordenaes por fecha d'anovamientu (recientes - antigües)";
 $NotesSortedByCreationDateAsc = "Notes ordenaes por fecha de criación (antigües - recientes)";
 $NotesSortedByCreationDateDESC = "Notes ordenaes por fecha de criación (recientes - antigües)";
+?>

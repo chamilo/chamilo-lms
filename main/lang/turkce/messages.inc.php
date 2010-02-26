@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $MessageEmptyMessageOrSubject = "Lütfen konu yada mesajı boş bırakmayınız";
 $Inbox = "Gelen Kutusu";
 $Messages = "Mesajlar";
@@ -33,3 +36,4 @@ $WriteAMessage = "Mesaj yaz";
 $AlreadyReadMessage = "Okunmuş mesaj";
 $UnReadMessage = "Okunmamış mesaj";
 $MessageSent = "Mesaj gönderildi";
+?>

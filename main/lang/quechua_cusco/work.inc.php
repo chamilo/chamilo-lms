@@ -1,14 +1,17 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $Tools = "Llank'anakuna";
 $SendWork = "Apachiy qelqa khiputa";
-$langTooBig = "Manan ajllankichu khipu apachinapaq utan sinchi hatunmi khipuqa";
-$langListDeleted = "Yupachasqaqa pichachikunpuni";
+$langTooBig = "Manaraq ajllankichu hoq khipu apachinapaq utaq khipuqa sinchi hatunmi.";
+$langListDeleted = "Sinriqa tukuy kayninpi wañuchikun.";
 $langDocModif = "Qelqa khipuqa t'ijrachisqaña";
 $langDocAdd = "Qelqa khipuqa apachisqaña.";
 $langDocDel = "Llank'aynaqa wañuchisqaña";
 $langTitleWork = "Llank'aypa sutinchaynin";
 $langAuthors = "Ruwaq";
-$langDelList = "Pichay yupachasqat";
+$langDelList = "Pichachiy llipin sinrita";
 $langWorkDelete = "Pichay";
 $langWorkModify = "T'ijray";
 $langWorkConfirmDelete = "Cheqaychu munanki kay qelqa khiputa pichachiyta ?";
@@ -17,11 +20,11 @@ $lang_default_upload = "Kikinmanta kamachikushan musuq qelqa khipukuna qhawachik
 $lang_new_visible = "Musuq qelqa khipukunataqa llipin haykuqmasikuna qhawanqaku";
 $lang_new_unvisible = "Musuq qelqa khipukunaqa yachachiq(kuna)llapaq qhawana kanqa.";
 $lang_doc_unvisible = "Kay qelqa khipuqa yachachiq(kuna)llapaq qhawana kanqa.";
-$langDelLk = " Cheqaychu munanki wañuchiyta kay llank'anata ?";
+$langDelLk = "Pichay waskhanata";
 $langMustBeRegisteredUser = "Kay yachachinapi haykuqmasikuna qelqachikusqalla apachinqaku qelqa khipukunataqa.";
 $langListDel = "Pichay yupachasqata";
-$langNameDir = "Musuq wayaqaq sutin";
-$langFileExists = "Mana ruwanapuni, manan kanchu khipu kikin sutiyuq.";
+$langNameDir = "Hoq sutiwan wayaqata churay";
+$langFileExists = "Khipuqa ña kashan";
 $CreateDirectory = "Kamay wayaqata";
 $langCurrentDir = "kunan kaq wayaqa";
 $UploadADocument = "Apachiy qelqa khiputa";
@@ -41,7 +44,7 @@ $ExpiresAt = "Tukukunqa kay pachapi";
 $AddToCalendar = "Yapay ruwanaman";
 $DirectoryCreated = "Wayaqa kamarisqa";
 $Assignment = "Llank'ayna";
-$AdvancedParameters = "Parámetros avanzados";
+$AdvancedParameters = "kamachinakuna allin purinanpaq";
 $ExpiryDateToSendWorkIs = "Llank'aynakunata apachinapaq, tukukuy pacha";
 $EnableExpiryDate = "K'anchachiy pacha tukukuyta";
 $EnableEndDate = "K'anchachiy pacha tukunata";
@@ -68,3 +71,4 @@ $ButtonCreateAssignment = "Crear";
 $AssignmentName = "Nombre de la tarea";
 $CreateAssignment = "Crear una tarea";
 $FolderEdited = "Tarea modificada";
+?>

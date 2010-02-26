@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langSelectOptionForBackup = "Por favor, escueya una opción de copia de seguridá";
 $langLetMeSelectItems = "Escoyer los componentes del cursu";
 $langCreateFullBackup = "Crear una copia de seguridá completa d'esti cursu";
@@ -45,3 +48,4 @@ $DocumentsWillBeAddedToo = "Los documentos van ser amestaos tamién";
 $ToExportLearnpathWithQuizYouHaveToSelectQuiz = "Si quier esportar un itinerariu d'aprendizaxe con exercicios, tien de s'asegurar de que los exercicios s'incluyeren na esportación. Pa facelo tuvo que seleicionalos nel llistáu d'exercicios.";
 $ArchivesDirectoryNotWriteableContactAdmin = "El direutoriu \"archive\" qu'usa esta ferramienta nun tien habilitaos los permisos d'escritura. Contaute col alministrador de la plataforma.";
 $DestinationCourse = "Cursu de destín";
+?>

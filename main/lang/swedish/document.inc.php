@@ -1,14 +1,17 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $MoveTo = "Flytta till";
 $langDownloadFile = "Ladda filen till servern";
 $langNameDir = "Namn på den nya mappen";
 $langSize = "Storlek";
 $langRename = "Byt namn";
-$langCopy = "Kopiera kursinnehållet";
+$langCopy = "Kopiera";
 $langTo = "till";
 $langNoSpace = "Uppladdningen har misslyckats. Det finns inte tillräckligt med diskutrymme i din mapp.";
 $langDownloadEnd = "Uppladdningen är klar.";
-$langFileExists = "Operationen är omöjlig.<br>En fil med detta namn existerar redan.";
+$langFileExists = "Operationen är omöjlig.<br />En fil med detta namn existerar redan.";
 $langImpossible = "Operation omöjlig";
 $langAddComment = "lägg till/modifiera kommentar till";
 $langDocCopied = "dokument kopierat";
@@ -25,14 +28,14 @@ $langUncompress = "dekomprimera zippad (.ZIP) fil på servern";
 $langDownloadAndZipEnd = ".ZIP-fil uppladdad och dekomprimerad";
 $langRoot = "rot";
 $langCreateDoc = "Skapa ett dokument";
-$langDown = "ner";
+$langDown = "Ner";
 $langFileError = "Filen för uppladdning är inte tillåten.";
 $langMaxFileSize = "Max filstorlek är";
 $langFileName = "Filnamn";
 $langNoFileName = "Var vänlig skriv filnamn";
 $langNoText = "Var vänlig skriv din text / HTML innehåll";
 $langAreYouSureToDelete = "Är du säker på att du vill radera";
-$langScormcontent = "Detta är ett SCORM innehåll <br><input type=button name=scormbutton value='Starta !' onclick='openscorm()'>";
+$langScormcontent = "Detta är ett SCORM innehåll <br /><input type=button name=scormbutton value='Starta !' onclick='openscorm()'>";
 $langScormcontentstudent = "Detta är ett SCORM format kurs. För att spela upp det, klicka här : <input type=button name=scormbutton value='Starta !' onclick='openscorm()'>";
 $langPublish = "Publicera";
 $langMissingImagesDetected = "Saknade bilder har detekterats";
@@ -95,7 +98,7 @@ $UplOverwriteLong = "Skriv över redan existerande fil";
 $UplRename = "Döp om";
 $UplRenameLong = "Döp om den uppladdade filen om den existerar";
 $Metadata = "Metadata";
-$DocumentQuota = "Dokument quota ";
+$DocumentQuota = "Dokument quota";
 $NoDocsInFolder = "Inga dokument i denna mapp!";
 $UploadTo = "Ladda upp till";
 $fileModified = "Filen är ändrad";
@@ -128,3 +131,4 @@ $TemplateTitleIntroduction = "Introduktion";
 $TemplateTitleIntroductionDescription = "Skriv in introduktionstexten";
 $TemplateTitlePlan = "Planering";
 $TemplateTitlePlanDescription = "Listar innehållet";
+?>

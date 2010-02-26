@@ -1,27 +1,30 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $Tools = "Ferramentas";
 $SendWork = "Enviar documento";
-$langTooBig = "Não escolheu o ficheiro que pretende enviar, ou então é demasiado grande";
-$langListDeleted = "A lista foi eliminada";
+$langTooBig = "Não seleccionou nenhum ficheiro ou o ficheiro é demasiado grande.";
+$langListDeleted = "A lista inteira foi toda eliminada.";
 $langDocModif = "Título do documento modificado";
 $langDocAdd = "O ficheiro foi adicionado à lista das publicações.";
 $langDocDel = "Ficheiro eliminado";
 $langTitleWork = "Título do documento";
 $langAuthors = "Autores";
-$langDelList = "Eliminar lista";
+$langDelList = "Eliminar a lista inteira";
 $langWorkDelete = "Eliminar";
 $langWorkModify = "Editar";
 $langWorkConfirmDelete = "Deseja mesmo eliminar este ficheiro";
 $langAllFiles = "Acções em todos os ficheiros";
-$lang_default_upload = "Configuração pré-definida para a visibilidade dos ficheiros publicados recentemente ";
+$lang_default_upload = "Configuração pré-definida para a visibilidade dos ficheiros publicados recentemente";
 $lang_new_visible = "Os novos documentos são visíveis para todos os utilizadores";
 $lang_new_unvisible = "Os novos documentos são apenas visíveis para o(s) instrutor(es)";
 $lang_doc_unvisible = "O seu ficheiro é apenas visível para o(s) instrutor(es) e por esse motivo, não será visível para si.";
-$langDelLk = "Deseja mesmo eliminar esta ligação?";
+$langDelLk = "Eliminar ligação/link";
 $langMustBeRegisteredUser = "Apenas utilizadores registados neste curso podem publicar documentos.";
 $langListDel = "Eliminar lista";
-$langNameDir = "Nome da nova pasta/directório";
-$langFileExists = "É impossível realizar a operação, já existe um ficheiro com este nome.";
+$langNameDir = "Renomear directório/pasta";
+$langFileExists = "O ficheiro já existe";
 $CreateDirectory = "Validar";
 $langCurrentDir = "Pasta actual";
 $UploadADocument = "Enviar documento";
@@ -30,7 +33,7 @@ $DocumentDeleted = "Documento eliminado";
 $SendMailBody = "Um utilizador adicionou um documento na ferramenta de Tarefas/trabalhos.";
 $DirDelete = "Eliminar directório/pasta";
 $ValidateChanges = "Validar modificações";
-$FolderUpdated = "Pasta/directório actualizada";
+$FolderUpdated = "Pasta actualizada";
 $EndsAt = "Termina a (completamente encerrado)";
 $QualificationOfAssignment = "Pontuação da tarefa/trabalho";
 $MakeQualifiable = "Activar avaliação/classificação";
@@ -41,7 +44,7 @@ $ExpiresAt = "Termina/expira a";
 $AddToCalendar = "Adicionar ao calendário";
 $DirectoryCreated = "Directório/pasta criada";
 $Assignment = "Tarefas/trabalhos";
-$AdvancedParameters = "Configurações avançadas";
+$AdvancedParameters = "Parâmetros avançados";
 $ExpiryDateToSendWorkIs = "Data limite para tarefas/trabalhos";
 $EnableExpiryDate = "Activar data de expiração";
 $EnableEndDate = "Activar data final";
@@ -71,7 +74,6 @@ $FolderEdited = "Pasta/directório editado";
 $UpdateWork = "Actualizar esta tarefa";
 $MakeAllPapersInvisible = "Tornar todos os documentos invisíveis";
 $MakeAllPapersVisible = "Tornar todos os documento visíveis";
-$StudentAllowedToDeleteOwnPublication = "Permitir que os alunos possam eliminar as suas publicações";
 $TheDocumentHasBeenDeleted = "O documento foi eliminado.";
 $YouAreNotAllowedToDeleteThisDocument = "Não está autorizado a eliminar este documento";
-$ConfirmYourChoiceDeleteAllfiles = "Ao confirmar a sua opção eliminará todos os ficheiros e não será possível voltar a recuperá-los mais tarde";
+?>

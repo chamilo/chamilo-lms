@@ -1,8 +1,11 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $ForumDeleted = "Forum sters";
 $ForumCategoryDeleted = "Categorie in forum stearsa";
 $ForumLocked = "Forum blocat";
-$Forum = "Forumuri";
+$Forum = "Forum";
 $AddForumCategory = "Adaugati o noua categorie de forum";
 $AddForum = "Adaugati un forum nou";
 $Topics = "Topicuri";
@@ -38,9 +41,9 @@ $ReplyShort = "Re:";
 $DeletePost = "Sunteti sigur ca doriti sa stergeti acest mesaj? Stergand acest mesaj veti sterge deasemenea si raspunsurile acestuia. Va rog bifati lista arborescenta cu discutii pentru a vedea ce mesaje vor fi deasemenea sterse";
 $Locked = "Blocat: studentii nu mai pot posta mesaje noi in acesta categorie de forum, forum sau discutii dar pot citi mesajele existente.";
 $Unlocked = "Deblocat: studentii pot posta mesaje noi in aceasta categorie de forum, forum sau discutie";
-$Flat = "Plat";
-$Threaded = "Insiruit";
-$Nested = "Imbricat";
+$Flat = "Plan";
+$Threaded = "Arborescent";
+$Nested = "Inserat";
 $FlatView = "Vedere plana";
 $ThreadedView = "Vedere arborescenta";
 $NestedView = "Vedere Inserata";
@@ -56,7 +59,7 @@ $ForGroup = "Pentru Grup";
 $ThreadLocked = "Discutia este inchisa.";
 $NotAllowedHere = "Accesul nu va este permis aici.";
 $ReplyAdded = "Raspunsul a fost adaugat";
-$EditPost = "Editeaza un articol";
+$EditPost = "Editeaza Mesaj";
 $EditPostStored = "Mesajul a fost modificat";
 $NewForumPost = "Mesaj nou in forum";
 $YouWantedToStayInformed = "Ati ales ca vreti sa fiti informat prin e-mail de fiecare data cand cineva raspunde discutiei";
@@ -104,3 +107,4 @@ $EditAnAttachment = "Modifica atasamentul";
 $EditForum = "Schimbare forum";
 $BackToForum = "Inapoi la forum";
 $BackToForumOverview = "Inapoi la forum";
+?>

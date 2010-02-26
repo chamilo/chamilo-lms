@@ -1,12 +1,15 @@
 <?php
-$langToolName = "Importera Blackboard kurser";
+/*
+for more information: see languages.txt in the lang folder.
+*/
+$langToolName = "Statistik";
 $TrackingDisabled = "Spårning har avaktiverats av systemadministratören.";
 $InactivesStudents = "Inaktiva användare";
 $SeeStudentList = "Titta på användarlistan";
 $langShowNone = "Visa ingen";
 $langCourseStats = "Kursstatistik";
 $langToolsAccess = "Tillgång till verktyg";
-$langCourseAccess = "Kursåtkomst";
+$langCourseAccess = "Åtkomst till denna kurs";
 $langLinksAccess = "Länkar";
 $langDocumentsAccess = "Dokument";
 $langScormAccess = "Learning path - Scorm format kurser";
@@ -47,12 +50,12 @@ $langWorkAuthors = "Författare";
 $langWorkDescription = "Beskrivning";
 $informationsAbout = "Spårning av";
 $langNoEmail = "Ingen emejladress angiven";
-$langNoResult = "Det finns inga resultat ännu";
-$langCourse = "Webbsajten ";
+$langNoResult = "Inga resultat";
+$langCourse = "Kurs";
 $langHits = "Träffar";
 $langTotal = "Total";
 $langHour = "Timme";
-$langDay = "dag";
+$langDay = "Dag";
 $langLittleHour = "h.";
 $langLast31days = "Inom de senaste 31 dagarna";
 $langLast7days = "Inom de sista 7 dagarna";
@@ -84,7 +87,7 @@ $langPreviousYear = "Föregående år";
 $langViewToolList = "Visa lista över alla verktyg";
 $langToolList = "Lista över alla verktyg";
 $langFrom = "Från";
-$langTo = "till";
+$langTo = "Till";
 $langPeriodToDisplay = "Period";
 $langDetailView = "Visa efter";
 $langBredCrumpGroups = "Grupper";
@@ -141,3 +144,4 @@ $LimitDate = "Datumbegränsning";
 $NoComment = "Ingen kommentar";
 $Print = "Skriv ut";
 $NoConnexion = "Ingen anslutning";
+?>

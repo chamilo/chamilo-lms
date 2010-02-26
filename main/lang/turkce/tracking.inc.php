@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langToolName = "KaraTahta Derslerini Al";
 $TrackingDisabled = "İzleme aracı sistem yöneticisi tarafından devre dışı bırakılmıştır.";
 $langShowNone = "Hiçbirini gösterme";
@@ -39,14 +42,14 @@ $langScormTitleColumn = "Ders/Bölüm";
 $langScormStatusColumn = "Durum";
 $langScormScoreColumn = "Puan";
 $langScormTimeColumn = "Süre";
-$langScormNeverOpened = "Bu kullanıcının bu derse hiç erişimi yok.";
+$langScormNeverOpened = "Bu kullan&#305;c&#305;n&#305;n bu derse hiç eri&#351;imi yok.";
 $langWorkTitle = "Başlık";
 $langWorkAuthors = "Yazan";
 $langWorkDescription = "Açıklama";
 $informationsAbout = "İzleme sonuçları görüntülenen=>";
 $langNoEmail = "Herhangi bir E-Posta adresi belirtilmemiş.";
 $langNoResult = "Henüz bir sonuç bulunmuyor";
-$langCourse = "Web sitesi ";
+$langCourse = "Web sitesi";
 $langHits = "Görüntülenme";
 $langTotal = "Toplam";
 $langHour = "Saat";
@@ -56,7 +59,7 @@ $langLast31days = "Son Bir Ay";
 $langLast7days = "Son Hafta";
 $langThisday = "Bugün";
 $langLogins = "Giriş";
-$langLoginsExplaination = "Ziyaret ettiğiniz bölümlere göre son girişlerinizin listesi";
+$langLoginsExplaination = "Ziyaret etti&#287;iniz bölümlere göre son giri&#351;lerinizin listesi";
 $langExercicesResults = "Bitirilen testlerin sonucu";
 $langVisits = "ziyaret";
 $langAt = "@";
@@ -123,9 +126,10 @@ $langAllRight = "Burada ilginç, acayip bir durum bulunmuyor.";
 $langDefcon = "Ooops, problemli durumlar bulundu !!";
 $langNULLValue = "Boş (veya NULL)";
 $langTrafficDetails = "Trafik Detayları";
-$langSeeIndividualTracking = "Tek bir izleme için <a href=../user/user.php>Kullanıcılar</a> aracına bakın lütfen. ";
-$langPathNeverOpenedByAnybody = "Bu yol hiçkimse tarafından açılmadı.";
+$langSeeIndividualTracking = "Tek bir izleme için <a href=../user/user.php>Kullanıcılar</a> aracına bakın lütfen.";
+$langPathNeverOpenedByAnybody = "Bu yol hiçkimse taraf&#305;ndan aç&#305;lmad&#305;.";
 $SynthesisView = "Birleştirilmiş görünüm";
 $Visited = "ziyaret edildi";
 $FirstAccess = "İlk erişim";
 $LastAccess = "Son Erişim";
+?>

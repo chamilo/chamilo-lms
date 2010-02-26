@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $lang_already_enrolled = "Ja està matriculat";
 $lang_my_personnal_course_list = "La meva llista personal de cursos";
 $lang_course_enrollment = "Cursos de l'usuari";
@@ -22,12 +25,12 @@ $lang_back_to_parent_category = "Tornar a la categoria superior";
 $lang_back_to_course_selection = "Tornar a la selecció del curs";
 $lang_up = "Tronar a la categoria superior";
 $langCatList = "Categories";
-$langCourseList = "Llistat de cursos";
+$langCourseList = "Cursos";
 $Subscribe = "Inscriure";
 $AlreadySubscribed = "Ja està inscrit";
 $CodeMandatory = "Codi obligatori";
-$CourseCategoryMandatory = "Categoria de curs obligatòria ";
-$TeacherMandatory = "Nom de professor obligatori ";
+$CourseCategoryMandatory = "Categoria de curs obligatòria";
+$TeacherMandatory = "Nom de professor obligatori";
 $CourseCategoryStored = "La categoria del curs està creada";
 $langWithoutTimeLimits = "Sense límit de temps";
 $lang_back_to_main_category_list = "Tornar a la llista principal de categories";
@@ -39,7 +42,7 @@ $langHideAndSubscribeOpen = "Privat/obert";
 $langShowAndSubscribeOpen = "Visible/obert";
 $langShowAndSubscribeClosed = "Visible/tancat";
 $langAdminThisUser = "Tornar a aquest usuari";
-$langManage = "Administració del campus";
+$langManage = "Administració de l'entorn";
 $langEnrollToCourseSuccessful = "Has estat matriculat en el curs";
 $langSubCat = "Subcategories";
 $langUnsubscribeNotAllowed = "No està permès abandonar el curs abans que finalitzi";
@@ -70,11 +73,12 @@ $SubmitRegistrationCode = "Enviar el codi de registre";
 $CourseCategoryDeleted = "La categoria del curs ha estat esborrada";
 $CategorySortingDone = "Ordenació de categories efectuada";
 $CourseCategoryEditStored = "La categoria ha estat actualitzada";
-$buttonCreateCourseCategory = "Crear una categoria de cursos ";
-$buttonSaveCategory = "Guardar categoria ";
+$buttonCreateCourseCategory = "Crear una categoria de cursos";
+$buttonSaveCategory = "Guardar categoria";
 $buttonChangeCategory = "Canviar categoria";
 $SessionName = "Nom de la sessió";
 $SessionCategory = "Categoria de la sessió";
 $Expand = "Expandir";
-$Collapse = "Contreure ";
-$CourseDetails = "Detalls del curs ";
+$Collapse = "Contreure";
+$CourseDetails = "Detalls del curs";
+?>

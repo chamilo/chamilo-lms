@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langLineNumber = "Satır sayısı";
 $langLine = "satır";
 $langLines = "satır";
@@ -26,3 +29,4 @@ $langUnreg = "Kayıt sil";
 $langGroupUserManagement = "Grup yönetimi";
 $langUnregister = "Kayıt İptal Et";
 $langAddAUser = "Kullanıcı ekle";
+?>

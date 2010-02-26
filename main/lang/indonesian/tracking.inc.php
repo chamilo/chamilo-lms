@@ -1,10 +1,13 @@
 <?php
-$langToolName = "Import mata kuliah dari Blackboard";
+/*
+for more information: see languages.txt in the lang folder.
+*/
+$langToolName = "Statistik";
 $TrackingDisabled = "Tracking dinon-aktifkan oleh system administrator.";
 $langShowNone = "Sembunyikan semua";
 $langCourseStats = "Statistik Mata Kuliah";
 $langToolsAccess = "Akses ke tool-tool";
-$langCourseAccess = "Akses Mata Kuliah";
+$langCourseAccess = "Akses ke mata kuliah ini";
 $langLinksAccess = "Link-link";
 $langDocumentsAccess = "Dokumen-dokumen";
 $langScormAccess = "Learning path - Mata Kuliah Berformat Scorm";
@@ -43,14 +46,14 @@ $langScormNeverOpened = "Mata Kuliah ini belum pernah di baca user ini.";
 $langWorkTitle = "Jumlah";
 $langWorkAuthors = "Pengarang";
 $langWorkDescription = "Deskripsi";
-$informationsAbout = "Tracking ";
+$informationsAbout = "Tracking";
 $langNoEmail = "Alamat email belum diisi";
-$langNoResult = "Sementara belum ada hasil";
-$langCourse = "Situs ";
+$langNoResult = "Tidak Ada";
+$langCourse = "Mata Kuliah";
 $langHits = "Hits";
 $langTotal = "Total";
 $langHour = "Jam";
-$langDay = "hari";
+$langDay = "Hari";
 $langLittleHour = "Pkl.";
 $langLast31days = "Dalam 31 hari terakhir";
 $langLast7days = "Dalam 7 hari terakhir";
@@ -82,7 +85,7 @@ $langPreviousYear = "Tahun Sebelumnya";
 $langViewToolList = "Lihat daftar semua tool";
 $langToolList = "Daftar semua tool";
 $langFrom = "Dari";
-$langTo = "ke";
+$langTo = "Kepada";
 $langPeriodToDisplay = "Periode";
 $langDetailView = "Lihat menurut";
 $langBredCrumpGroups = "Group";
@@ -129,3 +132,4 @@ $SynthesisView = "View sintesa";
 $Visited = "Dikunjungi";
 $FirstAccess = "Akses pertama";
 $LastAccess = "Akses terakhir";
+?>

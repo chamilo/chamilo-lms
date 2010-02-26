@@ -1,25 +1,28 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langInvalidId = "Вход не удался - неверное имя пользователя или пароль";
-$langWelcome = "Добро пожаловать!";
+$langWelcome = "курсы в свободном доступе внизу. Другие курсы требуют имя пользователя и пароль, которые Вы можете получить щелкнув на \"регистрация\". Преподаватели могут создавать зоны курса также щелкнув на \"регистрация\", но затем выбирая \"Создать зоны курса\".";
 $langPass = "Пароль";
-$langEnter = "Вернуться к моему списку курсов";
+$langEnter = "Вход";
 $langReg = "Регистрация";
 $langMenu = "Меню";
 $langAdvises = "Советы";
-$langOtherCourses = "другие курсы";
+$langCourseDoesntExist = "<b>Предупреждение:</b> Этот курс не существут";
+$langGetCourseFromOldPortal = "Щелкнуть здесь, чтобы получить этот курс с Вашего старого портала";
+$langOtherCourses = "Список курсов";
 $langSupportForum = "Форум поддержки";
-$langCategories = "категории";
+$langCategories = "Разделы";
 $langBackToHomePage = "Обзор разделов";
 $lang_No_course_publicly_available = "Нет курсов в свободном доступе";
 $langLostPassword = "Утерян пароль";
 $lang_edit_my_course_list = "Редактировать мой список курсов";
-$langCourseDoesntExist = "<b>Предупреждение:</b> Этот курс не существут";
-$langGetCourseFromOldPortal = "Щелкнуть здесь, чтобы получить этот курс с Вашего старого портала";
-$langAgenda = "Повестка дня (расписание)";
+$langAgenda = "План предстоящих событий";
 $langValvas = "Последние объявления";
-$langUp = "Вверх";
+$langUp = "Предыдущий уровень";
 $langCatList = "Разделы";
-$langCourseList = "Список курса";
+$langCourseList = "Курсы";
 $langHelptwo = "Помощь";
 $langRegAll = "журнал регистрации";
 $EussMenu = "меню";
@@ -33,16 +36,16 @@ $langMenuUser = "Пользователь";
 $langMenuAdmin = "Администратор платформы";
 $langUsersOnLineList = "Спосок пользователя онлайн";
 $langTotalOnLine = "Полностью онлайн";
-$langRefresh = "Обновить";
+$langRefresh = "обновить страницу";
 $langMe = "я, меня";
-$langSystemAnnouncements = "Системные объявления";
+$langSystemAnnouncements = "Портал объявлений";
 $langHelpMaj = "Помощь";
 $langNotRegistered = "Не зарегистрирован";
 $langAdmin = "Администратор платформы";
-$Login = "Регистрационное имя пользователя (логин)";
+$Login = "Имя пользователя (логин)";
 $langRegisterForCourse = "Регистрироваться на курс";
 $langUnregisterForCourse = "Отказаться от регистрации на курс";
-$langCombinedCourse = "Объединенный курс";
+$langCombinedCourse = "Комбинированный курс -";
 $Platform = "Платформа";
 $Refresh = "Обновить";
 $TotalOnLine = "пользователи полного онлайна";
@@ -63,3 +66,4 @@ $FolderCreated = "Новая папка создана";
 $LinkAdded = "Новая ссылка добавлена";
 $AnnouncementAdded = "Объявление добавлено";
 $AgendaAdded = "Пункты повестки дня добавлены";
+?>

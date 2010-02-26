@@ -1,5 +1,8 @@
 <?php
-$FlatView = "عرض مسطح ";
+/*
+for more information: see languages.txt in the lang folder.
+*/
+$FlatView = "عرض بدون تغيير";
 $ScoreEdit = "نشرة قواعد الدرجات";
 $ScoreColor = "لون الدرجات";
 $ScoringSystem = "نظام التسجيل";
@@ -16,7 +19,7 @@ $NewCategory = "الفئة الجديدة";
 $NewEvaluation = "التقييم الجديد";
 $Weight = "الوزن";
 $PickACourse = "اختيار المقرر";
-$CategoryName = "اسم الصنف";
+$CategoryName = "اسم الفئة";
 $CourseIndependent = "مقرر مستقل";
 $CourseIndependentEvaluation = "تقييم مقرر مستقل";
 $EvaluationName = "اسم التقييم";
@@ -36,7 +39,7 @@ $DokeosLearningPaths = "مسارات تعلم دوكيوس";
 $ChooseExercise = "اختر التمرين";
 $AddResult = "أضف النتائج";
 $BackToOverview = "الرجوع للعرض الكامل";
-$ExportPDF = "تحويل الصيغة الى PDF ";
+$ExportPDF = "تحويل الصيغة الى PDF";
 $Print = "طباعة";
 $ChooseOrientation = "اختيار الشكل";
 $Portrait = "شكل Portrait";
@@ -45,3 +48,4 @@ $FilterCategory = "ترشيح فئة";
 $DeleteAll = "حذف الكل";
 $ScoringUpdated = "تم تعديل التسجيل";
 $CertificateWCertifiesStudentXFinishedCourseYWithGradeZ = "%s تشهد بأنnn %s nأنهى بنجاح المقرر nn '%s' nnبدرجة  ofnn '%s'";
+?>

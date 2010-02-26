@@ -1,5 +1,8 @@
 <?php
-$ResourceAdded = "Resource added";
+/*
+for more information: see languages.txt in the lang folder.
+*/
+$ResourceAdded = "Resource added. You can now go back to the path or add more resources.";
 $LearningPath = "Courses";
 $LevelUp = "level up";
 $AddIt = "Add it";
@@ -21,7 +24,7 @@ $AdValvas = "Announcements";
 $Document = "Document";
 $ShowDelete = "Show / Delete";
 $IntroductionText = "Introduction text";
-$CourseDescription = "Training Description";
+$CourseDescription = "Training description";
 $Groups = "Groups";
 $Users = "Users";
 $IntroductionTextAdd = "Add a page containing the introduction text to this section.";
@@ -33,23 +36,24 @@ $DokeosRelatedCourseMaterial = "Chamilo related course resources";
 $LinkTarget = "Link's target";
 $SameWindow = "In the same window";
 $NewWindow = "In a new window";
-$StepDeleted1 = "This ";
+$StepDeleted1 = "This";
 $StepDeleted2 = "item was deleted in that tool.";
 $Modify = "Edit";
 $Chapter = "Section";
-$NoAgendaItems = "There are no events";
-$AgendaAdd = "Add event";
-$UserGroupFilter = "Filter on groups/users";
-$AgendaSortChronologicallyUp = "Ascending";
+$NoAgendaItems = "There are no events in the agenda";
+$AgendaAdd = "Add an event";
+$UserGroupFilter = "User group filter";
+$AgendaSortChronologicallyUp = "Sort chronologically (up)";
 $ShowCurrent = "Current month";
 $ModifyCalendarItem = "Edit event";
-$ItemTitle = "Event name";
-$Detail = "Detail";
-$EditSuccess = "Event edited";
-$AddCalendarItem = "Add event to agenda";
+$ItemTitle = "Title";
+$Detail = "Details";
+$EditSuccess = "Edit was successful";
+$AddCalendarItem = "Add an event";
 $AddAnn = "Add announcement";
 $ForumAddNewTopic = "Forum: add new topic";
 $ForumEditTopic = "Forum: edit topic";
 $ExerciseAnswers = "Test : Answers";
 $ForumReply = "Forum: reply";
-$AgendaSortChronologicallyDown = "Descending";
+$AgendaSortChronologicallyDown = "Sort chronologically (down)";
+?>

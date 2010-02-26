@@ -1,10 +1,13 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langOnlineConference = "Rimarinakuy";
 $langWash = "Pichay";
 $langReset = "Kuti qallariy";
 $langSave = "Allchay";
 $langRefresh = "Kunanyachiy";
-$langIsNowInYourDocDir = "ña kashan qelqa kiphukunaykipi. <br><B>Kay khipuqa qawachikushanmi</B>";
+$langIsNowInYourDocDir = "ña kashan qelqa kiphukunaykipi. <br /><B>Kay khipuqa qawachikushanmi</B>";
 $langCopyFailed = "Khipu allachayqa waqllirun";
 $langTypeMessage = "Ama hina kaychu, qelqa willanaykita";
 $langConfirmReset = "Cheqaychu kashanki llipin willanakunata pichanaykipaq?";
@@ -29,7 +32,7 @@ $langWelcomeToOnlineConf = "Chayaykamullaysi <b>RI</b>";
 $langNoLinkAvailable = "Ni hoq waskhanapas kanchu";
 $langChat_reset_by = "kuti qallarichiy chat nisqata";
 $OrFile = "Utaq khipu";
-$langCallSent = "Rimapakunapaq mañakuyqa apachiku. Mayqan runaman mañakuyqa suyachikushanraq. ";
+$langCallSent = "Rimapakunapaq mañakuyqa apachiku. Mayqan runaman mañakuyqa suyachikushanraq.";
 $langChatDenied = "Waqyasqaykiqa mana chaskikunchu runa mañakusqayki";
 $Send = "Apachiy";
 $Connected = "Kaqkuna";
@@ -57,3 +60,4 @@ $AskPermissionSpeak = "Mañakuy rimanapaq";
 $GiveTheFloorTo = "Qoy rimanapaq";
 $Pause = "Utiy";
 $Stop = "Harkay";
+?>

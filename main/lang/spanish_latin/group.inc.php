@@ -46,8 +46,6 @@ $langStudentsNotInThisGroups = "Usuarios fuera de este grupo";
 $langQtyOfUserCanSubscribe_PartBeforeNumber = "Un usuario puede ser miembro de un máximo de";
 $langQtyOfUserCanSubscribe_PartAfterNumber = " grupos";
 $langGroupLimit = "Límite";
-$CreateGroup = "";
-$ProceedToCreateGroup = "";
 $langStudentRegAllowed = "Los estudiantes están autorizados a registrarse solos en los grupos";
 $langGroupAllowStudentUnregistration = "Los usuarios están habilitados para retirar su inscripción de los grupos";
 $langAllGroups = "Todos los grupos";
@@ -91,7 +89,4 @@ $NoCategoriesDefined = "Sin categorías definidas";
 $GroupsFromClasses = "Grupos de clases";
 $GroupsFromClassesInfo = "Usando esta opción, puede crear grupos basado en las clases subscritas a su curso.";
 $Group = "Grupo";
-$ForumOfGroup = "";
-$BackToGroupList = "";
-$EditGroupCategory = "";
 ?>

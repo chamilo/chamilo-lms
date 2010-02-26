@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $MyTasks = "Mano užduotys";
 $FavoriteBlogs = "Mano favoritiniai dienoraščiai";
 $Navigation = "Navigacija";
@@ -56,7 +59,7 @@ $Rating = "Reitingavimas";
 $RateThis = "Reitinguoti šį straipsnį";
 $SelectTaskArticle = "Išrinkti straipsnį šiai užduočiai";
 $ExecuteThisTask = "Vykdyti šią užduotį";
-$WrittenBy = "Parašė ";
+$WrittenBy = "Parašė";
 $InBlog = "Šiame bloge";
 $ViewPostsOfThisDay = "Rodyti šios dienos įrašus";
 $PostsOf = "Įrašai";
@@ -79,3 +82,4 @@ $AddBlog = "Sukurti naują dienoraštį";
 $EditBlog = "Redaguoti antraštę ir poantraštę";
 $DeleteBlog = "Ištrinti šį dienoraštį";
 $Shared = "Padalinta";
+?>

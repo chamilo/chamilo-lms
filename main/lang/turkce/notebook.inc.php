@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $NewNote = "Yeni not";
 $Note = "Not";
 $NoteDeleted = "Not silindi";
@@ -29,3 +32,4 @@ $NotesSortedByUpdateDateAsc = "Notları güncelleme tarihine göre sırala (1-9)
 $NotesSortedByUpdateDateDESC = "Notları güncelleme tarihine göre sırala (9-1)";
 $NotesSortedByCreationDateAsc = "Notları oluşturma tarihine göre sırala (1-9)";
 $NotesSortedByCreationDateDESC = "Notları güncelleme tarihine göre sırala (9-1)";
+?>

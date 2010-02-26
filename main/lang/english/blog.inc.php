@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $MyTasks = "My tasks";
 $FavoriteBlogs = "My projects";
 $Navigation = "Navigation";
@@ -50,7 +53,7 @@ $ReadMore = "Read more...";
 $DeleteThisArticle = "Delete this task";
 $EditThisPost = "Edit this task";
 $DeleteThisComment = "Delete this comment";
-$NoArticles = "There are no tasks in this project. If you are the manager of this project, click on  link 'New task' to write an task.";
+$NoArticles = "There are no tasks in this project. If you are the manager of this project, click on link 'New task' to write a task.";
 $NoTasks = "No tasks";
 $Rating = "Rating";
 $RateThis = "Rate this task";
@@ -99,3 +102,4 @@ $CommentDeleted = "The comment has been deleted.";
 $RatingAdded = "A rating has been added.";
 $BlogPosts = "Blog Posts";
 $BlogComments = "Blog comments";
+?>

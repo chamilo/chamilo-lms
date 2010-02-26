@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langShouldBeCSVFormat = "Datoteka mora biti v CSV obliki. Ne dodajajte presledkov. Zgradba datoteke mora biti natančno kot :";
 $langTracking = "Poročila";
 $langEnter2passToChange = "Za spremembo vnesite geslo dvakrat. Sicer pustite polji prazni.";
@@ -9,16 +12,13 @@ $langAddImage = "Slika";
 $langCourseManager = "Učitelj";
 $NewPass = "Novo geslo";
 $CurrentPasswordEmptyOrIncorrect = "Trenutno geslo je prazno ali kakorkoli nepravilno";
-$password_request = "Zahtevali ste ponastavitev vašega gesla.
-Če to ni bila vaša zahteva, prezrite to sporočilo.
-
-Za 'resetiranje' gesla uporabite dano povezavo.";
+$password_request = "Zahtevali ste ponastavitev vašega gesl";
 $YourPasswordHasBeenEmailed = "Geslo vam je bilo poslano preko e-pošte.";
 $lang_enter_email_and_well_send_you_password = "Vnesi e-poštni naslov, ki ste ga uporabili pri registraciji in poslali vam bomo geslo.";
 $langLogin = "Vstop";
 $langAction = "Akcija";
 $langPreserved = "Ohranjeno";
-$langDeleted = "Odstranjeno";
+$langDeleted = "Brisano";
 $langAdded = "Dodano";
 $langConfirmUnsubscribe = "Potrdi izpis uporabnika";
 $langCourseName = "Ime tečaja";
@@ -26,7 +26,7 @@ $langSubscribe = "Vpis";
 $langSee = "Pojdi na";
 $langLastVisits = "Moji zadnji obiski";
 $langIfYouWantToAddManyUsers = "Če želiš dodati svojemu tečaju skupino uporabnikov, se povezi z administratorjem.";
-$langPassTooEasy = "to geslo je preveč preprosto. Uporabi geslo, kot na primer ";
+$langPassTooEasy = "to geslo je preveč preprosto. Uporabi geslo, kot na primer";
 $langGroupUserManagement = "Upravljanje s skupino";
 $langAddedToCourse = "je bil registriran v tvoj tečaj";
 $langUserAlreadyRegistered = "Uporabnik z enakim imenom je že registriran v ta tečaj.";
@@ -41,14 +41,14 @@ $langSend = "Pošlji";
 $langUserAddExplanation = "vsaka vrstica datoteke mora imeti natančno 5 polj:		<b>Priimek   Ime   		uporabniško_ime   geslo 		  elektronski_naslov</b>, v tem vrstnem redu in ločenih s TAB.		Uporabniki bodo dobili po e-pošti potrditev z uporabniškim imenom in geslom.";
 $langUserMany = "Vnos seznama uporabnikov iz CSV / XML datoteke";
 $langOneByOne = "Uporabnika dodaj ročno";
-$langNow = "trenutno";
+$langNow = "sedaj";
 $langTutor = "Inštruktor";
-$langTitular = "Vodja";
-$langAddHereSomeCourses = "<font size=2 face='Arial, Helvetica'><big>Spremeni seznam tečajev</big><br><br>Označi tečaje, ki bi jim rad sledil.<br>Zbriši kljukice pri tečajih, ki te ne zanimajo več.<br>Nato klikni gumb OK na koncu seznama";
-$langStudent = "Tečajnik";
+$langTitular = "Avtor";
+$langAddHereSomeCourses = "<font size=2 face='Arial, Helvetica'><big>Spremeni seznam tečajev</big><br /><br />Označi tečaje, ki bi jim rad sledil.<br />Zbriši kljukice pri tečajih, ki te ne zanimajo več.<br />Nato klikni gumb OK na koncu seznama";
+$langStudent = "tečajnik";
 $langImportUserList = "Uvozi seznam uporabnikov";
 $langAddAU = "Dodaj uporabnika";
-$langAddedU = "je bil dodan. Poslana mu je bila e-pošta z imenom uporabnika ";
+$langAddedU = "je bil dodan. Poslana mu je bila e-pošta z imenom uporabnika";
 $langTheU = "Uporabnik";
 $langRegYou = "vas je registriral v ta tečaj";
 $langOneResp = "Eden od administratorjev tečaja";
@@ -72,14 +72,12 @@ $langNowGoChooseYourCourses = "Sedaj iz seznama tečajev lahko izberete tistega,
 $langMailHasBeenSent = "Da bi si laže zapomnili uporabniško ime in geslo, vam je bilo poslano e-sporočilo.";
 $langPersonalSettings = "Vaše osebne nastavitve so bile shranjene in odposlano vam je bilo e-sporočilo z vašim uporabniškim imenom in geslom.</p>";
 $langManager = "upravitelj";
-$langFormula = "S spoštovanjem";
+$langFormula = "vaš";
 $langProblem = "V primeru težav, stopite v kontakt z nami";
 $langIs = "je";
-$langAddress = "Naslov ";
-$langSettings = "z naslednjimi nastavitvami :
-
-Uporabniško ime :";
-$langYouAreReg = "Registrirani ste v skupnost ";
+$langAddress = "Naslov";
+$langSettings = "z naslednjimi nastavitvami";
+$langYouAreReg = "Registrirani ste v skupnost";
 $langYourReg = "Vasa registracija v";
 $langUserFree = "To uporabniško ime je že v rabi. Uporabite brskalnikov gumb 'nazaj' in izberite drugega.";
 $langEmptyFields = "Nekaj vnosnih polj ste pustili praznih. Uporabite brskalnikov gumb 'nazaj' in poskusite znova.";
@@ -103,8 +101,8 @@ $langMember = "član";
 $langLock = "zaklenjeno";
 $langUnlock = "odklenjeno";
 $langHaveNoCourse = "brez tečaja";
-$langManage = "Upravljanje portala";
-$langAdministrationTools = "Orodja upravitelja";
+$langManage = "Upravljaj platformo";
+$langAdministrationTools = "Orodja administracije";
 $langUserProfileReg = "Uporabniški profil je bil shranjen";
 $lang_no_user_account_with_this_email_address = "Uporabniški račun s tem e-poštnim naslovom ne obstaja";
 $langCourses4User = "Tečaji uporabnika";
@@ -132,9 +130,9 @@ $PasswordRequestFrom = "Zahteva po geslu za e-poštni naslov";
 $CorrespondsToAccount = "Ta e-poštni naslov odgovarja naslednjemu uporabniškemu računu";
 $CorrespondsToAccounts = "Ta e-poštni naslov odgovarja naslednjim uporabniškim računom";
 $AccountExternalAuthSource = "Chamilo ne more te zahteve servisirati avtomatično, ker je uporabniški račun avtoriziran s pomočjo tunanjega izvora. Izvedite odgovarjajoče mere in obvestite uporabnika.";
-$AccountsExternalAuthSource = "Chamilo ne more servisirati te izjeme avtomatično, ker je vsaj eden od uporabniških računov avtoriziran preko zunanjega izvora. Izvedite odgovarjajoče mere za vse uporabniške račune (vključno s tistimi, ki jih avtorizira platforma) in ibvestite uporabnike.";
-$RequestSentToPlatformAdmin = "Chamilo ne more servisirati zahteve avtomatično za to vrsto uporabniškega računa. Vaša zahteva je bila posredovana upravitelju platforme, ki bo izvedel odgovarjajoče mere in vas naknadno obvestil o rezultatih izvedbe zahteve.";
-$langphone = "Telefonska št.";
+$AccountsExternalAuthSource = "Chamilo ne more servisirati te izjeme avtomatično, ker je vsaj eden od uporabniških računov avtoriziran preko zunanjega izvora. Izvedite odgovarjajoče mere za vse uporabniške račune (vklju&#269;no s tistimi, ki jih avtorizira platforma) in ibvestite upora";
+$RequestSentToPlatformAdmin = "Chamilo ne more servisirati zahteve avtomati&#269;no za to vrsto uporabniškega računa. Vaša zahteva je bila posredovana upravitelju platforme, ki bo izvedel odgovarjajoče mere in vas naknadno obvestil o rezultatih izvedbe zahteve.";
+$langphone = "Tel.";
 $Unreg = "Odjavi";
 $MyProgress = "Moj napredek";
 $ProgressIntroduction = "Prični z izbiro tečaja seje spodaj.<br />Napredek je viden za vsak tečaj v katerega je tečajnik vpisan.";
@@ -178,3 +176,4 @@ $LostPass = "Si pozabil(a) geslo ?";
 $EnterEmailUserAndWellSendYouPassword = "Vnesi uporabniško ime ali e-poštni naslov s katerim si registriran(a) in poslali vam bomo geslo.";
 $NoUserAccountWithThisEmailAddress = "Tu ni uporabniškega računa s tem uporabniškim imenom ali e-poštnim naslovom";
 $WithTheFollowingSettings = "z naslednjimi nastavitvami:";
+?>

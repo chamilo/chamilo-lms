@@ -1,8 +1,11 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $lang_already_enrolled = "deja inscris";
 $lang_my_personnal_course_list = "Lista personala curs";
 $lang_course_enrollment = "Cursurile utilizatorului";
-$lang_course_not_available = "Acest curs nu este disponibil sau nu există.";
+$lang_course_not_available = "Acest curs nu este disponibil sau nu exist&#259;.";
 $lang_enroll = "Inscriere";
 $lang_enroll_to_a_new_course = "Inscriere la un curs nou";
 $lang_my_present_course_list = "Lista mea de cursuri";
@@ -22,7 +25,7 @@ $lang_back_to_parent_category = "Inapoi la categoria superioara";
 $lang_back_to_course_selection = "Inapoi la selectarea cursului";
 $lang_up = "Inapoi la categoria superioara";
 $langCatList = "Categorii";
-$langCourseList = "Lista cursurilor";
+$langCourseList = "Cursuri";
 $Subscribe = "Inscrie-te";
 $AlreadySubscribed = "Deja inscris";
 $CodeMandatory = "Codul este spatiu obligatoriu";
@@ -39,7 +42,7 @@ $langHideAndSubscribeOpen = "Ascuns / Deschis";
 $langShowAndSubscribeOpen = "Vizibil / Deschis";
 $langShowAndSubscribeClosed = "Vizibil / Inchis";
 $langAdminThisUser = "Inapoi la utilizator";
-$langManage = "Managementul portalului";
+$langManage = "Administrarea portalului";
 $langEnrollToCourseSuccessful = "Ai fost inscris la acest curs";
 $langSubCat = "sub-categorii";
 $langUnsubscribeNotAllowed = "Nu este permisa renuntare la acest curs.";
@@ -73,3 +76,4 @@ $CourseCategoryEditStored = "Categorie actualizata";
 $buttonCreateCourseCategory = "Pastreaza categoria Trainingului";
 $buttonSaveCategory = "Pastreaza categoria";
 $buttonChangeCategory = "Modifica categoria";
+?>

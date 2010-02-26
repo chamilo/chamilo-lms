@@ -1,8 +1,11 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $ForumDeleted = "K'itirimana wañuchisqa";
 $ForumCategoryDeleted = "K'itirimanaq mitayninkuna wañuchisqa";
 $ForumLocked = "K'itirimana wisqasqa";
-$Forum = "Rimarinakuykuna";
+$Forum = "K'itirimana";
 $AddForumCategory = "Yapay hoq mita k'itirimanata";
 $AddForum = "Yapay hoq k'itirimanata";
 $Topics = "Rimanakuna";
@@ -38,9 +41,9 @@ $ReplyShort = "Kuti:";
 $DeletePost = "Cheqaychu pichanki kay willayta? kay willayta pichaspaqa, pichakunqan llapan kutichikuynin kasqanpas. Ama hina kaychu, k'allmachasqa qhawanapi qhawariy mayqen willaykuna pichachikunqa chayta";
 $Locked = "Wisqasqa: yachaqekunaqa manañan churanqakuchu kay mitapi, k'itirimanapi nitaq rimanapipas, ichaqa ñaupaq willaykuna churasqataqa ñauwichallankuman.";
 $Unlocked = " Kichasqa: yachaqekunaqa atinqaku musuq willaykunata churayta kay mitapi, k'itirimanapi utaq  rimanapipas";
-$Flat = "P'altachasqa";
+$Flat = "P'alta";
 $Threaded = "Sach'achasqa";
-$Nested = "Q'esachasqa";
+$Nested = "Mitamitachasqa";
 $FlatView = "P'altachasqa qhawana";
 $ThreadedView = "K'allmachasqa qhawana";
 $NestedView = "Rak'ipachasqa qhawana";
@@ -56,7 +59,7 @@ $ForGroup = "Huñusqanapaq";
 $ThreadLocked = "Rimana wisqasqa.";
 $NotAllowedHere = "Kaymanqa mana haykuwaqchu.";
 $ReplyAdded = "Kutichikuyqa yapasqaña";
-$EditPost = "Ruwapay qelqachata";
+$EditPost = "Ruwapay willayta";
 $EditPostStored = "Willayqa t'ijrapachikunña";
 $NewForumPost = "Musuq willay k'itirimanapi";
 $YouWantedToStayInformed = "Kayta ajllarinki, sapa kuti rimanaman kutichiqtinku e-chaskipi willasunkiku";
@@ -118,7 +121,9 @@ $Thread = "Rimana";
 $NotifyMe = "Willawanankupaq";
 $ConfirmUserQualification = " Cheqaqchankichu haykuqmasiq chaninchayninta?";
 $NotChanged = "Manan kanchu t'ijrachasqakuna";
+$TitleColumnGradebook = "Patara chaninchanapaq sutinchaynin";
 $QualifyThreadGradebook = "Chaninchay patara chaninchana ukhupi";
+$QualifyWeight = "Chaninchaymanta llasaynin";
 $QualifyNumeric = "Haykamanta chaninchana";
 $AlterQualifyThread = "Ruwapay rimanaq chaninchasqata";
 $ForumMoved = "Rimanaqa kuyuchikunña";
@@ -134,3 +139,4 @@ $EditForum = "Editar foro";
 $BackToForum = "Volver al foro";
 $BackToForumOverview = "Volver a la vista general del foro";
 $BackToThread = "Regresar a tema";
+?>

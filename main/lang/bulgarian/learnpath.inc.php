@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $NewForumCreated = "Новият форум е създаден.";
 $NewThreadCreated = "Новата тема е създадена.";
 $AddHotpotatoes = "Добавяне на HotPotatoes тест";
@@ -91,9 +94,9 @@ $langTitleManipulateQuiz = "Работа с текущия тест";
 $langTitleManipulateStudentPublication = "Работа с текущата публикация";
 $langEnterDataNewChapter = "Въвеждане на данни за новия модул";
 $langEnterDataNewModule = "Въвеждане на данни за новия модул";
-$langCreateNewStep = "Създаване на стъпка: ";
+$langCreateNewStep = "Създаване на стъпка:";
 $langNewDocument = "Нов документ";
-$langUseAnExistingResource = "Или да се използва съществуващ ресурс: ";
+$langUseAnExistingResource = "Или да се използва съществуващ ресурс:";
 $langParent = "Родител";
 $langPosition = "Позиция";
 $langNewChapterCreated = "Новият модул е създаден. В него можете да добавите друг модул или стъпка.";
@@ -116,13 +119,13 @@ $lang_loading = "Зареждане на страницата, моля изча
 $lang_empty = "Няма съдържание.";
 $langHotPotatoesFinished = "Този тест (HotPotatoes) е приключен.";
 $langCompletionLimit = "Праг за изпълнение (минимални точки)";
-$langPrereqToEnter = "За да преминете към ";
-$langPrereqFirstNeedTo = ", трябва да сте изпълнили ";
-$langPrereqModuleMinimum1 = "Минимум 1 стъпка липсва от ";
+$langPrereqToEnter = "За да преминете към";
+$langPrereqFirstNeedTo = ", трябва да сте изпълнили";
+$langPrereqModuleMinimum1 = "Минимум 1 стъпка липсва от";
 $langPrereqModuleMinimum2 = ", която е определена като задължителна.";
-$langPrereqTestLimit1 = ", трябва да постигнете минимум ";
-$langPrereqTestLimit2 = " точки резултат в ";
-$langPrereqTestLimitNow = "Вашият точков резултат е ";
+$langPrereqTestLimit1 = ", трябва да постигнете минимум";
+$langPrereqTestLimit2 = " точки резултат в";
+$langPrereqTestLimitNow = "Вашият точков резултат е";
 $langLearnpathExitFullScreen = "Нормален екран";
 $langLearnpathFullScreen = "Цял екран";
 $langItemMissing1 = "Тук е съществувала";
@@ -135,7 +138,7 @@ $langditCurrentModule = "Редактиране на текущия модул";
 $langCreateTheDocument = "Създаване на документа";
 $langMoveTheCurrentDocument = "Преместване на текущия документ";
 $langEditTheCurrentDocument = "Редактиране на текущия документ";
-$langWarning = "Внимание! ";
+$langWarning = "Внимание!";
 $langWarningEditingDocument = "Когато редактирате съществуващ документ в пътеката за обучение се създава нова версия на документа. Новата версия на документа не презаписва старата версия, а се записва като нов документ. Ако искате изрично да редактирате оригиналния документ, направете това чрез инструмента \"Документи\".";
 $langDirectory = "Папка";
 $langCreateTheExercise = "Създаване на тест";
@@ -209,7 +212,7 @@ $ChangesStored = "Промените са записани.";
 $ViewScoreChangeHistory = "Преглед на историята с резултати";
 $ImageWillResizeMsg = "Изображението ще промени размерите си.";
 $ImagePreview = "Преглед на изображението";
-$UplAlreadyExists = " вече съществува. ";
+$UplAlreadyExists = " вече съществува.";
 $UplUnableToSaveFile = "Качваният файл не може да бъде съхранен. Проверете, дали тази операция е разрешена.";
 $UnknownPackageFormat = "Форматът на този пакет не е разпознат. Моля, проверете дали пакетът е валиден.";
 $MoveDocument = "Преместване на документа";
@@ -235,3 +238,4 @@ $AddAssignmentToCourse = "Добавяне на работа";
 $AddForumToCourse = "Добаване на форум";
 $SaveAudioAndOrganization = "Запис на аудиофайловете и тяхната организация";
 $UploadOnlyMp3Files = "Моля, качвайте само mp3 файлове.";
+?>

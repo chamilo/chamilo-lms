@@ -1,25 +1,28 @@
 <?php
-$langInvalidId = "Deze identificatie is niet geldig (verkeerde log-in of wachtwoord). ";
-$langWelcome = "Welkom !";
+/*
+for more information: see languages.txt in the lang folder.
+*/
+$langInvalidId = "Deze identificatie is niet geldig (verkeerde log-in of wachtwoord).";
+$langWelcome = "Cursussites hieronder hebben vrije toegang. De andere cursussen vereisen een gebruikersnaam en een wachtwoord. Die kunt u krijgen door een klik op 'Registratie'. Lesgevers kunnen bij registratie aangeven dat ze cursussites wensen aan te maken.";
 $langPass = "Wachtwoord";
-$langEnter = "Terug naar uw cursuslijst";
+$langEnter = "Log in";
 $langReg = "Registratie";
 $langMenu = "Menu";
 $langAdvises = "Advies";
 $langCourseDoesntExist = "<b>Opgepast:</b> Deze cursus bestaat niet.";
 $langGetCourseFromOldPortal = "Klik hier om de cursus op te halen uit de oude portaalsite";
-$langOtherCourses = "Andere cursussen";
+$langOtherCourses = "Cursusoverzicht";
 $langSupportForum = "Ondersteuningsforum";
-$langCategories = "categorieën";
+$langCategories = "Categorieën";
 $langBackToHomePage = "Categorieoverzicht";
 $lang_No_course_publicly_available = "Geen vrij toegankelijke cursussen.";
 $langLostPassword = "Wachtwoord vergeten";
 $lang_edit_my_course_list = "Ga naar cursusoverzicht";
-$langAgenda = "Agenda";
+$langAgenda = "Eerstvolgende agenda-items";
 $langValvas = "Recente aankondigingen";
-$langUp = "Omhoog";
-$langCatList = "Categorieën";
-$langCourseList = "Cursuslijst";
+$langUp = "Vorig niveau";
+$langCatList = "Categorie";
+$langCourseList = "Cursussen";
 $langHelptwo = "Help";
 $langRegAll = "Registreer";
 $EussMenu = "Menu";
@@ -33,9 +36,9 @@ $langMenuUser = "Gebruiker";
 $langMenuAdmin = "Platformbeheerder";
 $langUsersOnLineList = "Lijst van gebruikers die online zijn";
 $langTotalOnLine = "Totaal online";
-$langRefresh = "Bijwerken";
+$langRefresh = "Pagina vernieuwen";
 $langMe = "mezelf";
-$langSystemAnnouncements = "Platformmededelingen";
+$langSystemAnnouncements = "Mededelingen";
 $langHelpMaj = "Help";
 $langNotRegistered = "Niet geregistreerd";
 $langAdmin = "Platformbeheerder";
@@ -60,10 +63,11 @@ $CourseView = "De volledige lijst met cursussen weergeven";
 $DropboxFileAdded = "Dropbox bestand toegevoegd";
 $NewMessageInForum = "Nieuw bericht geplaatst in het forum";
 $FolderCreated = "Nieuwe folder aangemaakt";
-$LinkAdded = "Een link werd toegevoegd.";
-$AnnouncementAdded = "De aankondiging is toegevoegd.";
+$LinkAdded = "Nieuwe link toegevoegd";
+$AnnouncementAdded = "Aankondiging toegevoegd";
 $AgendaAdded = "Agenda item toegevoegd";
 $Messages = "Berichten";
 $Inbox = "Postvak In";
 $Comppose = "Opstellen";
 $PendingInvitations = "Hangende uitnodigingen";
+?>

@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $ReservationPeriodToSmall = "La période de réservation est trop courte.";
 $BookingSystem = "Réservations";
 $BookingPeriodList = "Liste des périodes de réservations";
@@ -32,6 +35,8 @@ $DeleteBookingPeriod = "Supprimer cette période de réservation";
 $BookingPeriodEdited = "La période de réservation a été mise à jour";
 $BookingPeriodDateOverlap = "Une partie de la période de réservation est déjà utilisée du #START# au #END#";
 $BookingPeriodSubscribeUntilAfterStart = "La date d'inscription limite est plus grande que la date de début";
+$RepeatFor = "Répéter chaque";
+$RepeatUntil = "Répéter jusqu'au";
 $BookingPeriodPast = "Il est impossible de faire des réservations avant la date actuelle";
 $ReservationMaxUsersOverrun = "Il y a déjà plus de personnes inscrites que le maximum d'utilisateurs que vous venez de sélectionner";
 $AddNewBookingPeriod = "Ajouter une nouvelle période de réservation";
@@ -66,8 +71,6 @@ $ReservationDeleteTitle = "Un période de réservation de #NAME# a été supprim
 $ReservationDeleteMessage = "Madame, Mademoiselle, Monsieur,nnLa période de réservation de #NAME# du #START# au #END# a été supprimée.";
 $OutPeriod = "Hors période";
 $ReservationFromUntilError = "La période de réservation du #START# au #END# n'a pas été enregistrée car une partie de la période de réservation est déjà prisen";
-$RepeatFor = "Répéter chaque";
-$RepeatUntil = "Répéter jusqu'au";
 $Recurrence = "Récurrence";
 $NoRecurrence = "Pas de récurrence";
 $UntilRecurrence = "Utiliser la récurrence";
@@ -129,3 +132,4 @@ $Step1SelectResourceType = "1. Choisissez le type de ressource";
 $Step2SelectResource = "2. Choisissez la ressource";
 $Step3SelectBookingPeriod = "3. Choisissez la période de réservation";
 $NoReservations = "Pas de réservations";
+?>

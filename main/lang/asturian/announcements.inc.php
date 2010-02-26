@@ -1,11 +1,14 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $Announcement = "Anuncies";
 $langAnnEmpty = "Les anuncies esborrárense";
 $AnnouncementModified = "L'anuncia modificóse";
 $AnnouncementAdded = "L'anuncia amestóse";
 $AnnouncementDeleted = "La anuncia esborróse";
-$AnnouncementPublishedOn = "Publicáu'l ";
-$AddAnnouncement = "Amestar como una anuncia";
+$AnnouncementPublishedOn = "Publicáu'l";
+$AddAnnouncement = "Amestar una anuncia";
 $langContent = "Conteníu";
 $AnnouncementDeleteAll = "Esborrar toles anuncies";
 $professorMessage = "Recáu del profesor";
@@ -53,3 +56,4 @@ $AnnounceSentToUserSelection = "Anunciu unviáu a una seleición d'usuarios";
 $SendAnnouncement = "Unviar anunciu";
 $ModifyAnnouncement = "Camudar anunciu";
 $ButtonPublishAnnouncement = "Unviar anunciu";
+?>

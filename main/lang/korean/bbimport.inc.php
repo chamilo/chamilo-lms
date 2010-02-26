@@ -1,20 +1,24 @@
 <?php
-$langViewCourseMaterialImport = "불러올 교육 자료 보기 ";
-$langViewExternalLinksImport = "불러올 외부 링크 보기 ";
-$langViewForumImport = "불러올 포럼 보기";
-$langImportCourseMaterial = "과정 자료 가져오기(Blackboard tool \"Course Material\") ";
+/*
+for more information: see languages.txt in the lang folder.
+*/
+$langViewCourseMaterialImport = "&#48520;&#47084;&#50732; &#44368;&#50977; &#51088;&#47308; &#48372;&#44592;";
+$langViewExternalLinksImport = "&#48520;&#47084;&#50732; &#50808;&#48512; &#47553;&#53356; &#48372;&#44592;";
+$langViewForumImport = "&#48520;&#47084;&#50732; &#54252;&#47100; &#48372;&#44592;";
+$langImportCourseMaterial = "과정 자료 가져오기(Blackboard tool \"Course Material\")";
 $langImportExternalLinks = "링크 가져오기 ( blackboard tool \"External Links\")";
 $langImportForum = "포럼 가져오기 (Blackboard tool \"Discussion Board\")";
-$langToolInfo = "이 툴은 Blackboard 5.5 과정을 가져옵니다  (Course Material, Discussion Board, and External Links)";
-$langToolName = "Blackboard 과정 가져오기";
-$langSelectCoursePackage = "과정 패키지 선택";
-$langPackageAlreadySelected = "이미 선택한 패키지입니다";
-$langFirstSelectPackage = "패키지를 먼저 선택하고 불러오기 전에 오픈해야 합니다.";
-$langCourseToMigrate = "이동 시킬 과정";
-$langSelectPackage = "패키지 선택";
-$langOpenPackageForImporting = "불러오기 위해 패키지 오픈";
-$langInformation = "불러오기 절차에 대한 정보";
-$langChooseImportOptions = "불러오기 옵션 선택";
-$langCheckWhatIsImported = "불러오기 과정을 시작하기 전에 무엇을 불러올지 선택할 수 있습니다";
-$langStartImporting = "불러오기 시작";
-$langImport = "불러오기";
+$langToolInfo = "&#51060; &#53812;&#51008; Blackboard 5.5 &#44284;&#51221;&#51012; &#44032;&#51256;&#50741;&#45768;&#45796;  (Course Material, Discussion Board, and External Links)";
+$langToolName = "Blackboard &#44284;&#51221; &#44032;&#51256;&#50724;&#44592;";
+$langSelectCoursePackage = "&#44284;&#51221; &#54056;&#53412;&#51648; &#49440;&#53469;";
+$langPackageAlreadySelected = "&#51060;&#48120; &#49440;&#53469;&#54620; &#54056;&#53412;&#51648;&#51077;&#45768;&#45796;";
+$langFirstSelectPackage = "&#54056;&#53412;&#51648;&#47484; &#47676;&#51200; &#49440;&#53469;&#54616;&#44256; &#48520;&#47084;&#50724;&#44592; &#51204;&#50640; &#50724;&#54536;&#54644;&#50556; &#54633;&#45768;&#45796;.";
+$langCourseToMigrate = "&#51060;&#46041; &#49884;&#53420; &#44284;&#51221;";
+$langSelectPackage = "&#54056;&#53412;&#51648; &#49440;&#53469;";
+$langOpenPackageForImporting = "&#48520;&#47084;&#50724;&#44592; &#50948;&#54644; &#54056;&#53412;&#51648; &#50724;&#54536;";
+$langInformation = "&#48520;&#47084;&#50724;&#44592; &#51208;&#52264;&#50640; &#45824;&#54620; &#51221;&#48372;";
+$langChooseImportOptions = "&#48520;&#47084;&#50724;&#44592; &#50741;&#49496; &#49440;&#53469;";
+$langCheckWhatIsImported = "&#48520;&#47084;&#50724;&#44592; &#44284;&#51221;&#51012; &#49884;&#51089;&#54616;&#44592; &#51204;&#50640; &#47924;&#50631;&#51012; &#48520;&#47084;&#50732;&#51648; &#49440;&#53469;&#54624; &#49688; &#51080;&#49845;&#45768;&#45796;";
+$langStartImporting = "&#48520;&#47084;&#50724;&#44592; &#49884;&#51089;";
+$langImport = "&#48520;&#47084;&#50724;&#44592;";
+?>

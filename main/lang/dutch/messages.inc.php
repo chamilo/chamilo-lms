@@ -1,14 +1,17 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $MessageEmptyMessageOrSubject = "Gelieve een onderwerp of bericht in te vullen";
-$Inbox = "Postvak In";
-$Messages = "Berichten";
+$Inbox = "Inbox";
+$Messages = "Bericht";
 $SendMessage = "Verstuur bericht";
 $NewMessage = "Nieuw bericht";
 $ComposeMessage = "Bericht opstellen";
 $DeleteSelectedMessages = "Verwijder geselecteerde berichten";
 $SelectAll = "Selecteer alle";
 $DeselectAll = "Selecteer geen";
-$ReplyToMessage = "Antwoorden op dit bericht";
+$ReplyToMessage = "Antwoord";
 $BackToInbox = "Terug naar inbox";
 $MessageSentTo = "Het bericht is verzonden naar";
 $SendMessageTo = "Verzend naar";
@@ -34,3 +37,4 @@ $AlreadyReadMessage = "Bericht reeds gelezen";
 $UnReadMessage = "Ongelezen bericht";
 $MessageSent = "Bericht verstuurd";
 $YouShouldWriteAMessage = "Je moet een bericht schrijven";
+?>

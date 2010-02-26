@@ -1,19 +1,22 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $WikiSearchResults = "Risultati della ricerca su Wiki";
-$Wiki = "Wiki di gruppo";
+$Wiki = "Wiki";
 $StartPage = "Pagina iniziale";
 $EditThisPage = "Modifica la pagina";
 $ShowPageHistory = "Cronologia";
 $RecentChanges = "Cambiamenti recenti";
 $AllPages = "Tutte le pagine";
 $AddNew = "Aggiungi una pagina";
-$ChangesStored = "Modifiche salvate";
+$ChangesStored = "I cambiamenti sono stati salvati";
 $NewWikiSaved = "La nuova pagina wiki è stata salvata. Puoi vederla cliccando su:";
-$DefaultContent = " <br/> <br/> <p align=\"center\"> <img src=\"%swiki/wcollaborative.png\" alt=\"mr. Chamilo\" title=\"mr. Chamilo\" /></p> <p align=\"center\">Per iniziare, modifica questa pagina</p> ";
+$DefaultContent = " <br /> <br /> <p align=\"center\"> <img src=\"%swiki/wcollaborative.png\" alt=\"mr. Chamilo\" title=\"mr. Chamilo\" /></p> <p align=\"center\">Per iniziare, modifica questa pagina</p>";
 $CourseWikiPages = "Pagine wiki del corso";
 $GroupWikiPages = "Pagine wiki del corso";
 $NoWikiPageTitle = "I cambiamenti sono stati effettuati. Ora dai un titolo alla pagina.";
-$WikiPageTitleExist = "La pagina esiste già. La puoi modificare cliccando qui: ";
+$WikiPageTitleExist = "La pagina esiste già. La puoi modificare cliccando qui:";
 $WikiDiffAddedLine = "Linea aggiunta";
 $WikiDiffDeletedLine = "Linea eliminata";
 $WikiDiffMovedLine = "Linea spostata";
@@ -53,11 +56,11 @@ $AddOptionProtected = "L'opzione \"aggiungi\" è stata bloccata. Solo il docente
 $AddOptionUnprotected = "L'opzione \"aggiungi\" è consentita per tutti i corsisti o i membri del gruppo";
 $NotifyChanges = "Notificami i cambiamenti";
 $NotNotifyChanges = "Non notificarmi i cambiamenti";
-$NotifyByEmail = "Notificami via e-mail le eventuali risposte";
+$NotifyByEmail = "Notificami via e-mail le ulteriori modifiche della pagina";
 $CancelNotifyByEmail = "Non notificarmi via e-mail le ulteriori modifiche della pagina";
-$MostRecentVersionBy = "L'ultima modifica è stata effettuata da ";
-$Rating = "Valutazione";
-$RatingMedia = "Il voto medio della pagina è ";
+$MostRecentVersionBy = "L'ultima modifica è stata effettuata da";
+$Rating = "Voto";
+$RatingMedia = "Il voto medio della pagina è";
 $NumComments = "Commenti ai contenuti della pagina";
 $NumCommentsScore = "Numero di commenti associati alla pagina";
 $AddPagesLocked = "L'opzione \"aggiungi\" è stata temporaneamente disabilitata dal gestore del corso";
@@ -132,17 +135,17 @@ $EmailWikiPageDiscAdded = "Un nuovo intervento è stato inserito come discussion
 $FullNotifyByEmail = "Ricevi una notifica via email per ogni cambiamento del Wiki";
 $FullCancelNotifyByEmail = "Ferma la notifica via email dei cambiamenti effettuati sul Wiki";
 $EmailWikiChangesExt_1 = "La notifica è stata effettuata in base alla tua richiesta di monitoraggio dei cambiamenti dl Wiki, richiesta attivata attraverso la selezione di un'opzione del Wiki";
-$EmailWikiChangesExt_2 = "Se vuoi fermare la notifica dei cambiamenti del Wiki seleziona l'opzione opportuna in <strong> Modifiche recenti</ strong>, <strong>Pagina attiva</ strong>, <strong>Notifica</ strong> ";
+$EmailWikiChangesExt_2 = "Se vuoi fermare la notifica dei cambiamenti del Wiki seleziona l'opzione opportuna in <strong> Modifiche recenti</ strong>, <strong>Pagina attiva</ strong>, <strong>Notifica</ strong>";
 $Visits = "visite";
 $OrphanedPages = "Pagine orfane";
 $WantedPages = "Pagine ricercate";
 $MostVisitedPages = "Pagine più visitate";
 $MostChangedPages = "Pagine più modificate";
-$Changes = "Modifiche";
+$Changes = "cambiamenti";
 $MostActiveUsers = "Utenti più attivi";
 $Contributions = "Contributi";
 $UserContributions = "Contributi dell'utente";
-$WarningDeleteMainPage = "Non è consigliabile eliminare la pagina iniziale del Wiki, in quanto costituisce la radice della struttura gerarchica delle altre pagine.<br />Se devi eliminarla, abbi l'avvertenza di ricrearla con lo stesso nome, altrimenti sarà impossibile una corretta gestione del Wiki.";
+$WarningDeleteMainPage = "Non è consigliabile eliminare la pagina iniziale del Wiki, in quanto costituisce la radice della struttura gerarchica delle altre pagine.<br />Se devi eliminarla, abbi l'avvertenza di ricrearla con lo stesso nome, altrimenti sarà impossibile una corretta";
 $ConvertToLastVersion = "Per aggiornare la versione clicca";
 $Restore = "Ripristina";
 $CurrentVersion = "Versione corrente";
@@ -153,7 +156,7 @@ $HWiki = "Aiuto: Wiki";
 $FirstSelectOnepage = "Seleziona prima una pagina, grazie.";
 $DefineTask = "Se nella descrizione viene scritto qualcosa, la pagina verrà considerata come pagina speciale di assegnazione di un compito";
 $ThisPageisBeginEditedBy = "In questo istante la pagina viene modificata da";
-$ThisPageisBeginEditedTryLater = "Riprova più tardi. Se la pagina non verrà salvata dall'utente che la sta modificando, potrai modificarla tra ";
+$ThisPageisBeginEditedTryLater = "Riprova più tardi. Se la pagina non verrà salvata dall'utente che la sta modificando, potrai modificarla tra";
 $EditedByAnotherUser = "I cambiamenti non saranno salvati perché un altro utente ha modificato la pagina nel frattempo";
 $WarningMaxEditingTime = "Hai a disposizione 20 minuti per modificare la pagina. Trascorso questo tempo, se non avrai salvato i cambiamenti, un altro utente potrà modificare la pagina ed annullare i cambiamenti da te apportati";
 $TheTaskDoesNotBeginUntil = "Bisogna attendere la data d'inizio";
@@ -164,7 +167,7 @@ $DescriptionOfTheTask = "Descrizione della consegna";
 $OtherSettings = "Altri requisiti";
 $NMaxWords = "Numero massimo di parole";
 $NMaxVersion = "Numero massimo di modifiche";
-$Feedback = "Commenti";
+$Feedback = "Messaggi guida";
 $AddFeedback = "Aggiungi un messaggio di orientamento associato al progredire del lavoro";
 $Feedback1 = "Primo messaggio";
 $Feedback2 = "Secondo messaggio";
@@ -173,3 +176,4 @@ $FProgress = "Progresso";
 $PutATimeLimit = "Limiti di tempo";
 $StandardTask = "Compito predefinito";
 $ThePageHasBeenExportedToDocArea = "La pagina è stata esportata nella sezione Documenti";
+?>

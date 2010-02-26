@@ -1,5 +1,8 @@
 <?php
-$ResourceAdded = "Recursu agregáu";
+/*
+for more information: see languages.txt in the lang folder.
+*/
+$ResourceAdded = "Recursu amestáu. Agora pue tornar al itinerariu o amestar más recursos.";
 $LearningPath = "Itinerarios d'aprendizaxe";
 $LevelUp = "Subir un nivel";
 $AddIt = "Amestar";
@@ -9,7 +12,7 @@ $AddToLinks = "Amestar a los enllaces del cursu";
 $DontAdd = "non amestar";
 $lang_show_all_added_resources = "Amosar tolos recursos amestaos";
 $ResourcesAdded = "Recursos amestaos";
-$BackTo = "Volver a";
+$BackTo = "Tornar a";
 $ExternalResources = "Recursos esternos";
 $CourseResources = "Recursos del cursu";
 $ExternalLink = "Enllaz esternu";
@@ -33,23 +36,24 @@ $DokeosRelatedCourseMaterial = "Recursos rellacionaos. Nun se puen esportar en f
 $LinkTarget = "Destín del enllaz";
 $SameWindow = "Na mesma ventana";
 $NewWindow = "Nuna ventana nueva";
-$StepDeleted1 = "Esti ";
+$StepDeleted1 = "Esti";
 $StepDeleted2 = "l'elementu esborróse nesta ferramienta.";
 $Modify = "modificar";
 $Chapter = "Capítulu";
-$NoAgendaItems = "Nun hai eventos";
-$AgendaAdd = "Amestar un eventu";
-$UserGroupFilter = "Filtrar por grupos/usuarios";
-$AgendaSortChronologicallyUp = "Ordenar eventos (antigüos/recientes)";
-$ShowCurrent = "Amosar tolos eventos del mes";
-$ModifyCalendarItem = "Cambiar un eventu de l'axenda";
-$ItemTitle = "Títulu del eventu";
+$NoAgendaItems = "Nun hai eventos na Axenda";
+$AgendaAdd = "Amestar un eventu de l'Axenda";
+$UserGroupFilter = "Facer filtru por grupos d'usuarios";
+$AgendaSortChronologicallyUp = "Ordenar l'axenda de más vieyo a más nuevo";
+$ShowCurrent = "Amosar los eventos actuales de l'axenda";
+$ModifyCalendarItem = "Modificar eventos de l'axenda";
+$ItemTitle = "Títulu";
 $Detail = "Detalles";
-$EditSuccess = "L'eventu modificóse";
-$AddCalendarItem = "Amestar un eventu nuevu a la axenda";
+$EditSuccess = "Fízose la modificación.";
+$AddCalendarItem = "Amestar un eventu a l'Axenda";
 $AddAnn = "Amestar una anuncia";
 $ForumAddNewTopic = "Foru: amestar un tema";
 $ForumEditTopic = "Foru: editar un tema";
 $ExerciseAnswers = "Exerciciu: Retruques";
 $ForumReply = "Foru: retrucar";
-$AgendaSortChronologicallyDown = "Ordenar eventos (recientes/antigüos)";
+$AgendaSortChronologicallyDown = "Ordenar l'axenda de más nuevo a más vieyo";
+?>

@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $ReservationPeriodToSmall = "The reservation period is to short.";
 $BookingSystem = "Booking system";
 $BookingPeriodList = "Booking period list";
@@ -32,6 +35,8 @@ $DeleteBookingPeriod = "Remove this booking period";
 $BookingPeriodEdited = "The booking period has been edited";
 $BookingPeriodDateOverlap = "A part of the booking period is already in use in the period from #START# until #END#";
 $BookingPeriodSubscribeUntilAfterStart = "The subscribe until date is greater then the startdate";
+$RepeatFor = "Repeat every";
+$RepeatUntil = "Repeat until";
 $BookingPeriodPast = "Its not possible to make reservations before the current time";
 $ReservationMaxUsersOverrun = "The are already more people subscribed then the Max Users you selected";
 $AddNewBookingPeriod = "Add a new booking period";
@@ -46,7 +51,7 @@ $EditResourceType = "Edit resource type";
 $DeleteResourceType = "Delete resource type";
 $DeleteSelectedCategories = "Delete selected resources";
 $NoResourcesType = "No resource type yet";
-$ResourceType = "Category";
+$ResourceType = "Resource type";
 $ResourceTypeExist = "This resource type already exists";
 $ResourceTypeHasItems = "The resource type has #NUM# items ! Delete has been aborted";
 $ResourceTypeNotDeleted = "Some categories could not be removed because they contain resources";
@@ -61,13 +66,11 @@ $ReservationTresspassing = "This reservation is already full, you are not allowe
 $ReservationOutOfDate = "The date you have choosen is already in use and/or is not the reservation period from #START# until #END#";
 $ReservationAlready = "You already booked this resource";
 $ReservationMadeTitle = "Your booking of #ITEM# was successfull";
-$ReservationMadeMessage = "Dear Sir/Madam,nnYour booking for #ITEM# from #START# until #END# is successfull. ";
+$ReservationMadeMessage = "Dear Sir/Madam,nnYour booking for #ITEM# from #START# until #END# is successfull.";
 $ReservationDeleteTitle = "A booking period of #NAME# has been deleted";
 $ReservationDeleteMessage = "Dear Sir/Madam,nThe reservation period of #NAME# from #START# until #END# has been removed";
 $OutPeriod = "Out period";
-$ReservationFromUntilError = "The booking period from #START# until #END# hasn't been made because a part of the booking period is already takenn ";
-$RepeatFor = "Repeat every";
-$RepeatUntil = "Repeat until";
+$ReservationFromUntilError = "The booking period from #START# until #END# hasn't been made because a part of the booking period is already takenn";
 $Recurrence = "Recurrence";
 $NoRecurrence = "No recurrence";
 $UntilRecurrence = "Use recurrence";
@@ -96,7 +99,7 @@ $AddNewResource = "Add new resource";
 $ConfirmDeleteResource = "Are you sure that you want to permantly delete this resource?";
 $ResourceInactivated = "The resource has been disabled";
 $ResourceActivated = "The resource has been enabled";
-$Resource = "Assessment";
+$Resource = "Resource";
 $OpenBooking = "Open booking";
 $DeleteResource = "Delete resource";
 $DeleteSelectedResources = "Delete selected resources";
@@ -114,7 +117,7 @@ $ReservationForItemAccepted = "Dear Sir/Madam,nnYour reservation for #ITEM# from
 $ReservationForItemDenied = "Dear Sir/Madam,nnYour booking for #ITEM# from #BEGIN till #END has been rejected";
 $ReservationCancelled = "Reservation cancelled, #NAME# is temporary unavailable";
 $ReservationActive = "Reservation is active again, #NAME# is available again";
-$ReservationUnavailable = "Dear Sir/Madam,nnResource #NAME# is temporarily unavailable so your booking from #BEGIN# till #END# has been cancelled.nYou will get an email when it is available again. ";
+$ReservationUnavailable = "Dear Sir/Madam,nnResource #NAME# is temporarily unavailable so your booking from #BEGIN# till #END# has been cancelled.nYou will get an email when it is available again.";
 $ReservationAvailable = "Dear Sir/Madam,nnWe wish to inform you that #NAME# is available again so your reservation from #BEGIN# till #END# is active again.";
 $Resources = "Resources";
 $EditBookingPeriod = "Edit booking period";
@@ -129,3 +132,4 @@ $Step1SelectResourceType = "Step 1: Select resource type";
 $Step2SelectResource = "Step 2: select the resource";
 $Step3SelectBookingPeriod = "Step 3: select the booking period";
 $NoReservations = "No reservations";
+?>

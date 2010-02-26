@@ -1,11 +1,14 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $Announcement = "Anunturi";
 $langAnnEmpty = "Lista cu anunturi a fost stearsa";
 $AnnouncementModified = "Anuntul a fost modificat";
 $AnnouncementAdded = "Au fost adaugate anunturi";
 $AnnouncementDeleted = "Anuntul a fost sters";
 $AnnouncementPublishedOn = "Publicate la";
-$AddAnnouncement = "Adauga un anunt";
+$AddAnnouncement = "Adaugati anunt";
 $langContent = "Continut";
 $AnnouncementDeleteAll = "Sterge lista cu anunturi";
 $professorMessage = "Mesaj de la profesor";
@@ -53,3 +56,4 @@ $AnnounceSentToUserSelection = "Anuntul este trimis la utilizatorii selectati.";
 $SendAnnouncement = "Trimite anunt.";
 $ModifyAnnouncement = "Modifica anuntul.";
 $ButtonPublishAnnouncement = "Adauga anunt";
+?>

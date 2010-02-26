@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $select = "Kiválaszt";
 $square = "Négyzet";
 $circle = "Elipszis";
@@ -13,6 +16,7 @@ $exercise_status_3 = "Státusz: befejezett kérdés";
 $showUserPoints = "Felhasználók kattintásának mutatása/elrejtése";
 $showHotspots = "Hotspot mutatása/elrejtése";
 $labelPolyMenu = "Poligon zárása";
-$triesleft = "Hátralévő próbálkozások";
+$triesleft = "Hátralév&#337; próbálkozások";
 $exeFinished = "Minden választ megadott. Most már elhelyezheti a forrópontokat, vagy továbbléphet.";
 $nextAnswer = "Most kattintson erre: &done=done";
+?>

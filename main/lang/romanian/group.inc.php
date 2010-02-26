@@ -1,9 +1,12 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langNewGroupCreate = "Creaza grup/grupuri noi";
 $langGroupCreation = "Creare de grupuri noi";
 $langCreate = "creaza";
 $langNewGroups = "grup/grupuri noi";
-$langMax = "max. 20 caractere, e.g. <i>INNOV21</i>";
+$langMax = "max.";
 $langGroupPlacesThis = "locuri (optional)";
 $langGroupsAdded = "grupul/grupurile a/au fost adaugat/adaugate";
 $langGroupDel = "Grup sters";
@@ -16,13 +19,13 @@ $langGroupDocument = "Documente";
 $langGroupPropertiesModified = "Setarile grupului au fost modificate";
 $langGroupSpace = "Zona grupului";
 $langGroupName = "Numele grupului";
-$langGroupDescription = "Descrierea grupului";
+$langGroupDescription = "Descriere";
 $langGroupMembers = "Membrii grupului";
 $langEditGroup = "Editeaza acest grup";
 $Optional = "(optional)";
 $langGroupSettingsModified = "Setarile grupului modificate";
 $langGroupTooMuchMembers = "Numarul propus depaseste limitele admise (poti modifica de alaturi). Compozitia grupului nu a fost modificata";
-$langGroupTutor = "Indrumatorul grupului";
+$langGroupTutor = "Tutore";
 $langGroupNoTutor = "(nimic)";
 $langGroupNone = "(nimic)";
 $langGroupNoneMasc = "(nimic)";
@@ -33,8 +36,8 @@ $langGroupSelfRegistration = "Inregistrare";
 $langGroupSelfRegInf = "inregistreaza";
 $langRegIntoGroup = "Adauga-ma la acest grup";
 $langGroupNowMember = "Acuma esti un membrul al acestui grup.";
-$langPrivate = "Acces privat (accesibil doar utilizatorilor din lista de utilizatori)";
-$langPublic = "Accesul public al paginei principale fara inregistrare";
+$langPrivate = "privat";
+$langPublic = "public";
 $langPropModify = "Modifica setarile";
 $langState = "Stat";
 $langGroupFilledGroups = "Grupurile au fost umplute (sau completate) de utilizatorii prezenti in lista \"Utilizatori\".";
@@ -65,10 +68,10 @@ $langNoGroupsAvailable = "Nici un grup disponibil";
 $langGroupsFromVirtualCourses = "Cursuri virtuale";
 $NotAvailable = "Nu este disponibil";
 $CreateSubgroups = "Creaza subgrupuri";
-$CreateSubgroupsInfo = "Aceasta optiune iti permite sa creezi grupuri noi bazate pe un grup existent. Indica numarul dorit de grupuri si alege un grup existent. Numarul indicat de grupuri va fi creat iar toti membrii vor fi inscrisi in acele grupuri noi. Grupul existent ramane neschimbat.";
+$CreateSubgroupsInfo = "Aceasta optiune iti permite sa creezi grupuri noi bazate pe un grup existent. Indica numarul dorit de grupuri si alege un grup existent. Numarul indicat de grupuri va fi creat iar toti membrii vor fi inscrisi in acele grupuri noi. Grupul existent ramane n";
 $CreateNumberOfGroups = "Creaza";
 $WithUsersFrom = "grupuri cu membrii din";
-$CategoryDeleted = "Categoria a fost stearsa.";
+$CategoryDeleted = "Categoria este stearsa";
 $Empty = "Gol";
 $FillGroup = "adauga utilizatori";
 $EmptyGroup = "dezaboneaza toti utilizatorii";
@@ -90,3 +93,4 @@ $GroupsFromClassesInfo = "Utilizand aceasta optiune, puteti crea grupuri bazate 
 $Group = "Grup";
 $ForumOfGroup = "Forumul grupului:";
 $BackToGroupList = "Inapoi la lista de grupuri.";
+?>

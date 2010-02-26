@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $ModifInfo = "Ders bilgilerini değiştir";
 $langModifDone = "Bilgiler değişti";
 $langDelCourse = "Ders sitesini sil";
@@ -23,9 +26,9 @@ $langExercise = "Testler";
 $langStats = "İstatistikler";
 $langUplPage = "Sayfa yükle ve Ana Sayfaya bağla";
 $langLinkSite = "Ana Sayfaya Bağlantı ekle";
-$langCourse = "Web sitesi ";
+$langCourse = "Web sitesi";
 $langHasDel = "silindi";
-$langBackHome = "Dönülecek AnaSayfa: ";
+$langBackHome = "Dönülecek AnaSayfa:";
 $langByDel = "Bu dersin websitesi silindiğinde, içindeki tüm belgeler ve öğrenci kayıtları da silinir.<p>Silmek istediğinizden emin misiniz?";
 $langY = "EVET";
 $langN = "HAYIR";
@@ -36,7 +39,7 @@ $langModifGroups = "Gruplar";
 $langProfessor = "Öğretmen";
 $langGroups = "Gruplar";
 $langDescriptionCours = "Ders açıklaması";
-$langArchiveCourse = "Ders yedekleme ";
+$langArchiveCourse = "Ders yedekleme";
 $langRestoreCourse = "Arşivden ders yükle";
 $langRestore = "Geri Yükle";
 $langCreatedIn = "Yaratıldığı yer";
@@ -62,8 +65,8 @@ $langSubscription = "Kayıt";
 $langCourseAccess = "Erişim";
 $langConfirmBackup = "Bu dersi yedeklemek istiyormusunuz?";
 $langCreateSite = "Ders oluştur";
-$langRestoreDescription = "Bu ders aşağıdaki listeden seçebileceğiniz bir arşiv dosyasıdır.<br><br>\"Geri Al\",komutuna tıkladığınızda dosya açılacak ve ders tekrar oluşturulacaktır. ";
-$langRestoreNotice = "Bu yazılım henüz kullanıcıları otomatik olarak tekrar yüklemek için elverişli değildir ama yetkili tarafından \"users.csv\" dosyası kullanılarak elle bu işlem yapılabilir";
+$langRestoreDescription = "Bu ders aşağıdaki listeden seçebileceğiniz bir arşiv dosyasıdır.<br /><br />\"Geri Al\",komutuna tıkladığınızda dosya açılacak ve ders tekrar oluşturulacaktır.";
+$langRestoreNotice = "Bu yaz&#305;l&#305;m henüz kullan&#305;c&#305;lar&#305; otomatik olarak tekrar yüklemek için elveri&#351;li de&#287;ildir ama yetkili taraf&#305;ndan \"users.csv\" dosyas&#305; kullan&#305;larak elle bu i&#351;lem yap&#305;labilir";
 $langAvailableArchives = "Kullanılabilen arşiv listesi";
 $langNoArchive = "Herhangi bir arşiv seçilmedi";
 $langArchiveNotFound = "Bu arşiv bulunmuyor.";
@@ -90,7 +93,7 @@ $AllowUserEditAnnouncementActivate = "Kullanıcılar tarafından yayınlamaya iz
 $AllowUserEditAnnouncementDeactivate = "Kullanıcılar tarafında yayınlamayı kaldır";
 $OrInTime = "yada içinde";
 $CourseRegistrationPassword = "Eğitim kayıt şifresi";
-$langDescriptionDeleteCourse = "Ana makinadan eğitimi kaldırmak içn bu bağlantı üzerine tıklayın<br><br>Dikkatli olun, geri dönüş yoktur!";
+$langDescriptionDeleteCourse = "Ana makinadan eğitimi kaldırmak içn bu bağlantı üzerine tıklayın<br /><br />Dikkatli olun, geri dönüş yoktur!";
 $langDescriptionCopyCourse = "Eğitimin yada başka eğitimlerdeki bazı eğitim objelerinin kopyasını çıkar. Bu özelliği kullanmak için 2 eğitime ihtiyacınız var: Biri orijinal diğeri hedef eğitim";
 $DescriptionRecycleCourse = "Bu araç eğitimi boşaltır. Dokümanları, forumları, bağlantıları uzaklaştırır. Ve size silmek istediğiniz parçayı yada tamamını silmenize karar vermenize izin verir.";
 $QuizEmailAlert = "Yeni test sunulduğunda e-posta alarmı";
@@ -110,3 +113,4 @@ $NewUserEmailAlert = "Yeni bir kullanıcının otomatik kaydında eğitimciyi e-
 $NewUserEmailAlertEnable = "Yeni bir kullanıcının otomatik kaydında eğitimcinin e-posta ile bilgilendirilmesini aktifleştir";
 $NewUserEmailAlertToTeacharAndTutor = "Yeni bir kullanıcının otomatik kaydında eğitimciyi ve yazarların e-posta ile bilgilendirilmesini aktifleştir";
 $NewUserEmailAlertDisable = "Yeni bir kullanıcının otomatik kaydında eğitimcinin e-posta ile bilgilendirilmesini devre dışı bırak";
+?>

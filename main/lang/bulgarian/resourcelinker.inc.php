@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $ResourceAdded = "Добавен е ресурс.";
 $LearningPath = "Пътеки за обучение";
 $LevelUp = "Ниво нагоре";
@@ -53,3 +56,4 @@ $ForumEditTopic = "Форум: редактиране на тема";
 $ExerciseAnswers = "Тест: отговори";
 $ForumReply = "Форум: отговор";
 $AgendaSortChronologicallyDown = "Сортиране на програмата в обратен хронологичен ред";
+?>

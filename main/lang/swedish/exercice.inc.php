@@ -1,10 +1,13 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langExercice = "Prov";
 $langActivate = "aktivera";
-$langDeactivate = "deaktivera";
+$langDeactivate = "inaktivera";
 $langNoEx = "Det finns inga prov för tillfället";
 $langNewEx = "Nytt prov";
-$langQuestion = "fråga";
+$langQuestion = "Fråga";
 $langQuestions = "Frågor";
 $langAnswers = "Svar";
 $langTrue = "Sant";
@@ -127,16 +130,16 @@ $langTake = "ta";
 $langAmong = "bland";
 $langImportHotPotatoesQuiz = "Importera HotPotatoestest";
 $langHotPotatoesTests = "Importera HotPotatoestest";
-$langDownloadFile = "Ladda filen till servern";
+$langDownloadFile = "Ladda upp HotPotatoes (html eller zip) till servern";
 $langDownloadImg = "Ladda upp bildfil till servern";
-$langDownloadEnd = "Uppladdningen är klar.";
-$langNoSpace = "Uppladdningen har misslyckats. Det finns inte tillräckligt med diskutrymme i din mapp.";
-$langZipNoPhp = "ZIP-filen kan inte innehålla .PHP-filer";
+$langDownloadEnd = "Uppladdningen av html fil är avslutad.";
+$langNoSpace = "Uppladdningen har misslyckats. Det finns inte tillräckligt med utrymme i din katalog";
+$langZipNoPhp = "Zip filen kan inte innehålla .PHP filer";
 $langNoImg = "Prova utan bilder";
-$langImgNote_st = "<br> Du behöver fortfarande ladda upp";
+$langImgNote_st = "<br /> Du behöver fortfarande ladda upp";
 $langImgNote_en = "bild(er):";
-$langDocDeleted = "dokument raderat";
-$langViMod = "Synlighet modifierad";
+$langDocDeleted = "Dokument raderat";
+$langViMod = "Synlighet modifierat";
 $langNameNotEqual = "är inte den giltiga filen!";
 $langIndice = "Index";
 $langIndices = "Flera index";
@@ -196,3 +199,4 @@ $ChooseAtLeastOneCheckbox = "Välj minst ett bra svar";
 $ExerciseEdited = "Provet har ändrats";
 $ExerciseDeleted = "Provet har tagits bort";
 $ValidateAnswer = "Spara och rätta mina svar";
+?>

@@ -1,28 +1,32 @@
 <?php
-$langLineNumber = "บรรทัดที่";
-$langLine = "บรรทัด";
-$langLines = "บรรทัด";
-$langLineOrLines = "บรรทัด";
-$langMoveUp = "เลื่อนขึ้น";
-$langMoveDown = "เลื่อนลง";
-$langAddNewHeading = "เพิ่มหัวเรื่องใหม่";
-$langCourseAdministratorOnly = "ผู้สอนเท่านั้น";
-$langDefineHeadings = "นิยามหัวเรื่อง";
-$langBackToUsersList = "กลับไปที่รายชื่อผู้ใช้";
-$langTracking = "การติดตามผล";
-$langCourseManager = "อาจารย์ผู้สอน";
-$langModRight = "เปลี่ยนแปลงสิทธิ์ของ";
-$langNoAdmin = "ตั้งแต่นี้ไป<b>ไม่มี</b>สิทธิ์ในหน้านี้ ";
-$langAllAdmin = "ตั้งแต่นี้ไป มีสิทธิ์ในหน้านี้<b>ทั้งหมด</b> ";
-$langModRole = "เปลี่ยนบทบาทของ";
-$langRole = "คำอธิบาย";
-$langIsNow = "ตั้งแต่นี้ไป";
-$langInC = "ในรายวิชานี้";
-$langFilled = "คุณกรอกข้อมูลยังไม่ครบ";
-$langUserNo = "ชื่อผู้ใช้ที่คุณเลือก";
-$langTaken = "ถูกใช้แล้ว โปรดเลือกชื่ออื่น";
-$langTutor = "ผู้ช่วยสอน";
-$langUnreg = "ถอนการสมัคร";
-$langGroupUserManagement = "การจัดการกลุ่ม";
-$langUnregister = "ไม่ได้ลงทะเบียน";
-$langAddAUser = "เพิ่มผู้ใช้";
+/*
+for more information: see languages.txt in the lang folder.
+*/
+$langLineNumber = "ºÃÃ·ÑŽ·Õè";
+$langLine = "ºÃÃ·ÑŽ";
+$langLines = "ºÃÃ·ÑŽ";
+$langLineOrLines = "ºÃÃ·ÑŽ";
+$langMoveUp = "àÅ×èÍ¹¢Öé¹";
+$langMoveDown = "àÅ×èÍ¹Å§";
+$langAddNewHeading = "àŸÔèÁËÑÇàÃ×èÍ§ãËÁè";
+$langCourseAdministratorOnly = "ŒÙéÊÍ¹à·èÒ¹Ñé¹";
+$langDefineHeadings = "¹ÔÂÒÁËÑÇàÃ×èÍ§";
+$langBackToUsersList = "¡ÅÑºä»·ÕèÃÒÂª×èÍŒÙéãªé";
+$langTracking = "µÔŽµÒÁŒÅ";
+$langCourseManager = "ÍÒšÒÃÂìŒÙéÊÍ¹";
+$langModRight = "à»ÅÕèÂ¹á»Å§ÊÔ·žÔì¢Í§";
+$langNoAdmin = "µÑé§áµè¹Õéä»<b>äÁèÁÕ</b>ÊÔ·žÔìã¹Ë¹éÒ¹Õé";
+$langAllAdmin = "µÑé§áµè¹Õéä» ÁÕÊÔ·žÔìã¹Ë¹éÒ¹Õé<b>·Ñé§ËÁŽ</b>";
+$langModRole = "à»ÅÕèÂ¹º·ºÒ·¢Í§";
+$langRole = "º·ºÒ·/Ê¶Ò¹ÀÒŸ";
+$langIsNow = "µÑé§áµè¹Õéä»";
+$langInC = "ã¹ÃÒÂÇÔªÒ¹Õé";
+$langFilled = "äÁèäŽé¡ÃÍ¡ÃÒÂ¡ÒÃã¹·Ø¡ªèÍ§";
+$langUserNo = "ŒÙéãªéàÅ¢·Õè";
+$langTaken = "¡ÓÅÑ§ãªé§Ò¹ÍÂÙè â»ÃŽàÅ×Í¡ÍÂèÒ§Í×è¹";
+$langTutor = "ŒÙéªèÇÂÊÍ¹";
+$langUnreg = "¶Í¹¡ÒÃÊÁÑ€Ã";
+$langGroupUserManagement = "¡ÒÃºÃÔËÒÃšÑŽ¡ÒÃ¡ÅØèÁ";
+$langUnregister = "äÁèäŽéÅ§·ÐàºÕÂ¹";
+$langAddAUser = "àŸÔèÁŒÙéãªé";
+?>

@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langSelectOptionForBackup = "Ama hina kaychu, ajllay kikinchan waqaychasqamanta ajllay hoq imaymanata";
 $langLetMeSelectItems = "Ajllay yachachinaqpa imaymana purinanpaq";
 $langCreateFullBackup = "Kamay yachachinamanta hunt'a kikinchay waqaychananta";
@@ -45,3 +48,4 @@ $DocumentsWillBeAddedToo = "Los documentos también serán añadidos";
 $ToExportLearnpathWithQuizYouHaveToSelectQuiz = "Si quiere exportar una lección que contenga ejercicios, tendrá que  asegurarse de que estos ejercicios han sido incluidos en la exportación; para eso tendrá que haberlos seleccionado en la lista de ejercicios.";
 $ArchivesDirectoryNotWriteableContactAdmin = "Wayaqa \"archive\" nisutilizado por esta herramienta no tiene habilitado los permisos de escritura. Contacte al administrador de la plataforma.";
 $DestinationCourse = "Chayana yachachina";
+?>

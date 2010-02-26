@@ -1,11 +1,14 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $Announcement = "Announcements";
 $langAnnEmpty = "Announcements list has been cleared up";
 $AnnouncementModified = "Announcement has been modified";
 $AnnouncementAdded = "Announcement has been added";
 $AnnouncementDeleted = "Announcement has been deleted";
 $AnnouncementPublishedOn = "Published on";
-$AddAnnouncement = "Add as an announcement";
+$AddAnnouncement = "Add announcement";
 $langContent = "Content";
 $AnnouncementDeleteAll = "Clear list of announcements";
 $professorMessage = "Message from the trainer";
@@ -20,7 +23,7 @@ $langDelete = "delete";
 $langTitle = "Subject";
 $langHelp = "help";
 $langOk = "Validate";
-$langAddIntro = "Add an introduction text ";
+$langAddIntro = "Add an introduction text";
 $langBackList = "Return to the list";
 $langSelMess = "Warnings to some users";
 $EmailTitle = "Subject";
@@ -53,3 +56,4 @@ $AnnounceSentToUserSelection = "Announcement sent to the selected users";
 $SendAnnouncement = "Send announcement";
 $ModifyAnnouncement = "Edit announcement";
 $ButtonPublishAnnouncement = "Send announcement";
+?>

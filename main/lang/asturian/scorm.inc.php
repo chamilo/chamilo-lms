@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langScormVersion = "versión";
 $langScormRestarted = "Toles lleiciones tán ensin facer.";
 $langScormNoNext = "Esti ye l'últimu elementu.";
@@ -8,9 +11,9 @@ $langScormNoOrder = "Nun hai un orde establecíu de mano, pues calcar na lleici�
 $langScormScore = "Puntos";
 $langScormLessonTitle = "Títulu del elementu";
 $langScormStatus = "Estáu";
-$langScormToEnter = "Pa entrar en ";
-$langScormFirstNeedTo = "enantes tien d'acabar ";
-$langScormThisStatus = "Esti elementu ta agora mesmo ";
+$langScormToEnter = "Pa entrar en";
+$langScormFirstNeedTo = "enantes tien d'acabar";
+$langScormThisStatus = "Esti elementu ta agora mesmo";
 $langScormClose = "Cerrar aplicación";
 $langScormRestart = "Volver entamar";
 $langScormCompstatus = "Completáu";
@@ -22,7 +25,7 @@ $langScormNext = "Siguiente";
 $langScormTitle = "Visor de conteníos SCORM";
 $langScormMystatus = "Estáu";
 $langScormNoItems = "Esti recursu nun tien elementos.";
-$langScormNoStatus = "Nun hai estáu pa esti conteníu ";
+$langScormNoStatus = "Nun hai estáu pa esti conteníu";
 $langScormLoggedout = "Marchó del área SCORM";
 $langScormCloseWindow = "Cerrar ventanes";
 $ScormBrowsed = "Visto";
@@ -36,7 +39,7 @@ $langAutodetect = "Autodeteutar";
 $langAccomplishedStepsTotal = "Total d'elementos fechos";
 $langUnknown = "Desconocíu";
 $AreYouSureToDeleteSteps = "¿ Ta seguru de que quier esborrar estos elementos ?";
-$Origin = "Orixe ";
+$Origin = "Orixe";
 $Local = "Llocal";
 $Remote = "Remotu";
 $FileToUpload = "Archivu pa unviar";
@@ -49,5 +52,6 @@ $GenericScorm = "SCORM xenéricu";
 $UnknownPackageFormat = "El formatu d'esti paquete ye desconocíu. Por favor, compruebe que ye un paquete válidu.";
 $Attempt = "Intentu";
 $MoveTheCurrentForum = "Mover el foru actual";
-$WarningWhenEditingScorm = "¡ Cuidáu ! <br/>Si edita'l conteníu d'un elementu SCORM igual cambia l'informe de la secuencia d'aprendizaxe o estroza l'elementu.";
+$WarningWhenEditingScorm = "¡ Cuidáu ! <br />Si edita'l conteníu d'un elementu SCORM igual cambia l'informe de la secuencia d'aprendizaxe o estroza l'elementu.";
 $AdditionalProfileField = "Amestar un campu del perfil d'usuariu";
+?>

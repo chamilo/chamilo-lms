@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langExercice = "遍浆啼玛";
 $langActivate = "铜跟にする";
 $langDeactivate = "痰跟步";
@@ -37,3 +40,4 @@ $langRep20 = "has been introduced. It has been replaced by 20";
 $langDefault = "Default values *";
 $langDefComment = "* If you click on \"Default values\", your ancient values will be permanently deleted.";
 $langScoreGet = "Numbers in black";
+?>

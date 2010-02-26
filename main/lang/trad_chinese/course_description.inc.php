@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langCourseProgram = "課程介紹";
 $langThisCourseDescriptionIsEmpty = "本課程目前沒有簡介";
 $langEditCourseProgram = "創建和編輯課程簡介";
@@ -12,4 +15,5 @@ $langValid = "可用的";
 $langBackAndForget = "返回和取消";
 $CourseDescriptionUpdated = "已更新課程簡介";
 $CourseDescriptionDeleted = "已刪除課程簡介";
-$CourseDescriptionIntro = "要建立課程簡介，在標頭按下後填寫各欄資料。<br><br> 按確定後可再按另一標頭，編寫另一項課程簡介。 ";
+$CourseDescriptionIntro = "要建立課程簡介，在標頭按下後填寫各欄資料。<br /><br /> 按確定後可再按另一標頭，編寫另一項課程簡介。";
+?>

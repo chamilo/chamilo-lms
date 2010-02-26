@@ -1,10 +1,13 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $MoveTo = "Mover a";
 $langDownloadFile = "Unviar un archivu";
 $langNameDir = "Nome del direutoriu nuevu";
 $langSize = "Tamañu";
 $langRename = "Cambiar de nome";
-$langCopy = "Copiar el conteníu del cursu";
+$langCopy = "Copiar";
 $langTo = "pa";
 $langNoSpace = "L'unvíu falló. Nun hai espaciu bastante nel so direutoriu";
 $langDownloadEnd = "L'unvíu fízose bien";
@@ -25,14 +28,14 @@ $langUncompress = "Descomprimir archivu (.zip) nel servidor";
 $langDownloadAndZipEnd = "L'archivu zip unvióse y descomprimióse nel servidor";
 $langRoot = "raíz";
 $langCreateDoc = "Crear un documentu";
-$langDown = "embaxu";
+$langDown = "Baxar";
 $langFileError = "L'archivu que quier subir nun val";
 $langMaxFileSize = "El tamañu másimu pa un archivu ye";
 $langFileName = "Nome del archivu";
 $langNoFileName = "Por favor, escriba'l nome del archivu";
 $langNoText = "Por favor, escriba'l conteníu de testu / conteníu HTML";
 $langAreYouSureToDelete = "¿ Ta seguru de que quier esborrar";
-$langScormcontent = "Esti ye un conteníu SCORM<br><input type=button name=scormbutton value='Entamar' onclick='openscorm()'>";
+$langScormcontent = "Esti ye un conteníu SCORM<br /><input type=button name=scormbutton value='Entamar' onclick='openscorm()'>";
 $langScormcontentstudent = "Esti ye un cursu con formatu SCORM. Si quier velu, calque equí:<input type=button name=scormbutton value='Entamar' onclick='openscorm()'>";
 $langPublish = "Publicar";
 $langMissingImagesDetected = "Deteutóse que falten imáxenes";
@@ -72,7 +75,7 @@ $langUp = "Enriba";
 $langDate = "Fecha";
 $ShowCourseQuotaUse = "Amosar la cantidá d'espaciu que tien esti cursu nel servidor";
 $CourseCurrentlyUses = "Esti cursu agora mesmo usa";
-$MaximumAllowedQuota = "La so llende d'espaciu d'almacenamientu ye de ";
+$MaximumAllowedQuota = "La so llende d'espaciu d'almacenamientu ye de";
 $PercentageQuotaInUse = "Porcentaxe de cantidá d'espaciu n'usu";
 $PercentageQuotaFree = "Porcentaxe de cantidá d'espaciu llibre";
 $CurrentDirectory = "Direutoriu actual";
@@ -107,7 +110,7 @@ $fileModified = "L'archivu modificóse";
 $DocumentsOverview = "llistáu de documentos";
 $ViewSlideshow = "Ver presentación d'imáxenes";
 $Options = "Opciones";
-$WelcomeOogieConverter = "Bienveníu al conversor de PowerPoint Oogie<br>1. Compruebe'l so discu duru y busque un archivu con estensión *.ppt o *odp<br>2.Unvíelu a Oogie, que lu va tresformar nun Itinerariu d'aprendizaxe Scorm.<br>3. Va poder añadir comentarios d'audiu a caúna les diapositives y insertar un test d'evaluación ente elles.";
+$WelcomeOogieConverter = "Bienveníu al conversor de PowerPoint Oogie<br />1. Compruebe'l so discu duru y busque un archivu con estensión *.ppt o *odp<br />2.Unvíelu a Oogie, que lu va tresformar nun Itinerariu d'aprendizaxe Scorm.<br />3. Va poder añadir comentarios d'audiu a caúna les diapositives y insertar un test d'evaluación ente elles.";
 $ConvertToLP = "Convertir nun Itinerariu d'aprendizaxe";
 $AdvancedSettings = "Configuraciones avanzaes";
 $File = "Archivu";
@@ -206,9 +209,10 @@ $TemplateTitleListLeftListDescription = "Llistáu a la izquierda con un instruct
 $TemplateTitleStopAndThinkDescription = "Invitación a parar y pensar";
 $CreateTheDocument = "Guardar documentu";
 $CreateTemplate = "Criar plantilla";
-$SharedFolder = "Carpeta compartida ";
+$SharedFolder = "Carpeta compartida";
 $CreateFolder = "Criar el direutoriu";
 $HelpDefaultDirDocuments = "Esti direutoriu caltien los ficheros suministraos por defeutu. Puedes desaniciar o amestar otros ficheros, pero si un ficheru ta anubríu cuando ye inxertáu nun documentu web los escolinos tampoco podrán velu equí. Cuando inxertes un ficheru nun documentu web faelo visible previamente. Los direutorios pueden siguir anubríos.";
 $HelpSharedFolder = "Esti direutoriu caltien los ficheros que los estudiantes (y tú) unvían a un cursu a traviés del editor, si nun lo facen dende la ferramienta grupos. Por defeutu serán visibles por cualisquier mayestru, pero tarán anubríos pa otros estudiantes salvo qu'accedan a ellos mediante un accesu direutu. Si fae visible'l direutoriu d'un escolín otros escolinos podrán ver tolo que caltenga.";
 $TemplateImage = "Imaxe de la plantilla";
 $MoveElement = "Mover elementu";
+?>

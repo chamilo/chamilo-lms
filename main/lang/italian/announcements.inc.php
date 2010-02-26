@@ -1,11 +1,14 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $Announcement = "Avvisi";
 $langAnnEmpty = "L'elenco degli avvisi è stato cancellato";
 $AnnouncementModified = "L'avviso è stato modificato";
 $AnnouncementAdded = "L'avviso è stato aggiunto";
 $AnnouncementDeleted = "L'avviso è stato eliminato";
 $AnnouncementPublishedOn = "Pubblicato in data";
-$AddAnnouncement = "Aggiungi come avviso ";
+$AddAnnouncement = "Aggiungi un avviso";
 $langContent = "Contenuto";
 $AnnouncementDeleteAll = "Cancella l'elenco degli avvisi";
 $professorMessage = "Messaggio del docente";
@@ -20,7 +23,7 @@ $langDelete = "Elimina";
 $langTitle = "Titolo";
 $langHelp = "Aiuto";
 $langOk = "Conferma";
-$langAddIntro = "Aggiungi un testo iniziale ";
+$langAddIntro = "Aggiungi un testo iniziale";
 $langBackList = "Ritorna all'elenco";
 $langSelMess = "Avviso a utenti specifici";
 $EmailTitle = "Oggetto";
@@ -53,3 +56,4 @@ $AnnounceSentToUserSelection = "Avviso inviato agli utenti selezionati";
 $SendAnnouncement = "Invia avviso";
 $ModifyAnnouncement = "Modifica l'avviso";
 $ButtonPublishAnnouncement = "Pubblica l'avviso";
+?>

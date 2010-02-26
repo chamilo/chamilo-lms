@@ -1,15 +1,18 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langOnlineConference = "在线会议";
 $langWash = "洗刷";
 $langReset = "重置";
 $langSave = "保存";
 $langRefresh = "刷新";
-$langIsNowInYourDocDir = "现在在你的文档工具中，<BR><B>这个文件是可见的</B>";
+$langIsNowInYourDocDir = "现在在你的文档工具中，<br /><B>这个文件是可见的</B>";
 $langCopyFailed = "打印失败";
 $langTypeMessage = "请输入你的消息!";
 $langConfirmReset = "真的想要删除所有消息吗？";
 $langHasResetChat = "已经重置聊天室";
-$langNoOnlineConference = "现在还没有会议... ";
+$langNoOnlineConference = "现在还没有会议...";
 $langMediaFile = "直播音频或视频流";
 $langContentFile = "介绍";
 $langListOfParticipants = "成员列表";
@@ -28,8 +31,6 @@ $langLinkURL = "链接网址";
 $langWelcomeToOnlineConf = "欢迎来到<B>在线会议</B>";
 $langNoLinkAvailable = "没有链接可用";
 $langChat_reset_by = "重置聊天室";
-$OrFile = "或文件";
 $langCallSent = "聊天请求已经发送，等待对方同意。";
 $langChatDenied = "你的聊天请求已经被对方拒绝。";
-$Send = "发送";
-$Connected = "已连接";
+?>

@@ -1,8 +1,11 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $ForumDeleted = "Foru esborráu";
 $ForumCategoryDeleted = "Categoría de foru esborrada";
 $ForumLocked = "Foru peslláu";
-$Forum = "Foros";
+$Forum = "Foru";
 $AddForumCategory = "Amestar una categoría de foros";
 $AddForum = "Amestar un foru";
 $Topics = "Temes";
@@ -39,8 +42,8 @@ $DeletePost = "¿ Ta seguru/a de querer esborrar esti mensaxe ? En esborrándolu
 $Locked = "Peslláu: los estudiantes nun puen espublizar más mensaxes nesta categoría, foru o tema, pero puen ver los mensaxes que s'espublizaran enantes.";
 $Unlocked = "Abiertu: los estudiantes puen esbpublizar mensaxes nuevos nesta categoría, foru o tema";
 $Flat = "Plana";
-$Threaded = "En forma d'árbol";
-$Nested = "En forma ñeru";
+$Threaded = "N'árbol";
+$Nested = "Xerárquicu";
 $FlatView = "Vista plana";
 $ThreadedView = "Vista n'árbol";
 $NestedView = "Vista xerárquica";
@@ -56,7 +59,7 @@ $ForGroup = "Pa Grupu";
 $ThreadLocked = "Tema peslláu";
 $NotAllowedHere = "Equí nun pue entrar";
 $ReplyAdded = "La rempuesta amestóse";
-$EditPost = "Editar artículu";
+$EditPost = "Editar mensaxe";
 $EditPostStored = "El mensaxe modificóse";
 $NewForumPost = "Mensaxe nuevu nel foru";
 $YouWantedToStayInformed = "Marcó que quier que se lu informe per e-mail si daquién retruca al tema";
@@ -75,7 +78,7 @@ $MoveThread = "Mover tema";
 $PostVisibilityChanged = "La visibilidá del mensaxe cambió";
 $PostDeleted = "El mensaxe esborróse";
 $MakeInvisible = "Facer invisible";
-$ThreadCanBeFoundHere = "El tema pue atopalu equí ";
+$ThreadCanBeFoundHere = "El tema pue atopalu equí";
 $MakeVisible = "Facer visible";
 $DeleteCompleteThread = "¿ Esborrar el tema dafachu ?";
 $PostDeletedSpecial = "El mensaxe d'avisu esborróse";
@@ -96,7 +99,7 @@ $ThreadUsersList = "Llistáu d'usuarios del tema";
 $StudentList = "Llistáu d'estudiantes";
 $QualifyThisThread = "Poner nota a esti tema";
 $CourseUsers = "Usuarios del Cursu";
-$PostsNumber = "Cantidá de mensaxes ";
+$PostsNumber = "Cantidá de mensaxes";
 $NumberOfPostsForThisUser = "Cantidá de mensaxes del usuariu";
 $AveragePostPerUser = "Promediu de mensaxes per usuariu";
 $QualificationChangesHistory = "Historial de cambios nes notes";
@@ -118,8 +121,10 @@ $Thread = "Tema";
 $NotifyMe = "Avisame";
 $ConfirmUserQualification = "¿ Confirmar laa nota del usuariu ?";
 $NotChanged = "Nun hai cambios";
+$TitleColumnGradebook = "Títulu nel cuadernu de notes";
 $QualifyThreadGradebook = "Poner nota nel cuadernu de notes";
-$QualifyNumeric = "Nota numbérica pa ";
+$QualifyWeight = "Porcentaxe d'esta nota na nota final";
+$QualifyNumeric = "Nota numbérica pa";
 $AlterQualifyThread = "Editar la nota del tema";
 $ForumMoved = "Esti foru ta movíu a otru sitiu";
 $YouMustAssignWeightOfQualification = "Tienes qu'asignar el pesu de la cualificación";
@@ -135,3 +140,4 @@ $BackToForum = "Volver al foru";
 $BackToForumOverview = "Volver a la vista xeneral del foru";
 $BackToThread = "Volver al filo";
 $ForumcategoryLocked = "Categoría de foru bloquiáu";
+?>

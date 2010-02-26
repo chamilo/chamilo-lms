@@ -1,14 +1,17 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $MoveTo = "Flyt til";
 $langDownloadFile = "Læg filen ud på serveren";
 $langNameDir = "Navn på den nye mappe";
 $langSize = "Størrelse";
 $langRename = "Omdøb";
-$langCopy = "Kopier kursusindhold";
+$langCopy = "Kopi";
 $langTo = "til";
 $langNoSpace = "Udlægningen mislykkedes. Enten fylder filen for meget, eller du har nået kursussidens loft for, hvor meget materialet på siden i alt må fylde.";
 $langDownloadEnd = "Udlægning er afsluttet";
-$langFileExists = "Udlægningen kan ikke gennemføres.<br>Der er allerede en fil med samme navn.";
+$langFileExists = "Udlægningen kan ikke gennemføres.<br />Der er allerede en fil med samme navn.";
 $langImpossible = "Umulig handling";
 $langAddComment = "Tilføj/ret kommentar til";
 $langDocCopied = "Dokumentet er kopieret";
@@ -25,14 +28,14 @@ $langUncompress = "udpak komprimeret fil (.zip) under den valgte mappe";
 $langDownloadAndZipEnd = " Zip fil er lagt ud og pakket ud";
 $langRoot = "rod";
 $langCreateDoc = "Opret et dokument";
-$langDown = "ned";
+$langDown = "Ned";
 $langFileError = "Filen, der ønskes overført, er ikke gyldig.";
 $langMaxFileSize = "Max fil størrelse er 20MB - ellers brug din lokale server";
 $langFileName = "Filnavn";
 $langNoFileName = "Indtast venligst filnavnet";
 $langNoText = "Indtast venligst di tekst/ indhold";
 $langAreYouSureToDelete = "Er du sikker på, at du vil slette";
-$langScormcontent = "Dette er Scorm indhold<br><input type='button' name='scormbutton' value='Kør det !' onclick='openscorm();'>";
+$langScormcontent = "Dette er Scorm indhold<br /><input type='button' name='scormbutton' value='Kør det !' onclick='openscorm();'>";
 $langScormcontentstudent = "Dette er et Scorm formateret kursus. For at afspille det, klik her: <input type='button' name='scormbutton' value='Kør det !' onclick='openscorm();'>";
 $langPublish = "Udgiv";
 $langMissingImagesDetected = "Billeder mangler";
@@ -113,3 +116,4 @@ $TemplateName = "Navn på skabelon";
 $TemplateDescription = "Skabelonbeskrivelse";
 $DocumentSetAsTemplate = "Dokument der er valgt som ny skabelon";
 $DocumentUnsetAsTemplate = "Dokument fravalgt som skabelon";
+?>

@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $Announcement = "????";
 $langAnnEmpty = "お梦らせをすべて、猴近する";
 $AnnouncementModified = "お梦らせ饯赖";
@@ -20,3 +23,4 @@ $langTitle = "タイトル";
 $langHelp = "へルプ";
 $langOk = "OK";
 $langBackList = "リストに提る";
+?>

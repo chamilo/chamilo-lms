@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $lang_height = "Višina";
 $lang_resizing_comment = "nastavi velikost slike na naslednje dimenzije (in pikslih)";
 $lang_width = "Širina";
@@ -18,3 +21,4 @@ $lang_of = "od";
 $lang_view_slideshow = "Poglej diaprojekcijo";
 $FirstSlide = "Prvi diapozitiv";
 $LastSlide = "Zadnj diapozitiv";
+?>

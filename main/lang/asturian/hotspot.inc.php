@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $select = "Escoyer";
 $square = "Cuadráu";
 $circle = "Elipse";
@@ -19,3 +22,4 @@ $nextAnswer = "Calque enriba: &done=done";
 $delineation = "Llende";
 $labelDelineationMenu = "Cerrar llende";
 $oar = "Zona de riesgu";
+?>

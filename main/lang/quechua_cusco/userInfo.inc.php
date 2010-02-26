@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langLineNumber = "Hayka seq'ekuna";
 $langLine = "seq'e";
 $langLines = "seq'ekuna";
@@ -6,27 +9,27 @@ $langLineOrLines = "seq'e (kuna)";
 $langMoveUp = "Wichachiy";
 $langMoveDown = "Urachiy";
 $langAddNewHeading = "Yapay musuq umanchasqata";
-$langCourseAdministratorOnly = "Yachacheqkunalla";
-$langDefineHeadings = "Ajllapay umachasqakunata";
+$langCourseAdministratorOnly = "Yachachinaq kamachiqninlla";
+$langDefineHeadings = "Mayqan umanchasqata";
 $langBackToUsersList = "Kutiy reqsisqaykikuna yupachasqaman";
-$langTracking = "Qatikuy";
-$langCourseManager = "Yachachiq";
+$langTracking = "Qhatikachay";
+$langCourseManager = "Yachachinapa kamachiq";
 $langModRight = "t'ijrachiy kaykunaq huñinkunata";
 $langNoAdmin = "kunanmantaqa <b>mana</b> kanqa huñiykuna, kay k'iti kamachinaykipaq";
 $langAllAdmin = "kunanmantaqa kanqa <b>llipin</b>huñiykuna, kay k'iti kamachinaykipaq";
 $langModRole = "T'ijrachiy kaypa llank'ayninta";
-$langRole = "Nisqaynin";
+$langRole = "Llankay/Imana kay";
 $langIsNow = "kunanqa wichaypin kashan";
 $langInC = "kay yachachinapi";
-$langFilled = "Mana llipin kanchakunatachu hunt'achinki.";
-$langUserNo = "Haykuqmasi suti ajllasqayki";
-$langTaken = "Ña kashan. Hoqta ajllay.";
-$langTutor = "Pusaq";
+$langFilled = "Llapan kanchakunaqa, manan hunt'asqachu kashanku";
+$langUserNo = "Ama Haykuqqaqa";
+$langTaken = "Ña hap'ipasqa kashan. Ama hina kaychu hoqta ajllay";
+$langTutor = "Purichiq";
 $langUnreg = "Chinkachiy qelqachikuyta";
-$langGroupUserManagement = "Huñusqakunaq kamachinan";
+$langGroupUserManagement = "Huñusqakunaq Kamachin";
 $langUnregister = "Mana qelqachasqa";
 $langAddAUser = "Yapay haykuqkunata";
-$UsersUnsubscribed = "Haykuqmasikuna ajllasqaqa hoqochisqaña yachichinamanta";
+$UsersUnsubscribed = "Ajllasqa haykuqkunaqa ñan horqochikunku yachachinamantaqa";
 $ThisStudentIsSubscribeThroughASession = "Kay yachaqeqa ñaupaqtaraq haykuspa ña qelqachasqa kashan. Mana qelqapayawaqchu imaymananta";
 $NoDataAvailable = "Información no disponible";
 $AddToFriends = "Cheqaqchu yapayta munanki ima kunpaykikunaman?";
@@ -59,10 +62,10 @@ $SocialEnemy = "Auqaykuna";
 $SocialDeleted = "Sispamasi horqosqa";
 $MessageOutboxComment = "Kaymantaqa qhawawaq willaykuna apachisqaykita";
 $MyPersonalData = "Kaymantaqa qhawawaq hinallataq t''ijrachiwaq runaykimanta imaykikunata";
-$AlterPersonalData = "Kaymanta t'ijrachiy runaykimanta ";
+$AlterPersonalData = "Kaymanta t'ijrachiy runaykimanta";
 $Invites = "Mink'asqaykuna";
 $ContactsGroups = "Sispamasiykunamanta huñusqaykuna";
-$ErrorSendingMessage = "Pantarun willana apachikushaqtin.";
+$ErrorSendingMessage = "Pantay willay apachispapi";
 $PendingInvitations = "Mink'akuna suyaychaq";
 $MyInbox = "K'uchu ch'askiq";
 $ViewSharedProfile = "Ima kay t'aqapasqa";
@@ -81,3 +84,4 @@ $ViewMySharedProfile = "Mi perfil compartido";
 $UserStatistics = "Presentación de informes para este usuario";
 $EditUser = "Editar usuario";
 $ViewUser = "Ver usuario";
+?>

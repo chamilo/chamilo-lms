@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $Announcement = "Pengumuman";
 $langAnnEmpty = "Daftar pengumuman telah dihapus";
 $AnnouncementModified = "Pengumuman telah diubah";
@@ -6,7 +9,7 @@ $AnnouncementAdded = "Pengumuman telah ditambahkan";
 $AnnouncementDeleted = "Pengumuman dihapus";
 $AnnouncementPublishedOn = "Diterbitkan pada";
 $AddAnnouncement = "Tambah Pengumuman";
-$langContent = "Isi (content)";
+$langContent = "Isi";
 $AnnouncementDeleteAll = "Hapus daftar Pengumuman";
 $professorMessage = "Pesan dari Pengajar anda";
 $langEmailSent = " dan di-email ke siswa-siswa terdaftar";
@@ -20,7 +23,7 @@ $langDelete = "hapus";
 $langTitle = "Judul";
 $langHelp = "pertolongan";
 $langOk = "OK";
-$langAddIntro = "Tambah teks pengantar ";
+$langAddIntro = "Tambah teks pengantar";
 $langBackList = "kembali ke daftar";
 $langSelMess = "Peringatkan ke beberapa user";
 $EmailTitle = "Perihal";
@@ -45,3 +48,4 @@ $AnnouncementDeletedAll = "Semua pengumuman telah dihapus";
 $AnnouncementMoved = "Pengumuman tsb telah dipendahkan";
 $NoAnnouncements = "Tidak ada pengumuman";
 $SelectEverybody = "Pilih Semua Orang";
+?>

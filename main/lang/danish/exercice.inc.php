@@ -1,10 +1,13 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langExercice = "Øvelse";
-$langActivate = "Gør aktiv/ synlig for deltagerne";
-$langDeactivate = "Gør passiv/ skjul for deltagerne";
+$langActivate = "Gør aktiv";
+$langDeactivate = "Gør passiv";
 $langNoEx = "Der er pt. ingen øvelser";
 $langNewEx = "Ny øvelse";
-$langQuestion = "spørgsmål";
+$langQuestion = "Spørgsmål";
 $langQuestions = "Spørgsmål";
 $langAnswers = "Svar";
 $langTrue = "Rigtig";
@@ -127,15 +130,15 @@ $langTake = "tag";
 $langAmong = "iblandt";
 $langImportHotPotatoesQuiz = "Importer HotPotatoes Test";
 $langHotPotatoesTests = "Importer HotPotatoes Test";
-$langDownloadFile = "Læg filen ud på serveren";
+$langDownloadFile = "Upload HotPotatoes (html eller zip) til serveren";
 $langDownloadImg = "Upload billedet til siden";
-$langDownloadEnd = "Udlægning er afsluttet";
-$langNoSpace = "Udlægningen mislykkedes. Enten fylder filen for meget, eller du har nået kursussidens loft for, hvor meget materialet på siden i alt må fylde.";
-$langZipNoPhp = "Zip fil må ikke indeholde .PHP filer";
+$langDownloadEnd = "Upload af html fuldført.";
+$langNoSpace = "Upload lykkedes ikke. Filstørrelsen overskrider kursussidens begrænsning";
+$langZipNoPhp = "Zipfilen må ikke indeholde .PHP filer";
 $langNoImg = "Øvelse uden billeder";
-$langImgNote_st = "<br>Du mangler stadig at uploade";
+$langImgNote_st = "<br />Du mangler stadig at uploade";
 $langImgNote_en = "billede(r):";
-$langDocDeleted = "Dokumentet er slettet";
+$langDocDeleted = "Dokument slettet";
 $langViMod = "Synlighed ændret";
 $langNameNotEqual = "er ikke den rigtige fil!";
 $langIndice = "Indeks";
@@ -199,7 +202,7 @@ $CorrectTest = "Ret denne øvelse";
 $ViewTest = "Se";
 $NotAttempted = "Ikke forsøgt";
 $AddElem = "+ element";
-$DelElem = "- element ";
+$DelElem = "- element";
 $PlusAnswer = "+ svar";
 $LessAnswer = "- svar";
 $YourScore = "Dit resultat";
@@ -226,3 +229,4 @@ $ClickLinkToViewComment = "Klik på det nedenstående link for at adgang til inf
 $Regards = "Med venlig hilsen";
 $AttemptVCCLong = "Din besvarelse af øvelsen er set/rettet/kommenteret af underviseren. Klik på nedenstående link for at få adgang til dine informationer og se vurderingen";
 $DearStudentEmailIntroduction = "Kære deltager,";
+?>

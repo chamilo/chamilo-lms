@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $MyTasks = "Мои задания";
 $FavoriteBlogs = "Мои любимые блоги (дневники)";
 $Navigation = "Навигация";
@@ -79,3 +82,4 @@ $AddBlog = "Создать новый блог";
 $EditBlog = "Редактировать заголовок и подзаголовок";
 $DeleteBlog = "Удалить этот блог";
 $Shared = "Совместный";
+?>

@@ -1,24 +1,27 @@
 <?php
-$langMdCallingTool = "Dokumentumok";
-$langMdTitle = "Tanulási objektum címe";
-$langMdDescription = "Az információ tárolásához kattintson a Tárolás gombra";
-$langMdCoverage = "pl. Kandidátus";
-$langMdCopyright = "pl. a forrás mellékelése megengedett";
+/*
+for more information: see languages.txt in the lang folder.
+*/
+$langMdCallingTool = "Hivatkozások";
+$langMdTitle = "Hivatkozás neve";
+$langMdDescription = "Hivatkozás meghatározása";
+$langMdCoverage = "Univerzális";
+$langMdCopyright = "Ghent Egyetem";
 $nameTools = "elavult nyelvi változó";
-$langTool = "Dokumentum metaadat";
-$langNoScript = "A parancsértelmező nincs engedélyezve a böngészőjén, kérjük, ne vegye figyelembe az alábbi szöveget, nem fog működni...";
-$langLanguageTip = "a tanulási objektumban használt nyelv";
+$langTool = "Hivatkozások Metaadat";
+$langNoScript = "A parancsértelmez&#337; nincs engedélyezve böngész&#337;jén, kérjük, hagyja figyelmen kívül az alábbi szöveget, Önnek ez nem fog m&#369;ködni...";
+$langLanguageTip = "az a nyelv, amelyben ez a tanulási objektum készült";
 $langIdentifier = "Azonosító";
 $langIdentifierTip = "A tanulási objektum egyedi azonosítója összeállítva betűkből, számokból, _-.()'!* karakterekből";
 $langTitleTip = "cím vagy elnevezés, és ezek nyelve";
-$langDescriptionTip = "Megjegyzés leírása, és a tanulási objektum leírásához használt nyelv";
-$langKeyword = "Kulcsszó";
-$langKeywordTip = "elválastztva vesszőkkel (betűk, számok, -.)";
-$langCoverage = "Terjedelem";
-$langCoverageTip = "például xxx kandidátusa";
-$langKwNote = "Ha megváltoztatja a leírás nyelvét, ne adjon hozzá ezzel egy időben kulcsszavakat.";
-$langClickKw = "Kattintson a kulcsszóra a fa struktúrában a kiválasztáshoz/kijelölés megszűntetéséhez.";
-$langKwHelp = "<p><br>Kattintson a '+' gombra a megnyitáshoz, , a '-' gombra a bezéréshoz, a '++' gombra az összes kinyitásához, a '--' gombra az összes bezárásához.<br><br>A kulcsszavak kijelölésének megszűntetéséhez zérja be teljesen a fastruktúrát és nyissa ki újra a '+' gombbal.<br>Alt gomb lenyomása közben a '+' gombra kattintva kereshetők az eredeti kulcsszavak a fában.<br><br>Alt gomb lenyomása közbeni kattintással lehet kiválastrani a kulcsszavakat anélkül, hogy bővítenénk a kifejezéseket, vagy megszűntetni a kulcsszó kijelölését a fogalmak bővítésével. </p><p><br>Ha megváltoztatja a leírás nyelvét, nem adjon hozzá kulcsszavakat vele egyidőben.<br></p>";
+$langDescriptionTip = "leírás vagy megjegyzés, és az ehhez használt nyelv";
+$langKeyword = "Kulcsszavak";
+$langKeywordTip = "vessz&#337;vel elválasztva (bet&#369;k, számok, -.)";
+$langCoverage = "Kategória";
+$langCoverageTip = "kategórianév, cfr. hivatkozások";
+$langKwNote = "Ha megváltoztatja a leírás nyelvét, ne adjon hozzá vele egy id&#337;ben kulcsszavakat";
+$langClickKw = "Kattintson a fában a kulcsszóra a kijelöléshez/kijelölés megsz&#369;ntetéséhez";
+$langKwHelp = "<p><br />Kattintson a '+' gombra a megnyitáshoz, , a '-' gombra a bezéréshoz, a '++' gombra az összes kinyitásához, a '--' gombra az összes bezárásához.<br /><br />A kulcsszavak kijelölésének megszűntetéséhez zérja be teljesen a fastruktúrát és nyissa ki újra a '+' gombbal.<br />Alt gomb lenyomása közben a '+' gombra kattintva kereshetők az eredeti kulcsszavak a fában.<br /><br />Alt gomb lenyomása közbeni kattintással lehet kiválastrani a kulcsszavakat anélkül, hogy bővítenénk a kifejezéseket, vagy megszűntetni a kulcsszó kijelölését a fogalmak bővítésével. </p><p><br />Ha megváltoztatja a leírás nyelvét, nem adjon hozzá kulcsszavakat vele egyidőben.<br /></p>";
 $langLocation = "URL/URI";
 $langLocationTip = "kattintson ide az objektum megnyitásához";
 $langStore = "Tárol";
@@ -31,13 +34,14 @@ $langEmptyManifest = "(üres manifest fájl...)";
 $langNoManifest = "(nincs manifest fájl...)";
 $langNotFolder = "nem lehetséges, ez nem egy mappa...";
 $langContinue = "Folytatás mivel:";
-$langCreate = "Létre kívánok hozni";
+$langCreate = "Metaadat bejegyzés létrehozása";
 $langRemove = "Metaadat bejegyzések törlése";
-$langAllRemovedFor = "Az összes bejegyzés eltávolítva a következő kategóriában:";
-$langRemainingFor = "Elavult bejegyzések eltávolítva a következő kategóriában:";
+$langAllRemovedFor = "Az összes bejegyzés eltávolítva a következ&#337; kategóriában:";
+$langRemainingFor = "Elavult bejegyzések eltávolítva a következ&#337; kategóriában:";
 $langIndex = "Szavak indexelése";
 $langTotalMDEs = "A hivatkozások metaadat bejegyzéseinek száma összesen:";
-$langMainMD = "Fő metaadat bejegyzés megnyitása";
+$langMainMD = "F&#337; metaadat bejegyzés megnyitása";
 $langOrElse = "Egy hivatkozások kategória kiválsaztása";
-$langWarningDups = "- megkettőzött kategórianevek el lettek távolítva a listából!";
-$langSLC = "Munka a következő nevű Hivatkozások kategóriával:";
+$langWarningDups = "- megkett&#337;zött kategórianevek el lettek távolítva a listából!";
+$langSLC = "Munka a következ&#337; nev&#369; Hivatkozások kategóriával:";
+?>

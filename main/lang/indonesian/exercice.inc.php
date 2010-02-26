@@ -1,10 +1,13 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langExercice = "Latihan";
 $langActivate = "Aktifkan";
 $langDeactivate = "Non-aktifkan";
 $langNoEx = "Saat ini belum ada latihan";
 $langNewEx = "Latihan baru";
-$langQuestion = "pertanyaan";
+$langQuestion = "Pertanyaan";
 $langQuestions = "Pertanyaan-Pertanyaan";
 $langAnswers = "Jawaban-Jawaban";
 $langTrue = "Benar";
@@ -33,9 +36,9 @@ $langAnswerType = "Macam jawaban";
 $langMultipleSelect = "Pilihan berganda (Jawaban ganda)";
 $langFillBlanks = "Mengisintitik-titik";
 $langMatching = "Menjodohkan";
-$langAddPicture = "Tambah foto";
+$langAddPicture = "Tambah gambar";
 $langReplacePicture = "Ganti gambar";
-$langDeletePicture = "Hapus foto";
+$langDeletePicture = "Hapus gambar";
 $langQuestionDescription = "Komentar Opsional";
 $langGiveQuestion = "Silahkan berikan pertanyaan";
 $langWeightingForEachBlank = "Silahkan berikan bobot pada tiap isian";
@@ -126,13 +129,13 @@ $langTake = "ambil";
 $langAmong = "diantara";
 $langImportHotPotatoesQuiz = "Import HotPotatoes Tests";
 $langHotPotatoesTests = "Import HotPotatoes Tests";
-$langDownloadFile = "Upload file ke server";
+$langDownloadFile = "Upload HotPotatoes (html atau zip) ke server";
 $langDownloadImg = "Upload file gambar ke server";
-$langDownloadEnd = "Upload selesai";
-$langNoSpace = "Upload gagal. Tempat penyimpanan di direktori tidak cukup";
+$langDownloadEnd = "Upload html selesai";
+$langNoSpace = "Upload gagal.  Tempat tidak cukup di direktory anda";
 $langZipNoPhp = "File zip tidak dapat berisi file .PHP";
 $langNoImg = "Latihan tanpa gambar";
-$langImgNote_st = "<br> Anda tetap harus meng-upload";
+$langImgNote_st = "<br /> Anda tetap harus meng-upload";
 $langImgNote_en = "gambar:";
 $langDocDeleted = "Dokumen dihapus";
 $langViMod = "Kenampakan diubah";
@@ -184,9 +187,10 @@ $Addlimits = "Tambah batas";
 $AreYouSure = "Apakah anda yakin";
 $StudentScore = "Skore Siswa";
 $backtoTesthome = "Kembali ke menu tes/latihan";
-$Feedback = "Umpan balik";
+$Feedback = "Feedback";
 $MarkIsUpdated = "Tanda/mark telah diperbarui";
 $MarkInserted = "Tanda dimasukkan";
 $PleaseGiveAMark = "Silahkan beri sebuah tanda";
 $EditCommentsAndMarks = "Edit komentar dan tanda";
 $AddComments = "Tambah komentar";
+?>

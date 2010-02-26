@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $ResourceAdded = "Resource added. You can now go back to the path or add more resources.";
 $LearningPath = "Kurs yolu";
 $LevelUp = "level up";
@@ -37,7 +40,7 @@ $StepDeleted1 = "This";
 $StepDeleted2 = "item was deleted in that tool.";
 $Modify = "düzenle";
 $Chapter = "Bölüm";
-$NoAgendaItems = "Planlanmış herhangi bir etkinlik bulunmuyor";
+$NoAgendaItems = "Herhangi bir kay&#305;t bulunmuyor.";
 $AgendaAdd = "Yeni bir etkinlik ekle";
 $UserGroupFilter = "Grup/Kullanıcılar filtresi";
 $AgendaSortChronologicallyUp = "Artan";
@@ -53,3 +56,4 @@ $ForumEditTopic = "Forum: başlık düzenle";
 $ExerciseAnswers = "Alıştırma: cevaplar";
 $ForumReply = "Forum: cevapla";
 $AgendaSortChronologicallyDown = "Azalan";
+?>

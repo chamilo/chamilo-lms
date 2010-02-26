@@ -1,5 +1,8 @@
 <?php
-$AdminBy = "Admin för ";
+/*
+for more information: see languages.txt in the lang folder.
+*/
+$AdminBy = "Admin för";
 $AdministrationTools = "Administratörsverktyg";
 $State = "Status";
 $Statistiques = "Statistik";
@@ -175,14 +178,14 @@ $langNomOutilTodo = "Hantera Att-göra-listan";
 $langNomPageAdmin = "Administration";
 $langSysInfo = "Information om systemet";
 $langDiffTranslation = "Jämför översättningar";
-$langStatOf = "Statistik över ";
+$langStatOf = "Statistik över";
 $langSpeeSubscribe = "Snabbprenumeration som kurskontrollant";
 $langLogIdentLogout = "Logg över in- och utloggningar";
-$langServerStatus = "Status för MySQL-server: ";
-$langDataBase = "Databas ";
+$langServerStatus = "Status för MySQL-server:";
+$langDataBase = "Databas";
 $langRun = "arbetar";
-$langClient = "MySQL-klient ";
-$langServer = "MySQL-server ";
+$langClient = "MySQL-klient";
+$langServer = "MySQL-server";
 $langtitulary = "Titulera";
 $langUpgradeBase = "Uppgradera databas";
 $langManage = "Hantera portal";
@@ -207,7 +210,7 @@ $langAdminCreateVirtualCourse = "Skapa en virtuell kurs";
 $langAdminCreateVirtualCourseExplanation = "Den virtuella kursen kommer att dela plats (bibliotek och databas) med existerande \"riktig\" kurs.";
 $langRealCourseCode = "Riktig kurskod";
 $langCourseCreationSucceeded = "Kursen skapades";
-$langYourDokeosUses = "Din chamiloinstallation använder för närvarande ";
+$langYourDokeosUses = "Din chamiloinstallation använder för närvarande";
 $langOnTheHardDisk = "på hårddisken";
 $langIsVirtualCourse = "Är virtuell kurs";
 $langSystemAnnouncements = "Systemtillkännagivanden";
@@ -259,9 +262,9 @@ $HomepageViewFixed = "Tre kolumners layout. Inaktiva verktyg är \"gråade\" (ik
 $Yes = "Ja";
 $No = "Nej";
 $ShowToolShortcutsTitle = "Genväg till verktyg";
-$ShowToolShortcutsComment = "Visa genvägen till verktyg i överskriften? ";
+$ShowToolShortcutsComment = "Visa genvägen till verktyg i överskriften?";
 $ShowStudentViewTitle = "Studentvy";
-$ShowStudentViewComment = "Aktivera studentvy?<br>Detta gör det möjligt för läraren att se hur eleven kommer att se sidan.";
+$ShowStudentViewComment = "Aktivera studentvy?<br />Detta gör det möjligt för läraren att se hur eleven kommer att se sidan.";
 $AllowGroupCategories = "Gruppkategori";
 $AllowGroupCategoriesComment = "Tillåt gruppadministratörer att skapa kategorier i gruppmodulen?";
 $PlatformLanguageComment = "Du kan bestämma plattformsspråket i en annan del av plattformsadministrationen, nämligen: <a href=\"languages.php\">Dokeos plattformsspråk</a>";
@@ -446,7 +449,7 @@ $ImageResizeComment = "Användarbild kan skalas vid uppladdning om PHP är kompi
 $MaxImageWidthTitle = "Maxbredd för användarens bild";
 $MaxImageWidthComment = "Max antal pixlar på bredden på användarbild. Denna inställning tillämpas om användarbild skalas vid uppladdning.";
 $MaxImageHeightTitle = "Maxhöjd på användarbild";
-$MaxImageHeightComment = "Max antal i pixlar på höjden på användarbild. Denna inställning tillämpas bara om användarbilden skall skalas vid uppladdning. ";
+$MaxImageHeightComment = "Max antal i pixlar på höjden på användarbild. Denna inställning tillämpas bara om användarbilden skall skalas vid uppladdning.";
 $YourVersionNotUpToDate = "Din version är inte uppdaterad";
 $YourVersionIs = "Din version är";
 $PleaseVisitDokeos = "Besök gärna Chamilo";
@@ -455,12 +458,11 @@ $ConnectSocketError = "Fel i nätverkskopplingen till servern";
 $SocketFunctionsDisabled = "Nätverkskoppling till servern inaktiverad";
 $ShowEmailAddresses = "Visa e-postadresser";
 $ShowEmailAddressesComment = "Visa användares e-postadresser";
-$langphone = "Telefon";
 $LatestVersionIs = "Senaste versionen är";
 $langConfigureExtensions = "Konfigurera tjänster";
 $langActiveExtensions = "Aktivera denna tjänst";
 $langVisioconf = "Visiokonferens";
-$langVisioconfDescription = "Chamilo Live Conferencing® är ett standardverktyg för visiokonferenser som erbjuder: visa presentationssidor (ex powerpoint), whiteboardfunktion, ljud och videoöverföring i duplex, chat, mm. Verktyget kräver Flashplugin och kan användas i tre lägen: en->en, en->många eller många->många.";
+$langVisioconfDescription = "Chamilo Live Conferencing® är ett standardverktyg för visiokonferenser som erbjuder: visa presentationssidor (ex powerpoint), whiteboardfunktion, ljud och videoöverföring i duplex, chat, mm. Verktyget kräver Flashplugin och kan användas i tre lägen: en->e";
 $langPpt2lp = "oogie";
 $langPpt2lpDescription = "Powerpoint->Kursmoment ger dig möjlighet att göra ett kursmoment från en presentation med några få klick. (MS PowerPoint eller OpenOffice Impress)";
 $langBandWidthStatistics = "Bandbreddsstatistik";
@@ -526,7 +528,7 @@ $MyCoursesMenu = "Kursmeny";
 $Header = "Sidhuvud";
 $Footer = "Sidfot";
 $PublicPagesComplyToWAITitle = "Offentliga sidor anpassas till <a href=\"http://sv.wikipedia.org/wiki/WAI\">WAI</a>";
-$PublicPagesComplyToWAIComment = "WAI (Web Accessibility Initiative) är ett initiativ från W3C för att öka tillgängligheten på webbsidor. Genom att aktivera det kommer offentliga sidor i Chamilo att göras mer tillgängliga för t ex handikappade. Det innebär också att en del innehåll kan visas annorlunda.";
+$PublicPagesComplyToWAIComment = "WAI (Web Accessibility Initiative) är ett initiativ från W3C för att öka tillgängligheten på webbsidor. Genom att aktivera det kommer offentliga sidor i Chamilo att göras mer tillgängliga för t ex handikappade. Det innebär också att en del innehåll kan vi";
 $VersionCheck = "Versionskontroll";
 $Active = "Aktiv";
 $Inactive = "Inaktiv";
@@ -634,7 +636,7 @@ $UploadExtensionsReplaceByComment = "Skriv in den filändelse som ska användas 
 $Remove = "Tabort";
 $Rename = "Namnändra";
 $ShowNumberOfCoursesComment = "Visa antal kurser i varje kategori på hemsidans listning av kurskategorier";
-$EphorusDescription = "Använd Ephorus plagiatkontroll som tjänst i Chamilo.<br />Med <a href=\"http://www.ephorus.nl/home_dn.html\">Ephorus</a> motverkas plagiering utan större ansträngning från din sida.<br />Du kan bygga en egen integration till chamilo eller använda en integrationsmodul som redan finns.";
+$EphorusDescription = "Använd Ephorus plagiatkontroll som tjänst i Chamilo.<br />Med <a href=\"http://www.ephorus.nl/home_dn.html\">Ephorus</a> motverkas plagiering utan större ansträngning från din sida.<br />Du kan bygga en egen integration till chamilo eller använda en integ";
 $EphorusLeadersInAntiPlagiarism = "motverkar plagiat";
 $EphorusClickHereForInformationsAndPrices = "Klicka för mer info om pris, mm";
 $NameOfTheSession = "Periodens namn";
@@ -789,3 +791,4 @@ $CannotMoveField = "Kan inte flytta fältet";
 $FieldMovedUp = "Fältet flyttades upp";
 $FieldShown = "Fältet är nu synligt för användaren";
 $FieldHidden = "Fältet är nu osynligt för användaren";
+?>

@@ -1,12 +1,15 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langLineNumber = "Zeilenzahl";
 $langLine = "Zeile";
 $langLines = "Zeilen";
 $langLineOrLines = "Zeile(n)";
-$langMoveUp = "nach oben";
-$langMoveDown = "nach unten";
+$langMoveUp = "hochsetzen";
+$langMoveDown = "heruntersetzen";
 $langAddNewHeading = "Neue Überschrift hinzufügen";
-$langCourseAdministratorOnly = "Nur für Kursleiter";
+$langCourseAdministratorOnly = "Nur für Lehrer/innen";
 $langDefineHeadings = "Überschriften definieren";
 $langBackToUsersList = "Zurück zur Liste der Benutzer";
 $langTracking = "Tracking";
@@ -15,16 +18,17 @@ $langModRight = "Rechte modifizieren";
 $langNoAdmin = "kein Admin";
 $langAllAdmin = "alle Admins";
 $langModRole = "Role modifizieren";
-$langRole = "Rolle";
-$langIsNow = "ist von nun an ";
-$langInC = "in diesem Kurs";
-$langFilled = "Sie haben einige Felder leer gelassen.";
-$langUserNo = "Der Benutzername  ";
-$langTaken = "ist bereits belegt. Bitte wählen Sie einen anderen.";
+$langRole = "Rolle/Status";
+$langIsNow = "ist von nun an";
+$langInC = "im Kurs";
+$langFilled = "voll";
+$langUserNo = "Nr. des Nutzers";
+$langTaken = "bereits belegt";
 $langTutor = "Tutor";
 $langUnreg = "abmelden";
-$langGroupUserManagement = "Gruppenverwaltung";
+$langGroupUserManagement = "Gruppen Verwaltung";
 $langUnregister = "Abmeldung";
 $langAddAUser = "Nutzer hinzufügen";
 $UsersUnsubscribed = "Die ausgewählten Benutzer wurden aus dem Kurs abgemeldet";
 $ThisStudentIsSubscribeThroughASession = "Dieser Student ist in diesem Kurs durch eine Session eingeschrieben. Seine Informationen können nicht bearbeitet werden";
+?>

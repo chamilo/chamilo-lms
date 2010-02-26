@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langScormVersion = "versió";
 $langScormRestarted = "Totes les lliçons estan incomplertes ara";
 $langScormNoNext = "Aquesta és la darrera lliçó";
@@ -33,7 +36,7 @@ $langCharset = "Joc de caràcters";
 $langLocal = "Local";
 $langRemote = "Remot";
 $langAutodetect = "Detecció automàtica";
-$langAccomplishedStepsTotal = "Total dels apartats realitzats ";
+$langAccomplishedStepsTotal = "Total dels apartats realitzats";
 $langUnknown = "Desconegut";
 $AreYouSureToDeleteSteps = "Està segur de voler eliminar aquests elements?";
 $Origin = "Origen";
@@ -49,4 +52,5 @@ $GenericScorm = "SCORM genèric";
 $UnknownPackageFormat = "El format d'aquest paquet no ha estat reconegut. Per favor, comprovi aquest és un paquet vàlid";
 $Attempt = "Intent";
 $MoveTheCurrentForum = "Moure el foro actual";
-$WarningWhenEditingScorm = "Avís ! Si edita el contingut d'un element scorm, pot alterar l'informe de la seqüència d'aprenentatge o danyar l'objecte. ";
+$WarningWhenEditingScorm = "Avís ! Si edita el contingut d'un element scorm, pot alterar l'informe de la seqüència d'aprenentatge o danyar l'objecte.";
+?>

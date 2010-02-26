@@ -1,8 +1,11 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $ForumDeleted = "Forum verwijderd";
 $ForumCategoryDeleted = "Forumcategorie verwijderd";
 $ForumLocked = "Forum geblokkeerd";
-$Forum = "Forums";
+$Forum = "Forum";
 $AddForumCategory = "Nieuwe forumcategorie toevoegen";
 $AddForum = "Nieuw forum toevoegen";
 $Topics = "Discussies";
@@ -22,7 +25,7 @@ $PublicPrivateGroupForum = "Publiek of privé groepenforum?";
 $Public = "Voor alle cursusleden";
 $Private = "Uitsluitend voor groepsleden";
 $NewPostStored = "Uw bericht werd opgeslagen";
-$ReturnTo = "U kunt nu terugkeren naar ";
+$ReturnTo = "U kunt nu terugkeren naar";
 $Or = "of";
 $ReplyToThread = "Antwoorden op deze discussie";
 $ReplyToMessage = "Antwoorden op dit bericht";
@@ -34,13 +37,13 @@ $LastPost = "Laatste bericht";
 $Quoting = "Quote";
 $NotifyByEmail = "Hou me via e-mail op de hoogte als iemand antwoordt";
 $StickyPost = "Dit is een vast bericht (verschijnt altijd bovenaan en wordt aangeduid met een speciaal icoon)";
-$ReplyShort = "Antwoord: ";
+$ReplyShort = "Antwoord:";
 $DeletePost = "Bent u zeker dat u dit bericht wenst te verwijderen?";
 $Locked = "Vergrendeld: Studenten kunnen geen nieuwe berichten meer plaatsen in deze forumcategorie, forum of discussie maar ze kunnen de reeds geplaatste berichten wel nog lezen";
 $Unlocked = "Ontgrendeld: Studenten kunnen terug nieuwe berichten plaatsen in deze forumcategorie, forum of discussie.";
-$Flat = "Vlakke weergave";
-$Threaded = "Gestructureerde weergave";
-$Nested = "Geneste weergave";
+$Flat = "Vlak";
+$Threaded = "Gestructureerd";
+$Nested = "Genest";
 $FlatView = "Vlakke weergave";
 $ThreadedView = "Gestructureerde weergave";
 $NestedView = "Geneste weergave";
@@ -56,7 +59,7 @@ $ForGroup = "Voor groep";
 $ThreadLocked = "De discussie is vergrendeld.";
 $NotAllowedHere = "U hebt niet voldoende machtiging om deze handeling te stellen.";
 $ReplyAdded = "Uw antwoord is toegevoegd";
-$EditPost = "Een artikel wijzigen";
+$EditPost = "Bericht wijzigen";
 $EditPostStored = "Het bericht is gewijzigd";
 $NewForumPost = "Nieuw bericht in het forum";
 $YouWantedToStayInformed = "U hebt aangegeven dat u via e-mail op de hoogte gehouden wilde worden wanneer er iemand antwoordt op de discussie";
@@ -104,3 +107,4 @@ $EditAnAttachment = "Wijzig een bijlage";
 $EditForum = "Forum wijzigen";
 $BackToForum = "Terug naar het forum";
 $BackToForumOverview = "Terug naar het forum overzicht";
+?>

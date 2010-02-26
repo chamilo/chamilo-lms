@@ -1,8 +1,11 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $AgendaAdd = "Afegir una nova activitat a l'agenda";
 $ShowAllEvents = "Veure totes les activitats";
 $ShowCurrent = "Veure les activitats d'aquest mes";
-$AddCalendarItem = "Afegir una nova anotació a l'agenda ";
+$AddCalendarItem = "Afegir una nova anotació a l'agenda";
 $Day = "Dia";
 $Month = "Mes";
 $Year = "Any";
@@ -72,3 +75,4 @@ $AgendaSortChronologicallyDown = "Ordenar events (recents/antics)";
 $ItemForUserSelection = "Esdeveniment dirigit a una selecció d'usuaris";
 $IsNotiCalFormatFile = "No és un arxiu de format iCal";
 $RepeatEvent = "Repetir esdeveniment";
+?>

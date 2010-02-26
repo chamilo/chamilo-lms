@@ -1,7 +1,10 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langExercice = "Latihan";
-$langActivate = "Aktifkan";
-$langDeactivate = "Tidak aktif";
+$langActivate = "Papar";
+$langDeactivate = "Tidak Papar";
 $langNoEx = "Tiada Latihan buat masa ini";
 $langNewEx = "Latihan baru";
 $langQuestion = "Soalan";
@@ -76,3 +79,4 @@ $langScore = "Markah";
 $langCorrespondsTo = "Corresponds to";
 $langExpectedChoice = "Pilihan Jangkaan";
 $langYourTotalScore = "Jumlah Markah ialah";
+?>

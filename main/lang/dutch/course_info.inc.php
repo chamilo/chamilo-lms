@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $ModifInfo = "Cursuseigenschappen";
 $langModifDone = "De eigenschappen werden gewijzigd.";
 $langDelCourse = "Deze cursussite verwijderen";
@@ -8,12 +11,12 @@ $langConfidentiality = "Vertrouwelijkheid";
 $langPublic = "Vrije toegang (vanaf de startpagina, zonder identificatiecode)";
 $langUnsubscription = "Uitschrijven";
 $langPrivOpen = "Beperkte toegang, open registratie";
-$langPrivate = "Beperkte toegang, gesloten registratie (site voorbehouden voor mensen die in de gebruikerslijst staan)";
+$langPrivate = "Beperkte toegang, gesloten registratie (site voorbehouden voor personen vermeld in de <a href=\"../user/user.php\">gebruikerslijst</a>)";
 $langForbidden = "U bent geen beheerder van deze cursus.";
-$CourseAccessConfigTip = "Standaard is uw cursus publiek toegankelijk. U kan de toegankelijkheid hierboven wijzigen.";
-$langOpenToTheWorld = "Open – toegang toegelaten voor de hele wereld";
-$OpenToThePlatform = "Open – toegang toegelaten voor geregistreerde gebruikers";
-$langOpenToThePlatform = "Open – toegang toegelaten voor geregistreerde gebruikers";
+$CourseAccessConfigTip = "Standaard bent u de enige gebruiker van uw cursus. Als u een minimum aan privacy wenst, is het aan te bevelen om de registratie gedurende een week te openen en aan de studenten te vragen zichzelf in te schrijven. Daarna sluit u de registratie en controlee";
+$langOpenToTheWorld = "Open &ndash; toegang toegelaten voor de hele wereld";
+$OpenToThePlatform = "Open &ndash; toegang toegelaten voor geregistreerde gebruikers";
+$langOpenToThePlatform = "Open &ndash; toegang toegelaten voor geregistreerde gebruikers";
 $langTipLang = "Deze taal zal gelden voor alle bezoekers van uw cursussite.";
 $langVid = "Video";
 $langWork = "Studentenpublicaties";
@@ -23,9 +26,9 @@ $langExercise = "Oefeningen";
 $langStats = "Statistieken";
 $langUplPage = "Pagina uploaden en verbinden met startpagina";
 $langLinkSite = "Link toevoegen en verbinden met startpagina";
-$langCourse = "De cursus ";
+$langCourse = "De cursus";
 $langHasDel = "werd verwijderd.";
-$langBackHome = "Terug naar startpagina van ";
+$langBackHome = "Terug naar startpagina van";
 $langByDel = "Wanneer u deze cursus verwijdert, worden alle gegevens (documenten, links...) verwijderd. Eventuele virtuele cursussen gelinkt aan deze cursus worden ook verwijderd.<br /><br />Wenst u deze cursus te verwijderen?";
 $langY = "JA";
 $langN = "NEE";
@@ -58,8 +61,8 @@ $langExpirationDate = "Vervaldatum";
 $langPostPone = "Uitstellen";
 $langLastEdit = "Laatst gewijzigd";
 $langLastVisit = "Laatste bezoek";
-$langSubscription = "Inschrijving";
-$langCourseAccess = "Toegang";
+$langSubscription = "Inschrijvingen";
+$langCourseAccess = "Cursustoegang";
 $langConfirmBackup = "Wilt u de cursussite echt back-uppen?";
 $langCreateSite = "Cursussite aanmaken";
 $langRestoreDescription = "De cursus bevindt zich in een archiefbestand dat u hieronder kunt selecteren.<br /><br />Wanneer u op \"Herstel\" drukt, zal het archief gedecomprimeerd worden en de cursus heraangemaakt.";
@@ -73,8 +76,8 @@ $langBackH = "Terug naar startpagina";
 $langOtherCategory = "Andere categorie";
 $langAllowedToUnsubscribe = "Toegelaten";
 $langNotAllowedToUnsubscribe = "Niet toegelaten";
-$langCourseVisibilityClosed = "Volledig gesloten, de cursus is enkel toegankelijk voor de cursusbeheerder";
-$CourseVisibilityClosed = "Gesloten – geen toegang tot deze cursus";
+$langCourseVisibilityClosed = "Niet bereikbaar; de cursus is enkel bereikbaar voor de cursusbeheerder.";
+$CourseVisibilityClosed = "Gesloten &ndash; geen toegang tot deze cursus";
 $CourseVisibilityModified = "Gewijzigd (de instellingen werden gewijzigd via het rollen-rechten systeem)";
 $WorkEmailAlert = "Waarschuw via email bij een nieuwe publicatie";
 $WorkEmailAlertActivate = "Activeer waarschuwing via email bij een nieuwe studentenpublicatie.";
@@ -90,9 +93,9 @@ $AllowUserEditAnnouncementActivate = "Wijzigen door gebruikers inschakelen";
 $AllowUserEditAnnouncementDeactivate = "Wijzigen door gebruikers uitschakelen";
 $OrInTime = "Of binnen";
 $CourseRegistrationPassword = "Registratie-wachtwoord voor cursus";
-$langDescriptionDeleteCourse = "Klik op deze link om alle sporen van de cursus op de server te verwijderen. <br><br> Wees zeer voorzichtig met het gebruik van deze functionaliteit! ";
-$langDescriptionCopyCourse = "Chamilo biedt nu ook de mogelijkheid om een bestaande cursus geheel of gedeeltelijk te kopiëren naar een andere cursus, die aanvankelijk leeg mag zijn.<br><br>De enige voorwaarde voor deze functie is dat u beschikt over een cursus met een aantal documenten, aankondigingen, forums en een tweede cursus die niet dezelfde elementen als de eerste bevat !";
-$DescriptionRecycleCourse = "Deze functie verwijdert uit de cursus de geselecteerde onderdelen, of alle onderdelen. Documenten, forums, links... worden verwijderd. Deze procedure kan uitgevoerd worden aan het einde van de opleiding, of na afloop van het academiejaar. Opgelet: alvorens deze \"recycling\" uit te voeren, kunt u best een volledige backup nemen van uw cursus ! ";
+$langDescriptionDeleteCourse = "Klik op deze link om alle sporen van de cursus op de server te verwijderen. <br /><br /> Wees zeer voorzichtig met het gebruik van deze functionaliteit!";
+$langDescriptionCopyCourse = "Chamilo biedt nu ook de mogelijkheid om een bestaande cursus geheel of gedeeltelijk te kopiëren naar een andere cursus, die aanvankelijk leeg mag zijn.<br /><br />De enige voorwaarde voor deze functie is dat u beschikt over een cursus met een aantal documente";
+$DescriptionRecycleCourse = "Deze functie verwijdert uit de cursus de geselecteerde onderdelen, of alle onderdelen. Documenten, forums, links... worden verwijderd. Deze procedure kan uitgevoerd worden aan het einde van de opleiding, of na afloop van het academiejaar. Opgelet: alvorens deze \"recycling\" uit te voeren, kunt u best een volledige backup nemen van uw cursus !";
 $QuizEmailAlert = "Waarschuwing via email bij nieuwe quiz verzonden";
 $QuizEmailAlertActivate = "Activeer waarschuwing via email wanneer een gebruiker een nieuw antwoord instuurt op een quiz";
 $QuizEmailAlertDeactivate = "Desactiveer waarschuwing via email wanneer een gebruiker een nieuw antwoord instuurt op een quiz";
@@ -110,3 +113,4 @@ $NewUserEmailAlert = "Melding van nieuwe zelfinschrijvingen aan de cursusbeheerd
 $NewUserEmailAlertEnable = "Breng de cursusbeheerder op de hoogte van nieuwe zelfinschrijvingen";
 $NewUserEmailAlertToTeacharAndTutor = "Breng de cursusbeheerder en tutoren op de hoogte van nieuwe zelfinschrijvingen";
 $NewUserEmailAlertDisable = "Breng de beheerders niet op de hoogte";
+?>

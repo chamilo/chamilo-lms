@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $AgendaAdd = "Legg til ny oppføring i kalender";
 $ShowAllEvents = "Vis alle oppføringer i kalender";
 $ShowCurrent = "Vis oppføringer i kalender for inneværende måned";
@@ -50,3 +53,4 @@ $Print = "Utskrift";
 $CopiedAsAnnouncement = "Kopiert som meddelelse";
 $NewAnnouncement = "Ny meddelelse";
 $AddAnnouncement = "Legg til som meddelelse";
+?>

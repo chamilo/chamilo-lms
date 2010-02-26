@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $lang_already_enrolled = "ña qelqachikunkiña";
 $lang_my_personnal_course_list = "Yachachinakunamanta noqaq sinriy";
 $lang_course_enrollment = "Yachachinamanta haykuqmasi";
@@ -10,7 +13,7 @@ $lang_no_course_to_enroll_in_this_category = "Kay mitapiqa mana kanchu yachachin
 $lang_or_search_from_the_course_code = "Utaq maskhay yachachinaq chinpunwan";
 $lang_search = "Maskhay";
 $lang_select_course_among_categories = "Ajllay mitakunamanta yachachinata";
-$lang_select_course_in = "Ajllay hoq yachachinata kay nisqapi ";
+$lang_select_course_in = "Ajllay hoq yachachinata kay nisqapi";
 $lang_select_course_in_search_results = "Ajllay hoq yachachinata maskhaypi rikurisqakunamanta";
 $lang_unsubscribe = "Horqoy wañuchiy hoq qelqachikuyta";
 $lang_back_to_my_home_page = "Kutiy raphi qallariyniyman";
@@ -22,7 +25,7 @@ $lang_back_to_parent_category = "Kutiy kuraq wichay mitaman";
 $lang_back_to_course_selection = "Kutiy yachachinaq ajllanaman";
 $lang_up = "Kutiy kuraq wichay mitaman";
 $langCatList = "Mitakuna";
-$langCourseList = "Yachachinaq sinrin";
+$langCourseList = "Yachachinakuna";
 $Subscribe = "Qelqachikuway";
 $AlreadySubscribed = "Ña qelqachisqa kashanki";
 $CourseCategoryStored = "Mitaqa kamarisqaña";
@@ -36,7 +39,7 @@ $langHideAndSubscribeOpen = "Pakasqa / Kichasqa";
 $langShowAndSubscribeOpen = "Qhawasqa / Kichasqa";
 $langShowAndSubscribeClosed = "Qhawasqa / Wisqasqa";
 $langAdminThisUser = "Kutiy kay haykuqmasiman";
-$langManage = "Kamachiy hanp'arata";
+$langManage = "Campus nisqaq kamachiynin";
 $langEnrollToCourseSuccessful = "Yachachinapi qelqachikusqaykiqa ña ruwakunña";
 $langSubCat = "ukhu-mitakuna";
 $langUnsubscribeNotAllowed = "Kay yachachinapiqa kikin haykuqmasikuna qelqachikusqankuta manan qechukunkumanchu.";
@@ -70,3 +73,4 @@ $CourseCategoryEditStored = "Mita kunanyachisqa";
 $buttonCreateCourseCategory = "Kamay yachachinaq hoq mitanta";
 $buttonSaveCategory = "Allachay mitata";
 $buttonChangeCategory = "T'ijray mitata";
+?>

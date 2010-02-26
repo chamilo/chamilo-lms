@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $lang_height = "高度";
 $lang_resizing_comment = "將圖像的尺寸改編為下面的尺寸(用像素表示)";
 $lang_width = "寬度";
@@ -16,3 +19,4 @@ $lang_next_slide = "下一張";
 $lang_image = "圖像";
 $lang_of = "的";
 $lang_view_slideshow = "檢視幻燈";
+?>

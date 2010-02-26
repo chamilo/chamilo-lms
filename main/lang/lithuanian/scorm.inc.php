@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langScormVersion = "versija";
 $langScormRestarted = "Visos pamokos nebaigtos.";
 $langScormNoNext = "Paskutinė pamoka.";
@@ -49,3 +52,4 @@ $GenericScorm = "Generic Scorm";
 $UnknownPackageFormat = "The package format cannot be recognized. Please make sure it is well formed and doesn't contain errors. Problems may be due to proprietary ZIP format or transfer of long files. If unsure about the ZIP, please try to use minimal zipping features.";
 $Attempt = "Attempt";
 $MoveTheCurrentForum = "Move the current forum";
+?>

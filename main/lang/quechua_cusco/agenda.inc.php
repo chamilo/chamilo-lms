@@ -1,5 +1,8 @@
 <?php
-$AgendaAdd = "Yapay musuq ruwayta ";
+/*
+for more information: see languages.txt in the lang folder.
+*/
+$AgendaAdd = "Yapay musuq ruwayta";
 $ShowAllEvents = "Qhawachiy llipin ruwaykunata";
 $ShowCurrent = "Killapi ruwaykuna";
 $AddCalendarItem = "Yapay musuq ruwayta ruwanaman";
@@ -12,7 +15,7 @@ $Detail = "Detalles";
 $EditSuccess = "Ruwayqa t'ijrapachikunña";
 $AddSuccess = "Ruwayqa yapachikunña ruwanaman";
 $AgendaDeleteSuccess = "Ruwayqa pichachikunña ruwanamanta";
-$NoAgendaItems = "Manan kanchu ruwaykuna. ";
+$NoAgendaItems = "Manan kanchu ruwaykuna.";
 $lang_september = "Unu-raymi killa";
 $langClassName = "Clase nisqaq sutin";
 $lang_agenda = "Ruwana";
@@ -71,3 +74,4 @@ $AgendaSortChronologicallyUp = "Allichay ruwaykunata (ñaupaqkuna / chayraqkuna)
 $AgendaSortChronologicallyDown = "Allichay ruwaykunata (chayraqkuna / ñaupaqkuna)";
 $ItemForUserSelection = "Ruway ajllapasqa haykuqmasikunapaq";
 $IsNotiCalFormatFile = "Manan khipu iCal nisqachu";
+?>

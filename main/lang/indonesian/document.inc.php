@@ -1,14 +1,17 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $MoveTo = "Pindah ke";
 $langDownloadFile = "Upload file ke server";
 $langNameDir = "Nama direktori baru";
 $langSize = "Ukuran";
 $langRename = "Ganti nama";
-$langCopy = "Copy isi mata kuliah";
+$langCopy = "Copy";
 $langTo = "ke";
 $langNoSpace = "Upload gagal. Tempat penyimpanan di direktori tidak cukup";
 $langDownloadEnd = "Upload selesai";
-$langFileExists = "Operasi tidak mungkin.<br>File dengan nama sama sudah ada terlebih dulu.";
+$langFileExists = "Operasi tidak mungkin.<br />File dengan nama sama sudah ada terlebih dulu.";
 $langImpossible = "Operasi tidak mungkin";
 $langAddComment = "Tambah/ubah komentar";
 $langDocCopied = "Dokumen di-copy";
@@ -25,14 +28,14 @@ $langUncompress = "uncompress file zip(.zip) di server";
 $langDownloadAndZipEnd = " file Zip di-upload dan di-uncompress";
 $langRoot = "root";
 $langCreateDoc = "Buat dokumen";
-$langDown = "turun";
+$langDown = "ke Bawah";
 $langFileError = "File yang di-upload tidak sah.";
 $langMaxFileSize = "Ukuran maximum file adalah";
 $langFileName = "Nama File";
 $langNoFileName = "Silahkan isi nama file";
 $langNoText = "Silahkan ketikkan text / HTML";
 $langAreYouSureToDelete = "Apakah anda sungguh-sungguh ingin menghapus";
-$langScormcontent = "Ini adalah Scorm content<br><input type=button name=scormbutton value='Luncurkan!' onclick='openscorm()'>";
+$langScormcontent = "Ini adalah Scorm content<br /><input type=button name=scormbutton value='Luncurkan!' onclick='openscorm()'>";
 $langScormcontentstudent = "Ini adalah mata kuliah dengan format Scorm. Untuk meminkannya, klik disini : <input type=button name=scormbutton value='Luncurkan!' onclick='openscorm()'>";
 $langPublish = "Terbitkan";
 $langMissingImagesDetected = "Ada citra yang hilang terdeteksi";
@@ -45,7 +48,7 @@ $langChapter = "Bab";
 $langDocumentList = "daftar seluruh dokumen";
 $langOrganisationList = "Daftar Isi";
 $langCreationSucces = "Daftar Isi berhasil dibuat.";
-$langCanViewOrganisation = "Anda dapat melihat organisasinya ";
+$langCanViewOrganisation = "Anda dapat melihat organisasinya";
 $langHere = "disini.";
 $langViewDocument = "Lihat";
 $langHtmlTitle = "Daftar Isi";
@@ -102,5 +105,6 @@ $fileModified = "File tersebut diubah";
 $DocumentsOverview = "overview dokumen";
 $ViewSlideshow = "Lihat  gambar slideshow";
 $Options = "Opsi";
-$WelcomeOogieConverter = "Selamat datang di Pengkonversi PowerPoing Oogie <br>1.  Browse hard disk anda untuk mencari file .ppt atau .odp <br>2.  Upload ke Oogie.  Ini akan di transformasi ke Scorm learning path. <br>3. Anda akan dapat menambah komentar audio pada tiap slide dan memasukkan test/quiz antar slide untuk evaluasi";
+$WelcomeOogieConverter = "Selamat datang di Pengkonversi PowerPoing Oogie <br />1.  Browse hard disk anda untuk mencari file .ppt atau .odp <br />2.  Upload ke Oogie.  Ini akan di transformasi ke Scorm learning path. <br />3. Anda akan dapat menambah komentar audio pada tiap slide dan memasukkan test/quiz antar slide untuk evaluasi";
 $ConvertToLP = "Konversi ke Learning Path";
+?>

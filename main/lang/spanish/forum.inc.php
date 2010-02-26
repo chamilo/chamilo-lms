@@ -1,8 +1,11 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $ForumDeleted = "Foro eliminado";
 $ForumCategoryDeleted = "Categoría de foro eliminada";
 $ForumLocked = "Foro cerrado";
-$Forum = "Foros";
+$Forum = "Foro";
 $AddForumCategory = "Añadir una categoría de foros";
 $AddForum = "Añadir un foro";
 $Topics = "Temas";
@@ -40,7 +43,7 @@ $Locked = "Cerrado: los estudiantes no pueden publicar más mensajes en esta cat
 $Unlocked = "Abierto: los estudiantes pueden publicar nuevos mensajes en esta categoría, foro o tema";
 $Flat = "Plana";
 $Threaded = "Arborescente";
-$Nested = "Anidada";
+$Nested = "Jerarquizado";
 $FlatView = "Vista plana";
 $ThreadedView = "Vista arborescente";
 $NestedView = "Vista jerarquizada";
@@ -56,7 +59,7 @@ $ForGroup = "Para Grupo";
 $ThreadLocked = "Tema cerrado.";
 $NotAllowedHere = "Aquí no le está permitido.";
 $ReplyAdded = "La respuesta ha sido añadida";
-$EditPost = "Editar artículo";
+$EditPost = "Editar mensaje";
 $EditPostStored = "El mensaje ha sido modificado";
 $NewForumPost = "Nuevo mensaje en el foro";
 $YouWantedToStayInformed = "Ha indicado que desea ser informado por e-mail cuando alguien conteste al tema";
@@ -118,7 +121,9 @@ $Thread = "Tema";
 $NotifyMe = "Notificarme";
 $ConfirmUserQualification = "¿Confirmar la calificación de usuario?";
 $NotChanged = "No hay cambios";
+$TitleColumnGradebook = "Título de la columna en el Informe de Evaluación";
 $QualifyThreadGradebook = "Calificar este hilo de discusión";
+$QualifyWeight = "Peso de la calificación";
 $QualifyNumeric = "Calificación numérica sobre";
 $AlterQualifyThread = "Editar la calificación del tema";
 $ForumMoved = "El foro ha sido movido";
@@ -135,3 +140,4 @@ $BackToForum = "Volver al foro";
 $BackToForumOverview = "Volver a la vista general del foro";
 $BackToThread = "Regresar a tema";
 $ForumcategoryLocked = "Categoría de foro bloqueado";
+?>

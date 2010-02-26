@@ -1,7 +1,10 @@
 <?php
-$AgendaAdd = "Ajouter un événement";
-$ShowAllEvents = "Afficher tous les événements";
-$ShowCurrent = "Afficher les événements du mois";
+/*
+for more information: see languages.txt in the lang folder.
+*/
+$AgendaAdd = "Ajouter événement";
+$ShowAllEvents = "Tous";
+$ShowCurrent = "Courant";
 $AddCalendarItem = "Ajouter un événement";
 $Day = "Jour";
 $Month = "Mois";
@@ -17,7 +20,7 @@ $lang_september = "Septembre";
 $langClassName = "Nom de la classe";
 $lang_agenda = "Agenda";
 $ModifyCalendarItem = "Modifier un événement";
-$ItemTitle = "Titre de l'événement";
+$ItemTitle = "Nom de l'événement";
 $langDay = "jour";
 $month_default = "mois par défaut";
 $langYear = "Année";
@@ -29,11 +32,11 @@ $langLasting = "durée";
 $langOldToNew = "d'ancien à nouveau";
 $langNewToOld = "de nouveau à ancien";
 $langNow = "maintenant";
-$langAddEvent = "Ajouter un événement";
+$langAddEvent = "Ajouter événement";
 $langDetail = "détail";
-$MonthView = "Vue par mois";
-$WeekView = "Vue par semaine";
-$DayView = "Vue par jour";
+$MonthView = "Mois";
+$WeekView = "Semaine";
+$DayView = "Jour";
 $AddPersonalItem = "Ajouter un événement perso";
 $Week = "Semaine";
 $Date = "Date";
@@ -47,10 +50,10 @@ $ViewPersonalItem = "Visualiser l'agenda perso";
 $UserGroupFilter = "Filtrer par groupes/utilisateurs";
 $ShowAll = "Tous les utilisateurs";
 $Print = "Imprimer";
-$MyTextHere = "votre texte içi";
+$MyTextHere = "votre texte ici";
 $CopiedAsAnnouncement = "Copié comme annonce";
 $NewAnnouncement = "Nouvelle annonce";
-$AddAnnouncement = "Ajouter comme une annonce";
+$AddAnnouncement = "Ajouter news";
 $UpcomingEvent = "Prochain événement";
 $RepeatedEvent = "Événement cyclique";
 $RepeatType = "Cycle";
@@ -72,3 +75,4 @@ $AgendaSortChronologicallyDown = "Descendant";
 $ItemForUserSelection = "Liste de sélection des utilisateurs";
 $IsNotiCalFormatFile = "Ce fichier n'est pas au format iCal";
 $RepeatEvent = "Évènement répétitif";
+?>

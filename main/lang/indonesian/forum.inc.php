@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $Forum = "Forum";
 $AddForumCategory = "Tambah kategori baru foum";
 $AddForum = "Tambah sebuah forum baru";
@@ -12,7 +15,7 @@ $AllowAnonymousPosts = "Ijinkan posting anonim?";
 $StudentsCanEdit = "Bolehkan siswa mengedir postingnya?";
 $ApprovalDirect = "Posting Pengesahan / Langsung";
 $AllowNewThreads = "Ijinkan siswa memulai thread baru";
-$DefaultViewType = "Type view Default ";
+$DefaultViewType = "Type view Default";
 $GroupSettings = "Seting Kelompok";
 $NotAGroupForum = "Bukan forum kelompok";
 $PublicPrivateGroupForum = "forum kelompok Publik atau privat ?";
@@ -58,3 +61,4 @@ $EditPostStored = "Postingan telah diubah";
 $NewForumPost = "Potingan baru di forum";
 $YouWantedToStayInformed = "Anda harus nyatakan bahwa anda ingin diinformasikan oleh email ketika sesorang menanggapi pada thread tersebut";
 $MessageHasToBeApproved = "Pesan anda telah disetujui sebelum orang lain dapat melihatnya.";
+?>

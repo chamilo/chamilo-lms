@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $NewForumCreated = "Il forum è stato creato";
 $NewThreadCreated = "L'argomento (Thread) è stato creato";
 $AddHotpotatoes = "Aggiungi file HotPotatoes";
@@ -64,7 +67,7 @@ $lang_learnpath_module_deleted = "Il capitolo e gli elementi contenuti sono stat
 $lang_nochapters = "Nessun capitolo è stato ancora aggiunto.";
 $lang_add_learnpath_item = "Aggiungi un elemento a questo capitolo";
 $lang_learnpath_item_deleted = "L'elemento del modulo didattico è stato eliminato";
-$lang_assign_learnpath_items_to = "Assegna questi elementi al capitolo: ";
+$lang_assign_learnpath_items_to = "Assegna questi elementi al capitolo:";
 $lang_edit_learnpath_item = "Modifica descrizione e titolo dell'elemento";
 $lang_add_prereq = "Aggiungi/modifica i prerequisiti per questo elemento";
 $lang_delete_learnpath_item = "Elimina l'elemento";
@@ -74,7 +77,7 @@ $lang_none = "NESSUNO";
 $lang_forum_opened = "Il Forum selezionato è stato aperto in una nuova finestra.";
 $lang_link_opened = "Il Collegamento selezionato è stato aperto in una nuova finestra.";
 $lang_short_help = "Per vedere il modulo come un corsista, clicca su Vedi";
-$lang_prereq_not_complete = "I prerequisiti non sono stati verificati, quindi l'elemento non è accessibile. La situazione si verifica quando è previsto che l'accesso all'elemento sia condizionato dall'aver visionato alcuni elementi precedenti o dall'aver ottenuto almeno un dato punteggio in un test.";
+$lang_prereq_not_complete = "I prerequisiti non sono stati verificati, quindi l'elemento non è accessibile. La situazione si verifica quando è previsto che l'accesso all'elemento sia condizionato dall'aver visionato alcuni elementi precedenti o dall'aver ottenuto almeno un dato";
 $lang_author = "Autore";
 $lang_date = "Data";
 $langBasicOverview = "Ordina";
@@ -145,10 +148,10 @@ $langEditCurrentExecice = "Modifica il test";
 $langUploadScorm = "Importa modulo SCORM";
 $langPowerPointConvert = "Converti una Presentazione";
 $langLPCreatedToContinue = "Per proseguire puoi aggiungere Capitoli o Elementi tramite il menù in alto a sinistra.";
-$langLPCreatedAddChapterStep = "<p><big><img height=\"250\" width=\"250\" align=\"right\" src=\"../img/gallery/creative.png\" alt=\"practicerAnim.gif\" />Benvenuti nel sistema autore di Chamilo !</big></p> <ul> <li><b>Crea</b> : Aggiungi capitoli ed elementi al modulo che hai creato</li> <li><b>Ordina</b> : Ordina le diverse parti nel menù a sinistra e aggiungi un commento audio</li> <li><b>Vedi</b> : Visualizza il modulo dal punto di vista del corsista</li> <li><b>Nuovo capitolo</b> : Capitolo 1, Capitolo 2 o Settimana 1, Settimana 2...</li> <li><b>Nuovo elemento</b> : Aggiungi documenti, test ed attività anche attraverso modelli di pagina, gallerie di immagini e media</li> </ul> <br> <br> <br> <br><br> <br> <br> <br> <br>";
+$langLPCreatedAddChapterStep = "<p><big><img height=\"250\" width=\"250\" align=\"right\" src=\"../img/gallery/creative.png\" alt=\"practicerAnim.gif\" />Benvenuti nel sistema autore di Chamilo !</big></p> <ul> <li><b>Crea</b> : Aggiungi capitoli ed elementi al modulo che hai creato</li";
 $langPrerequisitesAdded = "Sono stati aggiunti dei prerequisiti per il presente elemento";
 $langAddEditPrerequisites = "Aggiungi o modifica i prerequisiti";
-$langMinimum = "minimo";
+$langMinimum = "Minimo";
 $langMaximum = "Massimo";
 $langNoDocuments = "Non ci sono documenti";
 $langNoExercisesAvailable = "Non ci sono test disponibili";
@@ -198,7 +201,7 @@ $OogieBadExtension = "L'estensione del file non è consentita.";
 $WoogieBadExtension = "Carica solo documenti .doc, .docx o .odt provenienti da un elaboratore di testi.";
 $ShowAudioRecorder = "Mostra il registratore audio";
 $SearchFeatureNotEnabledComment = "Ricerca testuale libera non attivata. Si prega di contattare l'amministratore del sistema.";
-$SearchFeatureSearchExplanation = "Per effettuare una ricerca sul database dei moduli didattici, la sintassi è del tipo:<br/>    <i>termine tag:nome_del_tag -esclusione +inclusione \"frase esatta\"</i><br/> ad esempio<br/>    <i>vettura tag:camion -ferrari +ford  \"alto consumo\".</i><br/> La ricerca individuerà i risultati per la parola vettura con il tag 'camion' escludendo la parola 'ferrari' ma includendo 'ford' e la frase esatta 'alto consumo'.";
+$SearchFeatureSearchExplanation = "Per effettuare una ricerca sul database dei moduli didattici, la sintassi è del tipo:<br />    <i>termine tag:nome_del_tag -esclusione +inclusione \"frase esatta\"</i><br /> ad esempio<br />    <i>vettura tag:camion -ferrari +ford  \"alto consumo\".</i><br /> La ricerca individuerà i risultati per la parola vettura con il tag 'camion' escludendo la parola 'ferrari' ma includendo 'ford' e la frase esatta 'alto consumo'.";
 $ViewLearningPath = "Vedi il modulo didattico";
 $SearchFeatureDocumentTagsIfIndexing = "Tag da aggiungere al documento, se indicizzato";
 $ReturnToLearningPaths = "Ritorna ai moduli didattici";
@@ -208,11 +211,11 @@ $LeaveEmptyToKeepCurrentFile = "Lascia vuoto per conservare il file in uso";
 $RemoveAudio = "Elimina l'audio";
 $SaveAudio = "Salva";
 $ChangesStored = "Modifiche salvate";
-$ViewScoreChangeHistory = "Guarda lo storico dei punteggi";
+$ViewScoreChangeHistory = "Vedi lo storico dei punteggi";
 $ImageWillResizeMsg = "L'immagine sarà ridimensionata";
 $ImagePreview = "Anteprima immagine";
-$UplAlreadyExists = "esiste gia! ";
-$UplUnableToSaveFile = "Il file caricato non può essere salvato (ci sono problemi sui privilegi di scrittura?)!";
+$UplAlreadyExists = "Il file esiste già";
+$UplUnableToSaveFile = "Impossibile salvare il file";
 $UnknownPackageFormat = "Il formato del pacchetto non è riconosciuto. Scegli un pacchetto valido.";
 $MoveDocument = "Sposta il documento";
 $EditLPSettings = "Modifica le proprietà del modulo didattico";
@@ -226,7 +229,7 @@ $langAddEdit = "Aggiungi / Modifica";
 $ModifyPrerequisites = "Modifica i prerequisiti";
 $CreateLearningPath = "Crea il modulo didattico";
 $AddExercise = "Includi il quesito";
-$AddForum = "Aggiungi un forum";
+$AddForum = "Includi forum";
 $LPCreateDocument = "Crea documento";
 $ObjectiveID = "ID dell'Obiettivo";
 $ObjectiveStatus = "Status dell'Obiettivo";
@@ -244,3 +247,4 @@ $SaveAudioAndOrganization = "Salva audio e ordinamento";
 $UploadOnlyMp3Files = "Si possono caricare solo file mp3, grazie";
 $ModifyHotPotatoes = "Modifica l'elemento HotPotatoes";
 $SaveHotpotatoes = "Salva hotpotatoes";
+?>

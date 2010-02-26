@@ -1,10 +1,13 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langOnlineConference = "Conferência";
 $langWash = "Limpar";
 $langReset = "Reeniciar";
 $langSave = "Enviar mensagem";
 $langRefresh = "Actualizar";
-$langIsNowInYourDocDir = "foi adicionado à sua área de Documentos. <br><B>Este ficheiro será visível a todos os utilizadores</B>";
+$langIsNowInYourDocDir = "foi adicionado à sua área de Documentos. <br /><B>Este ficheiro será visível a todos os utilizadores</B>";
 $langCopyFailed = "Falhou a impressão";
 $langTypeMessage = "Por favor, escreva a sua mensagem!";
 $langConfirmReset = "Tem a certeza que deseja eliminar todas as mensagens?";
@@ -57,3 +60,4 @@ $AskPermissionSpeak = "Pedir autorização para falar";
 $GiveTheFloorTo = "Dar a palavra a";
 $Pause = "Pausa";
 $Stop = "Parar";
+?>

@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $MessageEmptyMessageOrSubject = "Моля, въведете заглавие и съдържание на съобщението.";
 $Inbox = "Входящи съобщения";
 $Messages = "Съобщения";
@@ -33,3 +36,4 @@ $WriteAMessage = "Създаване на съобщение";
 $AlreadyReadMessage = "Прочетено съобщение";
 $UnReadMessage = "Непрочетено съобщение";
 $MessageSent = "Съобщението е изпратено.";
+?>

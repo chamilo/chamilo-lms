@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langActivate = "Aktifkan";
 $langDeactivate = "Non-aktifkan";
 $langInLnk = "Non-aktif link";
@@ -20,3 +23,4 @@ $GreyIcons = "Kotak Tool";
 $Interaction = "Interaksi";
 $Authoring = "Authoring";
 $Administration = "Administrasi";
+?>

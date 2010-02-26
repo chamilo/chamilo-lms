@@ -1,18 +1,21 @@
 <?php
-$langLinkSite = "Lägg till länk på hemsidan";
-$langSubTitle = "Lägger sig till menyn på kursens hemsida som en länk till en sajt, en sida eller valfri URL. Tips: om du vill lägga till en länk till en sida, gå till den sidan, kopiera och klistra sedan in länkens address, som du hittar i URL-fältet högst upp i din webbläsare, i \"länk\"-fältet nedan.";
+/*
+for more information: see languages.txt in the lang folder.
+*/
+$langLinkSite = "Länk till en sajt (webbplats)";
+$langSubTitle = "Lägger sig till menyn på kursens hemsida som en länk till en sajt, en sida eller valfri URL. Tips: om du vill lägga till en länk till en sida, gå till den sidan, kopiera och klistra sedan in länkens address, som du hittar i URL-fältet högst upp i din webb";
 $langAddPage = "Lägg till en sida";
 $langSendPage = "Sida att sända";
 $langCouldNot = "Filen kunde inte sändas";
 $langOkSentLink = "Din länk är nu skickad.<p>Den är nu tillgänglig från <a href=\"../..//index.php\">Kurshemsidan</a>";
 $langTooBig = "Du valde ingen fil att sända, eller så var den för stor";
-$langExplanation = "När du klickar på OK, kommer en sajt att skapas med Forum, Agenda, Dokumenthanterare m.m. Ditt login, som skapare av sajten, ger dig möjlighet att modifiera den efter dina behov.";
+$langExplanation = "Sidan måste vara i HTML-format (eg. \"my_page.html\"). Den kommer att länka till från Hemsidan. Om du vill sända icke HTML-dokument (PDF, Word, Power Point, Video, etc.) använd <a href=../document/document.php>Dokumentverkyget</a>";
 $langPgTitle = "Sidans titel";
 $langNoLinkURL = "Var vänlig skriv länkens URL";
 $langLinkTarget = "Länkens mål";
 $langSameWindow = "I samma fönster";
 $langNewWindow = "I ett nytt fönster";
-$langAdded = "Tillagd";
+$langAdded = "Länken är tillagd";
 $langAddLink = "Lägg till en länk";
 $langNoLinkName = "Var vänlig skriv länkens namn";
 $langEditLink = "Ändra Kurshemsidans länk";
@@ -22,3 +25,4 @@ $NoLinkName = "Ingen länkbeskrivning";
 $NoLinkURL = "Ingen URL";
 $LinkChanged = "Länk ändrad";
 $OkSentLink = "Länken är skickad";
+?>

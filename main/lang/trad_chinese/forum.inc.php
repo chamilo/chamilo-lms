@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $ForumDeleted = "已移除討論區";
 $ForumCategoryDeleted = "已移除討論區類別";
 $ForumLocked = "已封鎖討論區";
@@ -9,8 +12,8 @@ $Topics = "議題";
 $Posts = "帖子";
 $LastPosts = "最新帖子";
 $Message = "訊息";
-$NoForumInThisCategory = "本類別中沒有討論區 ";
-$InForumCategory = "在類別中創建 ";
+$NoForumInThisCategory = "本類別中沒有討論區";
+$InForumCategory = "在類別中創建";
 $AllowAnonymousPosts = "允許匿名帖子？";
 $StudentsCanEdit = "是否讓使用者修訂自己的帖子？";
 $ApprovalDirect = "須待批 / 直接張貼";
@@ -18,7 +21,7 @@ $AllowNewThreads = "允許使用者開始新討論";
 $DefaultViewType = "預設檢視類型";
 $GroupSettings = "組別設定";
 $NotAGroupForum = "非小組討論區";
-$PublicPrivateGroupForum = "公開或私人小組討論區？ ";
+$PublicPrivateGroupForum = "公開或私人小組討論區？";
 $Public = "供所有課程會員";
 $Private = "僅供小組會員";
 $NewPostStored = "你的訊息已被儲存";
@@ -56,7 +59,7 @@ $ForGroup = "供小組";
 $ThreadLocked = "論題被封鎖";
 $NotAllowedHere = "你不能到此";
 $ReplyAdded = "已加入回應";
-$EditPost = "編輯文章";
+$EditPost = "編輯帖子";
 $EditPostStored = "帖子已被修訂";
 $NewForumPost = "討論區新帖子";
 $YouWantedToStayInformed = "你聲明你想在有人回應此帖子時收到通知。";
@@ -84,3 +87,4 @@ $NextMessage = "下一段訊息";
 $PrevMessage = "上一段訊息";
 $FirstMessage = "第一段訊息";
 $LastMessage = "最後一段訊息";
+?>

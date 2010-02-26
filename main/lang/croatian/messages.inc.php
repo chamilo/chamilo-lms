@@ -1,21 +1,25 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $Inbox = "Pretinac";
 $Messages = "Poruke";
-$SendMessage = "Pošalji poruku";
+$SendMessage = "Poalji poruku";
 $NewMessage = "Nova poruka";
-$ComposeMessage = "Napiši poruku";
-$DeleteSelectedMessages = "Obriši odabrane poruke";
-$SelectAll = "Označi sve";
-$DeselectAll = "Ukini označenost";
-$ReplyToMessage = "Odgovori na ovu poruku";
+$ComposeMessage = "Napii poruku";
+$DeleteSelectedMessages = "Obrii odabrane poruke";
+$SelectAll = "Ozna&#269;i sve";
+$DeselectAll = "Ukini ozna&#269;enost";
+$ReplyToMessage = "Odgovori";
 $BackToInbox = "Natrag u pretinac";
 $MessageSentTo = "Ova poruka je poslana";
-$SendMessageTo = "Pošalji";
+$SendMessageTo = "Poalji";
 $Myself = "meni";
 $From = "Od";
 $To = "Za";
 $Date = "Nadnevak";
-$InvalidMessageId = "ID poruke na koju želite odgovoriti nije ispravan.";
-$ErrorSendingMessage = "Došlo je do pogreške prilikom pokušaja slanja poruke.";
-$SureYouWantToDeleteSelectedMessages = "Jeste li sigurni da želite obrisati označene poruke?";
-$SelectedMessagesDeleted = "Označene poruke su obrisane";
+$InvalidMessageId = "ID poruke na koju elite odgovoriti nije ispravan.";
+$ErrorSendingMessage = "Dolo je do pogreke prilikom pokuaja slanja poruke.";
+$SureYouWantToDeleteSelectedMessages = "Jeste li sigurni da elite obrisati ozna&#269;ene poruke?";
+$SelectedMessagesDeleted = "Ozna&#269;ene poruke su obrisane";
+?>

@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $lang_new_item = "Amestóse eventu nuevu";
 $lang_title_notification = "Dende la so cabera visita";
 $lang_update_agenda = "actualizóse un eventu de l'axenda";
@@ -13,7 +16,7 @@ $lang_new_forum_topic = "Amestóse un tema nuevu";
 $lang_new_groupforum_topic = "Amestóse un tema nuevu al foru del grupu";
 $lang_new_dropbox_file = "Recibióse un archivu nuevu";
 $lang_update_dropbox_file = "Actualizóse un archivu nel so buzón de llabores / deberes";
-$ForumCategoryAdded = "La categoría nueva de foros amestóse";
+$ForumCategoryAdded = "Amestóse una categoría nel foru";
 $LearnpathAdded = "Amestóse un itinerariu d'aprendizaxe";
 $GlossaryAdded = "Términu amestáu al Glosariu";
 $QuizQuestionAdded = "Entruga nueva amestada nel Exerciciu";
@@ -30,3 +33,4 @@ $SurveyAdded = "Encuenta amestada";
 $NotebookAdded = "Nota amestada";
 $NotebookUpdated = "Nota anovada";
 $NotebookDeleted = "Nota desaniciada";
+?>

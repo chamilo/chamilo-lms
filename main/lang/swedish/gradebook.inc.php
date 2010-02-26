@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $AddResult = "Lägg till resultat";
 $ExportPDF = "Exportera till PDF";
 $Print = "Skriv ut";
@@ -19,3 +22,4 @@ $Average = "Genomsnitt";
 $ViewStatistics = "Visa statistik";
 $TotalUser = "Totalt för användaren";
 $AverageTotal = "Genomsnitt totalt";
+?>

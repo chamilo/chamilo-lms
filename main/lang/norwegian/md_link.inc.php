@@ -1,5 +1,8 @@
 <?php
-$langMdCallingTool = "Dokumenter";
+/*
+for more information: see languages.txt in the lang folder.
+*/
+$langMdCallingTool = "Lenker";
 $langMdTitle = "Navn på lenke";
 $langMdDescription = "Beskrivelse for lenke";
 $langMdCoverage = "Generell";
@@ -19,3 +22,4 @@ $langRemainingFor = "Utgåtte poster slettet for kategori";
 $langIndex = "Indeksord";
 $langMainMD = "Åpne hoved-MDE";
 $langOrElse = "Velg en kategori for lenker";
+?>

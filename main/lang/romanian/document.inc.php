@@ -1,10 +1,13 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $MoveTo = "Muta la";
 $langDownloadFile = "Transfera fisierul catre server";
 $langNameDir = "Numele noului director";
 $langSize = "Marime";
 $langRename = "Redenumeste";
-$langCopy = "Copiaza continutul cursului";
+$langCopy = "Copiaza";
 $langTo = "la";
 $langNoSpace = "Transferul a esuat. Nu este destul spatiu pe disc.";
 $langDownloadEnd = "Transferul este finalizat";
@@ -25,14 +28,14 @@ $langUncompress = "dezarhiveaza fisierul zip";
 $langDownloadAndZipEnd = "Arhiva zip transferata si dezarhivata";
 $langRoot = "root";
 $langCreateDoc = "Creaza un document";
-$langDown = "jos";
+$langDown = "Jos";
 $langFileError = "Fisierul ce trebuie transferat este invalid.";
 $langMaxFileSize = "Marimea maxima a fisierului este";
 $langFileName = "Numele fisierului";
 $langNoFileName = "Te rog introdu numele fisierului";
 $langNoText = "Te rog tasteaza textul tau / continut HTML";
 $langAreYouSureToDelete = "Esti sigur(a) ca doresti sa stergi";
-$langScormcontent = "Acesta este un continut Scorm<br><input type=button name=scormbutton value='Lanseaza ' onclick='openscorm()'>";
+$langScormcontent = "Acesta este un continut Scorm<br /><input type=button name=scormbutton value='Lanseaza ' onclick='openscorm()'>";
 $langScormcontentstudent = "Acesta este un curs in format Scorm. Daca doresti sa il lansezi : apasa aici  <input type=button name=scormbutton value='Lanseaza ' onclick='openscorm()'>";
 $langPublish = "Publica";
 $langMissingImagesDetected = "S-au detectat imagini disparute";
@@ -48,7 +51,7 @@ $langCreationSucces = "Tabla de continuturi a fost creata cu succes.";
 $langCanViewOrganisation = "Poti vedea organizarea ta";
 $langHere = "aici.";
 $langViewDocument = "Vezi";
-$langHtmlTitle = "Tabla de continuturi ";
+$langHtmlTitle = "Tabla de continuturi";
 $langAddToTOC = "Adauga la continuturi";
 $langAddChapter = "Adauga capitol";
 $langReady = "Genereaza tabla de continuturi";
@@ -107,7 +110,7 @@ $fileModified = "Fisierul este modificat";
 $DocumentsOverview = "Sumarul documentelor";
 $ViewSlideshow = "Vezi imaginile in slideshow";
 $Options = "Optiuni";
-$WelcomeOogieConverter = "Bine ati venit la Convertorul PowerPoint Oogie<br>1.Rasfoieste hard diskul pentru a gasi orice fisier .ppt sau .odp<br>2.Incarca-l in Oogie. Il va transforma in calea de invatare Scorm.<br>3.Apoi veti putea adauga comentarii audio la fiecare slide si introduce un test intre slide-uri pentru evaluare";
+$WelcomeOogieConverter = "Bine ati venit la Convertorul PowerPoint Oogie<br />1.Rasfoieste hard diskul pentru a gasi orice fisier .ppt sau .odp<br />2.Incarca-l in Oogie. Il va transforma in calea de invatare Scorm.<br />3.Apoi veti putea adauga comentarii audio la fiecare slide si introduce un test intre slide-uri pentru evaluare";
 $ConvertToLP = "Converteste la Calea de Invatare";
 $AdvancedSettings = "Setari avansate";
 $File = "Fisier";
@@ -209,3 +212,4 @@ $CreateTemplate = "Creeaza sablon";
 $SharedFolder = "Folder impartit";
 $CreateFolder = "Creeaza folder";
 $TemplateImage = "Icon pentru sablon";
+?>

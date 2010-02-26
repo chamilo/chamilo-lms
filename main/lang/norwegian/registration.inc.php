@@ -1,8 +1,11 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langTracking = "Statestikk";
 $langAuthInfo = "Autentifikasjon";
 $langUpdateImage = "Endre bilde";
-$langImageWrong = "Filstørrelsen skal være mindre enn ";
+$langImageWrong = "Filstørrelsen skal være mindre enn";
 $langAddImage = "Bilde";
 $langCourseManager = "Lærer";
 $password_request = "Vi har mottatt en forespørsel om å resette ditt passord. Dersom dette ikke er ønskelig, ignorer denne mailen.";
@@ -32,3 +35,4 @@ $langEdit = "rediger";
 $required = "nødvendige";
 $langphone = "Tlf";
 $MyProgress = "Min fremdrift";
+?>

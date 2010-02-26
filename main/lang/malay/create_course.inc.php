@@ -1,8 +1,11 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langProfessors = "Pensyarah";
 $langExplanation = "Apabila anda klik pada butang <b>Proses</b>,satu Laman Subjek yang mempunyai Forum, Agenda, Pengumuman dan sebagainya akan dibina. Anda boleh mengubahsuai Laman Subjek tersebut mengikut keperluan anda";
-$langEmpty = "Ruang kosong belum diisi sepenuhnya.<br>Use the <b>Back</b> button on your browser and try again.<br>If you ignore your course's code, see the Course Program";
-$langCodeTaken = "This course code is already taken.  <br>Use the <b>Back</b> button on your browser and try again";
+$langEmpty = "Ruang kosong belum diisi sepenuhnya.<br />Use the <b>Back</b> button on your browser and try again.<br />If you ignore your course's code, see the Course Program";
+$langCodeTaken = "This course code is already taken.  <br />Use the <b>Back</b> button on your browser and try again";
 $langFormula = "Yours sincerely, your professor";
 $langMessage = "When you remove the test forum, it will remove all messages in that forum too.";
 $langExerciceEx = "Contoh Latihan";
@@ -19,10 +22,10 @@ $langContradiction = "Use the Principle of Non Contradiction to force one's inte
 $langNotFalse = "This answer is not false. It is true that the revelation of the interlocutor's ignorance means showing the contradictory conclusions where lead his premisses.";
 $langAgenda = "Agenda";
 $langVideo = "Video";
-$langCourseProgram = "Penerangan Subjek";
+$langCourseProgram = "Program Subjek";
 $langAnnouncements = "Pengumuman";
 $langAddPageHome = "Tambah Page Pada Laman Subjek";
-$langLinkSite = "Tambah pautan pada Home Page";
+$langLinkSite = "Tambah Pautan Pada Laman Subjek";
 $langModifyInfo = "<i>Set</i>kan Subjek";
 $langCourseDesc = "Penerangan Subjek";
 $langAgendaTitle = "Tuesday the 11th of December - First lesson : Newton 18";
@@ -41,30 +44,31 @@ $langCreateCourseGroups = "Kumpulan";
 $langCatagoryMain = "Utama";
 $langCatagoryGroup = "Forum Kumpulan";
 $langLn = "Bahasa";
-$langCreateSite = "Bila Laman Subjek";
+$langCreateSite = "Bina Laman Subjek";
 $langFieldsRequ = "Semua Ruang Kosong Perlu Diisi";
 $langEx = "cth. <i>Elektronik Analog II</i>";
 $langFac = "Pusat Pengajian";
 $langTargetFac = "Pusat Pengajian yang Menawarkan Subjek Ini.";
 $langMax = "cth:. <i>EKT221</i>";
-$langDoubt = "If you doubt on your course's code, consult, ";
+$langDoubt = "If you doubt on your course's code, consult,";
 $langProgram = "Course Program</a>. If your course has no code, whatever the reason, invent one. For instance <i>INNOVATION</i> if the course is about Innovation Management";
 $langForumLanguage = "melayu";
 $langNewCourse = "Subjek Baru";
 $langAddNewCourse = "Tambah Subjek Baru";
-$langRestoreCourse = "Guna semula Subjek";
+$langRestoreCourse = "Guna Semula Subjek";
 $langOtherProperties = "Autres propriétés trouvées dans l'archive";
 $langSysId = "Id Système";
 $langDepartment = "Pusat Pengajian";
-$langDepartmentUrl = "URL Pusat Pengajian";
+$langDepartmentUrl = "Url";
 $langScoreShow = "Paparkan Markah";
 $langVisibility = "Visibility";
 $langVersionDb = "Version de la base de donnée lors de l'archivage";
-$langLastVisit = "Lawatan kali terakhir";
-$langLastEdit = "Ubahsuai kali terakhir";
+$langLastVisit = "Lawatan terakhir";
+$langLastEdit = "Sumbangan terakhir";
 $langExpire = "Luput";
 $langChoseFile = "Pilih Fail";
 $langFtpFileTips = "Si le fichier est sur un ordinateur tiers et accessible par ftp";
 $langHttpFileTips = "Si le fichier est sur un ordinateur tiers et accessible par http";
 $langLocalFileTips = "Si le fichier est sur l'espace de stockage des cours de ce campus";
 $langPostFileTips = "Si le fichier est sur  votre ordinateur";
+?>

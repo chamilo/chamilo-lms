@@ -1,9 +1,12 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langNewGroupCreate = "Crear grupos";
 $langGroupCreation = "Creación de grupos";
 $langCreate = "Crear";
 $langNewGroups = "grupu(os) nuevu(os)";
-$langMax = "mas. 20 carauteres, p. ex. <i>INNOV21</i>";
+$langMax = "Más.";
 $langGroupPlacesThis = "places (opcional)";
 $langGroupsAdded = "grupu(os) creáu/os";
 $langGroupDel = "Grupu esborráu";
@@ -14,15 +17,15 @@ $langGroupAllowStudentRegistration = "Los usuarios puen sumase al grupu que quie
 $langGroupTools = "Ferramientes";
 $langGroupDocument = "Documentos";
 $langGroupPropertiesModified = "La configuración del grupu modificóse";
-$langGroupSpace = "Área de grupu";
-$langGroupName = "Nome del grupu";
-$langGroupDescription = "Descripción del grupu";
+$langGroupSpace = "Área de Grupu";
+$langGroupName = "Nome del Grupu";
+$langGroupDescription = "Descripción";
 $langGroupMembers = "Miembros del grupu";
 $langEditGroup = "Modificar esti grupu";
 $Optional = "(opcional)";
 $langGroupSettingsModified = "Configuración de grupu modificada";
 $langGroupTooMuchMembers = "El númberu escritu ye más grande que'l másimu autorizáu por usté (pue cambialu embaxu). La composición del grupu nun se modificó.";
-$langGroupTutor = "Tutor del grupu";
+$langGroupTutor = "Tutor";
 $langGroupNoTutor = "(nengún)";
 $langGroupNone = "(nengún)";
 $langGroupNoneMasc = "(nengún)";
@@ -33,14 +36,14 @@ $langGroupSelfRegistration = "Rexistrase";
 $langGroupSelfRegInf = "Rexistrar";
 $langRegIntoGroup = "Apuntase a esti grupu";
 $langGroupNowMember = "Yá ye miembru d'esti grupu";
-$langPrivate = "Priváu - entrada permitida namás a los matriculaos nel cursu";
-$langPublic = "Entrada pública ensin identificación (dende la páxina d'entamu del campus)";
+$langPrivate = "Priváu";
+$langPublic = "Públicu";
 $langPropModify = "Modificar configuración";
 $langState = "Estáu";
 $langGroupFilledGroups = "Los grupos completárense colos miembros del llistáu d'usuarios.";
 $langSubscribed = "uauriaos rexistraos nesti cursu";
 $langStudentsNotInThisGroups = "Usuarios que nun son d'esti grupu";
-$langQtyOfUserCanSubscribe_PartBeforeNumber = "Un usuariu pue ser miembru d'un másimu de ";
+$langQtyOfUserCanSubscribe_PartBeforeNumber = "Un usuariu pue ser miembru d'un másimu de";
 $langQtyOfUserCanSubscribe_PartAfterNumber = " grupos";
 $langGroupLimit = "Llende";
 $CreateGroup = "Criar grupu(os)";
@@ -67,8 +70,8 @@ $NotAvailable = "Non disponible";
 $CreateSubgroups = "Crear sogrupos";
 $CreateSubgroupsInfo = "Esta opción permite crear grupos nuevos según los que yá esisten. Indique'l númberu de grupos que quier y escueya un grupu esistente. Van crease'l númberu de grupos escoyíu y tolos miembros del grupu primeru van quedar matriculaos nos demás. El grupu primeru queda como ta.";
 $CreateNumberOfGroups = "Crear";
-$WithUsersFrom = "grupos con miembros de ";
-$CategoryDeleted = "La categoría esborróse.";
+$WithUsersFrom = "grupos con miembros de";
+$CategoryDeleted = "La categoría esborróse";
 $Empty = "Vaciar";
 $FillGroup = "Amestar usuarios";
 $EmptyGroup = "Esborrar la matrícula de tolos usuarios";
@@ -91,3 +94,4 @@ $Group = "Grupu";
 $ForumOfGroup = "Foru del grupu:";
 $BackToGroupList = "Volver a la llista de grupos";
 $EditGroupCategory = "Camudar categoría de grupu";
+?>

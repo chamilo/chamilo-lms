@@ -1,8 +1,11 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $ForumDeleted = "Keskustelualue poistettu";
 $ForumCategoryDeleted = "Keskustelualue ryhmä poistettu";
 $ForumLocked = "Keskustelualue lukittu";
-$Forum = "Keskustelut";
+$Forum = "Keskustelualue";
 $AddForumCategory = "Lisää keskustelualue ryhmä";
 $AddForum = "Lisää uusi keskustelualue";
 $Topics = "Aiheet";
@@ -54,7 +57,7 @@ $ForGroup = "Ryhmälle";
 $ThreadLocked = "Keskustelu lukittu";
 $NotAllowedHere = "Sinun ei pitäisi olla täällä.";
 $ReplyAdded = "Vastaus lisätty";
-$EditPost = "Muokkaa tehtävää";
+$EditPost = "Muokkaa viestiä";
 $EditPostStored = "Viestiä muokattu";
 $NewForumPost = "Uusi viesti keskustelualueella";
 $YouWantedToStayInformed = "Olet halunnut ilmoituksen sähköpostilla, kun joku vastaa keskusteluun.";
@@ -111,3 +114,4 @@ $EditForum = "Muokkaa keskustelualuetta";
 $BackToForum = "Palaa keskustelualueelle";
 $BackToForumOverview = "Palaa keskustelun etusivulle";
 $BackToThread = "Palaa keskusteluun";
+?>

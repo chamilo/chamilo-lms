@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $ResourceAdded = "Risorsa aggiunta";
 $LearningPath = "Moduli didattici";
 $LevelUp = "sali di un livello";
@@ -9,7 +12,7 @@ $AddToLinks = "Aggiungi ai collegamenti del corso";
 $DontAdd = "non è stato aggiunto";
 $lang_show_all_added_resources = "Mostra tutte le risorse aggiunte";
 $ResourcesAdded = "Risorse aggiunte";
-$BackTo = "Torna a";
+$BackTo = "Vai a";
 $ExternalResources = "Risorse esterne";
 $CourseResources = "Risorse per il corso";
 $ExternalLink = "Collegamento esterno";
@@ -21,7 +24,7 @@ $AdValvas = "Avvisi";
 $Document = "Documenti";
 $ShowDelete = "Mostra  / Elimina";
 $IntroductionText = "Testo introduttivo";
-$CourseDescription = "Descrizione";
+$CourseDescription = "Descrizione del corso";
 $Groups = "Gruppi";
 $Users = "Utenti";
 $IntroductionTextAdd = "Aggiungi al capitolo una pagina contenente il testo di introduzione.";
@@ -37,19 +40,20 @@ $StepDeleted1 = "Questa";
 $StepDeleted2 = "parte è stata eliminata nello strumento";
 $Modify = "Modifica";
 $Chapter = "Capitolo";
-$NoAgendaItems = "Non ci sono eventi in agenda";
-$AgendaAdd = "Aggiungi evento";
-$UserGroupFilter = "Filtra sulla base dei gruppi/utenti";
-$AgendaSortChronologicallyUp = "Ascendente";
-$ShowCurrent = "Eventi del mese";
-$ModifyCalendarItem = "Modifica un evento";
-$ItemTitle = "Titolo dell'evento";
+$NoAgendaItems = "Non ci sono voci nell'agenda";
+$AgendaAdd = "Aggiungi un evento";
+$UserGroupFilter = "Filtro gruppo utente";
+$AgendaSortChronologicallyUp = "Ordine cronologico (su)";
+$ShowCurrent = "Mostra gli eventi correnti";
+$ModifyCalendarItem = "Modifica la voce nell'Agenda";
+$ItemTitle = "Titolo";
 $Detail = "Dettagli";
-$EditSuccess = "Evento modificato";
-$AddCalendarItem = "Aggiungi evento";
+$EditSuccess = "La modifica è stata effettuata";
+$AddCalendarItem = "Aggiungi una voce all'Agenda";
 $AddAnn = "Aggiungi un avviso";
 $ForumAddNewTopic = "Forum: nuovo argomento";
 $ForumEditTopic = "Forum: modifica argomento";
 $ExerciseAnswers = "Test: Risposte";
 $ForumReply = "Forum: rispondi";
-$AgendaSortChronologicallyDown = "Discendente";
+$AgendaSortChronologicallyDown = "Ordine cronologico (giù)";
+?>

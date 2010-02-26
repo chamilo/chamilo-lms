@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $NewNote = "Nova beležka";
 $Note = "Beležka";
 $NoteDeleted = "Beležka je bila odstranjena";
@@ -9,7 +12,7 @@ $SaveNote = "Shrani beležko";
 $WriteYourNoteHere = "Tule zapišite svojo beležko";
 $SearchByTitle = "Išči po naslovu";
 $WriteTheTitleHere = "Tule dodaj naslov";
-$UpdateDate = "Datum zadnje spremembe";
+$UpdateDate = "Zadnja sprememba";
 $NoteAddNew = "Dodaj novo";
 $OrderByCreationDate = "Po datumu nastanka";
 $OrderByModificationDate = "Po datumu spremembe";
@@ -29,3 +32,4 @@ $NotesSortedByUpdateDateAsc = "Po datumu ažuriranja naraščajoče";
 $NotesSortedByUpdateDateDESC = "Po datumu ažuriranja padajoče";
 $NotesSortedByCreationDateAsc = "Po datumu nastanka naraščajoče";
 $NotesSortedByCreationDateDESC = "Po datumu nastanka padajoče";
+?>

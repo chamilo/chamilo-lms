@@ -1,9 +1,12 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langNewGroupCreate = "Criar novo(s) grupo(s)";
 $langGroupCreation = "Criação de novos grupos";
 $langCreate = "Criar";
 $langNewGroups = "novo(s) grupo(s)";
-$langMax = "máx. de 12 caracteres, ex. <i>INOV21</i>";
+$langMax = "máx.";
 $langGroupPlacesThis = "vagas (opcional)";
 $langGroupsAdded = "o(s) grupo(s) foi (foram) adicionados";
 $langGroupDel = "Grupo excluido";
@@ -14,15 +17,15 @@ $langGroupAllowStudentRegistration = "É permitido aos usuários que se registre
 $langGroupTools = "Ferramentas";
 $langGroupDocument = "Documentos";
 $langGroupPropertiesModified = "As configurações do grupo foram modificadas";
-$langGroupSpace = "Área do grupo";
+$langGroupSpace = "Área dos grupos";
 $langGroupName = "Nome do grupo";
-$langGroupDescription = "Descrição do grupo";
+$langGroupDescription = "Descrição";
 $langGroupMembers = "Membros do grupo";
 $langEditGroup = "Editar este grupo";
 $Optional = "(opcional)";
 $langGroupSettingsModified = "Configurações do grupo modificadas";
 $langGroupTooMuchMembers = "O número proposto excede o máx. permitido  (pode modificá-lo em baixo). A composição do grupo não foi modificada";
-$langGroupTutor = "Tutor do grupo";
+$langGroupTutor = "Tutor";
 $langGroupNoTutor = "(nenhum)";
 $langGroupNone = "(nenhuma)";
 $langGroupNoneMasc = "(nenhum)";
@@ -33,14 +36,14 @@ $langGroupSelfRegistration = "Registro";
 $langGroupSelfRegInf = "registrar";
 $langRegIntoGroup = "Adicione-me a esse grupo";
 $langGroupNowMember = "Agora você é um membro desse grupo.";
-$langPrivate = "Acesso Privado (acessível apenas para inscritos no curso)";
-$langPublic = "Acesso público a partir da página inicial da plataforma mesmo sem fazer login";
+$langPrivate = "privado";
+$langPublic = "público";
 $langPropModify = "Editar configurações";
 $langState = "Status";
 $langGroupFilledGroups = "Os grupos foram preenchidos (ou completados) com usuários presentes na lista de 'Usuários'.";
 $langSubscribed = "usuários registrados nesse curso";
 $langStudentsNotInThisGroups = "Usuários que não fazem parte deste grupo";
-$langQtyOfUserCanSubscribe_PartBeforeNumber = "Um usuário pode ser membro de, no máximo, ";
+$langQtyOfUserCanSubscribe_PartBeforeNumber = "Um usuário pode ser membro de, no máximo,";
 $langQtyOfUserCanSubscribe_PartAfterNumber = " grupos";
 $langGroupLimit = "Limite";
 $CreateGroup = "Criar grupo(s)";
@@ -68,7 +71,7 @@ $CreateSubgroups = "Criar Subgrupos";
 $CreateSubgroupsInfo = "Esta opção permite que você críe os grupos novos baseados em um grupo existente.  Forneça o número desejado dos grupos e escolha um grupo existente.  O número dado dos grupos será criado e todos os membros do grupo existente serão subscritos naqueles grupos novos.  O grupo existente permance inalterado.";
 $CreateNumberOfGroups = "Criar";
 $WithUsersFrom = "grupos com membros de";
-$CategoryDeleted = "A categoria foi excluida.";
+$CategoryDeleted = "A categoria foi deletada";
 $Empty = "Vazio";
 $FillGroup = "adicionar usuários";
 $EmptyGroup = "cancelar a inscrição de todos os usuários";
@@ -90,3 +93,4 @@ $GroupsFromClassesInfo = "Utilizando esta opção, pode criar grupos baseados na
 $Group = "Grupo";
 $ForumOfGroup = "Fórum do grupo";
 $BackToGroupList = "Voltar para lista do grupo";
+?>

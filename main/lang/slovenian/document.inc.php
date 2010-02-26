@@ -1,14 +1,17 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $MoveTo = "Premakni v";
 $langDownloadFile = "Naloži datoteko na strežnik";
 $langNameDir = "Ime nove mape";
 $langSize = "Velikost";
 $langRename = "Preimenuj";
-$langCopy = "Kopija vsebin tečaja";
+$langCopy = "Kopiraj";
 $langTo = "na";
 $langNoSpace = "Nalaganje ni uspelo. V vaši mapi ni dovolj prostora ali pa ste prekoračili dovoljeno kvoto.";
 $langDownloadEnd = "Nalaganje je končano";
-$langFileExists = "Operacija ni možna.<br>Datoteka s tem imenom že obstaja.";
+$langFileExists = "Operacija ni možna.<br />Datoteka s tem imenom že obstaja.";
 $langImpossible = "Operacija ni možna";
 $langAddComment = "Dodaj/spremeni komentar";
 $langDocCopied = "Dokument je kopiran";
@@ -25,14 +28,14 @@ $langUncompress = "dekomprimiraj komprimirano datoteko (.zip)";
 $langDownloadAndZipEnd = " Datoteka ZIP je bila naložena in estrahirana";
 $langRoot = "koren";
 $langCreateDoc = "Tvori dokument";
-$langDown = "dol";
+$langDown = "Dol";
 $langFileError = "Datoteka za prepis na strežnik ni veljavna.";
 $langMaxFileSize = "Največja velikost datoteke je";
 $langFileName = "Ime datoteke";
 $langNoFileName = "Vnesi ime datoteke";
 $langNoText = "Vnesi tekstovno besedilo / HTML besedilo";
 $langAreYouSureToDelete = "Ali resnično želiš brisanje";
-$langScormcontent = "Tole je Scorm vsebina<br><input type=button name=scormbutton value='Zaženi jo !' onclick='openscorm()'>";
+$langScormcontent = "Tole je Scorm vsebina<br /><input type=button name=scormbutton value='Zaženi jo !' onclick='openscorm()'>";
 $langScormcontentstudent = "Tole je tečaj v Scorm obliki. Zaženi tečaj s pritiskom na : <input type=button name=scormbutton value='Zaženi jo !' onclick='openscorm()'>";
 $langPublish = "Objavi";
 $langMissingImagesDetected = "Odkril sem manjkajoče slike";
@@ -45,7 +48,7 @@ $langChapter = "Poglavje";
 $langDocumentList = "Seznam vseh dokumentov";
 $langOrganisationList = "Kazalo vsebine";
 $langCreationSucces = "Kazalo vsebine je bilo uspešno tvorjeno.";
-$langCanViewOrganisation = "Organizacijo si lahko ogledate ";
+$langCanViewOrganisation = "Organizacijo si lahko ogledate";
 $langHere = "tule.";
 $langViewDocument = "Poglej";
 $langHtmlTitle = "Kazalo vsebine";
@@ -63,7 +66,7 @@ $ChangeVisibility = "Spremeni vidnost";
 $VisibilityCannotBeChanged = "Vidnost ne more biti spremenjena.";
 $DocumentCannotBeMoved = "Dokumenta ni možno prestaviti.";
 $langOogieConversionPowerPoint = "Oogie : PowerPoint pretvorba";
-$langWelcomeOogieSubtitle = "Pretvornik PowerPoint datotek v učno pot";
+$langWelcomeOogieSubtitle = "Pretvornik PowerPoint datotek v u&#269;no pot";
 $langAddMetadata = "Poglej/Uredi metapodatke";
 $langGoMetadata = "Pojdi";
 $langQuotaForThisCourseIs = "Kvota za ta tečaj znaša";
@@ -88,7 +91,7 @@ $UplNoSCORMContent = "Ne najdem nobene SCORM vsebine!";
 $UplZipExtractSuccess = "Zip datoteke je bila uspešno estrahirana!";
 $UplZipCorrupt = "Ne morem estrahirati zip datoteke (pokvarjena datoteka?).";
 $UplAlreadyExists = "že obstaja!";
-$UplFileSavedAs = "Datoteka shranjena kot ";
+$UplFileSavedAs = "Datoteka shranjena kot";
 $UplFileOverwritten = "je bila prepisana.";
 $CannotCreateDir = "Ne morem ustvariti mape!";
 $UplUpload = "Naloži";
@@ -212,3 +215,4 @@ $HelpDefaultDirDocuments = "Ta mapa vsebuje privzeti arhiv. Vsebino lahko odstra
 $HelpSharedFolder = "Ta mapa vsebuje datoteke, ki jih tečajniki (ali vi sami) prenesete v področje tečaja preko urejevalnika (če jih niso/niste prenesli preko orodij skupine). Privzeto bodo vidne vsem učiteljem in skrite tečajnikom (razen v primeru direktnega dostopa do datoteke). V primeru, da naredite eno od map tečajnikom vidno, bo celotna njena vsebina vidna vsem tečajnikom.";
 $TemplateImage = "Ikona predloge";
 $MoveElement = "Premakni dokument";
+?>

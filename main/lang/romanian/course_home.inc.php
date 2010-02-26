@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langActivate = "Prezinta";
 $langDeactivate = "Ascunde";
 $langInLnk = "Unelte si legaturi ascunse";
@@ -11,7 +14,7 @@ $PlatformAdminOnly = "Doar pentru administratorii platformei";
 $langCombinedCourse = "Curs mix";
 $ToolIsNowVisible = "Unealta este acum vizibila";
 $ToolIsNowHidden = "Unealta este acum invizibila";
-$EditLink = "Editare legatura";
+$EditLink = "Schimba link";
 $Blog_management = "Administrarea blogului";
 $Forum = "Forumuri";
 $Course_maintenance = "Administrarea cursului";
@@ -22,3 +25,4 @@ $Authoring = "Creator";
 $Administration = "Administratie";
 $IntroductionTextUpdated = "Textul introductiv a fost actualizat";
 $IntroductionTextDeleted = "Textul introductiv a fost eliminat";
+?>

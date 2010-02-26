@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $Announcement = "Duyurular";
 $langAnnEmpty = "Duyuru listesi temizlendi";
 $AnnouncementModified = "Duyuru değiştirildi";
@@ -53,3 +56,4 @@ $AnnounceSentToUserSelection = "Seçili kullanıcılara gönderilmiş duyuru";
 $SendAnnouncement = "Duyuruyu gönder";
 $ModifyAnnouncement = "Duyuruyu düzenle";
 $ButtonPublishAnnouncement = "Duyuruyu gönder";
+?>

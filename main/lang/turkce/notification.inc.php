@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $lang_new_item = "yeni parça eklendi";
 $lang_title_notification = "Son ziyaretinizden beri";
 $lang_update_agenda = "varolan etkinlik güncellendi";
@@ -22,7 +25,7 @@ $QuizQuestionDeleted = "Kısa sınav sorusu silindi";
 $QuizUpdated = "Kısa sınav güncellendi";
 $QuizAdded = "Kısa sınav eklendi";
 $QuizDeleted = "Kısa sınav silindi";
-$DocumentInvisible = "Belge artık görünmez ";
+$DocumentInvisible = "Belge artık görünmez";
 $DocumentVisible = "Belge artık görünebilir";
 $CourseDescriptionAdded = "Kurs açıklaması eklendi";
 $WikiAdded = "Wiki eklendi";
@@ -30,3 +33,4 @@ $SurveyAdded = "Anket eklendi";
 $NotebookAdded = "Not eklendi";
 $NotebookUpdated = "Not Defteri güncellendi";
 $NotebookDeleted = "Not silindi";
+?>

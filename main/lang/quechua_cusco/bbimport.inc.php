@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langViewCourseMaterialImport = "Apachimuy--------";
 $langViewExternalLinksImport = "Qhaway hawa waskhanakuna apachikamuqta";
 $langViewForumImport = "Qhaway k'itirimana apachikamuqta";
@@ -18,3 +21,4 @@ $langChooseImportOptions = "Ajllay apachikuypa imayna ruwakunapaq";
 $langCheckWhatIsImported = "Manaraq apachikuy qallariqtin qhawariwaq ima apachikunqa chayta";
 $langStartImporting = "Qallariy apachimunata";
 $langImport = "Apachimuy";
+?>

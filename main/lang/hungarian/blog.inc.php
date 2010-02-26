@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $MyTasks = "Feladataim";
 $FavoriteBlogs = "Kedvenc blogjaim";
 $Navigation = "Navigálás";
@@ -10,8 +13,8 @@ $TaskManager = "Feladatkezelés";
 $MemberManager = "Tagok kezelése";
 $PostFullText = "Teljes szöveg elküldése";
 $ReadPost = "Üzenet olvasása";
-$Home = "Kezdőlap";
-$FirstPostText = "Első üzenet szöveg";
+$Home = "Kezd&#337;lap";
+$FirstPostText = "Els&#337; üzenet szöveg";
 $AddNewComment = "Új hozzászólás";
 $ReplyToThisComment = "Válasz erre a hozzászólásra";
 $ManageTasks = "Feladatok kezelése";
@@ -97,3 +100,4 @@ $TaskDeleted = "A feladat törölve.";
 $TaskAssignmentDeleted = "A feladat hozzárendelés törölve.";
 $CommentDeleted = "A hozzászólás törölve lett.";
 $RatingAdded = "Értékelés hozzáadva.";
+?>

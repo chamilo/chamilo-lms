@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $AgendaAdd = "Amestar un eventu";
 $ShowAllEvents = "Amosar tolos eventos";
 $ShowCurrent = "Amosar tolos eventos del mes";
@@ -72,3 +75,4 @@ $AgendaSortChronologicallyDown = "Ordenar eventos (recientes/antigüos)";
 $ItemForUserSelection = "Eventu dirixíu a una seleición d'usuarios";
 $IsNotiCalFormatFile = "Nun ye un ficheru de formatu iCal";
 $RepeatEvent = "Repetir eventu";
+?>

@@ -122,12 +122,4 @@ $MailingNonMailingError = "Un correo no puede ser sobrescrito por un no-correo y
 $MailingSelectNoOther = "El correo no se puede combinar con otros recipientes";
 $MailingJustUploadSelectNoOther = "El envío a mi mismo no se puede combinar con otros recipientes";
 $NoFilesHere = "Aquí no hay archivos";
-$NewDropboxFileUploaded = "";
-$NewDropboxFileUploadedContent = "";
-$langAddEdit = "";
-$ErrorNoFilesInFolder = "";
-$dropbox_lang["upload"] = "";
-$AddComment = "";
-$SentCatgoryDeleted = "";
-$ReceivedCatgoryDeleted = "";
 ?>

@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $lang_height = "Yükseklik";
 $lang_resizing_comment = "görüntüyü şu boyutlara göre ayarla (pixel olarak)";
 $lang_width = "Genişlik";
@@ -16,3 +19,4 @@ $lang_next_slide = "Sonraki Slayt";
 $lang_image = "Resim";
 $lang_of = "/";
 $lang_view_slideshow = "Slayt Gösterisini görüntüle";
+?>

@@ -1,10 +1,13 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $MoveTo = "Mover para";
 $langDownloadFile = "Enviar ficheiro";
 $langNameDir = "Nome da nova pasta/directório";
 $langSize = "Tamanho";
 $langRename = "Renomear";
-$langCopy = "Copiar conteúdos do curso";
+$langCopy = "Copiar";
 $langTo = "para";
 $langNoSpace = "O envio falhou. Ou excedeu o máximo de quota, ou não existe espaço suficiente em disco.";
 $langDownloadEnd = "O envio terminou";
@@ -25,17 +28,17 @@ $langUncompress = "Descomprimir ficheiro zip";
 $langDownloadAndZipEnd = "Ficheiro zip enviado e descomprimido";
 $langRoot = "raiz/root";
 $langCreateDoc = "Criar página de conteúdos de media / actividade";
-$langDown = "abaixo";
+$langDown = "Abaixo";
 $langFileError = "O ficheiro para enviar não é válido.";
 $langMaxFileSize = "O tamanho máximo do ficheiro é";
 $langFileName = "Nome da página / actividade";
 $langNoFileName = "Escreva por favor o nome do ficheiro";
 $langNoText = "Escreva por favor o seu texto / conteúdo HTML";
 $langAreYouSureToDelete = "Tem a certeza que deseja eliminar";
-$langScormcontent = "Isto é um conteúdo Scorm<br><input type=button name=scormbutton value='Iniciar!' onclick='openscorm()'>";
+$langScormcontent = "Isto é um conteúdo Scorm<br /><input type=button name=scormbutton value='Iniciar!' onclick='openscorm()'>";
 $langScormcontentstudent = "Este é um curso no formato Scorm. Para iniciar, clique aqui: <input type=button name=scormbutton value='Iniciar!' onclick='openscorm()'>";
 $langPublish = "Publicar";
-$langMissingImagesDetected = "Foi detectado imagens em falta ";
+$langMissingImagesDetected = "Foi detectado imagens em falta";
 $langCreateDocument = "Criar página de conteúdos de media / actividade";
 $langEditDocument = "Editar";
 $langDocuments = "Documentos";
@@ -73,7 +76,7 @@ $langDate = "Data";
 $ShowCourseQuotaUse = "Espaço disponível";
 $CourseCurrentlyUses = "Este curso utiliza actualmente";
 $MaximumAllowedQuota = "O seu limite de armazenamento é";
-$PercentageQuotaInUse = "Percentagem da sua quota em utilização ";
+$PercentageQuotaInUse = "Percentagem da sua quota em utilização";
 $PercentageQuotaFree = "Percentagem da sua quota que se encontra disponível";
 $CurrentDirectory = "Pasta/directório actual";
 $UplUploadDocument = "Enviar documentos";
@@ -211,3 +214,4 @@ $CreateFolder = "Criar a pasta/directório";
 $HelpDefaultDirDocuments = "Esta pasta/directório contém ficheiros pré-definidos. Pode eliminar ou adicionar novos ficheiros, mas se um ficheiro se encontra oculto/escondido quando é inserido num documento, os alunos não serão capazes de o visualizar nesse documento. Ao inserir um ficheiro num documento, certifique-se primeiro que este se encontra visível. As pastas/diretórios podem permanecer ocultos/escondidos.";
 $HelpSharedFolder = "Esta pasta/diretório contém os ficheiros que outros aluno (ou o próprio) enviaram para um curso através do editor (caso não tenha sido realizado a partir da ferramenta de grupos). Por pré-definição, serão visíveis para qualquer instrutor, mas estarão ocultos/escondidos para outros alunos (desde que não acedam aos ficheiros directamente). Ao tornar a pasta/directório de um aluno visível, todos os outros alunos poderão visualizar o seu conteúdo.";
 $TemplateImage = "Ícone do modelo/template";
+?>

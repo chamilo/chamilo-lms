@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $select = "Geçerli kıl";
 $square = "Kare";
 $circle = "Elips";
@@ -19,3 +22,4 @@ $nextAnswer = "Şimdi yapıldıya tıklayınız";
 $delineation = "Çizim";
 $labelDelineationMenu = "Çizimi kapat";
 $oar = "Riskli alan";
+?>

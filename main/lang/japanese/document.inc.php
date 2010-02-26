@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langDownloadFile = "矢今のアップロ〖ド";
 $langNameDir = "糠ディレクトリの叹涟";
 $langSize = "サイズ";
@@ -16,3 +19,4 @@ $langElRen = "element renamed";
 $langDirMv = "ディレクトリを败瓢";
 $langComMod = "コメントを饯赖";
 $langViMod = "材粕を饯赖";
+?>

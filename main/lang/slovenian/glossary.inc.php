@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $TermAddNew = "Dodaj nov pomenski termin";
 $TermName = "Ime termina";
 $TermDefinition = "Definicija termina";
@@ -20,5 +23,6 @@ $TableView = "Pogled tabele";
 $GlossaryTermAlreadyExistsYouShouldEditIt = "Ta termin je že dodan. Izberite drugo ime termina.";
 $GlossaryManagement = "Upravljanje glosarija";
 $TermMoved = "Izraz je bil premaknjen";
-$ShowGlossaryInExtraToolsTitle = "Prikaži termine besednjaka v dodatnih orodjih";
+$ShowGlossaryInExtraToolsTitle = "Prikaži termine slovarja v dodatnih orodjih";
 $ShowGlossaryInExtraToolsComment = "Od tu lahko nastavite način dodajanja terminov slovarja v dodatnih orodjih, kot so npr. učna pot, testi, ...";
+?>

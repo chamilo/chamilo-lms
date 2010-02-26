@@ -46,12 +46,4 @@ $FileToUpload = "Archivo a enviar";
 $ContentMaker = "Creador de contenidos";
 $ContentProximity = "Proximidad del contenido";
 $UploadLocalFileFromGarbageDir = "Enviar archivo local desde el directorio main/garbage";
-$ThisItemIsNotExportable = "";
-$MoveCurrentChapter = "";
-$GenericScorm = "";
-$UnknownPackageFormat = "";
-$Attempt = "";
-$MoveTheCurrentForum = "";
-$WarningWhenEditingScorm = "";
-$AdditionalProfileField = "";
 ?>

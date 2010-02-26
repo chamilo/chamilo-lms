@@ -1,11 +1,14 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $Announcement = "Annonseringer";
 $langAnnEmpty = "Annonseringslisten er nå ryddet opp";
 $AnnouncementModified = "Annonsering ble endret";
 $AnnouncementAdded = "Annonsering ble lagt til";
 $AnnouncementDeleted = "Annonsering ble slettet";
 $AnnouncementPublishedOn = "Publisert den";
-$AddAnnouncement = "Legg til som meddelelse";
+$AddAnnouncement = "Legg till annonsering";
 $langContent = "Innhold";
 $professorMessage = "Melding fra læreren";
 $langEmailSent = "og sendt som e-post til registrerte brukere";
@@ -37,3 +40,4 @@ $langMsg = "Meldinger";
 $langYes = "ja";
 $MsgText = "Melding";
 $SelectEverybody = "Velg alle";
+?>

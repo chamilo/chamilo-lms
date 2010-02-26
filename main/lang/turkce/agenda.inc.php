@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $AgendaAdd = "Yeni bir etkinlik ekle";
 $ShowAllEvents = "Etkinliklerin hepsini göster";
 $ShowCurrent = "Geçerli ayın etkinliklerini göster";
@@ -12,7 +15,7 @@ $Detail = "Detay";
 $EditSuccess = "Etkinlik düzenlendi";
 $AddSuccess = "Etkinlik eklendi";
 $AgendaDeleteSuccess = "Etkinlik silindi";
-$NoAgendaItems = "Planlanmış herhangi bir etkinlik bulunmuyor";
+$NoAgendaItems = "Planlanm&#305;&#351; herhangi bir etkinlik bulunmuyor";
 $lang_september = "Eylül";
 $langClassName = "Sınıf";
 $lang_agenda = "Ajanda";
@@ -28,7 +31,7 @@ $langMinute = "dakika";
 $langLasting = "süre";
 $langOldToNew = "eskiden yeniye";
 $langNewToOld = "yeniden eskiye";
-$langNow = "şimdi";
+$langNow = "&#351;imdi";
 $langAddEvent = "Plan ekle";
 $langDetail = "detay";
 $MonthView = "Aylık görünüm";
@@ -72,3 +75,4 @@ $AgendaSortChronologicallyDown = "Azalan";
 $ItemForUserSelection = "Kullanıcı seçim listesi";
 $IsNotiCalFormatFile = "Bu dosya iCal formatında değil";
 $RepeatEvent = "Etkinliği tekrarla";
+?>

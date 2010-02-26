@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $LinkMoved = "L'enllaç ha estat mogut";
 $langLinkName = "Nom de l'enllaç";
 $langLinkAdd = "Afegir un enllaç";
@@ -9,7 +12,7 @@ $langLinkDel = "Eliminar l'enllaç";
 $langLinkDeleted = "L'enllaç ha estat eliminat";
 $langLinkDelconfirm = "Esteu segur que voleu eliminar aquest enllaç?";
 $langAllLinksDel = "Eliminar tots els enllaços d'aquesta categoria";
-$langCategoryName = "Nom de categoria";
+$langCategoryName = "Nom de la categoria";
 $langCategoryAdd = "Afegir una categoria";
 $langCategoryAdded = "La categoria ha estat afegida";
 $langCategoryModded = "La categoria ha estat modificada";
@@ -23,7 +26,7 @@ $langNoCategory = "General";
 $showall = "Expandir totes les categories";
 $shownone = "Contraure totes les categories";
 $langListDeleted = "S'ha esborrat la llista";
-$langAddLink = "Afegir un enllaç";
+$langAddLink = "Afegeix un enllaç";
 $langDelList = "Esborra la llista sencera";
 $langModifyLink = "Modificar un enllaç";
 $langCsvImport = "Importar CSV";
@@ -34,14 +37,15 @@ $langCsvFileLine1 = "...- línia 1 =";
 $langCsvLinesFailed = "línia(es) errònia(es) en importar un enllaç (hi falta la URL o el títol).";
 $langCsvLinesOld = "enllaç(os) existent(s) actualitzat(s) (igual URL i categoria)";
 $langCsvLinesNew = "nou(s) enllaç(os) creat(s).";
-$langCsvExplain = "El fitxer hauria de ser d'aquesta manera:<blockquote><pre><b>URL</b>;categoria;<b>títol</b>;descripció;<b>http://www.aaa.org/...</b>;Enllaços importants;<b>Nom 1</b>;Descripció 1;<b>http://www.bbb.net/...</b>;<b>Nom 2</b>;\"Descripció 2\";</pre></blockquote>Si la 'URL' i la 'categoria' pertanyen a un enllaç ja existent, aquest serà actualitzat. En la resta dels casos es crearà un nou enllaç.<br><br> Negreta = obligatori. L'ordre dels camps no té importància, majúscules i minúscules estan permeses. Els camps desconeguts seran afegits a la 'descripció'. Separadors: comes o punts i comes. Els valors podran estar entre cometes, però no els noms de columna. Algunes [b]etiquetes HTML[/b] seran importades en el camp 'descripció'.";
+$langCsvExplain = "El fitxer hauria de ser d'aquesta manera:<blockquote><pre><b>URL</b>;categoria;<b>títol</b>;descripció;<b>http://www.aaa.org/...</b>;Enllaços importants;<b>Nom 1</b>;Descripció 1;<b>http://www.bbb.net/...</b>;<b>Nom 2</b>;\"Descripció 2\";</pre></blockquote>Si la 'URL' i la 'categoria' pertanyen a un enllaç ja existent, aquest serà actualitzat. En la resta dels casos es crearà un nou enllaç.<br /><br /> Negreta = obligatori. L'ordre dels camps no té importància, majúscules i minúscules estan permeses. Els camps desconeguts seran afegits a la 'descripció'. Separadors: comes o punts i comes. Els valors podran estar entre cometes, però no els noms de columna. Algunes [b]etiquetes HTML[/b] seran importades en el camp 'descripció'.";
 $langLinkUpdated = "L'enllaç ha estat actualitzat";
 $langAll_Link_Deleted = "L'enllaç ha estat eliminat";
 $langOnHomepage = "Mostrar l'enllaç a la pàgina principal";
 $langShowLinkOnHomepage = "Mostrar aquest enllaç com una icona a la pàgina principal del curs";
 $General = "General";
-$SearchFeatureDoIndexLink = "Indexar títol i descripció? ";
+$SearchFeatureDoIndexLink = "Indexar títol i descripció?";
 $langSaveLink = "Guardar enllaç";
 $langSaveCategory = "Guardar la categoria";
 $BackToLinksOverview = "Regressar a la llista d'enllaços";
-$AddTargetOfLinkOnHomepage = "Seleccioni la manera (target) que es mostrarà l'enllaç en la pàgina principal del curs ";
+$AddTargetOfLinkOnHomepage = "Seleccioni la manera (target) que es mostrarà l'enllaç en la pàgina principal del curs";
+?>

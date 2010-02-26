@@ -1,8 +1,11 @@
 <?php
-$AgendaAdd = "Ajustar una activitat nòva a l'agenda";
+/*
+for more information: see languages.txt in the lang folder.
+*/
+$AgendaAdd = "Ajustar una activitat nÃ²va a l'agenda";
 $ShowAllEvents = "Veire totei leis activitats";
 $ShowCurrent = "Veire leis activitats d'aquest mes";
-$AddCalendarItem = "Ajustar una anotacion nòva a l'agenda";
+$AddCalendarItem = "Ajustar una anotacion nÃ²va a l'agenda";
 $Day = "Jorn";
 $Month = "Mes";
 $Year = "An";
@@ -17,7 +20,7 @@ $lang_september = "Setembre";
 $langClassName = "Nom de la classa";
 $lang_agenda = "Agenda";
 $ModifyCalendarItem = "Modificar una anotacion de l'agenda";
-$ItemTitle = "Títol de l'anotacion";
+$ItemTitle = "TÃ­tol de l'anotacion";
 $langDay = "Jorn";
 $month_default = "Mes per manca";
 $langYear = "An";
@@ -26,8 +29,8 @@ $langHour = "Ora";
 $hour_default = "Ora per manca";
 $langMinute = "Minuta";
 $langLasting = "Durada";
-$langOldToNew = "dau vièlh au novèu";
-$langNewToOld = "dau nòu au vièlh";
+$langOldToNew = "dau viÃšlh au novÃšu";
+$langNewToOld = "dau nÃ²u au viÃšlh";
 $langNow = "Ara";
 $langAddEvent = "Ajustar una activitat";
 $langDetail = "detalh";
@@ -47,12 +50,12 @@ $ViewPersonalItem = "Veire les anotacions personalas";
 $UserGroupFilter = "Filtrar per grops / usanciers";
 $ShowAll = "Mostrar tot";
 $Print = "Imprimir";
-$MyTextHere = "mon tèxt aicí";
-$CopiedAsAnnouncement = "Copiat coma anóncia";
-$NewAnnouncement = "Anóncia nòva";
-$AddAnnouncement = "Ajustar coma anóncia";
-$UpcomingEvent = "Anóncia seguenta";
-$RepeatedEvent = "Anóncia precedenta";
+$MyTextHere = "mon tÃšxt aicÃ­";
+$CopiedAsAnnouncement = "Copiat coma anÃ³ncia";
+$NewAnnouncement = "AnÃ³ncia nÃ²va";
+$AddAnnouncement = "Ajustar coma anÃ³ncia";
+$UpcomingEvent = "AnÃ³ncia seguenta";
+$RepeatedEvent = "AnÃ³ncia precedenta";
 $RepeatType = "Periodicitat";
 $RepeatDaily = "Jornadier";
 $RepeatWeekly = "Setmanier";
@@ -63,3 +66,4 @@ $RepeatYearly = "Annadier";
 $RepeatEnd = "Acabar lei repeticions";
 $RepeatedEventViewOriginalEvent = "Veire l'anotacion iniciala";
 $ICalFileImport = "Importar un fiquier iCal/ics";
+?>

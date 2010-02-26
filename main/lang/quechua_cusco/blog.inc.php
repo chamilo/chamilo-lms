@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $MyTasks = "Llank'aynaykuna";
 $FavoriteBlogs = "Ancha munasqay blogs";
 $Navigation = "Wanp'una";
@@ -96,3 +99,4 @@ $TaskDeleted = "La tarea ha sido eliminada";
 $TaskAssignmentDeleted = "La asignación de la tarea ha sido eliminada";
 $CommentDeleted = "El comentario ha sido eliminado";
 $RatingAdded = "La calificación ha sido añadida.";
+?>

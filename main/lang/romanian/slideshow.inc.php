@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $lang_height = "Lungime";
 $lang_resizing_comment = "redimensionati poza la dimensiunile urmatoare (in pixeli)";
 $lang_width = "Latime";
@@ -16,3 +19,4 @@ $lang_next_slide = "Cadrul urmator";
 $lang_image = "Imagine";
 $lang_of = "a";
 $lang_view_slideshow = "Vedeti prezentarea";
+?>

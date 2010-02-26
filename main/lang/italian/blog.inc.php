@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $MyTasks = "Le mie attività";
 $FavoriteBlogs = "I miei blog";
 $Navigation = "Navigazione";
@@ -56,10 +59,10 @@ $Rating = "Valutazione";
 $RateThis = "Valuta";
 $SelectTaskArticle = "Scegli un articolo adatto al compito";
 $ExecuteThisTask = "Svolgi l'attività";
-$WrittenBy = "Autore: ";
+$WrittenBy = "Autore:";
 $InBlog = "Nel Blog";
 $ViewPostsOfThisDay = "Leggi gli articoli pubblicati oggi.";
-$PostsOf = "Articoli di ";
+$PostsOf = "Articoli di";
 $NoArticleMatches = "Non ci sono articoli che corrispondono al criterio di ricerca. Verifica l'ortografia o usa termini meno specifici. Cambia ed effettua una nuova ricerca.";
 $SaveProject = "Salva il blog";
 $langTask1 = "1° attività";
@@ -99,3 +102,4 @@ $CommentDeleted = "Commento eliminato";
 $RatingAdded = "Valutazione aggiunta";
 $BlogPosts = "Messaggi del blog";
 $BlogComments = "Commenti ai messaggi";
+?>

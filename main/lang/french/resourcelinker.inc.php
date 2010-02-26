@@ -1,6 +1,9 @@
 <?php
-$ResourceAdded = "Ressource ajoutée";
-$LearningPath = "Parcours d'apprentissage";
+/*
+for more information: see languages.txt in the lang folder.
+*/
+$ResourceAdded = "Ressource ajoutée. Vous pouvez maintenant retourner vers le cours ou ajouter d'autres ressources.";
+$LearningPath = "Cours";
 $LevelUp = "Monter";
 $AddIt = "Ajouter";
 $MainCategory = "catégorie principale";
@@ -9,12 +12,12 @@ $AddToLinks = "Ajouter aux Liens du cours";
 $DontAdd = "Ne pas ajouter";
 $lang_show_all_added_resources = "Montrer les ressources ajoutées";
 $ResourcesAdded = "Ressources ajoutées";
-$BackTo = "Retour à";
+$BackTo = "Retourner à:";
 $ExternalResources = "Ressources externes";
 $CourseResources = "Ressources du cours";
 $ExternalLink = "Lien externe";
-$DropboxAdd = "Ajouter le partage de fichiers à ce module.";
-$AddAssignmentPage = "Ajouter un lien vers Travaux dans ce module.";
+$DropboxAdd = "Ajouter le partage de documents à ce module.";
+$AddAssignmentPage = "Ajouter un lien vers Travaux";
 $Exercise = "Tests";
 $Link = "Liens";
 $AdValvas = "Annonces";
@@ -34,22 +37,23 @@ $LinkTarget = "Cible du lien";
 $SameWindow = "Dans la même fenêtre";
 $NewWindow = "Dans une nouvelle fenêtre";
 $StepDeleted1 = "Ce";
-$StepDeleted2 = "(article) a été supprimé de cet outil. ";
-$Modify = "modifié";
+$StepDeleted2 = "(article) a été supprimé de cet outil.";
+$Modify = "Modifié";
 $Chapter = "Chapitre";
-$NoAgendaItems = "Il n'y a aucun événement";
-$AgendaAdd = "Ajouter un événement";
-$UserGroupFilter = "Filtrer par groupes/utilisateurs";
-$AgendaSortChronologicallyUp = "Ascendant";
-$ShowCurrent = "Afficher les événements du mois";
-$ModifyCalendarItem = "Modifier un événement";
+$NoAgendaItems = "Evènements";
+$AgendaAdd = "Ajouter un nouvel événement";
+$UserGroupFilter = "Filtrer par groupe/utilisateur";
+$AgendaSortChronologicallyUp = "Afficher les événements (du plus ancien au plus récent)";
+$ShowCurrent = "Afficher les événements courants";
+$ModifyCalendarItem = "Modifier les événements de l'agenda";
 $ItemTitle = "Titre de l'événement";
-$Detail = "Détail";
-$EditSuccess = "L'événement a été modifié";
-$AddCalendarItem = "Ajouter un événement";
+$Detail = "Détails de l'événement";
+$EditSuccess = "Modifié avec succès";
+$AddCalendarItem = "Ajouter un nouvel événement";
 $AddAnn = "Ajouter une annonce";
 $ForumAddNewTopic = "Forum: ajouter un nouveau message";
-$ForumEditTopic = "Forum: éditer le message";
-$ExerciseAnswers = "Exercice: Réponses";
+$ForumEditTopic = "Forum: modifier le message";
+$ExerciseAnswers = "Test: Réponses";
 $ForumReply = "Forum: répondre";
-$AgendaSortChronologicallyDown = "Descendant";
+$AgendaSortChronologicallyDown = "Afficher les événements (du plus récent au plus ancien)";
+?>

@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $ResourceAdded = "Materiaal toegevoegd. Keer nu terug naar het pad of voeg meer materiaal toe.";
 $LearningPath = "Leerpad";
 $LevelUp = "omhoog";
@@ -38,18 +41,19 @@ $StepDeleted2 = "item is verwijderd uit deze module.";
 $Modify = "wijzig";
 $Chapter = "Hoofdstuk";
 $NoAgendaItems = "Er zijn geen agenda-items.";
-$AgendaAdd = "Nieuw agenda-item";
-$UserGroupFilter = "Filter op groepen/gebruikers";
-$AgendaSortChronologicallyUp = "Oplopend";
-$ShowCurrent = "Toon de agenda-items van deze maand";
-$ModifyCalendarItem = "Wijzig een agenda-item";
-$ItemTitle = "Itemtitel";
-$Detail = "Detail";
-$EditSuccess = "Het agenda-item is gewijzigd.";
-$AddCalendarItem = "Voeg nieuw agenda-item toe";
+$AgendaAdd = "Voeg een agenda-item toe";
+$UserGroupFilter = "Gebruikersgroepsfilter";
+$AgendaSortChronologicallyUp = "Sorteer agenda chronologisch (oplopend)";
+$ShowCurrent = "Toon agenda-items van deze maand";
+$ModifyCalendarItem = "Wijzig agenda-item";
+$ItemTitle = "Titel";
+$Detail = "Details";
+$EditSuccess = "Wijziging succesvol";
+$AddCalendarItem = "Agenda-item toevoegen";
 $AddAnn = "Aankondiging toevoegen";
 $ForumAddNewTopic = "Forum: nieuw bericht toevoegen";
 $ForumEditTopic = "Forum: bericht wijzigen";
 $ExerciseAnswers = "Oefeningen: antwoorden";
 $ForumReply = "Forum: antwoorden";
-$AgendaSortChronologicallyDown = "Aflopend";
+$AgendaSortChronologicallyDown = "Sorteer agenda chronologisch";
+?>

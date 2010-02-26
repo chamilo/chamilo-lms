@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $select = "Изберете";
 $square = "Правоъгълник";
 $circle = "Елипса";
@@ -19,3 +22,4 @@ $nextAnswer = "Щракнете върху: &done=done";
 $delineation = "Очертание";
 $labelDelineationMenu = "Затваряне на очертанието";
 $oar = "Рискова зона";
+?>

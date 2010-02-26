@@ -1,11 +1,14 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $GeneralDescription = "Llipin nisqasqay";
 $GeneralDescriptionQuestions = "Iman yachachinaq ruwaynin kay programapi ? Munakunchu ñaupaq ruwanakunata ? Ima masichay kan kay yachachinawan hoqkunawan ?";
 $GeneralDescriptionInformation = "Yachachinamanta nisqasqakuna (hayka pacha, chinpu, may k'itipi ruwakuynin...). Yachachiq (suti, mamataytamanta suti, kamachiynin, telÃ©fono nisqa, e-chaski...).";
 $Objectives = "Aypanakuna";
 $ObjectivesInformation = "Yachachinaq lliw aypanakunamanta rak'i aypanamantawan rikuchiy";
 $ObjectivesQuestions = "Imatan munashanki yachanqaku yachaqekuna kay yachachina tukukusqanpi? Hinallataq ima aypanakunata  hapinqaku kay llank'aypi ?";
-$Topics = "Rimanakuna";
+$Topics = "Ima kaqkuna";
 $TopicsInformation = "Yachachinapi iman kaqkuna. Sapa kaqkunamnata chaninchasqa. Sasa t'aqakuna. Ima ruwakuqninmanta masichakuyninmantawan.";
 $TopicsQuestions = "Iman kanqa yachachinaq ruwaynin ? Maypi yachaqe sinchi qhawariyta ruranman ? Kashanku  sasa umanchay mayqan sutichakusqakunapipas? Haykata llank'anman sapanqa yachachinapi ?";
 $Methodology = "Yachay-kamay";
@@ -20,3 +23,4 @@ $HumanAndTechnicalResourcesInformation = "Yanapaysinakuna hapinapaq técnicos ni
 $Assessment = "Chaninchana";
 $AssessmentQuestions = "Imaynatan yachaqekunapaq chaninchay kanqa ? Iman kashan paykuna yachachinata atinankupaq ?";
 $AssessmentInformation = "Tapukunamanta qhawarichina. Imakunamanta chaninchay. Ima yupipaykuna.";
+?>

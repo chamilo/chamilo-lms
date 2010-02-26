@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $TermAddNew = "Lisää uusi termi";
 $TermName = "Termin nimi";
 $TermDefinition = "Termin määritelmä";
@@ -17,3 +20,4 @@ $TermAdded = "Termi lisättty";
 $YouMustEnterATermName = "Termille täytyy antaa nimi";
 $YouMustEnterATermDefinition = "Termille täytyy antaa kuvaus";
 $TableView = "Taulukko näkymä";
+?>

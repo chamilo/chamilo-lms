@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $lang_already_enrolled = "вече е записан";
 $lang_my_personnal_course_list = "Моят списък с курсове";
 $lang_course_enrollment = "Курсове на потребителя";
@@ -78,3 +81,4 @@ $SessionCategory = "Категории сесии";
 $Expand = "Покажи всички";
 $Collapse = "Скрий всички";
 $CourseDetails = "Описание на курса";
+?>

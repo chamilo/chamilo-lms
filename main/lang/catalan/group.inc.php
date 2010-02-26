@@ -1,9 +1,12 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langNewGroupCreate = "Crea nou(s) grup(s)";
 $langGroupCreation = "Creació de nous grups";
 $langCreate = "crea";
 $langNewGroups = "nou grup(s)";
-$langMax = "max. 12 caracters, ex: <i>ONA2121</i>";
+$langMax = "màxim";
 $langGroupPlacesThis = "llocs (opcional)";
 $langGroupsAdded = "grup(s) ha(n) estat afegit(s)";
 $langGroupDel = "Grup esborrat";
@@ -16,13 +19,13 @@ $langGroupDocument = "Documents";
 $langGroupPropertiesModified = "Les especificacions del grup han estat modificades";
 $langGroupSpace = "Espai de grup";
 $langGroupName = "Nom del grup";
-$langGroupDescription = "Descripció del grup";
+$langGroupDescription = "Descripció";
 $langGroupMembers = "Membres del grup";
 $langEditGroup = "Edita aquest grup";
 $Optional = "(opcional)";
 $langGroupSettingsModified = "Especificacions del grup modificades";
 $langGroupTooMuchMembers = "Nombre proposat excedeix el màxim que has permés (pots modificar-ho a sota).				La composició del grup no ha estat modificada";
-$langGroupTutor = "Tutor del grup";
+$langGroupTutor = "Tutor";
 $langGroupNoTutor = "(cap)";
 $langGroupNone = "(cap)";
 $langGroupNoneMasc = "(cap)";
@@ -33,8 +36,8 @@ $langGroupSelfRegistration = "Enregistrament";
 $langGroupSelfRegInf = "enregistra";
 $langRegIntoGroup = "Afegeix-me a aquest grup";
 $langGroupNowMember = "Ara ets membre d'aquest grup";
-$langPrivate = "Accés privat (lloc accessible únicament entre les persones de la llista d'usuaris)";
-$langPublic = "Accés públic des de la plana principal del campus fins i tot sense iniciar sessió";
+$langPrivate = "privat";
+$langPublic = "públic";
 $langPropModify = "Modifica especificacions";
 $langState = "Estat";
 $langGroupFilledGroups = "Els grups han estat omplerts (o completats) pels usuaris presents en la 'llista d'usuaris'.";
@@ -68,7 +71,7 @@ $CreateSubgroups = "Crear subgrups";
 $CreateSubgroupsInfo = "Aquesta opció et permet crear nous grups basats en un grup ja existent. Assenyali el nombre de grups que desitja i trii un grup existent. Es crearà el nombre de grups desitjats i tots els membres del grup inicial seran inscrits en ells. El grup inicial no serà modificat.";
 $CreateNumberOfGroups = "Crear";
 $WithUsersFrom = "Grups amb membres de";
-$CategoryDeleted = "La categoria s'ha esborrat";
+$CategoryDeleted = "Aquesta categoria ha estat esborrada";
 $Empty = "Buidar";
 $FillGroup = "Afegir usuaris";
 $EmptyGroup = "Anul·lar la inscripció de tots els usuaris";
@@ -86,7 +89,8 @@ $GroupCalendar = "Agenda";
 $GroupAnnouncements = "Avisos";
 $NoCategoriesDefined = "Cap categoria definida";
 $GroupsFromClasses = "Grups de classes";
-$GroupsFromClassesInfo = "Utilitzant aquesta opció, podreu crear grups basats en les classes inscrites en el curs. ";
+$GroupsFromClassesInfo = "Utilitzant aquesta opció, podreu crear grups basats en les classes inscrites en el curs.";
 $Group = "Grup";
 $ForumOfGroup = "Fòrum del grup:";
 $BackToGroupList = "Tornar a la llista de grups";
+?>

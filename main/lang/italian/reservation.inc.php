@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $ReservationPeriodToSmall = "Il periodo di prenotazione è troppo corto.";
 $BookingSystem = "Sistema di prenotazione";
 $BookingPeriodList = "Elenco dei periodi di prenotazione";
@@ -32,6 +35,8 @@ $DeleteBookingPeriod = "Rimuovi questo periodo di prenotazione";
 $BookingPeriodEdited = "Il periodo di prenotazione è stato modificato";
 $BookingPeriodDateOverlap = "Il periodo di prenotazione è in parte già utilizzato dal #START# al #END#";
 $BookingPeriodSubscribeUntilAfterStart = "La richiesta \"fino ad una certa data\" supera la data d'inizio";
+$RepeatFor = "Ripeti ogni";
+$RepeatUntil = "Ripeti fino a";
 $BookingPeriodPast = "Non è possibile prenotare prima del momento attuale";
 $ReservationMaxUsersOverrun = "Ci sono più richieste del numero massimo previsto";
 $AddNewBookingPeriod = "Aggiungi un periodo di prenotazione";
@@ -62,12 +67,10 @@ $ReservationOutOfDate = "La data scelta è già usata e/o non è compresa nel pe
 $ReservationAlready = "Hai già prenotato questa risorsa";
 $ReservationMadeTitle = "Hai prenotato la risorsa #ITEM# con successo";
 $ReservationMadeMessage = "Cara/o utente nnLa tua prenotazione per la risorsa #ITEM# dal #START# al #END# è stata effettuata con successo";
-$ReservationDeleteTitle = "E' stato eliminato un periodo di prenotazione per la risorsa #NAME# ";
+$ReservationDeleteTitle = "E' stato eliminato un periodo di prenotazione per la risorsa #NAME#";
 $ReservationDeleteMessage = "Cara/o utente nnLa tua prenotazione per la risorsa #ITEM# dal #START# al #END# è stata cancellata";
 $OutPeriod = "Fuori tempo";
 $ReservationFromUntilError = "Il periodo di prenotazione dal #START# al #END# non è stato accettato in quanto si sovrappone parzialmente con un altro periodo di prenotazione";
-$RepeatFor = "Ripeti ogni";
-$RepeatUntil = "Ripeti fino a";
 $Recurrence = "Ripetizione";
 $NoRecurrence = "Nessuna ripetizione";
 $UntilRecurrence = "Attiva una ripetizione";
@@ -129,3 +132,4 @@ $Step1SelectResourceType = "Passo 1: seleziona il tipo di risorsa";
 $Step2SelectResource = "Passo 2: seleziona la risorsa";
 $Step3SelectBookingPeriod = "Passo 3: indica il periodo di prenotazione";
 $NoReservations = "Nessuna prenotazione";
+?>

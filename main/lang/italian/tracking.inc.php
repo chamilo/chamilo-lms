@@ -1,5 +1,8 @@
 <?php
-$langToolName = "Importa corsi Blackboard";
+/*
+for more information: see languages.txt in the lang folder.
+*/
+$langToolName = "Statistiche";
 $TrackingDisabled = "Le statistiche sono state disabilitate dall'Amministratore";
 $InactivesStudents = "Corsisti inattivi";
 $AverageTimeSpentOnThePlatform = "Tempo di accesso";
@@ -16,7 +19,7 @@ $SeeSessionList = "Mostra l'elenco delle sessioni";
 $langShowNone = "Chiudi tutti";
 $langCourseStats = "Statistiche del corso";
 $langToolsAccess = "Accessi alle sezioni";
-$langCourseAccess = "Accesso Corso";
+$langCourseAccess = "Accessi al corso";
 $langLinksAccess = "Collegamenti";
 $langDocumentsAccess = "Documenti";
 $langScormAccess = "Moduli didattici";
@@ -57,12 +60,12 @@ $langWorkAuthors = "Autori";
 $langWorkDescription = "Descrizione";
 $informationsAbout = "Statistiche su";
 $langNoEmail = "E-mail non specificata";
-$langNoResult = "Nessun risultato ancora disponibile";
-$langCourse = "Il Corso ";
+$langNoResult = "Nessun risultato";
+$langCourse = "Corso";
 $langHits = "Accessi";
 $langTotal = "Totale";
 $langHour = "Ora";
-$langDay = "giorno";
+$langDay = "Giorno";
 $langLittleHour = "h.";
 $langLast31days = "Negli ultimi 31 giorni";
 $langLast7days = "Negli ultimi 7 giorni";
@@ -94,7 +97,7 @@ $langPreviousYear = "Anno precedente";
 $langViewToolList = "Visualizza l'elenco di tutte le sezioni";
 $langToolList = "Elenco di tutte le sezioni";
 $langFrom = "Da";
-$langTo = "verso";
+$langTo = "a";
 $langPeriodToDisplay = "Periodo";
 $langDetailView = "Vista da";
 $langBredCrumpGroups = "Gruppi";
@@ -155,7 +158,7 @@ $Tracks = "Sequenza";
 $Success = "Successo";
 $ExcelFormat = "Formato .csv";
 $MyLearnpath = "I miei moduli didattici";
-$Time = "Ora";
+$Time = "Tempi";
 $Score = "Punteggi";
 $LastConnexion = "Ultimo collegamento";
 $ConnectionTime = "Tempo di connessione";
@@ -240,4 +243,7 @@ $CourseProgress = "Avanzamento";
 $ViewMinus = "Mostra meno";
 $ResourcesTracking = "Report sulle risorse";
 $SelectFieldToAdd = "Seleziona il campo del profilo utente da aggiungere";
-$AddAdditionalProfileField = "Aggiungi un campo al profilo utente";
+$AddAdditionalProfileField = "Aggiungi un campo del profilo utente";
+$ConfigureExtensions = "Configura le estensioni";
+$DashboardBlocks = "Blocchi del pannello";
+?>

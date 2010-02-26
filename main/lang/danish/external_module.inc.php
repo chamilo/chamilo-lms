@@ -1,6 +1,9 @@
 <?php
-$langLinkSite = "Tilføj link til kursussidens forside";
-$langSubTitle = "Du kan tilføje et link (URL) på din kursusforside.<br> Tip: hvis du ønsker at linke til en hjemmesiden, kan du åbne den pågældende side, kopiere sidens URL adresse i browservinduet og sætte linket ind i feltet nedenfor.";
+/*
+for more information: see languages.txt in the lang folder.
+*/
+$langLinkSite = "Link til en hjemmeside";
+$langSubTitle = "Du kan tilføje et link (URL) på din kursusforside.<br /> Tip: hvis du ønsker at linke til en hjemmesiden, kan du åbne den pågældende side, kopiere sidens URL adresse i browservinduet og sætte linket ind i feltet nedenfor.";
 $langAddPage = "Tilføj et dokument";
 $langSendPage = "Fil der skal uploades";
 $langCouldNot = "Filen kunne ikke uploades";
@@ -12,7 +15,7 @@ $langNoLinkURL = "Indtast venligst linkets URL";
 $langLinkTarget = "Linkets destination";
 $langSameWindow = "I samme vindue";
 $langNewWindow = "I nyt vindue";
-$langAdded = "Tilføjet";
+$langAdded = "Linket er tilføjet";
 $langAddLink = "Tilføj link";
 $langNoLinkName = "Indtast venligst linknavn";
 $langEditLink = "Rediger linket";
@@ -22,3 +25,4 @@ $NoLinkName = "Linket har intet navn";
 $NoLinkURL = "Linket har ikke en URL";
 $LinkChanged = "Linket er ændret";
 $OkSentLink = "Linket er sendt";
+?>

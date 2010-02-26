@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $Camera = "Камера";
 $Microphone = "Микрофон";
 $Name = "Име";
@@ -105,3 +108,4 @@ $Disconnected = "Несвързан";
 $FineStroke = "Тънко";
 $MediumStroke = "Среден";
 $ThickStroke = "Плътен";
+?>

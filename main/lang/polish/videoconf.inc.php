@@ -1,13 +1,17 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $Camera = "Kamera";
 $Microphone = "Mikrofon";
-$Progress = "Postęp";
+$Progress = "Post&#281;p";
 $Play = "Odtwórz";
 $Stop = "Zatrzymaj";
 $Record = "Nagraj";
-$NoFileAvailable = "Plik niedostępny";
-$UsersNow = "Użytkownicy on-line:";
+$NoFileAvailable = "Plik niedost&#281;pny";
+$UsersNow = "U&#380;ytkownicy on-line:";
 $Italic = "Kursywa";
 $Bold = "Pogrubiony";
-$Trainer = "Prowadzący";
+$Trainer = "Prowadz&#261;cy";
 $Learner = "Student";
+?>

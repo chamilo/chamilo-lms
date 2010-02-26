@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $Inbox = "Willana ch'askiq";
 $Messages = "Usqay willanakuna";
 $SendMessage = "Apachiy willanakunata";
@@ -7,7 +10,7 @@ $ComposeMessage = "Qelqay";
 $DeleteSelectedMessages = "Pichay ajllasqa willaykunata";
 $SelectAll = "Ajllay llipinta";
 $DeselectAll = "Amaña ajllaychu";
-$ReplyToMessage = "Kutichiy kay willayman";
+$ReplyToMessage = "Kutichiy";
 $BackToInbox = "Kutiy willana ch'askiqman";
 $MessageSentTo = "Willanaqa payman apachikun";
 $SendMessageTo = "Apachiy, payman";
@@ -32,3 +35,4 @@ $WriteAMessage = "Qelqay hoq willanata";
 $AlreadyReadMessage = "Willana ñawinchasqa";
 $UnReadMessage = "Willana mana ñawinchasqa";
 $MessageSent = "Willana apachisqa";
+?>

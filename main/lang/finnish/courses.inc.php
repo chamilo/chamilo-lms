@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $lang_already_enrolled = "olet jo ilmoittautunut";
 $lang_my_personnal_course_list = "Oma kurssilistani";
 $lang_course_enrollment = "Käyttäjän kurssit";
@@ -73,3 +76,4 @@ $CourseCategoryEditStored = "Kategoria päivitetty";
 $buttonCreateCourseCategory = "Tallenna kategoria";
 $buttonSaveCategory = "Tallenna kategoria";
 $buttonChangeCategory = "Muuta kategoria";
+?>

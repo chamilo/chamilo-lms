@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langActivate = "Göster";
 $langDeactivate = "Gizle";
 $langInLnk = "Gizli araç ve bağlantılar";
@@ -26,3 +29,4 @@ $SessionIdentifier = "Sömestr Tanımlayıcısı";
 $SessionName = "Dönem ismi";
 $SessionCategory = "Sömestr Kategorisi";
 $SessionData = "Sömestr Verileri";
+?>

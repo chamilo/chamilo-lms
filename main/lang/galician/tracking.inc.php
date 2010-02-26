@@ -1,5 +1,8 @@
 <?php
-$langToolName = "Importar cursos de Blackboard";
+/*
+for more information: see languages.txt in the lang folder.
+*/
+$langToolName = "Estatísticas";
 $TrackingDisabled = "O seguemento foi deshabilitado polo administrador do sistema.";
 $InactivesStudents = "Estudantes inactivos";
 $AverageTimeSpentOnThePlatform = "Tempo medio empregado na plataforma";
@@ -16,8 +19,8 @@ $SeeSessionList = "Ver a lista de sesións";
 $langShowNone = "Non mostrar ningún";
 $langCourseStats = "Estatísticas do Curso";
 $langToolsAccess = "Acceso ás Ferramentas";
-$langCourseAccess = "Acceso ó curso";
-$langLinksAccess = "Ligazóns ";
+$langCourseAccess = "Acceso a este curso";
+$langLinksAccess = "Ligazóns";
 $langDocumentsAccess = "Documentos";
 $langScormAccess = "Cursos con formato Scorm";
 $langLinksDetails = "Ligazóns visitadas polo estudante";
@@ -57,12 +60,12 @@ $langWorkAuthors = "Autores";
 $langWorkDescription = "Descrición";
 $informationsAbout = "Seguimento de";
 $langNoEmail = "Non se especificou un enderezo de correo electrónico";
-$langNoResult = "Aínda non hai resultados";
-$langCourse = "O curso ";
+$langNoResult = "Non hai Resultados";
+$langCourse = "Curso";
 $langHits = "Accesos";
 $langTotal = "Total";
 $langHour = "Hora";
-$langDay = "día";
+$langDay = "Día";
 $langLittleHour = "h.";
 $langLast31days = "Nos últimos 31 días";
 $langLast7days = "Nos últimos 7 días";
@@ -155,7 +158,7 @@ $Tracks = "Seguimento";
 $Success = "Calificación";
 $ExcelFormat = "Formato Excel";
 $MyLearnpath = "O meu itinerario de aprendizaxe";
-$Time = "Hora";
+$Time = "Tempo";
 $Score = "Puntuación";
 $LastConnexion = "Última conexión";
 $ConnectionTime = "Tempo de conexión";
@@ -215,3 +218,4 @@ $FirstLogin = "Primeiro acceso";
 $AccessDetails = "Detalles de acceso";
 $DateAndTimeOfAccess = "Data e hora de acceso";
 $Duration = "Duración";
+?>

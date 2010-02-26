@@ -1,8 +1,11 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $ForumDeleted = "Forum er slettet";
 $ForumCategoryDeleted = "Forumkategorien er slettet";
 $ForumLocked = "Forum er lukket";
-$Forum = "Diskussionsfora";
+$Forum = "Forum";
 $AddForumCategory = "Tilføj en ny forumkategori";
 $AddForum = "Tilføj et nyt diskussionsforum";
 $Topics = "Emner";
@@ -40,7 +43,7 @@ $Locked = "Låst: Deltagerne kan ikke længere skrive indlæg inden for denne fo
 $Unlocked = "Lås op: Deltagerne kan skrive nye indlæg i denne forumkategori, forum eller tråd";
 $Flat = "Liste";
 $Threaded = "Hierarki";
-$Nested = "Kombination ";
+$Nested = "Kombination";
 $FlatView = "Liste-visning";
 $ThreadedView = "Hierarkisk visning";
 $NestedView = "Kombineret visning";
@@ -56,7 +59,7 @@ $ForGroup = "til gruppe";
 $ThreadLocked = "Tråden er låst.";
 $NotAllowedHere = "Du har ikke tilladelse til denne del.";
 $ReplyAdded = "Svaret er tilføjet";
-$EditPost = "Rediger et indlæg";
+$EditPost = "Rediger indlæg";
 $EditPostStored = "Indlægget er ændret";
 $NewForumPost = "Nyt indlæg i forummet";
 $YouWantedToStayInformed = "Du har bedt om at modtage en e-mail, når dit indlæg besvares";
@@ -80,3 +83,4 @@ $MakeVisible = "Gør synlig/vis";
 $DeleteCompleteThread = "Slet hele tråden?";
 $PostDeletedSpecial = "Indlægget er slettet";
 $ThreadDeleted = "Tråd slettet";
+?>

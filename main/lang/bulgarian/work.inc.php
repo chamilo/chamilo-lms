@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $Tools = "Инструменти";
 $SendWork = "Качване на документ";
 $langTooBig = "Не сте избрали файл за изпращане, или този е твърде голям.";
@@ -21,7 +24,7 @@ $langDelLk = "Желаете да изтриете тази връзка?";
 $langMustBeRegisteredUser = "Само регистрираните в този курс потребители могат да публикуват документи.";
 $langListDel = "Изтриване на списъка";
 $langNameDir = "Име на папката";
-$langFileExists = "Операцията не е възможна.<br/>Съществува файл със същото име.";
+$langFileExists = "Операцията не е възможна.<br />Съществува файл със същото име.";
 $CreateDirectory = "Папката е създадена.";
 $langCurrentDir = "Текуща папка";
 $UploadADocument = "Качване на документ";
@@ -72,3 +75,4 @@ $UpdateWork = "Обновяване на задачата";
 $MakeAllPapersInvisible = "Скриване на всички документи";
 $MakeAllPapersVisible = "Показване на всички документи";
 $TheDocumentHasBeenDeleted = "Документът е изтрит.";
+?>

@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langSelectOptionForBackup = "Prašome parinkti archyvavimo nustatymus.";
 $langLetMeSelectItems = "Leisti parinkti kurso komponentus";
 $langCreateFullBackup = "Pilnai suarchyvuoti šį kursą";
@@ -42,3 +45,4 @@ $langCreateBackupInfo = "Archyvuoti šį kursą. Galite išrinkti kursų turinį
 $ToolIntro = "Įrankio apibūdinimas";
 $UploadError = "Įkėlimas nepavyko, patikrinkite įrašymo teises ir maksimalų leistiną įkeliamų failų dydį.";
 $DocumentsWillBeAddedToo = "Documents will be added too";
+?>

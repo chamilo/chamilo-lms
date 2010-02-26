@@ -397,7 +397,7 @@ if ($show_results) {
 
 		// destruction of the Question object
 		unset($objQuestionTmp);
-
+		
 		if($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER) {
 			$colspan=2;
 		}
@@ -809,30 +809,32 @@ if ($show_results) {
 			while ($real_answer = Database::fetch_array($res_answer)) {
 				$real_list[$real_answer['id']]= $real_answer['answer'];
 			}
-
-			$sql_select_answer = 'SELECT id, answer, correct, id_auto FROM '.$table_ans.' WHERE question_id="'.Database::escape_string($questionId).'" AND correct<>0';
+	
+			$sql_select_answer = 'SELECT id, answer, correct, id_auto FROM '.$table_ans.'
+								  WHERE question_id="'.Database::escape_string($questionId).'" AND correct <> 0 ORDER BY id_auto';
+								  
 			$res_answers = Database::query($sql_select_answer);
 
 			echo '<table width="100%" height="71" border="0" cellspacing="3" cellpadding="3" >';
 			echo '<tr><td colspan="2">&nbsp;</td></tr>';
 			echo '<tr>
-					<td><span style="font-style: italic;">'.get_lang("ElementList").'</span> </td>
-					<td><span style="font-style: italic;">'.get_lang("CorrespondsTo").'</span></td>
+					<td><span style="font-style: italic;">'.get_lang('ElementList').'</span> </td>
+					<td><span style="font-style: italic;">'.get_lang('CorrespondsTo').'</span></td>
 				  </tr>';
 			echo '<tr><td colspan="2">&nbsp;</td></tr>';
 
-			$questionScore=0;
+			$questionScore = 0;
 
 			while ($a_answers = Database::fetch_array($res_answers)) {
 
-				$i_answer_id = $a_answers['id']; //3
-				$s_answer_label = $a_answers['answer'];  // your dady - you mother
+				$i_answer_id 	= $a_answers['id']; //3
+				$s_answer_label = $a_answers['answer'];  // your daddy - your mother
 				$i_answer_correct_answer = $a_answers['correct']; //1 - 2
 				$i_answer_id_auto = $a_answers['id_auto']; // 3 - 4
 
-				$sql_user_answer = "SELECT answer
-									FROM $TBL_TRACK_ATTEMPT
+				$sql_user_answer = "SELECT answer FROM $TBL_TRACK_ATTEMPT
 									WHERE exe_id = '$id' AND question_id = '$questionId' AND position='$i_answer_id_auto'";
+				
 				$res_user_answer = Database::query($sql_user_answer);
 
 				if (Database::num_rows($res_user_answer)>0 ) {
@@ -844,10 +846,11 @@ if ($show_results) {
 				$i_answerWeighting=$objAnswerTmp->selectWeighting($i_answer_id);
 
 				$user_answer = '';
+
 				if (!empty($s_user_answer)) {
 					if ($s_user_answer == $i_answer_correct_answer)	{
-						$questionScore+=$i_answerWeighting;
-						$totalScore+=$i_answerWeighting;
+						$questionScore	+= $i_answerWeighting;
+						$totalScore		+= $i_answerWeighting;
 						$user_answer = '<span>'.$real_list[$i_answer_correct_answer].'</span>';
 					} else {
 						$user_answer = '<span style="color: #FF0000; text-decoration: line-through;">'.$real_list[$s_user_answer].'</span>';

@@ -1638,7 +1638,7 @@ class UserManager
 								ORDER BY session_category_id, date_start, date_end";
 
 		$result = Database::query($sessions_sql);
-		if (Database::num_rows($result)>0) {
+		if (Database::num_rows($result) > 0) {
 			while ($row = Database::fetch_array($result)) {
 				$categories[$row['session_category_id']][] = $row['id'];
 			}
@@ -1688,6 +1688,7 @@ class UserManager
 	 * @return array  list of statuses (session_id-course_code => status)
 	 */
 	public static function get_personal_session_course_list($user_id) {
+		global $_configuration;
 		// Database Table Definitions
 		$tbl_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 		$tbl_course 				= Database :: get_main_table(TABLE_MAIN_COURSE);
@@ -1702,7 +1703,7 @@ class UserManager
 
 		//we filter the courses from the URL
 		$join_access_url = $where_access_url = '';
-		global $_configuration;
+		
 		if ($_configuration['multiple_access_urls'] == true) {
 			$access_url_id = api_get_current_access_url_id();
 			if ($access_url_id != -1) {
@@ -1714,8 +1715,7 @@ class UserManager
 
 		// variable initialisation
 		$personal_course_list_sql = '';
-		$personal_course_list = array();
-
+		
 		//Courses in which we suscribed out of any session
 		/*$personal_course_list_sql = "SELECT course.code k, course.directory d, course.visual_code c, course.db_name db, course.title i,
 											course.tutor_name t, course.course_language l, course_rel_user.status s, course_rel_user.sort sort,
@@ -1738,9 +1738,12 @@ class UserManager
 										ORDER BY user_course_category.sort, course_rel_user.sort, course.title ASC";
 
 		$course_list_sql_result = api_sql_query($personal_course_list_sql);
-		//var_dump($course_list_sql_result); exit;
-		while ($result_row = Database::fetch_array($course_list_sql_result)) {
-			$personal_course_list[] = $result_row;
+
+		$personal_course_list = array();
+		if (Database::num_rows($course_list_sql_result) > 0 ) {
+			while ($result_row = Database::fetch_array($course_list_sql_result)) {
+				$personal_course_list[] = $result_row;
+			}
 		}
 
 		// get the list of sessions where the user is subscribed as student

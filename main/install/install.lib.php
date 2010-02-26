@@ -37,7 +37,7 @@ define('SYSTEM_CONFIG_FILENAME', 'configuration.dist.php');
  * @author Ivan Tcholakov, 2010;
  */
 function is_already_installed_system() {
-	global $new_version, $_configuration; 
+	global $new_version; 
 
 	if (empty($new_version)) {
 		return true; // Must be initialized.

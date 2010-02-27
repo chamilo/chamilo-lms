@@ -51,7 +51,7 @@ function display_drh_list(){
 		document.getElementById("drh_list").style.display="none";
 		document.getElementById("drh_select").options[0].selected="selected";
 		document.getElementById("check_admin").style.display="none";
-}
+	}
 }
 
 function show_image(image,width,height) {
@@ -177,7 +177,6 @@ $group[] =& HTML_QuickForm::createElement('radio', 'reset_password', null, null,
 $group[] =& HTML_QuickForm::createElement('password', 'password', null, array('onkeydown' => 'javascript: password_switch_radio_button();'));
 $form->addGroup($group, 'password', null, '', false);
 
-// Status
 // Status
 $status = array();
 $status[COURSEMANAGER] = get_lang('Teacher');

@@ -49,8 +49,8 @@ $UploadLocalFileFromGarbageDir = "Lokale Datei von Haupt/Garbage Verzeichnis hoc
 $ThisItemIsNotExportable = "Dieses Object ist zur Zeit nicht Scorm kompatibel. Aus diesem Grund kann es nicht exportiert werden.";
 $MoveCurrentChapter = "Das aktive Kapitel verschieben";
 $GenericScorm = "Generic Scorm";
-$UnknownPackageFormat = "Das Format des Paktes wird nicht erkannt. Vergewissen Sie sich, dass es korrekt formatiert ist und keine Fehler enthält. Probleme kann es geben durch proprietäre ZIP Formate oder die Übetragung langer Dateien. Bei Unklarheiten bzgl. ZIP, versuchen Sie es";
+$UnknownPackageFormat = "Das Format des Paktes wird nicht erkannt. Vergewissen Sie sich, dass es korrekt formatiert ist und keine Fehler enthält. Probleme kann es geben durch proprietäre ZIP Formate oder die Übetragung langer Dateien. Bei Unklarheiten bzgl. ZIP, versuchen Sie es bitte mit minimalen ZIP Funktionen.";
 $Attempt = "Versuch";
 $MoveTheCurrentForum = "Das bestehende Forum verschieben";
-$WarningWhenEditingScorm = "Warnung!<br />Wenn man den Inhalt eines Scorm Schrittes bearbeitet, kann man den Bericht des Lernpfads ändern oder den Schritt beschädigen";
+$WarningWhenEditingScorm = "Warnung!<br>Wenn man den Inhalt eines Scorm Schrittes bearbeitet, kann man den Bericht des Lernpfads ändern oder den Schritt beschädigen";
 ?>

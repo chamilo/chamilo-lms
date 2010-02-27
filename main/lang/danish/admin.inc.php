@@ -254,7 +254,7 @@ $No = "Nej";
 $ShowToolShortcutsTitle = "Værktøjsgenveje";
 $ShowToolShortcutsComment = "Vis genveje til værktøjer i banneret?";
 $ShowStudentViewTitle = "Se siden som studerende";
-$ShowStudentViewComment = "Aktiver Se siden som studerende?<br />Denne egenskab gør det muligt for en underviser at se siden som en studerende ville se den.";
+$ShowStudentViewComment = "Aktiver Se siden som studerende?<br>Denne egenskab gør det muligt for en underviser at se siden som en studerende ville se den.";
 $AllowGroupCategories = "Gruppe-kategorier";
 $AllowGroupCategoriesComment = "Tillad kursus-administratorer at oprette kategorier i gruppe-modulet?";
 $PlatformLanguageComment = "Du kan bestemme platformens sprog i en anden del af platforms-administreringen, nemlig: <a href=\"languages.php\">Dokeos Platform Sprog</a>";
@@ -320,7 +320,7 @@ $langPrivate = "Privat adgang - siden er kun tilgængelig for personer på delta
 $langCourseVisibilityClosed = "Fuldstændig lukket - siden er kun tilgængelig for underviseren eller kursusadministratoren";
 $langSubscription = "Tilmelding";
 $langUnsubscription = "Afmelding";
-$CourseAccessConfigTip = "Som standard er dit kursus tilgængeligt for registrerede brugere på platformen. Ønsker du en vis fortrolighed omkring adgang til kursussiden, er det lettest at åbne for tilmeldinger i f.eks. en uge (vælg: Fortrolig adgang, Kursustilmelding Tilladt) og bed";
+$CourseAccessConfigTip = "Som standard er dit kursus tilgængeligt for registrerede brugere på platformen. Ønsker du en vis fortrolighed omkring adgang til kursussiden, er det lettest at åbne for tilmeldinger i f.eks. en uge (vælg: Fortrolig adgang, Kursustilmelding Tilladt) og bede de studerende om i første lektion at tilmelde sig. Derefter lukker du siden for tilmeldinger (vælg: Kursustilmelding Nægtet). Du kan nu se de tilmeldte på deltagerlisten og slette evt. uvelkomne. Kursussiden er nu kun tilgængelig via login.";
 $Tool = "værktøj";
 $NumberOfItems = "antal objekter";
 $DocumentsAndFolders = "Dokumenter og mapper";

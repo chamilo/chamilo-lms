@@ -2,18 +2,18 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
-$lang_new_item = "àŸÔèÁÃÒÂ¡ÒÃáÅéÇ";
-$lang_title_notification = "¹ÑºµÑé§áµè€Ø³à¢éÒÁÒ€ÃÑé§ÊØŽ·éÒÂ";
-$lang_update_agenda = "»ÃÑº»ÃØ§¡ÓË¹Ž¡ÒÃ·ÕèÁÕÍÂÙèáÅéÇ";
-$lang_new_agenda = "àŸÔèÁ¡ÓË¹Ž¡ÒÃãËÁèáÅéÇ";
-$lang_update_announcements = "äŽé»ÃÑº»ÃØ§»ÃÐ¡ÒÈ·ÕèÁÕÍÂÙèàŽÔÁãËéáÅéÇ";
-$lang_new_announcements = "àŸÔèÁ»ÃÐ¡ÒÈãËÁèáÅéÇ";
-$lang_new_document = "äŽéàŸÔèÁàÍ¡ÊÒÃãËÁèáÅéÇ";
-$lang_new_exercise = "áºº·ŽÊÍºãËÁè ÊÒÁÒÃ¶ãªé§Ò¹äŽéáÅÇ";
-$lang_update_link = "äŽé»ÃÑº»ÃØ§ ÃÒÂ¡ÒÃàª×èÍÁâÂ§¢éÍÁÙÅãËéáÅéÇ";
-$lang_new_link = "àŸÔèÁ¡ÒÃàª×èÍÁâÂ§ãËÁèáÅéÇ";
-$lang_new_forum_topic = "äŽéàŸÔèÁËÑÇ¢éÍãËÁèãËéáÅéÇ";
-$lang_new_groupforum_topic = "äŽéàŸÔèÁËÑÇ¢éÍãËÁèã¹¡ÅØèÁÍÀÔ»ÃÒÂáÅéÇ";
-$lang_new_dropbox_file = "äŽéÃÑºä¿ÅìãËÁè";
-$lang_update_dropbox_file = "»ÃÑº»ÃØ§ä¿Åìã¹¡ÅèÍ§Êè§§Ò¹¢Í§€Ø³áÅéÇ";
+$lang_new_item = "เพิ่มรายการแล้ว";
+$lang_title_notification = "นับตั้งแต่คุณเข้ามาครั้งสุดท้าย";
+$lang_update_agenda = "ปรับปรุงกำหนดการที่มีอยู่แล้ว";
+$lang_new_agenda = "เพิ่มกำหนดการใหม่แล้ว";
+$lang_update_announcements = "ได้ปรับปรุงประกาศที่มีอยู่เดิมให้แล้ว";
+$lang_new_announcements = "เพิ่มประกาศใหม่แล้ว";
+$lang_new_document = "ได้เพิ่มเอกสารใหม่แล้ว";
+$lang_new_exercise = "แบบทดสอบใหม่ สามารถใช้งานได้แลว";
+$lang_update_link = "ได้ปรับปรุง รายการเชื่อมโยงข้อมูลให้แล้ว";
+$lang_new_link = "เพิ่มการเชื่อมโยงใหม่แล้ว";
+$lang_new_forum_topic = "ได้เพิ่มหัวข้อใหม่ให้แล้ว";
+$lang_new_groupforum_topic = "ได้เพิ่มหัวข้อใหม่ในกลุ่มอภิปรายแล้ว";
+$lang_new_dropbox_file = "ได้รับไฟล์ใหม่";
+$lang_update_dropbox_file = "ปรับปรุงไฟล์ในกล่องส่งงานของคุณแล้ว";
 ?>

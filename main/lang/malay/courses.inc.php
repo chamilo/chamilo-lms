@@ -30,5 +30,5 @@ $langHideAndSubscribeOpen = "Hided / Open";
 $langShowAndSubscribeOpen = "Visible / Open";
 $langShowAndSubscribeClosed = "Visible / Closed";
 $langAdminThisUser = "Kembali ke Pengguna";
-$langManage = "Pengurusan Kampus";
+$langManage = "Menguruskan Kampus";
 ?>

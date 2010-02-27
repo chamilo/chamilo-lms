@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $lang_height = "Výška";
 $lang_resizing_comment = "změnit velikost obrázku na nasledující rozměry (v pixlech)";
 $lang_width = "Šířka";
@@ -16,3 +19,4 @@ $lang_next_slide = "Další snímek";
 $lang_image = "Obrázek";
 $lang_of = "z";
 $lang_view_slideshow = "Zobraz prezentaci";
+?>

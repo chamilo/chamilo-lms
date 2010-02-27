@@ -5,11 +5,11 @@ for more information: see languages.txt in the lang folder.
 $langActivate = "Aktiviraj";
 $langDeactivate = "Deaktiviraj";
 $langInLnk = "Skriveni alati i poveznice";
-$langDelLk = "elite li izbrisati poveznicu?";
+$langDelLk = "Želite li izbrisati poveznicu?";
 $langCourseCreate = "Izradi web stranice kolegija";
 $langNameOfTheLink = "Naziv poveznice";
 $lang_main_categories_list = "Popis glavnih kategorija";
-$langCourseAdminOnly = "Samo predava&#269;i";
+$langCourseAdminOnly = "Samo predavači";
 $PlatformAdminOnly = "Samo nadzornici platforme";
 $langCombinedCourse = "Kombinirani kolegij";
 $ToolIsNowVisible = "Alat je sad vidljiv";
@@ -23,6 +23,6 @@ $GreyIcons = "Moduli";
 $Interaction = "Alati za interakciju";
 $Authoring = "Autorski alati";
 $Administration = "Alati za nadzor";
-$IntroductionTextUpdated = "Uvodni tekst je auriran";
+$IntroductionTextUpdated = "Uvodni tekst je ažuriran";
 $IntroductionTextDeleted = "Uvodni tekst je obrisan";
 ?>

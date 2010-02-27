@@ -3,16 +3,16 @@
 for more information: see languages.txt in the lang folder.
 */
 $WikiSearchResults = "Resultados de la búsqueda en el Wiki";
-$Wiki = "Wiki";
+$Wiki = "Wiki del grupo";
 $StartPage = "Página de inicio del Wiki";
 $EditThisPage = "Editar esta página";
 $ShowPageHistory = "Historial de la página";
 $RecentChanges = "Cambios recientes";
 $AllPages = "Todas las páginas";
 $AddNew = "Añadir una página";
-$ChangesStored = "Sus cambios han sido guardados";
+$ChangesStored = "Cambios almacenados";
 $NewWikiSaved = "La nueva página wiki ha sido guardada.";
-$DefaultContent = " <br /> <br /> <p align=\"center\"> <img src=\"%swiki/wcollaborative.png\" alt=\"Mr. Chamilo\" title=\"Mr. Chamilo\" /></p> <p align=\"center\">Para comenzar edite esta página y borre este texto</p>";
+$DefaultContent = " <br/> <br/> <p align=\"center\"> <img src=\"%swiki/wcollaborative.png\" alt=\"Mr. Chamilo\" title=\"Mr. Chamilo\" /></p> <p align=\"center\">Para comenzar edite esta página y borre este texto</p>";
 $CourseWikiPages = "Páginas Wiki del curso";
 $GroupWikiPages = "Páginas Wiki del grupo";
 $NoWikiPageTitle = "Los cambios no se han guardado. Debe dar un título a esta página";
@@ -56,7 +56,7 @@ $AddOptionProtected = "La posibilidad de añadir páginas ha sido desactivada. A
 $AddOptionUnprotected = "La posibilidad de añadir páginas está habilitada para todos los miembros del Wiki";
 $NotifyChanges = "Notificarme cambios";
 $NotNotifyChanges = "No notificarme cambios";
-$NotifyByEmail = "La notificacion por correo electrónico de las modificaciones de la página está habilitada";
+$NotifyByEmail = "Notificarme por e-mail cuando alguien responda";
 $CancelNotifyByEmail = "La notificación por correo electrónico de las modificaciones de la página está deshabilitada";
 $MostRecentVersionBy = "La última versión de esta página fue realizada por";
 $Rating = "Puntuación";
@@ -145,7 +145,7 @@ $Changes = "Cambios";
 $MostActiveUsers = "Usuarios más activos";
 $Contributions = "contribuciones";
 $UserContributions = "Contribuciones del usuario";
-$WarningDeleteMainPage = "No se recomienda la eliminación de la Página principal del Wiki, ya que es el principal acceso a su estructura jerárquica.<br /> Si de todas formas necesita borrarla, no olvide volver a crear esta Página principal pues hasta que no lo haga otros usuarios no";
+$WarningDeleteMainPage = "No se recomienda la eliminación de la Página principal del Wiki, ya que es el principal acceso a su estructura jerárquica.<br> Si de todas formas necesita borrarla, no olvide volver a crear esta Página principal pues hasta que no lo haga otros usuarios no podrán añadir nuevas páginas al Wiki.";
 $ConvertToLastVersion = "Para convertir esta versión en la última haga clic en";
 $Restore = "Restaurar";
 $CurrentVersion = "Versión actual";
@@ -167,7 +167,7 @@ $DescriptionOfTheTask = "Descripción de la tarea";
 $OtherSettings = "Otros requerimientos";
 $NMaxWords = "Número máximo de palabras";
 $NMaxVersion = "Número máximo de versiones";
-$Feedback = "Orientaciones";
+$Feedback = "Comentarios";
 $AddFeedback = "Añadir mensajes de orientación asociados al progreso en la página";
 $Feedback1 = "Primer mensaje";
 $Feedback2 = "Segundo mensaje";

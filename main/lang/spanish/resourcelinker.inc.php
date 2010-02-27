@@ -2,7 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
-$ResourceAdded = "Recurso añadido. Usted ahora puede volver a lecciones o añadir más recursos.";
+$ResourceAdded = "Recurso agregado";
 $LearningPath = "Lecciones";
 $LevelUp = "nivel superior";
 $AddIt = "Añadir";
@@ -12,7 +12,7 @@ $AddToLinks = "Añadir a los enlaces del curso";
 $DontAdd = "no añadir";
 $lang_show_all_added_resources = "Mostrar todos los recursos añadidos";
 $ResourcesAdded = "Recursos añadidos";
-$BackTo = "Volver a";
+$BackTo = "Regresar a";
 $ExternalResources = "Recursos externos";
 $CourseResources = "Recursos del curso";
 $ExternalLink = "Enlace externo";
@@ -41,19 +41,19 @@ $StepDeleted2 = "el elemento fue suprimido en esta herramienta.";
 $Modify = "modificar";
 $Chapter = "Capítulo";
 $NoAgendaItems = "No hay eventos en la Agenda";
-$AgendaAdd = "Añadir un evento de la Agenda";
-$UserGroupFilter = "Filtrar por grupos de usuarios";
-$AgendaSortChronologicallyUp = "Ordenar la agenda del más antiguo al más reciente";
-$ShowCurrent = "Mostrar los eventos actuales de la agenda";
-$ModifyCalendarItem = "Modificar eventos de la agenda";
-$ItemTitle = "Título";
+$AgendaAdd = "Añadir un nuevo evento";
+$UserGroupFilter = "Filtrar por grupos/usuarios";
+$AgendaSortChronologicallyUp = "Ordenar eventos (antiguos / recientes)";
+$ShowCurrent = "Eventos del mes";
+$ModifyCalendarItem = "Modificar un evento de la agenda";
+$ItemTitle = "Título del evento";
 $Detail = "Detalles";
-$EditSuccess = "La modificación se ha producido";
-$AddCalendarItem = "Añadir un evento a la Agenda";
+$EditSuccess = "El evento ha sido modificado";
+$AddCalendarItem = "Añadir un nuevo evento a la agenda";
 $AddAnn = "Añadir un anuncio";
 $ForumAddNewTopic = "Foro: añadir un tema";
 $ForumEditTopic = "Foro: editar un tema";
 $ExerciseAnswers = "Ejercicio: Respuestas";
 $ForumReply = "Foro: responder";
-$AgendaSortChronologicallyDown = "Ordenar la agenda del más reciente al más antiguo";
+$AgendaSortChronologicallyDown = "Ordenar eventos (recientes / antiguos)";
 ?>

@@ -3,7 +3,7 @@
 for more information: see languages.txt in the lang folder.
 */
 $LinkMoved = "Der Link wurde verschoben";
-$langLinkName = "Linkname";
+$langLinkName = "Link-Name";
 $langLinkAdd = "Link hinzufügen";
 $langLinkAdded = "Der Link wurde hinzugefügt";
 $langLinkMod = "Link wurde geändert";
@@ -12,13 +12,13 @@ $langLinkDel = "Link wurde gelöscht";
 $langLinkDeleted = "Der Link wurde gelöscht";
 $langLinkDelconfirm = "Möchten Sie den Link löschen?";
 $langAllLinksDel = "Alle Links in dieser Kategorie löschen";
-$langCategoryName = "Name der Kategorie";
+$langCategoryName = "Kategorie-Name";
 $langCategoryAdd = "Kategorie hinzufügen";
 $langCategoryAdded = "Die Kategorie wurde gelöscht";
 $langCategoryModded = "Die Kategorie wurde bearbeitet";
 $langCategoryDel = "Kategorie löschen";
 $langCategoryDeleted = "Die Kategorie sowie alle enthaltenen Links wurden gelöscht";
-$langCategoryDelconfirm = "Beim Löschen einer Kategorie werden alle enthaltenen Links <b>ebenfalls gelöscht</b>!\nMöchten Sie die Kategorie wirklich löschen?";
+$langCategoryDelconfirm = "Beim Löschen einer Kategorie werden alle enthaltenen Links <b>ebenfalls gelöscht</b>!nMöchten Sie die Kategorie wirklich löschen?";
 $langAllCategoryDel = "Alle Kategorien und Links löschen";
 $langGiveURL = "Bitte die URL für den Link eingeben";
 $langGiveCategoryName = "Bitte geben Sie den Namen der Kategorie an";
@@ -42,7 +42,7 @@ $langLinkUpdated = "Link wurde aktualisiert";
 $langAll_Link_Deleted = "Link wurde gelöscht";
 $langOnHomepage = "Link auf Homepage anzeigen";
 $langShowLinkOnHomepage = "Diesen Link als Icon auf der Kurs-Homepage anzeigen";
-$General = "Allgemein";
+$General = "allgemein";
 $SearchFeatureDoIndexLink = "Link-Name und Beschreibung in den Suchindex aufnehmen?";
 $langSaveLink = "Link speichern";
 $langSaveCategory = "Ordner speichern";

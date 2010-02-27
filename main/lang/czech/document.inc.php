@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $MoveTo = "Přesunout do";
 $langDownloadFile = "Uložit soubor na server";
 $langNameDir = "Název nové složky";
@@ -92,7 +95,7 @@ $UplFileSavedAs = "Soubor uložený jako";
 $UplFileOverwritten = "byl přepsán";
 $CannotCreateDir = "Není možné vytvořit adresář";
 $UplUpload = "Nahrát";
-$UplWhatIfFileExists = "Pokud soubor existuje: ";
+$UplWhatIfFileExists = "Pokud soubor existuje:";
 $UplDoNothing = "Nedělat nic";
 $UplDoNothingLong = "Pokud soubor existuje, nenahrávat";
 $UplOverwrite = "Přepsat";
@@ -134,7 +137,7 @@ $TemplateTitleIntroductionDescription = "Vložte úvodní text";
 $TemplateTitlePlan = "Plán";
 $TemplateTitlePlanDescription = "To je obsah";
 $TemplateTitleMrDokeos = "Krátké vysvětlení p.Dokeosu";
-$TemplateTitleMrDokeosDescription = "V dolní části rozhovor s p. Chamiloem ";
+$TemplateTitleMrDokeosDescription = "V dolní části rozhovor s p. Chamiloem";
 $TemplateTitleTeacher = "Váš instruktor";
 $TemplateTitleTeacherDescription = "Dialog se školitelem v dolní části";
 $TemplateTitleProduction = "Práce";
@@ -148,7 +151,7 @@ $TemplateTitleTextDescription = "Stránka plain textu";
 $TemplateTitleLeftImage = "Obrázek vlevo";
 $TemplateTitleLeftImageDescription = "Obrázek vlevo";
 $TemplateTitleTextCentered = "Text a obrázek vycentrován";
-$TemplateTitleTextCenteredDescription = "Text vycentrovaný s obrázkem a legendou ";
+$TemplateTitleTextCenteredDescription = "Text vycentrovaný s obrázkem a legendou";
 $TemplateTitleComparison = "Porovnat";
 $TemplateTitleComparisonDescription = "Dvou-sloupcová textová stránka";
 $TemplateTitleDiagram = "Vysvětlení diagramu";
@@ -159,7 +162,7 @@ $TemplateTitleFlash = "Flash animace";
 $TemplateTitleFlashDescription = "Animace + úvodní text";
 $TemplateTitleAudio = "Audio komentář";
 $TemplateTitleAudioDescription = "Audio + obrázek + text: cvičení na porozumnění textu";
-$TemplateTitleSchema = "Schéma s audio vysvětlením ";
+$TemplateTitleSchema = "Schéma s audio vysvětlením";
 $TemplateTitleSchemaDescription = "Schéma vysvětlené školitelem";
 $TemplateTitleVideo = "Video stránka";
 $TemplateTitleVideoDescription = "Video na požádání + text";
@@ -173,7 +176,7 @@ $TemplateTitleResources = "Zdroje";
 $TemplateTitleResourcesDescription = "Knihy, odkazy, nástroje";
 $TemplateTitleBibliography = "Bobliografie";
 $TemplateTitleBibliographyDescription = "Knihy, odkazy, nástroje";
-$TemplateTitleFAQ = "Často kladené otázky ";
+$TemplateTitleFAQ = "Často kladené otázky";
 $TemplateTitleFAQDescription = "Seznam otázek a odpovědí";
 $TemplateTitleGlossary = "Slovník";
 $TemplateTitleGlossaryDescription = "Seznam výrazů v sekci";
@@ -211,3 +214,4 @@ $CreateFolder = "Vytvořit adresář";
 $HelpDefaultDirDocuments = "Tento adresář obsahuje výchozí archivy. Můžete smazat soubory nebo přidat nové, ale pokud je soubor skrytý a je vložen ve webovém dokumentu, studenti jej nemohou vidět v tomto dokumentu. Když vkládáte soubor do webového dokumentu, zjistěte si, zda je viditelný. Adresáře mohou zůstat skryté.";
 $HelpSharedFolder = "Tenti adresář obsahuje soubory, které nahráli školitelé do kurzu zkrz editor. Ale zpravidla jsou viditelné jakýmkoli školitelem, ale jsou skryté pro ostatní studenty. Pokud uděláte adresář viditelný, ostatní uživatelé uvidí celý obsah";
 $TemplateImage = "Ikona šablony";
+?>

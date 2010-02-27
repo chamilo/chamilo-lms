@@ -9,8 +9,8 @@ $WCAGLabel = "Etiqueta de la imatge";
 $WCAGLink = "Enllaç";
 $WCAGLinkLabel = "Etiqueta de l'enllaç";
 $errorNoLabel = "No hi ha cap etiqueta sobre la imatge";
-$AllLanguages = "tots els idiomes";
+$AllLanguages = "totes les llengües";
 $WCAGEditor = "Editor WCAG";
-$WCAGGoMenu = "Vés al menú";
-$WCAGGoContent = "Vés al contingut";
+$WCAGGoMenu = "Anar al menú";
+$WCAGGoContent = "Anar al contingut";
 ?>

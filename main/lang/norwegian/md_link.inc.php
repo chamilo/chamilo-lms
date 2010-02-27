@@ -2,7 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
-$langMdCallingTool = "Lenker";
+$langMdCallingTool = "Dokumenter";
 $langMdTitle = "Navn på lenke";
 $langMdDescription = "Beskrivelse for lenke";
 $langMdCoverage = "Generell";

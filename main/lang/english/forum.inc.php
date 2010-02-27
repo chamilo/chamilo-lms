@@ -5,7 +5,7 @@ for more information: see languages.txt in the lang folder.
 $ForumDeleted = "Forum deleted";
 $ForumCategoryDeleted = "Forum category deleted";
 $ForumLocked = "Forum blocked";
-$Forum = "Forum";
+$Forum = "Forums";
 $AddForumCategory = "Add forum category";
 $AddForum = "Add a forum";
 $Topics = "Topics";
@@ -59,7 +59,7 @@ $ForGroup = "For Group";
 $ThreadLocked = "Thread is locked.";
 $NotAllowedHere = "You are not allowed here.";
 $ReplyAdded = "The reply has been added";
-$EditPost = "Edit Post";
+$EditPost = "Edit a task";
 $EditPostStored = "The post has been modified";
 $NewForumPost = "New Post in the forum";
 $YouWantedToStayInformed = "You stated that you wanted to be informed by e-mail whenever somebody replies on the thread";

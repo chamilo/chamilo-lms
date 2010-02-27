@@ -3,9 +3,9 @@
 for more information: see languages.txt in the lang folder.
 */
 $langInvalidId = "Sisäänkirjautuminen epäonnistui. Jos et ole rekisteröitynyt, niin täytä <a href='../auth/inscription.php'>rekisteröitymislomake</a></font color>";
-$langWelcome = "Tervetuloa.";
+$langWelcome = "Tervetuloa!";
 $langPass = "Salasana";
-$langEnter = "Sisään";
+$langEnter = "Sisään.";
 $langReg = "Rekisteröinti";
 $langMenu = "Menu";
 $langAdvises = "Vinkit";
@@ -17,22 +17,22 @@ $langBackToHomePage = "Takaisin etusivulle";
 $lang_No_course_publicly_available = "Ei avoimia kursseja.";
 $langLostPassword = "Salasana hukassa";
 $lang_edit_my_course_list = "Muokkaa omat kurssini luetteloa";
-$langAgenda = "Seuraava kalenterimerkintä";
+$langAgenda = "Kalenteri";
 $langValvas = "Viimeinen ilmoitus";
-$langUp = "edellinen taso";
-$langCatList = "Koulutusalat";
+$langUp = "Ylös";
+$langCatList = "Aihealueet";
 $langCourseList = "Kurssit";
 $langHelptwo = "Apua";
 $EussMenu = "Valikko";
 $Englin = "Englanti";
 $langInvalidForSelfRegistration = "Kirjautuminen epäonnistui - jos et ole vielä rekisteröitynyt, tee se<a href=claroline/auth/inscription.php>rekisteröintilomakkeella</a>";
-$langSubCat = "aihealueet";
+$langSubCat = "alakategoriat";
 $langMenuGeneral = "Yleiset";
 $langMenuUser = "Käyttäjä";
 $langMenuAdmin = "Ympäristön ylläpitäjä";
 $langUsersOnLineList = "Tällä hetkellä kirjautuneina";
 $langTotalOnLine = "Tällä hetkellä käyttäjiä";
-$langRefresh = "päivitä sivu";
+$langRefresh = "Järjestä";
 $langSystemAnnouncements = "Järjestelmän tiedotus";
 $langHelpMaj = "Apua";
 $langNotRegistered = "Rekisteröitymätön";
@@ -54,6 +54,6 @@ $langRequestDenied = "Kutsu hylätty.";
 $NewMessageInForum = "Uusi viesti keskustelualueella";
 $FolderCreated = "Uusi kansio tehty";
 $LinkAdded = "Uusi linkki lisätty";
-$AnnouncementAdded = "Ilmoitus lisätty";
+$AnnouncementAdded = "Ilmoitus on lisätty";
 $AgendaAdded = "Tapahtuma lisätty";
 ?>

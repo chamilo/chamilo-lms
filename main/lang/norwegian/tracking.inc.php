@@ -2,7 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
-$langToolName = "Rapportering";
+$langToolName = "Importer Blackboard kurser";
 $TrackingDisabled = "System administrator har slått av rapportering.";
 $InactivesStudents = "Uaktive brukere";
 $AverageTimeSpentOnThePlatform = "Forbrukt tid i portalen";
@@ -19,7 +19,7 @@ $SeeSessionList = "Se oversikt over sesjoner";
 $langShowNone = "Vis ingen";
 $langCourseStats = "Kursstatistikk";
 $langToolsAccess = "Adgang til verktøyene";
-$langCourseAccess = "Adgang til dette kurset";
+$langCourseAccess = "Kurs tilgang";
 $langLinksAccess = "Lenker";
 $langDocumentsAccess = "Dokumenter";
 $langScormAccess = "Læringssti - SCORM";
@@ -65,7 +65,7 @@ $langCourse = "Kurs";
 $langHits = "Treff";
 $langTotal = "Totalt";
 $langHour = "Time";
-$langDay = "Dag";
+$langDay = "dag";
 $langLittleHour = "t.";
 $langLast31days = "I de siste 31 dager";
 $langLast7days = "I de siste 7 dager";

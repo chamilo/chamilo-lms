@@ -31,6 +31,7 @@ $langLinkURL = "鏈接網址";
 $langWelcomeToOnlineConf = "歡迎來到<B>線上會議</B>";
 $langNoLinkAvailable = "沒有鏈接可用";
 $langChat_reset_by = "重置聊天室";
+$OrFile = "或文件";
 $langCallSent = "聊天請求已經發送，等待對方同意。";
 $langChatDenied = "你的聊天請求已經被對方拒絕。";
 $Send = "已傳送";

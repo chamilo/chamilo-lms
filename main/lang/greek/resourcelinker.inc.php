@@ -3,7 +3,7 @@
 for more information: see languages.txt in the lang folder.
 */
 $ResourceAdded = "Resource added. You can now go back to the path or add more resources.";
-$LearningPath = "Learning Path";
+$LearningPath = "Εκπαιδευτική Διαδρομή";
 $LevelUp = "level up";
 $AddIt = "Add it";
 $MainCategory = "main category";
@@ -22,12 +22,12 @@ $Exercise = "Test";
 $Link = "Link";
 $AdValvas = "Ad Valvas";
 $Document = "Document";
-$IntroductionText = "Åéóáãùãéêü êåßìåíï";
-$CourseDescription = "ðåñéãñáöÞ óôï êáôÜëïãï ìáèçìÜôùí";
-$Groups = "ÏìÜäåò ×ñçóôþí";
-$Users = "×ñÞóôåò";
-$Modify = "Ôñïðïðïßçóç";
-$Detail = "ËåðôïìÝñåéåò";
-$EditSuccess = "Ç äéüñèùóç ôùí óôïé÷åßùí ôçò åñãáóßáò Ýãéíå ìå åðéôõ÷ßá!";
-$AddAnn = "ÐñïóèÞêç Áíáêïßíùóçò";
+$IntroductionText = "Εισαγωγικό κείμενο";
+$CourseDescription = "Περιγραφή Μαθήματος";
+$Groups = "Ομάδες Χρηστών";
+$Users = "Χρήστες";
+$Modify = "Τροποποίηση";
+$Detail = "Λεπτομέρεια";
+$EditSuccess = "Το γεγονός τροποποιήθηκε";
+$AddAnn = "Προσθήκη Ανακοίνωσης";
 ?>

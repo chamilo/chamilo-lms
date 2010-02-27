@@ -15,12 +15,12 @@ $langCombinedCourse = "Cors combinat";
 $ToolIsNowVisible = "L'aisina es actualament visibla";
 $ToolIsNowHidden = "L'aisina es actualament invisibla";
 $EditLink = "Editar lo liame";
-$Blog_management = "Gestion dei blÃ²cs";
+$Blog_management = "Gestion dei blòcs";
 $Course_maintenance = "Manteniment dau cors";
 $TOOL_SURVEY = "Enquistas";
 $GreyIcons = "Instruments";
 $Interaction = "Interaccion";
 $Authoring = "Creacion de contenguts";
-$IntroductionTextUpdated = "Lo tÃšxt d'introduccion es estat actualizat";
-$IntroductionTextDeleted = "Lo tÃšxt d'introduccion es estat eliminat";
+$IntroductionTextUpdated = "Lo tèxt d'introduccion es estat actualizat";
+$IntroductionTextDeleted = "Lo tèxt d'introduccion es estat eliminat";
 ?>

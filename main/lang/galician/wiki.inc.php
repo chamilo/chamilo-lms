@@ -2,7 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
-$Wiki = "Wiki";
+$Wiki = "Wiki do grupo";
 $StartPage = "Páxina principal";
 $EditThisPage = "Editar esta páxina";
 $ShowPageHistory = "Histórico";
@@ -11,7 +11,7 @@ $AllPages = "Tódalas páxinas";
 $AddNew = "Engadir nova páxina";
 $ChangesStored = "Os seus trocos foron gardados";
 $NewWikiSaved = "A nova páxina foi gardada. Pode visualizala facendo click en:";
-$DefaultContent = " <br /> <br /> <p align=\"center\"> <img src=\"%swiki/wcollaborative.png\" alt=\"Mr. Chamilo\" title=\"Mr. Chamilo\" /></p> <p align=\"center\">Para comezar, edite esta pï¿œxina</p>";
+$DefaultContent = " <br/> <br/> <p align=\"center\"> <img src=\"%swiki/wcollaborative.png\" alt=\"Mr. Chamilo\" title=\"Mr. Chamilo\" /></p> <p align=\"center\">Para comezar, edite esta p�xina</p>";
 $CourseWikiPages = "Páxinas Wiki do curso";
 $GroupWikiPages = "Páxinas Wiki do grupo";
 $NoWikiPageTitle = "Os seus trocos foron gardados. Debe darlle un título á paxina";
@@ -55,7 +55,7 @@ $AddOptionProtected = "A opción engadir páxinas foi protexida. Só os profesor
 $AddOptionUnprotected = "A opción engadir páxinas foi activada para todos os membros do curso ou do grupo";
 $NotifyChanges = "Nofificar cambios";
 $NotNotifyChanges = "Non notificar cambios";
-$NotifyByEmail = "Recibir unha notificación por correo electrónico cada vez que se modifique esta páxina";
+$NotifyByEmail = "Gostaría de ser informado por email sempre que alguén responder a esta mensaxe";
 $CancelNotifyByEmail = "Non notificarme por email cando esta páxina sea modificada";
 $MostRecentVersionBy = "A última versión foi realizada por";
 $Rating = "Puntuación";

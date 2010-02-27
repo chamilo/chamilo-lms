@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $ReceivedFiles = "Přijaté soubory";
 $SentFiles = "Odeslané soubory";
 $ReceivedTitle = "Název";
@@ -54,3 +57,4 @@ $ErrorNoFilesInFolder = "Adresář je prázdný";
 $AddComment = "Uložit zpětnou vazbu";
 $SentCatgoryDeleted = "Adresář smazán";
 $ReceivedCatgoryDeleted = "Adresář byl smazán";
+?>

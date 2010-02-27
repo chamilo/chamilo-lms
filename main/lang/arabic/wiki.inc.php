@@ -3,7 +3,7 @@
 for more information: see languages.txt in the lang folder.
 */
 $WikiSearchResults = "نتائج البحث في الموسوعة";
-$Wiki = "الموسوعة";
+$Wiki = "Group wiki";
 $StartPage = "صفحة البداية";
 $EditThisPage = "تعديل الصفحة";
 $RecentChanges = "آخر التعديلات";

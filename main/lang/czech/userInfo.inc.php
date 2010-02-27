@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langLineNumber = "Číslo řádku";
 $langLine = "řádek";
 $langLines = "řádky";
@@ -26,3 +29,4 @@ $langUnreg = "Odhlásit";
 $langGroupUserManagement = "Správa skupin";
 $langUnregister = "Neregistrovaný";
 $langAddAUser = "Přidat uživatele";
+?>

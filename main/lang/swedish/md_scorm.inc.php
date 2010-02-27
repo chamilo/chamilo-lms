@@ -2,14 +2,14 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
-$nameTools = "suspekt språk var";
-$langMdCallingTool = "Learning path - Scorm";
-$langTool = "Scorm MD Operationer";
-$langNotInDB = "ingen Chamilo DB tillträde";
-$langManifestSyntax = "(syntax fel i manifestfilen...)";
+$nameTools = "suspekt språkvariabel";
+$langMdCallingTool = "Dokument";
+$langTool = "Dokument Metadata";
+$langNotInDB = "ingen sådan Linkkategori";
+$langManifestSyntax = "(syntaxfel i manifestfilen...)";
 $langEmptyManifest = "(tom manifestfil...)";
 $langNoManifest = "(ingen manifestfil...)";
-$langNotFolder = "inte möjligt, det är ingen mapp...";
+$langNotFolder = "är inte möjligt, det är ingen mapp...";
 $langUploadHtt = "Ladda upp HTT fil";
 $langHttFileNotFound = "Ny HTT fil kan inte öppnas (kan vara tom, eller för stor)";
 $langHttOk = "Ny HTT fil är uppladdad";
@@ -17,16 +17,16 @@ $langHttNotOk = "HTT filens uppladdning misslyckades";
 $langRemoveHtt = "Ta bort HTT filen";
 $langHttRmvOk = "HTT filen är borttagen";
 $langHttRmvNotOk = "Borttagningen av HTT filen misslyckades";
-$langImport = "Skapa MDEs från manifest";
-$langRemove = "Ta bort MDEs";
-$langAllRemovedFor = "All inmatning borttagen för";
-$langIndex = "Index ord med PhpDig";
-$langTotalMDEs = "Totalt antal Scorm MD inmatningar:";
+$langImport = "Importera";
+$langRemove = "Radera MDEs";
+$langAllRemovedFor = "Alla inmatningar raderade för denna kategori";
+$langIndex = "Index ord";
+$langTotalMDEs = "Sammanlagt antal Länkar MD inmatningar";
 $langMainMD = "Öppna huvud MDE";
 $langLines = "rader";
 $langPlay = "Starta index.php";
 $langNonePossible = "Inga MD operationer är möjliga";
-$langOrElse = "Välj ett Scorm bibliotek eller ett Scorm id";
+$langOrElse = "Välj en länk kategori";
 $langWorkWith = "Arbeta med Scorm bibliotek";
 $langSDI = "...Scorm bibliotek med SD-id (och delat manifest - eller lämna tomt)";
 $langRoot = "rot";

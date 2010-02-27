@@ -5,7 +5,7 @@ for more information: see languages.txt in the lang folder.
 $ForumDeleted = "Forum er slettet";
 $ForumCategoryDeleted = "Forumkategorien er slettet";
 $ForumLocked = "Forum er lukket";
-$Forum = "Forum";
+$Forum = "Diskussionsfora";
 $AddForumCategory = "Tilføj en ny forumkategori";
 $AddForum = "Tilføj et nyt diskussionsforum";
 $Topics = "Emner";
@@ -59,7 +59,7 @@ $ForGroup = "til gruppe";
 $ThreadLocked = "Tråden er låst.";
 $NotAllowedHere = "Du har ikke tilladelse til denne del.";
 $ReplyAdded = "Svaret er tilføjet";
-$EditPost = "Rediger indlæg";
+$EditPost = "Rediger et indlæg";
 $EditPostStored = "Indlægget er ændret";
 $NewForumPost = "Nyt indlæg i forummet";
 $YouWantedToStayInformed = "Du har bedt om at modtage en e-mail, når dit indlæg besvares";

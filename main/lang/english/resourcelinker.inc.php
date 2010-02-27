@@ -2,7 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
-$ResourceAdded = "Resource added. You can now go back to the path or add more resources.";
+$ResourceAdded = "Resource added";
 $LearningPath = "Courses";
 $LevelUp = "level up";
 $AddIt = "Add it";
@@ -24,7 +24,7 @@ $AdValvas = "Announcements";
 $Document = "Document";
 $ShowDelete = "Show / Delete";
 $IntroductionText = "Introduction text";
-$CourseDescription = "Training description";
+$CourseDescription = "Training Description";
 $Groups = "Groups";
 $Users = "Users";
 $IntroductionTextAdd = "Add a page containing the introduction text to this section.";
@@ -40,20 +40,20 @@ $StepDeleted1 = "This";
 $StepDeleted2 = "item was deleted in that tool.";
 $Modify = "Edit";
 $Chapter = "Section";
-$NoAgendaItems = "There are no events in the agenda";
-$AgendaAdd = "Add an event";
-$UserGroupFilter = "User group filter";
-$AgendaSortChronologicallyUp = "Sort chronologically (up)";
+$NoAgendaItems = "There are no events";
+$AgendaAdd = "Add event";
+$UserGroupFilter = "Filter on groups/users";
+$AgendaSortChronologicallyUp = "Ascending";
 $ShowCurrent = "Current month";
 $ModifyCalendarItem = "Edit event";
-$ItemTitle = "Title";
-$Detail = "Details";
-$EditSuccess = "Edit was successful";
-$AddCalendarItem = "Add an event";
+$ItemTitle = "Event name";
+$Detail = "Detail";
+$EditSuccess = "Event edited";
+$AddCalendarItem = "Add event to agenda";
 $AddAnn = "Add announcement";
 $ForumAddNewTopic = "Forum: add new topic";
 $ForumEditTopic = "Forum: edit topic";
 $ExerciseAnswers = "Test : Answers";
 $ForumReply = "Forum: reply";
-$AgendaSortChronologicallyDown = "Sort chronologically (down)";
+$AgendaSortChronologicallyDown = "Descending";
 ?>

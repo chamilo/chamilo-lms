@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langOnlineConference = "Konference";
 $langWash = "Vyčistit";
 $langReset = "Resetovat";
@@ -31,3 +34,4 @@ $langChat_reset_by = "reset chatu";
 $OrFile = "Nebo soubor";
 $langCallSent = "Váše pozvání na Chat hovor bylo posláno, nyní čekám na potvrzení od vašeho partnera.";
 $langChatDenied = "Volaný zamítnul Váš hovor.";
+?>

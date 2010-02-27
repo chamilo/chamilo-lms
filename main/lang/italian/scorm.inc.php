@@ -49,9 +49,9 @@ $UploadLocalFileFromGarbageDir = "Carica un file locale dalla directory principa
 $ThisItemIsNotExportable = "L'elemento non è per ora compatibile con lo standard SCORM, quindi non è esportabile.";
 $MoveCurrentChapter = "Sposta il capitolo";
 $GenericScorm = "SCORM generico";
-$UnknownPackageFormat = "Il formato del file non è stato riconosciuto. Assicurati che sia ben formato (in particolare che il file ZIP non abbia caratteristiche proprietarie o che il file non sia troppo lungo). Se non sei sicuro, comprimi il file ZIP con modalità di base.";
+$UnknownPackageFormat = "Il formato del pacchetto non è riconosciuto. Scegli un pacchetto valido.";
 $Attempt = "Tentativo";
 $MoveTheCurrentForum = "Sposta il Forum corrente";
-$WarningWhenEditingScorm = "Attenzione!<br />Modificando il contenuto di un elemento, puoi modificare le informazioni sugli esiti o danneggiarlo!";
+$WarningWhenEditingScorm = "Attenzione!<br/>Modificando il contenuto di un elemento, puoi modificare le informazioni sugli esiti o danneggiarlo!";
 $AdditionalProfileField = "Aggiungi un campo al profilo utente";
 ?>

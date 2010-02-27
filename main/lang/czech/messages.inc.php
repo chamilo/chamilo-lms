@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $Inbox = "Vstupní schránka (Inbox)";
 $Messages = "Zprávy";
 $SendMessage = "Poslat správu";
@@ -18,3 +21,4 @@ $Date = "Datum";
 $InvalidMessageId = "Neplatné ID správy pro odeslaní.";
 $ErrorSendingMessage = "Při pokusu o zaslání správy nastala chyba.";
 $SureYouWantToDeleteSelectedMessages = "Opravdu chcete smazat vybrané správy?";
+?>

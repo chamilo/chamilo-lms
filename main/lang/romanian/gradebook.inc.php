@@ -2,7 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
-$FlatView = "Vizualizare simpla";
+$FlatView = "Vedere plana";
 $ScoreEdit = "Editare regulilor pentru scoruri";
 $ScoreColor = "Culoarea scorului";
 $ScoringSystem = "Sistemul de scor";
@@ -40,7 +40,7 @@ $ChooseExercise = "Alege exercitiul";
 $AddResult = "Adauga rezultate";
 $BackToOverview = "Inapoi la sumar";
 $ExportPDF = "Exporta in format PDF";
-$Print = "Printeaza";
+$Print = "Tipareste";
 $ChooseOrientation = "Alege orientarea";
 $Portrait = "Portret";
 $Landscape = "Peisaj";
@@ -92,7 +92,7 @@ $Certificates = "Certificate";
 $Certificate = "Certificat";
 $ChooseUser = "Alege utilizatorii pentru aceasta evaluare";
 $FirstLetter = "Prima litera a numelui";
-$UserAdded = "Utilizator adaugat";
+$UserAdded = "Utilizatorul a fost adaugat";
 $ResultEdited = "Rezultat adaugat";
 $ChooseFormat = "Alege formatul";
 $OutputFileType = "Tipul fisierului de iesire";
@@ -103,7 +103,7 @@ $TotalUser = "Total pentru utilizator";
 $AverageTotal = "Total mediu";
 $Evaluation = "Evaluare";
 $EvaluationAverage = "Media la evaluare";
-$EditCategory = "Editeaza categorie";
+$EditCategory = "Editeaza aceasta categorie";
 $EditAllWeights = "Editeaza toate ponderile";
 $GradebookQualificationTotal = "Total";
 $GradebookEvaluationDeleted = "Evaluarea a fost eliminata cu succes";

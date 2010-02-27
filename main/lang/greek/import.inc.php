@@ -2,15 +2,15 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
-$langPgTitle = "Ôßôëïò óåëßäáò";
-$langExplanation = "Ç óåëßäá ðñÝðåé íá åßíáé óå ìïñöÞ HTML (ð.÷. \"my_page.htm\"). Èá äçìéïõñãçèåß óýíäåóìïò óôçí áñ÷éêÞ óåëßäá ðñïò áõôÞí. Áí èÝëåôå íá óôåßëåôå áñ÷åßá ðïõ äåí åßíáé óå ìïñöÞ HTML (ð.÷. PDF, Word, Power Point, Video, ê.ëð.) ÷ñçóéìïðïéÞóôå ôï <a href=../docum";
-$langTooBig = "Äåí äéáëÝîáôå êÜðïéï áñ÷åßï ãéá íá óôåßëåôå,Þ åßíáé ðïëý ìåãÜëï";
-$langCouldNot = "Ôï áñ÷åßï äåí Þôáí äõíáôüí íá óôáëåß";
-$langNotAllowed = "Äåí åðéôñÝðåôáé";
-$langAddPageToSite = "ÐñïóèÞêç ìéáò óåëßäáò óå Ýíá site";
-$langCouldNotSendPage = "Ôï áñ÷åßï äåí åßíáé óå ìïñöÞ HTML êáé äåí Þôáí äõíáôüí íá óôáëåß. Áí èÝëåôå íá óôåßëåôå áñ÷åßá ðïõ äåí åßíáé óå ìïñöÞ HTML (ð.÷. PDF, Word, Power Point, Video, ê.ëð.) ÷ñçóéìïðïéÞóôå ôï <a href=../document/document.php>Documents tool</a>";
-$langSendPage = "Œíïìá áñ÷åßïõ ôçò óåëéäáò";
-$langPageTitleModified = "Ï ôßôëïò ôçò óåëßäáò Üëëáîå";
-$langPageAdded = "Ç óåëßäá ðñïóôÝèçêå";
-$langAddPage = "ÐñïóèÞêç ìéáò óåëßäáò";
+$langPgTitle = "Τίτλος σελίδας";
+$langExplanation = "Οταν πατήσετε το «Εντάξει», θα δημιουργηθεί μια ιστοσελίδα με Περιοχή συζητήσεων, Ατζέντα, κ.λπ.. Μπορείτε να τη τροποποιήσετε σύμφωνα με τις απαιτήσεις σας.";
+$langTooBig = "Δεν διαλέξατε κάποιο αρχείο για να στείλετε,ή είναι πολύ μεγάλο";
+$langCouldNot = "Το αρχείο δεν ήταν δυνατόν να σταλεί";
+$langNotAllowed = "Δεν επιτρέπεται";
+$langAddPageToSite = "Προσθήκη μιας σελίδας σε ένα site";
+$langCouldNotSendPage = "Το αρχείο δεν είναι σε μορφή HTML και δεν ήταν δυνατόν να σταλεί. Αν θέλετε να στείλετε αρχεία που δεν είναι σε μορφή HTML (π.χ. PDF, Word, Power Point, Video, κ.λπ.) χρησιμοποιήστε το <a href=../document/document.php>Documents tool</a>";
+$langSendPage = "Όνομα αρχείου της σελίδας";
+$langPageTitleModified = "Ο τίτλος της σελίδας άλλαξε";
+$langPageAdded = "Η σελίδα προστέθηκε";
+$langAddPage = "Προσθήκη μιας σελίδας";
 ?>

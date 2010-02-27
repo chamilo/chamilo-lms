@@ -31,6 +31,9 @@ $langLinkURL = "链接网址";
 $langWelcomeToOnlineConf = "欢迎来到<B>在线会议</B>";
 $langNoLinkAvailable = "没有链接可用";
 $langChat_reset_by = "重置聊天室";
+$OrFile = "或文件";
 $langCallSent = "聊天请求已经发送，等待对方同意。";
 $langChatDenied = "你的聊天请求已经被对方拒绝。";
+$Send = "发送";
+$Connected = "已连接";
 ?>

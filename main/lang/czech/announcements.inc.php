@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $Announcement = "Oznámení";
 $langAnnEmpty = "Seznam oznámení byl vyčistěn";
 $AnnouncementModified = "Oznámení bylo upraveno";
@@ -53,3 +56,4 @@ $AnnounceSentToUserSelection = "Oznámení zasláno zvoleným uživatelům";
 $SendAnnouncement = "Poslat oznámení";
 $ModifyAnnouncement = "Upravit oznámení";
 $ButtonPublishAnnouncement = "Poslat oznámení";
+?>

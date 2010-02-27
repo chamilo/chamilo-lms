@@ -2,7 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
-$ResourceAdded = "Recurso adicionado. Pode regressar ao caminho/atalho do curso ou adicionar mais recursos.";
+$ResourceAdded = "Recurso adicionado";
 $LearningPath = "Cursos";
 $LevelUp = "nível acima";
 $AddIt = "Adicioná-lo";
@@ -42,18 +42,18 @@ $Modify = "Editar";
 $Chapter = "Secção";
 $NoAgendaItems = "Não existem eventos na agenda";
 $AgendaAdd = "Adicionar um evento";
-$UserGroupFilter = "Utilizar o filtro do grupo";
-$AgendaSortChronologicallyUp = "Ordenar cronologicamente (ascendente)";
-$ShowCurrent = "Mês actual";
+$UserGroupFilter = "Filtrar grupos/utilizadores";
+$AgendaSortChronologicallyUp = "Ascendente";
+$ShowCurrent = "Mês actual/corrente";
 $ModifyCalendarItem = "Editar evento";
-$ItemTitle = "Título";
+$ItemTitle = "Nome do evento";
 $Detail = "Detalhes";
-$EditSuccess = "Edição concluída com sucesso";
-$AddCalendarItem = "Adicionar um evento";
+$EditSuccess = "Evento editado";
+$AddCalendarItem = "Adicionar um evento à agenda";
 $AddAnn = "Adicionar anúncio";
 $ForumAddNewTopic = "Fórum: adicionar novo tópico";
 $ForumEditTopic = "Fórum: editar tópico";
 $ExerciseAnswers = "Exercício: Respostas";
 $ForumReply = "Fórum: responder";
-$AgendaSortChronologicallyDown = "Ordenar cronologicamente (descendente)";
+$AgendaSortChronologicallyDown = "Descendente";
 ?>

@@ -3,16 +3,16 @@
 for more information: see languages.txt in the lang folder.
 */
 $WikiSearchResults = "Resultats de la recerca en el Wiki";
-$Wiki = "Wiki";
+$Wiki = "Wiki del grup";
 $StartPage = "Pàgina d'inici del Wiki";
 $EditThisPage = "Editar aquesta pàgina";
 $ShowPageHistory = "Historial de la pàgina";
 $RecentChanges = "Canvis recents";
 $AllPages = "Totes les pàgines";
 $AddNew = "Afegir una pàgina";
-$ChangesStored = "Els seus canvis han estat guardats";
+$ChangesStored = "Canvis emmagatzemats";
 $NewWikiSaved = "La nova pàgina ha estat guardada";
-$DefaultContent = "<br /> <br />align=\"center\"> <img src=\"%swiki/wcollaborative.png\" alt=\"Mr. Chamilo\" title=\"Mr. *Dokeos\" />align=\"center\">Per a començar editi aquesta pàgina i esborri aquest text";
+$DefaultContent = "<br/> <br/>align=\"center\"> <img src=\"%swiki/wcollaborative.png\" alt=\"Mr. Chamilo\" title=\"Mr. *Dokeos\" />align=\"center\">Per a començar editi aquesta pàgina i esborri aquest text";
 $CourseWikiPages = "Pàgines wiki del curs";
 $GroupWikiPages = "Pàgines wiki del grup";
 $NoWikiPageTitle = "Els canvis no s'han guardat. Ha de donar un títol a aquesta pàgina";
@@ -56,7 +56,7 @@ $AddOptionProtected = "La possibilitat d'afegir pàgines ha estat desactivada. A
 $AddOptionUnprotected = "La possibilitat d'afegir pàgines està habilitada per a tots els membres del Wiki";
 $NotifyChanges = "Notificar-me canvis";
 $NotNotifyChanges = "No notificar-me canvis";
-$NotifyByEmail = "La notificació per correu electrònic de les modificacions de la pàgina està habilitada";
+$NotifyByEmail = "Notificar per correu-e si algú respon a aquest missatge";
 $CancelNotifyByEmail = "La notificació per correu electrònic de les modificacions de la pàgina està deshabilitada";
 $MostRecentVersionBy = "L'última versió d'aquesta pàgina va ser realitzada per";
 $Rating = "Puntuació";
@@ -145,7 +145,7 @@ $Changes = "Canvis";
 $MostActiveUsers = " Usuaris més actius";
 $Contributions = "contribucions";
 $UserContributions = "Contribucions de l'usuari";
-$WarningDeleteMainPage = "No es recomana l'eliminació de la Pàgina principal del Wiki, ja que és el principal accés a la seva estructura jeràrquica.<br /> Si de totes maneres necessita esborrar-la, no oblidi tornar a crear aquesta Pàgina principal doncs fins que no ho faci altres usuaris no podran afegir noves pàgines al Wiki.";
+$WarningDeleteMainPage = "No es recomana l'eliminació de la Pàgina principal del Wiki, ja que és el principal accés a la seva estructura jeràrquica.<br> Si de totes maneres necessita esborrar-la, no oblidi tornar a crear aquesta Pàgina principal doncs fins que no ho faci altres usuaris no podran afegir noves pàgines al Wiki.";
 $ConvertToLastVersion = "Per a convertir aquesta versió en l'última faci clic en";
 $Restore = "Restaurar";
 $CurrentVersion = "Versió actual";
@@ -167,7 +167,7 @@ $DescriptionOfTheTask = "Descripció de la tasca";
 $OtherSettings = "Altres requeriments";
 $NMaxWords = "Nombre màxim de paraules";
 $NMaxVersion = "Nombre màxim de versions";
-$Feedback = "Orientacions";
+$Feedback = "Comentari";
 $AddFeedback = "Afegir missatges d'orientació associats al progrés en la pàgina";
 $Feedback1 = "Primer missatge";
 $Feedback2 = "Segon missatge";

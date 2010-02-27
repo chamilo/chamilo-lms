@@ -5,7 +5,7 @@ for more information: see languages.txt in the lang folder.
 $ForumDeleted = "Keskustelualue poistettu";
 $ForumCategoryDeleted = "Keskustelualue ryhmä poistettu";
 $ForumLocked = "Keskustelualue lukittu";
-$Forum = "Keskustelualue";
+$Forum = "Keskustelut";
 $AddForumCategory = "Lisää keskustelualue ryhmä";
 $AddForum = "Lisää uusi keskustelualue";
 $Topics = "Aiheet";
@@ -57,7 +57,7 @@ $ForGroup = "Ryhmälle";
 $ThreadLocked = "Keskustelu lukittu";
 $NotAllowedHere = "Sinun ei pitäisi olla täällä.";
 $ReplyAdded = "Vastaus lisätty";
-$EditPost = "Muokkaa viestiä";
+$EditPost = "Muokkaa tehtävää";
 $EditPostStored = "Viestiä muokattu";
 $NewForumPost = "Uusi viesti keskustelualueella";
 $YouWantedToStayInformed = "Olet halunnut ilmoituksen sähköpostilla, kun joku vastaa keskusteluun.";

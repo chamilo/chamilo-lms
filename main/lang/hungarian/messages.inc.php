@@ -3,7 +3,7 @@
 for more information: see languages.txt in the lang folder.
 */
 $MessageEmptyMessageOrSubject = "Adja meg az üzenet tárgyát vagy szövegét";
-$Inbox = "Beérkez&#337; üzenetek";
+$Inbox = "Beérkező üzenetek";
 $Messages = "Üzenetek";
 $SendMessage = "Üzenet küldése";
 $NewMessage = "Új üzenet";
@@ -11,8 +11,8 @@ $ComposeMessage = "Üzenet írása";
 $DeleteSelectedMessages = "Kijelölt üzenetek törlése";
 $SelectAll = "Összes kijelölése";
 $DeselectAll = "Összes kijelölés megszüntetése";
-$ReplyToMessage = "Válasz";
-$BackToInbox = "Vissza a bejöv&#337; üzenetekhez";
+$ReplyToMessage = "Válasz erre az üzenetre";
+$BackToInbox = "Vissza a bejövő üzenetekhez";
 $MessageSentTo = "Az üzenet az alábbi címzett számára elküldésre került:";
 $SendMessageTo = "Elküld";
 $Myself = "magamnak";

@@ -2,7 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
-$langInvalidId = "Giriş yapılamadı.Kullanıcı ismi veya şifre hatalı.<br />Eğer kayıtlı değilseniz, <a href=claroline/auth/inscription.php> buradan kayıt olabilirsiniz</a></font color>";
+$langInvalidId = "Giriş yapılamadı.Kullanıcı ismi veya şifre hatalı.<BR>Eğer kayıtlı değilseniz, <a href=claroline/auth/inscription.php> buradan kayıt olabilirsiniz</a></font color>";
 $langWelcome = "Hoş geldiniz!";
 $langPass = "Şifre";
 $langEnter = "Derslerinizin listesi";
@@ -34,7 +34,7 @@ $langSubCat = "alt kategori";
 $langMenuGeneral = "Genel";
 $langMenuUser = "Kullanıcı";
 $langMenuAdmin = "Yönetici platformu";
-$langUsersOnLineList = "Online kullan&#305;c&#305; listesi";
+$langUsersOnLineList = "Online kullanıcı listesi";
 $langTotalOnLine = "Toplam";
 $langRefresh = "Yenile";
 $langMe = "ben";

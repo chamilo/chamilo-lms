@@ -2,7 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
-$langLinkSite = "Enllaz a una web";
+$langLinkSite = "Amestar un enllaz web na páxina d'entamu";
 $langSubTitle = "Amestar enllaz esternu o internu a la páxina d'entamu del cursu. Pa facer esto, vaya a la páxina, copie la URL que pue atopar na barra direiciones del navegador y péguela nel campu \"Enllaz\" asitiáu más embaxo.";
 $langAddPage = "Amestar páxina";
 $langSendPage = "Páxina pa unviar";
@@ -15,7 +15,7 @@ $langNoLinkURL = "Escriba la direición del enllaz";
 $langLinkTarget = "Destín del enllaz";
 $langSameWindow = "Na mesma ventana";
 $langNewWindow = "Nuna ventana nueva";
-$langAdded = "L'enllaz amestóse";
+$langAdded = "Añadíu";
 $langAddLink = "Amestar un enllaz";
 $langNoLinkName = "Escriba'l nome del enllaz";
 $langEditLink = "Editar un enllaz de la páxina d'entamu del cursu";

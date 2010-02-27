@@ -3,11 +3,11 @@
 for more information: see languages.txt in the lang folder.
 */
 $langExercice = "Øvelse";
-$langActivate = "Gør aktiv";
-$langDeactivate = "Gør passiv";
+$langActivate = "Gør aktiv/ synlig for deltagerne";
+$langDeactivate = "Gør passiv/ skjul for deltagerne";
 $langNoEx = "Der er pt. ingen øvelser";
 $langNewEx = "Ny øvelse";
-$langQuestion = "Spørgsmål";
+$langQuestion = "spørgsmål";
 $langQuestions = "Spørgsmål";
 $langAnswers = "Svar";
 $langTrue = "Rigtig";
@@ -130,15 +130,15 @@ $langTake = "tag";
 $langAmong = "iblandt";
 $langImportHotPotatoesQuiz = "Importer HotPotatoes Test";
 $langHotPotatoesTests = "Importer HotPotatoes Test";
-$langDownloadFile = "Upload HotPotatoes (html eller zip) til serveren";
+$langDownloadFile = "Læg filen ud på serveren";
 $langDownloadImg = "Upload billedet til siden";
-$langDownloadEnd = "Upload af html fuldført.";
-$langNoSpace = "Upload lykkedes ikke. Filstørrelsen overskrider kursussidens begrænsning";
-$langZipNoPhp = "Zipfilen må ikke indeholde .PHP filer";
+$langDownloadEnd = "Udlægning er afsluttet";
+$langNoSpace = "Udlægningen mislykkedes. Enten fylder filen for meget, eller du har nået kursussidens loft for, hvor meget materialet på siden i alt må fylde.";
+$langZipNoPhp = "Zip fil må ikke indeholde .PHP filer";
 $langNoImg = "Øvelse uden billeder";
-$langImgNote_st = "<br />Du mangler stadig at uploade";
+$langImgNote_st = "<br>Du mangler stadig at uploade";
 $langImgNote_en = "billede(r):";
-$langDocDeleted = "Dokument slettet";
+$langDocDeleted = "Dokumentet er slettet";
 $langViMod = "Synlighed ændret";
 $langNameNotEqual = "er ikke den rigtige fil!";
 $langIndice = "Indeks";

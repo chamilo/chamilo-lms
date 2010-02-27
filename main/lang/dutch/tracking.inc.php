@@ -2,7 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
-$langToolName = "Statistieken";
+$langToolName = "Importeren van Blackboardcursussen";
 $TrackingDisabled = "Statistieken zijn uitgeschakeld door de platformbeheerder.";
 $InactivesStudents = "Inactive studenten";
 $AverageTimeSpentOnThePlatform = "Gemiddelde tijd doorgebracht op het platform";
@@ -19,10 +19,10 @@ $SeeSessionList = "Bekijk de sessielijst";
 $langShowNone = "Toon niets";
 $langCourseStats = "Cursusstatistieken";
 $langToolsAccess = "Toegang tot modules";
-$langCourseAccess = "Toegang tot deze cursus";
+$langCourseAccess = "Toegang";
 $langLinksAccess = "Links";
 $langDocumentsAccess = "Documenten";
-$langScormAccess = "Leerpad &ndash; cursussen in SCORM-formaat";
+$langScormAccess = "Leerpad – cursussen in SCORM-formaat";
 $langLinksDetails = "Links die door de student bekeken werden";
 $langWorksDetails = "Publicaties die geüpload werden door de studenten";
 $langLoginsDetails = "Klik op de naam v.e. maand voor meer informatie";
@@ -60,12 +60,12 @@ $langWorkAuthors = "Auteurs";
 $langWorkDescription = "Beschrijving";
 $informationsAbout = "Tracken van";
 $langNoEmail = "Geen e-mailadres opgegeven";
-$langNoResult = "Geen resultaat";
-$langCourse = "Cursus";
+$langNoResult = "Er is nog geen resultaat.";
+$langCourse = "De cursus";
 $langHits = "Hits";
 $langTotal = "Totaal";
-$langHour = "Uur";
-$langDay = "Dag";
+$langHour = "uur";
+$langDay = "dag";
 $langLittleHour = "u.";
 $langLast31days = "Laatste 31 dagen";
 $langLast7days = "Laatste 7 dagen";

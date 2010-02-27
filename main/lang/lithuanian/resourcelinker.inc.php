@@ -3,7 +3,7 @@
 for more information: see languages.txt in the lang folder.
 */
 $ResourceAdded = "Resursas įdėtas. Dabar galite eiti atgal arba įdėti daugiau resursų.";
-$LearningPath = "Mokymosi medžiaga";
+$LearningPath = "Teorinė kurso medžiaga";
 $LevelUp = "vienu lygmeniu į viršų";
 $AddIt = "Pridėti";
 $MainCategory = "pagrindinė kategorija";
@@ -41,15 +41,15 @@ $StepDeleted2 = "įrašas ištrintas šiame įrankyje.";
 $Modify = "redaguoti";
 $Chapter = "Skyrius";
 $NoAgendaItems = "Darbotvarkės įrašų nėra";
-$AgendaAdd = "Pridėti Darbotvarkės įrašą";
-$UserGroupFilter = "Vartotojų grupės filtras";
+$AgendaAdd = "Pridėti naują darbotvarkės įrašą";
+$UserGroupFilter = "Filtruoti pagal grupes/įrašus";
 $AgendaSortChronologicallyUp = "Rūšiuoti darbotvarkės įrašus chronologine tvarka (į viršų)";
-$ShowCurrent = "Rodyti esamus darbotvarkės įrašus";
-$ModifyCalendarItem = "Redaguoti darbotvarkės įrašą";
-$ItemTitle = "Antraštė";
+$ShowCurrent = "Rodyti šio mėnesio darbotvarkės įrašus";
+$ModifyCalendarItem = "Redaguoti įrašą";
+$ItemTitle = "Įrašo pavadinimas";
 $Detail = "Detalės";
-$EditSuccess = "Redagavimas sėkmingas";
-$AddCalendarItem = "Įrašyti darbotvarkės įrašą";
+$EditSuccess = "Darbotvarkės įrašas buvo redaguotas";
+$AddCalendarItem = "Pridėti naują darbotvarkės įrašą";
 $AddAnn = "Įrašyti pranešimą";
 $ForumAddNewTopic = "Forumas: įrašyti naują temą";
 $ForumEditTopic = "Forumas: redaguoti temą";

@@ -2,7 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
-$langProfessors = " المدرسين";
+$langProfessors = "المعلمون";
 $langExplanation = "  بمجرد نقرك على الزر, سيتم إنشاء الموقع مع المنتديات وجدول الأعمال  و مدير المستندات الخ.., تسجيل دخولك كمدير الموقع يخولك لتحريره حسب متطلباتك الخاصة";
 $langEmpty = " لقد قمت بترك بعض الحقوق فارغة. <br /> استخدم <b> زر الرجوع </b> في المتصفح وحاول مرة أخرى. <br /> اذا قمت بتجاهل رمز المقرر , انظر الى برنامج المقرر";
 $langCodeTaken = "  رمز المقرر هذا تم استخدامه مسبقا. <br/ > استخدم  <b> زر الرجوع </b> في المتصفح وحاول مرة أخرى";
@@ -22,10 +22,10 @@ $langContradiction = " Use the Principle of Non Contradiction to force one's int
 $langNotFalse = " This answer is not false. It is true that the revelation of the interlocutor's ignorance means showing the contradictory conclusions where lead his premisses.";
 $langAgenda = " الأجندة";
 $langVideo = " الفيديو";
-$langCourseProgram = " برنامج المقرر";
+$langCourseProgram = "  وصف المقرر";
 $langAnnouncements = " الإعلانات";
 $langAddPageHome = " تحميل صفحة ورابط للصفحة الرئيسية";
-$langLinkSite = " إضافة رابط";
+$langLinkSite = "إضافة رابط الصفحة على الصفحة الرئيسية";
 $langModifyInfo = " إعدادت المقرر";
 $langCourseDesc = " وصف المقرر";
 $langAgendaTitle = " يوم الثلاثاء 12 ديسمبر - الإجتماع الأول - القاعة 55";
@@ -34,17 +34,17 @@ $langMicro = " مقابلات باشرة";
 $langGoogle = " محرك بحث قوي وسريع";
 $langIntroductionText = " هذا نص تعريفي , لاستبداله بنصك الخاص , انقر أدناه على أيقونة قلم الرصاص (فقط لمدراء المقرر)";
 $langIntroductionTwo = "  من خلال هذه الصفحة يمكن للمستخدمين والمجموعات  نشر المستندات";
-$langCourseDescription = " اكتب هنا نبذة  وستظهر في قائمة المقررات";
-$langProfessor = " مدرس";
+$langCourseDescription = " وصف المقرر";
+$langProfessor = "المعلم";
 $langAnnouncementEx = "  هذا مثال عن إعلان.  فقط مدرسي المقررات بإمكانهم نشر إعلانات";
 $langJustCreated = " لقد تم إضافة الدرس بنجاح";
 $langEnter = " الرجوع إلى قائمة مقرراتي";
-$langGroups = " المجموعات";
+$langGroups = "المجموعات";
 $langCreateCourseGroups = " المجموعات";
 $langCatagoryMain = " الرئيسية";
 $langCatagoryGroup = " منتديات المجموعات";
 $langLn = " اللغة";
-$langCreateSite = " إضافة مقرر";
+$langCreateSite = "إنشاء مساحة مقرر";
 $langFieldsRequ = " جميع الحقول مطلوبة";
 $langEx = " مثال. <i>إدارة الإبداع</i>";
 $langFac = " التصنيف";
@@ -55,10 +55,10 @@ $langProgram = " برنامج المقرر</a> إذا لم يكن لدى مقر�
 $langScormtool = " مسار التّعلم";
 $langScormbuildertool = " مولد سكورم مسار التّعلم";
 $langPathbuildertool = " مولد مسار التّعلم";
-$langOnlineConference = " إجتماع";
+$langOnlineConference = "إجتماع";
 $langAgendaCreationTitle = " إنشاء مقرر";
 $langAgendaCreationContenu = " لقد تم إنشاء هذا المقرر في هذه اللحظة";
-$langOnlineDescription = " هذا مثال شرح عن أداة الإجتماع المباشر";
+$langOnlineDescription = "نبذة عن الإجتماع";
 $langDropbox = " صندوق المشاركات";
 $langOnly = " فقط";
 $langRandomLanguage = " تحديد عشوائي في اللغات المتوفرة";
@@ -68,23 +68,23 @@ $langFlash = " فلاض";
 $langForumLanguage = " الإنجليزية";
 $langNewCourse = " منطقة مقرر جديدة";
 $langAddNewCourse = " أضف منطقة مقرر جديدة";
-$langRestoreCourse = " استرجاع منطقة مقرر";
+$langRestoreCourse = "استعادة المقرر";
 $langOtherProperties = " تم العثور على خيارات أخرى في الأرشيف";
 $langSysId = " هوية النظام - System ID";
 $langDepartment = " القسم";
-$langDepartmentUrl = " رابط انترنت";
+$langDepartmentUrl = "رابط القسم";
 $langScoreShow = " أظهر النقاط";
 $langVisibility = " خاصية الظهور";
 $langVersionDb = " Database version used at archive time";
-$langLastVisit = " آخر زيارة";
-$langLastEdit = " أخر مساهمة";
+$langLastVisit = "آخر زيارة";
+$langLastEdit = "آخر تحرير";
 $langExpire = " انتهاء الصلاحية";
 $langChoseFile = " حدد ملف";
 $langFtpFileTips = " الملف على خادم FTP";
 $langHttpFileTips = " الملف على الويب خادم (HTTP)";
 $langLocalFileTips = " الملف على الخادم - خادم النظام";
 $langPostFileTips = " الملف على جهازك المحلي";
-$langOtherCategory = " تصنيف أخر";
+$langOtherCategory = " الصنف الآخر";
 $langMinimum = " الحد الأدني";
 $langMaximum = " الحد الأقصى";
 $langRestoreACourse = " استرجاع المقرر";

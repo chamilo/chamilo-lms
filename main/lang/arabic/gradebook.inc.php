@@ -2,7 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
-$FlatView = "عرض بدون تغيير";
+$FlatView = "عرض مسطح";
 $ScoreEdit = "نشرة قواعد الدرجات";
 $ScoreColor = "لون الدرجات";
 $ScoringSystem = "نظام التسجيل";
@@ -19,7 +19,7 @@ $NewCategory = "الفئة الجديدة";
 $NewEvaluation = "التقييم الجديد";
 $Weight = "الوزن";
 $PickACourse = "اختيار المقرر";
-$CategoryName = "اسم الفئة";
+$CategoryName = "اسم الصنف";
 $CourseIndependent = "مقرر مستقل";
 $CourseIndependentEvaluation = "تقييم مقرر مستقل";
 $EvaluationName = "اسم التقييم";
@@ -47,5 +47,5 @@ $Landscape = "شكل Landscape";
 $FilterCategory = "ترشيح فئة";
 $DeleteAll = "حذف الكل";
 $ScoringUpdated = "تم تعديل التسجيل";
-$CertificateWCertifiesStudentXFinishedCourseYWithGradeZ = "%s تشهد بأنnn %s nأنهى بنجاح المقرر nn '%s' nnبدرجة  ofnn '%s'";
+$CertificateWCertifiesStudentXFinishedCourseYWithGradeZ = "%s تشهد بأن\n\n %s \nأنهى بنجاح المقرر \n\n '%s' \n\nبدرجة  of\n\n '%s'";
 ?>

@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $Title = "Nadpis";
 $UsersOnline = "Uživatel online";
 $Remove = "Odstranit";
@@ -14,6 +17,7 @@ $langComment = "Komentář";
 $langVisible = "Viditelné/skryté";
 $langNewDir = "Název nové složky";
 $langDirCr = "Složka vytvořená";
+$Download = "Stáhnout";
 $langGroup = "Skupina";
 $langEdit = "Uprav";
 $Language = "Jazyk";
@@ -97,7 +101,6 @@ $AddedResources = "Přidané zdroje";
 $lang_modify_resource = "Upravit / Přidat zdroj";
 $lang_resource = "Zdroj";
 $lang_resources = "Zdroje";
-$langNameOfLang = "Název jazyka";
 $Close = "zavřít";
 $langPlatform = "Platforma";
 $localLangName = "jazyk";
@@ -118,6 +121,7 @@ $langOnLine = "Online";
 $langUsers = "Uživatelé";
 $langPlatformAdmin = "Administrace platformy";
 $UserInfo = "informace o uživateli";
+$langNameOfLang = "Název jazyka";
 $langCheckAll = "Označ vše";
 $langNbAnnoucement = "Oznámení";
 $lang_no_access_here = "Žádný přístup";
@@ -264,7 +268,6 @@ $RightValueModified = "Hodnota byla upravená.";
 $course_rights = "Přehled rolí & práv";
 $Visio_conference = "Visio konference";
 $CourseAdminRoleDescription = "Administrátor kurzu";
-$Download = "Stáhnout";
 $Move = "Přesunout";
 $MoveTo = "Přesunout do";
 $Delete = "Vymazat";
@@ -321,3 +324,4 @@ $UserOnlineListSession = "Seznam studentů aktualně přihlášených - Výuka";
 $From = "Od";
 $To = "Komu";
 $NoUsersInCourse = "Žádný uživatelé v kurzu";
+?>

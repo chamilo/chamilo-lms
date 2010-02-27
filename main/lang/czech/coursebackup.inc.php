@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langSelectOptionForBackup = "Prosím zvolte možosti zálohování.";
 $langLetMeSelectItems = "Dovolte mi zvolit části kurzu";
 $langCreateFullBackup = "Vytvořit kompletní zálohu tohoto kurzu";
@@ -45,3 +48,4 @@ $DocumentsWillBeAddedToo = "Dokumenty budou také přidány";
 $ToExportLearnpathWithQuizYouHaveToSelectQuiz = "Pokud chcete exportovat kurz, který obsahuje test, pak si musíte být jisti, že odpovídající testy jsou součástí exportu, tak že jej musíte označit v seznamu testů";
 $ArchivesDirectoryNotWriteableContactAdmin = "Archivní katalog používaný tímto nástrojem není možné přepsat. Kontaktujte prosím svého admina platformy.";
 $DestinationCourse = "Cílový kurz";
+?>

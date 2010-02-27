@@ -14,7 +14,7 @@ $PlatformAdminOnly = "Autorizado apenas a administradores da plataforma/sistema"
 $langCombinedCourse = "Curso combinado";
 $ToolIsNowVisible = "A ferramenta encontra-se agora visível.";
 $ToolIsNowHidden = "A ferramenta encontra-se agora invisível.";
-$EditLink = "Editar ligação";
+$EditLink = "Editar ligação/link";
 $Blog_management = "Blogs";
 $Forum = "Fóruns";
 $Course_maintenance = "Backup";
@@ -27,6 +27,6 @@ $IntroductionTextUpdated = "A introdução foi actualizada";
 $IntroductionTextDeleted = "A introdução foi eliminada";
 $SessionIdentifier = "Identificador da sessão";
 $SessionName = "Nome da sessão";
-$SessionCategory = "Categoria da sessão";
+$SessionCategory = "Categorias das sessões";
 $SessionData = "Dados da sessão";
 ?>

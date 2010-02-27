@@ -3,7 +3,7 @@
 for more information: see languages.txt in the lang folder.
 */
 $dropbox_lang["help"] = "Yanapa";
-$dropbox_lang["dropbox"] = "T'aqapay qelqa khipukunata";
+$dropbox_lang["dropbox"] = "T\'aqapay qelqa khipukunata";
 $dropbox_lang["queryError"] = "Base de datos nisqapi tapukuyqa pantarun. Ama hina kachu sistemaq kachiqninta tapukuy.";
 $dropbox_lang["generalError"] = "Pantay rikurirun. Ama hina kachu, sistemaq kachiqninta tapukuy.";
 $dropbox_lang["badFormData"] = "Apachiyqa waqllirun: formulario nisqapi qelqakuna pantasqan. Ama hina kachu sistemaq kachiqninta tapukuy.";
@@ -12,7 +12,7 @@ $dropbox_lang["noFileSpecified"] = "Mana ajllankichu ni hoq khiputapas apachinap
 $dropbox_lang["tooBig"] = "Khipu ajllasqaqa sinchi hatunmi.";
 $dropbox_lang["uploadError"] = "Pantay rikurirun khipu wichachiypi. Ama hina kachu, sistemaq kachiqninta tapukuy.";
 $dropbox_lang["errorCreatingDir"] = "Mana atikunchu wayaqa ruwachiyta. Ama hina kachu, sistemaq kachiqninta tapukuy.";
-$dropbox_lang["installError"] = "Mana atikunchu hayka llaqllakuna churachikuyta chay modulo T'aqapay Khipukunata nisqaman. Ama hina kachu, sistemaq kachiqninta tapukuy.";
+$dropbox_lang["installError"] = "Mana atikunchu hayka llaqllakuna churachikuyta chay modulo T\'aqapay Khipukunata nisqaman. Ama hina kachu, sistemaq kachiqninta tapukuy.";
 $dropbox_lang["uploadFile"] = "Apachiy khiputa";
 $dropbox_lang["authors"] = "Ruwaq";
 $dropbox_lang["description"] = "Nisqasqa";
@@ -39,7 +39,7 @@ $dropbox_lang["author"] = "ruwaq";
 $dropbox_lang["sender"] = "apachiq";
 $dropbox_lang["recipient"] = "chaskiq";
 $dropbox_lang["docAdd"] = "Khipuqa yaparichikunña";
-$dropbox_lang["fileDeleted"] = "Wayaqa ajllasqaqa horqochikunña khipukuna t'aqapasqa k'itimantaqa";
+$dropbox_lang["fileDeleted"] = "Wayaqa ajllasqaqa horqochikunña khipukuna t\'aqapasqa k\'itimantaqa";
 $dropbox_lang["mailingAsUsername"] = "E-chaskipi apachiy";
 $dropbox_lang["mailingInSelect"] = "---E-chaskipi apachiy---";
 $dropbox_lang["mailingSelectNoOther"] = "E-chaski apachiyqa mana chaqrokunmanchu hoq chaskikuqkunawanqa";
@@ -51,8 +51,8 @@ $dropbox_lang["mailingFileIsFor"] = "pipaq";
 $dropbox_lang["mailingFileSentTo"] = "piman apachisqa";
 $dropbox_lang["mailingFileNotRegistered"] = "(mana qelqachikusqa kay yachachinapi)";
 $dropbox_lang["justUploadInList"] = "Piqpa apachimusqa";
-$dropbox_lang["backList"] = "K'itiyman kutiy qelqa khipukunata t'apapanapaq";
-$dropbox_lang["filingRefile"] = "Rak'ipay";
+$dropbox_lang["backList"] = "K\'itiyman kutiy qelqa khipukunata t\'apapanapaq";
+$dropbox_lang["filingRefile"] = "Rak\'ipay";
 $dropbox_lang["filingSelected"] = "ajllasqa";
 $dropbox_lang["filingName"] = "Suti";
 $ReceivedFiles = "Khipukuna chaskisqa";

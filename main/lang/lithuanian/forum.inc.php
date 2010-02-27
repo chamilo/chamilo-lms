@@ -5,7 +5,7 @@ for more information: see languages.txt in the lang folder.
 $ForumDeleted = "Forum deleted";
 $ForumCategoryDeleted = "Forum category deleted";
 $ForumLocked = "Forum blocked";
-$Forum = "Forumas";
+$Forum = "Forumai";
 $AddForumCategory = "Sukurti naują forumo kategoriją";
 $AddForum = "Sukurti naują forumą";
 $Topics = "Tema";
@@ -59,7 +59,7 @@ $ForGroup = "Grupei";
 $ThreadLocked = "Tema užrakinta.";
 $NotAllowedHere = "Priėjimas Jums draudžiamas.";
 $ReplyAdded = "Atsakymas įrašytas";
-$EditPost = "Redaguoti pranešimą";
+$EditPost = "Redaguoti straipsnį";
 $EditPostStored = "Pranešimas redaguotas";
 $NewForumPost = "Naujas pranešimas forume";
 $YouWantedToStayInformed = "Jūs nustatėte, kad gautumėte žinutę el. paštu kai bus atsakyta į Jūsų temą";

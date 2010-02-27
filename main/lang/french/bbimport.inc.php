@@ -2,7 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
-$langViewCourseMaterialImport = "Visualiser le contenu de la formation tel qu'il sera importé";
+$langViewCourseMaterialImport = "Visualiser le contenu du cours tel qu'il sera importé";
 $langViewExternalLinksImport = "Visualiser les liens externes tels qu'ils seront importés";
 $langViewForumImport = "Visualiser le forum tel qu'il sera importé";
 $langImportCourseMaterial = "Importer le contenu du cours (outil \"Contenu de cours - Course Material\" de Blackboard)";

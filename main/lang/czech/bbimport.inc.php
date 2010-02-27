@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langViewCourseMaterialImport = "Zobraz materiál kurzu tak jak bude naimportován";
 $langViewExternalLinksImport = "Zobraz externí odkazy tak jak budou naimportovány";
 $langViewForumImport = "Zobraz fórum tak jak bude importováno";
@@ -18,3 +21,4 @@ $langChooseImportOptions = "Zvolte možnosti Vašeho importu";
 $langCheckWhatIsImported = "Předtím než začne proces importování, můžete se podívat na to co bude importováno";
 $langStartImporting = "Start importování";
 $langImport = "Import";
+?>

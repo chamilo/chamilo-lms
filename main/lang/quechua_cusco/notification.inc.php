@@ -16,7 +16,7 @@ $lang_new_forum_topic = "musuq ima rimaymanta yapasqa";
 $lang_new_groupforum_topic = "musuq rimana yapakun huñusqakunaq k'itirimanaman";
 $lang_new_dropbox_file = "musuq khipu chaskisqa";
 $lang_update_dropbox_file = "hoq khipu khipuykikuna t'aqapasqaykimanta kunanyachikun";
-$ForumCategoryAdded = "yapachikunña k'itirimarinamanta hoq mita";
+$ForumCategoryAdded = "K'itirimanakunamanta hoq musuq mita yapasqaña";
 $LearnpathAdded = "Yachana yapasqa";
 $GlossaryAdded = "Musuq simi yaspasqa Glosario nisqaman";
 ?>

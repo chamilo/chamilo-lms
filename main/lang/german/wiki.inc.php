@@ -2,7 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
-$Wiki = "Wiki";
+$Wiki = "Gruppen-Wiki";
 $StartPage = "Hauptseite";
 $EditThisPage = "Diese Seite bearbeiten";
 $ShowPageHistory = "History";
@@ -11,7 +11,7 @@ $AllPages = "Alle Seiten";
 $AddNew = "Neue Seite hinzufügen";
 $ChangesStored = "Ihre Änderungen wurden gespeichert";
 $NewWikiSaved = "Der neue Wiki Eintrag wurde gespeichert. Sie können ihn ansehen durch Klick auf:";
-$DefaultContent = " <br /> <br /> <p align=\"center\"> <img src=\"%swiki/wcollaborative.png\" alt=\"mr. Dokeos\" title=\"mr. Chamilo\" /></p> <p align=\"center\">Beginnen Sie, indem Sie diese Seite bearbeiten</p>";
+$DefaultContent = " <br/> <br/> <p align=\"center\"> <img src=\"%swiki/wcollaborative.png\" alt=\"mr. Dokeos\" title=\"mr. Chamilo\" /></p> <p align=\"center\">Beginnen Sie, indem Sie diese Seite bearbeiten</p>";
 $CourseWikiPages = "Wiki Seiten für Kurse";
 $GroupWikiPages = "Wiki Seiten für Gruppen";
 $NoWikiPageTitle = "Ihre Änderungen wurden gespeichert. Sie müssen der Seite einen Titel geben";
@@ -55,10 +55,10 @@ $AddOptionProtected = "Hinzufügen Option wurde geschützt. Nur Kurs Lehrer kön
 $AddOptionUnprotected = "Hinzufügen Option wurde für all Kursteilnehmer und Gruppenmitglieder eingeschaltet";
 $NotifyChanges = "Bei Änderungen benachrichtigen";
 $NotNotifyChanges = "Bei Änderungen nicht benachrichtigen";
-$NotifyByEmail = "Benachrichtigen per E-Mail, wenn diese Seite bearbeitet wird";
+$NotifyByEmail = "Mich per E-Mail über Antworten benachrichtigen";
 $CancelNotifyByEmail = "Nicht per E-Mail benachrichten, wenn diese Seite bearbeitet wird";
 $MostRecentVersionBy = "Die neueste Version wurde bearbeitet von";
-$Rating = "Einschätzung";
+$Rating = "Bewerten";
 $RatingMedia = "Durchschnittliche Einschätzung dieser Seite ist";
 $NumComments = "Kemmentare zu dieser Seite";
 $NumCommentsScore = "Anzahl Kommentare zu dieser Seite";

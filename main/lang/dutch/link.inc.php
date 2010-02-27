@@ -3,7 +3,7 @@
 for more information: see languages.txt in the lang folder.
 */
 $LinkMoved = "De link is verplaatst";
-$langLinkName = "Naam link";
+$langLinkName = "Naam";
 $langLinkAdd = "Link toevoegen";
 $langLinkAdded = "Link is toegevoegd.";
 $langLinkMod = "Link wijzigen";
@@ -12,7 +12,7 @@ $langLinkDel = "Link verwijderen";
 $langLinkDeleted = "Link is verwijderd.";
 $langLinkDelconfirm = "Wenst u deze link te verwijderen?";
 $langAllLinksDel = "Alle links in deze categorie verwijderen";
-$langCategoryName = "Naam categorie";
+$langCategoryName = "Categorietitel";
 $langCategoryAdd = "Categorie toevoegen";
 $langCategoryAdded = "Categorie is toegevoegd.";
 $langCategoryModded = "Categorie is gewijzigd.";
@@ -26,7 +26,7 @@ $langNoCategory = "Geen categorie";
 $showall = "Toon alle";
 $shownone = "Toon geen";
 $langListDeleted = "Lijst is verwijderd.";
-$langAddLink = "Nieuwe link";
+$langAddLink = "Link toevoegen";
 $langDelList = "Verwijder lijst";
 $langModifyLink = "Wijzig link";
 $langCsvImport = "CSV-bestand importeren";
@@ -42,5 +42,5 @@ $langLinkUpdated = "Link is geüpdatet.";
 $langAll_Link_Deleted = "Link is verwijderd.";
 $langOnHomepage = "Toon link op cursushoofdpagina";
 $langShowLinkOnHomepage = "Toon deze link als een icoon op de cursushoofdpagina";
-$General = "Algemeen";
+$General = "algemeen";
 ?>

@@ -2,34 +2,34 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
-$langLineNumber = "&#268;íslo riadku";
+$langLineNumber = "Číslo riadku";
 $langLine = "riadok";
-$langLines = "Riadkov";
+$langLines = "riadky";
 $langLineOrLines = "riadky(ov)";
-$langMoveUp = "Posunú&#357; hore";
-$langMoveDown = "Posunú&#357; dole";
-$langAddNewHeading = "Prida&#357; nový nadpis";
-$langCourseAdministratorOnly = "Len pre lektorov";
-$langDefineHeadings = "Definuj nadpisy";
-$langBackToUsersList = "Spa&#357; na zoznam pouívate&#318;ov";
+$langMoveUp = "Presunúť hore";
+$langMoveDown = "Presunúť dole";
+$langAddNewHeading = "Pridať nový nadpis";
+$langCourseAdministratorOnly = "len pre lektorov";
+$langDefineHeadings = "Definovať nadpisy";
+$langBackToUsersList = "Spať na zoznam používateľov";
 $langTracking = "Sledovanie";
 $langCourseManager = "Lektor";
-$langModRight = "zmeni&#357; práva";
-$langNoAdmin = "od teraz <b>nemá</b> iadne práva na tejto stránke";
-$langAllAdmin = "od teraz <b>má</b> vetky práva na tejto stránke";
-$langModRole = "Zmeni&#357; rolu na";
-$langRole = "Rola";
+$langModRight = "zmeniť práva";
+$langNoAdmin = "od teraz <b>nemá</b> žiadne práva na tejto stránke";
+$langAllAdmin = "od teraz <b>má</b> všetky práva na tejto stránke";
+$langModRole = "Zmeniť rolu na";
+$langRole = "Popis";
 $langIsNow = "je odteraz";
 $langInC = "v tomto kurze";
-$langFilled = "Neboli vyplnené vetky polia";
-$langUserNo = "&#268;íslo pouívate&#318;a";
-$langTaken = "je u pouité. Vyberte si iné";
+$langFilled = "Nejaké polia ste nechali prázdne.";
+$langUserNo = "Meno používateľa, ktoré ste vybrali";
+$langTaken = "je už použitý. Vyberte iný.";
 $langTutor = "Tútor";
-$langUnreg = "Odhlási&#357;";
+$langUnreg = "Odhlásiť";
 $langGroupUserManagement = "Správa skupín";
-$langUnregister = "Zrui&#357; registráciu";
-$langAddAUser = "Prida&#357; pouívate&#318;a";
-$UsersUnsubscribed = "Vybraný pouívate&#318; bol odhlásený z kurzu.";
-$ThisStudentIsSubscribeThroughASession = "Tento tudent sa prihlásil do kurzu cez session. Nemôete upravova&#357; jeho informácie.";
-$NoDataAvailable = "Nie sú k dispozícii iadne údaje";
+$langUnregister = "Zrušiť registráciu";
+$langAddAUser = "Pridať používateľa";
+$UsersUnsubscribed = "Vybraní používatelia boli odhlásení z kurzu";
+$ThisStudentIsSubscribeThroughASession = "Tento študent sa prihlásil do kurzu cez session. Nemôžete upravovať jeho informácie.";
+$NoDataAvailable = "Nie sú k dispozícii žiadne údaje";
 ?>

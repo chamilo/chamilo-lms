@@ -2,19 +2,19 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
-$langCourseProgram = "Description";
-$langThisCourseDescriptionIsEmpty = "La description est vide";
-$langEditCourseProgram = "Créer et modifier une description";
-$QuestionPlan = "Aide";
-$langInfo2Say = "Informations à communiquer aux utilisateurs";
-$langOuAutreTitre = "Nom";
+$langCourseProgram = "Description du cours";
+$langThisCourseDescriptionIsEmpty = "La description du cours est vide";
+$langEditCourseProgram = "Cr�er et �diter une description du cours";
+$QuestionPlan = "Question pour le responsable";
+$langInfo2Say = "Informations � communiquer aux utilisateurs";
+$langOuAutreTitre = "Titre";
 $langNewBloc = "Autre";
 $langAddCat = "Ajouter une catégorie";
 $langAdd = "Ajouter";
-$langValid = "Sauvegarder l'intro";
+$langValid = "Enregistrer";
 $langBackAndForget = "Abandonner";
-$CourseDescriptionUpdated = "La description  a été mise à jour";
-$CourseDescriptionDeleted = "La description a été supprimée";
-$CourseDescriptionIntro = "Pour créer une description, cliquez sur une rubrique ci-dessous et remplissez le champ de formulaire.<br /><br />Validez ensuite et sélectionnez une autre rubrique.";
+$CourseDescriptionUpdated = "La description du cour a été mise à jour";
+$CourseDescriptionDeleted = "La description du cours a été supprimée";
+$CourseDescriptionIntro = "Pour créer une description du cours, cliquez sur une rubrique au choix et remplissez le champs du formulaire associé.<br /><br />Cliquez ensuite sur Valider et remplissez une autre rubrique de votre choix.";
 $langSaveDescription = "Enregistrer la description";
 ?>

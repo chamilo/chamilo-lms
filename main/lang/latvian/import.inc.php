@@ -3,14 +3,14 @@
 for more information: see languages.txt in the lang folder.
 */
 $langPgTitle = "Lapas virsraksts";
-$langExplanation = "Lapai ir j&#257;b&#363;t HTML form&#257;t&#257; (t.i., \"manalapa.html\"). Kursa m&#257;jas lap&#257; tiks ievietota hipersaite. Ja J&#363;s v&#275;laties ievietot ne HTML dokumentus (PDF, Word, Power Point, Video, utt.) izmantojiet <a href=../document/do";
-$langTooBig = "J&#363;s neizv&#275;l&#275;j&#257;ties k&#257;du failu augupl&#257;d&#275;t, vai ar&#299; tas ir p&#257;r&#257;k liels.";
-$langCouldNot = "Failu nebija iesp&#275;jams augupl&#257;d&#275;t.";
-$langNotAllowed = "Nav at&#316;auts";
-$langAddPageToSite = "Pievienot v&#275;l vienu lapu";
+$langExplanation = "Tiklīdz nospiedīsiet OK, tiks izveidota kursa mājas lapa ar Forumu, Plānotāju, Dokumentu rīku, u.t.t. Piesakoties sitēmā ar savu lietotājvārdu un paroli, Tu varēsi veidot un labot";
+$langTooBig = "Jūs neizvēlējāties nevienu failu, ko nosūtīt, vai arī tas ir pārāk liela izmēra";
+$langCouldNot = "Failu nebija iespējams aug";
+$langNotAllowed = "Nav atļauts";
+$langAddPageToSite = "Pievienot vēl vienu lapu";
 $langCouldNotSendPage = "is fails nav HTML form&#257;t&#257; un netika augupl&#257;d&#275;ts. Ja J&#363;s v&#275;laties nos&#363;t&#299;t ne-HTML dokumentus (PDF, Word, Power Point, Video, utmldz.), izmantojiet <a href=../document/document.php>Dokumentu</a> sada&#316;u";
-$langSendPage = "Lapu, kas augupj&#257;l&#257;d&#275;";
-$langPageTitleModified = "Lapas virsraksts tika main&#299;ts";
+$langSendPage = "Lapu, kas jāaug";
+$langPageTitleModified = "Lapas virsraksts tika mainīts";
 $langPageAdded = "Lapa pievienota";
 $langAddPage = "Pievienot lapu";
 ?>

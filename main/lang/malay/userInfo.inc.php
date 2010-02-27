@@ -13,5 +13,5 @@ $langCourseAdministratorOnly = "Untuk Pentadbir Subjek (Pensyarah) Sahaja";
 $langDefineHeadings = "Bina Borang Cadangan";
 $langBackToUsersList = "Kembali ke Senarai Ahli";
 $langTracking = "Pengesanan";
-$langCourseManager = "Pentadbir Subjek (Pensyarah)";
+$langCourseManager = "Pentadbir Subjek";
 ?>

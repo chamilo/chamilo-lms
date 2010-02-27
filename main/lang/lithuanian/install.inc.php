@@ -23,8 +23,8 @@ $langAdminPass = "Administrator password (<font color=\"red\">you may want to ch
 $langEducationManager = "Project manager";
 $langCampusName = "Your portal name";
 $langDBSettingIntro = "The install script will create the Chamilo main database(s). Please note that Chamilo will need to create several databases. If you are allowed to use only one database by your Hosting Service, Chamilo will not work, unless you chose the option \"One database\".";
-$langStep1 = "Step 1 of 6";
-$langStep2 = "Step 2 of 6";
+$langStep1 = "Žingsnis 1";
+$langStep2 = "Žingsnis 2";
 $langStep3 = "Step 3 of 6";
 $langStep4 = "Step 4 of 6";
 $langStep5 = "Step 5 of 6";

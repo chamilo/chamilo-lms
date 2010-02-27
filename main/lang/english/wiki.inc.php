@@ -3,16 +3,16 @@
 for more information: see languages.txt in the lang folder.
 */
 $WikiSearchResults = "Wiki Search Results";
-$Wiki = "Wiki";
+$Wiki = "Group wiki";
 $StartPage = "Main page";
 $EditThisPage = "Edit this page";
 $ShowPageHistory = "History";
 $RecentChanges = "Latest changes";
 $AllPages = "All pages";
 $AddNew = "Add new page";
-$ChangesStored = "Your changes have been saved";
+$ChangesStored = "Audio added";
 $NewWikiSaved = "The wiki page has been saved. You can see it clicking on:";
-$DefaultContent = " <br /> <br /> <p align=\"center\"> <img src=\"%swiki/wcollaborative.png\" alt=\"Mr. Chamilo\" title=\"Mr. Chamilo\" /></p> <p align=\"center\">To begin editing this page and remove this text</p>";
+$DefaultContent = " <br/> <br/> <p align=\"center\"> <img src=\"%swiki/wcollaborative.png\" alt=\"Mr. Chamilo\" title=\"Mr. Chamilo\" /></p> <p align=\"center\">To begin editing this page and remove this text</p>";
 $CourseWikiPages = "Wiki pages";
 $GroupWikiPages = "Group wiki pages";
 $NoWikiPageTitle = "Your changes have been saved. You still have to give a name to the page";
@@ -56,7 +56,7 @@ $AddOptionProtected = "The Add option has been protected. Trainers only can add 
 $AddOptionUnprotected = "The add option has been enabled for all course users and group members";
 $NotifyChanges = "Notify me of changes";
 $NotNotifyChanges = "Do not notify me of changes";
-$NotifyByEmail = "Notify me by e-mail when this page is edited";
+$NotifyByEmail = "Notify me by e-mail when somebody replies";
 $CancelNotifyByEmail = "Do not notify me by email when this page is edited";
 $MostRecentVersionBy = "The latest version was edited by";
 $Rating = "Rating";
@@ -167,7 +167,7 @@ $DescriptionOfTheTask = "Description of the assignment";
 $OtherSettings = "Other requirements";
 $NMaxWords = "Maximum number of words";
 $NMaxVersion = "Maximum number of versions";
-$Feedback = "Guidelines";
+$Feedback = "Feedback";
 $AddFeedback = "Add guidance messages associated with the progress in the page";
 $Feedback1 = "First message";
 $Feedback2 = "Second message";

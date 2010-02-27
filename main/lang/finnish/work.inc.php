@@ -4,8 +4,8 @@ for more information: see languages.txt in the lang folder.
 */
 $Tools = "Työkalut";
 $SendWork = "Lisää tiedosto";
-$langTooBig = "Et valinnut tiedostoa tai tiedosto on liian suuri.";
-$langListDeleted = "Koko lista on poistettu.";
+$langTooBig = "Et valinnut mitään tallennettavaksi tai se on liian iso";
+$langListDeleted = "Lista on poistettu";
 $langDocModif = "Tehtävän otsikko on muutettu";
 $langDocAdd = "Tehtävä on lisätty";
 $langDocDel = "Tehtävä on poistettu";
@@ -20,11 +20,11 @@ $lang_default_upload = "Oletusasetukset näkyvyydestä uusille tiedostoille";
 $lang_new_visible = "Uudet dokumentit ovat käyttäjien nähtävillä";
 $lang_new_unvisible = "Uudet dokumentit ovat ainoastaan kurssin opettajan nähtävillä";
 $lang_doc_unvisible = "Lähettämäsi tiedosto on ainoastaan kurssin opettajan nähtävillä ja siksi et näe sitä itse.";
-$langDelLk = "Poista linkki";
+$langDelLk = "Haluatko varmasti poistaa tämän linkin?";
 $langMustBeRegisteredUser = "Ainoastaan kurssin rekisteröityneet käyttäjät voivat julkaista dokumentteja.";
 $langListDel = "Poista lista";
-$langNameDir = "Nimeä hakemisto uudelleen";
-$langFileExists = "Tiedosto on jo olemassa";
+$langNameDir = "Uuden hakemiston nimi";
+$langFileExists = "Toiminto on mahdoton.<br>Samanniminen tiedosto on olemassa.";
 $CreateDirectory = "Luo hakemisto";
 $langCurrentDir = "Nykyinen kansio";
 $UploadADocument = "Tallenna dokumentti";

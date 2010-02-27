@@ -17,7 +17,7 @@ $RootCat = "根分類";
 $NewCategory = "新分類";
 $NewEvaluation = "新評估";
 $PickACourse = "選擇一門課程";
-$CategoryName = "分類名稱";
+$CategoryName = "類別名稱";
 $CourseIndependent = "獨立課程";
 $CourseIndependentEvaluation = "獨立課程評估";
 $Max = "最大";
@@ -40,5 +40,5 @@ $ExportPDF = "輸出 PDF 檔";
 $Print = "列印";
 $DeleteAll = "刪除全部";
 $ScoringUpdated = "已更新積分";
-$CertificateWCertifiesStudentXFinishedCourseYWithGradeZ = "%s 證明nn %s nn成功完成 nn '%s' nn課程，等第為nn '%s'";
+$CertificateWCertifiesStudentXFinishedCourseYWithGradeZ = "%s 證明\n\n %s \n\n成功完成 \n\n '%s' \n\n課程，等第為\n\n '%s'";
 ?>

@@ -16,5 +16,5 @@ $lang_new_forum_topic = "nauja tema įrašyta";
 $lang_new_groupforum_topic = "grupės forume įrašyta nauja tema";
 $lang_new_dropbox_file = "gautas naujas failas";
 $lang_update_dropbox_file = "Jūsų failų saugykloje esantis failas atnaujintas";
-$ForumCategoryAdded = "Forum category added";
+$ForumCategoryAdded = "Forumo kategorija įrašyta";
 ?>

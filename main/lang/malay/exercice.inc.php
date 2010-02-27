@@ -3,8 +3,8 @@
 for more information: see languages.txt in the lang folder.
 */
 $langExercice = "Latihan";
-$langActivate = "Papar";
-$langDeactivate = "Tidak Papar";
+$langActivate = "Aktifkan";
+$langDeactivate = "Tidak aktif";
 $langNoEx = "Tiada Latihan buat masa ini";
 $langNewEx = "Latihan baru";
 $langQuestion = "Soalan";

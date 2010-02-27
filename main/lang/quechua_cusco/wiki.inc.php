@@ -3,16 +3,16 @@
 for more information: see languages.txt in the lang folder.
 */
 $WikiSearchResults = "Resultados de la búsqueda en el Wiki";
-$Wiki = "Wiki";
+$Wiki = "Huñusmanta wikin";
 $StartPage = "Wikiq raphi qallariynin";
 $EditThisPage = "Ruwapay kay raphita";
 $ShowPageHistory = "Raphiq ñaupa purisqan";
 $RecentChanges = "Chayraq t'ijrapasqakuna";
 $AllPages = "Llipin raphikuna";
 $AddNew = "Yapay hoq raphita";
-$ChangesStored = "Hoqkuna yapasqaykiqa allchasqaña";
+$ChangesStored = "T'ijrapaykuna waqaychasqa";
 $NewWikiSaved = "Musuq Wiki haykuchisqaqa allchasqañan. Kunanqa qhawariwaq kaypi q'apispa:";
-$DefaultContent = " <br /> <br /> <p align=\"center\"> <img src=\"%swiki/wcollaborative.png\" alt=\"Mr. Chamilo\" title=\"Wiraqocha Chamilo\" /></p> <p align=\"center\">Qallarinapaqqa ruwapay kay raphita hinallataq pichay kay qelqata</p>";
+$DefaultContent = " <br/> <br/> <p align=\"center\"> <img src=\"%swiki/wcollaborative.png\" alt=\"Mr. Chamilo\" title=\"Wiraqocha Chamilo\" /></p> <p align=\"center\">Qallarinapaqqa ruwapay kay raphita hinallataq pichay kay qelqata</p>";
 $CourseWikiPages = "Yachachinaq Wiki raphinkuna";
 $GroupWikiPages = "Huñusqaq Wiki raphinkuna";
 $NoWikiPageTitle = "T'ijrapaykunaqa manan allchakunkuchu. Sutinchay kay raphita";
@@ -56,7 +56,7 @@ $AddOptionProtected = "Raphi yapayqa wañuchikun. Kunanqa yachachinamanta yachac
 $AddOptionUnprotected = "Raphi yapayqa hap'ichisqan kashan llipin Wikiq masimasinkunapaq";
 $NotifyChanges = "Willay t'ijrapasqamanta";
 $NotNotifyChanges = "Ama willaychu t'ijrapasqamanta";
-$NotifyByEmail = "E-chaskipi willakuy raphiq t'ijrapachikusqanmantaqa hap'ichisqan kashan";
+$NotifyByEmail = "Willaway e-chakipi pipas kutichiqtin";
 $CancelNotifyByEmail = "E-chaskipi willakuy raphiq t'ijrapachikusqanmantaqa wañuchisqan kashan";
 $MostRecentVersionBy = "Raphiq qepa versionninqa kaymi ruwarun";
 $Rating = "Marka";
@@ -145,7 +145,7 @@ $Changes = "t'ijraykuna";
 $MostActiveUsers = "Aswan llank'aq haykuqmasikuna";
 $Contributions = "aypachisqakuna";
 $UserContributions = "Haykuqmasiq aypachisqakunan";
-$WarningDeleteMainPage = "Aman pichawaqchu Wkiq Raphi Qallariyninta, chayñintin ima ukhunmanpas kaykunan.<br /> Munashankipuni pichayta chayqa ama qonqankichu hoqmanta kay Raphi Qallariy kamariyta, mana kamarinki chayqa hokaq haykuqmasikunaqa mana atinqakuchu Wikiman yapayta musuq r";
+$WarningDeleteMainPage = "Aman pichawaqchu Wkiq Raphi Qallariyninta, chayñintin ima ukhunmanpas kaykunan.<br> Munashankipuni pichayta chayqa ama qonqankichu hoqmanta kay Raphi Qallariy kamariyta, mana kamarinki chayqa hokaq haykuqmasikunaqa mana atinqakuchu Wikiman yapayta musuq raphikunataqa.";
 $ConvertToLastVersion = "Kay versión nisqata qepa kaq nisqaman churanapaqqa kaypi q'apiy";
 $Restore = "Allinchay";
 $CurrentVersion = "Kunan kaq versión";

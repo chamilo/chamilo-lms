@@ -2,11 +2,11 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
-$Wiki = "Wiki";
+$Wiki = "Wiki - Grupa";
 $StartPage = "Strona startowa";
-$ShowPageHistory = "Poka&#380; histori&#281; strony";
+$ShowPageHistory = "Pokaż historię strony";
 $AllPages = "Wszystkie strony";
-$AddNew = "Dodaj now&#261; stron&#281;";
+$AddNew = "Dodaj nową stronę";
 $Legend = "Legenda";
 $Print = "Drukuj";
 $Visits = "wizyty";

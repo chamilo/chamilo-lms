@@ -3,7 +3,7 @@
 for more information: see languages.txt in the lang folder.
 */
 $ResourceAdded = "Resource added. You can now go back to the path or add more resources.";
-$LearningPath = "Learning Path";
+$LearningPath = "Inlärningsvägar";
 $LevelUp = "level up";
 $AddIt = "Add it";
 $MainCategory = "main category";
@@ -41,15 +41,15 @@ $StepDeleted2 = "objekt blev raderat i det verktyget.";
 $Modify = "Modifiera / Ändra";
 $Chapter = "Kapitel";
 $NoAgendaItems = "Det finns inga Agenda objekt";
-$AgendaAdd = "Lägg till ett Agenda objekt";
-$UserGroupFilter = "Använd gruppfilter";
+$AgendaAdd = "Lägg till kalenderpost";
+$UserGroupFilter = "Filter på grupper/användare";
 $AgendaSortChronologicallyUp = "Sortera Agenda kronologiskt (upp)";
-$ShowCurrent = "Visa aktuella Agenda objekt";
-$ModifyCalendarItem = "Ändra Agenda objekt";
-$ItemTitle = "Titel";
-$Detail = "Detaljer";
-$EditSuccess = "Ändringen lyckades";
-$AddCalendarItem = "Lägg till Agenda objekt";
+$ShowCurrent = "Visa kalenderposter i aktuell månad";
+$ModifyCalendarItem = "Ändra en kalenderpost";
+$ItemTitle = "Objekttitel";
+$Detail = "Detalj";
+$EditSuccess = "Kalenderposten har blivit ändrad";
+$AddCalendarItem = "Lägg till kalenderpost";
 $AddAnn = "Lägg till tillkännagivande";
 $ForumAddNewTopic = "Forum: lägg till nytt ämne";
 $ForumEditTopic = "Forum: ändra ämne";

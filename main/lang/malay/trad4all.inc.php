@@ -3,7 +3,7 @@
 for more information: see languages.txt in the lang folder.
 */
 $Remove = "Padam";
-$langEnter = "Masuk";
+$langEnter = "Kembali ke senarai subjek";
 $Description = "Penerangan";
 $Links = "Pautan";
 $langWorks = "Tugasan";
@@ -44,7 +44,7 @@ $langYes = "Ya";
 $langNo = "Tidak";
 $Next = "Seterusnya";
 $langAllowed = "Dibenarkan";
-$langBackHome = "Kembali ke Homepej";
+$langBackHome = "Kembali ke Laman Subjek";
 $langPropositions = "Cadangan untuk meningkatkan";
 $langMaj = "Kemaskini";
 $langModify = "Ubahsuai";
@@ -56,13 +56,13 @@ $langAdd = "Tambah";
 $langAddIntro = "Tambah pengenalan";
 $langBackList = "Kembali ke senarai";
 $langText = "Teks";
-$langEmpty = "Kosong";
+$langEmpty = "Ruang kosong belum diisi sepenuhnya.<br>Use the <b>Back</b> button on your browser and try again.<br>If you ignore your course's code, see the Course Program";
 $langConfirmYourChoice = "Anda pasti untuk memadam pilihan anda ?";
 $langAnd = "dan";
 $langChoice = "Pilihan anda";
 $langFinish = "Selesai";
 $langCancel = "Batal";
-$langNotAllowed = "Anda tidak dibenarkan berada disini";
+$langNotAllowed = "Tidak dibenarkan";
 $langManager = "Pentadbir Sistem";
 $langOptional = "Pilihan";
 $NextPage = "Laman seterusnya";

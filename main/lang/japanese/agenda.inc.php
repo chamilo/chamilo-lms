@@ -17,6 +17,6 @@ $AddSuccess = "Agenda item added";
 $AgendaDeleteSuccess = "The agenda item has been deleted";
 $NoAgendaItems = "There are no Agenda Items";
 $lang_september = "September";
-$langClassName = "&#12463;&#12521;&#12473;&#21517;";
+$langClassName = "クラス名";
 $ShowAll = "Show All Agenda Items";
 ?>

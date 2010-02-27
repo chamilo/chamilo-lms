@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $lang_new_item = "přidaná nová položka";
 $lang_title_notification = "Od Vaší poslední návštěvy";
 $lang_update_agenda = "aktualizovaná položka agendy";
@@ -13,3 +16,4 @@ $lang_new_forum_topic = "přidána nová téma";
 $lang_new_groupforum_topic = "přidaná nová téma do skupinového fóra";
 $lang_new_dropbox_file = "byl přijat nový soubor";
 $lang_update_dropbox_file = "soubor ve Vaší schránce byl aktualizován";
+?>

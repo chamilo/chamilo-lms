@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $MyTasks = "Moje úkoly";
 $FavoriteBlogs = "Moje oblíbené blog-y";
 $Navigation = "Navigace";
@@ -44,3 +47,4 @@ $langUserHasPermissionNot = "Uživatel nemá práva";
 $langUserHasPermission = "Uživatel má práva";
 $langLegend = "Legenda";
 $langUserHasPermissionByRoleGroup = "Uživatel má práva v jeho skupině";
+?>

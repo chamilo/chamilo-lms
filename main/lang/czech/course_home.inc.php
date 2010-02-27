@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langActivate = "Ukázat";
 $langDeactivate = "Skrýt";
 $langInLnk = "Skryté nástroje a odkazy";
@@ -22,3 +25,4 @@ $Authoring = "Autoři";
 $Administration = "Administrace";
 $IntroductionTextUpdated = "Úvodní text aktualizován";
 $IntroductionTextDeleted = "Úvodní text smazán";
+?>

@@ -23,8 +23,8 @@ $langAdminPass = "Contraseña del administrador (<font color=\"red\">puede que d
 $langEducationManager = "Responsable educativo";
 $langCampusName = "Nombre de su plataforma";
 $langDBSettingIntro = "El script de instalación creará las principales bases de datos de Chamilo. Por favor, recuerde que  Chamilo necesitará crear varias bases de datos. Si sólo puede tener una base de datos en su proveedor,  Chamilo no funcionará.";
-$langStep1 = "Paso 1 de 6";
-$langStep2 = "Paso 2 de 6";
+$langStep1 = "1 Puriy";
+$langStep2 = "2 Puriy";
 $langStep3 = "Paso 3 de 6";
 $langStep4 = "Paso 4 de 6";
 $langStep5 = "Paso 5 de 6";
@@ -55,7 +55,7 @@ $PleasGoBackToStep1 = "Por favor, vuelva al paso 1";
 $langInstallationLanguage = "Idioma de instalación";
 $ReadThoroughly = "Lea con atención";
 $DokeosNeedFollowingOnServer = "Para que Chamilo funcione, su servidor necesita lo siguiente";
-$WarningExistingDokeosInstallationDetected = "¡ Atención !<br />El instalador ha detectado una instalación anterior de Chamilo en su sistema.";
+$WarningExistingDokeosInstallationDetected = "¡ Atención !<br>El instalador ha detectado una instalación anterior de Chamilo en su sistema.";
 $NewInstallation = "Nueva instalación";
 $CheckDatabaseConnection = "Comprobar la conexión con la base de datos";
 $PrintOverview = "Sumario de la instalación";
@@ -73,7 +73,7 @@ $RecommendedSettingsInfo = "Parámetros recomendados para la configuración de s
 $Setting = "Parámetro";
 $Actual = "Actual";
 $DirectoryAndFilePermissions = "Permisos de directorios y ficheros";
-$DirectoryAndFilePermissionsInfo = "Algunos directorios y los ficheros que contienen deben tener habilitados los permisos de escritura en el servidor web para que Chamilo pueda funcionar (envío de ficheros por parte de los estudiantes, ficheros html de la página principal,...). Esto puede s";
+$DirectoryAndFilePermissionsInfo = "Algunos directorios y los ficheros que contienen deben tener habilitados los permisos de escritura en el servidor web para que Chamilo pueda funcionar (envío de ficheros por parte de los estudiantes, ficheros html de la página principal,...). Esto puede suponer un cambio manual en su servidor (debe realizarse fuera de este interfaz).";
 $NotWritable = "Escritura no permitida";
 $Writable = "Escritura permitida";
 $ExtensionLDAPNotAvailable = "Extensión LDAP no disponible";
@@ -113,5 +113,5 @@ $ExtensionMySQLNotAvailable = "Extensión MySQL no disponible";
 $DokeosArtLicense = "Las imágenes y las galerías de medios de Chamilo utilizan imágenes e iconos de Nuvola, Crystal Clear y Tango. Otras imágenes y medios, como diagramas y animaciones flash, se han tomado prestadas de Wikimedia y de los cursos de Ali Pakdel y de Denis Hoa con su consentimiento y publicadas bajo licencia BY-SA Creative Commons. Puede encontrar los detalles de la licencia en <a href=\"http://creativecommons.org/licenses/by-sa/3.0/\">la web de CC</a>, donde un enlace al pie de la página le dará acceso al texto completo de la licencia.";
 $OptionalParameters = "Parámetros opcionales";
 $FailedConectionDatabase = "La conexión con la base de datos ha fallado. Puede que el nombre de usuario, la contraseña o el prefijo de la base de datos sean incorrectos. Por favor, revise estos datos y vuelva a intentarlo.";
-$EncryptMethodUserPass = "Método de encriptación";
+$EncryptMethodUserPass = "Método de encriptación nisqa";
 ?>

@@ -2,7 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
-$langToolName = "Seguiment";
+$langToolName = "Importar cursos de la pissarra";
 $TrackingDisabled = "Seguir ha estat impossibilitat per administrador de sistema";
 $InactivesStudents = "Alumnes inactius";
 $AverageTimeSpentOnThePlatform = "Temps mitjà de connexió a la plataforma";
@@ -19,7 +19,7 @@ $SeeSessionList = "Veure la llista de sessions";
 $langShowNone = "No mostrar";
 $langCourseStats = "Estadístiques del curs";
 $langToolsAccess = "Accés a les eines";
-$langCourseAccess = "Accés a aquest curs";
+$langCourseAccess = "Accés al curs";
 $langLinksAccess = "Enllaços";
 $langDocumentsAccess = "Documents";
 $langScormAccess = "Itinerari formatiu-Cursos amb format SCORM";
@@ -60,8 +60,8 @@ $langWorkAuthors = "Autors";
 $langWorkDescription = "Descripció";
 $informationsAbout = "Seguiment de";
 $langNoEmail = "Adreça de correu no especificada";
-$langNoResult = "No resultat";
-$langCourse = "Curs";
+$langNoResult = "Encara no hi ha resultats";
+$langCourse = "El curs";
 $langHits = "Accesos";
 $langTotal = "Total";
 $langHour = "Hora";
@@ -158,7 +158,7 @@ $Tracks = "Seguiment";
 $Success = "Qualificació";
 $ExcelFormat = "Format Excel";
 $MyLearnpath = "El meu itinerari d'aprenentatge";
-$Time = "Temps";
+$Time = "Hora";
 $Score = "Puntuació";
 $LastConnexion = "Última connexió";
 $ConnectionTime = "Temps de connexió";
@@ -178,7 +178,7 @@ $NoProduction = "Sense productes";
 $NoComment = "Sense comentaris";
 $LatestLogin = "Última connexió";
 $TimeSpentOnThePlatform = "Temps de permanència en la plataforma";
-$Messages = "Missatges de foro";
+$Messages = "Missatges instantanis";
 $AveragePostsInForum = "Nombre de missatges en el foro";
 $AverageAssignments = "Nombre de tasques";
 $Print = "Imprimir";

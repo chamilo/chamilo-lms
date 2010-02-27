@@ -2,7 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
-$langLinkSite = "رابط إلى موقع إنترنت";
+$langLinkSite = "إضافة رابط الصفحة على الصفحة الرئيسية";
 $langSubTitle = "اضف رابط الصفحة للصفحة الرئيسية من مقررك . لعمل هذا، اذهب إلى تلك الصفحةِ، انسخ الرابط في خانة العنوانَ على قمةِ متصفّحِكَ، الصقه إلى حقلِ \"الوصلةَ\" تحت.";
 $langAddPage = "أضف صفحة";
 $langSendPage = "لتحميل الصفحة";
@@ -15,7 +15,7 @@ $langNoLinkURL = "الرجاء إدخال اسم الرابط";
 $langLinkTarget = "الرابط المستهدف";
 $langSameWindow = "في نفس النافذة";
 $langNewWindow = "في نافذة جديدة";
-$langAdded = "تم إضافة الرابط";
+$langAdded = " أضيف";
 $langAddLink = "إضافة الرابط";
 $langNoLinkName = "الرجاء إدخال اسم الرباط";
 $langEditLink = "حرر رابط صفحة المقرر";

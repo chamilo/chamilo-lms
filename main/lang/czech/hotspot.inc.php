@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $select = "Ověřit";
 $square = "Čtverec";
 $circle = "Elipsa";
@@ -15,6 +18,7 @@ $showHotspots = "Ukaž/Schovej hotspoty";
 $labelPolyMenu = "Zavřít polygon";
 $triesleft = "Vynechané pokusy";
 $exeFinished = "Nyní klikněte na tlačítko dole a ověřte své odpovědi";
-$nextAnswer = "Nyní klikněte na: &done=done ";
+$nextAnswer = "Nyní klikněte na: &done=done";
 $delineation = "Náčrt";
 $labelDelineationMenu = "Zvřít náčrt";
+?>

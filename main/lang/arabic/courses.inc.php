@@ -25,7 +25,7 @@ $lang_back_to_parent_category = " الرجوع إلى التصنيف الرئي�
 $lang_back_to_course_selection = " الرجوع لتحديد المقررات";
 $lang_up = " الرجوع إلى التصنيف الرئيسي";
 $langCatList = " التصانيف";
-$langCourseList = " المقررات";
+$langCourseList = " قائمة المقررات";
 $Subscribe = " تسجيل";
 $AlreadySubscribed = " مسجل بالفعل";
 $CourseCategoryStored = " لقد تم إضافة التصنيف بنجاح";
@@ -39,7 +39,7 @@ $langHideAndSubscribeOpen = " مخفي / مفتوح";
 $langShowAndSubscribeOpen = " ظاهر / مفتوح";
 $langShowAndSubscribeClosed = " ظاهر / مغلق";
 $langAdminThisUser = " Back to user";
-$langManage = " إدارة النظام";
+$langManage = " Portal ادارة الـ";
 $langEnrollToCourseSuccessful = " لقد تم تسجيلك في المقرر";
 $langSubCat = " التصانيف الفرعية";
 $langUnsubscribeNotAllowed = " إلغاء التسجيل غير متاح في هذا المقرر";

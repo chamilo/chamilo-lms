@@ -32,7 +32,7 @@ $langCsvImport = "Importación CSV";
 $langCsvFileNotFound = "El archivo CSV importado no pudo abrirse (p.ej. vacìo, demasiado grande, etc)";
 $langCsvFileNoSeps = "El archivo de importación CSV debe usar , o ; como separador de lista";
 $langCsvFileNoURL = "El archivo CSV debe al menos tener las columnas URL y título";
-$langCsvFileLine1 = " 	... - línea 1 =";
+$langCsvFileLine1 = " \t... - línea 1 =";
 $langCsvLinesFailed = "falla al importar el enlace (no hay URL o título)";
 $langCsvLinesOld = "los enlaces existentes se han actualizado";
 $langCsvLinesNew = "nuevo(s) enlace(s) creados";

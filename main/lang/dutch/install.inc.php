@@ -23,8 +23,8 @@ $langAdminPass = "Wachtwoord administrator (<font color=\"red\">aangewezen te wi
 $langEducationManager = "Projectleider";
 $langCampusName = "Campustitel";
 $langDBSettingIntro = "Het installatiescript zal de Chamilodatabank(en) aanmaken. Merk op dat Chamilo standaard meerdere databanken aanmaakt. Als u enkel gebruik kan maken van één databank bij uw hosting provider, dan zal Chamilo niet kunnen werken met meerdere databanken en moet u de optie \"Eén databank\" aanduiden.";
-$langStep1 = "Stap 1 van 6";
-$langStep2 = "Stap 2 van 6";
+$langStep1 = "Welkom bij de assistent voor de aanmaak van meerkeuzevragen.            U wordt verder geleid.\t\t\t\t\t\tDruk op volgende om door te gaan.";
+$langStep2 = "Titel van de oefening en beschrijving toevoegen/wijzigen. Druk op volgende wanneer u klaar bent.";
 $langStep3 = "Stap 3 van 6";
 $langStep4 = "Stap 4 van 6";
 $langStep5 = "Stap 5 van 6";
@@ -73,7 +73,7 @@ $RecommendedSettingsInfo = "Aanbevolen instellingen voor uw server configuratie.
 $Setting = "Instelling";
 $Actual = "Momenteel";
 $DirectoryAndFilePermissions = "Permissies van mappen en bestanden";
-$DirectoryAndFilePermissionsInfo = "Sommige mappen en de bestanden erin moeten overschrijfbaar zijn door de web server opdat Chamilo zou kunnen werken (door studenten geüploade bestanden, HTML-bestanden voor de startpagina,...). Dit vraagt mogelijk een manuele wijziging op uw server (buiten";
+$DirectoryAndFilePermissionsInfo = "Sommige mappen en de bestanden erin moeten overschrijfbaar zijn door de web server opdat Chamilo zou kunnen werken (door studenten geüploade bestanden, HTML-bestanden voor de startpagina,...). Dit vraagt mogelijk een manuele wijziging op uw server (buiten deze interface).";
 $NotWritable = "Niet schrijfbaar";
 $Writable = "Schrijfbaar";
 $ExtensionLDAPNotAvailable = "LDAP extensie niet beschikbaar";
@@ -113,7 +113,7 @@ $ExtensionMySQLNotAvailable = "De MySQL extensie is niet beschikbaar";
 $DokeosArtLicense = "De afbeelding en media gallerijen in Chamilo gebruiken afbeelding die afkomstig zijn van Nuvalo, Crystal Clear en Tango. Andere afbeeldingen en media zoals de diagrammen en Flash animaties zijn afkomstig van Wikimedia en van de cursus van Ali Pakdel en Denis Hoa die hiermee instemden en hun materiaal beschikbaar stellen onder de BY-SA Creative Commons licentie. U kunt meer informatie vinden over deze licentie op <a href=\"http://creativecommons.org/licenses/by-sa/3.0/deed.nl\">le de site van Creative Commons</a> waar u de integrale tekst van deze licentie kunt nalezen via een link onderaan de pagina.";
 $OptionalParameters = "Optionele parameters";
 $FailedConectionDatabase = "De verbinding met de databank is mislukt. Meestal is dit te wijten aan een foute gebruik, een fout wahctwoord of een foutief databasevoorvoegsel. Verifieer deze instelling en probeer het dan opnieuw.";
-$EncryptMethodUserPass = "Encryptiemethode";
+$EncryptMethodUserPass = "Encryptie methode";
 $UpgradeFromDokeos16x = "Upgrade vanaf Chamilo 1.6.x";
 $UpgradeFromDokeos18x = "Upgrade vanaf Chamilo 1.8.x";
 ?>

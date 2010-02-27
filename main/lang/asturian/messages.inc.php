@@ -4,14 +4,14 @@ for more information: see languages.txt in the lang folder.
 */
 $MessageEmptyMessageOrSubject = "Por favor, escribe'l títulu y el testu del to mensax";
 $Inbox = "Buzón d'entrada";
-$Messages = "Mensaxes instantáneos";
+$Messages = "Mensaxes";
 $SendMessage = "Unviar mensax";
 $NewMessage = "Mensaxe instantaneu nuevu";
 $ComposeMessage = "Mensaxe instantaneu";
 $DeleteSelectedMessages = "Esborrar los mensaxes seleicionaos";
 $SelectAll = "Seleicionar too";
 $DeselectAll = "Anular seleición";
-$ReplyToMessage = "Retrucar";
+$ReplyToMessage = "Retrucar a esti mensaxe";
 $BackToInbox = "Volver al Buzón d'entrada";
 $MessageSentTo = "El mensaxe unvióse a";
 $SendMessageTo = "Unviar a";

@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $ModifInfo = "Nastavení kurzu";
 $langModifDone = "Informace byla upravená";
 $langDelCourse = "Vymazat celou oblast kurzu";
@@ -50,8 +53,8 @@ $langSizeOf = "Velikost";
 $langArchiveName = "Jméno archivu";
 $langBackupSuccesfull = "Zálohování úspěšné";
 $langBUCourseDataOfMainBase = "Zálohování dat kurzu v hlavní databáze pro";
-$langBUUsersInMainBase = "Zálohování uživatelských dat v hlavní databáze pro ";
-$langBUAnnounceInMainBase = "Zálohování dat oznámení v hlavní databáze pro ";
+$langBUUsersInMainBase = "Zálohování uživatelských dat v hlavní databáze pro";
+$langBUAnnounceInMainBase = "Zálohování dat oznámení v hlavní databáze pro";
 $langBackupOfDataBase = "Zálohování databázy";
 $langCreationDate = "Vytvořené";
 $langExpirationDate = "Datum vypršení";
@@ -77,14 +80,14 @@ $langCourseVisibilityClosed = "Zcela uzavřeno: školení je přístupné pouze 
 $CourseVisibilityClosed = "Uzavřený - kurz je přístupný pouze pro správce kurzu a vyučující asistenty.";
 $CourseVisibilityModified = "Modifikovaný (podrobnější nastavení se specifikuje skrz systém rolí-práv)";
 $WorkEmailAlert = "Upozornění e-mailom při předložení nové práce";
-$WorkEmailAlertActivate = "Aktivovat upozornění e-mailom při předložení nové práce ";
+$WorkEmailAlertActivate = "Aktivovat upozornění e-mailom při předložení nové práce";
 $WorkEmailAlertDeactivate = "Zrušit e-mailové upozornění při předložení nové práce";
 $DropboxEmailAlert = "Upozornění e-mailom o doručení do poštovní schránky";
-$DropboxEmailAlertActivate = "Aktivace upozornění e-mailem o novém doručení do poštovní schránky ";
-$DropboxEmailAlertDeactivate = "Zrušit upozornění e-mailem o novém doručení do poštovní schránky ";
+$DropboxEmailAlertActivate = "Aktivace upozornění e-mailem o novém doručení do poštovní schránky";
+$DropboxEmailAlertDeactivate = "Zrušit upozornění e-mailem o novém doručení do poštovní schránky";
 $AllowUserEditAgenda = "Povolit uživatelům editovat agendu kurzu";
 $AllowUserEditAgendaActivate = "Aktivovat editaci agendy kurzu uživatelům";
-$AllowUserEditAgendaDeactivate = "Deaktivovat editaci agendy kurzu uživatelům ";
+$AllowUserEditAgendaDeactivate = "Deaktivovat editaci agendy kurzu uživatelům";
 $AllowUserEditAnnouncement = "Povolit uživatelům editovat oznámení kurzu";
 $AllowUserEditAnnouncementActivate = "Aktivovat editaci uživatelům";
 $AllowUserEditAnnouncementDeactivate = "Deaktivovat editaci uživatelům";
@@ -110,3 +113,4 @@ $NewUserEmailAlert = "Oznámení emailem učiteli o zápisu do kurzu novým uži
 $NewUserEmailAlertEnable = "Povolit oznámení emailem učiteli o zápisu do kurzu novým uživatelem";
 $NewUserEmailAlertToTeacharAndTutor = "Povolit oznámení emailem učiteli a tvůrci kurzu o zápisu do kurzu novým uživatelem";
 $NewUserEmailAlertDisable = "Zneplatnit oznámení emailem o zápisu do kurzu novým uživatelem";
+?>

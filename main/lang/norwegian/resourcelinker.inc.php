@@ -27,7 +27,7 @@ $NewWindow = "I et nytt vindu";
 $StepDeleted1 = "Denne";
 $Modify = "Modifiser";
 $Chapter = "Kapitell";
-$AgendaAdd = "Legg til en kalenderoppføring";
-$ItemTitle = "Tittel";
+$AgendaAdd = "Legg til ny oppføring i kalender";
+$ItemTitle = "Tittel for oppføring";
 $Detail = "Detaljer";
 ?>

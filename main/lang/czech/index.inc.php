@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langInvalidId = "Přihlášení selhalo. Zadejte prosím platné uživatelské jméno a heslo.";
 $langPass = "Heslo";
 $langReg = "Registrace";
@@ -11,3 +14,4 @@ $langHelptwo = "Nápověda";
 $EussMenu = "menu";
 $langMenuUser = "Uživatel";
 $langRefresh = "Aktualizovat";
+?>

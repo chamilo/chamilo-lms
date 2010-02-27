@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $Tools = "Nástroje";
 $SendWork = "Ulož soubor na server (upload)";
 $langTooBig = "Nevybrali jste žádný soubor pro nahrání, nebo je soubor příliš veliký.";
@@ -24,8 +27,9 @@ $langNameDir = "Název nové složky";
 $langFileExists = "Operaci není možné vykonat, protože soubor s takovým jménem již existuje.";
 $CreateDirectory = "Vytvořit složku";
 $langCurrentDir = "aktuální složka";
-$UploadADocument = "Uložit dokument na server ";
-$EditToolOptions = "Možnosti nástroje pro úpravu ";
+$UploadADocument = "Uložit dokument na server";
+$EditToolOptions = "Možnosti nástroje pro úpravu";
 $DocumentDeleted = "Dokument smazán";
 $DirDelete = "Smazat adresář";
 $ValidateChanges = "Potvrdit změny";
+?>

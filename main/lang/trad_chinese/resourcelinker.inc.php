@@ -3,7 +3,7 @@
 for more information: see languages.txt in the lang folder.
 */
 $ResourceAdded = "已加入資源。你可以回到學習路徑或加入更多資源。";
-$LearningPath = "學習路徑";
+$LearningPath = "學習路線";
 $LevelUp = "上一層";
 $AddIt = "加入";
 $MainCategory = "主要類別";
@@ -41,15 +41,15 @@ $StepDeleted2 = "工具中的那個項目已被刪除";
 $Modify = "修訂";
 $Chapter = "章節";
 $NoAgendaItems = "沒有日程項目";
-$AgendaAdd = "加入日程項目";
-$UserGroupFilter = "使用者過濾器";
+$AgendaAdd = "新增日程項目";
+$UserGroupFilter = "過濾小組/使用者";
 $AgendaSortChronologicallyUp = "按時序排列日程(從後至先)";
-$ShowCurrent = "顯示當前日程項目";
+$ShowCurrent = "顯示本月日程項目";
 $ModifyCalendarItem = "修訂日程項目";
-$ItemTitle = "標題";
+$ItemTitle = "項目標題";
 $Detail = "詳情";
-$EditSuccess = "已成功編輯";
-$AddCalendarItem = "加入日程項目";
+$EditSuccess = "已編輯此日程項目";
+$AddCalendarItem = "新增日程項目";
 $AddAnn = "新增公告";
 $ForumAddNewTopic = "討論區：新增題目";
 $ForumEditTopic = "討論區：編輯題目";

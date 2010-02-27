@@ -3,7 +3,7 @@
 for more information: see languages.txt in the lang folder.
 */
 $LinkMoved = "Ссылка перенесена";
-$langLinkName = "Имя ссылки";
+$langLinkName = "Название ссылки";
 $langLinkAdd = "Добавить ссылку";
 $langLinkAdded = "Ссылка добавлена";
 $langLinkMod = "Изменить ссылку";
@@ -12,7 +12,7 @@ $langLinkDel = "Удалить ссылку";
 $langLinkDeleted = "Ссылка удалена";
 $langLinkDelconfirm = "Вы хотите удалить эту ссылку?";
 $langAllLinksDel = "Удалить все ссылки в этом разделе";
-$langCategoryName = "Название раздела";
+$langCategoryName = "Наименование категории";
 $langCategoryAdd = "Добавить раздел";
 $langCategoryAdded = "Раздел добавлен";
 $langCategoryModded = "Раздел изменен";
@@ -42,5 +42,5 @@ $langLinkUpdated = "Ссылка обновлена";
 $langAll_Link_Deleted = "Ссылка удалена";
 $langOnHomepage = "Показывать ссылку на домашней странице";
 $langShowLinkOnHomepage = "Показывать эту ссылку в виде иконки на домашней странице курса";
-$General = "Общий";
+$General = "общий (основной)";
 ?>

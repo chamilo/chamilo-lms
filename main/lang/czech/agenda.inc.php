@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $AgendaAdd = "Přidat novou položku do agendy";
 $ShowAllEvents = "Zobraz všechny položky agendy";
 $ShowCurrent = "Zobraz položky agendy pro tento měsíc";
@@ -67,8 +70,9 @@ $AllUsersOfThePlatform = "Všichni systémoví uživatelé";
 $GlobalEvent = "Globální událost";
 $ModifyEvent = "Upravit událost";
 $EndDateCannotBeBeforeTheStartDate = "Datum ukončení nemůže být před datumem začátku";
-$AgendaSortChronologicallyUp = "Seřadit agendu chronologicky (vzestupně) ";
-$AgendaSortChronologicallyDown = "Seřadit agendu chronologicky (sestupně) ";
+$AgendaSortChronologicallyUp = "Seřadit agendu chronologicky (vzestupně)";
+$AgendaSortChronologicallyDown = "Seřadit agendu chronologicky (sestupně)";
 $ItemForUserSelection = "Volba uživatelů";
 $IsNotiCalFormatFile = "Tento soubor není v iCal formátu";
 $RepeatEvent = "Opakovaná událost";
+?>

@@ -2,16 +2,16 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
-$Tools = "Средства управления";
+$Tools = "Инструменты";
 $SendWork = "Разместить файл";
-$langTooBig = "Вы не выбрали файл или файл слишком большой";
-$langListDeleted = "Список полностью удален";
+$langTooBig = "Вы не выбрали ни одного файла для отсылки или он слишком большой";
+$langListDeleted = "Список удален";
 $langDocModif = "Заголовок документа изменен";
 $langDocAdd = "Этот файл был добавлен в список публикаций";
 $langDocDel = "Файл удален";
 $langTitleWork = "Заголовок файла";
 $langAuthors = "Авторы";
-$langDelList = "Удалить список полностью";
+$langDelList = "Удалить список";
 $langWorkDelete = "Удалить";
 $langWorkModify = "Изменить";
 $langWorkConfirmDelete = "Вы действительно хотите удалить этот файл?";
@@ -20,11 +20,11 @@ $lang_default_upload = "Настройки по умолчанию для вид
 $lang_new_visible = "Новые документы видимы для всех пользователей";
 $lang_new_unvisible = "Новые документы видимы только для управляющего курсом(ами)";
 $lang_doc_unvisible = "Ваш файл видим только преподавателю(ям) этого курса и поэтому не будет видим для Вас";
-$langDelLk = "Удалить ссылку";
+$langDelLk = "Вы действительно хотите удалить эту ссылку?";
 $langMustBeRegisteredUser = "Только зарегистрированные пользователи этого курса могут публиковать документы";
 $langListDel = "Удалить список";
-$langNameDir = "Переименовать каталог";
-$langFileExists = "Файл уже существует";
+$langNameDir = "Название новой папки";
+$langFileExists = "Операция невозможна, файл с таким именем уже существует";
 $CreateDirectory = "Создать каталог";
 $langCurrentDir = "Текущая папка";
 $UploadADocument = "Загрузить документ";

@@ -2,12 +2,12 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
-$langToolName = "Statistik";
+$langToolName = "Import mata kuliah dari Blackboard";
 $TrackingDisabled = "Tracking dinon-aktifkan oleh system administrator.";
 $langShowNone = "Sembunyikan semua";
 $langCourseStats = "Statistik Mata Kuliah";
 $langToolsAccess = "Akses ke tool-tool";
-$langCourseAccess = "Akses ke mata kuliah ini";
+$langCourseAccess = "Akses Mata Kuliah";
 $langLinksAccess = "Link-link";
 $langDocumentsAccess = "Dokumen-dokumen";
 $langScormAccess = "Learning path - Mata Kuliah Berformat Scorm";
@@ -48,12 +48,12 @@ $langWorkAuthors = "Pengarang";
 $langWorkDescription = "Deskripsi";
 $informationsAbout = "Tracking";
 $langNoEmail = "Alamat email belum diisi";
-$langNoResult = "Tidak Ada";
-$langCourse = "Mata Kuliah";
+$langNoResult = "Sementara belum ada hasil";
+$langCourse = "Situs";
 $langHits = "Hits";
 $langTotal = "Total";
 $langHour = "Jam";
-$langDay = "Hari";
+$langDay = "hari";
 $langLittleHour = "Pkl.";
 $langLast31days = "Dalam 31 hari terakhir";
 $langLast7days = "Dalam 7 hari terakhir";
@@ -85,7 +85,7 @@ $langPreviousYear = "Tahun Sebelumnya";
 $langViewToolList = "Lihat daftar semua tool";
 $langToolList = "Daftar semua tool";
 $langFrom = "Dari";
-$langTo = "Kepada";
+$langTo = "ke";
 $langPeriodToDisplay = "Periode";
 $langDetailView = "Lihat menurut";
 $langBredCrumpGroups = "Group";

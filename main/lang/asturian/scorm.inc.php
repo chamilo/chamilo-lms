@@ -52,6 +52,6 @@ $GenericScorm = "SCORM xenéricu";
 $UnknownPackageFormat = "El formatu d'esti paquete ye desconocíu. Por favor, compruebe que ye un paquete válidu.";
 $Attempt = "Intentu";
 $MoveTheCurrentForum = "Mover el foru actual";
-$WarningWhenEditingScorm = "¡ Cuidáu ! <br />Si edita'l conteníu d'un elementu SCORM igual cambia l'informe de la secuencia d'aprendizaxe o estroza l'elementu.";
+$WarningWhenEditingScorm = "¡ Cuidáu ! <br/>Si edita'l conteníu d'un elementu SCORM igual cambia l'informe de la secuencia d'aprendizaxe o estroza l'elementu.";
 $AdditionalProfileField = "Amestar un campu del perfil d'usuariu";
 ?>

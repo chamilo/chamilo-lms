@@ -2,7 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
-$langToolName = "متابعة";
+$langToolName = "قم باستيراد مقررات السبورة";
 $TrackingDisabled = "لقد تم إيقاف التقرير من قبل إدارة النظام";
 $InactivesStudents = "المستخدمين غير النشطين";
 $AverageTimeSpentOnThePlatform = "متوسط الوقت المستغرق في النظام";
@@ -19,7 +19,7 @@ $SeeSessionList = "مشاهدة قائمة الجلسات";
 $langShowNone = "إخفاء الكل";
 $langCourseStats = "حالة المقرر";
 $langToolsAccess = "الوصول إلى الأدوات";
-$langCourseAccess = "الوصول إلى هذا المقرر";
+$langCourseAccess = "  الوصول إلى المقر";
 $langLinksAccess = "الروابط";
 $langDocumentsAccess = "المستندات";
 $langScormAccess = "مسار التّعلم - مقررات على هيئة Scorm";
@@ -60,8 +60,8 @@ $langWorkAuthors = "الكتاب";
 $langWorkDescription = "نبذة";
 $informationsAbout = "متابعة";
 $langNoEmail = "لم يتم تحديد أي بريد إلكتروني";
-$langNoResult = "لا توجد نتائج";
-$langCourse = "المقرر";
+$langNoResult = "لا توجد هناك نتائج بعد";
+$langCourse = "المنطقة";
 $langHits = "النقرات";
 $langTotal = "الإجمالي";
 $langHour = "الساعة";
@@ -159,7 +159,7 @@ $Success = "النجاح";
 $ExcelFormat = "تنسيق إكسل";
 $MyLearnpath = "مسار تعلمي";
 $Time = "الوقت";
-$Score = "النقاط";
+$Score = " نتيجة";
 $LastConnexion = "احدث اتصال";
 $ConnectionTime = "اخر اتصال";
 $ConnectionsToThisCourse = "اتصالات لهذا المقرر";
@@ -178,7 +178,7 @@ $NoProduction = "No production";
 $NoComment = "لا تعليق";
 $LatestLogin = "احدث إتصال";
 $TimeSpentOnThePlatform = "وقت مستغرق في النظام";
-$Messages = "مشاركات";
+$Messages = "الرسائل";
 $AveragePostsInForum = "Average posts number in the forum";
 $AverageAssignments = "Average assignments number";
 $Print = "طباعة";

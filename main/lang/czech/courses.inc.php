@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $lang_already_enrolled = "již přihlášený";
 $lang_my_personnal_course_list = "Můj osobní seznam kurzů";
 $lang_course_enrollment = "Kurzy uživatele";
@@ -6,7 +9,7 @@ $lang_course_not_available = "Tento kurz není přístupný nebo neexistuje.";
 $lang_enroll = "Zapsat se";
 $lang_enroll_to_a_new_course = "Zapsat se do nového kurzu";
 $lang_my_present_course_list = "Můj aktuální seznam kurzů";
-$lang_no_course_to_enroll_in_this_category = "V této kategorii neexistuje žádný kurz, do kterého by se dalo přihlásit. ";
+$lang_no_course_to_enroll_in_this_category = "V této kategorii neexistuje žádný kurz, do kterého by se dalo přihlásit.";
 $lang_or_search_from_the_course_code = "Nebo vyhledat dle kódu";
 $lang_search = "Vyhledávaní";
 $lang_select_course_among_categories = "Vybrat kurz z kategorií";
@@ -73,3 +76,4 @@ $CourseCategoryEditStored = "Kategorie aktualizovaná";
 $buttonCreateCourseCategory = "Uložit kategorii kurzu";
 $buttonSaveCategory = "Uložit kategorii";
 $buttonChangeCategory = "Změnit kategorii";
+?>

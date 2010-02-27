@@ -15,7 +15,7 @@ $lang_new_link = "uusi linkki lisätty";
 $lang_new_forum_topic = "uusi aihe lisätty";
 $lang_new_groupforum_topic = "new topic added to group forum";
 $lang_new_dropbox_file = "uusi tiedosto vastaanotettu";
-$ForumCategoryAdded = "Keskustelualueryhmä lisätty";
+$ForumCategoryAdded = "Keskustelualue ryhmä lisätty";
 $LearnpathAdded = "Kurssi lisätty";
 $GlossaryAdded = "Lisää uusi termi Sanastoon";
 ?>

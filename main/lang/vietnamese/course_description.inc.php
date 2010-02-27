@@ -2,15 +2,15 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
-$langCourseProgram = "MÃŽ táº£ tÃ³m táº¯t";
+$langCourseProgram = "Mô tả tóm tắt";
 $langThisCourseDescriptionIsEmpty = "GiÃ¡o trÃ¬nh nÃ y khÃŽng cÃ³ pháº§n diá»n giáº£i";
-$langEditCourseProgram = "Táº¡o diá»n giáº£i";
-$QuestionPlan = "CÃ¢u há»i vá»i giÃ¡o viÃªn";
-$langInfo2Say = "ThÃŽng tin Äáº¿n há»c sinh";
-$langOuAutreTitre = "TiÃªu Äá»";
-$langNewBloc = "KhÃ¡c";
-$langAddCat = "ThÃªm chá»§ Äá»";
-$langAdd = "ThÃªm";
+$langEditCourseProgram = "Tạo diễn giải";
+$QuestionPlan = "Câu hỏi với giáo viên";
+$langInfo2Say = "Thông tin đến học sinh";
+$langOuAutreTitre = "Tiêu đề";
+$langNewBloc = "Khác";
+$langAddCat = "Thêm chủ đề";
+$langAdd = "Thêm";
 $langValid = "OK";
-$langBackAndForget = "XoÃ¡";
+$langBackAndForget = "Xoá";
 ?>

@@ -2,7 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
-$langToolName = "Estadístiques";
+$langToolName = "Importar cursos de Blackboard";
 $TrackingDisabled = "L'alministrador del sistema deshabilitó'l siguimientu.";
 $InactivesStudents = "Alumnos inactivos";
 $AverageTimeSpentOnThePlatform = "Tiempu mediu de conesión a la plataforma";
@@ -19,7 +19,7 @@ $SeeSessionList = "Ver el llistáu de sesiones";
 $langShowNone = "Nun amosar nengún";
 $langCourseStats = "Estadístiques del cursu";
 $langToolsAccess = "Entrada a les ferramientes";
-$langCourseAccess = "Entrada a esti cursu";
+$langCourseAccess = "Entrada al cursu";
 $langLinksAccess = "Enllaces";
 $langDocumentsAccess = "Documentos";
 $langScormAccess = "Itinerarios d'aprendizaxe - Cursos con formatu SCORM";
@@ -60,8 +60,8 @@ $langWorkAuthors = "Autor";
 $langWorkDescription = "Descripción";
 $informationsAbout = "Siguimientu de";
 $langNoEmail = "Nun especificó una direición de corréu electrónicu.";
-$langNoResult = "Nun hai resultaos";
-$langCourse = "Cursu";
+$langNoResult = "Entá nun hai resultaos";
+$langCourse = "El cursu";
 $langHits = "Entraes";
 $langTotal = "Total";
 $langHour = "Hora";
@@ -158,7 +158,7 @@ $Tracks = "Siguimientu";
 $Success = "Nota";
 $ExcelFormat = "Formatu Excel";
 $MyLearnpath = "El mio itinerariu d'aprendizaxe";
-$Time = "Tiempu";
+$Time = "Hora";
 $Score = "Puntos";
 $LastConnexion = "Última conesión";
 $ConnectionTime = "Tiempu de conesión";
@@ -181,7 +181,7 @@ $TimeSpentOnThePlatform = "Tiempu d'estancia na plataforma";
 $Messages = "Mensaxes";
 $AveragePostsInForum = "Cantidá de mensaxes nel foru";
 $AverageAssignments = "Cantidá de llabores / deberes";
-$Print = "Imprentar";
+$Print = "Emprentar";
 $StudentDetails = "Detalles del alumnu";
 $StudentDetailsInCourse = "Detalles del alumnu nel cursu";
 $Learnpaths = "Itinerarios d'aprendizaxe";

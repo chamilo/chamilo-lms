@@ -4,8 +4,8 @@ for more information: see languages.txt in the lang folder.
 */
 $Task = "Zadanie";
 $Tasks = "Zadania";
-$Member = "U&#380;ytkownik";
-$Members = "U&#380;ytkownicy";
+$Member = "Użytkownik";
+$Members = "Użytkownicy";
 $AddTask = "Dodaj nowe zadanie";
 $Color = "Kolor";
 $langTask1 = "Zadanie 1";

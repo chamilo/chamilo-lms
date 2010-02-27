@@ -1,4 +1,7 @@
 <?php
+/*
+for more information: see languages.txt in the lang folder.
+*/
 $langProfessors = "Učitelé";
 $langExplanation = "Jedním kliknutím na OK vytvoříte webstránku s Fórem, Agendou, Správou dokumentů atd. Vaše přihlášení, jako tvorce webstránky Vám umožní změnit ji dle Vaší potřeby.";
 $langEmpty = "Nechali jste některá políčka prázdna.<br>Použijte tlačítko <b>Zpět</b> na Vašem prohlížeči a skuste to znovu.<br>Jestli ignorujete kód kurzu, podívejte se na Program kurzu";
@@ -100,3 +103,4 @@ $IntroductionWiki = "Slovo Wiki je zkratka pro WikiWikiWeb. Wikiwiki je havajsk�
 $CreateCourseArea = "Vytvořit tento kurz";
 $CreateCourse = "Vytvořit kurz";
 $Create = "Vytvořit";
+?>

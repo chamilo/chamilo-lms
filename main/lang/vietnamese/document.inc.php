@@ -2,31 +2,31 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
-$langDownloadFile = "Upload file lÃªn mÃ¡y chá»§ web";
-$langNameDir = "TÃªn thÆ° má»¥c má»i";
-$langSize = "KÃ­ch thÆ°á»c";
-$langRename = "Äá»i tÃªn";
-$langCopy = "Sao chÃ©p";
-$langTo = "Äáº¿n";
-$langNoSpace = "Upload cÃ³ lá»i. KhÃŽng Äá»§ chá» trá»ng trong thÆ° má»¥c";
+$langDownloadFile = "Upload file lên máy chủ web";
+$langNameDir = "Tên thư mục mới";
+$langSize = "Kích thước";
+$langRename = "Đổi tên";
+$langCopy = "Sao chép";
+$langTo = "đến";
+$langNoSpace = "Upload có lỗi. Không đủ chỗ trống trong thư mục";
 $langDownloadEnd = "Upload xong";
-$langFileExists = "KhÃŽng ÄÆ°á»£c.<br />TrÃ¹ng tÃªn file.";
-$langImpossible = "KhÃŽng ÄÆ°á»£c";
-$langAddComment = "ThÃªm/Sá»­a ghi chÃº";
-$langDocCopied = "TÃ i liá»u ÄÃ£ ÄÆ°á»£c sao";
-$langDocDeleted = "TÃ i liá»u ÄÃ£ xoÃ¡";
-$langElRen = "ÄÃ£ Äá»i tÃªn xong";
-$langDirMv = "ÄÃ£ di chuyá»n xong";
-$langComMod = "ÄÃ£ sá»­a pháº§n ghi chÃº";
-$langViMod = "ÄÃ£ thay Äá»i tÃ­nh hiá»n thá»";
-$langGroupSpace = "Khu vá»±c nhÃ³m";
-$langGroupSpaceLink = "Khu vá»±c nhÃ³m";
-$langGroupForumLink = "Diá»n ÄÃ n nhÃ³m";
-$langUncompress = "giáº£i nÃ©n tá»p (.zip) trÃªn server";
-$langDownloadAndZipEnd = " Tá»p Zip ÄÃ£ táº£i lÃªn vÃ  giáº£i nÃ©n";
-$langFileError = "khÃŽng há»£p lá».";
-$langMaxFileSize = "KÃ­ch thÆ°á»c tá»i Äa cá»§a file lÃ ";
-$langAreYouSureToDelete = "Cháº¯c cháº¯n xoÃ¡?";
-$langPublish = "Xuáº¥t báº£n";
-$langMissingImagesDetected = "KhÃŽng tháº¥y hÃ¬nh";
+$langFileExists = "Không được.<br>Trùng tên file.";
+$langImpossible = "Không được";
+$langAddComment = "Thêm/Sửa ghi chú";
+$langDocCopied = "Tài liệu đã được sao";
+$langDocDeleted = "Tài liệu đã xoá";
+$langElRen = "Đã đổi tên xong";
+$langDirMv = "Đã di chuyển xong";
+$langComMod = "Đã sửa phần ghi chú";
+$langViMod = "Đã thay đổi tính hiển thị";
+$langGroupSpace = "Khu vực nhóm";
+$langGroupSpaceLink = "Khu vực nhóm";
+$langGroupForumLink = "Diễn đàn nhóm";
+$langUncompress = "giải nén tệp (.zip) trên server";
+$langDownloadAndZipEnd = " Tệp Zip đã tải lên và giải nén";
+$langFileError = "không hợp lệ.";
+$langMaxFileSize = "Kích thước tối đa của file là";
+$langAreYouSureToDelete = "Chắc chắn xoá?";
+$langPublish = "Xuất bản";
+$langMissingImagesDetected = "Không thấy hình";
 ?>

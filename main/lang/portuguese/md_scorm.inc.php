@@ -2,10 +2,10 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
-$nameTools = "var de idioma obsoleta";
-$langMdCallingTool = "Curso";
-$langTool = "Operações Scorm MD";
-$langNotInDB = "Não existe entrada DB Chamilo";
+$nameTools = "variável de idioma obsoleta";
+$langMdCallingTool = "Documentos";
+$langTool = "Metadados do Documento";
+$langNotInDB = "não existe essa categoria de Links/ligações";
 $langManifestSyntax = "(erro de sintaxe no ficheiro manifest ...)";
 $langEmptyManifest = "(esvaziar ficheiro manifest ...)";
 $langNoManifest = "(não existe ficheiro manifest ...)";
@@ -17,19 +17,19 @@ $langHttNotOk = "falhou a transferência do ficheiro HTT";
 $langRemoveHtt = "Remover o ficheiro HTT";
 $langHttRmvOk = "O ficheiro HTT foi removido";
 $langHttRmvNotOk = "A remoção do ficheiro HTT falhou";
-$langImport = "Criar MDEs a partir do manifest";
+$langImport = "Importar";
 $langRemove = "Remover MDEs";
-$langAllRemovedFor = "Todas as entradas foram removidas para";
-$langIndex = "Indexar palavras com o PhpDig";
-$langTotalMDEs = "Número total de entradas Scorm MD:";
+$langAllRemovedFor = "Removidas todas as entradas para a categoria";
+$langIndex = "Índice de palavras";
+$langTotalMDEs = "Número total de entradas de Ligações/Links MD:";
 $langMainMD = "Abrir MDE Principal";
 $langLines = "linhas";
 $langPlay = "Executar index.php";
 $langNonePossible = "Não são possíveis operações MD";
-$langOrElse = "Seleccionar uma Directoria/pasta Scorm ou o id de uma Directoria/pasta Scorm";
+$langOrElse = "Seleccionar uma categoria de ligações/links";
 $langWorkWith = "Trabalhar com a Directoría/pasta Scorm";
 $langSDI = "... Directoría/pasta Scorm com o SD-id (e dividir o manifest - ou deixar vazio)";
-$langRoot = "raiz";
+$langRoot = "raiz/root";
 $langSplitData = "Dividir manifests, e #MDe, se houver:";
 $langMffNotOk = "A substituição do ficheiro manifest falhou";
 $langMffOk = "O ficheiro manifest foi substituido";

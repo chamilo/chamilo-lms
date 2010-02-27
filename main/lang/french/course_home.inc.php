@@ -4,7 +4,7 @@ for more information: see languages.txt in the lang folder.
 */
 $langActivate = "afficher";
 $langDeactivate = "masquer";
-$langInLnk = "Outils masqu�s";
+$langInLnk = "Outils masqués";
 $langDelLk = "Voulez-vous réellement supprimer ce lien?";
 $langCourseCreate = "Créer un cours";
 $langNameOfTheLink = "Nom du lien";

@@ -179,7 +179,7 @@ $langHotspotWeightingError = "You must give a positive (>0) weighing for all hot
 $langHotspotValidateError1 = "你應完全回答題目（";
 $langHotspotValidateError2 = " click(s) required on the image) before seeing the results";
 $langHotspotRequired = "題目和分數是必需的，摘要是可選的。";
-$langHotspotChoose = "<div style=\"padding:2px 3px;\">�創建熱點︰先選擇顏色對應的圖形然後畫出熱點</div><div style=\"padding:2px 3px;\">�移動熱點︰先選擇顏色對應的圖形然後畫出新的熱點</div><div style=\"padding:2px 3px;\">�關閉多邊形︰點擊右鍵然後選擇關閉多邊形</div><div style=\"padding:2px 3px;\"></div>";
+$langHotspotChoose = "<div style=\"padding:2px 3px;\">創建熱點︰先選擇顏色對應的圖形然後畫出熱點</div><div style=\"padding:2px 3px;\">移動熱點︰先選擇顏色對應的圖形然後畫出新的熱點</div><div style=\"padding:2px 3px;\">關閉多邊形︰點擊右鍵然後選擇關閉多邊形</div><div style=\"padding:2px 3px;\"></div>";
 $Fault = "不正確";
 $Hotspot = "圖像區";
 $ClickNumber = "按數字";

@@ -4,7 +4,7 @@ for more information: see languages.txt in the lang folder.
 */
 $nameTools = "variable désuète de langage";
 $langMdCallingTool = "Documents";
-$langTool = "M�tadonn�es document";
+$langTool = "Métadonnées document";
 $langNotInDB = "Cette catégorie n'a pas pu être trouvée";
 $langManifestSyntax = "(erreur de syntaxe dans le fichier manifeste...)";
 $langEmptyManifest = "(le fichier manifeste est vide...)";

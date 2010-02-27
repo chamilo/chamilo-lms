@@ -334,6 +334,7 @@ $Tool = "工具";
 $NumberOfItems = "项目数字";
 $DocumentsAndFolders = "文件与文件夹";
 $Learnpath = "学习路径";
+$Exercises = "wϰ";
 $AllowPersonalAgendaTitle = "个人日程";
 $AllowPersonalAgendaComment = "用户可以在我的日程上创建个人日程吗?";
 $CurrentValue = "当前值";

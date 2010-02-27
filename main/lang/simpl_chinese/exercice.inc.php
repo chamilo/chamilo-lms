@@ -177,7 +177,7 @@ $langHotspotWeightingError = "You must give a positive (>0) weighing for all hot
 $langHotspotValidateError1 = "你应完全回答题目（";
 $langHotspotValidateError2 = " click(s) required on the image) before seeing the results";
 $langHotspotRequired = "题目和分数是必需的，摘要是可选的。";
-$langHotspotChoose = "<div style=\"padding:2px 3px;\">�创建热点：先选择颜色对应的图形然后画出热点</div><div style=\"padding:2px 3px;\">�移动热点：先选择颜色对应的图形然后画出新的热点</div><div style=\"padding:2px 3px;\">�关闭多边形：点击右键然后选择关闭多边形</div><div style=\"padding:2px 3px;\"></div>";
+$langHotspotChoose = "<div style=\"padding:2px 3px;\">创建热点：先选择颜色对应的图形然后画出热点</div><div style=\"padding:2px 3px;\">移动热点：先选择颜色对应的图形然后画出新的热点</div><div style=\"padding:2px 3px;\">关闭多边形：点击右键然后选择关闭多边形</div><div style=\"padding:2px 3px;\"></div>";
 $Fault = "不正确";
 $Hotspot = "热点";
 $HotspotGiveAnswers = "请给一个答案";

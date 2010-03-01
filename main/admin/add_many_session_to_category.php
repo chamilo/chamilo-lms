@@ -139,7 +139,7 @@ $sql = "SELECT id, name  FROM $tbl_session $where ORDER BY name";
 $result=Database::query($sql);
 $rows_session = Database::store_result($result);
 ?>
-<form name="formulaire" method="post" action="<?php echo api_get_self(); ?>?page=<?php echo $_GET['page']; if(!empty($_GET['add'])) echo '&add=true' ; ?>" style="margin:0px;" <?php if($ajax_search){echo ' onsubmit="valide();"';}?>>
+<form name="formulaire" method="post" action="<?php echo api_get_self(); ?>?page=<?php echo Security::remove_XSS($_GET['page']); if(!empty($_GET['add'])) echo '&add=true' ; ?>" style="margin:0px;" <?php if($ajax_search){echo ' onsubmit="valide();"';}?>>
 <input type="hidden" name="formSent" value="1" />
 <?php
 if(!empty($errorMsg))

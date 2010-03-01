@@ -30,8 +30,7 @@ class Statistics
 	{
 		$course_table = Database :: get_main_table(TABLE_MAIN_COURSE);
 		$sql = "SELECT COUNT(*) AS number FROM ".$course_table." ";
-		if (isset ($category_code))
-		{
+		if (isset ($category_code)) {
 			$sql .= " WHERE category_code = '".Database::escape_string($category_code)."'";
 		}
 		$res = Database::query($sql);
@@ -53,8 +52,7 @@ class Statistics
 		$user_table 		= Database :: get_main_table(TABLE_MAIN_USER);
 
 		$sql = "SELECT COUNT(DISTINCT(user_id)) AS number FROM $user_table WHERE status = ".intval(Database::escape_string($status))." ";
-		if (isset ($category_code))
-		{
+		if (isset ($category_code)) {
 			$sql = "SELECT COUNT(DISTINCT(cu.user_id)) AS number FROM $course_user_table cu, $course_table c WHERE cu.status = ".intval(Database::escape_string($status))." AND c.code = cu.course_code AND c.category_code = '".Database::escape_string($category_code)."'  ";
 		}
 		$res = Database::query($sql);
@@ -74,8 +72,8 @@ class Statistics
 		$sql = "SELECT count(default_id) AS total_number_of_items FROM $track_e_default, $table_user user WHERE default_user_id = user.user_id ";
 
 		if (isset($_GET['keyword'])) {
-		$keyword = Database::escape_string(trim($_GET['keyword']));
-		$sql .= " AND (user.username LIKE '%".$keyword."%' OR default_event_type LIKE '%".$keyword."%' OR default_value_type LIKE '%".$keyword."%' OR default_value LIKE '%".$keyword."%') ";
+			$keyword = Database::escape_string(trim($_GET['keyword']));
+			$sql .= " AND (user.username LIKE '%".$keyword."%' OR default_event_type LIKE '%".$keyword."%' OR default_value_type LIKE '%".$keyword."%' OR default_value LIKE '%".$keyword."%') ";
 		}
 
 		$res = Database::query($sql);
@@ -91,13 +89,21 @@ class Statistics
 		$track_e_default 	= Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_DEFAULT);
 		$table_user = Database::get_main_table(TABLE_MAIN_USER);
 		$table_course = Database::get_main_table(TABLE_MAIN_COURSE);
+		
+		$column 		 = intval($column);
+		$from 			 = intval($from);
+		$number_of_items = intval($number_of_items);
+		
+		if(!in_array($direction, array('ASC','DESC'))){
+        	$direction = 'DESC';
+		}        	
 
 		$sql = "SELECT
 				 	default_event_type  as col0,
 					default_value_type	as col1,
 					default_value		as col2,
-					user.username 	as col3,
-					default_date 	as col4
+					user.username 		as col3,
+					default_date 		as col4
 				FROM $track_e_default track_default, $table_user user
 				WHERE track_default.default_user_id = user.user_id ";
 

@@ -1,9 +1,4 @@
 <?php
-require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be/gradebookitem.class.php';
-require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be/abstractlink.class.php';
-require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be/evallink.class.php';
-require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be/linkfactory.class.php';
-
 class TestExerciseLink extends UnitTestCase {
 	
 	public function TestExerciseLink() {
@@ -11,10 +6,31 @@ class TestExerciseLink extends UnitTestCase {
 	}
 
 	public function __construct() {
-		// The constructor acts like a global setUp for the class			
-		require_once api_get_path(SYS_TEST_PATH).'setup.inc.php';
+		global $date;
+		// The constructor acts like a global setUp for the class
+		TestManager::create_test_course('COURSEEXERCISELINK');			
 		$this->exerciselink = new ExerciseLink();
-		$this->exerciselink->set_course_code('COURSETEST');
+		$this->exerciselink-> set_id (1);
+		$this->exerciselink-> set_name ('test');
+		$this->exerciselink-> set_description ('test description');
+		$this->exerciselink-> set_user_id (1);
+		$this->exerciselink-> set_course_code ('COURSEEXERCISELINK');
+		$this->exerciselink-> set_category_id (1);
+		$this->exerciselink-> set_date ($date);
+		$this->exerciselink-> set_weight (1);
+		$this->exerciselink-> set_max (1);
+		$this->exerciselink-> set_visible (1);
+	}
+	
+	/**
+	 * Generate an array of all exercises available.
+	 * @return array 2-dimensional array - every element contains 2 subelements (id, name)
+	 */
+	
+	public function testget_all_links() {
+		$res = $this->exerciselink->get_all_links();
+		$this->assertTrue(is_array($res));
+		//var_dump($res);
 	}
 	
 	/**
@@ -31,16 +47,7 @@ class TestExerciseLink extends UnitTestCase {
 		//var_dump($res);
 	}
 	
-	/**
-	 * Generate an array of all exercises available.
-	 * @return array 2-dimensional array - every element contains 2 subelements (id, name)
-	 */
-	
-	public function testget_all_links() {
-		$res = $this->exerciselink->get_all_links();
-		$this->assertTrue(is_array($res));
-		//var_dump($res);
-	}
+
 	
 	/**
      * Get description to display: same as exercise description
@@ -139,7 +146,7 @@ class TestExerciseLink extends UnitTestCase {
 
 	public function __destruct() {
 		// The destructor acts like a global tearDown for the class			
-		require_once api_get_path(SYS_TEST_PATH).'teardown.inc.php';			
+		TestManager::delete_test_course('COURSEEXERCISELINK');			
 	}
 }
 ?>

@@ -373,7 +373,7 @@ $action_images['stylesheets'] 	= 'theme.gif';
 $action_images['templates'] 	= 'template.gif';
 $action_images['search']        = 'search.gif';
 $action_images['editor']		= 'html.png';
-
+$action_images['timezones']		= 'timezones.png';
 // grabbing the categories
 //$selectcategories = "SELECT DISTINCT category FROM ".$table_settings_current." WHERE category NOT IN ('stylesheets','Plugins')";
 //$resultcategories = Database::query($selectcategories);

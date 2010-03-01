@@ -82,7 +82,7 @@ function get_calendar_items($month, $year)
 	$group_memberships=GroupManager::get_group_ids($_course['dbName'], $_user['user_id']);
     $repeats = array();
 
-	$session_condition = intval($_SESSION['id_session'])==0 ? '' : ' AND agenda.session_id IN (0,'.intval($_SESSION['id_session']).') ';
+	//$session_condition = intval($_SESSION['id_session'])==0 ? '' : ' AND agenda.session_id IN (0,'.intval($_SESSION['id_session']).') ';
 
 
 	/*--------------------------------------------------
@@ -136,7 +136,8 @@ function get_calendar_items($month, $year)
 	// A. you are a course admin
 	//if ($is_courseAdmin)
 
-	$session_condition = intval($_SESSION['id_session'])==0 ? '' : ' AND agenda.session_id IN (0,'.intval($_SESSION['id_session']).') ';
+	$session_condition = api_get_session_condition($_SESSION['id_session']);
+	//$session_condition = intval($_SESSION['id_session'])==0 ? '' : ' AND agenda.session_id IN (0,'.intval($_SESSION['id_session']).') ';
 
 	if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous()))
 	{

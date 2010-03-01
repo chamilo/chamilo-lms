@@ -233,7 +233,7 @@ while ($row = Database::fetch_array($result_select)) {
 			$checked = ' checked="checked" ';
 		}
 
-		$row_td[] = '<input type="hidden" name="edit_id" value="'.$_GET['id'].'" /><input type="text" name="txt_name" value="'.$row['original_name'].'" /> '
+		$row_td[] = '<input type="hidden" name="edit_id" value="'.Security::remove_XSS($_GET['id']).'" /><input type="text" name="txt_name" value="'.$row['original_name'].'" /> '
 			. '<input type="checkbox" '.$checked.'name="platformlanguage" id="platformlanguage" value="'.$row['english_name'].'" /><label for="platformlanguage">'.$row['original_name'].' '.get_lang('AsPlatformLanguage').'</label> <input type="submit" name="Submit" value="'.get_lang('Ok').'" /><a name="value" />';
 	} else 	{
 		$row_td[] = $row['original_name'];

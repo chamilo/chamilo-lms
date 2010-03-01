@@ -73,7 +73,7 @@ if (!empty($return)) {
 	Display::display_error_message($return,false);
 }
 ?>
-<form method="post" name="form" action="<?php echo api_get_self(); ?>?page=<?php echo $_GET['page'] ?>&id=<?php echo $id; ?>" style="margin:0px;">
+<form method="post" name="form" action="<?php echo api_get_self(); ?>?page=<?php echo Security::remove_XSS($_GET['page']) ?>&id=<?php echo $id; ?>" style="margin:0px;">
 <input type="hidden" name="formSent" value="1">
 <div class="row"><div class="form_header"><?php echo $tool_name; ?></div></div>
 <table border="0" cellpadding="5" cellspacing="0" width="550">

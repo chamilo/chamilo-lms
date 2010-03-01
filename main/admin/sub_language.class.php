@@ -1,5 +1,5 @@
 <?php
-/* For licensing terms, see /dokeos_license.txt */
+/* For licensing terms, see /license.txt */
 /**
 ==================================================================================
 	@author Isaac flores paz <florespaz@bidsoftperu.com> - Added 9 july of 2009

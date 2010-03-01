@@ -667,7 +667,7 @@ function image_filter($image)
 function add_edit_template()
 {
 	// initiate the object
-	$form = new FormValidator('template', 'post', 'settings.php?category=Templates&action='.$_GET['action'].'&id='.$_GET['id']);
+	$form = new FormValidator('template', 'post', 'settings.php?category=Templates&action='.Security::remove_XSS($_GET['action']).'&id='.Security::remove_XSS($_GET['id']));
 
 	// settting the form elements: the header
 	if ($_GET['action'] == 'add') {

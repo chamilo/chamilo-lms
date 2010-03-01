@@ -29,11 +29,14 @@
 	Included libraries
 -----------------------------------------------------------
 */
-//Need to start to load the settings in the setup and teardown
+//The global.inc.php be need be load here to can load the settings files
 $incdir = dirname(__FILE__).'/../main/inc/'; 
 require_once $incdir.'global.inc.php';
 
-//Files than need simpletest
+//This file load the functions to create and destroy the course
+require_once api_get_path(SYS_TEST_PATH).'test_manager.inc.php';
+
+//Files than need simpletest to can test
 require_once 'simpletest/unit_tester.php';
 require_once 'simpletest/web_tester.php';
 require_once 'simpletest/mock_objects.php';
@@ -43,11 +46,17 @@ require_once 'simpletest/autorun.php';
 ==============================================================================
 		TEST SUITE
 ==============================================================================
+Start to load the tests files
 */
 
 class TestsSuite extends TestSuite {
+	
     function TestsSuite() {
+    	
+    	/**Name of the test suite*/
     	$this->TestSuite('All tests suite');
+    	
+    	/**Files will be tested*/
 /*		$this->addFile(api_get_path(SYS_TEST_PATH).'/main/inc/lib/database.lib.test.php');
 		$this->addFile(api_get_path(SYS_TEST_PATH).'/main/inc/lib/add_course.lib.inc.test.php');
 		$this->addFile(api_get_path(SYS_TEST_PATH).'/main/inc/lib/course.lib.test.php');
@@ -120,32 +129,27 @@ class TestsSuite extends TestSuite {
         $this->addFile(api_get_path(SYS_TEST_PATH).'/main/inc/lib/main_api.lib.test.php');//this file delete the course     
         $this->addFile(api_get_path(SYS_TEST_PATH).'/main/inc/lib/debug.lib.inc.test.php');//this file need be to the finish of the tests
        */ 
-       
-        /**This file was removed, now the functions was moved to install.lib*/
-		//$this->addFile(api_get_path(SYS_TEST_PATH).'/main/install/install_upgrade.lib.test.php');
-       
-        /**This files has metadata*/
+            
+        /**This files has metadata, is not available to test*/
         //$this->addFile(api_get_path(SYS_TEST_PATH).'/main/inc/lib/xht.lib.test.php');
 	    //$this->addFile(api_get_path(SYS_TEST_PATH).'/main/inc/lib/xmd.lib.test.php');
 	    
-	    /**This files are not used and is not finished implement*/
+	    /**This files are not used and is not finished implement, is not available to test*/
 	    //$this->addFile(api_get_path(SYS_TEST_PATH).'/main/exercice/export/qti/qti_classes.test.php');
 		//$this->addFile(api_get_path(SYS_TEST_PATH).'/main/exercice/export/qti2/qti2_export.test.php');
 		//$this->addFile(api_get_path(SYS_TEST_PATH).'/main/exercice/export/exercise_import.inc.test.php');
 		//$this->addFile(api_get_path(SYS_TEST_PATH).'/main/exercice/export/scorm/scorm_export.test.php');
-		
 		
 		/**EXERCISES**/
 		//$this->addFile(api_get_path(SYS_TEST_PATH).'/main/exercice/answer.class.test.php');
 		//$this->addFile(api_get_path(SYS_TEST_PATH).'/main/exercice/exercise_result.class.test.php');
 		//$this->addFile(api_get_path(SYS_TEST_PATH).'/main/inc/lib/exercise_show_functions.lib.test.php');
 		//$this->addFile(api_get_path(SYS_TEST_PATH).'/main/exercice/exercise.class.test.php');
-		
-		/**This files have problem with class and call objects*/
+		/**This files have problem with class and call objects, is not available to test
 		//$this->addFile(api_get_path(SYS_TEST_PATH).'/main/exercice/exercise.lib.test.php');
 	  	//$this->addFile(api_get_path(SYS_TEST_PATH).'/main/exercice/fill_blanks.class.test.php');
 	  	//$this->addFile(api_get_path(SYS_TEST_PATH).'/main/exercice/freeanswer.class.test.php');
-	  	
+	  	*/
 	  	
 	  	/**FORUM*/
 	  	//$this->addFile(api_get_path(SYS_TEST_PATH).'main/forum/forumfunction.inc.test.php');

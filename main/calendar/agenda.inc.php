@@ -1649,22 +1649,21 @@ function store_edited_agenda_item($id_attach,$file_comment)
 */
 function save_edit_agenda_item($id,$title,$content,$start_date,$end_date)
 {
-	$TABLEAGENDA 		= Database::get_course_table(TABLE_AGENDA);
-	$id=Database::escape_string($id);
-	$title=Database::escape_string(Security::remove_XSS($title));
-	$content=stripslashes($content);
-	$content = Database::escape_string(Security::remove_XSS($content,COURSEMANAGERLOWSECURITY));
-	$start_date=Database::escape_string($start_date);
-	$end_date=Database::escape_string($end_date);
+	$TABLEAGENDA= Database::get_course_table(TABLE_AGENDA);
+	$id			= Database::escape_string($id);
+	$title		= Database::escape_string(Security::remove_XSS($title));	
+	$content 	= Database::escape_string(Security::remove_XSS($content,COURSEMANAGERLOWSECURITY));
+	$start_date	= Database::escape_string($start_date);
+	$end_date	= Database::escape_string($end_date);
 
 	// store the modifications in the table calendar_event
 	$sql = "UPDATE ".$TABLEAGENDA."
-								SET title='".$title."',
-									content='".$content."',
-									start_date='".$start_date."',
-									end_date='".$end_date."'
-								WHERE id='".$id."'";
-	$result = Database::query($sql) or die (Database::error());
+			SET title		='".$title."',
+				content		='".$content."',
+				start_date	='".$start_date."',
+				end_date	='".$end_date."'
+			WHERE id='".$id."'";
+	$result = Database::query($sql);
 	return true;
 }
 
@@ -1687,7 +1686,7 @@ function delete_agenda_item($id)
 		{
 		    $t_agenda     = Database::get_course_table(TABLE_AGENDA);
             $t_agenda_r   = Database::get_course_table(TABLE_AGENDA_REPEAT);
-            $id=(int)addslashes($_GET['id']);
+            $id=intval($_GET['id']);
             $sql = "SELECT * FROM $t_agenda_r WHERE cal_id = $id";
             $res = Database::query($sql);
             if(Database::num_rows($res)>0)

@@ -135,7 +135,7 @@ class Statistics
 	function get_course_categories()
 	{
 		$category_table = Database :: get_main_table(TABLE_MAIN_CATEGORY);
-		$sql = "SELECT * FROM $category_table ORDER BY tree_pos";
+		$sql = "SELECT code, name FROM $category_table ORDER BY tree_pos";
 		$res = Database::query($sql);
 		$categories = array ();
 		while ($category = Database::fetch_object($res))

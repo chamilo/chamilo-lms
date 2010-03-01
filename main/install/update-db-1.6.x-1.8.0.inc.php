@@ -25,7 +25,7 @@
 */
 
 // Check if we come from index.php or update_courses.php - otherwise display error msg
-if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
+if (defined('SYSTEM_INSTALLATION')) {
 
 	// Check if the current Dokeos install is eligible for update
 	if (empty($updateFromConfigFile) || !file_exists($_POST['updatePath'].$updateFromConfigFile) || !in_array(get_config_param('clarolineVersion'), $update_from_version_6)) {

@@ -761,7 +761,7 @@ if ($_POST['step2']) {
 <div class="push"></div>
 </div><!-- wrapper end-->
 <div id="footer">
-	<div class="copyright"><?php echo get_lang('Platform'); ?> <a href="http://www.chamilo.org" target="_blank"> Chamilo <?php echo $new_version; ?></a> &copy; <?php echo date('Y'); ?> </div>
+	<div class="copyright"><?php echo get_lang('Platform'); ?> <a href="<?php echo $software_url; ?>" target="_blank"><?php echo $software_name; ?> <?php echo $new_version; ?></a> &copy; <?php echo date('Y'); ?> </div>
 	&nbsp;
 </div>
 </body>

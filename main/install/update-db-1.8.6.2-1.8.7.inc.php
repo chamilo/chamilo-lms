@@ -28,7 +28,7 @@ $new_file_version = '1.8.7';
 */
 
 // Check if we come from index.php or update_courses.php - otherwise display error msg
-if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
+if (defined('SYSTEM_INSTALLATION')) {
 
     // Check if the current Dokeos install is eligible for update
     if (!file_exists('../inc/conf/configuration.php')) {

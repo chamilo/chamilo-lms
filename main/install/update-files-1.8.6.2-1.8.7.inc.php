@@ -12,7 +12,7 @@
 ==============================================================================
 */
 
-if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
+if (defined('SYSTEM_INSTALLATION')) {
 
 	// Edit the configuration file
 	$file = file('../inc/conf/configuration.php');

@@ -267,7 +267,7 @@ function set_file_folder_permissions() {
 function write_courses_htaccess_file($url_append) {
 	$file_path = dirname(__FILE__).'/'.COURSES_HTACCESS_FILENAME;
 	$content = file_get_contents($file_path);
-	$content = str_replace('{DOKEOS_URL_APPEND_PATH}', $url_append, $content);
+	$content = str_replace('{CHAMILO_URL_APPEND_PATH}', $url_append, $content);
 	$fp = @ fopen('../../courses/.htaccess', 'w');
 	if ($fp) {
 		fwrite($fp, $content);
@@ -1000,7 +1000,7 @@ function display_language_selection() { ?>
 }
 
 /**
- * This function displays the requirements for installing Dokeos.
+ * This function displays the requirements for installing Chamilo.
  *
  * @param string $installType
  * @param boolean $badUpdatePath
@@ -1086,7 +1086,7 @@ function display_requirements($installType, $badUpdatePath, $updatePath = '', $u
 	echo '</div>';
 
 	// RECOMMENDED SETTINGS
-	// Note: these are the settings for Joomla, does this also apply for Dokeos?
+	// Note: these are the settings for Joomla, does this also apply for Chamilo?
 	// Note: also add upload_max_filesize here so that large uploads are possible
 	echo '<div class="RequirementHeading"><h1>'.get_lang('RecommendedSettings').'</h1>';
 	echo '<div class="RequirementText">'.get_lang('RecommendedSettingsInfo').'</div>';
@@ -1189,7 +1189,7 @@ function display_requirements($installType, $badUpdatePath, $updatePath = '', $u
                 <td class="requirements-value">'.check_writable('lang/',true).' ('.get_lang('SuggestionOnlyToEnableSubLanguageFeature').')</td>
             </tr>'.
             //'<tr>
-            //    <td class="requirements-item">dokeos/searchdb/</td>
+            //    <td class="requirements-item">chamilo/searchdb/</td>
             //    <td class="requirements-value">'.check_writable('../searchdb/').'</td>
             //</tr>'.
             //'<tr>

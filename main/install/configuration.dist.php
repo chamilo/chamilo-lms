@@ -8,7 +8,7 @@
 
 This file contains a list of variables that can be modified by the campus
 site administrator. Pay attention when changing these variables, some changes
-can cause Dokeos to stop working.
+can cause Chamilo to stop working.
 If you changed some settings and want to restore them, please have a look at
 configuration.php. That file is an exact copy of the config file at
 install time.
@@ -51,11 +51,11 @@ $_configuration['table_prefix']  						= '{COURSE_TABLE_PREFIX}';
 $_configuration['db_glue'] 								= '{DATABASE_GLUE}';
 // prefix all created bases (for courses) with this string
 $_configuration['db_prefix']       						= '{DATABASE_PREFIX}';
-// main Dokeos database
+// main Chamilo database
 $_configuration['main_database']						= '{DATABASE_MAIN}';
-// stats Dokeos database
+// stats Chamilo database
 $_configuration['statistics_database']        			='{DATABASE_STATS}';
-// Scorm Dokeos database
+// Scorm Chamilo database
 $_configuration['scorm_database']       				='{DATABASE_SCORM}';
 // User Personal Database (where all the personal stuff of the user is stored
 // (personal agenda items, course sorting)
@@ -65,16 +65,16 @@ $_configuration['user_personal_database']   			='{DATABASE_PERSONAL}';
 //   Directory settings
 //============================================================================
 
-// URL to the root of your Dokeos installation, example: http://www.mydokeos.com/
+// URL to the root of your Chamilo installation, example: http://www.mychamilo.com/
 $_configuration['root_web'] 							= '{ROOT_WEB}';
 
 // Path to the webroot of system, example: /var/www/
 $_configuration['root_sys'] 							= '{ROOT_SYS}';
 
-// Path from your WWW-root to the root of your Dokeos installation, example: dokeos (this means dokeos is installed in /var/www/dokeos/
+// Path from your WWW-root to the root of your Chamilo installation, example: chamilo (this means chamilo is installed in /var/www/chamilo/
 $_configuration['url_append'] 							= '{URL_APPEND_PATH}';
 
-// Directory of the Dokeos code. You could change this but it is not advised since this has not been tested yet.
+// Directory of the Chamilo code. You could change this but it is not advised since this has not been tested yet.
 $_configuration['code_append']    						= "main/";
 
 // Directory to store all course-related files. You could change this but it is not advised since this has not been tested yet.

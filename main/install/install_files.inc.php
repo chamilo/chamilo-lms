@@ -6,7 +6,7 @@
 * Notice : This script has to be included by install/index.php
 *
 * The script creates two files:
-* - configuration.php, the file that contains very important info for Dokeos
+* - configuration.php, the file that contains very important info for Chamilo
 *   such as the database names.
 * - .htaccess file (in the courses directory) that is optional but improves
 *   security

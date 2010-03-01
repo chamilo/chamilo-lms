@@ -8,7 +8,7 @@
 RewriteEngine On
 
 #rewrite base is the dir dokeos is installed in with trailing slash
-RewriteBase {DOKEOS_URL_APPEND_PATH}/courses/
+RewriteBase {CHAMILO_URL_APPEND_PATH}/courses/
 
 #do not rewrite on the main dir
 #change this path to the path of your main folder

@@ -12,7 +12,7 @@
 ==============================================================================
 */
 
-if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
+if (defined('SYSTEM_INSTALLATION')) {
 
 	// Edit the configuration file
 	$file = file('../inc/conf/configuration.php');
@@ -60,7 +60,7 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
 	$sql = "SELECT * FROM $db_name.course";
 	error_log('Getting courses for files updates: '.$sql, 0);
 	$result = Database::query($sql);
-	
+
 	if (Database::num_rows($result) > 0) {
 		while ($courses_directories = Database::fetch_array($result)) {
 			$currentCourseRepositorySys = $sys_course_path.$courses_directories['directory'].'/';
@@ -68,14 +68,14 @@ if (defined('SYSTEM_INSTALLATION') || defined('DOKEOS_COURSE_UPDATE')) {
 			if (!is_dir($currentCourseRepositorySys."upload/announcements")){
 				mkdir($currentCourseRepositorySys."upload/announcements", $perm);
 			}
-	
+
 			// upload > announcements > images
 			if (!is_dir($currentCourseRepositorySys."upload/announcements/images")) {
 				mkdir($currentCourseRepositorySys."upload/announcements/images", $perm);
 			}
 		}
 	}
-	
+
 	//// Create a specific directory for global thumbails
 	// home > default_platform_document > template_thumb
 	if (!is_dir($pathForm.'home/default_platform_document/template_thumb')) {

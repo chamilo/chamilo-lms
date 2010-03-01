@@ -1,8 +1,8 @@
 <?php // $id: $
-/* For licensing terms, see /dokeos_license.txt */
+/* For licensing terms, see /license.txt */
 /**
 ==============================================================================
-*	@package dokeos.admin
+*	@package chamilo.admin
 *	@author Carlos Vargas
 *	This file is the calendar/agenda.inc.php
 ==============================================================================
@@ -522,13 +522,10 @@ function get_agenda_item($id)
 	$TABLEAGENDA = Database::get_main_table(TABLE_MAIN_SYSTEM_CALENDAR);
     //$t_agenda_repeat = Database::get_course_table(TABLE_AGENDA_REPEAT);
     $item = array();
-	if(empty($id))
-    {
-        $id=(int)addslashes($_GET['id']);
-    }
-    else
-    {
-    	$id = (int) $id;
+	if(empty($id)) {
+        $id=intval($_GET['id']);
+    } else {
+    	$id = intval($id);
     }
     if(empty($id)){return $item;}
 	$sql 					= "SELECT * FROM ".$TABLEAGENDA." WHERE id='".$id."'";
@@ -1322,9 +1319,9 @@ function show_add_form($id = '')
 ?>
 
 <!-- START OF THE FORM  -->
-<form enctype="multipart/form-data"  action="<?php echo api_get_self().'?origin='.$_GET['origin'].'&amp;action='.$_GET['action']; ?>" method="post" name="new_calendar_item">
+<form enctype="multipart/form-data"  action="<?php echo api_get_self().'?origin='.Security::remove_XSS($_GET['origin']).'&amp;action='.Security::remove_XSS($_GET['action']); ?>" method="post" name="new_calendar_item">
 <input type="hidden" name="id" value="<?php if (isset($id)) echo $id; ?>" />
-<input type="hidden" name="action" value="<?php if (isset($_GET['action'])) echo $_GET['action']; ?>" />
+<input type="hidden" name="action" value="<?php if (isset($_GET['action'])) echo Security::remove_XSS($_GET['action']); ?>" />
 <input type="hidden" name="sort" value="asc" />
 <input type="hidden" name="submit_event" value="ok" />
 <?php

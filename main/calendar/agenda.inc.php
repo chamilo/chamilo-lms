@@ -1529,12 +1529,9 @@ function get_agenda_item($id)
     $t_agenda_repeat = Database::get_course_table(TABLE_AGENDA_REPEAT);
     $id=Database::escape_string($id);
     $item = array();
-	if(empty($id))
-    {
-        $id=(int)addslashes($_GET['id']);
-    }
-    else
-    {
+	if(empty($id)) {
+        $id=intval(Database::escape_string(($_GET['id'])));
+    } else {
     	$id = (int) $id;
     }
     if(empty($id)){return $item;}

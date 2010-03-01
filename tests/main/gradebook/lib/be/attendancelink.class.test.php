@@ -1,7 +1,4 @@
 <?php
-require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be/gradebookitem.class.php';
-require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be/abstractlink.class.php';
-require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be/linkfactory.class.php';
 
 class TestAttendanceLink extends UnitTestCase {
 	
@@ -10,11 +7,11 @@ class TestAttendanceLink extends UnitTestCase {
 	}
 
 	public function __construct() {
-		// The constructor acts like a global setUp for the class			
-		require_once api_get_path(SYS_TEST_PATH).'setup.inc.php';
-		global $date;
+		// The constructor acts like a global setUp for the class
+		global $date;			
+		TestManager::create_test_course('COURSEATTENDANCELINK');
 		$this->attendance = new AttendanceLink();
-		$this->attendance->set_course_code('COURSETEST');
+		$this->attendance->set_course_code('COURSEATTENDANCELINK');
 		$this->attendance->set_id (1);
 		$this->attendance->set_type (LINK_ATTENDANCE);
 		$this->attendance->set_ref_id (1) ;
@@ -23,7 +20,7 @@ class TestAttendanceLink extends UnitTestCase {
 		$this->attendance->set_date ($date);
 		$this->attendance->set_weight (1);
 		$this->attendance->set_visible (1);
-		$this->attendance->set_session_id(1);		
+		$this->attendance->set_session_id(1);
 	}
 	
 	public function testcalc_score() {
@@ -131,7 +128,7 @@ class TestAttendanceLink extends UnitTestCase {
 
 	public function __destruct() {
 		// The destructor acts like a global tearDown for the class			
-		require_once api_get_path(SYS_TEST_PATH).'teardown.inc.php';			
+		TestManager::delete_test_course('COURSEATTENDANCELINK');			
 	}
 }
 ?>

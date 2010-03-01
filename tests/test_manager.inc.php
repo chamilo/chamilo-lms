@@ -1,29 +1,24 @@
 <?php
-// $Id: setup.inc.php 2010-02-17 12:07:00Z aportugal $
+// $Id: test_manager.inc.php 2010-02-17 12:07:00Z aportugal $
 
 /* For licensing terms, see /chamilo_license.txt */
 /**
 ==============================================================================
-*	This is the settings file load than need some functions
+*	Code library for load functions than are needed to test
 *
-*	It load:
-*	- require_once
-*   - creation course
-*	- sessions
-*	- api_allow_edit
-*	- api_session
-*
-*
-*	@todo rewrite code to separate display, logic, database code
-*	@package chamilo.main
+*	@author Arthur Portugal, Principal author
+
+*	@package chamilo.tests
 ==============================================================================
 */
 
 /**
- * @todo shouldn't these settings be moved to the test_suite.php.
- * 		 if these are really configuration then we can make require_once in each tests.
- * @todo use this file to load the setup in each file test.
- * @todo check for duplication of require with test_suite.php
+ * @todo shouldn't these settings be moved to the test_suite.php
+ * if these are really configuration then we can make require_once in each tests
+ * file.
+ * @todo use this file to load in the setup in each file test.
+ * @todo use this file to destroy in the teardown in each file test.
+ * @todo check for duplication of "require_once" files with test_suite.php
  * @author aportugal
  */
 /*
@@ -43,9 +38,6 @@ $maindir = dirname(__FILE__).'/../main/';
 $incdir  = dirname(__FILE__).'/../main/inc/';
 $libdir  = dirname(__FILE__).'/../main/inc/lib/';
 
-/**This global.inc file need be loaded once time*/
-//require_once $incdir.'global.inc.php';
-
 /**Files inside '/../main' */
 require_once $maindir.'permissions/permissions_functions.inc.php';
 require_once $maindir.'admin/calendar.lib.php';
@@ -62,11 +54,17 @@ require_once $maindir.'exercice/exercise.class.php';
 require_once $maindir.'exercice/fill_blanks.class.php';
 require_once $maindir.'exercice/freeanswer.class.php';
 require_once $maindir.'forum/forumfunction.inc.php';
+require_once $maindir.'gradebook/lib/be/gradebookitem.class.php';
+require_once $maindir.'gradebook/lib/be/abstractlink.class.php';
+require_once $maindir.'gradebook/lib/be/evallink.class.php';
+require_once $maindir.'gradebook/lib/be/linkfactory.class.php';
 require_once $maindir.'gradebook/lib/be/attendancelink.class.php';
 require_once $maindir.'gradebook/lib/be/category.class.php';
 require_once $maindir.'gradebook/lib/be/dropboxlink.class.php';
 require_once $maindir.'gradebook/lib/be/evaluation.class.php';
 require_once $maindir.'gradebook/lib/be/exerciselink.class.php';
+require_once $maindir.'gradebook/lib/be/dropboxlink.class.php';
+require_once $maindir.'gradebook/lib/be/result.class.php';
 
 
 /**Files inside '/../main/lib/' */
@@ -96,37 +94,52 @@ ob_end_clean();
 /**Problem with this file to test objects*/
 //require_once $maindir.'exercice/exercise.lib.php';
 
+class TestManager {
+	
+/**
+==============================================================================
+		MAIN CODE
+==============================================================================
+*/
+
+/**
+ * This function create in the database a test course and will also load sessions.
+ * This name will be change each time is used in the tests.
+ * @param string	Course name
+ * @return void
+ */
+
+function create_test_course($course_code = 'COURSETEST') {
+	
 /*
 -----------------------------------------------------------
 	Table definitions
 -----------------------------------------------------------
 */
+
 $table_course 		= Database::get_main_table(TABLE_MAIN_COURSE);
 $course_table 		= Database::get_main_table(TABLE_MAIN_COURSE);
 $course_cat_table 	= Database::get_main_table(TABLE_MAIN_CATEGORY);
 
-/*
-==============================================================================
-		MAIN CODE
-==============================================================================
-*/
 global $_configuration, $_user, $_course, $cidReq;
-$cidReq = 'COURSETEST';
+$cidReq = $course_code;
 
 /*
 -----------------------------------------------------------
 	Check if the course exists
 -----------------------------------------------------------
 */
+
 $sql = "SELECT code FROM  $table_course WHERE code = '$cidReq' ";
 $rs = Database::query($sql, __FILE__, __LINE__);
 $row = Database::fetch_row($rs);
 
 /*
 -----------------------------------------------------------
-	Create the course COURSETEST
+	Create the course in the database
 -----------------------------------------------------------
 */
+
 if (empty($row[0])) {
     // create a course
     $course_datos = array(
@@ -159,6 +172,7 @@ $result = Database::query($sql,__FILE__,__LINE__);
 	Create the session
 -----------------------------------------------------------
 */
+
 if (Database::num_rows($result)>0) {
     $cData = Database::fetch_array($result);
     $_cid                            = $cData['code'             ];
@@ -188,7 +202,8 @@ if (Database::num_rows($result)>0) {
 -----------------------------------------------------------
 	Load the session
 -----------------------------------------------------------
-*/  
+*/
+
 $_SESSION['_user']['user_id'] = 1;    
 $_SESSION['is_courseAdmin'] = 1;
 $_SESSION['show'] = showall;
@@ -197,5 +212,49 @@ $_SESSION['show'] = showall;
 -----------------------------------------------------------
 	Load the user
 -----------------------------------------------------------
-*/  
+*/
+
 $_user['user_id'] = $_SESSION['_user']['user_id'];
+}
+
+/**
+ * This function delete the test course from the database and destroy the sessions. 
+ * @param string the course code than will be delete.
+ * @return void
+ */
+
+function delete_test_course($course_code) {
+$code = $course_code;
+	
+/*
+-----------------------------------------------------------
+	Delete the course
+-----------------------------------------------------------
+*/
+	
+$res = CourseManager::delete_course($code);
+$path = api_get_path(SYS_PATH).'archive';
+
+if ($handle = opendir($path)) {
+	while (false !== ($file = readdir($handle))) {
+		if (strpos($file,$code)!==false) {
+			if (is_dir($path.'/'.$file)) {
+				rmdirr($path.'/'.$file);
+			}
+		}
+	}
+	closedir($handle);
+}
+	
+/*
+-----------------------------------------------------------
+	Check api session destroy
+-----------------------------------------------------------
+*/
+	
+if (!headers_sent()) {
+	$res=api_session_destroy();
+	}
+}
+
+}

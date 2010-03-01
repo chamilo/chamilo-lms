@@ -1,5 +1,4 @@
 <?php
-require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be/evaluation.class.php';
 
 class TestCategoryClass extends UnitTestCase {
 	
@@ -9,13 +8,13 @@ class TestCategoryClass extends UnitTestCase {
 
 	public function __construct() {
 		// The constructor acts like a global setUp for the class			
-		require_once api_get_path(SYS_TEST_PATH).'setup.inc.php';
+		TestManager::create_test_course('COURSECATEGORYCLASS');
 		$this->category = new Category();
 		$this->category->set_id(1);
 		$this->category->set_name('test');
 		$this->category->set_description('test description');
 		$this->category->set_user_id(1);
-		$this->category->set_course_code('COURSETEST'); 
+		$this->category->set_course_code('COURSECATEGORYCLASS'); 
 		$this->category->set_certificate_min_score(20);
 		$this->category->set_parent_id(1);
 		$this->category->set_session_id(1);
@@ -412,7 +411,7 @@ class TestCategoryClass extends UnitTestCase {
 
 	public function __destruct() {
 		// The destructor acts like a global tearDown for the class			
-		require_once api_get_path(SYS_TEST_PATH).'teardown.inc.php';			
+		TestManager::delete_test_course('COURSECATEGORYCLASS');			
 	}
 }
 ?>

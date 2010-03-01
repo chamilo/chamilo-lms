@@ -1,27 +1,20 @@
 <?php
-require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be/gradebookitem.class.php';
-require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be/abstractlink.class.php';
-require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be/evallink.class.php';
-require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be/dropboxlink.class.php';
-require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be/result.class.php';
-
 class TestEvaluation extends UnitTestCase {
 	
 	public function TestEvaluation() {
 		$this->UnitTestCase('Test Evaluation');
 	}
-	
 
 	public function __construct() {
 		// The constructor acts like a global setUp for the class			
-		require_once api_get_path(SYS_TEST_PATH).'setup.inc.php';
 		global $date;
+		TestManager::create_test_course('COURSEEVALUATION');
 		$this->evaluation = new Evaluation();
 		$this->evaluation-> set_id (1);
 		$this->evaluation-> set_name ('test');
 		$this->evaluation-> set_description ('test description');
 		$this->evaluation-> set_user_id (1);
-		$this->evaluation-> set_course_code ('COURSETEST');
+		$this->evaluation-> set_course_code ('COURSEEVALUATION');
 		$this->evaluation-> set_category_id (1);
 		$this->evaluation-> set_date ($date);
 		$this->evaluation-> set_weight (1);
@@ -291,7 +284,7 @@ class TestEvaluation extends UnitTestCase {
 	}
 	
 	public function testset_course_code() {
-		$res = $this->evaluation->set_course_code('COURSETEST');
+		$res = $this->evaluation->set_course_code('COURSEEVALUATION');
 		$this->assertTrue(is_null($res));
 		//var_dump($res);
 	}
@@ -347,7 +340,7 @@ class TestEvaluation extends UnitTestCase {
 
 	public function __destruct() {
 		// The destructor acts like a global tearDown for the class			
-		require_once api_get_path(SYS_TEST_PATH).'teardown.inc.php';			
+		TestManager::delete_test_course('COURSEEVALUATION');		
 	}
 }
 ?>

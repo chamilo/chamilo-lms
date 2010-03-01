@@ -65,6 +65,7 @@ require_once $maindir.'gradebook/lib/be/evaluation.class.php';
 require_once $maindir.'gradebook/lib/be/exerciselink.class.php';
 require_once $maindir.'gradebook/lib/be/dropboxlink.class.php';
 require_once $maindir.'gradebook/lib/be/result.class.php';
+require_once $maindir.'gradebook/lib/be/forumthreadlink.class.php';
 
 
 /**Files inside '/../main/lib/' */

@@ -147,7 +147,7 @@ class TestDisplay extends UnitTestCase {
 	/**
 	 * Display the reduced page header (without banner)
 	 */
-	// [/var/www/chamilo/main/inc/reduced_header.inc.php line 30] - exception 
+	// [/var/www/chamilo/main/inc/reduced_header.inc.php line 30] - exception
 /*	public function testdisplay_reduced_header() {
 		global $_plugins,$lp_theme_css,$mycoursetheme,$user_theme,$platform_theme;
 		global $httpHeadXtra, $htmlHeadXtra, $htmlIncHeadXtra, $_course, $_user, $clarolineRepositoryWeb, $text_dir, $plugins, $_user, $rootAdminWeb, $_cid, $interbreadcrumb, $charset, $language_file, $noPHP_SELF, $language_interface;
@@ -200,7 +200,6 @@ class TestDisplay extends UnitTestCase {
 	 * @return string Code HTML about the footer
 	 */
 	public function testdisplay_footer() {
-		global $dokeos_version; //necessary to have the value accessible in the footer
 		global $_plugins;
 		ob_start();
 		$res=Display::display_footer();
@@ -359,7 +358,7 @@ class TestDisplay extends UnitTestCase {
 		$res=Display::user_name($fname,$lname);
 		ob_end_clean();
 		$this->assertTrue(is_string($res));
-		
+
 		//var_dump($res);
 	}
 }

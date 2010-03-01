@@ -37,7 +37,7 @@ define('SYSTEM_CONFIG_FILENAME', 'configuration.dist.php');
  * @author Ivan Tcholakov, 2010;
  */
 function is_already_installed_system() {
-	global $new_version; 
+	global $new_version;
 
 	if (empty($new_version)) {
 		return true; // Must be initialized.
@@ -49,8 +49,10 @@ function is_already_installed_system() {
 	}
 	require $current_config_file;
 
-	// Careful, if/when the name 'dokeos_version' is changed. Check this then.
 	$current_version = trim($_configuration['dokeos_version']);
+	if (empty($current_version)) {
+		$current_version = trim($_configuration['system_version']);
+	}
 
 	// If the current version is old, upgrading is assumed, the installer goes ahead.
 	return empty($current_version) ? false : version_compare($current_version, $new_version, '>=');

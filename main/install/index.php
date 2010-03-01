@@ -119,6 +119,9 @@ $update_from_version_8 = array('1.8', '1.8.2', '1.8.3', '1.8.4', '1.8.5', '1.8.6
 
 $my_old_version = '';
 $tmp_version = get_config_param('dokeos_version');
+if (empty($tmp_version)) {
+	$tmp_version = get_config_param('system_version');
+}
 if (!empty($_POST['old_version'])) {
 	$my_old_version = $_POST['old_version'];
 } elseif (!empty($tmp_version)) {
@@ -130,6 +133,8 @@ if (!empty($_POST['old_version'])) {
 $new_version = '1.8.7';
 $new_version_stable = false;
 $new_version_major = true;
+$software_name = 'Chamilo';
+$software_url = 'http://www.chamilo.org/';
 
 // A protection measure for already installed systems.
 if (is_already_installed_system()) {

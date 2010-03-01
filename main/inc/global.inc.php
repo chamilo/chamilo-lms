@@ -57,6 +57,17 @@ if (!isset($GLOBALS['_configuration'])) {
   $GLOBALS['_configuration'] = $_configuration;
 }
 
+// Code for trnasitional purposes, it can be removed right before the 1.8.7 release.
+if (empty($_configuration['system_version'])) {
+	$_configuration['system_version'] = $_configuration['dokeos_version'];
+	$_configuration['system_stable'] = $_configuration['dokeos_stable'];
+	$_configuration['software_url'] = 'http://www.chamilo.org/';
+}
+
+// For backward compatibility.
+$_configuration['dokeos_version'] = $_configuration['system_version'];
+$_configuration['dokeos_stable'] = $_configuration['system_stable'];
+
 // Include the main Dokeos platform library file.
 require_once $includePath.'/lib/main_api.lib.php';
 

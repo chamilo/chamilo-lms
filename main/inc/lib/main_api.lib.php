@@ -1063,7 +1063,7 @@ function api_session_start($already_installed = true) {
 		$session_handler = new session_handler();
 		@session_set_save_handler(array(& $session_handler, 'open'), array(& $session_handler, 'close'), array(& $session_handler, 'read'), array(& $session_handler, 'write'), array(& $session_handler, 'destroy'), array(& $session_handler, 'garbage'));
 	}
-	session_name('dk_sid');
+	session_name('ch_sid');
 	session_start();
 	if ($already_installed) {
 		if (empty ($_SESSION['checkDokeosURL'])) {
@@ -3244,7 +3244,7 @@ function api_chmod_R($path, $filemode) {
  */
 function api_get_version() {
 	global $_configuration;
-	return (string)$_configuration['dokeos_version'];
+	return (string)$_configuration['system_version'];
 }
 
 /**

@@ -622,7 +622,6 @@ class Display {
 	 * Display the page footer
 	 */
 	public static function display_footer () {
-		global $dokeos_version; //necessary to have the value accessible in the footer
 		global $_plugins;
 		include (api_get_path(INCLUDE_PATH)."footer.inc.php");
 	}

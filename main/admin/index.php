@@ -338,7 +338,7 @@ function version_check()
 		{
 		*/
 		$return = 'site registered. ';
-		$return .= check_dokeos_version2();
+		$return .= check_system_version2();
 		//}
 	}
 	return $return;
@@ -379,10 +379,10 @@ function register_site()
 * @copyright (C) 2001 The phpBB Group
 * @return language string with some layout (color)
 */
-function check_dokeos_version2()
+function check_system_version2()
 {
 	global $_configuration;
-	$dokeos_version = trim($_configuration['dokeos_version']); // the chamilo version of your installation
+	$system_version = trim($_configuration['system_version']); // the chamilo version of your installation
 
 	if (ini_get('allow_url_fopen')==1)
 	{
@@ -398,17 +398,14 @@ function check_dokeos_version2()
 		$row = Database::fetch_array($result);
 		$number_of_users = $row[0];
 
-		$version_url= 'http://version.chamilo.org/version.php?url='.urlencode(api_get_path(WEB_PATH)).'&campus='.urlencode(api_get_setting('siteName')).'&contact='.urlencode(api_get_setting('emailAdministrator')).'&version='.urlencode($dokeos_version).'&numberofcourses='.urlencode($number_of_courses).'&numberofusers='.urlencode($number_of_users).'&donotlistcampus='.api_get_setting('donotlistcampus').'&organisation='.urlencode(api_get_setting('Institution')).'&adminname='.urlencode(api_get_setting('administratorName').' '.api_get_setting('administratorSurname'));
+		$version_url= 'http://version.chamilo.org/version.php?url='.urlencode(api_get_path(WEB_PATH)).'&campus='.urlencode(api_get_setting('siteName')).'&contact='.urlencode(api_get_setting('emailAdministrator')).'&version='.urlencode($system_version).'&numberofcourses='.urlencode($number_of_courses).'&numberofusers='.urlencode($number_of_users).'&donotlistcampus='.api_get_setting('donotlistcampus').'&organisation='.urlencode(api_get_setting('Institution')).'&adminname='.urlencode(api_get_setting('administratorName').' '.api_get_setting('administratorSurname'));
 		$handle=@fopen($version_url,'r');
 		if ($handle !== false) {
 			$version_info=trim(@fread($handle, 1024));
 
-			if ($dokeos_version<>$version_info)
-			{
-				$output='<br /><span style="color:red">' . get_lang('YourVersionNotUpToDate') . '. '.get_lang('LatestVersionIs').' <b>Chamilo '.$version_info.'</b>. '.get_lang('YourVersionIs').' <b>Chamilo '.$dokeos_version. '</b>. '.str_replace('http://www.chamilo.org','<a href="http://www.chamilo.org">http://www.chamilo.org</a>',get_lang('PleaseVisitDokeos')).'</span>';
-			}
-			else
-			{
+			if ($system_version <> $version_info) {
+				$output='<br /><span style="color:red">' . get_lang('YourVersionNotUpToDate') . '. '.get_lang('LatestVersionIs').' <b>Chamilo '.$version_info.'</b>. '.get_lang('YourVersionIs').' <b>Chamilo '.$system_version. '</b>. '.str_replace('http://www.chamilo.org','<a href="http://www.chamilo.org">http://www.chamilo.org</a>',get_lang('PleaseVisitDokeos')).'</span>';
+			} else {
 				$output = '<br /><span style="color:green">'.get_lang('VersionUpToDate').': Chamilo '.$version_info.'</span>';
 			}
 		} else {
@@ -433,10 +430,10 @@ function check_dokeos_version2()
 				the http://www.dokeos.com/version.php page (instead of version.txt) . That's why I chose to use fopen which requires however
 				that allow_url_open is set to true
 */
-function check_dokeos_version()
+function check_system_version()
 {
 	global $_configuration; // the chamilo version of your installation
-	$dokeos_version = $_configuration['dokeos_version'];
+	$system_version = $_configuration['system_version'];
 
 	if ($fsock = @fsockopen('www.chamilo.org', 80, $errno, $errstr))
 	{
@@ -461,12 +458,9 @@ function check_dokeos_version()
 		}
 		@fclose($fsock);
 
-		if (trim($dokeos_version)<>trim($version_info))
-		{
-			$output='<span style="color:red">' . get_lang('YourVersionNotUpToDate') . '. '.get_lang('LatestVersionIs').' <b>Chamilo '.$version_info.'</b>. '.get_lang('YourVersionIs').' <b>Dokeos '.$dokeos_version. '</b>. '.str_replace('http://www.chamilo.org','<a href="http://www.chamilo.org">http://www.chamilo.org</a>',get_lang('PleaseVisitDokeos')).'</span>';
-		}
-		else
-		{
+		if (trim($system_version) <> trim($version_info)) {
+			$output='<span style="color:red">' . get_lang('YourVersionNotUpToDate') . '. '.get_lang('LatestVersionIs').' <b>Chamilo '.$version_info.'</b>. '.get_lang('YourVersionIs').' <b>Dokeos '.$system_version. '</b>. '.str_replace('http://www.chamilo.org','<a href="http://www.chamilo.org">http://www.chamilo.org</a>',get_lang('PleaseVisitDokeos')).'</span>';
+		} else {
 			$output = '<span style="color:green">'.get_lang('VersionUpToDate').': Chamilo '.$version_info.'</span>';
 		}
 	}

@@ -488,7 +488,7 @@ function makeTheBackup($exportedCourseId, $verbose_backup = FALSE, $ignore = '',
 	$stringConfig = "<?php
 		/*
 		      +----------------------------------------------------------------------+
-		      Dokeos version ".$dokeos_version."
+		      System version ".$_configuration['system_version']."
 		      +----------------------------------------------------------------------+
 		      This file was generate by script ".api_get_self()."
 		      ".date("r")."                  |
@@ -498,7 +498,7 @@ function makeTheBackup($exportedCourseId, $verbose_backup = FALSE, $ignore = '',
 		      |   as published by the Free Software Foundation; either version 2     |
 		*/
 
-		// Dokeos Version was :  ".$dokeos_version."
+		// System Version was :  ".$_configuration['system_version']."
 		// Source was  in ".realpath("../../".$exportedCourseId."/")."
 		// find in ".$archiveDir."/courseBase/courseBase.sql sql to rebuild the course base
 		// find in ".$archiveDir."/".$exportedCourseId." to content of directory of course

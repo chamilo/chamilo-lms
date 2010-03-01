@@ -563,7 +563,7 @@ function display_login_form() {
 	$form = new FormValidator('formLogin');
 	$form->addElement('text', 'login', get_lang('UserName'), array('size' => 17));
 	$form->addElement('password', 'password', get_lang('Pass'), array('size' => 17));
-	$form->addElement('style_submit_button','submitAuth', get_lang('langEnter'), array('class' => 'login'));
+	$form->addElement('style_submit_button','submitAuth', get_lang('LoginEnter'), array('class' => 'login'));
 	$renderer =& $form->defaultRenderer();
 	$renderer->setElementTemplate('<div><label>{label}</label></div><div>{element}</div>');
 	$form->display();

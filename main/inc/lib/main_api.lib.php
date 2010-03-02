@@ -1086,9 +1086,6 @@ function api_session_start($already_installed = true) {
  */
 function api_session_register($variable) {
 	global $$variable;
-	// session_register() is deprecated as of PHP 5.3
-	session_register($variable);
-	//
 	$_SESSION[$variable] = $$variable;
 }
 
@@ -1104,10 +1101,7 @@ function api_session_unregister($variable) {
 		unset ($GLOBALS[$variable]);
 	}
 	if (isset($_SESSION[$variable])) {
-		$_SESSION[$variable] = null;
-		// session_unregister() is deprecated as of PHP 5.3
-		session_unregister($variable);
-		//
+		unset($_SESSION[$variable]);
 	}
 }
 
@@ -4582,7 +4576,9 @@ function api_get_local_time($time, $format=null, $to_timezone=null, $from_timezo
 		}
 	}
 	// Determine the format
+	$format_null = false;
 	if ($format === null) {
+		$format_null = true;
 		$format = 'Y-m-d H:i:s';
 	}
 	// If time is a timestamp, convert it to a string
@@ -4596,7 +4592,15 @@ function api_get_local_time($time, $format=null, $to_timezone=null, $from_timezo
 		if (is_int($format) || strpos($format, '%') !== false) {
 			return api_format_date($format, strtotime($date->format("Y-m-d H:i:s")));
 		} else {
-			return $date->format($format);
+			if ($format_null == true && phpversion() >= 5.3) {
+				// use IntlDateFormatter to localize the date in the language of the user
+				require_once api_get_path(LIBRARY_PATH).'/internationalization.lib.php';
+				$locale = api_get_language_isocode();
+				$date_formatter = new IntlDateFormatter($locale, IntlDateFormatter::FULL, IntlDateFormatter::SHORT);
+				return $date_formatter->format(strtotime($date->format("Y-m-d H:i:s")));
+			} else {
+				return $date->format($format);
+			}
 		}
 	} catch (Exception $e) {
 		return null;

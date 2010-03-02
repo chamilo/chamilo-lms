@@ -22,8 +22,7 @@ class SystemAnnouncementManager
 		$user_selected_language = api_get_interface_language();
 		$db_table = Database :: get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
 		$sql = "SELECT *, DATE_FORMAT(date_start,'%d-%m-%Y') AS display_date FROM ".$db_table." WHERE (lang='$user_selected_language' OR lang IS NULL) AND ((NOW() BETWEEN date_start AND date_end) OR date_end='0000-00-00') ";
-		switch ($visible)
-		{
+		switch ($visible) {
 			case VISIBLE_GUEST :
 				$sql .= " AND visible_guest = 1 ";
 				break;
@@ -36,40 +35,32 @@ class SystemAnnouncementManager
 		}
 		$sql .= " ORDER BY date_start DESC LIMIT 0,7";
 		$announcements = Database::query($sql);
-		if (Database::num_rows($announcements))
-		{
+		if (Database::num_rows($announcements) > 0) {
 			$query_string = ereg_replace('announcement=[1-9]+', '', $_SERVER['QUERY_STRING']);
 			$query_string = ereg_replace('&$', '', $query_string);
 			$url = api_get_self();
 			echo '<div class="system_announcements">';
 			echo '<h3>'.get_lang('SystemAnnouncements').'</h3>';
 			echo '<table border="0">';
-			while ($announcement = Database::fetch_object($announcements))
-			{
+			while ($announcement = Database::fetch_object($announcements)) {
 
-				if ($id != $announcement->id)
-				{
-					if (strlen($query_string) > 0)
-					{
+				if ($id != $announcement->id) {
+					if (strlen($query_string) > 0) {
 						$show_url = 'news_list.php#'.$announcement->id;
 						//$show_url = $url.'?'.$query_string.'&announcement='.$announcement->id;
-					}
-					else
-					{
+					} else {
 						$show_url = 'news_list.php#'.$announcement->id;
 						//$show_url = $url.'?announcement='.$announcement->id;
 					}
 					echo '<tr class="system_announcement">
-							<td width="80px" valign="top" class="system_announcement_title">'
-								.$announcement->display_date.'
-							</td>
-							<td valign="top">
+							<td valign="top" class="system_announcement_title">
 								<a name="ann'.$announcement->id.'" href="'.$show_url.'">'.$announcement->title.'</a>
 							</td>
+							<td valign="top">
+								'.$announcement->display_date.'
+							</td>
 						</tr>';
-				}
-				else
-				{
+				} else {
 					echo '<div class="system_announcement">
 							<div class="system_announcement_title">'
 								.$announcement->display_date.'
@@ -84,7 +75,7 @@ class SystemAnnouncementManager
 
 			/*echo '<tr><td height="15px"></td></tr>';*/
 			echo '<tr><td colspan="2">';
-			echo '<a href="news_list.php">'.get_lang("More").'</a>';
+			echo '<a href="news_list.php">'.get_lang('More').'</a>';
 			echo '</td></tr>';
 			echo '</table>';
 			echo '</div>';
@@ -120,7 +111,7 @@ class SystemAnnouncementManager
 		}
 		$announcements = Database::query($sql);
 
-		if (Database::num_rows($announcements)) {
+		if (Database::num_rows($announcements) > 0) {
 			$query_string = ereg_replace('announcement=[1-9]+', '', $_SERVER['QUERY_STRING']);
 			$query_string = ereg_replace('&$', '', $query_string);
 			$url = api_get_self();
@@ -138,9 +129,7 @@ class SystemAnnouncementManager
 					echo '<tr><td>';
 					echo '<a name="'.$announcement->id.'"></a>
 							<div class="system_announcement">
-							<div class="system_announcement_title">'
-								.$announcement->display_date.' <strong>'.$announcement->title.'</strong>
-							</div>
+							<div class="system_announcement_title">'.$announcement->title.'</div><div class="system_announcement_date">'.$announcement->display_date.'</div>
 							<br />
 						  	<div class="system_announcement_content">'
 						  			.$announcement->content.'
@@ -159,8 +148,7 @@ class SystemAnnouncementManager
 				echo '</tr>';
 			echo '</table>';
 			echo '</div>';
-		}
-		return;
+		}		
 	}
 
 	public static function display_fleche($user_id)

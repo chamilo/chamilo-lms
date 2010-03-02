@@ -1,6 +1,6 @@
 <?php // $Id: user_portal.php 22375 2009-07-26 18:54:59Z herodoto $
 
-/* For licensing terms, see /dokeos_license.txt */
+/* For licensing terms, see /license.txt */
 /**
 ==============================================================================
 *	This is the index file displayed when a user is logged in on Dokeos.

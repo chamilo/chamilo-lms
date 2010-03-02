@@ -1635,8 +1635,7 @@ div.system_announcement {
 .system_announcement_title {
 	font-weight: bold;
 	font-size: 120%;
-	float:left;
-	
+	float:left;	
 }
 
 .system_announcement_date {

@@ -48,11 +48,23 @@ INSERT INTO settings_current (variable, subkey, type, category, selected_value, 
 ALTER TABLE user_field_values CHANGE id id BIGINT NOT NULL AUTO_INCREMENT;
 ALTER TABLE user_field_values ADD INDEX (user_id, field_id);
 
-UPDATE settings_current SET selected_value = '1.8.7.10483' WHERE variable = 'dokeos_database_version';
+UPDATE settings_current SET selected_value = '1.8.7.10610' WHERE variable = 'dokeos_database_version';
 
 -- xxSTATSxx
 CREATE TABLE track_e_item_property(id int NOT NULL auto_increment PRIMARY KEY, course_id int NOT NULL, item_property_id int NOT NULL, title varchar(255), content text, progress int NOT NULL default 0, lastedit_date datetime NOT NULL default '0000-00-00 00:00:00', lastedit_user_id int  NOT NULL, session_id int NOT NULL default 0);
 ALTER TABLE track_e_item_property ADD INDEX (course_id, item_property_id, session_id);
+ALTER TABLE track_e_access ADD access_session_id INT NOT NULL DEFAULT 0;
+ALTER TABLE track_e_access ADD INDEX (access_session_id);  
+ALTER TABLE track_e_course_access ADD session_id INT NOT NULL DEFAULT 0;
+ALTER TABLE track_e_course_access ADD INDEX (session_id);
+ALTER TABLE track_e_downloads ADD down_session_id INT NOT NULL DEFAULT 0;
+ALTER TABLE track_e_downloads ADD INDEX (down_session_id);
+ALTER TABLE track_e_links ADD links_session_id INT NOT NULL DEFAULT 0;
+ALTER TABLE track_e_links ADD INDEX (links_session_id);
+ALTER TABLE track_e_uploads ADD upload_session_id INT NOT NULL DEFAULT 0;
+ALTER TABLE track_e_uploads ADD INDEX (upload_session_id);
+ALTER TABLE track_e_online ADD session_id INT NOT NULL DEFAULT 0;
+ALTER TABLE track_e_online ADD INDEX (session_id);
 
 -- xxUSERxx
 

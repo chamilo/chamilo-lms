@@ -50,6 +50,7 @@ CREATE TABLE track_e_access (
   access_date datetime NOT NULL default '0000-00-00 00:00:00',
   access_cours_code varchar(40) NOT NULL default '',
   access_tool varchar(30) default NULL,
+  access_session_id int NOT NULL default 0,
   PRIMARY KEY  (access_id),
   KEY access_user_id (access_user_id),
   KEY access_cours_code (access_cours_code)
@@ -86,6 +87,7 @@ CREATE TABLE track_e_downloads (
   down_date datetime NOT NULL default '0000-00-00 00:00:00',
   down_cours_id varchar(40) NOT NULL default '',
   down_doc_path varchar(255) NOT NULL default '',
+  down_session_id INT NOT NULL DEFAULT 0,
   PRIMARY KEY  (down_id),
   KEY down_user_id (down_user_id),
   KEY down_cours_id (down_cours_id)
@@ -157,6 +159,7 @@ CREATE TABLE track_e_links (
   links_date datetime NOT NULL default '0000-00-00 00:00:00',
   links_cours_id varchar(40) NOT NULL default '' ,
   links_link_id int NOT NULL default 0,
+  links_session_id INT NOT NULL DEFAULT 0,
   PRIMARY KEY  (links_id),
   KEY links_cours_id (links_cours_id),
   KEY links_user_id (links_user_id)
@@ -178,6 +181,7 @@ CREATE TABLE track_e_online (
   login_date datetime NOT NULL default '0000-00-00 00:00:00',
   login_ip varchar(39) NOT NULL default '',
   course varchar(40) default NULL,
+  session_id INT NOT NULL DEFAULT 0,
   PRIMARY KEY  (login_id),
   KEY login_user_id (login_user_id)
 );
@@ -197,6 +201,7 @@ CREATE TABLE track_e_uploads (
   upload_date datetime NOT NULL default '0000-00-00 00:00:00',
   upload_cours_id varchar(40) NOT NULL default '',
   upload_work_id int NOT NULL default 0,
+  upload_session_id INT NOT NULL DEFAULT 0,
   PRIMARY KEY  (upload_id),
   KEY upload_user_id (upload_user_id),
   KEY upload_cours_id (upload_cours_id)
@@ -209,6 +214,7 @@ CREATE TABLE track_e_course_access (
   login_course_date datetime NOT NULL default '0000-00-00 00:00:00',
   logout_course_date datetime default NULL,
   counter int NOT NULL,
+  session_id int NOT NULL default 0,
   PRIMARY KEY  (course_access_id)
 );
 
@@ -245,3 +251,9 @@ ALTER TABLE track_e_course_access ADD INDEX (login_course_date);
 ALTER TABLE track_e_course_access ADD INDEX (course_code);
 ALTER TABLE track_e_online ADD INDEX (course);
 ALTER TABLE track_e_item_property ADD INDEX (course_id, item_property_id, session_id);
+ALTER TABLE track_e_access ADD INDEX (access_session_id);  
+ALTER TABLE track_e_course_access ADD INDEX (session_id);  
+ALTER TABLE track_e_downloads ADD INDEX (down_session_id);  
+ALTER TABLE track_e_links ADD INDEX (links_session_id); 
+ALTER TABLE track_e_uploads ADD INDEX (upload_session_id);  
+ALTER TABLE track_e_online ADD INDEX (session_id);

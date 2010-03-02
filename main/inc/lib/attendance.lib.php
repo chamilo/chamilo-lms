@@ -288,7 +288,11 @@ class Attendance
 		foreach ($a_course_users as $key =>  $value) {
 			$uid = intval($value['user_id']);
 			$status = $value['status'];
-			if ($uid <= 1 || $status == DRH) continue;
+
+			$user_status_in_course = CourseManager::get_user_in_course_status($uid, $current_course_id);			
+
+			if ($uid <= 1 || $status == DRH || $user_status_in_course == COURSEMANAGER) continue;
+
 			if (!empty($attendance_id)) {
 				$attendance_id = intval($attendance_id);
 				$user_faults = $this->get_faults_of_user($uid, $attendance_id);

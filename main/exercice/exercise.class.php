@@ -1362,10 +1362,42 @@ class Exercise
 		    delete_all_values_for_item($course_id, TOOL_QUIZ, $this->id);
 	    }
     }
-  function selectExpiredTime() {
+	function selectExpiredTime() {
   	   return $this->expired_time;
-  }
-}
+	}
 
+	/**
+	* Cleans the student's results only for the Exercise tool. 
+	* The LP results are NOT deleted
+	* Works with exercises in sessions
+	* @return int quantity of user's exercises deleted  
+	*/
+	function clean_results() {
+		$table_track_e_exercises = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+		$table_track_e_attempt   = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);	
+		
+		$sql_select = "SELECT exe_id FROM $table_track_e_exercises
+						WHERE exe_cours_id = '".api_get_course_id()."' AND exe_exo_id = ".$this->id." AND orig_lp_id = 0 AND orig_lp_item_id = 0 AND session_id = ".api_get_session_id()."";
+						
+		$result   = Database::query($sql_select);
+		$exe_list = Database::store_result($result);
+		
+		//deleting TRACK_E_ATTEMPT table
+		$i = 0;
+		if (is_array($exe_list) && count($exe_list) > 0) {
+			foreach($exe_list as $item) {
+				$sql = "DELETE $table_track_e_attempt WHERE exe_id = '".$item['exe_id']."'";				
+				Database::query($sql);
+				$i++; 
+			}
+		}
+		
+		//delete TRACK_E_EXERCICES table
+		$sql = "DELETE $table_track_e_exercises
+				WHERE exe_cours_id = '".api_get_course_id()."' AND exe_exo_id = ".$this->id." AND orig_lp_id = 0 AND orig_lp_item_id = 0 AND session_id = ".api_get_session_id()."";
+		Database::query($sql); 
+		return $i;	
+	}	
+}
 endif;
 ?>

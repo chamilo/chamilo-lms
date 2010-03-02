@@ -110,8 +110,8 @@ class TestsSuite extends TestSuite {
         $this->addFile(api_get_path(SYS_TEST_PATH).'/main/webservices/user_import/import.lib.test.php');        
         $this->addFile(api_get_path(SYS_TEST_PATH).'/main/work/work.lib.test.php');
         $this->addFile(api_get_path(SYS_TEST_PATH).'/main/inc/lib/glossary.lib.test.php');
-        $this->addFile(api_get_path(SYS_TEST_PATH).'/main/inc/lib/notebook.lib.test.php');
-        $this->addFile(api_get_path(SYS_TEST_PATH).'/main/permissions/permissions_functions.inc.test.php');     
+        */$this->addFile(api_get_path(SYS_TEST_PATH).'/main/inc/lib/notebook.lib.test.php');
+        /*$this->addFile(api_get_path(SYS_TEST_PATH).'/main/permissions/permissions_functions.inc.test.php');     
         $this->addFile(api_get_path(SYS_TEST_PATH).'/main/resourcelinker/resourcelinker.inc.test.php');
         $this->addFile(api_get_path(SYS_TEST_PATH).'/main/survey/survey.lib.test.php');
         $this->addFile(api_get_path(SYS_TEST_PATH).'/main/dropbox/dropbox_class.inc.test.php');

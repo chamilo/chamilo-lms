@@ -47,13 +47,15 @@ if ($description_type >= ADD_BLOCK) {
 
 // display form
 $form = new FormValidator('course_description','POST','index.php?action=edit&description_type='.$description_type.'&'.api_get_cidreq(),'','style="width: 100%;"');
+
 if ($description_type == THEMATIC_ADVANCE) {
 	$form->addElement('html','<div class="row">
-						  <div class="form_header"><table width="100%"><tr><td>'.get_lang('ThematicAdvance').'</td><td align="right"><a href="index.php?action=history&description_type='.$description_type.'">'.Display::return_icon('lp_dir.png',get_lang('ThematicAdvanceHistory'),array('style'=>'vertical-align:middle;hspace:6')).' '.get_lang('ThematicAdvanceHistory').'</a></td></tr></table>						  
+						  <div class="form_header"><table width="100%"><tr><td>'.get_lang('ThematicAdvance').'</td><td align="right"><a href="index.php?action=history&description_type='.$description_type.'">'.Display::return_icon('lp_dir.png',get_lang('ThematicAdvanceHistory'),array('style'=>'vertical-align:middle;hspace:6')).' '.get_lang('ThematicAdvanceHistory').'</a></td></tr></table></div>						  
 						  </div>');
 } else {
 	$form->addElement('header','',$header);
 }
+
 $form->addElement('hidden', 'description_type',$description_type);
 $form->addElement('hidden', 'sec_token',$token);
 $form->add_textfield('title', get_lang('Title'), true, array('size'=>'50'));
@@ -70,6 +72,7 @@ if ($description_type == THEMATIC_ADVANCE) {
 	$form->addElement ('select', 'progress',get_lang('Progress'),$options_select);
 	$default['progress'] = intval($progress);	
 }
+
 
 $form->addElement('style_submit_button', null, get_lang('Save'), 'class="save"');
 // Set some default values

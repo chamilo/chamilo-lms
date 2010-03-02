@@ -26,7 +26,7 @@ if (defined('SYSTEM_INSTALLATION')) {
 		if (stripos($line, '$_configuration[\'dokeos_version\']') !== false) {
 			$found_version = true;
 			$line = '$_configuration[\'system_version\'] = \''.$new_version.'\';'."\r\n";
-		elseif (stripos($line, '$_configuration[\'system_version\']') !== false) {
+		} elseif (stripos($line, '$_configuration[\'system_version\']') !== false) {
 			$found_version = true;
 			$line = '$_configuration[\'system_version\'] = \''.$new_version.'\';'."\r\n";
 		} elseif (stripos($line, '$_configuration[\'dokeos_stable\']') !== false) {

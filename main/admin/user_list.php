@@ -632,7 +632,7 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced')
 	$status_options['%'] = get_lang('All');
 	$status_options[STUDENT] = get_lang('Student');
 	$status_options[COURSEMANAGER] = get_lang('Teacher');
-	$status_options[DRH] = get_lang('HumanResourceManager');
+	$status_options[DRH] = get_lang('Drh');
 	$status_options[SESSIONADMIN] = get_lang('Administrator');//
 	$form->addElement('select','keyword_status',get_lang('Status'),$status_options);
 	$active_group = array();

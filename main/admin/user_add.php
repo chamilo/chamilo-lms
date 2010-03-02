@@ -148,6 +148,8 @@ $form->addElement('select', 'status', get_lang('Status'), $status, array('id' =>
 $form->addElement('select_language', 'language', get_lang('Language'));
 //drh list (display only if student)
 $display = ($_POST['status'] == STUDENT || !isset($_POST['status'])) ? 'block' : 'none';
+
+/*
 $form->addElement('html', '<div id="drh_list" style="display:'.$display.';">');
 $drh_select = $form->addElement('select', 'hr_dept_id', get_lang('Drh'), array(), 'id="drh_select"');
 $drh_list = UserManager :: get_user_list(array('status' => DRH), api_sort_by_first_name() ? array('firstname', 'lastname') : array('lastname', 'firstname'));
@@ -163,6 +165,8 @@ if (is_array($drh_list)) {
 	}
 }
 $form->addElement('html', '</div>');
+*/
+
 
 // Platform admin
 $group = array();

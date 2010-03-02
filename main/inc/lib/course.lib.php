@@ -566,19 +566,48 @@ class CourseManager {
 	 *	the current user is course admin
 	 */
 	public static function get_course_list_of_user_as_course_admin($user_id) {
+		global $_configuration;
+		
 		if ($user_id != strval(intval($user_id))) {
 			return array();
 		}
-		$sql_result = Database::query("SELECT *
-				FROM ".Database::get_main_table(TABLE_MAIN_COURSE)." course
-				LEFT JOIN ".Database::get_main_table(TABLE_MAIN_COURSE_USER)." course_user
-				ON course.code = course_user.course_code
-				WHERE course_user.user_id = '$user_id'
-					AND course_user.status = '1'");
-		while ($result = Database::fetch_array($sql_result)) {
-			$result_array[] = $result;
+		
+		// Definitions database tables and variables
+		$tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
+		$tbl_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+		$user_id = intval($user_id);
+		$data = array();
+		
+		$sql_nb_cours = "SELECT course_rel_user.course_code, course.title
+			FROM $tbl_course_user as course_rel_user
+			INNER JOIN $tbl_course as course
+				ON course.code = course_rel_user.course_code
+			WHERE course_rel_user.user_id='$user_id' AND course_rel_user.status='1'
+			ORDER BY course.title";
+
+		if ($_configuration['multiple_access_urls'] == true) {
+			$tbl_course_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
+			$access_url_id = api_get_current_access_url_id();
+			if ($access_url_id != -1) {
+				$sql_nb_cours = "	SELECT course_rel_user.course_code, course.title
+					FROM $tbl_course_user as course_rel_user
+					INNER JOIN $tbl_course as course
+						ON course.code = course_rel_user.course_code
+				  	INNER JOIN $tbl_course_rel_access_url course_rel_url
+						ON (course_rel_url.course_code= course.code)
+				  	WHERE access_url_id =  $access_url_id  AND course_rel_user.user_id='$user_id' AND course_rel_user.status='1'
+				  	ORDER BY course.title";
+			}
 		}
-		return $result_array;
+		
+		$result_nb_cours = Database::query($sql_nb_cours);
+		if (Database::num_rows($result_nb_cours) > 0) {
+			while ($row = Database::fetch_array($result_nb_cours)) {
+				$data[$row['course_code']] = $row;
+			}
+		}
+
+		return $data;
 	}
 
 	/**
@@ -1037,7 +1066,7 @@ class CourseManager {
 		// students subscribed to the course through a session
 
 		if (api_get_setting('use_session_mode') == 'true' && $with_session) {
-			$sql_query = "SELECT * FROM ".Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER)." WHERE course_code = '$course_code'";
+			$sql_query = "SELECT * FROM ".Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER)." WHERE course_code = '$course_code' AND status<>2";
 			if ($session_id != 0) {
 				$sql_query .= ' AND id_session = '.$session_id;
 			}

@@ -523,19 +523,22 @@ class Category implements GradebookItem
 	public function delete_all () {
 		$cats = Category::load(null, null, $this->course_code, $this->id, null);
 		$evals = Evaluation::load(null, null, $this->course_code, $this->id, null);
-		$links = LinkFactory::load(null,null,null,null,$this->course_code,$this->id,null);
-
-		foreach ($cats as $cat) {
-			$cat->delete_all();
-			$cat->delete();
+		$links = LinkFactory::load(null,null,null,null,$this->course_code,$this->id,null);		
+		if (!empty($cats)) {
+			foreach ($cats as $cat) {
+				$cat->delete_all();
+				$cat->delete();
+			}
+		}		
+		if (!empty($evals)) {
+			foreach ($evals as $eval) {
+				$eval->delete_with_results();
+			}
 		}
-
-		foreach ($evals as $eval) {
-			$eval->delete_with_results();
-		}
-
-		foreach ($links as $link) {
-			$link->delete();
+		if (!empty($links)) {
+			foreach ($links as $link) {
+				$link->delete();
+			}
 		}
 		$this->delete();
 	}
@@ -819,9 +822,12 @@ class Category implements GradebookItem
 	 */
 	private function add_subtree ($targets, $level, $catid, $visible) {
 		$subcats = Category::load(null,null,null,$catid,$visible);
-		foreach ($subcats as $cat) {
-			$targets[] = array ($cat->get_id(), $cat->get_name(), $level+1);
-			$targets = Category::add_subtree($targets, $level+1, $cat->get_id(),$visible);
+		
+		if (!empty($subcats)) {
+			foreach ($subcats as $cat) {
+				$targets[] = array ($cat->get_id(), $cat->get_name(), $level+1);
+				$targets = Category::add_subtree($targets, $level+1, $cat->get_id(),$visible);
+			}
 		}
 		return $targets;
 	}
@@ -889,21 +895,24 @@ class Category implements GradebookItem
 		$cats = Category::load(null, null, null, $this->id, null);
 		$evals = Evaluation::load(null, null, null, $this->id, null);
 		$links = LinkFactory::load(null,null,null,null,null,$this->id,null);
-
-		foreach ($cats as $cat) {
-			$cat->set_visible($this->is_visible());
-			$cat->save();
-			$cat->apply_visibility_to_children();
+		if (!empty($cats)) {
+			foreach ($cats as $cat) {
+				$cat->set_visible($this->is_visible());
+				$cat->save();
+				$cat->apply_visibility_to_children();
+			}
 		}
-
-		foreach ($evals as $eval) {
-			$eval->set_visible($this->is_visible());
-			$eval->save();
+		if (!empty($evals)) {
+			foreach ($evals as $eval) {
+				$eval->set_visible($this->is_visible());
+				$eval->save();
+			}
 		}
-
-		foreach ($links as $link) {
-			$link->set_visible($this->is_visible());
-			$link->save();
+		if (!empty($links)) {
+			foreach ($links as $link) {
+				$link->set_visible($this->is_visible());
+				$link->save();
+			}
 		}
 	}
 

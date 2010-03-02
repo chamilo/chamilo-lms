@@ -1606,7 +1606,7 @@ div.admin_section h4 {
  *  SYSTEM ANNOUNCEMENTS						     *
  *****************************************************/
 div.system_announcement {
-	padding: .2em;
+	padding: 10px;
 	border: 1px solid #ddd;
 	-moz-border-radius-topright : 5px;
     -moz-border-radius-topleft : 5px;
@@ -1614,8 +1614,9 @@ div.system_announcement {
     -moz-border-radius-bottomleft : 5px;
 }
 .system_announcement {
-	background: #ddd url('images/headertables.jpg') repeat-x top center;
+	background: #eee url('images/headertables.jpg') repeat-x top center;
 	font: bold 100% arial, sans-serif, sans;
+	
 }
 .system_announcement_content {
 	font: normal 100% 'Lucida Grande', verdana, Arial, sans-serif, sans;
@@ -1623,11 +1624,24 @@ div.system_announcement {
 .system_announcements {
 	background: transparent url('images/systemenouvelles.jpg') no-repeat top  left;
 	padding-top: 10px;
-	width: 50%;
+	padding-bottom: 10px;
+	width: 90%;
 }
 .system_announcements h3 {
 	padding-left:70px;
 	padding-top: 30px;
+}
+
+.system_announcement_title {
+	font-weight: bold;
+	font-size: 120%;
+	float:left;
+	
+}
+
+.system_announcement_date {
+	font-color: #ccc;
+	float:right;
 }
 /*****************************************************
  *  THE NEW FORUM					     *

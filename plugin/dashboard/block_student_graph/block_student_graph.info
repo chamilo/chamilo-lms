@@ -1,0 +1,6 @@
+name = "Student Graph Block"
+controller = "BlockStudentGraph"
+description = "Display information about students inside platform with graph"
+package = Dashboard
+version = 1.0 
+author = Christian Fasanando

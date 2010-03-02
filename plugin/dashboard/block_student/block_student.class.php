@@ -13,6 +13,11 @@ require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
 require_once api_get_path(LIBRARY_PATH).'course.lib.php';
 require_once api_get_path(LIBRARY_PATH).'tracking.lib.php';
 require_once api_get_path(LIBRARY_PATH).'attendance.lib.php';
+require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be/gradebookitem.class.php';
+require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be/evaluation.class.php';
+require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be/result.class.php';
+require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be/linkfactory.class.php';
+require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be/category.class.php';
 
 /**
  * This class is used like controller for student block plugin, 
@@ -59,7 +64,7 @@ class BlockStudent extends Block {
 		$html = '        		
 			            <li class="widget color-blue" id="intro">
 			                <div class="widget-head">
-			                    <h3>Students Informations</h3>
+			                    <h3>'.get_lang('StudentsInformationsList').'</h3>
 			                    <div class="widget-actions"><a onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset)).'\')) return false;" href="index.php?action=disable_block&path='.$this->path.'">'.Display::return_icon('close.gif',get_lang('Close')).'</a></div>
 			                </div>			
 			                <div class="widget-content">			                	
@@ -172,7 +177,7 @@ class BlockStudent extends Block {
 	 			$student_id = $student['user_id'];
 	 			$firstname  = $student['firstname'];
 	 			$lastname   = $student['lastname'];	 				 			
-	 			$evaluations_avg  = 0;
+
 				// get average of faults in attendances by student	 			
 	 			$results_faults_avg = $attendance->get_faults_average_inside_courses($student_id);	 	
 	 			if (!empty($results_faults_avg)) {
@@ -181,13 +186,34 @@ class BlockStudent extends Block {
 	 				$attendances_faults_avg = '0%';
 	 			}	 			
 	 				 			
+	 			$courses_by_user = CourseManager::get_courses_list_by_user_id($student_id, true);
+				$evaluations_avg  = 0;
+				$score = $weight = 0;
+	 			foreach ($courses_by_user as $course) {
+	 				$course_code = $course['code'];
+	 				$cats = Category::load(null, null, $course_code, null, null, null, false);
+	 				$scoretotal = array();
+	 				if (isset($cats)) {		 				
+		 				$scoretotal= $cats[0]->calc_score($student_id, $course_code);		 				
+	 				} 
+
+	 				if (!empty($scoretotal)) {
+	 					$score += $scoretotal[0];
+	 					$weight += $scoretotal[1];	
+	 				} 
+	 			}
+
+	 			if (!empty($weight)) {
+	 				$evaluations_avg = '<a title="'.get_lang('GoToStudentDetails').'" href="'.api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?student='.$student_id.'">'.round($score,2).'/'.round($weight,2).'('.round(($score / $weight) * 100,2) . ' %)</a>';
+	 			}
+	 			
 	 			if ($i%2 == 0) $class_tr = 'row_odd';
 	    		else $class_tr = 'row_even';
 	    		$students_table .= '<tr class="'.$class_tr.'">
 										<td>'.$firstname.'</td>
 										<td>'.$lastname.'</td>										
 										<td align="right">'.$attendances_faults_avg.'</td>
-										<td align="right">'.$evaluations_avg.'%</td>
+										<td align="right">'.$evaluations_avg.'</td>
 									</tr>';
 	 			
 	 			$i++;		
@@ -207,7 +233,7 @@ class BlockStudent extends Block {
   	}
   
     /**
-	 * Get number of sessions  
+	 * Get number of students
 	 * @return int
 	 */
 	function get_number_of_students() {

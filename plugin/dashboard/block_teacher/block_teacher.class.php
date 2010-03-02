@@ -58,7 +58,7 @@ class BlockTeacher extends Block {
 		$html = '        		
 			            <li class="widget color-blue" id="intro">
 			                <div class="widget-head">
-			                    <h3>Teachers Informations</h3>
+			                    <h3>'.get_lang('TeachersInformationsList').'</h3>
 			                    <div class="widget-actions"><a onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset)).'\')) return false;" href="index.php?action=disable_block&path='.$this->path.'">'.Display::return_icon('close.gif',get_lang('Close')).'</a></div>
 			                </div>
 			                <div class="widget-content">
@@ -192,7 +192,7 @@ class BlockTeacher extends Block {
   	}
  
     /**
-	 * Get number of sessions  
+	 * Get number of teachers  
 	 * @return int
 	 */
 	function get_number_of_teachers() {

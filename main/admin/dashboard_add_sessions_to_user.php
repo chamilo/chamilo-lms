@@ -166,13 +166,13 @@ if (intval($_POST['formSent']) == 1) {
 
 // display the dokeos header
 Display::display_header($tool_name);
-//echo '<div class="row"><div class="form_header">'.get_lang('AssignedSessionsTo').'&nbsp;'.api_get_person_name($hrm_info['firstname'], $hrm_info['lastname']).'</div></div><br />';
+//echo '<div class="row"><div class="form_header">'.get_lang('AssignSessionsTo').'&nbsp;'.api_get_person_name($hrm_info['firstname'], $hrm_info['lastname']).'</div></div><br />';
 
 echo '<div class="actions" style="height:22px;">
 <span style="float: right;margin:0px;padding:0px;">
 <a href="dashboard_add_users_to_user.php?user='.$hrm_id.'">'.Display::return_icon('add_user_big.gif', get_lang('AssignUsers'), array('style'=>'vertical-align:middle')).' '.get_lang('AssignUsers').'</a>
 <a href="dashboard_add_courses_to_user.php?user='.$hrm_id.'">'.Display::return_icon('course_add.gif', get_lang('AssignCourses'), array('style'=>'vertical-align:middle')).' '.get_lang('AssignCourses').'</a></span>
-<span style="vertical-align:middle">'.get_lang('AssignedUsersTo').'&nbsp;'.api_get_person_name($hrm_info['firstname'], $hrm_info['lastname']).'</span></div>';
+<span style="vertical-align:middle">'.get_lang('AssignSessionsTo').'&nbsp;'.api_get_person_name($hrm_info['firstname'], $hrm_info['lastname']).'</span></div>';
 
 // *******************
 

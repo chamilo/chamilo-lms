@@ -16,8 +16,14 @@ class CourseHome {
 		$toolsRow_all = array ();
 		switch ($cat) {
 			case 'Basic' :
+
+				$condition_display_tools = ' WHERE a.link=t.link AND t.position="basic" ';
+				if (api_is_coach()) {
+					$condition_display_tools = ' WHERE a.link=t.link AND (t.position="basic" OR a.name = "'.TOOL_TRACKING.'") ';	
+				}
+
 				$sql = "SELECT a.*, t.image img, t.row, t.column  FROM $TBL_ACCUEIL a, $TABLE_TOOLS t
-						WHERE a.link=t.link AND t.position='basic' ORDER BY t.row, t.column";
+						$condition_display_tools ORDER BY t.row, t.column";
 				break;
 
 			case 'External' :
@@ -131,7 +137,7 @@ class CourseHome {
 			$toolsRow['img'] = api_get_path(WEB_IMG_PATH).$toolsRow['img'];
 
 			// VISIBLE
-			if ($toolsRow['visibility'] or $cat == 'courseAdmin' or $cat == 'platformAdmin')
+			if (($toolsRow['visibility'] || (api_is_coach() && $toolsRow['name'] == TOOL_TRACKING))  || $cat == 'courseAdmin' || $cat == 'platformAdmin')
 			{
 				if(strpos($toolsRow['name'],'visio_')!==false)
 				{
@@ -261,7 +267,12 @@ class CourseHome {
 		{
 			case TOOL_PUBLIC:
 
-					$result = Database::query("SELECT * FROM $course_tool_table WHERE visibility=1 ORDER BY id");
+					$condition_display_tools = ' WHERE visibility = 1 ';
+					if (api_is_coach()) {
+						$condition_display_tools = ' WHERE visibility = 1 OR (visibility = 0 AND name = "'.TOOL_TRACKING.'") ';	
+					}
+
+					$result = Database::query("SELECT * FROM $course_tool_table $condition_display_tools ORDER BY id");
 					$colLink ="##003399";
 					break;
 
@@ -398,7 +409,9 @@ class CourseHome {
 				unset($lnk);
 				if (api_is_allowed_to_edit(null,true) && !api_is_coach())
 				{
-					if ($toolsRow["visibility"] == '1')
+					
+					
+					if ($toolsRow['visibility'] == '1' || $toolsRow['name'] == TOOL_TRACKING)
 					{
 						$link['name'] = Display::return_icon('remove.gif', get_lang('Deactivate'));
 						$link['cmd'] = "hide=yes";
@@ -425,7 +438,7 @@ class CourseHome {
 					}
 
 				}
-				if ( api_is_platform_admin() )
+				if ( api_is_platform_admin() && !api_is_coach())
 				{
 					if ($toolsRow["visibility"]==2)
 					{
@@ -441,12 +454,12 @@ class CourseHome {
 							$lnk[] = $link;
 						}
 					}
-
-					if ($toolsRow["visibility"] == 0 && $toolsRow["added_tool"] == 0)
+					if ($toolsRow["visibility"] == 0  && $toolsRow["added_tool"] == 0)
 					{
 						$link['name'] = Display::return_icon('delete.gif', get_lang('Remove'));
 						$link['cmd'] = "remove=yes";
 						$lnk[] = $link;
+						
 					}
 				}
 				if (is_array($lnk))
@@ -511,8 +524,11 @@ class CourseHome {
 
 		switch ($course_tool_category) {
 			case TOOL_STUDENT_VIEW:
-					//$visibility_codition = !api_is_coach()?" visibility = '1' AND ":" ";
-					$sql = "SELECT * FROM $course_tool_table WHERE visibility = '1' AND (category = 'authoring' OR category = 'interaction') $condition_session ORDER BY id";
+					$condition_display_tools = ' WHERE visibility = 1 AND (category = "authoring" OR category = "interaction") ';
+					if (api_is_coach()) {
+						$condition_display_tools = ' WHERE (visibility = 1 AND (category = "authoring" OR category = "interaction")) OR (name = "'.TOOL_TRACKING.'")  ';
+					} 					
+					$sql = "SELECT * FROM $course_tool_table  $condition_display_tools $condition_session ORDER BY id";
 					$result = Database::query($sql);
 					$colLink ="##003399";
 					break;
@@ -654,6 +670,7 @@ class CourseHome {
 
 	public static function show_tools_category($all_tools_list)
 	{
+		
 		global $_user;
 		$web_code_path = api_get_path(WEB_CODE_PATH);
 		$course_tool_table = Database::get_course_table(TABLE_TOOL_LIST);
@@ -729,7 +746,7 @@ class CourseHome {
 				//If it's a link, we don't add the cidReq
 				if ($toolsRow['image'] == 'file_html.gif' || $toolsRow['image'] == 'file_html_na.gif') {
 					$toolsRow['link'] = $toolsRow['link'].$qm_or_amp;
-				} else {
+				} else {					
 					$toolsRow['link'] = $toolsRow['link'].$qm_or_amp.api_get_cidreq();
 				}
 				if (strpos($toolsRow['name'],'visio_')!==false) {

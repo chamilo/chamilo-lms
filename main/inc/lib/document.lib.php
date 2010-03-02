@@ -524,9 +524,8 @@ class DocumentManager {
 
 		//condition for the session
 		$current_session_id = api_get_session_id();
-		$condition_session = " AND (id_session = '$current_session_id' OR (id_session = '0' AND insert_date <= (SELECT creation_date FROM $TABLE_COURSE WHERE code = '{$_course[id]}')))";
-
-		$sql = "SELECT *
+		$condition_session = " AND (id_session = '$current_session_id' OR id_session = '0')";
+		$sql = "SELECT docs.id, docs.filetype, docs.path, docs.title, docs.comment, docs.size, docs.readonly, last.visibility
 						FROM  ".$TABLE_ITEMPROPERTY."  AS last, ".$TABLE_DOCUMENT."  AS docs
 						WHERE docs.id = last.ref
 						AND docs.path LIKE '".$path.$added_slash."%'

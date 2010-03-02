@@ -1575,23 +1575,16 @@ function api_get_session_image($session_id, $status_id) {
  * @return string	condition of the session
  */
 function api_get_session_condition($session_id, $state = true, $both = false) {
-
 	$session_id = intval($session_id);
-
 	//condition to show resources by session
 	$condition_session = '';
-	$condition_add = $state == false ? " WHERE " : " AND ";
-	if ($session_id > 0) {
-		if (api_is_session_in_category($session_id,'20091U') || $both) {
-			$condition_session = $condition_add . " ( session_id = ".(int)$session_id." OR session_id = 0 ) ";
-		} else {
-			$condition_session = $condition_add . "  session_id = ".(int)$session_id." ";
-		}
+	$condition_add = $state == false ? " WHERE " : " AND ";		
+	if ($session_id > 0) {		
+		$condition_session = $condition_add."(session_id = ".(int)$session_id." OR session_id = 0)";		
 	} else {
-		$condition_session = $condition_add . " session_id = 0 ";
+		$condition_session = $condition_add."session_id = 0";
 	}
 	return $condition_session;
-
 }
 
 /**

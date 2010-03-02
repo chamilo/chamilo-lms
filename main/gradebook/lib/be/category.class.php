@@ -211,8 +211,11 @@ class Category implements GradebookItem
 			$sql .= ' visible = '.$visible;
 			$paramcount ++;
 		}
-		$result = Database::query($sql);
-		$allcat = Category::create_category_objects_from_sql_result($result);
+
+		$result = Database::query($sql);		
+		if (Database::num_rows($result) > 0) {
+			$allcat = Category::create_category_objects_from_sql_result($result);
+		}
 		return $allcat;
 	}
 
@@ -451,47 +454,58 @@ class Category implements GradebookItem
 	 * @return	array (score sum, weight sum)
 	 * 			or null if no scores available
 	 */
-	public function calc_score ($stud_id = null) {
+	public function calc_score ($stud_id = null, $course_code = '', $session_id = null) {
 		// get appropriate subcategories, evaluations and links
 
-		$cats = $this->get_subcategories($stud_id);
-		$evals = $this->get_evaluations($stud_id);
-		$links = $this->get_links($stud_id);
-
+		if (!empty($course_code)) {
+			$cats = $this->get_subcategories($stud_id, $course_code, $session_id);
+			$evals = $this->get_evaluations($stud_id, false, $course_code);
+			$links = $this->get_links($stud_id, false, $course_code);		
+		} else {
+			$cats = $this->get_subcategories($stud_id);
+			$evals = $this->get_evaluations($stud_id);
+			$links = $this->get_links($stud_id);
+		}
 
 		// calculate score
-
 		$rescount = 0;
 		$ressum = 0;
 		$weightsum = 0;
 
-		foreach ($cats as $cat) {
-			$catres = $cat->calc_score ($stud_id);     // recursive call
-			if (isset($catres) && $cat->get_weight() != 0) {
-				$catweight = $cat->get_weight();
-				$rescount++;
-				$weightsum += $catweight;
-				$ressum += (($catres[0]/$catres[1]) * $catweight);
+		if (!empty($cats)) {
+			foreach ($cats as $cat) {
+				$catres = $cat->calc_score ($stud_id);     // recursive call
+				if (isset($catres) && $cat->get_weight() != 0) {
+					$catweight = $cat->get_weight();
+					$rescount++;
+					$weightsum += $catweight;
+					$ressum += (($catres[0]/$catres[1]) * $catweight);
+				}
 			}
 		}
 
-		foreach ($evals as $eval) {
-			$evalres = $eval->calc_score ($stud_id);
-			if (isset($evalres) && $eval->get_weight() != 0) {
-				$evalweight = $eval->get_weight();
-				$rescount++;
-				$weightsum += $evalweight;
-				$ressum += (($evalres[0]/$evalres[1]) * $evalweight);
+		if (!empty($evals)) {
+			foreach ($evals as $eval) {
+				$evalres = $eval->calc_score ($stud_id);
+				if (isset($evalres) && $eval->get_weight() != 0) {
+					$evalweight = $eval->get_weight();
+					$rescount++;
+					$weightsum += $evalweight;
+					$ressum += (($evalres[0]/$evalres[1]) * $evalweight);
+				}
 			}
 		}
+			
+		if (!empty($links)) {
 			foreach ($links as $link) {
-			$linkres = $link->calc_score ($stud_id);
-			if (isset($linkres) && $link->get_weight() != 0) {
-				$linkweight     = $link->get_weight();
-				$link_res_denom = ($linkres[1]==0) ? 1 : $linkres[1];
-				$rescount++;
-				$weightsum += $linkweight;
-				$ressum += (($linkres[0]/$link_res_denom) * $linkweight);
+				$linkres = $link->calc_score ($stud_id);
+				if (isset($linkres) && $link->get_weight() != 0) {
+					$linkweight     = $link->get_weight();
+					$link_res_denom = ($linkres[1]==0) ? 1 : $linkres[1];
+					$rescount++;
+					$weightsum += $linkweight;
+					$ressum += (($linkres[0]/$link_res_denom) * $linkweight);
+				}
 			}
 		}
 
@@ -926,11 +940,13 @@ class Category implements GradebookItem
 
 		$crsindcats = Category::load(null,$creator,'0',$cat_id,
 						api_is_allowed_to_create_course() ? null : 1);
-		foreach ($crsindcats as $crsindcat) {
-			if ($crsindcat->has_evaluations_with_results_for_student($stud_id)) {
-				$cats[] = $crsindcat;
+		
+		if (!empty($crsindcats)) {				
+			foreach ($crsindcats as $crsindcat) {
+				if ($crsindcat->has_evaluations_with_results_for_student($stud_id)) {
+					$cats[] = $crsindcat;
+				}
 			}
-
 		}
 		return $cats;
     }
@@ -992,8 +1008,12 @@ class Category implements GradebookItem
 	 * @param int $stud_id student id (default: all students)
 	 * @param boolean $recursive process subcategories (default: no recursion)
 	 */
-	public function get_evaluations ($stud_id = null, $recursive = false) {
+	public function get_evaluations ($stud_id = null, $recursive = false, $course_code = '') {
 		$evals = array();
+
+		if (empty($course_code)) {
+			$course_code = api_get_course_id();
+		}
 
 		// 1 student
  		if (isset($stud_id)) {
@@ -1001,8 +1021,7 @@ class Category implements GradebookItem
 			if ($this->id == 0) {
 				$evals = Evaluation::get_evaluations_with_result_for_student(0,$stud_id);
 			} else {
-				//added api_get_course_id()
-					$evals = Evaluation::load(null,null,api_get_course_id(),$this->id,
+					$evals = Evaluation::load(null,null,$course_code,$this->id,
 					api_is_allowed_to_create_course() ? null : 1);
 			}
 		} else {// all students
@@ -1014,7 +1033,7 @@ class Category implements GradebookItem
 				}
 				// inside a course
 				elseif (isset($this->course_code) && !empty($this->course_code)) {
-					$evals = Evaluation::load(null, null, api_get_course_id(), $this->id, null);
+					$evals = Evaluation::load(null, null, $course_code, $this->id, null);
 
 				}else { // course independent
 					$evals = Evaluation::load(null, api_get_user_id(), null, $this->id, null);
@@ -1024,17 +1043,19 @@ class Category implements GradebookItem
 
 			//platform admin
 			elseif (api_is_platform_admin()) {
-				$evals = Evaluation::load(null, null, api_get_course_id(), $this->id, null);
+				$evals = Evaluation::load(null, null, $course_code, $this->id, null);
 			}
 
 		}
 
 		if ($recursive) {
 			$subcats = $this->get_subcategories($stud_id);
-			foreach ($subcats as $subcat) {
-				$subevals = $subcat->get_evaluations($stud_id, true);
-				//$this->debugprint($subevals);
-				$evals = array_merge($evals, $subevals);
+			if (!empty($subcats)) {
+				foreach ($subcats as $subcat) {
+					$subevals = $subcat->get_evaluations($stud_id, true);
+					//$this->debugprint($subevals);
+					$evals = array_merge($evals, $subevals);
+				}
 			}
 		}
 		return $evals;
@@ -1046,8 +1067,12 @@ class Category implements GradebookItem
 	 * @param int $stud_id student id (default: all students)
 	 * @param boolean $recursive process subcategories (default: no recursion)
 	 */
-	public function get_links ($stud_id = null, $recursive = false) {
+	public function get_links ($stud_id = null, $recursive = false, $course_code = '') {
 		$links = array();
+
+		if (empty($course_code)) {
+			$course_code = api_get_course_id();
+		}
 
 		// no links in root or course independent categories
 		if ($this->id == 0) {
@@ -1055,7 +1080,7 @@ class Category implements GradebookItem
 		}
 		// 1 student $stud_id
  		elseif (isset($stud_id)) {
-			$links = LinkFactory::load(null,null,null,null,empty($this->course_code)?null:api_get_course_id(),$this->id,
+			$links = LinkFactory::load(null,null,null,null,empty($this->course_code)?null:$course_code,$this->id,
 						api_is_allowed_to_create_course() ? null : 1);
  		}
 		// all students -> only for course/platform admin
@@ -1065,9 +1090,11 @@ class Category implements GradebookItem
 
 		if ($recursive) {
 			$subcats = $this->get_subcategories($stud_id);
-			foreach ($subcats as $subcat) {
-				$sublinks = $subcat->get_links($stud_id, false);
-				$links = array_merge($links, $sublinks);
+			if (!empty($subcats)) {
+				foreach ($subcats as $subcat) {
+					$sublinks = $subcat->get_links($stud_id, false);
+					$links = array_merge($links, $sublinks);
+				}
 			}
 		}
 		return $links;

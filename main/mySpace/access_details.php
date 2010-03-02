@@ -31,10 +31,12 @@ $this_section = "session_my_space";
 
 
 /* MAIN */
-$user_id = Security::remove_XSS($_REQUEST['student']);
+$user_id = intval($_REQUEST['student']);
 $course_code = Security::remove_XSS($_REQUEST['course']);
+$session_id = intval($_GET['id_session']);
 
-$connections = MySpace::get_connections_to_course($user_id, $course_code);
+$connections = MySpace::get_connections_to_course($user_id, $course_code, $session_id);
+
 if (api_is_xml_http_request()) {
 	$type  = Security::remove_XSS($_GET['type']);
 	$main_year = $main_month_year = $main_day = array();

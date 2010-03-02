@@ -148,11 +148,13 @@ function event_access_course()
 	$sql = "INSERT INTO ".$TABLETRACK_ACCESS."
 				(access_user_id,
 				 access_cours_code,
-				 access_date)
+				 access_date,
+				 access_session_id)
 				VALUES
 				(".$user_id.",
 				'".$_cid."',
-				FROM_UNIXTIME(".$reallyNow."))";
+				FROM_UNIXTIME(".$reallyNow."),
+				'".$id_session."')";
 	$res = Database::query($sql);
 	// added for "what's new" notification
 	$sql = "   UPDATE $TABLETRACK_LASTACCESS
@@ -261,30 +263,28 @@ function event_access_tool($tool, $id_session=0)
  */
 function event_download($doc_url)
 {
-	global $_configuration;
-	global $_user;
-	global $_cid;
-	global $TABLETRACK_DOWNLOADS;
+	global $_configuration, $_user, $_cid;
+
+	$tbl_stats_downloads = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_DOWNLOADS);
 
 	// if tracking is disabled record nothing
-	if (!$_configuration['tracking_enabled'])
-	{
+	if (!$_configuration['tracking_enabled']) {
 		return 0;
 	}
 
 	$reallyNow = time();
-	if ($_user['user_id'])
-	{
+	if ($_user['user_id']) {
 		$user_id = "'".$_user['user_id']."'";
 	} else {
 		$user_id = "0";
 	}
-	$sql = "INSERT INTO ".$TABLETRACK_DOWNLOADS."
+	$sql = "INSERT INTO $tbl_stats_downloads
 				(
 				 down_user_id,
 				 down_cours_id,
 				 down_doc_path,
-				 down_date
+				 down_date,
+				 down_session_id
 				)
 
 				VALUES
@@ -292,7 +292,8 @@ function event_download($doc_url)
 				 ".$user_id.",
 				 '".$_cid."',
 				 '".htmlspecialchars($doc_url, ENT_QUOTES)."',
-				 FROM_UNIXTIME(".$reallyNow.")
+				 FROM_UNIXTIME(".$reallyNow."),
+				 '".api_get_session_id()."'
 				)";
 	$res = Database::query($sql);
 	return 1;
@@ -326,13 +327,15 @@ function event_upload($doc_id)
 				( upload_user_id,
 				  upload_cours_id,
 				  upload_work_id,
-				  upload_date
+				  upload_date,
+				  updload_session_id
 				)
 				VALUES (
 				 ".$user_id.",
 				 '".$_cid."',
 				 '".$doc_id."',
-				 FROM_UNIXTIME(".$reallyNow.")
+				 FROM_UNIXTIME(".$reallyNow."),
+				 '".api_get_session_id()."'
 				)";
 	$res = Database::query($sql);
 	return 1;
@@ -346,9 +349,7 @@ function event_upload($doc_id)
 */
 function event_link($link_id)
 {
-	global $_configuration;
-	global $_user;
-	global $_cid;
+	global $_configuration, $_user, $_cid;
 	global $TABLETRACK_LINKS;
 
 	// if tracking is disabled record nothing
@@ -368,14 +369,16 @@ function event_link($link_id)
 				( links_user_id,
 				 links_cours_id,
 				 links_link_id,
-				 links_date
+				 links_date,
+				 links_session_id
 				)
 				VALUES
 				(
 				 ".$user_id.",
 				 '".$_cid."',
 				 '".Database::escape_string($link_id)."',
-				 FROM_UNIXTIME(".$reallyNow.")
+				 FROM_UNIXTIME(".$reallyNow."),
+				 '".api_get_session_id()."'
 				)";
 	$res = Database::query($sql);
 	return 1;

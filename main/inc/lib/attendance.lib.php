@@ -46,18 +46,24 @@ class Attendance
 	 * @param   int     session id (optional)
 	 * @return  array	attendances list
 	 */
-	function get_attendances_list($course_code = '', $session_id = 0) {		
+	function get_attendances_list($course_code = '', $session_id = null) {	
 		// initializing database table and variables
-		$tbl_attendance = Database :: get_course_table(TABLE_ATTENDANCE);
-		$session_id = intval($session_id);
+		$tbl_attendance = Database :: get_course_table(TABLE_ATTENDANCE);				
 		$data = array();
+		
 		if (!empty($course_code)) {
 			$course_info = api_get_course_info($course_code);
 			$tbl_attendance = Database :: get_course_table(TABLE_ATTENDANCE, $course_info['dbName']);
 		}
 		
+		$condition_session = '';
+		if (isset($session_id)) {
+			$session_id = intval($session_id);
+			$condition_session = ' WHERE session_id = '.$session_id;		
+		}
+				
 		// get attendance data
-		$sql = "SELECT * FROM $tbl_attendance WHERE session_id='$session_id'";
+		$sql = "SELECT * FROM $tbl_attendance $condition_session ";
 		$rs  = Database::query($sql);
 		if (Database::num_rows($rs) > 0){
 			while ($row = Database::fetch_array($rs)) {
@@ -519,9 +525,10 @@ class Attendance
 	/**
 	 * Get results of faults average by course
 	 * @param	int	   user id 
+	 * @param	int	   Session id (optional)
 	 * @return 	array  results containing number of faults, total done attendance, porcent of faults and color depend on result (red, orange)
 	 */
-	public function get_faults_average_by_course($user_id, $course_code) {
+	public function get_faults_average_by_course($user_id, $course_code, $session_id = null) {
 
 		
 		// Database tables and variables
@@ -530,7 +537,7 @@ class Attendance
 		$user_id = intval($user_id);				
 		$results = array();
 		$total_faults = $total_weight = $porcent = 0;
-		$attendances_by_course = $this->get_attendances_list($course_code);						
+		$attendances_by_course = $this->get_attendances_list($course_code, $session_id);						
 		
 		foreach ($attendances_by_course as $attendance) {					
 			// get total faults and total weight											

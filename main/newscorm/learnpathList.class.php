@@ -24,20 +24,27 @@ class learnpathList {
 	 * (only displays) items if he has enough permissions to view them.
 	 * @param	integer		User ID
 	 * @param	string		Optional course code (otherwise we use api_get_course_id())
+	 * @param	int			Optional session id (otherwise we use api_get_session_id())
 	 * @return	void
 	 */
-    function learnpathList($user_id,$course_code='') {
-    	if(!empty($course_code)){
-    		//proceed with course code given
-    	}else{
-		$course_code = api_get_course_id();
-		$lp_table = Database::get_course_table(TABLE_LP_MAIN);
+    function learnpathList($user_id, $course_code='', $session_id = null) {
+    	
+    	if (!empty($course_code)){
+    		$course_info = api_get_course_info($course_code);
+    		$lp_table = Database::get_course_table(TABLE_LP_MAIN, $course_info['dbName']);    		
+    	} else{
+			$course_code = api_get_course_id();
+			$lp_table = Database::get_course_table(TABLE_LP_MAIN);
     	}
     	$this->course_code = $course_code;
     	$this->user_id = $user_id;
 
     	//condition for the session
-		$session_id = api_get_session_id();
+    	if (isset($session_id)) {
+    		$session_id = intval($session_id);
+    	} else {
+    		$session_id = api_get_session_id();	
+    	}		
 		$condition_session = api_get_session_condition($session_id, false);
 
     	$sql = "SELECT * FROM $lp_table $condition_session ORDER BY display_order ASC, name ASC";

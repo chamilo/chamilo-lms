@@ -59,9 +59,11 @@ require api_get_path(SYS_CODE_PATH).'resourcelinker/resourcelinker.inc.php';
 
 // starting the output buffering when we are exporting the information
 $export_csv = isset($_GET['export']) && $_GET['export'] == 'csv' ? true : false;
+$session_id = intval($_REQUEST['id_session']);
+
 if ($export_csv) {
-	if (isset($_REQUEST['id_session']) && $_REQUEST['id_session'] != 0 ) {
-    	$_SESSION['id_session'] = intval($_REQUEST['id_session']);
+	if (!empty($session_id)) {		
+    	$_SESSION['id_session'] = $session_id;
 	}
 	ob_start();
 }
@@ -71,7 +73,7 @@ $csv_content = array();
 if (!empty($_GET['scormcontopen'])) {
     $tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
 	$contopen = (int) $_GET['scormcontopen'];
-	$sql = "SELECT default_encoding FROM $tbl_lp WHERE id = ".$contopen;
+	$sql = "SELECT default_encoding FROM $tbl_lp WHERE id = $contopen AND session_id = $session_id";
 	$res = Database::query($sql);
 	$row = Database::fetch_array($res);
 	$lp_charset = $row['default_encoding'];
@@ -134,13 +136,6 @@ if (isset($_GET['additional_profile_field']) && is_numeric($_GET['additional_pro
 	$additional_user_profile_info = TrackingCourseLog::get_addtional_profile_information_of_field_by_user($_GET['additional_profile_field'],$user_array);
 }
 
-
-
-
-
-
-
-
 /*
 ==============================================================================
 		MAIN CODE
@@ -163,7 +158,7 @@ if($_GET['studentlist'] == 'false') {
 	if (isset($_GET['additional_profile_field'])) {
 		$addional_param ='additional_profile_field='.intval($_GET['additional_profile_field']);
 	}
-	echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&id_session='.api_get_session_id().'&export=csv&'.$addional_param.'">'.Display::return_icon('csv.gif',get_lang('ExportAsCSV')).get_lang('ExportAsCSV').'</a>';
+	echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&export=csv&'.$addional_param.'">'.Display::return_icon('csv.gif',get_lang('ExportAsCSV')).get_lang('ExportAsCSV').'</a>';
 }
 if($_GET['studentlist'] == 'true' || empty($_GET['studentlist'])) {
 	echo TrackingCourseLog::display_additional_profile_fields();
@@ -172,6 +167,8 @@ echo '</div>';
 
 
 if ($_GET['studentlist'] == 'false') {
+	$course_code = api_get_course_id();
+	
 	echo'<br /><br />';
 
 	// learning path tracking
@@ -179,7 +176,7 @@ if ($_GET['studentlist'] == 'false') {
 			<h4>'.Display::return_icon('scormbuilder.gif',get_lang('AverageProgressInLearnpath')).get_lang('AverageProgressInLearnpath').'</h4>
 			<table class="data_table">';
 
-	$list = new LearnpathList($student);
+	$list = new LearnpathList($student, $course_code, $session_id);
 	$flat_list = $list->get_flat_list();
 
 	if ($export_csv) {
@@ -193,7 +190,7 @@ if ($_GET['studentlist'] == 'false') {
 			$lp_avg_progress = 0;
 			foreach ($a_students as $student_id => $student) {
 				// get the progress in learning pathes
-				$lp_avg_progress += learnpath::get_db_progress($lp_id, $student_id);
+				$lp_avg_progress += Tracking::get_avg_student_progress($student_id, $course_code, array($lp_id), $session_id);
 			}
 			if ($nbStudents > 0) {
 				$lp_avg_progress = $lp_avg_progress / $nbStudents;
@@ -228,7 +225,7 @@ if ($_GET['studentlist'] == 'false') {
 			<table class="data_table">';
 
 	$sql = "SELECT id, title
-			FROM $TABLEQUIZ WHERE active <> -1";
+			FROM $TABLEQUIZ WHERE active <> -1 AND session_id = $session_id";
 	$rs = Database::query($sql);
 
 	if ($export_csv) {
@@ -238,43 +235,13 @@ if ($_GET['studentlist'] == 'false') {
     }
 
 	if (Database::num_rows($rs) > 0) {
-		// gets course actual administrators
-		$sql = "SELECT user.user_id FROM $table_user user, $TABLECOURSUSER course_user
-			WHERE course_user.user_id=user.user_id AND course_user.course_code='".api_get_course_id()."' AND course_user.status <> '1' AND course_user.relation_type<>".COURSE_RELATION_TYPE_RRHH." ";
-		$res = Database::query($sql);
-
-		$student_ids = array();
-
-		while($row = Database::fetch_row($res)) {
-			$student_ids[] = $row[0];
-		}
+		$student_ids = array_keys($a_students);
 		$count_students = count($student_ids);
 		while ($quiz = Database::fetch_array($rs)) {
 			$quiz_avg_score = 0;
 			if ($count_students > 0) {
-				foreach ($student_ids as $student_id) {
-					// get the scorn in exercises
-					$sql = 'SELECT exe_result , exe_weighting
-						FROM '.$TABLETRACK_EXERCISES.'
-						WHERE exe_exo_id = '.$quiz['id'].'
-							AND exe_user_id = '.(int)$student_id.'
-							AND exe_cours_id = "'.api_get_course_id().'"
-						AND orig_lp_id = 0
-						AND orig_lp_item_id = 0
-						ORDER BY exe_date DESC';
-					$rsAttempt = Database::query($sql);
-					$nb_attempts = 0;
-					$avg_student_score = 0;
-					while ($attempt = Database::fetch_array($rsAttempt)) {
-						$nb_attempts++;
-						$exe_weight = $attempt['exe_weighting'];
-						if ($exe_weight > 0) {
-							$avg_student_score += round(($attempt['exe_result'] / $exe_weight * 100), 2);
-						}
-					}
-					if ($nb_attempts > 0) {
-						$avg_student_score = $avg_student_score / $nb_attempts;
-					}
+				foreach ($student_ids as $student_id) {					
+					$avg_student_score = Tracking::get_avg_student_exercise_score($student_id, $course_code, $quiz['id'], $session_id);					
 					$quiz_avg_score += $avg_student_score;
 				}
 			}
@@ -296,14 +263,13 @@ if ($_GET['studentlist'] == 'false') {
 	echo '</table></div>';
 	echo '<div class="clear"></div>';
 
-	 // forums tracking
-
+	// forums tracking
 	echo '<div class="report_section">
 			<h4>'.Display::return_icon('forum.gif', get_lang('Forum')).get_lang('Forum').'&nbsp;-&nbsp;<a href="../forum/index.php?cidReq='.$_course['id'].'">'.get_lang('SeeDetail').'</a></h4>
 			<table class="data_table">';
-	$count_number_of_posts_by_course = Tracking :: count_number_of_posts_by_course($_course['id']);
-	$count_number_of_forums_by_course = Tracking :: count_number_of_forums_by_course($_course['id']);
-	$count_number_of_threads_by_course = Tracking :: count_number_of_threads_by_course($_course['id']);
+	$count_number_of_posts_by_course = Tracking :: count_number_of_posts_by_course($course_code, $session_id);
+	$count_number_of_forums_by_course = Tracking :: count_number_of_forums_by_course($course_code, $session_id);
+	$count_number_of_threads_by_course = Tracking :: count_number_of_threads_by_course($course_code, $session_id);
 	if ($export_csv) {
 		$csv_content[] = array(get_lang('Forum'), '');
     	$csv_content[] = array(get_lang('ForumForumsNumber', ''), $count_number_of_forums_by_course);
@@ -321,7 +287,7 @@ if ($_GET['studentlist'] == 'false') {
 	echo '<div class="report_section">
 			<h4>'.Display::return_icon('chat.gif',get_lang('Chat')).get_lang('Chat').'</h4>
 			<table class="data_table">';
-	$chat_connections_during_last_x_days_by_course = Tracking :: chat_connections_during_last_x_days_by_course($_course['id'], 7);
+	$chat_connections_during_last_x_days_by_course = Tracking::chat_connections_during_last_x_days_by_course($course_code, 7, $session_id);
 	if ($export_csv) {
 		$csv_content[] = array(get_lang('Chat', ''), '');
     	$csv_content[] = array(sprintf(get_lang('ChatConnectionsDuringLastXDays', ''), '7'), $chat_connections_during_last_x_days_by_course);
@@ -335,29 +301,24 @@ if ($_GET['studentlist'] == 'false') {
 	echo '<div class="report_section">
 				<h4>'.Display::return_icon('acces_tool.gif', get_lang('ToolsMostUsed')).get_lang('ToolsMostUsed').'</h4>
 			<table class="data_table">';
-
-	$sql = "SELECT access_tool, COUNT(DISTINCT access_user_id),count( access_tool ) as count_access_tool
-            FROM $TABLETRACK_ACCESS
-            WHERE access_tool IS NOT NULL
-                AND access_cours_code = '$_cid'
-            GROUP BY access_tool
-			ORDER BY count_access_tool DESC
-			LIMIT 0, 3";
-	$rs = Database::query($sql);
+	
+	$tools_most_used = Tracking::get_tools_most_used_by_course($course_code, $session_id);
 
 	if ($export_csv) {
     	$temp = array(get_lang('ToolsMostUsed'), '');
     	$csv_content[] = $temp;
     }
 
-	while ($row = Database::fetch_array($rs)) {
-		echo '	<tr>
-					<td>'.get_lang(ucfirst($row['access_tool'])).'</td>
-					<td align="right">'.$row['count_access_tool'].' '.get_lang('Clicks').'</td>
-				</tr>';
-		if ($export_csv) {
-			$temp = array(get_lang(ucfirst($row['access_tool']), ''), $row['count_access_tool'].' '.get_lang('Clicks', ''));
-			$csv_content[] = $temp;
+	if (!empty($tools_most_used)) {
+		foreach ($tools_most_used as $row) {
+			echo '	<tr>
+						<td>'.get_lang(ucfirst($row['access_tool'])).'</td>
+						<td align="right">'.$row['count_access_tool'].' '.get_lang('Clicks').'</td>
+					</tr>';
+			if ($export_csv) {
+				$temp = array(get_lang(ucfirst($row['access_tool']), ''), $row['count_access_tool'].' '.get_lang('Clicks', ''));
+				$csv_content[] = $temp;
+			}
 		}
 	}
 
@@ -377,13 +338,7 @@ if ($_GET['studentlist'] == 'false') {
 				<h4>'.Display::return_icon('documents.gif',get_lang('DocumentsMostDownloaded')).'&nbsp;'.get_lang('DocumentsMostDownloaded').$link.'</h4>
 			<table class="data_table">';
 
-	$sql = "SELECT down_doc_path, COUNT(DISTINCT down_user_id), COUNT(down_doc_path) as count_down
-            FROM $TABLETRACK_DOWNLOADS
-            WHERE down_cours_id = '$_cid'
-            GROUP BY down_doc_path
-			ORDER BY count_down DESC
-			LIMIT 0,  $num";
-    $rs = Database::query($sql);
+	$documents_most_downloaded = Tracking::get_documents_most_downloaded_by_course($course_code, $session_id, $num);
 
     if ($export_csv) {
     	$temp = array(get_lang('DocumentsMostDownloaded', ''), '');
@@ -391,8 +346,8 @@ if ($_GET['studentlist'] == 'false') {
     	$csv_content[] = $temp;
     }
 
-    if (Database::num_rows($rs) > 0) {
-	    while($row = Database::fetch_array($rs)) {
+    if (!empty($documents_most_downloaded)) {
+	    foreach ($documents_most_downloaded as $row) {
 	    	echo '	<tr>
 						<td>'.$row['down_doc_path'].'</td>
 						<td align="right">'.$row['count_down'].' '.get_lang('Clicks').'</td>
@@ -418,14 +373,7 @@ if ($_GET['studentlist'] == 'false') {
 				<h4>'.Display::return_icon('link.gif',get_lang('LinksMostClicked')).'&nbsp;'.get_lang('LinksMostClicked').'</h4>
 			<table class="data_table">';
 
-	$sql = "SELECT cl.title, cl.url,count(DISTINCT sl.links_user_id), count(cl.title) as count_visits
-            FROM $TABLETRACK_LINKS AS sl, $TABLECOURSE_LINKS AS cl
-            WHERE sl.links_link_id = cl.id
-                AND sl.links_cours_id = '$_cid'
-            GROUP BY cl.title, cl.url
-			ORDER BY count_visits DESC
-			LIMIT 0, 3";
-    $rs = Database::query($sql);
+	$links_most_visited = Tracking::get_links_most_visited_by_course($course_code, $session_id);
 
     if ($export_csv) {
     	$temp = array(get_lang('LinksMostClicked'),'');
@@ -433,8 +381,8 @@ if ($_GET['studentlist'] == 'false') {
     	$csv_content[] = $temp;
     }
 
-    if (Database::num_rows($rs) > 0) {
-	    while ($row = Database::fetch_array($rs)) {
+    if (!empty($links_most_visited)) {
+	    foreach ($links_most_visited as $row) {
 	    	echo '	<tr>
 						<td>'.$row['title'].'</td>
 						<td align="right">'.$row['count_visits'].' '.get_lang('Clicks').'</td>
@@ -514,8 +462,9 @@ if ($_GET['studentlist'] == 'false') {
 		$table = new SortableTable('users_tracking', array('TrackingCourseLog','get_number_of_users'), array('TrackingCourseLog','get_user_data'), (api_is_western_name_order() xor api_sort_by_first_name()) ? 3 : 2);
 
 		$parameters['cidReq'] 		= Security::remove_XSS($_GET['cidReq']);
+		$parameters['id_session'] 	= $session_id;
 		$parameters['studentlist'] 	= Security::remove_XSS($_GET['studentlist']);
-		$parameters['from'] 	= Security::remove_XSS($_GET['myspace']);
+		$parameters['from'] 		= Security::remove_XSS($_GET['myspace']);
 
 		$table->set_additional_parameters($parameters);
 

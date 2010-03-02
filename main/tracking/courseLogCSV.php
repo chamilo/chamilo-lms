@@ -187,12 +187,12 @@ if($is_allowedToTrack && $_configuration['tracking_enabled'])
 
             	//--------------------------------BEGIN first/last access
             	// first access
-            	$sql = "SELECT access_date FROM $TABLETRACK_ACCESS_2 WHERE `access_user_id` = '".$results[$j][0]."' AND `access_cours_code` = '".$_course['official_code']."' AND `access_tool` = 'learnpath' ORDER BY access_id ASC LIMIT 1";
+            	$sql = "SELECT access_date FROM $TABLETRACK_ACCESS_2 WHERE access_user_id = '".$results[$j][0]."' AND access_cours_code = '".$_course['official_code']."' AND access_tool = 'learnpath' AND access_session_id = '".api_get_session_id()."' ORDER BY access_id ASC LIMIT 1";
             	$first_access = getOneResult($sql);
             	$first_access = empty($first_access) ? "-" : date('d.m.y',strtotime($first_access));
 
             	// last access
-            	$sql = "SELECT access_date FROM $TABLETRACK_ACCESS WHERE `access_user_id` = '".$results[$j][0]."' AND `access_cours_code` = '".$_course['official_code']."' AND `access_tool` = 'learnpath'";
+            	$sql = "SELECT access_date FROM $TABLETRACK_ACCESS WHERE access_user_id = '".$results[$j][0]."' AND access_cours_code = '".$_course['official_code']."' AND access_tool = 'learnpath'";
             	$last_access = getOneResult($sql);
             	$last_access = empty($last_access) ? "-" : date('d.m.y',strtotime($last_access));
             	//--------------------------------END first/last access

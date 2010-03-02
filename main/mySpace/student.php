@@ -114,7 +114,7 @@ if ($isCoach || api_is_platform_admin() || api_is_drh()) {
 			}			
 		}
 		
-		$menu_items[] = get_lang('Students');
+		$menu_items[] = '<a href="index.php?view=drh_students">'.get_lang('Students').'</a>';
 		$menu_items[] = '<a href="teachers.php">'.get_lang('Trainers').'</a>';
 		$menu_items[] = '<a href="course.php">'.get_lang('Courses').'</a>';
 		$menu_items[] = '<a href="session.php">'.get_lang('Sessions').'</a>';
@@ -134,6 +134,7 @@ if ($isCoach || api_is_platform_admin() || api_is_drh()) {
 			echo '<a href="'.api_get_self().'?export=csv"><img align="absbottom" src="../img/excel.gif">&nbsp;'.get_lang('ExportAsCSV').'</a>';	
 		}
 		echo '</div>';
+		echo '<h4>'.get_lang('YourStudentsList').'</h4>';
 	} else {
 		echo '<div align="left" style="float:left"><h4>'.$title.'</h4></div>
 			  <div align="right">

@@ -74,6 +74,28 @@ function rsort_users($a, $b) {
 	return api_strcmp(trim(api_strtolower($b[$_SESSION['tracking_column']])), trim(api_strtolower($a[$_SESSION['tracking_column']])));
 }
 
+function count_sessions_coached() {
+	global $nb_sessions;
+	return $nb_sessions;
+}
+
+function sort_sessions($a, $b) {
+	global $tracking_column;
+	if ($a[$tracking_column] > $b[$tracking_column]) {
+		return 1;
+	} else {
+		return -1;
+	}
+}
+
+function rsort_sessions($a, $b) {
+	global $tracking_column;
+	if ($b[$tracking_column] > $a[$tracking_column]) {
+		return 1;
+	} else {
+		return -1;
+	}
+}
 
 /**************************
  * MAIN CODE
@@ -81,47 +103,47 @@ function rsort_users($a, $b) {
 
 $is_coach = api_is_coach();
 $is_platform_admin = api_is_platform_admin();
+$is_drh = api_is_drh();
 
-$view = isset($_GET['view']) ? $_GET['view'] : 'teacher';
+// get views
+$views = array('admin', 'teacher', 'coach', 'drh');
+$view = 'teacher';
+if (isset($_GET['view']) && in_array($_GET['view'], $views)) {
+	$view = $_GET['view'];
+}
 
 $menu_items = array();
+$nb_teacher_courses = 0;
 global $_configuration;
 
+// interbreadcrumbs
 if (api_is_allowed_to_create_course()) {
-	$sql_nb_cours = "SELECT course_rel_user.course_code, course.title
-			FROM $tbl_course_user as course_rel_user
-			INNER JOIN $tbl_course as course
-				ON course.code = course_rel_user.course_code
-			WHERE course_rel_user.user_id='".$_user['user_id']."' AND course_rel_user.status='1'
-			ORDER BY course.title";
-
-	if ($_configuration['multiple_access_urls'] == true) {
-		$tbl_course_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
-		$access_url_id = api_get_current_access_url_id();
-		if ($access_url_id != -1) {
-			$sql_nb_cours = "	SELECT course_rel_user.course_code, course.title
-				FROM $tbl_course_user as course_rel_user
-				INNER JOIN $tbl_course as course
-					ON course.code = course_rel_user.course_code
-			  	INNER JOIN $tbl_course_rel_access_url course_rel_url
-					ON (course_rel_url.course_code= course.code)
-			  	WHERE access_url_id =  $access_url_id  AND course_rel_user.user_id='".$_user['user_id']."' AND course_rel_user.status='1'
-			  	ORDER BY course.title";
-		}
+		
+	$session_id = intval($_GET['session_id']);		
+	if (!empty($session_id)) {
+		$courses = Tracking::get_courses_followed_by_coach($_user['user_id'], $session_id);
+	} else {
+		$courses  = CourseManager::get_course_list_of_user_as_course_admin($_user['user_id']);	
 	}
 
-	$result_nb_cours = Database::query($sql_nb_cours);
-	$courses = Database::store_result($result_nb_cours);
-
 	$nb_teacher_courses = count($courses);
+	
+	$sessions = Tracking::get_sessions_coached_by_user($_user['user_id']);
+	$nb_sessions = count($sessions);
+
 	if ($nb_teacher_courses) {
 		if (!$is_coach && !$is_platform_admin) {
 			$view = 'teacher';
 		}
-		if ($view == 'teacher') {
+		
+		if ($view == 'teacher' && empty($session_id)) {		
 			$menu_items[] = get_lang('TeacherInterface');
-			$title = get_lang('YourCourseList');
-		} else {
+			$title = get_lang('YourCourseList');			
+		} else {			
+			if (!empty($session_id)) {								
+				$session_name = api_get_session_name($session_id);
+				$title = ucfirst($session_name);				
+			}			
 			$menu_items[] = '<a href="'.api_get_self().'?view=teacher">'.get_lang('TeacherInterface').'</a>';
 		}
 	}
@@ -140,7 +162,7 @@ if ($is_coach) {
 }
 
 if ($is_platform_admin) {
-	if (!$is_coach && $nb_teacher_courses == 0) {
+	if ((!$is_coach || !$is_drh) && $nb_teacher_courses == 0) {
 		$view = 'admin';
 	}
 	if ($view == 'admin') {
@@ -151,14 +173,15 @@ if ($is_platform_admin) {
 	}
 }
 
-if (api_is_drh()) {
-	$view = 'drh_students';	
+if ($is_drh) {
+	$view = 'drh';	
 	$menu_items[] = get_lang('Students');
 	$menu_items[] = '<a href="teachers.php">'.get_lang('Trainers').'</a>';
 	$menu_items[] = '<a href="course.php">'.get_lang('Courses').'</a>';
 	$menu_items[] = '<a href="session.php">'.get_lang('Sessions').'</a>';
 }
 
+// actions menu
 echo '<div class="actions-title" style ="font-size:10pt;">';
 $nb_menu_items = count($menu_items);
 if ($nb_menu_items > 1) {
@@ -179,7 +202,7 @@ if ($view == 'admin') {
 echo '</div>';
 echo '<h4>'.$title.'</h4>';
 
-if (api_is_drh() && $view == 'drh_students') {
+if ($is_drh && $view == 'drh') {
 	// get data for human resources manager
 	$students = array_keys(UserManager::get_users_followed_by_drh($_user['user_id'], STUDENT));
 	$courses_of_the_platform = CourseManager :: get_real_course_list();	
@@ -193,7 +216,7 @@ if ($is_coach && $view == 'coach') {
 	$courses = Tracking :: get_courses_followed_by_coach($_user['user_id']);
 }
 
-if ($view == 'coach' || $view == 'drh_students') {
+if ($view == 'coach' || $view == 'drh') {
 
 	$nb_students = count($students);
 	$total_time_spent = 0;
@@ -205,15 +228,8 @@ if ($view == 'coach' || $view == 'drh_students') {
 	foreach ($students as $student_id) {
 		// inactive students
 		$last_connection_date = Tracking :: get_last_connection_date($student_id, true, true);
-		if ($last_connection_date != false) {
-			/*
-			list($last_connection_date, $last_connection_hour) = explode(' ', $last_connection_date);
-			$last_connection_date = explode('-', $last_connection_date);
-			$last_connection_hour = explode(':', $last_connection_hour);
-			$last_connection_hour[0];
-			$last_connection_time = mktime($last_connection_hour[0], $last_connection_hour[1], $last_connection_hour[2], $last_connection_date[1], $last_connection_date[2], $last_connection_date[0]);
-			*/
-			if (time() - (3600 * 24 * 7) > $last_connection_time) {
+		if ($last_connection_date !== false) {			
+			if (time() - (3600 * 24 * 7) > $last_connection_date) {
 				$nb_inactive_students++;
 			}
 		} else {
@@ -480,6 +496,57 @@ if (api_is_allowed_to_create_course() && $view == 'teacher') {
 		);
 		$table->display();
 	}
+	
+	// display sessions
+	if ($nb_sessions > 0 && !isset($_GET['session_id'])) {
+		echo '<h4>'.get_lang('Sessions').'</h4>';
+		$table = new SortableTable('tracking_sessions', 'count_sessions_coached');
+		$table->set_header(0, get_lang('Title'));
+		$table->set_header(1, get_lang('Date'));
+		$table->set_header(2, get_lang('NbCoursesPerSession'));
+		$table->set_header(3, get_lang('Details'), false);
+	
+		$all_data = array();
+		foreach ($sessions as $session) {			
+			$count_courses_in_session = count(Tracking::get_courses_followed_by_coach($_user['user_id'], $session['id']));			
+			$row = array();
+			$row[] = $session['name'];
+	
+			if ($session['date_start'] != '0000-00-00' && $session['date_end'] != '0000-00-00') {
+				$row[] = get_lang('From').' '.format_locale_date(get_lang('DateFormatLongWithoutDay'), strtotime($session['date_start'])).' '.get_lang('To').' '.format_locale_date(get_lang('DateFormatLongWithoutDay'), strtotime($session['date_end']));
+			} else {
+				$row[] = ' - ';
+			}
+			$row[] = $count_courses_in_session;
+			$row[] = '<a href="'.api_get_self().'?session_id='.$session['id'].'"><img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a>';			
+			$all_data[] = $row;
+		}
+	
+		if (!isset($tracking_column)) {
+			$tracking_column = 0;
+		}
+	
+		if ($_GET['tracking_direction'] == 'DESC') {
+			usort($all_data, 'rsort_sessions');
+		} else {
+			usort($all_data, 'sort_sessions');
+		}
+	
+		if ($export_csv) {
+			usort($csv_content, 'sort_sessions');
+		}
+	
+		foreach ($all_data as $row) {
+			$table -> addRow($row);
+		}
+	
+		$table -> setColAttributes(1, array('align' => 'center'));
+		$table -> setColAttributes(2, array('align' => 'center'));
+		$table -> setColAttributes(3, array('align' => 'center'));
+		$table -> display();
+		
+	}
+	
 }
 
 if ($is_platform_admin && $view == 'admin') {

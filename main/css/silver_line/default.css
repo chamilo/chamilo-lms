@@ -1288,23 +1288,41 @@ a.specialLink:hover, a.specialLink:focus {
 */
 
 div.system_announcement {
-	padding: .2em;
+	padding: 10px;
 	border: 1px solid #ddd;
+	-moz-border-radius-topright : 5px;
+    -moz-border-radius-topleft : 5px;
+    -moz-border-radius-bottomright : 5px;
+    -moz-border-radius-bottomleft : 5px;
 }
 .system_announcement {
-	background: #ddd url('images/headertables.jpg') repeat-x top center;
+	background: #eee url('images/headertables.jpg') repeat-x top center;
 	font: bold 100% arial, sans-serif, sans;
+	
 }
 .system_announcement_content {
 	font: normal 100% 'Lucida Grande', verdana, Arial, sans-serif, sans;
 }
 .system_announcements {
 	background: transparent url('images/systemenouvelles.jpg') no-repeat top  left;
-	padding-top: 30px;
-	width: 50%;
+	padding-top: 10px;
+	padding-bottom: 10px;
+	width: 90%;
 }
 .system_announcements h3 {
-	text-align: center;
+	padding-left:70px;
+	padding-top: 30px;
+}
+
+.system_announcement_title {
+	font-weight: bold;
+	font-size: 120%;
+	float:left;	
+}
+
+.system_announcement_date {
+	font-color: #ccc;
+	float:right;
 }
 /*
 ==============================================================================

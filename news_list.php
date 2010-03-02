@@ -1,17 +1,14 @@
 <?php
-// @todo Add dokeos header here
-/*
- * Created on 30 mai 2006 by Elixir Interactive http://www.elixir-interactive.com
- */
+/* For licensing terms, see /license.txt */
 
 // name of the language file that needs to be included
 $language_file = array ('courses', 'index');
 
 // including necessary files
-include_once 'main/inc/global.inc.php';
-include_once api_get_path(LIBRARY_PATH).'system_announcements.lib.php';
+require_once 'main/inc/global.inc.php';
+require_once api_get_path(LIBRARY_PATH).'system_announcements.lib.php';
 
-$tool_name = get_lang("SystemAnnouncements");
+$tool_name = get_lang('SystemAnnouncements');
 Display::display_header($tool_name);
 
 $start = isset($_GET['start']) ? (int)$_GET['start'] : $start = 0;

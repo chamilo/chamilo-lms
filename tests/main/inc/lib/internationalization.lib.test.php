@@ -1372,7 +1372,6 @@ class TestInternationalization extends UnitTestCase {
 			'admin.inc.php',
 			'agenda.inc.php',
 			'announcements.inc.php',
-			'bbimport.inc.php',
 			'blog.inc.php',
 			'chat.inc.php',
 			'coursebackup.inc.php',
@@ -1392,7 +1391,6 @@ class TestInternationalization extends UnitTestCase {
 			'group.inc.php',
 			'help.inc.php',
 			'hotspot.inc.php',
-			//'htmlarea.js.php', // This file is not used.
 			'import.inc.php',
 			'index.inc.php',
 			'install.inc.php',

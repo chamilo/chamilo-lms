@@ -110,12 +110,12 @@ function search_users($needle,$type)
 			$sql = 'SELECT user_id, username, lastname, firstname FROM '.$tbl_user.' user
 					WHERE (username LIKE "'.$needle.'%"
 					OR firstname LIKE "'.$needle.'%"
-				OR lastname LIKE "'.$needle.'%") AND user_id<>"'.$user_anonymous.'"'.
+				OR lastname LIKE "'.$needle.'%") AND user_id<>"'.$user_anonymous.'"   AND user.status<>'.DRH.''. 
 				$order_clause.
 				' LIMIT 11';
 		} else {
 			$sql = 'SELECT user_id, username, lastname, firstname FROM '.$tbl_user.' user
-					WHERE '.(api_sort_by_first_name() ? 'firstname' : 'lastname').' LIKE "'.$needle.'%" AND user_id<>"'.$user_anonymous.'"'.$cond_user_id.
+					WHERE '.(api_sort_by_first_name() ? 'firstname' : 'lastname').' LIKE "'.$needle.'%" AND user.status<>'.DRH.' AND user_id<>"'.$user_anonymous.'"'.$cond_user_id.
 					$order_clause;
 		}
 
@@ -129,14 +129,14 @@ function search_users($needle,$type)
 					INNER JOIN '.$tbl_user_rel_access_url.' url_user ON (url_user.user_id=user.user_id)
 					WHERE access_url_id = '.$access_url_id.'  AND (username LIKE "'.$needle.'%"
 					OR firstname LIKE "'.$needle.'%"
-					OR lastname LIKE "'.$needle.'%") AND user.user_id<>"'.$user_anonymous.'"'.
+					OR lastname LIKE "'.$needle.'%") AND user.user_id<>"'.$user_anonymous.'" AND user.status<>'.DRH.' '.
 					$order_clause.
 					' LIMIT 11';
 				} else {
 					$sql = 'SELECT user.user_id, username, lastname, firstname FROM '.$tbl_user.' user
 					INNER JOIN '.$tbl_user_rel_access_url.' url_user ON (url_user.user_id=user.user_id)
 					WHERE access_url_id = '.$access_url_id.'
-					AND '.(api_sort_by_first_name() ? 'firstname' : 'lastname').' LIKE "'.$needle.'%" AND user.user_id<>"'.$user_anonymous.'"'.$cond_user_id.
+					AND '.(api_sort_by_first_name() ? 'firstname' : 'lastname').' LIKE "'.$needle.'%" AND user.status<>'.DRH.' AND user.user_id<>"'.$user_anonymous.'"'.$cond_user_id.
 					$order_clause;
 				}
 
@@ -274,9 +274,9 @@ if ($ajax_search) {
 	$sql="SELECT user_id, lastname, firstname, username, id_session
 			FROM $tbl_user
 			INNER JOIN $tbl_session_rel_user
-				ON $tbl_session_rel_user.id_user = $tbl_user.user_id
-				AND $tbl_session_rel_user.id_session = ".intval($id_session).
-			$order_clause;
+				ON $tbl_session_rel_user.id_user = $tbl_user.user_id AND $tbl_session_rel_user.relation_type<>".SESSION_RELATION_TYPE_RRHH."
+				AND $tbl_session_rel_user.id_session = ".intval($id_session)."
+			    WHERE status<>".DRH." $order_clause";
 
 	if ($_configuration['multiple_access_urls']==true) {
 		$tbl_user_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
@@ -285,10 +285,10 @@ if ($ajax_search) {
 			$sql="SELECT u.user_id, lastname, firstname, username, id_session
 			FROM $tbl_user u
 			INNER JOIN $tbl_session_rel_user
-				ON $tbl_session_rel_user.id_user = u.user_id
+				ON $tbl_session_rel_user.id_user = u.user_id AND $tbl_session_rel_user.relation_type<>".SESSION_RELATION_TYPE_RRHH."
 				AND $tbl_session_rel_user.id_session = ".intval($id_session)."
 				INNER JOIN $tbl_user_rel_access_url url_user ON (url_user.user_id=u.user_id)
-				WHERE access_url_id = $access_url_id
+				WHERE access_url_id = $access_url_id AND u.status<>".DRH."
 				$order_clause";
 		}
 	}
@@ -349,15 +349,16 @@ if ($ajax_search) {
 			$sql="SELECT  user_id, lastname, firstname, username, id_session
 				FROM $tbl_user u
 				LEFT JOIN $tbl_session_rel_user
-				ON $tbl_session_rel_user.id_user = u.user_id AND id_session = '$id_session'
-				$where_filter
+				ON $tbl_session_rel_user.id_user = u.user_id AND $tbl_session_rel_user.id_session = '$id_session' AND $tbl_session_rel_user.relation_type<>".SESSION_RELATION_TYPE_RRHH."
+				$where_filter AND u.status<>".DRH."
 			$order_clause";
 
 		} else {
 			$sql="SELECT  user_id, lastname, firstname, username, id_session
 				FROM $tbl_user u
 				LEFT JOIN $tbl_session_rel_user
-				ON $tbl_session_rel_user.id_user = u.user_id AND id_session = '$id_session'
+				ON $tbl_session_rel_user.id_user = u.user_id AND $tbl_session_rel_user.id_session = '$id_session' AND $tbl_session_rel_user.relation_type<>".SESSION_RELATION_TYPE_RRHH."
+				WHERE u.status<>".DRH."
 			$order_clause";
 		}
 		if ($_configuration['multiple_access_urls']==true) {
@@ -367,9 +368,9 @@ if ($ajax_search) {
 				$sql="SELECT  u.user_id, lastname, firstname, username, id_session
 				FROM $tbl_user u
 				LEFT JOIN $tbl_session_rel_user
-					ON $tbl_session_rel_user.id_user = u.user_id AND id_session = '$id_session'
+					ON $tbl_session_rel_user.id_user = u.user_id AND $tbl_session_rel_user.id_session = '$id_session' AND $tbl_session_rel_user.relation_type<>".SESSION_RELATION_TYPE_RRHH."
 				INNER JOIN $tbl_user_rel_access_url url_user ON (url_user.user_id=u.user_id)
-				WHERE access_url_id = $access_url_id  $where_filter
+				WHERE access_url_id = $access_url_id  $where_filter AND u.status<>".DRH."
 			$order_clause";
 			}
 		}
@@ -391,8 +392,8 @@ if ($ajax_search) {
 		$sql="SELECT  user_id, lastname, firstname, username, id_session
 			FROM $tbl_user u
 			LEFT JOIN $tbl_session_rel_user
-			ON $tbl_session_rel_user.id_user = u.user_id AND id_session = '$id_session'
-			$order_clause";
+			ON $tbl_session_rel_user.id_user = u.user_id AND $tbl_session_rel_user.id_session = '$id_session' AND $tbl_session_rel_user.relation_type<>".SESSION_RELATION_TYPE_RRHH."
+			WHERE u.status<>".DRH." $order_clause";
 
 		if ($_configuration['multiple_access_urls']==true) {
 			$tbl_user_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
@@ -401,9 +402,9 @@ if ($ajax_search) {
 				$sql="SELECT  u.user_id, lastname, firstname, username, id_session
 				FROM $tbl_user u
 				LEFT JOIN $tbl_session_rel_user
-					ON $tbl_session_rel_user.id_user = u.user_id AND id_session = '$id_session'
+					ON $tbl_session_rel_user.id_user = u.user_id AND $tbl_session_rel_user.id_session = '$id_session' AND $tbl_session_rel_user.relation_type<>".SESSION_RELATION_TYPE_RRHH."
 				INNER JOIN $tbl_user_rel_access_url url_user ON (url_user.user_id=u.user_id)
-				WHERE access_url_id = $access_url_id
+				WHERE access_url_id = $access_url_id AND u.status<>".DRH."
 				$order_clause";
 			}
 		}
@@ -422,8 +423,7 @@ if ($ajax_search) {
 			if (array_key_exists($user['user_id'],$nosessionUsersList))
                 unset($nosessionUsersList[$user['user_id']]);
 		}
-/*		else if ( $sessionUsersList[$user['user_id']]['id_session']!=$id_session )
-			$nosessionUsersList[$user['user_id']] = $user ;*/
+
 	}
 }
 

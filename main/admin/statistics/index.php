@@ -34,7 +34,7 @@ api_protect_admin_script();
 
 $interbreadcrumb[] = array ("url" => "../index.php", "name" => get_lang('PlatformAdmin'));
 
-$tool_name = get_lang('ToolName');
+$tool_name = get_lang('Statistics');
 Display::display_header($tool_name);
 api_display_tool_title($tool_name);
 

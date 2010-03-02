@@ -1,8 +1,8 @@
 <?php //$id: $
-/* For licensing terms, see /chamilo_license.txt */
+/* For licensing terms, see /license.txt */
 /**
 *
-*	@package dokeos.exercise
+*	@package chamilo.exercise
 * 	@author Julio Montoya Armas Added switchable fill in blank option added
 * 	@version $Id: exercise_show.php 22256 2009-07-20 17:40:20Z ivantcholakov $
 *

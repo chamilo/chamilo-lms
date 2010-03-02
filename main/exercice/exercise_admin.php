@@ -1,10 +1,10 @@
 <?php
-/* For licensing terms, see /dokeos_license.txt */
+/* For licensing terms, see /license.txt */
 
 /**
 *	Exercise administration
 *	This script allows to manage an exercise. It is included from the script admin.php
-*	@package dokeos.exercise
+*	@package chamilo.exercise
 * 	@author Olivier Brouckaert
 * 	@version $Id$
 */

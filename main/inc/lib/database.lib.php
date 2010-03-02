@@ -22,31 +22,31 @@
 */
 
 // Main database tables
-define('TABLE_MAIN_COURSE', 'course');
-define('TABLE_MAIN_USER', 'user');
-define('TABLE_MAIN_CLASS', 'class');
-define('TABLE_MAIN_ADMIN', 'admin');
-define('TABLE_MAIN_COURSE_CLASS', 'course_rel_class');
-define('TABLE_MAIN_COURSE_USER', 'course_rel_user');
-define('TABLE_MAIN_CLASS_USER', 'class_user');
-define('TABLE_MAIN_CATEGORY', 'course_category');
-define('TABLE_MAIN_COURSE_MODULE', 'course_module');
-define('TABLE_MAIN_SYSTEM_ANNOUNCEMENTS', 'sys_announcement');
-define('TABLE_MAIN_LANGUAGE', 'language');
-define('TABLE_MAIN_SETTINGS_OPTIONS', 'settings_options');
-define('TABLE_MAIN_SETTINGS_CURRENT', 'settings_current');
-define('TABLE_MAIN_SESSION', 'session');
-define('TABLE_MAIN_SESSION_CATEGORY', 'session_category');
-define('TABLE_MAIN_SESSION_COURSE', 'session_rel_course');
-define('TABLE_MAIN_SESSION_USER', 'session_rel_user');
-define('TABLE_MAIN_SESSION_CLASS', 'session_rel_class');
-define('TABLE_MAIN_SESSION_COURSE_USER', 'session_rel_course_rel_user');
-define('TABLE_MAIN_SHARED_SURVEY', 'shared_survey');
+define('TABLE_MAIN_COURSE', 				'course');
+define('TABLE_MAIN_USER', 					'user');
+define('TABLE_MAIN_CLASS', 					'class');
+define('TABLE_MAIN_ADMIN', 					'admin');
+define('TABLE_MAIN_COURSE_CLASS', 			'course_rel_class');
+define('TABLE_MAIN_COURSE_USER', 			'course_rel_user');
+define('TABLE_MAIN_CLASS_USER', 			'class_user');
+define('TABLE_MAIN_CATEGORY', 				'course_category');
+define('TABLE_MAIN_COURSE_MODULE', 			'course_module');
+define('TABLE_MAIN_SYSTEM_ANNOUNCEMENTS',	'sys_announcement');
+define('TABLE_MAIN_LANGUAGE', 				'language');
+define('TABLE_MAIN_SETTINGS_OPTIONS', 		'settings_options');
+define('TABLE_MAIN_SETTINGS_CURRENT', 		'settings_current');
+define('TABLE_MAIN_SESSION', 				'session');
+define('TABLE_MAIN_SESSION_CATEGORY', 		'session_category');
+define('TABLE_MAIN_SESSION_COURSE', 		'session_rel_course');
+define('TABLE_MAIN_SESSION_USER', 			'session_rel_user');
+define('TABLE_MAIN_SESSION_CLASS', 			'session_rel_class');
+define('TABLE_MAIN_SESSION_COURSE_USER', 	'session_rel_course_rel_user');
+define('TABLE_MAIN_SHARED_SURVEY', 			'shared_survey');
 define('TABLE_MAIN_SHARED_SURVEY_QUESTION', 'shared_survey_question');
 define('TABLE_MAIN_SHARED_SURVEY_QUESTION_OPTION', 'shared_survey_question_option');
-define('TABLE_MAIN_TEMPLATES', 'templates');
-define('TABLE_MAIN_SYSTEM_TEMPLATE', 'system_template');
-define('TABLE_MAIN_OPENID_ASSOCIATION', 'openid_association');
+define('TABLE_MAIN_TEMPLATES', 				'templates');
+define('TABLE_MAIN_SYSTEM_TEMPLATE', 		'system_template');
+define('TABLE_MAIN_OPENID_ASSOCIATION', 	'openid_association');
 
 // Gradebook
 define('TABLE_MAIN_GRADEBOOK_CATEGORY', 	'gradebook_category');
@@ -99,7 +99,7 @@ define('TABLE_MAIN_USER_REL_USER', 'user_rel_user');
 define('TABLE_MAIN_USER_FRIEND_RELATION_TYPE', 'user_friend_relation_type');
 
 // Web services
-define('TABLE_MAIN_USER_API_KEY', 'user_api_key');
+define('TABLE_MAIN_USER_API_KEY', 			'user_api_key');
 define('TABLE_MAIN_COURSE_FIELD',			'course_field');
 define('TABLE_MAIN_COURSE_FIELD_VALUES',	'course_field_values');
 define('TABLE_MAIN_SESSION_FIELD',			'session_field');
@@ -115,20 +115,20 @@ define('TABLE_MAIN_LEGAL', 'legal');
 define('TABLE_MAIN_BLOCK', 'block');
 
 // Statistic database tables
-define('TABLE_STATISTIC_TRACK_E_LASTACCESS', 'track_e_lastaccess');
-define('TABLE_STATISTIC_TRACK_E_ACCESS', 'track_e_access');
-define('TABLE_STATISTIC_TRACK_E_LOGIN', 'track_e_login');
-define('TABLE_STATISTIC_TRACK_E_DOWNLOADS', 'track_e_downloads');
-define('TABLE_STATISTIC_TRACK_E_LINKS', 'track_e_links');
-define('TABLE_STATISTIC_TRACK_E_ONLINE', 'track_e_online');
-define('TABLE_STATISTIC_TRACK_E_HOTPOTATOES', 'track_e_hotpotatoes');
+define('TABLE_STATISTIC_TRACK_E_LASTACCESS', 	'track_e_lastaccess');
+define('TABLE_STATISTIC_TRACK_E_ACCESS', 		'track_e_access');
+define('TABLE_STATISTIC_TRACK_E_LOGIN', 		'track_e_login');
+define('TABLE_STATISTIC_TRACK_E_DOWNLOADS', 	'track_e_downloads');
+define('TABLE_STATISTIC_TRACK_E_LINKS', 		'track_e_links');
+define('TABLE_STATISTIC_TRACK_E_ONLINE', 		'track_e_online');
+define('TABLE_STATISTIC_TRACK_E_HOTPOTATOES', 	'track_e_hotpotatoes');
 define('TABLE_STATISTIC_TRACK_E_COURSE_ACCESS', 'track_e_course_access');
-define('TABLE_STATISTIC_TRACK_E_EXERCICES', 'track_e_exercices');
-define('TABLE_STATISTIC_TRACK_E_ATTEMPT', 'track_e_attempt');
+define('TABLE_STATISTIC_TRACK_E_EXERCICES', 	'track_e_exercices');
+define('TABLE_STATISTIC_TRACK_E_ATTEMPT', 		'track_e_attempt');
 define('TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING', 'track_e_attempt_recording');
-define('TABLE_STATISTIC_TRACK_E_DEFAULT', 'track_e_default');
-define('TABLE_STATISTIC_TRACK_E_UPLOADS', 'track_e_uploads');
-define('TABLE_STATISTIC_TRACK_E_HOTSPOT', 'track_e_hotspot');
+define('TABLE_STATISTIC_TRACK_E_DEFAULT', 		'track_e_default');
+define('TABLE_STATISTIC_TRACK_E_UPLOADS', 		'track_e_uploads');
+define('TABLE_STATISTIC_TRACK_E_HOTSPOT', 		'track_e_hotspot');
 define('TABLE_STATISTIC_TRACK_E_ITEM_PROPERTY', 'track_e_item_property');
 
 // SCORM database tables

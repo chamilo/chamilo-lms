@@ -1,5 +1,5 @@
 <?php
-/* For licensing terms, see /chamilo_license.txt */
+/* For licensing terms, see /license.txt */
 
 /**
 *	Statement (?) administration
@@ -16,8 +16,8 @@
 ==============================================================================
 */
 
-include_once(api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
-include_once(api_get_path(LIBRARY_PATH).'image.lib.php');
+require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
+require_once api_get_path(LIBRARY_PATH).'image.lib.php';
 
 // ALLOWED_TO_INCLUDE is defined in admin.php
 if(!defined('ALLOWED_TO_INCLUDE')) {
@@ -28,10 +28,10 @@ if(!defined('ALLOWED_TO_INCLUDE')) {
 /*********************
  * INIT QUESTION
  *********************/
+
 if(isset($_GET['editQuestion'])) {
 	$objQuestion = Question::read ($_GET['editQuestion']);
 	$action = api_get_self()."?".api_get_cidreq()."&modifyQuestion=".$modifyQuestion."&editQuestion=".$objQuestion->id;
-
 
 	if (isset($exerciseId) && !empty($exerciseId)) {
 		$TBL_LP_ITEM	= Database::get_course_table(TABLE_LP_ITEM);
@@ -39,7 +39,7 @@ if(isset($_GET['editQuestion'])) {
 			  WHERE item_type = '".TOOL_QUIZ."' AND path ='".Database::escape_string($exerciseId)."'";
 		$result = Database::query($sql);
 		if (Database::num_rows($result) > 0) {
-			Display::display_warning_message(get_lang('EditingScoreCauseProblemsToExercisesInLP'));
+			//Display::display_warning_message(get_lang('EditingScoreCauseProblemsToExercisesInLP'));
 		}
 	}
 
@@ -94,10 +94,15 @@ if(is_object($objQuestion)) {
 
 	// question form elements
 	$objQuestion -> createForm ($form,array('Height'=>150));
-
+	
 	// answer form elements
 	$objQuestion -> createAnswersForm ($form);
-
+	
+	// this variable  $show_quiz_edition comes from admin.php blocks the exercise/quiz modifications
+	if ($show_quiz_edition == false) {
+		$form->freeze();
+	}
+	
 	// submit button is implemented in every question type
 
 	//$form->addElement('style_submit_button','submitQuestion',$text, 'class="'.$class.'"');
@@ -108,8 +113,7 @@ if(is_object($objQuestion)) {
 	/**********************
 	 * FORM VALIDATION
 	 **********************/
-	if(isset($_POST['submitQuestion']) && $form->validate())
-	{
+	if(isset($_POST['submitQuestion']) && $form->validate()) {
 
 		// question
 	    $objQuestion -> processCreation($form,$objExercise);
@@ -123,9 +127,7 @@ if(is_object($objQuestion)) {
 	    	echo '<script type="text/javascript">window.location.href="admin.php"</script>';
 	    else
 	    	echo '<script type="text/javascript">window.location.href="admin.php?hotspotadmin='.$objQuestion->id.'"</script>';
-	}
-	else
-	{
+	} else {
 
 		/******************
 		 * FORM DISPLAY

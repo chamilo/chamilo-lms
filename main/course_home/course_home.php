@@ -35,6 +35,10 @@ $use_anonymous = true;
 // Inlcuding the global initialization file.
 require '../../main/inc/global.inc.php';
 
+//Delete LP sessions  
+unset($_SESSION['oLP']);
+unset($_SESSION['lpobject']);
+
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js" type="text/javascript" language="javascript"></script>'; //jQuery
 $htmlHeadXtra[] ='<script type="text/javascript">
 $(document).ready(function() {

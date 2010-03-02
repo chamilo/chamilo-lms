@@ -1,10 +1,10 @@
 <?php
 // $Id: exercice.php 22201 2009-07-17 19:57:03Z cfasanando $
-/* For licensing terms, see /dokeos_license.txt */
+/* For licensing terms, see /license.txt */
 
 /**
 *	Exercise list: This script shows the list of exercises for administrators and students.
-*	@package dokeos.exercise
+*	@package chamilo.exercise
 *	@author Olivier Brouckaert, original author
 *	@author Denes Nagy, HotPotatoes integration
 *	@author Wolfgang Schneider, code/html cleanup
@@ -41,24 +41,24 @@ require_once api_get_path(LIBRARY_PATH) . 'usermanager.lib.php';
 	Constants and variables
 -----------------------------------------------------------
 */
-$is_allowedToEdit = api_is_allowed_to_edit(null,true);
-$is_tutor = api_is_allowed_to_edit(true);
-$is_tutor_course = api_is_course_tutor();
-$tbl_course_rel_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
-$TBL_USER = Database :: get_main_table(TABLE_MAIN_USER);
-$TBL_DOCUMENT = Database :: get_course_table(TABLE_DOCUMENT);
-$TBL_ITEM_PROPERTY = Database :: get_course_table(TABLE_ITEM_PROPERTY);
-$TBL_EXERCICE_ANSWER = Database :: get_course_table(TABLE_QUIZ_ANSWER);
-$TBL_EXERCICE_QUESTION = Database :: get_course_table(TABLE_QUIZ_TEST_QUESTION);
-$TBL_EXERCICES = Database :: get_course_table(TABLE_QUIZ_TEST);
-$TBL_QUESTIONS = Database :: get_course_table(TABLE_QUIZ_QUESTION);
-$TBL_TRACK_EXERCICES = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
-$TBL_TRACK_HOTPOTATOES = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_HOTPOTATOES);
-$TBL_TRACK_ATTEMPT = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
-$TBL_TRACK_ATTEMPT_RECORDING = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING);
-$TBL_LP_ITEM_VIEW = Database :: get_course_table(TABLE_LP_ITEM_VIEW);
-$TBL_LP_ITEM = Database :: get_course_table(TABLE_LP_ITEM);
-$TBL_LP_VIEW = Database :: get_course_table(TABLE_LP_VIEW);
+$is_allowedToEdit 			= api_is_allowed_to_edit(null,true);
+$is_tutor 					= api_is_allowed_to_edit(true);
+$is_tutor_course 			= api_is_course_tutor();
+$tbl_course_rel_user		= Database :: get_main_table(TABLE_MAIN_COURSE_USER);
+$TBL_USER 					= Database :: get_main_table(TABLE_MAIN_USER);
+$TBL_DOCUMENT 				= Database :: get_course_table(TABLE_DOCUMENT);
+$TBL_ITEM_PROPERTY 			= Database :: get_course_table(TABLE_ITEM_PROPERTY);
+$TBL_EXERCICE_ANSWER 		= Database :: get_course_table(TABLE_QUIZ_ANSWER);
+$TBL_EXERCICE_QUESTION 		= Database :: get_course_table(TABLE_QUIZ_TEST_QUESTION);
+$TBL_EXERCICES 				= Database :: get_course_table(TABLE_QUIZ_TEST);
+$TBL_QUESTIONS 				= Database :: get_course_table(TABLE_QUIZ_QUESTION);
+$TBL_TRACK_EXERCICES 		= Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+$TBL_TRACK_HOTPOTATOES 		= Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_HOTPOTATOES);
+$TBL_TRACK_ATTEMPT 			= Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+$TBL_TRACK_ATTEMPT_RECORDING= Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING);
+$TBL_LP_ITEM_VIEW 			= Database :: get_course_table(TABLE_LP_ITEM_VIEW);
+$TBL_LP_ITEM 				= Database :: get_course_table(TABLE_LP_ITEM);
+$TBL_LP_VIEW 				= Database :: get_course_table(TABLE_LP_VIEW);
 
 // document path
 $documentPath = api_get_path(SYS_COURSE_PATH) . $_course['path'] . "/document";
@@ -94,6 +94,7 @@ if (isset ($_SESSION['questionList'])) {
 if (isset ($_SESSION['exerciseResult'])) {
 	api_session_unregister('exerciseResult');
 }
+
 
 //general POST/GET/SESSION/COOKIES parameters recovery
 if (empty ($origin)) {
@@ -563,6 +564,15 @@ if ($is_allowedToEdit) {
 					$objExerciseTmp->save();
 					Display :: display_confirmation_message(get_lang('ResultsEnabled'));
 					break;
+				case 'clean_results' : //clean student results
+					$quantity_results_deleted= $objExerciseTmp->clean_results();					
+					Display :: display_confirmation_message(sprintf(get_lang('XResultsCleaned'),$quantity_results_deleted));
+					break;
+				case 'copy_exercise' : //copy an exercise
+					$objExerciseTmp->copy_exercise();					
+					Display :: display_confirmation_message(get_lang('ExerciseCopied'));
+					break;
+					
 			}
 		}
 
@@ -872,7 +882,9 @@ if ($show == 'test') {
 			<td width="30" align="left"><?php Display::display_icon('quiz.gif', get_lang('Exercice'))?></td>
 			<td width="15" valign="left"><?php echo ($i+($page*$limitExPage)).'.'; ?></td>
 				<?php $row['title']=api_parse_tex($row['title']); ?>
-			<td><a href="exercice_submit.php?<?php echo api_get_cidreq().$myorigin.$mylpid.$mylpitemid; ?>&amp;exerciseId=<?php echo $row['id']; ?>" <?php if(!$row['active']) echo 'class="invisible"'; ?>><?php echo $row['title']; ?></a><?php echo $session_img; ?></td>
+			<td>
+				<a href="exercice_submit.php?<?php echo api_get_cidreq().$myorigin.$mylpid.$mylpitemid; ?>&amp;exerciseId=<?php echo $row['id']; ?>" <?php if(!$row['active']) echo 'class="invisible"'; ?>><?php echo $row['title']; ?></a><?php echo $session_img; ?>
+			</td>
 			<td align="center"> <?php
 
 				$exid = $row['id'];
@@ -895,6 +907,10 @@ if ($show == 'test') {
 ?>
 		    <td>
 		    <a href="admin.php?<?php echo api_get_cidreq()?>&amp;exerciseId=<?php echo $row['id']; ?>"><img src="../img/wizard_small.gif" border="0" title="<?php echo api_htmlentities(get_lang('Edit'),ENT_QUOTES,$charset); ?>" alt="<?php echo api_htmlentities(get_lang('Edit'),ENT_QUOTES,$charset); ?>" /></a>
+		    
+		    <a href="exercice.php?<?php echo api_get_cidreq()?>&amp;choice=copy_exercise&amp;exerciseId=<?php echo $row['id']; ?>"><img width="16" src="../img/cd.gif" border="0" title="<?php echo api_htmlentities(get_lang('CopyExercise'),ENT_QUOTES,$charset); ?>" alt="<?php echo api_htmlentities(get_lang('CopyExercise'),ENT_QUOTES,$charset); ?>" /></a>		    
+		    <a href="exercice.php?<?php echo api_get_cidreq()?>&amp;choice=clean_results&amp;exerciseId=<?php echo $row['id']; ?>"><img width="16" src="../img/clean_group.gif" border="0" title="<?php echo api_htmlentities(get_lang('CleanStudentResults'),ENT_QUOTES,$charset); ?>" alt="<?php echo api_htmlentities(get_lang('CleanStudentResults'),ENT_QUOTES,$charset); ?>" /></a>
+		    
 			<?php
 
 				if ($row['results_disabled']) {
@@ -1342,28 +1358,24 @@ if ($_configuration['tracking_enabled'] && ($show == 'result')) {
 
 			}
 		}
-////////////////////////////////////////////////////////////////////////////////
 
-//Code added by Isaac flores
-$parameters=array('cidReq'=>Security::remove_XSS($_GET['cidReq']),'show'=>Security::remove_XSS($_GET['show']),'filter' => Security::remove_XSS($_GET['filter']),'gradebook' =>Security::remove_XSS($_GET['gradebook']));
+		$parameters=array('cidReq'=>Security::remove_XSS($_GET['cidReq']),'show'=>Security::remove_XSS($_GET['show']),'filter' => Security::remove_XSS($_GET['filter']),'gradebook' =>Security::remove_XSS($_GET['gradebook']));
+		
+		$table = new SortableTableFromArrayConfig($list_info, 1,20,'quiz_table');
+		$table->set_additional_parameters($parameters);
+		if ($is_allowedToEdit || $is_tutor) {
+			$table->set_header(0, get_lang('User'));
+			$secuence = 0;
+		} else {
+			$secuence = 1;
+		}
+		$table->set_header(-$secuence + 1, get_lang('Exercice'));
+		$table->set_header(-$secuence + 2, get_lang('Duration'),false);
+		$table->set_header(-$secuence + 3, get_lang('Date'));
+		$table->set_header(-$secuence + 4, get_lang('Result'),false);
+		$table->set_header(-$secuence + 5, (($is_allowedToEdit||$is_tutor) ? get_lang("CorrectTest") : get_lang("ViewTest")), false);
+		$table->display();
 
-
-$table = new SortableTableFromArrayConfig($list_info, 1,20,'quiz_table');
-$table->set_additional_parameters($parameters);
-if ($is_allowedToEdit || $is_tutor) {
-	$table->set_header(0, get_lang('User'));
-	$secuence = 0;
-} else {
-	$secuence = 1;
-}
-$table->set_header(-$secuence + 1, get_lang('Exercice'));
-$table->set_header(-$secuence + 2, get_lang('Duration'),false);
-$table->set_header(-$secuence + 3, get_lang('Date'));
-$table->set_header(-$secuence + 4, get_lang('Result'),false);
-$table->set_header(-$secuence + 5, (($is_allowedToEdit||$is_tutor) ? get_lang("CorrectTest") : get_lang("ViewTest")), false);
-$table->display();
-
-//////////////////////////////////////////////////////////////////////////////////
 	} else {
 		$NoTestRes = 1;
 	}

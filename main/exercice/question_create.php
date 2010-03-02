@@ -145,8 +145,7 @@ $pictures_question_types[5] = 'open_answer.gif';
 $pictures_question_types[6] = 'hotspot.gif';
 $pictures_question_types[9] = 'mcmac.gif';
 
-foreach (Question::$questionTypes as $key=>$value)
-{
+foreach (Question::$questionTypes as $key=>$value) {
 	?>
 	ddlObj1.addItem('<table width="100%"><tr><td style="width: 37px;" valign="top"><?php Display::display_icon($pictures_question_types[$key],addslashes(get_lang($value[1])),array('height'=>'40px;', 'style' => 'vertical-align:top; cursor:hand;')); ?></td><td><span class="thistext" style="cursor:hand"><?php echo addslashes(get_lang($value[1])); ?></span><br/><sub><?php /*echo addslashes(get_lang($value[1].'Comment'));*/ ?></sub></td></tr></table>','');
 	<?php

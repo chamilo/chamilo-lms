@@ -1,35 +1,15 @@
 <?php
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2009 Dokeos SPRL
-	Copyright (c) 2009 Julio Montoya Armas <gugli100@gmail.com>
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
-	Mail: info@dokeos.com
-==============================================================================
-*/
+/* For licensing terms, see /license.txt */
 /**
 ==============================================================================
-*	@package dokeos.admin
+*	@package chamilo.admin
 ==============================================================================
 */
 
 // name of the language file that needs to be included
 $language_file = 'admin';
 $cidReset = true;
-require ('../inc/global.inc.php');
+require '../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
 
 api_protect_admin_script();
@@ -40,10 +20,10 @@ $interbreadcrumb[] = array ("url" => 'index.php', "name" => get_lang('PlatformAd
 $tool_name = get_lang('MultipleAccessURLs');
 Display :: display_header($tool_name);
 
-require_once (api_get_path(LIBRARY_PATH).'sortabletable.class.php');
-require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
-require_once (api_get_path(LIBRARY_PATH).'security.lib.php');
-require_once (api_get_path(LIBRARY_PATH).'urlmanager.lib.php');
+require_once api_get_path(LIBRARY_PATH).'sortabletable.class.php';
+require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
+require_once api_get_path(LIBRARY_PATH).'security.lib.php';
+require_once api_get_path(LIBRARY_PATH).'urlmanager.lib.php';
 
 $my_user_url_list = api_get_access_url_from_user(api_get_user_id());
 $current_access_url_id = api_get_current_access_url_id();
@@ -138,30 +118,14 @@ $table->set_header(0, '', false);
 $table->set_header(1, get_lang('URL'));
 $table->set_header(2, get_lang('Description'));
 $table->set_header(3, get_lang('Active'));
-//$table->set_header(4, get_lang('Status'));
 $table->set_header(4, get_lang('Modify'));
 
 $table->set_column_filter(3, 'active_filter');
-//$table->set_column_filter(4, 'status_filter');
 $table->set_column_filter(4, 'modify_filter');
 
-//$table->set_form_actions(array ('delete' => get_lang('DeleteFromPlatform')));
-$table->display();
-/*
-function status_filter($active, $url_params, $row) {
-	$url_id =UrlManager::get_url_id($row[1]);
-	if ($row[0] == $url_id ) {
-		$action='lock';
-		$image='right';
-	} else {
-		$image='wrong';
-	}
-	// you cannot lock the default
-	$result = Display::return_icon($image.'.gif', get_lang(ucfirst($action)));
 
-	return $result;
-}
-*/
+$table->display();
+
 function modify_filter($active, $url_params, $row) {
 	global $charset;
 	$url_id = $row['0'];

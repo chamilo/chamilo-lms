@@ -8,7 +8,7 @@
 */
 
 // name of the language file that needs to be included
-$language_file = array ('registration','admin');
+$language_file = array ('registration','admin','userInfo');
 $cidReset = true;
 require ('../inc/global.inc.php');
 require_once (api_get_path(LIBRARY_PATH).'sortabletable.class.php');

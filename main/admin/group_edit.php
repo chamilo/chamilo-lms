@@ -6,7 +6,7 @@
 ==============================================================================
 */
 // Language files that should be included
-$language_file = array('admin');
+$language_file = array('admin','userInfo');
 $cidReset = true;
 include '../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;

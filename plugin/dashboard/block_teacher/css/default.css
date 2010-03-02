@@ -50,11 +50,6 @@
     padding: 0.8em 0;
     border-bottom: 1px solid #666;
 }
-.widget .widget-content img {
-    float: right;
-    margin: 10px;
-    border: 1px solid #FFF;
-}
 .widget .widget-content pre {
     padding: 0.5em 5px;
     color: #EEE;

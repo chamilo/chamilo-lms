@@ -80,16 +80,13 @@ function search_courses($needle,$type) {
 				WHERE  c.code LIKE '$needle%' $without_assigned_courses ";
 		$rs	= Database::query($sql);
 
-		$course_list = array();
 		$return .= '<select id="origin" name="NoAssignedCoursesList[]" multiple="multiple" size="20" style="width:340px;">';
 		while($course = Database :: fetch_array($rs)) {
-			$course_list[] = $course['id'];
 			$return .= '<option value="'.$course['code'].'" title="'.htmlspecialchars($course['title'],ENT_QUOTES).'">'.$course['title'].' ('.$course['code'].')</option>';
 		}
 		$return .= '</select>';
 		$xajax_response -> addAssign('ajax_list_courses_multiple','innerHTML',api_utf8_encode($return));
 	}
-	$_SESSION['course_list'] = $course_list;
 	return $xajax_response;
 }
 
@@ -216,7 +213,7 @@ if(!empty($msg)) {
 <?php if($add_type == 'multiple') { ?>
 <tr><td width="45%" align="center">
  <?php echo get_lang('FirstLetterCourse');?> :
-     <select name="firstLetterCourse" onchange = "xajax_search_courses(this.value,'multiple')">
+     <select name="firstLetterCourse" onchange = "xajax_search_course(this.value,'multiple')">
       <option value="%">--</option>
       <?php
       echo Display :: get_alphabet_options($_POST['firstLetterCourse']);

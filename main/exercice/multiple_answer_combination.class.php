@@ -144,19 +144,20 @@ class MultipleAnswerCombination extends Question {
 		$form -> addElement ('html', '<br /><br />');
 		
 		$navigator_info = api_get_navigator();
-		global $text, $class;
+		global $text, $class, $show_quiz_edition;
 		//ie6 fix
-		if ($navigator_info['name']=='Internet Explorer' &&  $navigator_info['version']=='6') {
-			$form->addElement('submit', 'lessAnswers', get_lang('LessAnswer'),'class="minus"');
-			$form->addElement('submit', 'moreAnswers', get_lang('PlusAnswer'),'class="plus"');
-			$form->addElement('submit','submitQuestion',$text, 'class="'.$class.'"');
-		} else {
-			$form->addElement('style_submit_button', 'lessAnswers', get_lang('LessAnswer'),'class="minus"');
-			$form->addElement('style_submit_button', 'moreAnswers', get_lang('PlusAnswer'),'class="plus"');
-			// setting the save button here and not in the question class.php
-			$form->addElement('style_submit_button','submitQuestion',$text, 'class="'.$class.'"');
+		if ($show_quiz_edition) {
+			if ($navigator_info['name']=='Internet Explorer' &&  $navigator_info['version']=='6') {
+				$form->addElement('submit', 'lessAnswers', get_lang('LessAnswer'),'class="minus"');
+				$form->addElement('submit', 'moreAnswers', get_lang('PlusAnswer'),'class="plus"');
+				$form->addElement('submit','submitQuestion',$text, 'class="'.$class.'"');
+			} else {
+				$form->addElement('style_submit_button', 'lessAnswers', get_lang('LessAnswer'),'class="minus"');
+				$form->addElement('style_submit_button', 'moreAnswers', get_lang('PlusAnswer'),'class="plus"');
+				// setting the save button here and not in the question class.php
+				$form->addElement('style_submit_button','submitQuestion',$text, 'class="'.$class.'"');
+			}
 		}
-
 		$renderer->setElementTemplate('{element}&nbsp;','lessAnswers');
 		$renderer->setElementTemplate('{element}&nbsp;','submitQuestion');
 		$renderer->setElementTemplate('{element}','moreAnswers');

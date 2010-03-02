@@ -47,13 +47,13 @@ abstract class Question
 	static $typePicture = 'new_question.png';
 	static $explanationLangVar = '';
 	static $questionTypes = array(
-							UNIQUE_ANSWER => array('unique_answer.class.php' , 'UniqueAnswer'),
-							MULTIPLE_ANSWER => array('multiple_answer.class.php' , 'MultipleAnswer'),
-							FILL_IN_BLANKS => array('fill_blanks.class.php' , 'FillBlanks'),
-							MATCHING => array('matching.class.php' , 'Matching'),
-							FREE_ANSWER => array('freeanswer.class.php' , 'FreeAnswer'),
-							HOT_SPOT => array('hotspot.class.php' , 'HotSpot'),
-							MULTIPLE_ANSWER_COMBINATION => array('multiple_answer_combination.class.php' , 'MultipleAnswerCombination'),
+							UNIQUE_ANSWER => 				array('unique_answer.class.php' , 'UniqueAnswer'),
+							MULTIPLE_ANSWER => 				array('multiple_answer.class.php' , 'MultipleAnswer'),
+							FILL_IN_BLANKS => 				array('fill_blanks.class.php' , 'FillBlanks'),
+							MATCHING => 					array('matching.class.php' , 'Matching'),
+							FREE_ANSWER => 					array('freeanswer.class.php' , 'FreeAnswer'),
+							HOT_SPOT => 					array('hotspot.class.php' , 'HotSpot'),
+							MULTIPLE_ANSWER_COMBINATION =>	array('multiple_answer_combination.class.php' , 'MultipleAnswerCombination'),
 							);
 
 	/**
@@ -61,8 +61,7 @@ abstract class Question
 	 *
 	 * @author - Olivier Brouckaert
 	 */
-	function Question()
-	{
+	function Question() {
 		$this->id=0;
 		$this->question='';
 		$this->description='';
@@ -1083,29 +1082,57 @@ abstract class Question
 			//2. but if it is a feedback DIRECT we only show the UNIQUE_ANSWER type that is currently available
 			$question_type_custom_list = array ( UNIQUE_ANSWER => self::$questionTypes[UNIQUE_ANSWER]);
 		}
+		
+		//blocking edition
+		
+		$show_quiz_edition = true;
+		if (isset($exerciseId) && !empty($exerciseId)) {
+			$TBL_LP_ITEM	= Database::get_course_table(TABLE_LP_ITEM);
+			$sql="SELECT max_score FROM $TBL_LP_ITEM
+				  WHERE item_type = '".TOOL_QUIZ."' AND path ='".Database::escape_string($exerciseId)."'";
+			$result = Database::query($sql);
+			if (Database::num_rows($result) > 0) {				
+				$show_quiz_edition = false;
+			}
+		}
+		
 		echo '<ul class="question_menu">';
+
 		foreach ($question_type_custom_list as $i=>$a_type) {
 			// include the class of the type
-			include_once($a_type[0]);
-			 // get the picture of the type and the langvar which describes it
+			require_once($a_type[0]);			
+ 		    // get the picture of the type and the langvar which describes it			 
 			eval('$img = '.$a_type[1].'::$typePicture;');
 			eval('$explanation = get_lang('.$a_type[1].'::$explanationLangVar);');
 			echo '<li>';
 			echo '<div class="icon_image_content">';
-			echo '<a href="admin.php?'.api_get_cidreq().'&newQuestion=yes&answerType='.$i.'">'.Display::return_icon($img, $explanation).'</a>';
-			echo '<br>';
-			echo '<a href="admin.php?'.api_get_cidreq().'&newQuestion=yes&answerType='.$i.'">'.$explanation.'</a>';
+			if ($show_quiz_edition) {
+				echo '<a href="admin.php?'.api_get_cidreq().'&newQuestion=yes&answerType='.$i.'">'.Display::return_icon($img, $explanation).'</a>';
+				echo '<br>';
+				echo '<a href="admin.php?'.api_get_cidreq().'&newQuestion=yes&answerType='.$i.'">'.$explanation.'</a>';
+			} else {
+				$img = pathinfo($img);
+				$img = $img['filename'];
+				echo ''.Display::return_icon($img.'_na.gif',$explanation).'';
+				echo '<br>';
+				echo ''.$explanation.'';
+			}
 			echo '</div>';
 			echo '</li>';
 		}
+		
 		echo '<li>';
 		echo '<div class="icon_image_content">';
-		if ($feedbacktype==1) {
-			echo $url = '<a href="question_pool.php?'.api_get_cidreq().'&type=1&fromExercise='.$exerciseId.'">';
+		if ($show_quiz_edition) {
+			if ($feedbacktype==1) {
+				echo $url = '<a href="question_pool.php?'.api_get_cidreq().'&type=1&fromExercise='.$exerciseId.'">';
+			} else {
+				echo $url = '<a href="question_pool.php?'.api_get_cidreq().'&fromExercise='.$exerciseId.'">';
+			}
+			echo Display::return_icon('database.png', get_lang('GetExistingQuestion'), '');
 		} else {
-			echo $url = '<a href="question_pool.php?'.api_get_cidreq().'&fromExercise='.$exerciseId.'">';
+			echo Display::return_icon('database_na.png', get_lang('GetExistingQuestion'), '');
 		}
-		echo Display::return_icon('database.png', get_lang('GetExistingQuestion'), '');
 		echo '<br>';
 		echo $url;
 		echo get_lang('GetExistingQuestion');
@@ -1118,6 +1145,12 @@ abstract class Question
 	{
 		return self::$questionTypes;
 	}
+	
+	static function updateId()
+	{
+		return self::$questionTypes;
+	}
+	
 }
 endif;
 ?>

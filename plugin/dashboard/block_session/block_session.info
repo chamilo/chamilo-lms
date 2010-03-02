@@ -1,4 +1,4 @@
-name = "Block Session"
+name = "Session Block"
 controller = "BlockSession"
 description = "Display information about sessions inside platform"
 package = Dashboard

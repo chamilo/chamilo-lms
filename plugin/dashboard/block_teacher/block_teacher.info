@@ -1,4 +1,4 @@
-name = "Block Teacher"
+name = "Teacher Block"
 controller = "BlockTeacher"
 description = "Display information about teachers inside platform"
 package = Dashboard

@@ -312,6 +312,13 @@ En versiones de Chamilo/Dokeos anteriores se requería que register_globals estu
 necesario, puede estar configurado en Off y Chamilo funcionará bien.
 </p>
 
+<p><strong>Nota:</strong> si se usa PHP 5.3 o superior, se necesita configurar la variable <em>date.timezone</em> a la zona horaria de su servidor.
+Por ejemplo, si su servidor está en la zona horaria 'America/Lima', modificar en el php.ini:</p>
+
+<div class="code">
+date.timezone = 'America/Lima'
+</div>
+
 
 <p><strong>Usuarios BSD:</strong> estas bibliotecas de php tienen que ser incluidas durante la instalación de php:</p>
 

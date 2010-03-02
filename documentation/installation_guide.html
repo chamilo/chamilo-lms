@@ -237,12 +237,16 @@ these ones:</p>
   <li>magic_quotes_runtime = Off</li>
 </ul>
 
-
-
 <p>
 Past Chamilo versions required register_globals to be set to On. This is
 no longer necessary, this can be set to Off and Chamilo will work fine.</p>
 
+<p><strong>Note:</strong> if you are using PHP 5.3 or higher, you need to set your <em>date.timezone</em> setting to whatever your server's timezone is.
+For example, if your server is in the 'America/New_York' timezone, set this in your php.ini:</p>
+
+<div class="code">
+date.timezone = 'America/New_York'
+</div>
 
 <p><strong>BSD users:</strong> these php libraries have to be included during php installation:</p>
 

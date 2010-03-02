@@ -1,5 +1,5 @@
 <?php // $Id: admin.php 21662 2009-06-29 14:55:09Z iflorespaz $
-/* For licensing terms, see /chamilo_license.txt */
+/* For licensing terms, see /license.txt */
 
 /**
 *	Exercise administration
@@ -47,38 +47,36 @@
 */
 
 
-include('exercise.class.php');
-include('question.class.php');
-include('answer.class.php');
+require_once 'exercise.class.php';
+require_once 'question.class.php';
+require_once 'answer.class.php';
 
 
 // name of the language file that needs to be included
 $language_file='exercice';
 
-include("../inc/global.inc.php");
-include('exercise.lib.php');
+require_once '../inc/global.inc.php';
+require_once 'exercise.lib.php';
+
 $this_section=SECTION_COURSES;
 
 $is_allowedToEdit=api_is_allowed_to_edit(null,true);
 
-if(!$is_allowedToEdit)
-{
+if (!$is_allowedToEdit) {
 	api_not_allowed(true);
 }
 
 // allows script inclusions
 define(ALLOWED_TO_INCLUDE,1);
 
-include_once(api_get_path(LIBRARY_PATH).'fileUpload.lib.php');
-include_once(api_get_path(LIBRARY_PATH).'document.lib.php');
+require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
+require_once api_get_path(LIBRARY_PATH).'document.lib.php';
 /****************************/
 /*  stripslashes POST data  */
 /****************************/
 
-if($_SERVER['REQUEST_METHOD'] == 'POST')
-{
-	foreach($_POST as $key=>$val)
-	{
+if($_SERVER['REQUEST_METHOD'] == 'POST') {
+	foreach($_POST as $key=>$val) {
 		if(is_string($val))
 		{
 			$_POST[$key]=stripslashes($val);
@@ -96,8 +94,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST')
 }
 
 // get vars from GET
-if ( empty ( $exerciseId ) )
-{
+if ( empty ( $exerciseId ) ) {
     $exerciseId = $_GET['exerciseId'];
 }
 if ( empty ( $newQuestion ) )
@@ -153,8 +150,7 @@ $TBL_QUESTIONS         = Database::get_course_table(TABLE_QUIZ_QUESTION);
 $TBL_REPONSES          = Database::get_course_table(TABLE_QUIZ_ANSWER);
 $TBL_DOCUMENT          = Database::get_course_table(TABLE_DOCUMENT);
 
-if($_GET['action'] == 'exportqti2' && !empty($_GET['questionId']))
-{
+if($_GET['action'] == 'exportqti2' && !empty($_GET['questionId'])) {
 	require_once('export/qti2/qti2_export.php');
 	$export = export_question((int)$_GET['questionId'],true);
 	$qid = (int)$_GET['questionId'];
@@ -427,9 +423,29 @@ function DetectFlashVer(reqMajorVer, reqMinorVer, reqRevision)
 
 Display::display_header($nameTools,'Exercise');
 
+$show_quiz_edition = true;
+if (isset($exerciseId) && !empty($exerciseId)) {
+	$TBL_LP_ITEM	= Database::get_course_table(TABLE_LP_ITEM);
+	$sql="SELECT max_score FROM $TBL_LP_ITEM
+		  WHERE item_type = '".TOOL_QUIZ."' AND path ='".Database::escape_string($exerciseId)."'";
+	$result = Database::query($sql);
+	if (Database::num_rows($result) > 0) {
+		Display::display_warning_message(get_lang('EditingExerciseCauseProblemsInLP'));
+		$show_quiz_edition = false;
+	}
+}
+
+
 echo '<div class="actions">';
 echo Display::return_icon('preview.gif', get_lang('Preview')).'<a href="exercice_submit.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id.'">'.get_lang('Preview').'</a>';
-echo Display::return_icon('edit.gif', get_lang('ModifyExercise')).'<a href="exercise_admin.php?'.api_get_cidreq().'&modifyExercise=yes&exerciseId='.$objExercise->id.'">'.get_lang('ModifyExercise').'</a>';
+
+
+if ($show_quiz_edition) {
+	echo Display::return_icon('edit.gif', get_lang('ModifyExercise')).'<a href="exercise_admin.php?'.api_get_cidreq().'&modifyExercise=yes&exerciseId='.$objExercise->id.'">'.get_lang('ModifyExercise').'</a>';
+} else {
+	echo Display::return_icon('edit_na.gif', get_lang('ModifyExercise')).'<a href="#">'.get_lang('ModifyExercise').'</a>';
+}
+
 if (isset($_GET['hotspotadmin']) || isset($_GET['newQuestion']) || isset($_GET['myid']))
 echo Display::return_icon('message_reply_forum.png', get_lang('GoBackToQuestionList')).' '.'<a href="admin.php?">'.get_lang('GoBackToQuestionList').'</a><br/>';
 

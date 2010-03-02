@@ -7,7 +7,7 @@
 */
 
 // Language files that should be included
-$language_file = array('admin', 'registration');
+$language_file = array('admin', 'registration','userInfo');
 
 $cidReset = true;
 

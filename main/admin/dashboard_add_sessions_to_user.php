@@ -15,12 +15,12 @@ $cidReset=true;
 
 // including some necessary dokeos files
 require_once '../inc/global.inc.php';
-require_once '../inc/lib/xajax/xajax.inc.php';
+require_once api_get_path(LIBRARY_PATH).'xajax/xajax.inc.php';
 require_once api_get_path(LIBRARY_PATH).'sessionmanager.lib.php';
 
 // create an ajax object
 $xajax = new xajax();
-$xajax -> registerFunction ('search_sessions');
+$xajax->registerFunction('search_sessions');
 
 // setting the section (for the tabs)
 $this_section = SECTION_PLATFORM_ADMIN;
@@ -31,7 +31,6 @@ api_protect_admin_script(true);
 // setting breadcrumbs
 $interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
 $interbreadcrumb[] = array('url' => 'user_list.php','name' => get_lang('UserList'));
-
 
 // Database Table Definitions
 $tbl_session 			= 	Database::get_main_table(TABLE_MAIN_SESSION);
@@ -57,18 +56,15 @@ if (!api_is_platform_admin()) {
 }
 
 function search_sessions($needle,$type) {
-	global $tbl_session, $tbl_session_rel_user, $hrm_id;
+	global $tbl_session, $hrm_id;
 
-	$xajax_response = new XajaxResponse();
-
+	$xajax_response = new XajaxResponse();	
 	$return = '';
 	if(!empty($needle) && !empty($type)) {
 		// xajax send utf8 datas... datas in db can be non-utf8 datas
 		$charset = api_get_setting('platform_charset');
 		$needle = api_convert_encoding($needle, $charset, 'utf-8');
-
 		$assigned_sessions_to_hrm = SessionManager::get_sessions_followed_by_drh($hrm_id);
-
 		$assigned_sessions_id = array_keys($assigned_sessions_to_hrm);
 
 		$without_assigned_sessions = '';
@@ -78,25 +74,19 @@ function search_sessions($needle,$type) {
 
 		$sql = "SELECT s.id, s.name FROM $tbl_session s
 				WHERE  s.name LIKE '$needle%' $without_assigned_sessions ";
-
-
-
 		$rs	= Database::query($sql);
 
-		$course_list = array();
 		$return .= '<select id="origin" name="NoAssignedSessionsList[]" multiple="multiple" size="20" style="width:340px;">';
 		while($session = Database :: fetch_array($rs)) {
-			$session_list[] = $session['id'];
 			$return .= '<option value="'.$session['id'].'" title="'.htmlspecialchars($session['name'],ENT_QUOTES).'">'.$session['name'].'</option>';
 		}
 		$return .= '</select>';
-		$xajax_response -> addAssign('ajax_list_sessions_multiple','innerHTML',api_utf8_encode($return));
+		$xajax_response->addAssign('ajax_list_sessions_multiple','innerHTML',api_utf8_encode($return));
 	}
-	$_SESSION['session_list'] = $session_list;
 	return $xajax_response;
 }
 
-$xajax -> processRequests();
+$xajax->processRequests();
 $htmlHeadXtra[] = $xajax->getJavascript('../inc/lib/xajax/');
 $htmlHeadXtra[] = '
 <script type="text/javascript">
@@ -215,7 +205,7 @@ if(!empty($msg)) {
 <?php if($add_type == 'multiple') { ?>
 <tr><td width="45%" align="center">
  <?php echo get_lang('FirstLetterSession');?> :
-     <select name="firstLetterSession" onchange = "xajax_search_sessions(this.value,'multiple')">
+     <select name="firstLetterSession" onchange = "xajax_search_sessions(this.value, 'multiple')">
       <option value="%">--</option>
       <?php
       echo Display :: get_alphabet_options($_POST['firstLetterSession']);

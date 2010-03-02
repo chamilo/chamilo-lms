@@ -1,62 +1,64 @@
 <?php
-require_once(api_get_path(LIBRARY_PATH).'notebook.lib.php');
-
-//require_once api_get_path(SYS_CODE_PATH).'inc/global.inc.php';
 class TestNotebook extends UnitTestCase {
+	
+	public function __construct() {
+		TestManager::create_test_course('COURSENOTEBOOK');
+	}
 
-	function testJavascriptNotebook() {
-		ob_start();
-		$values =array();
-		$res = NotebookManager::javascript_notebook($values);
-		$this->assertTrue(is_string($res)); 
-		ob_end_clean();
-		//var_dump($res);
+	public function testJavascriptNotebook() {
+		$res = NotebookManager::javascript_notebook(null);
+		$lang = get_lang("NoteConfirmDelete");
+		$this->assertTrue(is_string($res));
+		$this->assertPattern('/'.addslashes($lang).'/m',$res);		
 	}
 		
-	function testSaveNote() {
-		ob_start();
-		$values =array();
-		$res = NotebookManager::save_note($values);
+	public function testSaveNote() {
+		$resNull = NotebookManager::save_note(null);
+		$this->assertFalse($resNull);
+		$resFalse = NotebookManager::save_note(-1);
+	 	$this->assertFalse($resFalse);		
+		$res = NotebookManager::save_note(array());
 		$this->assertTrue(is_bool($res)); 
-		ob_end_clean();
-		//var_dump($res);
 	}
 
-	function testGetNoteInformation() {		
-		ob_start();
-		$notebook_id=1;
-		$res = NotebookManager::get_note_information($notebook_id);
-		$this->assertTrue(!(bool)$res);		
-		ob_end_clean();
-		//var_dump($res);	
+	public function testGetNoteInformation() {		
+		$resNull = NotebookManager::get_note_information(null);
+	 	$this->assertFalse($resNull);		
+		$resFalse = NotebookManager::get_note_information(-1);
+	 	$this->assertFalse($resFalse);		
+		$res = NotebookManager::get_note_information(1);
+	 	$this->assertTrue(is_array($res));	
 	}	
 	
-	function testUpdateNote() {
-		ob_start();
-		$values=array();
-		$res = NotebookManager::update_note($values);
-		$this->assertTrue(is_bool($res));
-		ob_end_clean();
-		//var_dump($res);	
+	public function testUpdateNote() {
+		$resNull = NotebookManager::update_note(null);
+	 	$this->assertFalse($resNull);		
+		$resFalse = NotebookManager::update_note('char');
+	 	$this->assertFalse($resFalse);		
+		$res = NotebookManager::update_note(array());
+	 	$this->assertTrue(is_bool($res));	
+
+
 	}	
 	
-	function testDisplayNotes() {
+	public function testDisplayNotes() {
 		ob_start();
 		$res = NotebookManager::display_notes();
 		$this->assertTrue(is_null($res));
 		ob_end_clean();
-		//var_dump($res);
 	}	
 	
-	function testDeleteNote() {
-		ob_start();
-		$notebook_id=1;
-		$res = NotebookManager::delete_note($notebook_id);
+	public function testDeleteNote() {
+		$resNull = NotebookManager::delete_note(null);
+	 	$this->assertFalse($resNull);		
+		$resFalse = NotebookManager::delete_note(-1);
+	 	$this->assertFalse($resFalse);			
+		$res = NotebookManager::delete_note(1);
 		$this->assertTrue(is_bool($res));
-		ob_end_clean();
-		//var_dump($res);
 	}	
 	
-	
+	public function __destruct() {
+		TestManager::delete_test_course('COURSENOTEBOOK');
+	}
 }
 ?>

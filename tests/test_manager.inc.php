@@ -68,6 +68,7 @@ require_once $maindir.'gradebook/lib/be/result.class.php';
 require_once $maindir.'gradebook/lib/be/forumthreadlink.class.php';
 
 
+
 /**Files inside '/../main/lib/' */
 require_once $libdir.'urlmanager.lib.php';
 require_once $libdir.'fileDisplay.lib.php';
@@ -80,6 +81,7 @@ require_once $libdir.'xmd.lib.php';
 require_once $libdir.'formvalidator/FormValidator.class.php';
 require_once $libdir.'exercise_show_functions.lib.php';
 require_once $libdir.'fileManage.lib.php';
+require_once $libdir.'notebook.lib.php';
 
 /**This files need be inside a buffering to clean the objects*/ 
 ob_start();

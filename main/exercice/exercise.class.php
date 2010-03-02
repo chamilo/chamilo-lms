@@ -568,6 +568,7 @@ class Exercise
 		}
         $start_time = Database::escape_string($this->start_time);
         $end_time = Database::escape_string($this->end_time);
+        
 		// exercise already exists
 		if($id) {
 		/*
@@ -1386,18 +1387,68 @@ class Exercise
 		$i = 0;
 		if (is_array($exe_list) && count($exe_list) > 0) {
 			foreach($exe_list as $item) {
-				$sql = "DELETE $table_track_e_attempt WHERE exe_id = '".$item['exe_id']."'";				
+				$sql = "DELETE FROM $table_track_e_attempt WHERE exe_id = '".$item['exe_id']."'";				
 				Database::query($sql);
 				$i++; 
 			}
 		}
 		
 		//delete TRACK_E_EXERCICES table
-		$sql = "DELETE $table_track_e_exercises
+		$sql = "DELETE FROM $table_track_e_exercises
 				WHERE exe_cours_id = '".api_get_course_id()."' AND exe_exo_id = ".$this->id." AND orig_lp_id = 0 AND orig_lp_item_id = 0 AND session_id = ".api_get_session_id()."";
 		Database::query($sql); 
 		return $i;	
-	}	
+	}
+	
+	/**
+	 * Copies an exercise   
+	*/
+	
+	function copy_exercise() {
+		$exercise_obj= new Exercise();
+		$exercise_obj = $this;
+		
+	    $TBL_EXERCICE_QUESTION  = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
+    	$TBL_EXERCICES          = Database::get_course_table(TABLE_QUIZ_TEST);
+	    $TBL_QUESTIONS          = Database::get_course_table(TABLE_QUIZ_QUESTION);
+	    
+	    // force the creation of a new exercise
+		$exercise_obj->updateTitle($exercise_obj->selectTitle().' - '.get_lang('Copy'));
+		//Hides the new exercise
+		$exercise_obj->updateStatus(false);
+		$exercise_obj->updateId(0);
+		$exercise_obj->save();
+		
+		$new_exercise_id = $exercise_obj->selectId();
+		
+		$question_list = $exercise_obj->selectQuestionList();
+	
+		//creation of question
+		
+		foreach ($question_list as $question_id) {			
+			$new_question_obj = Question::read($question_id);
+			$new_question_obj->addToList($new_exercise_id);		
+		}
+	}
+		
+	/**
+	 * Changes the exercise id
+	 *
+	 * @param - in $id - exercise id
+	 */
+	private function updateId($id) {	
+		$this->id = $id;
+	}
+	
+	/**
+	 * Changes the exercise status
+	 *
+	 * @param - string $status - exercise status
+	 */
+	function updateStatus($status)
+	{
+		$this->active = $status;
+	}
 }
 endif;
 ?>

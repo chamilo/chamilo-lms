@@ -24,7 +24,7 @@ $table->set_header(2, get_lang('Description'), true);
 $table->set_header(3, get_lang('CountDoneAttendance'), true, array('style'=>'width:50px;'));
 
 if (api_is_allowed_to_edit(null, true)) {
-	$table->set_header(4, get_lang('Action'), false,array('style'=>'text-align:center'));
+	$table->set_header(4, get_lang('Actions'), false,array('style'=>'text-align:center'));
 	$table->set_form_actions(array ('attendance_delete_select' => get_lang('DeleteAllAttendances')));	
 }
 

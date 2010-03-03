@@ -3697,6 +3697,7 @@ div.image-social-content center.friend {
 	margin-bottom:10px;
 }
 
+
 /* BOX SHARED PROFILE */
 
 .social-friend-container {
@@ -3912,6 +3913,46 @@ div.image-social-content center.friend {
 	/* text-decoration: underline; */
 }
 
+
+#social-forum-main-title {	
+	font-size:130%;
+	font-weight:bold;
+	padding: 0px 8px 0px 8px;
+	
+}
+
+#social-forum-title {	
+	font-size:130%;
+	font-weight:bold;
+	padding: 0px 8px 0px 8px;
+	
+}
+
+#social-thread {
+	/*-moz-border-radius-bottomleft:5px;
+	-moz-border-radius-bottomright:5px; */
+	-moz-border-radius-topleft:5px;
+	-moz-border-radius-topright:5px;
+	border:1px solid #E1E1E0;
+	background-color:#E1E1E0;
+	padding:8px;
+	font-size:110%;
+	font-weight:bold;
+}
+
+
+#social-post {
+	-moz-border-radius-bottomleft:5px;
+	-moz-border-radius-bottomright:5px;
+	/* -moz-border-radius-topleft:5px;
+	-moz-border-radius-topright:5px; */
+	border:1px solid #E1E1E0;
+	background-color:#ECECEB;
+	padding:12px;
+}
+
+
+
 /* THEMATIC ADVANCE */
 .thematic-postit {
   width:250px;
@@ -3981,3 +4022,5 @@ div.attendance-calendar-add div.row div.formw,div.attendance-calendar-edit div.r
 }
 
 #columns ul, #columns ol {margin:0; padding:0; list-style:none; border:none;}
+
+

@@ -156,7 +156,7 @@ class Evaluation implements GradebookItem
 			$sql .= ' user_id = '.$user_id;
 			$paramcount ++;
 		}
-		if (isset ($course_code)) {
+		if (isset ($course_code) && $course_code <> '-1') {
 			if ($paramcount != 0) $sql .= ' AND';
 			else $sql .= ' WHERE';
 			$sql .= " course_code = '".$course_code."'";

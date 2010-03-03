@@ -996,7 +996,7 @@ class Category implements GradebookItem
 		$evals = array();
 
 		// 1 student
- 		if (isset($stud_id)) {
+ 		if (isset($stud_id) and !empty($stud_id)) {
 			// special case: this is the root
 			if ($this->id == 0) {
 				$evals = Evaluation::get_evaluations_with_result_for_student(0,$stud_id);

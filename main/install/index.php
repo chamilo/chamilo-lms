@@ -218,7 +218,7 @@ if ($_POST['step2_install'] || $_POST['step2_update_8'] || $_POST['step2_update_
 
 if ($installType == 'update' && in_array($my_old_version, $update_from_version_8)) {
 	// This is the main configuration file of the system before the upgrade.
-	include_once api_get_path(CONFIGURATION_PATH).'configuration.php';
+	include api_get_path(CONFIGURATION_PATH).'configuration.php'; // Don't change to include_once
 }
 
 if (!isset($_GET['running'])) {

@@ -186,7 +186,8 @@ if (api_is_course_admin() || (api_is_course_admin() && $_GET['isStudentView']=='
 	{
 		foreach ($questions as $key=>$question)
 		{
-			$display = new $question['type'];
+			$ch_type = 'ch_'.$question['type'];
+			$display = new $ch_type;
 			$display->render_question($question);
 		}
 	}

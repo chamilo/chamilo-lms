@@ -1327,7 +1327,7 @@ class survey_manager
 }
 
 
-class question
+class survey_question
 {
 	// the html code of the form
 	public $html;
@@ -1617,7 +1617,7 @@ class question
 	}
 }
 
-class yesno extends question
+class ch_yesno extends survey_question
 {
 	/**
 	 * This function creates the form elements for the yesno questions
@@ -1718,7 +1718,7 @@ class yesno extends question
 
 }
 
-class multiplechoice extends question
+class ch_multiplechoice extends survey_question
 {
 	/**
 	 * This function creates the form elements for the multiple choice questions
@@ -1807,7 +1807,7 @@ class multiplechoice extends question
 }
 
 
-class personality extends question
+class ch_personality extends survey_question
 {
 	/**
 	 * This function creates the form elements for the multiple response questions
@@ -1911,7 +1911,7 @@ class personality extends question
 
 
 
-class multipleresponse extends question
+class ch_multipleresponse extends survey_question
 {
 	/**
 	 * This function creates the form elements for the multiple response questions
@@ -2020,7 +2020,7 @@ class multipleresponse extends question
 	}
 }
 
-class dropdown extends question
+class ch_dropdown extends survey_question
 {
 	/**
 	 * This function creates the form elements for the dropdown questions
@@ -2108,7 +2108,7 @@ class dropdown extends question
 }
 
 
-class open extends question
+class ch_open extends survey_question
 {
 	/**
 	 * This function creates the form elements for the open questions
@@ -2151,7 +2151,8 @@ class open extends question
 	}
 }
 
-class comment extends question
+
+class ch_comment extends survey_question
 {
 	/**
 	 * This function creates the form elements for a comment.
@@ -2185,7 +2186,7 @@ class comment extends question
 	}
 }
 
-class pagebreak extends question
+class ch_pagebreak extends survey_question
 {
 	/**
 	 * This function creates the form elements for a comment.
@@ -2202,7 +2203,7 @@ class pagebreak extends question
 	}
 }
 
-class percentage extends question
+class ch_percentage extends survey_question
 {
 	function create_form($form_content)
 	{
@@ -2236,7 +2237,7 @@ class percentage extends question
 }
 
 
-class score extends question
+class ch_score extends survey_question
 {
 	function create_form($form_content)
 	{

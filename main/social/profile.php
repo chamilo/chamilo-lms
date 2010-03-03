@@ -1,10 +1,10 @@
 <?php //$id: $
-/* For licensing terms, see /dokeos_license.txt */
+/* For licensing terms, see /license.txt */
 /**
 * This is the profile social main page
 * @author Julio Montoya <gugli100@gmail.com>
 * @author Isaac Flores Paz <florespaz_isaac@hotmail.com>
-* @package dokeos.social
+* @package chamilo.social
 */
 
 $language_file = array('userInfo');
@@ -516,6 +516,7 @@ echo '<div id="social-content-right">';
 		}
 
 		// COURSES LIST
+		
 		if ($show_full_profile) {
 			if ( is_array($list) ) {
 				echo '<div class="social-box-main1">';
@@ -530,9 +531,7 @@ echo '<div id="social-content-right">';
 							foreach($list as $key=>$value) {
 								if ( empty($value[2]) ) { //if out of any session
 									echo $value[1];
-									//echo '<div id="loading'.$i.'">&nbsp;</div>';
-									//class="social-profile-rounded maincourse"
-									echo '<div id="social_content'.$i.'"  style="background : #EFEFEF; padding:0px; ">';
+									echo '<div id="social_content'.$i.'" style="background : #EFEFEF; padding:0px; ">';
 									echo '</div>';
 									$i++;
 								}
@@ -545,6 +544,7 @@ echo '<div id="social-content-right">';
 									$listInactives[] = $value;
 								}
 							}
+							echo '</div>';
 						echo '</div>';
 					echo '</div>';
 				echo '</div>';
@@ -624,6 +624,7 @@ echo '<div id="social-content-right">';
 							echo '</div>';
 						}
 						// Images uploaded by course
+						
 						if (!empty($file_list)) {
 							echo '<div><h3>'.get_lang('ImagesUploaded').'</h3></div>';
 							echo '<div class="social-content-information">';

@@ -1,11 +1,11 @@
-<?php // $Id: usermanager.lib.php 22378 2009-07-26 19:58:38Z yannoo $
-/* For licensing terms, see /dokeos_license.txt */
+<?php
+/* For licensing terms, see /license.txt */
 /**
 ==============================================================================
 *	This library provides functions for user management.
 *	Include/require it in your code to use its functionality.
 *
-*	@package dokeos.library
+*	@package chamilo.library
 *	@author Julio Montoya <gugli100@gmail.com> Social network groups added 2009/12
 ==============================================================================
 */
@@ -100,22 +100,22 @@ class UserManager
 		//$password = ($userPasswordCrypted ? md5($password) : $password);
 		$current_date = date('Y-m-d H:i:s', time());
 		$sql = "INSERT INTO $table_user
-				SET lastname = '".Database::escape_string(trim($lastName))."',
-				firstname = '".Database::escape_string(trim($firstName))."',
-				username = '".Database::escape_string(trim($loginName))."',
-				status = '".Database::escape_string($status)."',
-				password = '".Database::escape_string($password)."',
-				email = '".Database::escape_string($email)."',
-				official_code	= '".Database::escape_string($official_code)."',
-				picture_uri 	= '".Database::escape_string($picture_uri)."',
-				creator_id  	= '".Database::escape_string($creator_id)."',
-				auth_source = '".Database::escape_string($auth_source)."',
-				phone = '".Database::escape_string($phone)."',
-				language = '".Database::escape_string($language)."',
+				SET lastname = 		'".Database::escape_string(trim($lastName))."',
+				firstname = 		'".Database::escape_string(trim($firstName))."',
+				username =			'".Database::escape_string(trim($loginName))."',
+				status = 			'".Database::escape_string($status)."',
+				password = 			'".Database::escape_string($password)."',
+				email = 			'".Database::escape_string($email)."',
+				official_code	= 	'".Database::escape_string($official_code)."',
+				picture_uri 	= 	'".Database::escape_string($picture_uri)."',
+				creator_id  	= 	'".Database::escape_string($creator_id)."',
+				auth_source = 		'".Database::escape_string($auth_source)."',
+				phone = 			'".Database::escape_string($phone)."',
+				language = 			'".Database::escape_string($language)."',
 				registration_date = '".$current_date."',
-				expiration_date = '".Database::escape_string($expiration_date)."',
-				hr_dept_id = '".Database::escape_string($hr_dept_id)."',
-				active = '".Database::escape_string($active)."'";
+				expiration_date = 	'".Database::escape_string($expiration_date)."',
+				hr_dept_id = 		'".Database::escape_string($hr_dept_id)."',
+				active = 			'".Database::escape_string($active)."'";
 		$result = Database::query($sql);
 		if ($result) {
 			//echo "id returned";
@@ -1960,10 +1960,9 @@ class UserManager
 	 * Get the users files upload from his share_folder
 	 * @param	string	User ID
 	 * @param   string  course directory
-	 * @param   int 	deprecated
 	 * @return	int		User ID (or false if not found)
 	 */
-	public static function get_user_upload_files_by_course($user_id, $course, $column = 2) {
+	public static function get_user_upload_files_by_course($user_id, $course) {
 		$return = '';
 		if (!empty($user_id) && !empty($course)) {
 			$user_id = intval($user_id);
@@ -1986,7 +1985,9 @@ class UserManager
 				foreach ($file_list as $file) {
 					$return .= '<li><a href="'.$web_path.urlencode($file).'" target="_blank">'.htmlentities($file).'</a>';
 				}
-				$return .= '</ul>';
+				if (count($file_list) > 0) {
+					$return .= '</ul>';
+				}
 			}
 		}
 		return $return;

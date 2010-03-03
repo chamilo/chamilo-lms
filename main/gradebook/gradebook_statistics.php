@@ -89,15 +89,14 @@ if (!$displayscore->is_custom()) {
 
 	$stattable= '<br><table class="data_table" cellspacing="0" cellpadding="3">';
 	$stattable .= '<tr><th colspan="4">' . get_lang('Statistics') . '</th></tr>';
-
 	$counter=0;
-	foreach ($keys as $key) {
-		$bar = ($nr_items[$key] / $highest_ratio) * 100;
+	foreach ($keys as $key) {				
+		$bar = ($highest_ratio > 0?($nr_items[$key] / $highest_ratio) * 100:0);
 		$stattable .= '<tr class="row_' . ($counter % 2 == 0 ? 'odd' : 'even') . '">';
 		$stattable .= '<td width="150">' . $key . '</td>';
 		$stattable .= '<td width="550"><img src="../img/bar_1u.gif" width="' . $bar . '%" height="10"/></td>';
 		$stattable .= '<td align="right">' . $nr_items[$key] . '</td>';
-		$stattable .= '<td align="right"> ' . round(($nr_items[$key] / $resultcount) * 100,2) . '%</td>';
+		$stattable .= '<td align="right"> ' . ($resultcount > 0 ?round(($nr_items[$key] / $resultcount) * 100,2):0) . '%</td>';		
 		$counter++;
 	}
 	$stattable .= '</tr></table>';

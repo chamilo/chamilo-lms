@@ -119,10 +119,10 @@ $nb_courses = count($a_courses);
 $table = new SortableTable('tracking_list_course', 'count_courses');
 $table -> set_header(0, get_lang('CourseTitle'), false, 'align="center"');
 $table -> set_header(1, get_lang('NbStudents'), false);
-$table -> set_header(2, get_lang('TimeSpentInTheCourse'), false);
+$table -> set_header(2, get_lang('TimeSpentInTheCourse').Display :: return_icon('info3.gif', get_lang('TimeOfActiveByTraining'), array('align' => 'absmiddle', 'hspace' => '3px')), false);
 $table -> set_header(3, get_lang('ThematicAdvance'), false);
-$table -> set_header(4, get_lang('AvgStudentsProgress'), false);
-$table -> set_header(5, get_lang('AvgCourseScore'), false);
+$table -> set_header(4, get_lang('AvgStudentsProgress').Display :: return_icon('info3.gif', get_lang('AvgAllUsersInAllCourses'), array('align' => 'absmiddle', 'hspace' => '3px')), false);
+$table -> set_header(5, get_lang('AvgCourseScore').Display :: return_icon('info3.gif', get_lang('AvgAllUsersInAllCourses'), array('align' => 'absmiddle', 'hspace' => '3px')), false);
 //$table -> set_header(5, get_lang('AvgExercisesScore'), false);// no code for this?
 $table -> set_header(6, get_lang('AvgMessages'), false);
 $table -> set_header(7, get_lang('AvgAssignments'), false);
@@ -171,10 +171,10 @@ if (is_array($a_courses)) {
 		}
 		if ($nb_students_in_course > 0) {
 			$avg_time_spent_in_course = api_time_to_hms($avg_time_spent_in_course / $nb_students_in_course);
-			$avg_progress_in_course = round($avg_progress_in_course / $nb_students_in_course, 2).'%';
-			$avg_score_in_course = round($avg_score_in_course / $nb_students_in_course, 2).'%';
-			$avg_messages_in_course = round($avg_messages_in_course / $nb_students_in_course, 2);
-			$avg_assignments_in_course = round($avg_assignments_in_course / $nb_students_in_course, 2);
+			$avg_progress_in_course = round($avg_progress_in_course / $nb_students_in_course, 2);
+			$avg_score_in_course = round($avg_score_in_course / $nb_students_in_course, 2);
+			//$avg_messages_in_course = round($avg_messages_in_course / $nb_students_in_course, 2);
+			//$avg_assignments_in_course = round($avg_assignments_in_course / $nb_students_in_course, 2);
 		} else {
 			$avg_time_spent_in_course = null;
 			$avg_progress_in_course = null;
@@ -192,18 +192,18 @@ if (is_array($a_courses)) {
 			$tematic_advance_csv = $tematic_advance_progress.'%';
 			$tematic_advance_progress = '<a title="'.get_lang('GoToThematicAdvance').'" href="'.api_get_path(WEB_CODE_PATH).'course_description/?cidReq='.$course_code.'#thematic_advance">'.$tematic_advance['progress'].'%</a>';
 		} else {
-			$tematic_advance_progress = '0%';
+			$tematic_advance_progress = '-';
 		}
 		
 		$table_row = array();
 		$table_row[] = $course['title'];
 		$table_row[] = $nb_students_in_course;
-		$table_row[] = $avg_time_spent_in_course;
+		$table_row[] = is_null($avg_time_spent_in_course)?'-':$avg_time_spent_in_course;
 		$table_row[] = $tematic_advance_progress;
-		$table_row[] = is_null($avg_progress_in_course) ? '' : $avg_progress_in_course.'%';
-		$table_row[] = is_null($avg_score_in_course) ? '' : $avg_score_in_course.'%';
-		$table_row[] = $avg_messages_in_course;
-		$table_row[] = $avg_assignments_in_course;
+		$table_row[] = is_null($avg_progress_in_course) ? '-' : $avg_progress_in_course.'%';
+		$table_row[] = is_null($avg_score_in_course) ? '-' : $avg_score_in_course.'%';
+		$table_row[] = is_null($avg_messages_in_course)?'-':$avg_messages_in_course;
+		$table_row[] = is_null($avg_assignments_in_course)?'-':$avg_assignments_in_course;
 		$table_row[] = '<a href="../tracking/courseLog.php?cidReq='.$course_code.'&studentlist=true&id_session='.$id_session.'"><img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a>';
 
 		$csv_content[] = array (

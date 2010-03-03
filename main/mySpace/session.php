@@ -103,8 +103,12 @@ if (api_is_drh()) {
 	}
 	echo '</div>';
 		
-} else {
-	$a_sessions = Tracking :: get_sessions_coached_by_user($id_coach);
+} else {		
+	if (api_is_platform_admin()) {
+		$a_sessions = SessionManager::get_sessions_list();
+	} else {
+		$a_sessions = Tracking :: get_sessions_coached_by_user($id_coach);
+	}	
 }
 
 $nb_sessions = count($a_sessions);
@@ -122,10 +126,10 @@ if ($nb_sessions > 0) {
 			  </div>';
 	}
 	$table = new SortableTable('tracking', 'count_sessions_coached');
-	$table -> set_header(0, get_lang('Title'));
-	//$table -> set_header(1, get_lang('Status'));
-	$table -> set_header(1, get_lang('Date'));
-	$table -> set_header(2, get_lang('Details'), false);
+	$table->set_header(0, get_lang('Title'));
+	$table->set_header(1, get_lang('Date'));
+	$table->set_header(2, get_lang('NbCoursesPerSession'));
+	$table->set_header(3, get_lang('Details'), false);
 
 	$all_data = array();
 	foreach ($a_sessions as $session) {
@@ -138,6 +142,8 @@ if ($nb_sessions > 0) {
 		} else {
 			$row[] = ' - ';
 		}
+		
+		$row[] = count(Tracking::get_courses_list_from_session($session['id']));
 
 		if ($export_csv) {
 			$csv_content[] = $row;

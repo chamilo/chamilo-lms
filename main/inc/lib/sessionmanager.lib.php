@@ -924,7 +924,7 @@ class SessionManager {
 		}
 		$sql_result = Database::query($sql_query);
 		while ($result = Database::fetch_array($sql_result)) {
-			$return_array[] = $result;
+			$return_array[$result['id']] = $result;
 		}
 		return $return_array;
 	}

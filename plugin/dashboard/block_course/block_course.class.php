@@ -144,7 +144,7 @@ class BlockCourse extends Block {
 			}
 			if (count($users) > 0) {
 				$nb_students_in_course = count($users);
-				$avg_time_spent_in_course  = api_time_to_hms(Tracking::get_time_spent_on_the_course($users, $course_code));
+				$avg_time_spent_in_course  = api_time_to_hms(Tracking::get_time_spent_on_the_course($users, $course_code)/$nb_students_in_course);
 			} else {
 				$avg_time_spent_in_course = null;
 			}

@@ -217,7 +217,7 @@ if (!empty ($_GET['student'])) {
 
 	// infos about user
 	$info_user = UserManager :: get_user_info_by_id($student_id);
-	if ($_user['status'] == DRH && $info_user['hr_dept_id'] != $_user['user_id']) {
+	if($_user['status']==DRH && $a_infosUser['hr_dept_id']!=$_user['user_id'] && !api_is_platform_admin()) {
 		api_not_allowed();
 	}
 

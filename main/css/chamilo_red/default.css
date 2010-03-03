@@ -19,11 +19,12 @@ body {
 	height: 100%; /* stick */
 }
 
-#wrapper{
+/* Sticky footer*/ 
+#wrapper {
 	min-height: 100%;
 	height: auto !important;
 	height: 100%;
-	margin: 0 auto -8em;
+	margin: 0 auto -9em; /* Do not change this value */
 }
 
 input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
@@ -583,17 +584,18 @@ margin-top:0;
 	background-repeat:repeat-x;
 	font-size: 12px;
 	color:#ffffff;
-	min-height: 100px;	
+	height: 8em;	 /* Do not change this value */ 
 	overflow:hidden;
 	width: 100%;
 	padding-bottom:10px;
 }
+/* Sticky footer*/ 
 .push {
-	height: 8em; /* Very important */
+	height: 10em; /* Do not change this value */ 
 }
 #footer .copyright {
 	float: right;
-	padding-top:60px;
+	padding-top:53px;
 	margin-right:5%;
 	background-color: #a90a0e;
 	background-image: url(images/bg-footer.gif);

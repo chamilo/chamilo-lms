@@ -3934,23 +3934,28 @@ function get_thread_user_post($course_db, $thread_id, $user_id ) {
 		 				if (is_array($post_list) && count($post_list)>0) {
 		 					$hand_forums.= '<div id="social-thread">';
 			 				$hand_forums.= Display::return_icon('forumthread.gif', get_lang('Thread'));
-			 				$hand_forums.= ' '.Security::remove_XSS($thread['thread_title']).' ';
+			 				$hand_forums.= Security::remove_XSS($thread['thread_title'], STUDENT);
+			 				$hand_forums.= '</div>';
+			 				
 			 				foreach($post_list as $posts) {
 			 					$hand_forums.= '<div id="social-post">';
-			 					$hand_forums.= '<strong>'.Security::remove_XSS($posts['post_title']).'</strong>';
+			 					$hand_forums.= '<strong>'.Security::remove_XSS($posts['post_title'], STUDENT).'</strong>';
 			 					$hand_forums.= '<br / >';
-			 					$hand_forums.= Security::remove_XSS($posts['post_text']);
+			 					$hand_forums.= Security::remove_XSS($posts['post_text'],STUDENT);
 			 					$hand_forums.= '</div>';
 			 					$hand_forums.= '<br / >';
 			 				}
 		 				}
-			 			$hand_forums.= '</div>';
+			 			
+			 			
 		 			}
 		 			$i++;
 	 			}
 				$forum_results .='<div id="social-forum">';
  				$forum_results .='<div class="clear"></div><br />';
- 				$forum_results .='<div class="actions" style="margin-left:5px;margin-right:5px;">'.Display::return_icon('forum.gif',get_lang('Forum')).'&nbsp;'.$forum['forum_title'].'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div style="float:right;margin-top:-18px"><a href="../forum/viewforum.php?cidReq='.$my_course_code.'&gidReq=&forum='.$forum['forum_id'].' " >'.get_lang('SeeForum').'</a></div></div>';
+ 				$forum_results .='<div id="social-forum-title">'.
+ 									Display::return_icon('forum.gif',get_lang('Forum')).'&nbsp;'.$forum['forum_title'].
+									'<div style="float:right;margin-top:-35px"><a href="../forum/viewforum.php?cidReq='.$my_course_code.'&gidReq=&forum='.$forum['forum_id'].' " >'.get_lang('SeeForum').'</a></div></div>';
  				$forum_results .='<br / >';
  				if ($post_counter > 0 ) {
 					$forum_results .=$hand_forums;
@@ -3974,11 +3979,11 @@ function get_thread_user_post_limit($course_db, $thread_id, $user_id, $limit=10)
 	$table_users =  Database::get_main_table(TABLE_MAIN_USER);
 
 	$sql = "SELECT * FROM $table_posts posts
-						LEFT JOIN  $table_users users
-							ON posts.poster_id=users.user_id
-						WHERE posts.thread_id='".Database::escape_string($thread_id)."'
-							AND posts.poster_id='".Database::escape_string($user_id)."'
-						ORDER BY posts.post_id DESC LIMIT $limit ";
+			LEFT JOIN  $table_users users
+				ON posts.poster_id=users.user_id
+			WHERE posts.thread_id='".Database::escape_string($thread_id)."'
+				AND posts.poster_id='".Database::escape_string($user_id)."'
+			ORDER BY posts.post_id DESC LIMIT $limit ";
 	$result=Database::query($sql);
 
 	while ($row=Database::fetch_array($result)) {

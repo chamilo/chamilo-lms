@@ -156,6 +156,7 @@ switch ($action) {
 			
 			case 'load_course' :
 				$course_db =  $_POST['course_code'];
+				
 				// @todo goto the course link
 				//echo '<a href="'.api_get_path(WEB_COURSE_PATH).$course_directory.'/?id_session='.$my_course['id_session'].'">'.get_lang('GotoCourse').'</a>';
 				$course_id=CourseManager::get_course_id_by_database_name($course_db);
@@ -173,7 +174,11 @@ switch ($action) {
 					$forum_result = get_all_post_from_user($user_id, $course_db);
 					$all_result_data = 0;
 					if ($forum_result !='') {
-						api_display_tool_title(get_lang('Forum'));
+						echo '<div id="social-forum-main-title">';
+						echo api_xml_http_response_encode(get_lang('Forum'));
+						echo '</div>';
+						
+						
 						echo '<div style="background:#FAF9F6; padding:0px;" >';
 						echo api_xml_http_response_encode($forum_result);
 						echo '</div>';

@@ -19,16 +19,16 @@
 // name of the language file that needs to be included
 $language_file = 'registration';
 
-require '../inc/global.inc.php';
-require_once 'lost_password.lib.php';
+require_once '../inc/global.inc.php';
+require_once api_get_path(LIBRARY_PATH).'login.lib.php';
 require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
 
 $tool_name = get_lang('LostPassword');
 Display :: display_header($tool_name);
 
-$this_section = SECTION_CAMPUS;
-$tool_name = get_lang('LostPass');
+$this_section 	= SECTION_CAMPUS;
+$tool_name 		= get_lang('LostPass');
 
 // Forbidden to retrieve the lost password
 if (api_get_setting('allow_lostpassword') == 'false') {
@@ -41,7 +41,7 @@ echo '</div>';
 
 if (isset ($_GET['reset']) && isset ($_GET['id'])) {
 
-	$msg = reset_password($_GET["reset"], $_GET["id"], true);
+	$msg = Login::reset_password($_GET["reset"], $_GET["id"], true);
 	$msg1= '<a href="'.api_get_path(WEB_CODE_PATH).'auth/lostPassword.php" class="fake_button_back" >'.get_lang('Back').'</a>';
 	echo '<br /><br /><div class="actions" >'.$msg1.'</div>';
 
@@ -59,6 +59,7 @@ if (isset ($_GET['reset']) && isset ($_GET['id'])) {
 
 	if ($form->validate()) {
 		$values = $form->exportValues();
+		
 		$user = $values['user'];
 		$email = $values['email'];
 
@@ -88,9 +89,9 @@ if (isset ($_GET['reset']) && isset ($_GET['id'])) {
 				$user = Database::fetch_array($result);
 			}
 			if ($userPasswordCrypted != 'none') {
-				handle_encrypted_password($user, $by_username);
+				Login::handle_encrypted_password($user, $by_username);
 			} else {
-				send_password_to_user($user, $by_username);
+				Login::send_password_to_user($user, $by_username);
 			}
 		} else {
 			Display::display_error_message(get_lang('NoUserAccountWithThisEmailAddress'));
@@ -100,12 +101,10 @@ if (isset ($_GET['reset']) && isset ($_GET['id'])) {
 		echo '<br /><br /><div class="actions" >'.$msg.'</div>';
 
 	} else {
-
 		echo '<p>';
 		echo get_lang('EnterEmailUserAndWellSendYouPassword');
 		echo '</p>';
 		$form->display();
 	}
 }
-
 Display :: display_footer();

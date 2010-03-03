@@ -10,7 +10,7 @@
 if (api_is_allowed_to_edit(null, true)) {
 	$param_gradebook = '';
 	if (isset($_SESSION['gradebook'])) {
-		$param_gradebook = '&gradebook='.$_SESSION['gradebook'];
+		$param_gradebook = '&gradebook='.Security::remove_XSS($_SESSION['gradebook']);
 	}
 	echo '<div class="actions" style="margin-bottom:30px">';
 	echo '<a href="index.php?'.api_get_cidreq().$param_gradebook.'&action=attendance_add">'.Display::return_icon('adherir.png',get_lang('CreateANewAttendance')).' '.get_lang('CreateANewAttendance').'</a>';	

@@ -1,40 +1,15 @@
-<?php // $Id: question_create.php 20569 2009-05-12 21:34:00Z pcool $
-
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2004-2009 Dokeos SPRL
-	Copyright (c) 2003 Ghent University (UGent)
-	Copyright (c) 2001 Universite catholique de Louvain (UCL)
-	Copyright (c) various contributors
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
-	Mail: info@dokeos.com
-==============================================================================
-*/
-
+<?php
+/* For licensing terms, see /license.txt */
 
 // name of the language file that needs to be included
 $language_file='exercice';
 
 // including global Dokeos file
-include("../inc/global.inc.php");
+require_once '../inc/global.inc.php';
 
 // including additional libraries
-require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
-require_once ('question.class.php');
-
+require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
+require_once 'question.class.php';
 
 // the section (tabs)
 $this_section=SECTION_COURSES;
@@ -47,8 +22,6 @@ $interbreadcrumb[]=array("url" => "exercice.php","name" => get_lang('Exercices')
 
 // Tool name
 $nameTools=get_lang('AddQuestionToExercise');
-
-
 
 // The form
 $form = new FormValidator('add_question','post',api_get_self().'?'.api_get_cidreq());
@@ -76,8 +49,7 @@ $tbl_exercices = Database :: get_course_table(TABLE_QUIZ_TEST);
 $sql = "SELECT id,title,type,description, results_disabled FROM $tbl_exercices WHERE active<>'-1' ORDER BY title ASC";
 $result = Database::query($sql);
 $exercises['-'] = '-'.get_lang('SelectExercice').'-';
-while ($row = Database :: fetch_array($result))
-{
+while ($row = Database :: fetch_array($result)) {
 	$exercises[$row['id']] = $row['title'];
 }
 $form->addElement('select', 'exercice', get_lang('Exercice'), $exercises);
@@ -92,28 +64,25 @@ $form->addRule('exercice', '<span class="required">'.get_lang('YouHaveToSelectAT
 $form->registerRule('validquestiontype', 'callback', 'check_question_type');
 $form->addRule('question_type_hidden', get_lang('InvalidQuestionType'), 'validquestiontype');
 
-
-
-if ($form->validate())
-{
+if ($form->validate()) {
 	$values = $form->exportValues();
 	//echo 'form validates';
 	//print_r($values);
 
-	foreach (Question::$questionTypes as $question_type_id => $question_type_class_and_name)
-	{
-		if (get_lang($question_type_class_and_name[1]) == $values['question_type_hidden'])
-		{
+	foreach (Question::$questionTypes as $question_type_id => $question_type_class_and_name) {
+		if (get_lang($question_type_class_and_name[1]) == $values['question_type_hidden']) {
 			$answer_type = $question_type_id;
 		}
 	}
-
 	header('Location: admin.php?exerciseId='.$values['exercice'].'&newQuestion=yes&answerType='.$answer_type);
-}
-else
-{
+	exit;
+} else {
 	// header
 	Display::display_header($nameTools);
+	
+	echo '<div class="actions">';
+	echo '<a href="exercice.php?show=test">' . Display :: return_icon('quiz.gif', get_lang('BackToExercisesList')) . get_lang('BackToExercisesList') . '</a>';
+	echo '</div>';
 
 	// displaying the form
 	$form->display();
@@ -121,20 +90,12 @@ else
 	// footer
 	Display::display_footer();
 }
-
-
 ?>
-
-
-
 <script>
 var ddlObj1=$("#questiontypes").finalselect({id:"test",viewWidth:'260px', viewHeight:'150px', selectText:'<?php echo Display::return_icon('div_show.gif',get_lang('Show'),array('style'=>'vertical-align:middle; cursor:hand'))."&nbsp;&nbsp;".get_lang('SelectQuestionType');?>',selectImage:'<?php echo api_get_path(WEB_IMG_PATH); ?>select.png', viewMouseoverColor: '#EFEFEF'});
 $("#test-select").bind('click',function(){
 	$("#question_type_hidden").val(ddlObj1.getText());
 });
-
-
-
 <?php
 // defining the pictures of the question types
 $pictures_question_types[1] = 'mcua.gif';
@@ -156,19 +117,14 @@ foreach (Question::$questionTypes as $key=>$value) {
 
 
 <?php
-function check_question_type($parameter)
-{
-	foreach (Question::$questionTypes as $key=>$value)
-	{
+function check_question_type($parameter) {
+	foreach (Question::$questionTypes as $key=>$value) {
 		$valid_question_types[] = get_lang($value[1]);
 		//$valid_question_types[] = trim($value[1]);
 	}
-	if (in_array($parameter, $valid_question_types))
-	{
+	if (in_array($parameter, $valid_question_types)) {
 		return true;
-	}
-	else
-	{
+	} else {
 		return false;
 	}
 }

@@ -1,26 +1,8 @@
 <?php
-/*
-    DOKEOS - elearning and course management software
-
-    For a full list of contributors, see documentation/credits.html
-
-    This program is free software; you can redistribute it and/or
-    modify it under the terms of the GNU General Public License
-    as published by the Free Software Foundation; either version 2
-    of the License, or (at your option) any later version.
-    See "documentation/licence.html" more details.
-
-    Contact:
-		Dokeos
-		Rue des Palais 44 Paleizenstraat
-		B-1030 Brussels - Belgium
-		Tel. +32 (2) 211 34 56
-*/
-
-
+/* For licensing terms, see /license.txt */
 /**
 *	Code for Hotpotatoes integration.
-*	@package dokeos.exercise
+*	@package chamilo.exercise
 * 	@author Istvan Mandak
 * 	@version $Id: hotpotatoes.php 20798 2009-05-18 18:13:25Z cvargas1 $
 */
@@ -36,15 +18,14 @@ require_once '../inc/global.inc.php';
 require_once (api_get_path(LIBRARY_PATH).'fileUpload.lib.php');
 require_once (api_get_path(LIBRARY_PATH).'document.lib.php');
 require_once (api_get_path(LIBRARY_PATH).'fileManage.lib.php');
-require_once (api_get_path(LIBRARY_PATH)."pclzip/pclzip.lib.php");
+require_once (api_get_path(LIBRARY_PATH).'pclzip/pclzip.lib.php');
 require_once 'hotpotatoes.lib.php';
 
 // section (for the tabs)
 $this_section=SECTION_COURSES;
 
 // access restriction: only teachers are allowed here
-if(!api_is_allowed_to_edit(null,true))
-{
+if(!api_is_allowed_to_edit(null,true)) {
 	api_not_allowed();
 }
 
@@ -76,13 +57,12 @@ $imgcount		= (!empty($_POST['imgcount'])?$_POST['imgcount']:null);
 $fld			= (!empty($_POST['fld'])?$_POST['fld']:null);
 
 // if user is allowed to edit
-if (api_is_allowed_to_edit(null,true))
-{
+if (api_is_allowed_to_edit(null,true)) {
 	//disable document parsing(?) - obviously deprecated
 	$enableDocumentParsing=false;
 
-	if(hotpotatoes_init($document_sys_path.$uploadPath))
-	{//if the directory doesn't exist
+	if(hotpotatoes_init($document_sys_path.$uploadPath)) {
+		//if the directory doesn't exist
 		//create the "HotPotatoes" directory
 		$doc_id = add_document($_course, '/HotPotatoes_files','folder',0,'HotPotatoes Files');
 		//update properties in dbase (in any case)
@@ -223,7 +203,11 @@ if((api_is_allowed_to_edit(null,true)) && (($finish == 0) || ($finish == 2)))
 		exit;
 	}
 
-	Display::display_header($nameTools,"Exercise");
+	Display::display_header($nameTools,get_lang('Exercise'));
+	
+	echo '<div class="actions">';
+	echo '<a href="exercice.php?show=test">' . Display :: return_icon('quiz.gif', get_lang('BackToExercisesList')) . get_lang('BackToExercisesList') . '</a>';
+	echo '</div>';
 
 	if ($finish==2) //if we are in the img upload process
 	{

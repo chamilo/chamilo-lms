@@ -534,8 +534,9 @@ class CourseManager {
 	 */
 	public static function get_real_course_list() {
 		$sql_result = Database::query("SELECT * FROM ".Database::get_main_table(TABLE_MAIN_COURSE)." WHERE target_course_code IS NULL");
+		$real_course_list = array();
 		while ($result = Database::fetch_array($sql_result)) {
-			$real_course_list[] = $result;
+			$real_course_list[$result['code']] = $result;
 		}
 		return $real_course_list;
 	}
@@ -545,8 +546,9 @@ class CourseManager {
 	 */
 	public static function get_virtual_course_list() {
 		$sql_result = Database::query("SELECT * FROM ".Database::get_main_table(TABLE_MAIN_COURSE)." WHERE target_course_code IS NOT NULL");
+		$virtual_course_list = array();
 		while ($result = Database::fetch_array($sql_result)) {
-			$virtual_course_list[] = $result;
+			$virtual_course_list[$result['code']] = $result;
 		}
 		return $virtual_course_list;
 	}

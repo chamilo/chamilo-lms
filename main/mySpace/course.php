@@ -111,7 +111,16 @@ if ($show_import_icon) {
 }
 
 if (!api_is_drh()) {	
-	$a_courses = Tracking :: get_courses_followed_by_coach($_user['user_id'], $id_session);
+	if (api_is_platform_admin()) {
+		if (empty($id_session)) {			
+			$courses = CourseManager::get_real_course_list();			
+		} else {
+			$courses = Tracking::get_courses_list_from_session($id_session);
+		}
+	} else {
+		$courses = Tracking::get_courses_followed_by_coach($_user['user_id'], $id_session);
+	}	
+	$a_courses = array_keys($courses);
 } 
 
 $nb_courses = count($a_courses);
@@ -143,49 +152,44 @@ $csv_header[] = array(
 if (is_array($a_courses)) {
 	foreach ($a_courses as $course_code) {
 		$nb_students_in_course = 0;
-		$a_students = array();
 		$course = CourseManager :: get_course_information($course_code);
 		$avg_assignments_in_course = $avg_messages_in_course = $avg_progress_in_course = $avg_score_in_course = $avg_time_spent_in_course = 0;
 
-		// students subscribed to the course throw a session
-		if (api_get_setting('use_session_mode') == 'true') {
-			$sql = 'SELECT id_user as user_id
-					FROM '.$tbl_session_course_user.'
-					WHERE course_code="'.Database :: escape_string($course_code).'"
-					AND id_session='.$id_session;
-			$rs = Database::query($sql);
+		// students directly subscribed to the course			
+		if (empty($session_id)) {
+			$sql = "SELECT user_id FROM $tbl_user_course as course_rel_user WHERE course_rel_user.status='5' AND course_rel_user.course_code='$course_code'";
+		} else {
+			$sql = "SELECT id_user as user_id FROM $tbl_session_course_user srcu WHERE  srcu. course_code='$course_code' AND id_session = '$id_session' AND srcu.status<>2";			
+		}						
 
-			while ($row = Database::fetch_array($rs)) {
-				if (!in_array($row['user_id'], $a_students)) {
-					$nb_students_in_course++;
-
-					// tracking datas
-					$avg_progress_in_course += Tracking :: get_avg_student_progress ($row['user_id'], $course_code);
-					$avg_score_in_course += Tracking :: get_avg_student_score ($row['user_id'], $course_code);
-					$avg_time_spent_in_course += Tracking :: get_time_spent_on_the_course ($row['user_id'], $course_code);
-					$avg_messages_in_course += Tracking :: count_student_messages ($row['user_id'], $course_code);
-					$avg_assignments_in_course += Tracking :: count_student_assignments ($row['user_id'], $course_code);
-					$a_students[] = $row['user_id'];
-				}
-			}
-		}
-		if ($nb_students_in_course > 0) {
+		$rs = Database::query($sql);			
+		$users = array();
+		while ($row = Database::fetch_array($rs)) { $users[] = $row['user_id']; }
+		
+		if (count($users) > 0) {
+			$nb_students_in_course = count($users);
+			// tracking datas
+			$avg_progress_in_course = Tracking :: get_avg_student_progress ($users, $course_code, array(), $id_session);
+			$avg_score_in_course = Tracking :: get_avg_student_score ($users, $course_code, array(), $id_session);
+			$avg_time_spent_in_course = Tracking :: get_time_spent_on_the_course ($users, $course_code, $id_session);
+			$messages_in_course = Tracking :: count_student_messages ($users, $course_code, $id_session);
+			$assignments_in_course = Tracking :: count_student_assignments ($users, $course_code, $id_session);
+			
 			$avg_time_spent_in_course = api_time_to_hms($avg_time_spent_in_course / $nb_students_in_course);
 			$avg_progress_in_course = round($avg_progress_in_course / $nb_students_in_course, 2);
 			$avg_score_in_course = round($avg_score_in_course / $nb_students_in_course, 2);
-			//$avg_messages_in_course = round($avg_messages_in_course / $nb_students_in_course, 2);
-			//$avg_assignments_in_course = round($avg_assignments_in_course / $nb_students_in_course, 2);
+			
 		} else {
 			$avg_time_spent_in_course = null;
 			$avg_progress_in_course = null;
 			$avg_score_in_course = null;
-			$avg_messages_in_course = null;
-			$avg_assignments_in_course = null;
+			$messages_in_course = null;
+			$assignments_in_course = null;
 		}
 		
 		$tematic_advance_progress = 0;
 		$course_description = new CourseDescription();
-		$course_description->set_session_id(0);
+		$course_description->set_session_id($id_session);
 		$tematic_advance = $course_description->get_data_by_description_type(8, $course_code);
 
 		if (!empty($tematic_advance)) {
@@ -202,8 +206,8 @@ if (is_array($a_courses)) {
 		$table_row[] = $tematic_advance_progress;
 		$table_row[] = is_null($avg_progress_in_course) ? '-' : $avg_progress_in_course.'%';
 		$table_row[] = is_null($avg_score_in_course) ? '-' : $avg_score_in_course.'%';
-		$table_row[] = is_null($avg_messages_in_course)?'-':$avg_messages_in_course;
-		$table_row[] = is_null($avg_assignments_in_course)?'-':$avg_assignments_in_course;
+		$table_row[] = is_null($messages_in_course)?'-':$messages_in_course;
+		$table_row[] = is_null($assignments_in_course)?'-':$assignments_in_course;
 		$table_row[] = '<a href="../tracking/courseLog.php?cidReq='.$course_code.'&studentlist=true&id_session='.$id_session.'"><img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a>';
 
 		$csv_content[] = array (
@@ -213,8 +217,8 @@ if (is_array($a_courses)) {
 			$tematic_advance_csv,
 			is_null($avg_progress_in_course) ? null : $avg_progress_in_course.'%',
 			is_null($avg_score_in_course) ? null : $avg_score_in_course.'%',
-			$avg_messages_in_course,
-			$avg_assignments_in_course,
+			$messages_in_course,
+			$assignments_in_course,
 		);
 
 		$table -> addRow($table_row, 'align="right"');

@@ -86,7 +86,8 @@ class BlockSession extends Block {
 			$sessions_table = '<table class="data_table" width:"95%">';
  			$sessions_table .= '<tr>								
 									<th >'.get_lang('Title').'</th>
-									<th >'.get_lang('Date').'</th>								
+									<th >'.get_lang('Date').'</th>
+									<th width="100px">'.get_lang('NbCoursesPerSession').'</th>							
 								</tr>';
 			$i = 1;
 			foreach ($sessions as $session) {
@@ -99,12 +100,15 @@ class BlockSession extends Block {
 					$date = ' - ';
 				}
 	 			
+	 			$count_courses_in_session = count(Tracking::get_courses_list_from_session($session_id));
+	 			
 				if ($i%2 == 0) $class_tr = 'row_odd';
 	    		else $class_tr = 'row_even';
 
 				$sessions_table .= '<tr class="'.$class_tr.'">
-										<td align="right">'.$title.'</td>
-										<td align="right">'.$date.'</td>										
+										<td>'.$title.'</td>
+										<td align="center">'.$date.'</td>
+										<td align="center">'.$count_courses_in_session.'</td>										
 								   </tr>';
 				$i++;
 			}

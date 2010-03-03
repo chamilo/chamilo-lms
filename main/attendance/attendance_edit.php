@@ -18,7 +18,7 @@ if (isset($error) && intval($error) == 1) {
 
 $param_gradebook = '';
 if (isset($_SESSION['gradebook'])) {
-	$param_gradebook = '&gradebook='.$_SESSION['gradebook'];
+	$param_gradebook = '&gradebook='.Security::remove_XSS($_SESSION['gradebook']);
 }
 $token = Security::get_token();
 $attendance_weight = floatval($attendance_weight);

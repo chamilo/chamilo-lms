@@ -9,7 +9,7 @@
 
 $param_gradebook = '';
 if (isset($_SESSION['gradebook'])) {
-	$param_gradebook = '&gradebook='.$_SESSION['gradebook'];
+	$param_gradebook = '&gradebook='.Security::remove_XSS($_SESSION['gradebook']);
 }
 echo '<div class="actions" style="margin-bottom:30px">';
 echo '<a href="index.php?'.api_get_cidreq().'&action=attendance_sheet_list&attendance_id='.$attendance_id.$param_gradebook.'">'.Display::return_icon('check.gif',get_lang('AttendanceSheet')).' '.get_lang('AttendanceSheet').'</a>';

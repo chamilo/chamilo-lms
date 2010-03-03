@@ -1153,19 +1153,24 @@ function get_forums_in_category($cat_id) {
 /**
 * Retrieve all the forums (regardless of their category) or of only one. The forums are sorted according to the forum_order.
 * Since it does not take the forum category into account there probably will be two or more forums that have forum_order=1, ...
-*
+* @param int forum id
+* @param string course db name
 * @return an array containing all the information about the forums (regardless of their category)
 * @todo check $sql4 because this one really looks fishy.
 *
 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 * @version february 2006, dokeos 1.8
 */
-function get_forums($id='') {
-	$table_forums 			= Database :: get_course_table(TABLE_FORUM);
-	$table_threads 			= Database :: get_course_table(TABLE_FORUM_THREAD);
-	$table_posts 			= Database :: get_course_table(TABLE_FORUM_POST);
-	$table_item_property 	= Database :: get_course_table(TABLE_ITEM_PROPERTY);
+function get_forums($id='', $course_db_name = '') {	
+	if (!isset($course_db_name)) {
+		$course_db_name = '';
+	}	
 	$table_users 			= Database :: get_main_table(TABLE_MAIN_USER);
+	$table_forums 			= Database :: get_course_table(TABLE_FORUM, $course_db_name);
+	$table_threads 			= Database :: get_course_table(TABLE_FORUM_THREAD, $course_db_name);
+	$table_posts 			= Database :: get_course_table(TABLE_FORUM_POST, $course_db_name);
+	$table_item_property 	= Database :: get_course_table(TABLE_ITEM_PROPERTY, $course_db_name);
+	
 
 	// **************** GETTING ALL THE FORUMS ************************* //
 
@@ -1298,7 +1303,7 @@ function get_forums($id='') {
 	if ($id=='') {
 		if(is_array($forum_list)) {
 			foreach ($forum_list as $key=>$value) {
-				$last_post_info_of_forum=get_last_post_information($key,is_allowed_to_edit());
+				$last_post_info_of_forum=get_last_post_information($key,is_allowed_to_edit(), $course_db_name);
 				$forum_list[$key]['last_post_id']=$last_post_info_of_forum['last_post_id'];
 				$forum_list[$key]['last_poster_id']=$last_post_info_of_forum['last_poster_id'];
 				$forum_list[$key]['last_post_date']=$last_post_info_of_forum['last_post_date'];
@@ -1310,7 +1315,7 @@ function get_forums($id='') {
 			$forum_list = array();
 		}
 	} else {
-		$last_post_info_of_forum=get_last_post_information($id,is_allowed_to_edit());
+		$last_post_info_of_forum=get_last_post_information($id,is_allowed_to_edit(), $course_db_name);
 		$forum_list['last_post_id']=$last_post_info_of_forum['last_post_id'];
 		$forum_list['last_poster_id']=$last_post_info_of_forum['last_poster_id'];
 		$forum_list['last_post_date']=$last_post_info_of_forum['last_post_date'];
@@ -1324,20 +1329,25 @@ function get_forums($id='') {
 /**
 * This functions gets all the last post information of a certain forum
 *
-* @param $forum_id the id of the forum we want to know the last post information of.
-* @param $show_invisibles
+* @param int 	$forum_id the id of the forum we want to know the last post information of.
+* @param bool 	$show_invisibles
+* @param string course db name
 * @return array containing all the information about the last post (last_post_id, last_poster_id, last_post_date, last_poster_name, last_poster_lastname, last_poster_firstname)
 *
 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 * @version february 2006, dokeos 1.8
 */
-function get_last_post_information($forum_id, $show_invisibles=false) {
-	$table_forums 			= Database :: get_course_table(TABLE_FORUM);
-	$table_threads 			= Database :: get_course_table(TABLE_FORUM_THREAD);
-	$table_posts 			= Database :: get_course_table(TABLE_FORUM_POST);
-	$table_item_property 	= Database :: get_course_table(TABLE_ITEM_PROPERTY);
+function get_last_post_information($forum_id, $show_invisibles=false, $course_db_name = '') {
+	if (!isset($course_db_name)) {
+		$course_db_name = '';
+	}	
+	
+	$table_forums 			= Database :: get_course_table(TABLE_FORUM,$course_db_name);
+	$table_threads 			= Database :: get_course_table(TABLE_FORUM_THREAD,$course_db_name);
+	$table_posts 			= Database :: get_course_table(TABLE_FORUM_POST,$course_db_name);
+	$table_item_property 	= Database :: get_course_table(TABLE_ITEM_PROPERTY,$course_db_name);
 	$table_users 			= Database :: get_main_table(TABLE_MAIN_USER);
-
+	
 	$sql="SELECT post.post_id, post.forum_id, post.poster_id, post.poster_name, post.post_date, users.lastname, users.firstname, post.visible, thread_properties.visibility AS thread_visibility, forum_properties.visibility AS forum_visibility
 				FROM $table_posts post, $table_users users, $table_item_property thread_properties,  $table_item_property forum_properties
 				WHERE post.forum_id=".Database::escape_string($forum_id)."
@@ -1377,17 +1387,24 @@ function get_last_post_information($forum_id, $show_invisibles=false) {
 /**
 * Retrieve all the threads of a given forum
 *
-* @param int forum id
+* @param int 	forum id
+* @param string course db name
 * @return an array containing all the information about the threads
-*
+
+
 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 * @version february 2006, dokeos 1.8
 */
-function get_threads($forum_id) {
-	$table_item_property 	= Database :: get_course_table(TABLE_ITEM_PROPERTY);
-	$table_threads 			= Database :: get_course_table(TABLE_FORUM_THREAD);
-	$table_posts 			= Database :: get_course_table(TABLE_FORUM_POST);
-	$table_users 			= Database :: get_main_table(TABLE_MAIN_USER);
+function get_threads($forum_id, $course_db = '') { 
+
+	if (!isset($course_db)) {
+		$course_db  = '';
+	}	
+	
+	$table_item_property 	= Database :: get_course_table(TABLE_ITEM_PROPERTY,$course_db);
+	$table_threads 			= Database :: get_course_table(TABLE_FORUM_THREAD, $course_db);
+	$table_posts 			= Database :: get_course_table(TABLE_FORUM_POST,$course_db);
+	$table_users 			= Database :: get_main_table(TABLE_MAIN_USER, $course_db);
 
 	$thread_list=array();
 	// important note: 	it might seem a little bit awkward that we have 'thread.locked as locked' in the sql statement
@@ -3897,16 +3914,16 @@ function get_thread_user_post($course_db, $thread_id, $user_id ) {
 
  function get_all_post_from_user($user_id, $course_db) {
  	$j=0;
-	$forums = get_forums();
+	$forums = get_forums('', $course_db);
 	krsort($forums);
 	$forum_results = '';
 
  	foreach ($forums as $forum) {
 		if ($j<=4) {
-	 		$threads = get_threads($forum['forum_id']);
+	 		$threads = get_threads($forum['forum_id'], $course_db);
 
 	 		if (is_array($threads)) {
-	 			$my_course_code=CourseManager::get_course_id_by_database_name($course_db);
+	 			$my_course_code = CourseManager::get_course_id_by_database_name($course_db);
 	 			$i=0;
 	 			$hand_forums = '';
 	 			$post_counter = 0;
@@ -3917,12 +3934,12 @@ function get_thread_user_post($course_db, $thread_id, $user_id ) {
 		 				if (is_array($post_list) && count($post_list)>0) {
 		 					$hand_forums.= '<div id="social-thread">';
 			 				$hand_forums.= Display::return_icon('forumthread.gif', get_lang('Thread'));
-			 				$hand_forums.= ' '.$thread['thread_title'].' ';
+			 				$hand_forums.= ' '.Security::remove_XSS($thread['thread_title']).' ';
 			 				foreach($post_list as $posts) {
 			 					$hand_forums.= '<div id="social-post">';
-			 					$hand_forums.= '<strong>'.$posts['post_title'].'</strong>';
+			 					$hand_forums.= '<strong>'.Security::remove_XSS($posts['post_title']).'</strong>';
 			 					$hand_forums.= '<br / >';
-			 					$hand_forums.= $posts['post_text'];
+			 					$hand_forums.= Security::remove_XSS($posts['post_text']);
 			 					$hand_forums.= '</div>';
 			 					$hand_forums.= '<br / >';
 			 				}

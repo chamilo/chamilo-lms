@@ -110,10 +110,13 @@ if ($mysqlUserDb != $mysqlMainDb) {
 	}
 }
 
-include api_get_path(SYS_LANG_PATH).'english/create_course.inc.php';
+// This parameter is needed to run a command line install of Chamilo (needed for Phing)
+if(!defined('CLI_INSTALLATION')) {
+	include api_get_path(SYS_LANG_PATH).'english/create_course.inc.php';
 
-if ($languageForm != 'english') {
-	include api_get_path(SYS_LANG_PATH).$languageForm.'/create_course.inc.php';
+	if ($languageForm != 'english') {
+		include api_get_path(SYS_LANG_PATH).$languageForm.'/create_course.inc.php';
+	}
 }
 
 /**

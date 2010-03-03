@@ -1,25 +1,5 @@
 <?php //$Id: announcements.inc.php 21903 2009-07-08 17:28:02Z juliomontoya $
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2004-2008 Dokeos SPRL
-	Copyright (c) various contributors
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
-	Mail: info@dokeos.com
-==============================================================================
-*/
+/* For licensing terms, see /license.txt */
 /**
 ==============================================================================
 * Include file with functions for the announcements module.
@@ -56,13 +36,11 @@ function display_announcement($announcement_id)
 						WHERE announcement.id = toolitemproperties.ref
 						AND announcement.id = '$announcement_id'
 						AND toolitemproperties.tool='announcement'
-						AND (toolitemproperties.to_user_id='".$_user['user_id']."' OR toolitemproperties.to_group_id='0')
+						AND (toolitemproperties.to_user_id='".intval($_user['user_id'])."' OR toolitemproperties.to_group_id='0')
 						AND toolitemproperties.visibility='1'
 						ORDER BY display_order DESC";
 
-	}
-	else
-	{
+	} else {
 		$sql_query = "	SELECT announcement.*, toolitemproperties.*
 						FROM $tbl_announcement announcement, $tbl_item_property toolitemproperties
 						WHERE announcement.id = toolitemproperties.ref
@@ -74,8 +52,7 @@ function display_announcement($announcement_id)
 	$sql_result = Database::query($sql_query);
 	$result = Database::fetch_array($sql_result);
 
-	if ($result !== false) // A sanity check.
-	{
+	if ($result !== false) { // A sanity check.
 		$title		 = $result['title'];
 		$content	 = $result['content'];
 		$content     = make_clickable($content);

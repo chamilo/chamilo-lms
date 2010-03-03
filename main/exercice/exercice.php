@@ -1,5 +1,4 @@
 <?php
-// $Id: exercice.php 22201 2009-07-17 19:57:03Z cfasanando $
 /* For licensing terms, see /license.txt */
 
 /**
@@ -8,6 +7,7 @@
 *	@author Olivier Brouckaert, original author
 *	@author Denes Nagy, HotPotatoes integration
 *	@author Wolfgang Schneider, code/html cleanup
+*	@author Julio Montoya <gugli100@gmail.com>, lots of cleanup + improvements 
 * 	@version $Id:exercice.php 12269 2007-05-03 14:17:37Z elixir_julian $
 */
 
@@ -784,7 +784,7 @@ if (($is_allowedToEdit) and ($origin != 'learnpath')) {
 		echo '<a href="exercise_admin.php?' . api_get_cidreq() . '">' . Display :: return_icon('new_test.gif', get_lang('NewEx')) . get_lang('NewEx') . '</a>';
 		echo '<a href="question_create.php?' . api_get_cidreq() . '">' . Display :: return_icon('question_add.gif', get_lang('AddQuestionToExercise')) . get_lang('AddQuestionToExercise') . '</a>';
 		echo '<a href="hotpotatoes.php?' . api_get_cidreq() . '">' . Display :: return_icon('jqz.gif', get_lang('ImportHotPotatoesQuiz')) . get_lang('ImportHotPotatoesQuiz') . '</a>';
-		echo '<a href="' . api_add_url_param($_SERVER['REQUEST_URI'], 'show=result') . '">' . Display :: return_icon('show_test_results.gif', get_lang('Results')) . get_lang('Results') . '</a>';
+		echo '<a href="exercice.php?' . api_get_cidreq() . '&show=result">' . Display :: return_icon('show_test_results.gif', get_lang('Results')) . get_lang('Results') . '</a>';
 	}
 
 	// the actions for the statistics

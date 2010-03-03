@@ -140,7 +140,8 @@ if (empty($_POST['save_question']) && in_array($_GET['type'],$possible_types)) {
 			}
 		}
 	}
-	$form = new $_GET['type'];
+	$ch_type = 'ch_'.$_GET['type'];
+	$form = new $ch_type;
 
 	// The defaults values for the form
 	$form_content['answers'] = array('', '');
@@ -192,7 +193,7 @@ if (empty($_POST['save_question']) && in_array($_GET['type'],$possible_types)) {
 	$form->render_form();
 } else {
 	$form_content = $_POST;
-	$form = new question();
+	$form = new survey_question();
 	$form->handle_action($form_content);
 }
 

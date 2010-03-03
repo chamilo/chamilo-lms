@@ -11,7 +11,7 @@ $language_file = array ('registration', 'index', 'trad4all', 'tracking', 'admin'
 $cidReset = true;
 
 require_once '../inc/global.inc.php';
-require_once api_get_path(SYS_CODE_PATH).'mySpace/myspace.lib.php';
+require_once 'myspace.lib.php';
 require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
 require_once api_get_path(LIBRARY_PATH).'tracking.lib.php';
 
@@ -168,7 +168,7 @@ if (count($formateurs) > 0) {
 echo '</table>';
 
 if (isset($_POST['export']) || (api_is_drh() && isset($_GET['export']))) {
-	export_csv($header, $data, 'teachers.csv');
+	MySpace::export_csv($header, $data, 'teachers.csv');
 }
 
 echo "<br /><br />";

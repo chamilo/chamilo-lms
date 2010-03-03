@@ -448,8 +448,6 @@ if ($show_quiz_edition) {
 if (isset($_GET['hotspotadmin']) || isset($_GET['newQuestion']) || isset($_GET['myid']))
 echo Display::return_icon('message_reply_forum.png', get_lang('GoBackToQuestionList')).' '.'<a href="admin.php?">'.get_lang('GoBackToQuestionList').'</a><br/>';
 
-echo '<a href="exercice.php?show=test">' . Display :: return_icon('quiz.gif', get_lang('BackToExercisesList')) . get_lang('BackToExercisesList') . '</a>';
-
 echo '</div>';
 
 if(isset($_GET['message']))

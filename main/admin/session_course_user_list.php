@@ -29,8 +29,13 @@ if (is_array($idChecked)) {
 	}
 	$idChecked = $my_temp;
 }
-$result=Database::query("SELECT name,title FROM $tbl_session,$tbl_course WHERE id='$id_session' AND code='".addslashes($course_code)."'");
 
+$sql = "SELECT s.name, c.title  FROM $tbl_session_rel_course src 
+		INNER JOIN $tbl_session s ON s.id = src.id_session
+		INNER JOIN $tbl_course c ON c.code = src.course_code
+		WHERE src.id_session='$id_session' AND src.course_code='".Database::escape_string($course_code)."' "; 
+
+$result=Database::query($sql);
 if(!list($session_name,$course_title)=Database::fetch_row($result))
 {
 	header('Location: session_course_list.php?id_session='.$id_session);

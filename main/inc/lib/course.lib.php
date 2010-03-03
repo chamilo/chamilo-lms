@@ -330,6 +330,11 @@ class CourseManager {
 			$count = $row[0]; // number of users by session
 			$result = Database::query("UPDATE ".Database::get_main_table(TABLE_MAIN_SESSION)." SET nbr_users = '$count'
 					WHERE id = '".$my_session_id."'");
+			
+			// Update the table session_rel_course 
+			$row = Database::fetch_array(@Database::query("SELECT COUNT(*) FROM ".Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER)." WHERE id_session = '$my_session_id' AND course_code = '$course_code' AND status<>2" ));
+			$count = $row[0]; // number of users by session and course
+			$result = @Database::query("UPDATE ".Database::get_main_table(TABLE_MAIN_SESSION_COURSE)." SET nbr_users = '$count' WHERE id_session = '$my_session_id' AND course_code = '$course_code' ");
 
 		} else {
 
@@ -417,6 +422,12 @@ class CourseManager {
 			$row = Database::fetch_array(@Database::query("SELECT COUNT(*) FROM ".Database::get_main_table(TABLE_MAIN_SESSION_USER)." WHERE id_session = '".$_SESSION['id_session']."' AND relation_type<>".SESSION_RELATION_TYPE_RRHH.""));
 			$count = $row[0]; // number of users by session
 			$result = @Database::query("UPDATE ".Database::get_main_table(TABLE_MAIN_SESSION)." SET nbr_users = '$count' WHERE id = '".$_SESSION['id_session']."'");
+			
+			// Update the table session_rel_course 
+			$row = Database::fetch_array(@Database::query("SELECT COUNT(*) FROM ".Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER)." WHERE id_session = '".$_SESSION['id_session']."' AND course_code = '$course_code' AND status<>2" ));
+			$count = $row[0]; // number of users by session
+			$result = @Database::query("UPDATE ".Database::get_main_table(TABLE_MAIN_SESSION_COURSE)." SET nbr_users = '$count' WHERE id_session = '".$_SESSION['id_session']."' AND course_code = '$course_code' ");
+			
 
 		} else {
 

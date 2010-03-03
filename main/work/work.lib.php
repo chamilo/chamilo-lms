@@ -1041,18 +1041,18 @@ function del_dir($base_work_dir,$dir,$id) {
 	if(empty($dir) or $dir=='/') {
 		return -1;
 	}
-	$check = Security::check_abs_path($base_work_dir.$dir, $base_work_dir);
+	$check = Security::check_abs_path($base_work_dir.$dir,$base_work_dir);
 	if (!$check || !is_dir($base_work_dir.$dir)) {
 		return -1;
 	}
 	$table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
-	$sql = "DELETE FROM $table WHERE url LIKE BINARY 'work/".$dir."/%'";
+	$sql = "DELETE FROM $table WHERE url BINARY 'work/".$dir."/%'";
 	$res = Database::query($sql);
 
 	//delete from DB the directories
-	$sql = "DELETE FROM $table WHERE filetype = 'folder' AND url LIKE BINARY '/".$dir."%'";
+	$sql = "DELETE FROM $table WHERE filetype = 'folder' AND url BINARY '/".$dir."%'";
 	$res = Database::query($sql);
-
+	
 	require_once(api_get_path(LIBRARY_PATH).'/fileManage.lib.php');
 	$new_dir= $dir.'_DELETED_'.$id;
 	if (api_get_setting('permanently_remove_deleted_files') == 'true'){
@@ -1063,6 +1063,7 @@ function del_dir($base_work_dir,$dir,$id) {
 		}
 	}
 }
+
 
 /**
  * Get the path of a document in the student_publication table (path relative to the course directory)

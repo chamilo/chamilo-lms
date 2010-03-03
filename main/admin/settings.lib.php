@@ -192,6 +192,7 @@ function display_plugin_cell($location, $plugin_info, $current_plugin, $active_p
 /**
  * This function allows the platform admin to choose the default stylesheet
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+ * @author Julio Montoya <gugli100@gmail.com>, Chamilo
 */
 function handle_stylesheets()
 {
@@ -273,41 +274,44 @@ function handle_stylesheets()
 	// Preview of the stylesheet
 	echo '<div><iframe src="style_preview.php" width="100%" height="300" name="preview"></iframe></div>';
 
+?>
+	<script type="text/javascript">
+	function load_preview(selectobj){
+		var style_dir = selectobj.options[selectobj.selectedIndex].value;
+	 	parent.preview.location='style_preview.php?style=' + style_dir;
+	}
+	</script>
+<?php
 	echo '<form name="stylesheets" method="post" action="'.api_get_self().'?category='.Security::remove_XSS($_GET['category']).'">';
-
+	echo '<br /><select name="style" onChange="load_preview(this)" >';
+	
+	$list_of_styles = array();
+	$list_of_names  = array();
+	
 	if ($handle = @opendir(api_get_path(SYS_PATH).'main/css/')) {
 		$counter=1;
-		while (false !== ($style_dir = readdir($handle)))
-		{
-			if(substr($style_dir,0,1)=='.') //skip dirs starting with a '.'
-			{
+		while (false !== ($style_dir = readdir($handle))) {
+			if(substr($style_dir,0,1)=='.') { //skip dirs starting with a '.'
 				continue;
 			}
 			$dirpath = api_get_path(SYS_PATH).'main/css/'.$style_dir;
-			if (is_dir($dirpath))
-			{
-				if ($style_dir != '.' && $style_dir != '..')
-				{
-					if ($currentstyle == $style_dir OR ($style_dir == 'dokeos_classic' AND !$currentstyle))
-					{
-						$selected = 'checked="checked"';
-					}
-					else
-					{
+			if (is_dir($dirpath)) {
+				if ($style_dir != '.' && $style_dir != '..') {
+					if ($currentstyle == $style_dir OR ($style_dir == 'dokeos_classic' AND !$currentstyle)) {
+						$selected = 'selected="true"';
+					} else {
 						$selected = '';
 					}
 					$show_name=get_lang(str_replace(' ','', ucwords(str_replace('_',' ', $style_dir))), '');
 
-					if ($is_style_changeable)
-					{
-						echo "<input type=\"radio\" name=\"style\" value=\"".$style_dir."\" ".$selected." onClick=\"parent.preview.location='style_preview.php?style=".$style_dir."';\"/>";
+					if ($is_style_changeable) {
+						$list_of_styles[$style_dir] = "<option  value=\"".$style_dir."\" ".$selected." /> $show_name </option>";
+						$list_of_names[$style_dir]  = $show_name;						
+						//echo "<input type=\"radio\" name=\"style\" value=\"".$style_dir."\" ".$selected." onClick=\"parent.preview.location='style_preview.php?style=".$style_dir."';\"/>";
+						//echo '<a href="style_preview.php?style='.$style_dir.'" target="preview">'.$show_name.'</a>';
+					} else {
 						echo '<a href="style_preview.php?style='.$style_dir.'" target="preview">'.$show_name.'</a>';
 					}
-					else
-						echo '<a href="style_preview.php?style='.$style_dir.'" target="preview">'.$show_name.'</a>';
-					//echo '<div id="Layer'.$counter.'" style="position:relative; width:687px; z-index:2; visibility: hidden;">';
-					//echo '<a href="#" onClick="MM_showHideLayers(\'Layer'.$counter.'\',\'\',\'hide\')">'.get_lang('Close').'</a>';
-					//echo '<iframe src="style_preview.php?style='.$file.'" width="100%" style="float:right;"></iframe></div>';
 					echo "<br />\n";
 					$counter++;
 				}
@@ -315,8 +319,15 @@ function handle_stylesheets()
 		}
 		@closedir($handle);
 	}
-	if ($is_style_changeable)
-	{
+	//Sort styles in alphabetical order
+	asort($list_of_names);	
+	foreach($list_of_names as $style_dir=>$item) {
+		echo $list_of_styles[$style_dir];
+	}
+	
+	echo '</select><br />';
+	//var_dump($list_of_names);
+	if ($is_style_changeable){
 		echo '<button class="save" type="submit" name="submit_stylesheets"> '.get_lang('SaveSettings').' </button></form>';
 	}
 }

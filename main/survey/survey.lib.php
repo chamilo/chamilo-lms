@@ -1801,7 +1801,7 @@ class ch_multiplechoice extends survey_question
 	 */
 	function render_question($form_content, $answers=array())
 	{
-		$question = new yesno();
+		$question = new ch_yesno();
 		$question->render_question($form_content, $answers);
 	}
 }
@@ -1904,7 +1904,7 @@ class ch_personality extends survey_question
 	 */
 	function render_question($form_content, $answers=array())
 	{
-		$question = new yesno();
+		$question = new ch_yesno();
 		$question->render_question($form_content, $answers);
 	}
 }
@@ -2737,7 +2737,8 @@ class SurveyUtil {
 						$second_parameter[] = $all_answers[$question['question_id']][0]['option_id'];
 					}
 				}
-				$display = new $question['type'];
+				$ch_type = 'ch_'.$question['type'];
+				$display = new $ch_type;
 				$display->render_question($question, $second_parameter);
 			}
 		}

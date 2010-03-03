@@ -122,7 +122,14 @@ $nameTools = get_lang('Tracking');
 Display::display_header($nameTools, 'Tracking');
 
 // getting all the students of the course
-$a_students = CourseManager :: get_student_list_from_course_code($_course['id'], true, (empty($_SESSION['id_session']) ? null : $_SESSION['id_session']));
+if (!empty($_SESSION['id_session'])) {
+	// registered students in session
+	$a_students = CourseManager :: get_student_list_from_course_code($_course['id'], true, $_SESSION['id_session']);	
+} else {
+	// registered students in a course outside session
+	$a_students = CourseManager :: get_student_list_from_course_code($_course['id']);	
+}
+
 $nbStudents = count($a_students);
 
 // gettting all the additional information of an additional profile field
@@ -458,7 +465,13 @@ if ($_GET['studentlist'] == 'false') {
 	    $all_datas = array();
 	    $course_code = $_course['id'];
 
+		
+		
+		
 		$user_ids = array_keys($a_students);
+		
+		
+		
 		$table = new SortableTable('users_tracking', array('TrackingCourseLog','get_number_of_users'), array('TrackingCourseLog','get_user_data'), (api_is_western_name_order() xor api_sort_by_first_name()) ? 3 : 2);
 
 		$parameters['cidReq'] 		= Security::remove_XSS($_GET['cidReq']);

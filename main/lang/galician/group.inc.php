@@ -93,4 +93,5 @@ $GroupsFromClassesInfo = "Información de grupos de clases";
 $Group = "Grupo";
 $ForumOfGroup = "Foro do grupo:";
 $BackToGroupList = "Volver á lista de grupos";
+$EditGroupCategory = "Modificar categoría de grupo";
 ?>

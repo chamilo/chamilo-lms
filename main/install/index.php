@@ -709,7 +709,7 @@ if ($_POST['step2']) {
                 include 'update-files-1.8.6.1-1.8.6.2.inc.php';
             case '1.8.6.2':
                 include 'update-db-1.8.6.2-1.8.7.inc.php';
-                //include 'update-files-1.8.6.2-1.8.7.inc.php';
+                include 'update-files-1.8.6.2-1.8.7.inc.php';
 
                 // After database conversion to UTF-8, new encoding initialization is necessary
                 // to be used for the next (hypothetical) upgrade 1.8.7 -> 1.8.7.1.

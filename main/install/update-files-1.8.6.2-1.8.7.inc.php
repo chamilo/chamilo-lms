@@ -17,6 +17,8 @@ if (defined('SYSTEM_INSTALLATION')) {
 	// Edit the configuration file
 	$file = file('../inc/conf/configuration.php');
 	$fh = fopen('../inc/conf/configuration.php', 'w');
+	$found_version_old = false;
+	$found_stable_old = false;
 	$found_version = false;
 	$found_stable = false;
 	$found_software_name = false;
@@ -24,14 +26,16 @@ if (defined('SYSTEM_INSTALLATION')) {
 	foreach ($file as $line) {
 		$ignore = false;
 		if (stripos($line, '$_configuration[\'dokeos_version\']') !== false) {
-			$found_version = true;
-			$line = '$_configuration[\'system_version\'] = \''.$new_version.'\';'."\r\n";
+			$found_version_old = true;
+			$line = '$_configuration[\'dokeos_version\'] = \''.$new_version.'\';'."\r\n";
+			$ignore = true;
 		} elseif (stripos($line, '$_configuration[\'system_version\']') !== false) {
 			$found_version = true;
 			$line = '$_configuration[\'system_version\'] = \''.$new_version.'\';'."\r\n";
 		} elseif (stripos($line, '$_configuration[\'dokeos_stable\']') !== false) {
-			$found_stable = true;
-			$line = '$_configuration[\'system_stable\'] = '.($new_version_stable ? 'true' : 'false').';'."\r\n";
+			$found_stable_old = true;
+			$line = '$_configuration[\'dokeos_stable\'] = '.($new_version_stable ? 'true' : 'false').';'."\r\n";
+			$ignore = true;
 		} elseif (stripos($line, '$_configuration[\'system_stable\']') !== false) {
 			$found_stable = true;
 			$line = '$_configuration[\'system_stable\'] = '.($new_version_stable ? 'true' : 'false').';'."\r\n";

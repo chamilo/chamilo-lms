@@ -15,7 +15,7 @@
 */
 
 // Names of the language file that needs to be included.
-$language_file = array ('courses', 'registration');
+$language_file = array ('courses', 'registration'); 
 
 // Delete the globals['_cid'], we don't need it here.
 $cidReset = true; // Flag forcing the 'current course' reset
@@ -495,7 +495,7 @@ function display_subscribe_to_courses($courses) {
 			// block course description
 			echo "\t\t<td>";
 			$icon_title = get_lang('CourseDetails') . ' - ' . $course['title'];
-			echo "<a href='course_description.php?code=".$course['code']."' title='$icon_title' rel='gb_page_center[778]'>".Display::return_icon('synthese_view.gif', $icon_title)."</a>";
+			echo "<a href='".api_get_path(WEB_CODE_PATH)."inc/lib/ajax/course_home.ajax.php?a=show_course_information&code=".$course['code']."' title='$icon_title' rel='gb_page_center[778]'>".Display::return_icon('synthese_view.gif', $icon_title)."</a>";
 			echo "\t\t</td>";
 		}
 
@@ -858,7 +858,7 @@ function display_courses_in_category($user_category_id, $showicons) {
 			// block course description
 			echo "\t\t<td>";
 			$icon_title = get_lang('CourseDetails') . ' - ' . $course['title'];
-			echo "<a href='course_description.php?code=".$course['code']."' title='$icon_title' rel='gb_page_center[778]'>".Display::return_icon('synthese_view.gif', $icon_title)."</a>";
+			echo "<a href='".api_get_path(WEB_CODE_PATH)."inc/ajax/course_home.ajax.php?a=show_course_information&code=".$course['code']."' title='$icon_title' rel='gb_page_center[778]'>".Display::return_icon('synthese_view.gif', $icon_title)."</a>";
 			echo "\t\t</td>";
 		}
 

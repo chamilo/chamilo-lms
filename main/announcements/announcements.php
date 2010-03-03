@@ -1,5 +1,5 @@
 <?php //$Id: announcements.php 2009-11-13 18:56:45Z aportugal $
-/* For licensing terms, see /dokeos_license.txt */
+/* For licensing terms, see /license.txt */
 /**
  * @author Frederik Vermeire <frederik.vermeire@pandora.be>, UGent Internship
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University: code cleaning
@@ -33,7 +33,7 @@ $nameTools = get_lang('Announcement');
 
 //session
 if(isset($_GET['id_session'])) {
-	$_SESSION['id_session'] = Security::remove_XSS($_GET['id_session']);
+	$_SESSION['id_session'] = intval($_GET['id_session']);
 }
 
 /* ------------	ACCESS RIGHTS ------------ */
@@ -276,16 +276,15 @@ if($surveyid)
 }
 
 if (!empty($_SESSION['toolgroup'])){
-	$_clean['toolgroup']=(int)$_SESSION['toolgroup'];
-	$group_properties  = GroupManager :: get_group_properties($_clean['toolgroup']);
+	$_clean_toolgroup=intval($_SESSION['toolgroup']);
+	$group_properties  = GroupManager :: get_group_properties($_clean_toolgroup);
 	$interbreadcrumb[] = array ("url" => "../group/group.php", "name" => get_lang('Groups'));
-	$interbreadcrumb[] = array ("url"=>"../group/group_space.php?gidReq=".$_SESSION['toolgroup'], "name"=> get_lang('GroupSpace').' ('.$group_properties['name'].')');
+	$interbreadcrumb[] = array ("url"=>"../group/group_space.php?gidReq=".$_clean_toolgroup, "name"=> get_lang('GroupSpace').' ('.$group_properties['name'].')');
 } else {
 	if($surveyid) {
-
-			$interbreadcrumb[] = array ("url" => "../survey/survey_list.php?cidReq=$cidReq", "name" => get_lang('Survey'));
-			$nameTools = get_lang('PublishSurvey');
-	}else {
+		$interbreadcrumb[] = array ("url" => "../survey/survey_list.php?cidReq=$cidReq", "name" => get_lang('Survey'));
+		$nameTools = get_lang('PublishSurvey');
+	} else {
 		$nameTools = get_lang('Announcement');
 		$nameTools12 = get_lang('PublishSurvey');
 	}
@@ -305,9 +304,7 @@ if (empty($_GET['origin']) or $_GET['origin'] !== 'learnpath')
 {
 	//we are not in the learning path
 	Display::Display_header($nameTools,"Announcements");
-}
-else
-{
+} else {
 	//we are in the learning path, only display central data and change css
 	$display_title_list = false;
 	$display_announcement_list = false;
@@ -414,7 +411,7 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 		$display_form = true;
 
 		// RETRIEVE THE CONTENT OF THE ANNOUNCEMENT TO MODIFY
-		$id = intval(addslashes($_GET['id']));
+		$id = intval($_GET['id']);
 
 		if (!api_is_course_coach() || api_is_element_in_the_session(TOOL_ANNOUNCEMENT, $id)) {
 			$sql="SELECT * FROM  $tbl_announcement WHERE id='$id'";
@@ -424,8 +421,7 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 			$edit_attachment = edit_announcement_attachment_file($last_id, $_FILES['user_upload'], $file_comment);
 			if ($myrow) {
 				$announcement_to_modify 	= $myrow['id'];
-				$content_to_modify 		= $myrow['content'];
-
+				$content_to_modify 			= $myrow['content'];
 				$title_to_modify 			= $myrow['title'];
 
 				if ($originalresource!=="no")  {
@@ -437,12 +433,9 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 				$display_announcement_list = false;
 			}
 
-			if ($to=="everyone" OR !empty($_SESSION['toolgroup']))
-			{
+			if ($to=="everyone" OR !empty($_SESSION['toolgroup'])) {
 				$_SESSION['select_groupusers']="hide";
-			}
-			else
-			{
+			} else {
 				$_SESSION['select_groupusers']="show";
 			}
 		}

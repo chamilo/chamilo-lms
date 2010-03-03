@@ -423,6 +423,7 @@ function DetectFlashVer(reqMajorVer, reqMinorVer, reqRevision)
 
 Display::display_header($nameTools,'Exercise');
 
+	
 $show_quiz_edition = true;
 if (isset($exerciseId) && !empty($exerciseId)) {
 	$TBL_LP_ITEM	= Database::get_course_table(TABLE_LP_ITEM);
@@ -438,8 +439,6 @@ if (isset($exerciseId) && !empty($exerciseId)) {
 
 echo '<div class="actions">';
 echo Display::return_icon('preview.gif', get_lang('Preview')).'<a href="exercice_submit.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id.'">'.get_lang('Preview').'</a>';
-
-
 if ($show_quiz_edition) {
 	echo Display::return_icon('edit.gif', get_lang('ModifyExercise')).'<a href="exercise_admin.php?'.api_get_cidreq().'&modifyExercise=yes&exerciseId='.$objExercise->id.'">'.get_lang('ModifyExercise').'</a>';
 } else {
@@ -448,6 +447,8 @@ if ($show_quiz_edition) {
 
 if (isset($_GET['hotspotadmin']) || isset($_GET['newQuestion']) || isset($_GET['myid']))
 echo Display::return_icon('message_reply_forum.png', get_lang('GoBackToQuestionList')).' '.'<a href="admin.php?">'.get_lang('GoBackToQuestionList').'</a><br/>';
+
+echo '<a href="exercice.php?show=test">' . Display :: return_icon('quiz.gif', get_lang('BackToExercisesList')) . get_lang('BackToExercisesList') . '</a>';
 
 echo '</div>';
 

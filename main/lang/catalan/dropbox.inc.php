@@ -54,7 +54,6 @@ $NewDropboxFileUploaded = "Un nou fitxer ha estat enviat a la bústia de compart
 $NewDropboxFileUploadedContent = "Un nou fitxer ha estat enviat a la bústia de compartició de fitxers del vostre curs";
 $langAddEdit = "Afegir/Editar";
 $ErrorNoFilesInFolder = "Aquest directori està vuit";
-$dropbox_lang["upload"] = "Enviar";
 $AddComment = "Afegir comentari";
 $SentCatgoryDeleted = "Aquesta carpeta ha estat eliminada";
 $ReceivedCatgoryDeleted = "La carpeta ha estat eliminada";

@@ -54,7 +54,6 @@ $NewDropboxFileUploaded = "Foi enviado um novo ficheiro da caixa de entrega";
 $NewDropboxFileUploadedContent = "Foi enviado um novo ficheiro para a Caixa de entrega";
 $langAddEdit = "Adicionar / Editar";
 $ErrorNoFilesInFolder = "Esta pasta encontra-se vazia";
-$dropbox_lang["upload"] = "Enviar";
 $AddComment = "Guardar feedback";
 $SentCatgoryDeleted = "A pasta foi eliminada";
 $ReceivedCatgoryDeleted = "A pasta foi eliminada";

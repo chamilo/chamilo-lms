@@ -41,7 +41,6 @@ $FileUploadSucces = "Tiedoston lataus onnistui.";
 $NoFilesHere = "Ei tiedostoja";
 $langAddEdit = "Lisää / Muokkaa";
 $ErrorNoFilesInFolder = "Tämä kansio on tyhjä";
-$dropbox_lang["upload"] = "Lataa";
 $AddComment = "Tallenna kommentti";
 $SentCatgoryDeleted = "Kansio poistettu";
 $ReceivedCatgoryDeleted = "Kansio poistettu";

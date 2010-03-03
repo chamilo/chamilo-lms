@@ -51,5 +51,4 @@ $NewDropboxFileUploaded = "Nový súbor bol poslaný do schránky na dokumenty";
 $NewDropboxFileUploadedContent = "Nový súbor bol poslaný do schránky na dokumenty Vášho kurzu";
 $langAddEdit = "Pridať / Upraviť";
 $ErrorNoFilesInFolder = "Tento priečinok je prázdny";
-$dropbox_lang["upload"] = "Na&#269;íta&#357;";
 ?>

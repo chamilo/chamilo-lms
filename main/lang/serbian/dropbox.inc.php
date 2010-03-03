@@ -26,7 +26,6 @@ $TheFileIsNotUploaded = "Fajl nije uspešno snimljen na server";
 $FileUploadSucces = "Fajl je uspešno snimljen na server";
 $NoFilesHere = "Ne postoje fajlovi";
 $langAddEdit = "Dodaj / Ažuriraj";
-$dropbox_lang["upload"] = "Snimi na server";
 $AddComment = "Snimi povratnu informaciju";
 $SentCatgoryDeleted = "Direktorijum je obrisan";
 $ReceivedCatgoryDeleted = "Direktorijum je obrisan";

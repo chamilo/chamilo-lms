@@ -54,7 +54,6 @@ $NewDropboxFileUploaded = "A new file has been sent in the dropbox";
 $NewDropboxFileUploadedContent = "A new file has been sent to the Dropbox";
 $langAddEdit = "Add / Edit";
 $ErrorNoFilesInFolder = "This folder is empty";
-$dropbox_lang["upload"] = "Upload";
 $AddComment = "Save feedback";
 $SentCatgoryDeleted = "The folder has been deleted";
 $ReceivedCatgoryDeleted = "The folder has been deleted";

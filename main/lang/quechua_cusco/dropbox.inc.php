@@ -54,6 +54,5 @@ $NewDropboxFileUploaded = "Musuq khipu apachikun T'aqapay Qelqa khipukunata nisq
 $NewDropboxFileUploadedContent = "Kay yachachinapiqa, musuq khipu apachikunña T'aqapay Qelqa khipukunata nisqapi";
 $langAddEdit = "Yapay / Ruwapay";
 $ErrorNoFilesInFolder = "Kay wayaqaqa ch'usaqmi kashan";
-$dropbox_lang["upload"] = "Apachiy";
 $AddComment = "Añadir comentario";
 ?>

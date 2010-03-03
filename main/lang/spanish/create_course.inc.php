@@ -5,7 +5,7 @@ for more information: see languages.txt in the lang folder.
 $langProfessors = "Profesores";
 $langExplanation = "Una vez que haya pulsado el botón \"Crear curso\" se creará el sitio web del curso, en el que dispondrá de múltiples herramientas que podrá configurar para dar al curso su aspecto definitivo: Test o Ejercicios, Proyectos o Blogs, Wikis, Tareas, Creador y visualizador de Lecciones en formato SCORM, Encuestas y mucho más. Su identificación como creador de este sitio automáticamente lo convierte en profesor del curso, lo cual le permitirá modificarlo según sus necesidades.";
 $langEmpty = "No ha rellenado todos los campos.<br>Utilice el botón de retorno de su navegador y vuelva a empezar.<br>Si no conoce el código de su curso, consulte el programa del curso";
-$langCodeTaken = "Este c�digo de curso ya es utilizado por otro curso.<br />Utilice el bot�n de retorno de su navegador y vuelva a empezar.";
+$langCodeTaken = "Este código de curso ya es utilizado por otro curso.<br />Utilice el botón de retorno de su navegador y vuelva a empezar.";
 $langFormula = "Atentamente";
 $langMessage = "Cuando suprima este foro de pruebas, también suprimirá todos los mensajes que contenga.";
 $langExerciceEx = "Ejercicio de ejemplo";
@@ -33,7 +33,7 @@ $langAgendaText = "Introducción general a la gestión de proyectos";
 $langMicro = "Entrevistas en la calle";
 $langGoogle = "Potente motor de búsqueda";
 $langIntroductionText = "Bienvenido a este curso";
-$langIntroductionTwo = "Esta p�gina permite a cualquier usuario o grupo enviar documentos.";
+$langIntroductionTwo = "Esta página permite a cualquier usuario o grupo enviar documentos.";
 $langCourseDescription = "Descripción del curso";
 $langProfessor = "Profesor";
 $langAnnouncementEx = "Esto es un ejemplo de anuncio.";

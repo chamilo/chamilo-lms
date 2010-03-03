@@ -54,7 +54,6 @@ $NewDropboxFileUploaded = "Az új állomány el lett küldve a fájl posta segí
 $NewDropboxFileUploadedContent = "Az új állomány el lett küldve a kurzusába a Fájl posta segítségével.";
 $langAddEdit = "Hozzáad / szerkeszt";
 $ErrorNoFilesInFolder = "Ez a mappa üres";
-$dropbox_lang["upload"] = "Feltölt";
 $AddComment = "Hozzászólás elmentése";
 $SentCatgoryDeleted = "A mappa törölve lett";
 $ReceivedCatgoryDeleted = "A mappa törölve lett";

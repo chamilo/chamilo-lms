@@ -54,7 +54,6 @@ $NewDropboxFileUploaded = "Er werd een nieuw bestand verzonden naar de dropbox t
 $NewDropboxFileUploadedContent = "Er werd een nieuw bestand verzonden naar de dropbox van uw cursus";
 $langAddEdit = "Toevoegen / wijzigen";
 $ErrorNoFilesInFolder = "Deze map is leeg";
-$dropbox_lang["upload"] = "Uploaden";
 $AddComment = "Commentaar toevoegen";
 $SentCatgoryDeleted = "De categorie is verwijderd";
 $ReceivedCatgoryDeleted = "De categorie is verwijderd";

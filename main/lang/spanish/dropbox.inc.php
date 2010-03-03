@@ -54,7 +54,6 @@ $NewDropboxFileUploaded = "Un nuevo archivo ha sido enviado en Compartir Documen
 $NewDropboxFileUploadedContent = "En su curso, un nuevo archivo ha sido enviado en Compartir Documentos";
 $langAddEdit = "Añadir / Editar";
 $ErrorNoFilesInFolder = "Este directorio está vacío";
-$dropbox_lang["upload"] = "Enviar";
 $AddComment = "Añadir comentario";
 $SentCatgoryDeleted = "La carpeta ha sido eliminada";
 $ReceivedCatgoryDeleted = "La carpeta ha sido eliminada";

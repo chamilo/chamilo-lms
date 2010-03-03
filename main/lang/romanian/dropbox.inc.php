@@ -54,7 +54,6 @@ $NewDropboxFileUploaded = "A fost trimis un nou fisier in instrumentul \"dropbox
 $NewDropboxFileUploadedContent = "A fost trimis un nou fisier in instrumentul \"dropbox\" al cursului dvs";
 $langAddEdit = "Adauga/modifica";
 $ErrorNoFilesInFolder = "Aceasta mapa este goala";
-$dropbox_lang["upload"] = "Incarcare";
 $AddComment = "Adauga comentariu";
 $SentCatgoryDeleted = "Categoria este stearsa";
 $ReceivedCatgoryDeleted = "Categoria a fost stearsa";

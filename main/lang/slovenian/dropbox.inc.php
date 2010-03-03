@@ -54,7 +54,6 @@ $NewDropboxFileUploaded = "V nabiralnik je bila poslana nova datoteka";
 $NewDropboxFileUploadedContent = "V nabiralnik tvojega tečaja je bila poslana nova datoteka";
 $langAddEdit = "Dodaj / Uredi";
 $ErrorNoFilesInFolder = "Ta mapa je prazna";
-$dropbox_lang["upload"] = "Naloži";
 $AddComment = "Dodaj komentar";
 $SentCatgoryDeleted = "Mapa je bila odstranjena";
 $ReceivedCatgoryDeleted = "Mapa je bila odstranjena";

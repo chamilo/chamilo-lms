@@ -54,7 +54,6 @@ $NewDropboxFileUploaded = "Un archivu nuevu unvióse al buzón de llabores / deb
 $NewDropboxFileUploadedContent = "Im archivu nuevu unvióse al buzón de llabores / deberes del so cursu";
 $langAddEdit = "Amestar/Editar";
 $ErrorNoFilesInFolder = "Compruebe polo menos un archivu";
-$dropbox_lang["upload"] = "Unviar";
 $AddComment = "Amestar comentariu";
 $SentCatgoryDeleted = "La carpeta desaniciose";
 $ReceivedCatgoryDeleted = "La carpeta desaniciose";

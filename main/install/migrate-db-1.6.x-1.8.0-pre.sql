@@ -261,9 +261,9 @@ CREATE TABLE group_rel_tutor(id int NOT NULL auto_increment, user_id int NOT NUL
 -- tool_intro table
 
 -- dropbox_file table
-ALTER TABLE dropbox_file ADD cat_id INT(11) NOT NULL ;
+ALTER TABLE dropbox_file ADD cat_id INT NOT NULL ;
 -- dropbox_post table
-ALTER TABLE dropbox_post ADD cat_id INT(11) NOT NULL ;
+ALTER TABLE dropbox_post ADD cat_id INT NOT NULL ;
 -- dropbox_person table
 CREATE TABLE dropbox_category(cat_id int NOT NULL auto_increment, cat_name text NOT NULL, received tinyint unsigned NOT NULL default 0, sent tinyint unsigned NOT NULL default 0, user_id int NOT NULL default 0, PRIMARY KEY  (cat_id));
 CREATE TABLE dropbox_feedback(feedback_id int NOT NULL auto_increment, file_id int NOT NULL default 0, author_user_id int NOT NULL default 0, feedback text NOT NULL, feedback_date datetime NOT NULL default '0000-00-00 00:00:00', PRIMARY KEY  (feedback_id), KEY file_id (file_id), KEY author_user_id (author_user_id));

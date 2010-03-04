@@ -2302,7 +2302,7 @@ CREATE TABLE search_engine_ref (
 --
 
 CREATE TABLE session_category (
-  id int(11) NOT NULL auto_increment,
+  id int NOT NULL auto_increment,
   name varchar(100) default NULL,
   date_start date default NULL,
   date_end date default NULL,

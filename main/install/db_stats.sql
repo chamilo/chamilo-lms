@@ -219,12 +219,12 @@ CREATE TABLE track_e_course_access (
 );
 
 CREATE TABLE track_e_hotspot (
-  hotspot_id int(11) NOT NULL auto_increment,
-  hotspot_user_id int(11) NOT NULL,
+  hotspot_id int NOT NULL auto_increment,
+  hotspot_user_id int NOT NULL,
   hotspot_course_code varchar(50) NOT NULL,
-  hotspot_exe_id int(11) NOT NULL,
-  hotspot_question_id int(11) NOT NULL,
-  hotspot_answer_id int(11) NOT NULL,
+  hotspot_exe_id int NOT NULL,
+  hotspot_question_id int NOT NULL,
+  hotspot_answer_id int NOT NULL,
   hotspot_correct tinyint(3) unsigned NOT NULL,
   hotspot_coordinate text NOT NULL,
   PRIMARY KEY  (hotspot_id),

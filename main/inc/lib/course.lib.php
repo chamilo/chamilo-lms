@@ -801,19 +801,24 @@ class CourseManager {
 	*/
 
 	/**
-	 * Return course info array of virtual course
-	 *
-	 * @param $user_id, the id (int) of the user
-	 * @param $course_info, array with info about the course (comes from course table)
-	 *
-	 * @return true if the user is registered in the course, false otherwise
+	 * Check if user is subscribed inside a course
+	 * @param 	int		User id
+	 * @param	string	Course code, if this parameter is null, it'll check for all courses
+	 * @param	bool	True for checking inside sessions too, by default is not checked 
+	 * @return 	bool 	true if the user is registered in the course, false otherwise
 	 */
-	public static function is_user_subscribed_in_course($user_id, $course_code, $in_a_session = false) {
+	public static function is_user_subscribed_in_course($user_id, $course_code = null, $in_a_session = false) {
+		
 		$user_id = intval($user_id);
-		$course_code = Database::escape_string($course_code);
-
+		
+		$condition_course = '';
+		if (isset($course_code)) {
+			$course_code = Database::escape_string($course_code);
+			$condition_course = ' AND course_code = "'.$course_code.'" ';
+		}
+		
 		$result = Database::fetch_array(Database::query("SELECT * FROM ".Database::get_main_table(TABLE_MAIN_COURSE_USER)."
-				WHERE user_id = $user_id AND relation_type<>".COURSE_RELATION_TYPE_RRHH." AND course_code = '$course_code'"));
+				WHERE user_id = $user_id AND relation_type<>".COURSE_RELATION_TYPE_RRHH." $condition_course "));
 		if (!empty($result)) {
 			return true; // The user has been registered in this course.
 		}
@@ -823,12 +828,12 @@ class CourseManager {
 		}
 
 		if (Database::num_rows(Database::query('SELECT 1 FROM '.Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER).
-				' WHERE id_user = '.$user_id.' AND course_code="'.$course_code.'"')) > 0) {
+				' WHERE id_user = '.$user_id.' '.$condition_course.' ')) > 0) {
 			return true;
 		}
 
 		if (Database::num_rows(Database::query('SELECT 1 FROM '.Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER).
-				' WHERE id_user = '.$user_id.' AND status=2 AND course_code="'.$course_code.'"')) > 0) {
+				' WHERE id_user = '.$user_id.' AND status=2 '.$condition_course.' ')) > 0) {
 			return true;
 		}
 

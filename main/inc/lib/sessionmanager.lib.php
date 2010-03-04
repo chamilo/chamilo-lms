@@ -424,7 +424,7 @@ class SessionManager {
 				}
 			}
 			// count users in this session-course relation
-			$sql = "SELECT COUNT(id_user) as nbUsers FROM $tbl_session_rel_course_rel_user WHERE id_session='$id_session' AND course_code='$enreg_course'";
+			$sql = "SELECT COUNT(id_user) as nbUsers FROM $tbl_session_rel_course_rel_user WHERE id_session='$id_session' AND course_code='$enreg_course' AND status<>2";
 			$rs = Database::query($sql);
 			list($nbr_users) = Database::fetch_array($rs);
 			// update the session-course relation to add the users total
@@ -443,48 +443,11 @@ class SessionManager {
 			$insert_sql = "INSERT IGNORE INTO $tbl_session_rel_user(id_session, id_user) VALUES('$id_session','$enreg_user')";
 			Database::query($insert_sql);
 		}
+		
 		// update number of users in the session
 		$nbr_users = count($user_list);
 		$update_sql = "UPDATE $tbl_session SET nbr_users= $nbr_users WHERE id='$id_session' ";
 		Database::query($update_sql);
-	}
-
-	 /**
-	  * Subscribes sessions to user (Dashboard feature)
-	  *	@param	int 		User id
-	  * @param	int			Session id
-	  * @param	int			Relation type
-	  **/
-	public static function suscribe_sessions_to_user($user_id,$session_list, $relation_stype) {
-
-	  	if ($user_id!= strval(intval($user_id))) return false;
-	   	foreach($session_list as $session_id){
-	   		if ($session_id!= strval(intval($session_id))) return false;
-	   	}
-
-	   	$tbl_session_rel_course		= Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
-	   	$tbl_session_rel_user 		= Database::get_main_table(TABLE_MAIN_SESSION_USER);
-	   	$tbl_session				= Database::get_main_table(TABLE_MAIN_SESSION);
-
-	   	$sql = "SELECT id_session FROM $tbl_session_rel_user WHERE id_user = $user_id AND relation_type = 1 ";
-		$result = Database::query($sql);
-		$existing_sessions = array();
-		while($row = Database::fetch_array($result)){
-			$existing_sessions[] = $row['id_session'];
-		}
-
-		//Deleting existing session_rel_user
-		foreach ($existing_sessions as $existing_session) {
-			$sql = "DELETE FROM $tbl_session_rel_user WHERE id_session=$existing_session  AND id_user = $user_id AND relation_type = 1 ";
-			Database::query($sql);
-		}
-
-		foreach ($session_list as $session_id) {
-			// for each session
-            $enreg_user = Database::escape_string($enreg_user);
-			$insert_sql = "INSERT IGNORE INTO $tbl_session_rel_user(id_session,id_user,relation_type) VALUES('$session_id','$user_id','1')";
-			Database::query($insert_sql);
-		}
 	}
 
 	 /** Subscribes courses to the given session and optionally (default) unsubscribes previous users
@@ -1036,21 +999,31 @@ class SessionManager {
 	public static function suscribe_sessions_to_hr_manager($hr_manager_id,$sessions_list) {
 
 		// Database Table Definitions
-		$tbl_session 			= 	Database::get_main_table(TABLE_MAIN_SESSION);
-		$tbl_session_rel_user 	= 	Database::get_main_table(TABLE_MAIN_SESSION_USER);
+		$tbl_session 					= 	Database::get_main_table(TABLE_MAIN_SESSION);
+		$tbl_session_rel_user 			= 	Database::get_main_table(TABLE_MAIN_SESSION_USER);
+		$tbl_session_rel_course_user 	= 	Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
 		$hr_manager_id = intval($hr_manager_id);
 		$affected_rows = 0;
 
 		//Deleting assigned sessions to hrm_id
-	   	$sql = "SELECT id_session FROM $tbl_session_rel_user WHERE id_user = $hr_manager_id AND relation_type = '".SESSION_RELATION_TYPE_RRHH."' ";
+	   	$sql = "SELECT id_session FROM $tbl_session_rel_user WHERE id_user = $hr_manager_id ";
 		$result = Database::query($sql);
 
 		if (Database::num_rows($result) > 0) {
-			$sql = "DELETE FROM $tbl_session_rel_user WHERE id_user = $hr_manager_id AND relation_type = '".SESSION_RELATION_TYPE_RRHH."' ";
+			$sql = "DELETE FROM $tbl_session_rel_user WHERE id_user = $hr_manager_id ";
 			Database::query($sql);
 		}
 
+		//Deleting assigned courses in sessions to hrm_id
+	   	$sql = "SELECT * FROM $tbl_session_rel_course_user WHERE id_user = $hr_manager_id ";
+		$result = Database::query($sql);
+
+		if (Database::num_rows($result) > 0) {
+			$sql = "DELETE FROM $tbl_session_rel_course_user WHERE id_user = $hr_manager_id ";
+			Database::query($sql);
+		}
+						
 		// inserting new sessions list
 		if (is_array($sessions_list)) {
 			foreach ($sessions_list as $session_id) {

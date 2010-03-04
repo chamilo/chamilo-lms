@@ -2203,11 +2203,11 @@ class CourseManager {
 		$affected_rows = 0;
 
 		//Deleting assigned courses to hrm_id
-	   	$sql = "SELECT course_code FROM $tbl_course_rel_user WHERE user_id = $hr_manager_id AND status = ".DRH." AND relation_type = '".COURSE_RELATION_TYPE_RRHH."' ";
+	   	$sql = "SELECT course_code FROM $tbl_course_rel_user WHERE user_id = $hr_manager_id ";
 		$result = Database::query($sql);
 
 		if (Database::num_rows($result) > 0) {
-			$sql = "DELETE FROM $tbl_course_rel_user WHERE user_id = $hr_manager_id AND status = ".DRH."  AND relation_type = '".COURSE_RELATION_TYPE_RRHH."' ";
+			$sql = "DELETE FROM $tbl_course_rel_user WHERE user_id = $hr_manager_id ";
 			Database::query($sql);
 		}
 

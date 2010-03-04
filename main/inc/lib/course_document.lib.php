@@ -1,5 +1,5 @@
 <?php
-
+/* For licensing terms, see /license.txt */
 
 
 function getlist ($directory) {

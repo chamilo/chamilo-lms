@@ -1,6 +1,5 @@
 <?php
 /**
- * ==============================================================================
  * File: internationalization.lib.php
  * Internationalization library for Chamilo 1.8.7 LMS
  * A library implementing internationalization related functions.
@@ -8,14 +7,11 @@
  * @author Ivan Tcholakov, <ivantcholakov@gmail.com>, 2009, 2010
  * @author More authors, mentioned in the correpsonding fragments of this source.
  * @package chamilo.library
- * ==============================================================================
  */
 
 
 /**
- * ----------------------------------------------------------------------------
  * Constants
- * ----------------------------------------------------------------------------
  */
 
 // Predefined date formats in Chamilo provided by the language sub-system.

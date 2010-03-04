@@ -1,5 +1,5 @@
 <?php
-/* For licensing terms, see /chamilo_license.txt */
+/* For licensing terms, see /license.txt */
 /**
 ==============================================================================
 *	Code library for showing Who is online
@@ -8,8 +8,7 @@
 *	@author Denes Nagy, principal author
 *	@author Bart Mollet
 *	@author Roan Embrechts, cleaning and bugfixing
-*	@package dokeos.whoisonline
-==============================================================================
+*	@package chamilo.whoisonline
 */
 /**
  * Insert a login reference for the current user into the track_e_online stats table.

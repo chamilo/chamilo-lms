@@ -1,23 +1,19 @@
 <?php //$id: $
 /* For licensing terms, see /license.txt */
 /**
-==============================================================================
 * This is the session library for Chamilo.
 * All main sessions functions should be placed here.
 * @package chamilo.library
-==============================================================================
 */
 
 /* LIBRARIES */
 require_once 'display.lib.php';
 
 /**
-==============================================================================
 *	This class provides methods for sessions management.
 *	Include/require it in your code to use its features.
 *
 *	@package chamilo.library
-==============================================================================
 */
 class SessionManager {
 	private function __construct() {

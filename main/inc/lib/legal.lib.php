@@ -1,12 +1,12 @@
 <?php
-/* For licensing terms, see /dokeos_license.txt */
+/* For licensing terms, see /license.txt */
 /**
  * Legal class
  *
  * @version 1.0
  * @package dokeos.legal
  *
- */
+*/
 
 class LegalManager {
 	private function __construct () {

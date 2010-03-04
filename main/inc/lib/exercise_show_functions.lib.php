@@ -1,4 +1,5 @@
-<?php // $Id: exercise_show_functions.lib.php 22205 2010-02-11 15:00:00Z aportugal $
+<?php
+/* See license terms in /license.txt */
 /**
 ==============================================================================
 * EVENTS LIBRARY

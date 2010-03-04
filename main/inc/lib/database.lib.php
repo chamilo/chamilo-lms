@@ -1,7 +1,6 @@
 <?php // $Id: database.lib.php 22265 2009-07-20 23:26:43Z juliomontoya $
 /* See license terms in /license.txt */
 /**
-==============================================================================
 *	This is the main database library for Dokeos.
 *	Include/require it in your code to use its functionality.
 *   Because this library contains all the basic database calls, it could be
@@ -12,14 +11,9 @@
 *	@package chamilo.library
 * 	@todo the table constants have all to start with TABLE_
 * 		  This is because of the analogy with the tool constants TOOL_
-==============================================================================
 */
 
-/*
-==============================================================================
-		CONSTANTS
-==============================================================================
-*/
+/*	CONSTANTS */
 
 // Main database tables
 define('TABLE_MAIN_COURSE', 				'course');

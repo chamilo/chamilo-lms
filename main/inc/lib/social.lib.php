@@ -1,13 +1,11 @@
 <?php //$id: $
-/* For licensing terms, see /chamilo_license.txt */
+/* For licensing terms, see /license.txt */
 
 /**
-==============================================================================
 *	This class provides methods for the social network management.
 *	Include/require it in your code to use its features.
 *
-*	@package dokeos.library
-==============================================================================
+*	@package chamilo.library
 */
 
 //PLUGIN PLACES

@@ -1,5 +1,5 @@
 <?php
-/* For licensing terms, see /dokeos_license.txt */
+/* For licensing terms, see /license.txt */
 /**
 * This is the security library for Dokeos.
 *
@@ -21,6 +21,7 @@
 * @package dokeos.library
 * @author Yannick Warnier <ywarnier@beeznest.org>
 */
+
 /**
  * Security class
  *

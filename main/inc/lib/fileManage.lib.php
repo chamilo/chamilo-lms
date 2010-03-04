@@ -5,7 +5,7 @@
 *	This is the file manage library for Dokeos.
 *	Include/require it in your code to use its functionality.
 *
-*	@package dokeos.library
+*	@package chamilo.library
 ==============================================================================
 */
 

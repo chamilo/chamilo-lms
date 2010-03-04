@@ -1,78 +1,39 @@
 <?php
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2004-2008 Dokeos SPRL
-	Copyright (c) 2003 Ghent University (UGent)
-	Copyright (c) Roan Embrechts, Vrije Universiteit Brussel
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
-	Mail: info@dokeos.com
-==============================================================================
-*/
+/* For licensing terms, see /license.txt */
 /**
-==============================================================================
 *	This is the document library for Dokeos.
 *	It is / will be used to provide a service layer to all document-using tools.
 *	and eliminate code duplication fro group documents, scorm documents, main documents.
 *	Include/require it in your code to use its functionality.
 *
 *	@version 1.1, January 2005
-*	@package dokeos.library
-==============================================================================
+*	@package chamilo.library
 */
 
-/*
-==============================================================================
-	DOCUMENTATION
-	use the functions like this: DocumentManager::get_course_quota()
-==============================================================================
+/*  DOCUMENTATION
+	use the functions like this: DocumentManager::get_course_quota() 
 */
 
 require_once api_get_path(LIBRARY_PATH).'course.lib.php';
 
-/*
-==============================================================================
-		CONSTANTS
-==============================================================================
-*/
+/* CONSTANTS */
 
 define("DISK_QUOTA_FIELD", "disk_quota"); //name of the database field
 /** default quota for the course documents folder */
 define("DEFAULT_DOCUMENT_QUOTA", api_get_setting('default_document_quotum'));
 
-/*
-==============================================================================
-		VARIABLES
-==============================================================================
-*/
+/* VARIABLES */
 
 $sys_course_path = api_get_path(SYS_COURSE_PATH);
 $baseServDir = api_get_path(SYS_PATH);
 $baseServUrl = $_configuration['url_append']."/";
 $baseWorkDir = $sys_course_path.(!empty($courseDir)?$courseDir:'');
 
-/*
-==============================================================================
+/* 
 		DocumentManager CLASS
-		the class and its functions
-==============================================================================
+		the class and its functions 
 */
 
-/**
- *	@package dokeos.library
- */
 class DocumentManager {
 	private function __construct() {
 

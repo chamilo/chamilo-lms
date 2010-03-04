@@ -1,41 +1,14 @@
 <?php
-/*
-vim: set expandtab tabstop=4 shiftwidth=4:
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2004 Dokeos S.A.
-	Copyright (c) 2003 Ghent University (UGent)
-	Copyright (c) 2001 Universite catholique de Louvain (UCL)
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact: Dokeos, 181 rue Royale, B-1000 Brussels, Belgium, info@dokeos.com
-==============================================================================
-*/
+/* See license terms in /license.txt */
 /**
-==============================================================================
 *	This is the file display library for Dokeos.
 *	Include/require it in your code to use its functionality.
 *
 *	@package dokeos.library
-==============================================================================
 */
 
 
-/*
-==============================================================================
-		GENERIC FUNCTIONS : FOR OLDER PHP VERSIONS
-==============================================================================
-*/
+/*	GENERIC FUNCTIONS : FOR OLDER PHP VERSIONS */
 if ( ! function_exists('array_search') )
 {
 	/**
@@ -61,11 +34,7 @@ if ( ! function_exists('array_search') )
 	}
 }
 
-/*
-==============================================================================
-		FILE DISPLAY FUNCTIONS
-==============================================================================
-*/
+/* FILE DISPLAY FUNCTIONS */
 /**
  * Define the image to display for each file extension.
  * This needs an existing image repository to work.

@@ -1,12 +1,10 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
-==============================================================================
 *	This library provides functions for the glossary tool.
 *	Include/require it in your code to use its functionality.
 
 *	@package chamilo.library
-==============================================================================
 */
 class GlossaryManager {
 

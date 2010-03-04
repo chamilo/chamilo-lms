@@ -1,13 +1,11 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
-==============================================================================
 *	This library provides functions for user management.
 *	Include/require it in your code to use its functionality.
 *
 *	@package chamilo.library
 *	@author Julio Montoya <gugli100@gmail.com> Social network groups added 2009/12
-==============================================================================
 */
 
 // Constants for user extra field types.

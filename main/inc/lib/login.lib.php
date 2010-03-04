@@ -1,5 +1,5 @@
 <?php
-/* For licensing terms, see /chamilo_license.txt */
+/* For licensing terms, see /license.txt */
 /**
 ==============================================================================
 *	Code library for login process
@@ -171,7 +171,7 @@ class Login
 		if ($result && $num_rows > 0) {
 			$user = Database::fetch_array($result);
 		} else {
-			return 'Could not reset password.'; // TODO: This message has to be translated.
+			return get_lang('CouldNotResetPassword'); 
 		}
 	
 		if (self::get_secret_word($user['email']) == $secret) { // OK, secret word is good. Now change password and mail it.
@@ -182,7 +182,7 @@ class Login
 			$result = Database::query($sql);
 			return self::send_password_to_user($user, $by_username);
 		} else {
-			return get_lang('NotAllowed'); // TODO: This message has to be translated.
+			return get_lang('NotAllowed');
 		}
 	}
 	

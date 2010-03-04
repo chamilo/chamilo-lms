@@ -1,19 +1,20 @@
-<?php // $Id: user_list.php 22041 2009-07-13 18:29:45Z juliomontoya $
-/* For licensing terms, see /dokeos_license.txt */
+<?php
+/* For licensing terms, see /license.txt */
 
 $language_file = array('admin','registration');
 $cidReset = true;
-require '../inc/global.inc.php';
+require_once '../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
 
 api_protect_admin_script();
+
 require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 require_once api_get_path(LIBRARY_PATH).'security.lib.php';
 require_once api_get_path(LIBRARY_PATH).'legal.lib.php';
-//var_dump($_POST);
+
 // Create the form
 $form = new FormValidator('addlegal');
-//var_dump($_POST);// var_dump($_GET);
+
 $defaults=array();
 if( $form->validate()) {
 	$check = Security::check_token('post');
@@ -36,9 +37,8 @@ if( $form->validate()) {
 				} elseif (isset($values['back'])) {
 					$submit	='back';
 				}
-			}else {
+			} else {
 				$submit  = $values['send'];
-
 			}
 
 			$default[content]=$content;
@@ -97,7 +97,7 @@ if( $form->validate()) {
 	}*/
 }
 $form->setDefaults($default);
-//var_dump($term_preview);
+
 if(isset($_POST['send'])) {
 	Security::clear_token();
 }
@@ -120,8 +120,8 @@ $form->addElement('html',$text);
 
 if (isset($_POST['language'])) {
 //$form->addElement('html_editor', 'content', null, null, array('ToolbarSet' => 'Basic', 'Width' => '100%', 'Height' => '250'));
-	$form->addElement('static', $_POST['language']);
-	$form->addElement('hidden', 'language',$_POST['language']);
+	$form->addElement('static', Security::remove_XSS($_POST['language']));
+	$form->addElement('hidden', 'language',Security::remove_XSS($_POST['language']));
 	$form->add_html_editor('content', get_lang('Content'), true, false, array('ToolbarSet' => 'terms_and_conditions', 'Width' => '100%', 'Height' => '250'));
 	//$form->addElement('textarea', 'content', get_lang('Content'),array('cols'=>'120','rows'=>'10'));
 	$form->addElement('radio', 'type', '', get_lang('HTMLText') ,'0');
@@ -143,15 +143,14 @@ if (isset($_POST['language'])) {
 		$navigator_info = api_get_navigator();
 		//ie6 fix
 	if ($navigator_info['name']=='Internet Explorer' &&  $navigator_info['version']=='6') {
-
-	$buttons = '<div class="row" align="center">
-			<div class="formw">
-			<input type="submit" name="back"  value="'.get_lang('Back').'"/>
-			<input type="submit" name="preview"  value="'.get_lang('Preview').'"/>
-			<input type="submit" name="save"  value="'.get_lang('Save').'"/>
-			</div>
-		</div>';
-		$form->addElement('html',$buttons);
+		$buttons = '<div class="row" align="center">
+				<div class="formw">
+				<input type="submit" name="back"  value="'.get_lang('Back').'"/>
+				<input type="submit" name="preview"  value="'.get_lang('Preview').'"/>
+				<input type="submit" name="save"  value="'.get_lang('Save').'"/>
+				</div>
+			</div>';
+			$form->addElement('html',$buttons);
 	} else {
 	$buttons = '<div class="row" align="center">
 					<div class="formw">
@@ -162,15 +161,6 @@ if (isset($_POST['language'])) {
 				</div>';
 		$form->addElement('html',$buttons);
 	}
-
-/*	$buttons = '<div class="row">
-					<div class="formw">
-					<button type="submit" class="back" 	 name="send" value="back">'.get_lang('Back').'</button>
-					<button type="submit" class="search" name="send" value="preview">'.get_lang('Preview').'</button>
-					<button type="submit" class="save" 	 name="send" value="save">'.get_lang('Save').'</button>
-					</div>
-				</div>';	*/
-
 } else {
 	$form->addElement('select_language', 'language', get_lang('Language'),null,array());
 	$buttons = '<div class="row">
@@ -181,8 +171,6 @@ if (isset($_POST['language'])) {
 	$form->addElement('html',$buttons);
 
 }
-//var_dump($defaults);
-
 
 $tool_name = get_lang('AddTermsAndConditions');
 $interbreadcrumb[] = array ("url" => 'index.php', "name" => get_lang('PlatformAdmin'));
@@ -191,7 +179,6 @@ Display :: display_header($tool_name);
 echo '<script>
 function sendlang(){
 	//document.addlegal.send.value=\'load\';
-//	alert(document.addlegal.send.value);
 	document.addlegal.sec_token.value=\''.$token.'\';
 	document.addlegal.submit();
 }
@@ -211,9 +198,6 @@ if (isset ($_GET['action'])) {
 			break;
 	}
 }
-
-
-//var_dump($defaults);
 
 $form->setDefaults($defaults);
 $form->display();

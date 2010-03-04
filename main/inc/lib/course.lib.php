@@ -1,12 +1,7 @@
 <?php //$id: $
-/* For licensing terms, see /dokeos_license.txt
-	Copyright (c) Roan Embrechts, Vrije Universiteit Brussel
-	Copyright (c) Bart Mollet, Hogeschool Gent
-	Copyright (c) Yannick Warnier, Dokeos SPRL
-*/
+/* For licensing terms, see /license.txt*/
 
 /**
-==============================================================================
 * This is the course library for Dokeos.
 *
 * All main course functions should be placed here.
@@ -20,11 +15,9 @@
 * There are probably some places left with the wrong code.
 *
 * @package chamilo.library
-==============================================================================
 */
 
 /*
-==============================================================================
 	DOCUMENTATION
 	(list not up to date, you can auto generate documentation with phpDocumentor)
 
@@ -67,14 +60,9 @@
 
 	CREATION FUNCTIONS
 	CourseManager::attempt_create_virtual_course($real_course_code, $course_title, $wanted_course_code, $course_language, $course_category)
-==============================================================================
 */
 
-/*
-==============================================================================
-		INIT SECTION
-==============================================================================
-*/
+/*	INIT SECTION */
 
 /*
 -----------------------------------------------------------
@@ -137,9 +125,7 @@ $TABLEANNOUNCEMENTS = 'announcement';
 $coursesRepositories = $_configuration['root_sys'];
 
 /*
-==============================================================================
 		CourseManager CLASS
-==============================================================================
 */
 
 /**

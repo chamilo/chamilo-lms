@@ -1,12 +1,10 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
-==============================================================================
 *	This library provides functions for the group management.
 *	Include/require it in your code to use its functionality.
 *	@author Julio Montoya <gugli100@gmail.com>
 *	@package chamilo.library
-==============================================================================
 */
 // Group permissions
 define('GROUP_PERMISSION_OPEN'	, '1');

@@ -1,13 +1,11 @@
 <?php
-/* For licensing terms, see /chamilo_license.txt */
+/* For licensing terms, see /license.txt */
 
 /**
-==============================================================================
 *	This class provides methods for the notebook management.
 *	Include/require it in your code to use its features.
 *	@author Carlos Vargas <litox84@gmail.com>, move code of main/notebook up here
 *	@package chamilo.library
-==============================================================================
 */
 
 class NotebookManager

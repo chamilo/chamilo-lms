@@ -1,4 +1,5 @@
 <?php
+/* For licensing terms, see /license.txt */
 require_once(api_get_path(SYS_CODE_PATH).'inc/banner.inc.php');
 
 /**

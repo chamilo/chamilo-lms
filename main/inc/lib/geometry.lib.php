@@ -1,4 +1,5 @@
-<?php //$Id: geometry.lib.php 16500 2008-10-11 14:56:57Z yannoo $
+<?php
+/* For licensing terms, see /license.txt */
 
 //more natural array index names
 define(X, 0);

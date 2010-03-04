@@ -1,7 +1,6 @@
 <?php //$id: $
-/* For licensing terms, see /dokeos_license.txt */
+/* For licensing terms, see /license.txt */
 /**
-==============================================================================
 * This is the course creation library for Dokeos.
 * It contains functions to create a course.
 * Include/require it in your code to use its functionality.
@@ -9,7 +8,6 @@
 * @package dokeos.library
 * @todo clean up horrible structure, script is unwieldy, for example easier way to deal with
 * different tool visibility settings: ALL_TOOLS_INVISIBLE, ALL_TOOLS_VISIBLE, CORE_TOOLS_VISIBLE...
-==============================================================================
 */
 
 include_once (api_get_path(LIBRARY_PATH).'database.lib.php');

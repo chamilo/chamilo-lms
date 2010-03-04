@@ -1,18 +1,11 @@
 <?php
-/* For licensing terms, see /dokeos_license.txt */
+/* For licensing terms, see /license.txt */
 /**
 ==============================================================================
 *	This is the array library for Dokeos.
 *	Include/require it in your code to use its functionality.
 *
-*	@package dokeos.library
-==============================================================================
-*/
-
-/*
-==============================================================================
-		FUNCTIONS
-==============================================================================
+*	@package chamilo.library
 */
 
 

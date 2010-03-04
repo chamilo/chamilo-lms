@@ -1,36 +1,7 @@
 <?php
-
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2004-2008 Dokeos S.A.
-	Copyright (c) Roan Embrechts, Vrije Universiteit Brussel
-	Copyright (c) Wolfgang Schneider
-	Copyright (c) Bert Vanderkimpen, Ghent University
-	Copyright (c) Bart Mollet, Hogeschool Gent
-	Copyright (c) René Haentjens, Ghent University
-	Copyright (c) Yannick Warnier, Dokeos S.A.
-	Copyright (c) Sandra Matthys, Hogeschool Gent
-	Copyright (c) Denes Nagy, Dokeos S.A.
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact address: Dokeos, 44 rue des palais, B-1030 Brussels, Belgium
-	Mail: info@dokeos.com
-==============================================================================
-*/
+/* For licensing terms, see /license.txt */
 /**
-==============================================================================
-*	This is a display library for Dokeos.
+*	This is a display library for Chamilo.
 *
 *	Include/require it in your code to use its public functionality.
 *	There are also several display public functions in the main api library.
@@ -39,28 +10,11 @@
 *	so you use them like this: e.g.
 *	Display::display_normal_message($message)
 *
-*	@package dokeos.library
-==============================================================================
+*	@package chamilo.library
 */
 /*
-==============================================================================
-	   CONSTANTS
-==============================================================================
-*/
-/*
-==============================================================================
-	   LIBRARIES
-==============================================================================
-*/
-//no other libraries needed at the moment
-/*
-==============================================================================
-		public functionS
-==============================================================================
-*/
-//all public functions are stored inside the Display class
-/*
-==============================================================================
+all public functions are stored inside the Display class
+ 
 		CLASS Display
 
 		public functions inside
@@ -74,8 +28,9 @@
 		Display::display_error_message($message)
 		Display::encrypted_mailto_link($email, $clickable_text, $style_class='')
 		Display::get_platform_home_link_html($name = '')
-==============================================================================
 */
+
+
 /**
 *	Display class
 *	contains several public functions dealing with the display of

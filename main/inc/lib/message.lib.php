@@ -1,13 +1,11 @@
 <?php
-/* For licensing terms, see /chamilo_license.txt */
+/* For licensing terms, see /license.txt */
 
 /**
-==============================================================================
 *	This class provides methods for messages management.
 *	Include/require it in your code to use its features.
 *
-*	@package dokeos.library
-==============================================================================
+*	@package chamilo.library
 */
 
 require_once api_get_path(LIBRARY_PATH).'online.inc.php';

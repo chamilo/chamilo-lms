@@ -1,7 +1,6 @@
 <?php // $Id: events.lib.inc.php 22205 2009-07-17 21:11:52Z cfasanando $
-/* See license terms in /dokeos_license.txt */
+/* See license terms in /license.txt */
 /**
-==============================================================================
 * EVENTS LIBRARY
 *
 * This is the events library for Dokeos.
@@ -12,13 +11,9 @@
 *
 * @package dokeos.library
 * @todo convert queries to use Database API
-==============================================================================
 */
-/*
-==============================================================================
-	   INIT SECTION
-==============================================================================
-*/
+/*	   INIT SECTION */
+
 // REGROUP TABLE NAMES FOR MAINTENANCE PURPOSE
 $TABLETRACK_LOGIN 		= $_configuration['statistics_database'].".track_e_login";
 $TABLETRACK_OPEN 		= $_configuration['statistics_database'].".track_e_open";
@@ -31,11 +26,7 @@ $TABLETRACK_SUBSCRIPTIONS = $_configuration['statistics_database'].".track_e_sub
 $TABLETRACK_LASTACCESS 	= $_configuration['statistics_database'].".track_e_lastaccess"; //for "what's new" notification
 $TABLETRACK_DEFAULT 	= $_configuration['statistics_database'].".track_e_default";
 
-/*
-==============================================================================
-		FUNCTIONS
-==============================================================================
-*/
+/* FUNCTIONS */
 /**
  * @author Sebastien Piraux <piraux_seb@hotmail.com>
  * @desc Record information for open event (when homepage is opened)

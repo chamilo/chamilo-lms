@@ -1,7 +1,6 @@
 <?php
-
+/* For licensing terms, see /license.txt */
 require_once (api_get_path(LIBRARY_PATH).'xajax/xajax.inc.php');
-
 
 class AddManySessionToCategoryFunctions {
 

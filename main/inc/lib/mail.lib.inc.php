@@ -1,4 +1,6 @@
-<?php //$id: $
+<?php
+/* For licensing terms, see /license.txt */
+
 require_once api_get_path(LIBRARY_PATH).'phpmailer/class.phpmailer.php';
 require_once api_get_path(CONFIGURATION_PATH).'mail.conf.php';
 

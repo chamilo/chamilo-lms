@@ -1,4 +1,6 @@
 <?php
+/* For licensing terms, see /license.txt */
+
 // See http://demo.icu-project.org/icu-bin/convexp
 return array(
 

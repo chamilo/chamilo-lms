@@ -1,4 +1,5 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 $_current_dir = str_replace('\\', '/', realpath(dirname(__FILE__))).'/';
 

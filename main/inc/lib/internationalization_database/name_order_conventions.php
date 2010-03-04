@@ -1,4 +1,5 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 /**
  * The following table contains two types of conventions concerning person names:
@@ -14,8 +15,6 @@
  * "sort_by" - determines you preferable way of sorting person names. The possible values are:
  * first_name                  - sorting names with priority for the first name;
  * last_name                   - sorting names with priority for the last name.
- *
- * For licensing terms, see dokeos_license.txt.
  */
 return array(
 	'afrikaans' =>        array(  'format' => 'title first_name last_name',  'sort_by' => 'first_name'  ),

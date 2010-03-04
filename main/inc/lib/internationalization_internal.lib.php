@@ -1,6 +1,7 @@
 <?php
+/* For licensing terms, see /license.txt */
+
 /**
- * ==============================================================================
  * File: internationalization_internal.lib.php
  * Main API extension library for Chamilo 1.8.7 LMS,
  * contains functions for internal use only.
@@ -8,7 +9,6 @@
  * @author Ivan Tcholakov, <ivantcholakov@gmail.com>, 2009, 2010
  * @author More authors, mentioned in the correpsonding fragments of this source.
  * @package chamilo.library
- * ==============================================================================
  *
  * Note: All functions and data structures here are not to be used directly.
  * See the file internationalization.lib.php which contains the "public" API.
@@ -16,9 +16,7 @@
 
 
 /**
- * ----------------------------------------------------------------------------
  * Internal constants
- * ----------------------------------------------------------------------------
  */
 
 // A regular expression for accessing declared encoding within xml-formatted text.
@@ -28,9 +26,7 @@ define('_PCRE_XML_ENCODING', '/<?xml.*encoding=[\'"](.*?)[\'"].*?>/m');
 
 
 /**
- * ----------------------------------------------------------------------------
  * Global variables used by some callback functions
- * ----------------------------------------------------------------------------
  */
 
 $_api_encoding = null;
@@ -38,9 +34,7 @@ $_api_collator = null;
 
 
 /**
- * ----------------------------------------------------------------------------
  * Appendix to "Language support"
- * ----------------------------------------------------------------------------
  */
 
 /**
@@ -90,14 +84,12 @@ function _api_get_latin1_compatible_languages() {
 
 
 /**
- * ----------------------------------------------------------------------------
  * Appendix to "Language recognition"
  * Based on the publication:
  * W. B. Cavnar and J. M. Trenkle. N-gram-based text categorization.
  * Proceedings of SDAIR-94, 3rd Annual Symposium on Document Analysis
  * and Information Retrieval, 1994.
  * @link http://citeseer.ist.psu.edu/cache/papers/cs/810/http:zSzzSzwww.info.unicaen.frzSz~giguetzSzclassifzSzcavnar_trenkle_ngram.pdf/n-gram-based-text.pdf
- * ----------------------------------------------------------------------------
  */
 
 /**
@@ -222,9 +214,7 @@ function & _api_compare_n_grams(&$n_grams, $encoding, $max_delta = LANGUAGE_DETE
 
 
 /**
- * ----------------------------------------------------------------------------
  * Appendix to "Date and time formats"
- * ----------------------------------------------------------------------------
  */
 
 /**
@@ -254,9 +244,7 @@ function &_api_get_day_month_names($language = null) {
 
 
 /**
- * ----------------------------------------------------------------------------
  * Appendix to "Name order conventions"
- * ----------------------------------------------------------------------------
  */
 
 /**
@@ -318,9 +306,7 @@ function _api_clean_person_name($person_name) {
 
 
 /**
- * ----------------------------------------------------------------------------
  * Appendix to "Multibyte string conversion functions"
- * ----------------------------------------------------------------------------
  */
 
 /**
@@ -468,7 +454,7 @@ function &_api_parse_character_map($name) {
  * @author Henri Sivonen, mailto:hsivonen@iki.fi
  * @link http://hsivonen.iki.fi/php-utf8/
  * @author Ivan Tcholakov, August 2009, adaptation for the Dokeos LMS.
-*/
+ */
 function _api_utf8_to_unicode(&$string) {
 	$str = (string)$string;
 	$state = 0;			// cached expected number of octets after the current octet
@@ -580,7 +566,7 @@ function _api_utf8_to_unicode(&$string) {
  * Takes an array of Unicode codepoints and returns a UTF-8 string.
  * @param array $codepoints				An array of Unicode codepoints representing a string.
  * @return string						Returns a UTF-8 string constructed using the given codepoints.
-*/
+ */
 function _api_utf8_from_unicode($codepoints) {
 	return implode(array_map('_api_utf8_chr', $codepoints));
 }
@@ -682,9 +668,7 @@ function _api_convert_encoding_xml_callback($matches) {
 
 
 /**
- * ----------------------------------------------------------------------------
  * Appendix to "Common multibyte string functions"
- * ----------------------------------------------------------------------------
  */
 
 /**
@@ -770,9 +754,7 @@ function _api_utf8_ucwords_callback($matches) {
 
 
 /**
- * ----------------------------------------------------------------------------
  * Appendix to "Common sting operations with arrays"
- * ----------------------------------------------------------------------------
  */
 
 /**
@@ -793,9 +775,7 @@ function _api_array_utf8_decode($variable) {
 
 
 /**
- * ----------------------------------------------------------------------------
  * Appendix to "String comparison"
- * ----------------------------------------------------------------------------
  */
 
 /**
@@ -925,9 +905,7 @@ function _api_get_collator_sort_flag($sort_flag = SORT_REGULAR) {
 
 
 /**
- * ----------------------------------------------------------------------------
  * ICU locales (accessible through intl extension).
- * ----------------------------------------------------------------------------
  */
 
 /**
@@ -979,9 +957,7 @@ function api_get_default_locale() {
 
 
 /**
- * ----------------------------------------------------------------------------
  * Appendix to "Encoding management functions"
- * ----------------------------------------------------------------------------
  */
 
 /**
@@ -1229,9 +1205,7 @@ function _api_html_entity_supports($encoding) {
 
 
 /**
- * ----------------------------------------------------------------------------
  * Upgrading the PHP5 mbstring extension
- * ----------------------------------------------------------------------------
  */
 
 // A multibyte replacement of strchr(). This function exists in PHP 5 >= 5.2.0

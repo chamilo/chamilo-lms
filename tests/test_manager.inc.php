@@ -255,7 +255,7 @@ if ($handle = opendir($path)) {
 -----------------------------------------------------------
 */
 	
-if (!headers_sent()) {
+if (!headers_sent() && session_id() != "") {
 	$res=api_session_destroy();
 	}
 }

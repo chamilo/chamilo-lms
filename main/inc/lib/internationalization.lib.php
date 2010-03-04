@@ -3175,7 +3175,7 @@ function api_get_valid_encodings() {
 	return array_merge(array('UTF-8'), $result1, $result2, $result3);
 }
 
-function api_detect_encoding(&$string) {
+function api_detect_encoding($string) {
 	if (api_is_valid_utf8($string)) {
 		return 'UTF-8';
 	}
@@ -3209,7 +3209,7 @@ function api_detect_encoding(&$string) {
  * @param string $default_encoding		This is the default encoding to be returned if there is no way the xml-text's encoding to be detected. If it not spesified, the system encoding is assumed then.
  * @return string						Returns the detected encoding.
  */
-function api_detect_encoding_xml(&$string, $default_encoding = null) {
+function api_detect_encoding_xml($string, $default_encoding = null) {
 	if (preg_match(_PCRE_XML_ENCODING, $string, $matches)) {
 		return api_refine_encoding_id($matches[1]);
 	}

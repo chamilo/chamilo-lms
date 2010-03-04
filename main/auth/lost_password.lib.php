@@ -117,7 +117,8 @@ function send_password_to_user($user, $by_username = false) {
 		}
 	}
 
-	$email_body = get_lang('YourAccountParam')." ".$portal_url."\n\n$user_account_list";
+	$email_body = get_lang('YourAccountParam')." ".$portal_url."\n\n$user_account_list \n\n";
+	$emailBody .= get_lang('Formula').",\n".api_get_setting('administratorName')." ".api_get_setting('administratorSurname')."\n".get_lang('PlataformAdmin')." ".api_get_setting('siteName');
 	// SEND MESSAGE
 	$sender_name = api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS);
     $email_admin = api_get_setting('emailAdministrator');
@@ -159,7 +160,8 @@ function handle_encrypted_password($user, $by_username = false) {
 	$email_body = get_lang('DearUser')." :\n".get_lang('password_request')."\n\n";
 	$email_body .= "-----------------------------------------------\n".$user_account_list."\n-----------------------------------------------\n\n";
 	$email_body .= get_lang('PasswordEncryptedForSecurity');
-	$email_body .= "\n\n".get_lang('Formula').",\n".get_lang('PlataformAdmin');
+	$emailBody .= " \n\n";
+	$emailBody .= get_lang('Formula').",\n".api_get_setting('administratorName')." ".api_get_setting('administratorSurname')."\n".get_lang('PlataformAdmin')." ".api_get_setting('siteName');
 	$sender_name = api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS);
     $email_admin = api_get_setting('emailAdministrator');
 

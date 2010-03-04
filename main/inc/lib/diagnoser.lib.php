@@ -53,11 +53,18 @@ class Diagnoser
         }
         
         $html .= '</ul><div class="tabbed-pane-content">';
-        
+                
         $data = call_user_func(array($this, 'get_' . $current_section . '_data'));
-
 		echo $html;
-		$table = new SortableTableFromArray($data);
+		$table = new SortableTableFromArray($data,1, 100);
+		
+		$table->set_header(0,get_lang(''), false);
+		$table->set_header(1,get_lang('Section'), false);
+		$table->set_header(2,get_lang('Setting'), false);
+		$table->set_header(3,get_lang('Current'), false);
+		$table->set_header(4,get_lang('Expected'), false);
+		$table->set_header(5,get_lang('Comment'), false);			
+		
 		$table->display();
         echo '</div></div>';
     }
@@ -263,22 +270,21 @@ class Diagnoser
         switch ($status)
         {
             case self :: STATUS_OK :
-                $img = 'status_ok_mini.png';
+                $img = 'bullet_green.gif';
                 break;
             case self :: STATUS_WARNING :
-                $img = 'status_warning_mini.png';
+                $img = 'bullet_orange.gif';
                 break;
             case self :: STATUS_ERROR :
-                $img = 'status_error_mini.png';
+                $img = 'bullet_red.gif';
                 break;
             case self :: STATUS_INFORMATION :
-                $img = 'status_confirmation_mini.png';
+                $img = 'bullet_blue.gif';
                 break;
         }
         
-        if (! $img_path)
-        {
-          //  $img_path = Theme :: get_common_image_path();
+        if (! $img_path) {
+            $img_path = api_get_path(WEB_IMG_PATH);
         }
         
         $image = '<img src="' . $img_path . $img . '" alt="' . $status . '" />';

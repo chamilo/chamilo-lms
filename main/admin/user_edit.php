@@ -324,102 +324,114 @@ if ($expiration_date == '0000-00-00 00:00:00') {
 }
 $form->setDefaults($user_data);
 
+$error_drh = false;
 // Validate form
 if ( $form->validate()) {
+	
 	$user = $form->exportValues();
-
-	$picture_element = & $form->getElement('picture');
-	$picture = $picture_element->getValue();
-
-	$picture_uri = $user_data['picture_uri'];
-	if ($user['delete_picture']) {
-		$picture_uri = UserManager::delete_user_picture($user_id);
+	$is_user_subscribed_in_course = CourseManager::is_user_subscribed_in_course($user['user_id']);
+	
+	if ($user['status'] == DRH && $is_user_subscribed_in_course) {
+		$error_drh = true;	
+	} else {		
+		$picture_element = & $form->getElement('picture');
+		$picture = $picture_element->getValue();
+	
+		$picture_uri = $user_data['picture_uri'];
+		if ($user['delete_picture']) {
+			$picture_uri = UserManager::delete_user_picture($user_id);
+			}
+		elseif (!empty($picture['name'])) {
+			$picture_uri = UserManager::update_user_picture($user_id, $_FILES['picture']['name'], $_FILES['picture']['tmp_name']);
 		}
-	elseif (!empty($picture['name'])) {
-		$picture_uri = UserManager::update_user_picture($user_id, $_FILES['picture']['name'], $_FILES['picture']['tmp_name']);
-	}
-
-	$lastname = $user['lastname'];
-	$firstname = $user['firstname'];
-	$official_code = $user['official_code'];
-	$email = $user['email'];
-	$phone = $user['phone'];
-	$username = $user['username'];
-	$status = intval($user['status']);
-	$platform_admin = intval($user['platform_admin']);
-	$send_mail = intval($user['send_mail']);
-	$reset_password = intval($user['reset_password']);
-	$hr_dept_id = intval($user['hr_dept_id']);
-	$language = $user['language'];
-	if ($user['radio_expiration_date'] == '1' && !$user_data['platform_admin']) {
-		$expiration_date=$user['expiration_date'];
-	} else {
-		$expiration_date='0000-00-00 00:00:00';
-	}
-	$active = $user_data['platform_admin'] ? 1 : intval($user['active']);
-
-	if ($reset_password == 0) {
-		$password = null;
-		$auth_source = $user_data['auth_source'];
-	}
-	elseif($reset_password == 1) {
-		$password = api_generate_password();
-		$auth_source = PLATFORM_AUTH_SOURCE;
-	}
-	elseif($reset_password == 2) {
-		$password = $user['password'];
-		$auth_source = PLATFORM_AUTH_SOURCE;
-	}
-	elseif($reset_password == 3) {
-		$password = $user['password'];
-		$auth_source = $user['auth_source'];
-	}
-	UserManager::update_user($user_id, $firstname, $lastname, $username, $password, $auth_source, $email, $status, $official_code, $phone, $picture_uri, $expiration_date, $active, null, $hr_dept_id, null, $language);
-	if (api_get_setting('openid_authentication') == 'true' && !empty($user['openid'])) {
-		$up = UserManager::update_openid($user_id,$user['openid']);
-	}
-	if ($user_id != $_SESSION['_uid']) {
-		if ($platform_admin == 1) {
-			$sql = "INSERT IGNORE INTO $table_admin SET user_id = '".$user_id."'";
-			Database::query($sql);
+	
+		$lastname = $user['lastname'];
+		$firstname = $user['firstname'];
+		$official_code = $user['official_code'];
+		$email = $user['email'];
+		$phone = $user['phone'];
+		$username = $user['username'];
+		$status = intval($user['status']);
+		$platform_admin = intval($user['platform_admin']);
+		$send_mail = intval($user['send_mail']);
+		$reset_password = intval($user['reset_password']);
+		$hr_dept_id = intval($user['hr_dept_id']);
+		$language = $user['language'];
+		if ($user['radio_expiration_date'] == '1' && !$user_data['platform_admin']) {
+			$expiration_date=$user['expiration_date'];
 		} else {
-			$sql = "DELETE FROM $table_admin WHERE user_id = '".$user_id."'";
-			Database::query($sql);
+			$expiration_date='0000-00-00 00:00:00';
 		}
-	}
-
-	$extras = array();
-	foreach($user as $key => $value) {
-		if(substr($key, 0, 6) == 'extra_') { //an extra field
-			$myres = UserManager::update_extra_field_value($user_id, substr($key, 6), $value);
+		$active = $user_data['platform_admin'] ? 1 : intval($user['active']);
+	
+		if ($reset_password == 0) {
+			$password = null;
+			$auth_source = $user_data['auth_source'];
 		}
-	}
-
-	if (!empty ($email) && $send_mail) {
-		$recipient_name = api_get_person_name($firstname, $lastname, null, PERSON_NAME_EMAIL_ADDRESS);
-		$emailsubject = '['.api_get_setting('siteName').'] '.get_lang('YourReg').' '.api_get_setting('siteName');
-		$sender_name = api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS);
-		$email_admin = api_get_setting('emailAdministrator');
-
-		if ($_configuration['multiple_access_urls'] == true) {
-			$access_url_id = api_get_current_access_url_id();
-			if ($access_url_id != -1) {
-				$url = api_get_access_url($access_url_id);
-				$emailbody = get_lang('Dear')." ".stripslashes(api_get_person_name($firstname, $lastname)).",\n\n".get_lang('YouAreReg')." ". api_get_setting('siteName') ." ".get_lang('WithTheFollowingSettings')."\n\n".get_lang('Username')." : ". $username . (($reset_password > 0) ? "\n". get_lang('Pass')." : ".stripslashes($password) : "") . "\n\n" .get_lang('Address') ." ". api_get_setting('siteName') ." ". get_lang('Is') ." : ". $url['url'] ."\n\n". get_lang('Problem'). "\n\n". get_lang('Formula').",\n\n".api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'))."\n". get_lang('Manager'). " ".api_get_setting('siteName')."\nT. ".api_get_setting('administratorTelephone')."\n" .get_lang('Email') ." : ".api_get_setting('emailAdministrator');
+		elseif($reset_password == 1) {
+			$password = api_generate_password();
+			$auth_source = PLATFORM_AUTH_SOURCE;
+		}
+		elseif($reset_password == 2) {
+			$password = $user['password'];
+			$auth_source = PLATFORM_AUTH_SOURCE;
+		}
+		elseif($reset_password == 3) {
+			$password = $user['password'];
+			$auth_source = $user['auth_source'];
+		}
+		UserManager::update_user($user_id, $firstname, $lastname, $username, $password, $auth_source, $email, $status, $official_code, $phone, $picture_uri, $expiration_date, $active, null, $hr_dept_id, null, $language);
+		if (api_get_setting('openid_authentication') == 'true' && !empty($user['openid'])) {
+			$up = UserManager::update_openid($user_id,$user['openid']);
+		}
+		if ($user_id != $_SESSION['_uid']) {
+			if ($platform_admin == 1) {
+				$sql = "INSERT IGNORE INTO $table_admin SET user_id = '".$user_id."'";
+				Database::query($sql);
+			} else {
+				$sql = "DELETE FROM $table_admin WHERE user_id = '".$user_id."'";
+				Database::query($sql);
 			}
 		}
-		else {
-			$emailbody=get_lang('Dear')." ".stripslashes(api_get_person_name($firstname, $lastname)).",\n\n".get_lang('YouAreReg')." ". api_get_setting('siteName') ." ".get_lang('WithTheFollowingSettings')."\n\n".get_lang('Username')." : ". $username . (($reset_password > 0) ? "\n". get_lang('Pass')." : ".stripslashes($password) : "") . "\n\n" .get_lang('Address') ." ". api_get_setting('siteName') ." ". get_lang('Is') ." : ". $_configuration['root_web'] ."\n\n". get_lang('Problem'). "\n\n". get_lang('Formula').",\n\n".api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'))."\n". get_lang('Manager'). " ".api_get_setting('siteName')."\nT. ".api_get_setting('administratorTelephone')."\n" .get_lang('Email') ." : ".api_get_setting('emailAdministrator');
+	
+		$extras = array();
+		foreach($user as $key => $value) {
+			if(substr($key, 0, 6) == 'extra_') { //an extra field
+				$myres = UserManager::update_extra_field_value($user_id, substr($key, 6), $value);
+			}
 		}
-
-		@api_mail($recipient_name, $email, $emailsubject, $emailbody, $sender_name, $email_admin);
+	
+		if (!empty ($email) && $send_mail) {
+			$recipient_name = api_get_person_name($firstname, $lastname, null, PERSON_NAME_EMAIL_ADDRESS);
+			$emailsubject = '['.api_get_setting('siteName').'] '.get_lang('YourReg').' '.api_get_setting('siteName');
+			$sender_name = api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS);
+			$email_admin = api_get_setting('emailAdministrator');
+	
+			if ($_configuration['multiple_access_urls'] == true) {
+				$access_url_id = api_get_current_access_url_id();
+				if ($access_url_id != -1) {
+					$url = api_get_access_url($access_url_id);
+					$emailbody = get_lang('Dear')." ".stripslashes(api_get_person_name($firstname, $lastname)).",\n\n".get_lang('YouAreReg')." ". api_get_setting('siteName') ." ".get_lang('WithTheFollowingSettings')."\n\n".get_lang('Username')." : ". $username . (($reset_password > 0) ? "\n". get_lang('Pass')." : ".stripslashes($password) : "") . "\n\n" .get_lang('Address') ." ". api_get_setting('siteName') ." ". get_lang('Is') ." : ". $url['url'] ."\n\n". get_lang('Problem'). "\n\n". get_lang('Formula').",\n\n".api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'))."\n". get_lang('Manager'). " ".api_get_setting('siteName')."\nT. ".api_get_setting('administratorTelephone')."\n" .get_lang('Email') ." : ".api_get_setting('emailAdministrator');
+				}
+			}
+			else {
+				$emailbody=get_lang('Dear')." ".stripslashes(api_get_person_name($firstname, $lastname)).",\n\n".get_lang('YouAreReg')." ". api_get_setting('siteName') ." ".get_lang('WithTheFollowingSettings')."\n\n".get_lang('Username')." : ". $username . (($reset_password > 0) ? "\n". get_lang('Pass')." : ".stripslashes($password) : "") . "\n\n" .get_lang('Address') ." ". api_get_setting('siteName') ." ". get_lang('Is') ." : ". $_configuration['root_web'] ."\n\n". get_lang('Problem'). "\n\n". get_lang('Formula').",\n\n".api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'))."\n". get_lang('Manager'). " ".api_get_setting('siteName')."\nT. ".api_get_setting('administratorTelephone')."\n" .get_lang('Email') ." : ".api_get_setting('emailAdministrator');
+			}
+	
+			@api_mail($recipient_name, $email, $emailsubject, $emailbody, $sender_name, $email_admin);
+		}
+		$tok = Security::get_token();
+		header('Location: user_list.php?action=show_message&message='.urlencode(get_lang('UserUpdated')).'&sec_token='.$tok);
+		exit();				
 	}
-	$tok = Security::get_token();
-	header('Location: user_list.php?action=show_message&message='.urlencode(get_lang('UserUpdated')).'&sec_token='.$tok);
-	exit();
 }
 
 Display::display_header($tool_name);
+
+if ($error_drh) {	
+	$err_msg = get_lang('StatusCanNotBeChangedToHumanResourcesManager');
+	Display::display_error_message($err_msg);	
+}
 
 // USER PICTURE
 $image_path = UserManager::get_user_picture_path_by_id($user_id,'web');

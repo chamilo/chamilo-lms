@@ -172,12 +172,12 @@ class TestsSuite extends TestSuite {
 	  	//$this->addFile(api_get_path(SYS_TEST_PATH).'main/forum/forumfunction.inc.test.php');
 	  	
         /**GRADEBOOK*/
-		//$this->addFile(api_get_path(SYS_TEST_PATH).'main/gradebook/lib/be/attendancelink.class.test.php');                
-		//$this->addFile(api_get_path(SYS_TEST_PATH).'main/gradebook/lib/be/category.class.test.php');
-		//$this->addFile(api_get_path(SYS_TEST_PATH).'main/gradebook/lib/be/dropboxlink.class.test.php');
-		//$this->addFile(api_get_path(SYS_TEST_PATH).'main/gradebook/lib/be/evaluation.class.test.php');
-		//$this->addFile(api_get_path(SYS_TEST_PATH).'main/gradebook/lib/be/exerciselink.class.test.php');
-		//$this->addFile(api_get_path(SYS_TEST_PATH).'main/gradebook/lib/be/forumthreadlink.class.test.php');
+		$this->addFile(api_get_path(SYS_TEST_PATH).'main/gradebook/lib/be/attendancelink.class.test.php');                
+		$this->addFile(api_get_path(SYS_TEST_PATH).'main/gradebook/lib/be/category.class.test.php');
+		$this->addFile(api_get_path(SYS_TEST_PATH).'main/gradebook/lib/be/dropboxlink.class.test.php');
+		$this->addFile(api_get_path(SYS_TEST_PATH).'main/gradebook/lib/be/evaluation.class.test.php');
+		$this->addFile(api_get_path(SYS_TEST_PATH).'main/gradebook/lib/be/exerciselink.class.test.php');
+		$this->addFile(api_get_path(SYS_TEST_PATH).'main/gradebook/lib/be/forumthreadlink.class.test.php');
 	    
 	    /**NEW SCORM*/
 	    //$this->addTestFile(dirname(__FILE__).'/main/newscorm/openoffice_presentation.class.test.php');

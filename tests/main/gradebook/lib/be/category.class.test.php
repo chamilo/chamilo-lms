@@ -16,7 +16,7 @@ class TestCategoryClass extends UnitTestCase {
 		$this->category->set_user_id(1);
 		$this->category->set_course_code('COURSECATEGORYCLASS'); 
 		$this->category->set_certificate_min_score(20);
-		$this->category->set_parent_id(1);
+		$this->category->set_parent_id(0);
 		$this->category->set_session_id(1);
 		$this->category->set_weight(1);
 		$this->category->set_visible(1);

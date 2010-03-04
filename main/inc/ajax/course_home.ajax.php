@@ -1,13 +1,13 @@
 <?php
-/* For licensing terms, see /chamilo_license.txt */
+/* For licensing terms, see /license.txt */
 /**
  * Responses to AJAX calls
- */
-require_once '../global.inc.php';
-$action = $_GET['a'];
+*/
 
+$action = $_GET['a'];
 switch ($action) {
 	case 'set_visibility':
+		require_once '../global.inc.php';
 		if(api_is_allowed_to_edit(null,true)) {
 				$tool_table = Database::get_course_table(TABLE_TOOL_LIST);
 				$tool_id = Security::remove_XSS($_GET["id"]);
@@ -79,6 +79,27 @@ switch ($action) {
 				);
 				print(json_encode($response_data));
 			}
+	break;
+	
+	case 'show_course_information' :
+	
+		$language_file = array ('course_description');
+		require_once '../global.inc.php';	
+			
+		require_once api_get_path(INCLUDE_PATH).'reduced_header.inc.php' ;
+				
+		// Get the name of the database course.
+		$database_course = CourseManager::get_name_database_course($_GET['code']);
+		$tbl_course_description = Database::get_course_table(TABLE_COURSE_DESCRIPTION, $database_course);
+	
+		$sql = "SELECT * FROM $tbl_course_description WHERE session_id=0 ORDER BY id";
+		$result = Database::query($sql);
+		while ($description = Database::fetch_object($result)) {
+			$descriptions[$description->id] = $description;
+		}
+
+		// Function that displays the details of the course description in html.
+		echo  CourseManager::get_details_course_description_html($descriptions, api_get_system_encoding(), false);
 	break;
 	default:
 		echo '';

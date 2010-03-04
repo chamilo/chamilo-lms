@@ -1,11 +1,11 @@
 <?php
-/* For licensing terms, see /chamilo_license.txt */
+/* For licensing terms, see /license.txt */
 /**
 ==============================================================================
 *	This library provides functions for the group management.
 *	Include/require it in your code to use its functionality.
 *	@author Julio Montoya <gugli100@gmail.com>
-*	@package dokeos.library
+*	@package chamilo.library
 ==============================================================================
 */
 // Group permissions
@@ -163,7 +163,7 @@ class GroupPortalManager
 		$tags = array();
 		if (Database::num_rows($res)>0) {
 			while ($row = Database::fetch_array($res,'ASSOC')) {
-					$tags[] = $row;
+				$tags[] = $row;
 			}
 		}
 
@@ -247,12 +247,12 @@ class GroupPortalManager
 		$result=Database::query($sql);
 		$array = array();
 		while ($row = Database::fetch_array($result, 'ASSOC')) {
-				if ($with_image == true) {
-					$picture = self::get_picture_group($row['id'], $row['picture_uri'],80);
-					$img = '<img src="'.$picture['file'].'" />';
-					$row['picture_uri'] = $img;
-				}
-				$array[$row['id']] = $row;
+			if ($with_image == true) {
+				$picture = self::get_picture_group($row['id'], $row['picture_uri'],80);
+				$img = '<img src="'.$picture['file'].'" />';
+				$row['picture_uri'] = $img;
+			}
+			$array[$row['id']] = $row;
 		}
 		return $array;
 	}
@@ -434,8 +434,7 @@ class GroupPortalManager
 					$role = self::get_user_group_role($user_id,$group_id);
 					if ($role == 0) {
 						$sql = "INSERT INTO $table_url_rel_group
-		               			SET user_id = ".intval($user_id).", group_id = ".intval($group_id).", relation_type = ".intval($relation_type)."";
-
+		               			SET user_id = ".intval($user_id).", group_id = ".intval($group_id).", relation_type = ".intval($relation_type);
 
 						$result = Database::query($sql);
 						if ($result)
@@ -461,6 +460,7 @@ class GroupPortalManager
 		$table_	= Database :: get_main_table(TABLE_MAIN_USER_REL_GROUP);
 		$condition_relation = "";
 		if (!empty($relation_type)) {
+			$relation_type = intval($relation_type);
 			$condition_relation = " AND relation_type = '$relation_type'";
 		}
 		$sql	= "DELETE FROM $table_ WHERE group_id = ".intval($group_id).$condition_relation;

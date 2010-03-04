@@ -9,7 +9,6 @@
 * 	@version $Id$
 */
 
-
 // name of the language file that needs to be included
 $language_file='exercice';
 
@@ -162,8 +161,10 @@ if ($form -> validate()) {
 	$objExercise -> processCreation($form);
 	if ($form -> getSubmitValue('edit') == 'true') {
 		header('Location:exercice.php?message=ExerciseEdited&'.api_get_cidreq());
+		exit;
 	} else {
 		header('Location:admin.php?message=ExerciseAdded&exerciseId='.$objExercise->id);
+		exit;
 	}
 } else {
 	/*********************
@@ -174,14 +175,17 @@ if ($form -> validate()) {
 	}
 
 	if (!empty($gradebook) && $gradebook=='view') {
-		$interbreadcrumb[]= array (
-				'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
-				'name' => get_lang('Gradebook')
-			);
+		$interbreadcrumb[]= array ('url' => '../gradebook/'.$_SESSION['gradebook_dest'],'name' => get_lang('Gradebook'));
 	}
 	$nameTools=get_lang('ExerciseManagement');
-	$interbreadcrumb[] = array ("url"=>"exercice.php", "name"=> get_lang('Exercices'));
-	Display::display_header($nameTools,"Exercise");
+	$interbreadcrumb[] = array ("url"=>'exercice.php', 'name'=> get_lang('Exercices'));
+	Display::display_header($nameTools,get_lang('Exercise'));
+	
+	echo '<div class="actions">';
+	echo '<a href="exercice.php?show=test">' . Display :: return_icon('message_reply_forum.png', get_lang('GoBackToQuestionList')) . get_lang('GoBackToQuestionList') . '</a>';
+	echo '</div>';
+	
+	
 	if ($objExercise->feedbacktype==1)
 		Display::display_normal_message(get_lang("DirectFeedbackCantModifyTypeQuestion"));
 		if(api_get_setting('search_enabled')=='true' && !extension_loaded('xapian')) {

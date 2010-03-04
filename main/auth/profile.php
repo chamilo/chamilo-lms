@@ -60,7 +60,7 @@ function generate_open_id_form() {
 		beforeSend: function(objeto) {
 		/*$("#div_api_key").html("Loading...");*/ },
 		type: "POST",
-		url: "../auth/generate_api_key.inc.php",
+		url: "'.api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php?a=generate_api_key",
 		data: "num_key_id="+"",
 		success: function(datos) {
 		 $("#div_api_key").html(datos);

@@ -1,5 +1,13 @@
 <?php
+/* For licensing terms, see /license.txt */
+/**
+==============================================================================
+*	This library provides functions for the glossary tool.
+*	Include/require it in your code to use its functionality.
 
+*	@package chamilo.library
+==============================================================================
+*/
 class GlossaryManager {
 
     function __construct() {
@@ -116,9 +124,7 @@ class GlossaryManager {
 		{
 			// display the feedback message
 			Display::display_error_message(get_lang('GlossaryTermAlreadyExistsYouShouldEditIt'));
-		}
-		else
-		{
+		} else {
 			$sql = "UPDATE $t_glossary SET
 							name 		= '".Database::escape_string(Security::remove_XSS($values['glossary_title']))."',
 							description	= '".Database::escape_string(Security::remove_XSS(stripslashes(api_html_entity_decode($values['glossary_comment'])),COURSEMANAGERLOWSECURITY))."'
@@ -142,7 +148,6 @@ class GlossaryManager {
 	{
 		// Database table definition
 		$t_glossary = Database :: get_course_table(TABLE_GLOSSARY);
-
 		$get_max = "SELECT MAX(display_order) FROM $t_glossary";
 		$res_max = Database::query($get_max);
 		$dsp=0;
@@ -172,12 +177,9 @@ class GlossaryManager {
 		}
 		$result = Database::query($sql);
 		$count = Database::num_rows($result);
-		if ($count > 0)
-		{
+		if ($count > 0) {
 			return true;
-		}
-		else
-		{
+		} else {
 			return false;
 		}
 	}
@@ -313,7 +315,7 @@ class GlossaryManager {
 	}
 
 	/**
-	 * get all the data of the glossary
+	 * Get all the data of a glossary
 	 *
 	 * @param unknown_type $from
 	 * @param unknown_type $number_of_items
@@ -458,7 +460,7 @@ class GlossaryManager {
 	}
 
 	/**
-	 * Enter description here...
+	 * Re-order glossary
 	 *
 	 * @author Patrick Cool <patrick.cool@ugent.be>, Ghent University, Belgium
 	 * @version januari 2009, dokeos 1.8.6
@@ -481,7 +483,7 @@ class GlossaryManager {
 	}
 
 	/**
-	 * Enter description here...
+	 * Move a glossary
 	 *
 	 * @param unknown_type $direction
 	 * @param unknown_type $glossary_id

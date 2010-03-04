@@ -140,12 +140,3 @@ if (api_is_allowed_to_edit(null,true)) {
 
 // footer
 Display::display_footer();
-/**
-@todo lots of cleaning
-1. All the functions below should be move to glossary.class.php
-2. glossary.class.php should be renamed to glossary.lib.php and moved to inc/lib 
-3. glossary_ajax_request.php file should be deleted. The content of that file should be move to inc/ajax/glossary.ajax.php
-4. We should call all functions like Glossary::display_something();
-http://support.chamilo.org/issues/510
-Julio Montoya
-*/

@@ -137,12 +137,14 @@ $(document).ready(function () {
  * INIT EXERCISE
  *********************/
 
-include_once(api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
+require_once(api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
 $objExercise = new Exercise();
 
 /*********************
  * INIT FORM
  *********************/
+ 
+
 if(isset($_GET['exerciseId'])) {
 	$form = new FormValidator('exercise_admin', 'post', api_get_self().'?'.api_get_cidreq().'&exerciseId='.$_GET['exerciseId']);
 	$objExercise -> read (intval($_GET['exerciseId']));
@@ -194,6 +196,21 @@ if ($form -> validate()) {
 
 	// to hide the exercise description
 	echo '<style> .media { display:none;}</style>';
+	
+	$show_quiz_edition = true;
+	if (isset($exerciseId) && !empty($exerciseId)) {
+		$TBL_LP_ITEM	= Database::get_course_table(TABLE_LP_ITEM);
+		$sql="SELECT max_score FROM $TBL_LP_ITEM
+			  WHERE item_type = '".TOOL_QUIZ."' AND path ='".Database::escape_string($exerciseId)."'";
+		$result = Database::query($sql);
+		if (Database::num_rows($result) > 0) {		
+			$show_quiz_edition = false;
+		}
+	}
+	if ($show_quiz_edition) {
+		$form->freeze();
+	}
+
 	$form -> display ();
 }
 Display::display_footer();

@@ -572,15 +572,24 @@ function display_admin_links() {
 }
 
 /**
- * Enter description here...
+ * Display create course link
  *
  */
 function display_create_course_link() {
 	echo "<li><a href=\"main/create_course/add_course.php\">".get_lang('CourseCreate')."</a></li>";
 }
 
+
 /**
- * Enter description here...
+ * Display dashboard link
+ *
+ */
+function display_dashboard_link() {
+	echo "<li><a href=\"main/dashboard/index.php\">".get_lang('Dashboard')."</a></li>";
+}
+
+/**
+ * Display edit course list links
  *
  */
 function display_edit_course_list_links() {
@@ -1609,9 +1618,13 @@ if ($show_menu) {
 	if ($show_create_link) {
 		display_create_course_link();
 	}
-	if ($show_course_link) {
-		display_edit_course_list_links();
-		display_history_course_session();
+	if ($show_course_link) {		
+		if (!api_is_drh()) {
+			display_edit_course_list_links();
+			display_history_course_session();
+		} else {
+			display_dashboard_link();
+		}
 	}
 	if ($show_digest_link) {
 		display_digest($toolsList, $digest, $orderKey, $courses);

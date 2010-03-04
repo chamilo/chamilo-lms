@@ -361,12 +361,25 @@ function category_has_open_courses($category) {
 	return false;
 }
 
+/**
+ * Display create course link
+ */
 function display_create_course_link() {
 	echo "<li><a href=\"main/create_course/add_course.php\">".get_lang("CourseCreate")."</a></li>";
 }
 
+/**
+ * Display edit course list links
+ */
 function display_edit_course_list_links() {
 	echo "<li><a href=\"main/auth/courses.php\">".get_lang("CourseManagement")."</a></li>";
+}
+
+/**
+ * Display dashboard link
+ */
+function display_dashboard_link() {
+	echo "<li><a href=\"main/dashboard/index.php\">".get_lang('Dashboard')."</a></li>";
 }
 
 /**
@@ -442,8 +455,12 @@ function display_anonymous_right_menu() {
 			if ($show_create_link) {
 				display_create_course_link();
 			}
-			if ($show_course_link) {
-				display_edit_course_list_links();
+			if ($show_course_link) {				
+				if (!api_is_drh()) {				
+					display_edit_course_list_links();
+				} else {
+					display_dashboard_link();
+				}
 			}
 			echo "</ul>";
 			echo "</div>";

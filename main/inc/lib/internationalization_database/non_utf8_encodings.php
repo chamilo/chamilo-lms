@@ -1,10 +1,10 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 /**
- * Historical data about non UTF-8 encodings that might be used in Dokeos LMS.
+ * Historical data about non UTF-8 encodings that might be used in Chamilo LMS.
  * The following list may have some inconsistencies.
  * Put the probably most used for your language encoding at the first place.
- * For licensing terms, see dokeos_license.txt.
  */
 return array(
 	'afrikaans' => array('ISO-8859-15', 'WINDOWS-1252'),

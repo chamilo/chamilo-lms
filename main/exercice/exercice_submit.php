@@ -1,5 +1,5 @@
 <?php
-/* For licensing terms, see /chamilo_license.txt */
+/* For licensing terms, see /license.txt */
 
 /**
 *	Exercise submission
@@ -1028,11 +1028,28 @@ if ($origin != 'learnpath') { //so we are not in learnpath tool
     echo '<div style="height:10px">&nbsp;</div>';
 }
 
+$show_quiz_edition = true;
+if (isset($exerciseId) && !empty($exerciseId)) {
+	$TBL_LP_ITEM	= Database::get_course_table(TABLE_LP_ITEM);
+	$sql="SELECT max_score FROM $TBL_LP_ITEM
+		  WHERE item_type = '".TOOL_QUIZ."' AND path ='".Database::escape_string($exerciseId)."'";
+	$result = Database::query($sql);
+	if (Database::num_rows($result) > 0) {		
+		$show_quiz_edition = false;
+	}
+}
+
+
 // I'm in a preview mode
 if (api_is_course_admin() && $origin != 'learnpath') {
-    echo '<div class="actions">';
-    echo Display :: return_icon('quiz.gif', get_lang('GoBackToEx')) . '<a href="admin.php?' . api_get_cidreq() . '&exerciseId=' . $objExercise->id . '">' . get_lang('GoBackToEx') . '</a>';
-    echo Display :: return_icon('edit.gif', get_lang('ModifyExercise')) . '<a href="exercise_admin.php?' . api_get_cidreq() . '&modifyExercise=yes&exerciseId=' . $objExercise->id . '">' . get_lang('ModifyExercise') . '</a>';
+    echo '<div class="actions">';    
+    echo '<a href="exercice.php?show=test">' . Display :: return_icon('message_reply_forum.png', get_lang('GoBackToQuestionList')) . get_lang('GoBackToQuestionList') . '</a>';
+    if ($show_quiz_edition) {
+    	echo Display :: return_icon('edit.gif', get_lang('ModifyExercise')) . '<a href="exercise_admin.php?' . api_get_cidreq() . '&modifyExercise=yes&exerciseId=' . $objExercise->id . '">' . get_lang('ModifyExercise') . '</a>';
+    } else {
+    	echo Display::return_icon('edit_na.gif', get_lang('ModifyExercise')).'<a href="#">'.get_lang('ModifyExercise').'</a>';
+    }
+    
     echo '</div>';
 }
 //Timer control

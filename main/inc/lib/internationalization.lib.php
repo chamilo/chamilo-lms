@@ -1,4 +1,6 @@
 <?php
+/* For licensing terms, see /license.txt */
+
 /**
  * File: internationalization.lib.php
  * Internationalization library for Chamilo 1.8.7 LMS
@@ -44,9 +46,7 @@ define ('LANGUAGE_DETECT_MAX_DELTA', 140000);
 
 
 /**
- * ----------------------------------------------------------------------------
  * Initialization
- * ----------------------------------------------------------------------------
  */
 
 /**
@@ -81,9 +81,7 @@ function api_set_internationalization_default_encoding($encoding) {
 
 
 /**
- * ----------------------------------------------------------------------------
  * Language support
- * ----------------------------------------------------------------------------
  */
 
 /**
@@ -358,14 +356,12 @@ function api_is_latin1_compatible($language) {
 
 
 /**
- * ----------------------------------------------------------------------------
  * Language recognition
  * Based on the publication:
  * W. B. Cavnar and J. M. Trenkle. N-gram-based text categorization.
  * Proceedings of SDAIR-94, 3rd Annual Symposium on Document Analysis
  * and Information Retrieval, 1994.
  * @link http://citeseer.ist.psu.edu/cache/papers/cs/810/http:zSzzSzwww.info.unicaen.frzSz~giguetzSzclassifzSzcavnar_trenkle_ngram.pdf/n-gram-based-text.pdf
- * ----------------------------------------------------------------------------
  */
 
 function api_detect_language(&$string, $encoding = null) {
@@ -385,9 +381,7 @@ function api_detect_language(&$string, $encoding = null) {
 
 
 /**
- * ----------------------------------------------------------------------------
  * Date and time formats
- * ----------------------------------------------------------------------------
  */
 
 /**
@@ -485,9 +479,7 @@ function api_get_months_long($language = null) {
 
 
 /**
- * ----------------------------------------------------------------------------
  * Name order conventions
- * ----------------------------------------------------------------------------
  */
 
 /**
@@ -594,9 +586,7 @@ function api_sort_by_first_name($language = null) {
 
 
 /**
- * ----------------------------------------------------------------------------
  * A safe way to calculate binary lenght of a string (as number of bytes)
- * ----------------------------------------------------------------------------
  */
 
 /**
@@ -620,9 +610,7 @@ function api_byte_count(& $string) {
 
 
 /**
- * ----------------------------------------------------------------------------
  * Multibyte string conversion functions
- * ----------------------------------------------------------------------------
  */
 
 /**
@@ -1089,9 +1077,7 @@ function api_utf8_decode_xml($string, $to_encoding = null) {
 
 
 /**
- * ----------------------------------------------------------------------------
  * Common multibyte string functions
- * ----------------------------------------------------------------------------
  */
 
 /**
@@ -2093,9 +2079,7 @@ function api_ucwords($string, $encoding = null) {
 
 
 /**
- * ----------------------------------------------------------------------------
  * String operations using regular expressions
- * ----------------------------------------------------------------------------
  */
 
 /**
@@ -2219,9 +2203,7 @@ function api_preg_split($pattern, $subject, $limit = -1, $flags = 0, $encoding =
 
 
 /**
- * ----------------------------------------------------------------------------
  * Obsolete string operations using regular expressions, to be deprecated
- * ----------------------------------------------------------------------------
  */
 
 /**
@@ -2428,9 +2410,7 @@ function api_split($pattern, $string, $limit = null) {
 
 
 /**
- * ----------------------------------------------------------------------------
  * String comparison
- * ----------------------------------------------------------------------------
  */
 
 /**
@@ -2507,9 +2487,7 @@ function api_strnatcmp($string1, $string2, $language = null, $encoding = null) {
 
 
 /**
- * ----------------------------------------------------------------------------
  * Sorting arrays
- * ----------------------------------------------------------------------------
  */
 
 /**
@@ -2910,9 +2888,7 @@ function api_rsort(&$array, $sort_flag = SORT_REGULAR, $language = null, $encodi
 
 
 /**
- * ----------------------------------------------------------------------------
  * Common sting operations with arrays
- * ----------------------------------------------------------------------------
  */
 
 /**
@@ -2951,9 +2927,7 @@ function api_in_array_nocase($needle, $haystack, $strict = false, $encoding = nu
 
 
 /**
- * ----------------------------------------------------------------------------
  * Encoding management functions
- * ----------------------------------------------------------------------------
  */
 
 /**
@@ -3220,9 +3194,7 @@ function api_detect_encoding_xml($string, $default_encoding = null) {
 
 
 /**
- * ----------------------------------------------------------------------------
  * String validation functions concerning certain encodings
- * ----------------------------------------------------------------------------
  */
 
 /**
@@ -3408,9 +3380,7 @@ function api_is_valid_ascii(&$string) {
 
 
 /**
- * ----------------------------------------------------------------------------
  * Parsing CSV-data.
- * ----------------------------------------------------------------------------
  */
 
 /**
@@ -3498,9 +3468,7 @@ function api_fgetcsv($handle, $length = null, $delimiter = ',', $enclosure = '"'
 
 
 /**
- * ----------------------------------------------------------------------------
  * Miscellaneous routines
- * ----------------------------------------------------------------------------
  */
 
 /**
@@ -3528,9 +3496,7 @@ function api_html_to_text($string) {
 
 
 /**
- * ----------------------------------------------------------------------------
  * Functions for internal use behind this API
- * ----------------------------------------------------------------------------
  */
 
 require_once dirname(__FILE__).'/internationalization_internal.lib.php';

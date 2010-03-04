@@ -1,18 +1,17 @@
 <?php
-/* For licensing terms, see /dokeos_license.txt */
+/* For licensing terms, see /license.txt */
 /**
 ==============================================================================
-*	@package dokeos.admin
+*	@package chamilo.admin
 ==============================================================================
 */
 
 // Language files that should be included
 $language_file = array('admin', 'registration');
-
 $cidReset = true;
 
 // Including necessary libraries.
-require '../inc/global.inc.php';
+require_once '../inc/global.inc.php';
 $libpath = api_get_path(LIBRARY_PATH);
 require_once $libpath.'fileManage.lib.php';
 require_once $libpath.'fileUpload.lib.php';
@@ -300,10 +299,6 @@ $defaults = array_merge($defaults, $extra_data);
 $form->setDefaults($defaults);
 
 // Submit button
-/*
-$form->addElement('style_submit_button', 'submit', get_lang('Add'), 'class="add"');
-$form->addElement('style_submit_button', 'submit_plus', get_lang('Add').'+', 'class="add"');
-*/
 $select_level = array ();
 $html_results_enabled[] = FormValidator :: createElement ('style_submit_button', 'submit_plus', get_lang('Add').'+', 'class="add"');
 $html_results_enabled[] = FormValidator :: createElement ('style_submit_button', 'submit', get_lang('Add'), 'class="add"');
@@ -317,9 +312,7 @@ if( $form->validate()) {
 
 		$picture_element = & $form->getElement('picture');
 		$picture = $picture_element->getValue();
-
 		$picture_uri = '';
-
 		$lastname = $user['lastname'];
 		$firstname = $user['firstname'];
 		$official_code = $user['official_code'];
@@ -387,7 +380,7 @@ if( $form->validate()) {
 		if (isset($user['submit_plus'])) {
 			//we want to add more. Prepare report message and redirect to the same page (to clean the form)
 			$tok = Security::get_token();
-			header('Location: user_add.php?message='.urlencode(get_lang('UserAdded')).'&sec_token='.$tok);
+			header('Location: user_add.php?message='.urlencode(get_lang('UserAdded')).'&sec_token='.$tok);			
 			exit ();
 		} else {
 			$tok = Security::get_token();

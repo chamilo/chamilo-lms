@@ -113,8 +113,8 @@ if ($_configuration['multiple_access_urls']==true) {
 		$clean_url = str_replace('/','-',$clean_url);
 		$clean_url .= '/';
 
-		$homep = '../../home/'; //homep for Home Path
-		$homep_new = '../../home/'.$clean_url; //homep for Home Path added the url
+		$homep = api_get_path(SYS_PATH).'home/'; //homep for Home Path
+		$homep_new = api_get_path(SYS_PATH).'home/'.$clean_url; //homep for Home Path added the url
 		$new_url_dir = api_get_path(SYS_PATH).'home/'.$clean_url;
 		//we create the new dir for the new sites
 		if (!is_dir($new_url_dir)){
@@ -122,8 +122,8 @@ if ($_configuration['multiple_access_urls']==true) {
 		}
 	}
 } else {
-	$homep_new ='';
-	$homep = '../../home/'; //homep for Home Path
+	$homep_new = '';
+	$homep = api_get_path(SYS_PATH).'home/'; //homep for Home Path
 }
 
 
@@ -439,7 +439,9 @@ if(!empty($action)) {
 				$link_index=intval($_GET['link_index']);
 				$menuf = ($action == 'delete_tabs')? $menutabs : $menuf;
 				$home_menu=file($homep.$menuf.'_'.$lang.$ext);
-
+				if (empty($home_menu)) {
+					$home_menu = array();
+				}
 				foreach($home_menu as $key=>$enreg) {
 					if($key == $link_index) {
 						unset($home_menu[$key]);
@@ -448,6 +450,7 @@ if(!empty($action)) {
 					}
 				}
 				$home_menu=implode("\n",$home_menu);
+				$home_menu = api_to_system_encoding($home_menu, api_detect_encoding(strip_tags($home_menu)));
 				$fp=fopen($homep.$menuf.'_'.$lang.$ext,'w');
 				fputs($fp,$home_menu);
 				fclose($fp);
@@ -456,7 +459,7 @@ if(!empty($action)) {
 						$fpo=fopen($homep.$menuf.$ext,'w');
 						fputs($fpo,$home_menu);
 						fclose($fpo);
-						}
+					}
 				}
 				header('Location: '.api_get_self());
 				exit();
@@ -471,6 +474,7 @@ if(!empty($action)) {
 				} else {
 					$errorMsg=get_lang('HomePageFilesNotReadable');
 				}
+				$home_top = api_to_system_encoding($home_top, api_detect_encoding(strip_tags($home_top)));
 				break;
 			case 'edit_notice':
 				// This request is only the preparation for the update of the home_notice
@@ -489,8 +493,13 @@ if(!empty($action)) {
 				{
 					$errorMsg=get_lang('HomePageFilesNotReadable');
 				}
-				$notice_title=strip_tags($home_notice[0]);
-				$notice_text=strip_tags(str_replace('<br />',"\n",$home_notice[1]),'<a>');
+				if (empty($home_notice)) {
+					$home_notice = array();
+				}
+				$notice_title = strip_tags($home_notice[0]);
+				$notice_title = api_to_system_encoding($notice_title, api_detect_encoding($notice_title));
+				$notice_text = strip_tags(str_replace('<br />',"\n",$home_notice[1]),'<a>');
+				$notice_text = api_to_system_encoding($notice_text, api_detect_encoding($notice_text));
 				break;
 			case 'edit_news':
 				// This request is the preparation for the update of the home_news page
@@ -511,6 +520,7 @@ if(!empty($action)) {
 				{
 					$errorMsg=get_lang('HomePageFilesNotReadable');
 				}
+				$home_news = api_to_system_encoding($home_news, api_detect_encoding(strip_tags($home_news)));
 				break;
 			case 'insert_link':
 				// This request is the preparation for the addition of an item in home_menu
@@ -530,6 +540,14 @@ if(!empty($action)) {
 				{
 					$errorMsg=get_lang('HomePageFilesNotReadable');
 				}
+				if (empty($home_menu)) {
+					$home_menu = array();
+				}
+				if (!empty($home_menu)) {
+					$home_menu = implode("\n", $home_menu);
+					$home_menu = api_to_system_encoding($home_menu, api_detect_encoding(strip_tags($home_menu)));
+					$home_menu = explode("\n", $home_menu);
+				}
 				break;
 			case 'insert_tabs':
 				// This request is the preparation for the addition of an item in home_menu
@@ -547,6 +565,14 @@ if(!empty($action)) {
 				else
 				{
 					$errorMsg=get_lang('HomePageFilesNotReadable');
+				}
+				if (empty($home_menu)) {
+					$home_menu = array();
+				}
+				if (!empty($home_menu)) {
+					$home_menu = implode("\n", $home_menu);
+					$home_menu = api_to_system_encoding($home_menu, api_detect_encoding(strip_tags($home_menu)));
+					$home_menu = explode("\n", $home_menu);
 				}
 				break;
 			case 'edit_tabs':
@@ -567,6 +593,14 @@ if(!empty($action)) {
 				else
 				{
 					$errorMsg=get_lang('HomePageFilesNotReadable');
+				}
+				if (empty($home_menu)) {
+					$home_menu = array();
+				}
+				if (!empty($home_menu)) {
+					$home_menu = implode("\n", $home_menu);
+					$home_menu = api_to_system_encoding($home_menu, api_detect_encoding(strip_tags($home_menu)));
+					$home_menu = explode("\n", $home_menu);
 				}
 
 				$link_index=intval($_GET['link_index']);
@@ -631,10 +665,11 @@ Display::display_header($tool_name);
 
 switch($action){
 	case 'open_link':
-		if(!empty($link))
-		{
+		if (!empty($link)) {
 			// $link is only set in case of action=open_link and is filtered
-			include($homep.$link);
+			$open = @(string)file_get_contents($homep.$link);
+			$open = api_to_system_encoding($open, api_detect_encoding(strip_tags($open)));
+			echo $open;
 		}
 		break;
 	case 'edit_notice':
@@ -645,7 +680,7 @@ switch($action){
 		<input type="hidden" name="formSent" value="1"/>
 
 		<?php
-		if(!empty($errorMsg)) {
+		if (!empty($errorMsg)) {
 			//echo '<tr><td colspan="2">';
 			Display::display_normal_message($errorMsg);
 			//echo '</td></tr>';
@@ -657,11 +692,11 @@ switch($action){
 		<tr><td colspan="2"><?php echo '<span style="font-style: italic;">'.get_lang('LetThoseFieldsEmptyToHideTheNotice').'</span>'; ?></tr>
 		<tr>
 		  <td nowrap="nowrap"><?php echo get_lang('NoticeTitle'); ?> :</td>
-		  <td><input type="text" name="notice_title" size="30" maxlength="50" value="<?php echo api_htmlentities($notice_title,ENT_QUOTES,$charset); ?>" style="width: 350px;"/></td>
+		  <td><input type="text" name="notice_title" size="30" maxlength="50" value="<?php echo $notice_title; ?>" style="width: 350px;"/></td>
 		</tr>
 		<tr>
 		  <td nowrap="nowrap" valign="top"><?php echo get_lang('NoticeText'); ?> :</td>
-		  <td><textarea name="notice_text" cols="30" rows="5" wrap="virtual" style="width: 350px;"><?php echo api_htmlentities($notice_text,ENT_QUOTES,$charset); ?></textarea></td>
+		  <td><textarea name="notice_text" cols="30" rows="5" wrap="virtual" style="width: 350px;"><?php echo $notice_text; ?></textarea></td>
 		</tr>
 		<tr>
 		  <td>&nbsp;</td>
@@ -692,12 +727,12 @@ switch($action){
 		$form->addElement('hidden', 'filename', ($action == 'edit_link' || $action == 'edit_tabs') ? $filename : '');
 
 		$form->addElement('html', '<tr><td nowrap="nowrap" style="width: 15%;">'.get_lang('LinkName').' :</td><td>');
-		$default['link_name'] = api_htmlentities($link_name, ENT_QUOTES, $charset);
+		$default['link_name'] = $link_name;
 		$form->addElement('text', 'link_name', get_lang('LinkName'), array('size' => '30', 'maxlength' => '50'));
 		$form->addElement('html', '</td></tr>');
 
 		$form->addElement('html', '<tr><td nowrap="nowrap">'.get_lang('LinkURL').' ('.get_lang('Optional').') :</td><td>');
-		$default['link_url'] = empty($link_url) ? 'http://' : api_htmlentities($link_url, ENT_QUOTES, $charset);
+		$default['link_url'] = empty($link_url) ? 'http://' : api_htmlentities($link_url, ENT_QUOTES);
 		$form->addElement('text', 'link_url', get_lang('LinkName'), array('size' => '30', 'maxlength' => '100', 'style' => 'width: 350px;'));
 		$form->addElement('html', '</td></tr>');
 
@@ -811,12 +846,13 @@ switch($action){
 			  <td colspan="2">
 				<?php
 					//print home_top contents
-					if(file_exists($homep.$topf.'_'.$lang.$ext)) {
+					if (file_exists($homep.$topf.'_'.$lang.$ext)) {
 						$home_top_temp=file_get_contents($homep.$topf.'_'.$lang.$ext);
 					} else {
 						$home_top_temp=file_get_contents($homep.$topf.$ext);
 					}
-					$open=str_replace('{rel_path}',api_get_path(REL_PATH),$home_top_temp);
+					$open = str_replace('{rel_path}', api_get_path(REL_PATH), $home_top_temp);
+					$open = api_to_system_encoding($open, api_detect_encoding(strip_tags($open)));
 					echo $open;
 				?>
 			  </td>
@@ -859,10 +895,14 @@ switch($action){
 			  </td>
 			  <!--<td width="50%" valign="top">
 				<?php
-				if(file_exists($homep.$newsf.'_'.$lang.$ext)) {
-					include ($homep.$newsf.'_'.$lang.$ext);
+				if (file_exists($homep.$newsf.'_'.$lang.$ext)) {
+					$open = @(string)file_get_contents($homep.$newsf.'_'.$lang.$ext);
+					$open = api_to_system_encoding($open, api_detect_encoding(strip_tags($open)));
+					echo $open;
 				} else {
-					include ($homep.$newsf.$ext);
+					$open = @(string)file_get_contents($homep.$newsf.$ext);
+					$open = api_to_system_encoding($open, api_detect_encoding(strip_tags($open)));
+					echo $open;
 				}
 
 			?>
@@ -912,13 +952,21 @@ switch($action){
 					} else {
 						$home_menu = file ($homep.$menuf.$ext);
 					}
+					if (empty($home_menu)) {
+						$home_menu = array();
+					}
+					if (!empty($home_menu)) {
+						$home_menu = implode("\n", $home_menu);
+						$home_menu = api_to_system_encoding($home_menu, api_detect_encoding(strip_tags($home_menu)));
+						$home_menu = explode("\n", $home_menu);
+					}
 
 					foreach($home_menu as $key=>$enreg) {
 						$enreg=trim($enreg);
 
 						if(!empty($enreg)) {
 							$edit_link='<a href="'.api_get_self().'?action=edit_link&amp;link_index='.$key.'">'.Display::return_icon('edit.gif', get_lang('Edit')).'</a>';
-							$delete_link='<a href="'.api_get_self().'?action=delete_link&amp;link_index='.$key.'" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset)).'\')) return false;">'.Display::return_icon('delete.gif', get_lang('Delete')).'</a>';
+							$delete_link='<a href="'.api_get_self().'?action=delete_link&amp;link_index='.$key.'" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES)).'\')) return false;">'.Display::return_icon('delete.gif', get_lang('Delete')).'</a>';
 
 							echo str_replace(array('href="'.api_get_path(WEB_PATH).'index.php?include=','</li>'),array('href="'.api_get_path(WEB_CODE_PATH).'admin/'.basename(api_get_self()).'?action=open_link&link=','<br />'.$edit_link.' '.$delete_link.'</li>'),$enreg);
 						}
@@ -940,7 +988,8 @@ switch($action){
 			} else {
 				$home_notice = @file_get_contents($homep.$noticef.$ext);
 			}
-			echo $home_notice
+			$home_notice = api_to_system_encoding($home_notice, api_detect_encoding(strip_tags($home_notice)));
+			echo $home_notice;
 			?>
 
 			</div>

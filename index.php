@@ -206,7 +206,9 @@ if ($_configuration['multiple_access_urls']) {
 $page_included = false;
 
 if (!empty($_GET['include']) && preg_match('/^[a-zA-Z0-9_-]*\.html$/', $_GET['include'])) {
-	include './'.$home.$_GET['include'];
+	$open = @(string)file_get_contents(api_get_path(SYS_PATH).$home.$_GET['include']);
+	$open = api_to_system_encoding($open, api_detect_encoding(strip_tags($open)));
+	echo $open;
 	$page_included = true;
 } else {
 
@@ -236,6 +238,7 @@ if (!empty($_GET['include']) && preg_match('/^[a-zA-Z0-9_-]*\.html$/', $_GET['in
 		$home_top_temp = get_lang('PortalHomepageDefaultIntroduction');
 	}
     $open = str_replace('{rel_path}', api_get_path(REL_PATH), $home_top_temp);
+    $open = api_to_system_encoding($open, api_detect_encoding(strip_tags($open)));
     echo $open;
 }
 
@@ -377,6 +380,7 @@ function display_anonymous_right_menu() {
 	global $loginFailed, $_plugins, $_user, $menu_navigation;
 
 	$platformLanguage = api_get_setting('platformLanguage');
+	$sys_path = api_get_path(SYS_PATH);
 
 	if (!($_user['user_id']) || api_is_anonymous($_user['user_id']) ) { // only display if the user isn't logged in
 		api_display_language_form(true);
@@ -475,21 +479,21 @@ function display_anonymous_right_menu() {
 		$user_selected_language = $platformLanguage;
 	}
 
-	if (!file_exists($home.'home_menu_'.$user_selected_language.'.html') && file_exists($home.'home_menu.html') && file_get_contents($home.'home_menu.html') != '') {
-		echo "<div class=\"menusection\">", "<span class=\"menusectioncaption\">".get_lang("MenuGeneral")."</span>";
-	 	echo "<ul class=\"menulist\">";
-		if (file_exists($home.'home_menu.html')) {
-			include ($home.'home_menu.html');
-		} else {
-			include ($home_old.'home_menu.html');
-		}
-		echo '</ul>';
-		echo '</div>';
+	$home_menu = @(string)file_get_contents($sys_path.$home.'home_menu_'.$user_selected_language.'.html');
+	if (empty($home_menu)) {
+		$home_menu = @(string)file_get_contents($sys_path.$home_old.'home_menu_'.$user_selected_language.'.html');
 	}
-	elseif(file_exists($home.'home_menu_'.$user_selected_language.'.html') && file_get_contents($home.'home_menu_'.$user_selected_language.'.html') != '') {
+	if (empty($home_menu)) {
+		$home_menu = @(string)file_get_contents($sys_path.$home.'home_menu.html');
+	}
+	if (empty($home_menu)) {
+		$home_menu = @(string)file_get_contents($sys_path.$home_old.'home_menu.html');
+	}
+	if (!empty($home_menu)) {
 		echo "<div class=\"menusection\">", "<span class=\"menusectioncaption\">".get_lang("MenuGeneral")."</span>";
 	 	echo "<ul class=\"menulist\">";
-		include ($home.'home_menu_'.$user_selected_language.'.html');
+	 	$home_menu = api_to_system_encoding($home_menu, api_detect_encoding(strip_tags($home_menu)));
+	 	echo $home_menu;
 		echo '</ul>';
 		echo '</div>';
 	}
@@ -502,18 +506,14 @@ function display_anonymous_right_menu() {
 
 	// includes for any files to be displayed below anonymous right menu
 
-	if (!file_exists($home.'home_notice_'.$user_selected_language.'.html') && file_exists($home.'home_notice.html') && file_get_contents($home.'home_notice.html') != '') {
-		echo '<div class="note">';
-		if (file_exists($home.'home_notice.html')) {
-			include ($home.'home_notice.html');
-		} else {
-			include ($home_old.'home_notice.html');
-		}
-		echo '</div>';
+	$home_notice = @(string)file_get_contents($sys_path.$home.'home_notice_'.$user_selected_language.'.html');
+	if (empty($home_notice)) {
+		$home_notice = @(string)file_get_contents($sys_path.$home.'home_notice.html');
 	}
-	elseif(file_exists($home.'home_notice_'.$user_selected_language.'.html') && file_get_contents($home.'home_notice_'.$user_selected_language.'.html') != '') {
+	if (!empty($home_notice)) {
 		echo '<div class="note">';
-		include($home.'home_notice_'.$user_selected_language.'.html');
+		$home_notice = api_to_system_encoding($home_notice, api_detect_encoding(strip_tags($home_notice)));
+	 	echo $home_notice;
 		echo '</div>';
 	}
 }

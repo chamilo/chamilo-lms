@@ -1,13 +1,4 @@
 <?php
-/**
- * 
- * @todo Here I should move all functions located in dokeos/index.php, dokeos/user_portal.php 
- * and all functions that means login, logout, show courses after login (maybe)
- *
- * Julio Montoya
- * 
- *  
- */
 /* For licensing terms, see /chamilo_license.txt */
 /**
 ==============================================================================
@@ -113,7 +104,7 @@ class Login
 		// SEND MESSAGE
 		$sender_name = api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS);
 	    $email_admin = api_get_setting('emailAdministrator');
-	
+
 		if (@api_mail('', $email_to, $email_subject, $email_body, $sender_name, $email_admin) == 1) {
 			Display::display_confirmation_message(get_lang('YourPasswordHasBeenEmailed'));
 		} else {
@@ -122,11 +113,10 @@ class Login
 	}
 	
 	/**
-	 * Enter description here...
+	 * Handle encrypted password, send an email to a user with his password 
 	 *
-	 * @param unknown_type $user
+	 * @param int	user id
 	 * @param bool	$by_username
-	 * @return unknown
 	 *
 	 * @author Olivier Cauberghe <olivier.cauberghe@UGent.be>, Ghent University
 	 */

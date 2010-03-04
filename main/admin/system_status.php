@@ -11,7 +11,12 @@ $cidReset = true;
 require_once '../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
 require_once api_get_path(LIBRARY_PATH).'diagnoser.lib.php';
+
+// User permissions
+api_protect_admin_script();
+$interbreadcrumb[] = array ('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
 Display :: display_header(get_lang('SystemStatus'));
+
 /* @todo this will be moved to default.css */
 ?>
 <style>
@@ -58,8 +63,7 @@ Display :: display_header(get_lang('SystemStatus'));
 	color: #4171b5;
 }
 
-.tabbed-pane-tabs li a:active,.tabbed-pane-tabs li a.current,.tabbed-pane-tabs li a.current:hover
-	{
+.tabbed-pane-tabs li a:active,.tabbed-pane-tabs li a.current,.tabbed-pane-tabs li a.current:hover {
 	color: black;
 }
 

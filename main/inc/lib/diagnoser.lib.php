@@ -1,21 +1,17 @@
 <?php
+/* For licensing terms, see /license.txt */
 /**
  * $Id: diagnoser.class.php 128 2009-11-09 13:13:20Z vanpouckesven $
+ * 
  * @package chamilo.diagnoser
  * @author spou595
+ * @author Julio Montoya <gugli100@gmail.com> port to chamilo 1.8.7
  *
  * Class that is responsible for generating diagnostic information about the system
  */
 
-//require_once dirname(__FILE__) . '/diagnoser_cellrenderer.class.php';
-
 class Diagnoser
 {
-    /**
-     * The manager where this diagnoser runs on
-     */
-    private $manager;
-    
     /**
      * The status's
      */
@@ -24,13 +20,11 @@ class Diagnoser
     const STATUS_ERROR = 3;
     const STATUS_INFORMATION = 4;
 
-    function Diagnoser($manager = null)
-    {
-        $this->manager = $manager;
+    function __construct() {    	
     }
 
-    function show_html()
-    {
+    function show_html() {
+    	
         $sections = array('chamilo', 'php', 'mysql', 'webserver');
         
         if (!in_array($_GET['section'], $sections)) {
@@ -73,8 +67,7 @@ class Diagnoser
      * Functions to get the data for the chamilo diagnostics
      * @return array of data
      */
-    function get_chamilo_data()
-    {
+    function get_chamilo_data() {
         $array = array();        
         $writable_folders = array('archive', 'courses', 'home', 'main/upload/users/','main/default_course_document/images/');        
         foreach ($writable_folders as $index => $folder) {
@@ -95,13 +88,11 @@ class Diagnoser
      * Functions to get the data for the php diagnostics
      * @return array of data
      */
-    function get_php_data()
-    {
+    function get_php_data() {
         $array = array();
         
         // General Functions
         
-
         $version = phpversion();
         $status = $version > '5.2' ? self :: STATUS_OK : self :: STATUS_ERROR;
         $array[] = $this->build_setting($status, '[PHP]', 'phpversion()', 'http://www.php.net/manual/en/function.phpversion.php', phpversion(), '>= 5.2', null, get_lang('PHPVersionInfo'));
@@ -206,12 +197,11 @@ class Diagnoser
         //Extensions
         $extensions = array('gd' => 'http://www.php.net/gd', 'mysql' => 'http://www.php.net/mysql', 'pcre' => 'http://www.php.net/pcre', 'session' => 'http://www.php.net/session', 'standard' => 'http://www.php.net/spl', 'zlib' => 'http://www.php.net/zlib', 'xsl' => 'http://be2.php.net/xsl');
         
-        foreach ($extensions as $extension => $url)
-        {
+        foreach ($extensions as $extension => $url) {
             $loaded = extension_loaded($extension);
             $status = $loaded ? self :: STATUS_OK : self :: STATUS_ERROR;
             $array[] = $this->build_setting($status, '[EXTENSION]', get_lang('ExtensionLoaded') . ': ' . $extension, $url, $loaded, 1, 'yes_no', get_lang('ExtensionMustBeLoaded'));
-        }
+        }        
         
         return $array;
     }
@@ -220,8 +210,7 @@ class Diagnoser
      * Functions to get the data for the mysql diagnostics
      * @return array of data
      */
-    function get_mysql_data()
-    {
+    function get_mysql_data() {
         $array = array();
         
         $array[] = $this->build_setting(self :: STATUS_INFORMATION, '[MySQL]', 'mysql_get_host_info()', 'http://www.php.net/manual/en/function.mysql-get-host-info.php', mysql_get_host_info(), null, null, get_lang('MysqlHostInfo'));
@@ -237,8 +226,7 @@ class Diagnoser
      * Functions to get the data for the webserver diagnostics
      * @return array of data
      */
-    function get_webserver_data()
-    {
+    function get_webserver_data() {
         $array = array();
         
         $array[] = $this->build_setting(self :: STATUS_INFORMATION, '[SERVER]', '$_SERVER["SERVER_ADDR"]', 'http://be.php.net/reserved.variables.server', $_SERVER["SERVER_ADDR"], null, null, get_lang('ServerIPInfo'));
@@ -267,8 +255,7 @@ class Diagnoser
     
     function build_setting($status, $section, $title, $url, $current_value, $expected_value, $formatter, $comment, $img_path = null)
     {
-        switch ($status)
-        {
+        switch ($status) {
             case self :: STATUS_OK :
                 $img = 'bullet_green.gif';
                 break;
@@ -293,10 +280,8 @@ class Diagnoser
         $formatted_current_value = $current_value;
         $formatted_expected_value = $expected_value;
         
-        if ($formatter)
-        {
-            if (method_exists($this, 'format_' . $formatter))
-            {
+        if ($formatter) {
+            if (method_exists($this, 'format_' . $formatter)) {
                 $formatted_current_value = call_user_func(array($this, 'format_' . $formatter), $current_value);
                 $formatted_expected_value = call_user_func(array($this, 'format_' . $formatter), $expected_value);
             }

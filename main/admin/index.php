@@ -1,10 +1,10 @@
 <?php // $Id: index.php 22269 2009-07-21 15:06:15Z juliomontoya $
-/* For licensing terms, see /dokeos_license.txt */
+/* For licensing terms, see /license.txt */
 /**
 ==============================================================================
 *	Index of the admin tools
 *
-*	@package dokeos.admin
+*	@package chamilo.admin
 ==============================================================================
 */
 // name of the language file that needs to be included <br />
@@ -14,8 +14,8 @@ $language_file=array('admin','tracking');
 $cidReset=true;
 
 // including some necessary chamilo files
-require('../inc/global.inc.php');
-require_once(api_get_path(LIBRARY_PATH).'security.lib.php');
+require_once '../inc/global.inc.php';
+require_once api_get_path(LIBRARY_PATH).'security.lib.php';
 
 // setting the section (for the tabs)
 $this_section=SECTION_PLATFORM_ADMIN;
@@ -34,8 +34,7 @@ $tool_name=get_lang('PlatformAdmin');
 Display::display_header($nameTools);
 
 
-if(api_is_platform_admin())
-{
+if(api_is_platform_admin()) {
 	if(is_dir(api_get_path(SYS_CODE_PATH).'install/') && is_readable(api_get_path(SYS_CODE_PATH).'install/index.php'))
 	{
 		Display::display_normal_message(get_lang('InstallDirAccessibleSecurityThreat'));
@@ -176,6 +175,9 @@ if(api_is_platform_admin()) {
   	  if (api_get_setting('allow_terms_conditions')=='true') {
 		  	echo '<li><a href="legal_add.php">'.get_lang('TermsAndConditions').'</a></li>';
 	  }
+	  
+	  echo '<li><a href="system_status.php">'.get_lang('SystemStatus').'</a></li>';
+	  
 
 	  ?>
 	 </ul>

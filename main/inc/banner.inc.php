@@ -288,10 +288,11 @@ if ($_configuration['multiple_access_urls']==true) {
 	$access_url_id = api_get_current_access_url_id();
 	if ($access_url_id != -1){
 		$url_info = api_get_access_url($access_url_id);
-		$url = substr($url_info['url'],7,strlen($url_info['url'])-8);
+		//$url = substr($url_info['url'],7,strlen($url_info['url'])-8);
+		$url = api_remove_trailing_slash(preg_replace('/https?:\/\//i', '', $url_info['url']));
 		$clean_url = replace_dangerous_char($url);
 		$clean_url = str_replace('/','-',$clean_url);
-		$clean_url = $clean_url.'/';
+		$clean_url .= '/';
 		$homep = '../../home/'; //homep for Home Path
 		$homep_new = '../../home/'.$clean_url; //homep for Home Path added the url
 		$new_url_dir = api_get_path(SYS_PATH).'home/'.$clean_url;

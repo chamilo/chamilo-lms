@@ -192,12 +192,13 @@ if ($_configuration['multiple_access_urls']) {
 	if ($access_url_id != -1){
 		$url_info = api_get_access_url($access_url_id);
 		// "http://" and the final "/" replaced
-		$url = substr($url_info['url'], 7, strlen($url_info['url']) - 8);
+		//$url = substr($url_info['url'], 7, strlen($url_info['url']) - 8);
+		$url = api_remove_trailing_slash(preg_replace('/https?:\/\//i', '', $url_info['url']));
 		$clean_url = replace_dangerous_char($url);
 		$clean_url = str_replace('/', '-', $clean_url);
-		$clean_url = $clean_url.'/';
+		$clean_url .= '/';
 		$home_old = 'home/';
-		$home= 'home/'.$clean_url;
+		$home = 'home/'.$clean_url;
 	}
 }
 

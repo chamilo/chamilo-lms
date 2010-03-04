@@ -69,10 +69,11 @@ if ($_configuration['multiple_access_urls']==true) {
 	if ($access_url_id != -1){
 		$url_info = api_get_access_url($access_url_id);
 		// "http://" and the final "/" replaced
-		$url = substr($url_info['url'],7,strlen($url_info['url'])-8);
+		//$url = substr($url_info['url'],7,strlen($url_info['url'])-8);
+		$url = api_remove_trailing_slash(preg_replace('/https?:\/\//i', '', $url_info['url']));
 		$clean_url = replace_dangerous_char($url);
 		$clean_url = str_replace('/','-',$clean_url);
-		$clean_url = $clean_url.'/';
+		$clean_url .= '/';
 		$home_old  = '../../home/';
 		$home= '../../home/'.$clean_url;
 	}
@@ -572,12 +573,12 @@ if ($form->validate()) {
 		$action_url = "../create_course/add_course.php";
 		$button_text = get_lang('CourseCreate');
 	} else {
-		if (api_get_setting('allow_students_to_browse_courses') == 'true') 
+		if (api_get_setting('allow_students_to_browse_courses') == 'true')
 			$action_url = "courses.php?action=subscribe";
-		else 
-			$action_url = api_get_path(WEB_PATH).'user_portal.php';			
+		else
+			$action_url = api_get_path(WEB_PATH).'user_portal.php';
 		echo "<p>", get_lang('NowGoChooseYourCourses'), ".</p>\n";
-		
+
 		$button_text = get_lang('Next');
 	}
 	// ?uidReset=true&uidReq=$_user['user_id']

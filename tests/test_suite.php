@@ -1,19 +1,15 @@
 <?php
-// $Id: test_suite.php 2010-02-17 12:07:00Z aportugal $
-
-/* For licensing terms, see /chamilo_license.txt */
+/* For licensing terms, see /license.txt */
 /**
-==============================================================================
 *	This is the index file load when a user is testing functions in Chamilo.
 *
-*	It load:
+*	Libraries loaded:
 *	- global.inc
 *	- files of simpletest
 *	- files with functions tests
 *
 *	@todo rewrite code to separate display, logic, database code
 *	@package chamilo.main
-==============================================================================
 */
 
 /**
@@ -23,12 +19,36 @@
  * @todo check for duplication of require with test_suite.php
  * @author aportugal
  */
-
-/*
------------------------------------------------------------
-	Included libraries
------------------------------------------------------------
+ 
+/**
+ * Helpful info for newcomers 
+ * 
+ * @todo maybe not the right place?
+ *  
+ * http://simpletest.sourceforge.net/en/unit_test_documentation.html
+ * 
+	assertTrue($x)					Fail if $x is false
+	assertFalse($x)					Fail if $x is true
+	assertNull($x)					Fail if $x is set
+	assertNotNull($x)				Fail if $x not set
+	assertIsA($x, $t)				Fail if $x is not the class or type $t
+	assertNotA($x, $t)				Fail if $x is of the class or type $t
+	assertEqual($x, $y)				Fail if $x == $y is false
+	assertNotEqual($x, $y)			Fail if $x == $y is true
+	assertWithinMargin($x, $y, $m)	Fail if abs($x - $y) < $m is false
+	assertOutsideMargin($x, $y, $m)	Fail if abs($x - $y) < $m is true
+	assertIdentical($x, $y)			Fail if $x == $y is false or a type mismatch
+	assertNotIdentical($x, $y)		Fail if $x == $y is true and types match
+	assertReference($x, $y)			Fail unless $x and $y are the same variable
+	assertClone($x, $y)				Fail unless $x and $y are identical copies
+	assertPattern($p, $x)			Fail unless the regex $p matches $x
+	assertNoPattern($p, $x)			Fail if the regex $p matches $x
+	expectError($x)					Swallows any upcoming matching error
+	assert($e)						Fail on failed expectation object $e	
 */
+
+/* Included libraries */
+
 //The global.inc.php be need be load here to can load the settings files
 $incdir = dirname(__FILE__).'/../main/inc/'; 
 require_once $incdir.'global.inc.php';
@@ -42,11 +62,8 @@ require_once 'simpletest/web_tester.php';
 require_once 'simpletest/mock_objects.php';
 require_once 'simpletest/autorun.php';
 
-/*
-==============================================================================
-		TEST SUITE
-==============================================================================
-Start to load the tests files
+/*  TEST SUITE 
+ * Start to load the tests files
 */
 
 class TestsSuite extends TestSuite {

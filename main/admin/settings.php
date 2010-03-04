@@ -8,7 +8,7 @@
 * @author Patrick Cool
 * @since Dokeos 1.6
 * @author Julio Montoya - Multiple URL site
-* @package dokeos.admin
+* @package chamilo.admin
 ==============================================================================
 */
 
@@ -254,8 +254,9 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
 				$form->addGroup($group, $row['variable'], get_lang($row['comment']), '<br />'."\n");
 				break;
 			case "link" :
-				$form->addElement('static', null, get_lang($row['comment']), get_lang('CurrentValue').' : '.$row['selected_value'],$hideme);
-			/* 
+				$form->addElement('static', null, get_lang($row['comment']), get_lang('CurrentValue').' : '.$row['selected_value'], $hideme);
+				break;
+			/*
 			 * To populate its list of options, the select type dynamically calls a function that must be called select_ + the name of the variable being displayed
 			 * The functions being called must be added to the file settings.lib.php
 			 */
@@ -397,9 +398,9 @@ if (!empty($_GET['category']))
 		// displaying the extensions: plugins
 		// this will be available to all the sites (access_urls)
 		case 'Plugins' :
-		
+
 			if (isset($_POST['submit_dashboard_plugins'])) {
-				$affected_rows = DashboardManager::store_dashboard_plugins($_POST);				
+				$affected_rows = DashboardManager::store_dashboard_plugins($_POST);
 				if ($affected_rows) {
 					// add event to system log
 					$time = time();
@@ -407,10 +408,10 @@ if (!empty($_GET['category']))
 					$category = $_GET['category'];
 					event_system(LOG_CONFIGURATION_SETTINGS_CHANGE, LOG_CONFIGURATION_SETTINGS_CATEGORY, $category, $time, $user_id);
 					Display :: display_confirmation_message(get_lang('DashboardPluginsHaveBeenUpdatedSucesslly'));
-				}				
+				}
 			}
-		
-			handle_plugins();			
+
+			handle_plugins();
 			DashboardManager::handle_dashboard_plugins();
 
 			break;

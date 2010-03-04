@@ -1,5 +1,5 @@
 <?php
-/* For licensing terms, see /dokeos_license.txt */
+/* For licensing terms, see /license.txt */
 /**
 ==============================================================================
  * SCRIPT PURPOSE :
@@ -13,7 +13,7 @@
 *
 *	@todo refactor, move relevant functions to code libraries
 *
-*	@package dokeos.auth
+*	@package chamilo.auth
 ==============================================================================
 */
 // name of the language file that needs to be included
@@ -40,7 +40,6 @@ echo $tool_name;
 echo '</div>';
 
 if (isset ($_GET['reset']) && isset ($_GET['id'])) {
-
 	$msg = Login::reset_password($_GET["reset"], $_GET["id"], true);
 	$msg1= '<a href="'.api_get_path(WEB_CODE_PATH).'auth/lostPassword.php" class="fake_button_back" >'.get_lang('Back').'</a>';
 	echo '<br /><br /><div class="actions" >'.$msg1.'</div>';
@@ -75,8 +74,8 @@ if (isset ($_GET['reset']) && isset ($_GET['id'])) {
 					FROM ".$tbl_user."
 					WHERE ( username = '".Database::escape_string($user)."' $condition ) ";
 
-		$result = Database::query($query);
-		$num_rows = Database::num_rows($result);
+		$result 	= Database::query($query);
+		$num_rows 	= Database::num_rows($result);
 
 		if ($result && $num_rows > 0) {
 			if ($num_rows > 1) {

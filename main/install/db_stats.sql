@@ -126,11 +126,13 @@ CREATE TABLE track_e_attempt (
   marks float(6,2) NOT NULL default 0,
   course_code varchar(40) NOT NULL default '',
   position int default 0,
-  tms datetime NOT NULL default '0000-00-00 00:00:00'
+  tms datetime NOT NULL default '0000-00-00 00:00:00',
+  session_id INT NOT NULL DEFAULT 0
 );
 ALTER TABLE track_e_attempt ADD INDEX (exe_id);
 ALTER TABLE track_e_attempt ADD INDEX (user_id); 
 ALTER TABLE track_e_attempt ADD INDEX (question_id);
+ALTER TABLE track_e_attempt ADD INDEX (session_id);
 
 CREATE TABLE track_e_attempt_recording (
   exe_id int unsigned NOT NULL, 
@@ -138,9 +140,12 @@ CREATE TABLE track_e_attempt_recording (
   marks int NOT NULL,  
   insert_date datetime NOT NULL default '0000-00-00 00:00:00',  
   author int unsigned NOT NULL,  
-  teacher_comment text NOT NULL
+  teacher_comment text NOT NULL,
+  session_id INT NOT NULL DEFAULT 0
 );
 ALTER TABLE track_e_attempt_recording ADD INDEX (exe_id);
+ALTER TABLE track_e_attempt_recording ADD INDEX (question_id);
+ALTER TABLE track_e_attempt_recording ADD INDEX (session_id);
 
 CREATE TABLE track_e_hotpotatoes (
   exe_name VARCHAR( 255 ) NOT NULL ,

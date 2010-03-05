@@ -48,7 +48,7 @@ INSERT INTO settings_current (variable, subkey, type, category, selected_value, 
 ALTER TABLE user_field_values CHANGE id id BIGINT NOT NULL AUTO_INCREMENT;
 ALTER TABLE user_field_values ADD INDEX (user_id, field_id);
 
-UPDATE settings_current SET selected_value = '1.8.7.10610' WHERE variable = 'dokeos_database_version';
+UPDATE settings_current SET selected_value = '1.8.7.10740' WHERE variable = 'dokeos_database_version';
 
 -- xxSTATSxx
 CREATE TABLE track_e_item_property(id int NOT NULL auto_increment PRIMARY KEY, course_id int NOT NULL, item_property_id int NOT NULL, title varchar(255), content text, progress int NOT NULL default 0, lastedit_date datetime NOT NULL default '0000-00-00 00:00:00', lastedit_user_id int  NOT NULL, session_id int NOT NULL default 0);
@@ -65,6 +65,11 @@ ALTER TABLE track_e_uploads ADD upload_session_id INT NOT NULL DEFAULT 0;
 ALTER TABLE track_e_uploads ADD INDEX (upload_session_id);
 ALTER TABLE track_e_online ADD session_id INT NOT NULL DEFAULT 0;
 ALTER TABLE track_e_online ADD INDEX (session_id);
+ALTER TABLE track_e_attempt ADD session_id INT NOT NULL DEFAULT 0;
+ALTER TABLE track_e_attempt ADD INDEX (session_id);
+ALTER TABLE track_e_attempt_recording ADD session_id INT NOT NULL DEFAULT 0;
+ALTER TABLE track_e_attempt_recording ADD INDEX (question_id);
+ALTER TABLE track_e_attempt_recording ADD INDEX (session_id);
 
 -- xxUSERxx
 
@@ -84,3 +89,6 @@ ALTER TABLE attendance_result ADD INDEX(user_id);
 CREATE TABLE attendance (id int NOT NULL auto_increment PRIMARY KEY, name text NOT NULL, description TEXT NULL, active tinyint(3) NOT NULL default 1, attendance_qualify_title varchar(255) NULL, attendance_qualify_max int NOT NULL default 0, attendance_weight float(6,2) NOT NULL default '0.0', session_id int NOT NULL default 0);
 ALTER TABLE attendance ADD INDEX(session_id);
 ALTER TABLE attendance ADD INDEX(active);
+ALTER TABLE lp_view ADD view_session_id INT NOT NULL DEFAULT 0;
+ALTER TABLE lp_view ADD INDEX(view_session_id)
+

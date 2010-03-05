@@ -1215,7 +1215,8 @@ function update_Db_course($courseDbName, $language = null)
 		"user_id		int 	unsigned	not null," . //user ID from main.user
 		"view_count		smallint unsigned	not null default 0," . //integer counting the amount of times this learning path has been attempted
 		"last_item		int		unsigned	not null default 0," . //last item seen in this view
-		"progress		int		unsigned	default 0 )" . $charset_clause; //lp's progress for this user
+		"progress		int		unsigned	default 0," .
+		"view_session_id int not null default 0 )" . $charset_clause; //lp's progress for this user
 	if(!Database::query($sql))
 	{
 		error_log($sql,0);
@@ -1230,7 +1231,12 @@ function update_Db_course($courseDbName, $language = null)
 	{
 		error_log($sql,0);
 	}
-
+	$sql = "ALTER TABLE `$TABLELPVIEW` ADD INDEX (view_session_id) ";
+	if(!Database::query($sql))
+	{
+		error_log($sql,0);
+	}
+	
 	$sql = "CREATE TABLE IF NOT EXISTS `$TABLELPITEM` (" .
 		"id				int	unsigned	primary	key auto_increment," .	//unique ID from MySQL
 		"lp_id			int unsigned	not null," .	//lp_id from 'lp'

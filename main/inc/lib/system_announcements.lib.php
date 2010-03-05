@@ -260,6 +260,11 @@ class SystemAnnouncementManager
 		$end = $date_end[0]."-".$date_end[1]."-".$date_end[2]." ".$date_end[3].":".$date_end[4].":".$date_start[5];
 		$title = Database::escape_string($title);
 		$content = Database::escape_string($content);
+		
+		//Fixing urls that are sent by email
+		$content = str_replace('src=\"/home/', 'src=\"'.api_get_path('WEB_PATH').'home/', $content);
+		$content = str_replace('file=/home/', 'file='.api_get_path('WEB_PATH').'home/', $content);		
+		
 		$lang = is_null($lang) ? 'NULL' : "'".Database::escape_string($lang)."'";
 		$sql = "INSERT INTO ".$db_table." (title,content,date_start,date_end,visible_teacher,visible_student,visible_guest, lang)
 				VALUES ('".$title."','".$content."','".$start."','".$end."','".$visible_teacher."','".$visible_student."','".$visible_guest."',".$lang.")";
@@ -305,6 +310,11 @@ class SystemAnnouncementManager
 		$end = $date_end[0]."-".$date_end[1]."-".$date_end[2]." ".$date_end[3].":".$date_end[4].":".$date_start[5];
 		$title = Database::escape_string($title);
 		$content = Database::escape_string($content);
+		
+		//Fixing urls that are sent by email    		
+		$content = str_replace('src=\"/home/', 'src=\"'.api_get_path('WEB_PATH').'home/', $content);
+		$content = str_replace('file=/home/', 'file='.api_get_path('WEB_PATH').'home/', $content);
+		
 		$id = intval($id);
 		$sql = "UPDATE ".$db_table." SET lang=$lang,title='".$title."',content='".$content."',date_start='".$start."',date_end='".$end."', ";
 		$sql .= " visible_teacher = '".$visible_teacher."', visible_student = '".$visible_student."', visible_guest = '".$visible_guest."' WHERE id='".$id."'";

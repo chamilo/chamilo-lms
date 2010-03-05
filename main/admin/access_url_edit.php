@@ -79,11 +79,20 @@ $form->addElement('text','url',get_lang('URL'),array('size'=>'30'));
 $form->addRule('url', get_lang('ThisFieldIsRequired'), 'required');
 $form->addRule('url', '', 'maxlength',254);
 $form->addElement('textarea','description',get_lang('Description'));
+<<<<<<< /www/chamilodev.beeznest.com/www/main/admin/access_url_edit.php
+
+if ($_GET['url_id'] != 1) {
+$form->addElement('checkbox','active',get_lang('Active'));
+}
+
+//$form->addRule('checkbox', get_lang('ThisFieldIsRequired'), 'required');
+=======
 
 //the first url with id = 1 will be always active
 if ($_GET['url_id'] != 1) {
 	$form->addElement('checkbox','active',get_lang('Active'));
 }
+>>>>>>> /tmp/access_url_edit.php~other.zY-an1
 
 $defaults['url']='http://';
 $form->setDefaults($defaults);

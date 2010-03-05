@@ -176,7 +176,8 @@ if(api_is_platform_admin()) {
 		  	echo '<li><a href="legal_add.php">'.get_lang('TermsAndConditions').'</a></li>';
 	  }
 	  
-	  echo '<li><a href="system_status.php">'.get_lang('SystemStatus').'</a></li>';
+	  //@todo Translations needed in order to see a better explanation of issues
+	  //echo '<li><a href="system_status.php">'.get_lang('SystemStatus').'</a></li>';
 	  
 
 	  ?>

@@ -101,7 +101,6 @@ if ($_configuration['multiple_access_urls']) {
 	$homep = api_get_path(SYS_PATH).'home/'; //homep for Home Path
 }
 
-
 $menuf	 = 'home_menu'; //menuf for Menu File
 $newsf	 = 'home_news'; //newsf for News File
 $topf 	 = 'home_top'; //topf for Top File
@@ -115,11 +114,11 @@ $homef = array($menuf, $newsf, $topf, $noticef, $menutabs);
 foreach ($homef as $my_file) {
 	if ($_configuration['multiple_access_urls']) {
 		if (!file_exists($homep_new.$my_file.'_'.$lang.$ext)) {
-			copy($homep.$my_file.$ext,$homep_new.$my_file.'_'.$lang.$ext);
+			copy($homep.$my_file.$ext, $homep_new.$my_file.'_'.$lang.$ext);
 		}
 	} else {
 		if (!file_exists($homep.$my_file.'_'.$lang.$ext)) {
-			copy($homep.$my_file.$ext,$homep.$my_file.'_'.$lang.$ext);
+			copy($homep.$my_file.$ext, $homep.$my_file.'_'.$lang.$ext);
 		}
 	}
 }
@@ -565,9 +564,7 @@ if (!empty($action)) {
 	$Categories = Database::store_result(Database::query("SELECT name FROM $tbl_category WHERE parent_id IS NULL ORDER BY tree_pos"));
 }
 
-// -------------------------
-// ---- Display section ----
-// -------------------------
+// Display section
 
 Display::display_header($tool_name);
 
@@ -583,7 +580,7 @@ switch ($action) {
 		}
 		break;
 	case 'edit_notice':
-		//------------  Display for edit_notice case --------------
+		// Display for edit_notice case
 		?>
 		<form action="<?php echo api_get_self(); ?>?action=<?php echo $action; ?>" method="post" style="margin:0px;">
 		<div class="row"><div class="form_header"><?php echo $tool_name; ?></div></div>

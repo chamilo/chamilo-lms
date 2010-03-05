@@ -76,8 +76,9 @@ if ($_configuration['multiple_access_urls']) {
 		$clean_url = replace_dangerous_char($url);
 		$clean_url = str_replace('/', '-', $clean_url);
 		$clean_url .= '/';
-		$homep = '../../home/'; //homep for Home Path
-		$homep_new = '../../home/'.$clean_url; //homep for Home Path added the url
+
+		$homep = api_get_path(SYS_PATH).'home/'; //homep for Home Path
+		$homep_new = api_get_path(SYS_PATH).'home/'.$clean_url; //homep for Home Path added the url
 		$new_url_dir = api_get_path(SYS_PATH).'home/'.$clean_url;
 		//we create the new dir for the new sites
 		if (!is_dir($new_url_dir)){
@@ -85,11 +86,9 @@ if ($_configuration['multiple_access_urls']) {
 		}
 	}
 } else {
-	$homep_new ='';
-	$homep = '../../home/'; //homep for Home Path
+	$homep_new = '';
+	$homep = api_get_path(SYS_PATH).'home/'; //homep for Home Path
 }
-
-
 
 $topf 	 = 'register_top'; //topf for Top File
 $ext 	 = '.html'; //ext for HTML Extension - when used frequently, variables are
@@ -99,11 +98,11 @@ $homef = array($topf);
 foreach ($homef as $my_file) {
 	if ($_configuration['multiple_access_urls']) {
 		if (!file_exists($homep_new.$my_file.'_'.$lang.$ext)) {
-			copy($homep.$my_file.$ext,$homep_new.$my_file.'_'.$lang.$ext);
+			copy($homep.$my_file.$ext, $homep_new.$my_file.'_'.$lang.$ext);
 		}
 	} else {
 		if (!file_exists($homep.$my_file.'_'.$lang.$ext)) {
-			copy($homep.$my_file.$ext,$homep.$my_file.'_'.$lang.$ext);
+			copy($homep.$my_file.$ext, $homep.$my_file.'_'.$lang.$ext);
 		}
 	}
 }
@@ -146,12 +145,13 @@ if (!empty($action)) {
 				// This request is only the preparation for the update of the home_top
 				$home_top = '';
 				if (is_file($homep.$topf.'_'.$lang.$ext) && is_readable($homep.$topf.'_'.$lang.$ext)) {
-					$home_top = file_get_contents($homep.$topf.'_'.$lang.$ext);
+					$home_top = @(string)file_get_contents($homep.$topf.'_'.$lang.$ext);
 				} elseif (is_file($homep.$topf.$lang.$ext) && is_readable($homep.$topf.$lang.$ext)) {
-					$home_top = file_get_contents($homep.$topf.$lang.$ext);
+					$home_top = @(string)file_get_contents($homep.$topf.$lang.$ext);
 				} else {
 					$errorMsg = get_lang('HomePageFilesNotReadable');
 				}
+				$home_top = api_to_system_encoding($home_top, api_detect_encoding(strip_tags($home_top)));
 				break;
 		}
 	}
@@ -372,7 +372,7 @@ if ($display_all_form) {
 
 }
 
-//------------ Terms and conditions
+// Terms and conditions
 if (get_setting('allow_terms_conditions') == 'true') {
 	$language = api_get_interface_language();
 	$language = api_get_language_id($language);
@@ -449,8 +449,8 @@ switch ($action){
 			$open = $home_top;
 		} else {
 			$name = $newsf;
-			$open = @file_get_contents($homep.$newsf.'_'.$lang.$ext);
-
+			$open = @(string)file_get_contents($homep.$newsf.'_'.$lang.$ext);
+			$open = api_to_system_encoding($open, api_detect_encoding(strip_tags($open)));
 		}
 
 		if (!empty($errorMsg)) {
@@ -484,14 +484,16 @@ switch ($action){
 		//Form of language
 		api_display_language_form();
 		echo '&nbsp;&nbsp;<a href="'.api_get_self().'?action=edit_top">'.Display::display_icon('edit.gif', get_lang('Edit')).'</a> <a href="'.api_get_self().'?action=edit_top">'.get_lang('EditNotice').'</a>';
-		echo '<div class="note">';
-		$home_notice = '';
-		if(file_exists($homep.$topf.'_'.$lang.$ext)) {
-			$home_notice = @file_get_contents($homep.$topf.'_'.$lang.$ext);
+		//echo '<div class="note">';
+		echo '<div style="border:1px solid #E1E1E1; padding:2px;">';
+		$open = '';
+		if (file_exists($homep.$topf.'_'.$lang.$ext)) {
+			$open = @(string)file_get_contents($homep.$topf.'_'.$lang.$ext);
 		} else {
-			$home_notice = @file_get_contents($homep.$topf.$ext);
+			$open = @(string)file_get_contents($homep.$topf.$ext);
 		}
-		echo $home_notice;
+		$open = api_to_system_encoding($open, api_detect_encoding(strip_tags($open)));
+		echo $open;
 		echo '</div>';
 		$form->display();
 		break;

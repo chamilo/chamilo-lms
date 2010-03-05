@@ -53,9 +53,7 @@ echo '<div class="actions-title">';
 echo $tool_name;
 echo '</div>';
 
-//Header of Configure Inscription
-
-$home = '../../home/';
+$home = api_get_path(SYS_PATH).'home/';
 if ($_configuration['multiple_access_urls']) {
 	$access_url_id = api_get_current_access_url_id();
 	if ($access_url_id != -1) {
@@ -64,8 +62,8 @@ if ($_configuration['multiple_access_urls']) {
 		$clean_url = replace_dangerous_char($url);
 		$clean_url = str_replace('/','-',$clean_url);
 		$clean_url .= '/';
-		$home_old  = '../../home/';
-		$home= '../../home/'.$clean_url;
+		$home_old  = api_get_path(SYS_PATH).'home/';
+		$home = api_get_path(SYS_PATH).'home/'.$clean_url;
 	}
 }
 
@@ -78,8 +76,9 @@ if (!empty($_SESSION['user_language_choice'])) {
 }
 
 if (file_exists($home.'register_top_'.$user_selected_language.'.html')) {
-	$home_top_temp = file_get_contents($home.'register_top_'.$user_selected_language.'.html');
+	$home_top_temp = @(string)file_get_contents($home.'register_top_'.$user_selected_language.'.html');
 	$open = str_replace('{rel_path}', api_get_path(REL_PATH), $home_top_temp);
+	$open = api_to_system_encoding($open, api_detect_encoding(strip_tags($open)));
 	echo '<div style="border:1px solid #E1E1E1; padding:2px;">'.$open.'</div>';
 }
 
@@ -302,13 +301,12 @@ if ($display_all_form) {
 	}
 
 }
-//------------ Terms and conditions
+
+// Terms and conditions
 if (api_get_setting('allow_terms_conditions') == 'true') {
-	//$language = api_get_setting('platformLanguage');
 	$language = api_get_interface_language();
 	$language = api_get_language_id($language);
 	$term_preview = LegalManager::get_last_condition($language);
-
 	if (!$term_preview) {
 		//we load from the platform
 		$language = api_get_setting('platformLanguage');
@@ -320,14 +318,15 @@ if (api_get_setting('allow_terms_conditions') == 'true') {
 			$term_preview = LegalManager::get_last_condition($language);
 		}
 	}
-	// Version and language //password
+	// Version and language
 	$form->addElement('hidden', 'legal_accept_type', $term_preview['version'].':'.$term_preview['language_id']);
 	$form->addElement('hidden', 'legal_info', $term_preview['legal_id'].':'.$term_preview['language_id']);
+	// Password
 	if (isset($_SESSION['info_current_user'][1]) && isset($_SESSION['info_current_user'][2])) {
-		$form->addElement('hidden', 'login',$_SESSION['info_current_user'][1]);
-		$form->addElement('hidden', 'password',$_SESSION['info_current_user'][2]);
+		$form->addElement('hidden', 'login', $_SESSION['info_current_user'][1]);
+		$form->addElement('hidden', 'password', $_SESSION['info_current_user'][2]);
 	}
-	if($term_preview['type'] == 1) {
+	if ($term_preview['type'] == 1) {
 		$form->addElement('checkbox', 'legal_accept', null, get_lang('IHaveReadAndAgree').'&nbsp;<a href="inscription.php?legal" target="_blank">'.get_lang('TermsAndConditions').'</a>');
 		$form->addRule('extra_legal_accept',  get_lang('ThisFieldIsRequired'), 'required');
 	} else {
@@ -588,7 +587,5 @@ if (!isset($_POST['username'])) {
 </div>
 <?php
 }
-?>
-<?php
 
 Display :: display_footer();

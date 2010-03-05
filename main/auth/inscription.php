@@ -1,12 +1,11 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
-==============================================================================
-*	This script displays a form for registering new users.
-*	@package	 dokeos.auth
-==============================================================================
-*/
-// name of the language file that needs to be included
+ *	This script displays a form for registering new users.
+ *	@package	 chamilo.auth
+ */
+
 $language_file = array('registration', 'admin');
 
 require_once '../inc/global.inc.php';
@@ -17,16 +16,11 @@ require_once api_get_path(CONFIGURATION_PATH).'profile.conf.php';
 require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
 require_once api_get_path(LIBRARY_PATH).'legal.lib.php';
 
-//require_once(api_get_path(LIBRARY_PATH).'fileManage.lib.php');
-//require_once(api_get_path(LIBRARY_PATH).'fileUpload.lib.php');
-//require_once (api_get_path(LIBRARY_PATH).'image.lib.php');
-
 // Load terms & conditions from the current lang
 if (api_get_setting('allow_terms_conditions') == 'true') {
 	$get = array_keys($_GET);
 	if (isset($get)) {
 		if ($get[0] == 'legal'){
-			//$language = api_get_setting('platformLanguage');
 			$language = api_get_interface_language();
 			$language = api_get_language_id($language);
 			$term_preview = LegalManager::get_last_condition($language);
@@ -59,40 +53,34 @@ echo '<div class="actions-title">';
 echo $tool_name;
 echo '</div>';
 
-/****************/
-
-//Header of Configure Inscription
-
-$home= '../../home/';
-if ($_configuration['multiple_access_urls']==true) {
+$home = api_get_path(SYS_PATH).'home/';
+if ($_configuration['multiple_access_urls']) {
 	$access_url_id = api_get_current_access_url_id();
-	if ($access_url_id != -1){
+	if ($access_url_id != -1) {
 		$url_info = api_get_access_url($access_url_id);
-		// "http://" and the final "/" replaced
-		//$url = substr($url_info['url'],7,strlen($url_info['url'])-8);
 		$url = api_remove_trailing_slash(preg_replace('/https?:\/\//i', '', $url_info['url']));
 		$clean_url = replace_dangerous_char($url);
 		$clean_url = str_replace('/','-',$clean_url);
 		$clean_url .= '/';
-		$home_old  = '../../home/';
-		$home= '../../home/'.$clean_url;
+		$home_old  = api_get_path(SYS_PATH).'home/';
+		$home = api_get_path(SYS_PATH).'home/'.$clean_url;
 	}
 }
 
 if (!empty($_SESSION['user_language_choice'])) {
-	$user_selected_language=$_SESSION['user_language_choice'];
-} elseif(!empty($_SESSION['_user']['language'])) {
-	$user_selected_language=$_SESSION['_user']['language'];
+	$user_selected_language = $_SESSION['user_language_choice'];
+} elseif (!empty($_SESSION['_user']['language'])) {
+	$user_selected_language = $_SESSION['_user']['language'];
 } else {
-	$user_selected_language=get_setting('platformLanguage');
+	$user_selected_language = get_setting('platformLanguage');
 }
 
-if(file_exists($home.'register_top_'.$user_selected_language.'.html')) {
-	$home_top_temp = file_get_contents($home.'register_top_'.$user_selected_language.'.html');
-	$open=str_replace('{rel_path}',api_get_path(REL_PATH),$home_top_temp);
+if (file_exists($home.'register_top_'.$user_selected_language.'.html')) {
+	$home_top_temp = @(string)file_get_contents($home.'register_top_'.$user_selected_language.'.html');
+	$open = str_replace('{rel_path}', api_get_path(REL_PATH), $home_top_temp);
+	$open = api_to_system_encoding($open, api_detect_encoding(strip_tags($open)));
 	echo '<div style="border:1px solid #E1E1E1; padding:2px;">'.$open.'</div>';
 }
-/****************/
 
 // Forbidden to self-register
 if (api_get_setting('allow_registration') == 'false') {
@@ -110,15 +98,12 @@ if (!empty($_GET['openid_msg']) && $_GET['openid_msg'] == 'idnotfound') {
 
 $form = new FormValidator('registration');
 if (api_get_setting('allow_terms_conditions') == 'true') {
-	if (!isset($_SESSION['update_term_and_condition'][1])) {
-		$display_all_form = true;
-	} else {
-		$display_all_form = false;
-	}
+	$display_all_form = !isset($_SESSION['update_term_and_condition'][1]);
 } else {
 	$display_all_form = true;
 }
-if ($display_all_form === true) {
+
+if ($display_all_form) {
 
 	if (api_is_western_name_order()) {
 		//	FIRST NAME and LAST NAME
@@ -141,14 +126,14 @@ if ($display_all_form === true) {
 	if (api_get_setting('openid_authentication') == 'true') {
 		$form->addElement('text', 'openid', get_lang('OpenIDURL'), array('size' => 40));
 	}
-	/*
+	// Enabled by Ivan Tcholakov, 06-APR-2009. CONFVAL_ASK_FOR_OFFICIAL_CODE = false by default.
 	//	OFFICIAL CODE
 	if (CONFVAL_ASK_FOR_OFFICIAL_CODE) {
 		$form->addElement('text', 'official_code', get_lang('OfficialCode'), array('size' => 40));
 		if (api_get_setting('registration', 'officialcode') == 'true')
 			$form->addRule('official_code', get_lang('ThisFieldIsRequired'), 'required');
 	}
-	*/
+	//
 	//	USERNAME
 	$form->addElement('text', 'username', get_lang('UserName'), array('size' => USERNAME_MAX_LENGTH));
 	$form->applyFilter('username','trim');
@@ -316,13 +301,12 @@ if ($display_all_form === true) {
 	}
 
 }
-//------------ Terms and conditions
+
+// Terms and conditions
 if (api_get_setting('allow_terms_conditions') == 'true') {
-	//$language = api_get_setting('platformLanguage');
 	$language = api_get_interface_language();
 	$language = api_get_language_id($language);
 	$term_preview = LegalManager::get_last_condition($language);
-
 	if (!$term_preview) {
 		//we load from the platform
 		$language = api_get_setting('platformLanguage');
@@ -334,14 +318,15 @@ if (api_get_setting('allow_terms_conditions') == 'true') {
 			$term_preview = LegalManager::get_last_condition($language);
 		}
 	}
-	// Version and language //password
+	// Version and language
 	$form->addElement('hidden', 'legal_accept_type', $term_preview['version'].':'.$term_preview['language_id']);
 	$form->addElement('hidden', 'legal_info', $term_preview['legal_id'].':'.$term_preview['language_id']);
+	// Password
 	if (isset($_SESSION['info_current_user'][1]) && isset($_SESSION['info_current_user'][2])) {
-		$form->addElement('hidden', 'login',$_SESSION['info_current_user'][1]);
-		$form->addElement('hidden', 'password',$_SESSION['info_current_user'][2]);
+		$form->addElement('hidden', 'login', $_SESSION['info_current_user'][1]);
+		$form->addElement('hidden', 'password', $_SESSION['info_current_user'][2]);
 	}
-	if($term_preview['type'] == 1) {
+	if ($term_preview['type'] == 1) {
 		$form->addElement('checkbox', 'legal_accept', null, get_lang('IHaveReadAndAgree').'&nbsp;<a href="inscription.php?legal" target="_blank">'.get_lang('TermsAndConditions').'</a>');
 		$form->addRule('extra_legal_accept',  get_lang('ThisFieldIsRequired'), 'required');
 	} else {
@@ -389,9 +374,9 @@ if (is_array($extra_data)) {
 $form->setDefaults($defaults);
 
 if ($form->validate()) {
-	/*-----------------------------------------------------
+	/*
 	  STORE THE NEW USER DATA INSIDE THE MAIN DOKEOS DATABASE
-	  -----------------------------------------------------*/
+	 */
 	$values = $form->exportValues();
 
 	$values['username'] = api_substr($values['username'], 0, USERNAME_MAX_LENGTH); //make *sure* the login isn't too long
@@ -399,6 +384,11 @@ if ($form->validate()) {
 	if (api_get_setting('allow_registration_as_teacher') == 'false') {
 		$values['status'] = STUDENT;
 	}
+	// Added by Ivan Tcholakov, 06-MAR-2008.
+	if (empty($values['official_code'])) {
+		$values['official_code'] =  api_strtoupper($values['username']);
+	}
+	//
 
 	// creating a new user
 	$user_id = UserManager::create_user($values['firstname'], $values['lastname'], $values['status'], $values['email'], $values['username'], $values['pass1'], $values['official_code'], $values['language'], $values['phone'], $picture_uri);
@@ -416,7 +406,7 @@ if ($form->validate()) {
 		}
 	}
 
-	/****** register extra fields*************/
+	// Register extra fields
 	$extras = array();
 	foreach ($values as $key => $value) {
 		if (substr($key, 0, 6) == 'extra_') { //an extra field
@@ -433,7 +423,6 @@ if ($form->validate()) {
 		}
 	}
 
-	/********************************************/
 	if ($user_id) {
 		// storing the extended profile
 		$store_extended = false;
@@ -510,9 +499,9 @@ if ($form->validate()) {
 			exit;
 		}
 
-		/*--------------------------------------
+		/*
 		          SESSION REGISTERING
-		  --------------------------------------*/
+		 */
 		$_user['firstName'] = stripslashes($values['firstname']);
 		$_user['lastName'] 	= stripslashes($values['lastname']);
 		$_user['mail'] 		= $values['email'];
@@ -529,9 +518,9 @@ if ($form->validate()) {
 
 		api_session_register('user_last_login_datetime');
 
-		/*--------------------------------------
+		/*
 		             EMAIL NOTIFICATION
-		  --------------------------------------*/
+		 */
 
 		if (strpos($values['email'], '@') !== false) {
 			// Let us predefine some variables. Be sure to change the from address!
@@ -539,7 +528,7 @@ if ($form->validate()) {
 			$email = $values['email'];
 			$emailfromaddr = api_get_setting('emailAdministrator');
 			$emailfromname = api_get_setting('siteName');
-			$emailsubject = "[".api_get_setting('siteName')."] ".get_lang('YourReg')." ".api_get_setting('siteName');
+			$emailsubject = '['.api_get_setting('siteName').'] '.get_lang('YourReg').' '.api_get_setting('siteName');
 
 			// The body can be as long as you wish, and any combination of text and variables
 			$portal_url = $_configuration['root_web'];
@@ -551,7 +540,7 @@ if ($form->validate()) {
 				}
 			}
 
-			$emailbody = get_lang('Dear')." ".stripslashes(Security::remove_XSS($recipient_name)).",\n\n".get_lang('YouAreReg')." ".api_get_setting('siteName')." ".get_lang('WithTheFollowingSettings')."\n\n".get_lang('Username')." : ".$values['username']."\n".get_lang('Pass')." : ".stripslashes($values['pass1'])."\n\n".get_lang('Address')." ".api_get_setting('siteName')." ".get_lang('Is')." : ".$portal_url."\n\n".get_lang('Problem')."\n\n".get_lang('Formula').",\n\n".api_get_setting('administratorName')." ".api_get_setting('administratorSurname')."\n".get_lang('Manager')." ".api_get_setting('siteName')."\nT. ".api_get_setting('administratorTelephone')."\n".get_lang('Email')." : ".api_get_setting('emailAdministrator');
+			$emailbody = get_lang('Dear').' '.stripslashes(Security::remove_XSS($recipient_name)).",\n\n".get_lang('YouAreReg').' '.api_get_setting('siteName').' '.get_lang('WithTheFollowingSettings')."\n\n".get_lang('Username').' : '.$values['username']."\n".get_lang('Pass').' : '.stripslashes($values['pass1'])."\n\n".get_lang('Address').' '.api_get_setting('siteName').' '.get_lang('Is').' : '.$portal_url."\n\n".get_lang('Problem')."\n\n".get_lang('Formula').",\n\n".api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'))."\n".get_lang('Manager').' '.api_get_setting('siteName')."\nT. ".api_get_setting('administratorTelephone')."\n".get_lang('Email').' : '.api_get_setting('emailAdministrator');
 
 			// Here we are forming one large header line
 			// Every header must be followed by a \n except the last
@@ -561,29 +550,29 @@ if ($form->validate()) {
 		}
 	}
 
-	echo "<p>".get_lang('Dear')." ".stripslashes(Security::remove_XSS($recipient_name)).",<br /><br />".get_lang('PersonalSettings').".</p>\n";
+	echo '<p>'.get_lang('Dear').' '.stripslashes(Security::remove_XSS($recipient_name)).',<br /><br />'.get_lang('PersonalSettings').".</p>\n";
 
 	if (!empty ($values['email'])) {
-		echo "<p>".get_lang('MailHasBeenSent').".</p>";
+		echo '<p>'.get_lang('MailHasBeenSent').'.</p>';
 	}
 
-	$button_text = "";
+	$button_text = '';
 	if ($is_allowedCreateCourse) {
-		echo "<p>", get_lang('NowGoCreateYourCourse'), ".</p>\n";
-		$action_url = "../create_course/add_course.php";
+		echo '<p>', get_lang('NowGoCreateYourCourse'), ".</p>\n";
+		$action_url = '../create_course/add_course.php';
 		$button_text = get_lang('CourseCreate');
 	} else {
 		if (api_get_setting('allow_students_to_browse_courses') == 'true')
-			$action_url = "courses.php?action=subscribe";
+			$action_url = 'courses.php?action=subscribe';
 		else
 			$action_url = api_get_path(WEB_PATH).'user_portal.php';
-		echo "<p>", get_lang('NowGoChooseYourCourses'), ".</p>\n";
+		echo '<p>', get_lang('NowGoChooseYourCourses'), ".</p>\n";
 
 		$button_text = get_lang('Next');
 	}
 	// ?uidReset=true&uidReq=$_user['user_id']
 
-	echo "<form action=\"", $action_url, "\"  method=\"post\">\n", "<button type=\"submit\" class=\"next\" name=\"next\" value=\"", get_lang('Next'), "\" validationmsg=\" ", get_lang('Next'), " \">".$button_text."</button>\n", "</form><br />\n";
+	echo '<form action="', $action_url, '"  method="post">', "\n", '<button type="submit" class="next" name="next" value="', get_lang('Next'), '" validationmsg=" ', get_lang('Next'), ' ">', $button_text, '</button>', "\n", '</form><br />', "\n";
 
 } else {
 	$form->display();
@@ -598,13 +587,5 @@ if (!isset($_POST['username'])) {
 </div>
 <?php
 }
-?>
-<?php
-/*
-==============================================================================
-		FOOTER
-==============================================================================
-*/
 
 Display :: display_footer();
-?>

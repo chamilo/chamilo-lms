@@ -21,7 +21,7 @@ if ($action == 'calendar_add') {
 }
 echo '</div>';
 
-$message_information = get_lang('informationAttendanceCalendar');
+$message_information = get_lang('AttendanceCalendarDescription');
 
 if (!empty($message_information)) {
 	$message = '<strong>'.get_lang('Information').'</strong><br />';

@@ -803,4 +803,15 @@ $AssignUsers = "Asignar usuarios";
 $AssignCourses = "Asignar cursos";
 $AssignSessions = "Asignar sesiones de formación";
 $Timezone = "Zona horaria";
+$Attendance = "Asistencia";
+$CreateANewAttendance = "Crear una nueva lista de asistencias";
+$QualifyAttendanceGradebook = "Calificar la lista de asistencias";
+$AttendanceCalendar = "Calendario de asistencias";
+$GoToAttendanceCalendar = "Ir al calendario de asistencias para agregar fechas";
+$AttendanceSheet = "Hoja de asistencia";
+$AddDateAndTime = "Agregar fecha y hora";
+$CleanCalendar = "Limpiar calendario";
+$AttendanceCalendarDescription = "Descripción de calendario de asistencia";
+$CalendarList = "Lista de calendario";
+$ThereAreNoRegisteredDatetimeYet = "No hay fecha/hora registrada todavía";
 ?>

@@ -803,4 +803,15 @@ $AssignUsers = "Assign users";
 $AssignCourses = "Assign courses";
 $AssignSessions = "Assign sessions";
 $Timezone = "Timezone";
+$Attendance = "Attendance";
+$CreateANewAttendance = "Create a new attendance list";
+$QualifyAttendanceGradebook = "Qualify the attendance list in the gradebook";
+$AttendanceCalendar = "Attendance calendar";
+$GoToAttendanceCalendar = "Ir al calendario de asistencias";
+$AttendanceSheet = "Attendance sheet";
+$AddDateAndTime = "Add a date and time";
+$CleanCalendar = "Clean the calendar of all lists";
+$AttendanceCalendarDescription = "The attendance calendar allows you to register attendance lists (one per real session the students need to attend). Add new attendance lists here.";
+$CalendarList = "Calendar list of attendances";
+$ThereAreNoRegisteredDatetimeYet = "There is no date/time registered yet";
 ?>

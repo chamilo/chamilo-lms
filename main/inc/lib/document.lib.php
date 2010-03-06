@@ -333,6 +333,12 @@ class DocumentManager {
 			// Commented to avoid double caching declaration when playing with IE and HTTPS
 			//header('Cache-Control: no-cache, must-revalidate');
 			//header('Pragma: no-cache');
+			if ($content_type == 'text/plain') {
+				$encoding = @api_detect_encoding(strip_tags(file_get_contents($full_file_name)));
+				if (!empty($encoding)) {
+					$content_type .= '; charset='.$encoding;
+				}
+			}
 			header('Content-type: '.$content_type);
 			header('Content-Length: '.$len);
 			$user_agent = strtolower($_SERVER['HTTP_USER_AGENT']);
@@ -395,6 +401,12 @@ class DocumentManager {
 			header('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT');
 			header('Cache-Control: no-cache, must-revalidate');
 			header('Pragma: no-cache');
+			if ($content_type == 'text/plain') {
+				$encoding = @api_detect_encoding(strip_tags($full_string));
+				if (!empty($encoding)) {
+					$content_type .= '; charset='.$encoding;
+				}
+			}
 			header('Content-type: '.$content_type);
 			header('Content-Length: '.$len);
 			$user_agent = strtolower($_SERVER['HTTP_USER_AGENT']);
@@ -930,7 +942,7 @@ class DocumentManager {
 		$sql = "SELECT path FROM $docTable d, $propTable ip " .
 				"where d.id=ip.ref AND ip.tool='".TOOL_DOCUMENT."' AND d.filetype='file' AND visibility=0 AND ".
 				"locate(concat(path,'/'),'".$doc_path."/')=1";
-        $result = Database::query($sql);
+		$result = Database::query($sql);
 		if (Database::num_rows($result) > 0) {
 			$row = Database::fetch_array($result);
 			//echo "$row[0] not visible";

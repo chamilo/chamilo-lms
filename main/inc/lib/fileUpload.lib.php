@@ -1,9 +1,10 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
 	FILE UPLOAD LIBRARY
 
-*	This is the file upload library for Dokeos.
+*	This is the file upload library for Chamilo.
 *	Include/require it in your code to use its functionality.
 *
 *	@package chamilo.library
@@ -386,7 +387,7 @@ function handle_uploaded_document($_course,$uploaded_file,$base_work_dir,$upload
 	}
 }
 
- 
+
 
 /**
  * Check if there is enough place to add a file on a directory
@@ -418,7 +419,7 @@ function enough_size($fileSize, $dir, $maxDirSpace)
 	return true;
 }
 
- 
+
 
 /**
  * Check if there is enough place to add a file on a directory
@@ -447,7 +448,7 @@ function enough_space($file_size, $max_dir_space)
 	return true;
 }
 
- 
+
 
 /**
  * Compute the size already occupied by a directory and is subdirectories
@@ -494,7 +495,7 @@ function dir_total_space($dirPath)
 	return $sumSize;
 }
 
- 
+
 
 /**
  * Calculate the total size of all documents in a course
@@ -530,7 +531,7 @@ function documents_total_space($to_group_id='0')
 	}
 }
 
- 
+
 
 /**
  * Try to add an extension to files without extension
@@ -638,7 +639,7 @@ function add_ext_on_mime($fileName,$fileType)
 	return $fileName;
 }
 
- 
+
 
 /**
  *
@@ -824,7 +825,7 @@ function unzip_uploaded_file($uploadedFile, $uploadPath, $baseWorkDir, $maxFille
 
 	return true;
 }
- 
+
 
 /**
  * Manages all the unzipping process of an uploaded document
@@ -981,7 +982,7 @@ function unzip_uploaded_document($uploaded_file, $upload_path, $base_work_dir, $
 	*/
 }
 
- 
+
 
 /**
  * this function is a callback function that is used while extracting a zipfile
@@ -997,7 +998,7 @@ function clean_up_files_in_zip($p_event, &$p_header)
 	return $res;
 }
 
- 
+
 
 /**
  * this function cleans up a given path
@@ -1089,7 +1090,7 @@ function filter_extension(&$filename)
 	}
 }
 
- 
+
 
 /**
  * Adds a new document to the database
@@ -1122,13 +1123,13 @@ function add_document($_course,$path,$filetype,$filesize,$title,$comment=NULL, $
 	}
 }
 
- 
+
 
 /*
 function get_document_id() moved to document.lib.php
 */
 
- 
+
 
 /**
  * Update an existing document in the database
@@ -1201,7 +1202,7 @@ function item_property_update_on_folder($_course,$path,$user_id)
 		}
 	}
 }
- 
+
 
 /**
  * Returns the directory depth of the file.
@@ -1224,7 +1225,7 @@ function get_levels($filename)
 	class FileManager
 */
 
- 
+
 
 /**
  * Adds file to document table in database
@@ -1274,7 +1275,7 @@ function set_default_settings($upload_path,$filename,$filetype="file")
 	Database::query($query);
 }
 
- 
+
 
 /**
  * retrieve the image path list in a html file
@@ -1332,7 +1333,7 @@ function search_img_from_html($htmlFile)
 
 }
 
- 
+
 
 /**
  * creates a new directory trying to find a directory name
@@ -1361,13 +1362,13 @@ function create_unexisting_directory($_course,$user_id,$to_group_id,$to_user_id,
 	}
 
 	if (mkdir($base_work_dir.$desired_dir_name.$nb, api_get_permissions_for_new_directories(), true))
-	{					
+	{
 		// check if pathname already exists inside document table
 		$tbl_document = Database::get_course_table(TABLE_DOCUMENT, $_course['dbName']);
 		$sql = "SELECT path FROM $tbl_document WHERE path='".$desired_dir_name.$nb."'";
-		$rs  = Database::query($sql); 
+		$rs  = Database::query($sql);
 		if (Database::num_rows($rs) == 0) {
-			$document_id = add_document($_course, $desired_dir_name.$nb,'folder',0,$title);		
+			$document_id = add_document($_course, $desired_dir_name.$nb,'folder',0,$title);
 			if ($document_id)
 			{
 				//update document item_property
@@ -1379,10 +1380,10 @@ function create_unexisting_directory($_course,$user_id,$to_group_id,$to_user_id,
 					api_item_property_update($_course,TOOL_DOCUMENT,$document_id,'FolderCreated',$user_id,$to_group_id,$to_user_id,null,null,$current_session_id);
 				}
 				return $desired_dir_name.$nb;
-			}	
+			}
 		} else {
 			return false;
-		}		
+		}
 	}
 	else
 	{
@@ -1390,7 +1391,7 @@ function create_unexisting_directory($_course,$user_id,$to_group_id,$to_user_id,
 	}
 }
 
- 
+
 
 /**
  * Handles uploaded missing images
@@ -1426,9 +1427,9 @@ function move_uploaded_file_collection_into_directory($_course, $uploaded_file_c
 	return $new_file_list;
 }
 
- 
 
- 
+
+
 
 /*
  * Open the old html file and replace the src path into the img tag
@@ -1466,7 +1467,7 @@ function replace_img_path_in_html_file($originalImgPath, $newImgPath, $htmlFile)
 
 	$new_html_content .= $buffer;
 
-	fclose ($fp) or die ('<center>cannot close file</center>');;
+	@fclose($fp); // or die ('<center>cannot close file</center>');
 
 	/*
 	 * Write the resulted new file
@@ -1480,7 +1481,7 @@ function replace_img_path_in_html_file($originalImgPath, $newImgPath, $htmlFile)
 	}
 }
 
- 
+
 
 /**
  * Creates a file containing an html redirection to a given url
@@ -1509,7 +1510,7 @@ function create_link_file($filePath, $url)
 	}
 }
 
- 
+
 
 /**
 	Open html file $full_file_name;
@@ -1535,7 +1536,7 @@ function api_replace_links_in_html($upload_path, $full_file_name)
 	}
 }
 
- 
+
 
 /**
 	@deprecated, use api_replace_parameter instead
@@ -1630,7 +1631,7 @@ function api_replace_links_in_string($upload_path, $buffer)
 	return $buffer;
 }
 
- 
+
 
 /**
 	EXPERIMENTAL - function seems to work, needs more testing
@@ -1757,7 +1758,7 @@ function api_replace_parameter($upload_path, $buffer, $param_name="src")
 	return $buffer;
 }
 
- 
+
 
 /**
  * Checks the extension of a file, if it's .htm or .html
@@ -1777,7 +1778,7 @@ function check_for_missing_files($file)
 	return false;
 }
 
- 
+
 
 /**
  * This builds a form that asks for the missing images in a html file

@@ -47,7 +47,9 @@ class DocumentManager {
 		$course_code = Database::escape_string($_course['sysCode']);
 		$course_table = Database::get_main_table(TABLE_MAIN_COURSE);
 
-		$result = Database::fetch_array(Database::query("SELECT ".DISK_QUOTA_FIELD." FROM $course_table WHERE code = '$course_code'"));
+		$sql_query = "SELECT ".DISK_QUOTA_FIELD." FROM $course_table WHERE code = '$course_code'";
+		$sql_result = Database::query($sql_query);
+		$result = Database::fetch_array($sql_result);
 		$course_quota = $result[DISK_QUOTA_FIELD];
 
 		if (is_null($course_quota)) {
@@ -846,7 +848,10 @@ class DocumentManager {
 	 * @return int id of document / false if no doc found
 	 */
 	public static function get_document_id($_course, $path) {
-		$result = Database::query("SELECT id FROM ".Database::get_course_table(TABLE_DOCUMENT, $_course['dbName'])." WHERE path LIKE BINARY '".Database::escape_string($path)."'");
+		$TABLE_DOCUMENT = Database :: get_course_table(TABLE_DOCUMENT, $_course['dbName']);
+		$path = Database::escape_string($path);
+		$sql = "SELECT id FROM $TABLE_DOCUMENT WHERE path LIKE BINARY '$path'";
+		$result = Database::query($sql);
 		if ($result && Database::num_rows($result) == 1) {
 			$row = Database::fetch_array($result);
 			return $row[0];
@@ -916,10 +921,16 @@ class DocumentManager {
 	 * @param array  $course the _course array info of the document's course
 	 */
 	public static function is_visible($doc_path, $course) {
-		// Note the extra / at the end of doc_path to match every path in the document table that is part of the document path
-		$result = Database::query("SELECT path FROM ".Database::get_course_table(TABLE_DOCUMENT, $course['dbName'])." d, ".Database::get_course_table(TABLE_ITEM_PROPERTY, $course['dbName'])." ip " .
+		$docTable  = Database::get_course_table(TABLE_DOCUMENT, $course['dbName']);
+		$propTable = Database::get_course_table(TABLE_ITEM_PROPERTY, $course['dbName']);
+		//note the extra / at the end of doc_path to match every path in the
+		// document table that is part of the document path
+		$doc_path = Database::escape_string($doc_path);
+
+		$sql = "SELECT path FROM $docTable d, $propTable ip " .
 				"where d.id=ip.ref AND ip.tool='".TOOL_DOCUMENT."' AND d.filetype='file' AND visibility=0 AND ".
-				"locate(concat(path,'/'),'".Database::escape_string($doc_path)."/')=1");
+				"locate(concat(path,'/'),'".$doc_path."/')=1";
+        $result = Database::query($sql);
 		if (Database::num_rows($result) > 0) {
 			$row = Database::fetch_array($result);
 			//echo "$row[0] not visible";

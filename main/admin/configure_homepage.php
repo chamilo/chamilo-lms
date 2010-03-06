@@ -2,9 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 $language_file = array('admin', 'accessibility');
-
 $cidReset = true;
-
 require '../inc/global.inc.php';
 
 $this_section = SECTION_PLATFORM_ADMIN;
@@ -77,7 +75,7 @@ if (!empty($_SESSION['user_language_choice'])) {
 	$lang = api_get_setting('platformLanguage');
 }
 
-// ----- Ensuring availability of main files in the corresponding language -----
+// Ensuring availability of main files in the corresponding language
 
 if ($_configuration['multiple_access_urls']) {
 	$access_url_id = api_get_current_access_url_id();
@@ -85,7 +83,7 @@ if ($_configuration['multiple_access_urls']) {
 		$url_info = api_get_access_url($access_url_id);
 		$url = api_remove_trailing_slash(preg_replace('/https?:\/\//i', '', $url_info['url']));
 		$clean_url = replace_dangerous_char($url);
-		$clean_url = str_replace('/','-',$clean_url);
+		$clean_url = str_replace('/', '-', $clean_url);
 		$clean_url .= '/';
 
 		$homep = api_get_path(SYS_PATH).'home/'; //homep for Home Path

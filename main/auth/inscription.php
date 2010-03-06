@@ -60,7 +60,7 @@ if ($_configuration['multiple_access_urls']) {
 		$url_info = api_get_access_url($access_url_id);
 		$url = api_remove_trailing_slash(preg_replace('/https?:\/\//i', '', $url_info['url']));
 		$clean_url = replace_dangerous_char($url);
-		$clean_url = str_replace('/','-',$clean_url);
+		$clean_url = str_replace('/', '-', $clean_url);
 		$clean_url .= '/';
 		$home_old  = api_get_path(SYS_PATH).'home/';
 		$home = api_get_path(SYS_PATH).'home/'.$clean_url;

@@ -19,7 +19,7 @@ $session_name   = api_get_session_name($my_session_id);
 	<div id="header1">
 		<div id="top_corner"></div>
 		<div id="institution">
-			<a href="<?php echo api_get_path(WEB_PATH);?>index.php" target="_top"><?php echo api_get_setting('siteName') ?></a>
+			<a href="<?php echo api_get_path(WEB_PATH); ?>index.php" target="_top"><?php echo api_get_setting('siteName'); ?></a>
 			<?php
 			$iurl  = api_get_setting('InstitutionUrl');
 			$iname = api_get_setting('Institution');
@@ -294,28 +294,39 @@ if ($_configuration['multiple_access_urls']) {
 $ext = '.html';
 $menutabs = 'home_tabs';
 if (is_file($homep.$menutabs.'_'.$lang.$ext) && is_readable($homep.$menutabs.'_'.$lang.$ext)) {
-	$home_top = file_get_contents($homep.$menutabs.'_'.$lang.$ext);
+	$home_top = @(string)file_get_contents($homep.$menutabs.'_'.$lang.$ext);
 } elseif (is_file($homep.$menutabs.$lang.$ext) && is_readable($homep.$menutabs.$lang.$ext)) {
-	$home_top = file_get_contents($homep.$menutabs.$lang.$ext);
+	$home_top = @(string)file_get_contents($homep.$menutabs.$lang.$ext);
 } else {
 	$errorMsg = get_lang('HomePageFilesNotReadable');
 }
+$home_top = api_to_system_encoding($home_top, api_detect_encoding(strip_tags($home_top)));
 
 if (api_get_self() != '/main/admin/configure_homepage.php') {
 	if (file_exists($homep.$menutabs.'_'.$lang.$ext)) {
-		$home_top_temp = file_get_contents($homep.$menutabs.'_'.$lang.$ext);
+		$home_top_temp = @(string)file_get_contents($homep.$menutabs.'_'.$lang.$ext);
 	} else if (file_exists($homep.$menutabs.$ext)) {
-		$home_top_temp = file_get_contents($homep.$menutabs.$ext);
+		$home_top_temp = @(string)file_get_contents($homep.$menutabs.$ext);
 	}
 	$open = str_replace('{rel_path}',api_get_path(REL_PATH), $home_top_temp);
+	$open = api_to_system_encoding($open, api_detect_encoding(strip_tags($open)));
 	echo $open;
 } else {
 	$home_menu = '';
 	if (file_exists($homep.$menutabs.'_'.$lang.$ext)) {
-		$home_menu = file($homep.$menutabs.'_'.$lang.$ext);
+		$home_menu = @file($homep.$menutabs.'_'.$lang.$ext);
 	} else {
-		$home_menu = file($homep.$menutabs.$ext);
+		$home_menu = @file($homep.$menutabs.$ext);
 	}
+	if (empty($home_menu)) {
+		$home_menu = array();
+	}
+	if (!empty($home_menu)) {
+		$home_menu = implode("\n", $home_menu);
+		$home_menu = api_to_system_encoding($home_menu, api_detect_encoding(strip_tags($home_menu)));
+		$home_menu = explode("\n", $home_menu);
+	}
+
 	foreach ($home_menu as $key => $enreg) {
 		$enreg = trim($enreg);
 		if (!empty($enreg)) {

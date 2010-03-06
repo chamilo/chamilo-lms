@@ -230,8 +230,8 @@ if (!empty($action)) {
 				} else {
 					// We update all the news file
 					$_languages = api_get_languages();
-					foreach ($_languages["name"] as $key => $value) {
-						$english_name = $_languages["folder"][$key];
+					foreach ($_languages['name'] as $key => $value) {
+						$english_name = $_languages['folder'][$key];
 						if (file_exists($homep.$newsf.'_'.$english_name.$ext)) {
 							if (is_writable($homep.$newsf.'_'.$english_name.$ext)) {
 								$fp = fopen($homep.$newsf.'_'.$english_name.$ext, 'w');
@@ -268,7 +268,7 @@ if (!empty($action)) {
 
 				if ($link_url == 'http://') {
 					$link_url = '';
-				} elseif (!empty($link_url) && !strstr($link_url,'://')) {
+				} elseif (!empty($link_url) && !strstr($link_url, '://')) {
 					$link_url='http://'.$link_url;
 				}
 				$menuf = ($action == 'insert_tabs' || $action == 'edit_tabs')? $menutabs : $menuf;
@@ -384,7 +384,7 @@ if (!empty($action)) {
 				// link and re-writing the array to the file
 				$link_index = intval($_GET['link_index']);
 				$menuf = ($action == 'delete_tabs')? $menutabs : $menuf;
-				$home_menu = file($homep.$menuf.'_'.$lang.$ext);
+				$home_menu = @file($homep.$menuf.'_'.$lang.$ext);
 				if (empty($home_menu)) {
 					$home_menu = array();
 				}
@@ -392,7 +392,7 @@ if (!empty($action)) {
 					if ($key == $link_index) {
 						unset($home_menu[$key]);
 					} else {
-						$home_menu[$key]=trim($enreg);
+						$home_menu[$key] = trim($enreg);
 					}
 				}
 				$home_menu = implode("\n", $home_menu);
@@ -414,9 +414,9 @@ if (!empty($action)) {
 				// This request is only the preparation for the update of the home_top
 				$home_top = '';
 				if (is_file($homep.$topf.'_'.$lang.$ext) && is_readable($homep.$topf.'_'.$lang.$ext)) {
-					$home_top = file_get_contents($homep.$topf.'_'.$lang.$ext);
+					$home_top = @(string)file_get_contents($homep.$topf.'_'.$lang.$ext);
 				} elseif (is_file($homep.$topf.$lang.$ext) && is_readable($homep.$topf.$lang.$ext)) {
-					$home_top = file_get_contents($homep.$topf.$lang.$ext);
+					$home_top = @(string)file_get_contents($homep.$topf.$lang.$ext);
 				} else {
 					$errorMsg = get_lang('HomePageFilesNotReadable');
 				}
@@ -426,9 +426,9 @@ if (!empty($action)) {
 				// This request is only the preparation for the update of the home_notice
 				$home_notice = '';
 				if (is_file($homep.$noticef.'_'.$lang.$ext) && is_readable($homep.$noticef.'_'.$lang.$ext)) {
-					$home_notice = file($homep.$noticef.'_'.$lang.$ext);
+					$home_notice = @file($homep.$noticef.'_'.$lang.$ext);
 				} elseif (is_file($homep.$noticef.$lang.$ext) && is_readable($homep.$noticef.$lang.$ext)) {
-					$home_notice = file($homep.$noticef.$lang.$ext);
+					$home_notice = @file($homep.$noticef.$lang.$ext);
 				} else {
 					$errorMsg = get_lang('HomePageFilesNotReadable');
 				}
@@ -444,9 +444,9 @@ if (!empty($action)) {
 				// This request is the preparation for the update of the home_news page
 				$home_news = '';
 				if (is_file($homep.$newsf.'_'.$lang.$ext) && is_readable($homep.$newsf.'_'.$lang.$ext)) {
-					$home_news = file_get_contents($homep.$newsf.'_'.$lang.$ext);
+					$home_news = @(string)file_get_contents($homep.$newsf.'_'.$lang.$ext);
 				} elseif (is_file($homep.$newsf.$lang.$ext) && is_readable($homep.$newsf.$lang.$ext)) {
-					$home_news = file_get_contents($homep.$newsf.$lang.$ext);
+					$home_news = @(string)file_get_contents($homep.$newsf.$lang.$ext);
 				} else {
 					$errorMsg = get_lang('HomePageFilesNotReadable');
 				}
@@ -457,9 +457,9 @@ if (!empty($action)) {
 				$home_menu = '';
 				$menuf = ($action == 'edit_tabs')? $menutabs : $menuf;
 				if (is_file($homep.$menuf.'_'.$lang.$ext) && is_readable($homep.$menuf.'_'.$lang.$ext)) {
-					$home_menu = file($homep.$menuf.'_'.$lang.$ext);
+					$home_menu = @file($homep.$menuf.'_'.$lang.$ext);
 				} elseif(is_file($homep.$menuf.$lang.$ext) && is_readable($homep.$menuf.$lang.$ext)) {
-					$home_menu = file($homep.$menuf.$lang.$ext);
+					$home_menu = @file($homep.$menuf.$lang.$ext);
 				} else {
 					$errorMsg = get_lang('HomePageFilesNotReadable');
 				}
@@ -476,9 +476,9 @@ if (!empty($action)) {
 				// This request is the preparation for the addition of an item in home_menu
 				$home_menu = '';
 				if (is_file($homep.$menutabs.'_'.$lang.$ext) && is_readable($homep.$menutabs.'_'.$lang.$ext)) {
-					$home_menu = file($homep.$menutabs.'_'.$lang.$ext);
+					$home_menu = @file($homep.$menutabs.'_'.$lang.$ext);
 				} elseif (is_file($homep.$menutabs.$lang.$ext) && is_readable($homep.$menutabs.$lang.$ext)) {
-					$home_menu = file($homep.$menutabs.$lang.$ext);
+					$home_menu = @file($homep.$menutabs.$lang.$ext);
 				} else {
 					$errorMsg = get_lang('HomePageFilesNotReadable');
 				}
@@ -497,9 +497,9 @@ if (!empty($action)) {
 				$home_menu = '';
 				$menuf = ($action == 'edit_tabs')? $menutabs : $menuf;
 				if (is_file($homep.$menuf.'_'.$lang.$ext) && is_readable($homep.$menuf.'_'.$lang.$ext)) {
-					$home_menu = file($homep.$menuf.'_'.$lang.$ext);
+					$home_menu = @file($homep.$menuf.'_'.$lang.$ext);
 				} elseif(is_file($homep.$menuf.$lang.$ext) && is_readable($homep.$menuf.$lang.$ext)) {
-					$home_menu = file($homep.$menuf.$lang.$ext);
+					$home_menu = @file($homep.$menuf.$lang.$ext);
 				} else {
 					$errorMsg = get_lang('HomePageFilesNotReadable');
 				}
@@ -544,7 +544,7 @@ if (!empty($action)) {
 
 							if (!strstr($filename, '/') && strstr($filename, '.html')) {
 								// Get oonly the contents of the link file
-								$link_html = file(api_get_path(SYS_PATH).'home/'.$filename);
+								$link_html = @file(api_get_path(SYS_PATH).'home/'.$filename);
 								$link_html = implode('', $link_html);
 								$link_url = '';
 							} else {
@@ -686,7 +686,7 @@ switch ($action) {
 			$open = $home_top;
 		} else {
 			$name = $newsf;
-			$open = @file_get_contents($homep.$newsf.'_'.$lang.$ext);
+			$open = @(string)file_get_contents($homep.$newsf.'_'.$lang.$ext);
 		}
 		$open = api_to_system_encoding($open, api_detect_encoding(strip_tags($open)));
 
@@ -751,9 +751,9 @@ switch ($action) {
 				<?php
 					//print home_top contents
 					if (file_exists($homep.$topf.'_'.$lang.$ext)) {
-						$home_top_temp = file_get_contents($homep.$topf.'_'.$lang.$ext);
+						$home_top_temp = @(string)file_get_contents($homep.$topf.'_'.$lang.$ext);
 					} else {
-						$home_top_temp = file_get_contents($homep.$topf.$ext);
+						$home_top_temp = @(string)file_get_contents($homep.$topf.$ext);
 					}
 					$open = str_replace('{rel_path}', api_get_path(REL_PATH), $home_top_temp);
 					$open = api_to_system_encoding($open, api_detect_encoding(strip_tags($open)));
@@ -852,9 +852,9 @@ switch ($action) {
 				<?php
 					$home_menu = '';
 					if (file_exists($homep.$menuf.'_'.$lang.$ext)) {
-						$home_menu = file($homep.$menuf.'_'.$lang.$ext);
+						$home_menu = @file($homep.$menuf.'_'.$lang.$ext);
 					} else {
-						$home_menu = file ($homep.$menuf.$ext);
+						$home_menu = @file($homep.$menuf.$ext);
 					}
 					if (empty($home_menu)) {
 						$home_menu = array();
@@ -888,9 +888,9 @@ switch ($action) {
 			<?php
 			$home_notice = '';
 			if (file_exists($homep.$noticef.'_'.$lang.$ext)) {
-				$home_notice = @file_get_contents($homep.$noticef.'_'.$lang.$ext);
+				$home_notice = @(string)file_get_contents($homep.$noticef.'_'.$lang.$ext);
 			} else {
-				$home_notice = @file_get_contents($homep.$noticef.$ext);
+				$home_notice = @(string)file_get_contents($homep.$noticef.$ext);
 			}
 			$home_notice = api_to_system_encoding($home_notice, api_detect_encoding(strip_tags($home_notice)));
 			echo $home_notice;

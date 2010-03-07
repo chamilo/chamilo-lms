@@ -411,7 +411,7 @@ class DocumentManager {
 			header('Pragma: no-cache');
 			switch ($content_type) {
 				case 'text/html':
-					$encoding = @api_detect_encoding($full_string);
+					$encoding = @api_detect_encoding_html($full_string);
 					if (!empty($encoding)) {
 						$content_type .= '; charset='.$encoding;
 					}

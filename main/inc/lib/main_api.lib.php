@@ -1541,9 +1541,9 @@ function api_get_session_condition($session_id, $state = true, $both = false) {
 	$session_id = intval($session_id);
 	//condition to show resources by session
 	$condition_session = '';
-	$condition_add = $state == false ? " WHERE " : " AND ";		
-	if ($session_id > 0) {		
-		$condition_session = $condition_add." (session_id = ".(int)$session_id." OR session_id = 0) ";		
+	$condition_add = $state == false ? " WHERE " : " AND ";
+	if ($session_id > 0) {
+		$condition_session = $condition_add." (session_id = ".(int)$session_id." OR session_id = 0) ";
 	} else {
 		$condition_session = $condition_add." session_id = 0 ";
 	}
@@ -4548,12 +4548,12 @@ function api_get_local_time($time, $format=null, $to_timezone=null, $from_timezo
 		if (is_int($format) || strpos($format, '%') !== false) {
 			return api_format_date($format, strtotime($date->format("Y-m-d H:i:s")));
 		} else {
-			if ($format_null == true && phpversion() >= 5.3) {
+			if ($format_null && IS_PHP_53) {
 				// use IntlDateFormatter to localize the date in the language of the user
-				require_once api_get_path(LIBRARY_PATH).'/internationalization.lib.php';
 				$locale = api_get_language_isocode();
+				// TODO: This instance of IntlDateFormatter is better to be cached for each locale. It is for speed, api_get_local_time() is called repetitively in tables.
 				$date_formatter = new IntlDateFormatter($locale, IntlDateFormatter::FULL, IntlDateFormatter::SHORT);
-				return $date_formatter->format(strtotime($date->format("Y-m-d H:i:s")));
+				return api_to_system_encoding($date_formatter->format(strtotime($date->format("Y-m-d H:i:s"))), 'UTF-8');
 			} else {
 				return $date->format($format);
 			}

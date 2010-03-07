@@ -333,11 +333,19 @@ class DocumentManager {
 			// Commented to avoid double caching declaration when playing with IE and HTTPS
 			//header('Cache-Control: no-cache, must-revalidate');
 			//header('Pragma: no-cache');
-			if ($content_type == 'text/plain') {
-				$encoding = @api_detect_encoding(strip_tags(file_get_contents($full_file_name)));
-				if (!empty($encoding)) {
-					$content_type .= '; charset='.$encoding;
-				}
+			switch ($content_type) {
+				case 'text/html':
+					$encoding = @api_detect_encoding_html(file_get_contents($full_file_name));
+					if (!empty($encoding)) {
+						$content_type .= '; charset='.$encoding;
+					}
+					break;
+				case 'text/plain':
+					$encoding = @api_detect_encoding(strip_tags(file_get_contents($full_file_name)));
+					if (!empty($encoding)) {
+						$content_type .= '; charset='.$encoding;
+					}
+					break;
 			}
 			header('Content-type: '.$content_type);
 			header('Content-Length: '.$len);
@@ -401,11 +409,19 @@ class DocumentManager {
 			header('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT');
 			header('Cache-Control: no-cache, must-revalidate');
 			header('Pragma: no-cache');
-			if ($content_type == 'text/plain') {
-				$encoding = @api_detect_encoding(strip_tags($full_string));
-				if (!empty($encoding)) {
-					$content_type .= '; charset='.$encoding;
-				}
+			switch ($content_type) {
+				case 'text/html':
+					$encoding = @api_detect_encoding($full_string);
+					if (!empty($encoding)) {
+						$content_type .= '; charset='.$encoding;
+					}
+					break;
+				case 'text/plain':
+					$encoding = @api_detect_encoding(strip_tags($full_string));
+					if (!empty($encoding)) {
+						$content_type .= '; charset='.$encoding;
+					}
+					break;
 			}
 			header('Content-type: '.$content_type);
 			header('Content-Length: '.$len);

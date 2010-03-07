@@ -921,6 +921,28 @@ class TestInternationalization extends UnitTestCase {
 		//var_dump($res);
 	}
 
+	public function test_api_detect_encoding_html() {
+		$meta = '<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-15" />'."\n";
+		$head1 = '<head>'."\n".'<title>Sample Document</title>'."\n".'</head>'."\n";
+		$head2 = '<head>'."\n".'<title>Sample Document</title>'."\n".$meta.'</head>'."\n";
+		$body1 = '<p>This is a sample document for testing encoding detection.</p>'."\n";
+		$body2 = '<body>'."\n".$body1.'</body>';
+		$html1 = $body1; // A html-snippet, see for example some log-files created by the "Chat" tool.
+		$html2 = '<html>'."\n".$head1.$body2."\n".'</html>'; // A full html-document, no encoding has been declared.
+		$html3 = '<html>'."\n".$head2.$body2."\n".'</html>'; // A full html-document, encoding has been declared.
+		$res1 = api_detect_encoding_html($html1);
+		$res2 = api_detect_encoding_html($html2);
+		$res3 = api_detect_encoding_html($html3);
+		$this->assertTrue(
+			$res1 === 'UTF-8'
+			&& $res2 === 'UTF-8'
+			&& $res3 === 'ISO-8859-15'
+		);
+		//var_dump($res1);
+		//var_dump($res2);
+		//var_dump($res3);
+	}
+
 	public function test_api_detect_encoding_xml() {
 		$xml1 = '
 			<Users>

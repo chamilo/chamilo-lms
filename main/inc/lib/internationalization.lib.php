@@ -3174,10 +3174,25 @@ function api_detect_encoding($string) {
 }
 
 /**
+ * Detects encoding of html-formatted text.
+ * @param string $string				The input html-formatted text.
+ * @return string						Returns the detected encoding.
+ */
+function api_detect_encoding_html($string) {
+	if (@preg_match('/<head.*(<meta[^>]*http-equiv=["\']*content-type[^>]*>).*<\/head>/si', $string, $matches)) {
+		if (@preg_match('/<meta[^>]*charset=(.*)["\';][^>]*>/si', $matches[1], $matches)) {
+			return api_refine_encoding_id(trim($matches[1]));
+		}
+	}
+	return api_detect_encoding(strip_tags($string));
+}
+
+/**
  * Detects encoding of xml-formatted text.
  * @param string $string				The input xml-formatted text.
  * @param string $default_encoding		This is the default encoding to be returned if there is no way the xml-text's encoding to be detected. If it not spesified, the system encoding is assumed then.
  * @return string						Returns the detected encoding.
+ * @todo The second parameter is to be eliminated. See api_detect_encoding_html().
  */
 function api_detect_encoding_xml($string, $default_encoding = null) {
 	if (preg_match(_PCRE_XML_ENCODING, $string, $matches)) {

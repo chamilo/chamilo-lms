@@ -8,7 +8,7 @@
 */
 
 // name of the language file that needs to be included
-$language_file = array ('registration', 'index', 'tracking', 'userInfo');
+$language_file = array ('registration', 'index', 'tracking', 'userInfo', 'admin');
 
 // including files 
 require_once '../inc/global.inc.php';

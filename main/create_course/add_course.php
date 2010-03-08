@@ -1,13 +1,10 @@
 <?php
-// $Id: add_course.php 20588 2009-05-13 12:34:18Z pcool $
-/* For licensing terms, see /dokeos_license.txt */
+/* For licensing terms, see /license.txt */
 /**
-==============================================================================
 * This script allows professors and administrative staff to create course sites.
 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 * @author Roan Embrechts, refactoring
 * @package dokeos.create_course
-==============================================================================
 */
 
 // name of the language file that needs to be included
@@ -17,21 +14,21 @@ $language_file = "create_course";
 $cidReset = true; // Flag forcing the 'current course' reset
 
 // including the global file
-include ('../inc/global.inc.php');
+require_once '../inc/global.inc.php';
 
 // section for the tabs
-$this_section=SECTION_COURSES;
+$this_section = SECTION_COURSES;
 
 // include configuration file
-include (api_get_path(CONFIGURATION_PATH).'add_course.conf.php');
+require_once api_get_path(CONFIGURATION_PATH).'add_course.conf.php';
 
-// include additional libraries
-include_once (api_get_path(LIBRARY_PATH).'add_course.lib.inc.php');
-include_once (api_get_path(LIBRARY_PATH).'course.lib.php');
-include_once (api_get_path(LIBRARY_PATH).'debug.lib.inc.php');
-include_once (api_get_path(LIBRARY_PATH).'fileManage.lib.php');
-include_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
-include_once (api_get_path(CONFIGURATION_PATH).'course_info.conf.php');
+// require_once additional libraries
+require_once api_get_path(LIBRARY_PATH).'add_course.lib.inc.php';
+require_once api_get_path(LIBRARY_PATH).'course.lib.php';
+require_once api_get_path(LIBRARY_PATH).'debug.lib.inc.php';
+require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
+require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
+require_once api_get_path(CONFIGURATION_PATH).'course_info.conf.php';
 
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js" type="text/javascript" language="javascript"></script>'; //jQuery
 $htmlHeadXtra[] = '<script type="text/javascript">
@@ -156,9 +153,5 @@ if ($form->validate()) {
 	$form->display();
 	Display::display_normal_message(get_lang('Explanation'));
 }
-/*
-==============================================================================
-		FOOTER
-==============================================================================
-*/
+/*	FOOTER */
 Display :: display_footer();

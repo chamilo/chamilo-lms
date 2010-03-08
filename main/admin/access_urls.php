@@ -1,15 +1,13 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
-==============================================================================
 *	@package chamilo.admin
-==============================================================================
 */
 
 // name of the language file that needs to be included
 $language_file = 'admin';
 $cidReset = true;
-require '../inc/global.inc.php';
+require_once '../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
 
 api_protect_admin_script();
@@ -63,7 +61,7 @@ if (isset ($_GET['action'])) {
 						foreach($url_list as $my_url) {
 							if (!in_array($my_url['id'],$my_user_url_list)){
 								UrlManager::add_user_to_url(api_get_user_id(),$my_url['id']);
-									$url_str.=$my_url['url'].' ';
+									$url_str.=$my_url['url'].' <br />';
 							}
 						}
 						Display :: display_normal_message(get_lang('AdminUserRegisteredToThisURL').': '.$url_str.'<br />',false);
@@ -84,11 +82,11 @@ $url_string='';
 $my_user_url_list = api_get_access_url_from_user(api_get_user_id());
 foreach($url_list as $my_url) {
 	if (!in_array($my_url['id'],$my_user_url_list)){
-		$url_string.=$my_url['url'].' ';
+		$url_string.=$my_url['url'].' <br />';
 	}
 }
 if(!empty($url_string)) {
-	Display :: display_warning_message(get_lang('AdminShouldBeRegisterInSite').':<br />'.$url_string,false);
+	Display :: display_warning_message(get_lang('AdminShouldBeRegisterInSite').'<br />'.$url_string,false);
 }
 
 // checking the current installation

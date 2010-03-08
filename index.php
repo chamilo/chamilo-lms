@@ -20,19 +20,17 @@ $language_file = array('courses', 'index');
 // Maybe we should change this into an api function? an example: Coursemanager::unset();
 $cidReset = true;
 
-
-/*
-	Included libraries
-*/
+/* 	Included libraries */
 
 /** @todo make all the library files consistent, use filename.lib.php and not filename.lib.inc.php */
 require_once 'main/inc/global.inc.php';
-include_once api_get_path(LIBRARY_PATH).'course.lib.php';
-include_once api_get_path(LIBRARY_PATH).'debug.lib.inc.php';
-include_once api_get_path(LIBRARY_PATH).'events.lib.inc.php';
-include_once api_get_path(LIBRARY_PATH).'system_announcements.lib.php';
-include_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
-include_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
+
+require_once api_get_path(LIBRARY_PATH).'course.lib.php';
+require_once api_get_path(LIBRARY_PATH).'debug.lib.inc.php';
+require_once api_get_path(LIBRARY_PATH).'events.lib.inc.php';
+require_once api_get_path(LIBRARY_PATH).'system_announcements.lib.php';
+require_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
+require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 require_once 'main/chat/chat_functions.lib.php';
 
 $loginFailed = isset($_GET['loginFailed']) ? true : isset($loginFailed);
@@ -41,9 +39,7 @@ $setting_show_also_closed_courses = api_get_setting('show_closed_courses') == 't
 // the section (for the tabs)
 $this_section = SECTION_CAMPUS;
 
-/*
-	Action Handling
-*/
+/*	Action Handling */
 
 /** @todo 	Wouldn't it make more sense if this would be done in local.inc.php so that local.inc.php become the only place where authentication is done?
  * 			by doing this you could logout from any page instead of only from index.php. From the moment there is a logout=true in the url you will be logged out
@@ -56,16 +52,12 @@ if (!empty($_GET['logout'])) {
 	logout();
 }
 
-/*
-	Table definitions
-*/
+/* 	Table definitions */
 $main_course_table 		= Database :: get_main_table(TABLE_MAIN_COURSE);
 $main_category_table 	= Database :: get_main_table(TABLE_MAIN_CATEGORY);
 $track_login_table 		= Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_LOGIN);
 
-/*
-	Constants and CONFIGURATION parameters
-*/
+/* 	Constants and CONFIGURATION parameters */
 /** @todo these configuration settings should move to the dokeos config settings */
 /** defines wether or not anonymous visitors can see a list of the courses on the Dokeos homepage that are open to the world */
 $_setting['display_courses_to_anonymous_users'] = 'true';
@@ -75,9 +67,7 @@ if (isset($_user['user_id'])) {
 	$nameTools = api_get_setting('siteName');
 }
 
-/*
-		LOGIN
-*/
+/* 		LOGIN  	*/
 
 /**
  * @todo This piece of code should probably move to local.inc.php where the actual login / logout procedure is handled.

@@ -1881,8 +1881,8 @@ class UserManager
 			$access_url_id = api_get_current_access_url_id();
 			if($access_url_id!=-1) {
 				$tbl_url_course = Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
-				$join_access_url= "LEFT JOIN $tbl_url_course url_rel_course ON url_rel_course.course_code= course.code";
-				$where_access_url=" AND access_url_id = $access_url_id ";
+				$join_access_url= " ,  $tbl_url_course url_rel_course ";
+				$where_access_url=" AND access_url_id = $access_url_id AND  url_rel_course.course_code = scu.course_code";
 			}
 		}
 
@@ -1922,8 +1922,7 @@ class UserManager
 										ORDER BY code";
 
 
-
-			$course_list_sql_result = Database::query($personal_course_list_sql);
+				$course_list_sql_result = Database::query($personal_course_list_sql);
 
 			if (Database::num_rows($course_list_sql_result)>0) {
 				while ($result_row = Database::fetch_array($course_list_sql_result)) {

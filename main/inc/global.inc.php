@@ -1,7 +1,6 @@
 <?php
 /**
-==============================================================================
-* It is recommended that ALL dokeos scripts include this important file.
+* It is recommended that ALL Chamilo scripts include this important file.
 * This script manages
 * - http get, post, post_files, session, server-vars extraction into global namespace;
 *   (which doesn't occur anymore when servertype config setting is set to test,
@@ -18,7 +17,6 @@
 * 		but use a redirect immediately. By doing so the $already_installed variable can be removed.
 * @todo make it possible to enable / disable the tracking through the Dokeos config page.
 *
-==============================================================================
 */
 
 // Showing/hiding error codes in global error messages.
@@ -74,16 +72,6 @@ require_once $includePath.'/lib/main_api.lib.php';
 // Do not over-use this variable. It is only for this script's local use.
 $lib_path = api_get_path(LIBRARY_PATH);
 
-// Start session.
-api_session_start($already_installed);
-
-if (!$already_installed) {
-	$global_error_code = 2;
-	// The system has not been installed yet.
-	require $includePath.'/global_error_message.inc.php';
-	die();
-}
-
 // Fix bug in IIS that doesn't fill the $_SERVER['REQUEST_URI'].
 api_request_uri();
 
@@ -99,6 +87,9 @@ require_once $lib_path.'display.lib.php';
 require_once $lib_path.'text.lib.php';
 require_once $lib_path.'security.lib.php';
 require_once $lib_path.'events.lib.inc.php';
+
+
+/*  DATABASE CONNECTION  */
 
 // @todo: this shouldn't be done here. It should be stored correctly during installation.
 if (empty($_configuration['statistics_database']) && $already_installed) {
@@ -125,6 +116,37 @@ if (!$_configuration['db_host']) {
 	die();
 }
 
+
+
+/* RETRIEVING ALL THE CHAMILO CONFIG SETTINGS FOR MULTIPLE URLs FEATURE*/
+if (!empty($_configuration['multiple_access_urls'])) {
+	$_configuration['access_url'] = 1;
+	$access_urls = api_get_access_urls();
+	
+	$protocol = ((!empty($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) != 'OFF') ? 'https' : 'http').'://';
+	$request_url1 = $protocol.$_SERVER['SERVER_NAME'].'/';
+	$request_url2 = $protocol.$_SERVER['HTTP_HOST'].'/';
+
+	foreach ($access_urls as & $details) {
+		if ($request_url1 == $details['url'] or $request_url2 == $details['url']) {
+			$_configuration['access_url'] = $details['id'];
+		}
+	}
+} else {
+	$_configuration['access_url'] = 1;
+}
+
+// This function is moved here after the database connections was made since  api_session_start will call the api_get_path() function and this function will call a Database function 
+// Start session.
+api_session_start($already_installed);
+
+if (!$already_installed) {
+	$global_error_code = 2;
+	// The system has not been installed yet.
+	require $includePath.'/global_error_message.inc.php';
+	die();
+}
+
 // The system has not been designed to use special SQL modes that were introduced since MySQL 5.
 Database::query("set session sql_mode='';");
 
@@ -135,11 +157,7 @@ if (!Database::select_db($_configuration['main_database'], $dokeos_database_conn
 	die();
 }
 
-/*
---------------------------------------------
-  Initialization of the default encodings
---------------------------------------------
-*/
+/*   Initialization of the default encodings */
 // The platform's character set must be retrieved at this early moment.
 $sql = "SELECT selected_value FROM settings_current WHERE variable = 'platform_charset';";
 $result = Database::query($sql);
@@ -161,27 +179,6 @@ api_set_internationalization_default_encoding($charset);
 Database::query("SET SESSION character_set_server='utf8';");
 Database::query("SET SESSION collation_server='utf8_general_ci';");
 Database::query("SET CHARACTER SET '" . Database::to_db_encoding($charset) . "';");
-
-/*
---------------------------------------------
-  RETRIEVING ALL THE DOKEOS CONFIG SETTINGS
---------------------------------------------
-*/
-if (!empty($_configuration['multiple_access_urls'])) {
-	$_configuration['access_url'] = 1;
-	$access_urls = api_get_access_urls();
-	$protocol = ((!empty($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) != 'OFF') ? 'https' : 'http').'://';
-	$request_url1 = $protocol.$_SERVER['SERVER_NAME'].'/';
-	$request_url2 = $protocol.$_SERVER['HTTP_HOST'].'/';
-
-	foreach ($access_urls as & $details) {
-		if ($request_url1 == $details['url'] or $request_url2 == $details['url']) {
-			$_configuration['access_url'] = $details['id'];
-		}
-	}
-} else {
-	$_configuration['access_url'] = 1;
-}
 
 // access_url == 1 is the default dokeos location
 if ($_configuration['access_url'] != 1) {
@@ -273,11 +270,9 @@ if (!$x = strpos($_SERVER['PHP_SELF'], 'whoisonline.php')) {
 
 if (api_get_setting('server_type') == 'test') {
 	/*
-	--------------------------------------------
-	Server type is test
+		Server type is test
 	- high error reporting level
 	- only do addslashes on $_GET and $_POST
-	--------------------------------------------
 	*/
 	if (IS_PHP_53) {
 		error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED);
@@ -305,11 +300,9 @@ if (api_get_setting('server_type') == 'test') {
 	}
 } else {
 	/*
-	--------------------------------------------
 	Server type is not test
 	- normal error reporting level
 	- full fake register globals block
-	--------------------------------------------
 	*/
 	error_reporting(E_COMPILE_ERROR | E_ERROR | E_CORE_ERROR);
 
@@ -343,11 +336,7 @@ if (api_get_setting('server_type') == 'test') {
 	}
 }
 
-/*
------------------------------------------------------------
-	LOAD LANGUAGE FILES SECTION
------------------------------------------------------------
-*/
+/*	LOAD LANGUAGE FILES SECTION */
 
 // if we use the javascript version (without go button) we receive a get
 // if we use the non-javascript version (with the go button) we receive a post
@@ -383,7 +372,7 @@ if (api_get_self() == api_get_path(REL_PATH).'main/admin/sub_language.php' || ap
 		$lang_list_result = array_diff($lang_list_post, $lang_list_pre);
 		unset($lang_list_pre);
 
-		// ------  english language array
+		//  english language array
 		$english_language_array[$language_file_item] = compact($lang_list_result);
 
 		//cleaning the variables
@@ -395,7 +384,7 @@ if (api_get_self() == api_get_path(REL_PATH).'main/admin/sub_language.php' || ap
 			include_once $parent_file;
 		}
 
-		// ------  parent language array
+		//  parent language array
 		$parent_language_array[$language_file_item] = compact($lang_list_result);
 
 		//cleaning the variables
@@ -407,7 +396,7 @@ if (api_get_self() == api_get_path(REL_PATH).'main/admin/sub_language.php' || ap
 			include $sub_file;
 		}
 
-		// ------  sub language array
+		//  sub language array
 		$sub_language_array[$language_file_item] = compact($lang_list_result);
 
 		//cleaning the variables

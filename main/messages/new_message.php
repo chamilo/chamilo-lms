@@ -8,11 +8,7 @@
 * - reply on message (when pressing reply when viewing a message)
 * - send to specific user (when pressing send message in the who is online list)
 */
-/*
-==============================================================================
-		INIT SECTION
-==============================================================================
-*/
+/* 		INIT SECTION	*/
 // name of the language file that needs to be included
 $language_file= array('messages','userInfo');
 $cidReset	= true;
@@ -30,11 +26,7 @@ require_once api_get_path(LIBRARY_PATH).'group_portal_manager.lib.php';
 require_once api_get_path(LIBRARY_PATH).'message.lib.php';
 
 $nameTools = api_xml_http_response_encode(get_lang('Messages'));
-/*
------------------------------------------------------------
-	Constants and variables
------------------------------------------------------------
-*/
+/*	Constants and variables */
 
 $htmlHeadXtra[]='
 <script language="javascript">

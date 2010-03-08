@@ -235,13 +235,17 @@ class Diagnoser
     function get_webserver_data() {
         $array = array();
 
-        $array[] = $this->build_setting(self :: STATUS_INFORMATION, '[SERVER]', '$_SERVER["SERVER_ADDR"]', 'http://be.php.net/reserved.variables.server', $_SERVER["SERVER_ADDR"], null, null, get_lang('ServerIPInfo'));
+        $array[] = $this->build_setting(self :: STATUS_INFORMATION, '[SERVER]', '$_SERVER["SERVER_NAME"]', 'http://be.php.net/reserved.variables.server', $_SERVER["SERVER_NAME"], null, null, get_lang('ServerNameInfo'));
+        
+        $array[] = $this->build_setting(self :: STATUS_INFORMATION, '[SERVER]', '$_SERVER["SERVER_ADDR"]', 'http://be.php.net/reserved.variables.server', $_SERVER["SERVER_ADDR"], null, null, get_lang('ServerAddessInfo'));
+        
+        $array[] = $this->build_setting(self :: STATUS_INFORMATION, '[SERVER]', '$_SERVER["SERVER_PORT"]', 'http://be.php.net/reserved.variables.server', $_SERVER["SERVER_PORT"], null, null, get_lang('ServerPortInfo'));       
 
         $array[] = $this->build_setting(self :: STATUS_INFORMATION, '[SERVER]', '$_SERVER["SERVER_SOFTWARE"]', 'http://be.php.net/reserved.variables.server', $_SERVER["SERVER_SOFTWARE"], null, null, get_lang('ServerSoftwareInfo'));
 
         $array[] = $this->build_setting(self :: STATUS_INFORMATION, '[SERVER]', '$_SERVER["REMOTE_ADDR"]', 'http://be.php.net/reserved.variables.server', $_SERVER["REMOTE_ADDR"], null, null, get_lang('ServerRemoteInfo'));
 
-        $array[] = $this->build_setting(self :: STATUS_INFORMATION, '[SERVER]', '$_SERVER["HTTP_USER_AGENT"]', 'http://be.php.net/reserved.variables.server', $_SERVER["HTTP_USER_AGENT"], null, null, get_lang('ServerRemoteInfo'));
+        $array[] = $this->build_setting(self :: STATUS_INFORMATION, '[SERVER]', '$_SERVER["HTTP_USER_AGENT"]', 'http://be.php.net/reserved.variables.server', $_SERVER["HTTP_USER_AGENT"], null, null, get_lang('ServerUserAgentInfo'));
 
         /*$path = $this->manager->get_url(array('section' => Request :: get('section')));
         $request = $_SERVER["REQUEST_URI"];
@@ -249,7 +253,7 @@ class Diagnoser
         $array[] = $this->build_setting($status, '[SERVER]', '$_SERVER["REQUEST_URI"]', 'http://be.php.net/reserved.variables.server', $request, $path, null, get_lang('RequestURIInfo'));
         */
         $array[] = $this->build_setting(self :: STATUS_INFORMATION, '[SERVER]', '$_SERVER["SERVER_PROTOCOL"]', 'http://be.php.net/reserved.variables.server', $_SERVER["SERVER_PROTOCOL"], null, null, get_lang('ServerProtocolInfo'));
-
+        
         $array[] = $this->build_setting(self :: STATUS_INFORMATION, '[SERVER]', 'php_uname()', 'http://be2.php.net/php_uname', php_uname(), null, null, get_lang('UnameInfo'));
 
         return $array;

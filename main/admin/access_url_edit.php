@@ -120,5 +120,5 @@ if (isset ($_GET['action'])) {
 }
 
 // Submit button
-$form->addElement('submit', 'submit', $submit_name);
+$form->addElement('style_submit_button', 'submit', $submit_name, 'class="add"');
 $form->display();

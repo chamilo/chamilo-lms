@@ -9,7 +9,7 @@
 $language_file='admin';
 $cidReset=true;
 include('../inc/global.inc.php');
-api_protect_admin_script();
+api_protect_admin_script(true);
 $tbl_user=Database::get_main_table(TABLE_MAIN_USER);
 $tbl_course=Database::get_main_table(TABLE_MAIN_COURSE);
 $tbl_session=Database::get_main_table(TABLE_MAIN_SESSION);

@@ -15,7 +15,7 @@ include('../inc/global.inc.php');
 // setting the section (for the tabs)
 $this_section=SECTION_PLATFORM_ADMIN;
 
-api_protect_admin_script();
+api_protect_admin_script(true);
 
 // Database Table Definitions
 $tbl_course							= Database::get_main_table(TABLE_MAIN_COURSE);

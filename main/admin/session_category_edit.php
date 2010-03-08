@@ -45,9 +45,10 @@ if (!$infos=Database::fetch_array($result)) {
 list($year_start,$month_start,$day_start)=explode('-',$infos['date_start']);
 list($year_end,$month_end,$day_end)=explode('-',$infos['date_end']);
 
-if (!api_is_platform_admin() && $infos['session_admin_id']!=$_user['user_id']) {
+if (!api_is_platform_admin() && $infos['session_admin_id']!=$_user['user_id'] && !api_is_session_admin()) {
 	api_not_allowed(true);
 }
+
 if ($_POST['formSent']) {
 	$formSent=1;
 	$name= $_POST['name'];

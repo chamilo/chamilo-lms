@@ -12,9 +12,9 @@ $cidReset=true;
 require '../inc/global.inc.php';
 require_once '../inc/lib/sessionmanager.lib.php';
 // setting the section (for the tabs)
-$this_section=SECTION_PLATFORM_ADMIN;
+/*$this_section=SECTION_PLATFORM_ADMIN;
 
-api_protect_admin_script();
+api_protect_admin_script();*/
 
 $id_session=intval($_GET['id_session']);
 $course_code=trim(stripslashes($_GET['course_code']));

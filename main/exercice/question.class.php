@@ -1027,6 +1027,7 @@ abstract class Question
 			case 3:	$this->question = get_lang('langDefaultFillBlankQuestion'); break;
 			case 4:	$this->question = get_lang('langDefaultMathingQuestion'); break;
 			case 5:	$this->question = get_lang('langDefaultOpenQuestion');	break;
+			case 9:	$this->question = get_lang('langDefaultMultipleQuestion'); break;
 		}
 		$form->addElement('html','</div>');
 		// default values

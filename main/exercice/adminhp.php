@@ -57,6 +57,7 @@ define(MULTIPLE_ANSWER,	2);
 define(FILL_IN_BLANKS,	3);
 define(MATCHING,		4);
 define(FREE_ANSWER,     5);
+define(MULTIPLE_ANSWER_COMBINATION, 6);
 
 // allows script inclusions
 define(ALLOWED_TO_INCLUDE,1);

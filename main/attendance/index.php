@@ -9,7 +9,7 @@
 */
 
 // name of the language file that needs to be included
-$language_file = array ('userInfo');
+$language_file = array ('userInfo', 'admin');
 
 // including files 
 require_once '../inc/global.inc.php';
@@ -151,7 +151,7 @@ if (api_is_drh() && isset($_GET['student_id'])) {
 	$student_param = '&student_id='.$student_id;
 	$student_info  = api_get_user_info($student_id);
 	$student_name  =  api_get_person_name($student_info['firstname'],$student_info['lastname']);
-	$interbreadcrumb[] = array ('url' => '/main/mySpace/myStudents.php?&student='.$student_id, 'name' => $student_name);	
+	$interbreadcrumb[] = array ('url' => '/main/mySpace/myStudents.php?student='.$student_id, 'name' => $student_name);	
 }
 
 if (!empty($gradebook)) {

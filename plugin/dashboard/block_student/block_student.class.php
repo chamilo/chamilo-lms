@@ -139,7 +139,7 @@ class BlockStudent extends Block {
 	 		}
 	 		$students_table .= '</table>';
  		} else { 			
- 			$students_table .= get_lang('ThereAreNoInformationAboutStudents');
+ 			$students_table .= get_lang('ThereAreNoInformationsAboutYourStudents');
  		}
  		 		 		
  		$content .= $students_table;
@@ -220,7 +220,7 @@ class BlockStudent extends Block {
 	 		}
 	 		$students_table .= '</table>';
  		} else {
- 			$students_table .= get_lang('ThereAreNoInformationAboutStudents');
+ 			$students_table .= get_lang('ThereAreNoInformationsAboutYourStudents');
  		}
   		
   		$content .= $students_table;

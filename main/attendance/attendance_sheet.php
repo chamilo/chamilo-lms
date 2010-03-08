@@ -16,7 +16,7 @@ if (api_is_allowed_to_edit(null, true)) {
 	echo '<a href="index.php?'.api_get_cidreq().'&action=calendar_list&attendance_id='.$attendance_id.$param_gradebook.'">'.Display::return_icon('calendar_up.gif',get_lang('AttendanceCalendar')).' '.get_lang('AttendanceCalendar').'</a>';	
 	echo '</div>';
 
-	$message_information = get_lang('informationAttendanceSheet');
+	$message_information = get_lang('AttendanceSheetDescription');
 	if (!empty($message_information)) {
 		$message = '<strong>'.get_lang('Information').'</strong><br />';
 		$message .= $message_information;
@@ -34,11 +34,11 @@ if (api_is_allowed_to_edit(null, true)) {
 	
 			<table class="data_table" width="100%">
 				<tr class="row_odd" >	
-					<th height="65px" width="35px" ><?php echo get_lang('Order')?></th>
+					<th height="65px" width="35px" ><?php echo get_lang('DisplayOrder')?></th>
 					<th width="45px" ><?php echo get_lang('Photo')?></th>
 					<th><?php echo get_lang('LastName')?></th>
 					<th><?php echo get_lang('FirstName')?></th>
-					<th width="90px"><?php echo get_lang('faults')?></th>
+					<th width="90px"><?php echo get_lang('AttendancesFaults')?></th>
 				</tr>
 				
 				<?php 
@@ -137,7 +137,7 @@ if (api_is_allowed_to_edit(null, true)) {
 	</div>
 	
 	<div class="clear"></div>
-	<div style="margin-top:20px;"><button type="submit" class="save"><?php echo get_lang('SaveAttendanceSheet') ?></button></div>
+	<div style="margin-top:20px;"><button type="submit" class="save"><?php echo get_lang('Save') ?></button></div>
 	</form>
 	
 	<?php } else {	
@@ -152,7 +152,7 @@ if (api_is_allowed_to_edit(null, true)) {
 		<div>
 			<table width="200px;">
 			<tr>
-				<td><?php echo get_lang('Faults').': ' ?></td><td><center><div class="attendance-faults-bar" style="background-color:<?php echo (!empty($faults['color_bar'])?$faults['color_bar']:'none') ?>"><?php echo $faults['faults'].'/'.$faults['total'].' ('.$faults['faults_porcent'].'%)' ?></div></center></td>
+				<td><?php echo get_lang('AttendancesFaults').': ' ?></td><td><center><div class="attendance-faults-bar" style="background-color:<?php echo (!empty($faults['color_bar'])?$faults['color_bar']:'none') ?>"><?php echo $faults['faults'].'/'.$faults['total'].' ('.$faults['faults_porcent'].'%)' ?></div></center></td>
 			</tr>	
 			</table>
 		</div>
@@ -162,7 +162,7 @@ if (api_is_allowed_to_edit(null, true)) {
 	<center>
 		<table class="data_table">
 				<tr class="row_odd" >	
-					<th><?php echo get_lang('Calendar')?></th>
+					<th><?php echo get_lang('AttendanceCalendar')?></th>
 					<th><?php echo get_lang('Attendance')?></th>				
 				</tr>
 				<?php 
@@ -177,7 +177,7 @@ if (api_is_allowed_to_edit(null, true)) {
 					<tr class="<?php echo $class ?>"><td><?php echo Display::return_icon('lp_calendar_event.png',get_lang('DateTime')).' '.$presence['date_time'] ?></td><td><center><?php echo $presence['presence']?Display::return_icon('checkbox_on.gif',get_lang('Presence')):Display::return_icon('checkbox_off.gif',get_lang('Presence')) ?></center></td></tr>					
 				<?php } 
 				} else { ?>
-				<tr><td colspan="2"><center><?php echo get_lang('YouDoNotHaveDoneAttendance')?></center></td></tr>	
+				<tr><td colspan="2"><center><?php echo get_lang('YouDoNotHaveDoneAttendances')?></center></td></tr>	
 				<?php }
 				
 				?>

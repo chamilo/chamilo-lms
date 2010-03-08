@@ -25,7 +25,7 @@ $attendance_weight = floatval($attendance_weight);
 
 // display form
 $form = new FormValidator('attendance_edit','POST','index.php?action=attendance_edit&'.api_get_cidreq().'&attendance_id='.$attendance_id.$param_gradebook,'','style="width: 100%;"');
-$form->addElement('header', '', get_lang('EditAnAttendance'));
+$form->addElement('header', '', get_lang('Edit'));
 $form->addElement('hidden', 'sec_token',$token);
 
 $form->add_textfield('title', get_lang('Title'), true, array('size'=>'50'));

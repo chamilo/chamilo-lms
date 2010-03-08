@@ -120,7 +120,7 @@ class BlockTeacher extends Block {
 	 		}
 	 		$teachers_table .= '</table>';
 		} else {
-			$teachers_table .= get_lang('ThereAreNoInformationAboutTeachers');
+			$teachers_table .= get_lang('ThereAreNoInformationsAboutYourTeachers');
 		}
 	 	
 	 	
@@ -177,7 +177,7 @@ class BlockTeacher extends Block {
 	 		}
 	 		$teachers_table .= '</table>';
  		} else {
- 			$teachers_table .= get_lang('ThereAreNoInformationAboutTeachers');
+ 			$teachers_table .= get_lang('ThereAreNoInformationsAboutYourTeachers');
  		}
   		
   		$content .= $teachers_table;

@@ -370,7 +370,7 @@ function get_number_of_users() {
 	if (!empty($_SESSION["id_session"])){
 		$a_course_users = CourseManager :: get_user_list_from_course_code($_SESSION['_course']['id'], true, $_SESSION['id_session']);
 	} else {
-		$a_course_users = CourseManager :: get_user_list_from_course_code($_SESSION['_course']['id'], true);
+		$a_course_users = CourseManager :: get_user_list_from_course_code($_SESSION['_course']['id'], false);
 	}
 	foreach ($a_course_users as $user_id => $o_course_user) {
 		if ((isset($_GET['keyword']) && search_keyword($o_course_user['firstname'], $o_course_user['lastname'], $o_course_user['username'], $o_course_user['official_code'], $_GET['keyword'])) || !isset($_GET['keyword']) || empty($_GET['keyword'])) {

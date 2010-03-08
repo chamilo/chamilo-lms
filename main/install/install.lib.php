@@ -441,12 +441,8 @@ function get_config_param($param, $updatePath = '') {
 			return null;
 		}
 	}
-
-	if (file_exists($updatePath.'main/inc/installedVersion.inc.php')) {
-
-		$updateFromInstalledVersionFile = $updatePath.'main/inc/installedVersion.inc.php';
-
-	} elseif (file_exists($updatePath.$updateFromConfigFile)) {
+	
+	if (file_exists($updatePath.$updateFromConfigFile)) {
 
 		// The parameter was not found among the global variables, so look into the old configuration file.
 
@@ -537,12 +533,29 @@ function get_config_param($param, $updatePath = '') {
 				}
 			}
 		}
+	}
 
-		return $val;
+	//Special treatment for dokeos_version parameter due to Dokeos 1.8.3 have the dokeos_version in the main/inc/installedVersion.inc.php file
+	if ($param == 'dokeos_version') {
+		//dokeos_version from configuration.php if empty
+		$dokeos_version = $val;
 
+		if (empty($dokeos_version)) {
+			//checking the dokeos_version value exists in main/inc/installedVersion.inc.php 
+			if (file_exists($updatePath.'main/inc/installedVersion.inc.php')) {
+				$updateFromInstalledVersionFile = $updatePath.'main/inc/installedVersion.inc.php';
+				require ($updateFromInstalledVersionFile); //there are only 2 variables here: $stable & $dokeos_version
+				$stable = false;		
+			}
+		}
+		return $dokeos_version;
 	} else {
-		error_log('Config array could not be found in get_config_param()', 0);
-		return null;
+		if (file_exists($updatePath.$updateFromConfigFile)) {
+			return  $val;
+		} else {
+			error_log('Config array could not be found in get_config_param()', 0);
+			return null;
+		}
 	}
 }
 

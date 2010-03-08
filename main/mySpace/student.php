@@ -5,7 +5,7 @@
  */
 
  // name of the language file that needs to be included
-$language_file = array ('registration', 'index', 'tracking');
+$language_file = array ('registration', 'index', 'tracking', 'admin');
 $cidReset = true;
 
 require '../inc/global.inc.php';
@@ -106,12 +106,34 @@ if ($isCoach || api_is_platform_admin() || api_is_drh()) {
 	
 	if (api_is_drh()) {
 		
-		if (!isset($_GET['id_session'])) {			
-			$students = array_keys(UserManager::get_users_followed_by_drh($_user['user_id'], STUDENT));			
-			$courses_of_the_platform = CourseManager :: get_real_course_list();
+		$title = get_lang('YourStudents');
+		if (!isset($_GET['id_session'])) {
+			
+			if (isset($_GET['user_id'])) {
+				$user_id = intval($_GET['user_id']);
+				$user_info = api_get_user_info($user_id);				
+				$title = api_get_person_name($user_info['firstname'], $user_info['lastname']).' : '.get_lang('Students');
+				$courses_by_teacher  = CourseManager::get_course_list_of_user_as_course_admin($user_id);								
+				$students_by_course = array();
+				if (!empty($courses_by_teacher)) {
+					foreach ($courses_by_teacher as $course) {
+						$students_by_course = array_keys(CourseManager::get_student_list_from_course_code($course['course_code']));
+						if (count($students_by_course) > 0) {
+							foreach ($students_by_course as $student_by_course) {
+								$students[] = $student_by_course;
+							}
+						}
+					}
+				}
+				$students = array_unique($students);				
+			} else {
+				$students = array_keys(UserManager::get_users_followed_by_drh($_user['user_id'], STUDENT));									
+			}
+			
+			$courses_of_the_platform = CourseManager :: get_real_course_list();			
 			foreach ($courses_of_the_platform as $course) {
 				$courses[$course['code']] = $course['code'];
-			}			
+			}
 		}
 		
 		$menu_items[] = '<a href="index.php?view=drh_students">'.get_lang('Students').'</a>';
@@ -134,7 +156,10 @@ if ($isCoach || api_is_platform_admin() || api_is_drh()) {
 			echo '<a href="'.api_get_self().'?export=csv"><img align="absbottom" src="../img/excel.gif">&nbsp;'.get_lang('ExportAsCSV').'</a>';	
 		}
 		echo '</div>';
-		echo '<h4>'.get_lang('YourStudentsList').'</h4>';
+		
+		echo '<h4>'.$title.'</h4>';
+		
+		
 	} else {
 		echo '<div align="left" style="float:left"><h4>'.$title.'</h4></div>
 			  <div align="right">

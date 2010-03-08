@@ -7,7 +7,7 @@
  */
 
 // name of the language file that needs to be included
-$language_file = array('registration', 'index', 'tracking', 'exercice', 'admin');
+$language_file = array('registration', 'index', 'tracking', 'exercice', 'admin', 'gradebook');
 
 
 require '../inc/global.inc.php';
@@ -892,7 +892,7 @@ if ($timezone !== null) {
 			get_lang('Time', ''),						
 			get_lang('Progress', ''),
 			get_lang('Score', ''),
-			get_lang('AttendanceFaults', ''),
+			get_lang('AttendancesFaults', ''),
 			get_lang('Evaluations')
 		);
 
@@ -933,7 +933,7 @@ if ($timezone !== null) {
 					<th>'.get_lang('Time').'</th>	
 					<th>'.get_lang('Progress').'</th>
 					<th>'.get_lang('Score').'</th>
-					<th>'.get_lang('AttendanceFaults').'</th>
+					<th>'.get_lang('AttendancesFaults').'</th>
 					<th>'.get_lang('Evaluations').'</th>
 					<th>'.get_lang('Details').'</th>
 				  </tr>';

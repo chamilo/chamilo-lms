@@ -776,7 +776,7 @@ function display_anonymous_course_list() {
 				// 2
 				if ($user_identified && !key_exists($course['code'], $courses_of_user)) {
 					if ($course['subscribe'] == '1') {
-						$courses_list_string .= '<form action="main/auth/courses.php?action=subscribe&category='.$_GET['category'].'" method="post">';
+						$courses_list_string .= '<form action="main/auth/courses.php?action=subscribe&category='.Security::remove_XSS($_GET['category']).'" method="post">';
 						$courses_list_string .= '<input type="hidden" name="sec_token" value="'.$stok.'">';
 						$courses_list_string .= '<input type="hidden" name="subscribe" value="'.$course['code'].'" />';
 						$courses_list_string .= '<input type="image" name="unsub" src="main/img/enroll.gif" alt="'.get_lang('Subscribe').'" />'.get_lang('Subscribe').'</form>';

@@ -137,7 +137,7 @@ if($ajax_search) {
 	}
 	$order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname, username' : ' ORDER BY lastname, firstname, username';
 	$sql="SELECT u.user_id, lastname, firstname, username
-	  	  	FROM $tbl_user u".
+	  	  	FROM $tbl_user u WHERE status <> ".ANONYMOUS." ".
 			$order_clause;
 	$result=Database::query($sql);
 	$Users=Database::store_result($result);

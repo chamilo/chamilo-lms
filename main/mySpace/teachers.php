@@ -49,6 +49,7 @@ if (api_is_drh()) {
 		echo '<a href="'.api_get_self().'?export=xls"><img align="absbottom" src="../img/excel.gif">&nbsp;'.get_lang('ExportAsXLS').'</a>';	
 	}
 	echo '</div>';
+	echo '<h4>'.get_lang('YourTeachers').'</h4>';
 	echo '<br />';
 }
 

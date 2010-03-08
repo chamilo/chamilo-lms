@@ -2225,7 +2225,7 @@ class Blog {
 			$session_id = 0;
 		}
 
-		$student_list = CourseManager :: get_student_list_from_course_code($currentCourse, true, $session_id);
+		$student_list = CourseManager :: get_student_list_from_course_code($currentCourse, false, $session_id);
 		$user_data = array ();
 
 		// Add users that are not in this blog to the list.

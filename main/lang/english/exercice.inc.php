@@ -356,4 +356,9 @@ $ExerciseAttempted = "A learner attempted an exercise";
 $MultipleSelectCombination = "Exact Selection";
 $MultipleAnswerCombination = "Exact answers combination";
 $ExerciceExpiredTimeMessage = "The exercise time limit has expired";
+$EditingExerciseCauseProblemsInLP = "Editing exercise cause problems in Learning Path";
+$AreYouSureToCopy = "Are you sure to copy";
+$ExerciseCopied = "Exercise copied";
+$AreYouSureToDeleteResults = "Are you sure to delete results";
+$XResultsCleaned = "%d results cleaned";
 ?>

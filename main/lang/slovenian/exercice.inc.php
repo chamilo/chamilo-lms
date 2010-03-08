@@ -356,4 +356,9 @@ $ExerciseAttempted = "Tečajnik je izvedel poskus reševanja testa";
 $MultipleSelectCombination = "Točna izbira";
 $MultipleAnswerCombination = "Kombinacija odgovorov točne izbire";
 $ExerciceExpiredTimeMessage = "Čas predviden za ta test je potekel";
+$EditingExerciseCauseProblemsInLP = "Urejanje testa/vaje lahko povzroči probleme v učni poti";
+$AreYouSureToCopy = "Ste prepričani, da želite ustvariti kopijo?";
+$ExerciseCopied = "Kopija testa je bila narejena";
+$AreYouSureToDeleteResults = "Ste prepričani, da želite odstraniti rezultate?";
+$XResultsCleaned = "%d rezultatov počiščenih";
 ?>

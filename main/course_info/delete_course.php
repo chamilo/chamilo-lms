@@ -36,8 +36,8 @@
 // name of the language file that needs to be included
 $language_file = array ('admin','course_info');
 
-include ('../inc/global.inc.php');
-include (api_get_path(LIBRARY_PATH).'course.lib.php');
+require_once ('../inc/global.inc.php');
+require_once (api_get_path(LIBRARY_PATH).'course.lib.php');
 require_once '../gradebook/lib/be/gradebookitem.class.php';
 require_once '../gradebook/lib/be/category.class.php';
 $this_section = SECTION_COURSES;

@@ -95,7 +95,7 @@ function display_action_links($cur_dir_path, $always_show_tool_options, $always_
 	}
 	if (api_is_allowed_to_edit(null,true)) {
 		global $publication;
-		if (empty($curdirpath) or $curdirpath != '.' or $cur_dir_path != '/') {
+		//if (empty($curdirpath) or $curdirpath != '.' or $cur_dir_path != '/') {
 			if (empty($_GET['list']) or Security::remove_XSS($_GET['list'])=='with'){
 				$display_output .=	"<a href=\"".api_get_self()."?".api_get_cidreq()."&amp;curdirpath=".$cur_dir_path."&amp;origin=$origin&amp;gradebook=$gradebook&amp;list=without\">".
 				Display::return_icon('un_check.gif', get_lang('ViewUsersWithoutTask')).' '.get_lang('ViewUsersWithoutTask').
@@ -110,7 +110,7 @@ function display_action_links($cur_dir_path, $always_show_tool_options, $always_
 				Display::return_icon('messagebox_warning.gif', get_lang('ReminderMessage')).' '.get_lang('ReminderMessage').
 				"</a>\n";
 			}
-		}
+		//}
 	}
 	if ($display_output != "") {
 		echo $display_output;

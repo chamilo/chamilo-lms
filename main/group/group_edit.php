@@ -161,7 +161,7 @@ $form->addElement('textarea', 'description', get_lang('Description'), array ('co
 // Members per group
 $form->addElement('radio', 'max_member_no_limit', get_lang('GroupLimit'), get_lang('NoLimit'), MEMBER_PER_GROUP_NO_LIMIT);
 $group = array ();
-$group[] = & $form->createElement('radio', 'max_member_no_limit', null, get_lang('Max'), 1);
+$group[] = & $form->createElement('radio', 'max_member_no_limit', null, get_lang('MaximumOfParticipants'), 1);
 $group[] = & $form->createElement('text', 'max_member', null, array ('size' => 2));
 $group[] = & $form->createElement('static', null, null, get_lang('GroupPlacesThis'));
 $form->addGroup($group, 'max_member_group', null, '', false);

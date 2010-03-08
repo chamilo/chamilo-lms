@@ -257,29 +257,34 @@ require_once dirname(__FILE__).'/internationalization.lib.php';
  * 	The other configuration paramaters have not been changed.
  *
  * 	This is how we can retireve mosth used paths, for common purpose:
- *	api_get_path(WEB_SERVER_ROOT_PATH)			http://www.mychamilo.org/
- *	api_get_path(SYS_SERVER_ROOT_PATH)			/var/www/ - This is the physical folder where the system Chamilo has been placed. It is not always equal to $_SERVER['DOCUMENT_ROOT'].
- * 	api_get_path(WEB_PATH)						http://www.mychamilo.org/chamilo/
- * 	api_get_path(SYS_PATH)						/var/www/chamilo/
- * 	api_get_path(REL_PATH)						/chamilo/
- * 	api_get_path(WEB_COURSE_PATH)				http://www.mychamilo.org/chamilo/courses/
- * 	api_get_path(SYS_COURSE_PATH)				/var/www/chamilo/courses/
- *	api_get_path(REL_COURSE_PATH)				/chamilo/courses/
+
+ *  api_get_path(REL_PATH)						/chamilo/
+ *  api_get_path(REL_COURSE_PATH)				/chamilo/courses/
  * 	api_get_path(REL_CODE_PATH)					/chamilo/main/
- * 	api_get_path(WEB_CODE_PATH)					http://www.mychamilo.org/chamilo/main/
- * 	api_get_path(SYS_CODE_PATH)					/var/www/chamilo/main/
+
+ *	api_get_path(SYS_SERVER_ROOT_PATH)			/var/www/ - This is the physical folder where the system Chamilo has been placed. It is not always equal to $_SERVER['DOCUMENT_ROOT']. 
+ * 	api_get_path(SYS_PATH)						/var/www/chamilo/
+ *  api_get_path(SYS_COURSE_PATH)				/var/www/chamilo/courses/
+ *  api_get_path(SYS_CODE_PATH)					/var/www/chamilo/main/
  * 	api_get_path(SYS_LANG_PATH)					/var/www/chamilo/main/lang/
+ * 
+ *  api_get_path(WEB_SERVER_ROOT_PATH)			http://www.mychamilo.org/
+ *  api_get_path(WEB_PATH)						http://www.mychamilo.org/chamilo/ 
+ *	api_get_path(WEB_COURSE_PATH)				http://www.mychamilo.org/chamilo/courses/
+ * 	api_get_path(WEB_CODE_PATH)					http://www.mychamilo.org/chamilo/main/
+ *	api_get_path(WEB_PLUGIN_PATH)				http://www.mychamilo.org/chamilo/plugin/
+ *  api_get_path(WEB_ARCHIVE_PATH)				http://www.mychamilo.org/chamilo/archive/
  * 	api_get_path(WEB_IMG_PATH)					http://www.mychamilo.org/chamilo/main/img/
  *	api_get_path(WEB_CSS_PATH)					http://www.mychamilo.org/chamilo/main/css/
- * 	api_get_path(GARBAGE_PATH)					Deprecated?
- * 	api_get_path(WEB_PLUGIN_PATH)				http://www.mychamilo.org/chamilo/plugin/
- * 	api_get_path(SYS_PLUGIN_PATH)				/var/www/chamilo/plugin/
- * 	api_get_path(WEB_ARCHIVE_PATH)				http://www.mychamilo.org/chamilo/archive/
+ *	api_get_path(WEB_LIBRARY_PATH)				http://www.mychamilo.org/chamilo/main/inc/lib/
+ *
+ * 	api_get_path(GARBAGE_PATH)					Deprecated? * 	
+ * 
  * 	api_get_path(SYS_ARCHIVE_PATH)				/var/www/chamilo/archive/
- *	api_get_path(INCLUDE_PATH)					/var/www/chamilo/main/inc/
- * 	api_get_path(WEB_LIBRARY_PATH)				http://www.mychamilo.org/chamilo/main/inc/lib/
+ *	api_get_path(INCLUDE_PATH)					/var/www/chamilo/main/inc/ 	
  * 	api_get_path(LIBRARY_PATH)					/var/www/chamilo/main/inc/lib/
  * 	api_get_path(CONFIGURATION_PATH)			/var/www/chamilo/main/inc/conf/
+ *  api_get_path(SYS_PLUGIN_PATH)				/var/www/chamilo/plugin/ 	
  *  api_get_path(SYS_TEST_PATH)					/var/www/chamilo/tests/
  *
  *	This is how we retrieve paths of "registerd" resource files (scripts, players, etc.):
@@ -300,38 +305,38 @@ require_once dirname(__FILE__).'/internationalization.lib.php';
 function api_get_path($path_type, $path = null) {
 
 	static $paths = array(
-		WEB_PATH => '',
-		SYS_PATH => '',
-		REL_PATH => '',
-		WEB_SERVER_ROOT_PATH => '',
-		SYS_SERVER_ROOT_PATH => '',
-		WEB_COURSE_PATH => '',
-		SYS_COURSE_PATH => '',
-		REL_COURSE_PATH => '',
-		REL_CODE_PATH => '',
-		WEB_CODE_PATH => '',
-		SYS_CODE_PATH => '',
-		SYS_LANG_PATH => 'lang/',
-		WEB_IMG_PATH => 'img/',
-		WEB_CSS_PATH => 'css/',
-		GARBAGE_PATH => 'archive/', // Deprecated?
-		SYS_PLUGIN_PATH => 'plugin/',
-		WEB_PLUGIN_PATH => 'plugin/',
-		SYS_ARCHIVE_PATH => 'archive/',
-		WEB_ARCHIVE_PATH => 'archive/',
-		INCLUDE_PATH => 'inc/',
-		LIBRARY_PATH => 'inc/lib/',
-		CONFIGURATION_PATH => 'inc/conf/',
-		WEB_LIBRARY_PATH => 'inc/lib/',
-		WEB_AJAX_PATH => 'inc/ajax/',
-		SYS_TEST_PATH => 'tests/'
+		WEB_PATH 				=> '',
+		SYS_PATH 				=> '',
+		REL_PATH 				=> '',
+		WEB_SERVER_ROOT_PATH 	=> '',
+		SYS_SERVER_ROOT_PATH 	=> '',
+		WEB_COURSE_PATH 		=> '',
+		SYS_COURSE_PATH 		=> '',
+		REL_COURSE_PATH 		=> '',
+		REL_CODE_PATH 			=> '',
+		WEB_CODE_PATH 			=> '',
+		SYS_CODE_PATH 			=> '',
+		SYS_LANG_PATH 			=> 'lang/',
+		WEB_IMG_PATH 			=> 'img/',
+		WEB_CSS_PATH 			=> 'css/',
+		GARBAGE_PATH 			=> 'archive/', // Deprecated?
+		SYS_PLUGIN_PATH 		=> 'plugin/',
+		WEB_PLUGIN_PATH 		=> 'plugin/',
+		SYS_ARCHIVE_PATH 		=> 'archive/',
+		WEB_ARCHIVE_PATH 		=> 'archive/',
+		INCLUDE_PATH 			=> 'inc/',
+		LIBRARY_PATH 			=> 'inc/lib/',
+		CONFIGURATION_PATH		=> 'inc/conf/',
+		WEB_LIBRARY_PATH 		=> 'inc/lib/',
+		WEB_AJAX_PATH			=> 'inc/ajax/',
+		SYS_TEST_PATH 			=> 'tests/'
 	);
 
 	static $resource_paths = array(
-		FLASH_PLAYER_AUDIO => 'inc/lib/mediaplayer/player.swf',
-		FLASH_PLAYER_VIDEO => 'inc/lib/mediaplayer/player.swf',
-		SCRIPT_SWFOBJECT => 'inc/lib/swfobject/swfobject.js',
-		SCRIPT_ASCIIMATHML => 'inc/lib/asciimath/ASCIIMathML.js'
+		FLASH_PLAYER_AUDIO 		=> 'inc/lib/mediaplayer/player.swf',
+		FLASH_PLAYER_VIDEO 		=> 'inc/lib/mediaplayer/player.swf',
+		SCRIPT_SWFOBJECT 		=> 'inc/lib/swfobject/swfobject.js',
+		SCRIPT_ASCIIMATHML 		=> 'inc/lib/asciimath/ASCIIMathML.js'
 	);
 
 	static $is_this_function_initialized;
@@ -344,8 +349,7 @@ function api_get_path($path_type, $path = null) {
 	static $code_folder;
 	static $course_folder;
 	
-	//always load root_web modifications for multiple url features
-	
+	//always load root_web modifications for multiple url features	
 	global $_configuration;
 	//default $_configuration['root_web'] configuration 
 	$root_web = $_configuration['root_web'];
@@ -428,40 +432,67 @@ function api_get_path($path_type, $path = null) {
 		//
 		// Now we can switch into api_get_path() "terminology".
 		$paths[SYS_LANG_PATH] 			= $paths[SYS_CODE_PATH].$paths[SYS_LANG_PATH];
-		$paths[WEB_IMG_PATH] 			= $paths[WEB_CODE_PATH].$paths[WEB_IMG_PATH];
+		$paths[SYS_PLUGIN_PATH] 		= $paths[SYS_PATH].$paths[SYS_PLUGIN_PATH];		
+		$paths[SYS_ARCHIVE_PATH] 		= $paths[SYS_PATH].$paths[SYS_ARCHIVE_PATH];
+		$paths[SYS_TEST_PATH] 			= $paths[SYS_PATH].$paths[SYS_TEST_PATH];
+		
+		$paths[GARBAGE_PATH] 			= $paths[SYS_PATH].$paths[GARBAGE_PATH]; // Deprecated?		
+
 		// TODO: This path may depend on the configuration option? To be researched.
 		// Maybe a new constant like WEB_USER_CSS_PATH has to be defined?
 		$paths[WEB_CSS_PATH] 			= $paths[WEB_CODE_PATH].$paths[WEB_CSS_PATH];
-		//
-		$paths[GARBAGE_PATH] 			= $paths[SYS_PATH].$paths[GARBAGE_PATH]; // Deprecated?
-		$paths[SYS_PLUGIN_PATH] 		= $paths[SYS_PATH].$paths[SYS_PLUGIN_PATH];
+		$paths[WEB_IMG_PATH] 			= $paths[WEB_CODE_PATH].$paths[WEB_IMG_PATH];
+		$paths[WEB_LIBRARY_PATH] 		= $paths[WEB_CODE_PATH].$paths[WEB_LIBRARY_PATH];
+		$paths[WEB_AJAX_PATH] 	 		= $paths[WEB_CODE_PATH].$paths[WEB_AJAX_PATH];
+		
 		$paths[WEB_PLUGIN_PATH] 		= $paths[WEB_PATH].$paths[WEB_PLUGIN_PATH];
-		$paths[SYS_ARCHIVE_PATH] 		= $paths[SYS_PATH].$paths[SYS_ARCHIVE_PATH];
-		$paths[WEB_ARCHIVE_PATH] 		= $paths[WEB_PATH].$paths[WEB_ARCHIVE_PATH];
-		$paths[SYS_TEST_PATH] 			= $paths[SYS_PATH].$paths[SYS_TEST_PATH];
+		$paths[WEB_ARCHIVE_PATH] 		= $paths[WEB_PATH].$paths[WEB_ARCHIVE_PATH];		
+	
 		// A change as of Chamilo 1.8.6.2
 		// Calculation in the previous way does not rely on configuration settings and in some cases gives unexpected results.
 		//$paths[INCLUDE_PATH] 			= $include_path_sys; // Old behaviour, Dokeos 1.8.6.1.
 		$paths[INCLUDE_PATH] 			= $paths[SYS_CODE_PATH].$paths[INCLUDE_PATH]; // New behaviour, coherrent with the model, Chamilo 1.8.6.2.
 		$paths[LIBRARY_PATH] 			= $paths[SYS_CODE_PATH].$paths[LIBRARY_PATH];
 		$paths[CONFIGURATION_PATH] 		= $paths[SYS_CODE_PATH].$paths[CONFIGURATION_PATH];
-		$paths[WEB_LIBRARY_PATH] 		= $paths[WEB_CODE_PATH].$paths[WEB_LIBRARY_PATH];
-		$paths[WEB_AJAX_PATH] 	 		= $paths[WEB_CODE_PATH].$paths[WEB_AJAX_PATH];
+
 
 		$is_this_function_initialized = true;
 	} else {
 		if ($load_new_config) {
+			//redifining variables
+			
+			$web_paths = array(
+				WEB_PATH 				=> '',
+				WEB_SERVER_ROOT_PATH	=> '',
+				WEB_COURSE_PATH 		=> '',
+				WEB_CODE_PATH 			=> '',
+				WEB_IMG_PATH 			=> 'img/',
+				WEB_CSS_PATH 			=> 'css/',
+				WEB_PLUGIN_PATH 		=> 'plugin/',
+				WEB_ARCHIVE_PATH 		=> 'archive/',
+				WEB_LIBRARY_PATH 		=> 'inc/lib/',
+				WEB_AJAX_PATH 			=> 'inc/ajax/',
+			);		
+	
 			
 			$root_web 		= api_add_trailing_slash($root_web);
 			// Web server base and system server base.
 			$server_base_web = preg_replace('@'.$root_rel.'$@', '', $root_web); // No trailing slash.
-			
+						
 			//redefine root webs
-			$paths[WEB_PATH] 			= $root_web;		
-			$paths[WEB_SERVER_ROOT_PATH]= $server_base_web.'/';
-			$paths[WEB_SERVER_ROOT_PATH]= $server_base_web.'/';		
-			$paths[WEB_COURSE_PATH] 	= $root_web.$course_folder;
-			$paths[WEB_CODE_PATH] 		= $root_web.$code_folder;
+			$paths[WEB_PATH] 				= $root_web;
+			$paths[WEB_SERVER_ROOT_PATH]	= $server_base_web.'/';		 
+			$paths[WEB_COURSE_PATH] 		= $root_web.$course_folder;
+			$paths[WEB_CODE_PATH] 			= $root_web.$code_folder;
+			$paths[WEB_IMG_PATH] 			= $paths[WEB_CODE_PATH].$web_paths[WEB_IMG_PATH];
+		
+			// Maybe a new constant like WEB_USER_CSS_PATH has to be defined?
+			$paths[WEB_CSS_PATH] 			= $paths[WEB_CODE_PATH].$web_paths[WEB_CSS_PATH];
+			$paths[WEB_PLUGIN_PATH] 		= $paths[WEB_PATH].$web_paths[WEB_PLUGIN_PATH];
+			$paths[WEB_ARCHIVE_PATH] 		= $paths[WEB_PATH].$web_paths[WEB_ARCHIVE_PATH];
+			$paths[WEB_LIBRARY_PATH] 		= $paths[WEB_CODE_PATH].$web_paths[WEB_LIBRARY_PATH];
+			$paths[WEB_AJAX_PATH] 	 		= $paths[WEB_CODE_PATH].$web_paths[WEB_AJAX_PATH];
+		
 		}
 	}
 

@@ -177,7 +177,7 @@ if(api_is_platform_admin()) {
 	  }
 	  
 	  //@todo Translations needed in order to see a better explanation of issues
-	  //echo '<li><a href="system_status.php">'.get_lang('SystemStatus').'</a></li>';
+	  echo '<li><a href="system_status.php">'.get_lang('SystemStatus').'</a></li>';
 	  
 
 	  ?>

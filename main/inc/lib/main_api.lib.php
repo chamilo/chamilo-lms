@@ -4472,6 +4472,35 @@ function api_get_timezones() {
 }
 
 /**
+ * Returns the timezone to be converted to/from, based on user or admin preferences
+ * 
+ * @return string The timezone chosen
+ * 
+ * 
+ */
+function _api_get_timezone() {
+	global $_user;
+	// First, get the default timezone of the server
+	$to_timezone = date_default_timezone_get();
+	// Second, see if a timezone has been chosen for the platform
+	$timezone_value = api_get_setting('timezone_value', 'timezones');
+	if ($timezone_value != null) {
+		$to_timezone = $timezone_value;
+	}
+	// If allowed by the administrator
+	$use_users_timezone = api_get_setting('use_users_timezone', 'timezones');
+	if ($use_users_timezone == 'true') {
+		// Get the timezone based on user preference, if it exists
+		require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
+		$timezone_user = UserManager::get_extra_user_data_by_field($_user['user_id'],'timezone');
+		if ($timezone_user['timezone'] != null) {
+			$to_timezone = $timezone_user['timezone'];
+		}
+	}
+	return $to_timezone;
+}
+
+/**
  * Returns the given date as a DATETIME in UTC timezone. This function should be used before entering any date in the DB.
  *
  * @param mixed The date to be converted (can be a string supported by date() or a timestamp)
@@ -4480,7 +4509,7 @@ function api_get_timezones() {
  * @author Guillaume Viguier <guillaume.viguier@beeznest.com>
  */
 function api_get_utc_datetime($time) {
-	$from_timezone = date_default_timezone_get();
+	$from_timezone = _api_get_timezone();
 	$to_timezone = 'UTC';
 	// If time is a timestamp, convert it to a string
 	if (is_int($time)) {
@@ -4506,30 +4535,13 @@ function api_get_utc_datetime($time) {
  * @author Guillaume Viguier <guillaume.viguier@beeznest.com>
  */
 function api_get_local_time($time, $format=null, $to_timezone=null, $from_timezone=null) {
-	global $_user;
 	// Determining the timezone to be converted from
 	if ($from_timezone === null) {
 		$from_timezone = 'UTC';
 	}
 	// Determining the timezone to be converted to
 	if ($to_timezone === null) {
-		// First, get the default timezone of the server
-		$to_timezone = date_default_timezone_get();
-		// Second, see if a timezone has been chosen for the platform
-		$timezone_value = api_get_setting('timezone_value', 'timezones');
-		if ($timezone_value != null) {
-			$to_timezone = $timezone_value;
-		}
-		// If allowed by the administrator
-		$use_users_timezone = api_get_setting('use_users_timezone', 'timezones');
-		if ($use_users_timezone == 'true') {
-			// Get the timezone based on user preference, if it exists
-			require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
-			$timezone_user = UserManager::get_extra_user_data_by_field($_user['user_id'],'timezone');
-			if ($timezone_user['timezone'] != null) {
-				$to_timezone = $timezone_user['timezone'];
-			}
-		}
+		$to_timezone = _api_get_timezone();
 	}
 	// Determine the format
 	$format_null = false;

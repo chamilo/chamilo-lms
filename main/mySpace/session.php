@@ -7,7 +7,7 @@
 ob_start();
 $nameTools= 'Sessions';
 // name of the language file that needs to be included
-$language_file = array ('registration', 'index', 'trad4all', 'tracking');
+$language_file = array ('registration', 'index', 'trad4all', 'tracking', 'admin');
 $cidReset = true;
 
 require '../inc/global.inc.php';
@@ -102,7 +102,8 @@ if (api_is_drh()) {
 		echo '<a href="'.api_get_self().'?export=csv"><img align="absbottom" src="../img/excel.gif">&nbsp;'.get_lang('ExportAsCSV').'</a>';	
 	}
 	echo '</div>';
-		
+	echo '<h4>'.get_lang('YourSessionsList').'</h4>';
+
 } else {		
 	if (api_is_platform_admin()) {
 		$a_sessions = SessionManager::get_sessions_list();

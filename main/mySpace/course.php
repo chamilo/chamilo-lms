@@ -61,12 +61,34 @@ Display :: display_header($nameTools);
 
 $a_courses = array();
 if (api_is_drh()) {
-	
-	$a_courses = array_keys(CourseManager::get_courses_followed_by_drh($_user['user_id']));
+
+	$title = '';
+	if (empty($id_session)) {		
+		if (isset($_GET['user_id'])) {
+			$user_id = intval($_GET['user_id']);
+			$user_info = api_get_user_info($user_id);
+			$title = get_lang('AssignedCoursesTo').' '.api_get_person_name($user_info['firstname'], $user_info['lastname']);			
+			$courses  = CourseManager::get_course_list_of_user_as_course_admin($user_id);		
+		} else {
+			$title = get_lang('YourCourseList');
+			$courses = CourseManager::get_courses_followed_by_drh($_user['user_id']);	
+		}
+	} else {
+		$session_name = api_get_session_name($id_session);		
+		$title = api_htmlentities($session_name,ENT_QUOTES,$charset).' : '.get_lang('CourseListInSession');		
+		$courses = Tracking::get_courses_list_from_session($id_session);
+	}
+			
+	$a_courses = array_keys($courses);
 
 	$menu_items[] = '<a href="index.php?view=drh_students">'.get_lang('Students').'</a>';
 	$menu_items[] = '<a href="teachers.php">'.get_lang('Teachers').'</a>';
-	$menu_items[] = get_lang('Courses');
+	
+	if (empty($_GET['user_id']) && empty($id_session)) {
+		$menu_items[] = get_lang('Courses');
+	} else {
+		$menu_items[] = '<a href="course.php">'.get_lang('Courses').'</a>';
+	}
 	$menu_items[] = '<a href="session.php">'.get_lang('Sessions').'</a>';
 		
 	echo '<div class="actions-title" style ="font-size:10pt;">';
@@ -83,7 +105,7 @@ if (api_is_drh()) {
 		echo '&nbsp;&nbsp;<a href="javascript: void(0);" onclick="javascript: window.print()"><img align="absbottom" src="../img/printmgr.gif">&nbsp;'.get_lang('Print').'</a> ';		
 	}
 	echo '</div>';
-	echo '<br />';
+	echo '<h4>'.$title.'</h4>';
 }
 
 // Database Table Definitions
@@ -156,7 +178,7 @@ if (is_array($a_courses)) {
 		$avg_assignments_in_course = $avg_messages_in_course = $avg_progress_in_course = $avg_score_in_course = $avg_time_spent_in_course = 0;
 
 		// students directly subscribed to the course			
-		if (empty($session_id)) {
+		if (empty($id_session)) {
 			$sql = "SELECT user_id FROM $tbl_user_course as course_rel_user WHERE course_rel_user.status='5' AND course_rel_user.course_code='$course_code'";
 		} else {
 			$sql = "SELECT id_user as user_id FROM $tbl_session_course_user srcu WHERE  srcu. course_code='$course_code' AND id_session = '$id_session' AND srcu.status<>2";			

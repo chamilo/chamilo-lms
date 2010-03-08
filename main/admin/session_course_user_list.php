@@ -9,7 +9,7 @@
 $language_file='admin';
 $cidReset=true;
 include('../inc/global.inc.php');
-api_protect_admin_script();
+api_protect_admin_script(true);
 $tbl_user=Database::get_main_table(TABLE_MAIN_USER);
 $tbl_course=Database::get_main_table(TABLE_MAIN_COURSE);
 $tbl_session=Database::get_main_table(TABLE_MAIN_SESSION);
@@ -57,7 +57,7 @@ $limit=20;
 $from=$page * $limit;
 $is_western_name_order = api_is_western_name_order();
 
-$result=Database::query("SELECT user_id,".($is_western_name_order ? 'firstname,lastname' : 'lastname,firstname').",username FROM $tbl_session_rel_course_rel_user,$tbl_user WHERE user_id=id_user AND id_session='$id_session' AND course_code='".addslashes($course_code)."' ORDER BY $sort LIMIT $from,".($limit+1));
+$result=Database::query("SELECT u.user_id,".($is_western_name_order ? 'u.firstname, u.lastname' : 'u.lastname, u.firstname').", u.username FROM $tbl_session_rel_course_rel_user scru, $tbl_user u WHERE u.user_id=scru.id_user AND scru.id_session='$id_session' AND scru.status<>2 AND scru.course_code='".addslashes($course_code)."' ORDER BY $sort LIMIT $from,".($limit+1));
 $Users=Database::store_result($result);
 
 $nbr_results=sizeof($Users);

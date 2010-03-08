@@ -536,7 +536,7 @@ function display_add_form()
 
 	<div class="row">
 		<div class="label">
-			<span class="form_required">*</span><?php echo dropbox_lang("uploadFile")?>:
+			<span class="form_required">*</span><?php echo get_lang('UploadFile'); ?>:
 		</div>
 		<div class="formw">
 				<input type="hidden" name="MAX_FILE_SIZE" value='<?php echo dropbox_cnf("maxFilesize")?>' />
@@ -561,7 +561,7 @@ function display_add_form()
 
 			</div>
 			<div class="formw">
-				<input type="checkbox" name="cb_overwrite" id="cb_overwrite" value="true" /><?php echo dropbox_lang("overwriteFile")?>
+				<input type="checkbox" name="cb_overwrite" id="cb_overwrite" value="true" /><?php echo get_lang('OverwriteFile'); ?>
 			</div>
 		</div>
 		<?php
@@ -570,7 +570,7 @@ function display_add_form()
 
 	<div class="row">
 		<div class="label">
-			<?php echo dropbox_lang("sendTo")?>
+			<?php echo get_lang('SendTo'); ?>
 		</div>
 		<div class="formw">
 	<?php
@@ -665,13 +665,13 @@ function display_add_form()
 
     if ( ($dropbox_person -> isCourseTutor || $dropbox_person -> isCourseAdmin) && dropbox_cnf("allowMailing"))  // RH: Mailing starting point
 	{
-			// echo '<option value="mailing">'.dropbox_lang("mailingInSelect").'</option>';
+			// echo '<option value="mailing">'.get_lang('MailingInSelect').'</option>';
 	}
 
     if ( dropbox_cnf("allowJustUpload"))  // RH
     {
-	  //echo '<option value="upload">'.dropbox_lang("justUploadInSelect").'</option>';
-	  echo '<option value="user_'.$_user['user_id'].'">'.dropbox_lang("justUploadInSelect").'</option>';
+	  //echo '<option value="upload">'.get_lang('JustUploadInSelect').'</option>';
+	  echo '<option value="user_'.$_user['user_id'].'">'.get_lang('JustUploadInSelect').'</option>';
     }
 
 		echo '</select>
@@ -683,7 +683,7 @@ function display_add_form()
 			<div class="label">
 			</div>
 			<div class="formw">
-				<button type="Submit" class="upload" name="submitWork">'.dropbox_lang("upload", "noDLTT").'</button>
+				<button type="Submit" class="upload" name="submitWork">'.get_lang('Upload', '').'</button>
 			</div>
 		</div>
 	';
@@ -702,7 +702,7 @@ function getUserNameFromId ($id)  // RH: Mailing: return 'Mailing ' + id
     $mailingId = $id - dropbox_cnf("mailingIdBase");
     if ( $mailingId > 0)
     {
-	    return dropbox_lang("mailingAsUsername", "noDLTT") . $mailingId;
+	    return get_lang('MailingAsUsername', '') . $mailingId;
     }
     $id = intval($id);
     $sql = "SELECT ".(api_is_western_name_order() ? "CONCAT(firstname,' ', lastname)" : "CONCAT(lastname,' ', firstname)")." AS name
@@ -793,14 +793,15 @@ function getUserOwningThisMailing($mailingPseudoId, $owner = 0, $or_die = '')
     $result = Database::query($sql);
 
     if (!($res = Database::fetch_array($result)))
-        die(dropbox_lang("generalError")." (code 901)");
+        die(get_lang('GeneralError').' (code 901)');
 
     if ($owner == 0) return $res['uploader_id'];
 
     if ($res['uploader_id'] == $owner) return TRUE;
 
-    die(dropbox_lang("generalError")." (code ".$or_die.")");
+    die(get_lang('GeneralError').' (code '.$or_die.')');
 }
+
 /**
 * @author René Haentjens, Ghent University
 * @todo check if this function is still necessary.
@@ -834,20 +835,6 @@ function removeMoreIfMailing($file_id)
     }
 }
 
-/**
-* The dropbox has a deviant naming scheme for language files so it needs an additional language function
-*
-* @todo check if this function is still necessary.
-*
-* @author René Haentjens, Ghent University
-*/
-function dropbox_lang($variable, $notrans = 'DLTT')
-{
-    global $charset;
-    return (api_get_setting('server_type') == 'test' ?
-        get_lang('dropbox_lang["'.$variable.'"]', $notrans) :
-        api_html_entity_decode(api_to_system_encoding(str_replace("\\'", "'", $GLOBALS['dropbox_lang'][$variable]), null, true), ENT_QUOTES, $charset));
-}
 /**
 * Function that finds a given config setting
 *
@@ -1259,7 +1246,7 @@ function zip_download ($array)
 	$overview_file=$temp_zip_dir.'/overview.html';
 	$handle=fopen($overview_file,'w');
 	fwrite($handle,$overview_file_content);
-	
+
 	// send the zip file
 	DocumentManager::file_send_for_download($temp_zip_file,true,$name);
 	exit;

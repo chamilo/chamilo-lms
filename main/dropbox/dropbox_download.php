@@ -317,7 +317,7 @@ if ($_GET['mailing'])  // RH: Mailing detail window call
 		SANITY CHECKS OF GET DATA & FILE
 ==============================================================================
 */
-if ( ! isset( $_GET['id']) || ! is_numeric( $_GET['id'])) die(dropbox_lang("generalError")." (code 501)");
+if ( ! isset( $_GET['id']) || ! is_numeric( $_GET['id'])) die(get_lang('GeneralError').' (code 501)');
 
 $work = new Dropbox_work($_GET['id']);
 
@@ -328,7 +328,7 @@ $file = $work->title;
 //if ( !is_file( $path) || ! eregi( '^[A-Z0-9_\-][A-Z0-9._\-]*$', $file))
 if ( !is_file( $path))
 {
-    die(dropbox_lang("generalError")." (code 504)");
+    die(get_lang('GeneralError').' (code 504)');
 }
 
 /*

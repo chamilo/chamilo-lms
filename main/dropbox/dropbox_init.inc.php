@@ -117,7 +117,7 @@ if ($_GET['action']=='add')
 $javascript = "<script type=\"text/javascript\">
 	function confirmsend ()
 	{
-		if (confirm(\"".dropbox_lang("mailingConfirmSend", "noDLTT")."\")){
+		if (confirm(\"".get_lang('MailingConfirmSend', '')."\")){
 			return true;
 		} else {
 			return false;
@@ -127,7 +127,7 @@ $javascript = "<script type=\"text/javascript\">
 
 	function confirmation (name)
 	{
-		if (confirm(\"".dropbox_lang("confirmDelete", "noDLTT")." : \"+ name )){
+		if (confirm(\"".get_lang('ConfirmDelete', '')." : \"+ name )){
 			return true;
 		} else {
 			return false;
@@ -138,10 +138,10 @@ $javascript = "<script type=\"text/javascript\">
 	function checkForm (frm)
 	{
 		if (frm.elements['recipients[]'].selectedIndex < 0){
-			alert(\"".dropbox_lang("noUserSelected", "noDLTT")."\");
+			alert(\"".get_lang('NoUserSelected', '')."\");
 			return false;
 		} else if (frm.file.value == '') {
-			alert(\"".dropbox_lang("noFileSpecified", "noDLTT")."\");
+			alert(\"".get_lang('NoFileSpecified', '')."\");
 			return false;
 		} else {
 			return true;
@@ -285,7 +285,7 @@ if((!$is_allowed_in_course || !$is_course_member) && !api_is_allowed_to_edit(nul
 */
 if ($_GET['view']=='received')
 {
-	$interbreadcrumb[] = array ("url" => "../dropbox/index.php", "name" => dropbox_lang("dropbox", "noDLTT"));
+	$interbreadcrumb[] = array ("url" => "../dropbox/index.php", "name" => get_lang('Dropbox', ''));
 	$nameTools = get_lang('ReceivedFiles');
 
 	if ($_GET['action'] == 'addreceivedcategory')
@@ -296,7 +296,7 @@ if ($_GET['view']=='received')
 }
 if ($_GET['view']=='sent' OR empty($_GET['view']))
 {
-	$interbreadcrumb[] = array ("url" => "../dropbox/index.php", "name" => dropbox_lang("dropbox", "noDLTT"));
+	$interbreadcrumb[] = array ("url" => "../dropbox/index.php", "name" => get_lang('Dropbox', ''));
 	$nameTools = get_lang('SentFiles');
 
 	if ($_GET['action'] == 'addsentcategory')

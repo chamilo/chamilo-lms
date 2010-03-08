@@ -2,12 +2,12 @@
 //include_once(api_get_path(LIBRARY_PATH)."/pclzip/pclzip.lib.php");
 require_once(api_get_path(LIBRARY_PATH).'document.lib.php');
 class TestDropboxFunctions extends UnitTestCase {
-	
+
 	/**
 	* This function is a wrapper function for the multiple actions feature.
 	* @return	Mixed	If there is a problem, return a string message, otherwise nothing
 	*/
-	
+
 	function testhandle_multiple_actions() {
 		global $_user, $is_courseAdmin, $is_courseTutor;
 		$res= handle_multiple_actions();
@@ -16,13 +16,13 @@ class TestDropboxFunctions extends UnitTestCase {
 		}
         //var_dump($res);
 	}
-	
-	
+
+
 	/**
 	* Displays the form to move one individual file to a category
 	* @return html code of the form that appears in a dokeos message box.
 	*/
-	
+
 	function testdisplay_move_form() {
 		ob_start();
 		$id= 1;
@@ -34,13 +34,13 @@ class TestDropboxFunctions extends UnitTestCase {
 		}
         //var_dump($res);
 	}
-	
+
 	/**
 	* This functions displays all teh possible actions that can be performed on multiple files. This is the dropdown list that
 	* appears below the sortable table of the sent / or received files.
 	* @return html value for the dropdown list
 	*/
-	
+
 	function testdisplay_action_options() {
 		ob_start();
 		$categories= 1;
@@ -51,8 +51,8 @@ class TestDropboxFunctions extends UnitTestCase {
 		$this->assertTrue(is_string($res));
 		}
         //var_dump($res);
-	}	
-	
+	}
+
 	/**
 	* this function returns the html code that displays the checkboxes next to the files so that
 	* multiple actions on one file are possible.
@@ -60,7 +60,7 @@ class TestDropboxFunctions extends UnitTestCase {
 	* @param $part are we dealing with a sent or with a received file?
 	* @return html code
 	*/
-	
+
 	function testdisplay_file_checkbox() {
 		$id= 1;
 		$part = 'test';
@@ -70,7 +70,7 @@ class TestDropboxFunctions extends UnitTestCase {
 		}
         //var_dump($res);
 	}
-	
+
 	/**
 	* This function displays the form to add a new category.
 	*
@@ -80,7 +80,7 @@ class TestDropboxFunctions extends UnitTestCase {
 	* @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 	* @version march 2006
 	*/
-	
+
 	function testdisplay_addcategory_form() {
 		global $dropbox_cnf;
 		ob_start();
@@ -99,7 +99,7 @@ class TestDropboxFunctions extends UnitTestCase {
 	* @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 	* @version march 2006
 	*/
-	
+
 	function testDisplay_add_form() {
 		global $_user, $is_courseAdmin, $is_courseTutor, $course_info, $origin, $dropbox_unid;
 		ob_start();
@@ -110,13 +110,13 @@ class TestDropboxFunctions extends UnitTestCase {
 		}
         //var_dump($res);
 	}
-	
+
 	/**
 	* This function displays the firstname and lastname of the user as a link to the user tool.
 	* @see this is the same function as in the new forum, so this probably has to move to a user library.
 	* @todo move this function to the user library
 	*/
-	
+
 	function testdisplayuserlink() {
 		global $_otherusers;
 		$user_id = 1;
@@ -126,12 +126,12 @@ class TestDropboxFunctions extends UnitTestCase {
 		}
         //var_dump($res);
 	}
-	
+
 	/**
 	* returns username or false if user isn't registered anymore
 	* @todo check if this function is still necessary. There might be a library function for this.
 	*/
-	
+
 	function testGetUserNameFromId() {
 		global $dropbox_cnf;
 		$id = 1;
@@ -141,12 +141,12 @@ class TestDropboxFunctions extends UnitTestCase {
 		}
         //var_dump($res);
 	}
-	
+
 	/**
 	* returns loginname or false if user isn't registered anymore
 	* @todo check if this function is still necessary. There might be a library function for this.
 	*/
-	
+
 	function testGetLoginFromId() {
 		$id = 1;
 		$res= getLoginFromId($id);
@@ -155,13 +155,13 @@ class TestDropboxFunctions extends UnitTestCase {
 		}
         //var_dump($res);
 	}
-	
-	
+
+
 	/**
 	* @desc This function retrieves the number of feedback messages on every document. This function might become obsolete when
 	* 		the feedback becomes user individual.
 	*/
-	
+
 	function testget_total_number_feedback() {
 		global $dropbox_cnf;
 		$res= get_total_number_feedback($file_id='');
@@ -170,7 +170,7 @@ class TestDropboxFunctions extends UnitTestCase {
 		}
         //var_dump($res);
 	}
-	
+
 	/**
 	* This function retrieves all the dropbox categories and returns them as an array
 	* @param $filter default '', when we need only the categories of the sent or the received part.
@@ -184,7 +184,7 @@ class TestDropboxFunctions extends UnitTestCase {
 		}
         //var_dump($res);
 	}
-	
+
 	/**
 	* RH: Mailing (2 new functions)
 	* Mailing zip-file is posted to (dest_user_id = ) mailing pseudo_id
@@ -203,7 +203,7 @@ class TestDropboxFunctions extends UnitTestCase {
 		}
         //var_dump($res);
 	}
-	
+
 	/**
 	 * Get the last access to a given tool of a given user
 	 * @param $tool string the tool constant
@@ -212,7 +212,7 @@ class TestDropboxFunctions extends UnitTestCase {
 	 * @return string last tool access date
 	 * @todo consider moving this function to a more appropriate place.
 	 */
-	
+
 	function testget_last_tool_access() {
 		global $_course, $_user;
 		$tool = '1';
@@ -222,7 +222,7 @@ class TestDropboxFunctions extends UnitTestCase {
 		}
         //var_dump($res);
 	}
-	
+
 	/**
 	* This functions stores a new dropboxcategory
 	* @var 	it might not seem very elegant if you create a category in sent and in received with the same name that you get two entries in the
@@ -233,7 +233,7 @@ class TestDropboxFunctions extends UnitTestCase {
 	*		more elegant would be
 	*		test	 |	  1		|	1  |	237
 	*/
-	
+
 	function teststoreaddcategory() {
 		global $_user,$dropbox_cnf;
 		$res= store_addcategory();
@@ -242,7 +242,7 @@ class TestDropboxFunctions extends UnitTestCase {
 		}
         //var_dump($res);
 	}
-	
+
 	/**
 	* This function moves a file to a different category
 	* @param $id the id of the file we are moving
@@ -250,7 +250,7 @@ class TestDropboxFunctions extends UnitTestCase {
 	* @param $part are we moving a received file or a sent file?
 	* @return language string
 	*/
-	
+
 	function testStoremove() {
 		$id= 1;
 		$part = 'test';
@@ -261,11 +261,11 @@ class TestDropboxFunctions extends UnitTestCase {
 		}
         //var_dump($res);
 	}
-	
+
 	/**
-	*@return selected string  
+	*@return selected string
 	*/
-	
+
 	function teststoreadddropbox() {
 		global $dropbox_cnf;
 		global $_user;
@@ -276,13 +276,13 @@ class TestDropboxFunctions extends UnitTestCase {
 		}
         //var_dump($res);
 	}
-	
+
 	/**
 	* @return boolean indicating if user with user_id=$user_id is a course member
 	* @todo eliminate global
 	* @todo check if this function is still necessary. There might be a library function for this.
 	*/
-	
+
 	function testIsCourseMember() {
 		$user_id = 1;
 		$res= isCourseMember($user_id);
@@ -291,12 +291,12 @@ class TestDropboxFunctions extends UnitTestCase {
 		}
         //var_dump($res);
 	}
-	
+
 	/**
 	* this function transforms the array containing all the feedback into something visually attractive.
 	* @param an array containing all the feedback about the given message.
 	*/
-	
+
 	function testfeedback() {
 		$array = array();
 		$res= feedback($array);
@@ -305,7 +305,7 @@ class TestDropboxFunctions extends UnitTestCase {
 		}
         //var_dump($res);
 	}
-	
+
 	/**
 	* This function returns the html code to display the feedback messages on a given dropbox file
 	* @param $feedback_array an array that contains all the feedback messages about the given document.
@@ -341,7 +341,7 @@ class TestDropboxFunctions extends UnitTestCase {
 	/**
 	* @return a language string (depending on the success or failure.
 	*/
-	
+
 	function teststore_feedback() {
 		global $dropbox_cnf;
 		global $_user;
@@ -351,12 +351,12 @@ class TestDropboxFunctions extends UnitTestCase {
 		}
         //var_dump($res);
 	}
-	
+
 	/**
 	* @desc This function checks if the real filename of the dropbox files doesn't already exist in the temp folder. If this is the case then
 	*		it will generate a different filename;
 	*/
-	
+
 	function testcheck_file_name() {
 		global $_course;
 		$file_name_2_check = 'test';
@@ -366,11 +366,11 @@ class TestDropboxFunctions extends UnitTestCase {
 		}
         //var_dump($res);
 	}
-	
+
 	/**
 	* @desc this function checks if the key exists. If this is the case it returns the value, if not it returns 0
 	*/
-	
+
 	function testcheck_number_feedback() {
 		$key = 'test';
 		$array = array();
@@ -380,12 +380,12 @@ class TestDropboxFunctions extends UnitTestCase {
 		}
         //var_dump($res);
 	}
-	
+
 	/**
 	* @desc generates the contents of a html file that gives an overview of all the files in the zip file.
 	*		This is to know the information of the files that are inside the zip file (who send it, the comment, ...)
 	*/
-	
+
 	function testgenerate_html_overview() {
 		$files = array();
 		$res= generate_html_overview($files, $dont_show_columns=array(), $make_link=array());
@@ -394,7 +394,7 @@ class TestDropboxFunctions extends UnitTestCase {
 		}
         //var_dump($res);
 	}
-	
+
 	/**
 	* This function downloads all the files of the inputarray into one zip
 	* @param $array an array containing all the ids of the files that have to be downloaded.
@@ -439,26 +439,11 @@ class TestDropboxFunctions extends UnitTestCase {
 	}
 */
 
-	
-	/**
-	* The dropbox has a deviant naming scheme for language files so it needs an additional language function
-	* @todo check if this function is still necessary.
-	*/
-
-	function testdropbox_lang() {
-		global $charset;
-		$variable = 'test';
-		$res= dropbox_lang($variable, $notrans = 'DLTT');
-		if(!is_null($res)){
-		$this->assertTrue(is_string($res));
-		}
-        //var_dump($res);
-	}
 
 	/**
 	* Function that finds a given config setting
 	*/
-	
+
 	function testdropbox_cnf() {
 		$variable = 'test';
 		$res= dropbox_cnf($variable);
@@ -483,13 +468,13 @@ class TestDropboxFunctions extends UnitTestCase {
 		}
         //var_dump($res);
 	}
-	
+
 	/**
 	* @desc Cleans the temp zip files that were created when users download several files or a whole folder at once.
 	*		T
 	* @return true
 	*/
-	
+
 	function testcleanup_temp_dropbox() {
 		global $_course;
 		$res= cleanup_temp_dropbox();
@@ -498,7 +483,7 @@ class TestDropboxFunctions extends UnitTestCase {
 		}
         //var_dump($res);
 	}
-	
+
 	/**
 	* This function deletes a dropbox category
 	* @todo give the user the possibility what needs to be done with the files in this category: move them to the root, download them as a zip, delete them
@@ -514,13 +499,13 @@ class TestDropboxFunctions extends UnitTestCase {
 		}
         //var_dump($res);
 	}
-	
-	
+
+
 		/**
 	* Checks if there are files in the dropbox_file table that aren't used anymore in dropbox_person table.
 	* If there are, all entries concerning the file are deleted from the db + the file is deleted from the server
 	*/
-	
+
 	function testremoveUnusedFiles() {
 		$res= removeUnusedFiles();
 		if(!is_null($res)){
@@ -532,7 +517,7 @@ class TestDropboxFunctions extends UnitTestCase {
 	/**
 	* @todo check if this function is still necessary.
 	*/
-	
+
 	function testremoveMoreIfMailing() {
 		$file_id = 1;
 		$res= removeMoreIfMailing($file_id);

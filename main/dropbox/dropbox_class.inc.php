@@ -93,7 +93,7 @@ class Dropbox_Work {
 	function _createNewWork ($uploader_id, $title, $description, $author, $filename, $filesize) {
 		global $_user,$dropbox_cnf;
 		// Do some sanity checks
-		settype($uploader_id, 'integer') or die(dropbox_lang("generalError")." (code 201)"); //set $uploader_id to correct type
+		settype($uploader_id, 'integer') or die(get_lang('GeneralError').' (code 201)'); //set $uploader_id to correct type
 		//if (! isCourseMember($uploader_id)) die(); //uploader must be coursemember to be able to upload
 			//-->this check is done when submitting data so it isn't checked here
 
@@ -165,11 +165,11 @@ class Dropbox_Work {
 	 */
 	function _createExistingWork ($id) {
 		global $_user,$dropbox_cnf;  // RH: Feedback
-		
+
 		// Do some sanity checks
-		settype($id, 'integer') or die(dropbox_lang("generalError")." (code 205)"); //set $id to correct type
+		settype($id, 'integer') or die(get_lang('GeneralError').' (code 205)'); //set $id to correct type
 		$id	= intval($id);
-		
+
 		// get the data from DB
 		$sql="SELECT uploader_id, filename, filesize, title, description, author, upload_date, last_upload_date, cat_id
 				FROM ".$dropbox_cnf["tbl_file"]."
@@ -183,7 +183,7 @@ class Dropbox_Work {
 		if ($uploaderName == FALSE) {
 			//deleted user
 			$this->uploader_id = -1;
-			$this->uploaderName = dropbox_lang("anonymous", "noDLTT");
+			$this->uploaderName = get_lang('Unknown', '');
 		} else {
 			$this->uploader_id = $uploader_id;
 			$this->uploaderName = $uploaderName;
@@ -268,7 +268,7 @@ class Dropbox_SentWork extends Dropbox_Work
 
 		// Do sanity checks on recipient_ids array & property fillin
 		// The sanity check for ex-coursemembers is already done in base constructor
-		settype($uploader_id, 'integer') or die(dropbox_lang("generalError")." (code 208)"); //set $uploader_id to correct type
+		settype($uploader_id, 'integer') or die(get_lang('GeneralError').' (code 208)'); //set $uploader_id to correct type
 
 		$justSubmit = FALSE;  // RH: mailing zip-file or just upload
 		if ( is_int($recipient_ids)) {
@@ -277,10 +277,10 @@ class Dropbox_SentWork extends Dropbox_Work
 			$justSubmit = TRUE; $recipient_ids = array($uploader_id);
 		}
 		if (! is_array($recipient_ids) || count($recipient_ids) == 0) {
-			die(dropbox_lang("generalError")." (code 209)");
+			die(get_lang('GeneralError').' (code 209)');
 		}
 		foreach ($recipient_ids as $rec) {
-			if (empty($rec)) die(dropbox_lang("generalError")." (code 210)");
+			if (empty($rec)) die(get_lang('GeneralError').' (code 210)');
 			//if (!isCourseMember($rec)) die(); //cannot sent document to someone outside of course
 				//this check is done when validating submitted data
 			$this->recipients[] = array("id"=>$rec, "name"=>getUserNameFromId($rec));
@@ -328,7 +328,7 @@ class Dropbox_SentWork extends Dropbox_Work
 		$this->Dropbox_Work($id);
 
 		// Do sanity check. The sanity check for ex-coursemembers is already done in base constructor
-		settype($id, 'integer') or die(dropbox_lang("generalError")." (code 211)"); //set $id to correct type
+		settype($id, 'integer') or die(get_lang('GeneralError').' (code 211)'); //set $id to correct type
 
 		//Fill in recipients array/
 		$this->recipients = array();  // RH: Feedback: added to SELECT
@@ -342,7 +342,7 @@ class Dropbox_SentWork extends Dropbox_Work
 			$recipientName = getUserNameFromId($dest_user_id);
 			//$this->category=$res['cat_id'];
 			if ($recipientName == FALSE) {
-				$this->recipients[] = array("id"=>-1, "name"=> dropbox_lang("anonymous", "noDLTT"));
+				$this->recipients[] = array("id"=>-1, "name"=> get_lang('Unknown', ''));
 			} else {
 				$this->recipients[] = array("id"=>$dest_user_id, "name"=>$recipientName, "user_id"=>$dest_user_id,
 				    "feedback_date"=>$res["feedback_date"], "feedback"=>$res["feedback"]);  // RH: Feedback
@@ -531,7 +531,7 @@ class Dropbox_Person
 	function deleteReceivedWorkFolder($id) {
 		global $dropbox_cnf;
 		$id = intval($id);
-		
+
 		$sql = "DELETE FROM ".$dropbox_cnf["tbl_file"]." where cat_id = '".$id."' ";
 		if(!Database::query($sql))		return false;
 		$sql = "DELETE FROM ".$dropbox_cnf["tbl_category"]." where cat_id = '".$id."' ";
@@ -558,7 +558,7 @@ class Dropbox_Person
 		}
 		if (! $found) {
 			if(!$this->deleteReceivedWorkFolder($id)) {
-				die(dropbox_lang("generalError")." (code 216)");
+				die(get_lang('GeneralError').' (code 216)');
 			}
 		}
 		//delete entries in person table concerning received works
@@ -586,7 +586,7 @@ class Dropbox_Person
 	 */
 	function deleteSentWork ($id) {
 		$id = intval($id);
-		
+
 		global $dropbox_cnf;
 		//index check
 		$found = false;
@@ -598,7 +598,7 @@ class Dropbox_Person
 		}
 		if (!$found) {
 			if(!$this->deleteReceivedWorkFolder($id)) {
-				die(dropbox_lang("generalError")." (code 219)");
+				die(get_lang('GeneralError').' (code 219)');
 			}
 		}
 		//$file_id = $this->sentWork[$index]->id;  // RH: Mailing
@@ -628,7 +628,7 @@ class Dropbox_Person
 			}  // foreach (... as $wi -> $w) gives error 221! (no idea why...)
 		}
 		if (! $found) {
-			die(dropbox_lang("generalError")." (code 221)");
+			die(get_lang('GeneralError').' (code 221)');
 		}
 
 		$feedback_date = date("Y-m-d H:i:s",time());

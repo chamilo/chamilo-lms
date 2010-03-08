@@ -403,7 +403,7 @@ foreach ($group_cats as $index => $category)
 			$table->set_header($column++,get_lang('GroupSelfRegistration'));
 		}
 		$table->set_header($column++,get_lang('Registered'));
-		$table->set_header($column++,get_lang('Max'));
+		$table->set_header($column++,get_lang('MaximumOfParticipants'));
 		$table->set_header($column++,get_lang('GroupTutor'));
 		if (api_is_allowed_to_edit(false,true)) // only for course administrator
 		{

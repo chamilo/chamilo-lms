@@ -692,8 +692,8 @@ class Attendance
 		$rs = Database::query($sql);
 		$data = array();
 		if (Database::num_rows($rs) > 0) {
-			while ($row = Database::fetch_array($rs)) {
-				$row['date_time'] = api_get_local_time($row['date_time'], null, null, date_default_timezone_get());
+			while ($row = Database::fetch_array($rs)) {				
+				$row['date_time'] = api_get_local_time($row['date_time']);				
 				$row['date'] = api_format_date($dateFormatShort, strtotime($row['date_time']));
 				$row['time'] = api_format_date($timeNoSecFormat, strtotime($row['date_time']));
 				$data[] = $row;

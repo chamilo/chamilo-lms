@@ -3,6 +3,9 @@
 
 /**
  * This file contains class used like controller, it should be included inside a dispatcher file (e.g: index.php)
+ * 
+ * !!! WARNING !!! : ALL DATES IN THIS MODULE ARE STORED IN UTC ! DO NOT CONVERT DURING THE TRANSITION FROM CHAMILO 1.8.x TO 2.0
+ * 
  * @author Christian Fasanando <christian1827@gmail.com>
  * @package chamilo.attendance
  */
@@ -219,10 +222,11 @@
 
 		if ($action == 'calendar_add') {			
 			if (strtoupper($_SERVER['REQUEST_METHOD']) == "POST") {	
-				if (!isset($_POST['cancel'])) {								
-					$datetime = $attendance->build_datetime_from_array($_POST['date_time']);
-					if (!empty($datetime)) {					
-						$attendance->set_date_time($datetime);
+				if (!isset($_POST['cancel'])) {												
+					$datetime = $attendance->build_datetime_from_array($_POST['date_time']);					
+					$datetimezone = api_get_utc_datetime(strtotime($datetime));					
+					if (!empty($datetime)) {						
+						$attendance->set_date_time($datetimezone);
 						$affected_rows = $attendance->attendant_calendar_add($attendance_id);
 					} else {
 						$data['error_date'] = true;
@@ -235,9 +239,10 @@
 		} else if ($action == 'calendar_edit') {
 			$data['calendar_id'] = $calendar_id;
 			if (strtoupper($_SERVER['REQUEST_METHOD']) == "POST") {					
-				if (!isset($_POST['cancel'])) {					
-					$datetime = $attendance->build_datetime_from_array($_POST['date_time']);
-					$attendance->set_date_time($datetime);				
+				if (!isset($_POST['cancel'])) {										
+					$datetime = $attendance->build_datetime_from_array($_POST['date_time']);									
+					$datetimezone = api_get_utc_datetime(strtotime($datetime));								
+					$attendance->set_date_time($datetimezone);					
 					$affected_rows = $attendance->attendant_calendar_edit($calendar_id, $attendance_id);
 					$data['calendar_id'] = 0;
 					$action = 'calendar_list';

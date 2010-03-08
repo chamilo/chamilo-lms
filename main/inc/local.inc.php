@@ -1,33 +1,6 @@
 <?php
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2004-2009 Dokeos SPRL
-	Copyright (c) 2003-2005 Ghent University (UGent)
-	Copyright (c) 2001 Universite catholique de Louvain (UCL)
-	Copyright (c) Hugues Peeters
-	Copyright (c) Roan Embrechts (Vrije Universiteit Brussel)
-	Copyright (c) Patrick Cool
-	Copyright (c) Julio Montoya Armas
-	Copyright (c) Isaac flores paz
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
-	Mail: info@dokeos.com
-==============================================================================
-*/
+/* For licensing terms, see /license.txt */
 /**
-==============================================================================
  *
  *                             SCRIPT PURPOSE
  *
@@ -148,14 +121,11 @@ The course id is stored in $_cid session variable.
  *
  * 7. The script initializes the user status and permission for the group level.
  *
- *	@package dokeos.include
-==============================================================================
+ *	@package chamilo.include
 */
 /*
-==============================================================================
 		INIT SECTION
 		variables should be initialised here
-==============================================================================
 */
 
 require_once (api_get_path(LIBRARY_PATH).'course.lib.php');
@@ -194,9 +164,7 @@ $login = isset($_POST["login"]) ? $_POST["login"] : '';
 //$cidReq -- passed from course folder index.php
 
 /*
-==============================================================================
 		MAIN CODE
-==============================================================================
 */
 
 if (!empty($_SESSION['_user']['user_id']) && ! ($login || $logout)) {
@@ -691,9 +659,7 @@ if ($gidReq && $gidReq != $gid) {
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-// USER INIT
-//////////////////////////////////////////////////////////////////////////////
+/* USER INIT */
 
 if (isset($uidReset) && $uidReset) // session data refresh requested
 {
@@ -761,9 +727,7 @@ if (isset($uidReset) && $uidReset) // session data refresh requested
     $is_allowedCreateCourse = $_SESSION['is_allowedCreateCourse'];
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// COURSE INIT
-//////////////////////////////////////////////////////////////////////////////
+/*  COURSE INIT */
 
 if (isset($cidReset) && $cidReset) { // course session data refresh requested or empty data
     if ($cidReq) {
@@ -911,9 +875,7 @@ if (isset($cidReset) && $cidReset) { // course session data refresh requested or
 	}
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// COURSE / USER REL. INIT
-//////////////////////////////////////////////////////////////////////////////
+/*  COURSE / USER REL. INIT */
 
 if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) { // session data refresh requested
     if (isset($_user['user_id']) && $_user['user_id'] && isset($_cid) && $_cid) { // have keys to search data
@@ -1059,7 +1021,7 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) { // ses
 	        }
     	}
     } else { // keys missing => not anymore in the course - user relation
-        //// course
+        // course
         $is_courseMember = false;
         $is_courseAdmin  = false;
         $is_courseTutor  = false;
@@ -1125,10 +1087,7 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) { // ses
     $is_courseCoach       = $_SESSION ['is_courseCoach'  ];
 }
 
-
-//////////////////////////////////////////////////////////////////////////////
-// GROUP INIT
-//////////////////////////////////////////////////////////////////////////////
+/*  GROUP INIT */
 
 if ((isset($gidReset) && $gidReset) || (isset($cidReset) && $cidReset)) { // session data refresh requested
     if ($gidReq && $_cid ) { // have keys to search data

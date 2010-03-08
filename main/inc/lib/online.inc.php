@@ -1,7 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
-==============================================================================
 *	Code library for showing Who is online
 *
 *	@author Istvan Mandak, principal author
@@ -10,37 +9,36 @@
 *	@author Roan Embrechts, cleaning and bugfixing
 *	@package chamilo.whoisonline
 */
+
 /**
  * Insert a login reference for the current user into the track_e_online stats table.
  * This table keeps trace of the last login. Nothing else matters (we don't keep traces of anything older)
  * @param int user id
  * @return void
  */
-function LoginCheck($uid)
-{
-	global $_course;
+function LoginCheck($uid) {
+	global $_course, $_configuration;
 	$uid = (int) $uid;
 	$online_table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ONLINE);
-	if (!empty($uid))
-	{
+	if (!empty($uid)) {
         $login_ip = '';
-        if(!empty($_SERVER['REMOTE_ADDR']))
-        {
+        if(!empty($_SERVER['REMOTE_ADDR'])) {
 		  $login_ip = Database::escape_string($_SERVER['REMOTE_ADDR']);
         }
 		$reallyNow = time();
 		$login_date = date("Y-m-d H:i:s",$reallyNow);
+		$access_url_id = 1;
+		if ($_configuration['multiple_access_urls']==true && api_get_current_access_url_id()!=-1) {
+			$access_url_id = api_get_current_access_url_id();
+		}
+		$session_id = api_get_session_id();
 		// if the $_course array exists this means we are in a course and we have to store this in the who's online table also
 		// to have the x users in this course feature working
-		if (is_array($_course) && count($_course)>0 && !empty($_course['id']))
-		{
-            $query = "REPLACE INTO ".$online_table ." (login_id,login_user_id,login_date,login_ip, course) VALUES ($uid,$uid,'$login_date','$login_ip', '".$_course['id']."')";
+		if (is_array($_course) && count($_course)>0 && !empty($_course['id'])) {
+            $query = "REPLACE INTO ".$online_table ." (login_id,login_user_id,login_date,login_ip, course, session_id, access_url_id) VALUES ($uid,$uid,'$login_date','$login_ip', '".$_course['id']."' , '$session_id' , '$access_url_id' )";
+		} else {
+            $query = "REPLACE INTO ".$online_table ." (login_id,login_user_id,login_date,login_ip, session_id, access_url_id) VALUES ($uid,$uid,'$login_date','$login_ip', '$session_id', '$access_url_id')";
 		}
-		else
-		{
-            $query = "REPLACE INTO ".$online_table ." (login_id,login_user_id,login_date,login_ip) VALUES ($uid,$uid,'$login_date','$login_ip')";
-		}
-
 		@Database::query($query);
 	}
 }
@@ -110,8 +108,7 @@ function online_logout() {
  * @param int User ID
  * @return void
  */
-function LoginDelete($user_id)
-{
+function LoginDelete($user_id) {
 	$online_table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ONLINE);
     $user_id = (int) $user_id;
 	$query = "DELETE FROM ".$online_table ." WHERE login_user_id = '".Database::escape_string($user_id)."'";
@@ -148,18 +145,15 @@ function WhoIsOnline($valid, $friends = false)
 		$access_url_id = api_get_current_access_url_id();
 		if ($access_url_id != -1) {
 			if ($friends) {
-				// 	who friends from social network is online
-				$query = "	SELECT distinct login_user_id,login_date
-							FROM $track_online_table
-							INNER JOIN $tbl_user_rel_access_url user_rel_url ON (user_rel_url.user_id = track.login_user_id)
+				// 	friends from social network is online
+				$query = "SELECT distinct login_user_id,login_date
+							FROM $track_online_table track						
 							INNER JOIN $friend_user_table ON (friend_user_id = login_user_id)
-							WHERE access_url_id =  $access_url_id AND DATE_ADD(login_date,INTERVAL $valid MINUTE) >= '".$current_date."' AND friend_user_id <> '".api_get_user_id()."' AND relation_type='".USER_RELATION_TYPE_FRIEND."' AND user_id = '".api_get_user_id()."' ";
+							WHERE track.access_url_id =  $access_url_id AND DATE_ADD(login_date,INTERVAL $valid MINUTE) >= '".$current_date."' AND friend_user_id <> '".api_get_user_id()."' AND relation_type='".USER_RELATION_TYPE_FRIEND."'  ";
 			} else {
 				// all users online
-				$query = "	SELECT login_user_id,login_date FROM ".$track_online_table ." track
-							INNER JOIN $tbl_user_rel_access_url user_rel_url
-							ON (user_rel_url.user_id = track.login_user_id)
-							WHERE access_url_id =  $access_url_id AND DATE_ADD(login_date,INTERVAL $valid MINUTE) >= '".$current_date."'  ";
+				$query = "SELECT login_user_id,login_date FROM ".$track_online_table ." track
+							WHERE track.access_url_id =  $access_url_id AND DATE_ADD(login_date,INTERVAL $valid MINUTE) >= '".$current_date."'  ";
 			}
 		}
 	}

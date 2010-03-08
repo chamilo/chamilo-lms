@@ -187,6 +187,7 @@ CREATE TABLE track_e_online (
   login_ip varchar(39) NOT NULL default '',
   course varchar(40) default NULL,
   session_id INT NOT NULL DEFAULT 0,
+  access_url_id INT NOT NULL DEFAULT 1,
   PRIMARY KEY  (login_id),
   KEY login_user_id (login_user_id)
 );

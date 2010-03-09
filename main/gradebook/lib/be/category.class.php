@@ -1035,7 +1035,7 @@ class Category implements GradebookItem
 			}
 		} else {// all students
 			// course admin
-			if (api_is_allowed_to_create_course() && !api_is_platform_admin()) {
+			if ((api_is_allowed_to_create_course() || api_is_drh()) && !api_is_platform_admin()) {
 				// root
 				if ($this->id == 0) {
 					$evals = Evaluation::load(null, api_get_user_id(), null, $this->id, null);
@@ -1093,7 +1093,7 @@ class Category implements GradebookItem
 						api_is_allowed_to_create_course() ? null : 1);
  		}
 		// all students -> only for course/platform admin
-		elseif (api_is_allowed_to_create_course()) {
+		elseif (api_is_allowed_to_create_course() || api_is_drh()) {
 			$links = LinkFactory::load(null,null,null,null,empty($this->course_code)?null:$this->course_code,$this->id, null);
 		}
 

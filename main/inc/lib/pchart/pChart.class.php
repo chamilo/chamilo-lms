@@ -196,15 +196,15 @@
    /* This function create the background picture */
    function pChart($XSize,$YSize)
     {
+    	    
      $this->XSize   = $XSize;
-     $this->YSize   = $YSize;
+     $this->YSize   = $YSize;          
      $this->Picture = imagecreatetruecolor($XSize,$YSize);
-
-     $C_White =$this->AllocateColor($this->Picture,255,255,255);
-     imagefilledrectangle($this->Picture,0,0,$XSize,$YSize,$C_White);
+     $C_White = $this->AllocateColor($this->Picture,255,255,255);          
+     imagefilledrectangle($this->Picture,0,0,$XSize,$YSize,$C_White);     
      imagecolortransparent($this->Picture,$C_White);
-
      $this->setFontProperties("tahoma.ttf",8);
+          
     }
 
   /* Set if warnings should be reported */
@@ -1914,6 +1914,68 @@
     }
 
    /* This function draw a bar graph */
+   function drawHorizontalBarGraph($Data,$DataDescription,$Shadow=FALSE,$Alpha=100)
+    {
+     /* Validate the Data and DataDescription array */
+     $this->validateDataDescription("drawHorizontalBarGraph",$DataDescription);
+     $this->validateData("drawHorizontalBarGraph",$Data);
+
+     $GraphID      = 0;
+     $Series       = count($DataDescription["Values"]);
+     $SeriesWidth  = $this->DivisionWidth / ($Series+1);
+     $SerieXOffset = $this->DivisionWidth / 2 - $SeriesWidth / 2;
+
+     $YZero  = $this->GArea_Y2 - ((0-$this->VMin) * $this->DivisionRatio);
+     if ( $YZero > $this->GArea_Y2 ) { $YZero = $this->GArea_Y2; }
+
+     $SerieID = 0;
+     foreach ( $DataDescription["Values"] as $Key2 => $ColName )
+      {
+       $ID = 0;
+       foreach ( $DataDescription["Description"] as $keyI => $ValueI )
+        { if ( $keyI == $ColName ) { $ColorID = $ID; }; $ID++; }
+
+       $XPos  = $this->GArea_X1 + $this->GAreaXOffset - $SerieXOffset + $SeriesWidth * $SerieID;
+       $XLast = -1;
+       foreach ( $Data as $Key => $Values )
+        {
+         if ( isset($Data[$Key][$ColName]))
+          {
+           if ( is_numeric($Data[$Key][$ColName]) )
+            {
+             $Value = $Data[$Key][$ColName];
+             $YPos = $this->GArea_Y2 - (($Value-$this->VMin) * $this->DivisionRatio);
+
+             /* Save point into the image map if option activated */
+             if ( $this->BuildMap )
+              {
+               $this->addToImageMap($XPos+1,min($YZero,$YPos),$XPos+$SeriesWidth-1,max($YZero,$YPos),$DataDescription["Description"][$ColName],$Data[$Key][$ColName].$DataDescription["Unit"]["Y"],"Bar");
+              }
+
+             if ( $Shadow && $Alpha == 100 )
+                          	
+              $X1 = $YZero;
+			  $Y1 = $XPos+1;
+			  $X2 = $YPos;
+			  $Y2 =	$XPos+$SeriesWidth-1;
+             
+             $this->drawRectangle($XPos+1,$YZero,$XPos+$SeriesWidth-1,$YPos,25,25,25,TRUE,$Alpha);
+             $this->drawFilledRectangle($XPos+1,$YZero,$XPos+$SeriesWidth-1,$YPos,$this->Palette[$ColorID]["R"],$this->Palette[$ColorID]["G"],$this->Palette[$ColorID]["B"],TRUE,$Alpha);
+             //$this->drawRectangle($X1,$Y1,$X2,$Y2,$YPos,25,25,25,TRUE,$Alpha);
+             //$this->drawFilledRectangle($X1,$Y1,$X2,$Y2,$this->Palette[$ColorID]["R"],$this->Palette[$ColorID]["G"],$this->Palette[$ColorID]["B"],TRUE,$Alpha);
+             
+             
+            }
+          }
+         $XPos = $XPos + $this->DivisionWidth;
+        }
+       $SerieID++;
+      }
+    }
+   
+
+
+   /* This function draw a bar graph */
    function drawBarGraph($Data,$DataDescription,$Shadow=FALSE,$Alpha=100)
     {
      /* Validate the Data and DataDescription array */
@@ -1953,9 +2015,18 @@
               }
 
              if ( $Shadow && $Alpha == 100 )
-              $this->drawRectangle($XPos+1,$YZero,$XPos+$SeriesWidth-1,$YPos,25,25,25,TRUE,$Alpha);
-
-             $this->drawFilledRectangle($XPos+1,$YZero,$XPos+$SeriesWidth-1,$YPos,$this->Palette[$ColorID]["R"],$this->Palette[$ColorID]["G"],$this->Palette[$ColorID]["B"],TRUE,$Alpha);
+                          	
+              $X1 = $YZero;
+			  $Y1 = $XPos+1;
+			  $X2 = $YPos;
+			  $Y2 =	$XPos+$SeriesWidth-1;
+             
+             //$this->drawRectangle($XPos+1,$YZero,$XPos+$SeriesWidth-1,$YPos,25,25,25,TRUE,$Alpha);
+             //$this->drawFilledRectangle($XPos+1,$YZero,$XPos+$SeriesWidth-1,$YPos,$this->Palette[$ColorID]["R"],$this->Palette[$ColorID]["G"],$this->Palette[$ColorID]["B"],TRUE,$Alpha);
+             $this->drawRectangle($X1,$Y1,$X2,$Y2,$YPos,25,25,25,TRUE,$Alpha);
+             $this->drawFilledRectangle($X1,$Y1,$X2,$Y2,$this->Palette[$ColorID]["R"],$this->Palette[$ColorID]["G"],$this->Palette[$ColorID]["B"],TRUE,$Alpha);
+             
+             
             }
           }
          $XPos = $XPos + $this->DivisionWidth;
@@ -1963,6 +2034,9 @@
        $SerieID++;
       }
     }
+
+
+
 
    /* This function draw a stacked bar graph */
    function drawStackedBarGraph($Data,$DataDescription,$Alpha=50,$Contiguous=FALSE)
@@ -2023,6 +2097,8 @@
        $SerieID++;
       }
     }
+
+
 
    /* This function draw a limits bar graphs */
    function drawLimitsGraph($Data,$DataDescription,$R=0,$G=0,$B=0)
@@ -2808,10 +2884,13 @@
 
      $X1=$X1-.2;$Y1=$Y1-.2;
      $X2=$X2+.2;$Y2=$Y2+.2;
+     
      $this->drawLine($X1,$Y1,$X2,$Y1,$R,$G,$B);
      $this->drawLine($X2,$Y1,$X2,$Y2,$R,$G,$B);
      $this->drawLine($X2,$Y2,$X1,$Y2,$R,$G,$B);
      $this->drawLine($X1,$Y2,$X1,$Y1,$R,$G,$B);
+     
+     
     }
 
    /* This function create a filled rectangle with antialias */
@@ -2914,7 +2993,10 @@
      if ( $G < 0 ) { $G = 0; } if ( $G > 255 ) { $G = 255; }
      if ( $B < 0 ) { $B = 0; } if ( $B > 255 ) { $B = 255; }
 
+
+
      $C_Rectangle = $this->AllocateColor($this->Picture,$R,$G,$B);
+
 
      $Step = 90 / ((3.1418 * $Radius)/2);
 
@@ -2953,6 +3035,10 @@
      $this->drawLine($X2-$Radius,$Y2,$X1+$Radius,$Y2,$R,$G,$B);
      $this->drawLine($X1,$Y2-$Radius,$X1,$Y1+$Radius,$R,$G,$B);
     }
+    
+    
+    
+    
 
    /* This function create a circle with antialias */
    function drawCircle($Xc,$Yc,$Height,$R,$G,$B,$Width=0)

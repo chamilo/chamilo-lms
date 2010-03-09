@@ -62,7 +62,7 @@ class BlockStudentGraph extends Block {
 		if (api_is_platform_admin()) {
 			$student_content_html = $this->get_students_content_html_for_platform_admin();
 		} else if (api_is_drh()) {*/
-			$students_evaluation_graph = $this->get_students_evaluation_graph();
+			$students_attendance_graph = $this->get_students_attendance_graph();
 		//}
 		
 		$html = '        		
@@ -72,7 +72,7 @@ class BlockStudentGraph extends Block {
 			                    <div class="widget-actions"><a onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset)).'\')) return false;" href="index.php?action=disable_block&path='.$this->path.'">'.Display::return_icon('close.gif',get_lang('Close')).'</a></div>
 			                </div>			
 			                <div class="widget-content" align="center">			                	
-								'.$students_evaluation_graph.'
+								'.$students_attendance_graph.'
 			                </div>
 			            </li>			                        			    
 				'; 
@@ -88,7 +88,7 @@ class BlockStudentGraph extends Block {
  	 * This method return a graph containing informations about students evaluation, it's used inside get_block method for showing it inside dashboard interface
  	 * @return string  img html
  	 */
-    public function get_students_evaluation_graph() {
+    public function get_students_attendance_graph() {
  			
  		$students = $this->students;
  		$attendance = new Attendance();
@@ -123,44 +123,85 @@ class BlockStudentGraph extends Block {
 		$img_file = '';
 
 		if (is_array($usernames) && count($usernames) > 0) {
-			// Defining data   
+			
+			// Defining data
+
 			$data_set = new pData;  
-			$data_set->AddPoint($usernames,"Usuario");  
-			$data_set->AddPoint($faults,"Promedio");  
-			$data_set->AddAllSeries();
-			$data_set->SetXAxisName(get_lang('UserName'));
-			$data_set->SetYAxisName(get_lang('AttendancesFaults'));  
-			$data_set->SetAbsciseLabelSerie("Usuario");
-			$graph_id = $this->user_id.'StudentEvaluationGraph';
-			 
-			$cache = new pCache();
-			// the graph id
-			$data = $data_set->GetData();
-	    
+			
+			
+			$data_set->AddPoint($faults,"Promedio");   				// $this->Data = array(0=>array('Promedio'=>57,'Name'=>0), 1=>array('Promedio'=>43,'Name'=>1), 2=>array('Promedio'=>29,'Name'=>2))
+			$data_set->AddPoint($usernames,"Usuario"); 				// $this->Data = array(0=>array('Usuario'=>'alumno3','Name'=>0), 1=>array('Usuario'=>'alumno1','Name'=>1), 2=>array('Usuario'=>'alumno2','Name'=>2))
+			
+			$data_set->AddAllSeries(); 				   				// $this->DataDescription = array('Position'=>'Name', 'Format'=>array('X'=>'number','Y'=>'number'), 'Unit'=>array('X'=>null,'Y'=null),'Values'=>array(0=>'Promedio',1=>'Usuario'))
+			
+			$data_set->SetXAxisName(get_lang('UserName'));			// $this->DataDescription["Axis"]["X"] = 'UserName'; 			
+			$data_set->SetYAxisName(get_lang('AttendancesFaults')); // $this->DataDescription["Axis"]["Y"] = 'AttendancesFaults'; 
+			
+			$data_set->SetAbsciseLabelSerie("Usuario");   			// $this->DataDescription["Position"] = "Usuario";
+			
+			
+			
+			
+			// prepare cache for saving image
+			$graph_id = $this->user_id.'StudentEvaluationGraph';  	// the graph id			 
+			$cache = new pCache();	
+					
+			$data = $data_set->GetData();	// return $this->DataDescription
+			
 			if ($cache->IsInCache($graph_id, $data_set->GetData())) {			
 				//if we already created the img
-				$img_file = $cache->GetHash($graph_id, $data_set->GetData());
+				$img_file = $cache->GetHash($graph_id, $data_set->GetData());  // image file with hash
 			} else {
-				
+																
+																
 				// Initializing the graph  
-				$test = new pChart(365,250);
-				$test->setFontProperties(api_get_path(LIBRARY_PATH).'pchart/fonts/tahoma.ttf',8);  
-				$test->setGraphArea(50,30,345,200);  
+				$test = new pChart(365,300);    // Create transparent image 365x300
+				
+				// $this->FontName = api_get_path(LIBRARY_PATH).'pchart/fonts/tahoma.ttf'
+				// $this->FontSize = 8
+				$test->setFontProperties(api_get_path(LIBRARY_PATH).'pchart/fonts/tahoma.ttf',8);
+
+				
+				
+				 $X1 = 50; 
+				 $Y1 = 30;
+				 $X2 = 345;
+				 $Y2 = 200;
+				 				 
+				//$this->GArea_X1 = $X1;$this->GArea_Y1 = $Y1;$this->GArea_X2 = $X2;$this->GArea_Y2 = $Y2; 
+				$test->setGraphArea($X1,$Y1,$X2,$Y2);  
+				
+				
 				$test->drawFilledRoundedRectangle(7,7,371,240,5,240,240,240);  
+				
 				$test->drawRoundedRectangle(5,5,373,225,5,230,230,230);  
+				
 				$test->drawGraphArea(255,255,255,TRUE);  				 
+				
+				
 				$test->setFixedScale(0,100,5);				 
-				$test->drawScale($data_set->GetData(),$data_set->GetDataDescription(),SCALE_NORMAL,150,150,150,TRUE,0,10,TRUE);     
+								
+				$test->drawScale($data_set->GetData(),$data_set->GetDataDescription(),SCALE_NORMAL,150,150,150,TRUE,0,10,TRUE);
+				
+				     
 				$test->drawGrid(4,TRUE,230,230,230,50);
 				
 				// Drawing bars
-				$test->drawBarGraph($data_set->GetData(),$data_set->GetDataDescription(),TRUE);  
+				//$test->drawBarGraph($data_set->GetData(),$data_set->GetDataDescription(),TRUE);  
+				//$test->drawLimitsGraph($data_set->GetData(),$data_set->GetDataDescription(),240,240,240);
+				//$test->drawOverlayBarGraph($data_set->GetData(),$data_set->GetDataDescription());
+				
+				$test->drawHorizontalBarGraph($data_set->GetData(),$data_set->GetDataDescription(),TRUE);
+				
 				  			  
 				// Drawing title
 				$test->setFontProperties(api_get_path(LIBRARY_PATH).'pchart/fonts/tahoma.ttf',10);  
 				$test->drawTitle(50,22,get_lang('AttendancesFaults'),50,50,50,385);  
 				
+												
 				$test->writeValues($data_set->GetData(),$data_set->GetDataDescription(),"Promedio");
+				
+			
 					 
 				$cache->WriteToCache($graph_id, $data_set->GetData(), $test);
 				ob_start();

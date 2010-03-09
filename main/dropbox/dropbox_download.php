@@ -8,7 +8,7 @@
 
 $language_file = 'dropbox';
 
-// including the basic Dokeos initialisation file
+// including the basic Chamilo initialisation file
 require_once '../inc/global.inc.php';
 
 // the dropbox configuration parameters

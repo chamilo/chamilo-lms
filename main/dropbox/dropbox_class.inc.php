@@ -40,7 +40,7 @@
  * @copyright 2004
  * @author Jan Bols <jan@ivpv.UGent.be>
  * with contributions by René Haentjens <rene.haentjens@UGent.be> (see RH)
- * @package dokeos.dropbox
+ * @package chamilo.dropbox
  */
 class Dropbox_Work {
 	public $id;
@@ -177,7 +177,7 @@ class Dropbox_Work {
         $result = Database::query($sql);
 		$res = Database::fetch_array($result, 'ASSOC');
 
-		// Check if uploader is still in Dokeos system
+		// Check if uploader is still in Chamilo system
 		$uploader_id = stripslashes($res['uploader_id']);
 		$uploaderName = getUserNameFromId($uploader_id);
 		if (!$uploaderName) {

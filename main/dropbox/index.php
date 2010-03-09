@@ -1,4 +1,4 @@
-<?php //$id: $
+<?php
 /* For licensing terms, see /license.txt */
 
 /**
@@ -12,7 +12,7 @@
  * @author Roan Embrechts, virtual course support
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University (see history version 1.3)
  *
- * @package dokeos.dropbox
+ * @package chamilo.dropbox
  *
  * @todo complete refactoring. Currently there are about at least 3 sql queries needed for every individual dropbox document.
  *			first we find all the documents that were sent (resp. received) by the user
@@ -227,7 +227,7 @@ if (!isset($_POST['feedback']) && (strstr($_POST['action'], 'move_received') OR
 // Store Feedback
 
 if ($_POST['feedback']) {
-	if (api_get_session_id() != 0 && !api_is_allowed_to_session_edit(false,true)) {
+	if (api_get_session_id() != 0 && !api_is_allowed_to_session_edit(false, true)) {
 		api_not_allowed();
 	}
 	$check = Security::check_token();
@@ -379,7 +379,7 @@ if ($_GET['action'] != 'add') {
 		// the headers of the sortable tables
 		$column_header = array();
 		$column_header[] = array('', false, '');
-		$column_header[] = array(get_lang('Type'), true,  '', 'style="width:40px; text-align:center"');
+		$column_header[] = array(get_lang('Type'), true, 'style="width:40px"', 'style="text-align:center"');
 		$column_header[] = array(get_lang('ReceivedTitle'), true, '');
 		$column_header[] = array(get_lang('Size'), true, '');
 		$column_header[] = array(get_lang('Authors'), true, '');
@@ -535,7 +535,7 @@ if ($_GET['action'] != 'add') {
 		$column_header = array();
 
 		$column_header[] = array('', false, '');
-		$column_header[] = array(get_lang('Type'), true, '', 'style="width:40px; text-align:center"');
+		$column_header[] = array(get_lang('Type'), true, 'style="width:40px"', 'style="text-align:center"');
 		$column_header[] = array(get_lang('SentTitle'), true, '');
 		$column_header[] = array(get_lang('Size'), true, '');
 		$column_header[] = array(get_lang('SentTo'), true, '');

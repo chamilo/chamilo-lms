@@ -149,7 +149,7 @@ function delete_category($action, $id) {
 /**
 * Displays the form to move one individual file to a category
 *
-* @return html code of the form that appears in a dokeos message box.
+* @return html code of the form that appears in a message box.
 *
 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 * @version march 2006

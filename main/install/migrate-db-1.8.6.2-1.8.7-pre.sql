@@ -92,5 +92,4 @@ CREATE TABLE attendance (id int NOT NULL auto_increment PRIMARY KEY, name text N
 ALTER TABLE attendance ADD INDEX(session_id);
 ALTER TABLE attendance ADD INDEX(active);
 ALTER TABLE lp_view ADD session_id INT NOT NULL DEFAULT 0;
-ALTER TABLE lp_view ADD INDEX(session_id)
-
+ALTER TABLE lp_view ADD INDEX(session_id);

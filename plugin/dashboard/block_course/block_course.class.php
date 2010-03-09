@@ -98,7 +98,7 @@ class BlockCourse extends Block {
 	    	}
 	    	$data_table .= '</table>';
 		} else {
-			$data_table .= get_lang('ThereAreNoInformationsAboutYoursCourses');
+			$data_table .= get_lang('ThereIsNoInformationAboutYourCourses');
 		}		
 		$content .= $data_table;
 		if (!empty($course_data)) {

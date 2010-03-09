@@ -115,7 +115,7 @@ class BlockSession extends Block {
 			$sessions_table .= '</table>';
 			$content .= $sessions_table; 
 		} else {
-			$content .= get_lang('ThereAreNoInformationsAboutYoursSessions');
+			$content .= get_lang('ThereIsNoInformationAboutYourSessions');
 		}
 
 		if (count($sessions) > 0) {

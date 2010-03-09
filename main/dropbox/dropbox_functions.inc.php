@@ -50,7 +50,6 @@ function handle_multiple_actions() {
 		return get_lang('CheckAtLeastOneFile');
 	}
 
-
 	// STEP 3A: deleting
 	if ($_POST['action'] == 'delete_received' || $_POST['action'] == 'delete_sent') {
 		$dropboxfile = new Dropbox_Person($_user['user_id'], $is_courseAdmin, $is_courseTutor);
@@ -271,7 +270,6 @@ function display_file_checkbox($id, $part) {
 	$return_value = '<input type="checkbox" name="'.Security::remove_XSS($part).'_'.Security::remove_XSS($id).'" value="'.Security::remove_XSS($id).'" '.$checked.' />';
 	return $return_value;
 }
-
 
 /**
 * This function retrieves all the dropbox categories and returns them as an array

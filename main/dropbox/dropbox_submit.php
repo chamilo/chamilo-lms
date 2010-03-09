@@ -226,7 +226,7 @@ if (isset($_POST['submitWork'])) {
 
 
 /**
- * // RH: EXAMINE OR SEND MAILING  (NEW)
+ * RH: EXAMINE OR SEND MAILING  (NEW)
  */
 
 if (isset($_GET['mailingIndex'])) { // examine or send

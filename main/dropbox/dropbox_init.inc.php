@@ -24,9 +24,7 @@
  * @package chamilo.dropbox
  */
 
-/*
-		INIT SECTION
-*/
+/*	INIT SECTION */
 
 $language_file = 'dropbox';
 
@@ -53,10 +51,8 @@ require_once api_get_path(LIBRARY_PATH) . 'fileUpload.lib.php';
 // protecting the script
 api_protect_course_script();
 
+/*	Libraries */
 
-/*
-	Libraries
-*/
 require_once api_get_path(LIBRARY_PATH) . 'debug.lib.inc.php';
 require_once api_get_path(LIBRARY_PATH) . 'course.lib.php';
 require_once api_get_path(LIBRARY_PATH) . 'groupmanager.lib.php';
@@ -73,9 +69,8 @@ require_once api_get_path(LIBRARY_PATH) . 'fileDisplay.lib.php'; // the function
 require_once api_get_path(LIBRARY_PATH) . 'document.lib.php';
 
 
-/*
-	Virtual course support
-*/
+/*	Virtual course support */
+
 $user_id = api_get_user_id();
 $course_code = $_course['sysCode'];
 $course_info = Database::get_course_info($course_code);
@@ -84,9 +79,8 @@ $session_id = api_get_session_id();
 $is_course_member = CourseManager::is_user_subscribed_in_real_or_linked_course($user_id, $course_code,$session_id);
 
 
-/*
-	Object Initialisation
-*/
+/*	Object Initialisation */
+
 // we need this here because the javascript to re-upload the file needs an array
 // off all the documents that have already been sent.
 // @todo consider moving the javascripts in a function that displays the javascripts
@@ -95,10 +89,8 @@ if ($_GET['action'] == 'add') {
 	$dropbox_person = new Dropbox_Person($_user['user_id'], $is_courseAdmin, $is_courseTutor);
 }
 
-/*
-	create javascript and htmlHeaders
-	// RH: Mailing: new function confirmsend
-*/
+/*	Create javascript and htmlHeaders */
+// RH: Mailing: new function confirmsend
 
 $javascript = "<script type=\"text/javascript\">
 	function confirmsend ()
@@ -247,9 +239,8 @@ if ((!$is_allowed_in_course || !$is_course_member) && !api_is_allowed_to_edit(nu
 	exit();
 }
 
-/*
-		BREADCRUMBS
-*/
+/*	BREADCRUMBS */
+
 if ($_GET['view'] == 'received') {
 	$interbreadcrumb[] = array('url' => '../dropbox/index.php', 'name' => get_lang('Dropbox', ''));
 	$nameTools = get_lang('ReceivedFiles');
@@ -274,10 +265,7 @@ if ($_GET['view'] == 'sent' OR empty($_GET['view'])) {
 	}
 }
 
-
-/*
-		HEADER & TITLE
-*/
+/*	HEADER & TITLE */
 
 if ($origin != 'learnpath') {
     Display::display_header($nameTools, 'Dropbox');

@@ -1,9 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-/*
-		INIT SECTION
-*/
+/*	INIT SECTION */
+
 // We cannot use dropbox_init.inc.php because this one already outputs data.
 
 $language_file = 'dropbox';
@@ -22,10 +21,8 @@ require_once 'dropbox_class.inc.php';
 
 require_once api_get_path(LIBRARY_PATH).'/document.lib.php';
 
+/*	DOWNLOAD A FOLDER */
 
-/*
-		DOWNLOAD A FOLDER
-*/
 if (isset($_GET['cat_id']) AND is_numeric($_GET['cat_id']) AND $_GET['action'] == 'downloadcategory' AND isset($_GET['sent_received'])) {
 	// step 1: constructingd' the sql statement. Due to the nature off the classes of the dropbox the categories for sent files are stored in the table
 	// dropbox_file while the categories for the received files are stored in dropbox_post. It would have been more elegant if these could be stored
@@ -62,12 +59,10 @@ if (isset($_GET['cat_id']) AND is_numeric($_GET['cat_id']) AND $_GET['action'] =
 }
 
 
-/*
-		DOWNLOAD A FILE
-*/
-/*
-		AUTHORIZATION
-*/
+/*	DOWNLOAD A FILE */
+
+/*		AUTHORIZATION */
+
 // Check if the id makes sense
 if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
 	Display::display_header($nameTools, 'Dropbox');
@@ -86,9 +81,8 @@ if (Database::num_rows($result) > 0) {
 	$allowed_to_download = true;
 }
 
-/*
-		ERROR IF NOT ALLOWED TO DOWNLOAD
-*/
+/*		ERROR IF NOT ALLOWED TO DOWNLOAD */
+
 if (!$allowed_to_download) {
 	Display::display_header($nameTools, 'Dropbox');
 	Display :: display_error_message(get_lang('YouAreNotAllowedToDownloadThisFile'));
@@ -96,9 +90,8 @@ if (!$allowed_to_download) {
 	exit;
 }
 
-/*
-		DOWNLOAD THE FILE
-*/
+/*		DOWNLOAD THE FILE */
+
 // the user is allowed to download the file
 else {
 	$_SESSION['_seen'][$_course['id']][TOOL_DROPBOX][] = intval($_GET['id']);
@@ -123,7 +116,6 @@ else {
 		header('Content-Disposition: attachment; filename='.$file);
 	}
 
-
 	/**
 	 * Note that if you use these two headers from a previous example:
 	 * header('Cache-Control: no-cache, must-revalidate');
@@ -134,7 +126,6 @@ else {
 	header("Pragma: \n");
 	header("Cache-Control: \n");
 	header("Cache-Control: public\n"); // IE cannot download from sessions without a cache
-
 
 	/*if (isset($_SERVER['HTTPS'])) {
 	    /**
@@ -148,8 +139,6 @@ else {
 	    header("Cache-Control: post-check=0, pre-check=0\n", false);
 	}*/
 
-
-
 	header('Content-Description: ' . trim(htmlentities($file)) . "\n");
 	header("Content-Transfer-Encoding: binary\n");
 	header("Content-Length: " . filesize($path)."\n" );
@@ -158,7 +147,6 @@ else {
 	fpassthru($fp);
 	exit();
 }
-
 
 
 /**
@@ -249,16 +237,14 @@ else {
  * @package chamilo.dropbox
  */
 
-/*
-		INITIALISING VARIABLES
-*/
+/*	INITIALISING VARIABLES */
+
 require_once 'dropbox_init.inc.php';	//only call init1 because init2 outputs data
 require_once 'dropbox_class.inc.php';
 
 
-/*
-		AUTHORISATION SECTION
-*/
+/*	AUTHORISATION SECTION */
+
 if (!isset($_user['user_id']) || !$is_course_member) {
     exit();
 }
@@ -266,9 +252,8 @@ if (!isset($_user['user_id']) || !$is_course_member) {
 if ($_GET['mailing'])  // RH: Mailing detail window call
 	getUserOwningThisMailing($_GET['mailing'], $_user['user_id'], '500');  // RH or die
 
-/*
-		SANITY CHECKS OF GET DATA & FILE
-*/
+/*	SANITY CHECKS OF GET DATA & FILE */
+
 if (!isset($_GET['id']) || !is_numeric($_GET['id'])) die(get_lang('GeneralError').' (code 501)');
 
 $work = new Dropbox_work($_GET['id']);
@@ -282,9 +267,8 @@ if (!is_file($path)) {
     die(get_lang('GeneralError').' (code 504)');
 }
 
-/*
-		SEND HEADERS
-*/
+/*	SEND HEADERS */
+
 require_once api_get_path(LIBRARY_PATH) . '/document.lib.php';
 $mimetype = DocumentManager::file_get_mime_type(true);
 
@@ -305,7 +289,6 @@ if (!in_array(strtolower($fileparts [$filepartscount - 1]), array('doc', 'xls', 
 	header('Content-Disposition: attachment; filename='.$file);
 }
 
-
 /**
  * Note that if you use these two headers from a previous example:
  * header('Cache-Control: no-cache, must-revalidate');
@@ -316,7 +299,6 @@ if (!in_array(strtolower($fileparts [$filepartscount - 1]), array('doc', 'xls', 
 header( "Pragma: \n");
 header( "Cache-Control: \n");
 header( "Cache-Control: public\n"); // IE cannot download from sessions without a cache
-
 
 /*if (isset($_SERVER['HTTPS'])) {
     /**
@@ -330,14 +312,12 @@ header( "Cache-Control: public\n"); // IE cannot download from sessions without 
     header("Cache-Control: post-check=0, pre-check=0\n", false);
 }*/
 
-
 header('Content-Description: ' . trim(htmlentities($file)) . "\n");
 header("Content-Transfer-Encoding: binary\n");
 header('Content-Length: ' . filesize($path)."\n" );
 
-/*
-		SEND FILE
-*/
+/*	SEND FILE */
+
 $fp = fopen( $path, 'rb');
 fpassthru($fp);
 exit();

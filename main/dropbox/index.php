@@ -89,9 +89,7 @@ Version 1.4 (Yannick Warnier)
 - removed all self-built database tables names
  */
 
-/*
-		INIT SECTION
-*/
+/*	INIT SECTION */
 
 // the file that contains all the initialisation stuff (and includes all the configuration stuff)
 require_once 'dropbox_init.inc.php';
@@ -110,18 +108,14 @@ event_access_tool(TOOL_DROPBOX);
 //this var is used to give a unique value to every page request. This is to prevent resubmiting data
 $dropbox_unid = md5(uniqid(rand(), true));
 
-/*
-		DISPLAY SECTION
-*/
+/*	DISPLAY SECTION */
 
 // Tool introduction
 Display::display_introduction_section(TOOL_DROPBOX);
 
-/*
-	ACTIONS: add a dropbox file, add a dropbox category.
-*/
+/*	ACTIONS: add a dropbox file, add a dropbox category. */
 
-// *** display the form for adding a new dropbox item. ***
+// Display the form for adding a new dropbox item.
 if ($_GET['action'] == 'add') {
 	if (api_get_session_id() != 0 && !api_is_allowed_to_session_edit(false, true)) {
 		api_not_allowed();
@@ -136,7 +130,6 @@ if (isset($_POST['submitWork'])) {
 		//include_once('dropbox_submit.php');
 	}
 }
-
 
 // display the form for adding a category
 if ($_GET['action'] == 'addreceivedcategory' or $_GET['action'] == 'addsentcategory') {
@@ -338,10 +331,8 @@ if ($_GET['action'] != 'add') {
 		}
 	}
 
+	/*	THE MENU TABS */
 
-	/*
-		THE MENU TABS
-	*/
 	if ($dropbox_cnf['sent_received_tabs']) {
 ?>
 <div id="tabbed_menu">
@@ -353,9 +344,8 @@ if ($_GET['action'] != 'add') {
 <?php
 	}
 
-	/*
-		RECEIVED FILES
-	*/
+	/*	RECEIVED FILES */
+
 	if ($_GET['view'] == 'received' OR !$dropbox_cnf['sent_received_tabs']) {
 		//echo '<h3>'.get_lang('ReceivedFiles').'</h3>';
 
@@ -507,9 +497,7 @@ if ($_GET['action'] != 'add') {
 		Display::display_sortable_config_table($column_header, $dropbox_data_recieved, $sorting_options, $paging_options, $additional_get_parameters, $column_show, $column_order, $selectlist);
 	}
 
-	/*
-		SENT FILES
-	*/
+	/*	SENT FILES */
 
 	if (!$_GET['view'] OR $_GET['view'] == 'sent' OR !$dropbox_cnf['sent_received_tabs']) {
 		//echo '<h3>'.get_lang('SentFiles').'</h3>';

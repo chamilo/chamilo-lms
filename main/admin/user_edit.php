@@ -35,22 +35,17 @@ function password_switch_radio_button(){
 }
 
 function display_drh_list(){
-	if(document.getElementById("status_select").value=='.STUDENT.')
+	if(document.getElementById("status_select").value=='.COURSEMANAGER.')
 	{
-		document.getElementById("drh_list").style.display="block";
-		document.getElementById("check_admin").style.display="none";
+		document.getElementById("id_platform_admin").style.display="block";
 	}
-	else if (document.getElementById("status_select").value=='.COURSEMANAGER.')
+	else if (document.getElementById("status_select").value=='.STUDENT.')
 	{
-		document.getElementById("drh_list").style.display="none";
-		document.getElementById("drh_select").options[0].selected="selected";
-		document.getElementById("check_admin").style.display="block";	
+		document.getElementById("id_platform_admin").style.display="none";	
 	}
 	else
 	{
-		document.getElementById("drh_list").style.display="none";
-		document.getElementById("drh_select").options[0].selected="selected";
-		document.getElementById("check_admin").style.display="none";
+		document.getElementById("id_platform_admin").style.display="none";
 	}
 }
 
@@ -210,17 +205,16 @@ $form->addElement('html', '</div>');
 
 // Platform admin
 // Only when changing another user!
-if ($user_id != $_SESSION['_uid']) {
+if ($user_id != $_user['user_id']) {
 	$group = array();
 	$group[] =& HTML_QuickForm::createElement('radio', 'platform_admin', null, get_lang('Yes'), 1);
 	$group[] =& HTML_QuickForm::createElement('radio', 'platform_admin', null, get_lang('No'), 0);
-	if ($user_data['status'] == 1) {
-		$form->addGroup($group, 'admin', get_lang('PlatformAdmin'), null, false);
-	} else {
-		$form->addElement('html', '<div id="check_admin" style="display:none">');
-		$form->addGroup($group, 'admin', get_lang('PlatformAdmin'), null, false);
-		$form->addElement('html', '</div>');
-	}
+	
+	$user_data['status'] == 1 ? $display = 'block':$display = 'none';
+	
+	$form->addElement('html', '<div id="id_platform_admin" style="display:'.$display.'">');
+	$form->addGroup($group, 'admin', get_lang('PlatformAdmin'), null, false);
+	$form->addElement('html', '</div>');
 }
 
 // Send email

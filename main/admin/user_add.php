@@ -54,11 +54,15 @@ function display_drh_list(){
 		document.getElementById("drh_list").style.display="block";
 		document.getElementById("id_platform_admin").style.display="none";
 	}
+	else if (document.getElementById("status_select").value=='.COURSEMANAGER.')
+	{
+		document.getElementById("drh_list").style.display="none";
+		document.getElementById("id_platform_admin").style.display="block";	
+	}
 	else
 	{
 		document.getElementById("drh_list").style.display="none";
-		document.getElementById("id_platform_admin").style.display="block";
-		document.getElementById("drh_select").options[0].selected="selected";
+		document.getElementById("id_platform_admin").style.display="none";
 	}
 }
 
@@ -148,15 +152,15 @@ $form->addElement('select_language', 'language', get_lang('Language'));
 //drh list (display only if student)
 $display = ($_POST['status'] == STUDENT || !isset($_POST['status'])) ? 'block' : 'none';
 
-/*
+
 $form->addElement('html', '<div id="drh_list" style="display:'.$display.';">');
-$drh_select = $form->addElement('select', 'hr_dept_id', get_lang('Drh'), array(), 'id="drh_select"');
+/*$drh_select = $form->addElement('select', 'hr_dept_id', get_lang('Drh'), array(), 'id="drh_select"');
 $drh_list = UserManager :: get_user_list(array('status' => DRH), api_sort_by_first_name() ? array('firstname', 'lastname') : array('lastname', 'firstname'));
 if (count($drh_list) == 0) {
 	$drh_select->addOption('- '.get_lang('ThereIsNotStillAResponsible', '').' -', 0);
 } else {
 	$drh_select->addOption('- '.get_lang('SelectAResponsible').' -', 0);
-}
+}*/
 
 if (is_array($drh_list)) {
 	foreach ($drh_list as $drh) {
@@ -164,7 +168,7 @@ if (is_array($drh_list)) {
 	}
 }
 $form->addElement('html', '</div>');
-*/
+
 
 
 // Platform admin

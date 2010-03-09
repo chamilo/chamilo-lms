@@ -1207,11 +1207,8 @@ function get_terms()
     	}
     	else
     	{
-    		if($this->current_start_time == 0)
-    		{ //small exception for start time, to avoid amazing values
-    			$this->current_start_time = time();
-    		}
-    		//error_log('New LP - reinit blocked by setting',0);
+    		// if we don't init start time here, the time is sometimes calculated from the las start time
+    		$this->current_start_time = time();
     	}
     }
     /**

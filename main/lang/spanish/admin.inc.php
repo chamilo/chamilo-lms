@@ -1159,4 +1159,13 @@ $TimeSpentOnThePlatformLastWeekByDay = "Tiempo en plataforma la semana pasada, p
 $GraphicNotAvailable = "Gráfico no disponible";
 $AttendancesFaults = "Faltas de asistencia";
 $Minutes = "Minutos";
+$SystemStatus = "Información del sistema";
+$IsWritable = "Es inscribible";
+$DirectoryExists = "La carpeta existe";
+$DirectoryMustBeWritable = "La carpeta tiene que ser inscribible por el servidor web";
+$DirectoryShouldBeRemoved = "La carpeta debería ser quitada (no es más necesaria)";
+$Section = "Sección";
+$Expected = "Esperado";
+$Setting = "Parámetro";
+$Current = "Actual";
 ?>

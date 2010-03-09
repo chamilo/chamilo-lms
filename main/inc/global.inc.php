@@ -49,6 +49,14 @@ if (file_exists($main_configuration_file_path)) {
 	$_configuration = array();
 }
 
+//Redirects to the main/install/ page
+if (!$already_installed) {
+	$global_error_code = 2;
+	// The system has not been installed yet.
+	require $includePath.'/global_error_message.inc.php';
+	die();
+}
+
 // Ensure that _configuration is in the global scope before loading
 // main_api.lib.php. This is particularly helpful for unit tests
 if (!isset($GLOBALS['_configuration'])) {
@@ -116,8 +124,6 @@ if (!$_configuration['db_host']) {
 	die();
 }
 
-
-
 /* RETRIEVING ALL THE CHAMILO CONFIG SETTINGS FOR MULTIPLE URLs FEATURE*/
 if (!empty($_configuration['multiple_access_urls'])) {
 	$_configuration['access_url'] = 1;
@@ -139,13 +145,6 @@ if (!empty($_configuration['multiple_access_urls'])) {
 // This function is moved here after the database connections was made since  api_session_start will call the api_get_path() function and this function will call a Database function 
 // Start session.
 api_session_start($already_installed);
-
-if (!$already_installed) {
-	$global_error_code = 2;
-	// The system has not been installed yet.
-	require $includePath.'/global_error_message.inc.php';
-	die();
-}
 
 // The system has not been designed to use special SQL modes that were introduced since MySQL 5.
 Database::query("set session sql_mode='';");

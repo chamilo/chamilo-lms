@@ -580,7 +580,7 @@ margin-top:0;
 	background-repeat:repeat-x;
 	font-size: 12px;
 	color:#ffffff;
-	height: 8em;	 /* Do not change this value */ 
+	//height: 8em;	 /* Do not change this value */ 
 	overflow:hidden;
 	width: 100%;
 	padding-bottom:10px;
@@ -604,7 +604,7 @@ margin-top:0;
 	margin-right:5%;	
 	background-color: #037fb2;
 	background-image: url(images/bg-footer.gif);
-	background-repeat:repeat-x;	
+	background-repeat:repeat-x;
 }
 
 #footer #platformmanager {

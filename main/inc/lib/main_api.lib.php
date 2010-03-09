@@ -367,7 +367,7 @@ function api_get_path($path_type, $path = null) {
 			$load_new_config = true;
 		}
 	}
-	
+		
 	if (!$is_this_function_initialized) {
 		global $_configuration;
 		$include_path_sys = str_replace('\\', '/', realpath(dirname(__FILE__).'/../')).'/';
@@ -459,8 +459,9 @@ function api_get_path($path_type, $path = null) {
 		$is_this_function_initialized = true;
 	} else {
 		if ($load_new_config) {
-			//redifining variables
+			//Redifining variables to work well with the "multiple url" feature
 			
+			//All web paths need to be here 
 			$web_paths = array(
 				WEB_PATH 				=> '',
 				WEB_SERVER_ROOT_PATH	=> '',
@@ -472,8 +473,7 @@ function api_get_path($path_type, $path = null) {
 				WEB_ARCHIVE_PATH 		=> 'archive/',
 				WEB_LIBRARY_PATH 		=> 'inc/lib/',
 				WEB_AJAX_PATH 			=> 'inc/ajax/',
-			);		
-	
+			);
 			
 			$root_web 		= api_add_trailing_slash($root_web);
 			// Web server base and system server base.
@@ -491,8 +491,7 @@ function api_get_path($path_type, $path = null) {
 			$paths[WEB_PLUGIN_PATH] 		= $paths[WEB_PATH].$web_paths[WEB_PLUGIN_PATH];
 			$paths[WEB_ARCHIVE_PATH] 		= $paths[WEB_PATH].$web_paths[WEB_ARCHIVE_PATH];
 			$paths[WEB_LIBRARY_PATH] 		= $paths[WEB_CODE_PATH].$web_paths[WEB_LIBRARY_PATH];
-			$paths[WEB_AJAX_PATH] 	 		= $paths[WEB_CODE_PATH].$web_paths[WEB_AJAX_PATH];
-		
+			$paths[WEB_AJAX_PATH] 	 		= $paths[WEB_CODE_PATH].$web_paths[WEB_AJAX_PATH];		
 		}
 	}
 
@@ -566,18 +565,12 @@ function api_get_path($path_type, $path = null) {
 		$path = preg_replace(VALID_WEB_SERVER_BASE, '/', $path);
 
 	} elseif (strpos($path, $server_base_sys) === 0) {
-
 		$path = preg_replace('@^'.$server_base_sys.'@', '', $path);
-
 	} elseif (strpos($path, '/') === 0) {
-
 		// Leading slash - we assume that this path is semi-absolute (REL),
 		// then path is left without furthes modifications.
-
 	} else {
-
 		return null; // Probably implementation of this case won't be needed.
-
 	}
 
 	// Path now is semi-absolute. It is convenient at this moment repeated slashes to be removed.

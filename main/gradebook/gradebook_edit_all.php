@@ -50,7 +50,6 @@ if (empty($my_selectcat)) {
 // -                       DISPLAY HEADERS AND MESSAGES                           -
 // --------------------------------------------------------------------------------
 
-
 if (!isset($_GET['exportpdf']) and !isset($_GET['export_certificate'])) {
 	if (isset ($_GET['studentoverview'])) {
 		$interbreadcrumb[]= array (
@@ -65,9 +64,8 @@ if (!isset($_GET['exportpdf']) and !isset($_GET['export_certificate'])) {
 		);
 		Display :: display_header(get_lang('SearchResults'));
 	} else {
-		$interbreadcrumb[]= array (
-			'url' => $_SESSION['gradebook_dest'].'?',
-			'name' => get_lang('Gradebook'));
+		$interbreadcrumb[] = array ('url' => $_SESSION['gradebook_dest'].'?selectcat=1', 'name' => get_lang('Gradebook'));
+
 
 		$interbreadcrumb[]= array (
 			'url' => $_SESSION['gradebook_dest'].'?&selectcat='.Security::remove_XSS($_GET['selectcat']),

@@ -1,5 +1,5 @@
 <?php
-/* For licensing terms, see /dokeos_license.txt */
+/* For licensing terms, see /license.txt */
 
 /**
  * This (abstract?) class defines the parent attributes and methods for the dokeos learnpaths and scorm
@@ -10,7 +10,7 @@
  */
 /**
  * Defines the learnpath parent class
- * @package dokeos.learnpath
+ * @package chamilo.learnpath
  */
 
 class learnpath {

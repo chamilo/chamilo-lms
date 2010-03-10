@@ -2015,18 +2015,8 @@
               }
 
              if ( $Shadow && $Alpha == 100 )
-                          	
-              $X1 = $YZero;
-			  $Y1 = $XPos+1;
-			  $X2 = $YPos;
-			  $Y2 =	$XPos+$SeriesWidth-1;
-             
-             //$this->drawRectangle($XPos+1,$YZero,$XPos+$SeriesWidth-1,$YPos,25,25,25,TRUE,$Alpha);
-             //$this->drawFilledRectangle($XPos+1,$YZero,$XPos+$SeriesWidth-1,$YPos,$this->Palette[$ColorID]["R"],$this->Palette[$ColorID]["G"],$this->Palette[$ColorID]["B"],TRUE,$Alpha);
-             $this->drawRectangle($X1,$Y1,$X2,$Y2,$YPos,25,25,25,TRUE,$Alpha);
-             $this->drawFilledRectangle($X1,$Y1,$X2,$Y2,$this->Palette[$ColorID]["R"],$this->Palette[$ColorID]["G"],$this->Palette[$ColorID]["B"],TRUE,$Alpha);
-             
-             
+              $this->drawRectangle($XPos+1,$YZero,$XPos+$SeriesWidth-1,$YPos,25,25,25,TRUE,$Alpha);
+             $this->drawFilledRectangle($XPos+1,$YZero,$XPos+$SeriesWidth-1,$YPos,$this->Palette[$ColorID]["R"],$this->Palette[$ColorID]["G"],$this->Palette[$ColorID]["B"],TRUE,$Alpha);
             }
           }
          $XPos = $XPos + $this->DivisionWidth;
@@ -2097,8 +2087,6 @@
        $SerieID++;
       }
     }
-
-
 
    /* This function draw a limits bar graphs */
    function drawLimitsGraph($Data,$DataDescription,$R=0,$G=0,$B=0)

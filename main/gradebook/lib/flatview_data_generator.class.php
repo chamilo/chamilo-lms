@@ -188,86 +188,53 @@ class FlatViewDataGenerator
 	/**
 	 * Get actual array data evaluation/link scores
 	 */
-	public function get_evaluation_sumary_results ($users_sorting = 0,
-							  $users_start = 0, $users_count = null,
-							  $items_start = 0, $items_count = null,
-							  $ignore_score_color = false) {
-							  	
-		// do some checks on users/items counts, redefine if invalid values
-		if (!isset($users_count)) {
-			$users_count = count ($this->users) - $users_start;
-		}
-		if ($users_count < 0) {
-			$users_count = 0;
-		}
-		if (!isset($items_count)) {
-			$items_count = count ($this->evals) + count ($this->links) - $items_start;
-		}
-		if ($items_count < 0) {
-			$items_count = 0;
-		}
-		// copy users to a new array that we will sort
-		// TODO - needed ?
+	public function get_evaluation_sumary_results ($session_id = null) {
+								
 		$usertable = array ();
-		foreach ($this->users as $user) {
-			$usertable[] = $user;
-		}
-		// sort users array
-		if ($users_sorting & self :: FVDG_SORT_LASTNAME) {
-			usort($usertable, array ('FlatViewDataGenerator','sort_by_last_name'));
-		} elseif ($users_sorting & self :: FVDG_SORT_FIRSTNAME) {
-			usort($usertable, array ('FlatViewDataGenerator','sort_by_first_name'));
-		}
-		if ($users_sorting & self :: FVDG_SORT_DESC) {
-			$usertable = array_reverse($usertable);
-		}
-		// select the requested users
-		$selected_users = array_slice($usertable, $users_start, $users_count);
-		// generate actual data array
-
-
-		$scoredisplay = ScoreDisplay :: instance();
-
-		$data= array ();
-		$displaytype = SCORE_DIV;
-		if ($ignore_score_color) {
-			$displaytype |= SCORE_IGNORE_SPLIT;
-		}
-
+		foreach ($this->users as $user) { $usertable[] = $user; }
+		$selected_users = $usertable; 
+				
+		// generate actual data array for all selected users
+		$data = array();
 
 		foreach ($selected_users as $user) {
 			$row = array ();
 			$item_value=0;
 			$item_total=0;
-
-			for ($count=0;($count < $items_count ) && ($items_start + $count < count($this->evals_links));$count++) {
-				
-				$item = $this->evals_links [$count + $items_start];
-				$score = $item->calc_score($user[0]);
+			for ($count=0;$count < count($this->evals_links); $count++) {								
+				$item = $this->evals_links [$count];
+				$score = $item->calc_score($user[0]);				
 				$porcent_score = $score[1] ?round(($score[0]*100)/$score[1]):0;
-				$row[$item->get_name()] = $porcent_score;  
-
+				$row[$item->get_name()] = $porcent_score;												
 			}
-			unset($score);
-			$data[$user[0]] = $row;
+			$data[$user[0]] = $row;			
 		}
-		
 
+		// get evaluations for every user by item
 		$data_by_item = array();
-		foreach ($data as $key => $value) {
-			
+		foreach ($data as $uid => $items) {			
 			$tmp = array();	
-			foreach ($value as $item => $val) {
+			foreach ($items as $item => $value) {
 				$tmp[] = $item;
 				if (in_array($item,$tmp)) {
-					$data_by_item[$item][] = $val;		
+					$data_by_item[$item][$uid] = $value;		
 				}				
 			}			
 		}
-		
-		var_dump($data_by_item);
-				
-		return $data;
+
+		// get evaluation sumary results (maximum, minimum and average of evaluations for all students)
+		$result = array();
+		$maximum = $minimum = $average = 0;
+		foreach ($data_by_item as $k => $v) {			
+			$average = round(array_sum($v)/count($v));					
+			arsort($v);
+			$maximum = array_shift($v);
+			$minimum = array_pop($v);			
+			$sumary_item = array('max'=>$maximum, 'min'=>$minimum, 'avg'=>$average); 			
+			$result[$k] = $sumary_item;			
+		}
+
+		return $result;
 	}
 	
 

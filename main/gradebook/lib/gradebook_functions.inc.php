@@ -339,29 +339,6 @@ function get_printable_data($users,$alleval, $alllinks) {
 	return array ($header_names, $newarray);
 }
 
-function get_evaluation_sumary_result($users,$alleval, $alllinks) {
-	
-	$datagen = new FlatViewDataGenerator ($users, $alleval, $alllinks);
-	
-	$offset = isset($_GET['offset']) ? $_GET['offset'] : '0';
-	
-	$count = (($offset + 10) > $datagen->get_total_items_count()) ? ($datagen->get_total_items_count() - $offset) : 10;
-	
-	$header_names = $datagen->get_evaluation_items($offset, $count);
-
-	$data_array = $datagen->get_evaluation_sumary_results(FlatViewDataGenerator :: FVDG_SORT_LASTNAME, 0, null, $offset, $count, true);
-	
-	$newarray = array();	
-	foreach ($data_array as $data) {
-		$newarray[] = array_slice($data, 1);
-	}
-	
-	return array ($header_names, $newarray);
-		
-	
-
-}
-
 
 /**
  * XML-parser: handle character data

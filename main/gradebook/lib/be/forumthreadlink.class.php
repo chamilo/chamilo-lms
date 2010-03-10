@@ -127,7 +127,7 @@ class ForumThreadLink extends AbstractLink
 			if ($database_name!="") {
 			$thread_qualify = Database :: get_course_table(TABLE_FORUM_THREAD_QUALIFY, $database_name);
 
-	  		$sql = 'SELECT thread_qualify_max FROM '.Database :: get_course_table(TABLE_FORUM_THREAD, $database_name)." WHERE thread_id = '".$this->get_ref_id()."' AND session_id=".api_get_session_id()."";
+	  		$sql = 'SELECT thread_qualify_max FROM '.Database :: get_course_table(TABLE_FORUM_THREAD, $database_name)." WHERE thread_id = '".$this->get_ref_id()."'";
 			$query = Database::query($sql);
 			$assignment = Database::fetch_array($query);
 

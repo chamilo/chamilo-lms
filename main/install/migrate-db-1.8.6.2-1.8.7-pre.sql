@@ -76,7 +76,7 @@ ALTER TABLE track_e_online ADD COLUMN access_url_id INT NOT NULL DEFAULT 1;
 -- xxUSERxx
 
 -- xxCOURSExx
-INSERT INTO tool(name,link,image,visibility,admin,address,added_tool,target,category) VALUES ('notebook','notebook/index.php','notebook.gif',0,'0','squaregrey.gif',0,'_self','interaction');
+INSERT INTO tool(name,link,image,visibility,admin,address,added_tool,target,category) VALUES ('attendance','attendance/index.php','attendance.gif',0,'0','squaregrey.gif',0,'_self','authoring');
 ALTER TABLE course_description ADD COLUMN progress INT  NOT NULL DEFAULT 0 AFTER description_type;
 ALTER TABLE item_property ADD id int NOT NULL auto_increment PRIMARY KEY FIRST;
 UPDATE course_description SET description_type = (SELECT IF(description_type>7,description_type+1,description_type)); -- update description_type field for using thematic advance with description_type = 8

@@ -77,7 +77,7 @@ if ($description_type == THEMATIC_ADVANCE) {
 $form->addElement('style_submit_button', null, get_lang('Save'), 'class="save"');
 // Set some default values
 $default['title'] = Security::remove_XSS($description_title);
-$default['contentDescription'] = Security::remove_XSS($description_content,STUDENT);
+$default['contentDescription'] = Security::remove_XSS($description_content,COURSEMANAGERLOWSECURITY);
 $default['description_type'] = $description_type;
 
 $form->setDefaults($default);

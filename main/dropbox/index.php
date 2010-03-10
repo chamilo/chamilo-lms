@@ -580,7 +580,7 @@ if ($_GET['action'] != 'add') {
 				$receivers_celldata = trim(trim($receivers_celldata), ','); // Removing the trailing comma.
 				$dropbox_file_data[] = $receivers_celldata;
 				$last_upload_date = api_get_local_time($dropbox_file->last_upload_date, 'Y-m-d H:i:s', null, date_default_timezone_get());
-				$dropbox_file_data[] = date_to_str_ago($last_upload_date).'<br /><span class="dropbox_date">'.api_get_local_time($last_upload_date).'</span>';
+				$dropbox_file_data[] = date_to_str_ago($last_upload_date).'<br /><span class="dropbox_date">'.api_format_date_time_long($last_upload_date).'</span>';
 
 				//$dropbox_file_data[] = $dropbox_file->author;
 				$receivers_celldata = '';

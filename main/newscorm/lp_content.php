@@ -1,11 +1,9 @@
-<?php //$id: $
+<?php
+/* For licensing terms, see /license.txt */
 /**
  * Script that displays an error message when no content could be loaded
- * @package dokeos.learnpath
+ * @package chamilo.learnpath
  * @author Yannick Warnier <ywarnier@beeznest.org>
- */
-/**
- * Nothing very interesting
  */
 
 // including the global file

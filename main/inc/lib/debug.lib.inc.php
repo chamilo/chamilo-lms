@@ -66,7 +66,6 @@ function debug_paths()
 	echo 'SYS_CODE_PATH :'.api_get_path(SYS_CODE_PATH).'<br />';
 	echo 'SYS_LANG_PATH :'.api_get_path(SYS_LANG_PATH).'<br />';
 	echo 'WEB_IMG_PATH :'.api_get_path(WEB_IMG_PATH).'<br />';
-	echo 'GARBAGE_PATH :'.api_get_path(GARBAGE_PATH).'<br />';
 	echo 'PLUGIN_PATH :'.api_get_path(PLUGIN_PATH).'<br />';
 	echo 'SYS_ARCHIVE_PATH :'.api_get_path(SYS_ARCHIVE_PATH).'<br />';
 	echo 'INCLUDE_PATH :'.api_get_path(INCLUDE_PATH).'<br />';

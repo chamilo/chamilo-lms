@@ -175,9 +175,8 @@ define('SYS_CODE_PATH', 'SYS_CODE_PATH');
 define('SYS_LANG_PATH', 'SYS_LANG_PATH');
 define('WEB_IMG_PATH', 'WEB_IMG_PATH');
 define('WEB_CSS_PATH', 'WEB_CSS_PATH');
-define('GARBAGE_PATH', 'GARBAGE_PATH'); // Deprecated?
 define('SYS_PLUGIN_PATH', 'SYS_PLUGIN_PATH');
-define('PLUGIN_PATH', 'SYS_PLUGIN_PATH'); // deprecated
+define('PLUGIN_PATH', 'SYS_PLUGIN_PATH'); // deprecated ?
 define('WEB_PLUGIN_PATH', 'WEB_PLUGIN_PATH');
 define('SYS_ARCHIVE_PATH', 'SYS_ARCHIVE_PATH');
 define('WEB_ARCHIVE_PATH', 'WEB_ARCHIVE_PATH');
@@ -228,11 +227,14 @@ require_once dirname(__FILE__).'/internationalization.lib.php';
  *	The defined constants used by this function contain the abbreviations WEB, REL, SYS with the following meaning for types:
  *	WEB - an absolute URL (we often call it web-path),
  *	example: http://www.mychamilo.org/chamilo/courses/COURSE01/document/lesson01.html;
+ *
  *	REL - represents a semi-absolute URL - a web-path, which is relative to the root web-path of the server, without server's base,
  *	example: /chamilo/courses/COURSE01/document/lesson01.html;
+ *
  *	SYS - represents an absolute path inside the scope of server's file system,
  *	/var/www/chamilo/courses/COURSE01/document/lesson01.html or
  *	C:/Inetpub/wwwroot/chamilo/courses/COURSE01/document/lesson01.html.
+ *
  *	In some abstract sense we can consider these three path types as absolute.
  *
  *	Notes about the current behaviour model:
@@ -271,7 +273,6 @@ require_once dirname(__FILE__).'/internationalization.lib.php';
  *	api_get_path(WEB_CSS_PATH)					http://www.mychamilo.org/chamilo/main/css/
  *	api_get_path(WEB_LIBRARY_PATH)				http://www.mychamilo.org/chamilo/main/inc/lib/
  *
- * 	api_get_path(GARBAGE_PATH)					Deprecated? *
  *
  * 	api_get_path(SYS_ARCHIVE_PATH)				/var/www/chamilo/archive/
  *	api_get_path(INCLUDE_PATH)					/var/www/chamilo/main/inc/
@@ -312,7 +313,6 @@ function api_get_path($path_type, $path = null) {
 		SYS_LANG_PATH 			=> 'lang/',
 		WEB_IMG_PATH 			=> 'img/',
 		WEB_CSS_PATH 			=> 'css/',
-		GARBAGE_PATH 			=> 'archive/', // Deprecated?
 		SYS_PLUGIN_PATH 		=> 'plugin/',
 		WEB_PLUGIN_PATH 		=> 'plugin/',
 		SYS_ARCHIVE_PATH 		=> 'archive/',
@@ -426,8 +426,6 @@ function api_get_path($path_type, $path = null) {
 		$paths[SYS_PLUGIN_PATH] 		= $paths[SYS_PATH].$paths[SYS_PLUGIN_PATH];
 		$paths[SYS_ARCHIVE_PATH] 		= $paths[SYS_PATH].$paths[SYS_ARCHIVE_PATH];
 		$paths[SYS_TEST_PATH] 			= $paths[SYS_PATH].$paths[SYS_TEST_PATH];
-
-		$paths[GARBAGE_PATH] 			= $paths[SYS_PATH].$paths[GARBAGE_PATH]; // Deprecated?
 
 		// TODO: This path may depend on the configuration option? To be researched.
 		// Maybe a new constant like WEB_USER_CSS_PATH has to be defined?

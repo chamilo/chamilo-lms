@@ -390,17 +390,21 @@ function api_detect_language(&$string, $encoding = null) {
  * @author Christophe Gesche<gesche@ipm.ucl.ac.be>
  *         originally inspired from from PhpMyAdmin
  * @author Ivan Tcholakov, 2009, code refactoring, adding support for predefined date/time formats.
- * @param string/int $date_format		The date pattern. See the php-manual about the function strftime().
+ * @param string/int $date_format			The date pattern. See the php-manual about the function strftime().
  * Note: For $date_format the following integer constants may be used for using predefined date/time
  * formats in the Chamilo system: TIME_NO_SEC_FORMAT, DATE_FORMAT_SHORT, DATE_FORMAT_LONG, DATE_TIME_FORMAT_LONG.
- * @param int $time_stamp (optional)	Time as an integer value. The default value -1 means now, the function time() is called internally.
- * @param string $language (optional)	Language indentificator. If it is omited, the current interface language is assumed.
- * @return string						Returns the formatted date.
+ * @param int/string $time_stamp (optional)	Time as an integer value. The default value -1 means now, the function time() is called internally.
+ * 											This parameter also could be a string, 'Y-m-d H:i:s' formatted.
+ * @param string $language (optional)		Language indentificator. If it is omited, the current interface language is assumed.
+ * @return string							Returns the formatted date.
  * @link http://php.net/manual/en/function.strftime.php
  */
 function api_format_date($date_format, $time_stamp = -1, $language = null) {
 	if ($time_stamp == -1) {
 		$time_stamp = time();
+	}
+	if (is_string($time_stamp)) {
+		$time_stamp = strtotime($time_stamp);
 	}
 	if (is_int($date_format)) {
 		switch ($date_format) {
@@ -435,14 +439,18 @@ function api_format_date($date_format, $time_stamp = -1, $language = null) {
  * Returns date and time with long format correspondent to a given language.
  * This function is a workaround, it is designed to work for PHP 5.2.x and PHP 5.3+.
  * @author Ivan Tcholakov, 2010
- * @param int $time_stamp (optional)	Time as an integer value. The default value -1 means now, the function time() is called internally.
- * @param string $language (optional)	Language indentificator. If it is omited, the current interface language is assumed.
- * @return string						Returns the formatted date.
+ * @param int/string $time_stamp (optional)	Time as an integer value. The default value -1 means now, the function time() is called internally.
+ * 											This parameter also could be a string, 'Y-m-d H:i:s' formatted.
+ * @param string $language (optional)		Language indentificator. If it is omited, the current interface language is assumed.
+ * @return string							Returns the formatted date.
  */
 function api_format_date_time_long($time_stamp = -1, $language = null) {
 	static $date_formatter; // Holds the IntlDateFormatter object that should be created only once, for performance.
 	if ($time_stamp == -1) {
 		$time_stamp = time();
+	}
+	if (is_string($time_stamp)) {
+		$time_stamp = strtotime($time_stamp);
 	}
 	if (IS_PHP_53 && INTL_INSTALLED && !isset($date_formatter)) {
 		$locale = _api_get_locale_from_language($language);

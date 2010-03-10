@@ -295,11 +295,11 @@ class DocumentManager {
 	 * @param string $name
 	 * @return false if file doesn't exist, true if stream succeeded
 	 */
-	public static function file_send_for_download ($full_file_name, $forced = false, $name = '') {
+	public static function file_send_for_download($full_file_name, $forced = false, $name = '') {
 		if (!is_file($full_file_name)) {
 			return false;
 		}
-		$filename = ($name == '') ? basename($full_file_name) : $name;
+		$filename = ($name == '') ? basename($full_file_name) : replace_dangerous_char($name);
 		$len = filesize($full_file_name);
 
 		if ($forced) {

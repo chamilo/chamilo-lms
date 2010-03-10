@@ -3528,6 +3528,7 @@ class SurveyUtil {
 
 		require_once(api_get_path(LIBRARY_PATH).'pear/Spreadsheet_Excel_Writer/Writer.php');
 		$workbook = new Spreadsheet_Excel_Writer();
+		$workbook ->setTempDir(api_get_path(SYS_ARCHIVE_PATH));
 		$workbook->send($filename);
 		$worksheet =& $workbook->addWorksheet('Report 1');
 		$line = 0;

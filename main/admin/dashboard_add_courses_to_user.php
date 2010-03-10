@@ -165,7 +165,7 @@ echo '<div class="actions" style="height:22px;">
 <span style="float: right;margin:0px;padding:0px;">
 <a href="dashboard_add_users_to_user.php?user='.$hrm_id.'">'.Display::return_icon('add_user_big.gif', get_lang('AssignUsers'), array('style'=>'vertical-align:middle')).' '.get_lang('AssignUsers').'</a>
 <a href="dashboard_add_sessions_to_user.php?user='.$hrm_id.'">'.Display::return_icon('view_more_stats.gif', get_lang('AssignSessions'), array('style'=>'vertical-align:middle')).' '.get_lang('AssignSessions').'</a></span>
-<span style="vertical-align:middle">'.get_lang('AssignCoursesTo').'&nbsp;'.api_get_person_name($hrm_info['firstname'], $hrm_info['lastname']).'</span></div>';
+<span style="vertical-align:middle">'.sprintf(get_lang('AssignCoursesToX'), api_get_person_name($hrm_info['firstname'], $hrm_info['lastname'])).'</span></div>';
 
 // *******************
 

@@ -366,6 +366,9 @@ class scorm extends learnpath {
 
 		foreach($this->organizations as $id => $dummy)
 		{
+			$is_session=api_get_session_id();
+			$is_session!=0?$session_id=$is_session:$session_id=0;
+					
 			$oOrganization =& $this->organizations[$id];
 	     	//prepare and execute insert queries
 	     	//-for learnpath
@@ -384,9 +387,11 @@ class scorm extends learnpath {
 	     	if(!empty($charset) && !empty($this->manifest_encoding) && $this->manifest_encoding != $charset){
 	     		$myname = api_convert_encoding($myname,$charset,$this->manifest_encoding);
 	     	}
-			$sql = "INSERT INTO $new_lp (lp_type, name, ref, description, path, force_commit, default_view_mod, default_encoding, js_lib,display_order)" .
-					"VALUES (2,'".$myname."', '".$oOrganization->get_ref()."','','".$this->subdir."', 0, 'embedded', '".$this->manifest_encoding."','scorm_api.php',$dsp)";
+			$sql = "INSERT INTO $new_lp (lp_type, name, ref, description, path, force_commit, default_view_mod, default_encoding, js_lib,display_order, session_id)" .
+					"VALUES (2,'".$myname."', '".$oOrganization->get_ref()."','','".$this->subdir."', 0, 'embedded', '".$this->manifest_encoding."','scorm_api.php',$dsp,$session_id)";
 			if($this->debug>1){error_log('New LP - In import_manifest(), inserting path: '. $sql,0);}
+
+			
 			$res = Database::query($sql);
 			$lp_id = Database::insert_id();
 			$this->lp_id = $lp_id;

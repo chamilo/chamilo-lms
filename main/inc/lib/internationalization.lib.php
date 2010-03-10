@@ -385,7 +385,7 @@ function api_detect_language(&$string, $encoding = null) {
  */
 
 /**
- * Returns formated date/time format correspondent to a given language.
+ * Returns formated date/time, correspondent to a given language.
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  * @author Christophe Gesche<gesche@ipm.ucl.ac.be>
  *         originally inspired from from PhpMyAdmin
@@ -429,6 +429,32 @@ function api_format_date($date_format, $time_stamp = -1, $language = null) {
 			$translated['months_short'][(int)strftime('%m', $time_stamp) - 1]),
 		$date_format);
 	return strftime($date_format, $time_stamp);
+}
+
+/**
+ * Returns date and time with long format correspondent to a given language.
+ * This function is a workaround, it is designed to work for PHP 5.2.x and PHP 5.3+.
+ * @author Ivan Tcholakov, 2010
+ * @param int $time_stamp (optional)	Time as an integer value. The default value -1 means now, the function time() is called internally.
+ * @param string $language (optional)	Language indentificator. If it is omited, the current interface language is assumed.
+ * @return string						Returns the formatted date.
+ */
+function api_format_date_time_long($time_stamp = -1, $language = null) {
+	static $date_formatter; // Holds the IntlDateFormatter object that should be created only once, for performance.
+	if ($time_stamp == -1) {
+		$time_stamp = time();
+	}
+	if (IS_PHP_53 && INTL_INSTALLED && !isset($date_formatter)) {
+		$locale = _api_get_locale_from_language($language);
+		$date_formatter = datefmt_create($locale, IntlDateFormatter::FULL, IntlDateFormatter::SHORT);
+		if (!is_object($date_formatter)) {
+			$date_formatter = false;
+		}
+	}
+	if ($date_formatter) {
+		return api_to_system_encoding(datefmt_format($date_formatter, $time_stamp), 'UTF-8');
+	}
+	return api_format_date(DATE_FORMAT_LONG, $time_stamp).'&nbsp;&nbsp;&nbsp;&nbsp;'.api_format_date(TIME_NO_SEC_FORMAT, $time_stamp);
 }
 
 /**

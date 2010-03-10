@@ -2661,7 +2661,7 @@ function api_get_themes() {
  */
 function api_disp_html_area($name, $content = '', $height = '', $width = '100%', $attributes = null, $editor_config = null) {
 	global $_configuration, $_course, $fck_attribute;
-	require_once dirname(__FILE__).'/formvalidator/Element/html_editor.php';
+	require_once api_get_path(LIBRARY_PATH).'formvalidator/Element/html_editor.php';
 	$editor = new HTML_QuickForm_html_editor($name, null, $attributes, $editor_config);
 	$editor->setValue($content);
 	// The global variable $fck_attribute has been deprecated. It stays here for supporting old external code.
@@ -2676,7 +2676,7 @@ function api_disp_html_area($name, $content = '', $height = '', $width = '100%',
 
 function api_return_html_area($name, $content = '', $height = '', $width = '100%', $attributes = null, $editor_config = null) {
 	global $_configuration, $_course, $fck_attribute;
-	require_once(dirname(__FILE__).'/formvalidator/Element/html_editor.php');
+	require_once api_get_path(LIBRARY_PATH).'formvalidator/Element/html_editor.php';
 	$editor = new HTML_QuickForm_html_editor($name, null, $attributes, $editor_config);
 	$editor->setValue($content);
 	// The global variable $fck_attribute has been deprecated. It stays here for supporting old external code.
@@ -4347,21 +4347,21 @@ function api_get_local_time($time, $format=null, $to_timezone=null, $from_timezo
 	}
 	// If time is a timestamp, convert it to a string
 	if (is_int($time)) {
-		$time = date("Y-m-d H:i:s", $time);
+		$time = date('Y-m-d H:i:s', $time);
 	}
 	try {
 		$date = new DateTime($time, new DateTimezone($from_timezone));
 		$date->setTimezone(new DateTimeZone($to_timezone));
 		// In the following case, the format is an internal Chamilo format, so we are using api_format_date
 		if (is_int($format) || strpos($format, '%') !== false) {
-			return api_format_date($format, strtotime($date->format("Y-m-d H:i:s")));
+			return api_format_date($format, strtotime($date->format('Y-m-d H:i:s')));
 		} else {
 			if ($format_null && IS_PHP_53) {
 				// use IntlDateFormatter to localize the date in the language of the user
 				$locale = api_get_language_isocode();
 				// TODO: This instance of IntlDateFormatter is better to be cached for each locale. It is for speed, api_get_local_time() is called repetitively in tables.
 				$date_formatter = new IntlDateFormatter($locale, IntlDateFormatter::FULL, IntlDateFormatter::SHORT);
-				return api_to_system_encoding($date_formatter->format(strtotime($date->format("Y-m-d H:i:s"))), 'UTF-8');
+				return api_to_system_encoding($date_formatter->format(strtotime($date->format('Y-m-d H:i:s'))), 'UTF-8');
 			} else {
 				return $date->format($format);
 			}

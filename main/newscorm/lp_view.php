@@ -1,32 +1,28 @@
-<?php // $Id: lp_view.php,v 1.33 2006/09/12 10:20:46 yannoo Exp $
+<?php 
+/* For licensing terms, see /license.txt */
 /**
-==============================================================================
-* This file was origially the copy of document.php, but many modifications happened since then ;
+* This file was originally the copy of document.php, but many modifications happened since then ;
 * the direct file view is not needed anymore, if the user uploads a scorm zip file, a directory
 * will be automatically created for it, and the files will be uncompressed there for example ;
 *
-* @package dokeos.learnpath
+* @package chamilo.learnpath
 * @author Yannick Warnier <ywarnier@beeznest.org> - redesign
 * @author Denes Nagy, principal author
 * @author Isthvan Mandak, several new features
 * @author Roan Embrechts, code improvements and refactoring
 * @license	GNU/GPL - See Dokeos license directory for details
-==============================================================================
 */
 /**
  * Script
  */
-/*
-==============================================================================
-		INIT SECTION
-==============================================================================
-*/
+/*	INIT SECTION */
 
 $_SESSION['whereami'] = 'lp/view';
 $this_section=SECTION_COURSES;
 
 if($lp_controller_touched!=1){
 	header('location: lp_controller.php?action=view&item_id='.$_REQUEST['item_id']);
+	exit;
 }
 
 /*
@@ -61,11 +57,8 @@ $user_id = api_get_user_id();
 $platform_theme = api_get_setting('stylesheets'); 	// plataform's css
 $my_style=$platform_theme;
 //escape external variables
-/*
------------------------------------------------------------
-	Header
------------------------------------------------------------
-*/
+
+/* 	Header  */
 $htmlHeadXtra[] = '<script src="../inc/lib/javascript/jquery.js" type="text/javascript" language="javascript"></script>'; //jQuery
 
 if (api_get_setting('show_glossary_in_documents') == 'ismanual' || api_get_setting('show_glossary_in_documents') == 'isautomatic' ) {
@@ -116,9 +109,14 @@ if (!isset($src)) {
 			$htmlHeadXtra[] = '<script src="scorm_api.php" type="text/javascript" language="javascript"></script>';
 			$prereq_check = $_SESSION['oLP']->prerequisites_match($lp_item_id);
 			if($prereq_check === true){
-				$src = $_SESSION['oLP']->get_link('http',$lp_item_id);
+				$src = $_SESSION['oLP']->get_link('http',$lp_item_id);			
+				//Prevents FF 3.6 + Adobe Reader 9 bug see BT#794 when calling a pdf file in a LP
+				$file_info = pathinfo($src);					
+				if (api_strtolower(substr($file_info['extension'], 0, 3) == 'pdf')) {
+					$src = 'lp_view_item.php?src='.$src;
+				}				
 				$_SESSION['oLP']->start_current_item(); //starts time counter manually if asset
-			}else{
+			} else {
 				$src = 'blank.php?error=prerequisites';
 			}
 			break;
@@ -169,9 +167,9 @@ if ($type_quiz && !empty($_REQUEST['exeId']) && isset($_GET['lp_id']) && isset($
 	$TBL_LP_ITEM_VIEW		= Database::get_course_table(TABLE_LP_ITEM_VIEW);
 	$TBL_LP_VIEW			= Database::get_course_table(TABLE_LP_VIEW);
 	$TBL_LP_ITEM			= Database::get_course_table(TABLE_LP_ITEM);
-	$safe_item_id      = Database::escape_string($_GET['lp_item_id']);
-    $safe_id           = Database::escape_string($_GET['lp_id']);
-	$safe_exe_id = Database::escape_string($_REQUEST['exeId']);
+	$safe_item_id      		= Database::escape_string($_GET['lp_item_id']);
+    $safe_id           		= Database::escape_string($_GET['lp_id']);
+	$safe_exe_id 			= Database::escape_string($_REQUEST['exeId']);
 
 	if ($safe_id == strval(intval($safe_id)) && $safe_item_id == strval(intval($safe_item_id))) {
 
@@ -528,7 +526,7 @@ window.onresize = updateContentHeight;
 	</div>
     <!-- end left Zone -->
 
-    <!-- right Zone -->
+    <!-- right Zone -->    
 	<div id="learning_path_right_zone" style="margin-left:282px;height:100%">
 		<iframe id="content_id" name="content_name" src="<?php echo $src; ?>" border="0" frameborder="0"  style="width:100%;height:600px" ></iframe>
 	</div>

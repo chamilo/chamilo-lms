@@ -495,8 +495,7 @@ function display_subscribe_to_courses($courses) {
 			// block course description
 			echo "\t\t<td>";
 			$icon_title = get_lang('CourseDetails') . ' - ' . $course['title'];
-			echo "<a href='".api_get_path(WEB_CODE_PATH)."inc/lib/ajax/course_home.ajax.php?a=show_course_information&code=".$course['code']."' title='$icon_title' rel='gb_page_center[778]'>".Display::return_icon('synthese_view.gif', $icon_title)."</a>";
-			echo "\t\t</td>";
+			echo "<a href='".api_get_path(WEB_CODE_PATH)."inc/ajax/course_home.ajax.php?a=show_course_information&code=".$course['code']."' title='$icon_title' rel='gb_page_center[778]'>".Display::return_icon('synthese_view.gif', $icon_title)."</a>";			echo "\t\t</td>";
 		}
 
 		echo "\t\t<td>\n";

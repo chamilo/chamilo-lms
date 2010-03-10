@@ -4,7 +4,7 @@
 /**
  *  DEBUGGING VARS
  */
-$DEBUG = false;
+$DEBUG = false; // TODO: Is this needed?
 
 /**
  *  DATABASE TABLE VARIABLES
@@ -32,7 +32,7 @@ $dropbox_cnf['allowStudentToStudent'] 	= string_2_boolean(api_get_setting('dropb
 $dropbox_cnf['allowGroup'] 				= string_2_boolean(api_get_setting('dropbox_allow_group'));
 
 /**
- * RH: INITIALISE MAILING VARIABLES
+ * INITIALISE MAILING VARIABLES
  */
 $dropbox_cnf['allowMailing'] = string_2_boolean(api_get_setting('dropbox_allow_mailing'));  // false = no mailing functionality
 $dropbox_cnf['mailingIdBase'] = 10000000;  // bigger than any user_id,

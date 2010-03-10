@@ -1471,25 +1471,10 @@ function draw_date_picker($prefix, $default = '') {
 	list($d_year, $d_month, $d_day) = split('-', $parts[0]);
 	list($d_hour, $d_minute) = split(':', $parts[1]);
 
-	$month_list = array(
-	1=>get_lang('JanuaryLong'),
-	2=>get_lang('FebruaryLong'),
-	3=>get_lang('MarchLong'),
-	4=>get_lang('AprilLong'),
-	5=>get_lang('MayLong'),
-	6=>get_lang('JuneLong'),
-	7=>get_lang('JulyLong'),
-	8=>get_lang('AugustLong'),
-	9=>get_lang('SeptemberLong'),
-	10=>get_lang('OctoberLong'),
-	11=>get_lang('NovemberLong'),
-	12=>get_lang('DecemberLong')
-	);
-
 	$minute = range(10, 59);
 	array_unshift($minute, '00', '01', '02', '03', '04', '05', '06', '07', '08', '09');
 	$date_form = make_select($prefix.'_day', array_combine(range(1, 31), range(1, 31)), $d_day);
-	$date_form .= make_select($prefix.'_month', $month_list, $d_month);
+	$date_form .= make_select($prefix.'_month', array_combine(range(1, 12), api_get_months_long()), $d_month);
 	$date_form .= make_select($prefix.'_year', array($d_year => $d_year, $d_year + 1 => $d_year + 1), $d_year).'&nbsp;&nbsp;&nbsp;&nbsp;';
 	$date_form .= make_select($prefix.'_hour', array_combine(range(0, 23), range(0, 23)), $d_hour).' : ';
 	$date_form .= make_select($prefix.'_minute', $minute, $d_minute);

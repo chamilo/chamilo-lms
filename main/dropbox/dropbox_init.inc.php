@@ -11,7 +11,7 @@
  * @version 1.31
  * @copyright 2004-2005
  * @author Jan Bols <jan@ivpv.UGent.be>, main programmer
- * @author René Haentjens, severalcontributions <rene.haentjens@UGent.be> (see RH)
+ * @author René Haentjens, severalcontributions <rene.haentjens@UGent.be>
  * @author Roan Embrechts, virtual course support
  * @author Patrick Cool <patrick.cool@UGent.be>
  				Chamilo Config Settings (AWACS)
@@ -34,7 +34,7 @@ $language_file = 'dropbox';
 // including the basic Chamilo initialisation file
 require '../inc/global.inc.php';
 
-require_once api_get_path(LIBRARY_PATH) . 'security.lib.php';
+require_once api_get_path(LIBRARY_PATH).'security.lib.php';
 
 // the dropbox configuration parameters
 require_once 'dropbox_config.inc.php';
@@ -45,28 +45,28 @@ require_once 'dropbox_config.inc.php';
 // the dropbox file that contains additional functions
 require_once 'dropbox_functions.inc.php';
 
-require_once api_get_path(LIBRARY_PATH) . 'mail.lib.inc.php';
-require_once api_get_path(LIBRARY_PATH) . 'fileUpload.lib.php';
+require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
+require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
 
 // protecting the script
 api_protect_course_script();
 
 /*	Libraries */
 
-require_once api_get_path(LIBRARY_PATH) . 'debug.lib.inc.php';
-require_once api_get_path(LIBRARY_PATH) . 'course.lib.php';
-require_once api_get_path(LIBRARY_PATH) . 'groupmanager.lib.php';
+require_once api_get_path(LIBRARY_PATH).'debug.lib.inc.php'; // TODO: Is this needed? Another technology is used for testing/debugging now.
+require_once api_get_path(LIBRARY_PATH).'course.lib.php';
+require_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
 
 // including the library for the sortable table
-require_once api_get_path(LIBRARY_PATH) . 'tablesort.lib.php';
+require_once api_get_path(LIBRARY_PATH).'tablesort.lib.php';
 
 // including the library for the dropbox
 require_once 'dropbox_class.inc.php';
 
 // including some libraries that are also used in the documents tool
-require_once api_get_path(SYS_CODE_PATH) . 'document/document.inc.php';  // we use a function build_document_icon_tag
-require_once api_get_path(LIBRARY_PATH) . 'fileDisplay.lib.php'; // the function choose_image is used
-require_once api_get_path(LIBRARY_PATH) . 'document.lib.php';
+require_once api_get_path(SYS_CODE_PATH).'document/document.inc.php';  // we use a function build_document_icon_tag
+require_once api_get_path(LIBRARY_PATH).'fileDisplay.lib.php'; // the function choose_image is used
+require_once api_get_path(LIBRARY_PATH).'document.lib.php';
 
 
 /*	Virtual course support */
@@ -90,7 +90,6 @@ if ($_GET['action'] == 'add') {
 }
 
 /*	Create javascript and htmlHeaders */
-// RH: Mailing: new function confirmsend
 
 $javascript = "<script type=\"text/javascript\">
 	function confirmsend ()

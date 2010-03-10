@@ -547,12 +547,14 @@ function display_add_form() {
 	$current_user_id = '';
 	foreach ($complete_user_list_for_dropbox as $current_user) {
 		if (($dropbox_person -> isCourseTutor
-		|| $dropbox_person -> isCourseAdmin
-		|| dropbox_cnf('allowStudentToStudent')	// RH: also if option is set
-		|| $current_user['status'] != 5				// always allow teachers
-		|| $current_user['tutor_id'] == 1				// always allow tutors
-		) && $current_user['user_id'] != $_user['user_id']) {	// don't include yourself
-			if ($current_user['user_id'] == $current_user_id) continue;
+				|| $dropbox_person -> isCourseAdmin
+				|| dropbox_cnf('allowStudentToStudent')
+				|| $current_user['status'] != 5							// Always allow teachers.
+				|| $current_user['tutor_id'] == 1						// Always allow tutors.
+				) && $current_user['user_id'] != $_user['user_id']) {	// Don't include yourself.
+			if ($current_user['user_id'] == $current_user_id) {
+				continue;
+			}
 			$full_name = $current_user['lastcommafirst'];
 			$current_user_id = $current_user['user_id'];
 			echo '<option value="user_' . $current_user_id . '">' . $full_name . '</option>';
@@ -575,11 +577,11 @@ function display_add_form() {
 		}
     }
 
-    if (($dropbox_person -> isCourseTutor || $dropbox_person -> isCourseAdmin) && dropbox_cnf('allowMailing')) {  // RH: Mailing starting point
+    if (($dropbox_person -> isCourseTutor || $dropbox_person -> isCourseAdmin) && dropbox_cnf('allowMailing')) {
 		// echo '<option value="mailing">'.get_lang('MailingInSelect').'</option>';
 	}
 
-    if (dropbox_cnf('allowJustUpload')) {  // RH
+    if (dropbox_cnf('allowJustUpload')) {
     	//echo '<option value="upload">'.get_lang('JustUploadInSelect').'</option>';
     	echo '<option value="user_'.$_user['user_id'].'">'.get_lang('JustUploadInSelect').'</option>';
     }
@@ -606,7 +608,7 @@ function display_add_form() {
 * returns username or false if user isn't registered anymore
 * @todo check if this function is still necessary. There might be a library function for this.
 */
-function getUserNameFromId($id) {  // RH: Mailing: return 'Mailing ' + id
+function getUserNameFromId($id) {
 	global $dropbox_cnf;
 
     $mailingId = $id - dropbox_cnf('mailingIdBase');
@@ -675,7 +677,6 @@ function removeUnusedFiles() {
 }
 
 /**
-* RH: Mailing (2 new functions)
 *
 * Mailing zip-file is posted to (dest_user_id = ) mailing pseudo_id
 * and is only visible to its uploader (user_id).
@@ -770,8 +771,8 @@ function store_add_dropbox() {
     }
     // Check if all the recipients are valid
     else {
-        $thisIsAMailing = false;  // RH: Mailing selected as destination
-        $thisIsJustUpload = false;  // RH
+        $thisIsAMailing = false;
+        $thisIsJustUpload = false;
 	    foreach ($_POST['recipients'] as $rec) {
 			if ($rec == 'mailing') {
 				$thisIsAMailing = true;
@@ -847,7 +848,7 @@ function store_add_dropbox() {
 
 	// note: I think we could better migrate everything from here on to separate functions: store_new_dropbox, store_new_mailing, store_just_upload
 
-	if ($dropbox_overwrite) {  // RH: Mailing: adapted
+	if ($dropbox_overwrite) {
 		$dropbox_person = new Dropbox_Person($_user['user_id'], api_is_course_admin(), api_is_course_tutor());
 
 		foreach ($dropbox_person->sentWork as $w) {

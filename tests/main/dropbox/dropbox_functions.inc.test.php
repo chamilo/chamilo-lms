@@ -186,7 +186,6 @@ class TestDropboxFunctions extends UnitTestCase {
 	}
 
 	/**
-	* RH: Mailing (2 new functions)
 	* Mailing zip-file is posted to (dest_user_id = ) mailing pseudo_id
 	* and is only visible to its uploader (user_id).
 	* Mailing content files have uploader_id == mailing pseudo_id, a normal recipient,

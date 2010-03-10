@@ -63,8 +63,8 @@ if (isset($_POST['submitWork'])) {
         $error = true;
         $errormsg = get_lang('NoUserSelected');
     } else {
-        $thisIsAMailing = false;  // RH: Mailing selected as destination
-        $thisIsJustUpload = false;  // RH
+        $thisIsAMailing = false;
+        $thisIsJustUpload = false;
 
 	    foreach ($_POST['recipients'] as $rec) {
             if ($rec == 'mailing') {
@@ -138,7 +138,7 @@ if (isset($_POST['submitWork'])) {
 	                $_POST['authors'] = getUserNameFromId($_user['user_id']);
 	            }
 
-				if ($dropbox_overwrite) { // RH: Mailing: adapted
+				if ($dropbox_overwrite) {
 					$dropbox_person = new Dropbox_Person($_user['user_id'], $is_courseAdmin, $is_courseTutor);
 
 					foreach ($dropbox_person->sentWork as $w) {
@@ -175,17 +175,17 @@ if (isset($_POST['submitWork'])) {
 	            }
 
 				if ($error) {}
-				elseif ($thisIsAMailing) { // RH: $newWorkRecipients is integer - see class
+				elseif ($thisIsAMailing) {
 				    if (preg_match(dropbox_cnf('mailingZipRegexp'), $dropbox_title)) {
 			            $newWorkRecipients = dropbox_cnf('mailingIdBase');
 					} else {
 				        $error = true;
 				        $errormsg = $dropbox_title . ': ' . get_lang('MailingWrongZipfile');
 					}
-				} elseif ( $thisIsJustUpload) { // RH: $newWorkRecipients is empty array
+				} elseif ($thisIsJustUpload) {
 		            $newWorkRecipients = array();
 	        	} else {
-				 	// creating the array that contains all the users who will receive the file
+				 	// Creating the array that contains all the users who will receive the file
 					$newWorkRecipients = array();
 		            foreach ($_POST['recipients'] as $rec) {
 		            	if (strpos($rec, 'user_') === 0) {
@@ -226,7 +226,7 @@ if (isset($_POST['submitWork'])) {
 
 
 /**
- * RH: EXAMINE OR SEND MAILING  (NEW)
+ * EXAMINE OR SEND MAILING (NEW)
  */
 
 if (isset($_GET['mailingIndex'])) { // examine or send
@@ -427,23 +427,21 @@ if (isset($_GET['mailingIndex'])) { // examine or send
 
 
 /**
- * DELETE RECEIVED OR SENT FILES - EDIT FEEDBACK  // RH: Feedback
+ * DELETE RECEIVED OR SENT FILES - EDIT FEEDBACK
  * - DELETE ALL RECEIVED FILES
  * - DELETE 1 RECEIVED FILE
  * - DELETE ALL SENT FILES
  * - DELETE 1 SENT FILE
- * - EDIT FEEDBACK                                // RH: Feedback
+ * - EDIT FEEDBACK
  */
 if (isset($_GET['deleteReceived']) || isset($_GET['deleteSent'])
-         || isset( $_GET['showFeedback']) || isset( $_GET['editFeedback'])) { // RH: Feedback
-	if ($_GET['mailing']) { // RH: Mailing
-		getUserOwningThisMailing($_GET['mailing'], $_user['user_id'], '408');  // RH or die
+         || isset( $_GET['showFeedback']) || isset( $_GET['editFeedback'])) {
+	if ($_GET['mailing']) {
+		getUserOwningThisMailing($_GET['mailing'], $_user['user_id'], '408');
 		$dropbox_person = new Dropbox_Person($_GET['mailing'], $is_courseAdmin, $is_courseTutor);
 	} else {
 	    $dropbox_person = new Dropbox_Person($_user['user_id'], $is_courseAdmin, $is_courseTutor);
     }
-
-	// RH: these two are needed, I think
 
 	if (isset($_SESSION['sentOrder'])) {
 		$dropbox_person->orderSentWork($_SESSION['sentOrder']);
@@ -456,7 +454,7 @@ if (isset($_GET['deleteReceived']) || isset($_GET['deleteSent'])
 	    die(get_lang('GeneralError').' (code 408)');
 	}*/
 
-	$tellUser = get_lang('FileDeleted');  // RH: Feedback
+	$tellUser = get_lang('FileDeleted');
 
     if (isset($_GET['deleteReceived'])) {
         if ($_GET['deleteReceived'] == 'all') {
@@ -466,7 +464,7 @@ if (isset($_GET['deleteReceived']) || isset($_GET['deleteSent'])
         } else {
             die(get_lang('GeneralError').' (code 409)');
         }
-    } elseif (isset( $_GET['deleteSent'])) { // RH: Feedback
+    } elseif (isset( $_GET['deleteSent'])) {
         if ($_GET['deleteSent'] == 'all') {
             $dropbox_person->deleteAllSentWork( );
         } elseif (is_numeric($_GET['deleteSent'])) {
@@ -474,11 +472,11 @@ if (isset($_GET['deleteReceived']) || isset($_GET['deleteSent'])
         } else {
             die(get_lang('GeneralError').' (code 410)');
         }
-    } elseif (isset($_GET['showFeedback'])) { // RH: Feedback
+    } elseif (isset($_GET['showFeedback'])) {
 		$w = new Dropbox_SentWork($id = $_GET['showFeedback']);
 
 		if ($w->uploader_id != $_user['user_id']) {
-		    getUserOwningThisMailing($w->uploader_id, $_user['user_id'], '411');  // RH or die
+		    getUserOwningThisMailing($w->uploader_id, $_user['user_id'], '411');
 		}
 
     	foreach ($w -> recipients as $r) {
@@ -497,7 +495,7 @@ if (isset($_GET['deleteReceived']) || isset($_GET['deleteSent'])
 
         $tellUser = get_lang('ShowFeedback');
 
-    } else { // if ( isset( $_GET['editFeedback'])) { // RH: Feedback
+    } else { // if ( isset( $_GET['editFeedback'])) {
         $id = $_GET['editFeedback'];
         $found = false;
 		foreach ($dropbox_person->receivedWork as $w) {
@@ -519,7 +517,7 @@ if (isset($_GET['deleteReceived']) || isset($_GET['deleteSent'])
     }
 
     /**
-     * RESULTMESSAGE FOR DELETE FILE OR EDIT FEEDBACK  // RH: Feedback
+     * RESULTMESSAGE FOR DELETE FILE OR EDIT FEEDBACK
      */
     $return_message = get_lang('BackList');
 }

@@ -19,7 +19,7 @@ require_once 'dropbox_functions.inc.php';
 // the dropbox class
 require_once 'dropbox_class.inc.php';
 
-require_once api_get_path(LIBRARY_PATH).'/document.lib.php';
+require_once api_get_path(LIBRARY_PATH).'document.lib.php';
 
 /*	DOWNLOAD A FOLDER */
 
@@ -231,7 +231,7 @@ else {
  * @version 1.21
  * @copyright 2004-2005
  * @author Jan Bols <jan@ivpv.UGent.be>, main programmer
- * @author René Haentjens <rene.haentjens@UGent.be>, several contributions  (see RH)
+ * @author René Haentjens <rene.haentjens@UGent.be>, several contributions
  * @author Roan Embrechts, virtual course support
  *
  * @package chamilo.dropbox
@@ -249,8 +249,9 @@ if (!isset($_user['user_id']) || !$is_course_member) {
     exit();
 }
 
-if ($_GET['mailing'])  // RH: Mailing detail window call
-	getUserOwningThisMailing($_GET['mailing'], $_user['user_id'], '500');  // RH or die
+if ($_GET['mailing']) {
+	getUserOwningThisMailing($_GET['mailing'], $_user['user_id'], '500');
+}
 
 /*	SANITY CHECKS OF GET DATA & FILE */
 
@@ -269,7 +270,7 @@ if (!is_file($path)) {
 
 /*	SEND HEADERS */
 
-require_once api_get_path(LIBRARY_PATH) . '/document.lib.php';
+require_once api_get_path(LIBRARY_PATH).'document.lib.php';
 $mimetype = DocumentManager::file_get_mime_type(true);
 
 $fileparts = explode('.', $file);
@@ -296,9 +297,9 @@ if (!in_array(strtolower($fileparts [$filepartscount - 1]), array('doc', 'xls', 
  * before sending a file to the browser, the "Open" option on Internet Explorer's file download dialog will not work properly. If the user clicks "Open" instead of "Save," the target application will open an empty file, because the downloaded file was not cached. The user will have to save the file to their hard drive in order to use it.
  * Make sure to leave these headers out if you'd like your visitors to be able to use IE's "Open" option.
  */
-header( "Pragma: \n");
-header( "Cache-Control: \n");
-header( "Cache-Control: public\n"); // IE cannot download from sessions without a cache
+header("Pragma: \n");
+header("Cache-Control: \n");
+header("Cache-Control: public\n"); // IE cannot download from sessions without a cache
 
 /*if (isset($_SERVER['HTTPS'])) {
     /**

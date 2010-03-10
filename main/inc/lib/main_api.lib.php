@@ -2172,10 +2172,9 @@ function api_not_allowed($print_headers = false) {
 		}
 		require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 		$form = new FormValidator('formLogin', 'post', api_get_self().'?'.Security::remove_XSS($_SERVER['QUERY_STRING']));
-
-		$form->addElement('text', 'login', get_lang('Username'), array('size' => 17));
+		$form->addElement('text', 'login', get_lang('UserName'), array('size' => 17));
 		$form->addElement('password', 'password', get_lang('Password'), array('size' => 17));
-		$form->addElement('style_submit_button', 'submitAuth', get_lang('Enter'),'class="login"');
+		$form->addElement('style_submit_button', 'submitAuth', get_lang('LoginEnter'),'class="login"');
 
 		if ((!headers_sent() || $print_headers) && $origin != 'learnpath') { Display::display_header(''); }
 		Display::display_error_message(get_lang('NotAllowed').'<br />'.get_lang('PleaseLoginAgainFromFormBelow').'<br />', false);

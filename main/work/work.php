@@ -140,7 +140,6 @@ $title = isset($_REQUEST['title']) ? Database::escape_string($_REQUEST['title'])
 $uploadvisibledisabled = isset($_REQUEST['uploadvisibledisabled']) ? Database::escape_string($_REQUEST['uploadvisibledisabled']) : '';
 $id = isset($_REQUEST['id']) ? strval(intval($_REQUEST['id'])) : '';
 
-
 // get data for publication assignment
 $has_expired = false;
 $has_ended = false;
@@ -190,11 +189,9 @@ if ($my_cur_dir_path == '/') {
 } elseif (substr($my_cur_dir_path, -1, 1) != '/') {
 	$my_cur_dir_path = $my_cur_dir_path . '/';
 }
-/*
------------------------------------------------------------
-	Configuration settings
------------------------------------------------------------
-*/
+
+/*	Configuration settings */
+
 $link_target_parameter = ""; //or e.g. "target=\"_blank\"";
 $always_show_tool_options = false;
 $always_show_upload_form = false;
@@ -366,8 +363,7 @@ if (!empty($_SESSION['toolgroup'])) {
 				'url' => 'work.php?gradebook='.$gradebook,
 				'name' => get_lang('EditToolOptions'));
 		}
-		if ($_GET['createdir'] == 1)
-		{
+		if ($_GET['createdir'] == 1) {
 			$interbreadcrumb[] = array (
 				'url' => 'work.php?gradebook='.$gradebook,
 				'name' => get_lang('CreateDir'));
@@ -377,7 +373,7 @@ if (!empty($_SESSION['toolgroup'])) {
 
 	} else {
 		//we are in the learnpath tool
-		include api_get_path(INCLUDE_PATH).'reduced_header.inc.php';
+		require api_get_path(INCLUDE_PATH).'reduced_header.inc.php';
 	}
 }
 
@@ -388,8 +384,6 @@ $is_allowed_to_edit = api_is_allowed_to_edit(); //has to come after display_tool
 //api_display_tool_title($tool_name);
 
 /*		MAIN CODE */
-
-
 
 if (!empty ($_POST['changeProperties'])) {
 	// changing the tool setting: default visibility of an uploaded document
@@ -1047,7 +1041,6 @@ if (!empty($_POST['submitWork']) && !empty($succeed) && !$id) {
 					$emailto[$row_email['myemail']] = $row_email['myemail'];
 				}
 			}
-
 		}
 
 		if (count($emailto) > 0) {
@@ -1283,7 +1276,7 @@ if ($is_course_member) {
 
 
 	//show them the form for the directory name
-	if (isset ($_REQUEST['createdir']) && $is_allowed_to_edit) {
+	if (isset($_REQUEST['createdir']) && $is_allowed_to_edit) {
 		//create the form that asks for the directory name
 		$new_folder_text = '<form name="form1"  method="POST">';
 		$new_folder_text .= '<div class="row"><div class="form_header">'.get_lang('CreateAssignment').'</div></div>';
@@ -1326,7 +1319,7 @@ if ($is_course_member) {
 		$addtext .= '<input type="text" name="weight" value="" size="5" onfocus="document.getElementById(\'msg_error_weight\').style.display=\'none\';"/></div></td></tr>';
 		$addtext .= '</tr></table>';
 		$addtext .= '<br />';
-		$addtext .= '<b>'.get_lang('DatesAvailables').'</b><br>';
+		$addtext .= '<b>'.get_lang('DatesAvailables').'</b><br />';
 		$addtext .= '<input type="checkbox" value="1" name="type1" onclick="if(this.checked==true){document.getElementById(\'option2\').style.display=\'block\';}else{document.getElementById(\'option2\').style.display=\'none\';}"/>'.get_lang('EnableExpiryDate').'';
 		$addtext .= '&nbsp;&nbsp;&nbsp;<span id="msg_error2" style="display:none;color:red"></span>';
 		$addtext .= '&nbsp;&nbsp;&nbsp;<span id="msg_error3" style="display:none;color:red"></span>';
@@ -1337,7 +1330,7 @@ if ($is_course_member) {
 		$addtext .= '&nbsp;&nbsp;&nbsp;<div id="msg_error4" style="display:none;color:red"></div>';
 		$addtext .= draw_date_picker('ends').'<br />';
 		$addtext .= '</div>';
-		$addtext .= '<br><br><b>'.get_lang('Agenda').'</b><br>';
+		$addtext .= '<br /><br /><b>'.get_lang('Agenda').'</b><br />';
 		$addtext .= '&nbsp;&nbsp;'.make_checkbox('add_to_calendar').get_lang('AddToCalendar').'</div>';
 		$addtext .= '</div>';
 

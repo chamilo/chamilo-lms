@@ -9,6 +9,7 @@
 * 	@author Frederic Vauthier, directories management
 * 	@version $Id: work.lib.php 22357 2009-07-24 17:44:17Z juliomontoya $
 */
+
 /**
  * Displays action links (for admins, authorized groups members and authorized students)
  * @param	string	Current dir
@@ -568,7 +569,6 @@ function display_student_publications_list($work_dir, $sub_course_dir, $currentC
 									Database::query($sql_add_publication);
 								}
 							}
-
 						}
 						//if($_POST['qualification']['qualification']!='')
 						Database::query('UPDATE '.$work_table.' SET description = '."'".Database::escape_string(Security::remove_XSS($_POST['description']))."'".', qualification = '."'".Database::escape_string($_POST['qualification']['qualification'])."'".',weight = '."'".Database::escape_string($_POST['weight']['weight'])."'".' WHERE id = '."'".$row['id']."'");
@@ -608,14 +608,13 @@ function display_student_publications_list($work_dir, $sub_course_dir, $currentC
 								WHERE id='".$calendar_id[0]."'";
 							Database::query($sql);
 						}
-
 					}
 				}
 			}
 			$action = '';
 			$row = array();
 			$class = '';
-			$row[] = '<img src="../img/works.gif" border="0" hspace="5" align="middle" alt="'.get_lang('Assignment').'" title="'.get_lang('Assignment').'" />'; //image
+
 			//$a_count_directory = count_dir($work_dir.'/'.$dir, false);
 
 			$cant_files = 0;
@@ -631,7 +630,7 @@ function display_student_publications_list($work_dir, $sub_course_dir, $currentC
 				$res = Database::query($sql);
 				$admin_course = '';
 				while($row_admin = Database::fetch_row($res)) {
-					$admin_course .='\''.$row_admin[0].'\',';
+					$admin_course .= '\''.$row_admin[0].'\',';
 				}
 				$sql_document = "SELECT count(*) FROM $work_table s, $iprop_table p WHERE s.id = p.ref AND p.tool='work' AND lastedit_user_id IN(".$admin_course.'\''.api_get_user_id().'\''.") AND s.accepted='1' AND url NOT LIKE '".$sub_course_dir.$dir."/%/%' AND url LIKE '".$sub_course_dir.$dir."/%'";
 			}
@@ -662,9 +661,13 @@ function display_student_publications_list($work_dir, $sub_course_dir, $currentC
 				$dirtext = '';
 			}
 
+			$icon = '<img src="../img/works.gif" border="0" hspace="5" align="middle" alt="'.get_lang('Assignment').'" title="'.get_lang('Assignment').'" />';
+
 			if (!empty($display_edit_form) && isset($clean_edit_dir) && $clean_edit_dir == $mydir) {
+				$row[] = $icon;
 				$row[] = '<span class="invisible" style="display:none">'.$dir.'</span>'.$form_folder->toHtml(); // form to edit the directory's name
 			} else {
+				$row[] = '<a href="'.api_get_self().'?'.api_get_cidreq().'&origin='.$origin.'&gradebook='.$gradebook.'&curdirpath='.$mydir.'">'.$icon.'</a>';
 				$tbl_gradebook_link = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
 				$add_to_name = '';
 				$sql = "SELECT weight FROM ". $tbl_gradebook_link ." WHERE type='3' AND ref_id= '".$id2."'";
@@ -680,9 +683,9 @@ function display_student_publications_list($work_dir, $sub_course_dir, $currentC
 					if (is_allowed_to_edit()) {
 						$zip='<a href="'.api_get_self().'?cidReq='.api_get_course_id().'&gradebook='.$gradebook.'&action=downloadfolder&path=/'.$mydir.'"><img src="../img/zip_save.gif" style="float:right;" alt="'.get_lang('Save').'" title="'.get_lang('Save').'" width="17" height="17"/></a>';
 					}
-					$row[] = $zip.'<a href="'.api_get_self().'?'.api_get_cidreq().'&origin='.$origin.'&gradebook='.Security::remove_XSS($_GET['gradebook']).'&curdirpath='.$mydir.'"'.$class.'>'.$dir.'</a>'.$add_to_name.'<br>'.$cant_files.' '.$text_file.$dirtext;
+					$row[] = $zip.'<a href="'.api_get_self().'?'.api_get_cidreq().'&origin='.$origin.'&gradebook='.Security::remove_XSS($_GET['gradebook']).'&curdirpath='.$mydir.'"'.$class.'>'.$dir.'</a>'.$add_to_name.'<br />'.$cant_files.' '.$text_file.$dirtext;
 				} else {
-					$row[] = '<a href="'.api_get_self().'?'.api_get_cidreq().'&origin='.$origin.'&gradebook='.$gradebook.'&curdirpath='.$mydir.'"'.$class.'>'.$dir.'</a>'.$add_to_name.'<br>'.$cant_files.' '.$text_file.$dirtext;
+					$row[] = '<a href="'.api_get_self().'?'.api_get_cidreq().'&origin='.$origin.'&gradebook='.$gradebook.'&curdirpath='.$mydir.'"'.$class.'>'.$dir.'</a>'.$add_to_name.'<br />'.$cant_files.' '.$text_file.$dirtext;
 				}
 			}
 			if ($count_files != 0) {
@@ -690,9 +693,14 @@ function display_student_publications_list($work_dir, $sub_course_dir, $currentC
 			}
 
 			if ($direc_date != '' && $direc_date != '0000-00-00 00:00:00') {
+
 				$direc_date = api_get_local_time($direc_date, null, null, date_default_timezone_get());
+				/*
 				$my_direc_date = api_ucfirst(format_locale_date($dateFormatShort, strtotime($direc_date))).'&nbsp;&nbsp;&nbsp;&nbsp;';
 				$my_direc_date .= api_ucfirst(strftime($timeNoSecFormat, strtotime($direc_date)));
+				*/
+				$my_direc_date = $direc_date;
+
 				$row[] = date_to_str_ago($direc_date).'<br /><span class="dropbox_date">'.$my_direc_date.'</span>'.'<!--uts='.strtotime($direc_date).'-->';
 			} else {
 				$row[] = '';
@@ -728,7 +736,7 @@ function display_student_publications_list($work_dir, $sub_course_dir, $currentC
 			//display info depending on the permissions
 			if ($work->accepted == '1' || $is_allowed_to_edit) {
 				$row = array();
-				if($work->accepted == '0') {
+				if ($work->accepted == '0') {
 					$class = 'class="invisible"';
 				} else {
 					$class = '';
@@ -738,9 +746,9 @@ function display_student_publications_list($work_dir, $sub_course_dir, $currentC
 				$add_string = '';
 				if (defined('IS_ASSIGNMENT')) {
 					if($work->qualification == '') {
-						$qualification_string = ' / <b style="color:orange">'.get_lang('NotRevised').'<b>';
+						$qualification_string = ' / <b style="color:orange">'.get_lang('NotRevised').'</b>';
 					} else {
-						$qualification_string = ' / <b style="color:blue">'.get_lang('Qualification').': '.$work->qualification.'<b>';
+						$qualification_string = ' / <b style="color:blue">'.get_lang('Qualification').': '.$work->qualification.'</b>';
 					}
 					if (defined('ASSIGNMENT_EXPIRES') && (ASSIGNMENT_EXPIRES < convert_date_to_number($work->sent_date))) {
 						$add_string = ' <b style="color:red">'.get_lang('Expired').'</b>';
@@ -749,14 +757,18 @@ function display_student_publications_list($work_dir, $sub_course_dir, $currentC
 
 				$url = implode('/', array_map('rawurlencode', explode('/', $work->url)));
 
-				//$full_file_name = 'download.php?file='.$realname;
-				$row[] = build_document_icon_tag('file', $work->url);
+				$row[] = '<a href="download.php?file='.$url.'">'.build_document_icon_tag('file', substr(basename($work->url), 13)).'</a>';
 				$row[] = '<a href="download.php?file='.$url.'"'.$class.'><img src="../img/filesave.gif" style="float:right;" alt="'.get_lang('Save').'" title="'.get_lang('Save').'" />'.$work->title.'</a><br />'.$work->description;
-				$row[] = display_user_link_work($row2['insert_user_id'],$work->author).$qualification_string; // $work->author;
+				$row[] = display_user_link_work($row2['insert_user_id'], $work->author).$qualification_string; // $work->author;
+
 				$work_sent_date = api_get_local_time($work->sent_date, null, null, date_default_timezone_get());
+				/*
 				$sent_date = api_ucfirst(format_locale_date($dateFormatShort, strtotime($work_sent_date))).'&nbsp;&nbsp;&nbsp;&nbsp;';
 				$sent_date .= api_ucfirst(strftime($timeNoSecFormat, strtotime($work_sent_date)));
-				$row[] = date_to_str_ago($work->sent_date).$add_string.'<br><span class="dropbox_date">'.$sent_date.'</span>'.'<!--uts='.strtotime($work->sent_date).'-->';
+				*/
+				$sent_date = $work_sent_date;
+
+				$row[] = date_to_str_ago($work->sent_date).$add_string.'<br /><span class="dropbox_date">'.$sent_date.'</span>'.'<!--uts='.strtotime($work->sent_date).'-->';
 
 				if ($is_allowed_to_edit) {
 

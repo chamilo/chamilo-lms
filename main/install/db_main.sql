@@ -1246,9 +1246,6 @@ CREATE TABLE access_url_rel_user (
   PRIMARY KEY (access_url_id, user_id)
 );
 
-//Adding admin user in the first access_url
-INSERT INTO access_url_rel_user SET user_id=1, access_url_id=1;
-
 ALTER TABLE access_url_rel_user ADD INDEX idx_access_url_rel_user_user (user_id);
 ALTER TABLE access_url_rel_user ADD INDEX idx_access_url_rel_user_access_url(access_url_id);
 ALTER TABLE access_url_rel_user ADD INDEX idx_access_url_rel_user_access_url_user (user_id,access_url_id);

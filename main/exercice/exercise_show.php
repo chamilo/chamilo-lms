@@ -674,20 +674,25 @@ if ($show_results) {
 						if (($pos = api_strpos($temp,']')) === false) {
 							break;
 						}
-
+	
 						$queryfill = "select answer from ".$TBL_TRACK_ATTEMPT." where exe_id = '".Database::escape_string($id)."' and question_id= '".Database::escape_string($questionId)."'";
 						$resfill = Database::query($queryfill);
 						$str = Database::result($resfill,0,"answer");
 
 						preg_match_all('#\[([^[]*)\]#', $str, $arr);
 						$choice = $arr[1];
+						
 						$tmp=strrpos($choice[$j],' / ');
 						$choice[$j]=substr($choice[$j],0,$tmp);
 						$choice[$j]=trim($choice[$j]);
+			
+						//Needed to let characters ' and " to work as part of an answer
+						$choice[$j] = stripslashes($choice[$j]);
 
 
 						// if the word entered by the student IS the same as the one defined by the professor
 						if (api_strtolower(api_substr($temp,0,$pos)) == api_strtolower($choice[$j])) {
+						//if ((api_substr($temp,0,$pos)) == ($choice[$j])) {
 							// gives the related weighting to the student
 							$questionScore+=$answerWeighting[$j];
 							// increments total score

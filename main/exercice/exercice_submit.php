@@ -494,11 +494,11 @@ if ($formSent) {
 
                                     // TeX parsing
                                     // 1. find everything between the [tex] and [/tex] tags
-                                    $startlocations = strpos($temp, '[tex]');
-                                    $endlocations = strpos($temp, '[/tex]');
+                                    $startlocations = api_strpos($temp, '[tex]');
+                                    $endlocations = api_strpos($temp, '[/tex]');
 
                                     if ($startlocations !== false && $endlocations !== false) {
-                                        $texstring = substr($temp, $startlocations, $endlocations - $startlocations +6);
+                                        $texstring = api_substr($temp, $startlocations, $endlocations - $startlocations +6);
                                         // 2. replace this by {texcode}
                                         $temp = str_replace($texstring, '{texcode}', $temp);
                                     }
@@ -511,9 +511,9 @@ if ($formSent) {
                                     $correct_tags = array ();
                                     $real_text = array ();
                                     // the loop will stop at the end of the text
-                                    while (1) {
+                                    while (1) { 
                                         // quits the loop if there are no more blanks (detect '[')
-                                        if (($pos = strpos($temp, '[')) === false) {
+                                        if (($pos = api_strpos($temp, '[')) === false) {
                                             // adds the end of the text
                                             $answer = $temp;
                                             // TeX parsing - replacement of texcode tags
@@ -524,22 +524,22 @@ if ($formSent) {
                                         }
                                         // adds the piece of text that is before the blank
                                         //and ends with '[' into a general storage array
-                                        $real_text[] = substr($temp, 0, $pos +1);
-                                        $answer .= substr($temp, 0, $pos +1);
+                                        $real_text[] = api_substr($temp, 0, $pos +1);
+                                        $answer .= api_substr($temp, 0, $pos +1);
                                         //take the string remaining (after the last "[" we found)
-                                        $temp = substr($temp, $pos +1);
+                                        $temp = api_substr($temp, $pos +1);
                                         // quit the loop if there are no more blanks, and update $pos to the position of next ']'
-                                        if (($pos = strpos($temp, ']')) === false) {
+                                        if (($pos = api_strpos($temp, ']')) === false) {
                                             // adds the end of the text
                                             $answer .= $temp;
                                             break;
                                         }
                                         $choice[$j] = trim($choice[$j]);
-                                        $user_tags[] = strtolower($choice[$j]);
+                                        $user_tags[] = api_strtolower($choice[$j]);
                                         //put the contents of the [] answer tag into correct_tags[]
-                                        $correct_tags[] = strtolower(substr($temp, 0, $pos));
+                                        $correct_tags[] = api_strtolower(substr($temp, 0, $pos));
                                         $j++;
-                                        $temp = substr($temp, $pos +1);
+                                        $temp = api_substr($temp, $pos +1);
                                         //$answer .= ']';
                                     }
 
@@ -553,6 +553,8 @@ if ($formSent) {
                                         }
 
                                         if (!$switchable_answer_set) {
+                                        	//needed to parse ' and " characters
+                                        	$user_tags[$i] = stripslashes($user_tags[$i]);                                        	
                                             if ($correct_tags[$i] == $user_tags[$i]) {
                                                 // gives the related weighting to the student
                                                 $questionScore += $answerWeighting[$i];

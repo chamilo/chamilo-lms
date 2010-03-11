@@ -814,4 +814,6 @@ $CleanCalendar = "Limpiar calendario";
 $AttendanceCalendarDescription = "El calendario de asistencia le permite registrar lista de asistencia (una por cada período real que los estudiantes deben asistir). Agregar nueva lista de asistencia aquí.";
 $CalendarList = "Lista de calendario";
 $ThereAreNoRegisteredDatetimeYet = "No hay fecha/hora registrada todavía";
+$DashboardPluginsHaveBeenUpdatedSucesslly = "Los plugins del panel de control han sido actualizados correctamente";
+$LoginEnter = "Entrar";
 ?>

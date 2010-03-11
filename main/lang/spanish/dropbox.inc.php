@@ -95,6 +95,7 @@ $DocAdd = "El documento ha sido añadido";
 $FileDeleted = "El fichero seleccionado ha sido suprimido de su area de documentos compartidos.";
 $MailingAsUsername = "Envío por correo";
 $MailingInSelect = "---Envío por correo---";
+$$MailingExamine = "Examinar correo";
 $MailingNotYetSent = "Los ficheros contenidos en el correo no han sido enviados...";
 $MailingSend = "Enviar el contenido de los ficheros";
 $MailingConfirmSend = "¿Enviar el contenido de los ficheros a direcciones específicas?";

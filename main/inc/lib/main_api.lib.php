@@ -3860,24 +3860,37 @@ function api_is_element_in_the_session($tool, $element_id, $session_id = null) {
  */
 
 function replace_dangerous_char($filename, $strict = 'loose') {
-	static $search  = array(' ', '/', '\\', '"', '\'', '?', '*', '>', '<', '|', ':', '$', '(', ')', '^', '[', ']', '#');
-	static $replace = array('_', '-', '-',  '-', '_',  '-', '-', '',  '-', '-', '-', '-', '-', '-', '-', '-', '-', '-');
-	static $search_strict  = array('-');
-	static $replace_strict = array('_');
+	// Safe replacements for some non-letter characters.
+	static $search  = array("\0", ' ', "\t", "\n", "\r", "\x0B", '/', "\\", '"', "'", '?', '*', '>', '<', '|', ':', '$', '(', ')', '^', '[', ']', '#', '+', '&', '%');
+	static $replace = array('',   '_', '_',  '_',  '_',  '_',    '-', '-',  '-', '_', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-');
 
-	$filename = api_transliterate($filename, 'x', api_detect_encoding($filename));
+	// Encoding detection.
+	$encoding = api_detect_encoding($filename);
+	// Converting html-entities into encoded characters.
+	$filename = api_html_entity_decode($filename, ENT_QUOTES, $encoding);
+	// Transliteration to ASCII letters, they are not dangerous for filesystems.
+	$filename = api_transliterate($filename, 'x', $encoding);
 
+	// Trimming leading/trailing whitespace.
 	$filename = trim($filename);
 	// Trimming any leading/trailing dots.
 	$filename = trim($filename, '.');
 	$filename = trim($filename);
-	// Replacing other remaining dangerous characters.
+
+	// Replacing remaining dangerous non-letter characters.
 	$filename = str_replace($search, $replace, $filename);
 	if ($strict == 'strict') {
-		$filename = str_replace($search_strict, $replace_strict, $filename);
+		$filename = str_replace('-', '_', $filename);
 		$filename = preg_replace('/[^0-9A-Za-z_.\-]/', '', $filename);
 	}
-	// Length is limited, so the file name to be acceptable by some operating systems.
+
+	// Length is to be limited, so the file name to be acceptable by some operating systems.
+	$extension = (string)strrchr($filename, '.');
+	$extension_len = strlen($extension);
+	if ($extension_len > 0 && $extension_len < 250) {
+		$filename = substr($filename, 0, -$extension_len);
+		return substr($filename, 0, 250 - $extension_len).$extension;
+	}
 	return substr($filename, 0, 250);
 }
 

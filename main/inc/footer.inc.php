@@ -1,13 +1,12 @@
 <?php
-/* For licensing terms, see /chamilo_license.txt */
+/* For licensing terms, see /license.txt */
+
 /**
-==============================================================================
-*	This script displays the footer that is below (almost)
-*	every Chamilo web page.
-*
-*	@package chamilo.include
-==============================================================================
-*/
+ *	This script displays the footer that is below (almost)
+ *	every Chamilo web page.
+ *
+ *	@package chamilo.include
+ */
 
 // Display of tool_navigation_menu according to admin setting.
 require_once api_get_path(LIBRARY_PATH).'course.lib.php';
@@ -35,12 +34,14 @@ if (api_get_setting('show_navigation_menu') != 'false') {
 <div class="copyright">
 <?php
 global $_configuration;
+
 if (api_get_setting('show_administrator_data') == 'true') {
 	// Platform manager
 	echo '<div align="right">', get_lang('Manager'), ' : ', Display::encrypted_mailto_link(api_get_setting('emailAdministrator'), api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'))).'</div>';
 }
 
-echo get_lang("Platform"), ' <a href="', $_configuration['software_url'], '" target="_blank">', $_configuration['software_name'], ' ', $_configuration['system_version'], '</a> &copy; ', date('Y');
+echo get_lang('Platform'), ' <a href="', $_configuration['software_url'], '" target="_blank">', $_configuration['software_name'], ' ', $_configuration['system_version'], '</a> &copy; ', date('Y');
+
 // Server mode indicator.
 if (api_is_platform_admin()) {
 	if (api_get_setting('server_type') == 'test') {
@@ -52,17 +53,15 @@ if (api_is_platform_admin()) {
 </div>
 
 <?php
-/*
------------------------------------------------------------------------------
-	Plugins for footer section
------------------------------------------------------------------------------
-*/
+
+/*	Plugins for footer section */
+
 api_plugin('footer');
 
 echo '<div class="footer_emails">';
 
 if (api_get_setting('show_tutor_data') == 'true') {
-	// course manager
+	// Course manager
 	$id_course = api_get_course_id();
 	$id_session = api_get_session_id();
 	if (isset($id_course) && $id_course != -1) {

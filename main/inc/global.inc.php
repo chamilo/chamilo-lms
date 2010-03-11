@@ -1,23 +1,25 @@
 <?php
+/* For licensing terms, see /license.txt */
+
 /**
-* It is recommended that ALL Chamilo scripts include this important file.
-* This script manages
-* - http get, post, post_files, session, server-vars extraction into global namespace;
-*   (which doesn't occur anymore when servertype config setting is set to test,
-*    and which will disappear completely in Dokeos 1.6.1)
-* - include of /conf/configuration.php;
-* - include of several libraries: main_api, database, display, text, security;
-* - selecting the main database;
-* - include of language files.
-*
-* @package dokeos.include
-* @todo isn't configuration.php renamed to configuration.inc.php yet?
-* @todo use the $_configuration array for all the needed variables
-* @todo remove the code that displays the button that links to the install page
-* 		but use a redirect immediately. By doing so the $already_installed variable can be removed.
-* @todo make it possible to enable / disable the tracking through the Dokeos config page.
-*
-*/
+ * It is recommended that ALL Chamilo scripts include this important file.
+ * This script manages
+ * - http get, post, post_files, session, server-vars extraction into global namespace;
+ *   (which doesn't occur anymore when servertype config setting is set to test,
+ *    and which will disappear completely in Dokeos 1.6.1)
+ * - include of /conf/configuration.php;
+ * - include of several libraries: main_api, database, display, text, security;
+ * - selecting the main database;
+ * - include of language files.
+ *
+ * @package chamilo.include
+ * @todo isn't configuration.php renamed to configuration.inc.php yet?
+ * @todo use the $_configuration array for all the needed variables
+ * @todo remove the code that displays the button that links to the install page
+ * 		but use a redirect immediately. By doing so the $already_installed variable can be removed.
+ * @todo make it possible to enable / disable the tracking through the Chamilo config page.
+ *
+ */
 
 // Showing/hiding error codes in global error messages.
 define('SHOW_ERROR_CODES', false);
@@ -38,7 +40,7 @@ if (!function_exists('version_compare') || version_compare(phpversion(), REQUIRE
 }
 
 // @todo Isn't this file renamed to configuration.inc.php yet?
-// Include the main Dokeos platform configuration file.
+// Include the main Chamilo platform configuration file.
 $main_configuration_file_path = $includePath.'/conf/configuration.php';
 
 $already_installed = false;
@@ -74,7 +76,7 @@ if (empty($_configuration['system_version'])) {
 $_configuration['dokeos_version'] = $_configuration['system_version'];
 $_configuration['dokeos_stable'] = $_configuration['system_stable'];
 
-// Include the main Dokeos platform library file.
+// Include the main Chamilo platform library file.
 require_once $includePath.'/lib/main_api.lib.php';
 
 // Do not over-use this variable. It is only for this script's local use.
@@ -104,7 +106,7 @@ if (empty($_configuration['statistics_database']) && $already_installed) {
 	$_configuration['statistics_database'] = $_configuration['main_database'];
 }
 
-// Connect to the server database and select the main dokeos database.
+// Connect to the server database and select the main chamilo database.
 if (!($dokeos_database_connection = @Database::connect(
 	array(
 		'server' => $_configuration['db_host'],
@@ -128,7 +130,7 @@ if (!$_configuration['db_host']) {
 if (!empty($_configuration['multiple_access_urls'])) {
 	$_configuration['access_url'] = 1;
 	$access_urls = api_get_access_urls();
-	
+
 	$protocol = ((!empty($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) != 'OFF') ? 'https' : 'http').'://';
 	$request_url1 = $protocol.$_SERVER['SERVER_NAME'].'/';
 	$request_url2 = $protocol.$_SERVER['HTTP_HOST'].'/';
@@ -142,7 +144,7 @@ if (!empty($_configuration['multiple_access_urls'])) {
 	$_configuration['access_url'] = 1;
 }
 
-// This function is moved here after the database connections was made since  api_session_start will call the api_get_path() function and this function will call a Database function 
+// This function is moved here after the database connections was made since  api_session_start will call the api_get_path() function and this function will call a Database function
 // Start session.
 api_session_start($already_installed);
 
@@ -151,7 +153,7 @@ Database::query("set session sql_mode='';");
 
 if (!Database::select_db($_configuration['main_database'], $dokeos_database_connection)) {
 	$global_error_code = 5;
-	// Connection to the main Dokeos database is impossible, it might be missing or restricted or its configuration option might be incorrect.
+	// Connection to the main Chamilo database is impossible, it might be missing or restricted or its configuration option might be incorrect.
 	require $includePath.'/global_error_message.inc.php';
 	die();
 }
@@ -179,7 +181,7 @@ Database::query("SET SESSION character_set_server='utf8';");
 Database::query("SET SESSION collation_server='utf8_general_ci';");
 Database::query("SET CHARACTER SET '" . Database::to_db_encoding($charset) . "';");
 
-// access_url == 1 is the default dokeos location
+// access_url == 1 is the default chamilo location
 if ($_configuration['access_url'] != 1) {
 	$url_info = api_get_access_url($_configuration['access_url']);
 	if ($url_info['active'] == 1) {

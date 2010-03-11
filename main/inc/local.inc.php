@@ -4,7 +4,7 @@
  *
  *                             SCRIPT PURPOSE
  *
- * This script initializes and manages Dokeos session information. It
+ * This script initializes and manages Chamilo session information. It
  * keeps available session information up to date.
  *
  * You can request a course id. It will check if the course Id requested is the
@@ -232,7 +232,7 @@ if (api_get_setting('allow_terms_conditions')=='true') {
             $uData = Database::fetch_array($result);
 
             if ($uData['auth_source'] == PLATFORM_AUTH_SOURCE) {
-                //the authentification of this user is managed by Dokeos itself
+                //the authentification of this user is managed by Chamilo itself
                 $password = trim(stripslashes($password));
                 // determine if the password needs to be encrypted before checking
                 // $userPasswordCrypted is set in an external configuration file
@@ -343,10 +343,10 @@ if (api_get_setting('allow_terms_conditions')=='true') {
 				// see configuration.php to define these
                 include_once($extAuthSource[$key]['login']);
                 /* >>>>>>>> External authentication modules <<<<<<<<< */
-            } else // no standard Dokeos login - try external authentification
+            } else // no standard Chamilo login - try external authentification
             {
             	//huh... nothing to do... we shouldn't get here
-            	error_log('Dokeos Authentication file '. $extAuthSource[$uData['auth_source']]['login']. ' could not be found - this might prevent your system from doing the corresponding authentication process',0);
+            	error_log('Chamilo Authentication file '. $extAuthSource[$uData['auth_source']]['login']. ' could not be found - this might prevent your system from doing the corresponding authentication process',0);
             }
 
     	    if (!empty($_SESSION['request_uri'])) {
@@ -403,7 +403,7 @@ if (api_get_setting('allow_terms_conditions')=='true') {
     	 * - Implement user interface for api_get_setting('sso_authentication')
     	 *   } elseif (api_get_setting('sso_authentication')=='true') {
     	 * - Work on a better validation for webservices paths. Current is very poor and exit
-    	 * - $master variable should be recovered from dokeos settings.
+    	 * - $master variable should be recovered from chamilo settings.
     	*/
         $master = array(
     		'domain' => api_get_setting('sso_authentication_domain'), 			//	'localhost/project/drupal5',

@@ -91,14 +91,12 @@ function event_login()
 		return 0;
 	}
 	$reallyNow = time();
-	$sql = "INSERT INTO ".$TABLETRACK_LOGIN."
-				(login_user_id,
-				 login_ip,
-				 login_date)
-				 VALUES
-					('".$_user['user_id']."',
+	$sql = "INSERT INTO ".$TABLETRACK_LOGIN." (login_user_id, login_ip, login_date, logout_date)
+			VALUES	('".$_user['user_id']."',
 					'".Database::escape_string($_SERVER['REMOTE_ADDR'])."',
-					FROM_UNIXTIME(".$reallyNow."))";
+					FROM_UNIXTIME(".$reallyNow."),
+					FROM_UNIXTIME(".$reallyNow.")		 
+					)";
 	$res = Database::query($sql);
 }
 
@@ -116,20 +114,11 @@ function event_access_course()
 	global $TABLETRACK_LASTACCESS; //for "what's new" notification
 
 	// if tracking is disabled record nothing
-	if (!$_configuration['tracking_enabled'])
-	{
+	if (!$_configuration['tracking_enabled']){
 		return 0;
 	}
-
-	if(api_get_setting('use_session_mode')=='true' && isset($_SESSION['id_session']))
-	{
-		$id_session = intval($_SESSION['id_session']);
-	}
-	else
-	{
-		$id_session = 0;
-	}
-
+	$id_session = api_get_session_id();
+	
 	$reallyNow = time();
 	if ($_user['user_id']) {
 		$user_id = "'".$_user['user_id']."'";
@@ -148,12 +137,11 @@ function event_access_course()
 				'".$id_session."')";
 	$res = Database::query($sql);
 	// added for "what's new" notification
-	$sql = "   UPDATE $TABLETRACK_LASTACCESS
+	$sql = "  UPDATE $TABLETRACK_LASTACCESS
 	                    SET access_date = FROM_UNIXTIME($reallyNow)
 						WHERE access_user_id = ".$user_id." AND access_cours_code = '".$_cid."' AND access_tool IS NULL AND access_session_id=".$id_session;
 	$res = Database::query($sql);
-	if (Database::affected_rows() == 0)
-	{
+	if (Database::affected_rows() == 0) {
 		$sql = "	INSERT INTO $TABLETRACK_LASTACCESS
 		                	    (access_user_id,access_cours_code,access_date, access_session_id)
 		                    	VALUES
@@ -209,8 +197,7 @@ function event_access_tool($tool, $id_session=0)
 	// added for "what's new" notification
 	$pos2 = strpos(strtolower($_SERVER['HTTP_REFERER']), strtolower($_configuration['root_web']."index"));
 	// end "what's new" notification
-	if ($_configuration['tracking_enabled'] && ($pos !== false || $pos2 !== false))
-	{
+	if ($_configuration['tracking_enabled'] && ($pos !== false || $pos2 !== false)) {
 			$sql = "INSERT INTO ".$TABLETRACK_ACCESS."
 							(access_user_id,
 							 access_cours_code,

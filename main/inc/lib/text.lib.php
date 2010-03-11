@@ -55,7 +55,10 @@ function make_clickable($string) {
  */
 
 function format_locale_date($date_format, $time_stamp = -1, $language = null) {
-	return api_format_date($date_format, $time_stamp, $language);
+	if ($time_stamp == -1) {
+		$time_stamp = time();
+	}
+	return api_format_date($time_stamp, $date_format, $language);
 }
 
 /**
@@ -213,6 +216,7 @@ function latex_gif_renderer($latex_code) {
  * Returns the difference between the current date (date(now)) with the parameter $date in a string format like "2 days, 1 hour"
  * Example: $date="2008-03-07 15:44:08";
  * 			date_to_str($date) it will return 3 days, 20 hours
+ * The given date should be in the timezone chosen by the user or administrator. Use api_get_local_time() to get it...
  *
  * @param  string The string has to be the result of a date function in this format -> date("Y-m-d H:i:s",time());
  * @return string The difference between the current date and the parameter in a literal way "3 days, 2 hour" *
@@ -226,6 +230,9 @@ function date_to_str_ago($date) {
 	static $min_decade, $min_year, $min_month, $min_week, $min_day, $min_hour, $min_minute;
 	static $min_decades, $min_years, $min_months, $min_weeks, $min_days, $min_hours, $min_minutes;
 	static $sec_time_time, $sec_time_sing, $sec_time_plu;
+	
+	$system_timezone = date_default_timezone_get();
+	date_default_timezone_set(_api_get_timezone());
 
 	if (!$initialized) {
 		$today = api_ucfirst(get_lang('Today'));
@@ -328,6 +335,8 @@ function date_to_str_ago($date) {
 	} else {
 		$str = $str_result[0];
 	}
+	
+	date_default_timezone_set($system_timezone);
 	return $str;
 }
 

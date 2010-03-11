@@ -611,8 +611,7 @@ class Attendance
 				$res = Database::query($sql);
 				if (Database::num_rows($res) > 0) {
 					while ($row = Database::fetch_array($res)) {
-						$row['date_time'] = api_get_local_time($row['date_time'], $dateTimeFormatLong, null, date_default_timezone_get());
-						//$row['date_time'] = api_format_date($dateTimeFormatLong, strtotime($row['date_time']));
+						$row['date_time'] = api_convert_and_format_date($row['date_time'], null, date_default_timezone_get());
 						$data[$user_id][] = $row;
 					}
 				}
@@ -694,8 +693,8 @@ class Attendance
 		if (Database::num_rows($rs) > 0) {
 			while ($row = Database::fetch_array($rs)) {				
 				$row['date_time'] = api_get_local_time($row['date_time']);				
-				$row['date'] = api_format_date($dateFormatShort, strtotime($row['date_time']));
-				$row['time'] = api_format_date($timeNoSecFormat, strtotime($row['date_time']));
+				$row['date'] = api_format_date($row['date_time'], DATE_FORMAT_SHORT);
+				$row['time'] = api_format_date($row['date_time'], TIME_NO_SEC_FORMAT);
 				$data[] = $row;
 			}
 		}

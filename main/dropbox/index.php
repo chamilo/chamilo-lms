@@ -433,8 +433,8 @@ if ($_GET['action'] != 'add') {
 				$dropbox_file_data[] = $dropbox_file->author;
 				//$dropbox_file_data[] = $dropbox_file->description;
 
-				$last_upload_date = api_get_local_time($dropbox_file->last_upload_date, 'Y-m-d H:i:s', null, date_default_timezone_get());
-				$dropbox_file_data[] = date_to_str_ago($last_upload_date).'<br /><span class="dropbox_date">'.api_format_date_time_long($last_upload_date).'</span>';
+				$last_upload_date = api_get_local_time($dropbox_file->last_upload_date, null, date_default_timezone_get());
+				$dropbox_file_data[] = date_to_str_ago($last_upload_date).'<br /><span class="dropbox_date">'.api_format_date($last_upload_date).'</span>';
 
 				$action_icons = check_number_feedback($dropbox_file->id, $number_feedback).' '.get_lang('Feedback').'
 									<a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category='.Security::remove_XSS($_GET['view_received_category']).'&amp;view_sent_category='.Security::remove_XSS($_GET['view_sent_category']).'&amp;view='.Security::remove_XSS($_GET['view']).'&amp;action=viewfeedback&amp;id='.$dropbox_file->id.'">'.Display::return_icon('comment_bubble.gif', get_lang('Comment')).'</a>
@@ -582,8 +582,8 @@ if ($_GET['action'] != 'add') {
 				}
 				$receivers_celldata = trim(trim($receivers_celldata), ','); // Removing the trailing comma.
 				$dropbox_file_data[] = $receivers_celldata;
-				$last_upload_date = api_get_local_time($dropbox_file->last_upload_date, 'Y-m-d H:i:s', null, date_default_timezone_get());
-				$dropbox_file_data[] = date_to_str_ago($last_upload_date).'<br /><span class="dropbox_date">'.api_format_date_time_long($last_upload_date).'</span>';
+				$last_upload_date = api_get_local_time($dropbox_file->last_upload_date, null, date_default_timezone_get());
+				$dropbox_file_data[] = date_to_str_ago($last_upload_date).'<br /><span class="dropbox_date">'.api_format_date($last_upload_date).'</span>';
 
 				//$dropbox_file_data[] = $dropbox_file->author;
 				$receivers_celldata = '';

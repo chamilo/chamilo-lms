@@ -729,21 +729,21 @@ function get_logged_user_course_html($course, $session_id = 0, $class='courses')
 
 	// Table definitions
 	//$statistic_database = Database::get_statistic_database();
-	$main_user_table 		= Database :: get_main_table(TABLE_MAIN_USER);
-	$tbl_session 			= Database :: get_main_table(TABLE_MAIN_SESSION);
-	$tbl_session_category 	= Database :: get_main_table(TABLE_MAIN_SESSION_CATEGORY);
-	$course_database = $my_course['db'];
+	$main_user_table 			= Database :: get_main_table(TABLE_MAIN_USER);
+	$tbl_session 				= Database :: get_main_table(TABLE_MAIN_SESSION);
+	$tbl_session_category 		= Database :: get_main_table(TABLE_MAIN_SESSION_CATEGORY);
+	$course_database 			= $my_course['db'];
 	$course_tool_table 			= Database :: get_course_table(TABLE_TOOL_LIST, $course_database);
 	$tool_edit_table 			= Database :: get_course_table(TABLE_ITEM_PROPERTY, $course_database);
 	$course_group_user_table 	= Database :: get_course_table(TOOL_USER, $course_database);
 
-	$user_id = api_get_user_id();
-	$course_system_code = $my_course['k'];
-	$course_visual_code = $my_course['c'];
-	$course_title = $my_course['i'];
-	$course_directory = $my_course['d'];
-	$course_teacher = $my_course['t'];
-	$course_teacher_email = isset($my_course['email'])?$my_course['email']:'';
+	$user_id 				= api_get_user_id();
+	$course_system_code	 	= $my_course['k'];
+	$course_visual_code 	= $my_course['c'];
+	$course_title 			= $my_course['i'];
+	$course_directory 		= $my_course['d'];
+	$course_teacher 		= $my_course['t'];
+	$course_teacher_email 	= isset($my_course['email'])?$my_course['email']:'';
 	$course_info = Database :: get_course_info($course_system_code);
 	$course_access_settings = CourseManager :: get_access_settings($course_system_code);
 	$course_id = isset($course_info['course_id'])?$course_info['course_id']:null;
@@ -950,6 +950,11 @@ function get_logged_user_course_html($course, $session_id = 0, $class='courses')
  */
 function get_session_title_box($session_id) {
 	global $nosession;
+	
+	if (api_get_setting('use_session_mode')=='true' && !$nosession) {
+		global $now, $date_start, $date_end;
+	}
+	
 	$output = array();
 	if (api_get_setting('use_session_mode')=='true' && !$nosession) {
 		$main_user_table 		= Database :: get_main_table(TABLE_MAIN_USER);
@@ -957,18 +962,18 @@ function get_session_title_box($session_id) {
 		$tbl_session_category 		= Database :: get_main_table(TABLE_MAIN_SESSION_CATEGORY);
 		$active = false;
 		// Request for the name of the general coach
-		$sql =
-		'SELECT tu.lastname, tu.firstname, ts.name, ts.date_start, ts.date_end, ts.session_category_id
-		FROM '.$tbl_session.' ts
-		LEFT JOIN '.$main_user_table .' tu
-		ON ts.id_coach = tu.user_id
-		WHERE ts.id='.intval($session_id);
+		$sql ='SELECT tu.lastname, tu.firstname, ts.name, ts.date_start, ts.date_end, ts.session_category_id
+				FROM '.$tbl_session.' ts
+				LEFT JOIN '.$main_user_table .' tu
+				ON ts.id_coach = tu.user_id
+				WHERE ts.id='.intval($session_id);
 		$rs = Database::query($sql);
 		$session_info = Database::store_result($rs);
 		$session_info = $session_info[0];
 		$session = array();
 		$session['title'] = $session_info[2];
 		$session['coach'] = '';
+		
 		if ( $session_info[3]=='0000-00-00' ) {
 			$session['dates'] = get_lang('WithoutTimeLimits');
 			if ( api_get_setting('show_session_coach') === 'true' ) {
@@ -1332,9 +1337,16 @@ if ( is_array($courses_tree) ) {
 				if ($count_courses_session > 0) {
 					echo '<ul class="session_box">';
 						echo '<li class="session_box_title" id="session_'.$session['details']['id'].'" >';
-						echo Display::return_icon('div_hide.gif', get_lang('Expand').'/'.get_lang('Hide'), array('align' => 'absmiddle', 'id' => 'session_img_'.$session['details']['id'])) . ' ';
+						echo Display::return_icon('div_hide.gif', get_lang('Expand').'/'.get_lang('Hide'), array('align' => 'absmiddle', 'id' => 'session_img_'.$session['details']['id'])) . ' ';						
 						$s = get_session_title_box($session['details']['id']);
-						echo get_lang('SessionName') . ': ' . $s['title']. ' - '.(!empty($s['coach'])?$s['coach'].' - ':'').$s['dates'];
+						//var_dump($s);
+						//echo get_lang('SessionName') . ': ' . $s['title']. ' - '.(!empty($s['coach'])?$s['coach'].' - ':'').$s['dates'];
+						echo '<span>' . $s['title']. ' </span> ';
+						if (api_is_platform_admin()) {						
+							echo '<a href="'.api_get_path(WEB_CODE_PATH).'admin/resume_session.php?id_session='.$session['details']['id'].'">'.Display::return_icon('edit.gif', get_lang('Edit'), array('align' => 'absmiddle')).'</a>';
+						}
+						
+						echo '<br />'.(!empty($s['coach'])?$s['coach'].' | ':'').$s['dates'];
 						echo '</li>';
 					    echo $html_courses_session;
 					echo '</ul>';
@@ -1375,7 +1387,7 @@ if ( is_array($courses_tree) ) {
 						$html_sessions .= '<ul class="session_box" id="session_'.$session['details']['id'].'">';
 						$html_sessions .= '<li class="session_box_title" id="session_'.$session['details']['id'].'">';
 						$html_sessions .= Display::return_icon('div_hide.gif', get_lang('Expand').'/'.get_lang('Hide'), array('align' => 'absmiddle', 'id' => 'session_img_'.$session['details']['id'])) . ' ';
-						$html_sessions .= get_lang('SessionName') . ': ' . $s['title']. ' - '.(!empty($s['coach'])?$s['coach'].' - ':'').$s['dates'];
+						$html_sessions .= get_lang('SessionName') . ': ' . $s['title']. ' | '.(!empty($s['coach'])?$s['coach'].' - ':'').$s['dates'];
 						$html_sessions .= '</li>';
 						$html_sessions .= $html_courses_session;
 						$html_sessions .= '</ul>';

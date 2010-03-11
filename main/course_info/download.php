@@ -1,29 +1,6 @@
-<?php // $Id: download.php 21562 2009-06-22 10:38:38Z ivantcholakov $
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2004 Dokeos S.A.
-	Copyright (c) 2003 Ghent University (UGent)
-	Copyright (c) 2001 Universite catholique de Louvain (UCL)
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact address: Dokeos, 44 rue des palais, B-1030 Brussels, Belgium
-	Mail: info@dokeos.com
-==============================================================================
-*/
-
+<?php
+/* For licensing terms, see /license.txt */
 //session_cache_limiter('public');
-
 require '../inc/global.inc.php';
 $this_section = SECTION_COURSES;
 
@@ -52,7 +29,7 @@ $content_type = '';
 if (in_array(strtolower($extension), array('xml','csv')) && (api_is_platform_admin(true) || api_is_drh())) {
 	$content_type = 'application/force-download';
 }
-elseif (strtolower($extension) == 'zip' && $_cid) {
+elseif (strtolower($extension) == 'zip' && $_cid && (api_is_platform_admin(true) || $is_courseAdmin)) {
 	$content_type = 'application/force-download';
 }
 
@@ -60,10 +37,6 @@ if (empty($content_type)) {
 	api_not_allowed(true);
 }
 
-
-/*
-===============================================================================================
-*/
 
 header('Expires: Wed, 01 Jan 1990 00:00:00 GMT');
 header('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT');

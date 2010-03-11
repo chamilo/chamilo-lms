@@ -1,41 +1,42 @@
 <?php
-/* For licensing terms, see /dokeos_license.txt */
+/* For licensing terms, see /license.txt */
 /**
-==============================================================================
 *	This is the tracking library for Dokeos.
 *	Include/require it in your code to use its functionality.
 *
-*	@package dokeos.library
-==============================================================================
-
+*	@package chamilo.library
+*
 * Calculates the time spent on the course
 * @param integer $user_id the user id
 * @param string $course_code the course code
-*	Funzione scritta da Mario per testare cose
+* @author Mario per testare cose
+* @author Julio Montoya <gugli100@gmail.col>
+* 
 */
 
 // name of the language file that needs to be included
 $language_file = array ('registration', 'index', 'tracking');
 
 // including the global Dokeos file
-require '../inc/global.inc.php';
+require_once '../inc/global.inc.php';
 
 // including additional libraries
 require_once api_get_path(LIBRARY_PATH).'pchart/pData.class.php';
 require_once api_get_path(LIBRARY_PATH).'pchart/pChart.class.php';
 require_once api_get_path(LIBRARY_PATH).'pchart/pCache.class.php';
+
 require_once 'myspace.lib.php';
 
 // the section (for the tabs)
-$this_section = "session_my_space";
+$this_section = SECTION_TRACKING;
 
 
 /* MAIN */
 $user_id = intval($_REQUEST['student']);
-$course_code = Security::remove_XSS($_REQUEST['course']);
 $session_id = intval($_GET['id_session']);
-
+$course_code = Security::remove_XSS($_REQUEST['course']);
 $connections = MySpace::get_connections_to_course($user_id, $course_code, $session_id);
+
 
 if (api_is_xml_http_request()) {
 	$type  = Security::remove_XSS($_GET['type']);

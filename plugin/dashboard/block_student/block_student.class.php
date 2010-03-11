@@ -29,18 +29,36 @@ class BlockStudent extends Block {
     private $user_id;
 	private $students;
 	private $path;
+	private $permission = array(DRH);
 
 	/**
 	 * Constructor
 	 */	
     public function __construct ($user_id) {    	
-    	$this->user_id  = $user_id;    	
-    	if (api_is_platform_admin()) {
-    		$this->students = UserManager::get_user_list(array('status' => STUDENT));
-    	} else if (api_is_drh()) {
-    		$this->students =  UserManager::get_users_followed_by_drh($user_id, STUDENT);
-    	}
-    	$this->path 	= 'block_student';    	  	
+    	$this->user_id  = $user_id;    
+    	$this->path 	= 'block_student';
+    	if ($this->is_block_visible_for_user($user_id)) {
+    		/*if (api_is_platform_admin()) {
+	    		$this->students = UserManager::get_user_list(array('status' => STUDENT));
+	    	} else {*/
+	    		$this->students =  UserManager::get_users_followed_by_drh($user_id, STUDENT);
+	    	//}	
+    	}	
+    }
+    
+    /**
+	 * This method check if a user is allowed to see the block inside dashboard interface
+	 * @param	int		User id
+	 * @return	bool	Is block visible for user
+	 */    
+    public function is_block_visible_for_user($user_id) {	
+    	$user_info = api_get_user_info($user_id);
+		$user_status = $user_info['status'];
+		$is_block_visible_for_user = false;
+    	if (UserManager::is_admin($user_id) || in_array($user_status, $this->permission)) {
+    		$is_block_visible_for_user = true;
+    	}    	
+    	return $is_block_visible_for_user;    	
     }
     
     /**
@@ -55,11 +73,11 @@ class BlockStudent extends Block {
     	$column = 1;
     	$data   = array();
 
-		if (api_is_platform_admin()) {
+		/*if (api_is_platform_admin()) {
 			$student_content_html = $this->get_students_content_html_for_platform_admin();
-		} else if (api_is_drh()) {
+		} else if (api_is_drh()) {*/
 			$student_content_html = $this->get_students_content_html_for_drh();
-		}
+		//}
 		
 		$html = '        		
 			            <li class="widget color-blue" id="intro">
@@ -226,7 +244,7 @@ class BlockStudent extends Block {
   		$content .= $students_table;
  		
  		if (count($students) > 0) {
-			$content .= '<div style="text-align:right;margin-top:10px;"><a href="'.api_get_path(WEB_CODE_PATH).'mySpace/index.php?view=admin&display=useroverview">'.get_lang('SeeMore').'</a></div>';
+			$content .= '<div style="text-align:right;margin-top:10px;"><a href="'.api_get_path(WEB_CODE_PATH).'mySpace/index.php?view=admin&display=yourstudents">'.get_lang('SeeMore').'</a></div>';
 		}
 		$content .= '</div>';		
   		return $content;	

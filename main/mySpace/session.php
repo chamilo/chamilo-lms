@@ -10,7 +10,7 @@ $nameTools= 'Sessions';
 $language_file = array ('registration', 'index', 'trad4all', 'tracking', 'admin');
 $cidReset = true;
 
-require '../inc/global.inc.php';
+require_once '../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'tracking.lib.php';
 require_once api_get_path(LIBRARY_PATH).'sessionmanager.lib.php';
 require_once api_get_path(LIBRARY_PATH).'export.lib.inc.php';
@@ -34,7 +34,6 @@ $export_csv = false;
 if (isset($_GET['export']) && $_GET['export'] == 'csv') {
 	$export_csv = true;
 }
-
 
 /*
 ===============================================================================
@@ -65,7 +64,6 @@ function rsort_sessions($a, $b) {
 	}
 }
 
-
 /*
 ===============================================================================
 	MAIN CODE
@@ -78,13 +76,15 @@ if (isset($_GET['id_coach']) && $_GET['id_coach'] != '') {
 	$id_coach = $_user['user_id'];
 }
 		
-if (api_is_drh()) {
+if (api_is_drh() || api_is_session_admin() || api_is_platform_admin()) {
 
 	$a_sessions = SessionManager::get_sessions_followed_by_drh($_user['user_id']);
 	
-	$menu_items[] = '<a href="index.php?view=drh_students">'.get_lang('Students').'</a>';
-	$menu_items[] = '<a href="teachers.php">'.get_lang('Trainers').'</a>';
-	$menu_items[] = '<a href="course.php">'.get_lang('Courses').'</a>';
+	if (!api_is_session_admin()) {
+		$menu_items[] = '<a href="index.php?view=drh_students&amp;display=yourstudents">'.get_lang('Students').'</a>';
+		$menu_items[] = '<a href="teachers.php">'.get_lang('Trainers').'</a>';
+		$menu_items[] = '<a href="course.php">'.get_lang('Courses').'</a>';
+	}	
 	$menu_items[] = get_lang('Sessions');
 		
 	echo '<div class="actions-title" style ="font-size:10pt;">';
@@ -105,11 +105,11 @@ if (api_is_drh()) {
 	echo '<h4>'.get_lang('YourSessionsList').'</h4>';
 
 } else {		
-	if (api_is_platform_admin()) {
+	/*if (api_is_platform_admin()) {
 		$a_sessions = SessionManager::get_sessions_list();
-	} else {
+	} else {*/
 		$a_sessions = Tracking :: get_sessions_coached_by_user($id_coach);
-	}	
+	//}	
 }
 
 $nb_sessions = count($a_sessions);

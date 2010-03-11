@@ -35,15 +35,21 @@ $interbreadcrumb[] = array('url' => 'user_list.php','name' => get_lang('UserList
 // Database Table Definitions
 $tbl_user 			= 	Database::get_main_table(TABLE_MAIN_USER);
 
-// setting the name of the tool
-$tool_name= get_lang('AssignUsersToHumanResourcesManager');
-
 // initializing variables
 $id_session=intval($_GET['id_session']);
-$hrm_id = intval($_GET['user']);
-$hrm_info = api_get_user_info($hrm_id);
+$user_id = intval($_GET['user']);
+$user_info = api_get_user_info($user_id);
 $user_anonymous  = api_get_anonymous_id();
 $current_user_id = api_get_user_id();
+
+// setting the name of the tool
+if (UserManager::is_admin($user_id)) {
+	$tool_name= get_lang('AssignUsersToPlatformAdministrator');
+} else if ($user_info['status'] == SESSIONADMIN) {
+	$tool_name= get_lang('AssignUsersToSessionsAdministrator');
+} else {
+	$tool_name= get_lang('AssignUsersToHumanResourcesManager');
+}
 
 $add_type = 'multiple';
 if(isset($_GET['add_type']) && $_GET['add_type']!=''){
@@ -55,7 +61,7 @@ if (!api_is_platform_admin()) {
 }
 
 function search_users($needle,$type) {
-	global $tbl_user, $user_anonymous, $current_user_id, $hrm_id;
+	global $tbl_user, $user_anonymous, $current_user_id, $user_id;
 
 	$xajax_response = new XajaxResponse();
 	$return = '';
@@ -64,7 +70,7 @@ function search_users($needle,$type) {
 		$charset = api_get_setting('platform_charset');
 		$needle = api_convert_encoding($needle, $charset, 'utf-8');
 
-		$assigned_users_to_hrm = UserManager::get_users_followed_by_drh($hrm_id);
+		$assigned_users_to_hrm = UserManager::get_users_followed_by_drh($user_id);
 		$assigned_users_id = array_keys($assigned_users_to_hrm);
 		$without_assigned_users = '';
 		if (count($assigned_users_id) > 0) {
@@ -72,7 +78,7 @@ function search_users($needle,$type) {
 		}
 
 		$sql = "SELECT user_id, username, lastname, firstname FROM $tbl_user user
-				WHERE  ".(api_sort_by_first_name() ? 'firstname' : 'lastname')." LIKE '$needle%' AND status<>".DRH." AND user_id NOT IN ($user_anonymous, $current_user_id, $hrm_id) $without_assigned_users";
+				WHERE  ".(api_sort_by_first_name() ? 'firstname' : 'lastname')." LIKE '$needle%' AND status<>".DRH." AND user_id NOT IN ($user_anonymous, $current_user_id, $user_id) $without_assigned_users";
 		$rs	= Database::query($sql);
 
 		$return .= '<select id="origin" name="NoAssignedUsersList[]" multiple="multiple" size="20" style="width:340px;">';
@@ -148,24 +154,25 @@ $UserList = array();
 $msg = '';
 if (intval($_POST['formSent']) == 1) {
 	$user_list = $_POST['UsersList'];
-	$affected_rows = UserManager::suscribe_users_to_hr_manager($hrm_id,$user_list);
+	$affected_rows = UserManager::suscribe_users_to_hr_manager($user_id,$user_list);
 	if ($affected_rows)	{
 		$msg = get_lang('AssignedUsersHaveBeenUpdatedSuccessfully');
 	}
 }
 
-// display the dokeos header
+// display header
 Display::display_header($tool_name);
 
+// actions
 echo '<div class="actions" style="height:22px;">
 <span style="float: right;margin:0px;padding:0px;">
-<a href="dashboard_add_courses_to_user.php?user='.$hrm_id.'">'.Display::return_icon('course_add.gif', get_lang('AssignCourses'), array('style'=>'vertical-align:middle')).' '.get_lang('AssignCourses').'</a>
-<a href="dashboard_add_sessions_to_user.php?user='.$hrm_id.'">'.Display::return_icon('view_more_stats.gif', get_lang('AssignSessions'), array('style'=>'vertical-align:middle')).' '.get_lang('AssignSessions').'</a></span>
-<span style="vertical-align:middle">'.sprintf(get_lang('AssignUsersToX'), api_get_person_name($hrm_info['firstname'], $hrm_info['lastname'])).'</span></div>';	
+<a href="dashboard_add_courses_to_user.php?user='.$user_id.'">'.Display::return_icon('course_add.gif', get_lang('AssignCourses'), array('style'=>'vertical-align:middle')).' '.get_lang('AssignCourses').'</a>
+<a href="dashboard_add_sessions_to_user.php?user='.$user_id.'">'.Display::return_icon('view_more_stats.gif', get_lang('AssignSessions'), array('style'=>'vertical-align:middle')).' '.get_lang('AssignSessions').'</a></span>
+<span style="vertical-align:middle">'.sprintf(get_lang('AssignUsersToX'), api_get_person_name($user_info['firstname'], $user_info['lastname'])).'</span></div>';	
 
 // *******************
 
-$assigned_users_to_hrm = UserManager::get_users_followed_by_drh($hrm_id);
+$assigned_users_to_hrm = UserManager::get_users_followed_by_drh($user_id);
 $assigned_users_id = array_keys($assigned_users_to_hrm);
 $without_assigned_users = '';
 if (count($assigned_users_id) > 0) {
@@ -179,11 +186,11 @@ if (isset($_POST['firstLetterUser'])) {
 }
 
 $sql = "SELECT user_id, username, lastname, firstname FROM $tbl_user user
-		WHERE  $without_assigned_users user_id NOT IN ($user_anonymous, $current_user_id, $hrm_id) AND status<>".DRH." $search_user ";
+		WHERE  $without_assigned_users user_id NOT IN ($user_anonymous, $current_user_id, $user_id) AND status<>".DRH." $search_user ";
 $result	= Database::query($sql);
 
 ?>
-<form name="formulaire" method="post" action="<?php echo api_get_self(); ?>?user=<?php echo $hrm_id ?>" style="margin:0px;" <?php if($ajax_search){echo ' onsubmit="valide();"';}?>>
+<form name="formulaire" method="post" action="<?php echo api_get_self(); ?>?user=<?php echo $user_id ?>" style="margin:0px;" <?php if($ajax_search){echo ' onsubmit="valide();"';}?>>
 <input type="hidden" name="formSent" value="1" />
 <?php
 if(!empty($msg)) {
@@ -199,7 +206,17 @@ if(!empty($msg)) {
 <tr>
   <td width="45%" align="center"><b><?php echo get_lang('UserListInPlatform') ?> :</b></td>
   <td width="10%">&nbsp;</td>
-  <td align="center" width="45%"><b><?php echo get_lang('AssignedUsersListToHumanResourcesManager') ?> :</b></td>
+  <td align="center" width="45%"><b>
+  <?php 
+	if (UserManager::is_admin($user_id)) {
+		echo get_lang('AssignedUsersListToPlatformAdministrator');
+	} else if ($user_info['status'] == SESSIONADMIN) {
+		echo get_lang('AssignedUsersListToSessionsAdministrator');		
+	} else {
+		echo get_lang('AssignedUsersListToHumanResourcesManager');
+	}
+  ?>
+   :</b></td>
 </tr>
 
 <?php if($add_type == 'multiple') { ?>
@@ -245,7 +262,7 @@ if(!empty($msg)) {
   ?>
 	<br /><br /><br /><br /><br /><br />
 	<?php
-		echo '<button class="save" type="button" value="" onclick="valide()" >'.get_lang('AssignUsersToHumanResourcesManager').'</button>';
+		echo '<button class="save" type="button" value="" onclick="valide()" >'.$tool_name.'</button>';
 	?>
   </td>
   <td width="45%" align="center">

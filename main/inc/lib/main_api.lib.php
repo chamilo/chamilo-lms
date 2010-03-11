@@ -32,6 +32,7 @@ $_status_list[SESSIONADMIN] = 'session_admin';
 $_status_list[DRH] = 'drh';
 $_status_list[ANONYMOUS] = 'anonymous';
 
+
 //COURSE VISIBILITY CONSTANTS
 /** only visible for course admin */
 define('COURSE_VISIBILITY_CLOSED', 0);

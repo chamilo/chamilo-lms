@@ -17,6 +17,7 @@ $cidReset=true;
 require_once '../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'xajax/xajax.inc.php';
 require_once api_get_path(LIBRARY_PATH).'sessionmanager.lib.php';
+require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
 
 // create an ajax object
 $xajax = new xajax();
@@ -36,27 +37,33 @@ $interbreadcrumb[] = array('url' => 'user_list.php','name' => get_lang('UserList
 $tbl_session 			= 	Database::get_main_table(TABLE_MAIN_SESSION);
 $tbl_session_rel_user 	= 	Database::get_main_table(TABLE_MAIN_SESSION_USER);
 
-// setting the name of the tool
-$tool_name= get_lang('AssignSessionsToHumanResourcesManager');
-
 // initializing variables
 $id_session=intval($_GET['id_session']);
-$hrm_id = intval($_GET['user']);
-$hrm_info = api_get_user_info($hrm_id);
+$user_id = intval($_GET['user']);
+$user_info = api_get_user_info($user_id);
 $user_anonymous  = api_get_anonymous_id();
 $current_user_id = api_get_user_id();
+
+// setting the name of the tool
+if (UserManager::is_admin($user_id)) {
+	$tool_name= get_lang('AssignSessionsToPlatformAdministrator');
+} else if ($user_info['status'] == SESSIONADMIN) {
+	$tool_name= get_lang('AssignSessionsToSessionsAdministrator');
+} else {
+	$tool_name= get_lang('AssignSessionsToHumanResourcesManager');
+}
 
 $add_type = 'multiple';
 if(isset($_GET['add_type']) && $_GET['add_type']!=''){
 	$add_type = Security::remove_XSS($_REQUEST['add_type']);
 }
 
-if (!api_is_platform_admin()) {
+if (!api_is_platform_admin() && !api_is_session_admin()) {
 	api_not_allowed(true);
 }
 
 function search_sessions($needle,$type) {
-	global $tbl_session, $hrm_id;
+	global $tbl_session, $user_id;
 
 	$xajax_response = new XajaxResponse();	
 	$return = '';
@@ -64,7 +71,7 @@ function search_sessions($needle,$type) {
 		// xajax send utf8 datas... datas in db can be non-utf8 datas
 		$charset = api_get_setting('platform_charset');
 		$needle = api_convert_encoding($needle, $charset, 'utf-8');
-		$assigned_sessions_to_hrm = SessionManager::get_sessions_followed_by_drh($hrm_id);
+		$assigned_sessions_to_hrm = SessionManager::get_sessions_followed_by_drh($user_id);
 		$assigned_sessions_id = array_keys($assigned_sessions_to_hrm);
 
 		$without_assigned_sessions = '';
@@ -148,25 +155,31 @@ $UserList = array();
 $msg = '';
 if (intval($_POST['formSent']) == 1) {
 	$sessions_list = $_POST['SessionsList'];
-	$affected_rows = SessionManager::suscribe_sessions_to_hr_manager($hrm_id,$sessions_list);
+	$affected_rows = SessionManager::suscribe_sessions_to_hr_manager($user_id,$sessions_list);
 	if ($affected_rows)	{
 		$msg = get_lang('AssignedSessionsHaveBeenUpdatedSuccessfully');
 	}
 }
 
-// display the dokeos header
+// display header
 Display::display_header($tool_name);
-//echo '<div class="row"><div class="form_header">'.get_lang('AssignSessionsTo').'&nbsp;'.api_get_person_name($hrm_info['firstname'], $hrm_info['lastname']).'</div></div><br />';
 
-echo '<div class="actions" style="height:22px;">
-<span style="float: right;margin:0px;padding:0px;">
-<a href="dashboard_add_users_to_user.php?user='.$hrm_id.'">'.Display::return_icon('add_user_big.gif', get_lang('AssignUsers'), array('style'=>'vertical-align:middle')).' '.get_lang('AssignUsers').'</a>
-<a href="dashboard_add_courses_to_user.php?user='.$hrm_id.'">'.Display::return_icon('course_add.gif', get_lang('AssignCourses'), array('style'=>'vertical-align:middle')).' '.get_lang('AssignCourses').'</a></span>
-<span style="vertical-align:middle">'.sprintf(get_lang('AssignSessionsToX'),api_get_person_name($hrm_info['firstname'], $hrm_info['lastname'])).'</span></div>';
+// actions
+echo '<div class="actions" style="height:22px;">';
+if ($user_info['status'] != SESSIONADMIN) {
+	echo 	'<span style="float: right;margin:0px;padding:0px;">
+				<a href="dashboard_add_users_to_user.php?user='.$user_id.'">'.Display::return_icon('add_user_big.gif', get_lang('AssignUsers'), array('style'=>'vertical-align:middle')).' '.get_lang('AssignUsers').'</a>
+				<a href="dashboard_add_courses_to_user.php?user='.$user_id.'">'.Display::return_icon('course_add.gif', get_lang('AssignCourses'), array('style'=>'vertical-align:middle')).' '.get_lang('AssignCourses').'</a>
+			</span>
+			<span style="vertical-align:middle">'.sprintf(get_lang('AssignSessionsToX'),api_get_person_name($user_info['firstname'], $user_info['lastname'])).'</span>';
+} else {
+	echo '<span>'.sprintf(get_lang('AssignSessionsToX'),api_get_person_name($user_info['firstname'], $user_info['lastname'])).'</span>';
+}
+echo '</div>';
 
 // *******************
 
-$assigned_sessions_to_hrm = SessionManager::get_sessions_followed_by_drh($hrm_id);
+$assigned_sessions_to_hrm = SessionManager::get_sessions_followed_by_drh($user_id);
 $assigned_sessions_id = array_keys($assigned_sessions_to_hrm);
 $without_assigned_sessions = '';
 if (count($assigned_sessions_id) > 0) {
@@ -183,7 +196,7 @@ $sql 	= " SELECT s.id, s.name FROM $tbl_session s
 			WHERE  s.name LIKE '$needle%' $without_assigned_sessions ";
 $result	= Database::query($sql);
 ?>
-<form name="formulaire" method="post" action="<?php echo api_get_self(); ?>?user=<?php echo $hrm_id ?>" style="margin:0px;" <?php if($ajax_search){echo ' onsubmit="valide();"';}?>>
+<form name="formulaire" method="post" action="<?php echo api_get_self(); ?>?user=<?php echo $user_id ?>" style="margin:0px;" <?php if($ajax_search){echo ' onsubmit="valide();"';}?>>
 <input type="hidden" name="formSent" value="1" />
 <?php
 if(!empty($msg)) {
@@ -199,7 +212,17 @@ if(!empty($msg)) {
 <tr>
   <td width="45%" align="center"><b><?php echo get_lang('SessionsListInPlatform') ?> :</b></td>
   <td width="10%">&nbsp;</td>
-  <td align="center" width="45%"><b><?php echo get_lang('AssignedSessionsListToHumanResourcesManager') ?> :</b></td>
+  <td align="center" width="45%"><b>
+  <?php 
+  	if (UserManager::is_admin($user_id)) {
+		echo get_lang('AssignedSessionsListToPlatformAdministrator');
+	} else if ($user_info['status'] == SESSIONADMIN) {
+		echo get_lang('AssignedSessionsListToSessionsAdministrator');		
+	} else {
+		echo get_lang('AssignedSessionsListToHumanResourcesManager');
+	}   
+  ?> 
+  : </b></td>
 </tr>
 
 <?php if($add_type == 'multiple') { ?>
@@ -244,7 +267,7 @@ if(!empty($msg)) {
   ?>
 	<br /><br /><br /><br /><br /><br />
 	<?php
-		echo '<button class="save" type="button" value="" onclick="valide()" >'.get_lang('AssignSessionsToHumanResourcesManager').'</button>';
+		echo '<button class="save" type="button" value="" onclick="valide()" >'.$tool_name.'</button>';
 	?>
   </td>
   <td width="45%" align="center">

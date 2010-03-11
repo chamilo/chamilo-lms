@@ -23,18 +23,36 @@ class BlockTeacher extends Block {
     private $user_id;
     private $teachers;
     private $path;
+    private $permission = array(DRH);
 
 	/**
 	 * Controller
 	 */
     public function __construct ($user_id) {    	
     	$this->user_id  = $user_id;
-    	if (api_is_platform_admin()) {
-    		$this->teachers = UserManager::get_user_list(array('status' => COURSEMANAGER));
-    	} else if (api_is_drh()) {
-    		$this->teachers = UserManager::get_users_followed_by_drh($user_id, COURSEMANAGER);
-    	}     	    	
-    	$this->path 	= 'block_teacher';  	
+    	$this->path 	= 'block_teacher';
+    	if ($this->is_block_visible_for_user($user_id)) {
+    		/*if (api_is_platform_admin()) {
+	    		$this->teachers = UserManager::get_user_list(array('status' => COURSEMANAGER));
+	    	} else {*/
+	    		$this->teachers = UserManager::get_users_followed_by_drh($user_id, COURSEMANAGER);
+	    	//}	
+    	}
+    }
+    
+    /**
+	 * This method check if a user is allowed to see the block inside dashboard interface
+	 * @param	int		User id
+	 * @return	bool	Is block visible for user
+	 */    
+    public function is_block_visible_for_user($user_id) {	
+    	$user_info = api_get_user_info($user_id);
+		$user_status = $user_info['status'];
+		$is_block_visible_for_user = false;
+    	if (UserManager::is_admin($user_id) || in_array($user_status, $this->permission)) {
+    		$is_block_visible_for_user = true;
+    	}    	
+    	return $is_block_visible_for_user;    	
     }
     
     /**
@@ -49,11 +67,11 @@ class BlockTeacher extends Block {
     	$column = 1;
     	$data   = array();
 		
-		if (api_is_platform_admin()) {
+		/*if (api_is_platform_admin()) {
 			$teacher_content_html = $this->get_teachers_content_html_for_platform_admin();
-		} else if (api_is_drh()) {
+		} else if (api_is_drh()) {*/
 			$teacher_content_html = $this->get_teachers_content_html_for_drh();
-		}
+		//}
 		
 		$html = '        		
 			            <li class="widget color-blue" id="intro">

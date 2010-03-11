@@ -8,12 +8,11 @@
 $language_file = array ('registration', 'index', 'tracking', 'admin');
 $cidReset = true;
 
-require '../inc/global.inc.php';
+require_once '../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'tracking.lib.php';
 require_once api_get_path(LIBRARY_PATH).'export.lib.inc.php';
 require_once api_get_path(LIBRARY_PATH).'course.lib.php';
 require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
-
 
 $export_csv = isset($_GET['export']) && $_GET['export'] == 'csv' ? true : false;
 if ($export_csv) {
@@ -104,16 +103,16 @@ if ($isCoach || api_is_platform_admin() || api_is_drh()) {
 	}
 	$sort_by_first_name = api_sort_by_first_name();
 	
-	if (api_is_drh()) {
-		
+	if (api_is_drh() || $_GET['display'] == 'yourstudents') {
+
 		$title = get_lang('YourStudents');
 		if (!isset($_GET['id_session'])) {
-			
+
 			if (isset($_GET['user_id'])) {
 				$user_id = intval($_GET['user_id']);
-				$user_info = api_get_user_info($user_id);				
+				$user_info = api_get_user_info($user_id);
 				$title = api_get_person_name($user_info['firstname'], $user_info['lastname']).' : '.get_lang('Students');
-				$courses_by_teacher  = CourseManager::get_course_list_of_user_as_course_admin($user_id);								
+				$courses_by_teacher  = CourseManager::get_course_list_of_user_as_course_admin($user_id);				
 				$students_by_course = array();
 				if (!empty($courses_by_teacher)) {
 					foreach ($courses_by_teacher as $course) {
@@ -127,7 +126,7 @@ if ($isCoach || api_is_platform_admin() || api_is_drh()) {
 				}
 				$students = array_unique($students);				
 			} else {
-				$students = array_keys(UserManager::get_users_followed_by_drh($_user['user_id'], STUDENT));									
+				$students = array_keys(UserManager::get_users_followed_by_drh($_user['user_id'], STUDENT));
 			}
 			
 			$courses_of_the_platform = CourseManager :: get_real_course_list();			

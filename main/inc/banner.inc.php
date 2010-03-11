@@ -206,13 +206,13 @@ if ($_user['user_id'] && !api_is_anonymous()) {
 
 	// Reporting
 	if (api_get_setting('show_tabs', 'reporting') == 'true') {
-		if (api_is_allowed_to_create_course() || $_user['status'] == DRH) {
+		if (api_is_allowed_to_create_course() || api_is_drh() || api_is_session_admin()) {
 			$navigation['session_my_space'] = $possible_tabs['session_my_space'];
 		} else {
 			$navigation['session_my_space'] = $possible_tabs['session_my_progress'];
 		}
 	} else {
-		if (api_is_allowed_to_create_course() || $_user['status'] == DRH) {
+		if (api_is_allowed_to_create_course() || api_is_drh() || api_is_session_admin()) {
 			$menu_navigation['session_my_space'] = $possible_tabs['session_my_space'];
 		} else {
 			$menu_navigation['session_my_space'] = $possible_tabs['session_my_progress'];
@@ -230,7 +230,7 @@ if ($_user['user_id'] && !api_is_anonymous()) {
 
 	// Dashboard
 	if (api_get_setting('show_tabs', 'dashboard') == 'true') {
-		if (api_is_platform_admin() || $_user['status'] == DRH) {
+		if (api_is_platform_admin() || api_is_drh() || api_is_session_admin()) {
 			$navigation['dashboard'] = $possible_tabs['dashboard'];
 		}
 	} else{

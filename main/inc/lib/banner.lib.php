@@ -53,7 +53,7 @@ function get_tabs() {
 	}
 
 	// Reporting
-	if(api_is_allowed_to_create_course() || $_user['status']==DRH) {
+	if(api_is_allowed_to_create_course() || api_is_drh() || api_is_session_admin()) {
 		// Link to my space
 		$navigation['session_my_space']['url'] = api_get_path(WEB_CODE_PATH).'mySpace/';
 		$navigation['session_my_space']['title'] = get_lang('MySpace');
@@ -70,7 +70,7 @@ function get_tabs() {
 	}
 	
 	// Dashboard
-	if (api_is_platform_admin() || $_user['status']==DRH) {
+	if (api_is_platform_admin() || api_is_drh() || api_is_session_admin()) {
 			$navigation['dashboard']['url'] = api_get_path(WEB_CODE_PATH).'dashboard/index.php';
 			$navigation['dashboard']['title'] = get_lang('Dashboard');
 	}

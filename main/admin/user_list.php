@@ -507,11 +507,20 @@ function modify_filter($user_id,$url_params,$row)
 	} else {
 		$result .= Display::return_icon('admin_star_na.png', get_lang('IsNotAdministrator'));
 	}
-
-	if ($row['7'] == $statusname[DRH]) {
-		$result .= '<a href="dashboard_add_users_to_user.php?user='.$user_id.'">'.Display::return_icon('add_user_big.gif', get_lang('AssignUsers')).'</a>&nbsp;&nbsp;';
-		$result .= '<a href="dashboard_add_courses_to_user.php?user='.$user_id.'">'.Display::return_icon('course_add.gif', get_lang('AssignCourses')).'</a>&nbsp;&nbsp;';
-		$result .= '<a href="dashboard_add_sessions_to_user.php?user='.$user_id.'">'.Display::return_icon('view_more_stats.gif', get_lang('AssignSessions')).'</a>&nbsp;&nbsp;';	
+	
+	// actions for assigning sessions, courses or users
+	if (api_is_session_admin()) {
+		if ($row[0] == api_get_user_id()) {			
+			$result .= '<a href="dashboard_add_sessions_to_user.php?user='.$user_id.'">'.Display::return_icon('view_more_stats.gif', get_lang('AssignSessions')).'</a>&nbsp;&nbsp;';
+		}
+	} else {
+		if ($row['7'] == $statusname[DRH] || UserManager::is_admin($row[0])) {
+			$result .= '<a href="dashboard_add_users_to_user.php?user='.$user_id.'">'.Display::return_icon('add_user_big.gif', get_lang('AssignUsers')).'</a>&nbsp;&nbsp;';
+			$result .= '<a href="dashboard_add_courses_to_user.php?user='.$user_id.'">'.Display::return_icon('course_add.gif', get_lang('AssignCourses')).'</a>&nbsp;&nbsp;';
+			$result .= '<a href="dashboard_add_sessions_to_user.php?user='.$user_id.'">'.Display::return_icon('view_more_stats.gif', get_lang('AssignSessions')).'</a>&nbsp;&nbsp;';	
+		} else if ($row['7'] == $statusname[SESSIONADMIN]) {
+			$result .= '<a href="dashboard_add_sessions_to_user.php?user='.$user_id.'">'.Display::return_icon('view_more_stats.gif', get_lang('AssignSessions')).'</a>&nbsp;&nbsp;';
+		}
 	}
 
 	return $result;

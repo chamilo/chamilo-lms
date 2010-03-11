@@ -60,7 +60,7 @@ if (api_get_setting('add_users_by_coach') == 'true') {
 Display :: display_header($nameTools);
 
 $a_courses = array();
-if (api_is_drh()) {
+if (api_is_drh() || api_is_session_admin() || api_is_platform_admin()) {
 
 	$title = '';
 	if (empty($id_session)) {		
@@ -80,17 +80,18 @@ if (api_is_drh()) {
 	}
 			
 	$a_courses = array_keys($courses);
-
-	$menu_items[] = '<a href="index.php?view=drh_students">'.get_lang('Students').'</a>';
-	$menu_items[] = '<a href="teachers.php">'.get_lang('Teachers').'</a>';
 	
-	if (empty($_GET['user_id']) && empty($id_session)) {
-		$menu_items[] = get_lang('Courses');
-	} else {
-		$menu_items[] = '<a href="course.php">'.get_lang('Courses').'</a>';
+	if (!api_is_session_admin()) {
+		$menu_items[] = '<a href="index.php?view=drh_students&amp;display=yourstudents">'.get_lang('Students').'</a>';
+		$menu_items[] = '<a href="teachers.php">'.get_lang('Teachers').'</a>';		
+		if (empty($_GET['user_id']) && empty($id_session)) {
+			$menu_items[] = get_lang('Courses');
+		} else {
+			$menu_items[] = '<a href="course.php">'.get_lang('Courses').'</a>';
+		}
+		$menu_items[] = '<a href="session.php">'.get_lang('Sessions').'</a>';
 	}
-	$menu_items[] = '<a href="session.php">'.get_lang('Sessions').'</a>';
-		
+	
 	echo '<div class="actions-title" style ="font-size:10pt;">';
 	$nb_menu_items = count($menu_items);
 	if ($nb_menu_items > 1) {
@@ -132,16 +133,16 @@ if ($show_import_icon) {
 	echo "</div><br />";
 }
 
-if (!api_is_drh()) {	
-	if (api_is_platform_admin()) {
+if (!api_is_drh() && !api_is_session_admin() && !api_is_platform_admin()) {	
+	/*if (api_is_platform_admin()) {
 		if (empty($id_session)) {			
 			$courses = CourseManager::get_real_course_list();			
 		} else {
 			$courses = Tracking::get_courses_list_from_session($id_session);
 		}
-	} else {
+	} else {*/
 		$courses = Tracking::get_courses_followed_by_coach($_user['user_id'], $id_session);
-	}	
+	//}	
 	$a_courses = array_keys($courses);
 } 
 

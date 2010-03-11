@@ -10,6 +10,7 @@
  * required files for getting data
  */
 require_once api_get_path(LIBRARY_PATH).'sessionmanager.lib.php';
+require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
 require_once api_get_path(LIBRARY_PATH).'course.lib.php';
 require_once api_get_path(LIBRARY_PATH).'tracking.lib.php';
 require_once api_get_path(LIBRARY_PATH).'course_description.lib.php';
@@ -24,18 +25,36 @@ class BlockSession extends Block {
     private $user_id;
 	private $sessions;
 	private $path;
+	private $permission = array(DRH, SESSIONADMIN);
 
 	/**
 	 * Constructor
 	 */
     public function __construct ($user_id) {
     	$this->user_id 	= $user_id;
-    	if (api_is_platform_admin()) {
-    		$this->sessions = SessionManager::get_sessions_list();
-    	} else if (api_is_drh()) {
-    		$this->sessions = SessionManager::get_sessions_followed_by_drh($user_id);	
-    	}    	
     	$this->path = 'block_session';
+    	if ($this->is_block_visible_for_user($user_id)) {
+    		/*if (api_is_platform_admin()) {
+	    		$this->sessions = SessionManager::get_sessions_list();
+	    	} else {*/
+	    		$this->sessions = SessionManager::get_sessions_followed_by_drh($user_id);	
+	    	//}
+    	}
+    }
+
+	/**
+	 * This method check if a user is allowed to see the block inside dashboard interface
+	 * @param	int		User id
+	 * @return	bool	Is block visible for user
+	 */    
+    public function is_block_visible_for_user($user_id) {	
+    	$user_info = api_get_user_info($user_id);
+		$user_status = $user_info['status'];
+		$is_block_visible_for_user = false;
+    	if (UserManager::is_admin($user_id) || in_array($user_status, $this->permission)) {
+    		$is_block_visible_for_user = true;
+    	}    	
+    	return $is_block_visible_for_user;    	
     }
 
     /**

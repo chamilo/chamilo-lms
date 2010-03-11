@@ -1,10 +1,10 @@
 <?php
-/* For licensing terms, see /dokeos_license.txt */
+/* For licensing terms, see /license.txt */
+
 /**
-==============================================================================
  * The INTRODUCTION MICRO MODULE is used to insert and edit
- * an introduction section on a Dokeos Module. It can be inserted on any
- * Dokeos Module, provided a connection to a course Database is already active.
+ * an introduction section on a Chamilo Module. It can be inserted on any
+ * Chamilo Module, provided a connection to a course Database is already active.
  *
  * The introduction content are stored on a table called "introduction"
  * in the course Database. Each module introduction has an Id stored on
@@ -19,30 +19,26 @@
  *
  * $moduleId = XX // specifying the module Id
  * include(moduleIntro.inc.php);
-*
-*	@package dokeos.include
-==============================================================================
-*/
+ *
+ *	@package chamilo.include
+ */
 
 require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 require_once api_get_path(LIBRARY_PATH).'course_description.lib.php';
 
-/*
------------------------------------------------------------
-	Constants and variables
------------------------------------------------------------
-*/
+/*	Constants and variables */
+
 $TBL_INTRODUCTION = Database::get_course_table(TABLE_TOOL_INTRO);
 $intro_editAllowed = $is_allowed_to_edit;
 
 global $charset;
-$intro_cmdEdit = (empty($_GET['intro_cmdEdit'])?'':$_GET['intro_cmdEdit']);
-$intro_cmdUpdate = isset($_POST['intro_cmdUpdate'])?true:false;
-$intro_cmdDel= (empty($_GET['intro_cmdDel'])?'':$_GET['intro_cmdDel']);
-$intro_cmdAdd= (empty($_GET['intro_cmdAdd'])?'':$_GET['intro_cmdAdd']);
+$intro_cmdEdit = empty($_GET['intro_cmdEdit']) ? '' : $_GET['intro_cmdEdit'];
+$intro_cmdUpdate = isset($_POST['intro_cmdUpdate']);
+$intro_cmdDel = empty($_GET['intro_cmdDel']) ? '' : $_GET['intro_cmdDel'];
+$intro_cmdAdd = empty($_GET['intro_cmdAdd']) ? '' : $_GET['intro_cmdAdd'];
 
-if (!empty ($GLOBALS["_cid"])) {
-	$form = new FormValidator('introduction_text', 'post', api_get_self()."?".api_get_cidreq());
+if (!empty ($GLOBALS['_cid'])) {
+	$form = new FormValidator('introduction_text', 'post', api_get_self().'?'.api_get_cidreq());
 } else {
 	$form = new FormValidator('introduction_text');
 }
@@ -84,28 +80,25 @@ if (is_array($editor_config)) {
 $form->add_html_editor('intro_content', null, null, false, $editor_config);
 $form->addElement('style_submit_button', 'intro_cmdUpdate', get_lang('SaveIntroText'), 'class="save"');
 
-
-/*=========================================================
-  INTRODUCTION MICRO MODULE - COMMANDS SECTION (IF ALLOWED)
-  ========================================================*/
+/*	INTRODUCTION MICRO MODULE - COMMANDS SECTION (IF ALLOWED) */
 
 if ($intro_editAllowed) {
+
 	/* Replace command */
 
-	if ( $intro_cmdUpdate ) {
-		if ( $form->validate()) {
+	if ($intro_cmdUpdate) {
+		if ($form->validate()) {
 
 			$form_values = $form->exportValues();
 			$intro_content = Security::remove_XSS(stripslashes(api_html_entity_decode($form_values['intro_content'])), COURSEMANAGERLOWSECURITY);
 
-			if ( ! empty($intro_content) ) {
+			if (!empty($intro_content)) {
 				$sql = "REPLACE $TBL_INTRODUCTION SET id='$moduleId',intro_text='".Database::escape_string($intro_content)."'";
 				Database::query($sql);
-				Display::display_confirmation_message(get_lang('IntroductionTextUpdated'),false);
+				Display::display_confirmation_message(get_lang('IntroductionTextUpdated'), false);
 			} else {
 				$intro_cmdDel = true;	// got to the delete command
 			}
-
 		} else {
 			$intro_cmdEdit = true;
 		}
@@ -117,13 +110,10 @@ if ($intro_editAllowed) {
 		Database::query("DELETE FROM $TBL_INTRODUCTION WHERE id='".$moduleId."'");
 		Display::display_confirmation_message(get_lang('IntroductionTextDeleted'));
 	}
-
 }
 
 
-/*===========================================
-  INTRODUCTION MICRO MODULE - DISPLAY SECTION
-  ===========================================*/
+/*	INTRODUCTION MICRO MODULE - DISPLAY SECTION */
 
 /* Retrieves the module introduction text, if exist */
 
@@ -135,9 +125,11 @@ $intro_content = $intro_dbResult['intro_text'];
 /* Determines the correct display */
 
 if ($intro_cmdEdit || $intro_cmdAdd) {
+
 	$intro_dispDefault = false;
 	$intro_dispForm = true;
 	$intro_dispCommand = false;
+
 } else {
 
 	$intro_dispDefault = true;
@@ -148,7 +140,6 @@ if ($intro_cmdEdit || $intro_cmdAdd) {
 	} else {
 		$intro_dispCommand = false;
 	}
-
 }
 
 /* Executes the display */
@@ -156,7 +147,6 @@ if ($intro_cmdEdit || $intro_cmdAdd) {
 if ($intro_dispForm) {
 	$default['intro_content'] = $intro_content;
 	$form->setDefaults($default);
-	//echo '<div id="courseintro">';
 	echo '<div id="courseintro" style="width: 100%">';
 	$form->display();
 	echo '</div>';
@@ -164,21 +154,21 @@ if ($intro_dispForm) {
 
 $style_introduction_section = 'style="margin-left:10%;margin-right:10%;"';
 $thematic_description_html = '';
-if ($tool==TOOL_COURSE_HOMEPAGE && !isset($_GET['intro_cmdEdit'])) {
-	
+if ($tool == TOOL_COURSE_HOMEPAGE && !isset($_GET['intro_cmdEdit'])) {
+
 	$course_description = new CourseDescription();
 	$course_description->set_session_id(api_get_session_id());
 	$thematic_description = $course_description->get_data_by_description_type(8);
-		
+
 	if (!empty($thematic_description)) {
-		
+
 		$style_introduction_section = 'style="width:65%;float:left;margin-left:10%;"';
-		
-		$thematic_advance = get_lang('ThematicAdvance').'&nbsp;'.$course_description->get_progress_porcent(false,8);
-		if (api_is_allowed_to_edit(null,true)) {
-			$thematic_advance = '<a href="'.api_get_path(WEB_CODE_PATH).'course_description/index.php?action=edit&'.api_get_cidreq().'&description_type=8'.'">'.get_lang('ThematicAdvance').'&nbsp;'.$course_description->get_progress_porcent(false,8).'</a>';
+
+		$thematic_advance = get_lang('ThematicAdvance').'&nbsp;'.$course_description->get_progress_porcent(false, 8);
+		if (api_is_allowed_to_edit(null, true)) {
+			$thematic_advance = '<a href="'.api_get_path(WEB_CODE_PATH).'course_description/index.php?action=edit&'.api_get_cidreq().'&description_type=8'.'">'.get_lang('ThematicAdvance').'&nbsp;'.$course_description->get_progress_porcent(false, 8).'</a>';
 		}
-		
+
 		$thematic_description_html = '<div style="width:20%;float:left;font-size:10pt;"><div class="thematic-postit">
 								  <div class="thematic-postit-top"><a class="thematic-postit-head" style="" href="#">'.Display::return_icon('postit_top.png').'</a></div>
 								  <div class="thematic-postit-center">
@@ -188,8 +178,7 @@ if ($tool==TOOL_COURSE_HOMEPAGE && !isset($_GET['intro_cmdEdit'])) {
 								  </div>
 								  <div  class="thematic-postit-bottom">'.Display::return_icon('postit_bottom.png').'</div>
 								  </div></div>';
-		
-	}	
+	}
 }
 
 echo '<div '.$style_introduction_section.'>';
@@ -203,11 +192,11 @@ if ($intro_dispDefault) {
 
 if ($intro_dispCommand) {
 
-	if ( empty($intro_content) ) {
+	if (empty($intro_content)) {
 
-		//displays "Add intro" Commands
+		// Displays "Add intro" commands
 		echo "<div id=\"courseintro\"><p>\n";
-		if (!empty ($GLOBALS["_cid"])) {
+		if (!empty ($GLOBALS['_cid'])) {
 			echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&amp;intro_cmdAdd=1\">\n".get_lang('AddIntro')."</a>\n";
 		} else {
 			echo "<a href=\"".api_get_self()."?intro_cmdAdd=1\">\n".get_lang('AddIntro')."</a>\n";
@@ -216,9 +205,9 @@ if ($intro_dispCommand) {
 
 	} else {
 
-		// displays "edit intro && delete intro" Commands
+		// Displays "edit intro && delete intro" commands
 		echo "<div id=\"courseintro_icons\"><p>\n";
-		if (!empty ($GLOBALS["_cid"])) {
+		if (!empty ($GLOBALS['_cid'])) {
 			echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&amp;intro_cmdEdit=1\"><img src=\"".api_get_path(WEB_CODE_PATH)."img/edit.gif\" alt=\"".get_lang('Modify')."\" border=\"0\" /></a>\n";
 			echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&amp;intro_cmdDel=1\" onclick=\"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset))."')) return false;\"><img src=\"".api_get_path(WEB_CODE_PATH)."img/delete.gif\" alt=\"".get_lang('Delete')."\" border=\"0\" /></a>\n";
 		} else {
@@ -235,5 +224,3 @@ echo '</div>';
 echo $thematic_description_html;
 
 echo '<div class="clear"></div>';
-
-?>

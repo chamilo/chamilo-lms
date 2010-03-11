@@ -1,82 +1,66 @@
 <?php
-// $Id: tool_navigation_menu.inc.php 22072 2009-07-14 15:14:42Z jhp1411 $
-/* For licensing terms, see /chamilo_license.txt */
+/* For licensing terms, see /license.txt */
+
 /**
-==============================================================================
-*	Navigation menu display code
-*
-*	@package dokeos.include
-==============================================================================
-*/
-define('SHORTCUTS_HORIZONTAL',0);
-define('SHORTCUTS_VERTICAL',1);
+ *	Navigation menu display code
+ *
+ *	@package dokeos.include
+ */
+
+define('SHORTCUTS_HORIZONTAL', 0);
+define('SHORTCUTS_VERTICAL', 1);
+
 /**
  * Build the navigation items to show in a course menu
  * @param boolean $include_admin_tools
  */
-function get_navigation_items($include_admin_tools = false)
-{
+function get_navigation_items($include_admin_tools = false) {
 	global $is_courseMember;
 	global $_user;
 	global $_course;
 
-	if (!empty($_course['db_name']))
-	{
+	if (!empty($_course['db_name'])) {
 		$database = $_course['db_name'];
 	}
 
 	$navigation_items = array ();
 	$course_id = api_get_course_id();
 
-	if (!empty ($course_id) && ($course_id != -1))
-	{
+	if (!empty($course_id) && $course_id != -1) {
+
 		$user_id = api_get_user_id();
 
 		$course_tools_table = Database :: get_course_table(TABLE_TOOL_LIST,$database);
 
-		/*
-		--------------------------------------------------------------
-					Link to the Course homepage
-		--------------------------------------------------------------
-		*/
+		/*	Link to the Course homepage */
 
 		$navigation_items['home']['image'] = 'home.gif';
 		$navigation_items['home']['link'] = api_get_path(REL_COURSE_PATH).Security::remove_XSS($_SESSION['_course']['path']).'/index.php';
 		$navigation_items['home']['name'] = get_lang('CourseHomepageLink');
 
-		/*
-		--------------------------------------------------------------
-					Link to the different tools
-		--------------------------------------------------------------
-		*/
+		/*	Link to the different tools */
 
 		$sql_menu_query = "SELECT * FROM $course_tools_table WHERE visibility='1' and admin='0' ORDER BY id ASC";
 		$sql_result = Database::query($sql_menu_query);
-		while ($row = Database::fetch_array($sql_result))
-		{
+		while ($row = Database::fetch_array($sql_result)) {
 			$navigation_items[$row['id']] = $row;
 			/*
 			if (!stristr($row['link'], 'http://'))
 			*/
-			if (stripos($row['link'], 'http://') === false && stripos($row['link'], 'https://') === false)
-			{
+			if (stripos($row['link'], 'http://') === false && stripos($row['link'], 'https://') === false) {
 				$navigation_items[$row['id']]['link'] = api_get_path(REL_CODE_PATH).$row['link'];
 				/*
 				$navigation_items[$row['id']]['name'] = $row['image'] == 'scormbuilder.gif' ? $navigation_items[$row['id']]['name'] : get_lang(ucfirst($navigation_items[$row['id']]['name']));
 				*/
-				if ($row['image'] != 'scormbuilder.gif' && $row['image'] != 'blog.gif')
-				{
+				if ($row['image'] != 'scormbuilder.gif' && $row['image'] != 'blog.gif') {
 					$navigation_items[$row['id']]['name'] = get_lang(ucfirst($navigation_items[$row['id']]['name']));
 				}
 			}
 		}
-		/*
-		--------------------------------------------------------------
-			Admin (edit rights) only links
+
+		/*	Admin (edit rights) only links
 			- Course settings (course admin only)
-			- Course rights (roles & rights overview)
-		--------------------------------------------------------------
-		*/
+			- Course rights (roles & rights overview) */
 
 		if ($include_admin_tools) {
 			$course_settings_sql = "SELECT name,image FROM $course_tools_table
@@ -84,7 +68,7 @@ function get_navigation_items($include_admin_tools = false)
 			$sql_result = Database::query($course_settings_sql);
 			$course_setting_info = Database::fetch_array($sql_result);
 			$course_setting_visual_name = get_lang(api_ucfirst($course_setting_info['name']));
-			if (api_get_session_id()==0) {
+			if (api_get_session_id() == 0) {
 				// course settings item
 				$navigation_items['course_settings']['image'] = $course_setting_info['image'];
 				$navigation_items['course_settings']['link'] = api_get_path(REL_CODE_PATH).'course_info/infocours.php';
@@ -92,7 +76,7 @@ function get_navigation_items($include_admin_tools = false)
 			}
 		}
 	}
-	foreach($navigation_items as $key => $navigation_item) {
+	foreach ($navigation_items as $key => $navigation_item) {
 		if (strstr($navigation_item['link'], '?')) {
 			//link already contains a parameter, add course id parameter with &
 			$parameter_separator = '&amp;';
@@ -108,11 +92,10 @@ function get_navigation_items($include_admin_tools = false)
 /**
  * Show a navigation menu
  */
-function show_navigation_menu()
-{
+function show_navigation_menu() {
 	$navigation_items = get_navigation_items(true);
 	$course_id = api_get_course_id();
-	if(api_get_setting('show_navigation_menu') == 'icons') {
+	if (api_get_setting('show_navigation_menu') == 'icons') {
 		echo '<div style="float:right;width: 40px;position:absolute;right:10px;top:10px;">';
 		show_navigation_tool_shortcuts($orientation = SHORTCUTS_VERTICAL);
 		echo '</div>';
@@ -121,7 +104,7 @@ function show_navigation_menu()
 		?>
 		<script type="text/javascript">
 		/* <![CDATA[ */
-		function createCookie(name,value,days)
+		function createCookie(name, value, days)
 		{
 			if (days)
 			{
@@ -136,7 +119,7 @@ function show_navigation_menu()
 		{
 			var nameEQ = name + "=";
 			var ca = document.cookie.split(';');
-			for(var i=0;i < ca.length;i++)
+			for (var i = 0; i < ca.length; i++)
 			{
 				var c = ca[i];
 				while (c.charAt(0)==' ') c = c.substring(1,c.length);
@@ -150,7 +133,7 @@ function show_navigation_menu()
 			center_el = document.getElementById('center');
 			swap_menu_link_el = document.getElementById('swap_menu_link');
 
-			if(toolnavlist_el.style.display == 'none')
+			if (toolnavlist_el.style.display == 'none')
 			{
 				toolnavlist_el.style.display = '';
 				if (center_el)
@@ -186,26 +169,22 @@ function show_navigation_menu()
 			$url_item = parse_url($navigation_item['link']);
 			$url_current = parse_url($_SERVER['REQUEST_URI']);
 
-			if (strpos($navigation_item['link'],'chat')!==false && api_get_course_setting('allow_open_chat_window',$course_id)==true) {
-				echo '<a href="javascript: void(0);" onclick="window.open(\''.$navigation_item['link'].'\',\'window_chat'.$_SESSION['_cid'].'\',config=\'height=\'+380+\', width=\'+625+\', left=2, top=2, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no\')" target="' . $navigation_item['target'] . '"';
+			if (strpos($navigation_item['link'], 'chat') !== false && api_get_course_setting('allow_open_chat_window', $course_id)) {
+				echo '<a href="javascript: void(0);" onclick="javascript: window.open(\''.$navigation_item['link'].'\',\'window_chat'.$_SESSION['_cid'].'\',config=\'height=\'+380+\', width=\'+625+\', left=2, top=2, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no\')" target="' . $navigation_item['target'] . '"';
 			} else {
 				echo '<a href="'.$navigation_item['link'].'" target="_top" ';
 			}
 
-			if (stristr($url_item['path'],$url_current['path']))
-			{
-				if(! isset($_GET['learnpath_id']) || strpos($url_item['query'],'learnpath_id='.$_GET['learnpath_id']) === 0)
-				{
+			if (stristr($url_item['path'], $url_current['path'])) {
+				if (!isset($_GET['learnpath_id']) || strpos($url_item['query'],'learnpath_id='.$_GET['learnpath_id']) === 0) {
 					echo ' id="here"';
 				}
 			}
 			echo ' title="'.$navigation_item['name'].'">';
-			if (api_get_setting('show_navigation_menu') != 'text')
-			{
+			if (api_get_setting('show_navigation_menu') != 'text') {
 				echo '<div align="left"><img src="'.api_get_path(WEB_IMG_PATH).$navigation_item['image'].'" alt="'.$navigation_item['name'].'"/></div>';
 			}
-			if (api_get_setting('show_navigation_menu') != 'icons')
-			{
+			if (api_get_setting('show_navigation_menu') != 'icons') {
 				echo $navigation_item['name'];
 			}
 			echo '</a>';
@@ -217,7 +196,7 @@ function show_navigation_menu()
 		?>
 		<script type="text/javascript">
 		/* <![CDATA[ */
-		if(readCookie('dokeos_menu_state') == 0)
+		if (readCookie('dokeos_menu_state') == 0)
 			swap_menu();
 		}
 		/* ]]> */
@@ -229,11 +208,10 @@ function show_navigation_menu()
 /**
  * Show a toolbar with shortcuts to the course tool
  */
-function show_navigation_tool_shortcuts($orientation = SHORTCUTS_HORIZONTAL)
-{
+function show_navigation_tool_shortcuts($orientation = SHORTCUTS_HORIZONTAL) {
 	$navigation_items = get_navigation_items(false);
 	foreach ($navigation_items as $key => $navigation_item) {
-		if (strpos($navigation_item['link'],'chat')!==false && api_get_course_setting('allow_open_chat_window')==true) {
+		if (strpos($navigation_item['link'],'chat') !== false && api_get_course_setting('allow_open_chat_window')) {
 	    	/*
 		  	echo '<a href="#" onclick="window.open(\''.$navigation_item['link'].'\',\'window_chat'.$_SESSION['_cid'].'\',config=\'height=\'+380+\', width=\'+625+\', left=2, top=2, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no\')" target="' . $navigation_item['target'] . '"';
 		  	*/
@@ -248,9 +226,8 @@ function show_navigation_tool_shortcuts($orientation = SHORTCUTS_HORIZONTAL)
 		echo ' target="_top" title="'.$navigation_item['name'].'">';
 		echo '<img src="'.api_get_path(WEB_IMG_PATH).$navigation_item['image'].'" alt="'.$navigation_item['name'].'"/>';
 		echo '</a>';
-		if($orientation == SHORTCUTS_VERTICAL){
+		if ($orientation == SHORTCUTS_VERTICAL) {
 			echo '<br />';
 		}
 	}
 }
-?>

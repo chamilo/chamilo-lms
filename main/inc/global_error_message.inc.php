@@ -1,14 +1,11 @@
 <?php
-/* For licensing terms, see /chamilo_license.txt */
+/* For licensing terms, see /license.txt */
 
 /**
- *==============================================================================
- * This script displays error messages on fatal errors
- * during initialization.
+ * This script displays error messages on fatal errors during initialization.
  *
- * @package dokeos.include
- * @author Ivan Tcholakov, 2009
- *==============================================================================
+ * @package chamilo.include
+ * @author Ivan Tcholakov, 2009-2010
  */
 
 $Organisation = '<a href="http://www.chamilo.org" target="_blank">Chamilo Homepage</a>';

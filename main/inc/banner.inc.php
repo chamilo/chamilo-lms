@@ -1,14 +1,14 @@
 <?php
-/* For licensing terms, see /chamilo_license.txt */
+/* For licensing terms, see /license.txt */
 
 /**
  *	This script contains the actual html code to display the "header"
- *	or "banner" on top of every Dokeos page.
+ *	or "banner" on top of every Chamilo page.
  *
  *	@package chamilo.include
  */
 
-require_once api_get_path(SYS_CODE_PATH).'/inc/lib/banner.lib.php';
+require_once api_get_path(LIBRARY_PATH).'banner.lib.php';
 
 $session_id     = api_get_session_id();
 $session_name   = api_get_session_name($my_session_id);
@@ -29,9 +29,9 @@ $session_name   = api_get_session_name($my_session_id);
 			?>
 		</div>
 <?php
-/*
-	Course title section
-*/
+
+/*	Course title section */
+
 if (!empty($_cid) and $_cid != -1 and isset($_course)) {
 	//Put the name of the course in the header
 ?>
@@ -63,18 +63,16 @@ if (!empty($_cid) and $_cid != -1 and isset($_course)) {
 } else {
 	echo '<div id="my_courses"></div>';
 }
-//not to let the header disappear if there's nothing on the left
+//Don't let the header disappear if there's nothing on the left
 echo '<div class="clear">&nbsp;</div>';
 
-/*
-	Plugins for banner section
-*/
+/*	Plugins for banner section */
+
 api_plugin('header');
 $web_course_path = api_get_path(WEB_COURSE_PATH);
 
-/*
-	External link section
-*/
+/*	External link section */
+
 if (isset($_course['extLink']) && $_course['extLink']['name'] != '') {
 	echo '<span class="extLinkSeparator"> / </span>';
 	if ($_course['extLink']['url'] != '') {
@@ -106,7 +104,6 @@ if ((api_get_setting('showonline', 'world') == 'true' AND !$_user['user_id']) OR
  	echo '<li>';
 	// Display the who's online of the platform
 	if ((api_get_setting('showonline', 'world') == 'true' AND !$_user['user_id']) OR (api_get_setting('showonline', 'users') == 'true' AND $_user['user_id'])) {
-		//echo '<a href="'.api_get_path(WEB_PATH).'whoisonline.php" target="_top">'.$number.'</a>';
 		echo '<a href="'.api_get_path(WEB_PATH).'whoisonline.php" target="_top">'.get_lang('UsersOnline').': '.$number.'</a>';
 	}
 
@@ -129,8 +126,8 @@ if (api_is_allowed_to_edit()) {
 	// Show help
 	?>
 	<li>|
-	<a href="#" onclick="MyWindow=window.open('<?php echo api_get_path(WEB_CODE_PATH).'help/help.php'; ?>?open=<?php echo $help; ?>','MyWindow','toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=620,height=600,left=200,top=20'); return false;">
-	<img src="<?php echo api_get_path(WEB_CODE_PATH); ?>img/khelpcenter.gif" style="vertical-align: middle;" alt="<?php echo get_lang('Help'); ?>"/>&nbsp;<?php echo get_lang('Help'); ?></li></a>
+	<a href="#" onclick="javascript: MyWindow=window.open('<?php echo api_get_path(WEB_CODE_PATH).'help/help.php'; ?>?open=<?php echo $help; ?>','MyWindow','toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=620,height=600,left=200,top=20'); return false;">
+	<img src="<?php echo api_get_path(WEB_IMG_PATH); ?>khelpcenter.gif" style="vertical-align: middle;" alt="<?php echo get_lang('Help'); ?>"/>&nbsp;<?php echo get_lang('Help'); ?></li></a>
 
 	<?php
 	}
@@ -143,12 +140,12 @@ if (api_is_allowed_to_edit()) {
 
 	<div id="header3">
 <?php
-/*
-	User section
-*/
+
+/*	User section */
+
 if ($_user['user_id']) {
 	$login = '';
-	if(api_is_anonymous()) {
+	if (api_is_anonymous()) {
 		$login = '('.get_lang('Anonymous').')';
 	} else {
 		$uinfo = api_get_user_info(api_get_user_id());
@@ -180,7 +177,7 @@ if ($_user['user_id'] && !api_is_anonymous()) {
 	// My Courses
 	if (api_get_setting('show_tabs', 'my_courses') == 'true') {
 		$navigation['mycourses'] = $possible_tabs['mycourses'];
-	} else{
+	} else {
 		$menu_navigation['mycourses'] = $possible_tabs['mycourses'];
 	}
 
@@ -209,13 +206,13 @@ if ($_user['user_id'] && !api_is_anonymous()) {
 
 	// Reporting
 	if (api_get_setting('show_tabs', 'reporting') == 'true') {
-		if(api_is_allowed_to_create_course() || $_user['status'] == DRH) {
+		if (api_is_allowed_to_create_course() || $_user['status'] == DRH) {
 			$navigation['session_my_space'] = $possible_tabs['session_my_space'];
 		} else {
 			$navigation['session_my_space'] = $possible_tabs['session_my_progress'];
 		}
 	} else {
-		if(api_is_allowed_to_create_course() || $_user['status'] == DRH) {
+		if (api_is_allowed_to_create_course() || $_user['status'] == DRH) {
 			$menu_navigation['session_my_space'] = $possible_tabs['session_my_space'];
 		} else {
 			$menu_navigation['session_my_space'] = $possible_tabs['session_my_progress'];
@@ -331,8 +328,8 @@ if (api_get_self() != '/main/admin/configure_homepage.php') {
 		$enreg = trim($enreg);
 		if (!empty($enreg)) {
 			$edit_link = '<a href="'.api_get_self().'?action=edit_tabs&amp;link_index='.$key.'" ><span>'.Display::return_icon('edit.gif', get_lang('Edit')).'</span></a>';
-			$delete_link = '<a href="'.api_get_self().'?action=delete_tabs&amp;link_index='.$key.'"  onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset)).'\')) return false;"><span>'.Display::return_icon('delete.gif', get_lang('Delete')).'</span></a>';
-			$tab_string = str_replace(array('href="'.api_get_path(WEB_PATH).'index.php?include=','</li>'),array('href="'.api_get_path(WEB_CODE_PATH).'admin/'.basename(api_get_self()).'?action=open_link&link=',''.$edit_link.$delete_link.'</li>'),$enreg);
+			$delete_link = '<a href="'.api_get_self().'?action=delete_tabs&amp;link_index='.$key.'"  onclick="javascript: if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES)).'\')) return false;"><span>'.Display::return_icon('delete.gif', get_lang('Delete')).'</span></a>';
+			$tab_string = str_replace(array('href="'.api_get_path(WEB_PATH).'index.php?include=', '</li>'), array('href="'.api_get_path(WEB_CODE_PATH).'admin/'.basename(api_get_self()).'?action=open_link&link=', $edit_link.$delete_link.'</li>'), $enreg);
 			echo $tab_string;
 		}
 	}
@@ -352,7 +349,7 @@ $navigation = array();
 // part 1: Course Homepage. If we are in a course then the first breadcrumb is a link to the course homepage
 // hide_course_breadcrumb the parameter has been added to hide the name of the course, that appeared in the default $interbreadcrumb
 $my_session_name = is_null($session_name) ? '' : '&nbsp;('.$session_name.')';
-if (isset ($_cid) and $_cid != -1 and isset($_course) and !isset($_GET['hide_course_breadcrumb'])) {
+if (isset($_cid) and $_cid != -1 and isset($_course) and !isset($_GET['hide_course_breadcrumb'])) {
 	$navigation_item['url'] = $web_course_path . $_course['path'].'/index.php'.(!empty($session_id) ? '?id_session='.$session_id : '');
 	switch (api_get_setting('breadcrumbs_course_homepage')) {
 		case 'get_lang':
@@ -409,7 +406,7 @@ if (api_get_setting('show_toolshortcuts') == 'true') {
   	echo '</div>';
 }
 
-if (isset ($dokeos_database_connection)) {
+if (isset($dokeos_database_connection)) {
 	// connect to the main database.
 	// if single database, don't pefix table names with the main database name in SQL queries
 	// (ex. SELECT * FROM `table`)
@@ -433,9 +430,8 @@ if (!empty($header_hide_main_div) && $header_hide_main_div === true) {
 <?php
 }
 
-/*
-	"call for chat" module section
-*/
+/*	"call for chat" module section */
+
 $chat = strpos(api_get_self(), 'chat_banner.php');
 if (!$chat) {
 	include_once api_get_path(LIBRARY_PATH).'online.inc.php';
@@ -446,9 +442,8 @@ if (!$chat) {
 	}
 }
 
-/*
-	Navigation menu section
-*/
+/*	Navigation menu section */
+
 if (api_get_setting('show_navigation_menu') != 'false' && api_get_setting('show_navigation_menu') != 'icons') {
 	Display::show_course_navigation_menu($_GET['isHidden']);
 	$course_id = api_get_course_id();

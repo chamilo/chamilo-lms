@@ -52,13 +52,18 @@ $content_type = '';
 if (in_array(strtolower($extension), array('xml','csv')) && (api_is_platform_admin(true) || api_is_drh())) {
 	$content_type = 'application/force-download';
 }
-elseif (strtolower($extension) == 'zip' && $_cid && $is_courseAdmin) {
+elseif (strtolower($extension) == 'zip' && $_cid) {
 	$content_type = 'application/force-download';
 }
 
 if (empty($content_type)) {
 	api_not_allowed(true);
 }
+
+
+/*
+===============================================================================================
+*/
 
 header('Expires: Wed, 01 Jan 1990 00:00:00 GMT');
 header('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT');

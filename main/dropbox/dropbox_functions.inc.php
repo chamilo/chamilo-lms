@@ -1217,18 +1217,27 @@ function cleanup_temp_dropbox() {
 }
 
 /**
-* @desc generates the contents of a html file that gives an overview of all the files in the zip file.
-*		This is to know the information of the files that are inside the zip file (who send it, the comment, ...)
-* @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
-* @version march 2006
-*/
+ * @desc Generates the contents of a html file that gives an overview of all the files in the zip file.
+ *		This is to know the information of the files that are inside the zip file (who send it, the comment, ...)
+ * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, March 2006
+ * @author Ivan Tcholakov, 2010, code for html metadata has been added.
+ */
 function generate_html_overview($files, $dont_show_columns = array(), $make_link = array()) {
-	$return = "<html>\n<head>\n\t<title>".get_lang('OverviewOfFilesInThisZip')."</title>\n</head>";
-	$return .= "\n\n<body>\n<table border=\"1px\">";
+	$return = '<!DOCTYPE html'."\n";
+	$return .= "\t".'PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"'."\n";
+	$return .= "\t".'"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">'."\n";
+	$return .= '<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="'.api_get_language_isocode().'" lang="'.api_get_language_isocode().'">'."\n";
+
+	$return .= "<head>\n\t<title>".get_lang('OverviewOfFilesInThisZip')."</title>\n";
+	$return .= "\t".'<meta http-equiv="Content-Type" content="text/html; charset='.api_get_system_encoding().'" />'."\n";
+	$return .= "</head>\n\n";
+	$return .= '<body dir="'.api_get_text_direction().'">'."\n\n";
+	$return .= "<table border=\"1px\">\n";
 
 	$counter = 0;
 	foreach ($files as $key => $value) {
-		// We add the header
+
+		// Adding the header.
 		if ($counter == 0) {
 			$columns_array = array_keys($value);
 			$return .= "\n<tr>";
@@ -1238,11 +1247,11 @@ function generate_html_overview($files, $dont_show_columns = array(), $make_link
 				}
 				$column[] = $columns_array_value;
 			}
-			$return .= "</tr>\n";
+			$return .= "\n</tr>\n";
 		}
 		$counter++;
 
-		// We add the content
+		// Adding the content.
 		$return .= "\n<tr>";
 		foreach ($column as $column_key => $column_value) {
 			if (!in_array($column_value,$dont_show_columns)) {
@@ -1255,9 +1264,7 @@ function generate_html_overview($files, $dont_show_columns = array(), $make_link
 				$return .= "</td>";
 			}
 		}
-		$return .= "</tr>\n";
-
-
+		$return .= "\n</tr>\n";
 	}
 	$return .= "\n</table>\n\n</body>";
 	$return .= "\n</html>";

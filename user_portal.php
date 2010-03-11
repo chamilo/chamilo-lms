@@ -818,12 +818,11 @@ function get_logged_user_course_html($course, $session_id = 0, $class='courses')
 	if (api_get_setting('display_coursecode_in_courselist') == 'true' || api_get_setting('display_teacher_in_courselist') == 'true') {
 		$result .= '<br />';
 	}
+	
 	if (api_get_setting('display_coursecode_in_courselist') == 'true') {
 		$result .= $course_display_code;
-	}
-	if (api_get_setting('display_coursecode_in_courselist') == 'true' && api_get_setting('display_teacher_in_courselist') == 'true') {
-		$result .= ' &ndash; ';
-	}
+	}	
+	
 	if (api_get_setting('display_teacher_in_courselist') == 'true') {
 		if (api_get_setting('use_session_mode')=='true' && !$nosession) {
 			$coachs_course = api_get_coachs_from_course($my_course['id_session'],$course['code']);
@@ -839,7 +838,12 @@ function get_logged_user_course_html($course, $session_id = 0, $class='courses')
 			}
 
 			if (($s_course_status == 5 && !empty($my_course['id_session'])) || ($is_coach && $s_course_status != 1)) {
-				$result .= get_lang('Coachs').': '.implode(', ',$course_coachs);
+				if (is_array($course_coachs) && count($course_coachs)> 0 ) {
+					if (api_get_setting('display_coursecode_in_courselist') == 'true' && api_get_setting('display_teacher_in_courselist') == 'true') {
+						$result .= ' &ndash; ';
+					}					
+					$result .= get_lang('Coachs').': '.implode(', ',$course_coachs);					
+				}
 			}
 
 

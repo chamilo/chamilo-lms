@@ -208,7 +208,7 @@ class learnpathItem {
     	if($this->debug>0){error_log('New LP - In learnpath_item::delete() for item '.$this->db_id,0);}
     	$lp_item_view = Database::get_course_table(TABLE_LP_ITEM_VIEW);
     	$lp_item = Database::get_course_table(TABLE_LP_ITEM);
-    	$sql_del_view = "DELETE FROM $lp_item_view WHERE item_id = ".$this->db_id;
+    	$sql_del_view = "DELETE FROM $lp_item_view WHERE lp_item_id = ".$this->db_id;
 		//error_log('New LP - Deleting from lp_item_view: '.$sql_del_view,0);
 		$res_del_view = Database::query($sql_del_view);
 

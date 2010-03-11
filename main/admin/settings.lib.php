@@ -6,9 +6,11 @@
 ==============================================================================
 * Library of the settings.php file
 *
+* @author Julio Montoya <gugli100@gmail.com>
 * @author Guillaume Viguier <guillaume@viguierjust.com>
+* 
 * @since Chamilo 1.8.7
-* @package admin
+* @package chamilo.admin
 ==============================================================================
 */
 
@@ -302,7 +304,7 @@ function handle_stylesheets()
 					} else {
 						$selected = '';
 					}
-					$show_name=get_lang(str_replace(' ','', ucwords(str_replace('_',' ', $style_dir))), '');
+					$show_name=ucwords(str_replace('_',' ', $style_dir));
 
 					if ($is_style_changeable) {
 						$list_of_styles[$style_dir] = "<option  value=\"".$style_dir."\" ".$selected." /> $show_name </option>";

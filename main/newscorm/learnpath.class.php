@@ -2760,10 +2760,12 @@ class learnpath {
 			if ($this->get_lp_session_id()==api_get_session_id()) {
 				$html .= '<div class="actions_lp">';
 				if ($display_action_links_with_icons) {
+					$html .= '<a href="lp_controller.php?' . api_get_cidreq() . '">'. get_lang('CourseList') . '</a>';
 					$html .= "<a href='lp_controller.php?" . api_get_cidreq() . "&amp;action=build&amp;lp_id=" . $this->lp_id . "' target='_parent'>" . Display :: return_icon('learnpath_build.gif', get_lang('Build')) . ' ' . get_lang('Build') . "</a>";
 					$html .= "<a href='lp_controller.php?" . api_get_cidreq() . "&amp;action=admin_view&amp;lp_id=" . $this->lp_id . "' target='_parent'>" . Display :: return_icon('learnpath_organize.gif', get_lang('BasicOverview')) . ' ' . get_lang('BasicOverview') . "</a>";
 					$html .= '<span>' . Display :: return_icon('learnpath_view_na.gif', get_lang("Display")) . ' <b>' . get_lang("Display") . '</b></span>';
 				} else {
+					$html .= '<a href="lp_controller.php?' . api_get_cidreq() . '">'. get_lang('CourseList') . '</a>';
 					$html .= "<a href='lp_controller.php?" . api_get_cidreq() . "&amp;gradebook=$gradebook&amp;action=build&amp;lp_id=" . $this->lp_id . "' target='_parent'>" . get_lang('Build') . "</a>";
 					$html .= "<a href='lp_controller.php?" . api_get_cidreq() . "&amp;action=admin_view&amp;lp_id=" . $this->lp_id . "' target='_parent'>" . get_lang('BasicOverview') . "</a>";
 					$html .= '<span><b>' . get_lang('Display') . '</b></span>';

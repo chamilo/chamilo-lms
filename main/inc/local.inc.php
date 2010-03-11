@@ -769,18 +769,8 @@ if (isset($cidReset) && $cidReset) { // course session data refresh requested or
             api_session_register('_course');
             //@TODO real_cid should be cid, for working with numeric course id
             api_session_register('_real_cid');
-
-			if ($_configuration['tracking_enabled'] && !isset($_SESSION['login_as'])) {
-	            //We add a new record in the course tracking table
-	            $course_tracking_table = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
-				$time = api_get_datetime();
-		        $sql="INSERT INTO $course_tracking_table(course_code, user_id, login_course_date, logout_course_date, counter, session_id)" .
-							"VALUES('".$_course['sysCode']."', '".$_user['user_id']."', '$time', '$time', '1', ".intval($_SESSION['id_session']).")";
-
-				Database::query($sql);
-			}
-
-			// if a session id has been given in url, we store the session
+            
+            // if a session id has been given in url, we store the session
 			if (api_get_setting('use_session_mode')=='true') {
 				// Database Table Definitions
 				$tbl_session 				= Database::get_main_table(TABLE_MAIN_SESSION);
@@ -798,6 +788,16 @@ if (isset($cidReset) && $cidReset) { // course session data refresh requested or
 					api_session_unregister('id_session');
 				}
 			}
+			
+			if ($_configuration['tracking_enabled'] && !isset($_SESSION['login_as'])) {
+	            //We add a new record in the course tracking table
+	            $course_tracking_table = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
+				$time = api_get_datetime();
+		        $sql="INSERT INTO $course_tracking_table(course_code, user_id, login_course_date, logout_course_date, counter, session_id)" .
+					 "VALUES('".$_course['sysCode']."', '".$_user['user_id']."', '$time', '$time', '1', ".api_get_session_id().")";				
+				Database::query($sql);
+			}
+			
         } else {
             //exit("WARNING UNDEFINED CID !! ");
             header('location:'.api_get_path(WEB_PATH));
@@ -826,52 +826,45 @@ if (isset($cidReset) && $cidReset) { // course session data refresh requested or
 		}
 
 		if ($_configuration['tracking_enabled'] && !isset($_SESSION['login_as'])) {
-       	    $course_tracking_table = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
-            $time = api_get_datetime();
-	   		//We select the last record for the current course in the course tracking table
+			
+			$course_tracking_table = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
+   			if (isset($_configuration['session_lifetime'])) {
+   				$session_lifetime=$_configuration['session_lifetime'];
+			} else {
+				$session_lifetime=3600;
+  			}
 
-	   		$sql="SELECT course_access_id, logout_course_date FROM $course_tracking_table WHERE user_id=".intval($_user ['user_id'])." ORDER BY login_course_date DESC LIMIT 0,1";
-	   		$result=Database::query($sql);
-	   		$update_course_access = false;
-	   		$i_course_access_id = array();
-	   		$timeout_course_access = 0;
-	   		if (Database::num_rows($result)>0) {
-	   			$i_course_access_id = Database::fetch_array($result);
-	   			// calculate time spent between last logout course date and current date
-	   			$timeout_course_access = (time() - strtotime($i_course_access_id['logout_course_date']));
-	   			$update_course_access = true;
-	   		}
-
-	   		if ($update_course_access && $timeout_course_access < 1800) {
-	   			// if time spent between last logout course date and current date is less 30 minutes update the logout_course_date
-				$sql="UPDATE $course_tracking_table
-		   				SET logout_course_date = '$time', counter = counter+1
-						WHERE course_access_id=".intval($i_course_access_id['course_access_id']);
-				Database::query($sql);
-	   		} else {
-	   			$sql="INSERT INTO $course_tracking_table(course_code, user_id, login_course_date, logout_course_date, counter)
-						VALUES('".$_course['sysCode']."', '".$_user['user_id']."', '$time', '$time', '1')";
-				Database::query($sql);
-	   		}
-
-			/*
-	   		$result=Database::query($sql);
-	   		if (Database::num_rows($result)>0 ) {
-		   		$i_course_access_id = Database::fetch_array($result);
-		   		//We update the course tracking table
-		   		$sql="UPDATE $course_tracking_table " .
-		   				"SET logout_course_date = '$time', " .
-		   					"counter = counter+1 " .
-						"WHERE course_access_id=".intval($i_course_access_id['course_access_id']);
-
-				Database::query($sql);
-	   		} else {
-	            $sql="INSERT INTO $course_tracking_table(course_code, user_id, login_course_date, logout_course_date, counter)" .
-						"VALUES('".$_course['sysCode']."', '".$_user['user_id']."', '$time', '$time', '1')";
-				Database::query($sql);
-	   		}
-	   		*/
-		}
+			$course_code=$_course['sysCode'];			
+			$time = api_get_datetime();			
+			
+			//We select the last record for the current course in the course tracking table			
+			// But only if the login date is < thant now + max_life_time		
+			
+			$sql="SELECT course_access_id FROM $course_tracking_table 		
+			
+				WHERE user_id=".intval($_user ['user_id'])."
+						AND course_code='$course_code'					
+						AND login_course_date > now() - INTERVAL $session_lifetime SECOND 
+						ORDER BY login_course_date DESC LIMIT 0,1";
+				$result=Database::query($sql,__FILE__,__LINE__);
+						
+			if (Database::num_rows($result)>0) {			
+							
+				$i_course_access_id = Database::result($result,0,0);
+				//We update the course tracking table	
+			
+				$sql="UPDATE $course_tracking_table " .
+						"SET logout_course_date = '$time', " .
+						"counter = counter+1 " .
+					"WHERE course_access_id=".intval($i_course_access_id);
+				Database::query($sql,__FILE__,__LINE__);
+			} else {
+				$sql="INSERT INTO $course_tracking_table
+						(course_code, user_id, login_course_date, logout_course_date, counter)" .
+					"VALUES('".$course_code."', '".$_user['user_id']."', '$time', '$time', '1')";
+				Database::query($sql,__FILE__,__LINE__);
+			}
+   	 	}   
 	}
 }
 

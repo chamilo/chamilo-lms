@@ -1,4 +1,6 @@
 <?php
+/* For licensing terms, see /license.txt */
+
 /**
  * Defines the scorm class, which is meant to contain the scorm items (nuclear elements)
  * @package dokeos.learnpath.scorm
@@ -6,12 +8,13 @@
  */
 /**
  * Defines the "scorm" child of class "learnpath"
- * @package dokeos.learnpath
+ * @package chamilo.learnpath
  */
 require_once('scormItem.class.php');
 require_once('scormMetadata.class.php');
 require_once('scormOrganization.class.php');
 require_once('scormResource.class.php');
+
 class scorm extends learnpath {
 	var $manifest = array();
 	var $resources = array();
@@ -559,7 +562,10 @@ class scorm extends learnpath {
      function import_package($zip_file_info,$current_dir = '')
      {
      	if($this->debug>0){error_log('In scorm::import_package('.print_r($zip_file_info,true).',"'.$current_dir.'") method',0);}
-     	$maxFilledSpace = 1000000000;
+     	require_once(api_get_path(LIBRARY_PATH).'document.lib.php');
+     	$maxFilledSpace = DocumentManager :: get_course_quota();
+     	//$maxFilledSpace = 1000000000;
+     	
      	$zip_file_path = $zip_file_info['tmp_name'];
      	$zip_file_name = $zip_file_info['name'];
      	if($this->debug>1){error_log('New LP - import_package() - zip file path = '.$zip_file_path.', zip file name = '.$zip_file_name,0);}

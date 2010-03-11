@@ -4024,3 +4024,20 @@ div.attendance-calendar-add div.row div.formw,div.attendance-calendar-edit div.r
 #columns ul, #columns ol {margin:0; padding:0; list-style:none; border:none;}
 
 
+
+
+/* To add in 1.8.7*/
+
+.session_box_title span {
+	font-size: 130%;
+	font-weight: bold;	
+}
+
+#session_category_title {
+	font-size: 140%;
+	font-weight: bold;
+	padding: 2px 0px 5px 5px;	
+
+}
+
+/*           */  

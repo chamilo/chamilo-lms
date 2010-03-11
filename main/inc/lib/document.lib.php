@@ -26,10 +26,8 @@ $baseServDir = api_get_path(SYS_PATH);
 $baseServUrl = $_configuration['url_append'].'/';
 $baseWorkDir = $sys_course_path.(!empty($courseDir) ? $courseDir : '');
 
-/*
-		DocumentManager CLASS
-		the class and its functions
-*/
+/*		DocumentManager CLASS
+		the class and its functions */
 
 class DocumentManager {
 
@@ -41,7 +39,7 @@ class DocumentManager {
 	 * @return the document folder quuta of the current course, in bytes
 	 * @todo eliminate globals
 	 */
-	public static function get_course_quota () {
+	public static function get_course_quota() {
 		global $_course, $maxFilledSpace;
 
 		$course_code = Database::escape_string($_course['sysCode']);
@@ -70,7 +68,7 @@ class DocumentManager {
 	 *	@author Bert Vanderkimpen
 	 *
 	 */
-	public static function file_get_mime_type ($filename) {
+	public static function file_get_mime_type($filename) {
 		// All MIME types in an array (from 1.6, this is the authorative source)
 		// Please, keep this alphabetical if you add something to this list!
 		$mime_types = array(
@@ -245,7 +243,7 @@ class DocumentManager {
 
 		//$filename will be an array if a . was found
 		if (is_array($extension)) {
-			$extension = (strtolower($extension[sizeof($extension) - 1]));
+			$extension = strtolower($extension[sizeof($extension) - 1]);
 		}
 		//file without extension
 		else {
@@ -253,7 +251,7 @@ class DocumentManager {
 		}
 
 		//if the extension is found, return the content type
-		if (isset ($mime_types[$extension])) {
+		if (isset($mime_types[$extension])) {
 			return $mime_types[$extension];
 		}
 		//else return octet-stream
@@ -449,7 +447,7 @@ class DocumentManager {
 	 * @param boolean $can_see_invisible
 	 * @return array with all document data
 	 */
-	public static function get_all_document_data ($_course, $path = '/', $to_group_id = 0, $to_user_id = NULL, $can_see_invisible = false) {
+	public static function get_all_document_data($_course, $path = '/', $to_group_id = 0, $to_user_id = NULL, $can_see_invisible = false) {
 		$TABLE_ITEMPROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY, $_course['dbName']);
 		$TABLE_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT, $_course['dbName']);
 		$TABLE_COURSE = Database::get_main_table(TABLE_MAIN_COURSE);
@@ -786,12 +784,12 @@ class DocumentManager {
 										//Change path of subfolders and documents in database
 										$old_item_path = $deleted_items['path'];
 										$new_item_path = $new_path.substr($old_item_path, strlen($path));
-										/*/
-										 * trying to fix this bug FS#2681
+										/*
+										// Trying to fix this bug FS#2681
 										echo $base_work_dir.$old_item_path;
-										echo "<br>";
+										echo "<br />";
 										echo $base_work_dir.$new_item_path;
-										echo "<br>";echo "<br>";
+										echo "<br /><br />";
 										rename($base_work_dir.$old_item_path, $base_work_dir.$new_item_path);
 										*/
 										self::unset_document_as_template($deleted_items['id'], api_get_course_id(), api_get_user_id());
@@ -1106,7 +1104,7 @@ class DocumentManager {
 														}
 													} else {
 														//no starting '/', making it relative to current document's path
-														if(substr($second_part, 0, 2) == './') {
+														if (substr($second_part, 0, 2) == './') {
 															$second_part = substr($second_part, 2);
 														}
 														$files_list[] = array($second_part, 'local', 'rel');
@@ -1124,7 +1122,7 @@ class DocumentManager {
 												//leave that second part behind now
 												$source = substr($source, 0, strpos($source, '?'));
 												if (strpos($source, '://') > 0) {
-													if (strpos($source,api_get_path(WEB_PATH)) !== false) {
+													if (strpos($source, api_get_path(WEB_PATH)) !== false) {
 														//we found the current portal url
 														$files_list[] = array($source, 'local', 'url');
 														$in_files_list[] = DocumentManager::get_resources_from_source_html($source, true, TOOL_DOCUMENT, $recursivity+1);
@@ -1168,7 +1166,7 @@ class DocumentManager {
 														$new_abs_path = realpath($dir.$source);
 														$in_files_list[] = DocumentManager::get_resources_from_source_html($new_abs_path, true, TOOL_DOCUMENT, $recursivity + 1);
 														if (count($in_files_list) > 0) {
-															$files_list = array_merge($files_list,$in_files_list);
+															$files_list = array_merge($files_list, $in_files_list);
 														}
 													}
 												}
@@ -1176,7 +1174,7 @@ class DocumentManager {
 											//found some protocol there
 											if (strpos($source, api_get_path(WEB_PATH)) !== false) {
 												//we found the current portal url
-												$files_list[] = array($source,'local','url');
+												$files_list[] = array($source, 'local', 'url');
 												$in_files_list[] = DocumentManager::get_resources_from_source_html($source, true, TOOL_DOCUMENT, $recursivity + 1);
 												if (count($in_files_list) > 0) {
 													$files_list = array_merge($files_list, $in_files_list);
@@ -1290,7 +1288,7 @@ class DocumentManager {
 		   );
 
 		} catch (Exception $e) {
-			error_log('Caught exception: '. $e->getMessage(),0) ;
+			error_log('Caught exception: '. $e->getMessage(), 0) ;
 		}
 		if ($res) {
 			for ($i = 0; $i < count($regs[1]); $i++) {

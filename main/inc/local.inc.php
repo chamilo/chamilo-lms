@@ -769,18 +769,8 @@ if (isset($cidReset) && $cidReset) { // course session data refresh requested or
             api_session_register('_course');
             //@TODO real_cid should be cid, for working with numeric course id
             api_session_register('_real_cid');
-
-			if ($_configuration['tracking_enabled'] && !isset($_SESSION['login_as'])) {
-	            //We add a new record in the course tracking table
-	            $course_tracking_table = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
-				$time = api_get_datetime();
-		        $sql="INSERT INTO $course_tracking_table(course_code, user_id, login_course_date, logout_course_date, counter, session_id)" .
-							"VALUES('".$_course['sysCode']."', '".$_user['user_id']."', '$time', '$time', '1', ".intval($_SESSION['id_session']).")";
-
-				Database::query($sql);
-			}
-
-			// if a session id has been given in url, we store the session
+            
+            // if a session id has been given in url, we store the session
 			if (api_get_setting('use_session_mode')=='true') {
 				// Database Table Definitions
 				$tbl_session 				= Database::get_main_table(TABLE_MAIN_SESSION);
@@ -798,6 +788,16 @@ if (isset($cidReset) && $cidReset) { // course session data refresh requested or
 					api_session_unregister('id_session');
 				}
 			}
+			
+			if ($_configuration['tracking_enabled'] && !isset($_SESSION['login_as'])) {
+	            //We add a new record in the course tracking table
+	            $course_tracking_table = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
+				$time = api_get_datetime();
+		        $sql="INSERT INTO $course_tracking_table(course_code, user_id, login_course_date, logout_course_date, counter, session_id)" .
+					 "VALUES('".$_course['sysCode']."', '".$_user['user_id']."', '$time', '$time', '1', ".api_get_session_id().")";				
+				Database::query($sql);
+			}
+			
         } else {
             //exit("WARNING UNDEFINED CID !! ");
             header('location:'.api_get_path(WEB_PATH));

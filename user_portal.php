@@ -1391,7 +1391,13 @@ if ( is_array($courses_tree) ) {
 						$html_sessions .= '<ul class="session_box" id="session_'.$session['details']['id'].'">';
 						$html_sessions .= '<li class="session_box_title" id="session_'.$session['details']['id'].'">';
 						$html_sessions .= Display::return_icon('div_hide.gif', get_lang('Expand').'/'.get_lang('Hide'), array('align' => 'absmiddle', 'id' => 'session_img_'.$session['details']['id'])) . ' ';
-						$html_sessions .= get_lang('SessionName') . ': ' . $s['title']. ' | '.(!empty($s['coach'])?$s['coach'].' - ':'').$s['dates'];
+						
+						$html_sessions .=  '<span>' . $s['title']. ' </span> ';
+						if (api_is_platform_admin()) {						
+							$html_sessions .=  '<a href="'.api_get_path(WEB_CODE_PATH).'admin/resume_session.php?id_session='.$session['details']['id'].'">'.Display::return_icon('edit.gif', get_lang('Edit'), array('align' => 'absmiddle')).'</a>';
+						}
+												
+						$html_sessions .= ' <br /> '.(!empty($s['coach'])?$s['coach'].' - ':'').$s['dates'];
 						$html_sessions .= '</li>';
 						$html_sessions .= $html_courses_session;
 						$html_sessions .= '</ul>';
@@ -1400,7 +1406,14 @@ if ( is_array($courses_tree) ) {
 
 				if ($count_courses_session > 0) {
 					echo '<div class="session_category" id="session_category_'.$category['details']['id'].'" style="background-color:#fbfbfb; border:1px solid #dddddd; padding:5px; margin-top: 10px;">';
-					echo '<div class="session_category_title_box" id="session_category_title_box_'.$category['details']['id'].'" style="font-size:larger; color: #555555;">'. Display::return_icon('div_hide.gif', get_lang('Expand').'/'.get_lang('Hide'), array('align' => 'absmiddle', 'id' => 'category_img_'.$category['details']['id'])) . ' ' . get_lang('SessionCategory') . ': ' . $category['details']['name'].'  -  '.get_lang('From').' '.$category['details']['date_start'].' '.get_lang('Until').' '.$category['details']['date_end'].'</div>';
+					echo '<div class="session_category_title_box" id="session_category_title_box_'.$category['details']['id'].'" style="color: #555555;">';
+					echo Display::return_icon('div_hide.gif', get_lang('Expand').'/'.get_lang('Hide'), array('align' => 'absmiddle', 'id' => 'category_img_'.$category['details']['id']));
+					
+					echo Display::return_icon('folder_document.gif', get_lang('algo'));
+					echo '<span id="session_category_title">';
+						echo $category['details']['name'];
+					echo '</span>';
+					echo '<br / >'.get_lang('From').' '.$category['details']['date_start'].' '.get_lang('Until').' '.$category['details']['date_end'].'</div>';
 					echo $html_sessions;
 					echo '</div>';
 				}

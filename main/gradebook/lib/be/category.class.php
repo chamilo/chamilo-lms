@@ -1,33 +1,10 @@
 <?php
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2008 Dokeos Latinoamerica SAC
-	Copyright (c) 2006 Dokeos SPRL
-	Copyright (c) 2006 Ghent University (UGent)
-	Copyright (c) various contributors
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
-	Mail: info@dokeos.com
-==============================================================================
-*/
+/* For licensing terms, see /license.txt */
 /**
  * Defines a gradebook Category object
- * @author Bert Stepp�, Stijn Konings
- * @author Isaac flores, <florespaz@bidsoftperu.com>
- * @package dokeos.gradebook
+ * @package chamilo.gradebook
  */
+ 
 class Category implements GradebookItem
 {
 
@@ -1025,7 +1002,7 @@ class Category implements GradebookItem
 		}
 
 		// 1 student
- 		if (isset($stud_id)) {
+		if (isset($stud_id) && !empty($stud_id)) {
 			// special case: this is the root
 			if ($this->id == 0) {
 				$evals = Evaluation::get_evaluations_with_result_for_student(0,$stud_id);

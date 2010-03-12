@@ -154,7 +154,7 @@ if (!empty($_GET['gradebook']) && $_GET['gradebook']=='view' ) {
 if (!empty($gradebook) && $gradebook=='view') {
 	$interbreadcrumb[] = array (
 		'url' => '../gradebook/' . $_SESSION['gradebook_dest'],
-		'name' => get_lang('Gradebook')
+		'name' => get_lang('ToolGradebook')
 	);
 }
 $interbreadcrumb[]= array ("url"=>"lp_controller.php?action=list", "name"=> get_lang("_learning_path"));

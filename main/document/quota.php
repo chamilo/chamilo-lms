@@ -45,7 +45,7 @@ $courseDir   = $_course['path']."/document";
 $maxFilledSpace = DEFAULT_DOCUMENT_QUOTA;
 
 // breadcrumbs
-$interbreadcrumb[]=array("url" => "document.php","name" => get_lang('Document'));
+$interbreadcrumb[]=array("url" => "document.php","name" => get_lang('ToolDocument'));
 
 // title of the page
 $nameTools = get_lang("DocumentQuota");

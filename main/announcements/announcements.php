@@ -28,7 +28,7 @@ $use_anonymous = true;
 require_once '../inc/global.inc.php';
 $this_section=SECTION_COURSES;
 
-$nameTools = get_lang('Announcement');
+$nameTools = get_lang('ToolAnnouncement');
 
 
 //session
@@ -285,7 +285,7 @@ if (!empty($_SESSION['toolgroup'])){
 		$interbreadcrumb[] = array ("url" => "../survey/survey_list.php?cidReq=$cidReq", "name" => get_lang('Survey'));
 		$nameTools = get_lang('PublishSurvey');
 	} else {
-		$nameTools = get_lang('Announcement');
+		$nameTools = get_lang('ToolAnnouncement');
 		$nameTools12 = get_lang('PublishSurvey');
 	}
 }

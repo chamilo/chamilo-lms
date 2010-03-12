@@ -91,7 +91,7 @@ if (isset($_GET['isStudentView'])) {
 	if ( (isset($_GET['selectcat']) && $_GET['selectcat']>0) && (isset($_SESSION['studentview']) && $_SESSION['studentview']=='studentview') ) {
 		$interbreadcrumb[]= array (
 		'url' => 'index.php'.'?selectcat=0&amp;isStudentView='.$_GET['isStudentView'],
-		'name' => get_lang('Gradebook')
+		'name' => get_lang('ToolGradebook')
 		);
 	}
 }
@@ -478,24 +478,24 @@ if (!isset($_GET['exportpdf']) and !isset($_GET['export_certificate'])) {
 	if (isset ($_GET['studentoverview'])) {
 		$interbreadcrumb[]= array (
 			'url' => $_SESSION['gradebook_dest'].'?selectcat=' . Security::remove_XSS($_GET['selectcat']),
-			'name' => get_lang('Gradebook')
+			'name' => get_lang('ToolGradebook')
 		);
 		Display :: display_header(get_lang('FlatView'));
 	} elseif (isset ($_GET['search'])) {
 		$interbreadcrumb[]= array (
 			'url' => $_SESSION['gradebook_dest'].'?selectcat=' . Security::remove_XSS($_GET['selectcat']),
-			'name' => get_lang('Gradebook')
+			'name' => get_lang('ToolGradebook')
 		);
 		Display :: display_header(get_lang('SearchResults'));
 	} elseif(isset ($_GET['selectcat'])) {
 		$interbreadcrumb[]= array (
 			'url' => $_SESSION['gradebook_dest'],
-			'name' => get_lang('Gradebook')
+			'name' => get_lang('ToolGradebook')
 		);
 
 		Display :: display_header('');
 	} else {
-		Display :: display_header(get_lang('Gradebook'));
+		Display :: display_header(get_lang('ToolGradebook'));
 		/*if ( ($_SESSION['studentview']=='studentview') || (isset($_GET['isStudentView']) && $_GET['isStudentView']=='true') ) {
 			$cats = Category :: load (0, null, null, null, null, null, false);
 			$allcat= $cats[0]->get_subcategories($stud_id, $course_code, $session_id);

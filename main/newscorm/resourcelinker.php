@@ -388,7 +388,7 @@ if (isset($_SESSION['gradebook'])){
 if (!empty($gradebook) && $gradebook=='view') {
 	$interbreadcrumb[]= array (
 			'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
-			'name' => get_lang('Gradebook')
+			'name' => get_lang('ToolGradebook')
 		);
 }
 
@@ -556,7 +556,7 @@ while ($row=Database::fetch_array($result_select_active))
         {
         ?>
         <tr>
-          <td><?php echo "<a href=\"".api_get_self()."?content=Document&action=$action&id=$id&lp_id=$learnpath_id&parent_item_id=$chapter_id&source_forum=$source_forum&originalresource=no\">".get_lang('Document')."</a>"; ?></td>
+          <td><?php echo "<a href=\"".api_get_self()."?content=Document&action=$action&id=$id&lp_id=$learnpath_id&parent_item_id=$chapter_id&source_forum=$source_forum&originalresource=no\">".get_lang('Documents')."</a>"; ?></td>
         </tr>
         <?php
         }
@@ -588,7 +588,7 @@ while ($row=Database::fetch_array($result_select_active))
         {
         ?>
         <tr>
-          <td><?php echo "<a href=\"".api_get_self()."?content=Link&action=$action&id=$id&lp_id=$learnpath_id&parent_item_id=$chapter_id&source_forum=$source_forum&originalresource=no\">".get_lang('Link')."</a>"; ?></td>
+          <td><?php echo "<a href=\"".api_get_self()."?content=Link&action=$action&id=$id&lp_id=$learnpath_id&parent_item_id=$chapter_id&source_forum=$source_forum&originalresource=no\">".get_lang('Links')."</a>"; ?></td>
         </tr>
         <?php
         }

@@ -177,7 +177,7 @@ if ($form -> validate()) {
 	}
 
 	if (!empty($gradebook) && $gradebook=='view') {
-		$interbreadcrumb[]= array ('url' => '../gradebook/'.$_SESSION['gradebook_dest'],'name' => get_lang('Gradebook'));
+		$interbreadcrumb[]= array ('url' => '../gradebook/'.$_SESSION['gradebook_dest'],'name' => get_lang('ToolGradebook'));
 	}
 	$nameTools=get_lang('ExerciseManagement');
 	$interbreadcrumb[] = array ("url"=>'exercice.php', 'name'=> get_lang('Exercices'));

@@ -760,7 +760,7 @@ class SocialManager extends UserManager {
 	    	  		}
 	    	  	}
 	    	  	if (!empty($announcements)) {
-			    	echo '<div align="center" class="social-menu-title" ><span class="social-menu-text1">'.get_lang('Announcement').'</span></div>';
+			    	echo '<div align="center" class="social-menu-title" ><span class="social-menu-text1">'.get_lang('ToolAnnouncement').'</span></div>';
 					echo '<div>';
 					echo '<ul>';
 						foreach ($announcements as $announcement) {

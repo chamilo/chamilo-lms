@@ -890,7 +890,7 @@ elseif (empty ($_GET['gradebook'])) {
 if (!empty ($gradebook) && $gradebook == 'view') {
     $interbreadcrumb[] = array (
         'url' => '../gradebook/' . $_SESSION['gradebook_dest'],
-        'name' => get_lang('Gradebook')
+        'name' => get_lang('ToolGradebook')
     );
 }
 //$nameTools=get_lang('Exercice');

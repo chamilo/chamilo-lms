@@ -155,7 +155,7 @@ if (api_is_drh() && isset($_GET['student_id'])) {
 }
 
 if (!empty($gradebook)) {
-	$interbreadcrumb[] = array ('url' => '/main/gradebook/index.php', 'name' => get_lang('Gradebook'));	
+	$interbreadcrumb[] = array ('url' => '/main/gradebook/index.php', 'name' => get_lang('ToolGradebook'));	
 }
 $interbreadcrumb[] = array ('url' => 'index.php?action=attendance_list'.$param_gradebook.$student_param, 'name' => get_lang('Attendance'));
 if($action == 'attendance_add') $interbreadcrumb[] = array ('url' => '#', 'name' => get_lang('CreateANewAttendance'));

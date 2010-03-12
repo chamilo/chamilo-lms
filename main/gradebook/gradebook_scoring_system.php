@@ -64,7 +64,7 @@ $htmlHeadXtra[]= '
   }
  </script>';
 
-$interbreadcrumb[] = array ('url' => $_SESSION['gradebook_dest'].'?selectcat=1', 'name' => get_lang('Gradebook'));
+$interbreadcrumb[] = array ('url' => $_SESSION['gradebook_dest'].'?selectcat=1', 'name' => get_lang('ToolGradebook'));
 	
 $displayscore= ScoreDisplay :: instance();
 $customdisplays = $displayscore->get_custom_score_display_settings();

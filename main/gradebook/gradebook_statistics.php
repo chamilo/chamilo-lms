@@ -41,7 +41,7 @@ if ($eval[0]->get_category_id() < 0) {
 }
 
 $interbreadcrumb[]= array (
-	'url' => $_SESSION['gradebook_dest'].'?selectcat=' . $currentcat[0]->get_id(), 'name' => get_lang('Gradebook'));
+	'url' => $_SESSION['gradebook_dest'].'?selectcat=' . $currentcat[0]->get_id(), 'name' => get_lang('ToolGradebook'));
 
 if (api_is_allowed_to_create_course()){
 	$interbreadcrumb[]= array (

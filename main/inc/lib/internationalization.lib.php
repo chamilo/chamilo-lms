@@ -470,12 +470,12 @@ function api_format_date($time, $format = null, $language = null) {
 		// We replace %a %A %b %B masks of date format with translated strings.
 		$translated = &_api_get_day_month_names($language);
 		$date_format = str_replace(array('%A', '%a', '%B', '%b'),
-		array($translated['days_long'][(int)strftime('%w', $time_stamp)],
-			$translated['days_short'][(int)strftime('%w', $time_stamp)],
-			$translated['months_long'][(int)strftime('%m', $time_stamp) - 1],
-			$translated['months_short'][(int)strftime('%m', $time_stamp) - 1]),
+		array($translated['days_long'][(int)strftime('%w', $time )],
+			$translated['days_short'][(int)strftime('%w', $time)],
+			$translated['months_long'][(int)strftime('%m', $time) - 1],
+			$translated['months_short'][(int)strftime('%m', $time) - 1]),
 		$date_format);
-		$formatted_date = api_to_system_encoding(strftime($date_format, $time_stamp), 'UTF-8');
+		$formatted_date = api_to_system_encoding(strftime($date_format, $time), 'UTF-8');
 	}
 	date_default_timezone_set($system_timezone);
 	return $formatted_date;

@@ -3,7 +3,7 @@
 /**
  * Gradebook link to student publication item
  * @author Bert Steppé
- * @package dokeos.gradebook
+ * @package chamilo.gradebook
  */
 class StudentPublicationLink extends AbstractLink
 {

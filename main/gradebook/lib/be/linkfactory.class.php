@@ -25,7 +25,7 @@ require_once 'attendancelink.class.php';
 /**
  * Factory for link objects
  * @author Bert Steppé
- * @package dokeos.gradebook
+ * @package chamilo.gradebook
  */
 class LinkFactory
 {

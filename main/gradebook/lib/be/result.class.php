@@ -3,7 +3,7 @@
 /**
  * Defines a gradebook Result object
  * @author Bert Steppé, Stijn Konings
- * @package dokeos.gradebook
+ * @package chamilo.gradebook
  */
 class Result
 {

@@ -104,6 +104,12 @@ function rsort_sessions($a, $b) {
 $is_coach = api_is_coach();
 $is_platform_admin = api_is_platform_admin();
 $is_drh = api_is_drh();
+$is_session_admin = api_is_session_admin();
+
+if ($is_session_admin) {
+	header('location:session.php');
+	exit;
+}
 
 // get views
 $views = array('admin', 'teacher', 'coach', 'drh');
@@ -117,8 +123,8 @@ $nb_teacher_courses = 0;
 global $_configuration;
 
 // interbreadcrumbs
-if (api_is_allowed_to_create_course()) {
-		
+if (api_is_allowed_to_create_course() && $_GET['display'] != 'yourstudents') {
+
 	$session_id = intval($_GET['session_id']);		
 	if (!empty($session_id)) {
 		$courses = Tracking::get_courses_followed_by_coach($_user['user_id'], $session_id);
@@ -131,14 +137,18 @@ if (api_is_allowed_to_create_course()) {
 	$sessions = Tracking::get_sessions_coached_by_user($_user['user_id']);
 	$nb_sessions = count($sessions);
 
-	if ($nb_teacher_courses) {
+	if ($nb_teacher_courses || $nb_sessions) {
 		if (!$is_coach && !$is_platform_admin) {
 			$view = 'teacher';
 		}
 		
 		if ($view == 'teacher' && empty($session_id)) {		
 			$menu_items[] = get_lang('TeacherInterface');
-			$title = get_lang('YourCourseList');			
+			
+			if ($nb_teacher_courses) {
+				$title = get_lang('YourCourseList');
+			}
+						
 		} else {			
 			if (!empty($session_id)) {								
 				$session_name = api_get_session_name($session_id);
@@ -149,7 +159,7 @@ if (api_is_allowed_to_create_course()) {
 	}
 }
 
-if ($is_coach) {
+if ($is_coach && $_GET['display'] != 'yourstudents') {
 	if ($nb_teacher_courses == 0 && !$is_platform_admin) {
 		$view = 'coach';
 	}
@@ -161,19 +171,21 @@ if ($is_coach) {
 	}
 }
 
-if ($is_platform_admin) {
-	if ((!$is_coach || !$is_drh) && $nb_teacher_courses == 0) {
+if ($is_platform_admin &&  $_GET['display'] != 'yourstudents') {
+
+	if ($nb_teacher_courses == 0 && $nb_sessions == 0) {
 		$view = 'admin';
 	}
 	if ($view == 'admin') {
 		$menu_items[] = get_lang('AdminInterface');
 		$title = get_lang('CoachList');
+		//$menu_items[] = $title;
 	} else {
 		$menu_items[] = '<a href="'.api_get_self().'?view=admin">'.get_lang('AdminInterface').'</a>';
 	}
 }
 
-if ($is_drh) {
+if ($is_drh || $_GET['display'] == 'yourstudents') {
 	$view = 'drh';	
 	$menu_items[] = get_lang('Students');
 	$menu_items[] = '<a href="teachers.php">'.get_lang('Trainers').'</a>';
@@ -202,7 +214,7 @@ if ($view == 'admin') {
 echo '</div>';
 echo '<h4>'.$title.'</h4>';
 
-if ($is_drh && $view == 'drh') {
+if (($is_drh && $view == 'drh') || $_GET['display'] == 'yourstudents') {
 	// get data for human resources manager
 	$students = array_keys(UserManager::get_users_followed_by_drh($_user['user_id'], STUDENT));
 	$courses_of_the_platform = CourseManager :: get_real_course_list();	
@@ -300,7 +312,7 @@ if ($view == 'coach' || $view == 'drh') {
 		echo '
 		 <div class="report_section">
 			<h4>
-				<a href="student.php"><img src="'.api_get_path(WEB_IMG_PATH).'students.gif">&nbsp;'.get_lang('Probationers').' ('.$nb_students.')'.'</a>
+				<a href="student.php?display=yourstudents"><img src="'.api_get_path(WEB_IMG_PATH).'students.gif">&nbsp;'.get_lang('Probationers').' ('.$nb_students.')'.'</a>
 			</h4>
 			<table class="data_table">
 				<tr>
@@ -360,7 +372,7 @@ if ($view == 'coach' || $view == 'drh') {
 					</td>
 				</tr>
 			</table><br />					
-			<a href="student.php">'.get_lang('SeeStudentList').'</a>
+			<a href="student.php?display=yourstudents">'.get_lang('SeeStudentList').'</a>
 		 </div>';
 	}
 }
@@ -543,13 +555,11 @@ if (api_is_allowed_to_create_course() && $view == 'teacher') {
 		$table -> setColAttributes(1, array('align' => 'center'));
 		$table -> setColAttributes(2, array('align' => 'center'));
 		$table -> setColAttributes(3, array('align' => 'center'));
-		$table -> display();
-		
-	}
-	
+		$table -> display();		
+	}	
 }
 
-if ($is_platform_admin && $view == 'admin') {
+if ($is_platform_admin && $view == 'admin' && $_GET['display'] != 'yourstudents') {
 	echo '<a href="'.api_get_self().'?view=admin&amp;display=coaches">'.get_lang('DisplayCoaches').'</a> | ';
 	echo '<a href="'.api_get_self().'?view=admin&amp;display=useroverview">'.get_lang('DisplayUserOverview').'</a>';
 	if ($_GET['display'] == 'useroverview') {

@@ -701,11 +701,11 @@ margin-top:0;
 	padding: 10px 0 40px 0;
 }
 #toolnav {
-	float: right;
-	margin: 0;
-	margin-left: -5%;  /* the difference to make the left colum appear flush left */
-	padding: 0;
-	width: 180px;
+	float:right;
+	margin:-7px 0 0 -5%;
+	overflow:hidden;
+	padding:0;
+	width:180px;
 }
 #toolnav img {
 	float: left;

@@ -409,7 +409,7 @@ function display_anonymous_right_menu() {
 				display_create_course_link();
 			}
 			if ($show_course_link) {
-				if (!api_is_drh()) {
+				if (!api_is_drh() && !api_is_session_admin()) {
 					display_edit_course_list_links();
 				} else {
 					display_dashboard_link();

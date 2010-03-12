@@ -360,6 +360,20 @@ class DashboardManager
 
 			// We display all enabled plugins and the checkboxes
 			foreach ($enabled_dashboard_plugins as $block) {
+				
+				$path = $block['path'];
+				$controller_class = $block['controller'];
+				$filename_controller = $path.'.class.php';			
+				$dashboard_plugin_path = api_get_path(SYS_PLUGIN_PATH).'dashboard/'.$path.'/';	
+				require_once $dashboard_plugin_path.$filename_controller;
+				$obj_block = new $controller_class($user_id);
+				
+				// check if user is allowed to see the block
+				if (method_exists($obj_block, 'is_block_visible_for_user')) {					
+					$is_block_visible_for_user = $obj_block->is_block_visible_for_user($user_id);					
+					if (!$is_block_visible_for_user) continue;
+				}
+
 				echo '<tr>';
 					// checkboxes
 					self::display_user_dashboard_list_checkboxes($user_id, $block['id']);

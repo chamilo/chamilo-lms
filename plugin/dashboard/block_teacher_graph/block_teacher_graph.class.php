@@ -28,18 +28,36 @@ class BlockTeacherGraph extends Block {
     private $user_id;
     private $teachers;
     private $path;
+    private $permission = array(DRH);
 
 	/**
 	 * Controller
 	 */
     public function __construct ($user_id) {    	
     	$this->user_id  = $user_id;
-    	if (api_is_platform_admin()) {
-    		$this->teachers = UserManager::get_user_list(array('status' => COURSEMANAGER));
-    	} else if (api_is_drh()) {
-    		$this->teachers = UserManager::get_users_followed_by_drh($user_id, COURSEMANAGER);
-    	}     	    	
-    	$this->path 	= 'block_teacher_graph';  	
+    	$this->path 	= 'block_teacher_graph';
+    	if ($this->is_block_visible_for_user($user_id)) {
+    		/*if (api_is_platform_admin()) {
+	    		$this->teachers = UserManager::get_user_list(array('status' => COURSEMANAGER));
+	    	} else {*/
+	    		$this->teachers = UserManager::get_users_followed_by_drh($user_id, COURSEMANAGER);
+	    	//}	
+    	}
+    }
+    
+    /**
+	 * This method check if a user is allowed to see the block inside dashboard interface
+	 * @param	int		User id
+	 * @return	bool	Is block visible for user
+	 */    
+    public function is_block_visible_for_user($user_id) {	
+    	$user_info = api_get_user_info($user_id);
+		$user_status = $user_info['status'];
+		$is_block_visible_for_user = false;
+    	if (UserManager::is_admin($user_id) || in_array($user_status, $this->permission)) {
+    		$is_block_visible_for_user = true;
+    	}    	
+    	return $is_block_visible_for_user;    	
     }
     
     /**
@@ -67,6 +85,7 @@ class BlockTeacherGraph extends Block {
 			                    <div class="widget-actions"><a onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset)).'\')) return false;" href="index.php?action=disable_block&path='.$this->path.'">'.Display::return_icon('close.gif',get_lang('Close')).'</a></div>
 			                </div>
 			                <div class="widget-content" align="center">
+			                	<div style="padding:10px;"><strong>'.get_lang('TimeSpentOnThePlatformLastWeekByDay').'</strong></div>
 								'.$teacher_information_graph.'
 			                </div>
 			            </li>		            			    
@@ -128,11 +147,13 @@ class BlockTeacherGraph extends Block {
 			}
 	
 			$last_week 	 = date('Y-m-d',$a_last_week[0]).' '.get_lang('To').' '.date('Y-m-d', $a_last_week[6]);
-			foreach ($a_last_week as &$weekday) {
-				$weekday = date('d/m',$weekday);
+			
+			$days_on_week = array();			
+			foreach ($a_last_week as $weekday) {
+				$days_on_week[] = date('d/m',$weekday);
 			}
 					
-			$data_set->AddPoint($a_last_week,"Days");						
+			$data_set->AddPoint($days_on_week,"Days");						
 			$data_set->SetXAxisName($last_week);
 			$data_set->SetYAxisName(get_lang('Minutes'));
 							
@@ -167,8 +188,8 @@ class BlockTeacherGraph extends Block {
 				$test->drawLegend(320,20,$data_set->GetDataDescription(),204,204,255);  
 				
 				// Drawing title
-				$test->setFontProperties(api_get_path(LIBRARY_PATH).'pchart/fonts/tahoma.ttf',10);  
-				$test->drawTitle(50,22,get_lang('TimeSpentOnThePlatformLastWeekByDay'),50,50,50,385);
+				//$test->setFontProperties(api_get_path(LIBRARY_PATH).'pchart/fonts/tahoma.ttf',10);  
+				//$test->drawTitle(50,22,get_lang('TimeSpentOnThePlatformLastWeekByDay'),50,50,50,385);
 				 
 				$test->writeValues($data_set->GetData(),$data_set->GetDataDescription(),"Days"); 
 				 

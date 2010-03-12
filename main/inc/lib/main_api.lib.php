@@ -32,6 +32,7 @@ $_status_list[SESSIONADMIN] = 'session_admin';
 $_status_list[DRH] = 'drh';
 $_status_list[ANONYMOUS] = 'anonymous';
 
+
 //COURSE VISIBILITY CONSTANTS
 /** only visible for course admin */
 define('COURSE_VISIBILITY_CLOSED', 0);
@@ -4338,12 +4339,15 @@ function _api_get_timezone() {
  *
  * @author Guillaume Viguier <guillaume.viguier@beeznest.com>
  */
-function api_get_utc_datetime($time) {
+function api_get_utc_datetime($time = null) {
 	$from_timezone = _api_get_timezone();
 	$to_timezone = 'UTC';
-	// If time is a timestamp, convert it to a string
+	if (is_null($time)) {
+		return gmdate("Y-m-d H:i:s");
+	}
+	// If time is a timestamp, return directly in utc
 	if (is_int($time)) {
-		$time = date("Y-m-d H:i:s", $time);
+		return gmdate("Y-m-d H:i:s", $time);
 	}
 	try {
 		$date = new DateTime($time, new DateTimezone($from_timezone));
@@ -4355,56 +4359,56 @@ function api_get_utc_datetime($time) {
 }
 
 /**
- * Returns the local time in a format given as an argument
- * @param string The time to be converted
- * @param string The format to be used. The default format is DATETIME
+ * Returns a DATETIME string converted to the right timezone
+ * @param mixed The time to be converted
  * @param string The timezone to be converted to. If null, the timezone will be determined based on user preference, or timezone chosen by the admin for the platform.
  * @param string The timezone to be converted from. If null, UTC will be assumed.
- * @return string The converted time
+ * @return string The converted time formatted as Y-m-d H:i:s
  *
  * @author Guillaume Viguier <guillaume.viguier@beeznest.com>
  */
-function api_get_local_time($time, $format=null, $to_timezone=null, $from_timezone=null) {
+function api_get_local_time($time = null, $to_timezone=null, $from_timezone=null) {
 	// Determining the timezone to be converted from
-	if ($from_timezone === null) {
+	if (is_null($from_timezone)) {
 		$from_timezone = 'UTC';
 	}
 	// Determining the timezone to be converted to
-	if ($to_timezone === null) {
+	if (is_null($to_timezone)) {
 		$to_timezone = _api_get_timezone();
 	}
-	// Determine the format
-	$format_null = false;
-	if ($format === null) {
-		$format_null = true;
-		$format = 'Y-m-d H:i:s';
-	}
 	// If time is a timestamp, convert it to a string
+	if (is_null($time)) {
+		$from_timezone = 'UTC';
+		$time = gmdate('Y-m-d H:i:s');
+	}
 	if (is_int($time)) {
-		$time = date('Y-m-d H:i:s', $time);
+		$from_timezone = 'UTC';
+		$time = gmdate('Y-m-d H:i:s', $time);
 	}
 	try {
 		$date = new DateTime($time, new DateTimezone($from_timezone));
 		$date->setTimezone(new DateTimeZone($to_timezone));
-		// In the following case, the format is an internal Chamilo format, so we are using api_format_date
-		if (is_int($format) || strpos($format, '%') !== false) {
-			return api_format_date($format, strtotime($date->format('Y-m-d H:i:s')));
-		} else {
-			if ($format_null && IS_PHP_53) {
-				// use IntlDateFormatter to localize the date in the language of the user
-				$locale = api_get_language_isocode();
-				// TODO: This instance of IntlDateFormatter is better to be cached for each locale. It is for speed, api_get_local_time() is called repetitively in tables.
-				$date_formatter = new IntlDateFormatter($locale, IntlDateFormatter::FULL, IntlDateFormatter::SHORT);
-				return api_to_system_encoding($date_formatter->format(strtotime($date->format('Y-m-d H:i:s'))), 'UTF-8');
-			} else {
-				return $date->format($format);
-			}
-		}
+		return $date->format('Y-m-d H:i:s');
 	} catch (Exception $e) {
 		return null;
 	}
 }
 
+/**
+ * Converts a date to the right timezone and localizes it in the format given as an argument
+ * @param mixed The time to be converted
+ * @param mixed Format to be used
+ * @param string Timezone to be converted from. If null, UTC will be assumed.
+ * @return string Converted and localized date
+ * 
+ * @author Guillaume Viguier <guillaume.viguier@beeznest.com>
+ */
+function api_convert_and_format_date($time = null, $format = null, $from_timezone = null) {
+	// First, convert the datetime to the right timezone
+	$datetime = api_get_local_time($time, null, $from_timezone);
+	// Second, localize the date
+	return api_format_date($time, $format);
+}
 
 /*	DEPRECATED FUNCTIONS */
 

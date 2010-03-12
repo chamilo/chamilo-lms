@@ -22,6 +22,7 @@ define('TIME_NO_SEC_FORMAT', 0);	// 15:23
 define('DATE_FORMAT_SHORT', 1);		// 25.08.2009
 define('DATE_FORMAT_LONG', 2);		// Aug 25, 09
 define('DATE_TIME_FORMAT_LONG', 3);	// August 25, 2009 at 03:28 PM
+define('DATE_FORMAT_LONG_WITHOUT_DAY', 4);
 
 // Formatting person's name.
 define('PERSON_NAME_COMMON_CONVENTION', 0);	// Formatting a person's name using the pattern as it has been
@@ -386,83 +387,98 @@ function api_detect_language(&$string, $encoding = null) {
 
 /**
  * Returns formated date/time, correspondent to a given language.
+ * The given date should be in the timezone chosen by the administrator and/or user. Use api_get_local_time to get it.
+ * 
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  * @author Christophe Gesche<gesche@ipm.ucl.ac.be>
  *         originally inspired from from PhpMyAdmin
  * @author Ivan Tcholakov, 2009, code refactoring, adding support for predefined date/time formats.
- * @param string/int $date_format			The date pattern. See the php-manual about the function strftime().
- * Note: For $date_format the following integer constants may be used for using predefined date/time
- * formats in the Chamilo system: TIME_NO_SEC_FORMAT, DATE_FORMAT_SHORT, DATE_FORMAT_LONG, DATE_TIME_FORMAT_LONG.
- * @param int/string $time_stamp (optional)	Time as an integer value. The default value -1 means now, the function time() is called internally.
- * 											This parameter also could be a string, 'Y-m-d H:i:s' formatted.
+ * @author Guillaume Viguier <guillaume.viguier@beeznest.com>
+ * 
+ * @param mixed Timestamp or datetime string
+ * @param mixed Date format (string or int; see date formats in the Chamilo system: TIME_NO_SEC_FORMAT, DATE_FORMAT_SHORT, DATE_FORMAT_LONG, DATE_TIME_FORMAT_LONG, DATE_FORMAT_LONG_WITHOUT_DAY)
  * @param string $language (optional)		Language indentificator. If it is omited, the current interface language is assumed.
  * @return string							Returns the formatted date.
+ * 
  * @link http://php.net/manual/en/function.strftime.php
  */
-function api_format_date($date_format, $time_stamp = -1, $language = null) {
-	if ($time_stamp == -1) {
-		$time_stamp = time();
+function api_format_date($time, $format = null, $language = null) {
+	
+	$system_timezone = date_default_timezone_get();
+	date_default_timezone_set(_api_get_timezone());
+	
+	if (is_string($time)) {
+		$time = strtotime($time);
 	}
-	if (is_string($time_stamp)) {
-		$time_stamp = strtotime($time_stamp);
+	
+	if (is_null($format)) {
+		$format = DATE_TIME_FORMAT_LONG;
 	}
-	if (is_int($date_format)) {
-		switch ($date_format) {
+	
+	$datetype = null;
+	$timetype = null;
+	if(is_int($format)) {
+		switch ($format) {
 			case TIME_NO_SEC_FORMAT:
 				$date_format = get_lang('timeNoSecFormat', '', $language);
+				if (IS_PHP_53) {
+					$datetype = IntlDateFormatter::NONE;
+					$timetype = IntlDateFormatter::SHORT;
+				}
 				break;
 			case DATE_FORMAT_SHORT:
 				$date_format = get_lang('dateFormatShort', '', $language);
+				if (IS_PHP_53) {
+					$datetype = IntlDateFormatter::LONG;
+					$timetype = IntlDateFormatter::NONE;
+				}
 				break;
 			case DATE_FORMAT_LONG:
-				$date_format = get_lang('dateFormatShort', '', $language);
+				$date_format = get_lang('dateFormatLong', '', $language);
+				if (IS_PHP_53) {
+					$datetype = IntlDateFormatter::FULL;
+					$timetype = IntlDateFormatter::NONE;
+				}
 				break;
 			case DATE_TIME_FORMAT_LONG:
 				$date_format = get_lang('dateTimeFormatLong', '', $language);
+				if (IS_PHP_53) {
+					$datetype = IntlDateFormatter::FULL;
+					$timetype = IntlDateFormatter::SHORT;
+				}
+				break;
+			case DATE_FORMAT_LONG_WITHOUT_DAY:
+				$date_format = get_lang('DateFormatLongWithoutDay', '', $language);
 				break;
 			default:
 				$date_format = get_lang('dateTimeFormatLong', '', $language);
+				if (IS_PHP_53) {
+					$datetype = IntlDateFormatter::FULL;
+					$timetype = IntlDateFormatter::SHORT;
+				}
 		}
 	}
-	// We replace %a %A %b %B masks of date format with translated strings.
-	$translated = &_api_get_day_month_names($language);
-	$date_format = str_replace(array('%A', '%a', '%B', '%b'),
-		array($translated['days_long'][(int)strftime('%w', $time_stamp)],
-			$translated['days_short'][(int)strftime('%w', $time_stamp)],
-			$translated['months_long'][(int)strftime('%m', $time_stamp) - 1],
-			$translated['months_short'][(int)strftime('%m', $time_stamp) - 1]),
+	
+	if (IS_PHP_53 && INTL_INSTALLED && $datetype !== null && $timetype !== null) {
+		// Use ICU
+		if (is_null($language)) {
+			$language = api_get_language_isocode();
+		}
+		$date_formatter = datefmt_create($language, $datetype, $timetype, date_default_timezone_get());
+		$formatted_date = api_to_system_encoding(datefmt_format($date_formatter, $time), 'UTF-8');
+	} else {
+		// We replace %a %A %b %B masks of date format with translated strings.
+		$translated = &_api_get_day_month_names($language);
+		$date_format = str_replace(array('%A', '%a', '%B', '%b'),
+		array($translated['days_long'][(int)strftime('%w', $time )],
+			$translated['days_short'][(int)strftime('%w', $time)],
+			$translated['months_long'][(int)strftime('%m', $time) - 1],
+			$translated['months_short'][(int)strftime('%m', $time) - 1]),
 		$date_format);
-	return strftime($date_format, $time_stamp);
-}
-
-/**
- * Returns date and time with long format correspondent to a given language.
- * This function is a workaround, it is designed to work for PHP 5.2.x and PHP 5.3+.
- * @author Ivan Tcholakov, 2010
- * @param int/string $time_stamp (optional)	Time as an integer value. The default value -1 means now, the function time() is called internally.
- * 											This parameter also could be a string, 'Y-m-d H:i:s' formatted.
- * @param string $language (optional)		Language indentificator. If it is omited, the current interface language is assumed.
- * @return string							Returns the formatted date.
- */
-function api_format_date_time_long($time_stamp = -1, $language = null) {
-	static $date_formatter; // Holds the IntlDateFormatter object that should be created only once, for performance.
-	if ($time_stamp == -1) {
-		$time_stamp = time();
+		$formatted_date = api_to_system_encoding(strftime($date_format, $time), 'UTF-8');
 	}
-	if (is_string($time_stamp)) {
-		$time_stamp = strtotime($time_stamp);
-	}
-	if (IS_PHP_53 && INTL_INSTALLED && !isset($date_formatter)) {
-		$locale = _api_get_locale_from_language($language);
-		$date_formatter = datefmt_create($locale, IntlDateFormatter::FULL, IntlDateFormatter::SHORT);
-		if (!is_object($date_formatter)) {
-			$date_formatter = false;
-		}
-	}
-	if ($date_formatter) {
-		return api_to_system_encoding(datefmt_format($date_formatter, $time_stamp), 'UTF-8');
-	}
-	return api_format_date(DATE_FORMAT_LONG, $time_stamp).'&nbsp;&nbsp;&nbsp;&nbsp;'.api_format_date(TIME_NO_SEC_FORMAT, $time_stamp);
+	date_default_timezone_set($system_timezone);
+	return $formatted_date;
 }
 
 /**

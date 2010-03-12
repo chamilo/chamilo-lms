@@ -23,18 +23,36 @@ class BlockTeacher extends Block {
     private $user_id;
     private $teachers;
     private $path;
+    private $permission = array(DRH);
 
 	/**
 	 * Controller
 	 */
     public function __construct ($user_id) {    	
     	$this->user_id  = $user_id;
-    	if (api_is_platform_admin()) {
-    		$this->teachers = UserManager::get_user_list(array('status' => COURSEMANAGER));
-    	} else if (api_is_drh()) {
-    		$this->teachers = UserManager::get_users_followed_by_drh($user_id, COURSEMANAGER);
-    	}     	    	
-    	$this->path 	= 'block_teacher';  	
+    	$this->path 	= 'block_teacher';
+    	if ($this->is_block_visible_for_user($user_id)) {
+    		/*if (api_is_platform_admin()) {
+	    		$this->teachers = UserManager::get_user_list(array('status' => COURSEMANAGER));
+	    	} else {*/
+	    		$this->teachers = UserManager::get_users_followed_by_drh($user_id, COURSEMANAGER);
+	    	//}	
+    	}
+    }
+    
+    /**
+	 * This method check if a user is allowed to see the block inside dashboard interface
+	 * @param	int		User id
+	 * @return	bool	Is block visible for user
+	 */    
+    public function is_block_visible_for_user($user_id) {	
+    	$user_info = api_get_user_info($user_id);
+		$user_status = $user_info['status'];
+		$is_block_visible_for_user = false;
+    	if (UserManager::is_admin($user_id) || in_array($user_status, $this->permission)) {
+    		$is_block_visible_for_user = true;
+    	}    	
+    	return $is_block_visible_for_user;    	
     }
     
     /**
@@ -49,11 +67,11 @@ class BlockTeacher extends Block {
     	$column = 1;
     	$data   = array();
 		
-		if (api_is_platform_admin()) {
+		/*if (api_is_platform_admin()) {
 			$teacher_content_html = $this->get_teachers_content_html_for_platform_admin();
-		} else if (api_is_drh()) {
+		} else if (api_is_drh()) {*/
 			$teacher_content_html = $this->get_teachers_content_html_for_drh();
-		}
+		//}
 		
 		$html = '        		
 			            <li class="widget color-blue" id="intro">
@@ -89,8 +107,7 @@ class BlockTeacher extends Block {
 	 		$teachers_table = '<table class="data_table" width:"95%">'; 		
 	 		$teachers_table .= '
 								<tr>		
-									<th>'.get_lang('FirstName').'</th>
-									<th>'.get_lang('LastName').'</th>
+									<th>'.get_lang('User').'</th>
 									<th>'.get_lang('TimeSpentOnThePlatform').'</th>					
 									<th>'.get_lang('LastConnexion').'</th>													
 								</tr>								
@@ -100,8 +117,10 @@ class BlockTeacher extends Block {
 	 		foreach ($teachers as $teacher) {
 	 			
 	 			$teacher_id = $teacher['user_id'];
-	 			$firtname = $teacher['firstname'];
-	 			$lastname = $teacher['lastname'];
+	 			$firstname 	= $teacher['firstname'];
+	 			$lastname 	= $teacher['lastname'];
+	 			$username	= $teacher['username'];
+	 			
 	 			$time_on_platform = api_time_to_hms(Tracking :: get_time_spent_on_the_platform($teacher_id));
 	 			$last_connection = Tracking :: get_last_connection_date($teacher_id);	 			
 				
@@ -110,8 +129,7 @@ class BlockTeacher extends Block {
 			    		
 				$teachers_table .= '
 									<tr class="'.$class_tr.'">		
-										<td>'.$firtname.'</td>
-										<td>'.$lastname.'</td>
+										<td>'.api_get_person_name($firstname,$lastname).' ('.$username.')</td>
 										<td align="right">'.$time_on_platform.'</td>					
 										<td align="right">'.$last_connection.'</td>															
 									</tr>								
@@ -150,8 +168,7 @@ class BlockTeacher extends Block {
 	 		$teachers_table = '<table class="data_table" width:"95%">'; 		
 	 		$teachers_table .= '
 								<tr>		
-									<th>'.get_lang('FirstName').'</th>
-									<th>'.get_lang('LastName').'</th>
+									<th>'.get_lang('User').'</th>
 									<th>'.get_lang('TimeSpentLastWeek').'<br />'.$last_week.'</th>														
 								</tr>								
 							';
@@ -162,14 +179,13 @@ class BlockTeacher extends Block {
 	 			$teacher_id = $teacher['user_id'];
 	 			$firstname  = $teacher['firstname'];
 	 			$lastname   = $teacher['lastname'];
-
+				$username	= $teacher['username'];
 	 			$time_on_platform = api_time_to_hms(Tracking :: get_time_spent_on_the_platform($teacher_id,true));
 	 				 			
 	 			if ($i%2 == 0) $class_tr = 'row_odd';
 	    		else $class_tr = 'row_even';
 	    		$teachers_table .= '<tr class="'.$class_tr.'">
-										<td>'.$firstname.'</td>
-										<td>'.$lastname.'</td>										
+										<td>'.api_get_person_name($firstname,$lastname).' ('.$username.')</td>										
 										<td align="right">'.$time_on_platform.'</td>										
 									</tr>';
 	 			

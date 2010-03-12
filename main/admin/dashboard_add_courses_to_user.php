@@ -17,6 +17,7 @@ $cidReset=true;
 require_once '../inc/global.inc.php';
 require_once '../inc/lib/xajax/xajax.inc.php';
 require_once api_get_path(LIBRARY_PATH).'course.lib.php';
+require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
 
 // create an ajax object
 $xajax = new xajax();
@@ -32,20 +33,25 @@ api_protect_admin_script(true);
 $interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
 $interbreadcrumb[] = array('url' => 'user_list.php','name' => get_lang('UserList'));
 
-
 // Database Table Definitions
 $tbl_course 			= 	Database::get_main_table(TABLE_MAIN_COURSE);
 $tbl_course_rel_user 	= 	Database::get_main_table(TABLE_MAIN_COURSE_USER);
 
-// setting the name of the tool
-$tool_name= get_lang('AssignCoursesToHumanResourcesManager');
-
 // initializing variables
 $id_session=intval($_GET['id_session']);
-$hrm_id = intval($_GET['user']);
-$hrm_info = api_get_user_info($hrm_id);
+$user_id = intval($_GET['user']);
+$user_info = api_get_user_info($user_id);
 $user_anonymous  = api_get_anonymous_id();
 $current_user_id = api_get_user_id();
+
+// setting the name of the tool
+if (UserManager::is_admin($user_id)) {
+	$tool_name= get_lang('AssignCoursesToPlatformAdministrator');
+} else if ($user_info['status'] == SESSIONADMIN) {
+	$tool_name= get_lang('AssignCoursesToSessionsAdministrator');
+} else {
+	$tool_name= get_lang('AssignCoursesToHumanResourcesManager');
+}
 
 $add_type = 'multiple';
 if(isset($_GET['add_type']) && $_GET['add_type']!=''){
@@ -57,7 +63,7 @@ if (!api_is_platform_admin()) {
 }
 
 function search_courses($needle,$type) {
-	global $tbl_course, $tbl_course_rel_user, $hrm_id;
+	global $tbl_course, $tbl_course_rel_user, $user_id;
 
 	$xajax_response = new XajaxResponse();
 	$return = '';
@@ -66,7 +72,7 @@ function search_courses($needle,$type) {
 		$charset = api_get_setting('platform_charset');
 		$needle = api_convert_encoding($needle, $charset, 'utf-8');
 
-		$assigned_courses_to_hrm = CourseManager::get_courses_followed_by_drh($hrm_id);
+		$assigned_courses_to_hrm = CourseManager::get_courses_followed_by_drh($user_id);
 		$assigned_courses_code = array_keys($assigned_courses_to_hrm);
 		foreach ($assigned_courses_code as &$value) {
 			$value = "'".$value."'";
@@ -152,24 +158,25 @@ $UserList = array();
 $msg = '';
 if (intval($_POST['formSent']) == 1) {
 	$courses_list = $_POST['CoursesList'];
-	$affected_rows = CourseManager::suscribe_courses_to_hr_manager($hrm_id,$courses_list);
+	$affected_rows = CourseManager::suscribe_courses_to_hr_manager($user_id,$courses_list);
 	if ($affected_rows)	{
 		$msg = get_lang('AssignedCoursesHaveBeenUpdatedSuccessfully');
 	}
 }
 
-// display the dokeos header
+// display header
 Display::display_header($tool_name);
-//echo '<div class="row"><div class="form_header">'.get_lang('AssignedCoursesTo').'&nbsp;'.api_get_person_name($hrm_info['firstname'], $hrm_info['lastname']).'</div></div><br />';
+
+// actions
 echo '<div class="actions" style="height:22px;">
 <span style="float: right;margin:0px;padding:0px;">
-<a href="dashboard_add_users_to_user.php?user='.$hrm_id.'">'.Display::return_icon('add_user_big.gif', get_lang('AssignUsers'), array('style'=>'vertical-align:middle')).' '.get_lang('AssignUsers').'</a>
-<a href="dashboard_add_sessions_to_user.php?user='.$hrm_id.'">'.Display::return_icon('view_more_stats.gif', get_lang('AssignSessions'), array('style'=>'vertical-align:middle')).' '.get_lang('AssignSessions').'</a></span>
-<span style="vertical-align:middle">'.sprintf(get_lang('AssignCoursesToX'), api_get_person_name($hrm_info['firstname'], $hrm_info['lastname'])).'</span></div>';
+<a href="dashboard_add_users_to_user.php?user='.$user_id.'">'.Display::return_icon('add_user_big.gif', get_lang('AssignUsers'), array('style'=>'vertical-align:middle')).' '.get_lang('AssignUsers').'</a>
+<a href="dashboard_add_sessions_to_user.php?user='.$user_id.'">'.Display::return_icon('view_more_stats.gif', get_lang('AssignSessions'), array('style'=>'vertical-align:middle')).' '.get_lang('AssignSessions').'</a></span>
+<span style="vertical-align:middle">'.sprintf(get_lang('AssignCoursesToX'), api_get_person_name($user_info['firstname'], $user_info['lastname'])).'</span></div>';
 
 // *******************
 
-$assigned_courses_to_hrm = CourseManager::get_courses_followed_by_drh($hrm_id);
+$assigned_courses_to_hrm = CourseManager::get_courses_followed_by_drh($user_id);
 $assigned_courses_code = array_keys($assigned_courses_to_hrm);
 foreach ($assigned_courses_code as &$value) {
 	$value = "'".$value."'";
@@ -191,7 +198,7 @@ $sql 	= " SELECT c.code, c.title FROM $tbl_course c
 $result	= Database::query($sql);
 
 ?>
-<form name="formulaire" method="post" action="<?php echo api_get_self(); ?>?user=<?php echo $hrm_id ?>" style="margin:0px;" <?php if($ajax_search){echo ' onsubmit="valide();"';}?>>
+<form name="formulaire" method="post" action="<?php echo api_get_self(); ?>?user=<?php echo $user_id ?>" style="margin:0px;" <?php if($ajax_search){echo ' onsubmit="valide();"';}?>>
 <input type="hidden" name="formSent" value="1" />
 <?php
 if(!empty($msg)) {
@@ -207,7 +214,17 @@ if(!empty($msg)) {
 <tr>
   <td width="45%" align="center"><b><?php echo get_lang('CoursesListInPlatform') ?> :</b></td>
   <td width="10%">&nbsp;</td>
-  <td align="center" width="45%"><b><?php echo get_lang('AssignedCoursesListToHumanResourceManager') ?> :</b></td>
+  <td align="center" width="45%"><b>
+  	<?php   	
+	  	if (UserManager::is_admin($user_id)) {
+			echo get_lang('AssignedCoursesListToPlatformAdministrator');
+		} else if ($user_info['status'] == SESSIONADMIN) {
+			echo get_lang('AssignedCoursesListToSessionsAdministrator');		
+		} else {
+			echo get_lang('AssignedCoursesListToHumanResourcesManager');
+		}  	
+  	?> 
+  	:</b></td>
 </tr>
 
 <?php if($add_type == 'multiple') { ?>
@@ -252,7 +269,7 @@ if(!empty($msg)) {
   ?>
 	<br /><br /><br /><br /><br /><br />
 	<?php
-		echo '<button class="save" type="button" value="" onclick="valide()" >'.get_lang('AssignCoursesToHumanResourcesManager').'</button>';
+		echo '<button class="save" type="button" value="" onclick="valide()" >'.$tool_name.'</button>';
 	?>
   </td>
   <td width="45%" align="center">

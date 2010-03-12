@@ -54,6 +54,13 @@ class DashboardController { // extends Controller {
 				$dashboard_plugin_path = api_get_path(SYS_PLUGIN_PATH).'dashboard/'.$path.'/';	
 				require_once $dashboard_plugin_path.$filename_controller;
 				$obj = new $controller_class($user_id);
+				
+				// check if user is allowed to see the block
+				if (method_exists($obj, 'is_block_visible_for_user')) {					
+					$is_block_visible_for_user = $obj->is_block_visible_for_user($user_id);					
+					if (!$is_block_visible_for_user) continue;
+				}
+				
 				$data_block[$path] = $obj->get_block();
 				// set user block column 
 				$data_block[$path]['column'] = $user_block_data[$block['id']]['column'];				

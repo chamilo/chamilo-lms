@@ -224,7 +224,7 @@
 			if (strtoupper($_SERVER['REQUEST_METHOD']) == "POST") {	
 				if (!isset($_POST['cancel'])) {												
 					$datetime = $attendance->build_datetime_from_array($_POST['date_time']);					
-					$datetimezone = api_get_utc_datetime(strtotime($datetime));					
+					$datetimezone = api_get_utc_datetime($datetime);					
 					if (!empty($datetime)) {						
 						$attendance->set_date_time($datetimezone);
 						$affected_rows = $attendance->attendant_calendar_add($attendance_id);
@@ -241,7 +241,7 @@
 			if (strtoupper($_SERVER['REQUEST_METHOD']) == "POST") {					
 				if (!isset($_POST['cancel'])) {										
 					$datetime = $attendance->build_datetime_from_array($_POST['date_time']);									
-					$datetimezone = api_get_utc_datetime(strtotime($datetime));								
+					$datetimezone = api_get_utc_datetime($datetime);								
 					$attendance->set_date_time($datetimezone);					
 					$affected_rows = $attendance->attendant_calendar_edit($calendar_id, $attendance_id);
 					$data['calendar_id'] = 0;

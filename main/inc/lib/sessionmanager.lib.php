@@ -1003,14 +1003,15 @@ class SessionManager {
 		$affected_rows = 0;
 
 		//Deleting assigned sessions to hrm_id
-	   	$sql = "SELECT id_session FROM $tbl_session_rel_user WHERE id_user = $hr_manager_id ";
+	   	$sql = "SELECT id_session FROM $tbl_session_rel_user WHERE id_user = $hr_manager_id AND relation_type=".SESSION_RELATION_TYPE_RRHH." ";
 		$result = Database::query($sql);
 
 		if (Database::num_rows($result) > 0) {
-			$sql = "DELETE FROM $tbl_session_rel_user WHERE id_user = $hr_manager_id ";
+			$sql = "DELETE FROM $tbl_session_rel_user WHERE id_user = $hr_manager_id AND relation_type=".SESSION_RELATION_TYPE_RRHH." ";
 			Database::query($sql);
 		}
 
+		/*
 		//Deleting assigned courses in sessions to hrm_id
 	   	$sql = "SELECT * FROM $tbl_session_rel_course_user WHERE id_user = $hr_manager_id ";
 		$result = Database::query($sql);
@@ -1019,6 +1020,7 @@ class SessionManager {
 			$sql = "DELETE FROM $tbl_session_rel_course_user WHERE id_user = $hr_manager_id ";
 			Database::query($sql);
 		}
+		*/
 						
 		// inserting new sessions list
 		if (is_array($sessions_list)) {

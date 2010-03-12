@@ -78,7 +78,7 @@ function search_users($needle,$type) {
 		}
 
 		$sql = "SELECT user_id, username, lastname, firstname FROM $tbl_user user
-				WHERE  ".(api_sort_by_first_name() ? 'firstname' : 'lastname')." LIKE '$needle%' AND status<>".DRH." AND user_id NOT IN ($user_anonymous, $current_user_id, $user_id) $without_assigned_users";
+				WHERE  ".(api_sort_by_first_name() ? 'firstname' : 'lastname')." LIKE '$needle%' AND status NOT IN(".DRH.", ".SESSIONADMIN.") AND user_id NOT IN ($user_anonymous, $current_user_id, $user_id) $without_assigned_users";
 		$rs	= Database::query($sql);
 
 		$return .= '<select id="origin" name="NoAssignedUsersList[]" multiple="multiple" size="20" style="width:340px;">';
@@ -186,7 +186,7 @@ if (isset($_POST['firstLetterUser'])) {
 }
 
 $sql = "SELECT user_id, username, lastname, firstname FROM $tbl_user user
-		WHERE  $without_assigned_users user_id NOT IN ($user_anonymous, $current_user_id, $user_id) AND status<>".DRH." $search_user ";
+		WHERE  $without_assigned_users user_id NOT IN ($user_anonymous, $current_user_id, $user_id) AND status NOT IN(".DRH.", ".SESSIONADMIN.") $search_user ";
 $result	= Database::query($sql);
 
 ?>

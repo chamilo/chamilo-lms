@@ -237,7 +237,10 @@ $form -> addElement('html',$linebreak);
 
 $form->addElement('radio', 'allow_user_image_forum', get_lang('AllowUserImageForum'), get_lang('AllowUserImageForumActivate'), 1);
 $form->addElement('radio', 'allow_user_image_forum', null, get_lang('AllowUserImageForumDeactivate'), 0);
+$form -> addElement('html',$linebreak);
 
+$form->addElement('radio', 'allow_user_view_user_list', get_lang('AllowUserViewUserList'), get_lang('AllowUserViewUserListActivate'), 1);
+$form->addElement('radio', 'allow_user_view_user_list', null, get_lang('AllowUserViewUserListDeactivate'), 0);
 
 $form->addElement('style_submit_button', null, get_lang('SaveSettings'), 'class="save"');
 
@@ -314,7 +317,8 @@ $values['allow_open_chat_window'] = api_get_course_setting('allow_open_chat_wind
 $values['course_theme'] = api_get_course_setting('course_theme');
 // get allow_learning_path_theme from table
 $values['allow_learning_path_theme'] = api_get_course_setting('allow_learning_path_theme');
-
+//get allow show user list 
+$values['allow_user_view_user_list'] = api_get_course_setting('allow_user_view_user_list');
 
 $form->setDefaults($values);
 // Validate form
@@ -380,7 +384,11 @@ if ($form->validate() && is_settings_editable()) {
 		$sql = "UPDATE $table_course_setting SET value = ".(int)$update_values['allow_learning_path_theme']." WHERE variable = 'allow_learning_path_theme' ";
 		Database::query($sql);
 	}
-
+	
+	if($update_values['allow_user_view_user_list'] != $values['allow_user_view_user_list']){
+		$sql = "UPDATE $table_course_setting SET value = ".(int)$update_values['allow_user_view_user_list']." WHERE variable = 'allow_user_view_user_list' ";
+		Database::query($sql);
+	}
 
 	$cidReset = true;
 	$cidReq = $course_code;

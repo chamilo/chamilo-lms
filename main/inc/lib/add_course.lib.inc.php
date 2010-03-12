@@ -10,7 +10,7 @@
 * different tool visibility settings: ALL_TOOLS_INVISIBLE, ALL_TOOLS_VISIBLE, CORE_TOOLS_VISIBLE...
 */
 
-include_once (api_get_path(LIBRARY_PATH).'database.lib.php');
+require_once (api_get_path(LIBRARY_PATH).'database.lib.php');
 require_once (api_get_path(LIBRARY_PATH).'mail.lib.inc.php');
 
 /*
@@ -2159,6 +2159,7 @@ function fill_Db_course($courseDbName, $courseRepository, $language,$default_doc
 	Database::query("INSERT INTO `".$TABLESETTING . "`(variable,value,category) VALUES ('allow_learning_path_theme','1','theme')");
 	Database::query("INSERT INTO `".$TABLESETTING . "`(variable,value,category) VALUES ('allow_open_chat_window',0,'chat')");
     Database::query("INSERT INTO `".$TABLESETTING . "`(variable,value,category) VALUES ('email_alert_to_teacher_on_new_user_in_course',0,'registration')");
+    Database::query("INSERT INTO `".$TABLESETTING . "`(variable,value,category) VALUES ('allow_user_view_user_list',1,'user')");
 	/*
 	-----------------------------------------------------------
 		Course homepage tools for platform admin only

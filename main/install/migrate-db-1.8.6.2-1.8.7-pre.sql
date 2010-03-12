@@ -93,3 +93,4 @@ ALTER TABLE attendance ADD INDEX(session_id);
 ALTER TABLE attendance ADD INDEX(active);
 ALTER TABLE lp_view ADD session_id INT NOT NULL DEFAULT 0;
 ALTER TABLE lp_view ADD INDEX(session_id);
+INSERT INTO course_setting (variable,value,category) VALUES ('allow_user_view_user_list',1,'user');

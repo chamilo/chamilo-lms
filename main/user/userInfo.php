@@ -47,6 +47,8 @@ $this_section = SECTION_COURSES;
 
 $nameTools = get_lang('Users');
 api_protect_course_script(true);
+$tool_info = api_get_tool_information_by_name(TOOL_USER);
+
 if(api_is_anonymous())
 {
 	api_not_allowed(true);
@@ -56,7 +58,9 @@ if(api_is_anonymous())
 $TBL_USERINFO_DEF 		= Database :: get_course_table(TABLE_USER_INFO);
 $TBL_USERINFO_CONTENT 	= Database :: get_course_table(TABLE_USER_INFO_CONTENT);
 
-$interbreadcrumb[] = array ('url' => 'user.php', 'name' => get_lang('Users'));
+if ($tool_info['visibility'] == 1 ) {
+	$interbreadcrumb[] = array ('url' => 'user.php', 'name' => get_lang('Users'));
+} 
 
 if ($origin != 'learnpath')
 { //so we are not in learnpath tool
@@ -90,6 +94,7 @@ $userIdViewed = Security::remove_XSS($_REQUEST['uInfo']);
 	Connection layer between Dokeos and the current script
 -----------------------------------------------------------
 */
+
 
 $mainDB = $_configuration['main_database'];
 $courseCode = $currentCourseID = $_course['sysCode'];
@@ -262,17 +267,28 @@ if ($allowedToEditContent)
 ==============================================================================
 */
 // Back button for each display mode (Top)
-echo '<div class="actions">';
-echo '<a href="user.php?'.api_get_cidreq().'&amp;origin='.$origin.'">'.Display::return_icon('back.png',get_lang('BackUser')).get_lang('BackUser').'</a>';
+
+
 if (api_is_allowed_to_edit()) {
+	echo '<div class="actions">';
+	echo '<a href="user.php?'.api_get_cidreq().'&amp;origin='.$origin.'">'.Display::return_icon('back.png',get_lang('BackUser')).get_lang('BackUser').'</a>';	
 	if (!is_numeric($_GET['editMainUserInfo'])) {
 		echo '<a href="userInfo.php?'.api_get_cidreq().'&amp;origin='.$origin.'&amp;editMainUserInfo='.$userIdViewed.'">'.Display::return_icon('edit.gif',get_lang('EditUser')).get_lang('EditUser').'</a>';
 	} else {
 		echo '<a href="userInfo.php?'.api_get_cidreq().'&amp;origin='.$origin.'&amp;uInfo='.$userIdViewed.'">'.Display::return_icon('members.gif',get_lang('ViewUser')).get_lang('ViewUser').'</a>';
-	}
+	}	
 	echo '<a href="../mySpace/myStudents.php?'.api_get_cidreq().'&amp;origin=user_course&amp;student='.$userIdViewed.'&amp;details=true&amp;course='.$_course['id'].'">'.Display::return_icon('statistics.gif',get_lang('UserStatistics')).get_lang('UserStatistics').'</a>';
+	echo '</div>';
+} else {
+	
+	
+	if ($tool_info['visibility'] == 1 ) {
+		echo '<div class="actions">';
+		echo '<a href="user.php?'.api_get_cidreq().'&amp;origin='.$origin.'">'.Display::return_icon('back.png',get_lang('BackUser')).get_lang('BackUser').'</a>';
+		echo '</div>';	
+	}	
 }
-echo '</div>';
+
 
 
 if ($displayMode == "viewDefEdit")

@@ -4254,6 +4254,20 @@ function api_get_tool_information($tool_id) {
 }
 
 /**
+ * Get all information of the tool into course
+ * @param int The tool id
+ * @return array
+ */
+function api_get_tool_information_by_name($name) {
+	$t_tool = Database::get_course_table(TABLE_TOOL_LIST);
+	$sql = 'SELECT * FROM '.$t_tool.' WHERE name="'.Database::escape_string($name).'"';
+	$rs  = Database::query($sql);
+	return Database::fetch_array($rs,'ASSOC');
+}
+
+
+
+/**
  * Gets the software name
  * @return string
  *

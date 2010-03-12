@@ -35,6 +35,15 @@ $this_section = SECTION_COURSES;
 
 // notice for unauthorized people.
 api_protect_course_script(true);
+
+if (!api_is_platform_admin(true)) {
+	if (!api_is_course_admin() && !api_is_coach()) { 
+		if (api_get_course_setting('allow_user_view_user_list')) {
+			api_not_allowed(true);
+		}
+	}	
+};
+
 /*
 -----------------------------------------------------------
 	Libraries

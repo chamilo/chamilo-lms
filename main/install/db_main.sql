@@ -328,7 +328,7 @@ CREATE TABLE course_rel_user (
   sort int default NULL,
   user_course_cat int default '0',
   relation_type int default 0,
-  PRIMARY KEY  (course_code,user_id)
+  PRIMARY KEY  (course_code,user_id,relation_type)
 );
 ALTER TABLE course_rel_user ADD INDEX (user_id);
 
@@ -502,7 +502,7 @@ CREATE TABLE session_rel_user (
   id_session mediumint unsigned NOT NULL default '0',
   id_user mediumint unsigned NOT NULL default '0',
   relation_type int default 0,
-  PRIMARY KEY  (id_session,id_user)
+  PRIMARY KEY (id_session,id_user,relation_type)
 );
 
 
@@ -754,7 +754,7 @@ VALUES
 ('show_tabs', 'dashboard', 'checkbox', 'Platform', 'true', 'ShowTabsTitle', 'ShowTabsComment', NULL, 'TabsDashboard', 1),
 ('use_users_timezone', 'timezones', 'radio', 'Timezones', 'true', 'UseUsersTimezoneTitle','UseUsersTimezoneComment',NULL,'Timezones', 1),
 ('timezone_value', 'timezones', 'select', 'Timezones', '', 'TimezoneValueTitle','TimezoneValueComment',NULL,'Timezones', 1),
-('dokeos_database_version', NULL, 'textfield', NULL,'1.8.7.10741','DokeosDatabaseVersion','',NULL,NULL,0);
+('dokeos_database_version', NULL, 'textfield', NULL,'1.8.7.10879','DokeosDatabaseVersion','',NULL,NULL,0);
 
 
 UNLOCK TABLES;

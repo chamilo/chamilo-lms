@@ -10,7 +10,7 @@
 * @param integer $user_id the user id
 * @param string $course_code the course code
 * @author Mario per testare cose
-* @author Julio Montoya <gugli100@gmail.col>
+* @author Julio Montoya <gugli100@gmail.com>
 * 
 */
 

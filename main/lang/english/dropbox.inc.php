@@ -95,6 +95,7 @@ $DocAdd = "Document has been added successfully";
 $FileDeleted = "The selected file has been removed from your dropbox.";
 $MailingAsUsername = "Mailing";
 $MailingInSelect = "---Mailing---";
+$$MailingExamine = "Examine mailing";
 $MailingNotYetSent = "Mailing content files have not yet been sent out...";
 $MailingSend = "Validate";
 $MailingConfirmSend = "Send content files to individuals?";

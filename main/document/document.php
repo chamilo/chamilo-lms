@@ -314,7 +314,7 @@ $image_files_only='';
 -----------------------------------------------------------
 */
 
-$interbreadcrumb[]= array ('url'=>'', 'name'=> get_lang('Document'));
+$interbreadcrumb[]= array ('url'=>'', 'name'=> get_lang('ToolDocument'));
 
 //------interbreadcrumb for the current directory root path
 

@@ -790,7 +790,10 @@ class CourseHome {
 				{
 					$tool_name = stripslashes($toolsRow['name']);
 				} else {
-					$tool_name = get_lang(ucfirst($toolsRow['name']));
+					$list = explode('_',$toolsRow['name']);
+					foreach($list as &$item) { $item = ucfirst($item); }
+					$tool_name = get_lang('Tool'.implode($list));
+					//$tool_name = get_lang(ucfirst($toolsRow['name']));
 				}
 				Display::display_icon($toolsRow['image'], $tool_name, array('class'=>'tool-icon','id'=>'toolimage_'.$toolsRow["id"]));
 

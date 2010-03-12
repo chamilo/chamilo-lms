@@ -175,15 +175,14 @@ class BlockStudent extends Block {
   		$attendance = new Attendance();  		  			
   		$students = $this->students;
  		$content = ''; 		
- 		$content = '<div style="margin:10px;">';
+ 		$content = '<div style="margin:5px;">';
  		$content .= '<h3><font color="#000">'.get_lang('YourStudents').'</font></h3>';
- 		 		
+
  		if (count($students) > 0) {
 	 		$students_table = '<table class="data_table" width:"95%">'; 		
 	 		$students_table .= '
-								<tr>		
-									<th>'.get_lang('FirstName').'</th>
-									<th>'.get_lang('LastName').'</th>														
+								<tr>																									
+									<th>'.get_lang('User').'</th>
 									<th>'.get_lang('AttendancesFaults').'</th>
 									<th>'.get_lang('Evaluations').'</th>
 								</tr>								
@@ -194,7 +193,9 @@ class BlockStudent extends Block {
 	 			
 	 			$student_id = $student['user_id'];
 	 			$firstname  = $student['firstname'];
-	 			$lastname   = $student['lastname'];	 				 			
+	 			$lastname   = $student['lastname'];	
+	 			$username	= $student['username'];
+	 							 			
 
 				// get average of faults in attendances by student	 			
 	 			$results_faults_avg = $attendance->get_faults_average_inside_courses($student_id);	 	
@@ -227,9 +228,8 @@ class BlockStudent extends Block {
 	 			
 	 			if ($i%2 == 0) $class_tr = 'row_odd';
 	    		else $class_tr = 'row_even';
-	    		$students_table .= '<tr class="'.$class_tr.'">
-										<td>'.$firstname.'</td>
-										<td>'.$lastname.'</td>										
+	    		$students_table .= '<tr class="'.$class_tr.'">										
+										<td>'.api_get_person_name($firstname,$lastname).' ('.$username.')</td>										
 										<td align="right">'.$attendances_faults_avg.'</td>
 										<td align="right">'.$evaluations_avg.'</td>
 									</tr>';

@@ -85,6 +85,7 @@ class BlockTeacherGraph extends Block {
 			                    <div class="widget-actions"><a onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset)).'\')) return false;" href="index.php?action=disable_block&path='.$this->path.'">'.Display::return_icon('close.gif',get_lang('Close')).'</a></div>
 			                </div>
 			                <div class="widget-content" align="center">
+			                	<div style="padding:10px;"><strong>'.get_lang('TimeSpentOnThePlatformLastWeekByDay').'</strong></div>
 								'.$teacher_information_graph.'
 			                </div>
 			            </li>		            			    
@@ -187,8 +188,8 @@ class BlockTeacherGraph extends Block {
 				$test->drawLegend(320,20,$data_set->GetDataDescription(),204,204,255);  
 				
 				// Drawing title
-				$test->setFontProperties(api_get_path(LIBRARY_PATH).'pchart/fonts/tahoma.ttf',10);  
-				$test->drawTitle(50,22,get_lang('TimeSpentOnThePlatformLastWeekByDay'),50,50,50,385);
+				//$test->setFontProperties(api_get_path(LIBRARY_PATH).'pchart/fonts/tahoma.ttf',10);  
+				//$test->drawTitle(50,22,get_lang('TimeSpentOnThePlatformLastWeekByDay'),50,50,50,385);
 				 
 				$test->writeValues($data_set->GetData(),$data_set->GetDataDescription(),"Days"); 
 				 

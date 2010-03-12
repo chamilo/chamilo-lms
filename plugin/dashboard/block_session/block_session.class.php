@@ -113,8 +113,9 @@ class BlockSession extends Block {
 
 				$session_id = intval($session['id']);
 				$title = $session['name'];		
+
 				if ($session['date_start'] != '0000-00-00' && $session['date_end'] != '0000-00-00') {
-					$date = get_lang('From').' '.format_locale_date(get_lang('DateFormatLongWithoutDay'), strtotime($session['date_start'])).' '.get_lang('To').' '.format_locale_date(get_lang('DateFormatLongWithoutDay'), strtotime($session['date_end']));
+					$date = get_lang('From').' '.format_locale_date(DATE_FORMAT_LONG_WITHOUT_DAY,strtotime($session['date_start'])).' '.get_lang('To').' '.format_locale_date(DATE_FORMAT_LONG_WITHOUT_DAY, strtotime($session['date_end']));
 				} else {
 					$date = ' - ';
 				}

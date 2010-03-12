@@ -107,8 +107,7 @@ class BlockTeacher extends Block {
 	 		$teachers_table = '<table class="data_table" width:"95%">'; 		
 	 		$teachers_table .= '
 								<tr>		
-									<th>'.get_lang('FirstName').'</th>
-									<th>'.get_lang('LastName').'</th>
+									<th>'.get_lang('User').'</th>
 									<th>'.get_lang('TimeSpentOnThePlatform').'</th>					
 									<th>'.get_lang('LastConnexion').'</th>													
 								</tr>								
@@ -118,8 +117,10 @@ class BlockTeacher extends Block {
 	 		foreach ($teachers as $teacher) {
 	 			
 	 			$teacher_id = $teacher['user_id'];
-	 			$firtname = $teacher['firstname'];
-	 			$lastname = $teacher['lastname'];
+	 			$firstname 	= $teacher['firstname'];
+	 			$lastname 	= $teacher['lastname'];
+	 			$username	= $teacher['username'];
+	 			
 	 			$time_on_platform = api_time_to_hms(Tracking :: get_time_spent_on_the_platform($teacher_id));
 	 			$last_connection = Tracking :: get_last_connection_date($teacher_id);	 			
 				
@@ -128,8 +129,7 @@ class BlockTeacher extends Block {
 			    		
 				$teachers_table .= '
 									<tr class="'.$class_tr.'">		
-										<td>'.$firtname.'</td>
-										<td>'.$lastname.'</td>
+										<td>'.api_get_person_name($firstname,$lastname).' ('.$username.')</td>
 										<td align="right">'.$time_on_platform.'</td>					
 										<td align="right">'.$last_connection.'</td>															
 									</tr>								
@@ -168,8 +168,7 @@ class BlockTeacher extends Block {
 	 		$teachers_table = '<table class="data_table" width:"95%">'; 		
 	 		$teachers_table .= '
 								<tr>		
-									<th>'.get_lang('FirstName').'</th>
-									<th>'.get_lang('LastName').'</th>
+									<th>'.get_lang('User').'</th>
 									<th>'.get_lang('TimeSpentLastWeek').'<br />'.$last_week.'</th>														
 								</tr>								
 							';
@@ -180,14 +179,13 @@ class BlockTeacher extends Block {
 	 			$teacher_id = $teacher['user_id'];
 	 			$firstname  = $teacher['firstname'];
 	 			$lastname   = $teacher['lastname'];
-
+				$username	= $teacher['username'];
 	 			$time_on_platform = api_time_to_hms(Tracking :: get_time_spent_on_the_platform($teacher_id,true));
 	 				 			
 	 			if ($i%2 == 0) $class_tr = 'row_odd';
 	    		else $class_tr = 'row_even';
 	    		$teachers_table .= '<tr class="'.$class_tr.'">
-										<td>'.$firstname.'</td>
-										<td>'.$lastname.'</td>										
+										<td>'.api_get_person_name($firstname,$lastname).' ('.$username.')</td>										
 										<td align="right">'.$time_on_platform.'</td>										
 									</tr>';
 	 			

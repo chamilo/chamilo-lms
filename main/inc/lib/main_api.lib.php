@@ -4256,7 +4256,7 @@ function api_get_tool_information($tool_id) {
 
 /**
  * Get all information of the tool into course
- * @param int The tool id
+ * @param string The tool name (use constants)
  * @return array
  */
 function api_get_tool_information_by_name($name) {

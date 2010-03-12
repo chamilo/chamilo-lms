@@ -123,7 +123,7 @@ $nb_teacher_courses = 0;
 global $_configuration;
 
 // interbreadcrumbs
-if (api_is_allowed_to_create_course()) {
+if (api_is_allowed_to_create_course() && $_GET['display'] != 'yourstudents') {
 
 	$session_id = intval($_GET['session_id']);		
 	if (!empty($session_id)) {
@@ -159,7 +159,7 @@ if (api_is_allowed_to_create_course()) {
 	}
 }
 
-if ($is_coach) {
+if ($is_coach && $_GET['display'] != 'yourstudents') {
 	if ($nb_teacher_courses == 0 && !$is_platform_admin) {
 		$view = 'coach';
 	}

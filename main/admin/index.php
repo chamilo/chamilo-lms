@@ -1,11 +1,9 @@
 <?php // $Id: index.php 22269 2009-07-21 15:06:15Z juliomontoya $
 /* For licensing terms, see /license.txt */
 /**
-==============================================================================
 *	Index of the admin tools
 *
 *	@package chamilo.admin
-==============================================================================
 */
 // name of the language file that needs to be included <br />
 $language_file=array('admin','tracking');
@@ -70,7 +68,7 @@ if (api_is_platform_admin()) {
 			</form>
 		</div>
 	<ul>
-		<li><a href="user_list.php?search=advanced"><?php echo api_ucfirst(get_lang('AdvancedSearch')); ?></a></li>
+		<!-- <li><a href="user_list.php?search=advanced"><?php echo api_ucfirst(get_lang('AdvancedSearch')); ?></a></li> -->
 		<li><a href="user_list.php">	<?php echo get_lang('UserList') ?></a></li>
 		<li><a href="user_add.php">		<?php echo get_lang('AddUsers') ?></a></li>
 		<li><a href="user_export.php">	<?php echo get_lang('ExportUserListXMLCSV') ?></a></li>
@@ -121,7 +119,7 @@ if(api_is_platform_admin()) {
 
 		<ul>
 		<li>
-		<a href="course_list.php?search=advanced"><?php echo api_ucfirst(get_lang('AdvancedSearch')); ?></a>
+		<!-- <a href="course_list.php?search=advanced"><?php echo api_ucfirst(get_lang('AdvancedSearch')); ?></a> -->
 
 	</li>
 	<li><a href="course_list.php"><?php echo get_lang('CourseList') ?></a></li>
@@ -201,7 +199,7 @@ if(api_get_setting('use_session_mode')=='true')
 </div>
 
  <ul>
-  <li><a href="session_list.php?search=advanced"><?php echo api_ucfirst(get_lang('AdvancedSearch')); ?></a></li>
+  <!--  <li><a href="session_list.php?search=advanced"><?php echo api_ucfirst(get_lang('AdvancedSearch')); ?></a></li> -->
   <li><a href="session_list.php"><?php echo get_lang('ListSession') ?></a></li>
   <li><a href="session_category_list.php"><?php echo get_lang('ListSessionCategory') ?></a></li>
   <li><a href="session_add.php"><?php echo get_lang('AddSession') ?></a></li>

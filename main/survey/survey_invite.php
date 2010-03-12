@@ -48,7 +48,7 @@ $this_section=SECTION_COURSES;
 
 if (!api_is_allowed_to_edit(false,true))
 {
-	Display :: display_header(get_lang('Survey'));
+	Display :: display_header(get_lang('ToolSurvey'));
 	Display :: display_error_message(get_lang('NotAllowed'), false);
 	Display :: display_footer();
 	exit;
@@ -66,7 +66,7 @@ $user_info 			= Database::get_main_table(TABLE_MAIN_SURVEY_REMINDER); // TODO: T
 $survey_id = Security::remove_XSS($_GET['survey_id']);
 $survey_data = survey_manager::get_survey($survey_id);
 if (empty($survey_data)) {
-	Display :: display_header(get_lang('Survey'));
+	Display :: display_header(get_lang('ToolSurvey'));
 	Display :: display_error_message(get_lang('InvallidSurvey'), false);
 	Display :: display_footer();
 	exit;

@@ -47,11 +47,11 @@ event_access_tool(TOOL_NOTEBOOK);
 // tool name
 if ( isset($_GET['action']) && $_GET['action'] == 'addnote') {
 	$tool = 'NoteAddNew';
-	$interbreadcrumb[] = array ("url"=>"index.php", "name"=> get_lang('Notebook'));
+	$interbreadcrumb[] = array ("url"=>"index.php", "name"=> get_lang('ToolNotebook'));
 }
 if ( isset($_GET['action']) && $_GET['action'] == 'editnote') {
 	$tool = 'ModifyNote';
-	$interbreadcrumb[] = array ("url"=>"index.php", "name"=> get_lang('Notebook'));
+	$interbreadcrumb[] = array ("url"=>"index.php", "name"=> get_lang('ToolNotebook'));
 }
 
 // displaying the header

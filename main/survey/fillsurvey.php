@@ -60,7 +60,7 @@ if (!empty($_user))
 }
 
 // Header
-Display :: display_header(get_lang('Survey'));
+Display :: display_header(get_lang('ToolSurvey'));
 
 // getting all the course information
 $_course = CourseManager::get_course_information($_GET['course']);

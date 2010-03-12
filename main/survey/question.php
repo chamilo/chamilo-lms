@@ -75,7 +75,7 @@ $table_user 					= Database :: get_main_table(TABLE_MAIN_USER);
 // getting the survey information
 $survey_data = survey_manager::get_survey($_GET['survey_id']);
 if (empty($survey_data)) {
-	Display :: display_header(get_lang('Survey'));
+	Display :: display_header(get_lang('ToolSurvey'));
 	Display :: display_error_message(get_lang('InvallidSurvey'), false);
 	Display :: display_footer();
 	exit;

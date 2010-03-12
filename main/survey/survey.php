@@ -26,7 +26,7 @@ require_once (api_get_path(LIBRARY_PATH)."/course.lib.php");
 $extend_rights_for_coachs = api_get_setting('extend_rights_for_coach_on_survey');
 if (!api_is_allowed_to_edit(false,true) || (api_is_course_coach() && $extend_rights_for_coachs=='false'))
 {
-	Display :: display_header(get_lang('Survey'));
+	Display :: display_header(get_lang('ToolSurvey'));
 	Display :: display_error_message(get_lang('NotAllowed'), false);
 	Display :: display_footer();
 	exit;
@@ -51,7 +51,7 @@ if (isset($_GET['survey_id'])) {
 	if ($course_code!=-1) {
 		$survey_data = survey_manager::get_survey($survey_id);
 	} else {
-		Display :: display_header(get_lang('Survey'));
+		Display :: display_header(get_lang('ToolSurvey'));
 		Display :: display_error_message(get_lang('NotAllowed'), false);
 		Display :: display_footer();
 		exit;

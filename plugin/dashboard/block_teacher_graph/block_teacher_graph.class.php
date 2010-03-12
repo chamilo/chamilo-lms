@@ -103,28 +103,11 @@ class BlockTeacherGraph extends Block {
  	 * @return string  content html
  	 */
     public function get_teachers_information_graph() {
- 	
+
 	 	$teachers = $this->teachers;
 		$graph = '';
 
- 		// get data
- 		$time_on_the_platform = array(); 		
- 		foreach ($teachers as $teacher) {	 			
- 			$teacher_id = $teacher['user_id'];			
- 			// get time on platform last week
- 			$time_on_platform_last_week = Tracking :: get_time_spent_on_the_platform($teacher_id,true);	 				
- 			if (!empty($time_on_platform_last_week)) {
- 				$time_on_the_platform[$teacher_id] = $time_on_platform_last_week;	 				
- 			} else {
- 				$time_on_the_platform[$teacher_id] = 0;
- 			} 			
- 		}
- 		
- 		arsort($time_on_the_platform);		
-		// get only until five users
-		if (count($time_on_the_platform) > 5) { array_splice($time_on_the_platform,5); }
- 		
- 		$user_ids = array_keys($time_on_the_platform); 		
+ 		$user_ids = array_keys($teachers); 		
  		$a_last_week = get_last_week();
 
 		if (is_array($user_ids) && count($user_ids) > 0) {
@@ -132,22 +115,18 @@ class BlockTeacherGraph extends Block {
 			foreach ($user_ids as $user_id) {
 				$teacher_info = api_get_user_info($user_id); 
 				$username = $teacher_info['username'];
-				
 				$time_by_days = array();
-				foreach ($a_last_week as $day) {				
+				foreach ($a_last_week as $day) {
 					$time_on_platform_by_day = Tracking::get_time_spent_on_the_platform($user_id, false, $day);
 					$hours = floor($time_on_platform_by_day / 3600);			
 					$min = floor(($time_on_platform_by_day - ($hours * 3600)) / 60);
 					$time_by_days[] = $min;					
 				}
-	
 				$data_set->AddPoint($time_by_days,$username);	
 				$data_set->AddSerie($username);
-				
 			}
 	
 			$last_week 	 = date('Y-m-d',$a_last_week[0]).' '.get_lang('To').' '.date('Y-m-d', $a_last_week[6]);
-			
 			$days_on_week = array();			
 			foreach ($a_last_week as $weekday) {
 				$days_on_week[] = date('d/m',$weekday);
@@ -170,11 +149,11 @@ class BlockTeacherGraph extends Block {
 			} else {
 				
 				// Initializing the graph			      
-				$test = new pChart(400,280);  
+				$test = new pChart(400,330);  
 				$test->setFontProperties(api_get_path(LIBRARY_PATH).'pchart/fonts/tahoma.ttf',8);  
-				$test->setGraphArea(65,30,350,200);  
-				$test->drawFilledRoundedRectangle(7,7,393,253,5,240,240,240);  
-				$test->drawRoundedRectangle(5,5,395,255,5,230,230,230);  
+				$test->setGraphArea(65,30,350,250);  
+				$test->drawFilledRoundedRectangle(7,7,393,303,5,240,240,240);  
+				$test->drawRoundedRectangle(5,5,395,305,5,230,230,230);  
 				$test->drawGraphArea(255,255,255,TRUE);  
 				$test->drawScale($data_set->GetData(),$data_set->GetDataDescription(),SCALE_NORMAL,150,150,150,TRUE,0,2,TRUE);  
 				$test->drawGrid(4,TRUE,230,230,230,50);  
@@ -186,30 +165,24 @@ class BlockTeacherGraph extends Block {
 				// Drawing Legend  			 
 				$test->setFontProperties(api_get_path(LIBRARY_PATH).'pchart/fonts/tahoma.ttf',8);  
 				$test->drawLegend(320,20,$data_set->GetDataDescription(),204,204,255);  
-				
-				// Drawing title
-				//$test->setFontProperties(api_get_path(LIBRARY_PATH).'pchart/fonts/tahoma.ttf',10);  
-				//$test->drawTitle(50,22,get_lang('TimeSpentOnThePlatformLastWeekByDay'),50,50,50,385);
-				 
-				$test->writeValues($data_set->GetData(),$data_set->GetDataDescription(),"Days"); 
-				 
+								 
+				$test->writeValues($data_set->GetData(),$data_set->GetDataDescription(),array("Days")); 
+								 
 				$cache->WriteToCache($graph_id, $data_set->GetData(), $test);
 				ob_start();
 				$test->Stroke();
 				ob_end_clean();
 				$img_file = $cache->GetHash($graph_id, $data_set->GetData());  
 	
-			}
-		
+			}		
 			if (!empty($img_file)) {
 				$graph = '<img src="'.api_get_path(WEB_ARCHIVE_PATH).$img_file.'">';
 			}
 		} else {
 			$graph = '<p>'.api_convert_encoding(get_lang('GraphicNotAvailable'),'UTF-8').'</p>';
-		}
-		  
- 		return $graph;
- 	
+		}		  
+ 		return $graph; 	
+ 		
 	}
 	
  

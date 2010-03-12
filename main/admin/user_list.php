@@ -1,21 +1,20 @@
 <?php // $Id: user_list.php 22292 2009-07-22 18:32:32Z herodoto $
-/* For licensing terms, see /dokeos_license.txt */
+/* For licensing terms, see /license.txt */
 /**
-==============================================================================
 	@author Bart Mollet
-*	@package dokeos.admin
-==============================================================================
+*	@package chamilo.admin
 */
 
 // name of the language file that needs to be included
 $language_file = array ('registration','admin');
 $cidReset = true;
-require ('../inc/global.inc.php');
-require_once (api_get_path(LIBRARY_PATH).'sortabletable.class.php');
-require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
-require_once (api_get_path(LIBRARY_PATH).'security.lib.php');
-require_once(api_get_path(LIBRARY_PATH).'xajax/xajax.inc.php');
-require_once (api_get_path(LIBRARY_PATH).'usermanager.lib.php');
+require_once '../inc/global.inc.php';
+require_once api_get_path(LIBRARY_PATH).'sortabletable.class.php';
+require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
+require_once api_get_path(LIBRARY_PATH).'security.lib.php';
+require_once api_get_path(LIBRARY_PATH).'xajax/xajax.inc.php';
+require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
+
 $htmlHeadXtra[] = '<script src="../inc/lib/javascript/jquery.js" type="text/javascript" language="javascript"></script>';
 $htmlHeadXtra[] = '<script type="text/javascript">
 function load_course_list (div_course,my_user_id) {
@@ -434,8 +433,19 @@ function get_user_data($from, $number_of_items, $column, $direction)
 */
 function email_filter($email)
 {
-	return Display :: encrypted_mailto_link($email, $email);
+	return Display :: encrypted_mailto_link($email, $email);	
 }
+
+/**
+* Returns a mailto-link
+* @param string $email An email-address
+* @return string HTML-code with a mailto-link
+*/
+function user_filter($name, $params, $row) {	
+	return '<a href="'.api_get_path(WEB_PATH).'whoisonline.php?origin=user_list&id='.$row[0].'">'.$name.'</a>';	
+	
+}
+
 /**
  * Build the modify-column of the table
  * @param   int     The user id
@@ -790,6 +800,10 @@ else
 	$table->set_header(7, get_lang('Status'));
 	$table->set_header(8, get_lang('Active'));
 	$table->set_header(9, get_lang('Action'), false,'width="200px"');
+	
+	$table->set_column_filter(3, 'user_filter');
+	$table->set_column_filter(4, 'user_filter');
+	
 	$table->set_column_filter(6, 'email_filter');
 	$table->set_column_filter(7, 'status_filter');
 	$table->set_column_filter(8, 'active_filter');

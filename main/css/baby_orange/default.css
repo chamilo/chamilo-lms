@@ -466,6 +466,7 @@ form span.form_error {
 	vertical-align:middle;
 }
 .actions {
+	margin: 5px 0px; padding-top: 1px; border-top-width: 1px; top: 10px; right: 10px; bottom: 0px; left: 10px; padding-bottom: 1px;
 	background-color:#FDDEAA;
 	border-bottom:1px solid #EE4C03;
 	border-top:1px solid #EE4C03;
@@ -1408,11 +1409,10 @@ div.system_announcement {
 	min-height: 300px;
 }
 #toolnav {
-	float: right;
-	width: 180px;
-	padding: 0;
-	margin: 0;
-	margin-left: -5%; /* the difference to make the left colum appear flush left */
+	float:right;
+	overflow:hidden;
+	padding:0;
+	width:180px;
 }
 /* Hide from IE5-mac. Only IE-win sees this. \*/
 * html #toolnav {

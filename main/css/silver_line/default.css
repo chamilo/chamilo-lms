@@ -499,15 +499,24 @@ this lets the navigation menu appear to the left:
 #center { margin: 0 0 0 180px; padding: 10px 0 40px 0;
  min-height: 300px; }
 
-#toolnav { float: left; width: 180px; padding: 20px 0 0 0;
+float:right;
+	margin:-7px 0 0 -5%;
+	overflow:hidden;
+	padding:0;
+	width:180px;
+
+#toolnav { float: left; width: 180px; padding: 0;
  margin-left: -5%;
 }
-#toolnav { float: right; width: 180px; padding: 0; margin: 0;
+#toolnav { float: right; width: 180px; padding: 0; margin: -7px 0 0 -5%;
  margin-left: -5%; /* the difference to make the left colum appear flush left */
 }
 /* Hide from IE5-mac. Only IE-win sees this. \*/
 * html #toolnav {
 	margin-right: 0px;
+	overflow:hidden;
+	padding:0;
+	width:180px;
 }
 * html #center {
 	height: 1%;
@@ -1757,6 +1766,7 @@ div.system_announcement {
 	/*height:35px;*/
 	padding:2px;
 	margin-bottom: 5px;
+	margin:5px;
 	vertical-align:middle;
 }
 .actions img {

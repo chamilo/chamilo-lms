@@ -448,11 +448,11 @@ input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
 	min-height: 300px;
 }
 #toolnav {
-	float: right;
-	width: 180px;
-	padding: 0;
-	margin: 0;
-	margin-left: -5%; /* the difference to make the left colum appear flush left */
+	float:right;
+	margin:-7px 0 0 -5%;
+	overflow:hidden;
+	padding:0;
+	width:180px;
 }
 /* Hide from IE5-mac. Only IE-win sees this. \*/
 * html #toolnav {

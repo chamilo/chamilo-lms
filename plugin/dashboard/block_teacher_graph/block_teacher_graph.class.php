@@ -37,11 +37,11 @@ class BlockTeacherGraph extends Block {
     	$this->user_id  = $user_id;
     	$this->path 	= 'block_teacher_graph';
     	if ($this->is_block_visible_for_user($user_id)) {
-    		if (api_is_platform_admin()) {
+    		/*if (api_is_platform_admin()) {
 	    		$this->teachers = UserManager::get_user_list(array('status' => COURSEMANAGER));
-	    	} else {
+	    	} else {*/
 	    		$this->teachers = UserManager::get_users_followed_by_drh($user_id, COURSEMANAGER);
-	    	}	
+	    	//}	
     	}
     }
     

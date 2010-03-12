@@ -1,16 +1,10 @@
 <?php // $Id: system_announcements.php 22243 2009-07-20 15:08:31Z ivantcholakov $
 /* For licensing terms, see /license.txt */
 /**
-==============================================================================
 *	This page allows the administrator to manage the system announcements.
-*	@package dokeos.admin
-==============================================================================
+*	@package chamilo.admin
 */
-/*
-==============================================================================
-		INIT SECTION
-==============================================================================
-*/
+/*		INIT SECTION */
 // name of the language file that needs to be included
 $language_file = array ('admin', 'agenda');
 

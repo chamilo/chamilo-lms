@@ -1,11 +1,11 @@
 <?php
-/* For licensing terms, see /dokeos_license.txt */
+/* For licensing terms, see /license.txt */
 
 // name of the language file that needs to be included
 $language_file ='admin';
 $cidReset=true;
-include('../inc/global.inc.php');
-require_once (api_get_path(LIBRARY_PATH).'sessionmanager.lib.php');
+require_once '../inc/global.inc.php';
+require_once api_get_path(LIBRARY_PATH).'sessionmanager.lib.php';
 
 // setting the section (for the tabs)
 $this_section=SECTION_PLATFORM_ADMIN;

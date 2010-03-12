@@ -1,9 +1,7 @@
 <?php //$id: $
-/* For licensing terms, see /dokeos_license.txt */
+/* For licensing terms, see /license.txt */
 /**
-==============================================================================
-*	@package dokeos.admin
-==============================================================================
+*	@package chamilo.admin
 */
 
 // name of the language file that needs to be included
@@ -13,7 +11,7 @@ $language_file='admin';
 $cidReset=true;
 
 // including some necessary dokeos files
-require '../inc/global.inc.php';
+require_once '../inc/global.inc.php';
 
 // including additonal libraries
 require_once api_get_path(LIBRARY_PATH).'sessionmanager.lib.php';

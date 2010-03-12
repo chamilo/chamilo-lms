@@ -1,9 +1,6 @@
 <?php
-/*
- * For licensing terms, see /license.txt
- */
+/* For licensing terms, see /license.txt */
 /**
-==============================================================================
 * Library of the settings.php file
 *
 * @author Julio Montoya <gugli100@gmail.com>
@@ -11,7 +8,6 @@
 * 
 * @since Chamilo 1.8.7
 * @package chamilo.admin
-==============================================================================
 */
 
 /**

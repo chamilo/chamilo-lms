@@ -1,13 +1,15 @@
 <?php
-/* For licensing terms, see /dokeos_license.txt */
+/* For licensing terms, see /license.txt */
 $language_file='admin';
 $cidReset=true;
 
-include('../inc/global.inc.php');
-require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
-require_once (api_get_path(LIBRARY_PATH).'sessionmanager.lib.php');
+require_once '../inc/global.inc.php';
+
+require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
+require_once api_get_path(LIBRARY_PATH).'sessionmanager.lib.php';
 
 $this_section = SECTION_PLATFORM_ADMIN;
+
 api_protect_admin_script(true);
 
 $htmlHeadXtra[] = '<script language="javascript">
@@ -28,12 +30,12 @@ $htmlHeadXtra[] = '<script language="javascript">
 				</script>
 		';
 
-$tbl_session=Database::get_main_table(TABLE_MAIN_SESSION);
-$tbl_session_category=Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
-$tbl_session_rel_course=Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
+$tbl_session			= Database::get_main_table(TABLE_MAIN_SESSION);
+$tbl_session_category	= Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
+$tbl_session_rel_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
 $tbl_session_rel_course_rel_user=Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-$tbl_session_rel_user=Database::get_main_table(TABLE_MAIN_SESSION_USER);
-$tbl_user = Database::get_main_table(TABLE_MAIN_USER);
+$tbl_session_rel_user 	= Database::get_main_table(TABLE_MAIN_SESSION_USER);
+$tbl_user 				= Database::get_main_table(TABLE_MAIN_USER);
 
 $page=intval($_GET['page']);
 $action=$_REQUEST['action'];

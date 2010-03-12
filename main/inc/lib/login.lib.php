@@ -1,13 +1,11 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
-==============================================================================
 *	Code library for login process
 *
 * @author Olivier Cauberghe <olivier.cauberghe@UGent.be>, Ghent University
 * @author Julio Montoya		<gugli100@gmail.com>
 * @package chamilo.login
-==============================================================================
 */
 
 class Login 
@@ -42,7 +40,7 @@ class Login
 				$user_account_list = get_lang('YourRegistrationData')." : \n".get_lang('UserName').' : '.$user['loginName']."\n".get_lang('ResetLink').' : '.$reset_link.'';
 	
 				if ($user_account_list) {
-					$user_account_list = "\n------------------------\n" . $user_account_list;
+					$user_account_list = "\n-----------------------------------------------\n" . $user_account_list;
 				}
 	
 			} else {	
@@ -56,7 +54,7 @@ class Login
 					$user_account_list[] = get_lang('YourRegistrationData')." : \n".get_lang('UserName').' : '.$this_user['loginName']."\n".get_lang('ResetLink').' : '.$reset_link.'';
 				}	
 				if ($user_account_list) {
-					$user_account_list = implode("\n------------------------\n", $user_account_list);
+					$user_account_list = implode("\n-----------------------------------------------\n", $user_account_list);
 				}
 			}	
 		} else {	
@@ -131,12 +129,14 @@ class Login
 			$user_account_list = self::get_user_account_list($user, true); // BODY
 			$email_to = $user[0]['email'];
 		}
-	
+			
 		$secret_word = self::get_secret_word($email_to);
-		$email_body = get_lang('DearUser')." :\n".get_lang('password_request')."\n\n";
-		$email_body .= "-----------------------------------------------\n".$user_account_list."\n-----------------------------------------------\n\n";
+		$email_body = get_lang('DearUser')." :\n".get_lang('password_request')."\n";
+		$email_body .= $user_account_list."\n-----------------------------------------------\n\n";
 		$email_body .= get_lang('PasswordEncryptedForSecurity');
-		$email_body .= "\n\n".get_lang('Formula').",\n".get_lang('PlataformAdmin');
+		//$email_body .= "\n\n".get_lang('Formula').",\n".get_lang('PlataformAdmin');
+		$email_body .= "\n\n".get_lang('Formula').",\n".api_get_setting('administratorName')." ".api_get_setting('administratorSurname')."\n".get_lang('PlataformAdmin')." - ".api_get_setting('siteName');
+		
 		$sender_name = api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS);
 	    $email_admin = api_get_setting('emailAdministrator');
 		

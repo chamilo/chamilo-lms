@@ -1347,7 +1347,7 @@ if ( is_array($courses_tree) ) {
 						//echo get_lang('SessionName') . ': ' . $s['title']. ' - '.(!empty($s['coach'])?$s['coach'].' - ':'').$s['dates'];
 						echo '<span>' . $s['title']. ' </span> ';
 						if (api_is_platform_admin()) {						
-							echo '<a href="'.api_get_path(WEB_CODE_PATH).'admin/resume_session.php?id_session='.$session['details']['id'].'">'.Display::return_icon('edit.gif', get_lang('Edit'), array('align' => 'absmiddle')).'</a>';
+							echo '<div style="float:right;"><a href="'.api_get_path(WEB_CODE_PATH).'admin/resume_session.php?id_session='.$session['details']['id'].'">'.Display::return_icon('edit.gif', get_lang('Edit'), array('align' => 'absmiddle')).'</a></div>';
 						}
 						
 						echo '<br />'.(!empty($s['coach'])?$s['coach'].' | ':'').$s['dates'];
@@ -1393,11 +1393,11 @@ if ( is_array($courses_tree) ) {
 						$html_sessions .= Display::return_icon('div_hide.gif', get_lang('Expand').'/'.get_lang('Hide'), array('align' => 'absmiddle', 'id' => 'session_img_'.$session['details']['id'])) . ' ';
 						
 						$html_sessions .=  '<span>' . $s['title']. ' </span> ';
-						if (api_is_platform_admin()) {						
-							$html_sessions .=  '<a href="'.api_get_path(WEB_CODE_PATH).'admin/resume_session.php?id_session='.$session['details']['id'].'">'.Display::return_icon('edit.gif', get_lang('Edit'), array('align' => 'absmiddle')).'</a>';
+						if (api_is_platform_admin()) {
+							$html_sessions .=  '<div style="float:right;"><a href="'.api_get_path(WEB_CODE_PATH).'admin/resume_session.php?id_session='.$session['details']['id'].'">'.Display::return_icon('edit.gif', get_lang('Edit'), array('align' => 'absmiddle')).'</a></div>';
 						}
 												
-						$html_sessions .= ' <br /> '.(!empty($s['coach'])?$s['coach'].' - ':'').$s['dates'];
+						$html_sessions .= ' <br /> '.(!empty($s['coach'])?$s['coach'].' | ':'').$s['dates'];
 						$html_sessions .= '</li>';
 						$html_sessions .= $html_courses_session;
 						$html_sessions .= '</ul>';

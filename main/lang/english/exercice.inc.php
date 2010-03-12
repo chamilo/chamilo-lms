@@ -361,4 +361,6 @@ $AreYouSureToCopy = "Are you sure to copy";
 $ExerciseCopied = "Exercise copied";
 $AreYouSureToDeleteResults = "Are you sure to delete results";
 $XResultsCleaned = "%d results cleaned";
+$CopyExercise = "Copy this exercise as a new one";
+$CleanStudentResults = "Clear all students results for this exercise";
 ?>

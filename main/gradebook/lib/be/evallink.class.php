@@ -25,7 +25,7 @@
 /**
  * Class to be used as basis for links referring to Evaluation objects.
  * @author Bert Steppé
- * @package dokeos.gradebook
+ * @package chamilo.gradebook
  */
 abstract class EvalLink extends AbstractLink
 {

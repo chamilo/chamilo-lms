@@ -3,7 +3,7 @@
 /**
  * Gradebook link to attendance item
  * @author Christian Fasanando (christian1827@gmail.com)
- * @package dokeos.gradebook
+ * @package chamilo.gradebook
  */
 class AttendanceLink extends AbstractLink
 {

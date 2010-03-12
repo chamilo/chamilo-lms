@@ -40,7 +40,7 @@ api_protect_course_script(true);
 require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 require_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
 
-$nameTools	= get_lang('Forum');
+$nameTools	= get_lang('ToolForum');
 
 /*
 -----------------------------------------------------------

@@ -52,7 +52,7 @@ if ($_REQUEST['type']=='teacher') {
 
 
 //extra entries in breadcrumb
-$interbreadcrumb[] = array ("url" => "user.php", "name" => get_lang("Users"));
+$interbreadcrumb[] = array ("url" => "user.php", "name" => get_lang("ToolUser"));
 if ($_GET['keyword'])
 {
 	$interbreadcrumb[] = array ("url" => "subscribe_user.php?type=".Security::remove_XSS($_GET['type']), "name" => $tool_name);

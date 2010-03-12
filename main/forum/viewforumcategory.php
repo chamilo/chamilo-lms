@@ -80,7 +80,7 @@ api_protect_course_script(true);
 // including additional library scripts
 require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
 include_once (api_get_path(LIBRARY_PATH).'groupmanager.lib.php');
-$nameTools=get_lang('Forum');
+$nameTools=get_lang('ToolForum');
 
 /*
 -----------------------------------------------------------

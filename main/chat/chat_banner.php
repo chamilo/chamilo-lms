@@ -40,7 +40,7 @@ require_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
 //$shortBanner=false;
 //Display::display_header(null,"Chat");
 
-$tool_name = get_lang('Chat');
+$tool_name = get_lang('ToolChat');
 
 // If it is a group chat then the breadcrumbs.
 if ($_SESSION['_gid'] OR $_GET['group_id']) {

@@ -41,7 +41,7 @@ require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php'
 */
 $tool_name = get_lang("AddClassesToACourse");
 //extra entries in breadcrumb
-$interbreadcrumb[] = array ("url" => "user.php", "name" => get_lang("Users"));
+$interbreadcrumb[] = array ("url" => "user.php", "name" => get_lang("ToolUser"));
 $interbreadcrumb[] = array ("url" => "class.php", "name" => get_lang("Classes"));
 Display :: display_header($tool_name, "User");
 

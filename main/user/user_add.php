@@ -227,7 +227,7 @@ if($register)
 
 } // end if register request
 
-$interbreadcrumb[] = array ("url"=>"user.php", "name"=> get_lang('Users'));
+$interbreadcrumb[] = array ("url"=>"user.php", "name"=> get_lang('ToolUser'));
 
 $nameTools = get_lang('AddAU');
 
@@ -238,7 +238,7 @@ Display::display_header($nameTools, "User");
 
 
 
-<h3><?php echo get_lang('Users'); ?></h3>
+<h3><?php echo get_lang('ToolUser'); ?></h3>
 
 <table border="0" cellpadding="0" cellspacing="0" width="100%">
 <tr>

@@ -74,7 +74,7 @@ api_protect_course_script(true);
 require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
 include_once (api_get_path(LIBRARY_PATH).'groupmanager.lib.php');
 
-$nameTools=get_lang('Forum');
+$nameTools=get_lang('ToolForum');
 ?>
 <!DOCTYPE html
      PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"

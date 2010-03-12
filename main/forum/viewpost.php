@@ -35,7 +35,7 @@ api_protect_course_script(true);
 require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
 include_once (api_get_path(LIBRARY_PATH).'groupmanager.lib.php');
 //require_once (api_get_path(LIBRARY_PATH).'resourcelinker.lib.php');
-$nameTools=get_lang('Forum');
+$nameTools=get_lang('ToolForum');
 
 /*
 -----------------------------------------------------------

@@ -28,7 +28,7 @@ require_once 'forumconfig.inc.php';
 require_once 'forumfunction.inc.php';
 
 
-$nameTools=get_lang('Forum');
+$nameTools=get_lang('ToolForum');
 
 //are we in a lp ?
 $origin = '';

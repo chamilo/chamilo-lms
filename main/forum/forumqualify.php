@@ -26,7 +26,7 @@ $language_file=array('admin','forum');
 require '../inc/global.inc.php';
 require_once 'forumconfig.inc.php';
 require_once 'forumfunction.inc.php';
-$nameTools = get_lang('Forum');
+$nameTools = get_lang('ToolForum');
 $this_section = SECTION_COURSES;
 
 $allowed_to_edit = api_is_allowed_to_edit(null,true);
@@ -44,7 +44,7 @@ if (isset($_GET['origin'])) {
 require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
 include_once (api_get_path(LIBRARY_PATH).'groupmanager.lib.php');
 //require_once (api_get_path(LIBRARY_PATH).'resourcelinker.lib.php');
-$nameTools=get_lang('Forum');
+$nameTools=get_lang('ToolForum');
 
 /*
 -----------------------------------------------------------

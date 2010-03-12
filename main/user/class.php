@@ -63,7 +63,7 @@ if(api_get_setting('use_session_mode')=='true')
 */
 $tool_name = get_lang("Classes");
 //extra entries in breadcrumb
-$interbreadcrumb[] = array ("url" => "user.php", "name" => get_lang("Users"));
+$interbreadcrumb[] = array ("url" => "user.php", "name" => get_lang("ToolUser"));
 Display :: display_header($tool_name, "User");
 
 api_display_tool_title($tool_name);

@@ -2,6 +2,7 @@
 /* For licensing terms, see /license.txt */
 /**
 *	@package chamilo.admin
+*	@author Julio Montoya <gugli100@gmail.com>
 */
 
 // name of the language file that needs to be included
@@ -11,10 +12,12 @@ require_once '../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
 
 api_protect_admin_script();
-if (!$_configuration['multiple_access_urls'])
+if (!$_configuration['multiple_access_urls']) {
 	header('Location: index.php');
+	exit;
+}
 
-$interbreadcrumb[] = array ("url" => 'index.php', "name" => get_lang('PlatformAdmin'));
+$interbreadcrumb[] = array ("url" => 'index.php', 'name' => get_lang('PlatformAdmin'));
 $tool_name = get_lang('MultipleAccessURLs');
 Display :: display_header($tool_name);
 
@@ -161,10 +164,6 @@ function url_count_mask() {
 	return UrlManager::url_count();
 }
 
-/*
-==============================================================================
-		FOOTER
-==============================================================================
-*/
+/*		FOOTER	*/
 Display :: display_footer();
 ?>

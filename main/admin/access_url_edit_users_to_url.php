@@ -2,6 +2,7 @@
 /* For licensing terms, see /license.txt */
 /**
 *	@package chamilo.admin
+*	@author Julio Montoya <gugli100@gmail.com>
 */
 
 
@@ -13,7 +14,6 @@ $cidReset=true;
 
 // including some necessary dokeos files
 require_once '../inc/global.inc.php';
-
 require_once (api_get_path(LIBRARY_PATH).'urlmanager.lib.php');
 require_once ('../inc/lib/xajax/xajax.inc.php');
 $xajax = new xajax();
@@ -25,8 +25,10 @@ $this_section = SECTION_PLATFORM_ADMIN;
 
 // Access restrictions
 api_protect_admin_script();
-if (!$_configuration['multiple_access_urls'])
+if (!$_configuration['multiple_access_urls']) {
 	header('Location: index.php');
+	exit;
+}
 
 
 // Database Table Definitions

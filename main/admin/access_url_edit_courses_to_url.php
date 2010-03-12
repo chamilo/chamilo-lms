@@ -2,6 +2,7 @@
 /* For licensing terms, see /license.txt */
 /**
 *	@package chamilo.admin
+*	@author Julio Montoya <gugli100@gmail.com>
 */
 
 
@@ -26,8 +27,10 @@ $this_section = SECTION_PLATFORM_ADMIN;
 
 // Access restrictions
 api_protect_admin_script();
-if (!$_configuration['multiple_access_urls'])
+if (!$_configuration['multiple_access_urls']) {
 	header('Location: index.php');
+	exit;
+}
 
 
 // Database Table Definitions

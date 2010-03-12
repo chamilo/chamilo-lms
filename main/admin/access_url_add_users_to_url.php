@@ -5,6 +5,7 @@
 *	It displays a list of users and a list of courses;
 *	you can select multiple users and courses and then click on
 *	@package chamilo.admin
+*	@author Julio Montoya <gugli100@gmail.com>
 */
 
 // name of the language file that needs to be included
@@ -21,9 +22,7 @@ if (!$_configuration['multiple_access_urls']) {
 }
 
 /*
------------------------------------------------------------
 	Global constants and variables
------------------------------------------------------------
 */
 
 $form_sent = 0;
@@ -37,21 +36,13 @@ $tbl_access_url_rel_user = Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_
 $tbl_access_url = Database :: get_main_table(TABLE_MAIN_ACCESS_URL);
 $tbl_user 		= Database :: get_main_table(TABLE_MAIN_USER);
 
-/*
------------------------------------------------------------
-	Header
------------------------------------------------------------
-*/
+/*	Header	*/
 $tool_name = get_lang('AddUsersToURL');
 $interbreadcrumb[] = array ('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
 $interbreadcrumb[] = array ('url' => 'access_urls.php', 'name' => get_lang('MultipleAccessURLs'));
 
 
-/*
-==============================================================================
-		MAIN CODE
-==============================================================================
-*/
+/*		MAIN CODE	*/
 
 Display :: display_header($tool_name);
 
@@ -62,8 +53,6 @@ echo '<div style="float:right;">
 echo '</div>';
 
 api_display_tool_title($tool_name);
-
-
 
 if ($_POST['form_sent']) {
 	$form_sent = $_POST['form_sent'];
@@ -90,11 +79,7 @@ if ($_POST['form_sent']) {
 
 
 
-/*
------------------------------------------------------------
-	Display GUI
------------------------------------------------------------
-*/
+/*	Display GUI	*/
 
 
 if(empty($first_letter_user)) {
@@ -174,10 +159,6 @@ unset($result);
  </table>
 </form>
 <?php
-/*
-==============================================================================
-		FOOTER
-==============================================================================
-*/
+/*		FOOTER	*/
 Display :: display_footer();
 ?>

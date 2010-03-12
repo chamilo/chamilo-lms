@@ -5,6 +5,7 @@
 *	It displays a list of users and a list of courses;
 *	you can select multiple users and courses and then click on
 *	@package chamilo.admin
+*	@author Julio Montoya <gugli100@gmail.com>
 */
 
 // name of the language file that needs to be included
@@ -21,9 +22,7 @@ if (!$_configuration['multiple_access_urls']) {
 }
 
 /*
------------------------------------------------------------
 	Global constants and variables
------------------------------------------------------------
 */
 
 $form_sent = 0;
@@ -47,9 +46,7 @@ $interbreadcrumb[] = array ('url' => 'index.php', 'name' => get_lang('PlatformAd
 $interbreadcrumb[] = array ('url' => 'access_urls.php', 'name' => get_lang('MultipleAccessURLs'));
 
 /*
-==============================================================================
 		MAIN CODE
-==============================================================================
 */
 
 Display :: display_header($tool_name);
@@ -75,25 +72,18 @@ if ($_POST['form_sent']) {
 	if ($form_sent == 1) {
 		if ( count($courses) == 0 || count($url_list) == 0) {
 			Display :: display_error_message(get_lang('AtLeastOneCourseAndOneURL'));
-			//header('Location: access_urls.php?action=show_message&message='.get_lang('AtLeastOneUserAndOneURL'));
 		} else {
 			UrlManager::add_courses_to_urls($courses,$url_list);
 			Display :: display_confirmation_message(get_lang('CourseBelongURL'));
-			//header('Location: access_urls.php?action=show_message&message='.get_lang('UsersBelongURL'));
 		}
 	}
 }
 
 
 
-/*
------------------------------------------------------------
-	Display GUI
------------------------------------------------------------
-*/
+/*	Display GUI */
 
-if(empty($first_letter_user))
-{
+if(empty($first_letter_user)) {
 	$sql = "SELECT count(*) as num_courses FROM $tbl_course";
 	$result = Database::query($sql);
 	$num_row = Database::fetch_array($result);
@@ -172,9 +162,7 @@ unset($result);
 </form>
 <?php
 /*
-==============================================================================
 		FOOTER
-==============================================================================
 */
 Display :: display_footer();
 ?>

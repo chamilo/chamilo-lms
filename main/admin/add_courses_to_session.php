@@ -1,11 +1,9 @@
 <?php //$id: $
-/* For licensing terms, see /dokeos_license.txt */
-/**
-==============================================================================
-*	@package dokeos.admin
-* 	@todo use formvalidator
-==============================================================================
-*/
+/* For licensing terms, see /license.txt */
+/**	
+ * @package chamilo.admin
+ * @todo use formvalidator
+ */
 
 // name of the language file that needs to be included
 $language_file='admin';
@@ -436,10 +434,6 @@ function valide(){
 
 </script>
 <?php
-/*
-==============================================================================
-		FOOTER
-==============================================================================
-*/
+/*		FOOTER 	*/
 Display::display_footer();
 ?>

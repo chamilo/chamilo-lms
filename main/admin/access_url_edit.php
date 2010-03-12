@@ -1,9 +1,9 @@
 <?php
 /* For licensing terms, see /license.txt */
-
 /**
- *	@package chamilo.admin
- */
+*	@package chamilo.admin
+*	@author Julio Montoya <gugli100@gmail.com>
+*/
 
 $language_file = 'admin';
 $cidReset = true;
@@ -11,8 +11,9 @@ require_once '../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
 
 api_protect_admin_script();
-if (!$_configuration['multiple_access_urls'])
+if (!$_configuration['multiple_access_urls']) {
 	header('Location: index.php');
+}
 
 require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 require_once api_get_path(LIBRARY_PATH).'security.lib.php';

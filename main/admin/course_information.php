@@ -5,11 +5,7 @@
  * @author Bart Mollet
  * @package dokeos.admin
 */
-/*
-==============================================================================
-		INIT SECTION
-==============================================================================
-*/
+/*		INIT SECTION */
 
 // name of the language file that needs to be included
 $language_file = 'admin';
@@ -25,7 +21,6 @@ api_protect_admin_script();
  */
 function get_course_usage($course_code, $session_id = 0)
 {
-
 	$table = Database::get_main_table(TABLE_MAIN_COURSE);
     $course_code = Database::escape_string($course_code);
 	$sql = "SELECT * FROM $table WHERE code='".$course_code."'";
@@ -71,14 +66,13 @@ $res = Database::query($sql);
 $course = Database::fetch_object($res);
 $tool_name = $course->title.' ('.$course->visual_code.')';
 Display::display_header($tool_name);
-//api_display_tool_title($tool_name);
+
 ?>
-<p>
+<div class="actions">
 <a href="<?php echo api_get_path(WEB_COURSE_PATH).$course->directory; ?>"><?php Display::display_icon('course_home.gif', get_lang('CourseHomepage')); ?> <?php echo get_lang('CourseHomepage'); ?></a>
-<br/>
+</div>
 <?php
-if(api_get_setting('server_type') == 'test')
-{
+if(api_get_setting('server_type') == 'test') {
 	?>
 	<a href="course_create_content.php?course_code=<?php echo $course->code ?>"><?php echo get_lang('AddDummyContentToCourse') ?></a>
 	<?php
@@ -92,7 +86,7 @@ echo '<blockquote>';
 
 $id_session = intval($_GET['id_session']);
 $table = new SortableTableFromArray(get_course_usage($course->code,$id_session),0,20,'usage_table');
-$table->set_additional_parameters(array ('code' => $_GET['code']));
+$table->set_additional_parameters(array ('code' => Security::remove_XSS($_GET['code'])));
 $table->set_other_tables(array('user_table','class_table'));
 $table->set_header(0,get_lang('Tool'), true);
 $table->set_header(1,get_lang('NumberOfItems'), true);
@@ -111,8 +105,7 @@ $is_western_name_order = api_is_western_name_order();
 if (Database::num_rows($res) > 0)
 {
 	$users = array ();
-	while ($obj = Database::fetch_object($res))
-	{
+	while ($obj = Database::fetch_object($res)) {
 		$user = array ();
 		$user[] = $obj->official_code;
 		if ($is_western_name_order)
@@ -154,6 +147,8 @@ else
 	echo get_lang('NoUsersInCourse');
 }
 echo '</blockquote>';
+
+/*@todo This should be dissapear classes are a deprecated feature*/ 
 /**
  * Show all classes subscribed in this course
  */
@@ -180,15 +175,9 @@ if (Database::num_rows($res) > 0)
 	$table->set_header(1,'');
 	$table->display();
 	echo '</blockquote>';
-}
-else
-{
+} else {
 	echo '<p>'.get_lang('NoClassesForThisCourse').'</p>';
 }
-/*
-==============================================================================
-		FOOTER
-==============================================================================
-*/
+/*	FOOTER	*/
 Display::display_footer();
 ?>

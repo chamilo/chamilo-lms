@@ -282,7 +282,7 @@ if (!empty($_SESSION['toolgroup'])){
 	$interbreadcrumb[] = array ("url"=>"../group/group_space.php?gidReq=".$_clean_toolgroup, "name"=> get_lang('GroupSpace').' ('.$group_properties['name'].')');
 } else {
 	if($surveyid) {
-		$interbreadcrumb[] = array ("url" => "../survey/survey_list.php?cidReq=$cidReq", "name" => get_lang('Survey'));
+		$interbreadcrumb[] = array ("url" => "../survey/survey_list.php?cidReq=$cidReq", "name" => get_lang('ToolSurvey'));
 		$nameTools = get_lang('PublishSurvey');
 	} else {
 		$nameTools = get_lang('ToolAnnouncement');

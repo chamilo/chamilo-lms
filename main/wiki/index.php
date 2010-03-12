@@ -94,7 +94,7 @@ $tbl_wiki_conf = Database::get_course_table(TABLE_WIKI_CONF);
 Constants and variables
 -----------------------------------------------------------
 */
-$tool_name = get_lang('Wiki');
+$tool_name = get_lang('ToolWiki');
 
 $MonthsLong = array (get_lang("JanuaryLong"), get_lang("FebruaryLong"), get_lang("MarchLong"), get_lang("AprilLong"), get_lang("MayLong"), get_lang("JuneLong"), get_lang("JulyLong"), get_lang("AugustLong"), get_lang("SeptemberLong"), get_lang("OctoberLong"), get_lang("NovemberLong"), get_lang("DecemberLong"));
 

@@ -42,7 +42,7 @@ switch ($action) {
 				} else $sql="UPDATE $tool_table SET visibility=$requested_visible WHERE id='".$_GET["id"]."'";
 				*/
 
-				$sql="UPDATE $tool_table SET visibility=$requested_visible WHERE id='".$_GET["id"]."'";
+				$sql="UPDATE $tool_table SET visibility=$requested_visible WHERE id='".intval($_GET['id'])."'";
 				Database::query($sql);
 			}
 				/*
@@ -84,10 +84,9 @@ switch ($action) {
 	case 'show_course_information' :
 	
 		$language_file = array ('course_description');
-		require_once '../global.inc.php';	
-			
+		require_once '../global.inc.php';			
 		require_once api_get_path(INCLUDE_PATH).'reduced_header.inc.php' ;
-				
+		
 		// Get the name of the database course.
 		$database_course = CourseManager::get_name_database_course($_GET['code']);
 		$tbl_course_description = Database::get_course_table(TABLE_COURSE_DESCRIPTION, $database_course);
@@ -97,7 +96,6 @@ switch ($action) {
 		while ($description = Database::fetch_object($result)) {
 			$descriptions[$description->id] = $description;
 		}
-
 		// Function that displays the details of the course description in html.
 		echo  CourseManager::get_details_course_description_html($descriptions, api_get_system_encoding(), false);
 	break;

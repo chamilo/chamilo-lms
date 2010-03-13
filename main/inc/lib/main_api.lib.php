@@ -4410,6 +4410,23 @@ function api_convert_and_format_date($time = null, $format = null, $from_timezon
 	return api_format_date($time, $format);
 }
 
+/**
+ * Converts a string into a timestamp safely (handling timezones), using strtotime
+ * 
+ * @param string String to be converted
+ * @param string Timezone (if null, the timezone will be determined based on user preference, or timezone chosen by the admin for the platform)
+ * @return int Timestamp
+ * 
+ * @author Guillaume Viguier <guillaume.viguier@beeznest.com>
+ */
+function api_strtotime($time, $timezone = null) {
+	$system_timezone = date_default_timezone_get();
+	date_default_timezone_set($timezone);
+	$timestamp = strtotime($time);
+	date_default_timezone_set($system_timezone);
+	return $timestamp;
+}
+
 /*	DEPRECATED FUNCTIONS */
 
 /**

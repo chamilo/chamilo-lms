@@ -1,31 +1,24 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
-==============================================================================
-* Chamilo LMS
-*
-* Update the Chamilo database from an older Dokeos version
-* Notice : This script has to be included by index.php
-* or update_courses.php (deprecated).
-*
-* @package chamilo.install
-* @todo
-* - conditional changing of tables. Currently we execute for example
-* ALTER TABLE `$dbNameForm`.`cours`
-* instructions without checking wether this is necessary.
-* - reorganise code into functions
-* @todo use database library
-==============================================================================
-*/
+ * Chamilo LMS
+ *
+ * Update the Chamilo database from an older Dokeos version
+ * Notice : This script has to be included by index.php
+ * or update_courses.php (deprecated).
+ *
+ * @package chamilo.install
+ * @todo
+ * - conditional changing of tables. Currently we execute for example
+ * ALTER TABLE `$dbNameForm`.`cours`
+ * instructions without checking wether this is necessary.
+ * - reorganise code into functions
+ * @todo use database library
+ */
 
 $old_file_version = '1.8.4';
 $new_file_version = '1.8.5';
-
-/*
-==============================================================================
-		MAIN CODE
-==============================================================================
-*/
 
 // Check if we come from index.php or update_courses.php - otherwise display error msg
 if (defined('SYSTEM_INSTALLATION')) {
@@ -57,12 +50,8 @@ if (defined('SYSTEM_INSTALLATION')) {
 		$dbScormForm = $dbPrefixForm.'scorm';
 	}
 
-	/*
-	-----------------------------------------------------------
-		Normal upgrade procedure:
-		start by updating main, statistic, user databases
-	-----------------------------------------------------------
-	*/
+	/*	Normal upgrade procedure: start by updating main, statistic, user databases */
+
 	// If this script has been included by index.php, not update_courses.php, so
 	// that we want to change the main databases as well...
 	$only_test = false;

@@ -1,25 +1,21 @@
-<?php //$id: $
+<?php
 /* For licensing terms, see /license.txt */
-/**
-==============================================================================
-* GOAL : Chamilo installation
-* As seen from the user, the installation proceeds in 6 steps.
-* The user is presented with several webpages where he/she has to make choices
-* and/or fill in data.
-*
-* The aim is, as always, to have good default settings and suggestions.
-*
-* @todo	reduce high level of duplication in this code
-* @todo (busy) organise code into functions
-* @package chamilo.install
-==============================================================================
-*/
 
-/*
-==============================================================================
-		CONSTANTS
-==============================================================================
-*/
+/**
+ * Chamilo installation
+ *
+ * As seen from the user, the installation proceeds in 6 steps.
+ * The user is presented with several webpages where he/she has to make choices
+ * and/or fill in data.
+ *
+ * The aim is, as always, to have good default settings and suggestions.
+ *
+ * @todo	reduce high level of duplication in this code
+ * @todo (busy) organise code into functions
+ * @package chamilo.install
+ */
+
+/*		CONSTANTS */
 
 define('SYSTEM_INSTALLATION', 1);
 define('INSTALL_TYPE_UPDATE', 'update');
@@ -27,11 +23,7 @@ define('FORM_FIELD_DISPLAY_LENGTH', 40);
 define('DATABASE_FORM_FIELD_DISPLAY_LENGTH', 25);
 define('MAX_FORM_FIELD_LENGTH', 80);
 
-/*
-==============================================================================
-		PHP VERSION CHECK
-==============================================================================
-*/
+/*		PHP VERSION CHECK */
 
 // PHP version requirement.
 define('REQUIRED_PHP_VERSION', '5');
@@ -43,11 +35,7 @@ if (!function_exists('version_compare') || version_compare( phpversion(), REQUIR
 	die();
 }
 
-/*
-==============================================================================
-		INITIALIZATION SECTION
-==============================================================================
-*/
+/*		INITIALIZATION SECTION */
 
 session_start();
 
@@ -144,13 +132,9 @@ if (is_already_installed_system()) {
 	die();
 }
 
-/*
-==============================================================================
-		STEP 1 : INITIALIZES FORM VARIABLES IF IT IS THE FIRST VISIT
-==============================================================================
-*/
+/*		STEP 1 : INITIALIZES FORM VARIABLES IF IT IS THE FIRST VISIT */
 
-//Is valid request
+// Is valid request
 $is_valid_request = $_REQUEST['is_executable'];
 foreach ($_POST as $request_index => $request_value) {
 	if (substr($request_index, 0, 4) == 'step') {
@@ -289,7 +273,8 @@ if (!isset($_GET['running'])) {
 	}
 }
 
-// The Steps
+/*		NEXT STEPS IMPLEMENTATION */
+
 $total_steps = 7;
 if (!$_POST) {
 	$current_step = 1;

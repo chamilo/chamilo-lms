@@ -2,32 +2,22 @@
 /* For licensing terms, see /license.txt */
 
 /**
-==============================================================================
-* Chamilo LMS
-* This file contains functions used by the install and upgrade scripts.
-*
-* Ideas for future additions:
-* - a function get_old_version_settings to retrieve the config file settings
-*   of older versions before upgrading.
-==============================================================================
-*/
+ * Chamilo LMS
+ * This file contains functions used by the install and upgrade scripts.
+ *
+ * Ideas for future additions:
+ * - a function get_old_version_settings to retrieve the config file settings
+ *   of older versions before upgrading.
+ */
 
-/*
-==============================================================================
-		CONSTANTS
-==============================================================================
-*/
+/*		CONSTANTS */
 
 define('SYSTEM_MAIN_DATABASE_FILE', 'db_main.sql');
 define('COUNTRY_DATA_FILENAME', 'country_data.csv');
 define('COURSES_HTACCESS_FILENAME', 'htaccess.dist');
 define('SYSTEM_CONFIG_FILENAME', 'configuration.dist.php');
 
-/*
-==============================================================================
-		COMMON PURPOSE FUNCTIONS
-==============================================================================
-*/
+/*		COMMON PURPOSE FUNCTIONS */
 
 /**
  * This function detects whether the system has been already installed.
@@ -217,11 +207,7 @@ function detect_browser_language() {
 	return 'english';
 }
 
-/*
-==============================================================================
-		FILESYSTEM RELATED FUNCTIONS
-==============================================================================
-*/
+/*		FILESYSTEM RELATED FUNCTIONS */
 
 /**
  * This function checks if the given folder is writable
@@ -441,7 +427,7 @@ function get_config_param($param, $updatePath = '') {
 			return null;
 		}
 	}
-	
+
 	if (file_exists($updatePath.$updateFromConfigFile)) {
 
 		// The parameter was not found among the global variables, so look into the old configuration file.
@@ -541,11 +527,11 @@ function get_config_param($param, $updatePath = '') {
 		$dokeos_version = $val;
 
 		if (empty($dokeos_version)) {
-			//checking the dokeos_version value exists in main/inc/installedVersion.inc.php 
+			//checking the dokeos_version value exists in main/inc/installedVersion.inc.php
 			if (file_exists($updatePath.'main/inc/installedVersion.inc.php')) {
 				$updateFromInstalledVersionFile = $updatePath.'main/inc/installedVersion.inc.php';
 				require ($updateFromInstalledVersionFile); //there are only 2 variables here: $stable & $dokeos_version
-				$stable = false;		
+				$stable = false;
 			}
 		}
 		return $dokeos_version;
@@ -559,11 +545,7 @@ function get_config_param($param, $updatePath = '') {
 	}
 }
 
-/*
-==============================================================================
-		DATABASE RELATED FUNCTIONS
-==============================================================================
-*/
+/*		DATABASE RELATED FUNCTIONS */
 
 /**
  * Gets a configuration parameter from the database. Returns returns null on failure.
@@ -918,11 +900,7 @@ function add_document_180($_course, $path, $filetype, $filesize, $title, $commen
     }
 }
 
-/*
-==============================================================================
-		DISPLAY FUNCTIONS
-==============================================================================
-*/
+/*		DISPLAY FUNCTIONS */
 
 /**
  * This function prints class=active_step $current_step=$param

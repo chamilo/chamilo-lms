@@ -1,29 +1,23 @@
 <?php
 /* For licensing terms, see /license.txt */
-/**
-==============================================================================
-* Chamilo LMS
-*
-* Updates the Dokeos files from version 1.6.x to version 1.8.0
-* IMPORTANT: This script has to be included by install/index.php or
-* update_courses.php (deprecated)
-*
-* SYSTEM_INSTALLATION is defined in the install/index.php (means that we are in
-* the regular upgrade process)
-*
-* When SYSTEM_INSTALLATION is defined, do for every course:
-* - create a new set of directories that reflect the new tools offered by 1.8
-* - record an item_property for each directory added
-*
-* @package chamilo.install
-==============================================================================
-*/
 
-/*
-==============================================================================
-		FUNCTIONS
-==============================================================================
-*/
+/**
+ * Chamilo LMS
+ *
+ * Updates the Dokeos files from version 1.6.x to version 1.8.0
+ * IMPORTANT: This script has to be included by install/index.php or
+ * update_courses.php (deprecated)
+ *
+ * SYSTEM_INSTALLATION is defined in the install/index.php (means that we are in
+ * the regular upgrade process)
+ *
+ * When SYSTEM_INSTALLATION is defined, do for every course:
+ * - create a new set of directories that reflect the new tools offered by 1.8
+ * - record an item_property for each directory added
+ *
+ * @package chamilo.install
+ */
+
 function insert_db($db_name, $folder_name, $text) {
 
 	// TODO: The (global?) variable $_course has not been declared/initialized.
@@ -33,12 +27,6 @@ function insert_db($db_name, $folder_name, $text) {
 	api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'invisible', 1);
 
 }
-
-/*
-==============================================================================
-		INIT SECTION
-==============================================================================
-*/
 
 if (defined('SYSTEM_INSTALLATION')) {
 

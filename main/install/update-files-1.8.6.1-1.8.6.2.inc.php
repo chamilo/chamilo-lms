@@ -1,16 +1,15 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
-==============================================================================
-* Chamilo LMS
-*
-* Updates the Dokeos files from version 1.8.6.1 to Chamilo version 1.8.6.2
-* This script operates only in the case of an update, and only to change the
-* active version number (and other things that might need a change) in the
-* current configuration file.
-* @package chamilo.install
-==============================================================================
-*/
+ * Chamilo LMS
+ *
+ * Updates the Dokeos files from version 1.8.6.1 to Chamilo version 1.8.6.2
+ * This script operates only in the case of an update, and only to change the
+ * active version number (and other things that might need a change) in the
+ * current configuration file.
+ * @package chamilo.install
+ */
 
 if (defined('SYSTEM_INSTALLATION')) {
 

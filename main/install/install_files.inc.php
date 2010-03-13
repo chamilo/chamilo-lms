@@ -1,19 +1,18 @@
-<?php // $Id: install_files.inc.php 22577 2009-08-03 04:31:24Z yannoo $
+<?php
 /* For licensing terms, see /license.txt */
+
 /**
-==============================================================================
-* Install the Chamilo files
-* Notice : This script has to be included by install/index.php
-*
-* The script creates two files:
-* - configuration.php, the file that contains very important info for Chamilo
-*   such as the database names.
-* - .htaccess file (in the courses directory) that is optional but improves
-*   security
-*
-* @package chamilo.install
-==============================================================================
-*/
+ * Install the Chamilo files
+ * Notice : This script has to be included by install/index.php
+ *
+ * The script creates two files:
+ * - configuration.php, the file that contains very important info for Chamilo
+ *   such as the database names.
+ * - .htaccess file (in the courses directory) that is optional but improves
+ *   security
+ *
+ * @package chamilo.install
+ */
 
 if (defined('SYSTEM_INSTALLATION')) {
 

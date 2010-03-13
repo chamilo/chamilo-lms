@@ -1,19 +1,12 @@
 <?php
 /* For licensing terms, see /license.txt */
-/**
-==============================================================================
-*	Install the Chamilo database
-*	Notice : This script has to be included by index.php
-*
-*	@package chamilo.install
-==============================================================================
-*/
 
-/*
-==============================================================================
-		MAIN CODE
-==============================================================================
-*/
+/**
+ *	Install the Chamilo database
+ *	Notice : This script has to be included by index.php
+ *
+ *	@package chamilo.install
+ */
 
 // This page can only be access through including from the install script.
 
@@ -120,7 +113,7 @@ if(!defined('CLI_INSTALLATION')) {
 }
 
 /**
- * creating the tables of the main database
+ * Creating the tables of the main database
  */
 Database::select_db($mysqlMainDb) or die(Database::error());
 
@@ -142,7 +135,7 @@ $installation_settings['{HASHFUNCTIONMODE}'] = $encryptPassForm;
 load_main_database($installation_settings);
 
 /**
- * creating the tables of the tracking database
+ * Creating the tables of the tracking database
  */
 
 Database::select_db($mysqlStatsDb) or die(Database::error());
@@ -153,8 +146,8 @@ $track_countries_table = "track_c_countries";
 fill_track_countries_table($track_countries_table);
 
 /**
- * creating the tables of the USER database
- * this is where the personal agenda items are storen, the user defined course categories (sorting of my courses)
+ * Creating the tables of the USER database
+ * This is where the personal agenda items are storen, the user defined course categories (sorting of my courses)
  */
 
 Database::select_db($mysqlUserDb) or die(Database::error());

@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  * Chamilo LMS
  * Script handling the migration between an old Dokeos platform (<1.8.0) to
@@ -35,7 +36,7 @@ function my_get_time($time) {
     else return 0;
 }
 
-//open log file
+// Open log file
 $fh = fopen('../../archive/newscorm_'.time().'.log', 'w');
 $fh_revert = fopen('../../archive/newscorm_'.time().'_revert.log', 'w');
 $fh_res = fopen('../../archive/newscorm_'.time().'_res.log', 'w');

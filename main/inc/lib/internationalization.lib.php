@@ -382,8 +382,134 @@ function api_detect_language(&$string, $encoding = null) {
 
 
 /**
- * Date and time formats
+ * Date and time conversions and formats
  */
+
+/**
+ * Returns an alphabetized list of timezones in an associative array that can be used to populate a select
+ *
+ * @return array List of timezone identifiers
+ *
+ * @author Guillaume Viguier <guillaume.viguier@beeznest.com>
+ */
+function api_get_timezones() {
+	$timezone_identifiers = DateTimeZone::listIdentifiers();
+	sort($timezone_identifiers);
+	$out = array();
+	foreach($timezone_identifiers as $tz) {
+		$out[$tz] = $tz;
+	}
+	$null_option = array("" => "");
+	$result = array_merge($null_option, $out);
+	return $result;
+}
+
+/**
+ * Returns the timezone to be converted to/from, based on user or admin preferences
+ *
+ * @return string The timezone chosen
+ */
+function _api_get_timezone() {
+	global $_user;
+	// First, get the default timezone of the server
+	$to_timezone = date_default_timezone_get();
+	// Second, see if a timezone has been chosen for the platform
+	$timezone_value = api_get_setting('timezone_value', 'timezones');
+	if ($timezone_value != null) {
+		$to_timezone = $timezone_value;
+	}
+	// If allowed by the administrator
+	$use_users_timezone = api_get_setting('use_users_timezone', 'timezones');
+	if ($use_users_timezone == 'true') {
+		// Get the timezone based on user preference, if it exists
+		require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
+		$timezone_user = UserManager::get_extra_user_data_by_field($_user['user_id'],'timezone');
+		if ($timezone_user['timezone'] != null) {
+			$to_timezone = $timezone_user['timezone'];
+		}
+	}
+	return $to_timezone;
+}
+
+/**
+ * Returns the given date as a DATETIME in UTC timezone. This function should be used before entering any date in the DB.
+ *
+ * @param mixed The date to be converted (can be a string supported by date() or a timestamp)
+ * @return string The DATETIME in UTC to be inserted in the DB, or null if the format of the argument is not supported
+ *
+ * @author Guillaume Viguier <guillaume.viguier@beeznest.com>
+ */
+function api_get_utc_datetime($time = null) {
+	$from_timezone = _api_get_timezone();
+	$to_timezone = 'UTC';
+	if (is_null($time)) {
+		return gmdate("Y-m-d H:i:s");
+	}
+	// If time is a timestamp, return directly in utc
+	if (is_int($time)) {
+		return gmdate("Y-m-d H:i:s", $time);
+	}
+	try {
+		$date = new DateTime($time, new DateTimezone($from_timezone));
+		$date->setTimezone(new DateTimeZone($to_timezone));
+		return $date->format("Y-m-d H:i:s");
+	} catch (Exception $e) {
+		return null;
+	}
+}
+
+/**
+ * Returns a DATETIME string converted to the right timezone
+ * @param mixed The time to be converted
+ * @param string The timezone to be converted to. If null, the timezone will be determined based on user preference, or timezone chosen by the admin for the platform.
+ * @param string The timezone to be converted from. If null, UTC will be assumed.
+ * @return string The converted time formatted as Y-m-d H:i:s
+ *
+ * @author Guillaume Viguier <guillaume.viguier@beeznest.com>
+ */
+function api_get_local_time($time = null, $to_timezone=null, $from_timezone=null) {
+	// Determining the timezone to be converted from
+	if (is_null($from_timezone)) {
+		$from_timezone = 'UTC';
+	}
+	// Determining the timezone to be converted to
+	if (is_null($to_timezone)) {
+		$to_timezone = _api_get_timezone();
+	}
+	// If time is a timestamp, convert it to a string
+	if (is_null($time)) {
+		$from_timezone = 'UTC';
+		$time = gmdate('Y-m-d H:i:s');
+	}
+	if (is_int($time)) {
+		$from_timezone = 'UTC';
+		$time = gmdate('Y-m-d H:i:s', $time);
+	}
+	try {
+		$date = new DateTime($time, new DateTimezone($from_timezone));
+		$date->setTimezone(new DateTimeZone($to_timezone));
+		return $date->format('Y-m-d H:i:s');
+	} catch (Exception $e) {
+		return null;
+	}
+}
+
+/**
+ * Converts a string into a timestamp safely (handling timezones), using strtotime
+ * 
+ * @param string String to be converted
+ * @param string Timezone (if null, the timezone will be determined based on user preference, or timezone chosen by the admin for the platform)
+ * @return int Timestamp
+ * 
+ * @author Guillaume Viguier <guillaume.viguier@beeznest.com>
+ */
+function api_strtotime($time, $timezone = null) {
+	$system_timezone = date_default_timezone_get();
+	date_default_timezone_set($timezone);
+	$timestamp = strtotime($time);
+	date_default_timezone_set($system_timezone);
+	return $timestamp;
+}
 
 /**
  * Returns formated date/time, correspondent to a given language.
@@ -479,6 +605,150 @@ function api_format_date($time, $format = null, $language = null) {
 	}
 	date_default_timezone_set($system_timezone);
 	return $formatted_date;
+}
+
+/**
+ * Returns the difference between the current date (date(now)) with the parameter $date in a string format like "2 days, 1 hour"
+ * Example: $date="2008-03-07 15:44:08";
+ * 			date_to_str($date) it will return 3 days, 20 hours
+ * The given date should be in the timezone chosen by the user or administrator. Use api_get_local_time() to get it...
+ *
+ * @param  string The string has to be the result of a date function in this format -> date("Y-m-d H:i:s",time());
+ * @return string The difference between the current date and the parameter in a literal way "3 days, 2 hour" *
+ * @author Julio Montoya
+ */
+
+function date_to_str_ago($date) {
+
+	static $initialized = false;
+	static $today, $yesterday;
+	static $min_decade, $min_year, $min_month, $min_week, $min_day, $min_hour, $min_minute;
+	static $min_decades, $min_years, $min_months, $min_weeks, $min_days, $min_hours, $min_minutes;
+	static $sec_time_time, $sec_time_sing, $sec_time_plu;
+	
+	$system_timezone = date_default_timezone_get();
+	date_default_timezone_set(_api_get_timezone());
+
+	if (!$initialized) {
+		$today = api_ucfirst(get_lang('Today'));
+		$yesterday = api_ucfirst(get_lang('Yesterday'));
+
+		$min_decade = get_lang('MinDecade');
+		$min_year = get_lang('MinYear');
+		$min_month = get_lang('MinMonth');
+		$min_week = get_lang('MinWeek');
+		$min_day = get_lang('MinDay');
+		$min_hour = get_lang('MinHour');
+		$min_minute = get_lang('MinMinute');
+
+		$min_decades = get_lang('MinDecades');
+		$min_years = get_lang('MinYears');
+		$min_months = get_lang('MinMonths');
+		$min_weeks = get_lang('MinWeeks');
+		$min_days = get_lang('MinDays');
+		$min_hours = get_lang('MinHours');
+		$min_minutes = get_lang('MinMinutes');
+
+		// original 1
+		//$sec_time=array("century"=>3.1556926*pow(10,9),"decade"=>315569260,"year"=>31556926,"month"=>2629743.83,"week"=>604800,"day"=>86400,"hour"=>3600,"minute"=>60,"second"=>1);
+		//$sec_time=array(get_lang('MinDecade')=>315569260,get_lang('MinYear')=>31556926,get_lang('MinMonth')=>2629743.83,get_lang('MinWeek')=>604800,get_lang('MinDay')=>86400,get_lang('MinHour')=>3600,get_lang('MinMinute')=>60);
+		$sec_time_time = array(315569260, 31556926, 2629743.83, 604800, 86400, 3600, 60);
+		$sec_time_sing = array($min_decade, $min_year, $min_month, $min_week, $min_day, $min_hour, $min_minute);
+		$sec_time_plu = array($min_decades, $min_years, $min_months, $min_weeks, $min_days, $min_hours, $min_minutes);
+		$initialized = true;
+	}
+
+	$dst_date = is_string($date) ? strtotime($date) : $date;
+	// For avoiding calling date() several times
+	$date_array = date('s/i/G/j/n/Y', $dst_date);
+	$date_split = explode('/', $date_array);
+
+	$dst_s = $date_split[0];
+	$dst_m = $date_split[1];
+	$dst_h = $date_split[2];
+	$dst_day = $date_split[3];
+	$dst_mth = $date_split[4];
+	$dst_yr = $date_split[5];
+
+	$dst_date = mktime($dst_h, $dst_m, $dst_s, $dst_mth, $dst_day, $dst_yr);
+	$time = $offset = time() - $dst_date; // Seconds between current days and today.
+
+	// Here start the functions sec_to_str()
+	$act_day = date('d');
+	$act_mth = date('n');
+	$act_yr = date('Y');
+
+	if ($dst_day == $act_day && $dst_mth == $act_mth && $dst_yr == $act_yr) {
+		return $today;
+	}
+
+	if ($dst_day == $act_day - 1 && $dst_mth == $act_mth && $dst_yr == $act_yr) {
+		return $yesterday;
+	}
+
+	$str_result = array();
+	$time_result = array();
+	$key_result = array();
+
+	$str = '';
+	$i = 0;
+	for ($i = 0; $i < count($sec_time_time); $i++) {
+		$seconds = $sec_time_time[$i];
+		if ($seconds > $time) {
+			continue;
+		}
+		$current_value = intval($time/$seconds);
+
+		if ($current_value != 1) {
+			$date_str = $sec_time_plu[$i];
+		} else {
+			$date_str = $sec_time_sing[$i];
+
+		}
+		$key_result[] = $sec_time_sing[$i];
+
+		$str_result[] = $current_value.' '.$date_str;
+		$time_result[] = $current_value;
+		$str .= $current_value.$date_str;
+		$time %= $seconds;
+	}
+
+	if ($key_result[0] == $min_day && $key_result[1]== $min_minute) {
+		$key_result[1] = ' 0 '.$min_hours;
+		$str_result[0] = $time_result[0].' '.$key_result[0];
+		$str_result[1] = $key_result[1];
+	}
+
+	if ($key_result[0] == $min_year && ($key_result[1] == $min_day || $key_result[1] == $min_week)) {
+		$key_result[1] = ' 0 '.$min_months;
+		$str_result[0] = $time_result[0].' '.$key_result[0];
+		$str_result[1] = $key_result[1];
+	}
+
+	if (!empty($str_result[1])) {
+		$str = $str_result[0].', '.$str_result[1];
+	} else {
+		$str = $str_result[0];
+	}
+	
+	date_default_timezone_set($system_timezone);
+	return $str;
+}
+
+/**
+ * Converts a date to the right timezone and localizes it in the format given as an argument
+ * @param mixed The time to be converted
+ * @param mixed Format to be used
+ * @param string Timezone to be converted from. If null, UTC will be assumed.
+ * @return string Converted and localized date
+ * 
+ * @author Guillaume Viguier <guillaume.viguier@beeznest.com>
+ */
+function api_convert_and_format_date($time = null, $format = null, $from_timezone = null) {
+	// First, convert the datetime to the right timezone
+	$datetime = api_get_local_time($time, null, $from_timezone);
+	// Second, localize the date
+	return api_format_date($time, $format);
 }
 
 /**

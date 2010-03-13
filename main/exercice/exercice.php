@@ -1168,14 +1168,14 @@ if ($_configuration['tracking_enabled'] && ($show == 'result')) {
 		}
 
 			$sql="SELECT ".(api_is_western_name_order() ? "CONCAT(firstname,' ',lastname)" : "CONCAT(lastname,' ',firstname)")." as users, ce.title, te.exe_result ,
-								 te.exe_weighting, UNIX_TIMESTAMP(te.exe_date), te.exe_id, email, UNIX_TIMESTAMP(te.start_date), steps_counter,cuser.user_id,te.exe_duration
+								 te.exe_weighting, te.exe_date, te.exe_id, email, te.start_date, steps_counter,cuser.user_id,te.exe_duration
 						  FROM $TBL_EXERCICES AS ce , $TBL_TRACK_EXERCICES AS te, $TBL_USER AS user,$tbl_course_rel_user AS cuser
 						  WHERE  user.user_id=cuser.user_id AND cuser.relation_type<>".COURSE_RELATION_TYPE_RRHH." AND te.exe_exo_id = ce.id AND te.status != 'incomplete' AND cuser.user_id=te.exe_user_id AND te.exe_cours_id='" . Database :: escape_string($_cid) . "'
 						  AND cuser.status<>1 $user_id_and $session_id_and AND ce.active <>-1 AND orig_lp_id = 0 AND orig_lp_item_id = 0
 						  AND cuser.course_code=te.exe_cours_id ORDER BY users, te.exe_cours_id ASC, ce.title ASC, te.exe_date DESC";
 
 			$hpsql="SELECT ".(api_is_western_name_order() ? "CONCAT(tu.firstname,' ',tu.lastname)" : "CONCAT(tu.lastname,' ',tu.firstname)").", tth.exe_name,
-								tth.exe_result , tth.exe_weighting, UNIX_TIMESTAMP(tth.exe_date)
+								tth.exe_result , tth.exe_weighting, tth.exe_date
 							FROM $TBL_TRACK_HOTPOTATOES tth, $TBL_USER tu
 							WHERE  tu.user_id=tth.exe_user_id AND tth.exe_cours_id = '" . Database :: escape_string($_cid) . " $user_id_and '
 							ORDER BY tth.exe_cours_id ASC, tth.exe_date DESC";
@@ -1185,13 +1185,13 @@ if ($_configuration['tracking_enabled'] && ($show == 'result')) {
 		$user_id_and = ' AND te.exe_user_id = ' . api_get_user_id() . ' ';
 
 				$sql="SELECT ".(api_is_western_name_order() ? "CONCAT(firstname,' ',lastname)" : "CONCAT(lastname,' ',firstname)")." as users,ce.title, te.exe_result ,
-							 te.exe_weighting, UNIX_TIMESTAMP(te.exe_date), te.exe_id, email, UNIX_TIMESTAMP(te.start_date), steps_counter,cuser.user_id,te.exe_duration, ce.results_disabled
+							 te.exe_weighting, te.exe_date, te.exe_id, email, te.start_date, steps_counter,cuser.user_id,te.exe_duration, ce.results_disabled
 						  FROM $TBL_EXERCICES AS ce , $TBL_TRACK_EXERCICES AS te, $TBL_USER AS user,$tbl_course_rel_user AS cuser
 						  WHERE  user.user_id=cuser.user_id AND te.exe_exo_id = ce.id AND te.status != 'incomplete' AND cuser.user_id=te.exe_user_id AND te.exe_cours_id='" . Database :: escape_string($_cid) . "'
 						  AND cuser.status<>1 AND cuser.relation_type<>".COURSE_RELATION_TYPE_RRHH." $user_id_and $session_id_and AND ce.active <>-1 AND orig_lp_id = 0 AND orig_lp_item_id = 0
 						  AND cuser.course_code=te.exe_cours_id ORDER BY users, te.exe_cours_id ASC, ce.title ASC, te.exe_date DESC";
 
-		$hpsql = "SELECT '',exe_name, exe_result , exe_weighting, UNIX_TIMESTAMP(exe_date)
+		$hpsql = "SELECT '',exe_name, exe_result , exe_weighting, exe_date
 						FROM $TBL_TRACK_HOTPOTATOES
 						WHERE exe_user_id = '" . $_user['user_id'] . "' AND exe_cours_id = '" . Database :: escape_string($_cid) . "'
 						ORDER BY exe_cours_id ASC, exe_date DESC";
@@ -1248,7 +1248,7 @@ if ($_configuration['tracking_enabled'] && ($show == 'result')) {
 			$user = $results[$i][0];
 			$test = $results[$i][1];
 			$quiz_name_list = $test;
-			$dt = strftime($dateTimeFormatLong, $results[$i][4]);
+			$dt = api_convert_and_format_date($results[$i][4], null, date_default_timezone_get());
 			$res = $results[$i][2];
 
 			$duration = intval($results[$i][10]);
@@ -1274,14 +1274,16 @@ if ($_configuration['tracking_enabled'] && ($show == 'result')) {
 				}
 				//echo '<td>' . $test . '</td>';
 				//echo '<td>';
-				if ($results[$i][7] > 1) {
+				if ($results[$i][7] != "0000-00-00 00:00:00") {
 					//echo ceil((($results[$i][4] - $results[$i][7]) / 60)) . ' ' . get_lang('MinMinutes');
-					$duration_list = ceil((($results[$i][4] - $results[$i][7]) / 60)) . ' ' . get_lang('MinMinutes');
+					$exe_date_timestamp = api_strtotime($results[$i][4], date_default_timezone_get());
+					$start_date_timestamp = api_strtotime($results[$i][7], date_default_timezone_get());
+					$duration_list = ceil((($exe_date_timestamp - $start_date_timestamp) / 60)) . ' ' . get_lang('MinMinutes');
 					if ($results[$i][8] > 1) {
 						//echo ' ( ' . $results[$i][8] . ' ' . get_lang('Steps') . ' )';
 						$duration_list = ' ( ' . $results[$i][8] . ' ' . get_lang('Steps') . ' )';
 					}
-					$add_start_date = format_locale_date('%b %d, %Y %H:%M', $results[$i][7]) . ' / ';
+					$add_start_date = api_convert_and_format_date($results[$i][7], null, date_default_timezone_get()) . ' / ';
 				} else {
 					$duration_list = get_lang('NoLogOfDuration');
 					//echo get_lang('NoLogOfDuration');
@@ -1289,7 +1291,7 @@ if ($_configuration['tracking_enabled'] && ($show == 'result')) {
 				//echo '</td>';
 				//echo '<td>' . $add_start_date . format_locale_date('%b %d, %Y %H:%M', $results[$i][4]) . '</td>'; //get_lang('dateTimeFormatLong')
 				// Date conversion
-				$date_list = api_get_local_time((int)$results[$i][7], null, null, date_default_timezone_get()). ' / ' . api_get_local_time((int)$results[$i][4], null, null, date_default_timezone_get());
+				$date_list = api_get_local_time($results[$i][7], null, date_default_timezone_get()). ' / ' . api_get_local_time($results[$i][4], null, date_default_timezone_get());
 				// there are already a duration test period calculated??
 				//echo '<td>'.sprintf(get_lang('DurationFormat'), $duration).'</td>';
 
@@ -1396,7 +1398,7 @@ if ($_configuration['tracking_enabled'] && ($show == 'result')) {
 				echo '<td class="content">' . $hpresults[$i][0] . '</td>';
 			}
 			echo '<td class="content">' . $title . '</td>';
-			echo '<td class="content">' . strftime($dateTimeFormatLong, $hpresults[$i][4]) . '</td>';
+			echo '<td class="content">' . api_convert_and_format_date($hpresults[$i][4], null, date_default_timezone_get()) . '</td>';
 			echo '<td class="content">' . round(($hpresults[$i][2] / ($hpresults[$i][3] != 0 ? $hpresults[$i][3] : 1)) * 100, 2) . '% (' . $hpresults[$i][2] . ' / ' . $hpresults[$i][3] . ')</td>';
 			echo '<td></td>'; //there is no possibility to edit the results of a Hotpotatoes test
 			echo '</tr>';

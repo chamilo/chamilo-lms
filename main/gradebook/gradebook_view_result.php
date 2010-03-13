@@ -229,7 +229,7 @@ if ($export_result_form->validate()) {
 		$pdf->selectFont(api_get_path(LIBRARY_PATH).'ezpdf/fonts/Courier.afm');
 		$pdf->ezSetMargins(30, 30, 50, 30);
 		$pdf->ezSetY(800);
-		$pdf->ezText(get_lang('EvaluationName') . ' : ' . $eval[0]->get_name() . ' (' . date('j/n/Y g:i', $eval[0]->get_date()) . ')', 12, array (
+		$pdf->ezText(get_lang('EvaluationName') . ' : ' . $eval[0]->get_name() . ' (' . api_format_date($eval[0]->get_date(), "%d/%m/%Y %R") . ')', 12, array (
 			'justification' => 'left'
 		));
 		$pdf->ezText(get_lang('Description') . ' : ' . $eval[0]->get_description());
@@ -295,7 +295,7 @@ if ($export_result_form->validate()) {
 		$data['lastname']= $userinfo['lastname'];
 		$data['firstname']= $userinfo['firstname'];
 		$data['score']= $result->get_score();
-		$data['date']= date('Y-n-j g:i', $result->get_date());
+		$data['date'] = api_convert_and_format_date($result->get_date(), "%d/%m/%Y %R");
 		$alldata[]= $data;
 	}
 	switch ($file_type) {

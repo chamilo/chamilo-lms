@@ -734,8 +734,7 @@ class Blog {
 				// Prepare data
 				$blog_post_id = $blog_post['post_id'];
 				$blog_post_text = make_clickable(stripslashes($blog_post['full_text']));
-				$blog_post_date = api_get_local_time($blog_post['date_creation'], $dateFormatLong, null, date_default_timezone_get());
-				$blog_post_time = api_get_local_time($blog_post['date_creation'], 'H:i', null, date_default_timezone_get());
+				$blog_post_date = api_convert_and_format_date($blog_post['date_creation'], null, date_default_timezone_get());
 
 				// Create an introduction text (but keep FULL sentences)
 				$limit = 100; //nmbr of words in introduction text
@@ -769,7 +768,7 @@ class Blog {
 
 				echo '<div class="blogpost">'."\n";
 				echo '<span class="blogpost_title"><a href="blog.php?action=view_post&amp;blog_id=' . $blog_id . '&amp;post_id=' . $blog_post['post_id'] . '#add_comment" title="' . get_lang('ReadPost') . '" >'.stripslashes($blog_post['title']) . '</a></span>'."\n";
-				echo '<span class="blogpost_date"><a href="blog.php?action=view_post&amp;blog_id=' . $blog_id . '&amp;post_id=' . $blog_post['post_id'] . '#add_comment" title="' . get_lang('ReadPost') . '" >' . $blog_post_date . ' (' . $blog_post_time . ')</a></span>'."\n";
+				echo '<span class="blogpost_date"><a href="blog.php?action=view_post&amp;blog_id=' . $blog_id . '&amp;post_id=' . $blog_post['post_id'] . '#add_comment" title="' . get_lang('ReadPost') . '" >' . $blog_post_date . '</a></span>'."\n";
 				echo '<span class="blogpost_introduction" id="blogpost_introduction_' . $blog_post_id . '">' . $introduction_text . $readMoreLink . '</span>'."\n";
 				echo '<span class="blogpost_text" id="blogpost_text_' . $blog_post_id . '" style="display: none">' . $blog_post_text . '</span>'."\n";
 				$file_name_array=get_blog_attachment($blog_id,$blog_post_id,0);
@@ -873,8 +872,7 @@ class Blog {
 
 		// Prepare data
 		$blog_post_text = make_clickable(stripslashes($blog_post['full_text']));
-		$blog_post_date = format_locale_date($dateFormatLong,strtotime($blog_post['date_creation']));
-		$blog_post_time = date('H:m',strtotime($blog_post['date_creation']));
+		$blog_post_date = api_convert_and_format_date($blog_post['date_creation'], null, date_default_timezone_get());
 		$blog_post_actions = "";
 
 		$task_id = (isset($_GET['task_id']) && is_numeric($_GET['task_id'])) ? intval($_GET['task_id']) : 0;
@@ -893,7 +891,7 @@ class Blog {
 		// Display post
 		echo '<div class="blogpost">';
 		echo '<span class="blogpost_title"><a href="blog.php?action=view_post&amp;blog_id=' . $blog_id . '&amp;post_id=' . $blog_post['post_id'] . '" title="' . get_lang('ReadPost') . '" >'.stripslashes($blog_post['title']) . '</a></span>';
-		echo '<span class="blogpost_date">' . $blog_post_date . ' (' . $blog_post_time . ')</span>';
+		echo '<span class="blogpost_date">' . $blog_post_date . '</span>';
 		echo '<span class="blogpost_text">' . $blog_post_text . '</span><br />';
 
 		$file_name_array=get_blog_attachment($blog_id,$post_id);
@@ -1086,8 +1084,7 @@ class Blog {
 
 			// Prepare data
 			$comment_text = make_clickable(stripslashes($comment['comment']));
-			$blog_comment_date = format_locale_date($dateFormatLong,strtotime($comment['date_creation']));
-			$blog_comment_time = date('H:i',strtotime($comment['date_creation']));
+			$blog_comment_date = api_convert_and_format_date($comment['date_creation'], null, date_default_timezone_get());
 			$blog_comment_actions = "";
 			if(api_is_allowed('BLOG_' . $blog_id, 'article_comments_delete', $task_id)) { $blog_comment_actions .= '<a href="blog.php?action=view_post&amp;blog_id=' . $blog_id . '&amp;post_id=' . $post_id . '&amp;do=delete_comment&amp;comment_id=' . $comment['comment_id'] . '&amp;task_id=' . $task_id . '" title="' . get_lang('DeleteThisComment') . '" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset)). '\')) return false;"><img src="../img/delete.gif" border="0" /></a>'; }
 			if(api_is_allowed('BLOG_' . $blog_id, 'article_comments_rate')) { $rating_select = Blog::display_rating_form('comment', $blog_id, $post_id, $comment['comment_id']); }
@@ -1103,7 +1100,7 @@ class Blog {
 			$margin = $current_level * 30;
 			echo '<div class="blogpost_comment" style="margin-left: ' . $margin . 'px;' . $border_color . '">';
 				echo '<span class="blogpost_comment_title"><a href="#add_comment" onclick="document.getElementById(\'comment_parent_id\').value=\'' . $comment['comment_id'] . '\'; document.getElementById(\'comment_title\').value=\'Re: '.addslashes($comment['title']) . '\'" title="' . get_lang('ReplyToThisComment') . '" >'.stripslashes($comment['title']) . '</a></span>';
-				echo '<span class="blogpost_comment_date">' . $blog_comment_date . ' (' . $blog_comment_time . ')</span>';
+				echo '<span class="blogpost_comment_date">' . $blog_comment_date . '</span>';
 				echo '<span class="blogpost_text">' . $comment_text . '</span>';
 
 				$file_name_array=get_blog_attachment($blog_id,$post_id, $comment['comment_id']);

@@ -1117,11 +1117,9 @@ if ($is_special > 0) {
 			define('ASSIGNMENT_EXPIRES', $time_expires);
 		}
 
-		$ends_on_datetime = api_get_local_time($homework['ends_on'], null, date_default_timezone_get());
-		$ends_on = api_format_date($ends_on_datetime);
+		$ends_on = api_convert_and_format_date($homework['ends_on'], null, date_default_timezone_get());
 
-		$expires_on_datetime = api_get_local_time($homework['expires_on'], null, date_default_timezone_get());
-		$expires_on = api_format_date($expires_on_datetime);
+		$expires_on = api_convert_and_format_date($homework['expires_on'], null, date_default_timezone_get());
 
 		if ($has_ended) {
 			display_action_links($cur_dir_path, $always_show_tool_options, true);

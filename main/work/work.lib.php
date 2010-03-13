@@ -694,7 +694,7 @@ function display_student_publications_list($work_dir, $sub_course_dir, $currentC
 
 			if ($direc_date != '' && $direc_date != '0000-00-00 00:00:00') {
 				$direc_date_local = api_get_local_time($direc_date, null, date_default_timezone_get());
-				$row[] = date_to_str_ago($direc_date_local).'<br /><span class="dropbox_date">'.api_format_date($direc_date_local).'</span>'.'<!--uts='.strtotime($direc_date).'-->';
+				$row[] = date_to_str_ago($direc_date_local).'<br /><span class="dropbox_date">'.api_format_date($direc_date_local).'</span>'.'<!--uts='.api_strtotime($direc_date_local).'-->';
 			} else {
 				$row[] = '';
 			}
@@ -755,7 +755,7 @@ function display_student_publications_list($work_dir, $sub_course_dir, $currentC
 				$row[] = display_user_link_work($row2['insert_user_id'], $work->author).$qualification_string; // $work->author;
 
 				$work_sent_date_local = api_get_local_time($work->sent_date, null, date_default_timezone_get());
-				$row[] = date_to_str_ago($work_sent_date_local).$add_string.'<br /><span class="dropbox_date">'.api_format_date($work_sent_date_local).'</span>'.'<!--uts='.strtotime($work_sent_date).'-->';
+				$row[] = date_to_str_ago($work_sent_date_local).$add_string.'<br /><span class="dropbox_date">'.api_format_date($work_sent_date_local).'</span>'.'<!--uts='.api_strtotime($work_sent_date_local).'-->';
 
 				if ($is_allowed_to_edit) {
 

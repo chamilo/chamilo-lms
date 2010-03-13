@@ -1362,7 +1362,7 @@ if ($_GET['action']=='edit')
 				//check tasks
 				if (!empty($row['startdate_assig']) && $row['startdate_assig']!='0000-00-00 00:00:00' && time()<strtotime($row['startdate_assig']))
 				{
-					$message=get_lang('TheTaskDoesNotBeginUntil').': '.api_get_local_time($row['startdate_assig'], null, null, date_default_timezone_get());
+					$message=get_lang('TheTaskDoesNotBeginUntil').': '.api_convert_and_format_date($row['startdate_assig'], null, date_default_timezone_get());
 					Display::display_warning_message($message);
 					if(!api_is_allowed_to_edit(false,true))
 					{
@@ -1373,7 +1373,7 @@ if ($_GET['action']=='edit')
 				//
 				if (!empty($row['enddate_assig']) && $row['enddate_assig']!='0000-00-00 00:00:00' && time()>strtotime($row['enddate_assig']) && $row['enddate_assig']!='0000-00-00 00:00:00' && $row['delayedsubmit']==0)
 				{
-					$message=get_lang('TheDeadlineHasBeenCompleted').': '.api_get_local_time($row['enddate_assig'], null, null, date_default_timezone_get());
+					$message=get_lang('TheDeadlineHasBeenCompleted').': '.api_convert_and_format_date($row['enddate_assig'], null, date_default_timezone_get());
 					Display::display_warning_message($message);
 					if(!api_is_allowed_to_edit(false,true))
 					{
@@ -1414,7 +1414,7 @@ if ($_GET['action']=='edit')
 					}
 					else
 					{
-						$message_task_startdate=api_get_local_time($row['startdate_assig'], null, null, date_default_timezone_get());
+						$message_task_startdate=api_convert_and_format_date($row['startdate_assig'], null, date_default_timezone_get());
 					}
 
 					if ($row['enddate_assig']=='0000-00-00 00:00:00')
@@ -1423,7 +1423,7 @@ if ($_GET['action']=='edit')
 					}
 					else
 					{
-						$message_task_endate=api_get_local_time($row['enddate_assig'], null, null, date_default_timezone_get());
+						$message_task_endate=api_convert_and_format_date($row['enddate_assig'], null, date_default_timezone_get());
 					}
 
 					if ($row['delayedsubmit']==0)
@@ -1777,7 +1777,7 @@ if ($_GET['action']=='history' or Security::remove_XSS($_POST['HistoryDifference
 				echo '<a href="'.api_get_self().'?action=showpage&amp;title='.$page.'&amp;view='.$row['id'].'">';
 				echo '<a href="'.api_get_self().'?cidReq='.$_course[id].'&action=showpage&amp;title='.$page.'&amp;view='.$row['id'].'&group_id='.$group_id.'">';
 
-				echo api_get_local_time($row['dtime'], null, null, date_default_timezone_get());
+				echo api_convert_and_format_date($row['dtime'], null, date_default_timezone_get());
 				echo '</a>';
 				echo ' ('.get_lang('Version').' '.$row['version'].')';
 				echo ' '.get_lang('By').' ';
@@ -1976,7 +1976,7 @@ if ($_GET['action']=='recentchanges')
 
 
 			$row = array ();
-			$row[] = api_get_local_time($obj->dtime, null, null, date_default_timezone_get());
+			$row[] = api_convert_and_format_date($obj->dtime, null, date_default_timezone_get());
 			$row[] = $ShowAssignment.$icon_task;
 			$row[] = '<a href="'.api_get_self().'?cidReq='.$_course[id].'&action=showpage&title='.urlencode($obj->reflink).'&amp;view='.$obj->id.'&group_id='.Security::remove_XSS($_GET['group_id']).'">'.$obj->title.'</a>';
 			$row[] = $obj->version>1 ? get_lang('EditedBy') : get_lang('AddedBy');
@@ -2060,7 +2060,7 @@ if ($_GET['action']=='allpages')
 			$row[] =$ShowAssignment.$icon_task;
 			$row[] = '<a href="'.api_get_self().'?cidReq='.$_course[id].'&action=showpage&title='.urlencode(Security::remove_XSS($obj->reflink)).'&group_id='.Security::remove_XSS($_GET['group_id']).'">'.Security::remove_XSS($obj->title).'</a>';
 			$row[] = $obj->user_id <>0 ? '<a href="../user/userInfo.php?uInfo='.$userinfo['user_id'].'">'.api_get_person_name($userinfo['firstname'], $userinfo['lastname']).'</a>' : get_lang('Anonymous').' ('.$obj->user_ip.')';
-			$row[] = api_get_local_time($obj->dtime, null, null, date_default_timezone_get());
+			$row[] = api_convert_and_format_date($obj->dtime, null, date_default_timezone_get());
 
 			if(api_is_allowed_to_edit(false,true)|| api_is_platform_admin())
 			{
@@ -2102,7 +2102,7 @@ if ($_GET['action']=='discuss')
 	$sql='SELECT * FROM '.$tbl_wiki.'WHERE reflink="'.html_entity_decode(Database::escape_string(stripslashes(urldecode($page)))).'" AND '.$groupfilter.$condition_session.' ORDER BY id DESC';
 	$result=Database::query($sql);
 	$row=Database::fetch_array($result);
-	$lastversiondate=api_get_local_time($row['dtime'], null, null, date_default_timezone_get());
+	$lastversiondate=api_convert_and_format_date($row['dtime'], null, date_default_timezone_get());
 	$lastuserinfo=Database::get_user_info_from_id($row['user_id']);
 
 	//select page to discuss
@@ -2385,7 +2385,7 @@ if ($_GET['action']=='discuss')
 			echo '<p><table>';
 			echo '<tr>';
 			echo '<td rowspan="2">'.$author_photo.'</td>';
-			echo '<td style=" color:#999999"><a href="../user/userInfo.php?uInfo='.$userinfo['user_id'].'">'.api_get_person_name($userinfo['firstname'], $userinfo['lastname']).'</a> ('.$author_status.') '.api_get_local_time($row['dtime'], null, null, date_default_timezone_get()).' - '.get_lang('Rating').': '.$row['p_score'].' '.$imagerating.' </td>';
+			echo '<td style=" color:#999999"><a href="../user/userInfo.php?uInfo='.$userinfo['user_id'].'">'.api_get_person_name($userinfo['firstname'], $userinfo['lastname']).'</a> ('.$author_status.') '.api_convert_and_format_date($row['dtime'], null, date_default_timezone_get()).' - '.get_lang('Rating').': '.$row['p_score'].' '.$imagerating.' </td>';
 			echo '</tr>';
 			echo '<tr>';
 			echo '<td>'.$row['comment'].'</td>';

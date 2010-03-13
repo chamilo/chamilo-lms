@@ -203,7 +203,7 @@ abstract class AbstractLink implements GradebookItem
 			$link->set_user_id($data['user_id']);
 			$link->set_course_code($data['course_code']);
 			$link->set_category_id($data['category_id']);
-			$link->set_date($data['date']);
+			$link->set_date(api_get_local_time($data['date']));
 			$link->set_weight($data['weight']);
 			$link->set_visible($data['visible']);
 			$links[]=$link;
@@ -261,12 +261,6 @@ abstract class AbstractLink implements GradebookItem
 				.', user_id = '.$this->get_user_id()
 				.", course_code = '".$this->get_course_code()."'"
 				.', category_id = '.$this->get_category_id();
-				//.', date = ';
-		/*if (isset($this->link_date)) {
-			$sql .= $this->get_date();
-		} else {
-			$sql .= 'null';
-		}*/
 		$sql .= ', weight = '.$this->get_weight()
 				.', visible = '.$this->is_visible()
 				.' WHERE id = '.$this->id;

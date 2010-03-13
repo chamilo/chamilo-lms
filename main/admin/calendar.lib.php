@@ -735,17 +735,17 @@ function display_agenda_items()
     while($myrow=Database::fetch_array($result))
     {
     	$is_repeated = !empty($myrow['parent_event_id']);
-    	$myrow["start_date"] = api_get_local_time($myrow["start_date"], null, null, date_default_timezone_get());
 	    echo '<table class="data_table">',"\n";
         /*--------------------------------------------------
         		display: the month bar
          --------------------------------------------------*/
-        // Make the month bar appear only once.
-        if ($month_bar != date("m",strtotime($myrow["start_date"])).date("Y",strtotime($myrow["start_date"])))
+        
+        $myrow["start_date"] = api_get_local_time($myrow["start_date"], null, date_default_timezone_get());
+        if ($month_bar != api_format_date($myrow["start_date"], "%m%Y"))
 		{
-            $month_bar = date("m",strtotime($myrow["start_date"])).date("Y",strtotime($myrow["start_date"]));
+            $month_bar = api_format_date($myrow["start_date"], "%m%Y");
 			echo "\t<tr>\n\t\t<td class=\"agenda_month_divider\" colspan=\"3\" valign=\"top\">".
-			api_ucfirst(format_locale_date("%B %Y",strtotime($myrow["start_date"]))).
+			api_ucfirst(api_format_date($myrow["start_date"], "%B %Y")).
 			"</td>\n\t</tr>\n";
 		}
 
@@ -755,7 +755,7 @@ function display_agenda_items()
     	echo '<tr>';
 
     	// highlight: if a date in the small calendar is clicked we highlight the relevant items
-    	$db_date=(int)date("d",strtotime($myrow["start_date"])).date("n",strtotime($myrow["start_date"])).date("Y",strtotime($myrow["start_date"]));
+    	$db_date = (int)api_format_date($myrow["start_date"], "%d").intval(api_format_date($myrow["start_date"], "%m")).api_format_date($myrow["start_date"], "%Y");
     	if ($_GET["day"].$_GET["month"].$_GET["year"] <>$db_date)
     	{
     		if ($myrow['visibility']=='0')
@@ -814,16 +814,13 @@ function display_agenda_items()
          --------------------------------------------------*/
     	echo "<tr class='row_odd'>";
     	echo "\t\t<td>".get_lang("StartTimeWindow").": ";
-    	echo api_ucfirst(format_locale_date($dateFormatLong,strtotime($myrow["start_date"])))."&nbsp;&nbsp;&nbsp;";
-    	echo ucfirst(strftime($timeNoSecFormat,strtotime($myrow["start_date"])))."";
+    	echo api_ucfirst(api_format_date($myrow["start_date"]));
     	echo "</td>\n";
     	echo "\t\t<td>";
     	if ($myrow["end_date"]<>"0000-00-00 00:00:00")
     	{
-			$myrow["end_date"] = api_get_local_time($myrow["end_date"], null, null, date_default_timezone_get());
     		echo get_lang("EndTimeWindow").": ";
-    		echo api_ucfirst(format_locale_date($dateFormatLong,strtotime($myrow["end_date"])))."&nbsp;&nbsp;&nbsp;";
-    		echo ucfirst(strftime($timeNoSecFormat,strtotime($myrow["end_date"])))."";
+    		echo api_ucfirst(api_convert_and_format_date($myrow["end_date"], null, date_default_timezone_get()));
     	}
     	echo "</td>\n";
 
@@ -1008,9 +1005,9 @@ function display_one_agenda_item($agenda_id)
 	echo "\t<tr>\n";
 
 	// highlight: if a date in the small calendar is clicked we highlight the relevant items
-	$myrow["start_date"] = api_get_local_time($myrow["start_date"], null, null, date_default_timezone_get());
-	$db_date=(int)date("d",strtotime($myrow["start_date"])).date("n",strtotime($myrow["start_date"])).date("Y",strtotime($myrow["start_date"]));
-	if ($_GET["day"].$_GET["month"].$_GET["year"] <>$db_date)
+	$myrow["start_date"] = api_get_local_time($myrow["start_date"], null, date_default_timezone_get());
+	$db_date = (int)api_format_date($myrow["start_date"], "%d").intval(api_format_date($myrow["start_date"], "%m")).api_format_date($myrow["start_date"], "%Y");
+    if ($_GET["day"].$_GET["month"].$_GET["year"] <>$db_date)
 	{
 		if ($myrow['visibility']=='0')
 		{
@@ -1061,13 +1058,10 @@ function display_one_agenda_item($agenda_id)
 	  --------------------------------------------------*/
 	echo "\t<tr class=\"".$stylenotbold."\">\n";
 	echo "\t\t<td>".get_lang("StartTime").": ";
-	echo api_ucfirst(format_locale_date($dateFormatLong,strtotime($myrow["start_date"])))."&nbsp;&nbsp;&nbsp;";
-	echo ucfirst(strftime($timeNoSecFormat,strtotime($myrow["start_date"])))."";
+	echo api_ucfirst(api_format_date($myrow["start_date"]));
 	echo "</td>\n";
 	echo "\t\t<td>".get_lang("EndTime").": ";
-	$myrow["end_date"] = api_get_local_time($myrow["end_date"], null, null, date_default_timezone_get());
-	echo api_ucfirst(format_locale_date($dateFormatLong,strtotime($myrow["end_date"])))."&nbsp;&nbsp;&nbsp;";
-	echo ucfirst(strftime($timeNoSecFormat,strtotime($myrow["end_date"])))."";
+	echo api_ucfirst(api_convert_and_format_date($myrow["end_date"], null, date_default_timezone_get()));
 	echo "</td>\n";
 	echo "\n\t</tr>\n";
 
@@ -1675,9 +1669,9 @@ function get_agendaitems($month, $year)
     $result = Database::query($sqlquery);
 	while ($item = Database::fetch_array($result))
 	{
-		$item['start_date'] = api_get_local_time($item['start_date'], null, null, date_default_timezone_get());
-		$agendaday = date('j',strtotime($item['start_date']));
-		$time= date('H:i',strtotime($item['start_date']));
+		$agendaday_string = api_convert_and_format_date($item['start_date'], "%d", date_default_timezone_get());
+		$agendaday = intval($agendaday_string);
+		$time = api_convert_and_format_date($item['start_date'], TIME_NO_SEC_FORMAT, date_default_timezone_get());
 		$URL = $portal_url.'main/admin/agenda.php?day='.$agendaday."&amp;month=".$month."&amp;year=".$year; // RH  //Patrick Cool: to highlight the relevant agenda item
 		$items[$agendaday][$item['start_time']] .= '<i>'.$time.'</i> <a href="'.$URL.'" title="'.$item['title'].'<br />';
 	}
@@ -1998,7 +1992,7 @@ function get_day_agendaitems($courses_dbs, $month, $year, $day)
 		{
 			// in the display_daycalendar function we use $i (ranging from 0 to 47) for each halfhour
 			// we want to know for each agenda item for this day to wich halfhour it must be assigned
-			$item['start_date'] = api_get_local_time($item['start_date'], null, null, date_default_timezone_get());
+			$item['start_date'] = api_get_local_time($item['start_date'], null, date_default_timezone_get());
 			list ($datepart, $timepart) = split(" ", $item['start_date']);
 			list ($year, $month, $day) = explode("-", $datepart);
 			list ($hours, $minutes, $seconds) = explode(":", $timepart);
@@ -2108,10 +2102,10 @@ function get_week_agendaitems($courses_dbs, $month, $year, $week = '')
 
 		while ($item = Database::fetch_array($result))
 		{
-			$item['start_date'] = api_get_local_time($item['start_date'], null, null, date_default_timezone_get());
-			$agendaday = date("j",strtotime($item['start_date']));
-			$time= date("H:i",strtotime($item['start_date']));
-
+			$agendaday_string = api_convert_and_format_date($item['start_date'], "%d", date_default_timezone_get());
+			$agendaday = intval($agendaday_string);
+			$time = api_convert_and_format_date($item['start_date'], TIME_NO_SEC_FORMAT, date_default_timezone_get());
+			
 			if ($setting_agenda_link == 'coursecode')
 			{
 				$title=$array_course_info['title'];

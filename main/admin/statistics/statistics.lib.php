@@ -122,7 +122,7 @@ class Statistics
 		$res = Database::query($sql);
 		$activities = array ();
 		while ($row = Database::fetch_row($res)) {
-			$row[4] = api_get_local_time($row[4], DATE_TIME_FORMAT_LONG, null, date_default_timezone_get());
+			$row[4] = api_get_local_time($row[4], null, date_default_timezone_get());
 			$activities[] = $row;
 		}
 		return $activities;
@@ -425,7 +425,7 @@ class Statistics
 			{
 				$course = array ();
 				$course[]= '<a href="'.api_get_path(WEB_PATH).'courses/'.$obj->access_cours_code.'">'.$obj->access_cours_code.' <a>';
-				$course[] = api_get_local_time($obj->access_date, null, null, date_default_timezone_get());
+				$course[] = api_convert_and_format_date($obj->access_date, null, date_default_timezone_get());
 				$courses[] = $course;
 			}
 			$parameters['action'] = 'courselastvisit';

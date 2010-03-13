@@ -174,10 +174,22 @@ class GradebookDataGenerator
 	}
 
 	function sort_by_date($item1, $item2) {
-		if ($item1->get_date() == $item2->get_date()) {
+		if(is_int($item1->get_date())) {
+			$timestamp1 = $item1->get_date();
+		} else {
+			$timestamp1 = api_strtotime($item1->get_date());
+		}
+		
+		if(is_int($item2->get_date())) {
+			$timestamp2 = $item2->get_date();
+		} else {
+			$timestamp2 = api_strtotime($item2->get_date());
+		}
+		
+		if ($timestamp1 == $timestamp2) {
 			return $this->sort_by_name($item1,$item2);
 		} else {
-			return ($item1->get_date() < $item2->get_date() ? -1 : 1);
+			return ($timestamp1 < $timestamp2 ? -1 : 1);
 		}
 	}
 
@@ -217,7 +229,11 @@ class GradebookDataGenerator
 		if (!isset($date) || empty($date)) {
 			return '';
 		} else {
-			return api_get_local_time((int)$date, null, null, date_default_timezone_get());
+			if(is_int($date)) {
+				return api_convert_and_format_date($date);
+			} else {
+				return api_format_date($date);
+			}
 		}
 	}
 }

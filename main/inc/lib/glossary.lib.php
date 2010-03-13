@@ -381,8 +381,8 @@ class GlossaryManager {
 			}
 			
 			// Date treatment for timezones
-			$array[3] = api_get_local_time($array[3], null, null, date_default_timezone_get());
-			$array[4] = api_get_local_time($array[4], null, null, date_default_timezone_get());
+			$array[3] = api_get_local_time($array[3], null, date_default_timezone_get());
+			$array[4] = api_get_local_time($array[4], null, date_default_timezone_get());
 
 			$return[] = $array;
 		}

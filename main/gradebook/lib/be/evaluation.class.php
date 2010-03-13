@@ -191,7 +191,7 @@ class Evaluation implements GradebookItem
 			$eval->set_user_id($data['user_id']);
 			$eval->set_course_code($data['course_code']);
 			$eval->set_category_id($data['category_id']);
-			$eval->set_date($data['date']);
+			$eval->set_date(api_get_local_time($data['date']));
 			$eval->set_weight($data['weight']);
 			$eval->set_max($data['max']);
 			$eval->set_visible($data['visible']);
@@ -291,12 +291,6 @@ class Evaluation implements GradebookItem
 		} else {
 			$sql .= 'null';
 		}
-		//$sql .= ', date = ';
-		/*if (isset($this->eval_date)) {
-			$sql .= $this->get_date();
-		} else {
-			$sql .= 'null';
-		}*/
 		$sql .= ', weight = '.$this->get_weight()
 				.', max = '.$this->get_max()
 				.', visible = '.$this->is_visible()

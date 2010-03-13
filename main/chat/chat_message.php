@@ -93,7 +93,7 @@ if (!empty($course) && !empty($_user['user_id'])) {
 	}
 	$chat_path = $document_path.$basepath_chat.'/';
 
-	$TABLEITEMPROPERTY= Database::get_course_table(TABLE_ITEM_PROPERTY);
+	$TABLEITEMPROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);
 
 	if (!is_dir($chat_path)) {
 		if (is_file($chat_path)) {
@@ -232,8 +232,8 @@ if (!empty($course) && !empty($_user['user_id'])) {
 
 				$chat_size = filesize($chat_path.$basename_chat.'.log.html');
 
-				update_existing_document($_course, $doc_id,$chat_size);
-				item_property_update_on_folder($_course,$basepath_chat, $_user['user_id']);
+				update_existing_document($_course, $doc_id, $chat_size);
+				item_property_update_on_folder($_course, $basepath_chat, $_user['user_id']);
 			}
 		}
 	}
@@ -246,7 +246,7 @@ if (!empty($course) && !empty($_user['user_id'])) {
         <textarea name="message" style="width: 320px; height: 35px" onkeydown="send_message(event);" onclick="javascript: insert_smile(this);"></textarea>
         </td>
         <td>
-        <button type="submit" value="<?php echo get_lang("Send"); ?>" class="background_submit"><?php echo get_lang("Send"); ?></button>
+        <button type="submit" value="<?php echo get_lang('Send'); ?>" class="background_submit"><?php echo get_lang('Send'); ?></button>
         </td>
 	</tr>
     <tr>

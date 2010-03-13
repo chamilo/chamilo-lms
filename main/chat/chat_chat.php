@@ -15,7 +15,6 @@ require_once '../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'document.lib.php';
 require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
 require_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
-//$course=api_get_course_id();
 
 $course = $_GET['cidReq'];
 $session_id = intval($_SESSION['id_session']);
@@ -53,7 +52,7 @@ if (!empty($course)) {
 
 		if (!api_is_anonymous()) {
 			@mkdir($chat_path, api_get_permissions_for_new_directories());
-			// save chat files document for group into item property
+			// Save chat files document for group into item property
 			if (!empty($group_id)) {
 				$doc_id = add_document($_course, $basepath_chat, 'folder', 0, 'chat_files');
 				$sql = "INSERT INTO $TABLEITEMPROPERTY (tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility)
@@ -134,8 +133,8 @@ if (!empty($course)) {
 	}
 
 	echo '<div style="margin-left: 5px;">';
-	foreach ($content as & $thisLine) {
-		echo strip_tags(api_html_entity_decode($thisLine), '<br> <span> <b> <i> <img> <font>');
+	foreach ($content as & $this_line) {
+		echo strip_tags(api_html_entity_decode($this_line), '<br> <span> <b> <i> <img> <font>');
 	}
 	echo '</div>';
 
@@ -155,4 +154,5 @@ if (!empty($course)) {
 	$message = get_lang('CloseOtherSession');
 	Display :: display_error_message($message);
 }
+
 require 'footer_frame.inc.php';

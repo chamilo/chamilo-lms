@@ -81,8 +81,14 @@ if (api_get_setting('show_navigation_menu') != 'false') {
 }
 $cidreq = $_GET['cidReq'];
 
-echo '<html><head>';
-echo '<meta http-equiv="Content-Type" content="text/html; charset='.api_get_system_encoding().'" />';
+?>
+<!DOCTYPE html
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php echo api_get_language_isocode(); ?>" lang="<?php echo api_get_language_isocode(); ?>">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=<?php echo api_get_system_encoding(); ?>" />
+<?php
 echo'<title>'.get_lang('Chat').' - '.$mycourseid.' - '.api_get_setting('siteName').'</title>';
 
 if (empty($open_chat_window)) {

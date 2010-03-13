@@ -45,7 +45,7 @@ if (!empty($course)) {
 	$isAllowed = !(empty($pseudo_user) || !$_cid);
 	$isMaster = (bool)$is_courseAdmin;
 
-	$date_inter = date('Y-m-d H:i:s', time()-120);
+	$date_inter = date('Y-m-d H:i:s', time() - 120);
 
 	$users = array();
 
@@ -84,15 +84,15 @@ if (!empty($course)) {
 			$users[$coaches['user_id']] = $coaches;
 		}
 
-		//if($coach = Database::fetch_array($result))
-			//$users[$coach['user_id']] = $coach;
+		//if ($coach = Database::fetch_array($result))
+		//	$users[$coach['user_id']] = $coach;
 	}
 
 	$user_id = $enreg['user_id'];
 	require 'header_frame.inc.php';
 	?>
 	<table border="0" cellpadding="0" cellspacing="0" width="100%" class="data_table">
-	<tr><th colspan="2"><?php echo get_lang("Connected"); ?></th></tr>
+	<tr><th colspan="2"><?php echo get_lang('Connected'); ?></th></tr>
 	<?php
 	foreach ($users as & $user) {
 		if (empty($session_id)) {

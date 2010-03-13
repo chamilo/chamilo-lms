@@ -5,7 +5,14 @@ require_once '../inc/global.inc.php';
 
 define('FRAME', 'footer');
 
-echo '<html><head><style>';
+?><!DOCTYPE html
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php echo api_get_language_isocode(); ?>" lang="<?php echo api_get_language_isocode(); ?>">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=<?php echo api_get_system_encoding(); ?>" />
+<style>
+<?php
 
 /*
  * Choose CSS style (platform's, user's, or course's)
@@ -32,9 +39,12 @@ if (!empty($mycourseid) && $mycourseid != -1) {
 		}
 	}
 }
-
-echo '@import "'.api_get_path(WEB_CSS_PATH).$my_style.'/default.css'.'";';
-
-echo '</style></head><body><br />';
+?>
+@import "<?php echo api_get_path(WEB_CSS_PATH).$my_style.'/default.css'; ?>";
+</style>
+</head>
+<body dir="<?php echo api_get_text_direction(); ?>">
+<br />
+<?php
 
 Display::display_footer();

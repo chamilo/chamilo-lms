@@ -1288,8 +1288,6 @@ if ($_configuration['tracking_enabled'] && ($show == 'result')) {
 					$duration_list = get_lang('NoLogOfDuration');
 					//echo get_lang('NoLogOfDuration');
 				}
-				//echo '</td>';
-				//echo '<td>' . $add_start_date . format_locale_date('%b %d, %Y %H:%M', $results[$i][4]) . '</td>'; //get_lang('dateTimeFormatLong')
 				// Date conversion
 				$date_list = api_get_local_time($results[$i][7], null, date_default_timezone_get()). ' / ' . api_get_local_time($results[$i][4], null, date_default_timezone_get());
 				// there are already a duration test period calculated??

@@ -525,7 +525,7 @@ if (api_is_allowed_to_create_course() && $view == 'teacher') {
 			$row[] = $session['name'];
 	
 			if ($session['date_start'] != '0000-00-00' && $session['date_end'] != '0000-00-00') {
-				$row[] = get_lang('From').' '.format_locale_date(get_lang('DateFormatLongWithoutDay'), strtotime($session['date_start'])).' '.get_lang('To').' '.format_locale_date(get_lang('DateFormatLongWithoutDay'), strtotime($session['date_end']));
+				$row[] = get_lang('From').' '.api_convert_and_format_date($session['date_start'], DATE_FORMAT_SHORT, date_default_timezone_get()).' '.get_lang('To').' '.api_convert_and_format_date($session['date_end'], DATE_FORMAT_SHORT, date_default_timezone_get());
 			} else {
 				$row[] = ' - ';
 			}

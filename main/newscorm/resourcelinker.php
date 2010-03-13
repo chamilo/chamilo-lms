@@ -754,8 +754,7 @@ if ($content == "Agenda")
 	{
 		echo "<table width=\"100%\"><tr><td bgcolor=\"#E6E6E6\">";
 		echo "<img src='../img/agenda.gif' alt='agenda'>";
-		echo api_ucfirst(format_locale_date($dateFormatLong, strtotime($myrow["start_date"])))."&nbsp;";
-		echo api_ucfirst(strftime($timeNoSecFormat, strtotime($myrow["start_date"])))."<br />";
+		echo api_ucfirst(api_convert_and_format_date($myrow["start_date"], null, date_default_timezone_get()))."<br />";
 		echo "<b>".$myrow["title"]."</b></td></tr><tr><td>";
 		echo $myrow["content"]."<br />";
 		showorhide_addresourcelink($content, $myrow["id"]);
@@ -825,7 +824,7 @@ if ($content == "Ad_Valvas")
 	{
 		echo "<table width=\"100%\"><tr><td>";
 		echo "<img src='../img/valves.gif' alt='advalvas'>";
-		echo api_ucfirst(format_locale_date($dateFormatLong, strtotime($myrow["end_date"])));
+		echo api_ucfirst(api_convert_and_format_date($myrow["end_date"], DATE_FORMAT_LONG, date_default_timezone_get());
 		echo "</td></tr><tr><td>";
 		echo $myrow["title"]."<br />";
 		showorhide_addresourcelink($content, $myrow["id"]);

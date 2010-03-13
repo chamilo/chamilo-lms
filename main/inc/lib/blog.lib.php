@@ -832,10 +832,9 @@ class Blog {
 		$date_output = $query_string;
 		$date = explode('-',$query_string);
 		$query_string = ' DAYOFMONTH(date_creation) =' . $date[2] . ' AND MONTH(date_creation) =' . $date[1] . ' AND YEAR(date_creation) =' . $date[0];
-		global $dateFormatLong;
 
 		// Put date in correct output format
-		$date_output = format_locale_date($dateFormatLong,strtotime($date_output));
+		$date_output = api_format_date($date_output, DATE_FORMAT_LONG);
 
 		// Display the posts
 		echo '<span class="blogpost_title">' . get_lang('PostsOf') . ': ' . $date_output . '</span>';

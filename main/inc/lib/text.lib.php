@@ -44,24 +44,6 @@ function make_clickable($string) {
 }
 
 /**
- * Formats the date according to the locale settings
- *
- * @author  Patrick Cool <patrick.cool@UGent.be>, Ghent University
- * @author  Christophe Gesché <gesche@ipm.ucl.ac.be>
- *          originally inspired from from PhpMyAdmin
- * @param  string  $date_format date pattern
- * @param  integer $time_stamp, default is NOW.
- * @return the formatted date
- */
-
-function format_locale_date($date_format, $time_stamp = -1, $language = null) {
-	if ($time_stamp == -1) {
-		$time_stamp = time();
-	}
-	return api_format_date($time_stamp, $date_format, $language);
-}
-
-/**
  * @desc This function does some parsing on the text that gets inputted. This parsing can be of any kind
  * 		LaTeX notation, Word Censoring, Glossary Terminology (extension will available soon), Musical Notations, ...
  *		The inspiration for this filter function came from Moodle an phpBB who both use a similar approach

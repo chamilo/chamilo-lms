@@ -1702,17 +1702,18 @@ function exportitem($id, $item_id, $item_type, $add_scorm_communications = false
 			//3 For each event corresponding to this agenda, do the following:
 			while ($myrow = Database::fetch_array($result))
 			{
+				$start_date_local = api_get_local_time($myrow["start_date"], null, date_default_timezone_get());
 				//3.1 Make the blue month bar appear only once.
-				if ($barreMois != date("m", strtotime($myrow["start_date"])))
+				if ($barreMois != api_format_date($start_date_local, "%m"))
 				{
 					//3.1.1 Update the check value for the month bar
-					$barreMois = date("m", strtotime($myrow["start_date"]));
+					$barreMois = api_format_date($start_date_local, "%m");
 					//3.1.2	Display the month bar
-					$expcontent .= "<tr><td id=\"title\" colspan=\"2\" class=\"month\" valign=\"top\">".api_ucfirst(format_locale_date("%B %Y", strtotime($myrow["start_date"])))."</td></tr>";
+					$expcontent .= "<tr><td id=\"title\" colspan=\"2\" class=\"month\" valign=\"top\">".api_ucfirst(api_format_date($start_date_local, "%B %Y"))."</td></tr>";
 				}
 
 				//3.2 Display the agenda items (of this month): the date, hour and title
-				$db_date = (int) date(d, strtotime($myrow["start_date"]));
+				$db_date = (int) api_format_date($start_date_local, "%d");
 				if ($_GET["day"] <> $db_date)
 				{ //3.2.1.a If the day given in the URL (might not be set) is different from this element's day, use style 'data'
 					$expcontent .= "<tr><td class=\"data\" colspan='2'>";
@@ -1722,10 +1723,9 @@ function exportitem($id, $item_id, $item_type, $add_scorm_communications = false
 					$expcontent .= "<tr><td class=\"datanow\" colspan='2'>";
 				}
 				//3.2.2 Mark an anchor for this date
-				$expcontent .= "<a name=\"".(int) date(d, strtotime($myrow["start_date"]))."\"></a>"; // anchoring
+				$expcontent .= "<a name=\"".$db_date."\"></a>"; // anchoring
 				//3.2.3 Write the date and time of this event to the export string
-				$expcontent .= api_ucfirst(format_locale_date($dateFormatLong, strtotime($myrow["start_date"])))."&nbsp;&nbsp;&nbsp;";
-				$expcontent .= api_ucfirst(strftime($timeNoSecFormat, strtotime($myrow["start_time"])))."";
+				$expcontent .= api_ucfirst(api_format_date($start_date_local));
 				//3.2.4 If a duration is set, write it, otherwise ignore
 				if ($myrow["duration"] == "")
 				{
@@ -1801,7 +1801,7 @@ function exportitem($id, $item_id, $item_type, $add_scorm_communications = false
 				}
 
 				//3.5 Write this content to the export string (formatted HTML array)
-				$expcontent .= "<tr>\n"."<td class=\"cell_header\">\n"."<font ".$colorBecauseNew.">".$langPubl." : ".api_ucfirst(format_locale_date($dateFormatLong, strtotime($last_post_date)))."</font>\n"."</td>\n"."</tr>\n"."<tr>\n"."<td>\n".$content."</td>\n"."</tr>\n";
+				$expcontent .= "<tr>\n"."<td class=\"cell_header\">\n"."<font ".$colorBecauseNew.">".$langPubl." : ".api_ucfirst(api_convert_and_format_date($last_post_datetime, null, date_default_timezone_get()))."</font>\n"."</td>\n"."</tr>\n"."<tr>\n"."<td>\n".$content."</td>\n"."</tr>\n";
 
 			} // while loop
 

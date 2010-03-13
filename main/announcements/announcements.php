@@ -957,7 +957,7 @@ if (!$surveyid) {
 			//validation when belongs to a session
 			$session_img = api_get_session_image($myrow['session_id'], $_user['status']);
 
-			echo "\t\t\t\t\t\t".Display::return_icon('lp_announcement.png', api_ucfirst(format_locale_date($dateFormatLong,strtotime($myrow['end_date']))), array('align' => 'absmiddle', 'Width' => '10', 'Height' => '10'))."  <a style=\"text-decoration:none\" href=\"announcements.php?".api_get_cidreq()."#".$myrow['id']."\" ".$class.">" . api_trunc_str($title, $length) . "</a>\n" . $session_img;
+			echo "\t\t\t\t\t\t".Display::return_icon('lp_announcement.png', api_ucfirst(api_convert_and_format_date($myrow['end_date'], DATE_FORMAT_LONG)), array('align' => 'absmiddle', 'Width' => '10', 'Height' => '10'))."  <a style=\"text-decoration:none\" href=\"announcements.php?".api_get_cidreq()."#".$myrow['id']."\" ".$class.">" . api_trunc_str($title, $length) . "</a>\n" . $session_img;
 			echo "\t\t\t\t\t</td>\n\t\t\t\t</tr>\n";
 		}
 		echo "\t\t\t</table>\n";
@@ -1407,7 +1407,7 @@ if ($display_announcement_list && !$surveyid) {
 			echo '&nbsp;&nbsp;&nbsp;'.get_lang('By').' : &nbsp;'.str_replace(' ', '&nbsp;', api_get_person_name($user_info['firstName'], $user_info['lastName']));
 			echo "\t\t\t\t\t</th>\n","\t\t\t\t</tr>\n";
 			echo "\t\t\t\t<tr class='row_odd'>\n\t\t\t\t\t<td class=\"announcements_datum\" colspan=\"3\">";
-			echo get_lang('AnnouncementPublishedOn')," : ",api_ucfirst(format_locale_date($dateFormatLong,strtotime($last_post_date)));
+			echo get_lang('AnnouncementPublishedOn')," : ",api_ucfirst(api_convert_and_format_date($last_post_datetime, null, date_default_timezone_get()));
 			echo "</td>\n\t\t\t\t</tr>\n";
 
 			/* CONTENT */

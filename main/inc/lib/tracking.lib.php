@@ -118,8 +118,7 @@ class Tracking {
 		if(Database::num_rows($rs)>0)
 		{
 			if ($first_login_date = Database::result($rs, 0, 0)) {
-				$first_login_date_local = api_get_local_time($first_login_date, null, date_default_timezone_get());
-				return format_locale_date(get_lang('DateFormatLongWithoutDay'), strtotime($first_login_date_local));
+				return api_convert_and_format_date($first_login_date, DATE_FORMAT_SHORT, date_default_timezone_get());
 			}
 		}
 		return false;
@@ -147,28 +146,28 @@ class Tracking {
 				$last_login_date = api_get_local_time($last_login_date, null, date_default_timezone_get());
 				if ($return_timestamp)
 				{
-					return strtotime($last_login_date);
+					return api_strtotime($last_login_date);
 				}
 				else
 				{
 					if (!$warning_message)
 					{
-						return format_locale_date(get_lang('DateFormatLongWithoutDay'), strtotime($last_login_date));
+						return api_format_date($last_login_date, DATE_FORMAT_SHORT);
 					}
 					else
 					{
-						$timestamp = strtotime($last_login_date);
-						$currentTimestamp = mktime();
+						$timestamp = api_strtotime($last_login_date);
+						$currentTimestamp = time();
 
 						//If the last connection is > than 7 days, the text is red
 						//345600 = 7 days in seconds
 						if ($currentTimestamp - $timestamp > 604800)
 						{
-							return '<span style="color: #F00;">' . format_locale_date(get_lang('DateFormatLongWithoutDay'), strtotime($last_login_date)) . '</span>';
+							return '<span style="color: #F00;">' . api_format_date($last_login_date, DATE_FORMAT_SHORT) . '</span>';
 						}
 						else
 						{
-							return format_locale_date(get_lang('DateFormatLongWithoutDay'), strtotime($last_login_date));
+							return api_format_date($last_login_date, DATE_FORMAT_SHORT);
 						}
 					}
 				}
@@ -200,8 +199,7 @@ class Tracking {
 		$rs = Database::query($sql);
 		if (Database::num_rows($rs)>0) {
 			if ($first_login_date = Database::result($rs, 0, 0)) {
-				$first_login_date = api_get_local_time($first_login_date, null, date_default_timezone_get());
-				return format_locale_date(get_lang('DateFormatLongWithoutDay'), strtotime($first_login_date));
+				return api_convert_and_format_date($first_login_date, DATE_FORMAT_SHORT, date_default_timezone_get());
 			}
 		}
 		return false;
@@ -232,14 +230,14 @@ class Tracking {
 		if (Database::num_rows($rs)>0) {
 			if ($last_login_date = Database::result($rs, 0, 0)) {
 				$last_login_date = api_get_local_time($last_login_date, null, date_default_timezone_get());
-				$timestamp = strtotime($last_login_date);
-				$currentTimestamp = mktime();
+				$timestamp = api_strtotime($last_login_date);
+				$currentTimestamp = time();
 				//If the last connection is > than 7 days, the text is red
 				//345600 = 7 days in seconds
 				if ($currentTimestamp - $timestamp > 604800) {
-					return '<span style="color: #F00;">' . format_locale_date(get_lang('DateFormatLongWithoutDay'), strtotime($last_login_date)) . (api_is_allowed_to_edit()?' <a href="'.api_get_path(REL_CODE_PATH).'announcements/announcements.php?action=add&remind_inactive='.$student_id.'" title="'.get_lang('RemindInactiveUser').'"><img align="middle" src="'.api_get_path(WEB_IMG_PATH).'messagebox_warning.gif" /></a>':'').'</span>';
+					return '<span style="color: #F00;">' . api_format_date($last_login_date, DATE_FORMAT_SHORT) . (api_is_allowed_to_edit()?' <a href="'.api_get_path(REL_CODE_PATH).'announcements/announcements.php?action=add&remind_inactive='.$student_id.'" title="'.get_lang('RemindInactiveUser').'"><img align="middle" src="'.api_get_path(WEB_IMG_PATH).'messagebox_warning.gif" /></a>':'').'</span>';
 				} else {
-					return format_locale_date(get_lang('DateFormatLongWithoutDay'), strtotime($last_login_date));
+					return api_format_date($last_login_date, DATE_FORMAT_SHORT);
 				}
 			}
 		}
@@ -1377,12 +1375,7 @@ class Tracking {
 		$rs = Database::query($sql);				
 		if (Database::num_rows($rs) > 0) {
 			$row = Database::fetch_array($rs);
-			$last_connection = api_get_local_time($row['access_date'], null, date_default_timezone_get());
-			if (!empty($last_connection)) {
-				$date_format_long = format_locale_date(get_lang('DateFormatLongWithoutDay'), strtotime($last_connection));
-				$time = explode(' ',$last_connection);
-				$date_time = $date_format_long.' '.$time[1];
-			}
+			$date_time = api_convert_and_format_date($row['access_date'], null, date_default_timezone_get());
 		}			
 		return $date_time;		
 	}

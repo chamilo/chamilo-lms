@@ -441,7 +441,7 @@ $form->display();
 ?>
 	<tr>
 	<td><?php echo get_lang('LastEdit'); ?>&nbsp;:</td>
-	<td><?php echo format_locale_date($dateTimeFormatLong,strtotime($currentCourseLastEdit)); ?></td>
+	<td><?php echo api_convert_and_format_date($currentCourseLastEdit, null, date_default_timezone_get()); ?></td>
 	</tr>
 	<?php
 
@@ -451,7 +451,7 @@ $form->display();
 ?>
 	<tr>
 	<td><?php echo get_lang('LastVisit'); ?>&nbsp;:</td>
-	<td><?php echo format_locale_date($dateTimeFormatLong,strtotime($currentCourseLastVisit)); ?></td>
+	<td><?php echo api_convert_and_format_date($currentCourseLastVisit, null, date_default_timezone_get()); ?></td>
 	</tr>
 	<?php
 
@@ -461,7 +461,7 @@ $form->display();
 ?>
 	<tr>
 	<td><?php echo get_lang('CreationDate'); ?>&nbsp;:</td>
-	<td><?php echo format_locale_date($dateTimeFormatLong,strtotime($currentCourseCreationDate)); ?></td>
+	<td><?php echo api_convert_and_format_date($currentCourseCreationDate, null, date_default_timezone_get()); ?></td>
 	</tr>
 	<?php
 
@@ -474,7 +474,7 @@ $form->display();
 	<td>
 	<?php
 
-		echo format_locale_date($dateTimeFormatLong, strtotime($currentCourseExpirationDate));
+		echo api_convert_and_format_date($currentCourseExpirationDate, null, date_default_timezone_get());
 		echo "<br />".get_lang('OrInTime')." : ";
 		$nbJour = (strtotime($currentCourseExpirationDate) - time()) / (60 * 60 * 24);
 		$nbAnnees = round($nbJour / 365);

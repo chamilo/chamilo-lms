@@ -634,7 +634,7 @@ function display_digest($toolsList, $digest, $orderKey, $courses) {
 					$courseSysCode = $key1;
 					echo "<a href=\"", api_get_path(WEB_COURSE_PATH), $courses[$key1]['coursePath'], "\">", $courses[$key1]['courseCode'], "</a>\n";
 				} elseif ($orderKey[0] == 'keyTime') {
-					echo format_locale_date(CONFVAL_dateFormatForInfosFromCourses, strtotime($digest[$key1]));
+					echo api_convert_and_format_date($digest[$key1], DATE_FORMAT_LONG, date_default_timezone_get());
 				}
 				echo "</strong>\n";
 				// // // End Of Title of LEVEL 1 // // //
@@ -650,7 +650,7 @@ function display_digest($toolsList, $digest, $orderKey, $courses) {
 						$courseSysCode = $key2;
 						echo "<a href=\"", api_get_path(WEB_COURSE_PATH), $courses[$key2]['coursePath'], "\">", $courses[$key2]['courseCode'], "</a>\n";
 					} elseif ($orderKey[1] == 'keyTime') {
-						echo format_locale_date(CONFVAL_dateFormatForInfosFromCourses, strtotime($key2));
+						echo api_convert_and_format_date($key2, DATE_FORMAT_LONG, date_default_timezone_get());
 					}
 					echo "\n";
 					echo "</p>";
@@ -664,7 +664,7 @@ function display_digest($toolsList, $digest, $orderKey, $courses) {
 						} elseif ($orderKey[2] == 'keyCourse') {
 							$level3title = "&#8226; <a href=\"".$toolsList[$tools]["path"].$key3."\">".$courses[$key3]['courseCode']."</a>\n";
 						} elseif ($orderKey[2] == 'keyTime') {
-							$level3title = "&#8226; <a href=\"".$toolsList[$tools]["path"].$courseSysCode."\">".format_locale_date(CONFVAL_dateFormatForInfosFromCourses, strtotime($key3))."</a>";
+							$level3title = "&#8226; <a href=\"".$toolsList[$tools]["path"].$courseSysCode."\">".api_convert_and_format_date($key3, DATE_FORMAT_LONG, date_default_timezone_get())."</a>";
 						}
 						// // // End Of Title of LEVEL 3 // // //
 						// // // LEVEL 4 (data) // // //
@@ -874,7 +874,7 @@ function get_logged_user_course_html($course, $session_id = 0, $class='courses')
 				$result .= "<a href=\"$toolsList[$key2] [\"path\"] $thisCourseSysCode \">";
 				$result .= "$toolsList[$key2][\"name\"]</a>";
 			} else {
-				$result .= format_locale_date(CONFVAL_dateFormatForInfosFromCourses, strtotime($key2));
+				$result .= api_convert_and_format_date($key2, DATE_FORMAT_LONG, date_default_timezone_get());
 			}
 			$result .= '</li>';
 			$result .= '<ul>';
@@ -885,7 +885,7 @@ function get_logged_user_course_html($course, $session_id = 0, $class='courses')
 					$result .= "<a href=\"$toolsList[$key3] [\"path\"] $thisCourseSysCode \">";
 					$result .= "$toolsList[$key3][\"name\"]</a>";
 				} else {
-					$result .= format_locale_date(CONFVAL_dateFormatForInfosFromCourses, strtotime($key3));
+					$result .= api_convert_and_format_date($key3, DATE_FORMAT_LONG, date_default_timezone_get());
 				}
 				$result .= '<ul compact="compact">';
 				reset($digest[$thisCourseSysCode][$key2][$key3]);

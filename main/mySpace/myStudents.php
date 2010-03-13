@@ -608,7 +608,7 @@ if ($timezone !== null) {
 					api_time_to_hms($total_time),
 					$score . '%',
 					$progress,
-					date('Y-m-d', $start_time)
+					api_convert_and_format_date($start_time, "%Y-%m-%d")
 				);
 ?>
 					<tr class="<?php echo $css_class;?>">
@@ -640,7 +640,7 @@ if ($timezone !== null) {
 						<td align="center">
 							<?php
 				if ($start_time != '' && $start_time > 0) {
-					echo format_locale_date(get_lang('DateFormatLongWithoutDay'), $start_time);
+					echo api_convert_and_format_date($start_time, DATE_FORMAT_SHORT);
 				} else {
 					echo '-';
 				}

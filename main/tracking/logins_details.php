@@ -209,10 +209,7 @@ if( ( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse ) && $_configura
         {
             for ($j = 0 ; $j < sizeof($results); $j++)
             {
-                $timestamp = strtotime($results[$j]);
-                //$beautifulDate = $langDay_of_weekNames['long'][date("w" , $timestamp)].date(" d " , $timestamp);
-                //$beautifulHour = date("H : i" , $timestamp);
-                $beautifulDateTime = format_locale_date($dateTimeFormatLong,$timestamp);
+                $beautifulDateTime = api_convert_and_format_date($results[$j], null, date_default_timezone_get());
                 echo "<tr>";
                 echo "<td style='padding-left : 40px;' valign='top'>".$beautifulDateTime."</td>";
                 echo"</tr>";

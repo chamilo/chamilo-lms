@@ -117,25 +117,25 @@ class GradeBookResult
 			//get all results (ourself and the others) as an admin should see them
 			//AND exe_user_id <> $_user['user_id']  clause has been removed
 			$sql="SELECT ".(api_is_western_name_order() ? "CONCAT(firstname,' ',lastname)" : "CONCAT(lastname,' ',firstname)").", ce.title, te.exe_result ,
-						te.exe_weighting, UNIX_TIMESTAMP(te.exe_date),te.exe_id, user.email, user.user_id
+						te.exe_weighting, te.exe_date,te.exe_id, user.email, user.user_id
 				  FROM $TBL_EXERCISES ce , $TBL_TRACK_EXERCISES te, $TBL_USER user
 				  WHERE te.exe_exo_id = ce.id AND user_id=te.exe_user_id AND te.exe_cours_id='$cid'
 				  ORDER BY te.exe_cours_id ASC, ce.title ASC, te.exe_date ASC";
 
 			$hpsql="SELECT ".(api_is_western_name_order() ? "CONCAT(tu.firstname,' ',tu.lastname)" : "CONCAT(tu.lastname,' ',tu.firstname)").", tth.exe_name,
-						tth.exe_result , tth.exe_weighting, UNIX_TIMESTAMP(tth.exe_date), tu.email, tu.user_id
+						tth.exe_result , tth.exe_weighting, tth.exe_date, tu.email, tu.user_id
 					FROM $TBL_TRACK_HOTPOTATOES tth, $TBL_USER tu
 					WHERE  tu.user_id=tth.exe_user_id AND tth.exe_cours_id = '".$cid."'
 					ORDER BY tth.exe_cours_id ASC, tth.exe_date ASC";
 
 		} else { // get only this user's results
 			  $sql="SELECT '',ce.title, te.exe_result , te.exe_weighting, " .
-			  		"UNIX_TIMESTAMP(te.exe_date),te.exe_id
+			  		"te.exe_date,te.exe_id
 				  FROM $TBL_EXERCISES ce , $TBL_TRACK_EXERCISES te
 				  WHERE te.exe_exo_id = ce.id AND te.exe_user_id='".$user_id."' AND te.exe_cours_id='$cid'
 				  ORDER BY te.exe_cours_id ASC, ce.title ASC, te.exe_date ASC";
 
-			$hpsql="SELECT '',exe_name, exe_result , exe_weighting, UNIX_TIMESTAMP(exe_date)
+			$hpsql="SELECT '',exe_name, exe_result , exe_weighting, exe_date
 					FROM $TBL_TRACK_HOTPOTATOES
 					WHERE exe_user_id = '".$user_id."' AND exe_cours_id = '".$cid."'
 					ORDER BY exe_cours_id ASC, exe_date ASC";
@@ -155,7 +155,6 @@ class GradeBookResult
 				$mailid = $results[$i][6];
 				$user = $results[$i][0];
 				$test = $results[$i][1];
-				$dt = strftime(get_lang('dateTimeFormatLong'),$results[$i][4]);
 				$res = $results[$i][2];
 				if(empty($user_id)) {
 					$user = $results[$i][0];
@@ -163,7 +162,7 @@ class GradeBookResult
 					$return[$i]['user_id'] = $results[$i][7];
 				}
 				$return[$i]['title'] = $test;
-				$return[$i]['time'] = format_locale_date(get_lang('dateTimeFormatLong'),$results[$i][4]);
+				$return[$i]['time'] = api_convert_and_format_date($results[$i][4], null, date_default_timezone_get());
 				$return[$i]['result'] = $res;
 				$return[$i]['max'] = $results[$i][3];
 				$j=$i;
@@ -184,7 +183,7 @@ class GradeBookResult
 
 				}
 				$return[$j+$i]['title'] = $title;
-				$return[$j+$i]['time'] = strftime(get_lang('dateTimeFormatLong'),$hpresults[$i][4]);
+				$return[$j+$i]['time'] = api_convert_and_format_date($hpresults[$i][4], null, date_default_timezone_get());
 				$return[$j+$i]['result'] = $hpresults[$i][2];
 				$return[$j+$i]['max'] = $hpresults[$i][3];
 			}

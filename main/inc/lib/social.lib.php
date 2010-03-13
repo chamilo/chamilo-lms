@@ -485,7 +485,7 @@ class SocialManager extends UserManager {
 					$result .= "<a href=\"$toolsList[$key2] [\"path\"] $thisCourseSysCode \">";
 					$result .= "$toolsList[$key2][\"name\"]</a>";
 				} else {
-					$result .= format_locale_date(CONFVAL_dateFormatForInfosFromCourses, strtotime($key2));
+					$result .= api_convert_and_format_date($key2, DATE_FORMAT_LONG, date_default_timezone_get());
 				}
 				$result .= '</li>';
 				$result .= '<ul>';
@@ -496,7 +496,7 @@ class SocialManager extends UserManager {
 						$result .= "<a href=\"$toolsList[$key3] [\"path\"] $thisCourseSysCode \">";
 						$result .= "$toolsList[$key3][\"name\"]</a>";
 					} else {
-						$result .= format_locale_date(CONFVAL_dateFormatForInfosFromCourses, strtotime($key3));
+						$result .= api_convert_and_format_date($key3, DATE_FORMAT_LONG, date_default_timezone_get());
 					}
 					$result .= '<ul compact="compact">';
 					reset($digest[$thisCourseSysCode][$key2][$key3]);

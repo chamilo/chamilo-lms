@@ -82,15 +82,13 @@ while($row=Database::fetch_array($result))
 
 	echo get_lang('StartTime').' : ';
 
-	echo api_ucfirst(format_locale_date($dateFormatLong,strtotime($row["start_date"])))."&nbsp;&nbsp;&nbsp;";
-	echo ucfirst(strftime($timeNoSecFormat,strtotime($row["start_date"])))."";
+	echo api_ucfirst(api_convert_and_format_date($row["start_date"], null, date_default_timezone_get()));
 
 	echo '<br />';
 
 	echo get_lang('EndTime').' : ';
 
-	echo api_ucfirst(format_locale_date($dateFormatLong,strtotime($row["end_date"])))."&nbsp;&nbsp;&nbsp;";
-	echo ucfirst(strftime($timeNoSecFormat,strtotime($row["end_date"])))."";
+	echo api_ucfirst(api_convert_and_format_date($row["end_date"], null, date_default_timezone_get()));
 
 	echo '<br /><br />';
 

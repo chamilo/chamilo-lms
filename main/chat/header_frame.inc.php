@@ -13,13 +13,13 @@ if (!defined('FRAME')) {
 	exit();
 }
 
-$bodyXtra='';
+$bodyXtra = 'dir="'.api_get_text_direction().'" ';
 
 if (FRAME == 'hidden') {
-	$bodyXtra = 'onload="javascript: updateChat(); updateConnected(); setTimeout(\'submitHiddenForm();\',5000);"';
+	$bodyXtra .= 'onload="javascript: updateChat(); updateConnected(); setTimeout(\'submitHiddenForm();\', 5000);"';
     // Change timeout to change refresh time of the chat window
 } elseif (FRAME == 'message') {
-	$bodyXtra = 'onload="javascript: eventMessage();"';
+	$bodyXtra .= 'onload="javascript: eventMessage();"';
 }
 
 /*
@@ -55,12 +55,15 @@ if (empty($mycourseid)) {
 	echo "parent.chat_message.location.href='chat_whoisonline.php?".api_get_cidreq()."';";
 	echo '</script>';
 }
-?><!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<html>
+
+?><!DOCTYPE html
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php echo api_get_language_isocode(); ?>" lang="<?php echo api_get_language_isocode(); ?>">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=<?php echo api_get_system_encoding(); ?>">
 <title>Chat</title>
-<link rel="stylesheet" type="text/css" href="../css/<?php echo $my_style; ?>/default.css">
+<link rel="stylesheet" type="text/css" href="<?php echo api_get_path(WEB_CSS_PATH).$my_style; ?>/default.css">
 <style>
 	a{
 		font-size: 12px;

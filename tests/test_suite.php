@@ -139,9 +139,9 @@ class TestsSuite extends TestSuite {
         $this->addFile(api_get_path(SYS_TEST_PATH).'/main/inc/lib/usermanager.lib.test.php'); 
         $this->addFile(api_get_path(SYS_TEST_PATH).'/main/inc/lib/groupmanager.lib.test.php');	 
         $this->addFile(api_get_path(SYS_TEST_PATH).'/main/inc/lib/image.lib.test.php'); 
-        $this->addFile(api_get_path(SYS_TEST_PATH).'/main/inc/lib/import.lib.test.php');
+        $this->addFile(api_get_path(SYS_TEST_PATH).'/main/inc/lib/import.lib.test.php');*/
         $this->addFile(api_get_path(SYS_TEST_PATH).'/main/inc/lib/internationalization.lib.test.php');  
-        $this->addFile(api_get_path(SYS_TEST_PATH).'/main/inc/lib/system_announcements.lib.test.php');
+        /*$this->addFile(api_get_path(SYS_TEST_PATH).'/main/inc/lib/system_announcements.lib.test.php');
         $this->addFile(api_get_path(SYS_TEST_PATH).'/main/inc/lib/fileUpload.lib.test.php');
         $this->addFile(api_get_path(SYS_TEST_PATH).'/main/inc/lib/main_api.lib.test.php');//this file delete the course     
         $this->addFile(api_get_path(SYS_TEST_PATH).'/main/inc/lib/debug.lib.inc.test.php');//this file need be to the finish of the tests

@@ -1384,6 +1384,37 @@ class TestInternationalization extends UnitTestCase {
 		}
 		//var_dump('<pre>'.$res.'</pre>');
 	}
+	
+	public function test_api_get_local_time_with_datetime() {
+		$datetime_not_converted = '2010-03-13 16:24:02';
+		$datetime_gmtplus1 = api_get_local_time($datetime_not_converted, 'Europe/Paris', 'America/Lima');
+		$this->assertEqual($datetime_gmtplus1, '2010-03-13 22:24:02');
+	}
+	
+	public function test_api_get_local_time_with_timestamp() {
+		$current_timestamp = time();
+		$datetime = api_get_local_time($current_timestamp, 'Europe/Paris');
+		$system_timezone = date_default_timezone_get();
+		date_default_timezone_set('Europe/Paris');
+		$this->assertEqual($datetime, date('Y-m-d H:i:s', $current_timestamp));
+		date_default_timezone_set($system_timezone);
+	}
+	
+	public function test_api_get_utc_datetime_with_string() {
+		$timestamp = time();
+		$timezone = _api_get_timezone();
+		$system_timezone = date_default_timezone_get();
+		date_default_timezone_set($timezone);
+		$datetime = date('Y-m-d H:i:s', $timestamp);
+		$datetime_utc = api_get_utc_datetime($datetime);
+		$this->assertEqual($datetime_utc, gmdate('Y-m-d H:i:s', $timestamp));
+		date_default_timezone_set($system_timezone);
+	}
+	
+	public function test_api_get_utc_datetime_with_timestamp() {
+		$timestamp = time();
+		$this->assertEqual(api_get_utc_datetime($timestamp), gmdate("Y-m-d H:i:s", $timestamp));
+	}
 
 	/*
 	// Enable the following test when you need to run it.

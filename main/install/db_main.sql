@@ -421,6 +421,9 @@ INSERT INTO language (original_name, english_name, isocode, dokeos_folder, avail
 ('Kiswahili','swahili','sw','swahili',0),
 ('Yor&ugrave;b&aacute;','yoruba','yo','yoruba',0);
 
+-- The chosen during the installation platform language should be enabled.
+UPDATE language SET available=1 WHERE dokeos_folder = '{PLATFORMLANGUAGE}';
+
 UNLOCK TABLES;
 /*!40000 ALTER TABLE language ENABLE KEYS */;
 

@@ -1407,7 +1407,7 @@ if ($display_announcement_list && !$surveyid) {
 			echo '&nbsp;&nbsp;&nbsp;'.get_lang('By').' : &nbsp;'.str_replace(' ', '&nbsp;', api_get_person_name($user_info['firstName'], $user_info['lastName']));
 			echo "\t\t\t\t\t</th>\n","\t\t\t\t</tr>\n";
 			echo "\t\t\t\t<tr class='row_odd'>\n\t\t\t\t\t<td class=\"announcements_datum\" colspan=\"3\">";
-			echo get_lang('AnnouncementPublishedOn')," : ",api_ucfirst(api_convert_and_format_date($last_post_datetime, null, date_default_timezone_get()));
+			echo get_lang('AnnouncementPublishedOn')," : ",api_ucfirst(api_convert_and_format_date($last_post_datetime, DATE_FORMAT_LONG, date_default_timezone_get()));
 			echo "</td>\n\t\t\t\t</tr>\n";
 
 			/* CONTENT */

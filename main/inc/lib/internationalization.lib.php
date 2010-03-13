@@ -22,7 +22,6 @@ define('TIME_NO_SEC_FORMAT', 0);	// 15:23
 define('DATE_FORMAT_SHORT', 1);		// 25.08.2009
 define('DATE_FORMAT_LONG', 2);		// Aug 25, 09
 define('DATE_TIME_FORMAT_LONG', 3);	// August 25, 2009 at 03:28 PM
-define('DATE_FORMAT_LONG_WITHOUT_DAY', 4);
 
 // Formatting person's name.
 define('PERSON_NAME_COMMON_CONVENTION', 0);	// Formatting a person's name using the pattern as it has been
@@ -522,7 +521,7 @@ function api_strtotime($time, $timezone = null) {
  * @author Guillaume Viguier <guillaume.viguier@beeznest.com>
  * 
  * @param mixed Timestamp or datetime string
- * @param mixed Date format (string or int; see date formats in the Chamilo system: TIME_NO_SEC_FORMAT, DATE_FORMAT_SHORT, DATE_FORMAT_LONG, DATE_TIME_FORMAT_LONG, DATE_FORMAT_LONG_WITHOUT_DAY)
+ * @param mixed Date format (string or int; see date formats in the Chamilo system: TIME_NO_SEC_FORMAT, DATE_FORMAT_SHORT, DATE_FORMAT_LONG, DATE_TIME_FORMAT_LONG)
  * @param string $language (optional)		Language indentificator. If it is omited, the current interface language is assumed.
  * @return string							Returns the formatted date.
  * 
@@ -572,9 +571,6 @@ function api_format_date($time, $format = null, $language = null) {
 					$datetype = IntlDateFormatter::FULL;
 					$timetype = IntlDateFormatter::SHORT;
 				}
-				break;
-			case DATE_FORMAT_LONG_WITHOUT_DAY:
-				$date_format = get_lang('DateFormatLongWithoutDay', '', $language);
 				break;
 			default:
 				$date_format = get_lang('dateTimeFormatLong', '', $language);

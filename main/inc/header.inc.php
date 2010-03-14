@@ -75,7 +75,7 @@ if (!empty($mycourseid) && $mycourseid != -1) {
 
 		if (!empty($mycoursetheme) && $mycoursetheme != -1) {
 			if (!empty($mycoursetheme) && $mycoursetheme != $my_style) {
-				$my_style = $mycoursetheme;		// course's css
+				$my_style = $mycoursetheme;			// course's css
 			}
 		}
 

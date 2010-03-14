@@ -13,7 +13,7 @@
 /**
  * function make_clickable($string)
  *
- * @desc   completes url contained in the text with "<a href ...".
+ * @desc   Completes url contained in the text with "<a href ...".
  *         However the function simply returns the submitted text without any
  *         transformation if it already contains some "<a href:" or "<img src=".
  * @param string $text text to be converted
@@ -109,7 +109,7 @@ function text_filter($input, $filter = true) {
 */
 function _text_parse_tex($textext) {
 	//$textext = str_replace(array ("[tex]", "[/tex]"), array ('[*****]', '[/*****]'), $textext);
-	//$textext=stripslashes($texttext);
+	//$textext = stripslashes($texttext);
 
 	$input_array = preg_split("/(\[tex]|\[\/tex])/", $textext, -1, PREG_SPLIT_DELIM_CAPTURE);
 
@@ -122,7 +122,7 @@ function _text_parse_tex($textext) {
 		}
 	}
 
-	$output=implode('',$input_array);
+	$output = implode('',$input_array);
 	return $output;
 }
 
@@ -142,7 +142,6 @@ function _text_parse_texexplorer($textext) {
 		$textext = str_replace(array("[texexplorer]", "[/texexplorer]"), array("<embed type=\"application/x-techexplorer\" texdata=\"", "\" autosize=\"true\" pluginspage=\"http://www.integretechpub.com/techexplorer/\">"), $textext);
 	}
 	return $textext;
-
 }
 
 /**
@@ -159,11 +158,11 @@ function _text_parse_glossary($input) {
 * @author Patrick Cool <patrick.cool@UGent.be>
 */
 function _text_parse_tool($input) {
-	// an array with all the valid tools
+	// An array with all the valid tools
 	$tools[] = array(TOOL_ANNOUNCEMENT, 'announcements/announcements.php');
 	$tools[] = array(TOOL_CALENDAR_EVENT, 'calendar/agenda.php');
 
-	// check if the name between the [tool] [/tool] tags is a valid one
+	// Check if the name between the [tool] [/tool] tags is a valid one
 }
 
 /**
@@ -173,7 +172,7 @@ function _text_parse_tool($input) {
 function latex_gif_renderer($latex_code) {
 	global $_course;
 
-	// setting the paths and filenames
+	// Setting the paths and filenames
 	$mimetex_path = api_get_path(LIBRARY_PATH).'mimetex/';
 	$temp_path = api_get_path(SYS_COURSE_PATH).$_course['path'].'/temp/';
 	$latex_filename = md5($latex_code).'.gif';
@@ -219,20 +218,21 @@ function cut($text, $maxchar, $embed = false) {
  * @return mixed an integer or a float depends on the parameter
  */
 function float_format($number, $flag = 1) {
-	if (is_numeric($number)) { // a number
-		if (!$number) { // zero
-			$result = ($flag == 2 ? '0.00' : '0'); // output zero
-		} else { // value
-			if (floor($number) == $number) { // whole number
-				$result = number_format($number, ($flag == 2 ? 2 : 0)); // format
-			} else { // cents
-				$result = number_format(round($number, 2), ($flag == 0 ? 0 : 2)); // format
-			} // integer or decimal
-		} // value
+	if (is_numeric($number)) {
+		if (!$number) {
+			$result = ($flag == 2 ? '0.00' : '0');
+		} else {
+			if (floor($number) == $number) {
+				$result = number_format($number, ($flag == 2 ? 2 : 0));
+			} else {
+				$result = number_format(round($number, 2), ($flag == 0 ? 0 : 2));
+			}
+		}
 		return $result;
 	}
 }
 
+// TODO: To be checked for timezones management and to be moved in the internationalization library.
 /**
  * Function to obtain last week timestamps
  * @return array  times for every day inside week
@@ -248,7 +248,7 @@ function get_last_week() {
     }
 
     $lastweek = sprintf("%02d", $lastweek);
-    for ($i=1; $i<=7; $i++) {
+    for ($i = 1; $i <= 7; $i++) {
         $arrdays[] = strtotime("$year"."W$lastweek"."$i");
     }
     return $arrdays;

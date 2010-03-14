@@ -518,22 +518,20 @@ if ($_configuration['tracking_enabled'] && !isset($_SESSION['login_as']) && isse
 	$q_last_connection = Database::query($sql_last_connection);
 	if (Database::num_rows($q_last_connection) > 0) {
 		$i_id_last_connection = Database::result($q_last_connection, 0, 'login_id');
-	
+
 		// is the latest logout_date still relevant?
 		$sql_logout_date = "SELECT logout_date FROM $tbl_track_login WHERE login_id=$i_id_last_connection";
 		$q_logout_date = Database::query($sql_logout_date);
 		$res_logout_date = convert_mysql_date(Database::result($q_logout_date,0,'logout_date'));
-				
+
         if ($res_logout_date < time() - $_configuration['session_lifetime']) {
 			// it isn't, we should create a fresh entry
 			event_login();
             // now that it's created, we can get its ID and carry on
 			$q_last_connection = Database::query($sql_last_connection);
-			$i_id_last_connection = Database::result($q_last_connection, 0, 'login_id');			
+			$i_id_last_connection = Database::result($q_last_connection, 0, 'login_id');
 		}
-		
-		
-		
+
 		$s_sql_update_logout_date = "UPDATE $tbl_track_login SET logout_date=NOW() WHERE login_id='$i_id_last_connection'";
 		Database::query($s_sql_update_logout_date);
 	}

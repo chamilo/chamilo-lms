@@ -1,48 +1,19 @@
-<?php // $Id: create_document.php 22259 2009-07-20 18:56:45Z ivantcholakov $
+<?php
+/* For licensing terms, see /license.txt */
 
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2004-2008 Dokeos SPRL
-	Copyright (c) 2003 Ghent University (UGent)
-	Copyright (c) 2001 Universite catholique de Louvain (UCL)
-	Copyright (c) Olivier Brouckaert
-	Copyright (c) Bart Mollet, Hogeschool Gent
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
-	Mail: info@dokeos.com
-
-==============================================================================
-*/
 /**
-==============================================================================
-*	This file allows creating new html documents with an online WYSIWYG html380
-*	editor.
-*
-*	@package dokeos.document
-==============================================================================
-*/
+ *	This file allows creating new html documents with an online WYSIWYG html editor.
+ *
+ *	@package chamilo.document
+ */
 
-/*
-==============================================================================
-		INIT SECTION
-==============================================================================
-*/
+/*	INIT SECTION */
 
-// name of the language file that needs to be included
+// Name of the language file that needs to be included
 $language_file = 'document';
+
 require_once '../inc/global.inc.php';
+
 $_SESSION['whereami'] = 'document/create';
 $this_section = SECTION_COURSES;
 
@@ -196,68 +167,52 @@ require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
 require_once api_get_path(LIBRARY_PATH).'document.lib.php';
 require_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
 require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
+
 $nameTools = get_lang('CreateDocument');
 
+/*	Constants and variables */
 
-/*
------------------------------------------------------------
-	Constants and variables
------------------------------------------------------------
-*/
 $dir = isset($_GET['dir']) ? Security::remove_XSS($_GET['dir']) : Security::remove_XSS($_POST['dir']); // please do not modify this dirname formatting
 
-/*
-==============================================================================
-		MAIN CODE
-==============================================================================
-*/
+/*	MAIN CODE */
 
-if (api_is_in_group())
-{
+if (api_is_in_group()) {
 	$group_properties = GroupManager::get_group_properties($_SESSION['_gid']);
 }
 
-if (strstr($dir, '..'))
-{
+if (strstr($dir, '..')) {
 	$dir = '/';
 }
 
-if ($dir[0] == '.')
-{
+if ($dir[0] == '.') {
 	$dir = substr($dir, 1);
 }
 
-if ($dir[0] != '/')
-{
+if ($dir[0] != '/') {
 	$dir = '/'.$dir;
 }
 
-if ($dir[strlen($dir) - 1] != '/')
-{
+if ($dir[strlen($dir) - 1] != '/') {
 	$dir .= '/';
 }
 
-// Configuration for the FCKEDITOR
-$doc_tree= explode('/', $dir);
-$count_dir = count($doc_tree) -2; // "2" because at the begin and end there are 2 "/"
+// Configuration for the online editor
+$doc_tree = explode('/', $dir);
+$count_dir = count($doc_tree) - 2; // "2" because at the begin and end there are 2 "/"
 // Level correction for group documents.
-if (!empty($group_properties['directory']))
-{
+if (!empty($group_properties['directory'])) {
 	$count_dir = $count_dir > 0 ? $count_dir - 1 : 0;
 }
-$relative_url='';
-
-for($i=0;$i<($count_dir);$i++)
-{
-	$relative_url.='../';
+$relative_url = '';
+for ($i = 0; $i < ($count_dir); $i++) {
+	$relative_url .= '../';
 }
-
-// we do this in order to avoid the condition in html_editor.php ==> if ($this -> fck_editor->Config['CreateDocumentWebDir']=='' || $this -> fck_editor->Config['CreateDocumentDir']== '')
+// We do this in order to avoid the condition in html_editor.php ==> if ($this -> fck_editor->Config['CreateDocumentWebDir']=='' || $this -> fck_editor->Config['CreateDocumentDir']== '')
 if ($relative_url== '') {
 	$relative_url = '/';
 }
 
-$is_allowed_to_edit = api_is_allowed_to_edit(null,true);
+$is_allowed_to_edit = api_is_allowed_to_edit(null, true);
 
 $html_editor_config = array(
 	'ToolbarSet' => ($is_allowed_to_edit ? 'Documents' :'DocumentsStudent'),
@@ -279,15 +234,11 @@ if (!is_dir($filepath)) {
 	$dir = '/';
 }
 
-
-//------------
-
-/**************************************************/
 $to_group_id = 0;
 
-if (isset ($_SESSION['_gid']) && $_SESSION['_gid'] != '') {
+if (isset($_SESSION['_gid']) && $_SESSION['_gid'] != '') {
 	$req_gid = '&amp;gidReq='.$_SESSION['_gid'];
-	$interbreadcrumb[] = array ("url" => "../group/group_space.php?gidReq=".$_SESSION['_gid'], "name" => get_lang('GroupSpace'));
+	$interbreadcrumb[] = array('url' => '../group/group_space.php?gidReq='.$_SESSION['_gid'], 'name' => get_lang('GroupSpace'));
 	$noPHP_SELF = true;
 	$to_group_id = $_SESSION['_gid'];
 	$group = GroupManager :: get_group_properties($to_group_id);
@@ -296,19 +247,16 @@ if (isset ($_SESSION['_gid']) && $_SESSION['_gid'] != '') {
 		api_not_allowed(true);
 	}
 }
-$interbreadcrumb[] = array ("url" => "./document.php?curdirpath=".urlencode($_GET['dir']).$req_gid, "name" => get_lang('Documents'));
+$interbreadcrumb[] = array('url' => './document.php?curdirpath='.urlencode($_GET['dir']).$req_gid, 'name' => get_lang('Documents'));
 
-if (!$is_allowed_in_course)
+if (!$is_allowed_in_course) {
 	api_not_allowed(true);
-
+}
 if (!($is_allowed_to_edit || $_SESSION['group_member_with_upload_rights'])) {
 	api_not_allowed(true);
 }
-/*
------------------------------------------------------------
-	Header
------------------------------------------------------------
-*/
+
+/*	Header */
 
 event_access_tool(TOOL_DOCUMENT);
 $display_dir = $dir;
@@ -332,7 +280,7 @@ $form->addElement('hidden', 'dir');
 $default['dir'] = $dir;
 // Filename
 
-$form->addElement('hidden','title_edited','false','id="title_edited"');
+$form->addElement('hidden', 'title_edited', 'false', 'id="title_edited"');
 
 /**
  * Check if a document width the choosen filename allready exists
@@ -351,10 +299,10 @@ function document_exists($filename) {
 $renderer = & $form->defaultRenderer();
 */
 //$filename_template = str_replace('{element}', "<tt>$display_dir</tt> {element} <tt>.html</tt>", $renderer->_elementTemplate);
-$filename_template = str_replace('{element}', "{element}", $renderer->_elementTemplate);
+$filename_template = str_replace('{element}', '{element}', $renderer->_elementTemplate); // TODO: What is the point of this statement?
 $renderer->setElementTemplate($filename_template, 'filename');
 
-// initialize group array
+// Initialize group array
 $group = array();
 
 // If allowed, add element for document title
@@ -369,9 +317,9 @@ if (api_get_setting('use_document_title') == 'true') {
 	$form->addElement('hidden', 'filename', '', array('id' => 'filename'));
 	//
 } else {
-	//$form->add_textfield('filename', get_lang('FileName'),true,'class="input_titles" id="filename"  onblur="check_if_still_empty()"');
+	//$form->add_textfield('filename', get_lang('FileName'),true,'class="input_titles" id="filename" onblur="javascript: check_if_still_empty();"');
 	// replace the 	add_textfield with this
-	$group[]=$form->createElement('text','filename',get_lang('FileName'),'class="input_titles" id="document_title" onblur="check_if_still_empty()"');
+	$group[]=$form->createElement('text', 'filename', get_lang('FileName'), 'class="input_titles" id="document_title" onblur="javascript: check_if_still_empty();"');
 	//$form->applyFilter('filename','trim');
 	//$form->addRule('filename', get_lang('ThisFieldIsRequired'), 'required');
 	//$form->addRule('filename', get_lang('FileExists'), 'callback', 'document_exists');
@@ -381,12 +329,13 @@ if (api_get_setting('use_document_title') == 'true') {
 	//
 }
 
-/* Show read-only box only in groups */
-if(!empty($_SESSION['_gid'])) {
+// Show read-only box only in groups
+if (!empty($_SESSION['_gid'])) {
 	//$renderer->setElementTemplate('<div class="row"><div class="label"></div><div class="formw">{element}{label}</div></div>', 'readonly');
-	$group[]= $form->createElement('checkbox','readonly','',get_lang('ReadOnly'));
+	$group[]= $form->createElement('checkbox', 'readonly', '', get_lang('ReadOnly'));
 }
-// add group to the form
+
+// Add group to the form
 $form->addGroup($group, 'filename_group', api_get_setting('use_document_title') == 'true' ? get_lang('Title') : get_lang('FileName') ,'&nbsp;&nbsp;&nbsp;', false);
 $form->addRule('filename_group', get_lang('ThisFieldIsRequired'), 'required');
 
@@ -429,7 +378,7 @@ if ($form->validate()) {
 	$values = $form->exportValues();
 	$readonly = isset($values['readonly']) ? 1 : 0;
 
-	$values['title']=addslashes(trim($values['title']));
+	$values['title'] = addslashes(trim($values['title']));
 	$values['title'] = Security::remove_XSS($values['title']);
 	$values['title'] = replace_dangerous_char($values['title']);
 	$values['title'] = disable_dangerous_file($values['title']);
@@ -449,15 +398,14 @@ if ($form->validate()) {
 	$title = $values['title'];
 	$extension = 'html';
 
-	$texte = $values['content'];
-	$texte=Security::remove_XSS($texte,COURSEMANAGERLOWSECURITY);
+	$content = Security::remove_XSS($values['content'], COURSEMANAGERLOWSECURITY);
 
-	if (!strstr($texte, '/css/frames.css')) {
-		$texte = str_replace('</head>', '<style> body{margin:10px;}</style> <link rel="stylesheet" href="./css/frames.css" type="text/css" /></head>', $texte);
+	if (strpos($content, '/css/frames.css') === false) {
+		$content = str_replace('</head>', '<style> body{margin:10px;}</style> <link rel="stylesheet" href="./css/frames.css" type="text/css" /></head>', $content);
 	}
-	if ($fp = @ fopen($filepath.$filename.'.'.$extension, 'w')) {
-		$texte = text_filter($texte);
-		$content = str_replace(api_get_path('WEB_COURSE_PATH'), $_configuration['url_append'].'/courses/', $texte);
+	if ($fp = @fopen($filepath.$filename.'.'.$extension, 'w')) {
+		$content = text_filter($content);
+		$content = str_replace(api_get_path('WEB_COURSE_PATH'), $_configuration['url_append'].'/courses/', $content);
 		// change the path of mp3 to absolute
 		// first regexp deals with ../../../ urls
 		// Disabled by Ivan Tcholakov.
@@ -471,28 +419,28 @@ if ($form->validate()) {
 		if (!is_dir($filepath.'css')) {
 			mkdir($filepath.'css', api_get_permissions_for_new_directories());
 			$doc_id = add_document($_course, $dir.'css', 'folder', 0, 'css');
-			api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'FolderCreated', $_user['user_id'],null,null,null,null,$current_session_id);
-			api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'invisible', $_user['user_id'],null,null,null,null,$current_session_id);
+			api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'FolderCreated', $_user['user_id'], null, null, null, null, $current_session_id);
+			api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'invisible', $_user['user_id'], null, null, null, null, $current_session_id);
 		}
 
 		if (!is_file($filepath.'css/frames.css')) {
-			//make a copy of the current css for the new document
+			// Make a copy of the current css for the new document
 			copy(api_get_path(SYS_CODE_PATH).'css/'.api_get_setting('stylesheets').'/frames.css', $filepath.'css/frames.css');
 			$doc_id = add_document($_course, $dir.'css/frames.css', 'file', filesize($filepath.'css/frames.css'), 'frames.css');
-			api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'DocumentAdded', $_user['user_id'],null,null,null,null,$current_session_id);
-			api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'invisible', $_user['user_id'],null,null,null,null,$current_session_id);
+			api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'DocumentAdded', $_user['user_id'], null, null, null, null, $current_session_id);
+			api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'invisible', $_user['user_id'], null, null, null, null, $current_session_id);
 		}
 
 		$file_size = filesize($filepath.$filename.'.'.$extension);
 		$save_file_path = $dir.$filename.'.'.$extension;
 
-		$document_id = add_document($_course, $save_file_path, 'file', $file_size, $filename,null,$readonly);
+		$document_id = add_document($_course, $save_file_path, 'file', $file_size, $filename, null, $readonly);
 		if ($document_id) {
-			api_item_property_update($_course, TOOL_DOCUMENT, $document_id, 'DocumentAdded', $_user['user_id'], $to_group_id,null,null,null,$current_session_id);
-			//update parent folders
+			api_item_property_update($_course, TOOL_DOCUMENT, $document_id, 'DocumentAdded', $_user['user_id'], $to_group_id, null, null, null, $current_session_id);
+			// Update parent folders
 			item_property_update_on_folder($_course, $_GET['dir'], $_user['user_id']);
-			$new_comment = isset ($_POST['comment']) ? trim($_POST['comment']) : '';
-			$new_title = isset ($_POST['title']) ? trim($_POST['title']) : '';
+			$new_comment = isset($_POST['comment']) ? trim($_POST['comment']) : '';
+			$new_title = isset($_POST['title']) ? trim($_POST['title']) : '';
 			if ($new_comment || $new_title) {
 				$TABLE_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT);
 				$ct = '';
@@ -502,16 +450,16 @@ if ($form->validate()) {
 					$ct .= ", title='$new_title'";
 				Database::query("UPDATE $TABLE_DOCUMENT SET".substr($ct, 1)." WHERE id = '$document_id'");
 			}
-			$dir= substr($dir,0,-1);
+			$dir = substr($dir, 0, -1);
 			header('Location: document.php?curdirpath='.urlencode($dir));
 			exit ();
 		} else {
-			Display :: display_header($nameTools, "Doc");
+			Display :: display_header($nameTools, 'Doc');
 			Display :: display_error_message(get_lang('Impossible'));
 			Display :: display_footer();
 		}
 	} else {
-		Display :: display_header($nameTools, "Doc");
+		Display :: display_header($nameTools, 'Doc');
 		//api_display_tool_title($nameTools);
 		Display :: display_error_message(get_lang('Impossible'));
 		Display :: display_footer();
@@ -521,10 +469,9 @@ if ($form->validate()) {
 	//api_display_tool_title($nameTools);
 	// actions
 	echo '<div class="actions">';
-	// link back to the documents overview
-	echo '<a href="document.php?curdirpath='.Security::remove_XSS($_GET['dir']).'">'.Display::return_icon('back.png',get_lang('Back').' '.get_lang('To').' '.get_lang('DocumentsOverview')).get_lang('BackTo').' '.get_lang('DocumentsOverview').'</a>';
+	// Link back to the documents overview
+	echo '<a href="document.php?curdirpath='.Security::remove_XSS($_GET['dir']).'">'.Display::return_icon('back.png', get_lang('Back').' '.get_lang('To').' '.get_lang('DocumentsOverview')).get_lang('BackTo').' '.get_lang('DocumentsOverview').'</a>';
 	echo '</div>';
 	$form->display();
 	Display :: display_footer();
 }
-?>

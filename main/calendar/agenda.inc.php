@@ -1652,7 +1652,7 @@ function save_edit_agenda_item($id,$title,$content,$start_date,$end_date)
 {
 	$TABLEAGENDA= Database::get_course_table(TABLE_AGENDA);
 	$id			= Database::escape_string($id);
-	$title		= Database::escape_string(Security::remove_XSS($title));	
+	$title		= Database::escape_string(Security::remove_XSS($title));
 	$content 	= Database::escape_string(Security::remove_XSS($content,COURSEMANAGERLOWSECURITY));
 	$start_date	= Database::escape_string($start_date);
 	$end_date	= Database::escape_string($end_date);
@@ -2068,7 +2068,7 @@ function display_agenda_items()
 		{
             $month_bar = api_format_date($myrow["start_date"], "%m%Y");
 			echo "\t<tr>\n\t\t<td class=\"agenda_month_divider\" colspan=\"3\" valign=\"top\">".
-			api_ucfirst(api_format_date($myrow["start_date"], "%B %Y")).
+			api_format_date($myrow["start_date"], "%B %Y").
 			"</td>\n\t</tr>\n";
 		}
 
@@ -2137,12 +2137,12 @@ function display_agenda_items()
          --------------------------------------------------*/
     	echo "<tr class='row_odd'>";
     	echo "\t\t<td>".get_lang("StartTimeWindow").": ";
-    	echo api_ucfirst(api_format_date($myrow['start_date']));
+    	echo api_format_date($myrow['start_date']);
     	echo "</td>\n";
     	echo "\t\t<td>";
     	if ($myrow["end_date"]<>"0000-00-00 00:00:00") {
     		echo get_lang("EndTimeWindow").": ";
-    		echo api_ucfirst(api_convert_and_format_date($myrow['end_date'], null, date_default_timezone_get()));
+    		echo api_convert_and_format_date($myrow['end_date'], null, date_default_timezone_get());
     	}
     	echo "</td>\n";
 
@@ -2368,7 +2368,7 @@ function display_one_agenda_item($agenda_id)
 	 DISPLAY : the icon, title, destinees of the item
 	  --------------------------------------------------*/
 	echo "\t<tr>\n";
-	
+
 	$myrow["start_date"] = api_get_local_time($myrow["start_date"], null, date_default_timezone_get());
 
 	// highlight: if a date in the small calendar is clicked we highlight the relevant items
@@ -2430,10 +2430,10 @@ function display_one_agenda_item($agenda_id)
 	  --------------------------------------------------*/
 	echo "\t<tr class='row_odd'>\n";
 	echo "\t\t<td>".get_lang("StartTime").": ";
-	echo api_ucfirst(api_format_date($myrow['start_date']));
+	echo api_format_date($myrow['start_date']);
 	echo "</td>\n";
 	echo "\t\t<td>".get_lang("EndTime").": ";
-	echo api_ucfirst(api_convert_and_format_date($myrow['end_date'], null, date_default_timezone_get()));
+	echo api_convert_and_format_date($myrow['end_date'], null, date_default_timezone_get());
 	echo "</td>\n";
 
 	/*--------------------------------------------------

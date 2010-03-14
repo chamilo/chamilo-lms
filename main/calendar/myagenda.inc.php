@@ -751,7 +751,7 @@ function show_personal_agenda()
 			// adding an internal anchor
 			echo "<a name=\"".$myrow["id"]."\"></a>";
 			echo date("d", strtotime($myrow["date"]))." ".$MonthsLong[date("n", strtotime($myrow["date"])) - 1]." ".date("Y", strtotime($myrow["date"]))."&nbsp;";
-			echo api_ucfirst(strftime(get_lang("timeNoSecFormat"), strtotime($myrow["date"])));
+			echo strftime(get_lang("timeNoSecFormat"), strtotime($myrow["date"]));
 			echo "</td>";
 			echo '<td></td>'; //remove when enabling ical
             //echo '<td class="'.$style.'">';
@@ -843,7 +843,7 @@ function show_simple_personal_agenda($user_id)
 			  --------------------------------------------------*/
 			// adding an internal anchor
 			$content.= date("d", strtotime($myrow["date"]))." ".$MonthsLong[date("n", strtotime($myrow["date"])) - 1]." ".date("Y", strtotime($myrow["date"]))."&nbsp;";
-			$content.= api_ucfirst(strftime(get_lang("timeNoSecFormat"), strtotime($myrow["date"])));
+			$content.= strftime(get_lang("timeNoSecFormat"), strtotime($myrow["date"]));
 
 			/*--------------------------------------------------
 			 			display: the title

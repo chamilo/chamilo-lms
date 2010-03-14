@@ -63,7 +63,7 @@ function display_announcement($announcement_id)
 
 	echo "<table height=\"100\" width=\"100%\" border=\"1\" cellpadding=\"5\" cellspacing=\"0\" id=\"agenda_list\">\n";
 	echo "<tr class=\"data\"><td>" . $title . "</td></tr>\n";
-	echo "<tr><td class=\"announcements_datum\">" . get_lang('AnnouncementPublishedOn') . " : " . api_ucfirst(api_convert_and_format_date($last_post_datetime, null, date_default_timezone_get()) ) . "</td></tr>\n";
+	echo "<tr><td class=\"announcements_datum\">" . get_lang('AnnouncementPublishedOn') . " : " . api_convert_and_format_date($last_post_datetime, null, date_default_timezone_get()) . "</td></tr>\n";
 	echo "<tr class=\"text\"><td>$content</td></tr>\n";
 	echo "</table>";
 }

@@ -82,13 +82,13 @@ while($row=Database::fetch_array($result))
 
 	echo get_lang('StartTime').' : ';
 
-	echo api_ucfirst(api_convert_and_format_date($row["start_date"], null, date_default_timezone_get()));
+	echo api_convert_and_format_date($row["start_date"], null, date_default_timezone_get());
 
 	echo '<br />';
 
 	echo get_lang('EndTime').' : ';
 
-	echo api_ucfirst(api_convert_and_format_date($row["end_date"], null, date_default_timezone_get()));
+	echo api_convert_and_format_date($row["end_date"], null, date_default_timezone_get());
 
 	echo '<br /><br />';
 

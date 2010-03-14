@@ -60,13 +60,13 @@ while($row=Database::fetch_array($result))
 
 	echo get_lang('StartTime').' : ';
 
-	echo api_ucfirst(api_convert_and_format_date($row["start_date"], null, date_default_timezone_get()));
+	echo api_convert_and_format_date($row["start_date"], null, date_default_timezone_get());
 
 	echo '<br />';
 
 	echo get_lang('EndTime').' : ';
 
-	echo api_ucfirst(api_convert_and_format_date($row["end_date"], null, date_default_timezone_get()));
+	echo api_convert_and_format_date($row["end_date"], null, date_default_timezone_get());
 
 	echo '<br /><br />';
 
@@ -76,7 +76,7 @@ while($row=Database::fetch_array($result))
 
 <br /><br />
 <center>
-<input type="button" value="<?php echo api_htmlentities(get_lang('Print'),ENT_QUOTES,$charset); ?>" onClick="javascript:window.print();" />
+<input type="button" value="<?php echo api_htmlentities(get_lang('Print'), ENT_QUOTES); ?>" onClick="javascript: window.print();" />
 </center>
 
 </body>

@@ -1709,7 +1709,7 @@ function exportitem($id, $item_id, $item_type, $add_scorm_communications = false
 					//3.1.1 Update the check value for the month bar
 					$barreMois = api_format_date($start_date_local, "%m");
 					//3.1.2	Display the month bar
-					$expcontent .= "<tr><td id=\"title\" colspan=\"2\" class=\"month\" valign=\"top\">".api_ucfirst(api_format_date($start_date_local, "%B %Y"))."</td></tr>";
+					$expcontent .= "<tr><td id=\"title\" colspan=\"2\" class=\"month\" valign=\"top\">".api_format_date($start_date_local, "%B %Y")."</td></tr>";
 				}
 
 				//3.2 Display the agenda items (of this month): the date, hour and title
@@ -1725,7 +1725,7 @@ function exportitem($id, $item_id, $item_type, $add_scorm_communications = false
 				//3.2.2 Mark an anchor for this date
 				$expcontent .= "<a name=\"".$db_date."\"></a>"; // anchoring
 				//3.2.3 Write the date and time of this event to the export string
-				$expcontent .= api_ucfirst(api_format_date($start_date_local));
+				$expcontent .= api_format_date($start_date_local);
 				//3.2.4 If a duration is set, write it, otherwise ignore
 				if ($myrow["duration"] == "")
 				{
@@ -1801,7 +1801,7 @@ function exportitem($id, $item_id, $item_type, $add_scorm_communications = false
 				}
 
 				//3.5 Write this content to the export string (formatted HTML array)
-				$expcontent .= "<tr>\n"."<td class=\"cell_header\">\n"."<font ".$colorBecauseNew.">".$langPubl." : ".api_ucfirst(api_convert_and_format_date($last_post_datetime, null, date_default_timezone_get()))."</font>\n"."</td>\n"."</tr>\n"."<tr>\n"."<td>\n".$content."</td>\n"."</tr>\n";
+				$expcontent .= "<tr>\n"."<td class=\"cell_header\">\n"."<font ".$colorBecauseNew.">".$langPubl." : ".api_convert_and_format_date($last_post_datetime, null, date_default_timezone_get())."</font>\n"."</td>\n"."</tr>\n"."<tr>\n"."<td>\n".$content."</td>\n"."</tr>\n";
 
 			} // while loop
 

@@ -739,13 +739,13 @@ function display_agenda_items()
         /*--------------------------------------------------
         		display: the month bar
          --------------------------------------------------*/
-        
+
         $myrow["start_date"] = api_get_local_time($myrow["start_date"], null, date_default_timezone_get());
         if ($month_bar != api_format_date($myrow["start_date"], "%m%Y"))
 		{
             $month_bar = api_format_date($myrow["start_date"], "%m%Y");
 			echo "\t<tr>\n\t\t<td class=\"agenda_month_divider\" colspan=\"3\" valign=\"top\">".
-			api_ucfirst(api_format_date($myrow["start_date"], "%B %Y")).
+			api_format_date($myrow["start_date"], "%B %Y").
 			"</td>\n\t</tr>\n";
 		}
 
@@ -814,13 +814,13 @@ function display_agenda_items()
          --------------------------------------------------*/
     	echo "<tr class='row_odd'>";
     	echo "\t\t<td>".get_lang("StartTimeWindow").": ";
-    	echo api_ucfirst(api_format_date($myrow["start_date"]));
+    	echo api_format_date($myrow["start_date"]);
     	echo "</td>\n";
     	echo "\t\t<td>";
     	if ($myrow["end_date"]<>"0000-00-00 00:00:00")
     	{
     		echo get_lang("EndTimeWindow").": ";
-    		echo api_ucfirst(api_convert_and_format_date($myrow["end_date"], null, date_default_timezone_get()));
+    		echo api_convert_and_format_date($myrow["end_date"], null, date_default_timezone_get());
     	}
     	echo "</td>\n";
 
@@ -1058,10 +1058,10 @@ function display_one_agenda_item($agenda_id)
 	  --------------------------------------------------*/
 	echo "\t<tr class=\"".$stylenotbold."\">\n";
 	echo "\t\t<td>".get_lang("StartTime").": ";
-	echo api_ucfirst(api_format_date($myrow["start_date"]));
+	echo api_format_date($myrow["start_date"]);
 	echo "</td>\n";
 	echo "\t\t<td>".get_lang("EndTime").": ";
-	echo api_ucfirst(api_convert_and_format_date($myrow["end_date"], null, date_default_timezone_get()));
+	echo api_convert_and_format_date($myrow["end_date"], null, date_default_timezone_get());
 	echo "</td>\n";
 	echo "\n\t</tr>\n";
 
@@ -2105,7 +2105,7 @@ function get_week_agendaitems($courses_dbs, $month, $year, $week = '')
 			$agendaday_string = api_convert_and_format_date($item['start_date'], "%d", date_default_timezone_get());
 			$agendaday = intval($agendaday_string);
 			$time = api_convert_and_format_date($item['start_date'], TIME_NO_SEC_FORMAT, date_default_timezone_get());
-			
+
 			if ($setting_agenda_link == 'coursecode')
 			{
 				$title=$array_course_info['title'];

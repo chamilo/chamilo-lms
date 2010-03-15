@@ -68,7 +68,6 @@ $documentPath=api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';
 // picture path
 $picturePath=$documentPath.'/images';
 
-
 if(!($objExcercise instanceOf Exercise) && !empty($fromExercise)) {
     $objExercise = new Exercise();
     $objExercise->read($fromExercise);
@@ -84,9 +83,12 @@ if($is_allowedToEdit) {
 	if ($copy_question != 0 && isset($fromExercise)) {
 		
 		$old_question_id = $copy_question;
-		$new_question_obj = Question::read($old_question_id);
-		$new_question_obj->updateTitle($new_question_obj->selectTitle().' - '.get_lang('Copy'));
-		$new_id = $new_question_obj->duplicate();
+		$old_question_obj = Question::read($old_question_id);
+		$old_question_obj->updateTitle($old_question_obj->selectTitle().' - '.get_lang('Copy'));
+		$new_id = $old_question_obj->duplicate();
+		
+		$new_question_obj = Question::read($new_id);			
+		$new_question_obj->addToList($fromExercise);			
 								
 		$new_answer_obj = new Answer($old_question_id);
 		$new_answer_obj->read();
@@ -95,14 +97,14 @@ if($is_allowedToEdit) {
 		
 		// destruction of the Question object
 		unset($new_question_obj);
+		unset($old_question_obj);
 
-        if(!$objExcercise instanceOf Exercise)
-        {
+        if(!$objExcercise instanceOf Exercise) {
         	$objExercise = new Exercise();
             $objExercise->read($fromExercise);
         }
 		// adds the question ID represented by $recup into the list of questions for the current exercise
-		$objExercise->addToList($new_id);
+		//$objExercise->addToList($new_id);
 		api_session_register('objExercise');
 		
 		header("Location: admin.php?".api_get_cidreq()."&exerciseId=$fromExercise");

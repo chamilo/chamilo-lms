@@ -140,6 +140,10 @@ function api_mail_html($recipient_name, $recipient_email, $subject, $message, $s
 	$mail->IsHTML(0);
 	$mail->SMTPKeepAlive = true;
 
+	if (($sender_email != "") && ($sender_name != "")) {
+		$mail->AddReplyTo ($sender_email,$sender_name);
+	}
+
 	// attachments
 	// $mail->AddAttachment($path);
 	// $mail->AddAttachment($path,$filename);

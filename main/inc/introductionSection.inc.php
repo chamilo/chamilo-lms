@@ -30,6 +30,8 @@ require_once api_get_path(LIBRARY_PATH).'course_description.lib.php';
 
 $TBL_INTRODUCTION = Database::get_course_table(TABLE_TOOL_INTRO);
 $intro_editAllowed = $is_allowed_to_edit;
+$session_id = api_get_session_id();
+
 
 global $charset;
 $intro_cmdEdit = empty($_GET['intro_cmdEdit']) ? '' : $_GET['intro_cmdEdit'];
@@ -91,9 +93,10 @@ if ($intro_editAllowed) {
 
 			$form_values = $form->exportValues();
 			$intro_content = Security::remove_XSS(stripslashes(api_html_entity_decode($form_values['intro_content'])), COURSEMANAGERLOWSECURITY);
-
 			if (!empty($intro_content)) {
-				$sql = "REPLACE $TBL_INTRODUCTION SET id='$moduleId',intro_text='".Database::escape_string($intro_content)."'";
+				$sql = "REPLACE $TBL_INTRODUCTION SET id='$moduleId',intro_text='".Database::escape_string($intro_content)."', session_id='".$session_id."'";
+				
+				var_dump($sql);
 				Database::query($sql);
 				Display::display_confirmation_message(get_lang('IntroductionTextUpdated'), false);
 			} else {
@@ -107,7 +110,7 @@ if ($intro_editAllowed) {
 	/* Delete Command */
 
 	if ($intro_cmdDel) {
-		Database::query("DELETE FROM $TBL_INTRODUCTION WHERE id='".$moduleId."'");
+		Database::query("DELETE FROM $TBL_INTRODUCTION WHERE id='".$moduleId."' AND session_id='".$session_id."'");
 		Display::display_confirmation_message(get_lang('IntroductionTextDeleted'));
 	}
 }
@@ -117,7 +120,7 @@ if ($intro_editAllowed) {
 
 /* Retrieves the module introduction text, if exist */
 
-$sql = "SELECT intro_text FROM $TBL_INTRODUCTION WHERE id='".$moduleId."'";
+$sql = "SELECT intro_text FROM $TBL_INTRODUCTION WHERE id='".$moduleId."' AND session_id='".$session_id."'";
 $intro_dbQuery = Database::query($sql);
 $intro_dbResult = Database::fetch_array($intro_dbQuery);
 $intro_content = $intro_dbResult['intro_text'];

@@ -1,15 +1,10 @@
 <?php
 /* For licensing terms, see /license.txt*/
-
 /**
-==============================================================================
-*	@package dokeos.user
-==============================================================================
+*	@package chamilo.user
 */
 
-/*==========================
-            INIT
-  ==========================*/
+/* INIT	*/
 
 // name of the language file that needs to be included
 $language_file="registration";
@@ -28,17 +23,14 @@ $tbl_courseUser    = "course_rel_user";
 
 
 
-/*==========================
-         DATA CHECKING
-  ==========================*/
+/* DATA CHECKING	*/
 
-if($register)
-{
+if($register) {
 	/*
 	 * Fields Checking
 	 */
 
-	$lastname_form      = trim($lastname_form);
+	$lastname_form    = trim($lastname_form);
 	$firstname_form   = trim($firstname_form);
 	$password_form = trim($password_form);
 	$username_form = trim($username_form);

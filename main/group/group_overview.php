@@ -22,9 +22,7 @@ $this_section=SECTION_COURSES;
 $nameTools = get_lang("GroupOverview");
 
 /*
------------------------------------------------------------
 	Libraries
------------------------------------------------------------
 */
 include_once (api_get_path(LIBRARY_PATH).'course.lib.php'); //necessary
 include_once (api_get_path(LIBRARY_PATH).'groupmanager.lib.php');
@@ -64,9 +62,7 @@ if( isset($_GET['action']))
 }
 
 /*
------------------------------------------------------------
 	Header
------------------------------------------------------------
 */
 $interbreadcrumb[]=array("url" => "group.php","name" => get_lang('Groups'));
 if (!isset ($_GET['origin']) || $_GET['origin'] != 'learnpath')
@@ -120,9 +116,7 @@ foreach($categories as $index => $category)
 	echo '</ul>';
 }
 /*
-==============================================================================
 		FOOTER
-==============================================================================
 */
 if (!isset ($_GET['origin']) || $_GET['origin'] != 'learnpath')
 {

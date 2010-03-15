@@ -18,23 +18,17 @@ include ('../inc/global.inc.php');
 $this_section = SECTION_COURSES;
 
 /*
------------------------------------------------------------
 	Libraries & settings
------------------------------------------------------------
 */
 require_once (api_get_path(LIBRARY_PATH).'course.lib.php');
 require_once (api_get_path(LIBRARY_PATH).'groupmanager.lib.php');
 require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
 /*
------------------------------------------------------------
 	Constants & variables
------------------------------------------------------------
 */
 $current_group = GroupManager :: get_group_properties($_SESSION['_gid']);
 /*
------------------------------------------------------------
 	Header
------------------------------------------------------------
 */
 $nameTools = get_lang('EditGroup');
 $interbreadcrumb[] = array ("url" => "group.php", "name" => get_lang('Groups'));
@@ -42,11 +36,7 @@ $interbreadcrumb[] = array ("url" => "group.php", "name" => get_lang('Groups'));
 if (!api_is_allowed_to_edit(false,true)) {
 	api_not_allowed(true);
 }
-/*
-==============================================================================
-		FUNCTIONS
-==============================================================================
-*/
+/*		FUNCTIONS	*/
 
 /**
  * function to sort users after getting the list in the db. Necessary because there are 2 or 3 queries. Called by usort()
@@ -104,9 +94,7 @@ function check_group_members($value) {
 	return true;
 }
 /*
-==============================================================================
 		MAIN CODE
-==============================================================================
 */
 
 // Build form
@@ -320,9 +308,7 @@ $defaults['referer'] = $referer;
 $form->setDefaults($defaults);
 $form->display();
 /*
-==============================================================================
 		FOOTER
-==============================================================================
 */
 Display :: display_footer();
 ?>

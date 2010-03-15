@@ -3,8 +3,7 @@
 /**
 *	@package chamilo.group
 */
-/*	INIT SECTION	*/
-
+/*	INIT SECTION */
 
 // name of the language file that needs to be included
 $language_file = "group";
@@ -16,9 +15,7 @@ require_once (api_get_path(LIBRARY_PATH).'classmanager.lib.php');
 require_once (api_get_path(LIBRARY_PATH).'course.lib.php');
 require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
 /*
---------------------------------------
         Create the groups
---------------------------------------
 */
 if (isset ($_POST['action']))
 {
@@ -258,9 +255,7 @@ EOT;
 	$form->addElement('style_submit_button', 'submit', get_lang('CreateGroup'), 'class="save"');
 	$form->display();
 	}
-}
-else
-{
+} else {
 	/*
 	 * Show form to generate new groups
 	 */
@@ -387,9 +382,7 @@ else
 	}
 }
 /*
-===============================================================================
-       DOKEOS FOOTER
-===============================================================================
+       FOOTER
 */
 Display :: display_footer();
 ?>

@@ -1,13 +1,11 @@
 <?php //$Id: group_space.php 21933 2009-07-09 06:08:22Z ivantcholakov $
 /* For licensing terms, see /license.txt */
 /**
-==============================================================================
 * This script shows the group space for one specific group, possibly displaying
 * a list of users in the group, subscribe or unsubscribe option, tutors...
 *
 * @package chamilo.group
 * @todo	Display error message if no group ID specified
-==============================================================================
 */
 
 /*	INIT SECTION*/
@@ -16,9 +14,7 @@
 $language_file = "group";
 require_once '../inc/global.inc.php';
 /*
------------------------------------------------------------
 	Libraries & config files
------------------------------------------------------------
 */
 require_once api_get_path(LIBRARY_PATH).'course.lib.php';
 require_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
@@ -26,9 +22,7 @@ require_once api_get_path(LIBRARY_PATH).'sortabletable.class.php';
 require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';
 require_once api_get_path(SYS_CODE_PATH).'forum/forumconfig.inc.php';
 /*
-==============================================================================
-		MAIN CODE
-==============================================================================
+	MAIN CODE
 */
 $current_group = GroupManager :: get_group_properties($_SESSION['_gid']);
 if (!is_array($current_group) ) {
@@ -39,9 +33,8 @@ $nameTools = get_lang("GroupSpace");
 $interbreadcrumb[] = array ("url" => "group.php", "name" => get_lang("Groups"));
 
 /*
------------------------------------------------------------
 	Ensure all private groups // Juan Carlos Ra�a Trabado
------------------------------------------------------------
+
 */
 
 $forums_of_groups = get_forums_of_group($current_group['id']);

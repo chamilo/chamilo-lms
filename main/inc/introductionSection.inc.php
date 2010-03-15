@@ -96,7 +96,6 @@ if ($intro_editAllowed) {
 			if (!empty($intro_content)) {
 				$sql = "REPLACE $TBL_INTRODUCTION SET id='$moduleId',intro_text='".Database::escape_string($intro_content)."', session_id='".$session_id."'";
 				
-				var_dump($sql);
 				Database::query($sql);
 				Display::display_confirmation_message(get_lang('IntroductionTextUpdated'), false);
 			} else {

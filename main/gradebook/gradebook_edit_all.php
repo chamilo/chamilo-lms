@@ -5,30 +5,31 @@ $language_file= 'gradebook';
 $cidReset= true;
 require_once '../inc/global.inc.php';
 $this_section = SECTION_MYGRADEBOOK;
-require_once ('lib/be.inc.php');
-require_once ('lib/scoredisplay.class.php');
-require_once ('lib/gradebook_functions.inc.php');
-require_once ('lib/fe/catform.class.php');
-require_once ('lib/fe/evalform.class.php');
-require_once ('lib/fe/linkform.class.php');
-require_once ('lib/gradebook_data_generator.class.php');
-require_once ('lib/fe/gradebooktable.class.php');
-require_once ('lib/fe/displaygradebook.php');
+
+require_once 'lib/be.inc.php';
+require_once 'lib/scoredisplay.class.php';
+require_once 'lib/gradebook_functions.inc.php';
+require_once 'lib/fe/catform.class.php';
+require_once 'lib/fe/evalform.class.php';
+require_once 'lib/fe/linkform.class.php';
+require_once 'lib/gradebook_data_generator.class.php';
+require_once 'lib/fe/gradebooktable.class.php';
+require_once 'lib/fe/displaygradebook.php';
 require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/gradebook_functions.inc.php';
 
 api_block_anonymous_users();
 if (!api_is_allowed_to_create_course()) {
 	header('Location: /index.php');
+	exit;
 }
 
 $my_selectcat=isset($_GET['selectcat']) ? Security::remove_XSS($_GET['selectcat']) : '';
+
 if (empty($my_selectcat)) {
 	api_not_allowed();
 }
 
-// --------------------------------------------------------------------------------
-// -                       DISPLAY HEADERS AND MESSAGES                           -
-// --------------------------------------------------------------------------------
+// 	DISPLAY HEADERS AND MESSAGES                           -
 
 if (!isset($_GET['exportpdf']) and !isset($_GET['export_certificate'])) {
 	if (isset ($_GET['studentoverview'])) {

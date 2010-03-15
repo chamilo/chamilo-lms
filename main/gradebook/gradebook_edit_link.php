@@ -47,19 +47,16 @@ if ($form->validate()) {
 	}
 
 	//Update weight into forum thread
-	$sql_t='UPDATE '.$tbl_forum_thread.' SET thread_weight='.$values['weight'].' WHERE thread_id=(SELECT ref_id FROM '.$tbl_grade_links.' where id='.Security::remove_XSS($_GET['editlink']).' and type=5);';
+	$sql_t='UPDATE '.$tbl_forum_thread.' SET thread_weight='.$values['weight'].' WHERE thread_id=(SELECT ref_id FROM '.$tbl_grade_links.' where id='.intval($_GET['editlink']).' and type=5);';
 	Database::query($sql_t);
 	//Update weight into student publication(work)
-	$sql_t='UPDATE '.$tbl_work.' SET weight='.$values['weight'].' WHERE id=(SELECT ref_id FROM '.$tbl_grade_links.' where id='.Security::remove_XSS($_GET['editlink']).' and type=3);';
+	$sql_t='UPDATE '.$tbl_work.' SET weight='.$values['weight'].' WHERE id=(SELECT ref_id FROM '.$tbl_grade_links.' where id='.intval($_GET['editlink']).' and type=3);';
 	Database::query($sql_t);
 	header('Location: '.$_SESSION['gradebook_dest'].'?linkedited=&selectcat=' . $link->get_category_id());
 	exit;
 }
 
-$interbreadcrumb[] = array (
-	'url' => $_SESSION['gradebook_dest'].'?selectcat='.$linkcat,
-	'name' => get_lang('Gradebook'
-));
+$interbreadcrumb[] = array ('url' => Security::remove_XSS($_SESSION['gradebook_dest']).'?selectcat='.$linkcat,'name' => get_lang('Gradebook'));
 
 Display :: display_header(get_lang('EditLink'));
 $form->display();

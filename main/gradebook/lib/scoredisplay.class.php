@@ -339,7 +339,6 @@ class ScoreDisplay
 	private function get_custom_displays() {
     	$tbl_display = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_SCORE_DISPLAY);
 		$sql = 'SELECT * FROM '.$tbl_display.' ORDER BY score';
-		//echo $sql;
 		$result = Database::query($sql);
 		return Database::store_result($result);
 	}

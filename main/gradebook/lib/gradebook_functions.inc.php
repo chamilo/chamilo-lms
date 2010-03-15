@@ -420,17 +420,15 @@ function parse_xml_data($file) {
   * @param Datetime The date when you obtained the certificate  
   * @return void() 
   */
-  function register_user_info_about_certificate ($cat_id,$user_id,$score_certificate,
-  $date_certificate) {
+  function register_user_info_about_certificate ($cat_id,$user_id,$score_certificate, $date_certificate) {
   	$table_certificate = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
   	$sql_exist='SELECT COUNT(*) as count FROM '.$table_certificate.' gc 
-	WHERE gc.cat_id="'.$cat_id.'" AND user_id="'.$user_id.'" ';
+				WHERE gc.cat_id="'.$cat_id.'" AND user_id="'.$user_id.'" ';
 	$rs_exist=Database::query($sql_exist,__FILE__,__LINE__);
 	$row=Database::fetch_array($rs_exist);
 	if ($row['count']==0) {
-		$sql='INSERT INTO '.$table_certificate.'
-		(cat_id,user_id,score_certificate,date_certificate)
-		VALUES("'.$cat_id.'","'.$user_id.'","'.$score_certificate.'","'.$date_certificate.'")';
+		echo $sql='INSERT INTO '.$table_certificate.' (cat_id,user_id,score_certificate,date_certificate)
+			  VALUES("'.$cat_id.'","'.$user_id.'","'.$score_certificate.'","'.$date_certificate.'")';
 		$rs=Database::query($sql,__FILE__,__LINE__);  
 	}
 	
@@ -457,7 +455,7 @@ function parse_xml_data($file) {
   function get_list_users_certificates ($cat_id=null) {
     $table_certificate = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE); 	
     $table_user = Database::get_main_table(TABLE_MAIN_USER);
-  	echo $sql='SELECT DISTINCT u.user_id,u.lastname,u.firstname,u.username FROM '.$table_user.' u INNER JOIN '.$table_certificate.' gc 
+  	$sql='SELECT DISTINCT u.user_id,u.lastname,u.firstname,u.username FROM '.$table_user.' u INNER JOIN '.$table_certificate.' gc 
 			ON u.user_id=gc.user_id ';
 	if (!is_null($cat_id) && $cat_id>0) {
   		$sql.=' WHERE cat_id='.Database::escape_string($cat_id);
@@ -472,7 +470,7 @@ function parse_xml_data($file) {
   }
 
   /**
-  *Get list of certificates by user id
+  *Gets the certificate list by user id
   *@param int The user id
   *@param int The category id
   *@retun array
@@ -480,11 +478,11 @@ function parse_xml_data($file) {
   function get_list_gradebook_certificates_by_user_id ($user_id,$cat_id=null) {
   	$table_certificate = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE); 	
   	$sql='SELECT gc.score_certificate,gc.date_certificate,gc.path_certificate,gc.cat_id,gc.user_id FROM  '.$table_certificate.' gc 
-		WHERE gc.user_id="'.Database::escape_string($user_id).'" ';
+		  WHERE gc.user_id="'.Database::escape_string($user_id).'" ';
 	if (!is_null($cat_id) && $cat_id>0) {
   		$sql.=' AND cat_id='.Database::escape_string($cat_id);
   	}
-  	$rs=Database::query($sql,__FILE__,__LINE__);
+  	$rs = Database::query($sql,__FILE__,__LINE__);
   	$list_certificate=array();
   	while ($row=Database::fetch_array($rs)) {
   		$list_certificate[]=$row;
@@ -492,10 +490,10 @@ function parse_xml_data($file) {
   	return $list_certificate;
   }
   /**
-  *Allow remove certificate
-  *@param int The category id
-  *@param int The user id
-  *@return boolean
+  * Deletes a certificate
+  * @param int The category id
+  * @param int The user id
+  * @return boolean
   */
   function delete_certificate ($cat_id,$user_id) {
   	
@@ -508,7 +506,7 @@ function parse_xml_data($file) {
   			$path_info= UserManager::get_user_picture_path_by_id($user_id,'system',true);
 			$path_directory_user_certificate=$path_info['dir'].'certificate'.$path;
 			if (is_file($path_directory_user_certificate)) {
-				unlink($path_directory_user_certificate);
+				@unlink($path_directory_user_certificate);
 				if (is_file($path_directory_user_certificate)===false) {
 					$delete_db=true;
 				} else {
@@ -522,5 +520,10 @@ function parse_xml_data($file) {
 	  	} else {
 	  		return false;
 	  	}
+  	} else {
+  		//path is not generate delete only the DB record
+  		$sql_delete='DELETE FROM '.$table_certificate.' WHERE cat_id="'.Database::escape_string($cat_id).'" AND user_id="'.Database::escape_string($user_id).'" ';
+	  	$rs_delete=Database::query($sql_delete,__FILE__,__LINE__);
+	  	return true;
   	}
   }

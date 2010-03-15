@@ -117,15 +117,15 @@ class GradebookTable extends SortableTable
 		$course_code=api_get_course_id();
 		$status_user=api_get_status_of_user_in_course ($user_id,$course_code);
 		$data_array = $this->datagen->get_data($sorting, $from, $this->per_page);
-		//error_log(print_r($data_array,true));
 		// generate the data to display
 		$sortable_data = array();
 		$weight_total_links = 0;		
+		
 		foreach ($data_array as $data) {
 			$row = array ();
 			$item = $data[0];
 			$id = $item->get_id();
-			if (empty($_GET['selectcat'])) {
+			if (empty($_GET['selectcat']) ) {
 				$certificate_min_score = $this->build_certificate_min_score($item);
 			}
 			//if the item is invisible, wrap it in a span with class invisible
@@ -166,6 +166,7 @@ class GradebookTable extends SortableTable
 					$scoretotal= $cattotal[0]->calc_score(api_get_user_id());
 					$scoretotal_display = (isset($scoretotal)? round($scoretotal[0],2).'/'.round($scoretotal[1],2).'('.round(($scoretotal[0] / $scoretotal[1]) * 100,2) . ' %)': '-');
 					$row[] = $item_value;
+					
 				} else {
 			   		$row[] = $invisibility_span_open . $data[3] . $invisibility_span_close;
 			   	}
@@ -179,23 +180,19 @@ class GradebookTable extends SortableTable
 				if ($show_message===false) {
 					$row[] = $this->build_edit_column ($item);
 				}
-
-			} else {
-				
-				//students get the results and certificates columns
-				
+			} else {				
+				//students get the results and certificates columns				
 				if (count($this->evals_links)>0 && $status_user!=1 ) {
 					$value_data=isset($data[5]) ? $data[5] : null;
 					if (!is_null($value_data)) {
 						$row[] = $value_data;
 					}
 				}
-				//@todo Fix this harcode value 
-				//by default we load the first category 1
-				if (empty($_GET['selectcat']) || $_GET['selectcat'] == 1) {
-					
-					if (isset($certificate_min_score) && (int)$item_value >= (int)$certificate_min_score) {
-						
+				//variables load in index.php
+				global $my_score_in_gradebook, $certificate_min_score, $item_value, $certificate_min_score;
+				
+				if (empty($_GET['selectcat'])) {
+					if (isset($certificate_min_score) && (int)$item_value >= (int)$certificate_min_score) {						
 						$certificates = '<a href="'.api_get_path(WEB_CODE_PATH) .'gradebook/'.$_SESSION['gradebook_dest'].'?export_certificate=yes&cat_id='.$id.'" target="_blank">
 										 <img src="'.api_get_path(WEB_CODE_PATH) . 'img/dokeos.gif" /></a>&nbsp;'.$scoretotal_display;
 						
@@ -207,15 +204,22 @@ class GradebookTable extends SortableTable
 					} else {
 						$certificates = '-';
 					}
-				//show certificate date
-				$get_date=get_certificate_date_by_user_id($id,$current_user_id);
-				if ($get_date=='' || is_null($get_date)) {					
-						$row[4]='-';					
-				} else {					
-						$row[4] = date('d/m/y H:i:s',strtotime($get_date));						
-				}
-				
-				$row[] = $certificates;
+					//show certificate date
+					$get_date=get_certificate_date_by_user_id($id,$current_user_id);
+					if ($get_date=='' || is_null($get_date)) {					
+							$row[4]='-';					
+					} else {					
+							$row[4] = date('d/m/y H:i:s',strtotime($get_date));						
+					}				
+					$row[] = $certificates;
+				} elseif ($_GET['selectcat'] == 1) {
+					if (isset($certificate_min_score) && (int)$item_value >= (int)$certificate_min_score) {		
+						//register gradebook certificate
+						$current_user_id=api_get_user_id();
+						$date_certificate=date('Y-m-d H:i:s',time());						
+						register_user_info_about_certificate($id,$current_user_id,$my_score_in_gradebook,$date_certificate);
+					} 
+					
 				}
 			}
 			$sortable_data[] = $row;

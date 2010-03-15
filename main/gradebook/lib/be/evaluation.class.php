@@ -62,6 +62,10 @@ class Evaluation implements GradebookItem
 	public function get_max() {
 		return $this->eval_max;
 	}
+	
+	public function get_type() {
+		return $this->type;
+	}	
 
 	public function is_visible() {
 		return $this->visible;
@@ -106,8 +110,12 @@ class Evaluation implements GradebookItem
 	public function set_visible ($visible) {
 		$this->visible = $visible;
 	}
-
-
+	
+    public function set_type ($type) {
+		$this->type = $type;
+	}
+    
+    
 // CRUD FUNCTIONS
 
 	/**
@@ -121,7 +129,7 @@ class Evaluation implements GradebookItem
 	public function load ($id = null, $user_id = null, $course_code = null, $category_id = null, $visible = null)
 	{
     	$tbl_grade_evaluations = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_EVALUATION);
-		$sql='SELECT id,name,description,user_id,course_code,category_id,date,weight,max,visible FROM '.$tbl_grade_evaluations;
+		$sql='SELECT id,name,description,user_id,course_code,category_id,date,weight,max,visible,type FROM '.$tbl_grade_evaluations;
 		$paramcount = 0;
 		if (isset ($id)) {
 			$sql.= ' WHERE id = '.$id;
@@ -172,6 +180,8 @@ class Evaluation implements GradebookItem
 			$eval->set_weight($data['weight']);
 			$eval->set_max($data['max']);
 			$eval->set_visible($data['visible']);
+			$eval->set_type($data['type']);
+			
 			$alleval[]=$eval;
 		}
 		return $alleval;
@@ -199,6 +209,8 @@ class Evaluation implements GradebookItem
 			if (isset($this->eval_date)) {
 			  $sql .= ',date';
 			}
+			$sql .= ',type';
+			
 			$sql .= ") VALUES ('".Database::escape_string(Security::remove_XSS($this->get_name()))."'"
 					.','.$this->get_user_id()
 					.','.$this->get_weight()
@@ -216,6 +228,12 @@ class Evaluation implements GradebookItem
 			//if (isset($this->eval_date)) {
 				 $sql .= ','.strtotime(date('Y-m-d H:i:s',time()));
 			//}
+			if (empty($this->type))
+			{
+				$this->type = 'evaluation';	
+			}
+			$sql .= ',\''.$this->type.'\'';
+			
 			$sql .= ")";
 			Database::query($sql);
 			$this->set_id(Database::insert_id());

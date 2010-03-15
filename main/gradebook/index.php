@@ -859,16 +859,14 @@ if ($category != '0') {
 			$cattotal = Category :: load($category_id);
 			$scoretotal= $cattotal[0]->calc_score(api_get_user_id());
 			$scoretotal_display = (isset($scoretotal)? round($scoretotal[0],2).'/'.round($scoretotal[1],2).'('.round(($scoretotal[0] / $scoretotal[1]) * 100,2) . ' %)': '-');
-
+			$my_score_in_gradebook =  round($scoretotal[0],2);	
 			//show certificate
 			$certificate_min_score=$cats[0]->get_certificate_min_score();
 			if (isset($certificate_min_score) && (int)$item_value >= (int)$certificate_min_score) {				
-				$certificates = '<a href="'.api_get_path(WEB_CODE_PATH) .'gradebook/'.$_SESSION['gradebook_dest'].'?export_certificate=yes&cat_id='.$cats[0]->get_id().'"><img src="'.api_get_path(WEB_CODE_PATH) . 'img/dokeos.gif" />'.get_lang('Certificates').'</a>&nbsp;'.get_lang('langTotal').': '.$scoretotal_display;
-
-			echo '<div class="actions" align="right">';
-			 echo $certificates;
-			echo '</div>';
-
+				$certificates = '<a href="'.api_get_path(WEB_CODE_PATH) .'gradebook/'.Security::remove_XSS($_SESSION['gradebook_dest']).'?export_certificate=yes&cat_id='.$cats[0]->get_id().'"><img src="'.api_get_path(WEB_CODE_PATH) . 'img/dokeos.gif" />'.get_lang('Certificates').'</a>&nbsp;'.get_lang('langTotal').': '.$scoretotal_display;
+				echo '<div class="actions" align="right">';
+				echo $certificates;
+				echo '</div>';
 			}
 		} //end hack
 

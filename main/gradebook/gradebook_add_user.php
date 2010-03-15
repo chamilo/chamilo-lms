@@ -1,13 +1,16 @@
 <?php //$Id: gradebook_add_user.php 21153 2009-06-01 01:51:43Z yannoo $
-/* For licensing terms, see /dokeos_license.txt */
+
+/* For licensing terms, see /license.txt */
+
 $language_file = 'gradebook';
 require_once '../inc/global.inc.php';
 $this_section = SECTION_MYGRADEBOOK;
-require_once ('lib/be.inc.php');
-require_once ('lib/fe/displaygradebook.php');
-require_once ('lib/gradebook_functions.inc.php');
-require_once ('lib/fe/evalform.class.php');
-require_once ('lib/scoredisplay.class.php');
+require_once 'lib/be.inc.php';
+require_once 'lib/fe/displaygradebook.php';
+require_once 'lib/gradebook_functions.inc.php';
+require_once 'lib/fe/evalform.class.php';
+require_once 'lib/scoredisplay.class.php';
+
 api_block_anonymous_users();
 block_students();
 

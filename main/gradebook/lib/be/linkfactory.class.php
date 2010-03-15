@@ -6,7 +6,7 @@
 // - add include
 // - change create() and get_all_types()
 // Please do not change existing values, they are used in the database !
-define('LINK_EXERCISE',1);
+define('LINK_EXERCISE',		1);
 define('LINK_DROPBOX',2);
 define('LINK_STUDENTPUBLICATION',3);
 define('LINK_LEARNPATH',4);

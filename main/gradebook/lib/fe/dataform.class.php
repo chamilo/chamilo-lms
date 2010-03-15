@@ -71,7 +71,7 @@ class DataForm extends FormValidator {
 		$this->addElement('static','label','',get_lang('ChooseOrientation'));
 		$this->addElement('radio', 'orientation', null, get_lang('Portrait'), 'portrait');
 		$this->addElement('radio', 'orientation', null, get_lang('Landscape'), 'landscape');
-		$this->addElement('submit', 'submit', get_lang('Ok'));
+		$this->addElement('style_submit_button', 'submit', get_lang('Ok'), 'class="save"');
 		$this->setDefaults(array (
 			'orientation' => 'portrait'
 		));

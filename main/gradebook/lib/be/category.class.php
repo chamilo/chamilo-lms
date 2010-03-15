@@ -110,6 +110,11 @@ class Category implements GradebookItem
 	public function set_visible ($visible) {
 		$this->visible = $visible;
 	}
+	
+	public function get_type()
+	{
+		return 'category';
+	}
 
 
 // CRUD FUNCTIONS

@@ -2,26 +2,18 @@
 /* For licensing terms, see /license.txt */
 $language_file = 'gradebook';
 //$cidReset = true;
-require_once ('../inc/global.inc.php');
-require_once ('lib/be.inc.php');
-require_once ('lib/gradebook_functions.inc.php');
-require_once ('lib/fe/evalform.class.php');
+require_once '../inc/global.inc.php';
+require_once 'lib/be.inc.php';
+require_once 'lib/gradebook_functions.inc.php';
+require_once 'lib/fe/evalform.class.php';
+
 api_block_anonymous_users();
 block_students();
 
-$interbreadcrumb[] = array (
-	'url' => $_SESSION['gradebook_dest'].'?',
-	'name' => get_lang('Gradebook'
-));
-$interbreadcrumb[] = array (
-	'url' => $_SESSION['gradebook_dest'].'?selectcat='.Security::remove_XSS($_GET['selectcat']),
-	'name' => get_lang('Details'
-));
+$interbreadcrumb[] = array ('url' => Security::remove_XSS($_SESSION['gradebook_dest']).'?','name' => get_lang('Gradebook'));
+$interbreadcrumb[] = array ('url' => Security::remove_XSS($_SESSION['gradebook_dest']).'?selectcat='.Security::remove_XSS($_GET['selectcat']),'name' => get_lang('Details'));
+$interbreadcrumb[] = array ('url' => 'gradebook_showlog_link.php?visiblelink='.Security::remove_XSS($_GET['visiblelink']).'&amp;selectcat='.Security::remove_XSS($_GET['selectcat']),	'name' => get_lang('GradebookQualifyLog'));
 
-$interbreadcrumb[] = array (
-	'url' => 'gradebook_showlog_link.php?visiblelink='.Security::remove_XSS($_GET['visiblelink']).'&amp;selectcat='.Security::remove_XSS($_GET['selectcat']),
-	'name' => get_lang('GradebookQualifyLog')
-);
 Display :: display_header('');
 echo '<div class="clear"></div>';
 echo '<div class="actions">';

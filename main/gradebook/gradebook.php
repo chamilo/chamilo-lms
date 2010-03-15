@@ -177,7 +177,7 @@ if (isset ($_GET['visiblecat'])) {
 	} else {
 		$visibility_command= 0;
 	}
-	$cats= Category :: load(Security::remove_XSS($_GET['visiblecat']));
+	$cats= Category :: load($_GET['visiblecat']);
 	$cats[0]->set_visible($visibility_command);
 	$cats[0]->save();
 	$cats[0]->apply_visibility_to_children();
@@ -192,7 +192,7 @@ if (isset ($_GET['visiblecat'])) {
 }
 if (isset ($_GET['deletecat'])) {
 	block_students();
-	$cats= Category :: load(Security::remove_XSS($_GET['deletecat']));
+	$cats= Category :: load($_GET['deletecat']);
 	//delete all categories,subcategories and results
 	if ($cats[0] != null) {
 		if ($cats[0]->get_id() != 0) {
@@ -212,7 +212,7 @@ if (isset ($_GET['visibleeval'])) {
 		$visibility_command= 0;
 	}
 
-	$eval= Evaluation :: load(Security::remove_XSS($_GET['visibleeval']));
+	$eval= Evaluation :: load($_GET['visibleeval']);
 	$eval[0]->set_visible($visibility_command);
 	$eval[0]->save();
 	unset ($eval);
@@ -226,7 +226,7 @@ if (isset ($_GET['visibleeval'])) {
 }
 if (isset ($_GET['deleteeval'])) {
 	block_students();
-	$eval= Evaluation :: load(Security::remove_XSS($_GET['deleteeval']));
+	$eval= Evaluation :: load($_GET['deleteeval']);
 	if ($eval[0] != null) {
 		$eval[0]->delete_with_results();
 	}
@@ -241,7 +241,7 @@ if (isset ($_GET['visiblelink'])) {
 	}else {
 		$visibility_command= 0;
 	}
-	$link= LinkFactory :: load(Security::remove_XSS($_GET['visiblelink']));
+	$link= LinkFactory :: load($_GET['visiblelink']);
 	$link[0]->set_visible($visibility_command);
 	$link[0]->save();
 	unset ($link);
@@ -257,9 +257,9 @@ if (isset ($_GET['deletelink'])) {
 	block_students();
 	//fixing #5229
 	if (!empty($_GET['deletelink'])) {	
-		$link= LinkFactory :: load(Security::remove_XSS($_GET['deletelink']));
+		$link= LinkFactory :: load($_GET['deletelink']);
 		if ($link[0] != null) {
-			$sql='UPDATE '.$tbl_forum_thread.' SET thread_qualify_max=0,thread_weight=0,thread_title_qualify="" WHERE thread_id=(SELECT ref_id FROM '.$tbl_grade_links.' where id='.Security::remove_XSS($_GET['deletelink']).');';
+			$sql='UPDATE '.$tbl_forum_thread.' SET thread_qualify_max=0,thread_weight=0,thread_title_qualify="" WHERE thread_id=(SELECT ref_id FROM '.$tbl_grade_links.' where id='.intval($_GET['deletelink']).');';
 			Database::query($sql);
 			$link[0]->delete();
 		}
@@ -412,9 +412,9 @@ if (!isset($_GET['exportpdf']) and !isset($_GET['export_certificate'])) {
 	} else {	
 		
 		if ($_SESSION['gradebook_dest'] == 'index.php') {
-			$gradebook_dest = $_SESSION['gradebook_dest'].'?cidReq='.Security::remove_XSS($_GET['course']).'&amp;';	
+			$gradebook_dest = Security::remove_XSS($_SESSION['gradebook_dest']).'?cidReq='.Security::remove_XSS($_GET['course']).'&amp;';	
 		} else {
-			$gradebook_dest = $_SESSION['gradebook_dest'];
+			$gradebook_dest = Security::remove_XSS($_SESSION['gradebook_dest']);
 		}	
 		
 		$interbreadcrumb[]= array (
@@ -552,7 +552,7 @@ if (!empty($keyword)) {
 	if (!api_is_allowed_to_edit(true,true)) {
 		$user_id = api_get_user_id();
 	}
-	$category = Category :: load (Security::remove_XSS($_GET['cat_id']));
+	$category = Category :: load ($_GET['cat_id']);
 	if ($category[0]->is_certificate_available($user_id)) {
 		$user= get_user_info_from_id($user_id);
 		$scoredisplay = ScoreDisplay :: instance();

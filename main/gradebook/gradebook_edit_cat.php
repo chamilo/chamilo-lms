@@ -33,12 +33,12 @@ if ($form->validate()) {
 	}
 	$cat->set_visible($visible);
 	$cat->save();
-	header('Location: '.$_SESSION['gradebook_dest'].'?editcat=&selectcat=' . $cat->get_parent_id());
+	header('Location: '.Security::remove_XSS($_SESSION['gradebook_dest']).'?editcat=&selectcat=' . $cat->get_parent_id());
 	exit;
 }
 $selectcat = isset($_GET['selectcat']) ? Security::remove_XSS($_GET['selectcat']) : '';
 $interbreadcrumb[] = array (
-	'url' => $_SESSION['gradebook_dest'].'?selectcat='.$selectcat,
+	'url' => Security::remove_XSS($_SESSION['gradebook_dest']).'?selectcat='.$selectcat,
 	'name' => get_lang('Gradebook'
 ));
 Display :: display_header(get_lang('EditCategory'));

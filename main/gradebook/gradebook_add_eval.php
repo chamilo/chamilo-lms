@@ -13,7 +13,7 @@ $is_allowedToEdit = $is_courseAdmin;
 $evaladd = new Evaluation();
 $evaladd->set_user_id($_user['user_id']);
 if (isset ($_GET['selectcat']) && (!empty ($_GET['selectcat']))) {
-	$evaladd->set_category_id(Database::escape_string($_GET['selectcat']));
+	$evaladd->set_category_id($_GET['selectcat']);
 	$cat = Category :: load($_GET['selectcat']);
 	$evaladd->set_course_code($cat[0]->get_course_code());
 } else {
@@ -46,7 +46,7 @@ if ($form->validate()) {
 			header('Location: gradebook_add_user.php?selecteval=' . $eval->get_id());
 			exit;
 		} else {
-			header('Location: '.$_SESSION['gradebook_dest'].'?selectcat=' . $eval->get_category_id());
+			header('Location: '.Security::remove_XSS($_SESSION['gradebook_dest']).'?selectcat=' . $eval->get_category_id());
 			exit;
 		}
 	} else {
@@ -55,14 +55,14 @@ if ($form->validate()) {
 			header('Location: gradebook_add_result.php?selecteval=' . $eval->get_id());
 			exit;
 		} else {
-			header('Location: '.$_SESSION['gradebook_dest'].'?selectcat=' . $eval->get_category_id());
+			header('Location: '.Security::remove_XSS($_SESSION['gradebook_dest']).'?selectcat=' . $eval->get_category_id());
 			exit;
 		}
 	}
 }
 
 $interbreadcrumb[] = array (
-	'url' => $_SESSION['gradebook_dest'].'?selectcat='.$select_cat,
+	'url' => Security::remove_XSS($_SESSION['gradebook_dest']).'?selectcat='.$select_cat,
 	'name' => get_lang('Gradebook'
 ));
 Display :: display_header(get_lang('NewEvaluation'));

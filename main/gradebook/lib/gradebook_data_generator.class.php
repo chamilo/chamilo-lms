@@ -114,7 +114,7 @@ class GradebookDataGenerator
 	function get_certificate_link($item) {
 		if(is_a($item, 'Category')) {
 			if($item->is_certificate_available(api_get_user_id())) {
-				$link = '<a href="'.$_SESSION['gradebook_dest'].'?export_certificate=1&cat='.$item->get_id().'&user='.api_get_user_id().'">'.get_lang('Certificate').'</a>';
+				$link = '<a href="'.Security::remove_XSS($_SESSION['gradebook_dest']).'?export_certificate=1&cat='.$item->get_id().'&user='.api_get_user_id().'">'.get_lang('Certificate').'</a>';
 				return $link;
 			}
 		}

@@ -345,7 +345,7 @@ private function build_id_column ($item) {
 				$cat=new Category();
 				$show_message=$cat->show_message_resource_delete($item->get_course_code());
 
-				return '&nbsp;<a href="'.$_SESSION['gradebook_dest'].$prms_uri.'">'
+				return '&nbsp;<a href="'.Security::remove_XSS($_SESSION['gradebook_dest']).$prms_uri.'">'
 				 		. $item->get_name()
 				 		. '</a>'
 				 		. ($item->is_course() ? ' &nbsp;[' . $item->get_course_code() . ']'.$show_message : '');

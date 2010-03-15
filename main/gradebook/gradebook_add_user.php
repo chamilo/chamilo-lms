@@ -58,10 +58,7 @@ if ( isset($_POST['submit_button']) ) {
 		}
 }
 
-$interbreadcrumb[]= array (
-	'url' => $_SESSION['gradebook_dest'],
-	'name' => get_lang('Gradebook'
-));
+$interbreadcrumb[]= array ('url' => Security::remove_XSS($_SESSION['gradebook_dest']),'name' => get_lang('Gradebook'));
 $interbreadcrumb[]= array (
 	'url' => 'gradebook_view_result.php?selecteval=' .Security::remove_XSS($_GET['selecteval']),
 	'name' => get_lang('ViewResult'

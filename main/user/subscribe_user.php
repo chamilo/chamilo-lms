@@ -1,24 +1,18 @@
 <?php // $Id: subscribe_user.php 20412 2009-05-08 16:09:34Z herodoto $
-/* For licensing terms, see /license.txt
+/* For licensing terms, see /license.txt*/
 
 /**
-==============================================================================
 *	This script allows teachers to subscribe existing users
 *	to their course.
-*
-*	@package dokeos.user
-==============================================================================
+*	@package chamilo.user
 */
-/*
-==============================================================================
-		INIT SECTION
-==============================================================================
-*/
+
+/*			INIT SECTION		*/
 // name of the language file that needs to be included
 $language_file = array('registration','admin');
 
 // including the global Dokeos file
-include ('../inc/global.inc.php');
+require_once '../inc/global.inc.php';
 
 // the section (for the tabs)
 $this_section = SECTION_COURSES;
@@ -26,24 +20,17 @@ $this_section = SECTION_COURSES;
 if (!api_is_allowed_to_edit()) {
 	 api_not_allowed(true);
 }
+
 // including additional libraries
-require_once (api_get_path(LIBRARY_PATH).'course.lib.php');
-require_once (api_get_path(LIBRARY_PATH).'sessionmanager.lib.php');
-require_once (api_get_path(LIBRARY_PATH).'sortabletable.class.php');
-require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
-require_once (api_get_path(LIBRARY_PATH).'usermanager.lib.php');
+require_once api_get_path(LIBRARY_PATH).'course.lib.php';
+require_once api_get_path(LIBRARY_PATH).'sessionmanager.lib.php';
+require_once api_get_path(LIBRARY_PATH).'sortabletable.class.php';
+require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
+require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
 
-/*
-==============================================================================
-		MAIN CODE
-==============================================================================
-*/
+/*	MAIN CODE	*/
 
-/*
------------------------------------------------------------
-	Header
------------------------------------------------------------
-*/
+/*	Header	*/
 
 $tool_name = get_lang("SubscribeUserToCourse");
 if ($_REQUEST['type']=='teacher') {
@@ -512,23 +499,23 @@ function get_user_data($from, $number_of_items, $column, $direction) {
 			if ($_configuration['multiple_access_urls']==true) {
 				$url_access_id = api_get_current_access_url_id();
 				if ($url_access_id !=-1) {
+					
 					$tbl_url_rel_user = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
 					$sql = "SELECT
-					u.user_id AS col0,
-					u.official_code AS col1,
-					".($is_western_name_order
-					? "u.firstname  AS col2,
-					u.lastname AS col3,"
-					: "u.lastname  AS col2,
-					u.firstname AS col3,")."
-					u.email 	AS col4,
-					u.active 	AS col5,
-					u.user_id   AS col6
-					FROM $user_table u
-					LEFT JOIN $course_user_table cu on u.user_id = cu.user_id and course_code='".$_SESSION['_course']['id']."'
-					INNER JOIN  $tbl_url_rel_user as url_rel_user
-					ON (url_rel_user.user_id = u.user_id)
-					WHERE cu.user_id IS NULL AND u.status<>".DRH." AND access_url_id= $url_access_id ";
+						u.user_id AS col0,
+						u.official_code AS col1,
+						".($is_western_name_order
+						? "u.firstname  AS col2,
+						u.lastname AS col3,"
+						: "u.lastname  AS col2,
+						u.firstname AS col3,")."
+						u.email 	AS col4,
+						u.active 	AS col5,
+						u.user_id   AS col6
+						FROM $user_table u
+						LEFT JOIN $course_user_table cu on u.user_id = cu.user_id and course_code='".$_SESSION['_course']['id']."'
+						INNER JOIN  $tbl_url_rel_user as url_rel_user
+						ON (url_rel_user.user_id = u.user_id) ";
 
 
 					// applying the filter of the additional user profile fields
@@ -539,11 +526,11 @@ function get_user_data($from, $number_of_items, $column, $direction) {
 								ON field_values.user_id = u.user_id
 							WHERE cu.user_id IS NULL AND u.status<>".DRH."
 								AND field_values.field_id = '".Database::escape_string($field_identification[0])."'
-								AND field_values.field_value = '".Database::escape_string($field_identification[1])."'";
+								AND field_values.field_value = '".Database::escape_string($field_identification[1])."' AND access_url_id= $url_access_id  ";
 					} else	{
-						$sql .=	"WHERE cu.user_id IS NULL AND u.status<>".DRH." AND access_url_id= $url_access_id ";
-					}
-
+						$sql .=	"WHERE  cu.user_id IS NULL AND u.status<>".DRH." AND access_url_id= $url_access_id ";
+					}					
+				
 				}
 			}
 		}
@@ -573,6 +560,7 @@ function get_user_data($from, $number_of_items, $column, $direction) {
 	// Sorting and pagination (used by the sortable table)
 	$sql .= " ORDER BY col$column $direction ";
 	$sql .= " LIMIT $from,$number_of_items";
+	
 	$res = Database::query($sql);
 	$users = array ();
 	while ($user = Database::fetch_row($res)) {
@@ -593,7 +581,6 @@ function get_user_data($from, $number_of_items, $column, $direction) {
 				}
 			}
 		}
-
 	}
 	return $users;
 }

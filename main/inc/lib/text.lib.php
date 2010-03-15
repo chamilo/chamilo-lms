@@ -11,6 +11,44 @@
 /*	FUNCTIONS */
 
 /**
+ * Truncates a string.
+ *
+ * @author Brouckaert Olivier
+ * @param  string $text					The text to truncate.
+ * @param  integer $length				The approximate desired length. The length of the suffix below is to be added to have the total length of the result string.
+ * @param  string $suffix				A suffix to be added as a replacement.
+ * @param string $encoding (optional)	The encoding to be used. If it is omitted, the platform character set will be used by default.
+ * @param  boolean $middle				If this parameter is true, truncation is done in the middle of the string.
+ * @return string						Truncated string, decorated with the given suffix (replacement).
+ */
+function api_trunc_str($text, $length = 30, $suffix = '...', $middle = false, $encoding = null) {
+	if (empty($encoding)) {
+		$encoding = api_get_system_encoding();
+	}
+	$text_length = api_strlen($text, $encoding);
+	if ($text_length <= $length) {
+		return $text;
+	}
+	if ($middle) {
+		return rtrim(api_substr($text, 0, round($length / 2), $encoding)).$suffix.ltrim(api_substr($text, - round($length / 2), $text_length, $encoding));
+	}
+	return rtrim(api_substr($text, 0, $length, $encoding)).$suffix;
+}
+
+/**
+ * Handling simple and double apostrofe in order that strings be stored properly in database
+ *
+ * @author Denes Nagy
+ * @param  string variable - the variable to be revised
+ */
+function domesticate($input) {
+	$input = stripslashes($input);
+	$input = str_replace("'", "''", $input);
+	$input = str_replace('"', "''", $input);
+	return ($input);
+}
+
+/**
  * function make_clickable($string)
  *
  * @desc   Completes url contained in the text with "<a href ...".
@@ -41,6 +79,21 @@ function make_clickable($string) {
 		$string = eregi_replace("([a-z0-9_.-]+@[a-z0-9.-]+)", "<a href=\"mailto:\\1\">\\1</a>", $string);
 	}
 	return $string;
+}
+
+/**
+ * Applies parsing the content for tex commands that are separated by [tex]
+ * [/tex] to make it readable for techexplorer plugin.
+ * @param string $text The text to parse
+ * @return string The text after parsing.
+ * @author Patrick Cool <patrick.cool@UGent.be>
+ * @version June 2004
+ */
+function api_parse_tex($textext) {
+	if (strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE') !== false) {
+		return str_replace(array('[tex]', '[/tex]'), array("<object classid=\"clsid:5AFAB315-AD87-11D3-98BB-002035EFB1A4\"><param name=\"autosize\" value=\"true\" /><param name=\"DataType\" value=\"0\" /><param name=\"Data\" value=\"", "\" /></object>"), $textext);
+	}
+	return str_replace(array('[tex]', '[/tex]'), array("<embed type=\"application/x-techexplorer\" texdata=\"", "\" autosize=\"true\" pluginspage=\"http://www.integretechpub.com/techexplorer/\">"), $textext);
 }
 
 /**
@@ -99,7 +152,7 @@ function text_filter($input, $filter = true) {
 }
 
 /**
- * Applies parsing for tex commandos that are seperated by [tex]
+ * Applies parsing for tex commands that are separated by [tex]
  * [/tex] to make it readable for techexplorer plugin.
  * This function should not be accessed directly but should be accesse through the text_filter function
  * @param string $text The text to parse
@@ -232,7 +285,7 @@ function float_format($number, $flag = 1) {
 	}
 }
 
-// TODO: To be checked for timezones management and to be moved in the internationalization library.
+// TODO: To be checked for correct timezone management.
 /**
  * Function to obtain last week timestamps
  * @return array  times for every day inside week

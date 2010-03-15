@@ -1,5 +1,4 @@
 <?php // $Id: copy_course.php 22204 2009-07-17 20:31:35Z iflorespaz $
-
 /* For licensing terms, see /dokeos_license.txt */
 
 // name of the language file that needs to be included
@@ -9,7 +8,7 @@ $language_file = array('exercice', 'coursebackup', 'admin');
 require_once '../inc/global.inc.php';
 
 // including additional libraries
-include_once api_get_path(LIBRARY_PATH) . 'fileManage.lib.php';
+require_once api_get_path(LIBRARY_PATH) . 'fileManage.lib.php';
 require_once 'classes/CourseBuilder.class.php';
 require_once 'classes/CourseRestorer.class.php';
 require_once 'classes/CourseSelectForm.class.php';
@@ -37,9 +36,7 @@ $this_section=SECTION_COURSES;
 Display::display_header(get_lang('CopyCourse'));
 //api_display_tool_title($nameTools);
 /*
-==============================================================================
 		MAIN CODE
-==============================================================================
 */
 // If a CourseSelectForm is posted or we should copy all resources, then copy them
 if ((isset ($_POST['action']) && $_POST['action'] == 'course_select_form') || (isset ($_POST['copy_option']) && $_POST['copy_option'] == 'full_copy')) {
@@ -117,10 +114,6 @@ if ((isset ($_POST['action']) && $_POST['action'] == 'course_select_form') || (i
 	}
 
 }
-/*
-==============================================================================
-		FOOTER
-==============================================================================
-*/
+/*		FOOTER	*/
 Display::display_footer();
 ?>

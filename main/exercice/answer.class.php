@@ -1,34 +1,15 @@
 <?php
-/*
-    DOKEOS - elearning and course management software
-
-    For a full list of contributors, see documentation/credits.html
-
-    This program is free software; you can redistribute it and/or
-    modify it under the terms of the GNU General Public License
-    as published by the Free Software Foundation; either version 2
-    of the License, or (at your option) any later version.
-    See "documentation/licence.html" more details.
-
-    Contact:
-		Dokeos
-		Rue des Palais 44 Paleizenstraat
-		B-1030 Brussels - Belgium
-		Tel. +32 (2) 211 34 56
-*/
-
+/* For licensing terms, see /license.txt */
 
 /**
 *	This class allows to instantiate an object of type Answer
 *	5 arrays are created to receive the attributes of each answer belonging to a specified question
-* 	@package dokeos.exercise
+* 	@package chamilo.exercise
 * 	@author Olivier Brouckaert
 * 	@version $Id: answer.class.php 21172 2009-06-01 20:58:05Z darkvela $
 */
 
-
 if(!class_exists('Answer')):
-
 
 class Answer
 {
@@ -67,51 +48,48 @@ class Answer
 	function Answer($questionId)
 	{
 		//$this->questionType=$questionType;
-		$this->questionId=(int)$questionId;
-		$this->answer=array();
-		$this->correct=array();
-		$this->comment=array();
-		$this->weighting=array();
-		$this->position=array();
-		$this->hotspot_coordinates=array();
-		$this->hotspot_type=array();
-		$this->destination= array();
+		$this->questionId			= (int)$questionId;
+		$this->answer				= array();
+		$this->correct				= array();
+		$this->comment				= array();
+		$this->weighting			= array();
+		$this->position				= array();
+		$this->hotspot_coordinates	= array();
+		$this->hotspot_type 		= array();
+		$this->destination  		= array();
 		// clears $new_* arrays
 		$this->cancel();
 
 		// fills arrays
 		$objExercise = new Exercise();
-		$objExercise->read($_REQUEST['exerciseId']);
-		if($objExercise->random_answers=='1')
-		{
+		$objExercise->read($_REQUEST['exerciseId']);		
+		if($objExercise->random_answers=='1') {
 			$this->readOrderedBy('rand()', '');// randomize answers
-		}
-		else
-		{
+		} else {
 			$this->read(); // natural order
 		}
 	}
 
 	/**
-	 * clears $new_* arrays
+	 * Clears $new_* arrays
 	 *
 	 * @author - Olivier Brouckaert
 	 */
 	function cancel()
 	{
-		$this->new_answer=array();
-		$this->new_correct=array();
-		$this->new_comment=array();
-		$this->new_weighting=array();
-		$this->new_position=array();
-		$this->new_hotspot_coordinates=array();
-		$this->new_hotspot_type=array();
-		$this->new_nbrAnswers=0;
-		$this->new_destination=array();
+		$this->new_answer				= array();
+		$this->new_correct				= array();
+		$this->new_comment				= array();
+		$this->new_weighting			= array();
+		$this->new_position				= array();
+		$this->new_hotspot_coordinates	= array();
+		$this->new_hotspot_type			= array();
+		$this->new_nbrAnswers			= 0;
+		$this->new_destination			= array();
 	}
 
 	/**
-	 * reads answer informations from the data base
+	 * Reads answer informations from the data base
 	 *
 	 * @author - Olivier Brouckaert
 	 */
@@ -131,21 +109,19 @@ class Answer
 		$i=1;
 
 		// while a record is found
-		while($object=Database::fetch_object($result))
-		{
-			$this->id[$i]=$object->id;
-			$this->answer[$i]=$object->answer;
-			$this->correct[$i]=$object->correct;
-			$this->comment[$i]=$object->comment;
-			$this->weighting[$i]=$object->ponderation;
-			$this->position[$i]=$object->position;
-			$this->hotspot_coordinates[$i]=$object->hotspot_coordinates;
-			$this->hotspot_type[$i]=$object->hotspot_type;
-			$this->destination[$i]=$object->destination;
-			$this->autoId[$i]=$object->id_auto;
+		while($object=Database::fetch_object($result)) {
+			$this->id[$i]					= $object->id;
+			$this->answer[$i]				= $object->answer;
+			$this->correct[$i]				= $object->correct;
+			$this->comment[$i]				= $object->comment;
+			$this->weighting[$i]			= $object->ponderation;
+			$this->position[$i]				= $object->position;
+			$this->hotspot_coordinates[$i]	= $object->hotspot_coordinates;
+			$this->hotspot_type[$i]			= $object->hotspot_type;
+			$this->destination[$i]			= $object->destination;
+			$this->autoId[$i]				= $object->id_auto;
 			$i++;
 		}
-
 		$this->nbrAnswers=$i-1;
 	}
 	/**
@@ -158,8 +134,7 @@ class Answer
 	{
 		global $_course;
 		$field = Database::escape_string($field);
-		if(empty($field))
-		{
+		if(empty($field)) {
 			$field = 'position';
 		}
 		if($order != 'ASC' and $order!='DESC')
@@ -182,16 +157,15 @@ class Answer
 		// while a record is found
 		while($object=Database::fetch_object($result))
 		{
-			$this->answer[$i]=$object->answer;
-			$this->correct[$i]=$object->correct;
-			$this->comment[$i]=$object->comment;
-			$this->weighting[$i]=$object->ponderation;
-			$this->position[$i]=$object->position;
-			$this->destination[$i]=$object->destination;
-			$this->autoId[$i]=$object->id_auto;
+			$this->answer[$i]		= $object->answer;
+			$this->correct[$i]		= $object->correct;
+			$this->comment[$i]		= $object->comment;
+			$this->weighting[$i]	= $object->ponderation;
+			$this->position[$i]		= $object->position;
+			$this->destination[$i]	= $object->destination;
+			$this->autoId[$i]		= $object->id_auto;
 			$i++;
 		}
-
 		$this->nbrAnswers=$i-1;
 	}
 
@@ -470,7 +444,7 @@ class Answer
 	}
 
 	/**
-	 * records answers into the data base
+	 * Records answers into the data base
 	 *
 	 * @author - Olivier Brouckaert
 	 */
@@ -489,8 +463,7 @@ class Answer
 				"(id,question_id,answer,correct,comment," .
 				"ponderation,position,hotspot_coordinates,hotspot_type,destination) VALUES";
 
-		for($i=1;$i <= $this->new_nbrAnswers;$i++)
-		{
+		for($i=1;$i <= $this->new_nbrAnswers;$i++) {
 			$answer					= Database::escape_string($this->new_answer[$i]);
 			$correct				= Database::escape_string($this->new_correct[$i]);
 			$comment				= Database::escape_string($this->new_comment[$i]);
@@ -522,7 +495,7 @@ class Answer
 	}
 
 	/**
-	 * duplicates answers by copying them into another question
+	 * Duplicates answers by copying them into another question
 	 *
 	 * @author - Olivier Brouckaert
 	 * @param - integer $newQuestionId - ID of the new question
@@ -532,15 +505,13 @@ class Answer
 		$TBL_REPONSES = Database :: get_course_table(TABLE_QUIZ_ANSWER);
 
 		// if at least one answer
-		if($this->nbrAnswers)
-		{
+		if($this->nbrAnswers) {
 			// inserts new answers into data base
 			$sql="INSERT INTO $TBL_REPONSES" .
 					"(id,question_id,answer,correct,comment," .
 					"ponderation,position,hotspot_coordinates,hotspot_type,destination) VALUES";
 
-			for($i=1;$i <= $this->nbrAnswers;$i++)
-			{
+			for($i=1;$i <= $this->nbrAnswers;$i++) {
 				$answer					= Database::escape_string($this->answer[$i]);
 				$correct				= Database::escape_string($this->correct[$i]);
 				$comment				= Database::escape_string($this->comment[$i]);

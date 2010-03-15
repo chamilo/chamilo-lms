@@ -1,7 +1,7 @@
 <?php //$id: $
-/* For licensing terms, see /dokeos_license.txt */
+/* For licensing terms, see /license.txt */
 /**
- * @package dokeos.glossary
+ * @package chamilo.glossary
  * @author Christian Fasanando, initial version
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium, refactoring and tighter integration in Dokeos
  */

@@ -1,22 +1,20 @@
-<?php
+<?php // $Id: group.php 22201 2009-07-17 19:57:03Z cfasanando $
 /* For licensing terms, see /license.txt */
 
 /**
- *	Main page for the group module.
- *	This script displays the general group settings,
- *	and a list of groups with buttons to view, edit...
- *
- *	@author Thomas Depraetere, Hugues Peeters, Christophe Gesche: initial versions
- *	@author Bert Vanderkimpen, improved self-unsubscribe for cvs
- *	@author Patrick Cool, show group comment under the group name
- *	@author Roan Embrechts, initial self-unsubscribe code, code cleaning, virtual course support
- *	@author Bart Mollet, code cleaning, use of Display-library, list of courseAdmin-tools, use of GroupManager
- *	@author Isaac Flores, code cleaning and improvements
- *	@package chamilo.group
- */
-
-/*	INIT SECTION */
-
+*	Main page for the group module.
+*	This script displays the general group settings,
+*	and a list of groups with buttons to view, edit...
+*
+*	@author Thomas Depraetere, Hugues Peeters, Christophe Gesche: initial versions
+*	@author Bert Vanderkimpen, improved self-unsubscribe for cvs
+*	@author Patrick Cool, show group comment under the group name
+*	@author Roan Embrechts, initial self-unsubscribe code, code cleaning, virtual course support
+*	@author Bart Mollet, code cleaning, use of Display-library, list of courseAdmin-tools, use of GroupManager
+*	@author Isaac Flores, code cleaning and improvements
+*	@package chamilo.group
+*/
+/*		INIT SECTION	*/
 // Name of the language file that needs to be included
 $language_file = 'group';
 

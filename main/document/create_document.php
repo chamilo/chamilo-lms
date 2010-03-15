@@ -167,6 +167,12 @@ require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
 require_once api_get_path(LIBRARY_PATH).'document.lib.php';
 require_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
 require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
+require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
+if (isset($_REQUEST['certificate'])) {
+	$nameTools = get_lang('CreateCertificate');	
+} else {
+	$nameTools = get_lang('CreateDocument');	
+}
 
 $nameTools = get_lang('CreateDocument');
 
@@ -198,11 +204,12 @@ if ($dir[strlen($dir) - 1] != '/') {
 	$dir .= '/';
 }
 
-// Configuration for the online editor
-$doc_tree = explode('/', $dir);
-$count_dir = count($doc_tree) - 2; // "2" because at the begin and end there are 2 "/"
+// Configuration for the FCKEDITOR
+$doc_tree= explode('/', $dir);
+$count_dir = count($doc_tree) -2; // "2" because at the begin and end there are 2 "/"
 // Level correction for group documents.
-if (!empty($group_properties['directory'])) {
+if (!empty($group_properties['directory']))
+{
 	$count_dir = $count_dir > 0 ? $count_dir - 1 : 0;
 }
 $relative_url = '';
@@ -236,20 +243,31 @@ if (!is_dir($filepath)) {
 	$dir = '/';
 }
 
+//I'm in the certification module?  
+$is_certificate_mode = false;
+$is_certificate_array = explode('/',$_GET['dir']);
+array_shift($is_certificate_array);
+if ($is_certificate_array[0]=='certificates') {
+	$is_certificate_mode = true;
+}
 $to_group_id = 0;
 
-if (isset($_SESSION['_gid']) && $_SESSION['_gid'] != '') {
-	$req_gid = '&amp;gidReq='.$_SESSION['_gid'];
-	$interbreadcrumb[] = array('url' => '../group/group_space.php?gidReq='.$_SESSION['_gid'], 'name' => get_lang('GroupSpace'));
-	$noPHP_SELF = true;
-	$to_group_id = $_SESSION['_gid'];
-	$group = GroupManager :: get_group_properties($to_group_id);
-	$path = explode('/', $dir);
-	if ('/'.$path[1] != $group['directory']) {
-		api_not_allowed(true);
+if (!$is_certificate_mode) {
+	if (isset ($_SESSION['_gid']) && $_SESSION['_gid'] != '') {
+		$req_gid = '&amp;gidReq='.$_SESSION['_gid'];
+		$interbreadcrumb[] = array ("url" => "../group/group_space.php?gidReq=".$_SESSION['_gid'], "name" => get_lang('GroupSpace'));
+		$noPHP_SELF = true;
+		$to_group_id = $_SESSION['_gid'];
+		$group = GroupManager :: get_group_properties($to_group_id);
+		$path = explode('/', $dir);
+		if ('/'.$path[1] != $group['directory']) {
+			api_not_allowed(true);
+		}
 	}
+	$interbreadcrumb[] = array ("url" => "./document.php?curdirpath=".urlencode($_GET['dir']).$req_gid, "name" => get_lang('Documents'));
+} else {
+	$interbreadcrumb[]= array (	'url' => '../gradebook/'.$_SESSION['gradebook_dest'], 'name' => get_lang('Gradebook'));	
 }
-$interbreadcrumb[] = array('url' => './document.php?curdirpath='.urlencode($_GET['dir']).$req_gid, 'name' => get_lang('Documents'));
 
 if (!$is_allowed_in_course) {
 	api_not_allowed(true);
@@ -270,11 +288,17 @@ if (isset ($group)) {
 }
 
 // Create a new form
-$form = new FormValidator('create_document');
+$form = new FormValidator('create_document','post',api_get_self().'?dir='.Security::remove_XSS(urlencode($_GET['dir'])).'&selectcat='.Security::remove_XSS($_GET['selectcat']));
 
 // form title
 $form->addElement('header', '', $nameTools);
 
+if (isset($_REQUEST['certificate'])) {//added condition for certicate in gradebook
+	$form->addElement('hidden','certificate','true',array('id'=>'certificate'));
+	if (isset($_GET['selectcat']))
+		$form->addElement('hidden','selectcat',intval($_GET['selectcat']));	
+	
+}
 $renderer = & $form->defaultRenderer();
 
 // Hidden element with current directory
@@ -338,7 +362,11 @@ if (!empty($_SESSION['_gid'])) {
 }
 
 // Add group to the form
-$form->addGroup($group, 'filename_group', api_get_setting('use_document_title') == 'true' ? get_lang('Title') : get_lang('FileName') ,'&nbsp;&nbsp;&nbsp;', false);
+if ($is_certificate_mode)
+	$form->addGroup($group, 'filename_group', get_lang('CertificateName') ,'&nbsp;&nbsp;&nbsp;', false);
+else
+	$form->addGroup($group, 'filename_group', api_get_setting('use_document_title') == 'true' ? get_lang('Title') : get_lang('FileName') ,'&nbsp;&nbsp;&nbsp;', false);
+	
 $form->addRule('filename_group', get_lang('ThisFieldIsRequired'), 'required');
 
 if (api_get_setting('use_document_title') == 'true') {
@@ -367,7 +395,11 @@ $form->add_html_editor('content','', false, false, $html_editor_config);
 // Comment-field
 
 //$form->addElement('textarea', 'comment', get_lang('Comment'), array ('rows' => 5, 'cols' => 50));
-$form->addElement('style_submit_button', 'submit', get_lang('langCreateDoc'), 'class="save"');
+if ($is_certificate_mode)
+	$form->addElement('style_submit_button', 'submit', get_lang('CreateCertificate'), 'class="save"');
+else 
+	$form->addElement('style_submit_button', 'submit', get_lang('langCreateDoc'), 'class="save"');
+	
 $form->setDefaults($default);
 
 // HTML
@@ -452,8 +484,11 @@ if ($form->validate()) {
 					$ct .= ", title='$new_title'";
 				Database::query("UPDATE $TABLE_DOCUMENT SET".substr($ct, 1)." WHERE id = '$document_id'");
 			}
-			$dir = substr($dir, 0, -1);
-			header('Location: document.php?curdirpath='.urlencode($dir));
+			$dir= substr($dir,0,-1);
+			$selectcat = '';			
+			if (isset($_REQUEST['selectcat']))
+				$selectcat = "&selectcat=".Security::remove_XSS($_REQUEST['selectcat']);
+			header('Location: document.php?curdirpath='.urlencode($dir).$selectcat); 
 			exit ();
 		} else {
 			Display :: display_header($nameTools, 'Doc');
@@ -470,9 +505,21 @@ if ($form->validate()) {
 	Display :: display_header($nameTools, "Doc");
 	//api_display_tool_title($nameTools);
 	// actions
+	if (isset($_REQUEST['certificate'])) {
+		$all_information_by_create_certificate=DocumentManager::get_all_info_to_certificate();
+		$str_info='';
+		foreach ($all_information_by_create_certificate[0] as $info_value) {
+			$str_info.=$info_value.'<br/>';
+		}
+		$create_certificate=get_lang('CreateCertificateWithTags');
+		Display::display_normal_message($create_certificate.': <br /><br/>'.$str_info,false);
+	}
 	echo '<div class="actions">';
-	// Link back to the documents overview
-	echo '<a href="document.php?curdirpath='.Security::remove_XSS($_GET['dir']).'">'.Display::return_icon('back.png', get_lang('Back').' '.get_lang('To').' '.get_lang('DocumentsOverview')).get_lang('BackTo').' '.get_lang('DocumentsOverview').'</a>';
+	// link back to the documents overview
+	if ($is_certificate_mode) 
+		echo '<a href="document.php?curdirpath='.Security::remove_XSS($_GET['dir']).'&selectcat=' . Security::remove_XSS($_GET['selectcat']).'">'.Display::return_icon('back.png',get_lang('Back').' '.get_lang('To').' '.get_lang('CertificateOverview')).get_lang('Back').' '.get_lang('To').' '.get_lang('CertificateOverview').'</a>';
+	else 
+		echo '<a href="document.php?curdirpath='.Security::remove_XSS($_GET['dir']).'">'.Display::return_icon('back.png',get_lang('Back').' '.get_lang('To').' '.get_lang('DocumentsOverview')).get_lang('BackTo').' '.get_lang('DocumentsOverview').'</a>';	
 	echo '</div>';
 	$form->display();
 	Display :: display_footer();

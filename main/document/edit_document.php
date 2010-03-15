@@ -100,6 +100,11 @@ $file = $_GET['file'];
 $doc = basename($file);
 //echo('doc: '.$doc.'<br />');
 $dir = Security::remove_XSS($_GET['curdirpath']);
+
+//I'm in the certification module?  
+$is_certificate_mode = DocumentManager::is_certificate_mode($dir);
+
+
 //echo('dir: '.$dir.'<br />');
 $file_name = $doc;
 //echo('file_name: '.$file_name.'<br />');
@@ -175,7 +180,11 @@ if (!empty($_SESSION['_gid'])) {
 	$noPHP_SELF = true;
 }
 $my_cur_dir_path = Security::remove_XSS($_GET['curdirpath']);
-$interbreadcrumb[] = array('url' => './document.php?curdirpath='.urlencode($my_cur_dir_path).$req_gid, 'name' => get_lang('Documents'));
+if (!$is_certificate_mode)
+	$interbreadcrumb[]=array("url"=>"./document.php?curdirpath=".urlencode($my_cur_dir_path).$req_gid, "name"=> get_lang('Documents'));
+else 
+	$interbreadcrumb[]= array (	'url' => '../gradebook/'.$_SESSION['gradebook_dest'], 'name' => get_lang('Gradebook'));	
+
 
 $is_allowedToEdit = is_allowed_to_edit() || $_SESSION['group_member_with_upload_rights'];
 
@@ -533,8 +542,13 @@ if ($owner_id == $_user['user_id'] || api_is_platform_admin() || $is_allowed_to_
 			$checked->setChecked(true);
 		}
 	}
-	$form->addElement('style_submit_button', 'submit', get_lang('SaveDocument'), 'class="save"');
-
+		if ($is_certificate_mode)
+		$form->addElement('style_submit_button', 'submit', get_lang('SaveCertificate'), 'class="save"');
+	else 
+		$form->addElement('style_submit_button','submit',get_lang('SaveDocument'), 'class="save"');
+	
+	
+	
 	$defaults['filename'] = $filename;
 	$defaults['extension'] = $extension;
 	$defaults['file_path'] = Security::remove_XSS($_GET['file']);
@@ -549,10 +563,25 @@ if ($owner_id == $_user['user_id'] || api_is_platform_admin() || $is_allowed_to_
 	/*
 	$form->addElement('html', '<div id="frmModel" style="display:block; height:525px; width:240px; position:absolute; top:115px; left:1px;"></div>');
 	*/
-	$origin = Security::remove_XSS($_GET['origin']);
-	if ($origin == 'slideshow') {
-		$slide_id = $_GET['origin_opt'];
-		nav_to_slideshow($slide_id);
+if (isset($_REQUEST['curdirpath']) && $_GET['curdirpath']=='/certificates') {
+		$all_information_by_create_certificate=DocumentManager::get_all_info_to_certificate();
+		$str_info='';
+		foreach ($all_information_by_create_certificate[0] as $info_value) {
+			$str_info.=$info_value.'<br/>';
+		}
+		$create_certificate=get_lang('CreateCertificateWithTags');
+		Display::display_normal_message($create_certificate.': <br /><br />'.$str_info,false);
+	}	
+	if ($is_certificate_mode) {
+		echo '<div class="actions">';
+				echo '<a href="document.php?curdirpath='.Security::remove_XSS($_GET['curdirpath']).'&selectcat=' . Security::remove_XSS($_GET['selectcat']).'">'.Display::return_icon('back.png',get_lang('Back').' '.get_lang('To').' '.get_lang('CertificateOverview')).get_lang('Back').' '.get_lang('To').' '.get_lang('CertificateOverview').'</a>';
+		echo '</div>';
+	} else {
+		$origin=Security::remove_XSS($_GET['origin']);
+		if ($origin=='slideshow') {
+			$slide_id=$_GET['origin_opt'];
+			nav_to_slideshow($slide_id);
+		}
 	}
 	$form->display();
 	//Display::display_error_message(get_lang('ReadOnlyFile'));

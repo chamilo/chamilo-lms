@@ -567,11 +567,11 @@ if ($is_allowedToEdit) {
 					case 'clean_results' : //clean student results
 							$quantity_results_deleted= $objExerciseTmp->clean_results();					
 							Display :: display_confirmation_message(sprintf(get_lang('XResultsCleaned'),$quantity_results_deleted));
-						break;
+					break;
 					case 'copy_exercise' : //copy an exercise					
 							$objExerciseTmp->copy_exercise();					
 							Display :: display_confirmation_message(get_lang('ExerciseCopied'));					
-						break;					
+					break;					
 				}
 			}
 		}

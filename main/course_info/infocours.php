@@ -1,32 +1,6 @@
-<?php // $Id: infocours.php 21873 2009-07-08 08:35:57Z herodoto $
-
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2004-2009 Dokeos SPRL
-	Copyright (c) 2003 Ghent University (UGent)
-	Copyright (c) 2001 Universite catholique de Louvain (UCL)
-	Copyright (c) Hugues Peeters
-	Copyright (c) Roan Embrechts (Vrije Universiteit Brussel)
-	Copyright (c) Olivier Brouckaert
-	Copyright (c) Bart Mollet, Hogeschool Gent
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact: Dokeos, 181 rue Royale, B-1000 Brussels, Belgium, info@dokeos.com
-==============================================================================
-*/
+<?php
+/* For licensing terms, see /license.txt */
 /**
-==============================================================================
 *	Code to display the course settings form (for the course admin)
 *	and activate the changes.
 *
@@ -36,35 +10,22 @@
 * @author Patrick Cool <patrick.cool@UGent.be>
 * @author Roan Embrechts, refactoring
 * and improved course visibility|subscribe|unsubscribe options
-* @package dokeos.course_info
-==============================================================================
+* @package chamilo.course_info
 */
-/*
-==============================================================================
-	   INIT SECTION
-==============================================================================
-*/
+/*	   INIT SECTION 	*/
 // name of the language file that needs to be included
 $language_file = array ('create_course', 'course_info');
-include ('../inc/global.inc.php');
+require_once '../inc/global.inc.php';
 $this_section = SECTION_COURSES;
 
 $nameTools = get_lang("ModifInfo");
 
-/*
------------------------------------------------------------
-	Libraries
------------------------------------------------------------
-*/
-require_once (api_get_path(LIBRARY_PATH).'course.lib.php');
-require_once (api_get_path(INCLUDE_PATH)."conf/course_info.conf.php");
-require_once (api_get_path(INCLUDE_PATH)."lib/debug.lib.inc.php");
-require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
-/*
------------------------------------------------------------
-	Constants and variables
------------------------------------------------------------
-*/
+/*	Libraries	*/
+require_once api_get_path(LIBRARY_PATH).'course.lib.php';
+require_once api_get_path(INCLUDE_PATH)."conf/course_info.conf.php";
+require_once api_get_path(INCLUDE_PATH)."lib/debug.lib.inc.php";
+require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
+/*	Constants and variables	*/
 define("MODULE_HELP_NAME", "Settings");
 define("COURSE_CHANGE_PROPERTIES", "COURSE_CHANGE_PROPERTIES");
 $TABLECOURSE 				= Database :: get_main_table(TABLE_MAIN_COURSE);
@@ -76,11 +37,8 @@ $currentCourseID 			= $_course['sysCode'];
 $currentCourseRepository 	= $_course["path"];
 $is_allowedToEdit 			= $is_courseAdmin || $is_platformAdmin;
 $course_setting_table 		= Database::get_course_table(TABLE_COURSE_SETTING);
-/*
-==============================================================================
-		LOGIC FUNCTIONS
-==============================================================================
-*/
+
+/*		LOGIC FUNCTIONS		*/
 function is_settings_editable()
 {
 	return $GLOBALS["course_info_is_editable"];
@@ -89,9 +47,7 @@ $course_code = $_course["sysCode"];
 $course_access_settings = CourseManager :: get_access_settings($course_code);
 
 /*
-==============================================================================
 		MAIN CODE
-==============================================================================
 */
 
 if (!$is_allowedToEdit)
@@ -254,8 +210,7 @@ $form->addElement('radio', 'allow_open_chat_window', null, get_lang('AllowOpenCh
 $form->addElement('style_submit_button', null, get_lang('SaveSettings'), 'class="save"');
 
 // COURSE THEME PICKER
-if (api_get_setting('allow_course_theme') == 'true')
-{
+if (api_get_setting('allow_course_theme') == 'true') {
 	$form->addElement('html','<div class="sectiontitle" style="margin-top: 40px;"><a href="#header" style="float:right;">'.Display::return_icon('top.gif',get_lang('Top')).'</a><a name="theme" id="theme"></a>'.Display::return_icon('theme.gif',get_lang('Theming')).' '.get_lang('Theming').'</div><div style="clear:both;"></div>');
 
 	//Allow Learning path
@@ -268,17 +223,14 @@ if (api_get_setting('allow_course_theme') == 'true')
 	$form -> addElement('html',$linebreak);
 }
 
-if (is_settings_editable())
-	{
+if (is_settings_editable()) {
 	$form->addElement('style_submit_button', null, get_lang('SaveSettings'), 'class="save"');
-	}
-else
-{
+} else {
 	// is it allowed to edit the course settings?
 	if (!is_settings_editable())
 		$disabled_output = "disabled";
 	$form->freeze();
-	}
+}
 
 // get all the course information
 $all_course_information =  CourseManager::get_course_information($_course['sysCode']);
@@ -328,18 +280,19 @@ if ($form->validate() && is_settings_editable()) {
 		$update_values[$index] = Database::escape_string($value);
 	}
 	$table_course = Database :: get_main_table(TABLE_MAIN_COURSE);
-	$sql = "UPDATE $table_course SET title 			= '".Security::remove_XSS($update_values['title'])."',
-										 visual_code 	= '".$update_values['visual_code']."',
-										 course_language = '".$update_values['course_language']."',
-										 category_code  = '".$update_values['category_code']."',
-										 department_name  = '".Security::remove_XSS($update_values['department_name'])."',
-										 department_url  = '".Security::remove_XSS($update_values['department_url'])."',
-										 visibility  = '".$update_values['visibility']."',
-										 subscribe  = '".$update_values['subscribe']."',
-										 unsubscribe  = '".$update_values['unsubscribe']."',
-										 tutor_name     = '".$update_values['tutor_name']."',
-										 registration_code = '".$update_values['course_registration_password']."'
-									WHERE code = '".$course_code."'";
+	$sql = "UPDATE $table_course SET
+				title 				= '".Security::remove_XSS($update_values['title'])."',
+				visual_code 		= '".$update_values['visual_code']."',
+				course_language 	= '".$update_values['course_language']."',
+				category_code 		= '".$update_values['category_code']."',
+				department_name  	= '".Security::remove_XSS($update_values['department_name'])."',
+				department_url  	= '".Security::remove_XSS($update_values['department_url'])."',
+				visibility  		= '".$update_values['visibility']."',
+				subscribe  			= '".$update_values['subscribe']."',
+				unsubscribe  		= '".$update_values['unsubscribe']."',
+				tutor_name     		= '".$update_values['tutor_name']."',
+				registration_code 	= '".$update_values['course_registration_password']."'
+			WHERE code = '".$course_code."'";
 	Database::query($sql);
 
 	//update course_settings table - this assumes those records exist, otherwise triggers an error
@@ -425,8 +378,11 @@ echo '</div>';
 
 // Display the form
 $form->display();
-	if ($showDiskQuota && $currentCourseDiskQuota != "")
-	{
+
+//@todo this code is out dated should 
+
+	if ($showDiskQuota && $currentCourseDiskQuota != "") {
+		
 ?>
 <table>
 	<tr>
@@ -511,11 +467,6 @@ $form->display();
 
 	}
 
-/*
-==============================================================================
-		FOOTER
-==============================================================================
-*/
+/*		FOOTER	*/
 Display::display_footer();
 ?>
-

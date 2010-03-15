@@ -1,26 +1,5 @@
 <?php
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2006-2008 Dokeos SPRL
-	Copyright (c) 2006 Ghent University (UGent)
-	Copyright (c) various contributors
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
-	Mail: info@dokeos.com
-==============================================================================
-*/
+/* For licensing terms, see /license.txt */
 $language_file = 'gradebook';
 //$cidReset = true;
 require_once ('../inc/global.inc.php');
@@ -64,14 +43,14 @@ if (isset($_GET['typeselected']) && $_GET['typeselected'] != '0') {
 								   intval($_GET['typeselected']),
 								   null,
 								   'add_link',
-								   api_get_self() . '?selectcat=' . $_GET['selectcat']
-														. '&typeselected=' . $_GET['typeselected'] . '&course_code=' . $_GET['course_code']);
+								   api_get_self() . '?selectcat=' . Security::remove_XSS($_GET['selectcat'])
+														. '&typeselected=' . Security::remove_XSS($_GET['typeselected']) . '&course_code=' . Security::remove_XSS($_GET['course_code']));
 	if ($addform->validate()) {
 		$addvalues = $addform->exportValues();
 		$link= LinkFactory :: create($_GET['typeselected']);
 		$link->set_user_id(api_get_user_id());
 		if($category[0]->get_course_code() == '' && !empty($_GET['course_code'])) {
-			$link->set_course_code(Database::escape_string($_GET['course_code']));
+			$link->set_course_code($_GET['course_code']);
 
 		} else {
 			$link->set_course_code($category[0]->get_course_code());
@@ -98,7 +77,6 @@ if (isset($_GET['typeselected']) && $_GET['typeselected'] != '0') {
 		$work_table = Database :: get_course_table(TABLE_STUDENT_PUBLICATION);
 		if ( isset($_GET['typeselected']) && 5==$_GET['typeselected'] && (isset($addvalues['select_link']) && $addvalues['select_link']<>"")) {
 
-
 			$sql1='SELECT thread_title from '.$tbl_forum_thread.' where thread_id='.$addvalues['select_link'].';';
 			$res1=Database::query($sql1);
 			$rowtit=Database::fetch_row($res1);
@@ -121,19 +99,14 @@ if (isset($_GET['typeselected']) && $_GET['typeselected'] != '0') {
 			header('Location: gradebook_add_result.php?selecteval=' . $link->get_ref_id());
 			exit;
 		} else {
-			header('Location: '.$_SESSION['gradebook_dest'].'?linkadded=&selectcat=' . $_GET['selectcat']);
+			header('Location: '.Security::remove_XSS($_SESSION['gradebook_dest']).'?linkadded=&selectcat=' . Security::remove_XSS($_GET['selectcat']));
 			exit;
 		}
-
 	}
 }
 
 
-
-$interbreadcrumb[]= array (
-	'url' => $_SESSION['gradebook_dest'].'?selectcat=' . $_GET['selectcat'],
-	'name' => get_lang('Gradebook'
-));
+$interbreadcrumb[]= array ('url' => $_SESSION['gradebook_dest'].'?selectcat=' .Security::remove_XSS($_GET['selectcat']),'name' => get_lang('Gradebook'));
 
 Display :: display_header(get_lang('MakeLink'));
 if (isset ($typeform)) {

@@ -1,10 +1,9 @@
 <?php // $Id: question.class.php 22257 2009-07-20 17:50:09Z juliomontoya $
-
-/* For licensing terms, see /dokeos_license.txt */
+/* For licensing terms, see /license.txt */
 
 /**
 *	File containing the Question class.
-*	@package dokeos.exercise
+*	@package chamilo.exercise
 * 	@author Olivier Brouckaert
 * 	@version $Id: question.class.php 22257 2009-07-20 17:50:09Z juliomontoya $
 */
@@ -13,24 +12,23 @@
 if(!class_exists('Question')):
 
 // answer types
-define('UNIQUE_ANSWER',	1);
-define('MULTIPLE_ANSWER',	2);
-define('FILL_IN_BLANKS',	3);
-define('MATCHING',		4);
-define('FREE_ANSWER',     5);
-define('HOT_SPOT', 		6);
-define('HOT_SPOT_ORDER', 	7);
-define('HOT_SPOT_DELINEATION', 		8);
+define('UNIQUE_ANSWER',					1);
+define('MULTIPLE_ANSWER',				2);
+define('FILL_IN_BLANKS',				3);
+define('MATCHING',						4);
+define('FREE_ANSWER',    				5);
+define('HOT_SPOT', 						6);
+define('HOT_SPOT_ORDER', 				7);
+define('HOT_SPOT_DELINEATION', 			8);
 define('MULTIPLE_ANSWER_COMBINATION', 	9);
 
 /**
-	CLASS QUESTION
+	QUESTION CLASS
  *
  *	This class allows to instantiate an object of type Question
  *
  *	@author Olivier Brouckaert, original author
  *	@author Patrick Cool, LaTeX support
- *	@package dokeos.exercise
  */
 abstract class Question
 {
@@ -47,12 +45,12 @@ abstract class Question
 	static $typePicture = 'new_question.png';
 	static $explanationLangVar = '';
 	static $questionTypes = array(
-							UNIQUE_ANSWER => 				array('unique_answer.class.php' , 'UniqueAnswer'),
+							UNIQUE_ANSWER => 				array('unique_answer.class.php' , 	'UniqueAnswer'),
 							MULTIPLE_ANSWER => 				array('multiple_answer.class.php' , 'MultipleAnswer'),
-							FILL_IN_BLANKS => 				array('fill_blanks.class.php' , 'FillBlanks'),
-							MATCHING => 					array('matching.class.php' , 'Matching'),
-							FREE_ANSWER => 					array('freeanswer.class.php' , 'FreeAnswer'),
-							HOT_SPOT => 					array('hotspot.class.php' , 'HotSpot'),
+							FILL_IN_BLANKS => 				array('fill_blanks.class.php' , 	'FillBlanks'),
+							MATCHING => 					array('matching.class.php' , 		'Matching'),
+							FREE_ANSWER => 					array('freeanswer.class.php' , 		'FreeAnswer'),
+							HOT_SPOT => 					array('hotspot.class.php' , 		'HotSpot'),
 							MULTIPLE_ANSWER_COMBINATION =>	array('multiple_answer_combination.class.php' , 'MultipleAnswerCombination'),
 							);
 
@@ -73,7 +71,7 @@ abstract class Question
 	}
 
 	/**
-	 * reads question informations from the data base
+	 * Reads question informations from the data base
 	 *
 	 * @author - Olivier Brouckaert
 	 * @param - integer $id - question ID
@@ -94,22 +92,21 @@ abstract class Question
 		// if the question has been found
 		if($object=Database::fetch_object($result))
 		{
-			$objQuestion = Question::getInstance($object->type);
-			$objQuestion->id=$id;
-			$objQuestion->question=$object->question;
-			$objQuestion->description=$object->description;
-			$objQuestion->weighting=$object->ponderation;
-			$objQuestion->position=$object->position;
-			$objQuestion->type=$object->type;
-			$objQuestion->picture=$object->picture;
-			$objQuestion->level=(int) $object->level;
+			$objQuestion 				= Question::getInstance($object->type);
+			$objQuestion->id			= $id;
+			$objQuestion->question		= $object->question;
+			$objQuestion->description	= $object->description;
+			$objQuestion->weighting		= $object->ponderation;
+			$objQuestion->position		= $object->position;
+			$objQuestion->type			= $object->type;
+			$objQuestion->picture		= $object->picture;
+			$objQuestion->level			= (int) $object->level;
 
 			$sql="SELECT exercice_id FROM $TBL_EXERCICE_QUESTION WHERE question_id='".intval($id)."'";
 			$result=Database::query($sql);
 
 			// fills the array with the exercises which this question is in
-			while($object=Database::fetch_object($result))
-			{
+			while($object=Database::fetch_object($result)) {
 				$objQuestion->exerciseList[]=$object->exercice_id;
 			}
 
@@ -518,9 +515,18 @@ abstract class Question
 		// saves the picture into a temporary file
 		@move_uploaded_file($Picture,$picturePath.'/tmp.'.$Extension);
 	}
+	
+	/**
+		Sets the title 
+	*/
+	public function setTitle($title)
+	{
+		$this->question = $title; 	
+	}
+	
 
 	/**
-	 * moves the temporary question "tmp" to "quiz-$questionId"
+	 * Moves the temporary question "tmp" to "quiz-$questionId"
 	 * Temporary pictures are used when we don't want to save a picture right after a form submission.
 	 * For example, if we first show a confirmation box.
 	 *
@@ -603,7 +609,8 @@ abstract class Question
                 }
             }
 
-		} else {// creates a new question
+		} else {
+			// creates a new question
 			$sql="SELECT max(position) FROM $TBL_QUESTIONS as question, $TBL_EXERCICE_QUESTION as test_question WHERE question.id=test_question.question_id AND test_question.exercice_id='".Database::escape_string($exerciseId)."'";
 			$result=Database::query($sql);
 			$current_position=Database::result($result,0,0);
@@ -886,7 +893,7 @@ abstract class Question
 	}
 
 	/**
-	 * duplicates the question
+	 * Duplicates the question
 	 *
 	 * @author - Olivier Brouckaert
 	 * @return - integer - ID of the new question
@@ -1150,8 +1157,7 @@ abstract class Question
 	static function updateId()
 	{
 		return self::$questionTypes;
-	}
-	
+	}	
 }
 endif;
 ?>

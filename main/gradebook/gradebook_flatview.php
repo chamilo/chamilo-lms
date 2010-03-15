@@ -226,7 +226,7 @@ if (isset ($_GET['exportpdf']))	{
 		$pdf =& new Cezpdf('a4',$format); //format is 'portrait' or 'landscape'
 		$clear_printable_data=array();
 		$clear_send_printable_data=array();
-		//var_dump(count($printable_data[1]));
+
 		for ($i=0;$i<count($printable_data[1]);$i++) {
 			for ($k=0;$k<count($printable_data[1][$i]);$k++) {
 				$clear_printable_data[]=strip_tags($printable_data[1][$i][$k]);

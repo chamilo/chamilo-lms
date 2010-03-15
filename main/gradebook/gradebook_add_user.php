@@ -1,13 +1,16 @@
 <?php //$Id: gradebook_add_user.php 21153 2009-06-01 01:51:43Z yannoo $
-/* For licensing terms, see /dokeos_license.txt */
+
+/* For licensing terms, see /license.txt */
+
 $language_file = 'gradebook';
 require_once '../inc/global.inc.php';
 $this_section = SECTION_MYGRADEBOOK;
-require_once ('lib/be.inc.php');
-require_once ('lib/fe/displaygradebook.php');
-require_once ('lib/gradebook_functions.inc.php');
-require_once ('lib/fe/evalform.class.php');
-require_once ('lib/scoredisplay.class.php');
+require_once 'lib/be.inc.php';
+require_once 'lib/fe/displaygradebook.php';
+require_once 'lib/gradebook_functions.inc.php';
+require_once 'lib/fe/evalform.class.php';
+require_once 'lib/scoredisplay.class.php';
+
 api_block_anonymous_users();
 block_students();
 
@@ -23,8 +26,8 @@ $add_user_form= new EvalForm(EvalForm :: TYPE_ADD_USERS_TO_EVAL,
 							 null,
 							 'add_users_to_evaluation',
 							 null,
-							 api_get_self() . '?selecteval=' . $_GET['selecteval'],
-							 $_GET['firstletter'],
+							 api_get_self() . '?selecteval=' . Security::remove_XSS($_GET['selecteval']),
+							 Security::remove_XSS($_GET['firstletter']),
 							 $newstudents);
 
 if ( isset($_POST['submit_button']) ) {
@@ -54,10 +57,7 @@ if ( isset($_POST['submit_button']) ) {
 		}
 }
 
-$interbreadcrumb[]= array (
-	'url' => $_SESSION['gradebook_dest'],
-	'name' => get_lang('Gradebook'
-));
+$interbreadcrumb[]= array ('url' => Security::remove_XSS($_SESSION['gradebook_dest']),'name' => get_lang('Gradebook'));
 $interbreadcrumb[]= array (
 	'url' => 'gradebook_view_result.php?selecteval=' .Security::remove_XSS($_GET['selecteval']),
 	'name' => get_lang('ViewResult'

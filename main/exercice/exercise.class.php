@@ -1378,7 +1378,7 @@ class Exercise
 		$table_track_e_attempt   = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);	
 		
 		$sql_select = "SELECT exe_id FROM $table_track_e_exercises
-						WHERE exe_cours_id = '".api_get_course_id()."' AND exe_exo_id = ".$this->id." AND orig_lp_id = 0 AND orig_lp_item_id = 0 AND session_id = ".api_get_session_id()."";
+					   WHERE exe_cours_id = '".api_get_course_id()."' AND exe_exo_id = ".$this->id." AND orig_lp_id = 0 AND orig_lp_item_id = 0 AND session_id = ".api_get_session_id()."";
 						
 		$result   = Database::query($sql_select);
 		$exe_list = Database::store_result($result);
@@ -1401,10 +1401,10 @@ class Exercise
 	}
 	
 	/**
-	 * Copies an exercise   
+	 * Copies an exercise (duplicate all questions and answers)
 	*/
 	
-	function copy_exercise() {
+	public function copy_exercise() {
 		$exercise_obj= new Exercise();
 		$exercise_obj = $this;
 		
@@ -1419,15 +1419,21 @@ class Exercise
 		$exercise_obj->updateId(0);
 		$exercise_obj->save();
 		
-		$new_exercise_id = $exercise_obj->selectId();
-		
-		$question_list = $exercise_obj->selectQuestionList();
+		$new_exercise_id = $exercise_obj->selectId();		
+		$question_list 	 = $exercise_obj->selectQuestionList();
 	
-		//creation of question
-		
-		foreach ($question_list as $question_id) {			
-			$new_question_obj = Question::read($question_id);
+		//Question creation 		
+		foreach ($question_list as $old_question_id) {			
+			$old_question_obj = Question::read($old_question_id);
+			$new_id = $old_question_obj->duplicate();
+			
+			$new_question_obj = Question::read($new_id);
+			
 			$new_question_obj->addToList($new_exercise_id);		
+			// This should be moved to the duplicate function				
+			$new_answer_obj = new Answer($old_question_id);
+			$new_answer_obj->read();
+			$new_answer_obj->duplicate($new_id);			
 		}
 	}
 		

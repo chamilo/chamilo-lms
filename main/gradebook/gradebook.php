@@ -29,8 +29,14 @@ $cidReset= true;
 $_in_course = false;
 //make sure the destination for scripts is index.php instead of gradebook.php
 require_once '../inc/global.inc.php';
-$_SESSION['gradebook_dest'] = 'gradebook.php';
-$this_section = SECTION_MYGRADEBOOK;
+if (!empty($_GET['course'])) {
+	$_SESSION['gradebook_dest'] = 'index.php';	
+	$this_section = SECTION_COURSES;
+} else {
+	$_SESSION['gradebook_dest'] = 'gradebook.php';	
+	$this_section = SECTION_MYGRADEBOOK;
+	unset($_GET['course']);
+}
 require_once 'lib/be.inc.php';
 require_once 'lib/scoredisplay.class.php';
 require_once 'lib/gradebook_functions.inc.php';
@@ -41,6 +47,8 @@ require_once 'lib/gradebook_data_generator.class.php';
 require_once 'lib/fe/gradebooktable.class.php';
 require_once 'lib/fe/displaygradebook.php';
 require_once 'lib/fe/userform.class.php';
+require_once api_get_path(LIBRARY_PATH).'document.lib.php';
+require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
 require_once api_get_path(LIBRARY_PATH).'ezpdf/class.ezpdf.php';
 $htmlHeadXtra[] = '<script src="../inc/lib/javascript/jquery.js" type="text/javascript" language="javascript"></script>'; //jQuery
 $htmlHeadXtra[] = '<script type="text/javascript">
@@ -191,7 +199,7 @@ if (isset ($_GET['visiblecat'])) {
 	} else {
 		$visibility_command= 0;
 	}
-	$cats= Category :: load(Security::remove_XSS($_GET['visiblecat']));
+	$cats= Category :: load($_GET['visiblecat']);
 	$cats[0]->set_visible($visibility_command);
 	$cats[0]->save();
 	$cats[0]->apply_visibility_to_children();
@@ -206,7 +214,7 @@ if (isset ($_GET['visiblecat'])) {
 }
 if (isset ($_GET['deletecat'])) {
 	block_students();
-	$cats= Category :: load(Security::remove_XSS($_GET['deletecat']));
+	$cats= Category :: load($_GET['deletecat']);
 	//delete all categories,subcategories and results
 	if ($cats[0] != null) {
 		if ($cats[0]->get_id() != 0) {
@@ -226,7 +234,7 @@ if (isset ($_GET['visibleeval'])) {
 		$visibility_command= 0;
 	}
 
-	$eval= Evaluation :: load(Security::remove_XSS($_GET['visibleeval']));
+	$eval= Evaluation :: load($_GET['visibleeval']);
 	$eval[0]->set_visible($visibility_command);
 	$eval[0]->save();
 	unset ($eval);
@@ -240,7 +248,7 @@ if (isset ($_GET['visibleeval'])) {
 }
 if (isset ($_GET['deleteeval'])) {
 	block_students();
-	$eval= Evaluation :: load(Security::remove_XSS($_GET['deleteeval']));
+	$eval= Evaluation :: load($_GET['deleteeval']);
 	if ($eval[0] != null) {
 		$eval[0]->delete_with_results();
 	}
@@ -255,7 +263,7 @@ if (isset ($_GET['visiblelink'])) {
 	}else {
 		$visibility_command= 0;
 	}
-	$link= LinkFactory :: load(Security::remove_XSS($_GET['visiblelink']));
+	$link= LinkFactory :: load($_GET['visiblelink']);
 	$link[0]->set_visible($visibility_command);
 	$link[0]->save();
 	unset ($link);
@@ -271,9 +279,9 @@ if (isset ($_GET['deletelink'])) {
 	block_students();
 	//fixing #5229
 	if (!empty($_GET['deletelink'])) {	
-		$link= LinkFactory :: load(Security::remove_XSS($_GET['deletelink']));
+		$link= LinkFactory :: load($_GET['deletelink']);
 		if ($link[0] != null) {
-			$sql='UPDATE '.$tbl_forum_thread.' SET thread_qualify_max=0,thread_weight=0,thread_title_qualify="" WHERE thread_id=(SELECT ref_id FROM '.$tbl_grade_links.' where id='.Security::remove_XSS($_GET['deletelink']).');';
+			$sql='UPDATE '.$tbl_forum_thread.' SET thread_qualify_max=0,thread_weight=0,thread_title_qualify="" WHERE thread_id=(SELECT ref_id FROM '.$tbl_grade_links.' where id='.intval($_GET['deletelink']).');';
 			Database::query($sql);
 			$link[0]->delete();
 		}
@@ -418,23 +426,35 @@ if (!isset($_GET['exportpdf']) and !isset($_GET['export_certificate'])) {
 		Display :: display_header(get_lang('FlatView'));
 	}
 	elseif (isset ($_GET['search'])) {
+			
+		if ($_SESSION['gradebook_dest'] == 'index.php') {
+			$gradebook_dest = Security::remove_XSS($_SESSION['gradebook_dest']).'?cidReq='.Security::remove_XSS($_GET['course']).'&amp;';	
+		} else {
+			$gradebook_dest = Security::remove_XSS($_SESSION['gradebook_dest']);
+		}	
+		
 		$interbreadcrumb[]= array (
-			'url' => $_SESSION['gradebook_dest'].'?selectcat=' . Security::remove_XSS($_GET['selectcat']),
-			'name' => get_lang('ToolGradebook')
-		);
-		Display :: display_header(get_lang('SearchResults'));
-	} else {
-			$interbreadcrumb[]= array (
-				'url' => $_SESSION['gradebook_dest'],
-				'name' => get_lang('ToolGradebook')
-			);
+			'url' => $gradebook_dest,
+			'name' => get_lang('Gradebook')
+		);	
+			
 
 		if ((isset($_GET['selectcat']) && $_GET['selectcat']>0)) {
-			$interbreadcrumb[]= array (
+			
+			if (!empty($_GET['course'])) {
+				$interbreadcrumb[]= array (
+					'url' => $gradebook_dest.'selectcat='.Security::remove_XSS($_GET['selectcat']),
+					'name' => get_lang('Details')
+				);	
+			} else {
+				$interbreadcrumb[]= array (
 				'url' => $_SESSION['gradebook_dest'].'?selectcat=0',
 				'name' => get_lang('Details')
-			);
+				);
+			}
+	
 		}
+		
 	 Display :: display_header('');
 	}
 }

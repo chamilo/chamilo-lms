@@ -13,9 +13,9 @@
 // name of the language file that needs to be included
 $language_file='exercice';
 
-include('exercise.class.php');
-include('question.class.php');
-include('answer.class.php');
+require_once 'exercise.class.php';
+require_once 'question.class.php';
+require_once 'answer.class.php';
 require_once '../inc/global.inc.php';
 
 $this_section=SECTION_COURSES;
@@ -49,6 +49,11 @@ if(!empty($_GET['page'])){
 	$page = intval($_GET['page']);
 }
 
+$copy_question = 0;
+if(!empty($_GET['copy_question'])){
+	$copy_question = intval($_GET['copy_question']);
+}
+
 //only that type of question
 if(!empty($_GET['type'])){
 	$type = intval($_GET['type']);
@@ -63,23 +68,51 @@ $documentPath=api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';
 // picture path
 $picturePath=$documentPath.'/images';
 
-
-if(!($objExcercise instanceOf Exercise) && !empty($fromExercise))
-{
+if(!($objExcercise instanceOf Exercise) && !empty($fromExercise)) {
     $objExercise = new Exercise();
     $objExercise->read($fromExercise);
 }
-if(!($objExcercise instanceOf Exercise) && !empty($exerciseId))
-{
+if(!($objExcercise instanceOf Exercise) && !empty($exerciseId)) {
     $objExercise = new Exercise();
     $objExercise->read($exerciseId);
 }
 
-if($is_allowedToEdit)
-{
+if($is_allowedToEdit) {
+	
+	//copy exercise 
+	if ($copy_question != 0 && isset($fromExercise)) {
+		
+		$old_question_id = $copy_question;
+		$old_question_obj = Question::read($old_question_id);
+		$old_question_obj->updateTitle($old_question_obj->selectTitle().' - '.get_lang('Copy'));
+		$new_id = $old_question_obj->duplicate();
+		
+		$new_question_obj = Question::read($new_id);			
+		$new_question_obj->addToList($fromExercise);			
+								
+		$new_answer_obj = new Answer($old_question_id);
+		$new_answer_obj->read();
+		$new_answer_obj->duplicate($new_id);
+		
+		
+		// destruction of the Question object
+		unset($new_question_obj);
+		unset($old_question_obj);
+
+        if(!$objExcercise instanceOf Exercise) {
+        	$objExercise = new Exercise();
+            $objExercise->read($fromExercise);
+        }
+		// adds the question ID represented by $recup into the list of questions for the current exercise
+		//$objExercise->addToList($new_id);
+		api_session_register('objExercise');
+		
+		header("Location: admin.php?".api_get_cidreq()."&exerciseId=$fromExercise");
+		exit();	
+	}
+	
 	// deletes a question from the data base and all exercises
-	if($delete)
-	{
+	if($delete) {
 		// construction of the Question object
 		// if the question exists
 		if($objQuestionTmp = Question::read($delete))
@@ -90,10 +123,9 @@ if($is_allowedToEdit)
 
 		// destruction of the Question object
 		unset($objQuestionTmp);
-	}
-	// gets an existing question and copies it into a new exercise
-	elseif($recup && $fromExercise)
-	{
+	} elseif($recup && $fromExercise) {
+		// gets an existing question and copies it into a new exercise
+		
 		// if the question exists
 		if($objQuestionTmp = Question :: read($recup))
 		{
@@ -162,7 +194,9 @@ if($is_allowedToEdit)
 <h3><?php echo $nameTools; ?></h3>
 
 <div class="actions">
+	
 	<?php
+	
 	if (isset($type)) {
 		$url = api_get_self().'?type=1';
 	} else {
@@ -222,8 +256,6 @@ if($is_allowedToEdit)
 		//answer type
 		if (!isset($answerType)) $answerType = -1;
 		{
-
-
 			for ($answer_type = -1; $answer_type <=9; $answer_type++) {
 				$selected ='';
 				if ($answer_type!=0) {
@@ -373,9 +405,9 @@ if($is_allowedToEdit)
 	 '<td align="right">';
 
 	if(!empty($page)) {
-	   echo '<a href="',api_get_self(),'?',api_get_cidreq(),'&exerciseId=',$exerciseId,'&fromExercise=',$fromExercise,'&page=',($page-1),'">&lt;&lt; ',get_lang('PreviousPage'),'</a> |';
+	   echo '<a href="',api_get_self(),'?',api_get_cidreq(),'&exerciseId=',$exerciseId,'&fromExercise=',$fromExercise,'&page=',($page-1),'">&lt;&lt; ',get_lang('PreviousPage'),'</a> | ';
 	} elseif($nbrQuestions > $limitQuestPage) {
-	   echo '&lt;&lt; ',get_lang('PreviousPage'),' |';
+	   echo '&lt;&lt; ',get_lang('PreviousPage'),' | ';
 	}
 
 	if($nbrQuestions > $limitQuestPage) {
@@ -432,8 +464,11 @@ if($is_allowedToEdit)
                 //echo $row['level'],'</td>',
 //					'<td><a href="',api_get_self(),'?',api_get_cidreq(),'&recup=',$row['id'],'&fromExercise=',$fromExercise,'"><img src="../img/view_more_stats.gif" border="0" alt="',get_lang('Reuse'),'"></a>';
 				echo $row['level'],'</td>',
-					'<td align="center" ><a href="',api_get_self(),'?',api_get_cidreq(),'&recup=',$row['id'],'&fromExercise=',$fromExercise,'">' .
-							'<img src="../img/view_more_stats.gif" border="0" alt="',get_lang('Reuse'),'"></a>';
+					'<td align="center"><a href="',api_get_self(),'?',api_get_cidreq(),'&recup=',$row['id'],'&fromExercise=',$fromExercise,'">' .
+							'<img src="../img/view_more_stats.gif" border="0" title="'.get_lang('Reuse').'" alt="'.get_lang('Reuse').'"></a>';
+							
+					echo ' <a href="',api_get_self(),'?',api_get_cidreq(),'&copy_question=',$row['id'],'&fromExercise=',$fromExercise,'">' .
+							'<img src="../img/cd.gif" border="0" title="'.get_lang('ReUseACopyInCurrentTest').'" alt="'.get_lang('ReUseACopyInCurrentTest').'"></a>';
 			}
             echo '</td>';
             echo '</tr>';

@@ -1,13 +1,10 @@
 <?php
-/* For licensing terms, see /dokeos_license.txt */
-
+/* For licensing terms, see /license.txt */
 /**
- * ==============================================================================
  * Copy resources from one course in a session to another one.
  *
  * @author Christian Fasanando <christian.fasanando@dokeos.com>
- * @package dokeos.backup
- * ==============================================================================
+ * @package chamilo.backup
  */
 
 /*  INIT SECTION  */

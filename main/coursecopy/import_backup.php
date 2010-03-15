@@ -1,40 +1,13 @@
 <?php // $Id: import_backup.php 20448 2009-05-10 10:17:22Z ivantcholakov $
-/*
-==============================================================================
-	Dokeos - elearning and course management software
+/* For licensing terms, see /license.txt */
 
-	Copyright (c) 2004-2008 Dokeos SPRL
-	Copyright (c) 2003 Ghent University (UGent)
-	Copyright (c) 2001 Universite catholique de Louvain (UCL)
-	Copyright (c) Bart Mollet (bart.mollet@hogent.be)
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
-	Mail: info@dokeos.com
-==============================================================================
-*/
 /**
- * ==============================================================================
  * Import a backup.
  *
  * @author Bart Mollet <bart.mollet@hogent.be>
- * @package dokeos.backup
- * ==============================================================================
+ * @package chamilo.backup
  */
-/*
-==============================================================================
-		INIT SECTION
-==============================================================================
-*/
+/*		INIT SECTION	*/
 // name of the language file that needs to be included
 $language_file = array('exercice', 'coursebackup', 'admin');
 
@@ -75,11 +48,7 @@ require_once('classes/CourseSelectForm.class.php');
 api_display_tool_title($nameTools);
 
 
-/*
-==============================================================================
-		MAIN CODE
-==============================================================================
-*/
+/*		MAIN CODE		*/
 
 if((isset($_POST['action']) && $_POST['action'] == 'course_select_form' ) || (isset($_POST['import_option']) && $_POST['import_option'] == 'full_backup' )) {
 	$error=false;
@@ -207,10 +176,6 @@ if((isset($_POST['action']) && $_POST['action'] == 'course_select_form' ) || (is
 	$form->display();
 
 }
-/*
-==============================================================================
-		FOOTER
-==============================================================================
-*/
+/*	FOOTER	*/
 Display::display_footer();
 ?>

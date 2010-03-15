@@ -1,7 +1,7 @@
 <?php // $Id: database.lib.php 22265 2009-07-20 23:26:43Z juliomontoya $
 /* See license terms in /license.txt */
 /**
-*	This is the main database library for Dokeos.
+*	This is the main database library for Chamilo.
 *	Include/require it in your code to use its functionality.
 *   Because this library contains all the basic database calls, it could be
 *   replaced by another library for say, PostgreSQL, to actually use Dokeos
@@ -50,8 +50,9 @@ define('TABLE_MAIN_GRADEBOOK_RESULT', 		'gradebook_result');
 define('TABLE_MAIN_GRADEBOOK_RESULT_LOG', 	'gradebook_result_log');
 define('TABLE_MAIN_GRADEBOOK_LINK', 		'gradebook_link');
 define('TABLE_MAIN_GRADEBOOK_SCORE_DISPLAY','gradebook_score_display');
+define('TABLE_MAIN_GRADEBOOK_CERTIFICATE', 	'gradebook_certificate');
 
-// Profiling
+//Profiling
 define('TABLE_MAIN_USER_FIELD',			'user_field');
 define('TABLE_MAIN_USER_FIELD_OPTIONS',	'user_field_options');
 define('TABLE_MAIN_USER_FIELD_VALUES',	'user_field_values');
@@ -60,12 +61,10 @@ define('TABLE_MAIN_USER_FIELD_VALUES',	'user_field_values');
 define('TABLE_MAIN_TAG',				'tag');
 define('TABLE_MAIN_USER_REL_TAG',		'user_rel_tag');
 
-
 //User groups
 define('TABLE_MAIN_GROUP',				'groups');
 define('TABLE_MAIN_USER_REL_GROUP',		'group_rel_user');
 define('TABLE_MAIN_GROUP_REL_TAG',		'group_rel_tag');
-
 
 // Search engine
 define('TABLE_MAIN_SPECIFIC_FIELD',			'specific_field');
@@ -82,11 +81,11 @@ define('TABLE_MAIN_ACCESS_URL_REL_SESSION', 'access_url_rel_session');
 define('TABLE_MAIN_SYSTEM_CALENDAR', 'sys_calendar');
 
 // Reservation System
-define('TABLE_MAIN_RESERVATION_ITEM', 'reservation_item');
-define('TABLE_MAIN_RESERVATION_RESERVATION', 'reservation_main');
-define('TABLE_MAIN_RESERVATION_SUBSCRIBTION', 'reservation_subscription');
-define('TABLE_MAIN_RESERVATION_CATEGORY', 'reservation_category');
-define('TABLE_MAIN_RESERVATION_ITEM_RIGHTS', 'reservation_item_rights');
+define('TABLE_MAIN_RESERVATION_ITEM', 			'reservation_item');
+define('TABLE_MAIN_RESERVATION_RESERVATION', 	'reservation_main');
+define('TABLE_MAIN_RESERVATION_SUBSCRIBTION', 	'reservation_subscription');
+define('TABLE_MAIN_RESERVATION_CATEGORY', 		'reservation_category');
+define('TABLE_MAIN_RESERVATION_ITEM_RIGHTS', 	'reservation_item_rights');
 
 // Social networking
 define('TABLE_MAIN_USER_REL_USER', 'user_rel_user');
@@ -130,54 +129,54 @@ define('TABLE_SCORM_MAIN', 'scorm_main');
 define('TABLE_SCORM_SCO_DATA', 'scorm_sco_data');
 
 // Course tables
-define('TABLE_AGENDA', 'calendar_event');
-define('TABLE_AGENDA_REPEAT', 'calendar_event_repeat');
-define('TABLE_AGENDA_REPEAT_NOT', 'calendar_event_repeat_not');
-define('TABLE_AGENDA_ATTACHMENT', 'calendar_event_attachment');
-define('TABLE_ANNOUNCEMENT', 'announcement');
-define('TABLE_ANNOUNCEMENT_ATTACHMENT', 'announcement_attachment');
-define('TABLE_CHAT_CONNECTED', 'chat_connected'); // @todo: probably no longer in use !!!
-define('TABLE_COURSE_DESCRIPTION', 'course_description');
-define('TABLE_DOCUMENT', 'document');
-define('TABLE_ITEM_PROPERTY', 'item_property');
-define('TABLE_LINK', 'link');
-define('TABLE_LINK_CATEGORY', 'link_category');
-define('TABLE_TOOL_LIST', 'tool');
-define('TABLE_TOOL_INTRO', 'tool_intro');
-define('TABLE_SCORMDOC', 'scormdocument');
-define('TABLE_STUDENT_PUBLICATION', 'student_publication');
-define('TABLE_STUDENT_PUBLICATION_ASSIGNMENT', 'student_publication_assignment');
-define('CHAT_CONNECTED_TABLE', 'chat_connected');
+define('TABLE_AGENDA',				 			'calendar_event');
+define('TABLE_AGENDA_REPEAT', 					'calendar_event_repeat');
+define('TABLE_AGENDA_REPEAT_NOT', 				'calendar_event_repeat_not');
+define('TABLE_AGENDA_ATTACHMENT', 				'calendar_event_attachment');
+define('TABLE_ANNOUNCEMENT', 					'announcement');
+define('TABLE_ANNOUNCEMENT_ATTACHMENT', 		'announcement_attachment');
+define('TABLE_CHAT_CONNECTED',			 		'chat_connected'); // @todo: probably no longer in use !!!
+define('TABLE_COURSE_DESCRIPTION',		 		'course_description');
+define('TABLE_DOCUMENT', 						'document');
+define('TABLE_ITEM_PROPERTY', 					'item_property');
+define('TABLE_LINK', 							'link');
+define('TABLE_LINK_CATEGORY', 					'link_category');
+define('TABLE_TOOL_LIST', 						'tool');
+define('TABLE_TOOL_INTRO', 						'tool_intro');
+define('TABLE_SCORMDOC', 						'scormdocument');
+define('TABLE_STUDENT_PUBLICATION', 			'student_publication');
+define('TABLE_STUDENT_PUBLICATION_ASSIGNMENT',	'student_publication_assignment');
+define('CHAT_CONNECTED_TABLE',					'chat_connected');
 
 // Course forum tables
-define('TABLE_FORUM_CATEGORY', 'forum_category');
-define('TABLE_FORUM', 'forum_forum');
-define('TABLE_FORUM_THREAD', 'forum_thread');
-define('TABLE_FORUM_POST', 'forum_post');
-define('TABLE_FORUM_ATTACHMENT', 'forum_attachment');
-define('TABLE_FORUM_MAIL_QUEUE', 'forum_mailcue');
-define('TABLE_FORUM_THREAD_QUALIFY', 'forum_thread_qualify');
-define('TABLE_FORUM_THREAD_QUALIFY_LOG', 'forum_thread_qualify_log');
-define('TABLE_FORUM_NOTIFICATION', 'forum_notification');
+define('TABLE_FORUM_CATEGORY', 				'forum_category');
+define('TABLE_FORUM', 						'forum_forum');
+define('TABLE_FORUM_THREAD',	 			'forum_thread');
+define('TABLE_FORUM_POST', 					'forum_post');
+define('TABLE_FORUM_ATTACHMENT', 			'forum_attachment');
+define('TABLE_FORUM_MAIL_QUEUE', 			'forum_mailcue');
+define('TABLE_FORUM_THREAD_QUALIFY', 		'forum_thread_qualify');
+define('TABLE_FORUM_THREAD_QUALIFY_LOG', 	'forum_thread_qualify_log');
+define('TABLE_FORUM_NOTIFICATION', 			'forum_notification');
 
 // Course group tables
-define('TABLE_GROUP', 'group_info');
-define('TABLE_GROUP_USER', 'group_rel_user');
-define('TABLE_GROUP_TUTOR', 'group_rel_tutor');
-define('TABLE_GROUP_CATEGORY', 'group_category');
+define('TABLE_GROUP', 			'group_info');
+define('TABLE_GROUP_USER', 		'group_rel_user');
+define('TABLE_GROUP_TUTOR', 	'group_rel_tutor');
+define('TABLE_GROUP_CATEGORY', 	'group_category');
 
 // Course dropbox tables
-define('TABLE_DROPBOX_CATEGORY', 'dropbox_category');
-define('TABLE_DROPBOX_FEEDBACK', 'dropbox_feedback');
-define('TABLE_DROPBOX_POST', 'dropbox_post');
-define('TABLE_DROPBOX_FILE', 'dropbox_file');
-define('TABLE_DROPBOX_PERSON', 'dropbox_person');
+define('TABLE_DROPBOX_CATEGORY','dropbox_category');
+define('TABLE_DROPBOX_FEEDBACK','dropbox_feedback');
+define('TABLE_DROPBOX_POST', 	'dropbox_post');
+define('TABLE_DROPBOX_FILE', 	'dropbox_file');
+define('TABLE_DROPBOX_PERSON', 	'dropbox_person');
 
 // Course quiz (or test, or exercice) tables
-define('TABLE_QUIZ_QUESTION', 'quiz_question');
-define('TABLE_QUIZ_TEST', 'quiz');
-define('TABLE_QUIZ_ANSWER', 'quiz_answer');
-define('TABLE_QUIZ_TEST_QUESTION', 'quiz_rel_question');
+define('TABLE_QUIZ_QUESTION', 		'quiz_question');
+define('TABLE_QUIZ_TEST', 			'quiz');
+define('TABLE_QUIZ_ANSWER', 		'quiz_answer');
+define('TABLE_QUIZ_TEST_QUESTION', 	'quiz_rel_question');
 
 // Linked resource table
 define('TABLE_LINKED_RESOURCES', 'resource');
@@ -213,42 +212,42 @@ define('TABLE_BLOGS_TASKS_PERMISSIONS', 'permission_task');
 //end of Smartblogs
 
 // User information tables
-define('TABLE_USER_INFO', 'userinfo_def');
-define('TABLE_USER_INFO_CONTENT', 'userinfo_content');
+define('TABLE_USER_INFO', 			'userinfo_def');
+define('TABLE_USER_INFO_CONTENT', 	'userinfo_content');
 
 // Course settings table
 define('TABLE_COURSE_SETTING', 'course_setting');
 
 // Course online tables
-define('TABLE_ONLINE_LINK', 'online_link');
-define('TABLE_ONLINE_CONNECTED', 'online_connected');
+define('TABLE_ONLINE_LINK', 	'online_link');
+define('TABLE_ONLINE_CONNECTED','online_connected');
 
 // User database
-define('TABLE_PERSONAL_AGENDA', 'personal_agenda');
-define('TABLE_PERSONAL_AGENDA_REPEAT', 'personal_agenda_repeat');
-define('TABLE_PERSONAL_AGENDA_REPEAT_NOT', 'personal_agenda_repeat_not');
-define('TABLE_USER_COURSE_CATEGORY', 'user_course_category');
+define('TABLE_PERSONAL_AGENDA', 			'personal_agenda');
+define('TABLE_PERSONAL_AGENDA_REPEAT', 		'personal_agenda_repeat');
+define('TABLE_PERSONAL_AGENDA_REPEAT_NOT', 	'personal_agenda_repeat_not');
+define('TABLE_USER_COURSE_CATEGORY', 		'user_course_category');
 
 // Survey
 // @TODO: Are these MAIN tables or course tables?
 // @TODO: Probably these constants are obsolete.
-define('TABLE_MAIN_SURVEY', 'survey');
+define('TABLE_MAIN_SURVEY', 		'survey');
 define('TABLE_MAIN_SURVEYQUESTION', 'questions');
 
 // Survey
-define('TABLE_SURVEY', 'survey');
-define('TABLE_SURVEY_QUESTION', 'survey_question');
-define('TABLE_SURVEY_QUESTION_OPTION', 'survey_question_option');
-define('TABLE_SURVEY_INVITATION', 'survey_invitation');
-define('TABLE_SURVEY_ANSWER', 'survey_answer');
-define('TABLE_SURVEY_QUESTION_GROUP', 'survey_group');
-define('TABLE_SURVEY_REPORT', 'survey_report');
+define('TABLE_SURVEY', 					'survey');
+define('TABLE_SURVEY_QUESTION', 		'survey_question');
+define('TABLE_SURVEY_QUESTION_OPTION', 	'survey_question_option');
+define('TABLE_SURVEY_INVITATION', 		'survey_invitation');
+define('TABLE_SURVEY_ANSWER', 			'survey_answer');
+define('TABLE_SURVEY_QUESTION_GROUP', 	'survey_group');
+define('TABLE_SURVEY_REPORT', 			'survey_report');
 
 // Wiki tables
-define('TABLE_WIKI', 'wiki');
-define('TABLE_WIKI_CONF', 'wiki_conf');
-define('TABLE_WIKI_DISCUSS', 'wiki_discuss');
-define('TABLE_WIKI_MAILCUE', 'wiki_mailcue');
+define('TABLE_WIKI', 			'wiki');
+define('TABLE_WIKI_CONF', 		'wiki_conf');
+define('TABLE_WIKI_DISCUSS', 	'wiki_discuss');
+define('TABLE_WIKI_MAILCUE', 	'wiki_mailcue');
 
 // Glossary
 define('TABLE_GLOSSARY', 'glossary');
@@ -264,22 +263,15 @@ define('TABLE_MESSAGE_ATTACHMENT', 'message_attachment');
 define('TABLE_METADATA', 'metadata');
 
 // Attendance Sheet
-define('TABLE_ATTENDANCE','attendance');
+define('TABLE_ATTENDANCE',			'attendance');
 define('TABLE_ATTENDANCE_CALENDAR', 'attendance_calendar');
-define('TABLE_ATTENDANCE_SHEET','attendance_sheet');
-define('TABLE_ATTENDANCE_RESULT', 'attendance_result');
+define('TABLE_ATTENDANCE_SHEET',	'attendance_sheet');
+define('TABLE_ATTENDANCE_RESULT', 	'attendance_result');
 
 
-/*
-==============================================================================
-		DATABASE CLASS
+/*		DATABASE CLASS
 		the class and its functions
-==============================================================================
 */
-
-/**
- *	@package chamilo.library
- */
 
 class Database {
 
@@ -1321,6 +1313,5 @@ class Database {
 	public static function get_last_insert_id() {
 		return mysql_insert_id();
 	}
-
 }
 //end class Database

@@ -74,15 +74,12 @@ if ($form->validate()) {
 	}
 	$cat->set_visible($visible);
 	$cat->add();
-	header('Location: '.$_SESSION['gradebook_dest'].'?addcat=&selectcat=' . $cat->get_parent_id());
+	header('Location: '.Security::remove_XSS($_SESSION['gradebook_dest']).'?addcat=&selectcat=' . $cat->get_parent_id());
 	exit;
 }
 
 if ( !$_in_course ) {
-$interbreadcrumb[] = array (
-	'url' => $_SESSION['gradebook_dest'].'?selectcat='.$get_select_cat,
-	'name' => get_lang('ToolGradebook')
-	);
+	$interbreadcrumb[] = array ('url' => Security::remove_XSS($_SESSION['gradebook_dest']).'?selectcat='.$get_select_cat,'name' => get_lang('Gradebook'));
 }
 Display :: display_header(get_lang('NewCategory'));
 $form->display();

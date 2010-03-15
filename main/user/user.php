@@ -2,7 +2,6 @@
 /* For licensing terms, see /license.txt */
 
 /**
-==============================================================================
 *	This script displays a list of the users of the current course.
 *	Course admins can change user perimssions, subscribe and unsubscribe users...
 *
@@ -19,14 +18,11 @@
 *	@todo display table functions need support for align and valign (e.g. to center text in cells) (this is now possible)
 *	@author Roan Embrechts, refactoring + virtual courses support
 *	@author Julio Montoya Armas Several fixes
-*	@package dokeos.user
-==============================================================================
+*	@package chamilo.user
 */
-/*
-==============================================================================
-	   INIT SECTION
-==============================================================================
-*/
+
+
+/*	   INIT SECTION	*/
 // name of the language file that needs to be included
 $language_file = array('registration', 'admin', 'userInfo');
 $use_anonymous = true;
@@ -36,19 +32,8 @@ $this_section = SECTION_COURSES;
 // notice for unauthorized people.
 api_protect_course_script(true);
 
-if (!api_is_platform_admin(true)) {
-	if (!api_is_course_admin() && !api_is_coach()) { 
-		if (api_get_course_setting('allow_user_view_user_list')) {
-			api_not_allowed(true);
-		}
-	}	
-};
 
-/*
------------------------------------------------------------
-	Libraries
------------------------------------------------------------
-*/
+/*		Libraries	*/
 require_once api_get_path(LIBRARY_PATH).'debug.lib.inc.php';
 require_once api_get_path(LIBRARY_PATH).'export.lib.inc.php';
 require_once api_get_path(LIBRARY_PATH).'course.lib.php';
@@ -60,6 +45,14 @@ require_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
 //CHECK KEYS
 if (!isset ($_cid)) {
 	header('location: '.$_configuration['root_web']);
+}
+
+if (!api_is_platform_admin(true)) {
+	if (!api_is_course_admin() && !api_is_coach()) {
+		if (api_get_course_setting('allow_user_view_user_list')) {
+			api_not_allowed(true);
+		}
+	}	
 }
 
 /*

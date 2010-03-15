@@ -967,7 +967,209 @@ class DocumentManager {
 		return $_SESSION ['is_allowed_in_course'] || api_is_platform_admin();
 	}
 
+	/**
+	 * Allow attach certificate to course
+	 * @param string The course id
+	 * @param int The document id
+	 * @return void()
+	 */
+	 function attach_gradebook_certificate ($course_id,$document_id) {
+	 	$tbl_category=Database :: get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
+	 	$session_id=api_get_session_id();
+	 	if ($session_id==0 || is_null($session_id)) {
+	 		$sql_session='AND (session_id='.Database::escape_string($session_id).' OR isnull(session_id)) ';
+	 	} elseif ($session_id>0) {
+	 		$sql_session='AND session_id='.Database::escape_string($session_id);
+	 	} else {
+	 		$sql_session='';
+	 	}
+	 	$sql='UPDATE '.$tbl_category.' SET document_id="'.Database::escape_string($document_id).'" 
+	 	WHERE course_code="'.Database::escape_string($course_id).'" '.$sql_session;
+	 	$rs=Database::query($sql,__FILE__,__LINE__);
+	 }
+	 /**
+	  * get the document id of default certificate
+	  * @param string The course id
+	  * @return int The default certificate id
+	  */
+	 function get_default_certificate_id ($course_id) {
+	 	$tbl_category=Database :: get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);	 	
+	 	$session_id=api_get_session_id();
+	 	if ($session_id==0 || is_null($session_id)) {
+	 		$sql_session='AND (session_id='.Database::escape_string($session_id).' OR isnull(session_id)) ';
+	 	} elseif ($session_id>0) {
+	 		$sql_session='AND session_id='.Database::escape_string($session_id);
+	 	} else {
+	 		$sql_session='';
+	 	}	 	
+	 	$sql='SELECT document_id FROM '.$tbl_category.'  
+	 	WHERE course_code="'.Database::escape_string($course_id).'" '.$sql_session;
+	 	$rs=Database::query($sql,__FILE__,__LINE__);
+	 	$row=Database::fetch_array($rs);
+	 	return $row['document_id'];
+	 }
+	 /**
+	  * allow replace user info in file html
+	  * @param string The course id
+	  * @return string The html content of the certificate
+	  */
+	  function replace_user_info_into_html($course_id) {
+	  	global $_course;
 
+	  	$course_info = api_get_course_info($course_id);	  		  	
+	  	$tbl_document=Database::get_course_table(TABLE_DOCUMENT,$course_info['dbName']);
+	  	$document_id=self::get_default_certificate_id($course_id);	  		  	
+	  	
+	  	$sql='SELECT path FROM '.$tbl_document.' WHERE id="'.Database::escape_string($document_id).'" ';	  		  	
+	  	
+	  	$rs=Database::query($sql,__FILE__,__LINE__);
+	  	$new_content = '';
+	  	if (Database::num_rows($rs)) {
+		  	$row=Database::fetch_array($rs);
+		  	$filepath = api_get_path('SYS_COURSE_PATH').$course_info['path'].'/document'.$row['path'];
+		  	
+		  	if (is_file($filepath)) {
+		  		$my_content_html=file_get_contents($filepath);
+		  	}
+			$all_user_info=self::get_all_info_to_certificate();
+			$info_to_be_replaced_in_content_html=$all_user_info[0];
+			$info_to_replace_in_content_html=$all_user_info[1];
+			$new_content=str_replace($info_to_be_replaced_in_content_html,$info_to_replace_in_content_html,$my_content_html);	  	
+	  	}
+	  	
+	  	return $new_content;
+	  }
+	  
+	  /**
+	   * return all content to replace and all content to be replace
+	   */
+	  function get_all_info_to_certificate () {
+	  	
+		global $charset,$dateFormatLong;
+		$info_list	= array();
+	  	$user_id	= api_get_user_id();
+	  	$course_id	= api_get_course_id();
+	  	
+		//info portal	
+		$organization_name = api_get_setting('Institution');
+		$portal_name = api_get_setting('siteName');
+
+		//info extra user data
+		$extra_user_info_data=UserManager::get_extra_user_data($user_id,false,false);
+
+		//info student
+		$user_info=api_get_user_info($user_id); 		
+		$first_name=($user_info['firstName']);
+		$last_name=($user_info['lastName']);
+		$official_code=($user_info['official_code']);
+			
+		//info teacher
+		$info_teacher_id=UserManager::get_user_id_of_course_admin_or_session_admin($course_id);
+		$teacher_info=api_get_user_info($info_teacher_id);
+		$teacher_first_name=($teacher_info['firstName']);
+		$teacher_last_name=($teacher_info['lastName']);
+		
+		// info gradebook certificate
+		$info_grade_certificate = UserManager::get_info_gradebook_certificate($course_id,$user_id);
+		$date_certificate = $info_grade_certificate['date_certificate'];
+		$date_long_certificate = '';
+		
+		if (!empty($date_certificate)) {
+			$date_long_certificate = api_ucfirst(format_locale_date($dateFormatLong,convert_mysql_date($date_certificate)));	
+		}
+
+		//replace content
+		$info_to_replace_in_content_html=array($first_name,$last_name,$organization_name,$portal_name,$teacher_first_name,$teacher_last_name, $official_code, $date_long_certificate);
+		$info_to_be_replaced_in_content_html=array('((user_firstname))','((user_lastname))','((gradebook_institution))',
+		'((gradebook_sitename))','((teacher_firstname))','((teacher_lastname))','((official_code))','((date_certificate))');
+		foreach ($extra_user_info_data as $key_extra=>$value_extra) {
+			$info_to_be_replaced_in_content_html[]='(('.strtolower($key_extra).'))';
+			$info_to_replace_in_content_html[]=$value_extra;
+		}
+		$info_list[]=$info_to_be_replaced_in_content_html;
+		$info_list[]=$info_to_replace_in_content_html;
+		return $info_list;
+	  }
+	  /**
+	   * Remove default certificate
+	   * @param string The course id
+	   * @param int The document id of the default certificate
+	   * @return void()
+	   */
+	   function remove_attach_certificate ($course_id,$default_certificate_id) {
+	   		$default_certificate=self::get_default_certificate_id($course_id);
+	   		if ((int)$default_certificate==(int)$default_certificate_id) {
+			   	$tbl_category=Database :: get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
+			 	$session_id=api_get_session_id();
+			 	if ($session_id==0 || is_null($session_id)) {
+			 		$sql_session='AND (session_id='.Database::escape_string($session_id).' OR isnull(session_id)) ';
+			 	} elseif ($session_id>0) {
+			 		$sql_session='AND session_id='.Database::escape_string($session_id);
+			 	} else {
+			 		$sql_session='';
+			 	}
+			 	
+			 	$sql='UPDATE '.$tbl_category.' SET document_id=null 
+			 	WHERE course_code="'.Database::escape_string($course_id).'" AND document_id="'.$default_certificate_id.'" '.$sql_session;
+			 	$rs=Database::query($sql,__FILE__,__LINE__);
+	   		}
+	   }
+	   
+	    /**
+	    * Create directory certificate
+	    * @param string The course id
+	    * @return void() 
+	    */
+	    function create_directory_certificate_in_course ($course_id) {
+	    	
+	    	global $_course;
+	    	global $_user;
+	    	$to_group_id=0;
+	    	$to_user_id=null;
+	    	$course_dir   = $_course['path']."/document/";
+			$sys_course_path = api_get_path(SYS_COURSE_PATH);
+	    	$base_work_dir=$sys_course_path.$course_dir;
+	    	$base_work_dir_test=$base_work_dir.'certificates';
+	    	$dir_name='/certificates';
+	    	$post_dir_name='certificates';
+	    	$visibility_command='invisible';
+	    	if (!is_dir($base_work_dir_test)) {
+				$created_dir = create_unexisting_directory($_course,$_user['user_id'],$to_group_id,$to_user_id,$base_work_dir,$dir_name,$post_dir_name);
+	    		$update_id=DocumentManager::get_document_id_of_directory_certificate();
+	    		api_item_property_update($_course, TOOL_DOCUMENT, $update_id, $visibility_command, $_user['user_id']);
+	    	}
+	    }
+	    /**
+	     * Get the document id of the directory certificate
+	     * @param string The course id
+	     * @return int The document id of the directory certificate
+	     */
+	    function get_document_id_of_directory_certificate () {
+	    	global $_course;
+	  		$tbl_document=Database::get_course_table(TABLE_DOCUMENT);
+	    	$sql='SELECT id FROM '.$tbl_document.' WHERE path="/certificates" ';
+	    	$rs=Database::query($sql,__FILE__,__LINE__);
+	    	$row=Database::fetch_array($rs);
+	    	return $row['id'];
+	    	
+	    }
+
+		 /**
+	     * Check if a directory given is for certificate 
+	     * @param string path of directory
+	     * @return bool  true if is a certificate or false otherwise
+	     */	    
+	    function is_certificate_mode($dir) {
+	    	//I'm in the certification module?  
+			$is_certificate_mode = false;
+			$is_certificate_array = explode('/',$dir);
+			array_shift($is_certificate_array);
+			if ($is_certificate_array[0]=='certificates') {
+				$is_certificate_mode = true;
+			}	
+			return $is_certificate_mode;
+	    }
+	   
 	/**
 	 * Gets the list of included resources as a list of absolute or relative paths from a html file or string html
 	 * This allows for a better SCORM export or replace urls inside content html from copy course

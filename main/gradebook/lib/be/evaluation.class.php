@@ -1,31 +1,8 @@
 <?php
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2008 Dokeos Latinoamerica SAC
-	Copyright (c) 2006 Dokeos SPRL
-	Copyright (c) 2006 Ghent University (UGent)
-	Copyright (c) various contributors
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
-	Mail: info@dokeos.com
-==============================================================================
-*/
+/* For licensing terms, see /license.txt */
 /**
  * Defines a gradebook Evaluation object
- * @author Bert Stepp�, Stijn Konings
- * @package dokeos.gradebook
+ * @package chamilo.gradebook
  */
 class Evaluation implements GradebookItem
 {
@@ -85,6 +62,10 @@ class Evaluation implements GradebookItem
 	public function get_max() {
 		return $this->eval_max;
 	}
+	
+	public function get_type() {
+		return $this->type;
+	}	
 
 	public function is_visible() {
 		return $this->visible;
@@ -131,6 +112,12 @@ class Evaluation implements GradebookItem
 	}
 
 
+	
+    public function set_type ($type) {
+		$this->type = $type;
+	}
+    
+    
 // CRUD FUNCTIONS
 
 	/**
@@ -144,34 +131,34 @@ class Evaluation implements GradebookItem
 	public function load ($id = null, $user_id = null, $course_code = null, $category_id = null, $visible = null)
 	{
     	$tbl_grade_evaluations = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_EVALUATION);
-		$sql='SELECT id,name,description,user_id,course_code,category_id,created_at,weight,max,visible FROM '.$tbl_grade_evaluations;
+		$sql='SELECT id,name,description,user_id,course_code,category_id,date,weight,max,visible,type FROM '.$tbl_grade_evaluations;
 		$paramcount = 0;
 		if (isset ($id)) {
-			$sql.= ' WHERE id = '.$id;
+			$sql.= ' WHERE id = '.intval($id);
 			$paramcount ++;
 		}
 		if (isset ($user_id)) {
 			if ($paramcount != 0) $sql .= ' AND';
 			else $sql .= ' WHERE';
-			$sql .= ' user_id = '.$user_id;
+			$sql .= ' user_id = '.intval($user_id);
 			$paramcount ++;
 		}
-		if (isset ($course_code)) {
+		if (isset ($course_code) && $course_code <> '-1') {
 			if ($paramcount != 0) $sql .= ' AND';
 			else $sql .= ' WHERE';
-			$sql .= " course_code = '".$course_code."'";
+			$sql .= " course_code = '".Database::escape_string($course_code)."'";
 			$paramcount ++;
 		}
 		if (isset ($category_id)) {
 			if ($paramcount != 0) $sql .= ' AND';
 			else $sql .= ' WHERE';
-			$sql .= ' category_id = '.$category_id;
+			$sql .= ' category_id = '.intval($category_id);
 			$paramcount ++;
 		}
 		if (isset ($visible)) {
 			if ($paramcount != 0) $sql .= ' AND';
 			else $sql .= ' WHERE';
-			$sql .= ' visible = '.$visible;
+			$sql .= ' visible = '.intval($visible);
 			$paramcount ++;
 		}
 
@@ -195,6 +182,8 @@ class Evaluation implements GradebookItem
 			$eval->set_weight($data['weight']);
 			$eval->set_max($data['max']);
 			$eval->set_visible($data['visible']);
+			$eval->set_type($data['type']);
+			
 			$alleval[]=$eval;
 		}
 		return $alleval;
@@ -220,6 +209,7 @@ class Evaluation implements GradebookItem
 			 $sql .= ',category_id';
 			}
 			$sql .= ',created_at';
+			$sql .= ',type';
 			$sql .= ") VALUES ('".Database::escape_string(Security::remove_XSS($this->get_name()))."'"
 					.','.$this->get_user_id()
 					.','.$this->get_weight()
@@ -234,6 +224,12 @@ class Evaluation implements GradebookItem
 			if (isset($this->category)) {
 				 $sql .= ','.$this->get_category_id();
 			}
+if (empty($this->type))
+			{
+				$this->type = 'evaluation';	
+			}
+			$sql .= ',\''.$this->type.'\'';
+
 			$sql .= ", '".api_get_utc_datetime()."'";
 			$sql .= ")";
 			Database::query($sql);

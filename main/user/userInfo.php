@@ -2,7 +2,6 @@
 /* For licensing terms, see /license.txt	*/
 
 /**
-==============================================================================
 *	This script displays info about one specific user, specified through
 *	a GET parameter, e.g. uInfo=2
 *
@@ -13,22 +12,17 @@
 *	@author original author (unknown, probably thomas,hugues,moosh)
 *	@author Roan Embrechts, minor modification: virtual courses support
 *	@author Julio Montoya Armas Several fixes
-*	@package dokeos.user
-==============================================================================
+*	@package chamilo.user
 */
 
-/*
-==============================================================================
-	   INIT SECTION
-==============================================================================
-*/
+/*	   INIT SECTION		*/
 
 // name of the language file that needs to be included
 $language_file = array ('registration', 'userInfo');
 
-include ("../inc/global.inc.php");
-require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
-require_once (api_get_path(LIBRARY_PATH).'usermanager.lib.php');
+require_once '../inc/global.inc.php';
+require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
+require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
 require_once api_get_path(LIBRARY_PATH).'tracking.lib.php';
 
 $htmlHeadXtra[] = '<script type="text/javascript">
@@ -49,8 +43,7 @@ $nameTools = get_lang('Users');
 api_protect_course_script(true);
 $tool_info = api_get_tool_information_by_name(TOOL_USER);
 
-if(api_is_anonymous())
-{
+if(api_is_anonymous()) {
 	api_not_allowed(true);
 }
 
@@ -108,7 +101,7 @@ $allowedToEditDef = api_is_allowed_to_edit();
 $is_allowedToTrack = api_is_allowed_to_edit() && $_configuration['tracking_enabled'];
 
 // Library connection
-include ("userInfoLib.php");
+require_once ("userInfoLib.php");
 
 /*
 ==============================================================================
@@ -261,13 +254,8 @@ if ($allowedToEditContent)
 	}
 }
 
-/*
-==============================================================================
-	   DISPLAY MODES
-==============================================================================
-*/
+/*	   DISPLAY MODES	*/
 // Back button for each display mode (Top)
-
 
 if (api_is_allowed_to_edit()) {
 	echo '<div class="actions">';
@@ -280,8 +268,6 @@ if (api_is_allowed_to_edit()) {
 	echo '<a href="../mySpace/myStudents.php?'.api_get_cidreq().'&amp;origin=user_course&amp;student='.$userIdViewed.'&amp;details=true&amp;course='.$_course['id'].'">'.Display::return_icon('statistics.gif',get_lang('UserStatistics')).get_lang('UserStatistics').'</a>';
 	echo '</div>';
 } else {
-	
-	
 	if ($tool_info['visibility'] == 1 ) {
 		echo '<div class="actions">';
 		echo '<a href="user.php?'.api_get_cidreq().'&amp;origin='.$origin.'">'.Display::return_icon('back.png',get_lang('BackUser')).get_lang('BackUser').'</a>';
@@ -628,10 +614,6 @@ elseif ($displayMode == "viewContentList") // default display
 
 // Back button for each display mode (bottom)
 //echo "<div class=\"actions\"><a href=\"user.php?".api_get_cidreq()."&amp;origin=".$origin."\">".get_lang('BackUser')."</a></div>\n";
-/*
-==============================================================================
-		FOOTER
-==============================================================================
-*/
+/*		FOOTER	*/
 Display :: display_footer();
 ?>

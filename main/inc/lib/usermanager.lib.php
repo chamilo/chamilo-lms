@@ -9,17 +9,17 @@
 */
 
 // Constants for user extra field types.
-define('USER_FIELD_TYPE_TEXT', 1);
-define('USER_FIELD_TYPE_TEXTAREA', 2);
-define('USER_FIELD_TYPE_RADIO',3);
-define('USER_FIELD_TYPE_SELECT',4);
-define('USER_FIELD_TYPE_SELECT_MULTIPLE', 5);
-define('USER_FIELD_TYPE_DATE', 6);
-define('USER_FIELD_TYPE_DATETIME', 7);
-define('USER_FIELD_TYPE_DOUBLE_SELECT', 8);
-define('USER_FIELD_TYPE_DIVIDER', 9);
-define('USER_FIELD_TYPE_TAG', 10);
-define('USER_FIELD_TYPE_TIMEZONE', 11);
+define('USER_FIELD_TYPE_TEXT',		 		1);
+define('USER_FIELD_TYPE_TEXTAREA',			2);
+define('USER_FIELD_TYPE_RADIO',				3);
+define('USER_FIELD_TYPE_SELECT',			4);
+define('USER_FIELD_TYPE_SELECT_MULTIPLE',	5);
+define('USER_FIELD_TYPE_DATE', 				6);
+define('USER_FIELD_TYPE_DATETIME', 			7);
+define('USER_FIELD_TYPE_DOUBLE_SELECT', 	8);
+define('USER_FIELD_TYPE_DIVIDER', 			9);
+define('USER_FIELD_TYPE_TAG', 				10);
+define('USER_FIELD_TYPE_TIMEZONE', 			11);
 
 //User image sizes
 define('USER_IMAGE_SIZE_ORIGINAL',	1);
@@ -2995,6 +2995,104 @@ class UserManager
 		return $result;
 		
 	}
+	/**
+	 * get user id of teacher or session administrator
+	 * @param string The course id
+	 * @return int The user id
+	 */
+	 function get_user_id_of_course_admin_or_session_admin ($course_id) {
+	 	$session=api_get_session_id();
+		$table_user = Database::get_main_table(TABLE_MAIN_USER);
+		$table_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+		$table_session_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);	 			 	
+	 	if ($session==0 || is_null($session)) {
+	 		$sql='SELECT u.user_id FROM '.$table_user.' u
+					INNER JOIN '.$table_course_user.' ru ON ru.user_id=u.user_id
+					WHERE ru.status=1 AND ru.course_code="'.Database::escape_string($course_id).'" ';
+			$rs=Database::query($sql,__FILE__,__LINE__);
+			$num_rows=Database::num_rows($rs);
+			if ($num_rows==1) {
+				$row=Database::fetch_array($rs);
+				return $row['user_id'];
+			} else {
+				$my_num_rows=$num_rows;
+				$my_user_id=Database::result($rs,$my_num_rows-1,'user_id');
+				return $my_user_id;
+			}		
+		} elseif ($session>0) {
+			$sql='SELECT u.user_id FROM '.$table_user.' u
+				INNER JOIN '.$table_session_user.' sru
+				ON sru.id_coach=u.user_id WHERE sru.course_code="'.Database::escape_string($course_id).'" ';
+			$rs=Database::query($sql,__FILE__,__LINE__);
+			$row=Database::fetch_array($rs);
+			return $row['user_id'];
+		 	}
+		 }
+	 
+  /**
+   * Determines if a user is certified
+   * @param int The category id of gradebook
+   * @param int The user id
+   * @return boolean 
+   */
+  function is_user_certified($cat_id,$user_id) {
+  	$table_certificate = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
+  	$sql='SELECT path_certificate FROM '.$table_certificate.' WHERE cat_id="'.Database::escape_string($cat_id).'" AND user_id="'.Database::escape_string($user_id).'" ';
+  	$rs=Database::query($sql,__FILE__,__LINE__);
+  	$row=Database::fetch_array($rs);
+  	if ($row['path_certificate']=='' || is_null($row['path_certificate'])) {
+  		return false;
+  	} else {
+  		return true;
+  	}
+  }
+
+   /**
+   * Gets the info about a gradebook certificate for a user by course 
+   * @param string The course code
+   * @param int The user id
+   * @return array  if there is not information return false 
+   */
+  function get_info_gradebook_certificate($course_code,$user_id) {
+  	$tbl_grade_certificate 	= Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
+  	$tbl_grade_category 	= Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
+  	$sql='SELECT * FROM '.$tbl_grade_certificate.' WHERE cat_id= (SELECT id FROM '.$tbl_grade_category.' WHERE course_code = "'.Database::escape_string($course_code).'" ) AND user_id="'.Database::escape_string($user_id).'" ';
+  	$rs = Database::query($sql,__FILE__,__LINE__);
+  	$row= Database::fetch_array($rs);
+  	if (Database::num_rows($rs) > 0) 
+  		return $row;  		
+  	else 
+  		return false;
+  }
+
+ /**
+  * Gets the user path of user certificated
+  * @param int The user id
+  * @return array  containing path_certificate and cat_id
+  */
+ function get_user_path_certificate($user_id) {
+ 	$my_certificate = array();
+	$table_certificate 			= Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
+	$table_gradebook_category 	= Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
+		 	
+ 	$session_id = api_get_session_id();
+ 	$user_id = intval($user_id);
+ 	if ($session_id==0 || is_null($session_id)) {
+ 		$sql_session='AND (session_id='.Database::escape_string($session_id).' OR isnull(session_id)) ';
+ 	} elseif ($session_id>0) {
+ 		$sql_session='AND session_id='.Database::escape_string($session_id);
+ 	} else {
+ 		$sql_session='';
+ 	}
+ 	$sql= "SELECT tc.path_certificate,tc.cat_id,tgc.course_code,tgc.name FROM $table_certificate tc, $table_gradebook_category tgc 
+	WHERE tgc.id = tc.cat_id AND tc.user_id='$user_id'  ORDER BY tc.date_certificate DESC limit 5";		
+
+ 	$rs=Database::query($sql,__FILE__,__LINE__);
+ 	while ($row=Database::fetch_array($rs)) {
+ 		$my_certificate[]=$row;
+ 	}
+ 	return $my_certificate;
+ }
 
 
 }

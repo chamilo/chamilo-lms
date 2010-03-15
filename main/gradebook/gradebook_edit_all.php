@@ -1,80 +1,52 @@
 <?php
-/*
-==============================================================================
-	Dokeos - elearning and course management software
+/* For licensing terms, see /license.txt */
 
-	Copyright (c) 2006-2008 Dokeos SPRL
-	Copyright (c) 2006 Ghent University (UGent)
-	Copyright (c) various contributors
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
-	Mail: info@dokeos.com
-==============================================================================
-*/
 $language_file= 'gradebook';
 $cidReset= true;
-require_once ('../inc/global.inc.php');
+require_once '../inc/global.inc.php';
 $this_section = SECTION_MYGRADEBOOK;
-require_once ('lib/be.inc.php');
-require_once ('lib/scoredisplay.class.php');
-require_once ('lib/gradebook_functions.inc.php');
-require_once ('lib/fe/catform.class.php');
-require_once ('lib/fe/evalform.class.php');
-require_once ('lib/fe/linkform.class.php');
-require_once ('lib/gradebook_data_generator.class.php');
-require_once ('lib/fe/gradebooktable.class.php');
-require_once ('lib/fe/displaygradebook.php');
+
+require_once 'lib/be.inc.php';
+require_once 'lib/scoredisplay.class.php';
+require_once 'lib/gradebook_functions.inc.php';
+require_once 'lib/fe/catform.class.php';
+require_once 'lib/fe/evalform.class.php';
+require_once 'lib/fe/linkform.class.php';
+require_once 'lib/gradebook_data_generator.class.php';
+require_once 'lib/fe/gradebooktable.class.php';
+require_once 'lib/fe/displaygradebook.php';
 require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/gradebook_functions.inc.php';
 
 api_block_anonymous_users();
 if (!api_is_allowed_to_create_course()) {
 	header('Location: /index.php');
+	exit;
 }
 
 $my_selectcat=isset($_GET['selectcat']) ? Security::remove_XSS($_GET['selectcat']) : '';
+
 if (empty($my_selectcat)) {
 	api_not_allowed();
 }
 
-// --------------------------------------------------------------------------------
-// -                       DISPLAY HEADERS AND MESSAGES                           -
-// --------------------------------------------------------------------------------
+// 	DISPLAY HEADERS AND MESSAGES                           -
 
 if (!isset($_GET['exportpdf']) and !isset($_GET['export_certificate'])) {
 	if (isset ($_GET['studentoverview'])) {
-		$interbreadcrumb[]= array (
-			'url' => $_SESSION['gradebook_dest'].'?selectcat=' . Security::remove_XSS($_GET['selectcat']),
-			'name' => get_lang('ToolGradebook')
-		);
+		$interbreadcrumb[]= array ('url' => Security::remove_XSS($_SESSION['gradebook_dest']).'?selectcat=' . Security::remove_XSS($_GET['selectcat']),'name' => get_lang('Gradebook'));
 		Display :: display_header(get_lang('FlatView'));
 	} elseif (isset ($_GET['search'])) {
-		$interbreadcrumb[]= array (
-			'url' => $_SESSION['gradebook_dest'].'?selectcat=' . Security::remove_XSS($_GET['selectcat']),
-			'name' => get_lang('ToolGradebook')
-		);
+		$interbreadcrumb[]= array ('url' => Security::remove_XSS($_SESSION['gradebook_dest']).'?selectcat=' . Security::remove_XSS($_GET['selectcat']),'name' => get_lang('Gradebook'));
 		Display :: display_header(get_lang('SearchResults'));
 	} else {
-		$interbreadcrumb[] = array ('url' => $_SESSION['gradebook_dest'].'?selectcat=1', 'name' => get_lang('ToolGradebook'));
-
-
-		$interbreadcrumb[]= array (
-			'url' => $_SESSION['gradebook_dest'].'?&selectcat='.Security::remove_XSS($_GET['selectcat']),
-			'name' => get_lang('EditAllWeights'));
+		$interbreadcrumb[] = array ('url' => Security::remove_XSS($_SESSION['gradebook_dest']).'?selectcat=1', 'name' => get_lang('Gradebook'));
+		$interbreadcrumb[] = array ('url' => Security::remove_XSS($_SESSION['gradebook_dest']).'?&selectcat='.Security::remove_XSS($_GET['selectcat']),'name' => get_lang('EditAllWeights'));
 
 		Display :: display_header('');
 
 	}
 }
+
 
 
 $table_link = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);

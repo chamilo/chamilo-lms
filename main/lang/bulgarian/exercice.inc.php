@@ -345,4 +345,8 @@ $TooManyIterationsPleaseTryUsingMoreStraightforwardPolygons = "Твърде мн
 $Thresholds = "Прагови стойности";
 $Delineation = "Очертаване";
 $QuestionTypeDoesNotBelongToFeedbackTypeInExercise = "Типът въпрос не изисква преглед и оценяване от преподавател.";
+$SessionIsReadOnly = "Сесията е само за четене.";
+$EnableTimerControl = "Включване на таймер";
+$ExerciseTotalDurationInMinutes = "Продължителност на целия тест в минути";
+$RandomAnswers = "Случаен ред на предложените отговори";
 ?>

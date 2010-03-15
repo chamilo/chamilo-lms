@@ -202,4 +202,5 @@ $BackToSurvey = "Обратно към анкетата";
 $UpdateInformation = "Обновяване на информацията";
 $PleaseFillSurvey = "Моля, попълнете анкетата.";
 $ReportingOverview = "справките";
+$ThereAreNotQuestionsForthisSurvey = "Няма въпроси в тази анкета.";
 ?>

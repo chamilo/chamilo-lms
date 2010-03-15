@@ -25,4 +25,8 @@ $Authoring = "Учебни материали";
 $Administration = "Администриране";
 $IntroductionTextUpdated = "Встъпителният текст е актуализиран.";
 $IntroductionTextDeleted = "Встъпителният текст е изтрит.";
+$SessionIdentifier = "Идентификатор на сесията";
+$SessionName = "Име на сесията";
+$SessionCategory = "Категории сесии";
+$SessionData = "Информация за сесията";
 ?>

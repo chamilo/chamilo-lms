@@ -43,7 +43,7 @@ $langState = "Състояние";
 $langGroupFilledGroups = "Групите са попълнени с потребители, които са се записали в този курс.";
 $langSubscribed = "Потребители, записани в този курс";
 $langStudentsNotInThisGroups = "Потребители, не в тази група";
-$langQtyOfUserCanSubscribe_PartBeforeNumber = " ";
+$langQtyOfUserCanSubscribe_PartBeforeNumber = "Потребител може да бъде член в максимум";
 $langQtyOfUserCanSubscribe_PartAfterNumber = " са групите, в които потребителят може да участва";
 $langGroupLimit = "Лимит за членство";
 $CreateGroup = "Създаване на групи";
@@ -93,4 +93,5 @@ $GroupsFromClassesInfo = "Чрез тази опция имате възможн
 $Group = "Група";
 $ForumOfGroup = "Форум на групата:";
 $BackToGroupList = "Обратно към списъка с групите";
+$EditGroupCategory = "Редактиране на категорията";
 ?>

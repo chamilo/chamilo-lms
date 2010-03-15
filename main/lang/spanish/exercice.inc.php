@@ -361,4 +361,7 @@ $AreYouSureToCopy = "Está seguro de querer copiar";
 $ExerciseCopied = "Ejercicio copiado";
 $AreYouSureToDeleteResults = "Está seguro de querer eliminar los resultados";
 $XResultsCleaned = "%d resultados eliminados";
+$CopyExercise = "Copie este ejercicio como uno nuevo";
+$CleanStudentResults = "Borrar todos los resultados de los estudiantes en este ejercicio";
+$ImportQtiQuiz = "Importar ejercicios de Qti2";
 ?>

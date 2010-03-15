@@ -1091,8 +1091,8 @@ $GroupPermissions = "Group Permissions";
 $SpecialCourse = "Special course";
 $MathMimetexTitle = "mimeTEX mathematical editor";
 $MathMimetexComment = "Enable mimeTeX mathematical editor";
-$MathASCIImathMLTitle = "SCIImathML mathematical editor";
-$MathASCIImathMLComment = "Enable SCIImathML mathematical editor";
+$MathASCIImathMLTitle = "ASCIIMathML mathematical editor";
+$MathASCIImathMLComment = "Enable ASCIIMathML mathematical editor";
 $YoutubeForStudentsTitle = "Allow students to insert videos from YouTube";
 $YoutubeForStudentsComment = "Enable the possibility that students can insert Youtube videos";
 $BlockCopyPasteForStudentsTitle = "Block students copy and paste";
@@ -1206,5 +1206,5 @@ $AssignSessionsToPlatformAdministrator = "Assign sessions to platform administra
 $AssignSessionsToSessionsAdministrator = "assign sessions to sessions administrator";
 $AssignedSessionsListToPlatformAdministrator = "Assigned sessions list to platform administrator";
 $AssignedSessionsListToSessionsAdministrator = "Assigned sessions list to sessions administrator";
-$EvaluationsGraph = "graph of evaluations";
+$EvaluationsGraph = "Graph of evaluations";
 ?>

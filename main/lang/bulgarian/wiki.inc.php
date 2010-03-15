@@ -148,9 +148,11 @@ $TheDeadlineHasBeenCompleted = "Вие надхврърлихте крайния
 $HasReachedMaxNumWords = "Вие надхвърлихте максимално допустимия брой думи.";
 $HasReachedMaxiNumVersions = "Вие надхвърлихте максимално допустимия брой версии.";
 $DescriptionOfTheTask = "Описание на задачата";
+$OtherSettings = "Други изисквания";
 $NMaxWords = "Максимален брой думи";
 $NMaxVersion = "Максимален брой версии";
 $FProgress = "Напредък";
 $PutATimeLimit = "Задаване на ограничение за време";
 $StandardTask = "Стандартна задача";
+$ThePageHasBeenExportedToDocArea = "Страницата е експортирана в \"Документи\".";
 ?>

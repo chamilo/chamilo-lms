@@ -816,6 +816,7 @@ $CalendarList = "Calendar list of attendances";
 $ThereAreNoRegisteredDatetimeYet = "There is no date/time registered yet";
 $DashboardPluginsHaveBeenUpdatedSucesslly = "Dashboard plugins have been updated sucessfully";
 $LoginEnter = "Login";
+$ThereAreNoRegisteredLearnersInsidetheCourse = "There are no registered learners inside the course";
 $ToolCourseDescription = "Course description";
 $ToolDocument = "Documents";
 $ToolLearnpath = "Courses";

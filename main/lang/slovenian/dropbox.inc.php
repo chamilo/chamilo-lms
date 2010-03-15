@@ -95,6 +95,7 @@ $DocAdd = "Dokument je bil uspešno dodan";
 $FileDeleted = "Izbrana datoteka je bila odstranjena iz vašega nabiralnika.";
 $MailingAsUsername = "Pošiljke";
 $MailingInSelect = "---Pošiljke---";
+$$MailingExamine = "Preglej pošiljanje";
 $MailingNotYetSent = "Vsebinske datoteke pošiljk še niso bile odposlane ...";
 $MailingSend = "Pošlji vsebinske datoteke";
 $MailingConfirmSend = "Pošiljanje vsebinskih datotek na posamezne destinacije ?";

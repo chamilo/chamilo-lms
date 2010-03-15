@@ -81,4 +81,6 @@ $SessionCategory = "Категории сесии";
 $Expand = "Покажи всички";
 $Collapse = "Скрий всички";
 $CourseDetails = "Описание на курса";
+$GroupPendingInvitations = "Покани за участие в група";
+$Compose = "Създаване";
 ?>

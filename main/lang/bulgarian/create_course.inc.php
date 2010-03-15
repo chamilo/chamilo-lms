@@ -103,4 +103,7 @@ $IntroductionWiki = "Думата Wiki е съкращение от WikiWikiWeb.
 $CreateCourseArea = "Създаване на курс";
 $CreateCourse = "Създаване на курс";
 $Create = "Създаване";
+$MessageOfNewCourseToAdmin = "С това съобщение Ви информираме, че сте създали в системата за обучение нов курс";
+$NewCourseCreatedIn = "Нов курс създаден в";
+$ExplicationTrainers = "Вие сте преподавател в курса. Можете да промените преподавателя в страницата за ностройки на курса.";
 ?>

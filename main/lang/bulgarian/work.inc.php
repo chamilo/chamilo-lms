@@ -75,4 +75,16 @@ $UpdateWork = "Обновяване на задачата";
 $MakeAllPapersInvisible = "Скриване на всички документи";
 $MakeAllPapersVisible = "Показване на всички документи";
 $TheDocumentHasBeenDeleted = "Документът е изтрит.";
+$YouAreNotAllowedToDeleteThisDocument = "Не ви е позволено да изтриете документа.";
+$StudentAllowedToDeleteOwnPublication = "Разрешаване на курсистите да изтриват свои собствени публикации.";
+$ConfirmYourChoiceDeleteAllfiles = "Моля, потвърдете вашия избор. Изтриването на всички файлове не може да се отмени, файловете се изтриват безвъзвратно.";
+$WorkName = "Заглавие на задачата";
+$ReminderToSubmitPendingTask = "Напомняме Ви, че трябва да изпратите своята работа.";
+$MessageConfirmSendingOfTask = "С това съобщение се потвърждава, че изпратената работа е получена.";
+$DataSent = "Дата на изпращане";
+$DownloadLink = "Връзка за сваляне";
+$ViewUsersWithTask = "Получени задачи";
+$ReminderMessage = "Изпращане на напомнително съобщение";
+$DateSent = "Дата на изпращане";
+$ViewUsersWithoutTask = "Преглед за липсващи работи";
 ?>

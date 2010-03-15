@@ -175,4 +175,6 @@ $User = "Потребител";
 $LostPass = "Забравена парола?";
 $EnterEmailUserAndWellSendYouPassword = "Въведете своето потребителско име или своя e-mail адрес, за да бъде изпратена вашата парола.";
 $NoUserAccountWithThisEmailAddress = "Не съществува регистрация с даденото потребителско име или e-mail адрес.";
+$WithTheFollowingSettings = "със следните настройки:";
+$CouldNotResetPassword = "Паролата не може да бъде анулирана.";
 ?>

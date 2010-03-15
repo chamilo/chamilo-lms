@@ -110,4 +110,7 @@ $AllowOpenchatWindow = "Отваряне на говорилнята в отде
 $AllowOpenChatWindowActivate = "Отваряне на говорилнята в нов прозорец";
 $AllowOpenChatWindowDeactivate = "Отваряне на говорилнята в същия прозорец";
 $NewUserEmailAlert = "Известяване на инструктора по e-mail, когато потребител се запише самостоятелно в курса";
+$NewUserEmailAlertEnable = "Да се уведомява с e-mail преподавателя, когато потребител се регистрира самостоятелно в курса";
+$NewUserEmailAlertToTeacharAndTutor = "Да се уведомяват с e-mail преподавателите и инструкторите, когато потребител се регистрира самостоятелно в курса";
+$NewUserEmailAlertDisable = "Изключване на уведомяването с e-mail на новозаписаните курсисти";
 ?>

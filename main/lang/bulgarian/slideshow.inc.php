@@ -19,4 +19,6 @@ $lang_next_slide = "Следващо";
 $lang_image = "Изображение";
 $lang_of = "от";
 $lang_view_slideshow = "Старт на презентацията";
+$FirstSlide = "Първо";
+$LastSlide = "Последно";
 ?>

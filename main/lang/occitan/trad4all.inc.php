@@ -220,7 +220,7 @@ $SelectGroupsUsers = "Causir lei grops/ leis usanciers";
 $Student = "Estudiant";
 $Teacher = "Professor";
 $Send2All = "Avètz pas causit d'usanciers ni mai de grops. L'element serà visible de totei";
-$wiki = "Wiki";
+$Wiki = "Wiki";
 $Category = "Categoria";
 $ListView = "mostrar coma lista";
 ?>

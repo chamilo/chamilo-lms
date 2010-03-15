@@ -95,6 +95,7 @@ $DocAdd = "Файлът беше добавен.";
 $FileDeleted = "Посоченият файл беше изтрит от вашия куриер.";
 $MailingAsUsername = "Изпращане";
 $MailingInSelect = "---Изпращане---";
+$$MailingExamine = "Проверка на изпращания zip-файл";
 $MailingNotYetSent = "Файловете все още не са изпратени...";
 $MailingSend = "Изпращане на файловете";
 $MailingConfirmSend = "Да се ипзращат ли файловете към индивидуални адресати?";

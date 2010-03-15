@@ -2,7 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
-$langLineNumber = "N&uacutemero de líneas";
+$langLineNumber = "Número de líneas";
 $langLine = "línea";
 $langLines = "líneas";
 $langLineOrLines = "línea(s)";

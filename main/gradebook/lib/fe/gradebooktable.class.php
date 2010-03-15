@@ -1,25 +1,5 @@
 <?php
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2008 Dokeos SPRL
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
-	Mail: info@dokeos.com
-==============================================================================
-*/
-
+/* For licensing terms, see license.txt */
 
 require_once (dirname(__FILE__).'/../../../inc/global.inc.php');
 require_once (dirname(__FILE__).'/../be.inc.php');
@@ -28,7 +8,7 @@ require_once (dirname(__FILE__).'/../be.inc.php');
  * Table to display categories, evaluations and links
  * @author Stijn Konings
  * @author Bert Steppé (refactored, optimised)
- * @author Isaac flores (refactored, optimised)
+ * 
  */
 class GradebookTable extends SortableTable
 {
@@ -140,12 +120,13 @@ class GradebookTable extends SortableTable
 		//error_log(print_r($data_array,true));
 		// generate the data to display
 		$sortable_data = array();
+		$weight_total_links = 0;		
 		foreach ($data_array as $data) {
 			$row = array ();
 			$item = $data[0];
 			$id = $item->get_id();
 			if (empty($_GET['selectcat'])) {
-			$certificate_min_score = $this->build_certificate_min_score($item);
+				$certificate_min_score = $this->build_certificate_min_score($item);
 			}
 			//if the item is invisible, wrap it in a span with class invisible
 			$invisibility_span_open = (api_is_allowed_to_create_course() && $item->is_visible() == '0') ? '<span class="invisible">' : '';
@@ -155,12 +136,12 @@ class GradebookTable extends SortableTable
 				$row[] = $this->build_id_column ($item);
 			}
 
-			//$row[] = $this->build_id_column ($item);
 			$row[] = $this->build_type_column ($item);
 			$row[] = $invisibility_span_open . $this->build_name_link ($item) . $invisibility_span_close;
 			$row[] = $invisibility_span_open . $data[2] . $invisibility_span_close;
 			if (($status_user==1 || is_null($status_user)) && api_is_allowed_to_create_course()) {
-			$row[] = $invisibility_span_open . $data[3] . $invisibility_span_close;
+				$row[] = $invisibility_span_open . $data[3] . $invisibility_span_close;
+				$weight_total_links += intval($data[3]);
 			} else {
 
 				if (empty($_GET['selectcat'])) {
@@ -190,34 +171,123 @@ class GradebookTable extends SortableTable
 			   	}
 			}
 				$row[] = $invisibility_span_open . str_replace(' ','&nbsp;',$data[4]) . $invisibility_span_close;
-
+			
 			//admins get an edit column
 			if (($status_user==1 || is_null($status_user)) && api_is_allowed_to_create_course() && ($_SESSION['studentview']<>'studentview' || (isset($_GET['isStudentView']) && $_GET['isStudentView']=='false'))) {
 				$cat=new Category();
-				$show_message=$cat->show_message_resource_delete($item->get_course_code());
-
+				$show_message=$cat->show_message_resource_delete($item->get_course_code());				
 				if ($show_message===false) {
 					$row[] = $this->build_edit_column ($item);
 				}
 
 			} else {
-			//students get the results and certificates columns
+				
+				//students get the results and certificates columns
+				
 				if (count($this->evals_links)>0 && $status_user!=1 ) {
 					$value_data=isset($data[5]) ? $data[5] : null;
 					if (!is_null($value_data)) {
 						$row[] = $value_data;
 					}
 				}
-				if (empty($_GET['selectcat'])) {
+				//@todo Fix this harcode value 
+				//by default we load the first category 1
+				if (empty($_GET['selectcat']) || $_GET['selectcat'] == 1) {
+					
 					if (isset($certificate_min_score) && (int)$item_value >= (int)$certificate_min_score) {
-						$certificates = '<a href="'.api_get_path(WEB_CODE_PATH) .'gradebook/'.$_SESSION['gradebook_dest'].'?export_certificate=yes&cat_id='.$id.'"><img src="'.api_get_path(WEB_CODE_PATH) . 'img/dokeos.gif" /></a>&nbsp;'.$scoretotal_display;
+						
+						$certificates = '<a href="'.api_get_path(WEB_CODE_PATH) .'gradebook/'.$_SESSION['gradebook_dest'].'?export_certificate=yes&cat_id='.$id.'" target="_blank">
+										 <img src="'.api_get_path(WEB_CODE_PATH) . 'img/dokeos.gif" /></a>&nbsp;'.$scoretotal_display;
+						
+						//register gradebook certificate
+						$current_user_id=api_get_user_id();
+						$date_certificate=date('Y-m-d H:i:s',time());
+						register_user_info_about_certificate($id,$current_user_id,$my_score_in_gradebook,$date_certificate); 	
+					
 					} else {
 						$certificates = '-';
 					}
+				//show certificate date
+				$get_date=get_certificate_date_by_user_id($id,$current_user_id);
+				if ($get_date=='' || is_null($get_date)) {					
+						$row[4]='-';					
+				} else {					
+						$row[4] = date('d/m/y H:i:s',strtotime($get_date));						
+				}
+				
 				$row[] = $certificates;
 				}
 			}
 			$sortable_data[] = $row;
+		}	
+		
+		// warning messages		
+		
+		if (api_is_allowed_to_edit()) {
+						
+			if (isset($_GET['selectcat']) && $_GET['selectcat'] > 0 && $_GET['view'] <> 'presence') {		
+				$id_cat = intval($_GET['selectcat']);			
+				$category = Category :: load($id_cat);
+				$weight_category = intval($this->build_weight($category[0]));
+				$course_code = $this->build_course_code($category[0]);
+														
+				if ($weight_total_links > $weight_category) {
+					$warning_message = get_lang('TotalWeightMustNotBeMoreThan').'&nbsp;'.$weight_category;
+					Display::display_warning_message($warning_message,false);				
+				}
+							
+				$content_html=DocumentManager::replace_user_info_into_html($course_code);	
+					
+				$new_content=explode('</head>',$content_html);
+							
+				if (empty($new_content[0])) {
+					$warning_message = get_lang('ThereIsNotACertificateAvailableByDefault');
+					Display::display_warning_message($warning_message);				
+				}
+								
+			}
+			
+			if (empty($_GET['selectcat'])) {
+				
+				$categories = Category :: load();
+				$weight_categories = $certificate_min_scores = $course_codes = array();
+
+				foreach ($categories as $category) {
+					$course_code_category = $this->build_course_code($category);													
+					if (!empty($course_code)) {						
+						if ($course_code_category == $course_code) {						
+							$weight_categories[] = intval($this->build_weight($category));
+							$certificate_min_scores[] = intval($this->build_certificate_min_score($category));
+							$course_codes[] = $course_code;
+							break;
+						}													
+					} else {
+						$weight_categories[] = intval($this->build_weight($category));
+						$certificate_min_scores[] = intval($this->build_certificate_min_score($category));
+						$course_codes[] = $course_code_category;	
+					}										
+				}												
+
+				if (is_array($weight_categories) && is_array($certificate_min_scores) && is_array($course_codes)) {					
+					$warning_message = '';
+					for ($x = 0; $x<count($weight_categories);$x++) {						
+						$weight_category = intval($weight_categories[$x]);
+						$certificate_min_score = intval($certificate_min_scores[$x]);
+						$course_code = $course_codes[$x];
+						
+						if (empty($certificate_min_score) || ($certificate_min_score > $weight_category)) {
+							$warning_message .= $course_code .'&nbsp;-&nbsp;'.get_lang('CertificateMinimunScoreIsRequiredAndMustNotBeMoreThan').'&nbsp;'.$weight_category.'<br />';											
+						}
+
+					}
+					
+					if (!empty($warning_message)) {
+						Display::display_warning_message($warning_message,false);
+					}
+					
+					
+				}				
+			}			
 		}
 
 		return $sortable_data;
@@ -227,6 +297,14 @@ class GradebookTable extends SortableTable
 
 private function build_certificate_min_score ($item) {
 	return $item->get_certificate_min_score();
+}
+
+private function build_weight ($item) {
+	return $item->get_weight();
+}
+
+private function build_course_code ($item) {
+	return $item->get_course_code();
 }
 
 private function build_id_column ($item) {
@@ -252,7 +330,8 @@ private function build_id_column ($item) {
 		switch ($item->get_item_type()) {
 			// category
 			case 'C' :
-				$prms_uri='?selectcat=' . $item->get_id();
+				$prms_uri='?selectcat=' . $item->get_id() . '&amp;view='.Security::remove_XSS($_GET['view']);
+				
 				if (isset($_GET['isStudentView'])) {
 					if ( isset($is_student) || ( isset($_SESSION['studentview']) && $_SESSION['studentview']=='studentview') ) {
 						$prms_uri=$prms_uri.'&amp;isStudentView='.Security::remove_XSS($_GET['isStudentView']);
@@ -276,12 +355,30 @@ private function build_id_column ($item) {
 				$show_message=$cat->show_message_resource_delete($course_id);
 
 				// course/platform admin can go to the view_results page
-				if (api_is_allowed_to_create_course() && $show_message===false) {
 
-					return '&nbsp;'
-						. '<a href="gradebook_view_result.php?cidReq='.$course_id.'&amp;selecteval=' . $item->get_id() . '">'
-						. $item->get_name()
-						. '</a>&nbsp;['.get_lang('Evaluation').']';
+				if (api_is_allowed_to_create_course() && $show_message===false) {
+		
+					if ($item->get_type() == 'presence')
+					{
+						return '&nbsp;'
+							. '<a href="gradebook_view_result.php?cidReq='.$course_id.'&amp;selecteval=' . $item->get_id() . '">'
+							. $item->get_name()
+							. '</a>';						
+						/*return '&nbsp;'
+							. '<a href="gradebook_add_result.php?selectcat'.Security::remove_XSS($_GET['selectcat']).'&amp;selecteval=' . $item->get_id() . '">'
+							. $item->get_name()
+							. '</a>';
+							*/
+					}
+					else 
+					{
+					
+					
+						return '&nbsp;'
+							. '<a href="gradebook_view_result.php?cidReq='.$course_id.'&amp;selecteval=' . $item->get_id() . '">'
+							. $item->get_name()
+							. '</a>&nbsp;['.get_lang('Evaluation').']';
+					}
 				} elseif (ScoreDisplay :: instance()->is_custom() && $show_message===false) {
 					// students can go to the statistics page (if custom display enabled)
 					return '&nbsp;'

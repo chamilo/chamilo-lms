@@ -50,7 +50,7 @@ define('TABLE_MAIN_GRADEBOOK_RESULT', 		'gradebook_result');
 define('TABLE_MAIN_GRADEBOOK_RESULT_LOG', 	'gradebook_result_log');
 define('TABLE_MAIN_GRADEBOOK_LINK', 		'gradebook_link');
 define('TABLE_MAIN_GRADEBOOK_SCORE_DISPLAY','gradebook_score_display');
-
+define('TABLE_MAIN_GRADEBOOK_CERTIFICATE', 	'gradebook_certificate');
 
 //Profiling
 define('TABLE_MAIN_USER_FIELD',			'user_field');

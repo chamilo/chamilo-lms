@@ -1,24 +1,5 @@
 <?php
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2008 Dokeos SPRL
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
-	Mail: info@dokeos.com
-==============================================================================
-*/
+/* For licensing terms, see /license.txt */
 /*
 * These are functions used in gradebook
 *
@@ -414,3 +395,132 @@ function parse_xml_data($file) {
 	xml_parser_free($parser);
 	return $users;
 }
+
+/**
+  * update user info about certificate
+  * @param int The category id
+  * @param int The user id
+  * @param string the path name of the certificate
+  * @return void() 
+  */
+  function update_user_info_about_certificate ($cat_id,$user_id,$path_certificate) {
+  	$table_certificate = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
+  	if (!UserManager::is_user_certified($cat_id,$user_id)) {
+  		$sql='UPDATE '.$table_certificate.' SET path_certificate="'.$path_certificate.'"  
+		WHERE cat_id="'.$cat_id.'" AND user_id="'.$user_id.'" ';
+		$rs=Database::query($sql,__FILE__,__LINE__);
+  	}
+  }
+  
+  /**
+  * register user info about certificate
+  * @param int The category id
+  * @param int The user id
+  * @param float The score obtained for certified
+  * @param Datetime The date when you obtained the certificate  
+  * @return void() 
+  */
+  function register_user_info_about_certificate ($cat_id,$user_id,$score_certificate,
+  $date_certificate) {
+  	$table_certificate = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
+  	$sql_exist='SELECT COUNT(*) as count FROM '.$table_certificate.' gc 
+	WHERE gc.cat_id="'.$cat_id.'" AND user_id="'.$user_id.'" ';
+	$rs_exist=Database::query($sql_exist,__FILE__,__LINE__);
+	$row=Database::fetch_array($rs_exist);
+	if ($row['count']==0) {
+		$sql='INSERT INTO '.$table_certificate.'
+		(cat_id,user_id,score_certificate,date_certificate)
+		VALUES("'.$cat_id.'","'.$user_id.'","'.$score_certificate.'","'.$date_certificate.'")';
+		$rs=Database::query($sql,__FILE__,__LINE__);  
+	}
+	
+  }
+  /**
+  * Get date of user certificate
+  * @param int The category id
+  * @param int The user id
+  * @return Datetime The date when you obtained the certificate   
+  */  
+  function get_certificate_date_by_user_id ($cat_id,$user_id) {
+    	$table_certificate = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
+    	$sql_get_date='SELECT date_certificate FROM '.$table_certificate.' WHERE cat_id="'.$cat_id.'" AND user_id="'.$user_id.'"';
+    	$rs_get_date=Database::query($sql_get_date,__FILE__,__LINE__);
+    	$row_get_date=Database::fetch_array($rs_get_date,'ASSOC');
+    	return $row_get_date['date_certificate'];
+  }
+  
+  /**
+  * Get list of users certificates
+  * @param int The category id
+  * @return array
+  */
+  function get_list_users_certificates ($cat_id=null) {
+    $table_certificate = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE); 	
+    $table_user = Database::get_main_table(TABLE_MAIN_USER);
+  	echo $sql='SELECT DISTINCT u.user_id,u.lastname,u.firstname,u.username FROM '.$table_user.' u INNER JOIN '.$table_certificate.' gc 
+			ON u.user_id=gc.user_id ';
+	if (!is_null($cat_id) && $cat_id>0) {
+  		$sql.=' WHERE cat_id='.Database::escape_string($cat_id);
+  	}
+  	$sql.=' ORDER BY u.firstname';
+	$rs=Database::query($sql,__FILE__,__LINE__);
+	$list_users=array();
+	while ($row=Database::fetch_array($rs)) {
+		$list_users[]=$row;
+	}
+	return $list_users;
+  }
+
+  /**
+  *Get list of certificates by user id
+  *@param int The user id
+  *@param int The category id
+  *@retun array
+  */
+  function get_list_gradebook_certificates_by_user_id ($user_id,$cat_id=null) {
+  	$table_certificate = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE); 	
+  	$sql='SELECT gc.score_certificate,gc.date_certificate,gc.path_certificate,gc.cat_id,gc.user_id FROM  '.$table_certificate.' gc 
+		WHERE gc.user_id="'.Database::escape_string($user_id).'" ';
+	if (!is_null($cat_id) && $cat_id>0) {
+  		$sql.=' AND cat_id='.Database::escape_string($cat_id);
+  	}
+  	$rs=Database::query($sql,__FILE__,__LINE__);
+  	$list_certificate=array();
+  	while ($row=Database::fetch_array($rs)) {
+  		$list_certificate[]=$row;
+  	}
+  	return $list_certificate;
+  }
+  /**
+  *Allow remove certificate
+  *@param int The category id
+  *@param int The user id
+  *@return boolean
+  */
+  function delete_certificate ($cat_id,$user_id) {
+  	
+    $table_certificate = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE); 		
+  	$sql_verified='SELECT count(*) AS count,path_certificate as path,user_id FROM '.$table_certificate.' gc WHERE cat_id="'.Database::escape_string($cat_id).'" AND user_id="'.Database::escape_string($user_id).'" GROUP BY user_id,cat_id';
+  	$rs_verified=Database::query($sql_verified,__FILE__,__LINE__);
+  	$path=Database::result($rs_verified,0,'path');
+  	$user_id=Database::result($rs_verified,0,'user_id');
+  	if (!is_null($path) || $path!='' || strlen($path)) {
+  			$path_info= UserManager::get_user_picture_path_by_id($user_id,'system',true);
+			$path_directory_user_certificate=$path_info['dir'].'certificate'.$path;
+			if (is_file($path_directory_user_certificate)) {
+				unlink($path_directory_user_certificate);
+				if (is_file($path_directory_user_certificate)===false) {
+					$delete_db=true;
+				} else {
+					$delete_db=false;
+				}
+			}
+	  	if (Database::result($rs_verified,0,'count')==1 && $delete_db===true) {
+	  		$sql_delete='DELETE FROM '.$table_certificate.' WHERE cat_id="'.Database::escape_string($cat_id).'" AND user_id="'.Database::escape_string($user_id).'" ';
+	  		$rs_delete=Database::query($sql_delete,__FILE__,__LINE__);
+	  		return true;
+	  	} else {
+	  		return false;
+	  	}
+  	}
+  }

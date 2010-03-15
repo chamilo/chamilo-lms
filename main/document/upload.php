@@ -229,6 +229,14 @@ if($to_group_id!=0 && $path=='/')
 	$path = $group_properties['directory'];
 }
 
+//I'm in the certification module?  
+$is_certificate_mode = false;
+$is_certificate_array = explode('/',$path);
+array_shift($is_certificate_array);
+if ($is_certificate_array[0]=='certificates') {
+	$is_certificate_mode = true;
+}
+
 //if we want to unzip a file, we need the library
 if (isset($_POST['unzip']) && $_POST['unzip'] == 1) {
 	require_once api_get_path(LIBRARY_PATH).'pclzip/pclzip.lib.php';
@@ -242,10 +250,20 @@ if($to_group_id !=0) //add group name after for group documents
 {
 	$add_group_to_title = ' ('.$group_properties['name'].')';
 }
-$nameTools = get_lang('UplUploadDocument').$add_group_to_title;
+
+if (isset($_REQUEST['certificate'])) {
+	$nameTools = get_lang('UploadCertificate').$add_group_to_title;
+} else {
+	$nameTools = get_lang('UplUploadDocument').$add_group_to_title;	
+}
+
+
 
 // breadcrumbs
-$interbreadcrumb[] = array('url' =>'./document.php?curdirpath='.urlencode($path).$req_gid, 'name'=> get_lang('Documents'));
+if ($is_certificate_mode)
+	$interbreadcrumb[]= array (	'url' => '../gradebook/'.$_SESSION['gradebook_dest'], 'name' => get_lang('Gradebook'));
+else
+	$interbreadcrumb[] = array('url' =>'./document.php?curdirpath='.urlencode($path).$req_gid, 'name'=> get_lang('Documents'));
 
 // display the header
 Display::display_header($nameTools, 'Doc');
@@ -504,10 +522,13 @@ if(isset($_GET['createdir']))
 echo '<div class="actions">';
 
 // link back to the documents overview
-echo '<a href="document.php?curdirpath='.$path.'">'.Display::return_icon('back.png',get_lang('BackTo').' '.get_lang('DocumentsOverview')).get_lang('BackTo').' '.get_lang('DocumentsOverview').'</a>';
+if ($is_certificate_mode)
+	echo '<a href="document.php?curdirpath='.$path.'&selectcat=' . Security::remove_XSS($_GET['selectcat']).'">'.Display::return_icon('back.png',get_lang('Back').' '.get_lang('To').' '.get_lang('CertificateOverview')).get_lang('Back').' '.get_lang('To').' '.get_lang('CertificateOverview').'</a>';
+else 
+	echo '<a href="document.php?curdirpath='.$path.'">'.Display::return_icon('back.png',get_lang('BackTo').' '.get_lang('DocumentsOverview')).get_lang('BackTo').' '.get_lang('DocumentsOverview').'</a>';
 
 // link to create a folder
-if(!isset($_GET['createdir']) && !is_my_shared_folder($_user['user_id'], $path))
+if(!isset($_GET['createdir']) && !is_my_shared_folder($_user['user_id'], $path) && !$is_certificate_mode)
 {
 	echo '<a href="'.api_get_self().'?path='.$path.'&amp;createdir=1">'.Display::return_icon('folder_new.gif', get_lang('CreateDir')).get_lang('CreateDir').'</a>';
 }
@@ -515,8 +536,8 @@ echo '</div>';
 
 //form to select directory
 $folders = DocumentManager::get_all_document_folders($_course,$to_group_id,$is_allowed_to_edit);
-
-echo(build_directory_selector($folders,$path,$group_properties['directory']));
+if (!$is_certificate_mode)
+	echo(build_directory_selector($folders,$path,$group_properties['directory']));
 
 ?>
 

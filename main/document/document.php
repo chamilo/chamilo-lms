@@ -1,29 +1,6 @@
 <?php // $Id: document.php 22201 2009-07-17 19:57:03Z cfasanando $
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2004-2008 Dokeos SPRL
-	Copyright (c) 2003 Ghent University (UGent)
-	Copyright (c) 2001 Universite catholique de Louvain (UCL)
-	Copyright (c) various contributors
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
-	Mail: info@dokeos.com
-==============================================================================
-*/
+/* For licensing terms, see /license.txt */
 /**
-==============================================================================
 * Main script for the documents tool
 *
 * This script allows the user to manage files and directories on a remote http server.
@@ -52,19 +29,15 @@
 * @todo eliminate code duplication between
 * document/document.php, scormdocument.php
 *
-* @package dokeos.document
-==============================================================================
+* @package chamilo.document
 */
 
-/*
-==============================================================================
-		INIT SECTION
-==============================================================================
-*/
+/*		INIT SECTION	*/
 
 // name of the language file that needs to be included
 $language_file[] = 'document';
 $language_file[] = 'slideshow';
+$language_file[] = 'gradebook';
 
 require_once "../inc/global.inc.php";
 $this_section=SECTION_COURSES;
@@ -73,9 +46,12 @@ require_once 'document.inc.php';
 
 
 require_once '../inc/lib/usermanager.lib.php';
-
+require_once api_get_path(LIBRARY_PATH).'document.lib.php';
+require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
 api_protect_course_script(true);
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js" type="text/javascript" language="javascript"></script>'; //jQuery
+$htmlHeadXtra[] = '<script type="text/javascript" src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/thickbox.js"></script>';
+$htmlHeadXtra[] = '<link rel="stylesheet" href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/thickbox.css" type="text/css" media="projection, screen">';
 $htmlHeadXtra[] = '<script type="text/javascript">
 $(document).ready( function() {
 	for (i=0;i<$(".actions").length;i++) {
@@ -89,6 +65,41 @@ $(document).ready( function() {
 if(isset($_GET['id_session'])) {
 	$_SESSION['id_session'] = Security::remove_XSS($_GET['id_session']);
 }
+
+
+//create directory certificates
+$course_id=api_get_course_id();
+DocumentManager::create_directory_certificate_in_course($course_id);
+
+//show preview
+if (isset($_GET['curdirpath']) && $_GET['curdirpath']=='/certificates' && isset($_GET['set_preview']) && $_GET['set_preview']==strval(intval($_GET['set_preview']))) {
+	if (isset($_GET['set_preview'])) {
+			//generate document HTML
+			$course_id=api_get_course_id();
+			$content_html=DocumentManager::replace_user_info_into_html($course_id);
+			
+			$new_content_html=$content_html;
+
+			$path_image=api_get_path(WEB_COURSE_PATH).api_get_course_path().'/document/images/gallery';
+			$new_content_html=str_replace('../images/gallery',$path_image,$new_content_html);
+			
+			$path_image_in_default_course=api_get_path(WEB_CODE_PATH).'default_course_document';
+			$new_content_html=str_replace('/main/default_course_document',$path_image_in_default_course,$new_content_html);
+
+			$path_image_in_dokeos_main=api_get_path(WEB_IMG_PATH);
+			$new_content_html=str_replace('/main/img/',$path_image_in_dokeos_main,$new_content_html);
+			echo '
+			<style media="print" type="text/css">
+				#imprimir {
+				visibility:hidden;
+				}				
+			</style>';
+			echo '<a href="javascript:window.print();" style="float:right; padding:4px;" id="imprimir"><img src="../img/printmgr.gif" alt="' . get_lang('Print') . '" /> ' . get_lang('Print') . '</a>';
+			print_r($new_content_html);
+			exit;
+	}
+}
+
 
 // Is the document tool visible?
 // Check whether the tool is actually visible
@@ -130,6 +141,9 @@ if(isset($_GET['curdirpath']) && $_GET['curdirpath']!='') {
 	$curdirpath = '/';
 }
 $curdirpathurl = urlencode($curdirpath);
+
+//I'm in the certification module?  
+$is_certificate_mode = DocumentManager::is_certificate_mode($curdirpath);
 
 $course_dir   = $_course['path']."/document";
 $sys_course_path = api_get_path(SYS_COURSE_PATH);
@@ -313,20 +327,25 @@ $image_files_only='';
 	Header
 -----------------------------------------------------------
 */
-
-$interbreadcrumb[]= array ('url'=>'', 'name'=> get_lang('Document'));
+if ($is_certificate_mode) {
+	$interbreadcrumb[]= array (	'url' => '../gradebook/index.php', 'name' => get_lang('Gradebook'));
+} else {  
+	$interbreadcrumb[]= array ('url'=>'', 'name'=> get_lang('Document'));
+}
 
 //------interbreadcrumb for the current directory root path
 
 $dir_array=explode("/",$curdirpath);
 $array_len=count($dir_array);
 
-if ($array_len >1)
-{
-	if(empty($_SESSION['_gid']))
+if (!$is_certificate_mode) {
+	if ($array_len >1)
 	{
-		$url_dir='document.php?&curdirpath=/';
-		$interbreadcrumb[]= array ('url'=>$url_dir, 'name'=> get_lang('HomeDirectory'));
+		if(empty($_SESSION['_gid']))
+		{
+			$url_dir='document.php?&curdirpath=/';
+			$interbreadcrumb[]= array ('url'=>$url_dir, 'name'=> get_lang('HomeDirectory'));
+		}
 	}
 }
 
@@ -344,7 +363,11 @@ for ($i=0; $i<$array_len;$i++)
 	}
 
 	$url_dir='document.php?&curdirpath='.$dir_acum.$dir_array[$i];
-	$interbreadcrumb[]= array ('url'=>$url_dir, 'name'=> $dir_array[$i]);
+	if ($is_certificate_mode) {
+		$interbreadcrumb[]= array ('url'=>$url_dir.'&selectcat='.Security::remove_XSS($_GET['selectcat']), 'name'=> $dir_array[$i]);
+	} else {
+		$interbreadcrumb[]= array ('url'=>$url_dir, 'name'=> $dir_array[$i]);	
+	}
 	$dir_acum.=$dir_array[$i].'/';
 }
 
@@ -467,6 +490,11 @@ if($is_allowed_to_edit || $group_member_with_upload_rights) // TEACHER ONLY
 
 		if(DocumentManager::delete_document($_course,$_GET['delete'],$base_work_dir))
 		{
+			if ( isset($_GET['delete_certificate_id']) && $_GET['delete_certificate_id']==strval(intval($_GET['delete_certificate_id'])) ) {
+				$course_id=api_get_course_id();
+				$default_certificate_id=$_GET['delete_certificate_id'];
+				DocumentManager::remove_attach_certificate ($course_id,$default_certificate_id);
+			}
 			Display::display_confirmation_message(get_lang('DocDeleted'));
 		}
 		else
@@ -696,6 +724,16 @@ if($is_allowed_to_edit || $group_member_with_upload_rights) // TEACHER ONLY
 	}
 } // END is allowed to edit
 
+
+//attach certificate in the gradebook
+if (isset($_GET['curdirpath']) && $_GET['curdirpath']=='/certificates' && isset($_GET['set_certificate']) && $_GET['set_certificate']==strval(intval($_GET['set_certificate']))) {
+	if (isset($_GET['cidReq'])) {
+		$course_id=Security::remove_XSS($_GET['cidReq']);//course id
+		$document_id=Security::remove_XSS($_GET['set_certificate']);//document id
+		DocumentManager::attach_gradebook_certificate ($course_id,$document_id) ;
+		Display::display_normal_message(get_lang('IsDefaultCertificate'));	
+	}	
+}
 /*
 -----------------------------------------------------------
 	GET ALL DOCUMENT DATA FOR CURDIRPATH
@@ -720,18 +758,24 @@ if($folders===false)
 
 
 	/* GO TO PARENT DIRECTORY */
-
-	if ($curdirpath!= '/'&& $curdirpath!=$group_properties['directory'])
-	{
+	if ($curdirpath!= '/' && $curdirpath!=$group_properties['directory']&& !$is_certificate_mode)  {		
 	?>
 		 <a href="<?php echo api_get_self(); ?>?<?php echo api_get_cidreq();?>&curdirpath=<?php echo urlencode((dirname($curdirpath)=='\\')?'/':dirname($curdirpath)).$req_gid ?>">
 				<img src="../img/folder_up.gif" border="0" title="<?php echo get_lang('Up'); ?>" alt="" />
 				<?php echo get_lang('Up'); ?></a>&nbsp;
-	<?php
+	<?php		
 	}
-
-if(isset($docs_and_folders) && is_array($docs_and_folders))
-{
+	
+	if ($is_certificate_mode & $curdirpath!= '/certificates')  {		
+	?>
+		 <a href="<?php echo api_get_self(); ?>?<?php echo api_get_cidreq();?>&curdirpath=<?php echo urlencode((dirname($curdirpath)=='\\')?'/':dirname($curdirpath)).$req_gid ?>">
+				<img src="../img/folder_up.gif" border="0" title="<?php echo get_lang('Up'); ?>" alt="" />
+				<?php echo get_lang('Up'); ?></a>&nbsp;
+	<?php		
+	}
+	
+	
+if(isset($docs_and_folders) && is_array($docs_and_folders)) {
 	//echo('<pre>');
 	//print_r($docs_and_folders);
 	//echo('</pre>');
@@ -843,17 +887,29 @@ $column_show=array();
 		/* CREATE NEW DOCUMENT OR NEW DIRECTORY / GO TO UPLOAD / DOWNLOAD ZIPPED FOLDER */
 		?>
 			<!-- create new document or directory -->
-            <?php if (!is_my_shared_folder($_user['user_id'],$curdirpath))
+            <?php if (!$is_certificate_mode && !is_my_shared_folder($_user['user_id'],$curdirpath))
             {?>
                 <a href="create_document.php?<?php echo api_get_cidreq();?>&dir=<?php echo $curdirpathurl.$req_gid; ?>"><img src="../img/filenew.gif" border="0" alt="" title="<?php echo get_lang('CreateDoc'); ?>" /></a>
                 <a href="create_document.php?<?php echo api_get_cidreq();?>&dir=<?php echo $curdirpathurl.$req_gid; ?>"><?php echo get_lang("CreateDoc"); ?></a>&nbsp;&nbsp;
-      <?php }?>
+	        <?php }?>
+	        
+      		<!--create new certificate -->
+			<?php if ($is_certificate_mode) { ?>	
+			<a href="create_document.php?<?php echo api_get_cidreq();?>&dir=<?php echo $curdirpathurl.$req_gid; ?>&certificate=true&<?php echo 'selectcat=' . Security::remove_XSS($_GET['selectcat']); ?>"><img src="../img/filenew.gif" border="0" alt="" title="<?php echo get_lang('CreateCertificate'); ?>" /></a>
+			<a href="create_document.php?<?php echo api_get_cidreq();?>&dir=<?php echo $curdirpathurl.$req_gid; ?>&certificate=true&<?php echo 'selectcat=' . Security::remove_XSS($_GET['selectcat']); ?>"><?php echo get_lang("CreateCertificate"); ?></a>&nbsp;&nbsp;	
+			<?php }?>
+			
 			<!-- file upload link -->
+			<?php
+				$upload_name =  get_lang('UplUploadDocument');
+				if ($is_certificate_mode) { 
+				$upload_name =	 get_lang('UploadCertificate');
+			}?>	
 
 			<a href="upload.php?<?php echo api_get_cidreq();?>&curdirpath=<?php echo $curdirpathurl.$req_gid; ?>"><img src="../img/submit_file.gif" border="0" title="<?php echo get_lang('UplUploadDocument'); ?>" alt="" /></a>
 			<a href="upload.php?<?php echo api_get_cidreq();?>&curdirpath=<?php echo $curdirpathurl.$req_gid; ?>"><?php echo get_lang('UplUploadDocument'); ?></a>&nbsp;
 			<!-- create directory -->
-            <?php if (!is_my_shared_folder($_user['user_id'],$curdirpath))
+            <?php if (!$is_certificate_mode && !is_my_shared_folder($_user['user_id'],$curdirpath))
             {?>
                 <a href="<?php echo api_get_self(); ?>?<?php echo api_get_cidreq();?>&curdirpath=<?php echo $curdirpathurl.$req_gid; ?>&amp;createdir=1"><img src="../img/folder_new.gif" border="0" title="<?php echo get_lang('CreateDir'); ?>" alt ="" /></a>
                 <a href="<?php echo api_get_self(); ?>?<?php echo api_get_cidreq();?>&curdirpath=<?php echo $curdirpathurl.$req_gid; ?>&amp;createdir=1"><?php echo get_lang("CreateDir"); ?></a>&nbsp;
@@ -863,7 +919,7 @@ $column_show=array();
 	}
 	if ($docs_and_folders!=null) {
 		global $total_size;
-		if ($total_size!=0  &&  (api_get_setting('students_download_folders') == 'true' || api_is_allowed_to_edit() || api_is_platform_admin())){ ?>
+		if (!$is_certificate_mode && $total_size!=0  &&  (api_get_setting('students_download_folders') == 'true' || api_is_allowed_to_edit() || api_is_platform_admin())){ ?>
 	<!-- download zipped folder -->
 			<a href="<?php echo api_get_self(); ?>?<?php echo api_get_cidreq();?>&action=downloadfolder"><img src="../img/zip_save.gif" border="0" title="<?php echo get_lang("Save"); ?> (ZIP)" alt="" /></a>
 			<a href="<?php echo api_get_self(); ?>?<?php echo api_get_cidreq();?>&action=downloadfolder"><?php echo get_lang("Save"); ?> (ZIP)</a>&nbsp;
@@ -877,7 +933,8 @@ $column_show=array();
 		echo "<a href=\"slideshow.php?".api_get_cidreq()."&curdirpath=".$curdirpathurl."\"><img src=\"../img/images_gallery.gif\" border=\"0\" title=\"".get_lang('ViewSlideshow')."\"/>&nbsp;". get_lang('ViewSlideshow') . "</a>";
 	}
 	echo "</div>";
-	echo(build_directory_selector($folders,$curdirpath,(isset($group_properties['directory'])?$group_properties['directory']:array()),true));
+	if (!$is_certificate_mode)
+		echo(build_directory_selector($folders,$curdirpath,(isset($group_properties['directory'])?$group_properties['directory']:array()),true));
 //==============================================================================
 
 

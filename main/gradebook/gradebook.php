@@ -29,8 +29,14 @@ $cidReset= true;
 $_in_course = false;
 //make sure the destination for scripts is index.php instead of gradebook.php
 require_once '../inc/global.inc.php';
-$_SESSION['gradebook_dest'] = 'gradebook.php';
-$this_section = SECTION_MYGRADEBOOK;
+if (!empty($_GET['course'])) {
+	$_SESSION['gradebook_dest'] = 'index.php';	
+	$this_section = SECTION_COURSES;
+} else {
+	$_SESSION['gradebook_dest'] = 'gradebook.php';	
+	$this_section = SECTION_MYGRADEBOOK;
+	unset($_GET['course']);
+}
 require_once 'lib/be.inc.php';
 require_once 'lib/scoredisplay.class.php';
 require_once 'lib/gradebook_functions.inc.php';
@@ -41,6 +47,8 @@ require_once 'lib/gradebook_data_generator.class.php';
 require_once 'lib/fe/gradebooktable.class.php';
 require_once 'lib/fe/displaygradebook.php';
 require_once 'lib/fe/userform.class.php';
+require_once api_get_path(LIBRARY_PATH).'document.lib.php';
+require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
 require_once api_get_path(LIBRARY_PATH).'ezpdf/class.ezpdf.php';
 $htmlHeadXtra[] = '<script src="../inc/lib/javascript/jquery.js" type="text/javascript" language="javascript"></script>'; //jQuery
 $htmlHeadXtra[] = '<script type="text/javascript">
@@ -423,18 +431,37 @@ if (!isset($_GET['exportpdf']) and !isset($_GET['export_certificate'])) {
 			'name' => get_lang('Gradebook')
 		);
 		Display :: display_header(get_lang('SearchResults'));
-	} else {
-			$interbreadcrumb[]= array (
-				'url' => $_SESSION['gradebook_dest'],
-				'name' => get_lang('Gradebook')
-			);
+	} else {	
+		
+		if ($_SESSION['gradebook_dest'] == 'index.php') {
+			$gradebook_dest = $_SESSION['gradebook_dest'].'?cidReq='.Security::remove_XSS($_GET['course']).'&amp;';	
+		} else {
+			$gradebook_dest = $_SESSION['gradebook_dest'];
+		}	
+		
+		$interbreadcrumb[]= array (
+			'url' => $gradebook_dest,
+			'name' => get_lang('Gradebook')
+		);	
+			
 
 		if ((isset($_GET['selectcat']) && $_GET['selectcat']>0)) {
-			$interbreadcrumb[]= array (
+			
+			if (!empty($_GET['course'])) {
+				$interbreadcrumb[]= array (
+					'url' => $gradebook_dest.'selectcat='.Security::remove_XSS($_GET['selectcat']),
+					'name' => get_lang('Details')
+				);	
+			} else {
+				$interbreadcrumb[]= array (
 				'url' => $_SESSION['gradebook_dest'].'?selectcat=0',
 				'name' => get_lang('Details')
-			);
+				);
+			}
+	
 		}
+		
+		
 	 Display :: display_header('');
 	}
 }

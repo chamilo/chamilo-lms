@@ -1,27 +1,5 @@
 <?php // $Id: $
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-    Copyright (c) 2008 Dokeos Latinoamerica SAC
-	Copyright (c) 2006-2008 Dokeos SPRL
-	Copyright (c) 2006 Ghent University (UGent)
-	Copyright (c) various contributors
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
-	Mail: info@dokeos.com
-==============================================================================
-*/
+/* For licensing terms, see /license.txt */
 $language_file= 'gradebook';
 // $cidReset : This is the main difference with gradebook.php, here we say,
 // basically, that we are inside a course, and many things depend from that
@@ -49,6 +27,9 @@ require_once 'lib/fe/gradebooktable.class.php';
 require_once 'lib/fe/displaygradebook.php';
 require_once 'lib/fe/userform.class.php';
 require_once api_get_path(LIBRARY_PATH).'ezpdf/class.ezpdf.php';
+require_once api_get_path(LIBRARY_PATH).'document.lib.php';
+require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
+
 $htmlHeadXtra[] = '<script src="../inc/lib/javascript/jquery.js" type="text/javascript" language="javascript"></script>'; //jQuery
 $htmlHeadXtra[] = '<script type="text/javascript">
 $(document).ready( function() {
@@ -138,10 +119,7 @@ if ( (isset($_GET['selectcat']) && $_GET['selectcat']>0) && (isset($_SESSION['st
 	}
 }
 
-
-// --------------------------------------------------------------------------------
-// -                                  ACTIONS                                     -
-// --------------------------------------------------------------------------------
+// ACTIONS                                   
 //this is called when there is no data for the course admin
 if (isset ($_GET['createallcategories'])) {
 	block_students();
@@ -470,11 +448,9 @@ if (isset ($_POST['submit']) && isset ($_POST['keyword'])) {
 }
 
 
-// --------------------------------------------------------------------------------
-// -                       DISPLAY HEADERS AND MESSAGES                           -
-// --------------------------------------------------------------------------------
+// DISPLAY HEADERS AND MESSAGES                          
 
-if (!isset($_GET['exportpdf']) and !isset($_GET['export_certificate'])) {
+if (!isset($_GET['exportpdf']) and !isset($_GET['export_certificate'])) {	
 	if (isset ($_GET['studentoverview'])) {
 		$interbreadcrumb[]= array (
 			'url' => $_SESSION['gradebook_dest'].'?selectcat=' . Security::remove_XSS($_GET['selectcat']),
@@ -492,6 +468,13 @@ if (!isset($_GET['exportpdf']) and !isset($_GET['export_certificate'])) {
 			'url' => $_SESSION['gradebook_dest'],
 			'name' => get_lang('Gradebook')
 		);
+		
+			if (!isset($_GET['gradebooklist_direction'])) {
+				$interbreadcrumb[]= array (
+			    'url' => $_SESSION['gradebook_dest'].'?selectcat=' . Security::remove_XSS($_GET['selectcat']),
+			    'name' => get_lang('Details')
+			  );
+			}
 
 		Display :: display_header('');
 	} else {
@@ -552,9 +535,7 @@ if (isset ($move_form)){
 	Display :: display_normal_message($move_form->toHtml(),false);
 }
 
-// --------------------------------------------------------------------------------
-// -                        LOAD DATA & DISPLAY TABLE                             -
-// --------------------------------------------------------------------------------
+// LOAD DATA & DISPLAY TABLE                             
 
 $is_platform_admin= api_is_platform_admin();
 $is_course_admin= api_is_allowed_to_create_course();
@@ -633,6 +614,7 @@ if (isset ($_GET['studentoverview'])) {
 		$scoretotal= $cattotal[0]->calc_score($user_id);
 		$scoretotal_display = (isset($scoretotal) ? $scoredisplay->display_score($scoretotal,SCORE_PERCENT) : get_lang('NoResultsAvailable'));
 
+		global $charset;
 		//prepare all necessary variables:
 		$organization_name = api_get_setting('Institution');
 		$portal_name = api_get_setting('siteName');
@@ -642,7 +624,79 @@ if (isset ($_GET['studentoverview'])) {
 		$certif_text = str_replace("\\n","\n",$certif_text);
 		$date = date('d/m/Y',time());
 
-		$pdf= new Cezpdf('a4','landscape');
+			$path_info= UserManager::get_user_picture_path_by_id($user_id,'system',true);
+			
+			$path_directory_user_certificate=$path_info['dir'].'certificate/';
+			
+			if (!is_dir($path_info['dir'])) {
+				mkdir($path_info['dir'],0777);
+			}	
+			if (!is_dir($path_directory_user_certificate)) {
+				mkdir($path_directory_user_certificate,0777);
+			}
+			if (is_dir($path_directory_user_certificate)) {
+				$user_id=api_get_user_id();
+				$cat_id=$_GET['cat_id'];
+				$name=md5($user_id.$cat_id);
+				
+				//generate document HTML
+				$course_id=api_get_course_id();
+				$content_html=DocumentManager::replace_user_info_into_html($course_id);
+								
+				$new_content=explode('</head>',$content_html);
+				
+		
+				if ($new_content[0]!='') {
+			
+					$new_content_html=$new_content[1];
+					$my_path_certificate=$path_directory_user_certificate.$name.'.html';
+				 	
+					
+					$path_image=api_get_path(WEB_COURSE_PATH).api_get_course_path().'/document/images/gallery';
+					$new_content_html=str_replace('../images/gallery',$path_image,$new_content_html);
+					
+					$path_image_in_default_course=api_get_path(WEB_CODE_PATH).'default_course_document';
+					$new_content_html=str_replace('/main/default_course_document',$path_image_in_default_course,$new_content_html);
+		
+					$path_image_in_dokeos_main=api_get_path(WEB_IMG_PATH);
+					$new_content_html=str_replace('/main/img/',$path_image_in_dokeos_main,$new_content_html);
+					
+					//add print header
+					$print= '
+					<style media="print" type="text/css">
+						#imprimir {
+						visibility:hidden;
+						}				
+					</style>';
+					$print ='<a href="javascript:window.print();" style="float:right; padding:4px;" id="imprimir"><img src="'.api_get_path(WEB_CODE_PATH).'img/printmgr.gif" alt="' . get_lang('Print') . '" /> ' . get_lang('Print') . '</a>';
+
+					//add header
+					$new_content_html=$new_content[0].$print.'</head>'.$new_content_html;
+					
+					if ($cat_id=strval(intval($cat_id))) {
+						if (UserManager::is_user_certified($cat_id,$user_id)===true){ 
+							header('Content-Type: text/html; charset='. $charset);
+							echo $new_content_html;
+							
+							exit;
+						} else {
+							$my_new_content_html=$new_content_html;
+							$my_new_content_html=mb_convert_encoding($my_new_content_html,'UTF-8',$charset);
+							file_put_contents($my_path_certificate,$my_new_content_html);	
+							header('Content-Type: text/html; charset='. $charset);
+							echo $new_content_html;								
+						}
+						$path_certificate='/'.$name.'.html';
+						update_user_info_about_certificate($cat_id,$user_id,$path_certificate);
+						exit;	
+					}
+				} else {
+					Display :: display_reduced_header();
+					Display :: display_warning_message(get_lang('NoCertificateAvailable'));	
+				}
+			}
+		
+		/*$pdf= new Cezpdf('a4','landscape');
 		$pdf->selectFont(api_get_path(LIBRARY_PATH).'ezpdf/fonts/Courier.afm');
 		$pdf->ezSetMargins(30, 30, 50, 50);
 		//line Y coordinates in landscape mode are upside down (500 is on top, 10 is on the bottom)
@@ -659,7 +713,7 @@ if (isset ($_GET['studentoverview'])) {
 		$pdf->ezText($organization_name,22,array('justification'=>'left'));
 		$pdf->ezSetY(580);
 		$pdf->ezText($portal_name,22,array('justification'=>'right'));
-		$pdf->ezStream();
+		$pdf->ezStream();*/
 	}
 	exit;
 } else { //in any other case (no search, no pdf), print the available gradebooks
@@ -808,8 +862,8 @@ if ($category != '0') {
 
 			//show certificate
 			$certificate_min_score=$cats[0]->get_certificate_min_score();
-			if (isset($certificate_min_score) && (int)$item_value >= (int)$certificate_min_score) {
-				$certificates = '<a href="'.api_get_path(WEB_CODE_PATH) .'gradebook/'.$_SESSION['gradebook_dest'].'?export_certificate=yes&cat_id='.$cats[0]->get_course_code().'"><img src="'.api_get_path(WEB_CODE_PATH) . 'img/dokeos.gif" />'.get_lang('Certificates').'</a>&nbsp;'.get_lang('langTotal').': '.$scoretotal_display;
+			if (isset($certificate_min_score) && (int)$item_value >= (int)$certificate_min_score) {				
+				$certificates = '<a href="'.api_get_path(WEB_CODE_PATH) .'gradebook/'.$_SESSION['gradebook_dest'].'?export_certificate=yes&cat_id='.$cats[0]->get_id().'"><img src="'.api_get_path(WEB_CODE_PATH) . 'img/dokeos.gif" />'.get_lang('Certificates').'</a>&nbsp;'.get_lang('langTotal').': '.$scoretotal_display;
 
 			echo '<div class="actions" align="right">';
 			 echo $certificates;

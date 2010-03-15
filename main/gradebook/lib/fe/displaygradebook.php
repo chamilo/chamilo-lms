@@ -1,27 +1,5 @@
 <?php
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2008 Dokeos Latinoamerica SAC
-	Copyright (c) 2006 Dokeos SPRL
-	Copyright (c) 2006 Ghent University (UGent)
-	Copyright (c) various contributors
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
-	Mail: info@dokeos.com
-==============================================================================
-*/
+/* For licensing terms, see /license.txt */
 class DisplayGradebook
 {
 	/**
@@ -327,6 +305,9 @@ class DisplayGradebook
 	                	$header .= '<td style="vertical-align: top;"><a href="gradebook_flatview.php?'.$my_api_cidreq.'&selectcat=' . $catobj->get_id() . '">'.Display::return_icon('stats_access.gif', get_lang('FlatView')).' ' . get_lang('FlatView') . '</a>';
 						if (/*($is_course_admin && $message_resource===false && $status_user==1) ||*/ api_is_platform_admin()) {
 							$header .= '<td style="vertical-align: top;"><a href="gradebook_scoring_system.php?'.$my_api_cidreq.'&selectcat=' . $catobj->get_id() .'">'.Display::return_icon('acces_tool.gif', get_lang('ScoreEdit')).' ' . get_lang('ScoreEdit') . '</a>';
+							$header .= '<td style="vertical-align: top;"><a href="../document/document.php?curdirpath=/certificates&'.$my_api_cidreq.'&origin=gradebook&selectcat=' . $catobj->get_id() . '">'.Display::return_icon('acces_tool.gif', get_lang('AttachCertificate')).' ' . get_lang('AttachCertificate') . '</a>';
+							$header .= '<td style="vertical-align: top;"><a href="gradebook_display_certificate.php?'.$my_api_cidreq.'&amp;cat_id='.(int)$_GET['selectcat'].'">'.Display::return_icon('acces_tool.gif', get_lang('Certificate')).' ' . get_lang('GradebookSeeListOfStudentsCertificates') . '</a>';
+					
 						}
 					}
                 }

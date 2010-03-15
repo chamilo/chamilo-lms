@@ -1,44 +1,13 @@
 <?php // $Id: create_document.php 22259 2009-07-20 18:56:45Z ivantcholakov $
-
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2004-2008 Dokeos SPRL
-	Copyright (c) 2003 Ghent University (UGent)
-	Copyright (c) 2001 Universite catholique de Louvain (UCL)
-	Copyright (c) Olivier Brouckaert
-	Copyright (c) Bart Mollet, Hogeschool Gent
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
-	Mail: info@dokeos.com
-
-==============================================================================
-*/
+/* See license terms in /license.txt */
 /**
-==============================================================================
 *	This file allows creating new html documents with an online WYSIWYG html380
 *	editor.
 *
-*	@package dokeos.document
-==============================================================================
+*	@package chamilo.document
 */
 
-/*
-==============================================================================
-		INIT SECTION
-==============================================================================
-*/
+/*		INIT SECTION		*/
 
 // name of the language file that needs to be included
 $language_file = 'document';
@@ -196,7 +165,12 @@ require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
 require_once api_get_path(LIBRARY_PATH).'document.lib.php';
 require_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
 require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
-$nameTools = get_lang('CreateDocument');
+require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
+if (isset($_REQUEST['certificate'])) {
+	$nameTools = get_lang('CreateCertificate');	
+} else {
+	$nameTools = get_lang('CreateDocument');	
+}
 
 
 /*
@@ -280,23 +254,31 @@ if (!is_dir($filepath)) {
 }
 
 
-//------------
-
-/**************************************************/
-$to_group_id = 0;
-
-if (isset ($_SESSION['_gid']) && $_SESSION['_gid'] != '') {
-	$req_gid = '&amp;gidReq='.$_SESSION['_gid'];
-	$interbreadcrumb[] = array ("url" => "../group/group_space.php?gidReq=".$_SESSION['_gid'], "name" => get_lang('GroupSpace'));
-	$noPHP_SELF = true;
-	$to_group_id = $_SESSION['_gid'];
-	$group = GroupManager :: get_group_properties($to_group_id);
-	$path = explode('/', $dir);
-	if ('/'.$path[1] != $group['directory']) {
-		api_not_allowed(true);
-	}
+//I'm in the certification module?  
+$is_certificate_mode = false;
+$is_certificate_array = explode('/',$_GET['dir']);
+array_shift($is_certificate_array);
+if ($is_certificate_array[0]=='certificates') {
+	$is_certificate_mode = true;
 }
-$interbreadcrumb[] = array ("url" => "./document.php?curdirpath=".urlencode($_GET['dir']).$req_gid, "name" => get_lang('Documents'));
+
+$to_group_id = 0;
+if (!$is_certificate_mode) {
+	if (isset ($_SESSION['_gid']) && $_SESSION['_gid'] != '') {
+		$req_gid = '&amp;gidReq='.$_SESSION['_gid'];
+		$interbreadcrumb[] = array ("url" => "../group/group_space.php?gidReq=".$_SESSION['_gid'], "name" => get_lang('GroupSpace'));
+		$noPHP_SELF = true;
+		$to_group_id = $_SESSION['_gid'];
+		$group = GroupManager :: get_group_properties($to_group_id);
+		$path = explode('/', $dir);
+		if ('/'.$path[1] != $group['directory']) {
+			api_not_allowed(true);
+		}
+	}
+	$interbreadcrumb[] = array ("url" => "./document.php?curdirpath=".urlencode($_GET['dir']).$req_gid, "name" => get_lang('Documents'));
+} else {
+	$interbreadcrumb[]= array (	'url' => '../gradebook/'.$_SESSION['gradebook_dest'], 'name' => get_lang('Gradebook'));	
+}
 
 if (!$is_allowed_in_course)
 	api_not_allowed(true);
@@ -320,11 +302,16 @@ if (isset ($group)) {
 }
 
 // Create a new form
-$form = new FormValidator('create_document');
+$form = new FormValidator('create_document','post',api_get_self().'?dir='.Security::remove_XSS(urlencode($_GET['dir'])).'&selectcat='.Security::remove_XSS($_GET['selectcat']));
 
 // form title
 $form->addElement('header', '', $nameTools);
-
+if (isset($_REQUEST['certificate'])) {//added condition for certicate in gradebook
+	$form->addElement('hidden','certificate','true',array('id'=>'certificate'));
+	if (isset($_GET['selectcat']))
+		$form->addElement('hidden','selectcat',intval($_GET['selectcat']));	
+	
+}
 $renderer = & $form->defaultRenderer();
 
 // Hidden element with current directory
@@ -387,7 +374,12 @@ if(!empty($_SESSION['_gid'])) {
 	$group[]= $form->createElement('checkbox','readonly','',get_lang('ReadOnly'));
 }
 // add group to the form
-$form->addGroup($group, 'filename_group', api_get_setting('use_document_title') == 'true' ? get_lang('Title') : get_lang('FileName') ,'&nbsp;&nbsp;&nbsp;', false);
+if ($is_certificate_mode)
+	$form->addGroup($group, 'filename_group', get_lang('CertificateName') ,'&nbsp;&nbsp;&nbsp;', false);
+else
+	$form->addGroup($group, 'filename_group', api_get_setting('use_document_title') == 'true' ? get_lang('Title') : get_lang('FileName') ,'&nbsp;&nbsp;&nbsp;', false);
+	
+
 $form->addRule('filename_group', get_lang('ThisFieldIsRequired'), 'required');
 
 if (api_get_setting('use_document_title') == 'true') {
@@ -416,7 +408,11 @@ $form->add_html_editor('content','', false, false, $html_editor_config);
 // Comment-field
 
 //$form->addElement('textarea', 'comment', get_lang('Comment'), array ('rows' => 5, 'cols' => 50));
-$form->addElement('style_submit_button', 'submit', get_lang('langCreateDoc'), 'class="save"');
+if ($is_certificate_mode)
+	$form->addElement('style_submit_button', 'submit', get_lang('CreateCertificate'), 'class="save"');
+else 
+	$form->addElement('style_submit_button', 'submit', get_lang('langCreateDoc'), 'class="save"');
+	
 $form->setDefaults($default);
 
 // HTML
@@ -503,7 +499,10 @@ if ($form->validate()) {
 				Database::query("UPDATE $TABLE_DOCUMENT SET".substr($ct, 1)." WHERE id = '$document_id'");
 			}
 			$dir= substr($dir,0,-1);
-			header('Location: document.php?curdirpath='.urlencode($dir));
+			$selectcat = '';			
+			if (isset($_REQUEST['selectcat']))
+				$selectcat = "&selectcat=".Security::remove_XSS($_REQUEST['selectcat']);
+			header('Location: document.php?curdirpath='.urlencode($dir).$selectcat); 
 			exit ();
 		} else {
 			Display :: display_header($nameTools, "Doc");
@@ -520,9 +519,21 @@ if ($form->validate()) {
 	Display :: display_header($nameTools, "Doc");
 	//api_display_tool_title($nameTools);
 	// actions
+	if (isset($_REQUEST['certificate'])) {
+		$all_information_by_create_certificate=DocumentManager::get_all_info_to_certificate();
+		$str_info='';
+		foreach ($all_information_by_create_certificate[0] as $info_value) {
+			$str_info.=$info_value.'<br/>';
+		}
+		$create_certificate=get_lang('CreateCertificateWithTags');
+		Display::display_normal_message($create_certificate.': <br /><br/>'.$str_info,false);
+	}
 	echo '<div class="actions">';
 	// link back to the documents overview
-	echo '<a href="document.php?curdirpath='.Security::remove_XSS($_GET['dir']).'">'.Display::return_icon('back.png',get_lang('Back').' '.get_lang('To').' '.get_lang('DocumentsOverview')).get_lang('BackTo').' '.get_lang('DocumentsOverview').'</a>';
+	if ($is_certificate_mode) 
+		echo '<a href="document.php?curdirpath='.Security::remove_XSS($_GET['dir']).'&selectcat=' . Security::remove_XSS($_GET['selectcat']).'">'.Display::return_icon('back.png',get_lang('Back').' '.get_lang('To').' '.get_lang('CertificateOverview')).get_lang('Back').' '.get_lang('To').' '.get_lang('CertificateOverview').'</a>';
+	else 
+		echo '<a href="document.php?curdirpath='.Security::remove_XSS($_GET['dir']).'">'.Display::return_icon('back.png',get_lang('Back').' '.get_lang('To').' '.get_lang('DocumentsOverview')).get_lang('BackTo').' '.get_lang('DocumentsOverview').'</a>';	
 	echo '</div>';
 	$form->display();
 	Display :: display_footer();

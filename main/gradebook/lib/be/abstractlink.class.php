@@ -41,7 +41,7 @@ abstract class AbstractLink implements GradebookItem
 	protected $user_id;
 	protected $course_code;
 	protected $category;
-	protected $link_date;
+	protected $created_at;
 	protected $weight;
 	protected $visible;
 	protected $session_id;
@@ -78,7 +78,7 @@ abstract class AbstractLink implements GradebookItem
 	}
 
 	public function get_date() {
-		return $this->link_date;
+		return $this->created_at;
 	}
 
 	public function get_weight() {
@@ -114,7 +114,7 @@ abstract class AbstractLink implements GradebookItem
 	}
 
 	public function set_date ($date) {
-		$this->link_date = $date;
+		$this->created_at = $date;
 	}
 
 	public function set_weight ($weight) {
@@ -133,7 +133,7 @@ abstract class AbstractLink implements GradebookItem
 	 */
 	public function load ($id = null, $type = null, $ref_id = null, $user_id = null, $course_code = null, $category_id = null, $visible = null) {
     	$tbl_grade_links = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
-		$sql='SELECT id,type,ref_id,user_id,course_code,category_id,date,weight,visible FROM '.$tbl_grade_links;
+		$sql='SELECT id,type,ref_id,user_id,course_code,category_id,created_at,weight,visible FROM '.$tbl_grade_links;
 		$paramcount = 0;
 		if (isset ($id)) {
 			$sql.= ' WHERE id = '.$id;
@@ -203,7 +203,7 @@ abstract class AbstractLink implements GradebookItem
 			$link->set_user_id($data['user_id']);
 			$link->set_course_code($data['course_code']);
 			$link->set_category_id($data['category_id']);
-			$link->set_date(api_get_local_time($data['date']));
+			$link->set_date(api_get_local_time($data['created_at']));
 			$link->set_weight($data['weight']);
 			$link->set_visible($data['visible']);
 			$links[]=$link;
@@ -228,8 +228,7 @@ abstract class AbstractLink implements GradebookItem
 			$row_testing=Database::fetch_array($result_testing);
 
 			if ($row_testing[0]==0) {
-				$sql = 'INSERT INTO '.$tbl_grade_links.' (type,ref_id,user_id,course_code,category_id,weight,visible';
-				if (isset($this->link_date)) { $sql .= ',date';}
+				$sql = 'INSERT INTO '.$tbl_grade_links.' (type,ref_id,user_id,course_code,category_id,weight,visible,created_at';
 					$sql .= ') VALUES ('
 						.$this->get_type()
 						.','.$this->get_ref_id()
@@ -237,9 +236,9 @@ abstract class AbstractLink implements GradebookItem
 						.",'".$this->get_course_code()."'"
 						.','.$this->get_category_id()
 						.','.$this->get_weight()
-						.','.$this->is_visible();
-				if (isset($this->link_date)) {$sql .= ','.'"'.$date_current=strtotime(date('Y-m-d H:i:s',time())).'"';}
-			$sql .= ")";
+						.','.$this->is_visible()
+						.",'".api_get_utc_datetime()."')";
+				echo $sql;
 			Database::query($sql);
 			$this->set_id(Database::insert_id());
 		 	}
@@ -271,9 +270,8 @@ abstract class AbstractLink implements GradebookItem
 	public function add_link_log($idevaluation) {
 		$tbl_grade_linkeval_log = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINKEVAL_LOG);
 		$dateobject=AbstractLink::load ($idevaluation,null,null,null,null);
-		$current_date_server=strtotime(date('Y-m-d H:i:s',time()));
+		$current_date_server=api_get_utc_datetime();
 		$arreval=get_object_vars($dateobject[0]);
-		//var_dump($arreval);
 		$description_log=isset($arreval['description'])?$arreval['description']:'';
 		if (isset($_POST['name_link'])) {
 			$name_log=isset($_POST['name_link'])?Security::remove_XSS($_POST['name_link']):$arreval['course_code'];
@@ -283,7 +281,7 @@ abstract class AbstractLink implements GradebookItem
 			$name_log=$arreval['course_code'];
 		}
 		//error_log($name_log);
-		$sql="INSERT INTO ".$tbl_grade_linkeval_log."(id_linkeval_log,name,description,date_log,weight,visible,type,user_id_log)VALUES('".Database::escape_string($arreval['id'])."','".Database::escape_string($name_log)."','".Database::escape_string($description_log)."','".Database::escape_string($current_date_server)."','".Database::escape_string($arreval['weight'])."','".Database::escape_string($arreval['visible'])."','Link',".api_get_user_id().")";
+		$sql="INSERT INTO ".$tbl_grade_linkeval_log."(id_linkeval_log,name,description,created_at,weight,visible,type,user_id_log)VALUES('".Database::escape_string($arreval['id'])."','".Database::escape_string($name_log)."','".Database::escape_string($description_log)."','".$current_date_server."','".Database::escape_string($arreval['weight'])."','".Database::escape_string($arreval['visible'])."','Link',".api_get_user_id().")";
 		Database::query($sql);
 
 	}

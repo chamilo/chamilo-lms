@@ -88,7 +88,6 @@ if (isset($_GET['typeselected']) && $_GET['typeselected'] != '0') {
 		if ($link->needs_max()) {
 			$link->set_max($addvalues['max']);
 		}
-		$link->set_date(strtotime($addvalues['date']));
 
 		if ($link->needs_name_and_description()) {
 			$link->set_description($addvalues['description']);

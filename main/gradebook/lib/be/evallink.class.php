@@ -133,7 +133,7 @@ abstract class EvalLink extends AbstractLink
 	}
 // Functions overriding non-trivial implementations from AbstractLink
 	public function set_date ($date) {
-		$this->link_date = $date;
+		$this->created_at = $date;
 		if ($this->is_valid_link()) {
 			$this->evaluation->set_date($date);
 		}
@@ -168,7 +168,7 @@ abstract class EvalLink extends AbstractLink
 			} else {
 				$eval = new Evaluation();
 				$eval->set_category_id(-1);
-				$eval->set_date(time()); // these values will be changed
+				$eval->set_date(api_get_utc_datetime()); // these values will be changed
 				$eval->set_weight(0);    //   when the link setter
 				$eval->set_visible(0);   //     is called
 				$eval->set_id(-1); // a 'real' id will be set when eval is added to db

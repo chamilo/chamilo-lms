@@ -200,9 +200,9 @@ class GradeBookResult
 	 */
 	public function exportCompleteReportCSV($dato) {
 		//$this->_getGradeBookReporting($document_path,$user_id);
-		$filename = 'gradebook_results_'.date('YmdGis').'.csv';
+		$filename = 'gradebook_results_'.gmdate('YmdGis').'.csv';
 		if (!empty($user_id)) {
-			$filename = 'gradebook_results_user_'.$user_id.'_'.date('YmdGis').'.csv';
+			$filename = 'gradebook_results_user_'.$user_id.'_'.gmdate('YmdGis').'.csv';
 		}
 		$data = '';
 		//build the results
@@ -250,14 +250,14 @@ class GradeBookResult
 	 * @return	boolean		False on error
 	 */
 	public function exportCompleteReportXLS($data) {
-	   	$filename = 'gradebook_results_user_'.date('YmdGis').'.xls';
+	   	$filename = 'gradebook_results_user_'.gmdate('YmdGis').'.xls';
 		//build the results
 		require_once(api_get_path(LIBRARY_PATH).'pear/Spreadsheet_Excel_Writer/Writer.php');
 		$workbook = new Spreadsheet_Excel_Writer();
 		$workbook ->setTempDir(api_get_path(SYS_ARCHIVE_PATH));
 		
 		$workbook->send($filename);
-		$worksheet =& $workbook->addWorksheet('Report '.date('YmdGis'));
+		$worksheet =& $workbook->addWorksheet('Report '.gmdate('YmdGis'));
 		$line = 0;
 		$column = 0; //skip the first column (row titles)
 		//headers

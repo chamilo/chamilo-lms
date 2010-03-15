@@ -37,7 +37,6 @@ if (isset($_GET['cidReq'])) {
 } else {
 	$this_section = SECTION_MYGRADEBOOK;
 }
-
 require_once 'lib/be.inc.php';
 require_once 'lib/scoredisplay.class.php';
 require_once 'lib/gradebook_functions.inc.php';
@@ -49,6 +48,7 @@ require_once 'lib/fe/gradebooktable.class.php';
 require_once 'lib/fe/displaygradebook.php';
 require_once 'lib/fe/userform.class.php';
 require_once api_get_path(LIBRARY_PATH).'ezpdf/class.ezpdf.php';
+
 $htmlHeadXtra[] = '<script src="../inc/lib/javascript/jquery.js" type="text/javascript" language="javascript"></script>'; //jQuery
 $htmlHeadXtra[] = '<script type="text/javascript">
 $(document).ready( function() {
@@ -607,7 +607,7 @@ if (isset ($_GET['studentoverview'])) {
 		$pdf->selectFont(api_get_path(LIBRARY_PATH).'ezpdf/fonts/Courier.afm');
 		$pdf->ezSetMargins(30, 30, 50, 30);
 		$pdf->ezSetY(810);
-		$pdf->ezText(get_lang('FlatView').' ('. date('j/n/Y g:i') .')',12,array('justification'=>'center'));
+		$pdf->ezText(get_lang('FlatView').' ('. api_convert_and_format_date(null, DATE_FORMAT_SHORT). ' ' . api_convert_and_format_date(null, TIME_NO_SEC_FORMAT) .')',12,array('justification'=>'center'));
 		$pdf->line(50,790,550,790);
 		$pdf->line(50,40,550,40);
 		$pdf->ezSetY(750);
@@ -640,7 +640,7 @@ if (isset ($_GET['studentoverview'])) {
 		$stud_ln = $user['lastname'];
 		$certif_text = sprintf(get_lang('CertificateWCertifiesStudentXFinishedCourseYWithGradeZ'),$organization_name,$stud_fn.' '.$stud_ln,$category[0]->get_name(),$scorecourse_display);
 		$certif_text = str_replace("\\n","\n",$certif_text);
-		$date = date('d/m/Y',time());
+		$date = api_convert_and_format_date(null, DATE_FORMAT_SHORT);
 
 		$pdf= new Cezpdf('a4','landscape');
 		$pdf->selectFont(api_get_path(LIBRARY_PATH).'ezpdf/fonts/Courier.afm');

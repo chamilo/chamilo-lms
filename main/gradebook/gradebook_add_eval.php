@@ -53,8 +53,6 @@ if ($form->validate()) {
 	}
 	$eval->set_category_id($values['hid_category_id']);
 	$eval->set_weight($values['weight']);
-	//converts the date back to unix timestamp format
-	$eval->set_date(strtotime($values['date']));
 	$eval->set_max($values['max']);
 	if (empty ($values['visible'])) {
 		$visible = 0;

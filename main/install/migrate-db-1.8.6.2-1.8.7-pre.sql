@@ -41,6 +41,26 @@ ALTER TABLE user_field_options CHANGE tms tms DATETIME NOT NULL default '0000-00
 ALTER TABLE user_field_values CHANGE tms tms DATETIME NOT NULL default '0000-00-00 00:00:00';
 ALTER TABLE access_url CHANGE tms tms DATETIME NOT NULL default '0000-00-00 00:00:00';
 
+ALTER TABLE gradebook_certificate CHANGE date_certificate created_at DATETIME NOT NULL default '0000-00-00 00:00:00';
+
+ALTER TABLE gradebook_evaluation ADD COLUMN created_at DATETIME NOT NULL default '0000-00-00 00:00:00';
+UPDATE gradebook_evaluation SET created_at = FROM_UNIXTIME(date);
+ALTER TABLE gradebook_evaluation DROP date;
+
+ALTER TABLE gradebook_link ADD COLUMN created_at DATETIME NOT NULL default '0000-00-00 00:00:00';
+UPDATE gradebook_link SET created_at = FROM_UNIXTIME(date);
+ALTER TABLE gradebook_link DROP date;
+
+ALTER TABLE gradebook_linkeval_log ADD COLUMN created_at DATETIME NOT NULL default '0000-00-00 00:00:00';
+UPDATE gradebook_linkeval_log SET created_at = FROM_UNIXTIME(date_log);
+ALTER TABLE gradebook_linkeval_log DROP date_log;
+
+ALTER TABLE gradebook_result ADD COLUMN created_at DATETIME NOT NULL default '0000-00-00 00:00:00';
+UPDATE gradebook_result SET created_at = FROM_UNIXTIME(date);
+ALTER TABLE gradebook_result DROP date;
+
+ALTER TABLE gradebook_result_log CHANGE date_log created_at DATETIME NOT NULL default '0000-00-00 00:00:00';
+
 INSERT INTO user_field(field_type, field_variable, field_display_text, field_visible, field_changeable) VALUES(11, 'timezone', 'Timezone', 0, 0);
 
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('course_create_active_tools','attendances','checkbox','Tools','true','CourseCreateActiveToolsTitle','CourseCreateActiveToolsComment',NULL,'Attendances', 0);

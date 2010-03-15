@@ -43,7 +43,6 @@ if ($form->validate()) {
 	$eval->set_course_code($values['hid_course_code']);
 	$eval->set_category_id($values['hid_category_id']);
 	$eval->set_weight($values['weight']);
-	$eval->set_date(strtotime($values['date']));
 	$eval->set_max($values['max']);
 	if (empty ($values['visible'])) {
 		$visible = 0;

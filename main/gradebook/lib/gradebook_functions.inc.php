@@ -106,9 +106,6 @@ function add_resource_to_course_gradebook($course_code, $resource_type, $resourc
     if ($link->needs_max()) {
     	$link->set_max($max);
     }
-    if (isset($date)) {
-        $link->set_date($date);
-    }
     if ($link->needs_name_and_description()) {
     	$link->set_description($resource_description);
     }

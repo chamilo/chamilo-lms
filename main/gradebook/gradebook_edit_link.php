@@ -52,7 +52,6 @@ $form = new LinkAddEditForm(LinkAddEditForm :: TYPE_EDIT,
 if ($form->validate()) {
 	$values = $form->exportValues();
 	$link->set_weight($values['weight']);
-	$link->set_date(strtotime($values['date']));
 	$link->set_visible(empty ($values['visible']) ? 0 : 1);
 	$link->save();
 

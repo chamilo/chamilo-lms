@@ -288,7 +288,7 @@ class EvalForm extends FormValidator
 	 */
 	protected function build_add_form() {
 		$this->setDefaults(array (
-		'hid_user_id' => $this->evaluation_object->get_user_id(), 'hid_category_id' => $this->evaluation_object->get_category_id(), 'hid_course_code' => $this->evaluation_object->get_course_code(), 'date' => time()));
+		'hid_user_id' => $this->evaluation_object->get_user_id(), 'hid_category_id' => $this->evaluation_object->get_category_id(), 'hid_course_code' => $this->evaluation_object->get_course_code(), 'created_at' => api_get_utc_datetime()));
 		$this->build_basic_form(0);
 		if ($this->evaluation_object->get_course_code() == null) {
 			$this->addElement('checkbox', 'adduser', get_lang('AddUserToEval'));
@@ -302,7 +302,7 @@ class EvalForm extends FormValidator
 	 */
 	protected function build_editing_form() {
 		$this->setDefaults(array (
-		'hid_id' => $this->evaluation_object->get_id(), 'name' => $this->evaluation_object->get_name(), 'description' => $this->evaluation_object->get_description(), 'hid_user_id' => $this->evaluation_object->get_user_id(), 'hid_course_code' => $this->evaluation_object->get_course_code(), 'hid_category_id' => $this->evaluation_object->get_category_id(), 'date' => api_strtotime($this->evaluation_object->get_date()), 'weight' => $this->evaluation_object->get_weight(), 'max' => $this->evaluation_object->get_max(), 'visible' => $this->evaluation_object->is_visible()));
+		'hid_id' => $this->evaluation_object->get_id(), 'name' => $this->evaluation_object->get_name(), 'description' => $this->evaluation_object->get_description(), 'hid_user_id' => $this->evaluation_object->get_user_id(), 'hid_course_code' => $this->evaluation_object->get_course_code(), 'hid_category_id' => $this->evaluation_object->get_category_id(), 'created_at' => api_get_utc_datetime($this->evaluation_object->get_date()), 'weight' => $this->evaluation_object->get_weight(), 'max' => $this->evaluation_object->get_max(), 'visible' => $this->evaluation_object->is_visible()));
 		$id_current=isset($this->id)?$this->id :null;
 		$this->addElement('hidden', 'hid_id',$id_current);
 		$this->build_basic_form(1);
@@ -352,7 +352,6 @@ class EvalForm extends FormValidator
 				'maxlength' => '4'
 			));
 		}
-		/*$this->add_datepicker('date', get_lang('DateEval'));*/
 		$this->addElement('textarea', 'description', get_lang('Description'), array (
 			'rows' => '3',
 			'cols' => '34'

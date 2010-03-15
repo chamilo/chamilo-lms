@@ -41,7 +41,6 @@ if ( isset($_POST['submit_button']) ) {
 			$result= new Result();
 			$result->set_user_id($user_id);
 			$result->set_evaluation_id($_GET['selecteval']);
-			$result->set_date(time());
 			$result->add();
 			}
 		}

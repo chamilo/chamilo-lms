@@ -49,53 +49,12 @@ echo '<div class="clear"></div>';
 echo '<div class="actions">';
 api_display_tool_title(get_lang('GradebookQualifyLog'));
 echo '</div>';
-/*
-$t_user=	 Database :: get_main_table(TABLE_MAIN_USER);
-$t_link_log = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINKEVAL_LOG);
-$evaledit = EvalLink :: load($_GET['visiblelink']);
-
-$sql="SELECT lk.name,lk.description,lk.date_log,lk.weight,lk.visible,lk.type,us.username from ".$t_link_log." lk inner join ".$t_user." us on lk.user_id_log=us.user_id where lk.id_linkeval_log=".$evaledit[0]->get_id()." and lk.type='link';";
-$result=Database::query($sql);
-echo '<table width="100%" border="0" >';
-	echo '<tr>';
-		echo '<td align="center" class="gradebook-table-header"><strong>'.get_lang('GradebookNameLog').'</strong></td>';
-		echo '<td align="center" class="gradebook-table-header"><strong>'.get_lang('GradebookDescriptionLog').'</strong></td>';
-		echo '<td align="center" class="gradebook-table-header"><strong>'.get_lang('Date').'</strong></td>';
-		echo '<td align="center" class="gradebook-table-header"><strong>'.get_lang('Weight').'</strong></td>';
-		echo '<td align="center" class="gradebook-table-header"><strong>'.get_lang('GradebookVisibilityLog').'</strong></td>';
-		echo '<td align="center" class="gradebook-table-header"><strong>'.get_lang('ResourceType').'</strong></td>';
-		echo '<td align="center" class="gradebook-table-header"><strong>'.get_lang('GradebookWhoChangedItLog').'</strong></td>';
-echo '</tr>';
-while($row=Database::fetch_array($result)){
-
-if ('0000-00-00 00:00:00'!=$row[2]) {
-	$date_log=date('d-m-Y H:i:s',$row[2]);
-} else {
-	$date_log='0000-00-00 00:00:00';
-}
-echo '<tr>';
-		echo '<td align="center" Class="gradebook-table-body">'.$row[0].'</td>';
-		echo '<td align="center" Class="gradebook-table-body">'.$row[1].'</td>';
-		echo '<td align="center" Class="gradebook-table-body">'.$date_log.'</td>';
-		echo '<td align="center" Class="gradebook-table-body">'.$row[3].'</td>';
-		if (1 == $row[4]) {
-			$visib=get_lang('GradebookVisible');
-		} else {
-			$visib=get_lang('GradebookInvisible');
-		}
-		echo '<td align="center" Class="gradebook-table-body">'.$visib.'</td>';
-		echo '<td align="center" Class="gradebook-table-body">'.$row[5].'</td>';
-		echo '<td align="center" Class="gradebook-table-body">'.$row[6].'</td>';
-		echo '</tr>';
-}
-echo '</table>';
-*/
 
 $t_user     = Database :: get_main_table(TABLE_MAIN_USER);
 $t_link_log = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINKEVAL_LOG);
 $visible_link=Security::remove_XSS($_GET['visiblelink']);
 $evaledit   = EvalLink :: load($visible_link);
-$sql="SELECT lk.name,lk.description,lk.weight,lk.visible,lk.type,lk.date_log,us.username from ".$t_link_log." lk inner join ".$t_user." us on lk.user_id_log=us.user_id where lk.id_linkeval_log=".$evaledit[0]->get_id()." and lk.type='link';";
+$sql="SELECT lk.name,lk.description,lk.weight,lk.visible,lk.type,lk.created_at,us.username from ".$t_link_log." lk inner join ".$t_user." us on lk.user_id_log=us.user_id where lk.id_linkeval_log=".$evaledit[0]->get_id()." and lk.type='link';";
 $result=Database::query($sql);
 $list_info=array();
 while ($row=Database::fetch_row($result)) {
@@ -103,7 +62,7 @@ while ($row=Database::fetch_row($result)) {
 }
 
 foreach($list_info as $key => $info_log) {
-	$list_info[$key][5]=($info_log[5]) ? date('d-m-Y H:i:s',$info_log[5]) : '0000-00-00 00:00:00';
+	$list_info[$key][5]=($info_log[5]) ? api_convert_and_format_date($info_log[5]) : 'N/A';
 	$list_info[$key][3]=($info_log[3]==1) ? get_lang('GradebookVisible') : get_lang('GradebookInvisible');
 }
 

@@ -35,13 +35,13 @@ class Result
 	private $id;
 	private $user_id;
 	private $evaluation;
-	private $creation_date;
+	private $created_at;
 	private $score;
 
 // CONSTRUCTORS
 
     function Result() {
-    	$this->creation_date = time();
+		$this->created_at = api_get_utc_datetime();
     }
 
 // GETTERS AND SETTERS
@@ -59,7 +59,7 @@ class Result
 	}
 
     public function get_date() {
-		return $this->creation_date;
+		return $this->created_at;
 	}
 
    	public function get_score() {
@@ -79,7 +79,7 @@ class Result
 	}
 
     public function set_date ($creation_date) {
-		$this->creation_date = $creation_date;
+		$this->created_at = $creation_date;
 	}
 
    	public function set_score ($score) {
@@ -119,14 +119,14 @@ class Result
 					$list_user_course_list[]=$row_course_rel_user;
 				}
 
-				$current_date=time();
+				$current_date=api_get_utc_datetime();
 				for ($i=0;$i<count($list_user_course_list);$i++) {
 					$sql_verified='SELECT COUNT(*) AS count FROM '.$tbl_grade_results.' WHERE user_id="'.(int)($list_user_course_list[$i]['user_id']).'" AND evaluation_id="'.Database::escape_string($evaluation_id).'";';
 					//$my_status_in_course=CourseManager::get_user_in_course_status($list_user_course_list[$i]['user_id'], api_get_course_id());
 					$res_verified=Database::query($sql_verified);
 					$info_verified=Database::result($res_verified,0,0);
 					if ($info_verified==0) {
-						$sql_insert='INSERT INTO '.$tbl_grade_results.'(user_id,evaluation_id,date,score) values ("'.Database::escape_string($list_user_course_list[$i]['user_id']).'","'.Database::escape_string($evaluation_id).'","'.$current_date.'",0);';
+						$sql_insert='INSERT INTO '.$tbl_grade_results.'(user_id,evaluation_id,created_at,score) values ("'.Database::escape_string($list_user_course_list[$i]['user_id']).'","'.Database::escape_string($evaluation_id).'","'.$current_date.'",0);';
 						$res_insert=Database::query($sql_insert);
 					}
 				}
@@ -134,7 +134,7 @@ class Result
 			}
 		}
 
-		$sql='SELECT id,user_id,evaluation_id,date,score FROM '.$tbl_grade_results;
+		$sql='SELECT id,user_id,evaluation_id,created_at,score FROM '.$tbl_grade_results;
 		$paramcount = 0;
 		if (!empty ($id)) {
 			$sql.= ' WHERE id = '.Database::escape_string($id);
@@ -162,7 +162,7 @@ class Result
 			$res->set_id($data['id']);
 			$res->set_user_id($data['user_id']);
 			$res->set_evaluation_id($data['evaluation_id']);
-			$res->set_date($data['date']);
+			$res->set_date(api_get_local_time($data['created_at']));
 			$res->set_score($data['score']);
 			$allres[]=$res;
 		}
@@ -173,11 +173,11 @@ class Result
      * Insert this result into the database
      */
     public function add() {
-		if (isset($this->user_id) && isset($this->evaluation) && isset($this->creation_date) ) {
+		if (isset($this->user_id) && isset($this->evaluation) ) {
 			$tbl_grade_results = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_RESULT);
 			$sql = 'INSERT INTO '.$tbl_grade_results
 					.' (user_id, evaluation_id,
-					date';
+					created_at';
 			if (isset($this->score)) {
 			 $sql .= ',score';
 			}
@@ -208,14 +208,13 @@ class Result
 			$arr=get_object_vars($arr_result[0]);
 
 			$sql = 'INSERT INTO '.$tbl_grade_results_log
-					.' (id_result,user_id, evaluation_id,
-					date_log';
+					.' (id_result,user_id, evaluation_id,created_at';
 			if (isset($arr['score'])) {
 			 	$sql .= ',score';
 			}
 				$sql .= ') VALUES
 					('.(int)$arr['id'].','.(int)$arr['user_id'].', '.(int)$arr['evaluation']
-					.', '.$arr['creation_date'];
+					.", '".api_get_utc_datetime()."'";
 			if (isset($arr['score'])) {
 				 $sql .= ', '.$arr['score'];
 			}

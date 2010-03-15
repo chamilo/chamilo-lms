@@ -81,7 +81,7 @@ a:active {text-decoration: none; font-weight : bold;  color : black;}
 <body><div id="main">';
 
 	$printdata .= '<h2>'.$view.' : '.$coursename.'</h2>';
-	$printdata .= '<h3>'.get_lang('Date').' : '.date('j/n/Y g:i').'</h3>';
+	$printdata .= '<h3>'.get_lang('Date').' : '.api_convert_and_format_date(null, DATE_FORMAT_SHORT). ' ' . api_convert_and_format_date(null, TIME_NO_SEC_FORMAT).'</h3>';
 	$printdata .= '<table border="1" width="90%" cellspacing="1" cellpadding="1">';
 	foreach ($header_names as $header) {
 		$printdata .= '<th>'.$header.'</th>';
@@ -110,7 +110,7 @@ function export_pdf($pdf,$newarray,$header_names,$format) {
 	$pdf->ezSetCmMargins(0,0,0,0);
 	$pdf->ezSetY(($format=='portrait')?'820':'570');
 	$pdf->selectFont(api_get_path(LIBRARY_PATH).'ezpdf/fonts/Courier.afm');
-	$pdf->ezText(get_lang('FlatView').' ('. date('j/n/Y g:i') .')',12,array('justification'=>'center'));
+	$pdf->ezText(get_lang('FlatView').' ('. api_convert_and_format_date(null, DATE_FORMAT_SHORT). ' ' . api_convert_and_format_date(null, TIME_NO_SEC_FORMAT) .')',12,array('justification'=>'center'));
 	if ($format=='portrait') {
 		$pdf->line(40,790,540,790);
 		$pdf->line(40,40,540,40);

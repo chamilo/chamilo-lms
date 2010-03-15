@@ -143,11 +143,11 @@ class Category implements GradebookItem
 		$paramcount = 0;
 		if (isset($id)) {
 			$id = Database::escape_string($id);
-			$sql.= ' WHERE id = '.$id;
+			$sql.= ' WHERE id = '.intval($id);
 			$paramcount ++;
 		}
 		if (isset($user_id)) {
-			$user_id = Database::escape_string($user_id);
+			$user_id = intval($user_id);
 			if ($paramcount != 0) { $sql .= ' AND';
 			} else {
 			$sql .= ' WHERE';

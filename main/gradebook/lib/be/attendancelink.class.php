@@ -224,7 +224,7 @@ class AttendanceLink extends AbstractLink
    		$session_id = api_get_session_id();
    		if ($tbl_name != '') {
     	$sql = 'SELECT * FROM '.$this->get_attendance_table().' att
-    			WHERE att.id = '.$this->get_ref_id().' AND att.session_id = '.$session_id.' ';
+    			WHERE att.id = '.intval($this->get_ref_id()).' AND att.session_id = '.intval($session_id).' ';
 		$result = Database::query($sql);
 		$row    = Database::fetch_array($result,'ASSOC');
 		$attendance_id = $row['id'];
@@ -239,7 +239,7 @@ class AttendanceLink extends AbstractLink
 		if ($tbl_name == '') {
 			return false;
 		} elseif (!isset($this->attendance_data)) {
-			$sql = 'SELECT * FROM '.$this->get_attendance_table().' att WHERE att.id = '.$this->get_ref_id().' AND att.session_id='.$session_id.'';
+			$sql = 'SELECT * FROM '.$this->get_attendance_table().' att WHERE att.id = '.intval($this->get_ref_id()).' AND att.session_id='.intval($session_id).'';
 			$query = Database::query($sql);
 			$this->attendance_data = Database::fetch_array($query);
     	}

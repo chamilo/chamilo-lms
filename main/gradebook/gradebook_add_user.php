@@ -26,8 +26,8 @@ $add_user_form= new EvalForm(EvalForm :: TYPE_ADD_USERS_TO_EVAL,
 							 null,
 							 'add_users_to_evaluation',
 							 null,
-							 api_get_self() . '?selecteval=' . $_GET['selecteval'],
-							 $_GET['firstletter'],
+							 api_get_self() . '?selecteval=' . Security::remove_XSS($_GET['selecteval']),
+							 Security::remove_XSS($_GET['firstletter']),
 							 $newstudents);
 
 if ( isset($_POST['submit_button']) ) {

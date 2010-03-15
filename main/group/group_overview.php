@@ -1,31 +1,6 @@
 <?php // $Id: group_overview.php 22201 2009-07-17 19:57:03Z cfasanando $
-
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2004-2008 Dokeos SPRL
-	Copyright (c) 2003 Ghent University (UGent)
-	Copyright (c) 2001 Universite catholique de Louvain (UCL)
-	Copyright (c) various contributors
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
-	Mail: info@dokeos.com
-==============================================================================
-*/
-
+/* For licensing terms, see /license.txt */
 /**
-==============================================================================
 *	Main page for the group module.
 *	This script displays the general group settings,
 *	and a list of groups with buttons to view, edit...
@@ -35,14 +10,10 @@
 *	@author Patrick Cool, show group comment under the group name
 *	@author Roan Embrechts, initial self-unsubscribe code, code cleaning, virtual course support
 *	@author Bart Mollet, code cleaning, use of Display-library, list of courseAdmin-tools, use of GroupManager
-*	@package dokeos.group
-==============================================================================
+*	@package chamilo.group
 */
-/*
-==============================================================================
-		INIT SECTION
-==============================================================================
-*/
+/*	INIT SECTION*/
+
 // name of the language file that needs to be included
 $language_file = "group";
 include ('../inc/global.inc.php');

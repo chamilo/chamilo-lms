@@ -172,13 +172,15 @@ $nameTools = get_lang('CreateDocument');
 
 /*	Constants and variables */
 
-$dir = isset($_GET['dir']) ? Security::remove_XSS($_GET['dir']) : Security::remove_XSS($_POST['dir']); // please do not modify this dirname formatting
+$dir = isset($_GET['dir']) ? Security::remove_XSS($_GET['dir']) : Security::remove_XSS($_POST['dir']);
 
 /*	MAIN CODE */
 
 if (api_is_in_group()) {
 	$group_properties = GroupManager::get_group_properties($_SESSION['_gid']);
 }
+
+// Please, do not modify this dirname formatting
 
 if (strstr($dir, '..')) {
 	$dir = '/';

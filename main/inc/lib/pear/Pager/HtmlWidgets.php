@@ -175,15 +175,24 @@ class Pager_HtmlWidgets
                 $selector = '\' + '.'this.options[this.selectedIndex].value + \'';
                 if ($this->pager->_append) {
                     $href = '?' . $this->pager->_http_build_query_wrapper($this->pager->_linkData);
-                    $href = htmlentities($this->pager->_url). preg_replace(
-                        '/(&|&amp;|\?)('.$this->pager->_urlVar.'=)(\d+)/',
+                    // Modified by Ivan Tcholakov, 17-OCT-2008.
+                    //$href = htmlentities($this->pager->_url). preg_replace(
+                    //    '/(&|&amp;|\?)('.$this->pager->_urlVar.'=)(\d+)/',
+                    //    '\\1\\2'.$selector,
+                    //    htmlentities($href)
+                    $href = api_htmlentities($this->pager->_url). preg_replace(
+                        '/(&|&amp;|\?)('.$this->pager->_urlVar.'=)(\d+)/u',
                         '\\1\\2'.$selector,
-                        htmlentities($href)
+                        api_htmlentities($href)
                     );
+                    //
                 } else {
-                    $href = htmlentities($this->pager->_url . str_replace('%d', $selector, $this->pager->_fileName));
+                    // Modified by Ivan Tcholakov, 17-OCT-2008.
+                    //$href = htmlentities($this->pager->_url . str_replace('%d', $selector, $this->pager->_fileName));
+                    $href = api_htmlentities($this->pager->_url . str_replace('%d', $selector, $this->pager->_fileName));
+                    //
                 }
-                $tmp .= ' onchange="document.location.href=\''
+                $tmp .= ' onchange="javascript: document.location.href=\''
                      . $href .'\''
                      . '"';
             } elseif ($this->pager->_httpMethod == 'POST') {

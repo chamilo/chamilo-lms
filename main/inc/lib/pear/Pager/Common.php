@@ -33,7 +33,7 @@
  * @author     Richard Heyes <richard@phpguru.org>
  * @copyright  2003-2006 Lorenzo Alberton, Richard Heyes
  * @license    http://www.debian.org/misc/bsd.license  BSD License (3 Clause)
- * @version    CVS: $Id: Common.php 20456 2009-05-10 17:27:44Z ivantcholakov $
+ * @version    CVS: $Id: Common.php,v 1.55 2006/06/07 11:33:00 quipo Exp $
  * @link       http://pear.php.net/package/Pager
  */
 
@@ -41,6 +41,14 @@
  * Two constants used to guess the path- and file-name of the page
  * when the user doesn't set any other value
  */
+// Modified by Chamilo team, 16-MAR-2010.
+//if (substr($_SERVER['PHP_SELF'], -1) == '/') {
+//    define('CURRENT_FILENAME', '');
+//    define('CURRENT_PATHNAME', 'http://'.$_SERVER['HTTP_HOST'].str_replace('\\', '/', $_SERVER['PHP_SELF']));
+//} else {
+//    define('CURRENT_FILENAME', preg_replace('/(.*)\?.*/', '\\1', basename($_SERVER['PHP_SELF'])));
+//    define('CURRENT_PATHNAME', str_replace('\\', '/', dirname($_SERVER['PHP_SELF'])));
+//}
 if (substr(api_get_self(), -1) == '/') {
     define('CURRENT_FILENAME', '');
     define('CURRENT_PATHNAME', 'http://'.$_SERVER['HTTP_HOST'].str_replace('\\', '/', api_get_self()));
@@ -48,6 +56,7 @@ if (substr(api_get_self(), -1) == '/') {
     define('CURRENT_FILENAME', preg_replace('/(.*)\?.*/', '\\1', basename(api_get_self())));
     define('CURRENT_PATHNAME', str_replace('\\', '/', dirname(api_get_self())));
 }
+//
 /**
  * Error codes
  */
@@ -753,7 +762,10 @@ class Pager_Common
                 $href = str_replace('%d', $this->_linkData[$this->_urlVar], $this->_fileName);
             }
             return sprintf('<a href="%s"%s%s%s title="%s">%s</a>',
-                           htmlentities($this->_url . $href),
+                           // Modified by Ivan Tcholakov, 17-OCT-2008.
+                           //htmlentities($this->_url . $href),
+                           api_htmlentities($this->_url . $href),
+                           //
                            empty($this->_classString) ? '' : ' '.$this->_classString,
                            empty($this->_attributes)  ? '' : ' '.$this->_attributes,
                            empty($this->_accesskey)   ? '' : ' accesskey="'.$this->_linkData[$this->_urlVar].'"',
@@ -816,7 +828,10 @@ class Pager_Common
         }
 
         // We /shouldn't/ need to escape the URL ...
-        $str .= sprintf('form.action = "%s"; ', htmlentities($formAction));
+        // Modified by Ivan Tcholakov, 17-OCT-2008.
+        //$str .= sprintf('form.action = "%s"; ', htmlentities($formAction));
+        $str .= sprintf('form.action = "%s"; ', api_htmlentities($formAction));
+        //
         $str .= sprintf('form.method = "%s"; ', $this->_httpMethod);
         foreach ($data as $key => $val) {
             $str .= $this->_generateFormOnClickHelper($val, $key);
@@ -845,7 +860,6 @@ class Pager_Common
      */
     function _generateFormOnClickHelper($data, $prev = '')
     {
-		global $charset;
         $str = '';
         if (is_array($data) || is_object($data)) {
             // foreach key/visible member
@@ -865,8 +879,10 @@ class Pager_Common
             if (!$this->_isEncoded($escapedData)) {
                 $escapedData = urlencode($escapedData);
             }
+            // Modified by Ivan Tcholakov, 16-MAR-2010.
             //$escapedData = htmlentities($escapedData, ENT_QUOTES, 'UTF-8');
-            $escapedData = api_htmlentities($escapedData, ENT_QUOTES, $charset);
+            $escapedData = api_htmlentities($escapedData, ENT_QUOTES);
+            //
 
             $str .= 'input = document.createElement("input"); ';
             $str .= 'input.type = "hidden"; ';
@@ -1120,7 +1136,10 @@ class Pager_Common
         } else {
             $href = str_replace('%d', $this->_linkData[$this->_urlVar], $this->_fileName);
         }
-        return htmlentities($this->_url . $href);
+        // Modified by Ivan Tcholakov, 17-OCT-2008.
+        //return htmlentities($this->_url . $href);
+        return api_htmlentities($this->_url . $href);
+        //
     }
 
     // }}}
@@ -1149,7 +1168,7 @@ class Pager_Common
     function getPerPageSelectBox($start=5, $end=30, $step=5, $showAllData=false, $extraParams=array())
     {
         require_once 'Pager/HtmlWidgets.php';
-        // Suppressing a deprecation warning on PHP 5.3
+        // Modified by Ivan Tcholakov, 16-MAR-2010. Suppressing a deprecation warning on PHP 5.3
         //$widget =& new Pager_HtmlWidgets($this);
         $widget = new Pager_HtmlWidgets($this);
         //
@@ -1176,7 +1195,7 @@ class Pager_Common
     function getPageSelectBox($params = array(), $extraAttributes = '')
     {
         require_once 'Pager/HtmlWidgets.php';
-        // Suppressing a deprecation warning on PHP 5.3
+        // Modified by Ivan Tcholakov, 16-MAR-2010. Suppressing a deprecation warning on PHP 5.3
         //$widget =& new Pager_HtmlWidgets($this);
         $widget = new Pager_HtmlWidgets($this);
         //
@@ -1282,7 +1301,10 @@ class Pager_Common
             }
             // If the value is an array, recursively parse it
             if (is_array($val)) {
-                array_push($tmp, $this->__http_build_query($val, htmlentities($key)));
+                // Modified by Ivan Tcholakov, 17-OCT-2008.
+                //array_push($tmp, $this->__http_build_query($val, htmlentities($key)));
+                array_push($tmp, $this->__http_build_query($val, api_htmlentities($key)));
+                //
                 continue;
             }
         }
@@ -1300,7 +1322,6 @@ class Pager_Common
      */
     function __http_build_query($array, $name)
     {
-		global $charset;
         $tmp = array ();
         $separator = ini_get('arg_separator.output');
         if ($separator == '&amp;') {
@@ -1312,7 +1333,10 @@ class Pager_Common
                 array_push($tmp, $this->__http_build_query($value, $name.'%5B'.$key.'%5D'));
             } elseif (is_scalar($value)) {
                 //array_push($tmp, sprintf('%s[%s]=%s', $name, htmlentities($key), htmlentities($value)));
-                array_push($tmp, $name.'%5B'.api_htmlentities($key, ENT_QUOTES, $charset).'%5D='.api_htmlentities($value, ENT_QUOTES, $charset));
+                // Modified by Ivan Tcholakov, 16-MAR-2010.
+                //array_push($tmp, $name.'%5B'.htmlentities($key).'%5D='.htmlentities($value));
+                array_push($tmp, $name.'%5B'.api_htmlentities($key).'%5D='.api_htmlentities($value));
+                //
             } elseif (is_object($value)) {
                 //array_push($tmp, $this->__http_build_query(get_object_vars($value), sprintf('%s[%s]', $name, $key)));
                 array_push($tmp, $this->__http_build_query(get_object_vars($value), $name.'%5B'.$key.'%5D'));
@@ -1399,17 +1423,17 @@ class Pager_Common
             if (strncasecmp($this->_fileName, 'javascript', 10) != 0) {
                 $this->_url .= '/';
             }
-            if (!api_strstr($this->_fileName, '%d')) {
+            if (!strstr($this->_fileName, '%d')) {
                 trigger_error($this->errorMessage(ERROR_PAGER_INVALID_USAGE), E_USER_WARNING);
             }
         }
 
         $this->_classString = '';
-        if (api_strlen($this->_linkClass)) {
+        if (strlen($this->_linkClass)) {
             $this->_classString = 'class="'.$this->_linkClass.'"';
         }
 
-        if (api_strlen($this->_curPageLinkClassName)) {
+        if (strlen($this->_curPageLinkClassName)) {
             $this->_curPageSpanPre  = '<span class="'.$this->_curPageLinkClassName.'">';
             $this->_curPageSpanPost = '</span>';
         }
@@ -1434,7 +1458,7 @@ class Pager_Common
             session_write_close();
         }
 
-        // Suppressing warnings on PHP 5.3
+        // Modified by Ivan Tcholakov, 16-MAR-2010. Suppressing warnings on PHP 5.3
         //$this->_spacesBefore = str_repeat('&nbsp;', $this->_spacesBeforeSeparator);
         //$this->_spacesAfter  = str_repeat('&nbsp;', $this->_spacesAfterSeparator);
         $this->_spacesBefore = str_repeat('&nbsp;', intval($this->_spacesBeforeSeparator));

@@ -56,11 +56,7 @@ class HTML_QuickForm_date extends HTML_QuickForm_group
         'language'         => 'en',
         'format'           => 'dMY',
         'minYear'          => 2001,
-        // Modified by Chamilo team, 16-MAR-2010.
-        // TODO: This modification to be re-thought.
-        //'maxYear'          => 2090,
-        'maxYear'          => 2010,
-        //
+        'maxYear'          => 2090,
         'addEmptyOption'   => false,
         'emptyOptionValue' => '',
         'emptyOptionText'  => '&nbsp;',
@@ -288,6 +284,11 @@ class HTML_QuickForm_date extends HTML_QuickForm_group
         $this->_persistantFreeze = true;
         $this->_appendName = true;
         $this->_type = 'date';
+        // Added by Ivan Tcholakov, 16-MAR-2010.
+        $current_year = intval(api_get_local_time());
+        $this->_options['minYear'] = $current_year - 9;
+        $this->_options['maxYear'] = $current_year + 1;
+        //
         // set the options, do not bother setting bogus ones
         if (is_array($options)) {
             foreach ($options as $name => $value) {

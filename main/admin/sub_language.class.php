@@ -213,7 +213,7 @@ class SubLanguageManager {
 	/**
 	 * Make available the language
 	 * @param Integer The language id
-	 * @return void()
+	 * @return void
 	 */
 	public static function make_available_language ($language_id) {
 	 	$tbl_admin_languages= Database :: get_main_table(TABLE_MAIN_LANGUAGE);

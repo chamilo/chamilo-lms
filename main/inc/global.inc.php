@@ -446,7 +446,7 @@ if (!empty($valid_languages)) {
 // to use it within the function get_lang(...).
 $language_interface_initial_value = $language_interface;
 
-/*
+/**
  * Include all necessary language files
  * - trad4all
  * - notification

@@ -3,7 +3,7 @@
 /**
  * Class to select, sort and transform object data into array data,
  * used for a student's general view
- * @author Bert Stepp�
+ * @author Bert Steppé
  */
 class UserDataGenerator
 {

@@ -2,20 +2,21 @@
 /* For licensing terms, see /license.txt */
 /**
  * Various user related functions
- * @package dokeos.gradebook
+ * @package chamilo.gradebook
  */
 /**
  * returns users within a course given by param
  * @param $course_id
  */
 function get_users_in_course($course_id) {
-	$tbl_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
-	$tbl_session_course_user = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-	$tbl_user = Database :: get_main_table(TABLE_MAIN_USER);
+	$tbl_course_user 			= Database :: get_main_table(TABLE_MAIN_COURSE_USER);
+	$tbl_session_course_user 	= Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+	$tbl_user 					= Database :: get_main_table(TABLE_MAIN_USER);
 
 	$order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname ASC' : ' ORDER BY lastname, firstname ASC';
 
 	$current_session = api_get_session_id();
+	$course_id = Databse::escape_string($course_id);
 
 	if (!empty($current_session)) {
 		$sql = "SELECT user.user_id,lastname,firstname
@@ -31,9 +32,6 @@ function get_users_in_course($course_id) {
 			." AND course_rel_user.course_code='".$course_id."'"
 			.$order_clause;
 	}
-
-
-
 	$result = Database::query($sql);
 	return get_user_array_from_sql_result($result);
 }
@@ -71,7 +69,7 @@ function get_all_users ($evals = array(), $links = array()) {
 
 			$sql = 'SELECT user.user_id,lastname,firstname'
 					.' FROM '.$tbl_res.' as res, '.$tbl_user.' as user'
-					.' WHERE res.evaluation_id = '.$eval->get_id()
+					.' WHERE res.evaluation_id = '.intval($eval->get_id())
 					.' AND res.user_id = user.user_id';
 			$result = Database::query($sql);
 			$users = array_merge($users,get_user_array_from_sql_result($result));
@@ -99,6 +97,8 @@ function find_students($mask= '') {
 	if (!api_is_allowed_to_create_course() || empty ($mask)) {
 		return null;
 	}
+	$mask = Database::escape_string($mask);
+	 
 	$tbl_user= Database :: get_main_table(TABLE_MAIN_USER);
 	$tbl_cru= Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 	$sql= 'SELECT DISTINCT user.user_id, user.lastname, user.firstname, user.email' . ' FROM ' . $tbl_user . ' user';
@@ -126,7 +126,7 @@ function find_students($mask= '') {
  */
 function get_user_info_from_id($userid) {
 	$user_table= Database :: get_main_table(TABLE_MAIN_USER);
-	$sql= 'SELECT * FROM ' . $user_table . ' WHERE user_id=' . $userid;
+	$sql= 'SELECT * FROM ' . $user_table . ' WHERE user_id=' . intval($userid);
 	$res= Database::query($sql);
 	$user= Database::fetch_array($res,ASSOC);
 	return $user;

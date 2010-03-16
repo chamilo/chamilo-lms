@@ -16,7 +16,7 @@
 // | Author: Alexey Borzov <avb@php.net>                                  |
 // +----------------------------------------------------------------------+
 //
-// $Id: Back.php 6184 2005-09-07 10:08:17Z bmol $
+// $Id: Back.php,v 1.3 2004/03/02 21:15:45 avb Exp $
 
 require_once 'HTML/QuickForm/Action.php';
 
@@ -25,7 +25,7 @@ require_once 'HTML/QuickForm/Action.php';
  *
  * @author  Alexey Borzov <avb@php.net>
  * @package HTML_QuickForm_Controller
- * @version $Revision: 6184 $
+ * @version $Revision: 1.3 $
  */
 class HTML_QuickForm_Action_Back extends HTML_QuickForm_Action
 {
@@ -43,10 +43,16 @@ class HTML_QuickForm_Action_Back extends HTML_QuickForm_Action
         // get the previous page and go to it
         // we don't check validation status here, 'jump' handler should
         if (null === ($prevName = $page->controller->getPrevName($pageName))) {
+            // Modified by Chamilo team, 16-MAR-2010.
+            //$page->handle('jump');
             return $page->handle('jump');
+            //
         } else {
             $prev =& $page->controller->getPage($prevName);
+            // Modified by Chamilo team, 16-MAR-2010.
+            //$prev->handle('jump');
             return $prev->handle('jump');
+            //
         }
     }
 }

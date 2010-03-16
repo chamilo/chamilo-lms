@@ -17,7 +17,7 @@
 // |          Bertrand Mansion <bmansion@mamasam.com>                     |
 // +----------------------------------------------------------------------+
 //
-// $Id: Controller.php 6184 2005-09-07 10:08:17Z bmol $
+// $Id: Controller.php,v 1.10 2004/10/01 09:48:35 avb Exp $
 
 require_once 'HTML/QuickForm/Page.php';
 
@@ -32,7 +32,7 @@ require_once 'HTML/QuickForm/Page.php';
  *
  * @author  Alexey Borzov <avb@php.net>
  * @package HTML_QuickForm_Controller
- * @version $Revision: 6184 $
+ * @version $Revision: 1.10 $
  */
 class HTML_QuickForm_Controller
 {

@@ -16,7 +16,7 @@
 // | Author: Alexey Borzov <avb@php.net>                                  |
 // +----------------------------------------------------------------------+
 //
-// $Id: Submit.php 6184 2005-09-07 10:08:17Z bmol $
+// $Id: Submit.php,v 1.2 2004/03/02 21:15:45 avb Exp $
 
 require_once 'HTML/QuickForm/Action.php';
 
@@ -25,7 +25,7 @@ require_once 'HTML/QuickForm/Action.php';
  *
  * @author  Alexey Borzov <avb@php.net>
  * @package HTML_QuickForm_Controller
- * @version $Revision: 6184 $
+ * @version $Revision: 1.2 $
  */
 class HTML_QuickForm_Action_Submit extends HTML_QuickForm_Action
 {
@@ -40,16 +40,25 @@ class HTML_QuickForm_Action_Submit extends HTML_QuickForm_Action
 
         // All pages are valid, process
         if ($page->controller->isValid()) {
+            // Modified by Chamilo team, 16-MAR-2010.
+            //$page->handle('process');
             return $page->handle('process');
+            //
 
         // Current page is invalid, display it
         } elseif (!$data['valid'][$pageName]) {
+            // Modified by Chamilo team, 16-MAR-2010.
+            //$page->handle('display');
             return $page->handle('display');
+            //
 
         // Some other page is invalid, redirect to it
         } else {
             $target =& $page->controller->getPage($page->controller->findInvalid());
+            // Modified by Chamilo team, 16-MAR-2010.
+            //$target->handle('jump');
             return $target->handle('jump');
+            //
         }
     }
 }

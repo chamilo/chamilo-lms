@@ -16,7 +16,7 @@
 // | Author: Alexey Borzov <avb@php.net>                                  |
 // +----------------------------------------------------------------------+
 //
-// $Id: Display.php 6184 2005-09-07 10:08:17Z bmol $
+// $Id: Display.php,v 1.4 2004/10/01 09:48:37 avb Exp $
 
 require_once 'HTML/QuickForm/Action.php';
 
@@ -29,7 +29,7 @@ require_once 'HTML/QuickForm/Action.php';
  *
  * @author  Alexey Borzov <avb@php.net>
  * @package HTML_QuickForm_Controller
- * @version $Revision: 6184 $
+ * @version $Revision: 1.4 $
  */
 class HTML_QuickForm_Action_Display extends HTML_QuickForm_Action
 {
@@ -44,7 +44,10 @@ class HTML_QuickForm_Action_Display extends HTML_QuickForm_Action
             // unless all previous pages are valid (see also bug #2323)
             if ($page->controller->isModal() && !$page->controller->isValid($page->getAttribute('id'))) {
                 $target =& $page->controller->getPage($page->controller->findInvalid());
+                // Modified by Chamilo team, 16-MAR-2010.
+                //$target->handle('jump');
                 return $target->handle('jump');
+                //
             }
             $data =& $page->controller->container();
             if (!empty($data['values'][$pageName])) {
@@ -59,7 +62,10 @@ class HTML_QuickForm_Action_Display extends HTML_QuickForm_Action
         if (isset($validate) && $validate) {
             $page->validate();
         }
+        // Modified by Chamilo team, 16-MAR-2010.
+        //$this->_renderForm($page);
         return $this->_renderForm($page);
+        //
     }
 
 

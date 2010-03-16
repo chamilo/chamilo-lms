@@ -17,7 +17,7 @@
 // |          Bertrand Mansion <bmansion@mamasam.com>                     |
 // +----------------------------------------------------------------------+
 //
-// $Id: Action.php 6184 2005-09-07 10:08:17Z bmol $
+// $Id: Action.php,v 1.1 2003/08/29 12:19:41 avb Exp $
 
 /**
  * Class representing an action to perform on HTTP request. The Controller
@@ -27,7 +27,7 @@
  *
  * @author  Alexey Borzov <avb@php.net>
  * @package HTML_QuickForm_Controller
- * @version $Revision: 6184 $
+ * @version $Revision: 1.1 $
  */
 class HTML_QuickForm_Action
 {

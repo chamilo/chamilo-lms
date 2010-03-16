@@ -16,7 +16,7 @@
 // | Author: Alexey Borzov <avb@php.net>                                  |
 // +----------------------------------------------------------------------+
 //
-// $Id: Jump.php 6184 2005-09-07 10:08:17Z bmol $
+// $Id: Jump.php,v 1.3 2004/03/02 21:15:45 avb Exp $
 
 require_once 'HTML/QuickForm/Action.php';
 
@@ -25,7 +25,7 @@ require_once 'HTML/QuickForm/Action.php';
  *
  * @author  Alexey Borzov <avb@php.net>
  * @package HTML_QuickForm_Controller
- * @version $Revision: 6184 $
+ * @version $Revision: 1.3 $
  */
 class HTML_QuickForm_Action_Jump extends HTML_QuickForm_Action
 {

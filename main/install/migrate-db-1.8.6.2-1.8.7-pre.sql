@@ -68,7 +68,7 @@ INSERT INTO settings_current (variable, subkey, type, category, selected_value, 
 ALTER TABLE user_field_values CHANGE id id BIGINT NOT NULL AUTO_INCREMENT;
 ALTER TABLE user_field_values ADD INDEX (user_id, field_id);
 
-UPDATE settings_current SET selected_value = '1.8.7.10741' WHERE variable = 'dokeos_database_version';
+UPDATE settings_current SET selected_value = '1.8.7.10983' WHERE variable = 'dokeos_database_version';
 
 ALTER TABLE course_rel_user DROP PRIMARY KEY, ADD PRIMARY KEY (course_code, user_id, relation_type);
 ALTER TABLE session_rel_user DROP PRIMARY KEY, ADD PRIMARY KEY (id_session, id_user, relation_type);
@@ -117,3 +117,4 @@ ALTER TABLE attendance ADD INDEX(active);
 ALTER TABLE lp_view ADD session_id INT NOT NULL DEFAULT 0;
 ALTER TABLE lp_view ADD INDEX(session_id);
 INSERT INTO course_setting (variable,value,category) VALUES ('allow_user_view_user_list',1,'user');
+ALTER TABLE tool_intro ADD COLUMN session_id INT  NOT NULL DEFAULT 0 AFTER intro_text, DROP PRIMARY KEY, ADD PRIMARY KEY  USING BTREE(id, session_id);

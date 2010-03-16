@@ -1105,7 +1105,8 @@ function update_Db_course($courseDbName, $language = null)
 		CREATE TABLE `".$TABLEINTROS . "` (
 		id varchar(50) NOT NULL,
 		intro_text text NOT NULL,
-		PRIMARY KEY (id)
+		session_id INT  NOT NULL DEFAULT 0,
+		PRIMARY KEY (id, session_id)
 		)" . $charset_clause);
 
 	/*
@@ -2324,12 +2325,12 @@ function fill_Db_course($courseDbName, $courseRepository, $language,$default_doc
 		*/
 
 		$intro_text='<table width="100%" border="0" cellpadding="0" cellspacing="0"><tr><td width="110" valign="middle" align="left"><img src="'.api_get_path(REL_CODE_PATH).'img/mr_dokeos.png" alt="mr. Dokeos" title="mr. Dokeos" /></td><td valign="middle" align="left">'.lang2db(get_lang('IntroductionText')).'</td></tr></table>';
-		Database::query("INSERT INTO `".$TABLEINTROS . "` VALUES ('" . TOOL_COURSE_HOMEPAGE . "','".$intro_text. "')");
-		Database::query("INSERT INTO `".$TABLEINTROS . "` VALUES ('" . TOOL_STUDENTPUBLICATION . "','".lang2db(get_lang('IntroductionTwo')) . "')");
+		Database::query("INSERT INTO `".$TABLEINTROS . "` VALUES ('" . TOOL_COURSE_HOMEPAGE . "','".$intro_text. "', 0)");
+		Database::query("INSERT INTO `".$TABLEINTROS . "` VALUES ('" . TOOL_STUDENTPUBLICATION . "','".lang2db(get_lang('IntroductionTwo')) . "', 0)");
 
 		//wiki intro
 		$intro_wiki='<table width="100%" border="0" cellpadding="0" cellspacing="0"><tr><td width="110" valign="top" align="left"></td><td valign="top" align="left">'.lang2db(get_lang('IntroductionWiki')).'</td></tr></table>';
-		Database::query("INSERT INTO `".$TABLEINTROS . "` VALUES ('" . TOOL_WIKI . "','".$intro_wiki. "')");
+		Database::query("INSERT INTO `".$TABLEINTROS . "` VALUES ('" . TOOL_WIKI . "','".$intro_wiki. "', 0)");
 
 		/*
 		-----------------------------------------------------------

@@ -714,7 +714,7 @@ if (isset ($_GET['studentoverview'])) {
 		$pdf->ezText($organization_name,22,array('justification'=>'left'));
 		$pdf->ezSetY(580);
 		$pdf->ezText($portal_name,22,array('justification'=>'right'));
-		$pdf->ezStream();
+		$pdf->ezStream();*/
 	}
 	exit;
 } else { //in any other case (no search, no pdf), print the available gradebooks

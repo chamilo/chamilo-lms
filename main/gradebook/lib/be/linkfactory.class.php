@@ -6,13 +6,14 @@
 // - add include
 // - change create() and get_all_types()
 // Please do not change existing values, they are used in the database !
-define('LINK_EXERCISE',		1);
-define('LINK_DROPBOX',2);
-define('LINK_STUDENTPUBLICATION',3);
-define('LINK_LEARNPATH',4);
-define('LINK_FORUM_THREAD',5);
+define('LINK_EXERCISE',				1);
+define('LINK_DROPBOX',				2);
+define('LINK_STUDENTPUBLICATION',	3);
+define('LINK_LEARNPATH',			4);
+define('LINK_FORUM_THREAD',			5);
 //define('LINK_WORK',6);
-define('LINK_ATTENDANCE',7);
+define('LINK_ATTENDANCE',			7);
+
 require_once 'gradebookitem.class.php';
 require_once 'abstractlink.class.php';
 require_once 'exerciselink.class.php';
@@ -22,6 +23,7 @@ require_once 'studentpublicationlink.class.php';
 require_once 'learnpathlink.class.php';
 require_once 'forumthreadlink.class.php';
 require_once 'attendancelink.class.php';
+
 /**
  * Factory for link objects
  * @author Bert Steppé

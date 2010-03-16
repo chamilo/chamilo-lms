@@ -156,31 +156,27 @@ if (count($friends) == 0 ) {
 					$number_of_images = 8;
 					
 					$number_friends = count($friends);
-					if ($number_friends != 0) {
-						$number_loop   = ($number_friends/$number_of_images);
-						$loop_friends  = ceil($number_loop);
-						$j=0;
-						$friend_html.= '<table width="100%" border="0" cellpadding="0" cellspacing="0" bgcolor="" >';
-						for ($k=0;$k<$loop_friends;$k++) {
-							$friend_html.='<tr><td valign="top">';
-							if ($j==$number_of_images) {
-								$number_of_images=$number_of_images*2;
+					$j=0;
+					echo '<div id ="social-content-right">';
+					$friend_html.= '<table width="100%" border="0" cellpadding="0" cellspacing="0" bgcolor="" >';
+					for ($k=0;$k<$number_friends;$k++) {
+						$friend_html.='<tr><td valign="top">';
+					
+						while ($j<$number_friends) {
+							if (isset($friends[$j])) {
+								$friend = $friends[$j];
+								$user_name = api_xml_http_response_encode($friend['firstName'].' '.$friend['lastName']);
+								$friends_profile = SocialManager::get_picture_user($friend['friend_user_id'], $friend['image'], 92);
+								$friend_html.='<div onMouseover="show_icon_delete(this)" onMouseout="hide_icon_delete(this)" class="image-social-content" id=div_'.$friends[$j]['friend_user_id'].'>';
+								$friend_html.='<span><a href="profile.php?u='.$friend['friend_user_id'].'"><center><img src="'.$friends_profile['file'].'" style="height:60px;border:3pt solid #eee" id="imgfriend_'.$friend['friend_user_id'].'" title="'.$user_name.'" /></center></a></span>';
+								$friend_html.='<img onclick="delete_friend (this)" id=img_'.$friend['friend_user_id'].' src="../img/blank.gif" alt="" title=""  class="image-delete" /> <center class="friend">'.$user_name.'</center></div>';				
 							}
-							while ($j<$number_of_images) {
-								if (isset($friends[$j])) {
-									$friend = $friends[$j];
-									$user_name = api_xml_http_response_encode($friend['firstName'].' '.$friend['lastName']);
-									$friends_profile = SocialManager::get_picture_user($friend['friend_user_id'], $friend['image'], 92);
-									$friend_html.='<div onMouseover="show_icon_delete(this)" onMouseout="hide_icon_delete(this)" class="image-social-content" id=div_'.$friends[$j]['friend_user_id'].'>';
-									$friend_html.='<span><a href="profile.php?u='.$friend['friend_user_id'].'"><center><img src="'.$friends_profile['file'].'" style="height:60px;border:3pt solid #eee" id="imgfriend_'.$friend['friend_user_id'].'" title="'.$user_name.'" /></center></a></span>';
-									$friend_html.='<img onclick="delete_friend (this)" id=img_'.$friend['friend_user_id'].' src="../img/blank.gif" alt="" title=""  class="image-delete" /> <center class="friend">'.$user_name.'</center></div>';				
-								}
-								$j++;
-							}
-							$friend_html.='</td></tr>';
+							$j++;
 						}
-						$friend_html.='<br/></table>';
+						$friend_html.='</td></tr>';
 					}
+					$friend_html.='<br/></table>';
+					echo '</div>';
 					echo $friend_html;
 				echo '</div>';
 				echo '</div>';

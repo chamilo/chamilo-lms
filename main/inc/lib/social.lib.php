@@ -813,10 +813,10 @@ class SocialManager extends UserManager {
 
 				$table_row[] = '<a href="'.$url.'"><img title = "'.$name.'" class="social-home-users-online" alt="'.$name.'" src="'.$friends_profile['file'].'" height="60px"></a>';
 				$table_row[] = '<a href="'.$url.'" style="font-size:10px;">'.api_get_person_name(cut($user_info['firstName'],15), cut($user_info['lastName'],15)).'</a>';
-
+/*
 				if (api_get_setting('show_email_addresses') == 'true') {
 					$table_row[] = Display::encrypted_mailto_link($user_info['mail']);
-				}
+				}*/
 				$user_anonymous = api_get_anonymous_id();
 				$table_data[] = $table_row;
 			}

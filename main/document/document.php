@@ -32,7 +32,7 @@
 /*	INIT SECTION */
 
 // Name of the language file that needs to be included
-$language_file = array('document', 'slideshow');
+$language_file = array('document', 'slideshow', 'gradebook');
 
 require_once '../inc/global.inc.php';
 $this_section = SECTION_COURSES;
@@ -59,7 +59,7 @@ $(document).ready( function() {
  </script>';
 //session
 if (isset($_GET['id_session'])) {
-	$_SESSION['id_session'] = Security::remove_XSS($_GET['id_session']);
+	$_SESSION['id_session'] = intval($_GET['id_session']);
 }
 //create directory certificates
 $course_id=api_get_course_id();
@@ -131,6 +131,9 @@ if (isset($_GET['curdirpath']) && $_GET['curdirpath'] != '') {
 	$curdirpath = '/';
 }
 $curdirpathurl = urlencode($curdirpath);
+
+//I'm in the certification module?  
+$is_certificate_mode = DocumentManager::is_certificate_mode($curdirpath);
 
 $course_dir      = $_course['path'].'/document';
 $sys_course_path = api_get_path(SYS_COURSE_PATH);
@@ -272,17 +275,23 @@ $image_files_only = '';
 
 /*	Header */
 
-$interbreadcrumb[]= array ('url' => '', 'name' => get_lang('ToolDocument'));
+if ($is_certificate_mode) {
+	$interbreadcrumb[]= array (	'url' => '../gradebook/index.php', 'name' => get_lang('Gradebook'));
+} else {  
+	$interbreadcrumb[]= array ('url'=>'', 'name'=> get_lang('Document'));
+}
 
 // Interbreadcrumb for the current directory root path
 
 $dir_array = explode('/', $curdirpath);
 $array_len = count($dir_array);
 
-if ($array_len > 1) {
-	if (empty($_SESSION['_gid'])) {
-		$url_dir = 'document.php?&curdirpath=/';
-		$interbreadcrumb[] = array('url' => $url_dir, 'name' => get_lang('HomeDirectory'));
+if (!$is_certificate_mode) {
+	if ($array_len > 1) {
+		if (empty($_SESSION['_gid'])) {
+			$url_dir = 'document.php?&curdirpath=/';
+			$interbreadcrumb[] = array('url' => $url_dir, 'name' => get_lang('HomeDirectory'));
+		}
 	}
 }
 
@@ -296,7 +305,12 @@ for ($i = 0; $i < $array_len; $i++) {
 	}
 
 	$url_dir = 'document.php?&curdirpath='.$dir_acum.$dir_array[$i];
-	$interbreadcrumb[] = array('url' => $url_dir, 'name' => $dir_array[$i]);
+	if ($is_certificate_mode) {
+		$interbreadcrumb[]= array ('url'=>$url_dir.'&selectcat='.Security::remove_XSS($_GET['selectcat']), 'name'=> $dir_array[$i]);
+	} else {
+		$interbreadcrumb[]= array ('url'=>$url_dir, 'name'=> $dir_array[$i]);	
+	}
+	
 	$dir_acum.=$dir_array[$i].'/';
 }
 
@@ -721,7 +735,7 @@ if ($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_fold
 			<?php }?>
 			
 			<!-- file upload link -->
-		<?php
+			<?php
 				$upload_name =  get_lang('UplUploadDocument');
 				if ($is_certificate_mode) { 
 				$upload_name =	 get_lang('UploadCertificate');
@@ -742,8 +756,8 @@ if (!is_null($docs_and_folders)) {
 	global $total_size;
 	if (!$is_certificate_mode && $total_size!=0  &&  (api_get_setting('students_download_folders') == 'true' || api_is_allowed_to_edit() || api_is_platform_admin())){ ?>
 	<!-- download zipped folder -->
-			<a href="<?php echo api_get_self(); ?>?<?php echo api_get_cidreq();?>&action=downloadfolder"><img src="../img/zip_save.gif" border="0" title="<?php echo get_lang("Save"); ?> (ZIP)" alt="" /></a>
-			<a href="<?php echo api_get_self(); ?>?<?php echo api_get_cidreq();?>&action=downloadfolder"><?php echo get_lang("Save"); ?> (ZIP)</a>&nbsp;
+		<a href="<?php echo api_get_self(); ?>?<?php echo api_get_cidreq();?>&action=downloadfolder"><img src="../img/zip_save.gif" border="0" title="<?php echo get_lang("Save"); ?> (ZIP)" alt="" /></a>
+		<a href="<?php echo api_get_self(); ?>?<?php echo api_get_cidreq();?>&action=downloadfolder"><?php echo get_lang("Save"); ?> (ZIP)</a>&nbsp;
 <?php
 	}
 }
@@ -755,7 +769,7 @@ if ($image_present) {
 }
 echo '</div>';
 if (!$is_certificate_mode)
-echo build_directory_selector($folders, $curdirpath, (isset($group_properties['directory']) ? $group_properties['directory'] : array()), true);
+	echo build_directory_selector($folders, $curdirpath, (isset($group_properties['directory']) ? $group_properties['directory'] : array()), true);
 
 if (($is_allowed_to_edit || $group_member_with_upload_rights) && count($docs_and_folders) > 1) {
 	$column_show[] = 1;

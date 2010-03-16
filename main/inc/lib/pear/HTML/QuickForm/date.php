@@ -73,7 +73,7 @@ class HTML_QuickForm_date extends HTML_QuickForm_group
         'format'           => 'dMY',
         'minYear'          => 2001,
         // Modified by Chamilo team, 16-MAR-2010.
-        // TODO: This modification to be rethinked.
+        // TODO: This modification to be re-thought.
         //'maxYear'          => 2090,
         'maxYear'          => 2010,
         //

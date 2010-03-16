@@ -19,7 +19,7 @@
 * @author     Laurent Laville <pear@laurent-laville.org>
 * @copyright  1997-2005 The PHP Group
 * @license    http://www.php.net/license/3_0.txt  PHP License 3.0
-* @version    CVS: $Id: advmultiselect.php 20028 2009-04-23 19:32:35Z cfasanando $
+* @version    CVS: $Id: advmultiselect.php,v 1.5 2005/08/05 14:02:43 farell Exp $
 * @link       http://pear.php.net/package/HTML_QuickForm_advmultiselect
 */
 
@@ -330,6 +330,7 @@ class HTML_QuickForm_advmultiselect extends HTML_QuickForm_select
             case 'add':
                 if (is_null($attributes)) {
                     $this->_addButtonAttributes = array('name'  => 'add',
+                                                        'value' => ' >> ',
                                                         'type'  => 'button'
                                                        );
                 } else {
@@ -341,6 +342,7 @@ class HTML_QuickForm_advmultiselect extends HTML_QuickForm_select
             case 'remove':
                 if (is_null($attributes)) {
                     $this->_removeButtonAttributes = array('name'  => 'remove',
+                                                           'value' => ' << ',
                                                            'type'  => 'button'
                                                           );
                 } else {
@@ -440,9 +442,12 @@ class HTML_QuickForm_advmultiselect extends HTML_QuickForm_select
 
         if ($raw !== true) {
             $css = '<style type="text/css">' . PHP_EOL
+                 // Modified by Chamilo team, 16-MAR-2010.
+                 //. '<!--' . $css . '// -->'  . PHP_EOL
                  . '/*<![CDATA[*/' . PHP_EOL
                  . $css . PHP_EOL
                  . '/*]]>*/'  . PHP_EOL
+                 //
                  . '</style>';
         }
         return $css;
@@ -563,14 +568,17 @@ class HTML_QuickForm_advmultiselect extends HTML_QuickForm_select
 
             // The 'unselected' multi-select which appears on the left
             $strHtmlUnselected = "<select$attrUnselected>". PHP_EOL;
+            // Added by Chamilo team, 16-MAR-2010.
             if (is_array($arrHtmlUnselected) && count($arrHtmlUnselected) > 0) {
-		        foreach ($arrHtmlUnselected as $data) {
-		            $strHtmlUnselected .= $tabs . $tab
-		                               . '<option' . $this->_getAttrString($data['attr']) . '>'
-		                               . $data['text'] . '</option>' . PHP_EOL;
-		        }
+            //
+                foreach ($arrHtmlUnselected as $data) {
+                    $strHtmlUnselected .= $tabs . $tab
+                                       . '<option' . $this->_getAttrString($data['attr']) . '>'
+                                       . $data['text'] . '</option>' . PHP_EOL;
+                }
+            //
             }
-
+            //
             $strHtmlUnselected .= '</select>';
 
             // The 'selected' multi-select which appears on the right

@@ -955,6 +955,7 @@ class CourseManager {
 			: 'SELECT DISTINCT user.user_id, user.status, user.*  ';
 		$sql .= ' FROM '.Database::get_main_table(TABLE_MAIN_USER).' as user ';
 
+
 		if (api_get_setting('use_session_mode')=='true' && $with_session) {
 			$sql .= ' LEFT JOIN '.Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER).' as session_course_user
 						ON user.user_id = session_course_user.id_user

@@ -1,24 +1,23 @@
 <?php
 /* For licensing terms, see /dokeos_license.txt */
-/*
-==============================================================================
-		INIT SECTION
-==============================================================================
-*/
+/**
+ * This script allows for the addition of sub-languages
+ * @package chamilo.admin
+ */
+/**
+ * Initialization section
+ */
 // name of the language file that needs to be included
 $language_file = 'admin';
 $cidReset = true;
 require_once '../inc/global.inc.php';
 require_once 'sub_language.class.php';
-$this_section=SECTION_PLATFORM_ADMIN;
-
+$this_section = SECTION_PLATFORM_ADMIN;
 api_protect_admin_script();
 
-/*
-==============================================================================
-		MAIN CODE
-==============================================================================
-*/
+/**
+ *		MAIN CODE
+ */
 // setting the name of the tool
 $tool_name = get_lang('CreateSubLanguage');
 
@@ -29,9 +28,11 @@ $interbreadcrumb[] = array ('url' => 'languages.php', 'name' => get_lang('Platfo
 require_once api_get_path(LIBRARY_PATH).'text.lib.php';
 require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 
-/*declare functions*/
 /**
  * Add sub-language
+ * @param   string  Original language name (Occitan, Wallon, Vlaams)
+ * @param   string  English language name (occitan, wallon, flanders)
+ * @param   string  ISO code
  */
 function add_sub_language ($original_name,$english_name,$isocode,$sublanguage_available,$parent_id) {
 	$tbl_admin_languages 	= Database :: get_main_table(TABLE_MAIN_LANGUAGE);
@@ -262,7 +263,7 @@ if (isset($_POST['SubmitAddDeleteLanguage'])) {
 		$form->addRule('original_name', get_lang('ThisFieldIsRequired'), 'required');
 		$form->addElement('text', 'english_name', get_lang('EnglishName'),'class="input_titles"');
 		$form->addRule('english_name', get_lang('ThisFieldIsRequired'), 'required');
-		$form->addElement('text', 'isocode', get_lang('PlatformCharsetTitle'),'class="input_titles"');
+		$form->addElement('text', 'isocode', get_lang('ISOCode'),'class="input_titles"');
 		$form->addRule('isocode', get_lang('ThisFieldIsRequired'), 'required');
 		$form->addElement('checkbox', 'sub_language_is_visible', '', get_lang('Visibility'));
 		$form->addElement('style_submit_button', 'SubmitAddNewLanguage', get_lang('CreateSubLanguage'), 'class="'.$class.'"');

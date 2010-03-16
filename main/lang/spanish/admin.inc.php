@@ -961,7 +961,7 @@ $SearchNetworkTimeoutError = "Tiempo expirado mientras se conectaba a una base d
 $SearchOtherXapianError = "Se ha producido un error relacionado al motor de indexación";
 $SearchXapianModuleNotInstaled = "El modulo xapian de php no está configurado en su servidor,póngase en contacto con su administrador";
 $FieldRemoved = "Campo removido";
-$TheNewSubLanguageHasBeenAdd = "El sub-idioma ha sido creado";
+$TheNewSubLanguageHasBeenAdded = "El sub-idioma ha sido creado";
 $DeleteSubLanguage = "Eliminar sub-idioma";
 $CreateSubLanguageForLanguage = "Crear sub-idioma para el idioma";
 $DeleteSubLanguageFromLanguage = "Eliminar sub-idioma de idioma";
@@ -1208,4 +1208,5 @@ $AssignedSessionsListToPlatformAdministrator = "Lista de sesiones asignadas al a
 $AssignedSessionsListToSessionsAdministrator = "Lista de sesiones asignadas al administrador de sesiones";
 $EvaluationsGraph = "Gráficos de las evaluaciones";
 $Action = "Acción";
+$ISOCode = "Código ISO";
 ?>

@@ -48,4 +48,5 @@ $langSaveLink = "Enregistrer le lien";
 $langSaveCategory = "Enregistrer le dossier";
 $BackToLinksOverview = "Retour à la vue globale des liens";
 $AddTargetOfLinkOnHomepage = "Sélectionnez la cible du lien pour la page d'accueil du cours";
+$Url = "URL";
 ?>

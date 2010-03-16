@@ -961,7 +961,7 @@ $SearchNetworkTimeoutError = "Connection timed out while communicating with the 
 $SearchOtherXapianError = "Error in search engine";
 $SearchXapianModuleNotInstaled = "The Xapian search module is not installed";
 $FieldRemoved = "Field removed";
-$TheNewSubLanguageHasBeenAdd = "The new sub-language has been added";
+$TheNewSubLanguageHasBeenAdded = "The new sub-language has been added";
 $DeleteSubLanguage = "Delete sub-language";
 $CreateSubLanguageForLanguage = "Create a sub-language for this language";
 $DeleteSubLanguageFromLanguage = "Delete this sub-language";
@@ -1207,4 +1207,8 @@ $AssignSessionsToSessionsAdministrator = "assign sessions to sessions administra
 $AssignedSessionsListToPlatformAdministrator = "Assigned sessions list to platform administrator";
 $AssignedSessionsListToSessionsAdministrator = "Assigned sessions list to sessions administrator";
 $EvaluationsGraph = "Graph of evaluations";
+$Action = "Action";
+$ISOCode = "ISO code";
+$TheSubLanguageForThisLanguageHasBeenAdded = "The sub-language of this language has been added";
+$ReturnToLanguagesList = "Return to the languages list";
 ?>

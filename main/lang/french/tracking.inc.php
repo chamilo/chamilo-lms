@@ -245,4 +245,24 @@ $ResourcesTracking = "Rapport de ressources";
 $SelectFieldToAdd = "Sélectionner un champ de profil utilisateur à ajouter";
 $AddAdditionalProfileField = "Ajouter un champ de profil utilisateur";
 $ConfigureExtensions = "Configurer les extensions";
+$DashboardBlocks = "Blocs du panneau de contrôle";
+$DashboardList = "Liste du panneau de contrôle";
+$YouHaveNotEnabledBlocks = "Vous n'avez activé aucun bloc";
+$BlocksHaveBeenUpdatedSuccessfully = "Les blocs ont été mis à jour";
+$AssignSessionsTo = "Assigner des sessions à %s";
+$DeleteAllAttendances = "Supprimer toutes les assistances créées";
+$AttendanceSheetDescription = "Les répertoires de présences vous permettent de réunir les feuilles de présences par groupe. Par exemple, vous pourriez vouloir prendre les présence pour les cours théoriques séparément des cours pratiques.
+Chaque élément montrera tous les apprenants comme présents par défaut. C'est à vous de noter leur absence en décochant les cases correspondantes.";
+$AttendanceSheetReport = "Rapport de présences";
+$YouDoNotHaveDoneAttendances = "Vous n'avez aucune feuille de présences";
+$GoToAttendanceCalendarList = "Aller à la vue calendrier des présences";
+$AddADateTime = "Ajouter une date/heure";
+$AreYouSureToDeleteAllDates = "Êtes-vous certain de vouloir supprimer toutes les dates?";
+$DashboardPluginsHaveBeenUpdatedSuccessfully = "Les plugins du panneau de contrôle ont été mis à jour avec succès";
+$ThereIsNoInformationAboutYourCourses = "Aucune information disponible à propos de vos formations";
+$ThereIsNoInformationAboutYourSessions = "Aucune information disponible à propos de vos sessions";
+$ThereIsNoInformationAboutYourTeachers = "Aucune information disponible à propos de vos enseignants";
+$ThereIsNoInformationAboutYourStudents = "Aucune information disponible à propos de vos apprenants";
+$TimeSpentLastWeek = "Temps passé la semaine dernière";
+$DateLock = "Bloquage de date";
 ?>

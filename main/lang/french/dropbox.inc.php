@@ -95,6 +95,7 @@ $DocAdd = "Le fichier a été ajouté";
 $FileDeleted = "Le fichier sélectionné a été supprimé de votre espace d'échange.";
 $MailingAsUsername = "Envoi par mail";
 $MailingInSelect = "--- Mailing ---";
+$$MailingExamine = "Analyser le mailing";
 $MailingNotYetSent = "Les fichiers contenus dans le mailing n'ont pas été envoyés ...";
 $MailingSend = "Importer le contenu";
 $MailingConfirmSend = "Envoyer le contenu vers des personnes individuellement ?";

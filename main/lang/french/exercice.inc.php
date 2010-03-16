@@ -356,4 +356,12 @@ $ExerciseAttempted = "Un apprenant a passé un exercice";
 $MultipleSelectCombination = "Combinaison exacte";
 $MultipleAnswerCombination = "Combinaison exacte";
 $ExerciceExpiredTimeMessage = "Durée maximum de l'exercice expirée";
+$EditingExerciseCauseProblemsInLP = "Éditer l'exercice peut causer des problèmes dans les parcours d'apprentissage";
+$AreYouSureToCopy = "Êtes-vous certain de vouloir procéder à la copie";
+$ExerciseCopied = "Exercice copié";
+$AreYouSureToDeleteResults = "Êtes-vous certain de vouloir supprimer les résultats?";
+$XResultsCleaned = "%d résultats éliminés";
+$CopyExercise = "Copier cet exercice comme un nouvel exercice";
+$CleanStudentResults = "Supprimer tous les résultats de cet exercice";
+$ImportQtiQuiz = "Importer exercices QTI2";
 ?>

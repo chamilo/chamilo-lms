@@ -176,4 +176,5 @@ $LostPass = "Vous avez oublié votre mot de passe?";
 $EnterEmailUserAndWellSendYouPassword = "Entrez votre nom d'utilisateur ou l'adresse e-mail avec laquelle vous vous êtes enregistré et nous vous enverrons votre mot de passe par e-mail.";
 $NoUserAccountWithThisEmailAddress = "Désolé, nous n'avons trouvé aucune trace d'un compte avec ce nom d'utilisateur et/ou cette adresse e-mail.";
 $WithTheFollowingSettings = "avec les paramètres suivants:";
+$CouldNotResetPassword = "Impossible de modifier le mot de passe";
 ?>

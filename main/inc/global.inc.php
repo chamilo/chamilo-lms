@@ -446,7 +446,7 @@ if (!empty($valid_languages)) {
 // to use it within the function get_lang(...).
 $language_interface_initial_value = $language_interface;
 
-/*
+/**
  * Include all necessary language files
  * - trad4all
  * - notification
@@ -463,34 +463,34 @@ if (isset($language_file)) {
 		$language_files = array_merge($language_files, $language_file);
 	}
 }
-
+// if a set of language files has been properly defined
 if (is_array($language_files)) {
+	// if the sub-language feature is on
 	if (api_get_setting('allow_use_sub_language') == 'true') {
-		foreach ($language_files as $index => $language_file) {
+        require_once api_get_path(SYS_CODE_PATH).'admin/sub_language.class.php';
+        $parent_path = SubLanguageManager::get_parent_language_path($language_interface);
+        foreach ($language_files as $index => $language_file) {
+			// include English
 			include $langpath.'english/'.$language_file.'.inc.php';
-			$langfile = $langpath.$language_interface.'/'.$language_file.'.inc.php';
-
-			$tbl_admin_languages = Database :: get_main_table(TABLE_MAIN_LANGUAGE);
-			$sql_sub_language = 'SELECT dokeos_folder FROM '.$tbl_admin_languages.' WHERE parent_id=(SELECT id FROM '.$tbl_admin_languages.' WHERE dokeos_folder="'.Database::escape_string($language_interface).'" AND ISNULL(parent_id))';
-
-			$rs_sub_language = Database::query($sql_sub_language);
-			$num_row_sub_language = Database::num_rows($rs_sub_language);
-
-			if (file_exists($langfile)) {
-				include $langfile;
-				for ($i = 0; $i < $num_row_sub_language; $i++) {
-					$row_sub_language = Database::result($rs_sub_language, $i, 'dokeos_folder');
-					$sub_langfile = $langpath.$row_sub_language.'/'.$language_file.'.inc.php';
-					if (file_exists($sub_langfile)) {
-						include $sub_langfile;
-					}
-				}
-
+			// prepare string for current language and its parent
+			$lang_file = $langpath.$language_interface.'/'.$language_file.'.inc.php';
+			$parent_lang_file = $langpath.$parent_path.'/'.$language_file.'.inc.php';
+			// load the parent language file first
+            if (file_exists($parent_lang_file)) {
+            	include $parent_lang_file;
+            }
+            // overwrite the parent language translations if there is a child
+			if (file_exists($lang_file)) {
+                include $lang_file;
 			}
 		}
 	} else {
+		// if the sub-languages feature is not on, then just load the
+		// set language interface 
 		foreach ($language_files as $index => $language_file) {
+			// include English
 			include $langpath.'english/'.$language_file.'.inc.php';
+			// prepare string for current language
 			$langfile = $langpath.$language_interface.'/'.$language_file.'.inc.php';
 			if (file_exists($langfile)) {
 				include $langfile;

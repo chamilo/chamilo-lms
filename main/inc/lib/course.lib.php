@@ -1186,13 +1186,12 @@ class CourseManager {
 		$database_name = $course_info['db_name'];
 
 		$group_list = array();
-		$session_condition = $session_id == 0 ? '' : ' WHERE g.session_id IN(0,'.intval($session_id).')';
 
 		$result = Database::query("SELECT g.id, g.name, COUNT(gu.id) userNb
 				FROM ".Database::get_course_table(TABLE_GROUP, $database_name)." AS g
 				LEFT JOIN ".Database::get_course_table(TABLE_GROUP_USER, $database_name)." gu
 				ON g.id = gu.group_id
-				$session_condition
+				WHERE g.session_id IN(0,".intval($session_id).")
 				GROUP BY g.id
 				ORDER BY g.name");
 

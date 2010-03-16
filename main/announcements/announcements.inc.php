@@ -304,8 +304,14 @@ function get_course_users()
 {
 	//this would return only the users from real courses:
 	//$user_list = CourseManager::get_user_list_from_course_code(api_get_course_id());
+	$session_id = api_get_session_id();
+	
+	if ($session_id) {
+		$user_list = CourseManager::get_real_and_linked_user_list(api_get_course_id(), true, $session_id);
+	} else {
+		$user_list = CourseManager::get_real_and_linked_user_list(api_get_course_id(), false, 0);
+	}
 
-	$user_list = CourseManager::get_real_and_linked_user_list(api_get_course_id(), true, $_SESSION['id_session']);
 	return $user_list;
 }
 
@@ -314,8 +320,14 @@ function get_course_users()
 * not including linked courses
 */
 function get_course_groups()
-{
-	$new_group_list = CourseManager::get_group_list_of_course(api_get_course_id(), intval($_SESSION['id_session']));
+{	
+	$session_id = api_get_session_id();
+	
+	if ($session_id) {
+		$new_group_list = CourseManager::get_group_list_of_course(api_get_course_id(), intval($session_id));
+	} else {	
+		$new_group_list = CourseManager::get_group_list_of_course(api_get_course_id(), 0);
+	}
 	return $new_group_list;
 }
 

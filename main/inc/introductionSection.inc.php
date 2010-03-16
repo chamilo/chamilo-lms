@@ -32,7 +32,6 @@ $TBL_INTRODUCTION = Database::get_course_table(TABLE_TOOL_INTRO);
 $intro_editAllowed = $is_allowed_to_edit;
 $session_id = api_get_session_id();
 
-
 global $charset;
 $intro_cmdEdit = empty($_GET['intro_cmdEdit']) ? '' : $_GET['intro_cmdEdit'];
 $intro_cmdUpdate = isset($_POST['intro_cmdUpdate']);
@@ -85,17 +84,15 @@ $form->addElement('style_submit_button', 'intro_cmdUpdate', get_lang('SaveIntroT
 /*	INTRODUCTION MICRO MODULE - COMMANDS SECTION (IF ALLOWED) */
 
 if ($intro_editAllowed) {
-
+	$moduleId = Database::escape_string($moduleId);
+	
 	/* Replace command */
-
 	if ($intro_cmdUpdate) {
 		if ($form->validate()) {
-
 			$form_values = $form->exportValues();
-			$intro_content = Security::remove_XSS(stripslashes(api_html_entity_decode($form_values['intro_content'])), COURSEMANAGERLOWSECURITY);
+			$intro_content = Security::remove_XSS(stripslashes(api_html_entity_decode($form_values['intro_content'])), COURSEMANAGERLOWSECURITY);			
 			if (!empty($intro_content)) {
-				$sql = "REPLACE $TBL_INTRODUCTION SET id='$moduleId',intro_text='".Database::escape_string($intro_content)."', session_id='".$session_id."'";
-				
+				$sql = "REPLACE $TBL_INTRODUCTION SET id='$moduleId',intro_text='".Database::escape_string($intro_content)."', session_id='".intval($session_id)."'";				
 				Database::query($sql);
 				Display::display_confirmation_message(get_lang('IntroductionTextUpdated'), false);
 			} else {
@@ -107,9 +104,8 @@ if ($intro_editAllowed) {
 	}
 
 	/* Delete Command */
-
 	if ($intro_cmdDel) {
-		Database::query("DELETE FROM $TBL_INTRODUCTION WHERE id='".$moduleId."' AND session_id='".$session_id."'");
+		Database::query("DELETE FROM $TBL_INTRODUCTION WHERE id='".$moduleId."' AND session_id='".intval($session_id)."'");
 		Display::display_confirmation_message(get_lang('IntroductionTextDeleted'));
 	}
 }
@@ -119,7 +115,7 @@ if ($intro_editAllowed) {
 
 /* Retrieves the module introduction text, if exist */
 
-$sql = "SELECT intro_text FROM $TBL_INTRODUCTION WHERE id='".$moduleId."' AND session_id='".$session_id."'";
+$sql = "SELECT intro_text FROM $TBL_INTRODUCTION WHERE id='".Database::escape_string($moduleId)."' AND session_id='".intval($session_id)."'";
 $intro_dbQuery = Database::query($sql);
 $intro_dbResult = Database::fetch_array($intro_dbQuery);
 $intro_content = $intro_dbResult['intro_text'];
@@ -222,7 +218,5 @@ if ($intro_dispCommand) {
 
 }
 echo '</div>';
-
 echo $thematic_description_html;
-
 echo '<div class="clear"></div>';

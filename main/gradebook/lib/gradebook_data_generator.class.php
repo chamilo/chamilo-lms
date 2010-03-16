@@ -3,7 +3,7 @@
 /**
  * Class to select, sort and transform object data into array data,
  * used for the general gradebook view
- * @author Bert Stepp�
+ * @author Bert Steppé
  */
 class GradebookDataGenerator
 {

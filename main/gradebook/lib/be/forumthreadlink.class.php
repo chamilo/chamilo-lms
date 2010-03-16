@@ -46,7 +46,7 @@ class ForumThreadLink extends AbstractLink
 				.' forum_thread WHERE thread_id NOT IN'
 				.' (SELECT ref_id FROM '.$tbl_grade_links
 				.' WHERE type = '.LINK_FORUM_THREAD
-				." AND course_code = '".$this->get_course_code()."'"
+				." AND course_code = '".Database::escape_string($this->get_course_code())."'"
 				.') AND forum_thread.session_id='.api_get_session_id().'';
 
 		$result = Database::query($sql);
@@ -112,7 +112,7 @@ class ForumThreadLink extends AbstractLink
 	  	    $sql = 'SELECT * FROM '.$thread_qualify.' WHERE thread_id = '.$this->get_ref_id();
 
 	    	if (isset($stud_id)){
-	    		$sql .= ' AND user_id = '."'".$stud_id."'";
+	    		$sql .= ' AND user_id = '."'".intval($stud_id)."'";
 	    	}
 
 	    	// order by id, that way the student's first attempt is accessed first

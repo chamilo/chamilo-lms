@@ -55,8 +55,7 @@ if (isset($_GET['user_id']) && $_GET['user_id']==strval(intval($_GET['user_id'])
 	?>
 	<tr>
 		<td width="100%" class="actions"><?php echo get_lang('Student').' : '. $value['firstname'].' '.$value['lastname'] ?>
-		</td>
-		
+		</td>		
 	</tr>
 	<tr>
 	<td>
@@ -67,7 +66,7 @@ if (isset($_GET['user_id']) && $_GET['user_id']==strval(intval($_GET['user_id'])
 			?>
 			<tr >
 			<td width="50%"><?php echo get_lang('Score').' : '.$value_certificate['score_certificate'] ?></td>
-			<td width="30%"><?php echo get_lang('Date').' : '.$value_certificate['date_certificate'] ?></td>
+			<td width="30%"><?php echo get_lang('Date').' : '.api_convert_and_format_date($value_certificate['created_at']) ?></td>
 			<td width="20%"><a  onclick="return confirmation();" href="gradebook_display_certificate.php?action=delete&<?php echo 'user_id='.$value_certificate['user_id'].'&amp;cat_id='.$value_certificate['cat_id'] ?>"><?php echo Display::return_icon('delete.gif',get_lang('Delete')); ?></a></td>
 			</tr>
 			<?php

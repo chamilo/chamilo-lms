@@ -20,12 +20,15 @@
  * @author     Greg Beaver <cellog@php.net>
  * @copyright  1997-2006 The PHP Group
  * @license    http://www.php.net/license/3_0.txt  PHP License 3.0
- * @version    CVS: $Id: PEAR.php 9613 2006-10-20 12:14:38Z bmol $
+ * @version    CVS: $Id: PEAR.php,v 1.98 2006/01/23 05:38:05 cellog Exp $
  * @link       http://pear.php.net/package/PEAR
  * @since      File available since Release 0.1
  */
 
+// Added by Chamilo team, 16-MAR-2010
 if (class_exists('pear')) { return; }
+//
+
 /**#@+
  * ERROR constants
  */
@@ -761,7 +764,9 @@ class PEAR
 
 // {{{ _PEAR_call_destructors()
 
+// Added by Chamilo team, 16-MAR-2010
 if (!function_exists('_PEAR_call_destructors')) {
+//
 function _PEAR_call_destructors()
 {
     global $_PEAR_destructor_object_list;
@@ -796,7 +801,9 @@ function _PEAR_call_destructors()
         }
     }
 }
+//
 }
+//
 
 // }}}
 /**

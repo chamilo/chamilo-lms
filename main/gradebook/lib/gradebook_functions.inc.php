@@ -1,13 +1,14 @@
 <?php
 /* For licensing terms, see /license.txt */
-/*
+
+/**
 * These are functions used in gradebook
 *
 * @author Stijn Konings <konings.stijn@skynet.be>, Hogeschool Ghent
+* @author Julio Montoya <gugli100@gmail.com> adding security functions
 * @version april 2007
 */
 require_once ('gradebook_functions_users.inc.php');
-
 
 /**
  * Adds a resource to the unique gradebook of a given course
@@ -118,7 +119,7 @@ function block_students() {
  */
 function get_course_name_from_code($code) {
 	$tbl_main_categories= Database :: get_main_table(TABLE_MAIN_COURSE);
-	$sql= 'SELECT title,code FROM ' . $tbl_main_categories . 'WHERE code = "' . $code . '"';
+	$sql= 'SELECT title, code FROM ' . $tbl_main_categories . 'WHERE code = "' . Database::escape_string($code) . '"';
 	$result= Database::query($sql);
 	if ($col= Database::fetch_array($result)) {
 		return $col['title'];
@@ -235,17 +236,10 @@ function build_edit_icons_link($link, $selectcat) {
  * @return   int     false on error or link ID
  */
 function is_resource_in_course_gradebook($course_code, $resource_type, $resource_id, $session_id = 0) {
-    /* See defines in lib/be/linkfactory.class.php
-    define('LINK_EXERCISE',1);
-    define('LINK_DROPBOX',2);
-    define('LINK_STUDENTPUBLICATION',3);
-    define('LINK_LEARNPATH',4);
-    define('LINK_FORUM_THREAD',5),
-    define('LINK_WORK',6);
-    */
-    require_once(api_get_path(SYS_CODE_PATH).'gradebook/lib/be/linkfactory.class.php');
-    require_once (api_get_path(SYS_CODE_PATH).'gradebook/lib/be.inc.php');
-	require_once(api_get_path(SYS_CODE_PATH).'gradebook/lib/be/linkfactory.class.php');
+    require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be/linkfactory.class.php';
+    require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be.inc.php';
+	require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be/linkfactory.class.php';
+	
     // TODO find the corresponding category (the first one for this course, ordered by ID)
     $t = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
     $l = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
@@ -262,7 +256,7 @@ function is_resource_in_course_gradebook($course_code, $resource_type, $resource
     }
     $row = Database::fetch_array($res);
     $category = $row['id'];
-    $sql = "SELECT * FROM $l l WHERE l.category_id = $category AND type = ".(int) $resource_type." and ref_id = ".(int) $resource_id;
+    $sql = "SELECT id FROM $l l WHERE l.category_id = $category AND type = ".(int) $resource_type." and ref_id = ".(int) $resource_id;
     $res = Database::query($sql);
     if (Database::num_rows($res)<1) {
     	return false;
@@ -285,15 +279,15 @@ function remove_resource_from_course_gradebook($link_id) {
     return true;
 }
 /**
- * return the database name
+ * Return the database name
  * @param    int
  * @return   String
  */
 function get_database_name_by_link_id($id_link) {
 	$course_table = Database::get_main_table(TABLE_MAIN_COURSE);
 	$tbl_grade_links = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
-	$res=Database::query('SELECT db_name from '.$course_table.' c inner join '.$tbl_grade_links.' l
-	on c.code=l.course_code WHERE l.id='.$id_link.' OR l.category_id='.$id_link);
+	$res=Database::query('SELECT db_name FROM '.$course_table.' c INNER JOIN '.$tbl_grade_links.' l
+			ON c.code=l.course_code WHERE l.id='.intval($id_link).' OR l.category_id='.intval($id_link));
 	$my_db_name=Database::fetch_array($res,'ASSOC');
 	return $my_db_name['db_name'];
 }
@@ -402,8 +396,8 @@ function parse_xml_data($file) {
   function update_user_info_about_certificate ($cat_id,$user_id,$path_certificate) {
   	$table_certificate = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
   	if (!UserManager::is_user_certified($cat_id,$user_id)) {
-  		$sql='UPDATE '.$table_certificate.' SET path_certificate="'.$path_certificate.'"  
-		WHERE cat_id="'.$cat_id.'" AND user_id="'.$user_id.'" ';
+  		$sql='UPDATE '.$table_certificate.' SET path_certificate="'.Database::escape_string($path_certificate).'"  
+			 WHERE cat_id="'.intval($cat_id).'" AND user_id="'.intval($user_id).'" ';
 		$rs=Database::query($sql,__FILE__,__LINE__);
   	}
   }
@@ -419,12 +413,12 @@ function parse_xml_data($file) {
   function register_user_info_about_certificate ($cat_id,$user_id,$score_certificate, $date_certificate) {
   	$table_certificate = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
   	$sql_exist='SELECT COUNT(*) as count FROM '.$table_certificate.' gc 
-				WHERE gc.cat_id="'.$cat_id.'" AND user_id="'.$user_id.'" ';
+				WHERE gc.cat_id="'.intval($cat_id).'" AND user_id="'.intval($user_id).'" ';
 	$rs_exist=Database::query($sql_exist,__FILE__,__LINE__);
 	$row=Database::fetch_array($rs_exist);
 	if ($row['count']==0) {
-		echo $sql='INSERT INTO '.$table_certificate.' (cat_id,user_id,score_certificate,date_certificate)
-			  VALUES("'.$cat_id.'","'.$user_id.'","'.$score_certificate.'","'.$date_certificate.'")';
+		$sql='INSERT INTO '.$table_certificate.' (cat_id,user_id,score_certificate,date_certificate)
+			  VALUES("'.intval($cat_id).'","'.intval($user_id).'","'.Database::escape_string($score_certificate).'","'.Database::escape_string($date_certificate).'")';
 		$rs=Database::query($sql,__FILE__,__LINE__);  
 	}
 	
@@ -437,7 +431,7 @@ function parse_xml_data($file) {
   */  
   function get_certificate_date_by_user_id ($cat_id,$user_id) {
     	$table_certificate = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
-    	$sql_get_date='SELECT date_certificate FROM '.$table_certificate.' WHERE cat_id="'.$cat_id.'" AND user_id="'.$user_id.'"';
+    	$sql_get_date='SELECT date_certificate FROM '.$table_certificate.' WHERE cat_id="'.intval($cat_id).'" AND user_id="'.intval($user_id).'"';
     	$rs_get_date=Database::query($sql_get_date,__FILE__,__LINE__);
     	$row_get_date=Database::fetch_array($rs_get_date,'ASSOC');
     	return $row_get_date['date_certificate'];

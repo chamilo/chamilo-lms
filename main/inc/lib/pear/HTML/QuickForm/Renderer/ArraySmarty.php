@@ -1,34 +1,42 @@
 <?php
-/* vim: set expandtab tabstop=4 shiftwidth=4: */
-// +----------------------------------------------------------------------+
-// | PHP version 4.0                                                      |
-// +----------------------------------------------------------------------+
-// | Copyright (c) 1997-2003 The PHP Group                                |
-// +----------------------------------------------------------------------+
-// | This source file is subject to version 2.0 of the PHP license,       |
-// | that is bundled with this package in the file LICENSE, and is        |
-// | available at through the world-wide-web at                           |
-// | http://www.php.net/license/2_02.txt.                                 |
-// | If you did not receive a copy of the PHP license and are unable to   |
-// | obtain it through the world-wide-web, please send a note to          |
-// | license@php.net so we can mail you a copy immediately.               |
-// +----------------------------------------------------------------------+
-// | Authors: Alexey Borzov <borz_off@cs.msu.su>                          |
-// |          Bertrand Mansion <bmansion@mamasam.com>                     |
-// |          Thomas Schulz <ths@4bconsult.de>                            |
-// +----------------------------------------------------------------------+
-//
-// $Id: ArraySmarty.php,v 1.11 2006/10/07 20:12:17 avb Exp $
+/* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4: */
 
+/**
+ * A static renderer for HTML_QuickForm, makes an array of form content
+ * useful for a Smarty template
+ *
+ * PHP versions 4 and 5
+ *
+ * LICENSE: This source file is subject to version 3.01 of the PHP license
+ * that is available through the world-wide-web at the following URI:
+ * http://www.php.net/license/3_01.txt If you did not receive a copy of
+ * the PHP License and are unable to obtain it through the web, please
+ * send a note to license@php.net so we can mail you a copy immediately.
+ *
+ * @category    HTML
+ * @package     HTML_QuickForm
+ * @author      Alexey Borzov <avb@php.net>
+ * @author      Bertrand Mansion <bmansion@mamasam.com>
+ * @author      Thomas Schulz <ths@4bconsult.de>
+ * @copyright   2001-2009 The PHP Group
+ * @license     http://www.php.net/license/3_01.txt PHP License 3.01
+ * @version     CVS: $Id: ArraySmarty.php,v 1.14 2009/04/06 12:02:08 avb Exp $
+ * @link        http://pear.php.net/package/HTML_QuickForm
+ */
+
+/**
+ * A concrete renderer for HTML_QuickForm, makes an array of form contents
+ */
 require_once 'HTML/QuickForm/Renderer/Array.php';
 
 /**
  * A static renderer for HTML_QuickForm, makes an array of form content
- * useful for an Smarty template
+ * useful for a Smarty template
  *
- * Based on old toArray() code and ITStatic renderer.
+ * Based on old HTML_QuickForm::toArray() code and ITStatic renderer.
  *
  * The form array structure is the following:
+ * <pre>
  * Array (
  *  [frozen]       => whether the complete form is frozen'
  *  [javascript]   => javascript for client-side validation
@@ -52,8 +60,10 @@ require_once 'HTML/QuickForm/Renderer/Array.php';
  *  [1st_element_name] => Array for the 1st element
  *  ...
  *  [nth_element_name] => Array for the nth element
+ * </pre>
  *
- * // where an element array has the form:
+ * where an element array has the form:
+ * <pre>
  *      (
  *          [name]      => element name
  *          [value]     => element value,
@@ -70,11 +80,21 @@ require_once 'HTML/QuickForm/Renderer/Array.php';
  *          [nth_gitem_name] => Array for the nth element in group
  *      )
  * )
+ * </pre>
  *
- * @access public
+ * @category    HTML
+ * @package     HTML_QuickForm
+ * @author      Alexey Borzov <avb@php.net>
+ * @author      Bertrand Mansion <bmansion@mamasam.com>
+ * @author      Thomas Schulz <ths@4bconsult.de>
+ * @version     Release: 3.2.11
+ * @since       3.0
  */
 class HTML_QuickForm_Renderer_ArraySmarty extends HTML_QuickForm_Renderer_Array
 {
+   /**#@+
+    * @access private
+    */
    /**
     * The Smarty template engine instance
     * @var object
@@ -106,24 +126,26 @@ class HTML_QuickForm_Renderer_ArraySmarty extends HTML_QuickForm_Renderer_Array
     * @see      setErrorTemplate()
     */
     var $_error = '';
+   /**#@-*/
 
    /**
     * Constructor
     *
-    * @param  object  reference to the Smarty template engine instance
+    * @param  Smarty  reference to the Smarty template engine instance
     * @param  bool    true: render an array of labels to many labels, $key 0 to 'label' and the oterh to "label_$key"
+    * @param  bool    true: collect all hidden elements into string; false: process them as usual form elements
     * @access public
     */
-    function HTML_QuickForm_Renderer_ArraySmarty(&$tpl, $staticLabels = false)
+    function HTML_QuickForm_Renderer_ArraySmarty(&$tpl, $staticLabels = false, $collectHidden = true)
     {
-        $this->HTML_QuickForm_Renderer_Array(true, $staticLabels);
+        $this->HTML_QuickForm_Renderer_Array($collectHidden, $staticLabels);
         $this->_tpl =& $tpl;
     } // end constructor
 
    /**
     * Called when visiting a header element
     *
-    * @param    object     An HTML_QuickForm_header element being visited
+    * @param    HTML_QuickForm_header   header element being visited
     * @access   public
     * @return   void
     */
@@ -140,9 +162,9 @@ class HTML_QuickForm_Renderer_ArraySmarty extends HTML_QuickForm_Renderer_Array
    /**
     * Called when visiting a group, before processing any group elements
     *
-    * @param    object     An HTML_QuickForm_group object being visited
-    * @param    bool       Whether a group is required
-    * @param    string     An error message associated with a group
+    * @param    HTML_QuickForm_group    group being visited
+    * @param    bool                    Whether a group is required
+    * @param    string                  An error message associated with a group
     * @access   public
     * @return   void
     */
@@ -157,9 +179,9 @@ class HTML_QuickForm_Renderer_ArraySmarty extends HTML_QuickForm_Renderer_Array
     * the key for storing this
     *
     * @access private
-    * @param  object    An HTML_QuickForm_element object
-    * @param  bool      Whether an element is required
-    * @param  string    Error associated with the element
+    * @param  HTML_QuickForm_element    form element being visited
+    * @param  bool                      Whether an element is required
+    * @param  string                    Error associated with the element
     * @return array
     */
     function _elementToArray(&$element, $required, $error)

@@ -1,29 +1,39 @@
 <?php
-/* vim: set expandtab tabstop=4 shiftwidth=4: */
-// +----------------------------------------------------------------------+
-// | PHP version 4.0                                                      |
-// +----------------------------------------------------------------------+
-// | Copyright (c) 1997-2003 The PHP Group                                |
-// +----------------------------------------------------------------------+
-// | This source file is subject to version 2.0 of the PHP license,       |
-// | that is bundled with this package in the file LICENSE, and is        |
-// | available at through the world-wide-web at                           |
-// | http://www.php.net/license/2_02.txt.                                 |
-// | If you did not receive a copy of the PHP license and are unable to   |
-// | obtain it through the world-wide-web, please send a note to          |
-// | license@php.net so we can mail you a copy immediately.               |
-// +----------------------------------------------------------------------+
-// | Authors: Adam Daniel <adaniel1@eesus.jnj.com>                        |
-// |          Alexey Borzov <borz_off@cs.msu.su>                          |
-// |          Bertrand Mansion <bmansion@mamasam.com>                     |
-// +----------------------------------------------------------------------+
-//
-// $Id: RuleRegistry.php,v 1.17 2006/06/20 22:09:15 avb Exp $
+/* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4: */
 
 /**
-* Registers rule objects and uses them for validation
-*
-*/
+ * Registers rule objects and uses them for validation
+ *
+ * PHP versions 4 and 5
+ *
+ * LICENSE: This source file is subject to version 3.01 of the PHP license
+ * that is available through the world-wide-web at the following URI:
+ * http://www.php.net/license/3_01.txt If you did not receive a copy of
+ * the PHP License and are unable to obtain it through the web, please
+ * send a note to license@php.net so we can mail you a copy immediately.
+ *
+ * @category    HTML
+ * @package     HTML_QuickForm
+ * @author      Adam Daniel <adaniel1@eesus.jnj.com>
+ * @author      Bertrand Mansion <bmansion@mamasam.com>
+ * @author      Alexey Borzov <avb@php.net>
+ * @copyright   2001-2009 The PHP Group
+ * @license     http://www.php.net/license/3_01.txt PHP License 3.01
+ * @version     CVS: $Id: RuleRegistry.php,v 1.19 2009/04/04 21:34:02 avb Exp $
+ * @link        http://pear.php.net/package/HTML_QuickForm
+ */
+
+/**
+ * Registers rule objects and uses them for validation
+ *
+ * @category    HTML
+ * @package     HTML_QuickForm
+ * @author      Adam Daniel <adaniel1@eesus.jnj.com>
+ * @author      Bertrand Mansion <bmansion@mamasam.com>
+ * @author      Alexey Borzov <avb@php.net>
+ * @version     Release: 3.2.11
+ * @since       3.2
+ */
 class HTML_QuickForm_RuleRegistry
 {
     /**
@@ -42,7 +52,7 @@ class HTML_QuickForm_RuleRegistry
      *
      * @access    public
      * @static
-     * @return    object    Reference to the HTML_QuickForm_RuleRegistry singleton
+     * @return    HTML_QuickForm_RuleRegistry
      */
     function &singleton()
     {
@@ -105,7 +115,7 @@ class HTML_QuickForm_RuleRegistry
      *
      * @param     string   $ruleName        Name of the requested rule
      * @access    public
-     * @return    object
+     * @return    HTML_QuickForm_Rule
      */
     function &getRule($ruleName)
     {
@@ -155,9 +165,10 @@ class HTML_QuickForm_RuleRegistry
     /**
      * Returns the validation test in javascript code
      *
-     * @param     mixed     Element(s) the rule applies to
-     * @param     string    Element name, in case $element is not array
-     * @param     array     Rule data
+     * @param     array|HTML_QuickForm_element  Element(s) the rule applies to
+     * @param     string                        Element name, in case $element is
+     *                                          not an array
+     * @param     array                         Rule data
      * @access    public
      * @return    string    JavaScript for the rule
      */
@@ -207,10 +218,12 @@ class HTML_QuickForm_RuleRegistry
     * Returns JavaScript to get and to reset the element's value
     *
     * @access private
-    * @param  object HTML_QuickForm_element     element being processed
-    * @param  string    element's name
-    * @param  bool      whether to generate JavaScript to reset the value
-    * @param  integer   value's index in the array (only used for multielement rules)
+    * @param  HTML_QuickForm_element    element being processed
+    * @param  string                    element's name
+    * @param  bool                      whether to generate JavaScript to reset
+    *                                   the value
+    * @param  integer                   value's index in the array (only used for
+    *                                   multielement rules)
     * @return array     first item is value javascript, second is reset
     */
     function _getJsValue(&$element, $elementName, $reset = false, $index = null)

@@ -1,36 +1,44 @@
 <?php
-/* vim: set expandtab tabstop=4 shiftwidth=4: */
-// +----------------------------------------------------------------------+
-// | PHP version 4.0                                                      |
-// +----------------------------------------------------------------------+
-// | Copyright (c) 1997-2003 The PHP Group                                |
-// +----------------------------------------------------------------------+
-// | This source file is subject to version 2.0 of the PHP license,       |
-// | that is bundled with this package in the file LICENSE, and is        |
-// | available at through the world-wide-web at                           |
-// | http://www.php.net/license/2_02.txt.                                 |
-// | If you did not receive a copy of the PHP license and are unable to   |
-// | obtain it through the world-wide-web, please send a note to          |
-// | license@php.net so we can mail you a copy immediately.               |
-// +----------------------------------------------------------------------+
-// | Authors: Alexey Borzov <avb@php.net>                                 |
-// |          Bertrand Mansion <bmansion@mamasam.com>                     |
-// +----------------------------------------------------------------------+
-//
-// $Id: Page.php,v 1.3 2004/03/02 21:15:52 avb Exp $
+/* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4: */
 
+/**
+ * Class representing a page of a multipage form.
+ *
+ * PHP versions 4 and 5
+ *
+ * LICENSE: This source file is subject to version 3.01 of the PHP license
+ * that is available through the world-wide-web at the following URI:
+ * http://www.php.net/license/3_01.txt If you did not receive a copy of
+ * the PHP License and are unable to obtain it through the web, please
+ * send a note to license@php.net so we can mail you a copy immediately.
+ *
+ * @category    HTML
+ * @package     HTML_QuickForm_Controller
+ * @author      Alexey Borzov <avb@php.net>
+ * @author      Bertrand Mansion <bmansion@mamasam.com>
+ * @copyright   2003-2009 The PHP Group
+ * @license     http://www.php.net/license/3_01.txt PHP License 3.01
+ * @version     SVN: $Id: Page.php 289084 2009-10-02 06:53:09Z avb $
+ * @link        http://pear.php.net/package/HTML_QuickForm_Controller
+ */
+
+/**
+ * Create, validate and process HTML forms
+ */
 require_once 'HTML/QuickForm.php';
 
 /**
- * The class represents a page of a multipage form.
+ * Class representing a page of a multipage form.
  *
  * Generally you'll need to subclass this and define your buildForm()
  * method that will build the form. While it is also possible to instantiate
  * this class and build the form manually, this is not the recommended way.
  *
- * @author  Alexey Borzov <avb@php.net>
- * @package HTML_QuickForm_Controller
- * @version $Revision: 1.3 $
+ * @category    HTML
+ * @package     HTML_QuickForm_Controller
+ * @author      Alexey Borzov <avb@php.net>
+ * @author      Bertrand Mansion <bmansion@mamasam.com>
+ * @version     Release: 1.0.10
  */
 class HTML_QuickForm_Page extends HTML_QuickForm
 {
@@ -42,8 +50,8 @@ class HTML_QuickForm_Page extends HTML_QuickForm
 
    /**
     * Contains a reference to a Controller object containing this page
-    * @var object HTML_QuickForm_Controller
-    * @access public
+    * @var      HTML_QuickForm_Controller
+    * @access   public
     */
     var $controller = null;
 
@@ -58,7 +66,7 @@ class HTML_QuickForm_Page extends HTML_QuickForm
     *
     * @access public
     */
-    function HTML_QuickForm_Page($formName, $method = 'post', $target = '_self', $attributes = null)
+    function HTML_QuickForm_Page($formName, $method = 'post', $target = '', $attributes = null)
     {
         $this->HTML_QuickForm($formName, $method, '', $target, $attributes);
     }
@@ -68,8 +76,8 @@ class HTML_QuickForm_Page extends HTML_QuickForm
     * Registers a handler for a specific action.
     *
     * @access public
-    * @param  string    name of the action
-    * @param  object HTML_QuickForm_Action   the handler for the action
+    * @param  string                name of the action
+    * @param  HTML_QuickForm_Action the handler for the action
     */
     function addAction($actionName, &$action)
     {
@@ -85,6 +93,7 @@ class HTML_QuickForm_Page extends HTML_QuickForm
     *
     * @access public
     * @param  string Name of the action
+    * @throws PEAR_Error
     */
     function handle($actionName)
     {
@@ -119,6 +128,7 @@ class HTML_QuickForm_Page extends HTML_QuickForm
     */
     function loadValues($values)
     {
+        $this->_flagSubmitted = true;
         $this->_submitValues = $values;
         foreach (array_keys($this->_elements) as $key) {
             $this->_elements[$key]->onQuickFormEvent('updateValue', null, $this);
@@ -174,6 +184,26 @@ class HTML_QuickForm_Page extends HTML_QuickForm
         } else {
             $this->addElement('hidden', '_qf_default', $this->getAttribute('id') . ':' . $actionName);
         }
+    }
+
+
+   /**
+    * Returns 'safe' elements' values
+    *
+    * @param   mixed   Array/string of element names, whose values we want. If not set then return all elements.
+    * @param   bool    Whether to remove internal (_qf_...) values from the resultant array
+    */
+    function exportValues($elementList = null, $filterInternal = false)
+    {
+        $values = parent::exportValues($elementList);
+        if ($filterInternal) {
+            foreach (array_keys($values) as $key) {
+                if (0 === strpos($key, '_qf_')) {
+                    unset($values[$key]);
+                }
+            }
+        }
+        return $values;
     }
 }
 

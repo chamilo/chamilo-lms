@@ -157,7 +157,7 @@ if ($my_api_cidreq=='') {
 }
 ?>
 <div class="actions">
-<a href="<?php echo $_SESSION['gradebook_dest'].'?id_session='.$_SESSION['id_session'].'&amp;'.$my_api_cidreq ?>&selectcat=<?php echo $category_id ?>"> <?php echo Display::return_icon('back.png',get_lang('FolderView')) . get_lang('FolderView') ?></a>
+<a href="<?php echo Security::remove_XSS($_SESSION['gradebook_dest']).'?id_session='.api_get_session_id().'&amp;'.$my_api_cidreq ?>&selectcat=<?php echo $category_id ?>"> <?php echo Display::return_icon('back.png',get_lang('FolderView')) . get_lang('FolderView') ?></a>
 </div>
 <form method="post" action="gradebook_edit_all.php?id_session=<?php echo $_SESSION['id_session'].'&amp;'.$my_api_cidreq ?>&selectcat=<?php echo $category_id?>">
 <table class="data_table">

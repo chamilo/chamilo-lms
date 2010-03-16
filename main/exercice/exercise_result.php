@@ -927,7 +927,7 @@ foreach ($questionList as $questionId) {
 
 			<tr>
 				<td colspan="2">
-					<i><?php echo get_lang('Hotspot'); ?></i><br /><br />
+					<i><?php echo get_lang('HotSpot'); ?></i><br /><br />
 					<object type="application/x-shockwave-flash" data="../plugin/hotspot/hotspot_solution.swf?modifyAnswers=<?php echo Security::remove_XSS($questionId); ?>&exe_id=&from_db=0" width="552" height="352">
 						<param name="movie" value="../plugin/hotspot/hotspot_solution.swf?modifyAnswers=<?php echo Security::remove_XSS($questionId); ?>&exe_id=&from_db=0" />
 					</object>

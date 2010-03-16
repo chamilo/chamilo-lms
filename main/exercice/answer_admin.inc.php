@@ -1392,7 +1392,7 @@ if($modifyAnswers)
 					</tr>
 					-->
 					<tr style="background-color: #E6E6E6; height: 37px">
-					  <td style="width: 20px; border-bottom: 1px solid #4271b5">&nbsp;<?php /* echo get_lang('Hotspot'); */ ?></td>
+					  <td style="width: 20px; border-bottom: 1px solid #4271b5">&nbsp;<?php /* echo get_lang('HotSpot'); */ ?></td>
 					  <td style="width: 100px; border-bottom: 1px solid #4271b5"><?php echo get_lang('Description'); ?>*</td>
 					  <td style="border-bottom: 1px solid #4271b5"><?php echo get_lang('Comment'); ?></td>
 					  <td style="width: 60px; border-bottom: 1px solid #4271b5"><?php echo get_lang('QuestionWeighting'); ?>*</td>

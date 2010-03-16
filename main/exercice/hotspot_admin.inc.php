@@ -301,7 +301,7 @@ if($modifyAnswers)
 					</tr>
 					-->
 					<tr>
-					  <th width="5" >&nbsp;<?php /* echo get_lang('Hotspot'); */ ?></th>
+					  <th width="5" >&nbsp;<?php /* echo get_lang('HotSpot'); */ ?></th>
 					  
 					  
 					  <?php if ($objExercise->selectFeedbackType() != EXERCISE_FEEDBACK_TYPE_EXAM) { ?>

@@ -141,7 +141,7 @@ $picturePath=$documentPath.'/images';
 $audioPath=$documentPath.'/audio';
 
 // the 5 types of answers
-$aType=array(get_lang('UniqueSelect'),get_lang('MultipleSelect'),get_lang('FillBlanks'),get_lang('Matching'),get_lang('freeAnswer'));
+$aType=array(get_lang('UniqueSelect'),get_lang('MultipleSelect'),get_lang('FillBlanks'),get_lang('Matching'),get_lang('FreeAnswer'));
 
 // tables used in the exercise tool
 $TBL_EXERCICE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);

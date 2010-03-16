@@ -117,6 +117,7 @@ class GradebookTable extends SortableTable
 		$course_code=api_get_course_id();
 		$status_user=api_get_status_of_user_in_course ($user_id,$course_code);
 		$data_array = $this->datagen->get_data($sorting, $from, $this->per_page);
+				
 		// generate the data to display
 		$sortable_data = array();
 		$weight_total_links = 0;		
@@ -197,9 +198,8 @@ class GradebookTable extends SortableTable
 										 <img src="'.api_get_path(WEB_CODE_PATH) . 'img/dokeos.gif" /></a>&nbsp;'.$scoretotal_display;
 						
 						//register gradebook certificate
-						$current_user_id=api_get_user_id();
-						$date_certificate=date('Y-m-d H:i:s',time());
-						register_user_info_about_certificate($id,$current_user_id,$my_score_in_gradebook,$date_certificate); 	
+						$current_user_id=api_get_user_id();								
+						register_user_info_about_certificate($id,$current_user_id,$my_score_in_gradebook,api_get_utc_datetime()); 	
 					
 					} else {
 						$certificates = '-';
@@ -209,15 +209,14 @@ class GradebookTable extends SortableTable
 					if ($get_date=='' || is_null($get_date)) {					
 							$row[4]='-';					
 					} else {					
-							$row[4] = date('d/m/y H:i:s',strtotime($get_date));						
+							$row[4] = api_convert_and_format_date($get_date);						
 					}				
 					$row[] = $certificates;
-				} elseif ($_GET['selectcat'] == 1) {
+				} else {
 					if (isset($certificate_min_score) && (int)$item_value >= (int)$certificate_min_score) {		
 						//register gradebook certificate
 						$current_user_id=api_get_user_id();
-						$date_certificate=date('Y-m-d H:i:s',time());						
-						register_user_info_about_certificate($id,$current_user_id,$my_score_in_gradebook,$date_certificate);
+						register_user_info_about_certificate($_GET['selectcat'],$current_user_id,$my_score_in_gradebook,api_get_utc_datetime());
 					} 
 					
 				}
@@ -227,8 +226,7 @@ class GradebookTable extends SortableTable
 		
 		// warning messages		
 		
-		if (api_is_allowed_to_edit()) {
-						
+		if (api_is_allowed_to_edit()) {						
 			if (isset($_GET['selectcat']) && $_GET['selectcat'] > 0 && $_GET['view'] <> 'presence') {		
 				$id_cat = intval($_GET['selectcat']);			
 				$category = Category :: load($id_cat);

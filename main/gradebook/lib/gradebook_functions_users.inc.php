@@ -2,6 +2,7 @@
 /* For licensing terms, see /license.txt */
 /**
  * Various user related functions
+ * @author Julio Montoya <gugli100@gmail.com> adding security functions
  * @package chamilo.gradebook
  */
 /**

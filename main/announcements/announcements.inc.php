@@ -126,7 +126,7 @@ function show_to_form($to_already_selected)
 /**
 * this function shows the form for sending a message to a specific group or user.
 */
-function construct_not_selected_select_form($group_list=null, $user_list=null,$to_already_selected)
+function construct_not_selected_select_form($group_list=null, $user_list=null,$to_already_selecte)
 {
 
 	echo "\t\t<select name=\"not_selected_form[]\" size=5 style=\"width:200px\" multiple>\n";

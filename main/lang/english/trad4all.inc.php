@@ -816,7 +816,9 @@ $CalendarList = "Calendar list of attendances";
 $ThereAreNoRegisteredDatetimeYet = "There is no date/time registered yet";
 $DashboardPluginsHaveBeenUpdatedSucesslly = "Dashboard plugins have been updated sucessfully";
 $LoginEnter = "Login";
+$AttendanceSheetDescription = "The attendance sheets allow you to specify a list of dates in which you will report attendance to your courses";
 $ThereAreNoRegisteredLearnersInsidetheCourse = "There are no registered learners inside the course";
+$GoToAttendanceCalendarList = "Go to the calendar list of attendance dates";
 $ToolCourseDescription = "Course description";
 $ToolDocument = "Documents";
 $ToolLearnpath = "Courses";
@@ -840,4 +842,5 @@ $ToolBlogManagement = "Projects";
 $ToolTracking = "Reporting";
 $ToolCourseSetting = "Settings";
 $ToolCourseMaintenance = "Backup";
+$AreYouSureToDeleteAllDates = "Are you sure you want to delete all dates?";
 ?>

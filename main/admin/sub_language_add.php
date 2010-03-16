@@ -228,7 +228,8 @@ if (isset($_POST['SubmitAddNewLanguage'])) {
 			$mkdir_result=add_directory_of_sub_language($path);
 			if ($mkdir_result) {
 			  	add_sub_language($original_name,$english_name,$isocode,$sublanguage_available,$parent_id);
-			  	Display::display_confirmation_message(get_lang('TheNewSubLanguageHasBeenAdd').$str_info,false);
+			  	$link = '<br /><br /><a href="languages.php">'.get_lang('ReturnToLanguagesList').'</a>';
+			  	Display::display_confirmation_message(get_lang('TheNewSubLanguageHasBeenAdded').$str_info.$link,false);
 			} else {
 				  Display::display_error_message(get_lang('LanguageDirectoryNotWriteableContactAdmin'));
 			}
@@ -281,7 +282,7 @@ if (isset($_POST['SubmitAddDeleteLanguage'])) {
 			$form->display();
 		}
 		if (isset($_GET['action']) && $_GET['action']=='definenewsublanguage') {
-			Display::display_normal_message(get_lang('TheSubLanguageForThisLanguageHasBeenAdd'));
+			Display::display_normal_message(get_lang('TheSubLanguageForThisLanguageHasBeenAdded'));
 		}
 	}
 

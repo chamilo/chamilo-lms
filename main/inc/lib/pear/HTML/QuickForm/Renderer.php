@@ -16,7 +16,7 @@
 // | Author: Alexey Borzov <borz_off@cs.msu.su>                           |
 // +----------------------------------------------------------------------+
 //
-// $Id: Renderer.php 6184 2005-09-07 10:08:17Z bmol $
+// $Id: Renderer.php,v 1.1 2003/03/08 17:02:07 mansion Exp $
 
 /**
  * An abstract base class for QuickForm renderers

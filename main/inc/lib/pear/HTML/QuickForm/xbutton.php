@@ -16,7 +16,7 @@
 // | Authors: Alexey Borzov <avb@php.net>                                 |
 // +----------------------------------------------------------------------+
 //
-// $Id: xbutton.php 6184 2005-09-07 10:08:17Z bmol $
+// $Id: xbutton.php,v 1.1 2004/05/18 09:46:46 avb Exp $
 
 require_once 'HTML/QuickForm/element.php';
 

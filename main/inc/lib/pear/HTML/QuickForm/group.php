@@ -17,7 +17,7 @@
 // |          Bertrand Mansion <bmansion@mamasam.com>                     |
 // +----------------------------------------------------------------------+
 //
-// $Id: group.php 20456 2009-05-10 17:27:44Z ivantcholakov $
+// $Id: group.php,v 1.38 2006/01/11 17:13:20 mansion Exp $
 
 require_once("HTML/QuickForm/element.php");
 
@@ -161,7 +161,7 @@ class HTML_QuickForm_group extends HTML_QuickForm_element
 
             } else {
                 $elementName = $this->_elements[$key]->getName();
-                $index       = api_strlen($elementName) ? $elementName : $key;
+                $index       = strlen($elementName) ? $elementName : $key;
                 if (is_array($value)) {
                     if (isset($value[$index])) {
                         $this->_elements[$key]->onQuickFormEvent('setGroupValue', $value[$index], $this);
@@ -290,7 +290,7 @@ class HTML_QuickForm_group extends HTML_QuickForm_element
     function toHtml()
     {
         include_once('HTML/QuickForm/Renderer/Default.php');
-        // Suppressing a deprecation warning on PHP 5.3
+        // Modified by Ivan Tcholakov, 16-MAR-2010. Suppressing a deprecation warning on PHP 5.3
         //$renderer =& new HTML_QuickForm_Renderer_Default();
         $renderer = new HTML_QuickForm_Renderer_Default();
         //
@@ -436,7 +436,7 @@ class HTML_QuickForm_group extends HTML_QuickForm_element
             if ($this->_appendName) {
                 $elementName = $element->getName();
                 if (isset($elementName)) {
-                    $element->setName($name . '['. (api_strlen($elementName)? $elementName: $key) .']');
+                    $element->setName($name . '['. (strlen($elementName)? $elementName: $key) .']');
                 } else {
                     $element->setName($name);
                 }

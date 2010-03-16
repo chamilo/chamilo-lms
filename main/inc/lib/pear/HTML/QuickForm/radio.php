@@ -17,7 +17,7 @@
 // |          Bertrand Mansion <bmansion@mamasam.com>                     |
 // +----------------------------------------------------------------------+
 //
-// $Id: radio.php 9612 2006-10-20 11:56:44Z bmol $
+// $Id: radio.php,v 1.18 2006/10/07 15:18:16 avb Exp $
 
 require_once('HTML/QuickForm/input.php');
 

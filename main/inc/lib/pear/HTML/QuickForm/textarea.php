@@ -17,7 +17,7 @@
 // |          Bertrand Mansion <bmansion@mamasam.com>                     |
 // +----------------------------------------------------------------------+
 //
-// $Id: textarea.php 20456 2009-05-10 17:27:44Z ivantcholakov $
+// $Id: textarea.php,v 1.11 2004/02/28 22:10:16 avb Exp $
 
 require_once("HTML/QuickForm/element.php");
 
@@ -187,11 +187,13 @@ class HTML_QuickForm_textarea extends HTML_QuickForm_element
         if ($this->_flagFrozen) {
             return $this->getFrozenHtml();
         } else {
-			global $charset;
             return $this->_getTabs() .
                    '<textarea' . $this->_getAttrString($this->_attributes) . '>' .
                    // because we wrap the form later we don't want the text indented
-                   preg_replace("/(\r\n|\n|\r)/", '&#010;', htmlspecialchars($this->_value, ENT_COMPAT, $charset)) .
+                   // Modified by Ivan Tcholakov, 16-MAR-2010.
+                   //preg_replace("/(\r\n|\n|\r)/", '&#010;', htmlspecialchars($this->_value)) .
+                   preg_replace("/(\r\n|\n|\r)/", '&#010;', @htmlspecialchars($this->_value, ENT_COMPAT, HTML_Common::charset())) .
+                   //
                    '</textarea>';
         }
     } //end func toHtml
@@ -208,8 +210,10 @@ class HTML_QuickForm_textarea extends HTML_QuickForm_element
      */
     function getFrozenHtml()
     {
-        global $charset;
-        $value = htmlspecialchars($this->getValue(), ENT_COMPAT, $charset);
+        // Modified by Ivan Tcholakov, 16-MAR-2010.
+        //$value = htmlspecialchars($this->getValue());
+        $value = @htmlspecialchars($this->getValue(), ENT_COMPAT, HTML_Common::charset());
+        //
         if ($this->getAttribute('wrap') == 'off') {
             $html = $this->_getTabs() . '<pre>' . $value."</pre>\n";
         } else {

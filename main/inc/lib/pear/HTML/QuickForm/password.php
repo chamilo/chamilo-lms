@@ -17,7 +17,7 @@
 // |          Bertrand Mansion <bmansion@mamasam.com>                     |
 // +----------------------------------------------------------------------+
 //
-// $Id: password.php 6184 2005-09-07 10:08:17Z bmol $
+// $Id: password.php,v 1.6 2004/02/28 22:10:16 avb Exp $
 
 require_once("HTML/QuickForm/input.php");
 

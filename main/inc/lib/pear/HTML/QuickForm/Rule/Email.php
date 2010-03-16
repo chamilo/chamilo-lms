@@ -16,7 +16,7 @@
 // | Authors: Bertrand Mansion <bmansion@mamasam.com>                     |
 // +----------------------------------------------------------------------+
 //
-// $Id: Email.php 6184 2005-09-07 10:08:17Z bmol $
+// $Id: Email.php,v 1.4 2003/12/18 14:21:57 mansion Exp $
 
 require_once('HTML/QuickForm/Rule.php');
 

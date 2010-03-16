@@ -18,7 +18,7 @@
 // |          Bertrand Mansion <bmansion@mamasam.com>                     |
 // +----------------------------------------------------------------------+
 //
-// $Id: date.php 20682 2009-05-15 11:11:07Z ivantcholakov $
+// $Id: date.php,v 1.57 2006/06/03 12:33:44 avb Exp $
 
 require_once 'HTML/QuickForm/group.php';
 require_once 'HTML/QuickForm/select.php';
@@ -72,7 +72,11 @@ class HTML_QuickForm_date extends HTML_QuickForm_group
         'language'         => 'en',
         'format'           => 'dMY',
         'minYear'          => 2001,
-        'maxYear'          => 2090,
+        // Modified by Chamilo team, 16-MAR-2010.
+        // TODO: This modification to be rethinked.
+        //'maxYear'          => 2090,
+        'maxYear'          => 2010,
+        //
         'addEmptyOption'   => false,
         'emptyOptionValue' => '',
         'emptyOptionText'  => '&nbsp;',
@@ -297,9 +301,12 @@ class HTML_QuickForm_date extends HTML_QuickForm_group
         $separator =  '';
         $locale    =& $this->_locale[$this->_options['language']];
         $backslash =  false;
+        // Modified by Ivan Tcholakov, 16-MAR-2010.
+        //for ($i = 0, $length = strlen($this->_options['format']); $i < $length; $i++) {
+        //    $sign = $this->_options['format']{$i};
         for ($i = 0, $length = api_strlen($this->_options['format']); $i < $length; $i++) {
-            //$sign = $this->_options['format']{$i};
             $sign = api_substr($this->_options['format'], $i, 1);
+        //
             if ($backslash) {
                 $backslash  = false;
                 $separator .= $sign;

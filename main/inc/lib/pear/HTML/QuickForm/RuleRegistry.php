@@ -18,7 +18,7 @@
 // |          Bertrand Mansion <bmansion@mamasam.com>                     |
 // +----------------------------------------------------------------------+
 //
-// $Id: RuleRegistry.php 9612 2006-10-20 11:56:44Z bmol $
+// $Id: RuleRegistry.php,v 1.17 2006/06/20 22:09:15 avb Exp $
 
 /**
 * Registers rule objects and uses them for validation
@@ -115,7 +115,7 @@ class HTML_QuickForm_RuleRegistry
             if (!empty($path)) {
                 include_once($path);
             }
-            // Suppressing a deprecation warning on PHP 5.3
+            // Modified by Ivan Tcholakov, 16-MAR-2010. Suppressing a deprecation warning on PHP 5.3
             //$this->_rules[$class] =& new $class();
             $this->_rules[$class] = new $class();
             //

@@ -17,7 +17,7 @@
 // |          Bertrand Mansion <bmansion@mamasam.com>                     |
 // +----------------------------------------------------------------------+
 //
-// $Id: select.php 12243 2007-05-02 21:00:52Z yannoo $
+// $Id: select.php,v 1.31 2006/06/03 12:03:46 avb Exp $
 
 require_once('HTML/QuickForm/element.php');
 
@@ -446,9 +446,12 @@ class HTML_QuickForm_select extends HTML_QuickForm_element {
             case (is_a($options, 'db_result')):
                 return $this->loadDbResult($options, $param1, $param2, $param3);
                 break;
+            // Disabled by Chamilo team, 16-MAR-2010.
+            // TODO: To be verified (why it has been disabled).
             //case (is_string($options) && !empty($options) || is_subclass_of($options, "db_common")):
             //    return $this->loadQuery($options, $param1, $param2, $param3, $param4);
             //    break;
+            //
         }
     } // end func load
 

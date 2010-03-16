@@ -16,7 +16,7 @@
 // | Author: Alexey Borzov <borz_off@cs.msu.su>                           |
 // +----------------------------------------------------------------------+
 //
-// $Id: html.php 6184 2005-09-07 10:08:17Z bmol $
+// $Id: html.php,v 1.1 2003/03/12 11:16:33 avb Exp $
 
 require_once 'HTML/QuickForm/static.php';
 

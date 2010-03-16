@@ -16,7 +16,7 @@
 // | Author: Bertrand Mansion <bmansion@mamasam.com>                      |
 // +----------------------------------------------------------------------+
 //
-// $Id: ITStatic.php 6184 2005-09-07 10:08:17Z bmol $
+// $Id: ITStatic.php,v 1.7 2004/06/28 14:20:22 avb Exp $
 
 require_once('HTML/QuickForm/Renderer.php');
 

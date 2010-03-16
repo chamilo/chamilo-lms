@@ -19,7 +19,7 @@
 // |          Thomas Schulz <ths@4bconsult.de>                            |
 // +----------------------------------------------------------------------+
 //
-// $Id: Array.php 6184 2005-09-07 10:08:17Z bmol $
+// $Id: Array.php,v 1.9 2004/10/15 20:00:48 ths Exp $
 
 require_once 'HTML/QuickForm/Renderer.php';
 

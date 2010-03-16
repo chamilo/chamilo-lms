@@ -16,7 +16,7 @@
 // | Authors: Jason Rust <jrust@rustyparts.com>                           |
 // +----------------------------------------------------------------------+
 //
-// $Id: QuickHtml.php 6184 2005-09-07 10:08:17Z bmol $
+// $Id: QuickHtml.php,v 1.1 2003/08/25 16:41:02 jrust Exp $
 
 require_once('HTML/QuickForm/Renderer/Default.php');
 

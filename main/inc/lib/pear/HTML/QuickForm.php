@@ -17,7 +17,7 @@
 // |          Bertrand Mansion <bmansion@mamasam.com>                     |
 // +----------------------------------------------------------------------+
 //
-// $Id: QuickForm.php 17296 2008-12-15 17:08:44Z cfasanando $
+// $Id: QuickForm.php,v 1.162 2006/10/07 20:12:17 avb Exp $
 
 require_once('PEAR.php');
 require_once('HTML/Common.php');
@@ -62,9 +62,12 @@ $GLOBALS['_HTML_QuickForm_registered_rules'] = array(
     'nopunctuation' => array('html_quickform_rule_regex',    'HTML/QuickForm/Rule/Regex.php'),
     'nonzero'       => array('html_quickform_rule_regex',    'HTML/QuickForm/Rule/Regex.php'),
     'callback'      => array('html_quickform_rule_callback', 'HTML/QuickForm/Rule/Callback.php'),
+    // Added by Chamilo team, 16-MAR-2010
+    //'compare'       => array('html_quickform_rule_compare',  'HTML/QuickForm/Rule/Compare.php')
     'compare'       => array('html_quickform_rule_compare',  'HTML/QuickForm/Rule/Compare.php'),
     'comparedate'   => array('html_quickform_rule_comparedate',  'HTML/QuickForm/Rule/CompareDate.php'),
     'errordate'  	=> array('html_quickform_rule_date',  'HTML/QuickForm/Rule/Date.php')
+    //
 );
 
 // {{{ error codes
@@ -259,7 +262,10 @@ class HTML_QuickForm extends HTML_Common {
     {
         HTML_Common::HTML_Common($attributes);
         $method = (strtoupper($method) == 'GET') ? 'get' : 'post';
+        // Modified by Chamilo team, 16-MAR-2010
+        //$action = ($action == '') ? $_SERVER['PHP_SELF'] : $action;
         $action = ($action == '') ? api_get_self() : $action;
+        //
         $target = empty($target) ? array() : array('target' => $target);
         $attributes = array('action'=>$action, 'method'=>$method, 'name'=>$formName, 'id'=>$formName) + $target;
         $this->updateAttributes($attributes);
@@ -565,7 +571,7 @@ class HTML_QuickForm extends HTML_Common {
         $className = $GLOBALS['HTML_QUICKFORM_ELEMENT_TYPES'][$type][1];
         $includeFile = $GLOBALS['HTML_QUICKFORM_ELEMENT_TYPES'][$type][0];
         include_once($includeFile);
-        // Suppressing a deprecation warning on PHP 5.3
+        // Modified by Ivan Tcholakov, 16-MAR-2010. Suppressing a deprecation warning on PHP 5.3
         //$elementObject =& new $className();
         $elementObject = new $className();
         //
@@ -680,13 +686,9 @@ class HTML_QuickForm extends HTML_Common {
                 $this->_elements[$i + 1] =& $this->_elements[$i];
                 if ($this->_elementIndex[$currentName] == $i) {
                     $this->_elementIndex[$currentName] = $i + 1;
-                } else
-                {
-                	if (is_array($this->_duplicateIndex[$currentName]))
-                	{
-                    	$dupIdx = array_search($i, $this->_duplicateIndex[$currentName]);
-                    	$this->_duplicateIndex[$currentName][$dupIdx] = $i + 1;
-                	}
+                } else {
+                    $dupIdx = array_search($i, $this->_duplicateIndex[$currentName]);
+                    $this->_duplicateIndex[$currentName][$dupIdx] = $i + 1;
                 }
                 unset($this->_elements[$i]);
             }
@@ -1667,7 +1669,7 @@ class HTML_QuickForm extends HTML_Common {
     {
         if (!isset($GLOBALS['_HTML_QuickForm_default_renderer'])) {
             include_once('HTML/QuickForm/Renderer/Default.php');
-            // Suppressing a deprecation warning on PHP 5.3
+            // Modified by Ivan Tcholakov, 16-MAR-2010. Suppressing a deprecation warning on PHP 5.3
             //$GLOBALS['_HTML_QuickForm_default_renderer'] =& new HTML_QuickForm_Renderer_Default();
             $GLOBALS['_HTML_QuickForm_default_renderer'] = new HTML_QuickForm_Renderer_Default();
             //
@@ -1827,7 +1829,7 @@ class HTML_QuickForm extends HTML_Common {
     function toArray($collectHidden = false)
     {
         include_once 'HTML/QuickForm/Renderer/Array.php';
-        // Suppressing a deprecation warning on PHP 5.3
+        // Modified by Ivan Tcholakov, 16-MAR-2010. Suppressing a deprecation warning on PHP 5.3
         //$renderer =& new HTML_QuickForm_Renderer_Array($collectHidden);
         $renderer = new HTML_QuickForm_Renderer_Array($collectHidden);
         //

@@ -18,7 +18,7 @@
 // |          Bertrand Mansion <bmansion@mamasam.com>                     |
 // +----------------------------------------------------------------------+
 //
-// $Id: Default.php 9612 2006-10-20 11:56:44Z bmol $
+// $Id$
 
 require_once('HTML/QuickForm/Renderer.php');
 

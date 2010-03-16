@@ -17,7 +17,7 @@
 // |          Bertrand Mansion <bmansion@mamasam.com>                     |
 // +----------------------------------------------------------------------+
 //
-// $Id: hiddenselect.php 9612 2006-10-20 11:56:44Z bmol $
+// $Id: hiddenselect.php,v 1.5 2006/10/07 21:18:41 avb Exp $
 
 require_once('HTML/QuickForm/select.php');
 

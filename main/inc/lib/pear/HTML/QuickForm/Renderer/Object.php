@@ -16,7 +16,7 @@
 // | Author: Ron McClain <ron@humaniq.com>                                |
 // +----------------------------------------------------------------------+
 //
-// $Id: Object.php 6184 2005-09-07 10:08:17Z bmol $
+// $Id: Object.php,v 1.4 2005/06/17 20:00:57 avb Exp $
 
 require_once('HTML/QuickForm/Renderer.php');
 

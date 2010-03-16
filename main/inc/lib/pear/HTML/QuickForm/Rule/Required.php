@@ -16,7 +16,7 @@
 // | Authors: Bertrand Mansion <bmansion@mamasam.com>                     |
 // +----------------------------------------------------------------------+
 //
-// $Id: Required.php 6184 2005-09-07 10:08:17Z bmol $
+// $Id: Required.php,v 1.4 2005/06/18 20:58:33 avb Exp $
 
 require_once('HTML/QuickForm/Rule.php');
 

@@ -210,25 +210,24 @@ class Evaluation implements GradebookItem
 			}
 			$sql .= ',created_at';
 			$sql .= ',type';
-			$sql .= ") VALUES ('".Database::escape_string(Security::remove_XSS($this->get_name()))."'"
-					.','.$this->get_user_id()
-					.','.$this->get_weight()
-					.','.$this->get_max()
-					.','.$this->is_visible();
+			$sql .= ") VALUES ('".Database::escape_string($this->get_name())."'"
+					.','.intval($this->get_user_id())
+					.','.intval($this->get_weight())
+					.','.intval($this->get_max())
+					.','.intval($this->is_visible());
 			if (isset($this->description)) {
-				 $sql .= ",'".Database::escape_string(Security::remove_XSS($this->get_description()))."'";
+				 $sql .= ",'".Database::escape_string($this->get_description())."'";
 			}
 			if (isset($this->course_code)) {
-				 $sql .= ",'".$this->get_course_code()."'";
+				 $sql .= ",'".Database::escape_string($this->get_course_code())."'";
 			}
 			if (isset($this->category)) {
-				 $sql .= ','.$this->get_category_id();
+				 $sql .= ','.intval($this->get_category_id());
 			}
-if (empty($this->type))
-			{
+			if (empty($this->type)) {
 				$this->type = 'evaluation';	
 			}
-			$sql .= ',\''.$this->type.'\'';
+			$sql .= ',\''.Database::escape_string($this->type).'\'';
 
 			$sql .= ", '".api_get_utc_datetime()."'";
 			$sql .= ")";
@@ -252,7 +251,8 @@ if (empty($this->type))
 				$rs=Database::query($sql_eval);
 				$row_old_weight=Database::fetch_array($rs,'ASSOC');
 				$current_date=api_get_utc_datetime();
-				$sql="INSERT INTO ".$tbl_grade_linkeval_log."(id_linkeval_log,name,description,created_at,weight,visible,type,user_id_log)VALUES('".Database::escape_string($arreval['id'])."','".Database::escape_string($arreval['name'])."','".Database::escape_string($arreval['description'])."','".$current_date."','".Database::escape_string($row_old_weight['weight'])."','".Database::escape_string($arreval['visible'])."','evaluation',".api_get_user_id().")";
+				$sql="INSERT INTO ".$tbl_grade_linkeval_log."(id_linkeval_log,name,description,created_at,weight,visible,type,user_id_log)
+					  VALUES('".Database::escape_string($arreval['id'])."','".Database::escape_string($arreval['name'])."','".Database::escape_string($arreval['description'])."','".$current_date."','".Database::escape_string($row_old_weight['weight'])."','".Database::escape_string($arreval['visible'])."','evaluation',".api_get_user_id().")";
 				Database::query($sql);
 			}
 		}
@@ -263,35 +263,34 @@ if (empty($this->type))
 	public function save() {
 		$tbl_grade_evaluations = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_EVALUATION);
 		$sql = 'UPDATE '.$tbl_grade_evaluations
-			." SET name = '".Database::escape_string(Security::remove_XSS($this->get_name()))."'"
+			." SET name = '".Database::escape_string($this->get_name())."'"
 			.', description = ';
 		if (isset($this->description)) {
-			$sql .= "'".Database::escape_string(Security::remove_XSS($this->get_description()))."'";
+			$sql .= "'".Database::escape_string($this->get_description())."'";
 		}else {
 			$sql .= 'null';
 		}
-		$sql .= ', user_id = '.$this->get_user_id()
+		$sql .= ', user_id = '.intval($this->get_user_id())
 				.', course_code = ';
 		if (isset($this->course_code)) {
-			$sql .= "'".$this->get_course_code()."'";
+			$sql .= "'".Database::escape_string($this->get_course_code())."'";
 		} else {
 			$sql .= 'null';
 		}
 		$sql .= ', category_id = ';
 		if (isset($this->category)) {
-			$sql .= $this->get_category_id();
+			$sql .= intval($this->get_category_id());
 		} else {
 			$sql .= 'null';
 		}
-		$sql .= ', weight = '.$this->get_weight()
-				.', max = '.$this->get_max()
-				.', visible = '.$this->is_visible()
-				.' WHERE id = '.$this->id;
+		$sql .= ', weight = '.Database::escape_string($this->get_weight())
+				.', max = '.Database::escape_string($this->get_max())
+				.', visible = '.intval($this->is_visible())
+				.' WHERE id = '.intval($this->id);
 		//recorded history
 		$eval_log=new Evaluation();
 		$eval_log->add_evaluation_log($this->id);
 		Database::query($sql);
-
 	}
 
 	/**
@@ -299,7 +298,7 @@ if (empty($this->type))
 	 */
 	public function delete() {
 		$tbl_grade_evaluations = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_EVALUATION);
-		$sql = 'DELETE FROM '.$tbl_grade_evaluations.' WHERE id = '.$this->id;
+		$sql = 'DELETE FROM '.$tbl_grade_evaluations.' WHERE id = '.intval($this->id);
 		Database::query($sql);
 	}
 
@@ -318,7 +317,7 @@ if (empty($this->type))
 		$tbl_grade_evaluations = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_EVALUATION);
 		$sql = 'SELECT count(id) AS number'
 			 .' FROM '.$tbl_grade_evaluations
-			 ." WHERE name = '".$name."'";
+			 ." WHERE name = '".Database::escape_string($name)."'";
 
 		if (api_is_allowed_to_create_course()) {
 			$parent = Category::load($parent);
@@ -327,7 +326,7 @@ if (empty($this->type))
 				$main_course_user_table = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 				$sql .= ' AND user_id IN ('
 						.' SELECT user_id FROM '.$main_course_user_table
-						." WHERE course_code = '".$code."'"
+						." WHERE course_code = '".Database::escape_string($code)."'"
 						.' AND status = '.COURSEMANAGER
 						.')';
 			} else {
@@ -341,7 +340,7 @@ if (empty($this->type))
 		if (!isset ($parent)) {
 			$sql.= ' AND category_id is null';
 		} else {
-			$sql.= ' AND category_id = '.$parent;
+			$sql.= ' AND category_id = '.intval($parent);
 		}
     	$result = Database::query($sql);
 		$number=Database::fetch_row($result);
@@ -355,7 +354,7 @@ if (empty($this->type))
     public function has_results() {
     	$tbl_grade_results = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_RESULT);
 		$sql='SELECT count(id) AS number FROM '.$tbl_grade_results
-			.' WHERE evaluation_id = '.$this->id;
+			.' WHERE evaluation_id = '.intval($this->id);
     	$result = Database::query($sql);
 		$number=Database::fetch_row($result);
 
@@ -367,7 +366,7 @@ if (empty($this->type))
      */
     public function delete_results() {
 		$tbl_grade_results = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_RESULT);
-		$sql = 'DELETE FROM '.$tbl_grade_results.' WHERE evaluation_id = '.$this->id;
+		$sql = 'DELETE FROM '.$tbl_grade_results.' WHERE evaluation_id = '.intval($this->id);
 		Database::query($sql);
     }
 
@@ -496,12 +495,12 @@ if (empty($this->type))
 		$sql = 'SELECT * FROM '.$tbl_grade_evaluations
 				.' WHERE id IN'
 				.'(SELECT evaluation_id FROM '.$tbl_grade_results
-				.' WHERE user_id = '.$stud_id.' AND score IS NOT NULL)';
+				.' WHERE user_id = '.intval($stud_id).' AND score IS NOT NULL)';
 		if (!api_is_allowed_to_create_course()) {
 			$sql .= ' AND visible = 1';
 		}
 		if (isset($cat_id)) {
-			$sql .= ' AND category_id = '.$cat_id;
+			$sql .= ' AND category_id = '.intval($cat_id);
 		} else {
 			$sql .= ' AND category_id >= 0';
 		}
@@ -521,11 +520,11 @@ if (empty($this->type))
     	$tbl_grade_results = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_RESULT);
 
     	$sql = 'SELECT user_id,lastname,firstname,username FROM '.$tbl_user
-				." WHERE lastname LIKE '".$first_letter_user."%'"
+				." WHERE lastname LIKE '".Database::escape_string($first_letter_user)."%'"
 				.' AND status = '.STUDENT
 				.' AND user_id NOT IN'
 				.' (SELECT user_id FROM '.$tbl_grade_results
-				.' WHERE evaluation_id = '.$this->id
+				.' WHERE evaluation_id = '.intval($this->id)
 				.' )'
 				.' ORDER BY lastname';
 

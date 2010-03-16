@@ -8,7 +8,6 @@
 interface GradebookItem
 {
 	public function get_item_type();
-
 	public function get_id();
 	public function get_name();
 	public function get_description();
@@ -16,9 +15,6 @@ interface GradebookItem
 	public function get_weight();
 	public function get_date();
 	public function is_visible();
-
 	public function get_icon_name();
-
 	public function calc_score($stud_id = null);
-
 }

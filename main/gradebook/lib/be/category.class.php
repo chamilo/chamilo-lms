@@ -152,7 +152,7 @@ class Category implements GradebookItem
 			} else {
 			$sql .= ' WHERE';
 			 }
-			$sql .= ' user_id = '.$user_id;
+			$sql .= ' user_id = '.intval($user_id);
 			$paramcount ++;
 		}
 		if (isset($course_code)) {
@@ -160,7 +160,7 @@ class Category implements GradebookItem
 			if ($paramcount != 0) { $sql .= ' AND'; }
 			else { $sql .= ' WHERE'; }
 			if ($course_code == '0') { $sql .= ' course_code is null '; }
-			else { $sql .= " course_code = '".$course_code."'"; }
+			else { $sql .= " course_code = '".Database::escape_string($course_code)."'"; }
             if (!empty($session)) {
             	$sql .= ' AND session_id = '.(int) $session.' ';
             } else {
@@ -180,7 +180,7 @@ class Category implements GradebookItem
 			} else {
 			$sql .= ' WHERE';
 			}
-			$sql .= ' parent_id = '.$parent_id;
+			$sql .= ' parent_id = '.intval($parent_id);
 			$paramcount ++;
 		}
 		if (isset($visible)) {
@@ -190,7 +190,7 @@ class Category implements GradebookItem
 			} else {
 			$sql .= ' WHERE';
 			}
-			$sql .= ' visible = '.$visible;
+			$sql .= ' visible = '.intval($visible);
 			$paramcount ++;
 		}
 
@@ -256,20 +256,20 @@ class Category implements GradebookItem
             	$sql .= ', session_id';
             }
 			$sql .= ") VALUES ('".Database::escape_string($this->get_name())."'"
-					.','.$this->get_user_id()
-					.','.$this->get_weight()
-					.','.$this->is_visible();
+					.','.intval($this->get_user_id())
+					.','.Database::escape_string($this->get_weight())
+					.','.intval($this->is_visible());
 			if (isset($this->description)) {
 				$sql .= ",'".Database::escape_string($this->get_description())."'";
 			}
 			if (isset($this->course_code)) {
-				$sql .= ",'".$this->get_course_code()."'";
+				$sql .= ",'".Database::escape_string($this->get_course_code())."'";
 			}
 			if (isset($this->parent)) {
-				 $sql .= ','.$this->get_parent_id();
+				 $sql .= ','.intval($this->get_parent_id());
 			}
             if (!empty($this->session_id)) {
-            $sql .= ', '.$this->get_session_id();
+            $sql .= ', '.intval($this->get_session_id());
             }
 			$sql .= ')';
 
@@ -292,28 +292,28 @@ class Category implements GradebookItem
 		} else {
 			$sql .= 'null';
 		}
-		$sql .= ', user_id = '.$this->get_user_id()
+		$sql .= ', user_id = '.intval($this->get_user_id())
 			.', course_code = ';
 		if (isset($this->course_code)) {
-			$sql .= "'".$this->get_course_code()."'";
+			$sql .= "'".Database::escape_string($this->get_course_code())."'";
 		} else {
 			$sql .= 'null';
 		}
 		$sql .=	', parent_id = ';
 		if (isset ($this->parent)) {
-			$sql .= $this->get_parent_id();
+			$sql .= intval($this->get_parent_id());
 		} else {
 			$sql .= 'null';
 		}
 		$sql .= ', certif_min_score = ';
 		if (isset ($this->certificate_min_score) && strcmp($this->certificate_min_score,'')!==0) {
-			$sql .= $this->get_certificate_min_score();
+			$sql .= Database::escape_string($this->get_certificate_min_score());
 		} else {
 			$sql .= 'null';
 		}
-		$sql .= ', weight = '.$this->get_weight()
-			.', visible = '.$this->is_visible()
-			.' WHERE id = '.$this->id;
+		$sql .= ', weight = '.Database::escape_string($this->get_weight())
+			.', visible = '.intval($this->is_visible())
+			.' WHERE id = '.intval($this->id);
 
 		Database::query($sql);
 	}
@@ -323,7 +323,7 @@ class Category implements GradebookItem
 	 */
 	public function delete() {
 		$tbl_grade_categories = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
-		$sql = 'DELETE FROM '.$tbl_grade_categories.' WHERE id = '.$this->id;
+		$sql = 'DELETE FROM '.$tbl_grade_categories.' WHERE id = '.intval($this->id);
 		Database::query($sql);
 	}
 	/**
@@ -331,7 +331,7 @@ class Category implements GradebookItem
 	 */
 	public function update_category_delete($course_id){
 		$tbl_grade_categories = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
-		$sql = 'UPDATE '.$tbl_grade_categories.' SET visible=3 WHERE course_code ="'.$course_id.'"';
+		$sql = 'UPDATE '.$tbl_grade_categories.' SET visible=3 WHERE course_code ="'.Database::escape_string($course_id).'"';
 		Database::query($sql);
 	}
 	/**
@@ -339,7 +339,7 @@ class Category implements GradebookItem
 	 */
 	public function show_message_resource_delete($course_id) {
 		$tbl_grade_categories = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
-		$sql = 'SELECT count(*) AS num from '.$tbl_grade_categories.' WHERE course_code ="'.$course_id.'" AND visible=3';
+		$sql = 'SELECT count(*) AS num from '.$tbl_grade_categories.' WHERE course_code ="'.Database::escape_string($course_id).'" AND visible=3';
 		$res=Database::query($sql);
 		$option=Database::fetch_array($res,'ASSOC');
 		if ($option['num']>=1) {
@@ -357,7 +357,7 @@ class Category implements GradebookItem
 	 		return null;
 	 	} else {
 		 	$tbl_category=Database :: get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
-		 	$sql='SELECT name,description,user_id,course_code,parent_id,weight,visible,certif_min_score,session_id FROM '.$tbl_category.' c WHERE c.id='.$selectcat;
+		 	$sql='SELECT name,description,user_id,course_code,parent_id,weight,visible,certif_min_score,session_id FROM '.$tbl_category.' c WHERE c.id='.intval($selectcat);
 		 	$result=Database::query($sql);
 		 	$row=Database::fetch_array($result,'ASSOC');
 		 	return $row;
@@ -378,7 +378,7 @@ class Category implements GradebookItem
 		$tbl_grade_categories = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
 		$sql = 'SELECT count(id) AS number'
 			 .' FROM '.$tbl_grade_categories
-			 ." WHERE name = '".$name."'";
+			 ." WHERE name = '".Database::escape_string($name)."'";
 
 		if (api_is_allowed_to_create_course()) {
 			$parent = Category::load($parent);
@@ -387,7 +387,7 @@ class Category implements GradebookItem
 				$main_course_user_table = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 				$sql .= ' AND user_id IN ('
 						.' SELECT user_id FROM '.$main_course_user_table
-						." WHERE course_code = '".$code."'"
+						." WHERE course_code = '".Database::escape_string($code)."'"
 						.' AND status = '.COURSEMANAGER
 						.')';
 			} else {
@@ -400,11 +400,11 @@ class Category implements GradebookItem
 		if (!isset ($parent)) {
 			$sql.= ' AND parent_id is null';
 		} else {
-			$sql.= ' AND parent_id = '.$parent;
+			$sql.= ' AND parent_id = '.intval($parent);
 		}
 
     	$result = Database::query($sql);
-		$number=Database::fetch_row($result);
+		$number = Database::fetch_row($result);
 		return ($number[0] != 0);
 	}
 
@@ -560,7 +560,7 @@ class Category implements GradebookItem
                 $sql .= ' AND course_code in'
                     .' (SELECT course_code'
                     .' FROM '.$main_course_user_table
-                    .' WHERE user_id = '.$stud_id
+                    .' WHERE user_id = '.intval($stud_id)
                     .' AND status = '.STUDENT
                     .')';
             }
@@ -587,7 +587,7 @@ class Category implements GradebookItem
             }
         }elseif (api_is_platform_admin()) {
         	if (isset($session_id) && $session_id!=0) {
-        		$sql.=' AND session_id='.$session_id;
+        		$sql.=' AND session_id='.intval($session_id);
         	} else {
         		$sql.=' AND coalesce(session_id,0)=0';
         	}
@@ -633,7 +633,7 @@ class Category implements GradebookItem
 			$sql .= ' AND course_code in'
 				.' (SELECT course_code'
 				.' FROM '.$main_course_user_table
-				.' WHERE user_id = '.$user_id
+				.' WHERE user_id = '.intval($user_id)
 				.')';
         }
 		$result = Database::query($sql);
@@ -857,7 +857,7 @@ class Category implements GradebookItem
 				.' WHERE cc.code = cu.course_code'
 				.' AND cu.status = '.COURSEMANAGER;
 		if (!api_is_platform_admin()) {
-		$sql .= ' AND cu.user_id = '.$user_id;
+		$sql .= ' AND cu.user_id = '.intval($user_id);
 		}
 
 		$result = Database::query($sql);

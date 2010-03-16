@@ -108,7 +108,7 @@ class LearnpathLink extends AbstractLink
     			." WHERE lp_id = ".$this->get_ref_id();
 
     	if (isset($stud_id))
-    		$sql .= ' AND user_id = '.$stud_id;
+    		$sql .= ' AND user_id = '.intval($stud_id);
 
     	// order by id, that way the student's first attempt is accessed first
 		$sql .= ' ORDER BY view_count DESC';

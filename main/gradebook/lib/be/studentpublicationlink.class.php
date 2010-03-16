@@ -34,7 +34,7 @@ class StudentPublicationLink extends AbstractLink
 				.' FROM '.$this->get_itemprop_table().' prop, '
 						 .$this->get_studpub_table().' pub'
 				." WHERE prop.tool = 'work'"
-				.' AND prop.insert_user_id = '.$stud_id
+				.' AND prop.insert_user_id = '.intval($stud_id)
 				.' AND prop.ref = pub.id'
 				." AND pub.title = '".Database::escape_string($eval->get_name())."' AND pub.session_id=".api_get_session_id()."";
 
@@ -80,7 +80,7 @@ class StudentPublicationLink extends AbstractLink
 				.' pup WHERE has_properties != '."''".' AND id NOT IN'
 				.' (SELECT ref_id FROM '.$tbl_grade_links
 				.' WHERE type = '.LINK_STUDENTPUBLICATION
-				." AND course_code = '".$this->get_course_code()."'"
+				." AND course_code = '".Database::escape_string($this->get_course_code())."'"
 				.') AND pub.session_id='.api_get_session_id().'';
 
 		$result = Database::query($sql);
@@ -118,7 +118,7 @@ class StudentPublicationLink extends AbstractLink
     public function has_results() {
     	$course_info = api_get_course_info($this->course_code);
     	$tbl_grade_links = Database :: get_course_table(TABLE_STUDENT_PUBLICATION,$course_info['dbName']);
-		$sql = 'SELECT count(*) AS number FROM '.$tbl_grade_links." WHERE parent_id = '".$this->get_ref_id()."' AND session_id=".api_get_session_id()."";
+		$sql = 'SELECT count(*) AS number FROM '.$tbl_grade_links." WHERE parent_id = '".intval($this->get_ref_id())."' AND session_id=".api_get_session_id()."";
     	$result = Database::query($sql);
 		$number=Database::fetch_row($result);
 		return ($number[0] != 0);
@@ -132,7 +132,7 @@ class StudentPublicationLink extends AbstractLink
 		if (is_null($database_name)===true) {
 			return false;
 		}
-    	$sql = 'SELECT * FROM '.$tbl_stats." WHERE id = '".$this->get_ref_id()."' AND session_id=".api_get_session_id()."";
+    	$sql = 'SELECT * FROM '.$tbl_stats." WHERE id = '".intval($this->get_ref_id())."' AND session_id=".api_get_session_id()."";
 		$query = Database::query($sql);
 		$assignment = Database::fetch_array($query);
 
@@ -247,7 +247,7 @@ class StudentPublicationLink extends AbstractLink
 		if ($tbl_name=='') {
 			return false;
 		} elseif (!isset($this->exercise_data)) {
-    		$sql = 'SELECT * FROM '.$this->get_studpub_table()." WHERE id = '".$this->get_ref_id()."' AND session_id=".api_get_session_id()."";
+    		$sql = 'SELECT * FROM '.$this->get_studpub_table()." WHERE id = '".intval($this->get_ref_id())."' AND session_id=".api_get_session_id()."";
 			$query = Database::query($sql);
 			$this->exercise_data = Database::fetch_array($query);
     	}
@@ -264,7 +264,7 @@ class StudentPublicationLink extends AbstractLink
 
     public function is_valid_link() {
     	$sql = 'SELECT count(id) from '.$this->get_studpub_table()
-				.' WHERE id = '.$this->get_ref_id().' AND session_id='.api_get_session_id().'';
+				.' WHERE id = '.intval($this->get_ref_id()).' AND session_id='.api_get_session_id().'';
 		$result = Database::query($sql);
 		$number=Database::fetch_row($result);
 		return ($number[0] != 0);

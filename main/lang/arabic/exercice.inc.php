@@ -154,7 +154,7 @@ $langModifyExercise = "تعديل تمرين";
 $langModifyAnswers = "تعديل أجوبة";
 $langForExercise = "من أجل التمارين";
 $langUseExistantQuestion = "استخدام أسئلة موجودة مسبقا";
-$freeAnswer = "جواب حر";
+$FreeAnswer = "جواب حر";
 $notCorrectedYet = "هذا الجواب لم يتم تصحيحه بعد. معنى هذا أن نقاط هذا السؤال هي 0, هذا يؤثر  على المجموع العام للنقاط";
 $adminHP = "ادارة البطاطس الساخنة";
 $NewQu = "سؤال جديد";
@@ -181,7 +181,7 @@ $langHotspotValidateError2 = " المطلوب نقرة أو نقرات على ا
 $langHotspotRequired = ".التوصيف و النتيجة هما متطلبين لكل بقعة ساخنة. الاستجابة اختيارية";
 $langHotspotChoose = "<div style=\"padding:2px 3px;\">•  .لإنشاء بقعة ساخنة: اختر شكلا بجوار اللون، و من ثم أرسم البقعة الساخنة </div><div style=\"padding:2px 3px;\">• لنقل بقعة ساخنة، اختر اللون، أنقر على بقعة أخرى على الصورة، و من ثم أرسم البقعة الساخنة.</div><div style=\"padding:2px 3px;\">•    [+hotspot] لإضافة بقعة ساخنة: أنقر على الزر  </div><div style=\"padding:2px 3px;\">•  \"Close polygon\"لإغلاق شكل المضلع: أنقر على الزر الأيمن للفارة و اختر   .</div>";
 $Fault = "غير صحيح";
-$Hotspot = "نطاق الصورة";
+$HotSpot = "نطاق الصورة";
 $ClickNumber = "أنقر رقم";
 $HotspotGiveAnswers = "قضلا، أعط جوابا";
 $Addlimits = "أضف حدودا";

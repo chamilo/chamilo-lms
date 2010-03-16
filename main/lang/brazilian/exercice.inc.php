@@ -156,7 +156,7 @@ $langModifyExercise = "Editar nome do teste e definições";
 $langModifyAnswers = "Editar respostas";
 $langForExercise = "para o teste";
 $langUseExistantQuestion = "Utilizar uma questão existente";
-$freeAnswer = "Questão aberta";
+$FreeAnswer = "Questão aberta";
 $notCorrectedYet = "Esta resposta ainda não foi corrigido. Entretanto, a sua pontuação para esta questão está definido para 0, que afetam a pontuação total.";
 $adminHP = "Administração do Hot Potatoes";
 $NewQu = "Nova questão";
@@ -183,7 +183,7 @@ $langHotspotValidateError2 = "clique(s) sobre a imagem são necessários antes d
 $langHotspotRequired = "A descrição e a pontuação são necessárias para cada hotspot. Feedback são opcionais.";
 $langHotspotChoose = "<div style=\"padding:2px 3px;\">• Para criar um hotspot: selecione uma forma junto à cor e depois desenhe o hotspot.</div><div style=\"padding:2px 3px;\">• Para mover um hotspot, selecione a cor, clique em um outro ponto da imagem e desenhe o hotspot.</div><div style=\"padding:2px 3px;\">• Para adicionar um hotspot: clique no botão [+ hotspot].</div><div style=\"padding:2px 3px;\">• Para fechar a forma de um polígono: clique com o botão direito do mouse e selecione \"Fechar polígono\".</div>";
 $Fault = "Incorreto";
-$Hotspot = "Zona de imagens";
+$HotSpot = "Zona de imagens";
 $ClickNumber = "Número de cliques";
 $HotspotGiveAnswers = "Por favor, responda";
 $Addlimits = "Adicionar limites";

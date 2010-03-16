@@ -153,7 +153,7 @@ $langModifyExercise = "Ŝanĝi ekzercon";
 $langModifyAnswers = "Ŝanĝi respondojn";
 $langForExercise = "por ekzerco";
 $langUseExistantQuestion = "Uzi ekzistantan demandon";
-$freeAnswer = "Malferma respondo";
+$FreeAnswer = "Malferma respondo";
 $notCorrectedYet = "Ĉi-respondo ankoraŭ ne estas korektita. Provizore viaj poentoj por ĝi kalkuliĝas nul.";
 $adminHP = "Administranto de \"Hot Potatoes\"";
 $NewQu = "Nova demando";
@@ -180,7 +180,7 @@ $langHotspotValidateError2 = "Necesa nombro da musklakoj antaŭ vido de la rezul
 $langHotspotRequired = "Priskribo kaj viŝo estas devigaj por ĉiu atentilo - komentario estas laŭdezira";
 $langHotspotChoose = "<div style=\"padding:2px 3px;\">• Por ekfari atentilon: elektu formon apud la koloroj kaj desegnu la atentilon sur la bildon.</div><div style=\"padding:2px 3px;\">• Por translokigi atentilon, elektu la koloron, musklaku sur alian lokon en la bildo kaj desegnu la atentilon.</div><div style=\"padding:2px 3px;\">• Por aldoni atentilon:musklaku sur la [+atentilo] butonon.</div><div style=\"padding:2px 3px;\">• Por fini plurangulan fomon: dekstre musklaku kaj elektu \"Fini plurangulon\".</div>";
 $Fault = "Eraro";
-$Hotspot = "Atentilo";
+$HotSpot = "Atentilo";
 $ClickNumber = "Nombro da musklakoj";
 $HotspotGiveAnswers = "Bonvolu doni respondon";
 $Addlimits = "Aldoni limojn";

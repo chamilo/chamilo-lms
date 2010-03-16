@@ -156,7 +156,7 @@ $langModifyExercise = "Modifica exercitiul";
 $langModifyAnswers = "modifica raspunsurile";
 $langForExercise = "pentru exercitiu";
 $langUseExistantQuestion = "Foloseste o intrebare existenta";
-$freeAnswer = "Intrebare deschisa";
+$FreeAnswer = "Intrebare deschisa";
 $notCorrectedYet = "Acest raspuns nu a fost inca corectat. Intre timp, scorul tau pentru aceasta intrebare este setat la 0, afectand punctajul total.";
 $adminHP = "Admin sistem";
 $NewQu = "Intrebare noua";
@@ -183,7 +183,7 @@ $langHotspotValidateError2 = "este nevoie sa apasati pe imagine) inainte de a ve
 $langHotspotRequired = "Descrierea si valoarea sunt necesare pentru fiecare punct de interes. Comentariul este optional.";
 $langHotspotChoose = "<div style=\"padding:2px 3px;\">• Pentru a crea un punct de interes: selectati o forma de langa o culoare si apoi desenati punctul de interes.</div><div style=\"padding:2px 3px;\">• Pentru a muta un punct de interes, selectati culoarea, apasati pe alt punct din imagine, si apoi desenati punctul de interes</div><div style=\"padding:2px 3px;\">• Pentru a adauga un punct de interes: apasati pe butonul  [+punct de interes].</div><div style=\"padding:2px 3px;\">• Pentrut a inchide o forma de poligon: apasati pe click dreapta si selectati\"Close polygon\".</div>";
 $Fault = "Incorect";
-$Hotspot = "Hot Spot";
+$HotSpot = "Hot Spot";
 $ClickNumber = "Numarul clickurilor";
 $HotspotGiveAnswers = "Va rog dati un raspuns";
 $Addlimits = "Adauga limitele";

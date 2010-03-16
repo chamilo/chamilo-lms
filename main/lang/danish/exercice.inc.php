@@ -154,7 +154,7 @@ $langModifyExercise = "Rediger øvelse";
 $langModifyAnswers = "rediger svar";
 $langForExercise = "for øvelse";
 $langUseExistantQuestion = "Brug et eksisterende spørgsmål";
-$freeAnswer = "Åbent spørgsmål";
+$FreeAnswer = "Åbent spørgsmål";
 $notCorrectedYet = "Dette svar er endnu ikke blevet rettet. Imidlertid er din score i forbindelse med dette spørgsmål sat til 0, hvilket påvirker din totale score.";
 $adminHP = "Hot Potatoes Admin";
 $NewQu = "Nyt spørgsmål";
@@ -181,7 +181,7 @@ $langHotspotValidateError2 = "der skal klikkes på et billede), før resultatet 
 $langHotspotRequired = "Beskrivelse og værdi skal anføre for hvert hotspot. Tilbagemelding er valgfri";
 $langHotspotChoose = "<div style=\"padding:2px 3px;\">• For at oprette et hotspot: vælg en form ved siden at farven og angiv hotspot'en.</div><div style=\"padding:2px 3px;\">• For at flytte et hotsport, vælg farven, klik et andet sted på billeder og angiv et nyt hotsport.</div><div style=\"padding:2px 3px;\">• For at tilføje et hotspot: klik på [+hotspot] knappen.</div><div style=\"padding:2px 3px;\">• For at lukke en polygon: højreklik og vælg\"Luk polygon\".</div>";
 $Fault = "Ikke korrekt";
-$Hotspot = "Billedeområde";
+$HotSpot = "Billedeområde";
 $ClickNumber = "Klik-nummer";
 $HotspotGiveAnswers = "Afgiv venligst et svar";
 $Addlimits = "Tilføj begrænsninger";

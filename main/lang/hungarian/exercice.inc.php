@@ -154,7 +154,7 @@ $langModifyExercise = "Teszt módosítása";
 $langModifyAnswers = "válaszok módosítása";
 $langForExercise = "a következő teszthez:";
 $langUseExistantQuestion = "Már létező kérdés felhasználása";
-$freeAnswer = "Szabad válasz";
+$FreeAnswer = "Szabad válasz";
 $notCorrectedYet = "Ez a válasz nem lett kijavítva. Ugyanakkor a kérdés nulla ponttal beszámításra került pontszámába.";
 $adminHP = "Hot Potatoes adminisztrátor";
 $NewQu = "Új kérdés";
@@ -181,7 +181,7 @@ $langHotspotValidateError2 = "kattintás szükséges a képen) mielőtt látná 
 $langHotspotRequired = "Leírás és súlyozás minden forróponthoz szükséges - megjegyzés írása opcionális.";
 $langHotspotChoose = "<div style=\"padding:2px 3px;\">• Forropont létrehozása: válasszon ki egy alakzatot és a színét, majd rajzolja meg a forrópontot.</div><div style=\"padding:2px 3px;\">• A forrópont áthelyezéséhez válassza ki színét, kattintson a kép egy másik részére, és rajzolja meg az új helyét.</div><div style=\"padding:2px 3px;\">• Forrópont hozzáadáshoz: kattintson a [+forrópont] gombra.</div><div style=\"padding:2px 3px;\">• Poligon alakzat bezárásához: jobb egérgombal kattintson rá és válassza a \"Poligon bezárása\" pontot.</div>";
 $Fault = "Helytelen";
-$Hotspot = "Kép zónák";
+$HotSpot = "Kép zónák";
 $ClickNumber = "Kattintson a számra";
 $HotspotGiveAnswers = "Kérem adjon meg egy választ";
 $Addlimits = "Limitek hozzáadása";

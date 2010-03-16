@@ -153,7 +153,7 @@ $langModifyExercise = "تغییر تمرین";
 $langModifyAnswers = "تغییر جواب ها";
 $langForExercise = "برای تمرین مورد نظر";
 $langUseExistantQuestion = "استفاده از تمرین های موجود";
-$freeAnswer = "تشریحی";
+$FreeAnswer = "تشریحی";
 $notCorrectedYet = "جواب شما به این سؤال تشریحی هنوز بررسی نشده است. فعلاً به صورت موقّت نمره صفر برای این جواب در نظر گرفته می شود. این نمره بر روی رتبه کل شما تأثیر خواهد داشت";
 $adminHP = "Hot potatoes مدیریت آزمون های";
 ?>

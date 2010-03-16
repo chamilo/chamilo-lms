@@ -156,7 +156,7 @@ $langModifyExercise = "Modificar exercicio";
 $langModifyAnswers = "modificar respostas";
 $langForExercise = "para o exercicio";
 $langUseExistantQuestion = "Empregar unha pregunta xa existente";
-$freeAnswer = "Resposta libre";
+$FreeAnswer = "Resposta libre";
 $notCorrectedYet = "Esta resposta aínda non foi correxida. Mentres tanto, a súa puntuación para esta pregunta será 0, afectando a puntuación total.";
 $adminHP = "Administración de HotPotatoes";
 $NewQu = "Nova pregunta";
@@ -183,7 +183,7 @@ $langHotspotValidateError2 = "clics requiridos na imaxe) antes de ver os resulta
 $langHotspotRequired = "A descrición e o valor son requiridos en cada hotspot. O comentario é opcional.";
 $langHotspotChoose = "<div style=\"padding:2px 3px;\">• Para crear un hotspot: selecciona a forma ao lado da cor, e a continuación debuxa o hotspot.</div><div style=\"padding:2px 3px;\">• Para mover un hotspot, selecciona a cor, fai click sobre outro punto da imaxe e a continuación debuxa o hotspot.</div><div style=\"padding:2px 3px;\">• Para engadir un hotspot: fai click no botón [+hotspot]</div><div style=\"padding:2px 3px;\">• Para pechar a forma dun polígono: fai click co botón dereito e selecciona \"Pechar polígono\".</div>";
 $Fault = "Incorrecto";
-$Hotspot = "hotspot";
+$HotSpot = "hotspot";
 $ClickNumber = "Número de clics";
 $HotspotGiveAnswers = "Por favor, responda";
 $Addlimits = "Engadir límites";

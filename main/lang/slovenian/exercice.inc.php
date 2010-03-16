@@ -156,7 +156,7 @@ $langModifyExercise = "Uredi ime testa in njegove nastavitve";
 $langModifyAnswers = "uredi odgovor";
 $langForExercise = "za test";
 $langUseExistantQuestion = "Uporabi obstoječe vprašanje";
-$freeAnswer = "Prost odgovor";
+$FreeAnswer = "Prost odgovor";
 $notCorrectedYet = "Ta odgovor še ni bil ocenjen. Do tedaj bo vrednost vašega odgovora v skupnem rezultatu testa postavljena na 0.";
 $adminHP = "Upravljanje Hot Potatoes";
 $NewQu = "Novo vprašanje";
@@ -183,7 +183,7 @@ $langHotspotValidateError2 = "klikov je potrebnih na sliki) predenj si lahko ogl
 $langHotspotRequired = "Opis in utež sta zahtevana za vsako izmed vročih točk. Komentar je opcijski.";
 $langHotspotChoose = "<div style=\"padding:2px 3px;\">• Vročo točko ustvarimo: izberemo obliko poleg barve, nato narišemo vročo točko.</div><div style=\"padding:2px 3px;\">• Premik vroče točke: izberemo barvo, kliknemo drugo želeno mesto na sliki in narišemo vročo točko.</div><div style=\"padding:2px 3px;\">• Dodajanje vroče točke: kliknemo na gumb [+vroča točka].</div><div style=\"padding:2px 3px;\">• Zapiranje poligonske oblike: desni klik in izberemo \"Zapri poligon\".</div>";
 $Fault = "Nepravilno";
-$Hotspot = "Slikovna področja";
+$HotSpot = "Slikovna področja";
 $ClickNumber = "Klikni številko";
 $HotspotGiveAnswers = "Prosim, podajte odgovor";
 $Addlimits = "Dodaj omejitve";

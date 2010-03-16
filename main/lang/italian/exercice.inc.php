@@ -156,7 +156,7 @@ $langModifyExercise = "Modifica proprietà del test";
 $langModifyAnswers = "modifica le risposte";
 $langForExercise = "per il test";
 $langUseExistantQuestion = "Usa un quesito esistente";
-$freeAnswer = "Risposta aperta";
+$FreeAnswer = "Risposta aperta";
 $notCorrectedYet = "La risposta non è stata ancora corretta. Il punteggio per la risposta è posto temporaneamente a 0, con conseguenze sul punteggio totale.";
 $adminHP = "Amministra test Hot Potatoes";
 $NewQu = "Nuovo quesito";
@@ -183,7 +183,7 @@ $langHotspotValidateError2 = "click sull'immagine) prima di poter vedere il risu
 $langHotspotRequired = "Sono richiesti peso e descrizione per ogni zona sensibile. Il commento è facoltativo";
 $langHotspotChoose = "<div style=\"padding:2px 3px;\">• Per creare una zona sensibile: seleziona una forma vicino al colore, e traccia la zona.</div><div style=\"padding:2px 3px;\">• Per muovere una zona, seleziona il colore, clicca su una zona diversa nell'immagine e traccia la nuova zona.</div><div style=\"padding:2px 3px;\">• Per aggiungere una zona sensibile clicca sul pulsante  [+zona sensibile].</div><div style=\"padding:2px 3px;\">• Per chiudere una forma poligonale usa il pulsante destro del mouse e seleziona \"Chiudi il poligono\".</div>";
 $Fault = "Errato";
-$Hotspot = "Selezione zona";
+$HotSpot = "Selezione zona";
 $ClickNumber = "Clicca sul numero";
 $HotspotGiveAnswers = "Per favore, dai una risposta";
 $Addlimits = "Aggiungi limitazioni";

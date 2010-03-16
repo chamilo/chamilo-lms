@@ -156,7 +156,7 @@ $langModifyExercise = "Wijzig oefening";
 $langModifyAnswers = "Wijzig antwoorden";
 $langForExercise = "voor oefening";
 $langUseExistantQuestion = "Gebruik bestaande vraag";
-$freeAnswer = "Open vraag";
+$FreeAnswer = "Open vraag";
 $notCorrectedYet = "Dit antwoord is nog niet verbeterd. Tot dit gebeurt, wordt uw score voor deze vraag als 0 gerekend.";
 $adminHP = "Hot Potatoes Admin";
 $NewQu = "Nieuwe vraag";
@@ -183,7 +183,7 @@ $langHotspotValidateError2 = "Vereiste aantal muiskliks op de afbeelding voor he
 $langHotspotRequired = "Beschrijving en gewist zijn verplicht voor elke hotspot - commentaar is optioneel";
 $langHotspotChoose = "<div style=\"padding:2px 3px;\">• Om een hotspot aan te maken: selecteer een vorm naast de kleuren en teken de hotspot op de afbeelding.</div><div style=\"padding:2px 3px;\">• Om een hotspot te verplaatsen, selecteer de kleur, klik op een andere plaats in de afbeelding en teken de hotspot.</div><div style=\"padding:2px 3px;\">• Om een hotspot bij te voegen: klik op de [+hotspot] knop.</div><div style=\"padding:2px 3px;\">• Om een polygoon vorm te sluiten: rechtsklikken en selecteer \"Sluit polygoon\".</div>";
 $Fault = "Fout";
-$Hotspot = "Hot spot";
+$HotSpot = "Hot spot";
 $ClickNumber = "Aantal klikken.";
 $HotspotGiveAnswers = "Gelieve een antwoord op te geven";
 $Addlimits = "Grenzen toevoegen";

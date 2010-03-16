@@ -154,7 +154,7 @@ $langModifyExercise = "Izmijeni vježbu";
 $langModifyAnswers = "izmijeni odgovore";
 $langForExercise = "za vježbu";
 $langUseExistantQuestion = "Upotrijebi postojeće pitanje";
-$freeAnswer = "Slobodan odgovor";
+$FreeAnswer = "Slobodan odgovor";
 $notCorrectedYet = "Ovaj odgovor još nije ispravljen. U međuvremenu je vaš rezultat za ovo pitanje jednak 0 i kao takav se ubraja u ukupni rezultat.";
 $adminHP = "Nadzor Hot Potatoes";
 $NewQu = "Novo pitanje";
@@ -181,7 +181,7 @@ $langHotspotValidateError2 = "potrebni su klik(ovi) mišom na sliku) prije nego 
 $langHotspotRequired = "Opis i bodovanje je potrebno za svako aktivno mjesto. Opaska je neobavezna.";
 $langHotspotChoose = "<div style=\"padding:2px 3px;\">• Za kreiranje aktivnog mjesta: odaberi oblik do boje i zatim nacrtaj aktivno mjesto.</div><div style=\"padding:2px 3px;\">• Za pomicanje aktivnog mjesta, odaberi boju, odaberi bilo koju točku na slici (klik), i zatim nacrtaj aktivno mjesto.</div><div style=\"padding:2px 3px;\">• Za dodavanje aktivnog mjesta: odaberite [+aktivno mjesto] gumb.</div><div style=\"padding:2px 3px;\">• Za zatvaranje poligonskog oblika: desni klik i odabir \"Close polygon\".</div>";
 $Fault = "Netočno";
-$Hotspot = "Aktivna mjesta (hotspots)";
+$HotSpot = "Aktivna mjesta (hotspots)";
 $ClickNumber = "Klikni broj";
 $HotspotGiveAnswers = "Molim, odgovorite na pitanje";
 $Addlimits = "Dodaj ograničenja";

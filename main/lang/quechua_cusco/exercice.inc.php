@@ -155,7 +155,7 @@ $langModifyExercise = "T'ijrapay llank'aynata";
 $langModifyAnswers = "t'ijrapay kutichiykunata";
 $langForExercise = "llank'aynapaq";
 $langUseExistantQuestion = "Hap'ipay tapuy kasqata";
-$freeAnswer = "Respuesta abierta";
+$FreeAnswer = "Respuesta abierta";
 $notCorrectedYet = "Kutichiyqa manaraq allinchasqachu. Chayraykun markaykiqa ch'usaqmi kanqa, hinallataq qechunqapuni yupaykunata lliw markaykiman.";
 $adminHP = "Hot Potatoes kamachina";
 $NewQu = "Musuq tapuy";
@@ -182,7 +182,7 @@ $langHotspotValidateError2 = "clics requeridos en la imagen) antes de ver los re
 $langHotspotRequired = "En cada zona interactiva la descripción y el valor son obligatorios. El feedback es opcional.";
 $langHotspotChoose = "<div style=\"padding:2px 3px;\">• Para crear una zona interactiva: seleccione la forma asociada al color y después dibuje la zona interactiva.</div><div style=\"padding:2px 3px;\">• Para mover una zona interactiva, seleccione el color, haga clic en otro punto de la imagen y finalmente dibuje la zona interactiva.</div><div style=\"padding:2px 3px;\">• Para añadir una zona interactiva: haga clic en el botón [+zona interactiva].</div><div style=\"padding:2px 3px;\">• Para cerrar una forma poligonal: botón derecho del ratón y seleccionar \"Cerrar polígono\".</div>";
 $Fault = "Mana allinchu";
-$Hotspot = "Zonas de imagen";
+$HotSpot = "Zonas de imagen";
 $ClickNumber = "Hayka clics";
 $HotspotGiveAnswers = "Ama hina kaychu, kutichiy";
 $Addlimits = "Yapay saywakunata";

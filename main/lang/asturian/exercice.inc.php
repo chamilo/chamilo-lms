@@ -156,7 +156,7 @@ $langModifyExercise = "Modificar exerciciu";
 $langModifyAnswers = "Modificar les rempuestes";
 $langForExercise = "pal exerciciu";
 $langUseExistantQuestion = "Usar una entruga esistente";
-$freeAnswer = "Rempuesta abierta";
+$FreeAnswer = "Rempuesta abierta";
 $notCorrectedYet = "Esti retruque entá nun ta correxíu. En tantu se corrixe, los sos puntos nél va ser cero, lo qu'afeuta a los sos puntos totales.";
 $adminHP = "Alministración Hot Potatoes";
 $NewQu = "Entruga nueva";
@@ -183,7 +183,7 @@ $langHotspotValidateError2 = "clics necesarios na imaxe) enantes ver los resulta
 $langHotspotRequired = "En cauna les zones interautives la descripción y el valor son obligatorios. El comentariu ye opcional.";
 $langHotspotChoose = "<div style=\"padding:2px 3px;\">• Pa crear una zona interautiva seleicione la forma que va asociar al color y dempués dibuxe la zona interautiva.</div><div style=\"padding:2px 3px;\">• Pa mover una zona interautiva, escueya'l color, calque n'otru puntu de la imaxe y p'acabar dibuxe la zona interautiva. </div><div style=\"padding:2px 3px;\">• Pa amestar una zona interautiva calque nel botón [+zona interautiva].</div><div style=\"padding:2px 3px;\">• Pa cerrar una forma poligonal calque'l botón derechu del ratón y seleicione \"Cerrar polígonu\".</div>";
 $Fault = "Incorreuta";
-$Hotspot = "Zones d'imaxe";
+$HotSpot = "Zones d'imaxe";
 $ClickNumber = "Numberu de clics";
 $HotspotGiveAnswers = "Por favor, respuenda";
 $Addlimits = "Amestar llendes";

@@ -153,7 +153,7 @@ $langModifyExercise = "Ubah Latihan";
 $langModifyAnswers = "ubah jawaban";
 $langForExercise = "untuk latihan";
 $langUseExistantQuestion = "Gunakan pertanyaan yang sudah ada";
-$freeAnswer = "Jawaban bebas";
+$FreeAnswer = "Jawaban bebas";
 $notCorrectedYet = "Jawaban ini belum diperiksa.  Sementara, skor anda untuk pertanyaan ini dianggap 0, mempengaruhi skor total.";
 $adminHP = "Administrator Hot Potatoes";
 $NewQu = "Pertanyaan baru";
@@ -180,7 +180,7 @@ $langHotspotValidateError2 = "klik dibutuhkan pada citra) sebelum melihat hasil"
 $langHotspotRequired = "Deskripsi dan bobot dibutuhkan untuk tiap hotspot. Komentar adalah opsional.";
 $langHotspotChoose = "<div style=\"padding:2px 3px;\">• Untuk membuat sebuah hotspot: pilih bentuk disamping warna, dan gambarkan hotspot. </div><div style=\"padding:2px 3px;\">•  untuk memindahkan hotspot, pilih warna, dan klik hotspot lain pada citra, dan gambar hotspotnya. /div><div style=\"padding:2px 3px;\">•  Untuk menambah sebuah hotspot: klik tombol [+hotspot]. </div><div style=\"padding:2px 3px;\">•  Untuk menutup bentuk polygon: klik kanan dan pilih  \"Close polygon\".</div>";
 $Fault = "Salah";
-$Hotspot = "Hotspot";
+$HotSpot = "Hotspot";
 $ClickNumber = "Klik angka";
 $HotspotGiveAnswers = "Silahkan beri jawaban";
 $Addlimits = "Tambah batas";

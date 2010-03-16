@@ -153,7 +153,7 @@ $langModifyExercise = "연습문제 수정";
 $langModifyAnswers = "해답 수정";
 $langForExercise = "연습문제를 위한";
 $langUseExistantQuestion = "기존 문제 사용";
-$freeAnswer = "자유 답안";
+$FreeAnswer = "자유 답안";
 $notCorrectedYet = "이 답은 정답이 아닙니다. 이로 인해, 이 문제에 대한 점수는 0점이고, 전체 점수에 반영될 것입니다.";
 $adminHP = "Hot Potatoes 관리";
 ?>

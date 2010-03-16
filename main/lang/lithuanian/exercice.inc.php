@@ -154,7 +154,7 @@ $langModifyExercise = "Redaguoti pratimus";
 $langModifyAnswers = "redaguoti atsakymus";
 $langForExercise = "užduočiai";
 $langUseExistantQuestion = "Naudoti esantį klausimą";
-$freeAnswer = "Laisvos formos atsakymas";
+$FreeAnswer = "Laisvos formos atsakymas";
 $notCorrectedYet = "Šis atsakymas dar neištaisytas. Šio klausimo įverinimas įrašytas 0.";
 $adminHP = "Hot Potatoes administratorius";
 $NewQu = "Naujas klausimas";
@@ -181,7 +181,7 @@ $langHotspotValidateError2 = " paspaudimų ant paveikslėlio) prieš peržiūrin
 $langHotspotRequired = "Paaiškinimai ir svoriniai įvertinimo koeficientai būtini - komentarai nebūtini";
 $langHotspotChoose = "<div style=\"padding:2px 3px;\">•Kad sukurti \"hotspot\": pasirinkite kontūrą šalia spalvos ir nupieškite \"hotspot\".</div><div style=\"padding:2px 3px;\">•Kad sukurti naują \"hotspot\" spauskite [ + ] mygtuką.</div><div style=\"padding:2px 3px;\">•Kad uždaryti \"polygon\" sritį: dešinys pelės klavišas ir \"Close polygon\".</div>";
 $Fault = "Neteisingas";
-$Hotspot = "Paveikslėlių zonos";
+$HotSpot = "Paveikslėlių zonos";
 $ClickNumber = "Paspausti ant numerio";
 $HotspotGiveAnswers = "Įrašykite atsakymą";
 $Addlimits = "Laiko ir bandymų limitai";

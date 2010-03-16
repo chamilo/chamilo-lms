@@ -153,7 +153,7 @@ $langModifyExercise = "修改练习";
 $langModifyAnswers = "修改答案";
 $langForExercise = "做练习";
 $langUseExistantQuestion = "用一个现有题目";
-$freeAnswer = "自由回答";
+$FreeAnswer = "自由回答";
 $notCorrectedYet = "��û�и���. ͬʱ, ������ķ�������Ϊ0, Ӱ������ܷ�.";
 $adminHP = "Hot Potatoes 管理";
 $NewQu = "新问题";
@@ -179,7 +179,7 @@ $langHotspotValidateError2 = " click(s) required on the image) before seeing the
 $langHotspotRequired = "题目和分数是必需的，摘要是可选的。";
 $langHotspotChoose = "<div style=\"padding:2px 3px;\">创建热点：先选择颜色对应的图形然后画出热点</div><div style=\"padding:2px 3px;\">移动热点：先选择颜色对应的图形然后画出新的热点</div><div style=\"padding:2px 3px;\">关闭多边形：点击右键然后选择关闭多边形</div><div style=\"padding:2px 3px;\"></div>";
 $Fault = "不正确";
-$Hotspot = "热点";
+$HotSpot = "热点";
 $HotspotGiveAnswers = "请给一个答案";
 $Addlimits = "增加限制";
 $AreYouSure = "你肯定吗";

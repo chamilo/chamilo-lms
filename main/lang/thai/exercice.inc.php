@@ -153,7 +153,7 @@ $langModifyExercise = "แก้ไขแบบฝึกหัด";
 $langModifyAnswers = "แก้ไขคำตอบ";
 $langForExercise = "สำหรับแบบฝึกหัด for exercise";
 $langUseExistantQuestion = "ใช้คำถามเดิมที่มีอยู่ Use an existing question";
-$freeAnswer = "ตอบคำถามแบบอัตนัย";
+$FreeAnswer = "ตอบคำถามแบบอัตนัย";
 $notCorrectedYet = "�ӵͺ����ѧ���Ѻ��Ҷ١��ͧ �س�����ṹ�� 0 ��觡���繼ŵ�ͤ�ṹ������� This answer has not yet been corrected. Meanwhile, your score for this question is set to 0, affecting the total score.";
 $adminHP = "Hot Potatoes Admin";
 ?>

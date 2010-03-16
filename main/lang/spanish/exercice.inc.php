@@ -156,7 +156,7 @@ $langModifyExercise = "Modificar ejercicio";
 $langModifyAnswers = "modificar las respuestas";
 $langForExercise = "para el ejercicio";
 $langUseExistantQuestion = "Usar una pregunta existente";
-$freeAnswer = "Respuesta abierta";
+$FreeAnswer = "Respuesta abierta";
 $notCorrectedYet = "Esta pregunta aún no ha sido corregida. Hasta que no lo sea, Ud. tendrá en ella la calificación de cero, lo cual se reflejará en su puntuación global.";
 $adminHP = "Administración Hot Potatoes";
 $NewQu = "Nueva pregunta";
@@ -183,7 +183,7 @@ $langHotspotValidateError2 = "clics requeridos en la imagen) antes de ver los re
 $langHotspotRequired = "En cada zona interactiva la descripción y el valor son obligatorios. El feedback es opcional.";
 $langHotspotChoose = "<div style=\"padding:2px 3px;\">• Para crear una zona interactiva: seleccione la forma asociada al color y después dibuje la zona interactiva.</div><div style=\"padding:2px 3px;\">• Para mover una zona interactiva, seleccione el color, haga clic en otro punto de la imagen y finalmente dibuje la zona interactiva.</div><div style=\"padding:2px 3px;\">• Para añadir una zona interactiva: haga clic en el botón [+zona interactiva].</div><div style=\"padding:2px 3px;\">• Para cerrar una forma poligonal: botón derecho del ratón y seleccionar \"Cerrar polígono\".</div>";
 $Fault = "Incorrecta";
-$Hotspot = "Zonas de imagen";
+$HotSpot = "Zonas de imagen";
 $ClickNumber = "Número de clics";
 $HotspotGiveAnswers = "Por favor, responda";
 $Addlimits = "Añadir límites";

@@ -154,7 +154,7 @@ $langModifyExercise = "修改練習";
 $langModifyAnswers = "修改答案";
 $langForExercise = "做練習";
 $langUseExistantQuestion = "用一個現有題目";
-$freeAnswer = "開放式問題";
+$FreeAnswer = "開放式問題";
 $notCorrectedYet = "答案不正確，本題得到 0 分，會影響總分。";
 $adminHP = "Hot Potatoes 管理";
 $NewQu = "新問題";
@@ -181,7 +181,7 @@ $langHotspotValidateError2 = " click(s) required on the image) before seeing the
 $langHotspotRequired = "題目和分數是必需的，摘要是可選的。";
 $langHotspotChoose = "<div style=\"padding:2px 3px;\">創建熱點︰先選擇顏色對應的圖形然後畫出熱點</div><div style=\"padding:2px 3px;\">移動熱點︰先選擇顏色對應的圖形然後畫出新的熱點</div><div style=\"padding:2px 3px;\">關閉多邊形︰點擊右鍵然後選擇關閉多邊形</div><div style=\"padding:2px 3px;\"></div>";
 $Fault = "不正確";
-$Hotspot = "圖像區";
+$HotSpot = "圖像區";
 $ClickNumber = "按數字";
 $HotspotGiveAnswers = "請填寫答案";
 $Addlimits = "加入限制";

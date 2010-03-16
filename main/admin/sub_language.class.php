@@ -215,24 +215,40 @@ class SubLanguageManager {
 	 * @param Integer The language id
 	 * @return void()
 	 */
-	 public static function make_available_language ($language_id) {
+	public static function make_available_language ($language_id) {
 	 	$tbl_admin_languages= Database :: get_main_table(TABLE_MAIN_LANGUAGE);
 	 	$sql_make_available = "UPDATE $tbl_admin_languages SET available='1' WHERE id='".Database::escape_string($language_id)."'";
 		$result = Database::query($sql_make_available);
-	 }
-	 /**
-	  * Set platform language
-	  * @param Integer The language id
-	  * @return void()
-	  */
-	  public static function set_platform_language ($language_id) {
-		$tbl_admin_languages= Database :: get_main_table(TABLE_MAIN_LANGUAGE);
+	}
+	/**
+	 * Set platform language
+	 * @param Integer The language id
+	 * @return void()
+	 */
+    public static function set_platform_language ($language_id) {
+		$tbl_admin_languages = Database :: get_main_table(TABLE_MAIN_LANGUAGE);
 		$tbl_settings_current 	= Database :: get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
 		$sql_update = "SELECT english_name FROM ". $tbl_admin_languages." WHERE id='".Database::escape_string($language_id)."'";
 		$result = Database::query($sql_update);
 		$lang=Database::fetch_array($result);
 		$sql_update_2 = "UPDATE ".$tbl_settings_current." SET selected_value='".$lang['english_name']."' WHERE variable='platformLanguage'";
 		$result_2 = Database::query($sql_update_2);
-	  }
+    }
+	/**
+	 * Get parent language path (or null if no parent)
+	 * @param    string  Children language path
+	 * @return   string  Parent language path or null
+	 */
+    public static function get_parent_language_path ($language_path) {
+        $tbl_admin_languages = Database :: get_main_table(TABLE_MAIN_LANGUAGE);
+        $tbl_settings_current   = Database :: get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
+        $sql_update = "SELECT dokeos_folder FROM ". $tbl_admin_languages." WHERE id=(SELECT parent_id FROM ". $tbl_admin_languages." WHERE dokeos_folder = '".Database::escape_string($language_path)."')";
+        $result = Database::query($sql_update);
+        if (Database::num_rows($result) == 0) {
+        	return null;
+        }
+        $row = Database::fetch_array($result);
+        return $row['dokeos_folder'];
+    }
 }
 ?>

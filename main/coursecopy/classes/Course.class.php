@@ -50,6 +50,7 @@ class Course
 		$this->code = '';
 		$this->path = '';
 		$this->backup_path = '';
+		$this->encoding = api_get_system_encoding();
 	}
 	/**
 	 * Check if a resource links to the given resource

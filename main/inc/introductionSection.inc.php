@@ -1,6 +1,5 @@
 <?php
 /* For licensing terms, see /license.txt */
-
 /**
  * The INTRODUCTION MICRO MODULE is used to insert and edit
  * an introduction section on a Chamilo Module. It can be inserted on any
@@ -117,8 +116,12 @@ if ($intro_editAllowed) {
 
 $sql = "SELECT intro_text FROM $TBL_INTRODUCTION WHERE id='".Database::escape_string($moduleId)."' AND session_id='".intval($session_id)."'";
 $intro_dbQuery = Database::query($sql);
-$intro_dbResult = Database::fetch_array($intro_dbQuery);
-$intro_content = $intro_dbResult['intro_text'];
+if (Database::num_rows($intro_dbQuery) > 0) {
+	$intro_dbResult = Database::fetch_array($intro_dbQuery);
+	$intro_content = $intro_dbResult['intro_text'];	
+} else {
+	$intro_content = '';
+}
 
 /* Determines the correct display */
 

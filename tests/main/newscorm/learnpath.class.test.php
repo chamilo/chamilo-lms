@@ -3,7 +3,7 @@ require_once(api_get_path(SYS_CODE_PATH).'newscorm/learnpath.class.php');
 
 class TestLearnpath extends UnitTestCase {
 	
-	public const course = 'COURSETEST';
+	const course = 'COURSETEST';
 	
 	public function testAddItem() {
 		//ob_start();

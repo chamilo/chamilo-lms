@@ -55,7 +55,7 @@ class learnpathItem {
 	var $type; // this attribute can contain chapter|link|student_publication|module|quiz|document|forum|thread
 	var $view_id;
 
-	var $debug = 0; //logging param
+	const debug = 0; //logging param
     /**
      * Class constructor. Prepares the learnpath_item for later launch
      *
@@ -67,7 +67,7 @@ class learnpathItem {
      */
     function learnpathItem($db_id, $user_id) { 
     	//get items table
-    	if($this->debug>0){error_log('New LP - In learnpathItem constructor: '.$db_id.','.$user_id,0);}
+    	if(self::debug>0){error_log('New LP - In learnpathItem constructor: '.$db_id.','.$user_id,0);}
     	$items_table = Database::get_course_table(TABLE_LP_ITEM);
     	$id = (int) $db_id;
     	$sql = "SELECT * FROM $items_table WHERE id = $id";
@@ -124,7 +124,7 @@ class learnpathItem {
      */
     function add_child($item)
     {
-    	if($this->debug>0){error_log('New LP - In learnpathItem::add_child()',0);}
+    	if(self::debug>0){error_log('New LP - In learnpathItem::add_child()',0);}
     	if(!empty($item))
     	{
     		//do not check in DB as we expect the call to come from the learnpath class which should
@@ -180,7 +180,7 @@ class learnpathItem {
      */
     function close()
     {
-		if($this->debug>0){error_log('New LP - In learnpathItem::close()',0);}
+		if(self::debug>0){error_log('New LP - In learnpathItem::close()',0);}
 	   	$this->current_stop_time = time();
 	   	$type = $this->get_type();
     	if($type != 'sco'){
@@ -205,7 +205,7 @@ class learnpathItem {
      */
     function delete()
     {
-    	if($this->debug>0){error_log('New LP - In learnpath_item::delete() for item '.$this->db_id,0);}
+    	if(self::debug>0){error_log('New LP - In learnpath_item::delete() for item '.$this->db_id,0);}
     	$lp_item_view = Database::get_course_table(TABLE_LP_ITEM_VIEW);
     	$lp_item = Database::get_course_table(TABLE_LP_ITEM);
     	$sql_del_view = "DELETE FROM $lp_item_view WHERE lp_item_id = ".$this->db_id;
@@ -238,7 +238,7 @@ class learnpathItem {
      */
     function drop_child($item)
     {
-    	if($this->debug>0){error_log('New LP - In learnpathItem::drop_child()',0);}
+    	if(self::debug>0){error_log('New LP - In learnpathItem::drop_child()',0);}
     	if(!empty($item))
     	{
     		foreach($this->children as $index => $child)
@@ -255,13 +255,13 @@ class learnpathItem {
      */
     function get_attempt_id()
     {
-    	if($this->debug>0){error_log('New LP - In learnpathItem::get_attempt_id() on item '.$this->db_id,0);}
+    	if(self::debug>0){error_log('New LP - In learnpathItem::get_attempt_id() on item '.$this->db_id,0);}
     	$res = 1;
     	if(!empty($this->attempt_id))
     	{
     		$res = $this->attempt_id;
     	}
-    	if($this->debug>0){error_log('New LP - End of learnpathItem::get_attempt_id() on item '.$this->db_id.' - Returning '.$res,0);}
+    	if(self::debug>0){error_log('New LP - End of learnpathItem::get_attempt_id() on item '.$this->db_id.' - Returning '.$res,0);}
     	return $res;
     }
     /**
@@ -270,7 +270,7 @@ class learnpathItem {
      */
     function get_children()
     {
-    	if($this->debug>0){error_log('New LP - In learnpathItem::get_children()',0);}
+    	if(self::debug>0){error_log('New LP - In learnpathItem::get_children()',0);}
     	$list = array();
     	foreach($this->children as $child){
     		if(!empty($child))
@@ -294,7 +294,7 @@ class learnpathItem {
      * @return	string	'credit' or 'no-credit'. Defaults to 'credit' because if we don't know enough about this item, it's probably because it was never used before.
      */
     function get_credit(){
-    	if(!empty($this->debug) && $this->debug>1){error_log('New LP - In learnpathItem::get_credit()',0);}
+    	if (self::debug>1) {error_log('New LP - In learnpathItem::get_credit()',0);}
 		$credit = 'credit';
     	//now check the value of prevent_reinit (if it's 0, return credit as the default was)
 		if($this->get_prevent_reinit() != 0){ //if prevent_reinit == 1 (or more)
@@ -302,7 +302,7 @@ class learnpathItem {
     		//check the status in the database rather than in the object, as checking in the object
 			//would always return "no-credit" when we want to set it to completed
 			$status = $this->get_status(true);
-			if(!empty($this->debug) && $this->debug>2){error_log('New LP - In learnpathItem::get_credit() - get_prevent_reinit!=0 and status is '.$status,0);}
+			if (self::debug>2) {error_log('New LP - In learnpathItem::get_credit() - get_prevent_reinit!=0 and status is '.$status,0);}
 			if($status != $this->possible_status[0] AND $status != $this->possible_status[1]){
 				$credit = 'no-credit';
 			}
@@ -315,7 +315,7 @@ class learnpathItem {
      */
     function get_current_start_time()
     {
-    	if($this->debug>0){error_log('New LP - In learnpathItem::get_current_start_time()',0);}
+    	if(self::debug>0){error_log('New LP - In learnpathItem::get_current_start_time()',0);}
     	if(empty($this->current_start_time))
     	{
     		return time();
@@ -328,7 +328,7 @@ class learnpathItem {
      * @return	string	Description
      */
     function get_description(){
-    	if($this->debug>0){error_log('New LP - In learnpathItem::get_description()',0);}
+    	if(self::debug>0){error_log('New LP - In learnpathItem::get_description()',0);}
     	if(empty($this->description)){return '';}
     	return $this->description;
     }
@@ -337,7 +337,7 @@ class learnpathItem {
      * @return	string	The file path, or an empty string if there is no file attached, or '-1' if the file must be replaced by an error page
      */
     function get_file_path($path_to_scorm_dir=''){
-    	if($this->debug>0){error_log('New LP - In learnpathItem::get_file_path()',0);}
+    	if(self::debug>0){error_log('New LP - In learnpathItem::get_file_path()',0);}
     	$path = $this->get_path();
    		$type = $this->get_type();
     	if(empty($path))
@@ -386,7 +386,7 @@ class learnpathItem {
      * @return	integer	Database ID for the current item
      */
     function get_id(){
-    	if($this->debug>1){error_log('New LP - In learnpathItem::get_id()',0);}
+    	if(self::debug>1){error_log('New LP - In learnpathItem::get_id()',0);}
     	if(!empty($this->db_id))
     	{
     		return $this->db_id;
@@ -427,7 +427,7 @@ class learnpathItem {
      */
     function get_interactions_count($checkdb=false)
     {
-    	if($this->debug>1){error_log('New LP - In learnpathItem::get_interactions_count()',0);}
+    	if(self::debug>1){error_log('New LP - In learnpathItem::get_interactions_count()',0);}
     	$return = 0;
         if ($checkdb) {
             $tbl = Database::get_course_table(TABLE_LP_ITEM_VIEW);
@@ -479,7 +479,7 @@ class learnpathItem {
      */
     function get_objectives_count()
     {
-    	if($this->debug>1){error_log('New LP - In learnpathItem::get_objectives_count()',0);}
+    	if(self::debug>1){error_log('New LP - In learnpathItem::get_objectives_count()',0);}
     	$res = 0;
     	if(!empty($this->objectives_count)){
     		$res = $this->objectives_count;
@@ -491,7 +491,7 @@ class learnpathItem {
      * @return	string	Launch data as found in imsmanifest and stored in Dokeos (read only). Defaults to ''.
      */
     function get_launch_data(){
-    	if($this->debug>0){error_log('New LP - In learnpathItem::get_launch_data()',0);}
+    	if(self::debug>0){error_log('New LP - In learnpathItem::get_launch_data()',0);}
     	if(!empty($this->launch_data)){
     		return $this->launch_data;
     	}
@@ -502,7 +502,7 @@ class learnpathItem {
      * @return string	lesson location as recorded by the SCORM and AICC elements. Defaults to ''
      */
 	function get_lesson_location(){
-    	if($this->debug>0){error_log('New LP - In learnpathItem::get_lesson_location()',0);}
+    	if(self::debug>0){error_log('New LP - In learnpathItem::get_lesson_location()',0);}
     	if(!empty($this->lesson_location)){return $this->lesson_location;}else{return '';}
 	}
 	/**
@@ -526,7 +526,7 @@ class learnpathItem {
      * @return int	Level. Defaults to 0
      */
     function get_level(){
-    	if($this->debug>0){error_log('New LP - In learnpathItem::get_level()',0);}
+    	if(self::debug>0){error_log('New LP - In learnpathItem::get_level()',0);}
     	if(empty($this->level)){return 0;}
     	return $this->level;
     }
@@ -535,7 +535,7 @@ class learnpathItem {
      */
     function get_mastery_score()
     {
-    	if($this->debug>0){error_log('New LP - In learnpathItem::get_mastery_score()',0);}
+    	if(self::debug>0){error_log('New LP - In learnpathItem::get_mastery_score()',0);}
     	if(isset($this->mastery_score)){return $this->mastery_score;}else{return -1;}
     }
     /**
@@ -543,7 +543,7 @@ class learnpathItem {
      * @return	int	Maximum score. Defaults to 100 if nothing else is defined
      */
     function get_max(){
-    	if($this->debug>0){error_log('New LP - In learnpathItem::get_max()',0);}
+    	if(self::debug>0){error_log('New LP - In learnpathItem::get_max()',0);}
     	if($this->type == 'sco')
     	{
     		if(!empty($this->view_max_score) and $this->view_max_score>0)
@@ -570,7 +570,7 @@ class learnpathItem {
      */
     function get_max_time_allowed()
     {
-    	if($this->debug>0){error_log('New LP - In learnpathItem::get_max_time_allowed()',0);}
+    	if(self::debug>0){error_log('New LP - In learnpathItem::get_max_time_allowed()',0);}
     	if(!empty($this->max_time_allowed)){return $this->max_time_allowed;}else{return '';}
     }
     /**
@@ -578,7 +578,7 @@ class learnpathItem {
      * @return int	Minimum score. Defaults to 0
      */
     function get_min(){
-    	if($this->debug>0){error_log('New LP - In learnpathItem::get_min()',0);}
+    	if(self::debug>0){error_log('New LP - In learnpathItem::get_min()',0);}
     	if(!empty($this->min_score)){return $this->min_score;}else{return 0;}
     }
     /**
@@ -586,7 +586,7 @@ class learnpathItem {
      * @return	int	Parent ID. Defaults to null
      */
     function get_parent(){
-    	if($this->debug>0){error_log('New LP - In learnpathItem::get_parent()',0);}
+    	if(self::debug>0){error_log('New LP - In learnpathItem::get_parent()',0);}
     	if(!empty($this->parent))
     	{
     		return $this->parent;
@@ -599,7 +599,7 @@ class learnpathItem {
      * @return	string	Path. Defaults to ''
      */
     function get_path(){
-    	if($this->debug>0){error_log('New LP - In learnpathItem::get_path()',0);}
+    	if(self::debug>0){error_log('New LP - In learnpathItem::get_path()',0);}
     	if(empty($this->path)){return '';}
     	return $this->path;
     }
@@ -609,7 +609,7 @@ class learnpathItem {
      */
     function get_prereq_string()
     {
-    	if($this->debug>0){error_log('New LP - In learnpathItem::get_prereq_string()',0);}
+    	if(self::debug>0){error_log('New LP - In learnpathItem::get_prereq_string()',0);}
     	if(!empty($this->prereq_string))
     	{
     		return $this->prereq_string;
@@ -622,7 +622,7 @@ class learnpathItem {
      * @return	int	1 or 0 (defaults to 1)
      */
     function get_prevent_reinit(){
-		if($this->debug>2){error_log('New LP - In learnpathItem::get_prevent_reinit()',0);}
+		if(self::debug>2){error_log('New LP - In learnpathItem::get_prevent_reinit()',0);}
     	if(!isset($this->prevent_reinit)){
 	    	if(!empty($this->lp_id)){
 	    		$db = Database::get_course_table(TABLE_LP_MAIN);
@@ -631,7 +631,7 @@ class learnpathItem {
 		    	if(Database::num_rows($res)<1)
 		    	{
 		    		$this->error = "Could not find parent learnpath in learnpath table";
-					if($this->debug>2){error_log('New LP - End of learnpathItem::get_prevent_reinit() - Returning false',0);}
+					if(self::debug>2){error_log('New LP - End of learnpathItem::get_prevent_reinit() - Returning false',0);}
 		    		return false;
 		    	}else{
 		    		$row = Database::fetch_array($res);
@@ -641,7 +641,7 @@ class learnpathItem {
 	    		$this->prevent_reinit = 1;//prevent reinit is always 1 by default - see learnpath.class.php
 	    	}
     	}
-		if($this->debug>2){error_log('New LP - End of learnpathItem::get_prevent_reinit() - Returned '.$this->prevent_reinit,0);}
+		if(self::debug>2){error_log('New LP - End of learnpathItem::get_prevent_reinit() - Returned '.$this->prevent_reinit,0);}
     	return $this->prevent_reinit;
     }
     /**
@@ -990,13 +990,13 @@ class learnpathItem {
      * @return	float	The current score or 0 if no score set yet
      */
     function get_score(){
-    	if($this->debug>0){error_log('New LP - In learnpathItem::get_score()',0);}
+    	if(self::debug>0){error_log('New LP - In learnpathItem::get_score()',0);}
     	$res = 0;
     	if(!empty($this->current_score))
     	{
     		$res = $this->current_score;
     	}
-    	if($this->debug>1){error_log('New LP - Out of learnpathItem::get_score() - returning '.$res,0);}
+    	if(self::debug>1){error_log('New LP - Out of learnpathItem::get_score() - returning '.$res,0);}
     	return $res;
     }
     /**
@@ -1006,12 +1006,12 @@ class learnpathItem {
      * @return	string	Current status or 'Nnot attempted' if no status set yet
      */
     function get_status($check_db=true,$update_local=false) {
-    	if($this->debug>0){error_log('New LP - In learnpathItem::get_status() on item '.$this->db_id,0);}
+    	if(self::debug>0){error_log('New LP - In learnpathItem::get_status() on item '.$this->db_id,0);}
     	if($check_db) {
-    		if($this->debug>2){error_log('New LP - In learnpathItem::get_status(): checking db',0);}
+    		if(self::debug>2){error_log('New LP - In learnpathItem::get_status(): checking db',0);}
     		$table = Database::get_course_table(TABLE_LP_ITEM_VIEW);
     		$sql = "SELECT * FROM $table WHERE id = '".$this->db_item_view_id."' AND view_count = '".$this->get_attempt_id()."'";
-    		if($this->debug>2){error_log('New LP - In learnpathItem::get_status() - Checking DB: '.$sql,0);}
+    		if(self::debug>2){error_log('New LP - In learnpathItem::get_status() - Checking DB: '.$sql,0);}
 
     		$res = Database::query($sql);
     		if (Database::num_rows($res)==1) {
@@ -1019,17 +1019,17 @@ class learnpathItem {
     			if($update_local==true){
     				$this->set_status($row['status']);
     			}
-	    		if($this->debug>2){error_log('New LP - In learnpathItem::get_status() - Returning db value '.$row['status'],0);}
+	    		if(self::debug>2){error_log('New LP - In learnpathItem::get_status() - Returning db value '.$row['status'],0);}
     			return $row['status'];
     		}
     	} else {
-    		if($this->debug>2){error_log('New LP - In learnpathItem::get_status() - in get_status: using attrib',0);}
+    		if(self::debug>2){error_log('New LP - In learnpathItem::get_status() - in get_status: using attrib',0);}
 	    	if(!empty($this->status)) {
-	    		if($this->debug>2){error_log('New LP - In learnpathItem::get_status() - Returning attrib: '.$this->status,0);}
+	    		if(self::debug>2){error_log('New LP - In learnpathItem::get_status() - Returning attrib: '.$this->status,0);}
 	    		return $this->status;
 	    	}
     	}
-   		if($this->debug>2){error_log('New LP - In learnpathItem::get_status() - Returning default '.$this->possible_status[0],0);}
+   		if(self::debug>2){error_log('New LP - In learnpathItem::get_status() - Returning default '.$this->possible_status[0],0);}
     	return $this->possible_status[0];
     }
     /**
@@ -1037,7 +1037,7 @@ class learnpathItem {
      */
     function get_suspend_data()
     {
-    	if($this->debug>0){error_log('New LP - In learnpathItem::get_suspend_data()',0);}
+    	if(self::debug>0){error_log('New LP - In learnpathItem::get_suspend_data()',0);}
     	//TODO : improve cleaning of breaklines ... it works but is it really a beautiful way to do it ?
     	if(!empty($this->current_data)){return str_replace(array("\r","\n"),array('\r','\n'),$this->current_data);}else{return '';}
     }
@@ -1046,52 +1046,66 @@ class learnpathItem {
      * @param	string	Origin of the request. If coming from PHP, send formatted as xxhxx'xx", otherwise use scorm format 00:00:00
      * @param	integer	Given time is a default time to return formatted
      */
-    function get_scorm_time($origin='php',$given_time=null){
-    	//if($this->debug>0){error_log('New LP - In learnpathItem::get_scorm_time()',0);}
+    function get_scorm_time($origin='php',$given_time=null,$query_db=false) {
     	$h = get_lang('h');
-    	if(!isset($given_time)){
-	    	if(!empty($this->current_start_time) && is_object($this)){
-	    		if(!empty($this->current_stop_time)){
-	    			$time = $this->current_stop_time - $this->current_start_time;
-	    		}else{
-	    			$time = time() - $this->current_start_time;
-	    		}
-	    	}else{
-	    		if($origin == 'js'){
+    	if (!isset($given_time)) {
+            if (self::debug>2) {error_log('New LP - In learnpathItem::get_scorm_time(): given time empty, current_start_time = '.$this->current_start_time,0);}
+    		if (is_object($this)) {
+                if ($query_db === true) {
+                    $table = Database::get_course_table(TABLE_LP_ITEM_VIEW);
+                    $sql = "SELECT start_time, total_time FROM $table WHERE id = '".$this->db_item_view_id."' AND view_count = '".$this->get_attempt_id()."'";
+                    $res = Database::query($sql);
+                    $row = Database::fetch_array($res);
+                    $start = $row['start_time'];
+                    $stop = $start + $row['total_time'];
+                } else {
+                    $start = $this->current_start_time;
+                    $stop = $this->current_stop_time;
+                }
+    			if (!empty($start)) {
+	    			if (!empty($stop)) {
+		    			$time = $stop - $start;
+		    		} else {
+		    			$time = time() - $start;
+		    		}
+    			}
+	    	} else {
+	    		if ($origin == 'js') {
 	    			return '00:00:00';
-	    		}else{
+	    		} else {
 	    			return '00'.$h.'00\'00"';
 	    		}
 	    	}
-    	}else{
+    	} else {
     		$time = $given_time;
     	}
-		$hours = $time/3600;
+		if (self::debug>2) {error_log('New LP - In learnpathItem::get_scorm_time(): intermediate = '.$time,0);}
+        $hours = $time/3600;
 		$mins  = ($time%3600)/60;
 		$secs  = ($time%60);
-  		if($origin == 'js'){
+  		if ($origin == 'js') {
 			$scorm_time = trim(sprintf("%4d:%02d:%02d",$hours,$mins,$secs));
-  		}else{
+  		} else {
 			$scorm_time = trim(sprintf("%4d$h%02d'%02d\"",$hours,$mins,$secs));
   		}
-		return $scorm_time;
+        if (self::debug>2) {error_log('New LP - In learnpathItem::get_scorm_time('.$scorm_time.')',0);}
+  		return $scorm_time;
     }
 
-function get_terms()
-          {
-                $lp_item = Database::get_course_table(TABLE_LP_ITEM);
-                $sql = "SELECT * FROM $lp_item WHERE id='".Database::escape_string($this->db_id)."'";
-                $res = Database::query($sql);
-                $row = Database::fetch_array($res);
-                return $row['terms'];
-          }
+    function get_terms() {
+        $lp_item = Database::get_course_table(TABLE_LP_ITEM);
+        $sql = "SELECT * FROM $lp_item WHERE id='".Database::escape_string($this->db_id)."'";
+        $res = Database::query($sql);
+        $row = Database::fetch_array($res);
+        return $row['terms'];
+    }
     /**
      * Returns the item's title
      * @return	string	Title
      */
-    function get_title(){
-    	if($this->debug>0){error_log('New LP - In learnpathItem::get_title()',0);}
-    	if(empty($this->title)){return '';}
+    function get_title() {
+    	if (self::debug>0) {error_log('New LP - In learnpathItem::get_title()',0);}
+    	if (empty($this->title)) {return '';}
     	return $this->title;
     }
     /**
@@ -1099,7 +1113,7 @@ function get_terms()
      * @return	integer	Total time
      */
     function get_total_time(){
-    	if($this->debug>0){error_log('New LP - In learnpathItem::get_total_time()',0);}
+    	if(self::debug>0){error_log('New LP - In learnpathItem::get_total_time()',0);}
     	if($this->current_start_time == 0){ //shouldn't be necessary thanks to the open() method
     		$this->current_start_time = time();
     	}
@@ -1108,7 +1122,7 @@ function get_terms()
     	if($time < 0){
     		return 0;
     	}else{
-    	if($this->debug>2){error_log('New LP - In learnpathItem::get_total_time() - Current stop time = '.$this->current_stop_time.', current start time = '.$this->current_start_time.' Returning '.$time,0);}
+    	if(self::debug>2){error_log('New LP - In learnpathItem::get_total_time() - Current stop time = '.$this->current_stop_time.', current start time = '.$this->current_start_time.' Returning '.$time,0);}
     		return $time;
     	}
     }
@@ -1119,20 +1133,21 @@ function get_terms()
     function get_type()
     {
     	$res = 'asset';
-    	if($this->debug>0){error_log('New LP - In learnpathItem::get_type() on item '.$this->db_id,0);}
+    	if(self::debug>0){error_log('New LP - In learnpathItem::get_type() on item '.$this->db_id,0);}
     	if(!empty($this->type))
     	{
     		//error_log('In item::get_type() - returning '.$this->type,0);
     		$res = $this->type;
     	}
-    	if($this->debug>2){error_log('New LP - In learnpathItem::get_type() - Returning '.$res.' for item '.$this->db_id,0);}
+    	if(self::debug>2){error_log('New LP - In learnpathItem::get_type() - Returning '.$res.' for item '.$this->db_id,0);}
     	return $res;
     }
     /**
      * Gets the view count for this item
+     * @return  int     Number of attempts or 0
      */
 	function get_view_count(){
-    	if($this->debug>0){error_log('New LP - In learnpathItem::get_view_count()',0);}
+    	if(self::debug>0){error_log('New LP - In learnpathItem::get_view_count()',0);}
 		if(!empty($this->attempt_id)){
 			return $this->attempt_id;
 		}else{
@@ -1145,10 +1160,10 @@ function get_terms()
 	 */
 	function is_done(){
    		if($this->status_is(array('completed','passed','succeeded'))){
-   			if($this->debug>2){error_log('New LP - In learnpath::is_done() - Item '.$this->get_id().' is complete',0);}
+   			if(self::debug>2){error_log('New LP - In learnpath::is_done() - Item '.$this->get_id().' is complete',0);}
    			return true;
    		}else{
-   			if($this->debug>2){error_log('New LP - In learnpath::is_done() - Item '.$this->get_id().' is not complete',0);}
+   			if(self::debug>2){error_log('New LP - In learnpath::is_done() - Item '.$this->get_id().' is not complete',0);}
    			return false;
    		}
 	}
@@ -1160,7 +1175,7 @@ function get_terms()
 	 */
 	function is_restart_allowed()
 	{
-		if($this->debug>2){error_log('New LP - In learnpathItem::is_restart_allowed()',0);}
+		if(self::debug>2){error_log('New LP - In learnpathItem::is_restart_allowed()',0);}
 		$restart = 1;
 		$mystatus = $this->get_status(true);
 		if($this->get_prevent_reinit() > 0){ //if prevent_reinit == 1 (or more)
@@ -1175,7 +1190,7 @@ function get_terms()
 				$restart = -1;
 			}
 		}
-		if($this->debug>2){error_log('New LP - End of learnpathItem::is_restart_allowed() - Returning '.$restart,0);}
+		if(self::debug>2){error_log('New LP - End of learnpathItem::is_restart_allowed() - Returning '.$restart,0);}
 		return $restart;
 	}
     /**
@@ -1183,7 +1198,7 @@ function get_terms()
      * @return	boolean	True on success, false on failure.
      */
     function open($allow_new_attempt=false){
-    	if($this->debug>0){error_log('New LP - In learnpathItem::open()',0);}
+    	if(self::debug>0){error_log('New LP - In learnpathItem::open()',0);}
     	if($this->prevent_reinit == 0)
     	{
 	    	$this->current_score = 0;
@@ -1222,7 +1237,7 @@ function get_terms()
      */
     function output()
     {
-    	if($this->debug>0){error_log('New LP - In learnpathItem::output()',0);}
+    	if(self::debug>0){error_log('New LP - In learnpathItem::output()',0);}
     	if(!empty($this->path) and is_file($this->path))
     	{
 	    	$output = '';
@@ -1239,7 +1254,8 @@ function get_terms()
 	 * @param	integer	The user ID. In some cases like Dokeos quizzes, it's necessary to have the user ID to query other tables (like the results of quizzes)
      * @return	boolean	True if the list of prerequisites given is entirely satisfied, false otherwise
      */
-    function parse_prereq($prereqs_string, $items, $refs_list,$user_id){    	if($this->debug>0){error_log('New LP - In learnpathItem::parse_prereq() for learnpath '.$this->lp_id.' with string '.$prereqs_string,0);}
+    function parse_prereq($prereqs_string, $items, $refs_list,$user_id){    	
+		if(self::debug>0){error_log('New LP - In learnpathItem::parse_prereq() for learnpath '.$this->lp_id.' with string '.$prereqs_string,0);}
     	//deal with &, |, ~, =, <>, {}, ,, X*, () in reverse order
 		$this->prereq_alert = '';
 		// First parse all parenthesis by using a sequential loop (looking for less-inclusives first)
@@ -1268,7 +1284,7 @@ function get_terms()
 	
 		//parenthesis removed, now look for ORs as it is the lesser-priority binary operator (= always uses one text operand)
 		if (strpos($prereqs_string,"|")===false) { 	
-    		if($this->debug>1){error_log('New LP - Didnt find any OR, looking for AND',0);}
+    		if(self::debug>1){error_log('New LP - Didnt find any OR, looking for AND',0);}
 	    	if(strpos($prereqs_string,"&")!==false){
 	    		$list = split("&",$prereqs_string);
 	    		if(count($list)>1){
@@ -1276,7 +1292,7 @@ function get_terms()
 					foreach($list as $condition){
 	    				$andstatus = $andstatus && $this->parse_prereq($condition,$items,$refs_list,$user_id);
 	    				if($andstatus==false){
-							if($this->debug>1){error_log('New LP - One condition in AND was false, short-circuit',0);}
+							if(self::debug>1){error_log('New LP - One condition in AND was false, short-circuit',0);}
 							break;
 	    				}
 					}
@@ -1299,9 +1315,9 @@ function get_terms()
 	    	} else {
 	    		//no ORs found, now look for ANDs
 
-    			if($this->debug>1){error_log('New LP - Didnt find any AND, looking for =',0);}
+    			if(self::debug>1){error_log('New LP - Didnt find any AND, looking for =',0);}
 	    		if(strpos($prereqs_string,"=")!==false){
-		    		if($this->debug>1){error_log('New LP - Found =, looking into it',0);}
+		    		if(self::debug>1){error_log('New LP - Found =, looking into it',0);}
 		    		//we assume '=' signs only appear when there's nothing else around
 		    		$params = split('=',$prereqs_string);
 		    		if(count($params) == 2){
@@ -1321,9 +1337,9 @@ function get_terms()
 
 	    			//No ANDs found, look for <>
 
-	    			if($this->debug>1){error_log('New LP - Didnt find any =, looking for <>',0);}
+	    			if(self::debug>1){error_log('New LP - Didnt find any =, looking for <>',0);}
 		    		if(strpos($prereqs_string,"<>")!==false){
-			    		if($this->debug>1){error_log('New LP - Found <>, looking into it',0);}
+			    		if(self::debug>1){error_log('New LP - Found <>, looking into it',0);}
 			    		//we assume '<>' signs only appear when there's nothing else around
 			    		$params = split('<>',$prereqs_string);
 			    		if(count($params) == 2){
@@ -1343,11 +1359,11 @@ function get_terms()
 
 		    			//No <> found, look for ~ (unary)
 
-		    			if($this->debug>1){error_log('New LP - Didnt find any =, looking for ~',0);}
+		    			if(self::debug>1){error_log('New LP - Didnt find any =, looking for ~',0);}
 		    			//only remains: ~ and X*{}
 		    			if(strpos($prereqs_string,"~")!==false){
 		    				//found NOT
-				    		if($this->debug>1){error_log('New LP - Found ~, looking into it',0);}
+				    		if(self::debug>1){error_log('New LP - Found ~, looking into it',0);}
 		    				$list = array();
 		    				$myres = preg_match('/~([^(\d+\*)\{]*)/',$prereqs_string,$list);
 		    				if($myres){
@@ -1358,24 +1374,24 @@ function get_terms()
 								return $returnstatus;
 		    				}else{
 		    					//strange...
-					    		if($this->debug>1){error_log('New LP - Found ~ but strange string: '.$prereqs_string,0);}
+					    		if(self::debug>1){error_log('New LP - Found ~ but strange string: '.$prereqs_string,0);}
 		    				}
 		    			} else {
 
 		    				//Finally, look for sets/groups
 
-			    			if($this->debug>1){error_log('New LP - Didnt find any ~, looking for groups',0);}
+			    			if(self::debug>1){error_log('New LP - Didnt find any ~, looking for groups',0);}
 		    				//only groups here
 					    	$groups = array();
 					    	$groups_there = preg_match_all('/((\d+\*)?\{([^\}]+)\}+)/',$prereqs_string,$groups);
 					    	if($groups_there){
 						    	foreach($groups[1] as $gr) //only take the results that correspond to the big brackets-enclosed condition
 						    	{
-						    		if($this->debug>1){error_log('New LP - Dealing with group '.$gr,0);}
+						    		if(self::debug>1){error_log('New LP - Dealing with group '.$gr,0);}
 						    		$multi = array();
 									$mycond = false;
 						    		if(preg_match('/(\d+)\*\{([^\}]+)\}/',$gr,$multi)){
-						    			if($this->debug>1){error_log('New LP - Found multiplier '.$multi[0],0);}
+						    			if(self::debug>1){error_log('New LP - Found multiplier '.$multi[0],0);}
 						    			$count = $multi[1];
 						    			$list = split(',',$multi[2]);
 						    			$mytrue = 0;
@@ -1384,21 +1400,21 @@ function get_terms()
 							    				$status = $items[$refs_list[$cond]]->get_status(true);
 								    			if (($status == $this->possible_status[2]) OR ($status == $this->possible_status[3])){
 						    						$mytrue ++;
-						    						if($this->debug>1){error_log('New LP - Found true item, counting.. ('.($mytrue).')',0);}
+						    						if(self::debug>1){error_log('New LP - Found true item, counting.. ('.($mytrue).')',0);}
 								    			}
 						    				}else{
-							    				if($this->debug>1){error_log('New LP - item '.$cond.' does not exist in items list',0);}
+							    				if(self::debug>1){error_log('New LP - item '.$cond.' does not exist in items list',0);}
 							    			}
 						    			}
 										if($mytrue >= $count){
-					    					if($this->debug>1){error_log('New LP - Got enough true results, return true',0);}
+					    					if(self::debug>1){error_log('New LP - Got enough true results, return true',0);}
 											$mycond = true;
 										}else{
-					    					if($this->debug>1){error_log('New LP - Not enough true results',0);}
+					    					if(self::debug>1){error_log('New LP - Not enough true results',0);}
 										}
 						    		}
 						    		else{
-						    			if($this->debug>1){error_log('New LP - No multiplier',0);}
+						    			if(self::debug>1){error_log('New LP - No multiplier',0);}
 						    			$list = split(',',$gr);
 						    			$mycond = true;
 						    			foreach($list as $cond){
@@ -1406,15 +1422,15 @@ function get_terms()
 							    				$status = $items[$refs_list[$cond]]->get_status(true);
 								    			if (($status == $this->possible_status[2]) OR ($status == $this->possible_status[3])){
 						    						$mycond = true;
-							    					if($this->debug>1){error_log('New LP - Found true item',0);}
+							    					if(self::debug>1){error_log('New LP - Found true item',0);}
 								    			}else{
-							    					if($this->debug>1){error_log('New LP - Found false item, the set is not true, return false',0);}
+							    					if(self::debug>1){error_log('New LP - Found false item, the set is not true, return false',0);}
 								    				$mycond = false;
 								    				break;
 								    			}
 						    				}else{
-							    				if($this->debug>1){error_log('New LP - item '.$cond.' does not exist in items list',0);}
-						    					if($this->debug>1){error_log('New LP - Found false item, the set is not true, return false',0);}
+							    				if(self::debug>1){error_log('New LP - item '.$cond.' does not exist in items list',0);}
+						    					if(self::debug>1){error_log('New LP - Found false item, the set is not true, return false',0);}
 							    				$mycond = false;
 							    				break;
 							    			}
@@ -1428,7 +1444,7 @@ function get_terms()
 					    	} else {
 
 					    		//Nothing found there either. Now return the value of the corresponding resource completion status
-				    			if($this->debug>1){error_log('New LP - Didnt find any group, returning value for '.$prereqs_string,0);}				
+				    			if(self::debug>1){error_log('New LP - Didnt find any group, returning value for '.$prereqs_string,0);}				
 				    			
 				    			if (isset($items[$refs_list[$prereqs_string]])) {
 				    				if ($items[$refs_list[$prereqs_string]]->type == 'quiz') {
@@ -1439,9 +1455,9 @@ function get_terms()
 				    					$returnstatus = (($status == $this->possible_status[2]) OR ($status == $this->possible_status[3]));
 				    					
 								    	if(!$returnstatus) {
-								    		if($this->debug>1){error_log('New LP - Prerequisite '.$prereqs_string.' not complete',0);}
+								    		if(self::debug>1){error_log('New LP - Prerequisite '.$prereqs_string.' not complete',0);}
 								    	} else {
-								    		if($this->debug>1){error_log('New LP - Prerequisite '.$prereqs_string.' complete',0);}
+								    		if(self::debug>1){error_log('New LP - Prerequisite '.$prereqs_string.' complete',0);}
 								    	}
 								    									    	
 				    					//for one attempt LPs					    			
@@ -1508,9 +1524,9 @@ function get_terms()
 				    					$returnstatus = (($status == $this->possible_status[2]) OR ($status == $this->possible_status[3]));
 
 								    	if (!$returnstatus) {
-								    		if($this->debug>1){error_log('New LP - Prerequisite '.$prereqs_string.' not complete',0);}
+								    		if(self::debug>1){error_log('New LP - Prerequisite '.$prereqs_string.' not complete',0);}
 								    	} else {
-								    		if($this->debug>1){error_log('New LP - Prerequisite '.$prereqs_string.' complete',0);}
+								    		if(self::debug>1){error_log('New LP - Prerequisite '.$prereqs_string.' complete',0);}
 								    	}
 								    	//error_log('status of document'.$status);
 								    	//var_dump($returnstatus);
@@ -1538,9 +1554,9 @@ function get_terms()
 									    		$this->prereq_alert = get_lang('_prereq_not_complete');
 									    	}
 									    	if (!$returnstatus){
-									    		if($this->debug>1){error_log('New LP - Prerequisite '.$prereqs_string.' not complete',0);}
+									    		if(self::debug>1){error_log('New LP - Prerequisite '.$prereqs_string.' not complete',0);}
 									    	} else {
-									    		if($this->debug>1){error_log('New LP - Prerequisite '.$prereqs_string.' complete',0);}
+									    		if(self::debug>1){error_log('New LP - Prerequisite '.$prereqs_string.' complete',0);}
 									    	}
 				    					}
 				    					
@@ -1574,9 +1590,9 @@ function get_terms()
 								    		$this->prereq_alert = get_lang('_prereq_not_complete');
 								    	}
 								    	if(!$returnstatus){
-								    		if($this->debug>1){error_log('New LP - Prerequisite '.$prereqs_string.' not complete',0);}
+								    		if(self::debug>1){error_log('New LP - Prerequisite '.$prereqs_string.' not complete',0);}
 								    	}else{
-								    		if($this->debug>1){error_log('New LP - Prerequisite '.$prereqs_string.' complete',0);}
+								    		if(self::debug>1){error_log('New LP - Prerequisite '.$prereqs_string.' complete',0);}
 								    	}
 								    	*/
 								    	
@@ -1584,7 +1600,7 @@ function get_terms()
 						    			return $returnstatus;
 				    				}
 				    			} else {
-				    				if($this->debug>1){error_log('New LP - Could not find '.$prereqs_string.' in '.print_r($refs_list,true),0);}
+				    				if(self::debug>1){error_log('New LP - Could not find '.$prereqs_string.' in '.print_r($refs_list,true),0);}
 				    			}
 					    	}
 		    			}
@@ -1594,14 +1610,14 @@ function get_terms()
     	} else {
     		$list = split("\|",$prereqs_string);
     		if(count($list)>1){
-	    		if($this->debug>1){error_log('New LP - Found OR, looking into it',0);}
+	    		if(self::debug>1){error_log('New LP - Found OR, looking into it',0);}
 				$orstatus = false;
 				foreach($list as $condition){
-					if($this->debug>1){error_log('New LP - Found OR, adding it ('.$condition.')',0);}
+					if(self::debug>1){error_log('New LP - Found OR, adding it ('.$condition.')',0);}
     				$orstatus = $orstatus || $this->parse_prereq($condition,$items,$refs_list,$user_id);
     				if($orstatus == true){
     					//shortcircuit OR
-						if($this->debug>1){error_log('New LP - One condition in OR was true, short-circuit',0);}
+						if(self::debug>1){error_log('New LP - One condition in OR was true, short-circuit',0);}
     					break;
     				}
 				}
@@ -1610,7 +1626,7 @@ function get_terms()
 		    	}
 				return $orstatus;
     		}else{
-	    		if($this->debug>1){error_log('New LP - OR was found but only one elem present !?',0);}
+	    		if(self::debug>1){error_log('New LP - OR was found but only one elem present !?',0);}
     			if(isset($items[$refs_list[$list[0]]])){
     				$status = $items[$refs_list[$list[0]]]->get_status(true);
 	    			$returnstatus = (($status == 'completed') OR ($status == 'passed'));
@@ -1624,7 +1640,7 @@ function get_terms()
     	if(empty($this->prereq_alert)){
     		$this->prereq_alert = get_lang('_prereq_not_complete');
     	}
-    	if($this->debug>1){error_log('New LP - End of parse_prereq. Error code is now '.$this->prereq_alert,0);}
+    	if(self::debug>1){error_log('New LP - End of parse_prereq. Error code is now '.$this->prereq_alert,0);}
     	return false;
     }
     /**
@@ -1633,7 +1649,7 @@ function get_terms()
      */
     function restart()
     {
-		if($this->debug>0){error_log('New LP - In learnpathItem::restart()',0);}
+		if(self::debug>0){error_log('New LP - In learnpathItem::restart()',0);}
 		$this->save();
 		$allowed = $this->is_restart_allowed();
 		if($allowed === -1){
@@ -1674,7 +1690,7 @@ function get_terms()
      */
     function save($from_outside=true,$prereqs_complete=false)
     {
-		if($this->debug>0){error_log('New LP - In learnpathItem::save()',0);}
+		if(self::debug>0){error_log('New LP - In learnpathItem::save()',0);}
 		//$item_view_table = Database::get_course_table(COURSEID,LEARNPATH_ITEM_VIEW_TABLE);
      	$item_id = $this->get_id();
      	//first check if parameters passed via GET can be saved here
@@ -1683,51 +1699,51 @@ function get_terms()
 			$s = $this->get_status(true);
 			if($this->prevent_reinit == 1 AND
 				$s != $this->possible_status[0] AND $s != $this->possible_status[1]){
-				if($this->debug>1){error_log('New LP - In learnpathItem::save() - save reinit blocked by setting',0);}
+				if(self::debug>1){error_log('New LP - In learnpathItem::save() - save reinit blocked by setting',0);}
 				//do nothing because the status has already been set. Don't allow it to change.
 				//TODO check there isn't a special circumstance where this should be saved
 			}else{
-			  if($this->debug>1){error_log('New LP - In learnpathItem::save() - SCORM save request received',0);}
+			  if(self::debug>1){error_log('New LP - In learnpathItem::save() - SCORM save request received',0);}
 			  //get all new settings from the URL
 				if($from_outside==true){
-				  if($this->debug>1){error_log('New LP - In learnpathItem::save() - Getting item data from outside',0);}
+				  if(self::debug>1){error_log('New LP - In learnpathItem::save() - Getting item data from outside',0);}
 		     	  foreach($_GET as $param => $value)
 		     	  {
 		     		$value = Database::escape_string($value);
 		     		switch($param){
 		     			case 'score':
 		   					$this->set_score($value);
-		   					if($this->debug>2){error_log('New LP - In learnpathItem::save() - setting score to '.$value,0);}
+		   					if(self::debug>2){error_log('New LP - In learnpathItem::save() - setting score to '.$value,0);}
 		     				break;
 		     			case 'max':
 		     				$this->set_max_score($value);
-		   					if($this->debug>2){error_log('New LP - In learnpathItem::save() - setting view_max_score to '.$value,0);}
+		   					if(self::debug>2){error_log('New LP - In learnpathItem::save() - setting view_max_score to '.$value,0);}
 		     				break;
 		     			case 'min':
 		     				$this->min_score = $value;
-		   					if($this->debug>2){error_log('New LP - In learnpathItem::save() - setting min_score to '.$value,0);}
+		   					if(self::debug>2){error_log('New LP - In learnpathItem::save() - setting min_score to '.$value,0);}
 		     				break;
 		     			case 'lesson_status':
 		     				if(!empty($value)){
 			     				$this->set_status($value);
-			   					if($this->debug>2){error_log('New LP - In learnpathItem::save() - setting status to '.$value,0);}
+			   					if(self::debug>2){error_log('New LP - In learnpathItem::save() - setting status to '.$value,0);}
 		     				}
 		     				break;
 		     			case 'time':
 		     				$this->set_time($value);
-		   					if($this->debug>2){error_log('New LP - In learnpathItem::save() - setting time to '.$value,0);}
+		   					if(self::debug>2){error_log('New LP - In learnpathItem::save() - setting time to '.$value,0);}
 		     				break;
 		     			case 'suspend_data':
 		     				$this->current_data = $value;
-		     				if($this->debug>2){error_log('New LP - In learnpathItem::save() - setting suspend_data to '.$value,0);}
+		     				if(self::debug>2){error_log('New LP - In learnpathItem::save() - setting suspend_data to '.$value,0);}
 		     				break;
 		     			case 'lesson_location':
 		     				$this->set_lesson_location($value);
-		     				if($this->debug>2){error_log('New LP - In learnpathItem::save() - setting lesson_location to '.$value,0);}
+		     				if(self::debug>2){error_log('New LP - In learnpathItem::save() - setting lesson_location to '.$value,0);}
 		     				break;
 		     			case 'core_exit':
 		     				$this->set_core_exit($value);
-		     				if($this->debug>2){error_log('New LP - In learnpathItem::save() - setting core_exit to '.$value,0);}
+		     				if(self::debug>2){error_log('New LP - In learnpathItem::save() - setting core_exit to '.$value,0);}
 		     				break;
 		     			case 'interactions':
 		     				//$interactions = unserialize($value);
@@ -1751,7 +1767,7 @@ function get_terms()
 		     		}
 		     	  }
 				}else{
-					if($this->debug>1){error_log('New LP - In learnpathItem::save() - Using inside item status',0);}
+					if(self::debug>1){error_log('New LP - In learnpathItem::save() - Using inside item status',0);}
 					//do nothing, just let the local attributes be used
 				}
 			}
@@ -1777,7 +1793,7 @@ function get_terms()
 	 		}
 		}
 		//$time = $this->time
-		if($this->debug>1){error_log('New LP - End of learnpathItem::save() - Calling write_to_db()',0);}
+		if(self::debug>1){error_log('New LP - End of learnpathItem::save() - Calling write_to_db()',0);}
 		return $this->write_to_db();
     }
     /**
@@ -1787,7 +1803,7 @@ function get_terms()
      */
     function set_attempt_id($num)
     {
-		if($this->debug>0){error_log('New LP - In learnpathItem::set_attempt_id()',0);}
+		if(self::debug>0){error_log('New LP - In learnpathItem::set_attempt_id()',0);}
      	if($num == strval(intval($num)) && $num>=0){
      		$this->attempt_id = $num;
      		return true;
@@ -1796,6 +1812,7 @@ function get_terms()
     }
     /**
      * Sets the core_exit value to the one given
+     * @return  bool    True (always)
      */
     function set_core_exit($value)
     {
@@ -1815,9 +1832,10 @@ function get_terms()
     /**
      * Sets the item's description
      * @param	string	Description
+     * @return  void
      */
     function set_description($string=''){
-		if($this->debug>0){error_log('New LP - In learnpathItem::set_description()',0);}
+		if(self::debug>0){error_log('New LP - In learnpathItem::set_description()',0);}
     	if(!empty($string)){$this->description = $string;}
     }
     /**
@@ -1827,7 +1845,7 @@ function get_terms()
      */
     function set_lesson_location($location)
     {
-   		if($this->debug>0){error_log('New LP - In learnpathItem::set_lesson_location()',0);}
+   		if(self::debug>0){error_log('New LP - In learnpathItem::set_lesson_location()',0);}
 		if(isset($location)){
    			$this->lesson_location = Database::escape_string($location);
   			return true;
@@ -1837,19 +1855,21 @@ function get_terms()
     /**
      * Sets the item's depth level in the LP tree (0 is at root)
      * @param	integer	Level
+     * @return  void
      */
     function set_level($int=0){
-		if($this->debug>0){error_log('New LP - In learnpathItem::set_level('.$int.')',0);}
+		if(self::debug>0){error_log('New LP - In learnpathItem::set_level('.$int.')',0);}
     	if(!empty($int) AND $int == strval(intval($int))){$this->level = $int;}
     }
     /**
      * Sets the lp_view id this item view is registered to
      * @param	integer	lp_view DB ID
+     * @return  void
      * @todo //todo insert into lp_item_view if lp_view not exists
      */
     function set_lp_view($lp_view_id)
     {
-		if($this->debug>0){error_log('New LP - In learnpathItem::set_lp_view('.$lp_view_id.')',0);}
+		if(self::debug>0){error_log('New LP - In learnpathItem::set_lp_view('.$lp_view_id.')',0);}
     	if(!empty($lp_view_id) and $lp_view_id = intval(strval($lp_view_id)))
      	{	
      		$this->view_id = $lp_view_id;
@@ -1857,7 +1877,7 @@ function get_terms()
 	     	//get the lp_item_view with the highest view_count
 	     	$sql = "SELECT * FROM $item_view_table WHERE lp_item_id = ".$this->get_id()." " .
 	     			" AND lp_view_id = ".$lp_view_id." ORDER BY view_count DESC";
-	     	if($this->debug>2){error_log('New LP - In learnpathItem::set_lp_view() - Querying lp_item_view: '.$sql,0);}
+	     	if(self::debug>2){error_log('New LP - In learnpathItem::set_lp_view() - Querying lp_item_view: '.$sql,0);}
 	     	$res = Database::query($sql);
 	     	if(Database::num_rows($res)>0){
 	     		$row = Database::fetch_array($res);
@@ -1872,7 +1892,7 @@ function get_terms()
 				$this->current_stop_time 	= $this->current_start_time + $row['total_time'];
 				$this->lesson_location  = $row['lesson_location'];
 				$this->core_exit		= $row['core_exit'];
-		     	if($this->debug>2){error_log('New LP - In learnpathItem::set_lp_view() - Updated item object with database values',0);}
+		     	if(self::debug>2){error_log('New LP - In learnpathItem::set_lp_view() - Updated item object with database values',0);}
 
 		     	//now get the number of interactions for this little guy
 		     	$item_view_interaction_table = Database::get_course_table(TABLE_LP_IV_INTERACTION);
@@ -1895,23 +1915,25 @@ function get_terms()
 	     	}
      	}
 		//end
-		if($this->debug>2){error_log('New LP - End of learnpathItem::set_lp_view()',0);}
+		if(self::debug>2){error_log('New LP - End of learnpathItem::set_lp_view()',0);}
     }
     /**
      * Sets the path
      * @param	string	Path
+     * @return  void
      */
     function set_path($string=''){
-		if($this->debug>0){error_log('New LP - In learnpathItem::set_path()',0);}
+		if(self::debug>0){error_log('New LP - In learnpathItem::set_path()',0);}
     	if(!empty($string)){$this->path = $string;}
     }
     /**
      * Sets the prevent_reinit attribute. This is based on the LP value and is set at creation time for
      * each learnpathItem. It is a (bad?) way of avoiding a reference to the LP when saving an item.
      * @param	integer	1 for "prevent", 0 for "don't prevent" saving freshened values (new "not attempted" status etc)
+     * @return  void
      */
     function set_prevent_reinit($prevent){
-		if($this->debug>0){error_log('New LP - In learnpathItem::set_prevent_reinit()',0);}
+		if(self::debug>0){error_log('New LP - In learnpathItem::set_prevent_reinit()',0);}
     	if($prevent){
     		$this->prevent_reinit = 1;
     	}else{
@@ -1926,7 +1948,7 @@ function get_terms()
      */
     function set_score($score)
     {
-   		if($this->debug>0){error_log('New LP - In learnpathItem::set_score('.$score.')',0);}
+   		if(self::debug>0){error_log('New LP - In learnpathItem::set_score('.$score.')',0);}
    		if(($this->max_score<=0 || $score <= $this->max_score) && ($score >= $this->min_score))
    		{
    			$this->current_score = $score;
@@ -1952,11 +1974,11 @@ function get_terms()
      */
     function set_max_score($score)
     {
-   		if($this->debug>0){error_log('New LP - In learnpathItem::set_max_score('.$score.')',0);}
+   		if(self::debug>0){error_log('New LP - In learnpathItem::set_max_score('.$score.')',0);}
      	if(is_int($score) or $score == '')
      	{
      		$this->view_max_score = Database::escape_string($score);
-     		if($this->debug>1){error_log('New LP - In learnpathItem::set_max_score() - Updated object score of item '.$this->db_id.' to '.$this->view_max_score,0);}
+     		if(self::debug>1){error_log('New LP - In learnpathItem::set_max_score() - Updated object score of item '.$this->db_id.' to '.$this->view_max_score,0);}
      		return true;
      	}
      	return false;
@@ -1968,7 +1990,7 @@ function get_terms()
      */
     function set_status($status)
     {
-   		if($this->debug>0){error_log('New LP - In learnpathItem::set_status('.$status.')',0);}
+   		if(self::debug>0){error_log('New LP - In learnpathItem::set_status('.$status.')',0);}
      	$found = false;
      	foreach($this->possible_status  as $possible){
      		if(preg_match('/^'.$possible.'$/i',$status)){
@@ -1979,7 +2001,7 @@ function get_terms()
      	if($found)
      	{
      		$this->status = Database::escape_string($status);
-     		if($this->debug>1){error_log('New LP - In learnpathItem::set_status() - Updated object status of item '.$this->db_id.' to '.$this->status,0);}
+     		if(self::debug>1){error_log('New LP - In learnpathItem::set_status() - Updated object status of item '.$this->db_id.' to '.$this->status,0);}
      		return true;
      	}
      	//error_log('New LP - '.$status.' was not in the possible status',0);
@@ -2025,15 +2047,16 @@ function get_terms()
     /**
      * Sets the item viewing time in a usable form, given that SCORM packages often give it as 00:00:00.0000
      * @param	string	Time as given by SCORM
+     * @return  void
      */
     function set_time($scorm_time,$format='scorm')
     {
-   		if($this->debug>0){error_log('New LP - In learnpathItem::set_time('.$scorm_time.')',0);}
+   		if(self::debug>0){error_log('New LP - In learnpathItem::set_time('.$scorm_time.')',0);}
      	if($scorm_time == 0 and ($this->type!='sco') and $this->current_start_time!=0){
      		$my_time = time() - $this->current_start_time;
      		if($my_time > 0){
      			$this->update_time($my_time);
-     			if($this->debug>0){error_log('New LP - In learnpathItem::set_time('.$scorm_time.') - found asset - set time to '.$my_time,0);}
+     			if(self::debug>0){error_log('New LP - In learnpathItem::set_time('.$scorm_time.') - found asset - set time to '.$my_time,0);}
      		}
      	}else{
      		if($format == 'scorm'){
@@ -2055,17 +2078,19 @@ function get_terms()
     /**
      * Sets the item's title
      * @param	string	Title
+     * @return  void
      */
     function set_title($string=''){
-   		if($this->debug>0){error_log('New LP - In learnpathItem::set_title()',0);}
+   		if(self::debug>0){error_log('New LP - In learnpathItem::set_title()',0);}
     	if(!empty($string)){$this->title = $string;}
     }
     /**
      * Sets the item's type
      * @param	string	Type
+     * @return  void
      */
     function set_type($string=''){
-   		if($this->debug>0){error_log('New LP - In learnpathItem::set_type()',0);}
+   		if(self::debug>0){error_log('New LP - In learnpathItem::set_type()',0);}
     	if(!empty($string)){$this->type = $string;}
     }
 	/**
@@ -2075,7 +2100,7 @@ function get_terms()
 	 */
 	function status_is($list=array())
 	{
-   		if($this->debug>1){error_log('New LP - In learnpathItem::status_is('.print_r($list,true).') on item '.$this->db_id,0);}
+   		if(self::debug>1){error_log('New LP - In learnpathItem::status_is('.print_r($list,true).') on item '.$this->db_id,0);}
 		$mystatus = $this->get_status(true);
 		if(empty($mystatus)){
 			return false;
@@ -2085,21 +2110,22 @@ function get_terms()
 		{
 			if(preg_match('/^'.$status.'$/i',$mystatus))
 			{
-				if($this->debug>2){error_log('New LP - learnpathItem::status_is() - Found status '.$status.' corresponding to current status',0);}
+				if(self::debug>2){error_log('New LP - learnpathItem::status_is() - Found status '.$status.' corresponding to current status',0);}
 				$found = true;
 				return $found;
 			}
 		}
-		if($this->debug>2){error_log('New LP - learnpathItem::status_is() - Status '.$mystatus.' did not match request',0);}
+		if(self::debug>2){error_log('New LP - learnpathItem::status_is() - Status '.$mystatus.' did not match request',0);}
 		return $found;
 	}
     /**
      * Updates the time info according to the given session_time
      * @param	integer	Time in seconds
+     * @return  void
      * //TODO @TODO make this method better by allowing better/multiple time slices
      */
     function update_time($total_sec=0){
-   		if($this->debug>0){error_log('New LP - In learnpathItem::update_time('.$total_sec.')',0);}
+   		if(self::debug>0){error_log('New LP - In learnpathItem::update_time('.$total_sec.')',0);}
     	if($total_sec>=0){
 	 		//getting start time from finish time. The only problem in the calculation is it might be
 	 		//modified by the scripts processing time
@@ -2138,7 +2164,7 @@ function get_terms()
      */
     function write_objectives_to_db()
     {
-   		if($this->debug>0){error_log('New LP - In learnpathItem::write_objectives_to_db()',0);}
+   		if(self::debug>0){error_log('New LP - In learnpathItem::write_objectives_to_db()',0);}
      	if(is_array($this->objectives) && count($this->objectives)>0){
      		//save objectives
      		$tbl = Database::get_course_table(TABLE_LP_ITEM_VIEW);
@@ -2150,7 +2176,7 @@ function get_terms()
      		if(Database::num_rows($res)>0){
      			$row = Database::fetch_array($res);
      			$lp_iv_id = $row[0];
-     			if($this->debug>2){error_log('New LP - In learnpathItem::write_to_db() - Got item_view_id '.$lp_iv_id.', now checking objectives ',0);}
+     			if(self::debug>2){error_log('New LP - In learnpathItem::write_to_db() - Got item_view_id '.$lp_iv_id.', now checking objectives ',0);}
 	     		foreach($this->objectives as $index => $objective){
 	     			$iva_table = Database::get_course_table(TABLE_LP_IV_OBJECTIVE);
 	     			$iva_sql = "SELECT id FROM $iva_table " .
@@ -2203,7 +2229,7 @@ function get_terms()
 			return false;
 		}
 
-   		if($this->debug>0){error_log('New LP - In learnpathItem::write_to_db()',0);}
+   		if(self::debug>0){error_log('New LP - In learnpathItem::write_to_db()',0);}
    		$mode = $this->get_lesson_mode();
    		$credit = $this->get_credit();
    		$my_verified_status=$this->get_status(false);
@@ -2222,7 +2248,7 @@ function get_terms()
    		if (($save===false && $this->type == 'sco') ||(($this->type == 'sco') && ($credit == 'no-credit' OR $mode == 'review' OR $mode == 'browse')))
    		{
    			//this info shouldn't be saved as the credit or lesson mode info prevent it
-   			if($this->debug>1){error_log('New LP - In learnpathItem::write_to_db() - credit('.$credit.') or lesson_mode('.$mode.') prevent recording!',0);}
+   			if(self::debug>1){error_log('New LP - In learnpathItem::write_to_db() - credit('.$credit.') or lesson_mode('.$mode.') prevent recording!',0);}
    		} else {
       		//check the row exists
       		$inserted = false;
@@ -2256,7 +2282,7 @@ function get_terms()
 		     			"'".Database::escape_string($this->current_data)."'," .
 		     			//"'".$this->get_max_time_allowed()."'," .
 		     			"'".$this->lesson_location."')";
-      			if($this->debug>2){error_log('New LP - In learnpathItem::write_to_db() - Inserting into item_view forced: '.$sql,0);}
+      			if(self::debug>2){error_log('New LP - In learnpathItem::write_to_db() - Inserting into item_view forced: '.$sql,0);}
 		     	$res = Database::query($sql);
 		     	$this->db_item_view_id = Database::insert_id();
 		     	$inserted = true;
@@ -2267,7 +2293,7 @@ function get_terms()
 	     			"WHERE lp_item_id = ".$this->db_id. " " .
 	     			"AND   lp_view_id = ".$this->view_id. " ".
 	     			"AND   view_count = ".$this->get_attempt_id();
-	     	if($this->debug>2){error_log('New LP - In learnpathItem::write_to_db() - Querying item_view: '.$check,0);}
+	     	if(self::debug>2){error_log('New LP - In learnpathItem::write_to_db() - Querying item_view: '.$check,0);}
 	     	$check_res = Database::query($check);
 	     	//depending on what we want (really), we'll update or insert a new row
 	     	//now save into DB
@@ -2302,7 +2328,7 @@ function get_terms()
 		     			"'".Database::escape_string($this->current_data)."'," .
 		     			//"'".$this->get_max_time_allowed()."'," .
 		     			"'".$this->lesson_location."')";
-		     	if($this->debug>2){error_log('New LP - In learnpathItem::write_to_db() - Inserting into item_view: '.$sql,0);}
+		     	if(self::debug>2){error_log('New LP - In learnpathItem::write_to_db() - Inserting into item_view: '.$sql,0);}
 		     	$res = Database::query($sql);
 		     	$this->db_item_view_id = Database::insert_id();
 	     	} else {
@@ -2424,7 +2450,7 @@ function get_terms()
 
 			     			$this->current_start_time = time();
 	     		}
-	    	 	if($this->debug>2){error_log('New LP - In learnpathItem::write_to_db() - Updating item_view: '.$sql,0);}
+	    	 	if(self::debug>2){error_log('New LP - In learnpathItem::write_to_db() - Updating item_view: '.$sql,0);}
 		     	$res = Database::query($sql);
 	     	}
 	     	//if(!$res)
@@ -2442,7 +2468,7 @@ function get_terms()
 	     		if(Database::num_rows($res)>0){
 	     			$row = Database::fetch_array($res);
 	     			$lp_iv_id = $row[0];
-	     			if($this->debug>2){error_log('New LP - In learnpathItem::write_to_db() - Got item_view_id '.$lp_iv_id.', now checking interactions ',0);}
+	     			if(self::debug>2){error_log('New LP - In learnpathItem::write_to_db() - Got item_view_id '.$lp_iv_id.', now checking interactions ',0);}
 		     		foreach($this->interactions as $index => $interaction){
 		     			$correct_resp = '';
 		     			if(is_array($interaction[4]) && !empty($interaction[4][0]) ){
@@ -2492,8 +2518,7 @@ function get_terms()
 	     		}
 	     	}
    		}
-		if($this->debug>2){error_log('New LP - End of learnpathItem::write_to_db()',0);}
+		if(self::debug>2){error_log('New LP - End of learnpathItem::write_to_db()',0);}
      	return true;
      }
 }
-?>

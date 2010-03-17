@@ -13,6 +13,7 @@ require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
 require_once api_get_path(LIBRARY_PATH).'fileDisplay.lib.php';
 require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
 require_once api_get_path(LIBRARY_PATH).'group_portal_manager.lib.php';
+require_once api_get_path(LIBRARY_PATH).'sortabletable.class.php';
 
 /*
  * @todo use constants!
@@ -201,7 +202,7 @@ class MessageManager
 	}
 
 	/**
-	 * save message for social network
+	 * Save message for social network
 	 * @param int 	  receiver user id
 	 * @param string  subject
 	 * @param string  content

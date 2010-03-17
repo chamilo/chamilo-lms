@@ -4,7 +4,7 @@
 require_once 'HTML/Table.php';
 require_once 'Pager/Pager.php';
 require_once 'tablesort.lib.php';
-require_once 'main_api.lib.php'; // TODO: Is this line necessary?
+
 /**
  * This class allows you to display a sortable data-table. It is possible to
  * split the data in several pages.

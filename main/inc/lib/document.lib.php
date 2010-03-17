@@ -968,14 +968,14 @@ class DocumentManager {
 	}
 
 	/**
-	 * Allow attach certificate to course
+	 * Allow attach a certificate to a course
 	 * @param string The course id
 	 * @param int The document id
 	 * @return void()
 	 */
-	 function attach_gradebook_certificate ($course_id,$document_id) {
-	 	$tbl_category=Database :: get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
-	 	$session_id=api_get_session_id();
+	 function attach_gradebook_certificate ($course_id, $document_id) {
+	 	$tbl_category = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
+	 	$session_id = api_get_session_id();
 	 	if ($session_id==0 || is_null($session_id)) {
 	 		$sql_session='AND (session_id='.Database::escape_string($session_id).' OR isnull(session_id)) ';
 	 	} elseif ($session_id>0) {
@@ -984,9 +984,10 @@ class DocumentManager {
 	 		$sql_session='';
 	 	}
 	 	$sql='UPDATE '.$tbl_category.' SET document_id="'.Database::escape_string($document_id).'" 
-	 	WHERE course_code="'.Database::escape_string($course_id).'" '.$sql_session;
+	 		  WHERE course_code="'.Database::escape_string($course_id).'" '.$sql_session;
 	 	$rs=Database::query($sql,__FILE__,__LINE__);
 	 }
+	 
 	 /**
 	  * get the document id of default certificate
 	  * @param string The course id
@@ -1008,6 +1009,7 @@ class DocumentManager {
 	 	$row=Database::fetch_array($rs);
 	 	return $row['document_id'];
 	 }
+	 
 	 /**
 	  * allow replace user info in file html
 	  * @param string The course id
@@ -1045,7 +1047,7 @@ class DocumentManager {
 	   */
 	  function get_all_info_to_certificate () {
 	  	
-		global $charset,$dateFormatLong;
+		global $charset, $dateFormatLong;
 		$info_list	= array();
 	  	$user_id	= api_get_user_id();
 	  	$course_id	= api_get_course_id();
@@ -1055,33 +1057,34 @@ class DocumentManager {
 		$portal_name = api_get_setting('siteName');
 
 		//info extra user data
-		$extra_user_info_data=UserManager::get_extra_user_data($user_id,false,false);
+		$extra_user_info_data = UserManager::get_extra_user_data($user_id,false,false);
 
 		//info student
-		$user_info=api_get_user_info($user_id); 		
-		$first_name=($user_info['firstName']);
-		$last_name=($user_info['lastName']);
-		$official_code=($user_info['official_code']);
+		$user_info 	= api_get_user_info($user_id); 		
+		$first_name = $user_info['firstname'];
+		$last_name 	= $user_info['lastname'];
+		$official_code = $user_info['official_code'];
 			
 		//info teacher
-		$info_teacher_id=UserManager::get_user_id_of_course_admin_or_session_admin($course_id);
-		$teacher_info=api_get_user_info($info_teacher_id);
-		$teacher_first_name=($teacher_info['firstName']);
-		$teacher_last_name=($teacher_info['lastName']);
+		$info_teacher_id = UserManager::get_user_id_of_course_admin_or_session_admin($course_id);
+		$teacher_info = api_get_user_info($info_teacher_id);
+		$teacher_first_name = $teacher_info['firstname'];
+		$teacher_last_name = $teacher_info['lastname'];
 		
 		// info gradebook certificate
 		$info_grade_certificate = UserManager::get_info_gradebook_certificate($course_id,$user_id);
-		$date_certificate = $info_grade_certificate['date_certificate'];
-		$date_long_certificate = '';
-		
+				
+		$date_certificate = $info_grade_certificate['created_at'];
+		$date_long_certificate = '';		
 		if (!empty($date_certificate)) {
-			$date_long_certificate = api_ucfirst(format_locale_date($dateFormatLong,convert_mysql_date($date_certificate)));	
+			$date_long_certificate = api_convert_and_format_date($date_certificate);	
 		}
 
 		//replace content
-		$info_to_replace_in_content_html=array($first_name,$last_name,$organization_name,$portal_name,$teacher_first_name,$teacher_last_name, $official_code, $date_long_certificate);
-		$info_to_be_replaced_in_content_html=array('((user_firstname))','((user_lastname))','((gradebook_institution))',
-		'((gradebook_sitename))','((teacher_firstname))','((teacher_lastname))','((official_code))','((date_certificate))');
+		$info_to_replace_in_content_html = array($first_name,$last_name,$organization_name,$portal_name,$teacher_first_name,$teacher_last_name, $official_code, $date_long_certificate);
+		$info_to_be_replaced_in_content_html= array('((user_firstname))','((user_lastname))','((gradebook_institution))',
+													'((gradebook_sitename))','((teacher_firstname))','((teacher_lastname))','((official_code))','((date_certificate))');
+		
 		foreach ($extra_user_info_data as $key_extra=>$value_extra) {
 			$info_to_be_replaced_in_content_html[]='(('.strtolower($key_extra).'))';
 			$info_to_replace_in_content_html[]=$value_extra;
@@ -1110,7 +1113,7 @@ class DocumentManager {
 			 	}
 			 	
 			 	$sql='UPDATE '.$tbl_category.' SET document_id=null 
-			 	WHERE course_code="'.Database::escape_string($course_id).'" AND document_id="'.$default_certificate_id.'" '.$sql_session;
+			 		  WHERE course_code="'.Database::escape_string($course_id).'" AND document_id="'.$default_certificate_id.'" '.$sql_session;
 			 	$rs=Database::query($sql,__FILE__,__LINE__);
 	   		}
 	   }
@@ -1150,8 +1153,7 @@ class DocumentManager {
 	    	$sql='SELECT id FROM '.$tbl_document.' WHERE path="/certificates" ';
 	    	$rs=Database::query($sql,__FILE__,__LINE__);
 	    	$row=Database::fetch_array($rs);
-	    	return $row['id'];
-	    	
+	    	return $row['id'];	    	
 	    }
 
 		 /**

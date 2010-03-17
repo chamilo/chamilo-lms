@@ -267,7 +267,7 @@ class DisplayGradebook
 		$user_id=api_get_user_id();
 		$course_code=$my_category['course_code'];
 		$status_user=api_get_status_of_user_in_course ($user_id,$course_code);
-		if (($status_user==1 && $is_course_admin && !isset ($_GET['search'])) || api_is_platform_admin()) {
+		if (($status_user==1 && $is_course_admin && !isset ($_GET['search'])) || api_is_platform_admin() || api_is_course_coach()) {
 			if ($selectcat == '0') {
                 if ($show_add_qualification === true) {
 				   // $header .= '<a href="gradebook_add_cat.php?'.api_get_cidreq().'&selectcat=0"><img src="../img/folder_new.gif" alt="' . get_lang('NewCategory') . '" /> ' . get_lang('NewCategory') . '</a></td>';
@@ -302,13 +302,14 @@ class DisplayGradebook
                 	$my_course_id=api_get_course_id();
                 	$my_file= substr($_SESSION['gradebook_dest'],0,5);
                 	if (($my_file!='index' || $status_user==1) || api_is_platform_admin()) {
-	                	$header .= '<td style="vertical-align: top;"><a href="gradebook_flatview.php?'.$my_api_cidreq.'&selectcat=' . $catobj->get_id() . '">'.Display::return_icon('stats_access.gif', get_lang('FlatView')).' ' . get_lang('FlatView') . '</a>';
-						if (/*($is_course_admin && $message_resource===false && $status_user==1) ||*/ api_is_platform_admin()) {
-							$header .= '<td style="vertical-align: top;"><a href="gradebook_scoring_system.php?'.$my_api_cidreq.'&selectcat=' . $catobj->get_id() .'">'.Display::return_icon('acces_tool.gif', get_lang('ScoreEdit')).' ' . get_lang('ScoreEdit') . '</a>';
-							$header .= '<td style="vertical-align: top;"><a href="../document/document.php?curdirpath=/certificates&'.$my_api_cidreq.'&origin=gradebook&selectcat=' . $catobj->get_id() . '">'.Display::return_icon('acces_tool.gif', get_lang('AttachCertificate')).' ' . get_lang('AttachCertificate') . '</a>';
-							$header .= '<td style="vertical-align: top;"><a href="gradebook_display_certificate.php?'.$my_api_cidreq.'&amp;cat_id='.(int)$_GET['selectcat'].'">'.Display::return_icon('acces_tool.gif', get_lang('Certificate')).' ' . get_lang('GradebookSeeListOfStudentsCertificates') . '</a>';
-					
-						}
+                		$header .= '<td style="vertical-align: top;"><a href="gradebook_scoring_system.php?'.$my_api_cidreq.'&selectcat=' . $catobj->get_id() .'">'.Display::return_icon('acces_tool.gif', get_lang('ScoreEdit')).' ' . get_lang('ScoreEdit') . '</a>';
+	            
+					}
+					if (/*($is_course_admin && $message_resource===false && $status_user==1) ||*/ api_is_platform_admin() || api_is_course_coach()) {
+						$header .= '<td style="vertical-align: top;"><a href="gradebook_flatview.php?'.$my_api_cidreq.'&selectcat=' . $catobj->get_id() . '">'.Display::return_icon('stats_access.gif', get_lang('FlatView')).' ' . get_lang('FlatView') . '</a>';		
+						$header .= '<td style="vertical-align: top;"><a href="../document/document.php?curdirpath=/certificates&'.$my_api_cidreq.'&origin=gradebook&selectcat=' . $catobj->get_id() . '">'.Display::return_icon('acces_tool.gif', get_lang('AttachCertificate')).' ' . get_lang('AttachCertificate') . '</a>';
+						$header .= '<td style="vertical-align: top;"><a href="gradebook_display_certificate.php?'.$my_api_cidreq.'&amp;cat_id='.(int)$_GET['selectcat'].'">'.Display::return_icon('acces_tool.gif', get_lang('Certificate')).' ' . get_lang('GradebookSeeListOfStudentsCertificates') . '</a>';
+				
 					}
                 }
 			}

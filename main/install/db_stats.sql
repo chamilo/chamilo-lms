@@ -238,7 +238,7 @@ CREATE TABLE track_e_hotspot (
   KEY hotspot_user_id (hotspot_user_id),
   KEY hotspot_exe_id (hotspot_exe_id),
   KEY hotspot_question_id (hotspot_question_id)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+);
 
 CREATE TABLE track_e_item_property (
   id int NOT NULL auto_increment PRIMARY KEY,
@@ -255,11 +255,13 @@ CREATE TABLE track_e_item_property (
 ALTER TABLE track_e_course_access ADD INDEX (user_id);
 ALTER TABLE track_e_course_access ADD INDEX (login_course_date);
 ALTER TABLE track_e_course_access ADD INDEX (course_code);
+ALTER TABLE track_e_course_access ADD INDEX (session_id);
+ALTER TABLE track_e_access ADD INDEX (access_session_id);
+
 ALTER TABLE track_e_online ADD INDEX (course);
+ALTER TABLE track_e_online ADD INDEX (session_id);
+
 ALTER TABLE track_e_item_property ADD INDEX (course_id, item_property_id, session_id);
-ALTER TABLE track_e_access ADD INDEX (access_session_id);  
-ALTER TABLE track_e_course_access ADD INDEX (session_id);  
 ALTER TABLE track_e_downloads ADD INDEX (down_session_id);  
 ALTER TABLE track_e_links ADD INDEX (links_session_id); 
 ALTER TABLE track_e_uploads ADD INDEX (upload_session_id);  
-ALTER TABLE track_e_online ADD INDEX (session_id);

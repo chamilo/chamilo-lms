@@ -3,6 +3,8 @@ require_once(api_get_path(SYS_CODE_PATH).'newscorm/learnpath.class.php');
 
 class TestLearnpath extends UnitTestCase {
 	
+	public const course = 'COURSETEST';
+	
 	public function testAddItem() {
 		//ob_start();
 		$parent = 2;
@@ -14,10 +16,9 @@ class TestLearnpath extends UnitTestCase {
 		$prerequisites = 0;	
 		$max_time_allowed = 0;
 		
-		$course='COURSETEST';
 		$lp_id=1;
 		$user_id=1;
-		$obj = new learnpath($course, $lp_id, $user_id); 
+		$obj = new learnpath(self::course, $lp_id, $user_id); 
 		
 		$res = $obj->add_item($parent, $previous, $type, $id, $title, $description, $prerequisites, $max_time_allowed);
 	 	$this->assertTrue(is_numeric($res));
@@ -27,13 +28,12 @@ class TestLearnpath extends UnitTestCase {
 		
 	public function testAddLp() {
 		//ob_start();
-		$course = 'COURSETEST';
 		$name = '';
 		$description = '';
 		$learnpath = 'guess';
 		$origin = 'zip';
 		$zipname = '';
-		$res = learnpath::add_lp($course, $name, $description, $learnpath, $origin, $zipname);
+		$res = learnpath::add_lp(self::course, $name, $description, $learnpath, $origin, $zipname);
 	 	$this->assertTrue(is_null($res));
 		//ob_end_clean();
 	 	//var_dump($res);
@@ -411,10 +411,9 @@ class TestLearnpath extends UnitTestCase {
 	public function testExportLp() {
 		//ob_start();
 		$type = 'scorm';
-		$course = 'COURSETEST';
 		$id = 1;
 		$zipname = 'FILE';
-		$res = learnpath::export_lp($type, $course, $id, $zipname);
+		$res = learnpath::export_lp($type, self::course, $id, $zipname);
 	 	$this->assertTrue(is_string($res));
 		//ob_end_clean();
 	 	//var_dump($res);
@@ -494,10 +493,9 @@ class TestLearnpath extends UnitTestCase {
 
 	public function testGetDocuments() {
 		//ob_start();
-		$course='COURSETEST';
 		$lp_id=1;
 		$user_id=1;
-		$obj = new learnpath($course, $lp_id, $user_id); 
+		$obj = new learnpath(self::course, $lp_id, $user_id); 
 		
 		$res = $obj->get_documents();
 	 	$this->assertTrue(is_string($res));
@@ -655,10 +653,9 @@ class TestLearnpath extends UnitTestCase {
 		//ob_start();
 		$type = 'http';
 		$item_id = null;
-		$course='COURSETEST';
 		$lp_id=1;
 		$user_id=1;
-		$obj = new learnpath($course, $lp_id, $user_id); 
+		$obj = new learnpath(self::course, $lp_id, $user_id); 
 		
 		$res = $obj->get_link($type, $item_id);
 	 	$this->assertTrue(is_string($res));
@@ -717,10 +714,9 @@ class TestLearnpath extends UnitTestCase {
 		
 	public function testGetNavigationBar() {
 		//ob_start();
-		$course='COURSETEST';
 		$lp_id=1;
 		$user_id=1;
-		$obj = new learnpath($course, $lp_id, $user_id); 
+		$obj = new learnpath(self::course, $lp_id, $user_id); 
 		
 		$res = $obj->get_navigation_bar();
 	 	$this->assertTrue(is_string($res));
@@ -738,10 +734,9 @@ class TestLearnpath extends UnitTestCase {
 		
 	public function testGetNextItemId() {
 		//ob_start();
-		$course='COURSETEST';
 		$lp_id=1;
 		$user_id=1;
-		$obj = new learnpath($course, $lp_id, $user_id); 
+		$obj = new learnpath(self::course, $lp_id, $user_id); 
 		
 		$res = $obj->get_next_item_id();
 	 	$this->assertTrue(is_numeric($res));
@@ -791,10 +786,9 @@ class TestLearnpath extends UnitTestCase {
 
 	public function testGetPreviousItemId() {
 		//ob_start();
-		$course='COURSETEST';
 		$lp_id=1;
 		$user_id=1;
-		$obj = new learnpath($course, $lp_id, $user_id); 
+		$obj = new learnpath(self::course, $lp_id, $user_id); 
 		
 		$res = $obj->get_previous_item_id();
 	 	$this->assertTrue(is_numeric($res));
@@ -816,10 +810,9 @@ class TestLearnpath extends UnitTestCase {
 		$percentage = -1;
 		$text_add = '';
 		$from_lp = false;
-		$course='COURSETEST';
 		$lp_id=1;
 		$user_id=1;
-		$obj = new learnpath($course, $lp_id, $user_id); 
+		$obj = new learnpath(self::course, $lp_id, $user_id); 
 		
 		$res = $obj->get_progress_bar($mode, $percentage, $text_add, $from_lp);
 	 	$this->assertTrue(is_string($res));
@@ -839,10 +832,9 @@ class TestLearnpath extends UnitTestCase {
 		//ob_start();
 		$mode = '';
 		$add = 0;
-		$course='COURSETEST';
 		$lp_id=1;
 		$user_id=1;
-		$obj = new learnpath($course, $lp_id, $user_id); 
+		$obj = new learnpath(self::course, $lp_id, $user_id); 
 		
 		$res = $obj->get_progress_bar_text($mode, $add);
 	 	$this->assertTrue(is_array($res));
@@ -896,9 +888,8 @@ class TestLearnpath extends UnitTestCase {
 
 	public function testGetStatsLp() {
 		//ob_start();
-		$course = 'COURSETEST';
 		$lp = 1;
-		$res = learnpath::get_stats_lp($course, $lp);
+		$res = learnpath::get_stats_lp(self::course, $lp);
 	 	$this->assertTrue(is_null($res));
 		//ob_end_clean();
 	 	//var_dump($res);
@@ -906,10 +897,9 @@ class TestLearnpath extends UnitTestCase {
 		
 	public function testGetStatsLpUser() {
 		//ob_start();
-		$course = 'COURSETEST';
 		$lp = 1;
 		$user = 1;
-		$res = learnpath::get_stats_lp_user($course, $lp, $user);
+		$res = learnpath::get_stats_lp_user(self::course, $lp, $user);
 	 	$this->assertTrue(is_null($res));
 		//ob_end_clean();
 	 	//var_dump($res);
@@ -917,9 +907,8 @@ class TestLearnpath extends UnitTestCase {
 
 	public function testGetStatsUser() {
 		//ob_start();
-		$course = 'COURSETEST';
 		$user = 1;
-		$res = learnpath::get_stats_user($course, $user);
+		$res = learnpath::get_stats_user(self::course, $user);
 	 	$this->assertTrue(is_null($res));
 		//ob_end_clean();
 	 	//var_dump($res);
@@ -1015,10 +1004,9 @@ class TestLearnpath extends UnitTestCase {
 	*/	
 	public function testGetViewId() {
 		//ob_start();
-		$course='COURSETEST';
 		$lp_id=1;
 		$user_id=1;
-		$obj = new learnpath($course, $lp_id, $user_id); 
+		$obj = new learnpath(self::course, $lp_id, $user_id); 
 		
 		$res = $obj->get_view_id();
 	 	$this->assertTrue(is_numeric($res));
@@ -1164,10 +1152,9 @@ class TestLearnpath extends UnitTestCase {
 		//ob_start();
 		$item_id = null;
 		$from_outside = true;
-		$course='COURSETEST';
 		$lp_id=1;
 		$user_id=1;
-		$obj = new learnpath($course, $lp_id, $user_id); 
+		$obj = new learnpath(self::course, $lp_id, $user_id); 
 		
 		$res = $obj->save_item($item_id, $from_outside);
 	 	$this->assertTrue(is_bool($res));
@@ -1177,10 +1164,9 @@ class TestLearnpath extends UnitTestCase {
 	
 	public function testSaveLast() {
 		//ob_start();
-		$course='COURSETEST';
 		$lp_id=1;
 		$user_id=1;
-		$obj = new learnpath($course, $lp_id, $user_id); 
+		$obj = new learnpath(self::course, $lp_id, $user_id); 
 		
 		$res = $obj->save_last();
 	 	$this->assertTrue(is_null($res));
@@ -1204,10 +1190,9 @@ class TestLearnpath extends UnitTestCase {
 	public function testSetAuthor() {
 		//ob_start();
 		$name = '';
-		$course='COURSETEST';
 		$lp_id=1;
 		$user_id=1;
-		$obj = new learnpath($course, $lp_id, $user_id); 
+		$obj = new learnpath(self::course, $lp_id, $user_id); 
 		
 		$res = $obj->set_author($name);
 	 	$this->assertTrue(is_bool($res));
@@ -1227,10 +1212,9 @@ class TestLearnpath extends UnitTestCase {
 	public function testSetEncoding() {
 		//ob_start();
 		$enc = 'ISO-8859-15';
-		$course='COURSETEST';
 		$lp_id=1;
 		$user_id=1;
-		$obj = new learnpath($course, $lp_id, $user_id); 
+		$obj = new learnpath(self::course, $lp_id, $user_id); 
 		
 		$res = $obj->set_encoding($enc);
 	 	$this->assertTrue(is_bool($res));
@@ -1250,10 +1234,9 @@ class TestLearnpath extends UnitTestCase {
 	public function testSetJslib() {
 		//ob_start();
 		$lib = '';
-		$course='COURSETEST';
 		$lp_id=1;
 		$user_id=1;
-		$obj = new learnpath($course, $lp_id, $user_id); 
+		$obj = new learnpath(self::course, $lp_id, $user_id); 
 		
 		$res = $obj->set_jslib($lib);
 	 	$this->assertTrue(is_bool($res));
@@ -1282,10 +1265,9 @@ class TestLearnpath extends UnitTestCase {
 	public function testSetPreviewImage() {
 		//ob_start();
 		$name = '';
-		$course='COURSETEST';
 		$lp_id=1;
 		$user_id=1;
-		$obj = new learnpath($course, $lp_id, $user_id); 
+		$obj = new learnpath(self::course, $lp_id, $user_id); 
 		
 		$res = $obj->set_preview_image($name);
 	 	$this->assertTrue(is_bool($res));
@@ -1324,10 +1306,9 @@ class TestLearnpath extends UnitTestCase {
 	public function testSetTheme() {
 		//ob_start();
 		$name = '';
-		$course='COURSETEST';
 		$lp_id=1;
 		$user_id=1;
-		$obj = new learnpath($course, $lp_id, $user_id); 
+		$obj = new learnpath(self::course, $lp_id, $user_id); 
 		
 		$res = $obj->set_theme($name);
 	 	$this->assertTrue(is_bool($res));
@@ -1397,10 +1378,9 @@ class TestLearnpath extends UnitTestCase {
 */	
 	public function testUpdateDefaultScormCommit() {
 		//ob_start();
-		$course='COURSETEST';
 		$lp_id=1;
 		$user_id=1;
-		$obj = new learnpath($course, $lp_id, $user_id); 
+		$obj = new learnpath(self::course, $lp_id, $user_id); 
 		
 		$res = $obj->update_default_scorm_commit();
 	 	$this->assertTrue(is_bool($res));
@@ -1410,10 +1390,9 @@ class TestLearnpath extends UnitTestCase {
 	
 	public function testUpdateDefaultViewMode() {
 		//ob_start();
-		$course='COURSETEST';
 		$lp_id=1;
 		$user_id=1;
-		$obj = new learnpath($course, $lp_id, $user_id); 
+		$obj = new learnpath(self::course, $lp_id, $user_id); 
 		
 		$res = $obj->update_default_view_mode();
 	 	$this->assertTrue(is_string($res));
@@ -1431,10 +1410,9 @@ class TestLearnpath extends UnitTestCase {
 	
 	public function testUpdateReinit() {
 		//ob_start();
-		$course='COURSETEST';
 		$lp_id=1;
 		$user_id=1;
-		$obj = new learnpath($course, $lp_id, $user_id); 
+		$obj = new learnpath(self::course, $lp_id, $user_id); 
 		
 		$res = $obj->update_reinit();
 	 	$this->assertTrue(is_numeric($res));
@@ -1444,10 +1422,9 @@ class TestLearnpath extends UnitTestCase {
 	
 	public function testUpdateScormDebug() {
 		//ob_start();
-		$course='COURSETEST';
 		$lp_id=1;
 		$user_id=1;
-		$obj = new learnpath($course, $lp_id, $user_id); 
+		$obj = new learnpath(self::course, $lp_id, $user_id); 
 		
 		$res = $obj->update_scorm_debug();
 	 	$this->assertTrue(is_numeric($res));
@@ -1510,10 +1487,9 @@ class TestLearnpath extends UnitTestCase {
 
 	public function testDeleteLpImage() {
 		//ob_start();
-		$course='COURSETEST';
 		$lp_id=1;
 		$user_id=1;
-		$obj = new learnpath($course, $lp_id, $user_id); 
+		$obj = new learnpath(self::course, $lp_id, $user_id); 
 		
 		$res = $obj->delete_lp_image();
 	 	$this->assertTrue(is_bool($res));

@@ -42,6 +42,7 @@ if (!$is_allowedToTrack && !api_is_session_admin()) {
 	api_not_allowed();
 	Display :: display_footer();
 	exit;
+}
 
 // Including additional libraries
 require_once api_get_path(LIBRARY_PATH).'sortabletable.class.php';

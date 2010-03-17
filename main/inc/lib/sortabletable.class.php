@@ -177,10 +177,11 @@ class SortableTable extends HTML_Table {
 			$params['totalItems'] = $total_number_of_items;
 			$params['urlVar'] = $this->param_prefix.'page_nr';
 			$params['currentPage'] = $this->page_nr;
-			$params['prevImg'] = '<img src="'.api_get_path(WEB_CODE_PATH).'img/prev.png"  alt="'.get_lang('PreviousPage').'" title="'.get_lang('PreviousPage').'" style="vertical-align: middle;"/>';
-			$params['nextImg'] = '<img src="'.api_get_path(WEB_CODE_PATH).'img/next.png"  alt="'.get_lang('NextPage').'" title="'.get_lang('NextPage').'" style="vertical-align: middle;"/>';
-			$params['firstPageText'] = '<img src="'.api_get_path(WEB_CODE_PATH).'img/first.png"  alt="'.get_lang('FirstPage').'" title="'.get_lang('FirstPage').'" style="vertical-align: middle;"/>';
-			$params['lastPageText'] = '<img src="'.api_get_path(WEB_CODE_PATH).'img/last.png"  alt="'.get_lang('LastPage').'" title="'.get_lang('LastPage').'" style="vertical-align: middle;"/>';
+			$icon_attributes = array('style' => 'vertical-align: middle;');
+			$params['prevImg'] = Display :: return_icon('action_prev.png', get_lang('PreviousPage'), $icon_attributes);
+			$params['nextImg'] = Display :: return_icon('action_next.png', get_lang('NextPage'), $icon_attributes);
+			$params['firstPageText'] = Display :: return_icon('action_first.png', get_lang('FirstPage'), $icon_attributes);
+			$params['lastPageText'] =  Display :: return_icon('action_last.png', get_lang('LastPage'), $icon_attributes);
 			$params['firstPagePre'] = '';
 			$params['lastPagePre'] = '';
 			$params['firstPagePost'] = '';
@@ -211,11 +212,7 @@ class SortableTable extends HTML_Table {
 		{
 			$cols = $this->getColCount();
 			$this->setCellAttributes(1, 0, 'style="font-style: italic;text-align:center;" colspan='.$cols);
-			if (api_is_xml_http_request()===true) {
-				$message_empty=api_utf8_encode(get_lang('TheListIsEmpty'));
-			} else {
-				$message_empty=get_lang('TheListIsEmpty');
-			}
+			$message_empty = api_xml_http_response_encode(get_lang('TheListIsEmpty'));
 			$this->setCellContents(1, 0,$message_empty);
 
 			$empty_table = true;
@@ -292,16 +289,16 @@ class SortableTable extends HTML_Table {
 		}
 		echo $html;
 	}
-	
+
 	/**
 	 * This function shows the content of a table in a grid.
 	 * Should not be use to edit information (edit/delete rows) only.
 	 * */
 	public function display_grid () {
-		global $charset;		
+		global $charset;
 		$empty_table = false;
 		$html = '';
-		
+
 		if ($this->get_total_number_of_items() == 0) {
 			$cols = $this->getColCount();
 			//$this->setCellAttributes(1, 0, 'style="font-style: italic;text-align:center;" colspan='.$cols);
@@ -317,31 +314,31 @@ class SortableTable extends HTML_Table {
 		if (!$empty_table) {
 			$form = $this->get_page_select_form();
 			$nav = $this->get_navigation_html();
-			
-			// @todo This style css must be moved to default.css only for dev		 
+
+			// @todo This style css must be moved to default.css only for dev
 			echo '<style>
 					.grid_container { width:100%;}
 					.grid_item { height: 120px; width:98px;  border:1px dotted #ccc; float:left; padding:5px; margin:8px;}
 					.grid_element_0 { width:100px; float:left; text-align:center; margin-bottom:5px;}
 					.grid_element_1 { width:100px; float:left; text-align:center;margin-bottom:5px;}
 					.grid_element_2 { width:150px; float:left;}
-					
+
 					.grid_selectbox { width:50%; float:left;}
 					.grid_title 	{ width:30%; float:left;}
 					.grid_nav 		{ float:right;}
-						
+
 			</style>';
-		
-		
-			//this also must be moved			
+
+
+			//this also must be moved
 			$html = '<div class="sub-header">';
-			$html .= '<div class="grid_selectbox">'.$form.'</div>';			
-			$html .= '<div class="grid_title">'.$this->get_table_title().'</div>';			
-			$html .= '<div class="grid_nav">'.$nav.'</div>';			
+			$html .= '<div class="grid_selectbox">'.$form.'</div>';
+			$html .= '<div class="grid_title">'.$this->get_table_title().'</div>';
+			$html .= '<div class="grid_nav">'.$nav.'</div>';
 			$html .= '</div>';
-			
+
 			$html .= '<div class="clear"></div>';
-			if (count($this->form_actions) > 0) {				
+			if (count($this->form_actions) > 0) {
 				$script= '<script language="JavaScript" type="text/javascript">
 																/*<![CDATA[*/
 																function setCheckbox(value) {
@@ -358,22 +355,22 @@ class SortableTable extends HTML_Table {
 				$html .= '<form method="post" action="'.api_get_self().'?'.$params.'" name="form_'.$this->table_name.'">';
 			}
 		}
-		$items = $this->get_clean_html(); // getting the items of the table				
+		$items = $this->get_clean_html(); // getting the items of the table
 		// the generating of style classes must be improved. Maybe we need a a table name to create style on the fly:
 		// i.e: .whoisonline_table_grid_container instead of  .grid_container
 		// where whoisonline is the table's name like drupal's template engine
-		
-		$html .= '<div class="grid_container">';		
+
+		$html .= '<div class="grid_container">';
 		if (is_array($items) && count($items)>0 ) {
-			foreach($items as $row) {						
+			foreach($items as $row) {
 				$html.= '<div class="grid_item">';
 				$i=0;
 				foreach($row as $element) {
 					$html.='<div class="grid_element_'.$i.'">'.$element.'</div>';
 					$i++;
-				}		
+				}
 				$html.='</div>';
-			}			
+			}
 			$html .= '</div>';
 		}
 		$html .= '<div class="clear"></div>';
@@ -408,7 +405,7 @@ class SortableTable extends HTML_Table {
 		*/
 		echo $html;
 	}
-	
+
 	/**
 	 * This function return the content of a table in a grid
 	 * Should not be use to edit information (edit/delete rows) only.
@@ -416,12 +413,12 @@ class SortableTable extends HTML_Table {
 	 * @param bool   	hide navigation optionally
 	 * @param int    	content per page when show navigation (optional)
 	 * @param bool	 	sort data optionally
-	 * @return string	grid html 
+	 * @return string	grid html
 	 */
 	public function display_simple_grid($vibility_options, $hide_navigation = true, $per_page = 0, $sort_data = true) {
-		global $charset;		
+		global $charset;
 		$empty_table = false;
-		$html = '';		
+		$html = '';
 		if ($this->get_total_number_of_items() == 0) {
 			$cols = $this->getColCount();
 			//$this->setCellAttributes(1, 0, 'style="font-style: italic;text-align:center;" colspan='.$cols);
@@ -434,25 +431,25 @@ class SortableTable extends HTML_Table {
 			$empty_table = true;
 		}
 		$html='';
-		
+
 		if (!$empty_table) {
-			//if we show the pagination					
-			if ($hide_navigation == false ) {	
-				$form = '&nbsp;';			
-				if ($per_page > 10) {				
+			//if we show the pagination
+			if ($hide_navigation == false ) {
+				$form = '&nbsp;';
+				if ($per_page > 10) {
 					$form = $this->get_page_select_form();
-				}	
-				$nav = $this->get_navigation_html();				
-				//this also must be moved			
+				}
+				$nav = $this->get_navigation_html();
+				//this also must be moved
 				$html = '<div class="sub-header" >';
-				$html .= '<div class="grid_selectbox">'.$form.'</div>';		
-				$html .= '<div class="grid_title">'.$this->get_table_title().'</div>';			
-				$html .= '<div class="grid_nav">'.$nav.'</div>';			
+				$html .= '<div class="grid_selectbox">'.$form.'</div>';
+				$html .= '<div class="grid_title">'.$this->get_table_title().'</div>';
+				$html .= '<div class="grid_nav">'.$nav.'</div>';
 				$html .= '</div>';
 			}
-			
+
 			$html .= '<div class="clear"></div>';
-			if (count($this->form_actions) > 0) {			
+			if (count($this->form_actions) > 0) {
 				$script= '<script language="javaScript" type="text/javascript">
 							/*<![CDATA[*/
 							function setCheckbox(value) {
@@ -469,21 +466,21 @@ class SortableTable extends HTML_Table {
 				$html .= '<form method="post" action="'.api_get_self().'?'.$params.'" name="form_'.$this->table_name.'">';
 			}
 		}
-		
+
 		if ($hide_navigation == true ) {
 			$items = $this->table_data; //this is a faster way to get what we want
 		} else {
 			//the normal way
 			$items = $this->get_clean_html($sort_data); // getting the items of the table
 		}
-		
-					
+
+
 		// the generating of style classes must be improved. Maybe we need a a table name to create style on the fly:
 		// i.e: .whoisonline_table_grid_container instead of  .grid_container
 		// where whoisonline is the table's name like drupal's template engine
-		
+
 		if (is_array($vibility_options)) {
-			$filter = false; // the 2nd condition of the if will be loaded			 
+			$filter = false; // the 2nd condition of the if will be loaded
 		} else {
 			if ($vibility_options === false) {
 				$filter = false;
@@ -491,18 +488,18 @@ class SortableTable extends HTML_Table {
 				$filter = true;
 			}
 		}
-		
-		$html .= '<div class="'.$this->table_name.'_grid_container">';		
-		if (is_array($items) && count($items)>0 ) {			 
-			foreach($items as $row) {				
+
+		$html .= '<div class="'.$this->table_name.'_grid_container">';
+		if (is_array($items) && count($items)>0 ) {
+			foreach($items as $row) {
 				$html.= '<div class="'.$this->table_name.'_grid_item">';
 				$i=0;
-				foreach($row as $element) {					
+				foreach($row as $element) {
 					if ( $filter === true || $vibility_options[$i] == true) {
 						$html.='<div class="'.$this->table_name.'_grid_element_'.$i.'">'.$element.'</div>';
 					}
 					$i++;
-				}		
+				}
 				$html.='</div>';
 			}
 		}
@@ -510,7 +507,7 @@ class SortableTable extends HTML_Table {
 		$html .= '<div class="clear"></div>';
 		return $html;
 	}
-	
+
 	/**
 	 * Get the HTML-code with the navigational buttons to browse through the
 	 * data-pages.
@@ -558,17 +555,17 @@ class SortableTable extends HTML_Table {
 		$val = $pager->getOffsetByPageId();
 		$offset = $pager->getOffsetByPageId();
 		$from = $offset[0] - 1;
-		$table_data = $this->get_table_data($from,$sort);		
+		$table_data = $this->get_table_data($from,$sort);
 		$new_table_data = array();
 		if (is_array($table_data)) {
 			foreach ($table_data as $index => $row) {
 				$row = $this->filter_data($row);
 				$new_table_data[] = $row;
 			}
-		}		
+		}
 		return $new_table_data;
 	}
-	
+
 	/**
 	 * Get the HTML-code wich represents a form to select how many items a page
 	 * should contain.
@@ -836,14 +833,14 @@ class SortableTableFromArray extends SortableTable {
 	 * Get table data to show on current page
 	 * @see SortableTable#get_table_data
 	 */
-	 
-	 
-	public function get_table_data ($from = 1,$sort = true) {				
+
+
+	public function get_table_data ($from = 1,$sort = true) {
 		if ($sort) {
 			$content = TableSort :: sort_table($this->table_data, $this->column, $this->direction == 'ASC' ? SORT_ASC : SORT_DESC);
 		} else {
 			$content = $this->table_data;
-		}		
+		}
 		return array_slice($content, $from, $this->per_page);
 	}
 	/**

@@ -1,5 +1,6 @@
 <?php
-require_once(api_get_path(LIBRARY_PATH).'export.lib.inc.php');
+require_once api_get_path(LIBRARY_PATH).'sortabletable.class.php';
+require_once api_get_path(LIBRARY_PATH).'export.lib.inc.php';
 
 class TestSortableTable extends UnitTestCase {
 

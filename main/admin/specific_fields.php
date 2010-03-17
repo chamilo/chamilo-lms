@@ -24,19 +24,20 @@
  * @package dokeos.admin
  */
 $language_file[] = 'admin';
-// including some necessary dokeos files
-require('../inc/global.inc.php');
+// Including some necessary chamilo files
+require '../inc/global.inc.php';
 
-// user permissions
+// User permissions
 api_protect_admin_script();
 
-// breadcrumb
-$interbreadcrumb[] = array ("url" => 'index.php', "name" => get_lang('PlatformAdmin'));
-$interbreadcrumb[] = array ("url" => 'specific_fields.php', "name" => get_lang('SpecificSearchFields'));
+// Breadcrumb
+$interbreadcrumb[] = array ('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
+$interbreadcrumb[] = array ('url' => 'specific_fields.php', 'name' => get_lang('SpecificSearchFields'));
 
 $libpath = api_get_path(LIBRARY_PATH);
-include_once ($libpath.'specific_fields_manager.lib.php');
-require_once ($libpath.'formvalidator/FormValidator.class.php');
+require_once $libpath.'sortabletable.class.php';
+include_once $libpath.'specific_fields_manager.lib.php';
+require_once $libpath.'formvalidator/FormValidator.class.php';
 
 // Create an add-field box
 $form = new FormValidator('add_field','post','','',null,false);

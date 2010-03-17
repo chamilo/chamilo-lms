@@ -7,7 +7,7 @@
 *	@author Olivier Brouckaert, original author
 *	@author Denes Nagy, HotPotatoes integration
 *	@author Wolfgang Schneider, code/html cleanup
-*	@author Julio Montoya <gugli100@gmail.com>, lots of cleanup + several improvements 
+*	@author Julio Montoya <gugli100@gmail.com>, lots of cleanup + several improvements
 * 	@version $Id:exercice.php 12269 2007-05-03 14:17:37Z elixir_julian $
 */
 
@@ -16,6 +16,7 @@ $language_file = 'exercice';
 
 // including the global library
 require_once '../inc/global.inc.php';
+require_once api_get_path(LIBRARY_PATH).'sortabletable.class.php';
 require_once '../gradebook/lib/be.inc.php';
 // setting the tabs
 $this_section = SECTION_COURSES;
@@ -520,15 +521,15 @@ if ($is_allowedToEdit) {
 	if (!empty ($choice)) {
 		// construction of Exercise
 
-		$objExerciseTmp = new Exercise();		
+		$objExerciseTmp = new Exercise();
 		$check = Security::check_token('get');
-		
+
 		if ($objExerciseTmp->read($exerciseId)) {
 			if ($check) {
 				switch ($choice) {
 					case 'delete' : // deletes an exercise
 						$objExerciseTmp->delete();
-	
+
 						//delete link of exercise of gradebook tool
 						$sql = 'SELECT gl.id FROM ' . $tbl_grade_link . ' gl WHERE gl.type="1" AND gl.ref_id="' . $exerciseId . '";';
 						$result = Database::query($sql);
@@ -547,7 +548,7 @@ if ($is_allowedToEdit) {
 						$objExerciseTmp->save();
 						// "WHAT'S NEW" notification: update table item_property (previously last_tooledit)
 						Display :: display_confirmation_message(get_lang('VisibilityChanged'));
-	
+
 						break;
 					case 'disable' : // disables an exercise
 						$objExerciseTmp->disable();
@@ -565,13 +566,13 @@ if ($is_allowedToEdit) {
 						Display :: display_confirmation_message(get_lang('ResultsEnabled'));
 						break;
 					case 'clean_results' : //clean student results
-							$quantity_results_deleted= $objExerciseTmp->clean_results();					
+							$quantity_results_deleted= $objExerciseTmp->clean_results();
 							Display :: display_confirmation_message(sprintf(get_lang('XResultsCleaned'),$quantity_results_deleted));
 					break;
-					case 'copy_exercise' : //copy an exercise					
-							$objExerciseTmp->copy_exercise();					
-							Display :: display_confirmation_message(get_lang('ExerciseCopied'));					
-					break;					
+					case 'copy_exercise' : //copy an exercise
+							$objExerciseTmp->copy_exercise();
+							Display :: display_confirmation_message(get_lang('ExerciseCopied'));
+					break;
 				}
 			}
 		}
@@ -868,9 +869,9 @@ if ($show == 'test') {
 		$myorigin = (empty ($origin) ? '' : '&origin=' . $origin);
 		$mylpid = (empty ($learnpath_id) ? '' : '&learnpath_id=' . $learnpath_id);
 		$mylpitemid = (empty ($learnpath_item_id) ? '' : '&learnpath_item_id=' . $learnpath_item_id);
-		
-		$token = Security::get_token();	
-		
+
+		$token = Security::get_token();
+
 		while ($row = Database :: fetch_array($result)) {
 			//validacion when belongs to a session
 			$session_img = api_get_session_image($row['session_id'], $_user['status']);
@@ -911,10 +912,10 @@ if ($show == 'test') {
 ?>
 		    <td>
 		    <a   href="admin.php?<?php echo api_get_cidreq()?>&amp;exerciseId=<?php echo $row['id']; ?>"><img src="../img/wizard_small.gif" border="0" title="<?php echo api_htmlentities(get_lang('Edit'),ENT_QUOTES,$charset); ?>" alt="<?php echo api_htmlentities(get_lang('Edit'),ENT_QUOTES,$charset); ?>" /></a>
-		    
-		    <a href="exercice.php?<?php echo api_get_cidreq()?>&amp;choice=copy_exercise&amp;sec_token=<?php echo$token; ?>&amp;exerciseId=<?php echo $row['id']; ?>"  onclick="javascript:if(!confirm('<?php echo addslashes(api_htmlentities(get_lang('AreYouSureToCopy'),ENT_QUOTES,$charset)); echo " ".$row['title']; echo "?"; ?>')) return false;"><img width="16" src="../img/cd.gif" border="0" title="<?php echo api_htmlentities(get_lang('CopyExercise'),ENT_QUOTES,$charset); ?>" alt="<?php echo api_htmlentities(get_lang('CopyExercise'),ENT_QUOTES,$charset); ?>" /></a>		    
+
+		    <a href="exercice.php?<?php echo api_get_cidreq()?>&amp;choice=copy_exercise&amp;sec_token=<?php echo$token; ?>&amp;exerciseId=<?php echo $row['id']; ?>"  onclick="javascript:if(!confirm('<?php echo addslashes(api_htmlentities(get_lang('AreYouSureToCopy'),ENT_QUOTES,$charset)); echo " ".$row['title']; echo "?"; ?>')) return false;"><img width="16" src="../img/cd.gif" border="0" title="<?php echo api_htmlentities(get_lang('CopyExercise'),ENT_QUOTES,$charset); ?>" alt="<?php echo api_htmlentities(get_lang('CopyExercise'),ENT_QUOTES,$charset); ?>" /></a>
 		    <a href="exercice.php?<?php echo api_get_cidreq()?>&amp;choice=clean_results&amp;sec_token=<?php echo$token; ?>&amp;exerciseId=<?php echo $row['id']; ?>"  onclick="javascript:if(!confirm('<?php echo addslashes(api_htmlentities(get_lang('AreYouSureToDeleteResults'),ENT_QUOTES,$charset)); echo " ".$row['title']; echo "?"; ?>')) return false;" ><img width="16" src="../img/clean_group.gif" border="0" title="<?php echo api_htmlentities(get_lang('CleanStudentResults'),ENT_QUOTES,$charset); ?>" alt="<?php echo api_htmlentities(get_lang('CleanStudentResults'),ENT_QUOTES,$charset); ?>" /></a>
-		    
+
 			<?php
 
 				if ($row['results_disabled']) {
@@ -1364,7 +1365,7 @@ if ($_configuration['tracking_enabled'] && ($show == 'result')) {
 		}
 
 		$parameters=array('cidReq'=>Security::remove_XSS($_GET['cidReq']),'show'=>Security::remove_XSS($_GET['show']),'filter' => Security::remove_XSS($_GET['filter']),'gradebook' =>Security::remove_XSS($_GET['gradebook']));
-		
+
 		$table = new SortableTableFromArrayConfig($list_info, 1,20,'quiz_table');
 		$table->set_additional_parameters($parameters);
 		if ($is_allowedToEdit || $is_tutor) {

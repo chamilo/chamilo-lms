@@ -4,7 +4,7 @@
  * @todo use constant for $this_section
  */
 // name of the language file that needs to be included
-$language_file = array ('registration', 'index', 'tracking');
+$language_file = array('registration', 'index', 'tracking');
 
 // resetting the course id
 $cidReset = true;
@@ -13,6 +13,7 @@ $cidReset = true;
 require_once '../inc/global.inc.php';
 
 // including additional libraries
+require_once api_get_path(LIBRARY_PATH).'sortabletable.class.php';
 require_once api_get_path(LIBRARY_PATH).'tracking.lib.php';
 require_once api_get_path(LIBRARY_PATH).'course.lib.php';
 require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
@@ -125,15 +126,15 @@ global $_configuration;
 // interbreadcrumbs
 if (api_is_allowed_to_create_course() && $_GET['display'] != 'yourstudents') {
 
-	$session_id = intval($_GET['session_id']);		
+	$session_id = intval($_GET['session_id']);
 	if (!empty($session_id)) {
 		$courses = Tracking::get_courses_followed_by_coach($_user['user_id'], $session_id);
 	} else {
-		$courses  = CourseManager::get_course_list_of_user_as_course_admin($_user['user_id']);	
+		$courses  = CourseManager::get_course_list_of_user_as_course_admin($_user['user_id']);
 	}
 
 	$nb_teacher_courses = count($courses);
-	
+
 	$sessions = Tracking::get_sessions_coached_by_user($_user['user_id']);
 	$nb_sessions = count($sessions);
 
@@ -141,19 +142,19 @@ if (api_is_allowed_to_create_course() && $_GET['display'] != 'yourstudents') {
 		if (!$is_coach && !$is_platform_admin) {
 			$view = 'teacher';
 		}
-		
-		if ($view == 'teacher' && empty($session_id)) {		
+
+		if ($view == 'teacher' && empty($session_id)) {
 			$menu_items[] = get_lang('TeacherInterface');
-			
+
 			if ($nb_teacher_courses) {
 				$title = get_lang('YourCourseList');
 			}
-						
-		} else {			
-			if (!empty($session_id)) {								
+
+		} else {
+			if (!empty($session_id)) {
 				$session_name = api_get_session_name($session_id);
-				$title = ucfirst($session_name);				
-			}			
+				$title = ucfirst($session_name);
+			}
 			$menu_items[] = '<a href="'.api_get_self().'?view=teacher">'.get_lang('TeacherInterface').'</a>';
 		}
 	}
@@ -186,7 +187,7 @@ if ($is_platform_admin &&  $_GET['display'] != 'yourstudents') {
 }
 
 if ($is_drh || $_GET['display'] == 'yourstudents') {
-	$view = 'drh';	
+	$view = 'drh';
 	$menu_items[] = get_lang('Students');
 	$menu_items[] = '<a href="teachers.php">'.get_lang('Trainers').'</a>';
 	$menu_items[] = '<a href="course.php">'.get_lang('Courses').'</a>';
@@ -217,7 +218,7 @@ echo '<h4>'.$title.'</h4>';
 if (($is_drh && $view == 'drh') || $_GET['display'] == 'yourstudents') {
 	// get data for human resources manager
 	$students = array_keys(UserManager::get_users_followed_by_drh($_user['user_id'], STUDENT));
-	$courses_of_the_platform = CourseManager :: get_real_course_list();	
+	$courses_of_the_platform = CourseManager :: get_real_course_list();
 	foreach ($courses_of_the_platform as $course) {
 		$courses[$course['code']] = $course['code'];
 	}
@@ -240,7 +241,7 @@ if ($view == 'coach' || $view == 'drh') {
 	foreach ($students as $student_id) {
 		// inactive students
 		$last_connection_date = Tracking :: get_last_connection_date($student_id, true, true);
-		if ($last_connection_date !== false) {			
+		if ($last_connection_date !== false) {
 			if (time() - (3600 * 24 * 7) > $last_connection_date) {
 				$nb_inactive_students++;
 			}
@@ -371,7 +372,7 @@ if ($view == 'coach' || $view == 'drh') {
 						'.(is_null($nb_assignments) ? '' : round($nb_assignments, 2)).'
 					</td>
 				</tr>
-			</table><br />					
+			</table><br />
 			<a href="student.php?display=yourstudents">'.get_lang('SeeStudentList').'</a>
 		 </div>';
 	}
@@ -508,7 +509,7 @@ if (api_is_allowed_to_create_course() && $view == 'teacher') {
 		);
 		$table->display();
 	}
-	
+
 	// display sessions
 	if ($nb_sessions > 0 && !isset($_GET['session_id'])) {
 		echo '<h4>'.get_lang('Sessions').'</h4>';
@@ -517,46 +518,46 @@ if (api_is_allowed_to_create_course() && $view == 'teacher') {
 		$table->set_header(1, get_lang('Date'));
 		$table->set_header(2, get_lang('NbCoursesPerSession'));
 		$table->set_header(3, get_lang('Details'), false);
-	
+
 		$all_data = array();
-		foreach ($sessions as $session) {			
-			$count_courses_in_session = count(Tracking::get_courses_followed_by_coach($_user['user_id'], $session['id']));			
+		foreach ($sessions as $session) {
+			$count_courses_in_session = count(Tracking::get_courses_followed_by_coach($_user['user_id'], $session['id']));
 			$row = array();
 			$row[] = $session['name'];
-	
+
 			if ($session['date_start'] != '0000-00-00' && $session['date_end'] != '0000-00-00') {
 				$row[] = get_lang('From').' '.api_convert_and_format_date($session['date_start'], DATE_FORMAT_SHORT, date_default_timezone_get()).' '.get_lang('To').' '.api_convert_and_format_date($session['date_end'], DATE_FORMAT_SHORT, date_default_timezone_get());
 			} else {
 				$row[] = ' - ';
 			}
 			$row[] = $count_courses_in_session;
-			$row[] = '<a href="'.api_get_self().'?session_id='.$session['id'].'"><img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a>';			
+			$row[] = '<a href="'.api_get_self().'?session_id='.$session['id'].'"><img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a>';
 			$all_data[] = $row;
 		}
-	
+
 		if (!isset($tracking_column)) {
 			$tracking_column = 0;
 		}
-	
+
 		if ($_GET['tracking_direction'] == 'DESC') {
 			usort($all_data, 'rsort_sessions');
 		} else {
 			usort($all_data, 'sort_sessions');
 		}
-	
+
 		if ($export_csv) {
 			usort($csv_content, 'sort_sessions');
 		}
-	
+
 		foreach ($all_data as $row) {
 			$table -> addRow($row);
 		}
-	
+
 		$table -> setColAttributes(1, array('align' => 'center'));
 		$table -> setColAttributes(2, array('align' => 'center'));
 		$table -> setColAttributes(3, array('align' => 'center'));
-		$table -> display();		
-	}	
+		$table -> display();
+	}
 }
 
 if ($is_platform_admin && $view == 'admin' && $_GET['display'] != 'yourstudents') {

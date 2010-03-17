@@ -28,15 +28,16 @@
 // name of the language file that needs to be included
 $language_file = 'survey';
 
-// including the global dokeos file
-require ('../inc/global.inc.php');
+// Including the global initialization file
+require '../inc/global.inc.php';
 
-// including additional libraries
-//require_once (api_get_path(LIBRARY_PATH)."/survey.lib.php");
-require_once('survey.lib.php');
-require_once (api_get_path(LIBRARY_PATH)."course.lib.php");
-require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
-require_once (api_get_path(LIBRARY_PATH)."mail.lib.inc.php");
+// Including additional libraries
+//require_once (api_get_path(LIBRARY_PATH).'survey.lib.php');
+require_once api_get_path(LIBRARY_PATH).'sortabletable.class.php';
+require_once 'survey.lib.php';
+require_once api_get_path(LIBRARY_PATH).'course.lib.php';
+require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
+require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
 
 /** @todo this has to be moved to a more appropriate place (after the display_header of the code)*/
 if (!api_is_allowed_to_edit(false,true))

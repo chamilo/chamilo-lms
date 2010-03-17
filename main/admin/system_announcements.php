@@ -12,9 +12,10 @@ $language_file = array ('admin', 'agenda');
 $cidReset = true;
 
 // including the global dokeos files
-require_once ('../inc/global.inc.php');
+require '../inc/global.inc.php';
 
 // including additional libraries
+require_once api_get_path(LIBRARY_PATH).'sortabletable.class.php';
 require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 require_once api_get_path(LIBRARY_PATH).'system_announcements.lib.php';
 require_once api_get_path(LIBRARY_PATH).'WCAG/WCAG_rendering.php';
@@ -110,7 +111,7 @@ if (isset ($_GET['action']) && $_GET['action'] == 'add') {
 }
 // Edit an announcement
 if (isset ($_GET['action']) && $_GET['action'] == 'edit') {
-	
+
 	$announcement 				= SystemAnnouncementManager :: get_announcement($_GET['id']);
 	$values['id'] 				= $announcement->id;
 	$values['title'] 			= $announcement->title;

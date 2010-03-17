@@ -11,6 +11,7 @@ $language_file = array ('registration', 'index', 'trad4all', 'tracking', 'admin'
 $cidReset = true;
 
 require_once '../inc/global.inc.php';
+require_once api_get_path(LIBRARY_PATH).'sortabletable.class.php';
 require_once api_get_path(LIBRARY_PATH).'tracking.lib.php';
 require_once api_get_path(LIBRARY_PATH).'sessionmanager.lib.php';
 require_once api_get_path(LIBRARY_PATH).'export.lib.inc.php';
@@ -75,18 +76,18 @@ if (isset($_GET['id_coach']) && $_GET['id_coach'] != '') {
 } else {
 	$id_coach = $_user['user_id'];
 }
-		
+
 if (api_is_drh() || api_is_session_admin() || api_is_platform_admin()) {
 
 	$a_sessions = SessionManager::get_sessions_followed_by_drh($_user['user_id']);
-	
+
 	if (!api_is_session_admin()) {
 		$menu_items[] = '<a href="index.php?view=drh_students&amp;display=yourstudents">'.get_lang('Students').'</a>';
 		$menu_items[] = '<a href="teachers.php">'.get_lang('Trainers').'</a>';
 		$menu_items[] = '<a href="course.php">'.get_lang('Courses').'</a>';
-	}	
+	}
 	$menu_items[] = get_lang('Sessions');
-		
+
 	echo '<div class="actions-title" style ="font-size:10pt;">';
 	$nb_menu_items = count($menu_items);
 	if ($nb_menu_items > 1) {
@@ -96,20 +97,20 @@ if (api_is_drh() || api_is_session_admin() || api_is_platform_admin()) {
 				echo '&nbsp;|&nbsp;';
 			}
 		}
-	}		
+	}
 	if (count($a_sessions) > 0) {
 		echo '&nbsp;&nbsp;<a href="javascript: void(0);" onclick="javascript: window.print()"><img align="absbottom" src="../img/printmgr.gif">&nbsp;'.get_lang('Print').'</a> ';
-		echo '<a href="'.api_get_self().'?export=csv"><img align="absbottom" src="../img/excel.gif">&nbsp;'.get_lang('ExportAsCSV').'</a>';	
+		echo '<a href="'.api_get_self().'?export=csv"><img align="absbottom" src="../img/excel.gif">&nbsp;'.get_lang('ExportAsCSV').'</a>';
 	}
 	echo '</div>';
 	echo '<h4>'.get_lang('YourSessionsList').'</h4>';
 
-} else {		
+} else {
 	/*if (api_is_platform_admin()) {
 		$a_sessions = SessionManager::get_sessions_list();
 	} else {*/
 		$a_sessions = Tracking :: get_sessions_coached_by_user($id_coach);
-	//}	
+	//}
 }
 
 $nb_sessions = count($a_sessions);
@@ -119,7 +120,7 @@ if ($export_csv) {
 }
 
 if ($nb_sessions > 0) {
-	
+
 	if (!api_is_drh()) {
 		echo '<div align="right">
 				<a href="javascript: void(0);" onclick="javascript: window.print();"><img align="absbottom" src="../img/printmgr.gif">&nbsp;'.get_lang('Print').'</a>
@@ -143,7 +144,7 @@ if ($nb_sessions > 0) {
 		} else {
 			$row[] = ' - ';
 		}
-		
+
 		$row[] = count(Tracking::get_courses_list_from_session($session['id']));
 
 		if ($export_csv) {

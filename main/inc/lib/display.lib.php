@@ -14,7 +14,7 @@
 */
 /*
 all public functions are stored inside the Display class
- 
+
 		CLASS Display
 
 		public functions inside
@@ -39,7 +39,7 @@ all public functions are stored inside the Display class
 *	@version 1.0.4
 *	@package dokeos.library
 */
-require_once 'sortabletable.class.php';
+
 class Display {
 	private function __construct() {
 
@@ -229,6 +229,9 @@ class Display {
 	 * @author bart.mollet@hogent.be
 	 */
 	public static function display_sortable_table ($header, $content, $sorting_options = array (), $paging_options = array (), $query_vars = null, $form_actions=array(), $style='table') {
+		if (!class_exists('SortableTable')) {
+			require_once 'sortabletable.class.php';
+		}
 		global $origin;
 		$column = isset ($sorting_options['column']) ? $sorting_options['column'] : 0;
 		$default_items_per_page = isset ($paging_options['per_page']) ? $paging_options['per_page'] : 20;
@@ -268,6 +271,9 @@ class Display {
 	 */
 
 	public static function display_sortable_grid ($name, $header, $content, $paging_options = array (), $query_vars = null, $form_actions=array(), $vibility_options = true) {
+		if (!class_exists('SortableTable')) {
+			require_once 'sortabletable.class.php';
+		}
 		global $origin;
 		$column =  0;
 		$default_items_per_page = isset ($paging_options['per_page']) ? $paging_options['per_page'] : 20;
@@ -298,6 +304,9 @@ class Display {
 	 * @return 	string   html grid
 	 */
 	public static function return_sortable_grid ($name, $header, $content, $paging_options = array (), $query_vars = null, $form_actions=array(), $vibility_options = true, $sort_data = true) {
+		if (!class_exists('SortableTable')) {
+			require_once 'sortabletable.class.php';
+		}
 		global $origin;
 		$column =  0;
 		$default_items_per_page = isset ($paging_options['per_page']) ? $paging_options['per_page'] : 20;
@@ -338,6 +347,9 @@ class Display {
 	 */
 
 	public static function display_sortable_config_table ($header, $content, $sorting_options = array (), $paging_options = array (), $query_vars = null, $column_show=array(),$column_order=array(),$form_actions=array()) {
+		if (!class_exists('SortableTable')) {
+			require_once 'sortabletable.class.php';
+		}
 		global $origin;
 		$column = isset ($sorting_options['column']) ? $sorting_options['column'] : 0;
 		$default_items_per_page = isset ($paging_options['per_page']) ? $paging_options['per_page'] : 20;

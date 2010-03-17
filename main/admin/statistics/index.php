@@ -25,14 +25,15 @@
 * @package dokeos.statistics
 ==============================================================================
 */
-// name of the language file that needs to be included
-$language_file=array('admin','tracking');
+// Language files that need to be included
+$language_file = array('admin', 'tracking');
 $cidReset = true;
 
-include('../../inc/global.inc.php');
+require '../../inc/global.inc.php';
+require_once api_get_path(LIBRARY_PATH).'sortabletable.class.php';
 api_protect_admin_script();
 
-$interbreadcrumb[] = array ("url" => "../index.php", "name" => get_lang('PlatformAdmin'));
+$interbreadcrumb[] = array ('url' => '../index.php', 'name' => get_lang('PlatformAdmin'));
 
 $tool_name = get_lang('Statistics');
 Display::display_header($tool_name);

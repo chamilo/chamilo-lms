@@ -21,7 +21,7 @@ $language_file[] = 'admin';
 $language_file[] = 'tracking';
 $language_file[] = 'scorm';
 //$cidReset = true; //TODO: delete this line bug 457
-// including the global Dokeos file
+// including the global initialization file
 require_once '../inc/global.inc.php';
 
 // the section (for the tabs)
@@ -42,8 +42,9 @@ if (!$is_allowedToTrack && !api_is_session_admin()) {
 	api_not_allowed();
 	Display :: display_footer();
 	exit;
-}
-// including additional libraries
+
+// Including additional libraries
+require_once api_get_path(LIBRARY_PATH).'sortabletable.class.php';
 require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpath.class.php';
 require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpathItem.class.php';
 require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpathList.class.php';
@@ -62,7 +63,7 @@ $export_csv = isset($_GET['export']) && $_GET['export'] == 'csv' ? true : false;
 $session_id = intval($_REQUEST['id_session']);
 
 if ($export_csv) {
-	if (!empty($session_id)) {		
+	if (!empty($session_id)) {
     	$_SESSION['id_session'] = $session_id;
 	}
 	ob_start();
@@ -125,10 +126,10 @@ Display::display_header($nameTools, 'Tracking');
 // getting all the students of the course
 if (!empty($_SESSION['id_session'])) {
 	// registered students in session
-	$a_students = CourseManager :: get_student_list_from_course_code($_course['id'], true, $_SESSION['id_session']);	
+	$a_students = CourseManager :: get_student_list_from_course_code($_course['id'], true, $_SESSION['id_session']);
 } else {
 	// registered students in a course outside session
-	$a_students = CourseManager :: get_student_list_from_course_code($_course['id']);	
+	$a_students = CourseManager :: get_student_list_from_course_code($_course['id']);
 }
 
 $nbStudents = count($a_students);
@@ -176,7 +177,7 @@ echo '</div>';
 
 if ($_GET['studentlist'] == 'false') {
 	$course_code = api_get_course_id();
-	
+
 	echo'<br /><br />';
 
 	// learning path tracking
@@ -248,8 +249,8 @@ if ($_GET['studentlist'] == 'false') {
 		while ($quiz = Database::fetch_array($rs)) {
 			$quiz_avg_score = 0;
 			if ($count_students > 0) {
-				foreach ($student_ids as $student_id) {					
-					$avg_student_score = Tracking::get_avg_student_exercise_score($student_id, $course_code, $quiz['id'], $session_id);					
+				foreach ($student_ids as $student_id) {
+					$avg_student_score = Tracking::get_avg_student_exercise_score($student_id, $course_code, $quiz['id'], $session_id);
 					$quiz_avg_score += $avg_student_score;
 				}
 			}
@@ -309,7 +310,7 @@ if ($_GET['studentlist'] == 'false') {
 	echo '<div class="report_section">
 				<h4>'.Display::return_icon('acces_tool.gif', get_lang('ToolsMostUsed')).get_lang('ToolsMostUsed').'</h4>
 			<table class="data_table">';
-	
+
 	$tools_most_used = Tracking::get_tools_most_used_by_course($course_code, $session_id);
 
 	if ($export_csv) {
@@ -466,13 +467,13 @@ if ($_GET['studentlist'] == 'false') {
 	    $all_datas = array();
 	    $course_code = $_course['id'];
 
-		
-		
-		
+
+
+
 		$user_ids = array_keys($a_students);
-		
-		
-		
+
+
+
 		$table = new SortableTable('users_tracking', array('TrackingCourseLog','get_number_of_users'), array('TrackingCourseLog','get_user_data'), (api_is_western_name_order() xor api_sort_by_first_name()) ? 3 : 2);
 
 		$parameters['cidReq'] 		= Security::remove_XSS($_GET['cidReq']);

@@ -1,13 +1,14 @@
 <?php
+require_once api_get_path(LIBRARY_PATH).'sortabletable.class.php';
 require_once api_get_path(LIBRARY_PATH).'export.lib.inc.php';
 require_once api_get_path(LIBRARY_PATH).'tracking.lib.php';
 require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
 require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 
-class MySpace { 
+class MySpace {
 
 	/* For licensing terms, see /dokeos_license.txt */
-	
+
 	/**
 	 * This function serves exporting data in CSV format.
 	 * @param array $header			The header labels.
@@ -16,36 +17,36 @@ class MySpace {
 	 * @return string mixed				Returns a message (string) if an error occurred.
 	 */
 	function export_csv($header, $data, $file_name = 'export.csv') {
-	
+
 		$archive_path = api_get_path(SYS_ARCHIVE_PATH);
 		$archive_url = api_get_path(WEB_CODE_PATH).'course_info/download.php?archive=';
-	
+
 		if (!$open = fopen($archive_path.$file_name, 'w+')) {
 			$message = get_lang('noOpen');
 		} else {
 			$info = '';
-	
+
 			foreach ($header as $value) {
 				$info .= $value.';';
 			}
 			$info .= "\r\n";
-	
+
 			foreach ($data as $row) {
 				foreach ($row as $value) {
 					$info .= $value.';';
 				}
 				$info .= "\r\n";
 			}
-	
+
 			fwrite($open, $info);
 			fclose($open);
 			@chmod($file_name, api_get_permissions_for_new_files());
-	
+
 			header("Location:".$archive_url.$file_name);
 		}
 		return $message;
 	}
-	
+
 	/**
 	 * Gets the connections to a course as an array of login and logout time
 	 *
@@ -55,44 +56,44 @@ class MySpace {
 	 * @return 	array   Conections
 	 */
 	function get_connections_to_course($user_id, $course_code, $session_id = 0) {
-		
+
 		// Database table definitions
 	    $tbl_track_course 	= Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
 	    $tbl_main			= Database :: get_main_table(TABLE_MAIN_COURSE);
-	
+
 		// protect data
 		$user_id     = intval($user_id);
 		$course_code = Database::escape_string($course_code);
 		$session_id  = intval($session_id);
-	
+
 	    $sql_query = 'SELECT visual_code as course_code FROM '.$tbl_main.' c WHERE code="'.$course_code.'";';
 	    $result = Database::query($sql_query);
 	    $row_query = Database::fetch_array($result, 'ASSOC');
 	    $course_true = isset($row_query['course_code']) ? $row_query['course_code']: $course_code;
-	
+
 	    $sql = 'SELECT login_course_date, logout_course_date FROM ' . $tbl_track_course . '
 	    	WHERE user_id = '.$user_id.'
 	    	AND course_code="'.$course_true.'" AND session_id = '.$session_id.' ORDER BY login_course_date ASC';
-	
+
 	    $rs = Database::query($sql);
 	    $connections = array();
-	
+
 	    while ($row = Database::fetch_array($rs)) {
-	
+
 	        $login_date = $row['login_course_date'];
 	        $logout_date = $row['logout_course_date'];
-	        
+
 	        $login_date = api_get_local_time($login_date, null, date_default_timezone_get());
 	        $logout_date = api_get_local_time($logout_date, null, date_default_timezone_get());
-	
+
 	        $timestamp_login_date = api_strtotime($login_date);
 	        $timestamp_logout_date = api_strtotime($logout_date);
-	
+
 	        $connections[] = array('login' => $timestamp_login_date, 'logout' => $timestamp_logout_date);
 	    }
 	    return $connections;
 	}
-	
+
 	/**
 	 * TODO: Not used, to b deleted?
 	 * Enter description here...
@@ -107,17 +108,17 @@ class MySpace {
 		// Database table definitions
 	    $tbl_track_course 		= Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
 	    $tbl_main				= Database :: get_main_table(TABLE_MAIN_COURSE);
-	
+
 	    $sql_query = 'SELECT visual_code as course_code FROM '.$tbl_main.' c WHERE code="'.Database :: escape_string($course_code).'";';
 	    $result = Database::query($sql_query);
 	    $row_query = Database::fetch_array($result,'ASSOC');
 	    $course_true = isset($row_query['course_code']) ? $row_query['course_code']: $course_code;
-	
+
 	    $sql = 'SELECT login_course_date, logout_course_date FROM ' . $tbl_track_course . '
 	    				WHERE user_id = ' . intval($user_id) . '
 	    				AND course_code="' . Database::escape_string($course_true) . '"
 	    				ORDER BY login_course_date DESC';
-	
+
 	    $rs = Database::query($sql);
 	    $connections = array();
 	    while ($row = Database::fetch_array($rs)) {
@@ -129,7 +130,7 @@ class MySpace {
 	    }
 	    return $connections;
 	}
-	
+
 	/**
 	 * Creates a small table in the last column of the table with the user overview
 	 *
@@ -156,10 +157,10 @@ class MySpace {
 		$return .= '		<th>'.get_lang('FirstLogin').'</th>';
 		$return .= '		<th>'.get_lang('LatestLogin').'</th>';
 		$return .= '	</tr>';*/
-	
+
 		// database table definition
 		$tbl_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
-	
+
 		// getting all the courses of the user
 		$sql = "SELECT * FROM $tbl_course_user WHERE user_id = '".Database::escape_string($user_id)."' AND relation_type<>".COURSE_RELATION_TYPE_RRHH." ";
 		$result = Database::query($sql);
@@ -203,7 +204,7 @@ class MySpace {
 	 */
 	function display_tracking_user_overview() {
 		MySpace::display_user_overview_export_options();
-	
+
 		$t_head .= '	<table style="width: 100%;border:0;padding:0;border-collapse:collapse;table-layout: fixed">';
 		$t_head .= '	<caption>'.get_lang('CourseInformation').'</caption>';
 		$t_head .=		'<tr>';
@@ -221,12 +222,12 @@ class MySpace {
 		//$t_head .= '		<th><div style="width:60px">'.get_lang('FirstLogin').'</div></th>';
 		$t_head .= '		<th style="padding:0;border-bottom:0;border-right:0;"><span>'.get_lang('LatestLogin').'</span></th>';
 		$t_head .= '	</tr></table>';
-	
+
 		$addparams = array('view' => 'admin', 'display' => 'useroverview');
-	
+
 		$table = new SortableTable('tracking_user_overview', array('MySpace','get_number_of_users_tracking_overview'), array('MySpace','get_user_data_tracking_overview'), 0);
 		$table->additional_parameters = $addparams;
-	
+
 		$table->set_header(0, get_lang('OfficialCode'), true, array('style' => 'font-size:8pt'), array('style' => 'font-size:8pt'));
 		if (api_is_western_name_order()) {
 			$table->set_header(1, get_lang('FirstName'), true, array('style' => 'font-size:8pt'), array('style' => 'font-size:8pt'));
@@ -240,7 +241,7 @@ class MySpace {
 		$table->set_column_filter(4, array('MySpace','course_info_tracking_filter'));
 		$table->display();
 	}
-	
+
 	/**
 	 * Displays a form with all the additionally defined user fields of the profile
 	 * and give you the opportunity to include these in the CSV export
@@ -252,20 +253,20 @@ class MySpace {
 	function display_user_overview_export_options() {
 		// include the user manager and formvalidator library
 
-	
+
 		if ($_GET['export'] == 'options') {
 			// get all the defined extra fields
 			$extrafields = UserManager::get_extra_fields(0, 50, 5, 'ASC', false);
-	
+
 			// creating the form with all the defined extra fields
 			$form = new FormValidator('exportextrafields', 'post', api_get_self()."?view=".Security::remove_XSS($_GET['view']).'&display='.Security::remove_XSS($_GET['display']).'&export='.Security::remove_XSS($_GET['export']));
-	
+
 			if (is_array($extrafields) && count($extrafields) > 0) {
 				foreach ($extrafields as $key => $extra) {
 					$form->addElement('checkbox', 'extra_export_field'.$extra[0], '', $extra[3]);
 				}
 				$form->addElement('style_submit_button','submit', get_lang('Ok'),'class="save"' );
-	
+
 				// setting the default values for the form that contains all the extra fields
 				if (is_array($_SESSION['additional_export_fields'])) {
 					foreach ($_SESSION['additional_export_fields'] as $key => $value) {
@@ -276,14 +277,14 @@ class MySpace {
 			} else {
 				$form->addElement('html', Display::display_warning_message(get_lang('ThereAreNotExtrafieldsAvailable')));
 			}
-	
+
 			if ($form->validate()) {
 				// exporting the form values
 				$values = $form->exportValues();
-	
+
 				// re-initialising the session that contains the additional fields that need to be exported
 				$_SESSION['additional_export_fields'] = array();
-	
+
 				// adding the fields that are checked to the session
 				$message = '';
 				foreach ($values as $field_ids => $value) {
@@ -291,14 +292,14 @@ class MySpace {
 						$_SESSION['additional_export_fields'][] = str_replace('extra_export_field', '', $field_ids);
 					}
 				}
-	
+
 				// adding the fields that will be also exported to a message string
 				if (is_array($_SESSION['additional_export_fields'])) {
 					foreach ($_SESSION['additional_export_fields'] as $key => $extra_field_export) {
 						$message .= '<li>'.$extrafields[$extra_field_export][3].'</li>';
 					}
 				}
-	
+
 				// Displaying a feedback message
 				if (!empty($_SESSION['additional_export_fields'])) {
 					Display::display_confirmation_message(get_lang('FollowingFieldsWillAlsoBeExported').': <br /><ul>'.$message.'</ul>', false);
@@ -309,22 +310,22 @@ class MySpace {
 			} else {
 				$form->display();
 			}
-	
+
 		} else {
 			if (!empty($_SESSION['additional_export_fields'])) {
 				// get all the defined extra fields
 				$extrafields = UserManager::get_extra_fields(0, 50, 5, 'ASC');
-	
+
 				foreach ($_SESSION['additional_export_fields'] as $key => $extra_field_export) {
 					$message .= '<li>'.$extrafields[$extra_field_export][3].'</li>';
 				}
-	
+
 				Display::display_normal_message(get_lang('FollowingFieldsWillAlsoBeExported').': <br /><ul>'.$message.'</ul>', false);
 				$message = '';
 			}
 		}
-	}	
-	
+	}
+
 	/**
 	 * Get general information about the exercise performance of the user
 	 * the total obtained score (all the score on all the questions)
@@ -333,7 +334,7 @@ class MySpace {
 	 * the success percentage
 	 * @param integer $user_id the id of the user
 	 * @param string $course_code the course code
-	 * @return array 
+	 * @return array
 	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
 	 * @version Dokeos 1.8.6
 	 * @since November 2008
@@ -353,13 +354,13 @@ class MySpace {
 			$score_possible += $row['exe_weighting'];
 			$questions_answered ++;
 		}
-	
+
 		if ($score_possible != 0) {
 			$percentage = round(($score_obtained / $score_possible * 100), 2);
 		} else {
 			$percentage = null;
 		}
-	
+
 		return array('score_obtained' => $score_obtained, 'score_possible' => $score_possible, 'questions_answered' => $questions_answered, 'percentage' => $percentage);
 	}
 
@@ -371,14 +372,14 @@ class MySpace {
 	 * @since October 2008
 	 */
 	function export_tracking_user_overview() {
-		
-		
+
+
 		// database table definitions
 		$tbl_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
-	
+
 		$is_western_name_order = api_is_western_name_order(PERSON_NAME_DATA_EXPORT);
 		$sort_by_first_name = api_sort_by_first_name();
-	
+
 		// the values of the sortable table
 		if ($_GET['tracking_user_overview_page_nr']) {
 			$from = $_GET['tracking_user_overview_page_nr'];
@@ -399,9 +400,9 @@ class MySpace {
 		} else {
 			$direction = 'ASC';
 		}
-	
+
 		$user_data = MySpace::get_user_data_tracking_overview($from, 1000, $orderby, $direction);
-	
+
 		// the first line of the csv file with the column headers
 		$csv_row = array();
 		$csv_row[] = get_lang('OfficialCode');
@@ -415,9 +416,9 @@ class MySpace {
 		$csv_row[] = get_lang('LoginName');
 		$csv_row[] = get_lang('CourseCode');
 		// the additional user defined fields (only those that were selected to be exported)
-		
+
 		$fields = UserManager::get_extra_fields(0, 50, 5, 'ASC');
-	
+
 		if (is_array($_SESSION['additional_export_fields'])) {
 			foreach ($_SESSION['additional_export_fields'] as $key => $extra_field_export) {
 				$csv_row[] = $fields[$extra_field_export][3];
@@ -437,7 +438,7 @@ class MySpace {
 		$csv_row[] = get_lang('FirstLogin', '');
 		$csv_row[] = get_lang('LatestLogin', '');
 		$csv_content[] = $csv_row;
-	
+
 		// the other lines (the data)
 		foreach ($user_data as $key => $user) {
 			// getting all the courses of the user
@@ -457,7 +458,7 @@ class MySpace {
 				$csv_row[] = $row[0];
 				// the additional defined user fields
 				$extra_fields = MySpace::get_user_overview_export_extra_fields($user[4]);
-	
+
 				if (is_array($field_names_to_be_exported)) {
 					foreach ($field_names_to_be_exported as $key => $extra_field_export) {
 						$csv_row[] = $extra_fields[$extra_field_export];
@@ -485,7 +486,7 @@ class MySpace {
 				$csv_row[] = Tracking :: get_first_connection_date_on_the_course ($user[4], $row[0]);
 				// last connection
 				$csv_row[] = strip_tags(Tracking :: get_last_connection_date_on_the_course ($user[4], $row[0]));
-	
+
 				$csv_content[] = $csv_row;
 			}
 		}
@@ -498,14 +499,14 @@ class MySpace {
 	 * @return array
 	 */
 	function get_course_data($from, $number_of_items, $column, $direction) {
-	
+
 		global $courses, $csv_content, $charset, $session_id;
-		
-		// definition database tables		
+
+		// definition database tables
 		$tbl_course 				= Database :: get_main_table(TABLE_MAIN_COURSE);
 		$tbl_course_user 			= Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 		$tbl_session_course_user 	= Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-		
+
 		$a_course_students  = array();
 		$course_data = array();
 		$courses_code = array_keys($courses);
@@ -513,50 +514,50 @@ class MySpace {
 		foreach ($courses_code as &$code) {
 			$code = "'$code'";
 		}
-	
+
 		// get all courses with limit
 		$sql = "SELECT course.code as col1, course.title as col2
 				FROM $tbl_course course
 				WHERE course.code IN (".implode(',',$courses_code).")";
 		if (!in_array($direction, array('ASC','DESC'))) $direction = 'ASC';
-	
+
 	    $column = intval($column);
 	    $from = intval($from);
 	    $number_of_items = intval($number_of_items);
 		$sql .= " ORDER BY col$column $direction ";
 		$sql .= " LIMIT $from,$number_of_items";
-	
+
 		$res = Database::query($sql);
 		while ($row_course = Database::fetch_row($res)) {
-	
+
 			$course_code = $row_course[0];
 			$course_info = api_get_course_info($course_code);
 			$avg_assignments_in_course = $avg_messages_in_course = $nb_students_in_course = $avg_progress_in_course = $avg_score_in_course = $avg_time_spent_in_course = $avg_score_in_exercise = 0;
-			
-			// students directly subscribed to the course			
+
+			// students directly subscribed to the course
 			if (empty($session_id)) {
 				$sql = "SELECT user_id FROM $tbl_course_user as course_rel_user WHERE course_rel_user.status='5' AND course_rel_user.course_code='$course_code'";
 			} else {
-				$sql = "SELECT id_user as user_id FROM $tbl_session_course_user srcu WHERE  srcu. course_code='$course_code' AND id_session = '$session_id' AND srcu.status<>2";			
-			}			
-			$rs = Database::query($sql);			
+				$sql = "SELECT id_user as user_id FROM $tbl_session_course_user srcu WHERE  srcu. course_code='$course_code' AND id_session = '$session_id' AND srcu.status<>2";
+			}
+			$rs = Database::query($sql);
 			$users = array();
 			while ($row = Database::fetch_array($rs)) { $users[] = $row['user_id']; }
-			
+
 			if (count($users) > 0) {
 				$nb_students_in_course = count($users);
 				$avg_assignments_in_course = Tracking::count_student_assignments($users, $course_code, $session_id);
-				$avg_messages_in_course    = Tracking::count_student_messages($users, $course_code, $session_id);				
+				$avg_messages_in_course    = Tracking::count_student_messages($users, $course_code, $session_id);
 				$avg_progress_in_course = Tracking::get_avg_student_progress($users, $course_code, array(), $session_id);
 				$avg_score_in_course = Tracking :: get_avg_student_score($users, $course_code, array(), $session_id);
 				$avg_score_in_exercise = Tracking::get_avg_student_exercise_score($users, $course_code, 0, $session_id);
 				$avg_time_spent_in_course  = Tracking::get_time_spent_on_the_course($users, $course_code, $session_id);
-				
+
 				$avg_progress_in_course = round($avg_progress_in_course / $nb_students_in_course, 2);
 				$avg_score_in_course = round($avg_score_in_course / $nb_students_in_course, 2);
 				$avg_score_in_exercise = round($avg_score_in_exercise / $nb_students_in_course, 2);
 				$avg_time_spent_in_course = api_time_to_hms($avg_time_spent_in_course / $nb_students_in_course);
-				
+
 			} else {
 				$avg_time_spent_in_course = null;
 				$avg_progress_in_course = null;
@@ -574,7 +575,7 @@ class MySpace {
 			$table_row[] = is_null($avg_score_in_exercise) ? '' : $avg_score_in_exercise.'%';
 			$table_row[] = $avg_messages_in_course;
 			$table_row[] = $avg_assignments_in_course;
-			
+
 			//set the "from" value to know if I access the Reporting by the chamilo tab or the course link
 			$table_row[] = '<center><a href="../tracking/courseLog.php?cidReq='.$course_code.'&studentlist=true&from=myspace&id_session='.$session_id.'"><img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a></center>';
 			$csv_content[] = array(
@@ -591,7 +592,7 @@ class MySpace {
 		}
 		return $course_data;
 	}
-	
+
 	/**
 	 * get the numer of users of the platform
 	 *
@@ -604,11 +605,11 @@ class MySpace {
 	function get_number_of_users_tracking_overview() {
 		// database table definition
 		$main_user_table = Database :: get_main_table(TABLE_MAIN_USER);
-	
+
 		// query
 		$sql = 'SELECT user_id FROM '.$main_user_table;
 		$result = Database::query($sql);
-	
+
 		// return the number of results
 		return Database::num_rows($result);
 	}
@@ -652,7 +653,7 @@ class MySpace {
 		}
 		return $return;
 	}
-	
+
 	/**
 	 * Get all information that the user with user_id = $user_data has
 	 * entered in the additionally defined profile fields
@@ -703,7 +704,7 @@ class MySpace {
 			return $username_array;
 		}
 	}
-	
+
 	/**
 	 * Checks if there are repeted users in a given array
 	 * @param  array $usernames list of the usernames in the uploaded file
@@ -714,7 +715,7 @@ class MySpace {
 	function check_user_in_array($usernames, $user_array) {
 		$user_list = array_keys($usernames);
 		$username = $user_array['username'].$user_array['sufix'];
-	
+
 		if (in_array($username, $user_list)) {
 			$user_array['sufix'] += $usernames[$username];
 			$usernames[$username]++;
@@ -724,7 +725,7 @@ class MySpace {
 		$result_array = array($usernames, $user_array);
 		return $result_array;
 	}
-	
+
 	/**
 	 * Checks whether a username has been already subscribed in a session.
 	 * @param string a given username
@@ -750,7 +751,7 @@ class MySpace {
 			}
 		}
 	}
-	
+
 	/**
 	This function checks whether some users in the uploaded file repeated and creates unique usernames if necesary.
 	A case: Within the file there is an user repeted twice (Julio Montoya / Julio Montoya) and the username fields are empty.
@@ -796,7 +797,7 @@ class MySpace {
 		}
 		return $new_users;
 	}
-	
+
 	/**
 	 * This functions checks whether there are users that are already registered in the DB by different creator than the current coach.
 	 * @param string a given username
@@ -813,7 +814,7 @@ class MySpace {
 			$username = Database::escape_string($user['UserName']);
 			//echo "<br>";
 			$sql = "SELECT creator_id FROM $table_user WHERE username='$username' ";
-	
+
 			$rs = Database::query($sql);
 			$creator_id = Database::result($rs, 0, 0);
 			// check if we are the creators or not
@@ -826,7 +827,7 @@ class MySpace {
 		}
 		return $errors;
 	}
-	
+
 	/**
 	 * Validates imported data.
 	 * @param list of users
@@ -841,7 +842,7 @@ class MySpace {
 			if (api_get_setting('registration', 'email') == 'true') {
 				$mandatory_fields[] = 'Email';
 			}
-	
+
 			foreach ($mandatory_fields as $key => $field) {
 				if (!isset ($user[$field]) || strlen($user[$field]) == 0) {
 					$user['error'] = get_lang($field.'Mandatory');
@@ -853,9 +854,9 @@ class MySpace {
 				$user['error'] = get_lang('UserNameTooLong');
 				$errors[] = $user;
 			}
-	
+
 			$user['UserName'] = trim($user['UserName']);
-	
+
 			if (empty($user['UserName'])) {
 				 $user['UserName'] = UserManager::create_username($user['FirstName'], $user['LastName']);
 			}
@@ -864,7 +865,7 @@ class MySpace {
 		$results = array('errors' => $errors, 'users' => $new_users);
 		return $results;
 	}
-	
+
 	/**
 	 * Adds missing user-information (which isn't required, like password, etc).
 	 */
@@ -875,7 +876,7 @@ class MySpace {
 		}
 		return $user;
 	}
-	
+
 	/**
 	 * Saves imported data.
 	 */
@@ -884,10 +885,10 @@ class MySpace {
 		$tbl_session_rel_course				= Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
 		$tbl_session_rel_course_rel_user	= Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 		$tbl_session_rel_user				= Database::get_main_table(TABLE_MAIN_SESSION_USER);
-	
+
 		$id_session = intval($id_session);
 		$sendMail = $_POST['sendMail'] ? 1 : 0;
-	
+
 		// Adding users to the platform.
 		$new_users = array();
 		foreach ($users as $index => $user) {
@@ -905,7 +906,7 @@ class MySpace {
 		}
 		// Update user list.
 		$users = $new_users;
-	
+
 		// Inserting users.
 		$super_list = array();
 		foreach ($course_list as $enreg_course) {
@@ -924,21 +925,21 @@ class MySpace {
 				$new_users[] = $user;
 			}
 			$super_list[] = $new_users;
-	
+
 			//update the nbr_users field
 			$sql_select = "SELECT COUNT(id_user) as nbUsers FROM $tbl_session_rel_course_rel_user WHERE id_session='$id_session' AND course_code='$enreg_course'";
 			$rs = Database::query($sql_select);
 			list($nbr_users) = Database::fetch_array($rs);
 			$sql_update = "UPDATE $tbl_session_rel_course SET nbr_users=$nbr_users WHERE id_session='$id_session' AND course_code='$enreg_course'";
 			Database::query($sql_update);
-	
+
 			$sql_update = "UPDATE $tbl_session SET nbr_users= '$nbr_users' WHERE id='$id_session'";
 			Database::query($sql_update);
 		}
 		// We don't delete the users (thoughts while dreaming)
 		//$sql_delete = "DELETE FROM $tbl_session_rel_user WHERE id_session = '$id_session'";
 		//Database::query($sql_delete);
-	
+
 		$new_users = array();
 		foreach ($users as $index => $user) {
 			$userid = $user['id'];
@@ -947,7 +948,7 @@ class MySpace {
 			$user['added_at_session'] = 1;
 			$new_users[] = $user;
 		}
-	
+
 		$users = $new_users;
 		$registered_users = get_lang('FileImported').'<br /> Import file results : <br />';
 		// Sending emails.
@@ -961,14 +962,14 @@ class MySpace {
 				$emailheaders = 'From: '.api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS).' <'.api_get_setting('emailAdministrator').">\n";
 				$emailheaders .= 'Reply-To: '.api_get_setting('emailAdministrator');
 				@api_send_mail($emailto, $emailsubject, $emailbody, $emailheaders);
-	
+
 				if (($user['added_at_platform'] == 1  && $user['added_at_session'] == 1) || $user['added_at_session'] == 1) {
 					if ($user['added_at_platform'] == 1) {
 						$addedto = get_lang('UserCreatedPlatform');
 					} else  {
 						$addedto = '          ';
 					}
-	
+
 					if ($user['added_at_session'] == 1) {
 						$addedto .= get_lang('UserInSession');
 					}
@@ -987,11 +988,11 @@ class MySpace {
 					} else {
 						$addedto = '          ';
 					}
-	
+
 					if ($user['added_at_session'] == 1) {
 						$addedto .= ' '.get_lang('UserInSession');
 					}
-	
+
 					$registered_users .= "<a href=\"../user/userInfo.php?uInfo=".$user['id']."\">".api_get_person_name($user['FirstName'], $user['LastName'])."</a> - ".$addedto.'<br />';
 				} else {
 					$addedto = get_lang('UserNotAdded');
@@ -999,13 +1000,13 @@ class MySpace {
 				}
 			}
 		}
-	
+
 		header('Location: course.php?id_session='.$id_session.'&action=show_message&message='.urlencode($registered_users));
 		exit ();
-	
+
 		//header('Location: resume_session.php?id_session='.$id_session);
 	}
-	
+
 	/**
 	 * Reads CSV-file.
 	 * @param string $file Path to the CSV-file
@@ -1021,7 +1022,7 @@ class MySpace {
 		}
 		return $users;
 	}
-	
+
 	/**
 	 * XML-parser: the handler at the beginning of element.
 	 */
@@ -1037,7 +1038,7 @@ class MySpace {
 				$current_tag = $data;
 		}
 	}
-	
+
 	/**
 	 * XML-parser: the handler at the end of element.
 	 */
@@ -1058,7 +1059,7 @@ class MySpace {
 				break;
 		}
 	}
-	
+
 	/**
 	 * XML-parser: the handler for character data.
 	 */
@@ -1067,7 +1068,7 @@ class MySpace {
 		global $current_value;
 		$current_value = $data;
 	}
-	
+
 	/**
 	 * Reads XML-file.
 	 * @param string $file Path to the XML-file

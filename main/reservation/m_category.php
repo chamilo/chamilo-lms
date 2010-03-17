@@ -28,18 +28,21 @@
                 Category-manager (add, edit & delete)
     ---------------------------------------------------------------------
  */
-require_once('rsys.php');
+require_once 'rsys.php';
 
+// TODO: The global initialization scripts loads once again here. To be checked.
 $language_file = 'admin';
 $cidReset = true;
-require ('../inc/global.inc.php');
+require '../inc/global.inc.php';
+//
+
 $this_section = SECTION_PLATFORM_ADMIN;
 
 api_protect_admin_script();
 
 Rsys :: protect_script('m_category');
 $tool_name = get_lang('BookingSystem');
-$interbreadcrumb[] = array ("url" => "../admin/index.php", "name" => get_lang('PlatformAdmin'));
+$interbreadcrumb[] = array ('url' => '../admin/index.php', 'name' => get_lang('PlatformAdmin'));
 
 /**
     ---------------------------------------------------------------------

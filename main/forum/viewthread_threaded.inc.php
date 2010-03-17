@@ -118,10 +118,10 @@ $next_message=get_lang('NextMessage');
 $prev_message=get_lang('PrevMessage');
 
 // images
-$first_img 	= Display::return_icon('first.png',get_lang('FirstMessage'),array('style'=>'vertical-align: middle;'));
-$last_img 	= Display::return_icon('last.png',get_lang('LastMessage'),array('style'=>'vertical-align: middle;'));
-$prev_img 	= Display::return_icon('prev.png',get_lang('PrevMessage'),array('style'=>'vertical-align: middle;'));
-$next_img 	= Display::return_icon('next.png',get_lang('NextMessage'),array('style'=>'vertical-align: middle;'));
+$first_img 	= Display::return_icon('action_first.png',get_lang('FirstMessage'), array('style' => 'vertical-align: middle;'));
+$last_img 	= Display::return_icon('action_last.png',get_lang('LastMessage'), array('style' => 'vertical-align: middle;'));
+$prev_img 	= Display::return_icon('action_prev.png',get_lang('PrevMessage'), array('style' => 'vertical-align: middle;'));
+$next_img 	= Display::return_icon('action_next.png',get_lang('NextMessage'), array('style' => 'vertical-align: middle;'));
 
 // links
 $first_href = 'viewthread.php?'.api_get_cidreq().'&amp;forum='.Security::remove_XSS($_GET['forum']).'&amp;thread='.Security::remove_XSS($_GET['thread']).'&amp;gradebook='.$gradebook.'&amp;origin='.$origin.'&amp;id=1&amp;post='.$prev_next_array[0];

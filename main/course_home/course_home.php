@@ -122,8 +122,8 @@ if (isset($_SESSION['_gid'])) {
 $this_section = SECTION_COURSES;
 
 // Libraries
-include_once api_get_path(LIBRARY_PATH).'course.lib.php';
-include_once api_get_path(LIBRARY_PATH).'debug.lib.inc.php';
+require_once api_get_path(LIBRARY_PATH).'course.lib.php';
+//require_once api_get_path(LIBRARY_PATH).'debug.lib.inc.php'; // Old technology
 
 /*
 -----------------------------------------------------------

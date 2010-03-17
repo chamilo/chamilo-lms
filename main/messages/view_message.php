@@ -1,7 +1,7 @@
 <?php
-/* For licensing terms, see /chamilo_license.txt */
+/* For licensing terms, see /license.txt */
 /**
-*	@package dokeos.messages
+*	@package chamilo.messages
 */
 
 $language_file = array('registration','messages','userInfo');
@@ -15,9 +15,7 @@ require_once api_get_path(LIBRARY_PATH).'message.lib.php';
 
 
 /*
-==============================================================================
 		HEADER
-==============================================================================
 */
 $htmlHeadXtra[] = '<script type="text/javascript" src="/main/inc/lib/javascript/jquery.js"></script>';
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/thickbox.js" type="text/javascript" language="javascript"></script>';
@@ -86,10 +84,7 @@ echo '<div id="social-content">';
 	}
 
 	echo '<div id="'.$id_content_right.'">';
-		//MAIN CONTENT				
-		
-		
-		
+		//MAIN CONTENT
 		$message = MessageManager::show_message_box($id_message,$source);
 		
 		if (!empty($message)) {
@@ -103,9 +98,7 @@ echo '<div id="social-content">';
 echo '</div>';
 
 /*
-==============================================================================
 		FOOTER
-==============================================================================
 */
 Display::display_footer();
 ?>

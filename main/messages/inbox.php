@@ -1,7 +1,7 @@
 <?php
-/* For licensing terms, see /chamilo_license.txt */
+/* For licensing terms, see /license.txt */
 /**
-*	@package dokeos.messages
+*	@package chamilo.messages
 */
 
 // name of the language file that needs to be included
@@ -42,31 +42,27 @@ function hide_icon_edit(element_html)  {
 </script>';
 
 /*
-==============================================================================
 		MAIN CODE
-==============================================================================
 */
 $nameTools = get_lang('Messages');
 $request=api_is_xml_http_request();
 if (isset($_GET['form_reply']) || isset($_GET['form_delete'])) {
-	/***********************************************/
 	$info_reply=array();
 	$info_delete=array();
-	/***********************************************/
+	
 	if ( isset($_GET['form_reply']) ) {
 		//allow to insert messages
 		$info_reply=explode(base64_encode('&%ff..x'),$_GET['form_reply']);
 		$count_reply=count($info_reply);
 		$button_sent=urldecode($info_reply[4]);
 	}
-	/***********************************************/
+	
 	if ( isset($_GET['form_delete']) ) {
 		//allow to delete messages
 		$info_delete=explode(',',$_GET['form_delete']);
 		$count_delete=(count($info_delete)-1);
 	}
-	/***********************************************/
-
+	
 	if ( isset($button_sent) ) {
 		$title     = api_convert_encoding(urldecode($info_reply[0]),'UTF-8',$charset);
 		$content   = api_convert_encoding(str_replace("\\","",urldecode($info_reply[1])),'UTF-8',$charset);
@@ -185,9 +181,7 @@ echo '<div id="social-content">';
 echo '</div>';
 
 /*
-==============================================================================
 		FOOTER
-==============================================================================
 */
 
 Display::display_footer();

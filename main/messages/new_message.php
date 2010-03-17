@@ -1,5 +1,5 @@
 <?php
-/* For licensing terms, see /chamilo_license.txt */
+/* For licensing terms, see /license.txt */
 /**
 * This script shows a compose area (wysiwyg editor if supported, otherwise
 * a simple textarea) where the user can type a message.
@@ -101,9 +101,7 @@ function add_image_form() {
 $nameTools = get_lang('ComposeMessage');
 
 /*
-==============================================================================
 		FUNCTIONS
-==============================================================================
 */
 
 /**
@@ -255,9 +253,7 @@ function manage_form ($default, $select_from_user_list = null) {
 	}
 }
 /*
-==============================================================================
 		MAIN SECTION
-==============================================================================
 */
 if ($_GET['f']=='social') {
 	$this_section = SECTION_SOCIAL;
@@ -370,9 +366,7 @@ echo '<div id="social-content" >';
 echo '</div>';
 
 /*
-==============================================================================
 		FOOTER
-==============================================================================
 */
 Display::display_footer();
 

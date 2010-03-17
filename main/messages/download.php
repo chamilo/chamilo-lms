@@ -1,20 +1,16 @@
 <?php
-/* For licensing terms, see /chamilo_license.txt */
+/* For licensing terms, see /license.txt */
 /**
-==============================================================================
 *	This file is responsible for  passing requested file attachments from messages
 *	Html files are parsed to fix a few problems with URLs,
 *	but this code will hopefully be replaced soon by an Apache URL
 *	rewrite mechanism.
 *
-*	@package dokeos.messages
-==============================================================================
+*	@package chamilo.messages
 */
 
 /*
-==============================================================================
 		MAIN CODE
-==============================================================================
 */
 
 session_cache_limiter('public');

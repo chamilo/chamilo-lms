@@ -1,9 +1,7 @@
 <?php
-/* For licensing terms, see /chamilo_license.txt */
+/* For licensing terms, see /license.txt */
 /*
-==============================================================================
 		INIT SECTION
-==============================================================================
 */
 // name of the language file that needs to be included
 $language_file = array('registration','messages','userInfo');
@@ -20,6 +18,7 @@ if (isset($_GET['messages_page_nr'])) {
 			$social_link = '&f=social';
 		}
 		header('Location:outbox.php?pager='.Security::remove_XSS($_GET['messages_page_nr']).$social_link.'');
+		exit;
 	}
 }
 
@@ -61,13 +60,10 @@ function deselect_all(formita)
 
 
 /*
-==============================================================================
 		MAIN CODE
-==============================================================================
 */
 
 //$nameTools = get_lang('Messages');
-
 
 //api_display_tool_title(api_xml_http_response_encode(get_lang('Inbox')));
 if ($_GET['f']=='social') {
@@ -100,11 +96,10 @@ if ($_GET['f']=='social') {
 	}
 }
 
-/**************************************************************/
 $info_delete_outbox=array();
 $info_delete_outbox=explode(',',$_GET['form_delete_outbox']);
 $count_delete_outbox=(count($info_delete_outbox)-1);
-/**************************************************************/
+
 if( trim($info_delete_outbox[0])=='delete' ) {
 	for ($i=1;$i<=$count_delete_outbox;$i++) {
 		MessageManager::delete_message_by_user_sender(api_get_user_id(),$info_delete_outbox[$i]);
@@ -117,7 +112,7 @@ if( trim($info_delete_outbox[0])=='delete' ) {
 		Display::display_normal_message(api_xml_http_response_encode($message_box),false);
 	    exit;
 }
-/**************************************************************/
+
 $table_message = Database::get_main_table(TABLE_MESSAGE);
 
 $user_sender_id=api_get_user_id();
@@ -178,10 +173,7 @@ echo '</div>';
 
 
 /*
-==============================================================================
 		FOOTER
-==============================================================================
 */
 Display::display_footer();
-
 ?>

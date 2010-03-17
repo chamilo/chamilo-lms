@@ -1,5 +1,5 @@
 <?php
-/* For licensing terms, see /chamilo_license.txt */
+/* For licensing terms, see /license.txt */
 /**
  * This script is a configuration file for the messages plugin. You can use it as a master for other plugins.
  * These settings will be used in the administration interface for plugins (Dokeos configuration settings->Plugins)

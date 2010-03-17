@@ -1,5 +1,5 @@
 <?php
-/* For licensing terms, see /chamilo_license.txt */
+/* For licensing terms, see /license.txt */
 
 $language_file = array('registration','messages','userInfo','admin');
 $cidReset=true;

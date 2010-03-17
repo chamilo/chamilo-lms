@@ -68,28 +68,30 @@ function save_item($lp_id,$user_id,$view_id,$item_id,$score=-1,$max=-1,$min=-1,$
 
         $mylpi =& $mylp->items[$item_id];
         //$mylpi->set_lp_view($view_id);
-        if($max!=-1)
+        if(isset($max) && $max!=-1)
         {
             $mylpi->max_score=$max;
         }
-        if($min!=-1)
+        if(isset($min) && $min!=-1)
         {
             $mylpi->min_score=$min;
         }
-        if($score!=-1)
+        if(isset($score) && $score!=-1)
         {
-            $mylpi->set_score($score);
+            if($debug>1){error_log('Calling set_score('.$score.') from xajax',0);}
+        	$mylpi->set_score($score);
         }
-        if($status!='')
+        if(isset($status) && $status!='')
         {
             if($debug>1){error_log('Calling set_status('.$status.') from xajax',0);}
             $mylpi->set_status($status);
             if($debug>1){error_log('Done calling set_status from xajax',0);}
         }
-        if($time!='')
+        if(isset($time) && $time!='')
         {
             //if big integer, then it's a timestamp, otherwise it's normal scorm time
-            if($time == intval(strval($time)) && $time>1000000){
+            if($debug>1){error_log('Calling set_time('.$time.') from xajax',0);}
+        	if($time == intval(strval($time)) && $time>1000000){
                 $real_time = time() - $time;
                 //$real_time += $mylpi->get_total_time();
                 $mylpi->set_time($real_time,'int');
@@ -97,11 +99,11 @@ function save_item($lp_id,$user_id,$view_id,$item_id,$score=-1,$max=-1,$min=-1,$
                 $mylpi->set_time($time);
             }
         }
-        if($suspend!='')
+        if(isset($suspend) && $suspend!='')
         {
             $mylpi->current_data = $suspend;//escapetxt($suspend);
         }
-        if($location!='')
+        if(isset($location) && $location!='')
         {
             $mylpi->set_lesson_location($location);
         }
@@ -159,7 +161,7 @@ function save_item($lp_id,$user_id,$view_id,$item_id,$score=-1,$max=-1,$min=-1,$
     if($debug>0){
         //$objResponse->addScript("logit_lms('Saved data for item ".$item_id.", user ".$user_id." (status=".$mystatus.")',2);");
         $return .= "logit_lms('Saved data for item ".$item_id.", user ".$user_id." (status=".$mystatus.")',2);";
-        if($debug>1){error_log('End of xajax_save_item()',0);}
+        if($debug>1){error_log('End of save_item()',0);}
     }
 
     if($_configuration['tracking_enabled'] && !isset($_SESSION['login_as']))

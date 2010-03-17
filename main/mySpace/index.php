@@ -1,5 +1,5 @@
 <?php // $Id: index.php 16620 2008-10-25 20:03:54Z yannoo $
-/* For licensing terms, see /chamilo_license.txt */
+/* For licensing terms, see /license.txt */
 /**
  * @todo use constant for $this_section
  */
@@ -21,7 +21,7 @@ require_once api_get_path(LIBRARY_PATH).'export.lib.inc.php';
 require_once 'myspace.lib.php';
 
 // the section (for the tabs)
-$this_section = 'session_my_space';
+$this_section = SECTION_TRACKING;
 ob_start();
 
 $export_csv = isset($_GET['export']) && $_GET['export'] == 'csv' ? true : false;

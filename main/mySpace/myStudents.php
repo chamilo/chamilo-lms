@@ -1,9 +1,8 @@
 <?php
-//$Id: myStudents.php 21874 2009-07-08 08:45:18Z herodoto $
-/* For licensing terms, see /dokeos_license.txt */
+/* For licensing terms, see /license.txt */
 /**
  * Implements the tracking of students in the Reporting pages
- * @package dokeos.mySpace
+ * @package chamilo.mySpace
  */
 
 // name of the language file that needs to be included
@@ -45,7 +44,7 @@ $csv_content = array ();
 $from_myspace = false;
 if (isset ($_GET['from']) && $_GET['from'] == 'myspace') {
 	$from_myspace = true;
-	$this_section = "session_my_space";
+	$this_section = SECTION_TRACKING;
 } else {
 	$this_section = SECTION_COURSES;
 }
@@ -166,10 +165,8 @@ if (!api_is_allowed_to_edit() && !api_is_coach() && !api_is_drh() && $_user['sta
 Display :: display_header($nameTools);
 
 /*
- *===============================================================================
  *	MAIN CODE
- *===============================================================================
- */
+*/
 // Database Table Definitions
 $tbl_user = Database :: get_main_table(TABLE_MAIN_USER);
 $tbl_session_user = Database :: get_main_table(TABLE_MAIN_SESSION_USER);

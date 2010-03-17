@@ -1,5 +1,5 @@
 <?php
-/* For licensing terms, see /dokeos_license.txt */
+/* For licensing terms, see /license.txt */
 /*
  * Created on 28 juil. 2006 by Elixir Interactive http://www.elixir-interactive.com
  */
@@ -15,7 +15,7 @@ $nameTools = get_lang('Progression');
 
 $cidReset = true;
 
-$this_section = "session_my_space";
+$this_section = SECTION_TRACKING;
 
 api_block_anonymous_users();
 $interbreadcrumb[] = array ("url" => "index.php", "name" => get_lang('MySpace'));
@@ -29,9 +29,7 @@ $tbl_session 		= Database :: get_main_table(TABLE_MAIN_SESSION);
 $tbl_track_exercice = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
 
 /*
-===============================================================================
  	MAIN CODE
-===============================================================================
 */
 $sql_course = "SELECT title,code FROM $tbl_course as course ORDER BY title ASC";
 $result_course = Database::query($sql_course);
@@ -70,9 +68,7 @@ if (Database::num_rows($result_course) > 0) {
 }
 
 /*
-==============================================================================
 		FOOTER
-==============================================================================
 */
 
 Display :: display_footer();

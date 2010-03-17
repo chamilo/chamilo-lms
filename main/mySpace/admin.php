@@ -1,5 +1,5 @@
 <?php
-/* For licensing terms, see /dokeos_license.txt */
+/* For licensing terms, see /license.txt */
 /*
  * Created on 18 October 2006 by Elixir Interactive http://www.elixir-interactive.com
  */
@@ -13,7 +13,7 @@ $cidReset = true;
 require '../inc/global.inc.php';
 require_once api_get_path(SYS_CODE_PATH).'mySpace/myspace.lib.php';
 
-$this_section = "session_my_space";
+$this_section = SECTION_TRACKING;
 
 $nameTools = get_lang('Administrators');
 

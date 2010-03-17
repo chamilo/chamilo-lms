@@ -1,5 +1,5 @@
 <?php
-/* For licensing terms, see /dokeos_license.txt */
+/* For licensing terms, see /license.txt */
 /*
  * Created on 28 juil. 2006 by Elixir Interactive http://www.elixir-interactive.com
  * Somes fixes by Julio Montoya
@@ -18,7 +18,7 @@ require_once api_get_path(LIBRARY_PATH).'export.lib.inc.php';
 
 api_block_anonymous_users();
 
-$this_section = "session_my_space";
+$this_section = SECTION_TRACKING;
 
 api_block_anonymous_users();
 $interbreadcrumb[] = array ("url" => "index.php", "name" => get_lang('MySpace'));

@@ -1,8 +1,5 @@
 <?php
-/* For licensing terms, see /dokeos_license.txt */
-/*
- * Created on 18 October 2006 by Elixir Interactive http://www.elixir-interactive.com
- */
+/* For licensing terms, see /license.txt */
 
 ob_start();
 
@@ -15,7 +12,7 @@ require_once 'myspace.lib.php';
 require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
 require_once api_get_path(LIBRARY_PATH).'tracking.lib.php';
 
-$this_section = "session_my_space";
+$this_section = SECTION_TRACKING;
 
 $nameTools = get_lang('Teachers');
 

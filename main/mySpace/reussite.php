@@ -1,8 +1,5 @@
 <?php
-/*
- * Created on 28 juil. 2006 by Elixir Interactive http://www.elixir-interactive.com
- */
-
+/* For licensing terms, see /license.txt */
 // TODO: Is this file used?
 
 $nameTools = 'Reussite';

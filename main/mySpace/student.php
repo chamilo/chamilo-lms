@@ -1,8 +1,5 @@
 <?php
-/* For licensing terms, see /dokeos_license.txt */
-/*
- * Created on 28 juil. 2006 by Elixir Interactive http://www.elixir-interactive.com
- */
+/* For licensing terms, see /license.txt */
 
  // name of the language file that needs to be included
 $language_file = array ('registration', 'index', 'tracking', 'admin');
@@ -32,7 +29,7 @@ if (isset($_GET['id_coach']) && intval($_GET['id_coach']) != 0) {
 	$title = get_lang('Probationers');
 }
 
-$this_section = "session_my_space";
+$this_section = SECTION_TRACKING;
 
 api_block_anonymous_users();
 

@@ -1,7 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
-==============================================================================
 * Function library for the links tool.
 *
 * This is a complete remake of the original link tool.
@@ -15,14 +14,12 @@
 *
 *	@author Patrick Cool, complete remake (December 2003 - January 2004)
 *	@author René Haentjens, CSV file import (October 2004)
-*	@package dokeos.link
-==============================================================================
+*	@package chamilo.link
 */
 
 /*
-==============================================================================
+
 		FUNCTIONS
-==============================================================================
 */
 
 /**

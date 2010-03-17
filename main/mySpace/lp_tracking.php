@@ -1,5 +1,5 @@
 <?php
-/* For licensing terms, see /dokeos_license.txt */
+/* For licensing terms, see /license.txt */
 
 /*
  * Created on 26 mars 07 by Eric Marguin
@@ -9,13 +9,13 @@
 $language_file = array ('registration', 'index', 'tracking', 'exercice', 'scorm', 'learnpath');
 //$cidReset = true;
 
-require '../inc/global.inc.php';
+require_once '../inc/global.inc.php';
 
 $from_myspace = false;
 $from_link = '';
 if (isset($_GET['from']) && $_GET['from'] == 'myspace') {
 	$from_link = '&from=myspace';
-	$this_section = "session_my_space";
+	$this_section = SECTION_TRACKING;
 } else {
 	$this_section = SECTION_COURSES;
 }

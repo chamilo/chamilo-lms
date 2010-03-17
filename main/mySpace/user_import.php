@@ -1,36 +1,13 @@
 <?php // $Id: user_import.php 14792 2008-04-08 20:57:53Z yannoo $
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2008 Dokeos SPRL
-	Copyright (c) 2008 Julio Montoya Armas <gugli100@gmail.com>
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium, info@dokeos.com
-==============================================================================
-*/
+/* For licensing terms, see /license.txt */
 
 /**
-==============================================================================
 *   This tool allows platform admins to add users by uploading a CSV or XML file
 *   This code is inherited from admin/user_import.php
 *   Created on 26 julio 2008  by Julio Montoya gugli100@gmail.com
-==============================================================================
 */
 /*
-==============================================================================
 		Main script
-==============================================================================
 */
 
 $language_file = array ('admin', 'registration', 'index', 'trad4all', 'tracking');
@@ -194,8 +171,6 @@ $form->display();
 </blockquote>
 <?php
 /*
-==============================================================================
 		FOOTER
-==============================================================================
 */
 Display :: display_footer();

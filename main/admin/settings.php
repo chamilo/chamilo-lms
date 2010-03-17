@@ -1,22 +1,15 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
-==============================================================================
 * With this tool you can easily adjust non critical configuration settings.
 * Non critical means that changing them will not result in a broken campus.
 *
 * @author Patrick Cool
-* @since Dokeos 1.6
 * @author Julio Montoya - Multiple URL site
 * @package chamilo.admin
-==============================================================================
 */
 
-/*
-==============================================================================
-		INIT SECTION
-==============================================================================
-*/
+/*		INIT SECTION	*/
 // name of the language file that needs to be included
 if ($_GET['category']=='Templates') {
 	$language_file = array('admin','document');
@@ -42,8 +35,7 @@ $_SESSION['this_section'] = $this_section;
 api_protect_admin_script();
 
 // Submit Stylesheets
-if (isset($_POST['submit_stylesheets']))
-{
+if (isset($_POST['submit_stylesheets'])) {
 	$message = store_stylesheets();
 	header("Location: ".api_get_self()."?category=stylesheets");
 	exit;
@@ -105,18 +97,20 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
 	//while ($row = Database::fetch_array($resultsettings))
 	$default_values = array();
 	foreach($settings as $row) {
-		if ($row['variable'] == 'search_enabled') { continue; }
+		// Settings to avoid
+		$rows_to_avoid = array('search_enabled', 'gradebook_enable');		
+		if (in_array($row['variable'], $rows_to_avoid)) { continue; }
+		
 		$anchor_name = $row['variable'].(!empty($row['subkey']) ? '_'.$row['subkey'] : '');
 		$form->addElement('html',"\n<a name=\"$anchor_name\"></a>\n");
 
 		($countsetting['0']%10) < 5 ?$b=$countsetting['0']-10:$b=$countsetting['0'];
-		if ($i % 10 == 0 and $i<$b){
-
-				$form->addElement('html','<div align="right">');
-				$form->addElement('style_submit_button', null,get_lang('SaveSettings'), 'class="save"');
-				$form->addElement('html','</div>');
-
+		if ($i % 10 == 0 and $i<$b) {
+			$form->addElement('html','<div align="right">');
+			$form->addElement('style_submit_button', null,get_lang('SaveSettings'), 'class="save"');
+			$form->addElement('html','</div>');
 		}
+		
 		$i++;
 
 		$form->addElement('header', null, get_lang($row['title']));
@@ -127,16 +121,12 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
 
 		$hideme=array();
 		$hide_element=false;
-		if ($_configuration['access_url']!=1)
-		{
-			if ($row['access_url_changeable']==0)
-			{
+		if ($_configuration['access_url']!=1) {
+			if ($row['access_url_changeable']==0) {
 				//we hide the element in other cases (checkbox, radiobutton) we 'freeze' the element
 				$hide_element=true;
 				$hideme=array('disabled');
-			}
-			elseif($url_info['active']==1)
-			{
+			} elseif($url_info['active']==1) {
 				// we show the elements
 				if (empty($row['variable']))
 					$row['variable']=0;
@@ -145,8 +135,7 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
 				if (empty($row['category']))
 					$row['category']=0;
 
-				if (is_array ($settings_by_access_list[ $row['variable'] ] [ $row['subkey'] ]	[ $row['category'] ]))
-				{
+				if (is_array ($settings_by_access_list[ $row['variable'] ] [ $row['subkey'] ]	[ $row['category'] ])) {
 					// we are sure that the other site have a selected value
 					if ($settings_by_access_list[ $row['variable'] ] [ $row['subkey'] ]	[ $row['category'] ]['selected_value']!='')
 						$row['selected_value']	=$settings_by_access_list[$row['variable']] [$row['subkey']]	[ $row['category'] ]['selected_value'];
@@ -189,14 +178,11 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
 					}
 					$form->addElement('select', $row['variable'], get_lang($row['comment']), $valid_encodings);
 					$default_values[$row['variable']] = $current_system_encoding;
-				//
-
 				} else {
 					$form->addElement('text', $row['variable'], get_lang($row['comment']),$hideme);
 					$form->applyFilter($row['variable'],'html_filter');
 					$default_values[$row['variable']] = $row['selected_value'];
 				}
-
 				break;
 			case 'textarea' :
 				$form->addElement('textarea', $row['variable'], get_lang($row['comment']),$hideme);
@@ -273,8 +259,7 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
 		$form->addElement('html','</div>');
 
 	$form->setDefaults($default_values);
-	if ($form->validate())
-	{
+	if ($form->validate()) {
 		$values = $form->exportValues();
 
 		// set true for allow_message_tool variable if social tool is actived
@@ -292,10 +277,8 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
 		//$result = Database::query($sql);
 		// Save the settings
 		$keys = array();
-		foreach ($values as $key => $value)
-		{
-			if (!is_array($value))
-			{
+		foreach ($values as $key => $value) {
+			if (!is_array($value)) {
 				//$sql = "UPDATE $table_settings_current SET selected_value='".Database::escape_string($value)."' WHERE variable='$key'";
 				//$result = Database::query($sql);
 
@@ -303,9 +286,7 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
 
 				$result = api_set_setting($key,$value,null,null,$_configuration['access_url']);
 
-			}
-			else
-			{
+			} else {
 
 				$sql = "SELECT subkey FROM $table_settings_current WHERE variable = '$key'";
 				$res = Database::query($sql);
@@ -355,8 +336,7 @@ Display :: display_header($tool_name);
 //api_display_tool_title($tool_name);
 
 // displaying the message that the settings have been stored
-if (!empty($_GET['action']) && $_GET['action'] == "stored")
-{
+if (!empty($_GET['action']) && $_GET['action'] == 'stored') {
 	Display :: display_confirmation_message(get_lang('SettingsStored'));
 }
 
@@ -376,14 +356,14 @@ $action_images['templates'] 	= 'template.gif';
 $action_images['search']        = 'search.gif';
 $action_images['editor']		= 'html.png';
 $action_images['timezones']		= 'timezones.png';
+
 // grabbing the categories
 //$selectcategories = "SELECT DISTINCT category FROM ".$table_settings_current." WHERE category NOT IN ('stylesheets','Plugins')";
 //$resultcategories = Database::query($selectcategories);
 $resultcategories = api_get_settings_categories(array('stylesheets','Plugins', 'Templates', 'Search'));
 echo "\n<div class=\"actions\">";
 //while ($row = Database::fetch_array($resultcategories))
-foreach($resultcategories as $row)
-{
+foreach($resultcategories as $row) {
 	echo "\n\t<a href=\"".api_get_self()."?category=".$row['category']."\">".Display::return_icon($action_images[strtolower($row['category'])], api_ucfirst(get_lang($row['category']))).api_ucfirst(get_lang($row['category']))."</a>";
 }
 echo "\n\t<a href=\"".api_get_self()."?category=Plugins\">".Display::return_icon($action_images['plugins'], api_ucfirst(get_lang('Plugins'))).api_ucfirst(get_lang('Plugins'))."</a>";
@@ -392,10 +372,8 @@ echo "\n\t<a href=\"".api_get_self()."?category=Templates\">".Display::return_ic
 echo "\n\t<a href=\"".api_get_self()."?category=Search\">".Display::return_icon($action_images['search'], api_ucfirst(get_lang('Search'))).api_ucfirst(get_lang('Search'))."</a>";
 echo "\n</div>";
 
-if (!empty($_GET['category']))
-{
-	switch ($_GET['category'])
-	{
+if (!empty($_GET['category'])) {
+	switch ($_GET['category']) {
 		// displaying the extensions: plugins
 		// this will be available to all the sites (access_urls)
 		case 'Plugins' :
@@ -432,8 +410,6 @@ if (!empty($_GET['category']))
 }
 
 /*
-==============================================================================
 		FOOTER
-==============================================================================
 */
 Display :: display_footer();

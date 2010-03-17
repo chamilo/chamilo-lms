@@ -505,7 +505,7 @@ CREATE TABLE session_rel_user (
   id_session mediumint unsigned NOT NULL default '0',
   id_user mediumint unsigned NOT NULL default '0',
   relation_type int default 0,
-  PRIMARY KEY (id_session,id_user,relation_type)
+  PRIMARY KEY (id_session, id_user, relation_type)
 );
 
 
@@ -1124,7 +1124,7 @@ CREATE TABLE gradebook_evaluation (
   user_id int NOT NULL,
   course_code varchar(40) default NULL,
   category_id int default NULL,
-  date int default 0,
+  created_at DATETIME NOT NULL default '0000-00-00 00:00:00',
   weight smallint NOT NULL,
   max float unsigned NOT NULL,
   visible tinyint NOT NULL,
@@ -1139,7 +1139,7 @@ CREATE TABLE gradebook_link (
   user_id int NOT NULL,
   course_code varchar(40) NOT NULL,
   category_id int NOT NULL,
-  date int default NULL,
+  created_at DATETIME NOT NULL default '0000-00-00 00:00:00',
   weight smallint NOT NULL,
   visible tinyint NOT NULL,
   PRIMARY KEY  (id)
@@ -1149,7 +1149,7 @@ CREATE TABLE gradebook_result (
   id int NOT NULL auto_increment,
   user_id int NOT NULL,
   evaluation_id int NOT NULL,
-  date int NOT NULL,
+  created_at DATETIME NOT NULL default '0000-00-00 00:00:00',
   score float unsigned default NULL,
   PRIMARY KEY  (id)
 );
@@ -1186,15 +1186,15 @@ CREATE TABLE user_field_options (
 );
 DROP TABLE IF EXISTS user_field_values;
 CREATE TABLE user_field_values(
-	id	bigint	NOT NULL auto_increment,
+	id	bigint	NOT NULL auto_increment, 	
 	user_id	int	unsigned NOT NULL,
 	field_id int NOT NULL,
 	field_value	text,
 	tms DATETIME NOT NULL default '0000-00-00 00:00:00',
-	PRIMARY KEY(id),
-	KEY user_id (user_id, field_id)
+	PRIMARY KEY(id)
 );
 
+ALTER TABLE user_field_values ADD INDEX (user_id, field_id);
 
 ALTER TABLE gradebook_category ADD session_id int DEFAULT NULL;
 
@@ -1204,7 +1204,7 @@ CREATE TABLE gradebook_result_log (
 	id_result int NOT NULL,
 	user_id int NOT NULL,
 	evaluation_id int NOT NULL,
-	date_log datetime default '0000-00-00 00:00:00',
+	created_at DATETIME NOT NULL default '0000-00-00 00:00:00',
 	score float unsigned default NULL,
 	PRIMARY KEY(id)
 );
@@ -1215,7 +1215,7 @@ CREATE TABLE gradebook_linkeval_log (
 	id_linkeval_log int NOT NULL,
 	name text,
 	description text,
-	date_log int,
+	created_at DATETIME NOT NULL default '0000-00-00 00:00:00',
 	weight smallint default NULL,
 	visible tinyint default NULL,
 	type varchar(20) NOT NULL,
@@ -2235,7 +2235,7 @@ VALUES
 -- Table structure for table legal (Terms & Conditions)
 --
 
-CREATE TABLE  legal (
+CREATE TABLE legal (
   legal_id int NOT NULL auto_increment,
   language_id int NOT NULL,
   date int NOT NULL default 0,
@@ -2252,12 +2252,12 @@ INSERT INTO user_field (field_type, field_variable, field_display_text, field_vi
 -- Table structure for certificate with gradebook
 --
 
-CREATE TABLE gradebook_certificate(
+CREATE TABLE gradebook_certificate (
 	id bigint unsigned not null auto_increment,
 	cat_id int unsigned not null,
 	user_id int unsigned not null,
-	score_certificate float unsigned not null default 0,
-	date_certificate datetime not null default '0000-00-00 00:00:00',
+	score_certificate float unsigned not null default 0,	
+	created_at DATETIME NOT NULL default '0000-00-00 00:00:00',
 	path_certificate text null,
 	PRIMARY KEY(id)
 );
@@ -2305,10 +2305,10 @@ CREATE TABLE search_engine_ref (
 --
 
 CREATE TABLE session_category (
-  id int NOT NULL auto_increment,
-  name varchar(100) default NULL,
-  date_start date default NULL,
-  date_end date default NULL,
+	id int NOT NULL auto_increment,
+	name varchar(100) default NULL,
+	date_start date default NULL,
+	date_end date default NULL,
   PRIMARY KEY  (id)
 );
 
@@ -2316,7 +2316,6 @@ CREATE TABLE session_category (
 --
 -- Table structure for table user tag
 --
-
 
 CREATE TABLE tag (
 	id int NOT NULL auto_increment,
@@ -2339,33 +2338,33 @@ CREATE TABLE user_rel_tag (
 --
 
 CREATE TABLE groups (
-  id int NOT NULL AUTO_INCREMENT,
-  name varchar(255) NOT NULL,
-  description varchar(255) NOT NULL,
-  picture_uri varchar(255) NOT NULL,
-  url varchar(255) NOT NULL,
-  visibility int NOT NULL,
-  updated_on varchar(255) NOT NULL,
-  created_on varchar(255) NOT NULL,
-  PRIMARY KEY (id)
+	id int NOT NULL AUTO_INCREMENT,
+	name varchar(255) NOT NULL,
+	description varchar(255) NOT NULL,
+	picture_uri varchar(255) NOT NULL,
+	url varchar(255) NOT NULL,
+	visibility int NOT NULL,
+	updated_on varchar(255) NOT NULL,
+	created_on varchar(255) NOT NULL,
+	PRIMARY KEY (id)
 );
 
 CREATE TABLE group_rel_tag (
-  id int NOT NULL AUTO_INCREMENT,
-  tag_id int NOT NULL,
-  group_id int NOT NULL,
-  PRIMARY KEY (id)
+	id int NOT NULL AUTO_INCREMENT,
+	tag_id int NOT NULL,
+	group_id int NOT NULL,
+	PRIMARY KEY (id)
 );
 
 ALTER TABLE group_rel_tag ADD INDEX ( group_id );
 ALTER TABLE group_rel_tag ADD INDEX ( tag_id );
 
 CREATE TABLE group_rel_user (
-  id int NOT NULL AUTO_INCREMENT,
-  group_id int NOT NULL,
-  user_id int NOT NULL,
-  relation_type int NOT NULL,
-  PRIMARY KEY (id)
+	id int NOT NULL AUTO_INCREMENT,
+	group_id int NOT NULL,
+	user_id int NOT NULL,
+	relation_type int NOT NULL,
+	PRIMARY KEY (id)
 );
 ALTER TABLE group_rel_user ADD INDEX ( group_id );
 ALTER TABLE group_rel_user ADD INDEX ( user_id );
@@ -2375,13 +2374,13 @@ ALTER TABLE group_rel_user ADD INDEX ( relation_type );
 --
 
 CREATE TABLE IF NOT EXISTS message_attachment (
-  id int NOT NULL AUTO_INCREMENT,
-  path varchar(255) NOT NULL,
-  comment text,
-  size int NOT NULL default 0,
-  message_id int NOT NULL,
-  filename varchar(255) NOT NULL,
-  PRIMARY KEY  (id)
+	id int NOT NULL AUTO_INCREMENT,
+	path varchar(255) NOT NULL,
+	comment text,
+	size int NOT NULL default 0,
+	message_id int NOT NULL,
+	filename varchar(255) NOT NULL,
+	PRIMARY KEY  (id)
 );
 
 INSERT INTO user_field (field_type, field_variable, field_display_text, field_visible, field_changeable) values (10, 'tags','tags',0,0);
@@ -2393,13 +2392,13 @@ INSERT INTO course_field (field_type, field_variable, field_display_text, field_
 --
 
 CREATE TABLE IF NOT EXISTS block (
-id INT NOT NULL AUTO_INCREMENT,
-name VARCHAR(255) NULL,
-description TEXT NULL,
-path VARCHAR(255) NOT NULL,
-controller VARCHAR(100) NOT NULL,
-active TINYINT NOT NULL DEFAULT 1,
-PRIMARY KEY(id)
+	id INT NOT NULL AUTO_INCREMENT,
+	name VARCHAR(255) NULL,
+	description TEXT NULL,
+	path VARCHAR(255) NOT NULL,
+	controller VARCHAR(100) NOT NULL,
+	active TINYINT NOT NULL DEFAULT 1,
+	PRIMARY KEY(id)
 );
 ALTER TABLE block ADD UNIQUE(path);
 

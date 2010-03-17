@@ -25,9 +25,9 @@ require_once('back_compat.inc.php');
  */
 function initialize_item($lp_id,$user_id,$view_id,$next_item)
 {
-    $debug=0;
+    $debug = 0;
     $return = '';
-    if($debug>0){error_log('In initialize_item('.$lp_id.','.$user_id.','.$view_id.','.$next_item.')',0);}
+    if ($debug>0) {error_log('In initialize_item('.$lp_id.','.$user_id.','.$view_id.','.$next_item.')',0);}
     //$objResponse = new xajaxResponse();
     /*$item_id may be one of:
      * -'next'
@@ -58,7 +58,7 @@ function initialize_item($lp_id,$user_id,$view_id,$next_item)
         }
     }
     $mylp->set_current_item($next_item);
-    if ($debug>1) {error_log('In {default} - item is '.$new_item_id,0);}
+    if ($debug>1) {error_log('In initialize_item() - new item is '.$next_item,0);}
     $mylp->start_current_item(true);
     /*
     if ($mylp->force_commit) {
@@ -67,9 +67,10 @@ function initialize_item($lp_id,$user_id,$view_id,$next_item)
     */
     //$objResponse->addAlert(api_get_path(REL_CODE_PATH).'newscorm/learnpathItem.class.php');
     if (is_object($mylp->items[$next_item])) {
-        $mylpi = & $mylp->items[$next_item];
+        if($debug>1){error_log('In initialize_item - recovering existing item object '.$next_item,0);}
+    	$mylpi = & $mylp->items[$next_item];
     } else {
-        if($debug>1){error_log('In switch_item_details - generating new item object',0);}
+        if($debug>1){error_log('In initialize_item - generating new item object '.$next_item,0);}
         $mylpi =& new learnpathItem($next_item,$user_id);
         $mylpi->set_lp_view($view_id);
     }
@@ -88,7 +89,7 @@ function initialize_item($lp_id,$user_id,$view_id,$next_item)
     $mymin = $mylpi->get_min();
     $mylesson_status = $mylpi->get_status();
     $mylesson_location = $mylpi->get_lesson_location();
-    $mytotal_time = $mylpi->get_scorm_time('js');
+    $mytotal_time = $mylpi->get_scorm_time('js',null,true);
     $mymastery_score = $mylpi->get_mastery_score();
     $mymax_time_allowed = $mylpi->get_max_time_allowed();
     $mylaunch_data = $mylpi->get_launch_data();

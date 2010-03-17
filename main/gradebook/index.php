@@ -453,30 +453,16 @@ if (isset ($_POST['submit']) && isset ($_POST['keyword'])) {
 
 if (!isset($_GET['exportpdf']) and !isset($_GET['export_certificate'])) {
 	if (isset ($_GET['studentoverview'])) {
-		$interbreadcrumb[]= array (
-			'url' => $_SESSION['gradebook_dest'].'?selectcat=' . Security::remove_XSS($_GET['selectcat']),
-			'name' => get_lang('ToolGradebook')
-		);
+		$interbreadcrumb[]= array ('url' => $_SESSION['gradebook_dest'].'?selectcat=' . Security::remove_XSS($_GET['selectcat']),'name' => get_lang('ToolGradebook'));
 		Display :: display_header(get_lang('FlatView'));
 	} elseif (isset ($_GET['search'])) {
-		$interbreadcrumb[]= array (
-			'url' => $_SESSION['gradebook_dest'].'?selectcat=' . Security::remove_XSS($_GET['selectcat']),
-			'name' => get_lang('ToolGradebook')
-		);
+		$interbreadcrumb[]= array ('url' => $_SESSION['gradebook_dest'].'?selectcat=' . Security::remove_XSS($_GET['selectcat']),'name' => get_lang('ToolGradebook'));
 		Display :: display_header(get_lang('SearchResults'));
 	} elseif(isset ($_GET['selectcat'])) {
-		$interbreadcrumb[]= array (
-			'url' => $_SESSION['gradebook_dest'],
-			'name' => get_lang('ToolGradebook')
-		);
-		
-			if (!isset($_GET['gradebooklist_direction'])) {
-				$interbreadcrumb[]= array (
-			    'url' => $_SESSION['gradebook_dest'].'?selectcat=' . Security::remove_XSS($_GET['selectcat']),
-			    'name' => get_lang('Details')
-			  );
-			}
-
+		$interbreadcrumb[]= array (	'url' => $_SESSION['gradebook_dest'],'name' => get_lang('ToolGradebook'));
+		if (!isset($_GET['gradebooklist_direction'])) {
+			$interbreadcrumb[]= array ('url' => $_SESSION['gradebook_dest'].'?selectcat=' . Security::remove_XSS($_GET['selectcat']),'name' => get_lang('Details'));
+		}
 		Display :: display_header('');
 	} else {
 		Display :: display_header(get_lang('ToolGradebook'));
@@ -598,7 +584,7 @@ if (isset ($_GET['studentoverview'])) {
 		exit;
 		}
 	} elseif (!empty($_GET['export_certificate'])) {
-	$user_id = strval(intval($_GET['user']));
+		$user_id = strval(intval($_GET['user']));		
 	if (!api_is_allowed_to_edit(true,true)) {
 		$user_id = api_get_user_id();
 	}
@@ -636,14 +622,15 @@ if (isset ($_GET['studentoverview'])) {
 				mkdir($path_directory_user_certificate,0777);
 			}
 			if (is_dir($path_directory_user_certificate)) {
-				$user_id=api_get_user_id();
-				$cat_id=$_GET['cat_id'];
+				$user_id = api_get_user_id();
+				$cat_id  = intval($_GET['cat_id']);
 				$name=md5($user_id.$cat_id);
 				
 				//generate document HTML
-				$course_id=api_get_course_id();
-				$content_html=DocumentManager::replace_user_info_into_html($course_id);
-								
+				$course_id = api_get_course_id();
+				$content_html = DocumentManager::replace_user_info_into_html($course_id);
+				
+					
 				$new_content=explode('</head>',$content_html);
 				
 		
@@ -837,9 +824,7 @@ if ($category != '0') {
 			echo '<div  align="left" style="float:left"><img  src="../img/info3.gif" border="0" title="' . $opt_cat_descrip1 . '" alt="'.$opt_cat_descrip1.'" /> '.$op_cat_weight.' '.'&nbsp;&nbsp;'.$opt_cat_cert_min.'&nbsp;&nbsp;'.$opt_cat_descrip.'</div>';
 			echo $modify_icons;
 			echo '</div>';
-		}
-		else
-		{
+		} else	{
 			// generating the total score for a course
 			$stud_id= api_get_user_id();
 			$cats_course = Category :: load ($category_id, null, null, null, null, null, false);
@@ -863,19 +848,16 @@ if ($category != '0') {
 
 			$my_score_in_gradebook =  round($scoretotal[0],2);	
 			//show certificate
-			$certificate_min_score=$cats[0]->get_certificate_min_score();
+			$certificate_min_score=$cats[0]->get_certificate_min_score(); 
 			if (isset($certificate_min_score) && (int)$item_value >= (int)$certificate_min_score) {				
 				$certificates = '<a href="'.api_get_path(WEB_CODE_PATH) .'gradebook/'.Security::remove_XSS($_SESSION['gradebook_dest']).'?export_certificate=yes&cat_id='.$cats[0]->get_id().'"><img src="'.api_get_path(WEB_CODE_PATH) . 'img/dokeos.gif" />'.get_lang('Certificates').'</a>&nbsp;'.get_lang('langTotal').': '.$scoretotal_display;
 				echo '<div class="actions" align="right">';
 				echo $certificates;
 				echo '</div>';
-
 			}
 		} //end hack
-
 		DisplayGradebook :: display_header_gradebook($cats[0], 0, $category_id, $is_course_admin, $is_platform_admin, $simple_search_form, false, true);
 	}
-
 } else {
 //this is the root category
 	//DisplayGradebook :: display_header_gradebook($cats[0], 0, 0, $is_course_admin, $is_platform_admin, $simple_search_form, false, false);
@@ -896,8 +878,7 @@ if (api_is_platform_admin() || api_is_allowed_to_create_course()  || $status==1)
 	} else {
 			if ( ((isset ($_GET['selectcat']) && $_GET['selectcat']==0) || ((isset($_GET['cidReq']) && $_GET['cidReq']!==''))) || isset($_GET['isStudentView']) && $_GET['isStudentView']=='false') {
 				$cats = Category :: load(null, null, $course_code, null, null, $session_id, false);
-				if(!$first_time=1)
-				{
+				if(!$first_time=1) {
 					DisplayGradebook :: display_reduce_header_gradebook($cats[0],$is_course_admin, $is_platform_admin, $simple_search_form, false, false);
 				}
 		}
@@ -906,9 +887,7 @@ if (api_is_platform_admin() || api_is_allowed_to_create_course()  || $status==1)
 if($first_time==1 && api_is_allowed_to_edit(null,true))
 {
 	echo '<meta http-equiv="refresh" content="0;url='.api_get_self().'?cidReq='.$course_code.'" />';
-}
-else
-{
+} else {
 	$gradebooktable->display();
 }
 Display :: display_footer();

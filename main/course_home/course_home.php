@@ -1,4 +1,4 @@
-<?php 
+<?php
 /* For licensing terms, see /chamilo_license.txt */
 /**
         HOME PAGE FOR EACH COURSE
@@ -35,7 +35,7 @@ $use_anonymous = true;
 // Inlcuding the global initialization file.
 require '../../main/inc/global.inc.php';
 
-//Delete LP sessions  
+//Delete LP sessions
 unset($_SESSION['oLP']);
 unset($_SESSION['lpobject']);
 
@@ -94,14 +94,15 @@ $(document).ready(function() {
 		});
 	});
 });
-	
-/* toogle for post-it in course home */	
+
+/* toogle for post-it in course home */
 $(function() {
 	$(".thematic-postit-head").click(function() {
-				$(".thematic-postit-center").slideToggle("normal");								
-		 	}).$(".thematic-postit-center").hide();
-});	
-	
+				$(".thematic-postit-center").slideToggle("normal");
+		 	});
+	$(".thematic-postit-center").hide();
+});
+
 </script>';
 
 if (!isset($cidReq)) {

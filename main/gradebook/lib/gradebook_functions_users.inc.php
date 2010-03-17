@@ -17,7 +17,7 @@ function get_users_in_course($course_id) {
 	$order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname ASC' : ' ORDER BY lastname, firstname ASC';
 
 	$current_session = api_get_session_id();
-	$course_id = Databse::escape_string($course_id);
+	$course_id = Database::escape_string($course_id);
 
 	if (!empty($current_session)) {
 		$sql = "SELECT user.user_id,lastname,firstname

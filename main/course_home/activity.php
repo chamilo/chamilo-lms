@@ -10,10 +10,10 @@
 *	visitor is allowed to activate, deactivate home page links,
 *	access to the teachers tools (statistics, edit forums...).
 *
-*	@package dokeos.course_home
+*	@package chamilo.course_home
 ==============================================================================
 */
-require_once '../../main/inc/global.inc.php';
+
 require_once api_get_path(LIBRARY_PATH).'course_home.lib.php';
 
 //	MAIN CODE

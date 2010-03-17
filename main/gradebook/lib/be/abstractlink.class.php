@@ -9,10 +9,8 @@
  * @author Julio Montoya <gugli100@gmail.com> security improvements
  * @package chamilo.gradebook
  */
-abstract class AbstractLink implements GradebookItem
-{
-
-// PROPERTIES
+abstract class AbstractLink implements GradebookItem {
+	// PROPERTIES
 
 	protected $id;
 	protected $type;
@@ -25,12 +23,12 @@ abstract class AbstractLink implements GradebookItem
 	protected $visible;
 	protected $session_id;
 
-// CONSTRUCTORS
+	// CONSTRUCTORS
 
     function AbstractLink() {
     }
 
-// GETTERS AND SETTERS
+	// GETTERS AND SETTERS
 
    	public function get_id() {
 		return $this->id;
@@ -112,7 +110,7 @@ abstract class AbstractLink implements GradebookItem
 	 */
 	public function load ($id = null, $type = null, $ref_id = null, $user_id = null, $course_code = null, $category_id = null, $visible = null) {
     	$tbl_grade_links = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
-		$sql='SELECT id,type,ref_id,user_id,course_code,category_id,created_at,weight,visible FROM '.$tbl_grade_links;
+		$sql='SELECT id, type, ref_id, user_id,course_code,category_id,created_at,weight,visible FROM '.$tbl_grade_links;
 		$paramcount = 0;
 		if (isset ($id)) {
 			$sql.= ' WHERE id = '.Database::escape_string($id);
@@ -202,13 +200,12 @@ abstract class AbstractLink implements GradebookItem
 
 		if (isset($this->type) && isset($this->ref_id) && isset($this->user_id) && isset($this->course_code) && isset($this->category) && isset($this->weight) && isset($this->visible)) {
 			$tbl_grade_links = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
-			$sql_testing="select count(*) from ".$tbl_grade_links." where ref_id=".$this->get_ref_id()." AND category_id =  ".$this->category." AND type =  ".$this->type." ;";
+			$sql_testing="SELECT count(*) FROM ".$tbl_grade_links." WHERE ref_id=".$this->get_ref_id()." AND category_id =  ".$this->category." AND type =  ".$this->type." ;";
 			$result_testing=Database::query($sql_testing);
 			$row_testing=Database::fetch_array($result_testing);
-
-						if ($row_testing[0]==0) {
-				$sql = 'INSERT INTO '.$tbl_grade_links.' (type,ref_id,user_id,course_code,category_id,weight,visible';
-				if (isset($this->link_date)) { $sql .= ',date';}
+						
+			if ($row_testing[0]==0) {
+				$sql = 'INSERT INTO '.$tbl_grade_links.' (type,ref_id, user_id, course_code, category_id, weight, visible, created_at';
 				$sql .= ') VALUES ('
 					.intval($this->get_type())
 					.','.intval($this->get_ref_id())
@@ -217,8 +214,8 @@ abstract class AbstractLink implements GradebookItem
 					.','.intval($this->get_category_id())
 					.','.intval($this->get_weight())
 					.','.intval($this->is_visible());
-				if (isset($this->link_date)) {$sql .= ','.'"'.$date_current=strtotime(date('Y-m-d H:i:s',time())).'"';}
-				$sql .= ")";
+				$sql .= ','.'"'.$date_current=api_get_local_time().'"';
+				$sql .= ")";				
 				Database::query($sql);
 				$this->set_id(Database::insert_id());
 		 	}
@@ -262,7 +259,7 @@ abstract class AbstractLink implements GradebookItem
 			$name_log=$arreval['course_code'];
 		}
 		//error_log($name_log);
-		$sql="INSERT INTO ".$tbl_grade_linkeval_log."(id_linkeval_log,name,description,date_log,weight,visible,type,user_id_log)
+		$sql="INSERT INTO ".$tbl_grade_linkeval_log."(id_linkeval_log,name,description,created_at,weight,visible,type,user_id_log)
 			  VALUES('".Database::escape_string($arreval['id'])."','".Database::escape_string($name_log)."','".Database::escape_string($description_log)."','".Database::escape_string($current_date_server)."','".Database::escape_string($arreval['weight'])."','".Database::escape_string($arreval['visible'])."','Link',".api_get_user_id().")";
 	
 		Database::query($sql);

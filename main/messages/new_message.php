@@ -1,6 +1,11 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
+*	@package chamilo.messages
+*/
+
+
+/**
 * This script shows a compose area (wysiwyg editor if supported, otherwise
 * a simple textarea) where the user can type a message.
 * There are three modes
@@ -151,7 +156,7 @@ function manage_form ($default, $select_from_user_list = null) {
 	global $charset;
 	$table_message = Database::get_main_table(TABLE_MESSAGE);
 
-	$group_id = intval($_REQUEST['group_id']);
+	$group_id 	= intval($_REQUEST['group_id']);
 	$message_id = intval($_GET['message_id']);
 	$param_f = isset($_GET['f'])?Security::remove_XSS($_GET['f']):'';
 

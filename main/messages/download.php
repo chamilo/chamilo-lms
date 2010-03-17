@@ -9,9 +9,7 @@
 *	@package chamilo.messages
 */
 
-/*
-		MAIN CODE
-*/
+/*		MAIN CODE	*/
 
 session_cache_limiter('public');
 

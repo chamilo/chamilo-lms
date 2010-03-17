@@ -1,27 +1,7 @@
 <?php // $Id: link.php 22251 2009-07-20 16:56:54Z iflorespaz $
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2004-2008 Dokeos SPRL
-	Copyright (c) 2003 Ghent University (UGent)
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact: Dokeos, rue Notre Dame, 152, B-1140 Evere, Belgium, info@dokeos.com
-==============================================================================
-*/
+/* For licensing terms, see /license.txt */
 
 /**
-==============================================================================
 * Main script for the links tool.
 *
 * Features:
@@ -34,15 +14,12 @@
 *
 * @author Patrick Cool, main author, completely rewritten
 * @author René Haentjens, added CSV file import (October 2004)
-* @package dokeos.link
+* @package chamilo.link
 * @todo improve organisation, tables should come from database library
-==============================================================================
 */
 
 /*
-==============================================================================
 		INIT SECTION
-==============================================================================
 */
 // name of the language file that needs to be included
 $language_file = array('link','admin');
@@ -154,9 +131,7 @@ function MM_popupMsg(msg) { //v1.0
 
 
 /*
------------------------------------------------------------
 	Action Handling
------------------------------------------------------------
 */
 $nameTools = get_lang("Links");
 
@@ -566,11 +541,8 @@ if (empty($_GET['action']) || ($_GET['action']!='editlink' && $_GET['action']!='
 		// displaying the link of the category
 		$i++;
 	}
-	echo '</table>';
-	////////////////////////////////////////////////////////////////////////////
+	echo '</table>';	
 }
-
-
 
 Display::display_footer();
 ?>

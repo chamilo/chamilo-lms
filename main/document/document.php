@@ -71,12 +71,12 @@ if (isset($_GET['curdirpath']) && $_GET['curdirpath']=='/certificates' && isset(
 			//generate document HTML
 			$course_id=api_get_course_id();
 			$content_html=DocumentManager::replace_user_info_into_html($course_id);
-			
+
 			$new_content_html=$content_html;
 
 			$path_image=api_get_path(WEB_COURSE_PATH).api_get_course_path().'/document/images/gallery';
 			$new_content_html=str_replace('../images/gallery',$path_image,$new_content_html);
-			
+
 			$path_image_in_default_course=api_get_path(WEB_CODE_PATH).'default_course_document';
 			$new_content_html=str_replace('/main/default_course_document',$path_image_in_default_course,$new_content_html);
 
@@ -86,7 +86,7 @@ if (isset($_GET['curdirpath']) && $_GET['curdirpath']=='/certificates' && isset(
 			<style media="print" type="text/css">
 				#imprimir {
 				visibility:hidden;
-				}				
+				}
 			</style>';
 			echo '<a href="javascript:window.print();" style="float:right; padding:4px;" id="imprimir"><img src="../img/printmgr.gif" alt="' . get_lang('Print') . '" /> ' . get_lang('Print') . '</a>';
 			print_r($new_content_html);
@@ -132,7 +132,7 @@ if (isset($_GET['curdirpath']) && $_GET['curdirpath'] != '') {
 }
 $curdirpathurl = urlencode($curdirpath);
 
-//I'm in the certification module?  
+//I'm in the certification module?
 $is_certificate_mode = DocumentManager::is_certificate_mode($curdirpath);
 
 $course_dir      = $_course['path'].'/document';
@@ -277,7 +277,7 @@ $image_files_only = '';
 
 if ($is_certificate_mode) {
 	$interbreadcrumb[]= array (	'url' => '../gradebook/index.php', 'name' => get_lang('Gradebook'));
-} else {  
+} else {
 	$interbreadcrumb[]= array ('url'=>'', 'name'=> get_lang('Document'));
 }
 
@@ -308,9 +308,9 @@ for ($i = 0; $i < $array_len; $i++) {
 	if ($is_certificate_mode) {
 		$interbreadcrumb[]= array ('url'=>$url_dir.'&selectcat='.Security::remove_XSS($_GET['selectcat']), 'name'=> $dir_array[$i]);
 	} else {
-		$interbreadcrumb[]= array ('url'=>$url_dir, 'name'=> $dir_array[$i]);	
+		$interbreadcrumb[]= array ('url'=>$url_dir, 'name'=> $dir_array[$i]);
 	}
-	
+
 	$dir_acum.=$dir_array[$i].'/';
 }
 
@@ -418,7 +418,7 @@ if ($is_allowed_to_edit || $group_member_with_upload_rights) { // TEACHER ONLY
 				}
 
 				foreach ($_POST['path'] as $index => & $path) {
-					if (in_array($path, array('/audio', '/flash', '/images', '/shared_folder', '/video', '/chat_files'))) {
+					if (in_array($path, array('/audio', '/flash', '/images', '/shared_folder', '/video', '/chat_files', '/certificates'))) {
 						continue;
 					} else {
 					   $delete_document = DocumentManager::delete_document($_course, $path, $base_work_dir);
@@ -593,8 +593,8 @@ if (isset($_GET['curdirpath']) && $_GET['curdirpath']=='/certificates' && isset(
 		$course_id=Security::remove_XSS($_GET['cidReq']);//course id
 		$document_id=Security::remove_XSS($_GET['set_certificate']);//document id
 		DocumentManager::attach_gradebook_certificate ($course_id,$document_id) ;
-		Display::display_normal_message(get_lang('IsDefaultCertificate'));	
-	}	
+		Display::display_normal_message(get_lang('IsDefaultCertificate'));
+	}
 }
 
 
@@ -609,20 +609,20 @@ if ($folders === false) {
 echo '<div class="actions">';
 
 	/* GO TO PARENT DIRECTORY */
-	if ($curdirpath!= '/' && $curdirpath!=$group_properties['directory']&& !$is_certificate_mode)  {		
+	if ($curdirpath!= '/' && $curdirpath!=$group_properties['directory']&& !$is_certificate_mode)  {
 	?>
 		 <a href="<?php echo api_get_self(); ?>?<?php echo api_get_cidreq();?>&curdirpath=<?php echo urlencode((dirname($curdirpath)=='\\')?'/':dirname($curdirpath)).$req_gid ?>">
 				<img src="../img/folder_up.gif" border="0" title="<?php echo get_lang('Up'); ?>" alt="" />
 				<?php echo get_lang('Up'); ?></a>&nbsp;
-	<?php		
+	<?php
 	}
-	
-	if ($is_certificate_mode & $curdirpath!= '/certificates')  {		
+
+	if ($is_certificate_mode & $curdirpath!= '/certificates')  {
 	?>
 		 <a href="<?php echo api_get_self(); ?>?<?php echo api_get_cidreq();?>&curdirpath=<?php echo urlencode((dirname($curdirpath)=='\\')?'/':dirname($curdirpath)).$req_gid ?>">
 				<img src="../img/folder_up.gif" border="0" title="<?php echo get_lang('Up'); ?>" alt="" />
 				<?php echo get_lang('Up'); ?></a>&nbsp;
-	<?php		
+	<?php
 	}
 
 if (isset($docs_and_folders) && is_array($docs_and_folders)) {
@@ -727,19 +727,19 @@ if ($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_fold
                 <a href="create_document.php?<?php echo api_get_cidreq();?>&dir=<?php echo $curdirpathurl.$req_gid; ?>"><img src="../img/filenew.gif" border="0" alt="" title="<?php echo get_lang('CreateDoc'); ?>" /></a>
                 <a href="create_document.php?<?php echo api_get_cidreq();?>&dir=<?php echo $curdirpathurl.$req_gid; ?>"><?php echo get_lang("CreateDoc"); ?></a>&nbsp;&nbsp;
 	        <?php }?>
-	        
+
       		<!--create new certificate -->
-			<?php if ($is_certificate_mode) { ?>	
+			<?php if ($is_certificate_mode) { ?>
 			<a href="create_document.php?<?php echo api_get_cidreq();?>&dir=<?php echo $curdirpathurl.$req_gid; ?>&certificate=true&<?php echo 'selectcat=' . Security::remove_XSS($_GET['selectcat']); ?>"><img src="../img/filenew.gif" border="0" alt="" title="<?php echo get_lang('CreateCertificate'); ?>" /></a>
-			<a href="create_document.php?<?php echo api_get_cidreq();?>&dir=<?php echo $curdirpathurl.$req_gid; ?>&certificate=true&<?php echo 'selectcat=' . Security::remove_XSS($_GET['selectcat']); ?>"><?php echo get_lang("CreateCertificate"); ?></a>&nbsp;&nbsp;	
+			<a href="create_document.php?<?php echo api_get_cidreq();?>&dir=<?php echo $curdirpathurl.$req_gid; ?>&certificate=true&<?php echo 'selectcat=' . Security::remove_XSS($_GET['selectcat']); ?>"><?php echo get_lang("CreateCertificate"); ?></a>&nbsp;&nbsp;
 			<?php }?>
-			
+
 			<!-- file upload link -->
 			<?php
 				$upload_name =  get_lang('UplUploadDocument');
-				if ($is_certificate_mode) { 
+				if ($is_certificate_mode) {
 				$upload_name =	 get_lang('UploadCertificate');
-			}?>	
+			}?>
 
 			<a href="upload.php?<?php echo api_get_cidreq();?>&curdirpath=<?php echo $curdirpathurl.$req_gid; ?>"><img src="../img/submit_file.gif" border="0" title="<?php echo get_lang('UplUploadDocument'); ?>" alt="" /></a>
 			<a href="upload.php?<?php echo api_get_cidreq();?>&curdirpath=<?php echo $curdirpathurl.$req_gid; ?>"><?php echo get_lang('UplUploadDocument'); ?></a>&nbsp;

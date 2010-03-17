@@ -12,6 +12,7 @@ $cidReset = true;
 require_once '../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
 require_once api_get_path(LIBRARY_PATH).'diagnoser.lib.php';
+require_once api_get_path(LIBRARY_PATH).'sortabletable.class.php';
 
 // User permissions
 api_protect_admin_script();

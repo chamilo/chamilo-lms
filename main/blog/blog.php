@@ -1,22 +1,15 @@
-<?php //$Id: announcements.php 16702 2008-11-10 13:02:30Z elixir_inter $
-/*
-/* For licensing terms, see /chamilo_license.txt */
+<?php
+/* For licensing terms, see /license.txt */
 
 /**
-==============================================================================
-
     BLOG HOMEPAGE
 
 	This file takes care of all blog navigation and displaying.
-
-	@package dokeos.blogs
-==============================================================================
+	@package chamilo.blogs
 */
 
 /*
-==============================================================================
 	INIT
-==============================================================================
 */
 // name of the language file that needs to be included
 $language_file = "blog";
@@ -26,36 +19,33 @@ include ('../inc/global.inc.php');
 $this_section=SECTION_COURSES;
 
 
-/* ------------	ACCESS RIGHTS ------------ */
+/* 	ACCESS RIGHTS */
 // notice for unauthorized people.
 api_protect_course_script(true);
 
 
 //session
-if(isset($_GET['id_session']))
-{
-	$_SESSION['id_session'] = $_GET['id_session'];
+if(isset($_GET['id_session'])) {
+	$_SESSION['id_session'] = intval($_GET['id_session']);
 }
 
 $lib_path = api_get_path(LIBRARY_PATH);
-require_once ($lib_path.'/display.lib.php');
-require_once ($lib_path.'/text.lib.php');
-require_once ($lib_path.'/blog.lib.php');
-require_once ($lib_path.'/fckeditor/fckeditor.php');
+require_once $lib_path.'/display.lib.php';
+require_once $lib_path.'/text.lib.php';
+require_once $lib_path.'/blog.lib.php';
+require_once $lib_path.'/fckeditor/fckeditor.php';
 
 $blog_table_attachment 	= Database::get_course_table(TABLE_BLOGS_ATTACHMENT);
 
-$nameTools = get_lang('Blogs');
-$DaysShort = api_get_week_days_short();
-$DaysLong = api_get_week_days_long();
+$nameTools  = get_lang('Blogs');
+$DaysShort  = api_get_week_days_short();
+$DaysLong   = api_get_week_days_long();
 $MonthsLong = api_get_months_long();
 
 $current_page = $_GET['action'];
 
 /*
-==============================================================================
 	PROCESSING
-==============================================================================
 */
 
 $safe_post_title = Security::remove_XSS($_POST['post_title']);
@@ -208,9 +198,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'view_post')
 	}
 }
 /*
-==============================================================================
 	DISPLAY
-==============================================================================
 */
 $htmlHeadXtra[] = '<script src="tbl_change.js" type="text/javascript" language="javascript"></script>';
 
@@ -369,21 +357,18 @@ if ($flag == '1')
 
 $user_task = false;
 
-if (isset ($_GET['task_id']) && is_numeric($_GET['task_id']))
+if (isset ($_GET['task_id']) && is_numeric($_GET['task_id'])) {
 	$task_id = (int)$_GET['task_id'];
-else
-{
+} else {
 	$task_id = 0;
-
 	$tbl_blogs_tasks_rel_user = Database :: get_course_table(TABLE_BLOGS_TASKS_REL_USER);
 
-	$sql = "
-							SELECT COUNT(*) as number
-							FROM ".$tbl_blogs_tasks_rel_user."
-							WHERE
-								blog_id = ".$blog_id." AND
-								user_id = ".api_get_user_id()." AND
-								task_id = ".$task_id;
+	$sql = "SELECT COUNT(*) as number
+			FROM ".$tbl_blogs_tasks_rel_user."
+			WHERE
+				blog_id = ".$blog_id." AND
+				user_id = ".api_get_user_id()." AND
+				task_id = ".$task_id;
 
 	$result = Database::query($sql);
 	$row = Database::fetch_array($result);

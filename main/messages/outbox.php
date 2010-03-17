@@ -1,8 +1,9 @@
 <?php
 /* For licensing terms, see /license.txt */
-/*
-		INIT SECTION
+/**
+*	@package chamilo.messages
 */
+
 // name of the language file that needs to be included
 $language_file = array('registration','messages','userInfo');
 $cidReset=true;
@@ -54,9 +55,6 @@ function deselect_all(formita)
 }
 //-->
 </script>';
-
-
-
 
 
 /*
@@ -153,9 +151,8 @@ echo '<div id="social-content">';
 				}
 				$delete_list_id=array();
 				
-				//------------------------
+				
 				outbox_display();
-				//------------------------
 				
 			} elseif ($_REQUEST['action']=='deleteone') {
 				$delete_list_id=array();

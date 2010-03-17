@@ -12,7 +12,7 @@
 * url is given to avoid a new select
 *
 * @author Thomas Depraetere, Hugues Peeters, Christophe Gesch� - original versions
-* @package dokeos.link
+* @package chamilo.link
 */
 
 /*

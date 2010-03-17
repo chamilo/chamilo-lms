@@ -205,7 +205,7 @@ $form->addElement('html', '</div>');
 
 // Platform admin
 // Only when changing another user!
-if ($user_id != $_user['user_id']) {
+//if ($user_id != $_user['user_id']) {
 	$group = array();
 	$group[] =& HTML_QuickForm::createElement('radio', 'platform_admin', null, get_lang('Yes'), 1);
 	$group[] =& HTML_QuickForm::createElement('radio', 'platform_admin', null, get_lang('No'), 0);
@@ -215,7 +215,7 @@ if ($user_id != $_user['user_id']) {
 	$form->addElement('html', '<div id="id_platform_admin" style="display:'.$display.'">');
 	$form->addGroup($group, 'admin', get_lang('PlatformAdmin'), null, false);
 	$form->addElement('html', '</div>');
-}
+//}
 
 // Send email
 $group = array();

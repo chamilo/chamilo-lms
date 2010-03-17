@@ -346,20 +346,5 @@ class TestDisplay extends UnitTestCase {
 		//var_dump($res);
 	}
 
-	/**
-	 * Display name and lastname in a specific order
-	 * @param string Firstname
-	 * @param string Lastname
-	 */
-	public function testuser_name() {
-		$fname='';
-		$lname='';
-		ob_start();
-		$res=Display::user_name($fname,$lname);
-		ob_end_clean();
-		$this->assertTrue(is_string($res));
-
-		//var_dump($res);
-	}
 }
 ?>

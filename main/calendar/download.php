@@ -1,39 +1,16 @@
 <?php // $Id: $
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2008 Dokeos SPRL
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
-	info@dokeos.com
-==============================================================================
-*/
+/* For licensing terms, see /license.txt */
 /**
-==============================================================================
 *	This file is responsible for  passing requested documents to the browser.
 *	Html files are parsed to fix a few problems with URLs,
 *	but this code will hopefully be replaced soon by an Apache URL
 *	rewrite mechanism.
 *
-*	@package dokeos.calendar
-==============================================================================
+*	@package chamilo.calendar
 */
 
 /*
-==============================================================================
 		MAIN CODE
-==============================================================================
 */
 
 session_cache_limiter('public');
@@ -74,6 +51,7 @@ if (is_dir($full_file_name))
 	$document_explorer = api_get_path(WEB_COURSE_PATH).api_get_course_path(); // home course path
 	//redirect
 	header('Location: '.$document_explorer);
+	exit;
 }
 
 $tbl_agenda_attachment 	= Database::get_course_table(TABLE_AGENDA_ATTACHMENT);
@@ -82,7 +60,7 @@ $tbl_agenda_attachment 	= Database::get_course_table(TABLE_AGENDA_ATTACHMENT);
 event_download($doc_url);
 
 $sql='SELECT filename FROM '.$tbl_agenda_attachment.'
-  	  WHERE path LIKE BINARY "'.$doc_url.'"';
+  	  WHERE path LIKE BINARY "'.Database::escape_string($doc_url).'"';
 
 $result= Database::query($sql);
 $row= Database::fetch_array($result);

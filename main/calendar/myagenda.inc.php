@@ -1,13 +1,13 @@
 <?php //$Id: agenda.php 16490 2008-10-10 14:29:52Z elixir_inter $
-/* For licensing terms, see /dokeos_license.txt
-==============================================================================
+/* For licensing terms, see /license.txt */
+/**
 	@author: Patrick Cool <patrick.cool@UGent.be>, Ghent University
 	@author: Toon Van Hoecke <toon.vanhoecke@ugent.be>, Ghent University
 	@author: Eric Remy (initial version)
 	@version: 2.2 alpha
 	@description: 	this file generates a general agenda of all items of the
 					courses the user is registered for
-==============================================================================
+
 	version info:
 	-------------
 	-> version 2.2 : Patrick Cool, patrick.cool@ugent.be, november 2004
@@ -55,8 +55,7 @@ function get_myagendaitems($courses_dbs, $month, $year)
 
 	$items = array ();
 	// get agenda-items for every course
-	foreach ($courses_dbs as $key => $array_course_info)
-	{
+	foreach ($courses_dbs as $key => $array_course_info) {
 		//databases of the courses
 		$TABLEAGENDA = Database :: get_course_table(TABLE_AGENDA, $array_course_info["db"]);
 		$TABLE_ITEMPROPERTY = Database :: get_course_table(TABLE_ITEM_PROPERTY, $array_course_info["db"]);
@@ -66,17 +65,16 @@ function get_myagendaitems($courses_dbs, $month, $year)
 		if ($array_course_info['status'] == '1')
 		{
 			//echo "course admin";
-			$sqlquery = "SELECT
-										DISTINCT agenda.*, ip.visibility, ip.to_group_id, ip.insert_user_id, ip.ref
-										FROM ".$TABLEAGENDA." agenda,
-											 ".$TABLE_ITEMPROPERTY." ip
-										WHERE agenda.id = ip.ref
-										AND MONTH(agenda.start_date)='".$month."'
-										AND YEAR(agenda.start_date)='".$year."'
-										AND ip.tool='".TOOL_CALENDAR_EVENT."'
-										AND ip.visibility='1'
-										GROUP BY agenda.id
-										ORDER BY start_date ";
+			$sqlquery = "SELECT DISTINCT agenda.*, ip.visibility, ip.to_group_id, ip.insert_user_id, ip.ref
+							FROM ".$TABLEAGENDA." agenda,
+								 ".$TABLE_ITEMPROPERTY." ip
+							WHERE agenda.id = ip.ref
+							AND MONTH(agenda.start_date)='".$month."'
+							AND YEAR(agenda.start_date)='".$year."'
+							AND ip.tool='".TOOL_CALENDAR_EVENT."'
+							AND ip.visibility='1'
+							GROUP BY agenda.id
+							ORDER BY start_date ";
 		}
 		// if the user is not an administrator of that course
 		else
@@ -84,31 +82,29 @@ function get_myagendaitems($courses_dbs, $month, $year)
 			//echo "GEEN course admin";
 			if (is_array($group_memberships) && count($group_memberships)>0)
 			{
-				$sqlquery = "SELECT
-													agenda.*, ip.visibility, ip.to_group_id, ip.insert_user_id, ip.ref
-													FROM ".$TABLEAGENDA." agenda,
-														".$TABLE_ITEMPROPERTY." ip
-													WHERE agenda.id = ip.ref
-													AND MONTH(agenda.start_date)='".$month."'
-													AND YEAR(agenda.start_date)='".$year."'
-													AND ip.tool='".TOOL_CALENDAR_EVENT."'
-													AND	( ip.to_user_id='".$_user['user_id']."' OR ip.to_group_id IN (0, ".implode(", ", $group_memberships).") )
-													AND ip.visibility='1'
-													ORDER BY start_date ";
+				$sqlquery = "SELECT	agenda.*, ip.visibility, ip.to_group_id, ip.insert_user_id, ip.ref
+								FROM ".$TABLEAGENDA." agenda,
+									".$TABLE_ITEMPROPERTY." ip
+								WHERE agenda.id = ip.ref
+								AND MONTH(agenda.start_date)='".$month."'
+								AND YEAR(agenda.start_date)='".$year."'
+								AND ip.tool='".TOOL_CALENDAR_EVENT."'
+								AND	( ip.to_user_id='".$_user['user_id']."' OR ip.to_group_id IN (0, ".implode(", ", $group_memberships).") )
+								AND ip.visibility='1'
+								ORDER BY start_date ";
 			}
 			else
 			{
-				$sqlquery = "SELECT
-													agenda.*, ip.visibility, ip.to_group_id, ip.insert_user_id, ip.ref
-													FROM ".$TABLEAGENDA." agenda,
-														".$TABLE_ITEMPROPERTY." ip
-													WHERE agenda.id = ip.ref
-													AND MONTH(agenda.start_date)='".$month."'
-													AND YEAR(agenda.start_date)='".$year."'
-													AND ip.tool='".TOOL_CALENDAR_EVENT."'
-													AND ( ip.to_user_id='".$_user['user_id']."' OR ip.to_group_id='0')
-													AND ip.visibility='1'
-													ORDER BY start_date ";
+				$sqlquery = "SELECT agenda.*, ip.visibility, ip.to_group_id, ip.insert_user_id, ip.ref
+								FROM ".$TABLEAGENDA." agenda,
+									".$TABLE_ITEMPROPERTY." ip
+								WHERE agenda.id = ip.ref
+								AND MONTH(agenda.start_date)='".$month."'
+								AND YEAR(agenda.start_date)='".$year."'
+								AND ip.tool='".TOOL_CALENDAR_EVENT."'
+								AND ( ip.to_user_id='".$_user['user_id']."' OR ip.to_group_id='0')
+								AND ip.visibility='1'
+								ORDER BY start_date ";
 			}
 		}
 

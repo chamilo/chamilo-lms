@@ -1,30 +1,13 @@
 <?php //$Id: myagenda.php 21102 2009-05-30 14:58:16Z iflorespaz $
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2004-2008 Dokeos SPRL
-	Copyright (c) 2003 Ghent University (UGent)
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium, info@dokeos.com
-==============================================================================
+/* For licensing terms, see /license.txt */
+/**
 	@author: Patrick Cool <patrick.cool@UGent.be>, Ghent University
 	@author: Toon Van Hoecke <toon.vanhoecke@ugent.be>, Ghent University
 	@author: Eric Remy (initial version)
 	@version: 2.2 alpha
 	@description: 	this file generates a general agenda of all items of the
 					courses the user is registered for
-==============================================================================
+
 	version info:
 	-------------
 	-> version 2.3 : Yannick Warnier, yannick.warnier@dokeos.com 2008
@@ -55,11 +38,9 @@
 	The tool was initially called master-calendar as it collects all the calendar
 	items of all the courses one is subscribed to. It was very soon integrated in
 	Dokeos as this was a really basic and very usefull tool.
+**/
 
-/* ==============================================================================
-				  			HEADER
-============================================================================== */
-
+//	HEADER
 
 // name of the language file that needs to be included
 $language_file = 'agenda';
@@ -91,9 +72,9 @@ $htmlHeadXtra[] = "<script src=\"tbl_change.js\" type=\"text/javascript\" langua
 // showing the header
 Display::display_header(get_lang('MyAgenda'));
 
-/* ==============================================================================
-  						SETTING SOME VARIABLES
-============================================================================== */
+
+//	SETTING SOME VARIABLES
+
 // setting the database variables
 $TABLECOURS = Database :: get_main_table(TABLE_MAIN_COURSE);
 $TABLECOURSUSER = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
@@ -109,7 +90,7 @@ $DaysLong = api_get_week_days_long();
 // Defining the months of the year to allow translation of the months
 $MonthsLong = api_get_months_long();
 
-/*==============================================================================
+/*
   			TREATING THE URL PARAMETERS
 			1. The default values
 			2. storing it in the session
@@ -121,22 +102,20 @@ $MonthsLong = api_get_months_long();
 			4. add personal agenda
 			5. edit personal agenda
 			6. delete personal agenda
-  ============================================================================== */
+*/
+
 // 1. The default values. if there is no session yet, we have by default the month view
-if (empty($_SESSION['view']))
-{
-	$_SESSION['view'] = "month";
+if (empty($_SESSION['view'])) {
+	$_SESSION['view'] = 'month';
 }
 // 2. Storing it in the session. If we change the view by clicking on the links left, we change the session
 if (!empty($_GET['view'])) {
 	$_SESSION['view'] = Security::remove_XSS($_GET['view']);
-
 }
+
 // 3. The views: (month, week, day, personal)
-if ($_SESSION['view'])
-{
-	switch ($_SESSION['view'])
-	{
+if ($_SESSION['view']) {
+	switch ($_SESSION['view']) {
 		// 3.a Month view
 		case "month" :
 			$process = "month_view";
@@ -178,9 +157,7 @@ if (!empty($_GET['action']) && $_GET['action'] == "delete" AND $_GET['id'])
 {
 	$process = "delete_personal_agenda_item";
 }
-/* ==============================================================================
-  						OUTPUT
-============================================================================== */
+// OUTPUT
 if (isset ($_user['user_id']))
 {
 	// getting all the courses that this user is subscribed to

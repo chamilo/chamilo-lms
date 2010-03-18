@@ -1,11 +1,10 @@
 <?php //$Id: agenda.inc.php 22324 2009-07-23 17:44:22Z cfasanando $
-/* For licensing terms, see /dokeos_license.txt */
-/*
-==============================================================================
+/* For licensing terms, see /license.txt */
+/**
 	@author: Patrick Cool, patrick.cool@UGent.be
 	@version: 1.1
 	@todo: synchronisation with the function in myagenda.php (for instance: using one function for the mini_calendar
-==============================================================================
+
 	Large parts of the code are recycled from the old agenda tool, but I
 	reworked it and cleaned the code to make it more readable. The code for
 	the small calender on the left is taken from the My Agenda tool.
@@ -13,13 +12,11 @@
 	Reabability is also the reason why I use the if ($is_allowed_to_edit)
 	check for each part of the code. I'm aware that is duplication, but
 	it makes the code much easier to read.
-==============================================================================
+
 */
 
 /*
------------------------------------------------------------
 	Constants and variables
------------------------------------------------------------
 */
 // the variables for the days and the months
 // Defining the shorts for the days
@@ -30,9 +27,7 @@ $DaysLong = api_get_week_days_long();
 $MonthsLong = api_get_months_long();
 
 /*
------------------------------------------------------------
 	Javascript
------------------------------------------------------------
 */
 
 $htmlHeadXtra[] = to_javascript();
@@ -47,9 +42,7 @@ $(document).ready(function () {
 </script>';
 
 /*
-==============================================================================
 		FUNCTIONS
-==============================================================================
 */
 
 /**

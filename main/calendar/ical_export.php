@@ -1,4 +1,5 @@
-<?php // $id: $
+<?php
+/* For licensing terms, see /license.txt */
 /**
  * This file exclusively export calendar items to iCal or similar formats
  * @author Yannick Warnier <yannick.warnier@dokeos.com>

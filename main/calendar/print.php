@@ -1,20 +1,18 @@
 <?php
+/* For licensing terms, see /license.txt */
 /**
  * See copyright information in the Dokeos root directory, dokeos_license.txt
- * @package dokeos.calendar
+ * @package chamilo.calendar
  */
 // name of the language file that needs to be included
 $language_file = 'agenda';
 $id=$_GET['id'];
 
-if(strstr($id,','))
-{
+if(strstr($id,',')) {
 	$id=explode(',',$id);
 	$id=array_map('intval',$id);
 	$id=implode(',',$id);
-}
-else
-{
+} else {
 	$id=intval($id);
 }
 
@@ -23,8 +21,7 @@ require_once '../inc/global.inc.php';
 
 
 
-$TABLEAGENDA 		= Database::get_course_table(TABLE_AGENDA);
-
+$TABLEAGENDA 	= Database::get_course_table(TABLE_AGENDA);
 $sql 			= "SELECT * FROM $TABLEAGENDA WHERE id IN($id) ORDER BY start_date DESC";
 $result			= Database::query($sql);
 ?>
@@ -73,11 +70,9 @@ while($row=Database::fetch_array($result))
 	echo $row['content'].'<hr size="1" noshade="noshade" />';
 }
 ?>
-
 <br /><br />
-<center>
-<input type="button" value="<?php echo api_htmlentities(get_lang('Print'), ENT_QUOTES); ?>" onClick="javascript: window.print();" />
-</center>
-
+	<center>
+	<input type="button" value="<?php echo api_htmlentities(get_lang('Print'), ENT_QUOTES); ?>" onClick="javascript: window.print();" />
+	</center>
 </body>
 </html>

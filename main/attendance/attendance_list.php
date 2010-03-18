@@ -7,6 +7,9 @@
 * @package chamilo.attendance
 */
 
+// protect a course script
+api_protect_course_script(true);
+
 if (api_is_allowed_to_edit(null, true)) {
 	$param_gradebook = '';
 	if (isset($_SESSION['gradebook'])) {
@@ -14,6 +17,7 @@ if (api_is_allowed_to_edit(null, true)) {
 	}
 	echo '<div class="actions" style="margin-bottom:30px">';
 	echo '<a href="index.php?'.api_get_cidreq().$param_gradebook.'&action=attendance_add">'.Display::return_icon('adherir.png',get_lang('CreateANewAttendance')).' '.get_lang('CreateANewAttendance').'</a>';	
+	echo '<a href="index.php?'.api_get_cidreq().$param_gradebook.'&action=thematic_details">'.Display::return_icon('defaut.gif',get_lang('ThematicControl')).' '.get_lang('ThematicControl').'</a>';
 	echo '</div>';
 }
 $table = new SortableTable('attendance_list', array('Attendance', 'get_number_of_attendances'), array('Attendance', 'get_attendance_data'), $default_column);

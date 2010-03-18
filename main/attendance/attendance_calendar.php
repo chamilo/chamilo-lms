@@ -7,6 +7,9 @@
 * @package chamilo.attendance
 */
 
+// protect a course script
+api_protect_course_script(true);
+
 $param_gradebook = '';
 if (isset($_SESSION['gradebook'])) {
 	$param_gradebook = '&gradebook='.Security::remove_XSS($_SESSION['gradebook']);

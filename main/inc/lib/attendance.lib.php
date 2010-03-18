@@ -32,7 +32,8 @@ class Attendance
 	function get_number_of_attendances() {
 		$tbl_attendance = Database :: get_course_table(TABLE_ATTENDANCE);
 		$session_id = api_get_session_id();
-		$sql = "SELECT COUNT(att.id) AS total_number_of_items FROM $tbl_attendance att WHERE att.active = 1 = att.session_id = '$session_id' ";
+		$condition_session = api_get_session_condition($session_id);
+		$sql = "SELECT COUNT(att.id) AS total_number_of_items FROM $tbl_attendance att WHERE att.active = 1 $condition_session ";
 		$res = Database::query($sql);
 		$res = Database::query($sql);
 		$obj = Database::fetch_object($res);
@@ -59,11 +60,14 @@ class Attendance
 		$condition_session = '';
 		if (isset($session_id)) {
 			$session_id = intval($session_id);
-			$condition_session = ' WHERE session_id = '.$session_id;		
+			$condition_session = ' WHERE session_id = '.$session_id;
+		} else {
+			$session_id = api_get_session_id();
+			$condition_session = api_get_session_condition($session_id);
 		}
 				
 		// get attendance data
-		$sql = "SELECT * FROM $tbl_attendance $condition_session ";
+		$sql = "SELECT * FROM $tbl_attendance WHERE active = 1 $condition_session ";
 		$rs  = Database::query($sql);
 		if (Database::num_rows($rs) > 0){
 			while ($row = Database::fetch_array($rs)) {
@@ -84,6 +88,7 @@ class Attendance
 	function get_attendance_data($from, $number_of_items, $column, $direction) {
 		$tbl_attendance = Database :: get_course_table(TABLE_ATTENDANCE);
 		$session_id = api_get_session_id();
+		$condition_session = api_get_session_condition($session_id);
 	    $column = intval($column);
 	    $from = intval($from);
 	    $number_of_items = intval($number_of_items);
@@ -96,7 +101,7 @@ class Attendance
 				att.description AS col2,
 				att.attendance_qualify_max AS col3
 				FROM $tbl_attendance att
-				WHERE att.session_id = '$session_id' AND att.active = 1
+				WHERE att.active = 1 $condition_session
 				ORDER BY col$column $direction LIMIT $from,$number_of_items ";
 		$res = Database::query($sql);
 		$attendances = array ();
@@ -135,7 +140,6 @@ class Attendance
 	 */
 	public function get_attendance_by_id($attendance_id) {
 		$tbl_attendance = Database :: get_course_table(TABLE_ATTENDANCE);
-		$sesion_id = api_get_session_id();
 		$attendance_id = intval($attendance_id);
 	    $attendance_data = array();
 		$sql = "SELECT *  FROM $tbl_attendance WHERE id = '$attendance_id'";
@@ -238,8 +242,8 @@ class Attendance
 
 	/**
 	 * delete attendaces
-	 * @param 	int	   attendance id
-	 * @return 	int    affected rows
+	 * @param 	int|array	   one or many attendances id 
+	 * @return 	int    		   affected rows
 	 */
 	public function attendance_delete($attendance_id) {
 		global $_course;

@@ -84,8 +84,13 @@ class CourseDescriptionController { // extends Controller {
 		    		$course_description->set_title($title);
 		    		$course_description->set_content($content);
 		    		$course_description->set_progress($progress);		
-		        	if ($description_type >= ADD_BLOCK) {        		        		
-						$affected_rows = $course_description->update();
+		        	if ($description_type >= ADD_BLOCK) {      		        		  		        		
+		        		$thematic_advance = $course_description->get_data_by_description_type($description_type);		        		
+		        		if (!empty($thematic_advance)) {
+		        			$affected_rows = $course_description->update();	
+		        		} else {
+		        			$affected_rows = $course_description->insert();
+		        		}
 		        	} else {	        			        		
 		        		$thematic_advance = $course_description->get_data_by_description_type($description_type);			        		        		
 		        		if (!empty($thematic_advance)) {
@@ -131,8 +136,12 @@ class CourseDescriptionController { // extends Controller {
 				$this->view->render();        		
         	}
         } else {
-			if (!empty($description_type)) {							
-        		$course_description_data = $course_description->get_data_by_description_type($description_type);        		
+
+			if (!empty($description_type)) {				
+				if (isset($_GET['id_session'])) {
+					$session_id = intval($_GET['id_session']);
+				}				
+        		$course_description_data = $course_description->get_data_by_description_type($description_type, null, $session_id);        		        		
         		$data['default_description_titles'] = $course_description->get_default_description_title();
 				$data['default_description_title_editable'] = $course_description->get_default_description_title_editable();
 				$data['default_description_icon'] = $course_description->get_default_description_icon();
@@ -141,8 +150,8 @@ class CourseDescriptionController { // extends Controller {
 				$data['description_title'] = $course_description_data['description_title'];
         		$data['description_content'] = $course_description_data['description_content'];
         		$data['description_type'] = $description_type;
-        		$data['progress'] = $course_description_data['progress'];
-        		$data['descriptions'] = $course_description->get_data_by_description_type($description_type);
+        		$data['progress'] = $course_description_data['progress'];        		
+        		$data['descriptions'] = $course_description->get_data_by_description_type($description_type, null, $session_id);
         	}
         	// render to the view        					
 			$this->view->set_data($data);

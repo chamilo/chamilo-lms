@@ -12,7 +12,7 @@
 require_once api_get_path(LIBRARY_PATH).'course.lib.php';
 require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
 require_once api_get_path(LIBRARY_PATH).'tracking.lib.php';
-require_once api_get_path(LIBRARY_PATH).'course_description.lib.php';
+require_once api_get_path(LIBRARY_PATH).'thematic.lib.php';
 
 /**
  * This class is used like controller for this course block plugin,
@@ -148,7 +148,8 @@ class BlockCourse extends Block {
 		$a_course_students  = array();
 		$course_data = array();
 		$courses = $this->courses;
-		$course_description = new CourseDescription();
+		
+		$thematic = new Thematic();
 		
 		foreach ($courses as $row_course) {
 
@@ -156,7 +157,7 @@ class BlockCourse extends Block {
 			$avg_assignments_in_course = $avg_messages_in_course = $nb_students_in_course = $avg_progress_in_course = $avg_score_in_course = $avg_time_spent_in_course = $avg_score_in_exercise = 0;
 
 			// students directly subscribed to the course
-			$sql = "SELECT user_id FROM $tbl_course_user as course_rel_user WHERE course_rel_user.status='5' AND course_rel_user.course_code='$course_code'";
+			$sql = "SELECT user_id FROM $tbl_course_user as course_rel_user WHERE course_rel_user.status=".STUDENT." AND course_rel_user.course_code='$course_code'";
 			$rs = Database::query($sql);
 			$users = array();
 			while ($row = Database::fetch_array($rs)) {
@@ -170,11 +171,10 @@ class BlockCourse extends Block {
 			}
 
 			$tematic_advance_progress = 0;			
-			$course_description->set_session_id(0);
-			$tematic_advance = $course_description->get_data_by_description_type(8, $course_code);
+			$tematic_advance = $thematic->get_total_average_of_thematic_advances($course_code, 0);
 
 			if (!empty($tematic_advance)) {
-				$tematic_advance_progress = '<a title="'.get_lang('GoToThematicAdvance').'" href="'.api_get_path(WEB_CODE_PATH).'course_description/?cidReq='.$course_code.'#thematic_advance">'.$tematic_advance['progress'].'%</a>';
+				$tematic_advance_progress = '<a title="'.get_lang('GoToThematicAdvance').'" href="'.api_get_path(WEB_CODE_PATH).'attendance/index.php?cidReq='.$course_code.'&action=thematic_details">'.$tematic_advance.'%</a>';
 			} else {
 				$tematic_advance_progress = '0%';
 			}

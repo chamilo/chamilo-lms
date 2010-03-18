@@ -49,14 +49,16 @@ if (isset($descriptions) && count($descriptions) > 0) {
 		echo '<div class="sectiontitle">';
 		
 		if (api_is_allowed_to_edit(null,true) && !$history) {
-			
-			//delete
-			echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=delete&description_type='.$description['description_type'].'" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset)).'\')) return false;">';
-			echo Display::return_icon('delete.gif', get_lang('Delete'), array('style' => 'vertical-align:middle;float:right;'));
-			echo '</a> ';
+
+			if (api_get_session_id() == $description['session_id']) {
+				//delete
+				echo '<a href="'.api_get_self().'?cidReq='.api_get_course_id().'&id_session='.$description['session_id'].'&action=delete&description_type='.$description['description_type'].'" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset)).'\')) return false;">';
+				echo Display::return_icon('delete.gif', get_lang('Delete'), array('style' => 'vertical-align:middle;float:right;'));
+				echo '</a> ';
+			}
 			
 			//edit
-			echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=edit&&description_type='.$description['description_type'].'">';
+			echo '<a href="'.api_get_self().'?cidReq='.api_get_course_id().'&id_session='.$description['session_id'].'&action=edit&description_type='.$description['description_type'].'">';
 			echo Display::return_icon('edit.gif', get_lang('Edit'), array('style' => 'vertical-align:middle;float:right; padding-right:4px;'));
 			echo '</a> ';
 			

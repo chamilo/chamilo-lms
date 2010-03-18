@@ -1499,16 +1499,18 @@ function api_get_session_image($session_id, $status_id) {
  * @param bool	optional, true if condition is only with session_id = current session id, false if condition is with 0 else
  * @return string	condition of the session
  */
-function api_get_session_condition($session_id, $state = true, $both = false) {
+function api_get_session_condition($session_id, $and = true, $with_base_content = false) {
 	$session_id = intval($session_id);
 	//condition to show resources by session
 	$condition_session = '';
-	$condition_add = $state == false ? " WHERE " : " AND ";
-	if ($session_id > 0) {
-		$condition_session = $condition_add." (session_id = ".(int)$session_id." OR session_id = 0) ";
+	$condition_add = $and == false ? " WHERE " : " AND ";
+	
+	if ($with_base_content) {		
+		$condition_session = $condition_add." (session_id = $session_id OR session_id = 0) ";		
 	} else {
-		$condition_session = $condition_add." session_id = 0 ";
+		$condition_session = $condition_add." session_id = $session_id ";
 	}
+	
 	return $condition_session;
 }
 

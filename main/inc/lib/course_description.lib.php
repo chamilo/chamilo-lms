@@ -32,7 +32,8 @@ class CourseDescription
      */
 	public function get_description_data() {
 		$tbl_course_description = Database::get_course_table(TABLE_COURSE_DESCRIPTION);
-		$sql = "SELECT * FROM $tbl_course_description WHERE session_id = '".$this->session_id."' ORDER BY id ";
+		$condition_session = api_get_session_condition($this->session_id, false, true);
+		$sql = "SELECT * FROM $tbl_course_description $condition_session ORDER BY id ";
 		$rs = Database::query($sql);
 		$data = array();
 		while ($description = Database::fetch_array($rs)) {
@@ -74,20 +75,25 @@ class CourseDescription
 	/**
      * Get all data by description and session id,
      * first you must set session_id property with the object CourseDescription
-     * @param 	int	description type
+     * @param 	int		description type
      * @param   string  course code (optional)
+     * @param	int		session id (optional)
      * @return array
      */
-	public function get_data_by_description_type($description_type, $course_code = '') {
+	public function get_data_by_description_type($description_type, $course_code = '', $session_id = null) {
 
 		$tbl_course_description = Database::get_course_table(TABLE_COURSE_DESCRIPTION);
-
+		
+		if (!isset($session_id)) {
+			$session_id = $this->session_id;
+		}		
+		$condition_session = api_get_session_condition($session_id);		
 		if (!empty($course_code)) {
 			$course_info = api_get_course_info($course_code);
 			$tbl_course_description = Database::get_course_table(TABLE_COURSE_DESCRIPTION, $course_info['dbName']);
 		}
 
-		$sql = "SELECT * FROM $tbl_course_description WHERE description_type='$description_type' AND session_id='".$this->session_id."'";
+		$sql = "SELECT * FROM $tbl_course_description WHERE description_type='$description_type' $condition_session ";
 		$rs = Database::query($sql);
 		$data = array();
 		if ($description = Database::fetch_array($rs)) {

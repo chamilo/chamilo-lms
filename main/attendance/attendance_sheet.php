@@ -7,6 +7,9 @@
 * @package chamilo.attendance
 */
 
+// protect a course script
+api_protect_course_script(true);
+
 if (api_is_allowed_to_edit(null, true)) {
 	$param_gradebook = '';
 	if (isset($_SESSION['gradebook'])) {

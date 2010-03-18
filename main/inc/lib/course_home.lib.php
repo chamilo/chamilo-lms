@@ -1,5 +1,5 @@
 <?php
-/* For licensing terms, see /chamilo_license.txt */
+/* For licensing terms, see /license.txt */
 
 class CourseHome {
 
@@ -7,19 +7,20 @@ class CourseHome {
 	 * Gets the html content to show in the 3 column view
 	 */
 	public static function show_tool_3column($cat) {
-		global $_user, $charset;
+		global $_user;
+		$charset = api_get_system_encoding();
 		$TBL_ACCUEIL = Database :: get_course_table(TABLE_TOOL_LIST);
 		$TABLE_TOOLS = Database :: get_main_table(TABLE_MAIN_COURSE_MODULE);
 
 		$numcols = 3;
 		$table = new HTML_Table('width="100%"');
-		$toolsRow_all = array ();
+		$all_tools = array();
 		switch ($cat) {
-			case 'Basic' :
 
+			case 'Basic' :
 				$condition_display_tools = ' WHERE a.link=t.link AND t.position="basic" ';
 				if (api_is_coach()) {
-					$condition_display_tools = ' WHERE a.link=t.link AND (t.position="basic" OR a.name = "'.TOOL_TRACKING.'") ';	
+					$condition_display_tools = ' WHERE a.link=t.link AND (t.position="basic" OR a.name = "'.TOOL_TRACKING.'") ';
 				}
 
 				$sql = "SELECT a.*, t.image img, t.row, t.column  FROM $TBL_ACCUEIL a, $TABLE_TOOLS t
@@ -39,6 +40,7 @@ class CourseHome {
 							ORDER BY a.id";
 				}
 				break;
+
 			case 'courseAdmin' :
 				$sql = "SELECT a.*, t.image img, t.row, t.column  FROM $TBL_ACCUEIL a, $TABLE_TOOLS t
 						WHERE admin=1 AND a.link=t.link ORDER BY t.row, t.column";
@@ -49,199 +51,141 @@ class CourseHome {
 		}
 		$result = Database::query($sql);
 
-		// grabbing all the tools from $course_tool_table
-		while ($tempRow = Database::fetch_array($result))
-		{
-			/*
-			if ($tempRow['img'] !== "scormbuilder.gif" AND $tempRow['img'] !== "blog.gif")
-			*/
-			if ($tempRow['img'] != 'file_html.gif' && $tempRow['img'] != 'file_html_na.gif'
-				&& $tempRow['img'] != 'scormbuilder.gif' && $tempRow['img'] != 'scormbuilder_na.gif'
-				&& $tempRow['img'] != 'blog.gif' && $tempRow['img'] != 'blog_na.gif'
-				&& $tempRow['img'] != 'external.gif' && $tempRow['img'] != 'external_na.gif')
-			{
-				$tempRow['name_translated'] = get_lang(ucfirst($tempRow['name']));
+		// Grabbing all the tools from $course_tool_table
+		while ($row = Database::fetch_array($result)) {
+			if ($row['img'] != 'file_html.gif' && $row['img'] != 'file_html_na.gif'
+					&& $row['img'] != 'scormbuilder.gif' && $row['img'] != 'scormbuilder_na.gif'
+					&& $row['img'] != 'blog.gif' && $row['img'] != 'blog_na.gif'
+					&& $row['img'] != 'external.gif' && $row['img'] != 'external_na.gif') {
+				$row['name_translated'] = get_lang(ucfirst($row['name']));
 			}
-			$toolsRow_all[] = $tempRow;
+			$all_tools[] = $row;
 		}
-		// grabbing all the links that have the property on_homepage set to 1
-		if ($cat == "External")
-		{
+
+		// Grabbing all the links that have the property on_homepage set to 1
+		if ($cat == 'External') {
 			$tbl_link = Database :: get_course_table(TABLE_LINK);
 			$tbl_item_property = Database :: get_course_table(TABLE_ITEM_PROPERTY);
-			if (api_is_allowed_to_edit(null,true))
-			{
+			if (api_is_allowed_to_edit(null, true)) {
 				$sql_links = "SELECT tl.*, tip.visibility
 									FROM $tbl_link tl
 									LEFT JOIN $tbl_item_property tip ON tip.tool='link' AND tip.ref=tl.id
 									WHERE tl.on_homepage='1' AND tip.visibility != 2";
-			}
-			else
-			{
+			} else {
 				$sql_links = "SELECT tl.*, tip.visibility
 									FROM $tbl_link tl
 									LEFT JOIN $tbl_item_property tip ON tip.tool='link' AND tip.ref=tl.id
 									WHERE tl.on_homepage='1' AND tip.visibility = 1";
 			}
 			$result_links = Database::query($sql_links);
-			while ($links_row = Database::fetch_array($result_links))
-			{
-				$properties = array ();
+			while ($links_row = Database::fetch_array($result_links)) {
+				$properties = array();
 				$properties['name'] = $links_row['title'];
 				$properties['link'] = $links_row['url'];
 				$properties['visibility'] = $links_row['visibility'];
 				$properties['img'] = 'external.gif';
 				$properties['adminlink'] = api_get_path(WEB_CODE_PATH).'link/link.php?action=editlink&amp;id='.$links_row['id'];
-				$toolsRow_all[] = $properties;
+				$all_tools[] = $properties;
 			}
 		}
 
 		$cell_number = 0;
-		// draw line between basic and external, only if there are entries in External
-		if ($cat == "External" && count($toolsRow_all))
-		{
+		// Draw line between basic and external, only if there are entries in External
+		if ($cat == 'External' && count($all_tools)) {
 			$table->setCellContents(0, 0, '<hr noshade="noshade" size="1"/>');
 			$table->updateCellAttributes(0, 0, 'colspan="3"');
 			$cell_number += $numcols;
 		}
 
-		foreach ($toolsRow_all as $toolsRow)
-		{
-			if (api_get_session_id()!=0 && in_array($toolsRow['name'],array('course_maintenance','course_setting'))) {
+		foreach ($all_tools as & $tool) {
+			if (api_get_session_id() != 0 && in_array($tool['name'], array('course_maintenance', 'course_setting'))) {
 					continue;
 			}
 
 			$cell_content = '';
-			// the name of the tool
-			$tool_name = ($toolsRow['name_translated'] != "" ? $toolsRow['name_translated'] : htmlspecialchars($toolsRow['name'],ENT_QUOTES,$charset)); // RH: added htmlspecialchars
+			// The name of the tool
+			$tool_name = !empty($tool['name_translated']) ? $tool['name_translated'] : @htmlspecialchars($tool['name'], ENT_QUOTES, $charset); // RH: added htmlspecialchars
 
 			$link_annex = '';
-			// the url of the tool
-			if ($toolsRow['img'] != "external.gif")
-			{
-				$toolsRow['link'] = api_get_path(WEB_CODE_PATH).$toolsRow['link'];
-				$qm_or_amp = ((strpos($toolsRow['link'], '?') === FALSE) ? '?' : '&amp;');
+			// The url of the tool
+			if ($tool['img'] != 'external.gif') {
+				$tool['link'] = api_get_path(WEB_CODE_PATH).$tool['link'];
+				$qm_or_amp = strpos($tool['link'], '?') === false ? '?' : '&amp;';
 				$link_annex = $qm_or_amp.api_get_cidreq();
-			}
-			else // if an external link ends with 'login=', add the actual login...
-				{
-				$pos = strpos($toolsRow['link'], "?login=");
-				$pos2 = strpos($toolsRow['link'], "&amp;login=");
-				if ($pos !== false or $pos2 !== false)
-				{
+			} else {
+				// If an external link ends with 'login=', add the actual login...
+				$pos = strpos($tool['link'], '?login=');
+				$pos2 = strpos($tool['link'], '&amp;login=');
+				if ($pos !== false or $pos2 !== false) {
 					$link_annex = $_user['username'];
 				}
 			}
 
-			// setting the actual image url
-			$toolsRow['img'] = api_get_path(WEB_IMG_PATH).$toolsRow['img'];
+			// Setting the actual image url
+			$tool['img'] = api_get_path(WEB_IMG_PATH).$tool['img'];
 
 			// VISIBLE
-			if (($toolsRow['visibility'] || (api_is_coach() && $toolsRow['name'] == TOOL_TRACKING))  || $cat == 'courseAdmin' || $cat == 'platformAdmin')
-			{
-				if(strpos($toolsRow['name'],'visio_')!==false)
-				{
-					$cell_content .= '<a  href="javascript: void(0);" onclick="window.open(\'' . $toolsRow['link'].$link_annex . '\',\'window_visio'.$_SESSION['_cid'].'\',config=\'height=\'+730+\', width=\'+1020+\', left=2, top=2, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no\')" target="' . $toolsRow['target'] . '"><img src="'.$toolsRow['img'].'" title="'.$tool_name.'" alt="'.$tool_name.'" align="absmiddle" border="0">'.$tool_name.'</a>';
-				}
-				else if(strpos($toolsRow['name'],'chat')!==false && api_get_course_setting('allow_open_chat_window')==true)
-				{
-					/*
-					$cell_content .= '<a href="#" onclick="window.open(\'' .$toolsRow['link'].$link_annex. '\',\'window_chat'.$_SESSION['_cid'].'\',config=\'height=\'+380+\', width=\'+625+\', left=2, top=2, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no\')" target="' . $toolsRow['target'] . '"><img src="'.$toolsRow['img'].'" alt="'.get_lang(ucfirst($toolsRow['name'])).' " align="absmiddle" border="0">'.$tool_name.'</a>'."\n"; // don't replace img with display::return_icon because $toolsRow['img'] = api_get_path(WEB_IMG_PATH).$toolsRow['img']
-					*/
-					$cell_content .= '<a href="javascript: void(0);" onclick="window.open(\'' .$toolsRow['link'].$link_annex. '\',\'window_chat'.$_SESSION['_cid'].'\',config=\'height=\'+380+\', width=\'+625+\', left=2, top=2, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no\')" target="' . $toolsRow['target'] . '"><img src="'.$toolsRow['img'].'" title="'.$tool_name.'" alt="'.$tool_name.'" align="absmiddle" border="0">'.$tool_name.'</a>'."\n"; // don't replace img with display::return_icon because $toolsRow['img'] = api_get_path(WEB_IMG_PATH).$toolsRow['img']
-				}
-				else
-				{
-					/*
-					$cell_content .= '<a href="'.$toolsRow['link'].$link_annex.'" target="'.$toolsRow['target'].'"><img src="'.$toolsRow['img'].'" alt="'.get_lang(ucfirst($toolsRow['name'])).' " align="absmiddle" border="0">'.$tool_name.'</a>'."\n"; // don't replace img with display::return_icon because $toolsRow['img'] = api_get_path(WEB_IMG_PATH).$toolsRow['img']
-					*/
-					$cell_content .= '<a href="'.$toolsRow['link'].$link_annex.'" target="'.$toolsRow['target'].'"><img src="'.$toolsRow['img'].'" title="'.$tool_name.'" alt="'.$tool_name.'" align="absmiddle" border="0">'.$tool_name.'</a>'."\n"; // don't replace img with display::return_icon because $toolsRow['img'] = api_get_path(WEB_IMG_PATH).$toolsRow['img']
+			if (($tool['visibility'] || (api_is_coach() && $tool['name'] == TOOL_TRACKING)) || $cat == 'courseAdmin' || $cat == 'platformAdmin') {
+				if (strpos($tool['name'], 'visio_') !== false) {
+					$cell_content .= '<a  href="javascript: void(0);" onclick="javascript: window.open(\'' . $tool['link'].$link_annex . '\',\'window_visio'.$_SESSION['_cid'].'\',config=\'height=\'+730+\', width=\'+1020+\', left=2, top=2, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no\')" target="' . $tool['target'] . '"><img src="'.$tool['img'].'" title="'.$tool_name.'" alt="'.$tool_name.'" align="absmiddle" border="0">'.$tool_name.'</a>';
+				} elseif (strpos($tool['name'], 'chat') !== false && api_get_course_setting('allow_open_chat_window')) {
+					$cell_content .= '<a href="javascript: void(0);" onclick="javascript: window.open(\'' .$tool['link'].$link_annex. '\',\'window_chat'.$_SESSION['_cid'].'\',config=\'height=\'+380+\', width=\'+625+\', left=2, top=2, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no\')" target="' . $tool['target'] . '"><img src="'.$tool['img'].'" title="'.$tool_name.'" alt="'.$tool_name.'" align="absmiddle" border="0">'.$tool_name.'</a>'."\n"; // don't replace img with display::return_icon because $tool['img'] = api_get_path(WEB_IMG_PATH).$tool['img']
+				} else {
+					$cell_content .= '<a href="'.$tool['link'].$link_annex.'" target="'.$tool['target'].'"><img src="'.$tool['img'].'" title="'.$tool_name.'" alt="'.$tool_name.'" align="absmiddle" border="0">'.$tool_name.'</a>'."\n"; // don't replace img with display::return_icon because $tool['img'] = api_get_path(WEB_IMG_PATH).$tool['img']
 				}
 			}
 			// INVISIBLE
-			else
-			{
-				if (api_is_allowed_to_edit(null,true))
-				{
-					if(strpos($toolsRow['name'],'visio_')!==false)
-					{
-						$cell_content .= '<a  href="javascript: void(0);" onclick="window.open(\'' . $toolsRow['link'].$link_annex . '\',\'window_visio'.$_SESSION['_cid'].'\',config=\'height=\'+730+\', width=\'+1020+\', left=2, top=2, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no\')" target="' . $toolsRow['target'] . '"><img src="'.str_replace(".gif", "_na.gif", $toolsRow['img']).'" title="'.$tool_name.'" alt="'.$tool_name.'" align="absmiddle" border="0">'.$tool_name.'</a>'."\n";
+			else {
+				if (api_is_allowed_to_edit(null, true)) {
+					if (strpos($tool['name'], 'visio_') !== false) {
+						$cell_content .= '<a  href="javascript: void(0);" onclick="window.open(\'' . $tool['link'].$link_annex . '\',\'window_visio'.$_SESSION['_cid'].'\',config=\'height=\'+730+\', width=\'+1020+\', left=2, top=2, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no\')" target="' . $tool['target'] . '"><img src="'.str_replace(".gif", "_na.gif", $tool['img']).'" title="'.$tool_name.'" alt="'.$tool_name.'" align="absmiddle" border="0">'.$tool_name.'</a>'."\n";
+					} elseif (strpos($tool['name'],'chat') !== false && api_get_course_setting('allow_open_chat_window')) {
+						$cell_content .= '<a href="javascript: void(0);" onclick="javascript: window.open(\'' .$tool['link'].$link_annex. '\',\'window_chat'.$_SESSION['_cid'].'\',config=\'height=\'+380+\', width=\'+625+\', left=2, top=2, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no\')" target="' . $tool['target'] . '" class="invisible"><img src="'.str_replace(".gif", "_na.gif", $tool['img']).'" title="'.$tool_name.'" alt="'.$tool_name.'" align="absmiddle" border="0">'.$tool_name.'</a>'."\n"; // don't replace img with display::return_icon because $tool['img'] = api_get_path(WEB_IMG_PATH).$tool['img']
+					} else {
+						$cell_content .= '<a href="'.$tool['link'].$link_annex.'" target="'.$tool['target'].'" class="invisible"><img src="'.str_replace(".gif", "_na.gif", $tool['img']).'" title="'.$tool_name.'" alt="'.$tool_name.'" align="absmiddle" border="0">'.$tool_name.'</a>'."\n";// don't replace img with display::return_icon because $tool['img'] = api_get_path(WEB_IMG_PATH).$tool['img']
 					}
-					else if(strpos($toolsRow['name'],'chat')!==false && api_get_course_setting('allow_open_chat_window')==true)
-					{
-						/*
-						$cell_content .= '<a href="#" onclick="window.open(\'' .$toolsRow['link'].$link_annex. '\',\'window_chat'.$_SESSION['_cid'].'\',config=\'height=\'+380+\', width=\'+625+\', left=2, top=2, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no\')" target="' . $toolsRow['target'] . '" class="invisible"><img src="'.str_replace(".gif", "_na.gif", $toolsRow['img']).'" alt="'.get_lang(ucfirst($toolsRow['name'])).' " align="absmiddle" border="0">'.$tool_name.'</a>'."\n"; // don't replace img with display::return_icon because $toolsRow['img'] = api_get_path(WEB_IMG_PATH).$toolsRow['img']
-						*/
-						$cell_content .= '<a href="javascript: void(0);" onclick="window.open(\'' .$toolsRow['link'].$link_annex. '\',\'window_chat'.$_SESSION['_cid'].'\',config=\'height=\'+380+\', width=\'+625+\', left=2, top=2, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no\')" target="' . $toolsRow['target'] . '" class="invisible"><img src="'.str_replace(".gif", "_na.gif", $toolsRow['img']).'" title="'.$tool_name.'" alt="'.$tool_name.'" align="absmiddle" border="0">'.$tool_name.'</a>'."\n"; // don't replace img with display::return_icon because $toolsRow['img'] = api_get_path(WEB_IMG_PATH).$toolsRow['img']
-					}
-					else
-					{
-						/*
-						$cell_content .= '<a href="'.$toolsRow['link'].$link_annex.'" target="'.$toolsRow['target'].'" class="invisible"><img src="'.str_replace(".gif", "_na.gif", $toolsRow['img']).'" alt="'.get_lang(ucfirst($toolsRow['name'])).' " align="absmiddle" border="0">'.$tool_name.'</a>'."\n";// don't replace img with display::return_icon because $toolsRow['img'] = api_get_path(WEB_IMG_PATH).$toolsRow['img']
-						*/
-						$cell_content .= '<a href="'.$toolsRow['link'].$link_annex.'" target="'.$toolsRow['target'].'" class="invisible"><img src="'.str_replace(".gif", "_na.gif", $toolsRow['img']).'" title="'.$tool_name.'" alt="'.$tool_name.'" align="absmiddle" border="0">'.$tool_name.'</a>'."\n";// don't replace img with display::return_icon because $toolsRow['img'] = api_get_path(WEB_IMG_PATH).$toolsRow['img']
-					}
-				}
-				else
-				{
-					/*
-					$cell_content .= '<img src="'.str_replace(".gif", "_na.gif", $toolsRow['img']).'" alt="'.get_lang(ucfirst($toolsRow['name'])).' " align="absmiddle" border="0">'; // don't replace img with display::return_icon because $toolsRow['img'] = api_get_path(WEB_IMG_PATH).$toolsRow['img']
-					*/
-					$cell_content .= '<img src="'.str_replace(".gif", "_na.gif", $toolsRow['img']).'" title="'.$tool_name.'" alt="'.$tool_name.'" align="absmiddle" border="0">'; // don't replace img with display::return_icon because $toolsRow['img'] = api_get_path(WEB_IMG_PATH).$toolsRow['img']
+				} else {
+					$cell_content .= '<img src="'.str_replace(".gif", "_na.gif", $tool['img']).'" title="'.$tool_name.'" alt="'.$tool_name.'" align="absmiddle" border="0">'; // don't replace img with display::return_icon because $tool['img'] = api_get_path(WEB_IMG_PATH).$tool['img']
 					$cell_content .= '<span class="invisible">'.$tool_name.'</span>';
 				}
 			}
 
-			$lnk = array ();
-			if (api_is_allowed_to_edit(null,true) && $cat != "courseAdmin" && !strpos($toolsRow['link'], 'learnpath_handler.php?learnpath_id') && !api_is_coach())
-			{
-				if ($toolsRow["visibility"])
-				{
-					$link['name'] = Display::return_icon('remove.gif', get_lang('Deactivate'), array('style' => 'vertical-align:middle;'));
+			$lnk = array();
+			if (api_is_allowed_to_edit(null, true) && $cat != "courseAdmin" && !strpos($tool['link'], 'learnpath_handler.php?learnpath_id') && !api_is_coach()) {
+				if ($tool['visibility']) {
+					$link['name'] = Display::return_icon('remove.gif', get_lang('Deactivate'), array('style' => 'vertical-align: middle;'));
 					$link['cmd'] = "hide=yes";
 					$lnk[] = $link;
-				}
-				else
-				{
-					$link['name'] = Display::return_icon('add.gif', get_lang('Activate'), array('style' => 'vertical-align:middle;'));
+				} else {
+					$link['name'] = Display::return_icon('add.gif', get_lang('Activate'), array('style' => 'vertical-align: middle;'));
 					$link['cmd'] = "restore=yes";
 					$lnk[] = $link;
 
-					/*if($toolsRow["img"] == $dokeosRepositoryWeb."img/external.gif")
-					{
-						$link['name'] = get_lang('Remove'); $link['cmd']  = "remove=yes";
-						if ($toolsRow["visibility"]==2 and $cat=="platformAdmin")
-						{
-							$link['name'] = get_lang('Delete'); $link['cmd'] = "askDelete=yes";
+					/*if ($tool['img'] == api_get_path(WEB_IMG_PATH).'external.gif') {
+						$link['name'] = get_lang('Remove');
+						$link['cmd']  = 'remove=yes';
+						if ($tool['visibility'] == 2 && $cat == 'platformAdmin') {
+							$link['name'] = get_lang('Delete');
+							$link['cmd'] = 'askDelete=yes';
 							$lnk[] = $link;
 						}
 					}*/
 				}
 				//echo "<div class=courseadmin>";
-				if (is_array($lnk))
-				{
-					foreach ($lnk as $thisLnk)
-					{
-						if ($toolsRow['adminlink'])
-						{
+				if (is_array($lnk)) {
+					foreach ($lnk as & $this_lnk) {
+						if ($tool['adminlink']) {
 							$cell_content .= '<a href="'.$properties['adminlink'].'">'.Display::return_icon('edit.gif', get_lang('Edit')).'</a>';
-							//echo "edit link:".$properties['adminlink'];
-						}
-						else
-						{
-							$cell_content .= "<a href=\"".api_get_self()."?id=".$toolsRow["id"]."&amp;".$thisLnk['cmd']."\">".$thisLnk['name']."</a>";
+						} else {
+							$cell_content .= '<a href="'.api_get_self().'?id='.$tool['id'].'&amp;'.$this_lnk['cmd'].'">'.$this_lnk['name'].'</a>';
 						}
 					}
 				}
 
 				// RH: Allow editing of invisible homepage links (modified external_module)
-				/*
-				if ($toolsRow["added_tool"] == 1 && api_is_allowed_to_edit() && !$toolsRow["visibility"])
-				*/
-				if ($toolsRow["added_tool"] == 1 && api_is_allowed_to_edit() && !$toolsRow["visibility"]
-					&& $toolsRow['image'] != 'scormbuilder.gif' && $toolsRow['image'] != 'scormbuilder_na.gif')
-				{
-					$cell_content .= "<a class=\"nobold\" href=\"".api_get_path(WEB_CODE_PATH).'external_module/external_module.php'."?id=".$toolsRow["id"]."\">".get_lang("Edit")."</a>";
+				if ($tool['added_tool'] == 1 && api_is_allowed_to_edit() && !$tool['visibility']
+						&& $tool['image'] != 'scormbuilder.gif' && $tool['image'] != 'scormbuilder_na.gif') {
+					$cell_content .= '<a class="nobold" href="'.api_get_path(WEB_CODE_PATH).'external_module/external_module.php?id='.$tool['id'].'">'.get_lang('Edit').'</a>';
 				}
 			}
 			$table->setCellContents($cell_number / $numcols, ($cell_number) % $numcols, $cell_content);
@@ -259,17 +203,17 @@ class CourseHome {
 	 * "Public", "PublicButHide", "courseAdmin", "claroAdmin"
 	 */
 	function show_tool_2column($course_tool_category) {
-		global $charset;
+		$charset = api_get_system_encoding();
 		$web_code_path = api_get_path(WEB_CODE_PATH);
 		$course_tool_table = Database::get_course_table(TABLE_TOOL_LIST);
 
-		switch ($course_tool_category)
-		{
+		switch ($course_tool_category) {
+
 			case TOOL_PUBLIC:
 
 					$condition_display_tools = ' WHERE visibility = 1 ';
 					if (api_is_coach()) {
-						$condition_display_tools = ' WHERE visibility = 1 OR (visibility = 0 AND name = "'.TOOL_TRACKING.'") ';	
+						$condition_display_tools = ' WHERE visibility = 1 OR (visibility = 0 AND name = "'.TOOL_TRACKING.'") ';
 					}
 
 					$result = Database::query("SELECT * FROM $course_tool_table $condition_display_tools ORDER BY id");
@@ -294,23 +238,20 @@ class CourseHome {
 					$colLink ="##003399";
 		}
 
-		$i=0;
+		$i = 0;
 
-		// grabbing all the tools from $course_tool_table
-		while ($temp_row = Database::fetch_array($result))
-		{
-			if($course_tool_category == TOOL_PUBLIC_BUT_HIDDEN && $temp_row['image'] != 'scormbuilder.gif')
-			{
-				$temp_row['image']=str_replace('.gif','_na.gif',$temp_row['image']);
+		// Grabbing all the tools from $course_tool_table
+		while ($temp_row = Database::fetch_array($result)) {
+			if ($course_tool_category == TOOL_PUBLIC_BUT_HIDDEN && $temp_row['image'] != 'scormbuilder.gif') {
+				$temp_row['image'] = str_replace('.gif', '_na.gif', $temp_row['image']);
 			}
-			$all_tools_list[]=$temp_row;
+			$all_tools_list[] = $temp_row;
 		}
 
-		// grabbing all the links that have the property on_homepage set to 1
+		// Grabbing all the links that have the property on_homepage set to 1
 		$course_link_table = Database::get_course_table(TABLE_LINK);
 		$course_item_property_table = Database::get_course_table(TABLE_ITEM_PROPERTY);
-		switch ($course_tool_category)
-		{
+		switch ($course_tool_category)  {
 			case TOOL_PUBLIC:
 				$sql_links="SELECT tl.*, tip.visibility
 						FROM $course_link_table tl
@@ -327,167 +268,123 @@ class CourseHome {
 				$sql_links = null;
 				break;
 		}
-		if( $sql_links != null )
-		{
+		if ($sql_links != null) {
 			$properties = array();
-			$result_links=Database::query($sql_links);
-			while ($links_row=Database::fetch_array($result_links))
-			{
+			$result_links = Database::query($sql_links);
+			while ($links_row = Database::fetch_array($result_links)) {
 				unset($properties);
-				$properties['name']=$links_row['title'];
-				$properties['link']=$links_row['url'];
-				$properties['visibility']=$links_row['visibility'];
-				$properties['image']=($course_tool_category == TOOL_PUBLIC_BUT_HIDDEN)?"external_na.gif":"external.gif";
-				$properties['adminlink']=api_get_path(WEB_CODE_PATH)."link/link.php?action=editlink&id=".$links_row['id'];
-				$all_tools_list[]=$properties;
+				$properties['name'] = $links_row['title'];
+				$properties['link'] = $links_row['url'];
+				$properties['visibility'] = $links_row['visibility'];
+				$properties['image'] = $course_tool_category == TOOL_PUBLIC_BUT_HIDDEN ? 'external_na.gif' : 'external.gif';
+				$properties['adminlink'] = api_get_path(WEB_CODE_PATH).'link/link.php?action=editlink&id='.$links_row['id'];
+				$all_tools_list[] = $properties;
 			}
 		}
 
-		if (isset($all_tools_list))
-		{
+		if (isset($all_tools_list)) {
 			$lnk = array();
-			foreach ($all_tools_list as $toolsRow)
-			{
-				if (api_get_session_id()!=0 && in_array($toolsRow['name'],array('course_maintenance','course_setting'))) {
+			foreach ($all_tools_list as & $tool) {
+				if (api_get_session_id() != 0 && in_array($tool['name'], array('course_maintenance', 'course_setting'))) {
 					continue;
 				}
 
-				if (!($i%2))
-				{
-					echo	"<tr valign=\"top\">\n";
+				if (!($i % 2)) {
+					echo "<tr valign=\"top\">\n";
 				}
 
-				// NOTE : table contains only the image file name, not full path
-				if(!stristr($toolsRow['link'],'http://') && !stristr($toolsRow['link'],'https://') && !stristr($toolsRow['link'],'ftp://'))
-				{
-					$toolsRow['link']=$web_code_path.$toolsRow['link'];
+				// NOTE : Table contains only the image file name, not full path
+				if (stripos($tool['link'], 'http://') === false && stripos($tool['link'], 'https://') === false && stripos($tool['link'], 'ftp://') === false) {
+					$tool['link'] = $web_code_path.$tool['link'];
 				}
-				if ($course_tool_category == TOOL_PUBLIC_BUT_HIDDEN)
-				{
-				    $class="class=\"invisible\"";
+				if ($course_tool_category == TOOL_PUBLIC_BUT_HIDDEN) {
+				    $class = 'class="invisible"';
 				}
-				$qm_or_amp = ((strpos($toolsRow['link'],'?')===FALSE)?'?':'&amp;');
+				$qm_or_amp = strpos($tool['link'], '?') === false ? '?' : '&amp;';
 
-				$toolsRow['link'] = $toolsRow['link'];
-				echo	'<td width="50%" height="30">';
+				$tool['link'] = $tool['link'];
+				echo '<td width="50%" height="30">';
 
-				if(strpos($toolsRow['name'],'visio_')!==false)
-				{
-					echo '<a  '.$class.' href="javascript: void(0);" onclick="window.open(\'' . htmlspecialchars($toolsRow['link']).(($toolsRow['image']=="external.gif" || $toolsRow['image']=="external_na.gif") ? '' : $qm_or_amp.api_get_cidreq()) . '\',\'window_visio'.$_SESSION['_cid'].'\',config=\'height=\'+730+\', width=\'+1020+\', left=2, top=2, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no\')" target="' . $toolsRow['target'] . '">';
-				}
-
-				else if(strpos($toolsRow['name'],'chat')!==false && api_get_course_setting('allow_open_chat_window')==true)
-				{
-					/*
-					echo  '<a href="#" onclick="window.open(\'' . htmlspecialchars($toolsRow['link']) .(($toolsRow['image']=="external.gif" || $toolsRow['image']=="external_na.gif") ? '' : $qm_or_amp.api_get_cidreq()). '\',\'window_chat'.$_SESSION['_cid'].'\',config=\'height=\'+380+\', width=\'+625+\', left=2, top=2, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no\')" target="' . $toolsRow['target'] . '"'.$class.'>';
-					*/
-					echo  '<a href="javascript: void(0);" onclick="window.open(\'' . htmlspecialchars($toolsRow['link']).$qm_or_amp.api_get_cidreq() . '\',\'window_chat'.$_SESSION['_cid'].'\',config=\'height=\'+380+\', width=\'+625+\', left=2, top=2, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no\')" target="' . $toolsRow['target'] . '"'.$class.'>';
-				}
-				else
-				{
-					echo	'<a href="'. htmlspecialchars($toolsRow['link']).(($toolsRow['image']=="external.gif" || $toolsRow['image']=="external_na.gif") ? '' : $qm_or_amp.api_get_cidreq()).'" target="' , $toolsRow['target'], '" '.$class.'>';
+				if (strpos($tool['name'], 'visio_') !== false) {
+					echo '<a  '.$class.' href="javascript: void(0);" onclick="javascript: window.open(\'' . htmlspecialchars($tool['link']).(($tool['image']=="external.gif" || $tool['image']=="external_na.gif") ? '' : $qm_or_amp.api_get_cidreq()) . '\',\'window_visio'.$_SESSION['_cid'].'\',config=\'height=\'+730+\', width=\'+1020+\', left=2, top=2, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no\')" target="' . $tool['target'] . '">';
+				} elseif (strpos($tool['name'], 'chat') !== false && api_get_course_setting('allow_open_chat_window')) {
+					echo '<a href="javascript: void(0);" onclick="javascript: window.open(\'' . htmlspecialchars($tool['link']).$qm_or_amp.api_get_cidreq() . '\',\'window_chat'.$_SESSION['_cid'].'\',config=\'height=\'+380+\', width=\'+625+\', left=2, top=2, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no\')" target="' . $tool['target'] . '"'.$class.'>';
+				} else {
+					echo '<a href="'. htmlspecialchars($tool['link']).(($tool['image'] == 'external.gif' || $tool['image'] == 'external_na.gif') ? '' : $qm_or_amp.api_get_cidreq()).'" target="' , $tool['target'], '" '.$class.'>';
 				}
 
-				/*
-				echo Display::return_icon($toolsRow['image'], get_lang(ucfirst($toolsRow['name']))),'&nbsp;', ($toolsRow['image']=="external.gif" || $toolsRow['image']=="external_na.gif" || $toolsRow['image']=="scormbuilder.gif" || $toolsRow['image']=="blog.gif") ? htmlspecialchars( $toolsRow['name'],ENT_QUOTES,$charset) : get_lang(ucfirst($toolsRow['name'])),'</a>';
-				*/
-				if ($toolsRow['image'] == 'file_html.gif' || $toolsRow['image'] == 'file_html_na.gif'
-					|| $toolsRow['image'] == 'scormbuilder.gif' || $toolsRow['image'] == 'scormbuilder_na.gif'
-					|| $toolsRow['image'] == 'blog.gif' || $toolsRow['image'] == 'blog_na.gif'
-					|| $toolsRow['image'] == 'external.gif' || $toolsRow['image'] == 'external_na.gif')
-				{
-					$tool_name = htmlspecialchars($toolsRow['name'], ENT_QUOTES, $charset);
+				if ($tool['image'] == 'file_html.gif' || $tool['image'] == 'file_html_na.gif'
+						|| $tool['image'] == 'scormbuilder.gif' || $tool['image'] == 'scormbuilder_na.gif'
+						|| $tool['image'] == 'blog.gif' || $tool['image'] == 'blog_na.gif'
+						|| $tool['image'] == 'external.gif' || $tool['image'] == 'external_na.gif') {
+					$tool_name = @htmlspecialchars($tool['name'], ENT_QUOTES, $charset);
+				} else {
+					$tool_name = get_lang(ucfirst($tool['name']));
 				}
-				else
-				{
-					$tool_name = get_lang(ucfirst($toolsRow['name']));
-				}
-				echo Display::return_icon($toolsRow['image'], $tool_name),'&nbsp;', $tool_name,'</a>';
+				echo Display::return_icon($tool['image'], $tool_name),'&nbsp;', $tool_name,'</a>';
 
 				// This part displays the links to hide or remove a tool.
 				// These links are only visible by the course manager.
 				unset($lnk);
-				if (api_is_allowed_to_edit(null,true) && !api_is_coach())
-				{
-					
-					
-					if ($toolsRow['visibility'] == '1' || $toolsRow['name'] == TOOL_TRACKING)
-					{
+				if (api_is_allowed_to_edit(null, true) && !api_is_coach()) {
+
+					if ($tool['visibility'] == '1' || $tool['name'] == TOOL_TRACKING) {
 						$link['name'] = Display::return_icon('remove.gif', get_lang('Deactivate'));
-						$link['cmd'] = "hide=yes";
+						$link['cmd'] = 'hide=yes';
 						$lnk[] = $link;
 					}
 
-					if ($course_tool_category == TOOL_PUBLIC_BUT_HIDDEN)
-					{
+					if ($course_tool_category == TOOL_PUBLIC_BUT_HIDDEN) {
 						$link['name'] = Display::return_icon('add.gif', get_lang('Activate'));
-						$link['cmd']  = "restore=yes";
+						$link['cmd']  = 'restore=yes';
 						$lnk[] = $link;
 
-						if($toolsRow["added_tool"] == 1)
-						{
+						if ($tool['added_tool'] == 1) {
 							$link['name'] = Display::return_icon('delete.gif', get_lang('Remove'));
-							$link['cmd']  = "remove=yes";
+							$link['cmd']  = 'remove=yes';
 							$lnk[] = $link;
 						}
 					}
-					if ($toolsRow['adminlink'])
-					{
-						echo	'<a href="'.$toolsRow['adminlink'].'">'.Display::return_icon('edit.gif', get_lang('Edit')).'</a>';
-						//echo "edit link:".$properties['adminlink'];
+					if ($tool['adminlink']) {
+						echo '<a href="'.$tool['adminlink'].'">'.Display::return_icon('edit.gif', get_lang('Edit')).'</a>';
 					}
 
 				}
-				if ( api_is_platform_admin() && !api_is_coach())
-				{
-					if ($toolsRow["visibility"]==2)
-					{
+				if (api_is_platform_admin() && !api_is_coach()) {
+					if ($tool['visibility'] == 2) {
 						$link['name'] = Display::return_icon('undelete.gif', get_lang('Activate'));
 
-						$link['cmd']  = "hide=yes";
+						$link['cmd']  = 'hide=yes';
 						$lnk[] = $link;
 
-						if($toolsRow["added_tool"] == 1)
-						{
-							$link['name'] = get_lang("Delete");
-							$link['cmd'] = "askDelete=yes";
+						if ($tool['added_tool'] == 1) {
+							$link['name'] = get_lang('Delete');
+							$link['cmd'] = 'askDelete=yes';
 							$lnk[] = $link;
 						}
 					}
-					if ($toolsRow["visibility"] == 0  && $toolsRow["added_tool"] == 0)
-					{
+					if ($tool['visibility'] == 0  && $tool['added_tool'] == 0) {
 						$link['name'] = Display::return_icon('delete.gif', get_lang('Remove'));
-						$link['cmd'] = "remove=yes";
+						$link['cmd'] = 'remove=yes';
 						$lnk[] = $link;
-						
 					}
 				}
-				if (is_array($lnk))
-				{
-					foreach($lnk as $this_link)
-					{
-						if (!$toolsRow['adminlink'])
-							{
-								echo "<a href=\"" .api_get_self(). "?".api_get_cidreq()."&amp;id=" . $toolsRow["id"] . "&amp;" . $this_link['cmd'] . "\">" .	$this_link['name'] . "</a>";
-							}
+				if (is_array($lnk)) {
+					foreach($lnk as $this_link) {
+						if (!$tool['adminlink']) {
+							echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;id='.$tool['id'].'&amp;'.$this_link['cmd'].'">'.$this_link['name'].'</a>';
+						}
 					}
 				}
 
 				// Allow editing of invisible homepage links (modified external_module)
-				/*
-				if ($toolsRow["added_tool"] == 1 &&
-						api_is_allowed_to_edit() && !$toolsRow["visibility"])
-				*/
-				if ($toolsRow["added_tool"] == 1 && api_is_allowed_to_edit(null,true) && !$toolsRow["visibility"]
-					&& $toolsRow['image'] != 'scormbuilder.gif' && $toolsRow['image'] != 'scormbuilder_na.gif')
-					echo	"<a class=\"nobold\" href=\"" . api_get_path(WEB_PATH) .
-							'main/external_module/external_module.php' .
-							"?".api_get_cidreq()."&amp;id=".$toolsRow["id"]."\">". get_lang("Edit"). "</a>";
-
+				if ($tool['added_tool'] == 1 && api_is_allowed_to_edit(null, true) && !$tool['visibility']
+						&& $tool['image'] != 'scormbuilder.gif' && $tool['image'] != 'scormbuilder_na.gif') {
+					echo '<a class="nobold" href="'.api_get_path(WEB_CODE_PATH).'external_module/external_module.php?'.api_get_cidreq().'&amp;id='.$tool['id'].'">'.get_lang('Edit').'</a>';
+				}
 				echo "</td>\n";
 
-				if($i%2)
-				{
+				if ($i % 2) {
 					echo "</tr>\n";
 				}
 
@@ -495,10 +392,8 @@ class CourseHome {
 			}
 		}
 
-		if($i%2)
-		{
-			echo	"<td width=\"50%\">&nbsp;</td>\n",
-					"</tr>\n";
+		if ($i % 2) {
+			echo "<td width=\"50%\">&nbsp;</td>\n", "</tr>\n";
 		}
 	}
 
@@ -514,20 +409,20 @@ class CourseHome {
 		global $_user;
 		$web_code_path = api_get_path(WEB_CODE_PATH);
 		$course_tool_table = Database::get_course_table(TABLE_TOOL_LIST);
-		$is_allowed_to_edit = api_is_allowed_to_edit(null,true);
+		$is_allowed_to_edit = api_is_allowed_to_edit(null, true);
 		$is_platform_admin = api_is_platform_admin();
 		$all_tools_list = array();
 
-		//condition for the session
+		// Condition for the session
 		$session_id = api_get_session_id();
-		$condition_session = api_get_session_condition($session_id,true,true);
+		$condition_session = api_get_session_condition($session_id, true, true);
 
 		switch ($course_tool_category) {
 			case TOOL_STUDENT_VIEW:
 					$condition_display_tools = ' WHERE visibility = 1 AND (category = "authoring" OR category = "interaction") ';
 					if (api_is_coach()) {
 						$condition_display_tools = ' WHERE (visibility = 1 AND (category = "authoring" OR category = "interaction")) OR (name = "'.TOOL_TRACKING.'")  ';
-					} 					
+					}
 					$sql = "SELECT * FROM $course_tool_table  $condition_display_tools $condition_session ORDER BY id";
 					$result = Database::query($sql);
 					$colLink ="##003399";
@@ -555,58 +450,57 @@ class CourseHome {
 		}
 
 		while ($temp_row = Database::fetch_array($result)) {
-			$all_tools_list[]=$temp_row;
+			$all_tools_list[] = $temp_row;
 		}
 
-		/*if(api_is_course_coach())
-		{
+		/*if(api_is_course_coach()) {
 			$result = Database::query("SELECT * FROM $course_tool_table WHERE name='tracking'");
 			$all_tools_list[]=Database :: fetch_array($result);
 		}*/
 
-		$i=0;
-		// grabbing all the links that have the property on_homepage set to 1
+		$i = 0;
+		// Grabbing all the links that have the property on_homepage set to 1
 		$course_link_table = Database::get_course_table(TABLE_LINK);
 		$course_item_property_table = Database::get_course_table(TABLE_ITEM_PROPERTY);
 
 		switch ($course_tool_category) {
 				case TOOL_AUTHORING:
-				$sql_links="SELECT tl.*, tip.visibility
+					$sql_links = "SELECT tl.*, tip.visibility
 						FROM $course_link_table tl
 						LEFT JOIN $course_item_property_table tip ON tip.tool='link' AND tip.ref=tl.id
-						WHERE tl.on_homepage='1' $condition_session";
-				break;
+							WHERE tl.on_homepage='1' $condition_session";
+					break;
 
 				case TOOL_INTERACTION:
-				$sql_links = null;
-				/*
-				$sql_links="SELECT tl.*, tip.visibility
-					FROM $course_link_table tl
-					LEFT JOIN $course_item_property_table tip ON tip.tool='link' AND tip.ref=tl.id
+					$sql_links = null;
+					/*
+					$sql_links = "SELECT tl.*, tip.visibility
+						FROM $course_link_table tl
+						LEFT JOIN $course_item_property_table tip ON tip.tool='link' AND tip.ref=tl.id
 							WHERE tl.on_homepage='1' ";
-				*/
-				break;
+					*/
+					break;
 
 				case TOOL_STUDENT_VIEW:
-					$sql_links="SELECT tl.*, tip.visibility
-					FROM $course_link_table tl
-					LEFT JOIN $course_item_property_table tip ON tip.tool='link' AND tip.ref=tl.id
+					$sql_links = "SELECT tl.*, tip.visibility
+						FROM $course_link_table tl
+						LEFT JOIN $course_item_property_table tip ON tip.tool='link' AND tip.ref=tl.id
 							WHERE tl.on_homepage='1' $condition_session";
-				break;
+					break;
 
 				case TOOL_ADMIN:
-					$sql_links="SELECT tl.*, tip.visibility
-					FROM $course_link_table tl
-					LEFT JOIN $course_item_property_table tip ON tip.tool='link' AND tip.ref=tl.id
+					$sql_links = "SELECT tl.*, tip.visibility
+						FROM $course_link_table tl
+						LEFT JOIN $course_item_property_table tip ON tip.tool='link' AND tip.ref=tl.id
 							WHERE tl.on_homepage='1' $condition_session";
-				break;
+					break;
 
-			default:
-				$sql_links = null;
-				break;
+				default:
+					$sql_links = null;
+					break;
 		}
 
-		//edit by Kevin Van Den Haute (kevin@develop-it.be) for integrating Smartblogs
+		// Edited by Kevin Van Den Haute (kevin@develop-it.be) for integrating Smartblogs
 		if ($sql_links != null) {
 			$result_links = Database::query($sql_links);
 			$properties = array();
@@ -617,8 +511,8 @@ class CourseHome {
 					$properties['session_id'] = $links_row['session_id'];
 					$properties['link'] = $links_row['url'];
 					$properties['visibility'] = $links_row['visibility'];
-					$properties['image'] = ($links_row['visibility']== '0') ? "file_html.gif" : "file_html.gif";
-					$properties['adminlink'] = api_get_path(WEB_CODE_PATH) . "link/link.php?action=editlink&id=".$links_row['id'];
+					$properties['image'] = ($links_row['visibility'] == '0') ? 'file_html.gif' : 'file_html.gif';
+					$properties['adminlink'] = api_get_path(WEB_CODE_PATH).'link/link.php?action=editlink&id='.$links_row['id'];
 					$properties['target'] = $links_row['target'];
 					$tmp_all_tools_list[] = $properties;
 				}
@@ -626,16 +520,16 @@ class CourseHome {
 		}
 
 		if (isset($tmp_all_tools_list)) {
-			foreach ($tmp_all_tools_list as $toolsRow) {
-				if ($toolsRow['image'] == 'blog.gif') {
+			foreach ($tmp_all_tools_list as $tool) {
+				if ($tool['image'] == 'blog.gif') {
 					// Init
 					$tbl_blogs_rel_user = Database::get_course_table(TABLE_BLOGS_REL_USER);
 
 					// Get blog id
-					$blog_id = substr($toolsRow['link'], strrpos($toolsRow['link'], '=') + 1, strlen($toolsRow['link']));
+					$blog_id = substr($tool['link'], strrpos($tool['link'], '=') + 1, strlen($tool['link']));
 
 					// Get blog members
-					if($is_platform_admin) {
+					if ($is_platform_admin) {
 						$sql_blogs = "
 							SELECT *
 							FROM " . $tbl_blogs_rel_user . " blogs_rel_user
@@ -652,10 +546,10 @@ class CourseHome {
 					$result_blogs = Database::query($sql_blogs);
 
 					if (Database::num_rows($result_blogs) > 0) {
-						$all_tools_list[] = $toolsRow;
+						$all_tools_list[] = $tool;
 					}
 				} else {
-					$all_tools_list[] = $toolsRow;
+					$all_tools_list[] = $tool;
 				}
 			}
 		}
@@ -668,174 +562,155 @@ class CourseHome {
 	 * @return void
 	 */
 
-	public static function show_tools_category($all_tools_list)
-	{
-		
+	public static function show_tools_category($all_tools_list) {
+
 		global $_user;
 		$web_code_path = api_get_path(WEB_CODE_PATH);
 		$course_tool_table = Database::get_course_table(TABLE_TOOL_LIST);
-		$is_allowed_to_edit = api_is_allowed_to_edit(null,true);
+		$is_allowed_to_edit = api_is_allowed_to_edit(null, true);
 		$is_platform_admin = api_is_platform_admin();
 		$i = 0;
 		if (isset($all_tools_list)) {
 			$lnk = '';
-			foreach ($all_tools_list as $toolsRow) {
-				if (api_get_session_id()!=0 && in_array($toolsRow['name'],array('course_maintenance','course_setting'))) {
+			foreach ($all_tools_list as & $tool) {
+				if (api_get_session_id() != 0 && in_array($tool['name'], array('course_maintenance', 'course_setting'))) {
 					continue;
 				}
 
-				if (!($i%2)) {
-					echo	"<tr valign=\"top\">\n";
+				if (!($i % 2)) {
+					echo "<tr valign=\"top\">\n";
 	            }
 
 				// This part displays the links to hide or remove a tool.
 				// These links are only visible by the course manager.
 				unset($lnk);
-				echo '<td width="50%">' . "\n";
+				echo '<td width="50%">'."\n";
 				if ($is_allowed_to_edit && !api_is_coach()) {
 
-					if ($toolsRow['visibility'] == '1' && $toolsRow['admin'] !='1') {
-						$link['name'] = Display::return_icon('visible.gif', get_lang('Deactivate'),array('id'=>'linktool_'.$toolsRow["id"]));
-						$link['cmd'] = "hide=yes";
+					if ($tool['visibility'] == '1' && $tool['admin'] != '1') {
+						$link['name'] = Display::return_icon('visible.gif', get_lang('Deactivate'), array('id' => 'linktool_'.$tool['id']));
+						$link['cmd'] = 'hide=yes';
 						$lnk[] = $link;
 					}
 
-					if ($toolsRow['visibility'] == '0' && $toolsRow['admin'] !='1') {
-						$link['name'] = Display::return_icon('invisible.gif', get_lang('Activate'),array('id'=>'linktool_'.$toolsRow["id"]));
-						$link['cmd'] = "restore=yes";
+					if ($tool['visibility'] == '0' && $tool['admin'] != '1') {
+						$link['name'] = Display::return_icon('invisible.gif', get_lang('Activate'), array('id' => 'linktool_'.$tool['id']));
+						$link['cmd'] = 'restore=yes';
 						$lnk[] = $link;
 					}
 
-					if (!empty($toolsRow['adminlink'])) {
-						echo '<a href="'.$toolsRow['adminlink'].'">'.Display::return_icon('edit.gif', get_lang('Edit')).'</a>';
+					if (!empty($tool['adminlink'])) {
+						echo '<a href="'.$tool['adminlink'].'">'.Display::return_icon('edit.gif', get_lang('Edit')).'</a>';
 					}
 
 				}
 
 				// Both checks are necessary as is_platform_admin doesn't take student view into account
 				if ($is_platform_admin && $is_allowed_to_edit) {
-	 				if ($toolsRow['admin'] !='1') {
-						$link['cmd'] = "hide=yes";
+	 				if ($tool['admin'] != '1') {
+						$link['cmd'] = 'hide=yes';
 					}
 				}
 
 				if (isset($lnk) && is_array($lnk)) {
-					foreach ($lnk as $this_link)	{
-						if (empty($toolsRow['adminlink'])) {
-							echo '<a class="make_visible_and_invisible"  href="'.api_get_self(). '?'.api_get_cidreq()."&amp;id=" . $toolsRow['id'] . "&amp;" . $this_link['cmd'] . "\">" .	$this_link['name'] . "</a>";
+					foreach ($lnk as $this_link) {
+						if (empty($tool['adminlink'])) {
+							echo '<a class="make_visible_and_invisible"  href="'.api_get_self().'?'.api_get_cidreq().'&amp;id='.$tool['id'].'&amp;'.$this_link['cmd'].'">'.$this_link['name'].'</a>';
 						}
 					}
-				} else { echo '&nbsp;&nbsp;&nbsp;&nbsp;';}
+				} else {
+					echo '&nbsp;&nbsp;&nbsp;&nbsp;';
+				}
 
-				// NOTE : table contains only the image file name, not full path
-				if (!stristr($toolsRow['link'], 'http://')
-	                    && !stristr($toolsRow['link'], 'https://')
-	                    && !stristr($toolsRow['link'],'ftp://')) {
-					$toolsRow['link'] = $web_code_path . $toolsRow['link'];
+				// NOTE : Table contains only the image file name, not full path
+				if (stripos($tool['link'], 'http://') === false && stripos($tool['link'], 'https://') === false && stripos($tool['link'], 'ftp://') === false) {
+					$tool['link'] = $web_code_path.$tool['link'];
 	            }
-				if ($toolsRow['visibility'] == '0' && $toolsRow['admin'] != '1') {
-				  	$class="class=\"invisible\"";
-				  	$info = pathinfo($toolsRow['image']);
-				  	$basename = basename ($toolsRow['image'],'.'.$info['extension']); // $file is set to "index"
-					$toolsRow['image'] = $basename.'_na.'.$info['extension'];
+				if ($tool['visibility'] == '0' && $tool['admin'] != '1') {
+				  	$class = 'class="invisible"';
+				  	$info = pathinfo($tool['image']);
+				  	$basename = basename($tool['image'], '.'.$info['extension']); // $file is set to "index"
+					$tool['image'] = $basename.'_na.'.$info['extension'];
 				} else {
-					$class='';
+					$class = '';
 				}
 
-				$qm_or_amp = ((strpos($toolsRow['link'], '?') === FALSE) ? '?' : '&amp;');
-				//If it's a link, we don't add the cidReq
-				if ($toolsRow['image'] == 'file_html.gif' || $toolsRow['image'] == 'file_html_na.gif') {
-					$toolsRow['link'] = $toolsRow['link'].$qm_or_amp;
-				} else {					
-					$toolsRow['link'] = $toolsRow['link'].$qm_or_amp.api_get_cidreq();
+				$qm_or_amp = strpos($tool['link'], '?') === false ? '?' : '&amp;';
+				// If it's a link, we don't add the cidReq
+				if ($tool['image'] == 'file_html.gif' || $tool['image'] == 'file_html_na.gif') {
+					$tool['link'] = $tool['link'].$qm_or_amp;
+				} else {
+					$tool['link'] = $tool['link'].$qm_or_amp.api_get_cidreq();
 				}
-				if (strpos($toolsRow['name'],'visio_')!==false) {
-					/*
-					$toollink = "\t" . '<a ' . $class . ' href="#" onclick="window.open(\'' . htmlspecialchars($toolsRow['link']) . '\',\'window_visio\',config=\'height=\'+730+\', width=\'+1020+\', left=2, top=2, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no\')" target="' . $toolsRow['target'] . '">';
-					*/
 
-					$toollink = "\t" . '<a id="tooldesc_'.$toolsRow["id"].'"  ' . $class . ' href="javascript: void(0);" onclick="window.open(\'' . htmlspecialchars($toolsRow['link']) . '\',\'window_visio'.$_SESSION['_cid'].'\',config=\'height=\'+730+\', width=\'+1020+\', left=2, top=2, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no\')" target="' . $toolsRow['target'] . '">';
-					$my_tool_link = "\t" . '<a id="istooldesc_'.$toolsRow["id"].'"  ' . $class . ' href="javascript: void(0);" onclick="window.open(\'' . htmlspecialchars($toolsRow['link']) . '\',\'window_visio'.$_SESSION['_cid'].'\',config=\'height=\'+730+\', width=\'+1020+\', left=2, top=2, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no\')" target="' . $toolsRow['target'] . '">';
-				} elseif (strpos($toolsRow['name'],'chat')!==false && api_get_course_setting('allow_open_chat_window')==true) {
-					/*
-					$toollink = "\t" . '<a ' . $class . ' href="#" onclick="window.open(\'' . htmlspecialchars($toolsRow['link']) . '\',\'window_chat'.$_SESSION['_cid'].'\',config=\'height=\'+380+\', width=\'+625+\', left=2, top=2, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no\')" target="' . $toolsRow['target'] . '">';
-					*/
-					$toollink = "\t" . '<a id="tooldesc_'.$toolsRow["id"].'" ' . $class . ' href="javascript: void(0);" onclick="window.open(\'' . htmlspecialchars($toolsRow['link']) . '\',\'window_chat'.$_SESSION['_cid'].'\',config=\'height=\'+380+\', width=\'+625+\', left=2, top=2, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no\')" target="' . $toolsRow['target'] . '">';
-					$my_tool_link="\t" . '<a id="istooldesc_'.$toolsRow["id"].'" ' . $class . ' href="javascript: void(0);" onclick="window.open(\'' . htmlspecialchars($toolsRow['link']) . '\',\'window_chat'.$_SESSION['_cid'].'\',config=\'height=\'+380+\', width=\'+625+\', left=2, top=2, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no\')" target="' . $toolsRow['target'] . '">';
+				if (strpos($tool['name'],'visio_') !== false) {
+					$toollink = "\t" . '<a id="tooldesc_'.$tool["id"].'"  ' . $class . ' href="javascript: void(0);" onclick="javascript: window.open(\'' . htmlspecialchars($tool['link']) . '\',\'window_visio'.$_SESSION['_cid'].'\',config=\'height=\'+730+\', width=\'+1020+\', left=2, top=2, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no\')" target="' . $tool['target'] . '">';
+					$my_tool_link = "\t" . '<a id="istooldesc_'.$tool["id"].'"  ' . $class . ' href="javascript: void(0);" onclick="javascript: window.open(\'' . htmlspecialchars($tool['link']) . '\',\'window_visio'.$_SESSION['_cid'].'\',config=\'height=\'+730+\', width=\'+1020+\', left=2, top=2, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no\')" target="' . $tool['target'] . '">';
+
+				} elseif (strpos($tool['name'], 'chat') !== false && api_get_course_setting('allow_open_chat_window')) {
+					$toollink = "\t" . '<a id="tooldesc_'.$tool["id"].'" ' . $class . ' href="javascript: void(0);" onclick="javascript: window.open(\'' . htmlspecialchars($tool['link']) . '\',\'window_chat'.$_SESSION['_cid'].'\',config=\'height=\'+380+\', width=\'+625+\', left=2, top=2, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no\')" target="' . $tool['target'] . '">';
+					$my_tool_link="\t" . '<a id="istooldesc_'.$tool["id"].'" ' . $class . ' href="javascript: void(0);" onclick="javascript: window.open(\'' . htmlspecialchars($tool['link']) . '\',\'window_chat'.$_SESSION['_cid'].'\',config=\'height=\'+380+\', width=\'+625+\', left=2, top=2, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no\')" target="' . $tool['target'] . '">';
 
 				} else {
 
-					if (count(explode('type=classroom',$toolsRow['link']))==2 || count(explode('type=conference',$toolsRow['link']))==2) {
-						//$toollink = "\t" . '<a ' . $class . ' href="' . $toolsRow['link'] . '" target="_blank">';
-						$toollink = "\t" . '<a id="tooldesc_'.$toolsRow["id"].'" ' . $class . ' href="' . $toolsRow['link'] . '" target="_blank">';
-						$my_tool_link = "\t" . '<a id="istooldesc_'.$toolsRow["id"].'" ' . $class . ' href="' . $toolsRow['link'] . '" target="_blank">';
+					if (count(explode('type=classroom',$tool['link'])) == 2 || count(explode('type=conference', $tool['link'])) == 2) {
+						$toollink = "\t" . '<a id="tooldesc_'.$tool["id"].'" ' . $class . ' href="' . $tool['link'] . '" target="_blank">';
+						$my_tool_link = "\t" . '<a id="istooldesc_'.$tool["id"].'" ' . $class . ' href="' . $tool['link'] . '" target="_blank">';
 
 					} else {
-						//$toollink = "\t" . '<a ' . $class . ' href="' . htmlspecialchars($toolsRow['link']) . '" target="' . $toolsRow['target'] . '">';
-						$toollink = "\t" . '<a id="tooldesc_'.$toolsRow["id"].'" ' . $class . ' href="' . htmlspecialchars($toolsRow['link']) . '" target="' . $toolsRow['target'] . '">';
-						$my_tool_link = "\t" . '<a id="istooldesc_'.$toolsRow["id"].'" ' . $class . ' href="' . htmlspecialchars($toolsRow['link']) . '" target="' . $toolsRow['target'] . '">';
+						$toollink = "\t" . '<a id="tooldesc_'.$tool["id"].'" ' . $class . ' href="' . htmlspecialchars($tool['link']) . '" target="' . $tool['target'] . '">';
+						$my_tool_link = "\t" . '<a id="istooldesc_'.$tool["id"].'" ' . $class . ' href="' . htmlspecialchars($tool['link']) . '" target="' . $tool['target'] . '">';
 
 					}
 
 				}
 				echo $toollink;
-				//var_dump($toollink);
-				/*
-				Display::display_icon($toolsRow['image'], get_lang(ucfirst($toolsRow['name'])));
-				*/
-				if ($toolsRow['image'] == 'file_html.gif' || $toolsRow['image'] == 'file_html_na.gif'
-					|| $toolsRow['image'] == 'scormbuilder.gif' || $toolsRow['image'] == 'scormbuilder_na.gif'
-					|| $toolsRow['image'] == 'blog.gif' || $toolsRow['image'] == 'blog_na.gif'
-					|| $toolsRow['image'] == 'external.gif' || $toolsRow['image'] == 'external_na.gif')
-				{
-					$tool_name = stripslashes($toolsRow['name']);
-				} else {
-					$list = explode('_',$toolsRow['name']);
-					foreach($list as &$item) { $item = ucfirst($item); }
-					$tool_name = get_lang('Tool'.implode($list));
-					//$tool_name = get_lang(ucfirst($toolsRow['name']));
-				}
-				Display::display_icon($toolsRow['image'], $tool_name, array('class'=>'tool-icon','id'=>'toolimage_'.$toolsRow["id"]));
 
-				//validacion when belongs to a session
-				$session_img = api_get_session_image($toolsRow['session_id'], $_user['status']);
+				if ($tool['image'] == 'file_html.gif' || $tool['image'] == 'file_html_na.gif'
+						|| $tool['image'] == 'scormbuilder.gif' || $tool['image'] == 'scormbuilder_na.gif'
+						|| $tool['image'] == 'blog.gif' || $tool['image'] == 'blog_na.gif'
+						|| $tool['image'] == 'external.gif' || $tool['image'] == 'external_na.gif') {
+					$tool_name = stripslashes($tool['name']);
+				} else {
+					$list = explode('_', $tool['name']);
+					foreach ($list as & $item) { $item = ucfirst($item); }
+					$tool_name = get_lang('Tool'.implode($list));
+				}
+				Display::display_icon($tool['image'], $tool_name, array('class' => 'tool-icon', 'id' => 'toolimage_'.$tool['id']));
+
+				// Validacion when belongs to a session
+				$session_img = api_get_session_image($tool['session_id'], $_user['status']);
 
 				echo '</a> ';
-
 				echo $my_tool_link;
-				/*
-					echo ($toolsRow['image'] == 'file_html_na.gif' || $toolsRow['image'] == 'file_html.gif' || $toolsRow['image'] == 'scormbuilder.gif' || $toolsRow['image'] == 'scormbuilder_na.gif' || $toolsRow['image'] == 'blog.gif' || $toolsRow['image'] == 'blog_na.gif' || $toolsRow['image'] == 'external.gif' || $toolsRow['image'] == 'external_na.gif') ? '  '.stripslashes($toolsRow['name']) : '  '.get_lang(ucfirst($toolsRow['name']));
-				*/
 				echo "{$tool_name}$session_img";
-				echo "\t" . '</a>';
-				echo '</td>';
-				if ($i%2) {
-					echo "</tr>";
+				echo "\t".'</a></td>';
+
+				if ($i % 2) {
+					echo '</tr>';
 				}
+
 				$i++;
 			}
 		}
 
-		if ($i%2) {
-			echo	"<td width=\"50%\">&nbsp;</td>\n",
-					"</tr>\n";
+		if ($i % 2) {
+			echo "<td width=\"50%\">&nbsp;</td>\n", "</tr>\n";
 		}
 	}
-
 
 	/**
 	 * Shows the general data for a particular meeting
 	 *
 	 * @param id	session id
 	 * @return string	session data
-	 *
 	 */
 	public static function show_session_data($id_session) {
 		$session_table 			= Database::get_main_table(TABLE_MAIN_SESSION);
 		$user_table 			= Database::get_main_table(TABLE_MAIN_USER);
 		$session_category_table = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
 
-		if ($id_session!=strval(intval($id_session))) {
+		if ($id_session != strval(intval($id_session))) {
 			return '';
 		} else {
 			$id_session = intval($id_session);
@@ -876,7 +751,4 @@ class CourseHome {
 		return $output;
 	}
 
-
-
 }
-?>

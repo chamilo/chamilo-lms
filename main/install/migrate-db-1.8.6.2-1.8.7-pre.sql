@@ -68,7 +68,7 @@ INSERT INTO settings_current (variable, subkey, type, category, selected_value, 
 ALTER TABLE user_field_values CHANGE id id BIGINT NOT NULL AUTO_INCREMENT;
 ALTER TABLE user_field_values ADD INDEX (user_id, field_id);
 
-UPDATE settings_current SET selected_value = '1.8.7.10983' WHERE variable = 'dokeos_database_version';
+UPDATE settings_current SET selected_value = '1.8.7.11104' WHERE variable = 'dokeos_database_version';
 
 ALTER TABLE course_rel_user DROP PRIMARY KEY, ADD PRIMARY KEY (course_code, user_id, relation_type);
 ALTER TABLE session_rel_user DROP PRIMARY KEY, ADD PRIMARY KEY (id_session, id_user, relation_type);
@@ -118,3 +118,9 @@ ALTER TABLE lp_view ADD session_id INT NOT NULL DEFAULT 0;
 ALTER TABLE lp_view ADD INDEX(session_id);
 INSERT INTO course_setting (variable,value,category) VALUES ('allow_user_view_user_list',1,'user');
 ALTER TABLE tool_intro ADD COLUMN session_id INT  NOT NULL DEFAULT 0 AFTER intro_text, DROP PRIMARY KEY, ADD PRIMARY KEY  USING BTREE(id, session_id);
+CREATE TABLE thematic (id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, title VARCHAR( 255 ) NOT NULL, content TEXT NULL, display_order int unsigned not null default 0, active TINYINT NOT NULL default 0, session_id INT NOT NULL DEFAULT 0);
+ALTER TABLE thematic ADD INDEX (active, session_id);  
+CREATE TABLE thematic_plan (id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, thematic_id INT NOT NULL, title VARCHAR(255) NOT NULL, description TEXT NULL, description_type` INT NOT NULL); 
+ALTER TABLE thematic_plan ADD INDEX (thematic_id, description_type); 
+CREATE TABLE thematic_advance (id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, thematic_id INT NOT NULL, attendance_id INT NOT NULL DEFAULT 0, content TEXT NOT NULL, start_date DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00', duration INT NOT NULL DEFAULT 0, done_advance tinyint NOT NULL DEFAULT 0);
+ALTER TABLE thematic_advance ADD INDEX (thematic_id);

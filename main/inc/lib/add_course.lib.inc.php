@@ -392,6 +392,10 @@ function update_Db_course($courseDbName, $language = null)
 	$TBL_ATTENDANCE_CALENDAR = $courseDbName . 'attendance_calendar';
 	$TBL_ATTENDANCE_RESULT 	 = $courseDbName . 'attendance_result';
 
+	// Thematic
+	$TBL_THEMATIC 		 	= $courseDbName . 'thematic';
+	$TBL_THEMATIC_PLAN 	 	= $courseDbName . 'thematic_plan';
+	$TBL_THEMATIC_ADVANCE 	= $courseDbName . 'thematic_advance';	
 
 	/*
 	-----------------------------------------------------------
@@ -1781,6 +1785,48 @@ function update_Db_course($courseDbName, $language = null)
 	$sql    = "ALTER TABLE `".$TBL_ATTENDANCE_RESULT."` ADD INDEX (attendance_id)";
 	Database::query($sql);
 	$sql    = "ALTER TABLE `".$TBL_ATTENDANCE_RESULT."` ADD INDEX (user_id)";
+	Database::query($sql);
+
+	// thematic table
+	$sql = "
+			CREATE TABLE `".$TBL_THEMATIC."` (
+				id int NOT NULL auto_increment PRIMARY KEY,
+				title varchar(255) NOT NULL,
+				content text NULL,
+				display_order int unsigned NOT NULL DEFAULT 0,
+				active tinyint NOT NULL DEFAULT 0,
+				session_id int NOT NULL DEFAULT 0
+			)" . $charset_clause;
+	$result = Database::query($sql) or die(Database::error()); 
+	$sql    = "ALTER TABLE `".$TBL_THEMATIC."` ADD INDEX (active, session_id)";
+	Database::query($sql);
+	
+	// thematic plan table
+	$sql = "
+			CREATE TABLE `".$TBL_THEMATIC_PLAN."` (
+				id int NOT NULL auto_increment PRIMARY KEY,
+				thematic_id int NOT NULL,
+				title varchar(255) NOT NULL,
+				description text NULL,
+				description_type int NOT NULL
+			)" . $charset_clause;
+	$result = Database::query($sql) or die(Database::error()); 
+	$sql    = "ALTER TABLE `".$TBL_THEMATIC_PLAN."` ADD INDEX (thematic_id, description_type)";
+	Database::query($sql);
+
+	// thematic advance table
+	$sql = "
+			CREATE TABLE `".$TBL_THEMATIC_ADVANCE."` (
+				id int NOT NULL auto_increment PRIMARY KEY,
+				thematic_id int NOT NULL,
+				attendance_id int NOT NULL DEFAULT 0,
+				content text NULL,
+				start_date datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+				duration int NOT NULL DEFAULT 0,
+				done_advance tinyint NOT NULL DEFAULT 0
+			)" . $charset_clause;
+	$result = Database::query($sql) or die(Database::error()); 
+	$sql    = "ALTER TABLE `".$TBL_THEMATIC_ADVANCE."` ADD INDEX (thematic_id)";
 	Database::query($sql);
 
 	return 0;

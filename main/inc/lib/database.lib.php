@@ -268,6 +268,10 @@ define('TABLE_ATTENDANCE_CALENDAR', 'attendance_calendar');
 define('TABLE_ATTENDANCE_SHEET',	'attendance_sheet');
 define('TABLE_ATTENDANCE_RESULT', 	'attendance_result');
 
+// Thematic 
+define('TABLE_THEMATIC','thematic');
+define('TABLE_THEMATIC_PLAN', 'thematic_plan');
+define('TABLE_THEMATIC_ADVANCE','thematic_advance');
 
 /*		DATABASE CLASS
 		the class and its functions

@@ -1,8 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-require_once 'HTML/Table.php';
-require_once 'Pager/Pager.php';
+require_once 'pear/HTML/Table.php';
+require_once 'pear/Pager/Pager.php';
 require_once 'tablesort.lib.php';
 
 /**

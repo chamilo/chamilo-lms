@@ -32,7 +32,7 @@ class MessageManager
 	public static function get_online_user_list($current_user_id) {
 		$min=30;
 		global $_configuration;
-		$userlist = WhoIsOnline($current_user_id,$_configuration['statistics_database'],$min);
+		$userlist = who_is_online($current_user_id,$_configuration['statistics_database'],$min);
 		foreach($userlist as $row) {
 			$receiver_id = $row[0];
 			$online_user_list[$receiver_id] = GetFullUserName($receiver_id).($current_user_id==$receiver_id?("&nbsp;(".get_lang('Myself').")"):(""));
@@ -95,7 +95,7 @@ class MessageManager
 	public static function users_connected_by_id() {
 		global $_configuration, $_user;
 		$minute=30;
-		$user_connect = WhoIsOnline($_user['user_id'],$_configuration['statistics_database'],$minute);
+		$user_connect = who_is_online($_user['user_id'],$_configuration['statistics_database'],$minute);
 		for ($i=0; $i<count($user_connect); $i++) {
 			$user_id_list[$i]=$user_connect[$i][0];
 		}

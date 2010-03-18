@@ -119,16 +119,14 @@ if ($_GET['chatid'] != '') {
 if ((api_get_setting('showonline', 'world') == 'true' && !$_user['user_id']) || ((api_get_setting('showonline', 'users') == 'true' || api_get_setting('showonline', 'course') == 'true') && $_user['user_id'])) {
 
 	if(isset($_GET['cidReq']) && strlen($_GET['cidReq']) > 0) {
-		$user_list = Who_is_online_in_this_course($_user['user_id'], api_get_setting('time_limit_whosonline'), $_GET['cidReq']);
+		$user_list = who_is_online_in_this_course($_user['user_id'], api_get_setting('time_limit_whosonline'), $_GET['cidReq']);
 	} else {
-		$user_list = WhoIsOnline(api_get_setting('time_limit_whosonline'));
+		$user_list = who_is_online(api_get_setting('time_limit_whosonline'));
 	}
 
 	$total = count($user_list);
 	if (!isset($_GET['id'])) {
-
 		Display::display_header(get_lang('UsersOnLineList'));
-
 		if (api_get_setting('allow_social_tool') == 'true') {
 			if (!api_is_anonymous()) {
 				echo '<div id="social-content-left">';
@@ -139,7 +137,7 @@ if ((api_get_setting('showonline', 'world') == 'true' && !$_user['user_id']) || 
 
 
 			if ($_GET['id'] == '') {
-				echo '<p><a class="refresh" href="javascript:window.location.reload()">'.get_lang('Refresh').'</a></p>';
+				//echo '<p><a class="refresh" href="javascript:window.location.reload()">'.get_lang('Refresh').'</a></p>';
 			} /*else {
 				if (0) {
 				// if ($_user['user_id'] && $_GET["id"] != $_user['user_id']) {
@@ -161,7 +159,7 @@ if ((api_get_setting('showonline', 'world') == 'true' && !$_user['user_id']) || 
 				if (!api_is_anonymous()) {
 					echo UserManager::get_search_form($_GET['q']);
 				}
-			}
+			}			
 			SocialManager::display_user_list($user_list);
 			echo '</div>';
 		} else {

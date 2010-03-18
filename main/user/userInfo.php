@@ -461,7 +461,7 @@ elseif ($displayMode == "viewContentList") // default display
 		}
 
 		// is the user online ?			
-		$users_online = WhoIsOnline(30);
+		$users_online = who_is_online(30);
 		foreach ($users_online as $online) {
 			if (in_array($userIdViewed, $online)) {	
 				

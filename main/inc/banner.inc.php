@@ -93,14 +93,13 @@ if ((api_get_setting('showonline', 'world') == 'true' AND !$_user['user_id']) OR
 	if (api_get_setting('use_session_mode') == 'true' && isset($_user['user_id']) && api_is_coach()) {
 	    echo '<li><a href="'.api_get_path(WEB_PATH).'whoisonlinesession.php?id_coach='.$_user['user_id'].'&amp;referer='.urlencode($_SERVER['REQUEST_URI']).'" target="_top">'.get_lang('UsersConnectedToMySessions').'</a></li>';
 	}
-	$number = count(WhoIsOnline(api_get_setting('time_limit_whosonline')));
+	$number = who_is_online_count(api_get_setting('time_limit_whosonline'));
+	
+	$number_online_in_course = 0;
 	if(!empty($_course['id'])) {
-		$online_in_course = who_is_online_in_this_course(api_get_user_id(), api_get_setting('time_limit_whosonline'), $_course['id']);
-		$number_online_in_course = count($online_in_course);
-	} else {
-		$number_online_in_course = 0;
+		$number_online_in_course = who_is_online_in_this_course_count(api_get_user_id(), api_get_setting('time_limit_whosonline'), $_course['id']);
 	}
-
+	
  	echo '<li>';
 	// Display the who's online of the platform
 	if ((api_get_setting('showonline', 'world') == 'true' AND !$_user['user_id']) OR (api_get_setting('showonline', 'users') == 'true' AND $_user['user_id'])) {

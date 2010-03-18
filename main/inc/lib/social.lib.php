@@ -790,7 +790,7 @@ class SocialManager extends UserManager {
 				$extra_params['cidReq'] = Security::remove_XSS($_GET['cidReq']);
 				$course_url = '&amp;cidReq='.Security::remove_XSS($_GET['cidReq']);
 			}
-
+			
 			foreach ($user_list as $user) {
 				$uid = $user[0];
 				$user_info = api_get_user_info($uid);
@@ -801,7 +801,7 @@ class SocialManager extends UserManager {
 						$url = api_get_path(WEB_PATH).'main/social/profile.php?u='.$uid.$course_url;
 					} else {
 						$url = '?id='.$uid.$course_url;
-					}
+					} 
 				} else {
 					$url = '#';
 				}
@@ -826,8 +826,8 @@ class SocialManager extends UserManager {
 
 			if (api_get_setting('show_email_addresses') == 'true') {
 				$table_header[] = array(get_lang('Email'), true);
-			}
-			Display::display_sortable_table($table_header, $table_data, array(), array('per_page' => 20), $extra_params, array(),'grid');
+			}			
+			Display::display_sortable_table($table_header, $table_data, array(), array('per_page' => 25), $extra_params, array(),'grid');
 		}
 	}
 	/**

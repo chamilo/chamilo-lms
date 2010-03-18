@@ -21,10 +21,9 @@ class TestOnline extends UnitTestCase {
 				."</p>";
 		$res=chatcall();
 
-		if(!empty($message)){
-		$this->assertTrue(is_string($message));
-		//var_dump($message);
-
+		if (!empty($message)) {
+			$this->assertTrue(is_string($message));
+			//var_dump($message);
 		} else {
 			$this->assertTrue(is_bool($message));
 			//var_dump($message);
@@ -76,8 +75,8 @@ class TestOnline extends UnitTestCase {
 		$login_user_id= '';
 		$login_date= '';
 		array_push($rarray,$barray);
-			array_push($barray,$login_user_id);
-			array_push($barray,$login_date);
+		array_push($barray,$login_user_id);
+		array_push($barray,$login_date);
 
 		$res=who_is_online_in_this_course($uid, $valid, $coursecode=null);
 		if(!empty($barray)){
@@ -90,11 +89,11 @@ class TestOnline extends UnitTestCase {
 		//var_dump($rarray);
 	}
 
-	function testWhoIsOnline()  {
+	function testwho_is_online()  {
 		$valid='';
-		$res=WhoIsOnline($valid);
+		$res=who_is_online($valid);
 		$this->assertTrue(is_array($res));
-		//var_dump($res);
+		//var_dump($res);	
 	}
 }
 ?>

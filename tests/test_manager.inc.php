@@ -1,38 +1,30 @@
 <?php
-// $Id: test_manager.inc.php 2010-02-17 12:07:00Z aportugal $
+/* For licensing terms, see /license.txt */
 
-/* For licensing terms, see /chamilo_license.txt */
 /**
-==============================================================================
 *	Code library for load functions than are needed to test
 *
 *	@author Arthur Portugal, Principal author
-
 *	@package chamilo.tests
-==============================================================================
 */
 
 /**
  * @todo shouldn't these settings be moved to the test_suite.php
- * if these are really configuration then we can make require_once in each tests
- * file.
+ * if these are really configuration then we can make require_once in each tests file.
  * @todo use this file to load in the setup in each file test.
  * @todo use this file to destroy in the teardown in each file test.
  * @todo check for duplication of "require_once" files with test_suite.php
- * @author aportugal
+ * @author Arthur Portugal
  */
+ 
 /*
-==============================================================================
 		INIT SECTION
-==============================================================================
 */
 ini_set('memory_limit','256M');
 ini_set('max_execution_time','0');
 
 /*
------------------------------------------------------------
 	Included libraries
------------------------------------------------------------
 */
 $maindir = dirname(__FILE__).'/../main/';
 $incdir  = dirname(__FILE__).'/../main/inc/';
@@ -100,11 +92,7 @@ ob_end_clean();
 
 class TestManager {
 	
-/**
-==============================================================================
-		MAIN CODE
-==============================================================================
-*/
+/* MAIN CODE */
 
 /**
  * This function create in the database a test course and will also load sessions.
@@ -114,111 +102,86 @@ class TestManager {
  */
 
 function create_test_course($course_code = 'COURSETEST') {
+		
+	/* Table definitions */	
+	$table_course 		= Database::get_main_table(TABLE_MAIN_COURSE);
+	$course_table 		= Database::get_main_table(TABLE_MAIN_COURSE);
+	$course_cat_table 	= Database::get_main_table(TABLE_MAIN_CATEGORY);
 	
-/*
------------------------------------------------------------
-	Table definitions
------------------------------------------------------------
-*/
-
-$table_course 		= Database::get_main_table(TABLE_MAIN_COURSE);
-$course_table 		= Database::get_main_table(TABLE_MAIN_COURSE);
-$course_cat_table 	= Database::get_main_table(TABLE_MAIN_CATEGORY);
-
-global $_configuration, $_user, $_course, $cidReq;
-$cidReq = $course_code;
-
-/*
------------------------------------------------------------
-	Check if the course exists
------------------------------------------------------------
-*/
-
-$sql = "SELECT code FROM  $table_course WHERE code = '$cidReq' ";
-$rs = Database::query($sql, __FILE__, __LINE__);
-$row = Database::fetch_row($rs);
-
-/*
------------------------------------------------------------
-	Create the course in the database
------------------------------------------------------------
-*/
-
-if (empty($row[0])) {
-    // create a course
-    $course_datos = array(
-            'wanted_code'=> $cidReq,
-            'title'=>$cidReq,
-            'tutor_name'=>'John Doe',
-            'category_code'=>'LANG',
-            'course_language'=>'spanish',
-            'course_admin_id'=>'001',
-            'db_prefix'=> $_configuration['db_prefix'],
-            'firstExpirationDelay'=>'999'
-            );
-    $res = create_course($course_datos['wanted_code'], $course_datos['title'],
-                         $course_datos['tutor_name'], $course_datos['category_code'],
-                         $course_datos['course_language'],$course_datos['course_admin_id'],
-                         $course_datos['db_prefix'], $course_datos['firstExpirationDelay']);
-}
-
-
-$sql =  "SELECT course.*, course_category.code faCode, course_category.name faName
-         FROM $course_table
-         LEFT JOIN $course_cat_table
-         ON course.category_code = course_category.code
-         WHERE course.code = '$cidReq'";
-         
-$result = Database::query($sql,__FILE__,__LINE__);
-
-/*
------------------------------------------------------------
-	Create the session
------------------------------------------------------------
-*/
-
-if (Database::num_rows($result)>0) {
-    $cData = Database::fetch_array($result);
-    $_cid                            = $cData['code'             ];
-    $_course 						 = array();
-    $_course['id'          ]         = $cData['code'             ]; //auto-assigned integer
-    $_course['name'        ]         = $cData['title'         	 ];
-    $_course['official_code']        = $cData['visual_code'      ]; // use in echo
-    $_course['sysCode'     ]         = $cData['code'             ]; // use as key in db
-    $_course['path'        ]         = $cData['directory'		 ]; // use as key in path
-    $_course['dbName'      ]         = $cData['db_name'          ]; // use as key in db list
-    $_course['dbNameGlu'   ]         = $_configuration['table_prefix'] . $cData['db_name'] . $_configuration['db_glue']; // use in all queries
-    $_course['titular'     ]         = $cData['tutor_name'       ];
-    $_course['language'    ]         = $cData['course_language'  ];
-    $_course['extLink'     ]['url' ] = $cData['department_url'   ];
-    $_course['extLink'     ]['name'] = $cData['department_name'  ];
-    $_course['categoryCode']         = $cData['faCode'           ];
-    $_course['categoryName']         = $cData['faName'           ];
-    $_course['visibility'  ]         = $cData['visibility'		 ];
-    $_course['subscribe_allowed']    = $cData['subscribe'		 ];
-    $_course['unubscribe_allowed']   = $cData['unsubscribe'		 ];
-
-    api_session_register('_cid');
-    api_session_register('_course');
-}
-   
-/*
------------------------------------------------------------
-	Load the session
------------------------------------------------------------
-*/
-
-$_SESSION['_user']['user_id'] = 1;    
-$_SESSION['is_courseAdmin'] = 1;
-$_SESSION['show'] = showall;
-
-/*
------------------------------------------------------------
-	Load the user
------------------------------------------------------------
-*/
-
-$_user['user_id'] = $_SESSION['_user']['user_id'];
+	global $_configuration, $_user, $_course, $cidReq;
+	$cidReq = $course_code;
+	
+	/*	Check if the course exists	*/
+	
+	$sql = "SELECT code FROM  $table_course WHERE code = '$cidReq' ";
+	$rs = Database::query($sql, __FILE__, __LINE__);
+	$row = Database::fetch_row($rs);
+	
+	/*	Create the course in the database */
+	
+	if (empty($row[0])) {
+	    // Create a course
+	    $course_datos = array(
+	            'wanted_code'=> $cidReq,
+	            'title'=>$cidReq,
+	            'tutor_name'=>'John Doe',
+	            'category_code'=>'LANG',
+	            'course_language'=>'spanish',
+	            'course_admin_id'=>'001',
+	            'db_prefix'=> $_configuration['db_prefix'],
+	            'firstExpirationDelay'=>'999'
+	            );
+	    $res = create_course($course_datos['wanted_code'], $course_datos['title'],
+	                         $course_datos['tutor_name'], $course_datos['category_code'],
+	                         $course_datos['course_language'],$course_datos['course_admin_id'],
+	                         $course_datos['db_prefix'], $course_datos['firstExpirationDelay']);
+	}
+	
+	
+	$sql =  "SELECT course.*, course_category.code faCode, course_category.name faName
+	         FROM $course_table
+	         LEFT JOIN $course_cat_table
+	         ON course.category_code = course_category.code
+	         WHERE course.code = '$cidReq'";
+	         
+	$result = Database::query($sql,__FILE__,__LINE__);
+	
+	/*	Create the session	*/
+	
+	if (Database::num_rows($result)>0) {
+	    $cData = Database::fetch_array($result);
+	    $_cid                            = $cData['code'             ];
+	    $_course 						 = array();
+	    $_course['id'          ]         = $cData['code'             ]; //auto-assigned integer
+	    $_course['name'        ]         = $cData['title'         	 ];
+	    $_course['official_code']        = $cData['visual_code'      ]; // use in echo
+	    $_course['sysCode'     ]         = $cData['code'             ]; // use as key in db
+	    $_course['path'        ]         = $cData['directory'		 ]; // use as key in path
+	    $_course['dbName'      ]         = $cData['db_name'          ]; // use as key in db list
+	    $_course['dbNameGlu'   ]         = $_configuration['table_prefix'] . $cData['db_name'] . $_configuration['db_glue']; // use in all queries
+	    $_course['titular'     ]         = $cData['tutor_name'       ];
+	    $_course['language'    ]         = $cData['course_language'  ];
+	    $_course['extLink'     ]['url' ] = $cData['department_url'   ];
+	    $_course['extLink'     ]['name'] = $cData['department_name'  ];
+	    $_course['categoryCode']         = $cData['faCode'           ];
+	    $_course['categoryName']         = $cData['faName'           ];
+	    $_course['visibility'  ]         = $cData['visibility'		 ];
+	    $_course['subscribe_allowed']    = $cData['subscribe'		 ];
+	    $_course['unubscribe_allowed']   = $cData['unsubscribe'		 ];
+	
+	    api_session_register('_cid');
+	    api_session_register('_course');
+	}
+	   
+	/*	Load the session	*/
+	
+	$_SESSION['_user']['user_id'] = 1;    
+	$_SESSION['is_courseAdmin'] = 1;
+	$_SESSION['show'] = showall;
+	
+	/*		Load the user	*/
+	
+	$_user['user_id'] = $_SESSION['_user']['user_id'];
 }
 
 /**
@@ -228,37 +191,25 @@ $_user['user_id'] = $_SESSION['_user']['user_id'];
  */
 
 function delete_test_course($course_code) {
-$code = $course_code;
+	$code = $course_code;		
+			
+	$res = CourseManager::delete_course($code);
+	$path = api_get_path(SYS_PATH).'archive';
 	
-/*
------------------------------------------------------------
-	Delete the course
------------------------------------------------------------
-*/
-	
-$res = CourseManager::delete_course($code);
-$path = api_get_path(SYS_PATH).'archive';
-
-if ($handle = opendir($path)) {
-	while (false !== ($file = readdir($handle))) {
-		if (strpos($file,$code)!==false) {
-			if (is_dir($path.'/'.$file)) {
-				rmdirr($path.'/'.$file);
+	if ($handle = opendir($path)) {
+		while (false !== ($file = readdir($handle))) {
+			if (strpos($file,$code)!==false) {
+				if (is_dir($path.'/'.$file)) {
+					rmdirr($path.'/'.$file);
+				}
 			}
 		}
+		closedir($handle);
 	}
-	closedir($handle);
-}
-	
-/*
------------------------------------------------------------
-	Check api session destroy
------------------------------------------------------------
-*/
-	
-if (!headers_sent() && session_id() != "") {
-	$res=api_session_destroy();
+		
+	//	Check api session destroy
+	if (!headers_sent() && session_id() != "") {
+		$res=api_session_destroy();
+		}
 	}
-}
-
 }

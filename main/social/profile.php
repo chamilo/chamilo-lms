@@ -248,7 +248,7 @@ if (is_array($personal_course_list)) {
 	$course_list_code = array_unique_dimensional($course_list_code);
 }
 
-$user_online_list = WhoIsOnline(api_get_setting('time_limit_whosonline'), true);
+$user_online_list = who_is_online(api_get_setting('time_limit_whosonline'), true);
 $user_online_count = count($user_online_list);
 
 echo '<div id="social-content">';

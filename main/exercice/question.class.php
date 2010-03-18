@@ -334,13 +334,10 @@ abstract class Question
 		}
 
 		// if the question has got an ID
-		if($this->id)
-		{
-
+		if($this->id) {
 			$extension = pathinfo($PictureName, PATHINFO_EXTENSION);
 			$this->picture='quiz-'.$this->id.'.jpg';
-			if($extension == 'gif' || $extension == 'png')
-			{
+			if($extension == 'gif' || $extension == 'png') {
 				$o_img = new image($Picture);
 				$o_img->send_image('JPG',$picturePath.'/'.$this->picture);
 				$document_id = add_document($_course, '/images/'.$this->picture, 'file', filesize($picturePath.'/'.$this->picture),$this->picture);
@@ -350,8 +347,7 @@ abstract class Question
 				move_uploaded_file($Picture,$picturePath.'/'.$this->picture)?true:false;
 			}
 			$document_id = add_document($_course, '/images/'.$this->picture, 'file', filesize($picturePath.'/'.$this->picture),$this->picture);
-			if($document_id)
-			{
+			if($document_id) {
 				return api_item_property_update($_course, TOOL_DOCUMENT, $document_id, 'DocumentAdded', $_user['user_id']);
 			}
 		}
@@ -372,8 +368,7 @@ abstract class Question
 		global $picturePath;
 
 		// if the question has an ID
-		if($this->id)
-		{
+		if($this->id) {
 	  		// Get dimensions from current image.
 	  		$current_img = imagecreatefromjpeg($picturePath.'/'.$this->picture);
 
@@ -470,7 +465,7 @@ abstract class Question
 	}
 
 	/**
-	 * exports a picture to another question
+	 * Exports a picture to another question
 	 *
 	 * @author - Olivier Brouckaert
 	 * @param - integer $questionId - ID of the target question
@@ -906,8 +901,9 @@ abstract class Question
 		$weighting=$this->weighting;
 		$position=$this->position;
 		$type=$this->type;
+		$level = intval($this->level);
 
-		$sql="INSERT INTO $TBL_QUESTIONS(question,description,ponderation,position,type) VALUES('".Database::escape_string($question)."','".Database::escape_string($description)."','".Database::escape_string($weighting)."','".Database::escape_string($position)."','".Database::escape_string($type)."')";
+		$sql="INSERT INTO $TBL_QUESTIONS(question, description, ponderation, position, type, level ) VALUES('".Database::escape_string($question)."','".Database::escape_string($description)."','".Database::escape_string($weighting)."','".Database::escape_string($position)."','".Database::escape_string($type)."' ,'".Database::escape_string($level)."')";
 		Database::query($sql);
 
 		$id=Database::insert_id();

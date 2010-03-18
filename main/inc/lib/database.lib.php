@@ -1,10 +1,10 @@
 <?php // $Id: database.lib.php 22265 2009-07-20 23:26:43Z juliomontoya $
-/* See license terms in /license.txt */
+/* For licensing terms, see /license.txt */
 /**
 *	This is the main database library for Chamilo.
 *	Include/require it in your code to use its functionality.
 *   Because this library contains all the basic database calls, it could be
-*   replaced by another library for say, PostgreSQL, to actually use Dokeos
+*   replaced by another library for say, PostgreSQL, to actually use Chamilo
 *   with another database (this is not ready yet because a lot of code still
 *   uses the MySQL database functions extensively).
 *
@@ -268,23 +268,21 @@ define('TABLE_ATTENDANCE_CALENDAR', 'attendance_calendar');
 define('TABLE_ATTENDANCE_SHEET',	'attendance_sheet');
 define('TABLE_ATTENDANCE_RESULT', 	'attendance_result');
 
-// Thematic 
+// Thematic
 define('TABLE_THEMATIC','thematic');
 define('TABLE_THEMATIC_PLAN', 'thematic_plan');
 define('TABLE_THEMATIC_ADVANCE','thematic_advance');
 
 /*		DATABASE CLASS
-		the class and its functions
+		The class and its methods
 */
 
 class Database {
 
 	/*
-	-----------------------------------------------------------------------------
-		Accessor Functions
+		Accessor methods
 		Usually, you won't need these directly but instead
-		rely on of the get_xxx_table functions.
-	-----------------------------------------------------------------------------
+		rely on of the get_xxx_table methods.
 	*/
 
 	/**
@@ -338,7 +336,7 @@ class Database {
 
 	/**
 	 *	The glue is the string needed between database and table.
-	 *	The trick is: in multiple databases, this is a period (with backticks)
+	 *	The trick is: in multiple databases, this is a period (with backticks).
 	 *	In single database, this can be e.g. an underscore so we just fake
 	 *	there are multiple databases and the code can be written independent
 	 *	of the single / multiple database setting.
@@ -372,9 +370,8 @@ class Database {
 	}
 
 	/*
-	-----------------------------------------------------------------------------
-		Table Name functions
-		use these functions to get a table name for queries,
+		Table name methods
+		Use these methods to get table names for queries,
 		instead of constructing them yourself.
 
 		Backticks automatically surround the result,
@@ -386,14 +383,13 @@ class Database {
 		$sql_query = "SELECT * FROM $table WHERE $condition";
 		$sql_result = Database::query($sql_query);
 		$result = Database::fetch_array($sql_result);
-	-----------------------------------------------------------------------------
 	*/
 
 	/**
-	 * A more generic function than the other get_main_xxx_table functions,
-	 * this one can return the correct complete name of any table of the main database of which you pass
+	 * A more generic method than the other get_main_xxx_table methods,
+	 * This one returns the correct complete name of any table of the main database of which you pass
 	 * the short name as a parameter.
-	 * Please define table names as constants in this library and use them
+	 * Please, define table names as constants in this library and use them
 	 * instead of directly using magic words in your tool code.
 	 *
 	 * @param string $short_table_name, the name of the table
@@ -403,10 +399,10 @@ class Database {
 	}
 
 	/**
-	 * A more generic function than the older get_course_xxx_table functions,
-	 * this one can return the correct complete name of any course table of which you pass
+	 * A more generic method than the older get_course_xxx_table methods,
+	 * This one can return the correct complete name of any course table of which you pass
 	 * the short name as a parameter.
-	 * Please define table names as constants in this library and use them
+	 * Please, define table names as constants in this library and use them
 	 * instead of directly using magic words in your tool code.
 	 *
 	 * @param string $short_table_name, the name of the table
@@ -418,7 +414,7 @@ class Database {
 	}
 
 	/**
-	 * Get a complete course table name from a course code
+	 * Gets a complete course table name from a course code
 	 *
 	 * @param string $course_code
 	 * @param string $table the name of the table
@@ -437,9 +433,9 @@ class Database {
 	}
 
 	/**
-	 * This generic function returns the correct and complete name of any statistic table
+	 * This generic method returns the correct and complete name of any statistic table
 	 * of which you pass the short name as a parameter.
-	 * Please define table names as constants in this library and use them
+	 * Please, define table names as constants in this library and use them
 	 * instead of directly using magic words in your tool code.
 	 *
 	 * @param string $short_table_name, the name of the table
@@ -449,8 +445,8 @@ class Database {
 	}
 
 	/**
-	 * This generic function returns the correct and complete name of any scorm
-	 * table of which you pass the short name as a parameter. Please define
+	 * This generic method returns the correct and complete name of any scorm
+	 * table of which you pass the short name as a parameter. Please, define
 	 * table names as constants in this library and use them instead of directly
 	 * using magic words in your tool code.
 	 *
@@ -461,8 +457,8 @@ class Database {
 	}
 
 	/**
-	 * This generic function returns the correct and complete name of any scorm
-	 * table of which you pass the short name as a parameter. Please define
+	 * This generic method returns the correct and complete name of any scorm
+	 * table of which you pass the short name as a parameter. Please, define
 	 * table names as constants in this library and use them instead of directly
 	 * using magic words in your tool code.
 	 *
@@ -477,10 +473,8 @@ class Database {
 	}
 
 	/*
-	-----------------------------------------------------------------------------
-		Query Functions
-		these execute a query and return the result(s).
-	-----------------------------------------------------------------------------
+		Query methods
+		These methods execute a query and return the result(s).
 	*/
 
 	/**
@@ -537,16 +531,16 @@ class Database {
 	}
 
 	/**
-	 *	This creates an abstraction layer between database field names
+	 *	This method creates an abstraction layer between database field names
 	 *	and field names expected in code.
 	 *
-	 *	This helps when changing database names.
+	 *	This approach helps when changing database names.
 	 *	It's also useful now to get rid of the 'franglais'.
 	 *
 	 *	@todo	add more array entries to abstract course info from field names
 	 *	@author	Roan Embrechts
 	 *
-	 * 	@todo what's the use of this function. I think this is better removed.
+	 * 	@todo What's the use of this method. I think this is better removed.
 	 * 		  There should be consistency in the variable names and the use throughout the scripts
 	 * 		  for the database name we should consistently use or db_name or database (db_name probably being the better one)
 	 */
@@ -555,7 +549,7 @@ class Database {
 		$code        = isset($result_array['code']) ? $result_array['code'] : null;
 		$title       = isset($result_array['title']) ? $result_array['title'] : null;
 		$db_name     = isset($result_array['db_name']) ? $result_array['db_name'] : null;
-		$category_code= isset($result_array['category_code']) ? $result_array['category_code'] : null;
+		$category_code = isset($result_array['category_code']) ? $result_array['category_code'] : null;
 		$result_array['official_code'] = $visual_code;
 		$result_array['visual_code']   = $visual_code;
 		$result_array['real_code']     = $code;
@@ -588,7 +582,7 @@ class Database {
 	}
 
 	/**
-	 *	This creates an abstraction layer between database field names
+	 *	This method creates an abstraction layer between database field names
 	 *	and field names expected in code.
 	 *
 	 *	This helps when changing database names.
@@ -611,7 +605,7 @@ class Database {
 	}
 
 	/**
-	 * Count the number of rows in a table
+	 * Counts the number of rows in a table
 	 * @param string $table The table of which the rows should be counted
 	 * @return int The number of rows in the given table.
 	 */
@@ -621,9 +615,7 @@ class Database {
 	}
 
 	/*
-	-----------------------------------------------------------------------------
 		An intermediate API-layer between the system and the dabase server.
-	-----------------------------------------------------------------------------
 	*/
 
 	/**
@@ -895,7 +887,7 @@ class Database {
 	 * @author Yannick Warnier <yannick.warnier@dokeos.com>
 	 **/
 	public static function num_rows($result) {
-		return mysql_num_rows($result);
+		return is_resource($result) ? mysql_num_rows($result) : false;
 	}
 
 	/**
@@ -907,11 +899,11 @@ class Database {
 	 * @result	mixed		One cell of the result, or FALSE on error
 	 */
 	public static function result($resource, $row, $field = '') {
-		return mysql_num_rows($resource) > 0 ? (!empty($field) ? mysql_result($resource, $row, $field) : mysql_result($resource, $row)) : null;
+		return self::num_rows($resource) > 0 ? (!empty($field) ? mysql_result($resource, $row, $field) : mysql_result($resource, $row)) : null;
 	}
 
 	/**
-	 * This function returns a resource
+	 * This method returns a resource
 	 * Documentation has been added by Arthur Portugal
 	 * Some adaptations have been implemented by Ivan Tcholakov, 2009, 2010
 	 * @author Olivier Brouckaert
@@ -1021,9 +1013,7 @@ class Database {
 	}
 
 	/*
-	-----------------------------------------------------------------------------
 		Encodings and collations supported by MySQL database server
-	-----------------------------------------------------------------------------
 	*/
 
 	/**
@@ -1152,11 +1142,9 @@ class Database {
 	}
 
 	/*
-	-----------------------------------------------------------------------------
 		Private methods
 		You should not access these from outside the class
 		No effort is made to keep the names / results the same.
-	-----------------------------------------------------------------------------
 	*/
 
 	/**
@@ -1223,7 +1211,7 @@ class Database {
 	}
 
 	/**
-	 * This private function encapsulates a table with relations between
+	 * This private method encapsulates a table with relations between
 	 * conventional and MuSQL-specific encoding identificators.
 	 * @author Ivan Tcholakov
 	 */
@@ -1299,9 +1287,7 @@ class Database {
 	}
 
 	/*
-	==============================================================================
 		DEPRECATED METHODS
-	==============================================================================
 	*/
 
 	/**

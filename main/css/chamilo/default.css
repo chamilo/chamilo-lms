@@ -4040,4 +4040,8 @@ div.attendance-calendar-add div.row div.formw,div.attendance-calendar-edit div.r
 
 }
 
-/*           */  
+/* fixes the * */ 
+span.form_required  {
+	padding-right:5px;
+}
+

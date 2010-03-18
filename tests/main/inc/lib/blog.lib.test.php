@@ -1,8 +1,11 @@
 <?php
 require_once(api_get_path(LIBRARY_PATH).'blog.lib.php');
+ob_start();
+require_once (api_get_path(INCLUDE_PATH).'lib/fckeditor/fckeditor.php');
+require_once(api_get_path(LIBRARY_PATH).'course.lib.php');
+
 //require_once(api_get_path(SYS_CODE_PATH).'permissions/blog_permissions.inc.php');
-
-
+ob_end_clean();
 class TestBlog extends UnitTestCase
 
 {
@@ -77,12 +80,13 @@ class TestBlog extends UnitTestCase
 	 /**
 	  * Test about get Title to a Blog
 	 */
-
+	 
 	 public function testGetBlogTitle(){
+	 	
+	 	global $_course;
 	 	$res = $this->oblog->get_Blog_title(11);
 	 	$this->assertFalse($this->oblog->get_Blog_title(11)===String);
 	 	$this->assertTrue(is_String($res));
-
 	 }
 
 	 public function testGetBlogSubtitle(){
@@ -90,85 +94,83 @@ class TestBlog extends UnitTestCase
 	 	$this->assertFalse($this->oblog->get_Blog_subtitle(0)=== null);
 	 	$this->assertTrue(is_String($res));
 	 	$this->assertNotNull($res);
-
 	 }
 
 	 public function testGetBlogUsers(){
 	 	$res = $this->oblog->get_Blog_users(11);
 	 	$this->assertTrue($this->oblog->get_Blog_users(1110)===array());
 	 	$this->assertTrue(is_array($res));
-
 	 }
 
 	 public function testCreateBlog(){
 	 	global $_user;
 	 	$res = $this->oblog->create_Blog('testingBlog','pass');
-	 	$this->assertFalse(is_null($res));
-	 	$this->assertNotNull($res);
-		$this->assertTrue($res);
-
+	 	$this->assertTrue(is_null($res));
+	 	$this->assertNull($res);
+		$this->assertFalse($res);
 	 }
 
 	 public function testEditBlog(){
 	 	global $_user;
-	 	$_user = array('Blog_id'=>1,'title'=>'TestBlog','subtitle'=>'testing');
-	 	$res = $this->oblog->edit_Blog($_user);
-	 	$this->assertNotNull($res);
-	 	$this->assertTrue($this->oblog->edit_Blog($_user)=== $res);
-		$this->assertTrue($res);
+	 	$blog_id = 1;
+	 	$title = 'titulo1';
+	 	$subtitle = 'subtitulo1';
+	 	$res = $this->oblog->edit_Blog($blog_id, $title, $subtitle);
+	 	$this->assertNull($res);
+	 	$this->assertTrue($this->oblog->edit_Blog($blog_id, $title, $subtitle)=== $res);
+		$this->assertFalse($res);
 	 }
 
 	 public function testDeleteBlog(){
-	 	$res = $this->oblog->delete_Blog(1);
-	 	$this->assertTrue(is_string($res));
-	 	$this->assertNotNull($this->oblog->edit_Blog(1)===null);
+	 	$blog_id = 1;
+	 	$res = $this->oblog->delete_Blog($blog_id);
+	 	$this->assertTrue(is_null($res));
 	 	$this->assertFalse(is_array($res));
-	 	$this->assertTrue($res);
-
 	 }
+
 	 public function testCreatePost(){
-	 	global $_user, $_course, $Blog_table_attachment;
-	 	$Blog_table_attachment = array('title' => 'xxxxtestxxxx',
-	 								   'full_text'=>'xxxxx',
- 	 	  						       'file_comment'=>'xxxxx',
-	 								   'Blog_id'=>11
-	 								  );
-	 	$res = $this->oblog->create_post($Blog_table_attachment);
-	 	$this->assertFalse($this->oblog->create_post($Blog_table_attachment)=== null);
+	 	global $_user, $_course;
+	 	$title = 'xxxxtestxxxx';
+	 	$full_text = 'xxxxx';
+	 	$file_comment = 'xxxxx';
+	 	$blog_id = 1;
+	 	$res = $this->oblog->create_post($title, $full_text, $file_comment, $blog_id);
+	 	$this->assertTrue($this->oblog->create_post($title, $full_text, $file_comment, $blog_id)=== null);
 	 	$this->assertNotNull(is_null,$res);
-	 	$this->assertTrue($res);
+	 	$this->assertFalse($res);
 
 	 }
 
 	 public function testEditPost(){
+	 	ob_start();
 	 	$post_id =3;
 	 	$title = 'xxTestxx';
 	 	$full_text = 'testing public function';
 	 	$Blog_id = 11;
 		$res = $this->oblog->edit_post(3,'xtestx','test',11);
+		ob_end_clean();
 		$this->assertNotNull($this->oblog->edit_post(3, 'xtestx','test',11)===null);
-		$this->assertTrue($res);
-		$this->assertTrue(is_string($res));
-
+		$this->assertFalse($res);
+		$this->assertTrue(is_null($res));
+		//var_dump($res);
 	 }
 
 	 public function testDeletePost(){
 	 	$Blog_id = 11;
 	 	$post_id = 21;
 	 	$res = $this->oblog->delete_post(11,21);
-	 	$this->assertFalse($this->oblog->delete_post(11,21)===null);
+	 	$this->assertTrue($this->oblog->delete_post(11,21)===null);
 	 	$this->assertNull(null,$res);
-	 	$this->assertTrue(is_string($res));
-
+	 	$this->assertTrue(is_null($res));
+		//var_dump($res);
 	 }
 
 	 public function testCreateComment(){
 	 	global $_user, $_course, $Blog_table_attachment;
 	 	$res = $this->oblog->create_comment('tesingBlog','xxxxxxx','xxx',12,1,null);
 	 	$this->assertNotNull($this->oblog->create_comment('tesingBlog','xxxxxxx','xxx',12,1,null)===null);
-	 	$this->assertFalse(is_null($res));
-	 	$this->assertTrue($res);
-
+	 	$this->assertTrue(is_null($res));
+	 	$this->assertFalse($res);
 	 }
 
 	 public function testDeleteComment(){
@@ -180,90 +182,103 @@ class TestBlog extends UnitTestCase
 	 public function testCreateTask(){
 		$res = $this->oblog->create_task(1,'xxx','xxxxxxx','xxxx','zzzzz','xxzz','blue');
 		$this->assertNotNull($this->oblog->create_task(1,'xxx','xxxxxxx','xxxx','zzzzz','xxzz','blue')=== null);
-		$this->assertFalse(is_null($res));
-		$this->assertTrue($res);
+		$this->assertTrue(is_null($res));
+		$this->assertFalse($res);
 		$this->assertFalse(null,$res);
-
 	 }
 
 	 public function testEditTask() {
-	 	$res = $this->oblog->edit_task();
+	 	$blog_id = 1;
+	 	$task_id = 2;
+	 	$title = 'xxxxxx';
+	 	$description = 'xx';
+	 	$articleDelete = 'aaa';
+	 	$articleEdit = 'axa';
+	 	$commentsDelete  = 'xax';
+	 	$color = 'red';
+	 	$res = $this->oblog->edit_task($blog_id, $task_id, $title, $description, $articleDelete, $articleEdit, $commentsDelete, $color);
 	 	//$res = Blog::edit_task();
-	 	$this->assertFalse($this->oblog->edit_task()===null);
-	 	$this->assertFalse(is_null($res));
-	 	$this->assertTrue(is_string($res));
-	 	$this->assertNotNull($res);
-
+	 	$this->assertTrue($this->oblog->edit_task($blog_id, $task_id, $title, $description, $articleDelete, $articleEdit, $commentsDelete, $color)===null);
+	 	$this->assertTrue(is_null($res));
+	 	$this->assertFalse(is_string($res));
+	 	$this->assertNull($res);
 	 }
 
 	 public function testDeleteTask(){
-	 	$res = $this->oblog->delete_task();
-	 	$this->assertFalse($this->oblog->delete_task()===null);
-	 	$this->assertTrue(is_string($res));
-
+	 	$blog_id = 1;
+	 	$task_id = 2;
+	 	$res = $this->oblog->delete_task($blog_id, $task_id);
+	 	$this->assertTrue($this->oblog->delete_task($blog_id, $task_id)===null);
+	 	$this->assertTrue(is_null($res));
 	 }
 
 	 public function testDeleteAssignedTask(){
-	 	$res = $this->oblog->delete_assigned_task();
-	 	$this->assertFalse($this->oblog->delete_assigned_task()===null);
+	 	$blog_id = 1;
+	 	$task_id = 2;
+	 	$user_id = 1;
+	 	$res = $this->oblog->delete_assigned_task($blog_id, $task_id,$user_id);
+	 	$this->assertTrue($this->oblog->delete_assigned_task($blog_id, $task_id,$user_id)===null);
 	 	$this->assertNotNull(is_null($res));
-	 	$this->assertTrue($res);
-
+	 	$this->assertFalse($res);
 	 }
 
 	 public function testGetPersonalTaskList(){
 	 	global $_user;
 	 	ob_start();
 	 	$res = Blog::get_personal_task_list('a');
-	 	$this->assertEqual($this->oblog->get_personal_task_list(1)===1);
 	 	$this->assertFalse($res);
 	 	ob_end_clean();
 	 }
 
 	 public function testChangeBlogVisibility(){
-	 	$res = $this->oblog->change_blog_visibility();
-	 	$this->assertFalse($this->oblog->change_blog_visibility()=== null);
-	 	$this->assertTrue(is_string($res));
-
+	 	$blog_id = 1;
+	 	$res = $this->oblog->change_blog_visibility($blog_id);
+	 	$this->assertTrue($this->oblog->change_blog_visibility($blog_id)=== null);
+	 	$this->assertTrue(is_null($res));
 	 }
 
 	 public function testDisplayBlogPosts(){
 	 	ob_start();
-	 	$res = $this->oblog->display_blog_posts(10,null,null);
-	 	$this->assertTrue($this->oblog->display_blog_posts(10,null,null)=== null);
+	 	$blog_id = 1;
+	 	$filter = '1=1';
+	 	$max_number_of_posts = 20;
+	 	$res = BLog::display_blog_posts($blog_id, $filter, $max_number_of_posts);
+	 	$this->assertTrue($this->oblog->display_blog_posts($blog_id, $filter, $max_number_of_posts)=== null);
+	 	ob_end_clean();
 	 	$this->assertNull($res);
 	 	$this->assertTrue(is_null($res));
 	 	$this->assertFalse(null, $res);
-	 	ob_end_clean();
-
 	 }
 
 	 public function testDisplaySearchResults(){
 	 	ob_start();
-		$res = $this->oblog->display_search_results(11,null);
-		$this->assertTrue($this->oblog->display_search_results(11,null)===null);
+	 	$blog_id = 1;
+	 	$query_string = '"SELECT post.*, user.lastname, user.firstname FROM $tbl_blogs_posts"';
+	 	$res = $this->oblog->display_search_results($blog_id, $query_string);
 		ob_end_clean();
-
+		$this->assertTrue(is_null($res));
+		$this->assertNull($res);
 	 }
 
 	 public function testDisplayDayResults(){
 	 	ob_start();
-	 	$res = $this->oblog->display_day_results(12,null);
-	 	$this->assertTrue($this->oblog->display_day_results(12,null)===null);
+	 	$blog_id = 1;
+	 	$query_string = '01-01-2010';
+	 	$res = $this->oblog->display_day_results($blog_id, $query_string);
+	 	ob_end_clean();
+	 	$this->assertTrue(is_null($res));
 	 	$this->assertFalse($res);
 	 	$this->assertNull(null,$res);
-	 	ob_end_clean();
-
 	 }
 
 	 public function testDisplayPost(){
 	 	ob_start();
-	 	$res = $this->oblog->display_post(12,11);
-	 	$this->assertTrue($this->oblog->display_post(12,11)===null);
-	 	$this->assertFalse($res);
-	 	$this->assertTrue(is_null($res));
+	 	$blog_id = 1;
+	 	$post_id = 2;
+	 	$res = $this->oblog->display_post($blog_id, $post_id);
 	 	ob_end_clean();
-
+	 	$this->assertTrue(is_null($res));
+	 	$this->assertFalse($res);
 	 }
 
 	 public function testAddRating(){
@@ -272,7 +287,6 @@ class TestBlog extends UnitTestCase
 	 	$this->assertFalse($this->oblog->add_rating(null,11,2,5)=== bool);
 	 	$this->assertTrue(is_bool($res));
 	 	$this->assertFalse(null,$res);
-
 	 }
 
 	 public function testDisplayRating(){
@@ -282,7 +296,6 @@ class TestBlog extends UnitTestCase
 	 	$this->assertTrue(is_numeric($res));
 	 	$this->assertFalse($res);
 	 	ob_end_clean();
-
 	 }
 
 	 public function testDisplayRatingForm(){
@@ -291,51 +304,47 @@ class TestBlog extends UnitTestCase
 	 	$this->assertFalse($this->oblog->display_rating_form('xxx',11,1,null)===null);
 	 	$this->assertTrue(is_string($res));
 	 	$this->assertNotNull($res,null);
-
-
 	 }
 
 	 public function testGetThreadedComments(){
 	 	ob_start();
+	 	$current = 0;
+	 	$current_level = 0;
+	 	$blog_id = 1;
+	 	$post_id = 2;
+	 	$task_id = 0;
 	 	global $charset, $dataFormatLong;
-	 	$res = $this->oblog->get_threaded_comments(null,null,11,2,null);
+	 	$res = $this->oblog->get_threaded_comments($current, $current_level, $blog_id, $post_id, $task_id);
+	 	ob_end_clean();
 	 	$this->assertFalse($res);
-	 	$this->assertTrue($this->oblog->get_threaded_comments(null,null,11,2,null)===null);
-	 	ob_end_clean();
-
+	 	$this->assertTrue(is_null($res));
 	 }
-	 /**
-	  * this function have will be testing with mocks
-	  */ /* usando mock
-	 public function testDisplayFormNewPost(){
-	 	// $mock = new Mock('FCKeditor');
-	 	ob_start();
-	 	$res = $this->oblog->display_form_new_post(12);
-	 	//$res = ob_get_contents();
-	 	// $mock->expectOnce('FCKeditor','post_full_text');
-	 	$this->assertTrue($this->oblog->display_form_new_post(12));
-	 	$this->assertTrue(is_string($res));
-	 	$this->assertNotNull($res);
-	 	ob_end_clean();
 
-	 } */
-	/* usando mock
+	 public function testDisplayFormNewPost(){
+	 	ob_start();
+	 	$blog_id = 1;
+	 	$res = Blog::display_form_new_post($blog_id);
+	 	$this->assertTrue(is_null($res));
+	 	$this->assertNull($res);
+	 	ob_end_clean();	 	
+	 } 
+	
 	 public function testDisplayFormEditPost(){
 	 	ob_start();
-	 	$res = $this->oblog->display_form_edit_post(11,12);
-
+	 	$blog_id = 1;
+	 	$post_id = 2;
+	 	$res = $this->oblog->display_form_edit_post($blog_id, $post_id);
 	 	$this->assertNotNull(is_null($res));
 	 	$this->assertFalse($res);
 	 	ob_end_clean();
-
-	 }	*/
+	 	//var_dump($res);
+	 }	
 
 	 public function testDisplayTaskList(){
 	 	ob_start();
 	 	$res = $this->oblog->display_task_list(11);
 	 	$this->assertTrue($this->oblog->display_task_list(11)===null);
 	 	ob_end_clean();
-
 	 }
 
 	 public function testDisplayAssignedTaskList(){
@@ -343,17 +352,18 @@ class TestBlog extends UnitTestCase
 	 	global $charset, $color2;
 	 	$res = $this->oblog->display_assigned_task_list(11);
 	 	$this->assertTrue($this->oblog->display_assigned_task_list(11)===null);
-	 	$this->assertFalse($res);
 	 	ob_end_clean();
-
+	 	$this->assertFalse($res);
+	 	
 	 }
 
 	 public function testDisplayNewTaskForm(){
 	 	ob_start();
 	 	$res = $this->oblog->display_new_task_form(11);
 	 	$this->assertTrue($this->oblog->display_new_task_form(11)===null);
-	 	$this->assertFalse($res);
 	 	ob_end_clean();
+	 	$this->assertFalse($res);
+	 	
 
 	 }
 
@@ -371,9 +381,10 @@ class TestBlog extends UnitTestCase
 	 	ob_start();
 	 	$res = $this->oblog->display_assign_task_form(11);
 	 	$this->assertTrue($this->oblog->display_assign_task_form(11)===null);
+	 	ob_end_clean();
 	 	$this->assertFalse($res);
 	 	$this->assertTrue(is_null($res));
-	 	ob_end_clean();
+	 	
 	 }
 
 	 public function testDisplayEditAssignedTaskForm(){
@@ -390,10 +401,10 @@ class TestBlog extends UnitTestCase
 	 	ob_start();
 	 	$res = $this->oblog->assign_task(11,1,12,null);
 	 	$this->assertTrue($this->oblog->assign_task(11,1,12,null)===null);
+	 	ob_end_clean();
 	 	$this->assertFalse(is_numeric($res));
 	 	$this->assertNull(null,$res);
-	 	ob_end_clean();
-
+	 	
 	 }
 
 	 public function testEditAssignedTask(){
@@ -405,96 +416,98 @@ class TestBlog extends UnitTestCase
                  	  'old_task_id'=>11,
                  	  'old_target_date'=>'xxxzxxx'
                  	 );
-        $res = $this->oblog->edit_assigned_task();
-        $this->assertTrue($this->oblog->edit_assigned_task()===null);
+        $res = $this->oblog->edit_assigned_task($task['blog_id'],$task['user_id'], $task['task_id'], $task['target_date'], $task['old_user_id'], $task['old_task_id'], $task['old_target_date']);
+        $this->assertNull($res);
         $this->assertTrue(is_null($res));
-
 	 }
 
 	 public function testDisplaySelectTaskPost(){
 	 	ob_start();
 	 	$res = $this->oblog->display_select_task_post(11,12);
 	 	$this->assertTrue($this->oblog->display_select_task_post(11,12)===null);
+	 	ob_end_clean();
 	 	$this->assertTrue(is_null($res));
 	 	$this->assertFalse($res);
-	 	ob_end_clean();
-
-	 }
+	 	
+     }
 
 	 public function testSetUserSubscribed(){
 	 	$res = $this->oblog->set_user_subscribed(11,12);
 	 	$this->assertTrue($this->oblog->set_user_subscribed(11,12)===null);
 	 	$this->assertFalse($res);
 	 	$this->assertTrue(is_null($res));
-
-	 }
+     }
 
 	 public function testUserUnsubscribed(){
 	 	$res = $this->oblog->set_user_unsubscribed(11,12);
 	 	$this->assertTrue($this->oblog->set_user_unsubscribed(11,12)===null);
 	 	$this->assertFalse($res);
 	 	$this->assertTrue(is_null($res));
-
 	 }
-
+	
 	 public function testDisplayFormUserSubscribe(){
 	 	ob_start();
 	 	$res = $this->oblog->display_form_user_subscribe(12);
 	 	$this->assertTrue($this->oblog->display_form_user_subscribe(12)===null);
+	 	ob_end_clean();
 	 	$this->assertNotNull(is_null($res));
 	 	$this->assertFalse($res);
-	 	ob_end_clean();
+	 	
 	}
-/**
- * this function have been tested modified the function
- * display_form_user_unsubscribe in the blog.lib.php
- * main_table and course_table.
- *
- */ /* usando mocks
-	public function testDisplayFormUserUnsubscribe(){
-		ob_start();
-		global $_user;
-		$blog_id = '1';
-		$course_id='0001';
-		$res = $this->oblog->display_form_user_unsubscribe($blog_id,$course_id);
-		$this->assertFalse($this->oblog->display_form_user_unsubscribe($blog_id,$course_id)==='');
-		$this->assertTrue(is_null($res));
-		ob_end_clean();
 
-	}*/
+	/**
+	 * this function have been tested modified the function
+	 * display_form_user_unsubscribe in the blog.lib.php
+	 * main_table and course_table.
+	 *
+	 */
+	 
+    public function testDisplayFormUserUnsubscribe(){
+		
+		global $_user;
+		ob_start();
+		$blog_id = '1';
+		$res = Blog::display_form_user_unsubscribe($blog_id);
+		ob_end_clean();
+		$this->assertTrue(is_null($res));		
+		$this->assertNull($res);
+		
+	}
 
 	public function testDisplayFormUserRights(){
 		ob_start();
 		$res = $this->oblog->display_form_user_rights(12);
 		$this->assertTrue($this->oblog->display_form_user_rights(12)===null);
-		$this->assertFalse($res);
 		ob_end_clean();
-	}
-	/* usando mocks
+		$this->assertFalse($res);
+		
+	} 
+	
 	public function testDisplayNewCommentForm(){
 		$blog_id = '12';
 		$post_id='1';
 		$title='test';
 		ob_start();
 		$res =$this->oblog->display_new_comment_form($blog_id,$post_id,$title);
-		//$res = ob_get_contents();
-		//$this->assertTrue($this->oblog->display_new_comment_form(12,1,'comment_text')===null);
+		ob_end_clean();
 		$this->assertFalse($res);
 		$this->assertNotNull(is_null($res));
-		ob_end_clean();
-		var_dump($res);
-	}*/
-
+		
+	}
+    
 	public function testDisplayMinimonthcalendar(){
 		global $_user,$DaysShort, $MonthsLong;
 		ob_start();
-		$res = $this->oblog->display_minimonthcalendar();
-		$this->assertTrue($this->oblog->display_minimonthcalendar()=== null);
-		$this->assertTrue(is_null($res));
+		$month = 12;
+		$year = 2010;
+		$blog_id = 1;
+		$res = $this->oblog->display_minimonthcalendar($month, $year, $blog_id);
+		$this->assertTrue($this->oblog->display_minimonthcalendar($month, $year, $blog_id)=== null);
 		ob_end_clean();
-
+		$this->assertTrue(is_null($res));
+		
 	}
-
+     
 	public function testDisplayNewBlogForm(){
 		ob_start();
 		$res = $this->oblog->display_new_blog_form();
@@ -502,56 +515,86 @@ class TestBlog extends UnitTestCase
 		$this->assertTrue(is_null($res));
 		$this->assertTrue($this->oblog->display_new_blog_form()===null);
 		ob_end_clean();
-
 	}
-
+    
 	public function testDisplayEditBlogForm(){
 		ob_start();
 		$res = $this->oblog->display_edit_blog_form(12);
 		$this->assertTrue($this->oblog->display_edit_blog_form(12)===null);
-		$this->assertTrue(is_null($res));
 		ob_end_clean();
-
+		$this->assertTrue(is_null($res));
+		
 	}
 
 	public function testDisplayBlogList(){
 		ob_start();
 		$res = $this->oblog->display_blog_list();
 		$this->assertTrue($this->oblog->display_blog_list()===null);
-		$this->assertTrue(is_null($res));
 		ob_end_clean();
+		$this->assertTrue(is_null($res));
+		
 	}
-
+	
 	public function testGetBlogAttachment(){
 		ob_start();
-		global $blog_table_attachment;
-		$oblog_table_attachment = array('blog_id'=>12);
-		$res=get_blog_attachment();
+		ob_end_clean();
+		global $_configuration;
+		$blog_id = '0';
+		$post_id = null; 
+		$comment_id = null;
+		$res = get_blog_attachment($blog_id, $post_id,$comment_id);
 		$this->assertFalse($res);
 		$this->assertTrue(is_array($res));
-		ob_end_clean();
-
 	}
-
+    
 	public function testDeleteAllBlogAttachment(){
-		global $blog_table_attachment, $_course;
-		$res = delete_all_blog_attachment(12,null,null);
+		global $_course,$_configuration;		
+		$blog_id = 1;
+		$post_id=null;
+		$comment_id=null;
+		$res = delete_all_blog_attachment($blog_id,$post_id,$comment_id);
 		$this->assertFalse($res);
 		$this->assertNull($res);
-
-	}
-
+	} 
+ 	
 	public function testGetBlogPostFromUser(){
-		$res = get_blog_post_from_user('mate',2);
+		global $_configuration;
+		$res = get_blog_post_from_user('chamilo_COURSETEST',1);
 		$this->assertFalse($res);
 		$this->assertTrue(is_string($res));
-
+		//var_dump($res);
 	}
-
-	public function testGetBlogCOmmentFromUser(){
-		$res = get_blog_comment_from_user('mate',2);
+    
+	public function testGetBlogCommentFromUser(){
+		global $_configuration;
+		$course_datos['wanted_code'] = 'chamilo_COURSETEST';
+		$user_id = 1;
+		$res = get_blog_comment_from_user($course_datos['wanted_code'],1);
 		$this->assertFalse($res);
 		$this->assertTrue(is_string($res));
+		$path = api_get_path(SYS_PATH).'archive';		
+		if ($handle = opendir($path)) {
+			while (false !== ($file = readdir($handle))) {				
+				if (strpos($file,'COURSETEST')!==false) {										
+					if (is_dir($path.'/'.$file)) {						
+						rmdirr($path.'/'.$file);						
+					}				
+				}				
+			}
+		closedir($handle);
+		}
+	} 
+/*	
+	public function testDeleteCourse() {
+		global $cidReq;			
+		$resu = CourseManager::delete_course($cidReq);				
 	}
-}
+	
+	*/
+	
+	
+	
+	
+	
+}   
 ?>

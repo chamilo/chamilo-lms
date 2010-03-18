@@ -1,29 +1,5 @@
 <?php // $Id: admin.php 21662 2009-06-29 14:55:09Z iflorespaz $
-
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2004-2008 Dokeos SPRL
-	Copyright (c) 2003 Ghent University (UGent)
-	Copyright (c) 2001 Universite catholique de Louvain (UCL)
-	Copyright (c) various contributors
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
-	Mail: info@dokeos.com
-==============================================================================
-*/
-
+/* For licensing terms, see /license.txt */
 
 /**
 *	Exercise administration
@@ -71,38 +47,36 @@
 */
 
 
-include('exercise.class.php');
-include('question.class.php');
-include('answer.class.php');
+require_once 'exercise.class.php';
+require_once 'question.class.php';
+require_once 'answer.class.php';
 
 
 // name of the language file that needs to be included
 $language_file='exercice';
 
-include("../inc/global.inc.php");
-include('exercise.lib.php');
+require_once '../inc/global.inc.php';
+require_once 'exercise.lib.php';
+
 $this_section=SECTION_COURSES;
 
 $is_allowedToEdit=api_is_allowed_to_edit(null,true);
 
-if(!$is_allowedToEdit)
-{
+if (!$is_allowedToEdit) {
 	api_not_allowed(true);
 }
 
 // allows script inclusions
 define(ALLOWED_TO_INCLUDE,1);
 
-include_once(api_get_path(LIBRARY_PATH).'fileUpload.lib.php');
-include_once(api_get_path(LIBRARY_PATH).'document.lib.php');
+require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
+require_once api_get_path(LIBRARY_PATH).'document.lib.php';
 /****************************/
 /*  stripslashes POST data  */
 /****************************/
 
-if($_SERVER['REQUEST_METHOD'] == 'POST')
-{
-	foreach($_POST as $key=>$val)
-	{
+if($_SERVER['REQUEST_METHOD'] == 'POST') {
+	foreach($_POST as $key=>$val) {
 		if(is_string($val))
 		{
 			$_POST[$key]=stripslashes($val);
@@ -120,8 +94,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST')
 }
 
 // get vars from GET
-if ( empty ( $exerciseId ) )
-{
+if ( empty ( $exerciseId ) ) {
     $exerciseId = $_GET['exerciseId'];
 }
 if ( empty ( $newQuestion ) )
@@ -168,7 +141,7 @@ $picturePath=$documentPath.'/images';
 $audioPath=$documentPath.'/audio';
 
 // the 5 types of answers
-$aType=array(get_lang('UniqueSelect'),get_lang('MultipleSelect'),get_lang('FillBlanks'),get_lang('Matching'),get_lang('freeAnswer'));
+$aType=array(get_lang('UniqueSelect'),get_lang('MultipleSelect'),get_lang('FillBlanks'),get_lang('Matching'),get_lang('FreeAnswer'));
 
 // tables used in the exercise tool
 $TBL_EXERCICE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
@@ -177,8 +150,7 @@ $TBL_QUESTIONS         = Database::get_course_table(TABLE_QUIZ_QUESTION);
 $TBL_REPONSES          = Database::get_course_table(TABLE_QUIZ_ANSWER);
 $TBL_DOCUMENT          = Database::get_course_table(TABLE_DOCUMENT);
 
-if($_GET['action'] == 'exportqti2' && !empty($_GET['questionId']))
-{
+if($_GET['action'] == 'exportqti2' && !empty($_GET['questionId'])) {
 	require_once('export/qti2/qti2_export.php');
 	$export = export_question((int)$_GET['questionId'],true);
 	$qid = (int)$_GET['questionId'];
@@ -186,7 +158,7 @@ if($_GET['action'] == 'exportqti2' && !empty($_GET['questionId']))
 	$archive_path = api_get_path(SYS_ARCHIVE_PATH);
 	$temp_dir_short = uniqid();
 	$temp_zip_dir = $archive_path."/".$temp_dir_short;
-	if(!is_dir($temp_zip_dir)) mkdir($temp_zip_dir);
+	if(!is_dir($temp_zip_dir)) mkdir($temp_zip_dir, api_get_permissions_for_new_directories());
 	$temp_zip_file = $temp_zip_dir."/".md5(time()).".zip";
 	$temp_xml_file = $temp_zip_dir."/qti2export_".$qid.'.xml';
 	file_put_contents($temp_xml_file,$export);
@@ -315,7 +287,7 @@ if (isset($_SESSION['gradebook'])){
 if (!empty($gradebook) && $gradebook=='view') {
 	$interbreadcrumb[]= array (
 			'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
-			'name' => get_lang('Gradebook')
+			'name' => get_lang('ToolGradebook')
 		);
 }
 
@@ -448,11 +420,33 @@ function DetectFlashVer(reqMajorVer, reqMinorVer, reqRevision)
 }
 // -->
 </script>";
+
 Display::display_header($nameTools,'Exercise');
+
+	
+$show_quiz_edition = true;
+if (isset($exerciseId) && !empty($exerciseId)) {
+	$TBL_LP_ITEM	= Database::get_course_table(TABLE_LP_ITEM);
+	$sql="SELECT max_score FROM $TBL_LP_ITEM
+		  WHERE item_type = '".TOOL_QUIZ."' AND path ='".Database::escape_string($exerciseId)."'";
+	$result = Database::query($sql);
+	if (Database::num_rows($result) > 0) {
+		Display::display_warning_message(get_lang('EditingExerciseCauseProblemsInLP'));
+		$show_quiz_edition = false;
+	}
+}
+
 
 echo '<div class="actions">';
 echo Display::return_icon('preview.gif', get_lang('Preview')).'<a href="exercice_submit.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id.'">'.get_lang('Preview').'</a>';
-echo Display::return_icon('edit.gif', get_lang('ModifyExercise')).'<a href="exercise_admin.php?modifyExercise=yes&exerciseId='.$objExercise->id.'">'.get_lang('ModifyExercise').'</a>';
+if ($show_quiz_edition) {
+	echo Display::return_icon('edit.gif', get_lang('ModifyExercise')).'<a href="exercise_admin.php?'.api_get_cidreq().'&modifyExercise=yes&exerciseId='.$objExercise->id.'">'.get_lang('ModifyExercise').'</a>';
+} else {
+	echo Display::return_icon('edit_na.gif', get_lang('ModifyExercise')).'<a href="#">'.get_lang('ModifyExercise').'</a>';
+}
+
+if (isset($_GET['hotspotadmin']) || isset($_GET['newQuestion']) || isset($_GET['myid']))
+echo Display::return_icon('message_reply_forum.png', get_lang('GoBackToQuestionList')).' '.'<a href="admin.php?">'.get_lang('GoBackToQuestionList').'</a><br/>';
 
 echo '</div>';
 

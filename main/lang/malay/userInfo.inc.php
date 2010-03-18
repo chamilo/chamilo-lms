@@ -1,5 +1,6 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $langLineNumber = "Bilangan baris";
 $langLine = "baris";
@@ -12,5 +13,5 @@ $langCourseAdministratorOnly = "Untuk Pentadbir Subjek (Pensyarah) Sahaja";
 $langDefineHeadings = "Bina Borang Cadangan";
 $langBackToUsersList = "Kembali ke Senarai Ahli";
 $langTracking = "Pengesanan";
-$langCourseManager = "Pentadbir Subjek (Pensyarah)";
+$langCourseManager = "Pentadbir Subjek";
 ?>

@@ -230,7 +230,7 @@ class aicc extends learnpath {
 
      	//The previous method wasn't safe to get the database name, so do it manually with the course_code
      	$sql = "SELECT * FROM ".Database::get_main_table(TABLE_MAIN_COURSE)." WHERE code='$course_code'";
-        $res = Database::query($sql,__FILE__,__LINE__);
+        $res = Database::query($sql);
         if(Database::num_rows($res)<1){ error_log('New LP - Database for '.$course_code.' not found '.__FILE__.' '.__LINE__,0);return -1;}
         $row = Database::fetch_array($res);
         $dbname = Database::get_course_table_prefix().$row['db_name'].Database::get_database_glue();
@@ -297,7 +297,7 @@ class aicc extends learnpath {
 					"'$prereq', 0" .
 					")";
 			$res_item = Database::query($sql_item);
-			if($this->debug>1){error_log('New LP - In aicc::import_aicc() - inserting item : '.$sql_item.' : '.mysql_error(),0);}
+			if($this->debug>1){error_log('New LP - In aicc::import_aicc() - inserting item : '.$sql_item.' : '.Database::error(),0);}
 			$item_id = Database::insert_id();
 			//now update previous item to change next_item_id
 			if($previous != 0){
@@ -483,7 +483,7 @@ class aicc extends learnpath {
 			- parse & change relative html links
 			- make sure the filenames are secure (filter funny characters or php extensions)
 		*/
-		if(is_dir($course_sys_dir.$new_dir) OR @mkdir($course_sys_dir.$new_dir))
+		if(is_dir($course_sys_dir.$new_dir) OR @mkdir($course_sys_dir.$new_dir, api_get_permissions_for_new_directories()))
 		{
 			// PHP method - slower...
 			if($this->debug>=1){error_log('New LP - Changing dir to '.$course_sys_dir.$new_dir,0);}
@@ -532,7 +532,7 @@ class aicc extends learnpath {
 									if(!empty($mysubdir)){
 										$mybasedir = $mybasedir.$mysubdir.'/';
 										if(!is_dir($mybasedir)){
-											@mkdir($mybasedir);
+											@mkdir($mybasedir, api_get_permissions_for_new_directories());
 											if($this->debug==1){error_log('New LP - Dir '.$mybasedir.' doesnt exist. Creating.',0);}
 										}
 									}
@@ -672,7 +672,7 @@ class aicc extends learnpath {
 		$_course = Database::get_course_info(api_get_course_id());
 
 		$sql = "SELECT * FROM $tbl_lp WHERE id=".$lp_id;
-		$result = Database::query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql);
 		$row = Database::fetch_array($result);
 		$LPname = $row['path'];
 		$list = split('/',$LPname);
@@ -687,7 +687,7 @@ class aicc extends learnpath {
 
 		//error_log('New LP - cleaning dir '.$zipfoldername,0);
 		deldir($zipfoldername); //make sure the temp dir is cleared
-		$res = mkdir($zipfoldername);
+		mkdir($zipfoldername, api_get_permissions_for_new_directories());
 		//error_log('New LP - made dir '.$zipfoldername,0);
 
 		//create zipfile of given directory
@@ -702,6 +702,7 @@ class aicc extends learnpath {
 		// Delete the temporary zip file and directory in fileManage.lib.php
 		my_delete($zipfilename);
 		my_delete($zipfoldername);
+
 
 		return true;
 	}

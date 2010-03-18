@@ -1,5 +1,6 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $MyTasks = "Sarcinile mele";
 $FavoriteBlogs = "Blogurile mele favorite";
@@ -52,8 +53,8 @@ $ReadMore = "Citeste mai multe...";
 $DeleteThisArticle = "Sterge acest articol";
 $EditThisPost = "Editeaza acest post";
 $DeleteThisComment = "Sterge acest comentariu";
-$NoArticles = "In acest moment nu exista articole in acest blog. Daca sunteti autorul acestui blog, click pe legatura \'articol nou\' pentru a scrie un nou articol.";
-$NoTasks = "Nu aveti nici o sarcina de indeplinit in acest moment";
+$NoArticles = "In acest moment nu exista articole in acest blog. Daca sunteti autorul acestui blog, click pe legatura 'articol nou' pentru a scrie un nou articol.";
+$NoTasks = "Nu exista sarcini";
 $Rating = "Rating";
 $RateThis = "Noteaza acest articol";
 $SelectTaskArticle = "Selectati un articol pentru aceasta sarcina";
@@ -81,7 +82,6 @@ $EditPost = "Editeaza un articol";
 $AddBlog = "Creaza un blog nou";
 $EditBlog = "Editeaza titlul si subtitlul";
 $DeleteBlog = "Sterge acest blog";
-$NoTasks = "Nu exista sarcini";
 $Shared = "Partajat";
 $PermissionGrantedByGroupOrRole = "Drepturile acordate de grup sau pe rol";
 $Reader = "Cititor";

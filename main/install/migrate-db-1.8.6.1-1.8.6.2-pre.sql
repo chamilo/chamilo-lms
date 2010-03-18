@@ -18,8 +18,7 @@ ALTER TABLE session ADD COLUMN session_category_id INT NOT NULL;
 
 ALTER TABLE session_rel_course_rel_user ADD COLUMN visibility int NOT NULL default 1;
 ALTER TABLE session_rel_course_rel_user ADD COLUMN status int NOT NULL default 0;
-CREATE TABLE session_category (id int(11) NOT NULL auto_increment, name varchar(100) default NULL, date_start date default NULL, date_end date default NULL, PRIMARY KEY  (id));
-
+CREATE TABLE session_category (id int NOT NULL auto_increment, name varchar(100) default NULL, date_start date default NULL, date_end date default NULL, PRIMARY KEY  (id));
 
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('allow_coach_to_edit_course_session', NULL, 'radio', 'Course', 'false', 'AllowCoachsToEditInsideTrainingSessions', 'AllowCoachsToEditInsideTrainingSessionsComment', NULL, NULL, 0);
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url, access_url_changeable) VALUES ('show_courses_descriptions_in_catalog', NULL, 'radio', 'Course', 'true', 'ShowCoursesDescriptionsInCatalogTitle', 'ShowCoursesDescriptionsInCatalogComment', NULL, NULL, 1, 1);
@@ -37,8 +36,6 @@ INSERT INTO settings_options (variable, value, display_text) VALUES ('show_gloss
 CREATE TABLE tag (id int NOT NULL auto_increment, tag varchar(255) NOT NULL, field_id int NOT NULL, count int NOT NULL, PRIMARY KEY  (id));
 CREATE TABLE user_rel_tag (id int NOT NULL auto_increment,user_id int NOT NULL,tag_id int NOT NULL, PRIMARY KEY  (id));
 
-CREATE TABLE announcement_attachment ( id int NOT NULL auto_increment, path varchar(255) NOT NULL, comment text, size int NOT NULL default 0, announcement_id int NOT NULL, filename varchar(255) NOT NULL, PRIMARY KEY (id) );
-
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('send_email_to_admin_when_create_course',NULL,'radio','Platform','false','SendEmailToAdminTitle','SendEmailToAdminComment',NULL,NULL, 1);
 INSERT INTO settings_options (variable, value, display_text) VALUES ('send_email_to_admin_when_create_course','true','Yes');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('send_email_to_admin_when_create_course','false','No');
@@ -47,24 +44,73 @@ INSERT INTO settings_current (variable, subkey, type, category, selected_value, 
 INSERT INTO settings_options (variable, value, display_text) VALUES ('go_to_course_after_login', 'true', 'Yes');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('go_to_course_after_login', 'false', 'No');
 
-CREATE TABLE IF NOT EXISTS message_attachment (id int NOT NULL AUTO_INCREMENT, path varchar(255) NOT NULL, comment text, size int NOT NULL default 0, message_id int NOT NULL, filename varchar(255) NOT NULL, PRIMARY KEY(id));
+CREATE TABLE message_attachment (id int NOT NULL AUTO_INCREMENT, path varchar(255) NOT NULL, comment text, size int NOT NULL default 0, message_id int NOT NULL, filename varchar(255) NOT NULL, PRIMARY KEY(id));
 
-CREATE TABLE `group` (id int NOT NULL AUTO_INCREMENT, name varchar(255) NOT NULL, description varchar(255) NOT NULL, picture_uri varchar(255) NOT NULL, url varchar(255) NOT NULL, visibility int NOT NULL, updated_on varchar(255) NOT NULL, created_on varchar(255) NOT NULL, PRIMARY KEY (id));
+CREATE TABLE groups (id int NOT NULL AUTO_INCREMENT, name varchar(255) NOT NULL, description varchar(255) NOT NULL, picture_uri varchar(255) NOT NULL, url varchar(255) NOT NULL, visibility int NOT NULL, updated_on varchar(255) NOT NULL, created_on varchar(255) NOT NULL, PRIMARY KEY (id));
 CREATE TABLE group_rel_tag (id int NOT NULL AUTO_INCREMENT, tag_id int NOT NULL, group_id int NOT NULL, PRIMARY KEY (id));
 CREATE TABLE group_rel_user (id int NOT NULL AUTO_INCREMENT, group_id int NOT NULL, user_id int NOT NULL, relation_type int NOT NULL, PRIMARY KEY (id));
-
 
 ALTER TABLE message ADD COLUMN group_id INT NOT NULL DEFAULT 0;
 ALTER TABLE message ADD COLUMN parent_id INT NOT NULL DEFAULT 0;
 ALTER TABLE message ADD INDEX idx_message_group(group_id);
 ALTER TABLE message ADD INDEX idx_message_parent(parent_id);
 
-INSERT INTO user_field (field_type, field_variable, field_display_text, field_visible, field_changeable) values (10, 'tags','tags',0,0);
-INSERT INTO user_field (field_type, field_variable, field_display_text, field_visible, field_changeable) values (9, 'rssfeeds','RSS',0,0);
+INSERT INTO user_field (field_type, field_variable, field_display_text, field_visible, field_changeable) values (1, 'rssfeeds','RSS',0,0);
+INSERT INTO user_field (field_type, field_variable, field_display_text, field_visible, field_changeable) values (10,'tags','tags',0,0);
 
-UPDATE TABLE settings_current SET selected_value = '1.8.6.2.9070' WHERE variable = 'dokeos_database_version';
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('send_email_to_admin_when_create_course',NULL,'radio','Platform','false','SendEmailToAdminTitle','SendEmailToAdminComment',NULL,NULL, 1);
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('show_tabs', 'social', 'checkbox', 'Platform', 'true', 'ShowTabsTitle','ShowTabsComment',NULL,'TabsSocial', 0);
+
+UPDATE settings_current SET selected_value = '1.8.6.2.9928' WHERE variable = 'dokeos_database_version';
 
 INSERT INTO course_field (field_type, field_variable, field_display_text, field_default_value, field_visible, field_changeable) values (10, 'special_course','SpecialCourse', 'Yes', 1 , 1);
+
+ALTER TABLE group_rel_user ADD INDEX ( group_id );
+ALTER TABLE group_rel_user ADD INDEX ( user_id );
+ALTER TABLE group_rel_user ADD INDEX ( relation_type );
+ALTER TABLE group_rel_tag  ADD INDEX ( group_id );
+ALTER TABLE group_rel_tag  ADD INDEX ( tag_id );
+
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('allow_students_to_create_groups_in_social', NULL, 'radio', 'Tools', 'false', 'AllowStudentsToCreateGroupsInSocialTitle', 'AllowStudentsToCreateGroupsInSocialComment', NULL, NULL, 0);
+INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_students_to_create_groups_in_social', 'true', 'Yes');
+INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_students_to_create_groups_in_social', 'false', 'No');
+
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('allow_send_message_to_all_platform_users', NULL, 'radio', 'Tools', 'false', 'AllowSendMessageToAllPlatformUsersTitle', 'AllowSendMessageToAllPlatformUsersComment', NULL, NULL, 0);
+INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_send_message_to_all_platform_users', 'true', 'Yes');
+INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_send_message_to_all_platform_users', 'false', 'No');
+
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('message_max_upload_filesize', NULL, 'textfield', 'Tools', '20971520', 'MessageMaxUploadFilesizeTitle','MessageMaxUploadFilesizeComment',NULL,NULL, 0);
+
+ALTER TABLE message ADD COLUMN update_date DATETIME  NOT NULL DEFAULT '0000-00-00 00:00:00'; 
+
+UPDATE settings_current SET category = 'Languages' WHERE variable = 'hide_dltt_markup';
+UPDATE settings_current SET category = 'Languages' WHERE variable = 'platform_charset';
+UPDATE settings_current SET category = 'Languages' WHERE variable = 'allow_use_sub_language';
+
+UPDATE settings_current SET category = 'Editor' WHERE variable = 'wcag_anysurfer_public_pages';
+UPDATE settings_current SET category = 'Editor' WHERE variable = 'advanced_filemanager';
+
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('math_mimetex',NULL,'radio','Editor','false','MathMimetexTitle','MathMimetexComment',NULL,NULL, 0);
+INSERT INTO settings_options (variable, value, display_text) VALUES ('math_mimetex', 'true', 'Yes');
+INSERT INTO settings_options (variable, value, display_text) VALUES ('math_mimetex', 'false', 'No');
+
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('math_asciimathML',NULL,'radio','Editor','false','MathASCIImathMLTitle','MathASCIImathMLComment',NULL,NULL, 0);
+INSERT INTO settings_options (variable, value, display_text) VALUES ('math_asciimathML', 'true', 'Yes');
+INSERT INTO settings_options (variable, value, display_text) VALUES ('math_asciimathML', 'false', 'No');
+
+
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('youtube_for_students',NULL,'radio','Editor','true','YoutubeForStudentsTitle','YoutubeForStudentsComment',NULL,NULL, 0);
+INSERT INTO settings_options (variable, value, display_text) VALUES ('youtube_for_students', 'true', 'Yes');
+INSERT INTO settings_options (variable, value, display_text) VALUES ('youtube_for_students', 'false', 'No');
+
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('block_copy_paste_for_students',NULL,'radio','Editor','false','BlockCopyPasteForStudentsTitle','BlockCopyPasteForStudentsComment',NULL,NULL, 0);
+INSERT INTO settings_options (variable, value, display_text) VALUES ('block_copy_paste_for_students', 'true', 'Yes');
+INSERT INTO settings_options (variable, value, display_text) VALUES ('block_copy_paste_for_students', 'false', 'No');
+
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('more_buttons_maximized_mode',NULL,'radio','Editor','false','MoreButtonsForMaximizedModeTitle','MoreButtonsForMaximizedModeComment',NULL,NULL, 0);
+INSERT INTO settings_options (variable, value, display_text) VALUES ('more_buttons_maximized_mode', 'true', 'Yes');
+INSERT INTO settings_options (variable, value, display_text) VALUES ('more_buttons_maximized_mode', 'false', 'No');
+
 
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('user_order_by', NULL, 'radio', 'User', 'lastname', 'OrderUsersByTitle', 'OrderUsersByComment', NULL, NULL, 1);
 INSERT INTO settings_options (variable, value, display_text) VALUES ('user_order_by','firstname','FirstName');
@@ -81,6 +127,7 @@ ALTER TABLE track_e_online ADD INDEX (course);
 
 -- xxCOURSExx
 
+CREATE TABLE announcement_attachment ( id int NOT NULL auto_increment, path varchar(255) NOT NULL, comment text, size int NOT NULL default 0, announcement_id int NOT NULL, filename varchar(255) NOT NULL, PRIMARY KEY (id) );
 ALTER TABLE quiz ADD COLUMN session_id smallint DEFAULT 0, ADD INDEX (session_id);
 ALTER TABLE blog ADD COLUMN session_id smallint DEFAULT 0, ADD INDEX (session_id);
 ALTER TABLE course_description ADD COLUMN session_id smallint DEFAULT 0, ADD INDEX (session_id);
@@ -97,3 +144,8 @@ ALTER TABLE group_category ADD COLUMN chat_state TINYINT DEFAULT 1, ADD INDEX (c
 ALTER TABLE student_publication ADD COLUMN weight float(6,2) UNSIGNED NOT NULL DEFAULT 0;
 ALTER TABLE course_description ADD COLUMN description_type TINYINT NOT NULL DEFAULT 0;
 ALTER TABLE dropbox_category ADD COLUMN session_id smallint NOT NULL DEFAULT 0, ADD INDEX (session_id);
+ALTER TABLE quiz ADD COLUMN random_answers TINYINT UNSIGNED NOT NULL DEFAULT 0 AFTER random;
+ALTER TABLE quiz_answer ADD COLUMN id_auto INT NOT NULL AUTO_INCREMENT, ADD UNIQUE INDEX (id_auto);
+
+ALTER TABLE chat_connected ADD COLUMN session_id INT NOT NULL default 0;
+ALTER TABLE chat_connected ADD COLUMN to_group_id INT NOT NULL default 0;

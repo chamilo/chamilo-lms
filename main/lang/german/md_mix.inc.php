@@ -1,18 +1,19 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$langTool = "Metadaten";
-$langClickKw = "Ein Schlüsselwort anklicken, um es aus- oder abzuwählen";
-$langKwHelp = "<br/>Zum Öffnen den \'+\' Knopf klicken, \'-\' Knopf zum Schließen, \'++\' Knopf um alle zu öffnen, \'--\' Knopf um alle zu schließen.<br/><br/>Alle ausgewählten Schlüsselwörter deselektieren durch Einklappen des Baums und anschileßendes Öffnen mit dem \'+\' Knopf.<br/>Alt-Klick \'+\' wählt die vorher selektierten Schlüsselwörter wieder aus<br/><br/>Alt-Klick Schlüsselwort negiert das Schlüsselwort<br/><br/>";
-$langAdvanced = "Erweiterte";
-$langSearch = "Suche";
-$langSearchCrit = "Benutzen Sie das Feld unten für beschreibende Wörter, ein Wort pro Zeile!";
-$langNoKeywords = "Dieser Kurs hat keine Schlüsselwörter";
-$langKwCacheProblem = "Der Cache für Schlüsselwörter kann nicht geöffnet werden";
-$langCourseKwds = "Schlüsselwörter für Kurs";
-$langKwdsInMD = "In MD benutzte Schlüsselwörter";
-$langKwdRefs = "Schlüsselwörter Verweise";
-$langNonCourseKwds = "Nicht zum Kurs gehörende Schlüsselwörter";
-$langKwdsUse = "Kurs Schlüsselwörter (fett = nicht benutzt)";
-$langTotalMDEs = "Gesamtzahl der MD Einträge:";
+$langTool = "Dokument-Metadaten";
+$langClickKw = "Ein SchlÃ¼sselwort anklicken, um es aus- oder abzuwÃ¤hlen";
+$langKwHelp = "<br/>Zum Ã–ffnen den '+' Knopf klicken, '-' Knopf zum SchlieÃŸen, '++' Knopf um alle zu Ã¶ffnen, '--' Knopf um alle zu schlieÃŸen.<br/><br/>Alle ausgewÃ¤hlten SchlÃ¼sselwÃ¶rter deselektieren durch Einklappen des Baums und anschileÃŸendes Ã–ffnen mit dem '+' Knopf.<br/>Alt-Klick '+' durchsucht die originalen SchlÃ¼sselwÃ¶rter im Baum.<br/><br/>Alt-Klick SchlÃ¼sselwort wÃ¤hlt ein SchlÃ¼sselwort ohne weitere Begriffe aus oder deselektiert ein SchlÃ¼sselwort mit weiteren Begriffen.<br/><br/>Wenn Sie die Sprache fÃ¼r die Beschreibung Ã¤ndern, fÃ¼gen Sie bitte zur gleichen Zeit keine SchlÃ¼sselwÃ¶rter hinzu.<br/><br/>";
+$langAdvanced = "Fortgeschritten";
+$langSearch = "Suchen";
+$langSearchCrit = "Ein Wort pro Zeile!";
+$langNoKeywords = "Dieser Kurs hat keine SchlÃ¼sselwÃ¶rter";
+$langKwCacheProblem = "Der Cache fÃ¼r SchlÃ¼sselwÃ¶rter kann nicht geÃ¶ffnet werden";
+$langCourseKwds = "Dieses Dokument enthÃ¤lt die SchlÃ¼sselwÃ¶rter fÃ¼r den Kurs";
+$langKwdsInMD = "In MD benutzte SchlÃ¼sselwÃ¶rter";
+$langKwdRefs = "SchlÃ¼sselwÃ¶rter Verweise";
+$langNonCourseKwds = "Nicht zum Kurs gehÃ¶rende SchlÃ¼sselwÃ¶rter";
+$langKwdsUse = "Kurs SchlÃ¼sselwÃ¶rter (fett = nicht benutzt)";
+$langTotalMDEs = "Gesamtzahl der Links MD EintrÃ¤ge:";
 ?>

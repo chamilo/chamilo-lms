@@ -1,5 +1,6 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $NewNote = "New note";
 $Note = "Note";
@@ -11,7 +12,7 @@ $SaveNote = "Save note";
 $WriteYourNoteHere = "Click here to write a new note";
 $SearchByTitle = "Search by title";
 $WriteTheTitleHere = "Write the title here";
-$UpdateDate = "Latest modification";
+$UpdateDate = "Updated";
 $NoteAddNew = "Add new note in my personal notebook";
 $OrderByCreationDate = "Sort by date created";
 $OrderByModificationDate = "Sort by date last modified";

@@ -1,38 +1,39 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$langOnlineConference  = "Konferencja online";
-$langWash  = "Wyczy��";
-$langReset  = "Zresetuj";
-$langSave  = "Zapisz";
-$langRefresh  = "Od�wie�";
-$langIsNowInYourDocDir  = "jest ju� w obszarze dokument�w. <br><B>Ten plik jest widoczny.</B>";
-$langCopyFailed  = "B��d drukowania";
-$langTypeMessage  = "Wpisz tresc wiadomosci!";
-$langConfirmReset  = "Czy na pewno chcesz usun&#261;&#263; wszystkie wiadomo&#347;ci?";
-$langHasResetChat  = "zresetowa&#322; Chat";
-$langNoOnlineConference  = "W tej chwili nie ma �adnych konferencji online ...";
-$langMediaFile  = "Strumie� audio lub wideo";
-$langContentFile  = "Prezentacja";
-$langListOfParticipants  = "Lista uczestnik�w";
-$langYourPicture  = "Twoje zdj�cie";
-$langOnlineDescription  = "Opis konferencji online";
-$langOnlyCheckForImportantQuestion = "Zaznacz to pole jedynie w celu zadania wa&#380;nego pytania!!!";
+$langOnlineConference = "Konferencja online";
+$langWash = "Wyczy¶ć";
+$langReset = "Zresetuj";
+$langSave = "Zapisz";
+$langRefresh = "Od¶wież";
+$langIsNowInYourDocDir = "jest ju� w obszarze dokument�w. <br /><B>Ten plik jest widoczny.</B>";
+$langCopyFailed = "Bł±d drukowania";
+$langTypeMessage = "Wpisz tresc wiadomosci!";
+$langConfirmReset = "Czy na pewno chcesz usunąć wszystkie wiadomości?";
+$langHasResetChat = "zresetował Chat";
+$langNoOnlineConference = "W tej chwili nie ma �adnych konferencji online ...";
+$langMediaFile = "Strumień audio lub wideo";
+$langContentFile = "Prezentacja";
+$langListOfParticipants = "Lista uczestników";
+$langYourPicture = "Twoje zdjęcie";
+$langOnlineDescription = "Opis konferencji online";
+$langOnlyCheckForImportantQuestion = "Zaznacz to pole jedynie w celu zadania ważnego pytania!!!";
 $langQuestion = "pytanie";
-$langClearList = "Wyczy&#347;&#263; list&#281;";
-$langWhiteBoard = "Bia&#322;a tablica";
-$langTextEditorDefault = "<h2>Edytor tekstu</h2>Wklej tu tekst i edytuj go. Uczestnicy zobacz&#261; modyfikacje w czasie rzeczywistym, wtedy kiedy b&#281;dziesz je robi&#322;.";
+$langClearList = "Wyczyść listę";
+$langWhiteBoard = "Biała tablica";
+$langTextEditorDefault = "<h2>Edytor tekstu</h2>Wklej tu tekst i edytuj go. Uczestnicy zobaczą modyfikacje w czasie rzeczywistym, wtedy kiedy będziesz je robił.";
 $langStreaming = "Transmisja";
-$langStreamURL = "URL transmisji (adres &#378;r�d&#322;a)";
+$langStreamURL = "URL transmisji (adres źródła)";
 $langStreamType = "Rodzaj transmisji";
-$langLinkName = "Nazwa &#322;&#261;cza(link\'a)";
-$langLinkURL = "URL &#322;&#261;cza (adres link\'a)";
+$langLinkName = "Nazwa łącza(link'a)";
+$langLinkURL = "URL łącza (adres link'a)";
 $langWelcomeToOnlineConf = "Witam na <b>Konferencji online</b>";
-$langNoLinkAvailable = "Brak &#322;&#261;cza";
+$langNoLinkAvailable = "Brak łącza";
 $langChat_reset_by = "zresetuj czat";
 $OrFile = "Lub plik";
-$langCallSent = "Tw�j czatowy rozm�wca otrzyma&#322; powiadomienie i wie, &#380;e chcesz z nim rozmawia&#263;. Oczekiwanie na przyj&#281;cie rozmowy.";
-$langChatDenied = "Rozm�wca nie chce z tob&#261; teraz rozmawia&#263;.";
-$Send = "Wy&#347;lij";
-$Connected = "Po&#322;&#261;czony";
+$langCallSent = "Twój czatowy rozmówca otrzymał powiadomienie i wie, że chcesz z nim rozmawiać. Oczekiwanie na przyjęcie rozmowy.";
+$langChatDenied = "Rozmówca nie chce z tobą teraz rozmawiać.";
+$Send = "Wyślij";
+$Connected = "Połączony";
 ?>

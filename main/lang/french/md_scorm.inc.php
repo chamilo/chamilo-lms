@@ -1,37 +1,38 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$nameTools = "Variable linguistique obsolète";
-$langMdCallingTool = "Cours SCORM";
-$langTool = "Opérations sur les métadonnées SCORM";
-$langNotInDB = "pas d\'entrée dans la base de donnée de Dokeos";
+$nameTools = "variable dÃ©suÃ¨te de langage";
+$langMdCallingTool = "Documents";
+$langTool = "MÃ©tadonnÃ©es document";
+$langNotInDB = "Cette catÃ©gorie n'a pas pu Ãªtre trouvÃ©e";
 $langManifestSyntax = "(erreur de syntaxe dans le fichier manifeste...)";
 $langEmptyManifest = "(le fichier manifeste est vide...)";
 $langNoManifest = "(pas de fichier manifeste...)";
-$langNotFolder = "est impossible, ce n\'est pas un dossier...";
-$langUploadHtt = "Transférer un fichier-gabarit HTML (HTT)";
-$langHttFileNotFound = "Le nouveau fichier-gabarit HTML (HTT) ne peut être ouvert (fichier vide ou trop lourd)";
-$langHttOk = "Le nouveau fichier-gabarit HTML (HTT) a été transféré correctement";
-$langHttNotOk = "Le transfert du fichier-gabarit HTML (HTT) a échoué";
+$langNotFolder = "est impossible, ce n'est pas un rÃ©pertoire...";
+$langUploadHtt = "TransfÃ©rer un fichier-gabarit HTML (HTT)";
+$langHttFileNotFound = "Le nouveau fichier-gabarit HTML (HTT) ne peut Ãªtre ouvert (fichier vide ou trop lourd)";
+$langHttOk = "Le nouveau fichier-gabarit HTML (HTT) a Ã©tÃ© transfÃ©rÃ© correctement";
+$langHttNotOk = "Le transfert du fichier-gabarit HTML (HTT) a Ã©chouÃ©";
 $langRemoveHtt = "Supprimer un fichier-gabarit HTML (HTT)";
-$langHttRmvOk = "Le fichier-gabarit HTML (HTT) a été supprimé";
-$langHttRmvNotOk = "La suppression du fichier-gabarit HTML (HTT) a échoué";
-$langImport = "Créer les entrées de Métadonnées depuis un fichier manifeste";
-$langRemove = "Supprimer les entrées de Métadonnées";
-$langAllRemovedFor = "Toutes les entrées ont été supprimées pour";
-$langIndex = "Index avec PhpDig";
-$langTotalMDEs = "Nombre total d\'entrées de Métadonnées SCORM";
+$langHttRmvOk = "Le fichier-gabarit HTML (HTT) a Ã©tÃ© supprimÃ©";
+$langHttRmvNotOk = "La suppression du fichier-gabarit HTML (HTT) a Ã©chouÃ©";
+$langImport = "Importer";
+$langRemove = "Supprimer des entrÃ©es de MÃ©tadonnÃ©es";
+$langAllRemovedFor = "Toutes les entrÃ©es ont Ã©tÃ© retirÃ©es de la catÃ©gorie";
+$langIndex = "Index";
+$langTotalMDEs = "Nombre total d'entrÃ©es de MÃ©tadonnÃ©es";
 $langMainMD = "Ouvrir le MDE principal";
 $langLines = "lignes";
-$langPlay = "Exécuter le fichier index.php";
-$langNonePossible = "Opérations impossibles sur les Métadonnées";
-$langOrElse = "Sélectionnez un dossier Scorm ou un ID de dossier Scorm";
+$langPlay = "ExÃ©cuter le fichier index.php";
+$langNonePossible = "OpÃ©rations impossibles sur les MÃ©tadonnÃ©es";
+$langOrElse = "SÃ©lectionnez une catÃ©gorie de liens";
 $langWorkWith = "Travailler avec le dossier Scorm";
-$langSDI = "... Répertoire SCORM avec SD-id (et séparer manifest - ou laisser vide)";
+$langSDI = "... RÃ©pertoire SCORM avec SD-id (et sÃ©parer manifest - ou laisser vide)";
 $langRoot = "racine";
-$langSplitData = "Séparer les manifest\'s et #MDe, s\'il y en a:";
-$langMffNotOk = "Le remplacement du fichier manifeste a échoué";
-$langMffOk = "Le fichier manifeste a été correctement remplacé";
-$langMffFileNotFound = "Le nouveau fichier manifeste ne peut être ouvert (fichier vide ou trop lourd)";
+$langSplitData = "SÃ©parer les manifest's et #MDe, s'il y en a:";
+$langMffNotOk = "Le remplacement du fichier manifeste a Ã©chouÃ©";
+$langMffOk = "Le fichier manifeste a Ã©tÃ© correctement remplacÃ©";
+$langMffFileNotFound = "Le nouveau fichier manifeste ne peut Ãªtre ouvert (fichier vide ou trop lourd)";
 $langUploadMff = "Remplacer le fichier manifeste";
 ?>

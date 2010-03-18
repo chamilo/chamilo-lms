@@ -1,28 +1,5 @@
 <?php // $Id: document.php 16494 2008-10-10 22:07:36Z yannoo $
-
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2004-2008 Dokeos SPRL
-	Copyright (c) 2003 Ghent University (UGent)
-	Copyright (c) 2001 Universite catholique de Louvain (UCL)
-	Copyright (c) various contributors
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
-	Mail: info@dokeos.com
-==============================================================================
-*/
+/* For licensing terms, see /chamilo_license.txt */
 
 /**
 *	File containing the MultipleAnswer class.
@@ -66,6 +43,8 @@ class MultipleAnswer extends Question {
 		$nb_answers = isset($_POST['nb_answers']) ? $_POST['nb_answers'] : 2;
 		$nb_answers += (isset($_POST['lessAnswers']) ? -1 : (isset($_POST['moreAnswers']) ? 1 : 0));
 
+		$obj_ex = $_SESSION['objExercise'];
+
 		$html='
 		<div class="row">
 			<div class="label">
@@ -82,11 +61,15 @@ class MultipleAnswer extends Question {
 						</th>
 						<th>
 							'.get_lang('Answer').'
-						</th>
-						<th>
+						</th>';
+				// show column comment when feedback is enable				
+				if ($obj_ex->selectFeedbackType() != EXERCISE_FEEDBACK_TYPE_EXAM ) {	
+				$html .='<th>
 							'.get_lang('Comment').'
-						</th>
-						<th>
+						</th>';
+				}
+						
+				$html .= '<th>
 							'.get_lang('Weighting').'
 						</th>
 					</tr>';
@@ -104,6 +87,11 @@ class MultipleAnswer extends Question {
 
 		$form -> addElement('hidden', 'nb_answers');
 		$boxes_names = array();
+
+		if ($nb_answers < 1) {
+			$nb_answers = 1;
+			Display::display_normal_message(get_lang('YouHaveToCreateAtLeastOneAnswer'));
+		}
 
 		for($i = 1 ; $i <= $nb_answers ; ++$i) {
 			if(is_object($answer)) {
@@ -130,10 +118,15 @@ class MultipleAnswer extends Question {
 
 			$form->addElement('checkbox', 'correct['.$i.']', null, null, 'class="checkbox" style="margin-left: 0em;"');
 			$boxes_names[] = 'correct['.$i.']';
-
-			$form->addElement('html_editor', 'answer['.$i.']',null, 'style="vertical-align:middle"', array('ToolbarSet' => 'TestProposedAnswer', 'Width' => '100%', 'Height' => '100'));
+							
+			$form->addElement('html_editor', 'answer['.$i.']',null, 'style="vertical-align:middle"', array('ToolbarSet' => 'TestProposedAnswer', 'Width' => '100%', 'Height' => '100'));		
 			$form->addRule('answer['.$i.']', get_lang('ThisFieldIsRequired'), 'required');
-			$form->addElement('html_editor', 'comment['.$i.']',null, 'style="vertical-align:middle"', array('ToolbarSet' => 'TestProposedAnswer', 'Width' => '100%', 'Height' => '100'));
+			
+			// show comment when feedback is enable				
+			if ($obj_ex->selectFeedbackType() != EXERCISE_FEEDBACK_TYPE_EXAM) {
+				$form->addElement('html_editor', 'comment['.$i.']',null, 'style="vertical-align:middle"', array('ToolbarSet' => 'TestProposedAnswer', 'Width' => '100%', 'Height' => '100'));	
+			}
+			
 			$form->addElement('text', 'weighting['.$i.']',null, 'style="vertical-align:middle;margin-left: 0em;" size="5" value="10"');
 			$form -> addElement ('html', '</tr>');
 		}
@@ -144,19 +137,21 @@ class MultipleAnswer extends Question {
 
 
 		$navigator_info = api_get_navigator();
-		global $text, $class;
-		//ie6 fix
-		if ($navigator_info['name']=='Internet Explorer' &&  $navigator_info['version']=='6') {
-			$form->addElement('submit', 'lessAnswers', get_lang('LessAnswer'),'class="minus"');
-			$form->addElement('submit', 'moreAnswers', get_lang('PlusAnswer'),'class="plus"');
-			$form->addElement('submit','submitQuestion',$text, 'class="'.$class.'"');
-		} else {
-			$form->addElement('style_submit_button', 'lessAnswers', get_lang('LessAnswer'),'class="minus"');
-			$form->addElement('style_submit_button', 'moreAnswers', get_lang('PlusAnswer'),'class="plus"');
-			// setting the save button here and not in the question class.php
-			$form->addElement('style_submit_button','submitQuestion',$text, 'class="'.$class.'"');
+		
+		global $text, $class, $show_quiz_edition;
+		if ($show_quiz_edition) {
+			//ie6 fix
+			if ($navigator_info['name']=='Internet Explorer' &&  $navigator_info['version']=='6') {
+				$form->addElement('submit', 'lessAnswers', get_lang('LessAnswer'),'class="minus"');
+				$form->addElement('submit', 'moreAnswers', get_lang('PlusAnswer'),'class="plus"');
+				$form->addElement('submit','submitQuestion',$text, 'class="'.$class.'"');
+			} else {
+				$form->addElement('style_submit_button', 'lessAnswers', get_lang('LessAnswer'),'class="minus"');
+				$form->addElement('style_submit_button', 'moreAnswers', get_lang('PlusAnswer'),'class="plus"');
+				// setting the save button here and not in the question class.php
+				$form->addElement('style_submit_button','submitQuestion',$text, 'class="'.$class.'"');
+			}
 		}
-
 		$renderer->setElementTemplate('{element}&nbsp;','lessAnswers');
 		$renderer->setElementTemplate('{element}&nbsp;','submitQuestion');
 		$renderer->setElementTemplate('{element}','moreAnswers');

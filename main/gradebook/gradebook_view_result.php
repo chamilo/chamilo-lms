@@ -1,27 +1,5 @@
 <?php // $Id: $
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2008 Dokeos Latinoamerica SAC
-	Copyright (c) 2006 Dokeos SPRL
-	Copyright (c) 2006 Ghent University (UGent)
-	Copyright (c) various contributors
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
-	Mail: info@dokeos.com
-==============================================================================
-*/
+/* For licensing terms, see /license.txt */
 $language_file[] = 'gradebook';
 //$cidReset= true;
 require_once ('../inc/global.inc.php');
@@ -33,11 +11,14 @@ require_once ('lib/fe/dataform.class.php');
 require_once (api_get_path(LIBRARY_PATH) . 'fileManage.lib.php');
 require_once (api_get_path(LIBRARY_PATH) . 'export.lib.inc.php');
 require_once (api_get_path(LIBRARY_PATH) . 'import.lib.php');
+require_once (api_get_path(LIBRARY_PATH) . 'usermanager.lib.php');
 require_once ('lib/results_data_generator.class.php');
 require_once ('lib/fe/resulttable.class.php');
 require_once ('lib/fe/exportgradebook.php');
 require_once ('lib/scoredisplay.class.php');
 require_once (api_get_path(LIBRARY_PATH).'ezpdf/class.ezpdf.php');
+require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/gradebook_functions.inc.php';
+
 api_block_anonymous_users();
 block_students();
 
@@ -61,76 +42,12 @@ if ($eval[0]->get_category_id() < 0) {
 } else
 	$currentcat= Category :: load($eval[0]->get_category_id());
 	//load the result with the evaluation id
-function overwritescore($resid, $importscore, $eval_max) {
-	$result= Result :: load($resid);
-	if ($importscore > $eval_max) {
-		header('Location: gradebook_view_result.php?selecteval=' .Security::remove_XSS($_GET['selecteval']) . '&overwritemax=');
-		exit;
-	}
-	$result[0]->set_score($importscore);
-	$result[0]->save();
-	unset ($result);
-}
+
 if (isset ($_GET['selecteval'])) {
 	$allresults= Result :: load(null,null,$select_eval);
 	$iscourse= $currentcat[0]->get_course_code() == null ? 1 : 0;
 }
-/**
- * XML-parser: handle start of element
- */
-function element_start($parser, $data) {
-global $user;
-global $current_tag;
-	switch ($data) {
-	case 'Result' :
-		$user= array ();
-		break;
-	default :
-		$current_tag= $data;
-	}
-}
-/**
- * XML-parser: handle end of element
- */
-function element_end($parser, $data) {
-global $user;
-global $users;
-global $current_value;
-	switch ($data) {
-	case 'Result' :
-		$users[]= $user;
-		break;
-	default :
-		$user[$data]= $current_value;
-		break;
-	}
-}
-/**
- * XML-parser: handle character data
- */
-function character_data($parser, $data) {
-global $current_value;
-$current_value= $data;
-}
-/**
- * Read the XML-file
- * @param string $file Path to the XML-file
- * @return array All userinformation read from the file
- */
-function parse_xml_data($file) {
-	global $current_tag;
-	global $current_value;
-	global $user;
-	global $users;
-		$users= array ();
-		$parser= xml_parser_create();
-		xml_set_element_handler($parser, 'element_start', 'element_end');
-		xml_set_character_data_handler($parser, "character_data");
-		xml_parser_set_option($parser, XML_OPTION_CASE_FOLDING, false);
-		xml_parse($parser, file_get_contents($file));
-		xml_parser_free($parser);
-		return $users;
-}
+
 if (isset ($_GET['editres'])) {
 	$edit_res_xml=Security::remove_XSS($_GET['editres']);
 	$select_eval_edit=Security::remove_XSS($_GET['selecteval']);
@@ -156,92 +73,95 @@ if (isset ($_GET['editres'])) {
 	}
 }
 if (isset ($_GET['import'])) {
-$interbreadcrumb[]= array (
-	'url' => 'gradebook_view_result.php?selecteval=' . Security::remove_XSS($_GET['selecteval']),
-	'name' => get_lang('ViewResult'
-));
-$import_result_form = new DataForm(DataForm :: TYPE_IMPORT, 'import_result_form', null, api_get_self() . '?import=&selecteval=' . $_GET['selecteval']);
-if (!$import_result_form->validate()) {
-	Display :: display_header(get_lang('Import'));
-}
+	$interbreadcrumb[]= array (
+		'url' => 'gradebook_view_result.php?selecteval=' . Security::remove_XSS($_GET['selecteval']),
+		'name' => get_lang('ViewResult'
+	));
+	$import_result_form = new DataForm(DataForm :: TYPE_IMPORT, 'import_result_form', null, api_get_self() . '?import=&selecteval=' . Security::remove_XSS($_GET['selecteval']));
+	if (!$import_result_form->validate()) {
+		Display :: display_header(get_lang('Import'));
+	}
 
-if ($_POST['formSent'] ) {
-	if (!empty ($_FILES['import_file']['name'])) {
-		$values= $import_result_form->exportValues();
-		$file_type= $_POST['file_type'];
-		$file_name= $_FILES['import_file']['tmp_name'];
-		if ($file_type == 'csv') {
-			$results= Import :: csv_to_array($file_name);
-		} else {
-			$results= parse_xml_data($file_name);
-		}
-		$nr_results_added= 0;
-		foreach ($results as $index => $importedresult) {
-			//check username & score
-			$added= '0';
-			foreach ($allresults as $allresult) {
-				if (($importedresult['user_id'] == $allresult->get_user_id())) {
-					if ($importedresult['score'] != $allresult->get_score()) {
-						if (!isset ($values['overwrite'])) {
-							header('Location: gradebook_view_result.php?selecteval=' . Security::remove_XSS($_GET['selecteval']) . '&import_score_error=' . $importedresult['user_id']);
-							exit;
-							break;
+	if ($_POST['formSent'] ) {
+		if (!empty ($_FILES['import_file']['name'])) {
+			$values= $import_result_form->exportValues();
+			$file_type= $_POST['file_type'];
+			$file_name= $_FILES['import_file']['tmp_name'];
+			if ($file_type == 'csv') {
+				$results= Import :: csv_to_array($file_name);
+			} else {
+				$results= parse_xml_data($file_name);
+			}
+
+			$nr_results_added= 0;
+			foreach ($results as $index => $importedresult) {												
+				//check username & score
+				$importedresult['user_id'] = UserManager::get_user_id_from_username($importedresult['username']);		
+				$added= '0';
+				foreach ($allresults as $allresult) {
+					if (($importedresult['user_id'] == $allresult->get_user_id())) {
+						if ($importedresult['score'] != $allresult->get_score()) {
+							if (!isset ($values['overwrite'])) {
+								header('Location: gradebook_view_result.php?selecteval=' . Security::remove_XSS($_GET['selecteval']) . '&import_score_error=' . $importedresult['user_id']);
+								exit;
+								break;
+							} else {
+								overwritescore($allresult->get_id(), $importedresult['score'], $eval[0]->get_max());
+								$overwritescore++;
+								$added= '1';
+							}
 						} else {
-							overwritescore($allresult->get_id(), $importedresult['score'], $eval[0]->get_max());
-							$overwritescore++;
 							$added= '1';
 						}
-					} else {
-						$added= '1';
+	
 					}
 
 				}
-			}
-			if ($importedresult['user_id'] == null) {
-				header('Location: gradebook_view_result.php?selecteval=' . Security::remove_XSS($_GET['selecteval']) . '&incorrectdata=');
-				exit;
-			}
-			$userinfo= get_user_info_from_id($importedresult['user_id']);
-			if ($userinfo['lastname'] != $importedresult['lastname'] || $userinfo['firstname'] != $importedresult['firstname'] || $userinfo['official_code'] != $importedresult['official_code']) {
-				if (!isset ($values['ignoreerrors'])) {
-					header('Location: gradebook_view_result.php?selecteval=' .Security::remove_XSS($_GET['selecteval']) . '&import_user_error=' . $importedresult['user_id']);
+				if ($importedresult['user_id'] == null) {
+					header('Location: gradebook_view_result.php?selecteval=' . Security::remove_XSS($_GET['selecteval']) . '&incorrectdata=');
 					exit;
 				}
+				$userinfo= get_user_info_from_id($importedresult['user_id']);
+				if ($userinfo['lastname'] != $importedresult['lastname'] || $userinfo['firstname'] != $importedresult['firstname'] || $userinfo['official_code'] != $importedresult['official_code']) {
+					if (!isset ($values['ignoreerrors'])) {
+						header('Location: gradebook_view_result.php?selecteval=' .Security::remove_XSS($_GET['selecteval']) . '&import_user_error=' . $importedresult['user_id']);
+						exit;
+					}
+				}
+				if ($added != '1') {
+					if ($importedresult['score'] > $eval[0]->get_max()) {
+						header('Location: gradebook_view_result.php?selecteval=' .Security::remove_XSS($_GET['selecteval']) . '&overwritemax=');
+						exit;
+					}
+					$result= new Result();
+					$result->set_user_id($importedresult['user_id']);
+					if (!empty ($importedresult['score'])) {
+						$result->set_score($importedresult['score']);
+					}
+					if (!empty ($importedresult['date'])) {
+						$result->set_date(api_get_utc_datetime($importedresult['date']));
+					} else {
+						$result->set_date(api_get_utc_datetime());
+					}
+					$result->set_evaluation_id($_GET['selecteval']);
+					$result->add();
+					$nr_results_added++;
+				}
 			}
-			if ($added != '1') {
-				if ($importedresult['score'] > $eval[0]->get_max()) {
-					header('Location: gradebook_view_result.php?selecteval=' .Security::remove_XSS($_GET['selecteval']) . '&overwritemax=');
-					exit;
-				}
-				$result= new Result();
-				$result->set_user_id($importedresult['user_id']);
-				if (!empty ($importedresult['score'])) {
-					$result->set_score($importedresult['score']);
-				}
-				if (!empty ($importedresult['date'])) {
-					$result->set_date(strtotime($importedresult['date']));
-				} else {
-					$result->set_date(time());
-				}
-				$result->set_evaluation_id($_GET['selecteval']);
-				$result->add();
-				$nr_results_added++;
-			}
+		} else {
+			header('Location: ' . api_get_self() . '?import=&selecteval=' . Security::remove_XSS($_GET['selecteval']) . '&importnofile=');
+			exit;
 		}
-	} else {
-		header('Location: ' . api_get_self() . '?import=&selecteval=' . Security::remove_XSS($_GET['selecteval']) . '&importnofile=');
+		if ($overwritescore != 0) {
+			header('Location: ' . api_get_self() . '?selecteval=' . Security::remove_XSS($_GET['selecteval']) . '&importoverwritescore=' . $overwritescore);
+			exit;
+		}
+		if ($nr_results_added == 0) {
+			header('Location: ' . api_get_self() . '?selecteval=' . Security::remove_XSS($_GET['selecteval']) . '&nothingadded=');
+			exit;
+		}
+		header('Location: ' . api_get_self() . '?selecteval=' . Security::remove_XSS($_GET['selecteval']) . '&importok=');
 		exit;
-	}
-	if ($overwritescore != 0) {
-		header('Location: ' . api_get_self() . '?selecteval=' . Security::remove_XSS($_GET['selecteval']) . '&importoverwritescore=' . $overwritescore);
-		exit;
-	}
-	if ($nr_results_added == 0) {
-		header('Location: ' . api_get_self() . '?selecteval=' . Security::remove_XSS($_GET['selecteval']) . '&nothingadded=');
-		exit;
-	}
-	header('Location: ' . api_get_self() . '?selecteval=' . Security::remove_XSS($_GET['selecteval']) . '&importok=');
-	exit;
 	}
 }
 if (isset ($_GET['export'])) {
@@ -257,12 +177,12 @@ if (!$export_result_form->validate()) {
 if ($export_result_form->validate()) {
 	$export= $export_result_form->exportValues();
 	$file_type= $export['file_type'];
-	$filename= 'export_results_' . date('Y-m-d_H-i-s');
+	$filename= 'export_results_' . gmdate('Y-m-d_H-i-s');
 	$results= Result :: load(null, null, Security::remove_XSS($_GET['selecteval']));
 	$data= array (); //when file type is csv, add a header to the output file
 	if ($file_type == 'csv') {
 		$alldata[]= array (
-			'user_id',
+			'username',
 			'official_code',
 			'lastname',
 			'firstname',
@@ -287,7 +207,7 @@ if ($export_result_form->validate()) {
 		$pdf->selectFont(api_get_path(LIBRARY_PATH).'ezpdf/fonts/Courier.afm');
 		$pdf->ezSetMargins(30, 30, 50, 30);
 		$pdf->ezSetY(800);
-		$pdf->ezText(get_lang('EvaluationName') . ' : ' . $eval[0]->get_name() . ' (' . date('j/n/Y g:i', $eval[0]->get_date()) . ')', 12, array (
+		$pdf->ezText(get_lang('EvaluationName') . ' : ' . $eval[0]->get_name() . ' (' . api_format_date($eval[0]->get_date(), "%d/%m/%Y %R") . ')', 12, array (
 			'justification' => 'left'
 		));
 		$pdf->ezText(get_lang('Description') . ' : ' . $eval[0]->get_description());
@@ -345,22 +265,25 @@ if ($export_result_form->validate()) {
 		$pdf->ezStream();
 		exit;
 	}
+
 	foreach ($results as $result) {
 		$userinfo= get_user_info_from_id($result->get_user_id());
-		$data['user_id']= $result->get_user_id();
+		$data['username']= $userinfo['username']; //$result->get_user_id();
 		$data['official_code']= $userinfo['official_code'];
 		$data['lastname']= $userinfo['lastname'];
 		$data['firstname']= $userinfo['firstname'];
 		$data['score']= $result->get_score();
-		$data['date']= date('Y-n-j g:i', $result->get_date());
+		$data['date'] = api_format_date($result->get_date(), "%d/%m/%Y %R");
 		$alldata[]= $data;
 	}
 	switch ($file_type) {
 		case 'xml' :
 			Export :: export_table_xml($alldata, $filename, 'Result', 'XMLResults');
+			exit;
 			break;
 		case 'csv' :
 			Export :: export_table_csv($alldata, $filename);
+			exit;
 			break;
 		}
 	}

@@ -1,15 +1,16 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$Inbox  = "Inbox";
+$Inbox = "Inbox";
 $Messages = "Mesaje";
 $SendMessage = "Trimite mesaj";
 $NewMessage = "Mesaj nou";
 $ComposeMessage = "Compune mesaj";
 $DeleteSelectedMessages = "Sterge mesajele selectate";
 $SelectAll = "Selecteaza toate";
-$DeselectAll  = "Deselecteaza toate";
-$ReplyToMessage = "Raspunde";
+$DeselectAll = "Deselecteaza toate";
+$ReplyToMessage = "Raspunde acestui mesaj";
 $BackToInbox = "Inapoi la inbox";
 $MessageSentTo = "Mesajul a fost trimis la";
 $SendMessageTo = "Trimite la";

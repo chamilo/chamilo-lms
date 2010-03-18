@@ -1,41 +1,14 @@
 <?php
-/*
-vim: set expandtab tabstop=4 shiftwidth=4:
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2004 Dokeos S.A.
-	Copyright (c) 2003 Ghent University (UGent)
-	Copyright (c) 2001 Universite catholique de Louvain (UCL)
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact: Dokeos, 181 rue Royale, B-1000 Brussels, Belgium, info@dokeos.com
-==============================================================================
-*/
+/* See license terms in /license.txt */
 /**
-==============================================================================
 *	This is the file display library for Dokeos.
 *	Include/require it in your code to use its functionality.
 *
 *	@package dokeos.library
-==============================================================================
 */
 
 
-/*
-==============================================================================
-		GENERIC FUNCTIONS : FOR OLDER PHP VERSIONS
-==============================================================================
-*/
+/*	GENERIC FUNCTIONS : FOR OLDER PHP VERSIONS */
 if ( ! function_exists('array_search') )
 {
 	/**
@@ -61,11 +34,7 @@ if ( ! function_exists('array_search') )
 	}
 }
 
-/*
-==============================================================================
-		FILE DISPLAY FUNCTIONS
-==============================================================================
-*/
+/* FILE DISPLAY FUNCTIONS */
 /**
  * Define the image to display for each file extension.
  * This needs an existing image repository to work.
@@ -201,27 +170,30 @@ function format_url($file_path)
  */
 function recent_modified_file_time($dir_name, $do_recursive = true)
 {
+
 	$dir = dir($dir_name);
 	$last_modified = 0;
+	$return = 0;
+	if (is_dir($dir)) {
+		while(($entry = $dir->read()) !== false)
+		{
+			if ($entry != '.' && $entry != '..')
+				continue;
 
-	while(($entry = $dir->read()) !== false)
-	{
-		if ($entry != '.' && $entry != '..')
-			continue;
+			if (!is_dir($dir_name.'/'.$entry))
+				$current_modified = filemtime($dir_name.'/'.$entry);
+			elseif ($do_recursive)
+				$current_modified = recent_modified_file_time($dir_name.'/'.$entry, true);
 
-		if (!is_dir($dir_name.'/'.$entry))
-			$current_modified = filemtime($dir_name.'/'.$entry);
-		elseif ($do_recursive)
-			$current_modified = recent_modified_file_time($dir_name.'/'.$entry, true);
+			if ($current_modified > $last_modified)
+				$last_modified = $current_modified;
+		}
 
-		if ($current_modified > $last_modified)
-			$last_modified = $current_modified;
+		$dir->close();
+		//prevents returning 0 (for empty directories)
+		$return = ($last_modified == 0) ? filemtime($dir_name) : $last_modified;
 	}
-
-	$dir->close();
-
-	//prevents returning 0 (for empty directories)
-	return ($last_modified == 0) ? filemtime($dir_name) : $last_modified;
+	return $return;
 }
 
 /**
@@ -278,7 +250,7 @@ SELECT SUM(size)
 		AND $visibility_rule
 EOQ;
 
-	$result = Database::query($sql,__FILE__,__LINE__);
+	$result = Database::query($sql);
 
 	if($result && Database::num_rows($result) != 0)
 	{

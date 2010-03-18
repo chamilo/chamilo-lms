@@ -1,6 +1,7 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$langAnnouncements = "Ανακοινώσεις";
-$langCourseDescription = "περιγραφή στο κατάλογο μαθημάτων";
+$langAnnouncements = "Ξ‘Ξ½Ξ±ΞΊΞΏΞΉΞ½ΟΟƒΞµΞΉΟ‚";
+$langCourseDescription = "Ο€ΞµΟΞΉΞ³ΟΞ±Ο†Ξ® ΟƒΟ„ΞΏ ΞΊΞ±Ο„Ξ¬Ξ»ΞΏΞ³ΞΏ ΞΌΞ±ΞΈΞ·ΞΌΞ¬Ο„Ο‰Ξ½";
 ?>

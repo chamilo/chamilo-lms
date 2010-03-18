@@ -1,5 +1,6 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $lang_new_item = "new item added";
 $lang_title_notification = "Since your latest visit";
@@ -15,7 +16,7 @@ $lang_new_forum_topic = "new topic added";
 $lang_new_groupforum_topic = "new topic added to group forum";
 $lang_new_dropbox_file = "new file received";
 $lang_update_dropbox_file = "a file in your dropbox was updated";
-$ForumCategoryAdded = "Forum category added";
+$ForumCategoryAdded = "The forum category has been added";
 $LearnpathAdded = "Course added";
 $GlossaryAdded = "Added new term in the Glossary";
 $QuizQuestionAdded = "Added new question in the quiz";

@@ -26,7 +26,7 @@ require_once '../inc/global.inc.php';
 $TABLEAGENDA 		= Database::get_course_table(TABLE_AGENDA);
 
 $sql 			= "SELECT * FROM $TABLEAGENDA WHERE id IN($id) ORDER BY start_date DESC";
-$result			= Database::query($sql,__FILE__,__LINE__);
+$result			= Database::query($sql);
 ?>
 
 <html>
@@ -60,15 +60,13 @@ while($row=Database::fetch_array($result))
 
 	echo get_lang('StartTime').' : ';
 
-	echo api_ucfirst(format_locale_date($dateFormatLong,strtotime($row["start_date"])))."&nbsp;&nbsp;&nbsp;";
-	echo api_ucfirst(strftime($timeNoSecFormat,strtotime($row["start_date"])))."";
+	echo api_convert_and_format_date($row["start_date"], null, date_default_timezone_get());
 
 	echo '<br />';
 
 	echo get_lang('EndTime').' : ';
 
-	echo api_ucfirst(format_locale_date($dateFormatLong,strtotime($row["end_date"])))."&nbsp;&nbsp;&nbsp;";
-	echo api_ucfirst(strftime($timeNoSecFormat,strtotime($row["end_date"])))."";
+	echo api_convert_and_format_date($row["end_date"], null, date_default_timezone_get());
 
 	echo '<br /><br />';
 
@@ -78,7 +76,7 @@ while($row=Database::fetch_array($result))
 
 <br /><br />
 <center>
-<input type="button" value="<?php echo api_htmlentities(get_lang('Print'),ENT_QUOTES,$charset); ?>" onClick="javascript:window.print();" />
+<input type="button" value="<?php echo api_htmlentities(get_lang('Print'), ENT_QUOTES); ?>" onClick="javascript: window.print();" />
 </center>
 
 </body>

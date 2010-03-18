@@ -1,47 +1,18 @@
 <?php // $Id: configure_homepage.php 9246 2006-09-25 13:24:53 +0000 (lun., 25 sept. 2006) bmol $
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2008 Dokeos SPRL
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
-	Mail: info@dokeos.com
-==============================================================================
-*/
+/* For licensing terms, see /chamilo_license.txt */
 
 // name of the language file that needs to be included
 $language_file='admin';
-
 $cidReset=true;
-
-include('../inc/global.inc.php');
-
-
+require_once '../inc/global.inc.php';
 $this_section=SECTION_PLATFORM_ADMIN;
-
 api_protect_admin_script();
-
 $interbreadcrumb[] = array ('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
-
 // Database Table Definitions
 $tbl_settings_current = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
-
 $message = '';
 
-require api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
-
-
+require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 
 if(isset($_POST['activeExtension'])){
 
@@ -52,19 +23,19 @@ if(isset($_POST['activeExtension'])){
 					selected_value="true"
 					WHERE variable="service_visio"
 					AND subkey="active"';
-			$rs = Database::query($sql, __FILE__, __LINE__);
+			$rs = Database::query($sql);
 			if(Database::affected_rows()>0)
 			{
 
 				// select all the courses and insert the tool inside
 				$sql = 'SELECT db_name FROM '.Database::get_main_table(TABLE_MAIN_COURSE);
-				$rs = Database::query($sql, __FILE__, __LINE__);
+				$rs = Database::query($sql);
 				while($row = Database::fetch_array($rs)){
 					if(!empty($_POST['visio_host']))
 					{
 						$tool_table = Database::get_course_table(TABLE_TOOL_LIST,$row['db_name']);
 						$select = "SELECT id FROM $tool_table WHERE name='".TOOL_VISIO_CONFERENCE."'";
-						$selectres = Database::query($select,__FILE__, __LINE__);
+						$selectres = Database::query($select);
 						if(Database::num_rows($selectres)<1)
 						{
 							$sql = 'INSERT INTO '.$tool_table.' SET
@@ -76,10 +47,10 @@ if(isset($_POST['activeExtension'])){
 									address="squaregrey.gif",
 									target="_self",
 									category="interaction"';
-							Database::query($sql, __FILE__, __LINE__);
+							Database::query($sql);
 						}
 						$select = "SELECT id FROM $tool_table WHERE name='".TOOL_VISIO_CLASSROOM."'";
-						$selectres = Database::query($select,__FILE__, __LINE__);
+						$selectres = Database::query($select);
 						if(Database::num_rows($selectres)<1)
 						{
 							$sql = 'INSERT INTO '.$tool_table.' SET
@@ -91,7 +62,7 @@ if(isset($_POST['activeExtension'])){
 									address="squaregrey.gif",
 									target="_self",
 									category="authoring"';
-							Database::query($sql, __FILE__, __LINE__);
+							Database::query($sql);
 						}
 					}
 				}
@@ -102,25 +73,25 @@ if(isset($_POST['activeExtension'])){
 					selected_value="'.Database::escape_string($_POST['visio_host']).'"
 					WHERE variable="service_visio"
 					AND subkey="visio_host"';
-			$rs = Database::query($sql, __FILE__, __LINE__);
+			$rs = Database::query($sql);
 
 			$sql = 'UPDATE '.$tbl_settings_current.' SET
 					selected_value="'.Database::escape_string($_POST['visio_port']).'"
 					WHERE variable="service_visio"
 					AND subkey="visio_port"';
-			$rs = Database::query($sql, __FILE__, __LINE__);
+			$rs = Database::query($sql);
 
 			$sql = 'UPDATE '.$tbl_settings_current.' SET
 					selected_value="'.Database::escape_string($_POST['visio_pass']).'"
 					WHERE variable="service_visio"
 					AND subkey="visio_pass"';
-			$rs = Database::query($sql, __FILE__, __LINE__);
+			$rs = Database::query($sql);
 
 			$sql = 'UPDATE '.$tbl_settings_current.' SET
 					selected_value="'.($_POST['visio_use_rtmpt']=='true'?'true':'false').'"
 					WHERE variable="service_visio"
 					AND subkey="visio_use_rtmpt"';
-			$rs = Database::query($sql, __FILE__, __LINE__);
+			$rs = Database::query($sql);
 
 			if(empty($message))
 			{
@@ -138,7 +109,7 @@ if(isset($_POST['activeExtension'])){
 					WHERE variable="service_ppt2lp"
 					AND subkey="active"';
 
-			$rs = Database::query($sql, __FILE__, __LINE__);
+			$rs = Database::query($sql);
 
 			if(Database::affected_rows()>0){
 				$message = get_lang('ServiceActivated');
@@ -148,37 +119,37 @@ if(isset($_POST['activeExtension'])){
 					selected_value="'.addslashes($_POST['host']).'"
 					WHERE variable="service_ppt2lp"
 					AND subkey="host"';
-			Database::query($sql, __FILE__, __LINE__);
+			Database::query($sql);
 
 			$sql = 'UPDATE '.$tbl_settings_current.' SET
 					selected_value="'.addslashes($_POST['port']).'"
 					WHERE variable="service_ppt2lp"
 					AND subkey="port"';
-			Database::query($sql, __FILE__, __LINE__);
+			Database::query($sql);
 
 			$sql = 'UPDATE '.$tbl_settings_current.' SET
 					selected_value="'.addslashes($_POST['ftp_password']).'"
 					WHERE variable="service_ppt2lp"
 					AND subkey="ftp_password"';
-			Database::query($sql, __FILE__, __LINE__);
+			Database::query($sql);
 
 			$sql = 'UPDATE '.$tbl_settings_current.' SET
 					selected_value="'.addslashes($_POST['user']).'"
 					WHERE variable="service_ppt2lp"
 					AND subkey="user"';
-			Database::query($sql, __FILE__, __LINE__);
+			Database::query($sql);
 
 			$sql = 'UPDATE '.$tbl_settings_current.' SET
 					selected_value="'.addslashes($_POST['path_to_lzx']).'"
 					WHERE variable="service_ppt2lp"
 					AND subkey="path_to_lzx"';
-			Database::query($sql, __FILE__, __LINE__);
+			Database::query($sql);
 
 			$sql = 'UPDATE '.$tbl_settings_current.' SET
 					selected_value="'.addslashes($_POST['size']).'"
 					WHERE variable="service_ppt2lp"
 					AND subkey="size"';
-			Database::query($sql, __FILE__, __LINE__);
+			Database::query($sql);
 
 			break;
 	}
@@ -191,7 +162,7 @@ $listActiveServices = array();
 // get the list of active services
 $sql = 'SELECT variable FROM '.$tbl_settings_current.' WHERE variable LIKE "service_%" AND subkey="active" and selected_value="true"';
 
-$rs = Database::query($sql, __FILE__, __LINE__);
+$rs = Database::query($sql);
 while($row = Database::fetch_array($rs)){
 	$listActiveServices[] = $row['variable'];
 }
@@ -291,7 +262,7 @@ Display::display_header($nameTool);
 					<td align="center">
 						<?php Display::display_icon('screenshot_conf.jpg', get_lang('Visioconf')); ?>
 					</td>
-					<!--td align="center" width="50%">
+					<td align="center" width="50%">
 						<?php
 						$form = new FormValidator('visio');
 						$form -> addElement('text', 'visio_host', get_lang('VisioHost'));
@@ -315,7 +286,7 @@ Display::display_header($nameTool);
 						{
 							$sql = 'SELECT subkey, selected_value FROM '.$tbl_settings_current.'
 									WHERE variable = "service_visio"';
-							$rs = Database::query($sql, __FILE__, __LINE__);
+							$rs = Database::query($sql);
 							while($row = Database::fetch_array($rs,'ASSOC'))
 							{
 								$defaults[$row['subkey']] = $row['selected_value'];
@@ -328,7 +299,7 @@ Display::display_header($nameTool);
 						$form -> setDefaults($defaults);
 						$form -> display();
 						?>
-					</td-->
+					</td>
 				</tr>
 			</table>
 		</div>
@@ -382,7 +353,7 @@ Display::display_header($nameTool);
 							$sql = 'SELECT subkey, selected_value FROM '.$tbl_settings_current.'
 									WHERE variable = "service_ppt2lp"
 									AND subkey <> "active"';
-							$rs = Database::query($sql, __FILE__, __LINE__);
+							$rs = Database::query($sql);
 							while($row = Database::fetch_array($rs,'ASSOC'))
 							{
 								$defaults[$row['subkey']] = $row['selected_value'];

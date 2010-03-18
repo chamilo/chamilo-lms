@@ -1,80 +1,71 @@
-<?php // $Id: showinframes.php 22177 2009-07-16 22:30:39Z iflorespaz $
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2004-2008 Dokeos S.A.
-	Copyright (c) 2003 Ghent University (UGent)
-	Copyright (c) 2001 Universite catholique de Louvain (UCL)
-	Copyright (c) Hugues Peeters
-	Copyright (c) Roan Embrechts
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
-	Mail: info@dokeos.com
-==============================================================================
-*/
+<?php
+/* For licensing terms, see /license.txt */
 
 /**
-==============================================================================
-*	This file will show documents in a separate frame.
-*	We don't like frames, but it was the best of two bad things.
-*
-*	display html files within Dokeos - html files have the Dokeos header.
-*
-*	--- advantages ---
-*	users "feel" like they are in Dokeos,
-*	and they can use the navigation context provided by the header.
-*
-*	--- design ---
-*	a file gets a parameter (an html file)
-*	and shows
-*	- dokeos header
-*	- html file from parameter
-*	- (removed) dokeos footer
-*
-*	@version 0.6
-*	@author Roan Embrechts (roan.embrechts@vub.ac.be)
-*	@package dokeos.document
-==============================================================================
-*/
+ *	This file will show documents in a separate frame.
+ *	We don't like frames, but it was the best of two bad things.
+ *
+ *	display html files within Dokeos - html files have the Dokeos header.
+ *
+ *	--- advantages ---
+ *	users "feel" like they are in Dokeos,
+ *	and they can use the navigation context provided by the header.
+ *
+ *	--- design ---
+ *	a file gets a parameter (an html file)
+ *	and shows
+ *	- dokeos header
+ *	- html file from parameter
+ *	- (removed) dokeos footer
+ *
+ *	@version 0.6
+ *	@author Roan Embrechts (roan.embrechts@vub.ac.be)
+ *	@package dokeos.document
+ */
 
-/*
-==============================================================================
-	   DOKEOS INIT
-==============================================================================
-*/
+/*   INITIALIZATION */
+
 $language_file[] = 'document';
 require_once '../inc/global.inc.php';
-require_once '../glossary/glossary.class.php';
+require_once api_get_path(LIBRARY_PATH).'glossary.lib.php';
+
+$noPHP_SELF = true;
+$header_file = Security::remove_XSS($_GET['file']);
+$path_array = explode('/', str_replace('\\', '/', $header_file));
+$path_array = array_map('urldecode', $path_array);
+$header_file = implode('/', $path_array);
+$nameTools = $header_file;
+
+if (isset($_SESSION['_gid']) && $_SESSION['_gid'] != '') {
+	$req_gid = '&amp;gidReq='.$_SESSION['_gid'];
+	$interbreadcrumb[] = array('url' => '../group/group_space.php?gidReq='.$_SESSION['_gid'], 'name' => get_lang('GroupSpace'));
+}
+
+$interbreadcrumb[] = array('url' => './document.php?curdirpath='.dirname($header_file).$req_gid, 'name' => get_lang('Documents'));
+$interbreadcrumb[] = array('url' => 'showinframes.php?file='.$header_file, 'name' => $header_file);
+$file_url_sys = api_get_path(SYS_COURSE_PATH).'document'.$header_file;
+$path_info = pathinfo($file_url_sys);
+$this_section = SECTION_COURSES;
+
+/*
 if (!empty($_GET['nopages'])) {
-	$nopages=Security::remove_XSS($_GET['nopages']);
-	if ($nopages==1) {
+	$nopages = Security::remove_XSS($_GET['nopages']);
+	if ($nopages == 1) {
 		require_once api_get_path(INCLUDE_PATH).'reduced_header.inc.php';
 		Display::display_error_message(get_lang('FileNotFound'));
 	}
 	exit;
 }
+*/
 
 $_SESSION['whereami'] = 'document/view';
 
-$interbreadcrumb[]= array ('url'=>'./document.php', 'name'=> get_lang('Documents'));
+$interbreadcrumb[] = array('url' => './document.php', 'name' => get_lang('Documents'));
 $nameTools = get_lang('Documents');
 $file = Security::remove_XSS(urldecode($_GET['file']));
-/*
-==============================================================================
-		Main section
-==============================================================================
-*/
+
+/*	Main section */
+
 header('Expires: Wed, 01 Jan 1990 00:00:00 GMT');
 //header('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT');
 header('Last-Modified: Wed, 01 Jan 2100 00:00:00 GMT');
@@ -82,39 +73,83 @@ header('Last-Modified: Wed, 01 Jan 2100 00:00:00 GMT');
 header('Cache-Control: no-cache, must-revalidate');
 header('Pragma: no-cache');
 
-$browser_display_title = "Dokeos Documents - " . Security::remove_XSS($_GET['cidReq']) . " - " . $file;
+$browser_display_title = 'Documents - '.Security::remove_XSS($_GET['cidReq']).' - '.$file;
 
-//only admins get to see the "no frames" link in pageheader.php, so students get a header that's not so high
+// Only admins get to see the "no frames" link in pageheader.php, so students get a header that's not so high
 $frameheight = 135;
-if($is_courseAdmin) {
+if ($is_courseAdmin) {
 	$frameheight = 165;
 }
 
-$file_root=$_course['path'].'/document'.str_replace('%2F', '/',$file);
-$file_url_sys=api_get_path(SYS_COURSE_PATH).$file_root;
-$file_url_web=api_get_path(WEB_COURSE_PATH).$file_root;
-$path_info= pathinfo($file_url_sys);
-?>
-<html>
-<head>
-<title>
-<?php echo $browser_display_title;?>
-</title>
-</head>
-	<frameset rows="<?php echo $frameheight; ?>,*" border="0" frameborder="no" >
-		<frame name="top" scrolling="no" noresize target="contents" src="headerpage.php?file=<?php echo $file.'&amp;'.api_get_cidreq(); ?>" />
-		<?php
-		if (file_exists($file_url_sys)) {
-			echo '<frame name="main" id="framemain" src="'.$file_url_web.'?'.api_get_cidreq().'&rand='.mt_rand(1,10000).'" />';
-		} else {
-			echo '<frame name="main" id="framemain" src=showinframes.php?nopages=1 />';
-		}
-		?>
-	<noframes>
-	<body>
-		<p>This page uses frames, but your browser doesn't support them.<br/>
-			We suggest you try Mozilla, Firefox, Safari, Opera, or other browsers updated this millenium.</p>
-	</body>
-	</noframes>
-	<frame src="#"></frameset>
-</html>
+$file_root = $_course['path'].'/document'.str_replace('%2F', '/', $file);
+$file_url_sys = api_get_path(SYS_COURSE_PATH).$file_root;
+$file_url_web = api_get_path(WEB_COURSE_PATH).$file_root;
+$path_info = pathinfo($file_url_sys);
+
+$js_glossary_in_documents = '';
+if (api_get_setting('show_glossary_in_documents') == 'ismanual') {
+	$js_glossary_in_documents = '	//	    $(document).ready(function() {
+									$.frameReady(function() {
+								       //  $("<div>I am a div courses</div>").prependTo("body");
+								      }, "top.mainFrame",
+								      { load: [
+								      		{type:"script", id:"_fr1", src:"'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js"},
+								            {type:"script", id:"_fr2", src:"'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.highlight.js"},
+								            {type:"script", id:"_fr3", src:"'.api_get_path(WEB_LIBRARY_PATH).'fckeditor/editor/plugins/glossary/fck_glossary_manual.js"}
+								      	 ]
+								      }
+								      );
+								    //});';
+} elseif (api_get_setting('show_glossary_in_documents') == 'isautomatic') {
+	$js_glossary_in_documents =	'//    $(document).ready(function() {
+								      $.frameReady(function(){
+								       //  $("<div>I am a div courses</div>").prependTo("body");
+
+								      }, "top.mainFrame",
+								      { load: [
+								      		{type:"script", id:"_fr1", src:"'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js"},
+								            {type:"script", id:"_fr2", src:"'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.highlight.js"},
+								            {type:"script", id:"_fr3", src:"'.api_get_path(WEB_LIBRARY_PATH).'fckeditor/editor/plugins/glossary/fck_glossary_automatic.js"}
+								      	 ]
+								      }
+								      );
+								//   });';
+}
+
+$htmlHeadXtra[] = '<script language="javascript" src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js"></script>';
+$htmlHeadXtra[] = '<script language="javascript" src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.frameready.js"></script>';
+
+$htmlHeadXtra[] = '<script type="text/javascript">
+<!--
+	var updateContentHeight = function() {
+		HeaderHeight = document.getElementById("header").offsetHeight;
+		FooterHeight = document.getElementById("footer").offsetHeight;
+		docHeight = document.body.clientHeight;
+		document.getElementById("mainFrame").style.height = ((docHeight-(parseInt(HeaderHeight)+parseInt(FooterHeight)))-60)+"px";
+	};
+
+	// Fixes the content height of the frame
+	window.onload = function() {
+		updateContentHeight();
+		'.$js_glossary_in_documents.'
+	}
+-->
+</script>';
+
+//Display::display_header($tool_name, 'User');
+
+Display::display_header(null, 'Doc');
+echo "<div align=\"center\">";
+$file_url_web = api_get_path('WEB_COURSE_PATH').$_course['path'].'/document'.$header_file.'?'.api_get_cidreq();
+echo '<a href="'.$file_url_web.'" target="_blank">'.get_lang('_cut_paste_link').'</a></div>';
+//echo '<div>';
+
+if (file_exists($file_url_sys)) {
+	echo '<iframe border="0" frameborder="0" scrolling="auto"  style="width:100%;"  id="mainFrame" name="mainFrame" src="'.$file_url_web.'?'.api_get_cidreq().'&rand='.mt_rand(1, 10000).'"></iframe>';
+} else {
+	echo '<frame name="mainFrame" id="mainFrame" src=showinframes.php?nopages=1 />';
+}
+
+//echo '</div>';
+
+Display::display_footer();

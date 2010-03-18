@@ -1,25 +1,26 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$GeneralDescription = "Descripción xeneral";
-$GeneralDescriptionQuestions = "¿ Qué papel y función tien esti cursu nel programa ? ¿ Necesítense actividaes previes ? ¿Qué rellación tien con otros cursos ?";
-$GeneralDescriptionInformation = "Descripción del crusu (númberu d\'hores, códigu, llugar onde se da...), Profesor (nome, apellíos, despachu, teléfonu, e-mail...).";
+$GeneralDescription = "DescripciÃ³n xeneral";
+$GeneralDescriptionQuestions = "Â¿ QuÃ© papel y funciÃ³n tien esti cursu nel programa ? Â¿ NecesÃ­tense actividaes previes ? Â¿QuÃ© rellaciÃ³n tien con otros cursos ?";
+$GeneralDescriptionInformation = "DescripciÃ³n del crusu (nÃºmberu d'hores, cÃ³digu, llugar onde se da...), Profesor (nome, apellÃ­os, despachu, telÃ©fonu, e-mail...).";
 $Objectives = "Oxetivos";
-$ObjectivesInformation = "Presentación de los oxetivos globales y específicos del cursu";
-$ObjectivesQuestions = "¿ Qué quier que los estudiantes sepan de la qu\'acaben el cursu ? ¿ Qué oxetivos tienen de dir consiguiendo nel mesmu ?";
-$Topics = "Conteníos";
-$TopicsInformation = "Llistáu de conteníos del cursu. Importancia de caún los conteníos. Nivel de dificultá. Estructura y interdependencia ente los sos apartaos.";
-$TopicsQuestions = "¿ Cuál va ser el desendolcu del cursu ? ¿ Ónde tienen d\'insistir los estudiantes ? ¿Hai problemes identificaos na comprensión de dellos capítulos ? ¿ Cuánto hai que dedicar a cáuna les partes del cursu ?";
-$Methodology = "Metodoloxía";
-$MethodologyQuestions = "¿ Qué métodos y actividaes van ayudar a consiguir los oxetivos del crusu ? ¿Cuál ye\'l calendariu ?";
-$MethodologyInformation = "Presentación  de les actividaes (conferencies, charres, investigaciones en grupu, llaboratorios...)";
+$ObjectivesInformation = "PresentaciÃ³n de los oxetivos globales y especÃ­ficos del cursu";
+$ObjectivesQuestions = "Â¿ QuÃ© quier que los estudiantes sepan de la qu'acaben el cursu ? Â¿ QuÃ© oxetivos tienen de dir consiguiendo nel mesmu ?";
+$Topics = "Temes";
+$TopicsInformation = "LlistÃ¡u de contenÃ­os del cursu. Importancia de caÃºn los contenÃ­os. Nivel de dificultÃ¡. Estructura y interdependencia ente los sos apartaos.";
+$TopicsQuestions = "Â¿ CuÃ¡l va ser el desendolcu del cursu ? Â¿ Ã“nde tienen d'insistir los estudiantes ? Â¿Hai problemes identificaos na comprensiÃ³n de dellos capÃ­tulos ? Â¿ CuÃ¡nto hai que dedicar a cÃ¡una les partes del cursu ?";
+$Methodology = "MetodoloxÃ­a";
+$MethodologyQuestions = "Â¿ QuÃ© mÃ©todos y actividaes van ayudar a consiguir los oxetivos del crusu ? Â¿CuÃ¡l ye'l calendariu ?";
+$MethodologyInformation = "PresentaciÃ³n  de les actividaes (conferencies, charres, investigaciones en grupu, llaboratorios...)";
 $CourseMaterial = "Materiales";
-$CourseMaterialQuestions = "¿ Esiste una guía del cursu, una coleición de documentos, una bibliografía, un llistáu d\'enllaces d\'Internet ?";
-$CourseMaterialInformation = "Descripción breve de los materiales del cursu.";
-$HumanAndTechnicalResources = "Recursos humanos y téunicos";
-$HumanAndTechnicalResourcesQuestions = "¿ Quién son los profesores, tutores, serviciu d\'asistencia téunica, asistentes sociales, etc ? ¿Cuálos son los recursos físicos qu\'hai pal cursu: sala d\'ordenadores, etc. ?";
-$HumanAndTechnicalResourcesInformation = "Descripción breve de les persones coles que contautar y de los recursos téunicos a disposición.";
-$Assessment  = "Evaluación";
-$AssessmentQuestions = "¿ Cómo se va evaluar a los estudiantes ? ¿ Qué estratexes se van desendolcar pa qu\'estos acaben dominando la materia ?";
-$AssessmentInformation = "Exemplos d\'entrugues d\'esame. Criterios d\'evaluación. Pistes y trucos.";
+$CourseMaterialQuestions = "Â¿ Esiste una guÃ­a del cursu, una coleiciÃ³n de documentos, una bibliografÃ­a, un llistÃ¡u d'enllaces d'Internet ?";
+$CourseMaterialInformation = "DescripciÃ³n breve de los materiales del cursu.";
+$HumanAndTechnicalResources = "Recursos humanos y tÃ©unicos";
+$HumanAndTechnicalResourcesQuestions = "Â¿ QuiÃ©n son los profesores, tutores, serviciu d'asistencia tÃ©unica, asistentes sociales, etc ? Â¿CuÃ¡los son los recursos fÃ­sicos qu'hai pal cursu: sala d'ordenadores, etc. ?";
+$HumanAndTechnicalResourcesInformation = "DescripciÃ³n breve de les persones coles que contautar y de los recursos tÃ©unicos a disposiciÃ³n.";
+$Assessment = "EvaluaciÃ³n";
+$AssessmentQuestions = "Â¿ CÃ³mo se va evaluar a los estudiantes ? Â¿ QuÃ© estratexes se van desendolcar pa qu'estos acaben dominando la materia ?";
+$AssessmentInformation = "Exemplos d'entrugues d'esame. Criterios d'evaluaciÃ³n. Pistes y trucos.";
 ?>

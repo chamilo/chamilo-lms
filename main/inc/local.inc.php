@@ -1,37 +1,10 @@
 <?php
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2004-2009 Dokeos SPRL
-	Copyright (c) 2003-2005 Ghent University (UGent)
-	Copyright (c) 2001 Universite catholique de Louvain (UCL)
-	Copyright (c) Hugues Peeters
-	Copyright (c) Roan Embrechts (Vrije Universiteit Brussel)
-	Copyright (c) Patrick Cool
-	Copyright (c) Julio Montoya Armas
-	Copyright (c) Isaac flores paz
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
-	Mail: info@dokeos.com
-==============================================================================
-*/
+/* For licensing terms, see /license.txt */
 /**
-==============================================================================
  *
  *                             SCRIPT PURPOSE
  *
- * This script initializes and manages Dokeos session information. It
+ * This script initializes and manages Chamilo session information. It
  * keeps available session information up to date.
  *
  * You can request a course id. It will check if the course Id requested is the
@@ -148,15 +121,15 @@ The course id is stored in $_cid session variable.
  *
  * 7. The script initializes the user status and permission for the group level.
  *
- *	@package dokeos.include
-==============================================================================
+ *	@package chamilo.include
 */
 /*
-==============================================================================
 		INIT SECTION
 		variables should be initialised here
-==============================================================================
 */
+
+require_once (api_get_path(LIBRARY_PATH).'course.lib.php');
+
 // verified if exists the username and password in session current
 if (isset($_SESSION['info_current_user'][1]) && isset($_SESSION['info_current_user'][2])) {
 	require_once (api_get_path(LIBRARY_PATH).'usermanager.lib.php');
@@ -191,9 +164,7 @@ $login = isset($_POST["login"]) ? $_POST["login"] : '';
 //$cidReq -- passed from course folder index.php
 
 /*
-==============================================================================
 		MAIN CODE
-==============================================================================
 */
 
 if (!empty($_SESSION['_user']['user_id']) && ! ($login || $logout)) {
@@ -255,13 +226,13 @@ if (api_get_setting('allow_terms_conditions')=='true') {
                 FROM $user_table
                 WHERE username = '".trim(addslashes($login))."'";
 
-        $result = Database::query($sql,__FILE__,__LINE__);
+        $result = Database::query($sql);
 
         if (Database::num_rows($result) > 0) {
             $uData = Database::fetch_array($result);
 
             if ($uData['auth_source'] == PLATFORM_AUTH_SOURCE) {
-                //the authentification of this user is managed by Dokeos itself
+                //the authentification of this user is managed by Chamilo itself
                 $password = trim(stripslashes($password));
                 // determine if the password needs to be encrypted before checking
                 // $userPasswordCrypted is set in an external configuration file
@@ -372,10 +343,10 @@ if (api_get_setting('allow_terms_conditions')=='true') {
 				// see configuration.php to define these
                 include_once($extAuthSource[$key]['login']);
                 /* >>>>>>>> External authentication modules <<<<<<<<< */
-            } else // no standard Dokeos login - try external authentification
+            } else // no standard Chamilo login - try external authentification
             {
             	//huh... nothing to do... we shouldn't get here
-            	error_log('Dokeos Authentication file '. $extAuthSource[$uData['auth_source']]['login']. ' could not be found - this might prevent your system from doing the corresponding authentication process',0);
+            	error_log('Chamilo Authentication file '. $extAuthSource[$uData['auth_source']]['login']. ' could not be found - this might prevent your system from doing the corresponding authentication process',0);
             }
 
     	    if (!empty($_SESSION['request_uri'])) {
@@ -432,7 +403,7 @@ if (api_get_setting('allow_terms_conditions')=='true') {
     	 * - Implement user interface for api_get_setting('sso_authentication')
     	 *   } elseif (api_get_setting('sso_authentication')=='true') {
     	 * - Work on a better validation for webservices paths. Current is very poor and exit
-    	 * - $master variable should be recovered from dokeos settings.
+    	 * - $master variable should be recovered from chamilo settings.
     	*/
         $master = array(
     		'domain' => api_get_setting('sso_authentication_domain'), 			//	'localhost/project/drupal5',
@@ -472,7 +443,7 @@ if (api_get_setting('allow_terms_conditions')=='true') {
                           FROM $user_table
                           WHERE username = '".trim(addslashes($sso['username']))."'";
 
-                  $result = Database::query($sql,__FILE__,__LINE__);
+                  $result = Database::query($sql);
 
                   if (Database::num_rows($result) > 0) {
                       $uData = Database::fetch_array($result);
@@ -688,9 +659,7 @@ if ($gidReq && $gidReq != $gid) {
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-// USER INIT
-//////////////////////////////////////////////////////////////////////////////
+/* USER INIT */
 
 if (isset($uidReset) && $uidReset) // session data refresh requested
 {
@@ -718,7 +687,7 @@ if (isset($uidReset) && $uidReset) // session data refresh requested
                     WHERE user.user_id = '".$_user['user_id']."'";
         }
 
-        $result = Database::query($sql,__FILE__,__LINE__);
+        $result = Database::query($sql);
 
         if (Database::num_rows($result) > 0) {
 			// Extracting the user data
@@ -758,80 +727,84 @@ if (isset($uidReset) && $uidReset) // session data refresh requested
     $is_allowedCreateCourse = $_SESSION['is_allowedCreateCourse'];
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// COURSE INIT
-//////////////////////////////////////////////////////////////////////////////
+/*  COURSE INIT */
 
 if (isset($cidReset) && $cidReset) { // course session data refresh requested or empty data
     if ($cidReq) {
     	$course_table = Database::get_main_table(TABLE_MAIN_COURSE);
     	$course_cat_table = Database::get_main_table(TABLE_MAIN_CATEGORY);
-        $sql =    "SELECT course.*, course_category.code faCode, course_category.name faName
+        $sql =  "SELECT course.*, course_category.code faCode, course_category.name faName
                  FROM $course_table
                  LEFT JOIN $course_cat_table
                  ON course.category_code = course_category.code
                  WHERE course.code = '$cidReq'";
-        $result = Database::query($sql,__FILE__,__LINE__);
+        $result = Database::query($sql);
 
         if (Database::num_rows($result)>0) {
             $cData = Database::fetch_array($result);
-            $_cid                            = $cData['code'             ];
-			$_course = array();
-			$_course['id'          ]         = $cData['code'             ]; //auto-assigned integer
-			$_course['name'        ]         = $cData['title'         ];
-            $_course['official_code']         = $cData['visual_code'        ]; // use in echo
-            $_course['sysCode'     ]         = $cData['code'             ]; // use as key in db
-            $_course['path'        ]         = $cData['directory'        ]; // use as key in path
-            $_course['dbName'      ]         = $cData['db_name'           ]; // use as key in db list
-            $_course['dbNameGlu'   ]         = $_configuration['table_prefix'] . $cData['db_name'] . $_configuration['db_glue']; // use in all queries
-            $_course['titular'     ]         = $cData['tutor_name'       ];
-            $_course['language'    ]         = $cData['course_language'   ];
-            $_course['extLink'     ]['url' ] = $cData['department_url'    ];
-            $_course['extLink'     ]['name'] = $cData['department_name'];
-            $_course['categoryCode']         = $cData['faCode'           ];
-            $_course['categoryName']         = $cData['faName'           ];
+            //@TODO real_cid should be cid, for working with numeric course id
+            $_real_cid						= $cData['id'];
 
-            $_course['visibility'  ]         = $cData['visibility'];
-            $_course['subscribe_allowed']    = $cData['subscribe'];
-			$_course['unubscribe_allowed']   = $cData['unsubscribe'];
+            $_cid							= $cData['code'];
+			$_course = array();
+			$_course['real_id']				= $cData['id'];
+			$_course['id']					= $cData['code']; //auto-assigned integer
+			$_course['name']				= $cData['title'];
+            $_course['official_code']		= $cData['visual_code']; // use in echo
+            $_course['sysCode']         	= $cData['code']; // use as key in db
+            $_course['path']         		= $cData['directory']; // use as key in path
+            $_course['dbName']				= $cData['db_name']; // use as key in db list
+            $_course['dbNameGlu']       	= $_configuration['table_prefix'] . $cData['db_name'] . $_configuration['db_glue']; // use in all queries
+            $_course['titular']         	= $cData['tutor_name'];
+            $_course['language']        	= $cData['course_language'];
+            $_course['extLink']['url' ] 	= $cData['department_url'];
+            $_course['extLink']['name'] 	= $cData['department_name'];
+            $_course['categoryCode']		= $cData['faCode'];
+            $_course['categoryName']		= $cData['faName'];
+            $_course['visibility']			= $cData['visibility'];
+            $_course['subscribe_allowed']	= $cData['subscribe'];
+			$_course['unubscribe_allowed']	= $cData['unsubscribe'];
 
             api_session_register('_cid');
             api_session_register('_course');
-
-			if ($_configuration['tracking_enabled'] && !isset($_SESSION['login_as'])) {
-	            //We add a new record in the course tracking table
-	            $course_tracking_table = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
-				$time = api_get_datetime();
-		        $sql="INSERT INTO $course_tracking_table(course_code, user_id, login_course_date, logout_course_date, counter)" .
-							"VALUES('".$_course['sysCode']."', '".$_user['user_id']."', '$time', '$time', '1')";
-
-				Database::query($sql,__FILE__,__LINE__);
-			}
-
-			// if a session id has been given in url, we store the session
+            //@TODO real_cid should be cid, for working with numeric course id
+            api_session_register('_real_cid');
+            
+            // if a session id has been given in url, we store the session
 			if (api_get_setting('use_session_mode')=='true') {
 				// Database Table Definitions
 				$tbl_session 				= Database::get_main_table(TABLE_MAIN_SESSION);
 				$tbl_user 					= Database::get_main_table(TABLE_MAIN_USER);
 				$tbl_session_course 		= Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
 				$tbl_session_course_user 	= Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-				
+
 				if (!empty($_GET['id_session'])) {
 					$_SESSION['id_session'] = Database::escape_string($_GET['id_session']);
 					$sql = 'SELECT name FROM '.$tbl_session . ' WHERE id="'.intval($_SESSION['id_session']) . '"';
-					$rs = Database::query($sql,__FILE__,__LINE__);
+					$rs = Database::query($sql);
 					list($_SESSION['session_name']) = Database::fetch_array($rs);
 				} else {
 					api_session_unregister('session_name');
 					api_session_unregister('id_session');
 				}
 			}
+			
+			if ($_configuration['tracking_enabled'] && !isset($_SESSION['login_as'])) {
+	            //We add a new record in the course tracking table
+	            $course_tracking_table = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
+				$time = api_get_datetime();
+		        $sql="INSERT INTO $course_tracking_table(course_code, user_id, login_course_date, logout_course_date, counter, session_id)" .
+					 "VALUES('".$_course['sysCode']."', '".$_user['user_id']."', '$time', '$time', '1', ".api_get_session_id().")";				
+				Database::query($sql);
+			}
+			
         } else {
             //exit("WARNING UNDEFINED CID !! ");
             header('location:'.api_get_path(WEB_PATH));
         }
     } else {
         api_session_unregister('_cid');
+        api_session_unregister('_real_cid');
         api_session_unregister('_course');
     }
 } else { // continue with the previous values
@@ -848,51 +821,54 @@ if (isset($cidReset) && $cidReset) { // course session data refresh requested or
 			$tbl_session 				= Database::get_main_table(TABLE_MAIN_SESSION);
 			$_SESSION['id_session'] = Database::escape_string($_GET['id_session']);
 			$sql = 'SELECT name FROM '.$tbl_session . ' WHERE id="'.intval($_SESSION['id_session']). '"';
-			$rs = Database::query($sql,__FILE__,__LINE__);
+			$rs = Database::query($sql);
 			list($_SESSION['session_name']) = Database::fetch_array($rs);
 		}
 
 		if ($_configuration['tracking_enabled'] && !isset($_SESSION['login_as'])) {
+			
 			$course_tracking_table = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
-			if (isset($_configuration['session_lifetime'])) {
-				$session_lifetime=$_configuration['session_lifetime'];
-			}
-			else  {
+   			if (isset($_configuration['session_lifetime'])) {
+   				$session_lifetime=$_configuration['session_lifetime'];
+			} else {
 				$session_lifetime=3600;
-			}
+  			}
 
-			$course_code=$_course['sysCode'];
-			$time = api_get_datetime();
-			//We select the last record for the current course in the course tracking table
-			// But only if the login date is < thant now + max_life_time
-			$sql="SELECT course_access_id FROM $course_tracking_table 
-				WHERE user_id=".intval($_user ['user_id'])." 
-				AND course_code='$course_code' 
-				AND login_course_date > now() - INTERVAL $session_lifetime SECOND 
-				ORDER BY login_course_date DESC LIMIT 0,1";
+			$course_code=$_course['sysCode'];			
+			$time = api_get_datetime();			
+			
+			//We select the last record for the current course in the course tracking table			
+			// But only if the login date is < thant now + max_life_time		
+			
+			$sql="SELECT course_access_id FROM $course_tracking_table 		
+			
+				WHERE user_id=".intval($_user ['user_id'])."
+						AND course_code='$course_code'					
+						AND login_course_date > now() - INTERVAL $session_lifetime SECOND 
+						ORDER BY login_course_date DESC LIMIT 0,1";
 				$result=Database::query($sql,__FILE__,__LINE__);
-			if (Database::num_rows($result)>0) {
+						
+			if (Database::num_rows($result)>0) {			
+							
 				$i_course_access_id = Database::result($result,0,0);
-				//We update the course tracking table
+				//We update the course tracking table	
+			
 				$sql="UPDATE $course_tracking_table " .
-					"SET logout_course_date = '$time', " .
-					"counter = counter+1 " .
+						"SET logout_course_date = '$time', " .
+						"counter = counter+1 " .
 					"WHERE course_access_id=".intval($i_course_access_id);
-
 				Database::query($sql,__FILE__,__LINE__);
 			} else {
-				$sql="INSERT INTO $course_tracking_table 
-				(course_code, user_id, login_course_date, logout_course_date, counter)" .
-				"VALUES('".$course_code."', '".$_user['user_id']."', '$time', '$time', '1')";
+				$sql="INSERT INTO $course_tracking_table
+						(course_code, user_id, login_course_date, logout_course_date, counter)" .
+					"VALUES('".$course_code."', '".$_user['user_id']."', '$time', '$time', '1')";
 				Database::query($sql,__FILE__,__LINE__);
 			}
-		}
+   	 	}   
 	}
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// COURSE / USER REL. INIT
-//////////////////////////////////////////////////////////////////////////////
+/*  COURSE / USER REL. INIT */
 
 if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) { // session data refresh requested
     if (isset($_user['user_id']) && $_user['user_id'] && isset($_cid) && $_cid) { // have keys to search data
@@ -900,10 +876,10 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) { // ses
 
 	    	$course_user_table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 	        $sql = "SELECT * FROM $course_user_table
-	               WHERE user_id  = '".$_user['user_id']."'
+	               WHERE user_id  = '".$_user['user_id']."' AND relation_type<>".COURSE_RELATION_TYPE_RRHH."
 	               AND course_code = '$cidReq'";
 
-	        $result = Database::query($sql,__FILE__,__LINE__);
+	        $result = Database::query($sql);
 
 	        if (Database::num_rows($result) > 0) { // this  user have a recorded state for this course
 	            $cuData = Database::fetch_array($result);
@@ -926,10 +902,10 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) { // ses
 			$tbl_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 
  			$sql = "SELECT * FROM ".$tbl_course_user."
-               WHERE user_id  = '".$_user['user_id']."'
+               WHERE user_id  = '".$_user['user_id']."' AND relation_type<>".COURSE_RELATION_TYPE_RRHH."
                AND course_code = '$cidReq'";
 
-	        $result = Database::query($sql,__FILE__,__LINE__);
+	        $result = Database::query($sql);
 
 	        if (Database::num_rows($result) > 0) { // this  user have a recorded state for this course
 	            $cuData = Database::fetch_array($result);
@@ -941,7 +917,7 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) { // ses
 
 	            api_session_register('_courseUser');
 	        }
-	        if (empty($is_courseAdmin)) { // this user has no status related to this course
+	        if (!isset($is_courseAdmin)) { // this user has no status related to this course
 		    	// is it the session coach or the session admin ?
 
 		    	$tbl_session = Database :: get_main_table(TABLE_MAIN_SESSION);
@@ -959,7 +935,7 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) { // ses
 							AND session_rel_course.course_code='$_cid'";
 				*/
 
-		        $result = Database::query($sql,__FILE__,__LINE__);
+		        $result = Database::query($sql);
 		        $row = Database::store_result($result);
 
 		        if ($row[0]['id_coach']==$_user['user_id']) {
@@ -992,7 +968,7 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) { // ses
 							AND id_session = '".api_get_session_id()."'
 							AND status = 2";
 
-			        $result = Database::query($sql,__FILE__,__LINE__);
+			        $result = Database::query($sql);
 			        if ($row = Database::fetch_array($result)) {
 			        	$_courseUser['role'] = 'Professor';
 			            $is_courseMember     = true;
@@ -1012,9 +988,9 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) { // ses
 					        $sql = "SELECT * FROM ".$tbl_session_course_user."
 					        		WHERE id_user  = '".$_user['user_id']."'
 					        		AND id_session = '".api_get_session_id()."'
-									AND course_code = '$cidReq' AND status NOT IN(2)";		
-					        $result = Database::query($sql,__FILE__,__LINE__);	
-					        if (Database::num_rows($result) > 0) { // this  user have a recorded state for this course					        
+									AND course_code = '$cidReq' AND status NOT IN(2)";
+					        $result = Database::query($sql);
+					        if (Database::num_rows($result) > 0) { // this  user have a recorded state for this course
 					        	while($row = Database::fetch_array($result)){
 						            $is_courseMember     = true;
 						            $is_courseTutor      = false;
@@ -1029,16 +1005,16 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) { // ses
 						    $is_courseTutor      = false;
 						    $is_courseAdmin      = false;
 						    $is_sessionAdmin     = false;
-						    api_session_unregister('_courseUser'); 
-						    //$_course['visibility'] = 0; this depends the 
+						    api_session_unregister('_courseUser');
+						    //$_course['visibility'] = 0; this depends the
 			        	}
-					
+
 			        }
 	        	}
 	        }
     	}
     } else { // keys missing => not anymore in the course - user relation
-        //// course
+        // course
         $is_courseMember = false;
         $is_courseAdmin  = false;
         $is_courseTutor  = false;
@@ -1104,16 +1080,13 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) { // ses
     $is_courseCoach       = $_SESSION ['is_courseCoach'  ];
 }
 
-
-//////////////////////////////////////////////////////////////////////////////
-// GROUP INIT
-//////////////////////////////////////////////////////////////////////////////
+/*  GROUP INIT */
 
 if ((isset($gidReset) && $gidReset) || (isset($cidReset) && $cidReset)) { // session data refresh requested
     if ($gidReq && $_cid ) { // have keys to search data
     	$group_table = Database::get_course_table(TABLE_GROUP);
         $sql = "SELECT * FROM $group_table WHERE id = '$gidReq'";
-        $result = Database::query($sql,__FILE__,__LINE__);
+        $result = Database::query($sql);
         if (Database::num_rows($result) > 0) { // This group has recorded status related to this course
             $gpData = Database::fetch_array($result);
             $_gid                   = $gpData ['id'             ];
@@ -1159,5 +1132,5 @@ if (isset($_cid)) {
 	$tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
     $time = api_get_datetime();
 	$sql="UPDATE $tbl_course SET last_visit= '$time' WHERE code='$_cid'";
-	Database::query($sql,__FILE__,__LINE__);
+	Database::query($sql);
 }

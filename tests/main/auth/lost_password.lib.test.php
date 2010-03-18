@@ -1,7 +1,7 @@
 <?php
-require_once(api_get_path(SYS_CODE_PATH).'auth/lost_password.lib.php');
+require_once(api_get_path(LIBRARY_PATH).'login.lib.php');
+require_once(api_get_path(LIBRARY_PATH).'course.lib.php');
 
-Mock::generate('Display');
 class TestLostPassword extends UnitTestCase {
 
 	/* function commented in platform code
@@ -17,8 +17,10 @@ class TestLostPassword extends UnitTestCase {
 	function testget_secret_word(){
 		global $_configuration;
 		$add='';
-		$res = get_secret_word($add);
- 		$this->assertTrue($res);
+		$res = Login::get_secret_word($add);		
+ 		// Expects an string of 32 chars
+ 		$this->assertEqual(strlen($res),32);
+ 		 		
  		$this->assertTrue(is_string($res));
  		//var_dump($res);
 	}
@@ -27,11 +29,10 @@ class TestLostPassword extends UnitTestCase {
 		global $_configuration;
 		$user='';
 		$thisUser=array();
-		$secretword = get_secret_word($thisUser["email"]);
+		$secretword = Login::get_secret_word($thisUser["email"]);
 		$reset_link = get_lang('Pass')." : $thisUser[password]";
 		$userAccountList[] = get_lang('YourRegistrationData')." : \n".get_lang('UserName').' : '.$thisUser["loginName"]."\n".get_lang('ResetLink').' : '.$reset_link.'';
-		$res = get_user_account_list($user, $reset = false);
- 		$this->assertTrue($userAccountList);
+		$res = Login::get_user_account_list($user, $reset = false);		
  		$this->assertTrue(is_array($userAccountList));
  		//var_dump($userAccountList);
 	}
@@ -43,16 +44,17 @@ class TestLostPassword extends UnitTestCase {
 		ob_start();
 		$user=array('abc');
 		$emailSubject = "[".api_get_setting('siteName')."] ".get_lang('LoginRequest'); // SUBJECT
-		$userAccountList = get_user_account_list($user, true); // BODY
+		$userAccountList = Login::get_user_account_list($user, true); // BODY
 		$emailTo = $user[0]["email"];
-		$secretword = get_secret_word($emailTo);
+		$secretword = Login::get_secret_word($emailTo);
 		$emailBody = get_lang('DearUser')." :\n".get_lang("password_request")."\n\n";
 		$emailBody .= "-----------------------------------------------\n".$userAccountList."\n-----------------------------------------------\n\n";
 		$emailBody .=get_lang('PasswordEncryptedForSecurity');
 		$emailBody .="\n\n".get_lang('Formula').",\n".get_lang('PlataformAdmin');
 		$sender_name = api_get_setting('administratorName').' '.api_get_setting('administratorSurname');
     	$email_admin = api_get_setting('emailAdministrator');
-		$res=handle_encrypted_password($user);
+		$res=Login::handle_encrypted_password($user);
+	
 		if(!is_array($res))$this->assertTrue(is_null($res));
 		ob_end_clean();
 		//var_dump($res);
@@ -61,7 +63,7 @@ class TestLostPassword extends UnitTestCase {
 	function testreset_password(){
 		$secret='1234567891011';
 		$id=5;
-		$res=reset_password($secret, $id);
+		$res=Login::reset_password($secret, $id);		
 		$this->assertTrue($res);
  		$this->assertTrue(is_string($res));
  		//var_dump($res);
@@ -70,7 +72,7 @@ class TestLostPassword extends UnitTestCase {
 	function testsend_password_to_user() {
 		$user=array();
 		ob_start();
-		$res=send_password_to_user($user);
+		$res=Login::send_password_to_user($user);
 		if(!is_null($res))$this->assertTrue(is_array($res));
 		ob_end_clean();
  		//var_dump($res);

@@ -612,8 +612,7 @@ class ScormSection
 function export_exercise($exerciseId, $standalone=true)
 {
     $exercise = new Exercise();
-    if (! $exercise->read($exerciseId))
-    {
+    if (! $exercise->read($exerciseId)) {
         return '';
     }
     $ims = new ScormSection($exercise);

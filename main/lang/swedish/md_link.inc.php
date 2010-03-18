@@ -1,46 +1,47 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$langMdCallingTool = "Länkar";
-$langMdTitle = "Länknamn";
-$langMdDescription = "Länkbeskrivning";
-$langMdCoverage = "Universal";
-$langMdCopyright = "Universitetet i Ghent";
-$nameTools = "suspekt språkvariabel";
-$langTool = "Länkarnas Metadata";
-$langNoScript = "Skriptfunktionen är inte aktiverat i din webläsare, var vänlig ignorera skärminnehållet efter denna text, det kommer inte att fungera...";
-$langLanguageTip = "språket som används i detta learningobjekt";
-$langIdentifier = "ID";
-$langIdentifierTip = "unikt ID för detta learning objekt, sammansatt av bokstäver siffror, _-.()\'!*";
-$langTitleTip = "titel eller namn, och språket på titeln eller namnet";
-$langDescriptionTip = "beskrivning eller kommentar, språket som används för att beskriva detta learning object";
+$langMdCallingTool = "Dokument";
+$langMdTitle = "Learning Object Titel";
+$langMdDescription = "FÃ¶r att lagra denna information, tryck Lagra";
+$langMdCoverage = "ex. Filosofie kandidat ...";
+$langMdCopyright = "ex. under fÃ¶rutsÃ¤ttning att kÃ¤llan Ã¤r kÃ¤nd";
+$nameTools = "suspekt sprÃ¥kvariabel";
+$langTool = "Dokument Metadata";
+$langNoScript = "Skripthantering Ã¤r inte aktivt i den weblÃ¤sare, var vÃ¤nlig ignorera skÃ¤rmdelen nedanfÃ¶r denna text, det kommer inte att fungera...";
+$langLanguageTip = "det sprÃ¥k som detta Learning object var skrivet i.";
+$langIdentifier = "Identifierare";
+$langIdentifierTip = "unik identifiering fÃ¶r detta learning object, sammansatt av bokstÃ¤ver, siffror, _-.()'!*";
+$langTitleTip = "titel eller namn och sprÃ¥ket pÃ¥ titeln eller namn.";
+$langDescriptionTip = "beskrivning eller kommentar, och sprÃ¥ket som anvÃ¤nds fÃ¶r att beskriva detta learning object";
 $langKeyword = "Nyckelord";
-$langKeywordTip = "separerat av komma (bokstäver, siffror, -.)";
-$langCoverage = "Kategori";
-$langCoverageTip = "kategorinamn, cfr. Länkar";
-$langKwNote = "Om du ändrar språket på beskrivningen, lägg inte till nya nyckelord samtidigt.";
-$langClickKw = "Klicka på ett nyckelord i listan för att välja eller avmarkera.";
-$langKwHelp = "<br/> Klicka \'+\' knappen för att öppna, \'-\' knappen för att stänga, \'++\' knappen för att öppna alla, \'--\' knappen för att stänga alla.<br/> <br/> Avmarkera alla nyckelord genom att stänga listan och öppna den med \'+\' knappen.<br/> Alt-klick \'+\' söker efter original nyckelord i listan.<br/> <br/> Alt-click nyckelord väljer ett nyckelord utan bredare beskrivning och avmarkerar ett nyckelord med bredare beskrivning.<br/> <br/> Om du ändrar språket på beskrivningen, lägg inte till nya nyckelord samtidigt.<br/> <br/>";
+$langKeywordTip = "separerad av komma (bokstÃ¤ver, siffror, -.)";
+$langCoverage = "TÃ¤ckning";
+$langCoverageTip = "tex. examen i xxx:yyy";
+$langKwNote = "Om du Ã¤ndrar sprÃ¥kbeskrivning, lÃ¤gg inte till nyckelord samtidigt.";
+$langClickKw = "Klicka pÃ¥ ett nyckelord i trÃ¤det fÃ¶r att vÃ¤lja eller vÃ¤lja bort.";
+$langKwHelp = "<br/> Klicka '+' knappen fÃ¶r att Ã¶ppna, '-' knappen fÃ¶r att stÃ¤nga, '++' knappen fÃ¶r att Ã¶ppna alla, '--' knappen fÃ¶r att stÃ¤nga alla.<br/> <br/> Ta bort alla valda nyckelord genom att  stÃ¤nga trÃ¤det och Ã¶ppna det igen med '+' knappen.<br/> Alt-klick '+' sÃ¶ker original nyckelord i trÃ¤den.<br/> <br/> Alt-click nyckelord vÃ¤ljer ett nyckelord utan bredare sÃ¶kning eller avaktiverar en bredare sÃ¶kning.<br/> <br/>Om du Ã¤ndrar sprÃ¥ket pÃ¥ beskrivningen, lÃ¤gg inte till nya nyckelord pÃ¥ samma gÃ¥ng.<br/> <br/>";
 $langLocation = "URL/URI";
-$langLocationTip = "klicka för att öppna objekt";
+$langLocationTip = "klicka fÃ¶r att Ã¶ppna object";
 $langStore = "Lagra";
-$langDeleteAll = "Radera alla metadata";
-$langConfirmDelete = "Vill du \"verkligen\" radera alla metadata ?";
-$langWorkOn = "på";
-$langNotInDB = "ingen sådan Linkkategori";
+$langDeleteAll = "Radera alla Metadata";
+$langConfirmDelete = "Vill du *verkligen* radera alla metadata?";
+$langWorkOn = "pÃ¥";
+$langNotInDB = "ingen sÃ¥dan Linkkategori";
 $langManifestSyntax = "(syntaxfel i manifestfilen...)";
 $langEmptyManifest = "(tom manifestfil...)";
 $langNoManifest = "(ingen manifestfil...)";
-$langNotFolder = "är inte möjligt, det är ingen mapp...";
-$langContinue = "Fortsätt med";
-$langCreate = "Skapa MDEs";
+$langNotFolder = "Ã¤r inte mÃ¶jligt, det Ã¤r ingen mapp...";
+$langContinue = "FortsÃ¤tt med";
+$langCreate = "skapa";
 $langRemove = "Radera MDEs";
-$langAllRemovedFor = "Alla inmatningar raderade för denna kategori";
-$langRemainingFor = "föråldrade inmatningar borttagna för denna kategori";
+$langAllRemovedFor = "Alla inmatningar raderade fÃ¶r denna kategori";
+$langRemainingFor = "fÃ¶rÃ¥ldrade inmatningar borttagna fÃ¶r denna kategori";
 $langIndex = "Index ord";
-$langTotalMDEs = "Sammanlagt antal Länkar MD inmatningar";
-$langMainMD = "Öppna huvud MDE";
-$langOrElse = "Välj en länk kategori";
-$langWarningDups = "- dubletter av kategorinamn är borttagna från listan!";
-$langSLC = "Arbeta tillsammans med länkkategori:";
+$langTotalMDEs = "Sammanlagt antal LÃ¤nkar MD inmatningar";
+$langMainMD = "Ã–ppna huvud MDE";
+$langOrElse = "VÃ¤lj en lÃ¤nk kategori";
+$langWarningDups = "- dubletter av kategorinamn Ã¤r borttagna frÃ¥n listan!";
+$langSLC = "Arbeta tillsammans med lÃ¤nkkategori:";
 ?>

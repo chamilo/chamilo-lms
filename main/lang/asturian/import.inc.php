@@ -1,16 +1,17 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$langPgTitle = "TÌtulu de la p·xina";
-$langExplanation = "Esta p·xina tien de tar en formatu HTML (por exemplu \"la_mio_paxina.htm\"). Va apaecer l\'enllaz na p·xina d\'entamu del so cursu. Si quier unviar un documentu que nun ta en formatu HTML (PDF, PowerPoint, Word, etc.) use la funciÛn<a href=../document/document.php> Documentos</a>";
-$langTooBig = "Nun escoyÛ neng˙n archivu pa unviar o tamiÈn pue ser que l\'archivu seya m·s grande de la cuenta.";
-$langCouldNot = "L\'archivu nun se pudo unviar";
-$langNotAllowed = "Nun ta identific·u como responsable d\'esti cursu";
-$langAddPageToSite = "Amestar p·xina al sitiu";
+$langPgTitle = "T√≠tulu de la p√°xina";
+$langExplanation = "En calcando Aceptar va crease'l sitiu web d'un cursu, que va tener distintes ferramientes: un xestor de documentos, un creador d'itinerarios d'aprendizase en formatu SCORM, un visualizador de lleiciones o itinerarios d'aprendizaxe; la posibilid√° de facer test y unviar trabayos, discutir nos foros y chat, unviar anuncies y recaos, disponer d'una axenda, videoconferencia y pizarra dixital, ferramientes pal trabayu en grupu, facer encuestes y siguimientu de los alumnos, etc. La so identificaci√≥n como creador d'esti sitiu va permitir que lu modifique seg√∫n les sos necesidaes.";
+$langTooBig = "Nun escoy√≥ neng√∫n archivu pa unvialu o igual ye que ye m√°s grande de la cuenta.";
+$langCouldNot = "L'archivu nun se pue unviar";
+$langNotAllowed = "Nun ta identific√°u como responsable d'esti cursu";
+$langAddPageToSite = "Amestar p√°xina al sitiu";
 $langCouldNotSendPage = "Esti archivu nun ta en formatu HTML y, poro, nun se pue unviar. Si quier subir al servidor documentos que nun tean en formatu HTML (PDF, Word, PowerPoint, etc) use <a href=../document/document.php> Documentos</a>";
-$langSendPage = "Unviar p·xina";
-$langPageTitleModified = "El tÌtulu de la p·xina modificÛse";
-$langPageAdded = "AmestÛse la p·xina";
-$langAddPage = "Amestar p·xina";
-$Choose = "escoyer";
+$langSendPage = "P√°xina pa unviar";
+$langPageTitleModified = "El t√≠tulu de la p√°xina modific√≥se";
+$langPageAdded = "Amest√≥se la p√°xina";
+$langAddPage = "Amestar p√°xina";
+$Choose = "Escueya";
 ?>

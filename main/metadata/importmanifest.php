@@ -61,7 +61,7 @@ if (isset($workWith))  // explicit in URL, or selected at bottom of screen
 {
     $scormdocument = Database::get_course_table(TABLE_LP_MAIN);
     $sql = "SELECT id FROM $scormdocument WHERE path='". Database::escape_string(api_substr($workWith,1)) . "' OR path='". Database::escape_string(substr($workWith,1)) . "/.'";
-    $result = Database::query($sql, __FILE__, __LINE__);
+    $result = Database::query($sql);
 
     if (Database::num_rows($result) == 1)
     {
@@ -443,7 +443,10 @@ elseif ($smo == get_lang('Index') && file_exists($phpDigIncCn) &&
     }
     // possible enhancement: UPDATE spider record for still existing pages
 
-    if(isset($db)) mysql_select_db($_configuration['main_database'], $db);  // back to Dokeos
+    if(isset($db)) {
+    	//mysql_select_db($_configuration['main_database'], $db);
+    	Database::select_db($_configuration['main_database'], $db);
+    }
 }
 elseif ($smo == get_lang('Index'))
 {

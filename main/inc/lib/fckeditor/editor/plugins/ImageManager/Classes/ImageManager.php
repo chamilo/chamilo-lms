@@ -210,7 +210,7 @@ class ImageManager
 		$tbl_system_template = Database :: get_main_table(TABLE_MAIN_SYSTEM_TEMPLATE);
 
 		$sql = "SELECT image FROM $tbl_system_template ";
-		$res = Database::query($sql,__FILE__,__LINE__);
+		$res = Database::query($sql);
 
 		$files_templates = array();
 
@@ -596,15 +596,15 @@ class ImageManager
 				$document_path = substr($path, strpos($path,'/document/')+9, strlen($path)); //   /shared_folder/4/name
 				$document_path.= $result;
 
-				$dokeosFile = $file['name'];
-				$dokeosFileSize = $file['size'];
+				$chamiloFile = $file['name'];
+				$chamiloFileSize = $file['size'];
 				if(!empty($group_properties['directory'])) {
-					$dokeosFolder=$group_properties['directory'].$dokeosFolder;//get Dokeos
+					$chamiloFolder=$group_properties['directory'].$chamiloFolder;
 				}
 
-				$doc_id = add_document($_course, $document_path,'file', $dokeosFileSize , $dokeosFile); //get Dokeos
-				$current_session_id = api_get_session_id();																								
-				api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'DocumentAdded', api_get_user_id(),$to_group_id,null,null,null,$current_session_id);//get Dokeos	
+				$doc_id = add_document($_course, $document_path,'file', $chamiloFileSize , $chamiloFile);
+				$current_session_id = api_get_session_id();
+				api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'DocumentAdded', api_get_user_id(),$to_group_id,null,null,null,$current_session_id);//get Dokeos
 			}
 
 			/*
@@ -844,7 +844,7 @@ class ImageManager
 					$new_dir  = substr($fullpath, strlen($base_dir),-1); //
 					$created_dir = create_unexisting_directory($_course, api_get_user_id(),0,0, $base_dir, $new_dir,$newDir);
 					$doc_id = DocumentManager::get_document_id($_course, $new_dir );
-					$current_session_id = api_get_session_id();							
+					$current_session_id = api_get_session_id();
 					api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'invisible', api_get_user_id(),null,null,null,null,$current_session_id);
 				}
 				else

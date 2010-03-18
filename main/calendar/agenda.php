@@ -199,7 +199,6 @@ event_access_tool(TOOL_CALENDAR_EVENT);
   			SETTING SOME VARIABLES
 ============================================================================== */
 // Variable definitions
-$dateNow 			= format_locale_date($dateTimeFormatLong);
 // Defining the shorts for the days. We use camelcase because these are arrays of language variables
 $DaysShort = api_get_week_days_short();
 // Defining the days of the week to allow translation of the days. We use camelcase because these are arrays of language variables

@@ -1,23 +1,19 @@
 <?php
-/* For licensing terms, see /dokeos_license.txt */
+/* For licensing terms, see /license.txt */
 
 /**
-==============================================================================
-*	This script displays the footer that is below (almost)
-*	every Dokeos web page.
-*
-*	@package dokeos.include
-==============================================================================
-*/
+ *	This script displays the footer that is below (almost)
+ *	every Chamilo web page.
+ *
+ *	@package chamilo.include
+ */
 
-/**** display of tool_navigation_menu according to admin setting *****/
-require_once (api_get_path(LIBRARY_PATH).'course.lib.php');
-
+// Display of tool_navigation_menu according to admin setting.
+require_once api_get_path(LIBRARY_PATH).'course.lib.php';
 if (api_get_setting('show_navigation_menu') != 'false') {
-
    $course_id = api_get_course_id();
    if (!empty($course_id) && ($course_id != -1)) {
-   		if ( api_get_setting('show_navigation_menu') != 'icons') {
+   		if (api_get_setting('show_navigation_menu') != 'icons') {
 	    	echo '</div> <!-- end #center -->';
     		echo '</div> <!-- end #centerwrap -->';
 		}
@@ -25,7 +21,7 @@ if (api_get_setting('show_navigation_menu') != 'false') {
       	show_navigation_menu();
    }
 }
-/***********************************************************************/
+
 ?>
  <div class="clear">&nbsp;</div> <!-- 'clearing' div to make sure that footer stays below the main and right column sections -->
 </div> <!-- end of #main" started at the end of banner.inc.php -->
@@ -38,7 +34,14 @@ if (api_get_setting('show_navigation_menu') != 'false') {
 <div class="copyright">
 <?php
 global $_configuration;
-echo get_lang("Platform"), ' <a href="http://www.dokeos.com" target="_blank">Dokeos ', $_configuration['dokeos_version'], '</a> &copy; ', date('Y');
+
+if (api_get_setting('show_administrator_data') == 'true') {
+	// Platform manager
+	echo '<div align="right">', get_lang('Manager'), ' : ', Display::encrypted_mailto_link(api_get_setting('emailAdministrator'), api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'))).'</div>';
+}
+
+echo get_lang('Platform'), ' <a href="', $_configuration['software_url'], '" target="_blank">', $_configuration['software_name'], ' ', $_configuration['system_version'], '</a> &copy; ', date('Y');
+
 // Server mode indicator.
 if (api_is_platform_admin()) {
 	if (api_get_setting('server_type') == 'test') {
@@ -50,68 +53,78 @@ if (api_is_platform_admin()) {
 </div>
 
 <?php
-/*
------------------------------------------------------------------------------
-	Plugins for footer section
------------------------------------------------------------------------------
-*/
+
+/*	Plugins for footer section */
+
 api_plugin('footer');
 
-if (api_get_setting('show_administrator_data')=='true') {
+echo '<div class="footer_emails">';
 
-	// Platform manager
-	echo '<span id="platformmanager">', get_lang('Manager'), ' : ', Display::encrypted_mailto_link(api_get_setting('emailAdministrator'), api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname')));
-
-}
-
-if (api_get_setting('show_tutor_data')=='true'){
-
-	// course manager
-	$id_course=api_get_course_id();
-	$id_session=api_get_session_id();
-	if (isset($id_course) && $id_course!=-1) {
-		echo '<span id="coursemanager">';
-		if ($id_session!=0){
-			$coachs_email=CourseManager::get_email_of_tutor_to_session($id_session,$id_course);
-
-				$email_link = array();
-				foreach ($coachs_email as $coach_email) {				
-					foreach ($coach_email as $email=>$username) {
-						$email_link[] = Display::encrypted_mailto_link($email,$username);
-					}
-				}				
-			echo '&nbsp;'.get_lang('Coachs')." : ".implode("&nbsp;|&nbsp;",$email_link);				
-		}
-		echo '</span>';
-	}
-
-}
-
-if (api_get_setting('show_teacher_data')=='true') {
-	// course manager
-	$id_course=api_get_course_id();
-	if (isset($id_course) && $id_course!=-1) {
-		echo '<span id="coursemanager">';
-		$mail=CourseManager::get_emails_of_tutors_to_course($id_course);
-		if (!empty($mail)) {
-			if (count($mail)>1){
-				$bar='&nbsp;|&nbsp;';
-				echo '&nbsp;'.get_lang('Teachers').' : ';
-			} else {
-				$bar='';
-				echo '&nbsp;'.get_lang('Teacher').' : ';
+if (api_get_setting('show_tutor_data') == 'true') {
+	// Course manager
+	$id_course = api_get_course_id();
+	$id_session = api_get_session_id();
+	if (isset($id_course) && $id_course != -1) {
+		echo '<div id="platformmanager">';
+		if ($id_session != 0){
+			$coachs_email = CourseManager::get_email_of_tutor_to_session($id_session, $id_course);
+			$email_link = array();
+			foreach ($coachs_email as $coach_email) {
+				foreach ($coach_email as $email => $username) {
+					$email_link[] = Display::encrypted_mailto_link($email, $username);
+				}
 			}
-			foreach ($mail as $value=>$key) {
-				foreach ($key as $email=>$name){
-					echo Display::encrypted_mailto_link($email,$name).$bar;
+			if (count($coachs_email) > 1) {
+				$bar = '<br />';
+				echo get_lang('Coachs').' : <ul>';
+				echo '<li>'.implode("<li>", $email_link);
+			} elseif (count($coachs_email) == 1) {
+				echo get_lang('Coach').' : ';
+				echo implode("&nbps;", $email_link);
+			} elseif (count($coachs_email) == 0) {
+				echo '';
+			}
+		}
+		echo '</ul></div>';
+	}
+	echo '<br>';
+}
+
+$class = '';
+
+if (api_get_setting('show_teacher_data') == 'true') {
+	if (api_get_setting('show_tutor_data') == 'false') {
+		$class = 'platformmanager';
+	} else {
+		$class = 'coursemanager';
+	}
+	// course manager
+	$id_course = api_get_course_id();
+	if (isset($id_course) && $id_course != -1) {
+		echo '<div id="'.$class.'">';
+		$mail = CourseManager::get_emails_of_tutors_to_course($id_course);
+		if (!empty($mail)) {
+			if (count($mail) > 1) {
+				echo get_lang('Teachers').' : <ul>';
+				foreach ($mail as $value => $key) {
+					foreach ($key as $email => $name) {
+						echo '<li>'.Display::encrypted_mailto_link($email, $name).'</li>';
+					}
+				}
+				echo '</ul>';
+			} else {
+				echo get_lang('Teacher').' : ';
+				foreach ($mail as $value => $key) {
+					foreach ($key as $email => $name) {
+						echo Display::encrypted_mailto_link($email, $name).'<br />';
+					}
 				}
 			}
 		}
-		echo '</span>';
+		echo '</div>';
 	}
-
 }
-
+echo '</div>';
 
 ?>&nbsp;
 </div> <!-- end of #footer -->

@@ -1,5 +1,6 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $Camera = "Webcam";
 $Microphone = "Microfone";
@@ -9,52 +10,52 @@ $Progress = "Progresso";
 $Play = "Reproduzir";
 $Stop = "Parar";
 $Record = "Gravar";
-$NoFileAvailable = "Não existem arquivos disponíveis";
-$RecordingOnlyForTeachers = "Gravar só para professores";
-$UsersNow = "Usuários atuais:";
-$StartConference = "Iniciar conferência";
+$NoFileAvailable = "NÃ£o existem arquivos disponÃ­veis";
+$RecordingOnlyForTeachers = "Gravar sÃ³ para professores";
+$UsersNow = "UsuÃ¡rios atuais:";
+$StartConference = "Iniciar conferÃªncia";
 $MyName = "Meu nome";
-$OrganisationSVideoconference = "Videoconferência Dokeos";
-$ImportPresentation = "Importar apresentação";
+$OrganisationSVideoconference = "VideoconferÃªncia Chamilo";
+$ImportPresentation = "Importar apresentaÃ§Ã£o";
 $RefreshList = "Atualizar lista";
-$GoToTop = "Voltar ao início";
+$GoToTop = "Voltar ao inÃ­cio";
 $NewPoll = "Nova pesquisa";
 $CreateNewPoll = "Criar uma nova pesquisa para esta sala";
-$Question = "Questão:";
+$Question = "Pergunta";
 $PollType = "Tipo de pesquisa:";
 $Create = "Criar";
-$InfoConnectedUsersGetNotifiedOfThisPoll = "Informação: todos os uusários conectados nesta sala obterão uma notificação desta nova pesquisa.";
-$YesNo = "Sim/Não";
-$Numeric1To10 = "Numérica 1-10";
+$InfoConnectedUsersGetNotifiedOfThisPoll = "InformaÃ§Ã£o: todos os uusÃ¡rios conectados nesta sala obterÃ£o uma notificaÃ§Ã£o desta nova pesquisa.";
+$YesNo = "Sim / NÃ£o";
+$Numeric1To10 = "NumÃ©rica 1-10";
 $Poll = "Pesquisa";
 $YouHaveToBecomeModeratorOfThisRoomToStartPolls = "Deve ser Moderador nesta sala para poder criar pesquisas";
 $YourVoteHasBeenSent = "O seu voto foi enviado";
-$YouAlreadyVotedForThisPoll = "Você já votou nesta pesquisa";
+$YouAlreadyVotedForThisPoll = "VocÃª jÃ¡ votou nesta pesquisa";
 $VoteButton = "Votar!";
 $Yes = "Sim";
-$No = "Não";
+$No = "NÃ£o";
 $Votes = "Votos:";
 $Mode = "Modo";
 $CheckIn = "Verificar";
 $SystemMessage = "Mensagem do sistema";
 $ChooseCam = "Selecionar webcam:";
 $OK = "OK";
-$ChangeSettings = "Alterar configurações";
-$Course = "Curso:";
-$DontAskMeAgain = "Não perguntar novamente";
-$ShowConfirmationBeforeClearingWhiteboard = "Pedir confirmação antes de limpar quadro branco";
+$ChangeSettings = "Alterar configuraÃ§Ãµes";
+$Course = "Curso";
+$DontAskMeAgain = "NÃ£o perguntar novamente";
+$ShowConfirmationBeforeClearingWhiteboard = "Pedir confirmaÃ§Ã£o antes de limpar quadro branco";
 $Redo = "Refazer";
 $Text = "Texto";
 $Paint = "Pintar";
 $Apply = "Aplicar";
-$Italic = "Itálico";
-$AUserWantsToApplyForModeration = "O seguinte usuário pede para ser moderador:";
-$SynchronisingConferenceMembers = "Sincronização dos participantes";
+$Italic = "ItÃ¡lico";
+$AUserWantsToApplyForModeration = "O seguinte usuÃ¡rio pede para ser moderador:";
+$SynchronisingConferenceMembers = "SincronizaÃ§Ã£o dos participantes";
 $Learner = "Estudante";
 $Chat = "Chat";
 $Slides = "Slides";
-$WaitingForParticipants = "À espera dos participantes";
+$WaitingForParticipants = "Ã€ espera dos participantes";
 $Disconnected = "Desconectado";
-$MediumStroke = "Médio";
+$MediumStroke = "MÃ©dio";
 $ThickStroke = "Grosso";
 ?>

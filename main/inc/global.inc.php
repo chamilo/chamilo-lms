@@ -1,25 +1,25 @@
 <?php
+/* For licensing terms, see /license.txt */
+
 /**
-==============================================================================
-* It is recommended that ALL dokeos scripts include this important file.
-* This script manages
-* - http get, post, post_files, session, server-vars extraction into global namespace;
-*   (which doesn't occur anymore when servertype config setting is set to test,
-*    and which will disappear completely in Dokeos 1.6.1)
-* - include of /conf/configuration.php;
-* - include of several libraries: main_api, database, display, text, security;
-* - selecting the main database;
-* - include of language files.
-*
-* @package dokeos.include
-* @todo isn't configuration.php renamed to configuration.inc.php yet?
-* @todo use the $_configuration array for all the needed variables
-* @todo remove the code that displays the button that links to the install page
-* 		but use a redirect immediately. By doing so the $already_installed variable can be removed.
-* @todo make it possible to enable / disable the tracking through the Dokeos config page.
-*
-==============================================================================
-*/
+ * It is recommended that ALL Chamilo scripts include this important file.
+ * This script manages
+ * - http get, post, post_files, session, server-vars extraction into global namespace;
+ *   (which doesn't occur anymore when servertype config setting is set to test,
+ *    and which will disappear completely in Dokeos 1.6.1)
+ * - include of /conf/configuration.php;
+ * - include of several libraries: main_api, database, display, text, security;
+ * - selecting the main database;
+ * - include of language files.
+ *
+ * @package chamilo.include
+ * @todo isn't configuration.php renamed to configuration.inc.php yet?
+ * @todo use the $_configuration array for all the needed variables
+ * @todo remove the code that displays the button that links to the install page
+ * 		but use a redirect immediately. By doing so the $already_installed variable can be removed.
+ * @todo make it possible to enable / disable the tracking through the Chamilo config page.
+ *
+ */
 
 // Showing/hiding error codes in global error messages.
 define('SHOW_ERROR_CODES', false);
@@ -40,7 +40,7 @@ if (!function_exists('version_compare') || version_compare(phpversion(), REQUIRE
 }
 
 // @todo Isn't this file renamed to configuration.inc.php yet?
-// Include the main Dokeos platform configuration file.
+// Include the main Chamilo platform configuration file.
 $main_configuration_file_path = $includePath.'/conf/configuration.php';
 
 $already_installed = false;
@@ -51,27 +51,36 @@ if (file_exists($main_configuration_file_path)) {
 	$_configuration = array();
 }
 
-// Ensure that _configuration is in the global scope before loading 
-// main_api.lib.php. This is particularly helpful for unit tests
-if (!isset($GLOBALS['_configuration'])) {
-  $GLOBALS['_configuration'] = $_configuration;
-}
-
-// Include the main Dokeos platform library file.
-require_once $includePath.'/lib/main_api.lib.php';
-
-// Do not over-use this variable. It is only for this script's local use.
-$lib_path = api_get_path(LIBRARY_PATH);
-
-// Start session.
-api_session_start($already_installed);
-
+//Redirects to the main/install/ page
 if (!$already_installed) {
 	$global_error_code = 2;
 	// The system has not been installed yet.
 	require $includePath.'/global_error_message.inc.php';
 	die();
 }
+
+// Ensure that _configuration is in the global scope before loading
+// main_api.lib.php. This is particularly helpful for unit tests
+if (!isset($GLOBALS['_configuration'])) {
+  $GLOBALS['_configuration'] = $_configuration;
+}
+
+// Code for trnasitional purposes, it can be removed right before the 1.8.7 release.
+if (empty($_configuration['system_version'])) {
+	$_configuration['system_version'] = $_configuration['dokeos_version'];
+	$_configuration['system_stable'] = $_configuration['dokeos_stable'];
+	$_configuration['software_url'] = 'http://www.chamilo.org/';
+}
+
+// For backward compatibility.
+$_configuration['dokeos_version'] = $_configuration['system_version'];
+$_configuration['dokeos_stable'] = $_configuration['system_stable'];
+
+// Include the main Chamilo platform library file.
+require_once $includePath.'/lib/main_api.lib.php';
+
+// Do not over-use this variable. It is only for this script's local use.
+$lib_path = api_get_path(LIBRARY_PATH);
 
 // Fix bug in IIS that doesn't fill the $_SERVER['REQUEST_URI'].
 api_request_uri();
@@ -89,13 +98,22 @@ require_once $lib_path.'text.lib.php';
 require_once $lib_path.'security.lib.php';
 require_once $lib_path.'events.lib.inc.php';
 
+
+/*  DATABASE CONNECTION  */
+
 // @todo: this shouldn't be done here. It should be stored correctly during installation.
 if (empty($_configuration['statistics_database']) && $already_installed) {
 	$_configuration['statistics_database'] = $_configuration['main_database'];
 }
 
-// Connect to the server database and select the main dokeos database.
-if (!($dokeos_database_connection = @mysql_connect($_configuration['db_host'], $_configuration['db_user'], $_configuration['db_password']))) {
+// Connect to the server database and select the main chamilo database.
+if (!($dokeos_database_connection = @Database::connect(
+	array(
+		'server' => $_configuration['db_host'],
+		'username' => $_configuration['db_user'],
+		'password' => $_configuration['db_password'],
+		'persistent' => $_configuration['db_persistent_connection'] // When $_configuration['db_persistent_connection'] is set, it is expected to be a boolean type.
+	)))) {
 	$global_error_code = 3;
 	// The database server is not available or credentials are invalid.
 	require $includePath.'/global_error_message.inc.php';
@@ -108,29 +126,47 @@ if (!$_configuration['db_host']) {
 	die();
 }
 
-// The Dokeos system has not been designed to use special SQL modes that were introduced since MySQL 5.
-Database::query("set session sql_mode='';", __FILE__, __LINE__);
+/* RETRIEVING ALL THE CHAMILO CONFIG SETTINGS FOR MULTIPLE URLs FEATURE*/
+if (!empty($_configuration['multiple_access_urls'])) {
+	$_configuration['access_url'] = 1;
+	$access_urls = api_get_access_urls();
 
-if (!mysql_select_db($_configuration['main_database'], $dokeos_database_connection)) {
+	$protocol = ((!empty($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) != 'OFF') ? 'https' : 'http').'://';
+	$request_url1 = $protocol.$_SERVER['SERVER_NAME'].'/';
+	$request_url2 = $protocol.$_SERVER['HTTP_HOST'].'/';
+
+	foreach ($access_urls as & $details) {
+		if ($request_url1 == $details['url'] or $request_url2 == $details['url']) {
+			$_configuration['access_url'] = $details['id'];
+		}
+	}
+} else {
+	$_configuration['access_url'] = 1;
+}
+
+// This function is moved here after the database connections was made since  api_session_start will call the api_get_path() function and this function will call a Database function
+// Start session.
+api_session_start($already_installed);
+
+// The system has not been designed to use special SQL modes that were introduced since MySQL 5.
+Database::query("set session sql_mode='';");
+
+if (!Database::select_db($_configuration['main_database'], $dokeos_database_connection)) {
 	$global_error_code = 5;
-	// Connection to the main Dokeos database is impossible, it might be missing or restricted or its configuration option might be incorrect.
+	// Connection to the main Chamilo database is impossible, it might be missing or restricted or its configuration option might be incorrect.
 	require $includePath.'/global_error_message.inc.php';
 	die();
 }
 
-/*
---------------------------------------------
-  Initialization of the default encodings
---------------------------------------------
-*/
+/*   Initialization of the default encodings */
 // The platform's character set must be retrieved at this early moment.
 $sql = "SELECT selected_value FROM settings_current WHERE variable = 'platform_charset';";
-$result = Database::query($sql, __FILE__, __LINE__);
+$result = Database::query($sql);
 while ($row = @Database::fetch_array($result)) {
 	$charset = $row[0];
 }
 if (empty($charset)) {
-	$charset = 'ISO-8859-15';
+	$charset = 'UTF-8';
 }
 // Preserving the value of the global variable $charset.
 $charset_initial_value = $charset;
@@ -140,33 +176,17 @@ api_initialize_internationalization();
 // Initialization of the default encoding that will be used by the multibyte string routines in the internationalization library.
 api_set_internationalization_default_encoding($charset);
 
-/*
---------------------------------------------
-  RETRIEVING ALL THE DOKEOS CONFIG SETTINGS
---------------------------------------------
-*/
-if (!empty($_configuration['multiple_access_urls'])) {
-	$_configuration['access_url'] = 1;
-	$access_urls = api_get_access_urls();
-	$protocol = ((!empty($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) != 'OFF') ? 'https' : 'http').'://';
-	$request_url1 = $protocol.$_SERVER['SERVER_NAME'].'/';
-	$request_url2 = $protocol.$_SERVER['HTTP_HOST'].'/';
+// Initialization of the database encoding to be used.
+Database::query("SET SESSION character_set_server='utf8';");
+Database::query("SET SESSION collation_server='utf8_general_ci';");
+Database::query("SET CHARACTER SET '" . Database::to_db_encoding($charset) . "';");
 
-	foreach ($access_urls as $details) {
-		if ($request_url1 == $details['url'] or $request_url2 == $details['url']) {
-			$_configuration['access_url'] = $details['id'];
-		}
-	}
-} else {
-	$_configuration['access_url'] = 1;
-}
-
-// access_url == 1 is the default dokeos location
+// access_url == 1 is the default chamilo location
 if ($_configuration['access_url'] != 1) {
 	$url_info = api_get_access_url($_configuration['access_url']);
 	if ($url_info['active'] == 1) {
-		$settings_by_access = api_get_settings(null, 'list', $_configuration['access_url'], 1);
-		foreach ($settings_by_access as $row) {
+		$settings_by_access = & api_get_settings(null, 'list', $_configuration['access_url'], 1);
+		foreach ($settings_by_access as & $row) {
 			if (empty($row['variable'])) {
 				$row['variable'] = 0;
 			}
@@ -181,8 +201,8 @@ if ($_configuration['access_url'] != 1) {
 	}
 }
 
-$result = api_get_settings(null, 'list', 1);
-foreach ($result as $row) {
+$result = & api_get_settings(null, 'list', 1);
+foreach ($result as & $row) {
 	if ($_configuration['access_url'] != 1) {
 		if ($url_info['active'] == 1) {
 			$var = empty($row['variable']) ? 0 : $row['variable'];
@@ -193,7 +213,7 @@ foreach ($result as $row) {
 		if ($row['access_url_changeable'] == 1 && $url_info['active'] == 1) {
 			if ($settings_by_access_list[$var][$subkey][$category]['selected_value'] != '') {
 				if ($row['subkey'] == null) {
-					$_setting[$row['variable']]= $settings_by_access_list[$var][$subkey][$category]['selected_value'];
+					$_setting[$row['variable']] = $settings_by_access_list[$var][$subkey][$category]['selected_value'];
 				} else {
 					$_setting[$row['variable']][$row['subkey']] = $settings_by_access_list[$var][$subkey][$category]['selected_value'];
 				}
@@ -220,10 +240,10 @@ foreach ($result as $row) {
 	}
 }
 
-$result = api_get_settings('Plugins', 'list', $_configuration['access_url']);
+$result = & api_get_settings('Plugins', 'list', $_configuration['access_url']);
 $_plugins = array();
-foreach ($result as $row) {
-	$key = $row['variable'];
+foreach ($result as & $row) {
+	$key = & $row['variable'];
 	if (is_string($_setting[$key])) {
 		$_setting[$key] = array();
 	}
@@ -251,11 +271,9 @@ if (!$x = strpos($_SERVER['PHP_SELF'], 'whoisonline.php')) {
 
 if (api_get_setting('server_type') == 'test') {
 	/*
-	--------------------------------------------
-	Server type is test
+		Server type is test
 	- high error reporting level
 	- only do addslashes on $_GET and $_POST
-	--------------------------------------------
 	*/
 	if (IS_PHP_53) {
 		error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED);
@@ -283,11 +301,9 @@ if (api_get_setting('server_type') == 'test') {
 	}
 } else {
 	/*
-	--------------------------------------------
 	Server type is not test
 	- normal error reporting level
 	- full fake register globals block
-	--------------------------------------------
 	*/
 	error_reporting(E_COMPILE_ERROR | E_ERROR | E_CORE_ERROR);
 
@@ -321,12 +337,7 @@ if (api_get_setting('server_type') == 'test') {
 	}
 }
 
-
-/*
------------------------------------------------------------
-	LOAD LANGUAGE FILES SECTION
------------------------------------------------------------
-*/
+/*	LOAD LANGUAGE FILES SECTION */
 
 // if we use the javascript version (without go button) we receive a get
 // if we use the non-javascript version (with the go button) we receive a post
@@ -340,8 +351,8 @@ if (!empty($_POST['language_list'])) {
 }
 
 // Include all files (first english and then current interface language)
-$langpath = api_get_path(SYS_CODE_PATH).'lang/';
 
+$langpath = api_get_path(SYS_LANG_PATH);
 
 /* This will only work if we are in the page to edit a sub_language */
 if (api_get_self() == api_get_path(REL_PATH).'main/admin/sub_language.php' || api_get_self() == api_get_path(REL_PATH).'main/admin/sub_language_ajax.inc.php') {
@@ -362,7 +373,7 @@ if (api_get_self() == api_get_path(REL_PATH).'main/admin/sub_language.php' || ap
 		$lang_list_result = array_diff($lang_list_post, $lang_list_pre);
 		unset($lang_list_pre);
 
-		// ------  english language array
+		//  english language array
 		$english_language_array[$language_file_item] = compact($lang_list_result);
 
 		//cleaning the variables
@@ -371,10 +382,10 @@ if (api_get_self() == api_get_path(REL_PATH).'main/admin/sub_language.php' || ap
 		}
 		$parent_file = $langpath.$parent_language['dokeos_folder'].'/'.$language_file_item.'.inc.php';
 		if (is_file($parent_file)) {
-			include $parent_file;
+			include_once $parent_file;
 		}
 
-		// ------  parent language array
+		//  parent language array
 		$parent_language_array[$language_file_item] = compact($lang_list_result);
 
 		//cleaning the variables
@@ -386,7 +397,7 @@ if (api_get_self() == api_get_path(REL_PATH).'main/admin/sub_language.php' || ap
 			include $sub_file;
 		}
 
-		// ------  sub language array
+		//  sub language array
 		$sub_language_array[$language_file_item] = compact($lang_list_result);
 
 		//cleaning the variables
@@ -397,31 +408,36 @@ if (api_get_self() == api_get_path(REL_PATH).'main/admin/sub_language.php' || ap
 }
 
 // Checking if we have a valid language. If not we set it to the platform language.
+
 $valid_languages = api_get_languages();
-if (!in_array($user_language, $valid_languages['folder'])) {
-	$user_language = api_get_setting('platformLanguage');
-}
 
-if (in_array($user_language, $valid_languages['folder']) && (isset($_GET['language']) || isset($_POST['language_list']))) {
-	$user_selected_language = $user_language; // $_GET['language'];
-	$_SESSION['user_language_choice'] = $user_selected_language;
-	$platformLanguage = $user_selected_language;
-} else {
-	$platformLanguage = api_get_setting('platformLanguage');
-}
+if (!empty($valid_languages)) {
 
-if (isset($_SESSION['user_language_choice'])) {
-	$language_interface = $_SESSION['user_language_choice'];
-} else {
-	$language_interface = api_get_setting('platformLanguage');
-}
+	if (!in_array($user_language, $valid_languages['folder'])) {
+		$user_language = api_get_setting('platformLanguage');
+	}
 
-if (isset($_user['language'])) {
-	$language_interface = $_user['language'];
-}
+	if (in_array($user_language, $valid_languages['folder']) && (isset($_GET['language']) || isset($_POST['language_list']))) {
+		$user_selected_language = $user_language; // $_GET['language'];
+		$_SESSION['user_language_choice'] = $user_selected_language;
+		$platformLanguage = $user_selected_language;
+	} else {
+		$platformLanguage = api_get_setting('platformLanguage');
+	}
 
-if ($_course['language']) {
-	$language_interface = $_course['language'];
+	if (isset($_SESSION['user_language_choice'])) {
+		$language_interface = $_SESSION['user_language_choice'];
+	} else {
+		$language_interface = api_get_setting('platformLanguage');
+	}
+
+	if (isset($_user['language'])) {
+		$language_interface = $_user['language'];
+	}
+
+	if ($_course['language']) {
+		$language_interface = $_course['language'];
+	}
 }
 
 // Sometimes the variable $language_interface is changed
@@ -430,7 +446,7 @@ if ($_course['language']) {
 // to use it within the function get_lang(...).
 $language_interface_initial_value = $language_interface;
 
-/*
+/**
  * Include all necessary language files
  * - trad4all
  * - notification
@@ -447,34 +463,34 @@ if (isset($language_file)) {
 		$language_files = array_merge($language_files, $language_file);
 	}
 }
-
+// if a set of language files has been properly defined
 if (is_array($language_files)) {
+	// if the sub-language feature is on
 	if (api_get_setting('allow_use_sub_language') == 'true') {
-		foreach ($language_files as $index => $language_file) {
+        require_once api_get_path(SYS_CODE_PATH).'admin/sub_language.class.php';
+        $parent_path = SubLanguageManager::get_parent_language_path($language_interface);
+        foreach ($language_files as $index => $language_file) {
+			// include English
 			include $langpath.'english/'.$language_file.'.inc.php';
-			$langfile = $langpath.$language_interface.'/'.$language_file.'.inc.php';
-
-			$tbl_admin_languages = Database :: get_main_table(TABLE_MAIN_LANGUAGE);
-			$sql_sub_language = 'SELECT dokeos_folder FROM '.$tbl_admin_languages.' WHERE parent_id=(SELECT id FROM '.$tbl_admin_languages.' WHERE dokeos_folder="'.Database::escape_string($language_interface).'" AND ISNULL(parent_id))';
-
-			$rs_sub_language = Database::query($sql_sub_language,__FILE__,__LINE__);
-			$num_row_sub_language = Database::num_rows($rs_sub_language);
-
-			if (file_exists($langfile)) {
-				include $langfile;
-				for ($i = 0; $i < $num_row_sub_language; $i++) {
-					$row_sub_language = Database::result($rs_sub_language, $i, 'dokeos_folder');
-					$sub_langfile = $langpath.$row_sub_language.'/'.$language_file.'.inc.php';
-					if (file_exists($sub_langfile)) {
-						include $sub_langfile;
-					}
-				}
-
+			// prepare string for current language and its parent
+			$lang_file = $langpath.$language_interface.'/'.$language_file.'.inc.php';
+			$parent_lang_file = $langpath.$parent_path.'/'.$language_file.'.inc.php';
+			// load the parent language file first
+            if (file_exists($parent_lang_file)) {
+            	include $parent_lang_file;
+            }
+            // overwrite the parent language translations if there is a child
+			if (file_exists($lang_file)) {
+                include $lang_file;
 			}
 		}
 	} else {
+		// if the sub-languages feature is not on, then just load the
+		// set language interface 
 		foreach ($language_files as $index => $language_file) {
+			// include English
 			include $langpath.'english/'.$language_file.'.inc.php';
+			// prepare string for current language
 			$langfile = $langpath.$language_interface.'/'.$language_file.'.inc.php';
 			if (file_exists($langfile)) {
 				include $langfile;
@@ -487,29 +503,35 @@ if (is_array($language_files)) {
 // So, we have to reassign this variable again in order to keep its value right.
 $charset = $charset_initial_value;
 
+// The global variable $text_dir has been defined in the language file trad4all.inc.php.
+// For determing text direction correspondent to the current language we use now information from the internationalization library.
+$text_dir = api_get_text_direction();
+
 //Update of the logout_date field in the table track_e_login (needed for the calculation of the total connection time)
 
 if ($_configuration['tracking_enabled'] && !isset($_SESSION['login_as']) && isset($_user)) {
 	// if $_SESSION['login_as'] is set, then the user is an admin logged as the user
 
 	$tbl_track_login = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_LOGIN);
-
 	$sql_last_connection = "SELECT login_id, login_date FROM $tbl_track_login WHERE login_user_id='".$_user["user_id"]."' ORDER BY login_date DESC LIMIT 0,1";
 
 	$q_last_connection = Database::query($sql_last_connection);
 	if (Database::num_rows($q_last_connection) > 0) {
 		$i_id_last_connection = Database::result($q_last_connection, 0, 'login_id');
-        // jeankarim@cblue.be -- is the latest logout_date still relevant?
-        $sql_logout_date = "SELECT logout_date FROM $tbl_track_login WHERE login_id=$i_id_last_connection";
-        $q_logout_date = Database::query($sql_logout_date);
-        $res_logout_date = convert_mysql_date(Database::result($q_logout_date,0,'logout_date'));
+
+		// is the latest logout_date still relevant?
+		$sql_logout_date = "SELECT logout_date FROM $tbl_track_login WHERE login_id=$i_id_last_connection";
+		$q_logout_date = Database::query($sql_logout_date);
+		$res_logout_date = convert_mysql_date(Database::result($q_logout_date,0,'logout_date'));
+
         if ($res_logout_date < time() - $_configuration['session_lifetime']) {
-            // it isn't, we should create a fresh entry
-            event_login();
+			// it isn't, we should create a fresh entry
+			event_login();
             // now that it's created, we can get its ID and carry on
-	        $q_last_connection = Database::query($sql_last_connection);
-		    $i_id_last_connection = Database::result($q_last_connection, 0, 'login_id');
-            }
+			$q_last_connection = Database::query($sql_last_connection);
+			$i_id_last_connection = Database::result($q_last_connection, 0, 'login_id');
+		}
+
 		$s_sql_update_logout_date = "UPDATE $tbl_track_login SET logout_date=NOW() WHERE login_id='$i_id_last_connection'";
 		Database::query($s_sql_update_logout_date);
 	}

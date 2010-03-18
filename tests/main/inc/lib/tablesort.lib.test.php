@@ -49,7 +49,7 @@ class TestTablesort extends UnitTestCase{
 	}
 
 	public function testIsDateColumn(){
-		$data='';
+		$data=array();
 		$column='';
 		$res = TableSort::is_date_column($data, $column);
 		if(is_bool($res))
@@ -61,7 +61,7 @@ class TestTablesort extends UnitTestCase{
 	}
 
 	public function testIsImageColumn(){
-		$data='';
+		$data=array();
 		$column='';
 		$res = TableSort::is_image_column($data, $column);
 		if(is_bool($res)){

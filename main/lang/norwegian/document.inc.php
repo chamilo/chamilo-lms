@@ -1,18 +1,19 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $MoveTo = "Flytt til";
 $langDownloadFile = "Last opp fil til tjener";
-$langNameDir = "Navn på ny mappe";
+$langNameDir = "Navn pÃ¥ ny mappe";
 $langSize = "Str.";
 $langRename = "Gi nytt navn";
 $langCopy = "Kopier";
 $langTo = "til";
 $langDownloadEnd = "Opplastingen er ferdig";
 $langCreateDoc = "Opprett ett dokument";
-$langPublish  = "Publiser";
+$langPublish = "Publiser";
 $langCreateDocument = "Opprett ett dokument";
-$langDocuments  = "Dokumenter";
-$CurrentDirectory = "Nåværende mappe";
+$langDocuments = "Dokumenter";
+$CurrentDirectory = "NÃ¥vÃ¦rende mappe";
 $UplOverwrite = "Overskrive";
 ?>

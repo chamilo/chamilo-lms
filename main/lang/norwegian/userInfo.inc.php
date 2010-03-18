@@ -1,5 +1,6 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $langLineNumber = "Linjenummer";
 $langLine = "linje";
@@ -8,24 +9,24 @@ $langLineOrLines = "linje(r)";
 $langMoveUp = "Flytt opp";
 $langMoveDown = "Flytt ned";
 $langAddNewHeading = "Legg til ny overskrift";
-$langCourseAdministratorOnly = "Kun for lærere";
+$langCourseAdministratorOnly = "Kun for lÃ¦rere";
 $langDefineHeadings = "Definer overskrifter";
 $langBackToUsersList = "Tilbake til brukerliste";
-$langTracking = "Sporing";
-$langCourseManager = "Lærer";
+$langTracking = "Statestikk";
+$langCourseManager = "LÃ¦rer";
 $langModRight = "endre rettigheter for";
-$langNoAdmin = "har fra nå av ingen rettigheter på denne side";
-$langAllAdmin = "har fra nå av alle rettigheter på denne side";
+$langNoAdmin = "har fra nÃ¥ av ingen rettigheter pÃ¥ denne side";
+$langAllAdmin = "har fra nÃ¥ av alle rettigheter pÃ¥ denne side";
 $langModRole = "Endre rolle for";
 $langRole = "Rolle";
-$langIsNow = "er fra nå av";
+$langIsNow = "er fra nÃ¥ av";
 $langInC = "i dette kurset";
 $langFilled = "Ikke alle felt ble utfylt";
 $langUserNo = "Brukernr.";
 $langTaken = "er allerede i bruk.  Velg en annen";
 $langTutor = "Mentor";
 $langUnreg = "Avmeld";
-$langGroupUserManagement = "Gruppehåndtering";
+$langGroupUserManagement = "GruppehÃ¥ndtering";
 $langUnregister = "Avregistrer";
 $langAddAUser = "Legg til brukere";
 ?>

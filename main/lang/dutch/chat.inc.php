@@ -1,22 +1,23 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$langOnlineConference  = "Onlineconferentie";
-$langWash  = "Wissen";
-$langReset  = "Herstart";
-$langSave  = "Opslaan";
-$langRefresh  = "Bijwerken";
-$langIsNowInYourDocDir  = "is nu in uw documentenmodule.<br /><b>Opgelet, het bestand is nu toegankelijk voor iedereen.</b>";
-$langCopyFailed  = "Het kopiëren van het bestand is mislukt";
-$langTypeMessage  = "Gelieve een tekst te tikken!";
-$langConfirmReset  = "Bent u zeker dat u alle berichten wilt verwijderen?";
-$langHasResetChat  = "heeft de chat opnieuw geïnitialiseerd";
-$langNoOnlineConference  = "Er is momenteel geen conferentie";
-$langMediaFile  = "Live audio- of videostreaming";
-$langContentFile  = "Presentatie";
-$langListOfParticipants  = "Deelnemerslijst";
-$langYourPicture  = "Uw foto";
-$langOnlineDescription  = "Beschrijving van de conferentie";
+$langOnlineConference = "Onlineconferentie";
+$langWash = "Wissen";
+$langReset = "Herstart";
+$langSave = "Opslaan";
+$langRefresh = "Bijwerken";
+$langIsNowInYourDocDir = "is nu in uw documentenmodule.<br /><b>Opgelet, het bestand is nu toegankelijk voor iedereen.</b>";
+$langCopyFailed = "Het kopiÃ«ren van het bestand is mislukt";
+$langTypeMessage = "Gelieve een tekst te tikken!";
+$langConfirmReset = "Bent u zeker dat u alle berichten wilt verwijderen?";
+$langHasResetChat = "heeft de chat opnieuw geÃ¯nitialiseerd";
+$langNoOnlineConference = "Er is momenteel geen conferentie";
+$langMediaFile = "Live audio- of videostreaming";
+$langContentFile = "Presentatie";
+$langListOfParticipants = "Deelnemerslijst";
+$langYourPicture = "Uw foto";
+$langOnlineDescription = "Beschrijving van de conferentie";
 $langOnlyCheckForImportantQuestion = "Gelieve deze optie enkel aan te vinken indien u een belangrijke vraag stelt.";
 $langQuestion = "vraag";
 $langClearList = "Wissen";
@@ -45,15 +46,18 @@ $Hand = "Hallo";
 $Wink = "Knipoog";
 $Neutral = "Neutraal";
 $Angry = "Boos";
+$Avid = "Ondeugend";
 $Redface = "Blozen";
 $Sad = "Droevig";
 $Silence = "Stilte";
+$Silenced = "Stilzwijgend";
 $Smile = "Lachen";
 $Exclamation = "Uitroep";
 $Arrow = "Pijl";
 $Question = "Vraag";
 $Idea = "Idee";
 $AskPermissionSpeak = "Vraag toestemming om te spreken";
+$GiveTheFloorTo = "Geef het woord aan";
 $Pause = "Pauze";
 $Stop = "Stop";
 ?>

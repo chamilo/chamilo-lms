@@ -1,37 +1,38 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$nameTools = "novecojis valodas main&#299;gais";
-$langMdCallingTool = "M&#257;c&#299;bu pl&#257;ns - <i>Scorm</i>";
-$langTool = "Darb&#299;bas ar <i>Scorm</i> MD";
-$langNotInDB = "nav DOKEOS DB ieraksta";
-$langManifestSyntax = "(sintakses k&#316;&#363;da izdodamaj&#257; saraksta fail&#257;...)";
-$langEmptyManifest = "(tuk�s saraksta fails...)";
-$langNoManifest = "(nav saraksta faila, ko izdot...)";
-$langNotFolder = "nav iesp&#275;jams, t&#257; nav direktorija...";
-$langUploadHtt = "Aug�upl&#257;d&#275;t HTT failu";
-$langHttFileNotFound = "Jaunais HTT fails nebija atverams (t.i., tuk�s, p&#257;r&#257;k liels)";
-$langHttOk = "Jauns HTT fails tika aug�upl&#257;d&#275;ts";
-$langHttNotOk = "HTT faila aug�upl&#257;de beidz&#257;s neveiksm&#299;gi";
-$langRemoveHtt = "Dz&#275;st HTT failu";
-$langHttRmvOk = "HTT fails tika dz&#275;sts";
-$langHttRmvNotOk = "HTT faila dz&#275;�ana beidz&#257;s neveiksm&#299;gi";
-$langImport = "Izveidot MDEs no izdodam&#257;";
-$langRemove = "Dz&#275;st MDEs";
-$langAllRemovedFor = "Tika dz&#275;sti visi ieraksti";
-$langIndex = "Veikt indeks&#275;�anu ar <i>PhpDig</i>";
-$langTotalMDEs = "<i>Scorm</i> MD ierakstu kop&#275;jais skaits:";
-$langMainMD = "Atv&#275;rt galveno MDE";
+$nameTools = "novecojis valodas mainīgais";
+$langMdCallingTool = "Dokumenti";
+$langTool = "Dokumenta META dati";
+$langNotInDB = "tāda Hipersai";
+$langManifestSyntax = "(sintakses kļūda izdodamajā failā...)";
+$langEmptyManifest = "(tuk";
+$langNoManifest = "(nav faila, ko izdot...)";
+$langNotFolder = "nav iespējams, tā nav direktorija...";
+$langUploadHtt = "Aug";
+$langHttFileNotFound = "Jaunais HTT fails nebija atverams (t.i., tuk";
+$langHttOk = "Jauns HTT fails tika aug";
+$langHttNotOk = "HTT faila aug";
+$langRemoveHtt = "Dzēst HTT failu";
+$langHttRmvOk = "HTT fails tika dzēsts";
+$langHttRmvNotOk = "HTT faila dzē";
+$langImport = "Importēt";
+$langRemove = "Dzēst MDE";
+$langAllRemovedFor = "Visi ieraksti";
+$langIndex = "Indeksācijas vārdi";
+$langTotalMDEs = "Kopējais hipersai";
+$langMainMD = "Atvērt galveno MDE";
 $langLines = "rindas";
-$langPlay = "Atv&#275;rt index.php";
-$langNonePossible = "Nav iesp&#275;jamas darb&#299;bas ar MD";
-$langOrElse = "Izv&#275;lieties <i>Scorm</i> direktoriju vai <i>Scorm</i> direktorijas ID";
-$langWorkWith = "Str&#257;d&#257;t ar <i>Scorm</i> direktoriju";
-$langSDI = "... <i>Scorm</i> direktorijas ar SD-id (un sadal&#299;t saraksta datus - vai atst&#257;t tuk�u)";
-$langRoot = "root";
-$langSplitData = "Sadal&#299;t sarakstus, un #Mde, ja ir:";
-$langMffNotOk = "Saraksta faila aizst&#257;�ana nebija veiksm&#299;ga";
-$langMffOk = "Saraksta fails tika aizst&#257;ts";
-$langMffFileNotFound = "Jaunais saraksta fails nebija atverams (t.i., tuk�s, p&#257;r&#257;k liels)";
-$langUploadMff = "Aizst&#257;t saraksta failu";
+$langPlay = "Atvērt index.php";
+$langNonePossible = "Nav iespējamas darbības ar MD";
+$langOrElse = "Izvēlēties hipersai";
+$langWorkWith = "Strādāt ar <i>Scorm</i> direktoriju";
+$langSDI = "... <i>Scorm</i> direktorijas ar SD-id (un sadalīt saraksta datus - vai atstāt tuk";
+$langRoot = "pamatdirektorija";
+$langSplitData = "Sadalīt sarakstus, un #Mde, ja ir:";
+$langMffNotOk = "Saraksta faila aizstā";
+$langMffOk = "Saraksta fails tika aizstāts";
+$langMffFileNotFound = "Jaunais saraksta fails nebija atverams (t.i., tuk";
+$langUploadMff = "Aizstāt saraksta failu";
 ?>

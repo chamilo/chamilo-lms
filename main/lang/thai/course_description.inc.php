@@ -1,15 +1,16 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$langCourseProgram  = "¤ÓÍ¸ÔºÒÂÃÒÂÇÔªÒ";
-$langThisCourseDescriptionIsEmpty  = "ÇÔªÒ¹ÕéÂÑ§äÁèÁÕ¤ÓÍ¸ÔºÒÂÃÒÂÇÔªÒ";
-$langEditCourseProgram  = "ÊÃéÒ§áÅÐá¡éä¢¤ÓÍ¸ÔºÒÂÃÒÂÇÔªÒ";
-$QuestionPlan  = "½Ò¡¤Ó¶ÒÁ¶Ö§ËÑÇË¹éÒ";
-$langInfo2Say  = "Êè§¢éÍÁÙÅáÅÐÊÒÃÐ¶Ö§¼ÙéàÃÕÂ¹";
-$langOuAutreTitre  = "àÃ×èÍ§";
-$langNewBloc  = "Í×è¹æ";
-$langAddCat  = "à¾ÔèÁ»ÃÐàÀ·";
-$langAdd  = "à¾ÔèÁ";
-$langValid  = "¶Ù¡µéÍ§";
-$langBackAndForget  = "ÂéÍ¹¡ÅÑº";
+$langCourseProgram = "à¸„à¸³à¸­à¸˜à¸´à¸šà¸²à¸¢à¸£à¸²à¸¢à¸§à¸´à¸Šà¸²";
+$langThisCourseDescriptionIsEmpty = "Ã‡Ã”ÂªÃ’Â¹Ã•Ã©Ã‚Ã‘Â§Ã¤ÃÃ¨ÃÃ•â‚¬Ã“ÃÅ¾Ã”ÂºÃ’Ã‚ÃƒÃ’Ã‚Ã‡Ã”ÂªÃ’";
+$langEditCourseProgram = "à¸ªà¸£à¹‰à¸²à¸‡à¹à¸¥à¸°à¹à¸à¹‰à¹„à¸‚à¸„à¸³à¸­à¸˜à¸´à¸šà¸²à¸¢à¸£à¸²à¸¢à¸§à¸´à¸Šà¸²";
+$QuestionPlan = "à¸à¸²à¸à¸„à¸³à¸–à¸²à¸¡à¸–à¸¶à¸‡à¸«à¸±à¸§à¸«à¸™à¹‰à¸²";
+$langInfo2Say = "à¸ªà¹ˆà¸‡à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¹à¸¥à¸°à¸ªà¸²à¸£à¸°à¸–à¸¶à¸‡à¸œà¸¹à¹‰à¹€à¸£à¸µà¸¢à¸™";
+$langOuAutreTitre = "à¹€à¸£à¸·à¹ˆà¸­à¸‡";
+$langNewBloc = "à¸­à¸·à¹ˆà¸™à¹†";
+$langAddCat = "à¹€à¸žà¸´à¹ˆà¸¡à¸›à¸£à¸°à¹€à¸ à¸—";
+$langAdd = "à¹€à¸žà¸´à¹ˆà¸¡";
+$langValid = "à¸–à¸¹à¸à¸•à¹‰à¸­à¸‡";
+$langBackAndForget = "à¸¢à¹‰à¸­à¸™à¸à¸¥à¸±à¸š";
 ?>

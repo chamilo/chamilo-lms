@@ -1,26 +1,10 @@
 <?php
-/*
-    DOKEOS - elearning and course management software
-
-    For a full list of contributors, see documentation/credits.html
-
-    This program is free software; you can redistribute it and/or
-    modify it under the terms of the GNU General Public License
-    as published by the Free Software Foundation; either version 2
-    of the License, or (at your option) any later version.
-    See "documentation/licence.html" more details.
-
-    Contact:
-		Dokeos
-		Rue des Palais 44 Paleizenstraat
-		B-1030 Brussels - Belgium
-		Tel. +32 (2) 211 34 56
-*/
+/* For licensing terms, see /license.txt */
 
 
 /**
 *	Adding limits
-*	@package dokeos.exercise
+*	@package chamilo.exercise
 * 	@author
 * 	@version $Id: admin.php 10680 2007-01-11 21:26:23Z pcool $
 */
@@ -51,6 +35,7 @@ define('MULTIPLE_ANSWER',	2);
 define('FILL_IN_BLANKS',	3);
 define('MATCHING',		4);
 define('FREE_ANSWER', 5);
+define('MULTIPLE_ANSWER_COMBINATION', 9);
 
 /*
 -----------------------------------------------------------
@@ -144,7 +129,7 @@ if (isset($_SESSION['gradebook'])){
 if (!empty($gradebook) && $gradebook=='view') {
 	$interbreadcrumb[]= array (
 			'url' => '../gradebook/'.Security::remove_XSS($_SESSION['gradebook_dest']),
-			'name' => get_lang('Gradebook')
+			'name' => get_lang('ToolGradebook')
 		);
 }
 $nameTools=get_lang('Exercice');
@@ -233,19 +218,19 @@ if (isset($_POST['ok'])) {
 	if ($_POST['limit']==1) {
 		$minutes = Database::escape_string($_POST['minutes']);
 		$query = "UPDATE ".$TBL_EXERCICES." SET ques_time_limit= $minutes where id= $exercise_id";
-		Database::query($query,__FILE__,__LINE__);
+		Database::query($query);
 	} else {
 		$query = "UPDATE ".$TBL_EXERCICES." SET ques_time_limit= 0 WHERE id= $exercise_id";
-		Database::query($query,__FILE__,__LINE__);
+		Database::query($query);
 	}
 
 	if ($_POST['attempt']==1) {
 		$attempts = Database::escape_string($_POST['attempts']);
 		$query = "UPDATE ".$TBL_EXERCICES." SET num_attempts = $attempts WHERE id= $exercise_id";
-		Database::query($query,__FILE__,__LINE__);
+		Database::query($query);
 	} else {
 		$query = "UPDATE ".$TBL_EXERCICES." SET num_attempts = 0 WHERE id= $exercise_id";
-		Database::query($query,__FILE__,__LINE__);
+		Database::query($query);
 	}
 }
 ?>

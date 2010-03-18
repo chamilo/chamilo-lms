@@ -1,33 +1,34 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$langLineNumber = "Número de liñas";
-$langLine = "liña";
-$langLines = "liñas";
-$langLineOrLines = "liña(s)";
+$langLineNumber = "NÃºmero de liÃ±as";
+$langLine = "liÃ±a";
+$langLines = "liÃ±as";
+$langLineOrLines = "liÃ±a(s)";
 $langMoveUp = "Subir";
 $langMoveDown = "Baixar";
 $langAddNewHeading = "Engadir novo encabezado";
-$langCourseAdministratorOnly = "Só o administrador do curso";
+$langCourseAdministratorOnly = "SÃ³ profesores";
 $langDefineHeadings = "Definir encabezados";
 $langBackToUsersList = "Voltar &aacute lista de usuarios";
-$langTracking = "Seguemento";
+$langTracking = "Seguimento";
 $langCourseManager = "Profesor";
 $langModRight = "cambiar os dereitos de";
-$langNoAdmin = "desde agora non ten dereito de administración neste sitio";
-$langAllAdmin = "agora ten todos os dereitos de administración sobre esta páxina";
+$langNoAdmin = "desde agora non ten dereito de administraciÃ³n neste sitio";
+$langAllAdmin = "agora ten todos os dereitos de administraciÃ³n sobre esta pÃ¡xina";
 $langModRole = "Cambiar o rol de";
-$langRole = "Rol/Estatus";
-$langIsNow = "agora está arriba";
+$langRole = " Papel (Rol)";
+$langIsNow = "agora estÃ¡ arriba";
 $langInC = "neste curso";
-$langFilled = "Algúns campos están incompletos";
-$langUserNo = "Usuario Nº";
-$langTaken = "xa está en uso. Por favor, seleccione un diferente";
+$langFilled = "Non cubrÃ­u todos os campos.";
+$langUserNo = "O nome de usuario que elixÃ­u";
+$langTaken = "xa existe. Escolla un diferente.";
 $langTutor = "Titor";
-$langUnreg = "Anular inscrición";
-$langGroupUserManagement = "Xestión de grupos";
+$langUnreg = "Anular inscriciÃ³n";
+$langGroupUserManagement = "XestiÃ³n de Grupos";
 $langUnregister = "Sen rexistrar";
 $langAddAUser = "Engadir usuarios";
-$UsersUnsubscribed = "Os usuarios seleccionados foron dados de baixa do curso";
-$ThisStudentIsSubscribeThroughASession = "Este estudante está suscrito a este curso mediante unha sesión. Vostede non pode editar as súas informacións";
+$UsersUnsubscribed = "Os usuarios seleccionados foron dados de baixa no curso";
+$ThisStudentIsSubscribeThroughASession = "Este estudante estÃ¡ suscrito a este curso mediante unha sesiÃ³n. Vostede non pode editar as sÃºas informaciÃ³ns";
 ?>

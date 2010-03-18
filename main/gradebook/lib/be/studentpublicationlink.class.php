@@ -1,31 +1,9 @@
 <?php
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2008 Dokeos Latinoamerica SAC
-	Copyright (c) 2006 Dokeos SPRL
-	Copyright (c) 2006 Ghent University (UGent)
-	Copyright (c) various contributors
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
-	Mail: info@dokeos.com
-==============================================================================
-*/
+/* For licensing terms, see /license.txt */
 /**
  * Gradebook link to student publication item
  * @author Bert Steppé
- * @package dokeos.gradebook
+ * @package chamilo.gradebook
  */
 class StudentPublicationLink extends AbstractLink
 {
@@ -56,11 +34,11 @@ class StudentPublicationLink extends AbstractLink
 				.' FROM '.$this->get_itemprop_table().' prop, '
 						 .$this->get_studpub_table().' pub'
 				." WHERE prop.tool = 'work'"
-				.' AND prop.insert_user_id = '.$stud_id
+				.' AND prop.insert_user_id = '.intval($stud_id)
 				.' AND prop.ref = pub.id'
-				." AND pub.title = '".Database::escape_string($eval->get_name())."'";
+				." AND pub.title = '".Database::escape_string($eval->get_name())."' AND pub.session_id=".api_get_session_id()."";
 
-		$result = Database::query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql);
 		if ($fileurl = Database::fetch_row($result)) {
 	    	$course_info = Database :: get_course_info($this->get_course_code());
 
@@ -99,13 +77,13 @@ class StudentPublicationLink extends AbstractLink
     	$tbl_grade_links = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
 
 		$sql = 'SELECT id,url from '.$this->get_studpub_table()
-				.' WHERE has_properties != '."''".' AND id NOT IN'
+				.' pup WHERE has_properties != '."''".' AND id NOT IN'
 				.' (SELECT ref_id FROM '.$tbl_grade_links
 				.' WHERE type = '.LINK_STUDENTPUBLICATION
-				." AND course_code = '".$this->get_course_code()."'"
-				.')';
+				." AND course_code = '".Database::escape_string($this->get_course_code())."'"
+				.') AND pub.session_id='.api_get_session_id().'';
 
-		$result = Database::query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql);
 
 		$cats=array();
 		while ($data=Database::fetch_array($result)) {
@@ -124,8 +102,8 @@ class StudentPublicationLink extends AbstractLink
     	$course_info = api_get_course_info($this->course_code);
     	$tbl_grade_links = Database :: get_course_table(TABLE_STUDENT_PUBLICATION,$course_info['dbName']);
 
-		$sql = 'SELECT id,url FROM '.$tbl_grade_links.' WHERE has_properties != '."'' AND filetype='folder'";
-		$result = Database::query($sql, __FILE__, __LINE__);
+		$sql = "SELECT id,url FROM $tbl_grade_links WHERE has_properties != '' AND filetype='folder' AND session_id = ".api_get_session_id()."";
+		$result = Database::query($sql);
 
 		while ($data=Database::fetch_array($result)) {
 			$cats[] = array ($data['id'], $data['url']);
@@ -140,8 +118,8 @@ class StudentPublicationLink extends AbstractLink
     public function has_results() {
     	$course_info = api_get_course_info($this->course_code);
     	$tbl_grade_links = Database :: get_course_table(TABLE_STUDENT_PUBLICATION,$course_info['dbName']);
-		$sql = 'SELECT count(*) AS number FROM '.$tbl_grade_links." WHERE parent_id = '".$this->get_ref_id()."'";
-    	$result = Database::query($sql, __FILE__, __LINE__);
+		$sql = 'SELECT count(*) AS number FROM '.$tbl_grade_links." WHERE parent_id = '".intval($this->get_ref_id())."' AND session_id=".api_get_session_id()."";
+    	$result = Database::query($sql);
 		$number=Database::fetch_row($result);
 		return ($number[0] != 0);
     }
@@ -154,8 +132,8 @@ class StudentPublicationLink extends AbstractLink
 		if (is_null($database_name)===true) {
 			return false;
 		}
-    	$sql = 'SELECT * FROM '.$tbl_stats." WHERE id = '".$this->get_ref_id()."'";
-		$query = Database::query($sql,__FILE__,__LINE__);
+    	$sql = 'SELECT * FROM '.$tbl_stats." WHERE id = '".intval($this->get_ref_id())."' AND session_id=".api_get_session_id()."";
+		$query = Database::query($sql);
 		$assignment = Database::fetch_array($query);
 
     	if(count($assignment)==0) {
@@ -163,16 +141,16 @@ class StudentPublicationLink extends AbstractLink
     	} else {
     		 $v_assigment_id = $assignment['id'];
     	}
-    	$sql = 'SELECT * FROM '.$tbl_stats.' WHERE parent_id ="'.$v_assigment_id.'"';
+    	$sql = 'SELECT * FROM '.$tbl_stats.' WHERE parent_id ="'.$v_assigment_id.'" AND session_id='.api_get_session_id().'';
     	if (isset($stud_id)){
     		$sql1='SELECT firstname, lastname FROM '.Database::get_main_table(TABLE_MAIN_USER)." WHERE user_id = '".((int)$stud_id)."'";
-     		$query = Database::query($sql1,__FILE__,__LINE__);
+     		$query = Database::query($sql1);
 			$student = Database::fetch_array($query);
     		$sql .= ' AND author = '."'".Database::escape_string(api_get_person_name($student['firstname'], $student['lastname'], null, null, $course_info['course_language']))."'";
     	}
     	// order by id, that way the student's first attempt is accessed first
 		$sql .= ' ORDER BY id';
-    	$scores = Database::query($sql, __FILE__, __LINE__);
+    	$scores = Database::query($sql);
 
 		// for 1 student
     	if (isset($stud_id)) {
@@ -269,8 +247,8 @@ class StudentPublicationLink extends AbstractLink
 		if ($tbl_name=='') {
 			return false;
 		} elseif (!isset($this->exercise_data)) {
-    		$sql = 'SELECT * FROM '.$this->get_studpub_table()." WHERE id = '".$this->get_ref_id()."'";
-			$query = Database::query($sql,__FILE__,__LINE__);
+    		$sql = 'SELECT * FROM '.$this->get_studpub_table()." WHERE id = '".intval($this->get_ref_id())."' AND session_id=".api_get_session_id()."";
+			$query = Database::query($sql);
 			$this->exercise_data = Database::fetch_array($query);
     	}
     	return $this->exercise_data;
@@ -286,8 +264,8 @@ class StudentPublicationLink extends AbstractLink
 
     public function is_valid_link() {
     	$sql = 'SELECT count(id) from '.$this->get_studpub_table()
-				.' WHERE id = '.$this->get_ref_id();
-		$result = Database::query($sql, __FILE__, __LINE__);
+				.' WHERE id = '.intval($this->get_ref_id()).' AND session_id='.api_get_session_id().'';
+		$result = Database::query($sql);
 		$number=Database::fetch_row($result);
 		return ($number[0] != 0);
     }

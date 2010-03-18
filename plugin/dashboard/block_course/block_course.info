@@ -1,0 +1,6 @@
+name = "Course Block"
+controller = "BlockCourse"
+description = "Display information about courses inside platform"
+package = Dashboard
+version = 1.0 
+author = Christian Fasanando

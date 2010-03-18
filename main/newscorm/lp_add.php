@@ -65,6 +65,15 @@ $currentstyle = api_get_setting('stylesheets');
 //$htmlHeadXtra[] = '<link rel="stylesheet" type="text/css" href="'.api_get_path(WEB_CODE_PATH).'css/'.$currentstyle.'/learnpath.css"/>';
 //$htmlHeadXtra[] = '<link rel="stylesheet" type="text/css" href="learnpath.css" />'; //will be a merged with original learnpath.css
 $htmlHeadXtra[] = '<link rel="stylesheet" type="text/css" href="dtree.css" />'; //will be moved
+$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js" type="text/javascript" language="javascript"></script>'; //jQuery
+$htmlHeadXtra[] = '<script type="text/javascript">
+function setFocus(){
+$("#learnpath_title").focus();
+}
+$(document).ready(function () {
+  setFocus();
+});
+</script>';
 /*
 -----------------------------------------------------------
 	Constants and variables
@@ -114,7 +123,7 @@ if (isset($_SESSION['gradebook'])){
 if (!empty($gradebook) && $gradebook=='view') {
 	$interbreadcrumb[]= array (
 			'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
-			'name' => get_lang('Gradebook')
+			'name' => get_lang('ToolGradebook')
 		);
 }
 
@@ -145,7 +154,7 @@ echo '<div class="label">';
 echo '<label for="idTitle"><span class="form_required">*</span> '.get_lang('LPName').'</label>';
 echo '</div>';
 echo '<div class="formw">';
-echo '<input id="idTitle" name="learnpath_name" type="text" size="50" />';
+echo '<input id="learnpath_title" name="learnpath_name" type="text" size="50" />';
 echo '</div>';
 echo '</div>';
 

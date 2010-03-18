@@ -1,19 +1,20 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$langCourseProgram  = "KurzusleÌr·s";
-$langThisCourseDescriptionIsEmpty  = "Ehhez a kurzushoz jelenleg nem tartozik leÌr·s.";
-$langEditCourseProgram  = "KurzusleÌr·s lÈtrehoz·sa Ès szerkesztÈse";
-$QuestionPlan  = "KÈrdÈs a kurzus lÈtrehozÛj·nak";
-$langInfo2Say  = "Inform·ciÛ a felhaszn·lÛknak";
-$langOuAutreTitre  = "CÌm";
-$langNewBloc  = "EgyÈb";
-$langAddCat  = "kategÛria hozz·ad·sa";
-$langAdd  = "Hozz·ad";
-$langValid  = "…rvÈnyes";
-$langBackAndForget  = "Vissza Ès felejt";
-$CourseDescriptionUpdated = "A kurzus leÌr·sa frissÌtve.";
-$CourseDescriptionDeleted = "A kurzus leÌr·sa tˆrˆlve.";
-$CourseDescriptionIntro = "KurzusleÌr·s lÈtrehoz·s·hoz kattintson a cÌmsorra Ès tˆltse ki a sz¸ksÈges mez&#337;t.<br><br> Azt·n kattintson az OK gombra, Ès tˆltsˆn ki egy m·sik cÌmsort.";
-$langSaveDescription = "LeÌr·s mentÈse";
+$langCourseProgram = "Kurzusle√≠r√°s";
+$langThisCourseDescriptionIsEmpty = "Ehhez a kurzushoz jelenleg nem tartozik le√≠r√°s.";
+$langEditCourseProgram = "Kurzusle√≠r√°s l√©trehoz√°sa √©s szerkeszt√©se";
+$QuestionPlan = "K√©rd√©s a kurzus l√©trehoz√≥j√°nak";
+$langInfo2Say = "Inform√°ci√≥ a felhaszn√°l√≥knak";
+$langOuAutreTitre = "C√≠m";
+$langNewBloc = "Egy√©b";
+$langAddCat = "kateg√≥ria hozz√°ad√°sa";
+$langAdd = "Hozz√°ad";
+$langValid = "√ârv√©nyes";
+$langBackAndForget = "Vissza √©s felejt";
+$CourseDescriptionUpdated = "A kurzus le√≠r√°sa friss√≠tve.";
+$CourseDescriptionDeleted = "A kurzus le√≠r√°sa t√∂r√∂lve.";
+$CourseDescriptionIntro = "Kurzusle√≠r√°s l√©trehoz√°s√°hoz kattintson a c√≠msorra √©s t√∂ltse ki a sz√ºks√©ges mez≈ët.<br><br> Azt√°n kattintson az OK gombra, √©s t√∂lts√∂n ki egy m√°sik c√≠msort.";
+$langSaveDescription = "Le√≠r√°s ment√©se";
 ?>

@@ -1,50 +1,51 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$AgendaAdd = "Añadir un nuevo evento a la agenda";
+$AgendaAdd = "AÃ±adir un nuevo evento a la agenda";
 $ShowAllEvents = "Mostrar todos los eventos";
 $ShowCurrent = "Mostrar todos los eventos del mes en curso";
-$AddCalendarItem = "Añadir un nuevo evento a la agenda";
+$AddCalendarItem = "AÃ±adir un nuevo evento a la agenda";
 $Day = "Dia";
 $Month = "Mes";
-$Year = "Año";
+$Year = "AÃ±o";
 $Hour = "Hora";
 $Minutes = "Minutos";
 $Detail = "Detalles";
 $EditSuccess = "El evento de la agenda ha sido editado";
-$AddSuccess = "Evento de la agenda añadido";
+$AddSuccess = "Evento de la agenda aÃ±adido";
 $AgendaDeleteSuccess = "El evento de la agenda ha sido borrado";
 $NoAgendaItems = "No hay eventos en la agenda";
 $lang_september = "Septiembre";
 $langClassName = "Nombre de la clase";
 $lang_agenda = "Agenda";
 $ModifyCalendarItem = "Modificar un evento de la Agenda";
-$ItemTitle = "Título del evento";
-$langDay = "Día";
+$ItemTitle = "TÃ­tulo del evento";
+$langDay = "DÃ­a";
 $month_default = "Mes por defecto";
-$langYear = "Año";
-$year_default = "Año por defecto";
+$langYear = "AÃ±o";
+$year_default = "AÃ±o por defecto";
 $langHour = "Hora";
 $hour_default = "hora por defecto";
 $langMinute = "minuto";
-$langLasting = "duración";
+$langLasting = "duraciÃ³n";
 $langOldToNew = "antiguo a reciente";
 $langNewToOld = "reciente a antiguo";
 $langNow = "Ahora";
-$langAddEvent = "Añadir un evento";
+$langAddEvent = "AÃ±adir un evento";
 $langDetail = "detalles";
 $MonthView = "Vista por mes";
 $WeekView = "Vista por semana";
-$DayView = "Vista por día";
-$AddPersonalItem = "Añadir evento personal";
+$DayView = "Vista por dÃ­a";
+$AddPersonalItem = "AÃ±adir evento personal";
 $Week = "Semana";
 $Date = "Fecha";
 $Time = "Hora";
-$AddPersonalCalendarItem = "Añadir un evento personal a la agenda ";
-$ModifyPersonalCalendarItem = "Modificar un evento personal en la agenda ";
-$PeronalAgendaItemAdded = "El evento personal ha sido añadido a su agenda ";
+$AddPersonalCalendarItem = "AÃ±adir un evento personal a la agenda";
+$ModifyPersonalCalendarItem = "Modificar un evento personal en la agenda";
+$PeronalAgendaItemAdded = "El evento personal ha sido aÃ±adido a su agenda";
 $PeronalAgendaItemEdited = "El evento personal de su agenda ha sido editado";
-$PeronalAgendaItemDeleted = "El evento personal ha sido borrado de su agenda ";
+$PeronalAgendaItemDeleted = "El evento personal ha sido borrado de su agenda";
 $ViewPersonalItem = "Ver eventos personales";
 $UserGroupFilter = "Filtrar por grupos/usuarios";
 $ShowAll = "Mostrar todo";

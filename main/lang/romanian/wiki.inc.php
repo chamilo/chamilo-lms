@@ -1,14 +1,15 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $WikiSearchResults = "Rezultatele cautarii Wiki";
-$Wiki = "Wiki";
+$Wiki = "Grupul wiki";
 $StartPage = "pagina de inceput";
 $EditThisPage = "corecteaza aceasta pagina";
 $ShowPageHistory = "Istorie";
 $RecentChanges = "schimbari recente";
 $AllPages = "toate paginile";
-$AddNew = "adauga o pagina noua ";
+$AddNew = "adauga o pagina noua";
 $ChangesStored = "schimbarile au fost facute";
 $NewWikiSaved = "noua pagina de start wiki e salvata. Poti sa o vezi accesand";
 $DefaultContent = "Pentru a incepe, fa modificari in aceasta pagina.";
@@ -51,14 +52,14 @@ $PageLockedExtra = "Pagina e protejata. Doar administratorii cursului pot modifi
 $PageUnlockedExtra = "Aceasta pagina nu e protejata. Toti cursistii si membrii grupului pot modifica aceasta pagina.";
 $ShowAddOption = "Afiseaza functionalitate pentru a adauga.";
 $HideAddOption = "Ascunde functionalitate pentru a adauga.";
-$AddOptionProtected = "Functionalitatea de a adauga este protejat&#259;. Doar administratorul cursului poate adauga pagini in acest wiki. Studentii si membri ai grupului nu pot decat sa modifice.";
+$AddOptionProtected = "Functionalitatea de a adauga este protejată. Doar administratorul cursului poate adauga pagini in acest wiki. Studentii si membri ai grupului nu pot decat sa modifice.";
 $AddOptionUnprotected = "Functionalitatea de a aduga este dezactivata pentru toti utilizatorii cursului si membrii grupului.";
 $NotifyChanges = "Tine-ma la curent cu modificarile.";
 $NotNotifyChanges = "Nu imi aduce la cunostinta modificarile.";
-$NotifyByEmail = "Adu-mi la cunostinta daca aceasta pagina e modificata.";
+$NotifyByEmail = "Atentioneaza-ma prin e-mail cand cineva raspunde";
 $CancelNotifyByEmail = "Nu imi adu la cunostinta daca aceasta pagina e modificata.";
 $MostRecentVersionBy = "Ultima versiune a fost modificata de";
-$Rating = "Scorul";
+$Rating = "Rating";
 $RatingMedia = "Scorul mediu al acestei pagini este";
 $NumComments = "Comentariu la aceasta pagina.";
 $NumCommentsScore = "Numarul de comentarii pe aceasta pagina.";
@@ -67,11 +68,11 @@ $LinksPages = "Referente.";
 $ShowLinksPages = "Arata paginile care au linkuri catre aceasta pagina.";
 $MoreWikiOptions = "Mai multe optiuni wiki.";
 $DefaultTitle = "Start.";
-$DiscussNotAvailable = "Optiunea Discutie nu e disponibila.";
-$Print = "Imprimare.";
-$Version = "Versiune.";
+$DiscussNotAvailable = "Discutia nu este valabila";
+$Print = "Tipareste";
+$Version = "Versiune";
 $EditPage = "Editare.";
-$AddedBy = "ad&#259;ugat de";
+$AddedBy = "adăugat de";
 $EditedBy = "Modificat de";
 $DeletedBy = "Sters de";
 $WikiStandardMode = "Mod Wiki";
@@ -88,7 +89,6 @@ $MustSelectPage = "Trebuie sa alegeti pagina prima data";
 $Export2ZIP = "Exporta intr-un document ZIP";
 $HidePage = "Ascunde pagina";
 $ShowPage = "Arata pagina.";
-$DiscussNotAvailable = "Discutia nu este valabila";
 $UnlockDiscuss = "Deblocheaza discutia";
 $LockDiscuss = "Blocheaza discutia";
 $HideDiscuss = "Ascunde discutia";
@@ -113,9 +113,8 @@ $Changes = "Schimbari";
 $MostActiveUsers = "Cei mai activi utilizatori";
 $Contributions = "Contributii";
 $UserContributions = "Contributii ale utilizatorilor";
-$MostActiveUsers = "Cei mai activi utilizatori";
 $WarningDeleteMainPage = "Nu se recomanda stergerea pagini initiale din Wiki deoarece este accesul principal la structura ierarhica a sa.<br/> Daca totusi este necesar sa o faceti, nu uitati sa recreati pagina initiala. Pana atunci, utilizatorii nu vor putea adauga noi pagini.";
-$ConvertToLastVersion = "Pentru versiunea cea mai recenta, puteti sa face&#355;i clic pe";
+$ConvertToLastVersion = "Pentru versiunea cea mai recenta, puteti sa faceţi clic pe";
 $Restore = "Restaurare";
 $CurrentVersion = "Versiunea actuala";
 $LastVersion = "Ultima versiune";

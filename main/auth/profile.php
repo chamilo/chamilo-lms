@@ -21,7 +21,12 @@ $cidReset = true;
 require_once '../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 
-$this_section = SECTION_MYPROFILE;
+if (api_get_setting('allow_social_tool') == 'true') {
+	$this_section = SECTION_SOCIAL;
+} else {
+	$this_section = SECTION_MYPROFILE;
+}
+
 $_SESSION['this_section'] = $this_section;
 
 if (!(isset($_user['user_id']) && $_user['user_id']) || api_is_anonymous($_user['user_id'], true)) {
@@ -29,8 +34,11 @@ if (!(isset($_user['user_id']) && $_user['user_id']) || api_is_anonymous($_user[
 }
 
 $htmlHeadXtra[] = '<script src="../inc/lib/javascript/jquery.js" type="text/javascript" language="javascript"></script>'; //jQuery
-$htmlHeadXtra[] = '<script src="../inc/lib/javascript/tag/jquery.fcbkcomplete.js" type="text/javascript" language="javascript"></script>'; //jQuery
+$htmlHeadXtra[] = '<script src="../inc/lib/javascript/tag/jquery.fcbkcomplete.js" type="text/javascript" language="javascript"></script>';
 $htmlHeadXtra[] = '<link href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/style.css" rel="stylesheet" type="text/css" />';
+
+$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/thickbox.js" type="text/javascript" language="javascript"></script>';
+$htmlHeadXtra[] = '<link rel="stylesheet" href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/thickbox.css" type="text/css" media="projection, screen">';
 
 
 $htmlHeadXtra[] = '<script type="text/javascript">
@@ -46,7 +54,19 @@ function show_image(image,width,height) {
 	window_x = window.open(image,\'windowX\',\'width=\'+ width + \', height=\'+ height + \'\');
 
 }
-
+function generate_open_id_form() {
+	$.ajax({
+		contentType: "application/x-www-form-urlencoded",
+		beforeSend: function(objeto) {
+		/*$("#div_api_key").html("Loading...");*/ },
+		type: "POST",
+		url: "'.api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php?a=generate_api_key",
+		data: "num_key_id="+"",
+		success: function(datos) {
+		 $("#div_api_key").html(datos);
+		}
+	});
+}
 </script>';
 
 $interbreadcrumb[] = array('url' => '../auth/profile.php', 'name' => get_lang('ModifyProfile'));
@@ -276,6 +296,7 @@ if (is_profile_editable() && api_get_setting('profile', 'password') == 'true') {
 
 // EXTRA FIELDS
 $extra = UserManager::get_extra_fields(0, 50, 5, 'ASC');
+
 $extra_data = UserManager::get_extra_user_data(api_get_user_id(), true);
 foreach ($extra as $id => $field_details) {
 	if ($field_details[6] == 0) {
@@ -371,39 +392,47 @@ foreach ($extra as $id => $field_details) {
 			$form->addElement('static', $field_details[1], '<br /><strong>'.$field_details[3].'</strong>');
 			break;
 		case USER_FIELD_TYPE_TAG:
-			//the magic should be here		
+			//the magic should be here
 			$user_tags = UserManager::get_user_tags(api_get_user_id(),$field_details[0]);
-			
+
 			$pre_html = '<div class="row">
 						<div class="label">'.$field_details[3].'</div>
 						<div class="formw">';
 			$post = '</div></div>';
-			
+
 			$tag_list = '';
 			if (is_array($user_tags) && count($user_tags)> 0) {
 				foreach ($user_tags as $tag) {
 					$tag_list .= '<option value="'.$tag['tag'].'" class="selected">'.$tag['tag'].'</option>';
 				}
-			}			
+			}
+
 			$multi_select = '<select id="extra_'.$field_details[1].'" name="extra_'.$field_details[1].'">
            					'.$tag_list.'
-      						 </select>';			
+      						 </select>';
+
 			$form->addElement('html',$pre_html.$multi_select.$post );
-			$url = api_get_path(WEB_CODE_PATH).'user';
+			$url = api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php';
+			$complete_text = get_lang('StartToType');
 			//if cache is set to true the jquery will be called 1 time
 			$jquery_ready_content.= <<<EOF
       		$("#extra_$field_details[1]").fcbkcomplete({
-	            json_url: "$url/$field_details[1].php?field_id=$field_details[0]",
+	            json_url: "$url?a=search_tags&field_id=$field_details[0]",
 	            cache: false,
 	            filter_case: true,
 	            filter_hide: true,
+	            complete_text:"$complete_text",
 				firstselected: true,
 	            //onremove: "testme",
 				//onselect: "testme",
 	            filter_selected: true,
-	            newel: true        
-          	});	
+	            newel: true
+          	});
 EOF;
+			break;
+		case USER_FIELD_TYPE_TIMEZONE:
+			$form->addElement('select', 'extra_'.$field_details[1], $field_details[3], api_get_timezones(), '');
+			if ($field_details[7] == 0)	$form->freeze('extra_'.$field_details[1]);
 			break;
 	}
 }
@@ -420,7 +449,7 @@ if (api_get_setting('profile', 'apikeys') == 'true') {
 	$form->addElement('html', '<div id="div_api_key">');
 	$form->addElement('text', 'api_key_generate', get_lang('MyApiKey'), array('size' => 40, 'id' => 'id_api_key_generate'));
 	$form->addElement('html', '</div>');
-	$form->addElement('button', 'generate_api_key', get_lang('GenerateApiKey'), array('id' => 'id_generate_api_key', 'onclick' => 'javascript: generate_open_id_form();')); //generate_open_id_form()
+	$form->addElement('button', 'generate_api_key', get_lang('GenerateApiKey'), array('id' => 'id_generate_api_key', 'onclick' => 'generate_open_id_form()')); //generate_open_id_form()
 }
 //	SUBMIT
 if (is_profile_editable()) {
@@ -471,10 +500,7 @@ function upload_user_production($user_id) {
 	$production_repository = $image_path['dir'].$user_id.'/';
 
 	if (!file_exists($production_repository)) {
-		$perm = api_get_setting('permissions_for_new_directories');
-		$perm = octdec(!empty($perm) ? $perm : '0770');
-		@mkdir($production_repository, $perm, true);
-
+		@mkdir($production_repository, api_get_permissions_for_new_directories(), true);
 	}
 
 	$filename = replace_dangerous_char($_FILES['production']['name']);
@@ -501,7 +527,7 @@ function check_user_password($password){
 	$table_user = Database :: get_main_table(TABLE_MAIN_USER);
 	$password = api_get_encrypted_password($password);
 	$sql_password = "SELECT * FROM $table_user WHERE user_id='".$user_id."' AND password='".$password."'";
-	$result = Database::query($sql_password, __FILE__, __LINE__);
+	$result = Database::query($sql_password);
 	return Database::num_rows($result) != 0;
 }
 /**
@@ -516,7 +542,7 @@ function check_user_email($email){
 	if ($user_id != strval(intval($user_id)) || empty($email)) { return false; }
 	$table_user = Database :: get_main_table(TABLE_MAIN_USER);
 	$sql_password = "SELECT * FROM $table_user WHERE user_id='".$user_id."' AND email='".$email."'";
-	$result = Database::query($sql_password, __FILE__, __LINE__);
+	$result = Database::query($sql_password);
 	return Database::num_rows($result) != 0;
 }
 /*
@@ -534,25 +560,19 @@ $msg_is_not_password = false;
 if (!empty($_SESSION['change_email'])) {
 	$msg_fail_changue_email= ($_SESSION['change_email'] == 'success');
 	unset($_SESSION['change_email']);
-}
-
-elseif (!empty($_SESSION['is_not_password'])) {
+} elseif (!empty($_SESSION['is_not_password'])) {
 	$msg_is_not_password = ($_SESSION['is_not_password'] == 'success');
 	unset($_SESSION['is_not_password']);
-} 
-elseif (!empty($_SESSION['profile_update'])) {
+} elseif (!empty($_SESSION['profile_update'])) {
 	$update_success = ($_SESSION['profile_update'] == 'success');
 	unset($_SESSION['profile_update']);
-} 
-elseif (!empty($_SESSION['image_uploaded'])) {
+} elseif (!empty($_SESSION['image_uploaded'])) {
 	$upload_picture_success = ($_SESSION['image_uploaded'] == 'success');
 	unset($_SESSION['image_uploaded']);
-} 
-elseif (!empty($_SESSION['production_uploaded'])) {
+} elseif (!empty($_SESSION['production_uploaded'])) {
 	$upload_production_success = ($_SESSION['production_uploaded'] == 'success');
 	unset($_SESSION['production_uploaded']);
-} 
-elseif (isset($_POST['remove_production'])) {
+} elseif (isset($_POST['remove_production'])) {
 	foreach (array_keys($_POST['remove_production']) as $production) {
 		UserManager::remove_user_production($_user['user_id'], urldecode($production));
 	}
@@ -561,10 +581,12 @@ elseif (isset($_POST['remove_production'])) {
 	}
 	$form->removeElement('productions_list');
 	$file_deleted = true;
-} elseif ($form->validate()) {
+} 
+
+if ($form->validate()) {
 
 	$wrong_current_password = false;
-//	$user_data = $form->exportValues();	
+//	$user_data = $form->exportValues();
 	$user_data = $form->getSubmitValues();
 	// set password if a new one was provided
 	if (!empty($user_data['password0'])) {
@@ -581,15 +603,15 @@ elseif (isset($_POST['remove_production'])) {
 		$wrong_current_password = true;
 		$_SESSION['is_not_password'] = 'success';
 	}
-	
+
 	if (!check_user_email($user_data['email']) && !empty($user_data['password0']) && ($wrong_current_password==false)) {
 		$changeemail = $user_data['email'];
-	} 
-	
+	}
+
 	if (!check_user_email($user_data['email']) && empty($user_data['password0'])){
 		$_SESSION['change_email'] = 'success';
 	}
-	
+
 	// upload picture if a new one is provided
 	if ($_FILES['picture']['size']) {
 		if ($new_picture = UserManager::update_user_picture($_user['user_id'], $_FILES['picture']['name'], $_FILES['picture']['tmp_name'])) {
@@ -629,23 +651,23 @@ elseif (isset($_POST['remove_production'])) {
 	// build SQL query
 	$sql = "UPDATE $table_user SET";
 	unset($user_data['api_key_generate']);
-	foreach ($user_data as $key => $value) {		
-		if (substr($key, 0, 6) == 'extra_') { //an extra field			
-			$new_key = substr($key, 6);			
+	foreach ($user_data as $key => $value) {
+		if (substr($key, 0, 6) == 'extra_') { //an extra field
+			$new_key = substr($key, 6);
 			// format array date to 'Y-m-d' or date time  to 'Y-m-d H:i:s'
-			if (is_array($value) && isset($value['Y']) && isset($value['F']) && isset($value['d'])) {						
+			if (is_array($value) && isset($value['Y']) && isset($value['F']) && isset($value['d'])) {
 				if (isset($value['H']) && isset($value['i'])) {
 					// extra field date time
 					$time = mktime($value['H'],$value['i'],0,$value['F'],$value['d'],$value['Y']);
-					$extras[$new_key] = date('Y-m-d H:i:s',$time);																		
+					$extras[$new_key] = date('Y-m-d H:i:s',$time);
 				} else {
 					// extra field date
 					$time = mktime(0,0,0,$value['F'],$value['d'],$value['Y']);
 					$extras[$new_key] = date('Y-m-d',$time);
-				}									
+				}
 			} else {
 				$extras[$new_key] = $value;
-			}												
+			}
 		} else {
 			$sql .= " $key = '".Database::escape_string($value)."',";
 		}
@@ -655,7 +677,7 @@ elseif (isset($_POST['remove_production'])) {
 	if (isset($changeemail) && !isset($password) ) {
 		$sql .= " email = '".Database::escape_string($changeemail)."' ";
 	} elseif (isset($password) && isset($changeemail)) {
-		$sql .= " email = '".Database::escape_string($changeemail)."', ";		
+		$sql .= " email = '".Database::escape_string($changeemail)."', ";
 		$password = api_get_encrypted_password($password);
 		$sql .= " password = '".Database::escape_string($password)."'";
 	} elseif (isset($password) && !isset($changeemail)) {
@@ -666,22 +688,23 @@ elseif (isset($_POST['remove_production'])) {
 		$sql = rtrim($sql, ',');
 	}
 	$sql .= " WHERE user_id  = '".$_user['user_id']."'";
-	//var_dump($sql); exit();
-	Database::query($sql, __FILE__, __LINE__);
-	
+	Database::query($sql);
+
 	// User tag process
-	//1. Deleting all user tags			
+	//1. Deleting all user tags
 	$list_extra_field_type_tag = UserManager::get_all_extra_field_by_type(USER_FIELD_TYPE_TAG);
 	if (is_array($list_extra_field_type_tag) && count($list_extra_field_type_tag)>0) {
 		foreach ($list_extra_field_type_tag as $id) {
 			UserManager::delete_user_tags(api_get_user_id(), $id);
 		}
 	}
-		
-	//2. Update the extra fields and user tags if available	 	
-	foreach ($extras as $key => $value) {		
-		//3. Tags are process in the UserManager::update_extra_field_value by the UserManager::process_tags function
-		$myres = UserManager::update_extra_field_value($_user['user_id'], $key, $value);
+
+	//2. Update the extra fields and user tags if available
+	if (is_array($extras) && count($extras)> 0) {
+		foreach ($extras as $key => $value) {
+			//3. Tags are process in the UserManager::update_extra_field_value by the UserManager::process_tags function
+			$myres = UserManager::update_extra_field_value($_user['user_id'], $key, $value);
+		}
 	}
 
 	// re-init the system to take new settings into account
@@ -697,11 +720,11 @@ if (isset($_GET['show'])) {
 
 	if ((api_get_setting('allow_social_tool') == 'true' && api_get_setting('allow_message_tool') == 'true') || (api_get_setting('allow_social_tool') == 'true')) {
 
-		$interbreadcrumb[] = array ('url' => 'javascript: void(0);', 'name' => get_lang('SocialNetwork'));
+		//$interbreadcrumb[] = array ('url' => 'javascript: void(0);', 'name' => get_lang('SocialNetwork'));
 
 	} elseif ((api_get_setting('allow_social_tool') == 'false' && api_get_setting('allow_message_tool') == 'true')) {
 
-		$interbreadcrumb[] = array('url' => 'javascript: void(0);', 'name' => get_lang('MessageTool'));
+		//$interbreadcrumb[] = array('url' => 'javascript: void(0);', 'name' => get_lang('MessageTool'));
 	}
 }
 
@@ -710,35 +733,34 @@ if (isset($_GET['show'])) {
 		MAIN DISPLAY SECTION
 ==============================================================================
 */
-Display :: display_header('');
+// the header
+Display::display_header(get_lang('ModifyProfile'));
 
-if (api_get_setting('extended_profile') == 'true') {
-	echo '<div class="actions">';
-	
-	if (api_get_setting('allow_social_tool') == 'true' && api_get_setting('allow_message_tool') == 'true') {
-		echo '<a href="'.api_get_path(WEB_PATH).'main/social/profile.php">'.Display::return_icon('shared_profile.png', get_lang('ViewSharedProfile')).'&nbsp;'.get_lang('ViewSharedProfile').'</a>';
-	}
-	if (api_get_setting('allow_message_tool') == 'true') {
-		echo '<a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php">'.Display::return_icon('inbox.png').' '.get_lang('Messages').'</a>';
-	}	
-	$show = isset($_GET['show']) ? '&amp;show='.Security::remove_XSS($_GET['show']) : '';
-	
-	//echo '<span style="float:right; padding-top:7px;">';
-				 
-	if (isset($_GET['type']) && $_GET['type'] == 'extended') {
-		echo '<a href="profile.php?type=reduced'.$show.'">'.Display::return_icon('edit.gif', get_lang('EditNormalProfile')).'&nbsp;'.get_lang('EditNormalProfile').'</a>';
-	} else {
-		echo '<a href="profile.php?type=extended'.$show.'">'.Display::return_icon('edit.gif', get_lang('EditExtendProfile')).'&nbsp;'.get_lang('EditExtendProfile').'</a>';
-	}
-	//echo '</span>';
+if (api_get_setting('allow_social_tool') != 'true') {
 
-	echo '</div>';
+	if (api_get_setting('extended_profile') == 'true') {
+		echo '<div class="actions">';
+
+		if (api_get_setting('allow_social_tool') == 'true' && api_get_setting('allow_message_tool') == 'true') {
+			echo '<a href="'.api_get_path(WEB_PATH).'main/social/profile.php">'.Display::return_icon('shared_profile.png', get_lang('ViewSharedProfile')).'&nbsp;'.get_lang('ViewSharedProfile').'</a>';
+		}
+		if (api_get_setting('allow_message_tool') == 'true') {
+			echo '<a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php">'.Display::return_icon('inbox.png').' '.get_lang('Messages').'</a>';
+		}
+		$show = isset($_GET['show']) ? '&amp;show='.Security::remove_XSS($_GET['show']) : '';
+
+		if (isset($_GET['type']) && $_GET['type'] == 'extended') {
+			echo '<a href="profile.php?type=reduced'.$show.'">'.Display::return_icon('edit.gif', get_lang('EditNormalProfile')).'&nbsp;'.get_lang('EditNormalProfile').'</a>';
+		} else {
+			echo '<a href="profile.php?type=extended'.$show.'">'.Display::return_icon('edit.gif', get_lang('EditExtendProfile')).'&nbsp;'.get_lang('EditExtendProfile').'</a>';
+		}
+
+		echo '</div>';
+	}
 }
 
 if (!empty($file_deleted)) {
-
 	Display :: display_confirmation_message(get_lang('FileDeleted'), false);
-
 } elseif (!empty($update_success)) {
 	$message = get_lang('ProfileReg');
 
@@ -748,8 +770,8 @@ if (!empty($file_deleted)) {
 
 	if ($upload_production_success) {
 		$message.='<br />'.get_lang('ProductionUploaded');
-	}	
-	
+	}
+
 	Display :: display_confirmation_message($message, false);
 }
 
@@ -791,45 +813,43 @@ $big_image_width = $big_image_size[0];
 $big_image_height = $big_image_size[1];
 $url_big_image = $big_image.'?rnd='.time();
 
-// Style position:absolute has been removed for Opera-compatibility. 
-//echo '<div id="image-message-container" style="float:right;display:inline;position:absolute;padding:3px;width:250px;" >';
-echo '<div id="image-message-container" style="float:right;display:inline;padding:3px;width:250px;" >';
 
-if ($image == 'unknown.jpg') {
-	echo '<img '.$img_attributes.' />';
+if (api_get_setting('allow_social_tool') == 'true') {
+	echo '<div id="social-content">';
+
+		echo '<div id="social-content-left">';
+		SocialManager::show_social_menu('home', null, $user_id, $show_full_profile);
+		echo '</div>';
+
+		echo '<div id="social-content-right">';
+			echo '<div id="social-content-online">';
+				if (api_get_setting('extended_profile') == 'true') {
+					$show = isset($_GET['show']) ? '&amp;show='.Security::remove_XSS($_GET['show']) : '';
+					if (isset($_GET['type']) && $_GET['type'] == 'extended') {
+						echo '<a href="profile.php?type=reduced'.$show.'"><span class="social-menu-text1">'.Display::return_icon('edit.gif', get_lang('EditNormalProfile')).'&nbsp;'.get_lang('EditNormalProfile').'</span></a>';
+					} else {
+						echo '<a href="profile.php?type=extended'.$show.'"><span class="social-menu-text1">'.Display::return_icon('edit.gif', get_lang('EditExtendProfile')).'&nbsp;'.get_lang('EditExtendProfile').'</span></a>';
+					}
+				}
+			echo '</div>';
+			$form->display();
+		echo '</div>';
+	echo '</div>';
+
+
 } else {
-	echo '<input type="image" '.$img_attributes.' onclick="javascript: return show_image(\''.$url_big_image.'\',\''.$big_image_width.'\',\''.$big_image_height.'\');"/>';
-}
-/* This was moved to user_portal.php
-if (api_get_setting('allow_message_tool') == 'true') {
-	include api_get_path(LIBRARY_PATH).'message.lib.php';
-	$number_of_new_messages = MessageManager::get_new_messages();
-	$number_of_outbox_message = MessageManager::get_number_of_messages_sent();
-	$cant_out_box = ' ('.$number_of_outbox_message.')';
-	$cant_msg = ' ('.$number_of_new_messages.')';
-	$number_of_new_messages_of_friend = SocialManager::get_message_number_invitation_by_user_id(api_get_user_id());
-	//echo '<div class="message-view" style="display:none;">'.get_lang('ViewMessages').'</div>';
-	echo '<div class="message-content">
-			<h2 class="message-title">'.get_lang('Messages').'</h2>
-			<p>
-				<a href="../social/index.php#remote-tab-2" class="message-body">'.get_lang('Inbox').$cant_msg.' </a><br />
-				<a href="../social/index.php#remote-tab-3" class="message-body">'.get_lang('Outbox').$cant_out_box.'</a><br />
-			</p>';
+	// Style position:absolute has been removed for Opera-compatibility.
+	//echo '<div id="image-message-container" style="float:right;display:inline;position:absolute;padding:3px;width:250px;" >';
+	echo '<div id="image-message-container" style="float:right;display:inline;padding:3px;width:230px;" >';
 
-	//if (api_get_setting('allow_social_tool') == 'true') {
-	//	 if ($number_of_new_messages_of_friend > 0) {
-	//		echo '<div class="message-content-internal">';
-	//		echo '<a href="../social/index.php#remote-tab-4" style="color:#000000">'. Display::return_icon('info3.gif', get_lang('NewMessage'), 'align="absmiddle"').'&nbsp;'.get_lang('Invitation ').'('.$number_of_new_messages_of_friend.')'.'</a>';
-	//		echo '</div><br />';
-	//	 }
-	// }
-	echo '<img src="'.api_get_path(WEB_IMG_PATH).'delete.gif" alt="'.get_lang('Close').'" title="'.get_lang('Close').'"  class="message-delete" />';
-	if ($number_of_new_messages_of_friend > 0) {
-		echo '<br />';
+	if ($image == 'unknown.jpg') {
+		echo '<img '.$img_attributes.' />';
+	} else {
+		echo '<input type="image" '.$img_attributes.' onclick="javascript: return show_image(\''.$url_big_image.'\',\''.$big_image_width.'\',\''.$big_image_height.'\');"/>';
 	}
 	echo '</div>';
+	$form->display();
 }
-*/
-echo '</div>';
-$form->display();
+
+
 Display :: display_footer();

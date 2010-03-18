@@ -77,7 +77,7 @@ if($modifyIn)
         $objAnswer=new Answer($questionId);
     }
 
-    if($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER)
+    if($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER || $answerType == MULTIPLE_ANSWER_COMBINATION)
     {
         $correct=unserialize($correct);
         $reponse=unserialize($reponse);
@@ -128,13 +128,11 @@ if($modifyIn)
 if($submitAnswers || $buttonBack)
 {
     if($debug>0){echo '$submitAnswers or $buttonBack was set'."<br />\n";}
-    if($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER)
-    {
+    if($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER || $answerType == MULTIPLE_ANSWER_COMBINATION) {
       if($debug>0){echo '&nbsp;&nbsp;$answerType is UNIQUE_ANSWER or MULTIPLE_ANSWER'."<br />\n";}
         $questionWeighting=$nbrGoodAnswers=0;
 
-        for($i=1;$i <= $nbrAnswers;$i++)
-        {
+        for($i=1;$i <= $nbrAnswers;$i++) {
             $reponse[$i]=trim($reponse[$i]);
             $comment[$i]=trim($comment[$i]);
             $weighting[$i]=intval($weighting[$i]);
@@ -161,14 +159,11 @@ if($submitAnswers || $buttonBack)
                 {
                     $questionWeighting+=$weighting[$i];
                 }
-            }
-            elseif($answerType == MULTIPLE_ANSWER)
-            {
+            } elseif($answerType == MULTIPLE_ANSWER) {
             if($debug>0){echo str_repeat('&nbsp;',4).'$answerType is MULTIPLE_ANSWER'."<br />\n";}
                 // a bad answer can't have a positive weighting
                 $weighting[$i]=0-abs($weighting[$i]);
             }
-
             // checks if field is empty
             if(empty($reponse[$i]) && $reponse[$i] != '0')
             {
@@ -178,9 +173,7 @@ if($submitAnswers || $buttonBack)
                 $objAnswer->cancel();
 
                 break;
-            }
-            else
-            {
+            } else {
                 // adds the answer into the object
                 $objAnswer->createAnswer($reponse[$i],$goodAnswer,$comment[$i],$weighting[$i],$i);
             	//added
@@ -883,19 +876,11 @@ if($modifyAnswers)
     {
         if($debug>0){echo str_repeat('&nbsp;',2).'$usedInSeveralExercises is untrue'."<br />\n";}
 
-        if($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER)
+        if($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER || $answerType == MULTIPLE_ANSWER_COMBINATION)
         {
             if($debug>0){echo str_repeat('&nbsp;',4).'$answerType is UNIQUE_ANSWER or MULTIPLE_ANSWER'."<br />\n";}
 
-
-
-
 ?>
-
-
-
-
-
 <h3>
   <?php echo $questionName; ?>
 </h3>
@@ -1407,7 +1392,7 @@ if($modifyAnswers)
 					</tr>
 					-->
 					<tr style="background-color: #E6E6E6; height: 37px">
-					  <td style="width: 20px; border-bottom: 1px solid #4271b5">&nbsp;<?php /* echo get_lang('Hotspot'); */ ?></td>
+					  <td style="width: 20px; border-bottom: 1px solid #4271b5">&nbsp;<?php /* echo get_lang('HotSpot'); */ ?></td>
 					  <td style="width: 100px; border-bottom: 1px solid #4271b5"><?php echo get_lang('Description'); ?>*</td>
 					  <td style="border-bottom: 1px solid #4271b5"><?php echo get_lang('Comment'); ?></td>
 					  <td style="width: 60px; border-bottom: 1px solid #4271b5"><?php echo get_lang('QuestionWeighting'); ?>*</td>
@@ -1437,7 +1422,7 @@ if($modifyAnswers)
 						<input type="submit" name="moreAnswers" value="<?php echo get_lang('MoreHotspots'); ?>" />
 						<hr noshade="noshade" size="1" style="color: #4271b5" />
 						<input type="submit" name="submitAnswers" value="<?php echo get_lang('Ok'); ?>" />
-						<input type="submit" name="cancelAnswers" value="<?php echo get_lang('Cancel'); ?>" onclick="javascript:if(!confirm('<?php echo addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset)); ?>')) return false;" />
+						<!--<input type="submit" name="cancelAnswers" value="<?php echo get_lang('Cancel'); ?>" onclick="javascript:if(!confirm('<?php echo addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset)); ?>')) return false;" />-->
 					  </td>
 					</tr>
 				</table>

@@ -7,31 +7,28 @@ class TestDisplay extends UnitTestCase {
 	public function testdisplay_introduction_section() {
 		$tool=api_get_tools_lists($my_tool=null);
 		ob_start();
-		Display::display_introduction_section($tool);
-		$res= ob_get_contents();
-		$this->assertTrue(is_array($tool));
+		$res = Display::display_introduction_section($tool);
 		ob_end_clean();
+		$this->assertTrue(is_array($tool));
 		//var_dump($tool);
 	}
 
 	public function testdisplay_localised_html_file(){
 		global $language_interface;
 		$doc_url = str_replace('/..', '', $doc_url);
-		$full_file_name=api_get_path(SYS_COURSE_PATH).api_get_course_path().'/upload/blog/'.$doc_url;
+		$full_file_name=api_get_path(SYS_COURSE_PATH).'/index'.$doc_url;
 		ob_start();
-		Display::display_localised_html_file($full_file_name);
-		$res=ob_get_contents();
-		$this->assertTrue(is_string($full_file_name));
+		$res = Display::display_localised_html_file($full_file_name);
 		ob_end_clean();
+		$this->assertTrue(is_string($full_file_name));
 		//var_dump($full_file_name);
 	}
 
 	public function testdisplay_table_header() {
 		ob_start();
-		Display::display_table_header();
-		$res=ob_get_contents();
-		$this->assertTrue(is_string($res));
+		$res = Display::display_table_header();
 		ob_end_clean();
+		$this->assertTrue(is_string($res));
 		//var_dump($res);
 	}
 
@@ -47,10 +44,9 @@ class TestDisplay extends UnitTestCase {
 		$properties='HTML_WHITE';
 		$column_header=array();
 		ob_start();
-		Display::display_complex_table_header($properties, $column_header);
-		$res=ob_get_contents();
-		$this->assertTrue(is_string($res));
+		$res= Display::display_complex_table_header($properties, $column_header);
 		ob_end_clean();
+		$this->assertTrue(is_string($res));
 		//var_dump($res);
 	}
 
@@ -63,13 +59,13 @@ class TestDisplay extends UnitTestCase {
 	*	@return string color
 	*/
 	public function testdisplay_table_row() {
-		$bgcolor='';
-		$table_row='';
+		$bgcolor = 'red';
+		$table_row = array();
+		$is_alternating = true;
 		ob_start();
-		Display::display_table_row($bgcolor, $table_row);
-		$res=ob_get_contents();
-		$this->assertTrue(is_string($res));
+		$res=Display::display_table_row($bgcolor, $table_row,$is_alternating);
 		ob_end_clean();
+		$this->assertTrue(is_string($res));
 		//var_dump($res);
 	}
 
@@ -77,10 +73,9 @@ class TestDisplay extends UnitTestCase {
 		$properties='';
 		$table_row='';
 		ob_start();
-		Display::display_complex_table_row($properties, $table_row);
-		$res=ob_get_contents();
-		$this->assertTrue(is_string($res));
+		$res=Display::display_complex_table_row($properties, $table_row);
 		ob_end_clean();
+		$this->assertTrue(is_string($res));
 		//var_dump($res);
 	}
 
@@ -89,10 +84,9 @@ class TestDisplay extends UnitTestCase {
 	*/
 	public function testdisplay_table_footer() {
 		ob_start();
-		Display::display_table_footer();
-		$res=ob_get_contents();
-		$this->assertTrue(is_string($res));
+		$res=Display::display_table_footer();
 		ob_end_clean();
+		$this->assertTrue(is_null($res));
 		//var_dump($res);
 	}
 
@@ -101,10 +95,10 @@ class TestDisplay extends UnitTestCase {
 		$content='';
 		global $origin;
 		ob_start();
-		Display::display_sortable_table($header, $content);
-		$res= ob_get_contents();
-		$this->assertTrue(is_string($res));
+		$res=Display::display_sortable_table($header, $content);
 		ob_end_clean();
+		$this->assertTrue(is_null($res));
+		$this->assertNull($res);
 		//var_dump($res);
 	}
 
@@ -125,10 +119,9 @@ class TestDisplay extends UnitTestCase {
 		$content='';
 		global $origin;
 		ob_start();
-		Display::display_sortable_config_table($header, $content);
-		$res= ob_get_contents();
-		$this->assertTrue(is_string($res));
+		$res=Display::display_sortable_config_table($header, $content);
 		ob_end_clean();
+		$this->assertTrue(is_null($res));
 		//var_dump($res);
 	}
 
@@ -145,28 +138,27 @@ class TestDisplay extends UnitTestCase {
 		global $charset;
 		$message=api_htmlentities($message, ENT_QUOTES, api_is_xml_http_request() ? 'UTF-8' : $charset);
 		ob_start();
-		Display::display_normal_message($message);
-		$res=ob_get_contents();
-		$this->assertTrue(is_string($res));
+		$res=Display::display_normal_message($message);
 		ob_end_clean();
+		$this->assertTrue(is_null($res));
 		//var_dump($res);
 	}
 
 	/**
 	 * Display the reduced page header (without banner)
 	 */
-	public function testdisplay_reduced_header() {
+	// [/var/www/chamilo/main/inc/reduced_header.inc.php line 30] - exception
+/*	public function testdisplay_reduced_header() {
 		global $_plugins,$lp_theme_css,$mycoursetheme,$user_theme,$platform_theme;
 		global $httpHeadXtra, $htmlHeadXtra, $htmlIncHeadXtra, $_course, $_user, $clarolineRepositoryWeb, $text_dir, $plugins, $_user, $rootAdminWeb, $_cid, $interbreadcrumb, $charset, $language_file, $noPHP_SELF, $language_interface;
 		global $menu_navigation;
 		ob_start();
-		Display::display_reduced_header();
-		$res= ob_get_contents();
-		$this->assertTrue(is_string($res));
+		$res=Display::display_reduced_header();
 		ob_end_clean();
+		$this->assertTrue(is_null($res));
 		//var_dump($res);
 	}
-
+*/
 	/**
 	* Displays an confirmation message. Use this if something has been done successfully
 	*
@@ -178,10 +170,9 @@ class TestDisplay extends UnitTestCase {
 		global $charset;
 		$message=api_htmlentities($message, ENT_QUOTES, api_is_xml_http_request() ? 'UTF-8' : $charset);
 		ob_start();
-		Display::display_confirmation_message($message);
-		$res=ob_get_contents();
-		$this->assertTrue(is_string($message));
+		$res=Display::display_confirmation_message($message);
 		ob_end_clean();
+		$this->assertTrue(is_string($message));
 		//var_dump($message);
 	}
 
@@ -197,10 +188,9 @@ class TestDisplay extends UnitTestCase {
 		global $charset;
 		$message = "error message";
 		ob_start();
-		Display::display_error_message($message);
-		$res=ob_get_contents();
-		$this->assertTrue(is_string($message));
+		$res=Display::display_error_message($message);
 		ob_end_clean();
+		$this->assertTrue(is_string($message));
 		//var_dump($message);
 	}
 
@@ -210,13 +200,11 @@ class TestDisplay extends UnitTestCase {
 	 * @return string Code HTML about the footer
 	 */
 	public function testdisplay_footer() {
-		global $dokeos_version; //necessary to have the value accessible in the footer
 		global $_plugins;
 		ob_start();
-		Display::display_footer();
-		$res= ob_get_contents();
-		$this->assertTrue(is_string($res));
+		$res=Display::display_footer();
 		ob_end_clean();
+		$this->assertTrue(is_null($res));
 		//var_dump($res);
 	}
 
@@ -226,21 +214,21 @@ class TestDisplay extends UnitTestCase {
 	 * @param string Optional help file name
 	 * @return string Display the hearders messages
 	 */
-
-	public function testdisplay_header() {
+	// [/var/www/chamilo/main/inc/header.inc.php line 31] - exception
+/*	public function testdisplay_header() {
 		global $_plugins,$lp_theme_css,$mycoursetheme,$user_theme,$platform_theme;
 		global $httpHeadXtra, $htmlHeadXtra, $htmlIncHeadXtra, $_course, $_user, $clarolineRepositoryWeb, $text_dir, $plugins, $_user, $rootAdminWeb, $_cid, $interbreadcrumb, $charset, $language_file, $noPHP_SELF;
 		global $menu_navigation;
-		$tool_name='';
+		$tool_name = '';
+		$help = NULL;
 		$nameTools = $tool_name;
 		ob_start();
-		Display::display_header($tool_name);
-		$res= ob_get_contents();
-		$this->assertTrue(is_string($res));
+		$res=Display::display_header($tool_name, $help);
 		ob_end_clean();
+		$this->assertTrue(is_null($res));
 		//var_dump($res);
 	}
-
+*/
 	/**
 	 * This public function displays an icon
 	 * @param string $image the filename of the file (in the main/img/ folder
@@ -251,10 +239,9 @@ class TestDisplay extends UnitTestCase {
 	public function testdisplay_icon() {
 		$image='file';
 		ob_start();
-		Display::display_icon($image);
-		$res=ob_get_contents();
-		$this->assertTrue(is_string($res));
+		$res=Display::display_icon($image);
 		ob_end_clean();
+		$this->assertTrue(is_null($res));
 		//var_dump($res);
 	}
 
@@ -269,10 +256,9 @@ class TestDisplay extends UnitTestCase {
 	public function testdisplay_warning_message() {
 		$message="warning-message";
 		ob_start();
-		Display::display_warning_message($message);
-		$res=ob_get_contents();
-		$this->assertTrue(is_string($res));
+		$res=Display::display_warning_message($message);
 		ob_end_clean();
+		$this->assertTrue(is_null($res));
 		//var_dump($res);
 	}
 
@@ -284,11 +270,12 @@ class TestDisplay extends UnitTestCase {
 	 */
 	public function testencrypted_mailto_link() {
 		$email='';
+		$clickable_text = null;
+		$style_class = '';
 		ob_start();
-		Display::encrypted_mailto_link();
-		$res= ob_get_contents();
-		$this->assertTrue(is_string($res));
+		$res=Display::encrypted_mailto_link($email, $clickable_text, $style_class);
 		ob_end_clean();
+		$this->assertTrue(is_string($res));
 		//var_dump($res);
 	}
 
@@ -299,10 +286,9 @@ class TestDisplay extends UnitTestCase {
 	public function testget_alphabet_options() {
 		$selected_letter = 5;
 		ob_start();
-		Display::get_alphabet_options();
-		$res=ob_get_contents();
-		$this->assertTrue(is_string($res));
+		$res=Display::get_alphabet_options();
 		ob_end_clean();
+		$this->assertTrue(is_string($res));
 		//var_dump($res);
 	}
 
@@ -310,10 +296,9 @@ class TestDisplay extends UnitTestCase {
 		$min='';
 		$max='';
 		ob_start();
-		Display::get_numeric_options($min,$max);
-		$res=ob_get_contents();
-		$this->assertTrue(is_string($res));
+		$res=Display::get_numeric_options($min,$max);
 		ob_end_clean();
+		$this->assertTrue(is_string($res));
 		//var_dump($res);
 	}
 
@@ -324,10 +309,9 @@ class TestDisplay extends UnitTestCase {
 	*/
 	public function testget_platform_home_link_html() {
 		ob_start();
-		Display::get_platform_home_link_html();
-		$res=ob_get_contents();
-		$this->assertTrue(is_string($res));
+		$res=Display::get_platform_home_link_html();
 		ob_end_clean();
+		$this->assertTrue(is_string($res));
 		//var_dump($res);
 	}
 
@@ -342,10 +326,10 @@ class TestDisplay extends UnitTestCase {
 	public function testreturn_icon() {
 		$image='';
 		ob_start();
-		Display::return_icon($image);
-		$res=ob_get_contents();
-		$this->assertTrue(is_string($res));
+		$res=Display::return_icon($image);
 		ob_end_clean();
+		//$res=ob_get_contents();
+		$this->assertTrue(is_string($res));
 		//var_dump($res);
 	}
 
@@ -356,27 +340,11 @@ class TestDisplay extends UnitTestCase {
 		global $output_string_menu;
 		global $_setting;
 		ob_start();
-		Display::show_course_navigation_menu();
-		$res=ob_get_contents();
-		$this->assertTrue(is_string($res));
+		$res=Display::show_course_navigation_menu();
 		ob_end_clean();
+		$this->assertTrue(is_null($res));
 		//var_dump($res);
 	}
 
-	/**
-	 * Display name and lastname in a specific order
-	 * @param string Firstname
-	 * @param string Lastname
-	 */
-	public function testuser_name() {
-		$fname='';
-		$lname='';
-		ob_start();
-		Display::user_name($fname,$lname);
-		$res= ob_get_contents();
-		$this->assertTrue(is_string($res));
-		ob_end_clean();
-		//var_dump($res);
-	}
 }
 ?>

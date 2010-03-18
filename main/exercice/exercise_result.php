@@ -1,24 +1,5 @@
 <?php
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2008 Dokeos SPRL
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
-	Mail: info@dokeos.com
-==============================================================================
-*/
+/* For licensing terms, see /chamilo_license.txt */
 /**
 *	Exercise result
 *	This script gets informations from the script "exercise_submit.php",
@@ -141,33 +122,31 @@ $from_name = api_get_person_name($uinfo['firstname'], $uinfo['lastname'], null, 
 $str = $_SERVER['REQUEST_URI'];
 $url = api_get_path(WEB_CODE_PATH).'exercice/exercice.php?'.api_get_cidreq().'&show=result';
 
-
-$sql_fb_type='SELECT feedback_type FROM '.$TBL_EXERCICES.' WHERE id ="'.Database::escape_string($objExercise->selectId()).'"';
-
-$res_fb_type=Database::query($sql_fb_type,__FILE__,__LINE__);
-$row_fb_type=Database::fetch_row($res_fb_type);
-$feedback_type = $row_fb_type[0];
-
  // if the above variables are empty or incorrect, we don't have any result to show, so stop the script
-if(!is_array($exerciseResult) || !is_array($questionList) || !is_object($objExercise))
-{
-
+if(!is_array($exerciseResult) || !is_array($questionList) || !is_object($objExercise)) {
 	header('Location: exercice.php');
 	exit();
 }
+
+$sql_fb_type='SELECT feedback_type FROM '.$TBL_EXERCICES.' WHERE id ="'.Database::escape_string($objExercise->selectId()).'"';
+$res_fb_type=Database::query($sql_fb_type);
+$row_fb_type=Database::fetch_row($res_fb_type);
+$feedback_type = $row_fb_type[0];
+
+
 // define basic exercise info to print on screen
 $exerciseTitle=$objExercise->selectTitle();
 $exerciseDescription=$objExercise->selectDescription();
 
 $gradebook = '';
-if (isset($_SESSION['gradebook'])){
+if (isset($_SESSION['gradebook'])) {
 	$gradebook=	$_SESSION['gradebook'];
 }
 
 if (!empty($gradebook) && $gradebook=='view') {
 	$interbreadcrumb[]= array (
 			'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
-			'name' => get_lang('Gradebook')
+			'name' => get_lang('ToolGradebook')
 		);
 }
 
@@ -292,17 +271,9 @@ if ($origin != 'learnpath') {
 	Display::display_header($nameTools,"Exercise");
 } else {
 
-	if (empty($charset)) {
-		$charset = 'ISO-8859-15';
-	}
-	header('Content-Type: text/html; charset='. $charset);
+	header('Content-Type: text/html; charset='.api_get_system_encoding());
 
-	@$document_language = api_get_language_isocode($language_interface);
-	if(empty($document_language))
-	{
-	  //if there was no valid iso-code, use the english one
-	  $document_language = 'en';
-	}
+	$document_language = api_get_language_isocode();
 
 	/*
 	 * HTML HEADER
@@ -315,10 +286,10 @@ if ($origin != 'learnpath') {
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php echo $document_language; ?>" lang="<?php echo $document_language; ?>">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=<?php echo $charset; ?>" />
+<link rel="stylesheet" type="text/css" href="<?php echo api_get_path(WEB_CODE_PATH).'css/'.api_get_setting('stylesheets').'/default.css'; ?>" />
 </head>
 
-<body>
-<link rel="stylesheet" type="text/css" href="<?php echo api_get_path(WEB_CODE_PATH).'css/'.api_get_setting('stylesheets').'/default.css'; ?>" />
+<body dir="<?php echo api_get_text_direction(); ?>">
 <?php
 }
 
@@ -334,6 +305,7 @@ FUNCTIONS
 
 function display_unique_or_multiple_answer($answerType, $studentChoice, $answer, $answerComment, $answerCorrect)
 {
+	global $feedback_type;
 	?>
 	<tr>
 	<td width="5%" align="center">
@@ -350,6 +322,7 @@ function display_unique_or_multiple_answer($answerType, $studentChoice, $answer,
 		echo $answer;
 		?>
 	</td>
+	<?php if ($feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) { ?>
 	<td width="45%" style="border-bottom: 1px solid #4171B5;">
 		<?php
 		$answerComment=api_parse_tex($answerComment);
@@ -369,6 +342,9 @@ function display_unique_or_multiple_answer($answerType, $studentChoice, $answer,
 		}
 		?>
 	</td>
+	<?php } else { ?>
+		<td>&nbsp;</td>
+	<?php } ?>
 	</tr>
 	<?php
 }
@@ -386,22 +362,27 @@ function display_fill_in_blanks_answer($answer)
 
 function display_free_answer($answer)
 {
+	global $feedback_type;
 	?>
 		<tr>
 		<td width="55%">
 			<?php echo nl2br(Security::remove_XSS($answer,COURSEMANAGERLOWSECURITY)); ?>
 		</td>
+	<?php if ($feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) { ?>
    <td width="45%">
     <?php echo get_lang('notCorrectedYet');?>
 
    </td>
+   <?php } else { ?>
+		<td>&nbsp;</td>
+	<?php } ?>
 		</tr>
 	<?php
 }
 
 function display_hotspot_answer($answerId, $answer, $studentChoice, $answerComment)
 {
-	//global $hotspot_colors;
+	global $feedback_type;
 	$hotspot_colors = array("", // $i starts from 1 on next loop (ugly fix)
             						"#4271B5",
 									"#FE8E16",
@@ -432,6 +413,7 @@ function display_hotspot_answer($answerId, $answer, $studentChoice, $answerComme
 				<td valign="top">
 					<?php $my_choice = ($studentChoice)?get_lang('Correct'):get_lang('Fault'); echo $my_choice; ?>
 				</td>
+				<?php if ($feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) { ?>
 				<td valign="top">
 					<?php
 					if ($studentChoice) {
@@ -443,6 +425,9 @@ function display_hotspot_answer($answerId, $answer, $studentChoice, $answerComme
 					echo '</span>';
 					?>
 				</td>
+				<?php } else { ?>
+					<td>&nbsp;</td>
+				<?php } ?>
 		</tr>
 	<?php
 }
@@ -455,7 +440,7 @@ DISPLAY AND MAIN PROCESS
 if (api_is_course_admin() && $origin != 'learnpath') {
 	echo '<div class="actions">';
 	echo Display::return_icon('quiz.gif', get_lang('GoBackToEx')).'<a href="admin.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id.'">'.get_lang('GoBackToEx').'</a>';
-	echo Display::return_icon('edit.gif', get_lang('ModifyExercise')).'<a href="exercise_admin.php?modifyExercise=yes&exerciseId='.$objExercise->id.'">'.get_lang('ModifyExercise').'</a>';
+	echo Display::return_icon('edit.gif', get_lang('ModifyExercise')).'<a href="exercise_admin.php?'.api_get_cidreq().'&modifyExercise=yes&exerciseId='.$objExercise->id.'">'.get_lang('ModifyExercise').'</a>';
 	echo '</div>';
 }
 
@@ -468,7 +453,7 @@ $exerciseTitle=api_parse_tex($exerciseTitle);
 		<?php echo $exerciseDescription; ?>
 	<?php } ?>
 
-	<form method="get" action="exercice.php">
+	<form method="get" action="exercice.php?<?php echo api_get_cidreq() ?>">
 	<input type="hidden" name="origin" value="<?php echo $origin; ?>" />
     <input type="hidden" name="learnpath_id" value="<?php echo $learnpath_id; ?>" />
     <input type="hidden" name="learnpath_item_id" value="<?php echo $learnpath_item_id; ?>" />
@@ -480,9 +465,9 @@ if($debug>0){echo "ExerciseResult: "; var_dump($exerciseResult); echo "QuestionL
 
 if ($_configuration['tracking_enabled']) {
 	// Create an empty exercise
-	if (api_is_allowed_to_session_edit() )  
+	if (api_is_allowed_to_session_edit() )
 		$exeId= create_event_exercice($objExercise->selectId());
-}	 
+}
 $counter=0;
 
 // Loop over all question to show results for each of them, one by one
@@ -503,7 +488,7 @@ foreach ($questionList as $questionId) {
 	unset($objQuestionTmp);
 
 	// decide how many columns we want to use to show the results of each type
-	if($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER) {
+	if($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER || $answerType == MULTIPLE_ANSWER_COMBINATION) {
 		$colspan=4;
 	} elseif($answerType == MATCHING || $answerType == FREE_ANSWER) {
 		$colspan=2;
@@ -527,7 +512,7 @@ foreach ($questionList as $questionId) {
 		</td>
 		</tr>
 		<?php
-		if ($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER) {
+		if ($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER || $answerType == MULTIPLE_ANSWER_COMBINATION ) {
 			?>
 				<tr>
 				<td width="5%" valign="top" align="center" nowrap="nowrap">
@@ -539,9 +524,13 @@ foreach ($questionList as $questionId) {
 				<td width="45%" valign="top">
 					<i><?php echo get_lang("Answer"); ?></i>
 				</td>
+				<?php if ($feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) { ?>
 				<td width="45%" valign="top">
 					<i><?php echo get_lang("Comment"); ?></i>
 				</td>
+				<?php } else { ?>
+					<td>&nbsp;</td>
+				<?php } ?>
 				</tr>
 			<?php
 		} elseif ($answerType == FILL_IN_BLANKS) {
@@ -558,9 +547,13 @@ foreach ($questionList as $questionId) {
 				<td width="55%">
 					<i><?php echo get_lang("Answer"); ?></i>
 				</td>
+				<?php if ($feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) { ?>
 				<td width="45%" valign="top">
 					<i><?php echo get_lang("Comment"); ?></i>
 				</td>
+				<?php } else { ?>
+					<td>&nbsp;</td>
+				<?php } ?>
 				</tr>
 			<?php
 		} elseif ($answerType == HOT_SPOT) {
@@ -576,9 +569,13 @@ foreach ($questionList as $questionId) {
 								<td width="100" valign="top">
 									<i><?php echo get_lang('HotspotHit'); ?></i><br /><br />
 								</td>
+								<?php if ($feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) { ?>
 								<td width="300" valign="top">
 									<i><?php echo get_lang("Comment"); ?></i><br /><br />
 								</td>
+								<?php } else { ?>
+									<td>&nbsp;</td>
+								<?php } ?>
 							</tr>
 			<?php
 		} else { //matching type
@@ -596,12 +593,22 @@ foreach ($questionList as $questionId) {
 	}
 
 	// construction of the Answer object
+	$user_answer = '';
 	$objAnswerTmp=new Answer($questionId);
 	$nbrAnswers=$objAnswerTmp->selectNbrAnswers();
 	$questionScore=0;
 	if ($answerType == FREE_ANSWER) {
 		$nbrAnswers = 1;
 	}
+
+	// get answer list for matching
+	$sql_answer = 'SELECT id, answer FROM '.$table_ans.' WHERE question_id="'.Database::escape_string($questionId).'" ';
+	$res_answer = Database::query($sql_answer);
+	$answer_matching =array();
+	while ($real_answer = Database::fetch_array($res_answer)) {
+		$answer_matching[$real_answer['id']]= $real_answer['answer'];
+	}
+	$real_answers = array();
 
 	// We're inside *one* question. Go through each possible answer for this question
 	for ($answerId=1;$answerId <= $nbrAnswers;$answerId++) {
@@ -611,6 +618,8 @@ foreach ($questionList as $questionId) {
 		$answerComment=$objAnswerTmp->selectComment($answerId);
 		$answerCorrect=$objAnswerTmp->isCorrect($answerId);
 		$answerWeighting=$objAnswerTmp->selectWeighting($answerId);
+		$numAnswer=$objAnswerTmp->selectAutoId($answerId);
+
 		switch ($answerType) {
 			// for unique answer
 			case UNIQUE_ANSWER :
@@ -618,7 +627,7 @@ foreach ($questionList as $questionId) {
 					// then give him the corresponding score
 					// (maybe a negative score, positive score or 0)
 					// Positive score should only be given when we are going over the right answer
-					$studentChoice=($choice == $answerId)?1:0;
+					$studentChoice=($choice == $numAnswer)?1:0;
 					if($studentChoice) {
 					  	$questionScore+=$answerWeighting;
 						$totalScore+=$answerWeighting;
@@ -626,12 +635,29 @@ foreach ($questionList as $questionId) {
 					break;
 			// for multiple answers
 			case MULTIPLE_ANSWER :
-					$studentChoice=$choice[$answerId];
-					if($studentChoice) {
-						$questionScore+=$answerWeighting;
-						$totalScore+=$answerWeighting;
+				$studentChoice=$choice[$numAnswer];
+				if($studentChoice) {
+					$questionScore+=$answerWeighting;
+					$totalScore+=$answerWeighting;
+				}
+				break;
+			case MULTIPLE_ANSWER_COMBINATION :
+				$studentChoice=$choice[$numAnswer];
+
+				if ($answerCorrect == 1) {
+					if ($studentChoice) {
+						$real_answers[$answerId] = true;
+					} else {
+						$real_answers[$answerId] = false;
 					}
-					break;
+				} else {
+					if ($studentChoice) {
+						$real_answers[$answerId] = false;
+					} else {
+						$real_answers[$answerId] = true;
+					}
+				}
+				break;
 			// for fill in the blanks
 			case FILL_IN_BLANKS :
 		    		// the question is encoded like this
@@ -725,8 +751,7 @@ foreach ($questionList as $questionId) {
 					$chosen_list=array();
 
 					for($i=0;$i<count($real_correct_tags);$i++) {
-						if ($i==0)
-						{
+						if ($i==0) {
 							$answer.=$real_text[0];
 						}
 
@@ -793,31 +818,18 @@ foreach ($questionList as $questionId) {
 					  	$questionScore=-1;
 						$totalScore+=0;
 					}
-
-
 					break;
 			// for matching
 			case MATCHING :
-					if($answerCorrect)
-					{
-						if($answerCorrect == $choice[$answerId])
-						{
+					if ($answerCorrect) {
+						if ($answerCorrect == $choice[$numAnswer]) {
 							$questionScore+=$answerWeighting;
 							$totalScore+=$answerWeighting;
-							$choice[$answerId]=$matching[$choice[$answerId]];
+							$user_answer = '<span>'.$answer_matching[$choice[$numAnswer]].'</span>';
+						} else {
+						   	$user_answer = '<span style="color: #FF0000; text-decoration: line-through;">'.$answer_matching[$choice[$numAnswer]].'</span>';
 						}
-						elseif(!$choice[$answerId])
-						{
-							$choice[$answerId]='&nbsp;&nbsp;&nbsp;';
-						}
-						else
-						{
-							$choice[$answerId]='<font color="red"><s>'.$matching[$choice[$answerId]].'</s></font>';
-						}
-					}
-					else
-					{
-						$matching[$answerId]=$answer;
+						$matching[$numAnswer] =  $choice[$numAnswer];
 					}
 					break;
 			// for hotspot with no order
@@ -848,7 +860,7 @@ foreach ($questionList as $questionId) {
 
 		//display answers (if not matching type, or if the answer is correct)
 		if ($answerType != MATCHING || $answerCorrect) {
-			if ($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER) {
+			if ($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER || $answerType == MULTIPLE_ANSWER_COMBINATION) {
 				if ($origin!='learnpath') {
 					display_unique_or_multiple_answer($answerType, $studentChoice, $answer, $answerComment, $answerCorrect);
 				}
@@ -861,8 +873,8 @@ foreach ($questionList as $questionId) {
 
 				$arrques[] = $questionName;
 				$arrans[]  = $choice;
-				
-			
+
+
 				if($origin != 'learnpath') {
 					display_free_answer($choice);
 				}
@@ -878,28 +890,32 @@ foreach ($questionList as $questionId) {
 			{
 				display_hotspot_order_answer($answerId, $answer, $studentChoice, $answerComment);
 			}
-			else
+			elseif($answerType==MATCHING)
 			{
 				if ($origin != 'learnpath') {
-				?>
-					<tr>
-					<td width="50%">
-						<?php
-						$answer=api_parse_tex($answer);
-						echo $answer; ?>
-					</td>
-					<td width="50%">
-						<?php echo $choice[$answerId]; ?> / <font color="green"><b>
-						<?php
-						$matching[$answerCorrect]=api_parse_tex($matching[$answerCorrect]);
-						echo $matching[$answerCorrect]; ?></b></font>
-					</td>
-					</tr>
-				<?php
+					echo '<tr>';
+					echo '<td>'.api_parse_tex($answer_matching[$answerId]).'</td><td>'.api_parse_tex($user_answer).' / <b><span style="color: #008000;">'.api_parse_tex($answer_matching[$answerCorrect]).'</span></b></td>';
+					echo '</tr>';
 				}
 			}
 		}
 	} // end for that loops over all answers of the current question
+
+	//
+	if ($answerType == MULTIPLE_ANSWER_COMBINATION) {
+		$final_answer = true;
+	 	foreach($real_answers as $my_answer) {
+	 		if (!$my_answer) {
+	 			$final_answer = false;
+	 		}
+	 	}
+	 	if ($final_answer) {
+	 		//getting only the first score where we save the weight of all the question
+	 		$answerWeighting=$objAnswerTmp->selectWeighting(1);
+			$questionScore+=$answerWeighting;
+			$totalScore+=$answerWeighting;
+		}
+	}
 
 	// if answer is hotspot. To the difference of exercise_show.php, we use the results from the session (from_db=0)
 	// TODO Change this, because it is wrong to show the user some results that haven't been stored in the database yet
@@ -911,7 +927,7 @@ foreach ($questionList as $questionId) {
 
 			<tr>
 				<td colspan="2">
-					<i><?php echo get_lang('Hotspot'); ?></i><br /><br />
+					<i><?php echo get_lang('HotSpot'); ?></i><br /><br />
 					<object type="application/x-shockwave-flash" data="../plugin/hotspot/hotspot_solution.swf?modifyAnswers=<?php echo Security::remove_XSS($questionId); ?>&exe_id=&from_db=0" width="552" height="352">
 						<param name="movie" value="../plugin/hotspot/hotspot_solution.swf?modifyAnswers=<?php echo Security::remove_XSS($questionId); ?>&exe_id=&from_db=0" />
 					</object>
@@ -958,21 +974,19 @@ foreach ($questionList as $questionId) {
 			} else {
 				exercise_attempt($questionScore, 0 ,$quesId,$exeId,0);
 			}
-		} elseif ($answerType==MATCHING) {
-			$j=sizeof($matching)+1;
-			for ($i=0;$i<sizeof($choice);$i++,$j++) {
-				$val = $choice[$j];
-				if (preg_match_all ('#<font color="red"><s>([0-9a-z ]*)</s></font>#', $val, $arr1))
-					$val = $arr1[1][0];
-				$val=strip_tags($val);
-				$sql = "SELECT position from $table_ans where question_id='".Database::escape_string($questionId)."' and answer='".Database::escape_string($val)."' AND correct=0";
-				$res = Database::query($sql, __FILE__, __LINE__);
-				if (Database::num_rows($res)>0) {
-					$answer = Database::result($res,0,"position");
-				} else {
-					$answer = 0;
+		} elseif ($answerType==MULTIPLE_ANSWER_COMBINATION ) {
+			if ($choice != 0) {
+				$reply = array_keys($choice);
+				for ($i=0;$i<sizeof($reply);$i++) {
+					$ans = $reply[$i];
+					exercise_attempt($questionScore,$ans,$quesId,$exeId,$i);
 				}
-				exercise_attempt($questionScore,$answer,$quesId,$exeId,$j);
+			} else {
+				exercise_attempt($questionScore, 0 ,$quesId,$exeId,0);
+			}
+		} elseif ($answerType==MATCHING) {
+			foreach ($matching as $j => $val) {
+				exercise_attempt($questionScore, $val, $quesId, $exeId, $j);
 			}
 		}
 		elseif ($answerType==FREE_ANSWER) {
@@ -984,7 +998,7 @@ foreach ($questionList as $questionId) {
 			// In fact, we are not storing the results by answer ID, but by *position*, which is stored in $choice
 			exercise_attempt($questionScore,$choice,$quesId,$exeId,0);
 		} elseif ($answerType == HOT_SPOT) {
-			exercise_attempt($questionScore, $answer, $quesId, $exeId, 0);							
+			exercise_attempt($questionScore, $answer, $quesId, $exeId, 0);
 			if (is_array($exerciseResultCoordinates[$quesId])) {
 				foreach($exerciseResultCoordinates[$quesId] as $idx => $val) {
 					exercise_attempt_hotspot($exeId,$quesId,$idx,$choice[$idx],$val);
@@ -1043,8 +1057,9 @@ if ($_configuration['tracking_enabled']) {
 	$safe_lp_id = $learnpath_id==''?0:(int)$learnpath_id;
 	$safe_lp_item_id = $learnpath_item_id==''?0:(int)$learnpath_item_id;
 	$quizDuration = (!empty($_SESSION['quizStartTime']) ? time() - $_SESSION['quizStartTime'] : 0);
-	if (api_is_allowed_to_session_edit() )  
+	if (api_is_allowed_to_session_edit() ) {
 		update_event_exercice($exeId, $objExercise->selectId(),$totalScore,$totalWeighting,api_get_session_id(),$safe_lp_id,$safe_lp_item_id,$quizDuration);
+	}
 }
 
 if($objExercise->results_disabled) {
@@ -1066,17 +1081,17 @@ if ($origin != 'learnpath') {
 }
 
 
-	
+
 // Email configuration settings
 require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
-$user_info	= UserManager::get_user_info_by_id(api_get_user_id());	
+$user_info	= UserManager::get_user_info_by_id(api_get_user_id());
 
 $firstName 	=  $user_info['firstname'];
 $lastName 	=  $user_info['lastname'];
-$mail 		=  $user_info['email'];	
+$mail 		=  $user_info['email'];
 $coursecode = api_get_course_id();
 $courseName = $_SESSION['_course']['name'];
-	
+
 $to = '';
 $teachers = array();
 if(api_get_setting('use_session_mode')=='true' && !empty($_SESSION['id_session'])) {
@@ -1100,121 +1115,116 @@ if($num>1) {
 }
 
 
-//------
-if ($origin != 'learnpath')
+// we are able to send emails to the teachers?
+if (api_get_course_setting('email_alert_manager_on_new_quiz') == 1 ) {
+	// only for "simple tests"
+	if ($origin != 'learnpath') {
+		//has a unique answer?
+		$mycharset = api_get_system_encoding();
+		$msg = '<html><head>
+			<link rel="stylesheet" href="'.api_get_path(WEB_CODE_PATH).'css/'.api_get_setting('stylesheets').'/default.css" type="text/css">
+			<meta content="text/html; charset='.$mycharset.'" http-equiv="content-type"></head>';
 
-if(count($arrques)>0) {
-	$mycharset = api_get_setting('platform_charset');
-	$msg = '<html><head>
-		<link rel="stylesheet" href="'.api_get_path(WEB_CODE_PATH).'css/'.api_get_setting('stylesheets').'/default.css" type="text/css">
-		<meta content="text/html; charset='.$mycharset.'" http-equiv="content-type">';
-	$msg .= '</head>
-	<body><br />
-	<p>'.get_lang('OpenQuestionsAttempted').' :
-	</p>
-	<p>'.get_lang('AttemptDetails').' : <br />
-	</p>
-	<table width="730" height="136" border="0" cellpadding="3" cellspacing="3">
-						<tr>
-	    <td width="229" valign="top"><h2>&nbsp;&nbsp;'.get_lang('CourseName').'</h2></td>
-	    <td width="469" valign="top"><h2>#course#</h2></td>
-	  </tr>
-	  <tr>
-	    <td width="229" valign="top" class="outerframe">&nbsp;&nbsp;'.get_lang('TestAttempted').'</span></td>
-	    <td width="469" valign="top" class="outerframe">#exercise#</td>
-	  </tr>
-	  <tr>
-	    <td valign="top">&nbsp;&nbsp;<span class="style10">'.get_lang('StudentName').'</span></td>
-	    '.(api_is_western_name_order() ? '<td valign="top" >#firstName# #lastName#</td>' : '<td valign="top" >#lastName# #firstName#</td>').'
-	  </tr>
-	  <tr>
-	    <td valign="top" >&nbsp;&nbsp;'.get_lang('StudentEmail').' </td>
-	    <td valign="top"> #mail#</td>
-	</tr></table>
-	<p><br />'.get_lang('OpenQuestionsAttemptedAre').' :</p>
-	 <table width="730" height="136" border="0" cellpadding="3" cellspacing="3">';
-	 
-	for($i=0;$i<sizeof($arrques);$i++) {
-		  $msg.='
-			<tr>
-		    <td width="220" valign="top" bgcolor="#E5EDF8">&nbsp;&nbsp;<span class="style10">'.get_lang('Question').'</span></td>
-		    <td width="473" valign="top" bgcolor="#F3F3F3"><span class="style16"> #questionName#</span></td>
-		  	</tr>
-		  	<tr>
-		    <td width="220" valign="top" bgcolor="#E5EDF8">&nbsp;&nbsp;<span class="style10">'.get_lang('Answer').' </span></td>
-		    <td valign="top" bgcolor="#F3F3F3"><span class="style16"> #answer#</span></td>
-		  	</tr>';
-			$msg1= str_replace("#exercise#",$exerciseTitle,$msg);
-			$msg= str_replace("#firstName#",$firstName,$msg1);
-			$msg1= str_replace("#lastName#",$lastName,$msg);
-			$msg= str_replace("#mail#",$mail,$msg1);
-			$msg1= str_replace("#questionName#",$arrques[$i],$msg);
-			$msg= str_replace("#answer#",$arrans[$i],$msg1);
-			$msg1= str_replace("#i#",$i,$msg);
-			$msg= str_replace("#course#",$courseName,$msg1);
+		if(count($arrques)>0) {
+			$msg .= '
+			<body><br />
+			<p>'.get_lang('OpenQuestionsAttempted').' :
+			</p>
+			<p>'.get_lang('AttemptDetails').' : <br />
+			</p>
+			<table width="730" height="136" border="0" cellpadding="3" cellspacing="3">
+								<tr>
+			    <td width="229" valign="top"><h2>&nbsp;&nbsp;'.get_lang('CourseName').'</h2></td>
+			    <td width="469" valign="top"><h2>#course#</h2></td>
+			  </tr>
+			  <tr>
+			    <td width="229" valign="top" class="outerframe">&nbsp;&nbsp;'.get_lang('TestAttempted').'</span></td>
+			    <td width="469" valign="top" class="outerframe">#exercise#</td>
+			  </tr>
+			  <tr>
+			    <td valign="top">&nbsp;&nbsp;<span class="style10">'.get_lang('StudentName').'</span></td>
+			    '.(api_is_western_name_order() ? '<td valign="top" >#firstName# #lastName#</td>' : '<td valign="top" >#lastName# #firstName#</td>').'
+			  </tr>
+			  <tr>
+			    <td valign="top" >&nbsp;&nbsp;'.get_lang('StudentEmail').' </td>
+			    <td valign="top"> #mail#</td>
+			</tr></table>
+			<p><br />'.get_lang('OpenQuestionsAttemptedAre').' :</p>
+			 <table width="730" height="136" border="0" cellpadding="3" cellspacing="3">';
+
+			for($i=0;$i<sizeof($arrques);$i++) {
+				  $msg.='
+					<tr>
+				    <td width="220" valign="top" bgcolor="#E5EDF8">&nbsp;&nbsp;<span class="style10">'.get_lang('Question').'</span></td>
+				    <td width="473" valign="top" bgcolor="#F3F3F3"><span class="style16"> #questionName#</span></td>
+				  	</tr>
+				  	<tr>
+				    <td width="220" valign="top" bgcolor="#E5EDF8">&nbsp;&nbsp;<span class="style10">'.get_lang('Answer').' </span></td>
+				    <td valign="top" bgcolor="#F3F3F3"><span class="style16"> #answer#</span></td>
+				  	</tr>';
+					$msg1= str_replace("#exercise#",$exerciseTitle,$msg);
+					$msg= str_replace("#firstName#",$firstName,$msg1);
+					$msg1= str_replace("#lastName#",$lastName,$msg);
+					$msg= str_replace("#mail#",$mail,$msg1);
+					$msg1= str_replace("#questionName#",$arrques[$i],$msg);
+					$msg= str_replace("#answer#",$arrans[$i],$msg1);
+					$msg1= str_replace("#i#",$i,$msg);
+					$msg= str_replace("#course#",$courseName,$msg1);
+			}
+
+			$msg.='</table><br>
+		 			<span class="style16">'.get_lang('ClickToCommentAndGiveFeedback').',<br />
+					<a href="#url#">#url#</a></span></body></html>';
+
+			$msg1= str_replace("#url#",$url,$msg);
+			$mail_content = $msg1;
+
+			$sender_name = api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS);
+			$email_admin = api_get_setting('emailAdministrator');
+
+			$subject = get_lang('OpenQuestionsAttempted');
+			$result = @api_mail_html('', $to, $subject, $mail_content, $sender_name, $email_admin, array('charset'=>$mycharset));
+		} else {
+			$msg .= '<body>
+			<p>'.get_lang('ExerciseAttempted').' <br />
+	    	</p>
+			<table width="730" height="136" border="0" cellpadding="3" cellspacing="3">
+				<tr>
+			    <td width="229" valign="top"><h2>&nbsp;&nbsp;'.get_lang('CourseName').'</h2></td>
+			    <td width="469" valign="top"><h2>#course#</h2></td>
+			  </tr>
+			  <tr>
+			    <td width="229" valign="top" class="outerframe">&nbsp;&nbsp;'.get_lang('TestAttempted').'</span></td>
+			    <td width="469" valign="top" class="outerframe">#exercise#</td>
+			  </tr>
+			  <tr>
+			    <td valign="top">&nbsp;&nbsp;<span class="style10">'.get_lang('StudentName').'</span></td>
+			    '.(api_is_western_name_order() ? '<td valign="top" >#firstName# #lastName#</td>' : '<td valign="top" >#lastName# #firstName#</td>').'
+			  </tr>
+			  <tr>
+			    <td valign="top" >&nbsp;&nbsp;'.get_lang('StudentEmail').' </td>
+			    <td valign="top"> #mail#</td>
+			</tr></table>';
+
+			$msg= str_replace("#exercise#",$exerciseTitle,$msg);
+			$msg= str_replace("#firstName#",$firstName,$msg);
+			$msg= str_replace("#lastName#",$lastName,$msg);
+			$msg= str_replace("#mail#",$mail,$msg);
+			$msg= str_replace("#course#",$courseName,$msg);
+
+			$msg.='<br />
+		 			<span class="style16">'.get_lang('ClickToCommentAndGiveFeedback').',<br />
+					<a href="#url#">#url#</a></span></body></html>';
+
+			$msg= str_replace("#url#",$url,$msg);
+			$mail_content = $msg;
+
+			$sender_name = api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS);
+			$email_admin = api_get_setting('emailAdministrator');
+
+			$subject = get_lang('ExerciseAttempted');
+			$result = @api_mail_html('', $to, $subject, $mail_content, $sender_name, $email_admin, array('charset'=>$mycharset));
+		}
 	}
-	
-	$msg.='</table><br>
- 			<span class="style16">'.get_lang('ClickToCommentAndGiveFeedback').',<br />
-			<a href="#url#">#url#</a></span></body></html>';
-
-	$msg1= str_replace("#url#",$url,$msg);
-	$mail_content = $msg1;
-	
-	$sender_name = api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS);
-	$email_admin = api_get_setting('emailAdministrator');
-			
-	$subject = get_lang('OpenQuestionsAttempted');
-	if (api_get_course_setting('email_alert_manager_on_new_quiz') == 1 ) {
-		$result = api_mail_html('', $to, $subject, $mail_content, $sender_name, $email_admin, array('charset'=>$mycharset));
-	}	
-} else {
-	$mycharset = api_get_setting('platform_charset');
-	$msg = '<html><head>
-		<link rel="stylesheet" href="'.api_get_path(WEB_CODE_PATH).'css/'.api_get_setting('stylesheets').'/default.css" type="text/css">
-		<meta content="text/html; charset='.$mycharset.'" http-equiv="content-type">';
-	$msg .= '</head>
-	<body>
-	<table width="730" height="136" border="0" cellpadding="3" cellspacing="3">
-		<tr>
-	    <td width="229" valign="top"><h2>&nbsp;&nbsp;'.get_lang('CourseName').'</h2></td>
-	    <td width="469" valign="top"><h2>#course#</h2></td>
-	  </tr>
-	  <tr>
-	    <td width="229" valign="top" class="outerframe">&nbsp;&nbsp;'.get_lang('TestAttempted').'</span></td>
-	    <td width="469" valign="top" class="outerframe">#exercise#</td>
-	  </tr>
-	  <tr>
-	    <td valign="top">&nbsp;&nbsp;<span class="style10">'.get_lang('StudentName').'</span></td>
-	    '.(api_is_western_name_order() ? '<td valign="top" >#firstName# #lastName#</td>' : '<td valign="top" >#lastName# #firstName#</td>').'
-	  </tr>
-	  <tr>
-	    <td valign="top" >&nbsp;&nbsp;'.get_lang('StudentEmail').' </td>
-	    <td valign="top"> #mail#</td>
-	</tr></table>';
-	 
-	$msg= str_replace("#exercise#",$exerciseTitle,$msg);
-	$msg= str_replace("#firstName#",$firstName,$msg);
-	$msg= str_replace("#lastName#",$lastName,$msg);	
-	$msg= str_replace("#mail#",$mail,$msg);
-	$msg= str_replace("#course#",$courseName,$msg);	
-	
-	$msg.='<br />
- 			<span class="style16">'.get_lang('ClickToCommentAndGiveFeedback').',<br />
-			<a href="#url#">#url#</a></span></body></html>';
-
-
-	$msg= str_replace("#url#",$url,$msg);
-	$mail_content = $msg;
-	
-	$sender_name = api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS);
-	$email_admin = api_get_setting('emailAdministrator');
-	
-	$subject = get_lang('ExerciseAttempted');
-	if (api_get_course_setting('email_alert_manager_on_new_quiz') == 1 ) {
-		$result = api_mail_html('', $to, $subject, $mail_content, $sender_name, $email_admin, array('charset'=>$mycharset));
-	}
-	
 }
-
 ?>

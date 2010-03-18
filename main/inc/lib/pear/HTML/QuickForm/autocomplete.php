@@ -1,45 +1,54 @@
 <?php
-/* vim: set expandtab tabstop=4 shiftwidth=4: */
-// +----------------------------------------------------------------------+
-// | PHP Version 4                                                        |
-// +----------------------------------------------------------------------+
-// | Copyright (c) 1997-2003 The PHP Group                                |
-// +----------------------------------------------------------------------+
-// | This source file is subject to version 2.0 of the PHP license,       |
-// | that is bundled with this package in the file LICENSE, and is        |
-// | available at through the world-wide-web at                           |
-// | http://www.php.net/license/2_02.txt.                                 |
-// | If you did not receive a copy of the PHP license and are unable to   |
-// | obtain it through the world-wide-web, please send a note to          |
-// | license@php.net so we can mail you a copy immediately.               |
-// +----------------------------------------------------------------------+
-// | Author:  Matteo Di Giovinazzo <matteodg@infinito.it>                 |
-// |                                                                      |
-// | For the JavaScript code thanks to Martin Honnen and                  |
-// | Nicholas C. Zakas                                                    |
-// | See:                                                                 |
-// |      http://www.faqts.com/knowledge_base/view.phtml/aid/13562        |
-// | and                                                                  |
-// |      http://www.sitepoint.com/article/1220                           |
-// +----------------------------------------------------------------------+
-//
-// $Id: autocomplete.php 9612 2006-10-20 11:56:44Z bmol $
-
-
-require_once("HTML/QuickForm/text.php");
-
+/* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4: */
 
 /**
- * Class to dynamically create an HTML input text element that
- * at every keypressed javascript event, check in an array of options
- * if there's a match and autocomplete the text in case of match.
+ * HTML class for an autocomplete element
  *
- * Ex:
+ * PHP versions 4 and 5
+ *
+ * LICENSE: This source file is subject to version 3.01 of the PHP license
+ * that is available through the world-wide-web at the following URI:
+ * http://www.php.net/license/3_01.txt If you did not receive a copy of
+ * the PHP License and are unable to obtain it through the web, please
+ * send a note to license@php.net so we can mail you a copy immediately.
+ *
+ * @category    HTML
+ * @package     HTML_QuickForm
+ * @author      Matteo Di Giovinazzo <matteodg@infinito.it>
+ * @copyright   2001-2009 The PHP Group
+ * @license     http://www.php.net/license/3_01.txt PHP License 3.01
+ * @version     CVS: $Id: autocomplete.php,v 1.8 2009/04/04 21:34:02 avb Exp $
+ * @link        http://pear.php.net/package/HTML_QuickForm
+ */
+
+/**
+ * HTML class for a text field
+ */
+require_once 'HTML/QuickForm/text.php';
+
+/**
+ * HTML class for an autocomplete element
+ *
+ * Creates an HTML input text element that
+ * at every keypressed javascript event checks in an array of options
+ * if there's a match and autocompletes the text in case of match.
+ *
+ * For the JavaScript code thanks to Martin Honnen and Nicholas C. Zakas
+ * See {@link http://www.faqts.com/knowledge_base/view.phtml/aid/13562} and
+ * {@link http://www.sitepoint.com/article/1220}
+ *
+ * Example:
+ * <code>
  * $autocomplete =& $form->addElement('autocomplete', 'fruit', 'Favourite fruit:');
  * $options = array("Apple", "Orange", "Pear", "Strawberry");
  * $autocomplete->setOptions($options);
+ * </code>
  *
- * @author       Matteo Di Giovinazzo <matteodg@infinito.it>
+ * @category    HTML
+ * @package     HTML_QuickForm
+ * @author      Matteo Di Giovinazzo <matteodg@infinito.it>
+ * @version     Release: 3.2.11
+ * @since       3.2
  */
 class HTML_QuickForm_autocomplete extends HTML_QuickForm_text
 {

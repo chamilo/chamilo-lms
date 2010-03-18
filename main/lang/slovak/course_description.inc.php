@@ -1,19 +1,20 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$langCourseProgram  = "Popis kurzu";
-$langThisCourseDescriptionIsEmpty  = "Tento kurz nem· popis.";
-$langEditCourseProgram  = "Vytvori&#357; / upravi&#357; popis kurzu";
-$QuestionPlan  = "Ot·zka lektorovi";
-$langInfo2Say  = "Inform·cia pre pouûÌvate&#318;ov";
-$langOuAutreTitre  = "N·zov";
-$langNewBloc  = "&#270;a&#318;öie";
-$langAddCat  = "prida&#357; kategÛriu";
-$langAdd  = "Prida&#357;";
-$langValid  = "Platn˝";
-$langBackAndForget  = "Sp‰&#357; a zabudn˙&#357;";
-$CourseDescriptionUpdated = "Popis kurzu bol aktualizovan˝";
-$CourseDescriptionDeleted = "Popis kurzu bol vymazan˝";
-$CourseDescriptionIntro = "Pre vytvorenie popisu kurzu kliknite na nadpis a vyplnte spr·vne polÌ&#269;ko formul·ru.<br><br>Potom kliknite na OK, a vyplnte &#271;a&#318;öÌ nadpis.";
-$langSaveDescription = "Uloûi&#357; popis";
+$langCourseProgram = "Popis kurzu";
+$langThisCourseDescriptionIsEmpty = "Tento kurz nem√° popis.";
+$langEditCourseProgram = "Vytvori≈• / upravi≈• popis kurzu";
+$QuestionPlan = "Ot√°zka lektorovi";
+$langInfo2Say = "Inform√°cia pre pou≈æ√≠vateƒæov";
+$langOuAutreTitre = "N√°zov";
+$langNewBloc = "ƒéaƒæ≈°ie";
+$langAddCat = "prida≈• kateg√≥riu";
+$langAdd = "Prida≈•";
+$langValid = "Platn√Ω";
+$langBackAndForget = "Sp√§≈• a zabudn√∫≈•";
+$CourseDescriptionUpdated = "Popis kurzu bol aktualizovan√Ω";
+$CourseDescriptionDeleted = "Popis kurzu bol vymazan√Ω";
+$CourseDescriptionIntro = "Pre vytvorenie popisu kurzu kliknite na nadpis a vyplnte spr√°vne pol√≠ƒçko formul√°ru.<br><br>Potom kliknite na OK, a vyplnte ƒèaƒæ≈°√≠ nadpis.";
+$langSaveDescription = "Ulo≈æi≈• popis";
 ?>

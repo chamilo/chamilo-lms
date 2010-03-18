@@ -53,7 +53,7 @@ Display::display_header(get_lang('UserOnlineListSession'));
 									INNER JOIN $tbl_session_course_user as srcru
 										ON srcru.id_user = ".$_user['user_id']." AND srcru.status=2
 										AND session.id = srcru.id_session
-									ORDER BY date_start, date_end, name",__FILE__,__LINE__);
+									ORDER BY date_start, date_end, name");
 
 		while ($session = Database:: fetch_array($result)) {
 			$session_is_coach[$session['id']] = $session;
@@ -65,7 +65,7 @@ Display::display_header(get_lang('UserOnlineListSession'));
 										date_end
 								FROM $tbl_session as session
 								WHERE session.id_coach = ".$_user['user_id']."
-								ORDER BY date_start, date_end, name",__FILE__,__LINE__);
+								ORDER BY date_start, date_end, name");
 		while ($session = Database:: fetch_array($result)) {
 			$session_is_coach[$session['id']] = $session;
 		}
@@ -84,7 +84,7 @@ Display::display_header(get_lang('UserOnlineListSession'));
 					WHERE access_session_id='".$session['id']."'
 					AND NOW()-access_date<1000 GROUP BY access_user_id";
 
-			$result = Database::query($sql, __FILE__, __LINE__);
+			$result = Database::query($sql);
 
 			while($user_list = Database::fetch_array($result)) {
 				$students_online[$user_list['access_user_id']] = $user_list;

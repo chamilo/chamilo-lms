@@ -1,7 +1,7 @@
 <?php
 /*
  * FCKeditor - The text editor for Internet - http://www.fckeditor.net
- * Copyright (C) 2003-2009 Frederico Caldeira Knabben
+ * Copyright (C) 2003-2010 Frederico Caldeira Knabben
  *
  * == BEGIN LICENSE ==
  *
@@ -36,7 +36,8 @@ function GetFolders( $resourceType, $currentFolder )
 	$in_shared_folder = $currentFolder == '/shared_folder/';
 	$user_id = api_get_user_id();
 
-	if ($oCurrentFolder !== false) {
+	if ($oCurrentFolder !== false)
+	{
 		while ( $sFile = readdir( $oCurrentFolder ) )
 		{
 			if ( $sFile != '.' && $sFile != '..'
@@ -54,7 +55,6 @@ function GetFolders( $resourceType, $currentFolder )
 		}
 		closedir( $oCurrentFolder ) ;
 	}
-
 
 	// Open the "Folders" node.
 	echo "<Folders>" ;
@@ -245,7 +245,7 @@ function FileUpload( $resourceType, $currentFolder, $sCommand )
 				{
 					$iCounter++ ;
 					$sFileName = RemoveExtension( $sOriginalFileName ) . '(' . $iCounter . ').' . $sExtension ;
-					$sErrorNumber = '0' ; //Change sErrorNumber $ 201 to 0 to allow create record files renamed
+					$sErrorNumber = '0' ; // Change $sErrorNumber '201' to '0' to allow create record files renamed
 				}
 				else
 				{
@@ -265,14 +265,15 @@ function FileUpload( $resourceType, $currentFolder, $sCommand )
 							$permissions = $Config['ChmodOnUpload'] ;
 						}
 
-						$oldumask = umask(0) ;
+						//$oldumask = umask(0) ;
 						chmod( $sFilePath, $permissions ) ;
-						umask( $oldumask ) ;
+						//umask( $oldumask ) ;
 					}
 
 					break ;
 				}
 			}
+
 			if ( file_exists( $sFilePath ) )
 			{
 				//previous checks failed, try once again

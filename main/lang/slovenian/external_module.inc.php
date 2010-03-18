@@ -1,25 +1,26 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$langLinkSite = "Povezava na stran";
-$langSubTitle = "Doda povezavo iz glavnega menuja domaèe strani teèaja na poljubno stran oziroma poljuben URL. <p>Nasvet: èe elite dodati povezavo na stran, pojdite na to stran, kopirajte \'naslov\' (URL) iz vrstice naslov vašega brskalnika in ga vstavite v polje \"Povezava\" spodaj.";
-$langAddPage            = "Dodaj stran";
-$langSendPage           = "Stran za prenos";
-$langCouldNot           = "Datoteke ni bilo mogoèe prenesti";
-$langOkSentLink         = "Vaša povezava je bila prenešena.<p>Dostopna je z <a href=\"../..//index.php\">domaèe strani teèaja</a>";
-$langTooBig             = "Niste izbrali datoteke za prenos, ali pa je ta prevelika";
-$langExplanation        = "Stran mora biti v HTML obliki (npr. \"my_page.html\"). Povezana bo z domaèe strani teèaja. Èe elite prenesti dokumente, ki niso v HTML obliki (PDF, Word, Power Point, Video, etc.) uporabite orodje <a href=../document/document.php>dokumenti</a>";
-$langPgTitle            = "Naziv strani";
-$langNoLinkURL          = "Vnesite povezavo (URL)";
+$langLinkSite = "Dodaj povezavo na domaÄo stran";
+$langSubTitle = "Doda povezavo iz glavnega menuja domaÄe strani teÄaja na poljubno stran oziroma poljuben URL. <p>Nasvet: Äe Å¾elite dodati povezavo na stran, pojdite na to stran, kopirajte 'naslov' (URL) iz vrstice naslov vaÅ¡ega brskalnika in ga vstavite v polje \"Povezava\" spodaj.";
+$langAddPage = "Dodaj stran";
+$langSendPage = "Stran za prenos";
+$langCouldNot = "Datoteke ni bilo mogoÄe prenesti";
+$langOkSentLink = "VaÅ¡a povezava je bila preneÅ¡ena.<p>Dostopna je z <a href=\"../..//index.php\">domaÄe strani teÄaja</a>";
+$langTooBig = "Niste izbrali datoteke za prenos, ali pa je ta prevelika";
+$langExplanation = "Ko kliknes OK, se bo tvorila stran s forumom, agendo, upravnikom dokumentov itd. Tvoje uporabniÅ¡ko ime ti, kot tvorcu teÄaja, dovoljuje spremembe, ki ustrezajo tvojim potrebam.";
+$langPgTitle = "Naziv strani";
+$langNoLinkURL = "Vnesite povezavo (URL)";
 $langLinkTarget = "Cilj povezave";
 $langSameWindow = "V istem oknu";
 $langNewWindow = "V novem oknu";
-$langAdded = "Povezava je bila dodana";
+$langAdded = "Dodano";
 $langAddLink = "Dodaj povezavo";
-$langNoLinkName = "Vpišite naziv povezave";
-$langEditLink = "Uredi povezavo teèajeve domaèe strani";
+$langNoLinkName = "VpiÅ¡ite naziv povezave";
+$langEditLink = "Uredi povezavo teÄajeve domaÄe strani";
 $langChangePress = "Spremeni in pritisni OK";
-$langLinkChanged = "Povezava te&#269;ajeve doma&#269;e strani se je spremenila. Uporabite zgornji menu za vrnitev na doma&#269;o stran.";
+$langLinkChanged = "Povezava teÄajeve domaÄe strani se je spremenila. Uporabite zgornji menu za vrnitev na domaÄo stran.";
 $NoLinkName = "Naziv povezave ni podan";
 $NoLinkURL = "URL povezave ni podan";
 $LinkChanged = "Povezava je bila spremenjena";

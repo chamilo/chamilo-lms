@@ -1,39 +1,40 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$MessageEmptyMessageOrSubject = "Por favor, escribe\'l títulu y el testu del to mensax";
-$Inbox  = "Buzón d\'entrada";
-$Messages = "Mensaxes instantáneos";
-$SendMessage = "Unviar mensaxe instantaneu";
+$MessageEmptyMessageOrSubject = "Por favor, escribe'l tÃ­tulu y el testu del to mensax";
+$Inbox = "BuzÃ³n d'entrada";
+$Messages = "Mensaxes";
+$SendMessage = "Unviar mensax";
 $NewMessage = "Mensaxe instantaneu nuevu";
 $ComposeMessage = "Mensaxe instantaneu";
 $DeleteSelectedMessages = "Esborrar los mensaxes seleicionaos";
 $SelectAll = "Seleicionar too";
-$DeselectAll  = "Anular seleición";
-$ReplyToMessage = "Retrucar";
-$BackToInbox = "Volver al Buzón d\'entrada";
-$MessageSentTo = "El mensaxe unvióse a ";
-$SendMessageTo = "Unviar a ";
+$DeselectAll = "Anular seleiciÃ³n";
+$ReplyToMessage = "Retrucar a esti mensaxe";
+$BackToInbox = "Volver al BuzÃ³n d'entrada";
+$MessageSentTo = "El mensaxe unviÃ³se a";
+$SendMessageTo = "Unviar a";
 $Myself = "Yo mesmu";
 $From = "De";
 $To = "pa";
 $Date = "Fecha";
 $InvalidMessageId = "El id del mensaxe que se quier retrucar nun val.";
-$ErrorSendingMessage = "Hubo un erru de la que s\'unviaba\'l mensaxe";
-$SureYouWantToDeleteSelectedMessages = "¿ Ta seguru de que quier esborrar los mensaxes seleicionaos ?";
-$SelectedMessagesDeleted = "Esborrárense los mensaxes seleicionaos";
-$EnterTitle = "Escriba un títulu";
-$TypeYourMessage = "Escriba\'l so mensaxe";
-$MessageDeleted = "Esborróse\'l mensaxe";
-$ConfirmDeleteMessage = "¿ Ta seguru de que quier esborrar esti mensaxe ?";
+$ErrorSendingMessage = "Hubo un erru de la que s'unviaba'l mensaxe";
+$SureYouWantToDeleteSelectedMessages = "Â¿ Ta seguru de que quier esborrar los mensaxes seleicionaos ?";
+$SelectedMessagesDeleted = "EsborrÃ¡rense los mensaxes seleicionaos";
+$EnterTitle = "Escriba un tÃ­tulu";
+$TypeYourMessage = "Escriba'l so mensaxe";
+$MessageDeleted = "EsborrÃ³se'l mensaxe";
+$ConfirmDeleteMessage = "Â¿ Ta seguru de que quier esborrar esti mensaxe ?";
 $DeleteMessage = "Esborrar mensaxe";
 $ReadMessage = "Lleer";
-$SendInviteMessage = "Unviar mensaxes d\'invitación";
-$SendMessageInvitation = "¿De xuro que quies unviar les invitaciones a los usuarios seleicionaos?";
+$SendInviteMessage = "Unviar mensaxes d'invitaciÃ³n";
+$SendMessageInvitation = "Â¿De xuro que quies unviar les invitaciones a los usuarios seleicionaos?";
 $MessageTool = "Ferramienta de mensaxes";
-$SendMessage = "Unviar mensax";
 $WriteAMessage = "Escribir un mensax";
-$AlreadyReadMessage = "Mensax lleíu";
+$AlreadyReadMessage = "Mensax lleÃ­u";
 $UnReadMessage = "Mensax ensin lleer";
-$MessageSent = "Mensax unviáu";
+$MessageSent = "Mensax unviÃ¡u";
+$YouShouldWriteAMessage = "Tienes qu'escribir un mensax";
 ?>

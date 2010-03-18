@@ -1,4 +1,4 @@
-/* Default Style Sheet for Dokeos  (in progress ...)
+/* Default Style Sheet for Chamilo
    2004-07-18 by Wolfgang Schneider
    (info@ws-webservice.de / webmaster@bibelcenter.de)
    updated on 2005-02-25 by Olivier Brouckaert
@@ -593,7 +593,7 @@ div.admin_section h4 {
 	padding: 5px;
 }
 
-/* Styles for the Dokeos Config Settings of the platform admin section*/
+/* Styles for the Chamilo Config Settings of the platform admin section*/
 .settingtitle{
 	background-color: #EFEFEF;
 	border: 1px solid #cccccc;

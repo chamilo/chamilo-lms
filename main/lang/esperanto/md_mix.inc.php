@@ -1,18 +1,19 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$langTool = "Metadatumoj";
-$langClickKw = "Musklaku &#349;losilvorton en la arbo por elekti a&#365; malelekti &#285;in.";
-$langKwHelp = "<br/> Klaku la butonon \'+\' por malfermi, \'-\' por fermi, \'++\' por &#265;ion malfermi, \'--\' por &#265;ion fermi.<br/> <br/>Por malelekti &#265;iun elektitan &#349;losilvorton, fermu la arbon kaj remalfermi &#285;in per la butono \'+\'.<br/> Alt-klaku \'+\' por reelekti la anta&#365;e elektitajn &#349;losilvortojn.<br/> <br/> Alt-klaku &#349;losilvorton por nei &#285;in.<br/>";
+$langTool = "Dokumentaj metadatumoj";
+$langClickKw = "Musklaku sur ŝlosilvorton por elekti aŭ nuligi ĝin.";
+$langKwHelp = "<br/> Klaku sur '+' por malfermi, '-' por fermi, '++' por malfermi ĉion, '--' por fermi ĉion.<br/> <br/> Fermu la arbostrukturon kaj malfermu ĝin per '+' por nuligi antaŭajn elektojn.<br/> Malfermu per Alt-klaku '+' por remeti la originalajn ŝlosilvortojn.<br/> <br/> Alt-klako sur ŝlosilvorto elektas la ŝlosilvorton sen akompanantaj konceptoj akj nuligas elekton kun akompanantaj konceptoj.<br/> <br/> Se vi volas ŝanĝi la lingvon de la priskribo, ne samtempe aldonu novajn ŝlosilvortojn.<br/> <br/>";
 $langAdvanced = "Altnivela";
-$langSearch = "Ser&#265;i";
-$langSearchCrit = "Uzu la suba aero por priskribemaj vortoj, po unu linie!";
-$langNoKeywords = "Tiu &#265;i kurso ne havas &#349;losilvortojn.";
-$langKwCacheProblem = "Ne eblas malfermi la provizejon de &#349;losilvortoj";
-$langCourseKwds = "&#349;losilvortoj de la kurso";
-$langKwdsInMD = "&#349;losilvortoj uzataj en MD";
-$langKwdRefs = "&#349;losilvortaj referencoj";
-$langNonCourseKwds = "Ne-kursaj &#349;losilvortoj";
-$langKwdsUse = "Kursaj &#349;losilvortoj (grasaj = ne uzataj)";
-$langTotalMDEs = "Nombro da MD-eroj:";
+$langSearch = "Serĉi";
+$langSearchCrit = "Po unu vorto en linio!";
+$langNoKeywords = "Tiu ĉi kurso ne havas ŝlosilvortojn.";
+$langKwCacheProblem = "Ne eblas malfermi la provizejon de ŝlosilvortoj";
+$langCourseKwds = "Ĉi-dokumento enhavas la ŝlosilvortojn de la kurso";
+$langKwdsInMD = "ŝlosilvortoj uzataj en MD";
+$langKwdRefs = "ŝlosilvortaj referencoj";
+$langNonCourseKwds = "Ne-kursaj ŝlosilvortoj";
+$langKwdsUse = "Kursaj ŝlosilvortoj (grasaj = ne uzataj)";
+$langTotalMDEs = "Totala nombro da Ligil-MDaj datumoj :";
 ?>

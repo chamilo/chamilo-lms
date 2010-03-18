@@ -6,7 +6,7 @@
 ==============================================================================
 */
 // Language files that should be included
-$language_file = array('admin');
+$language_file = array('admin','userInfo');
 $cidReset = true;
 include '../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
@@ -28,8 +28,22 @@ $interbreadcrumb[] = array('url' => 'group_list.php','name' => get_lang('GroupLi
 
 $table_group = Database::get_main_table(TABLE_MAIN_GROUP);
 
+$htmlHeadXtra[] = '<script type="text/javascript" src="/main/inc/lib/javascript/jquery.js"></script>';
+$htmlHeadXtra[] = '<script type="text/javascript">
+textarea = "";
+num_characters_permited = 255;
+function text_longitud(){
+   num_characters = document.forms[0].description.value.length;
+  if (num_characters > num_characters_permited){
+      document.forms[0].description.value = textarea;
+   }else{
+      textarea = document.forms[0].description.value;
+   }
+}
+</script>';
+
 $sql = "SELECT * FROM $table_group WHERE id = '".$group_id."'";
-$res = Database::query($sql, __FILE__, __LINE__);
+$res = Database::query($sql);
 if (Database::num_rows($res) != 1) {
 	header('Location: group_list.php');
 	exit;
@@ -43,21 +57,20 @@ $form->addElement('header', '', $tool_name);
 $form->addElement('hidden', 'id', $group_id);
 
 // name
-$form->addElement('text', 'name', get_lang('Name'));
+$form->addElement('text', 'name', get_lang('Name'), array('size'=>60, 'maxlength'=>120));
 $form->applyFilter('name', 'html_filter');
 $form->applyFilter('name', 'trim');
 $form->addRule('name', get_lang('ThisFieldIsRequired'), 'required');
 
 // Description
-$form->addElement('text', 'description', get_lang('Description'));
+$form->addElement('textarea', 'description', get_lang('Description'), array('rows'=>3, 'cols'=>58, onKeyDown => "text_longitud()", onKeyUp => "text_longitud()"));
 $form->applyFilter('description', 'html_filter');
 $form->applyFilter('description', 'trim');
 
 // url
-$form->addElement('text', 'url', get_lang('URL'));
+$form->addElement('text', 'url', get_lang('URL'), array('size'=>35));
 $form->applyFilter('url', 'html_filter');
 $form->applyFilter('url', 'trim');
-
 // Picture
 $form->addElement('file', 'picture', get_lang('AddPicture'));
 $allowed_picture_types = array ('jpg', 'jpeg', 'png', 'gif');
@@ -83,7 +96,7 @@ $form->setDefaults($group_data);
 // Validate form
 if ( $form->validate()) {
 	$group = $form->exportValues();
-	
+
 	$picture_element = & $form->getElement('picture');
 	$picture = $picture_element->getValue();
 
@@ -94,13 +107,13 @@ if ( $form->validate()) {
 	elseif (!empty($picture['name'])) {
 		$picture_uri = GroupPortalManager::update_group_picture($group_id, $_FILES['picture']['name'], $_FILES['picture']['tmp_name']);
 	}
-	
+
 	$name 			= $group['name'];
 	$description	= $group['description'];
-	$url 			= $group['url'];	
+	$url 			= $group['url'];
 	$status 		= intval($group['visibility']);
-	
-	GroupPortalManager::update($group_id, $name, $description, $url, $status, $picture_uri);	
+
+	GroupPortalManager::update($group_id, $name, $description, $url, $status, $picture_uri);
 	$tok = Security::get_token();
 	header('Location: group_list.php?action=show_message&message='.urlencode(get_lang('GroupUpdated')).'&sec_token='.$tok);
 	exit();

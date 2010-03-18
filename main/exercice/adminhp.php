@@ -57,6 +57,7 @@ define(MULTIPLE_ANSWER,	2);
 define(FILL_IN_BLANKS,	3);
 define(MATCHING,		4);
 define(FREE_ANSWER,     5);
+define(MULTIPLE_ANSWER_COMBINATION, 6);
 
 // allows script inclusions
 define(ALLOWED_TO_INCLUDE,1);
@@ -94,7 +95,7 @@ if (isset($_SESSION['gradebook'])){
 if (!empty($gradebook) && $gradebook=='view') {
 	$interbreadcrumb[]= array (
 			'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
-			'name' => get_lang('Gradebook')
+			'name' => get_lang('ToolGradebook')
 		);
 }
 

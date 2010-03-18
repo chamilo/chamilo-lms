@@ -1,31 +1,9 @@
 <?php
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2008 Dokeos Latinoamerica SAC
-	Copyright (c) 2006 Dokeos SPRL
-	Copyright (c) 2006 Ghent University (UGent)
-	Copyright (c) various contributors
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
-	Mail: info@dokeos.com
-==============================================================================
-*/
+/* For licensing terms, see /license.txt */
 /**
  * Defines a gradebook Result object
  * @author Bert Steppé, Stijn Konings
- * @package dokeos.gradebook
+ * @package chamilo.gradebook
  */
 class Result
 {
@@ -35,13 +13,13 @@ class Result
 	private $id;
 	private $user_id;
 	private $evaluation;
-	private $creation_date;
+	private $created_at;
 	private $score;
 
 // CONSTRUCTORS
 
     function Result() {
-    	$this->creation_date = time();
+		$this->created_at = api_get_utc_datetime();
     }
 
 // GETTERS AND SETTERS
@@ -59,7 +37,7 @@ class Result
 	}
 
     public function get_date() {
-		return $this->creation_date;
+		return $this->created_at;
 	}
 
    	public function get_score() {
@@ -79,7 +57,7 @@ class Result
 	}
 
     public function set_date ($creation_date) {
-		$this->creation_date = $creation_date;
+		$this->created_at = $creation_date;
 	}
 
    	public function set_score ($score) {
@@ -97,37 +75,44 @@ class Result
 	public function load ($id = null, $user_id = null, $evaluation_id = null) {
 		$tbl_grade_results = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_RESULT);
 		$tbl_course_rel_course = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
+		$tbl_session_rel_course_user = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 		if (is_null($id ) && is_null($user_id) && !is_null($evaluation_id)) {
 
 			$sql_verified_if_exist_evaluation='SELECT COUNT(*) AS count FROM '.$tbl_grade_results.' WHERE evaluation_id="'.Database::escape_string($evaluation_id).'";';
-			$res_verified_if_exist_evaluation=Database::query($sql_verified_if_exist_evaluation,__FILE__,__LINE__);
+			$res_verified_if_exist_evaluation=Database::query($sql_verified_if_exist_evaluation);
 			$info_verified_if_exist_evaluation=Database::result($res_verified_if_exist_evaluation,0,0);
 				if ($info_verified_if_exist_evaluation!=0) {
 
-				$sql_course_rel_user='SELECT course_code,user_id,status FROM '.$tbl_course_rel_course.' WHERE status="5" AND course_code="'.api_get_course_id().'"; ';
-				$res_course_rel_user=Database::query($sql_course_rel_user,__FILE__,__LINE__);
+				$sql_course_rel_user= '';
+				if (api_get_session_id()) {
+					$sql_course_rel_user = 'SELECT course_code,id_user,status FROM '.$tbl_session_rel_course_user.' WHERE status=0 AND course_code="'.api_get_course_id().' AND id_session='.api_get_session_id().'"';
+				} else {
+					$sql_course_rel_user = 'SELECT course_code,user_id,status FROM '.$tbl_course_rel_course.' WHERE status="'.STUDENT.'" AND course_code="'.api_get_course_id().'"; ';
+				}
+
+				$res_course_rel_user=Database::query($sql_course_rel_user);
 
 				$list_user_course_list=array();
 				while ($row_course_rel_user=Database::fetch_array($res_course_rel_user)) {
 					$list_user_course_list[]=$row_course_rel_user;
 				}
 
-				$current_date=time();
+				$current_date=api_get_utc_datetime();
 				for ($i=0;$i<count($list_user_course_list);$i++) {
 					$sql_verified='SELECT COUNT(*) AS count FROM '.$tbl_grade_results.' WHERE user_id="'.(int)($list_user_course_list[$i]['user_id']).'" AND evaluation_id="'.Database::escape_string($evaluation_id).'";';
 					//$my_status_in_course=CourseManager::get_user_in_course_status($list_user_course_list[$i]['user_id'], api_get_course_id());
-					$res_verified=Database::query($sql_verified,__FILE__,__LINE__);
+					$res_verified=Database::query($sql_verified);
 					$info_verified=Database::result($res_verified,0,0);
 					if ($info_verified==0) {
-						$sql_insert='INSERT INTO '.$tbl_grade_results.'(user_id,evaluation_id,date,score) values ("'.Database::escape_string($list_user_course_list[$i]['user_id']).'","'.Database::escape_string($evaluation_id).'","'.$current_date.'",0);';
-						$res_insert=Database::query($sql_insert,__FILE__,__LINE__);
+						$sql_insert='INSERT INTO '.$tbl_grade_results.'(user_id,evaluation_id,created_at,score) values ("'.Database::escape_string($list_user_course_list[$i]['user_id']).'","'.Database::escape_string($evaluation_id).'","'.$current_date.'",0);';
+						$res_insert=Database::query($sql_insert);
 					}
 				}
 				$list_user_course_list=array();
 			}
 		}
 
-		$sql='SELECT id,user_id,evaluation_id,date,score FROM '.$tbl_grade_results;
+		$sql='SELECT id,user_id,evaluation_id,created_at,score FROM '.$tbl_grade_results;
 		$paramcount = 0;
 		if (!empty ($id)) {
 			$sql.= ' WHERE id = '.Database::escape_string($id);
@@ -148,14 +133,14 @@ class Result
 			$sql .= ' evaluation_id = '.Database::escape_string($evaluation_id);
 			$paramcount ++;
 		}
-		$result = Database::query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql);
 		$allres=array();
 		while ($data=Database::fetch_array($result)) {
 			$res= new Result();
 			$res->set_id($data['id']);
 			$res->set_user_id($data['user_id']);
 			$res->set_evaluation_id($data['evaluation_id']);
-			$res->set_date($data['date']);
+			$res->set_date(api_get_local_time($data['created_at']));
 			$res->set_score($data['score']);
 			$allres[]=$res;
 		}
@@ -166,11 +151,11 @@ class Result
      * Insert this result into the database
      */
     public function add() {
-		if (isset($this->user_id) && isset($this->evaluation) && isset($this->creation_date) ) {
+		if (isset($this->user_id) && isset($this->evaluation) ) {
 			$tbl_grade_results = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_RESULT);
 			$sql = 'INSERT INTO '.$tbl_grade_results
 					.' (user_id, evaluation_id,
-					date';
+					created_at';
 			if (isset($this->score)) {
 			 $sql .= ',score';
 			}
@@ -182,7 +167,7 @@ class Result
 			}
 			$sql .= ')';
 
-			Database::query($sql, __FILE__, __LINE__);
+			Database::query($sql);
 		} else {
 			die('Error in Result add: required field empty');
 		}
@@ -201,20 +186,19 @@ class Result
 			$arr=get_object_vars($arr_result[0]);
 
 			$sql = 'INSERT INTO '.$tbl_grade_results_log
-					.' (id_result,user_id, evaluation_id,
-					date_log';
+					.' (id_result,user_id, evaluation_id,created_at';
 			if (isset($arr['score'])) {
 			 	$sql .= ',score';
 			}
 				$sql .= ') VALUES
 					('.(int)$arr['id'].','.(int)$arr['user_id'].', '.(int)$arr['evaluation']
-					.', '.$arr['creation_date'];
+					.", '".api_get_utc_datetime()."'";
 			if (isset($arr['score'])) {
 				 $sql .= ', '.$arr['score'];
 			}
 			$sql .= ')';
 
-			Database::query($sql, __FILE__, __LINE__);
+			Database::query($sql);
 		} else {
 			die('Error in Result add: required field empty');
 		}
@@ -236,7 +220,7 @@ class Result
 		}
 		$sql .= ' WHERE id = '.$this->id;
 		// no need to update creation date
-		Database::query($sql, __FILE__, __LINE__);
+		Database::query($sql);
 	}
 
 	/**
@@ -245,6 +229,6 @@ class Result
 	public function delete() {
 		$tbl_grade_results = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_RESULT);
 		$sql = 'DELETE FROM '.$tbl_grade_results.' WHERE id = '.$this->id;
-		Database::query($sql, __FILE__, __LINE__);
+		Database::query($sql);
 	}
 }

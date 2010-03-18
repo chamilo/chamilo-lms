@@ -3,7 +3,8 @@
 
 // including the global dokeos file
 require_once '../inc/global.inc.php';
-require_once '../glossary/glossary.class.php';
+require_once(api_get_path(LIBRARY_PATH).'glossary.lib.php');
+
 /*
  * search a term and return description from a glossary
  */

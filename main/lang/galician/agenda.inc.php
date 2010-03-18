@@ -1,11 +1,12 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $AgendaAdd = "Engadir un novo evento";
 $ShowAllEvents = "Mostrar todos os eventos";
 $ShowCurrent = "Mostrar todos os eventos da axenda do mes en curso";
-$AddCalendarItem = "Engadir un novo evento á axenda";
-$Day = "Día";
+$AddCalendarItem = "Engadir un novo evento Ã¡ axenda";
+$Day = "DÃ­a";
 $Month = "Mes";
 $Year = "Ano";
 $Hour = "Hora";
@@ -19,15 +20,15 @@ $lang_september = "Setembro";
 $langClassName = "Nome da clase";
 $lang_agenda = "Axenda";
 $ModifyCalendarItem = "Modificar un evento da axenda";
-$ItemTitle = "Título do evento";
-$langDay = "día";
+$ItemTitle = "TÃ­tulo do evento";
+$langDay = "dÃ­a";
 $month_default = "mes por defecto";
 $langYear = "ano";
 $year_default = "ano por defecto";
 $langHour = "Hora";
 $hour_default = "hora por defecto";
 $langMinute = "minutos";
-$langLasting = "duración";
+$langLasting = "duraciÃ³n";
 $langOldToNew = "vellos a novos";
 $langNewToOld = "novos a vellos";
 $langNow = "agora";
@@ -40,7 +41,7 @@ $AddPersonalItem = "Engadir evento persoal";
 $Week = "Semana";
 $Date = "Data";
 $Time = "Hora";
-$AddPersonalCalendarItem = "Engadir un evento á axenda persoal";
+$AddPersonalCalendarItem = "Engadir un evento Ã¡ axenda persoal";
 $ModifyPersonalCalendarItem = "Modificar un evento na axenda persoal";
 $PeronalAgendaItemAdded = "Evento persoal engadido correctamente";
 $PeronalAgendaItemEdited = "Evento persoal modificado correctamente";
@@ -49,29 +50,29 @@ $ViewPersonalItem = "Ver eventos persoais";
 $UserGroupFilter = "Filtrar por grupos/usuarios";
 $ShowAll = "Amosar todo";
 $Print = "Imprimir";
-$MyTextHere = "o meu texto aquí";
+$MyTextHere = "o meu texto aquÃ­";
 $CopiedAsAnnouncement = "Copiado como anuncio";
 $NewAnnouncement = "Novo anuncio";
 $AddAnnouncement = "Engadir como un anuncio";
-$UpcomingEvent = "Próximo evento";
-$RepeatedEvent = "Evento periódico";
+$UpcomingEvent = "PrÃ³ximo evento";
+$RepeatedEvent = "Evento periÃ³dico";
 $RepeatType = "Periodicidade";
 $RepeatDaily = "Diaria";
 $RepeatWeekly = "Semanal";
 $RepeatMonthlyByDate = "Mensual, por data";
-$RepeatMonthlyByDay = "Mensual, por día";
-$RepeatMonthlyByDayR = "Mensual, por día, restrinxido";
+$RepeatMonthlyByDay = "Mensual, por dÃ­a";
+$RepeatMonthlyByDayR = "Mensual, por dÃ­a, restrinxido";
 $RepeatYearly = "Anual";
-$RepeatEnd = "Finalizar as repeticións o";
+$RepeatEnd = "Finalizar as repeticiÃ³ns o";
 $RepeatedEventViewOriginalEvent = "Ver o evento inicial";
 $ICalFileImport = "Importar un ficheiro iCal/ics";
 $AllUsersOfThePlatform = "Todos os usuarios da Plataforma";
-$GlobalEvent = "Evento de carácter global";
+$GlobalEvent = "Evento de carÃ¡cter global";
 $ModifyEvent = "Modificar evento";
 $EndDateCannotBeBeforeTheStartDate = "A data final non pode ser menor que a data de inicio";
 $AgendaSortChronologicallyUp = "Ordenar eventos (antigos / recentes)";
 $AgendaSortChronologicallyDown = "Ordenar eventos (recentes / antigos)";
-$ItemForUserSelection = "Evento dirixido ós usuarios seleccionados";
-$IsNotiCalFormatFile = "Non é un arquivo de formato iCal";
+$ItemForUserSelection = "Evento dirixido Ã³s usuarios seleccionados";
+$IsNotiCalFormatFile = "Non Ã© un arquivo de formato iCal";
 $RepeatEvent = "Repetir evento";
 ?>

@@ -1,46 +1,47 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$langMdCallingTool = "Ba&#287;lant&#305;lar";
-$langMdTitle = "Ba&#287;lant&#305; ismi";
-$langMdDescription = "Ba&#287;lant&#305; a�&#305;klamas&#305;";
-$langMdCoverage = "Evrensel";
-$langMdCopyright = "Ghent �niversitesi";
-$nameTools = "kullan&#305;lmayan lisan de&#287;i&#351;keni";
-$langTool = "Ba&#287;lant&#305;lar Metadata";
-$langNoScript = "Taray&#305;c&#305;n&#305;z yaz&#305;l&#305;m&#305; desteklemiyor, l�tfen bu yaz&#305;n&#305;n alt&#305;ndaki ekran b�l�m�n� �nemsemeyin, �al&#305;&#351;mayacak.";
-$langLanguageTip = "bu kursun olu&#351;turuldu&#287;u lisan";
-$langIdentifier = "Tan&#305;mlay&#305;c&#305; (ID)";
-$langIdentifierTip = "bu kurs i�in harflerden, say&#305;lardan, _-.()\'!* gibi i&#351;aretlerden meydana gelmi&#351; benzersiz bir tan&#305;mlay&#305;c&#305; ";
-$langTitleTip = "ba&#351;l&#305;k veya isim ve ba&#351;l&#305;k veya isim lisan&#305;";
-$langDescriptionTip = "a�&#305;klama veya yorum, ve bu dersi tan&#305;mlayan lisan";
-$langKeyword = "Anahtar Kelimeler";
-$langKeywordTip = "virg�l ile ay&#305;r&#305;n (harf, say&#305;, -.)";
-$langCoverage = "Kategori";
-$langCoverageTip = "categori ismi";
-$langKwNote = "E&#287;er a�&#305;klama lisan&#305;n&#305; de&#287;i&#351;tirirseniz, ayn&#305; anda anahtar kelimeler eklemeyin.";
-$langClickKw = "Se�mek veya iptal etmek i�in dallardaki bir kelimeye t&#305;klay&#305;n.";
-$langKwHelp = "<br/> Click \'+\' button to open, \'-\' button to close, \'++\' button to open all, \'--\' button to close all.<br/> <br/> Clear all selected keywords by closing the tree and opening it again with the \'+\' button.<br/> Alt-click \'+\' searches the original keywords in the tree.<br/> <br/> Alt-click keyword selects a keyword without broader terms or deselects a keyword with broader terms.<br/> <br/> If you change the description language, do not add keywords at the same time.<br/> <br/> ";
+$langMdCallingTool = "Belgeler";
+$langMdTitle = "Kurs Başlığı";
+$langMdDescription = "Bu bilgiyi kaydetmek için Kaydet düğmesine basın.";
+$langMdCoverage = "e.g. Bachelor of ...";
+$langMdCopyright = "e.g. provided the source is acknowledged";
+$nameTools = "kullanılmayan lisan değişkeni";
+$langTool = "Belge Metadata";
+$langNoScript = "Script sizin tarayıcınızda çalıştırılamadığı için lütfen bu yazının altındaki parçayı yoksayın.";
+$langLanguageTip = "bu kursun hazırlandığı lisan";
+$langIdentifier = "Belirleyici";
+$langIdentifierTip = "unique identification for this learning object, composed of letters, digits, _-.()'!*";
+$langTitleTip = "başlık veya isim ve lisanı";
+$langDescriptionTip = "açıklama veya tavsiye ve bu kursu açıklamada kullanılan lisan";
+$langKeyword = "Anahtar sözcük";
+$langKeywordTip = "virgül ile ayırın ( harfler, sayılar, -,)";
+$langCoverage = "Coverage";
+$langCoverageTip = "for example bachelor of xxx: yyy";
+$langKwNote = "Eğer açıklama lisanını değiştirirseniz, aynı zamanda anahtar kelimeleri eklemeyin";
+$langClickKw = "Seçmek veya seçimi iptal için bir anahtar kelimeye tıklayın";
+$langKwHelp = "<br/> Açmak için  '+' , kapamak için '-' , hepsini açmak için '++' , hepsini kapatmak için '--' düğmesine tıklayın.<br/> <br/> Clear all selected keywords by closing the tree and opening it again with the '+' button.<br/> Alt-click '+' searches the original keywords in the tree.<br/> <br/> Alt-click keyword selects a keyword without broader terms or deselects a keyword with broader terms.<br/> <br/> If you change the description language, do not add keywords at the same time.<br/> <br/>";
 $langLocation = "URL/URI";
-$langLocationTip = "a�mak i�in t&#305;klay&#305;n";
+$langLocationTip = "açmak için tıklayın";
 $langStore = "Kaydet";
-$langDeleteAll = "B�t�n MetaDatay&#305; sil";
-$langConfirmDelete = "ger�ekten silmek istiyormusunuz ?";
+$langDeleteAll = "Bütün Metadata yı sil";
+$langConfirmDelete = "Do you *really* want to delete all metadata?";
 $langWorkOn = "on";
-$langNotInDB = "b�yle bir ba&#287;lant&#305; kategorisi yok";
-$langManifestSyntax = "(a�&#305;klama dosyas&#305;nda yaz&#305;m hatas&#305;...)";
-$langEmptyManifest = "(bo&#351; a�&#305;klama dosyas&#305;...)";
-$langNoManifest = "(a�&#305;klama dosyas&#305; yok...)";
-$langNotFolder = "m�mk�n de&#287;il, o bir klas�r de&#287;il...";
+$langNotInDB = "böyle bir bağlantı kategorisi yok";
+$langManifestSyntax = "(açıklama dosyasında yazım hatası...)";
+$langEmptyManifest = "(boş açıklama dosyası...)";
+$langNoManifest = "(açıklama dosyası yok...)";
+$langNotFolder = "mümkün değil, o bir klasör değil...";
 $langContinue = "Continue with";
-$langCreate = "MDE olu&#351;tur";
+$langCreate = "yarat";
 $langRemove = "MDE sil";
-$langAllRemovedFor = "kategorideki b�t�n giri&#351;ler silindi";
-$langRemainingFor = "kategorideki kullan&#305;lmayan giri&#351;ler silindi";
+$langAllRemovedFor = "kategorideki bütün girişler silindi";
+$langRemainingFor = "kategorideki kullanılmayan girişler silindi";
 $langIndex = "Index Kelimeleri";
-$langTotalMDEs = "MD giri&#351; ba&#287;lant&#305;lar&#305;n&#305;n Toplam Say&#305;s&#305;:";
-$langMainMD = "Ana MDE a�";
-$langOrElse = "Bir ba&#287;lant&#305; kategorisi se�";
+$langTotalMDEs = "MD giriş bağlantılarının Toplam Sayısı:";
+$langMainMD = "Ana MDE aç";
+$langOrElse = "Bir bağlantı kategorisi seç";
 $langWarningDups = "- tekrarlanan kategori isimleri listeden silindi!";
 $langSLC = "Work with Links category named";
 ?>

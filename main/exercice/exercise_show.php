@@ -1,8 +1,8 @@
 <?php //$id: $
-/* For licensing terms, see /dokeos_license.txt */
+/* For licensing terms, see /license.txt */
 /**
 *
-*	@package dokeos.exercise
+*	@package chamilo.exercise
 * 	@author Julio Montoya Armas Added switchable fill in blank option added
 * 	@version $Id: exercise_show.php 22256 2009-07-20 17:40:20Z ivantcholakov $
 *
@@ -15,13 +15,15 @@
 $language_file=array('exercice','tracking');
 
 // including the global dokeos file
-include_once '../inc/global.inc.php';
-include_once '../inc/lib/course.lib.php';
+require_once '../inc/global.inc.php';
+require_once '../inc/lib/course.lib.php';
 // including additional libraries
-include_once 'exercise.class.php';
-include_once 'question.class.php'; //also defines answer type constants
-include_once 'answer.class.php';
-include_once(api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
+require_once 'exercise.class.php';
+require_once 'question.class.php'; //also defines answer type constants
+require_once 'answer.class.php';
+require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
+require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
+require_once api_get_path(LIBRARY_PATH).'exercise_show_functions.lib.php';
 
 if ( empty ( $origin ) ) {
     $origin = $_REQUEST['origin'];
@@ -94,21 +96,39 @@ $current_attempt = $_SESSION['current_exercice_attempt'][$current_user_id];
 //Is fraudulent exercice
 $current_time = time();
 
-if (isset($_SESSION['expired_time'])) { //Only for exercice of type "One page"
-	$expired_date = $_SESSION['expired_time'];
+$emailId   = $_REQUEST['email'];
+$user_name = $_REQUEST['user'];
+$test 	   = $_REQUEST['test'];
+$dt	 	   = $_REQUEST['dt'];
+$marks 	   = $_REQUEST['res'];
+$id 	   = $_REQUEST['id'];
+
+$sql_fb_type='SELECT feedback_type, exercises.id FROM '.$TBL_EXERCICES.' as exercises, '.$TBL_TRACK_EXERCICES.' as track_exercises WHERE exercises.id=track_exercises.exe_exo_id AND track_exercises.exe_id="'.Database::escape_string($id).'"';
+$res_fb_type=Database::query($sql_fb_type);
+$row_fb_type=Database::fetch_row($res_fb_type);
+$feedback_type = $row_fb_type[0];
+$exercise_id = intval($row_fb_type[1]);
+
+$course_code = api_get_course_id();
+$session_id  = api_get_session_id();
+$current_expired_time_key = $course_code.'_'.$session_id.'_'.$exercise_id;
+
+if (isset($_SESSION['expired_time'][$current_expired_time_key])) { //Only for exercice of type "One page"
+	$expired_date = $_SESSION['expired_time'][$current_expired_time_key];
 	$expired_time = strtotime($expired_date);
 
 	//Validation in case of fraud
 	$total_time_allowed = $expired_time + 30;
 	if ($total_time_allowed < $current_time) {
 	  $sql_fraud = "UPDATE $TBL_TRACK_ATTEMPT SET answer = 0, marks=0, position=0 WHERE exe_id = '$current_attempt' ";
-	  Database::query($sql_fraud,__FILE__,__LINE__);
-	}	
+	  Database::query($sql_fraud);
+	}
 }
+
 //Unset session for clock time
 unset($_SESSION['current_exercice_attempt'][$current_user_id]);
-unset($_SESSION['expired_time']);
-unset($_SESSION['end_expired_time']);
+unset($_SESSION['expired_time'][$current_expired_time_key]);
+unset($_SESSION['end_expired_time'][$current_expired_time_key]);
 
 $is_allowedToEdit=api_is_allowed_to_edit(null,true) || $is_courseTutor;
 $nameTools=get_lang('CorrectTest');
@@ -118,10 +138,7 @@ if (isset($_SESSION['gradebook'])){
 }
 
 if (!empty($gradebook) && $gradebook=='view') {
-	$interbreadcrumb[]= array (
-			'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
-			'name' => get_lang('Gradebook')
-		);
+	$interbreadcrumb[]= array ('url' => '../gradebook/'.$_SESSION['gradebook_dest'],'name' => get_lang('ToolGradebook'));
 }
 $fromlink = '';
 if($origin=='user_course') {
@@ -134,17 +151,18 @@ if($origin=='user_course') {
  	$interbreadcrumb[] = array ("url" => api_get_path(WEB_COURSE_PATH).$_course['directory'], 'name' => $_course['title']);
 	$interbreadcrumb[] = array ("url" => "../tracking/courseLog.php?cidReq=".$cidReq.'&studentlist=true&id_session='.$_SESSION['id_session'], "name" => get_lang("Tracking"));
 	$interbreadcrumb[] = array ("url" => "../mySpace/myStudents.php?student=".Security::remove_XSS($_GET['student']).'&details=true&origin='.$origin.'&course='.Security::remove_XSS($_GET['cidReq']), "name" => get_lang("DetailsStudentInCourse"));
-	$interbreadcrumb[] = array ("url" => "../mySpace/lp_tracking.php?action=stats&course=".$cidReq."&student_id=".Security::remove_XSS($_GET['student'])."&lp_id=".$_GET['my_lp_id']."&origin=".Security::remove_XSS($_GET['origin']) , "name" => get_lang("LearningPathDetails"));
+	$interbreadcrumb[] = array ("url" => "../mySpace/lp_tracking.php?action=stats&course=".$cidReq."&student_id=".Security::remove_XSS($_GET['student'])."&lp_id=".Security::remove_XSS($_GET['my_lp_id'])."&origin=".Security::remove_XSS($_GET['origin']) , "name" => get_lang("LearningPathDetails"));
 
 	$from_myspace = false;
 	if (isset ($_GET['from']) && $_GET['from'] == 'myspace') {
 		$fromlink = '&from=myspace';
-		$this_section = "session_my_space";
+		$this_section = SECTION_TRACKING;
 	} else {
 		$this_section = SECTION_COURSES;
 	}
 
-} else if($origin=='student_progress') {
+} elseif($origin=='student_progress') {
+	$this_section = SECTION_TRACKING;
 	$interbreadcrumb[] = array ("url" => "../auth/my_progress.php?id_session".Security::remove_XSS($_GET['id_session'])."&course=".$_cid, "name" => get_lang('MyProgress'));
 	unset($_cid);
 } else {
@@ -158,17 +176,6 @@ if ($origin != 'learnpath') {
 } else {
 	Display::display_reduced_header();
 }
-$emailId   = $_REQUEST['email'];
-$user_name = $_REQUEST['user'];
-$test 	   = $_REQUEST['test'];
-$dt	 	   = $_REQUEST['dt'];
-$marks 	   = $_REQUEST['res'];
-$id 	   = $_REQUEST['id'];
-
-$sql_fb_type='SELECT feedback_type FROM '.$TBL_EXERCICES.' as exercises, '.$TBL_TRACK_EXERCICES.' as track_exercises WHERE exercises.id=track_exercises.exe_exo_id AND track_exercises.exe_id="'.Database::escape_string($id).'"';
-$res_fb_type=Database::query($sql_fb_type,__FILE__,__LINE__);
-$row_fb_type=Database::fetch_row($res_fb_type);
-$feedback_type = $row_fb_type[0];
 
 ?>
 <style type="text/css">
@@ -221,178 +228,11 @@ function getFCK(vals,marksid)
 </script>
 <?php
 
-/**
- * This function gets the comments of an exercise
- *
- * @param int $id
- * @param int $question_id
- * @return str the comment
- */
-function get_comments($id,$question_id)
-{
-	global $TBL_TRACK_ATTEMPT;
-	$sql = "SELECT teacher_comment FROM ".$TBL_TRACK_ATTEMPT." where exe_id='".Database::escape_string($id)."' and question_id = '".Database::escape_string($question_id)."' ORDER by question_id";
-	$sqlres = Database::query($sql, __FILE__, __LINE__);
-	$comm = Database::result($sqlres,0,"teacher_comment");
-	return $comm;
-}
-/**
- * Display the answers to a multiple choice question
- *
- * @param integer Answer type
- * @param integer Student choice
- * @param string  Textual answer
- * @param string  Comment on answer
- * @param string  Correct answer comment
- * @param integer Exercise ID
- * @param integer Question ID
- * @param boolean Whether to show the answer comment or not
- * @return void
- */
-function display_unique_or_multiple_answer($answerType, $studentChoice, $answer, $answerComment, $answerCorrect, $id, $questionId, $ans)
-{
-	?>
-	<tr>
-	<td width="5%" align="center">
-		<img src="../img/<?php echo ($answerType == UNIQUE_ANSWER)?'radio':'checkbox'; echo $studentChoice?'_on':'_off'; ?>.gif"
-		border="0" alt="" />
-	</td>
-	<td width="5%" align="center">
-		<img src="../img/<?php echo ($answerType == UNIQUE_ANSWER)?'radio':'checkbox'; echo $answerCorrect?'_on':'_off'; ?>.gif"
-		border="0" alt=" " />
-	</td>
-	<td width="40%" style="border-bottom: 1px solid #4171B5;">
-		<?php
-		$answer=api_parse_tex($answer);
-		echo $answer;
-		?>
-	</td>
-	<td width="20%" style="border-bottom: 1px solid #4171B5;">
-		<?php
-		$answerComment=api_parse_tex($answerComment);
-		if($studentChoice)
-		{
-			if(!$answerCorrect)
-			{
-				echo '<span style="font-weight: bold; color: #FF0000;">'.nl2br(make_clickable($answerComment)).'</span>';
-			}
-			else{
-				echo '<span style="font-weight: bold; color: #008000;">'.nl2br(make_clickable($answerComment)).'</span>';
-			}
-		}
-		else
-		{
-			echo '&nbsp;';
-		}
-		?>
-	</td>
-		<?php
-	    if ($ans==1) {
-	        $comm = get_comments($id,$questionId);
-		}
-	    ?>
-	</tr>
-	<?php
-}
-/**
- * Shows the answer to a fill-in-the-blanks question, as HTML
- * @param string    Answer text
- * @param int       Exercise ID
- * @param int       Question ID
- * @return void
- */
 
-function display_fill_in_blanks_answer($answer,$id,$questionId)
-{
-	?>
-		<tr>
-		<td>
-			<?php echo nl2br(Security::remove_XSS($answer,COURSEMANAGERLOWSECURITY)); ?>
-		</td><?php
-		if(!api_is_allowed_to_edit(null,true)) {?>
-			<td>
-			<?php
-			$comm = get_comments($id,$questionId);
-			?>
-			</td>
-			</tr>
-	<?php }
-}
-/**
- * Shows the answer to a free-answer question, as HTML
- * @param string    Answer text
- * @param int       Exercise ID
- * @param int       Question ID
- * @return void
- */
-function display_free_answer($answer,$id,$questionId) {
-	?>
-		<tr>
-		<td>
-			<?php echo nl2br(Security::remove_XSS($answer,COURSEMANAGERLOWSECURITY)); ?>
-		</td> <?php if(!api_is_allowed_to_edit(null,true)) {?>
-        <td>
-        <?php
-        $comm = get_comments($id,$questionId);
-        ?>
-        </td>
-    <?php }?>
-    </tr>
-    <?php
-}
-/**
- * Displays the answer to a hotspot question
- *
- * @param int $answerId
- * @param string $answer
- * @param string $studentChoice
- * @param string $answerComment
- */
-function display_hotspot_answer($answerId, $answer, $studentChoice, $answerComment) {
-	//global $hotspot_colors;
-	$hotspot_colors = array("", // $i starts from 1 on next loop (ugly fix)
-            						"#4271B5",
-									"#FE8E16",
-									"#3B3B3B",
-									"#BCD631",
-									"#D63173",
-									"#D7D7D7",
-									"#90AFDD",
-									"#AF8640",
-									"#4F9242",
-									"#F4EB24",
-									"#ED2024",
-									"#45C7F0",
-									"#F7BDE2");
-	?>
-	<tr>
-		<td width="100px" valign="top" align="left">
-			<div style="width:100%;">
-				<div style="height:11px; width:11px; background-color:<?php echo $hotspot_colors[$answerId]; ?>; display:inline; float:left; margin-top:3px;"></div>
-				<div style="float:left; padding-left:5px;">
-				<?php echo $answerId; ?>
-				</div>
-				<div><?php echo '&nbsp;'.$answer ?></div>
-			</div>
-		</td>
-		<td width="50px" style="padding-right:15px" valign="top" align="left">
-			<?php
-			$my_choice = ($studentChoice)?get_lang('Correct'):get_lang('Fault'); echo $my_choice; ?>
-		</td>
 
-		<td valign="top" align="left" >
-			<?php
-			$answerComment=api_parse_tex($answerComment);
-			if($studentChoice) {
-				echo '<span style="font-weight: bold; color: #008000;">'.nl2br(make_clickable($answerComment)).'</span>';
-			} else {
-				echo '<span style="font-weight: bold; color: #FF0000;">'.nl2br(make_clickable($answerComment)).'</span>';
-			}
-			?>
-		</td>
-	</tr>
-	<?php
-}
+
+
+
 
 /*
 ==============================================================================
@@ -404,7 +244,7 @@ function display_hotspot_answer($answerId, $answer, $studentChoice, $answerComme
 
 $coursecode = api_get_course_id();
 $courseName = $_SESSION['_course']['name'];
-	
+
 $to = '';
 $teachers = array();
 if(api_get_setting('use_session_mode')=='true' && !empty($_SESSION['id_session'])) {
@@ -466,7 +306,7 @@ if (Database::num_rows($result)>0 && isset($id)) {
 				  WHERE attempts.exe_id='".Database::escape_string($id)."' $user_restriction
 				  GROUP BY quizz_rel_questions.question_order, attempts.question_id";
 					//GROUP BY questions.position, attempts.question_id";
-		$result =Database::query($query, __FILE__, __LINE__);
+		$result =Database::query($query);
 	}
 } else {
 	Display::display_warning_message(get_lang('CantViewResults'));
@@ -557,7 +397,7 @@ if ($show_results) {
 
 		// destruction of the Question object
 		unset($objQuestionTmp);
-
+		
 		if($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER) {
 			$colspan=2;
 		}
@@ -586,7 +426,11 @@ if ($show_results) {
 				<td><i><?php echo get_lang("Choice"); ?></i> </td>
 				<td><i><?php echo get_lang("ExpectedChoice"); ?></i></td>
 				<td><i><?php echo get_lang("Answer"); ?></i></td>
+				<?php if ($feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) { ?>
 				<td><i><?php echo get_lang("Comment"); ?></i></td>
+				<?php } else { ?>
+				<td>&nbsp;</td>
+				<?php } ?>
 			</tr>
 			<tr>
 			<td>&nbsp;</td>
@@ -602,25 +446,106 @@ if ($show_results) {
 				$answerCorrect=$objAnswerTmp->isCorrect($answerId);
 				$answerWeighting=$objAnswerTmp->selectWeighting($answerId);
 				$queryans = "select * from ".$TBL_TRACK_ATTEMPT." where exe_id = '".Database::escape_string($id)."' and question_id= '".Database::escape_string($questionId)."'";
-				$resultans = Database::query($queryans, __FILE__, __LINE__);
+				$resultans = Database::query($queryans);
 				while ($row = Database::fetch_array($resultans)) {
 					$ind = $row['answer'];
 					$choice[$ind] = 1;
 				}
-				$studentChoice=$choice[$answerId];
+
+				$numAnswer=$objAnswerTmp->selectAutoId($answerId);
+
+				$studentChoice=$choice[$numAnswer];
+
 				if ($studentChoice) {
 					$questionScore+=$answerWeighting;
 					$totalScore+=$answerWeighting;
 				}
 				echo '<tr><td>';
 				if ($answerId==1) {
-						display_unique_or_multiple_answer($answerType, $studentChoice, $answer, $answerComment, $answerCorrect,$id,$questionId,$answerId);
+						ExerciseShowFunctions::display_unique_or_multiple_answer($answerType, $studentChoice, $answer, $answerComment, $answerCorrect,$id,$questionId,$answerId);
 				} else {
-						display_unique_or_multiple_answer($answerType, $studentChoice, $answer, $answerComment, $answerCorrect,$id,$questionId,"");
+						ExerciseShowFunctions::display_unique_or_multiple_answer($answerType, $studentChoice, $answer, $answerComment, $answerCorrect,$id,$questionId,"");
 				}
 				echo '</td></tr>';
 				$i++;
 		 	}
+		 	echo '</table>';
+		} elseif ($answerType == MULTIPLE_ANSWER_COMBINATION) {
+			$choice=array();
+			?>
+			<table width="100%" border="0" cellspacing="3" cellpadding="3">
+			<tr>
+			<td>&nbsp;</td>
+			</tr>
+			<tr>
+				<td><i><?php echo get_lang("Choice"); ?></i> </td>
+				<td><i><?php echo get_lang("ExpectedChoice"); ?></i></td>
+				<td><i><?php echo get_lang("Answer"); ?></i></td>
+				<td><i><?php echo get_lang("Comment"); ?></i></td>
+			</tr>
+			<tr>
+			<td>&nbsp;</td>
+			</tr>
+			<?php
+			// construction of the Answer object
+			$objAnswerTmp=new Answer($questionId);
+			$nbrAnswers=$objAnswerTmp->selectNbrAnswers();
+			$questionScore=0;
+
+			$real_answers = array();
+
+			for ($answerId=1;$answerId <= $nbrAnswers;$answerId++) {
+				$answer=$objAnswerTmp->selectAnswer($answerId);
+				$answerComment=$objAnswerTmp->selectComment($answerId);
+				$answerCorrect=$objAnswerTmp->isCorrect($answerId);
+				$answerWeighting=$objAnswerTmp->selectWeighting($answerId);
+				$queryans = "select * from ".$TBL_TRACK_ATTEMPT." where exe_id = '".Database::escape_string($id)."' and question_id= '".Database::escape_string($questionId)."'";
+				$resultans = Database::query($queryans);
+				while ($row = Database::fetch_array($resultans)) {
+					$ind = $row['answer'];
+					$choice[$ind] = 1;
+				}
+				$numAnswer=$objAnswerTmp->selectAutoId($answerId);
+				$studentChoice=$choice[$numAnswer];
+
+				if ($answerCorrect == 1) {
+					if ($studentChoice) {
+						$real_answers[$answerId] = true;
+					} else {
+						$real_answers[$answerId] = false;
+					}
+				} else {
+					if ($studentChoice) {
+						$real_answers[$answerId] = false;
+					} else {
+						$real_answers[$answerId] = true;
+					}
+				}
+
+				echo '<tr><td>';
+				if ($answerId==1) {
+						ExerciseShowFunctions::display_unique_or_multiple_answer($answerType, $studentChoice, $answer, $answerComment, $answerCorrect,$id,$questionId,$answerId);
+				} else {
+						ExerciseShowFunctions::display_unique_or_multiple_answer($answerType, $studentChoice, $answer, $answerComment, $answerCorrect,$id,$questionId,"");
+				}
+				echo '</td></tr>';
+				$i++;
+		 	}
+
+		 	$final_answer = true;
+		 	foreach($real_answers as $my_answer) {
+		 		if (!$my_answer) {
+		 			$final_answer = false;
+		 		}
+		 	}
+
+		 	if ($final_answer) {
+		 		//getting only the first score where we save the weight of all the question
+		 		$answerWeighting=$objAnswerTmp->selectWeighting(1);
+				$questionScore+=$answerWeighting;
+				$totalScore+=$answerWeighting;
+			}
+
 		 	echo '</table>';
 		} elseif ($answerType == UNIQUE_ANSWER) {
 			?>
@@ -632,7 +557,11 @@ if ($show_results) {
 					<td><i><?php echo get_lang("Choice"); ?></i> </td>
 					<td><i><?php echo get_lang("ExpectedChoice"); ?></i></td>
 					<td><i><?php echo get_lang("Answer"); ?></i></td>
+					<?php if ($feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) { ?>
 					<td><i><?php echo get_lang("Comment"); ?></i></td>
+					<?php } else { ?>
+					<td>&nbsp;</td>
+					<?php } ?>
 				</tr>
 				<tr>
 				<td>&nbsp;</td>
@@ -647,18 +576,21 @@ if ($show_results) {
 				$answerCorrect=$objAnswerTmp->isCorrect($answerId);
 				$answerWeighting=$objAnswerTmp->selectWeighting($answerId);
 				$queryans = "select answer from ".$TBL_TRACK_ATTEMPT." where exe_id = '".Database::escape_string($id)."' and question_id= '".Database::escape_string($questionId)."'";
-				$resultans = Database::query($queryans, __FILE__, __LINE__);
+				$resultans = Database::query($queryans);
 				$choice = Database::result($resultans,0,"answer");
-				$studentChoice=($choice == $answerId)?1:0;
+
+				$numAnswer=$objAnswerTmp->selectAutoId($answerId);
+
+				$studentChoice=($choice == $numAnswer)?1:0;
 				if ($studentChoice) {
 				  	$questionScore+=$answerWeighting;
 					$totalScore+=$answerWeighting;
 				}
 				echo '<tr><td>';
 				if ($answerId==1) {
-					display_unique_or_multiple_answer($answerType, $studentChoice, $answer, $answerComment, $answerCorrect,$id,$questionId,$answerId);
+					ExerciseShowFunctions::display_unique_or_multiple_answer($answerType, $studentChoice, $answer, $answerComment, $answerCorrect,$id,$questionId,$answerId);
 				} else {
-					display_unique_or_multiple_answer($answerType, $studentChoice, $answer, $answerComment, $answerCorrect,$id,$questionId,"");
+					ExerciseShowFunctions::display_unique_or_multiple_answer($answerType, $studentChoice, $answer, $answerComment, $answerCorrect,$id,$questionId,"");
 				}
 				echo '</td></tr>';
 				$i++;
@@ -742,20 +674,25 @@ if ($show_results) {
 						if (($pos = api_strpos($temp,']')) === false) {
 							break;
 						}
-
+	
 						$queryfill = "select answer from ".$TBL_TRACK_ATTEMPT." where exe_id = '".Database::escape_string($id)."' and question_id= '".Database::escape_string($questionId)."'";
-						$resfill = Database::query($queryfill, __FILE__, __LINE__);
+						$resfill = Database::query($queryfill);
 						$str = Database::result($resfill,0,"answer");
 
 						preg_match_all('#\[([^[]*)\]#', $str, $arr);
 						$choice = $arr[1];
+						
 						$tmp=strrpos($choice[$j],' / ');
 						$choice[$j]=substr($choice[$j],0,$tmp);
 						$choice[$j]=trim($choice[$j]);
+			
+						//Needed to let characters ' and " to work as part of an answer
+						$choice[$j] = stripslashes($choice[$j]);
 
 
 						// if the word entered by the student IS the same as the one defined by the professor
 						if (api_strtolower(api_substr($temp,0,$pos)) == api_strtolower($choice[$j])) {
+						//if ((api_substr($temp,0,$pos)) == ($choice[$j])) {
 							// gives the related weighting to the student
 							$questionScore+=$answerWeighting[$j];
 							// increments total score
@@ -795,7 +732,7 @@ if ($show_results) {
 						}
 
 						$queryfill = "SELECT answer FROM ".$TBL_TRACK_ATTEMPT." WHERE exe_id = '".Database::escape_string($id)."' and question_id= '".Database::escape_string($questionId)."'";
-						$resfill = Database::query($queryfill, __FILE__, __LINE__);
+						$resfill = Database::query($queryfill);
 						$str=Database::result($resfill,0,"answer");
 						preg_match_all ('#\[([^[/]*)/#', $str, $arr);
 						$choice = $arr[1];
@@ -822,7 +759,7 @@ if ($show_results) {
 				}
 				//echo $questionScore."-".$totalScore;
 				echo '<tr><td>';
-				display_fill_in_blanks_answer($answer,$id,$questionId);
+				ExerciseShowFunctions::display_fill_in_blanks_answer($answer,$id,$questionId);
 				echo '</td></tr>';
 				$i++;
 			}
@@ -856,12 +793,12 @@ if ($show_results) {
 			} else {
 				$totalScore+=$questionScore;
 			}
-			
+
 			$arrques[] = $questionName;
             $arrans[]  = $choice;
-			
+
 			echo '<tr>
-			<td valign="top">'.display_free_answer($choice, $id, $questionId).'</td>
+			<td valign="top">'.ExerciseShowFunctions::display_free_answer($choice, $id, $questionId).'</td>
 			</tr>
 			</table>';
 
@@ -870,69 +807,62 @@ if ($show_results) {
 			$objAnswerTmp=new Answer($questionId);
 			$table_ans = Database :: get_course_table(TABLE_QUIZ_ANSWER);
 			$TBL_TRACK_ATTEMPT= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
-
-			$sql_select_answer = 'SELECT id, answer, correct, position FROM '.$table_ans.' WHERE question_id="'.Database::escape_string($questionId).'" AND correct<>0';
-			$sql_answer = 'SELECT position, answer FROM '.$table_ans.' WHERE question_id="'.Database::escape_string($questionId).'" AND correct=0';
-			$res_answer = Database::query($sql_answer, __FILE__, __LINE__);
+			$sql_answer = 'SELECT id, answer FROM '.$table_ans.' WHERE question_id="'.Database::escape_string($questionId).'" AND correct=0';
+			$res_answer = Database::query($sql_answer);
 			// getting the real answer
 			$real_list =array();
 			while ($real_answer = Database::fetch_array($res_answer)) {
-				$real_list[$real_answer['position']]= $real_answer['answer'];
+				$real_list[$real_answer['id']]= $real_answer['answer'];
 			}
-
-			$res_answers = Database::query($sql_select_answer, __FILE__, __LINE__);
+	
+			$sql_select_answer = 'SELECT id, answer, correct, id_auto FROM '.$table_ans.'
+								  WHERE question_id="'.Database::escape_string($questionId).'" AND correct <> 0 ORDER BY id_auto';
+								  
+			$res_answers = Database::query($sql_select_answer);
 
 			echo '<table width="100%" height="71" border="0" cellspacing="3" cellpadding="3" >';
 			echo '<tr><td colspan="2">&nbsp;</td></tr>';
 			echo '<tr>
-					<td><span style="font-style: italic;">'.get_lang("ElementList").'</span> </td>
-					<td><span style="font-style: italic;">'.get_lang("CorrespondsTo").'</span></td>
+					<td><span style="font-style: italic;">'.get_lang('ElementList').'</span> </td>
+					<td><span style="font-style: italic;">'.get_lang('CorrespondsTo').'</span></td>
 				  </tr>';
 			echo '<tr><td colspan="2">&nbsp;</td></tr>';
 
-			$questionScore=0;
+			$questionScore = 0;
 
 			while ($a_answers = Database::fetch_array($res_answers)) {
-				$i_answer_id = $a_answers['id']; //3
-				$s_answer_label = $a_answers['answer'];  // your dady - you mother
+
+				$i_answer_id 	= $a_answers['id']; //3
+				$s_answer_label = $a_answers['answer'];  // your daddy - your mother
 				$i_answer_correct_answer = $a_answers['correct']; //1 - 2
-				$i_answer_position = $a_answers['position']; // 3 - 4
+				$i_answer_id_auto = $a_answers['id_auto']; // 3 - 4
 
-				$sql_user_answer =
-						'SELECT answers.answer
-						FROM '.$TBL_TRACK_ATTEMPT.' as track_e_attempt
-						INNER JOIN '.$table_ans.' as answers
-							ON answers.position = track_e_attempt.answer
-							AND track_e_attempt.question_id=answers.question_id
-						WHERE answers.correct = 0
-						AND track_e_attempt.exe_id = "'.Database::escape_string($id).'"
-						AND track_e_attempt.question_id = "'.Database::escape_string($questionId).'"
-						AND track_e_attempt.position="'.Database::escape_string($i_answer_position).'"';
+				$sql_user_answer = "SELECT answer FROM $TBL_TRACK_ATTEMPT
+									WHERE exe_id = '$id' AND question_id = '$questionId' AND position='$i_answer_id_auto'";
+				
+				$res_user_answer = Database::query($sql_user_answer);
 
-
-				$res_user_answer = Database::query($sql_user_answer, __FILE__, __LINE__);
 				if (Database::num_rows($res_user_answer)>0 ) {
 					$s_user_answer = Database::result($res_user_answer,0,0); //  rich - good looking
 				} else {
-					$s_user_answer = '';
+					$s_user_answer = 0;
 				}
-
-				//$s_correct_answer = $s_answer_label; // your ddady - your mother
-				$s_correct_answer = $real_list[$i_answer_correct_answer];
 
 				$i_answerWeighting=$objAnswerTmp->selectWeighting($i_answer_id);
 
-				//if($s_user_answer == $s_correct_answer) // rich == your ddady?? wrong
-				//echo $s_user_answer.' - '.$real_list[$i_answer_correct_answer];
+				$user_answer = '';
 
-				if ($s_user_answer == $real_list[$i_answer_correct_answer]) { // rich == your ddady?? wrong
-					$questionScore+=$i_answerWeighting;
-					$totalScore+=$i_answerWeighting;
-				} else {
-					$s_user_answer = '<span style="color: #FF0000; text-decoration: line-through;">'.$s_user_answer.'</span>';
+				if (!empty($s_user_answer)) {
+					if ($s_user_answer == $i_answer_correct_answer)	{
+						$questionScore	+= $i_answerWeighting;
+						$totalScore		+= $i_answerWeighting;
+						$user_answer = '<span>'.$real_list[$i_answer_correct_answer].'</span>';
+					} else {
+						$user_answer = '<span style="color: #FF0000; text-decoration: line-through;">'.$real_list[$s_user_answer].'</span>';
+					}
 				}
 				echo '<tr>';
-				echo '<td>'.$s_answer_label.'</td><td>'.$s_user_answer.' / <b><span style="color: #008000;">'.$s_correct_answer.'</span></b></td>';
+				echo '<td>'.$s_answer_label.'</td><td>'.$user_answer.' / <b><span style="color: #008000;">'.$real_list[$i_answer_correct_answer].'</span></b></td>';
 				echo '</tr>';
 			}
 			echo '</table>';
@@ -959,12 +889,12 @@ if ($show_results) {
 				$query = "select hotspot_correct from ".$TBL_TRACK_HOTSPOT." where hotspot_exe_id = '".Database::escape_string($id)."' and hotspot_question_id= '".Database::escape_string($questionId)."' AND hotspot_answer_id='".Database::escape_string($answerId)."'";
 				$resq=Database::query($query);
 				$choice = Database::result($resq,0,"hotspot_correct");
-				display_hotspot_answer($answerId,$answer,$choice,$answerComment);
+				ExerciseShowFunctions::display_hotspot_answer($answerId,$answer,$choice,$answerComment);
 
 				$i++;
 		 	}
 		 	$queryfree = "select marks from ".$TBL_TRACK_ATTEMPT." where exe_id = '".Database::escape_string($id)."' and question_id= '".Database::escape_string($questionId)."'";
-			$resfree = Database::query($queryfree, __FILE__, __LINE__);
+			$resfree = Database::query($queryfree);
 			$questionScore= Database::result($resfree,0,"marks");
 			$totalScore+=$questionScore;
 			echo '</table></td></tr>';
@@ -999,7 +929,7 @@ if ($show_results) {
 				}
 			}
 			echo '</a><br /><div id="feedback_'.$name.'" style="width:100%">';
-			$comnt = trim(get_comments($id,$questionId));
+			$comnt = trim(ExerciseShowFunctions::get_comments($id,$questionId));
 			if (empty($comnt)) {
 				echo '<br />';
 			} else {
@@ -1013,7 +943,7 @@ if ($show_results) {
 			$renderer =& $feedback_form->defaultRenderer();
 			$renderer->setFormTemplate('<form{attributes}><div align="left">{content}</div></form>');
 			$renderer->setElementTemplate('<div align="left">{element}</div>');
-			$comnt = get_comments($id,$questionId);
+			$comnt = ExerciseShowFunctions::get_comments($id,$questionId);
 			${user.$questionId}['comments_'.$questionId] = $comnt;
 			$feedback_form->addElement('html_editor', 'comments_'.$questionId, null, null, array('ToolbarSet' => 'TestAnswerFeedback', 'Width' => '100%', 'Height' => '120'));
 			$feedback_form->addElement('html','<br>');
@@ -1022,7 +952,7 @@ if ($show_results) {
 			$feedback_form->display();
 			echo '</div>';
 		} else {
-			$comnt = get_comments($id,$questionId);
+			$comnt = ExerciseShowFunctions::get_comments($id,$questionId);
 			echo '<tr><td><br />';
 			if (!empty($comnt)) {
 				echo '<b>'.get_lang('Feedback').'</b>';
@@ -1045,7 +975,7 @@ if ($show_results) {
 				}
 				echo '</select>';
 				echo '</form><br/ ></div>';
-				if ($questionScore==-1) {
+				if ($questionScore==-1 ) {
 					$questionScore=0;
 				  	echo '<br />'.get_lang('notCorrectedYet');
 				}
@@ -1064,12 +994,15 @@ if ($show_results) {
 		</tr>
 		</table>
 
-		<div id="question_score">
+
 		<?php
 		$my_total_score  = float_format($questionScore,1);
 		$my_total_weight = float_format($questionWeighting,1);
+
+		echo '<div id="question_score">';
 		echo get_lang('Score')." : $my_total_score/$my_total_weight";
 		echo '</div>';
+
 		unset($objAnswerTmp);
 		$i++;
 		$totalWeighting+=$questionWeighting;
@@ -1078,7 +1011,7 @@ if ($show_results) {
 
 if ($origin!='learnpath' || ($origin == 'learnpath' && isset($_GET['fb_type']))) {
 	//$query = "update ".$TBL_TRACK_EXERCICES." set exe_result = $totalScore where exe_id = '$id'";
-	//Database::query($query,__FILE__,__LINE__);
+	//Database::query($query);
 	if ($show_results) {
 		echo '<div id="question_score">'.get_lang('YourTotalScore')." ";
 		if($dsp_percent == true) {
@@ -1125,8 +1058,9 @@ if ($is_allowedToEdit) {
 	}
 }
 
-if ($origin=='student_progress') {?>
-	<button type="button" class="back" onclick="window.back();" value="<?php echo get_lang('Back'); ?>" ><?php echo get_lang('Back');?></button>
+
+if ($origin=='student_progress' && !isset($_GET['my_lp_id'])) {?>
+	<button type="button" class="back" onclick="window.back();" value="<?php echo get_lang('Back'); ?>" ><?php echo get_lang('Backs');?></button>
 <?php
 } else if($origin=='myprogress') {
 ?>
@@ -1136,12 +1070,12 @@ if ($origin=='student_progress') {?>
 
 if ($origin != 'learnpath') {
 	$url_email = api_get_path(WEB_CODE_PATH).'exercice/exercice.php?'.api_get_cidreq().'&show=result';
-	
+
 	//we are not in learnpath tool
 	Display::display_footer();
 } else {
 	$url_email = api_get_path(WEB_CODE_PATH).'mySpace/lp_tracking.php?course='.api_get_course_id().'&origin=tracking_course&lp_id='.$learnpath_id.'&student_id='.api_get_user_id();
-	
+
 	if (!isset($_GET['fb_type'])) {
 		$lp_mode =  $_SESSION['lp_mode'];
 		$url = '../newscorm/lp_controller.php?cidReq='.api_get_course_id().'&action=view&lp_id='.$learnpath_id.'&lp_item_id='.$learnpath_item_id.'&exeId='.$exeId.'&fb_type='.$feedback_type;
@@ -1153,15 +1087,15 @@ if ($origin != 'learnpath') {
 		echo '</body></html>';
 	} else {
 		if (!$is_allowedToEdit) {
-			send_notification($arrques, $arrans, $to);
-		}		
+			ExerciseShowFunctions::send_notification($arrques, $arrans, $to);
+		}
 		Display::display_normal_message(get_lang('ExerciseFinished').' '.get_lang('ToContinueUseMenu'));
-	}	
+	}
 }
 
 if (!$is_allowedToEdit) {
 	if ($origin != 'learnpath') {
- 		send_notification($arrques, $arrans, $to);
+ 		ExerciseShowFunctions::send_notification($arrques, $arrans, $to);
 	}
 }
 
@@ -1171,120 +1105,3 @@ unset ($questionList);
 
 api_session_unregister('exerciseResult');
 unset ($exerciseResult);
-
-function send_notification($arrques, $arrans, $to) {
-	global $courseName, $exerciseTitle, $url_email;
-	
-	if (api_get_course_setting('email_alert_manager_on_new_quiz') != 1 ) {
-		return '';
-	}
-	
-    require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
-   	require_once(api_get_path(LIBRARY_PATH).'mail.lib.inc.php');	
-	$user_info = UserManager::get_user_info_by_id(api_get_user_id());
-
-	$mycharset = api_get_setting('platform_charset');
-    $msg = '<html><head>
-            <link rel="stylesheet" href="'.api_get_path(WEB_CODE_PATH).'css/'.api_get_setting('stylesheets').'/default.css" type="text/css">
-            <meta content="text/html; charset='.$mycharset.'" http-equiv="content-type"></head>';	            
-	if(count($arrques)>0) {
-	    $msg .= '<body>
-	    <p>'.get_lang('OpenQuestionsAttempted').' : 
-	    </p>
-	    <p>'.get_lang('AttemptDetails').' : <br />
-	    </p>
-	    <table width="730" height="136" border="0" cellpadding="3" cellspacing="3">
-	                                            <tr>
-	        <td width="229" valign="top"><h2>&nbsp;&nbsp;'.get_lang('CourseName').'</h2></td>
-	        <td width="469" valign="top"><h2>#course#</h2></td>
-	      </tr>
-	      <tr>
-	        <td width="229" valign="top" class="outerframe">&nbsp;&nbsp;'.get_lang('TestAttempted').'</span></td>
-	        <td width="469" valign="top" class="outerframe">#exercise#</td>
-	      </tr>
-	      <tr>
-	        <td valign="top">&nbsp;&nbsp;<span class="style10">'.get_lang('StudentName').'</span></td>
-	        <td valign="top" >#firstName# #lastName#</td>
-	      </tr>
-	      <tr>
-	        <td valign="top" >&nbsp;&nbsp;'.get_lang('StudentEmail').' </td>
-	        <td valign="top"> #mail#</td>
-	    </tr></table>
-	    <p><br />'.get_lang('OpenQuestionsAttemptedAre').' :</p>
-	     <table width="730" height="136" border="0" cellpadding="3" cellspacing="3">';
-	     
-	    for($i=0;$i<sizeof($arrques);$i++) {
-	              $msg.='
-	                    <tr>
-	                <td width="220" valign="top" bgcolor="#E5EDF8">&nbsp;&nbsp;<span class="style10">'.get_lang('Question').'</span></td>
-	                <td width="473" valign="top" bgcolor="#F3F3F3"><span class="style16"> #questionName#</span></td>
-	                    </tr>
-	                    <tr>
-	                <td width="220" valign="top" bgcolor="#E5EDF8">&nbsp;&nbsp;<span class="style10">'.get_lang('Answer').' </span></td>
-	                <td valign="top" bgcolor="#F3F3F3"><span class="style16"> #answer#</span></td>
-	                    </tr>';
-	
-	                    $msg1= str_replace("#exercise#",$exerciseTitle,$msg);
-	                    $msg= str_replace("#firstName#",$user_info['firstname'],$msg1);
-	                    $msg1= str_replace("#lastName#",$user_info['lastname'],$msg);
-	                    $msg= str_replace("#mail#",$user_info['email'],$msg1);
-	                    $msg1= str_replace("#questionName#",$arrques[$i],$msg);
-	                    $msg= str_replace("#answer#",$arrans[$i],$msg1);
-	                    $msg1= str_replace("#i#",$i,$msg);
-	                    $msg= str_replace("#course#",$courseName,$msg1);
-	    }
-	    $msg.='</table><br>
-	                    <span class="style16">'.get_lang('ClickToCommentAndGiveFeedback').',<br />
-	                    <a href="#url#">#url#</a></span></body></html>';
-	
-	    $msg1= str_replace("#url#",$url_email,$msg);
-	    $mail_content = $msg1;
-	
-	    $subject = get_lang('OpenQuestionsAttempted');
-	
-	
-	    $sender_name = api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS);
-	    $email_admin = api_get_setting('emailAdministrator');
-
-	    $result = api_mail_html('', $to, $subject, $mail_content, $sender_name, $email_admin, array('charset'=>$mycharset));
-	} else {
-		
-		$msg .= '<body>
-		<table width="730" height="136" border="0" cellpadding="3" cellspacing="3">
-			<tr>
-		    <td width="229" valign="top"><h2>&nbsp;&nbsp;'.get_lang('CourseName').'</h2></td>
-		    <td width="469" valign="top"><h2>#course#</h2></td>
-		  </tr>
-		  <tr>
-		    <td width="229" valign="top" class="outerframe">&nbsp;&nbsp;'.get_lang('TestAttempted').'</span></td>
-		    <td width="469" valign="top" class="outerframe">#exercise#</td>
-		  </tr>
-		  <tr>
-		    <td valign="top">&nbsp;&nbsp;<span class="style10">'.get_lang('StudentName').'</span></td>
-		    '.(api_is_western_name_order() ? '<td valign="top" >#firstName# #lastName#</td>' : '<td valign="top" >#lastName# #firstName#</td>').'
-		  </tr>
-		  <tr>
-		    <td valign="top" >&nbsp;&nbsp;'.get_lang('StudentEmail').' </td>
-		    <td valign="top"> #mail#</td>
-		</tr></table>';
-		 
-		$msg= str_replace("#exercise#",$exerciseTitle,$msg);
-		$msg= str_replace("#firstName#",$user_info['firstname'],$msg);
-		$msg= str_replace("#lastName#",$user_info['lastname'],$msg);	
-		$msg= str_replace("#mail#",$user_info['email'],$msg);
-		$msg= str_replace("#course#",$courseName,$msg);	
-		
-		$msg.='<br />
-	 			<span class="style16">'.get_lang('ClickToCommentAndGiveFeedback').',<br />
-				<a href="#url#">#url#</a></span></body></html>';	
-	
-		$msg= str_replace("#url#",$url_email,$msg);
-		$mail_content = $msg;
-		
-		$sender_name = api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS);
-		$email_admin = api_get_setting('emailAdministrator');
-		
-		$subject = get_lang('ExerciseAttempted');
-		$result = api_mail_html('', $to, $subject, $mail_content, $sender_name, $email_admin, array('charset'=>$mycharset));
-	}
-}

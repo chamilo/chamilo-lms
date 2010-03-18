@@ -1,28 +1,29 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $langLineNumber = "Eilutės numeris";
 $langLine = "eilutė";
 $langLines = "eilutės";
 $langLineOrLines = "eilutė(s)";
-$langMoveUp = "Aukštyn";
-$langMoveDown = "Žemyn";
+$langMoveUp = "Kelti viršun";
+$langMoveDown = "Kelti žemyn";
 $langAddNewHeading = "Įterpti naują antraštę";
-$langCourseAdministratorOnly = "Tik dėstytojas";
-$langDefineHeadings = "Apibrėžti antraštę";
+$langCourseAdministratorOnly = "tik dėstytojas";
+$langDefineHeadings = "Define Headings";
 $langBackToUsersList = "Atgal į vartotojų sąrašą";
-$langTracking = "Tracking";
+$langTracking = "Įvertinimų sekimas";
 $langCourseManager = "Dėstytojas";
 $langModRight = "pakeisti teises vartotojo";
 $langNoAdmin = "nuo dabar neturi jokių teisių šiame puslapyje";
 $langAllAdmin = "nuo dabar turi visas teises šiame puslapyje";
 $langModRole = "Pakeisti vaidmenį vartotojo";
-$langRole = "Vaidmuo";
+$langRole = "Aprašymas";
 $langIsNow = "nuo šiol įjungta";
 $langInC = "šiame kurse";
-$langFilled = "Ne visi laukeliai užpildyti";
-$langUserNo = "User No";
-$langTaken = "jau naudojamas. Prašome pasirinkti kitą ";
+$langFilled = "Palikote kelis laukelius tuščius.";
+$langUserNo = "Jūsų pasirinktas vartotojo vardas";
+$langTaken = "jau naudojamas. Pasirinkite kitą.";
 $langTutor = "Kuratorius";
 $langUnreg = "Atsisakyti";
 $langGroupUserManagement = "Grupės valdymas";

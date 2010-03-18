@@ -1,16 +1,17 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$langPgTitle = "TÌtulo da p·gina";
-$langExplanation = "A p·gina precisa estar no formato HTML (ex. \\minha_pagina.html\\). Ela ser· referenciada pela P·gina Principal. Se vocÍ precisa enviar documentos em outros formatos (PDF, Word, Power Point, VÌdeo, etc.) use a <a href=../document/document.php>Ferramenta Documentos</a>";
-$langTooBig = "VocÍ n„o escolheu nenhum arquivo para enviar, ou ele È muito grande.";
-$langCouldNot = "O arquivo n„o pode ser enviado.";
-$langNotAllowed = "N„o permitido";
-$langAddPageToSite = "Adicionar uma p·gina a ·rea";
-$langCouldNotSendPage = "Esse arquivo n„o est· em formato HTML e n„o poder· ser enviado. Se vocÍ quiser enviar documentos em outros formatos (PDF, Word, Power Point, VÌdeo, etc.) use a <a href=../document/document.php>ferramenta Documentos</a>";
-$langSendPage = "P·gina para envio";
-$langPageTitleModified = "O tÌtulo da p·gina foi modificado";
-$langPageAdded = "P·gina adicionada";
-$langAddPage = "Adicionar uma p·gina";
+$langPgTitle = "T√≠tulo da p√°gina";
+$langExplanation = "Ap√≥s clicar em OK, ser√° criado um curso com uma se√ß√£o de testes/exerc√≠cios, projeto de rota de aprendizagem, avalia√ß√µes, cursos, caixa de documentos compartilhados, Agenda e muito mais. Ao registar-se como professor ser√° atribu√≠dos privil√©gios para poder editar esse curso.";
+$langTooBig = "N√£o foi selecionado nenhum arquivo para enviar, ou ele √© muito grande";
+$langCouldNot = "O arquivo n√£o pode ser enviado";
+$langNotAllowed = "N√£o permitido";
+$langAddPageToSite = "Adicionar uma p√°gina a √°rea";
+$langCouldNotSendPage = "Esse arquivo n√£o est√° em formato HTML e n√£o poder√° ser enviado. Se voc√™ quiser enviar documentos em outros formatos (PDF, Word, Power Point, V√≠deo, etc.) use a <a href=../document/document.php>ferramenta Documentos</a>";
+$langSendPage = "P√°gina a ser publicada";
+$langPageTitleModified = "O t√≠tulo da p√°gina foi modificado";
+$langPageAdded = "P√°gina adicionada";
+$langAddPage = "Adicionar uma p√°gina";
 $Choose = "Selecionar";
 ?>

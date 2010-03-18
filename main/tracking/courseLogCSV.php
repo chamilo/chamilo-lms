@@ -58,7 +58,7 @@ if ($_GET['scormcontopen'])
 	$tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
 	$contopen = (int) $_GET['scormcontopen'];
 	$sql = "SELECT default_encoding FROM $tbl_lp WHERE id = ".$contopen;
-	$res = Database::query($sql,__FILE__,__LINE__);
+	$res = Database::query($sql);
 	$row = Database::fetch_array($res);
 	$lp_charset = $row['default_encoding'];
 	//header('Content-Type: text/html; charset='. $row['default_encoding']);
@@ -105,7 +105,7 @@ $interbreadcrumb[] = array ("url" => api_get_self()."?view=0000000", "name" => g
 include(api_get_path(LIBRARY_PATH)."statsUtils.lib.inc.php");
 include("../resourcelinker/resourcelinker.inc.php");
 
-$is_allowedToTrack = $is_courseAdmin || $is_platformAdmin;
+$is_allowedToTrack = $is_courseAdmin || $is_platformAdmin || api_is_drh();
 
 /*
 ==============================================================================
@@ -142,10 +142,10 @@ if($is_allowedToTrack && $_configuration['tracking_enabled'])
     	$tempView[6] = '0';
 
         //--------------------------------BEGIN users in this course
-        $sql = "SELECT $TABLECOURSUSER.`user_id`, $table_user.`lastname`, $table_user.`firstname`
+        $sql = "SELECT $TABLECOURSUSER.user_i, $table_user.lastname, $table_user.firstname
                     FROM $TABLECOURSUSER, $table_user
-                    WHERE $TABLECOURSUSER.course_code = '".$_cid."' AND $TABLECOURSUSER.`user_id` = $table_user.`user_id`
-                    ORDER BY $table_user.`lastname`";
+                    WHERE $TABLECOURSUSER.course_code = '".$_cid."' AND $TABLECOURSUSER.user_id = $table_user.user_id AND $TABLECOURSUSER.relation_type<>".COURSE_RELATION_TYPE_RRHH."
+                    ORDER BY $table_user.lastname";
         $results = getManyResults3Col($sql);
 
         //BUGFIX: get visual code instead of real course code. Scormpaths use the visual code... (should be fixed in future versions)
@@ -187,12 +187,12 @@ if($is_allowedToTrack && $_configuration['tracking_enabled'])
 
             	//--------------------------------BEGIN first/last access
             	// first access
-            	$sql = "SELECT access_date FROM $TABLETRACK_ACCESS_2 WHERE `access_user_id` = '".$results[$j][0]."' AND `access_cours_code` = '".$_course['official_code']."' AND `access_tool` = 'learnpath' ORDER BY access_id ASC LIMIT 1";
+            	$sql = "SELECT access_date FROM $TABLETRACK_ACCESS_2 WHERE access_user_id = '".$results[$j][0]."' AND access_cours_code = '".$_course['official_code']."' AND access_tool = 'learnpath' AND access_session_id = '".api_get_session_id()."' ORDER BY access_id ASC LIMIT 1";
             	$first_access = getOneResult($sql);
             	$first_access = empty($first_access) ? "-" : date('d.m.y',strtotime($first_access));
 
             	// last access
-            	$sql = "SELECT access_date FROM $TABLETRACK_ACCESS WHERE `access_user_id` = '".$results[$j][0]."' AND `access_cours_code` = '".$_course['official_code']."' AND `access_tool` = 'learnpath'";
+            	$sql = "SELECT access_date FROM $TABLETRACK_ACCESS WHERE access_user_id = '".$results[$j][0]."' AND access_cours_code = '".$_course['official_code']."' AND access_tool = 'learnpath'";
             	$last_access = getOneResult($sql);
             	$last_access = empty($last_access) ? "-" : date('d.m.y',strtotime($last_access));
             	//--------------------------------END first/last access
@@ -232,7 +232,7 @@ if($is_allowedToTrack && $_configuration['tracking_enabled'])
 
         $sql = "SELECT count(*)
                     FROM $TABLECOURSUSER
-                    WHERE course_code = '".$_cid."'";
+                    WHERE course_code = '".$_cid."' AND relation_type<>".COURSE_RELATION_TYPE_RRHH."";
         $count = getOneResult($sql);
 
 		$title_line = get_lang('CountUsers')." ; ".$count."\n";
@@ -427,7 +427,7 @@ if($is_allowedToTrack && $_configuration['tracking_enabled'])
         $sql = "SELECT id, name
 					FROM $tbl_learnpath_main";
                     //WHERE dokeosCourse='$_cid'"; we are using a table inside the course now, so no need for course id
-		$result=Database::query($sql,__FILE__,__LINE__);
+		$result=Database::query($sql);
 
 	    $ar=Database::fetch_array($result);
 
@@ -451,7 +451,7 @@ if($is_allowedToTrack && $_configuration['tracking_enabled'])
 							"ON u.user_id = sd.user_id " .
 		                    "WHERE sd.lp_id=$contentId group by u.user_id";
 		            //error_log($sql2,0);
-					$result2=Database::query($sql2,__FILE__,__LINE__);
+					$result2=Database::query($sql2);
 
 					if(Database::num_rows($result2)>0){
 
@@ -460,15 +460,9 @@ if($is_allowedToTrack && $_configuration['tracking_enabled'])
 						while ($ar2 != '') {
 
 							if (isset($_REQUEST["scormstudentopen"]) && $ar2['user_id']==$scormstudentopen) {
-
-							$line .= $ar['id']." ".$ar2['user_id']." ".$ar2['lastname']." ".$ar2['firstname'];
-
-							}
-
-							else{
-
-							$line .= $ar['id']." ".$ar2['user_id']." ".$ar2['lastname']." ".$ar2['firstname'];
-
+								$line .= $ar['id']." ".$ar2['user_id']." ".api_get_person_name($ar2['firstname'], $ar2['lastname']);
+							} else {
+								$line .= $ar['id']." ".$ar2['user_id']." ".api_get_person_name($ar2['firstname'], $ar2['lastname']);
 							}
 
 
@@ -481,7 +475,7 @@ if($is_allowedToTrack && $_configuration['tracking_enabled'])
 										"INNER JOIN $tbl_learnpath_item_view iv ON i.id=iv.lp_item_id " .
 										"INNER JOIN $tbl_learnpath_view v ON iv.lp_view_id=v.id " .
 										"WHERE (v.user_id=$studentId and v.lp_id=$contentId) ORDER BY v.id, i.id";
-								$result3=Database::query($sql3,__FILE__,__LINE__);
+								$result3=Database::query($sql3);
 							    $ar3=Database::fetch_array($result3);
 						        $title_line .= get_lang('ScormTitleColumn').";".get_lang('ScormStatusColumn').";".get_lang('ScormScoreColumn').";".get_lang('ScormTimeColumn');
 								while ($ar3['status'] != '') {

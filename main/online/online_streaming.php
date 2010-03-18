@@ -41,7 +41,7 @@ $this_section=SECTION_COURSES;
 $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
 
 $query="SELECT username FROM $tbl_user WHERE user_id='".$_user['user_id']."'";
-$result=Database::query($query,__FILE__,__LINE__);
+$result=Database::query($query);
 
 list($pseudoUser)=Database::fetch_row($result);
 
@@ -72,7 +72,7 @@ if($_POST['sent'])
 		fclose($fp);
 	}
 
-	mysql_close();
+	Database::close();
 	header('Location: online_master.php');
 	exit();
 }

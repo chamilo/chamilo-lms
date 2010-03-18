@@ -17,7 +17,10 @@ class scormItem extends learnpathItem{
 	var $sub_items = array();
 	var $metadata;
 	//var $prerequisites = ''; - defined in learnpathItem.class.php
-	var $max_time_allowed = ''; //should be something like HHHH:MM:SS.SS
+	// Modified by Ivan Tcholakov, 06-FEB-2010.
+	//var $max_time_allowed = ''; //should be something like HHHH:MM:SS.SS
+	var $max_time_allowed = '00:00:00';
+	//
 	var $timelimitaction = '';
 	var $datafromlms = '';
 	var $mastery_score = '';

@@ -1,13 +1,14 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $langActivate = "Show";
 $langDeactivate = "Hide";
-$langInLnk  = "Hidden tools and links";
+$langInLnk = "Hidden tools and links";
 $langDelLk = "Do you really want to delete this link?";
-$langCourseCreate  = "Create a training";
-$langNameOfTheLink  = "Name of the link";
-$lang_main_categories_list                  = "Main category list";
+$langCourseCreate = "Create a training";
+$langNameOfTheLink = "Name of the link";
+$lang_main_categories_list = "Main category list";
 $langCourseAdminOnly = "Trainers only";
 $PlatformAdminOnly = "Portal Administrators only";
 $langCombinedCourse = "Combined course";
@@ -26,6 +27,6 @@ $IntroductionTextUpdated = "Intro was updated";
 $IntroductionTextDeleted = "Intro was deleted";
 $SessionIdentifier = "Identifier of session";
 $SessionName = "Session name";
-$SessionCategory = "Category of session";
-$SessionData = "Session\'s data";
+$SessionCategory = "Sessions categories";
+$SessionData = "Session's data";
 ?>

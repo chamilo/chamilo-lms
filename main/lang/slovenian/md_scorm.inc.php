@@ -1,37 +1,38 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$nameTools = "Scorm Manifest Metadata";
-$langMdCallingTool = "Uèna pot - Scorm";
-$langTool = "Scorm MD operacije";
-$langNotInDB = "ni vnosa v Dokeos podatkovno bazo";
-$langManifestSyntax = "(sintaktièna napaka v manifest datoteki)";
-$langEmptyManifest = "(prazna manifest datoteka...)";
-$langNoManifest = "(ni manifest datoteke...)";
-$langNotFolder = "ni možno, ni mapa ...";
+$nameTools = "zastarana jezikovna variabla";
+$langMdCallingTool = "Dokumenti";
+$langTool = "Metapodatki dokumenta";
+$langNotInDB = "taka kategorija povezav ne obstaja";
+$langManifestSyntax = "(sintaktiÄna napaka v manifest datoteki)";
+$langEmptyManifest = "(prazna manifest datoteka)";
+$langNoManifest = "(ni manifest datoteke)";
+$langNotFolder = "ni moÅ¾no, to ni mapa...";
 $langUploadHtt = "Prenesi (upload) HTT datoteko";
-$langHttFileNotFound = "Nove HTT datoteke ni mogoèe odpreti (prazna, prevelika)";
-$langHttOk = "Nova HTT datoteka je bila prenešena";
-$langHttNotOk = "prenos HTT datoteke ni bil uspešen";
+$langHttFileNotFound = "Nove HTT datoteke ni mogoÄe odpreti (prazna, prevelika)";
+$langHttOk = "Nova HTT datoteka je bila preneÅ¡ena";
+$langHttNotOk = "prenos HTT datoteke ni bil uspeÅ¡en";
 $langRemoveHtt = "Odstrani HTT datoteko";
 $langHttRmvOk = "HTT datoteka je bila odstranjena";
-$langHttRmvNotOk = "Odstranitev HTT datoteke ni bila uspešna";
-$langImport = "Uvozi imsmanifest.xml";
+$langHttRmvNotOk = "Odstranitev HTT datoteke ni bila uspeÅ¡na";
+$langImport = "Uvoz";
 $langRemove = "Odstrani MDE-je";
-$langAllRemovedFor = "Vsi vnosi odstranjeni za";
-$langIndex = "Indeksiraj besede z PhpDig";
-$langTotalMDEs = "Skupno število Scorm MDD vnosov:";
+$langAllRemovedFor = "Vsi vnosi so bili odstranjeni za kategorijo";
+$langIndex = "Indeksiraj besede - Indeks besed (md_link)";
+$langTotalMDEs = "Skupno Å¡tevilo MD vnosov povezav:";
 $langMainMD = "Odpri glavni MDE";
 $langLines = "vrstic";
-$langPlay = "Zaženi index.php";
-$langNonePossible = "Nobena MD operacija ni možna";
-$langOrElse = "Izberi Scorm mapo ali ID Scorm mape";
+$langPlay = "ZaÅ¾eni index.php";
+$langNonePossible = "Nobena MD operacija ni moÅ¾na";
+$langOrElse = "Izberi kategorijo povezav";
 $langWorkWith = "Operacije s Scorm mapo";
 $langSDI = "... Scorm mapa z SD-ID (in deljen manifest - ali pusti prazno)";
 $langRoot = "koren";
-$langSplitData = "Deljen manifest, in #MDe, èe obstaja:";
+$langSplitData = "Deljen manifest, in #MDe, Äe obstaja:";
 $langMffNotOk = "Zamenjava manifest datoteke ni uspela";
 $langMffOk = "Manifest datoteka je bila zamenjana";
-$langMffFileNotFound = "Novo manifest datoteko ni mogoèe odpreti (lahko je prazna, prevelika)";
+$langMffFileNotFound = "Novo manifest datoteko ni mogoÄe odpreti (lahko je prazna, prevelika)";
 $langUploadMff = "Nadomesti manifest datoteko";
 ?>

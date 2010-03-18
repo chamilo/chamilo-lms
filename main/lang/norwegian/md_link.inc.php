@@ -1,24 +1,25 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$langMdCallingTool = "Lenker";
-$langMdTitle = "Navn på lenke";
+$langMdCallingTool = "Dokumenter";
+$langMdTitle = "Navn pÃ¥ lenke";
 $langMdDescription = "Beskrivelse for lenke";
 $langMdCoverage = "Generell";
 $langMdCopyright = "Ghent Universitet";
-$nameTools = "Utgåtte språkvariabler";
+$nameTools = "UtgÃ¥tte sprÃ¥kvariabler";
 $langTool = "Lenkers metadata";
 $langIdentifier = "Identifikasjon";
-$langKeyword = "Nøkkelord";
+$langKeyword = "NÃ¸kkelord";
 $langCoverage = "Kategori";
 $langStore = "Lagre";
 $langNotFolder = "er ikke mulig siden dette ikke er en mappe";
 $langContinue = "Fortsett med";
-$langCreate = "Opprett MDE\'er";
-$langRemove = "Fjern MDE\'er";
+$langCreate = "Opprett MDE'er";
+$langRemove = "Fjern MDE'er";
 $langAllRemovedFor = "Alle poster slettet for kategori";
-$langRemainingFor = "Utgåtte poster slettet for kategori";
+$langRemainingFor = "UtgÃ¥tte poster slettet for kategori";
 $langIndex = "Indeksord";
-$langMainMD = "Åpne hoved-MDE";
+$langMainMD = "Ã…pne hoved-MDE";
 $langOrElse = "Velg en kategori for lenker";
 ?>

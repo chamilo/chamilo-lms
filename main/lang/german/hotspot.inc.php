@@ -1,7 +1,8 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$select = "Auswählen";
+$select = "AuswÃ¤hlen";
 $square = "Quadrat";
 $circle = "Elipse";
 $poly = "Polygon";
@@ -16,7 +17,7 @@ $showUserPoints = "Klicks von Benutzer zeigen / verbergen";
 $showHotspots = "Hotspots zeigen / verbergen";
 $labelPolyMenu = "Schliesse Polygon";
 $triesleft = "Verbleibende Versuche";
-$exeFinished = "Alle Antworten sind definiert. Sie können jetzt die Hotspots neuanordnen oder auf senden klicken.";
+$exeFinished = "Alle Antworten sind definiert. Sie kÃ¶nnen jetzt die Hotspots neuanordnen oder auf senden klicken.";
 $nextAnswer = "Jetzt klicke auf: &done=done";
 $delineation = "Skizze";
 $labelDelineationMenu = "Skizze schliessen";

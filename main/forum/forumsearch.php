@@ -73,7 +73,7 @@ if (isset($_GET['origin'])) {
 }
 
 // name of the tool
-$nameTools=get_lang('Forum');
+$nameTools=get_lang('ToolForum');
 
 // breadcrumbs
 
@@ -84,7 +84,7 @@ if (isset($_SESSION['gradebook'])){
 if (!empty($gradebook) && $gradebook=='view') {
 	$interbreadcrumb[]= array (
 			'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
-			'name' => get_lang('Gradebook')
+			'name' => get_lang('ToolGradebook')
 		);
 }
 

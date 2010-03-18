@@ -1,34 +1,43 @@
 <?php
-/* vim: set expandtab tabstop=4 shiftwidth=4: */
-// +----------------------------------------------------------------------+
-// | PHP version 4.0                                                      |
-// +----------------------------------------------------------------------+
-// | Copyright (c) 1997, 1998, 1999, 2000, 2001 The PHP Group             |
-// +----------------------------------------------------------------------+
-// | This source file is subject to version 2.0 of the PHP license,       |
-// | that is bundled with this package in the file LICENSE, and is        |
-// | available at through the world-wide-web at                           |
-// | http://www.php.net/license/2_02.txt.                                 |
-// | If you did not receive a copy of the PHP license and are unable to   |
-// | obtain it through the world-wide-web, please send a note to          |
-// | license@php.net so we can mail you a copy immediately.               |
-// +----------------------------------------------------------------------+
-// | Authors: Adam Daniel <adaniel1@eesus.jnj.com>                        |
-// |          Bertrand Mansion <bmansion@mamasam.com>                     |
-// +----------------------------------------------------------------------+
-//
-// $Id: element.php 20456 2009-05-10 17:27:44Z ivantcholakov $
-
-require_once('HTML/Common.php');
+/* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4: */
 
 /**
  * Base class for form elements
  *
- * @author       Adam Daniel <adaniel1@eesus.jnj.com>
- * @author       Bertrand Mansion <bmansion@mamasam.com>
- * @version      1.3
- * @since        PHP4.04pl1
- * @access       public
+ * PHP versions 4 and 5
+ *
+ * LICENSE: This source file is subject to version 3.01 of the PHP license
+ * that is available through the world-wide-web at the following URI:
+ * http://www.php.net/license/3_01.txt If you did not receive a copy of
+ * the PHP License and are unable to obtain it through the web, please
+ * send a note to license@php.net so we can mail you a copy immediately.
+ *
+ * @category    HTML
+ * @package     HTML_QuickForm
+ * @author      Adam Daniel <adaniel1@eesus.jnj.com>
+ * @author      Bertrand Mansion <bmansion@mamasam.com>
+ * @author      Alexey Borzov <avb@php.net>
+ * @copyright   2001-2009 The PHP Group
+ * @license     http://www.php.net/license/3_01.txt PHP License 3.01
+ * @version     CVS: $Id: element.php,v 1.37 2009/04/04 21:34:02 avb Exp $
+ * @link        http://pear.php.net/package/HTML_QuickForm
+ */
+
+/**
+ * Base class for all HTML classes
+ */
+require_once 'HTML/Common.php';
+
+/**
+ * Base class for form elements
+ *
+ * @category    HTML
+ * @package     HTML_QuickForm
+ * @author      Adam Daniel <adaniel1@eesus.jnj.com>
+ * @author      Bertrand Mansion <bmansion@mamasam.com>
+ * @author      Alexey Borzov <avb@php.net>
+ * @version     Release: 3.2.11
+ * @since       1.0
  * @abstract
  */
 class HTML_QuickForm_element extends HTML_Common
@@ -103,7 +112,7 @@ class HTML_QuickForm_element extends HTML_Common
      */
     function apiVersion()
     {
-        return 2.0;
+        return 3.2;
     } // end func apiVersion
 
     // }}}
@@ -226,9 +235,12 @@ class HTML_QuickForm_element extends HTML_Common
     function getFrozenHtml()
     {
         $value = $this->getValue();
-		global $charset;
-        return ('' != $value? htmlspecialchars($value, ENT_COMPAT, $charset): '&nbsp;') .
+        // Modified by Ivan Tcholakov, 16-MAR-2010.
+        //return ('' != $value? htmlspecialchars($value): '&nbsp;') .
+        //       $this->_getPersistantData();
+        return ('' != $value ? @htmlspecialchars($value, ENT_COMPAT, HTML_Common::charset()): '&nbsp;') .
                $this->_getPersistantData();
+        //
     } //end func getFrozenHtml
 
     // }}}
@@ -354,7 +366,7 @@ class HTML_QuickForm_element extends HTML_Common
      *
      * @param     string    $event  Name of event
      * @param     mixed     $arg    event arguments
-     * @param     object    $caller calling object
+     * @param     object    &$caller calling object
      * @since     1.0
      * @access    public
      * @return    void
@@ -396,9 +408,9 @@ class HTML_QuickForm_element extends HTML_Common
    /**
     * Accepts a renderer
     *
-    * @param object     An HTML_QuickForm_Renderer object
-    * @param bool       Whether an element is required
-    * @param string     An error message associated with an element
+    * @param HTML_QuickForm_Renderer    renderer object
+    * @param bool                       Whether an element is required
+    * @param string                     An error message associated with an element
     * @access public
     * @return void
     */

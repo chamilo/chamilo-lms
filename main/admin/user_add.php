@@ -1,18 +1,17 @@
 <?php
-/* For licensing terms, see /dokeos_license.txt */
+/* For licensing terms, see /license.txt */
 /**
 ==============================================================================
-*	@package dokeos.admin
+*	@package chamilo.admin
 ==============================================================================
 */
 
 // Language files that should be included
 $language_file = array('admin', 'registration');
-
 $cidReset = true;
 
 // Including necessary libraries.
-require '../inc/global.inc.php';
+require_once '../inc/global.inc.php';
 $libpath = api_get_path(LIBRARY_PATH);
 require_once $libpath.'fileManage.lib.php';
 require_once $libpath.'fileUpload.lib.php';
@@ -55,11 +54,15 @@ function display_drh_list(){
 		document.getElementById("drh_list").style.display="block";
 		document.getElementById("id_platform_admin").style.display="none";
 	}
+	else if (document.getElementById("status_select").value=='.COURSEMANAGER.')
+	{
+		document.getElementById("drh_list").style.display="none";
+		document.getElementById("id_platform_admin").style.display="block";	
+	}
 	else
 	{
 		document.getElementById("drh_list").style.display="none";
-		document.getElementById("id_platform_admin").style.display="block";
-		document.getElementById("drh_select").options[0].selected="selected";
+		document.getElementById("id_platform_admin").style.display="none";
 	}
 }
 
@@ -148,14 +151,16 @@ $form->addElement('select', 'status', get_lang('Status'), $status, array('id' =>
 $form->addElement('select_language', 'language', get_lang('Language'));
 //drh list (display only if student)
 $display = ($_POST['status'] == STUDENT || !isset($_POST['status'])) ? 'block' : 'none';
+
+
 $form->addElement('html', '<div id="drh_list" style="display:'.$display.';">');
-$drh_select = $form->addElement('select', 'hr_dept_id', get_lang('Drh'), array(), 'id="drh_select"');
+/*$drh_select = $form->addElement('select', 'hr_dept_id', get_lang('Drh'), array(), 'id="drh_select"');
 $drh_list = UserManager :: get_user_list(array('status' => DRH), api_sort_by_first_name() ? array('firstname', 'lastname') : array('lastname', 'firstname'));
 if (count($drh_list) == 0) {
 	$drh_select->addOption('- '.get_lang('ThereIsNotStillAResponsible', '').' -', 0);
 } else {
 	$drh_select->addOption('- '.get_lang('SelectAResponsible').' -', 0);
-}
+}*/
 
 if (is_array($drh_list)) {
 	foreach ($drh_list as $drh) {
@@ -163,6 +168,8 @@ if (is_array($drh_list)) {
 	}
 }
 $form->addElement('html', '</div>');
+
+
 
 // Platform admin
 $group = array();
@@ -296,10 +303,6 @@ $defaults = array_merge($defaults, $extra_data);
 $form->setDefaults($defaults);
 
 // Submit button
-/*
-$form->addElement('style_submit_button', 'submit', get_lang('Add'), 'class="add"');
-$form->addElement('style_submit_button', 'submit_plus', get_lang('Add').'+', 'class="add"');
-*/
 $select_level = array ();
 $html_results_enabled[] = FormValidator :: createElement ('style_submit_button', 'submit_plus', get_lang('Add').'+', 'class="add"');
 $html_results_enabled[] = FormValidator :: createElement ('style_submit_button', 'submit', get_lang('Add'), 'class="add"');
@@ -313,9 +316,7 @@ if( $form->validate()) {
 
 		$picture_element = & $form->getElement('picture');
 		$picture = $picture_element->getValue();
-
 		$picture_uri = '';
-
 		$lastname = $user['lastname'];
 		$firstname = $user['firstname'];
 		$official_code = $user['official_code'];
@@ -358,7 +359,7 @@ if( $form->validate()) {
 
 		if ($platform_admin) {
 			$sql = "INSERT INTO $table_admin SET user_id = '".$user_id."'";
-			Database::query($sql,__FILE__,__LINE__);
+			Database::query($sql);
 		}
 		if (!empty($email) && $send_mail) {
 			$recipient_name = api_get_person_name($firstname, $lastname, null, PERSON_NAME_EMAIL_ADDRESS);
@@ -369,7 +370,7 @@ if( $form->validate()) {
 
 			if ($_configuration['multiple_access_urls'] == true) {
 				$access_url_id = api_get_current_access_url_id();
-				if ($access_url_id != -1) { 
+				if ($access_url_id != -1) {
 					$url = api_get_access_url($access_url_id);
 					$emailbody = get_lang('Dear')." ".stripslashes(api_get_person_name($firstname, $lastname)).",\n\n".get_lang('YouAreReg')." ".api_get_setting('siteName') ." ".get_lang('WithTheFollowingSettings')."\n\n".get_lang('Username')." : ". $username ."\n". get_lang('Pass')." : ".stripslashes($password)."\n\n" .get_lang('Address') ." ". api_get_setting('siteName') ." ". get_lang('Is') ." : ". $url['url'] ."\n\n". get_lang('Problem'). "\n\n". get_lang('Formula').",\n\n".api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'))."\n". get_lang('Manager'). " ".api_get_setting('siteName')."\nT. ".api_get_setting('administratorTelephone')."\n" .get_lang('Email') ." : ".api_get_setting('emailAdministrator');
 				}
@@ -383,7 +384,7 @@ if( $form->validate()) {
 		if (isset($user['submit_plus'])) {
 			//we want to add more. Prepare report message and redirect to the same page (to clean the form)
 			$tok = Security::get_token();
-			header('Location: user_add.php?message='.urlencode(get_lang('UserAdded')).'&sec_token='.$tok);
+			header('Location: user_add.php?message='.urlencode(get_lang('UserAdded')).'&sec_token='.$tok);			
 			exit ();
 		} else {
 			$tok = Security::get_token();

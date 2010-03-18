@@ -136,10 +136,7 @@ if ( $_configuration['tracking_enabled'] )
 
             while ( list($key,$value) = each($results))
             {
-                $timestamp = strtotime($value);
-                //$beautifulDate = $langDay_of_weekNames['long'][date("w" , $timestamp)].date(" d " , $timestamp).$langMonthNames['long'][date("n", $timestamp)-1].date(" Y" , $timestamp);
-                //$beautifulHour = date("H : i" , $timestamp);
-                $beautifulDate = format_locale_date($dateTimeFormatLong,$timestamp);
+                $beautifulDate = api_convert_and_format_date($value, null, date_default_timezone_get());
                 echo "
     <tr>
         <td class='secLine'>

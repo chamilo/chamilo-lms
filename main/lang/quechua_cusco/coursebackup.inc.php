@@ -1,19 +1,20 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $langSelectOptionForBackup = "Ama hina kaychu, ajllay kikinchan waqaychasqamanta ajllay hoq imaymanata";
 $langLetMeSelectItems = "Ajllay yachachinaqpa imaymana purinanpaq";
-$langCreateFullBackup = "Kamay yachachinamanta hunt\'a kikinchay waqaychananta";
+$langCreateFullBackup = "Kamay yachachinamanta hunt'a kikinchay waqaychananta";
 $langCreateBackup = "Kamay kikinchay waqaychanapaq";
-$langBackupCreated  = "Ruwarikun kay yachachinaq kikinchan waqaychanapaq. Khipuq urayachiyninqa ña ruwarikunqaña. Mana urayaqtinqa, q\'apiy kay waskhanapi";
+$langBackupCreated = "Ruwarikun kay yachachinaq kikinchan waqaychanapaq. Khipuq urayachiyninqa ña ruwarikunqaña. Mana urayaqtinqa, q'apiy kay waskhanapi";
 $langSelectBackupFile = "Ajllay kikinchay waqaychasqamanta hoq wayaqata";
 $langImportBackup = "Apachimuy hoq kikinchay waqaychasqata";
-$langImportFullBackup = "Apachiy hunt\'a kikinchay waqaychasqata";
+$langImportFullBackup = "Apachiy hunt'a kikinchay waqaychasqata";
 $langImportFinished = "Apachiyqa tukurunña";
 $langEvents = "Ruwana";
 $langAnnouncements = "Willaykuna";
-$langDocuments  = "Qelqa khipukuna";
-$langTests = "Llank\'aynakuna";
+$langDocuments = "Qelqa khipukuna";
+$langTests = "Llank'aynakuna";
 $langLearnpaths = "Itinerarios formativos";
 $langCopyCourse = "Kikinchay yachachinata";
 $langSelectItemsToCopy = "Ajllay imaymana munasqaykita kikinchanapaq";
@@ -27,7 +28,7 @@ $langSameFilenameSkip = "Saltar los ficheros con el mismo nombre";
 $langSameFilenameRename = "Sutichayay wayaqata (qawariy khipu.pdf sutichayaykunqa kayman khipu_1.pdf)";
 $langSameFilenameOverwrite = "Qelqapay";
 $langSelectDestinationCourse = "Ajllay chayana yachachinata";
-$langFullCopy  = "Hunt\'a kikinchay";
+$langFullCopy = "Hunt'a kikinchay";
 $langCourseDescription = "Yachachinaq nisqaynin";
 $langNoResourcesToBackup = "No hay recursos para hacer una copia de seguridad";
 $langNoResourcesInBackupFile = "No hay recursos disponibles en este fichero de copia de seguridad";

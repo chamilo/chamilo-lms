@@ -1,26 +1,27 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$langActivate = "ÏÔÊ¾";
-$langDeactivate = "Òþ²Ø";
-$langInLnk  = "Òþ²Ø¹¤¾ßºÍÁ´½Ó";
-$langDelLk = "È·ÊµÒªÉ¾³ý´ËÁ´½ÓÂð? ";
-$langCourseCreate  = "´´½¨¿Î³ÌÕ¾µã";
-$langNameOfTheLink  = "Á´½ÓÃû³Æ";
-$lang_main_categories_list                  = "Ö÷·ÖÀàÁÐ±í";
-$langCourseAdminOnly = "½ö½ö½ÌÊ¦";
-$PlatformAdminOnly = "½öÆ½Ì¨¹ÜÀíÔ±";
-$langCombinedCourse = "ºÏ²¢µÄ¿Î³Ì";
-$ToolIsNowVisible = "¹¤¾ßµ±Ç°¿ÉÓÃ.";
-$ToolIsNowHidden = "¹¤¾ßµ±Ç°²»¿ÉÓÃ.";
-$EditLink = "±à¼­Á´½Ó";
-$Blog_management = "&#21338;&#23458;&#31649;&#29702;";
-$Forum = "&#35770;&#22363;";
-$Course_maintenance = "&#35838;&#31243;&#32500;&#25252;";
-$TOOL_SURVEY = "&#35843;&#26597;";
-$GreyIcons = "&#24037;&#20855;&#31665;";
-$Interaction = "&#20114;&#21160;";
-$Authoring = "&#20889;&#20316;";
-$Administration = "&#31649;&#29702;";
-$IntroductionTextUpdated = "&#31616;&#20171;&#26356;&#26032;&#23436;&#25104;";
+$langActivate = "å…¬å¼€";
+$langDeactivate = "éšè—";
+$langInLnk = "éšè—çš„å·¥å…·";
+$langDelLk = "ç¡®å®šè¦ç§»é™¤è¯¥å·¥å…·å—?";
+$langCourseCreate = "åˆ›å»ºè¯¾ç¨‹";
+$langNameOfTheLink = "é“¾æŽ¥åç§°";
+$lang_main_categories_list = "ä¸»åˆ†ç±»åˆ—è¡¨";
+$langCourseAdminOnly = "æ•™å¸ˆ";
+$PlatformAdminOnly = "ä»…å¹³å°ç®¡ç†å‘˜";
+$langCombinedCourse = "åˆå¹¶çš„è¯¾ç¨‹";
+$ToolIsNowVisible = "å·¥å…·å½“å‰å¯ç”¨.";
+$ToolIsNowHidden = "å·¥å…·å½“å‰ä¸å¯ç”¨.";
+$EditLink = "é“¾æŽ¥ç¼–è¾‘";
+$Blog_management = "åšå®¢ç®¡ç†";
+$Forum = "è®ºå›";
+$Course_maintenance = "è¯¾ç¨‹ç»´æŠ¤";
+$TOOL_SURVEY = "è°ƒæŸ¥";
+$GreyIcons = "å·¥å…·ç®±";
+$Interaction = "äº’åŠ¨";
+$Authoring = "å†™ä½œ";
+$Administration = "ç®¡ç†";
+$IntroductionTextUpdated = "ç®€ä»‹æ›´æ–°å®Œæˆ";
 ?>

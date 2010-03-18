@@ -1,50 +1,33 @@
 <?php
-/*
-==============================================================================
-	Dokeos - elearning and course management software
+/* For licensing terms, see /license.txt */
 
-	Copyright (c) 2008 Dokeos Latinoamerica SAC
-	Copyright (c) 2006 Dokeos SPRL
-	Copyright (c) 2006 Ghent University (UGent)
-	Copyright (c) various contributors
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
-	Mail: info@dokeos.com
-==============================================================================
-*/
 // To add your new link type here:
 // - define a unique type id
 // - add include
 // - change create() and get_all_types()
 // Please do not change existing values, they are used in the database !
-define('LINK_EXERCISE',1);
-define('LINK_DROPBOX',2);
-define('LINK_STUDENTPUBLICATION',3);
-define('LINK_LEARNPATH',4);
-define('LINK_FORUM_THREAD',5);
+define('LINK_EXERCISE',				1);
+define('LINK_DROPBOX',				2);
+define('LINK_STUDENTPUBLICATION',	3);
+define('LINK_LEARNPATH',			4);
+define('LINK_FORUM_THREAD',			5);
 //define('LINK_WORK',6);
-require_once('gradebookitem.class.php');
-require_once('abstractlink.class.php');
-require_once('exerciselink.class.php');
-require_once('evallink.class.php');
-require_once('dropboxlink.class.php');
-require_once('studentpublicationlink.class.php');
-require_once('learnpathlink.class.php');
-require_once('forumthreadlink.class.php');
+define('LINK_ATTENDANCE',			7);
+
+require_once 'gradebookitem.class.php';
+require_once 'abstractlink.class.php';
+require_once 'exerciselink.class.php';
+require_once 'evallink.class.php';
+require_once 'dropboxlink.class.php';
+require_once 'studentpublicationlink.class.php';
+require_once 'learnpathlink.class.php';
+require_once 'forumthreadlink.class.php';
+require_once 'attendancelink.class.php';
+
 /**
  * Factory for link objects
  * @author Bert Steppé
- * @package dokeos.gradebook
+ * @package chamilo.gradebook
  */
 class LinkFactory
 {
@@ -101,6 +84,8 @@ class LinkFactory
 			 return new LearnpathLink();
 		} elseif ($type == LINK_FORUM_THREAD ) {
 			 return new ForumThreadLink();
+		} elseif ($type == LINK_ATTENDANCE ) {
+			 return new AttendanceLink();
 		} else {
 			 return null;
 		}
@@ -115,7 +100,8 @@ class LinkFactory
 					  //LINK_DROPBOX,
 					  LINK_STUDENTPUBLICATION,
 					  LINK_LEARNPATH,
-                      LINK_FORUM_THREAD
+                      LINK_FORUM_THREAD,
+                      LINK_ATTENDANCE
 					  );
 	}
 

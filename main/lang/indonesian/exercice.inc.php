@@ -1,12 +1,13 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $langExercice = "Latihan";
 $langActivate = "Aktifkan";
 $langDeactivate = "Non-aktifkan";
 $langNoEx = "Saat ini belum ada latihan";
 $langNewEx = "Latihan baru";
-$langQuestion = "Pertanyaan";
+$langQuestion = "pertanyaan";
 $langQuestions = "Pertanyaan-Pertanyaan";
 $langAnswers = "Jawaban-Jawaban";
 $langTrue = "Benar";
@@ -35,9 +36,9 @@ $langAnswerType = "Macam jawaban";
 $langMultipleSelect = "Pilihan berganda (Jawaban ganda)";
 $langFillBlanks = "Mengisintitik-titik";
 $langMatching = "Menjodohkan";
-$langAddPicture = "Tambah gambar";
+$langAddPicture = "Tambah foto";
 $langReplacePicture = "Ganti gambar";
-$langDeletePicture = "Hapus gambar";
+$langDeletePicture = "Hapus foto";
 $langQuestionDescription = "Komentar Opsional";
 $langGiveQuestion = "Silahkan berikan pertanyaan";
 $langWeightingForEachBlank = "Silahkan berikan bobot pada tiap isian";
@@ -128,10 +129,10 @@ $langTake = "ambil";
 $langAmong = "diantara";
 $langImportHotPotatoesQuiz = "Import HotPotatoes Tests";
 $langHotPotatoesTests = "Import HotPotatoes Tests";
-$langDownloadFile = "Upload HotPotatoes (html atau zip) ke server";
+$langDownloadFile = "Upload file ke server";
 $langDownloadImg = "Upload file gambar ke server";
-$langDownloadEnd = "Upload html selesai";
-$langNoSpace = "Upload gagal.  Tempat tidak cukup di direktory anda";
+$langDownloadEnd = "Upload selesai";
+$langNoSpace = "Upload gagal. Tempat penyimpanan di direktori tidak cukup";
 $langZipNoPhp = "File zip tidak dapat berisi file .PHP";
 $langNoImg = "Latihan tanpa gambar";
 $langImgNote_st = "<br> Anda tetap harus meng-upload";
@@ -152,12 +153,12 @@ $langModifyExercise = "Ubah Latihan";
 $langModifyAnswers = "ubah jawaban";
 $langForExercise = "untuk latihan";
 $langUseExistantQuestion = "Gunakan pertanyaan yang sudah ada";
-$freeAnswer = "Jawaban bebas";
+$FreeAnswer = "Jawaban bebas";
 $notCorrectedYet = "Jawaban ini belum diperiksa.  Sementara, skor anda untuk pertanyaan ini dianggap 0, mempengaruhi skor total.";
 $adminHP = "Administrator Hot Potatoes";
 $NewQu = "Pertanyaan baru";
 $NoImage = "Silahkan pilih sebua gambar pada bagian bawah halaman.";
-$langAnswerHotspot = "Deskripsi dan bobot dibutuhkan untuk setiap \'hotspot - komentar adalah opsional";
+$langAnswerHotspot = "Deskripsi dan bobot dibutuhkan untuk setiap 'hotspot - komentar adalah opsional";
 $langMinHotspot = "Anda setidaknya harus membuat satu (1) hotspot.";
 $langMaxHotspot = "Maksimum hotspot yang dapat anda buat adalah 12.";
 $langHotspotError = "Silahkan isi deskripsi dan bobot tiap hotspot.";
@@ -177,16 +178,16 @@ $langHotspotWeightingError = "anda musti memberi bobot positif (>0) untuk semua 
 $langHotspotValidateError1 = "Anda harus menjawab lengkap pertanyaan (";
 $langHotspotValidateError2 = "klik dibutuhkan pada citra) sebelum melihat hasil";
 $langHotspotRequired = "Deskripsi dan bobot dibutuhkan untuk tiap hotspot. Komentar adalah opsional.";
-$langHotspotChoose = "<div style=\\\"padding:2px 3px;\\\">&bull;�Untuk membuat sebuah hotspot: pilih bentuk disamping warna, dan gambarkan hotspot. </div><div style=\\\"padding:2px 3px;\\\">&bull;� untuk memindahkan hotspot, pilih warna, dan klik hotspot lain pada citra, dan gambar hotspotnya. /div><div style=\\\"padding:2px 3px;\\\">&bull;� Untuk menambah sebuah hotspot: klik tombol [+hotspot]. </div><div style=\\\"padding:2px 3px;\\\">&bull;� Untuk menutup bentuk polygon: klik kanan dan pilih  \\\"Close polygon\\\".</div>";
+$langHotspotChoose = "<div style=\"padding:2px 3px;\">• Untuk membuat sebuah hotspot: pilih bentuk disamping warna, dan gambarkan hotspot. </div><div style=\"padding:2px 3px;\">•  untuk memindahkan hotspot, pilih warna, dan klik hotspot lain pada citra, dan gambar hotspotnya. /div><div style=\"padding:2px 3px;\">•  Untuk menambah sebuah hotspot: klik tombol [+hotspot]. </div><div style=\"padding:2px 3px;\">•  Untuk menutup bentuk polygon: klik kanan dan pilih  \"Close polygon\".</div>";
 $Fault = "Salah";
-$Hotspot = "Hotspot";
+$HotSpot = "Hotspot";
 $ClickNumber = "Klik angka";
 $HotspotGiveAnswers = "Silahkan beri jawaban";
 $Addlimits = "Tambah batas";
 $AreYouSure = "Apakah anda yakin";
 $StudentScore = "Skore Siswa";
 $backtoTesthome = "Kembali ke menu tes/latihan";
-$Feedback = "Feedback";
+$Feedback = "Umpan balik";
 $MarkIsUpdated = "Tanda/mark telah diperbarui";
 $MarkInserted = "Tanda dimasukkan";
 $PleaseGiveAMark = "Silahkan beri sebuah tanda";

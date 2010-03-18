@@ -1,0 +1,6 @@
+name = "Teacher Block"
+controller = "BlockTeacher"
+description = "Display information about teachers inside platform"
+package = Dashboard
+version = 1.0 
+author = Christian Fasanando

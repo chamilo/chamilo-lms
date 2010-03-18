@@ -50,7 +50,7 @@ $question = $_REQUEST['question'];
 $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
 
 $query="SELECT username FROM $tbl_user WHERE user_id='".$_user['user_id']."'";
-$result=Database::query($query,__FILE__,__LINE__);
+$result=Database::query($query);
 
 list($pseudoUser)=Database::fetch_row($result);
 
@@ -75,8 +75,7 @@ if(!is_dir($onlinePath))
 		@unlink($onlinePath);
 	}
 
-	@mkdir($onlinePath,0777);
-	@chmod($onlinePath,0777);
+	@mkdir($onlinePath, api_get_permissions_for_new_directories());
 }
 
 $chat_size=0;

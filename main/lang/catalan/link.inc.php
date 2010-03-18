@@ -1,51 +1,51 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$LinkMoved = "L\'enllaÁ ha estat mogut";
-$langLinkName = "Nom de l\'enllaÁ";
-$langLinkAdd = "Afegir un enllaÁ";
-$langLinkAdded = "L\'enllaÁ ha estat afegit";
-$langLinkMod = "Modificar l\'enllaÁ";
-$langLinkModded = "L\'enllaÁ ha estat modificat";
-$langLinkDel = "Eliminar l\'enllaÁ";
-$langLinkDeleted = "L\'enllaÁ ha estat eliminat";
-$langLinkDelconfirm = "Esteu segur que voleu eliminar aquest enllaÁ?";
-$langAllLinksDel = "Eliminar tots els enllaÁos d\'aquesta categoria";
-$langCategoryName = "Nom de la categoria";
+$LinkMoved = "L'enlla√ß ha estat mogut";
+$langLinkName = "Nom de l'enlla√ß";
+$langLinkAdd = "Afegir un enlla√ß";
+$langLinkAdded = "L'enlla√ß ha estat afegit";
+$langLinkMod = "Modificar l'enlla√ß";
+$langLinkModded = "L'enlla√ß ha estat modificat";
+$langLinkDel = "Eliminar l'enlla√ß";
+$langLinkDeleted = "L'enlla√ß ha estat eliminat";
+$langLinkDelconfirm = "Esteu segur que voleu eliminar aquest enlla√ß?";
+$langAllLinksDel = "Eliminar tots els enlla√ßos d'aquesta categoria";
+$langCategoryName = "Nom de categoria";
 $langCategoryAdd = "Afegir una categoria";
 $langCategoryAdded = "La categoria ha estat afegida";
 $langCategoryModded = "La categoria ha estat modificada";
 $langCategoryDel = "Eliminar categoria";
-$langCategoryDeleted = "S\'ha eliminat la categoria i tots els seus enllaÁos";
-$langCategoryDelconfirm = "Quan esborreu una categoria tambÈ s\'esborraran tots els enllaÁos dins d\'ella. Esteu segur que voleu eliminar aquesta categoria i tots els seus enllaÁos?";
-$langAllCategoryDel = "Esborrar totes les categories i els seus enllaÁos";
+$langCategoryDeleted = "S'ha eliminat la categoria i tots els seus enlla√ßos";
+$langCategoryDelconfirm = "Quan esborreu una categoria tamb√© s'esborraran tots els enlla√ßos dins d'ella. Esteu segur que voleu eliminar aquesta categoria i tots els seus enlla√ßos?";
+$langAllCategoryDel = "Esborrar totes les categories i els seus enlla√ßos";
 $langGiveURL = "Si us plau, poseu la URL";
 $langGiveCategoryName = "Si us plau, poseu un nom per a la categoria";
 $langNoCategory = "General";
 $showall = "Expandir totes les categories";
 $shownone = "Contraure totes les categories";
-$langListDeleted = "S\'ha esborrat la llista";
-$langAddLink = "Afegeix un enllaÁ";
+$langListDeleted = "S'ha esborrat la llista";
+$langAddLink = "Afegir un enlla√ß";
 $langDelList = "Esborra la llista sencera";
-$langModifyLink = "Modificar un enllaÁ";
-$langCsvImport = "Inportar un fitxer CSV";
-$langCsvFileNotFound = "El fitxer CSV no es pot importar (est‡ buit?, Ès massa gran?)";
-$langCsvFileNoSeps = "Utilitzeu , o ; per separar les columnes del fitxer CSV a importar";
-$langCsvFileNoURL = "Les columnes URL i tÌtol han d\'estar obligatÚriament en el fitxer CSV a importar";
-$langCsvFileLine1 = "...- lÌnia 1 =";
-$langCsvLinesFailed = "lÌnia(es) errÚnia(es) en importar un enllaÁ (hi falta la URL o el tÌtol).";
-$langCsvLinesOld = "enllaÁ(os) existent(s) actualitzat(s) (igual URL i categoria)";
-$langCsvLinesNew = "nou(s) enllaÁ(os) creat(s).";
-$langCsvExplain = "El fitxer hauria de ser d\'aquesta manera:<blockquote><pre><b>URL</b>;categoria;<b>tÌtol</b>;descripciÛ;<b>http://www.aaa.org/...</b>;EnllaÁos importants;<b>Nom 1</b>;DescripciÛ 1;<b>http://www.bbb.net/...</b>;<b>Nom 2</b>;\"DescripciÛ 2\";</pre></blockquote>Si la \'URL\' i la \'categoria\' pertanyen a un enllaÁ ja existent, aquest ser‡ actualitzat. En la resta dels casos es crear‡ un nou enllaÁ.<br><br> Negreta = obligatori. L\'ordre dels camps no tÈ import‡ncia, maj˙scules i min˙scules estan permeses. Els camps desconeguts seran afegits a la \'descripciÛ\'. Separadors: comes o punts i comes. Els valors podran estar entre cometes, perÚ no els noms de columna. Algunes [b]etiquetes HTML[/b] seran importades en el camp \'descripciÛ\'.";
-$langLinkUpdated = "L\'enllaÁ ha estat actualitzat";
-$langAll_Link_Deleted = "L\'enllaÁ ha estat eliminat";
-$langOnHomepage = "Mostrar l\'enllaÁ a la p‡gina principal";
-$langShowLinkOnHomepage = "Mostrar aquest enllaÁ com una icona a la p‡gina principal del curs";
+$langModifyLink = "Modificar un enlla√ß";
 $langCsvImport = "Importar CSV";
+$langCsvFileNotFound = "El fitxer CSV no es pot importar (est√† buit?, √©s massa gran?)";
+$langCsvFileNoSeps = "Utilitzeu , o ; per separar les columnes del fitxer CSV a importar";
+$langCsvFileNoURL = "Les columnes URL i t√≠tol han d'estar obligat√≤riament en el fitxer CSV a importar";
+$langCsvFileLine1 = "...- l√≠nia 1 =";
+$langCsvLinesFailed = "l√≠nia(es) err√≤nia(es) en importar un enlla√ß (hi falta la URL o el t√≠tol).";
+$langCsvLinesOld = "enlla√ß(os) existent(s) actualitzat(s) (igual URL i categoria)";
+$langCsvLinesNew = "nou(s) enlla√ß(os) creat(s).";
+$langCsvExplain = "El fitxer hauria de ser d'aquesta manera:<blockquote><pre><b>URL</b>;categoria;<b>t√≠tol</b>;descripci√≥;<b>http://www.aaa.org/...</b>;Enlla√ßos importants;<b>Nom 1</b>;Descripci√≥ 1;<b>http://www.bbb.net/...</b>;<b>Nom 2</b>;\"Descripci√≥ 2\";</pre></blockquote>Si la 'URL' i la 'categoria' pertanyen a un enlla√ß ja existent, aquest ser√† actualitzat. En la resta dels casos es crear√† un nou enlla√ß.<br><br> Negreta = obligatori. L'ordre dels camps no t√© import√†ncia, maj√∫scules i min√∫scules estan permeses. Els camps desconeguts seran afegits a la 'descripci√≥'. Separadors: comes o punts i comes. Els valors podran estar entre cometes, per√≤ no els noms de columna. Algunes [b]etiquetes HTML[/b] seran importades en el camp 'descripci√≥'.";
+$langLinkUpdated = "L'enlla√ß ha estat actualitzat";
+$langAll_Link_Deleted = "L'enlla√ß ha estat eliminat";
+$langOnHomepage = "Mostrar l'enlla√ß a la p√†gina principal";
+$langShowLinkOnHomepage = "Mostrar aquest enlla√ß com una icona a la p√†gina principal del curs";
 $General = "General";
-$SearchFeatureDoIndexLink = "Indexar tÌtol i descripciÛ? ";
-$langSaveLink = "Guardar enllaÁ";
+$SearchFeatureDoIndexLink = "Indexar t√≠tol i descripci√≥?";
+$langSaveLink = "Guardar enlla√ß";
 $langSaveCategory = "Guardar la categoria";
-$BackToLinksOverview = "Regressar a la llista d\'enllaÁos";
-$AddTargetOfLinkOnHomepage = "Seleccioni la manera (target) que es mostrar‡ l\'enllaÁ en la p‡gina principal del curs ";
+$BackToLinksOverview = "Regressar a la llista d'enlla√ßos";
+$AddTargetOfLinkOnHomepage = "Seleccioni la manera (target) que es mostrar√† l'enlla√ß en la p√†gina principal del curs";
 ?>

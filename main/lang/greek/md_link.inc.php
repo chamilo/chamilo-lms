@@ -1,5 +1,6 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$langCreate = "Äçìéïõñãßá MDEs";
+$langCreate = "Î”Î·Î¼Î¹Î¿Ï…ÏÎ³Î¯Î±";
 ?>

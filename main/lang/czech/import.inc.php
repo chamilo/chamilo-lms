@@ -1,15 +1,16 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$langPgTitle = "N·zev str·nky";
-$langExplanation = "Str·nka musÌ b˝t ve form·tu HTML (nap&#345;. \"moje_stranka.htm\"). Bude spojen· s Dom·cÌ str·nkou. Jestli chcete poslat dokumenty kterÈ nejsou ve form·tu HTML(PDF, Word, Power Point, Video, atd.) pouûijte <a href=../document/document.php>N·stroj dokument&#367;</a>";
-$langTooBig = "Nevybrali jste û·dn˝ soubor pro nahr·nÌ, nebo je soubor p&#345;Ìliö velik˝.";
-$langCouldNot = "Soubor nem&#367;ûe b˝t nahr·n.";
+$langPgTitle = "N√°zev str√°nky";
+$langExplanation = "Jedn√≠m kliknut√≠m na OK vytvo≈ô√≠te webstr√°nku s F√≥rem, Agendou, Spr√°vou dokument≈Ø atd. Va≈°e p≈ôihl√°≈°en√≠, jako tvorce webstr√°nky V√°m umo≈æn√≠ zmƒõnit ji dle Va≈°√≠ pot≈ôeby.";
+$langTooBig = "Nevybrali jste ≈æ√°dn√Ω soubor pro nahr√°n√≠, nebo je soubor p≈ô√≠li≈° velik√Ω.";
+$langCouldNot = "Soubor nem≈Ø≈æe b√Ωt nahr√°n.";
 $langNotAllowed = "Nedovoleno";
-$langAddPageToSite = "P&#345;idat str·nku na mÌsto";
-$langCouldNotSendPage = "Tento soubor nenÌ ve form·tu HTML a nem&#367;ûe b˝t nahr·n. Jestli chcete poslat dokumenty kterÈ nejsou ve form·tu HTML (PDF, Word, Power Point, Video, atd.) pouûijte <a href=../document/document.php>N·stroj dokument&#367;</a>";
-$langSendPage = "Str·nka pro nahr·nÌ(upload)";
-$langPageTitleModified = "N·zev str·nky byl zm&#283;n&#283;n";
-$langPageAdded = "Str·nka p&#345;idan·";
-$langAddPage = "P&#345;idat str·nku";
+$langAddPageToSite = "P≈ôidat str√°nku na m√≠sto";
+$langCouldNotSendPage = "Tento soubor nen√≠ ve form√°tu HTML a nem≈Ø≈æe b√Ωt nahr√°n. Jestli chcete poslat dokumenty kter√© nejsou ve form√°tu HTML (PDF, Word, Power Point, Video, atd.) pou≈æijte <a href=../document/document.php>N√°stroj dokument≈Ø</a>";
+$langSendPage = "Str√°nka pro nahr√°n√≠(upload)";
+$langPageTitleModified = "N√°zev str√°nky byl zmƒõnƒõn";
+$langPageAdded = "Str√°nka p≈ôidan√°";
+$langAddPage = "P≈ôidat str√°nku";
 ?>

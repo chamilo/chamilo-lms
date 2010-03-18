@@ -1,27 +1,28 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$TermAddNew = "Añadir un término";
-$TermName = "Término";
-$TermDefinition = "Definición";
-$TermDeleted = "Término eliminado";
-$TermUpdated = "Término actualizado";
-$TermConfirmDelete = "¿ Realmente desea eliminar el término";
-$TermAddButton = "Guardar este término";
-$TermUpdateButton = "Actualizar término";
-$TermEdit = "Editar término";
-$TermDeleteAction = "Eliminar término";
+$TermAddNew = "AÃ±adir un tÃ©rmino";
+$TermName = "TÃ©rmino";
+$TermDefinition = "DefiniciÃ³n";
+$TermDeleted = "TÃ©rmino eliminado";
+$TermUpdated = "TÃ©rmino actualizado";
+$TermConfirmDelete = "Â¿ Realmente desea eliminar el tÃ©rmino";
+$TermAddButton = "Guardar este tÃ©rmino";
+$TermUpdateButton = "Actualizar tÃ©rmino";
+$TermEdit = "Editar tÃ©rmino";
+$TermDeleteAction = "Eliminar tÃ©rmino";
 $OrderBy = "Ordenar por";
-$CreationDate = "Fecha de creación";
-$UpdateDate = "Última modificación";
-$PreSelectedOrder = "Ordenar por selección";
-$TermAdded = "Término añadido";
-$YouMustEnterATermName = "Debe introducir un término";
-$YouMustEnterATermDefinition = "Debe introducir la definición del término";
+$CreationDate = "Fecha de creaciÃ³n";
+$UpdateDate = "Ãšltima modificaciÃ³n";
+$PreSelectedOrder = "Ordenar por selecciÃ³n";
+$TermAdded = "TÃ©rmino aÃ±adido";
+$YouMustEnterATermName = "Debe introducir un tÃ©rmino";
+$YouMustEnterATermDefinition = "Debe introducir la definiciÃ³n del tÃ©rmino";
 $TableView = "Ver como tabla";
 $GlossaryTermAlreadyExistsYouShouldEditIt = "Este termino del glosario ya existe, por favor cambielo por otro nombre";
-$GlossaryManagement  = "Administración de glosario";
-$TermMoved = "El término se ha movido";
-$ShowGlossaryInExtraToolsTitle = "Muestra los términos del glosario en las herramientas lecciones(scorm) y ejercicios";
-$ShowGlossaryInExtraToolsComment = "Desde aquí usted puede configurar como añadir  los términos del glosario en herramientas como lecciones(scorm) y ejercicios";
+$GlossaryManagement = "AdministraciÃ³n de glosario";
+$TermMoved = "El tÃ©rmino se ha movido";
+$ShowGlossaryInExtraToolsTitle = "Muestra los tÃ©rminos del glosario en las herramientas lecciones(scorm) y ejercicios";
+$ShowGlossaryInExtraToolsComment = "Desde aquÃ­ usted puede configurar como aÃ±adir  los tÃ©rminos del glosario en herramientas como lecciones(scorm) y ejercicios";
 ?>

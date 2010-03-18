@@ -1,27 +1,28 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$langActivate = "Ukázat";
-$langDeactivate = "Skrýt";
-$langInLnk  = "Skryté nástroje a odkazy";
+$langActivate = "UkÃ¡zat";
+$langDeactivate = "SkrÃ½t";
+$langInLnk = "SkrytÃ© nÃ¡stroje a odkazy";
 $langDelLk = "Opravdu chcete smazat tenhle odkaz?";
-$langCourseCreate  = "Vytvo&#345;it webovou stránku kurzu";
-$langNameOfTheLink  = "Jméno odkazu";
-$lang_main_categories_list                  = "Seznam hlavních kategorií";
-$langCourseAdminOnly = "Jen pro u&#269;itele";
-$PlatformAdminOnly = "Jen pro platformové Administrátory";
-$langCombinedCourse = "Kombinovaný kurz";
-$ToolIsNowVisible = "Nástroj je nyní viditelný.";
-$ToolIsNowHidden = "Nástroj je nyní neviditelný.";
-$EditLink = "Editovat odkaz";
-$Blog_management = "Administrace Blog&#367;";
-$Forum = "Fóra";
+$langCourseCreate = "VytvoÅ™it webovou strÃ¡nku kurzu";
+$langNameOfTheLink = "JmÃ©no odkazu";
+$lang_main_categories_list = "Seznam hlavnÃ­ch kategoriÃ­";
+$langCourseAdminOnly = "Jen pro uÄitele";
+$PlatformAdminOnly = "Jen pro platformovÃ© AdministrÃ¡tory";
+$langCombinedCourse = "KombinovanÃ½ kurz";
+$ToolIsNowVisible = "NÃ¡stroj je nynÃ­ viditelnÃ½.";
+$ToolIsNowHidden = "NÃ¡stroj je nynÃ­ neviditelnÃ½.";
+$EditLink = "Upravit odkaz";
+$Blog_management = "Administrace BlogÅ¯";
+$Forum = "FÃ³ra";
 $Course_maintenance = "Spravovat kurz";
-$TOOL_SURVEY = "Pr&#367;zkum";
-$GreyIcons = "Sada nástroj&#367;";
+$TOOL_SURVEY = "PrÅ¯zkum";
+$GreyIcons = "Sada nÃ¡strojÅ¯";
 $Interaction = "Interakce";
-$Authoring = "Auto&#345;i";
+$Authoring = "AutoÅ™i";
 $Administration = "Administrace";
-$IntroductionTextUpdated = "Úvodní text aktualizován";
-$IntroductionTextDeleted = "Úvodní text smazán";
+$IntroductionTextUpdated = "ÃšvodnÃ­ text aktualizovÃ¡n";
+$IntroductionTextDeleted = "ÃšvodnÃ­ text smazÃ¡n";
 ?>

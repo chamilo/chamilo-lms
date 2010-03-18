@@ -1,37 +1,38 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$nameTools = "¹ýÊ±ÓïÑÔ±äÁ¿";
-$langMdCallingTool = "Ñ§Ï°Â·¾¶ - SCORM";
-$langTool = "SCORM MD ÐÐ¶¯";
-$langNotInDB = "Ã»ÓÐDokeosÊý¾Ý¿âÌõÄ¿";
-$langManifestSyntax = "(manifestÎÄ¼þÓï·¨´íÎó...) ";
-$langEmptyManifest = "(¿Õmanifest ÎÄ¼þ...)";
-$langNoManifest = "(ÎÞmanifest ÎÄ¼þ...)";
-$langNotFolder = "²»¿ÉÄÜ, Ëü²»ÊÇÒ»¸öÎÄ¼þ¼Ð...";
-$langUploadHtt = "ÉÏ´«HTT ÎÄ¼þ";
-$langHttFileNotFound = "ÐÂµÄ HTT ÎÄ¼þÎÞ·¨´ò¿ª (ÒòÎª¿Õ»òÌ«´ó)";
-$langHttOk = "ÐÂHTTÎÄ¼þÒÑ¾­ÉÏ´«";
-$langHttNotOk = "ÉÏ´«HTT ÎÄ¼þÊ§°Ü";
-$langRemoveHtt = "É¾³ý HTT ÎÄ¼þ";
-$langHttRmvOk = "HTT ÎÄ¼þÒÑ±»É¾³ý";
-$langHttRmvNotOk = "É¾³ýHTT ÎÄ¼þÊ§°Ü";
-$langImport = "´Ómanifest ´´½¨ MDE";
-$langRemove = "É¾³ý MDE";
-$langAllRemovedFor = "ÒÆÈ¥ËùÓÐÌõÄ¿";
-$langIndex = "ÓÐPhpDigµÄË÷Òý´Ê";
-$langTotalMDEs = "È«²¿Scorm MDÌõÄ¿µÄÊýÊýÁ¿:";
-$langMainMD = "¿ªÆôÖ÷Òª MDE";
-$langLines = "ÐÐ";
-$langPlay = "Ö´ÐÐ index.php";
-$langNonePossible = "²»¿ÉÄÜÖ´ÐÐÈÎºÎMD ÐÐ¶¯";
-$langOrElse = "Ñ¡ÔñÒ»¸ö Scorm Ä¿Â¼»òÒ»¸ö Scorm Ä¿Â¼±àºÅ";
-$langWorkWith = "ÔÚScormÂ·¾¶ÖÐÔËÐÐ";
-$langSDI = "... ÓÐ SD-id µÄ Scorm Â·¾¶ (Çå³þ·Ö¿ª - »ò±£³ÖÎª¿Õ) ";
-$langRoot = "¸ù";
-$langSplitData = "·ÖÀë manifest ºÍ#MDe,  ÈçÓÐ:";
-$langMffNotOk = "Ìæ»»manifest ÎÄ¼þÊ§°Ü";
-$langMffOk = "ÒÑÌæ»»manifest ÎÄ¼þ";
-$langMffFileNotFound = "ÐÂµÄ manifest ÎÄ¼þÎÞ·¨¿ªÆô (¿ÉÄÜÊÇ¿Õ»òÌ«´ó)";
-$langUploadMff = "Ìæ»» manifest ÎÄ¼þ";
+$nameTools = "åºŸå¼ƒè¯­è¨€å˜é‡";
+$langMdCallingTool = "æ–‡æ¡£";
+$langTool = "æ–‡æ¡£å…ƒæ•°æ®";
+$langNotInDB = "æ²¡æœ‰æ­¤é“¾æŽ¥åˆ†ç±»";
+$langManifestSyntax = "ï¼ˆè¯­æ³•é”™è¯¯åœ¨æ˜¾ç¤ºæ–‡ä»¶ä¸­...ï¼‰";
+$langEmptyManifest = "ç©ºçš„ manifest æ–‡ä»¶...ï¼‰";
+$langNoManifest = "ï¼ˆæ—  manifest æ–‡ä»¶...)";
+$langNotFolder = "ä¸å¯èƒ½ï¼Œå®ƒä¸æ˜¯ä¸€ä¸ªæ–‡ä»¶å¤¹...";
+$langUploadHtt = "ä¸Šä¼  HTT æ–‡ä»¶";
+$langHttFileNotFound = "æ–°çš„ HTT æ–‡ä»¶æ— æ³•æ‰“å¼€ï¼ˆå› ä¸ºç©ºæˆ–å¤ªå¤§ï¼‰";
+$langHttOk = "æ–° HTT æ–‡ä»¶å·²ç»ä¸Šä¼ ";
+$langHttNotOk = "ä¸Šä¼  HTT æ–‡ä»¶å¤±è´¥";
+$langRemoveHtt = "åˆ é™¤ HTT æ–‡ä»¶";
+$langHttRmvOk = "HTT æ–‡ä»¶å·²è¢«åˆ é™¤";
+$langHttRmvNotOk = "åˆ é™¤ HTT æ–‡ä»¶å¤±è´¥";
+$langImport = "å¯¼å…¥";
+$langRemove = "ç§»é™¤ MDEs";
+$langAllRemovedFor = "æ‰€æœ‰æ¡ç›®çš„åˆ†ç±»éƒ½è¢«ç§»èµ°";
+$langIndex = "ç´¢å¼•è¯";
+$langTotalMDEs = "å…¨éƒ¨ MD æ¡ç›®çš„é“¾æŽ¥æ•°ï¼š";
+$langMainMD = "å¼€å¯ä¸»è¦ MDE";
+$langLines = "è¡Œ";
+$langPlay = "æ‰§è¡Œ index.php";
+$langNonePossible = "ä¸å¯èƒ½æ‰§è¡Œä»»ä½• MD è¡ŒåŠ¨";
+$langOrElse = "é€‰æ‹©ä¸€ä¸ªé“¾æŽ¥åˆ†ç±»";
+$langWorkWith = "åœ¨ Scorm è·¯å¾„ä¸­è¿è¡Œ";
+$langSDI = "... æœ‰ SD-id çš„ Scorm è·¯å¾„ï¼ˆæ¸…æ¥šåˆ†å¼€ - æˆ–ä¿æŒä¸ºç©ºï¼‰";
+$langRoot = "æ ¹ç›®å½•";
+$langSplitData = "åˆ†ç¦» manifest å’Œ#MDe,  å¦‚æœ‰:";
+$langMffNotOk = "æ›¿æ¢ manifest æ–‡ä»¶å¤±è´¥";
+$langMffOk = "å·²æ›¿æ¢ manifest æ–‡ä»¶";
+$langMffFileNotFound = "æ–°çš„ manifest æ–‡ä»¶æ— æ³•å¼€å¯ï¼ˆå¯èƒ½æ˜¯ç©ºæˆ–å¤ªå¤§ï¼‰";
+$langUploadMff = "æ›¿æ¢ manifest æ–‡ä»¶";
 ?>

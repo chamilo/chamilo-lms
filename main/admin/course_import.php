@@ -65,14 +65,14 @@ function validate_data($courses) {
 			else {
 				$course_table = Database :: get_main_table(TABLE_MAIN_COURSE);
 				$sql = "SELECT * FROM $course_table WHERE code = '".Database::escape_string($course['Code'])."'";
-				$res = Database::query($sql, __FILE__, __LINE__);
+				$res = Database::query($sql);
 				if (Database::num_rows($res) > 0) {
 					$course['error'] = get_lang('CodeExists');
 					$errors[] = $course;
 				}
 			}
 			$coursecodes[$course['Code']] = 1;
-		}				
+		}
 		/*
 		// 3. Check whether teacher exists.
 		if (!UserManager::is_username_empty($course['Teacher'])) {
@@ -82,12 +82,12 @@ function validate_data($courses) {
 				$errors[] = $course;
 			}
 		}
-		*/		
+		*/
 		// 4. Check whether course category exists.
 		if (isset ($course['CourseCategory']) && strlen($course['CourseCategory']) != 0) {
 			$category_table = Database :: get_main_table(TABLE_MAIN_CATEGORY);
 			$sql = "SELECT * FROM $category_table WHERE code = '".Database::escape_string($course['CourseCategory'])."'";
-			$res = Database::query($sql, __FILE__, __LINE__);
+			$res = Database::query($sql);
 			if (Database::num_rows($res) == 0) {
 				$course['error'] = get_lang('UnkownCategoryCourseCode').' ('.$course['CourseCategory'].')';
 				$errors[] = $course;
@@ -104,32 +104,32 @@ function validate_data($courses) {
 function save_data($courses) {
 	global $_configuration, $firstExpirationDelay;
 	global $purification_option_for_usernames;
-	
-	$user_table = Database::get_main_table(TABLE_MAIN_USER);	
+
+	$user_table = Database::get_main_table(TABLE_MAIN_USER);
 	$msg = '';
 	foreach ($courses as $index => $course) {
 		$course_language = api_get_valid_language($course['Language']);
 		$keys = define_course_keys($course['Code'], '', $_configuration['db_prefix']);
-		
+
 		$titular = $uidCreator = $username = '';
-		
+
 		// get username from name (firstname lastname)
 		if (!UserManager::is_username_empty($course['Teacher'])) {
 			$teacher = UserManager::purify_username($course['Teacher'], $purification_option_for_usernames);
-			if (UserManager::is_username_available($teacher)) {				
-				$sql 	= "SELECT username FROM $user_table WHERE ".(api_is_western_name_order(null, $course_language) ? "CONCAT(firstname,' ',lastname)" : "CONCAT(lastname,' ',firstname)")." = '{$course['Teacher']}' LIMIT 1";	
-				$rs 	= Database::query($sql,__FILE__,__LINE__);
+			if (UserManager::is_username_available($teacher)) {
+				$sql 	= "SELECT username FROM $user_table WHERE ".(api_is_western_name_order(null, $course_language) ? "CONCAT(firstname,' ',lastname)" : "CONCAT(lastname,' ',firstname)")." = '{$course['Teacher']}' LIMIT 1";
+				$rs 	= Database::query($sql);
 				$user   = Database::fetch_object($rs);
-				$username = $user->username;								
+				$username = $user->username;
 			} else {
 				$username = $teacher;
-			} 
+			}
 		}
 
 		// get name and uid creator from username
-		if (!empty($username)) {			
+		if (!empty($username)) {
 				$sql = "SELECT user_id, ".(api_is_western_name_order(null, $course_language) ? "CONCAT(firstname,' ',lastname)" : "CONCAT(lastname,' ',firstname)")." AS name FROM $user_table WHERE username = '".Database::escape_string(UserManager::purify_username($username, $purification_option_for_usernames))."'";
-				$res = Database::query($sql,__FILE__,__LINE__);
+				$res = Database::query($sql);
 				$teacher 	= Database::fetch_object($res);
 				$titular 	= $teacher->name;
 				$uidCreator = $teacher->user_id;
@@ -137,7 +137,7 @@ function save_data($courses) {
 				$titular 	= $course['Teacher'];
 				$uidCreator = 1;
 		}
-		
+
 		$visual_code = $keys['currentCourseCode'];
 		$code = $keys['currentCourseId'];
 		$db_name = $keys['currentCourseDbName'];

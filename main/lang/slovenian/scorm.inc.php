@@ -1,43 +1,44 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $langScormVersion = "verzija";
-$langScormRestarted = "Vse lekcije so sedaj nedokonèane.";
-$langScormNoNext = "To je zadnja lekcija.";
-$langScormNoPrev = "To je prva lekcija.";
-$langScormTime = "Èas";
-$langScormNoOrder = "Zaporedje ni doloèeno, s klikom lahko izbereš poljubno lekcijo.";
+$langScormRestarted = "Vsi koraki so sedaj nedokonÄani.";
+$langScormNoNext = "To je zadnji korak.";
+$langScormNoPrev = "To je prvi korak.";
+$langScormTime = "ÄŒas";
+$langScormNoOrder = "Zaporedje ni doloÄeno, s klikom lahko izbereÅ¡ poljuben korak.";
 $langScormScore = "Rezultat";
-$langScormLessonTitle = "Naslov lekcije";
+$langScormLessonTitle = "Naslov koraka";
 $langScormStatus = "Status";
-$langScormToEnter = "Za dostop do ";
-$langScormFirstNeedTo = " moraš najprej dokonèati";
-$langScormThisStatus = "Ta lekcija je sedaj";
-$langScormClose = "Konèaj";
-$langScormRestart = "Ponovno zaeni";
-$langScormCompstatus = "Dokonèan";
-$langScormIncomplete = "Nedokonèan";
+$langScormToEnter = "Za dostop do";
+$langScormFirstNeedTo = " moraÅ¡ najprej dokonÄati";
+$langScormThisStatus = "Ta korak je sedaj";
+$langScormClose = "KonÄaj";
+$langScormRestart = "Ponovno zaÅ¾eni";
+$langScormCompstatus = "DokonÄan";
+$langScormIncomplete = "NedokonÄan";
 $langScormPassed = "Naredil";
 $langScormFailed = "Padel";
-$langScormPrevious = "Prejšnji";
+$langScormPrevious = "PrejÅ¡nji";
 $langScormNext = "Naslednji";
-$langScormTitle = "Dokeos Scorm predvajalnik";
+$langScormTitle = "Chamilo Scorm predvajalnik";
 $langScormMystatus = "Moj status";
 $langScormNoItems = "Ta vsebina ne vsebuje nobenih elementov.";
 $langScormNoStatus = "Ni statusa za to vsebino";
-$langScormLoggedout = "odjavljen iz SCORM podroèja";
+$langScormLoggedout = "odjavljen iz SCORM podroÄja";
 $langScormCloseWindow = "Zapri okna";
 $ScormBrowsed = "pregledan";
-$langScormExitFullScreen = "Normalen zaslonski naèin";
-$langScormFullScreen = "Celozaslonski naèin";
-$langScormNotAttempted = "Brez poskusa uporabe";
+$langScormExitFullScreen = "Normalen zaslonski naÄin";
+$langScormFullScreen = "Celozaslonski naÄin";
+$langScormNotAttempted = "Brez poskusa";
 $langCharset = "Znakovni nabor";
 $langLocal = "Lokalno";
 $langRemote = "Oddaljeno";
 $langAutodetect = "Samodejna zaznava";
-$langAccomplishedStepsTotal = "Zbir (Total of accomplished steps)";
+$langAccomplishedStepsTotal = "Skupno";
 $langUnknown = "Neznano";
-$AreYouSureToDeleteSteps = "Ste preprièani, da elite odstraniti te korake ?";
+$AreYouSureToDeleteSteps = "Ste prepriÄani, da Å¾elite odstraniti te korake ?";
 $Origin = "Izvor";
 $Local = "Lokalna";
 $Remote = "Oddaljena";
@@ -45,11 +46,12 @@ $FileToUpload = "Datoteka za prenos";
 $ContentMaker = "Izvor vsebine (orodje)";
 $ContentProximity = "Lokacija vsebine";
 $UploadLocalFileFromGarbageDir = "Prenesi lokalno datoteko z mape main/garbage";
-$ThisItemIsNotExportable = "Ta element trenutno ni SCORM zdruljiv, zato ga trenutno ni mono izvoziti.";
+$ThisItemIsNotExportable = "Ta element trenutno ni SCORM zdruÅ¾ljiv, zato ga trenutno ni moÅ¾no izvoziti.";
 $MoveCurrentChapter = "Premakni trenutno poglavje";
-$GenericScorm = "Generièni SCORM";
-$UnknownPackageFormat = "Format paketa ni prepoznan. Preprièajte se, da ima ustrezno formo in da ne vsebuje napak. Problem je lahko nastopil tudi zaredi neustreznega ZIP formata ali pa ste skušali naloiti preveliko datoteko. V primeru, da niste preprièani v pravilno obliko ZIP, skušajte datoteko naredi z minimalno uporabo posebnih nastavitev stiskanja.";
+$GenericScorm = "GeneriÄni SCORM";
+$UnknownPackageFormat = "Format tega paketa ni bil prepoznan. Preverite, Äe je paket dejansko veljaven paket.";
 $Attempt = "Poskus";
-$MoveTheCurrentForum = "Premakni tekoèi forum";
-$WarningWhenEditingScorm = "Opozorilo !<br /> Pri urejanju/popravljanju vsebine koraka scorm-a lahko pride do spremembe v poroèilih o izvajanju te uène poti ali do okvare koraka samega.";
+$MoveTheCurrentForum = "Premakni tekoÄi forum";
+$WarningWhenEditingScorm = "Opozorilo !<br /> Pri urejanju/popravljanju vsebine koraka scorm-a lahko pride do spremembe v poroÄilih o izvajanju te uÄne poti ali do okvare koraka samega.";
+$AdditionalProfileField = "Dodaj polje uporabniÅ¡kega profila";
 ?>

@@ -104,7 +104,7 @@ if( ( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse ) && $_configura
     {
         $sql = "SELECT `u`.`firstname`,`u`.`lastname`, `u`.`email`
                     FROM $TABLECOURSUSER cu , $TABLEUSER u
-                    WHERE `cu`.`user_id` = `u`.`user_id`
+                    WHERE `cu`.`user_id` = `u`.`user_id` AND cu.relation_type<>".COURSE_RELATION_TYPE_RRHH."
                         AND `cu`.`course_code` = '$_cid'
                         AND `u`.`user_id` = '$uInfo'";
     }
@@ -116,7 +116,7 @@ if( ( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse ) && $_configura
                         AND `gu`.`group_id` = '$_gid'
                         AND `u`.`user_id` = '$uInfo'";
     }
-    $query = Database::query($sql,__FILE__,__LINE__);
+    $query = Database::query($sql);
     $res = @Database::fetch_array($query);
     if(is_array($res))
     {
@@ -209,10 +209,7 @@ if( ( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse ) && $_configura
         {
             for ($j = 0 ; $j < sizeof($results); $j++)
             {
-                $timestamp = strtotime($results[$j]);
-                //$beautifulDate = $langDay_of_weekNames['long'][date("w" , $timestamp)].date(" d " , $timestamp);
-                //$beautifulHour = date("H : i" , $timestamp);
-                $beautifulDateTime = format_locale_date($dateTimeFormatLong,$timestamp);
+                $beautifulDateTime = api_convert_and_format_date($results[$j], null, date_default_timezone_get());
                 echo "<tr>";
                 echo "<td style='padding-left : 40px;' valign='top'>".$beautifulDateTime."</td>";
                 echo"</tr>";

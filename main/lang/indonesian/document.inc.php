@@ -1,12 +1,13 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $MoveTo = "Pindah ke";
 $langDownloadFile = "Upload file ke server";
 $langNameDir = "Nama direktori baru";
 $langSize = "Ukuran";
 $langRename = "Ganti nama";
-$langCopy = "Copy";
+$langCopy = "Copy isi mata kuliah";
 $langTo = "ke";
 $langNoSpace = "Upload gagal. Tempat penyimpanan di direktori tidak cukup";
 $langDownloadEnd = "Upload selesai";
@@ -27,36 +28,36 @@ $langUncompress = "uncompress file zip(.zip) di server";
 $langDownloadAndZipEnd = " file Zip di-upload dan di-uncompress";
 $langRoot = "root";
 $langCreateDoc = "Buat dokumen";
-$langDown = "ke Bawah";
+$langDown = "turun";
 $langFileError = "File yang di-upload tidak sah.";
 $langMaxFileSize = "Ukuran maximum file adalah";
 $langFileName = "Nama File";
 $langNoFileName = "Silahkan isi nama file";
 $langNoText = "Silahkan ketikkan text / HTML";
-$langAreYouSureToDelete  = "Apakah anda sungguh-sungguh ingin menghapus";
-$langScormcontent = "Ini adalah Scorm content<br><input type=button name=scormbutton value=\'Luncurkan!\' onclick=\'openscorm()\'>";
-$langScormcontentstudent = "Ini adalah mata kuliah dengan format Scorm. Untuk meminkannya, klik disini : <input type=button name=scormbutton value=\'Luncurkan!\' onclick=\'openscorm()\'>";
-$langPublish  = "Terbitkan";
-$langMissingImagesDetected  = "Ada citra yang hilang terdeteksi";
+$langAreYouSureToDelete = "Apakah anda sungguh-sungguh ingin menghapus";
+$langScormcontent = "Ini adalah Scorm content<br><input type=button name=scormbutton value='Luncurkan!' onclick='openscorm()'>";
+$langScormcontentstudent = "Ini adalah mata kuliah dengan format Scorm. Untuk meminkannya, klik disini : <input type=button name=scormbutton value='Luncurkan!' onclick='openscorm()'>";
+$langPublish = "Terbitkan";
+$langMissingImagesDetected = "Ada citra yang hilang terdeteksi";
 $langCreateDocument = "Buat dokumen";
 $langEditDocument = "Edit";
-$langDocuments  = "Dokumen";
-$langOrganiseDocuments  = "Buat Daftar Isi";
-$langEditTOC  = "Edit Daftar Isi";
-$langChapter  = "Bab";
-$langDocumentList  = "daftar seluruh dokumen";
-$langOrganisationList  = "Daftar Isi";
-$langCreationSucces  = "Daftar Isi berhasil dibuat.";
-$langCanViewOrganisation  = "Anda dapat melihat organisasinya ";
-$langHere  = "disini.";
-$langViewDocument  = "Lihat";
-$langHtmlTitle  = "Daftar Isi";
-$langAddToTOC  = "Tambah ke isi";
-$langAddChapter  = "Tambah bab";
-$langReady  = "Buat Daftar Isi";
-$langStoreDocuments  = "Simpan dokumen";
-$langTocDown  = "Kebawah";
-$langTocUp  = "keatas";
+$langDocuments = "Dokumen";
+$langOrganiseDocuments = "Buat Daftar Isi";
+$langEditTOC = "Edit Daftar Isi";
+$langChapter = "Bab";
+$langDocumentList = "daftar seluruh dokumen";
+$langOrganisationList = "Daftar Isi";
+$langCreationSucces = "Daftar Isi berhasil dibuat.";
+$langCanViewOrganisation = "Anda dapat melihat organisasinya";
+$langHere = "disini.";
+$langViewDocument = "Lihat";
+$langHtmlTitle = "Daftar Isi";
+$langAddToTOC = "Tambah ke isi";
+$langAddChapter = "Tambah bab";
+$langReady = "Buat Daftar Isi";
+$langStoreDocuments = "Simpan dokumen";
+$langTocDown = "Kebawah";
+$langTocUp = "keatas";
 $lang_cut_paste_link = "No frames";
 $langCreatePath = "Buat path";
 $langOogieConversionPowerPoint = "Oogie : Konversi PowerPoint";

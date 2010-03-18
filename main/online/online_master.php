@@ -44,8 +44,8 @@ $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
 $tbl_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 $tbl_online_link=Database::get_course_table(TABLE_ONLINE_LINK);
 
-$query="SELECT t1.user_id,username,picture_uri,t2.status FROM $tbl_user t1,$tbl_course_user t2 WHERE t1.user_id=t2.user_id AND course_code='$_cid' AND (t1.user_id='".$_user['user_id']."' OR t2.status='1')";
-$result=Database::query($query,__FILE__,__LINE__);
+$query="SELECT t1.user_id,username,picture_uri,t2.status FROM $tbl_user t1,$tbl_course_user t2 WHERE t1.user_id=t2.user_id AND t2.relation_type<>".COURSE_RELATION_TYPE_RRHH." AND course_code='$_cid' AND (t1.user_id='".$_user['user_id']."' OR t2.status='1')";
+$result=Database::query($query);
 
 while($row=Database::fetch_array($result))
 {
@@ -79,8 +79,7 @@ if(!is_dir($onlinePath))
 		@unlink($onlinePath);
 	}
 
-	@mkdir($onlinePath,0777);
-	@chmod($onlinePath,0777);
+	@mkdir($onlinePath, api_get_permissions_for_new_directories());
 }
 
 if($isMaster && $init)
@@ -115,7 +114,7 @@ if(!$isMaster)
 	}
 
 	$query="SELECT id,name,url FROM $tbl_online_link ORDER BY name";
-	$result=Database::query($query,__FILE__,__LINE__);
+	$result=Database::query($query);
 
 	$Links=Database::store_result($result);
 }

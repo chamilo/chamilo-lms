@@ -1,6 +1,7 @@
 <?php
 require_once(api_get_path(LIBRARY_PATH).'database.lib.php');
-
+require_once(api_get_path(LIBRARY_PATH).'add_course.lib.inc.php');
+require_once(api_get_path(LIBRARY_PATH).'course.lib.php');
 class TestDatabase extends UnitTestCase {
 
 	 public $dbase;
@@ -9,6 +10,7 @@ class TestDatabase extends UnitTestCase {
 	 }
 
 	 public function setUp() {
+	 	global $_configuration;
  	 	$this->dbase = new Database();
 	 }
 
@@ -24,7 +26,9 @@ class TestDatabase extends UnitTestCase {
 	public function testCountRows() {
 		$table='class';
 		$res=$this->dbase->count_rows($table);
-		$this->assertTrue(is_numeric($res));
+		if(!is_string($res)){
+			$this->assertTrue(is_numeric($res));
+		}
 	}
 
 	public function testError() {
@@ -41,7 +45,7 @@ class TestDatabase extends UnitTestCase {
 
 	public function testFetchArray() {
 		$sql = 'select 1';
-		$res=Database::query($sql,__FILE__,__LINE__);
+		$res=Database::query($sql);
 		$resu=$this->dbase->fetch_array($res);
 		$this->assertTrue(is_array($resu));
 		$this->assertFalse(is_null($resu));
@@ -49,25 +53,26 @@ class TestDatabase extends UnitTestCase {
 
 	public function testFetchArrayError() {
 		$sql ="SELECT  1";
-		$res=Database::query($sql,__FILE__,__LINE__);
+		$res=Database::query($sql);
 		$resu=$this->dbase->fetch_array($res);
 		$this->assertTrue(is_array($resu));
 	}
 
 	function testFetchObject() {
 		$sql ="SELECT  1";
-		$res=Database::query($sql,__FILE__,__LINE__);
+		$res=Database::query($sql);
 		$resu=$this->dbase->fetch_object($res);
 		$this->assertTrue(is_object($resu));
 	}
 
 	function testFetchRow() {
 		$sql ="SELECT  1";
-		$res=Database::query($sql,__FILE__,__LINE__);
+		$res=Database::query($sql);
 		$resu=$this->dbase->fetch_row($res);
 		$this->assertTrue(is_array($resu));
 	}
 
+	/* // Contains a private unaccessible method, Database::fix_database_parameter().
 	function testFixDatabaseParameterEmpty() {
 		$course_info = api_get_course_info();
 		$database_name= $course_info[""];
@@ -77,27 +82,34 @@ class TestDatabase extends UnitTestCase {
 		endif;
 		//var_dump($res);
 	}
+	*/
 
+	/* // Contains a private unaccessible method, Database::fix_database_parameter().
 	function testFixDatabaseParameterReturnString() {
 		$course_info = api_get_course_info();
 		$database_name= $course_info["dbName"];
 		$res=$this->dbase->fix_database_parameter($course_info);
 		$this->assertTrue(is_string($res));
 	}
+	*/
 
+	/* // Contains a private unaccessible method, Database::format_glued_course_table_name().
 	function testFormatGluedCourseTableName()  {
 		$database_name_with_glue='';
 		$table='';
 		$res=$this->dbase->format_glued_course_table_name($database_name_with_glue, $table);
 		$this->assertTrue(is_string($res));
 	}
+	*/
 
+	/* // Contains a private unaccessible method, Database::format_table_name().
 	function testFormatTableName() {
 		$database='';
 		$table='';
 		$res=$this->dbase->format_table_name($database, $table);
 		$this->assertTrue(is_string($res));
 	}
+	*/
 
 	function testGenerateAbstractCourseFieldNames() {
 		$result_array='';
@@ -205,7 +217,7 @@ class TestDatabase extends UnitTestCase {
 
 		function testGetScorm_table() {
 		$short_table_name='';
-		$res=$this->dbase->get_scorm_table();
+		$res=$this->dbase->get_scorm_table($short_table_name);
 		$this->assertTrue(is_string($res));
 		$this->assertTrue($res);
 	}
@@ -229,6 +241,7 @@ class TestDatabase extends UnitTestCase {
 		$res=$this->dbase->get_user_info_from_id($user_id);
 		$this->assertTrue(is_array($res));
 		$this->assertTrue($res);
+		//var_dump($res);
 	}
 
 	function testGetUserPersonalDatabase() {
@@ -240,17 +253,19 @@ class TestDatabase extends UnitTestCase {
 
 	function testGetUserPersonalTable(){
 		$short_table_name='';
-		$res=$this->dbase->	get_user_personal_table();
+		$res=$this->dbase->	get_user_personal_table($short_table_name);
 		$this->assertTrue(is_string($res));
 		$this->assertTrue($res);
 	}
 
+	/* // Contains a private unaccessible method, Database::glue_course_database_name().
 	function testGlueCourseDatabaseName() {
 		$database_name='';
 		$res=$this->dbase->glue_course_database_name($database_name);
 		$this->assertTrue(is_string($res));
 		$this->assertTrue($res);
 	}
+	*/
 
 	function testInsertId() {
 		$res=$this->dbase->insert_id();
@@ -258,33 +273,34 @@ class TestDatabase extends UnitTestCase {
 	}
 
 	function testNumRows() {
-		$res='';
-		$resul=$this->dbase->num_rows($res);
-		$this->assertTrue(is_string($res));
+		$sql= 	"SELECT * FROM chamilo_main.user";
+		$res = Database::query($sql);
+		$resul=Database::num_rows($res);
+		$this->assertTrue(is_numeric($resul));
+		//var_Dump($res);
 	}
 
 	function testQuery() {
 		$sql ="SELECT 1";
-		$res=$this->dbase->query($sql,__FILE__,__LINE__);
+		$res=$this->dbase->query($sql);
 		$this->assertTrue(is_resource($res));
 	}
 
 	function testResult() {
-		$sql="SELECT 1";
-		$resource=$this->dbase->query($sql,__FILE__,__LINE__);
-		$rows='1';
-		$res=$this->dbase->result($resource,$rows);
+		$sql="SELECT * FROM chamilo_main.user";
+		$resource= Database::query($sql);
+		$row= 1;
+		$res= Database::result($resource, $row);
+		$this->assertTrue(is_string($res));
 		//var_dump($res);
-		$this->assertTrue(is_bool($res));
 	}
 
 	function testStoreResult(){
 		$sql="SELECT 1";
-		$resource=$this->dbase->query($sql,__FILE__,__LINE__);
+		$resource=$this->dbase->query($sql);
 		$res = $this->dbase->store_result($resource);
 		$this->assertTrue(is_array($res));
 		//var_dump($res);
 	}
-
 }
 ?>

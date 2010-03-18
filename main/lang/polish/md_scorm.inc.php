@@ -1,37 +1,38 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$nameTools = "przestarza&#322;a zmienna j&#281;zykowa";
-$langMdCallingTool = "&#346;cie&#380;ka nauki - Scorm";
-$langTool = "Operacje MD Scorm";
-$langNotInDB = "wpis niezgodny z DB Dokeos\'a";
-$langManifestSyntax = "(b&#322;&#261;d sk&#322;adni w pliku...)";
-$langEmptyManifest = "(pusty plik...)";
-$langNoManifest = "(brak pliku...)";
-$langNotFolder = "nie s&#261; mo&#380;liwe, to nie jest katalog...";
-$langUploadHtt = "Za&#322;aduj plik HTT";
-$langHttFileNotFound = "Nie mo&#380;na by&#322;o otworzy&#263; nowego pliku HTT (np. pusty, zbyt du&#380;y) ";
-$langHttOk = "Nowy plik HTT zosta&#322; za&#322;adowany";
-$langHttNotOk = "Za&#322;adowanie pliku HTT nie powiod&#322;o si&#281;";
-$langRemoveHtt = "Usu&#324; plik HTT";
-$langHttRmvOk = "Plik HTT zosta&#322; usuni&#281;ty";
-$langHttRmvNotOk = "Usuni&#281;cie pliku HTT nie powiod&#322;o si&#281;";
-$langImport = "Utw髍z MDE z pokazanego";
-$langRemove = "Usu&#324; MDE";
-$langAllRemovedFor = "Wszystkie wpisy usuni&#281;te z powodu";
-$langIndex = "Indeksuj s&#322;owa za pomoc&#261; PhpDig";
-$langTotalMDEs = "Og髄na liczba wpis體 Scorm MD";
-$langMainMD = "Otw髍z g&#322;owny MDE";
+$nameTools = "archaiczna zmienna j臋zykowa";
+$langMdCallingTool = "Dokumenty";
+$langTool = "Dokument Metadane";
+$langNotInDB = "nie ma takiej kategorii Link贸w";
+$langManifestSyntax = "(b艂膮d sk艂adni w pliku ...)";
+$langEmptyManifest = "(pusty plik ...)";
+$langNoManifest = "(brak pliku ...)";
+$langNotFolder = "nie s膮 mo偶liwe, to nie katalog...";
+$langUploadHtt = "Za艂aduj plik HTT";
+$langHttFileNotFound = "Nie mo偶na by艂o otworzy膰 nowego pliku HTT (np. pusty, zbyt du偶y)";
+$langHttOk = "Nowy plik HTT zosta艂 za艂adowany";
+$langHttNotOk = "Za艂adowanie pliku HTT nie powiod艂o si臋";
+$langRemoveHtt = "Usu艅 plik HTT";
+$langHttRmvOk = "Plik HTT zosta艂 usuni臋ty";
+$langHttRmvNotOk = "Usuni臋cie pliku HTT nie powiod艂o si臋";
+$langImport = "Importuj";
+$langRemove = "Usu艅 MDE";
+$langAllRemovedFor = "Wszystkie wpisy usuni臋te dla kategorii";
+$langIndex = "Indeksuj s艂owa";
+$langTotalMDEs = "Og贸lna liczba wprowadzonych Link贸w MD";
+$langMainMD = "Otw贸rz g艂贸wny MDE";
 $langLines = "linie";
 $langPlay = "Uruchom index.php";
-$langNonePossible = "Nie mo&#380;na wykona&#263; &#380;adnych operacji MD";
-$langOrElse = "Wybierz katalog Scorm";
+$langNonePossible = "Nie mo偶na wykona膰 偶adnych operacji MD";
+$langOrElse = "Wybierz kategori臋 Link贸w";
 $langWorkWith = "Pracuj z katalogiem Scorm";
 $langSDI = "... Katalog Scrom z id-Katalogu Scorm (i podziel pokazany - albo zostaw pusty)";
 $langRoot = "root";
-$langSplitData = "Podziel pokazany, i liczb&#281; wpis體 MDE, w przypadku:";
-$langMffNotOk = "Zamiana pokazanego pliku nie powiod&#322;a si&#281;";
-$langMffOk = "Pokazany plik zaosta&#322; zamieniony";
-$langMffFileNotFound = "Nowy pokazany plik nie m骻&#322; zosta&#263; otwarty (np. pusty, za du&#380;y)";
-$langUploadMff = "Zamie&#324; pokazany plik";
+$langSplitData = "Podziel pokazany, i liczb臋 wpis贸w MDE, w przypadku:";
+$langMffNotOk = "Zamiana pokazanego pliku nie powiod艂a si臋";
+$langMffOk = "Pokazany plik zaosta艂 zamieniony";
+$langMffFileNotFound = "Nowy pokazany plik nie m贸g艂 zosta膰 otwarty (np. pusty, za du偶y)";
+$langUploadMff = "Zamie艅 pokazany plik";
 ?>

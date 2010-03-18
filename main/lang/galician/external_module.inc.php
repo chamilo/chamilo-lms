@@ -1,27 +1,28 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$langLinkSite = "LigazÛn a unha web";
-$langSubTitle = "Engadir Û men˙ principal da s˙a p·xina principal unha ligazÛn a unha p·xina, no interior ou exterior da s˙a web";
-$langAddPage            = "Engadir p·xina";
-$langSendPage           = "P·xina para enviar";
-$langCouldNot           = "O arquivo non se pode enviar";
-$langOkSentLink         = "Enviouse a ligazÛn.<p>Agora est· accesible desde <a href=\"../..//index.php\">P·xina inicial do curso</a>";
-$langTooBig             = "Non seleccionaches o arquivo para enviar, ou È demasiado grande";
-$langExplanation        = "A p·xina debe estar en formato HTML (e.x. \"paxina.htm\"). Enlazar·se · p·xina inicial. Se queres enviar documentos que non sexan HTML (PDF, Word, Power Point, VÌdeo, etc.) utiliza a <a href=../document/document.php>ferramenta Documentos</a>";
-$langPgTitle            = "TÌtulo da p·xina";
-$langNoLinkURL          = "Introduza o enderezo da ligazÛn";
-$langLinkTarget = "Destino da ligazÛn";
+$langLinkSite = "Engadir unha ligaz√≥n externa ou interna √° desde a p√°xina principal";
+$langSubTitle = "Engadir √≥ men√∫ principal da s√∫a p√°xina principal unha ligaz√≥n a unha p√°xina, no interior ou exterior da s√∫a web";
+$langAddPage = "Engadir p√°xina";
+$langSendPage = "P√°xina para enviar";
+$langCouldNot = "O arquivo non se pode enviar";
+$langOkSentLink = "Enviouse a ligaz√≥n.<p>Agora est√° accesible desde <a href=\"../..//index.php\">P√°xina inicial do curso</a>";
+$langTooBig = "Non seleccionaches o arquivo para enviar, ou √© demasiado grande";
+$langExplanation = "Unha vez que vostede prema OK, crearase unha web que incluir√° Foro, Lista de ligaz√≥ns, Exercicios, Axenda, Lista de documentos... Por medio do seu c√≥digo de identificaci√≥n, vostede poder√° modificar o seu contido";
+$langPgTitle = "T√≠tulo da p√°xina";
+$langNoLinkURL = "Introduza o enderezo da ligaz√≥n";
+$langLinkTarget = "Destino da ligaz√≥n";
 $langSameWindow = "Na mesma xanela";
 $langNewWindow = "Nunha xanela nova";
-$langAdded = "A ligazÛn foi engadida";
-$langAddLink = "Engadir unha ligazÛn";
-$langNoLinkName = "Introduza o nome da ligazÛn";
-$langEditLink = "Modificar a ligazÛn da p·xina inicial do curso";
+$langAdded = "Engadido";
+$langAddLink = "Engadir unha ligaz√≥n";
+$langNoLinkName = "Introduza o nome da ligaz√≥n";
+$langEditLink = "Modificar a ligaz√≥n da p√°xina inicial do curso";
 $langChangePress = "Cambiar e pulsar OK";
-$langLinkChanged = "A ligazÛn da p·xina inicial do curso cambiou. Emprega o men˙ de arriba para volver a p·xina inicial. ";
-$NoLinkName = "LigazÛn sen nome";
-$NoLinkURL = "LigazÛn sen URL";
-$LinkChanged = "LigazÛn modificada";
-$OkSentLink = "Envouse a ligazÛn";
+$langLinkChanged = "A ligaz√≥n da p√°xina inicial do curso cambiou. Emprega o men√∫ de arriba para volver a p√°xina inicial.";
+$NoLinkName = "Ligaz√≥n sen nome";
+$NoLinkURL = "Ligaz√≥n sen URL";
+$LinkChanged = "Ligaz√≥n modificada";
+$OkSentLink = "Envouse a ligaz√≥n";
 ?>

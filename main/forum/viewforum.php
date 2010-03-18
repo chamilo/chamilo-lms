@@ -62,7 +62,7 @@ $this_section=SECTION_COURSES;
 // including additional library scripts
 require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
 include_once (api_get_path(LIBRARY_PATH).'groupmanager.lib.php');
-$nameTools=get_lang('Forum');
+$nameTools=get_lang('ToolForum');
 
 
 //are we in a lp ?
@@ -133,7 +133,7 @@ if (isset($_SESSION['gradebook'])){
 if (!empty($gradebook) && $gradebook=='view') {
 	$interbreadcrumb[]= array (
 			'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
-			'name' => get_lang('Gradebook')
+			'name' => get_lang('ToolGradebook')
 		);
 }
 
@@ -149,13 +149,13 @@ if (!empty($_SESSION['toolgroup'])) {
 	$interbreadcrumb[] = array ("url"=>"../group/group_space.php?gidReq=".$_SESSION['toolgroup'], "name"=> get_lang('GroupSpace').' ('.$group_properties['name'].')');
 	//$interbreadcrumb[]=array("url" => "index.php?search=".Security::remove_XSS($my_search),"name" => $nameTools);
 	//$interbreadcrumb[]=array("url" => "viewforumcategory.php?forumcategory=".$current_forum_category['cat_id']."&amp;search=".Security::remove_XSS(urlencode($my_search)),"name" => prepare4display($current_forum_category['cat_title']));
-	$interbreadcrumb[]=array("url" => "#","name" => prepare4display($current_forum['forum_title']));
+	$interbreadcrumb[]=array("url" => "#","name" => prepare4display(Security::remove_XSS($current_forum['forum_title'])));
 	//viewforum.php?forum=".Security::remove_XSS($my_forum)."&amp;origin=".$origin."&amp;gidReq=".$_SESSION['toolgroup']."&amp;search=".Security::remove_XSS(urlencode($my_search)),
 
 } else {
 	$interbreadcrumb[]=array("url" => "index.php?gradebook=$gradebook&search=".Security::remove_XSS($my_search),"name" => $nameTools);
-	$interbreadcrumb[]=array("url" => "viewforumcategory.php?forumcategory=".$current_forum_category['cat_id']."&amp;search=".Security::remove_XSS(urlencode($my_search)),"name" => prepare4display($current_forum_category['cat_title']));
-	$interbreadcrumb[]=array("url" => "#","name" => prepare4display($current_forum['forum_title']));
+	$interbreadcrumb[]=array("url" => "viewforumcategory.php?forumcategory=".$current_forum_category['cat_id']."&amp;search=".Security::remove_XSS(urlencode($my_search)),"name" => prepare4display(Security::remove_XSS($current_forum_category['cat_title'])));
+	$interbreadcrumb[]=array("url" => "#","name" => prepare4display(Security::remove_XSS($current_forum['forum_title'])));
 	//viewforum.php?forum=".Security::remove_XSS($my_forum)."&amp;origin=".$origin."&amp;search=".Security::remove_XSS(urlencode($my_search))
 }
 
@@ -218,7 +218,7 @@ if ($my_action == 'liststd' AND isset($_GET['content']) AND isset($_GET['id']) A
 	}
 	$table_list = '<p><br /><h3>'.get_lang('ThreadUsersList').'&nbsp;:'.get_name_thread_by_id($_GET['id']).'</h3>';
 	if ($nrorow3>0 || $nrorow3==-2) {
-		$url = 'cidReq='.Security::remove_XSS($_GET['cidReq']).'&forum='.Security::remove_XSS($my_forum).'&action='.Security::remove_XSS($_GET['action']).'&content='.Security::remove_XSS($_GET['content']).'&id='.Security::remove_XSS($_GET['id']);
+		$url = 'cidReq='.Security::remove_XSS($_GET['cidReq']).'&forum='.Security::remove_XSS($my_forum).'&action='.Security::remove_XSS($_GET['action']).'&content='.Security::remove_XSS($_GET['content'],STUDENT).'&id='.Security::remove_XSS($_GET['id']);
 		$table_list.= '<br />
 				 <div style="width:50%">
 				 <table class="data_table" border="0">
@@ -289,7 +289,10 @@ if ($my_action == 'liststd' AND isset($_GET['content']) AND isset($_GET['id']) A
 // if the user is not a course administrator and the forum is hidden
 // then the user is not allowed here.
 if (!api_is_allowed_to_edit(false,true) AND ($current_forum_category['visibility']==0 OR $current_forum['visibility']==0)) {
-	forum_not_allowed_here();
+	$forum_allow = forum_not_allowed_here();
+	if ($forum_allow === false) {
+		exit;
+	}
 }
 
 if ($origin == 'learnpath') {
@@ -349,14 +352,14 @@ echo "<table class=\"data_table\" >\n";
 // the current forum
 if ($origin != 'learnpath') {
 	echo "\t<tr>\n\t\t<th align=\"left\" colspan=\"7\">";
-	echo '<span class="forum_title">'.prepare4display($current_forum['forum_title']).'</span>';
+	echo '<span class="forum_title">'.prepare4display(Security::remove_XSS($current_forum['forum_title'])).'</span>';
 
 	if (!empty ($current_forum['forum_comment'])) {
-		echo '<br><span class="forum_description">'.prepare4display($current_forum['forum_comment']).'</span>';
+		echo '<br><span class="forum_description">'.prepare4display(Security::remove_XSS($current_forum['forum_comment'],STUDENT)).'</span>';
 	}
 
 	if (!empty ($current_forum_category['cat_title'])) {
-		echo '<br /><span class="forum_low_description">'.prepare4display($current_forum_category['cat_title'])."</span><br />";
+		echo '<br /><span class="forum_low_description">'.prepare4display(Security::remove_XSS($current_forum_category['cat_title']))."</span><br />";
 	}
 	echo "</th>\n";
 	echo "\t</tr>\n";
@@ -405,7 +408,7 @@ if(is_array($threads)) {
 			}
 			echo "</td>\n";
 			echo "\t\t<td>";
-			echo "<a href=\"viewthread.php?".api_get_cidreq()."&gradebook=".Security::remove_XSS($_GET['gradebook'])."&forum=".Security::remove_XSS($my_forum)."&amp;origin=".$origin."&amp;thread=".$row['thread_id'].$origin_string."&amp;search=".Security::remove_XSS(urlencode($my_search))."\" ".class_visible_invisible($row['visibility']).">".prepare4display($row['thread_title'])."</a></td>\n";
+			echo "<a href=\"viewthread.php?".api_get_cidreq()."&gradebook=".Security::remove_XSS($_GET['gradebook'])."&forum=".Security::remove_XSS($my_forum)."&amp;origin=".$origin."&amp;thread=".$row['thread_id'].$origin_string."&amp;search=".Security::remove_XSS(urlencode($my_search))."\" ".class_visible_invisible($row['visibility']).">".prepare4display(Security::remove_XSS($row['thread_title']))."</a></td>\n";
 			echo "\t\t<td>".$row['thread_replies']."</td>\n";
 			if ($row['user_id']=='0') {
 				$name=prepare4display($row['thread_poster_name']);
@@ -427,19 +430,19 @@ if(is_array($threads)) {
 
 			// if the last post is invisible and it is not the teacher who is looking then we have to find the last visible post of the thread
 			if (($row['visible']=='1' OR api_is_allowed_to_edit(false,true)) && $origin!='learnpath') {
-				$last_post=$row['thread_date']." ".get_lang('By').' '.display_user_link($row['last_poster_user_id'], $name);
+				$last_post=api_convert_and_format_date($row['thread_date'], null, date_default_timezone_get())." ".get_lang('By').' '.display_user_link($row['last_poster_user_id'], $name);
 			} elseif ($origin!='learnpath') {
 				$last_post_sql="SELECT post.*, user.firstname, user.lastname FROM $table_posts post, $table_users user WHERE post.poster_id=user.user_id AND visible='1' AND thread_id='".$row['thread_id']."' ORDER BY post_id DESC";
-				$last_post_result=Database::query($last_post_sql, __FILE__, __LINE__);
+				$last_post_result=Database::query($last_post_sql);
 				$last_post_row=Database::fetch_array($last_post_result);
 				$name=api_get_person_name($last_post_row['firstname'], $last_post_row['lastname']);
-				$last_post=$last_post_row['post_date']." ".get_lang('By').' '.display_user_link($last_post_row['poster_id'], $name);
+				$last_post=api_convert_and_format_date($last_post_row['post_date'], null, date_default_timezone_get())." ".get_lang('By').' '.display_user_link($last_post_row['poster_id'], $name);
 			} else {
 				$last_post_sql="SELECT post.*, user.firstname, user.lastname FROM $table_posts post, $table_users user WHERE post.poster_id=user.user_id AND visible='1' AND thread_id='".$row['thread_id']."' ORDER BY post_id DESC";
-				$last_post_result=Database::query($last_post_sql, __FILE__, __LINE__);
+				$last_post_result=Database::query($last_post_sql);
 				$last_post_row=Database::fetch_array($last_post_result);
 				$name=api_get_person_name($last_post_row['firstname'], $last_post_row['lastname']);
-				$last_post=$last_post_row['post_date']." ".get_lang('By').' '.$name;
+				$last_post=api_convert_and_format_date($last_post_row['post_date'], null, date_default_timezone_get())." ".get_lang('By').' '.$name;
 			}
 
 			echo "\t\t<td>".$last_post."</td>\n";
@@ -448,8 +451,8 @@ if(is_array($threads)) {
 			$attachment_list=get_attachment($row['post_id']);
 			$id_attach = !empty($attachment_list)?$attachment_list['id']:'';
 
-			$sql_post_id="SELECT post_id FROM $table_posts WHERE post_title='".$row['thread_title']."'";
-			$result_post_id=Database::query($sql_post_id, __FILE__, __LINE__);
+			$sql_post_id="SELECT post_id FROM $table_posts WHERE post_title='".Database::escape_string($row['thread_title'])."'";
+			$result_post_id=Database::query($sql_post_id);
 			$row_post_id=Database::fetch_array($result_post_id);
 
 			if ($origin != 'learnpath') {

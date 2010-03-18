@@ -1,7 +1,8 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$langToolName = "Reporting";
+$langToolName = "Importuoti Blackboard kursą";
 $TrackingDisabled = "Reporting has been disabled by system administrator.";
 $InactivesStudents = "Inactive users";
 $AverageTimeSpentOnThePlatform = "Average time spent on portal";
@@ -18,12 +19,12 @@ $SeeSessionList = "Peržiūrėti sesijų sąrašą";
 $langShowNone = "Nieko nerodyti";
 $langCourseStats = "Kurso statistika";
 $langToolsAccess = "Įrankių pasiekiamumas";
-$langCourseAccess = "Šio kurso pasiekiamumas";
+$langCourseAccess = "Priėjimas prie kurso";
 $langLinksAccess = "Nuorodos";
 $langDocumentsAccess = "Dokumentais";
 $langScormAccess = "Mokymosi medžiaga - Scorm formato kursai";
 $langLinksDetails = "Links accessed by the user";
-$langWorksDetails = "Works uploaded by the user in the name of \\\'Authors\\\'";
+$langWorksDetails = "Works uploaded by the user in the name of 'Authors'";
 $langLoginsDetails = "Detalesnei informacijai gauti spauskite ant mėnesio pavadinimo";
 $langDocumentsDetails = "Vartotojo parsisiųsti dokumentai";
 $langExercicesDetails = "Testų rezultatai";
@@ -59,12 +60,12 @@ $langWorkAuthors = "Autoriai";
 $langWorkDescription = "Aprašymas";
 $informationsAbout = " statistika";
 $langNoEmail = "El. pašto adresas nenurodytas";
-$langNoResult = "Rezultatų nėra";
-$langCourse = "Kursas";
+$langNoResult = "Dar nėra rezultato";
+$langCourse = "Sritis";
 $langHits = "Paspaudimai";
 $langTotal = "Iš viso";
 $langHour = "Valanda";
-$langDay = "Diena";
+$langDay = "diena";
 $langLittleHour = "h.";
 $langLast31days = "Per paskutines 31 dienas";
 $langLast7days = "Per paskutines 7 dienas";
@@ -96,7 +97,7 @@ $langPreviousYear = "Ankstesni metai";
 $langViewToolList = "Peržiūrėti visą įrankių sąrašą";
 $langToolList = "Visų įrankių sąrašas";
 $langFrom = "Nuo";
-$langTo = "iki";
+$langTo = "į";
 $langPeriodToDisplay = "Periodas";
 $langDetailView = "Peržiūrėti kaip";
 $langBredCrumpGroups = "Grupės";
@@ -158,7 +159,7 @@ $Success = "Sėkmingas";
 $ExcelFormat = "Excel formatas";
 $MyLearnpath = "Mano mokymosi medžiaga";
 $Time = "Laikas";
-$Score = "Įvertinimas";
+$Score = "Įvertinimai";
 $LastConnexion = "Paskutinis prisijungimas";
 $ConnectionTime = "Prisijungimo laikas";
 $ConnectionsToThisCourse = "Prisijungimai prie šio kurso";
@@ -177,7 +178,7 @@ $NoProduction = "Jokios produkcijos";
 $NoComment = "Jokių komentarų";
 $LatestLogin = "Paskutinis prisijungimas";
 $TimeSpentOnThePlatform = "Praleistas laikas sistemoje";
-$Messages = "Pranešimai";
+$Messages = "Žinutės";
 $AveragePostsInForum = "Vidutinis pranešimų skaičius forume";
 $AverageAssignments = "Vidutinis priskyrimų skaičius";
 $Print = "Spausdinti";

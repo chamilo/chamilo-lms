@@ -1,27 +1,28 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $langActivate = "Mutat";
 $langDeactivate = "Elrejt";
-$langInLnk  = "Rejtett eszközök és linkek";
-$langDelLk = "Valóban ki akarja törölni ezt a linket?";
-$langCourseCreate  = "Kurzus website létrehozása";
-$langNameOfTheLink  = "A link neve";
-$lang_main_categories_list                  = "F&#337; kategóriák listája";
-$langCourseAdminOnly = "Csak tanároknak";
-$PlatformAdminOnly = "Csak platform adminisztrátoroknak";
-$langCombinedCourse = "Kombinált kurzus";
-$ToolIsNowVisible = "Az eszköz mostantól látható";
-$ToolIsNowHidden = "Az eszköz mostantól nem látható";
-$EditLink = "Hivatkozás szerkesztése";
-$Blog_management = "Blogok kezelése";
-$Forum = "Fórumok";
-$Course_maintenance = "Kurzus karbantartás";
-$TOOL_SURVEY = "Kérd&#337;ívek";
-$GreyIcons = "Eszközök";
-$Interaction = "Tevékenység";
-$Authoring = "Létrehozás";
-$Administration = "Adminisztráció";
-$IntroductionTextUpdated = "A bevezet&#337; szöveg frissítve lett.";
-$IntroductionTextDeleted = "Bevezet&#337; szöveg törölve";
+$langInLnk = "Rejtett eszkÃ¶zÃ¶k Ã©s linkek";
+$langDelLk = "ValÃ³ban ki akarja tÃ¶rÃ¶lni ezt a linket?";
+$langCourseCreate = "Kurzus website lÃ©trehozÃ¡sa";
+$langNameOfTheLink = "A link neve";
+$lang_main_categories_list = "FÅ‘ kategÃ³riÃ¡k listÃ¡ja";
+$langCourseAdminOnly = "Csak tanÃ¡roknak";
+$PlatformAdminOnly = "Csak platform adminisztrÃ¡toroknak";
+$langCombinedCourse = "KombinÃ¡lt kurzus";
+$ToolIsNowVisible = "Az eszkÃ¶z mostantÃ³l lÃ¡thatÃ³";
+$ToolIsNowHidden = "Az eszkÃ¶z mostantÃ³l nem lÃ¡thatÃ³";
+$EditLink = "HivatkozÃ¡s szerkesztÃ©se";
+$Blog_management = "Blogok kezelÃ©se";
+$Forum = "FÃ³rumok";
+$Course_maintenance = "Kurzus karbantartÃ¡s";
+$TOOL_SURVEY = "KÃ©rdÅ‘Ã­vek";
+$GreyIcons = "EszkÃ¶zÃ¶k";
+$Interaction = "TevÃ©kenysÃ©g";
+$Authoring = "LÃ©trehozÃ¡s";
+$Administration = "AdminisztrÃ¡ciÃ³";
+$IntroductionTextUpdated = "A bevezetÅ‘ szÃ¶veg frissÃ­tve lett.";
+$IntroductionTextDeleted = "BevezetÅ‘ szÃ¶veg tÃ¶rÃ¶lve";
 ?>

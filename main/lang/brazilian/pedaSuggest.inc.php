@@ -1,25 +1,26 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$GeneralDescription = "Descrição Geral";
-$GeneralDescriptionQuestions = "Qual é o lugar do curso no programa? Existem pré-requisitos? Como o curso é ligado a outros cursos?";
-$GeneralDescriptionInformation = "Descreva o curso (número de horas, código oficial, local onde acontecerá...) e o nome conhecido, primeiro do professor (, o escritório, Tel., E-mail...).";
+$GeneralDescription = "DescriÃ§Ã£o Geral";
+$GeneralDescriptionQuestions = "Qual Ã© o lugar do curso no programa? Existem prÃ©-requisitos? Como o curso Ã© ligado a outros cursos?";
+$GeneralDescriptionInformation = "Descreva o curso (nÃºmero de horas, cÃ³digo oficial, local onde acontecerÃ¡...) e o nome conhecido, primeiro do professor (, o escritÃ³rio, Tel., E-mail...).";
 $Objectives = "Objetivos";
-$ObjectivesInformation = "Apresentação dos objetivos globais e detalhados do curso.";
-$ObjectivesQuestions = "Do que os usuários serão capazes de fazer ao terminarem o curso. A que eles serão convidados a participar durante o processo do curso?";
-$Topics = "Tópicos";
-$TopicsInformation = "Lista dos tópicos incluídos no curso. Importância de cada tópico. Nível de dificuldade. Estrutura e inter-dependência das diferentes partes.";
-$TopicsQuestions = "Como se dará o andamento do curso? Em que os usuários deverão prestar atenção especial? Foram identificados problemas de entendimento nos diferentes capítulos? Quanto tempo alguém deveria dedicar às diferentes partes do curso?";
+$ObjectivesInformation = "ApresentaÃ§Ã£o dos objetivos globais e detalhados do curso.";
+$ObjectivesQuestions = "Do que os usuÃ¡rios serÃ£o capazes de fazer ao terminarem o curso. A que eles serÃ£o convidados a participar durante o processo do curso?";
+$Topics = "TÃ³picos";
+$TopicsInformation = "Lista dos tÃ³picos incluÃ­dos no curso. ImportÃ¢ncia de cada tÃ³pico. NÃ­vel de dificuldade. Estrutura e inter-dependÃªncia das diferentes partes.";
+$TopicsQuestions = "Como se darÃ¡ o andamento do curso? Em que os usuÃ¡rios deverÃ£o prestar atenÃ§Ã£o especial? Foram identificados problemas de entendimento nos diferentes capÃ­tulos? Quanto tempo alguÃ©m deveria dedicar Ã s diferentes partes do curso?";
 $Methodology = "Metodologia";
-$MethodologyQuestions = "Quais métodos e quais atividades irão ajudar a atingir os objetivos do curso? Ao longo de quanto tempo?";
-$MethodologyInformation = "Apresentação das atividades (conferências, trabalhos, pesquisa em grupo, laboratórios...).";
+$MethodologyQuestions = "Quais mÃ©todos e quais atividades irÃ£o ajudar a atingir os objetivos do curso? Ao longo de quanto tempo?";
+$MethodologyInformation = "ApresentaÃ§Ã£o das atividades (conferÃªncias, trabalhos, pesquisa em grupo, laboratÃ³rios...).";
 $CourseMaterial = "Material de Curso";
-$CourseMaterialQuestions = "Há algum livro texto, uma coleção de artigos, uma bibliografia, uma lista de links na internet?";
-$CourseMaterialInformation = "Breve descrição dos materiais do curso.";
+$CourseMaterialQuestions = "HÃ¡ algum livro texto, uma coleÃ§Ã£o de artigos, uma bibliografia, uma lista de links na internet?";
+$CourseMaterialInformation = "Breve descriÃ§Ã£o dos materiais do curso.";
 $HumanAndTechnicalResources = "Recursos Materiais e Humanos";
-$HumanAndTechnicalResourcesQuestions = "Existem professores, tutores, um helpdesk técnico, assistentes sociais, laboratórios de informática?";
-$HumanAndTechnicalResourcesInformation = "Breve descrição da identidade dos recursos humanos e equipamentos disponíveis.";
-$Assessment  = "Avaliação";
-$AssessmentQuestions = "Como os usuários serão avaliados? Existem estratégias a serem desenvolvidas para dominar o tópico?";
-$AssessmentInformation = "Exemplo das questões de prova. Critério de sucesso. Dicas e truques.";
+$HumanAndTechnicalResourcesQuestions = "Existem professores, tutores, um helpdesk tÃ©cnico, assistentes sociais, laboratÃ³rios de informÃ¡tica?";
+$HumanAndTechnicalResourcesInformation = "Breve descriÃ§Ã£o da identidade dos recursos humanos e equipamentos disponÃ­veis.";
+$Assessment = "AvaliaÃ§Ã£o";
+$AssessmentQuestions = "Como os usuÃ¡rios serÃ£o avaliados? Existem estratÃ©gias a serem desenvolvidas para dominar o tÃ³pico?";
+$AssessmentInformation = "Exemplo das questÃµes de prova. CritÃ©rio de sucesso. Dicas e truques.";
 ?>

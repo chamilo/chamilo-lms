@@ -1,14 +1,15 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$AdminBy  = "Ipinfunni nipase";
-$AdministrationTools  = "Ipinfunni";
-$State  = "Ipo nipa ero";
-$Statistiques  = "iro numeri";
-$langUsed       = "Lo";
-$langPresent   = "dara";
-$langMissing    = "so nu";
-$langExist      = "o wa nbe";
+$AdminBy = "Ipinfunni nipase";
+$AdministrationTools = "Ipinfunni";
+$State = "Ipo nipa ero";
+$Statistiques = "iro numeri";
+$langUsed = "Lo";
+$langPresent = "dara";
+$langMissing = "so nu";
+$langExist = "o wa nbe";
 $DisplayTeacherInCourselistTitle = "Fi Oluko wan ni ori eko";
 $DisplayTeacherInCourselistComment = "fi oluko han ninu ise iwe asoye";
 $DisplayCourseCodeInCourselistComment = "fi ena ise yi han ninu iwe iladi";

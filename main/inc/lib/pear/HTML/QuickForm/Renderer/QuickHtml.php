@@ -1,24 +1,30 @@
 <?php
-/* vim: set expandtab tabstop=4 shiftwidth=4: */
-// +----------------------------------------------------------------------+
-// | PHP version 4.0                                                      |
-// +----------------------------------------------------------------------+
-// | Copyright (c) 1997-2003 The PHP Group                                |
-// +----------------------------------------------------------------------+
-// | This source file is subject to version 2.0 of the PHP license,       |
-// | that is bundled with this package in the file LICENSE, and is        |
-// | available at through the world-wide-web at                           |
-// | http://www.php.net/license/2_02.txt.                                 |
-// | If you did not receive a copy of the PHP license and are unable to   |
-// | obtain it through the world-wide-web, please send a note to          |
-// | license@php.net so we can mail you a copy immediately.               |
-// +----------------------------------------------------------------------+
-// | Authors: Jason Rust <jrust@rustyparts.com>                           |
-// +----------------------------------------------------------------------+
-//
-// $Id: QuickHtml.php 6184 2005-09-07 10:08:17Z bmol $
+/* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4: */
 
-require_once('HTML/QuickForm/Renderer/Default.php');
+/**
+ * A renderer that makes it quick and easy to create customized forms.
+ *
+ * PHP versions 4 and 5
+ *
+ * LICENSE: This source file is subject to version 3.01 of the PHP license
+ * that is available through the world-wide-web at the following URI:
+ * http://www.php.net/license/3_01.txt If you did not receive a copy of
+ * the PHP License and are unable to obtain it through the web, please
+ * send a note to license@php.net so we can mail you a copy immediately.
+ *
+ * @category    HTML
+ * @package     HTML_QuickForm
+ * @author      Jason Rust <jrust@rustyparts.com>
+ * @copyright   2001-2009 The PHP Group
+ * @license     http://www.php.net/license/3_01.txt PHP License 3.01
+ * @version     CVS: $Id: QuickHtml.php,v 1.3 2009/04/04 21:34:04 avb Exp $
+ * @link        http://pear.php.net/package/HTML_QuickForm
+ */
+
+/**
+ * A concrete renderer for HTML_QuickForm, based on QuickForm 2.x built-in one
+ */
+require_once 'HTML/QuickForm/Renderer/Default.php';
 
 /**
  * A renderer that makes it quick and easy to create customized forms.
@@ -29,8 +35,11 @@ require_once('HTML/QuickForm/Renderer/Default.php');
  * widget-based template systems.  See the online docs for more info.
  * For a usage example see: docs/renderers/QuickHtml_example.php
  *
- * @access public
- * @package QuickForm
+ * @category    HTML
+ * @package     HTML_QuickForm
+ * @author      Jason Rust <jrust@rustyparts.com>
+ * @version     Release: 3.2.11
+ * @since       3.1.1
  */
 class HTML_QuickForm_Renderer_QuickHtml extends HTML_QuickForm_Renderer_Default {
     // {{{ properties
@@ -96,6 +105,7 @@ class HTML_QuickForm_Renderer_QuickHtml extends HTML_QuickForm_Renderer_Default 
      *
      * @access public
      * @return string The html for the QuickForm element
+     * @throws HTML_QuickForm_Error
      */
     function elementToHtml($elementName, $elementValue = null)
     {
@@ -134,9 +144,9 @@ class HTML_QuickForm_Renderer_QuickHtml extends HTML_QuickForm_Renderer_Default 
      * Gets the html for an element and adds it to the array by calling
      * parent::renderElement()
      *
-     * @param object     An HTML_QuickForm_element object
-     * @param bool       Whether an element is required
-     * @param string     An error message associated with an element
+     * @param HTML_QuickForm_element    form element being visited
+     * @param bool                      Whether an element is required
+     * @param string                    An error message associated with an element
      *
      * @access public
      * @return mixed HTML string of element if $immediateRender is set, else we just add the
@@ -162,7 +172,7 @@ class HTML_QuickForm_Renderer_QuickHtml extends HTML_QuickForm_Renderer_Default 
     /**
      * Gets the html for a hidden element and adds it to the array.
      *
-     * @param object     An HTML_QuickForm_hidden object being visited
+     * @param HTML_QuickForm_element    hidden form element being visited
      * @access public
      * @return void
      */
@@ -182,7 +192,7 @@ class HTML_QuickForm_Renderer_QuickHtml extends HTML_QuickForm_Renderer_Default 
      * Gets the html for the group element and adds it to the array by calling
      * parent::finishGroup()
      *
-     * @param    object      An HTML_QuickForm_group object being visited
+     * @param    HTML_QuickForm_group   group being visited
      * @access   public
      * @return   void
      */

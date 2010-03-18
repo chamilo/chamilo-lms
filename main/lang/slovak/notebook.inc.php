@@ -1,23 +1,24 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$NewNote = "Nová poznámka";
-$Note = "Poznámka";
-$NoteDeleted = "Poznámka zmazaná";
-$NoteUpdated = "Poznámka aktualizovaná";
-$NoteCreated = "Poznámka vytvorená";
-$YouMustWriteANote = "Prosím napíšte poznámku";
-$SaveNote = "Uloži&#357; poznámku";
-$WriteYourNoteHere = "Pre napísanie novej poznámky kliknite sem";
-$SearchByTitle = "Vyh&#318;ada&#357; pod&#318;a názvu";
-$WriteTheTitleHere = "Napíšte názov sem";
-$UpdateDate = "Posledná zmena";
-$NoteAddNew = "Prida&#357; novú poznámku";
-$OrderByCreationDate = "Zoradi&#357; pod&#318;a dátumu vytvorenia";
-$OrderByModificationDate = "Zoradi&#357; pod&#318;a dátumu zmeny";
-$OrderByTitle = "Zoradi&#357; pod&#318;a názvu";
-$NoteTitle = "Názov poznámky";
-$NoteComment = "Detaily poznámky";
-$NoteAdded = "Poznámka pridaná";
-$NoteConfirmDelete = "Naozaj chcete zmaza&#357; túto poznámku";
+$NewNote = "NovÃ¡ poznÃ¡mka";
+$Note = "PoznÃ¡mka";
+$NoteDeleted = "PoznÃ¡mka zmazanÃ¡";
+$NoteUpdated = "PoznÃ¡mka aktualizovanÃ¡";
+$NoteCreated = "PoznÃ¡mka vytvorenÃ¡";
+$YouMustWriteANote = "ProsÃ­m napÃ­Å¡te poznÃ¡mku";
+$SaveNote = "UloÅ¾iÅ¥ poznÃ¡mku";
+$WriteYourNoteHere = "Pre napÃ­sanie novej poznÃ¡mky kliknite sem";
+$SearchByTitle = "VyhÄ¾adaÅ¥ podÄ¾a nÃ¡zvu";
+$WriteTheTitleHere = "NapÃ­Å¡te nÃ¡zov sem";
+$UpdateDate = "DÃ¡tum aktualizÃ¡cie";
+$NoteAddNew = "PridaÅ¥ novÃº poznÃ¡mku";
+$OrderByCreationDate = "ZoradiÅ¥ podÄ¾a dÃ¡tumu vytvorenia";
+$OrderByModificationDate = "ZoradiÅ¥ podÄ¾a dÃ¡tumu zmeny";
+$OrderByTitle = "ZoradiÅ¥ podÄ¾a nÃ¡zvu";
+$NoteTitle = "NÃ¡zov poznÃ¡mky";
+$NoteComment = "Detaily poznÃ¡mky";
+$NoteAdded = "PoznÃ¡mka pridanÃ¡";
+$NoteConfirmDelete = "Naozaj chcete zmazaÅ¥ tÃºto poznÃ¡mku";
 ?>

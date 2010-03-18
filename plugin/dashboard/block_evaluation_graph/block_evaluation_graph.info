@@ -1,0 +1,6 @@
+name = "Evaluation Graph Block"
+controller = "BlockEvaluationGraph"
+description = "Display maximum, minimum and average evaluations about links inside assessments tool"
+package = Dashboard
+version = 1.0 
+author = Christian Fasanando

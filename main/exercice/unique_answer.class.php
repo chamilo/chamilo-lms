@@ -156,120 +156,130 @@ class UniqueAnswer extends Question {
 		}
 
 		$temp_scenario=array();
-		for($i = 1 ; $i <= $nb_answers ; ++$i)
-		{
-			$form -> addElement ('html', '<tr>');
-			if(is_object($answer))
-			{
-				if($answer -> correct[$i])
-				{
-					$correct = $i;
-				}
-
-				$defaults['answer['.$i.']'] = $answer -> answer[$i];
-				$defaults['comment['.$i.']'] = $answer -> comment[$i];
-				$defaults['weighting['.$i.']'] = float_format($answer -> weighting[$i], 1);
-
-				$item_list=explode('@@',$answer -> destination[$i]);
-				//echo '<pre>';	print_r($item_list);
-
-				$try = $item_list[0];
-				$lp = $item_list[1];
-				$list_dest= $item_list[2];
-				$url=$item_list[3];
-
-				if ($try==0)
-					$try_result=0;
-				else
-					$try_result=1;
-
-				if ($url==0)
-					$url_result='';
-				else
-					$url_result=$url;
-
-				$temp_scenario['url'.$i]=$url_result;
-				$temp_scenario['try'.$i]=$try_result;
-				$temp_scenario['lp'.$i]=$lp;
-				$temp_scenario['destination'.$i]=$list_dest;
-
-
-				/*$pre_list_destination=explode(';',$list_dest);
-				$list_destination=array();
-				foreach($pre_list_destination as $value)
-				{
-					$list_destination[]=$value;
-				}
-				$defaults['destination'.$i]=$list_destination;
-				*/
-				//$defaults['destination'.$i] = $list_destination;
-			}else {
-				$defaults['answer[1]']  = get_lang('langDefaultUniqueAnswer1');
-				$defaults['weighting[1]'] = 10;
-				$defaults['answer[2]']  = get_lang('langDefaultUniqueAnswer2');
-				$defaults['weighting[2]'] = 0;
-
-				$temp_scenario['destination'.$i] = array('0');
-				$temp_scenario['lp'.$i] = array('0');
-				//$defaults['scenario']
+			
+			if ($nb_answers < 1) {
+				$nb_answers = 1;
+				Display::display_normal_message(get_lang('YouHaveToCreateAtLeastOneAnswer'));
 			}
-			$defaults['scenario']=$temp_scenario;
-
-			$renderer = & $form->defaultRenderer();
-			$renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>');
-			$answer_number=$form->addElement('text', null,null,'value="'.$i.'"');
-			$answer_number->freeze();
-
-			$form->addElement('radio', 'correct', null, null, $i, 'class="checkbox" style="margin-left: 0em;"');
-			$form->addElement('html_editor', 'answer['.$i.']', null, 'style="vertical-align:middle"', $editor_config);
-			$form->addRule('answer['.$i.']', get_lang('ThisFieldIsRequired'), 'required');
-
-			if ($obj_ex->selectFeedbackType()==0) // feedback
-				$form->addElement('html_editor', 'comment['.$i.']', null, 'style="vertical-align:middle"', $editor_config);
-			elseif ($obj_ex->selectFeedbackType()==1) // direct feedback
+						
+			for($i = 1 ; $i <= $nb_answers ; ++$i)
 			{
-				$form->addElement('html_editor', 'comment['.$i.']', null, 'style="vertical-align:middle"', $editor_config);
-				//Adding extra feedback fields
-				$group = array();
-				$group['try'.$i] =&$form->createElement('checkbox', 'try'.$i,get_lang('TryAgain').': ' );
-				$group['lp'.$i] =&$form->createElement('select', 'lp'.$i,get_lang('SeeTheory').': ',$select_lp_id);
-				$group['destination'.$i]=&$form->createElement('select', 'destination'.$i, get_lang('GoToQuestion').': ' ,$select_question);
-				$group['url'.$i] =&$form->createElement('text', 'url'.$i,get_lang('Other').': ',array('size'=>'25px'));
+				
+				$form -> addElement ('html', '<tr>');
+				if(is_object($answer))
+				{
+					if($answer -> correct[$i])
+					{
+						$correct = $i;
+					}
+	
+					$defaults['answer['.$i.']'] = $answer -> answer[$i];
+					$defaults['comment['.$i.']'] = $answer -> comment[$i];
+					$defaults['weighting['.$i.']'] = float_format($answer -> weighting[$i], 1);
+	
+					$item_list=explode('@@',$answer -> destination[$i]);
+					//echo '<pre>';	print_r($item_list);
+	
+					$try = $item_list[0];
+					$lp = $item_list[1];
+					$list_dest= $item_list[2];
+					$url=$item_list[3];
+	
+					if ($try==0)
+						$try_result=0;
+					else
+						$try_result=1;
+	
+					if ($url==0)
+						$url_result='';
+					else
+						$url_result=$url;
+	
+					$temp_scenario['url'.$i]=$url_result;
+					$temp_scenario['try'.$i]=$try_result;
+					$temp_scenario['lp'.$i]=$lp;
+					$temp_scenario['destination'.$i]=$list_dest;
+	
+	
+					/*$pre_list_destination=explode(';',$list_dest);
+					$list_destination=array();
+					foreach($pre_list_destination as $value)
+					{
+						$list_destination[]=$value;
+					}
+					$defaults['destination'.$i]=$list_destination;
+					*/
+					//$defaults['destination'.$i] = $list_destination;
+				} else {
+					$defaults['answer[1]']  = get_lang('langDefaultUniqueAnswer1');
+					$defaults['weighting[1]'] = 10;
+					$defaults['answer[2]']  = get_lang('langDefaultUniqueAnswer2');
+					$defaults['weighting[2]'] = 0;
+	
+					$temp_scenario['destination'.$i] = array('0');
+					$temp_scenario['lp'.$i] = array('0');
+					//$defaults['scenario']
+				}
+				
+				$defaults['scenario']=$temp_scenario;	
+				$renderer = & $form->defaultRenderer();
+				$renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>');
+				$answer_number=$form->addElement('text', null,null,'value="'.$i.'"');
+				$answer_number->freeze();
+	
+				$form->addElement('radio', 'correct', null, null, $i, 'class="checkbox" style="margin-left: 0em;"');
+				$form->addElement('html_editor', 'answer['.$i.']', null, 'style="vertical-align:middle"', $editor_config);
+				$form->addRule('answer['.$i.']', get_lang('ThisFieldIsRequired'), 'required');
 
-				$form -> addGroup($group, 'scenario', 'scenario');
-				$renderer->setGroupElementTemplate('<div class="exercise_scenario_label">{label}</div><div class="exercise_scenario_element">{element}</div>','scenario');
+				if ($obj_ex->selectFeedbackType() == EXERCISE_FEEDBACK_TYPE_END) {
+					// feedback
+					$form->addElement('html_editor', 'comment['.$i.']', null, 'style="vertical-align:middle"', $editor_config);
+				} elseif ($obj_ex->selectFeedbackType() == EXERCISE_FEEDBACK_TYPE_DIRECT) {
+					// direct feedback
+					$form->addElement('html_editor', 'comment['.$i.']', null, 'style="vertical-align:middle"', $editor_config);
+					//Adding extra feedback fields
+					$group = array();
+					$group['try'.$i] =&$form->createElement('checkbox', 'try'.$i,get_lang('TryAgain').': ' );
+					$group['lp'.$i] =&$form->createElement('select', 'lp'.$i,get_lang('SeeTheory').': ',$select_lp_id);
+					$group['destination'.$i]=&$form->createElement('select', 'destination'.$i, get_lang('GoToQuestion').': ' ,$select_question);
+					$group['url'.$i] =&$form->createElement('text', 'url'.$i,get_lang('Other').': ',array('size'=>'25px'));
+	
+					$form -> addGroup($group, 'scenario', 'scenario');
+					$renderer->setGroupElementTemplate('<div class="exercise_scenario_label">{label}</div><div class="exercise_scenario_element">{element}</div>','scenario');
+				}
+	
+				//$form->addElement('select', 'destination'.$i, get_lang('SelectQuestion').' : ',$select_question,'multiple');
+	
+				$form->addElement('text', 'weighting['.$i.']',null, 'style="vertical-align:middle;margin-left: 0em;" size="5" value="10"');
+				$form -> addElement ('html', '</tr>');
 			}
-
-			//$form->addElement('select', 'destination'.$i, get_lang('SelectQuestion').' : ',$select_question,'multiple');
-
-			$form->addElement('text', 'weighting['.$i.']',null, 'style="vertical-align:middle;margin-left: 0em;" size="5" value="10"');
-			$form -> addElement ('html', '</tr>');
-		}
 
 		$form -> addElement ('html', '</table>');
 		$form -> addElement ('html', '<br />');
 		$navigator_info = api_get_navigator();
-		global $text, $class;
+		
+		global $text, $class, $show_quiz_edition;
 		//ie6 fix
-		if ($navigator_info['name']=='Internet Explorer' &&  $navigator_info['version']=='6') {
-			$form->addElement('submit', 'lessAnswers', get_lang('LessAnswer'),'class="minus"');
-			$form->addElement('submit', 'moreAnswers', get_lang('PlusAnswer'),'class="plus"');
-			$form->addElement('submit','submitQuestion',$text, 'class="'.$class.'"');
-		} else {
-			$form->addElement('style_submit_button', 'lessAnswers', get_lang('LessAnswer'),'class="minus"');
-			$form->addElement('style_submit_button', 'moreAnswers', get_lang('PlusAnswer'),'class="plus"');
-			// setting the save button here and not in the question class.php
-			$form->addElement('style_submit_button','submitQuestion',$text, 'class="'.$class.'"');
+		if ($show_quiz_edition) {
+			if ($navigator_info['name']=='Internet Explorer' &&  $navigator_info['version']=='6') {
+				$form->addElement('submit', 'lessAnswers', get_lang('LessAnswer'),'class="minus"');
+				$form->addElement('submit', 'moreAnswers', get_lang('PlusAnswer'),'class="plus"');
+				$form->addElement('submit','submitQuestion',$text, 'class="'.$class.'"');
+			} else {
+				$form->addElement('style_submit_button', 'lessAnswers', get_lang('LessAnswer'),'class="minus"');
+				$form->addElement('style_submit_button', 'moreAnswers', get_lang('PlusAnswer'),'class="plus"');
+				// setting the save button here and not in the question class.php
+				$form->addElement('style_submit_button','submitQuestion',$text, 'class="'.$class.'"');
+			}
 		}
-
-		$renderer->setElementTemplate('{element}','submitQuestion');
-		$renderer->setElementTemplate('{element}&nbsp;','lessAnswers');
+		$renderer->setElementTemplate('{element}','submitQuestion');		
+		$renderer->setElementTemplate('{element}&nbsp;','lessAnswers');		
 		$renderer->setElementTemplate('{element}','moreAnswers');
 
 		$form -> addElement ('html', '</div></div>');
 
 		//We check the first radio button to be sure a radio button will be check
-		if($correct==0){
+		if ($correct==0) {
 			$correct=1;
 		}
 		$defaults['correct'] = $correct;

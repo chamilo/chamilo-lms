@@ -1,21 +1,22 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$langLinkSite = "Odno&#347;nik do strony";
-$langSubTitle = "Dodanie odno&#347;nika do zewn&#281;trzego adresu URL na Stronie g&#322;�wnej kursu. Uwaga: Je&#347;li chcesz pod&#322;&#261;czy&#263; jak&#261;&#347; stron&#281; z Internetu, wejd&#378; na t&#281; stron&#281;, skopiuj jej adres z pola Adres okienka przegl&#261;darki a nast&#281;pnie wklej ten adres do pola \"Odno&#347;nik\" pon&#380;ej.";
-$langAddPage            = "Dodaj stron&#281;";
-$langSendPage           = "Strona do wys&#322;ania";
-$langCouldNot           = "Plik nie mo�e by� przes�any";
-$langOkSentLink         = "Odno&#347;nik &#380;osta&#322; dodany.<p>Jest on dost&#281;pny ze <a href=\"../../DOKEOSDEV/index.php\">strony g&#322;�wnej kursu</a>";
-$langTooBig             = "Nie wybrano &#380;adnego pliku do wys&#322;ania lub jest on za du&#380;y";
-$langExplanation        = "Strona musi by� plikiem HTML (np. \"my_page.htm\"). B&#281;dzie ona dost�pna jako odno&#347;nik ze strony g&#322;�wnej. Je&#347;li chcesz wys&#322;a&#263; dokument w innym formacie (PDF, Word, Power Point, Video, etc.) u&#380;yj <a href=../document/document.php>narz&#281;dzia Dokumentu</a>";
-$langPgTitle            = "Tytu&#322; strony";
-$langNoLinkURL          = "Wprowad&#378; adres &#322;&#261;cza (URL)";
-$langLinkTarget = "Cel &#322;&#261;cza";
+$langLinkSite = "Dodaj łącze do strony głównej";
+$langSubTitle = "Dodanie odnośnika do zewnętrzego adresu URL na Stronie głównej kursu. Uwaga: Jeśli chcesz podłączyć jakąś stronę z Internetu, wejdź na tę stronę, skopiuj jej adres z pola Adres okienka przeglądarki a następnie wklej ten adres do pola \"Odnośnik\" ponżej.";
+$langAddPage = "Dodaj stronę";
+$langSendPage = "Strona do wysłania";
+$langCouldNot = "Plik nie może być przesłany";
+$langOkSentLink = "Odnośnik żostał dodany.<p>Jest on dostępny ze <a href=\"../../DOKEOSDEV/index.php\">strony głównej kursu</a>";
+$langTooBig = "Nie wybrano żadnego pliku do wysłania lub jest on za duży";
+$langExplanation = "Kliknięcie OK spowoduje utworzenie stron kursu z Forum, Terminarzem, Obszarem dokumentów itd. Tylko Ty, jako twórca kursu możesz te strony modyfikować";
+$langPgTitle = "Tytuł strony";
+$langNoLinkURL = "Wprowadź adres łącza (URL)";
+$langLinkTarget = "Cel łącza";
 $langSameWindow = "W tym samym oknie";
 $langNewWindow = "W nowym oknie";
-$langAdded = "&#321;&#261;cze zosta&#322;o dodane";
-$langAddLink = "Dodaj odno�nik";
-$langNoLinkName = "Podaj nazw&#281; dla &#322;&#261;cza";
-$langEditLink = "Edytuj &#322;&#261;cze do strony g&#322;�wnej kursu";
+$langAdded = "Dodany";
+$langAddLink = "Dodaj odno¶nik";
+$langNoLinkName = "Podaj nazwę dla łącza";
+$langEditLink = "Edytuj łącze do strony głównej kursu";
 ?>

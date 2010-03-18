@@ -1,11 +1,25 @@
 <?php
+/**
+ *	Chamilo LMS
+ *
+ *	For a full list of contributors, see "credits.txt".
+ *	The full license can be read in "license.txt".
+ *
+ *	This program is free software; you can redistribute it and/or
+ *	modify it under the terms of the GNU General Public License
+ *	as published by the Free Software Foundation; either version 2
+ *	of the License, or (at your option) any later version.
+ *
+ *	See the GNU General Public License for more details.
+ */
+
 // setting the character set to UTF-8
 header('Content-Type: text/xml; charset=utf-8');
 
 // name of the language file that needs to be included
 $language_file = 'document';
 
-// including the global dokeos file
+// including the global initialization file
 require_once '../../global.inc.php';
 
 // outputting the opening tag of the xml file
@@ -19,17 +33,18 @@ $css = loadCSS(api_get_setting('stylesheets'));
 
 
 // load libreries js
+/* This libraries will be loaded in the showinframes.php file
 $js = '';
 if (api_get_setting('show_glossary_in_documents') != 'none') {
 	$js .= '<script language="javascript" src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js"/>'.PHP_EOL;
 	if (api_get_setting('show_glossary_in_documents') == 'ismanual') {
 		$js .= '<script language="javascript" src="'.api_get_path(WEB_LIBRARY_PATH).'fckeditor/editor/plugins/glossary/fck_glossary_manual.js"/>';
 	} else {
-    $js .= '<script language="javascript" src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.highlight.js"/>'.PHP_EOL;        
+    $js .= '<script language="javascript" src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.highlight.js"/>'.PHP_EOL;
 		$js .= '<script language="javascript" src="'.api_get_path(WEB_LIBRARY_PATH).'fckeditor/editor/plugins/glossary/fck_glossary_automatic.js"/>';
 	}
 }
-
+*/
 // setting some paths
 $img_dir = api_get_path(REL_CODE_PATH).'img/';
 $default_course_dir = api_get_path(REL_CODE_PATH).'default_course_document/';
@@ -103,7 +118,7 @@ function load_platform_templates() {
 	global $css, $img_dir, $default_course_dir,$js;
 	$sql = "SELECT title, image, comment, content FROM $table_template";
 
-	$result = Database::query($sql, __FILE__, __LINE__);
+	$result = Database::query($sql);
 	while ($row = Database::fetch_array($result)) {
         if (!empty($row['image'])) {
             $image = api_get_path(WEB_PATH).'home/default_platform_document/template_thumb/'.$row['image'];
@@ -163,7 +178,8 @@ function load_personal_templates($user_id=0) {
 			WHERE user_id='".Database::escape_string($user_id)."'
 			AND course_code='".Database::escape_string(api_get_course_id())."'
 			AND document.id = template.ref_doc";
-	$result_template = Database::query($sql,__FILE__,__LINE__);
+
+	$result_template = Database::query($sql);
 	while ($row = Database::fetch_array($result_template))
 	{
 		$row['content'] = file_get_contents(api_get_path('SYS_COURSE_PATH').$_course['path'].'/document'.$row['path']);
@@ -171,7 +187,7 @@ function load_personal_templates($user_id=0) {
 
 		if (!empty($row['image']))
 		{
-			$image = api_get_path(WEB_CODE_PATH).'upload/template_thumbnails/'.$row['image'];
+			$image = api_get_path(WEB_PATH).'courses/'.$_course['path'].'/upload/template_thumbnails/'.$row['image'];
 		} else {
 			$image = api_get_path(WEB_PATH).'home/default_platform_document/template_thumb/noimage.gif';
 		}

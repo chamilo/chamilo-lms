@@ -1,26 +1,8 @@
 <?php
-/*
-    DOKEOS - elearning and course management software
-
-    For a full list of contributors, see documentation/credits.html
-
-    This program is free software; you can redistribute it and/or
-    modify it under the terms of the GNU General Public License
-    as published by the Free Software Foundation; either version 2
-    of the License, or (at your option) any later version.
-    See "documentation/licence.html" more details.
-
-    Contact:
-		Dokeos
-		Rue des Palais 44 Paleizenstraat
-		B-1030 Brussels - Belgium
-		Tel. +32 (2) 211 34 56
-*/
-
-
+/* For licensing terms, see /license.txt */
 /**
 *	Code for Hotpotatoes integration.
-*	@package dokeos.exercise
+*	@package chamilo.exercise
 * 	@author Istvan Mandak
 * 	@version $Id: hotpotatoes.php 20798 2009-05-18 18:13:25Z cvargas1 $
 */
@@ -30,21 +12,20 @@
 $language_file ='exercice';
 
 // including the global Dokeos file
-include('../inc/global.inc.php');
+require_once '../inc/global.inc.php';
 
 // include additional libraries
-include_once(api_get_path(LIBRARY_PATH).'fileUpload.lib.php');
-include_once(api_get_path(LIBRARY_PATH).'document.lib.php');
-include_once(api_get_path(LIBRARY_PATH).'fileManage.lib.php');
-include_once(api_get_path(LIBRARY_PATH)."pclzip/pclzip.lib.php");
-include("hotpotatoes.lib.php");
+require_once (api_get_path(LIBRARY_PATH).'fileUpload.lib.php');
+require_once (api_get_path(LIBRARY_PATH).'document.lib.php');
+require_once (api_get_path(LIBRARY_PATH).'fileManage.lib.php');
+require_once (api_get_path(LIBRARY_PATH).'pclzip/pclzip.lib.php');
+require_once 'hotpotatoes.lib.php';
 
 // section (for the tabs)
 $this_section=SECTION_COURSES;
 
 // access restriction: only teachers are allowed here
-if(!api_is_allowed_to_edit(null,true))
-{
+if(!api_is_allowed_to_edit(null,true)) {
 	api_not_allowed();
 }
 
@@ -55,7 +36,7 @@ if (isset($_SESSION['gradebook'])){
 if (!empty($gradebook) && $gradebook=='view') {
 	$interbreadcrumb[]= array (
 			'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
-			'name' => get_lang('Gradebook')
+			'name' => get_lang('ToolGradebook')
 		);
 }
 // the breadcrumbs
@@ -76,13 +57,12 @@ $imgcount		= (!empty($_POST['imgcount'])?$_POST['imgcount']:null);
 $fld			= (!empty($_POST['fld'])?$_POST['fld']:null);
 
 // if user is allowed to edit
-if (api_is_allowed_to_edit(null,true))
-{
+if (api_is_allowed_to_edit(null,true)) {
 	//disable document parsing(?) - obviously deprecated
 	$enableDocumentParsing=false;
 
-	if(hotpotatoes_init($document_sys_path.$uploadPath))
-	{//if the directory doesn't exist
+	if(hotpotatoes_init($document_sys_path.$uploadPath)) {
+		//if the directory doesn't exist
 		//create the "HotPotatoes" directory
 		$doc_id = add_document($_course, '/HotPotatoes_files','folder',0,'HotPotatoes Files');
 		//update properties in dbase (in any case)
@@ -138,10 +118,7 @@ if((api_is_allowed_to_edit(null,true)) && (($finish == 0) || ($finish == 2)))
 				{		//generate new test folder if on first step of file upload
 					$filename = replace_dangerous_char(trim($_FILES['userFile']['name']),'strict');
 					$fld = GenerateHpFolder($document_sys_path.$uploadPath."/");
-					@mkdir($document_sys_path.$uploadPath."/".$fld);
-					$perm = api_get_setting('permissions_for_new_directories');
-					$perm = octdec(!empty($perm)?$perm:'0770');
-					chmod ($document_sys_path.$uploadPath."/".$fld,$perm);
+					@mkdir($document_sys_path.$uploadPath."/".$fld, api_get_permissions_for_new_directories());
 					$doc_id = add_document($_course, '/HotPotatoes_files/'.$fld,'folder',0,$fld);
 					api_item_property_update($_course,TOOL_DOCUMENT,$doc_id,'FolderCreated',$_user['user_id']);
 				}
@@ -191,7 +168,7 @@ if((api_is_allowed_to_edit(null,true)) && (($finish == 0) || ($finish == 2)))
 					$query = "UPDATE $dbTable SET comment='$newComment' WHERE path=\"".$uploadPath."/".$fld."/".$filename."\"";
 					/*, visibility='v' */
 
-					Database::query($query,__FILE__,__LINE__);
+					Database::query($query);
 					api_item_property_update($_course, TOOL_QUIZ, $id, "QuizAdded", $_user['user_id']);
 				}
 				else
@@ -222,11 +199,15 @@ if((api_is_allowed_to_edit(null,true)) && (($finish == 0) || ($finish == 2)))
 	}
 	if ($finish == 1)
 	{ /** ok -> send to main exercises page */
-		header("Location: exercice.php");
+		header('Location: exercice.php?'.api_get_cidreq());
 		exit;
 	}
 
-	Display::display_header($nameTools,"Exercise");
+	Display::display_header($nameTools,get_lang('Exercise'));
+	
+	echo '<div class="actions">';
+	echo '<a href="exercice.php?show=test">' . Display :: return_icon('message_reply_forum.png', get_lang('GoBackToQuestionList')) . get_lang('GoBackToQuestionList') . '</a>';
+	echo '</div>';
 
 	if ($finish==2) //if we are in the img upload process
 	{
@@ -246,7 +227,7 @@ if((api_is_allowed_to_edit(null,true)) && (($finish == 0) || ($finish == 2)))
 			  UPLOAD SECTION
 	 --------------------------------------*/
 	echo	"<!-- upload  -->\n",
-			"<form action=\"".api_get_self()."\" method=\"post\" enctype=\"multipart/form-data\" >\n",
+			"<form action=\"".api_get_self()."?".api_get_cidreq()."\" method=\"post\" enctype=\"multipart/form-data\" >\n",
 			"<input type=\"hidden\" name=\"uploadPath\" value=\"\">\n",
 			"<input type=\"hidden\" name=\"fld\" value=\"$fld\">\n",
 			"<input type=\"hidden\" name=\"imgcount\" value=\"$imgcount\">\n",

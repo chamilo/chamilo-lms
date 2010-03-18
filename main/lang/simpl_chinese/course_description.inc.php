@@ -1,18 +1,19 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$langCourseProgram  = "¿Î³Ì¼ò½é";
-$langThisCourseDescriptionIsEmpty  = "´Ë¿Î³ÌÄ¿Ç°Ã»ÓÐ¼ò½é.";
-$langEditCourseProgram  = "´´½¨ºÍ±à¼­¿Î³Ì¼ò½é";
-$QuestionPlan  = "¸øÁìµ¼µÄÎÊÌâ";
-$langInfo2Say  = "·¢ËÍ¸øÓÃ»§µÄÐÅÏ¢";
-$langOuAutreTitre  = "±êÌâ";
-$langNewBloc  = "ÆäËû";
-$langAddCat  = "Ìí¼Ó·ÖÀà";
-$langAdd  = "Ìí¼Ó";
-$langValid  = "¿ÉÓÃµÄ";
-$langBackAndForget  = "·µ»ØºÍÈ¡Ïû¼ÇÒä";
-$CourseDescriptionUpdated = "&#35838;&#31243;&#25551;&#36848;&#26356;&#26032;&#23436;&#25104;";
-$CourseDescriptionDeleted = "&#35838;&#31243;&#25551;&#36848;&#21024;&#38500;&#23436;&#25104;";
+$langCourseProgram = "æ•™å­¦å¤§çº²";
+$langThisCourseDescriptionIsEmpty = "æœ¬è¯¾ç¨‹ç›®å‰æ²¡æœ‰æ•™å­¦å¤§çº²ã€‚";
+$langEditCourseProgram = "åˆ›å»ºå’Œç¼–è¾‘è¯¾ç¨‹ç®€ä»‹";
+$QuestionPlan = "ç»™é¢†å¯¼çš„é—®é¢˜";
+$langInfo2Say = "å‘é€ç»™ç”¨æˆ·çš„ä¿¡æ¯";
+$langOuAutreTitre = "æ ‡é¢˜";
+$langNewBloc = "å…¶ä»–å†…å®¹";
+$langAddCat = "æ·»åŠ åˆ†ç±»";
+$langAdd = "æ·»åŠ ";
+$langValid = "å¯ç”¨çš„";
+$langBackAndForget = "è¿”å›žå’Œå–æ¶ˆ";
+$CourseDescriptionUpdated = "è¯¾ç¨‹æè¿°æ›´æ–°å®Œæˆ";
+$CourseDescriptionDeleted = "è¯¾ç¨‹æè¿°åˆ é™¤å®Œæˆ";
 $CourseDescriptionIntro = "To create a course description, click on a heading and fill the correct form field.<br><br> Click then OK and fill another heading.";
 ?>

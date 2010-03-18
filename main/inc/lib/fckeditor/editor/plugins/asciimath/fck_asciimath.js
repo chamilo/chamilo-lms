@@ -1,15 +1,12 @@
 /*
- *	Dokeos - elearning and course management software
+ *	Chamilo LMS
  *
- *	Copyright (c) 2008-2009 Dokeos SPRL
- *	Copyright (c) 2008-2009 Ivan Tcholakov <ivantcholakov@gmail.com>
+ *	Copyright (c) 2009-2010 Ivan Tcholakov <ivantcholakov@gmail.com>
+ *	Copyright (c) 2009 Dokeos SPRL
  *
  *	License:
  *	GNU Lesser General Public License, Version 3, 29 June 2007
  *	by Free Software Foundation, Inc. (http://www.gnu.org/licenses/lgpl.html)
- *
- * Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
- * Mail: info@dokeos.com
  */
 
 var dialog = window.parent ;

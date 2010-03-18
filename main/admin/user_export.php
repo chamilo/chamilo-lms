@@ -67,7 +67,7 @@ if ($_configuration['multiple_access_urls']==true) {
 		ORDER BY visual_code";
 	}
 }
-$result = Database::query($sql, __FILE__, __LINE__);
+$result = Database::query($sql);
 while ($course = Database::fetch_object($result))
 {
 	$courses[$course->code] = $course->visual_code.' - '.$course->title;
@@ -100,7 +100,7 @@ if ($form->validate())
 					u.official_code	AS OfficialCode,
 					u.phone		AS Phone";
 	if (strlen($course_code) > 0) {
-		$sql .= " FROM $user_table u, $course_user_table cu WHERE u.user_id = cu.user_id AND course_code = '$course_code' ORDER BY lastname,firstname";
+		$sql .= " FROM $user_table u, $course_user_table cu WHERE u.user_id = cu.user_id AND course_code = '$course_code' AND cu.relation_type<>".COURSE_RELATION_TYPE_RRHH." ORDER BY lastname,firstname";
 		$filename = 'export_users_'.$course_code.'_'.date('Y-m-d_H-i-s');
 	} else {
 		global $_configuration;
@@ -134,7 +134,7 @@ if ($form->validate())
 		}
 
 	}
-	$res = Database::query($sql,__FILE__,__LINE__);
+	$res = Database::query($sql);
 	while($user = Database::fetch_array($res,'ASSOC')) {
 		$student_data= UserManager :: get_extra_user_data($user['UserId'],true,false);
 		foreach($student_data as $key=>$value) {
@@ -148,13 +148,14 @@ if ($form->validate())
 		$data[] = $user	;
 	}
 
-	switch($file_type)
-	{
+	switch($file_type) {
 		case 'xml':
 			Export::export_table_xml($data,$filename,'Contact','Contacts');
+			exit;
 			break;
 		case 'csv':
 			Export::export_table_csv($data,$filename);
+			exit;
 			break;
 	}
 }

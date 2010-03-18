@@ -1,9 +1,10 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $AgendaAdd = "Dodaj novi element u raspored";
-$ShowAllEvents = "Prika�i sve elemente rasporeda";
-$ShowCurrent = "Prika�i elemente rasporeda u teku&#263;em mjesecu";
+$ShowAllEvents = "Prikaži sve elemente rasporeda";
+$ShowCurrent = "Prikaži elemente rasporeda u tekućem mjesecu";
 $AddCalendarItem = "Dodaj novi element u raspored";
 $Day = "Dan";
 $Month = "Mjesec";
@@ -31,9 +32,9 @@ $langLasting = "trajanje";
 $langOldToNew = "od najranijeg do najnovijeg";
 $langNewToOld = "od najnovijeg do najranijeg";
 $langNow = "trenutno";
-$langAddEvent = "Dodaj doga&#273;anje";
+$langAddEvent = "Dodaj događanje";
 $langDetail = "pojedinosti";
-$MonthView = "Mjese&#269;ni prikaz";
+$MonthView = "Mjesečni prikaz";
 $WeekView = "Tjedni prikaz";
 $DayView = "Dnevni prikaz";
 $AddPersonalItem = "Dodaj osobni element";
@@ -42,36 +43,36 @@ $Date = "Nadnevak";
 $Time = "Vrijeme";
 $AddPersonalCalendarItem = "Dodaj osobni element u raspored";
 $ModifyPersonalCalendarItem = "Izmijeni osobni element u rasporedu";
-$PeronalAgendaItemAdded = "Va� osobni elemnt uspje�no je dodan u raspored";
-$PeronalAgendaItemEdited = "Va� osobni element uspje�no je izmijenjen u rasporedu";
-$PeronalAgendaItemDeleted = "Va� osobni element uspje�no je izbrisan iz rasporeda";
-$ViewPersonalItem = "Prika�i osobne elemente";
+$PeronalAgendaItemAdded = "Vaš osobni elemnt uspješno je dodan u raspored";
+$PeronalAgendaItemEdited = "Vaš osobni element uspješno je izmijenjen u rasporedu";
+$PeronalAgendaItemDeleted = "Vaš osobni element uspješno je izbrisan iz rasporeda";
+$ViewPersonalItem = "Prikaži osobne elemente";
 $UserGroupFilter = "Filtar prema grupama/korisnicima";
-$ShowAll = "Prika�i sve";
+$ShowAll = "Prikaži sve";
 $Print = "Tiskanje";
 $MyTextHere = "moj tekst ovdje";
 $CopiedAsAnnouncement = "Preslikano kao obavijest";
 $NewAnnouncement = "Nova obavijest";
 $AddAnnouncement = "Dodaj kao obavijest";
-$UpcomingEvent = "Nadolaze&#263;i doga&#273;aj";
-$RepeatedEvent = "Ponovljeni doga&#273;aj";
+$UpcomingEvent = "Nadolazeći događaj";
+$RepeatedEvent = "Ponovljeni događaj";
 $RepeatType = "Vrsta ponovljivosti";
 $RepeatDaily = "Dnevno";
 $RepeatWeekly = "Tjedno";
-$RepeatMonthlyByDate = "Mjese&#269;no, prema nadnevku";
-$RepeatMonthlyByDay = "Mjese&#269;no, prema danu";
-$RepeatMonthlyByDayR = "Mjese&#269;no, prema danu, ograni&#269;en";
-$RepeatYearly = "Godi�nje";
-$RepeatEnd = "Ponovi zaklju&#269;ni nadnevak";
-$RepeatedEventViewOriginalEvent = "Pogledaj po&#269;etni doga&#273;aj";
+$RepeatMonthlyByDate = "Mjesečno, prema nadnevku";
+$RepeatMonthlyByDay = "Mjesečno, prema danu";
+$RepeatMonthlyByDayR = "Mjesečno, prema danu, ograničen";
+$RepeatYearly = "Godišnje";
+$RepeatEnd = "Ponovi zaključni nadnevak";
+$RepeatedEventViewOriginalEvent = "Pogledaj početni događaj";
 $ICalFileImport = "Preuzmi iCal/ics dokument";
 $AllUsersOfThePlatform = "Svi korisnici sustava";
-$GlobalEvent = "Globalni doga&#273;aj";
+$GlobalEvent = "Globalni događaj";
 $ModifyEvent = "Uredi element";
-$EndDateCannotBeBeforeTheStartDate = "Zaklju&#269;ni nadnevak ne mo�e biti prije nadnevka po&#269;etka ";
-$AgendaSortChronologicallyUp = "Sortiraj zapise rasporeda kronolo�ki uzlazno";
-$AgendaSortChronologicallyDown = "Sortiraj zapise rasporeda kronolo�ki silazno";
-$ItemForUserSelection = "Korisni&#269;ki popis odabira";
+$EndDateCannotBeBeforeTheStartDate = "Zaključni nadnevak ne može biti prije nadnevka početka";
+$AgendaSortChronologicallyUp = "Sortiraj zapise rasporeda kronološki uzlazno";
+$AgendaSortChronologicallyDown = "Sortiraj zapise rasporeda kronološki silazno";
+$ItemForUserSelection = "Korisnički popis odabira";
 $IsNotiCalFormatFile = "Ova datoteka nije u formatu iCal";
-$RepeatEvent = "Ponovi doga&#273;aj";
+$RepeatEvent = "Ponovi događaj";
 ?>

@@ -1,18 +1,18 @@
-<?php //$id: $
-/* For licensing terms, see /dokeos_license.txt */
+<?php
+/* For licensing terms, see /license.txt */
+
 /**
-==============================================================================
  * @desc The dropbox is a personal (peer to peer) file exchange module that allows
  * you to send documents to a certain (group of) users.
  *
  * @version 1.3
  *
  * @author Jan Bols <jan@ivpv.UGent.be>, main programmer, initial version
- * @author René Haentjens <rene.haentjens@UGent.be>, several contributions  (see RH)
+ * @author René Haentjens <rene.haentjens@UGent.be>, several contributions
  * @author Roan Embrechts, virtual course support
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University (see history version 1.3)
  *
- * @package dokeos.dropbox
+ * @package chamilo.dropbox
  *
  * @todo complete refactoring. Currently there are about at least 3 sql queries needed for every individual dropbox document.
  *			first we find all the documents that were sent (resp. received) by the user
@@ -20,13 +20,10 @@
  *			then for every individual document the feedback is retrieved
  * @todo 	the implementation of the dropbox categories could (on the database level) have been done more elegantly by storing the category
  *			in the dropbox_person table because this table stores the relationship between the files (sent OR received) and the users
-==============================================================================
  */
 
 /**
-==============================================================================
 					HISTORY
-==============================================================================
 Version 1.1
 ------------
 - dropbox_init1.inc.php: changed include statements to require statements. This way if a file is not found, it stops the execution of a script instead of continuing with warnings.
@@ -73,7 +70,7 @@ Version 1.2
 - index.php: upload form checks for correct user selection and file specification before uploading the script
 - dropbox_init1.inc.php: added dropbox_cnf["allowOverwrite"] to allow or disallow overwriting of files
 - index.php: author name textbox is automatically filled in
-- mailing functionality (see RH comments in code)
+- mailing functionality (René Haentjens)
 - allowStudentToStudent and allowJustUpload options (id.)
 - help in separate window (id.)
 
@@ -90,48 +87,36 @@ Version 1.3 (Patrick Cool)
 Version 1.4 (Yannick Warnier)
 -----------------------------
 - removed all self-built database tables names
-==============================================================================
  */
 
-/*
-==============================================================================
-		INIT SECTION
-==============================================================================
-*/
-// the file that contains all the initialisation stuff (and includes all the configuration stuff)
-require_once( "dropbox_init.inc.php");
+/*	INIT SECTION */
+
+// The file that contains all the initialisation stuff (and includes all the configuration stuff)
+require_once 'dropbox_init.inc.php';
+
 // get the last time the user accessed the tool
-if ($_SESSION[$_course['id']]['last_access'][TOOL_DROPBOX]=='') {
-	$last_access=get_last_tool_access(TOOL_DROPBOX,$_course['code'],$_user['user_id']);
-	$_SESSION[$_course['id']]['last_access'][TOOL_DROPBOX]=$last_access;
+if ($_SESSION[$_course['id']]['last_access'][TOOL_DROPBOX] == '') {
+	$last_access = get_last_tool_access(TOOL_DROPBOX, $_course['code'], $_user['user_id']);
+	$_SESSION[$_course['id']]['last_access'][TOOL_DROPBOX] = $last_access;
 } else {
-	$last_access=$_SESSION[$_course['id']]['last_access'][TOOL_DROPBOX];
+	$last_access = $_SESSION[$_course['id']]['last_access'][TOOL_DROPBOX];
 }
 
-// do the tracking
+// Do the tracking
 event_access_tool(TOOL_DROPBOX);
 
-//this var is used to give a unique value to every page request. This is to prevent resubmiting data
-$dropbox_unid = md5( uniqid( rand( ), true));
+// This var is used to give a unique value to every page request. This is to prevent resubmiting data
+$dropbox_unid = md5(uniqid(rand(), true));
 
-/*
-==============================================================================
-		DISPLAY SECTION
-==============================================================================
-*/
+/*	DISPLAY SECTION */
 
-// Tool introduction
 Display::display_introduction_section(TOOL_DROPBOX);
 
-/*
------------------------------------------------------------
-	ACTIONS: add a dropbox file, add a dropbox category.
------------------------------------------------------------
-*/
+/*	ACTIONS: add a dropbox file, add a dropbox category. */
 
-// *** display the form for adding a new dropbox item. ***
-if ($_GET['action']=="add") {
-	if (api_get_session_id()!=0 && api_is_allowed_to_session_edit(false,true)==false) {		 
+// Display the form for adding a new dropbox item.
+if ($_GET['action'] == 'add') {
+	if (api_get_session_id() != 0 && !api_is_allowed_to_session_edit(false, true)) {
 		api_not_allowed();
 	}
 	display_add_form();
@@ -141,527 +126,514 @@ if (isset($_POST['submitWork'])) {
 	$check = Security::check_token();
 	if ($check) {
 		Display :: display_confirmation_message(store_add_dropbox());
-		//include_once('dropbox_submit.php');
+		//require_once 'dropbox_submit.php';
 	}
 }
 
-
-// *** display the form for adding a category ***
-if ($_GET['action']=="addreceivedcategory" or $_GET['action']=="addsentcategory") {
-	if (api_get_session_id()!=0 && api_is_allowed_to_session_edit(false,true)==false) {		 
+// Display the form for adding a category
+if ($_GET['action'] == 'addreceivedcategory' or $_GET['action'] == 'addsentcategory') {
+	if (api_get_session_id() != 0 && !api_is_allowed_to_session_edit(false, true)) {
 		api_not_allowed();
 	}
 	display_addcategory_form($_POST['category_name'],'',$_GET['action']);
 }
 
-// *** editing a category: displaying the form ***
-if ($_GET['action']=='editcategory' and isset($_GET['id'])) {
-	if (api_get_session_id()!=0 && api_is_allowed_to_session_edit(false,true)==false) {		 
+// Editing a category: displaying the form
+if ($_GET['action'] == 'editcategory' and isset($_GET['id'])) {
+	if (api_get_session_id() != 0 && !api_is_allowed_to_session_edit(false, true)) {
 		api_not_allowed();
-	}	
+	}
 	if (!$_POST) {
-		if (api_get_session_id()!=0 && api_is_allowed_to_session_edit(false,true)==false) {		 
+		if (api_get_session_id() != 0 && !api_is_allowed_to_session_edit(false, true)) {
 			api_not_allowed();
 		}
-		display_addcategory_form('',$_GET['id'],'editcategory');
+		display_addcategory_form('', $_GET['id'], 'editcategory');
 	}
 }
 
-// *** storing a new or edited category ***
+// Storing a new or edited category
 if (isset($_POST['StoreCategory'])) {
-	if (api_get_session_id()!=0 && api_is_allowed_to_session_edit(false,true)==false) {		 
+	if (api_get_session_id() != 0 && !api_is_allowed_to_session_edit(false, true)) {
 		api_not_allowed();
-	}	
+	}
 	$return_information = store_addcategory();
-	if( $return_information['type'] == 'confirmation')
-	{
+	if ($return_information['type'] == 'confirmation') {
 		Display :: display_confirmation_message($return_information['message']);
 	}
-	if( $return_information['type'] == 'error')
-	{
+	if ($return_information['type'] == 'error') {
 		Display :: display_error_message(get_lang('FormHasErrorsPleaseComplete').'<br />'.$return_information['message']);
-		display_addcategory_form($_POST['category_name'],$_POST['edit_id'],$_POST['action']);
+		display_addcategory_form($_POST['category_name'], $_POST['edit_id'], $_POST['action']);
 	}
 
 }
 
-// *** Move a File ***
-if (($_GET['action']=='movesent' OR $_GET['action']=='movereceived') AND isset($_GET['move_id'])) {
-	if (api_get_session_id()!=0 && api_is_allowed_to_session_edit(false,true)==false) {		 
+// Move a File
+if (($_GET['action'] == 'movesent' OR $_GET['action'] == 'movereceived') AND isset($_GET['move_id'])) {
+	if (api_get_session_id() != 0 && !api_is_allowed_to_session_edit(false, true)) {
 		api_not_allowed();
-	}	
-	display_move_form(str_replace('move','',$_GET['action']), $_GET['move_id'], get_dropbox_categories(str_replace('move','',$_GET['action'])));
+	}
+	display_move_form(str_replace('move', '', $_GET['action']), $_GET['move_id'], get_dropbox_categories(str_replace('move', '', $_GET['action'])));
 }
 if ($_POST['do_move']) {
 	Display :: display_confirmation_message(store_move($_POST['id'], $_POST['move_target'], $_POST['part']));
 }
 
-// *** Delete a file ***
-if (($_GET['action']=='deletereceivedfile' OR $_GET['action']=='deletesentfile') AND isset($_GET['id']) AND is_numeric($_GET['id'])) {
-	if (api_get_session_id()!=0 && api_is_allowed_to_session_edit(false,true)==false) {		 
+// Delete a file
+if (($_GET['action'] == 'deletereceivedfile' OR $_GET['action'] == 'deletesentfile') AND isset($_GET['id']) AND is_numeric($_GET['id'])) {
+	if (api_get_session_id() != 0 && !api_is_allowed_to_session_edit(false, true)) {
 		api_not_allowed();
-	}	
-	$dropboxfile=new Dropbox_Person( $_user['user_id'], $is_courseAdmin, $is_courseTutor);
-	if ($_GET['action']=='deletereceivedfile') {
+	}
+	$dropboxfile = new Dropbox_Person($_user['user_id'], $is_courseAdmin, $is_courseTutor);
+	if ($_GET['action'] == 'deletereceivedfile') {
 		$dropboxfile->deleteReceivedWork($_GET['id']);
-		$message=get_lang('ReceivedFileDeleted');
+		$message = get_lang('ReceivedFileDeleted');
 	}
-	if ($_GET['action']=='deletesentfile') {
+	if ($_GET['action'] == 'deletesentfile') {
 		$dropboxfile->deleteSentWork($_GET['id']);
-		$message=get_lang('SentFileDeleted');
+		$message = get_lang('SentFileDeleted');
 	}
 	Display :: display_confirmation_message($message);
 }
 
-// *** Delete a category ***
-if (($_GET['action']=='deletereceivedcategory' OR $_GET['action']=='deletesentcategory') AND isset($_GET['id']) AND is_numeric($_GET['id'])) {
-	if (api_get_session_id()!=0 && api_is_allowed_to_session_edit(false,true)==false) {		 
+// Delete a category
+if (($_GET['action'] == 'deletereceivedcategory' OR $_GET['action'] == 'deletesentcategory') AND isset($_GET['id']) AND is_numeric($_GET['id'])) {
+	if (api_get_session_id() != 0 && !api_is_allowed_to_session_edit(false, true)) {
 		api_not_allowed();
-	}	
-	$message=delete_category($_GET['action'], $_GET['id']);
+	}
+	$message = delete_category($_GET['action'], $_GET['id']);
 	Display :: display_confirmation_message($message);
 }
 
-// *** Do an action on multiple files ***
+// Do an action on multiple files
 // only the download has is handled separately in dropbox_init_inc.php because this has to be done before the headers are sent
 // (which also happens in dropbox_init.inc.php
 
-if (!isset($_POST['feedback']) && (strstr($_POST['action'],'move_received') OR
-        $_POST['action'] == 'delete_received' OR $_POST['action'] == 'download_received' OR
-        $_POST['action'] == 'delete_sent' OR $_POST['action'] == 'download_sent'))
-{
-	$display_message=handle_multiple_actions();
+if (!isset($_POST['feedback']) && (strstr($_POST['action'], 'move_received') OR
+    $_POST['action'] == 'delete_received' OR $_POST['action'] == 'download_received' OR
+    $_POST['action'] == 'delete_sent' OR $_POST['action'] == 'download_sent')) {
+
+	$display_message = handle_multiple_actions();
 	Display :: display_normal_message($display_message);
 }
 
-// *** Store Feedback ***
+// Store Feedback
+
 if ($_POST['feedback']) {
-	if (api_get_session_id()!=0 && api_is_allowed_to_session_edit(false,true)==false) {		 
+	if (api_get_session_id() != 0 && !api_is_allowed_to_session_edit(false, true)) {
 		api_not_allowed();
 	}
-	$display_message = store_feedback();
-	Display :: display_normal_message($display_message);
+	$check = Security::check_token();
+	if ($check) {
+		$display_message = store_feedback();
+		Display :: display_normal_message($display_message);
+		Security::check_token();
+	}
 }
 
-
-// *** Error Message ***
+// Error Message
 if (isset($_GET['error']) AND !empty($_GET['error'])) {
 	Display :: display_normal_message(get_lang($_GET['error']));
 }
 
 
+if ($_GET['action'] != 'add') {
 
-if ($_GET['action']!="add") {
-// getting all the categories in the dropbox for the given user
-$dropbox_categories=get_dropbox_categories();
-// creating the arrays with the categories for the received files and for the sent files
-foreach ($dropbox_categories as $category) {
-	if ($category['received']=='1') {
-		$dropbox_received_category[]=$category;
-	}
-	if ($category['sent']=='1') {
-		$dropbox_sent_category[]=$category;
-	}
-}
-
-
-// ACTIONS
-if ( $_GET['view']=='received' OR $dropbox_cnf['sent_received_tabs']==false) {
-	//echo '<h3>'.get_lang('ReceivedFiles').'</h3>';
-
-	// This is for the categories
-	if (isset($_GET['view_received_category']) AND $_GET['view_received_category']<>'') {
-		$view_dropbox_category_received=Security::remove_XSS($_GET['view_received_category']);
-	} else {
-		$view_dropbox_category_received=0;
-	}
-
-
-	/* *** Menu Received *** */
-	
-	if (api_get_session_id()==0) {
-		echo '<div class="actions">';
-		if ($view_dropbox_category_received<>0  && api_is_allowed_to_session_edit(false,true)) {
-			echo get_lang('CurrentlySeeing').': <strong>'.$dropbox_categories[$view_dropbox_category_received]['cat_name'].'</strong> ';
-			echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category=0&amp;view_sent_category='.Security::remove_XSS($_GET['view_sent_category']).'&amp;view='.Security::remove_XSS($_GET['view']).'">'.Display::return_icon('folder_up.gif',get_lang('Up')).' '.get_lang('Root')."</a>\n";
-	        $movelist[0] = 'Root'; // move_received selectbox content
-		} else {
-		    echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=addreceivedcategory&view='.Security::remove_XSS($_GET['view']).'">'.Display::return_icon('folder_new.gif',get_lang('AddNewCategory')).' '.get_lang('AddNewCategory').'</a>';
+	// Getting all the categories in the dropbox for the given user
+	$dropbox_categories = get_dropbox_categories();
+	// Greating the arrays with the categories for the received files and for the sent files
+	foreach ($dropbox_categories as $category) {
+		if ($category['received'] == '1') {
+			$dropbox_received_category[] = $category;
 		}
-		echo '</div>';
-	} else {		
-		 if (api_is_allowed_to_session_edit(false,true)) {
-		 	echo '<div class="actions">';
-			if ($view_dropbox_category_received<>0  && api_is_allowed_to_session_edit(false,true)) {
+		if ($category['sent'] == '1') {
+			$dropbox_sent_category[] = $category;
+		}
+	}
+
+
+	// ACTIONS
+	if ($_GET['view'] == 'received' OR !$dropbox_cnf['sent_received_tabs']) {
+		//echo '<h3>'.get_lang('ReceivedFiles').'</h3>';
+
+		// This is for the categories
+		if (isset($_GET['view_received_category']) AND $_GET['view_received_category']<>'') {
+			$view_dropbox_category_received = Security::remove_XSS($_GET['view_received_category']);
+		} else {
+			$view_dropbox_category_received = 0;
+		}
+
+		/* Menu Received */
+
+		if (api_get_session_id() == 0) {
+			echo '<div class="actions">';
+			if ($view_dropbox_category_received != 0  && api_is_allowed_to_session_edit(false, true)) {
 				echo get_lang('CurrentlySeeing').': <strong>'.$dropbox_categories[$view_dropbox_category_received]['cat_name'].'</strong> ';
-				echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category=0&amp;view_sent_category='.Security::remove_XSS($_GET['view_sent_category']).'&amp;view='.Security::remove_XSS($_GET['view']).'">'.Display::return_icon('folder_up.gif',get_lang('Up')).' '.get_lang('Root')."</a>\n";
-		        $movelist[0] = 'Root'; // move_received selectbox content
+				echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category=0&amp;view_sent_category='.Security::remove_XSS($_GET['view_sent_category']).'&amp;view='.Security::remove_XSS($_GET['view']).'">'.Display::return_icon('folder_up.gif', get_lang('Up')).' '.get_lang('Root')."</a>\n";
+				$movelist[0] = 'Root'; // move_received selectbox content
 			} else {
-			    echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=addreceivedcategory&view='.Security::remove_XSS($_GET['view']).'">'.Display::return_icon('folder_new.gif',get_lang('AddNewCategory')).' '.get_lang('AddNewCategory').'</a>';
+				echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=addreceivedcategory&view='.Security::remove_XSS($_GET['view']).'">'.Display::return_icon('folder_new.gif', get_lang('AddNewCategory')).' '.get_lang('AddNewCategory').'</a>';
 			}
 			echo '</div>';
-		 }
-	}
-}
-if (!$_GET['view'] OR $_GET['view']=='sent' OR $dropbox_cnf['sent_received_tabs']==false) {
-	//echo '<h3>'.get_lang('SentFiles').'</h3>';
-
-	// This is for the categories
-	if (isset($_GET['view_sent_category']) AND $_GET['view_sent_category']<>'') {
-		$view_dropbox_category_sent=$_GET['view_sent_category'];
-	} else {
-		$view_dropbox_category_sent=0;
-	}
-
-	/* *** Menu Sent *** */
-
-	if (api_get_session_id()==0) {
-		echo '<div class="actions">';
-		if ($view_dropbox_category_sent<>0) {
-			echo get_lang('CurrentlySeeing').': <strong>'.$dropbox_categories[$view_dropbox_category_sent]['cat_name'].'</strong> ';
-			echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category='.Security::remove_XSS($_GET['view_received_category']).'&amp;view_sent_category=0&amp;view='.Security::remove_XSS($_GET['view']).'">'.Display::return_icon('folder_up.gif',get_lang('Up')).' '.get_lang('Root')."</a>\n";
 		} else {
-			echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&view=".Security::remove_XSS($_GET['view'])."&amp;action=addsentcategory\">".Display::return_icon('folder_new.gif',get_lang('AddNewCategory'))." ".get_lang('AddNewCategory')."</a>\n";
-		}	
-		if (empty($_GET['view_sent_category'])) {
-		echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&view=".Security::remove_XSS($_GET['view'])."&amp;action=add\">".Display::return_icon('submit_file.gif',get_lang('UploadNewFile')).' '.get_lang('UploadNewFile')."</a>&nbsp;\n";
-		}
-		echo '</div>';
-	} else {
-		 if (api_is_allowed_to_session_edit(false,true)) {
-		 	echo '<div class="actions">';
-			if ($view_dropbox_category_sent<>0) {
-				echo get_lang('CurrentlySeeing').': <strong>'.$dropbox_categories[$view_dropbox_category_sent]['cat_name'].'</strong> ';
-				echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category='.Security::remove_XSS($_GET['view_received_category']).'&amp;view_sent_category=0&amp;view='.Security::remove_XSS($_GET['view']).'">'.Display::return_icon('folder_up.gif',get_lang('Up')).' '.get_lang('Root')."</a>\n";
-			} else {
-				echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&view=".Security::remove_XSS($_GET['view'])."&amp;action=addsentcategory\">".Display::return_icon('folder_new.gif',get_lang('AddNewCategory'))." ".get_lang('AddNewCategory')."</a>\n";
-			}	
-			if (empty($_GET['view_sent_category'])) {
-			echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&view=".Security::remove_XSS($_GET['view'])."&amp;action=add\">".Display::return_icon('submit_file.gif',get_lang('UploadNewFile')).' '.get_lang('UploadNewFile')."</a>&nbsp;\n";
+			if (api_is_allowed_to_session_edit(false, true)) {
+				echo '<div class="actions">';
+				if ($view_dropbox_category_received != 0 && api_is_allowed_to_session_edit(false, true)) {
+					echo get_lang('CurrentlySeeing').': <strong>'.$dropbox_categories[$view_dropbox_category_received]['cat_name'].'</strong> ';
+					echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category=0&amp;view_sent_category='.Security::remove_XSS($_GET['view_sent_category']).'&amp;view='.Security::remove_XSS($_GET['view']).'">'.Display::return_icon('folder_up.gif', get_lang('Up')).' '.get_lang('Root')."</a>\n";
+					$movelist[0] = 'Root'; // move_received selectbox content
+				} else {
+					echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=addreceivedcategory&view='.Security::remove_XSS($_GET['view']).'">'.Display::return_icon('folder_new.gif', get_lang('AddNewCategory')).' '.get_lang('AddNewCategory').'</a>';
+				}
+				echo '</div>';
 			}
-			echo '</div>'; 	
-		 }
+		}
 	}
-	
-}
 
+	if (!$_GET['view'] OR $_GET['view'] == 'sent' OR !$dropbox_cnf['sent_received_tabs']) {
+		//echo '<h3>'.get_lang('SentFiles').'</h3>';
 
-/*
------------------------------------------------------------
-	THE MENU TABS
------------------------------------------------------------
-*/
-if ($dropbox_cnf['sent_received_tabs']) {
+		// This is for the categories
+		if (isset($_GET['view_sent_category']) AND $_GET['view_sent_category'] != '') {
+			$view_dropbox_category_sent = $_GET['view_sent_category'];
+		} else {
+			$view_dropbox_category_sent = 0;
+		}
+
+		/* Menu Sent */
+
+		if (api_get_session_id() == 0) {
+			echo '<div class="actions">';
+			if ($view_dropbox_category_sent != 0) {
+				echo get_lang('CurrentlySeeing').': <strong>'.$dropbox_categories[$view_dropbox_category_sent]['cat_name'].'</strong> ';
+				echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category='.Security::remove_XSS($_GET['view_received_category']).'&amp;view_sent_category=0&amp;view='.Security::remove_XSS($_GET['view']).'">'.Display::return_icon('folder_up.gif', get_lang('Up')).' '.get_lang('Root')."</a>\n";
+			} else {
+				echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&view=".Security::remove_XSS($_GET['view'])."&amp;action=addsentcategory\">".Display::return_icon('folder_new.gif', get_lang('AddNewCategory'))." ".get_lang('AddNewCategory')."</a>\n";
+			}
+			if (empty($_GET['view_sent_category'])) {
+				echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&view=".Security::remove_XSS($_GET['view'])."&amp;action=add\">".Display::return_icon('submit_file.gif', get_lang('UploadNewFile')).' '.get_lang('UploadNewFile')."</a>&nbsp;\n";
+			}
+			echo '</div>';
+		} else {
+			if (api_is_allowed_to_session_edit(false, true)) {
+				echo '<div class="actions">';
+				if ($view_dropbox_category_sent != 0) {
+					echo get_lang('CurrentlySeeing').': <strong>'.$dropbox_categories[$view_dropbox_category_sent]['cat_name'].'</strong> ';
+					echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category='.Security::remove_XSS($_GET['view_received_category']).'&amp;view_sent_category=0&amp;view='.Security::remove_XSS($_GET['view']).'">'.Display::return_icon('folder_up.gif', get_lang('Up')).' '.get_lang('Root')."</a>\n";
+				} else {
+					echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&view=".Security::remove_XSS($_GET['view'])."&amp;action=addsentcategory\">".Display::return_icon('folder_new.gif', get_lang('AddNewCategory'))." ".get_lang('AddNewCategory')."</a>\n";
+				}
+				if (empty($_GET['view_sent_category'])) {
+					echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&view=".Security::remove_XSS($_GET['view'])."&amp;action=add\">".Display::return_icon('submit_file.gif', get_lang('UploadNewFile')).' '.get_lang('UploadNewFile')."</a>&nbsp;\n";
+				}
+				echo '</div>';
+			}
+		}
+	}
+
+	/*	THE MENU TABS */
+
+	if ($dropbox_cnf['sent_received_tabs']) {
 ?>
 <div id="tabbed_menu">
 	<ul id="tabbed_menu_tabs">
-		<li><a href="index.php?<?php echo api_get_cidreq();?>&view=sent" <?php if (!$_GET['view'] OR $_GET['view']=='sent'){echo 'class="active"';}?>><?php echo get_lang('SentFiles'); ?></a></li>
-		<li><a href="index.php?<?php echo api_get_cidreq();?>&view=received" <?php if ($_GET['view']=='received'){echo 'class="active"';}?> ><?php echo get_lang('ReceivedFiles'); ?></a></li>
+		<li><a href="index.php?<?php echo api_get_cidreq(); ?>&view=sent" <?php if (!$_GET['view'] OR $_GET['view'] == 'sent') { echo 'class="active"'; } ?>><?php echo get_lang('SentFiles'); ?></a></li>
+		<li><a href="index.php?<?php echo api_get_cidreq(); ?>&view=received" <?php if ($_GET['view'] == 'received') { echo 'class="active"'; } ?> ><?php echo get_lang('ReceivedFiles'); ?></a></li>
 	</ul>
 </div>
 <?php
+	}
+
+	/*	RECEIVED FILES */
+
+	if ($_GET['view'] == 'received' OR !$dropbox_cnf['sent_received_tabs']) {
+		//echo '<h3>'.get_lang('ReceivedFiles').'</h3>';
+
+		// This is for the categories
+		if (isset($_GET['view_received_category']) AND $_GET['view_received_category'] != '') {
+			$view_dropbox_category_received = $_GET['view_received_category'];
+		} else {
+			$view_dropbox_category_received = 0;
+		}
+
+		// Object initialisation
+		$dropbox_person = new Dropbox_Person($_user['user_id'], $is_courseAdmin, $is_courseTutor); // note: are the $is_courseAdmin and $is_courseTutor parameters needed????
+
+		// Constructing the array that contains the total number of feedback messages per document.
+		$number_feedback = get_total_number_feedback();
+
+		// Sorting and paging options
+		$sorting_options = array();
+		$paging_options = array();
+
+		// The headers of the sortable tables
+		$column_header = array();
+		$column_header[] = array('', false, '');
+		$column_header[] = array(get_lang('Type'), true, 'style="width:40px"', 'style="text-align:center"');
+		$column_header[] = array(get_lang('ReceivedTitle'), true, '');
+		$column_header[] = array(get_lang('Size'), true, '');
+		$column_header[] = array(get_lang('Authors'), true, '');
+		$column_header[] = array(get_lang('LastResent'), true);
+
+		if (api_get_session_id() == 0) {
+			$column_header[] = array(get_lang('Modify'), false, '', 'nowrap style="text-align: right"');
+		} elseif (api_is_allowed_to_session_edit(false,true)) {
+			$column_header[] = array(get_lang('Modify'), false, '', 'nowrap style="text-align: right"');
+		}
+
+		$column_header[] = array('RealDate', true);
+
+		// An array with the setting of the columns -> 1: columns that we will show, 0:columns that will be hide
+		$column_show[] = 1;
+		$column_show[] = 1;
+		$column_show[] = 1;
+		$column_show[] = 1;
+		$column_show[] = 1;
+		$column_show[] = 1;
+
+		if (api_get_session_id() == 0) {
+			$column_show[] = 1;
+		} elseif (api_is_allowed_to_session_edit(false, true)) {
+			$column_show[] = 1;
+		}
+		$column_show[] = 0;
+
+		// Here we change the way how the colums are going to be sort
+		// in this case the the column of LastResent ( 4th element in $column_header) we will be order like the column RealDate
+		// because in the column RealDate we have the days in a correct format "2008-03-12 10:35:48"
+
+		$column_order[] = 1;
+		$column_order[] = 2;
+		$column_order[] = 3;
+		$column_order[] = 4;
+		$column_order[] = 7;
+		$column_order[] = 6;
+		$column_order[] = 7;
+		$column_order[] = 8;
+
+		// The content of the sortable table = the received files
+		foreach ($dropbox_person -> receivedWork as $dropbox_file) {
+			$dropbox_file_data = array();
+			if ($view_dropbox_category_received == $dropbox_file->category) { // we only display the files that are in the category that we are in.
+				$dropbox_file_data[] = $dropbox_file->id;
+
+				if (!is_array($_SESSION['_seen'][$_course['id']][TOOL_DROPBOX])) {
+					$_SESSION['_seen'][$_course['id']][TOOL_DROPBOX] = array();
+				}
+
+				// New icon
+				$new_icon = '';
+				if ($dropbox_file->last_upload_date > $last_access AND !in_array($dropbox_file->id, $_SESSION['_seen'][$_course['id']][TOOL_DROPBOX])) {
+					$new_icon = '&nbsp;'.Display::return_icon('new.gif', get_lang('New'));
+				}
+
+				$link_open = '<a href="dropbox_download.php?'.api_get_cidreq().'&amp;id='.$dropbox_file->id.'">';
+				$dropbox_file_data[] = $link_open.build_document_icon_tag('file', $dropbox_file->title).'</a>';
+				$dropbox_file_data[] = '<a href="dropbox_download.php?'.api_get_cidreq().'&id='.$dropbox_file->id.'&amp;action=download">'.Display::return_icon('filesave.gif', get_lang('Download'), array('style' => 'float:right;')).'</a>'.$link_open.$dropbox_file->title.'</a>'.$new_icon.'<br />'.$dropbox_file->description;
+				$dropbox_file_data[] = ceil(($dropbox_file->filesize) / 1024).' '.get_lang('kB');
+				$dropbox_file_data[] = $dropbox_file->author;
+				//$dropbox_file_data[] = $dropbox_file->description;
+
+				$last_upload_date = api_get_local_time($dropbox_file->last_upload_date, null, date_default_timezone_get());
+				$dropbox_file_data[] = date_to_str_ago($last_upload_date).'<br /><span class="dropbox_date">'.api_format_date($last_upload_date).'</span>';
+
+				$action_icons = check_number_feedback($dropbox_file->id, $number_feedback).' '.get_lang('Feedback').'
+									<a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category='.Security::remove_XSS($_GET['view_received_category']).'&amp;view_sent_category='.Security::remove_XSS($_GET['view_sent_category']).'&amp;view='.Security::remove_XSS($_GET['view']).'&amp;action=viewfeedback&amp;id='.$dropbox_file->id.'">'.Display::return_icon('comment_bubble.gif', get_lang('Comment')).'</a>
+									<a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category='.Security::remove_XSS($_GET['view_received_category']).'&amp;view_sent_category='.Security::remove_XSS($_GET['view_sent_category']).'&amp;view='.Security::remove_XSS($_GET['view']).'&amp;action=movereceived&amp;move_id='.$dropbox_file->id.'">'.Display::return_icon('deplacer_fichier.gif', get_lang('Move')).'</a>
+									<a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category='.Security::remove_XSS($_GET['view_received_category']).'&amp;view_sent_category='.Security::remove_XSS($_GET['view_sent_category']).'&amp;view='.Security::remove_XSS($_GET['view']).'&amp;action=deletereceivedfile&amp;id='.$dropbox_file->id.'" onclick="javascript: return confirmation(\''.$dropbox_file->title.'\');">'.Display::return_icon('delete.gif', get_lang('Delete')).'</a>';
+				//$action_icons='	<a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category='.$_GET['view_received_category'].'&amp;view_sent_category='.$_GET['view_sent_category'].'&amp;action=movereceived&amp;move_id='.$dropbox_file->id.'">'.Display::return_icon('deplacer.gif',get_lang('Move')).'</a>
+				//					<a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category='.$_GET['view_received_category'].'&amp;view_sent_category='.$_GET['view_sent_category'].'&amp;action=deletereceivedfile&amp;id='.$dropbox_file->id.'" onclick="javascript: return confirmation(\''.$dropbox_file->title.'\');">'.Display::return_icon('delete.gif', get_lang('Delete')).'</a>';
+				// This is a hack to have an additional row in a sortable table
+
+				if ($_GET['action'] == 'viewfeedback' AND isset($_GET['id']) and is_numeric($_GET['id']) AND $dropbox_file->id == $_GET['id']) {
+					$action_icons .= "</td></tr>\n"; // Ending the normal row of the sortable table
+					$action_icons .= '<tr><td colspan="2"><a href="index.php?"'.api_get_cidreq().'&view_received_category='.Security::remove_XSS($_GET['view_received_category'])."&amp;view_sent_category=".Security::remove_XSS($_GET['view_sent_category'])."&amp;view=".Security::remove_XSS($_GET['view'])."\">".get_lang('CloseFeedback')."</a></td><td colspan=\"7\">".feedback($dropbox_file->feedback2)."</td>\n</tr>\n";
+				}
+				if (api_get_session_id() == 0) {
+					$dropbox_file_data[] = $action_icons;
+				} elseif (api_is_allowed_to_session_edit(false, true)) {
+					$dropbox_file_data[] = $action_icons;
+				}
+				$action_icons = '';
+				$dropbox_file_data[] = $dropbox_file->last_upload_date; //date
+				$dropbox_data_recieved[] = $dropbox_file_data;
+			}
+		}
+
+		// The content of the sortable table = the categories (if we are not in the root)
+		if ($view_dropbox_category_received == 0) {
+			foreach ($dropbox_categories as $category) { // Note: This can probably be shortened since the categories for the received files are already in the $dropbox_received_category array;
+				$dropbox_category_data = array();
+				if ($category['received'] == '1') {
+					$movelist[$category['cat_id']] = $category['cat_name'];
+					$dropbox_category_data[] = $category['cat_id']; // This is where the checkbox icon for the files appear
+					// The icon of the category
+					$link_open = '<a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category='.$category['cat_id'].'&amp;view_sent_category='.Security::remove_XSS($_GET['view_sent_category']).'&amp;view='.Security::remove_XSS($_GET['view']).'">';
+					$dropbox_category_data[] = $link_open.build_document_icon_tag('folder', $category['cat_name']).'</a>';
+					$dropbox_category_data[] = '<a href="dropbox_download.php?'.api_get_cidreq().'&cat_id='.$category['cat_id'].'&amp;action=downloadcategory&amp;sent_received=received">'.Display::return_icon('folder_zip.gif', get_lang('Save'), array('width' => '16px', 'height' => '16px', 'style' => 'float:right;')).'</a>'.$link_open.$category['cat_name'].'</a>';
+					$dropbox_category_data[] = '';
+					$dropbox_category_data[] = '';
+					$dropbox_category_data[] = '';
+					$dropbox_category_data[] = '<a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category='.Security::remove_XSS($_GET['view_received_category']).'&amp;view_sent_category='.Security::remove_XSS($_GET['view_sent_category']).'&amp;view='.Security::remove_XSS($_GET['view']).'&amp;action=editcategory&amp;id='.$category['cat_id'].'">'.Display::return_icon('edit.gif',get_lang('Edit')).'</a>
+										  <a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category='.Security::remove_XSS($_GET['view_received_category']).'&amp;view_sent_category='.Security::remove_XSS($_GET['view_sent_category']).'&amp;view='.Security::remove_XSS($_GET['view']).'&amp;action=deletereceivedcategory&amp;id='.$category['cat_id'].'" onclick="javascript: return confirmation(\''.$category['cat_name'].'\');">'.Display::return_icon('delete.gif', get_lang('Delete')).'</a>';
+				}
+				if (is_array($dropbox_category_data) && count($dropbox_category_data) > 0) {
+					$dropbox_data_recieved[] = $dropbox_category_data;
+				}
+			}
+		}
+		// Displaying the table
+		$additional_get_parameters = array('view' => $_GET['view'], 'view_received_category' => $_GET['view_received_category'], 'view_sent_category' => $_GET['view_sent_category']);
+		$selectlist = array('delete_received' => get_lang('Delete'), 'download_received' => get_lang('Download'));
+		if (is_array($movelist)) {
+			foreach ($movelist as $catid => $catname){
+				$selectlist['move_received_'.$catid] = get_lang('Move') . '->'. $catname;
+			}
+		}
+
+		if (api_get_session_id() != 0 && !api_is_allowed_to_session_edit(false, true)) {
+			$selectlist = array();
+		}
+
+		Display::display_sortable_config_table($column_header, $dropbox_data_recieved, $sorting_options, $paging_options, $additional_get_parameters, $column_show, $column_order, $selectlist);
+	}
+
+	/*	SENT FILES */
+
+	if (!$_GET['view'] OR $_GET['view'] == 'sent' OR !$dropbox_cnf['sent_received_tabs']) {
+		//echo '<h3>'.get_lang('SentFiles').'</h3>';
+
+		// This is for the categories
+		if (isset($_GET['view_sent_category']) AND $_GET['view_sent_category'] != '') {
+			$view_dropbox_category_sent = $_GET['view_sent_category'];
+		} else {
+			$view_dropbox_category_sent = 0;
+		}
+
+		// Object initialisation
+		$dropbox_person = new Dropbox_Person( $_user['user_id'], $is_courseAdmin, $is_courseTutor);
+
+		// Constructing the array that contains the total number of feedback messages per document.
+		$number_feedback = get_total_number_feedback();
+
+		// Sorting and paging options
+		$sorting_options = array();
+		$paging_options = array();
+
+		// The headers of the sortable tables
+		$column_header = array();
+
+		$column_header[] = array('', false, '');
+		$column_header[] = array(get_lang('Type'), true, 'style="width:40px"', 'style="text-align:center"');
+		$column_header[] = array(get_lang('SentTitle'), true, '');
+		$column_header[] = array(get_lang('Size'), true, '');
+		$column_header[] = array(get_lang('SentTo'), true, '');
+		$column_header[] = array(get_lang('LastResent'), true, '');
+
+		if (api_get_session_id() == 0) {
+			$column_header[] = array(get_lang('Modify'), false, '', 'nowrap style="text-align: right"');
+		} elseif (api_is_allowed_to_session_edit(false, true)) {
+			$column_header[] = array(get_lang('Modify'), false, '', 'nowrap style="text-align: right"');
+		}
+
+		$column_header[] = array('RealDate', false);
+
+		$column_show = array();
+		$column_order = array();
+
+		// An array with the setting of the columns -> 1: columns that we will show, 0:columns that will be hide
+		$column_show[] = 1;
+		$column_show[] = 1;
+		$column_show[] = 1;
+		$column_show[] = 1;
+		$column_show[] = 1;
+		$column_show[] = 1;
+		if (api_get_session_id() == 0) {
+			$column_show[] = 1;
+		} elseif (api_is_allowed_to_session_edit(false, true)) {
+			$column_show[] = 1;
+		}
+		$column_show[] = 0;
+
+		// Here we change the way how the colums are going to be sort
+		// in this case the the column of LastResent ( 4th element in $column_header) we will be order like the column RealDate
+		// because in the column RealDate we have the days in a correct format "2008-03-12 10:35:48"
+
+		$column_order[] = 1;
+		$column_order[] = 2;
+		$column_order[] = 3;
+		$column_order[] = 4;
+		$column_order[] = 7;
+		$column_order[] = 6;
+		$column_order[] = 7;
+		$column_order[] = 8;
+
+		// The content of the sortable table = the received files
+		foreach ($dropbox_person -> sentWork as $dropbox_file) {
+			$dropbox_file_data = array();
+
+			if ($view_dropbox_category_sent == $dropbox_file->category) {
+				$dropbox_file_data[] = $dropbox_file->id;
+				$link_open = '<a href="dropbox_download.php?'.api_get_cidreq().'&id='.$dropbox_file->id.'">';
+				$dropbox_file_data[] = $link_open.build_document_icon_tag('file', $dropbox_file->title).'</a>';
+				$dropbox_file_data[] = '<a href="dropbox_download.php?'.api_get_cidreq().'&id='.$dropbox_file->id.'&amp;action=download">'.Display::return_icon('filesave.gif', get_lang('Save'), array('style' => 'float:right;')).'</a>'.$link_open.$dropbox_file->title.'</a><br />'.$dropbox_file->description;
+				$dropbox_file_data[] = ceil(($dropbox_file->filesize)/1024).' '.get_lang('kB');
+				foreach ($dropbox_file->recipients as $recipient) {
+					$receivers_celldata = display_user_link_work($recipient['user_id'], $recipient['name']).', '.$receivers_celldata;
+				}
+				$receivers_celldata = trim(trim($receivers_celldata), ','); // Removing the trailing comma.
+				$dropbox_file_data[] = $receivers_celldata;
+				$last_upload_date = api_get_local_time($dropbox_file->last_upload_date, null, date_default_timezone_get());
+				$dropbox_file_data[] = date_to_str_ago($last_upload_date).'<br /><span class="dropbox_date">'.api_format_date($last_upload_date).'</span>';
+
+				//$dropbox_file_data[] = $dropbox_file->author;
+				$receivers_celldata = '';
+				$action_icons = check_number_feedback($dropbox_file->id, $number_feedback).' '.get_lang('Feedback').'
+									<a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category='.Security::remove_XSS($_GET['view_received_category']).'&amp;view_sent_category='.Security::remove_XSS($_GET['view_sent_category']).'&amp;view='.Security::remove_XSS($_GET['view']).'&amp;action=viewfeedback&amp;id='.$dropbox_file->id.'">'.Display::return_icon('comment_bubble.gif', get_lang('Comment')).'</a>
+									<a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category='.Security::remove_XSS($_GET['view_received_category']).'&amp;view_sent_category='.Security::remove_XSS($_GET['view_sent_category']).'&amp;view='.Security::remove_XSS($_GET['view']).'&amp;action=movesent&amp;move_id='.$dropbox_file->id.'">'.Display::return_icon('deplacer_fichier.gif', get_lang('Move')).'</a>
+									<a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category='.Security::remove_XSS($_GET['view_received_category']).'&amp;view_sent_category='.Security::remove_XSS($_GET['view_sent_category']).'&amp;view='.Security::remove_XSS($_GET['view']).'&amp;action=deletesentfile&amp;id='.$dropbox_file->id.'" onclick="javascript: return confirmation(\''.$dropbox_file->title.'\');">'.Display::return_icon('delete.gif', get_lang('Delete')).'</a>';
+				// This is a hack to have an additional row in a sortable table
+				if ($_GET['action'] == 'viewfeedback' AND isset($_GET['id']) and is_numeric($_GET['id']) AND $dropbox_file->id==$_GET['id']) {
+					$action_icons .= "</td></tr>\n"; // ending the normal row of the sortable table
+					$action_icons .= "<tr>\n\t<td colspan=\"2\"><a href=\"index.php?".api_get_cidreq()."&view_received_category=".Security::remove_XSS($_GET['view_received_category'])."&amp;view_sent_category=".Security::remove_XSS($_GET['view_sent_category'])."&amp;view=".Security::remove_XSS($_GET['view'])."\">".get_lang('CloseFeedback')."</a></td><td colspan=\"7\">".feedback($dropbox_file->feedback2)."</td>\n</tr>\n";
+				}
+				$dropbox_file_data[] = $action_icons;
+				$dropbox_file_data[] = $dropbox_file->last_upload_date;
+				$action_icons = '';
+				$dropbox_data_sent[] = $dropbox_file_data;
+			}
+		}
+
+		// The content of the sortable table = the categories (if we are not in the root)
+		if ($view_dropbox_category_sent == 0) {
+			foreach ($dropbox_categories as $category) {
+				$dropbox_category_data = array();
+				if ($category['sent'] == '1') {
+					$dropbox_category_data[] = $category['cat_id']; // This is where the checkbox icon for the files appear.
+					$link_open = '<a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category='.Security::remove_XSS($_GET['view_received_category']).'&amp;view_sent_category='.$category['cat_id'].'&amp;view='.Security::remove_XSS($_GET['view']).'">';
+					$dropbox_category_data[] = $link_open.build_document_icon_tag('folder', $category['cat_name']).'</a>';
+					$dropbox_category_data[] = '<a href="dropbox_download.php?'.api_get_cidreq().'&cat_id='.$category['cat_id'].'&amp;action=downloadcategory&amp;sent_received=sent">'.Display::return_icon('folder_zip.gif', get_lang('Save'), array('width' => '16px', 'height' => '16px', 'style' => 'float:right;')).'</a>'.$link_open.$category['cat_name'].'</a>';
+					//$dropbox_category_data[] = '';
+					$dropbox_category_data[] = '';
+					//$dropbox_category_data[] = '';
+					$dropbox_category_data[] = '';
+					$dropbox_category_data[] = '';
+					$dropbox_category_data[] = '<a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category='.Security::remove_XSS($_GET['view_received_category']).'&amp;view_sent_category='.Security::remove_XSS($_GET['view_sent_category']).'&amp;view='.Security::remove_XSS($_GET['view']).'&amp;action=editcategory&id='.$category['cat_id'].'">'.Display::return_icon('edit.gif', get_lang('Edit')).'</a>
+									<a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category='.Security::remove_XSS($_GET['view_received_category']).'&amp;view_sent_category='.Security::remove_XSS($_GET['view_sent_category']).'&amp;view='.Security::remove_XSS($_GET['view']).'&amp;action=deletesentcategory&amp;id='.$category['cat_id'].'" onclick="javascript: return confirmation(\''.$category['cat_name'].'\');">'.Display::return_icon('delete.gif', get_lang('Delete')).'</a>';
+				}
+				if (is_array($dropbox_category_data) && count($dropbox_category_data) > 0) {
+					$dropbox_data_sent[] = $dropbox_category_data;
+				}
+			}
+		}
+		// Displaying the table
+		$additional_get_parameters = array('view' => Security::remove_XSS($_GET['view']), 'view_received_category' => Security::remove_XSS($_GET['view_received_category']), 'view_sent_category' => Security::remove_XSS($_GET['view_sent_category']));
+		$selectlist = array('delete_received' => get_lang('Delete'), 'download_received' => get_lang('Download'));
+		if (api_get_session_id() != 0 && !api_is_allowed_to_session_edit(false, true)) {
+			$selectlist = array('download_received' => get_lang('Download'));
+		}
+		Display::display_sortable_config_table($column_header, $dropbox_data_sent, $sorting_options, $paging_options, $additional_get_parameters, $column_show, $column_order, $selectlist);
+	}
+
 }
 
-/*
------------------------------------------------------------
-	RECEIVED FILES
------------------------------------------------------------
-*/
-if ($_GET['view']=='received' OR $dropbox_cnf['sent_received_tabs']==false) {
-	//echo '<h3>'.get_lang('ReceivedFiles').'</h3>';
-
-	// This is for the categories
-	if (isset($_GET['view_received_category']) AND $_GET['view_received_category']<>'') {
-		$view_dropbox_category_received=$_GET['view_received_category'];
-	} else {
-		$view_dropbox_category_received=0;
-	}
-
-	// object initialisation
-	$dropbox_person = new Dropbox_Person( $_user['user_id'], $is_courseAdmin, $is_courseTutor); // note: are the $is_courseAdmin and $is_courseTutor parameters needed????
-
-	// constructing the array that contains the total number of feedback messages per document.
-	$number_feedback=get_total_number_feedback();
-
-	// sorting and paging options
-	$sorting_options = array();
-	$paging_options = array();
-
-	// the headers of the sortable tables
-	$column_header=array();
-	$column_header[] = array('',false,'');
-	$column_header[] = array(get_lang('Type'),true,'style="width:40px"');
-	$column_header[] = array(get_lang('ReceivedTitle'), TRUE, '');
-	$column_header[] = array(get_lang('Size'), TRUE, '');
-	$column_header[] = array(get_lang('Authors'), TRUE, '');
-	$column_header[] = array(get_lang('LastResent'), true);
-	
-	if (api_get_session_id()==0)			
-		$column_header[] = array(get_lang('Modify'), FALSE, '', 'nowrap style="text-align: right"');
-	elseif (api_is_allowed_to_session_edit(false,true)){
-		$column_header[] = array(get_lang('Modify'), FALSE, '', 'nowrap style="text-align: right"');
-	}
-	
-	$column_header[] = array('RealDate', true);
-
-
-	// An array with the setting of the columns -> 1: columns that we will show, 0:columns that will be hide
-	$column_show[]=1;
-	$column_show[]=1;
-	$column_show[]=1;
-	$column_show[]=1;
-	$column_show[]=1;
-	$column_show[]=1;
-		
-	if (api_get_session_id()==0)			
-		$column_show[]=1;
-	elseif (api_is_allowed_to_session_edit(false,true)){
-		$column_show[]=1;
-	}
-	$column_show[]=0;
-
-	// Here we change the way how the colums are going to be sort
-	// in this case the the column of LastResent ( 4th element in $column_header) we will be order like the column RealDate
-	// because in the column RealDate we have the days in a correct format "2008-03-12 10:35:48"
-
-	$column_order[]=1;
-	$column_order[]=2;
-	$column_order[]=3;
-	$column_order[]=4;
-	$column_order[]=7;
-	$column_order[]=6;
-	$column_order[]=7;
-	$column_order[]=8;
-
-
-
-	// the content of the sortable table = the received files
-	foreach ( $dropbox_person -> receivedWork as $dropbox_file) {
-		$dropbox_file_data=array();
-		if ($view_dropbox_category_received==$dropbox_file->category) {// we only display the files that are in the category that we are in.
-			$dropbox_file_data[]=$dropbox_file->id;
-
-			if (!is_array($_SESSION['_seen'][$_course['id']][TOOL_DROPBOX])) {
-				$_SESSION['_seen'][$_course['id']][TOOL_DROPBOX] = array();
-			}
-
-			// new icon
-			$new_icon='';
-			if ($dropbox_file->last_upload_date > $last_access AND !in_array($dropbox_file->id,$_SESSION['_seen'][$_course['id']][TOOL_DROPBOX])) {
-				$new_icon='&nbsp;'.Display::return_icon('new.gif', get_lang('New'));
-			}
-
-
-			$dropbox_file_data[]=build_document_icon_tag('file',$dropbox_file->title);
-			$dropbox_file_data[]='<a href="dropbox_download.php?'.api_get_cidreq().'&id='.$dropbox_file->id.'&amp;action=download">'.Display::return_icon('filesave.gif', get_lang('Download'), array('style'=>'float:right;')).'</a><a href="dropbox_download.php?'.api_get_cidreq().'&id='.$dropbox_file->id.'">'.$dropbox_file->title.'</a>'.$new_icon.'<br>'.$dropbox_file->description;
-			$dropbox_file_data[]=ceil(($dropbox_file->filesize)/1024).' '.get_lang('kB');
-			$dropbox_file_data[]=$dropbox_file->author;
-			//$dropbox_file_data[]=$dropbox_file->description;
-
-			$dropbox_file_data[]=date_to_str_ago($dropbox_file->last_upload_date).'<br><span class="dropbox_date">'.$dropbox_file->last_upload_date.'</span>';
-
-			$action_icons=check_number_feedback($dropbox_file->id, $number_feedback).' '.get_lang('Feedback').'
-									<a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category='.Security::remove_XSS($_GET['view_received_category']).'&amp;view_sent_category='.Security::remove_XSS($_GET['view_sent_category']).'&amp;view='.Security::remove_XSS($_GET['view']).'&amp;action=viewfeedback&amp;id='.$dropbox_file->id.'">'.Display::return_icon('comment_bubble.gif',get_lang('Comment')).'</a>
-									<a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category='.Security::remove_XSS($_GET['view_received_category']).'&amp;view_sent_category='.Security::remove_XSS($_GET['view_sent_category']).'&amp;view='.Security::remove_XSS($_GET['view']).'&amp;action=movereceived&amp;move_id='.$dropbox_file->id.'">'.Display::return_icon('deplacer_fichier.gif',get_lang('Move')).'</a>
-									<a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category='.Security::remove_XSS($_GET['view_received_category']).'&amp;view_sent_category='.Security::remove_XSS($_GET['view_sent_category']).'&amp;view='.Security::remove_XSS($_GET['view']).'&amp;action=deletereceivedfile&amp;id='.$dropbox_file->id.'" onclick="return confirmation(\''.$dropbox_file->title.'\');">'.Display::return_icon('delete.gif',get_lang('Delete')).'</a>';
-			//$action_icons='		<a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category='.$_GET['view_received_category'].'&amp;view_sent_category='.$_GET['view_sent_category'].'&amp;action=movereceived&amp;move_id='.$dropbox_file->id.'">'.Display::return_icon('deplacer.gif',get_lang('Move')).'</a>
-			//						<a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category='.$_GET['view_received_category'].'&amp;view_sent_category='.$_GET['view_sent_category'].'&amp;action=deletereceivedfile&amp;id='.$dropbox_file->id.'" onclick="return confirmation(\''.$dropbox_file->title.'\');">'.Display::return_icon('delete.gif',get_lang('Delete')).'</a>';
-			// this is a hack to have an additional row in a sortable table
-
-			if ($_GET['action']=='viewfeedback' AND isset($_GET['id']) and is_numeric($_GET['id']) AND $dropbox_file->id==$_GET['id']) {
-				$action_icons.="</td></tr>\n"; // ending the normal row of the sortable table
-				$action_icons.='<tr><td colspan="2"><a href="index.php?"'.api_get_cidreq().'&view_received_category='.Security::remove_XSS($_GET['view_received_category'])."&amp;view_sent_category=".Security::remove_XSS($_GET['view_sent_category'])."&amp;view=".Security::remove_XSS($_GET['view'])."\">".get_lang('CloseFeedback')."</a></td><td colspan=\"7\">".feedback($dropbox_file->feedback2)."</td>\n</tr>\n";
-			}
-			if (api_get_session_id()==0)			
-				$dropbox_file_data[]=$action_icons;
-			elseif (api_is_allowed_to_session_edit(false,true)){
-				$dropbox_file_data[]=$action_icons;
-			}
-			$action_icons='';
-
-			$dropbox_file_data[]=$dropbox_file->last_upload_date;//date
-
-			$dropbox_data_recieved[]=$dropbox_file_data;
-		}
-	}
-
-
-
-	// the content of the sortable table = the categories (if we are not in the root)
-	if ($view_dropbox_category_received==0) {
-		foreach ($dropbox_categories as $category) { // note: this can probably be shortened since the categories for the received files are already in the $dropbox_received_category array;
-			$dropbox_category_data=array();
-			if ($category['received']=='1') {
-                $movelist[$category['cat_id']] = $category['cat_name'];
-				$dropbox_category_data[]=$category['cat_id']; // this is where the checkbox icon for the files appear
-				// the icon of the category
-				$dropbox_category_data[]=build_document_icon_tag('folder',$category['cat_name']);
-				$dropbox_category_data[]='<a href="dropbox_download.php?'.api_get_cidreq().'&cat_id='.$category['cat_id'].'&amp;action=downloadcategory&amp;sent_received=received">'.Display::return_icon('folder_zip.gif',get_lang('Save'),array('width'=>'16px', 'height'=>'16px', 'style'=>'float:right;')).'</a><a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category='.$category['cat_id'].'&amp;view_sent_category='.Security::remove_XSS($_GET['view_sent_category']).'&amp;view='.Security::remove_XSS($_GET['view']).'">'.$category['cat_name'].'</a>';
-				$dropbox_category_data[]='';
-				$dropbox_category_data[]='';
-				$dropbox_category_data[]='';
-				$dropbox_category_data[]='<a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category='.Security::remove_XSS($_GET['view_received_category']).'&amp;view_sent_category='.Security::remove_XSS($_GET['view_sent_category']).'&amp;view='.Security::remove_XSS($_GET['view']).'&amp;action=editcategory&amp;id='.$category['cat_id'].'">'.Display::return_icon('edit.gif',get_lang('Edit')).'</a>
-										  <a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category='.Security::remove_XSS($_GET['view_received_category']).'&amp;view_sent_category='.Security::remove_XSS($_GET['view_sent_category']).'&amp;view='.Security::remove_XSS($_GET['view']).'&amp;action=deletereceivedcategory&amp;id='.$category['cat_id'].'" onclick="return confirmation(\''.$category['cat_name'].'\');">'.Display::return_icon('delete.gif',get_lang('Delete')).'</a>';
-			}
-			if (is_array($dropbox_category_data) && count($dropbox_category_data)>0) {
-				$dropbox_data_recieved[]=$dropbox_category_data;
-			}
-		}
-	}
-	// Displaying the table
-	$additional_get_parameters=array('view'=>$_GET['view'], 'view_received_category'=>$_GET['view_received_category'],'view_sent_category'=>$_GET['view_sent_category']);
-	$selectlist = array ('delete_received' => get_lang('Delete'),'download_received'=>get_lang('Download'));
-    if (is_array($movelist)) {
-        foreach ($movelist as $catid => $catname){
-        	$selectlist['move_received_'.$catid] = get_lang('Move') . '->'. $catname;
-    	}
-    }
-    
-	if (api_get_session_id()!=0 && api_is_allowed_to_session_edit(false,true)==false) {		 
-		$selectlist=array();
-	}
-    
-	Display::display_sortable_config_table($column_header, $dropbox_data_recieved, $sorting_options, $paging_options, $additional_get_parameters,$column_show,$column_order, $selectlist);
-}
-
-
-/*
------------------------------------------------------------
-	SENT FILES
------------------------------------------------------------
-*/
-if (!$_GET['view'] OR $_GET['view']=='sent' OR $dropbox_cnf['sent_received_tabs']==false) {
-	//echo '<h3>'.get_lang('SentFiles').'</h3>';
-
-	// This is for the categories
-	if (isset($_GET['view_sent_category']) AND $_GET['view_sent_category']<>'') {
-		$view_dropbox_category_sent=$_GET['view_sent_category'];
-	} else {
-		$view_dropbox_category_sent=0;
-	}
-
-	// object initialisation
-	$dropbox_person = new Dropbox_Person( $_user['user_id'], $is_courseAdmin, $is_courseTutor);
-
-	// constructing the array that contains the total number of feedback messages per document.
-	$number_feedback=get_total_number_feedback();
-
-	// sorting and paging options
-	$sorting_options = array();
-	$paging_options = array();
-
-	// the headers of the sortable tables
-	$column_header=array();
-
-	$column_header[] = array('',false,'');
-	$column_header[] = array(get_lang('Type'),true,'style="width:40px"','style="text-align:center"');
-	$column_header[] = array(get_lang('SentTitle'), TRUE, '');
-	$column_header[] = array(get_lang('Size'), TRUE, '');
-	$column_header[] = array(get_lang('SentTo'), TRUE, '');
-	$column_header[] = array(get_lang('LastResent'), TRUE, '');
-		
-	if (api_get_session_id()==0)			
-		$column_header[] = array(get_lang('Modify'), FALSE, '', 'nowrap style="text-align: right"');
-	elseif (api_is_allowed_to_session_edit(false,true)){
-		$column_header[] = array(get_lang('Modify'), FALSE, '', 'nowrap style="text-align: right"');
-	}
-	
-	
-	$column_header[] = array('RealDate', FALSE);
-
-	$column_show=array();
-	$column_order=array();
-
-	// An array with the setting of the columns -> 1: columns that we will show, 0:columns that will be hide
-	$column_show[]=1;
-	$column_show[]=1;
-	$column_show[]=1;
-	$column_show[]=1;
-	$column_show[]=1;
-	$column_show[]=1;
-	if (api_get_session_id()==0)			
-		$column_show[]=1;
-	elseif (api_is_allowed_to_session_edit(false,true)){
-		$column_show[]=1;
-	}
-	$column_show[]=0;
-
-	// Here we change the way how the colums are going to be sort
-	// in this case the the column of LastResent ( 4th element in $column_header) we will be order like the column RealDate
-	// because in the column RealDate we have the days in a correct format "2008-03-12 10:35:48"
-
-	$column_order[]=1;
-	$column_order[]=2;
-	$column_order[]=3;
-	$column_order[]=4;
-	$column_order[]=7;
-	$column_order[]=6;
-	$column_order[]=7;
-	$column_order[]=8;
-
-	// the content of the sortable table = the received files
-	foreach ( $dropbox_person -> sentWork as $dropbox_file) {
-		$dropbox_file_data=array();
-
-		if ($view_dropbox_category_sent==$dropbox_file->category) {
-			$dropbox_file_data[]=$dropbox_file->id;
-			$dropbox_file_data[]=build_document_icon_tag('file',$dropbox_file->title);
-			$dropbox_file_data[]='<a href="dropbox_download.php?'.api_get_cidreq().'&id='.$dropbox_file->id.'&amp;action=download">'.Display::return_icon('filesave.gif',get_lang('Save'), array('style'=>'float:right;')).'</a><a href="dropbox_download.php?'.api_get_cidreq().'&id='.$dropbox_file->id.'">'.$dropbox_file->title.'</a><br>'.$dropbox_file->description;
-			$dropbox_file_data[]=ceil(($dropbox_file->filesize)/1024).' '.get_lang('kB');
-			foreach ($dropbox_file->recipients as $recipient) {
-				$receivers_celldata=display_user_link($recipient['user_id'], $recipient['name']).', '.$receivers_celldata;
-			}
-			$receivers_celldata = trim(trim($receivers_celldata), ','); // Removing the trailing comma.
-			$dropbox_file_data[]=$receivers_celldata;
-			$dropbox_file_data[]=date_to_str_ago($dropbox_file->last_upload_date).'<br><span class="dropbox_date">'.$dropbox_file->last_upload_date.'</span>';
-
-			//$dropbox_file_data[]=$dropbox_file->author;
-			$receivers_celldata='';
-			$action_icons=check_number_feedback($dropbox_file->id, $number_feedback).' '.get_lang('Feedback').'
-									<a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category='.Security::remove_XSS($_GET['view_received_category']).'&amp;view_sent_category='.Security::remove_XSS($_GET['view_sent_category']).'&amp;view='.Security::remove_XSS($_GET['view']).'&amp;action=viewfeedback&amp;id='.$dropbox_file->id.'">'.Display::return_icon('comment_bubble.gif',get_lang('Comment')).'</a>
-									<a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category='.Security::remove_XSS($_GET['view_received_category']).'&amp;view_sent_category='.Security::remove_XSS($_GET['view_sent_category']).'&amp;view='.Security::remove_XSS($_GET['view']).'&amp;action=movesent&amp;move_id='.$dropbox_file->id.'">'.Display::return_icon('deplacer_fichier.gif',get_lang('Move')).'</a>
-									<a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category='.Security::remove_XSS($_GET['view_received_category']).'&amp;view_sent_category='.Security::remove_XSS($_GET['view_sent_category']).'&amp;view='.Security::remove_XSS($_GET['view']).'&amp;action=deletesentfile&amp;id='.$dropbox_file->id.'" onclick="return confirmation(\''.$dropbox_file->title.'\');">'.Display::return_icon('delete.gif',get_lang('Delete')).'</a>';
-			// this is a hack to have an additional row in a sortable table
-			if ($_GET['action']=='viewfeedback' AND isset($_GET['id']) and is_numeric($_GET['id']) AND $dropbox_file->id==$_GET['id']) {
-				$action_icons.="</td></tr>\n"; // ending the normal row of the sortable table
-				$action_icons.="<tr>\n\t<td colspan=\"2\"><a href=\"index.php?".api_get_cidreq()."&view_received_category=".Security::remove_XSS($_GET['view_received_category'])."&amp;view_sent_category=".Security::remove_XSS($_GET['view_sent_category'])."&amp;view=".Security::remove_XSS($_GET['view'])."\">".get_lang('CloseFeedback')."</a></td><td colspan=\"7\">".feedback($dropbox_file->feedback2)."</td>\n</tr>\n";
-
-			}
-			$dropbox_file_data[]=$action_icons;
-			$dropbox_file_data[]=$dropbox_file->last_upload_date;
-			$action_icons='';
-			$dropbox_data_sent[]=$dropbox_file_data;
-		}
-	}
-
-	// the content of the sortable table = the categories (if we are not in the root)
-	if ($view_dropbox_category_sent==0) {
-		foreach ($dropbox_categories as $category) {
-			$dropbox_category_data=array();
-			if ($category['sent']=='1') {
-				$dropbox_category_data[]=$category['cat_id']; // this is where the checkbox icon for the files appear
-				$dropbox_category_data[]=build_document_icon_tag('folder',$category['cat_name']);
-				$dropbox_category_data[]='<a href="dropbox_download.php?'.api_get_cidreq().'&cat_id='.$category['cat_id'].'&amp;action=downloadcategory&amp;sent_received=sent">'.Display::return_icon('folder_zip.gif',get_lang('Save'),array('width'=>'16px', 'height'=>'16px', 'style'=>'float:right;')).'</a><a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category='.Security::remove_XSS($_GET['view_received_category']).'&amp;view_sent_category='.$category['cat_id'].'&amp;view='.Security::remove_XSS($_GET['view']).'">'.$category['cat_name'].'</a>';
-				//$dropbox_category_data[]='';
-				$dropbox_category_data[]='';
-				//$dropbox_category_data[]='';
-				$dropbox_category_data[]='';
-				$dropbox_category_data[]='';
-				$dropbox_category_data[]='<a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category='.Security::remove_XSS($_GET['view_received_category']).'&amp;view_sent_category='.Security::remove_XSS($_GET['view_sent_category']).'&amp;view='.Security::remove_XSS($_GET['view']).'&amp;action=editcategory&id='.$category['cat_id'].'">'.Display::return_icon('edit.gif',get_lang('Edit')).'</a>
-										  <a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category='.Security::remove_XSS($_GET['view_received_category']).'&amp;view_sent_category='.Security::remove_XSS($_GET['view_sent_category']).'&amp;view='.Security::remove_XSS($_GET['view']).'&amp;action=deletesentcategory&amp;id='.$category['cat_id'].'" onclick="return confirmation(\''.$category['cat_name'].'\');">'.Display::return_icon('delete.gif',get_lang('Delete')).'</a>';
-			}
-			if (is_array($dropbox_category_data) && count($dropbox_category_data)>0) {
-				$dropbox_data_sent[]=$dropbox_category_data;
-			}
-		}
-	}
-	// Displaying the table
-	$additional_get_parameters=array('view'=>Security::remove_XSS($_GET['view']), 'view_received_category'=>Security::remove_XSS($_GET['view_received_category']),'view_sent_category'=>Security::remove_XSS($_GET['view_sent_category']));
-	$selectlist = array ('delete_received' => get_lang('Delete'),'download_received'=>get_lang('Download'));
-	if (api_get_session_id()!=0 && api_is_allowed_to_session_edit(false,true)==false) {		 
-		$selectlist = array ('download_received'=>get_lang('Download'));
-	}	
-	Display::display_sortable_config_table($column_header, $dropbox_data_sent, $sorting_options, $paging_options, $additional_get_parameters,$column_show,$column_order, $selectlist);
-  }
-}
 Display::display_footer();

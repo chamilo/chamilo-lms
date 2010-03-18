@@ -1,25 +1,26 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $GeneralDescription = "Generell beskrivning";
-$GeneralDescriptionQuestions = "Vilken plats har kursen i programmet? Krävs det förkunskaper?  Hur är kurserna kopplade till varandra?";
-$GeneralDescriptionInformation = "Beskriv kursen (antal timmar, officiell kod, i vilket rum det sker...) och lärare (namn, förnamn, kontor, telefonnummer, e-post...).";
+$GeneralDescriptionQuestions = "Vilken plats har kursen i programmet? KrÃ¤vs det fÃ¶rkunskaper?  Hur Ã¤r kurserna kopplade till varandra?";
+$GeneralDescriptionInformation = "Beskriv kursen (antal timmar, officiell kod, i vilket rum det sker...) och lÃ¤rare (namn, fÃ¶rnamn, kontor, telefonnummer, e-post...).";
 $Objectives = "Objektiviteter";
-$ObjectivesInformation = "Presentation av det globala och detaljerade mål för kursen.";
-$ObjectivesQuestions = "Vad kommer användarna att kunna efter kursen? Vad inbjuds de att göra under kursen?";
-$Topics = "Ämnen";
-$TopicsInformation = "Lista på ämnen som ingår i kursen. Hur viktigt är varje ämne.Svårighetsnivå. Struktur och intern avhängighet av olika delar.";
-$TopicsQuestions = "Hur fortskrider kursen? var skall användarna fästa speciell uppmärksamhet? Är det identifierade problem med förståelsen av olika kapitel? Hur mycket tid skall avsättas till de olika kurserna?";
+$ObjectivesInformation = "Presentation av det globala och detaljerade mÃ¥l fÃ¶r kursen.";
+$ObjectivesQuestions = "Vad kommer anvÃ¤ndarna att kunna efter kursen? Vad inbjuds de att gÃ¶ra under kursen?";
+$Topics = "TrÃ¥dar";
+$TopicsInformation = "Lista pÃ¥ Ã¤mnen som ingÃ¥r i kursen. Hur viktigt Ã¤r varje Ã¤mne.SvÃ¥righetsnivÃ¥. Struktur och intern avhÃ¤ngighet av olika delar.";
+$TopicsQuestions = "Hur fortskrider kursen? var skall anvÃ¤ndarna fÃ¤sta speciell uppmÃ¤rksamhet? Ã„r det identifierade problem med fÃ¶rstÃ¥elsen av olika kapitel? Hur mycket tid skall avsÃ¤ttas till de olika kurserna?";
 $Methodology = "Metod";
-$MethodologyQuestions = "Vilken metod och aktiviteter kan hjälpa till att nå målen i kursen? Isåfall, vilket schema?";
-$MethodologyInformation = "Presentation på aktiviteter (konferenser, dokument, grupper, forskningar, laborationer...)";
+$MethodologyQuestions = "Vilken metod och aktiviteter kan hjÃ¤lpa till att nÃ¥ mÃ¥len i kursen? IsÃ¥fall, vilket schema?";
+$MethodologyInformation = "Presentation pÃ¥ aktiviteter (konferenser, dokument, grupper, forskningar, laborationer...)";
 $CourseMaterial = "Kursmaterial";
-$CourseMaterialQuestions = "Finns det en kursbok, en samling av dokument, en bibliografi, en lista på länkar på internet?";
+$CourseMaterialQuestions = "Finns det en kursbok, en samling av dokument, en bibliografi, en lista pÃ¥ lÃ¤nkar pÃ¥ internet?";
 $CourseMaterialInformation = "Kort beskrivning av kursmaterialet.";
-$HumanAndTechnicalResources = "Mänskliga och tekniska resurser";
-$HumanAndTechnicalResourcesQuestions = "Finns det lärare, vägledare, teknisk helpdesk, social assistent, datarum?";
-$HumanAndTechnicalResourcesInformation = "Kort beskrivning av identiteterna av de olika kontaktpersonerna och tekniska objekt som finns tillgängliga.";
-$Assessment  = "Bedömning";
-$AssessmentQuestions = "Hur kommer användaren att bedömas? Finns det en strategi hur man skall bemästra ämnet?";
-$AssessmentInformation = "Exempel på frågor. Kriterier för att lyckas. Tips och tricks.";
+$HumanAndTechnicalResources = "MÃ¤nskliga och tekniska resurser";
+$HumanAndTechnicalResourcesQuestions = "Finns det lÃ¤rare, vÃ¤gledare, teknisk helpdesk, social assistent, datarum?";
+$HumanAndTechnicalResourcesInformation = "Kort beskrivning av identiteterna av de olika kontaktpersonerna och tekniska objekt som finns tillgÃ¤ngliga.";
+$Assessment = "BedÃ¶mning";
+$AssessmentQuestions = "Hur kommer anvÃ¤ndaren att bedÃ¶mas? Finns det en strategi hur man skall bemÃ¤stra Ã¤mnet?";
+$AssessmentInformation = "Exempel pÃ¥ frÃ¥gor. Kriterier fÃ¶r att lyckas. Tips och tricks.";
 ?>

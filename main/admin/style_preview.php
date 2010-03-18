@@ -1,32 +1,34 @@
 <?php
-include_once('../inc/global.inc.php');
-if (isset($_GET['style']) AND $_GET['style']<>'')
-{
-	$style=Security::remove_XSS($_GET['style']);
-	//$htmlHeadXtra[] = '<link href="../css/'.$_GET['style'].'/default.css" rel="stylesheet" type="text/css">';
-	echo '<link href="../css/'.$style.'/default.css" rel="stylesheet" type="text/css">';
-}
-else
-{
+/* For licensing terms, see /chamilo_license.txt */
+require_once '../inc/global.inc.php';
+
+if (isset($_GET['style']) AND $_GET['style']<>'') {
+	$style=Security::remove_XSS($_GET['style']);	
+	$all_styles = api_get_themes();
+	if (in_array($style, $all_styles[0])) {
+		echo '<link href="../css/'.$style.'/default.css" rel="stylesheet" type="text/css">';
+	}
+} else {
 	$currentstyle = api_get_setting('stylesheets');
 	echo '<link href="../css/'.$currentstyle.'/default.css" rel="stylesheet" type="text/css">';
 }
 
-
 //Display::display_header($tool_name);
-include(api_get_path(INCLUDE_PATH).'banner.inc.php');
+require_once api_get_path(INCLUDE_PATH).'banner.inc.php';
 
 ?>
 <!-- start of #main wrapper for #content and #menu divs -->
   <!--   Begin Of script Output   -->
   <div class="maincontent">
-    <h3>tool title</h3>
+    <h3>Tool title</h3>
     <div id="courseintro">
       <p>This is the introduction text.
     </div>
     <div id="courseintro_icons">
     <a href="#"><?php Display::display_icon('edit.gif', get_lang('Edit')); ?></a><a href="#"><?php Display::display_icon('delete.gif', get_lang('Delete')); ?></a></div>
     <div class="normal-message"> Normal Message </div>
+    <div class="confirmation-message"> Confirmation Message </div>
+    <div class="warning-message"> Warning Message </div>
     <div class="error-message"> Error Message </div>
     <table width="750">
       <tr>
@@ -119,18 +121,14 @@ include(api_get_path(INCLUDE_PATH).'banner.inc.php');
             <tr>
               <th style="width:100px"><a href="#">Firstname</a>&nbsp;&#8595; </th>
               <th style="width:100px"><a href="#">Lastname</a></th>
-            </tr>
-            <tr class="row_even">
-              <td >Firstname</td>
-              <td >Lastname</td>
-            </tr>
+            </tr>           
             <tr class="row_odd">
-              <td >Julio</td>
-              <td >Montoya</td>
+              <td>Julio</td>
+              <td>Montoya</td>
             </tr>
             <tr class="row_even">
-              <td >Patrick</td>
-              <td >Cool</td>
+              <td>Yannick</td>
+              <td>Warnier</td>
             </tr>
           </table>
           <table width="100%">

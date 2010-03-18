@@ -1,16 +1,17 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$langInvalidId = "P&#345;ihlášení selhalo. Zadejte prosím platné uživatelské jméno a heslo.";
+$langInvalidId = "PÅ™ihlÃ¡Å¡enÃ­ selhalo. Zadejte prosÃ­m platnÃ© uÅ¾ivatelskÃ© jmÃ©no a heslo.";
 $langPass = "Heslo";
 $langReg = "Registrace";
-$langMenu  = "Menu";
-$langOtherCourses = "Seznam kurz&#367;";
-$langCategories  = "Kategorie";
-$langBackToHomePage  = "P&#345;ehled kategorií";
-$langCourseList  = "Kurzy";
-$langHelptwo = "Nápov&#283;da";
+$langMenu = "Menu";
+$langOtherCourses = "ostatnÃ­ kurzy";
+$langCategories = "kategorie";
+$langBackToHomePage = "PÅ™ehled kategoriÃ­";
+$langCourseList = "Seznam kurzÅ¯";
+$langHelptwo = "NÃ¡povÄ›da";
 $EussMenu = "menu";
-$langMenuUser = "Uživatel";
-$langRefresh = "obnovit stránku";
+$langMenuUser = "UÅ¾ivatel";
+$langRefresh = "Aktualizovat";
 ?>

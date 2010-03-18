@@ -63,7 +63,7 @@ if(api_get_setting('use_session_mode')=='true')
 */
 $tool_name = get_lang("Classes");
 //extra entries in breadcrumb
-$interbreadcrumb[] = array ("url" => "user.php", "name" => get_lang("Users"));
+$interbreadcrumb[] = array ("url" => "user.php", "name" => get_lang("ToolUser"));
 Display :: display_header($tool_name, "User");
 
 api_display_tool_title($tool_name);
@@ -117,10 +117,10 @@ function get_number_of_classes()
 	$sql = "SELECT c.id	FROM $class_table c, $course_class_table cc WHERE cc.class_id = c.id AND cc.course_code ='".$_SESSION['_course']['id']."'";
 	if (isset ($_GET['keyword']))
 	{
-		$keyword = Database::escape_string($_GET['keyword']);
+		$keyword = Database::escape_string(trim($_GET['keyword']));
 		$sql .= " AND (c.name LIKE '%".$keyword."%')";
 	}
-	$res = Database::query($sql, __FILE__, __LINE__);
+	$res = Database::query($sql);
 	$result = Database::num_rows($res);
 	return $result;
 }
@@ -146,13 +146,13 @@ function get_class_data($from, $number_of_items, $column, $direction)
 	$sql .= " WHERE c.id = cc.class_id AND cc.course_code = '".$_SESSION['_course']['id']."'";
 	if (isset ($_GET['keyword']))
 	{
-		$keyword = Database::escape_string($_GET['keyword']);
+		$keyword = Database::escape_string(trim($_GET['keyword']));
 		$sql .= " AND (c.name LIKE '%".$keyword."%')";
 	}
 	$sql .= " GROUP BY c.id, c.name ";
 	$sql .= " ORDER BY col$column $direction ";
 	$sql .= " LIMIT $from,$number_of_items";
-	$res = Database::query($sql, __FILE__, __LINE__);
+	$res = Database::query($sql);
 	$classes = array ();
 	while ($class = Database::fetch_row($res))
 	{
@@ -179,7 +179,7 @@ $form->add_textfield('keyword', '', false);
 $form->addElement('submit', 'submit', get_lang('SearchButton'));
 
 // Build table
-$table = new SortableTable('users', 'get_number_of_classes', 'get_class_data', 1);
+$table = new SortableTable('user_class', 'get_number_of_classes', 'get_class_data', 1);
 $parameters['keyword'] = $_GET['keyword'];
 $table->set_additional_parameters($parameters);
 $col = 0;

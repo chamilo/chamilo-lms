@@ -1,42 +1,18 @@
 <?php
 // $Id: create_backup.php 20084 2009-04-24 20:10:43Z aportugal $
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2004 Dokeos SPRL
-	Copyright (c) 2003 Ghent University (UGent)
-	Copyright (c) 2001 Universite catholique de Louvain (UCL)
-	Copyright (c) Bart Mollet (bart.mollet@hogent.be)
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
-	Mail: info@dokeos.com
-==============================================================================
-*/
+/* For licensing terms, see /license.txt */
 /**
- * ==============================================================================
  * Create a backup.
  *
  * @author Bart Mollet <bart.mollet@hogent.be>
- * @package dokeos.backup
- * ==============================================================================
+ * @package chamilo.backup
  */
 
 // name of the language file that needs to be included
 $language_file = array ('exercice', 'admin', 'coursebackup');
 
 // including the global file
-include ('../inc/global.inc.php');
+require_once ('../inc/global.inc.php');
 
 // Check access rights (only teachers are allowed here)
 if (!api_is_allowed_to_edit())
@@ -62,11 +38,11 @@ $nameTools = get_lang('CreateBackup');
 Display::display_header($nameTools);
 
 // include additional libraries
-include_once(api_get_path(LIBRARY_PATH) . 'fileManage.lib.php');
-require_once ('classes/CourseBuilder.class.php');
-require_once ('classes/CourseArchiver.class.php');
-require_once ('classes/CourseRestorer.class.php');
-require_once ('classes/CourseSelectForm.class.php');
+require_once api_get_path(LIBRARY_PATH) . 'fileManage.lib.php';
+require_once 'classes/CourseBuilder.class.php';
+require_once 'classes/CourseArchiver.class.php';
+require_once 'classes/CourseRestorer.class.php';
+require_once 'classes/CourseSelectForm.class.php';
 
 // Display the tool title
 api_display_tool_title($nameTools);
@@ -121,7 +97,7 @@ else
 	{
 		echo get_lang('SelectOptionForBackup');
 
-		include_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
+		require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
 		$form = new FormValidator('create_backup_form','POST');
 		$renderer = $form->defaultRenderer();
 		$renderer->setElementTemplate('<div>{element}</div> ');
@@ -138,10 +114,6 @@ else
 		$form->display();
 	}
 }
-/*
-==============================================================================
-		FOOTER
-==============================================================================
-*/
+/*		FOOTER		*/
 Display::display_footer();
 ?>

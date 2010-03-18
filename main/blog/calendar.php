@@ -1,9 +1,10 @@
 <?php
+/* For licensing terms, see /license.txt */
 // name of the language file that needs to be included
 $language_file = 'agenda';
 
 // including the global
-include('../inc/global.inc.php');
+require_once '../inc/global.inc.php';
 
 // the variables for the days and the months
 // Defining the shorts for the days
@@ -107,8 +108,7 @@ table.calendar .monthyear a:hover
 <!--
 var month_names = new Array(
 <?php
-foreach($MonthsLong as $index => $month)
-{
+foreach($MonthsLong as $index => $month){
 	echo '"'.$month.'",';
 }
 ?>

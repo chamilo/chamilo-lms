@@ -1,17 +1,18 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$langToolName = "Statistik";
+$langToolName = "Import mata kuliah dari Blackboard";
 $TrackingDisabled = "Tracking dinon-aktifkan oleh system administrator.";
 $langShowNone = "Sembunyikan semua";
 $langCourseStats = "Statistik Mata Kuliah";
 $langToolsAccess = "Akses ke tool-tool";
-$langCourseAccess = "Akses ke mata kuliah ini";
+$langCourseAccess = "Akses Mata Kuliah";
 $langLinksAccess = "Link-link";
 $langDocumentsAccess = "Dokumen-dokumen";
 $langScormAccess = "Learning path - Mata Kuliah Berformat Scorm";
 $langLinksDetails = "Link-link yang diakses siswa";
-$langWorksDetails = "Pekerjaan-pekerjaan yang di-upload siswa dalam nama  \'Pengarang/Author\'";
+$langWorksDetails = "Pekerjaan-pekerjaan yang di-upload siswa dalam nama  'Pengarang/Author'";
 $langLoginsDetails = "Klik pada nama bulan untuk detailnya";
 $langDocumentsDetails = "Dokumen-dokumen yang di-download siswa";
 $langExercicesDetails = "Nilai-nilai latihan";
@@ -45,14 +46,14 @@ $langScormNeverOpened = "Mata Kuliah ini belum pernah di baca user ini.";
 $langWorkTitle = "Jumlah";
 $langWorkAuthors = "Pengarang";
 $langWorkDescription = "Deskripsi";
-$informationsAbout = "Tracking ";
+$informationsAbout = "Tracking";
 $langNoEmail = "Alamat email belum diisi";
-$langNoResult = "Tidak Ada";
-$langCourse = "Mata Kuliah";
+$langNoResult = "Sementara belum ada hasil";
+$langCourse = "Situs";
 $langHits = "Hits";
 $langTotal = "Total";
 $langHour = "Jam";
-$langDay = "Hari";
+$langDay = "hari";
 $langLittleHour = "Pkl.";
 $langLast31days = "Dalam 31 hari terakhir";
 $langLast7days = "Dalam 7 hari terakhir";
@@ -84,7 +85,7 @@ $langPreviousYear = "Tahun Sebelumnya";
 $langViewToolList = "Lihat daftar semua tool";
 $langToolList = "Daftar semua tool";
 $langFrom = "Dari";
-$langTo = "Kepada";
+$langTo = "ke";
 $langPeriodToDisplay = "Periode";
 $langDetailView = "Lihat menurut";
 $langBredCrumpGroups = "Group";

@@ -1,12 +1,13 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $langCreateBackup = "Opprett en sikkerhetskopi";
 $langSelectBackupFile = "velg en sikkerhetskopifil";
 $langImportBackup = "Importer sikkerhetskopi";
 $langImportFullBackup = "Importer full sikkerhetskopi";
-$langImportFinished = "Import fullført";
+$langImportFinished = "Import fullfÃ¸rt";
 $langEvents = "Hendelser";
-$langDocuments  = "Dokumenter";
+$langDocuments = "Dokumenter";
 $langCourseDescription = "Kursbeskrivelse";
 ?>

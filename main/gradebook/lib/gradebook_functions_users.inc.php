@@ -1,47 +1,39 @@
 <?php
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2008 Dokeos Latinoamerica SAC
-	Copyright (c) 2006 Dokeos SPRL
-	Copyright (c) 2006 Ghent University (UGent)
-	Copyright (c) various contributors
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
-	Mail: info@dokeos.com
-==============================================================================
-*/
+/* For licensing terms, see /license.txt */
 /**
  * Various user related functions
- * @package dokeos.gradebook
+ * @author Julio Montoya <gugli100@gmail.com> adding security functions
+ * @package chamilo.gradebook
  */
 /**
  * returns users within a course given by param
  * @param $course_id
  */
 function get_users_in_course($course_id) {
-	$tbl_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
-	$tbl_user = Database :: get_main_table(TABLE_MAIN_USER);
+	$tbl_course_user 			= Database :: get_main_table(TABLE_MAIN_COURSE_USER);
+	$tbl_session_course_user 	= Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+	$tbl_user 					= Database :: get_main_table(TABLE_MAIN_USER);
 
 	$order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname ASC' : ' ORDER BY lastname, firstname ASC';
-	$sql = 'SELECT user.user_id,lastname,firstname'
+
+	$current_session = api_get_session_id();
+	$course_id = Database::escape_string($course_id);
+
+	if (!empty($current_session)) {
+		$sql = "SELECT user.user_id,lastname,firstname
+			 	FROM $tbl_session_course_user as scru, $tbl_user as user
+			 	WHERE scru.id_user=user.user_id
+			 	AND scru.status=0
+			 	AND scru.course_code='$course_id' AND id_session ='$current_session' $order_clause ";
+	} else {
+		$sql = 'SELECT user.user_id,lastname,firstname'
 			.' FROM '.$tbl_course_user.' as course_rel_user, '.$tbl_user.' as user'
 			.' WHERE course_rel_user.user_id=user.user_id'
 			.' AND course_rel_user.status='.STUDENT
 			." AND course_rel_user.course_code='".$course_id."'"
 			.$order_clause;
-	$result = Database::query($sql, __FILE__, __LINE__);
+	}
+	$result = Database::query($sql);
 	return get_user_array_from_sql_result($result);
 }
 
@@ -78,9 +70,9 @@ function get_all_users ($evals = array(), $links = array()) {
 
 			$sql = 'SELECT user.user_id,lastname,firstname'
 					.' FROM '.$tbl_res.' as res, '.$tbl_user.' as user'
-					.' WHERE res.evaluation_id = '.$eval->get_id()
+					.' WHERE res.evaluation_id = '.intval($eval->get_id())
 					.' AND res.user_id = user.user_id';
-			$result = Database::query($sql, __FILE__, __LINE__);
+			$result = Database::query($sql);
 			$users = array_merge($users,get_user_array_from_sql_result($result));
 		}
 	}
@@ -106,6 +98,8 @@ function find_students($mask= '') {
 	if (!api_is_allowed_to_create_course() || empty ($mask)) {
 		return null;
 	}
+	$mask = Database::escape_string($mask);
+	 
 	$tbl_user= Database :: get_main_table(TABLE_MAIN_USER);
 	$tbl_cru= Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 	$sql= 'SELECT DISTINCT user.user_id, user.lastname, user.firstname, user.email' . ' FROM ' . $tbl_user . ' user';
@@ -118,10 +112,10 @@ function find_students($mask= '') {
 	$sql .= ' OR user.firstname LIKE '."'%" . $mask . "%')";
 
 	if (!api_is_platform_admin()) {
-		$sql .= ' AND user.user_id = cru.user_id' . ' AND cru.course_code in' . ' (SELECT course_code' . ' FROM ' . $tbl_cru . ' WHERE user_id = ' . api_get_user_id() . ' AND status = ' . COURSEMANAGER . ')';
+		$sql .= ' AND user.user_id = cru.user_id AND cru.relation_type<>'.COURSE_RELATION_TYPE_RRHH.' ' . ' AND cru.course_code in' . ' (SELECT course_code' . ' FROM ' . $tbl_cru . ' WHERE user_id = ' . api_get_user_id() . ' AND status = ' . COURSEMANAGER . ')';
 	}
 	$sql .= ' ORDER BY lastname';
-	$result= Database::query($sql, __FILE__, __LINE__);
+	$result= Database::query($sql);
 	$db_users= Database::store_result($result);
 	return $db_users;
 }
@@ -133,8 +127,8 @@ function find_students($mask= '') {
  */
 function get_user_info_from_id($userid) {
 	$user_table= Database :: get_main_table(TABLE_MAIN_USER);
-	$sql= 'SELECT * FROM ' . $user_table . ' WHERE user_id=' . $userid;
-	$res= Database::query($sql, __FILE__, __LINE__);
+	$sql= 'SELECT * FROM ' . $user_table . ' WHERE user_id=' . intval($userid);
+	$res= Database::query($sql);
 	$user= Database::fetch_array($res,ASSOC);
 	return $user;
 }

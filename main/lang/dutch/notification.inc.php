@@ -1,5 +1,6 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $lang_new_item = "nieuw item toegevoegd";
 $lang_title_notification = "Sinds uw vorig bezoek";
@@ -15,7 +16,21 @@ $lang_new_forum_topic = "nieuw onderwerp toegevoegd";
 $lang_new_groupforum_topic = "nieuw onderwerp toegevoegd aan groepsforum";
 $lang_new_dropbox_file = "nieuw bestand ontvangen";
 $lang_update_dropbox_file = "bestand in de studentenpublicatie gewijzigd";
-$ForumCategoryAdded = "Forumcategorie toegevoegd";
+$ForumCategoryAdded = "De forumcategorie is toegevoegd";
 $LearnpathAdded = "Leerpad toegevoegd";
+$GlossaryAdded = "Nieuw begrip toegevoegd aan glossarium";
+$QuizQuestionAdded = "Nieuwe vraag toegevoegd aan oefening";
+$QuizQuestionUpdated = "Nieuwe vraag aangepast in de oefening";
+$QuizQuestionDeleted = "Nieuwe vraag verwijderd uit de oefening";
+$QuizUpdated = "Oefening aangepast";
+$QuizAdded = "Oefening toegevoegd";
+$QuizDeleted = "Oefening verwijderd";
+$DocumentInvisible = "Document werd onzichtbaar gemaakt";
+$DocumentVisible = "Document werd zichtbaar gemaakt";
+$CourseDescriptionAdded = "Cursusomschrijving toegevoegd";
 $WikiAdded = "Wiki toegevoegt";
+$SurveyAdded = "Enquête toegevoegd";
+$NotebookAdded = "Notitie toegevoegd";
+$NotebookUpdated = "Notitie aangepast";
+$NotebookDeleted = "Notitie verwijderd";
 ?>

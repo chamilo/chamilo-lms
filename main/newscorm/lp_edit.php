@@ -12,6 +12,7 @@ global $charset;
 
 $show_description_field = false; //for now
 $nameTools = get_lang("Doc");
+$this_section=SECTION_COURSES;
 event_access_tool(TOOL_LEARNPATH);
 if (! $is_allowed_in_course) api_not_allowed();
 
@@ -22,7 +23,7 @@ if (isset($_SESSION['gradebook'])){
 if (!empty($gradebook) && $gradebook=='view') {
 	$interbreadcrumb[]= array (
 			'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
-			'name' => get_lang('Gradebook')
+			'name' => get_lang('ToolGradebook')
 		);
 }
 $interbreadcrumb[]= array ("url"=>"lp_controller.php?action=list", "name"=> get_lang("_learning_path"));

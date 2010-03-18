@@ -1,6 +1,6 @@
 <?php
-// Dokeos - elearning and course management software
-// See license terms in dokeos/documentation/license.txt
+// Chamilo LMS
+// See license terms in chamilo/documentation/license.txt
 
 // Training tools
 // Glossary
@@ -11,7 +11,7 @@
 $config['ToolbarSets']['Normal'] = array(
 	array('Save','FitWindow','PasteWord','-','Undo','Redo'),
 	array('Link','Unlink','Anchor'),
-    array('Image','flvPlayer','Flash','EmbedMovies','YouTube','MP3','mimetex'),
+    array('Image','mimetex'),
     array('Table','SpecialChar'),
     array('OrderedList','UnorderedList','-','Outdent','Indent','-','TextColor','BGColor','-','Source'),
     '/',

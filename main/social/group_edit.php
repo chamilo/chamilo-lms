@@ -1,12 +1,12 @@
-<?php // $Id: user_edit.php 22233 2009-07-20 09:54:05Z ivantcholakov $
-/* For licensing terms, see /dokeos_license.txt */
+<?php
+/* For licensing terms, see /chamilo_license.txt */
 /**
-==============================================================================
-*	@package dokeos.admin
-==============================================================================
-*/
+ * @package dokeos.social
+ * @author Julio Montoya <gugli100@gmail.com>
+ */
+
 // Language files that should be included
-$language_file = array('admin');
+$language_file = array('userInfo');
 $cidReset = true;
 include '../inc/global.inc.php';
 $this_section = SECTION_SOCIAL;
@@ -20,40 +20,72 @@ require_once $libpath.'image.lib.php';
 require_once $libpath.'mail.lib.inc.php';
 require_once $libpath.'social.lib.php';
 
+$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js" type="text/javascript" language="javascript"></script>'; //jQuery
+$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/thickbox.js" type="text/javascript" language="javascript"></script>';
+$htmlHeadXtra[] = '<link rel="stylesheet" href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/thickbox.css" type="text/css" media="projection, screen">';
+
+$htmlHeadXtra[] = '<script type="text/javascript">
+var textarea = "";
+var num_characters_permited = 255;
+function textarea_maxlength(){
+   num_characters = document.forms[0].description.value.length;
+  if (num_characters > num_characters_permited){
+      document.forms[0].description.value = textarea;
+   }else{
+      textarea = document.forms[0].description.value;
+   }
+}
+function show_icon_edit(element_html) {
+	ident="#edit_image";
+	$(ident).show();
+}
+
+function hide_icon_edit(element_html)  {
+	ident="#edit_image";
+	$(ident).hide();
+}
+</script>';
+
 $group_id = isset($_GET['id']) ? intval($_GET['id']) : intval($_POST['id']);
 $tool_name = get_lang('GroupEdit');
 
-$interbreadcrumb[] = array('url' => 'index.php','name' => get_lang('PlatformAdmin'));
-$interbreadcrumb[] = array('url' => 'group_list.php','name' => get_lang('GroupList'));
+$interbreadcrumb[] = array('url' => 'home.php','name' => get_lang('Social'));
+$interbreadcrumb[] = array('url' => 'groups.php','name' => get_lang('Groups'));
 
 $table_group = Database::get_main_table(TABLE_MAIN_GROUP);
 
 $sql = "SELECT * FROM $table_group WHERE id = '".$group_id."'";
-$res = Database::query($sql, __FILE__, __LINE__);
+$res = Database::query($sql);
 if (Database::num_rows($res) != 1) {
 	header('Location: groups.php?id='.$group_id);
 	exit;
 }
 
+//only group admins can edit the group
+if (!GroupPortalManager::is_group_admin($group_id)) {
+	api_not_allowed();
+}
+
 $group_data = Database::fetch_array($res, 'ASSOC');
 
 // Create the form
-$form = new FormValidator('group_edit', 'post', '', '', array('style' => 'width: 60%; float: '.($text_dir == 'rtl' ? 'right;' : 'left;')));
+$form = new FormValidator('group_edit', 'post', '', '', array('style' => 'width: 100%; float: '.($text_dir == 'rtl' ? 'right;' : 'left;')));
 $form->addElement('hidden', 'id', $group_id);
 
 // name
-$form->addElement('text', 'name', get_lang('Name'));
+$form->addElement('text', 'name', get_lang('Name'), array('size'=>60, 'maxlength'=>120));
 $form->applyFilter('name', 'html_filter');
 $form->applyFilter('name', 'trim');
 $form->addRule('name', get_lang('ThisFieldIsRequired'), 'required');
 
 // Description
-$form->addElement('textarea', 'description', get_lang('Description'));
+$form->addElement('textarea', 'description', get_lang('Description'), array('rows'=>3, 'cols'=>58, onKeyDown => "textarea_maxlength()", onKeyUp => "textarea_maxlength()"));
 $form->applyFilter('description', 'html_filter');
 $form->applyFilter('description', 'trim');
+$form->addRule('name', '', 'maxlength',255);
 
 // url
-$form->addElement('text', 'url', get_lang('URL'));
+$form->addElement('text', 'url', get_lang('URL'), array('size'=>35));
 $form->applyFilter('url', 'html_filter');
 $form->applyFilter('url', 'trim');
 
@@ -64,7 +96,6 @@ $form->addRule('picture', get_lang('OnlyImagesAllowed').' ('.implode(',', $allow
 if (strlen($group_data['picture_uri']) > 0) {
 	$form->addElement('checkbox', 'delete_picture', '', get_lang('DelImage'));
 }
-
 
 // Status
 $status = array();
@@ -82,38 +113,29 @@ $form->setDefaults($group_data);
 // Validate form
 if ( $form->validate()) {
 	$group = $form->exportValues();
-	
 	$picture_element = & $form->getElement('picture');
 	$picture = $picture_element->getValue();
-
 	$picture_uri = $group_data['picture_uri'];
+
 	if ($group['delete_picture']) {
 		$picture_uri = GroupPortalManager::delete_group_picture($group_id);
 		}
 	elseif (!empty($picture['name'])) {
 		$picture_uri = GroupPortalManager::update_group_picture($group_id, $_FILES['picture']['name'], $_FILES['picture']['tmp_name']);
 	}
-	
+
 	$name 			= $group['name'];
 	$description	= $group['description'];
-	$url 			= $group['url'];	
+	$url 			= $group['url'];
 	$status 		= intval($group['visibility']);
-	
-	GroupPortalManager::update($group_id, $name, $description, $url, $status, $picture_uri);	
+
+	GroupPortalManager::update($group_id, $name, $description, $url, $status, $picture_uri);
 	$tok = Security::get_token();
 	header('Location: groups.php?id='.$group_id.'&action=show_message&message='.urlencode(get_lang('GroupUpdated')).'&sec_token='.$tok);
 	exit();
 }
 
 Display::display_header($tool_name);
-
-//show the action menu
-SocialManager::show_social_menu();
-echo '<div class="actions-title">';
-echo get_lang('Groups');
-echo '</div>';
-
-
 
 // Group picture
 $image_path = GroupPortalManager::get_group_picture_path_by_id($group_id,'web');
@@ -136,15 +158,26 @@ $big_image_size = api_getimagesize($big_image);
 $big_image_width = $big_image_size[0];
 $big_image_height = $big_image_size[1];
 $url_big_image = $big_image.'?rnd='.time();
-
+/*
 if ($image == '') {
 	echo '<img '.$img_attributes.' />';
 } else {
 	echo '<input type="image" '.$img_attributes.' onclick="javascript: return show_image(\''.$url_big_image.'\',\''.$big_image_width.'\',\''.$big_image_height.'\');"/>';
 }
+*/
+//Shows left column
+//echo GroupPortalManager::show_group_column_information($group_id, api_get_user_id());
 
-// Display form
-$form->display();
+echo '<div id="social-content">';
+	echo '<div id="social-content-left">';
+	//this include the social menu div
+	SocialManager::show_social_menu('group_edit',$group_id);
+	echo '</div>';
+	echo '<div id="social-content-right">';
+		// Display form
+		$form->display();
+	echo '</div>';
+echo '</div>';
 
 // Footer
 Display::display_footer();

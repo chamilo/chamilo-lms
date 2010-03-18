@@ -1,46 +1,47 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$langMdCallingTool = "Links";
-$langMdTitle = "Linknavn";
-$langMdDescription = "Linkbeskrivelse";
-$langMdCoverage = "Generel (universal)";
-$langMdCopyright = "Ghent Universitet";
-$nameTools = "Forældet sprogvariabel";
-$langTool = "Metadatalinks";
-$langNoScript = "Script er ikke aktiveret i din browser, ignorerer venligst skærmbillede nedenfor denne tekst, det vil ikke fungere...";
-$langLanguageTip = "sproget, som denne læringssti anvender";
-$langIdentifier = "Identificér";
-$langIdentifierTip = "unik identifikation for dette læringsobjekt opbygget af bogstaver, tal, _-,()\'!*";
-$langTitleTip = "titel eller navn, og sproget for titel eller navn";
-$langDescriptionTip = "beskrivelse eller kommentar og sprog brugt til beskrivelse af dette læringsplansobjekt";
-$langKeyword = "Nøgleord";
-$langKeywordTip = "del ved kommaer (bogstaver, tal, -.)";
-$langCoverage = "Kategori";
-$langCoverageTip = "categoryname, cfr. Links ";
-$langKwNote = "Hvis du ændrer sporgbeskrivelsen, så tilføj ikke nøglord samtidig med.";
-$langClickKw = "Klik på et nøgleord i mappestrukturen for at vælge eller fravælge nøgleordet";
-$langKwHelp = "<br/> Klik på \'+\' knappen for at åbne, klik på \'-\' knappen for at lukke, klik 2 gange på \'++\' knappen for at åbne alt, klik 2 gange på \'--\' knappen for at lukke alt.<br/> <br/> Fravælg alle valgte nøgleord ved at lukke \"træet\" og åbn det igen ved at klikke på \'+\' knappen.<br/> Alt-klik \'+\' søger på originale nøgleord i \"træet\".<br/> <br/> Alt-klik nøgleord vælger et nøgleord uden yderligere begreber eller fravælg et nøgleord uden yderlgere begreber.<br/> <br/> Hvis du ændrer sprogbeskrivelsen, så tilføj ikke nøgleord på samme tid.<br/> <br/> ";
+$langMdCallingTool = "Dokumenter";
+$langMdTitle = "Titel pÃ¥ lÃ¦ringsobjekt";
+$langMdDescription = "Klik pÃ¥ knappen Gem for at gemme denne information";
+$langMdCoverage = "fx Bachelor i..";
+$langMdCopyright = "forudsat at kilden er godkendt";
+$nameTools = "ForÃ¦ldet sprogvariabel";
+$langTool = "Metadata for dokumentet";
+$langNoScript = "Script er ikke slÃ¥et til i din browser,  venligst ignorerer skÃ¦rmbilledet nedenfor denne tekst, det virker ikke...";
+$langLanguageTip = "det sprog, som lÃ¦ringsobjektet er lavet i";
+$langIdentifier = "IdentificÃ©r";
+$langIdentifierTip = "unik identifikation til dette lÃ¦rigsobjekt, bestÃ¥ende af bogstaver, tal, _-.()'!*";
+$langTitleTip = "titel eller navn og sprog til denne titel eller dette navn";
+$langDescriptionTip = "beskrivelse eller kommentar og sprog brugt til beskrivelse af dette lÃ¦ringsobjekt";
+$langKeyword = "NÃ¸gleord";
+$langKeywordTip = "delt af komma (bogstvaer, tal, -.)";
+$langCoverage = "Omfang";
+$langCoverageTip = "fx. bachelor xxx: yyy";
+$langKwNote = "Du kan IKKE Ã¦ndre sprogbeskrivelse og tilfÃ¸j nÃ¸gleord samtidig.";
+$langClickKw = "Klik pÃ¥ et nÃ¸gleord i trÃ¦et for at vÃ¦lge/fravÃ¦lge det";
+$langKwHelp = "Klik pÃ¥ '+' knappen for at Ã¥bne, klik pÃ¥ '-' knappen for at lukke, klik 2 gange pÃ¥ '++' knappen for at Ã¥bne alt, klik 2 gange pÃ¥ '--' knappen for at lukke alt.FravÃ¦lg alle valgte nÃ¸gleord ved at lukke \"trÃ¦et\" og Ã¥bn det igen ved at klikke pÃ¥ '+' knappen.Alt-klik '+' sÃ¸ger pÃ¥ originale nÃ¸gleord i \"trÃ¦et\".Alt-klik nÃ¸gleord vÃ¦lger et nÃ¸gleord uden yderligere begreber eller fravÃ¦lg et nÃ¸gleord uden yderlgere begreber.Hvis du Ã¦ndrer sprogbeskrivelsen, sÃ¥ tilfÃ¸j ikke nÃ¸gleord pÃ¥ samme tid.";
 $langLocation = "URL/URI";
-$langLocationTip = "klik her for at åbne objektet";
+$langLocationTip = "Klik her for at Ã¥bne objektet";
 $langStore = "Gem";
-$langDeleteAll = "Slet alle metadata";
-$langConfirmDelete = "Ønsker du virkeligt at slette alle metadata?!!";
+$langDeleteAll = "Slet alle metadata?";
+$langConfirmDelete = "Vil du virkelig slette alle metadata?";
 $langWorkOn = "med";
 $langNotInDB = "linkkategorien findes ikke";
 $langManifestSyntax = "(syntaksfejl i manifestfil...)";
-$langEmptyManifest = "(tøm manifestfil...)";
+$langEmptyManifest = "(tÃ¸m manifestfil...)";
 $langNoManifest = "(ingen manifestfil...";
 $langNotFolder = "er ikke muligt, det er ikke en mappe...";
-$langContinue = "Fortsæt med";
-$langCreate = "Opret MDE\'er";
-$langRemove = "Fjern MDE\'er";
-$langAllRemovedFor = "Alle indtastninger er slettet ";
-$langRemainingFor = "Forældede indtasterne er blevet flyttet til kategori";
+$langContinue = "FortsÃ¦t med";
+$langCreate = "opret";
+$langRemove = "Fjern MDE'er";
+$langAllRemovedFor = "Alle indtastninger er slettet";
+$langRemainingFor = "ForÃ¦ldede indtasterne er blevet flyttet til kategori";
 $langIndex = "Index ord";
 $langTotalMDEs = "Total antal links MD indtastninger";
-$langMainMD = "Åbn MDE";
-$langOrElse = "Vælg linkkategori";
+$langMainMD = "Ã…bn MDE";
+$langOrElse = "VÃ¦lg linkkategori";
 $langWarningDups = "- dublikerede kategorinavne er slettet fra listen";
-$langSLC = "Arbejd med kategori-links benævnt";
+$langSLC = "Arbejd med kategori-links benÃ¦vnt";
 ?>

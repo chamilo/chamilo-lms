@@ -34,7 +34,7 @@ $show_link = true;
 if(!api_is_allowed_to_edit()) //if the user has no edit permission (simple user)
 {
 	$course_tool_table = Database::get_course_table(TABLE_TOOL_LIST);
-	$result = Database::query("SELECT * FROM $course_tool_table WHERE name='learnpath'",__FILE__,__LINE__);
+	$result = Database::query("SELECT * FROM $course_tool_table WHERE name='learnpath'");
 	if(Database::num_rows($result)>0)
 	{
 		$row = Database::fetch_array($result);
@@ -55,7 +55,7 @@ if (isset($_SESSION['gradebook'])){
 if (!empty($gradebook) && $gradebook=='view') {
 	$interbreadcrumb[]= array (
 			'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
-			'name' => get_lang('Gradebook')
+			'name' => get_lang('ToolGradebook')
 		);
 }
 

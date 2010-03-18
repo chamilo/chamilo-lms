@@ -1,5 +1,6 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $langScormVersion = "version";
 $langScormRestarted = "All the learning objects are now incomplete.";
@@ -21,7 +22,7 @@ $langScormPassed = "Passed";
 $langScormFailed = "Failed";
 $langScormPrevious = "Previous";
 $langScormNext = "Next";
-$langScormTitle = "Dokeos Scorm player";
+$langScormTitle = "Chamilo Scorm player";
 $langScormMystatus = "My progress";
 $langScormNoItems = "This course is empty.";
 $langScormNoStatus = "No status for this content";
@@ -45,11 +46,12 @@ $FileToUpload = "SCORM or AICC file to upload";
 $ContentMaker = "Authoring tool";
 $ContentProximity = "Course location";
 $UploadLocalFileFromGarbageDir = "Upload local file from main/archive directory";
-$ThisItemIsNotExportable = "This learning object or activity is not SCORM compliant. That\'s why it is not exportable.";
+$ThisItemIsNotExportable = "This learning object or activity is not SCORM compliant. That's why it is not exportable.";
 $MoveCurrentChapter = "Move the current section";
 $GenericScorm = "Generic Scorm";
-$UnknownPackageFormat = "The package format cannot be recognized. Please make sure it is well formed and doesn\'t contain errors. Problems may be due to proprietary ZIP format or transfer of long files. If unsure about the ZIP, please try to use minimal zipping features.";
+$UnknownPackageFormat = "The format of this package could not be recognized. Please check this is a valid package.";
 $Attempt = "Attempt";
 $MoveTheCurrentForum = "Move the current forum";
 $WarningWhenEditingScorm = "Warning ! When you edit the content of a learning object, you may alter the reporting of the course or damage the learning object.";
+$AdditionalProfileField = "Add user profile field";
 ?>

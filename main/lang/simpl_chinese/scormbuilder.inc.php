@@ -1,5 +1,6 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$langScormBuilder = "建立路径 - 建立Scorm格式课程";
+$langScormBuilder = "寤虹珛璺緞 - 寤虹珛Scorm鏍煎紡璇剧▼";
 ?>

@@ -1,44 +1,45 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $langMdCallingTool = "Belgeler";
-$langMdTitle = "Kurs Ba&#351;l&#305;&#287;&#305;";
-$langMdDescription = "Bu bilgiyi kaydetmek i�in Kaydet d�&#287;mesine bas&#305;n.";
+$langMdTitle = "Kurs Başlığı";
+$langMdDescription = "Bu bilgiyi kaydetmek için Kaydet düğmesine basın.";
 $langMdCoverage = "e.g. Bachelor of ...";
 $langMdCopyright = "e.g. provided the source is acknowledged";
 $langTool = "Belge Metadata";
-$langNoScript = "Script sizin taray&#305;c&#305;n&#305;zda �al&#305;&#351;t&#305;r&#305;lamad&#305;&#287;&#305; i�in l�tfen bu yaz&#305;n&#305;n alt&#305;ndaki par�ay&#305; yoksay&#305;n.";
-$langPressAgain = "Kaydet d�&#287;mesine tekrar bas&#305;n...";
-$langLanguageTip = "bu kursun haz&#305;rland&#305;&#287;&#305; lisan";
+$langNoScript = "Script sizin tarayıcınızda çalıştırılamadığı için lütfen bu yazının altındaki parçayı yoksayın.";
+$langPressAgain = "Kaydet düğmesine tekrar basın...";
+$langLanguageTip = "bu kursun hazırlandığı lisan";
 $langIdentifier = "Belirleyici";
-$langIdentifierTip = "unique identification for this learning object, composed of letters, digits, _-.()\'!*";
-$langTitleTip = "ba&#351;l&#305;k veya isim ve lisan&#305;";
-$langDescriptionTip = "a�&#305;klama veya tavsiye ve bu kursu a�&#305;klamada kullan&#305;lan lisan";
-$langKeyword = "Anahtar Kelimeler";
-$langKeywordTip = "virg�l ile ay&#305;r&#305;n ( harfler, say&#305;lar, -,)";
+$langIdentifierTip = "unique identification for this learning object, composed of letters, digits, _-.()'!*";
+$langTitleTip = "başlık veya isim ve lisanı";
+$langDescriptionTip = "açıklama veya tavsiye ve bu kursu açıklamada kullanılan lisan";
+$langKeyword = "Anahtar sözcük";
+$langKeywordTip = "virgül ile ayırın ( harfler, sayılar, -,)";
 $langCoverage = "Coverage";
 $langCoverageTip = "for example bachelor of xxx: yyy";
-$langKwNote = "E&#287;er a�&#305;klama lisan&#305;n&#305; de&#287;i&#351;tirirseniz, ayn&#305; zamanda anahtar kelimeleri eklemeyin";
-$langClickKw = "Se�mek veya se�imi iptal i�in bir anahtar kelimeye t&#305;klay&#305;n";
-$langKwHelp = "<br/> A�mak i�in  \'+\' , kapamak i�in \'-\' , hepsini a�mak i�in \'++\' , hepsini kapatmak i�in \'--\' d�&#287;mesine t&#305;klay&#305;n.<br/> <br/> Clear all selected keywords by closing the tree and opening it again with the \'+\' button.<br/> Alt-click \'+\' searches the original keywords in the tree.<br/> <br/> Alt-click keyword selects a keyword without broader terms or deselects a keyword with broader terms.<br/> <br/> If you change the description language, do not add keywords at the same time.<br/> <br/> ";
-$langRights = "Kullan&#305;m Haklar&#305;";
+$langKwNote = "Eğer açıklama lisanını değiştirirseniz, aynı zamanda anahtar kelimeleri eklemeyin";
+$langClickKw = "Seçmek veya seçimi iptal için bir anahtar kelimeye tıklayın";
+$langKwHelp = "<br/> Açmak için  '+' , kapamak için '-' , hepsini açmak için '++' , hepsini kapatmak için '--' düğmesine tıklayın.<br/> <br/> Clear all selected keywords by closing the tree and opening it again with the '+' button.<br/> Alt-click '+' searches the original keywords in the tree.<br/> <br/> Alt-click keyword selects a keyword without broader terms or deselects a keyword with broader terms.<br/> <br/> If you change the description language, do not add keywords at the same time.<br/> <br/>";
+$langRights = "Kullanım Hakları";
 $langRightsTip = "describe in words";
 $langVersion = "Version";
 $langVersionTip = "number or description";
-$langStatusTip = "listeden se�";
-$langCreatedSize = "Olu&#351;turuldu, boyutu";
+$langStatusTip = "listeden seç";
+$langCreatedSize = "Oluşturuldu, boyutu";
 $langCreatedSizeTip = "YYYY-MM-DD when created, size in octets (bytes)";
 $langAuthorTip = "in VCARD format";
 $langFormat = "Format";
-$langFormatTip = "listeden se�";
+$langFormatTip = "listeden seç";
 $langLocation = "URL/URI";
-$langLocationTip = "a�mak i�in t&#305;klay&#305;n";
+$langLocationTip = "açmak için tıklayın";
 $langStore = "Kaydet";
-$langDeleteAll = "B�t�n Metadata y&#305; sil";
+$langDeleteAll = "Bütün Metadata yı sil";
 $langConfirmDelete = "Do you *really* want to delete all metadata?";
-$langCourseKwds = "Bu belge ders anahtar kelimeleri i�eriyor";
-$langSearch = "Ara&#351;t&#305;r";
-$langSearchCrit = "Her sat&#305;ra bir kelime!";
+$langCourseKwds = "Bu belge ders anahtar kelimeleri i�eriyor";
+$langSearch = "Araştır";
+$langSearchCrit = "Her satıra bir kelime!";
 $langStatuses = ":draft:draft,, final:final,, revised:revised,, unavailable:unavailable";
 $langCosts = ":no:free, no cost,, yes:not free, cost";
 $langCopyrights = ":yes:copyright,, no:no copyright";

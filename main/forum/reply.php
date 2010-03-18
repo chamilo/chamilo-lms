@@ -1,25 +1,5 @@
 <?php
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2006-2008 Dokeos SPRL
-	Copyright (c) 2006 Ghent University (UGent)
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact address: Dokeos, 108 rue du Corbeau, B-1030 Brussels, Belgium
-	Mail: info@dokeos.com
-==============================================================================
-*/
+/* For licensing terms, see /license.txt */
 
 /**
 *	These files are a complete rework of the forum. The database structure is
@@ -46,7 +26,7 @@
 $language_file = array('forum','document');
 
 // including the global dokeos file
-require '../inc/global.inc.php';
+require_once '../inc/global.inc.php';
 
 // the section (tabs)
 $this_section=SECTION_COURSES;
@@ -56,9 +36,9 @@ api_protect_course_script(true);
 
 
 // including additional library scripts
-require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
-include_once (api_get_path(LIBRARY_PATH).'groupmanager.lib.php');
-$nameTools=get_lang('Forum');
+require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
+require_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
+$nameTools=get_lang('ToolForum');
 
 $origin = '';
 if(isset($_GET['origin'])) {
@@ -71,7 +51,7 @@ if(isset($_GET['origin'])) {
 	Including necessary files
 -----------------------------------------------------------
 */
-require 'forumconfig.inc.php';
+require_once 'forumconfig.inc.php';
 require_once 'forumfunction.inc.php';
 
 
@@ -94,6 +74,7 @@ $htmlHeadXtra[] = '<script>
 		MAIN DISPLAY SECTION
 ==============================================================================
 */
+
 /*
 -----------------------------------------------------------
 	Retrieving forum and forum categorie information
@@ -102,9 +83,9 @@ $htmlHeadXtra[] = '<script>
 // we are getting all the information about the current forum and forum category.
 // note pcool: I tried to use only one sql statement (and function) for this
 // but the problem is that the visibility of the forum AND forum cateogory are stored in the item_property table
-$current_thread=get_thread_information($_GET['thread']); // note: this has to be validated that it is an existing thread
-$current_forum=get_forum_information($current_thread['forum_id']); // note: this has to be validated that it is an existing forum.
-$current_forum_category=get_forumcategory_information($current_forum['forum_category']);
+$current_thread	= get_thread_information($_GET['thread']); // note: this has to be validated that it is an existing thread
+$current_forum	= get_forum_information($current_thread['forum_id']); // note: this has to be validated that it is an existing forum.
+$current_forum_category = get_forumcategory_information(Security::remove_XSS($current_forum['forum_category']));
 
 /*
 -----------------------------------------------------------
@@ -112,13 +93,13 @@ $current_forum_category=get_forumcategory_information($current_forum['forum_cate
 -----------------------------------------------------------
 */
 if (isset($_SESSION['gradebook'])){
-	$gradebook=	$_SESSION['gradebook'];
+	$gradebook = Security::remove_XSS($_SESSION['gradebook']);
 }
 
-if (!empty($gradebook) && $gradebook=='view') {
+if (!empty($gradebook) && $gradebook == 'view') {
 	$interbreadcrumb[]= array (
-			'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
-			'name' => get_lang('Gradebook')
+			'url' => '../gradebook/'.Security::remove_XSS($_SESSION['gradebook_dest']),
+			'name' => get_lang('ToolGradebook')
 		);
 }
 
@@ -174,13 +155,22 @@ if($origin=='learnpath') {
 // I have split this is several pieces for clarity.
 //if (!api_is_allowed_to_edit() AND (($current_forum_category['visibility']==0 OR $current_forum['visibility']==0) OR ($current_forum_category['locked']<>0 OR $current_forum['locked']<>0 OR $current_thread['locked']<>0)))
 if (!api_is_allowed_to_edit(false,true) AND (($current_forum_category['visibility']==0 OR $current_forum['visibility']==0))) {
-	forum_not_allowed_here();
+	$forum_allow = forum_not_allowed_here();
+	if ($forum_allow === false) {
+		exit;
+	}
 }
 if (!api_is_allowed_to_edit(false,true) AND ($current_forum_category['locked']<>0 OR $current_forum['locked']<>0 OR $current_thread['locked']<>0)) {
-	forum_not_allowed_here();
+	$forum_allow = forum_not_allowed_here();
+	if ($forum_allow === false) {
+		exit;
+	}
 }
 if (!$_user['user_id'] AND $current_forum['allow_anonymous']==0) {
-	forum_not_allowed_here();
+	$forum_allow = forum_not_allowed_here();
+	if ($forum_allow === false) {
+		exit;
+	}
 }
 /*
 -----------------------------------------------------------
@@ -201,28 +191,28 @@ if ($origin != 'learnpath') {
 -----------------------------------------------------------
 	Display Forum Category and the Forum information
 -----------------------------------------------------------
-*/
+*/ 
 echo "<table class=\"data_table\" width='100%'>\n";
 
 // the forum category
 echo "\t<tr>\n\t\t<th style=\"padding-left:5px;\" align=\"left\" colspan=\"2\">";
 
-echo '<span class="forum_title">'.prepare4display($current_thread['thread_title']).'</span><br />';
+echo '<span class="forum_title">'.prepare4display(Security::remove_XSS($current_thread['thread_title'])).'</span><br />';
 
 if (!empty ($current_forum_category['cat_title'])) {
-	echo '<span class="forum_low_description">'.prepare4display($current_forum_category['cat_title'])." - </span>";
+	echo '<span class="forum_low_description">'.prepare4display(Security::remove_XSS($current_forum_category['cat_title']))." - </span>";
 }
 
-echo '<span class="forum_low_description">'.prepare4display($current_forum['forum_title']).'</span>';
+//echo '<span class="forum_low_description">'.prepare4display(Security::remove_XSS($current_forum['forum_title'])).'</span>';
 echo "</th>\n";
 echo "\t</tr>\n";
 echo '</table>';
 
 // the form for the reply
-$my_action   = isset($_GET['action']) ? $_GET['action'] : '';
-$my_post     = isset($_GET['post']) ? $_GET['post'] : '';
+$my_action   = isset($_GET['action']) ? Security::remove_XSS($_GET['action']) : '';
+$my_post     = isset($_GET['post']) ?   Security::remove_XSS($_GET['post']) : '';
 $my_elements = isset($_SESSION['formelements']) ? $_SESSION['formelements'] : '';
-$values=show_add_post_form($my_action,$my_post, $my_elements); // note: this has to be cleaned first
+$values=show_add_post_form(Security::remove_XSS($my_action,$my_post, $my_elements)); // note: this has to be cleaned first
 
 if (!empty($values) AND isset($_POST['SubmitPost'])) {
 	store_reply($values);

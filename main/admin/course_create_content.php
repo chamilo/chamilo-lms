@@ -61,7 +61,7 @@ elseif( isset($_POST['action']))
 else
 {
 	echo get_lang('DummyCourseDescription');
-	echo '<form method="post"><input type="hidden" name="course_code" value="'.$_GET['course_code'].'"/><input type="submit" name="action" value="'.get_lang('Ok').'"/></form>';
+	echo '<form method="post"><input type="hidden" name="course_code" value="'.Security::remove_XSS($_GET['course_code']).'"/><input type="submit" name="action" value="'.get_lang('Ok').'"/></form>';
 }
 /*
 ==============================================================================

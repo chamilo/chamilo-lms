@@ -1,46 +1,47 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$langMdCallingTool = "Enllaces";
-$langMdTitle = "Nome del enllaz";
-$langMdDescription = "DescripciÛn del enllaz";
-$langMdCoverage = "Universal";
-$langMdCopyright = "Universid· de Gante";
-$nameTools = "variable d\'idioma caduca";
-$langTool = "Metadatos de los enllaces";
-$langNoScript = "El so navegador nun tien permisos pa scripts, por favor nun faiga casu a lo que se diz na parte d\'embaxo de la pantalla. Nun va funcionar...";
-$langLanguageTip = "idioma nel que se fizo esti oxetu d\'aprendizaxe";
+$langMdCallingTool = "Documentos";
+$langMdTitle = "T√≠tulu del oxetu d'aprendizaxe";
+$langMdDescription = "Pa guardar esta informaci√≥n, calque Guardar";
+$langMdCoverage = "por ex., Llicenci√°u en...";
+$langMdCopyright = "por ex., el que proporciona la fonte ye concoc√≠u.";
+$nameTools = "variable d'idioma caduca";
+$langTool = "Metadatos del documentu";
+$langNoScript = "El so navegador nun permite scripts, por favor nun faiga casu a lo que ve a la parte embaxo de la pantalla. Nun va funcionar....";
+$langLanguageTip = "idioma nel que l'oxetu d'aprendizaxe se fabric√≥";
 $langIdentifier = "Identificador";
-$langIdentifierTip = "identificador ˙nicu pa esti oxetu d\'aprendizaxe. Tien de tener lletres, n˙mberos, _-.()\\\'!*";
-$langTitleTip = "tÌtulu o nome, y tamiÈn idioma del tÌtulu o del nome";
-$langDescriptionTip = "descripciÛn o comentariu, y tamiÈn llingua na que se fizo la descripciÛn d\'esti oxetu d\'aprendizaxe";
-$langKeyword = "Palabres clave";
-$langKeywordTip = "separtar con comes (lletres, dÌxitos, -.)";
-$langCoverage = "CategorÌa";
-$langCoverageTip = "nome de la categorÌa, cfr. Enllaces";
-$langKwNote = "Si cambia l\'idioma de la descripciÛn, nun va poder amestar palabres clave al mesmu tiempu.";
-$langClickKw = "Calque enriba una palabra clave del ·rbol pa seleicionala o deseleicionala.";
-$langKwHelp = "<br/>Calque nel botÛn \'+\' p\'abrir, nel botÛn \'-\' pa pesllar, nel botÛn \'++\' p\'abrir too, nel botÛn \'--\' pa pesllar too.<br>Deseleicione toles palabres clave cerrando l\'·rbol y abriendolu otra vez col botÛn \'+\'.<br>Alt-clic \'+\' busca pallabres claves orixinales nel ·rbol.<br/>Alt-clic seleiciona les pallabres clave una por por, con o ensin tÈrminos m·s ·mplios.<br/><br/>Si cambia d\'idioma de descripciÛn, nun va poder amestar palabres clave al mesmu tiempu.";
+$langIdentifierTip = "Identificador √∫nicu pa esti oxetu d'aprendizaxe, tien de tener n√∫mberos, lletres o _-.()'!*";
+$langTitleTip = "t√≠tul o nome, y tami√©n idioma del t√≠tulu o del nome";
+$langDescriptionTip = "descripci√≥n o comentariu, y tami√©n idioma us√°u pa describir esti oxetu d'aprendizaxe";
+$langKeyword = "Pallabra clave";
+$langKeywordTip = "separtar por comes (lletres, dixitos, -.)";
+$langCoverage = "Dest√≠n";
+$langCoverageTip = "por exemplu llicenci√°u en xxx:yyy";
+$langKwNote = "Si cambia l'idioma de descripci√≥n, nun ameste pallabres claves al mesmu tiempu.";
+$langClickKw = "Calque na pallabra clave del √°rbol pa seleicionar o anular la seleici√≥n.";
+$langKwHelp = "<br/>Calque nel bot√≥n '+' p'abrir, nel bot√≥n '-' pa pesllar, nel bot√≥n '++' p'abrir too, nel bot√≥n '--' pa pesllalo too.<br/><br/>Anule la seleici√≥n de toles pallabres clave cerrando l'√°rbol y volviendo abrilu col bot√≥n '+'.<br/><br/>Alt+clic'+' busca les pallabres claves orixinales nel √°rbol.<br/><br/>Alt-clic seleiciona les pallabres clave ensin t√©rminos m√°s √°mplios o anula la seleici√≥n de pallabres clave con t√©rminos m√°s amplios.<br/><br/>Si cambia d'idioma de descripci√≥n, nun va poder amestar pallabres clave al mesmu tiempu.<br/><br/>";
 $langLocation = "URL/URI";
-$langLocationTip = "Calque p\'abrir l\'oxetu";
-$langStore = "Almacenar";
+$langLocationTip = "calque p'abrir l'oxetu";
+$langStore = "Guardar";
 $langDeleteAll = "Esborrar tolos metadatos";
-$langConfirmDelete = "ø Ta \"seguru\" de que quier esborrar tolos metadatos ?";
+$langConfirmDelete = "¬ø Ta \"seguru\" de que quier esborrar tolos metadatos ?";
 $langWorkOn = "en";
-$langNotInDB = "Nun esite esta categorÌa pal enllaz";
+$langNotInDB = "Nun esite esta categor√≠a pal enllaz";
 $langManifestSyntax = "(erru de sintaxis nel ficheru manifest...)";
-$langEmptyManifest = "(el ficheru manifest ta vacÌu...)";
+$langEmptyManifest = "(el ficheru manifest ta vac√≠u...)";
 $langNoManifest = "(nun esiste el ficheru manifest...)";
 $langNotFolder = "nun se pue, esto nun ye una carpeta...";
 $langContinue = "Siguir con";
-$langCreate = "Crear entraes de metadatos (MDE)";
+$langCreate = "Crear";
 $langRemove = "Esborrar entraes de metadatos (MDE)";
-$langAllRemovedFor = "Toles entraes quit·rense de la categorÌa";
-$langRemainingFor = "entraes caduques quitaes por categorÌa";
-$langIndex = "Õndiz de palabres";
-$langTotalMDEs = "Total d\'entraes de metadatos (MD) de los enllaces";
-$langMainMD = "Abrir la p·xina d\'entamu d\'entraes de metadatos (MDE)";
-$langOrElse = "Escoyer una categorÌa d\'enllaces";
-$langWarningDups = "° - los nomes de categorÌa duplicaos van quitase del llist·u !";
-$langSLC = "Trabayar cola categorÌa d\'enllaz nomada ";
+$langAllRemovedFor = "Toles entraes quit√°rense de la categor√≠a";
+$langRemainingFor = "entraes caduques quitaes por categor√≠a";
+$langIndex = "√çndiz de palabres";
+$langTotalMDEs = "Total d'entraes de metadatos (MD) de los enllaces";
+$langMainMD = "Abrir la p√°xina d'entamu d'entraes de metadatos (MDE)";
+$langOrElse = "Escoyer una categor√≠a d'enllaces";
+$langWarningDups = "¬° - los nomes de categor√≠a duplicaos van quitase del llist√°u !";
+$langSLC = "Trabayar cola categor√≠a d'enllaz nomada";
 ?>

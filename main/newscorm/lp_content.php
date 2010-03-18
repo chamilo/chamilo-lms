@@ -1,15 +1,17 @@
-<?php //$id: $
+<?php
+/* For licensing terms, see /license.txt */
 /**
  * Script that displays an error message when no content could be loaded
- * @package dokeos.learnpath
+ * @package chamilo.learnpath
  * @author Yannick Warnier <ywarnier@beeznest.org>
  */
-/**
- * Nothing very interesting
- */
+
+// including the global file
+require_once '../inc/global.inc.php'; 
+
 $debug = 0;
 if($debug>0){error_log('New lp - In lp_content.php',0);}
-if(empty($lp_controller_touched)){
+if (empty($lp_controller_touched)) {
 	if($debug>0){error_log('New lp - In lp_content.php - Redirecting to lp_controller',0);}
 	header('location: lp_controller.php?action=content&lp_id='.Security::remove_XSS($_REQUEST['lp_id']).'&item_id='.Security::remove_XSS($_REQUEST['item_id']));
 }
@@ -82,7 +84,7 @@ if (isset($_SESSION['gradebook'])){
 if (!empty($gradebook) && $gradebook=='view') {
 	$interbreadcrumb[]= array (
 			'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
-			'name' => get_lang('Gradebook')
+			'name' => get_lang('ToolGradebook')
 		);
 }
 // Define the 'doc.inc.php' as language file

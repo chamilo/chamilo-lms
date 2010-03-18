@@ -88,7 +88,7 @@ if ($reservation[0][9] < $reservation[0][4]) {
 
 		$sql = "SELECT start_at, end_at FROM ".Rsys :: getTable('subscription')."
 				WHERE reservation_id='".$reservationid."' and end_at > NOW() ORDER BY start_at";
-		$result = Database::query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql);
 		if (Database::num_rows($result) != 0){
 			$start_end = "<ul>";
 			while ($array = Database::fetch_array($result)) {

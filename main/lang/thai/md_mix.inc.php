@@ -1,18 +1,19 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$langTool = "Metadata";
-$langClickKw = "คลิกที่ของคำสำคัญในลำดับชั้นของไฟล์เพื่อเลือกหรือไม่เลือกรายการ";
-$langKwHelp = "<br/>คลิกเครื่องหมายบวก \'+\' เพื่อเปิด, \'-\' คลิกเครื่องหมายลบเพื่อปิด, \'++\' คลิกเครื่องหมายนี้เพื่อเปิดทั้งหมด, \'--\' คลิกเครื่องหมายนี้เพื่อปิดทั้งหมด.<br/> <br/> ล้างคำสำคัญทั้งหมดโดยปิดลำดับชั้นของไฟล์และเปิดอีกครั้งด้วยเครื่องหมาย \'+\'.<br/> กดปุ่ม Alt และคลิกเครื่องหมาย \'+\' เพื่อเลือกรายการคำสำคัญที่ผ่านมา.<br/> <br/> กดปุ่ม Alt และคลิกคำสำคัญเพื่อยกเลิกการค้นคำสำคัญ.<br/>";
-$langAdvanced = "ขั้นสูง";
-$langSearch = "ค้นหา";
-$langSearchCrit = "ใช้พื้นที่นี้อธิบายความหมายของคำ หนึ่งคำต่อหนึ่งบรรทัด";
-$langNoKeywords = "วิชานี้ไม่มีคำสำคัญ";
-$langKwCacheProblem = "แคชคำสำคัญไม่สามารถเปิดได้";
-$langCourseKwds = "คำสำคัญของวิชา";
-$langKwdsInMD = "คำสำคัญที่ใช้ในMD";
-$langKwdRefs = "การอ้างอิงคำสำคัญ";
-$langNonCourseKwds = "ไม่มีคำสำคัญของวิชา ";
-$langKwdsUse = "คำสำคัญของวิชา(ตัวหนา=ไม่ใช้)";
-$langTotalMDEs = "จำนวนรายการทั้งหมดของ MD";
+$langTool = "เน€เธญเธเธชเธฒเธฃ Metadata";
+$langClickKw = "Click a keyword in the tree to select or deselect it.";
+$langKwHelp = "<br/>เธเธฅเธดเธเธเธธเนเธกเธเธงเธ '+' เน€เธเธทเนเธญเน€เธเธดเธ”,เธฅเธ '-' เน€เธเธทเนเธญเธเธดเธ”, '++' button to open all, '--' button to close all..<br/> <br/> Clear all selected keywords by closing the tree and opening it again with the '+' button.<br/> Alt-click '+' searches the original keywords in the tree.<br/> <br/> Alt-click keyword selects a keyword without broader terms or deselects a keyword with broader terms.<br/> <br/> If you change the description language, do not add keywords at the same time.<br/> <br/>";
+$langAdvanced = "เธเธฑเนเธเธชเธนเธ";
+$langSearch = "เธเนเธเธซเธฒ Search";
+$langSearchCrit = "เธซเธเธถเนเธเธเธณเธ•เนเธญเธเธฃเธฃเธ—เธฑเธ”! One word per line!";
+$langNoKeywords = "๏ฟฝิชาน๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝีค๏ฟฝ๏ฟฝำคัญ";
+$langKwCacheProblem = "เนเธเธเธเธณเธชเธณเธเธฑเธเนเธกเนเธชเธฒเธกเธฒเธฃเธ–เน€เธเธดเธ”เนเธ”เน";
+$langCourseKwds = "๏ฟฝอก๏ฟฝ๏ฟฝรน๏ฟฝ๏ฟฝ๏ฟฝีค๏ฟฝ๏ฟฝำคัญ๏ฟฝอง๏ฟฝิช๏ฟฝ";
+$langKwdsInMD = "เธเธณเธชเธณเธเธฑเธเธ—เธตเนเนเธเนเนเธMD";
+$langKwdRefs = "เธเธฒเธฃเธญเนเธฒเธเธญเธดเธเธเธณเธชเธณเธเธฑเธ";
+$langNonCourseKwds = "เนเธกเนเธกเธตเธเธณเธชเธณเธเธฑเธเธเธญเธเธงเธดเธเธฒ";
+$langKwdsUse = "เธเธณเธชเธณเธเธฑเธเธเธญเธเธงเธดเธเธฒ(เธ•เธฑเธงเธซเธเธฒ=เนเธกเนเนเธเน)";
+$langTotalMDEs = "เธฃเธงเธกเธเธณเธเธงเธเธเธฒเธฃเน€เธเธทเนเธญเธกเนเธขเธเธ—เธตเนเธกเธตเธเธญเธ MD";
 ?>

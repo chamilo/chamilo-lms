@@ -1,5 +1,6 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $langMdCallingTool = "Documente";
 $langMdTitle = "Invatare titlu obiect";
@@ -8,13 +9,13 @@ $langMdCoverage = "ex. absolvent ...";
 $langMdCopyright = "ex. daca sursa este acceptata";
 $langTool = "Document Metadata";
 $langNoScript = "Scriptul nu este activat in browserul dvs, va rugam sa ignorati partea de mai jos a ecranului, nu va functiona...";
-$langPressAgain = "Apasa \'Memorare\' din nou...";
+$langPressAgain = "Apasa 'Memorare' din nou...";
 $langLanguageTip = "limba in care a fost a fost creat acest obiect de invatare";
 $langIdentifier = "Identificator";
-$langIdentifierTip = "identificare unica pentru acest obiect de invatare, compusa din litere,cifre,  _-.()\'!*";
+$langIdentifierTip = "identificare unica pentru acest obiect de invatare, compusa din litere,cifre,  _-.()'!*";
 $langTitleTip = "titlu si nume, si limba a acelui titlu sau nume";
-$langDescriptionTip = "descriere sau comentarii si limba folosita pentru detalierea acestui obiect ";
-$langKeyword = "Cuvinte cheie";
+$langDescriptionTip = "descriere sau comentarii si limba folosita pentru detalierea acestui obiect";
+$langKeyword = "Cuvant cheie";
 $langKeywordTip = "separea prin virgula (litere, cifre, -.)";
 $langCoverage = "Acoperire";
 $langCoverageTip = "de exemplu absolvent al xxx: yyy";

@@ -1,24 +1,25 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$AddResult = "Lägg till resultat";
+$AddResult = "LÃ¤gg till resultat";
 $ExportPDF = "Exportera till PDF";
 $Print = "Skriv ut";
-$ChooseOrientation = "Välj orientering";
-$Portrait = "Stående";
+$ChooseOrientation = "VÃ¤lj orientering";
+$Portrait = "StÃ¥ende";
 $Landscape = "Liggande";
 $DeleteAll = "Ta bort alla";
 $ViewResult = "Visa resultat";
-$AddStudent = "Lägg till användare";
+$AddStudent = "LÃ¤gg till anvÃ¤ndare";
 $Location = "Plats";
 $FileType = "Filtyp";
 $ExampleCSVFile = "CSV-filexempel";
 $ExampleXMLFile = "XML-filexempel";
 $IgnoreErrors = "Ignorera fel";
-$LinkAdded = "Länk tillagd";
-$LinkDeleted = "Länk borttagen";
+$LinkAdded = "LÃ¤nk tillagd";
+$LinkDeleted = "LÃ¤nk borttagen";
 $Average = "Genomsnitt";
 $ViewStatistics = "Visa statistik";
-$TotalUser = "Totalt för användaren";
+$TotalUser = "Totalt fÃ¶r anvÃ¤ndaren";
 $AverageTotal = "Genomsnitt totalt";
 ?>

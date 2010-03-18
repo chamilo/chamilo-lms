@@ -1,8 +1,9 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $ResourceAdded = "Resurse adaugate. Te poti intoarce sau adauga mai multe resurse.";
-$LearningPath = "Calea de Invatare";
+$LearningPath = "Cale";
 $LevelUp = "nivel ridicat";
 $AddIt = "Adauga-l";
 $MainCategory = "categoria principala";
@@ -31,7 +32,7 @@ $CourseDescriptionAdd = "Adauga o pagina ce contine descrierea cursului la acest
 $GroupsAdd = "Adauga pagina grupurilor la aces capitol.";
 $UsersAdd = "Adauga pagina utilizatorilor la acest capitol.";
 $ExportableCourseResources = "Resursele cursului exportabile";
-$DokeosRelatedCourseMaterial = "Dokeos relateaza resursele cursului";
+$DokeosRelatedCourseMaterial = "Chamilo relateaza resursele cursului";
 $LinkTarget = "Tinta linkului";
 $SameWindow = "In aceeasi fereastra";
 $NewWindow = "In fereastra noua";
@@ -40,19 +41,19 @@ $StepDeleted2 = "componenta a fost stearsa in aceea unealta.";
 $Modify = "modifica";
 $Chapter = "Capitol";
 $NoAgendaItems = "Nu sunt componente in agenda";
-$AgendaAdd = "Adauga un component la agenda";
-$UserGroupFilter = "Filtru pentru grupul de utilizator";
-$AgendaSortChronologicallyUp = "Ordoneaza agenda dupa data (sus)";
-$ShowCurrent = "Arata componentele existente ale agendei";
-$ModifyCalendarItem = "Modifica componentul agendei";
-$ItemTitle = "Titlu";
-$Detail = "Detalii";
-$EditSuccess = "Editare reusita";
-$AddCalendarItem = "Adauga un component la agenda";
+$AgendaAdd = "Adauga item nou";
+$UserGroupFilter = "Filtreaza grupuri/utilizatori";
+$AgendaSortChronologicallyUp = "Ordine crescatoare";
+$ShowCurrent = "Prezinta itemii lunii curente";
+$ModifyCalendarItem = "Modifica item din Agenda";
+$ItemTitle = "Titlul itemului";
+$Detail = "Detaliu";
+$EditSuccess = "Itemul a fost editat";
+$AddCalendarItem = "Adauga item in agenda;";
 $AddAnn = "Adauga anunt";
 $ForumAddNewTopic = "Forum: adauga un subiect de discutie nou";
 $ForumEditTopic = "Forum: editeaza subiectul de discutie";
 $ExerciseAnswers = "Exercitiu: Raspunsuri";
 $ForumReply = "Forum: raspunde";
-$AgendaSortChronologicallyDown = "Sorteaza agenda cronologic";
+$AgendaSortChronologicallyDown = "Ordine descrescatoare";
 ?>

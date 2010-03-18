@@ -127,7 +127,7 @@ if (isset($_SESSION['gradebook'])){
 if (!empty($gradebook) && $gradebook=='view') {
 	$interbreadcrumb[]= array (
 			'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
-			'name' => get_lang('Gradebook')
+			'name' => get_lang('ToolGradebook')
 		);
 }
 
@@ -213,7 +213,7 @@ if (isset($_POST['save_audio']))
 	}
 	if (count($lp_items_to_remove_audio)>0) {
 		$sql 	= "UPDATE $tbl_lp_item SET audio = '' WHERE id IN (".$in.")";
-		$result = Database::query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql);
 	}
 
 	// uploading the audio files
@@ -229,9 +229,7 @@ if (isset($_POST['save_audio']))
 			$filepath = api_get_path('SYS_COURSE_PATH').$_course['path'].'/document/';
 			if(!is_dir($filepath.'audio'))
 			{
-				$perm = api_get_setting('permissions_for_new_directories');
-				$perm = octdec(!empty($perm)?$perm:'0770');
-				mkdir($filepath.'audio',$perm);
+				mkdir($filepath.'audio', api_get_permissions_for_new_directories());
 				$audio_id=add_document($_course,'/audio','folder',0,'audio');
 				api_item_property_update($_course, TOOL_DOCUMENT, $audio_id, 'FolderCreated', api_get_user_id(),null,null,null,null,api_get_session_id());
 			}
@@ -273,7 +271,7 @@ if (isset($_POST['save_audio']))
 			// store the mp3 file in the lp_item table
 			$tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
 			$sql_insert_audio = "UPDATE $tbl_lp_item SET audio = '".Database::escape_string($file)."' WHERE id = '".Database::escape_string($lp_item_id)."'";
-			Database::query($sql_insert_audio, __FILE__, __LINE__);
+			Database::query($sql_insert_audio);
 
 		}
 	}

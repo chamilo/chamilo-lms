@@ -110,7 +110,7 @@ if (!empty($_GET['gradebook']) && $_GET['gradebook']=='view' ) {
 if (!empty($gradebook) && $gradebook=='view') {
 	$interbreadcrumb[] = array (
 		'url' => '../gradebook/' . $_SESSION['gradebook_dest'],
-		'name' => get_lang('Gradebook')
+		'name' => get_lang('ToolGradebook')
 	);
 }
 
@@ -232,7 +232,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'notify' AND isset($_GET['conte
 	------------------------------------------------------------------------------------------------------
 		Display Forum Categories and the Forums in it
 	------------------------------------------------------------------------------------------------------
-	*/
+	*/ 
 	echo '<table class="data_table">'."\n";
 	// Step 3: we display the forum_categories first
 	if(is_array($forum_categories_list)) {
@@ -242,16 +242,16 @@ if (isset($_GET['action']) && $_GET['action'] == 'notify' AND isset($_GET['conte
 			$session_img = api_get_session_image($forum_category['session_id'], $_user['status']);
 		
 			if((!isset($_SESSION['id_session']) || $_SESSION['id_session']==0) && !empty($forum_category['session_name'])) {
-				$session_displayed = ' ('.$forum_category['session_name'].')';
+				$session_displayed = ' ('.Security::remove_XSS($forum_category['session_name']).')';
 			} else {
 				$session_displayed = '';
 			}
 
 			echo "\t<tr>\n\t\t<th style=\"padding-left:5px;\" align=\"left\" colspan=\"5\">";
-			echo '<a href="viewforumcategory.php?'.api_get_cidreq().'&forumcategory='.prepare4display($forum_category['cat_id']).'" '.class_visible_invisible(prepare4display($forum_category['visibility'])).'>'.prepare4display($forum_category['cat_title']).$session_displayed.'</a>'. $session_img .'<br />';
+			echo '<a href="viewforumcategory.php?'.api_get_cidreq().'&forumcategory='.prepare4display(Security::remove_XSS($forum_category['cat_id'])).'" '.class_visible_invisible(prepare4display($forum_category['visibility'])).'>'.prepare4display(Security::remove_XSS($forum_category['cat_title'])).$session_displayed.'</a>'. $session_img .'<br />';
 			
 			if ($forum_category['cat_comment']<>'' AND trim($forum_category['cat_comment'])<>'&nbsp;') {  
-				echo '<span class="forum_description">'.prepare4display($forum_category['cat_comment']).'</span>';
+				echo '<span class="forum_description">'.prepare4display(Security::remove_XSS($forum_category['cat_comment'],STUDENT)).'</span>';
 			}
 			echo "</th>\n";
 
@@ -276,7 +276,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'notify' AND isset($_GET['conte
 			echo "\t</tr>\n";
 
 			// the forums in this category
-			$forums_in_category=get_forums_in_category($forum_category['cat_id']);
+		$forums_in_category=get_forums_in_category($forum_category['cat_id']);
 
 			// step 5: we display all the forums in this category.
 			$forum_count=0;
@@ -297,7 +297,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'notify' AND isset($_GET['conte
 
 				// note: this can be speeded up if we transform the $forum_list to an array that uses the forum_category as the key.
 				if (prepare4display($forum['forum_category'])==prepare4display($forum_category['cat_id'])) {
-					// the forum has to be showed if
+				// the forum has to be showed if
 					// 1.v it is a not a group forum (teacher and student)
 					// 2.v it is a group forum and it is public (teacher and student)
 					// 3. it is a group forum and it is private (always for teachers only if the user is member of the forum
@@ -345,8 +345,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'notify' AND isset($_GET['conte
 
 
 					//echo '<hr>';
-
-					if ($show_forum) {
+						if ($show_forum) {
 						$form_count++;
 						$mywhatsnew_post_info=isset($whatsnew_post_info[$forum['forum_id']]) ? $whatsnew_post_info[$forum['forum_id']]: null;
 						echo "\t<tr class=\"forum\">\n";
@@ -385,7 +384,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'notify' AND isset($_GET['conte
 
 						}
 						echo "</td>\n";
-						
+					
 						//validacion when belongs to a session
 						$session_img = api_get_session_image($forum['session_id'], $_user['status']);
 						
@@ -404,8 +403,8 @@ if (isset($_GET['action']) && $_GET['action'] == 'notify' AND isset($_GET['conte
 							$session_displayed = '';
 						}
 						$forum['forum_of_group']==0?$groupid='':$groupid=$forum['forum_of_group'];
-
-						echo "\t\t<td><a href=\"viewforum.php?".api_get_cidreq()."&gidReq=".Security::remove_XSS($groupid)."&forum=".prepare4display($forum['forum_id'])."\" ".class_visible_invisible(prepare4display($forum['visibility'])).">".prepare4display($forum['forum_title']).$session_displayed.'</a>'.$forum_title_group_addition.'<br />'.prepare4display($forum['forum_comment'])."</td>\n";
+						
+						echo "\t\t<td><a href=\"viewforum.php?".api_get_cidreq()."&gidReq=".Security::remove_XSS($groupid)."&forum=".prepare4display($forum['forum_id'])."\" ".class_visible_invisible(prepare4display($forum['visibility'])).">".prepare4display(Security::remove_XSS($forum['forum_title'])).$session_displayed.'</a>'.$forum_title_group_addition.'<br />'.prepare4display(Security::remove_XSS($forum['forum_comment'],STUDENT))."</td>\n";
 						//$number_forum_topics_and_posts=get_post_topics_of_forum($forum['forum_id']); // deprecated
 						// the number of topics and posts
 						$number_threads=isset($forum['number_of_threads']) ? $forum['number_of_threads'] : null;
@@ -423,7 +422,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'notify' AND isset($_GET['conte
 						echo "\t\t<td nowrap=\"nowrap\">";
 
 						if (!empty($forum['last_post_id'])) {
-							echo $forum['last_post_date']."<br /> ".get_lang('By').' '.display_user_link($poster_id, $name);
+							echo api_convert_and_format_date($forum['last_post_date'], null, date_default_timezone_get())."<br /> ".get_lang('By').' '.display_user_link($poster_id, $name);
 						}
 						echo "</td>\n";
 						echo "\t\t<td nowrap=\"nowrap\" align=\"center\">";
@@ -447,7 +446,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'notify' AND isset($_GET['conte
 						}
 						echo "</td>\n";
 						echo "\t</tr>";
-					}
+					} 
 				}
 			}
 
@@ -455,7 +454,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'notify' AND isset($_GET['conte
 				echo "\t<tr><td>".get_lang('NoForumInThisCategory')."</td>".(api_is_allowed_to_edit(false,true)?'<td colspan="6"></td>':'<td colspan="6"></td>')."</tr>\n";
 			}
 		}
-	}
+	} 
 	echo "</table>\n";
 
 /*

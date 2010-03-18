@@ -27,8 +27,6 @@ $display_progress_bar = true;
 require_once('learnpathList.class.php');
 require_once('learnpath.class.php');
 require_once('learnpathItem.class.php');
-//$charset = 'UTF-8';
-//$charset = 'ISO-8859-1';
 
 /**
  * Display initialisation and security checks
@@ -167,7 +165,7 @@ if ($is_allowed_to_edit)
   		//xport now is inside "Edit"
   		//'<th>'.get_lang('ExportShort')."</th>\n" .
 		'<th>'.get_lang('AuthoringOptions')."</th>\n";
-		
+
 	// only available for not session mode
 	if ($current_session == 0) {
 		echo'<th>'.get_lang('Move')."</th>\n";
@@ -192,7 +190,7 @@ if (is_array($flat_list))
 	{
 		//validacion when belongs to a session
 		$session_img = api_get_session_image($details['lp_session'], $_user['status']);
-		
+
 	    if(!$is_allowed_to_edit && $details['lp_visibility'] == 0)
 	    {
 	    	// This is a student and this path is invisible, skip
@@ -252,7 +250,7 @@ if (is_array($flat_list))
 	    	if ($current_session == $details['lp_session']) {
 		    	$dsp_desc = '<td valign="middle" style="color: grey; padding-top:1em;"><em>'.$details['lp_maker'].'</em>  &nbsp;&nbsp; '.$details['lp_proximity'].' &nbsp;&nbsp; '.$details['lp_encoding'].'<a href="lp_controller.php?'.api_get_cidreq().'&action=edit&lp_id='.$id.'">&nbsp;&nbsp;<img src="../img/edit.gif" border="0" title="'.get_lang('_edit_learnpath').'"></a></td>'."\n";
 	    	} else {
-				$dsp_desc = '<td valign="middle" style="color: grey; padding-top:1em;"><em>'.$details['lp_maker'].'</em>  &nbsp;&nbsp; '.$details['lp_proximity'].' &nbsp;&nbsp; '.$details['lp_encoding'].'<img src="../img/edit_na.gif" border="0" title="'.get_lang('_edit_learnpath').'"></td>'."\n";	    		
+				$dsp_desc = '<td valign="middle" style="color: grey; padding-top:1em;"><em>'.$details['lp_maker'].'</em>  &nbsp;&nbsp; '.$details['lp_proximity'].' &nbsp;&nbsp; '.$details['lp_encoding'].'<img src="../img/edit_na.gif" border="0" title="'.get_lang('_edit_learnpath').'"></td>'."\n";
 	    	}
 
 			/* export */
@@ -282,7 +280,7 @@ if (is_array($flat_list))
 			$dsp_edit = '<td align="center">';
 	    	$dsp_edit_close = '</td>';
 
-			/*   BUILD    */ 
+			/*   BUILD    */
 			if ($current_session == $details['lp_session']) {
 				if($details['lp_type']==1 || $details['lp_type']==2){
 					$dsp_build = '<a href="lp_controller.php?'.api_get_cidreq().'&amp;action=build&amp;lp_id='.$id.'"><img src="../img/wizard.gif" border="0" title="'.get_lang("Build").'"></a>&nbsp;';
@@ -291,11 +289,11 @@ if (is_array($flat_list))
 				}
 			} else {
 				$dsp_build = '<img src="../img/wizard_gray.gif" border="0" title="'.get_lang("Build").'">&nbsp;';
-			} 
-			
-			
-			
-			
+			}
+
+
+
+
 			/* VISIBILITY COMMAND */
 
 			if ($current_session == $details['lp_session']) {
@@ -316,7 +314,7 @@ if (is_array($flat_list))
 			} else {
 				$dsp_visible = '<img src="../img/invisible.gif" border="0" title="'.get_lang('Show').'" />';
 			}
-		
+
 
 			/* PUBLISH COMMAND */
 
@@ -338,9 +336,9 @@ if (is_array($flat_list))
 			} else {
 				$dsp_publish = '<img src="../img/invisible_LP_list.gif" border="0" title="'.get_lang('_no_publish').'" />';
 			}
-			
-			
-			/*  MULTIPLE ATTEMPTS    */ 
+
+
+			/*  MULTIPLE ATTEMPTS    */
 			if ($current_session == $details['lp_session']) {
 				if($details['lp_prevent_reinit']==1){
 					$dsp_reinit = '<a href="lp_controller.php?'.api_get_cidreq().'&action=switch_reinit&lp_id='.$id.'">' .
@@ -354,14 +352,14 @@ if (is_array($flat_list))
 			} else {
 					$dsp_reinit = '<img src="../img/kaboodleloop_gray.gif" border="0" alt="Allow reinit" title="'.get_lang("AllowMultipleAttempts").'"/>';
 			}
-			
-			
-			
-			
+
+
+
+
 			/* FUll screen VIEW */
-			 
+
 			if ($current_session == $details['lp_session']) {
-			
+
 				/* Default view mode settings (fullscreen/embedded) */
 				if($details['lp_view_mode'] == 'fullscreen'){
 					$dsp_default_view = '<a href="lp_controller.php?'.api_get_cidreq().'&action=switch_view_mode&lp_id='.$id.'">' .
@@ -390,9 +388,9 @@ if (is_array($flat_list))
 						'</a>&nbsp;';
 			}
 			*/
-			
+
 			/*  DEBUG  */
-			
+
 			if($test_mode == 'test' or api_is_platform_admin()) {
 				if($details['lp_scorm_debug']==1){
 					$dsp_debug = '<a href="lp_controller.php?'.api_get_cidreq().'&action=switch_scorm_debug&lp_id='.$id.'">' .
@@ -403,9 +401,9 @@ if (is_array($flat_list))
 							'<img src="../img/bug_gray.gif" border="0" alt="'.get_lang("ShowDebug").'" title="'.get_lang("ShowDebug").'"/>' .
 							'</a>&nbsp;';
 				}
-		 	}	 	
-		 	
-		 		 	
+		 	}
+
+
 		 	/* DELETE COMMAND */
 			if ($current_session == $details['lp_session']) {
 				$dsp_delete = "<a href=\"lp_controller.php?".api_get_cidreq()."&action=delete&lp_id=$id\" " .
@@ -415,7 +413,7 @@ if (is_array($flat_list))
 			} else {
 				$dsp_delete = '<img src="../img/delete_na.gif" border="0" title="'.get_lang('_delete_learnpath').'" />';
 			}
-			
+
 			if($details['lp_prevent_reinit']==1){
 				$dsp_reinit = '<a href="lp_controller.php?'.api_get_cidreq().'&action=switch_reinit&lp_id='.$id.'">' .
 						'<img src="../img/kaboodleloop_gray.gif" border="0" alt="Allow reinit" title="'.get_lang("AllowMultipleAttempts").'"/>' .
@@ -465,12 +463,12 @@ if (is_array($flat_list))
 
 			//hide icon export scorm
 			//$dsp_disk='';
-			
+
 			/* COLUMN ORDER	 */
 			// only active in a not session mode
-			
+
 			if ($current_session == 0) {
-				
+
 				if($details['lp_display_order'] == 1 && $max != 1)
 		    	{
 		    		$dsp_order .= '<td><a href="lp_controller.php?'.api_get_cidreq().'&action=move_lp_down&lp_id='.$id.'">' .

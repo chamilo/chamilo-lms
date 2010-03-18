@@ -1,25 +1,26 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$GeneralDescription = "Általános meghatározás";
-$GeneralDescriptionQuestions = "Hol van a kurzus helye a képzési programban? Hogyan kapcsolódik a kurzus más kurzusokhoz?";
-$GeneralDescriptionInformation = "A kurzus meghatározása (órák száma, hivatalos kód, osztályterem helye, stb.) és az oktató bemutatása (név, fogadóóra ideje, helye, telefonszáma, e-mail címe)";
-$Objectives = "Célkit&#369;zések";
-$ObjectivesInformation = "A kurzus átfogó, részletes céljainak bemutatása";
-$ObjectivesQuestions = "Mire lesznek képesek a hallgatók a kurzus befejezésekor. Mit várnak el t&#337;lük a kurzus alatt.";
-$Topics = "Témakörök";
-$TopicsInformation = "A kurzushoz tartozó témakörök listája. Az egyes témakörök fontossága. Nehézségi szintek. A különböz&#337; részek struktúrája és egymástól függ&#337;sége.";
-$TopicsQuestions = "Hogyan fog lezajlani a kurzus? Mire kell a hallgatóknak különösen figyelmet fordítani? Vannak ismert nehézségek a különböz&#337; fejezetek megértésénél? Mennyi id&#337;t ajánlott eltölteni a kurzus különböz&#337; részeivel?";
-$Methodology = "Metodológia";
-$MethodologyQuestions = "Milyen metódusok és tanulási tevékenységek segítik kurzusban a célok elérését? Milyen ütemezés szerint?";
-$MethodologyInformation = "A tevékenységek bemutatása (konferencia, dolgozatok, csoportos kutatás, labor, stb.)";
+$GeneralDescription = "ÃltalÃ¡nos meghatÃ¡rozÃ¡s";
+$GeneralDescriptionQuestions = "Hol van a kurzus helye a kÃ©pzÃ©si programban? Hogyan kapcsolÃ³dik a kurzus mÃ¡s kurzusokhoz?";
+$GeneralDescriptionInformation = "A kurzus meghatÃ¡rozÃ¡sa (Ã³rÃ¡k szÃ¡ma, hivatalos kÃ³d, osztÃ¡lyterem helye, stb.) Ã©s az oktatÃ³ bemutatÃ¡sa (nÃ©v, fogadÃ³Ã³ra ideje, helye, telefonszÃ¡ma, e-mail cÃ­me)";
+$Objectives = "CÃ©lkitÅ±zÃ©sek";
+$ObjectivesInformation = "A kurzus Ã¡tfogÃ³, rÃ©szletes cÃ©ljainak bemutatÃ¡sa";
+$ObjectivesQuestions = "Mire lesznek kÃ©pesek a hallgatÃ³k a kurzus befejezÃ©sekor. Mit vÃ¡rnak el tÅ‘lÃ¼k a kurzus alatt.";
+$Topics = "TÃ©mÃ¡k";
+$TopicsInformation = "A kurzushoz tartozÃ³ tÃ©makÃ¶rÃ¶k listÃ¡ja. Az egyes tÃ©makÃ¶rÃ¶k fontossÃ¡ga. NehÃ©zsÃ©gi szintek. A kÃ¼lÃ¶nbÃ¶zÅ‘ rÃ©szek struktÃºrÃ¡ja Ã©s egymÃ¡stÃ³l fÃ¼ggÅ‘sÃ©ge.";
+$TopicsQuestions = "Hogyan fog lezajlani a kurzus? Mire kell a hallgatÃ³knak kÃ¼lÃ¶nÃ¶sen figyelmet fordÃ­tani? Vannak ismert nehÃ©zsÃ©gek a kÃ¼lÃ¶nbÃ¶zÅ‘ fejezetek megÃ©rtÃ©sÃ©nÃ©l? Mennyi idÅ‘t ajÃ¡nlott eltÃ¶lteni a kurzus kÃ¼lÃ¶nbÃ¶zÅ‘ rÃ©szeivel?";
+$Methodology = "MetodolÃ³gia";
+$MethodologyQuestions = "Milyen metÃ³dusok Ã©s tanulÃ¡si tevÃ©kenysÃ©gek segÃ­tik kurzusban a cÃ©lok elÃ©rÃ©sÃ©t? Milyen Ã¼temezÃ©s szerint?";
+$MethodologyInformation = "A tevÃ©kenysÃ©gek bemutatÃ¡sa (konferencia, dolgozatok, csoportos kutatÃ¡s, labor, stb.)";
 $CourseMaterial = "Kurzus tananyagok";
-$CourseMaterialQuestions = "Van-e a kurzusnak tankönyve, tartoznak-e hozzá jegyzetek, van-e hozzá biográfia, hivatkozások az interneten? ";
-$CourseMaterialInformation = "A kurzushoz kapcsoló tananyagok rövid leírása";
-$HumanAndTechnicalResources = "Emberi és technikai er&#337;források";
-$HumanAndTechnicalResourcesQuestions = "Vannak tanárok, konzulensek, technikai helpdesk, szociális tanácsadók, számítógép-termek?";
-$HumanAndTechnicalResourcesInformation = "A különböz&#337; kapcsolattartó személyek és használható technikai eszközök bemutatása.";
-$Assessment  = "Értékelés";
-$AssessmentQuestions = "Hogyan lesznek értékelve a résztvev&#337;k?";
-$AssessmentInformation = "Példa teszt kérdések. A sikeres teljesítés feltétele. Tippek és trükkök.";
+$CourseMaterialQuestions = "Van-e a kurzusnak tankÃ¶nyve, tartoznak-e hozzÃ¡ jegyzetek, van-e hozzÃ¡ biogrÃ¡fia, hivatkozÃ¡sok az interneten?";
+$CourseMaterialInformation = "A kurzushoz kapcsolÃ³ tananyagok rÃ¶vid leÃ­rÃ¡sa";
+$HumanAndTechnicalResources = "Emberi Ã©s technikai erÅ‘forrÃ¡sok";
+$HumanAndTechnicalResourcesQuestions = "Vannak tanÃ¡rok, konzulensek, technikai helpdesk, szociÃ¡lis tanÃ¡csadÃ³k, szÃ¡mÃ­tÃ³gÃ©p-termek?";
+$HumanAndTechnicalResourcesInformation = "A kÃ¼lÃ¶nbÃ¶zÅ‘ kapcsolattartÃ³ szemÃ©lyek Ã©s hasznÃ¡lhatÃ³ technikai eszkÃ¶zÃ¶k bemutatÃ¡sa.";
+$Assessment = "Ã‰rtÃ©kelÃ©s";
+$AssessmentQuestions = "Hogyan lesznek Ã©rtÃ©kelve a rÃ©sztvevÅ‘k?";
+$AssessmentInformation = "PÃ©lda teszt kÃ©rdÃ©sek. A sikeres teljesÃ­tÃ©s feltÃ©tele. Tippek Ã©s trÃ¼kkÃ¶k.";
 ?>

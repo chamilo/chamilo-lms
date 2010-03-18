@@ -1,34 +1,35 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $NewNote = "Avisu nuevu";
 $Note = "Avisu";
-$NoteDeleted = "Avisu esborráu";
-$NoteUpdated = "Avisu actualizáu";
+$NoteDeleted = "Avisu esborrÃ¡u";
+$NoteUpdated = "Avisu actualizÃ¡u";
 $NoteCreated = "Avisu creau";
-$YouMustWriteANote = "Tien d\'escribir un avisu";
+$YouMustWriteANote = "Tien d'escribir un avisu";
 $SaveNote = "Guardar avisu";
-$WriteYourNoteHere = "Escribe\'l to avisu equí";
-$SearchByTitle = "Buscar por títulu";
-$WriteTheTitleHere = "Escriba\'l títulu equí";
-$UpdateDate = "Fecha d\'actualización";
+$WriteYourNoteHere = "Escribe'l to avisu equÃ­";
+$SearchByTitle = "Buscar por tÃ­tulu";
+$WriteTheTitleHere = "Escriba'l tÃ­tulu equÃ­";
+$UpdateDate = "Ãšltima modificaciÃ³n";
 $NoteAddNew = "Amestar nota nueva";
-$OrderByCreationDate = "Ordenar por fecha de creación";
-$OrderByModificationDate = "Ordenar por fecha de modificación";
-$OrderByTitle = "Ordenar por títulu";
-$NoteTitle = "Títulu de la nota";
+$OrderByCreationDate = "Ordenar por fecha de creaciÃ³n";
+$OrderByModificationDate = "Ordenar por fecha de modificaciÃ³n";
+$OrderByTitle = "Ordenar por tÃ­tulu";
+$NoteTitle = "TÃ­tulu de la nota";
 $NoteComment = "Comentarios de la Nota";
 $NoteAdded = "Nota amestada";
-$NoteConfirmDelete = "¿ Ta seguru de que quier esborrar la nota ?";
+$NoteConfirmDelete = "Â¿ Ta seguru de que quier esborrar la nota ?";
 $AddNote = "Amestar nota";
 $ModifyNote = "Camudar nota";
-$BackToNoteList = "Volver a la llista d\'anotaciones";
-$NotebookManagement = "Alminitración de nota personal";
-$BackToNotesList = "Volver al llistáu de notes";
-$NotesSortedByTitleAsc = "Notes ordenaes por títulu (A-Z)";
-$NotesSortedByTitleDESC = "Notes ordenaes por títulu (Z-A)";
-$NotesSortedByUpdateDateAsc = "Notes ordenaes por fecha d\'anovamientu (antigües - recientes)";
-$NotesSortedByUpdateDateDESC = "Notes ordenaes por fecha d\'anovamientu (recientes - antigües)";
-$NotesSortedByCreationDateAsc = "Notes ordenaes por fecha de criación (antigües - recientes)";
-$NotesSortedByCreationDateDESC = "Notes ordenaes por fecha de criación (recientes - antigües)";
+$BackToNoteList = "Volver a la llista d'anotaciones";
+$NotebookManagement = "AlminitraciÃ³n de nota personal";
+$BackToNotesList = "Volver al llistÃ¡u de notes";
+$NotesSortedByTitleAsc = "Notes ordenaes por tÃ­tulu (A-Z)";
+$NotesSortedByTitleDESC = "Notes ordenaes por tÃ­tulu (Z-A)";
+$NotesSortedByUpdateDateAsc = "Notes ordenaes por fecha d'anovamientu (antigÃ¼es - recientes)";
+$NotesSortedByUpdateDateDESC = "Notes ordenaes por fecha d'anovamientu (recientes - antigÃ¼es)";
+$NotesSortedByCreationDateAsc = "Notes ordenaes por fecha de criaciÃ³n (antigÃ¼es - recientes)";
+$NotesSortedByCreationDateDESC = "Notes ordenaes por fecha de criaciÃ³n (recientes - antigÃ¼es)";
 ?>

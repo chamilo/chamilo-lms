@@ -39,15 +39,16 @@ $language_file = 'survey';
 require ('../inc/global.inc.php');
 
 // including additional libraries
-//require_once (api_get_path(LIBRARY_PATH)."/survey.lib.php");
 require_once('survey.lib.php');
 require_once (api_get_path(LIBRARY_PATH)."course.lib.php");
 require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
 require_once (api_get_path(LIBRARY_PATH)."mail.lib.inc.php");
 
+$this_section=SECTION_COURSES;
+
 if (!api_is_allowed_to_edit(false,true))
 {
-	Display :: display_header(get_lang('Survey'));
+	Display :: display_header(get_lang('ToolSurvey'));
 	Display :: display_error_message(get_lang('NotAllowed'), false);
 	Display :: display_footer();
 	exit;
@@ -65,7 +66,7 @@ $user_info 			= Database::get_main_table(TABLE_MAIN_SURVEY_REMINDER); // TODO: T
 $survey_id = Security::remove_XSS($_GET['survey_id']);
 $survey_data = survey_manager::get_survey($survey_id);
 if (empty($survey_data)) {
-	Display :: display_header(get_lang('Survey'));
+	Display :: display_header(get_lang('ToolSurvey'));
 	Display :: display_error_message(get_lang('InvallidSurvey'), false);
 	Display :: display_footer();
 	exit;
@@ -93,7 +94,7 @@ Display::display_header($tool_name,'Survey');
 // checking if there is another survey with this code.
 // If this is the case there will be a language choice
 $sql = "SELECT * FROM $table_survey WHERE code='".Database::escape_string($survey_data['code'])."'";
-$result = Database::query($sql, __FILE__, __LINE__);
+$result = Database::query($sql);
 if (Database::num_rows($result) > 1)
 {
 	Display::display_warning_message(get_lang('IdenticalSurveycodeWarning'));

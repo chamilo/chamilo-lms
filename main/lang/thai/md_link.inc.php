@@ -1,46 +1,47 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$langMdCallingTool = "√“¬°“√‡™◊ËÕ¡‚¬ß";
-$langMdTitle = "™◊ËÕ°“√‡™◊ËÕ¡‚¬ß";
-$langMdDescription = "Õ∏‘∫“¬°“√‡™◊ËÕ¡‚¬ß";
-$langMdCoverage = " “°≈";
-$langMdCopyright = "Ghent University";
+$langMdCallingTool = "‡πÄ‡∏≠‡∏Å‡∏™‡∏≤‡∏£ Documents";
+$langMdTitle = "‡∏ß‡∏±‡∏ï‡∏ñ‡∏∏‡∏õ‡∏£‡∏∞‡∏™‡∏á‡∏Ñ‡πå‡∏Å‡∏≤‡∏£‡πÄ‡∏£‡∏µ‡∏¢‡∏ô Learning Object Title";
+$langMdDescription = "‡∏Å‡∏î‡∏õ‡∏∏‡πà‡∏°‡∏à‡∏±‡∏î‡πÄ‡∏Å‡πá‡∏ö(restore) To store this information, press Store";
+$langMdCoverage = "‡πÄ‡∏ä‡πà‡∏ô ‡∏õ‡∏£‡∏¥‡∏ç‡∏ç‡∏≤ e.g. Bachelor of ...";
+$langMdCopyright = "e.g. provided the source is acknowledged";
 $nameTools = "obsolete language variable";
-$langTool = "°“√‡™◊ËÕ¡‚¬ßµËÕ Metadata";
-$langNoScript = " §√‘Íª§” —Ëßπ’È ‚ª√·°√¡¥Ÿ‡«Áª‰´∑Ï‰¡Ë‰¥È°”Àπ¥„ÀÈ„™Èß“π ®÷ß„™Èß“π‰¡Ë‰¥È °√ÿ≥“¬°‡≈‘°§” —Ëßπ’È";
+$langTool = "‡πÄ‡∏≠‡∏Å‡∏™‡∏≤‡∏£ Metadata";
+$langNoScript = "‡πÇ‡∏õ‡∏£‡πÅ‡∏Å‡∏£‡∏°‡∏î‡∏π‡∏≠‡∏¥‡∏ô‡πÄ‡∏ï‡∏≠‡∏£‡πå‡πÄ‡∏ô‡πá‡∏ï‡∏ó‡∏µ‡πà‡∏ó‡πà‡∏≤‡∏ô‡πÉ‡∏ä‡πâ‡∏≠‡∏¢‡∏π‡πà‡∏ô‡∏µ‡πâ ‡πÑ‡∏°‡πà‡πÑ‡∏î‡πâ‡∏≠‡∏ô‡∏∏‡∏ç‡∏≤‡∏ï‡πÉ‡∏´‡πâ‡∏≠‡πà‡∏≤‡∏ô‡∏Ñ‡∏≥‡∏™‡∏±‡πà‡∏á‡∏ô‡∏µ‡πâ ‡πÉ‡∏´‡πâ‡∏Ç‡πâ‡∏≤‡∏°‡πÑ‡∏õ Script is not enabled in your browser, please ignore the screen part below this text, it won't work...";
 $langLanguageTip = "the language in which this learning object was made";
-$langIdentifier = "µ—«∫Ëß™’È";
-$langIdentifierTip = "unique identification for this learning object, composed of letters, digits, _-.()\'!*";
+$langIdentifier = "‡∏ï‡∏±‡∏ß‡∏ö‡πà‡∏á‡∏ä‡∏µ‡πâ Identifier";
+$langIdentifierTip = "unique identification for this learning object, composed of letters, digits, _-.()'!*";
 $langTitleTip = "title or name, and language of that title or name";
-$langDescriptionTip = "description or comment, and language used for describing this learning object";
-$langKeyword = "§” ”§—≠";
-$langKeywordTip = "·¬°§”‚¥¬‡§√◊ËÕßÀ¡“¬§Õ¡¡Ë“ ,";
-$langCoverage = "ª√–‡¿∑/À¡«¥";
-$langCoverageTip = "categoryname, cfr. Links";
+$langDescriptionTip = "‡∏≠‡∏ò‡∏¥‡∏ö‡∏≤‡∏¢‡πÅ‡∏™‡∏î‡∏á‡∏Ñ‡∏ß‡∏≤‡∏°‡∏Ñ‡∏¥‡∏î‡πÄ‡∏´‡πá‡∏ô description or comment, and language used for describing this learning object";
+$langKeyword = "‡∏Ñ‡∏≥‡∏™‡∏≥‡∏Ñ‡∏±‡∏ç";
+$langKeywordTip = "‡πÅ‡∏¢‡∏Å‡∏Ñ‡∏≥‡∏î‡πâ‡∏ß‡∏¢‡πÄ‡∏Ñ‡∏£‡∏∑‡πà‡∏≠‡∏á‡∏´‡∏°‡∏≤‡∏¢ , separate by commas (letters, digits, -.)";
+$langCoverage = "‡∏Ñ‡∏£‡∏≠‡∏ö‡∏Ñ‡∏•‡∏∏‡∏° Coverage";
+$langCoverageTip = "‡∏ï‡∏±‡∏ß‡∏≠‡∏¢‡πà‡∏≤‡∏á‡∏õ‡∏£‡∏¥‡∏ç‡∏ç‡∏≤‡∏Ç‡∏≠‡∏á for example bachelor of xxx: yyy";
 $langKwNote = "If you change the description language, do not add keywords at the same time.";
 $langClickKw = "Click a keyword in the tree to select or deselect it.";
-$langKwHelp = "<br/> Click \'+\' button to open, \'-\' button to close, \'++\' button to open all, \'--\' button to close all.<br/> <br/> Clear all selected keywords by closing the tree and opening it again with the \'+\' button.<br/> Alt-click \'+\' searches the original keywords in the tree.<br/> <br/> Alt-click keyword selects a keyword without broader terms or deselects a keyword with broader terms.<br/> <br/> If you change the description language, do not add keywords at the same time.<br/> <br/> ";
+$langKwHelp = "<br/>‡∏Ñ‡∏•‡∏¥‡∏Å‡∏õ‡∏∏‡πà‡∏°‡∏ö‡∏ß‡∏Å '+' ‡πÄ‡∏û‡∏∑‡πà‡∏≠‡πÄ‡∏õ‡∏¥‡∏î,‡∏•‡∏ö '-' ‡πÄ‡∏û‡∏∑‡πà‡∏≠‡∏õ‡∏¥‡∏î, '++' button to open all, '--' button to close all..<br/> <br/> Clear all selected keywords by closing the tree and opening it again with the '+' button.<br/> Alt-click '+' searches the original keywords in the tree.<br/> <br/> Alt-click keyword selects a keyword without broader terms or deselects a keyword with broader terms.<br/> <br/> If you change the description language, do not add keywords at the same time.<br/> <br/>";
 $langLocation = "URL/URI";
-$langLocationTip = "§≈‘°‡æ◊ËÕ‡ª‘¥";
-$langStore = "®—¥‡°Á∫";
-$langDeleteAll = "≈∫ metadata ∑—ÈßÀ¡¥";
-$langConfirmDelete = "§ÿ≥µÈÕß°“√∑’Ë®–≈∫ metadata ∑—ÈßÀ¡¥À√◊Õ‰¡Ë";
-$langWorkOn = "‡ª‘¥";
-$langNotInDB = "‰¡Ë¡’ª√–‡¿∑√“¬°“√‡™◊ËÕ¡‚¬ß";
+$langLocationTip = "‡∏Ñ‡∏•‡∏¥‡∏Å‡πÄ‡∏õ‡∏¥‡∏î click to open object";
+$langStore = "‡∏à‡∏±‡∏î‡πÄ‡∏Å‡πá‡∏ö Store";
+$langDeleteAll = "‡∏•‡∏ö metadata ‡∏ó‡∏±‡πâ‡∏á‡∏´‡∏°‡∏î";
+$langConfirmDelete = "‡∏Ñ‡∏∏‡∏ì‡∏ï‡πâ‡∏≠‡∏á‡∏Å‡∏≤‡∏£‡∏ó‡∏µ‡πà‡∏à‡∏∞‡∏•‡∏ö metadata ‡∏ó‡∏±‡πâ‡∏á‡∏´‡∏°‡∏î‡∏à‡∏£‡∏¥‡∏á‡πÜ‡πÉ‡∏ä‡πà‡∏´‡∏£‡∏∑‡∏≠‡πÑ‡∏°‡πà";
+$langWorkOn = "‡πÄ‡∏õ‡∏¥‡∏î";
+$langNotInDB = "‡πÑ‡∏°‡πà‡∏°‡∏µ‡∏õ‡∏£‡∏∞‡πÄ‡∏†‡∏ó‡∏£‡∏≤‡∏¢‡∏Å‡∏≤‡∏£‡πÄ‡∏ä‡∏∑‡πà‡∏≠‡∏°‡πÇ‡∏¢‡∏á";
 $langManifestSyntax = "(syntax error in manifest file...)";
-$langEmptyManifest = "‰¡Ë¡’‰ø≈Ï¢ÈÕ¡Ÿ≈";
-$langNoManifest = "‰¡Ë¡’‰ø≈Ï¢ÈÕ¡Ÿ≈";
-$langNotFolder = "‡ªÁπ‰ª‰¡Ë‰¥È ‰¡Ë¡’·øÈ¡";
-$langContinue = "µËÕ‰ª¥È«¬";
-$langCreate = " √È“ß MDEs";
-$langRemove = "‡Õ“ MDEs ÕÕ°";
-$langAllRemovedFor = "‡Õ“√“¬°“√∑’Ë¡’„πª√–‡¿∑ÕÕ°‰ª";
-$langRemainingFor = "‡Õ“√“¬°“√∑’Ë≈È“À≈—ßÕÕ°®“°ª√–‡¿∑";
-$langIndex = "¥—™π’§”";
-$langTotalMDEs = "√«¡®”π«π°“√‡™◊ËÕ¡‚¬ß∑’Ë¡’¢Õß MD";
-$langMainMD = "‡ª‘¥√“¬°“√À≈—° MDE";
-$langOrElse = "‡≈◊Õ°ª√–‡¿∑°“√‡™◊ËÕ¡‚¬ß";
-$langWarningDups = " ”‡π“™◊ËÕª√–‡¿∑‰¥È‡Õ“ÕÕ°®“°√“¬°“√·≈È«";
-$langSLC = "„™Èß“π√Ë«¡°—∫™◊ËÕ¢Õßª√–‡¿∑";
+$langEmptyManifest = "‡πÑ‡∏°‡πà‡∏°‡∏µ‡πÑ‡∏ü‡∏•‡πå‡∏Ç‡πâ‡∏≠‡∏°‡∏π‡∏•";
+$langNoManifest = "‡πÑ‡∏°‡πà‡∏°‡∏µ‡πÑ‡∏ü‡∏•‡πå‡∏Ç‡πâ‡∏≠‡∏°‡∏π‡∏•";
+$langNotFolder = "‡πÄ‡∏õ‡πá‡∏ô‡πÑ‡∏õ‡πÑ‡∏°‡πà‡πÑ‡∏î‡πâ ‡πÑ‡∏°‡πà‡∏°‡∏µ‡πÅ‡∏ü‡πâ‡∏°";
+$langContinue = "‡∏ï‡πà‡∏≠‡πÑ‡∏õ‡∏î‡πâ‡∏ß‡∏¢";
+$langCreate = "‡∏™‡∏£‡πâ‡∏≤‡∏á";
+$langRemove = "‡πÄ‡∏≠‡∏≤ MDEs ‡∏≠‡∏≠‡∏Å";
+$langAllRemovedFor = "‡πÄ‡∏≠‡∏≤‡∏£‡∏≤‡∏¢‡∏Å‡∏≤‡∏£‡∏ó‡∏µ‡πà‡∏°‡∏µ‡πÉ‡∏ô‡∏õ‡∏£‡∏∞‡πÄ‡∏†‡∏ó‡∏≠‡∏≠‡∏Å‡πÑ‡∏õ";
+$langRemainingFor = "‡πÄ‡∏≠‡∏≤‡∏£‡∏≤‡∏¢‡∏Å‡∏≤‡∏£‡∏ó‡∏µ‡πà‡∏•‡πâ‡∏≤‡∏´‡∏•‡∏±‡∏á‡∏≠‡∏≠‡∏Å‡∏à‡∏≤‡∏Å‡∏õ‡∏£‡∏∞‡πÄ‡∏†‡∏ó";
+$langIndex = "‡∏î‡∏±‡∏ä‡∏ô‡∏µ‡∏Ñ‡∏≥";
+$langTotalMDEs = "‡∏£‡∏ß‡∏°‡∏à‡∏≥‡∏ô‡∏ß‡∏ô‡∏Å‡∏≤‡∏£‡πÄ‡∏ä‡∏∑‡πà‡∏≠‡∏°‡πÇ‡∏¢‡∏á‡∏ó‡∏µ‡πà‡∏°‡∏µ‡∏Ç‡∏≠‡∏á MD";
+$langMainMD = "‡πÄ‡∏õ‡∏¥‡∏î‡∏£‡∏≤‡∏¢‡∏Å‡∏≤‡∏£‡∏´‡∏•‡∏±‡∏Å MDE";
+$langOrElse = "‡πÄ‡∏•‡∏∑‡∏≠‡∏Å‡∏õ‡∏£‡∏∞‡πÄ‡∏†‡∏ó‡∏Å‡∏≤‡∏£‡πÄ‡∏ä‡∏∑‡πà‡∏≠‡∏°‡πÇ‡∏¢‡∏á";
+$langWarningDups = "‡∏™‡∏≥‡πÄ‡∏ô‡∏≤‡∏ä‡∏∑‡πà‡∏≠‡∏õ‡∏£‡∏∞‡πÄ‡∏†‡∏ó‡πÑ‡∏î‡πâ‡πÄ‡∏≠‡∏≤‡∏≠‡∏≠‡∏Å‡∏à‡∏≤‡∏Å‡∏£‡∏≤‡∏¢‡∏Å‡∏≤‡∏£‡πÅ‡∏•‡πâ‡∏ß";
+$langSLC = "‡πÉ‡∏ä‡πâ‡∏á‡∏≤‡∏ô‡∏£‡πà‡∏ß‡∏°‡∏Å‡∏±‡∏ö‡∏ä‡∏∑‡πà‡∏≠‡∏Ç‡∏≠‡∏á‡∏õ‡∏£‡∏∞‡πÄ‡∏†‡∏ó";
 ?>

@@ -1,27 +1,28 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$langLinkSite = "Enllaça un lloc web";
-$langSubTitle = "Afegir un enllaç extern o intern des de la pàgina principal del curs. Per fer-ho, ves a aquella plana, copia la seva adreça que apareix a la barra \'URL\' de la part superior del teu navegador, i insereix-la en el camp \'enllaç\' de sota.";
-$langAddPage            = "Afegir una pàgina";
-$langSendPage           = "Pàgina a enviar";
-$langCouldNot           = "El fitxer no es pot enviar";
-$langOkSentLink         = "L\'enllaç ha estat afegit. Ara es accessible des de la pàgina principal del curs";
-$langTooBig             = "No ha escollit cap arxiu a enviar, o és massa gran";
-$langExplanation        = "La pàgina ha d\'estar en format HTML (ex: \"my_page.htm\"). Serà enllaçada a la pàgina principal. Si voleu enviar un document NO HTML (PDF, Word, Power Point, Video, etc.) utilitzeu les <a href=../document/document.php>eines de documents</a>";
-$langPgTitle            = "Títol de la pàgina";
-$langNoLinkURL          = "Introdueixi l\'adreça de l\'enllaç";
-$langLinkTarget = "Destinació de l\'enllaç";
+$langLinkSite = "Afegiu un enllaÃ§ a la pÃ gina principal";
+$langSubTitle = "Afegir un enllaÃ§ extern o intern des de la pÃ gina principal del curs. Per fer-ho, ves a aquella plana, copia la seva adreÃ§a que apareix a la barra 'URL' de la part superior del teu navegador, i insereix-la en el camp 'enllaÃ§' de sota.";
+$langAddPage = "Afegir una pÃ gina";
+$langSendPage = "PÃ gina a enviar";
+$langCouldNot = "El fitxer no es pot enviar";
+$langOkSentLink = "L'enllaÃ§ ha estat afegit. Ara es accessible des de la pÃ gina principal del curs";
+$langTooBig = "No ha escollit cap arxiu a enviar, o Ã©s massa gran";
+$langExplanation = "Un cop hagueu clicat Acceptar es crearÃ  el lloc web d'un curs. el qual constarÃ  de diverses eines: un gestor de documents, un creador d'itineraris formatius en format SCORM, un visualitzador de lliÃ§ons o itineraris formatius, la possibilitat de realitzar exÃ mens i lliurar treballs, discutir en fÃ²rums i a travÃ©s de xat, enviar anuncis i missatges, disposar d'una agenda, videoconferÃ¨ncia i pissarra digital, eines per al treball en grup, realitzar enquestes i seguiment dels alumnes, etc. La vostra identificaciÃ³ com a creador d'aquest lloc us permetrÃ  modificar-lo segons les vostres necessitats.";
+$langPgTitle = "TÃ­tol de la pÃ gina";
+$langNoLinkURL = "Introdueixi l'adreÃ§a de l'enllaÃ§";
+$langLinkTarget = "DestinaciÃ³ de l'enllaÃ§";
 $langSameWindow = "A la mateixa finestra";
 $langNewWindow = "En una nova finestra";
-$langAdded = "L\'enllaç ha estat afegit";
-$langAddLink = "Afegir un enllaç";
-$langNoLinkName = "Introduïu el nom de l\'enllaç";
-$langEditLink = "Editar l\'enllaç de la pàgina d\'inici del curs";
+$langAdded = "Afegit";
+$langAddLink = "Afegir un enllaÃ§";
+$langNoLinkName = "IntroduÃ¯u el nom de l'enllaÃ§";
+$langEditLink = "Editar l'enllaÃ§ de la pÃ gina d'inici del curs";
 $langChangePress = "Feu els canvis i cliqueu OK";
-$langLinkChanged = "L\'enllaç de la pàgina inicial del curs ha estat modificat. Utilitzeu el menú de navegació de la part superior per tornar a la pàgina inicial";
-$NoLinkName = "L\'enllaç no té nom";
-$NoLinkURL = "L\'enllaç no té URL";
-$LinkChanged = "Enllaç modificat";
-$OkSentLink = "L\'enllaç ha estat enviat";
+$langLinkChanged = "L'enllaÃ§ de la pÃ gina inicial del curs ha estat modificat. Utilitzeu el menÃº de navegaciÃ³ de la part superior per tornar a la pÃ gina inicial";
+$NoLinkName = "L'enllaÃ§ no tÃ© nom";
+$NoLinkURL = "L'enllaÃ§ no tÃ© URL";
+$LinkChanged = "EnllaÃ§ modificat";
+$OkSentLink = "L'enllaÃ§ ha estat enviat";
 ?>

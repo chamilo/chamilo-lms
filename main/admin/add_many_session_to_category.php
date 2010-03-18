@@ -11,12 +11,12 @@
 $language_file='admin';
 // resetting the course id
 $cidReset=true;
+require_once('../inc/global.inc.php');
 
 // including some necessary dokeos files
-require '../inc/global.inc.php';
 
 // including additonal libraries
-require_once '../inc/lib/xajax/xajax.inc.php';
+require_once api_get_path(LIBRARY_PATH).'add_many_session_to_category_functions.lib.php';
 require_once api_get_path(LIBRARY_PATH).'sessionmanager.lib.php';
 $xajax = new xajax();
 $xajax -> registerFunction ('search_courses');
@@ -50,40 +50,14 @@ if(isset($_GET['add_type']) && $_GET['add_type']!=''){
 	$add_type = Security::remove_XSS($_REQUEST['add_type']);
 }
 
-if (!api_is_platform_admin()) {
+if (!api_is_platform_admin() && !api_is_session_admin()) {
 	$sql = 'SELECT session_admin_id FROM '.Database :: get_main_table(TABLE_MAIN_SESSION).' WHERE id='.$id_session;
-	$rs = Database::query($sql,__FILE__,__LINE__);
+	$rs = Database::query($sql);
 	if (Database::result($rs,0,0)!=$_user['user_id']) {
 		api_not_allowed(true);
 	}
 }
 
-function search_courses($needle,$type) {
-	global $tbl_course, $tbl_session, $id_session;
-
-	$xajax_response = new XajaxResponse();
-	$return = '';
-	if(!empty($needle) && !empty($type)) {
-		// xajax send utf8 datas... datas in db can be non-utf8 datas
-		$charset = api_get_setting('platform_charset');
-		$needle = api_convert_encoding($needle, $charset, 'utf-8');
-
-		$sql = 'SELECT * FROM '.$tbl_session.' WHERE name LIKE "'.$needle.'%" ORDER BY id';
-
-		$rs = Database::query($sql, __FILE__, __LINE__);
-		$course_list = array();
-
-		$return .= '<select id="origin" name="NoSessionCategoryList[]" multiple="multiple" size="20" style="width:340px;">';
-		while($course = Database :: fetch_array($rs)) {
-			$course_list[] = $course['id'];
-			$return .= '<option value="'.$course['id'].'" title="'.htmlspecialchars($course['name'],ENT_QUOTES).'">'.$course['name'].'</option>';
-		}
-		$return .= '</select>';
-		$xajax_response -> addAssign('ajax_list_courses_multiple','innerHTML',api_utf8_encode($return));
-	}
-	$_SESSION['course_list'] = $course_list;
-	return $xajax_response;
-}
 $xajax -> processRequests();
 $htmlHeadXtra[] = $xajax->getJavascript('../inc/lib/xajax/');
 $htmlHeadXtra[] = '
@@ -132,7 +106,7 @@ if ($_POST['formSent']) {
 	if($Categoryid != 0 && count($SessionCategoryList)>0 ){
 		$session_id = join(',', $SessionCategoryList);
 		$sql = "UPDATE $tbl_session SET session_category_id = $Categoryid WHERE id in ($session_id) ";
-		Database::query($sql,__FILE__,__LINE__);
+		Database::query($sql);
 		header('Location: session_list.php?id_category='.$Categoryid);
 	} else {
 		header('Location: add_many_session_to_category.php?msg=error');
@@ -153,19 +127,19 @@ $rows_category_session = array();
 if(isset($_POST['CategorySessionId']) && $_POST['formSent'] == 0 ){
 	$where = 'WHERE session_category_id !='.intval($_POST['CategorySessionId']);
 	$sql = 'SELECT id, name  FROM '.$tbl_session .' WHERE session_category_id ='.intval($_POST['CategorySessionId']).' ORDER BY name';
-	$result=Database::query($sql,__FILE__,__LINE__);
+	$result=Database::query($sql);
 	$rows_category_session = Database::store_result($result);
 }
 
 $sql = "SELECT id, name  FROM $tbl_session_category ORDER BY name";
-$result=Database::query($sql,__FILE__,__LINE__);
+$result=Database::query($sql);
 $rows_session_category = Database::store_result($result);
 
 $sql = "SELECT id, name  FROM $tbl_session $where ORDER BY name";
-$result=Database::query($sql,__FILE__,__LINE__);
+$result=Database::query($sql);
 $rows_session = Database::store_result($result);
 ?>
-<form name="formulaire" method="post" action="<?php echo api_get_self(); ?>?page=<?php echo $_GET['page']; if(!empty($_GET['add'])) echo '&add=true' ; ?>" style="margin:0px;" <?php if($ajax_search){echo ' onsubmit="valide();"';}?>>
+<form name="formulaire" method="post" action="<?php echo api_get_self(); ?>?page=<?php echo Security::remove_XSS($_GET['page']); if(!empty($_GET['add'])) echo '&add=true' ; ?>" style="margin:0px;" <?php if($ajax_search){echo ' onsubmit="valide();"';}?>>
 <input type="hidden" name="formSent" value="1" />
 <?php
 if(!empty($errorMsg))

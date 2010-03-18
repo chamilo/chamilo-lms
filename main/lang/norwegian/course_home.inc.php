@@ -1,23 +1,24 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $langActivate = "Vis";
 $langDeactivate = "Skjul";
-$langInLnk  = "Skjulte verktøy og lenker";
+$langInLnk = "Skjulte verktÃ¸y og lenker";
 $langDelLk = "Skal lenken slettes?";
-$langCourseCreate  = "Opprett ett kursnettsted";
-$langNameOfTheLink  = "Navn på lenken";
-$lang_main_categories_list                  = "Liste hovedkategorier";
-$langCourseAdminOnly = "Kun for lærere";
+$langCourseCreate = "Opprett ett kursnettsted";
+$langNameOfTheLink = "Navn pÃ¥ lenken";
+$lang_main_categories_list = "Liste hovedkategorier";
+$langCourseAdminOnly = "Kun for lÃ¦rere";
 $PlatformAdminOnly = "Kun for platformadministratorer";
 $langCombinedCourse = "Kombinert kurs";
-$ToolIsNowVisible = "Verktøyet er nå synlig";
-$ToolIsNowHidden = "Verktøyet er nå usynlig";
+$ToolIsNowVisible = "VerktÃ¸yet er nÃ¥ synlig";
+$ToolIsNowHidden = "VerktÃ¸yet er nÃ¥ usynlig";
 $EditLink = "Rediger lenke";
 $Blog_management = "Blog administrasjon";
 $Forum = "Forum";
 $Course_maintenance = "Kurs vedlikehold";
-$GreyIcons = "Verktøykasse";
+$GreyIcons = "VerktÃ¸ykasse";
 $Interaction = "Samhandling";
 $Administration = "Administrasjon";
 $IntroductionTextUpdated = "Introduksjonstekseten er oppdatert";

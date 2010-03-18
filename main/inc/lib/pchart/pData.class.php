@@ -117,34 +117,34 @@
       }
     }
 
-   function AddPoint($Value,$Serie="Serie1",$Description="")
-    {
+   function AddPoint($Value,$Serie="Serie1",$Description="") {
+
      if (is_array($Value) && count($Value) == 1)
       $Value = $Value[0];
 
-     $ID = 0;
-     for($i=0;$i<=count($this->Data);$i++)
-      { if(isset($this->Data[$i][$Serie])) { $ID = $i+1; } }
-
-     if ( count($Value) == 1 )
-      {
+     $ID = 0;          
+     for ($i=0;$i<=count($this->Data);$i++) {
+     	if(isset($this->Data[$i][$Serie])) { $ID = $i+1; } 
+     }
+     
+     if ( count($Value) == 1 ) {
        $this->Data[$ID][$Serie] = $Value;
-       if ( $Description != "" )
-        $this->Data[$ID]["Name"] = $Description;
-       elseif (!isset($this->Data[$ID]["Name"]))
-        $this->Data[$ID]["Name"] = $ID;
-      }
-     else
-      {
-       foreach($Value as $key => $Val)
-        {
+       if ( $Description != "" ) $this->Data[$ID]["Name"] = $Description;
+       elseif (!isset($this->Data[$ID]["Name"])) $this->Data[$ID]["Name"] = $ID;
+     } else {
+       foreach ($Value as $key => $Val) {
          $this->Data[$ID][$Serie] = $Val;
          if (!isset($this->Data[$ID]["Name"]))
           $this->Data[$ID]["Name"] = $ID;
          $ID++;
         }
       }
+      
+      
+      
+      
     }
+
 
    function AddSerie($SerieName="Serie1")
     {
@@ -164,9 +164,8 @@
     }
 
    function AddAllSeries()
-    {
+    {    	
      unset($this->DataDescription["Values"]);
-
      if ( isset($this->Data[0]) )
       {
        foreach($this->Data[0] as $Key => $Value)
@@ -175,7 +174,10 @@
           $this->DataDescription["Values"][] = $Key;
         }
       }
+      
     }
+
+
 
    function RemoveSerie($SerieName="Serie1")
     {

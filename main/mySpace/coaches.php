@@ -1,5 +1,5 @@
 <?php
-/* For licensing terms, see /dokeos_license.txt */
+/* For licensing terms, see /license.txt */
 /*
  * Created on 18 October 2006 by Elixir Interactive http://www.elixir-interactive.com
  */
@@ -13,7 +13,7 @@ $cidReset = true;
 require '../inc/global.inc.php';
 require_once api_get_path(SYS_CODE_PATH).'mySpace/myspace.lib.php';
 
-$this_section = "session_my_space";
+$this_section = SECTION_TRACKING;
 
 $nameTools = get_lang('Tutors');
 
@@ -40,15 +40,15 @@ $tbl_track_login 					= Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_
 
 
 /*
- ===============================================================================
- 	FUNCTIONS
- ===============================================================================
- */
+  	FUNCTIONS
+  */
+ 
+/*Posible Deprecated*/
 
 function is_coach() {
   	global $tbl_session_course;
 	$sql = "SELECT course_code FROM $tbl_session_course WHERE id_coach='".intval($_SESSION["_uid"])."'";
-	$result = Database::query($sql, __FILE__, __LINE__);
+	$result = Database::query($sql);
 	if (Database::num_rows($result) > 0) {
 		return true;
 	}
@@ -83,7 +83,7 @@ if (isset($_GET["id_student"])) {
 	}
 }
 
-$result_coachs = Database::query($sql_coachs, __FILE__, __LINE__);
+$result_coachs = Database::query($sql_coachs);
 
 if (api_is_western_name_order()) {
 	echo '<table class="data_table"><tr><th>'.get_lang('FirstName').'</th><th>'.get_lang('LastName').'</th><th>'.get_lang('ConnectionTime').'</th><th>'.get_lang('AdminCourses').'</th><th>'.get_lang('Students').'</th></tr>';
@@ -106,7 +106,7 @@ if (Database::num_rows($result_coachs) > 0) {
 
 		if (isset($_GET["id_student"])) {
 			$sql_infos_coach = "SELECT lastname, firstname FROM $tbl_user WHERE user_id='$id_coach'";
-			$result_coachs_infos = Database::query($sql_infos_coach, __FILE__, __LINE__);
+			$result_coachs_infos = Database::query($sql_infos_coach);
 			$lastname = Database::result($result_coachs_infos, 0, "lastname");
 			$firstname = Database::result($result_coachs_infos, 0, "firstname");
 		} else {
@@ -115,7 +115,7 @@ if (Database::num_rows($result_coachs) > 0) {
 		}
 
 		$sql_connection_time = "SELECT login_date, logout_date FROM $tbl_track_login WHERE login_user_id ='$id_coach' AND logout_date <> 'null'";
-		$result_connection_time = Database::query($sql_connection_time, __FILE__, __LINE__);
+		$result_connection_time = Database::query($sql_connection_time);
 
 		$nb_seconds = 0;
 		while ($connections = Database::fetch_array($result_connection_time)) {

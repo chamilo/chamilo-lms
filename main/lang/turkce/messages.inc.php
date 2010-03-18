@@ -1,39 +1,39 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$MessageEmptyMessageOrSubject = "L�tfen konu yada mesaj&#305; bo&#351; b&#305;rakmay&#305;n&#305;z";
-$Inbox  = "Gelen Kutusu";
+$MessageEmptyMessageOrSubject = "Lütfen konu yada mesajı boş bırakmayınız";
+$Inbox = "Gelen Kutusu";
 $Messages = "Mesajlar";
-$SendMessage = "Mesaj g�nder";
+$SendMessage = "Mesaj gönder";
 $NewMessage = "Yeni mesaj";
 $ComposeMessage = "Mesaj yaz";
-$DeleteSelectedMessages = "Se�ili mesajlar&#305; sil";
-$SelectAll = "T�m�n� se�";
-$DeselectAll  = "Se�imleri kald&#305;r";
-$ReplyToMessage = "Yan&#305;tla";
-$BackToInbox = "Gelen kutusuna d�n";
-$MessageSentTo = "Mesaj g�nderilen";
-$SendMessageTo = "G�nderilen";
+$DeleteSelectedMessages = "Seçili mesajları sil";
+$SelectAll = "Tümünü seç";
+$DeselectAll = "Seçimleri kaldır";
+$ReplyToMessage = "Bu mesajı cevapla";
+$BackToInbox = "Gelen kutusuna dön";
+$MessageSentTo = "Mesaj gönderilen";
+$SendMessageTo = "Gönderilen";
 $Myself = "Ben";
-$From = "G�nderen";
-$To = "Al&#305;c&#305;";
+$From = "Gönderen";
+$To = "Alıcı";
 $Date = "Tarih";
-$InvalidMessageId = "Mesaj&#305;n id cevap i�in ge�erli de&#287;il.";
-$ErrorSendingMessage = "Mesaj yollan&#305;rken bir hata olu&#351;tu";
-$SureYouWantToDeleteSelectedMessages = "Se�ilen mesajlar&#305; silmek istedi&#287;inizden emin misiniz?";
-$SelectedMessagesDeleted = "Se�ilen mesajlar silindi";
-$EnterTitle = "L�tfen ba&#351;l&#305;k girin";
-$TypeYourMessage = "Mesaj&#305;n&#305;z&#305; buraya yaz&#305;n";
+$InvalidMessageId = "Mesajın id cevap için geçerli değil.";
+$ErrorSendingMessage = "Mesaj yollanırken bir hata oluştu";
+$SureYouWantToDeleteSelectedMessages = "Seçilen mesajları silmek istediğinizden emin misiniz?";
+$SelectedMessagesDeleted = "Seçilen mesajlar silindi";
+$EnterTitle = "Lütfen başlık girin";
+$TypeYourMessage = "Mesajınızı buraya yazın";
 $MessageDeleted = "Mesaj silindi";
-$ConfirmDeleteMessage = "Se�ili mesaj&#305; silmek istedi&#287;inizden emin misiniz?";
-$DeleteMessage = "Mesaj&#305; sil";
-$ReadMessage = "Mesaj&#305; oku";
-$SendInviteMessage = "Davet mesaj&#305; g�nder";
-$SendMessageInvitation = "Bu davetiyeleri g�ndermek istedi&#287;inize emin misiniz?";
-$MessageTool = "Mesaj ara�lar&#305;";
-$SendMessage = "Mesaj g�nder";
+$ConfirmDeleteMessage = "Seçili mesajı silmek istediğinizden emin misiniz?";
+$DeleteMessage = "Mesajı sil";
+$ReadMessage = "Mesajı oku";
+$SendInviteMessage = "Davet mesajı gönder";
+$SendMessageInvitation = "Bu davetiyeleri göndermek istediğinize emin misiniz?";
+$MessageTool = "Mesaj araçları";
 $WriteAMessage = "Mesaj yaz";
-$AlreadyReadMessage = "Okunmu&#351; mesaj";
-$UnReadMessage = "Okunmam&#305;&#351; mesaj";
-$MessageSent = "Mesaj g�nderildi";
+$AlreadyReadMessage = "Okunmuş mesaj";
+$UnReadMessage = "Okunmamış mesaj";
+$MessageSent = "Mesaj gönderildi";
 ?>

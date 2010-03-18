@@ -1,6 +1,6 @@
 <?php
 // $Id: tbl_change.js.php 18078 2009-01-29 17:21:11Z cfasanando $
-require ('../../../global.inc.php');
+require '../../../global.inc.php';
 ?>
 var day;
 var month;
@@ -28,7 +28,7 @@ function openCalendar(form, field) {
 			datevalues[dateindex++] = forminputs[i].value;
 		}
 	}
-    window.open("<?php echo api_get_path(WEB_CODE_PATH); ?>inc/lib/formvalidator/Element/calendar_popup.php", "calendar", "width=220,height=200,status=no");
+    window.open("<?php echo api_get_path(WEB_LIBRARY_PATH); ?>formvalidator/Element/calendar_popup.php", "calendar", "width=260,height=230,status=no");
 	day = datevalues[0];
 	month = datevalues[1];
 	year = datevalues[2];
@@ -180,7 +180,7 @@ function returnDate(d,m,y) {
 	date = new Date();
 	year = 1900;
 	datevalues[2].selectedIndex = (y-year);
-		 
+
 	for(i = 0; i<= 3; i++)
 	{
 		attributes = datevalues[i].attributes;

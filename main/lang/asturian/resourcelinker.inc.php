@@ -1,58 +1,59 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$ResourceAdded = "Recursu amest醬. Agora pue tornar al itinerariu o amestar m醩 recursos.";
-$LearningPath = "Itinerarios d\'aprendizaxe";
+$ResourceAdded = "Recursu agreg谩u";
+$LearningPath = "Itinerarios d'aprendizaxe";
 $LevelUp = "Subir un nivel";
 $AddIt = "Amestar";
-$MainCategory = "categor韆 d\'entamu";
+$MainCategory = "categor铆a d'entamu";
 $lang_delete_added_resources = "Esborrar los recursos amestaos";
 $AddToLinks = "Amestar a los enllaces del cursu";
 $DontAdd = "non amestar";
 $lang_show_all_added_resources = "Amosar tolos recursos amestaos";
 $ResourcesAdded = "Recursos amestaos";
-$BackTo = "Tornar a";
+$BackTo = "Volver a";
 $ExternalResources = "Recursos esternos";
 $CourseResources = "Recursos del cursu";
 $ExternalLink = "Enllaz esternu";
-$DropboxAdd = "Amestar la ferramienta Compartir Documentos a esti m骴ulu.";
-$AddAssignmentPage = "Amestar la ferramienta Trabayos a esti m骴ulu.";
+$DropboxAdd = "Amestar la ferramienta Compartir Documentos a esti m贸dulu.";
+$AddAssignmentPage = "Amestar la ferramienta Trabayos a esti m贸dulu.";
 $Exercise = "Exercicios";
 $Link = "Enllaz";
 $AdValvas = "Amestar anuncia";
 $Document = "Documentu";
 $ShowDelete = "Amosar / Esborrar";
-$IntroductionText = "Testu d\'entrada";
-$CourseDescription = "Descripci髇 del cursu";
+$IntroductionText = "Testu d'entrada";
+$CourseDescription = "Descripci贸n del cursu";
 $Groups = "Grupos";
 $Users = "Usuarios";
-$IntroductionTextAdd = "Amestar una p醲ina que tenga\'l testu d\'entrada a esti m骴ulu.";
-$CourseDescriptionAdd = "Amestar una p醲ina que tenga la Descripci髇 del cursu a esti m骴ulu.";
-$GroupsAdd = "Amestar una p醲ina colos Grupos a esti m骴ulu.";
-$UsersAdd = "Amestar una p醲ina de los Usuarios a esti m骴ulu.";
+$IntroductionTextAdd = "Amestar una p谩xina que tenga'l testu d'entrada a esti m贸dulu.";
+$CourseDescriptionAdd = "Amestar una p谩xina que tenga la Descripci贸n del cursu a esti m贸dulu.";
+$GroupsAdd = "Amestar una p谩xina colos Grupos a esti m贸dulu.";
+$UsersAdd = "Amestar una p谩xina de los Usuarios a esti m贸dulu.";
 $ExportableCourseResources = "Recursos del cursu que se puen esportar en formatu SCORM";
 $DokeosRelatedCourseMaterial = "Recursos rellacionaos. Nun se puen esportar en formatu SCORM.";
-$LinkTarget = "Dest韓 del enllaz";
+$LinkTarget = "Dest铆n del enllaz";
 $SameWindow = "Na mesma ventana";
 $NewWindow = "Nuna ventana nueva";
-$StepDeleted1 = "Esti ";
-$StepDeleted2 = "l\'elementu esborr髎e nesta ferramienta.";
+$StepDeleted1 = "Esti";
+$StepDeleted2 = "l'elementu esborr贸se nesta ferramienta.";
 $Modify = "modificar";
-$Chapter = "Cap韙ulu";
-$NoAgendaItems = "Nun hai eventos na Axenda";
-$AgendaAdd = "Amestar un eventu de l\'Axenda";
-$UserGroupFilter = "Facer filtru por grupos d\'usuarios";
-$AgendaSortChronologicallyUp = "Ordenar l\'axenda de m醩 vieyo a m醩 nuevo";
-$ShowCurrent = "Amosar los eventos actuales de l\'axenda";
-$ModifyCalendarItem = "Modificar eventos de l\'axenda";
-$ItemTitle = "T韙ulu";
+$Chapter = "Cap铆tulu";
+$NoAgendaItems = "Nun hai eventos";
+$AgendaAdd = "Amestar un eventu";
+$UserGroupFilter = "Filtrar por grupos/usuarios";
+$AgendaSortChronologicallyUp = "Ordenar eventos (antig眉os/recientes)";
+$ShowCurrent = "Amosar tolos eventos del mes";
+$ModifyCalendarItem = "Cambiar un eventu de l'axenda";
+$ItemTitle = "T铆tulu del eventu";
 $Detail = "Detalles";
-$EditSuccess = "F韟ose la modificaci髇.";
-$AddCalendarItem = "Amestar un eventu a l\'Axenda";
+$EditSuccess = "L'eventu modific贸se";
+$AddCalendarItem = "Amestar un eventu nuevu a la axenda";
 $AddAnn = "Amestar una anuncia";
 $ForumAddNewTopic = "Foru: amestar un tema";
 $ForumEditTopic = "Foru: editar un tema";
 $ExerciseAnswers = "Exerciciu: Retruques";
 $ForumReply = "Foru: retrucar";
-$AgendaSortChronologicallyDown = "Ordenar l\'axenda de m醩 nuevo a m醩 vieyo";
+$AgendaSortChronologicallyDown = "Ordenar eventos (recientes/antig眉os)";
 ?>

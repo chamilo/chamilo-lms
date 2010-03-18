@@ -1,46 +1,47 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$langMdCallingTool = "Links";
-$langMdTitle = "Nome do link";
-$langMdDescription = "DescriÁ„o do Link";
-$langMdCoverage = "Universal";
+$langMdCallingTool = "Documentos";
+$langMdTitle = "T√≠tulo do Objeto de Aprendizagem";
+$langMdDescription = "Para armazenar esta informa√ß√£o, clique em Armazenar";
+$langMdCoverage = "bacharel em engenharia";
 $langMdCopyright = "Universidade de Ghent";
-$nameTools = "Vari·veis de Linguagem Obsoletas";
-$langTool = "Metadados de Links";
-$langNoScript = "O suporte ‡ scripts n„o est· habilitado no seu navegador, por favor ignore a parte da tela abaixo desse texto, se n„o funcionar...";
-$langLanguageTip = "a lÌngua na qual esse objeto de aprendizagem foi feito";
+$nameTools = "Vari√°veis de Linguagem Obsoletas";
+$langTool = "Metadados do Documento";
+$langNoScript = "O script n√£o est√° habilitado no seu browser, por favor ignore a parte da tela abaixo desse texto, ele n√£o ir√° funcionar...";
+$langLanguageTip = "a l√≠ngua na qual esse objeto de aprendizagem foi feito";
 $langIdentifier = "Identificador";
-$langIdentifierTip = "identificaÁ„o ˙nica para esse objeto de aprendizagem, composta por letras, dÌgitos, _-.()\'!*";
-$langTitleTip = "tÌtulo ou nome, e lÌngua daquele tÌtulo ou nome";
-$langDescriptionTip = "descriÁ„o ou coment·rio, e lÌngua utilizada para descrever esse objeto de aprendizagem";
-$langKeyword = "Palavras chave";
-$langKeywordTip = "separado por vÌrgulas (letras, dÌgitos, -.)";
-$langCoverage = "Categoria";
-$langCoverageTip = "nome da categoria, ex. Links";
-$langKwNote = "Se vocÍ modificar a descriÁ„o da lÌngua, n„o adicione palavras chave ao mesmo tempo.";
-$langClickKw = "Clique em palavra chave na ·rvore para selecion·-la ou deselecion·-la.";
-$langKwHelp = "<br/> Clique no bot„o \'+\' para abrir, no bot„o \'-\' para fechar, no bot„o \'++\' para abrir tudo, no bot„o \'--\' para fechar tudo.<br/> <br/> Limpe todas as palavras chave selecionadas fechando a arvore e abrindo-a novamente com o bot„o \'+\'.<br/> Alt + clique em \'+\' pesquisa as palavras chave originais na ·rvore.<br/> <br/> Alt + clique em uma palavra chave seleciona uma palavra chave sem termos mais amplos ou deseleciona uma palavra chave com termos mais amplos.<br/> <br/> Se vocÍ modificar a lÌngua da descriÁ„o, n„o adicione palavras chave ao mesmo tempo.<br/> <br/>";
-$langLocation = "URL/URI";
+$langIdentifierTip = "identifica√ß√£o √∫nica para esse objeto de aprendizagem, composta de letras, digitos,  _-.()'!*";
+$langTitleTip = "t√≠tulo ou nome, e l√≠ngua daquele t√≠tulo ou nome";
+$langDescriptionTip = "descri√ß√£o ou coment√°rio, e l√≠ngua utilizada para descrever este objeto de aprendizagem";
+$langKeyword = "Palavra-chave";
+$langKeywordTip = "separado por v√≠rgulas (letras, digitos, -.)";
+$langCoverage = "Cobertura";
+$langCoverageTip = "por exemplo, bacharel em xxx: yyy";
+$langKwNote = "Se voc√™ modificar a l√≠ngua da descri√ß√£o, n√£o adicione palavras-chave ao mesmo tempo.";
+$langClickKw = "Clique em uma palavra-chave na √°rvore para marcar ou desmarc√°-lo.";
+$langKwHelp = "<br/> Clique no bot√£o '+' para abrir, no bot√£o '-' para fechar, no bot√£o '++' para abrir todos, no bot√£o '--' para fechar todos.<br/> <br/> Limpe todas as palavras-chave selecionadas fechando a √°rvore e abrindo-a novamente com o bot√£o '+'.<br/> Segurando o Alt e clicando no bot√£o '+' pesquisa as palavras-chave originais na √°rvore.<br/> <br/> Segurando o Alt e clicando na palavra-chave seleciona uma palavra-chave sem termos abrangentes ou desmarca uma palavra-chave com termos abrangentes.<br/> <br/> Se voc√™ modificar a l√≠ngua da descri√ß√£o, n√£o adicione palavras-chave ao mesmo tempo.<br/> <br/>";
+$langLocation = "URL/Endere√ßo";
 $langLocationTip = "clique para abrir o objeto";
 $langStore = "Armazenar";
 $langDeleteAll = "Deletar todos os metadados";
-$langConfirmDelete = "VocÍ *realmente* quer deletar todos os metadados?";
+$langConfirmDelete = "Voc√™ *realmente* quer apagar todos os metadados?";
 $langWorkOn = "ligado";
 $langNotInDB = "categoria de Links desconhecida";
 $langManifestSyntax = "(erro de sintaxe no arquivo de manifesto...)";
 $langEmptyManifest = "(arquivo de manifesto vazio...)";
 $langNoManifest = "(nenhum arquivo de manifesto...)";
-$langNotFolder = "n„o È possÌvel, isto n„o È uma pasta...";
+$langNotFolder = "n√£o √© poss√≠vel, isto n√£o √© uma pasta...";
 $langContinue = "Continuar com";
-$langCreate = "Criar MDEs";
+$langCreate = "Criar";
 $langRemove = "Remover MDEs";
 $langAllRemovedFor = "Todas as entradas removidas da categoria";
 $langRemainingFor = "entradas obsoletas removidas da categoria";
 $langIndex = "Indexar Palavras";
-$langTotalMDEs = "N˙mero total de entradas MD de Links:";
+$langTotalMDEs = "N√∫mero total de entradas MD de Links:";
 $langMainMD = "Abrir o MDE Principal";
 $langOrElse = "Selecione uma categoria de link";
-$langWarningDups = "- nomes de categoria duplicados ser„o removidos da lista!";
+$langWarningDups = "- nomes de categoria duplicados ser√£o removidos da lista!";
 $langSLC = "Trabalhar com a categoria de Links chamada";
 ?>

@@ -1,15 +1,16 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$ResourceAdded = "Resurs dodan. Možete se vratiti na put ili dodati još resursa.";
-$LearningPath = "Put u&#269;enja";
+$ResourceAdded = "Resurs dodan. MoÅ¾ete se vratiti na put ili dodati joÅ¡ resursa.";
+$LearningPath = "Put uÄenja";
 $LevelUp = "razina gore";
 $AddIt = "Dodaj";
 $MainCategory = "glavna kategorija";
-$lang_delete_added_resources = "Izbriši dodane resurse";
+$lang_delete_added_resources = "IzbriÅ¡i dodane resurse";
 $AddToLinks = "Dodaj poveznicama kolegija";
 $DontAdd = "nemoj dodati";
-$lang_show_all_added_resources = "Prikaži sve dodane resurse";
+$lang_show_all_added_resources = "PrikaÅ¾i sve dodane resurse";
 $ResourcesAdded = "Resursi dodani";
 $BackTo = "Natrag na";
 $ExternalResources = "Vanjski resursi";
@@ -17,11 +18,11 @@ $CourseResources = "Resursi kolegija";
 $ExternalLink = "Vanjska poveznica";
 $DropboxAdd = "Dodaj stranicu Pretinac ovome poglavlju.";
 $AddAssignmentPage = "Dodaj stranicu Studentski radovi ovome poglavlju.";
-$Exercise = "Vježbe";
+$Exercise = "VjeÅ¾be";
 $Link = "Poveznica";
 $AdValvas = "Obavijesti";
 $Document = "Dokument";
-$ShowDelete = "Prikaži/Izbriši";
+$ShowDelete = "PrikaÅ¾i/IzbriÅ¡i";
 $IntroductionText = "Uvodni tekst";
 $CourseDescription = "Opis kolegija";
 $Groups = "Skupine";
@@ -31,8 +32,8 @@ $CourseDescriptionAdd = "Dodaj stranicu s opisom kolegija ovome poglavlju.";
 $GroupsAdd = "Dodaj stranicu Skupine ovome poglavlju.";
 $UsersAdd = "Dodaj stranicu Korisnici ovome poglavlju.";
 $ExportableCourseResources = "Resursi kolegija dostupni za prijenos";
-$DokeosRelatedCourseMaterial = "Resursi kolegija povezani sa sustavom Dokeos";
-$LinkTarget = "Odredište poveznice";
+$DokeosRelatedCourseMaterial = "Resursi kolegija povezani sa sustavom Chamilo";
+$LinkTarget = "OdrediÅ¡te poveznice";
 $SameWindow = "U istome prozoru";
 $NewWindow = "U novome prozoru";
 $StepDeleted1 = "Ovaj";
@@ -40,19 +41,19 @@ $StepDeleted2 = "element je izbrisan u tom alatu.";
 $Modify = "izmijeni";
 $Chapter = "Poglavlje";
 $NoAgendaItems = "Nema elemenata u rasporedu";
-$AgendaAdd = "Dodaj element u raspored";
-$UserGroupFilter = "Filtar korisni&#269;kih skupina";
-$AgendaSortChronologicallyUp = "Razvrstaj elemente rasporeda kronološki (gore)";
-$ShowCurrent = "Prikaži postoje&#263;e elemente rasporeda";
+$AgendaAdd = "Dodaj novi element u raspored";
+$UserGroupFilter = "Filtar prema grupama/korisnicima";
+$AgendaSortChronologicallyUp = "Sortiraj zapise rasporeda kronoloÅ¡ki uzlazno";
+$ShowCurrent = "PrikaÅ¾i elemente rasporeda u tekuÄ‡em mjesecu";
 $ModifyCalendarItem = "Izmijeni element rasporeda";
-$ItemTitle = "Naslov";
+$ItemTitle = "Naslov elementa";
 $Detail = "Pojedinosti";
-$EditSuccess = "Uspješno ure&#273;eno";
-$AddCalendarItem = "Dodaj element rasporeda";
+$EditSuccess = "Element rasporeda je izmjenjen";
+$AddCalendarItem = "Dodaj novi element u raspored";
 $AddAnn = "Dodaj obavijest";
 $ForumAddNewTopic = "Forum: dodaj novu temu";
 $ForumEditTopic = "Forum: uredi temu";
-$ExerciseAnswers = "Vježba: odgovori";
+$ExerciseAnswers = "VjeÅ¾ba: odgovori";
 $ForumReply = "Forum: odgovor";
-$AgendaSortChronologicallyDown = "Sortiraj Raspored kronološki (silazno)";
+$AgendaSortChronologicallyDown = "Sortiraj zapise rasporeda kronoloÅ¡ki silazno";
 ?>

@@ -1,5 +1,6 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $lang_height = "Lungime";
 $lang_resizing_comment = "redimensionati poza la dimensiunile urmatoare (in pixeli)";

@@ -1,46 +1,47 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$langMdCallingTool = "EnllaÁos";
-$langMdTitle = "Nom de l\'enllaÁ";
-$langMdDescription = "DescripciÛ de l\'enllaÁ";
-$langMdCoverage = "Universal";
-$langMdCopyright = "Universitat de Gante";
-$nameTools = "variable d\'idioma obsoleta";
-$langTool = "MetainformaciÛ dels enllaÁos";
-$langNoScript = "El seu navegador no permet scripts, per favor ignori la part inferior de la pantalla. No funcionar‡...";
-$langLanguageTip = "idioma en el qual va ser fet aquest objecte d\'aprenentatge";
+$langMdCallingTool = "Documents";
+$langMdTitle = "T√≠tol d'objecte d'aprenentatge";
+$langMdDescription = "Per a guardar aquesta informaci√≥, polseu guardar";
+$langMdCoverage = "Per exemple, llicenciat en...";
+$langMdCopyright = "Per exemple, el prove√Ødor de les fonts √©s desconegut";
+$nameTools = "variable d'idioma obsoleta";
+$langTool = "Metadades del document";
+$langNoScript = "El vostre navegador no permet scripts, si us plau ignoreu la part inferior de la pantalla. No funcionar√†...";
+$langLanguageTip = "llengua en la qual fou fet aquest objecte d'aprenentatge";
 $langIdentifier = "Identificador";
-$langIdentifierTip = "identificador ˙nic per a aquest objecte d\'aprenentatge, compost per lletres, nombres, .()\'!*";
-$langTitleTip = "tÌtol o nom, i idioma del tÌtol o del nom ";
-$langDescriptionTip = "descripciÛ o comentari, i llengua usada per a descriure aquest objecte d\'aprenentatge ";
-$langKeyword = "Paraules clau";
-$langKeywordTip = "separar per comas (lletres, dÌgits,-.) ";
-$langCoverage = "Categoria ";
-$langCoverageTip = "nom de la categoria, cf. EnllaÁos ";
-$langKwNote = "Si canvia l\'idioma de descripciÛ, no podr‡ afegir paraules clau al mateix temps. ";
-$langClickKw = "Faci clic en una paraula clau de l\'arbre per a seleccionar-la o deseleccionar-la. ";
-$langKwHelp = "<br/> Faci clic en el botÛ \'+\' per a obrir, en el botÛ \'-\' per a tancar, en el botÛ \'++\' per a obrir tot, en el botÛ \'--\' per a tancar-lo tot.<br/> <br/> Deseleccione totes les paraules clau tancant l\'arbre i obrint-lo de nou amb el botÛ \'+\'.<br/> Alt-clic \'+\' busca les paraules claus originals en l\'arbre.<br/> <br/> Alt-clic selecciona les paraules clau una a una, amb o sense termes mÈs amplis.<br/> <br/> Si canvia d\'idioma de descripciÛ, no podr‡ afegir paraules clau al mateix temps.<br/> <br/> ";
+$langIdentifierTip = "identificador √∫nic per aquest objecte d'aprenentatge, compost de lletres, nombres, _-.()'!\"";
+$langTitleTip = "t√≠tol o nom, i idioma del t√≠tol o del nom";
+$langDescriptionTip = "descripci√≥ o comentari, i idioma utilitzat per descriure aquest objecte d'aprenentatge";
+$langKeyword = "Paraula clau";
+$langKeywordTip = "separeu mitjan√ßant comes (lletres, d√≠gits, -.)";
+$langCoverage = "Destinaci√≥";
+$langCoverageTip = "per exemple llicenciat en xxx: yyy";
+$langKwNote = "Si canvieu l'idioma de descripci√≥, no afegiu alhora paraules clau.";
+$langClickKw = "Feu clic a la paraula clau de l'arbre ja sigui per seleccionar-la com per anular la selecci√≥.";
+$langKwHelp = "<br/>Feu clic al bot√≥ '+' per obrir, al bot√≥ '-' per tancar, al bot√≥ '++' per obrir-ho tot, al bot√≥ '--' per tancar-ho tot.<br/> Anul¬∑leu la selecci√≥ de totes les paraules clau tancant l'arbre i tornant-lo a obrir amb el bot√≥ '+'.<br/> Alt-clic '+' cerca les paraules clau originals a l'arbre.<br/><br/>Alt-clic selecciona les paraules clau sense termes m√©s amplis o anul¬∑la la selecci√≥ de paraules clau amb termes m√©s amplis.<br/><br/>Si canvieu d'idioma de descripci√≥, no podreu afegir alhora paraules clau.<br/><br/>";
 $langLocation = "URL/URI";
-$langLocationTip = "faci clic per a obrir l\'objecte ";
-$langStore = "Emmagametzar";
-$langDeleteAll = "Eliminar tota la metainformaciÛ";
-$langConfirmDelete = "Est‡ segur de voler esborrar tots els metadatos ? ";
+$langLocationTip = "feu clic per obrir l'objecte";
+$langStore = "Guardar";
+$langDeleteAll = "Esborrar totes les metadades";
+$langConfirmDelete = "Esteu segur que voleu esborrar \"totes\" les metadades?";
 $langWorkOn = "a";
-$langNotInDB = "no existeix aquesta categoria per a l\'enllaÁ";
+$langNotInDB = "no existeix aquesta categoria per a l'enlla√ß";
 $langManifestSyntax = "(error de sintaxi en el fitxer manifest...)";
-$langEmptyManifest = "(el fitxer manifest est‡ buit...) ";
-$langNoManifest = "(no existeix el fitxer manifest...) ";
-$langNotFolder = "no Ès possible, aixÚ no Ès una carpeta... ";
+$langEmptyManifest = "(el fitxer manifest est√† buit...)";
+$langNoManifest = "(no existeix el fitxer manifest...)";
+$langNotFolder = "no √©s possible, aix√≤ no √©s una carpeta...";
 $langContinue = "Continuar amb";
-$langCreate = "Crear entrades de metadades (MDE)";
+$langCreate = "crea";
 $langRemove = "Esborrar entrades de metadades";
-$langAllRemovedFor = "Totes les entrades han estat retirades de la categoria ";
-$langRemainingFor = "entrades obsoletes llevades per categoria ";
-$langIndex = "Õndex de paraules";
-$langTotalMDEs = "Total d\'entrades de metadades (MD) d\'enllaÁos";
-$langMainMD = "Obrir la p‡gina principal d\'entrades de metadatos (MDE) ";
-$langOrElse = "Seleccionar una categoria d\'enllaÁos";
+$langAllRemovedFor = "Totes les entrades han estat retirades de la categoria";
+$langRemainingFor = "entrades obsoletes llevades per categoria";
+$langIndex = "√çndex de paraules";
+$langTotalMDEs = "Total d'entrades de metadades (MD) d'enlla√ßos";
+$langMainMD = "Obrir la p√†gina principal d'entrades de metadatos (MDE)";
+$langOrElse = "Seleccionar una categoria d'enlla√ßos";
 $langWarningDups = " - els noms de categoria duplicats seran retirats de la llista !";
-$langSLC = "Treballar amb la categoria d\'enllaÁ nomenada ";
+$langSLC = "Treballar amb la categoria d'enlla√ß nomenada";
 ?>

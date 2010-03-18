@@ -1,13 +1,14 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$Print = "&#25171;&#21360;";
-$Version = "&#29256;&#26412;";
-$EditPage = "&#32534;&#36753;";
-$MostActiveUsers = "&#26356;&#22810;&#22312;&#32447;&#29992;&#25143;";
-$Restore = "&#24674;&#22797;";
-$CurrentVersion = "&#24403;&#21069;&#29256;&#26412;";
-$LastVersion = "&#26368;&#21518;&#29256;&#26412;";
-$PageRestored = "&#39029;&#38754;&#24050;&#24674;&#22797;&#12290;&#28857;&#20987;&#27983;&#35272;";
-$RestoredFromVersion = "&#24674;&#22797;&#33258;&#29256;&#26412;";
+$Print = "打印";
+$Version = "版本";
+$EditPage = "编辑";
+$MostActiveUsers = "更多在线用户";
+$Restore = "恢复";
+$CurrentVersion = "当前版本";
+$LastVersion = "最后版本";
+$PageRestored = "页面已恢复。点击浏览";
+$RestoredFromVersion = "恢复自版本";
 ?>

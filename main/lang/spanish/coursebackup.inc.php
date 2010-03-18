@@ -1,18 +1,19 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$langSelectOptionForBackup = "Por favor, seleccione una opciÛn de copia de seguridad";
+$langSelectOptionForBackup = "Por favor, seleccione una opci√≥n de copia de seguridad";
 $langLetMeSelectItems = "Seleccionar los componentes del curso";
 $langCreateFullBackup = "Crear una copia de seguridad completa de este curso";
 $langCreateBackup = "Crear una copia de seguridad";
-$langBackupCreated  = "Se ha generado la copia de seguridad del curso. La descarga de este archivo se producir· en breves instantes. Si la descarga no se inicia, haga clic en el siguiente enlace";
+$langBackupCreated = "Se ha generado la copia de seguridad del curso. La descarga de este archivo se producir√° en breves instantes. Si la descarga no se inicia, haga clic en el siguiente enlace";
 $langSelectBackupFile = "Seleccionar un fichero de copia de seguridad";
 $langImportBackup = "Importar una copia de seguridad";
 $langImportFullBackup = "Importar una copia de seguridad completa";
-$langImportFinished = "ImportaciÛn finalizada";
+$langImportFinished = "Importaci√≥n finalizada";
 $langEvents = "Agenda";
 $langAnnouncements = "Anuncios";
-$langDocuments  = "Documentos";
+$langDocuments = "Documentos";
 $langTests = "Ejercicios";
 $langLearnpaths = "Lecciones";
 $langCopyCourse = "Copiar el curso";
@@ -21,14 +22,14 @@ $langCopyFinished = "La copia ha finalizado";
 $langFullRecycle = "Reciclado completo";
 $langRecycleCourse = "Reciclar el curso";
 $langRecycleFinished = "El reciclado ha finalizado";
-$langRecycleWarning = "AtenciÛn: al usar esta herramienta puede eliminar partes del curso que luego no podr· recuperar. Le aconsejamos que antes realice una <a href=\"create_backup.php\">copia de seguridad</a>";
-$langSameFilename = "ø QuÈ hacer con los ficheros importados que tengan el mismo nombre que otros existentes ?";
+$langRecycleWarning = "Atenci√≥n: al usar esta herramienta puede eliminar partes del curso que luego no podr√° recuperar. Le aconsejamos que antes realice una <a href=\"create_backup.php\">copia de seguridad</a>";
+$langSameFilename = "¬ø Qu√© hacer con los ficheros importados que tengan el mismo nombre que otros existentes ?";
 $langSameFilenameSkip = "Saltar los ficheros con el mismo nombre";
 $langSameFilenameRename = "Renombrar el fichero (ej. archivo.pdf se convierte en  archivo_1.pdf)";
 $langSameFilenameOverwrite = "Sobreescribir el fichero";
 $langSelectDestinationCourse = "Seleccionar el curso de destino";
-$langFullCopy  = "Copia completa";
-$langCourseDescription = "DescripciÛn del curso";
+$langFullCopy = "Copia completa";
+$langCourseDescription = "Descripci√≥n del curso";
 $langNoResourcesToBackup = "No hay recursos para hacer una copia de seguridad";
 $langNoResourcesInBackupFile = "No hay recursos disponibles en este fichero de copia de seguridad";
 $langSelectResources = "Seleccione los recursos";
@@ -40,11 +41,11 @@ $langNoBackupsAvailable = "No hay una copia de seguridad disponible";
 $langNoDestinationCoursesAvailable = "No hay disponible un curso de destino";
 $langBackup = "Copia de seguridad";
 $langImportBackupInfo = "Puede transferir una copia de seguridad desde su ordenador o bien usar una copia de seguridad ya disponible en el servidor.";
-$langCreateBackupInfo = "Puede seleccionar los contenidos del curso que constituir·n la copia de seguridad.";
-$ToolIntro = "Textos de introducciÛn";
-$UploadError = "Error de envÌo, revise tamaÒo m·ximo del archivo y los permisos del directorio.";
-$DocumentsWillBeAddedToo = "Los documentos tambiÈn ser·n aÒadidos";
-$ToExportLearnpathWithQuizYouHaveToSelectQuiz = "Si quiere exportar una lecciÛn que contenga ejercicios, tendr· que  asegurarse de que estos ejercicios han sido incluidos en la exportaciÛn; para eso tendr· que haberlos seleccionado en la lista de ejercicios.";
+$langCreateBackupInfo = "Puede seleccionar los contenidos del curso que constituir√°n la copia de seguridad.";
+$ToolIntro = "Textos de introducci√≥n";
+$UploadError = "Error de env√≠o, revise tama√±o m√°ximo del archivo y los permisos del directorio.";
+$DocumentsWillBeAddedToo = "Los documentos tambi√©n ser√°n a√±adidos";
+$ToExportLearnpathWithQuizYouHaveToSelectQuiz = "Si quiere exportar una lecci√≥n que contenga ejercicios, tendr√° que  asegurarse de que estos ejercicios han sido incluidos en la exportaci√≥n; para eso tendr√° que haberlos seleccionado en la lista de ejercicios.";
 $ArchivesDirectoryNotWriteableContactAdmin = "El directorio \"archive\" utilizado por esta herramienta no tiene habilitado los permisos de escritura. Contacte al administrador de la plataforma.";
 $DestinationCourse = "Curso de destino";
 ?>

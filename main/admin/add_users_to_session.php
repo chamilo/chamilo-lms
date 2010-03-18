@@ -53,7 +53,7 @@ if(isset($_REQUEST['add_type']) && $_REQUEST['add_type']!=''){
 
 if (!api_is_platform_admin()) {
 	$sql = 'SELECT session_admin_id FROM '.Database :: get_main_table(TABLE_MAIN_SESSION).' WHERE id='.$id_session;
-	$rs = Database::query($sql,__FILE__,__LINE__);
+	$rs = Database::query($sql);
 	if(Database::result($rs,0,0)!=$_user['user_id']) {
 		api_not_allowed(true);
 	}
@@ -92,8 +92,8 @@ function search_users($needle,$type)
 		if (!empty($id_session)) {
 		$id_session = Database::escape_string($id_session);
 			// check id_user from session_rel_user table
-			$sql = 'SELECT id_user FROM '.$tbl_session_rel_user.' WHERE id_session ="'.(int)$id_session.'"';
-			$res = Database::query($sql,__FILE__,__LINE__);
+			$sql = 'SELECT id_user FROM '.$tbl_session_rel_user.' WHERE id_session ="'.(int)$id_session.'" AND relation_type<>'.SESSION_RELATION_TYPE_RRHH.' ';
+			$res = Database::query($sql);
 			$user_ids = array();
 			if (Database::num_rows($res) > 0) {
 				while ($row = Database::fetch_row($res)) {
@@ -110,12 +110,12 @@ function search_users($needle,$type)
 			$sql = 'SELECT user_id, username, lastname, firstname FROM '.$tbl_user.' user
 					WHERE (username LIKE "'.$needle.'%"
 					OR firstname LIKE "'.$needle.'%"
-				OR lastname LIKE "'.$needle.'%") AND user_id<>"'.$user_anonymous.'"'.
+				OR lastname LIKE "'.$needle.'%") AND user_id<>"'.$user_anonymous.'"   AND user.status<>'.DRH.''. 
 				$order_clause.
 				' LIMIT 11';
 		} else {
 			$sql = 'SELECT user_id, username, lastname, firstname FROM '.$tbl_user.' user
-					WHERE '.(api_sort_by_first_name() ? 'firstname' : 'lastname').' LIKE "'.$needle.'%" AND user_id<>"'.$user_anonymous.'"'.$cond_user_id.
+					WHERE '.(api_sort_by_first_name() ? 'firstname' : 'lastname').' LIKE "'.$needle.'%" AND user.status<>'.DRH.' AND user_id<>"'.$user_anonymous.'"'.$cond_user_id.
 					$order_clause;
 		}
 
@@ -129,21 +129,21 @@ function search_users($needle,$type)
 					INNER JOIN '.$tbl_user_rel_access_url.' url_user ON (url_user.user_id=user.user_id)
 					WHERE access_url_id = '.$access_url_id.'  AND (username LIKE "'.$needle.'%"
 					OR firstname LIKE "'.$needle.'%"
-					OR lastname LIKE "'.$needle.'%") AND user.user_id<>"'.$user_anonymous.'"'.
+					OR lastname LIKE "'.$needle.'%") AND user.user_id<>"'.$user_anonymous.'" AND user.status<>'.DRH.' '.
 					$order_clause.
 					' LIMIT 11';
 				} else {
 					$sql = 'SELECT user.user_id, username, lastname, firstname FROM '.$tbl_user.' user
 					INNER JOIN '.$tbl_user_rel_access_url.' url_user ON (url_user.user_id=user.user_id)
 					WHERE access_url_id = '.$access_url_id.'
-					AND '.(api_sort_by_first_name() ? 'firstname' : 'lastname').' LIKE "'.$needle.'%" AND user.user_id<>"'.$user_anonymous.'"'.$cond_user_id.
+					AND '.(api_sort_by_first_name() ? 'firstname' : 'lastname').' LIKE "'.$needle.'%" AND user.status<>'.DRH.' AND user.user_id<>"'.$user_anonymous.'"'.$cond_user_id.
 					$order_clause;
 				}
 
 			}
 		}
 
-		$rs = Database::query($sql, __FILE__, __LINE__);
+		$rs = Database::query($sql);
         $i=0;
 		if ($type=='single') {
 			while ($user = Database :: fetch_array($rs)) {
@@ -264,7 +264,7 @@ Display::display_header($tool_name);
 
 $nosessionUsersList = $sessionUsersList = array();
 /*$sql = 'SELECT COUNT(1) FROM '.$tbl_user;
-$rs = Database::query($sql, __FILE__, __LINE__);
+$rs = Database::query($sql);
 $count_courses = Database::result($rs, 0, 0);*/
 $ajax_search = $add_type == 'unique' ? true : false;
 global $_configuration;
@@ -274,9 +274,9 @@ if ($ajax_search) {
 	$sql="SELECT user_id, lastname, firstname, username, id_session
 			FROM $tbl_user
 			INNER JOIN $tbl_session_rel_user
-				ON $tbl_session_rel_user.id_user = $tbl_user.user_id
-				AND $tbl_session_rel_user.id_session = ".intval($id_session).
-			$order_clause;
+				ON $tbl_session_rel_user.id_user = $tbl_user.user_id AND $tbl_session_rel_user.relation_type<>".SESSION_RELATION_TYPE_RRHH."
+				AND $tbl_session_rel_user.id_session = ".intval($id_session)."
+			    WHERE status<>".DRH." $order_clause";
 
 	if ($_configuration['multiple_access_urls']==true) {
 		$tbl_user_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
@@ -285,14 +285,14 @@ if ($ajax_search) {
 			$sql="SELECT u.user_id, lastname, firstname, username, id_session
 			FROM $tbl_user u
 			INNER JOIN $tbl_session_rel_user
-				ON $tbl_session_rel_user.id_user = u.user_id
+				ON $tbl_session_rel_user.id_user = u.user_id AND $tbl_session_rel_user.relation_type<>".SESSION_RELATION_TYPE_RRHH."
 				AND $tbl_session_rel_user.id_session = ".intval($id_session)."
 				INNER JOIN $tbl_user_rel_access_url url_user ON (url_user.user_id=u.user_id)
-				WHERE access_url_id = $access_url_id
+				WHERE access_url_id = $access_url_id AND u.status<>".DRH."
 				$order_clause";
 		}
 	}
-	$result=Database::query($sql,__FILE__,__LINE__);
+	$result=Database::query($sql);
 	$Users=Database::store_result($result);
 	foreach ($Users as $user) {
 		$sessionUsersList[$user['user_id']] = $user ;
@@ -349,15 +349,16 @@ if ($ajax_search) {
 			$sql="SELECT  user_id, lastname, firstname, username, id_session
 				FROM $tbl_user u
 				LEFT JOIN $tbl_session_rel_user
-				ON $tbl_session_rel_user.id_user = u.user_id AND id_session = '$id_session'
-				$where_filter
+				ON $tbl_session_rel_user.id_user = u.user_id AND $tbl_session_rel_user.id_session = '$id_session' AND $tbl_session_rel_user.relation_type<>".SESSION_RELATION_TYPE_RRHH."
+				$where_filter AND u.status<>".DRH."
 			$order_clause";
 
 		} else {
 			$sql="SELECT  user_id, lastname, firstname, username, id_session
 				FROM $tbl_user u
 				LEFT JOIN $tbl_session_rel_user
-				ON $tbl_session_rel_user.id_user = u.user_id AND id_session = '$id_session'
+				ON $tbl_session_rel_user.id_user = u.user_id AND $tbl_session_rel_user.id_session = '$id_session' AND $tbl_session_rel_user.relation_type<>".SESSION_RELATION_TYPE_RRHH."
+				WHERE u.status<>".DRH."
 			$order_clause";
 		}
 		if ($_configuration['multiple_access_urls']==true) {
@@ -367,14 +368,14 @@ if ($ajax_search) {
 				$sql="SELECT  u.user_id, lastname, firstname, username, id_session
 				FROM $tbl_user u
 				LEFT JOIN $tbl_session_rel_user
-					ON $tbl_session_rel_user.id_user = u.user_id AND id_session = '$id_session'
+					ON $tbl_session_rel_user.id_user = u.user_id AND $tbl_session_rel_user.id_session = '$id_session' AND $tbl_session_rel_user.relation_type<>".SESSION_RELATION_TYPE_RRHH."
 				INNER JOIN $tbl_user_rel_access_url url_user ON (url_user.user_id=u.user_id)
-				WHERE access_url_id = $access_url_id  $where_filter
+				WHERE access_url_id = $access_url_id  $where_filter AND u.status<>".DRH."
 			$order_clause";
 			}
 		}
-		
-		$result=Database::query($sql,__FILE__,__LINE__);
+
+		$result=Database::query($sql);
 		$Users=Database::store_result($result);
 		//var_dump($_REQUEST['id_session']);
 		foreach ($Users as $user) {
@@ -391,8 +392,8 @@ if ($ajax_search) {
 		$sql="SELECT  user_id, lastname, firstname, username, id_session
 			FROM $tbl_user u
 			LEFT JOIN $tbl_session_rel_user
-			ON $tbl_session_rel_user.id_user = u.user_id AND id_session = '$id_session'
-			$order_clause";
+			ON $tbl_session_rel_user.id_user = u.user_id AND $tbl_session_rel_user.id_session = '$id_session' AND $tbl_session_rel_user.relation_type<>".SESSION_RELATION_TYPE_RRHH."
+			WHERE u.status<>".DRH." $order_clause";
 
 		if ($_configuration['multiple_access_urls']==true) {
 			$tbl_user_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
@@ -401,13 +402,13 @@ if ($ajax_search) {
 				$sql="SELECT  u.user_id, lastname, firstname, username, id_session
 				FROM $tbl_user u
 				LEFT JOIN $tbl_session_rel_user
-					ON $tbl_session_rel_user.id_user = u.user_id AND id_session = '$id_session'
+					ON $tbl_session_rel_user.id_user = u.user_id AND $tbl_session_rel_user.id_session = '$id_session' AND $tbl_session_rel_user.relation_type<>".SESSION_RELATION_TYPE_RRHH."
 				INNER JOIN $tbl_user_rel_access_url url_user ON (url_user.user_id=u.user_id)
-				WHERE access_url_id = $access_url_id
+				WHERE access_url_id = $access_url_id AND u.status<>".DRH."
 				$order_clause";
 			}
 		}
-	$result=Database::query($sql,__FILE__,__LINE__);
+	$result=Database::query($sql);
 	$Users=Database::store_result($result);
 
 	foreach($Users as $key_user_list =>$value_user_list) {
@@ -422,8 +423,7 @@ if ($ajax_search) {
 			if (array_key_exists($user['user_id'],$nosessionUsersList))
                 unset($nosessionUsersList[$user['user_id']]);
 		}
-/*		else if ( $sessionUsersList[$user['user_id']]['id_session']!=$id_session )
-			$nosessionUsersList[$user['user_id']] = $user ;*/
+
 	}
 }
 

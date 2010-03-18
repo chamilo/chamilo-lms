@@ -1,23 +1,5 @@
 <?php // $id: $
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2008 Dokeos S.A.
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact: Dokeos, 181 rue Royale, B-1000 Brussels, Belgium, info@dokeos.com
-==============================================================================
-*/
+/* For licensing terms, see /license.txt */
 /**
 ==============================================================================
 *	@package dokeos.admin
@@ -60,7 +42,7 @@ $id_session=intval($_GET['id_session']);
 if(!api_is_platform_admin())
 {
 	$sql = 'SELECT session_admin_id FROM '.Database :: get_main_table(TABLE_MAIN_SESSION).' WHERE id='.$id_session;
-	$rs = Database::query($sql,__FILE__,__LINE__);
+	$rs = Database::query($sql);
 	if(Database::result($rs,0,0)!=$_user['user_id'])
 	{
 		api_not_allowed(true);
@@ -157,7 +139,6 @@ else
   			SETTING SOME VARIABLES
 ============================================================================== */
 // Variable definitions
-$dateNow 			= format_locale_date($dateTimeFormatLong);
 // Defining the shorts for the days. We use camelcase because these are arrays of language variables
 $DaysShort = api_get_week_days_short();
 // Defining the days of the week to allow translation of the days. We use camelcase because these are arrays of language variables
@@ -320,7 +301,14 @@ if (api_is_allowed_to_edit(false,true))
 			$id=(int)$_GET['id'];
 			if( ! (api_is_course_coach() && !api_is_element_in_the_session(TOOL_AGENDA, $id ) ) )
 			{ // a coach can only delete an element belonging to his session
-				delete_agenda_item($id);
+				if (is_allowed_to_edit()  && !api_is_anonymous()) {
+					if (!empty($id)) {
+						$res_del = delete_agenda_item($id);
+						if ($res_del) {
+							Display::display_normal_message(get_lang("AgendaDeleteSuccess"));
+						}
+					}
+				}
 			}
 				if (api_get_setting('display_upcoming_events') == 'true') {
 					display_upcoming_events();

@@ -213,7 +213,8 @@ function fetch_rss ($url) {
         }
         
         // else we totally failed
-        error( $errormsg ); 
+        //hide the error
+        //error( $errormsg ); 
         
         return false;
         

@@ -66,7 +66,7 @@ $mdObj = new mdobject($_course, EID_ID);  // see 'md_' . EID_TYPE . '.php'
 
 $result = Database::query("SELECT isocode FROM " .
     Database :: get_main_table(TABLE_MAIN_LANGUAGE) .
-    " WHERE available='1' ORDER BY isocode ASC", __FILE__, __LINE__);
+    " WHERE available='1' ORDER BY isocode ASC");
 
 $sep = ":"; $langLangs = $sep . "xx" . $sep . "xx";
 

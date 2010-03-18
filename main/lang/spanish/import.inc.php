@@ -1,16 +1,17 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$langPgTitle = "TÌtulo de la p·gina";
-$langExplanation = "Esta p·gina debe estar en formato HTML (por ejemplo \"mi_pagina.htm\"). Aparecer· el enlace en la p·gina principal de su curso. Si usted desea enviar un documento que no estÈ en formato HTML (PDF, Power Point, Word...) utilice la funciÛn <a href=../document/document.php> Documentos</a>";
-$langTooBig = "Usted no ha seleccionado ning˙n archivo para enviar o el archivo es demasiado grande";
-$langCouldNot = "El archivo no ha podido ser enviado";
-$langNotAllowed = "Usted no est· identificado como responsable de este curso";
-$langAddPageToSite = "AÒadir una p·gina al sitio";
-$langCouldNotSendPage = "Este archivo no tiene formato HTML y por tanto no puede ser enviado. Si usted desea subir al servidor documentos que no est·n en formato HTML (PDF, Word, Power Point, VÌdeo, etc.) utilice<a href=../document/document.php>Documentos</a>";
-$langSendPage = "Enviar P·gina";
-$langPageTitleModified = "El tÌtulo de la p·gina ha sido modificado";
-$langPageAdded = "La p·gina ha sido aÒadida";
-$langAddPage = "AÒadir una p·gina";
-$Choose = "Examinar";
+$langPgTitle = "T√≠tulo de la p√°gina";
+$langExplanation = "Una vez que haya pulsado el bot√≥n \"Crear curso\" se crear√° el sitio web del curso, en el que dispondr√° de m√∫ltiples herramientas que podr√° configurar para dar al curso su aspecto definitivo: Test o Ejercicios, Proyectos o Blogs, Wikis, Tareas, Creador y visualizador de Lecciones en formato SCORM, Encuestas y mucho m√°s. Su identificaci√≥n como creador de este sitio autom√°ticamente lo convierte en profesor del curso, lo cual le permitir√° modificarlo seg√∫n sus necesidades.";
+$langTooBig = "No ha seleccionado el archivo a enviar o es demasiado grande";
+$langCouldNot = "El archivo no puede enviarse";
+$langNotAllowed = "Usted no est√° identificado como responsable de este curso";
+$langAddPageToSite = "A√±adir una p√°gina al sitio";
+$langCouldNotSendPage = "Este archivo no tiene formato HTML y por tanto no puede ser enviado. Si usted desea subir al servidor documentos que no est√°n en formato HTML (PDF, Word, Power Point, V√≠deo, etc.) utilice<a href=../document/document.php>Documentos</a>";
+$langSendPage = "P√°gina a enviar";
+$langPageTitleModified = "El t√≠tulo de la p√°gina ha sido modificado";
+$langPageAdded = "La p√°gina ha sido a√±adida";
+$langAddPage = "A√±adir p√°gina";
+$Choose = "Seleccione";
 ?>

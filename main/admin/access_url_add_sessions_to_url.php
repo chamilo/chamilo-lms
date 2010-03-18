@@ -1,49 +1,28 @@
 <?php
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2009 Dokeos SPRL
-	Copyright (c) 2009 Julio Montoya Armas <gugli100@gmail.com>
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact address: Dokeos, 44 rue des palais, B-1030 Brussels, Belgium
-	Mail: info@dokeos.com
-==============================================================================
-*/
+/* For licensing terms, see /license.txt */
 /**
-==============================================================================
 *	This script allows platform admins to add users to urls.
 *	It displays a list of users and a list of courses;
 *	you can select multiple users and courses and then click on
-*	@package dokeos.admin
-==============================================================================
+*	@package chamilo.admin
+*	@author Julio Montoya <gugli100@gmail.com>
 */
 
 // name of the language file that needs to be included
 $language_file = 'admin';
 $cidReset = true;
-require ('../inc/global.inc.php');
+require_once '../inc/global.inc.php';
 $this_section=SECTION_PLATFORM_ADMIN;
 
 require_once (api_get_path(LIBRARY_PATH).'urlmanager.lib.php');
 api_protect_admin_script();
-if (!$_configuration['multiple_access_urls'])
+if (!$_configuration['multiple_access_urls']) {
 	header('Location: index.php');
+	exit;
+}
 
 /*
------------------------------------------------------------
 	Global constants and variables
------------------------------------------------------------
 */
 
 $form_sent = 0;
@@ -57,20 +36,12 @@ $tbl_access_url 			= Database :: get_main_table(TABLE_MAIN_ACCESS_URL);
 $tbl_user 					= Database :: get_main_table(TABLE_MAIN_USER);
 $tbl_session				= Database :: get_main_table(TABLE_MAIN_SESSION);
 
-/*
------------------------------------------------------------
-	Header
------------------------------------------------------------
-*/
+/*	Header	*/
 $tool_name = get_lang('AddSessionToURL');
 $interbreadcrumb[] = array ('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
 $interbreadcrumb[] = array ('url' => 'access_urls.php', 'name' => get_lang('MultipleAccessURLs'));
 
-/*
-==============================================================================
-		MAIN CODE
-==============================================================================
-*/
+/*		MAIN CODE	*/
 
 Display :: display_header($tool_name);
 echo '<div class="actions" style="height:22px;">';
@@ -106,14 +77,12 @@ if ($_POST['form_sent']) {
 
 
 /*
------------------------------------------------------------
 	Display GUI
------------------------------------------------------------
 */
 /*
 if(empty($first_letter_user)) {
 	$sql = "SELECT count(*) as num_courses FROM $tbl_course";
-	$result = Database::query($sql, __FILE__, __LINE__);
+	$result = Database::query($sql);
 	$num_row = Database::fetch_array($result);
 	if($num_row['num_courses']>1000)
 	{//if there are too much num_courses to gracefully handle with the HTML select list,
@@ -128,12 +97,12 @@ $sql = "SELECT id, name FROM $tbl_session
 		WHERE name LIKE '".$first_letter_session."%' OR name LIKE '".api_strtolower($first_letter_session)."%'
 		ORDER BY name DESC ";
 
-$result = Database::query($sql, __FILE__, __LINE__);
+$result = Database::query($sql);
 $db_sessions = Database::store_result($result);
 unset($result);
 
 $sql = "SELECT id, url FROM $tbl_access_url  WHERE active=1 ORDER BY url";
-$result = Database::query($sql, __FILE__, __LINE__);
+$result = Database::query($sql);
 $db_urls = Database::store_result($result);
 unset($result);
 ?>
@@ -194,9 +163,7 @@ unset($result);
 </form>
 <?php
 /*
-==============================================================================
 		FOOTER
-==============================================================================
 */
 Display :: display_footer();
 ?>

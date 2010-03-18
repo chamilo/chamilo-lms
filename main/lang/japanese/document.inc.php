@@ -1,21 +1,22 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$langDownloadFile = "ʸ��Υ��åץ�����";
-$langNameDir = "���ǥ��쥯�ȥ��̾��";
-$langSize = "������";
-$langRename = "̾�����Ѥ���";
-$langCopy = "���ԡ�";
+$langDownloadFile = "矢今のアップロ〖ド";
+$langNameDir = "糠ディレクトリの叹涟";
+$langSize = "サイズ";
+$langRename = "叹涟を恃える";
+$langCopy = "コピ〖";
 $langTo = "to";
-$langNoSpace = "���åץ����ɤ����Ԥ��ޤ������ǥ��������ڡ�������­�Ǥ���";
-$langDownloadEnd = "���åץ����ɽ�λ";
-$langFileExists = "�Բ�ǽ�����Ǥ�<br />Ʊ��̾���Υե����뤬¸�ߤ��Ƥ��ޤ���";
-$langImpossible = "�����ǽ";
-$langAddComment = "���Τ�Τ˥����Ȥ��ղä��뤤�ϥ����Ƚ������롣";
-$langDocCopied = "ʸ��򥳥ԡ����ޤ���";
-$langDocDeleted = "ʸ��������ޤ���";
+$langNoSpace = "アップロ〖ドが己窃しました。ディスクスペ〖スの稍颅です。";
+$langDownloadEnd = "アップロ〖ド姜位";
+$langFileExists = "稍材墙な拎侯です<br />票じ叹涟のファイルが赂哼しています。";
+$langImpossible = "拎侯稍墙";
+$langAddComment = "肌のものにコメントに烧裁あるいはコメント饯赖する。";
+$langDocCopied = "矢今をコピ〖しました";
+$langDocDeleted = "矢今を猴近しました";
 $langElRen = "element renamed";
-$langDirMv = "�ǥ��쥯�ȥ���ư";
-$langComMod = "�����Ȥ���";
-$langViMod = "���ɤ���";
+$langDirMv = "ディレクトリを败瓢";
+$langComMod = "コメントを饯赖";
+$langViMod = "材粕を饯赖";
 ?>

@@ -1,20 +1,21 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$lang_new_item = "nová položka pridaná";
-$lang_title_notification = "Od Vašej poslednej návštevy";
-$lang_update_agenda = "aktualizovaná existujúca položka agendy";
-$lang_new_agenda = "pridaná nová položka agendy";
-$lang_update_announcements = "existujúce oznamy boli aktualizované";
-$lang_new_announcements = "pridaný nový oznam";
-$lang_new_document = "pridaný nový dokument(y)";
-$lang_new_exercise = "sprístupnené nové cvi&#269;enie";
-$lang_update_link = "existujúci odkaz na informáciu bol aktualizovaný";
-$lang_new_link = "pridaný nový odkaz";
-$lang_new_forum_topic = "pridaná nová téma";
-$lang_new_groupforum_topic = "nová téma pridaná do skupinového fóra";
-$lang_new_dropbox_file = "prijatý nový súbor";
-$lang_update_dropbox_file = "súbor vo Vašej schránke dokumentov bol aktualizovaný";
-$ForumCategoryAdded = "pridaná kategória fóra";
-$LearnpathAdded = "pridaná u&#269;ebná osnova";
+$lang_new_item = "novÃ¡ poloÅ¾ka pridanÃ¡";
+$lang_title_notification = "Od VaÅ¡ej poslednej nÃ¡vÅ¡tevy";
+$lang_update_agenda = "aktualizovanÃ¡ existujÃºca poloÅ¾ka agendy";
+$lang_new_agenda = "pridanÃ¡ novÃ¡ poloÅ¾ka agendy";
+$lang_update_announcements = "existujÃºce oznamy boli aktualizovanÃ©";
+$lang_new_announcements = "pridanÃ½ novÃ½ oznam";
+$lang_new_document = "pridanÃ½ novÃ½ dokument(y)";
+$lang_new_exercise = "sprÃ­stupnenÃ© novÃ© cviÄenie";
+$lang_update_link = "existujÃºci odkaz na informÃ¡ciu bol aktualizovanÃ½";
+$lang_new_link = "pridanÃ½ novÃ½ odkaz";
+$lang_new_forum_topic = "pridanÃ¡ novÃ¡ tÃ©ma";
+$lang_new_groupforum_topic = "novÃ¡ tÃ©ma pridanÃ¡ do skupinovÃ©ho fÃ³ra";
+$lang_new_dropbox_file = "prijatÃ½ novÃ½ sÃºbor";
+$lang_update_dropbox_file = "sÃºbor vo VaÅ¡ej schrÃ¡nke dokumentov bol aktualizovanÃ½";
+$ForumCategoryAdded = "KategÃ³ria fÃ³ra bola pridanÃ¡";
+$LearnpathAdded = "pridanÃ¡ uÄebnÃ¡ osnova";
 ?>

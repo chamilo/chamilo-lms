@@ -1,32 +1,8 @@
 <?php
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2004 Dokeos S.A.
-	Copyright (c) 2003 Ghent University (UGent)
-	Copyright (c) 2001 Universite catholique de Louvain (UCL)
-	Copyright (c) Bart Mollet, Hogeschool Gent
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact address: Dokeos, 44 rue des palais, B-1030 Brussels, Belgium
-	Mail: info@dokeos.com
-==============================================================================
-*/
+/* For licensing terms, see /license.txt */
 /**
-==============================================================================
 *	This is the class library for Dokeos.
-*	@package	 dokeos.library
-==============================================================================
+*	@package	 chamilo.library
 */
 require_once (api_get_path(LIBRARY_PATH).'course.lib.php');
 /**
@@ -45,7 +21,7 @@ class ClassManager
 	{
 		$table_class = Database :: get_main_table(TABLE_MAIN_CLASS);
 		$sql = "SELECT * FROM $table_class WHERE id='".$class_id."'";
-		$res = Database::query($sql, __FILE__, __LINE__);
+		$res = Database::query($sql);
 		return Database::fetch_array($res, 'ASSOC');
 	}
 	/**
@@ -57,7 +33,7 @@ class ClassManager
 	{
 		$table_class = Database :: get_main_table(TABLE_MAIN_CLASS);
 		$sql = "UPDATE $table_class SET name='".Database::escape_string($name)."' WHERE id='".$class_id."'";
-		$res = Database::query($sql, __FILE__, __LINE__);
+		$res = Database::query($sql);
 	}
 	/**
 	 * Create a class
@@ -67,7 +43,7 @@ class ClassManager
 	{
 		$table_class = Database :: get_main_table(TABLE_MAIN_CLASS);
 		$sql = "INSERT INTO $table_class SET name='".Database::escape_string($name)."'";
-		Database::query($sql, __FILE__, __LINE__);
+		Database::query($sql);
 		return Database::affected_rows() == 1;
 	}
 	/**
@@ -78,7 +54,7 @@ class ClassManager
 	{
 		$table_class = Database :: get_main_table(TABLE_MAIN_CLASS);
 		$sql = "SELECT * FROM $table_class WHERE name='".Database::escape_string($name)."'";
-		$res = Database::query($sql, __FILE__, __LINE__);
+		$res = Database::query($sql);
 		return Database::num_rows($res) != 0;
 	}
 	/**
@@ -93,11 +69,11 @@ class ClassManager
 		$table_class_course = Database :: get_main_table(TABLE_MAIN_COURSE_CLASS);
 		$table_class_user = Database :: get_main_table(TABLE_MAIN_CLASS_USER);
 		$sql = "DELETE FROM $table_class_user WHERE class_id = '".$class_id."'";
-		Database::query($sql, __FILE__, __LINE__);
+		Database::query($sql);
 		$sql = "DELETE FROM $table_class_course WHERE class_id = '".$class_id."'";
-		Database::query($sql, __FILE__, __LINE__);
+		Database::query($sql);
 		$sql = "DELETE FROM $table_class WHERE id = '".$class_id."'";
-		Database::query($sql, __FILE__, __LINE__);
+		Database::query($sql);
 	}
 	/**
 	 * Get all users from a class
@@ -109,7 +85,7 @@ class ClassManager
 		$table_class_user = Database :: get_main_table(TABLE_MAIN_CLASS_USER);
 		$table_user = Database :: get_main_table(TABLE_MAIN_USER);
 		$sql = "SELECT * FROM $table_class_user cu, $table_user u WHERE cu.class_id = '".$class_id."' AND cu.user_id = u.user_id";
-		$res = Database::query($sql, __FILE__, __LINE__);
+		$res = Database::query($sql);
 		$users = array ();
 		while ($user = Database::fetch_array($res, 'ASSOC'))
 		{
@@ -127,7 +103,7 @@ class ClassManager
 	{
 		$table_class_user = Database :: get_main_table(TABLE_MAIN_CLASS_USER);
 		$sql = "INSERT IGNORE INTO $table_class_user SET user_id = '".$user_id."', class_id='".$class_id."'";
-		Database::query($sql, __FILE__, __LINE__);
+		Database::query($sql);
 		$courses = ClassManager :: get_courses($class_id);
 		foreach ($courses as $index => $course)
 		{
@@ -152,7 +128,7 @@ class ClassManager
 			{
 				$course_codes[] = $course['course_code'];
 				$sql = "SELECT DISTINCT user_id FROM $table_class_user t1, $table_course_class t2 WHERE t1.class_id=t2.class_id AND course_code = '".$course['course_code']."' AND user_id = $user_id AND t2.class_id<>'$class_id'";
-				$res = Database::query($sql, __FILE__, __LINE__);
+				$res = Database::query($sql);
 				if (Database::num_rows($res) == 0 && CourseManager :: get_user_in_course_status($user_id, $course['course_code']) == STUDENT)
 				{
 					CourseManager :: unsubscribe_user($user_id, $course['course_code']);
@@ -160,7 +136,7 @@ class ClassManager
 			}
 		}
 		$sql = "DELETE FROM $table_class_user WHERE user_id='".$user_id."' AND class_id = '".$class_id."'";
-		Database::query($sql, __FILE__, __LINE__);
+		Database::query($sql);
 	}
 	/**
 	 * Get all courses in which a class is subscribed
@@ -172,7 +148,7 @@ class ClassManager
 		$table_class_course = Database :: get_main_table(TABLE_MAIN_COURSE_CLASS);
 		$table_course = Database :: get_main_table(TABLE_MAIN_COURSE);
 		$sql = "SELECT * FROM $table_class_course cc, $table_course c WHERE cc.class_id = '".$class_id."' AND cc.course_code = c.code";
-		$res = Database::query($sql, __FILE__, __LINE__);
+		$res = Database::query($sql);
 		$courses = array ();
 		while ($course = Database::fetch_array($res, 'ASSOC'))
 		{
@@ -191,9 +167,9 @@ class ClassManager
 		$tbl_class_user = Database :: get_main_table(TABLE_MAIN_CLASS_USER);
 		$tbl_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 		$sql = "INSERT IGNORE INTO $tbl_course_class SET course_code = '".Database::escape_string($course_code)."', class_id = '".Database::escape_string($class_id)."'";
-		Database::query($sql, __FILE__, __LINE__);
+		Database::query($sql);
 		$sql = "SELECT user_id FROM $tbl_class_user WHERE class_id = '".Database::escape_string($class_id)."'";
-		$res = Database::query($sql, __FILE__, __LINE__);
+		$res = Database::query($sql);
 		while ($user = Database::fetch_object($res))
 		{
 			CourseManager :: subscribe_user($user->user_id, $course_code);
@@ -211,11 +187,11 @@ class ClassManager
 		$tbl_course_class = Database :: get_main_table(TABLE_MAIN_COURSE_CLASS);
 		$tbl_class_user = Database :: get_main_table(TABLE_MAIN_CLASS_USER);
 		$sql = "SELECT cu.user_id,COUNT(cc.class_id) FROM $tbl_course_class cc, $tbl_class_user cu WHERE  cc.class_id = cu.class_id AND cc.course_code = '".Database::escape_string($course_code)."' GROUP BY cu.user_id HAVING COUNT(cc.class_id) = 1";
-		$single_class_users = Database::query($sql, __FILE__, __LINE__);
+		$single_class_users = Database::query($sql);
 		while ($single_class_user = Database::fetch_object($single_class_users))
 		{
 			$sql = "SELECT * FROM $tbl_class_user WHERE class_id = '".Database::escape_string($class_id)."' AND user_id = '".Database::escape_string($single_class_user->user_id)."'";
-			$res = Database::query($sql, __FILE__, __LINE__);
+			$res = Database::query($sql);
 			if (Database::num_rows($res) > 0)
 			{
 				if (CourseManager :: get_user_in_course_status($single_class_user->user_id, $course_code) == STUDENT)
@@ -225,7 +201,7 @@ class ClassManager
 			}
 		}
 		$sql = "DELETE FROM $tbl_course_class WHERE course_code = '".Database::escape_string($course_code)."' AND class_id = '".Database::escape_string($class_id)."'";
-		Database::query($sql, __FILE__, __LINE__);
+		Database::query($sql);
 	}
 
 	/**
@@ -237,7 +213,7 @@ class ClassManager
 	{
 		$table_class = Database :: get_main_table(TABLE_MAIN_CLASS);
 		$sql = "SELECT * FROM $table_class WHERE name='".$name."'";
-		$res = Database::query($sql, __FILE__, __LINE__);
+		$res = Database::query($sql);
 		$obj = Database::fetch_object($res);
 		return $obj->id;
 	}
@@ -251,7 +227,7 @@ class ClassManager
 		$table_class = Database :: get_main_table(TABLE_MAIN_CLASS);
 		$table_course_class = Database :: get_main_table(TABLE_MAIN_COURSE_CLASS);
 		$sql = "SELECT cl.* FROM $table_class cl, $table_course_class cc WHERE cc.course_code = '".Database::escape_string($course_code)."' AND cc.class_id = cl.id";
-		$res = Database::query($sql, __FILE__, __LINE__);
+		$res = Database::query($sql);
 		$classes = array ();
 		while ($class = Database::fetch_array($res, 'ASSOC'))
 		{

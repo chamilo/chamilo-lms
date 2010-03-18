@@ -1,37 +1,38 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$ResourceAdded = "Resurs dodan";
-$LearningPath = "Uèna pot";
-$LevelUp = "nivo više";
+$ResourceAdded = "Resurs je bil dodan";
+$LearningPath = "UÄna pot";
+$LevelUp = "nivo viÅ¡e";
 $AddIt = "Dodaj";
 $MainCategory = "glavna kategorija";
 $lang_delete_added_resources = "Odstrani dodane resurse";
-$AddToLinks = "Dodaj k povezavam teèaja";
+$AddToLinks = "Dodaj k povezavam teÄaja";
 $DontAdd = "ne dodaj";
-$lang_show_all_added_resources = "Prikaži vse dodane resurse";
+$lang_show_all_added_resources = "PrikaÅ¾i vse dodane resurse";
 $ResourcesAdded = "Dodani resursi";
 $BackTo = "Nazaj na";
 $ExternalResources = "Zunanji resursi";
-$CourseResources = "Teèajevi resursi";
+$CourseResources = "TeÄajevi resursi";
 $ExternalLink = "Zunanja povezava";
 $DropboxAdd = "Dodaj nabiralnikovo stran temu poglavju.";
 $AddAssignmentPage = "Dodaj stran za prenos(upload) naloge temu poglavju.";
-$Exercise = "Testi";
+$Exercise = "Vaje";
 $Link = "Povezava";
 $AdValvas = "Obvestila";
 $Document = "Dokument";
-$ShowDelete = "Prikaži / Briši";
+$ShowDelete = "PrikaÅ¾i / BriÅ¡i";
 $IntroductionText = "Uvodno besedilo";
-$CourseDescription = "Opis teèaja";
+$CourseDescription = "Opis teÄaja";
 $Groups = "Skupine";
 $Users = "Uporabniki";
 $IntroductionTextAdd = "Dodaj stran z uvodnim besedilom k temu poglavju.";
-$CourseDescriptionAdd = "Dodaj stran z opisom teèaja k temu poglavju.";
+$CourseDescriptionAdd = "Dodaj stran z opisom teÄaja k temu poglavju.";
 $GroupsAdd = "Dodaj stran skupine k temu poglavju.";
 $UsersAdd = "Dodaj stran uporabnika k temu poglavju.";
-$ExportableCourseResources = "Zmožnosti teèaja, ki jih je mogoèe izvoziti";
-$DokeosRelatedCourseMaterial = "Dokeos zmožnosti teèaja";
+$ExportableCourseResources = "ZmoÅ¾nosti teÄaja, ki jih je mogoÄe izvoziti";
+$DokeosRelatedCourseMaterial = "Chamilo zmoÅ¾nosti teÄaja";
 $LinkTarget = "Cilj povezave";
 $SameWindow = "V istem oknu";
 $NewWindow = "V novem oknu";
@@ -39,20 +40,20 @@ $StepDeleted1 = "Ta";
 $StepDeleted2 = "element je bil odstranjen v tem orodju.";
 $Modify = "spremeni";
 $Chapter = "Poglavje";
-$NoAgendaItems = "Ni nobenih zapisov agende";
-$AgendaAdd = "Dodaj zapis agende";
-$UserGroupFilter = "Filter (uporabnik/skupina)";
-$AgendaSortChronologicallyUp = "Razvrsti zapise agende kronološko (narašèajo&#269;e)";
-$ShowCurrent = "Prikaži trenutne zapise agende";
+$NoAgendaItems = "Trenutni tu ni nobenih zapisov agende";
+$AgendaAdd = "Dodaj nov dogodek";
+$UserGroupFilter = "Filter na skupini/uporabnikih";
+$AgendaSortChronologicallyUp = "Razvrsti zapise agende kronoloÅ¡ko (naraÅ¡ÄajoÄe)";
+$ShowCurrent = "PrikaÅ¾i dogodke tekoÄega meseca";
 $ModifyCalendarItem = "Spremeni zapis agende";
-$ItemTitle = "Naslov";
+$ItemTitle = "Naslov dogodka";
 $Detail = "Podrobnosti";
-$EditSuccess = "Urejanje je bilo uspešno";
-$AddCalendarItem = "Dodaj zapis agende";
+$EditSuccess = "Dogodek je bil spremenjen";
+$AddCalendarItem = "Dodaj nov dogodek";
 $AddAnn = "Dodaj obvestilo";
 $ForumAddNewTopic = "Forum: dodaj novo temo";
 $ForumEditTopic = "Forum : uredi temo";
 $ExerciseAnswers = "Vaje & testi : Odgovori";
 $ForumReply = "Forum: odgovor";
-$AgendaSortChronologicallyDown = "Uredi zapise agende kronološko (padajoèe)";
+$AgendaSortChronologicallyDown = "Razvrsti zapise agende kronoloÅ¡ko (padajoÄe)";
 ?>

@@ -37,7 +37,7 @@ $tool_name = get_lang('EditSessionCategory');
 $interbreadcrumb[]=array('url' => 'index.php',"name" => get_lang('PlatformAdmin'));
 $interbreadcrumb[]=array('url' => "session_category_list.php","name" => get_lang('ListSessionCategory'));
 $sql = "SELECT * FROM $tbl_session_category WHERE id='".$id."' ORDER BY name";
-$result=Database::query($sql,__FILE__,__LINE__);
+$result=Database::query($sql);
 if (!$infos=Database::fetch_array($result)) {
 	header('Location: session_list.php');
 	exit();
@@ -45,9 +45,10 @@ if (!$infos=Database::fetch_array($result)) {
 list($year_start,$month_start,$day_start)=explode('-',$infos['date_start']);
 list($year_end,$month_end,$day_end)=explode('-',$infos['date_end']);
 
-if (!api_is_platform_admin() && $infos['session_admin_id']!=$_user['user_id']) {
+if (!api_is_platform_admin() && $infos['session_admin_id']!=$_user['user_id'] && !api_is_session_admin()) {
 	api_not_allowed(true);
 }
+
 if ($_POST['formSent']) {
 	$formSent=1;
 	$name= $_POST['name'];
@@ -73,7 +74,7 @@ if (!empty($return)) {
 	Display::display_error_message($return,false);
 }
 ?>
-<form method="post" name="form" action="<?php echo api_get_self(); ?>?page=<?php echo $_GET['page'] ?>&id=<?php echo $id; ?>" style="margin:0px;">
+<form method="post" name="form" action="<?php echo api_get_self(); ?>?page=<?php echo Security::remove_XSS($_GET['page']) ?>&id=<?php echo $id; ?>" style="margin:0px;">
 <input type="hidden" name="formSent" value="1">
 <div class="row"><div class="form_header"><?php echo $tool_name; ?></div></div>
 <table border="0" cellpadding="5" cellspacing="0" width="550">

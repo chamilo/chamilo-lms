@@ -1,6 +1,6 @@
 /*
  * FCKeditor - The text editor for Internet - http://www.fckeditor.net
- * Copyright (C) 2003-2009 Frederico Caldeira Knabben
+ * Copyright (C) 2003-2010 Frederico Caldeira Knabben
  *
  * == BEGIN LICENSE ==
  *
@@ -111,7 +111,6 @@ body, .BackColor
 	font-size: 11px;
 	font-family: 'Microsoft Sans Serif' , Arial, Helvetica, Verdana;
 }
-
 
 .DarkBackground
 {
@@ -423,9 +422,6 @@ body, .BackColor
 {
 	background-color: #DEDEDE;
 }
-
-
-
 
 .button {
     margin:2px 5px 3px 3px !important;

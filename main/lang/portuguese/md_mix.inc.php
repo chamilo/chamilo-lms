@@ -1,18 +1,19 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$langTool = "Metadados";
-$langClickKw = "Clique numa palavra-chave da ·rvore para seleccionar ou desceleccionar.";
-$langKwHelp = "<br/> Clique no bot„o \'+\' para abrir, no bot„o \'-\' para fechar, no bot„o \'++\' para abrir todos, no bot„o \'--\' para fechar todos.<br/> <br/> Elimine todas as palavras-chave seleccionadas fechando a ·rvore e abrindo-a novamente com o bot„o \'+\'.<br/> Alt-clique \'+\' re-selecciona a palavra-chave seleccionada previamente.<br/> <br/> Alt-clique palavra-chave nega a palavra-chave. <br/>";
-$langAdvanced = "AvanÁado";
-$langSearch = "Pesquisa";
-$langSearchCrit = "Utilize a ·rea abaixo para palavras descritivas, uma palavra por linha!";
-$langNoKeywords = "Este curso n„o tem palavras-chave";
-$langKwCacheProblem = "A palavra-chave n„o pode ser aberta";
-$langCourseKwds = "palavras-chave do curso";
+$langTool = "Metadados do Documento";
+$langClickKw = "Clique numa palavra-chave da lista para seleccionar ou desceleccionar";
+$langKwHelp = "<br/> Clique no bot√£o '+' para abrir, no bot√£o '-' para fechar, no bot√£o '++' para abrir todos, no bot√£o '--' para fechar todos.<br/> <br/> Elimine todas as palavras-chave seleccionadas fechando a √°rvore e abrindo-a novamente com o bot√£o '+'.<br/> Alt-clique '+' procura a palavra-chave original na √°rvore.<br/> <br/> Alt-clique palavra-chave selecciona uma palavra-chave sem termos alargados ou descelecciona uma palavra-chave com termos alargados.<br/> <br/> Se modificar a descri√ß√£o do idioma, n√£o adicione palavras-chave ao mesmo tempo.<br/> <br/>";
+$langAdvanced = "Autor√≠a";
+$langSearch = "Pesquisar";
+$langSearchCrit = "Apenas uma palavra por linha!";
+$langNoKeywords = "Este curso nÔøΩo tem palavras-chave";
+$langKwCacheProblem = "A palavra-chave n√£o pode ser aberta";
+$langCourseKwds = "Este documento contÔøΩm as palavras-chave do curso";
 $langKwdsInMD = "palavras-chave usadas no MD";
-$langKwdRefs = "referÍncias das palavras-chave";
+$langKwdRefs = "refer√™ncias das palavras-chave";
 $langNonCourseKwds = "Non-course keywords";
-$langKwdsUse = "Palavras-chave do curso (negrito = n„o usada)";
-$langTotalMDEs = "N˙mero total de entradas MD:";
+$langKwdsUse = "Palavras-chave do curso (negrito = n√£o usada)";
+$langTotalMDEs = "N√∫mero total de entradas de Liga√ß√µes/Links MD:";
 ?>

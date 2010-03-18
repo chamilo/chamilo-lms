@@ -1,25 +1,26 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$GeneralDescription = "¸ÅÒª¼ò½é";
-$GeneralDescriptionQuestions = "¿Î³ÌÔÚ³ÌÐòÖÐµÄÎ»ÖÃÔÚÄÄ? ÓÐÃ»ÓÐÇ°ÌáÌõ¼þ? ¿Î³ÌÓëÆäËûµÄ¿Î³ÌÁªÏµÈçºÎ?";
-$GeneralDescriptionInformation = "ÃèÊöÕâÃÅ¿Î³Ì(Ñ§Ê±, ¹Ù·½´úÂë, ½ÌÊÒ)ºÍ½ÌÊ¦(Ãû×Ö, ÐÕÊÏ, °ì¹«ÊÒ, µç»°, e-mail...)";
-$Objectives = "¶ÔÏó";
-$ObjectivesInformation = "Ä¿±ê¿Î³Ì´óÌå¼°ÏêÏ¸µØÃèÊö.";
-$ObjectivesQuestions = "ÓÃ»§½«ÔÚ¿Î³ÌµÄ×îºó×öÐ©Ê²Ã´ÄØ? ¿Î³Ì½øÐÐÖÐËûÃÇ»á×÷³öÊ²Ã´ÑùµÄ´´ÐÂÄØ?";
-$Topics = "»°Ìâ";
-$TopicsInformation = "Ö÷ÌåÁÐ±í°üº¬ÔÚ¿Î³ÌÖ®ÖÐ. Ã¿¸öÖ÷ÌâµÄÖØµã. ÄÑÒ×³Ì¶È. ½á¹¹ºÍÏà»¥¶ÀÁ¢µÄ²»Í¬²¿·Ö.";
-$TopicsQuestions = "¿Î³ÌµÄ½ø³ÌÔõÑù? ÓÃ»§ÐèÒªÌØÊâ×¢ÒâµÄµØ·½ÊÇÄÄÀï? ÕâÐ©ÎÊÌâÈç¹ûÔÚ²»Í¬µÄÕÂ½ÚÖÐÀí½â·½ÃæÓÐÊ²Ã´Çø±ðÂð? ÓÃ»§ÔÚÊ²Ã´Ê±¼ä²ÅÄÜ°Ñ¾«Á¦·ÅÔÚ²»Í¬µÄÕÂ½ÚÖÐÈ¥?";
-$Methodology = "·½·¨Ñ§";
-$MethodologyQuestions = "ÓÃÊ²Ã´ÑùµÄ·½·¨²ÅÄÜÓÐÖúÓÚ´ïµ½¿Î³ÌÄ¿±ê? ÑÓÊ²Ã´ÑùµÄ½ø¶È±í?";
-$MethodologyInformation = "»î¶¯³ÊÏÖ(»áÒé, ÂÛÎÄ, Ð¡×éµ÷²é, ÊµÑéÊÒ...). ";
-$CourseMaterial = "¿Î³ÌÄÚÈÝ";
-$CourseMaterialQuestions = "ÔÚÍø¼ÊÍøÂçÀïÊÇ·ñÓÐ¿Î±¾, ÂÛÎÄ, ×Ô´«»òÁ´½ÓÃûµ¥?";
-$CourseMaterialInformation = "¿Î³ÌÄÚÈÝµÄ¼ò¶ÌÃèÊö.";
-$HumanAndTechnicalResources = "ÈËÁ¦ºÍ¼¼Êõ×ÊÔ´";
-$HumanAndTechnicalResourcesQuestions = "ÓÐ½ÌÊ¦, Öú½Ì, ¼¼ÊõÖ§³Ö, Éç»áÖ÷Á¦, ÒÔ¼°¼ÆËã»úÊÒÂð?";
-$HumanAndTechnicalResourcesInformation = "¼òÒªÃèÊöÀûÓÃ²»Í¬ÁªÏµÖ®¼äµÄÈËÃÇºÍÀûÓÃ¼¼ÊõÉè±¸µÄµÄÍ³Ò»ÐÔ.";
-$Assessment  = "ÆÀ¹À";
-$AssessmentQuestions = "ÓÃ»§½«ÈçºÎÆÀ¼Û? ÓÃÊ²Ã´ÑùµÄ·½·¨²ÅÄÜ×¥×¡Ö÷Ìâ?";
-$AssessmentInformation = "¾ÙÀý²âÊÔÎÊÌâ. ÕýÈ·±ê×¼. ÌáÊ¾ÒÔ¼°ÇÏÃÅ.";
+$GeneralDescription = "æ¦‚è¦ç®€ä»‹";
+$GeneralDescriptionQuestions = "è¯¾ç¨‹åœ¨ç¨‹åºä¸­çš„ä½ç½®åœ¨å“ª? æœ‰æ²¡æœ‰å‰ææ¡ä»¶? è¯¾ç¨‹ä¸Žå…¶ä»–çš„è¯¾ç¨‹è”ç³»å¦‚ä½•?";
+$GeneralDescriptionInformation = "æè¿°è¿™é—¨è¯¾ç¨‹(å­¦æ—¶, å®˜æ–¹ä»£ç , æ•™å®¤)å’Œæ•™å¸ˆ(åå­—, å§“æ°, åŠžå…¬å®¤, ç”µè¯, e-mail...)";
+$Objectives = "å¯¹è±¡";
+$ObjectivesInformation = "ç›®æ ‡è¯¾ç¨‹å¤§ä½“åŠè¯¦ç»†åœ°æè¿°.";
+$ObjectivesQuestions = "ç”¨æˆ·å°†åœ¨è¯¾ç¨‹çš„æœ€åŽåšäº›ä»€ä¹ˆå‘¢? è¯¾ç¨‹è¿›è¡Œä¸­ä»–ä»¬ä¼šä½œå‡ºä»€ä¹ˆæ ·çš„åˆ›æ–°å‘¢?";
+$Topics = "ä¸»é¢˜";
+$TopicsInformation = "ä¸»ä½“åˆ—è¡¨åŒ…å«åœ¨è¯¾ç¨‹ä¹‹ä¸­. æ¯ä¸ªä¸»é¢˜çš„é‡ç‚¹. éš¾æ˜“ç¨‹åº¦. ç»“æž„å’Œç›¸äº’ç‹¬ç«‹çš„ä¸åŒéƒ¨åˆ†.";
+$TopicsQuestions = "è¯¾ç¨‹çš„è¿›ç¨‹æ€Žæ ·? ç”¨æˆ·éœ€è¦ç‰¹æ®Šæ³¨æ„çš„åœ°æ–¹æ˜¯å“ªé‡Œ? è¿™äº›é—®é¢˜å¦‚æžœåœ¨ä¸åŒçš„ç« èŠ‚ä¸­ç†è§£æ–¹é¢æœ‰ä»€ä¹ˆåŒºåˆ«å—? ç”¨æˆ·åœ¨ä»€ä¹ˆæ—¶é—´æ‰èƒ½æŠŠç²¾åŠ›æ”¾åœ¨ä¸åŒçš„ç« èŠ‚ä¸­åŽ»?";
+$Methodology = "æ–¹æ³•å­¦";
+$MethodologyQuestions = "ç”¨ä»€ä¹ˆæ ·çš„æ–¹æ³•æ‰èƒ½æœ‰åŠ©äºŽè¾¾åˆ°è¯¾ç¨‹ç›®æ ‡? å»¶ä»€ä¹ˆæ ·çš„è¿›åº¦è¡¨?";
+$MethodologyInformation = "æ´»åŠ¨å‘ˆçŽ°(ä¼šè®®, è®ºæ–‡, å°ç»„è°ƒæŸ¥, å®žéªŒå®¤...).";
+$CourseMaterial = "è¯¾ç¨‹å†…å®¹";
+$CourseMaterialQuestions = "åœ¨ç½‘é™…ç½‘ç»œé‡Œæ˜¯å¦æœ‰è¯¾æœ¬, è®ºæ–‡, è‡ªä¼ æˆ–é“¾æŽ¥åå•?";
+$CourseMaterialInformation = "è¯¾ç¨‹å†…å®¹çš„ç®€çŸ­æè¿°.";
+$HumanAndTechnicalResources = "äººåŠ›å’ŒæŠ€æœ¯èµ„æº";
+$HumanAndTechnicalResourcesQuestions = "æœ‰æ•™å¸ˆ, åŠ©æ•™, æŠ€æœ¯æ”¯æŒ, ç¤¾ä¼šä¸»åŠ›, ä»¥åŠè®¡ç®—æœºå®¤å—?";
+$HumanAndTechnicalResourcesInformation = "ç®€è¦æè¿°åˆ©ç”¨ä¸åŒè”ç³»ä¹‹é—´çš„äººä»¬å’Œåˆ©ç”¨æŠ€æœ¯è®¾å¤‡çš„çš„ç»Ÿä¸€æ€§.";
+$Assessment = "è¯„ä¼°";
+$AssessmentQuestions = "ç”¨æˆ·å°†å¦‚ä½•è¯„ä»·? ç”¨ä»€ä¹ˆæ ·çš„æ–¹æ³•æ‰èƒ½æŠ“ä½ä¸»é¢˜?";
+$AssessmentInformation = "ä¸¾ä¾‹æµ‹è¯•é—®é¢˜. æ­£ç¡®æ ‡å‡†. æç¤ºä»¥åŠçªé—¨.";
 ?>

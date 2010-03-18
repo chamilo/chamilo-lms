@@ -35,77 +35,6 @@ class SurveyManager {
 
 	}
 	/**
-	  * Creates a new survey for the platform
-	  * Possible  deprecated method
-	  */
-	public static function select_survey_list ($seleced_surveyid='', $extra_script='') {
-		$survey_table = Database :: get_course_table(TABLE_SURVEY);
-		$sql = "SELECT * FROM $survey_table";// WHERE is_shared='1'";
-		$sql_result = Database::query($sql,__FILE__,__LINE__);
-		if (Database::num_rows($sql_result) > 0)
-		{
-			$str_survey_list = "";
-			$str_survey_list .= "<select name=\"exiztingsurvey\" $extra_script>\n";
-			$str_survey_list .= "<option value=\"\">--Select Survey--</option>";
-
-			while($result=Database::fetch_array($sql_result))
-			{
-			 $selected = ($seleced_surveyid==$result[survey_id])?"selected":"";
-			 $str_survey_list .= "\n<option value=\"".$result[survey_id]."\" ".$selected.">".$result[title]."</option>";
-			}
-
-			$str_survey_list .= "</select>";
-			return $str_survey_list;
-
-		}
-		else
-		{
-			return false;
-		}
-
-	}
-
-	/*function getsurveyid($existing)
-	{
-
-		$survey_table = Database :: get_course_table(TABLE_MAIN_SURVEY);
-		$sql = "SELECT survey_id FROM $survey_table WHERE title='$existing'" ;
-		$result = Database::query($sql,__FILE__,__LINE__);
-		$i=0;
-		$survey_id=Database::result($result,$i,'survey_id');
-		echo "in getsurveyid".$survey_id;
-		return(survey_id);
-	}
-*/
-
-	/**
-	 * Possible  deprecated method
-	 */
-	function create_group($survey_id,$group_title,$introduction,$table_group)
-	{
-
-		$sql_query = "SELECT * FROM $table_group WHERE groupname='".Database::escape_string($group_title)."' AND survey_id=".Database::escape_string($survey_id);
-		$res = Database::query($sql_query, __FILE__, __LINE__);
-		if (Database::num_rows($res))
-		{
-			return false;
-
-		}
-		else
-		 {
-
-			$sql = 'SELECT MAX(sortby) FROM '.$table_group.' WHERE survey_id="'.Database::escape_string($survey_id).'"';
-			$rs = Database::query($sql, __FILE__, __LINE__);
-			list($sortby) = Database::fetch_array($rs);
-			$sortby++;
-			$sql="INSERT INTO $table_group(group_id,survey_id,groupname,introduction, sortby) values('','$survey_id','$group_title','$introduction','$sortby')";
-			$result=Database::query($sql, __FILE__, __LINE__);
-			return Database::insert_id();
-		 }
-
-	}
-
-	/**
 	 * Possible  deprecated method
 	 */
 	function get_survey_author($authorid)
@@ -113,7 +42,7 @@ class SurveyManager {
 			$user_table = Database :: get_main_table(TABLE_MAIN_USER);
 			$authorid = Database::escape_string($authorid);
 		    $sql_query = "SELECT * FROM $user_table WHERE user_id='$authorid'";
-			$res = Database::query($sql_query, __FILE__, __LINE__);
+			$res = Database::query($sql_query);
 			$firstname=@Database::result($res,0,'firstname');
 			return $firstname;
 	}
@@ -126,7 +55,7 @@ class SurveyManager {
 	    //$table_survey = Database :: get_course_table(TABLE_SURVEY);
 	    $survey_id = Database::escape_string($survey_id);
 		$sql = "SELECT author FROM $db_name.survey WHERE survey_id='$survey_id'";
-		$res = Database::query($sql, __FILE__, __LINE__);
+		$res = Database::query($sql);
 		$author=@Database::result($res,0,'author');
 		return $author;
 	}
@@ -138,7 +67,7 @@ class SurveyManager {
 	    //$group_table = Database :: get_course_table(TABLE_SURVEY_QUESTION_GROUP);
 	    $group_id = Database::escape_string($group_id);
 		$sql = "SELECT survey_id FROM $db_name.survey_group WHERE group_id='$group_id'";
-		$res = Database::query($sql, __FILE__, __LINE__);
+		$res = Database::query($sql);
 		$surveyid=@Database::result($res,0,'survey_id');
 		return $surveyid;
 	}
@@ -147,7 +76,7 @@ class SurveyManager {
 		//$grouptable = Database :: get_course_table(TABLE_SURVEY_QUESTION_GROUP);
 		$gid = Database::escape_string($gid);
 		$sql = "SELECT * FROM $db_name.survey_group WHERE group_id='$gid'";
-		$res=Database::query($sql, __FILE__, __LINE__);
+		$res=Database::query($sql);
 		$code=@Database::result($res,0,'groupname');
 		return($code);
 	}
@@ -161,7 +90,7 @@ class SurveyManager {
 		$introduction = Database::escape_string($introduction);
 
 		$sql="INSERT INTO $tb (group_id,survey_id,group_title,introduction) values('','$survey_id','$group_title','$introduction')";
-		$result=Database::query($sql, __FILE__, __LINE__);
+		$result=Database::query($sql);
 		return Database::insert_id();
 	}
 	/**
@@ -173,7 +102,7 @@ class SurveyManager {
 		$sql="SELECT code FROM $table_survey where code='$survey_code'";
 		//echo $sql;
 		//exit;
-		$result=Database::query($sql, __FILE__, __LINE__);
+		$result=Database::query($sql);
 		$code=@Database::result($result,0,'code');
 		//echo $code;exit;
 		return($code);
@@ -185,7 +114,7 @@ class SurveyManager {
 	{
 		$survey_table = Database :: get_course_table(TABLE_SURVEY);
 		$sql_query = "SELECT survey_id,title FROM $survey_table where title!='' ";
-		$sql_result = Database::query($sql_query,__FILE__,__LINE__);
+		$sql_result = Database::query($sql_query);
 		echo "<select name=\"author\">";
 		echo "<option value=\"\"><--Select Survey--></optional>";
 		while ($result =@Database::fetch_array($sql_result))
@@ -201,48 +130,16 @@ class SurveyManager {
 		{
 			//$table_survey = Database :: get_course_table(TABLE_SURVEY);
 			$sql = "INSERT INTO $table_survey (code,title, subtitle, author,lang,avail_from,avail_till, is_shared,template,intro,surveythanks,creation_date) values('$surveycode','$surveytitle','$surveysubtitle','$author','$survey_language','$availablefrom','$availabletill','$isshare','$surveytemplate','$surveyintroduction','$surveythanks',curdate())";
-			$result = Database::query($sql, __FILE__, __LINE__);
-			//$result = Database::query($sql, __FILE__, __LINE__);
+			$result = Database::query($sql);
+			//$result = Database::query($sql);
 			$survey_id = Database::insert_id();
 			$sql2 = "INSERT INTO $table_group(group_id,survey_id,groupname,introduction) values('','$survey_id','No Group','This is your Default Group')";
-			$result = Database::query($sql2, __FILE__, __LINE__);
+			$result = Database::query($sql2);
 			return $survey_id;
 		}
 	/**
 	 * Possible  deprecated method
 	 */
-	function create_survey_in_another_language($id, $lang){
-
-		global $_course;
-
-		$original_survey = self::get_all_datas($id);
-
-		// copy the survey itself
-		$sql = 'INSERT INTO '.$_course['dbName'].'.survey SET
-					code = "'.$original_survey->code.'",
-					title = "'.addslashes($original_survey->title).'",
-					subtitle = "'.addslashes($original_survey->subtitle).'",
-					author = "'.$original_survey->author.'",
-					lang = "'.$lang.'",
-					avail_from = "'.$original_survey->avail_from.'",
-					avail_till = "'.$original_survey->avail_till.'",
-					is_shared = "'.$original_survey->is_shared.'",
-					template = "'.$original_survey->template.'",
-					intro = "'.addslashes($original_survey->intro).'",
-					surveythanks = "'.addslashes($original_survey->surveythanks).'",
-					creation_date = "NOW()"';
-
-		$result = Database::query($sql, __FILE__, __LINE__);
-		$new_survey_id = Database::insert_id();
-
-		// copy the groups
-		$groups = self::listGroups($id);
-		foreach($groups as $group)
-		{
-			self::import_group($new_survey_id, $group['group_id'], $_course['dbName'], $_course['dbName']);
-		}
-
-	}
 	/**
 	 * Possible  deprecated method
 	 */
@@ -250,7 +147,7 @@ class SurveyManager {
 	{
 			//$table_survey = Database :: get_course_table(TABLE_SURVEY);
 			$sql = "INSERT INTO $table_survey (code,title, subtitle, author,lang,avail_from,avail_till, is_shared,template,intro,surveythanks,creation_date) values('$surveycode','$surveytitle','$surveysubtitle','$author','$survey_language','$availablefrom','$availabletill','$isshare','$surveytemplate','$surveyintroduction','$surveythanks',curdate())";
-			$result = Database::query($sql, __FILE__, __LINE__);
+			$result = Database::query($sql);
 			$survey_id = Database::insert_id();
 			return $survey_id;
 	}
@@ -260,103 +157,15 @@ class SurveyManager {
 	function update_survey($surveyid,$surveycode,$surveytitle, $surveysubtitle, $author, $survey_language, $availablefrom, $availabletill,$isshare, $surveytemplate, $surveyintroduction, $surveythanks, $cidReq,$table_course)
 	{
           $sql_course = "SELECT * FROM $table_course WHERE code = '$cidReq'";
-          $res_course = Database::query($sql_course,__FILE__,__LINE__);
+          $res_course = Database::query($sql_course);
           $obj_course=@Database::fetch_object($res_course);
           $curr_dbname = $obj_course->db_name ;
           $surveyid = Database::escape_string($surveyid);
 		  $sql = "UPDATE $curr_dbname.survey SET code='$surveycode', title='$surveytitle', subtitle='$surveysubtitle', lang='$survey_language',   avail_from='$availablefrom', avail_till='$availabletill', is_shared='$isshare', template='$surveytemplate', intro='$surveyintroduction',surveythanks='$surveythanks'
 		  		  WHERE survey_id='$surveyid'";
-		  Database::query($sql, __FILE__, __LINE__);
+		  Database::query($sql);
 		  return $curr_dbname;
 	}
-
-	/*
-	function create_question($gid,$type,$caption,$answers,$open_ans,$answerT,$answerD,$rating,$table_question)
-	{
-
-		for($i=0;$i<10;$i++)
-		{
-		   $x.= "'".$answers[$i]."',";
-		}
-		//echo "Hello".$x;
-
-		for($j=0;$j<10;$j++)
-		{
-			if($j==9)
-			{
-				$y.= "'".$rating[$j]."'";
-			}
-			else
-			{
-				$y.= "'".$rating[$j]."',";
-			}
-		}
-
-		$anst = implode(", " ,$answerT);
-		$ansd = implode(", " ,$answerD);
-
-		$table_question = Database :: get_course_table(TABLE_MAIN_SURVEYQUESTION);
-		$sql = "INSERT INTO  $table_question (gid,type,caption,ans1,ans2,ans3,ans4,ans5,ans6,ans7,ans8,ans9,ans10,open_ans,anst,ansd,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10) values('$gid','$type','$caption',$x'$open_ans','$anst','$ansd',$y)";
-		$result = Database::query($sql, __FILE__, __LINE__);
-		return Database::insert_id();
-	}
-
-	function get_question($questionid)
-	{
-		$table_question = Database :: get_course_table(TABLE_MAIN_SURVEYQUESTION);
-	  	$sql = "SELECT * FROM $table_question where qid='$questionid'";
-		$res=Database::query($sql, __FILE__, __LINE__);
-		$code=@Database::result($res,0,'caption');
-		return($code);
-	}
-	*/
-	/**
-	 * Possible  deprecated method
-	 */
-	function create_question($gid,$surveyid,$qtype,$caption,$alignment,$answers,$open_ans,$answerT,$answerD,$rating,$curr_dbname)
-	{
-    	$sql_sort = "SELECT max(sortby) AS sortby FROM $curr_dbname.questions ";
-		$res_sort=Database::query($sql_sort, __FILE__, __LINE__);
-		$rs=Database::fetch_object($res_sort);
-		$sortby=$rs->sortby;
-		if(empty($sortby))
-		{
-			$sortby=1;
-		}
-		else
-		{
-			$sortby=$sortby+1;
-		}
-		for($i=0;$i<10;$i++)
-		{
-		   $x.= "'".$answers[$i]."',";
-		}
-		for($j=0;$j<10;$j++)
-		{
-			if($j==9)
-			{
-				$y.= "'".$rating[$j]."'";
-			}
-			else
-			{
-				$y.= "'".$rating[$j]."',";
-			}
-		}
-		/*if($qtype=='Multiple Choice (multiple answer)')
-		{
-			$anst = implode(", " ,$answerT);
-			$ansd = implode(", " ,$answerD);
-		}
-		else
-		{*/
-			$anst = $answerT;
-			$ansd = $answerD;
-		//}
-			$sql = "INSERT INTO $curr_dbname.questions (gid,survey_id,qtype,caption,alignment,sortby,a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,at,ad,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10) values('$gid','$surveyid','$qtype','$caption','$alignment','$sortby',$x'$anst','$ansd',$y)";
-			$result = Database::query($sql, __FILE__, __LINE__);
-			return Database::insert_id();
-
-		}
 
 	/**
 	 * Possible  deprecated method
@@ -371,7 +180,7 @@ class SurveyManager {
 		$anst = $answerT;
 		$ansd = $answerD;
 		$sql = "UPDATE $curr_dbname.questions SET qtype='$qtype',caption='$caption',alignment='$alignment',a1='$answers[0]',a2='$answers[1]',a3='$answers[2]',a4='$answers[3]',a5='$answers[4]',a6='$answers[5]',a7='$answers[6]',a8='$answers[7]',a9='$answers[8]',a10='$answers[9]' WHERE qid='$qid'";
-		$result = Database::query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql);
 		return Database::insert_id();
 	}
 
@@ -383,7 +192,7 @@ class SurveyManager {
 	  $table_question = Database :: get_course_table(TABLE_MAIN_SURVEYQUESTION);
 	  $questionid = Database::escape_string($questionid);
 	  $sql = "SELECT * FROM $table_question WHERE qid='$questionid'";
-			$res=Database::query($sql, __FILE__, __LINE__);
+			$res=Database::query($sql);
 			$code=@Database::result($res,0,'type');
 			return($code);
 	 }
@@ -396,7 +205,7 @@ class SurveyManager {
 	  //$table_question = Database :: get_course_table(TABLE_MAIN_SURVEYQUESTION);
 	  $gid = Database::escape_string($gid);
 	  $sql = "SELECT * FROM $db_name.questions WHERE gid='$gid'";
-			$res=Database::query($sql, __FILE__, __LINE__);
+			$res=Database::query($sql);
 			$code=@Database::num_rows($res);
 			return($code);
 	 }
@@ -404,27 +213,11 @@ class SurveyManager {
 	/**
 	 * Possible  deprecated method
 	 */
-	function get_question_data($qid,$curr_dbname)
-	{
-			$qid = Database::escape_string($qid);
-	        $sql = "SELECT * FROM $curr_dbname.questions where qid='$qid'";
-			$res=Database::query($sql, __FILE__, __LINE__);
-			$rs=Database::fetch_object($res);
-			$properties = get_object_vars($rs);
-			foreach ($properties as $property=>$val){
-				$val = stripslashes($val);
-				$rs->$property = $val;
-			}
-			return $rs;
-	 }
-	/**
-	 * Possible  deprecated method
-	 */
 	function get_data($id, $field)
 	{
 		global $_course;
 		$sql='SELECT '.$field.' FROM '.$_course['dbName'].'.survey WHERE survey_id='.intval($id);
-		$res=Database::query($sql, __FILE__, __LINE__);
+		$res=Database::query($sql);
 		$code=@Database::result($res,0);
 		return($code);
 
@@ -436,7 +229,7 @@ class SurveyManager {
 	{
 		global $_course;
 		$sql='SELECT * FROM '.$_course['dbName'].'.survey WHERE survey_id='.intval($id);
-		$res=Database::query($sql, __FILE__, __LINE__);
+		$res=Database::query($sql);
 		return Database::fetch_object($res);
 	}
 	/**
@@ -447,7 +240,7 @@ class SurveyManager {
 			//$surveytable=Database:: get_course_table(TABLE_SURVEY);
 			$sid = Database::escape_string($sid);
 			$sql="SELECT * FROM $db_name.survey WHERE survey_id=$sid";
-			$res=Database::query($sql, __FILE__, __LINE__);
+			$res=Database::query($sql);
 			$code=@Database::result($res,0,'title');
 			return($code);
 	}
@@ -459,23 +252,11 @@ class SurveyManager {
 			$sid = Database::escape_string($sid);
 			$surveytable=Database:: get_course_table(TABLE_SURVEY);
 			$sql="SELECT * FROM $surveytable WHERE survey_id=$sid";
-			$res=Database::query($sql, __FILE__, __LINE__);
+			$res=Database::query($sql);
 			$code=@Database::result($res,0,'title');
 			return($code);
 	}
 
-	/*
-	function join_survey($question_type)
-		{
-		  $table_survey = Database :: get_course_table(TABLE_MAIN_SURVEY);
-		  $table_group =  Database :: get_course_table(TABLE_MAIN_GROUP);
-		  $table_question = Database :: get_course_table(TABLE_MAIN_SURVEYQUESTION);
-		  echo $sql="select t1.title as stitle, t3.type as type, t3.caption as caption, t2.groupname as groupname from $table_survey t1, $table_group t2, $table_question t3  where t1.survey_id=t2.survey_id  and t3.gid=t2.group_id and t3.type='$question_type'";
-		  $sql_result = Database::query($sql,__FILE__,__LINE__);
-		  $result = Database::fetch_object($sql_result);
-		  return ($result);
-		  }
-		  */
 	/**
 	 * Possible  deprecated method
 	 */
@@ -502,9 +283,9 @@ class SurveyManager {
 			if(isset($selected_group)){
 			 if($selected_group!=''){
 			  $sql = "SELECT $table_group('survey_id', 'groupname') values('$sid', '$groupname')";
-				$res = Database::query($sql, __FILE__, __LINE__);
+				$res = Database::query($sql);
 				$sql = "INSERT INTO $table_group('survey_id', 'groupname') values('$sid', '$groupname')";
-				$res = Database::query($sql, __FILE__, __LINE__);
+				$res = Database::query($sql);
 				$gid_arr[$index]+= Database::insert_id();
 				$groupids=implode(",",$gid_arr);
 			  }
@@ -522,7 +303,7 @@ class SurveyManager {
 	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, cleanup and refactoring
 	 *
 	 */
-	function delete_survey($survey_id)
+	public static function delete_survey($survey_id)
 	{
 		$table_survey 	= Database :: get_course_table(TABLE_SURVEY);
 		$table_group 	= Database :: get_course_table(TABLE_SURVEY_QUESTION_GROUP);
@@ -532,20 +313,20 @@ class SurveyManager {
 
 		// Deleting the survey
 		$sql = "DELETE FROM $table_survey WHERE survey_id='".$survey_id."'";
-		Database::query($sql,__FILE__,__LINE__);
+		Database::query($sql);
 
 		// Deleting all the questions of the survey
 		$sql = "SELECT * FROM $table_group WHERE survey_id='".$survey_id."'";
-		$res = Database::query($sql,__FILE__,__LINE__);
+		$res = Database::query($sql);
 		while($obj = Database::fetch_object($res))
 		{
 			$sql = "DELETE FROM $table_question WHERE gid='".$obj->group_id."'";
-			Database::query($sql,__FILE__,__LINE__);
+			Database::query($sql);
 		}
 
 		// Deleting the groups of the survey
 		$sql = "DELETE FROM $table_group WHERE survey_id='".$survey_id."'";
-		Database::query($sql,__FILE__,__LINE__);
+		Database::query($sql);
 		return true;
 	}
 
@@ -566,38 +347,9 @@ class SurveyManager {
 		$table_survey_group = Database :: get_course_table(TABLE_SURVEY_QUESTION_GROUP);
 
 		$sql = "DELETE FROM $table_question WHERE gid='".$group_id."'";
-		Database::query($sql,__FILE__,__LINE__);
+		Database::query($sql);
 		$sql = "DELETE FROM $table_survey_group WHERE group_id='".$group_id."'";
-		Database::query($sql,__FILE__,__LINE__);
-	}
-
-	/**
-	 *  Possible  deprecated method
-	 */
-	function ques_id_group_name($qid)
-	{
-		$ques_table=Database::get_course_table(TABLE_MAIN_SURVEYQUESTION);
-		$sql="SELECT gid FROM $ques_table where qid=$qid";
-		$res=Database::query($sql, __FILE__, __LINE__);
-		$id=@Database::result($res,0,'gid');
-		$gname=surveymanager::get_groupname($id);
-		return($gname);
-	}
-	/**
-	 *  Possible  deprecated method
-	 */
-	function insert_questions($sid,$newgid,$gid,$table_group)
-	{
-		$sql_select = "SELECT * FROM $table_group WHERE group_id IN (".$gid.")";
-		$res = Database::query($sql_select, __FILE__, __LINE__);
-		$num = Database::num_rows($res);
-		$i=0;
-		while($i<$num)
-		{
-			$sql_insert = "INSERT INTO $table_group(group_id, survey_id, groupname) values('', '$sid', 'Imported Group')";
-			$result = Database::query($sql_insert, __FILE__, __LINE__);
-			$i++;
-		}
+		Database::query($sql);
 	}
 	/**
 	 *  Possible  deprecated method
@@ -606,7 +358,7 @@ class SurveyManager {
 	{
 		$group_table = Database :: get_course_table(TABLE_SURVEY_QUESTION_GROUP);
 		$sql = "SELECT * FROM $group_table WHERE survey_id='$survey_id'";
-		$sql_result = Database::query($sql,__FILE__,__LINE__);
+		$sql_result = Database::query($sql);
 		if(Database::num_rows($sql_result)>0)
 		{
 			$str_group_list = "";
@@ -633,102 +385,11 @@ class SurveyManager {
 	/**
 	 *  Possible  deprecated method
 	 */
-//For importing the groups to new survey
-	function insert_groups($sid,$newgid,$gids,$table_group,$table_question)
-		{
-			$gid_arr = explode(",",$gids);
-			$num = count($gid_arr);
-
-
-				$queryone = "SELECT *  FROM $table_question WHERE gid = '$newgid'";
-				$rs = Database::query($queryone, __FILE__, __LINE__);
-				$numrs=Database::num_rows($rs);
-
-             for($k=0;$k<$numrs;$k++)
-				{
-                  $imp[]=Database::result($rs,$k,"imported_group");
-				}
-
-
-			$imp=@array_unique($imp);
-			for($n=0;$n<count($gid_arr);$n++)
-				{
-                  if(@in_array($gid_arr[$n],$imp))
-					{
-				     $gname=surveymanager::get_groupname($gid_arr[$n]);
-					 $alr[]=$gname;
-					 //$alr[]=$gid_arr[$n];
-					 //$unique_arr = @array_unique($alr);
-					// print_r($unique_arr);
-					}
-				}
-			//$unique_arr = @array_unique($alr);
-			//print_r($unique_arr);
-
-		/*if($msg)
-			{
-
-		echo "You have already imported the following group(s)";
-		echo "<br>".$msg;
-
-		}*/
-
-			for($index=0;$index<$num;$index++)
-			{
-				if(@!in_array($gid_arr[$index],$imp))
-				{
-				$temp_gid = $gid_arr[$index];
-
-				$sql = "SELECT * FROM $table_question WHERE gid = '$temp_gid'";
-				$res = Database::query($sql, __FILE__, __LINE__);
-				$num_rows = Database::num_rows($res);
-				while($obj = Database::fetch_object($res))
-				{
-					$temp_qtype = $obj->qtype;
-					$temp_caption = $obj->caption;
-					$y="";
-					$x="";
-					for($i=1;$i<=10;$i++)
-						{
-							$temp = "a".$i;
-							$x.= "'".$obj->$temp."',"; /*this variable contains concatenated values and need to be refreshed each time 								before the loop starts!*/
-						}
-
-					for($j=1;$j<=10;$j++)
-						{
-
-							if($j==10)
-								{
-									$temps = "r".$j;
-									$y.= "'".$obj->$temps."'";
-								}
-							else
-								{
-									$temps = "r".$j;
-									$y.= "'".$obj->$temps."',";
-								}
-						}
-
-					$sql_insert = "INSERT INTO  $table_question (qid,gid,qtype,caption,a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,at,ad,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,imported_group) values('','$newgid','$temp_qtype','$temp_caption',$x'$anst','$ansd',$y,'$temp_gid')";
-					$res2 = Database::query($sql_insert, __FILE__, __LINE__);
-				}
-
-			}
-
-			}
-
-		}
-
-
-
-	/**
-	 *  Possible  deprecated method
-	 */
 	function display_imported_group($sid,$table_group,$table_question)
 	{
 
 		 $sql = "SELECT group_id FROM $table_group WHERE survey_id='$sid'";
-		$res = Database::query($sql, __FILE__, __LINE__);
+		$res = Database::query($sql);
 		$num = @Database::num_rows($res);
 		//echo "ths is num".$num;
 		$parameters = array();
@@ -738,7 +399,7 @@ class SurveyManager {
 
 			$groupid = $obj->group_id;
 			$query = "SELECT * FROM $table_question WHERE gid = '$groupid'";
-			$result = Database::query($query, __FILE__, __LINE__);
+			$result = Database::query($query);
 		  while($object = @Database::fetch_object($result))
 			{
 				$display = array();
@@ -766,16 +427,16 @@ class SurveyManager {
 	//For attaching the whole survey with its groups and questions
 	  {
 	 $sql = "SELECT *  FROM $db_name.survey_group WHERE survey_id = '$surveyid'";
-     $res = Database::query($sql,__FILE__,__LINE__);
+     $res = Database::query($sql);
 	 while($obj=@Database::fetch_object($res))
      {
 		 $groupname=addslashes($obj->groupname);
 		 $introduction=addslashes($obj->introduction);
 	   $sql_insert = "INSERT INTO $curr_dbname.survey_group(group_id,survey_id,groupname,introduction) values('','$newsurveyid','$groupname','$introduction')";
-	   $resnext = Database::query($sql_insert,__FILE__,__LINE__);
+	   $resnext = Database::query($sql_insert);
 	   $groupid = Database::insert_id();
 	   $sql_q = "SELECT *  FROM $db_name.questions WHERE gid = '$obj->group_id'";
-	   $res_q = Database::query($sql_q,__FILE__,__LINE__);
+	   $res_q = Database::query($sql_q);
        while($obj_q = Database::fetch_object($res_q))
 	   {
 		 $caption1=addslashes($obj_q->caption);
@@ -802,971 +463,82 @@ class SurveyManager {
 			  $r9=addslashes($obj_q->r9);
 			  $r10=addslashes($obj_q->r10);
 		 $sql_sort = "SELECT max(sortby) AS sortby FROM $curr_dbname.questions ";
-         $res_sort=Database::query($sql_sort, __FILE__, __LINE__);
+         $res_sort=Database::query($sql_sort);
          $rs=Database::fetch_object($res_sort);
 	     $sortby=$rs->sortby;
 	     if(empty($sortby))
 	     {$sortby=1;}
 	     else{$sortby=$sortby+1;}
 		 $sql_q_insert = "INSERT INTO $curr_dbname.questions (qid,gid,survey_id,qtype,caption,alignment,sortby,a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,at,ad,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10) values('','$groupid','$newsurveyid','$obj_q->qtype','$caption1','$obj_q->alignment','$sortby','$a1','$a2','$a3','$a4','$a5','$a6','$a7','$a8','$a9','$a10','$at','$ad','$r1','$r2','$r3','$r4','$r5','$r6','$r7','$r8','$r9','$r10')";
-	    Database::query($sql_q_insert,__FILE__,__LINE__);
+	    Database::query($sql_q_insert);
 	   }
      }
    }
 
-
+	/**
+	 *  Possible  deprecated method
+	 */
    function update_group($groupid,$surveyid,$groupnamme,$introduction,$curr_dbname)
 	{
 		$sql = "UPDATE $curr_dbname.survey_group SET group_id='$groupid', survey_id='$surveyid', groupname='$groupnamme', introduction='$introduction' WHERE group_id='$groupid'";
-		Database::query($sql, __FILE__, __LINE__);
+		Database::query($sql);
 	}
 
-/*
-function insert_old_groups($sid,$gids,$table_group,$table_question)
-{
-	$gid_arr = explode(",",$gids);
-	$index = count($gid_arr);
-	($gid_arr);
-	for($p=0;$p<$index;$p++)
+	/**
+	 *  Possible  deprecated method
+	 */
+	function create_course_survey_rel($cidReq,$survey_id,$table_course,$table_course_survey_rel)
 	{
-		$sql = "SELECT * FROM $table_group WHERE group_id = '$gid_arr[$p]'";
-		$res = Database::query($sql, __FILE__, __LINE__);
-		$obj = Database::fetch_object($res);
-		$gname = $obj->groupname;
-		if($gname=='Default')
-		{
-			$query = "SELECT * FROM $table_group WHERE survey_id = '$sid' AND groupname = 'Default'";
-			$result = Database::query($query, __FILE__, __LINE__);
-			$object = Database::fetch_object($result);
-			$gid = $object->group_id;
-			$sql_def_check = "SELECT * FROM $table_question WHERE gid = '$gid'";
-			$res_def_check = Database::query($sql_def_check, __FILE__, __LINE__);
-			$count_def_check = Database::num_rows($res_def_check);
-			for($ctr=0;$ctr<$count_def_check;$ctr++)
-			{
-			 $imp[]=Database::result($res_def_check,$ctr,"imported_group");
-			}
-			$imp = @array_unique($imp);
-			if(!@in_array($gid_arr[$p],$imp))
-			{
-				$sql_ques = "SELECT * FROM $table_question WHERE gid= '$gid_arr[$p]'";
-				$res_ques = Database::query($sql_ques, __FILE__, __LINE__);
-				$num = Database::num_rows($res_ques);
-				while($obj_ques = Database::fetch_object($res_ques))
-				{
-					$temp_qtype = $obj_ques->qtype;
-					$temp_caption = $obj_ques->caption;
-					$anst = $obj_ques->at;
-					$ansd = $obj_ques->ad;
-					$y="";
-					$x="";
-					for($i=1;$i<=10;$i++)
-						{
-							$temp = "a".$i;
-							$x.= "'".$obj_ques->$temp."',";
-						}
+	 $sql = "SELECT * FROM $table_course WHERE code = '$cidReq'";
+	 $res = Database::query($sql);
+	 $obj=@Database::fetch_object($res);
+	 $db_name = $obj->db_name ;
+	 $sql="INSERT INTO $table_course_survey_rel(id,course_code,db_name,survey_id) values('','$cidReq','$db_name','$survey_id')";
 
-					for($j=1;$j<=10;$j++)
-						{
-
-							if($j==10)
-								{
-									$temps = "r".$j;
-									$y.= "'".$obj_ques->$temps."'";
-								}
-							else
-								{
-									$temps = "r".$j;
-									$y.= "'".$obj_ques->$temps."',";
-								}
-						}
-					 $sql_ques_insert = "INSERT INTO  $table_question (qid,gid,qtype,caption,a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,at,ad,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,imported_group) values('','$gid','$temp_qtype','$temp_caption',$x'$anst','$ansd',$y,'$gid_arr[$p]')";
-					 $res_ques_insert = Database::query($sql_ques_insert, __FILE__, __LINE__);
-				}
-			}
-			else
-			{
-				$flag = 1;
-			}
-		}
-		else
-		{
-			$intro = $obj->introduction;
-			$sql_check = "SELECT * FROM $table_group WHERE survey_id = '$sid'";
-			$res_check = Database::query($sql_check, __FILE__, __LINE__);
-			$num_check = Database::num_rows($res_check);
-			for($k=0;$k<$num_check;$k++)
-				{
-                  $imp[]=Database::result($res_check,$k,"imported_group");
-				}
-			$imp = @array_unique($imp);
-			if(!@in_array($gid_arr[$p],$imp))
-			{
-			$sql_insert = "INSERT INTO $table_group(group_id,survey_id,groupname,introduction,imported_group) values('','$sid','$gname','$intro','$gid_arr[$p]')";
-			$res_insert = Database::query($sql_insert, __FILE__, __LINE__);
-			$new_gid = Database::insert_id();
-			$sql_ques = "SELECT * FROM $table_question WHERE gid= '$gid_arr[$p]'";
-			$res_ques = Database::query($sql_ques, __FILE__, __LINE__);
-			$num = Database::num_rows($res_ques);
-			while($obj_ques = Database::fetch_object($res_ques))
-			{
-				$temp_qtype = $obj_ques->qtype;
-				$temp_caption = $obj_ques->caption;
-				$anst = $obj_ques->at;
-				$ansd = $obj_ques->ad;
-				$y="";
-				$x="";
-				for($i=1;$i<=10;$i++)
-					{
-						$temp = "a".$i;
-						$x.= "'".$obj_ques->$temp."',";
-					}
-
-				for($j=1;$j<=10;$j++)
-					{
-
-						if($j==10)
-							{
-								$temps = "r".$j;
-								$y.= "'".$obj_ques->$temps."'";
-							}
-						else
-							{
-								$temps = "r".$j;
-								$y.= "'".$obj_ques->$temps."',";
-							}
-					}
-				 $sql_ques_insert = "INSERT INTO  $table_question (qid,gid,qtype,caption,a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,at,ad,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,imported_group) values('','$new_gid','$temp_qtype','$temp_caption',$x'$anst','$ansd',$y,'$gid_arr[$p]')";
-				 $res_ques_insert = Database::query($sql_ques_insert, __FILE__, __LINE__);
-			}
-		}
-		else
-		{
-		$flag = 1;
-		}
-		}
+	 Database::query($sql);
+	 return $db_name;
 	}
-	return ($flag);
-}
-*/
+
 	/**
 	 *  Possible  deprecated method
 	 */
-function insert_old_groups($sid,$gids,$table_group,$table_question,$db_name,$cidReq)
-{
-	$table_course = Database :: get_main_table(TABLE_MAIN_COURSE);
-	$sql = "SELECT * FROM $table_course WHERE code = '$cidReq'";
-	$res = Database::query($sql,__FILE__,__LINE__);
-	$obj_name=@Database::fetch_object($res);
-	$current_db_name = $obj_name->db_name ;
-	$gid_arr = explode(",",$gids);
-	$index = count($gid_arr);
-	($gid_arr);
-	for($p=0;$p<$index;$p++)
+	function pick_surveyname($sid)
 	{
-		$sql = "SELECT * FROM $db_name.survey_group WHERE group_id = '$gid_arr[$p]'";
-		$res = Database::query($sql, __FILE__, __LINE__);
-		$obj = Database::fetch_object($res);
-		$gname = $obj->groupname;
-		if($gname=='No Group')
-		{
-			$query = "SELECT * FROM $db_name.survey_group WHERE survey_id = '$sid' AND groupname = 'No Group'";
-			$result = Database::query($query, __FILE__, __LINE__);
-			$object = Database::fetch_object($result);
-			$gid = $object->group_id;
-			$sql_def_check = "SELECT * FROM $db_name.questions WHERE gid = '$gid'";
-			$res_def_check = Database::query($sql_def_check, __FILE__, __LINE__);
-			$count_def_check = Database::num_rows($res_def_check);
-			for($ctr=0;$ctr<$count_def_check;$ctr++)
-			{
-			 $imp[]=Database::result($res_def_check,$ctr,"imported_group");
-			}
-			$imp = @array_unique($imp);
-			$gid_arr[$p];
-			if(!@in_array($gid_arr[$p],$imp))
-			{
-				$sql_ques = "SELECT * FROM $db_name.questions WHERE gid= '$gid_arr[$p]'";
-				$res_ques = Database::query($sql_ques, __FILE__, __LINE__);
-				$num = Database::num_rows($res_ques);
-				while($obj_ques = Database::fetch_object($res_ques))
-				{
-					$temp_qtype = $obj_ques->qtype;
-					$temp_caption = $obj_ques->caption;
-					$anst = $obj_ques->at;
-					$ansd = $obj_ques->ad;
-					$y="";
-					$x="";
-					for($i=1;$i<=10;$i++)
-						{
-							$temp = "a".$i;
-							$x.= "'".$obj_ques->$temp."',"; /*this variable contains concatenated values and need to be refreshed each time 									before the loop starts!*/
-						}
-
-					for($j=1;$j<=10;$j++)
-						{
-
-							if($j==10)
-								{
-									$temps = "r".$j;
-									$y.= "'".$obj_ques->$temps."'";
-								}
-							else
-								{
-									$temps = "r".$j;
-									$y.= "'".$obj_ques->$temps."',";
-								}
-						}
-					$sql_ques_insert = "INSERT INTO  $current_db_name.questions (qid,gid,qtype,caption,a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,at,ad,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,imported_group) values('','$gid','$temp_qtype','$temp_caption',$x'$anst','$ansd',$y,'$gid_arr[$p]')";
-					$res_ques_insert = Database::query($sql_ques_insert, __FILE__, __LINE__);
-				}
-			}
-			else
-			{
-				$flag = 1;
-			}
-		}
-		else
-		{
-			$intro = $obj->introduction;
-			$sql_check = "SELECT * FROM $db_name.survey_group WHERE survey_id = '$sid'";
-			$res_check = Database::query($sql_check, __FILE__, __LINE__);
-			$num_check = Database::num_rows($res_check);
-			for($k=0;$k<$num_check;$k++)
-				{
-                  $imp[]=Database::result($res_check,$k,"imported_group");
-				}
-			$imp = @array_unique($imp);
-			if(!@in_array($gid_arr[$p],$imp))
-			{
-			$sql_insert = "INSERT INTO $current_db_name.survey_group(group_id,survey_id,groupname,introduction,imported_group) values('','$sid','$gname','$intro','$gid_arr[$p]')";
-			$res_insert = Database::query($sql_insert, __FILE__, __LINE__);
-			$new_gid = Database::insert_id();
-			$sql_ques = "SELECT * FROM $db_name.questions WHERE gid= '$gid_arr[$p]'";
-			$res_ques = Database::query($sql_ques, __FILE__, __LINE__);
-			$num = Database::num_rows($res_ques);
-			while($obj_ques = Database::fetch_object($res_ques))
-			{
-				$temp_qtype = $obj_ques->qtype;
-				$temp_caption = $obj_ques->caption;
-				$anst = $obj_ques->at;
-				$ansd = $obj_ques->ad;
-				$y="";
-				$x="";
-				for($i=1;$i<=10;$i++)
-					{
-						$temp = "a".$i;
-						$x.= "'".$obj_ques->$temp."',"; /*this variable contains concatenated values and need to be refreshed each time 									before the loop starts!*/
-					}
-
-				for($j=1;$j<=10;$j++)
-					{
-
-						if($j==10)
-							{
-								$temps = "r".$j;
-								$y.= "'".$obj_ques->$temps."'";
-							}
-						else
-							{
-								$temps = "r".$j;
-								$y.= "'".$obj_ques->$temps."',";
-							}
-					}
-				 $sql_ques_insert = "INSERT INTO  $current_db_name.questions (qid,gid,qtype,caption,a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,at,ad,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,imported_group) values('','$new_gid','$temp_qtype','$temp_caption',$x'$anst','$ansd',$y,'$gid_arr[$p]')";
-				 $res_ques_insert = Database::query($sql_ques_insert, __FILE__, __LINE__);
-			}
-		}
-		else
-		{
-		$flag = 1;
-		}
-		}
+		$surveytable=Database:: get_course_table(TABLE_SURVEY);
+		$sql="SELECT * FROM $surveytable WHERE survey_id=$sid";
+		$res=Database::query($sql);
+		$code=@Database::result($res,0,'title');
+		return($code);
 	}
-	return ($flag);
-}
-
 	/**
 	 *  Possible  deprecated method
 	 */
-function import_question($surveyid,$qids,$table_group,$table_question,$db_name,$cidReq,$yes)
- {
-   $table_course = Database :: get_main_table(TABLE_MAIN_COURSE);
-   $sql_course = "SELECT * FROM $table_course WHERE code = '$cidReq'";
-   $res_course = Database::query($sql_course,__FILE__,__LINE__);
-   $obj_name=@Database::fetch_object($res_course);
-   $current_db_name = $obj_name->db_name ;
-   $qid=explode(",",$qids);
-   $count = count($qid);
-  for($i=0; $i<$count; $i++)
-   {
-	 $sql_q = "SELECT *  FROM $table_question WHERE qid = '$qid[$i]'";
-     $res_q = Database::query($sql_q,__FILE__,__LINE__);
-	 $obj=@Database::fetch_object($res_q);
-	 $oldgid=$obj->gid;
-	 $sql = "SELECT *  FROM $table_group WHERE group_id = '$oldgid'";
-	 $res = Database::query($sql,__FILE__,__LINE__);
-	 $obj_gr = @Database::fetch_object($res);
-	 $gname = $obj_gr->groupname;
-	 $gintro = $obj_gr->introduction;
-     $sql_gid = "SELECT *  FROM $table_group WHERE survey_id = '$surveyid' AND groupname = '$gname'";
-	 $res_gid = Database::query($sql_gid,__FILE__,__LINE__);
-	 $num=Database::num_rows($res_gid);
-     $obj_gid=@Database::fetch_object($res_gid);
-	 $sql_quesid = "SELECT *  FROM $table_question WHERE gid = '$obj_gid->group_id' AND caption = '$obj->caption'";
-     $res_quesid = Database::query($sql_quesid,__FILE__,__LINE__);
-     $num_ques=Database::num_rows($res_quesid);
- if($num_ques>0)
-  {
-	 $message=1;
-     //echo "<div align=\"center\"><strong><font color=\"#FF0000\">Already Imported !</font></strong></div>" ;
-  }
- else
-    {
-  if($num>0 && $yes=="yes")
-  {
-     $sql_q_insert = "INSERT INTO $current_db_name.questions (qid,gid,qtype,caption,a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,at,ad,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10) values('','$obj_gid->group_id','$obj->qtype','$obj->caption','$obj->a1','$obj->a2','$obj->a3','$obj->a4','$obj->a5','$obj->a6','$obj->a7','$obj->a8','$obj->a9','$obj->a10','$obj->at','$obj->ad','$obj->r1','$obj->r2','$obj->r3','$obj->r4','$obj->r5','$obj->r6','$obj->r7','$obj->r8','$obj->r9','$obj->r10')";
-	 Database::query($sql_q_insert,__FILE__,__LINE__);
-  }
-  else
-  {
-	 $sql_ginsert="INSERT INTO $current_db_name.survey_group(group_id,survey_id,groupname,introduction) values('','$surveyid','$gname','$gintro')";
-	 Database::query($sql_ginsert,__FILE__,__LINE__);
-     $new_gid = Database::insert_id();
-	 $sql_q_insert = "INSERT INTO $current_db_name.questions (qid,gid,qtype,caption,a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,at,ad,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10) values('','$new_gid','$obj->qtype','$obj->caption','$obj->a1','$obj->a2','$obj->a3','$obj->a4','$obj->a5','$obj->a6','$obj->a7','$obj->a8','$obj->a9','$obj->a10','$obj->at','$obj->ad','$obj->r1','$obj->r2','$obj->r3','$obj->r4','$obj->r5','$obj->r6','$obj->r7','$obj->r8','$obj->r9','$obj->r10')";
-	 Database::query($sql_q_insert,__FILE__,__LINE__);
-    }
-   }
-  }
-  return $message;
-}
-	/**
-	 *  Possible  deprecated method
-	 */
-function create_course_survey_rel($cidReq,$survey_id,$table_course,$table_course_survey_rel)
-{
- $sql = "SELECT * FROM $table_course WHERE code = '$cidReq'";
- $res = Database::query($sql,__FILE__,__LINE__);
- $obj=@Database::fetch_object($res);
- $db_name = $obj->db_name ;
- $sql="INSERT INTO $table_course_survey_rel(id,course_code,db_name,survey_id) values('','$cidReq','$db_name','$survey_id')";
-
- Database::query($sql,__FILE__,__LINE__);
- return $db_name;
-}
-	/**
-	 *  Possible  deprecated method
-	 */
-function import_existing_question($surveyid,$qids,$table_group,$table_question,$yes)
-{
-  $qid=explode(",",$qids);
-  $count = count($qid);
-  for($i=0; $i<$count; $i++)
-  {
-	 $sql_q = "SELECT *  FROM $table_question WHERE qid = '$qid[$i]'";
-     $res_q = Database::query($sql_q,__FILE__,__LINE__);
-	 $obj=@Database::fetch_object($res_q);
-	 $oldgid=$obj->gid;
-	 $sql = "SELECT *  FROM $table_group WHERE group_id = '$oldgid'";
-	 $res = Database::query($sql,__FILE__,__LINE__);
-	 $obj_gr = @Database::fetch_object($res);
-	 $gname = $obj_gr->groupname;
-	 $gintro = $obj_gr->introduction;
-     $sql_gid = "SELECT *  FROM $table_group WHERE survey_id = '$surveyid' AND groupname = '$gname'";
-	 $res_gid = Database::query($sql_gid,__FILE__,__LINE__);
-	 $num=Database::num_rows($res_gid);
-     $obj_gid=@Database::fetch_object($res_gid);
-	 $sql_quesid = "SELECT *  FROM $table_question WHERE gid = '$obj_gid->group_id' AND caption = '$obj->caption'";
-     $res_quesid = Database::query($sql_quesid,__FILE__,__LINE__);
-     $num_ques=Database::num_rows($res_quesid);
- if($num_ques>0)
-  {
-	 $message=1;
-     //echo "<div align=\"center\"><strong><font color=\"#FF0000\">Already Imported !</font></strong></div>" ;
-  }
- else
-    {
-  if($num>0 && $yes=="yes")
-  {
-     $sql_q_insert = "INSERT INTO $table_question (qid,gid,qtype,caption,a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,at,ad,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10) values('','$obj_gid->group_id','$obj->qtype','$obj->caption','$obj->a1','$obj->a2','$obj->a3','$obj->a4','$obj->a5','$obj->a6','$obj->a7','$obj->a8','$obj->a9','$obj->a10','$obj->at','$obj->ad','$obj->r1','$obj->r2','$obj->r3','$obj->r4','$obj->r5','$obj->r6','$obj->r7','$obj->r8','$obj->r9','$obj->r10')";
-	 Database::query($sql_q_insert,__FILE__,__LINE__);
-  }
-  else
-  {
-	 $sql_ginsert="INSERT INTO $table_group(group_id,survey_id,groupname,introduction) values('','$surveyid','$gname','$gintro')";
-	 Database::query($sql_ginsert,__FILE__,__LINE__);
-     $new_gid = Database::insert_id();
-	 $sql_q_insert = "INSERT INTO $table_question (qid,gid,qtype,caption,a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,at,ad,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10) values('','$new_gid','$obj->qtype','$obj->caption','$obj->a1','$obj->a2','$obj->a3','$obj->a4','$obj->a5','$obj->a6','$obj->a7','$obj->a8','$obj->a9','$obj->a10','$obj->at','$obj->ad','$obj->r1','$obj->r2','$obj->r3','$obj->r4','$obj->r5','$obj->r6','$obj->r7','$obj->r8','$obj->r9','$obj->r10')";
-	 Database::query($sql_q_insert,__FILE__,__LINE__);
-    }
-   }
-  }
-  return $message;
-}
-	/**
-	 *  Possible  deprecated method
-	 */
-function insert_existing_groups ($sid,$gids,$table_group,$table_question)
-  {
-	$gid_arr = explode(",",$gids);
-	$index = count($gid_arr);
-	($gid_arr);
-	for($p=0;$p<$index;$p++)
-	{
-		$sql = "SELECT * FROM $table_group WHERE group_id = '$gid_arr[$p]'";
-		$res = Database::query($sql, __FILE__, __LINE__);
-		$obj = Database::fetch_object($res);
-		$gname = $obj->groupname;
-		if($gname=='No Group')
-		{
-			$query = "SELECT * FROM $table_group WHERE survey_id = '$sid' AND groupname = 'No Group'";
-			$result = Database::query($query, __FILE__, __LINE__);
-			$object = Database::fetch_object($result);
-			$gid = $object->group_id;
-			$sql_def_check = "SELECT * FROM $table_question WHERE gid = '$gid'";
-			$res_def_check = Database::query($sql_def_check, __FILE__, __LINE__);
-			$count_def_check = Database::num_rows($res_def_check);
-			for($ctr=0;$ctr<$count_def_check;$ctr++)
-			{
-			 $imp[]=Database::result($res_def_check,$ctr,"imported_group");
-			}
-			$imp = @array_unique($imp);
-			if(!@in_array($gid_arr[$p],$imp))
-			{
-				$sql_ques = "SELECT * FROM $table_question WHERE gid= '$gid_arr[$p]'";
-				$res_ques = Database::query($sql_ques, __FILE__, __LINE__);
-				$num = Database::num_rows($res_ques);
-				while($obj_ques = Database::fetch_object($res_ques))
-				{
-					$temp_qtype = $obj_ques->qtype;
-					$temp_caption = $obj_ques->caption;
-					$anst = $obj_ques->at;
-					$ansd = $obj_ques->ad;
-					$y="";
-					$x="";
-					for($i=1;$i<=10;$i++)
-						{
-							$temp = "a".$i;
-							$x.= "'".$obj_ques->$temp."',"; /*this variable contains concatenated values and need to be refreshed each time 									before the loop starts!*/
-						}
-
-					for($j=1;$j<=10;$j++)
-						{
-
-							if($j==10)
-								{
-									$temps = "r".$j;
-									$y.= "'".$obj_ques->$temps."'";
-								}
-							else
-								{
-									$temps = "r".$j;
-									$y.= "'".$obj_ques->$temps."',";
-								}
-						}
-					 $sql_ques_insert = "INSERT INTO  $table_question (qid,gid,qtype,caption,a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,at,ad,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,imported_group) values('','$gid','$temp_qtype','$temp_caption',$x'$anst','$ansd',$y,'$gid_arr[$p]')";
-					 $res_ques_insert = Database::query($sql_ques_insert, __FILE__, __LINE__);
-				}
-			}
-			else
-			{
-				$flag = 1;
-			}
-		}
-		else
-		{
-			$intro = $obj->introduction;
-			$sql_check = "SELECT * FROM $table_group WHERE survey_id = '$sid'";
-			$res_check = Database::query($sql_check, __FILE__, __LINE__);
-			$num_check = Database::num_rows($res_check);
-			for($k=0;$k<$num_check;$k++)
-				{
-                  $imp[]=Database::result($res_check,$k,"imported_group");
-				}
-			$imp = @array_unique($imp);
-			if(!@in_array($gid_arr[$p],$imp))
-			{
-			$sql_insert = "INSERT INTO $table_group(group_id,survey_id,groupname,introduction,imported_group) values('','$sid','$gname','$intro','$gid_arr[$p]')";
-			$res_insert = Database::query($sql_insert, __FILE__, __LINE__);
-			$new_gid = Database::insert_id();
-			$sql_ques = "SELECT * FROM $table_question WHERE gid= '$gid_arr[$p]'";
-			$res_ques = Database::query($sql_ques, __FILE__, __LINE__);
-			$num = Database::num_rows($res_ques);
-			while($obj_ques = Database::fetch_object($res_ques))
-			{
-				$temp_qtype = $obj_ques->qtype;
-				$temp_caption = $obj_ques->caption;
-				$anst = $obj_ques->at;
-				$ansd = $obj_ques->ad;
-				$y="";
-				$x="";
-				for($i=1;$i<=10;$i++)
-					{
-						$temp = "a".$i;
-						$x.= "'".$obj_ques->$temp."',"; /*this variable contains concatenated values and need to be refreshed each time 									before the loop starts!*/
-					}
-
-				for($j=1;$j<=10;$j++)
-					{
-
-						if($j==10)
-							{
-								$temps = "r".$j;
-								$y.= "'".$obj_ques->$temps."'";
-							}
-						else
-							{
-								$temps = "r".$j;
-								$y.= "'".$obj_ques->$temps."',";
-							}
-					}
-				 $sql_ques_insert = "INSERT INTO  $table_question (qid,gid,qtype,caption,a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,at,ad,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,imported_group) values('','$new_gid','$temp_qtype','$temp_caption',$x'$anst','$ansd',$y,'$gid_arr[$p]')";
-				 $res_ques_insert = Database::query($sql_ques_insert, __FILE__, __LINE__);
-			}
-		}
-		else
-		{
-		$flag = 1;
-		}
-		}
-	}
-	return ($flag);
- }
-	/**
-	 *  Possible  deprecated method
-	 */
- function pick_surveyname($sid)
-		{
-			$surveytable=Database:: get_course_table(TABLE_SURVEY);
-			$sql="SELECT * FROM $surveytable WHERE survey_id=$sid";
-			$res=Database::query($sql, __FILE__, __LINE__);
-			$code=@Database::result($res,0,'title');
-			return($code);
-		}
-	/**
-	 *  Possible  deprecated method
-	 */
-function pick_author($survey_id)
+	function pick_author($survey_id)
 	{
 	    $survey_table = Database :: get_course_table(TABLE_SURVEY);
 		$sql = "SELECT author FROM $survey_table WHERE survey_id='$survey_id'";
-		$res = Database::query($sql, __FILE__, __LINE__);
+		$res = Database::query($sql);
 		$author=@Database::result($res,0,'author');
 		return $author;
 	}
 	/**
-	 *  Possible  deprecated method
+	 * Possible  deprecated method
+	 * Enter description here...
+	 *
+	 * @return unknown
+	 * @todo remove this function because this is of no use and should not be used.
 	 */
-function question_import($surveyid,$qids,$db_name,$curr_dbname)
- {
-  $qid=explode(",",$qids);
-  $count = count($qid);
-  for($i=0; $i<$count; $i++)
-   {
-	 $sql_sort = "SELECT max(sortby) AS sortby FROM $curr_dbname.questions ";
-     $res_sort=Database::query($sql_sort, __FILE__, __LINE__);
-     $rs=Database::fetch_object($res_sort);
-	 $sortby=$rs->sortby;
-	 if(empty($sortby))
-	 {$sortby=1;}
-	 else{$sortby=$sortby+1;}
-	 $sql_q = "SELECT * FROM $db_name.questions WHERE qid = '$qid[$i]'";
-     $res_q = Database::query($sql_q,__FILE__,__LINE__);
-	 $obj=@Database::fetch_object($res_q);
-	 $oldgid=$obj->gid;
-	 $caption1=addslashes($obj->caption);
-	  $a1=addslashes($obj->a1);
-			  $a2=addslashes($obj->a2);
-			  $a3=addslashes($obj->a3);
-			  $a4=addslashes($obj->a4);
-			  $a5=addslashes($obj->a5);
-			  $a6=addslashes($obj->a6);
-			  $a7=addslashes($obj->a7);
-			  $a8=addslashes($obj->a8);
-			  $a9=addslashes($obj->a9);
-			  $a10=addslashes($obj->a10);
-              $at=addslashes($obj->at);
-			  $ad=addslashes($obj->ad);
-			  $r1=addslashes($obj->r1);
-			  $r2=addslashes($obj->r2);
-			  $r3=addslashes($obj->r3);
-			  $r4=addslashes($obj->r4);
-			  $r5=addslashes($obj->r5);
-			  $r6=addslashes($obj->r6);
-			  $r7=addslashes($obj->r7);
-			  $r8=addslashes($obj->r8);
-			  $r9=addslashes($obj->r9);
-			  $r10=addslashes($obj_q->r10);
-     //$sql_gr = "SELECT * FROM $db_name.survey_group WHERE group_id = '$oldgid'";
-     //$res_gr = Database::query($sql_gr,__FILE__,__LINE__);
-	 // $obj_gr=@Database::fetch_object($res_gr);
-	 //$groupname = $obj_gr->groupname
-	 $sql_quesid = "SELECT *  FROM $curr_dbname.questions WHERE survey_id = '$surveyid' AND imported_question = '$qid[$i]' AND db_name = '$db_name'";
-     $res_quesid = Database::query($sql_quesid,__FILE__,__LINE__);
-     $num_ques=Database::num_rows($res_quesid);
-	if($num_ques>0)
-     {
-	  $message=1;
-     }
-	else
-	 {
-	  $sql_group = "SELECT * FROM $db_name.survey_group WHERE group_id = '$oldgid'";
-	  $res_group = Database::query($sql_group,__FILE__,__LINE__);
-	  $obj_group=@Database::fetch_object($res_group);
-	  $groupname = $obj_group->groupname;
-	  $sql = "SELECT *  FROM $curr_dbname.survey_group WHERE groupname = '$groupname' AND survey_id = '$surveyid'";
-	  $res = Database::query($sql,__FILE__,__LINE__);
-      $obj_gro = Database::fetch_object($res);
-	   $num_group=Database::num_rows($res);
-	  if($num_group>0)
-	   {
-	   $sql_q_insert = "INSERT INTO $curr_dbname.questions (qid,gid,survey_id,qtype,caption,alignment,sortby,a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,at,ad,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,imported_question,db_name) values('','$obj_gro->group_id','$surveyid','$obj->qtype','$caption1','$obj->alignment','$sortby','$a1','$a2','$a3','$a4','$a5','$a6','$a7','$a8','$a9','$a10','$at','$ad','$r1','$r2','$r3','$r4','$r5','$r6','$r7','$r8','$r9','$r10','$qid[$i]','$db_name')";
-	    Database::query($sql_q_insert,__FILE__,__LINE__);
-	   }
-	  else
-	   {
-		 //$num_group;
-      $sql_ginsert="INSERT INTO $curr_dbname.survey_group(group_id,survey_id,groupname,introduction,imported_group, db_name) values('','$surveyid','$groupname','$obj_group->introduction','$oldgid','$db_name')";
-	    Database::query($sql_ginsert,__FILE__,__LINE__);
-        $new_gid = Database::insert_id();
-      $sql_q_insert = "INSERT INTO $curr_dbname.questions (qid,gid,survey_id,qtype,caption,alignment,sortby,a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,at,ad,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,imported_question,db_name) values('','$new_gid','$surveyid','$obj->qtype','$caption1','$obj->alignment','$sortby','$a1','$a2','$a3','$a4','$a5','$a6','$a7','$a8','$a9','$a10','$at','$ad','$r1','$r2','$r3','$r4','$r5','$r6','$r7','$r8','$r9','$r10','$qid[$i]','$db_name')";
-	    Database::query($sql_q_insert,__FILE__,__LINE__);
-       }
-     }
-  }
-  return $message;
-}
-
-/*
-function import_group($surveyid,$gids,$db_name,$curr_dbname)
-  {
-	$gid_arr = explode(",",$gids);
-	$index = count($gid_arr);
-	for($i=0;$i<$index;$i++)
+	function get_status()
 	{
-		$sql = "SELECT * FROM $db_name.survey_group WHERE group_id = '$gid_arr[$i]'";
-		$res = Database::query($sql,__FILE__,__LINE__);
-		$obj = Database::fetch_object($res);
-		$sql_ques = "SELECT * FROM $db_name.questions WHERE gid = '$gid_arr[$i]'";
-		$res_ques = Database::query($sql_ques,__FILE__,__LINE__);
-		$obj_ques = Database::fetch_object($res_ques);
-		$sql_check = "SELECT * FROM $curr_dbname.survey_group WHERE survey_id = '$surveyid' AND imported_group = '$gid_arr[$i]' AND db_name = '$db_name'";
-		$res_check = Database::query($sql_check, __FILE__, __LINE__);
-		$obj_check = Database::fetch_object($res_check);
-		$num = Database::num_rows($res_check);
-		if($num>0)
-		{
-			$sql_question = "SELECT * FROM $curr_dbname.questions WHERE survey_id='$surveyid' AND imported_question = '$obj_ques->qid' AND db_name = '$db_name'";
-			$res_question = Database::query($sql_question,__FILE__,__LINE__);
-			$num_ques = Database::num_rows($res_question);
-			if($num_ques>0)
-			{
-				$message=1;
-			}
-	      else
-           {
-			$sql_insert_ques =  "INSERT INTO $curr_dbname.questions (qid,gid,qtype,caption,a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,at,ad,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,imported_question,db_name) values('','$obj_check->group_id','$surveyid','$obj_ques->qtype','$obj_ques->caption','$obj_ques->a1','$obj_ques->a2','$obj_ques->a3','$obj_ques->a4','$obj_ques->a5','$obj_ques->a6','$obj_ques->a7','$obj_ques->a8','$obj_ques->a9','$obj_ques->a10','$obj_ques->at','$obj_ques->ad','$obj_ques->r1','$obj_ques->r2','$obj_ques->r3','$obj_ques->r4','$obj_ques->r5','$obj_ques->r6','$obj_ques->r7','$obj_ques->r8','$obj_ques->r9','$obj_ques->r10','$obj_ques->qid','$db_name')";
-			Database::query($sql_insert_ques, __FILE__, __LINE__);
-		   }
-		}
-		else
-		 {
-			$insert_group = "INSERT INTO $curr_dbname.survey_group (group_id,survey_id,groupname,introduction,imported_group,db_name) values('','$surveyid','$obj->groupname','$obj->introduction','$obj->group_id','$db_name')";
-			$res_insert_group=Database::query($insert_group, __FILE__, __LINE__);
-            $new_gid = Database::insert_id();
-			$sql_insert_grp =  "INSERT INTO $curr_dbname.questions (qid,gid,qtype,caption,a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,at,ad,r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,imported_question,db_name) values('','$new_gid','$surveyid','$obj_ques->qtype','$obj_ques->caption','$obj_ques->a1','$obj_ques->a2','$obj_ques->a3','$obj_ques->a4','$obj_ques->a5','$obj_ques->a6','$obj_ques->a7','$obj_ques->a8','$obj_ques->a9','$obj_ques->a10','$obj_ques->at','$obj_ques->ad','$obj_ques->r1','$obj_ques->r2','$obj_ques->r3','$obj_ques->r4','$obj_ques->r5','$obj_ques->r6','$obj_ques->r7','$obj_ques->r8','$obj_ques->r9','$obj_ques->r10','$obj_ques->qid','$db_name')";
-			Database::query($sql_insert_grp, __FILE__, __LINE__);
-		 }
-	  }
-	return $message;
-  }
+		global $_user;
 
-*/
-
-	/**
-	 *  Possible  deprecated method
-	 */
-function import_group($sid,$gids,$db_name,$curr_dbname)
-{
-	$gid_arr = explode(",",$gids);
-	$index = count($gid_arr);
-	for($i=0;$i<$index;$i++)
-	{
-		$sql = "SELECT * FROM $db_name.survey_group WHERE group_id = '$gid_arr[$i]'";
-		$res = Database::query($sql, __FILE__, __LINE__);
-		$obj = Database::fetch_object($res);
-		$groupname=addslashes($obj->groupname);
-		$introduction=addslashes($obj->introduction);
-		$g_sortby = intval($obj->sortby);
-		$sql_curr = "SELECT * FROM $curr_dbname.survey_group WHERE survey_id = '$sid' AND groupname = '$obj->groupname'";
-		$res_curr = Database::query($sql_curr, __FILE__, __LINE__);
-		$obj_curr = Database::fetch_object($res_curr);
-		$gid = $obj_curr->group_id;
-		$num = Database::num_rows($res_curr);
-
-		if($num>0) //the group name exists and the questions will be imported in this group.
-		{
-			$sql_ques = "SELECT * FROM $curr_dbname.questions WHERE gid = '$gid'";
-			$res_ques = Database::query($sql_ques, __FILE__, __LINE__);
-			$obj_ques = Database::fetch_object($res_ques);
-			$count = Database::num_rows($res_ques);
-			for($j=0;$j<$count;$j++)
-			{
-				$check_qid[] = Database::result($res_ques,$j,"imported_question");
-				$check_db[] = Database::result($res_ques,$j,"db_name");
-			}
-			$check_qid = @array_unique($check_qid);
-			$check_db = @array_unique($check_db);
-			$sql_old = "SELECT * FROM $db_name.questions WHERE gid = '$gid_arr[$i]'";
-			$res_old = Database::query($sql_old, __FILE__, __LINE__);
-			while($obj_old = Database::fetch_object($res_old))
-			{
-			  $caption1=addslashes($obj_old->caption);
-	          $a1=addslashes($obj_old->a1);
-			  $a2=addslashes($obj_old->a2);
-			  $a3=addslashes($obj_old->a3);
-			  $a4=addslashes($obj_old->a4);
-			  $a5=addslashes($obj_old->a5);
-			  $a6=addslashes($obj_old->a6);
-			  $a7=addslashes($obj_old->a7);
-			  $a8=addslashes($obj_old->a8);
-			  $a9=addslashes($obj_old->a9);
-			  $a10=addslashes($obj_old->a10);
-              $at=addslashes($obj_old->at);
-			  $ad=addslashes($obj_old->ad);
-			  $r1=addslashes($obj_old->r1);
-			  $r2=addslashes($obj_old->r2);
-			  $r3=addslashes($obj_old->r3);
-			  $r4=addslashes($obj_old->r4);
-			  $r5=addslashes($obj_old->r5);
-			  $r6=addslashes($obj_old->r6);
-			  $r7=addslashes($obj_old->r7);
-			  $r8=addslashes($obj_old->r8);
-			  $r9=addslashes($obj_old->r9);
-			  $r10=addslashes($obj_old->r10);
-				$sql_sort = "SELECT max(sortby) AS sortby FROM $curr_dbname.questions ";
-                $res_sort=Database::query($sql_sort, __FILE__, __LINE__);
-                $rs=Database::fetch_object($res_sort);
-	            $sortby=$rs->sortby;
-	            if(empty($sortby))
-	            {$sortby=1;}
-	            else{$sortby=$sortby+1;}
-				if(@in_array($obj_old->qid,$check_qid)&&@in_array($db_name,$check_db))  //the question has already been imported
-				{
-					$flag=1;
-					continue;
-				}
-				else
-				{
-					$sql_insertq = "INSERT INTO $curr_dbname.questions (qid, gid, survey_id, qtype, caption, alignment, sortby, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, at, ad, alt_text, r1, r2, r3, r4, r5, r6, r7, r8, r9, r10, imported_question, db_name) VALUES('', '$gid', '$sid', '$obj_old->qtype', '$caption1', '$obj_old->alignment', '$sortby', '$a1', '$a2', '$a3', '$a4', '$a5', '$a6', '$a7', '$a8', '$a9', '$a10', '$at', '$ad', '$alt_text', '$r1', '$r2', '$r3', '$r4', '$r5', '$r6', '$r7', '$r8', '$r9', '$r10', '$obj_old->qid', '$db_name')";
-					Database::query($sql_insertq, __FILE__, __LINE__);
-				}
-			}
-		}
-		else  //the groupname does not exist. Create group with this name and insert questions in this new group.
-		{
-
-			$sql_insertg = "INSERT INTO $curr_dbname.survey_group (group_id, survey_id, groupname, introduction, imported_group, db_name, sortby) VALUES ('', '$sid', '$groupname', '$introduction', '$obj->group_id', '$db_name', $g_sortby)";
-			Database::query($sql_insertg, __FILE__, __LINE__);
-			$group_id = Database::insert_id();
-			$sql_old = "SELECT * FROM $db_name.questions WHERE gid = '$gid_arr[$i]'";
-			$res_old = Database::query($sql_old, __FILE__, __LINE__);
-			while($obj_old = Database::fetch_object($res_old))
-			{
-			  $caption1=addslashes($obj_old->caption);
-	          $a1=addslashes($obj_old->a1);
-			  $a2=addslashes($obj_old->a2);
-			  $a3=addslashes($obj_old->a3);
-			  $a4=addslashes($obj_old->a4);
-			  $a5=addslashes($obj_old->a5);
-			  $a6=addslashes($obj_old->a6);
-			  $a7=addslashes($obj_old->a7);
-			  $a8=addslashes($obj_old->a8);
-			  $a9=addslashes($obj_old->a9);
-			  $a10=addslashes($obj_old->a10);
-              $at=addslashes($obj_old->at);
-			  $ad=addslashes($obj_old->ad);
-			  $r1=addslashes($obj_old->r1);
-			  $r2=addslashes($obj_old->r2);
-			  $r3=addslashes($obj_old->r3);
-			  $r4=addslashes($obj_old->r4);
-			  $r5=addslashes($obj_old->r5);
-			  $r6=addslashes($obj_old->r6);
-			  $r7=addslashes($obj_old->r7);
-			  $r8=addslashes($obj_old->r8);
-			  $r9=addslashes($obj_old->r9);
-			  $r10=addslashes($obj_old->r10);
-				$sql_sort = "SELECT max(sortby) AS sortby FROM $curr_dbname.questions ";
-                $res_sort=Database::query($sql_sort, __FILE__, __LINE__);
-                $rs=Database::fetch_object($res_sort);
-	            $sortby=$rs->sortby;
-	            if(empty($sortby))
-	            {$sortby=1;}
-	            else{$sortby=$sortby+1;}
-				$sql_insertq = "INSERT INTO $curr_dbname.questions (qid, gid, survey_id, qtype, caption, alignment, sortby, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10, at, ad, alt_text, r1, r2, r3, r4, r5, r6, r7, r8, r9, r10, imported_question, db_name) VALUES('', '$group_id', '$sid', '$obj_old->qtype', '$caption1', '$obj_old->alignment', '$sortby', '$a1', '$a2', '$a3', '$a4', '$a5', '$a6', '$a7', '$a8', '$a9', '$a10', '$at', '$ad', '$obj_old->alt_text', '$r1', '$r2', '$r3', '$r4', '$r5', '$r6', '$r7', '$r8', '$r9', '$r10', '$obj_old->qid', '$db_name')";
-				Database::query($sql_insertq, __FILE__, __LINE__);
-			}
-		}
+		$table_user = Database::get_main_table(TABLE_MAIN_USER);
+		$sqlm = "SELECT  status FROM  $table_user WHERE user_id = '".Database::escape_string($_user['user_id'])."'";
+		$resm = Database::query($sqlm);
+		$objm=@Database::fetch_object($resm);
+		$ss = $objm->status ;
+		return $ss;
 	}
-
-	return ($flag);
-}
-
-
-
-/**
- * Possible  deprecated method
- * Enter description here...
- *
- * @return unknown
- * @todo remove this function because this is of no use and should not be used.
- */
-function get_status()
-{
-	global $_user;
-
-	$table_user = Database::get_main_table(TABLE_MAIN_USER);
-	$sqlm = "SELECT  status FROM  $table_user WHERE user_id = '".Database::escape_string($_user['user_id'])."'";
-	$resm = Database::query($sqlm,__FILE__,__LINE__);
-	$objm=@Database::fetch_object($resm);
-	$ss = $objm->status ;
-	return $ss;
-}
-
-/**
- * Possible  deprecated method
- */
-function move_question($direction,$qid,$sort,$curr_dbname)
-{
-
-	$questions=self::get_questions_move($curr_dbname);
-
-	foreach ($questions as $key=>$value)
-		{
-
-		if ($qid==$value['qid'])
-			{
-			$source_course=$value;
-			if ($direction=="up")
-				{
-				  $target_course=$questions[$key-1];
-			    }
-			else
-				{$target_course=$questions[$key+1];}
-			 }
-		}
-	$sql_update1="UPDATE $curr_dbname.questions SET sortby='".$target_course['sortby']."' WHERE qid='".$source_course['qid']."'";
-	$sql_update2="UPDATE $curr_dbname.questions SET sortby='".$source_course['sortby']."' WHERE qid='".$target_course['qid']."'";
-	Database::query($sql_update2, __FILE__, __LINE__);
-	Database::query($sql_update1, __FILE__, __LINE__);
-	//return ;
-}
-/**
- * Possible  deprecated method
- */
-function get_questions_move($curr_dbname)
-{
-	$sql_select_questions="SELECT  * from $curr_dbname.questions order by `sortby` asc";
-	$result=Database::query($sql_select_questions, __FILE__, __LINE__);
-	while ($row=Database::fetch_array($result))
-		{
-		// we only need the database name of the course
-		$question1[]=array("caption"=> $row['caption'], "qid" => $row['qid'],"sortby" => $row['sortby']);
-		}
-	return $question1;
-}
-/**
- * Possible  deprecated method
- */
-function listGroups($id_survey, $fields = '*')
-{
-	$groups_table = Database :: get_course_table(TABLE_SURVEY_QUESTION_GROUP);
-	$sql = 'SELECT '.$fields.' FROM '.$groups_table.'
-			WHERE survey_id='.$id_survey.' ORDER BY sortby';
-	$rs = Database::query($sql, __FILE__, __LINE__);
-	$groups = array();
-	while($row = Database::fetch_array($rs)){
-		$groups[] = $row;
-	}
-	return $groups;
-}
-/**
- * Possible  deprecated method
- */
-function listQuestions($id_survey, $fields = '*')
-{
-
-	$questions_table = Database :: get_course_table(TABLE_MAIN_SURVEYQUESTION);
-	$groups_table = Database :: get_course_table(TABLE_SURVEY_QUESTION_GROUP);
-
-	$sql = 'SELECT '.$fields.'
-			FROM '.$questions_table.' questions
-			INNER JOIN '.$groups_table.' groups
-				ON questions.gid = groups.group_id
-			WHERE questions.survey_id='.$id_survey.'
-			ORDER BY groups.sortby, questions.sortby';
-
-	$rs = Database::query($sql, __FILE__, __LINE__);
-
-	$questions = array();
-	while($row = Database::fetch_array($rs)){
-		$questions[] = $row;
-	}
-
-	return $questions;
-
-}
-/**
- * Possible  deprecated method
- */
-function listAnswers($qid){
-
-	$answers_table = Database :: get_course_table(TABLE_SURVEY_REPORT);
-
-	$sql = 'SELECT DISTINCT answer FROM '.$answers_table.'
-			WHERE qid='.$qid;
-
-	$rs = Database::query($sql, __FILE__, __LINE__);
-
-	$answers = array();
-	while($row = Database::fetch_array($rs)){
-		$answers[] = $row;
-	}
-
-	return $answers;
-}
-
-/**
- * Possible  deprecated method
- */
-function listUsers($survey_id, $dbname, $fields='id, user_id, firstname, lastname, email, organization') {
-	$tbl_survey_users = Database :: get_main_table(TABLE_MAIN_SURVEY_USER);
-		$order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname' : ' ORDER BY lastname, firstname';
-	$sql = 'SELECT '.$fields.' FROM '.$tbl_survey_users.'
-			WHERE survey_id='.$survey_id.'
-				AND db_name="'.$dbname.
-				$order_clause;
-	$rs = Database::query($sql, __FILE__, __LINE__);
-	$users = array();
-	while ($row = Database::fetch_array($rs)) {
-		$users[] = $row;
-	}
-	return $users;
-}
-/**
- * Possible  deprecated method
- */
-function getUserAnswersDetails($id_userAnswers, $params=''){
-
-	$table_answers = Database :: get_main_table(TABLE_MAIN_SURVEY_USER);
-	$sql = 'SELECT * FROM '.$table_answers.' '.$where.' '.$order;
-	$rs = Database::query($sql, __FILE__, __LINE__);
-	$answers = array();
-	while($row = Database::fetch_array($rs))
-		$answers[] = $row;
-
-	return $answers;
-}
-
 }
 
 
@@ -1802,7 +574,7 @@ class SurveyTree {
 		WHERE survey.author = user.user_id
 		GROUP BY survey.survey_id";
 
-		$res = Database::query($sql, __FILE__, __LINE__);
+		$res = Database::query($sql);
 		$surveys_parents = array ();
 		$refs = array();
 		$list = array();
@@ -1830,99 +602,6 @@ class SurveyTree {
         $this->surveylist = $list;
         $this->plainsurveylist = $plain_array;
     }
-    /*
-    function read_children($space=array(),$i=0)
-	{
-		foreach ( $this->surveylist  as $key=>$node)
-		{
-			if (is_array($node['children']))
-			{
-				if (($node['parent_id']==0))
-				{
-					//echo '1<br>';
-				}
-				else
-				{
-					$space[]='2>';
-				}
-
-				//if have children
-				for ($j=0;$j<count($space);$j++)
-				{
-					//echo $space[$j]; echo 'dd<br>';
-				}
-				//echo $node['name']; echo '3<br>';
-				read_children($node['children'],$space,$i);
-			}
-			else
-			{
-
-				for ($j=0;$j<count($space);$j++)
-				{
-					echo $space[$j]; echo '4<br>';
-				}
-				echo $node['name']; echo '5<br>';
-
-			}
-		}
-	}
-	*/
-	/*
-	if (($key==$id))
-			{
-				echo $node['name']; echo '<br>';
-				//$node['children']=array();
-				return $node['children'];
-			}
-			else
-			{
-				if (is_array($node['children']))
-				{
-					return SurveyTree::get_children($node['children'],$id);
-				}
-				else
-				{
-					//return SurveyTree::get_children($node, $id);
-				}
-			}
-	 */
-
-	/**
-	 * This function gets all the children of a given survey id
-	 *
-	 * @param  array the list where we are going to search the children
-	 * @param  id the id of the survey
-	 * @return array the children of a given survey id
-	 *
-	 * @author Julio Montoya <gugli100@gmail.com>, Dokeos
-	 * @version September 2008
-	 */
-	public function get_children ($list,$id) {
-		$result=array();
-		foreach ($list as $key=>$node)
-		{
-			if ($key==$id)
-			{
-				$result = $node['children'];
-				break;
-			}
-			if (is_array($node['children']))
-			{
-				//echo $key; echo '--<br>';
-				$re=self::get_children($node['children'],$id);
-				if (!empty($re))
-				{
-					$result=$re;
-				}
-			}
-			else
-			{
-				//echo $key; echo '-<br>';
-			}
-		}
-		return $result;
-	}
-
 	/**
 	 * This function gets the parent id of a survey
 	 *
@@ -1939,170 +618,6 @@ class SurveyTree {
 		else
 			return -1;
 	}
-
-	/**
-	 * This function gets all the siblings of a given survey id
-	 *
-	 * @param  array the list where we are going to search the children
-	 * @param  id the id of the survey
-	 * @return array the children of a given survey id
-	 *
-	 * @author Julio Montoya <gugli100@gmail.com>, Dokeos
-	 * @version September 2008
-	 */
-	public function nextSibling($id) {
-		$result=array();
-		$parent_id = self::getParentId($id);
-		$siblings  = self::get_children($this->surveylist ,$parent_id);
-		//print_r($siblings);
-		if (count($siblings) > 1)
-		{
-			// $key> $id means that the siblings are order 1 2 3 and we suppose that you can't change that order
-			foreach ($siblings as $key=>$bro)
-			{
-				if ($key> $id && $key != $id)
-				{
-					$result[$key]=($bro);
-				}
-			}
-		}
-		return $result;
-    }
-
-	/**
-	 *
-	 * This function shows the last sibling from a given list of surveys
-	 * @param  id of the survey
-	 * @author Julio Montoya <gugli100@gmail.com>, Dokeos
-	 * @version September 2008
-	 *
-	 */
-	public function lastSibling($id) {
-		$result=array();
-		$parent_id = self::getParentId($id);
-		$siblings  = self::get_children($this->surveylist ,$parent_id);
-		//print_r($siblings);
-		if (count($siblings) > 1)
-		{
-			// $key> $id means that the siblings are order 1 2 3 and we suppose that you can't change that order
-			$i=0;
-			foreach ($siblings as $key=>$bro)
-			{
-				if ($key> $id && $key != $id&& $i==count($siblings)-1)
-				{
-					$result[$key]=($bro);
-				}
-				$i++;
-			}
-		}
-		return $result;
-    }
-
-
-	/**
-	 *
-	 * This function shows the last children of a branch
-	 * @param  list of nodes
-	 * @return array of the lastest node
-	 * @author Julio Montoya <gugli100@gmail.com>, Dokeos
-	 * @version September 2008
-	 *
-	 */
-	public function get_last_children_from_branch($list) {
-		$result=array();
-		foreach ($list as $key=>$node)
-		{
-			//echo 'frist<br>'; echo $key;
-			//print_r($node);
-			if ($node['parent_id']!=0)
-			{
-				$list_bros = self::lastSibling($key);
-				//echo '   list_bro <br>';
-				//print_r($list_bros);
-				if (is_array($list_bros) && !empty($list_bros))
-				{
-					foreach	($list_bros as $bro)
-					{
-						//echo '0';
-						if (is_array($bro['children']))
-						{
-							//print_r($bro['children']);
-							return $result[]=self::get_last_children_from_branch($bro['children']);
-						}
-						else
-						{
-							//echo 'esl';
-							$result=$bro;
-							//print_r($bro);
-							return $result;
-						}
-					}
-				}
-				else
-				{
-					//SurveyTree::get_last_children_from_branch($list_bros);
-					//echo 'sss';
-					//if if (is_array($node['children']))
-					$children = self::get_children($node,$key);
-					//return $result[]=SurveyTree::get_last_children_from_branch($node);
-					if (is_array($node['children']))
-					{
-						return $result[]=self::get_last_children_from_branch($node['children']);
-					}
-					else
-					{
-						//return $result[]=SurveyTree::get_last_children_from_branch($node['children']);
-						return $result[]=$node;
-					}
-
-				}
-			}
-			else
-			{
-				//print_r($key);print_r($node['children']);
-				if (is_array($node['children']))
-				{
-					$result[]=self::get_last_children_from_branch($node['children']);
-				}
-				else
-				{
-					$result[]=$node;
-				}
-			}
-		}
-		return $result;
-	}
-	/*
-*
-	 *
-	 * This function show the last children of list
-	 * @param  id
-	 * @param  array
-	 * @return array of the lastest node
-	 * @author Julio Montoya <gugli100@gmail.com>, Dokeos
-	 * @version September 2008
-	 *
-
-
-	function get_last_children($id,$last)
-	{
-		foreach ( $this->_list as $key=>$node)
-		{
-			if (($node['parent_id']==$id))
-			{
-				$last=$node['name']; echo '<br>';
-			}
-			else
-			{
-				if (is_array($node['children']))
-				{
-					return $last = get_last_children($node['children'],$id);
-				}
-			}
-		}
-		return $last;
-	}
-	*/
 	/**
 	 * This function creates a list of all surveys id
 	 * @param  list of nodes
@@ -2113,33 +628,34 @@ class SurveyTree {
 	 */
 	public function createList ($list) {
 		$result=array();
-		foreach ($list as $key=>$node)
-		{
-			if (is_array($node['children']))
-			{
-				//echo $key; echo '--<br>';
-				//print_r($node);
-				//echo '<br>';
-				$result[$key]= $node['name'];
-				$re=self::createList($node['children']);
-				if (!empty($re))
+		if(is_array($list)) {
+			foreach ($list as $key=>$node) {
+				if (is_array($node['children']))
 				{
-					if (is_array($re))
-						foreach ($re as $key=>$r)
-						{
-							$result[$key]=''.$r;
-						}
-					else
+					//echo $key; echo '--<br>';
+					//print_r($node);
+					//echo '<br>';
+					$result[$key]= $node['name'];
+					$re=self::createList($node['children']);
+					if (!empty($re))
 					{
-						$result[]=$re;
-					}
+						if (is_array($re))
+							foreach ($re as $key=>$r)
+							{
+								$result[$key]=''.$r;
+							}
+						else
+						{
+							$result[]=$re;
+						}
 
+					}
 				}
-			}
-			else
-			{
-				//echo $key; echo '-<br>';
-				$result[$key]=$node['name'];
+				else
+				{
+					//echo $key; echo '-<br>';
+					$result[$key]=$node['name'];
+				}
 			}
 		}
 		return $result;

@@ -144,7 +144,7 @@ body {
 					<label for="uploadSize" style="white-space: nowrap;">Upload Size</label>
 					<select name="uploadSize" id="uploadSize">
 	<?php for ($i = 0; $i < count($IMConfig['maxWidth']); $i++){ ?>
-						<option value="<?php echo $i?>"><?php echo $IMConfig['maxWidth'][$i] . " x " . $IMConfig['maxHeight'][$i]?></option>
+						<option value="<?php echo $i ?>"><?php echo $IMConfig['maxWidth'][$i] . " x " . $IMConfig['maxHeight'][$i] ?></option>
 	<?php } ?>
 				<span style="padding-left: 5px;">
 					(max width x height dimensions)

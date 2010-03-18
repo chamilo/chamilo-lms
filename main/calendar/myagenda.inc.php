@@ -12,7 +12,7 @@
 	-------------
 	-> version 2.2 : Patrick Cool, patrick.cool@ugent.be, november 2004
 	Personal Agenda added. The user can add personal agenda items. The items
-	are stored in a dokeos_user database because it is not course or platform
+	are stored in a chamilo_user database because it is not course or platform
 	based. A personal agenda view was also added. This lists all the personal
 	agenda items of that user.
 
@@ -67,14 +67,14 @@ function get_myagendaitems($courses_dbs, $month, $year)
 		{
 			//echo "course admin";
 			$sqlquery = "SELECT
-										DISTINCT agenda.*, item_property.*
+										DISTINCT agenda.*, ip.visibility, ip.to_group_id, ip.insert_user_id, ip.ref
 										FROM ".$TABLEAGENDA." agenda,
-											 ".$TABLE_ITEMPROPERTY." item_property
-										WHERE agenda.id = item_property.ref
+											 ".$TABLE_ITEMPROPERTY." ip
+										WHERE agenda.id = ip.ref
 										AND MONTH(agenda.start_date)='".$month."'
 										AND YEAR(agenda.start_date)='".$year."'
-										AND item_property.tool='".TOOL_CALENDAR_EVENT."'
-										AND item_property.visibility='1'
+										AND ip.tool='".TOOL_CALENDAR_EVENT."'
+										AND ip.visibility='1'
 										GROUP BY agenda.id
 										ORDER BY start_date ";
 		}
@@ -85,40 +85,40 @@ function get_myagendaitems($courses_dbs, $month, $year)
 			if (is_array($group_memberships) && count($group_memberships)>0)
 			{
 				$sqlquery = "SELECT
-													agenda.*, item_property.*
+													agenda.*, ip.visibility, ip.to_group_id, ip.insert_user_id, ip.ref
 													FROM ".$TABLEAGENDA." agenda,
-														".$TABLE_ITEMPROPERTY." item_property
-													WHERE agenda.id = item_property.ref
+														".$TABLE_ITEMPROPERTY." ip
+													WHERE agenda.id = ip.ref
 													AND MONTH(agenda.start_date)='".$month."'
 													AND YEAR(agenda.start_date)='".$year."'
-													AND item_property.tool='".TOOL_CALENDAR_EVENT."'
-													AND	( item_property.to_user_id='".$_user['user_id']."' OR item_property.to_group_id IN (0, ".implode(", ", $group_memberships).") )
-													AND item_property.visibility='1'
+													AND ip.tool='".TOOL_CALENDAR_EVENT."'
+													AND	( ip.to_user_id='".$_user['user_id']."' OR ip.to_group_id IN (0, ".implode(", ", $group_memberships).") )
+													AND ip.visibility='1'
 													ORDER BY start_date ";
 			}
 			else
 			{
 				$sqlquery = "SELECT
-													agenda.*, item_property.*
+													agenda.*, ip.visibility, ip.to_group_id, ip.insert_user_id, ip.ref
 													FROM ".$TABLEAGENDA." agenda,
-														".$TABLE_ITEMPROPERTY." item_property
-													WHERE agenda.id = item_property.ref
+														".$TABLE_ITEMPROPERTY." ip
+													WHERE agenda.id = ip.ref
 													AND MONTH(agenda.start_date)='".$month."'
 													AND YEAR(agenda.start_date)='".$year."'
-													AND item_property.tool='".TOOL_CALENDAR_EVENT."'
-													AND ( item_property.to_user_id='".$_user['user_id']."' OR item_property.to_group_id='0')
-													AND item_property.visibility='1'
+													AND ip.tool='".TOOL_CALENDAR_EVENT."'
+													AND ( ip.to_user_id='".$_user['user_id']."' OR ip.to_group_id='0')
+													AND ip.visibility='1'
 													ORDER BY start_date ";
 			}
 		}
 
-		$result = Database::query($sqlquery, __FILE__, __LINE__);
+		$result = Database::query($sqlquery);
 		while ($item = Database::fetch_array($result)) {
 			$agendaday = date("j",strtotime($item['start_date']));
 			if(!isset($items[$agendaday])){$items[$agendaday]=array();}
 
-			$time= date("H:i",strtotime($item['start_date']));
-			$end_time= date("H:i",strtotime($item['end_date']));
+			$time = api_convert_and_format_date($item['start_date'], TIME_NO_SEC_FORMAT, date_default_timezone_get());
+			$end_time = api_convert_and_format_date($item['end_date'], TIME_NO_SEC_FORMAT, date_default_timezone_get());
 			$URL = api_get_path(WEB_PATH)."main/calendar/agenda.php?cidReq=".urlencode($array_course_info["code"])."&amp;day=$agendaday&amp;month=$month&amp;year=$year#$agendaday"; // RH  //Patrick Cool: to highlight the relevant agenda item
 			if ($setting_agenda_link == 'coursecode') {
 				$title=$array_course_info['title'];
@@ -298,6 +298,8 @@ function show_new_personal_item_form($id = "")
 	$year = $today['year'];
 	$hours = $today['hours'];
 	$minutes = $today['minutes'];
+	$content=stripslashes($content);
+	$title=stripslashes($title);
 	// if an $id is passed to this function this means we are editing an item
 	// we are loading the information here (we do this after everything else
 	// to overwrite the default information)
@@ -309,7 +311,7 @@ function show_new_personal_item_form($id = "")
 	if ($id <> "")
 	{
 		$sql = "SELECT * FROM ".$tbl_personal_agenda." WHERE user='".$_user['user_id']."' AND id='".$id."'";
-		$result = Database::query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql);
 		$aantal = Database::num_rows($result);
 		if ($aantal <> 0)
 		{
@@ -327,16 +329,19 @@ function show_new_personal_item_form($id = "")
 			return false;
 		}
 	}
-	echo "<form method=\"post\" action=\"myagenda.php?action=add_personal_agenda_item&amp;id=$id\" name=\"newedit_form\">\n";
-	echo "<table width=\"100%\" id=\"newedit_form\">\n";
-	echo "\t<tr class=\"title\">\n\t\t<td colspan=\"3\"><h4>";
+
+	echo '<form method="post" action="myagenda.php?action=add_personal_agenda_item&amp;id=$id" name="newedit_form">';
+	echo '<div id="newedit_form">';
+	echo '<div class="title">';
 	echo ($_GET['action'] == 'edit_personal_agenda_item') ? get_lang("ModifyPersonalCalendarItem") : get_lang("AddPersonalCalendarItem");
-	echo "</h4></td>\n\t</tr>\n";
-	echo "\t<tr class=\"subtitle\">\n\t\t<td>\n";
-	echo "<!-- date: 1 -> 31 -->\n";
-	echo "\t\t".get_lang("Date").": \n";
+	echo '</div>';
+	echo '<div>';
+	echo '<!-- date: 1 -> 31 -->';
+	echo '<br/>';
+	echo ''.get_lang("Date").':	';
+
 	// ********** The form containing the days (0->31) ********** \\
-	echo "<select name=\"frm_day\">\n";
+	echo '<select name="frm_day">';
 	// small loop for filling all the dates
 	// 2do: the available dates should be those of the selected month => february is from 1 to 28 (or 29) and not to 31
 	for ($i = 1; $i <= 31; $i ++)
@@ -353,17 +358,17 @@ function show_new_personal_item_form($id = "")
 		// the current day is indicated with [] around the date
 		if ($value == $day)
 		{
-			echo "\t\t\t\t <option value=\"".$value."\" selected>".$i."</option>\n";
+			echo '<option value='.$value.' selected>'.$i.'</option>';
 		}
 		else
 		{
-			echo "\t\t\t\t <option value=\"".$value."\">".$i."</option>\n";
+			echo '<option value='.$value.'>'.$i.'</option>';
 		}
 	}
-	echo "</select>\n\n";
+	echo '</select>';
 	// ********** The form containing the months (jan->dec) ********** \\
-	echo "<!-- month: january -> december -->\n";
-	echo "<select name=\"frm_month\">\n";
+	echo '<!-- month: january -> december -->';
+	echo '<select name="frm_month">';
 	for ($i = 1; $i <= 12; $i ++)
 	{
 		// values have to have double digits
@@ -378,31 +383,31 @@ function show_new_personal_item_form($id = "")
 		// the current month is indicated with [] around the month name
 		if ($value == $month)
 		{
-			echo "\t<option value=\"".$value."\" selected>".$MonthsLong[$i -1]."</option>\n";
+			echo '<option value='.$value.' selected>'.$MonthsLong[$i -1].'</option>';
 		}
 		else
 		{
-			echo "\t<option value=\"".$value."\">".$MonthsLong[$i -1]."</option>\n";
+			echo '<option value='.$value.'>'.$MonthsLong[$i -1].'</option>';
 		}
 	}
-	echo "</select>\n\n";
+	echo '</select>';
 	// ********** The form containing the years ********** \\
-	echo "<!-- year -->\n";
-	echo "<select name=\"frm_year\">";
-	echo "<option value=\"". ($year -1)."\">". ($year -1)."</option>\n";
-	echo "<option value=\"".$year."\" selected>".$year."</option>\n";
+	echo '<!-- year -->';
+	echo '<select name="frm_year">';
+	echo '<option value='. ($year -1).'>'. ($year -1).'</option>';
+	echo '<option value='.$year.' selected>'.$year.'</option>';
 	for ($i = 1; $i <= 5; $i ++)
 	{
 		$value = $year + $i;
-		echo "\t<option value=\"".$value."\">".$value."</option>\n";
+		echo '<option value='.$value.'>'.$value.'</option>';
 	}
-	echo "</select>";
+	echo '</select>&nbsp;&nbsp;';
 	echo "<a title=\"Kalender\" href=\"javascript:openCalendar('newedit_form', 'frm_')\">".Display::return_icon('calendar_select.gif', get_lang('Select'), array ('style' => 'vertical-align: middle;'))."</a>";
-	echo "&nbsp;&nbsp;";
+	echo '&nbsp;&nbsp;';
 	// ********** The form containing the hours  (00->23) ********** \\
-	echo "<!-- time: hour -->\n";
-	echo get_lang("Time").": \n";
-	echo "<select name=\"frm_hour\">\n";
+	echo '<!-- time: hour -->';
+	echo get_lang("Time").': ';
+	echo '<select name="frm_hour">';
 	for ($i = 1; $i <= 24; $i ++)
 	{
 		// values have to have double digits
@@ -417,14 +422,14 @@ function show_new_personal_item_form($id = "")
 		// the current hour is indicated with [] around the hour
 		if ($hours == $value)
 		{
-			echo "\t\t\t\t<option value=\"".$value."\" selected> ".$value." </option>\n";
+			echo '<option value='.$value.' selected>'.$value.'</option>';
 		}
 		else
 		{
-			echo "\t\t\t\t<option value=\"".$value."\"> ".$value." </option>\n";
+			echo '<option value='.$value.'> '.$value.' </option>';
 		}
 	}
-	echo "</select>";
+	echo '</select>';
 	// ********** The form containing the minutes ********** \\
 	echo "<select name=\"frm_minute\">";
 	echo "<option value=\"".$minutes."\">".$minutes."</option>";
@@ -440,22 +445,37 @@ function show_new_personal_item_form($id = "")
 	echo "<option value=\"45\">45</option>";
 	echo "<option value=\"50\">50</option>";
 	echo "<option value=\"55\">55</option>";
-	echo "</select>";
-	echo "</td></tr>";
+	echo '</select>';
+	echo '</div><br/>';
 	// ********** The title field ********** \\
-	echo "<tr class=\"subtitle\"><td colspan=\"2\">";
-	echo get_lang('Title').': <input type="text" name="frm_title" size="50" value="'.$title.'" />';
-	echo "</td></tr>";
+	echo '<div>';
+	echo ''.get_lang('Title').' : <input type="text" name="frm_title" size="50" value="'.$title.'" />';
+	echo '</div>';
 	// ********** The text field ********** \\
-	echo "<tr><td colspan=\"2\">";
-	//api_disp_html_area('frm_content', $text, '300px');
-	echo'<textarea name="frm_content" style="width: 450px; height: 100px;">'.$text.'</textarea>';
-	echo "</td></tr>";
+	echo '<div class="formw">';
+			require_once(api_get_path(LIBRARY_PATH) . "/fckeditor/fckeditor.php");
+
+			$oFCKeditor = new FCKeditor('frm_content') ;
+
+			$oFCKeditor->Width		= '80%';
+			$oFCKeditor->Height		= '200';
+
+			if(!api_is_allowed_to_edit(null,true)) {
+				$oFCKeditor->ToolbarSet = 'AgendaStudent';
+			} else {
+				$oFCKeditor->ToolbarSet = 'Agenda';
+			}
+			$oFCKeditor->Value		= $content;
+			$return =	$oFCKeditor->CreateHtml();
+			echo $return;
+	echo '</div>';
 	// ********** The Submit button********** \\
-	echo "<tr><td colspan=\"2\">";
+	echo '<div>';
 	echo '<button type="submit" class="add" name="Submit" value="'.get_lang('AddEvent').'" >'.get_lang('AddEvent').'</button>';
-	echo "</td></tr>";
-	echo "</table>\n</form>\n";
+	echo '</div>';
+	echo '</div>';
+	echo '</form>';
+
 }
 /**
  * This function shows all the forms that are needed form adding a new personal agenda item
@@ -483,7 +503,7 @@ function store_personal_item($day, $month, $year, $hour, $minute, $title, $conte
 	{ // we are adding a new item
 		$sql = "INSERT INTO $tbl_personal_agenda (user, title, text, date) VALUES ('".$_user['user_id']."','$title', '$content', '$date')";
 	}
-	$result = Database::query($sql, __FILE__, __LINE__);
+	$result = Database::query($sql);
 }
 /**
  * This function finds all the courses (also those of sessions) of the user and returns an array containing the
@@ -599,7 +619,7 @@ function get_personal_agenda_items($agendaitems, $day = "", $month = "", $year =
 		}
 	}
 
-	$result = Database::query($sql, __FILE__, __LINE__);
+	$result = Database::query($sql);
 	while ($item = Database::fetch_array($result))
 	{
 		// we break the date field in the database into a date and a time part
@@ -659,7 +679,7 @@ function get_personal_agenda_item($id)
 	// make sure events of the personal agenda can only be seen by the user himself
 	$user = api_get_user_id();
 	$sql = " SELECT * FROM ".$tbl_personal_agenda." WHERE id=".$id." AND user = ".$user;
-	$result = Database::query($sql, __FILE__, __LINE__);
+	$result = Database::query($sql);
 	if(Database::num_rows($result)==1)
 	{
 		$item = Database::fetch_array($result);
@@ -681,7 +701,7 @@ function show_personal_agenda()
 	global $_user;
 	// The SQL statement that retrieves all the personal agenda items of this user
 	$sql = "SELECT * FROM ".$tbl_personal_agenda." WHERE user='".$_user['user_id']."' ORDER BY date DESC";
-	$result = Database::query($sql, __FILE__, __LINE__);
+	$result = Database::query($sql);
 	// variable initialisation
 	$month_bar = "";
 	// setting the default day, month and year
@@ -731,7 +751,7 @@ function show_personal_agenda()
 			// adding an internal anchor
 			echo "<a name=\"".$myrow["id"]."\"></a>";
 			echo date("d", strtotime($myrow["date"]))." ".$MonthsLong[date("n", strtotime($myrow["date"])) - 1]." ".date("Y", strtotime($myrow["date"]))."&nbsp;";
-			echo api_ucfirst(strftime(get_lang("timeNoSecFormat"), strtotime($myrow["date"])));
+			echo strftime(get_lang("timeNoSecFormat"), strtotime($myrow["date"]));
 			echo "</td>";
 			echo '<td></td>'; //remove when enabling ical
             //echo '<td class="'.$style.'">';
@@ -785,7 +805,7 @@ function show_simple_personal_agenda($user_id)
 
 	// The SQL statement that retrieves all the personal agenda items of this user
 	$sql = "SELECT * FROM ".$tbl_personal_agenda." WHERE user='".$user_id."' ORDER BY date DESC";
-	$result = Database::query($sql, __FILE__, __LINE__);
+	$result = Database::query($sql);
 	// variable initialisation
 	$month_bar = "";
 	// setting the default day, month and year
@@ -823,7 +843,7 @@ function show_simple_personal_agenda($user_id)
 			  --------------------------------------------------*/
 			// adding an internal anchor
 			$content.= date("d", strtotime($myrow["date"]))." ".$MonthsLong[date("n", strtotime($myrow["date"])) - 1]." ".date("Y", strtotime($myrow["date"]))."&nbsp;";
-			$content.= api_ucfirst(strftime(get_lang("timeNoSecFormat"), strtotime($myrow["date"])));
+			$content.= strftime(get_lang("timeNoSecFormat"), strtotime($myrow["date"]));
 
 			/*--------------------------------------------------
 			 			display: the title
@@ -864,12 +884,12 @@ function delete_personal_agenda($id)
 	if ($id <> '')
 	{
 		$sql = "SELECT * FROM ".$tbl_personal_agenda." WHERE user='".$_user['user_id']."' AND id='".$id."'";
-		$result = Database::query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql);
 		$aantal = Database::num_rows($result);
 		if ($aantal <> 0)
 		{
 			$sql = "DELETE FROM ".$tbl_personal_agenda." WHERE user='".$_user['user_id']."' AND id='".$id."'";
-			$result = Database::query($sql, __FILE__, __LINE__);
+			$result = Database::query($sql);
 		}
 	}
 }
@@ -905,14 +925,14 @@ function get_personal_agenda_items_between_dates($user_id, $date_start='', $date
 		if ($course['status'] == '1') {
 			//echo "course admin";
 			$sqlquery = "SELECT ".
-						" DISTINCT agenda.*, item_property.* ".
+						" DISTINCT agenda.*, ip.visibility, ip.to_group_id, ip.insert_user_id, ip.ref ".
 						" FROM ".$t_a." agenda, ".
-						$t_ip." item_property ".
-                        " WHERE agenda.id = item_property.ref ".
+						$t_ip." ip ".
+                        " WHERE agenda.id = ip.ref ".
 						" AND agenda.start_date>='$date_start' ".
 						" AND agenda.end_date<='$date_end' ".
-						" AND item_property.tool='".TOOL_CALENDAR_EVENT."' ".
-						" AND item_property.visibility='1' ".
+						" AND ip.tool='".TOOL_CALENDAR_EVENT."' ".
+						" AND ip.visibility='1' ".
 						" GROUP BY agenda.id ".
 						" ORDER BY start_date ";
 		} else {
@@ -920,32 +940,32 @@ function get_personal_agenda_items_between_dates($user_id, $date_start='', $date
 			if (is_array($group_memberships) && count($group_memberships)>0)
 			{
 				$sqlquery = "SELECT " .
-							" agenda.*, item_property.* ".
+							" agenda.*, ip.visibility, ip.to_group_id, ip.insert_user_id, ip.ref ".
                             " FROM ".$t_a." agenda, ".
-			                $t_ip." item_property ".
-                            " WHERE agenda.id = item_property.ref ".
+			                $t_ip." ip ".
+                            " WHERE agenda.id = ip.ref ".
 							" AND agenda.start_date>='$date_start' ".
 							" AND agenda.end_date<='$date_end' ".
-							" AND item_property.tool='".TOOL_CALENDAR_EVENT."' ".
-							" AND	( item_property.to_user_id='".$user_id."' OR item_property.to_group_id IN (0, ".implode(", ", $group_memberships).") ) ".
-							" AND item_property.visibility='1' ".
+							" AND ip.tool='".TOOL_CALENDAR_EVENT."' ".
+							" AND	( ip.to_user_id='".$user_id."' OR ip.to_group_id IN (0, ".implode(", ", $group_memberships).") ) ".
+							" AND ip.visibility='1' ".
 							" ORDER BY start_date ";
 			} else {
 				$sqlquery = "SELECT ".
-							" agenda.*, item_property.* ".
+							" agenda.*, ip.visibility, ip.to_group_id, ip.insert_user_id, ip.ref ".
 							" FROM ".$t_a." agenda, ".
-							$t_ip." item_property ".
-							" WHERE agenda.id = item_property.ref ".
+							$t_ip." ip ".
+							" WHERE agenda.id = ip.ref ".
 							" AND agenda.start_date>='$date_start' ".
 							" AND agenda.end_date<='$date_end' ".
-							" AND item_property.tool='".TOOL_CALENDAR_EVENT."' ".
-							" AND ( item_property.to_user_id='".$user_id."' OR item_property.to_group_id='0') ".
-							" AND item_property.visibility='1' ".
+							" AND ip.tool='".TOOL_CALENDAR_EVENT."' ".
+							" AND ( ip.to_user_id='".$user_id."' OR ip.to_group_id='0') ".
+							" AND ip.visibility='1' ".
 							" ORDER BY start_date ";
 			}
 		}
 
-		$result = Database::query($sqlquery, __FILE__, __LINE__);
+		$result = Database::query($sqlquery);
 		while ($item = Database::fetch_array($result)) {
 			$agendaday = date("j",strtotime($item['start_date']));
 			$URL = api_get_path(WEB_PATH)."main/calendar/agenda.php?cidReq=".urlencode($course["code"])."&amp;day=$agendaday&amp;month=$month&amp;year=$year#$agendaday";

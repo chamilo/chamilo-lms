@@ -1,5 +1,6 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $TermAddNew = "Adauga termen nou";
 $TermName = "Numele termenului";
@@ -11,10 +12,10 @@ $TermAddButton = "Adaugati acest termen";
 $TermUpdateButton = "Actualizati termenul";
 $TermEdit = "Editati termenul";
 $TermDeleteAction = "Stergeti termenul";
-$OrderBy = "Ordonare dupa";
+$OrderBy = "Sorteaza dupa";
 $CreationDate = "Data creerii";
 $UpdateDate = "Data actualizarii";
 $PreSelectedOrder = "Ordoneaza dupa selectie";
 $TableView = "Vezi tabelul";
-$GlossaryManagement  = "Gestiunea glosarului";
+$GlossaryManagement = "Gestiunea glosarului";
 ?>

@@ -1,21 +1,22 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $lang_height = "Altura";
-$lang_resizing_comment = "redimensionar la imatge amb el següent tamany (en pixels)";
+$lang_resizing_comment = "redimensionar la imatge amb el segÃ¼ent tamany (en pixels)";
 $lang_width = "Amplaria";
 $lang_resizing = "Redimensionar";
-$lang_no_resizing_comment = "Mostrar totes les imatges al tamany original. No redimensionar s\'ha activat. Les barres de desplaçament apareixeran automáticament si la imatge és més gran que el tamany de la seva pantalla.";
+$lang_no_resizing_comment = "Mostrar totes les imatges al tamany original. No redimensionar s'ha activat. Les barres de desplaÃ§ament apareixeran automÃ¡ticament si la imatge Ã©s mÃ©s gran que el tamany de la seva pantalla.";
 $lang_show_thumbnails = "Mostrar miniatures";
 $lang_click_thumbnails = "Clic a una de les miniatures";
-$lang_set_slideshow_options = "Modificar les opcions de la presentació";
-$lang_slideshow_options = "Opcions de la presentació";
+$lang_set_slideshow_options = "Modificar les opcions de la presentaciÃ³";
+$lang_slideshow_options = "Opcions de la presentaciÃ³";
 $lang_no_resizing = "No redimensionar (per defecte)";
-$lang_exit_slideshow = "Sortir de la presentació";
-$SlideShow = "Presentació";
+$lang_exit_slideshow = "Sortir de la presentaciÃ³";
+$SlideShow = "PresentaciÃ³";
 $lang_previous_slide = "Diapositiva anterior";
-$lang_next_slide = "Diapositiva següent";
+$lang_next_slide = "Diapositiva segÃ¼ent";
 $lang_image = "Imatge";
 $lang_of = "de";
-$lang_view_slideshow = "Veure presentació";
+$lang_view_slideshow = "Veure presentaciÃ³";
 ?>

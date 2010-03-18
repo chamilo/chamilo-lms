@@ -1,37 +1,38 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$nameTools = "suspekt språk var";
-$langMdCallingTool = "Learning path - Scorm";
-$langTool = "Scorm MD Operationer";
-$langNotInDB = "ingen Dokeos DB tillträde";
-$langManifestSyntax = "(syntax fel i manifestfilen...)";
+$nameTools = "suspekt sprÃ¥kvariabel";
+$langMdCallingTool = "Dokument";
+$langTool = "Dokument Metadata";
+$langNotInDB = "ingen sÃ¥dan Linkkategori";
+$langManifestSyntax = "(syntaxfel i manifestfilen...)";
 $langEmptyManifest = "(tom manifestfil...)";
 $langNoManifest = "(ingen manifestfil...)";
-$langNotFolder = "inte möjligt, det är ingen mapp...";
+$langNotFolder = "Ã¤r inte mÃ¶jligt, det Ã¤r ingen mapp...";
 $langUploadHtt = "Ladda upp HTT fil";
-$langHttFileNotFound = "Ny HTT fil kan inte öppnas (kan vara tom, eller för stor)";
-$langHttOk = "Ny HTT fil är uppladdad";
+$langHttFileNotFound = "Ny HTT fil kan inte Ã¶ppnas (kan vara tom, eller fÃ¶r stor)";
+$langHttOk = "Ny HTT fil Ã¤r uppladdad";
 $langHttNotOk = "HTT filens uppladdning misslyckades";
 $langRemoveHtt = "Ta bort HTT filen";
-$langHttRmvOk = "HTT filen är borttagen";
+$langHttRmvOk = "HTT filen Ã¤r borttagen";
 $langHttRmvNotOk = "Borttagningen av HTT filen misslyckades";
-$langImport = "Skapa MDEs från manifest";
-$langRemove = "Ta bort MDEs";
-$langAllRemovedFor = "All inmatning borttagen för";
-$langIndex = "Index ord med PhpDig";
-$langTotalMDEs = "Totalt antal Scorm MD inmatningar:";
-$langMainMD = "Öppna huvud MDE";
+$langImport = "Importera";
+$langRemove = "Radera MDEs";
+$langAllRemovedFor = "Alla inmatningar raderade fÃ¶r denna kategori";
+$langIndex = "Index ord";
+$langTotalMDEs = "Sammanlagt antal LÃ¤nkar MD inmatningar";
+$langMainMD = "Ã–ppna huvud MDE";
 $langLines = "rader";
 $langPlay = "Starta index.php";
-$langNonePossible = "Inga MD operationer är möjliga";
-$langOrElse = "Välj ett Scorm bibliotek eller ett Scorm id";
+$langNonePossible = "Inga MD operationer Ã¤r mÃ¶jliga";
+$langOrElse = "VÃ¤lj en lÃ¤nk kategori";
 $langWorkWith = "Arbeta med Scorm bibliotek";
-$langSDI = "...Scorm bibliotek med SD-id (och delat manifest - eller lämna tomt)";
+$langSDI = "...Scorm bibliotek med SD-id (och delat manifest - eller lÃ¤mna tomt)";
 $langRoot = "rot";
-$langSplitData = "Delat manifest, och #MDe, om det finns några:";
-$langMffNotOk = "Ersättningen av manifestfilen misslyckades";
+$langSplitData = "Delat manifest, och #MDe, om det finns nÃ¥gra:";
+$langMffNotOk = "ErsÃ¤ttningen av manifestfilen misslyckades";
 $langMffOk = "Manifestfilen har blivit ersatt";
-$langMffFileNotFound = "Den nya manifestfilen kan inte öppnas (den kan vara tom, eller för stor)";
-$langUploadMff = "Ersätt manifestfilen";
+$langMffFileNotFound = "Den nya manifestfilen kan inte Ã¶ppnas (den kan vara tom, eller fÃ¶r stor)";
+$langUploadMff = "ErsÃ¤tt manifestfilen";
 ?>

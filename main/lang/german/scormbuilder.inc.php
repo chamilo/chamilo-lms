@@ -1,5 +1,6 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$langScormBuilder = "Lernpfad-Baukasten - Baukasten für Scorm-unterstützte Kurse";
+$langScormBuilder = "Lernpfad-Baukasten - Baukasten fÃ¼r Scorm-unterstÃ¼tzte Kurse";
 ?>

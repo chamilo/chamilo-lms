@@ -1,5 +1,6 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $ReceivedFiles = "Gauti failai";
 $SentFiles = "Išsiųsti failai";
@@ -48,7 +49,6 @@ $FileUploadSucces = "Failas sėkmingai įkeltas.";
 $MailingNonMailingError = "Mailing cannot be overwritten by non-mailing and vice-versa";
 $MailingSelectNoOther = "Mailing cannot be combined with other recipients";
 $MailingJustUploadSelectNoOther = "Just Upload cannot be combined with other recipients";
-$NoFilesHere = "Failų nėra";
 $NoFilesHere = "Failų nėra";
 $NewDropboxFileUploaded = "A new file has been sent in the dropbox tool";
 $NewDropboxFileUploadedContent = "A new file has been sent in the dropbox tool of your course";

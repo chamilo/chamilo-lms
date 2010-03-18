@@ -1,8 +1,9 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$ResourceAdded = "Recurs afegit. Vostè ara pot tornar a cursos o afegir més recursos";
-$LearningPath = "Itinerari d\'aprenentatge";
+$ResourceAdded = "Recurs afegit. VostÃ¨ ara pot tornar a cursos o afegir mÃ©s recursos";
+$LearningPath = "Itinerari formatiu";
 $LevelUp = "nivell superior";
 $AddIt = "Afegir";
 $MainCategory = "Categoria principal";
@@ -11,7 +12,7 @@ $AddToLinks = "Add to the course links";
 $DontAdd = "do not add";
 $lang_show_all_added_resources = "Show all added resources";
 $ResourcesAdded = "Added new resources";
-$BackTo = "Back to";
+$BackTo = "Tornar a";
 $ExternalResources = "External resources";
 $CourseResources = "Course resources";
 $ExternalLink = "External link";
@@ -23,36 +24,36 @@ $AdValvas = "Ad Valvas";
 $Document = "Document";
 $ShowDelete = "Mostrar/eliminar";
 $IntroductionText = "Introduir text";
-$CourseDescription = "Descripció del curs";
+$CourseDescription = "DescripciÃ³ del curs";
 $Groups = "Grups";
 $Users = "Usuaris";
-$IntroductionTextAdd = "Afegeixi una pàgina que conté el text d\'introducció a aquest capítol.";
-$CourseDescriptionAdd = "Afegeixi una pàgina que conté la descripció de curs a aquest capítol.";
-$GroupsAdd = "Afegeixi la pàgina de Grups a aquest capítol.";
-$UsersAdd = "Afegeixi la pàgina d\'Usuaris a aquest capítol.";
+$IntroductionTextAdd = "Afegeixi una pÃ gina que contÃ© el text d'introducciÃ³ a aquest capÃ­tol.";
+$CourseDescriptionAdd = "Afegeixi una pÃ gina que contÃ© la descripciÃ³ de curs a aquest capÃ­tol.";
+$GroupsAdd = "Afegeixi la pÃ gina de Grups a aquest capÃ­tol.";
+$UsersAdd = "Afegeixi la pÃ gina d'Usuaris a aquest capÃ­tol.";
 $ExportableCourseResources = "Recursos de curs exportables";
-$DokeosRelatedCourseMaterial = "Dokeos relacionava recursos de curs";
-$LinkTarget = "Destí d\'enllaç";
+$DokeosRelatedCourseMaterial = "Chamilo relacionava recursos de curs";
+$LinkTarget = "DestÃ­ d'enllaÃ§";
 $SameWindow = "A la mateixa finestra";
 $NewWindow = "A una nova finestra";
 $StepDeleted1 = "Aquest";
-$StepDeleted2 = "l\'element fou suprimit en aquesta eina";
+$StepDeleted2 = "l'element fou suprimit en aquesta eina";
 $Modify = "modificar";
-$Chapter = "Capítol";
-$NoAgendaItems = "No hi ha elements a l\'agenda";
-$AgendaAdd = "Afegir un element a l\'agenda";
-$UserGroupFilter = "Filtrar per grups d\'usuaris";
-$AgendaSortChronologicallyUp = "Ordenar l\'agenda cronologicament (adalt)";
-$ShowCurrent = "Ordenar els elements de l\'agenda";
-$ModifyCalendarItem = "Modificar els elements de l\'agenda";
-$ItemTitle = "Títol";
-$Detail = "Detalls";
-$EditSuccess = "L\'edició ha estat exitosa";
-$AddCalendarItem = "Afegir element a l\'agenda";
+$Chapter = "CapÃ­tol";
+$NoAgendaItems = "No hi ha esdeveniments";
+$AgendaAdd = "Afegir una nova activitat a l'agenda";
+$UserGroupFilter = "Filtrar per grups / usuaris";
+$AgendaSortChronologicallyUp = "Ordenar esdeveniments (antics/recents)";
+$ShowCurrent = "Veure les activitats d'aquest mes";
+$ModifyCalendarItem = "Modificar una anotaciÃ³ de l'agenda";
+$ItemTitle = "TÃ­tol de l'anotaciÃ³";
+$Detail = "Detall";
+$EditSuccess = "L'anotaciÃ³ ha estat editada";
+$AddCalendarItem = "Afegir una nova anotaciÃ³ a l'agenda";
 $AddAnn = "Afegir un anunci";
-$ForumAddNewTopic = "Fòrum: afegir un nou tòpic";
+$ForumAddNewTopic = "FÃ²rum: afegir un nou tÃ²pic";
 $ForumEditTopic = "Foro: editar un tema";
 $ExerciseAnswers = "Exercici: respostes";
 $ForumReply = "Foro: respondre";
-$AgendaSortChronologicallyDown = "Ordenar l\'agenda del més recent al més antic";
+$AgendaSortChronologicallyDown = "Ordenar events (recents/antics)";
 ?>

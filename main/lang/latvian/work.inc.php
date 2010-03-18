@@ -1,34 +1,35 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$Tools  = "Darbar&#299;ki";
-$SendWork = "Aug�upiel&#257;d&#275;t failu";
-$langTooBig = "J&#363;s neatz&#299;m&#275;j&#257;t dokumentu vai ar&#299; tas ir p&#257;r&#257;k liels.";
-$langListDeleted = "Viss saraksts tika izdz&#275;sts";
-$langDocModif = "pap&#299;ra virsraksts tika main&#299;ts";
-$langDocAdd = "Dokuments tika pievienots publik&#257;cij&#257;m.";
-$langDocDel = "Dokuments tika izdz&#275;sts";
+$Tools = "Rīki";
+$SendWork = "Aug";
+$langTooBig = "Jūs neizvēlējāties nevienu failu, ko nosūtīt, vai arī tas ir pārāk liela izmēra";
+$langListDeleted = "Saraksts tika dzēsts";
+$langDocModif = "papīra virsraksts tika mainīts";
+$langDocAdd = "Dokuments tika pievienots publikācijām.";
+$langDocDel = "Dokuments tika izdzēsts";
 $langTitleWork = "Dokumenta nosaukums";
 $langAuthors = "Autori";
-$langDelList = "Dz&#275;st visu sarakstu ";
-$langWorkDelete = "Dz&#275;st";
-$langWorkModify = "Main&#299;t";
-$langWorkConfirmDelete = "Vai tie�&#257;m v&#275;laties dz&#275;st �o failu";
-$langAllFiles = "Darb&#299;bas ar visiem failiem";
-$lang_default_upload = "Iepriek�noteikts veids, k&#257; tiko pievienotie dokumenti tiek att&#275;loti (redzami / neredzami).";
-$lang_new_visible = "Visi dokumenti ir redzami visiem lietot&#257;jiem";
+$langDelList = "Dzēst sarakstu";
+$langWorkDelete = "Dzēst";
+$langWorkModify = "Mainīt";
+$langWorkConfirmDelete = "Vai tie";
+$langAllFiles = "Darbības ar visiem failiem";
+$lang_default_upload = "Iepriek";
+$lang_new_visible = "Visi dokumenti ir redzami visiem lietotājiem";
 $lang_new_unvisible = "Jaunie dokumenti ir redzami tikai kursu administratoram/iem";
-$lang_doc_unvisible = "J&#363;su fails ir redzams tikai �&#299; kursa doc&#275;t&#257;jam/iem un t&#257;d&#275;&#316; nav redzams vairs.";
-$langDelLk = "Dz&#275;st saiti";
-$langMustBeRegisteredUser = "Tikai re&#291;istr&#275;tie lietot&#257;ji var public&#275;t dokumentus �ai kurs&#257;.";
-$langListDel = "Dz&#275;st sarakstu";
-$langNameDir = "P&#257;rsaukt mapi";
-$langFileExists = "T&#257;ds fails jau eksist&#275;";
+$lang_doc_unvisible = "Jūsu fails ir redzams tikai";
+$langDelLk = "Vai tie";
+$langMustBeRegisteredUser = "Tikai reģistrētie lietotāji var publicēt dokumentus";
+$langListDel = "Dzēst sarakstu";
+$langNameDir = "Jaunās direktorijas nosaukums";
+$langFileExists = "Veicamā darbība ir neiespējama - fails ar tādu nosaukumu jau eksistē.";
 $CreateDirectory = "Izveidot mapi";
-$langCurrentDir = "patreiz&#275;j&#257; mape";
-$UploadADocument = "Aug�upiel&#257;d&#275;t dokumentu";
-$EditToolOptions = "Main&#299;t darbar&#299;ku iestat&#299;jumus";
-$DocumentDeleted = "Dokuments izdz&#275;sts";
-$DirDelete = "Izdz&#275;st direktoriju";
-$ValidateChanges = "Apstiprin&#257;t izmai&#326;as";
+$langCurrentDir = "patreizējā mape";
+$UploadADocument = "Aug";
+$EditToolOptions = "Mainīt darbarīku iestatījumus";
+$DocumentDeleted = "Dokuments izdzēsts";
+$DirDelete = "Izdzēst direktoriju";
+$ValidateChanges = "Apstiprināt izmaiņas";
 ?>

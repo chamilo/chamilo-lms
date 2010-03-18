@@ -1,27 +1,32 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $langActivate = "afficher";
 $langDeactivate = "masquer";
-$langInLnk  = "Outils masqués";
-$langDelLk = "Voulez-vous réellement supprimer ce lien?";
-$langCourseCreate  = "Créer une formation";
-$langNameOfTheLink  = "Nom du lien";
-$lang_main_categories_list                  = "Liste des catégories";
-$langCourseAdminOnly = "Formateurs uniquement";
-$PlatformAdminOnly = "Administrateurs du portail uniquement";
-$langCombinedCourse = "Cours combiné";
-$ToolIsNowVisible = "L\'outil est à présent visible";
-$ToolIsNowHidden = "L\'outil est à présent invisible";
-$EditLink = "Modifier le lien";
-$Blog_management = "Projets";
+$langInLnk = "Outils masquÃ©s";
+$langDelLk = "Voulez-vous rÃ©ellement supprimer ce lien?";
+$langCourseCreate = "CrÃ©er un cours";
+$langNameOfTheLink = "Nom du lien";
+$lang_main_categories_list = "Liste des catÃ©gories";
+$langCourseAdminOnly = "Professeurs uniquement";
+$PlatformAdminOnly = "Administrateurs de la plateforme uniquement";
+$langCombinedCourse = "Cours combinÃ©";
+$ToolIsNowVisible = "L'outil est Ã  prÃ©sent visible";
+$ToolIsNowHidden = "L'outil est Ã  prÃ©sent invisible";
+$EditLink = "Editer le lien";
+$Blog_management = "Gestion des blogs";
 $Forum = "Forums";
-$Course_maintenance = "Sauvegarde";
-$TOOL_SURVEY = "Enquêtes";
-$GreyIcons = "Boîte à outils";
+$Course_maintenance = "Maintenance du cours";
+$TOOL_SURVEY = "EnquÃªtes";
+$GreyIcons = "BoÃ®te Ã  outils";
 $Interaction = "Interaction";
 $Authoring = "Production";
 $Administration = "Administration";
-$IntroductionTextUpdated = "L\'intro a été mise à jour";
-$IntroductionTextDeleted = "L\'intro a été supprimée";
+$IntroductionTextUpdated = "Le texte d'introduction a Ã©tÃ© mis Ã  jour";
+$IntroductionTextDeleted = "Le texte d'introduction du cours a bien Ã©tÃ© supprimÃ©";
+$SessionIdentifier = "Identifiant de session";
+$SessionName = "Nom de la session";
+$SessionCategory = "CatÃ©gorie de sessions";
+$SessionData = "Info de session";
 ?>

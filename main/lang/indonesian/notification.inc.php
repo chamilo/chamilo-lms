@@ -1,5 +1,6 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $lang_new_item = "item baru ditambahkan";
 $lang_title_notification = "Sejak kunjungan terakhir anda";

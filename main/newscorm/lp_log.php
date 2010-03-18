@@ -19,9 +19,6 @@
 //flag to allow for anonymous user - needs to be set before global.inc.php
 $use_anonymous = true;
 require_once('back_compat.inc.php');
-if (empty($charset)) {
-	$charset = 'ISO-8859-15';
-}
 
 $htmlHeadXtra[] = '<script language="javascript">
 function cleanlog(){

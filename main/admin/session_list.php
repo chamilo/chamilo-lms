@@ -1,13 +1,15 @@
 <?php
-/* For licensing terms, see /dokeos_license.txt */
+/* For licensing terms, see /license.txt */
 $language_file='admin';
 $cidReset=true;
 
-include('../inc/global.inc.php');
-require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
-require_once (api_get_path(LIBRARY_PATH).'sessionmanager.lib.php');
+require_once '../inc/global.inc.php';
+
+require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
+require_once api_get_path(LIBRARY_PATH).'sessionmanager.lib.php';
 
 $this_section = SECTION_PLATFORM_ADMIN;
+
 api_protect_admin_script(true);
 
 $htmlHeadXtra[] = '<script language="javascript">
@@ -28,12 +30,12 @@ $htmlHeadXtra[] = '<script language="javascript">
 				</script>
 		';
 
-$tbl_session=Database::get_main_table(TABLE_MAIN_SESSION);
-$tbl_session_category=Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
-$tbl_session_rel_course=Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
+$tbl_session			= Database::get_main_table(TABLE_MAIN_SESSION);
+$tbl_session_category	= Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
+$tbl_session_rel_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
 $tbl_session_rel_course_rel_user=Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-$tbl_session_rel_user=Database::get_main_table(TABLE_MAIN_SESSION_USER);
-$tbl_user = Database::get_main_table(TABLE_MAIN_USER);
+$tbl_session_rel_user 	= Database::get_main_table(TABLE_MAIN_SESSION_USER);
+$tbl_user 				= Database::get_main_table(TABLE_MAIN_USER);
 
 $page=intval($_GET['page']);
 $action=$_REQUEST['action'];
@@ -51,7 +53,7 @@ $interbreadcrumb[]=array("url" => "index.php","name" => get_lang('PlatformAdmin'
 
 //table for the search
 if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
-	
+
 	$interbreadcrumb[] = array ("url" => 'session_list.php', "name" => get_lang('SessionList'));
 	$tool_name = get_lang('SearchASession');
 	Display :: display_header($tool_name);
@@ -82,39 +84,39 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
 	$limit=20;
 	$from=$page * $limit;
 	$where = 'WHERE 1=1 ';
-	
+
 	//Prevent hacking keyword
 	if ( isset ($_GET['keyword'])) {
-		$keyword = Database::escape_string($_GET['keyword']);
+		$keyword = Database::escape_string(trim($_GET['keyword']));
 		} else if (isset ($_GET['keyword_name'])) {
-			$keyword_name = Database::escape_string($_GET['keyword_name']);
-			$keyword_category = Database::escape_string($_GET['keyword_category']);
-			$keyword_visibility = Database::escape_string($_GET['keyword_visibility']);
-			$keyword_firstname = Database::escape_string($_GET['keyword_firstname']);
-			$keyword_lastname = Database::escape_string($_GET['keyword_lastname']);
+			$keyword_name = Database::escape_string(trim($_GET['keyword_name']));
+			$keyword_category = Database::escape_string(trim($_GET['keyword_category']));
+			$keyword_visibility = Database::escape_string(trim($_GET['keyword_visibility']));
+			$keyword_firstname = Database::escape_string(trim($_GET['keyword_firstname']));
+			$keyword_lastname = Database::escape_string(trim($_GET['keyword_lastname']));
 			}
-	
+
 	//Process for the search advanced
 	if (!empty($_REQUEST['keyword_name'])) {
 		$where .= " AND s.name LIKE '%".$keyword_name."%'";
-	} 
-	
+	}
+
 	if (!empty($_REQUEST['keyword_category'])) {
 		$where .= " AND sc.name LIKE '%".$keyword_category."%'";
 	}
-	
+
 	if (!empty($_REQUEST['keyword_visibility']) AND $_REQUEST['keyword_visibility']!='%') {
 		$where .= " AND s.visibility LIKE '%".$keyword_visibility."%'";
 	}
-	
+
 	if (!empty($_REQUEST['keyword_firstname'])) {
 		$where .= " AND u.firstname LIKE '%".$keyword_firstname."%'";
 	}
-	
+
 	if (!empty($_REQUEST['keyword_lastname'])) {
 		$where .= " AND u.lastname LIKE '%".$keyword_lastname."%'";
 	}
-	
+
 	if (isset($_REQUEST['active']) && isset($_REQUEST['inactive'] )) {
 		// if both are set we search all sessions
 		$cond_url = '&amp;active='.Security::remove_XSS($_REQUEST['active']);
@@ -129,56 +131,62 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
 			$cond_url = '&amp;inactive='.Security::remove_XSS($_REQUEST['inactive']);
 		}
 	}
-	
+
 	if(isset($_GET['id_category'])){
 		$where.= ' AND ';
-		$id_category = Security::remove_XSS($id_category); 
+		$id_category = Security::remove_XSS($id_category);
 		$where.= ' session_category_id = "'.$id_category.'" ';
-		$cond_url.= '&amp;id_category='.$id_category;	
+		$cond_url.= '&amp;id_category='.$id_category;
+	}
+	
+	$user_id= $_user['user_id'];
+	if (api_is_session_admin()==true) {
+		$where.=" AND s.session_admin_id = $user_id ";
 	}
 	
 	//Get list sessions
 	$sort = ($sort != "name_category")?  's.'.$sort : 'category_name';
 	$query = "SELECT s.id, s.name, s.nbr_courses, s.date_start, s.date_end, u.firstname, u.lastname , sc.name as category_name, s.visibility
-			 FROM $tbl_session s 
-			 	LEFT JOIN  $tbl_session_category sc ON s.session_category_id = sc.id 
+			 FROM $tbl_session s
+			 	LEFT JOIN  $tbl_session_category sc ON s.session_category_id = sc.id
 			 	INNER JOIN $tbl_user u ON s.id_coach = u.user_id 
-			 $where 
+			 $where
 			 ORDER BY $sort ";
 	//query which allows me to get a record without taking into account the page
-	$query_rows = "SELECT count(*) as total_rows 
-			 FROM $tbl_session s 
+	$query_rows = "SELECT count(*) as total_rows
+			 FROM $tbl_session s
 			 	LEFT JOIN  $tbl_session_category sc ON s.session_category_id = sc.id
 			 	INNER JOIN $tbl_user u ON s.id_coach = u.user_id 
 			 $where ";
-
+			 
 //filtering the session list by access_url
 	if ($_configuration['multiple_access_urls'] == true){
-		$table_access_url_rel_session= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);	
+		$table_access_url_rel_session= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
 		$access_url_id = api_get_current_access_url_id();
 		if ($access_url_id != -1) {
 			$where.= " AND ar.access_url_id = $access_url_id ";
 			$query = "SELECT s.id, s.name, s.nbr_courses, s.date_start, s.date_end, u.firstname, u.lastname , sc.name as category_name , s.visibility
-			 FROM $tbl_session s 
+			 FROM $tbl_session s
 			 	LEFT JOIN  $tbl_session_category sc ON s.session_category_id = sc.id
-			 	INNER JOIN $tbl_user u ON s.id_coach = u.user_id 
+			 	INNER JOIN $tbl_user u ON s.id_coach = u.user_id
 				INNER JOIN $table_access_url_rel_session ar ON ar.session_id = s.id
-			 $where 
+			 $where
 			 ORDER BY $sort LIMIT $from,".($limit+1);
 
-			$query_rows = "SELECT count(*) as total_rows 
-			 FROM $tbl_session s 
-			 	LEFT JOIN  $tbl_session_category sc ON s.session_category_id = sc.id  
-			 	INNER JOIN $tbl_user u ON s.id_coach = u.user_id 
-			 	INNER JOIN $table_access_url_rel_session ar ON ar.session_id = s.id 
+			$query_rows = "SELECT count(*) as total_rows
+			 FROM $tbl_session s
+			 	LEFT JOIN  $tbl_session_category sc ON s.session_category_id = sc.id
+			 	INNER JOIN $tbl_user u ON s.id_coach = u.user_id
+			 	INNER JOIN $table_access_url_rel_session ar ON ar.session_id = s.id
 			 $where ";
 		}
 	}
+	
 
-	$result_rows = Database::query($query_rows,__FILE__,__LINE__);
+	$result_rows = Database::query($query_rows);
 	$recorset = Database::fetch_array($result_rows);
 	$num = $recorset['total_rows'];
-	$result=Database::query($query,__FILE__,__LINE__);
+	$result=Database::query($query);
 	$Sessions=Database::store_result($result);
 	$nbr_results=sizeof($Sessions);
 	$tool_name = get_lang('SessionList');
@@ -196,8 +204,8 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
 	<?php
 
 	echo '<div style="float:right;">
+		<a href="'.api_get_path(WEB_CODE_PATH).'admin/session_add.php">'.Display::return_icon('view_more_stats.gif',get_lang('AddSession')).get_lang('AddSession').'</a>
 		<a href="'.api_get_path(WEB_CODE_PATH).'admin/add_many_session_to_category.php">'.Display::return_icon('view_more_stats.gif',get_lang('AddSessionsInCategories')).get_lang('AddSessionsInCategories').'</a>
-		<a href="'.api_get_path(WEB_CODE_PATH).'admin/session_add.php">'.Display::return_icon('view_more_stats.gif',get_lang('AddSession')).get_lang('AddSession').'</a>									
 	  </div>';
 	?>
 	<form method="POST" action="session_list.php">
@@ -218,7 +226,7 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
 		if($num>$limit){
 			if($page) {
 			?>
-			<a href="<?php echo api_get_self(); ?>?page=<?php echo $page-1; ?>&sort=<?php echo $sort; ?>&keyword=<?php echo $_REQUEST['keyword']; ?><?php echo @$cond_url; ?>"><?php echo get_lang('Previous'); ?></a>
+			<a href="<?php echo api_get_self(); ?>?page=<?php echo $page-1; ?>&sort=<?php echo $sort; ?>&keyword=<?php echo Security::remove_XSS($_REQUEST['keyword']); ?><?php echo @$cond_url; ?>"><?php echo get_lang('Previous'); ?></a>
 			<?php
 			} else {
 				echo get_lang('Previous');
@@ -228,7 +236,7 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
 			<?php
 			if($nbr_results > $limit) {
 				?>
-				<a href="<?php echo api_get_self(); ?>?page=<?php echo $page+1; ?>&sort=<?php echo $sort; ?>&keyword=<?php echo $_REQUEST['keyword']; ?><?php echo @$cond_url; ?>"><?php echo get_lang('Next'); ?></a>
+				<a href="<?php echo api_get_self(); ?>?page=<?php echo $page+1; ?>&sort=<?php echo $sort; ?>&keyword=<?php echo Security::remove_XSS($_REQUEST['keyword']); ?><?php echo @$cond_url; ?>"><?php echo get_lang('Next'); ?></a>
 				<?php
 			} else {
 				echo get_lang('Next');
@@ -259,7 +267,7 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
 			}
 			$sql = 'SELECT COUNT(course_code) FROM '.$tbl_session_rel_course.' WHERE id_session='.intval($enreg['id']);
 
-		  	$rs = Database::query($sql, __FILE__, __LINE__);
+		  	$rs = Database::query($sql);
 		  	list($nb_courses) = Database::fetch_array($rs);
 
 		?>
@@ -273,7 +281,7 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
 	      <td><?php echo api_htmlentities($enreg['date_end'],ENT_QUOTES,$charset); ?></td>
 	      <td><?php echo api_htmlentities(api_get_person_name($enreg['firstname'], $enreg['lastname']),ENT_QUOTES,$charset); ?></td>
 		  <td><?php
-		  
+
 		  switch (intval($enreg['visibility'])) {
 				case SESSION_VISIBLE_READ_ONLY: //1
 					echo get_lang('ReadOnly');
@@ -283,10 +291,10 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
 				break;
 				case SESSION_INVISIBLE:			//3
 					echo api_ucfirst(get_lang('Invisible'));
-				break;				 
+				break;
 		  }
-		   
-		  
+
+
 		  ?></td>
 		  <td>
 			<a href="add_users_to_session.php?page=session_list.php&id_session=<?php echo $enreg['id']; ?>"><?php Display::display_icon('add_user_big.gif', get_lang('SubscribeUsersToSession')); ?></a>
@@ -318,7 +326,7 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
 			{
 			?>
 
-			<a href="<?php echo api_get_self(); ?>?page=<?php echo $page-1; ?>&sort=<?php echo $sort; ?>&keyword=<?php echo $_REQUEST['keyword']; ?><?php echo @$cond_url; ?>"><?php echo get_lang('Previous'); ?></a>
+			<a href="<?php echo api_get_self(); ?>?page=<?php echo $page-1; ?>&sort=<?php echo $sort; ?>&keyword=<?php echo Security::remove_XSS($_REQUEST['keyword']); ?><?php echo @$cond_url; ?>"><?php echo get_lang('Previous'); ?></a>
 
 			<?php
 			}
@@ -335,7 +343,7 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
 			{
 			?>
 
-			<a href="<?php echo api_get_self(); ?>?page=<?php echo $page+1; ?>&sort=<?php echo $sort; ?>&keyword=<?php echo $_REQUEST['keyword']; ?><?php echo @$cond_url; ?>"><?php echo get_lang('Next'); ?></a>
+			<a href="<?php echo api_get_self(); ?>?page=<?php echo $page+1; ?>&sort=<?php echo $sort; ?>&keyword=<?php echo Security::remove_XSS($_REQUEST['keyword']); ?><?php echo @$cond_url; ?>"><?php echo get_lang('Next'); ?></a>
 
 			<?php
 			}

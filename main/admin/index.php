@@ -1,11 +1,9 @@
 <?php // $Id: index.php 22269 2009-07-21 15:06:15Z juliomontoya $
-/* For licensing terms, see /dokeos_license.txt */
+/* For licensing terms, see /license.txt */
 /**
-==============================================================================
 *	Index of the admin tools
 *
-*	@package dokeos.admin
-==============================================================================
+*	@package chamilo.admin
 */
 // name of the language file that needs to be included <br />
 $language_file=array('admin','tracking');
@@ -13,9 +11,9 @@ $language_file=array('admin','tracking');
 // resetting the course id
 $cidReset=true;
 
-// including some necessary dokeos files
-require('../inc/global.inc.php');
-require_once(api_get_path(LIBRARY_PATH).'security.lib.php');
+// including some necessary chamilo files
+require_once '../inc/global.inc.php';
+require_once api_get_path(LIBRARY_PATH).'security.lib.php';
 
 // setting the section (for the tabs)
 $this_section=SECTION_PLATFORM_ADMIN;
@@ -34,8 +32,7 @@ $tool_name=get_lang('PlatformAdmin');
 Display::display_header($nameTools);
 
 
-if(api_is_platform_admin())
-{
+if(api_is_platform_admin()) {
 	if(is_dir(api_get_path(SYS_CODE_PATH).'install/') && is_readable(api_get_path(SYS_CODE_PATH).'install/index.php'))
 	{
 		Display::display_normal_message(get_lang('InstallDirAccessibleSecurityThreat'));
@@ -63,32 +60,33 @@ if (api_is_platform_admin()) {
 	?>
 		<div class="admin_section">
 	<h4><?php Display::display_icon('members.gif', get_lang('Users')); ?> <?php echo api_ucfirst(get_lang('Users')); ?></h4>
-	<ul>
-		<li style="list-style-type:none"><form method="get" action="user_list.php">
+
+		<div style="list-style-type:none"><form method="get" action="user_list.php">
 			<input type="text" name="keyword" value="<?php echo $keyword_url; ?>"/>
 			<button class="search" type="submit"> <?php echo get_lang('Search');?>
 			</button>
 			</form>
-		</li>
-		<li><a href="user_list.php?search=advanced"><?php echo api_ucfirst(get_lang('AdvancedSearch')); ?></a></li>
+		</div>
+	<ul>
+		<!-- <li><a href="user_list.php?search=advanced"><?php echo api_ucfirst(get_lang('AdvancedSearch')); ?></a></li> -->
 		<li><a href="user_list.php">	<?php echo get_lang('UserList') ?></a></li>
 		<li><a href="user_add.php">		<?php echo get_lang('AddUsers') ?></a></li>
 		<li><a href="user_export.php">	<?php echo get_lang('ExportUserListXMLCSV') ?></a></li>
 		<li><a href="user_import.php">	<?php echo get_lang('ImportUserListXMLCSV') ?></a></li>
 		<?php if (api_get_setting('allow_social_tool')=='true') { ?>
-			<li><a href="group_add.php">	<?php echo get_lang('AddGroups') ?></a></li>  
-			<li><a href="group_list.php">	<?php echo get_lang('GroupList') ?></a></li>		
+			<li><a href="group_add.php">	<?php echo get_lang('AddGroups') ?></a></li>
+			<li><a href="group_list.php">	<?php echo get_lang('GroupList') ?></a></li>
 		<?php
 		}
 		if(isset($extAuthSource) && isset($extAuthSource['ldap']) && count($extAuthSource['ldap'])>0){
 			?>
 			<!-- dynamic ldap code -->
-			  <li><a href="ldap_users_list.php"><?php echo get_lang('ImportLDAPUsersIntoPlatform');?></a></li> 
+			  <li><a href="ldap_users_list.php"><?php echo get_lang('ImportLDAPUsersIntoPlatform');?></a></li>
 			<!-- dynamic ldap code -->
 			<?php
 			}
 		?>
-		<li><a href="user_fields.php">	<?php echo get_lang('ManageUserFields'); ?></a></li>	
+		<li><a href="user_fields.php">	<?php echo get_lang('ManageUserFields'); ?></a></li>
 		</ul>
 		</div>
 <?php
@@ -112,19 +110,22 @@ if(api_is_platform_admin()) {
 ?>
 	<div class="admin_section">
 <h4><?php Display::display_icon('course.gif', get_lang('Courses')); ?> <?php echo api_ucfirst(get_lang('Courses')); ?></h4>
-		<ul><li style="list-style-type:none"><form method="get" action="course_list.php">
+		<div style="list-style-type:none"><form method="get" action="course_list.php">
 		<input type="text" name="keyword" value="<?php echo $keyword_url; ?>"/>
 		<button class="search" type="submit"> <?php echo get_lang('Search');?>
 			</button>
-		</form></li>
+		</form></div>
+
+
+		<ul>
 		<li>
-		<a href="course_list.php?search=advanced"><?php echo api_ucfirst(get_lang('AdvancedSearch')); ?></a>
+		<!-- <a href="course_list.php?search=advanced"><?php echo api_ucfirst(get_lang('AdvancedSearch')); ?></a> -->
 
 	</li>
 	<li><a href="course_list.php"><?php echo get_lang('CourseList') ?></a></li>
 	<li><a href="course_add.php"><?php echo get_lang('AddCourse') ?></a></li>
 	<li><a href="course_export.php"><?php echo get_lang('ExportCourses'); ?></a></li>
-	<li><a href="course_import.php"><?php echo get_lang('ImportCourses'); ?></a></li>	
+	<li><a href="course_import.php"><?php echo get_lang('ImportCourses'); ?></a></li>
 	<!--<li><a href="course_virtual.php"><?php //echo get_lang('AdminManageVirtualCourses') ?></a></li>-->
 	<li><a href="course_category.php"><?php echo get_lang('AdminCategories'); ?></a></li>
 	<li><a href="subscribe_user2course.php"><?php echo get_lang('AddUsersToACourse'); ?></a></li>
@@ -141,7 +142,7 @@ if(api_is_platform_admin()) {
 		<?php
 		}
 	?>
-	
+
 	</ul>
 	</div>
 
@@ -154,7 +155,7 @@ if(api_is_platform_admin()) {
 	  <li><a href="languages.php"><?php echo get_lang('Languages'); ?></a></li>
 	  <li><a href="configure_homepage.php"><?php echo get_lang('ConfigureHomePage'); ?></a></li>
 	  <li><a href="configure_inscription.php"><?php echo get_lang('ConfigureInscription'); ?></a></li>
-	  <li><a href="statistics/index.php"><?php echo get_lang('ToolName'); ?> </a></li>
+	  <li><a href="statistics/index.php"><?php echo get_lang('Statistics'); ?> </a></li>
 	  <li><a href="calendar.php"><?php echo get_lang('GlobalAgenda'); ?> </a></li>
 	  <?php if(!empty($phpMyAdminPath)) { ?>
 	  <li><a href="<?php echo $phpMyAdminPath; ?>" target="_blank"><?php echo get_lang("AdminDatabases"); ?></a><br />(<?php echo get_lang("DBManagementOnlyForServerAdmin"); ?>)</li>
@@ -172,6 +173,10 @@ if(api_is_platform_admin()) {
   	  if (api_get_setting('allow_terms_conditions')=='true') {
 		  	echo '<li><a href="legal_add.php">'.get_lang('TermsAndConditions').'</a></li>';
 	  }
+	  
+	  //@todo Translations needed in order to see a better explanation of issues
+	  echo '<li><a href="system_status.php">'.get_lang('SystemStatus').'</a></li>';
+	  
 
 	  ?>
 	 </ul>
@@ -186,14 +191,15 @@ if(api_get_setting('use_session_mode')=='true')
 
 <div class="admin_section">
  <h4><?php Display::display_icon('agenda.gif', get_lang('Sessions')); ?> <?php echo get_lang('Sessions') ?></h4>
- <ul>
- <li style="list-style-type:none"><form method="POST" action="session_list.php">
+ <div style="list-style-type:none"><form method="POST" action="session_list.php">
 	<input type="text" name="keyword_name" value="<?php echo $keyword_url; ?>"/>
 	<button class="search" type="submit"> <?php echo get_lang('Search');?>
 			</button>
 	</form>
-</li>
-  <li><a href="session_list.php?search=advanced"><?php echo api_ucfirst(get_lang('AdvancedSearch')); ?></a></li>
+</div>
+
+ <ul>
+  <!--  <li><a href="session_list.php?search=advanced"><?php echo api_ucfirst(get_lang('AdvancedSearch')); ?></a></li> -->
   <li><a href="session_list.php"><?php echo get_lang('ListSession') ?></a></li>
   <li><a href="session_category_list.php"><?php echo get_lang('ListSessionCategory') ?></a></li>
   <li><a href="session_add.php"><?php echo get_lang('AddSession') ?></a></li>
@@ -220,13 +226,13 @@ else if(api_is_platform_admin())
 
 <div class="admin_section">
 <h4><?php Display::display_icon('group.gif', get_lang('AdminClasses')); ?> <?php echo api_ucfirst(get_lang('AdminClasses')); ?></h4>
-<ul>
-<li style="list-style-type:none"><form method="get" action="class_list.php">
+<div style="list-style-type:none"><form method="get" action="class_list.php">
 
 	<input type="text" name="keyword" value="<?php echo $keyword_url; ?>"/>
 	<input class="search" type="submit" value="<?php echo get_lang('Search'); ?>"/>
 	</form>
-</li>
+</div>
+<ul>
 <li><a href="class_list.php"><?php echo get_lang('ClassList'); ?></a></li>
 <li><a href="class_add.php"><?php echo get_lang('AddClasses'); ?></a></li>
 <li><a href="class_import.php"><?php echo get_lang('ImportClassListCSV'); ?></a></li>
@@ -273,20 +279,19 @@ if(api_is_platform_admin()){
 	}*/
 ?>
 <div class="admin_section">
- <h4><?php Display::display_icon('dokeos.gif', 'Dokeos'); ?> Dokeos.com</h4>
+ <h4><?php Display::display_icon('logo.gif', 'Chamilo'); ?> Chamilo.org</h4>
  <ul>
-  <li><a href="http://www.dokeos.com/" target="_blank"><?php echo get_lang('DokeosHomepage'); ?></a></li>
-  <li><a href="http://www.dokeos.com/forum/" target="_blank"><?php echo get_lang('DokeosForum'); ?></a></li>
-  <li><a href="http://www.dokeos.com/extensions/" target="_blank"><?php echo get_lang('DokeosExtensions'); ?></a></li>
-  <li>
+  <li><a href="http://www.chamilo.org/" target="_blank"><?php echo get_lang('ChamiloHomepage'); ?></a></li>
+  <li><a href="http://forum.chamilo.org/" target="_blank"><?php echo get_lang('ChamiloForum'); ?></a></li>
+  <li><a href="http://www.chamilo.org/extensions" target="_blank"><?php echo get_lang('ChamiloExtensions'); ?></a></li>
+
   <?php
-  //try to display a maximum before we check the dokeos version and all that
+  //try to display a maximum before we check the chamilo version and all that
   	//session_write_close(); //close session to avoid blocking concurrent access
 	flush(); //send data to client as much as allowed by the web server
 	//ob_flush();
-	echo get_lang('VersionCheck').': '.version_check();
+	echo '<br />'.get_lang('VersionCheck').': '.version_check().'';
   ?>
-  </li>
  </ul>
 </div>
 <?php
@@ -304,7 +309,7 @@ function version_check()
 {
 	$tbl_settings = Database :: get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
 	$sql = 'SELECT selected_value FROM  '.$tbl_settings.' WHERE variable="registered" ';
-	$result = Database::query($sql,__FILE__,__LINE__);
+	$result = Database::query($sql);
 	$row=Database::fetch_array($result,'ASSOC');
 
 	// The site has not been registered yet
@@ -325,7 +330,7 @@ function version_check()
 		/*
 		if ((api_get_setting('registered') + 15552000) > mktime())
 		{
-			$return = 'It has been a long time since about your campus has been updated on Dokeos.com';
+			$return = 'It has been a long time since about your campus has been updated on chamilo.org';
 			$return .= '<form action="'.api_get_self().'" id="VersionCheck" name="VersionCheck" method="post">';
 			$return .= '<input type="submit" name="Register" value="Enable Version Check" id="register" />';
 			$return .= '</form>';
@@ -334,7 +339,7 @@ function version_check()
 		{
 		*/
 		$return = 'site registered. ';
-		$return .= check_dokeos_version2();
+		$return .= check_system_version2();
 		//}
 	}
 	return $return;
@@ -355,13 +360,13 @@ function register_site()
 
 	// the SQL statment
 	$sql = "UPDATE $tbl_settings SET selected_value='true' WHERE variable='registered'";
-	$result = Database::query($sql,__FILE__,__LINE__);
+	$result = Database::query($sql);
 
 	//
 	if ($_POST['donotlistcampus'])
 	{
 		$sql = "UPDATE $tbl_settings SET selected_value='true' WHERE variable='donotlistcampus'";
-		$result = Database::query($sql,__FILE__,__LINE__);
+		$result = Database::query($sql);
 	}
 
 	// reload the settings
@@ -375,36 +380,37 @@ function register_site()
 * @copyright (C) 2001 The phpBB Group
 * @return language string with some layout (color)
 */
-function check_dokeos_version2()
+function check_system_version2()
 {
 	global $_configuration;
-	$dokeos_version = trim($_configuration['dokeos_version']); // the dokeos version of your installation
+	$system_version = trim($_configuration['system_version']); // the chamilo version of your installation
 
 	if (ini_get('allow_url_fopen')==1)
 	{
 		// the number of courses
 		$sql="SELECT count(code) FROM ".Database::get_main_table(TABLE_MAIN_COURSE);
-		$result=Database::query($sql,__FILE__,__LINE__);
+		$result=Database::query($sql);
 		$row = Database::fetch_array($result);
 		$number_of_courses = $row[0];
 
 		// the number of users
 		$sql="SELECT count(user_id) FROM ".Database::get_main_table(TABLE_MAIN_USER);
-		$result=Database::query($sql,__FILE__,__LINE__);
+		$result=Database::query($sql);
 		$row = Database::fetch_array($result);
 		$number_of_users = $row[0];
 
-		$version_url= 'http://www.dokeos.com/version.php?url='.urlencode(api_get_path(WEB_PATH)).'&campus='.urlencode(api_get_setting('siteName')).'&contact='.urlencode(api_get_setting('emailAdministrator')).'&version='.urlencode($dokeos_version).'&numberofcourses='.urlencode($number_of_courses).'&numberofusers='.urlencode($number_of_users).'&donotlistcampus='.api_get_setting('donotlistcampus').'&organisation='.urlencode(api_get_setting('Institution')).'&adminname='.urlencode(api_get_setting('administratorName').' '.api_get_setting('administratorSurname'));
+		$version_url= 'http://version.chamilo.org/version.php?url='.urlencode(api_get_path(WEB_PATH)).'&campus='.urlencode(api_get_setting('siteName')).'&contact='.urlencode(api_get_setting('emailAdministrator')).'&version='.urlencode($system_version).'&numberofcourses='.urlencode($number_of_courses).'&numberofusers='.urlencode($number_of_users).'&donotlistcampus='.api_get_setting('donotlistcampus').'&organisation='.urlencode(api_get_setting('Institution')).'&adminname='.urlencode(api_get_setting('administratorName').' '.api_get_setting('administratorSurname'));
 		$handle=@fopen($version_url,'r');
-		$version_info=trim(@fread($handle, 1024));
+		if ($handle !== false) {
+			$version_info=trim(@fread($handle, 1024));
 
-		if ($dokeos_version<>$version_info)
-		{
-			$output='<br /><span style="color:red">' . get_lang('YourVersionNotUpToDate') . '. '.get_lang('LatestVersionIs').' <b>Dokeos '.$version_info.'</b>. '.get_lang('YourVersionIs').' <b>Dokeos '.$dokeos_version. '</b>. '.str_replace('http://www.dokeos.com','<a href="http://www.dokeos.com">http://www.dokeos.com</a>',get_lang('PleaseVisitDokeos')).'</span>';
-		}
-		else
-		{
-			$output = '<br /><span style="color:green">'.get_lang('VersionUpToDate').': Dokeos '.$version_info.'</span>';
+			if ($system_version <> $version_info) {
+				$output='<br /><span style="color:red">' . get_lang('YourVersionNotUpToDate') . '. '.get_lang('LatestVersionIs').' <b>Chamilo '.$version_info.'</b>. '.get_lang('YourVersionIs').' <b>Chamilo '.$system_version. '</b>. '.str_replace('http://www.chamilo.org','<a href="http://www.chamilo.org">http://www.chamilo.org</a>',get_lang('PleaseVisitDokeos')).'</span>';
+			} else {
+				$output = '<br /><span style="color:green">'.get_lang('VersionUpToDate').': Chamilo '.$version_info.'</span>';
+			}
+		} else {
+            $output = '<span style="color:red">' . get_lang('ImpossibleToContactVersionServerPleaseTryAgain') . '</span>';
 		}
 	}
 	else
@@ -425,15 +431,15 @@ function check_dokeos_version2()
 				the http://www.dokeos.com/version.php page (instead of version.txt) . That's why I chose to use fopen which requires however
 				that allow_url_open is set to true
 */
-function check_dokeos_version()
+function check_system_version()
 {
-	global $_configuration; // the dokeos version of your installation
-	$dokeos_version = $_configuration['dokeos_version'];
+	global $_configuration; // the chamilo version of your installation
+	$system_version = $_configuration['system_version'];
 
-	if ($fsock = @fsockopen('www.dokeos.com', 80, $errno, $errstr))
+	if ($fsock = @fsockopen('www.chamilo.org', 80, $errno, $errstr))
 	{
 		@fputs($fsock, "GET /version.php HTTP/1.1\r\n");
-		@fputs($fsock, "HOST: www.dokeos.com\r\n");
+		@fputs($fsock, "HOST: www.chamilo.org\r\n");
 		@fputs($fsock, "Connection: close\r\n\r\n");
 
 		$get_info = false;
@@ -453,13 +459,10 @@ function check_dokeos_version()
 		}
 		@fclose($fsock);
 
-		if (trim($dokeos_version)<>trim($version_info))
-		{
-			$output='<span style="color:red">' . get_lang('YourVersionNotUpToDate') . '. '.get_lang('LatestVersionIs').' <b>Dokeos '.$version_info.'</b>. '.get_lang('YourVersionIs').' <b>Dokeos '.$dokeos_version. '</b>. '.str_replace('http://www.dokeos.com','<a href="http://www.dokeos.com">http://www.dokeos.com</a>',get_lang('PleaseVisitDokeos')).'</span>';
-		}
-		else
-		{
-			$output = '<span style="color:green">'.get_lang('VersionUpToDate').': Dokeos '.$version_info.'</span>';
+		if (trim($system_version) <> trim($version_info)) {
+			$output='<span style="color:red">' . get_lang('YourVersionNotUpToDate') . '. '.get_lang('LatestVersionIs').' <b>Chamilo '.$version_info.'</b>. '.get_lang('YourVersionIs').' <b>Dokeos '.$system_version. '</b>. '.str_replace('http://www.chamilo.org','<a href="http://www.chamilo.org">http://www.chamilo.org</a>',get_lang('PleaseVisitDokeos')).'</span>';
+		} else {
+			$output = '<span style="color:green">'.get_lang('VersionUpToDate').': Chamilo '.$version_info.'</span>';
 		}
 	}
 	else

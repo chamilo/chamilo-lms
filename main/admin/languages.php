@@ -27,6 +27,7 @@ $cidReset = true;
 
 // include global script
 require_once '../inc/global.inc.php';
+require_once api_get_path(LIBRARY_PATH).'sortabletable.class.php';
 require_once 'sub_language.class.php';
 $this_section = SECTION_PLATFORM_ADMIN;
 
@@ -168,7 +169,7 @@ elseif (isset($_POST['action']))
 					$ids[] = Database::escape_string($id);
 				}
 				$sql = "UPDATE $tbl_admin_languages SET available='1' WHERE id IN ('".implode("','", $ids)."')";
-				Database::query($sql,__FILE__,__LINE__);
+				Database::query($sql);
 			}
 			break;
 		case 'makeunavailable' :
@@ -180,7 +181,7 @@ elseif (isset($_POST['action']))
 					$ids[] = Database::escape_string($id);
 				}
 				$sql = "UPDATE $tbl_admin_languages SET available='0' WHERE id IN ('".implode("','", $ids)."')";
-				Database::query($sql,__FILE__,__LINE__);
+				Database::query($sql);
 			}
 			break;
 	}
@@ -212,7 +213,7 @@ $sql_select = "SELECT * FROM $tbl_admin_languages";
 $result_select = Database::query($sql_select);
 
 $sql_select_lang = "SELECT * FROM $tbl_settings_current WHERE  category='Languages'";
-$result_select_lang = Database::query($sql_select_lang,__FILE__,__LINE__);
+$result_select_lang = Database::query($sql_select_lang);
 $row_lang=Database::fetch_array($result_select_lang);
 
 /*
@@ -233,7 +234,7 @@ while ($row = Database::fetch_array($result_select)) {
 			$checked = ' checked="checked" ';
 		}
 
-		$row_td[] = '<input type="hidden" name="edit_id" value="'.$_GET['id'].'" /><input type="text" name="txt_name" value="'.$row['original_name'].'" /> '
+		$row_td[] = '<input type="hidden" name="edit_id" value="'.Security::remove_XSS($_GET['id']).'" /><input type="text" name="txt_name" value="'.$row['original_name'].'" /> '
 			. '<input type="checkbox" '.$checked.'name="platformlanguage" id="platformlanguage" value="'.$row['english_name'].'" /><label for="platformlanguage">'.$row['original_name'].' '.get_lang('AsPlatformLanguage').'</label> <input type="submit" name="Submit" value="'.get_lang('Ok').'" /><a name="value" />';
 	} else 	{
 		$row_td[] = $row['original_name'];

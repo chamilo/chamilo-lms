@@ -1,50 +1,51 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$langSelectOptionForBackup = "Bitte w‰hlen Sie eine Sicherungs-Option.";
-$langLetMeSelectItems = "Kurs Komponenten ausw‰hlen";
-$langCreateFullBackup = "Vollst‰ndiges Backup erstellen";
+$langSelectOptionForBackup = "Bitte w√§hlen Sie eine Sicherungs-Option.";
+$langLetMeSelectItems = "Kurs Komponenten ausw√§hlen";
+$langCreateFullBackup = "Vollst√§ndiges Backup erstellen";
 $langCreateBackup = "Backup erstellen";
-$langBackupCreated  = "Backup wurde erstellt. Sollte der Download nicht in wenigen Sekunden starten, klicken Sie bitte auf folgenden Link";
-$langSelectBackupFile = "Backup Datei ausw‰hlen";
+$langBackupCreated = "Backup wurde erstellt. Sollte der Download nicht in wenigen Sekunden starten, klicken Sie bitte auf folgenden Link";
+$langSelectBackupFile = "Backup Datei ausw√§hlen";
 $langImportBackup = "Backup importieren";
-$langImportFullBackup = "Vollst‰ndiges Backup importieren";
+$langImportFullBackup = "Vollst√§ndiges Backup importieren";
 $langImportFinished = "Import beendet";
 $langEvents = "Ereignisse";
-$langAnnouncements = "Ank¸ndigungen";
-$langDocuments  = "Dokumente";
+$langAnnouncements = "Ank√ºndigungen";
+$langDocuments = "Dokumente";
 $langTests = "Tests";
 $langLearnpaths = "Lernpfade";
 $langCopyCourse = "Kurs kopieren";
-$langSelectItemsToCopy = "Teile f¸rs Kopieren ausw‰hlen";
+$langSelectItemsToCopy = "Teile f√ºrs Kopieren ausw√§hlen";
 $langCopyFinished = "Kopieren abgeschlossen";
-$langFullRecycle = "Vollst‰ndiges Recyclen";
+$langFullRecycle = "Vollst√§ndiges Recyclen";
 $langRecycleCourse = "Kurs Recycle";
 $langRecycleFinished = "Recycle beendet";
-$langRecycleWarning = "Warnung: mit diesem Tool werden einige Teile des Kurses gelˆscht. Dies ist irreversibel. Es empfiehlt sich, vorher ein <a href=\"create_backup.php\">Backup</a> anzulegen.";
+$langRecycleWarning = "Warnung: mit diesem Tool werden einige Teile des Kurses gel√∂scht. Dies ist irreversibel. Es empfiehlt sich, vorher ein <a href=\"create_backup.php\">Backup</a> anzulegen.";
 $langSameFilename = "Was soll mit importierten Dateien passieren, die gleichlautend sind?";
-$langSameFilenameSkip = "gleichlautende Dateien ¸berspringen";
+$langSameFilenameSkip = "gleichlautende Dateien √ºberspringen";
 $langSameFilenameRename = "Datei umbenennen (d.h. datei.pdf wird zu datei_1.pdf)";
-$langSameFilenameOverwrite = "Datei ¸berschreiben";
-$langSelectDestinationCourse = "Ziel-Kurs w‰hlen";
-$langFullCopy  = "Vollst‰ndige Kopie";
+$langSameFilenameOverwrite = "Datei √ºberschreiben";
+$langSelectDestinationCourse = "Ziel-Kurs w√§hlen";
+$langFullCopy = "Vollst√§ndige Kopie";
 $langCourseDescription = "Kursbeschreibung";
-$langNoResourcesToBackup = "Keine Resourcen f¸r Backup vorhanden";
+$langNoResourcesToBackup = "Keine Resourcen f√ºr Backup vorhanden";
 $langNoResourcesInBackupFile = "Keine Resourcen in der Backup Datei";
-$langSelectResources = "Resourcen ausw‰hlen";
-$langNoResourcesToRecycles = "Keine Resourcen f¸r Recycle";
+$langSelectResources = "Resourcen ausw√§hlen";
+$langNoResourcesToRecycles = "Keine Resourcen f√ºr Recycle";
 $langIncludeQuestionPool = "Fragen-Sammlung einbeziehen";
 $langLocalFile = "lokale Datei";
 $langServerFile = "Server Datei";
-$langNoBackupsAvailable = "Kein Backup verf¸gbar";
-$langNoDestinationCoursesAvailable = "Keine Kurse als Ziel verf¸gbar";
+$langNoBackupsAvailable = "Kein Backup verf√ºgbar";
+$langNoDestinationCoursesAvailable = "Keine Kurse als Ziel verf√ºgbar";
 $langBackup = "Backup";
-$langImportBackupInfo = "Backup importieren. Sie kˆnnen ein Backup von Ihrer Festplatte oder auf dem Server w‰hlen.";
-$langCreateBackupInfo = "Backup dieses Kurses erstellen. Sie kˆnnen einzelnen Content w‰hlen, der in das Backup aufgenommen wird.";
+$langImportBackupInfo = "Backup importieren. Sie k√∂nnen ein Backup von Ihrer Festplatte oder auf dem Server w√§hlen.";
+$langCreateBackupInfo = "Backup dieses Kurses erstellen. Sie k√∂nnen einzelnen Content w√§hlen, der in das Backup aufgenommen wird.";
 $ToolIntro = "Tool Einleitung";
-$UploadError = "Upload ist fehlgeschlagen, bitte maximale Dateigrˆﬂe und Schreibrechte f¸r Verzeichnisse pr¸fen";
-$DocumentsWillBeAddedToo = "Dokmente werden ebenfalls hinzugef¸gt";
-$ToExportLearnpathWithQuizYouHaveToSelectQuiz = "Beim Exportieren eines Lernpfads mit einem Test, muss man sicher stellen, dass zugehˆrige Tests im Export inbegriffen sind, daher m¸ssen diese aus der Liste der Tests ausgew‰hlt werden.";
+$UploadError = "Upload ist fehlgeschlagen, bitte maximale Dateigr√∂√üe und Schreibrechte f√ºr Verzeichnisse pr√ºfen";
+$DocumentsWillBeAddedToo = "Dokmente werden ebenfalls hinzugef√ºgt";
+$ToExportLearnpathWithQuizYouHaveToSelectQuiz = "Beim Exportieren eines Lernpfads mit einem Test, muss man sicher stellen, dass zugeh√∂rige Tests im Export inbegriffen sind, daher m√ºssen diese aus der Liste der Tests ausgew√§hlt werden.";
 $ArchivesDirectoryNotWriteableContactAdmin = "Das Verzeichnis des Archivs, das von diesem Tool benutzt wird, ist nicht beschreibbar. Bitte den Plattform Administrator benachrichtigen.";
 $DestinationCourse = "Ziel-Kurs";
 ?>

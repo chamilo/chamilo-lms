@@ -1,5 +1,6 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $langLineNumber = "Lijnnummer";
 $langLine = "lijn";
@@ -8,21 +9,21 @@ $langLineOrLines = "lijn(en)";
 $langMoveUp = "Omhoog";
 $langMoveDown = "Omlaag";
 $langAddNewHeading = "Voeg nieuwe hoofding toe";
-$langCourseAdministratorOnly = "Enkel voor cursusbeheerder";
-$langDefineHeadings = "Definieer hoofdingen";
+$langCourseAdministratorOnly = "Enkel voor cursusbeheerders";
+$langDefineHeadings = "Definieer aanvullende informatie";
 $langBackToUsersList = "Terug naar gebruikerslijst";
-$langTracking = "Tracking";
+$langTracking = "Statistieken";
 $langCourseManager = "Cursusbeheerder";
 $langModRight = "Beheersrechten wijzigen van";
 $langNoAdmin = "heeft vanaf nu <b>geen</b> beheersrecht op deze pagina.";
 $langAllAdmin = "heeft vanaf nu <b>alle</b> beheersrechten op deze pagina.";
 $langModRole = "Rol wijzigen van";
-$langRole = "Rol";
+$langRole = "Rol (facultatief)";
 $langIsNow = "is vanaf nu";
 $langInC = "in deze cursus";
 $langFilled = "U hebt niet alle velden ingevuld.";
-$langUserNo = "De gebruikersnaam die u gekozen hebt";
-$langTaken = "is al in gebruik. Kies een andere naam.";
+$langUserNo = "De gekozen gebruikersnaam";
+$langTaken = "is al in gebruik. Kies een ander.";
 $langTutor = "Begeleider (groepen)";
 $langUnreg = "Uitschrijven";
 $langGroupUserManagement = "Groepenbeheer";
@@ -48,7 +49,6 @@ $InvitationDenied = "Uw uitnodiging is geweigerd";
 $AddedContactToList = "U hebt contacten toegevoegd aan de lijst";
 $ContactsGroupsComment = "Dit scherm is een lijst van contacten gesorteerd per groep";
 $YouDontHaveInvites = "Leeg";
-$DateSend = "Verstuurdatum";
 $SocialUnknow = "Onbekend";
 $SocialParent = "Mijn ouders";
 $SocialFriend = "Mijn vrienden";
@@ -63,7 +63,7 @@ $ContactsGroups = "Contactgroepen";
 $MyInbox = "Mijn inbox";
 $ViewSharedProfile = "Gedeeld profiel bekijken";
 $SeeAll = "Alles weergeven";
-$ImagesUploaded = "Geüploade afbeeldingen";
+$ImagesUploaded = "GeÃ¼ploade afbeeldingen";
 $ExtraInformation = "Extra informatie";
 $SearchContacts = "Contacten zoeken";
 $SocialSeeContacts = "Contacten bekijken";

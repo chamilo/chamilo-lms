@@ -1,24 +1,5 @@
 <?php // $Id: download.php 12218 2007-05-01 18:27:14Z yannoo $
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2008 Dokeos SPRL
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
-	info@dokeos.com
-==============================================================================
-*/
+/* For licensing terms, see /license.txt */
 /**
 ==============================================================================
 *	This file is responsible for  passing requested documents to the browser.
@@ -71,7 +52,7 @@ if (is_dir($full_file_name))
 {
 	//remove last slash if present
 	//$doc_url = ($doc_url{strlen($doc_url)-1}=='/')?substr($doc_url,0,strlen($doc_url)-1):$doc_url;
-	//mod_rewrite can change /some/path/ to /some/path// in some cases, so clean them all off (Ren�)
+	//mod_rewrite can change /some/path/ to /some/path// in some cases, so clean them all off (René)
 	while ($doc_url{$dul = strlen($doc_url)-1}=='/') $doc_url = substr($doc_url,0,$dul);
 	//create the path
 	$document_explorer = api_get_path(WEB_COURSE_PATH).api_get_course_path(); // home course path
@@ -88,7 +69,7 @@ event_download($doc_url);
 $sql='SELECT thread_id, forum_id,filename FROM '.$tbl_forum_post.'  f  INNER JOIN '.$tbl_forum_attachment.' a
   	  ON a.post_id=f.post_id WHERE path LIKE BINARY "'.$doc_url.'"';
 
-$result= Database::query($sql, __FILE__, __LINE__);
+$result= Database::query($sql);
 $row= Database::fetch_array($result);
 
 $forum_thread_visibility=api_get_item_visibility(api_get_course_info($course_code),TOOL_FORUM_THREAD,$row['thread_id']);

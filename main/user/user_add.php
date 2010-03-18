@@ -1,37 +1,10 @@
 <?php
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2004 Dokeos S.A.
-	Copyright (c) 2003 Ghent University (UGent)
-	Copyright (c) 2001 Universite catholique de Louvain (UCL)
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact: Dokeos, 181 rue Royale, B-1000 Brussels, Belgium, info@dokeos.com
-==============================================================================
-*/
-
-// TODO: Is this file deprecated?
-
+/* For licensing terms, see /license.txt*/
 /**
-==============================================================================
-*	@package dokeos.user
-==============================================================================
+*	@package chamilo.user
 */
 
-/*==========================
-            INIT
-  ==========================*/
+/* INIT	*/
 
 // name of the language file that needs to be included
 $language_file="registration";
@@ -50,17 +23,14 @@ $tbl_courseUser    = "course_rel_user";
 
 
 
-/*==========================
-         DATA CHECKING
-  ==========================*/
+/* DATA CHECKING	*/
 
-if($register)
-{
+if($register) {
 	/*
 	 * Fields Checking
 	 */
 
-	$lastname_form      = trim($lastname_form);
+	$lastname_form    = trim($lastname_form);
 	$firstname_form   = trim($firstname_form);
 	$password_form = trim($password_form);
 	$username_form = trim($username_form);
@@ -96,7 +66,7 @@ if($register)
 		                       (lastname='$lastname_form' AND firstname='$firstname_form' AND email='$email_form') AS userExists
 		                     FROM $tbl_user
 		                     WHERE username='$username_form' OR (lastname='$lastname_form' AND firstname='$firstname_form' AND email='$email_form')
-		                     ORDER BY userExists DESC, loginExists DESC", __FILE__, __LINE__);
+		                     ORDER BY userExists DESC, loginExists DESC");
 
 		if(Database::num_rows($result))
 		{
@@ -154,7 +124,7 @@ if($register)
 		                           email     = '$email_form',
 		                           status    = '$platformStatus',
 		                           official_code = '$official_code_form',
-		                           creator_id = '".$_user['user_id']."'", __FILE__, __LINE__);
+		                           creator_id = '".$_user['user_id']."'");
 
 		$userId = Database::insert_id();
 
@@ -183,7 +153,7 @@ if($register)
 						SET user_id     = '$userId',
 							course_code  = '$currentCourseID',
 							status      = '$admin_form',
-							tutor_id       = '$tutor_form'", __FILE__, __LINE__))
+							tutor_id       = '$tutor_form'"))
 		{
 			$courseRegSucceed = true;
 		}
@@ -249,7 +219,7 @@ if($register)
 
 } // end if register request
 
-$interbreadcrumb[] = array ("url"=>"user.php", "name"=> get_lang('Users'));
+$interbreadcrumb[] = array ("url"=>"user.php", "name"=> get_lang('ToolUser'));
 
 $nameTools = get_lang('AddAU');
 
@@ -260,7 +230,7 @@ Display::display_header($nameTools, "User");
 
 
 
-<h3><?php echo get_lang('Users'); ?></h3>
+<h3><?php echo get_lang('ToolUser'); ?></h3>
 
 <table border="0" cellpadding="0" cellspacing="0" width="100%">
 <tr>

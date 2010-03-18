@@ -1,45 +1,46 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $langSelectOptionForBackup = "Molim Vas, odaberite opcije za backup.";
 $langLetMeSelectItems = "Dopusti da ja odaberem komponente kursa";
 $langCreateFullBackup = "Kreiraj kompletni backup ovog kursa";
 $langCreateBackup = "kreiraj backup";
-$langBackupCreated  = "Backup ovog kursa je kreiran. Download ovog fajla &#263;e po&#269;eti za par trenutaka. Ako download  ne po&#269;ne kliknite na slede&#263;i link.";
+$langBackupCreated = "Backup ovog kursa je kreiran. Download ovog fajla &#263;e po&#269;eti za par trenutaka. Ako download  ne po&#269;ne kliknite na slede&#263;i link.";
 $langSelectBackupFile = "selektujte backup fajl";
-$langImportBackup = "Uvezi backup ";
-$langImportFullBackup = "Uvezi kompletan backup ";
-$langImportFinished = "Uvoz je zavröen";
-$langEvents = "Doga&#273;aji";
-$langAnnouncements = "Obaveötenja";
-$langDocuments  = "Dokumenti";
+$langImportBackup = "Uvezi backup";
+$langImportFullBackup = "Uvezi kompletan backup";
+$langImportFinished = "Uvoz je zavr≈°en";
+$langEvents = "Dogaƒëaji";
+$langAnnouncements = "Obave≈°tenja";
+$langDocuments = "Dokumenti";
 $langTests = "Testovi";
-$langLearnpaths = "Putanje u&#269;enja";
+$langLearnpaths = "Putanje uƒçenja";
 $langCopyCourse = "Kopiraj kurs";
 $langSelectItemsToCopy = "Selektuj stavke za kopiranje";
-$langCopyFinished = "Kopiranje je zavröeno";
+$langCopyFinished = "Kopiranje je zavr≈°eno";
 $langFullRecycle = "Potpuno reciklirano";
 $langRecycleCourse = "Recikliraj kurs";
-$langRecycleFinished = "Recikliranje je zavröeno";
-$langRecycleWarning = "Upozorenje: upotrebom ovog alata obrisa&#263;ete neke delove vaöeg kursa. Ova akcija se ne moûe poniötiti. Savetujemo vas da napravite <a href=\"create_backup.php\">backup</a> pre upotrebe alata za recikliranje.";
-$langSameFilename = "äta treba da bude u&#269;injeno sa uvezenim fajlovima koji imaju isto ime kao i postoje&#263;i fajlovi?";
-$langSameFilenameSkip = "Presko&#269;i isto ime fajla";
+$langRecycleFinished = "Recikliranje je zavr≈°eno";
+$langRecycleWarning = "Upozorenje: upotrebom ovog alata obrisaƒáete neke delove va≈°eg kursa. Ova akcija se ne mo≈æe poni≈°titi. Savetujemo vas da napravite <a href=\"create_backup.php\">backup</a> pre upotrebe alata za recikliranje.";
+$langSameFilename = "≈†ta treba da bude uƒçinjeno sa uvezenim fajlovima koji imaju isto ime kao i postojeƒái fajlovi?";
+$langSameFilenameSkip = "Preskoƒçi isto ime fajla";
 $langSameFilenameRename = "Preimenuj fajl (eg file.pdf postaje file_1.pdf)";
-$langSameFilenameOverwrite = "Piöi preko postoje&#263;eg fajla";
+$langSameFilenameOverwrite = "Pi≈°i preko postojeƒáeg fajla";
 $langSelectDestinationCourse = "Odaberite lokaciju kursa";
-$langFullCopy  = "Kompletno kopiraj";
+$langFullCopy = "Kompletno kopiraj";
 $langCourseDescription = "Opis kursa";
 $langNoResourcesToBackup = "Nema resursa koje treba backup-ovati";
 $langNoResourcesInBackupFile = "Nema resursa u backup fajlu";
 $langSelectResources = "Selektuj resurse";
 $langNoResourcesToRecycles = "Nema resursa za recikliranje";
-$langIncludeQuestionPool = "Uklju&#269;i set pitanja";
+$langIncludeQuestionPool = "Ukljuƒçi set pitanja";
 $langLocalFile = "lokalni fajl";
 $langServerFile = "server fajl";
 $langNoBackupsAvailable = "ni jedan backup nije dostupan";
 $langNoDestinationCoursesAvailable = "ni jedan opis kursa nije dostupan";
 $langBackup = "Backup";
-$langImportBackupInfo = "Uvezi backup. Mo&#263;i &#263;ete da uvezete backup fajl sa vaöe lokalne radne stanice ili moûete da koristite fajlove koji su dostupni na serveru. ";
-$langCreateBackupInfo = "Kreiraj backup ovog kursa. Moûete sami da selektujete sadrûaj kursa koji ûelite da stavite u backup fajl.";
+$langImportBackupInfo = "Uvezi backup. Moƒái ƒáete da uvezete backup fajl sa va≈°e lokalne radne stanice ili mo≈æete da koristite fajlove koji su dostupni na serveru.";
+$langCreateBackupInfo = "Kreiraj backup ovog kursa. Mo≈æete sami da selektujete sadr≈æaj kursa koji ≈æelite da stavite u backup fajl.";
 $ToolIntro = "Uvod u alate";
 ?>

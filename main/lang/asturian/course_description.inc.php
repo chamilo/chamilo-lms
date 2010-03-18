@@ -1,19 +1,20 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$langCourseProgram  = "Descripci髇 del cursu";
-$langThisCourseDescriptionIsEmpty  = "Descripci髇 non disponible";
-$langEditCourseProgram  = "Crear o editar el programa del cursu";
-$QuestionPlan  = "Entrugues pal mayestru";
-$langInfo2Say  = "Informaci髇 pa los estudiantes";
-$langOuAutreTitre  = "T韙ulu";
-$langNewBloc  = "Apart醬 personaliz醬";
-$langAddCat  = "Amestar apart醬";
-$langAdd  = "Amestar";
-$langValid  = "Validar";
-$langBackAndForget  = "Volver y descartar";
-$CourseDescriptionUpdated = "La descripci髇 del cursu actualiz髎e";
-$CourseDescriptionDeleted = "La descripci髇 del cursu esborr髎e";
-$CourseDescriptionIntro = "Pa crear la descripci髇 d\'un cursu calque nos apartaos que quier que tenga y compl閠elos.";
-$langSaveDescription = "Guardar descripci髇";
+$langCourseProgram = "Descripci贸n del cursu";
+$langThisCourseDescriptionIsEmpty = "Descripci贸n non disponible";
+$langEditCourseProgram = "Crear o editar el programa del cursu";
+$QuestionPlan = "Entrugues pal mayestru";
+$langInfo2Say = "Informaci贸n pa los estudiantes";
+$langOuAutreTitre = "T铆tulu";
+$langNewBloc = "Apart谩u personaliz谩u";
+$langAddCat = "Amestar apart谩u";
+$langAdd = "Amestar";
+$langValid = "Validar";
+$langBackAndForget = "Volver y descartar";
+$CourseDescriptionUpdated = "La descripci贸n del cursu actualiz贸se";
+$CourseDescriptionDeleted = "La descripci贸n del cursu esborr贸se";
+$CourseDescriptionIntro = "Pa crear la descripci贸n d'un cursu calque nos apartaos que quier que tenga y compl茅telos.";
+$langSaveDescription = "Guardar descripci贸n";
 ?>

@@ -1,12 +1,27 @@
 <?php
-//If you want to test this file you nedd change the path in work.lib.php inside the line 19,20 for this:
-//require_once (api_get_path(SYS_CODE_PATH).'document/document.inc.php');
-//require_once (api_get_path(LIBRARY_PATH).'fileDisplay.lib.php');
-
 require_once(api_get_path(SYS_CODE_PATH).'work/work.lib.php');
+require_once(api_get_path(LIBRARY_PATH).'course.lib.php');
+
 
 class TestWork extends UnitTestCase {
 
+	 
+	/**
+	 * @param	string	Base work dir (.../work)
+	 * @param 	string $desiredDirName complete path of the desired name
+ 	 * @return 	string actual directory name if it succeeds, boolean false
+ 	 * otherwise
+ 	 */
+
+	function testcreate_unexisting_work_directory() {
+		$path_name = api_get_path(SYS_COURSE_PATH);
+		$base_work_dir=$path_name.'testing/';
+		$desired_dir_name= $path_name.'testing';
+		$res=create_unexisting_work_directory($base_work_dir,$desired_dir_name);
+		$this->assertTrue(is_bool($res));
+	}
+	 
+	 
 	 /**
 	 * Builds the form thats enables the user to
 	 * select a directory to browse/upload in
@@ -75,7 +90,8 @@ class TestWork extends UnitTestCase {
 	*/
 
 	function testcount_dir() {
-		$path_dir='/var/www';
+		$path_name = api_get_path(SYS_COURSE_PATH);
+		$path_dir=$path_name;
 		$recurse=0;
 		ob_start();
 		$res=count_dir($path_dir, $recurse);
@@ -95,36 +111,6 @@ class TestWork extends UnitTestCase {
 		//var_dump($res);
 	}
 
-	/**
-	 * @param	string	Base work dir (.../work)
-	 * @param 	string $desiredDirName complete path of the desired name
- 	 * @return 	string actual directory name if it succeeds, boolean false
- 	 * otherwise
- 	 */
-
-	function testcreate_unexisting_work_directory() {
-		$base_work_dir='/var/www/dokeos/courses/ABCD/work/';
-		$desired_dir_name='/var/www/merdokeos/main/work';
-		$res=create_unexisting_work_directory();
-		$this->assertTrue(is_bool($res));
-		//var_dump($res);
-	}
-
-	/**
-	 * Delete a work-tool directory
-	 * @param	string	Base "work" directory for this course as /var/www/dokeos/courses/ABCD/work/
-	 * @param	string	The directory name as the bit after "work/", without trailing slash
-	 * @return	integer	-1 on error
-	 */
-
-	function testdel_dir() {
-		$base_work_dir='/var/www/dokeos/';
-		$dir='work/';
-		$id=-1;
-		$res=del_dir();
-		$this->assertTrue(is_numeric($res));
-		//var_dump($res);
-	}
 
 	/**
 	 * Transform an all directory structure (only directories) in an array
@@ -133,7 +119,8 @@ class TestWork extends UnitTestCase {
 	 */
 
 	function testdirectory_to_array() {
-		$directory='/var/www/dokeos/';
+		$path_name = api_get_path(SYS_PATH);
+		$directory= $path_name;
 		$res=directory_to_array($directory);
 		$this->assertTrue(is_array($res));
 		//var_dump($res);
@@ -231,11 +218,10 @@ class TestWork extends UnitTestCase {
 	* @todo move this function to the user library
 	*/
 
-	function testdisplay_user_link() {
+	function testdisplay_user_link_work() {
 		global $_otherusers;
 		$user_id=1;
-		$name='';
-		$res=display_user_link($user_id, $name='');
+		$res=display_user_link_work($user_id, $name='');
 		$this->assertTrue(is_string($res));
 		//var_dump($res);
 	}
@@ -275,10 +261,10 @@ class TestWork extends UnitTestCase {
 	 */
 
 	function testget_subdirs_list() {
-		$basedir = $basedir.'/';
+		$path_name = api_get_path(SYS_PATH);
+		$basedir = $path_name.'/';
 		$dh = opendir($basedir);
 		$entry = readdir($dh);
-		$basedir = $basedir.'/';
 		$dirs_list[] = $entry;
 		$res=get_subdirs_list($basedir='',$recurse=0);
 		$this->assertTrue(is_numeric($res));
@@ -294,7 +280,9 @@ class TestWork extends UnitTestCase {
 	 */
 
 	function testget_work_id() {
-		$path='/var/www/path';
+		global $cidReq;
+		$path_name = api_get_path(SYS_PATH);
+		$path=$path_name.$cidReq;
 		$res=get_work_id($path);
 		$this->assertTrue(is_bool($res));
 		//var_dump($res);
@@ -321,8 +309,8 @@ class TestWork extends UnitTestCase {
 	 */
 
 	function testinsert_all_directory_in_course_table() {
-		global $work_table;
-		$base_work_dir='/var/www/path';
+		$path_name = api_get_path(SYS_COURSE_PATH);
+		$base_work_dir=$path_name.'work/testing';
 		$dir_to_array =directory_to_array($base_work_dir,true);
 		$res=insert_all_directory_in_course_table($base_work_dir);
 		$this->assertTrue(is_null($res));
@@ -338,8 +326,9 @@ class TestWork extends UnitTestCase {
 	 */
 
 	function testis_subdir_of() {
-		$subdir='';
-		$basedir='';
+		$path_name = api_get_path(SYS_COURSE_PATH);
+		$subdir=$path_name.'work/testing';
+		$basedir=$path_name;
 		$res=is_subdir_of($subdir,$basedir);
 		$this->assertTrue(is_numeric($res));
 		//var_dump($res);
@@ -391,8 +380,28 @@ class TestWork extends UnitTestCase {
 
 	function testupdate_work_url() {
 		$id=1;
-		$new_path='/var/www/path/';
+		$path_name = api_get_path(SYS_COURSE_PATH);
+		$new_path=$path_name.'work/testing';
 		$res=update_work_url($id,$new_path);
+		$this->assertTrue(is_numeric($res));
+		//var_dump($res);
+	}
+	
+		/**
+	 * Delete a work-tool directory
+	 * @param	string	Base "work" directory for this course as /var/www/dokeos/courses/ABCD/work/
+	 * @param	string	The directory name as the bit after "work/", without trailing slash
+	 * @return	integer	-1 on error
+	 */
+
+
+	function testdel_dir() {
+		global $cidReq;
+		$path_name = api_get_path(SYS_PATH);
+		$base_work_dir=$path_name.$cidReq.'work/testing';
+		$dir= $path_name.'testing/';
+		$id=-1;
+		$res=del_dir($base_work_dir,$dir,$id);
 		$this->assertTrue(is_numeric($res));
 		//var_dump($res);
 	}

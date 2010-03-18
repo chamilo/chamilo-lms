@@ -1,33 +1,8 @@
 <?php
-
-// $Id: 3column.php,v 1.2 2006/08/10 14:26:12 pcool Exp $
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2004-2005 Dokeos S.A.
-	Copyright (c) 2003 Ghent University
-	Copyright (c) 2001 Universite Catholique de Louvain
-	Copyright (c) various contributors
-	Copyright (c) Bart Mollet, Hogeschool Gent
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact address: Dokeos, 44 rue des palais, B-1030 Brussels, Belgium
-	Mail: info@dokeos.com
-==============================================================================
-*/
+/* For licensing terms, see /chamilo_license.txt */
 /**
 ==============================================================================
-*                  HOME PAGE FOR EACH COURSE (BASIC TOOLS FIXED)
+*              HOME PAGE FOR EACH COURSE (BASIC TOOLS FIXED)
 *
 *	This page, included in every course's index.php is the home
 *	page.To make administration simple, the professor edits his
@@ -38,18 +13,17 @@
 *	@package dokeos.course_home
 ==============================================================================
 */
+require_once api_get_path(LIBRARY_PATH).'course_home.lib.php';
+
 $hide = isset($_GET['hide']) && $_GET['hide'] == 'yes' ? 'yes' : null;
 $restore = isset($_GET['restore']) && $_GET['restore'] == 'yes' ? 'yes' : null;
 $id  = isset($_GET['id']) ? intval($_GET['id']) : null;
-
-include('../../main/course_home/btf_functions.php');  // RH: extra ../
 
 $TABLE_TOOLS = Database::get_main_table(TABLE_MAIN_COURSE_MODULE);
 $TBL_ACCUEIL = Database::get_course_table(TABLE_TOOL_LIST);
 
 // WORK with data post askable by admin of  course
-if (api_is_allowed_to_edit(null,true))
-{
+if (api_is_allowed_to_edit(null,true)) {
 /*  Work request */
 
 /*> > > > > > > > > > > > MODIFY HOME PAGE < < < < < < < < < < < <*/
@@ -86,7 +60,7 @@ if (api_is_allowed_to_edit(null,true))
 	if($remove)
 	{
 		$sql = "SELECT * FROM $TBL_ACCUEIL WHERE id=$id";
-		$result = Database::query($sql,__FILE__,__LINE__);
+		$result = Database::query($sql);
 		$toolsRow = Database::fetch_array($result);
 		$tool_name = htmlspecialchars($toolsRow['name'] != "" ? $toolsRow['name'] : $toolsRow['link'],ENT_QUOTES,$charset);
 		if($toolsRow['img'] != "external.gif")
@@ -125,9 +99,9 @@ if (api_is_allowed_to_edit(null,true))
 		Database::query("UPDATE $TBL_ACCUEIL SET visibility='2' WHERE id=$id");
 	}
 
-/*--------------------------------------
-                HIDE
-  --------------------------------------*/
+	/*--------------------------------------
+	                HIDE
+	  --------------------------------------*/
 
 	elseif ($hide) // visibility 1 -> 0
 	{
@@ -135,9 +109,9 @@ if (api_is_allowed_to_edit(null,true))
 		Display::display_confirmation_message(get_lang('ToolIsNowHidden'));
 	}
 
-/*--------------------------------------
-              REACTIVATE
-  --------------------------------------*/
+	/*--------------------------------------
+	              REACTIVATE
+	  --------------------------------------*/
 
 	elseif ($restore) // visibility 0,2 -> 1
 	{
@@ -254,8 +228,10 @@ echo "<table class=\"item\" align=\"center\" border=\"0\" width=\"95%\">\n";
 
 echo	"<tr>\n<td colspan=\"6\">&nbsp;</td>\n</tr>\n";
 echo	"<tr>\n<td colspan=\"6\">";
-showtools2('Basic');
-showtools2('External');
+
+CourseHome::show_tool_3column('Basic');
+CourseHome::show_tool_3column('External');
+
 echo 	"</td>\n</tr>\n";
 
 
@@ -263,14 +239,13 @@ echo 	"</td>\n</tr>\n";
        PROF ONLY VIEW
   ==========================*/
 
-if (api_is_allowed_to_edit(null,true) && !api_is_coach())
-{
+if (api_is_allowed_to_edit(null,true) && !api_is_coach()) {
 	echo	"<tr><td colspan=\"6\"><hr noshade size=\"1\" /></td></tr>\n",
 			"<tr>\n","<td colspan=\"6\">\n",
 			"<font color=\"#F66105\">\n",get_lang('CourseAdminOnly'),"</font>\n",
 			"</td>\n","</tr>\n";
 	echo	"<tr>\n<td colspan=\"6\">";
-	showtools2('courseAdmin');
+	CourseHome::show_tool_3column('courseAdmin');
 	echo 	"</td>\n</tr>\n";
 }
 
@@ -288,7 +263,7 @@ if ($is_platformAdmin && api_is_allowed_to_edit(null,true) && !api_is_coach())
 			"<font color=\"#F66105\" >",get_lang('PlatformAdminOnly'),"</font>\n",
 			"</td>\n","</tr>\n";
 	echo	"<tr>\n<td colspan=\"6\">";
-	showtools2('platformAdmin');
+	CourseHome::show_tool_3column('platformAdmin');
 	echo 	"</td>\n</tr>\n";
 }
 

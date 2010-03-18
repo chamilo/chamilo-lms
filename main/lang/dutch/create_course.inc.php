@@ -1,7 +1,8 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$langProfessors = "Lesgever(s)";
+$langProfessors = "Lesgevers";
 $langExplanation = "Wanneer u op OK klikt, wordt een cursuspagina aangemaakt met o.a. de onderdelen: forum, links, oefeningen, agenda en cursusmateriaal. Met uw log-in kan u de inhoud later wijzigen.";
 $langEmpty = "U hebt niet alle velden ingevuld.<br />Gebruik de terugknop en herbegin.<br />Als u uw cursuscode niet kent, kunt u de cursuslijst raadplegen.";
 $langCodeTaken = "Deze cursuscode is al in gebruik. Gebruik de terugknop en herbegin.";
@@ -21,19 +22,19 @@ $langContradiction = "Het principe van tegenstrijdigheid gebruiken om de gesprek
 $langNotFalse = "Dit antwoord is niet onjuist. Het is waar dat het tonen van de onwetendheid van zijn gesprekspartner gebeurt dankzij het tonen van de tegenstrijdige conclusies van zijn veronderstellingen.";
 $langAgenda = "Agenda";
 $langVideo = "Video";
-$langCourseProgram = "Takenprogramma";
+$langCourseProgram = "Cursus: situering en randinformatie";
 $langAnnouncements = "Aankondigingen";
 $langAddPageHome = "Pagina uploaden en linken met startpagina";
-$langLinkSite = "Link toevoegen op de startpagina";
+$langLinkSite = "Link toevoegen en verbinden met startpagina";
 $langModifyInfo = "Cursuseigenschappen";
-$langCourseDesc  = "Cursusbeschrijving";
+$langCourseDesc = "Cursusbeschrijving";
 $langAgendaTitle = "Dinsdag 11 december 14u00 : cursus filosofie (1) - Locaal : Sud 18";
 $langAgendaText = "Algemene inleiding tot de filosofie en verklaring van de cursuswerking";
 $langMicro = "Micro-trottoir";
 $langGoogle = "Handige zoekmachine";
 $langIntroductionText = "Dit is de inleidingstekst van deze cursus. Cursusbeheerders kunnen deze wijzigen door op het potloodicoontje onderaan te klikken.";
 $langIntroductionTwo = "Hier kunnen studenten documenten plaatsen. Via deze pagina is het mogelijk documenten uit te wisselen tussen studenten, studentengroepen en lesgevers.Als u via de groepsruimte een document publiceert (optie = publiceren), zal een verwijzing aangemaakt worden naar uw document, zonder dit te verplaatsen.";
-$langCourseDescription = "Geef hier een korte beschrijving voor de cursus. Deze zal verschijnen in de cursuslijst.";
+$langCourseDescription = "Cursusbeschrijving";
 $langProfessor = "Lesgever";
 $langAnnouncementEx = "Dit is een voorbeeld van een mededeling.";
 $langJustCreated = "De site van de cursus is aangemaakt.";
@@ -50,17 +51,17 @@ $langFac = "Categorie";
 $langTargetFac = "Vul hier de naam in van de faculteit waar de cursus wordt gedoceerd";
 $langMax = "max. 20 lettertekens, bv. <i>ROM2121</i>";
 $langDoubt = "Indien u twijfelt over de juiste titel of code van uw cursus, kunt u deze in de cursuslijst raadplegen.";
-$langProgram = "Cursusprogramma</a>. Als de startpagina die u wil creëren niet overeenkomt met een bestaande cursuscode, dan mag u deze verzinnen. Bijvoorbeeld <i>INNOVATIE</i> als het over een opleidingsprogramma gaat betreffend innovatiebeheer.";
+$langProgram = "Cursusprogramma</a>. Als de startpagina die u wil creÃ«ren niet overeenkomt met een bestaande cursuscode, dan mag u deze verzinnen. Bijvoorbeeld <i>INNOVATIE</i> als het over een opleidingsprogramma gaat betreffend innovatiebeheer.";
 $langScormtool = "Leerpad";
 $langScormbuildertool = "Constructie van SCORM-leerpad";
 $langPathbuildertool = "Constructie van leerpaden";
 $langOnlineConference = "Onlineconferentie";
 $langAgendaCreationTitle = "Aanmaken van cursus";
 $langAgendaCreationContenu = "Deze cursus werd op dit tijdstip aangemaakt.";
-$langOnlineDescription = "Dit is een voorbeeld van een omschrijving voor de conferentiemodule.";
-$langDropbox  = "Dropbox";
-$langOnly  = "Enkel";
-$langRandomLanguage  = "Random selectie uit beschikbare talen";
+$langOnlineDescription = "Beschrijving van de conferentie";
+$langDropbox = "Dropbox";
+$langOnly = "Enkel";
+$langRandomLanguage = "Random selectie uit beschikbare talen";
 $langImages = "Afbeeldingen";
 $langAudio = "Audio";
 $langFlash = "Flash";
@@ -71,12 +72,12 @@ $langRestoreCourse = "Herstel een cursussite";
 $langOtherProperties = "Andere eigenschappen gevonden in archief";
 $langSysId = "Systeem-ID";
 $langDepartment = "Departement";
-$langDepartmentUrl = "URL";
+$langDepartmentUrl = "URL van uw faculteit of vakgroep";
 $langScoreShow = "Score weergeven";
 $langVisibility = "Zichtbaarheid";
 $langVersionDb = "Databankversie gebruikt bij de archivering";
 $langLastVisit = "Laatste bezoek";
-$langLastEdit = "Laatste bijdrage";
+$langLastEdit = "Laatst gewijzigd";
 $langExpire = "Afloop";
 $langChoseFile = "Kies bestand";
 $langFtpFileTips = "Bestand op een FTP-server";
@@ -98,8 +99,11 @@ $ExampleForumCategory = "Voorbeeld forumcategorie";
 $ExampleForum = "Voorbeeldforum";
 $ExampleThread = "Voorbeelddiscussie";
 $ExampleThreadContent = "Voorbeeldinhoud";
-$IntroductionWiki = "Het woord Wiki is een afkorting van WikiWikiWeb, een woord dat komt van het Hawaiaans en snel of snelheid betekent. In een wiki kunnen mensen samen aan paginas schrijven. Als een bepaald iemand iets verkeerds schrijft dan kan een andere persoon dit corrigeren en eventueel ook iets nieuws toevoegen aan de pagina. Hierdoor wordt de inhoud telkens beter als er iets gewijzigd wordt. ";
+$IntroductionWiki = "Het woord Wiki is een afkorting van WikiWikiWeb, een woord dat komt van het Hawaiaans en snel of snelheid betekent. In een wiki kunnen mensen samen aan paginas schrijven. Als een bepaald iemand iets verkeerds schrijft dan kan een andere persoon dit corrigeren en eventueel ook iets nieuws toevoegen aan de pagina. Hierdoor wordt de inhoud telkens beter als er iets gewijzigd wordt.";
 $CreateCourseArea = "Maak deze training aan";
 $CreateCourse = "Training aanmaken";
 $Create = "Aanmaken";
+$MessageOfNewCourseToAdmin = "Er werd een nieuwe cursus aangemaakt op het platform:";
+$NewCourseCreatedIn = "Er werd een nieuwe cursus aangemaakt in";
+$ExplicationTrainers = "Je staat op dit moment ingesteld als cursusbeheerder. Je kan dit later aanpassen via de cursuseigenschappen.";
 ?>

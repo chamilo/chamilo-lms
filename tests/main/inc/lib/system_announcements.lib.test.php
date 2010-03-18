@@ -6,14 +6,19 @@ require_once(api_get_path(LIBRARY_PATH).'mail.lib.inc.php');
 class TestSystemAnnouncementManager extends UnitTestCase {
 
 	function testadd_announcement() {
-		$title='';
-		$content='';
-		$date_start='';
-		$date_end='';
-		ob_start();
-		$res=SystemAnnouncementManager::add_announcement($title, $content, $date_start, $date_end, $visible_teacher = 0, $visible_student = 0, $visible_guest = 0, $lang = null, $send_mail=0);
+		$title='Anuncio';
+		$content='Contenido del anuncio';
+		$date_start='2010-01-02';
+		$date_end='2010-01-03';
+		$visible_teacher = 0;
+		$visible_student = 0;
+		$visible_guest = 0;
+		$lang = null;
+		$send_mail=0;
+		//ob_start();
+		$res=SystemAnnouncementManager::add_announcement($title, $content, $date_start, $date_end, $visible_teacher, $visible_student, $visible_guest, $lang, $send_mail);
         $this->assertTrue(is_bool($res));
-        ob_end_clean();
+        //ob_end_clean();
         //var_dump($res);
 	}
 
@@ -81,24 +86,23 @@ class TestSystemAnnouncementManager extends UnitTestCase {
 		$announcement_id='';
 		$user='';
 		$visible='';
-		$res=SystemAnnouncementManager::set_visibility();
+		$res=SystemAnnouncementManager::set_visibility($announcement_id, $user, $visible);
 		$this->assertTrue(is_bool($res));
         //var_dump($res);
 	}
 
 	function testupdate_announcement() {
-		$id='';
-		$title='';
-		$content='';
-		$date_start=array();
-		$date_end=array();
+		$id=1;
+		$title='Anuncio';
+		$content='Contenido';
+		$date_start='2010-01-02';
+		$date_end='2010-01-03';
+		$send_mail=0;
 		ob_start();
-		$res=SystemAnnouncementManager::update_announcement($id, $title, $content, $date_start, $date_end, $visible_teacher = 0, $visible_student = 0, $visible_guest = 0,$lang=null, $send_mail=0);
+		$res=SystemAnnouncementManager::update_announcement($id, $title, $content, $date_start, $date_end, $visible_teacher = 0, $visible_student = 0, $visible_guest = 0,$lang=null, $send_mail);
 		$this->assertTrue(is_bool($res));
 		ob_end_clean();
         //var_dump($res);
 	}
-
-
 }
 ?>

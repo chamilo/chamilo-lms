@@ -1,15 +1,16 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$langClarContent = "<p><b>Lektor</b></p> <p>Dokeos je systém riadenia vyu&#269;ovania a vzdelávania. Lektorovi umo&#328;uje zostavi&#357; vyu&#269;ovacie materiály, u&#269;ebné osnovy a riadi&#357; spoluprácu s jeho/jej študentmi. A všetko toto robí priamo v prehliada&#269;i.</p> <p>Ak chcete Dokeos vyuíva&#357; ako lektor, potrebujete prihlasovacie meno a heslo. V závislosti od nastavení bezpe&#269;nosti vášho portálu, ich môete získa&#357; registráciou (menu vpravo) alebo od administrátora vo vašej organizácii. Všimnite si, e prihlasovacie meno a heslo nikdy neobsahujú medzery, diakritiku a systém rozlišuje ve&#318;ké a malé písmená. Napíšte svoje prihlasovacie meno/heslo, vytvorte kurz (ponuka vpravo hore) alebo pouite kurz, ktorı administrátor vašej organizácie vytvoril pre vás.</p> <p>Ak chcete prida&#357; kolegu – spoluadministrátora vášho kurzu:<ol><li>Ak ešte nie je zaregistrovanı v systéme, zaregistrujte ho a ako profil vyberte monos&#357; „Lektor“,</li> <li>Ak je u v systéme zaregistrovanı, do&#269;asne otvorte schválenie kurzu v nastaveniach kurzu a poiadajte ho, aby sa do kurzu zapísal. Potom upravte jehoprofil a dajte mupráva lektora.</li></ol></p> <p> Kadı nástroj Dokeos-u obsahuje nápovedu reprezentovanú &#269;ervenou bójou. Ak tam nenájdete potrebnú informáciu, skúste si prezrie&#357; stránku s Dokeos dokumentáciou: <a href=\\\"http://www.dokeos.com/documentation.php\\\">http://www.dokeos.com/documentation.php</a> a stiahnite si príru&#269;ku pre lektora vo vašom jazyku alebo v angli&#269;tine. </p> <p><b>Študent</b></p> <p>Tento portál vám umoní sledova&#357; a zú&#269;ast&#328;ova&#357; sa kurzov, tréningov, workshopov at&#271;. Bol vytvorenı na podporu aktívneho vyu&#269;ovania: zaloeného na projektoch, riešení problémov, prípadovıch štúdiách, vıskume v rámci tímov at&#271;. Vaši lektori vytvorili vyu&#269;ovací priestor, ktorı môe by&#357; reprezentovanı jednoduchım dokumenta&#269;nım prie&#269;inkom ale aj sofistikovanımi samoštúdijnımi, &#269;i tímovımi aktivitami.</p> <p>Proces registrácie je rozdielny v závislosti od organizácie. V niektorıch prípadoch je povolená registrácia samotnım študentom. V inom prípade dostanete prihlasovacie meno a heslo od administrátora.</p>";
+$langClarContent = "<p><b>Lektor</b></p> <p>Dokeos je systÃ©m riadenia vyuÄovania a vzdelÃ¡vania. Lektorovi umoÅ¾Åˆuje zostaviÅ¥ vyuÄovacie materiÃ¡ly, uÄebnÃ© osnovy a riadiÅ¥ spoluprÃ¡cu s jeho/jej Å¡tudentmi. A vÅ¡etko toto robÃ­ priamo v prehliadaÄi.</p> <p>Ak chcete Chamilo vyuÅ¾Ã­vaÅ¥ ako lektor, potrebujete prihlasovacie meno a heslo. V zÃ¡vislosti od nastavenÃ­ bezpeÄnosti vÃ¡Å¡ho portÃ¡lu, ich mÃ´Å¾ete zÃ­skaÅ¥ registrÃ¡ciou (menu vpravo) alebo od administrÃ¡tora vo vaÅ¡ej organizÃ¡cii. VÅ¡imnite si, Å¾e prihlasovacie meno a heslo nikdy neobsahujÃº medzery, diakritiku a systÃ©m rozliÅ¡uje veÄ¾kÃ© a malÃ© pÃ­smenÃ¡. NapÃ­Å¡te svoje prihlasovacie meno/heslo, vytvorte kurz (ponuka vpravo hore) alebo pouÅ¾ite kurz, ktorÃ½ administrÃ¡tor vaÅ¡ej organizÃ¡cie vytvoril pre vÃ¡s.</p> <p>Ak chcete pridaÅ¥ kolegu â€“ spoluadministrÃ¡tora vÃ¡Å¡ho kurzu:<ol><li>Ak eÅ¡te nie je zaregistrovanÃ½ v systÃ©me, zaregistrujte ho a ako profil vyberte moÅ¾nosÅ¥ â€Lektorâ€œ,</li> <li>Ak je uÅ¾ v systÃ©me zaregistrovanÃ½, doÄasne otvorte schvÃ¡lenie kurzu v nastaveniach kurzu a poÅ¾iadajte ho, aby sa do kurzu zapÃ­sal. Potom upravte jehoprofil a dajte muprÃ¡va lektora.</li></ol></p> <p> KaÅ¾dÃ½ nÃ¡stroj Chamilo-u obsahuje nÃ¡povedu reprezentovanÃº Äervenou bÃ³jou. Ak tam nenÃ¡jdete potrebnÃº informÃ¡ciu, skÃºste si prezrieÅ¥ strÃ¡nku s Chamilo dokumentÃ¡ciou: <a href=\"http://www.chamilo.org/documentation.php\">http://www.chamilo.org/documentation.php</a> a stiahnite si prÃ­ruÄku pre lektora vo vaÅ¡om jazyku alebo v angliÄtine. </p> <p><b>Å tudent</b></p> <p>Tento portÃ¡l vÃ¡m umoÅ¾nÃ­ sledovaÅ¥ a zÃºÄastÅˆovaÅ¥ sa kurzov, trÃ©ningov, workshopov atÄ. Bol vytvorenÃ½ na podporu aktÃ­vneho vyuÄovania: zaloÅ¾enÃ©ho na projektoch, rieÅ¡enÃ­ problÃ©mov, prÃ­padovÃ½ch Å¡tÃºdiÃ¡ch, vÃ½skume v rÃ¡mci tÃ­mov atÄ. VaÅ¡i lektori vytvorili vyuÄovacÃ­ priestor, ktorÃ½ mÃ´Å¾e byÅ¥ reprezentovanÃ½ jednoduchÃ½m dokumentaÄnÃ½m prieÄinkom ale aj sofistikovanÃ½mi samoÅ¡tÃºdijnÃ½mi, Äi tÃ­movÃ½mi aktivitami.</p> <p>Proces registrÃ¡cie je rozdielny v zÃ¡vislosti od organizÃ¡cie. V niektorÃ½ch prÃ­padoch je povolenÃ¡ registrÃ¡cia samotnÃ½m Å¡tudentom. V inom prÃ­pade dostanete prihlasovacie meno a heslo od administrÃ¡tora.</p>";
 $test = "test";
-$WCAGImage = "Obrázok";
-$WCAGLabel = "Názov obrázku";
+$WCAGImage = "ObrÃ¡zok";
+$WCAGLabel = "NÃ¡zov obrÃ¡zku";
 $WCAGLink = "Link";
-$WCAGLinkLabel = "Názov linku";
-$errorNoLabel = "Chıba názov obrázku.";
-$AllLanguages = "Všetky jazyky";
+$WCAGLinkLabel = "NÃ¡zov linku";
+$errorNoLabel = "ChÃ½ba nÃ¡zov obrÃ¡zku.";
+$AllLanguages = "VÅ¡etky jazyky";
 $WCAGEditor = "Editor WCAG";
-$WCAGGoMenu = "Cho&#271; do menu";
-$WCAGGoContent = "Cho&#271; na obsah";
+$WCAGGoMenu = "ChoÄ do menu";
+$WCAGGoContent = "ChoÄ na obsah";
 ?>

@@ -1,31 +1,9 @@
 <?php
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2008 Dokeos Latinoamerica SAC
-	Copyright (c) 2006 Dokeos SPRL
-	Copyright (c) 2006 Ghent University (UGent)
-	Copyright (c) various contributors
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
-	Mail: info@dokeos.com
-==============================================================================
-*/
+/* For licensing terms, see /license.txt */
 /**
  * Defines a gradebook ExerciseLink object.
  * @author Bert Steppé
- * @package dokeos.gradebook
+ * @package chamilo.gradebook
  */
 class ExerciseLink extends AbstractLink
 {
@@ -58,13 +36,13 @@ class ExerciseLink extends AbstractLink
     	$tbl_grade_links = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
 
 		$sql = 'SELECT id,title from '.$this->get_exercise_table()
-				.' WHERE id NOT IN'
+				.' exe WHERE id NOT IN'
 				.' (SELECT ref_id FROM '.$tbl_grade_links
 				.' WHERE type = '.LINK_EXERCISE
 				." AND course_code = '".$this->get_course_code()."'"
-				.')';
+				.') AND exe.session_id='.api_get_session_id().'';
 
-		$result = Database::query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql);
 		$cats=array();
 		while ($data=Database::fetch_array($result)) {
 			$cats[] = array ($data['id'], $data['title']);
@@ -81,8 +59,8 @@ class ExerciseLink extends AbstractLink
     	}
     	$course_info = api_get_course_info($this->course_code);
     	$tbl_grade_links = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK,$course_info['dbName']);
-		$sql = 'SELECT id,title from '.$this->get_exercise_table().' where active=1';
-		$result = Database::query($sql, __FILE__, __LINE__);
+		$sql = 'SELECT id,title from '.$this->get_exercise_table().' WHERE active=1 AND session_id='.api_get_session_id().'';
+		$result = Database::query($sql);
 
 		$cats=array();
 		while ($data=Database::fetch_array($result)) {
@@ -98,8 +76,8 @@ class ExerciseLink extends AbstractLink
     	$tbl_stats = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
 		$sql = 'SELECT count(exe_id) AS number FROM '.$tbl_stats
 				." WHERE exe_cours_id = '".$this->get_course_code()."'"
-				.' AND exe_exo_id = '.$this->get_ref_id();
-    	$result = Database::query($sql, __FILE__, __LINE__);
+				.' AND exe_exo_id = '.(int)$this->get_ref_id();
+    	$result = Database::query($sql);
 		$number=Database::fetch_row($result);
 		return ($number[0] != 0);
     }
@@ -115,16 +93,18 @@ class ExerciseLink extends AbstractLink
     	$tbl_stats = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
     	$tbl_stats_e_attempt_recording = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING);
 
-		$sql = 'SELECT * FROM '.$tbl_stats.' WHERE exe_exo_id = '.$this->get_ref_id().' AND orig_lp_id = 0 AND orig_lp_item_id = 0';
+		$sql = 'SELECT * FROM '.$tbl_stats.' WHERE exe_exo_id = '.(int)$this->get_ref_id().' AND orig_lp_id = 0 AND orig_lp_item_id = 0';
 
 		if (isset($stud_id)){
-			$currect_course=api_get_course_id();
-			$course_code_exe=(strlen($currect_course)===0) ? $this->get_course_code() : api_get_course_id();
+			
+			//$currect_course=api_get_course_id();			
+			//$course_code_exe = (strlen($currect_course)===0) ? $this->get_course_code() : api_get_course_id();    		
+    		$course_code_exe = $this->get_course_code();    		
     		$sql .= ' AND exe_cours_id="'.$course_code_exe.'" AND exe_user_id = '."'".$stud_id."'";
     	}
 
 		$sql .= ' ORDER BY exe_id DESC';
-		$scores = Database::query($sql, __FILE__, __LINE__);
+		$scores = Database::query($sql);
 
     	if (isset($stud_id)) {
     		// for 1 student
@@ -201,8 +181,8 @@ class ExerciseLink extends AbstractLink
      */
     public function is_valid_link() {
     	$sql = 'SELECT count(id) from '.$this->get_exercise_table()
-				.' WHERE id = '.$this->get_ref_id();
-		$result = Database::query($sql, __FILE__, __LINE__);
+				.' WHERE id = '.(int)$this->get_ref_id().' AND session_id='.api_get_session_id().'';
+		$result = Database::query($sql);
 		$number=Database::fetch_row($result);
 		return ($number[0] != 0);
     }
@@ -255,8 +235,8 @@ class ExerciseLink extends AbstractLink
     		return false;
     	} elseif (!isset($this->exercise_data)) {
 			$sql = 'SELECT * from '.$this->get_exercise_table()
-					.' WHERE id = '.$this->get_ref_id();
-			$result = Database::query($sql, __FILE__, __LINE__);
+					.' WHERE id = '.(int)$this->get_ref_id().' AND session_id ='.api_get_session_id().'';
+			$result = Database::query($sql);
 			$this->exercise_data=Database::fetch_array($result);
     	}
     	return $this->exercise_data;

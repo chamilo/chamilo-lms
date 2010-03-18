@@ -1,27 +1,5 @@
 <?php
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2008 Dokeos Latinoamerica SAC
-	Copyright (c) 2006 Dokeos SPRL
-	Copyright (c) 2006 Ghent University (UGent)
-	Copyright (c) various contributors
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
-	Mail: info@dokeos.com
-==============================================================================
-*/
+/* For licensing terms, see /license.txt */
 /**
  * Prints an HTML page with a table containing the gradebook data
  * @param	array 	Array containing the data to be printed in the table
@@ -81,7 +59,7 @@ a:active {text-decoration: none; font-weight : bold;  color : black;}
 <body><div id="main">';
 
 	$printdata .= '<h2>'.$view.' : '.$coursename.'</h2>';
-	$printdata .= '<h3>'.get_lang('Date').' : '.date('j/n/Y g:i').'</h3>';
+	$printdata .= '<h3>'.get_lang('Date').' : '.api_convert_and_format_date(null, DATE_FORMAT_SHORT). ' ' . api_convert_and_format_date(null, TIME_NO_SEC_FORMAT).'</h3>';
 	$printdata .= '<table border="1" width="90%" cellspacing="1" cellpadding="1">';
 	foreach ($header_names as $header) {
 		$printdata .= '<th>'.$header.'</th>';
@@ -110,7 +88,7 @@ function export_pdf($pdf,$newarray,$header_names,$format) {
 	$pdf->ezSetCmMargins(0,0,0,0);
 	$pdf->ezSetY(($format=='portrait')?'820':'570');
 	$pdf->selectFont(api_get_path(LIBRARY_PATH).'ezpdf/fonts/Courier.afm');
-	$pdf->ezText(get_lang('FlatView').' ('. date('j/n/Y g:i') .')',12,array('justification'=>'center'));
+	$pdf->ezText(get_lang('FlatView').' ('. api_convert_and_format_date(null, DATE_FORMAT_SHORT). ' ' . api_convert_and_format_date(null, TIME_NO_SEC_FORMAT) .')',12,array('justification'=>'center'));
 	if ($format=='portrait') {
 		$pdf->line(40,790,540,790);
 		$pdf->line(40,40,540,40);

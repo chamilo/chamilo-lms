@@ -172,7 +172,9 @@ if($modifyAnswers)
         for($i=1;$i <= $nbrAnswers;$i++)
         {
             $reponse[$i]=$objAnswer->selectAnswer($i);
-            $comment[$i]=$objAnswer->selectComment($i);
+            if ($objExercise->selectFeedbackType() != EXERCISE_FEEDBACK_TYPE_EXAM) {
+            	$comment[$i]=$objAnswer->selectComment($i);
+            }            
             $weighting[$i]=$objAnswer->selectWeighting($i);
             $hotspot_coordinates[$i]=$objAnswer->selectHotspotCoordinates($i);
             $hotspot_type[$i]=$objAnswer->selectHotspotType($i);
@@ -183,7 +185,9 @@ if($modifyAnswers)
 
     $_SESSION['tmp_answers'] = array();
     $_SESSION['tmp_answers']['answer'] = $reponse;
-    $_SESSION['tmp_answers']['comment'] = $comment;
+    if ($objExercise->selectFeedbackType() != EXERCISE_FEEDBACK_TYPE_EXAM) {
+    	$_SESSION['tmp_answers']['comment'] = $comment;
+    }
     $_SESSION['tmp_answers']['weighting'] = $weighting;
     $_SESSION['tmp_answers']['hotspot_coordinates'] = $hotspot_coordinates;
     $_SESSION['tmp_answers']['hotspot_type'] = $hotspot_type;
@@ -195,7 +199,9 @@ if($modifyAnswers)
             $nbrAnswers--;
             // Remove the last answer
 			$tmp = array_pop($_SESSION['tmp_answers']['answer']);
-			$tmp = array_pop($_SESSION['tmp_answers']['comment']);
+			if ($objExercise->selectFeedbackType() != EXERCISE_FEEDBACK_TYPE_EXAM) {
+				$tmp = array_pop($_SESSION['tmp_answers']['comment']);
+			}
 			$tmp = array_pop($_SESSION['tmp_answers']['weighting']);
 			$tmp = array_pop($_SESSION['tmp_answers']['hotspot_coordinates']);
 			$tmp = array_pop($_SESSION['tmp_answers']['hotspot_type']);
@@ -212,7 +218,9 @@ if($modifyAnswers)
 
             // Add a new answer
             $_SESSION['tmp_answers']['answer'][]='';
-			$_SESSION['tmp_answers']['comment'][]='';
+            if ($objExercise->selectFeedbackType() != EXERCISE_FEEDBACK_TYPE_EXAM) {
+				$_SESSION['tmp_answers']['comment'][]='';
+            }
 			$_SESSION['tmp_answers']['weighting'][]='1';
 			$_SESSION['tmp_answers']['hotspot_coordinates'][]='0;0|0|0';
 			$_SESSION['tmp_answers']['hotspot_type'][]='square';
@@ -267,14 +275,14 @@ if($modifyAnswers)
 		?>
 			<input type="submit" class="minus" name="lessAnswers" value="<?php echo get_lang('LessHotspots'); ?>" >
 			<input type="submit" class="plus" name="moreAnswers" value="<?php echo get_lang('MoreHotspots'); ?>" />
-			<input type="submit" class="cancel" name="cancelAnswers" value="<?php echo get_lang('Cancel'); ?>" onclick="javascript:if(!confirm('<?php echo addslashes(api_htmlentities(get_lang('ConfirmYourChoice'))); ?>')) return false;" >
+			<!--<input type="submit" class="cancel" name="cancelAnswers" value="<?php echo get_lang('Cancel'); ?>" onclick="javascript:if(!confirm('<?php echo addslashes(api_htmlentities(get_lang('ConfirmYourChoice'))); ?>')) return false;" >-->
 			<input type="submit" class="save" name="submitAnswers" value="<?php echo get_lang('Ok'); ?>" />
 		<?php
 			} else {
 		?>
 			<button type="submit" class="minus" name="lessAnswers" value="<?php echo get_lang('LessHotspots'); ?>" ><?php echo get_lang('LessHotspots'); ?></button>
 			<button type="submit" class="plus" name="moreAnswers" value="<?php echo get_lang('MoreHotspots'); ?>" /><?php echo get_lang('MoreHotspots'); ?></button>
-			<button type="submit" class="cancel" name="cancelAnswers" value="<?php echo get_lang('Cancel'); ?>" onclick="javascript:if(!confirm('<?php echo addslashes(api_htmlentities(get_lang('ConfirmYourChoice'))); ?>')) return false;" ><?php echo get_lang('Cancel'); ?></button>
+			<!--<button type="submit" class="cancel" name="cancelAnswers" value="<?php echo get_lang('Cancel'); ?>" onclick="javascript:if(!confirm('<?php echo addslashes(api_htmlentities(get_lang('ConfirmYourChoice'))); ?>')) return false;" ><?php echo get_lang('Cancel'); ?></button>-->
 			<button type="submit" class="save" name="submitAnswers" value="<?php echo get_lang('Ok'); ?>" /><?php echo get_lang('AddQuestionToExercise'); ?></button>
 		<?php
 			}
@@ -293,9 +301,16 @@ if($modifyAnswers)
 					</tr>
 					-->
 					<tr>
-					  <th width="5">&nbsp;<?php /* echo get_lang('Hotspot'); */ ?></th>
-					  <th ><?php echo get_lang('HotspotDescription'); ?>*</th>
-					  <th ><?php echo get_lang('Comment'); ?></th>
+					  <th width="5" >&nbsp;<?php /* echo get_lang('HotSpot'); */ ?></th>
+					  
+					  
+					  <?php if ($objExercise->selectFeedbackType() != EXERCISE_FEEDBACK_TYPE_EXAM) { ?>
+					  <th><?php echo get_lang('HotspotDescription'); ?>*</th>						  
+					  <th><?php echo get_lang('Comment'); ?></th>
+					  <?php } else { ?>
+					  	<th colspan="2"><?php echo get_lang('HotspotDescription'); ?>*</th>
+					  <?php } ?>	
+					  
 					  <th><?php echo get_lang('QuestionWeighting'); ?>*</th>
 					</tr>
 
@@ -303,8 +318,9 @@ if($modifyAnswers)
 								for($i=1;$i <= $nbrAnswers;$i++) {
 					?>
 					<tr>
-					  <td valign="top"><div style="height: 15px; width: 15px; background-color: <?php echo $hotspot_colors[$i]; ?>"> </div></td>
-					  <td valign="top" align="left"><input type="text" name="reponse[<?php echo $i; ?>]" value="<?php echo api_htmlentities($reponse[$i], ENT_QUOTES, api_get_system_encoding()); ?>" size="45" /></td>
+					  <td valign="top"><div style="height: 15px; width: 15px; background-color: <?php echo $hotspot_colors[$i]; ?>"> </div></td>					  					
+					<?php if ($objExercise->selectFeedbackType() != EXERCISE_FEEDBACK_TYPE_EXAM) { ?>					   
+						<td valign="top" align="left"><input type="text" name="reponse[<?php echo $i; ?>]" value="<?php echo api_htmlentities($reponse[$i], ENT_QUOTES, api_get_system_encoding()); ?>" size="45" /></td>
 					<?php
 						require_once(api_get_path(LIBRARY_PATH) . "/fckeditor/fckeditor.php");
 						$oFCKeditor = new FCKeditor("comment[$i]") ;
@@ -317,7 +333,11 @@ if($modifyAnswers)
 						$return =	$oFCKeditor->CreateHtml();
 						/*<td align="left"><textarea wrap="virtual" rows="1" cols="25" name="comment[<?php echo $i; ?>]" style="width: 100%"><?php echo api_htmlentities($comment[$i], ENT_QUOTES, api_get_system_encoding()); ?></textarea></td>*/
 					?>
-					<td align="left"><?php echo $return; ?></td>
+						<td align="left"><?php echo $return; ?></td>
+					<?php } else { ?>
+						<td valign="top" align="left" colspan="2"><input type="text" name="reponse[<?php echo $i; ?>]" value="<?php echo api_htmlentities($reponse[$i], ENT_QUOTES, api_get_system_encoding()); ?>" size="45" /></td>
+					<?php } ?>
+					
 					<td valign="top"><input type="text" name="weighting[<?php echo $i; ?>]" size="5" value="<?php echo (isset($weighting[$i]) ? float_format($weighting[$i],1) : 10); ?>" />
 					<input type="hidden" name="hotspot_coordinates[<?php echo $i; ?>]" value="<?php echo (empty($hotspot_coordinates[$i]) ? '0;0|0|0' : $hotspot_coordinates[$i]); ?>" />
 					<input type="hidden" name="hotspot_type[<?php echo $i; ?>]" value="<?php echo (empty($hotspot_type[$i]) ? 'square' : $hotspot_type[$i]); ?>" /></td>

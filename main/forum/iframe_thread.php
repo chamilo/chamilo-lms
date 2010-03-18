@@ -74,7 +74,7 @@ api_protect_course_script(true);
 require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
 include_once (api_get_path(LIBRARY_PATH).'groupmanager.lib.php');
 
-$nameTools=get_lang('Forum');
+$nameTools=get_lang('ToolForum');
 ?>
 <!DOCTYPE html
      PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
@@ -125,7 +125,10 @@ $current_forum_category=get_forumcategory_information($current_forum['forum_cate
 // if the user is not a course administrator and the forum is hidden
 // then the user is not allowed here.
 if (!api_is_allowed_to_edit(false,true) AND ($current_forum['visibility']==0 OR $current_thread['visibility']==0)) {
-	forum_not_allowed_here();
+	$forum_allow = forum_not_allowed_here();
+	if ($forum_allow === false) {
+		exit;
+	}
 }
 
 /*
@@ -141,7 +144,7 @@ $sql="SELECT * FROM $table_posts posts, $table_users users
 		WHERE posts.thread_id='".$current_thread['thread_id']."'
 		AND posts.poster_id=users.user_id
 		ORDER BY posts.post_id ASC";
-$result=Database::query($sql, __FILE__, __LINE__);
+$result=Database::query($sql);
 
 echo "<table width=\"100%\" cellspacing=\"5\" border=\"0\">\n";
 while ($row=Database::fetch_array($result)) {
@@ -156,11 +159,11 @@ while ($row=Database::fetch_array($result)) {
 	echo $row['post_date'].'<br /><br />';
 
 	echo "</td>\n";
-	echo "\t\t<td class=\"forum_message_post_title\">".$row['post_title']."</td>\n";
+	echo "\t\t<td class=\"forum_message_post_title\">".Security::remove_XSS($row['post_title'])."</td>\n";
 	echo "\t</tr>\n";
 
 	echo "\t<tr>\n";
-	echo "\t\t<td class=\"forum_message_post_text\">".$row['post_text']."</td>\n";
+	echo "\t\t<td class=\"forum_message_post_text\">".Security::remove_XSS($row['post_text'],STUDENT)."</td>\n";
 	echo "\t</tr>\n";
 }
 echo "</table>";

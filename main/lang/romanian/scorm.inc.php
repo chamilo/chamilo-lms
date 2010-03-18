@@ -1,5 +1,6 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $langScormVersion = "versiune";
 $langScormRestarted = "Toate lectiile sunt incomplete";
@@ -21,7 +22,7 @@ $langScormPassed = "Acceptata";
 $langScormFailed = "Respinsa";
 $langScormPrevious = "Anterior";
 $langScormNext = "Urmator";
-$langScormTitle = "Navigator Dokeos Scrom";
+$langScormTitle = "Navigator Chamilo Scrom";
 $langScormMystatus = "Situatia mea";
 $langScormNoItems = "Acest continut nu are obiecte";
 $langScormNoStatus = "Nici o situatie pentru acest continut";
@@ -43,7 +44,7 @@ $Local = "Local";
 $Remote = "La distanta";
 $FileToUpload = "Fisier de incarcat";
 $ContentMaker = "Creator de continut";
-$ContentProximity = "Vecinatatea continutului	";
+$ContentProximity = "Vecinatatea continutului\t";
 $UploadLocalFileFromGarbageDir = "Incarca fisierul local din folderul principal/gunoi";
 $ThisItemIsNotExportable = "Acest termen nu este compatibil in SCORM. Nu poate fi exportat.";
 $MoveCurrentChapter = "Mutati acest capitol";

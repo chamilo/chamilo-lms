@@ -1,19 +1,20 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$langCourseProgram  = "Kursbeschreibung";
-$langThisCourseDescriptionIsEmpty  = "Für diesen Kurs liegt noch keine Beschreibung vor.";
-$langEditCourseProgram  = "Kursbeschreibung erstellen und editieren";
-$QuestionPlan  = "Frage an Kursleiter";
-$langInfo2Say  = "Informationen für Teilnehmer/innen";
-$langOuAutreTitre  = "Titel";
-$langNewBloc  = "Andere";
-$langAddCat  = "Kategorie hinzufügen";
-$langAdd  = "hinzufügen";
-$langValid  = "gültig";
-$langBackAndForget  = "Zurück und vergessen";
+$langCourseProgram = "Kursbeschreibung";
+$langThisCourseDescriptionIsEmpty = "FÃ¼r diesen Kurs liegt noch keine Beschreibung vor.";
+$langEditCourseProgram = "Kursbeschreibung erstellen und editieren";
+$QuestionPlan = "Frage an Kursleiter";
+$langInfo2Say = "Informationen fÃ¼r Teilnehmer/innen";
+$langOuAutreTitre = "Titel";
+$langNewBloc = "Andere";
+$langAddCat = "Kategorie hinzufÃ¼gen";
+$langAdd = "hinzufÃ¼gen";
+$langValid = "gÃ¼ltig";
+$langBackAndForget = "ZurÃ¼ck und vergessen";
 $CourseDescriptionUpdated = "Die Kursbeschreibung wurde aktualisiert";
-$CourseDescriptionDeleted = "Die Kursbeschreibung wurde gelöscht";
-$CourseDescriptionIntro = "Um eine Kursbeschreibung zu erstellen, klicken Sie auf ein Thema oder füllen Sie das richtige Formular Feld aus.<br/><br/>Klicken Sie dann OK und füllen ein weiteres Thema aus.";
+$CourseDescriptionDeleted = "Die Kursbeschreibung wurde gelÃ¶scht";
+$CourseDescriptionIntro = "Um eine Kursbeschreibung zu erstellen, klicken Sie auf ein Thema oder fÃ¼llen Sie das richtige Formular Feld aus.<br/><br/>Klicken Sie dann OK und fÃ¼llen ein weiteres Thema aus.";
 $langSaveDescription = "Beschreibung speichern";
 ?>

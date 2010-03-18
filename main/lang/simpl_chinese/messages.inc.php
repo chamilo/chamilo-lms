@@ -1,23 +1,24 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$Inbox  = "&#25910;&#20449;&#31665;";
-$Messages = "&#20449;&#24687;";
-$SendMessage = "&#23492;&#20449;&#24687;";
-$NewMessage = "&#26032;&#20449;&#24687;";
-$ComposeMessage = "&#20889;&#20449;&#24687;";
-$DeleteSelectedMessages = "&#21024;&#38500;&#34987;&#36873;&#20449;&#24687;";
-$SelectAll = "&#36873;&#20840;&#37096;";
-$DeselectAll  = "&#19981;&#36873;&#20840;&#37096;";
-$ReplyToMessage = "&#22238;&#22797;";
-$BackToInbox = "&#22238;&#21040;&#25910;&#20449;&#31665;";
-$MessageSentTo = "&#26412;&#20449;&#24687;&#24050;&#21457;&#32473;";
-$SendMessageTo = "&#23492;&#32473;";
-$Myself = "&#25105;&#33258;&#24049;";
-$From = "&#30001;";
-$To = "&#33267;";
-$Date = "&#26085;&#26399;";
-$InvalidMessageId = "&#35201;&#22238;&#22797;&#30340;&#20449;&#24687;ID &#26080;&#25928;&#12290;";
-$ErrorSendingMessage = "&#21457;&#36865;&#20449;&#24687;&#26102;&#21457;&#29983;&#38169;&#35823;&#12290;";
-$SureYouWantToDeleteSelectedMessages = "&#20320;&#32943;&#23450;&#35201;&#21024;&#38500;&#34987;&#36873;&#30340;&#20449;&#24687;&#65311;";
+$Inbox = "收信箱";
+$Messages = "信息";
+$SendMessage = "寄信息";
+$NewMessage = "新信息";
+$ComposeMessage = "写信息";
+$DeleteSelectedMessages = "删除被选信息";
+$SelectAll = "选全部";
+$DeselectAll = "不选全部";
+$ReplyToMessage = "回复本主题";
+$BackToInbox = "回到收信箱";
+$MessageSentTo = "本信息已发给";
+$SendMessageTo = "寄给";
+$Myself = "我自己";
+$From = "由";
+$To = "至";
+$Date = "日期";
+$InvalidMessageId = "要回复的信息ID 无效。";
+$ErrorSendingMessage = "发送信息时发生错误。";
+$SureYouWantToDeleteSelectedMessages = "你肯定要删除被选的信息？";
 ?>

@@ -36,7 +36,8 @@ class TestSpecificFieldsManager extends UnitTestCase {
 		$course_id='';
 		$tool_id='';
 		$ref_id='';
-		$res=delete_all_specific_field_value($course_id, $tool_id, $ref_id);
+		$id_specific_field='';
+		$res=delete_all_specific_field_value($course_id, $id_specific_field, $tool_id, $ref_id);
 		$this->assertTrue(is_null($res));
 		//var_dump($res);
 	}
@@ -79,7 +80,7 @@ class TestSpecificFieldsManager extends UnitTestCase {
 		$prefix='';
 		$course_code='';
 		$tool_id='';
-		$ref_id='';
+		$ref_id=1;
 		$table_sf = Database :: get_main_table(TABLE_MAIN_SPECIFIC_FIELD);
   		$table_sfv = Database :: get_main_table(TABLE_MAIN_SPECIFIC_FIELD_VALUES);
 		$sql = sprintf($sql, $table_sf, $table_sfv, $prefix, $course_code, $tool_id, $ref_id);

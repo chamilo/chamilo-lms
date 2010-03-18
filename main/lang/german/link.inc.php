@@ -1,51 +1,51 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $LinkMoved = "Der Link wurde verschoben";
-$langLinkName = "Linkname";
-$langLinkAdd = "Link hinzufügen";
-$langLinkAdded = "Der Link wurde hinzugefügt";
-$langLinkMod = "Link wurde geändert";
+$langLinkName = "Link-Name";
+$langLinkAdd = "Link hinzufÃ¼gen";
+$langLinkAdded = "Der Link wurde hinzugefÃ¼gt";
+$langLinkMod = "Link wurde geÃ¤ndert";
 $langLinkModded = "Der Link wurde bearbeitet";
-$langLinkDel = "Link wurde gelöscht";
-$langLinkDeleted = "Der Link wurde gelöscht";
-$langLinkDelconfirm = "Möchten Sie den Link löschen?";
-$langAllLinksDel = "Alle Links in dieser Kategorie löschen";
-$langCategoryName = "Name der Kategorie";
-$langCategoryAdd = "Kategorie hinzufügen";
-$langCategoryAdded = "Die Kategorie wurde gelöscht";
+$langLinkDel = "Link wurde gelÃ¶scht";
+$langLinkDeleted = "Der Link wurde gelÃ¶scht";
+$langLinkDelconfirm = "MÃ¶chten Sie den Link lÃ¶schen?";
+$langAllLinksDel = "Alle Links in dieser Kategorie lÃ¶schen";
+$langCategoryName = "Kategorie-Name";
+$langCategoryAdd = "Kategorie hinzufÃ¼gen";
+$langCategoryAdded = "Die Kategorie wurde gelÃ¶scht";
 $langCategoryModded = "Die Kategorie wurde bearbeitet";
-$langCategoryDel = "Kategorie löschen";
-$langCategoryDeleted = "Die Kategorie sowie alle enthaltenen Links wurden gelöscht";
-$langCategoryDelconfirm = "Beim Löschen einer Kategorie werden alle enthaltenen Links <b>ebenfalls gelöscht</b>!\\nMöchten Sie die Kategorie wirklich löschen?";
-$langAllCategoryDel = "Alle Kategorien und Links löschen";
-$langGiveURL = "Bitte die URL für den Link eingeben";
+$langCategoryDel = "Kategorie lÃ¶schen";
+$langCategoryDeleted = "Die Kategorie sowie alle enthaltenen Links wurden gelÃ¶scht";
+$langCategoryDelconfirm = "Beim LÃ¶schen einer Kategorie werden alle enthaltenen Links <b>ebenfalls gelÃ¶scht</b>!\nMÃ¶chten Sie die Kategorie wirklich lÃ¶schen?";
+$langAllCategoryDel = "Alle Kategorien und Links lÃ¶schen";
+$langGiveURL = "Bitte die URL fÃ¼r den Link eingeben";
 $langGiveCategoryName = "Bitte geben Sie den Namen der Kategorie an";
 $langNoCategory = "Keine Kategorie";
-$showall = "Kategorien öffnen";
-$shownone = "Kategorien schließen";
-$langListDeleted = "Die Liste wurde gelöscht";
-$langAddLink = "Link hinzufügen";
-$langDelList = "Die gesamte Liste löschen";
+$showall = "Kategorien Ã¶ffnen";
+$shownone = "Kategorien schlieÃŸen";
+$langListDeleted = "Die Liste wurde gelÃ¶scht";
+$langAddLink = "Link hinzufÃ¼gen";
+$langDelList = "Die gesamte Liste lÃ¶schen";
 $langModifyLink = "Link bearbeiten";
-$langCsvImport = "CSV Datei importieren";
-$langCsvFileNotFound = "CSV Datei konnte nicht geöffnet werden (z.B. leer, zu groß)";
-$langCsvFileNoSeps = "CSV Datei muß , oder ; als Listentrennzeichen benutzen";
-$langCsvFileNoURL = "CSV Datei muß mindestens Spalten für URL und Titel haben";
-$langCsvFileLine1 = "... - Zeile 1 = ";
+$langCsvImport = "CSV Import";
+$langCsvFileNotFound = "CSV Datei konnte nicht geÃ¶ffnet werden (z.B. leer, zu groÃŸ)";
+$langCsvFileNoSeps = "CSV Datei muÃŸ , oder ; als Listentrennzeichen benutzen";
+$langCsvFileNoURL = "CSV Datei muÃŸ mindestens Spalten fÃ¼r URL und Titel haben";
+$langCsvFileLine1 = "... - Zeile 1 =";
 $langCsvLinesFailed = "Link aus Zeile(n) wurde(n) nicht importiert (keine URL oder kein Titel vorhanden)";
 $langCsvLinesOld = "existierende Link(s) wurden aktualisiert (gleiche URL und Kategorie)";
 $langCsvLinesNew = "Neue Links wurden erstellt";
-$langCsvExplain = "Die Datei sollte wie folgt aufgebaut sein:<blockquote><pre>URL;Kategorie;Titel;Beschreibung;http://www.aaa.org/...;Wichtige Links;Name 1;Beschreibung 1;http://www.bbb.net/...;;Name 2;\"Beschreibung 2\";</pre></blockquote>Wenn URL und Kategorie mit einem existierenen Link übereinstimmen, werden dessen Titel und Beschreibung aktualisiert. In allen anderen Fällen wird ein neuer Link erstellt.Fett = erforderlich. Reihenfolge der Felder ist frei wählbar, Namen in Griß- oder Kleinschreibung. Weitere Felder werden der Beschreibung hinzugefügt. Separator: Komma oder Semikolon. Werte können zitiert werden, Feldnamen aber nicht. Einige [b]HTML Tags[/b] können im Beschreibungsfeld einbezogen werden.";
+$langCsvExplain = "Die Datei sollte wie folgt aufgebaut sein:<blockquote><pre>URL;Kategorie;Titel;Beschreibung;http://www.aaa.org/...;Wichtige Links;Name 1;Beschreibung 1;http://www.bbb.net/...;;Name 2;\"Beschreibung 2\";</pre></blockquote>Wenn URL und Kategorie mit einem existierenen Link Ã¼bereinstimmen, werden dessen Titel und Beschreibung aktualisiert. In allen anderen FÃ¤llen wird ein neuer Link erstellt.Fett = erforderlich. Reihenfolge der Felder ist frei wÃ¤hlbar, Namen in GriÃŸ- oder Kleinschreibung. Weitere Felder werden der Beschreibung hinzugefÃ¼gt. Separator: Komma oder Semikolon. Werte kÃ¶nnen zitiert werden, Feldnamen aber nicht. Einige [b]HTML Tags[/b] kÃ¶nnen im Beschreibungsfeld einbezogen werden.";
 $langLinkUpdated = "Link wurde aktualisiert";
-$langAll_Link_Deleted = "Link wurde gelöscht";
+$langAll_Link_Deleted = "Link wurde gelÃ¶scht";
 $langOnHomepage = "Link auf Homepage anzeigen";
 $langShowLinkOnHomepage = "Diesen Link als Icon auf der Kurs-Homepage anzeigen";
-$langCsvImport = "CSV Import";
-$General = "Allgemein";
+$General = "allgemein";
 $SearchFeatureDoIndexLink = "Link-Name und Beschreibung in den Suchindex aufnehmen?";
 $langSaveLink = "Link speichern";
 $langSaveCategory = "Ordner speichern";
-$BackToLinksOverview = "Zurück zur Link-Übersicht";
-$AddTargetOfLinkOnHomepage = "Ziel für den Link auf der Kurshomepage auswählen";
+$BackToLinksOverview = "ZurÃ¼ck zur Link-Ãœbersicht";
+$AddTargetOfLinkOnHomepage = "Ziel fÃ¼r den Link auf der Kurshomepage auswÃ¤hlen";
 ?>

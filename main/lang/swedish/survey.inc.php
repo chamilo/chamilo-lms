@@ -1,12 +1,13 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$NextQuestion = "Nästa fråga";
+$MultipleResponse = "Flera svar";
+$NextQuestion = "NÃ¤sta frÃ¥ga";
 $Multiplechoice = "Flerval";
-$Multipleresponse = "Flera svar";
-$Score = "Poäng";
+$Score = "PoÃ¤ng";
 $Shared = "Delad";
 $Invite = "Bjud in";
-$MaximumScore = "Maxpoäng";
+$MaximumScore = "MaxpoÃ¤ng";
 $ViewInvited = "Visa inbjudna";
 ?>

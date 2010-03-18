@@ -33,5 +33,5 @@ FCKLang["DlgMimeTeXAnalysis"]     = "Математически анализ" ;
 FCKLang["DlgMimeTeXMoreSamples"]  = "Други примери" ;
 FCKLang["DlgMimeTeXEditorNotAvailable"] = "Редакторът за математически формули не може да се използва." ;
 FCKLang["DlgMimeTeXNotInstalled"] = "Софтуерната услуга MimeTeX не е инсталирана на сървъра или не работи." ;
-FCKLang["DlgMimeTeXSeeInstallationManual"] = "За да решите проблема, вижте %1ръководството за инсталиране%2 на системата Dokeos." ;
+FCKLang["DlgMimeTeXSeeInstallationManual"] = "За да решите проблема, вижте %1ръководството за инсталиране%2 на системата Chamilo." ;
 

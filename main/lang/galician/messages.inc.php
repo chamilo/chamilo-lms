@@ -1,25 +1,26 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$Inbox  = "Caixa de Entrada";
+$Inbox = "Caixa de Entrada";
 $Messages = "Mensaxes";
 $SendMessage = "Enviar mensaxe";
-$NewMessage = "Nova mensaxe instantánea";
-$ComposeMessage = "Mensaxe instantánea";
+$NewMessage = "Nova mensaxe instantÃ¡nea";
+$ComposeMessage = "Mensaxe instantÃ¡nea";
 $DeleteSelectedMessages = "Eliminar as mensaxes seleccionadas";
 $SelectAll = "Seleccionar todo";
-$DeselectAll  = "Anular selección";
-$ReplyToMessage = "Respostar";
-$BackToInbox = "Voltar á caixa de entrada";
-$MessageSentTo = "Envióuselle a mensaxe a";
+$DeselectAll = "Anular selecciÃ³n";
+$ReplyToMessage = "Respostar a esta mensaxe";
+$BackToInbox = "Voltar Ã¡ caixa de entrada";
+$MessageSentTo = "EnviÃ³uselle a mensaxe a";
 $SendMessageTo = "Enviar a";
 $Myself = "eu mesmo";
 $From = "De";
 $To = "Para";
 $Date = "Data";
-$InvalidMessageId = "O id da mensaxe a respostar non é válido.";
+$InvalidMessageId = "O id da mensaxe a respostar non Ã© vÃ¡lido.";
 $ErrorSendingMessage = "Produciuse un erro ao tentar enviar a mensaxe.";
 $SureYouWantToDeleteSelectedMessages = "Ten certeza de querer eliminar as mensaxes seleccionadas?";
 $SelectedMessagesDeleted = "Borrouse a mensaxe seleccionada";
-$TypeYourMessage = "Escriba a súa mensaxe";
+$TypeYourMessage = "Escriba a sÃºa mensaxe";
 ?>

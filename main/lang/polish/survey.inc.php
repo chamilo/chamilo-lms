@@ -1,47 +1,48 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$PublishSurvey = "Publikuj ankiet&#281;";
-$CompareQuestions = "Por�wnaj pytania";
+$PublishSurvey = "Publikuj ankietę";
+$CompareQuestions = "Porównaj pytania";
 $SurveyTitle = "Nazwa ankiety";
 $SurveyIntroduction = "Wprowadzenie do ankiety";
 $CreateNewSurvey = "Nowa ankieta";
 $Survey = "Ankieta";
 $SurveyTemplate = "Szablon ankiety";
-$PleaseEnterSurveyTitle = "Prosz&#281; wpisa&#263; nazw&#281; ankiety";
-$PleaseEnterValidDate = "Prosz&#281; poda&#263; poprawn&#261; dat&#281;";
+$PleaseEnterSurveyTitle = "Proszę wpisać nazwę ankiety";
+$PleaseEnterValidDate = "Proszę podać poprawną datę";
 $NotPublished = "Nie opublikowano";
-$AdvancedReportDetails = "Zaawansowany raport pozwala wybra&#263; u&#380;ytkownika i odpowiedzi w celu uzyskania szczeg�&#322;owych danych";
+$AdvancedReportDetails = "Zaawansowany raport pozwala wybrać użytkownika i odpowiedzi w celu uzyskania szczegółowych danych";
 $AdvancedReport = "Zaawansowany raport";
 $CompleteReport = "Kompletny raport";
-$OnlyThoseAddresses = "Wy&#347;lij ankiet&#281; tylko do tych adres�w";
-$BackToQuestions = "Powr�t do pytania";
-$SelectWhichLanguage = "Zaznacz w jakim j&#281;zyku ma by&#263; utworzona ankieta";
-$CreateInAnotherLanguage = "Utw�rz ankiet&#281; w innym j&#281;zyku";
+$OnlyThoseAddresses = "Wyślij ankietę tylko do tych adresów";
+$BackToQuestions = "Powrót do pytania";
+$SelectWhichLanguage = "Zaznacz w jakim języku ma być utworzona ankieta";
+$CreateInAnotherLanguage = "Utwórz ankietę w innym języku";
 $ExportInExcel = "Eksport do Excela";
-$ClickHereToOpenSurvey = "Kliknij aby rozpocz&#261;&#263; ankiet&#281;";
+$ClickHereToOpenSurvey = "Kliknij aby rozpocząć ankietę";
 $ViewSurvey = "Widok ankiety";
 $Thanks = "Informacja zwrotna";
 $SurveyReporting = "Raportowanie ankiety";
-$NoSurveyAvailable = "Brak dost&#281;pnych ankiet";
-$CreateFromExistingSurvey = "Utw�rz z istniej&#261;cej ankiety";
-$Publish = "Publikuj ankiet&#281;";
+$NoSurveyAvailable = "Brak dostępnych ankiet";
+$CreateFromExistingSurvey = "Utwórz z istniejącej ankiety";
+$Publish = "Publikuj ankietę";
 $SearchASurvey = "Szukaj ankiety";
-$SurveysOfAllCourses = "Ankieta(-y) wszystkich kurs�w";
-$PleaseSelectAChoice = "Prosz&#281; dokona&#263; wyboru";
+$SurveysOfAllCourses = "Ankieta(-y) wszystkich kursów";
+$PleaseSelectAChoice = "Proszę dokonać wyboru";
 $AddAnotherQuestion = "Dodaj nowe pytanie";
-$IsShareSurvey = "Udost&#281;pnij ankiet&#281; innym";
-$Proceed = "Kontynuuj ";
-$ViewQuestions = "Podgl&#261;d pyta&#324;";
-$CreateSurvey = "Utw�rz ankiet&#281;";
-$FinishSurvey = "Zako&#324;cz ankiet&#281;";
-$DeleteSurvey = "Usu&#324; ankiet&#281; ";
+$IsShareSurvey = "Udostępnij ankietę innym";
+$Proceed = "Kontynuuj";
+$ViewQuestions = "Podgląd pytań";
+$CreateSurvey = "Utwórz ankietę";
+$FinishSurvey = "Zakończ ankietę";
+$DeleteSurvey = "Usuń ankietę";
 $SurveyList = "Lista ankiet";
-$SaveAndExit = "Zapisz i wyjd&#378;";
+$SaveAndExit = "Zapisz i wyjdź";
 $ViewAnswers = "Zobacz odpowiedzi";
 $SurveyName = "Nazwa ankiety";
-$EditSurvey = "Edytuj ankiet&#281;";
-$ModifySurvey = "Modyfikuj ankiet&#281;";
-$CreateQuestionSurvey = "Utw�rz pytanie";
-$ModifyQuestionSurvey = "Zmie&#324; pytanie";
+$EditSurvey = "Edytuj ankietę";
+$ModifySurvey = "Modyfikuj ankietę";
+$CreateQuestionSurvey = "Utwórz pytanie";
+$ModifyQuestionSurvey = "Zmień pytanie";
 ?>

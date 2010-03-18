@@ -1,37 +1,38 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$nameTools = "var de idioma obsoleta";
-$langMdCallingTool = "Curso";
-$langTool = "Operações Scorm MD ";
-$langNotInDB = "Não existe entrada DB Dokeos";
+$nameTools = "variÃ¡vel de idioma obsoleta";
+$langMdCallingTool = "Documentos";
+$langTool = "Metadados do Documento";
+$langNotInDB = "nÃ£o existe essa categoria de Links/ligaÃ§Ãµes";
 $langManifestSyntax = "(erro de sintaxe no ficheiro manifest ...)";
 $langEmptyManifest = "(esvaziar ficheiro manifest ...)";
-$langNoManifest = "(não existe ficheiro manifest ...)";
-$langNotFolder = "não é possível, não é uma pasta/directório ...";
+$langNoManifest = "(nÃ£o existe ficheiro manifest ...)";
+$langNotFolder = "nÃ£o Ã© possÃ­vel, nÃ£o Ã© uma pasta/directÃ³rio ...";
 $langUploadHtt = "Enviar ficheiro HTT";
-$langHttFileNotFound = "Não foi possível abrir o novo HTT (p.ex.: vazio, demasiado grande)";
+$langHttFileNotFound = "NÃ£o foi possÃ­vel abrir o novo HTT (p.ex.: vazio, demasiado grande)";
 $langHttOk = "O novo ficheiro HTT foi enviado";
-$langHttNotOk = "falhou a transferência do ficheiro HTT";
+$langHttNotOk = "falhou a transferÃªncia do ficheiro HTT";
 $langRemoveHtt = "Remover o ficheiro HTT";
 $langHttRmvOk = "O ficheiro HTT foi removido";
-$langHttRmvNotOk = "A remoção do ficheiro HTT falhou";
-$langImport = "Criar MDEs a partir do manifest";
+$langHttRmvNotOk = "A remoÃ§Ã£o do ficheiro HTT falhou";
+$langImport = "Importar";
 $langRemove = "Remover MDEs";
-$langAllRemovedFor = "Todas as entradas foram removidas para";
-$langIndex = "Indexar palavras com o PhpDig";
-$langTotalMDEs = "Número total de entradas Scorm MD:";
+$langAllRemovedFor = "Removidas todas as entradas para a categoria";
+$langIndex = "Ãndice de palavras";
+$langTotalMDEs = "NÃºmero total de entradas de LigaÃ§Ãµes/Links MD:";
 $langMainMD = "Abrir MDE Principal";
 $langLines = "linhas";
 $langPlay = "Executar index.php";
-$langNonePossible = "Não são possíveis operações MD";
-$langOrElse = "Seleccionar uma Directoria/pasta Scorm ou o id de uma Directoria/pasta Scorm";
-$langWorkWith = "Trabalhar com a Directoría/pasta Scorm";
-$langSDI = "... Directoría/pasta Scorm com o SD-id (e dividir o manifest - ou deixar vazio)";
-$langRoot = "raiz";
+$langNonePossible = "NÃ£o sÃ£o possÃ­veis operaÃ§Ãµes MD";
+$langOrElse = "Seleccionar uma categoria de ligaÃ§Ãµes/links";
+$langWorkWith = "Trabalhar com a DirectorÃ­a/pasta Scorm";
+$langSDI = "... DirectorÃ­a/pasta Scorm com o SD-id (e dividir o manifest - ou deixar vazio)";
+$langRoot = "raiz/root";
 $langSplitData = "Dividir manifests, e #MDe, se houver:";
-$langMffNotOk = "A substituição do ficheiro manifest falhou";
+$langMffNotOk = "A substituiÃ§Ã£o do ficheiro manifest falhou";
 $langMffOk = "O ficheiro manifest foi substituido";
-$langMffFileNotFound = "Não foi possível abrir o novo ficheiro manifest (p.ex.: vazio, demasiado grande)";
+$langMffFileNotFound = "NÃ£o foi possÃ­vel abrir o novo ficheiro manifest (p.ex.: vazio, demasiado grande)";
 $langUploadMff = "Substituir o ficheiro manifest";
 ?>

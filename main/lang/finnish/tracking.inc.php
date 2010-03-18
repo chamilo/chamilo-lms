@@ -1,16 +1,17 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$langToolName = "Käytön seuranta";
-$TrackingDisabled = "Seuranta on kytketty pois päältä ylläpitäjän toimesta.";
+$langToolName = "KÃ¤ytÃ¶n seuranta";
+$TrackingDisabled = "Seuranta on kytketty pois pÃ¤Ã¤ltÃ¤ yllÃ¤pitÃ¤jÃ¤n toimesta.";
 $langShowNone = "Piilota kaikki";
 $langCourseStats = "Kurssin tilastot";
-$langToolsAccess = "Työkalujen käyttö";
+$langToolsAccess = "TyÃ¶kalujen kÃ¤yttÃ¶";
 $langLinksAccess = "Linkit";
 $langExercicesTitleExerciceColumn = "Harjoitus";
-$langNoResult = "Ei tulosta";
+$langNoResult = "Tulosta ei vielÃ¤ ole";
 $MyLearnpath = "Oppimispolkuni";
-$Attempts = "Yrityksiä";
+$Attempts = "YrityksiÃ¤";
 $Correction = "Korjaus";
 $NoExercise = "Ei harjoituksia";
 $Print = "Tulosta";

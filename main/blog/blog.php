@@ -1,40 +1,15 @@
-<?php //$Id: announcements.php 16702 2008-11-10 13:02:30Z elixir_inter $
-/*
-==============================================================================
-	Dokeos - elearning and course management software
+<?php
+/* For licensing terms, see /license.txt */
 
-	Copyright (c) 2004-2008 Dokeos SPRL
-	Copyright (c) 2003 Ghent University (UGent)
-	Copyright (c) 2001 Universite catholique de Louvain (UCL)
-	Copyright (c) various contributors
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
-	info@dokeos.com
-
-==============================================================================
-
+/**
     BLOG HOMEPAGE
 
 	This file takes care of all blog navigation and displaying.
-
-	@package dokeos.blogs
-==============================================================================
+	@package chamilo.blogs
 */
 
 /*
-==============================================================================
 	INIT
-==============================================================================
 */
 // name of the language file that needs to be included
 $language_file = "blog";
@@ -44,36 +19,33 @@ include ('../inc/global.inc.php');
 $this_section=SECTION_COURSES;
 
 
-/* ------------	ACCESS RIGHTS ------------ */
+/* 	ACCESS RIGHTS */
 // notice for unauthorized people.
 api_protect_course_script(true);
 
 
 //session
-if(isset($_GET['id_session']))
-{
-	$_SESSION['id_session'] = $_GET['id_session'];
+if(isset($_GET['id_session'])) {
+	$_SESSION['id_session'] = intval($_GET['id_session']);
 }
 
 $lib_path = api_get_path(LIBRARY_PATH);
-require_once ($lib_path.'/display.lib.php');
-require_once ($lib_path.'/text.lib.php');
-require_once ($lib_path.'/blog.lib.php');
-require_once ($lib_path.'/fckeditor/fckeditor.php');
+require_once $lib_path.'/display.lib.php';
+require_once $lib_path.'/text.lib.php';
+require_once $lib_path.'/blog.lib.php';
+require_once $lib_path.'/fckeditor/fckeditor.php';
 
 $blog_table_attachment 	= Database::get_course_table(TABLE_BLOGS_ATTACHMENT);
 
-$nameTools = get_lang('Blogs');
-$DaysShort = api_get_week_days_short();
-$DaysLong = api_get_week_days_long();
+$nameTools  = get_lang('Blogs');
+$DaysShort  = api_get_week_days_short();
+$DaysLong   = api_get_week_days_long();
 $MonthsLong = api_get_months_long();
 
 $current_page = $_GET['action'];
 
 /*
-==============================================================================
 	PROCESSING
-==============================================================================
 */
 
 $safe_post_title = Security::remove_XSS($_POST['post_title']);
@@ -226,9 +198,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'view_post')
 	}
 }
 /*
-==============================================================================
 	DISPLAY
-==============================================================================
 */
 $htmlHeadXtra[] = '<script src="tbl_change.js" type="text/javascript" language="javascript"></script>';
 
@@ -288,7 +258,7 @@ if (!empty($return_message))
 echo '<div class=actions>';
 ?>
 	<a href="<?php echo api_get_self(); ?>?blog_id=<?php echo $blog_id ?>" title="<?php echo get_lang('Home') ?>"><?php echo Display::return_icon('blog.gif', get_lang('Home')).get_lang('Home') ?></a>
-	<?php if(api_is_allowed('BLOG_'.$blog_id, 'article_add')) { ?><a href="<?php echo api_get_self(); ?>?action=new_post&amp;blog_id=<?php echo $blog_id ?>" title="<?php echo get_lang('NewPost') ?>"><?php echo Display::return_icon('blog_article.gif', get_lang('NewPost')).get_lang('NewPost') ?></a><?php } ?>
+	<?php if(api_is_allowed('BLOG_'.$blog_id, 'article_add')) { ?><a href="<?php echo api_get_self(); ?>?action=new_post&amp;blog_id=<?php echo $blog_id ?>" title="<?php echo get_lang('NewPost') ?>"><?php echo Display::return_icon('blog_newarticle.gif', get_lang('NewPost')).get_lang('NewPost') ?></a><?php } ?>
 	<?php if(api_is_allowed('BLOG_'.$blog_id, 'task_management')) { ?><a href="<?php echo api_get_self(); ?>?action=manage_tasks&amp;blog_id=<?php echo $blog_id ?>" title="<?php echo get_lang('ManageTasks') ?>"><?php echo Display::return_icon('blog_tasks.gif', get_lang('TaskManager')).get_lang('TaskManager') ?></a><?php } ?>
 	<?php if(api_is_allowed('BLOG_'.$blog_id, 'member_management')) { ?><a href="<?php echo api_get_self(); ?>?action=manage_members&amp;blog_id=<?php echo $blog_id ?>" title="<?php echo get_lang('ManageMembers') ?>"><?php echo Display::return_icon('blog_user.gif', get_lang('MemberManager')).get_lang('MemberManager') ?></a><?php } ?>
 <?php
@@ -387,23 +357,20 @@ if ($flag == '1')
 
 $user_task = false;
 
-if (isset ($_GET['task_id']) && is_numeric($_GET['task_id']))
+if (isset ($_GET['task_id']) && is_numeric($_GET['task_id'])) {
 	$task_id = (int)$_GET['task_id'];
-else
-{
+} else {
 	$task_id = 0;
-
 	$tbl_blogs_tasks_rel_user = Database :: get_course_table(TABLE_BLOGS_TASKS_REL_USER);
 
-	$sql = "
-							SELECT COUNT(*) as number
-							FROM ".$tbl_blogs_tasks_rel_user."
-							WHERE
-								blog_id = ".$blog_id." AND
-								user_id = ".api_get_user_id()." AND
-								task_id = ".$task_id;
+	$sql = "SELECT COUNT(*) as number
+			FROM ".$tbl_blogs_tasks_rel_user."
+			WHERE
+				blog_id = ".$blog_id." AND
+				user_id = ".api_get_user_id()." AND
+				task_id = ".$task_id;
 
-	$result = Database::query($sql, __LINE__, __FILE__);
+	$result = Database::query($sql);
 	$row = Database::fetch_array($result);
 
 	if ($row['number'] == 1)

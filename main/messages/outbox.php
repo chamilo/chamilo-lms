@@ -1,48 +1,35 @@
 <?php
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2009 Dokeos SPRL
-	Copyright (c) 2009 Julio Montoya Armas <gugli100@gmail.com>
-	Copyright (c) 2009 Isaac Flores Paz <florespaz@bidsoftperu.com>
-	Copyright (c) Facultad de Matematicas, UADY (México)
-	Copyright (c) Evie, Free University of Brussels (Belgium)
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-    Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
-    Mail: info@dokeos.com
-==============================================================================
+/* For licensing terms, see /license.txt */
+/**
+*	@package chamilo.messages
 */
-/*
-==============================================================================
-		INIT SECTION
-==============================================================================
-*/
+
 // name of the language file that needs to be included
-$language_file = array('registration','messages','userInfo','admin');
+$language_file = array('registration','messages','userInfo');
 $cidReset=true;
 require_once '../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'message.lib.php';
 
 api_block_anonymous_users();
+
 if (isset($_GET['messages_page_nr'])) {
 	if (api_get_setting('allow_social_tool')=='true' &&  api_get_setting('allow_message_tool')=='true') {
-		header('Location:../social/index.php?pager="'.Security::remove_XSS($_GET['messages_page_nr']).'"&remote=3#remote-tab-3');
+		$social_link = '';
+		if ($_REQUEST['f']=='social') {
+			$social_link = '&f=social';
+		}
+		header('Location:outbox.php?pager='.Security::remove_XSS($_GET['messages_page_nr']).$social_link.'');
+		exit;
 	}
 }
+
 if (api_get_setting('allow_message_tool')!='true'){
 	api_not_allowed();
 }
+$htmlHeadXtra[] = '<script type="text/javascript" src="/main/inc/lib/javascript/jquery.js"></script>';
+$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/thickbox.js" type="text/javascript" language="javascript"></script>';
+$htmlHeadXtra[] = '<link rel="stylesheet" href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/thickbox.css" type="text/css" media="projection, screen">';
+
 $htmlHeadXtra[]='<script language="javascript">
 <!--
 function enviar(miforma)
@@ -71,40 +58,46 @@ function deselect_all(formita)
 
 
 /*
-==============================================================================
 		MAIN CODE
-==============================================================================
 */
 
 //$nameTools = get_lang('Messages');
-$request=api_is_xml_http_request();
-if ($request===false) {
-	$interbreadcrumb[]= array (
-		'url' => '#',
-		'name' => get_lang('Messages')
-	);
-	$interbreadcrumb[]= array (
-		'url' => 'inbox.php',
-		'name' => get_lang('Inbox')
-	);
-	$interbreadcrumb[]= array (
-		'url' => 'outbox.php',
-		'name' => get_lang('Outbox')
-	);
-	Display::display_header('');
+
+//api_display_tool_title(api_xml_http_response_encode(get_lang('Inbox')));
+if ($_GET['f']=='social') {
+	$this_section = SECTION_SOCIAL;
+	$interbreadcrumb[]= array ('url' => api_get_path(WEB_PATH).'main/social/home.php','name' => get_lang('Social'));
+	$interbreadcrumb[]= array ('url' => '#','name' => get_lang('Outbox'));	
+} else {
+	$this_section = SECTION_MYPROFILE;
+	$interbreadcrumb[]= array ('url' => api_get_path(WEB_PATH).'main/auth/profile.php','name' => get_lang('Profile'));
+	$interbreadcrumb[]= array ('url' => '#','name' => get_lang('Inbox'));
 }
 
-echo '<div class=actions>';
-	echo '<a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php">'.Display::return_icon('inbox.png',api_xml_http_response_encode(get_lang('Inbox'))).api_xml_http_response_encode(get_lang('Inbox')).'</a>';
-	echo '<a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php">'.Display::return_icon('message_new.png',api_xml_http_response_encode(get_lang('ComposeMessage'))).api_xml_http_response_encode(get_lang('ComposeMessage')).'</a>';
-	echo '<a href="'.api_get_path(WEB_PATH).'main/messages/outbox.php">'.Display::return_icon('outbox.png',api_xml_http_response_encode(get_lang('Outbox'))).api_xml_http_response_encode(get_lang('Outbox')).'</a>';
-echo '</div>';	
+Display::display_header('');
 
-/**************************************************************/
+if ($_GET['f']=='social') {
+
+} else {
+	
+	if (api_get_setting('extended_profile') == 'true') {
+		echo '<div class="actions">';
+		
+		if (api_get_setting('allow_social_tool') == 'true' && api_get_setting('allow_message_tool') == 'true') {
+			echo '<a href="'.api_get_path(WEB_PATH).'main/social/profile.php">'.Display::return_icon('shared_profile.png', get_lang('ViewSharedProfile')).'&nbsp;'.get_lang('ViewSharedProfile').'</a>';
+		}
+		if (api_get_setting('allow_message_tool') == 'true') {
+			echo '<a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php">'.Display::return_icon('inbox.png').' '.get_lang('Messages').'</a>';
+		}	
+		echo '<a href="'.api_get_path(WEB_PATH).'main/auth/profile.php?type=reduced">'.Display::return_icon('edit.gif', get_lang('EditNormalProfile')).'&nbsp;'.get_lang('EditNormalProfile').'</a>';
+		echo '</div>';
+	}
+}
+
 $info_delete_outbox=array();
 $info_delete_outbox=explode(',',$_GET['form_delete_outbox']);
 $count_delete_outbox=(count($info_delete_outbox)-1);
-/**************************************************************/
+
 if( trim($info_delete_outbox[0])=='delete' ) {
 	for ($i=1;$i<=$count_delete_outbox;$i++) {
 		MessageManager::delete_message_by_user_sender(api_get_user_id(),$info_delete_outbox[$i]);
@@ -117,38 +110,67 @@ if( trim($info_delete_outbox[0])=='delete' ) {
 		Display::display_normal_message(api_xml_http_response_encode($message_box),false);
 	    exit;
 }
-/**************************************************************/
+
 $table_message = Database::get_main_table(TABLE_MESSAGE);
 
 $user_sender_id=api_get_user_id();
-if ($_REQUEST['action']=='delete') {
-	$delete_list_id=array();
-	if (isset($_POST['out'])) {
-		$delete_list_id=$_POST['out'];
+
+echo '<div id="social-content">';
+	$id_content_right = '';
+	//LEFT COLUMN	
+	if (api_get_setting('allow_social_tool') != 'true') { 
+		$id_content_right = 'outbox';
+		echo '<div id="inbox-menu" class="actions">';
+		echo '<ul>';
+			echo '<li><a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php">'.Display::return_icon('inbox.png',get_lang('Inbox')).get_lang('Inbox').'</a>'.'</li>';
+			echo '<li><a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php">'.Display::return_icon('message_new.png',get_lang('ComposeMessage')).get_lang('ComposeMessage').'</a>'.'</li>';
+			echo '<li><a href="'.api_get_path(WEB_PATH).'main/messages/outbox.php">'.Display::return_icon('outbox.png',get_lang('Outbox')).get_lang('Outbox').'</a>'.'</li>';
+		echo '</ul>';
+		echo '</div>';		
+	} else {
+		require_once api_get_path(LIBRARY_PATH).'social.lib.php';
+		$id_content_right = 'social-content-right';
+		echo '<div id="social-content-left">';	
+			//this include the social menu div
+			SocialManager::show_social_menu('messages_outbox');
+		echo '</div>';			
 	}
-	if (isset($_POST['id'])) {
-		$delete_list_id=$_POST['id'];
-	}
-	for ($i=0;$i<count($delete_list_id);$i++) {
-		MessageManager::delete_message_by_user_sender(api_get_user_id(), $delete_list_id[$i]);
-	}
-	$delete_list_id=array();
-	outbox_display();
-} elseif ($_REQUEST['action']=='deleteone') {
-	$delete_list_id=array();
-	$id=Security::remove_XSS($_GET['id']);
-	MessageManager::delete_message_by_user_sender(api_get_user_id(),$id);
-	$delete_list_id=array();
-	outbox_display();
-}else {
-	outbox_display();
-}
+	
+	echo '<div id="'.$id_content_right.'">';
+			//MAIN CONTENT
+			if ($_REQUEST['action']=='delete') {
+				$delete_list_id=array();
+				if (isset($_POST['out'])) {
+					$delete_list_id=$_POST['out'];
+				}
+				if (isset($_POST['id'])) {
+					$delete_list_id=$_POST['id'];
+				}
+				for ($i=0;$i<count($delete_list_id);$i++) {
+					MessageManager::delete_message_by_user_sender(api_get_user_id(), $delete_list_id[$i]);
+				}
+				$delete_list_id=array();
+				
+				
+				outbox_display();
+				
+			} elseif ($_REQUEST['action']=='deleteone') {
+				$delete_list_id=array();
+				$id=Security::remove_XSS($_GET['id']);
+				MessageManager::delete_message_by_user_sender(api_get_user_id(),$id);
+				$delete_list_id=array();
+				outbox_display();
+			}else {
+				outbox_display();
+			}
+	echo '</div>';	
+
+echo '</div>';
+
+
+
 /*
-==============================================================================
 		FOOTER
-==============================================================================
 */
-if ($request===false) {
-	Display::display_footer();
-}
+Display::display_footer();
 ?>

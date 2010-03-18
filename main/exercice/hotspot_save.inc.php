@@ -8,7 +8,6 @@
 * 	@version $Id: admin.php 10680 2007-01-11 21:26:23Z pcool $
 */
 
-
 include('exercise.class.php');
 include('question.class.php');
 include('answer.class.php');
@@ -45,6 +44,6 @@ if ($_GET['type'] == "poly" || $_GET['type'] == "delineation")
 	$hotspot_coordinates = api_substr($hotspot_coordinates,0,-2);
 }
 $sql = "UPDATE `$TBL_ANSWER` SET hotspot_coordinates = '".Database::escape_string($hotspot_coordinates)."',hotspot_type = '".Database::escape_string($hotspot_type)."' WHERE id = '".Database::escape_string($answerId)."' AND question_id ='".Database::escape_string($questionId)."' LIMIT 1 ;";
-$result = Database::query($sql,__FILE__,__LINE__);
+$result = Database::query($sql);
 echo "done=done";
 ?>

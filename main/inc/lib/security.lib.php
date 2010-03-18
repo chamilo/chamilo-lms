@@ -1,5 +1,5 @@
 <?php
-/* For licensing terms, see /dokeos_license.txt */
+/* For licensing terms, see /license.txt */
 /**
 * This is the security library for Dokeos.
 *
@@ -21,6 +21,7 @@
 * @package dokeos.library
 * @author Yannick Warnier <ywarnier@beeznest.org>
 */
+
 /**
  * Security class
  *
@@ -232,7 +233,6 @@ class Security {
 	 * @return	mixed	Filtered string or array
 	 */
 	public static function remove_XSS ($var,$user_status=ANONYMOUS) {
-		global $charset;
 		$purifier = new HTMLPurifier(null,$user_status);
 		if (is_array($var)) {
 			return $purifier->purifyArray($var);

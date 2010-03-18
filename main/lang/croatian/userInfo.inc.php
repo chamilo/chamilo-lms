@@ -1,5 +1,6 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $langLineNumber = "Broj redaka";
 $langLine = "redak";
@@ -8,26 +9,26 @@ $langLineOrLines = "redak/ci";
 $langMoveUp = "Pomak gore";
 $langMoveDown = "Pomak dolje";
 $langAddNewHeading = "Dodaj novi naslov";
-$langCourseAdministratorOnly = "Samo predava&#269;i";
+$langCourseAdministratorOnly = "samo predavač";
 $langDefineHeadings = "Odredi naslove";
 $langBackToUsersList = "Natrag u popis korisnika";
-$langTracking = "Pra&#263;enje";
-$langCourseManager = "Predava&#269;";
+$langTracking = "Praćenje";
+$langCourseManager = "Predavač";
 $langModRight = "izmijeni prava";
 $langNoAdmin = "odsad <b>nema</b> prava na ovoj stranici";
 $langAllAdmin = "odsad ima <b>sva</b> prava na ovoj stranici";
 $langModRole = "Izmijeni ulogu";
-$langRole = "uloga/status";
+$langRole = "Uloga";
 $langIsNow = "je odsad";
-$langInC = "u ovom kolegiju";
-$langFilled = "Niste popunili sva polja";
-$langUserNo = "Broj korisnika";
-$langTaken = "je ve&#263; u uporabi. Molim odaberite drugo";
+$langInC = "na ovom predmetu";
+$langFilled = "Ostavili ste neka prazna polja.";
+$langUserNo = "Korisničko ime koje ste izabrali";
+$langTaken = "već postoji. Izaberie neko drugo.";
 $langTutor = "Tutor";
-$langUnreg = "Ispi�i";
+$langUnreg = "Ispiši";
 $langGroupUserManagement = "Upravljanje skupinom";
 $langUnregister = "Odjavi";
 $langAddAUser = "Dodaj korisnike";
-$UsersUnsubscribed = "Odabrani korisnici su ispisani sa kolegija";
-$ThisStudentIsSubscribeThroughASession = "Ovaj student je upisan u kolegij putem sesije. Ne mo�ete mijenjati odabrane podatke.";
+$UsersUnsubscribed = "Odabrani korisnik se ispisao sa kolegija";
+$ThisStudentIsSubscribeThroughASession = "Ovaj student je upisan u kolegij putem sesije. Ne možete mijenjati odabrane podatke.";
 ?>

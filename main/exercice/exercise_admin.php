@@ -1,14 +1,13 @@
 <?php
-/* For licensing terms, see /dokeos_license.txt */
+/* For licensing terms, see /license.txt */
 
 /**
 *	Exercise administration
 *	This script allows to manage an exercise. It is included from the script admin.php
-*	@package dokeos.exercise
+*	@package chamilo.exercise
 * 	@author Olivier Brouckaert
 * 	@version $Id$
 */
-
 
 // name of the language file that needs to be included
 $language_file='exercice';
@@ -26,8 +25,10 @@ if(!api_is_allowed_to_edit(null,true)) {
 
 $htmlHeadXtra[] = '<script>
 
-		function advanced_parameters() {
-			if(document.getElementById(\'options\').style.display == \'none\') {
+		function advanced_parameters()
+		{
+			if(document.getElementById(\'options\').style.display == \'none\')
+			{
 				document.getElementById(\'options\').style.display = \'block\';
 				document.getElementById(\'img_plus_and_minus\').innerHTML=\'&nbsp;<img style="vertical-align:middle;" src="../img/div_hide.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'\';
 
@@ -38,33 +39,39 @@ $htmlHeadXtra[] = '<script>
 			}
 		}
 
-
 		function FCKeditor_OnComplete( editorInstance )
-			{
-			   if (document.getElementById ( \'HiddenFCK\' + editorInstance.Name )) {
+		{
+			   if (document.getElementById ( \'HiddenFCK\' + editorInstance.Name ))
+			   {
 			      HideFCKEditorByInstanceName (editorInstance.Name);
 			   }
-			}
-
-			function HideFCKEditorByInstanceName ( editorInstanceName ) {
-			   if (document.getElementById ( \'HiddenFCK\' + editorInstanceName ).className == "HideFCKEditor" ) {
-			      document.getElementById ( \'HiddenFCK\' + editorInstanceName ).className = "media";
-			      }
-			}
-		function show_media() {
-			var my_display = document.getElementById(\'HiddenFCKexerciseDescription\').style.display;
-				if(my_display== \'none\' || my_display == \'\') {
-				document.getElementById(\'HiddenFCKexerciseDescription\').style.display = \'block\';
-				document.getElementById(\'media_icon\').innerHTML=\'&nbsp;<img src="../img/looknfeelna.png" alt="" />&nbsp;'.get_lang('ExerciseDescription').'\';
-			} else {
-				document.getElementById(\'HiddenFCKexerciseDescription\').style.display = \'none\';
-				document.getElementById(\'media_icon\').innerHTML=\'&nbsp;<img src="../img/looknfeel.png" alt="" />&nbsp;'.get_lang('ExerciseDescription').'\';
-
-			}
 		}
 
-		function timelimit() {
-			if(document.getElementById(\'options2\').style.display == \'none\') {
+		function HideFCKEditorByInstanceName ( editorInstanceName )
+		{
+			if (document.getElementById ( \'HiddenFCK\' + editorInstanceName ).className == "HideFCKEditor" )
+			{
+			      document.getElementById ( \'HiddenFCK\' + editorInstanceName ).className = "media";
+			}
+		}
+		
+		function show_media()
+		{
+			var my_display = document.getElementById(\'HiddenFCKexerciseDescription\').style.display;
+				if(my_display== \'none\' || my_display == \'\')
+				{
+					document.getElementById(\'HiddenFCKexerciseDescription\').style.display = \'block\';
+					document.getElementById(\'media_icon\').innerHTML=\'&nbsp;<img src="../img/looknfeelna.png" alt="" />&nbsp;'.get_lang('ExerciseDescription').'\';
+				} else {
+					document.getElementById(\'HiddenFCKexerciseDescription\').style.display = \'none\';
+					document.getElementById(\'media_icon\').innerHTML=\'&nbsp;<img src="../img/looknfeel.png" alt="" />&nbsp;'.get_lang('ExerciseDescription').'\';
+				}
+		}
+
+		function timelimit()
+		{
+			if(document.getElementById(\'options2\').style.display == \'none\')
+			{
 				document.getElementById(\'options2\').style.display = \'block\';
 			} else {
 				document.getElementById(\'options2\').style.display = \'none\';
@@ -75,7 +82,8 @@ $htmlHeadXtra[] = '<script>
 		{
 			var index = document.exercise_admin.exerciseFeedbackType.selectedIndex;
 
-			if (index == \'1\') {
+			if (index == \'1\') 
+			{
 				document.exercise_admin.exerciseType[1].checked=true;
 				document.exercise_admin.exerciseType[0].disabled=true;
 
@@ -84,31 +92,65 @@ $htmlHeadXtra[] = '<script>
 			}
 		}
               
-    function option_time_expired() {
-      if(document.getElementById(\'timercontrol\').style.display == \'none\') {
-        document.getElementById(\'timercontrol\').style.display = \'block\';
-      } else {
-        document.getElementById(\'timercontrol\').style.display = \'none\';
-      }
-    }               
+	    function option_time_expired()
+	    {
+		    if(document.getElementById(\'timercontrol\').style.display == \'none\')
+		    {
+		      document.getElementById(\'timercontrol\').style.display = \'block\';
+		    } else {
+		      document.getElementById(\'timercontrol\').style.display = \'none\';
+		    }
+	    }  	
+      	
+     	function check_per_page_one()
+     	{
+     		if (document.getElementById(\'divtimecontrol\').style.display==\'none\')
+     		{
+     			document.getElementById(\'divtimecontrol\').style.display=\'block\';
+     			document.getElementById(\'divtimecontrol\').display=block;
+     			document.getElementById(\'timecontrol\').display=none;
+     		}
+		}
+
+		function check_per_page_all()
+     	{
+			if (document.getElementById(\'divtimecontrol\').style.display==\'block\')
+			{
+				document.getElementById(\'divtimecontrol\').style.display=\'none\';
+				document.getElementById(\'enabletimercontroltotalminutes\').value=\'\';
+			}
+		}
+                   
 		</script>';
+
+$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js" type="text/javascript" language="javascript"></script>'; //jQuery
+$htmlHeadXtra[] = '<script type="text/javascript">
+function setFocus(){
+$("#exercise_title").focus();
+}
+$(document).ready(function () {
+  setFocus();
+});
+</script>';
 
 /*********************
  * INIT EXERCISE
  *********************/
 
-include_once(api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
+require_once(api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
 $objExercise = new Exercise();
 
 /*********************
  * INIT FORM
  *********************/
+ 
+
 if(isset($_GET['exerciseId'])) {
-	$form = new FormValidator('exercise_admin', 'post', api_get_self().'?exerciseId='.$_GET['exerciseId']);
+	$form = new FormValidator('exercise_admin', 'post', api_get_self().'?'.api_get_cidreq().'&exerciseId='.$_GET['exerciseId']);
 	$objExercise -> read (intval($_GET['exerciseId']));
 	$form -> addElement ('hidden','edit','true');
 } else {
-	$form = new FormValidator('exercise_admin');
+	$form = new FormValidator('exercise_admin','post',api_get_self().'?'.api_get_cidreq());
 	$form -> addElement ('hidden','edit','false');
 }
 
@@ -121,8 +163,10 @@ if ($form -> validate()) {
 	$objExercise -> processCreation($form);
 	if ($form -> getSubmitValue('edit') == 'true') {
 		header('Location:exercice.php?message=ExerciseEdited&'.api_get_cidreq());
+		exit;
 	} else {
 		header('Location:admin.php?message=ExerciseAdded&exerciseId='.$objExercise->id);
+		exit;
 	}
 } else {
 	/*********************
@@ -133,14 +177,17 @@ if ($form -> validate()) {
 	}
 
 	if (!empty($gradebook) && $gradebook=='view') {
-		$interbreadcrumb[]= array (
-				'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
-				'name' => get_lang('Gradebook')
-			);
+		$interbreadcrumb[]= array ('url' => '../gradebook/'.$_SESSION['gradebook_dest'],'name' => get_lang('ToolGradebook'));
 	}
 	$nameTools=get_lang('ExerciseManagement');
-	$interbreadcrumb[] = array ("url"=>"exercice.php", "name"=> get_lang('Exercices'));
-	Display::display_header($nameTools,"Exercise");
+	$interbreadcrumb[] = array ("url"=>'exercice.php', 'name'=> get_lang('Exercices'));
+	Display::display_header($nameTools,get_lang('Exercise'));
+	
+	echo '<div class="actions">';
+	echo '<a href="exercice.php?show=test">' . Display :: return_icon('message_reply_forum.png', get_lang('GoBackToQuestionList')) . get_lang('GoBackToQuestionList') . '</a>';
+	echo '</div>';
+	
+	
 	if ($objExercise->feedbacktype==1)
 		Display::display_normal_message(get_lang("DirectFeedbackCantModifyTypeQuestion"));
 		if(api_get_setting('search_enabled')=='true' && !extension_loaded('xapian')) {
@@ -149,6 +196,16 @@ if ($form -> validate()) {
 
 	// to hide the exercise description
 	echo '<style> .media { display:none;}</style>';
+		
+	if (isset($objExercise) && !empty($objExercise->id)) {
+		$TBL_LP_ITEM	= Database::get_course_table(TABLE_LP_ITEM);
+		$sql="SELECT max_score FROM $TBL_LP_ITEM
+			  WHERE item_type = '".TOOL_QUIZ."' AND path ='".Database::escape_string($objExercise->id)."'";			  
+		$result = Database::query($sql);
+		if (Database::num_rows($result) > 0) {		
+			$form->freeze();
+		}	
+	}
 	$form -> display ();
 }
 Display::display_footer();

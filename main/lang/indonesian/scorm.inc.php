@@ -1,5 +1,6 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $langScormVersion = "versi";
 $langScormRestarted = "Semua topik kini tidak lengkap.";
@@ -21,7 +22,7 @@ $langScormPassed = "Berhaasil";
 $langScormFailed = "Gagal";
 $langScormPrevious = "Sebelumnya";
 $langScormNext = "Berikutnya";
-$langScormTitle = "Player Scorm Dokeos";
+$langScormTitle = "Player Scorm Chamilo";
 $langScormMystatus = "Status-ku";
 $langScormNoItems = "Konten ini tidak ada isinya.";
 $langScormNoStatus = "Tidak ada status pada konten ini.";

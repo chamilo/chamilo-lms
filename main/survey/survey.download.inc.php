@@ -46,14 +46,14 @@ function check_download_survey($course, $invitation, $doc_url) {
 
 	// now we check if the invitationcode is valid
 	$sql = "SELECT * FROM $table_survey_invitation WHERE invitation_code = '".Database::escape_string($invitation)."'";
-	$result = Database::query($sql, __FILE__, __LINE__);
+	$result = Database::query($sql);
 	if (Database::num_rows($result) < 1)
 	{
 		Display :: display_error_message(get_lang('WrongInvitationCode'), false);
 		Display :: display_footer();
 		exit;
 	}
-	$survey_invitation = mysql_fetch_assoc($result);
+	$survey_invitation = Database::fetch_assoc($result);
 
 	// now we check if the user already filled the survey
 	if ($survey_invitation['answered'] == 1)
@@ -72,7 +72,7 @@ function check_download_survey($course, $invitation, $doc_url) {
 
 	// If this is the case there will be a language choice
 	$sql = "SELECT * FROM $table_survey WHERE code='".Database::escape_string($survey_invitation['survey_code'])."'";
-	$result = Database::query($sql, __FILE__, __LINE__);
+	$result = Database::query($sql);
 	if (Database::num_rows($result) > 1)
 	{
 		if ($_POST['language'])
@@ -83,7 +83,7 @@ function check_download_survey($course, $invitation, $doc_url) {
 		{
 			echo '<form id="language" name="language" method="POST" action="'.api_get_self().'?course='.$_GET['course'].'&invitationcode='.$_GET['invitationcode'].'">';
 			echo '  <select name="language">';
-			while ($row=mysql_fetch_assoc($result))
+			while ($row = Database::fetch_assoc($result))
 			{
 				echo '<option value="'.$row['survey_id'].'">'.$row['lang'].'</option>';
 			}
@@ -96,7 +96,7 @@ function check_download_survey($course, $invitation, $doc_url) {
 	}
 	else
 	{
-		$row=mysql_fetch_assoc($result);
+		$row = Database::fetch_assoc($result);
 		$survey_invitation['survey_id'] = $row['survey_id'];
 	}
 	$sql = "select count(*) from $table_survey where survey_id = ".$survey_invitation['survey_id']."
@@ -115,7 +115,7 @@ function check_download_survey($course, $invitation, $doc_url) {
 								and (
 									option_text LIKE '%$doc_url%'
 								)";
-	$result = Database::query($sql, __FILE__, __LINE__);
+	$result = Database::query($sql);
 
 	if (Database::num_rows($result) == 0)
 	{

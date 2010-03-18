@@ -1,31 +1,32 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $langActivate = "Activar";
 $langDeactivate = "Desactivar";
-$langInLnk  = "Enllaces desactivaos";
-$langDelLk = "¿ Ta seguru de querer desactivar esta ferramienta ?";
-$langCourseCreate  = "Crear un cursu";
-$langNameOfTheLink  = "Nome del enllaz";
-$lang_main_categories_list                  = "Llistáu de categoríes princpales";
-$langCourseAdminOnly = "Namás profesores";
-$PlatformAdminOnly = "Namás alministradores de la plataforma";
-$langCombinedCourse = "Cursu combináu";
+$langInLnk = "Enllaces desactivaos";
+$langDelLk = "Â¿ Ta seguru de querer desactivar esta ferramienta ?";
+$langCourseCreate = "Crear un cursu";
+$langNameOfTheLink = "Nome del enllaz";
+$lang_main_categories_list = "LlistÃ¡u de categorÃ­es princpales";
+$langCourseAdminOnly = "NamÃ¡s profesores";
+$PlatformAdminOnly = "NamÃ¡s alministradores de la plataforma";
+$langCombinedCourse = "Cursu combinÃ¡u";
 $ToolIsNowVisible = "Agora pue vese la ferramienta";
 $ToolIsNowHidden = "Agora nun se pue ver la ferramienta";
 $EditLink = "Editar enllaz";
-$Blog_management = "Xestión de blogs";
+$Blog_management = "XestiÃ³n de blogs";
 $Forum = "Foros";
 $Course_maintenance = "Caltenimientu del cursu";
 $TOOL_SURVEY = "Encuestes";
 $GreyIcons = "Caxa de ferramientes";
-$Interaction = "Interaición";
-$Authoring = "Crear conteníos";
-$Administration = "Alministración";
-$IntroductionTextUpdated = "El testu d\'entamu actualizóse";
-$IntroductionTextDeleted = "Testu d\'entamu esborráu";
-$SessionIdentifier = "Identificador de la sesión";
-$SessionName = "Nome de la sesión";
-$SessionCategory = "Categoría de la sesión";
-$SessionData = "Datos de la sesión";
+$Interaction = "InteraiciÃ³n";
+$Authoring = "Crear contenÃ­os";
+$Administration = "AlministraciÃ³n";
+$IntroductionTextUpdated = "El testu d'entamu actualizÃ³se";
+$IntroductionTextDeleted = "Testu d'entamu esborrÃ¡u";
+$SessionIdentifier = "Identificador de la sesiÃ³n";
+$SessionName = "Nome de la sesiÃ³n";
+$SessionCategory = "CategorÃ­a de la sesiÃ³n";
+$SessionData = "Datos de la sesiÃ³n";
 ?>

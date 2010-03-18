@@ -1,48 +1,49 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$langProfessors = "Professor(s)";
-$langExplanation = "°ì²óOK¤ò¥¯¥ê¥Ã¥¯¤¹¤ë¤È¡¢²ñµÄ¼¼¤äÍ½Äê¡¢Ê¸½ñ¥Ş¥Í¡¼¥¸¥ã¡¼ÉÕ¤Î¥µ¥¤¥È¤¬½ĞÍè¤Ş¤¹¡£¥µ¥¤¥ÈºîÀ®¼Ô¤È¤·¤Æ¥í¥°¥¤¥ó¤¹¤ë¤È¡¢¥µ¥¤¥È¤ò½¤Àµ¤¹¤ë¤³¤È¤¬½ĞÍè¤Ş¤¹¡£";
-$langEmpty = "Ì¤µ­ÆşÍó¤¬¤¢¤ê¤Ş¤¹¡£<br />¤â¤É¤ë¥Ü¥¿¥ó¤Ç¤â¤É¤Ã¤Æ¡¢ºÆÅÙ»î¤·¤Æ¤¯¤À¤µ¤¤¡£<br />¤â¤·¤â¥³¡¼¥¹¥³¡¼¥É¤òÃÎ¤é¤Ê¤¤¤Ê¤é¡¢¥³¡¼¥¹¥×¥í¥°¥é¥à¤òÌä¤¤¹ç¤ï¤»¤Æ¤¯¤À¤µ¤¤";
-$langCodeTaken = "¤³¤Î¥³¡¼¥¹¥³¡¼¥É¤Ï´û¤Ë»È¤ï¤ì¤Æ¤¤¤Ş¤¹¡£<br />Ìá¤ë¥Ü¥¿¥ó¤ò²¡¤·¤Æ¡¢ºÆÅÙ»î¤·¤Æ¤¯¤À¤µ¤¤¡£";
+$langProfessors = "ä¹ˆç¢°å…œé•‘";
+$langExplanation = "åŠæ€OKã‚’ã‚¯ãƒªãƒƒã‚¯ã™ã‚‹ã¨ã€æŸ´çš„æŠ€ã‚„å¾’å¹´ã€çŸ¢ä»Šãƒãƒã€–ã‚¸ãƒ£ã€–çƒ§ã®ã‚µã‚¤ãƒˆãŒå«ä¸¸ã¾ã™ã€‚ã‚µã‚¤ãƒˆä¾¯å–‡èšã¨ã—ã¦ãƒ­ã‚°ã‚¤ãƒ³ã™ã‚‹ã¨ã€ã‚µã‚¤ãƒˆã‚’é¥¯èµ–ã™ã‚‹ã“ã¨ãŒå«ä¸¸ã¾ã™ã€‚";
+$langEmpty = "è¸æ·¡æè…•ãŒã‚ã‚Šã¾ã™ã€‚<br />ã‚‚ã©ã‚‹ãƒœã‚¿ãƒ³ã§ã‚‚ã©ã£ã¦ã€æµ©åˆ¨æ´»ã—ã¦ãã ã•ã„ã€‚<br />ã‚‚ã—ã‚‚ã‚³ã€–ã‚¹ã‚³ã€–ãƒ‰ã‚’æ¢¦ã‚‰ãªã„ãªã‚‰ã€ã‚³ã€–ã‚¹ãƒ—ãƒ­ã‚°ãƒ©ãƒ ã‚’å•¼ã„åœ­ã‚ã›ã¦ãã ã•ã„";
+$langCodeTaken = "ã“ã®ã‚³ã€–ã‚¹ã‚³ã€–ãƒ‰ã¯è´·ã«è—ã‚ã‚Œã¦ã„ã¾ã™ã€‚<br />æã‚‹ãƒœã‚¿ãƒ³ã‚’ç—…ã—ã¦ã€æµ©åˆ¨æ´»ã—ã¦ãã ã•ã„ã€‚";
 $langFormula = "Yours sincerely";
-$langMessage = "¥Æ¥¹¥È²ñµÄ¼¼¤òºï½ü¤¹¤ë¤È¤³¤Î¥á¥Ã¥»¡¼¥¸¤âºï½ü¤µ¤ì¤Ş¤¹";
-$langExerciceEx = "±é½¬ÌäÂêÎã";
-$langAntique = "¸ÅÂåÅ¯³Ø»Ë";
+$langMessage = "ãƒ†ã‚¹ãƒˆæŸ´çš„æŠ€ã‚’çŒ´è¿‘ã™ã‚‹ã¨ã“ã®ãƒ¡ãƒƒã‚»ã€–ã‚¸ã‚‚çŒ´è¿‘ã•ã‚Œã¾ã™";
+$langExerciceEx = "éæµ†å•¼ç›æ¯‹";
+$langAntique = "æ¦‚æ´›æš–æ± å‡°";
 $langSocraticIrony = "Socratic irony is...";
 $langManyAnswers = "(more than one answer can be true)";
-$langRidiculise = "Ridiculise one\\\'s interlocutor in order to have him concede he is wrong.";
+$langRidiculise = "Ridiculise one's interlocutor in order to have him concede he is wrong.";
 $langNoPsychology = "No. Socratic irony is not a matter of psychology, it concerns argumentation.";
-$langAdmitError = "Admit one\\\'s own errors to invite one\\\'s interlocutor to do the same.";
+$langAdmitError = "Admit one's own errors to invite one's interlocutor to do the same.";
 $langNoSeduction = "No. Socratic irony is not a seduction strategy or a method based on the example.";
-$langForce = "Compell one\\\'s interlocutor, by a series of questions and sub-questions, to admit he doesn\\\'t know what he claims to know.";
+$langForce = "Compell one's interlocutor, by a series of questions and sub-questions, to admit he doesn't know what he claims to know.";
 $langIndeed = "Indeed. Socratic irony is an interrogative method. The Greek \"eirotao\" means \"ask questions\"";
-$langContradiction = "Use the Principle of Non Contradiction to force one\\\'s interlocutor into a dead end.";
-$langNotFalse = "This answer is not false. It is true that the revelation of the interlocutor\\\'s ignorance means showing the contradictory conclusions where lead his premisses.";
-$langAgenda = "Í½Äê";
-$langVideo = "¥ô¥£¥Ç¥ª";
-$langCourseProgram = "¥³¡¼¥¹¥×¥í¥°¥é¥à";
-$langAnnouncements = "¤ªÃÎ¤é¤»";
-$langAddPageHome = "¥Ú¡¼¥¸¤ò¥¢¥Ã¥×¥í¡¼¥É¤·¡¢¥Û¡¼¥à¥Ú¡¼¥¸¤Ë¥ê¥ó¥¯¤ò¤Ï¤ë";
-$langLinkSite = "¥µ¥¤¥È¤ò¥ê¥ó¥¯";
-$langModifyInfo = "¥³¡¼¥¹¤Î¾ğÊó¤òÄûÀµ";
+$langContradiction = "Use the Principle of Non Contradiction to force one's interlocutor into a dead end.";
+$langNotFalse = "This answer is not false. It is true that the revelation of the interlocutor's ignorance means showing the contradictory conclusions where lead his premisses.";
+$langAgenda = "å¾’å¹´";
+$langVideo = "ãƒ´ã‚£ãƒ‡ã‚ª";
+$langCourseProgram = "ã‚³ã€–ã‚¹ãƒ—ãƒ­ã‚°ãƒ©ãƒ ";
+$langAnnouncements = "ãŠæ¢¦ã‚‰ã›";
+$langAddPageHome = "ãƒšã€–ã‚¸ã‚’ã‚¢ãƒƒãƒ—ãƒ­ã€–ãƒ‰ã—ã€ãƒ›ã€–ãƒ ãƒšã€–ã‚¸ã«ãƒªãƒ³ã‚¯ã‚’ã¯ã‚‹";
+$langLinkSite = "ã‚µã‚¤ãƒˆã‚’ãƒªãƒ³ã‚¯";
+$langModifyInfo = "ã‚³ã€–ã‚¹ã®æ”«é¼ ã‚’æŸ èµ–";
 $langAgendaTitle = "Tuesday the 11th of December - First lesson : Newton 18";
 $langAgendaText = "General introduction to philosophy and methodology principles";
 $langGoogle = "Quick and powerfull search engine";
-$langIntroductionText = "¡Ê¤³¤Î¾ì½ê¤Ï¤¢¤Ê¤¿¤Î¥³¡¼¥¹¤Î¾Ò²ğÊ¸½ñ¤Î¾ì½ê¤Ç¤¹¡£ÊÑ¹¹¤¹¤ë»ş¤Ï......<b>½¤Àµ</b>¤ò¥¯¥ê¥Ã¥¯¡Ë";
-$langIntroductionTwo = "³ØÀ¸¡¢ÈÉ¤¬Ê¸½ñ¤ò¥¢¥Ã¥×¥í¡¼¥É½ĞÍè¤ë¥Ú¡¼¥¸¤Ç¤¹¡£HTML¤Î¤ß¤Ç²èÁü¤Ï½ĞÍè¤Ş¤»¤ó¡£";
-$langCourseDescription = "¥³¡¼¥¹¤Î¥ê¥¹¥È²òÀâ¤ò½ñ¤¤¤Æ¤¯¤À¤µ¤¤¡£";
-$langProfessor = "¶µ»Õ";
-$langAnnouncementEx = "¤ªÃÎ¤é¤»¤ÎÎã:¥³¡¼¥¹¤Î¶µ»Õ¤«´ÉÍı¼Ô¤Î¤ß¤¬½ñ¤±¤Ş¤¹¡£";
-$langJustCreated = "¥³¡¼¥¹¤Î¥¦¥¨¥Ö¥µ¥¤¥È¤òºî¤ê¤Ş¤·¤¿";
+$langIntroductionText = "âˆˆã“ã®çœ·ç–¥ã¯ã‚ãªãŸã®ã‚³ã€–ã‚¹ã®ç–½æ‹†çŸ¢ä»Šã®çœ·ç–¥ã§ã™ã€‚æƒæ„ã™ã‚‹ç®•ã¯......<b>é¥¯èµ–</b>ã‚’ã‚¯ãƒªãƒƒã‚¯âˆ·";
+$langIntroductionTwo = "æ± æ ã€å£¬ãŒçŸ¢ä»Šã‚’ã‚¢ãƒƒãƒ—ãƒ­ã€–ãƒ‰å«ä¸¸ã‚‹ãƒšã€–ã‚¸ã§ã™ã€‚HTMLã®ã¿ã§èŒ¶å’™ã¯å«ä¸¸ã¾ã›ã‚“ã€‚";
+$langCourseDescription = "ã‚³ã€–ã‚¹ã®ãƒªã‚¹ãƒˆè±ºæ£±ã‚’ä»Šã„ã¦ãã ã•ã„ã€‚";
+$langProfessor = "å…œå¾½";
+$langAnnouncementEx = "ãŠæ¢¦ã‚‰ã›ã®æ¯‹:ã‚³ã€–ã‚¹ã®å…œå¾½ã‹ç“·å¦„èšã®ã¿ãŒä»Šã‘ã¾ã™ã€‚";
+$langJustCreated = "ã‚³ã€–ã‚¹ã®ã‚¦ã‚¨ãƒ–ã‚µã‚¤ãƒˆã‚’ä¾¯ã‚Šã¾ã—ãŸ";
 $langEnter = "Entrer";
-$langLn = "¸À¸ì";
-$langCreateSite = "¥³¡¼¥¹¤Î¥¦¥¨¥Ö¥µ¥¤¥È¤òºî¤ë";
-$langFieldsRequ = "¤¹¤Ù¤Æ¤ÎÍó¤Îµ­Æş¤¬É¬Í×";
-$langEx = "Îã¡§<i>Ê¸³Ø»Ë</i>";
-$langFac = "³Ø²Ê";
-$langTargetFac = "¤³¤Î¥³¡¼¥¹¤Î³Ø²Ê¡¢³ØÉô";
-$langMax = "ºÇÂç£±¥Ğ¥¤¥ÈÊ¸»ú¤Ç12Ê¸»ú e.g. <i>ROM2121</i>";
-$langDoubt = "¥³¡¼¥¹ÈÖ¹æ¤¬µ¿¤ï¤·¤¤¤Ê¤é¡¢Åö³ºÉô½ğ¤ËÏ¢Íí¤·¤Æ¤¯¤À¤µ¤¤";
-$langProgram = "¥³¡¼¥¹¥×¥í¥°¥é¥à";
+$langLn = "å’èƒ³";
+$langCreateSite = "ã‚³ã€–ã‚¹ã®ã‚¦ã‚¨ãƒ–ã‚µã‚¤ãƒˆã‚’ä¾¯ã‚‹";
+$langFieldsRequ = "ã™ã¹ã¦ã®è…•ã®æ·¡æãŒæ¶©å¦¥";
+$langEx = "æ¯‹Â¨<i>çŸ¢æ± å‡°</i>";
+$langFac = "æ± å½©";
+$langTargetFac = "ã“ã®ã‚³ã€–ã‚¹ã®æ± å½©ã€æ± å©¶";
+$langMax = "å‘µç»œï¼‘ãƒã‚¤ãƒˆçŸ¢æœºã§12çŸ¢æœº e.g. <i>ROM2121</i>";
+$langDoubt = "ã‚³ã€–ã‚¹æˆè§„ãŒæ‚¼ã‚ã—ã„ãªã‚‰ã€ç¢°æ¾ˆå©¶é‡‘ã«æ¯æ™šã—ã¦ãã ã•ã„";
+$langProgram = "ã‚³ã€–ã‚¹ãƒ—ãƒ­ã‚°ãƒ©ãƒ ";
 ?>

@@ -60,10 +60,10 @@ $tbl_session_rel_etape 				= "session_rel_etape";
 
 $message="";
 
-$result=Database::query("SELECT id, name FROM $tbl_session",__FILE__,__LINE__);
+$result=Database::query("SELECT id, name FROM $tbl_session");
 $Sessions=Database::store_result($result);
 
-$result=Database::query($sql,__FILE__,__LINE__);
+$result=Database::query($sql);
 $users=Database::store_result($result);
 
 foreach($Sessions as $session){
@@ -152,7 +152,7 @@ foreach($Sessions as $session){
 
 		// Une fois les utilisateurs importer dans la base des utilisateurs, on peux les affecter a� la session
 		$result=Database::query("SELECT course_code FROM $tbl_session_rel_course " .
-				"WHERE id_session='$id_session'",__FILE__,__LINE__);
+				"WHERE id_session='$id_session'");
 		$CourseList=array();
 		while($row=Database::fetch_array($result))
 		{
@@ -163,29 +163,29 @@ foreach($Sessions as $session){
 			// On ajoute la relation entre l'utilisateur et le cours
 			foreach($UserList as $enreg_user)
 			{
-				Database::query("INSERT IGNORE INTO $tbl_session_rel_course_rel_user(id_session,course_code,id_user) VALUES('$id_session','$enreg_course','$enreg_user')",__FILE__,__LINE__);
+				Database::query("INSERT IGNORE INTO $tbl_session_rel_course_rel_user(id_session,course_code,id_user) VALUES('$id_session','$enreg_course','$enreg_user')");
 			}
 			$sql = "SELECT COUNT(id_user) as nbUsers " .
 					"FROM $tbl_session_rel_course_rel_user " .
 					"WHERE id_session='$id_session' AND course_code='$enreg_course'";
-			$rs = Database::query($sql, __FILE__, __LINE__);
+			$rs = Database::query($sql);
 			list($nbr_users) = Database::fetch_array($rs);
 			$sql = "UPDATE $tbl_session_rel_course SET nbr_users=$nbr_users WHERE id_session='$id_session' AND course_code='$enreg_course'";
-			Database::query($sql,__FILE__,__LINE__);
+			Database::query($sql);
 		}
 		// On ajoute la relation entre l'utilisateur et la session
 		foreach($UserList as $enreg_user){
 			$sql = "INSERT IGNORE INTO $tbl_session_rel_user(id_session, id_user) " .
 					"VALUES('$id_session','$enreg_user')";
-			Database::query($sql,__FILE__,__LINE__);
+			Database::query($sql);
 		}
 		$sql = "SELECT COUNT(id_user) as nbUsers " .
 				"FROM $tbl_session_rel_user " .
-				"WHERE id_session='$id_session'";
-		$rs = Database::query($sql, __FILE__, __LINE__);
+				"WHERE id_session='$id_session' AND relation_type<>".SESSION_RELATION_TYPE_RRHH."";
+		$rs = Database::query($sql);
 		list($nbr_users) = Database::fetch_array($rs);
 		$sql = "UPDATE $tbl_session SET nbr_users=$nbr_users WHERE id='$id_session'";
-		Database::query($sql,__FILE__,__LINE__);
+		Database::query($sql);
 	}
 }
 ?>

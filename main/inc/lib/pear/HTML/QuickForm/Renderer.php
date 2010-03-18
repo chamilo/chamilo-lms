@@ -1,30 +1,37 @@
 <?php
-/* vim: set expandtab tabstop=4 shiftwidth=4: */
-// +----------------------------------------------------------------------+
-// | PHP version 4.0                                                      |
-// +----------------------------------------------------------------------+
-// | Copyright (c) 1997-2003 The PHP Group                                |
-// +----------------------------------------------------------------------+
-// | This source file is subject to version 2.0 of the PHP license,       |
-// | that is bundled with this package in the file LICENSE, and is        |
-// | available at through the world-wide-web at                           |
-// | http://www.php.net/license/2_02.txt.                                 |
-// | If you did not receive a copy of the PHP license and are unable to   |
-// | obtain it through the world-wide-web, please send a note to          |
-// | license@php.net so we can mail you a copy immediately.               |
-// +----------------------------------------------------------------------+
-// | Author: Alexey Borzov <borz_off@cs.msu.su>                           |
-// +----------------------------------------------------------------------+
-//
-// $Id: Renderer.php 6184 2005-09-07 10:08:17Z bmol $
+/* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4: */
+
+/**
+ * An abstract base class for QuickForm renderers
+ *
+ * PHP versions 4 and 5
+ *
+ * LICENSE: This source file is subject to version 3.01 of the PHP license
+ * that is available through the world-wide-web at the following URI:
+ * http://www.php.net/license/3_01.txt If you did not receive a copy of
+ * the PHP License and are unable to obtain it through the web, please
+ * send a note to license@php.net so we can mail you a copy immediately.
+ *
+ * @category    HTML
+ * @package     HTML_QuickForm
+ * @author      Alexey Borzov <avb@php.net>
+ * @copyright   2001-2009 The PHP Group
+ * @license     http://www.php.net/license/3_01.txt PHP License 3.01
+ * @version     CVS: $Id$
+ * @link        http://pear.php.net/package/HTML_QuickForm
+ */
 
 /**
  * An abstract base class for QuickForm renderers
  *
  * The class implements a Visitor design pattern
  *
+ * @category    HTML
+ * @package     HTML_QuickForm
+ * @author      Alexey Borzov <avb@php.net>
+ * @version     Release: 3.2.11
+ * @since       3.0
  * @abstract
- * @author Alexey Borzov <borz_off@cs.msu.su>
  */
 class HTML_QuickForm_Renderer
 {
@@ -40,7 +47,7 @@ class HTML_QuickForm_Renderer
    /**
     * Called when visiting a form, before processing any form elements
     *
-    * @param    object    An HTML_QuickForm object being visited
+    * @param    HTML_QuickForm  a form being visited
     * @access   public
     * @return   void
     * @abstract
@@ -53,7 +60,7 @@ class HTML_QuickForm_Renderer
    /**
     * Called when visiting a form, after processing all form elements
     *
-    * @param    object     An HTML_QuickForm object being visited
+    * @param    HTML_QuickForm  a form being visited
     * @access   public
     * @return   void
     * @abstract
@@ -66,7 +73,7 @@ class HTML_QuickForm_Renderer
    /**
     * Called when visiting a header element
     *
-    * @param    object     An HTML_QuickForm_header element being visited
+    * @param    HTML_QuickForm_header   a header element being visited
     * @access   public
     * @return   void
     * @abstract
@@ -79,9 +86,9 @@ class HTML_QuickForm_Renderer
    /**
     * Called when visiting an element
     *
-    * @param    object     An HTML_QuickForm_element object being visited
-    * @param    bool       Whether an element is required
-    * @param    string     An error message associated with an element
+    * @param    HTML_QuickForm_element  form element being visited
+    * @param    bool                    Whether an element is required
+    * @param    string                  An error message associated with an element
     * @access   public
     * @return   void
     * @abstract
@@ -94,7 +101,7 @@ class HTML_QuickForm_Renderer
    /**
     * Called when visiting a hidden element
     *
-    * @param    object     An HTML_QuickForm_hidden object being visited
+    * @param    HTML_QuickForm_element  a hidden element being visited
     * @access   public
     * @return   void
     * @abstract
@@ -107,9 +114,10 @@ class HTML_QuickForm_Renderer
    /**
     * Called when visiting a raw HTML/text pseudo-element
     *
-    * Seems that this should not be used when using a template-based renderer
+    * Only implemented in Default renderer. Usage of 'html' elements is
+    * discouraged, templates should be used instead.
     *
-    * @param    object     An HTML_QuickForm_html element being visited
+    * @param    HTML_QuickForm_html     a 'raw html' element being visited
     * @access   public
     * @return   void
     * @abstract
@@ -122,9 +130,9 @@ class HTML_QuickForm_Renderer
    /**
     * Called when visiting a group, before processing any group elements
     *
-    * @param    object     An HTML_QuickForm_group object being visited
-    * @param    bool       Whether a group is required
-    * @param    string     An error message associated with a group
+    * @param    HTML_QuickForm_group    A group being visited
+    * @param    bool                    Whether a group is required
+    * @param    string                  An error message associated with a group
     * @access   public
     * @return   void
     * @abstract
@@ -137,7 +145,7 @@ class HTML_QuickForm_Renderer
    /**
     * Called when visiting a group, after processing all group elements
     *
-    * @param    object     An HTML_QuickForm_group object being visited
+    * @param    HTML_QuickForm_group    A group being visited
     * @access   public
     * @return   void
     * @abstract

@@ -1,43 +1,42 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $langStudent = "student";
-$langAddAU = "¥æ¡¼¥¶¤ò²Ã¤¨¤ë";
+$langAddAU = "ãƒ¦ã€–ã‚¶ã‚’è£ãˆã‚‹";
 $langAddedU = "has been added. An email has been sent to give him his username";
 $langTheU = "The user";
 $langRegYou = "has registered you on this course";
 $langOneResp = "One of the course administrators";
-$langTaken = "´û¤Ë»È¤ï¤ì¤Æ¤¤¤Þ¤¹¡£Â¾¤ÎÌ¾Á°¤òÁª¤ó¤Ç¤¯¤À¤µ¤¤¡£";
-$langUserNo = "¤¢¤Ê¤¿¤¬Áª¤ó¤À¥æ¡¼¥¶Ì¾";
-$langFilled = "¤¤¤¯¤Ä¤«¤ÎÍó¤¬¶õÇò¤Ç¤¹";
+$langTaken = "è´·ã«è—ã‚ã‚Œã¦ã„ã¾ã™ã€‚æˆ®ã®å¹æ¶Ÿã‚’è”ã‚“ã§ãã ã•ã„ã€‚";
+$langUserNo = "ã‚ãªãŸãŒè”ã‚“ã ãƒ¦ã€–ã‚¶å¹";
+$langFilled = "ã„ãã¤ã‹ã®è…•ãŒé„‚çƒã§ã™";
 $langInC = "in this course";
 $langRole = "Role";
-$langProfileReg = "¤¢¤Ê¤¿¤Î¿·¥×¥í¥Õ¥¡¥¤¥ë¤¬ÊÝÂ¸¤µ¤ì¤Þ¤·¤¿";
-$langEmailWrong = "¤³¤Î email address ¤ÏÉÔ´°Á´¤«¡¢ÍøÍÑ½ÐÍè¤Ê¤¤Ê¸»ú¤¬´Þ¤Þ¤ì¤Æ¤¤¤Þ¤¹";
-$langUserTaken = "¤³¤Î¥æ¡¼¥¶Ì¾¤Ï¤¹¤Ç¤Ë¡¢Â¾¤Î¿Í¤¬¤Ä¤«¤Ã¤Æ¤¤¤Þ¤¹¡£";
-$langFields = "¤¤¤¯¤Ä¤«¤ÎÍó¤¬¶õÇò¤Ç¤¹¡£";
-$langAgain = "ºÆÅÙ»î¤·¤Æ¤¯¤À¤µ¤¤!";
+$langProfileReg = "ã‚ãªãŸã®ç³ ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«ãŒç˜¦èµ‚ã•ã‚Œã¾ã—ãŸ";
+$langEmailWrong = "ã“ã® email address ã¯ç¨çª—é“¾ã‹ã€ç½‘è„±å«ä¸¸ãªã„çŸ¢æœºãŒå´”ã¾ã‚Œã¦ã„ã¾ã™";
+$langUserTaken = "ã“ã®ãƒ¦ã€–ã‚¶å¹ã¯ã™ã§ã«ã€æˆ®ã®å®¢ãŒã¤ã‹ã£ã¦ã„ã¾ã™ã€‚";
+$langFields = "ã„ãã¤ã‹ã®è…•ãŒé„‚çƒã§ã™ã€‚";
+$langAgain = "æµ©åˆ¨æ´»ã—ã¦ãã ã•ã„!";
 $langPassTwo = "You have typed two different passwords";
-$langModifProfile = "¼«Ê¬¤Î¥×¥í¥Õ¥¡¥¤¥ë¤ò½¤Àµ";
+$langModifProfile = "æžå°¸ã®ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ«ã‚’é¥¯èµ–";
 $langIsReg = "ccourses is registered";
-$langPersonalSettings = "¸Ä¿ÍÀßÄê¤¬ÅÐÏ¿¤µ¤ì¤Þ¤·¤¿¡£¥æ¡¼¥¶Ì¾¤È¥Ñ¥¹¥ï¡¼¥É¤Î³Ð¤¨¤òµ­ºÜ¤·¤¿ mail¤¬Á÷ÉÕ¤µ¤ì¤Þ¤·¤¿¡£¤µ¤Æ¡¢¤¢¤Ê¤¿¤¬¤È¤ê¤¿¤¤¥³¡¼¥¹¤òÁª¤ó¤Ç¤¯¤À¤µ¤¤¡£";
-$langManager = "±¿ÍÑ¼Ô";
+$langPersonalSettings = "æ”¹å®¢è‚‹å¹´ãŒåˆ¤å³¡ã•ã‚Œã¾ã—ãŸã€‚ãƒ¦ã€–ã‚¶å¹ã¨ãƒ‘ã‚¹ãƒ¯ã€–ãƒ‰ã®æ‰¿ãˆã‚’æ·¡å¾ˆã—ãŸ mailãŒæµçƒ§ã•ã‚Œã¾ã—ãŸã€‚ã•ã¦ã€ã‚ãªãŸãŒã¨ã‚ŠãŸã„ã‚³ã€–ã‚¹ã‚’è”ã‚“ã§ãã ã•ã„ã€‚";
+$langManager = "ç¬¨è„±èš";
 $langFormula = "Yours sincerely";
-$langProblem = "ÌäÂê¤¬¤ª¤­¤¿¤È¤­¤Ï¡¢Ï¢Íí¤·¤Æ¤¯¤À¤µ¤¤";
-$langIs = "¤Ï";
-$langAddress = "¥¢¥É¥ì¥¹::";
-$langSettings = "¼¡¤ÎÀßÄê¤Ç¤¹: 
- Username:";
+$langProblem = "å•¼çŽ›ãŒãŠããŸã¨ãã¯ã€æ¯æ™šã—ã¦ãã ã•ã„";
+$langIs = "ã¯";
+$langAddress = "ã‚¢ãƒ‰ãƒ¬ã‚¹::";
+$langSettings = "è‚Œã®è‚‹å¹´ã§ã™: \n Username:";
 $langYouAreReg = "You are registered on";
-$langDear = "·ÉÇò";
-$langYourReg = "ÅÐÏ¿¤µ¤ì¤Þ¤·¤¿:";
-$langUserFree = "¤³¤Î¥æ¡¼¥¶Ì¾¤Ï¤¹¤Ç¤Ë¡¢Â¾¤Î¿Í¤¬¤Ä¤«¤Ã¤Æ¤¤¤Þ¤¹¡£¥Ü¥¿¥ó¤ÇÌá¤Ã¤Æ¡¢ÊÌ¤ÎÌ¾Á°¤ÇÅÐÏ¿¤·¤Æ¤¯¤À¤µ¤¤¡£";
-$langEmptyFields = "¤¤¤¯¤Ä¤«¤ÎÍó¤¬¶õÇò¤Ç¤¹¡£¥Ü¥¿¥ó¤ÇÌá¤Ã¤Æ¡¢ºÆÅÙ¤¿¤á¤·¤Æ¤¯¤À¤µ¤¤";
-$langPassTwice = "1ÅÙÌÜ¤È2ÅÙÌÜ¤Ç°ã¤Ã¤¿¥Ñ¥¹¥ï¡¼¥É¤òÆþ¤ì¤Þ¤·¤¿¡£¥Ü¥¿¥ó¤ÇÌá¤Ã¤Æ¡¢ºÆÅÙ¤¿¤á¤·¤Æ¤¯¤À¤µ¤¤";
-$langRegAdmin = "¥³¡¼¥¹¤Î¥¦¥¨¥Ö¥µ¥¤¥È¤ò¤Ä¤¯¤ë (¶µ»Õ)";
-$langRegStudent = "¼¡¤Î¥³¡¼¥¹¤¬¤¢¤ê¤Þ¤¹(³ØÀ¸)";
-$langConfirmation = "³ÎÇ§";
-$langPass = "¥Ñ¥¹¥ï¡¼¥É";
-$langSurname = "Ì¾Á°";
-$langRegistration = "ÅÐÏ¿";
+$langYourReg = "åˆ¤å³¡ã•ã‚Œã¾ã—ãŸ:";
+$langUserFree = "ã“ã®ãƒ¦ã€–ã‚¶å¹ã¯ã™ã§ã«ã€æˆ®ã®å®¢ãŒã¤ã‹ã£ã¦ã„ã¾ã™ã€‚ãƒœã‚¿ãƒ³ã§æã£ã¦ã€ä¾ã®å¹æ¶Ÿã§åˆ¤å³¡ã—ã¦ãã ã•ã„ã€‚";
+$langEmptyFields = "ã„ãã¤ã‹ã®è…•ãŒé„‚çƒã§ã™ã€‚ãƒœã‚¿ãƒ³ã§æã£ã¦ã€æµ©åˆ¨ãŸã‚ã—ã¦ãã ã•ã„";
+$langPassTwice = "1åˆ¨èªŠã¨2åˆ¨èªŠã§èˆ¬ã£ãŸãƒ‘ã‚¹ãƒ¯ã€–ãƒ‰ã‚’æŽã‚Œã¾ã—ãŸã€‚ãƒœã‚¿ãƒ³ã§æã£ã¦ã€æµ©åˆ¨ãŸã‚ã—ã¦ãã ã•ã„";
+$langRegAdmin = "ã‚³ã€–ã‚¹ã®ã‚¦ã‚¨ãƒ–ã‚µã‚¤ãƒˆã‚’ã¤ãã‚‹ (å…œå¾½)";
+$langRegStudent = "è‚Œã®ã‚³ã€–ã‚¹ãŒã‚ã‚Šã¾ã™(æ± æ )";
+$langConfirmation = "æ¾„åƒ";
+$langPass = "ãƒ‘ã‚¹ãƒ¯ã€–ãƒ‰";
+$langSurname = "å¹æ¶Ÿ";
+$langRegistration = "åˆ¤å³¡";
 ?>

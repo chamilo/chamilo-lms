@@ -1,4 +1,65 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
+$langChapter = "Глава";
+$langDocumentList = "Список всех документов";
+$langOrganisationList = "Содержание";
+$langEditTOC = "Редактировать содержание";
+$langEditDocument = "Редактировать";
+$langCreateDocument = "Создать документ";
+$langMissingImagesDetected = "Обнаружены недостающие изображения";
+$langPublish = "Опубликовать";
+$langScormcontentstudent = "Это курс в формате Scorm. Чтобы начать, нажмите здесь : <input type=button name=scormbutton value='Пуск!' onclick='openscorm()'>";
+$langScormcontent = "Это содержимое Scorm <br /><input type=button name=scormbutton value='Пуск!' onclick='openscorm()'>";
+$langDownloadAndZipEnd = "Zip файл загружен и разархивирован";
+$langZipNoPhp = "Архив .zip не может содержать файлы с расширением .PHP";
+$langGroupForumLink = "Форум группы";
+$langGroupSpace = "Зона группы";
+$langNotScormContent = "Это не scorm ZIP файл!";
+$langNoText = "Пожалуйста, введите свой текст (HTML)";
+$langNoFileName = "Пожалуйста, введите имя файла";
+$langMaxFileSize = "Максимальный размер файла - это";
+$langFileName = "Имя файла";
+$langFileError = "Файл для загрузки не действителен";
+$langDown = "вниз";
+$langViMod = "Видимость изменена";
+$langAddComment = "Добавить/изменить комментарий для";
+$langImpossible = "Операция невозможна";
+$langNewDir = "Название новой папки";
+$langTo = "в";
+$langNoSpace = "Загрузка файла не удалась. Либо Вы превысили Вашу максимальную квоту, либо не достаточно места на диске.";
+$langDownloadEnd = "Загрузка закончена";
+$langFileExists = "Операция невозможна, файл с таким именем уже существует";
+$langDocCopied = "Документ скопирован";
+$langDocDeleted = "Документ удален";
+$langElRen = "Элемент переименован";
+$langDirMv = "Элемент перемещен";
+$langComMod = "Комментарий изменен";
+$langRename = "Переименовать";
+$langCopy = "Копировать содержимое курса";
+$langNameDir = "Название новой папки";
+$langDownloadFile = "Выгрузить файл на сервер";
+$learning_path_access = "щелкните \"создать учебный план\" для того, чтобы удалять/изменять/показывать/скрывать/создавать/добавлять учебный план";
+$langRoot = "корень";
+$langBuilder = "Строитель Учебного Плана";
+$lang_edit_learnpath = "Редактировать учебный план";
+$lang_add_title_and_desc = "Редактировать заглавие и описание";
+$lang_add_learnpath = "Добавить учебный план";
+$lang_learnpath_added = "Новый учебный план был успешно создан. Сейчас Вы можете добавить в него главы с помощью щелчка на крест.";
+$lang_delete_learnpath = "удалить учебный план";
+$lang_learnpath_edited = "учебный план отредактирован";
+$lang_learnpath_deleted = "учебный план был удален";
+$lang_no_publish = "не публиковать";
+$lang_publish = "публиковать";
+$lang_no_published = "не опубликовано";
+$lang_published = "опубликовано";
+$lang_description = "описание";
+$lang_title = "заглавие";
+$langScormBuilder = "Строитель Плана - строитель курса в формате Scorm";
+$langCreateDoc = "Создать документ";
+$langOrganiseDocuments = "Создать содержание";
+$langUncompress = "Разархивировать zip";
+$ExportShort = "Экспортировать как SCORM";
+$progress = "Прогресс";
 ?>

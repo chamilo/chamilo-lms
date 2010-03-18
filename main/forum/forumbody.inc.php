@@ -1,6 +1,6 @@
-<?php  // $Id:  $
-
-$current_thread=get_thread_information($_GET['thread']);
+<?php  
+/* For licensing terms, see /license.txt */
+$current_thread		= get_thread_information($_GET['thread']);
 $my_cid_req		 	= Security::remove_XSS($_GET['cidReq']);
 $my_forum 			= Security::remove_XSS($_GET['forum']);
 $my_thread 			= Security::remove_XSS($_GET['thread']);
@@ -8,9 +8,9 @@ $my_user_id 		= Security::remove_XSS($_GET['user_id']);
 $user		 		= Security::remove_XSS($_GET['user']);
 $my_idtextqualify   = isset($_REQUEST['idtextqualify']) ? Security::remove_XSS($_REQUEST['idtextqualify']) : $qualify;
 $my_gradebook		= Security::remove_XSS($_GET['gradebook']);
-$to_origin				= Security::remove_XSS($_GET['origin']);
+$to_origin			= Security::remove_XSS($_GET['origin']);
 
-$output = <<<FIN
+$output = <<<EOF
 <div class="forum-body-form">
  	<table>
  		<form id="forum-thread-qualify" name="forum-thread-qualify" action="forumqualify.php">
@@ -22,7 +22,7 @@ $output = <<<FIN
  		<input type="hidden" name="gradebook" value="{$my_gradebook}">
   		<input type="hidden" name="origin" value="{$to_origin}">
     	<tr>
-FIN;
+EOF;
 
 $output .= '
 			<td width="40%" class="forum-thread-header">'.get_lang('User').'&nbsp;:</td >
@@ -72,5 +72,5 @@ $output .= '
         </tr>
         </form>
     </table>
-</div>';
+</div>'; 
 echo $output;

@@ -1,32 +1,28 @@
-<?php // $Id: lp_view.php,v 1.33 2006/09/12 10:20:46 yannoo Exp $
+<?php 
+/* For licensing terms, see /license.txt */
 /**
-==============================================================================
-* This file was origially the copy of document.php, but many modifications happened since then ;
+* This file was originally the copy of document.php, but many modifications happened since then ;
 * the direct file view is not needed anymore, if the user uploads a scorm zip file, a directory
 * will be automatically created for it, and the files will be uncompressed there for example ;
 *
-* @package dokeos.learnpath
+* @package chamilo.learnpath
 * @author Yannick Warnier <ywarnier@beeznest.org> - redesign
 * @author Denes Nagy, principal author
 * @author Isthvan Mandak, several new features
 * @author Roan Embrechts, code improvements and refactoring
 * @license	GNU/GPL - See Dokeos license directory for details
-==============================================================================
 */
 /**
  * Script
  */
-/*
-==============================================================================
-		INIT SECTION
-==============================================================================
-*/
+/*	INIT SECTION */
 
 $_SESSION['whereami'] = 'lp/view';
 $this_section=SECTION_COURSES;
 
 if($lp_controller_touched!=1){
 	header('location: lp_controller.php?action=view&item_id='.$_REQUEST['item_id']);
+	exit;
 }
 
 /*
@@ -47,17 +43,12 @@ if ($is_allowed_in_course == false) api_not_allowed();
 	Variables
 -----------------------------------------------------------
 */
-//$charset = 'UTF-8';
-//$charset = 'ISO-8859-1';
 
 // we set the encoding of the lp
 if (!empty($_SESSION['oLP']->encoding)) {
 	$charset = $_SESSION['oLP']->encoding;
 } else {
 	$charset = api_get_system_encoding();
-}
-if (empty($charset)) {
-	$charset = 'ISO-8859-1';
 }
 
 $oLearnpath = false;
@@ -66,12 +57,15 @@ $user_id = api_get_user_id();
 $platform_theme = api_get_setting('stylesheets'); 	// plataform's css
 $my_style=$platform_theme;
 //escape external variables
-/*
------------------------------------------------------------
-	Header
------------------------------------------------------------
-*/
+
+/* 	Header  */
 $htmlHeadXtra[] = '<script src="../inc/lib/javascript/jquery.js" type="text/javascript" language="javascript"></script>'; //jQuery
+
+if (api_get_setting('show_glossary_in_documents') == 'ismanual' || api_get_setting('show_glossary_in_documents') == 'isautomatic' ) {
+	$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.frameready.js" type="text/javascript" language="javascript"></script>';
+	$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.highlight.js" type="text/javascript" language="javascript"></script>';
+}
+
 
 $htmlHeadXtra[] = '<script language="javascript" type="text/javascript">
 $(document).ready(function (){
@@ -97,8 +91,7 @@ $_SESSION['scorm_view_id'] = $_SESSION['oLP']->get_view_id();
 $_SESSION['scorm_item_id'] = $lp_item_id;
 $_SESSION['lp_mode'] = $_SESSION['oLP']->mode;
 //reinit exercises variables to avoid spacename clashes (see exercise tool)
-if(isset($exerciseResult) or isset($_SESSION['exerciseResult']))
-{
+if(isset($exerciseResult) or isset($_SESSION['exerciseResult'])) {
     api_session_unregister($exerciseResult);
 }
 unset($_SESSION['objExercise']);
@@ -108,19 +101,22 @@ unset($_SESSION['questionList']);
  */
 
 
-if (!isset($src))
- {
+if (!isset($src)) {
  	$src = '';
-	switch($lp_type)
-	{
+	switch($lp_type) {
 		case 1:
 			$_SESSION['oLP']->stop_previous_item();
 			$htmlHeadXtra[] = '<script src="scorm_api.php" type="text/javascript" language="javascript"></script>';
 			$prereq_check = $_SESSION['oLP']->prerequisites_match($lp_item_id);
 			if($prereq_check === true){
-				$src = $_SESSION['oLP']->get_link('http',$lp_item_id);
+				$src = $_SESSION['oLP']->get_link('http',$lp_item_id);			
+				//Prevents FF 3.6 + Adobe Reader 9 bug see BT#794 when calling a pdf file in a LP
+				$file_info = pathinfo($src);					
+				if (api_strtolower(substr($file_info['extension'], 0, 3) == 'pdf')) {
+					$src = 'lp_view_item.php?src='.$src;
+				}				
 				$_SESSION['oLP']->start_current_item(); //starts time counter manually if asset
-			}else{
+			} else {
 				$src = 'blank.php?error=prerequisites';
 			}
 			break;
@@ -171,14 +167,14 @@ if ($type_quiz && !empty($_REQUEST['exeId']) && isset($_GET['lp_id']) && isset($
 	$TBL_LP_ITEM_VIEW		= Database::get_course_table(TABLE_LP_ITEM_VIEW);
 	$TBL_LP_VIEW			= Database::get_course_table(TABLE_LP_VIEW);
 	$TBL_LP_ITEM			= Database::get_course_table(TABLE_LP_ITEM);
-	$safe_item_id      = Database::escape_string($_GET['lp_item_id']);
-    $safe_id           = Database::escape_string($_GET['lp_id']);
-	$safe_exe_id = Database::escape_string($_REQUEST['exeId']);
+	$safe_item_id      		= Database::escape_string($_GET['lp_item_id']);
+    $safe_id           		= Database::escape_string($_GET['lp_id']);
+	$safe_exe_id 			= Database::escape_string($_REQUEST['exeId']);
 
 	if ($safe_id == strval(intval($safe_id)) && $safe_item_id == strval(intval($safe_item_id))) {
 
 		$sql = 'SELECT start_date,exe_date,exe_result,exe_weighting FROM ' . $TBL_TRACK_EXERCICES . ' WHERE exe_id = '.(int)$safe_exe_id;
-		$res = Database::query($sql,__FILE__,__LINE__);
+		$res = Database::query($sql);
 		$row_dates = Database::fetch_array($res);
 
 		$time_start_date = convert_mysql_date($row_dates['start_date']);
@@ -189,18 +185,18 @@ if ($type_quiz && !empty($_REQUEST['exeId']) && isset($_GET['lp_id']) && isset($
 
 		$sql_upd_status = "UPDATE $TBL_LP_ITEM_VIEW SET status = 'completed' WHERE lp_item_id = '".(int)$safe_item_id."'
 				 AND lp_view_id = (SELECT lp_view.id FROM $TBL_LP_VIEW lp_view WHERE user_id = '".(int)$_SESSION['oLP']->user_id."' AND lp_id='".(int)$safe_id."')";
-		Database::query($sql_upd_status,__FILE__,__LINE__);
+		Database::query($sql_upd_status);
 
 		$sql_upd_max_score = "UPDATE $TBL_LP_ITEM SET max_score = '$max_score' WHERE id = '".(int)$safe_item_id."'";
-		Database::query($sql_upd_max_score,__FILE__,__LINE__);
+		Database::query($sql_upd_max_score);
 
 		$sql_last_attempt = "SELECT id FROM $TBL_LP_ITEM_VIEW  WHERE lp_item_id = '$safe_item_id' AND lp_view_id = '".$_SESSION['oLP']->lp_view_id."' order by id desc limit 1";
-		$res_last_attempt = Database::query($sql_last_attempt,__FILE__,__LINE__);
+		$res_last_attempt = Database::query($sql_last_attempt);
 		$row_last_attempt = Database::fetch_row($res_last_attempt);
 
 		if (Database::num_rows($res_last_attempt)>0) {
 			$sql_upd_score = "UPDATE $TBL_LP_ITEM_VIEW SET score = $score,total_time = $mytime WHERE id='".$row_last_attempt[0]."'";
-			Database::query($sql_upd_score,__FILE__,__LINE__);
+			Database::query($sql_upd_score);
 		}
 	}
 
@@ -257,7 +253,7 @@ if($_SESSION['oLP']->mode == 'fullscreen') {
 			<div id="preview_image" style="padding:5px;background-image: url('../img/lp_author_background.gif');background-repeat:no-repeat;height:110px">
 		       	<div style="width:100; float:left;height:105;margin:5px">
 		       		<span>
-			        <?php 
+			        <?php
 			        if ($_SESSION['oLP']->get_preview_image()!='') {
 			            echo '<img width="115px" height="100px" src="'.api_get_path(WEB_COURSE_PATH).api_get_course_path().'/upload/learning_path/images/'.$_SESSION['oLP']->get_preview_image().'">';
 			        } else {
@@ -288,7 +284,7 @@ if($_SESSION['oLP']->mode == 'fullscreen') {
 						$show_audioplayer = false;
 						// getting all the information about the item
 						$sql = "SELECT audio FROM " . $tbl_lp_item . " WHERE lp_id = '" . $_SESSION['oLP']->lp_id."'";
-						$res_media= Database::query($sql, __FILE__, __LINE__);
+						$res_media= Database::query($sql);
 
 						if (Database::num_rows($res_media) > 0) {
 							while ($row_media= Database::fetch_array($res_media)) {
@@ -319,9 +315,10 @@ if($_SESSION['oLP']->mode == 'fullscreen') {
 
 	<!-- toc layout -->
 	<div id="toc_id" name="toc_name"  style="overflow: auto; padding:0;margin-top:20px;height:60%;width:100%">
+
 		<div id="learning_path_toc" style="font-size:9pt;margin:0;"><?php echo $_SESSION['oLP']->get_html_toc(); ?>
 			<!-- log message layout -->
-	
+
 			<div id="lp_log_name" name="lp_log_name" class="lp_log" style="height:50px;overflow:auto;margin:15px">
 				<div id="log_content"></div>
 				<div id="log_content_cleaner" style="color: white;">.</div>
@@ -393,8 +390,9 @@ window.onload = function() {
 	rightZoneHeightOccupied = docHeight - initialRightZoneHeight;
 	document.body.style.overflow = 'hidden';
 	updateContentHeight();
-		viewportheight = window.innerHeight
-		document.getElementById('toc_id').style.height = viewportheight - 200 + "px";
+	viewportheight = window.innerHeight;
+	document.getElementById('toc_id').style.height = viewportheight - 200 + "px";
+
 }
 
 window.onresize = updateContentHeight;
@@ -445,7 +443,7 @@ window.onresize = updateContentHeight;
 		       	<div style="width:100; float:left;height:105;margin:5px">
 		       		<span style="width:104px; height:96px; float:left; vertical-align:bottom;">
 			        <center>
-			        <?php 
+			        <?php
 			        if ($_SESSION['oLP']->get_preview_image()!='') {
 			        	$picture = getimagesize(api_get_path(SYS_COURSE_PATH).api_get_course_path().'/upload/learning_path/images/'.$_SESSION['oLP']->get_preview_image());
 			        	if($picture['1'] < 96) { $style = ' style="padding-top:'.((94 -$picture['1'])/2).'px;" '; }
@@ -481,7 +479,7 @@ window.onresize = updateContentHeight;
 						$show_audioplayer = false;
 						// getting all the information about the item
 						$sql = "SELECT audio FROM " . $tbl_lp_item . " WHERE lp_id = '" . $_SESSION['oLP']->lp_id."'";
-						$res_media= Database::query($sql, __FILE__, __LINE__);
+						$res_media= Database::query($sql);
 
 						if (Database::num_rows($res_media) > 0) {
 							while ($row_media= Database::fetch_array($res_media)) {
@@ -511,8 +509,9 @@ window.onresize = updateContentHeight;
 
 		<!-- toc layout -->
 		<div id="toc_id" name="toc_name"  style="overflow: auto; padding:0;margin-top:20px;height:60%;width:100%">
+
 			<div id="learning_path_toc" style="font-size:9pt;margin:0;"><?php echo $_SESSION['oLP']->get_html_toc(); ?>
-	
+
     	<?php if (!empty($_SESSION['oLP']->scorm_debug)) { //only show log  ?>
 	        <!-- log message layout -->
 			<div id="lp_log_name" name="lp_log_name" class="lp_log" style="height:150px;overflow:auto;margin:4px">
@@ -527,7 +526,7 @@ window.onresize = updateContentHeight;
 	</div>
     <!-- end left Zone -->
 
-    <!-- right Zone -->
+    <!-- right Zone -->    
 	<div id="learning_path_right_zone" style="margin-left:282px;height:100%">
 		<iframe id="content_id" name="content_name" src="<?php echo $src; ?>" border="0" frameborder="0"  style="width:100%;height:600px" ></iframe>
 	</div>
@@ -582,11 +581,43 @@ window.onload = function() {
 	initialRightZoneHeight = document.getElementById('learning_path_right_zone').offsetHeight;
 	docHeight = document.body.clientHeight;
 	leftZoneHeightOccupied = docHeight - initialLeftZoneHeight;
-rightZoneHeightOccupied = docHeight - initialRightZoneHeight;
+	rightZoneHeightOccupied = docHeight - initialRightZoneHeight;
 	document.body.style.overflow = 'hidden';
-	viewportheight = window.innerHeight
-	document.getElementById('toc_id').style.height = viewportheight - 200 + "px";
 	updateContentHeight();
+	viewportheight = window.innerHeight;
+	document.getElementById('toc_id').style.height = viewportheight - 200 + "px";
+
+
+	//loads the glossary library
+	<?php
+	  if (api_get_setting('show_glossary_in_extra_tools') == 'true') {
+	  	 if (api_get_setting('show_glossary_in_documents') == 'ismanual') {
+	  	 	 ?>
+			$.frameReady(function(){
+		   		//  $("<div>I am a div courses</div>").prependTo("body");
+	     }, "top.content_name",
+	      { load: [
+	      		{type:"script", id:"_fr1", src:"<?php echo api_get_path(WEB_LIBRARY_PATH); ?>javascript/jquery.js"},
+	          	{type:"script", id:"_fr2", src:"<?php echo api_get_path(WEB_LIBRARY_PATH); ?>javascript/jquery.highlight.js"},
+	          	{type:"script", id:"_fr3", src:"<?php echo api_get_path(WEB_LIBRARY_PATH); ?>fckeditor/editor/plugins/glossary/fck_glossary_manual.js"}
+	      ] }
+	      );
+	<?php
+		} elseif (api_get_setting('show_glossary_in_documents') == 'isautomatic') {
+	  ?>
+	$.frameReady(function(){
+		//  $("<div>I am a div courses</div>").prependTo("body");
+	  }, "top.content_name",
+	  { load: [
+	  		{type:"script", id:"_fr1", src:"<?php echo api_get_path(WEB_LIBRARY_PATH); ?>javascript/jquery.js"},
+	      	{type:"script", id:"_fr2", src:"<?php echo api_get_path(WEB_LIBRARY_PATH); ?>javascript/jquery.highlight.js"},
+	      	{type:"script", id:"_fr3", src:"<?php echo api_get_path(WEB_LIBRARY_PATH); ?>fckeditor/editor/plugins/glossary/fck_glossary_automatic.js"}
+	      ] }
+	      );
+	  <?php
+	  	 }
+	  }
+	  ?>
 }
 
 window.onresize = updateContentHeight;

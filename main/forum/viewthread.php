@@ -1,28 +1,5 @@
 <?php
-
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2004-2008 Dokeos SPRL
-	Copyright (c) 2003 Ghent University (UGent)
-	Copyright (c) 2001 Universite catholique de Louvain (UCL)
-	Copyright (c) various contributors
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
-	Mail: info@dokeos.com
-==============================================================================
-*/
+/* For licensing terms, see /license.txt */
 
 /**
 *	@Author Patrick Cool <patrick.cool@UGent.be>, Ghent University
@@ -32,13 +9,10 @@
 * 	@package dokeos.forum
 */
 // name of the language file that needs to be included
-$language_file = array (
-'forum',
-'group'
-);
+$language_file = array ('forum','group');
 
 // including the global dokeos file
-require '../inc/global.inc.php';
+require_once '../inc/global.inc.php';
 
 // the section (tabs)
 $this_section=SECTION_COURSES;
@@ -47,19 +21,14 @@ $this_section=SECTION_COURSES;
 api_protect_course_script(true);
 
 // including additional library scripts
-require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
-require_once (api_get_path(LIBRARY_PATH).'groupmanager.lib.php');
-//require_once (api_get_path(LIBRARY_PATH).'resourcelinker.lib.php');
-$nameTools=get_lang('Forum');
+require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
+require_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
 
-/*
------------------------------------------------------------
-	Including necessary files
------------------------------------------------------------
-*/
-require 'forumconfig.inc.php';
+require_once 'forumconfig.inc.php';
 require_once 'forumfunction.inc.php';
 
+
+$nameTools=get_lang('ToolForum');
 
 //are we in a lp ?
 $origin = '';
@@ -81,11 +50,11 @@ if (isset($_GET['origin'])) {
 // we are getting all the information about the current forum and forum category.
 // note pcool: I tried to use only one sql statement (and function) for this
 // but the problem is that the visibility of the forum AND forum cateogory are stored in the item_property table
-$current_thread=get_thread_information($_GET['thread']); // note: this has to be validated that it is an existing thread
-$current_forum=get_forum_information($current_thread['forum_id']); // note: this has to be validated that it is an existing forum.
-$current_forum_category=get_forumcategory_information($current_forum['forum_category']);
+$current_thread	= get_thread_information($_GET['thread']); // note: this has to be validated that it is an existing thread
+$current_forum	= get_forum_information($current_thread['forum_id']); // note: this has to be validated that it is an existing forum.
+$current_forum_category	= get_forumcategory_information($current_forum['forum_category']);
 
-$whatsnew_post_info=$_SESSION['whatsnew_post_info'];
+$whatsnew_post_info	= $_SESSION['whatsnew_post_info']; //this variable should be deprecated?
 
 /*
 -----------------------------------------------------------
@@ -98,26 +67,22 @@ $whatsnew_post_info=$_SESSION['whatsnew_post_info'];
 if (!empty($_GET['gradebook']) && $_GET['gradebook']=='view' ) {
 	$_SESSION['gradebook']=Security::remove_XSS($_GET['gradebook']);
 	$gradebook=	$_SESSION['gradebook'];
-} /*elseif (empty($_GET['gradebook'])) {
-	unset($_SESSION['gradebook']);
-	$gradebook=	'';
-} */
+}
 
 if (!empty($gradebook) && $gradebook=='view') {
 	$interbreadcrumb[] = array (
 		'url' => '../gradebook/' . $_SESSION['gradebook_dest'],
-		'name' => get_lang('Gradebook')
+		'name' => get_lang('ToolGradebook')
 	);
 }
 
 if (!empty($_SESSION['toolgroup'])) {
-
-	$_clean['toolgroup']=(int)$_SESSION['toolgroup'];
-	$group_properties  = GroupManager :: get_group_properties($_clean['toolgroup']);
-	$interbreadcrumb[] = array("url"=>"../group/group.php", "name" => get_lang('Groups'));
-	$interbreadcrumb[] = array("url"=>"../group/group_space.php?gidReq=".$_SESSION['toolgroup'], "name"=> get_lang('GroupSpace').' ('.$group_properties['name'].')');
-	$interbreadcrumb[] = array("url"=>"viewforum.php?forum=".Security::remove_XSS($_GET['forum'])."&amp;gidReq=".$_SESSION['toolgroup']."&amp;origin=".$origin."&amp;search=".Security::remove_XSS(urlencode($my_search)),"name" => prepare4display($current_forum['forum_title']));
-	$interbreadcrumb[] = array("url"=>"viewthread.php?forum=".Security::remove_XSS($_GET['forum'])."&gradebook=".$gradebook."&amp;thread=".Security::remove_XSS($_GET['thread']),"name" => prepare4display($current_thread['thread_title']));
+	$session_toolgroup	= intval($_SESSION['toolgroup']);
+	$group_properties	= GroupManager :: get_group_properties($session_toolgroup);
+	$interbreadcrumb[] 	= array("url"=>"../group/group.php", "name" => get_lang('Groups'));
+	$interbreadcrumb[] 	= array("url"=>"../group/group_space.php?gidReq=".$session_toolgroup, "name"=> get_lang('GroupSpace').' ('.$group_properties['name'].')');
+	$interbreadcrumb[] 	= array("url"=>"viewforum.php?forum=".Security::remove_XSS($_GET['forum'])."&amp;gidReq=".$session_toolgroup."&amp;origin=".$origin."&amp;search=".Security::remove_XSS(urlencode($my_search)),"name" => prepare4display($current_forum['forum_title']));
+	$interbreadcrumb[] 	= array("url"=>"viewthread.php?forum=".Security::remove_XSS($_GET['forum'])."&gradebook=".$gradebook."&amp;thread=".Security::remove_XSS($_GET['thread']),"name" => prepare4display($current_thread['thread_title']));
 
 	Display :: display_header('');
 	api_display_tool_title($nameTools);
@@ -126,11 +91,9 @@ if (!empty($_SESSION['toolgroup'])) {
 
 	$my_search=isset($_GET['search']) ? $_GET['search'] : '';
 
-
 	if ($origin=='learnpath') {
-		include(api_get_path(INCLUDE_PATH).'reduced_header.inc.php');
+		require_once api_get_path(INCLUDE_PATH).'reduced_header.inc.php';
 	} else {
-
 		$interbreadcrumb[]=array("url" => "index.php?gradebook=$gradebook&search=".Security::remove_XSS(urlencode($my_search)),"name" => $nameTools);
 		$interbreadcrumb[]=array("url" => "viewforumcategory.php?forumcategory=".$current_forum_category['cat_id']."&amp;origin=".$origin."&amp;search=".Security::remove_XSS(urlencode($my_search)),"name" => prepare4display($current_forum_category['cat_title']));
 		$interbreadcrumb[]=array("url" => "viewforum.php?forum=".Security::remove_XSS($_GET['forum'])."&amp;origin=".$origin."&amp;search=".Security::remove_XSS(urlencode($my_search)),"name" => prepare4display($current_forum['forum_title']));
@@ -148,7 +111,10 @@ if (!empty($_SESSION['toolgroup'])) {
 // if the user is not a course administrator and the forum is hidden
 // then the user is not allowed here.
 if (!api_is_allowed_to_edit(false,true) AND ($current_forum['visibility']==0 OR $current_thread['visibility']==0)) {
-	forum_not_allowed_here();
+	$forum_allow = forum_not_allowed_here();
+	if ($forum_allow === false) {
+		exit;
+	}
 }
 
 /*
@@ -181,7 +147,7 @@ if ($my_message<>'PostDeletedSpecial') {
 	// in this case the first and only post of the thread is removed
 	// this increases the number of times the thread has been viewed
 	increase_thread_view($_GET['thread']);
-	/*
+	/* 
 	-----------------------------------------------------------
 		Action Links
 	-----------------------------------------------------------
@@ -193,7 +159,7 @@ if ($my_message<>'PostDeletedSpecial') {
 	echo '<span style="float:right;">'.search_link().'</span>';
 	if ($origin != 'learnpath') {
 		echo '<a href="index.php?gradebook='.$gradebook.'">'.Display::return_icon('back.png',get_lang('BackToForumOverview')).' '.get_lang('BackToForumOverview').'</a>';
-		echo '<a href="viewforum.php?&forum='.Security::remove_XSS($_GET['forum']).'&amp;gidReq='.$_SESSION['toolgroup'].'">'.Display::return_icon('forum.gif',get_lang('BackToForum')).' '.get_lang('BackToForum').'</a>';
+		echo '<a href="viewforum.php?&forum='.Security::remove_XSS($_GET['forum']).'&amp;gidReq='.$session_toolgroup.'">'.Display::return_icon('forum.gif',get_lang('BackToForum')).' '.get_lang('BackToForum').'</a>';
 	}
 	// the reply to thread link should only appear when the forum_category is not locked AND the forum is not locked AND the thread is not locked.
 	// if one of the three levels is locked then the link should not be displayed
@@ -291,7 +257,7 @@ if ($my_message<>'PostDeletedSpecial') {
 		default:
 			include_once('viewthread_flat.inc.php');
 			break;
-	}
+	} 
 } // if ($message<>'PostDeletedSpecial') // in this case the first and only post of the thread is removed
 
 /*

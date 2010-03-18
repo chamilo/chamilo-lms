@@ -1,5 +1,6 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $langLineNumber = "Antal linier";
 $langLine = "linie";
@@ -7,27 +8,27 @@ $langLines = "linier";
 $langLineOrLines = "linie(r)";
 $langMoveUp = "Flyt op";
 $langMoveDown = "Flyt ned";
-$langAddNewHeading = "Tilføj nyt spørgsmål";
-$langCourseAdministratorOnly = "Kun kursusadministrator";
-$langDefineHeadings = "Angiv spørgsmål";
+$langAddNewHeading = "TilfÃ¸j nyt spÃ¸rgsmÃ¥l";
+$langCourseAdministratorOnly = "kun underviser";
+$langDefineHeadings = "Stil spÃ¸rgsmÃ¥l til deltagerne via deltagerlisten";
 $langBackToUsersList = "Tilbage til deltagerlisten";
-$langTracking = "Udtræk";
-$langCourseManager = "Kursusadministrator";
-$langModRight = "ændre rettigheder for";
-$langNoAdmin = "har fra nu af <b>ingen</b> rettigheder på denne side";
-$langAllAdmin = "har fra nu af <b>alle</b> rettigheder på denne side";
-$langModRole = "Ændre rolle for";
-$langRole = "rolle/status";
+$langTracking = "Statistik";
+$langCourseManager = "Kursusadministrator eller underviser";
+$langModRight = "Ã¦ndre rettigheder for";
+$langNoAdmin = "har fra nu af <b>ingen</b> rettigheder pÃ¥ denne side";
+$langAllAdmin = "har fra nu af <b>alle</b> rettigheder pÃ¥ denne side";
+$langModRole = "Ã†ndre rolle for";
+$langRole = "Titel";
 $langIsNow = "er fra nu af";
-$langInC = "i dette kursus";
-$langFilled = "Ikke alle felter blev udfyldt";
-$langUserNo = "Deltager Nej";
-$langTaken = "er allerede i brug. Benyt venligst et andet";
+$langInC = "pÃ¥ dette kursus";
+$langFilled = "Du har efterladt nogle tomme felter.";
+$langUserNo = "Det brugernavn, du valgte,";
+$langTaken = "er allerede i brug. VÃ¦lg et andet.";
 $langTutor = "Instruktor";
 $langUnreg = "Afmeld";
-$langGroupUserManagement = "Gruppehåndtering";
+$langGroupUserManagement = "Gruppestyring";
 $langUnregister = "Slet konto";
-$langAddAUser = "Tilføj deltagere";
-$UsersUnsubscribed = "De valgte deltagere er blevet afmeldt kursussiden";
+$langAddAUser = "TilfÃ¸j deltagere";
+$UsersUnsubscribed = "De valgte deltagere er nu afmeldt kursussiden";
 $ThisStudentIsSubscribeThroughASession = "Denne deltager er tilmeldt denne kursusside via en session. Du kan ikke redigere deltagerens informationer";
 ?>

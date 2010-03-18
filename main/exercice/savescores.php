@@ -102,7 +102,7 @@ function save_scores($file, $score)
 	'".Database::escape_string($_cid)."',
 	'".Database::escape_string($score)."',
 	'".Database::escape_string($weighting)."')";
-	$res = Database::query($sql,__FILE__,__LINE__);
+	$res = Database::query($sql);
 
 	if ($origin == 'learnpath')
 	{

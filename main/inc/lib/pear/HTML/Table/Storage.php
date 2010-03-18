@@ -8,21 +8,45 @@
  * more than one instance, it can be used for grouping the table into the
  * parts <thead>...</thead>, <tfoot>...</tfoot> and <tbody>...</tbody>.
  *
- * PHP versions 4
+ * PHP versions 4 and 5
  *
- * LICENSE: This source file is subject to version 3.0 of the PHP license
- * that is available through the world-wide-web at the following URI:
- * http://www.php.net/license/3_0.txt.  If you did not receive a copy of
- * the PHP License and are unable to obtain it through the web, please
- * send a note to license@php.net so we can mail you a copy immediately.
+ * LICENSE:
+ *
+ * Copyright (c) 2005-2007, Adam Daniel <adaniel1@eesus.jnj.com>,
+ *                          Bertrand Mansion <bmansion@mamasam.com>,
+ *                          Mark Wiesemann <wiesemann@php.net>
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ *
+ *    * Redistributions of source code must retain the above copyright
+ *      notice, this list of conditions and the following disclaimer.
+ *    * Redistributions in binary form must reproduce the above copyright
+ *      notice, this list of conditions and the following disclaimer in the
+ *      documentation and/or other materials provided with the distribution.
+ *    * The names of the authors may not be used to endorse or promote products
+ *      derived from this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS
+ * IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+ * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
+ * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+ * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+ * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+ * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
+ * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+ * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  * @category   HTML
  * @package    HTML_Table
  * @author     Adam Daniel <adaniel1@eesus.jnj.com>
  * @author     Bertrand Mansion <bmansion@mamasam.com>
- * @copyright  2005 The PHP Group
- * @license    http://www.php.net/license/3_0.txt  PHP License 3.0
- * @version    CVS: $Id: Storage.php,v 1.9 2006/09/18 20:06:45 wiesemann Exp $
+ * @license    http://www.opensource.org/licenses/bsd-license.php New BSD License
+ * @version    CVS: $Id: Storage.php,v 1.16 2007/04/29 16:31:06 wiesemann Exp $
  * @link       http://pear.php.net/package/HTML_Table
  */
 
@@ -38,8 +62,8 @@
  * @author     Adam Daniel <adaniel1@eesus.jnj.com>
  * @author     Bertrand Mansion <bmansion@mamasam.com>
  * @author     Mark Wiesemann <wiesemann@php.net>
- * @copyright  2005 The PHP Group
- * @license    http://www.php.net/license/3_0.txt  PHP License 3.0
+ * @copyright  2005-2006 The PHP Group
+ * @license    http://www.opensource.org/licenses/bsd-license.php New BSD License
  * @version    Release: @package_version@
  * @link       http://pear.php.net/package/HTML_Table
  */
@@ -53,7 +77,8 @@ class HTML_Table_Storage extends HTML_Common {
     var $_autoFill = '&nbsp;';
 
     /**
-     * Automatically adds a new row or column if a given row or column index does not exist
+     * Automatically adds a new row or column if a given row or column index
+     * does not exist
      * @var    bool
      * @access private
      */
@@ -96,15 +121,14 @@ class HTML_Table_Storage extends HTML_Common {
 
     /**
      * Class constructor
-     * @param    array    $attributes        Associative array of table tag attributes
      * @param    int      $tabOffset
      * @param    bool     $useTGroups        Whether to use <thead>, <tfoot> and
      *                                       <tbody> or not
      * @access   public
      */
-    function HTML_Table_Storage($attributes = null, $tabOffset = 0, $useTGroups = false)
+    function HTML_Table_Storage($tabOffset = 0, $useTGroups = false)
     {
-        HTML_Common::HTML_Common($attributes, (int)$tabOffset);
+        HTML_Common::HTML_Common(null, (int)$tabOffset);
         $this->_useTGroups = (boolean)$useTGroups;
     }
 
@@ -257,13 +281,18 @@ class HTML_Table_Storage extends HTML_Common {
      * error is returned.
      * @param    int        $row         Row index
      * @param    int        $col         Column index
-     * @param    mixed      $attributes  Associative array or string of table row attributes
+     * @param    mixed      $attributes  Associative array or string of table
+     *                                   row attributes
      * @access   public
      * @throws   PEAR_Error
      */
     function setCellAttributes($row, $col, $attributes)
     {
-        if (isset($this->_structure[$row][$col]) && $this->_structure[$row][$col] == '__SPANNED__') return;
+        if (   isset($this->_structure[$row][$col])
+            && $this->_structure[$row][$col] == '__SPANNED__'
+           ) {
+             return;
+        }
         $attributes = $this->_parseAttributes($attributes);
         $err = $this->_adjustEnds($row, $col, 'setCellAttributes', $attributes);
         if (PEAR::isError($err)) {
@@ -274,15 +303,21 @@ class HTML_Table_Storage extends HTML_Common {
     }
 
     /**
-     * Updates the cell attributes passed but leaves other existing attributes in tact
+     * Updates the cell attributes passed but leaves other existing attributes
+     * intact
      * @param    int     $row         Row index
      * @param    int     $col         Column index
-     * @param    mixed   $attributes  Associative array or string of table row attributes
+     * @param    mixed   $attributes  Associative array or string of table row
+     *                                attributes
      * @access   public
      */
     function updateCellAttributes($row, $col, $attributes)
     {
-        if (isset($this->_structure[$row][$col]) && $this->_structure[$row][$col] == '__SPANNED__') return;
+        if (   isset($this->_structure[$row][$col])
+            && $this->_structure[$row][$col] == '__SPANNED__'
+           ) {
+            return;
+        }
         $attributes = $this->_parseAttributes($attributes);
         $err = $this->_adjustEnds($row, $col, 'updateCellAttributes', $attributes);
         if (PEAR::isError($err)) {
@@ -301,7 +336,9 @@ class HTML_Table_Storage extends HTML_Common {
      */
     function getCellAttributes($row, $col)
     {
-        if (isset($this->_structure[$row][$col]) && $this->_structure[$row][$col] != '__SPANNED__') {
+        if (   isset($this->_structure[$row][$col])
+            && $this->_structure[$row][$col] != '__SPANNED__'
+           ) {
             return $this->_structure[$row][$col]['attr'];
         } elseif (!isset($this->_structure[$row][$col])) {
             return PEAR::raiseError('Invalid table cell reference[' .
@@ -318,10 +355,12 @@ class HTML_Table_Storage extends HTML_Common {
      * error is returned.
      * @param    int      $row        Row index
      * @param    int      $col        Column index
-     * @param    mixed    $contents   May contain html or any object with a toHTML method;
-     *                                if it is an array (with strings and/or objects), $col
-     *                                will be used as start offset and the array elements
-     *                                will be set to this and the following columns in $row
+     * @param    mixed    $contents   May contain html or any object with a
+     *                                toHTML() method; if it is an array (with
+     *                                strings and/or objects), $col will be used
+     *                                as start offset and the array elements will
+     *                                be set to this and the following columns
+     *                                in $row
      * @param    string   $type       (optional) Cell type either 'TH' or 'TD'
      * @access   public
      * @throws   PEAR_Error
@@ -330,7 +369,8 @@ class HTML_Table_Storage extends HTML_Common {
     {
         if (is_array($contents)) {
             foreach ($contents as $singleContent) {
-                $ret = $this->_setSingleCellContents($row, $col, $singleContent, $type);
+                $ret = $this->_setSingleCellContents($row, $col, $singleContent,
+                                                     $type);
                 if (PEAR::isError($ret)) {
                     return $ret;
                 }
@@ -352,17 +392,23 @@ class HTML_Table_Storage extends HTML_Common {
      * error is returned.
      * @param    int      $row        Row index
      * @param    int      $col        Column index
-     * @param    mixed    $contents   May contain html or any object with a toHTML method;
-     *                                if it is an array (with strings and/or objects), $col
-     *                                will be used as start offset and the array elements
-     *                                will be set to this and the following columns in $row
+     * @param    mixed    $contents   May contain html or any object with a
+     *                                toHTML() method; if it is an array (with
+     *                                strings and/or objects), $col will be used
+     *                                as start offset and the array elements will
+     *                                be set to this and the following columns
+     *                                in $row
      * @param    string   $type       (optional) Cell type either 'TH' or 'TD'
      * @access   private
      * @throws   PEAR_Error
      */
     function _setSingleCellContents($row, $col, $contents, $type = 'TD')
     {
-        if (isset($this->_structure[$row][$col]) && $this->_structure[$row][$col] == '__SPANNED__') return;
+        if (   isset($this->_structure[$row][$col])
+            && $this->_structure[$row][$col] == '__SPANNED__'
+           ) {
+            return;
+        }
         $err = $this->_adjustEnds($row, $col, 'setCellContents');
         if (PEAR::isError($err)) {
             return $err;
@@ -380,7 +426,11 @@ class HTML_Table_Storage extends HTML_Common {
      */
     function getCellContents($row, $col)
     {
-        if (isset($this->_structure[$row][$col]) && $this->_structure[$row][$col] == '__SPANNED__') return;
+        if (   isset($this->_structure[$row][$col])
+            && $this->_structure[$row][$col] == '__SPANNED__'
+           ) {
+            return;
+        }
         if (!isset($this->_structure[$row][$col])) {
             return PEAR::raiseError('Invalid table cell reference[' .
                 $row . '][' . $col . '] in HTML_Table::getCellContents');
@@ -393,7 +443,8 @@ class HTML_Table_Storage extends HTML_Common {
      * @param    int     $row
      * @param    int     $col
      * @param    mixed   $contents
-     * @param    mixed  $attributes Associative array or string of table row attributes
+     * @param    mixed   $attributes  Associative array or string of table row
+     *                                attributes
      * @access   public
      */
     function setHeaderContents($row, $col, $contents, $attributes = null)
@@ -406,20 +457,27 @@ class HTML_Table_Storage extends HTML_Common {
 
     /**
      * Adds a table row and returns the row identifier
-     * @param    array    $contents   (optional) Must be a indexed array of valid cell contents
-     * @param    mixed    $attributes (optional) Associative array or string of table row attributes
-     *                                This can also be an array of attributes, in which case the attributes
-     *                                will be repeated in a loop.
+     * @param    array    $contents   (optional) Must be a indexed array of valid
+     *                                           cell contents
+     * @param    mixed    $attributes (optional) Associative array or string of
+     *                                           table row attributes. This can
+     *                                           also be an array of attributes,
+     *                                           in which case the attributes
+     *                                           will be repeated in a loop.
      * @param    string   $type       (optional) Cell type either 'th' or 'td'
-     * @param    bool     $inTR           false if attributes are to be applied in TD tags
-     *                                    true if attributes are to be applied in TR tag
+     * @param    bool     $inTR                  false if attributes are to be
+     *                                           applied in TD tags; true if
+     *                                           attributes are to be applied in
+     *                                            TR tag
      * @return   int
      * @access   public
      */
-    function addRow($contents = null, $attributes = null, $type = 'td', $inTR = false)
+    function addRow($contents = null, $attributes = null, $type = 'td',
+        $inTR = false)
     {
         if (isset($contents) && !is_array($contents)) {
-            return PEAR::raiseError('First parameter to HTML_Table::addRow must be an array');
+            return PEAR::raiseError('First parameter to HTML_Table::addRow ' .
+                                    'must be an array');
         }
         if (is_null($contents)) {
           $contents = array();
@@ -441,11 +499,13 @@ class HTML_Table_Storage extends HTML_Common {
     /**
      * Sets the row attributes for an existing row
      * @param    int      $row            Row index
-     * @param    mixed    $attributes     Associative array or string of table row attributes
-     *                                    This can also be an array of attributes, in which case the attributes
-     *                                    will be repeated in a loop.
-     * @param    bool     $inTR           false if attributes are to be applied in TD tags
-     *                                    true if attributes are to be applied in TR tag
+     * @param    mixed    $attributes     Associative array or string of table
+     *                                    row attributes. This can also be an
+     *                                    array of attributes, in which case the
+     *                                    attributes will be repeated in a loop.
+     * @param    bool     $inTR           false if attributes are to be applied
+     *                                    in TD tags; true if attributes are to
+     *                                    be applied in TR tag
      * @access   public
      * @throws   PEAR_Error
      */
@@ -474,9 +534,11 @@ class HTML_Table_Storage extends HTML_Common {
     /**
      * Updates the row attributes for an existing row
      * @param    int      $row            Row index
-     * @param    mixed    $attributes     Associative array or string of table row attributes
-     * @param    bool     $inTR           false if attributes are to be applied in TD tags
-     *                                    true if attributes are to be applied in TR tag
+     * @param    mixed    $attributes     Associative array or string of table
+     *                                    row attributes
+     * @param    bool     $inTR           false if attributes are to be applied
+     *                                    in TD tags; true if attributes are to
+     *                                    be applied in TR tag
      * @access   public
      * @throws   PEAR_Error
      */
@@ -518,25 +580,38 @@ class HTML_Table_Storage extends HTML_Common {
 
     /**
      * Alternates the row attributes starting at $start
-     * @param    int      $start          Row index of row in which alternating begins
-     * @param    mixed    $attributes1    Associative array or string of table row attributes
-     * @param    mixed    $attributes2    Associative array or string of table row attributes
-     * @param    bool     $inTR           false if attributes are to be applied in TD tags
-     *                                    true if attributes are to be applied in TR tag
+     * @param    int      $start            Row index of row in which alternating
+     *                                      begins
+     * @param    mixed    $attributes1      Associative array or string of table
+     *                                      row attributes
+     * @param    mixed    $attributes2      Associative array or string of table
+     *                                      row attributes
+     * @param    bool     $inTR             false if attributes are to be applied
+     *                                      in TD tags; true if attributes are to
+     *                                      be applied in TR tag
+     * @param    int      $firstAttributes  (optional) Which attributes should be
+     *                                      applied to the first row, 1 or 2.
      * @access   public
      */
-    function altRowAttributes($start, $attributes1, $attributes2, $inTR = false)
+    function altRowAttributes($start, $attributes1, $attributes2, $inTR = false,
+        $firstAttributes = 1)
     {
-        for ($row = $start ; $row < $this->_rows ; $row++) {
-            $attributes = ( ($row + $start) % 2 == 0 ) ? $attributes1 : $attributes2;
+        for ($row = $start; $row < $this->_rows; $row++) {
+            if (($row + $start + ($firstAttributes - 1)) % 2 == 0) {
+                $attributes = $attributes1;
+            } else {
+                $attributes = $attributes2;
+            }
             $this->updateRowAttributes($row, $attributes, $inTR);
         }
     }
 
     /**
      * Adds a table column and returns the column identifier
-     * @param    array    $contents   (optional) Must be a indexed array of valid cell contents
-     * @param    mixed    $attributes (optional) Associative array or string of table row attributes
+     * @param    array    $contents   (optional) Must be a indexed array of valid
+     *                                cell contents
+     * @param    mixed    $attributes (optional) Associative array or string of
+     *                                table row attributes
      * @param    string   $type       (optional) Cell type either 'th' or 'td'
      * @return   int
      * @access   public
@@ -544,7 +619,8 @@ class HTML_Table_Storage extends HTML_Common {
     function addCol($contents = null, $attributes = null, $type = 'td')
     {
         if (isset($contents) && !is_array($contents)) {
-            return PEAR::raiseError('First parameter to HTML_Table::addCol must be an array');
+            return PEAR::raiseError('First parameter to HTML_Table::addCol ' .
+                                    'must be an array');
         }
         if (is_null($contents)) {
           $contents = array();
@@ -566,7 +642,8 @@ class HTML_Table_Storage extends HTML_Common {
     /**
      * Sets the column attributes for an existing column
      * @param    int      $col            Column index
-     * @param    mixed    $attributes     (optional) Associative array or string of table row attributes
+     * @param    mixed    $attributes     (optional) Associative array or string
+     *                                    of table row attributes
      * @access   public
      */
     function setColAttributes($col, $attributes = null)
@@ -585,7 +662,8 @@ class HTML_Table_Storage extends HTML_Common {
     /**
      * Updates the column attributes for an existing column
      * @param    int      $col            Column index
-     * @param    mixed    $attributes     (optional) Associative array or string of table row attributes
+     * @param    mixed    $attributes     (optional) Associative array or string
+     *                                    of table row attributes
      * @access   public
      */
     function updateColAttributes($col, $attributes = null)
@@ -603,7 +681,8 @@ class HTML_Table_Storage extends HTML_Common {
 
     /**
      * Sets the attributes for all cells
-     * @param    mixed    $attributes        (optional) Associative array or string of table row attributes
+     * @param    mixed    $attributes        (optional) Associative array or
+     *                                       string of table row attributes
      * @access   public
      */
     function setAllAttributes($attributes = null)
@@ -615,7 +694,8 @@ class HTML_Table_Storage extends HTML_Common {
 
     /**
      * Updates the attributes for all cells
-     * @param    mixed    $attributes        (optional) Associative array or string of table row attributes
+     * @param    mixed    $attributes        (optional) Associative array or
+     *                                       string of table row attributes
      * @access   public
      */
     function updateAllAttributes($attributes = null)
@@ -645,53 +725,55 @@ class HTML_Table_Storage extends HTML_Common {
         } else {
             $extraTab = '';
         }
-        for ($i = 0 ; $i < $this->_rows ; $i++) {
-            $attr = '';
-            if (isset($this->_structure[$i]['attr'])) {
-                $attr = $this->_getAttrString($this->_structure[$i]['attr']);
-            }
-            $strHtml .= $tabs .$tab . $extraTab . '<tr'.$attr.'>' . $lnEnd;
-            for ($j = 0 ; $j < $this->_cols ; $j++) {
-                $attr     = '';
-                $contents = '';
-                $type     = 'td';
-                if (isset($this->_structure[$i][$j]) && $this->_structure[$i][$j] == '__SPANNED__') {
-                    continue;
+        if ($this->_cols > 0) {
+            for ($i = 0 ; $i < $this->_rows ; $i++) {
+                $attr = '';
+                if (isset($this->_structure[$i]['attr'])) {
+                    $attr = $this->_getAttrString($this->_structure[$i]['attr']);
                 }
-                if (isset($this->_structure[$i][$j]['type'])) {
-                    $type = (strtolower($this->_structure[$i][$j]['type']) == 'th' ? 'th' : 'td');
-                }
-                if (isset($this->_structure[$i][$j]['attr'])) {
-                    $attr = $this->_structure[$i][$j]['attr'];
-                }
-                if (isset($this->_structure[$i][$j]['contents'])) {
-                    $contents = $this->_structure[$i][$j]['contents'];
-                }
-                $strHtml .= $tabs . $tab . $tab . $extraTab . "<$type" . $this->_getAttrString($attr) . '>';
-                if (is_object($contents)) {
-                    // changes indent and line end settings on nested tables
-                    if (is_subclass_of($contents, 'html_common')) {
-                        $contents->setTab($tab . $extraTab);
-                        $contents->setTabOffset($this->_tabOffset + 3);
-                        $contents->_nestLevel = $this->_nestLevel + 1;
-                        $contents->setLineEnd($this->_getLineEnd());
+                $strHtml .= $tabs .$tab . $extraTab . '<tr'.$attr.'>' . $lnEnd;
+                for ($j = 0 ; $j < $this->_cols ; $j++) {
+                    $attr     = '';
+                    $contents = '';
+                    $type     = 'td';
+                    if (isset($this->_structure[$i][$j]) && $this->_structure[$i][$j] == '__SPANNED__') {
+                        continue;
                     }
-                    if (method_exists($contents, 'toHtml')) {
-                        $contents = $contents->toHtml();
-                    } elseif (method_exists($contents, 'toString')) {
-                        $contents = $contents->toString();
+                    if (isset($this->_structure[$i][$j]['type'])) {
+                        $type = (strtolower($this->_structure[$i][$j]['type']) == 'th' ? 'th' : 'td');
                     }
+                    if (isset($this->_structure[$i][$j]['attr'])) {
+                        $attr = $this->_structure[$i][$j]['attr'];
+                    }
+                    if (isset($this->_structure[$i][$j]['contents'])) {
+                        $contents = $this->_structure[$i][$j]['contents'];
+                    }
+                    $strHtml .= $tabs . $tab . $tab . $extraTab . "<$type" . $this->_getAttrString($attr) . '>';
+                    if (is_object($contents)) {
+                        // changes indent and line end settings on nested tables
+                        if (is_subclass_of($contents, 'html_common')) {
+                            $contents->setTab($tab . $extraTab);
+                            $contents->setTabOffset($this->_tabOffset + 3);
+                            $contents->_nestLevel = $this->_nestLevel + 1;
+                            $contents->setLineEnd($this->_getLineEnd());
+                        }
+                        if (method_exists($contents, 'toHtml')) {
+                            $contents = $contents->toHtml();
+                        } elseif (method_exists($contents, 'toString')) {
+                            $contents = $contents->toString();
+                        }
+                    }
+                    if (is_array($contents)) {
+                        $contents = implode(', ', $contents);
+                    }
+                    if (isset($this->_autoFill) && $contents === '') {
+                        $contents = $this->_autoFill;
+                    }
+                    $strHtml .= $contents;
+                    $strHtml .= "</$type>" . $lnEnd;
                 }
-                if (is_array($contents)) {
-                    $contents = implode(', ', $contents);
-                }
-                if (isset($this->_autoFill) && $contents === '') {
-                    $contents = $this->_autoFill;
-                }
-                $strHtml .= $contents;
-                $strHtml .= "</$type>" . $lnEnd;
+                $strHtml .= $tabs . $tab . $extraTab . '</tr>' . $lnEnd;
             }
-            $strHtml .= $tabs . $tab . $extraTab . '</tr>' . $lnEnd;
         }
         return $strHtml;
     }

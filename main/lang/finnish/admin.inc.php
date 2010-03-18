@@ -1,43 +1,44 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$AdminBy  = "Ylläpito";
-$AdministrationTools  = "Ylläpito";
-$State  = "Syteemin tila";
-$Statistiques  = "Tilastot";
-$langUsed       = "käytetty";
-$langPresent   = "Ok";
-$langMissing    = "puuttuu";
-$langExist      = "olemassa oleva";
-$DisplayTeacherInCourselistTitle = "Näytä opettaja kurssin otsikossa";
-$DisplayTeacherInCourselistComment = "Näytä opettaja kurssilistan kommentissa";
-$DisplayCourseCodeInCourselistComment = "Näytä kurssikoodi kurssilistan kommentissa";
-$DisplayCourseCodeInCourselistTitle = "Näytä kurssikoodi kurssin otsikossa";
+$AdminBy = "YllÃ¤pito";
+$AdministrationTools = "YllÃ¤pito";
+$State = "Syteemin tila";
+$Statistiques = "Tilastot";
+$langUsed = "kÃ¤ytetty";
+$langPresent = "Ok";
+$langMissing = "puuttuu";
+$langExist = "olemassa oleva";
+$DisplayTeacherInCourselistTitle = "NÃ¤ytÃ¤ opettaja kurssin otsikossa";
+$DisplayTeacherInCourselistComment = "NÃ¤ytÃ¤ opettaja kurssilistan kommentissa";
+$DisplayCourseCodeInCourselistComment = "NÃ¤ytÃ¤ kurssikoodi kurssilistan kommentissa";
+$DisplayCourseCodeInCourselistTitle = "NÃ¤ytÃ¤ kurssikoodi kurssin otsikossa";
 $ThereAreNoVirtualCourses = "Ei ole virtuaalikursseja alustassa";
-$langCourseBackup = "Tee varmuuskopio tästä kursista";
+$langCourseBackup = "Tee varmuuskopio tÃ¤stÃ¤ kursista";
 $langCourseTitular = "Opettaja";
 $langCourseTitle = "Kurssin otsikko";
 $langCourseFaculty = "Kurssi kategoria";
 $langCourseLanguage = "Kurssin kieli";
-$langCourseAccess = "Kurssi pääsy";
+$langCourseAccess = "Kurssi pÃ¤Ã¤sy";
 $langCourseSubscription = "Kurssin tilaus";
-$langPublicAccess = "Julkinen pääsy";
-$langPrivateAccess = "Yksityinen pääsy";
-$langDBManagementOnlyForServerAdmin = "Tietokannan ylläpito on sallittu vain palvelimen ylläpitäjälle";
+$langPublicAccess = "Julkinen pÃ¤Ã¤sy";
+$langPrivateAccess = "Yksityinen pÃ¤Ã¤sy";
+$langDBManagementOnlyForServerAdmin = "Tietokannan yllÃ¤pito on sallittu vain palvelimen yllÃ¤pitÃ¤jÃ¤lle";
 $langPhone = "Puhelin";
 $langPhoneNumber = "Puhelinnumero";
-$langAddToCourse = "Lisää kurssiin";
+$langAddToCourse = "LisÃ¤Ã¤ kurssiin";
 $langDeleteFromCourse = "Peruuta kurssi(t)";
-$langAdministrator = "Ylläpitäjä";
-$langAddPicture = "Lisää kuva";
+$langAdministrator = "YllÃ¤pitÃ¤jÃ¤";
+$langAddPicture = "LisÃ¤Ã¤ kuva";
 $langDeletePicture = "Poista kuva";
-$langAddUsers = "Lisää käyttäjä";
-$langAddGroups = "Lisää ryhmiä";
-$langAddClasses = "Lisää luokkia";
-$langExportUsers = "Tuo käyttäjä lista";
-$langAddACategory = "Lisää kategoria";
+$langAddUsers = "LisÃ¤Ã¤ kÃ¤yttÃ¤jÃ¤";
+$langAddGroups = "LisÃ¤Ã¤ ryhmiÃ¤";
+$langAddClasses = "LisÃ¤Ã¤ luokkia";
+$langExportUsers = "Tuo kÃ¤yttÃ¤jÃ¤ lista";
+$langAddACategory = "LisÃ¤Ã¤ kategoria";
 $ServerStatusTitle = "Palvelin tyyppi";
 $Languages = "Kielet";
 $ClassDeleted = "Luokka on poistettu";
-$DokeosForum  = "Dokeos Foorumi";
+$DokeosForum = "Chamilo Foorumi";
 ?>

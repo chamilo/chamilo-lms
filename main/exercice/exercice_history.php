@@ -44,7 +44,7 @@ $show=(isset($_GET['show']) && $_GET['show'] == 'result')?'result':'test'; // mo
 */
 
 require_once(api_get_path(LIBRARY_PATH).'document.lib.php');
-include(api_get_path(LIBRARY_PATH).'mail.lib.inc.php');
+//include(api_get_path(LIBRARY_PATH).'mail.lib.inc.php');
 include(api_get_path(LIBRARY_PATH).'usermanager.lib.php');
 
 /*
@@ -56,7 +56,7 @@ $is_allowedToEdit = api_is_allowed_to_edit(null,true);
 $is_tutor = api_is_allowed_to_edit(true);
 
 if(!$is_allowedToEdit){
-	header('Location: /main/exercice/exercice.php?cidReq='.Security::Remove_XSS($_GET['cidReq']));
+	header('Location: /main/exercice/exercice.php?cidReq='.Security::remove_XSS($_GET['cidReq']));
 	exit;
 }
 
@@ -107,10 +107,10 @@ Display::display_header($nameTools,"Exercise");
 //Display::display_introduction_section(TOOL_QUIZ);
 /*
 $sql = 'SELECT * FROM '.$TBL_EXERCICES;
-$query = Database::query($sql,__FILE__,__LINE__);
+$query = Database::query($sql);
 */
 $sql = "SELECT *, quiz_question.question, firstname, lastname FROM $TBL_TRACK_ATTEMPT_RECORDING t,$TBL_USER,$TBL_EXERCICES_QUESTION quiz_question WHERE quiz_question.id = question_id AND user_id = author AND exe_id = '".(int)$_GET['exe_id']."' ORDER BY t.insert_date desc,question ASC";
-$query = Database::query($sql,__FILE__,__LINE__);
+$query = Database::query($sql);
 while($row = Database::fetch_array($query)){
 	echo '<tr';
 	if($i%2==0) echo 'class="row_odd"'; else echo 'class="row_even"';

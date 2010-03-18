@@ -1,29 +1,30 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$AgendaAdd = "Tilføj ny kalenderaftale";
+$AgendaAdd = "TilfÃ¸j ny kalenderaftale";
 $ShowAllEvents = "Vis alle kalenderaftaler";
-$ShowCurrent = "Vis kalenderaftaler for indeværende måned";
-$AddCalendarItem = "Tilføj ny aftale";
+$ShowCurrent = "Vis kalenderaftaler for indevÃ¦rende mÃ¥ned";
+$AddCalendarItem = "TilfÃ¸j ny aftale";
 $Day = "Dag";
-$Month = "Måned";
-$Year = "År";
+$Month = "MÃ¥ned";
+$Year = "Ã…r";
 $Hour = "Time";
 $Minutes = "Minutter";
 $Detail = "Detaljer";
-$EditSuccess = "Aftalen er blevet ændret";
-$AddSuccess = "Aftale tilføjet";
+$EditSuccess = "Aftalen er blevet Ã¦ndret";
+$AddSuccess = "Aftale tilfÃ¸jet";
 $AgendaDeleteSuccess = "Aftalen er slettet";
 $NoAgendaItems = "Der er ingen aftaler";
 $lang_september = "September";
 $langClassName = "Klassenavn";
 $lang_agenda = "Kalender";
 $ModifyCalendarItem = "Rediger aftale";
-$ItemTitle = "Titel på aftale";
+$ItemTitle = "Titel pÃ¥ aftale";
 $langDay = "dag";
-$month_default = "forvalgt måned";
-$langYear = "År";
-$year_default = "forvalgt år";
+$month_default = "forvalgt mÃ¥ned";
+$langYear = "Ã…r";
+$year_default = "forvalgt Ã¥r";
 $langHour = "Time";
 $hour_default = "forvalgt time";
 $langMinute = "minut";
@@ -31,26 +32,26 @@ $langLasting = "varende";
 $langOldToNew = "gammel til ny";
 $langNewToOld = "ny til gammel";
 $langNow = "nu";
-$langAddEvent = "Tilføj aftale";
+$langAddEvent = "TilfÃ¸j aftale";
 $langDetail = "detalje";
-$MonthView = "Månedsoversigt";
+$MonthView = "MÃ¥nedsoversigt";
 $WeekView = "Ugeoversigt";
 $DayView = "Dagsoversigt";
-$AddPersonalItem = "Tilføj personlig aftale";
+$AddPersonalItem = "TilfÃ¸j personlig aftale";
 $Week = "Uge";
 $Date = "Dato";
 $Time = "Tid";
-$AddPersonalCalendarItem = "Tilføj en personlig aftale";
+$AddPersonalCalendarItem = "TilfÃ¸j en personlig aftale";
 $ModifyPersonalCalendarItem = "Rediger en personlig aftale";
-$PeronalAgendaItemAdded = "Din personlige aftale er tilføjet";
+$PeronalAgendaItemAdded = "Din personlige aftale er tilfÃ¸jet";
 $PeronalAgendaItemEdited = "Din personlige aftale er gemt";
 $PeronalAgendaItemDeleted = "Din personlige aftale er slettet";
 $ViewPersonalItem = "Se personlige aftaler";
-$UserGroupFilter = "Filtrer på grupper/brugere";
+$UserGroupFilter = "Filtrer pÃ¥ grupper/brugere";
 $ShowAll = "Vis alle";
 $Print = "Udskriv";
 $MyTextHere = "min tekst her";
 $CopiedAsAnnouncement = "Kopieret som meddelelse";
 $NewAnnouncement = "Ny meddelelse";
-$AddAnnouncement = "tilføj som en meddelelse";
+$AddAnnouncement = "tilfÃ¸j som en meddelelse";
 ?>

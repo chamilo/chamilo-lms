@@ -1,16 +1,17 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$langPgTitle = "Názov stránky";
-$langExplanation = "Stránka musí by&#357; vo formáte HTML (napr. \"moja_stranka.htm\"). Bude spojená s domovskou stránkou. Ak chcete posla&#357; dokumenty v inom formáte ako HTML (PDF, Word, Power Point, Video, at&#271;.) pouite <a href=../document/document.php>Nástroj dokumentov</a>";
-$langTooBig = "Bu&#271; ste nevybrali súbor na na&#269;ítanie, alebo je ve&#318;mi ve&#318;kı.";
-$langCouldNot = "Súbor nemôe by&#357; na&#269;ítanı.";
-$langNotAllowed = "Nepovolené";
-$langAddPageToSite = "Prida&#357; stránku na plochu";
-$langCouldNotSendPage = "Tento súbor nie je vo formáte HTML a nemôe by&#357; na&#269;ítanı. Ak chcete posla&#357; dokumenty v inom formáte ako HTML (PDF, Word, Power Point, Video, at&#271;.) pouite <a href=../document/document.php>Nástroj dokumentov</a>";
-$langSendPage = "Stránka na na&#269;ítanie";
-$langPageTitleModified = "Názov stránky bol zmenenı";
-$langPageAdded = "Stránka pridaná";
-$langAddPage = "Prida&#357; stránku";
-$Choose = "Preh&#318;adáva&#357;";
+$langPgTitle = "NÃ¡zov strÃ¡nky";
+$langExplanation = "KliknutÃ­m na OK sa vytvorÃ­ strÃ¡nka z agendou, fÃ³rom, meneÅ¾Ã©rom dokumentov atÄ. PrihlÃ¡senie vaÅ¡Ã­m menom, ako tvorcom Vam umoÅ¾nÃ­ ju meniÅ¥ podÄ¾a potreby.";
+$langTooBig = "BuÄ ste nevybrali sÃºbor na zaslanie, alebo je veÄ¾mi veÄ¾kÃ½";
+$langCouldNot = "SÃºbor nie je moÅ¾nÃ© naÄÃ­taÅ¥";
+$langNotAllowed = "NepovolenÃ©";
+$langAddPageToSite = "PridaÅ¥ strÃ¡nku na plochu";
+$langCouldNotSendPage = "Tento sÃºbor nie je vo formÃ¡te HTML a nemÃ´Âe by&#357; na&#269;Ã­tanÃ½. Ak chcete posla&#357; dokumenty v inom formÃ¡te ako HTML (PDF, Word, Power Point, Video, at&#271;.) pouÂite <a href=../document/document.php>NÃ¡stroj dokumentov</a>";
+$langSendPage = "StrÃ¡nka na naÄÃ­tanie";
+$langPageTitleModified = "NÃ¡zov strÃ¡nky bol zmenenÃ½";
+$langPageAdded = "StrÃ¡nka pridanÃ¡";
+$langAddPage = "PridaÅ¥ strÃ¡nku";
+$Choose = "VybraÅ¥";
 ?>

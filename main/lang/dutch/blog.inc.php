@@ -1,5 +1,6 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $MyTasks = "Mijn taken";
 $FavoriteBlogs = "Mijn favoriete projecten";
@@ -52,7 +53,7 @@ $ReadMore = "lees meer...";
 $DeleteThisArticle = "Dit artikel verwijderen";
 $EditThisPost = "Dit artikel wijzigen";
 $DeleteThisComment = "Deze commentaar verwijderen";
-$NoArticles = "Er is momenteel geen enkel artikel in dit project. Als u een auteur bent in dit project kunt u op de link \'Nieuw artikel\' klikken om een nieuw artikel te schrijven.";
+$NoArticles = "Er is momenteel geen enkel artikel in dit project. Als u een auteur bent in dit project kunt u op de link 'Nieuw artikel' klikken om een nieuw artikel te schrijven.";
 $NoTasks = "Geen taken";
 $Rating = "Score";
 $RateThis = "Geef een score aan dit artikel";
@@ -62,7 +63,7 @@ $WrittenBy = "geschreven door";
 $InBlog = "in dit project";
 $ViewPostsOfThisDay = "Artikels van vandaag bekijken";
 $PostsOf = "Artikels van";
-$NoArticleMatches = "We hebben géén artikels gevonden die voldoen aan uw zoekcriteria. Gelieve een ruimere zoekopdracht uit te voeren.";
+$NoArticleMatches = "We hebben gÃ©Ã©n artikels gevonden die voldoen aan uw zoekcriteria. Gelieve een ruimere zoekopdracht uit te voeren.";
 $SaveProject = "Project bewaren";
 $langTask1 = "Taak 1";
 $langTask2 = "Taak 2";
@@ -81,7 +82,6 @@ $EditPost = "Een artikel wijzigen";
 $AddBlog = "Maak een nieuw project";
 $EditBlog = "Project wijzigen";
 $DeleteBlog = "Dit project verwijderen";
-$NoTasks = "Geen taken";
 $Shared = "Gedeeld";
 $PermissionGrantedByGroupOrRole = "Rechten toegekend per groep of rol";
 $Reader = "Lezer";
@@ -100,4 +100,6 @@ $TaskDeleted = "De taak is verwijderd";
 $TaskAssignmentDeleted = "De toekenning van de taak is verwijderd.";
 $CommentDeleted = "De opmerking is verwijderd.";
 $RatingAdded = "Een score is toegevoegd.";
+$BlogPosts = "Blog Posts";
+$BlogComments = "Blog commentaren";
 ?>

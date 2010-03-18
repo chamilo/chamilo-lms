@@ -1,5 +1,11 @@
 <?php
-$language_file= 'admin';
+/* For licensing terms, see /chamilo_license.txt */
+/**
+ * @package dokeos.social
+ * @author Julio Montoya <gugli100@gmail.com>
+ */
+ 
+$language_file= 'userInfo';
 $cidReset=true;
 require_once '../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'/formvalidator/FormValidator.class.php';
@@ -8,26 +14,52 @@ require_once api_get_path(LIBRARY_PATH).'group_portal_manager.lib.php';
 
 api_block_anonymous_users();
 
+if (api_get_setting('allow_students_to_create_groups_in_social') == 'false' && !api_is_allowed_to_edit()) {
+	api_not_allowed();
+}
 
 global $charset;
+
+$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js" type="text/javascript" language="javascript"></script>'; //jQuery
+$htmlHeadXtra[] = '<script type="text/javascript">
+textarea = "";
+num_characters_permited = 255;
+function text_longitud(){
+   num_characters = document.forms[0].description.value.length;
+  if (num_characters > num_characters_permited){
+      document.forms[0].description.value = textarea;
+   }else{
+      textarea = document.forms[0].description.value;
+   } 
+}
+function show_icon_edit(element_html) {	
+	ident="#edit_image";
+	$(ident).show();
+}		
+
+function hide_icon_edit(element_html)  {
+	ident="#edit_image";
+	$(ident).hide();
+}	
+</script>';
+					
 $table_message = Database::get_main_table(TABLE_MESSAGE);
 
 $form = new FormValidator('add_group');
 
 // name
-$form->addElement('text', 'name', get_lang('Name'));
+$form->addElement('text', 'name', get_lang('Name'), array('size'=>60, 'maxlength'=>120));
 $form->applyFilter('name', 'html_filter');
 $form->applyFilter('name', 'trim');
 $form->addRule('name', get_lang('ThisFieldIsRequired'), 'required');
 
 // Description
-$form->addElement('textarea', 'description', get_lang('Description'));
+$form->addElement('textarea', 'description', get_lang('Description'), array('rows'=>3, 'cols'=>58, onKeyDown => "text_longitud()", onKeyUp => "text_longitud()"));
 $form->applyFilter('description', 'html_filter');
 $form->applyFilter('description', 'trim');
 
-
 // url
-$form->addElement('text', 'url', get_lang('URL'));
+$form->addElement('text', 'url', get_lang('URL'), array('size'=>35));
 $form->applyFilter('url', 'html_filter');
 $form->applyFilter('url', 'trim');
 
@@ -73,14 +105,19 @@ $nameTools = get_lang('AddGroup');
 $this_section = SECTION_SOCIAL;
 
 $interbreadcrumb[]= array ('url' =>'home.php','name' => get_lang('Social'));
+$interbreadcrumb[]= array ('url' =>'groups.php','name' => get_lang('Groups'));
+$interbreadcrumb[]= array ('url' =>'#','name' => $nameTools);
 Display :: display_header($tool_name, 'Groups');
 
-//show the action menu
-SocialManager::show_social_menu();
-echo '<div class="actions-title">';
-echo get_lang('Groups');
+echo '<div id="social-content">';
+	echo '<div id="social-content-left">';
+		//show the action menu			
+		SocialManager::show_social_menu('group_add');
+	echo '</div>';
+	echo '<div id="social-content-right">';
+		$form->display();	
+	echo '</div>';
 echo '</div>';
 
-$form->display();	
-	
+Display :: display_footer();
 ?>

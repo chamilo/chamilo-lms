@@ -1,49 +1,50 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$MyTasks = "Moje úkoly";
-$FavoriteBlogs = "Moje oblíbené blog-y";
+$MyTasks = "Moje Ãºkoly";
+$FavoriteBlogs = "Moje oblÃ­benÃ© blog-y";
 $Navigation = "Navigace";
 $TopTen = "Top ten Blogy";
 $Subtitle = "Podnadpis";
 $ThisBlog = "Tento blog";
-$NewPost = "Nový &#269;lánek";
-$TaskManager = "Správa úkol&#367;";
-$MemberManager = "Správa uživatel&#367;";
+$NewPost = "NovÃ½ ÄlÃ¡nek";
+$TaskManager = "SprÃ¡va ÃºkolÅ¯";
+$MemberManager = "SprÃ¡va uÅ¾ivatelÅ¯";
 $PostFullText = "Text";
-$ReadPost = "&#268;íst tento &#269;lánek";
-$Home = "Dom&#367;";
-$FirstPostText = "Toto je první &#269;lánek v tomot projektu. Všichni zapsaní do projektu mohou p&#345;ispívat";
-$AddNewComment = "P&#345;idat nový komentá&#345;";
-$ReplyToThisComment = "Odpov&#283;d&#283;t na tento komentá&#345;";
-$ManageTasks = "Spravovat úlohy";
-$ManageMembers = "Zapsat/odregistrovat uživatele z projektu";
+$ReadPost = "ÄŒÃ­st tento ÄlÃ¡nek";
+$Home = "DomÅ¯";
+$FirstPostText = "Toto je prvnÃ­ ÄlÃ¡nek v tomot projektu. VÅ¡ichni zapsanÃ­ do projektu mohou pÅ™ispÃ­vat";
+$AddNewComment = "PÅ™idat novÃ½ komentÃ¡Å™";
+$ReplyToThisComment = "OdpovÄ›dÄ›t na tento komentÃ¡Å™";
+$ManageTasks = "Spravovat Ãºlohy";
+$ManageMembers = "Zapsat/odregistrovat uÅ¾ivatele z projektu";
 $Register = "Registrovat";
 $UnRegister = "Odregistrovat";
-$SubscribeMembers = "Schválit uživatele";
-$UnsubscribeMembers = "Neschválit uživatele";
-$RightsManager = "Správa uživatelských práv";
-$ManageRights = "Spravovat funkce a práva uživatele v tomto projektu";
-$Task = "Úkol";
-$Tasks = "Úkoly";
-$Member = "&#268;len";
-$Members = "&#268;lenové";
+$SubscribeMembers = "SchvÃ¡lit uÅ¾ivatele";
+$UnsubscribeMembers = "NeschvÃ¡lit uÅ¾ivatele";
+$RightsManager = "SprÃ¡va uÅ¾ivatelskÃ½ch prÃ¡v";
+$ManageRights = "Spravovat funkce a prÃ¡va uÅ¾ivatele v tomto projektu";
+$Task = "Ãškol";
+$Tasks = "Ãškoly";
+$Member = "ÄŒlen";
+$Members = "ÄŒlenovÃ©";
 $Role = "Funkce";
 $Rate = "Hodnota";
 $Roles = "Funkce";
-$AddTask = "P&#345;idat novou funkci";
-$AddTasks = "P&#345;idat nové funkce";
-$langTask1 = "Úloha 1";
-$langTask2 = "Úloha 2";
-$langTask3 = "Úloha 3";
-$langTask1Desc = "Úloha 1 - popis";
-$langTask2Desc = "Úloha 2 - popis";
-$langTask3Desc = "Úloha 3 - popis";
+$AddTask = "PÅ™idat novou funkci";
+$AddTasks = "PÅ™idat novÃ© funkce";
+$langTask1 = "Ãšloha 1";
+$langTask2 = "Ãšloha 2";
+$langTask3 = "Ãšloha 3";
+$langTask1Desc = "Ãšloha 1 - popis";
+$langTask2Desc = "Ãšloha 2 - popis";
+$langTask3Desc = "Ãšloha 3 - popis";
 $blog_management = "Blog management";
-$langWelcome = "Vítejte !";
+$langWelcome = "VÃ­tejte !";
 $langModule = "Modul";
-$langUserHasPermissionNot = "Uživatel nemá práva";
-$langUserHasPermission = "Uživatel má práva";
+$langUserHasPermissionNot = "UÅ¾ivatel nemÃ¡ prÃ¡va";
+$langUserHasPermission = "UÅ¾ivatel mÃ¡ prÃ¡va";
 $langLegend = "Legenda";
-$langUserHasPermissionByRoleGroup = "Uživatel má práva v jeho skupin&#283;";
+$langUserHasPermissionByRoleGroup = "UÅ¾ivatel mÃ¡ prÃ¡va v jeho skupinÄ›";
 ?>

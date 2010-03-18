@@ -1,8 +1,9 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$langActivate = "Í­¸ú¤Ë¤¹¤ë";
-$langDeactivate = "Ìµ¸ú²½";
-$langInLnk  = "¥ê¥ó¥¯¤òÌµ¸ú¤Ë¤¹¤ë";
-$langDelLk = "ËÜÅö¤Ë¥ê¥ó¥¯¤òºï½ü¤¹¤ë¤Î¤Ç¤¹¤«¡©¡©";
+$langActivate = "é“œè·Ÿã«ã™ã‚‹";
+$langDeactivate = "ç—°è·Ÿæ­¥";
+$langInLnk = "ãƒªãƒ³ã‚¯ã‚’ç—°è·Ÿã«ã™ã‚‹";
+$langDelLk = "å¡‘ç¢°ã«ãƒªãƒ³ã‚¯ã‚’çŒ´è¿‘ã™ã‚‹ã®ã§ã™ã‹ã€…ã€…";
 ?>

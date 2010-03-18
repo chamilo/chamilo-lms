@@ -49,7 +49,7 @@ if (isset($_SESSION['gradebook'])){
 if (!empty($gradebook) && $gradebook=='view') {
 	$interbreadcrumb[]= array (
 			'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
-			'name' => get_lang('Gradebook')
+			'name' => get_lang('ToolGradebook')
 		);
 }
 
@@ -75,7 +75,7 @@ Display::display_header($nameTools,"Exercise");
 	echo "<tr><td width='10%'> ";
 	$ans =  $objAnswerTmp->answer[$i];
 
-	$form = new FormValidator('feedbackform','post',api_get_self()."?modifyQuestion=".$modifyQuestion."&newQuestion=".$newQuestion);
+	$form = new FormValidator('feedbackform','post',api_get_self()."?".api_get_cidreq()."&modifyQuestion=".$modifyQuestion."&newQuestion=".$newQuestion);
 	$obj_registration_form = new HTML_QuickForm('frmRegistration', 'POST');
 	$renderer =& $obj_registration_form->defaultRenderer();
 	$renderer->setElementTemplate(

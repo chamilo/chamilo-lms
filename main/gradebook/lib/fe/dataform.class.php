@@ -1,27 +1,5 @@
 <?php
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2008 Dokeos Latinoamerica SAC
-	Copyright (c) 2006 Dokeos SPRL
-	Copyright (c) 2006 Ghent University (UGent)
-	Copyright (c) various contributors
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
-	Mail: info@dokeos.com
-==============================================================================
-*/
+/* For licensing terms, see /license.txt */
 require_once (dirname(__FILE__).'/../../../inc/global.inc.php');
 require_once (dirname(__FILE__).'/../be.inc.php');
 require_once (dirname(__FILE__).'/../gradebook_functions.inc.php');
@@ -71,7 +49,7 @@ class DataForm extends FormValidator {
 		$this->addElement('static','label','',get_lang('ChooseOrientation'));
 		$this->addElement('radio', 'orientation', null, get_lang('Portrait'), 'portrait');
 		$this->addElement('radio', 'orientation', null, get_lang('Landscape'), 'landscape');
-		$this->addElement('submit', 'submit', get_lang('Ok'));
+		$this->addElement('style_submit_button', 'submit', get_lang('Ok'), 'class="save"');
 		$this->setDefaults(array (
 			'orientation' => 'portrait'
 		));
@@ -97,7 +75,7 @@ class DataForm extends FormValidator {
 			'xml',
 			'csv'
 		);
-		$this->addRule('file', get_lang('InvalidExtension') . ' (' . implode(',', $allowed_file_types) . ')', 'filetype', $allowed_file_types);
+		//$this->addRule('file', get_lang('InvalidExtension') . ' (' . implode(',', $allowed_file_types) . ')', 'filetype', $allowed_file_types);
 		$this->addElement('radio', 'file_type', get_lang('FileType'), 'CSV (<a href="docs/example_csv.html" target="_blank">' . get_lang('ExampleCSVFile') . '</a>)', 'csv');
 		$this->addElement('radio', 'file_type', null, 'XML (<a href="docs/example_xml.html" target="_blank">' . get_lang('ExampleXMLFile') . '</a>)', 'xml');
 		$this->addElement('checkbox','overwrite', null,get_lang('OverwriteScores'));

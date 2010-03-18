@@ -14,6 +14,7 @@ $language_file = 'survey';
 
 // including the global dokeos file
 require ('../inc/global.inc.php');
+$this_section=SECTION_COURSES;
 
 // including additional libraries
 //require_once (api_get_path(LIBRARY_PATH)."/survey.lib.php");
@@ -25,7 +26,7 @@ require_once (api_get_path(LIBRARY_PATH)."/course.lib.php");
 $extend_rights_for_coachs = api_get_setting('extend_rights_for_coach_on_survey');
 if (!api_is_allowed_to_edit(false,true) || (api_is_course_coach() && $extend_rights_for_coachs=='false'))
 {
-	Display :: display_header(get_lang('Survey'));
+	Display :: display_header(get_lang('ToolSurvey'));
 	Display :: display_error_message(get_lang('NotAllowed'), false);
 	Display :: display_footer();
 	exit;
@@ -50,7 +51,7 @@ if (isset($_GET['survey_id'])) {
 	if ($course_code!=-1) {
 		$survey_data = survey_manager::get_survey($survey_id);
 	} else {
-		Display :: display_header(get_lang('Survey'));
+		Display :: display_header(get_lang('ToolSurvey'));
 		Display :: display_error_message(get_lang('NotAllowed'), false);
 		Display :: display_footer();
 		exit;
@@ -176,7 +177,7 @@ echo '	</tr>';
 // Displaying the table contents with all the questions
 $question_counter = 1;
 $sql = "SELECT * FROM $table_survey_question_group WHERE survey_id = '".Database::escape_string($survey_id)."' ORDER BY id";
-$result = Database::query($sql, __FILE__, __LINE__);
+$result = Database::query($sql);
 $groups = array();
 while($row = Database::fetch_array($result)) {
     $groups[$row['id']] = $row['name'];
@@ -188,7 +189,7 @@ $sql = "SELECT survey_question.*, count(survey_question_option.question_option_i
 			WHERE survey_question.survey_id = '".Database::escape_string($survey_id)."'
 			GROUP BY survey_question.question_id
 			ORDER BY survey_question.sort ASC";
-$result = Database::query($sql, __FILE__, __LINE__);
+$result = Database::query($sql);
 $question_counter_max = Database::num_rows($result);
 while ($row = Database::fetch_array($result,'ASSOC')) {
 	echo '<tr>';
@@ -256,7 +257,7 @@ if($is_survey_type_1)
 	echo '<form action="survey.php?action=addgroup&survey_id='.$survey_id.'" method="post">';
 	if($_GET['action']=='editgroup') {
 		$sql = 'SELECT name,description FROM '.$table_survey_question_group.' WHERE id = '.Database::escape_string($_GET['gid']).' AND survey_id = '.Database::escape_string($survey_id).' limit 1';
-		$rs = Database::query($sql,__FILE__,__LINE__);
+		$rs = Database::query($sql);
 		$editedrow = Database::fetch_array($rs,'ASSOC');
 
 		echo	'<input type="text" maxlength="20" name="name" value="'.$editedrow['name'].'" size="10" disabled>';
@@ -279,7 +280,7 @@ if($is_survey_type_1)
 
 	$sql = 'SELECT id,name,description FROM '.$table_survey_question_group.' WHERE survey_id = '.Database::escape_string($survey_id).' ORDER BY name';
 
-	$rs = Database::query($sql,__FILE__,__LINE__);
+	$rs = Database::query($sql);
 	while($row = Database::fetch_array($rs,ASSOC)){
 		$grouplist .= '<tr><td>'.$row['name'].'</td><td>'.$row['description'].'</td><td>'.
 		'<a href="survey.php?survey_id='.$survey_id.'&gid='.$row['id'].'&action=editgroup">'.

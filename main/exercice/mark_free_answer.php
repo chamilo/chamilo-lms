@@ -51,6 +51,7 @@ define('MULTIPLE_ANSWER',	2);
 define('FILL_IN_BLANKS',	3);
 define('MATCHING',		4);
 define('FREE_ANSWER', 5);
+define('MULTIPLE_ANSWER_COMBINATION', 9);
 
 
 
@@ -112,7 +113,7 @@ if (isset($_SESSION['gradebook'])){
 if (!empty($gradebook) && $gradebook=='view') {
 	$interbreadcrumb[]= array (
 			'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
-			'name' => get_lang('Gradebook')
+			'name' => get_lang('ToolGradebook')
 		);
 }
 
@@ -137,7 +138,7 @@ if($action == 'mark'){
 				WHERE exe_user_id = '".Database::escape_string($my_usr)."' AND exe_cours_id = '".Database::escape_string($my_cid)."' AND exe_exo_id = '".Database::escape_string($my_exe)."'
 				ORDER BY exe_date DESC";
 			#echo $sql;
-			$res = Database::query($sql,__FILE__,__LINE__);
+			$res = Database::query($sql);
 			if(Database::num_rows($res)>0){
 				$row = Database::fetch_array($res);
 				//@todo Check that just summing past score and the new free answer mark doesn't come up
@@ -146,7 +147,7 @@ if($action == 'mark'){
 				$sql = "UPDATE $exercise_table SET exe_result = '$my_score'
 					WHERE exe_id = '".$row['exe_id']."'";
 				#echo $sql;
-				$res = Database::query($sql,__FILE__,__LINE__);
+				$res = Database::query($sql);
 				$my_msg = get_lang('MarkIsUpdated');
 			}else{
 				$my_score = $_POST['score'];
@@ -177,12 +178,12 @@ if($action == 'mark'){
 				#		$user_id = '0';
 				#	}
 				#	$sql2 = "update `$tbl_learnpath_user` set score='$score' where (user_id=$user_id and learnpath_id='$learnpath_id' and learnpath_item_id='$learnpath_item_id')";
-				#	$res2 = Database::query($sql2,__FILE__,__LINE__);
+				#	$res2 = Database::query($sql2);
 				#}
-				$res = Database::query($sql,__FILE__,__LINE__);
+				$res = Database::query($sql);
 				$my_msg = get_lang('MarkInserted');
 			}
-			//$Database::query($sql, __FILE__, __LINE__);
+			//Database::query($sql);
 			//return 0;
 		}
 	}else{

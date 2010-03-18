@@ -1,9 +1,10 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $langExercice = "Bài tập";
-$langActivate = "Enable";
-$langDeactivate = "Disable";
+$langActivate = "Kích hoạt";
+$langDeactivate = "Tạm ngưng";
 $langNoEx = "Chưa có bài tập";
 $langNewEx = "Bài tập mới";
 $langQuestion = "Câu hỏi";

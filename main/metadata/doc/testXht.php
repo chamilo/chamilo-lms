@@ -49,7 +49,7 @@ $testdoc = new xmddoc(
 , this description was
                          modified
 by
-               Ren�
+               Ren&eacute;
                                        </imsmd:langstring>
             </imsmd:description>
           </imsmd:general>

@@ -1,9 +1,10 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $langExercice = "Latihan";
-$langActivate = "Papar";
-$langDeactivate = "Tidak Papar";
+$langActivate = "Aktifkan";
+$langDeactivate = "Tidak aktif";
 $langNoEx = "Tiada Latihan buat masa ini";
 $langNewEx = "Latihan baru";
 $langQuestion = "Soalan";
@@ -54,7 +55,7 @@ $langMakeCorrespond = "Make correspond";
 $langFillLists = "Please fill the two lists below";
 $langGiveText = "Please type the text";
 $langDefineBlanks = "Please define at least one blank with brackets [...]";
-$langGiveAnswers = "Please give the question\'s answers";
+$langGiveAnswers = "Please give the question's answers";
 $langChooseGoodAnswer = "Please choose a good answer";
 $langChooseGoodAnswers = "Please choose one or more good answers";
 $langQuestionList = "Senarai soalan dalam latihan";

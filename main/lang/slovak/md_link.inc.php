@@ -1,35 +1,36 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$langMdCallingTool = "Odkazy";
-$langMdTitle = "Názov odkazu";
-$langMdDescription = "Popis odkazu";
-$langMdCoverage = "Univerzálny";
-$langMdCopyright = "Gentská univerzita";
-$langTool = "Metadáta odkazu";
-$langLanguageTip = "Jazyk, v ktorom bol vyu&#269;ovací predmet vytvorený";
-$langIdentifier = "Identifikátor";
-$langTitleTip = "názov alebo meno a jazyk tohto názvu alebo mena";
-$langDescriptionTip = "popis alebo komentár a jazyk použitý pre popis vyu&#269;ovacieho predmetu";
-$langKeyword = "K&#318;ú&#269;ové slová";
-$langKeywordTip = "oddeli&#357; &#269;iarkami (písmená, &#269;íslice, -.)";
-$langCoverage = "Kategória";
-$langKwNote = "Ke&#271; meníte jazyk popisu, nepridávajte v rovnakom &#269;ase k&#318;ú&#269;ové slová.";
-$langClickKw = "Pre ozna&#269;enie alebo zrušenie výberu k&#318;ú&#269;ového slova na&#328; kliknite v štruktúre.";
+$langMdCallingTool = "Dokumenty";
+$langMdTitle = "NÃ¡zov vyuÄovacieho predmetu";
+$langMdDescription = "Pre uloÅ¾enie tejto informÃ¡cie stlaÄte UloÅ¾iÅ¥";
+$langMdCoverage = "UniverzÃ¡lny";
+$langMdCopyright = "GentskÃ¡ univerzita";
+$langTool = "MetadÃ¡ta dokumentu";
+$langLanguageTip = "jazyk, v ktorom bol vyuÄovacÃ­ predmet vytvorenÃ½";
+$langIdentifier = "IdentifikÃ¡tor";
+$langTitleTip = "nÃ¡zov alebo meno a jazyk tohto nÃ¡zvu alebo mena";
+$langDescriptionTip = "popis alebo komentÃ¡r a jazyk pouÅ¾itÃ½ pre popis tohto vyuÄovacieho predmetu";
+$langKeyword = "KlÃºÄovÃ© slovÃ¡";
+$langKeywordTip = "rozdeliÅ¥ Äiarkami (pÃ­smenÃ¡, ÄÃ­slice, -.)";
+$langCoverage = "KategÃ³ria";
+$langKwNote = "KeÄ zmenÃ­te jazyk popisu, nepridÃ¡vajte sÃºÄasne kÄ¾ÃºÄovÃ© slovÃ¡.";
+$langClickKw = "Pre oznaÄenie alebo zruÅ¡enie vÃ½beru kÄ¾ÃºÄovÃ©ho slova kliknite naÅˆ v Å¡truktÃºre.";
 $langLocation = "URL/URI";
-$langLocationTip = "klikom otvoríte predmet";
-$langStore = "Uloži&#357;";
-$langDeleteAll = "Zmaza&#357; všetky metadáta";
-$langConfirmDelete = "*Naozaj* chcete zmaza&#357; všetky metadáta?";
-$langNotInDB = "žiadna taká kategória odkazov";
-$langNotFolder = "nie je možné, ie je to prie&#269;inok...";
-$langContinue = "Pokra&#269;ova&#357; s";
-$langCreate = "Vytvori&#357; MDEs";
-$langRemove = "Odstráni&#357; MDEs";
-$langAllRemovedFor = "Všetky záznamy z kategórie odstránené";
-$langRemainingFor = "zastarané záznamy odstránené z kategórie";
-$langMainMD = "Otvori&#357; hlavné MDE";
-$langOrElse = "Vybra&#357; kategóriu odkazov";
-$langWarningDups = "- duplicitné mená kategórií boli odstránené zo zoznamu! ";
-$langSLC = "Pracova&#357; s kategóriou odkazov nazvanou";
+$langLocationTip = "Klikom otvorÃ­te predmet";
+$langStore = "UloÅ¾iÅ¥";
+$langDeleteAll = "ZmazaÅ¥ vÅ¡etky metadÃ¡ta";
+$langConfirmDelete = "*Naozaj* chcete zmazaÅ¥ vÅ¡etky metadÃ¡ta?";
+$langNotInDB = "Å¾iadna takÃ¡ kategÃ³ria odkazov";
+$langNotFolder = "nie je moÅ¾nÃ©, ie je to prieÄinok...";
+$langContinue = "PokraÄovaÅ¥ s";
+$langCreate = "vytvoriÅ¥";
+$langRemove = "OdstrÃ¡niÅ¥ MDEs";
+$langAllRemovedFor = "VÅ¡etky zÃ¡znamy z kategÃ³rie odstrÃ¡nenÃ©";
+$langRemainingFor = "zastaranÃ© zÃ¡znamy odstrÃ¡nenÃ© z kategÃ³rie";
+$langMainMD = "OtvoriÅ¥ hlavnÃ© MDE";
+$langOrElse = "VybraÅ¥ kategÃ³riu odkazov";
+$langWarningDups = "- duplicitnÃ© menÃ¡ kategÃ³riÃ­ boli odstrÃ¡nenÃ© zo zoznamu!";
+$langSLC = "PracovaÅ¥ s kategÃ³riou odkazov nazvanou";
 ?>

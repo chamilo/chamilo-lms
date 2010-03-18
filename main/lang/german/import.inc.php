@@ -1,16 +1,17 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$langPgTitle = "Seitentitel";
-$langExplanation = "Die Seite muss im HTML-Format vorliegen (z.B. \"my_page.htm\"). Es wird von der Homepage verknüpft. Wenn Sie Dokumente verknüpfen möchten, die nicht im HTML Format vorliegen (PDF, Word, Power Point, Video, etc.) benutzen Sie bitte <a href=../document/document.php>das Werkzeug Dokumente</a>";
-$langTooBig = "Sie haben keine Datei ausgewählt, oder Sie ist zu groß.";
-$langCouldNot = "Datei konnte nicht hochgeladen werden";
+$langPgTitle = "Seitenname";
+$langExplanation = "Wenn Sie OK geklickt haben, wird ein kompletter Kurs mit Forum, Agenda, Dokumentmanager usw. erstellt. Ihr Login, als Autor des Kurses, erlaubt Ihnen, die Seite fÃ¼r den Kurs entsprechend Ihrer WÃ¼nsche und Erfordernisse   zu bearbeiten";
+$langTooBig = "Sie haben keine Datei ausgewÃ¤hlt oder die Datei ist zu groÃŸ";
+$langCouldNot = "Datei kann nicht hochgeladen werden";
 $langNotAllowed = "Nicht erlaubt";
-$langAddPageToSite = "Eine Seite hinzufügen";
-$langCouldNotSendPage = "Diese Datei hat kein HTML Format und konnte daher nicht verschickt werden. Wenn Sie Dokumente versenden möchten, die nicht im HTML Format vorliegen (z.B. PDF, Word, Power Point, Video, usw.) benutzen Sie bitte <a href=../document/document.php>das Werkzeug Dokumente</a>";
-$langSendPage = "Seite senden";
-$langPageTitleModified = "Der Titel der Seite wurde verändert";
-$langPageAdded = "Seite wurde hinzugefügt";
-$langAddPage = "Seite hinzufügen";
-$Choose = "Suchen";
+$langAddPageToSite = "Eine Seite hinzufÃ¼gen";
+$langCouldNotSendPage = "Diese Datei hat kein HTML Format und konnte daher nicht verschickt werden. Wenn Sie Dokumente versenden mÃ¶chten, die nicht im HTML Format vorliegen (z.B. PDF, Word, Power Point, Video, usw.) benutzen Sie bitte <a href=../document/document.php>das Werkzeug Dokumente</a>";
+$langSendPage = "Seite hochladen";
+$langPageTitleModified = "Der Titel der Seite wurde verÃ¤ndert";
+$langPageAdded = "Seite wurde hinzugefÃ¼gt";
+$langAddPage = "Seite hinzufÃ¼gen";
+$Choose = "WÃ¤hlen";
 ?>

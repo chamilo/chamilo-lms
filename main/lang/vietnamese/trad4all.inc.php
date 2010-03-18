@@ -1,13 +1,14 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $Remove = "Xoá";
-$langEnter  = "Enter";
+$langEnter = "Trở lại danh mục khoá học";
 $Description = "Mô tả tóm tắt";
 $Links = "Liên kết";
 $langWorks = "Bài làm";
-$Forums = "Diễn đ� n";
-$langExercices = "B� i tập";
+$Forums = "Diá»…n Ä‘Ă n";
+$langExercices = "BĂ i táº­p";
 $langCreateDir = "Tạo thư mục";
 $Name = "Tên";
 $langComment = "Ghi chú";
@@ -23,9 +24,10 @@ $Forum = "Forum";
 $langCode = "Mã khoá học";
 $langUp = "Up";
 $langUniqueSelect = "Một lựa chọn đúng";
-$langCourseCreate = "Khởi tạo khoá học mới";
+$langCourseCreate = "Tạo một khoá học";
 $langTodo = "Kiến nghị";
 $UserName = "Tên truy cập";
+$langDear = "Dear";
 $iso639_2_code = "en";
 $iso639_1_code = "eng";
 $left_font_family = "verdana, helvetica, arial, geneva, sans-serif";
@@ -40,7 +42,7 @@ $langYes = "Có";
 $langNo = "Không";
 $Next = "Tiếp";
 $langAllowed = "Được phép";
-$langBackHome = "Về trang chủ";
+$langBackHome = "Trở về trang chính của";
 $langPropositions = "Đề xuất cải tiến về";
 $langMaj = "Cập nhật";
 $langModify = "Modify";
@@ -52,14 +54,14 @@ $langAdd = "Thêm";
 $langAddIntro = "Lời giới thiệu";
 $langBackList = "Về danh mục";
 $langText = "Văn bản";
-$langEmpty = "Rỗng";
+$langEmpty = "Bạn còn chừa trống ô.<br>Bấm nút <b>Back</b>để làm lại.<br>";
 $langConfirmYourChoice = "Hãy xác nhận lại lựa chọn của bạn";
 $langAnd = "và";
 $langChoice = "Lựa chọn của bạn";
 $langFinish = "Kết thúc";
 $langCancel = "Cancel";
-$langNotAllowed = "Bạn không có quyền truy cập vào đây";
-$langManager = "Người quản lý";
+$langNotAllowed = "Not allowed";
+$langManager = "Manager";
 $langOptional = "Tuỳ chọn";
 $NextPage = "Trang kế tiếp";
 $PreviousPage = "Trang trước";
@@ -69,7 +71,7 @@ $langTake = "cần";
 $langOne = "Một";
 $langSeveral = "Nhiều";
 $langNotice = "Ghi chú";
-$langDate = "Ng� y";
+$langDate = "NgĂ y";
 $langAmong = "trong số";
 $langMyCourses = "Danh mục khoá học";
 $langModifyProfile = "Sửa thông tin cá nhân";

@@ -1,50 +1,51 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$langSelectOptionForBackup = "Por favor, seleccione uma das opÁıes de backup/cÛpia de seguranÁa.";
+$langSelectOptionForBackup = "Por favor, seleccione uma das op√ß√µes de backup/c√≥pia de seguran√ßa.";
 $langLetMeSelectItems = "Permitir-me seleccionar os objectos de aprendizagem";
-$langCreateFullBackup = "Criar um backup/cÛpia de seguranÁa completa deste curso";
-$langCreateBackup = "Criar backup/cÛpia de seguranÁa";
-$langBackupCreated  = "O backup/cÛpia de seguranÁa foi criada. O download do ficheiro iniciar-se-· automaticamente. Se o download n„o inicar autom·ticamente, clique na ligaÁ„o seguinte";
-$langSelectBackupFile = "Seleccione um ficheiro de backup/cÛpia de seguranÁa";
-$langImportBackup = "Importar backup/cÛpia de seguranÁa";
-$langImportFullBackup = "Importar backup/cÛpia de seguranÁa completa";
-$langImportFinished = "ImportaÁ„o concluÌda";
+$langCreateFullBackup = "Criar um backup/c√≥pia de seguran√ßa completa deste curso";
+$langCreateBackup = "Criar backup/c√≥pia de seguran√ßa";
+$langBackupCreated = "O backup/c√≥pia de seguran√ßa foi criada. O download do ficheiro iniciar-se-√° automaticamente. Se o download n√£o inicar autom√°ticamente, clique na liga√ß√£o seguinte";
+$langSelectBackupFile = "Seleccione um ficheiro de backup/c√≥pia de seguran√ßa";
+$langImportBackup = "Importar backup/c√≥pia de seguran√ßa";
+$langImportFullBackup = "Importar backup/c√≥pia de seguran√ßa completa";
+$langImportFinished = "Importa√ß√£o conclu√≠da";
 $langEvents = "Eventos";
-$langAnnouncements = "An˙ncios";
-$langDocuments  = "Documentos";
-$langTests = "ExercÌcios";
+$langAnnouncements = "An√∫ncios";
+$langDocuments = "Documentos";
+$langTests = "Exerc√≠cios";
 $langLearnpaths = "Cursos";
 $langCopyCourse = "Copiar curso";
 $langSelectItemsToCopy = "Seleccionar os objectos de aprendizagem a copiar";
-$langCopyFinished = "CÛpia concluÌda";
+$langCopyFinished = "C√≥pia conclu√≠da";
 $langFullRecycle = "Eliminar tudo";
 $langRecycleCourse = "Esvaziar este curso";
 $langRecycleFinished = "Reciclagem terminada";
-$langRecycleWarning = "AtenÁ„o: ao utilizar esta ferramenta, ir· eliminar objectos de aprendizagem do curso. N„o ser· possÌvel recuper·-los mais tarde. Aconselhamos previamente a realizar um <a href=\\\"create_backup.php\\\">backup/cÛpia de seguranÁa</a>.";
-$langSameFilename = "O que fazer aos ficheiros importados com o mesmo nome de ficheiros j· existentes?";
+$langRecycleWarning = "Aten√ß√£o: ao utilizar esta ferramenta, ir√° eliminar objectos de aprendizagem do curso. N√£o ser√° poss√≠vel recuper√°-los mais tarde. Aconselhamos previamente a realizar um <a href=\"create_backup.php\">backup/c√≥pia de seguran√ßa</a>.";
+$langSameFilename = "O que fazer aos ficheiros importados com o mesmo nome de ficheiros j√° existentes?";
 $langSameFilenameSkip = "Salta ficheiro com o mesmo nome";
-$langSameFilenameRename = "Renomear ficheiros com o mesmo nome (ex. file.pdf ficar· file_1.pdf)";
+$langSameFilenameRename = "Renomear ficheiros com o mesmo nome (ex. file.pdf ficar√° file_1.pdf)";
 $langSameFilenameOverwrite = "Substituir ficheiro";
 $langSelectDestinationCourse = "Seleccione um curso destino";
-$langFullCopy  = "CÛpia completa";
-$langCourseDescription = "DescriÁ„o do curso";
-$langNoResourcesToBackup = "N„o existem recursos para realizar o backup/cÛpia de seguranÁa";
-$langNoResourcesInBackupFile = "N„o existem recursos no ficheiro de backup/cÛpia de seguranÁa";
+$langFullCopy = "C√≥pia completa";
+$langCourseDescription = "Descri√ß√£o do curso";
+$langNoResourcesToBackup = "N√£o existem recursos para realizar o backup/c√≥pia de seguran√ßa";
+$langNoResourcesInBackupFile = "N√£o existem recursos no ficheiro de backup/c√≥pia de seguran√ßa";
 $langSelectResources = "Seleccionar recursos";
-$langNoResourcesToRecycles = "N„o existem recursos para reciclar";
-$langIncludeQuestionPool = "Incluir pool/grupo de questıes";
+$langNoResourcesToRecycles = "N√£o existem recursos para reciclar";
+$langIncludeQuestionPool = "Incluir pool/grupo de quest√µes";
 $langLocalFile = "Ficheiro local";
 $langServerFile = "Ficheiro do servidor";
-$langNoBackupsAvailable = "N„o existe um backup/cÛpia de seguranÁa disponÌvel";
-$langNoDestinationCoursesAvailable = "N„o existe um curso destino disponÌvel";
-$langBackup = "Backup/cÛpia de seguranÁa";
-$langImportBackupInfo = "Importar um backup/cÛpia de seguranÁa. Poder· realizar o envio/upload de um ficheiro de backup/cÛpia de seguranÁa a partir de unidade local ou poder· utilizar um ficheiro de backup/cÛpia de seguranÁa disponÌvel no servidor.";
-$langCreateBackupInfo = "Criar um backup. Poder· selecionar os objectos de aprendizagem a integrar no ficheiro de backup.";
-$ToolIntro = "IntroduÁ„o da aplicaÁ„o/ferramenta";
-$UploadError = "Falha no upload/envio do ficheiro. Por favor verifique o tamanho limite m·ximo de upload de ficheiros e as permissıes da pasta de destino.";
-$DocumentsWillBeAddedToo = "Os documentos tambÈm ser„o adicionados";
-$ToExportLearnpathWithQuizYouHaveToSelectQuiz = "Se desejar exportar um curso juntamente com um teste/exercÌcio, dever· certificar-se de que os testes/exercÌcios correspondentes est„o incluÌdos na exportaÁ„o, para isso dever· selecion·-los da lista de testes/exercÌcios.";
-$ArchivesDirectoryNotWriteableContactAdmin = "O directÛrio de ficheiros utilizado por esta aplicaÁ„o, n„o se encontra edit·vel. Por favor, contacte o administrador da plataforma/sistema.";
+$langNoBackupsAvailable = "N√£o existe um backup/c√≥pia de seguran√ßa dispon√≠vel";
+$langNoDestinationCoursesAvailable = "N√£o existe um curso destino dispon√≠vel";
+$langBackup = "Backup/c√≥pia de seguran√ßa";
+$langImportBackupInfo = "Importar um backup/c√≥pia de seguran√ßa. Poder√° realizar o envio/upload de um ficheiro de backup/c√≥pia de seguran√ßa a partir de unidade local ou poder√° utilizar um ficheiro de backup/c√≥pia de seguran√ßa dispon√≠vel no servidor.";
+$langCreateBackupInfo = "Criar um backup. Poder√° selecionar os objectos de aprendizagem a integrar no ficheiro de backup.";
+$ToolIntro = "Introdu√ß√£o da aplica√ß√£o/ferramenta";
+$UploadError = "Falha no upload/envio do ficheiro. Por favor verifique o tamanho limite m√°ximo de upload de ficheiros e as permiss√µes da pasta de destino.";
+$DocumentsWillBeAddedToo = "Os documentos tamb√©m ser√£o adicionados";
+$ToExportLearnpathWithQuizYouHaveToSelectQuiz = "Se desejar exportar um curso juntamente com um teste/exerc√≠cio, dever√° certificar-se de que os testes/exerc√≠cios correspondentes est√£o inclu√≠dos na exporta√ß√£o, para isso dever√° selecion√°-los da lista de testes/exerc√≠cios.";
+$ArchivesDirectoryNotWriteableContactAdmin = "O direct√≥rio de ficheiros utilizado por esta aplica√ß√£o, n√£o se encontra edit√°vel. Por favor, contacte o administrador da plataforma/sistema.";
 $DestinationCourse = "Curso destino";
 ?>

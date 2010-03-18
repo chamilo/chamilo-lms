@@ -1,47 +1,48 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$langSelectOptionForBackup = "Vælg venligst en backup-løsning.";
-$langLetMeSelectItems = "Lad mig vælge kursuskomponenterne";
+$langSelectOptionForBackup = "VÃ¦lg venligst en backup-lÃ¸sning.";
+$langLetMeSelectItems = "Lad mig vÃ¦lge kursuskomponenterne";
 $langCreateFullBackup = "Lav en komplet backup af dette kursus";
 $langCreateBackup = "Lav en backup";
-$langBackupCreated  = "Backup af kurset er oprettet. Download af denne fil skulle starte straks. Hvis ikke, klik det følgende link";
-$langSelectBackupFile = "vælg en backup-fil";
+$langBackupCreated = "Backup af kurset er oprettet. Download af denne fil skulle starte straks. Hvis ikke, klik det fÃ¸lgende link";
+$langSelectBackupFile = "vÃ¦lg en backup-fil";
 $langImportBackup = "Importer backup";
 $langImportFullBackup = "Importer fuld backup";
-$langImportFinished = "Importering fuldført";
+$langImportFinished = "Importering fuldfÃ¸rt";
 $langEvents = "Kalender";
 $langAnnouncements = "Meddelelser";
-$langDocuments  = "Dokumenter";
-$langTests = "Øvelser";
-$langLearnpaths = "Læringsstier";
+$langDocuments = "Dokumenter";
+$langTests = "Ã˜velser";
+$langLearnpaths = "LÃ¦ringsstier";
 $langCopyCourse = "Kopier kursus";
-$langSelectItemsToCopy = "Vælg dele som skal kopieres";
-$langCopyFinished = "Kopiering fuldført";
+$langSelectItemsToCopy = "VÃ¦lg dele som skal kopieres";
+$langCopyFinished = "Kopiering fuldfÃ¸rt";
 $langFullRecycle = "Genbrug kursussiden, men uden indhold";
 $langRecycleCourse = "Genbrug kursusside";
 $langRecycleFinished = "Siden er nu renset for indhold";
-$langRecycleWarning = "Advarsel: Ved at bruge dette værktøj, sletter du dele af dit kursus. Dette kan ikke fortrydes. Vi anbefaler af du tager en <a href=\"create_backup.php\">backup</a> før du bruger dette genbrugs-værktøj.";
-$langSameFilename = "Hvad skal der gøres med importerede filer, som har samme filnavn som en eksisterende fil?";
+$langRecycleWarning = "Advarsel: Ved at bruge dette vÃ¦rktÃ¸j, sletter du dele af dit kursus. Dette kan ikke fortrydes. Vi anbefaler af du tager en <a href=\"create_backup.php\">backup</a> fÃ¸r du bruger dette genbrugs-vÃ¦rktÃ¸j.";
+$langSameFilename = "Hvad skal der gÃ¸res med importerede filer, som har samme filnavn som en eksisterende fil?";
 $langSameFilenameSkip = "Spring over filer med samme navn";
-$langSameFilenameRename = "Omdøb fil (eks. fil.pdf bliver til fil_1.pdf)";
+$langSameFilenameRename = "OmdÃ¸b fil (eks. fil.pdf bliver til fil_1.pdf)";
 $langSameFilenameOverwrite = "Overskriv fil";
-$langSelectDestinationCourse = "Vælg destinationen for kurset";
-$langFullCopy  = "Fuld kopi";
+$langSelectDestinationCourse = "VÃ¦lg destinationen for kurset";
+$langFullCopy = "Fuld kopi";
 $langCourseDescription = "Kursusbeskrivelse";
 $langNoResourcesToBackup = "Der er intet materiale at tage backup af";
 $langNoResourcesInBackupFile = "Der er intet materiale i backup-filen";
-$langSelectResources = "Vælg materiale";
+$langSelectResources = "VÃ¦lg materiale";
 $langNoResourcesToRecycles = "Der er intet materiale at genbruge";
-$langIncludeQuestionPool = "Inkluder spørgsmålsbank";
+$langIncludeQuestionPool = "Inkluder spÃ¸rgsmÃ¥lsbank";
 $langLocalFile = "lokal fil";
-$langServerFile = "fil på server";
-$langNoBackupsAvailable = "ingen backup tilgængelig";
-$langNoDestinationCoursesAvailable = "Ingen destination for kurset tilgængelig";
+$langServerFile = "fil pÃ¥ server";
+$langNoBackupsAvailable = "ingen backup tilgÃ¦ngelig";
+$langNoDestinationCoursesAvailable = "Ingen destination for kurset tilgÃ¦ngelig";
 $langBackup = "Backup";
-$langImportBackupInfo = "Importer en backup. Du kan enten uploade en backup-fil fra din computer eller benytte en backup-fil på serveren.";
-$langCreateBackupInfo = "Lav en backup af dette kursus. Du kan vælge hvilket kursusindhold, som skal i backup filen.";
-$ToolIntro = "Introduktioner til værktøjer på siden";
-$UploadError = "Upload lykkedes ikke. Venligst undersøg at filernes størrelse ikke overskrider begrænsningen, og at der ingen korrupte fil- og mappenavne er at finde";
-$DocumentsWillBeAddedToo = "Dokumenter tilføjes også";
+$langImportBackupInfo = "Importer en backup. Du kan enten uploade en backup-fil fra din computer eller benytte en backup-fil pÃ¥ serveren.";
+$langCreateBackupInfo = "Lav en backup af dette kursus. Du kan vÃ¦lge hvilket kursusindhold, som skal i backup filen.";
+$ToolIntro = "Introduktioner til vÃ¦rktÃ¸jer pÃ¥ siden";
+$UploadError = "Upload lykkedes ikke. Venligst undersÃ¸g at filernes stÃ¸rrelse ikke overskrider begrÃ¦nsningen, og at der ingen korrupte fil- og mappenavne er at finde";
+$DocumentsWillBeAddedToo = "Dokumenter tilfÃ¸jes ogsÃ¥";
 ?>

@@ -1,5 +1,6 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $langScormTime = "Aika";
 $langScormScore = "Tulos";
@@ -11,8 +12,8 @@ $langScormPrevious = "Edellinen";
 $langScormNext = "Seuraava";
 $langScormMystatus = "Tilastoni";
 $langScormCloseWindow = "Sulje ikkuna";
-$langScormExitFullScreen = "Palaa normaaliin näyttöön";
-$langScormFullScreen = "Koko näyttö";
+$langScormExitFullScreen = "Palaa normaaliin nÃ¤yttÃ¶Ã¶n";
+$langScormFullScreen = "Koko nÃ¤yttÃ¶";
 $langScormNotAttempted = "Aloittamatta";
-$langAccomplishedStepsTotal = "Suoritetut osat yhteensä";
+$langAccomplishedStepsTotal = "Suoritetut osat yhteensÃ¤";
 ?>

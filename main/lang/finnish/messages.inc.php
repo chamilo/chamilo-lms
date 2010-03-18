@@ -1,23 +1,24 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$Inbox  = "Postilaatikko";
+$Inbox = "Postilaatikko";
 $Messages = "Viestit";
-$SendMessage = "Lähetä viesti";
+$SendMessage = "LÃ¤hetÃ¤ viesti";
 $NewMessage = "Uusi viesti";
 $ComposeMessage = "Kirjoita viesti";
 $DeleteSelectedMessages = "Poista valitut viestit";
 $SelectAll = "Valitse kaikki";
-$DeselectAll  = "Poista kaikki valinnat";
-$ReplyToMessage = "Vastaa";
+$DeselectAll = "Poista kaikki valinnat";
+$ReplyToMessage = "Vastaa tÃ¤hÃ¤n viestiin";
 $BackToInbox = "Takaisin postilaatikkoon";
-$MessageSentTo = "Viesti on lähetetty";
+$MessageSentTo = "Viesti on lÃ¤hetetty";
 $SendMessageTo = "Kenelle";
 $Myself = "Minulle";
-$From = "Keneltä";
+$From = "KeneltÃ¤";
 $To = "Kenelle";
-$Date = "Päiväys";
-$ErrorSendingMessage = "Virhe viestin lähetyksessä.";
+$Date = "PÃ¤ivÃ¤";
+$ErrorSendingMessage = "Virhe viestin lÃ¤hetyksessÃ¤.";
 $SureYouWantToDeleteSelectedMessages = "Haluatko varmasti poistaa valitut viestit?";
 $SelectedMessagesDeleted = "Valitut viestit on poistettu";
 ?>

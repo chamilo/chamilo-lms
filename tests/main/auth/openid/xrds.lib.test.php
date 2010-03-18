@@ -3,15 +3,35 @@ require_once(api_get_path(SYS_CODE_PATH).'auth/openid/xrds.lib.php');
 
 class TestXrds extends UnitTestCase {
 
+	/*
 	function testxrds_cdata() {
 		global $xrds_open_elements, $xrds_services, $xrds_current_service;
 		$parser='';
 		$data='';
-		$res=_xrds_cdata($parser, $data);
+		$res=_xrds_cdata(&$parser, $data);
 		$this->assertTrue(is_null($res));
 		//var_dump($res);
 	}
+	*/
+	
+	function testxrdsparse() {
+		
+		$xml = <<<XML
+		<xml version="1.0">
+		<users>
+		<fname>Christian</fname>
+		<lname>Fasa Fasa</lname>
+		</users>
+XML;
 
+		$parser = xrds_parse($xml);				
+		if (is_resource($parser)) {
+			$this->assertTrue(is_resource($parser));
+		} else {
+			$this->assertTrue(is_null($parser));
+		}
+	} 
+/*
 	function test_xrds_element_end() {
 		 global $xrds_open_elements, $xrds_services, $xrds_current_service;
 		 $parser='';
@@ -20,18 +40,20 @@ class TestXrds extends UnitTestCase {
 		 $xrds_current_service['version'] = 1;
 		 $xrds_services[] = $xrds_current_service;
 		 $xrds_current_service= array();
-		 $res=_xrds_element_end($parser, $name);
+		 $res=_xrds_element_end(&$parser, $name);
 		 $this->assertTrue(is_null($res));
 		 //var_dump($xrds_current_service);
 	}
 
 	function test_xrds_element_start() {
+		
 		global $xrds_open_elements;
-		$parser='';
+		
 		$name='';
 		$attribs='';
-		$xrds_open_elements[] = _xrds_strip_namespace($name);
-		$res=_xrds_element_start($parser, $name);
+		
+		$res=_xrds_element_start(&$parser, $name, $attribs);
+		
 		$this->assertTrue(is_null($res));
 		//var_dump($res);
 	}
@@ -41,6 +63,6 @@ class TestXrds extends UnitTestCase {
 		$res=_xrds_strip_namespace($name);
 		$this->assertTrue(is_string($res));
 		//var_dump($res);
-	}
+	}*/
 }
 ?>

@@ -1,6 +1,7 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$langMyAgenda  = "我的日程";
-$langToday  = "今天";
+$langMyAgenda = "鏃ョ▼瀹夋帓";
+$langToday = "浠婂ぉ";
 ?>

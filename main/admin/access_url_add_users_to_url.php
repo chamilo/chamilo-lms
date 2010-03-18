@@ -1,48 +1,28 @@
 <?php
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2009 Dokeos SPRL
-	Copyright (c) 2009 Julio Montoya Armas <gugli100@gmail.com>
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium, info@dokeos.com
-==============================================================================
-*/
-/**
-==============================================================================
-*	This script allows platform admins to add users to urls.
+/* For licensing terms, see /license.txt */
+/**	
+* This script allows platform admins to add users to urls.
 *	It displays a list of users and a list of courses;
 *	you can select multiple users and courses and then click on
-*	@package dokeos.admin
-==============================================================================
+*	@package chamilo.admin
+*	@author Julio Montoya <gugli100@gmail.com>
 */
 
 // name of the language file that needs to be included
 $language_file = 'admin';
 $cidReset = true;
-require ('../inc/global.inc.php');
+require_once '../inc/global.inc.php';
 $this_section=SECTION_PLATFORM_ADMIN;
 
 require_once (api_get_path(LIBRARY_PATH).'urlmanager.lib.php');
 api_protect_admin_script();
-if (!$_configuration['multiple_access_urls'])
+if (!$_configuration['multiple_access_urls']) {
 	header('Location: index.php');
+	exit;
+}
 
 /*
------------------------------------------------------------
 	Global constants and variables
------------------------------------------------------------
 */
 
 $form_sent = 0;
@@ -56,21 +36,13 @@ $tbl_access_url_rel_user = Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_
 $tbl_access_url = Database :: get_main_table(TABLE_MAIN_ACCESS_URL);
 $tbl_user 		= Database :: get_main_table(TABLE_MAIN_USER);
 
-/*
------------------------------------------------------------
-	Header
------------------------------------------------------------
-*/
+/*	Header	*/
 $tool_name = get_lang('AddUsersToURL');
 $interbreadcrumb[] = array ('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
 $interbreadcrumb[] = array ('url' => 'access_urls.php', 'name' => get_lang('MultipleAccessURLs'));
 
 
-/*
-==============================================================================
-		MAIN CODE
-==============================================================================
-*/
+/*		MAIN CODE	*/
 
 Display :: display_header($tool_name);
 
@@ -81,8 +53,6 @@ echo '<div style="float:right;">
 echo '</div>';
 
 api_display_tool_title($tool_name);
-
-
 
 if ($_POST['form_sent']) {
 	$form_sent = $_POST['form_sent'];
@@ -109,16 +79,12 @@ if ($_POST['form_sent']) {
 
 
 
-/*
------------------------------------------------------------
-	Display GUI
------------------------------------------------------------
-*/
+/*	Display GUI	*/
 
 
 if(empty($first_letter_user)) {
 	$sql = "SELECT count(*) as nb_users FROM $tbl_user";
-	$result = Database::query($sql, __FILE__, __LINE__);
+	$result = Database::query($sql);
 	$num_row = Database::fetch_array($result);
 	if($num_row['nb_users']>1000) {
 		//if there are too much users to gracefully handle with the HTML select list,
@@ -133,12 +99,12 @@ $target_name = api_sort_by_first_name() ? 'firstname' : 'lastname';
 $sql = "SELECT user_id,lastname,firstname,username FROM $tbl_user
 	    WHERE ".$target_name." LIKE '".$first_letter_user."%' OR ".$target_name." LIKE '".api_strtolower($first_letter_user)."%'
 		ORDER BY ". (count($users) > 0 ? "(user_id IN(".implode(',', $users).")) DESC," : "")." ".$target_name;
-$result = Database::query($sql, __FILE__, __LINE__);
+$result = Database::query($sql);
 $db_users = Database::store_result($result);
 unset($result);
 
 $sql = "SELECT id, url FROM $tbl_access_url  WHERE active=1 ORDER BY url";
-$result = Database::query($sql, __FILE__, __LINE__);
+$result = Database::query($sql);
 $db_urls = Database::store_result($result);
 unset($result);
 ?>
@@ -193,10 +159,6 @@ unset($result);
  </table>
 </form>
 <?php
-/*
-==============================================================================
-		FOOTER
-==============================================================================
-*/
+/*		FOOTER	*/
 Display :: display_footer();
 ?>

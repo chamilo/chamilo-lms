@@ -1,14 +1,15 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $langPgTitle = "Naslov stranice";
-$langExplanation = "Stranica mora da bude u HTML formatu (npr. Ñmoja_stranica.htm\"). Ako ûelite da poöaljete dokumente koji nisu HTML (PDF, Word, Power Point, Video, itd.) koristite <a href=../document/document.php>Alatku za dokumente</a>";
-$langTooBig = "Niste odabrali nijedan fajl za u&#269;itavanje na server ili je fajl preveliki.";
-$langCouldNot = "U&#269;itavanje fajla nije uspelo.";
+$langExplanation = "Kada kliknete na OK, Forum, Agenda, Organizator dokumenata i td. ƒáe biti kreiran. Kao osoba koja je kreirala sajt imate moguƒánost da to modifikujete prema va≈°im potrebama.";
+$langTooBig = "Niste izabrali nijedan fajl za slanje ili je prevelik";
+$langCouldNot = "Fajl nije mogao da se uƒçita na server";
 $langNotAllowed = "Nije dozvoljeno";
-$langAddPageToSite = "Dodavanje stranice u okruûenje";
-$langCouldNotSendPage = "Ovaj fajl nije u HTML formatu i ne mo\\e da se u;ita na server. Ako ûelite da poöaljete dokument koji nije u HTML formatu (PDF, Word, Power Point, Video, itd.) koristite <a href=../document/document.php>Dokumeta alatku</a>";
-$langSendPage = "Stranica za u&#269;itavanje";
+$langAddPageToSite = "Dodavanje stranice u okru≈æenje";
+$langCouldNotSendPage = "Ovaj fajl nije u HTML formatu i ne mo\e da se u;ita na server. Ako ¬ûelite da po¬öaljete dokument koji nije u HTML formatu (PDF, Word, Power Point, Video, itd.) koristite <a href=../document/document.php>Dokumeta alatku</a>";
+$langSendPage = "Stranica za uƒçitavanje na server";
 $langPageTitleModified = "Naslov stranice je izmenjen";
 $langPageAdded = "Stranica je dodata";
 $langAddPage = "Dodaj stranicu";

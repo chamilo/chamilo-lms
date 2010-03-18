@@ -1,37 +1,12 @@
 <?php
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2004-2008 Dokeos SPRL
-	Copyright (c) 2003 Ghent University (UGent)
-	Copyright (c) 2001 Universite catholique de Louvain (UCL)
-	Copyright (c) Olivier Brouckaert
-	Copyright (c) Bart Mollet, Hogeschool Gent
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium, info@dokeos.com
-==============================================================================
-*/
-
+/* See license terms in /license.txt */
 /**
-==============================================================================
 *	This is the export library for Dokeos.
 *	Include/require it in your code to use its functionality.
 *
 *	Several functions below are adaptations from functions distributed by www.nexen.net
 *
-*	@package dokeos.library
-==============================================================================
+*	@package chamilo.library
 */
 
 require_once 'document.lib.php';
@@ -64,7 +39,7 @@ class Export {
 		}
 		@fclose($handle);
 		DocumentManager :: file_send_for_download($file, true, $filename.'.csv');
-		exit();
+		return false;
 	}
 
 	/**
@@ -80,7 +55,7 @@ class Export {
 		}
 		@fclose($handle);
 		DocumentManager :: file_send_for_download($file, true, $filename.'.xls');
-		exit();
+		return false;
 	}
 
 	/**
@@ -113,7 +88,7 @@ class Export {
 		}
 		fclose($handle);
 		DocumentManager :: file_send_for_download($file, true, $filename.'.xml');
-		exit;
+		return false;
 	}
 
     /**
@@ -140,7 +115,7 @@ class Export {
         }
         fclose($handle);
         DocumentManager :: file_send_for_download($file, true, $filename.'.xml');
-        exit;
+        return false;
     }
 
     /**
@@ -169,7 +144,7 @@ class Export {
 
 /*
 ==============================================================================
-		FUNCTIONS
+		DEPRECATED FUNCTIONS
 ==============================================================================
 */
 
@@ -195,7 +170,7 @@ function backupDatabase($link, $db_name, $structure, $donnees, $format = 'SQL', 
 		$error_no['backup'][] = '1';
 		return false;
 	}
-	mysql_select_db($db_name);
+	Database::select_db($db_name);
 	$format = strtolower($format);
 	$filename = $whereSave.'/courseDbContent.'.$format;
 	$format = strtoupper($format);
@@ -231,7 +206,7 @@ function backupDatabase($link, $db_name, $structure, $donnees, $format = 'SQL', 
 			}
 			// requete de creation de la table
 			$query = "SHOW CREATE TABLE `".$tablename."`";
-			$resCreate = Database::query($query,__FILE__, __LINE__);
+			$resCreate = Database::query($query);
 			$row = Database::fetch_array($resCreate);
 			$schema = $row[1].';';
 			if ($format == 'PHP' || $format == 'SQL') {
@@ -244,7 +219,7 @@ function backupDatabase($link, $db_name, $structure, $donnees, $format = 'SQL', 
 		if ($donnees === true) {
 			// les donn�es de la table
 			$query = "SELECT * FROM $tablename";
-			$resData = Database::query($query,__FILE__, __LINE__);
+			$resData = Database::query($query);
 			if (Database::num_rows($resData) > 0) {
 				$sFieldnames = '';
 				if ($insertComplet === true) {
@@ -300,7 +275,7 @@ function copydir($origine, $destination, $verbose = false) {
 			return 0;
 	}
 	*/
-	mkpath($destination, 0770);
+	mkdir($destination, api_get_permissions_for_new_directories(), true);
 	if ($verbose) {
 		echo "
 						<strong>
@@ -488,7 +463,7 @@ function makeTheBackup($exportedCourseId, $verbose_backup = FALSE, $ignore = '',
 	$stringConfig = "<?php
 		/*
 		      +----------------------------------------------------------------------+
-		      Dokeos version ".$dokeos_version."
+		      System version ".$_configuration['system_version']."
 		      +----------------------------------------------------------------------+
 		      This file was generate by script ".api_get_self()."
 		      ".date("r")."                  |
@@ -498,7 +473,7 @@ function makeTheBackup($exportedCourseId, $verbose_backup = FALSE, $ignore = '',
 		      |   as published by the Free Software Foundation; either version 2     |
 		*/
 
-		// Dokeos Version was :  ".$dokeos_version."
+		// System Version was :  ".$_configuration['system_version']."
 		// Source was  in ".realpath("../../".$exportedCourseId."/")."
 		// find in ".$archiveDir."/courseBase/courseBase.sql sql to rebuild the course base
 		// find in ".$archiveDir."/".$exportedCourseId." to content of directory of course
@@ -525,7 +500,7 @@ function makeTheBackup($exportedCourseId, $verbose_backup = FALSE, $ignore = '',
 	$csvInsertCourse = "\n";
 	$iniCourse = "[".$exportedCourseId."]\n";
 	$sqlSelectInfoCourse = "Select * from `".$TABLECOURS."` `course` where code = '".$exportedCourseId."' ";
-	$resInfoCourse = Database::query($sqlSelectInfoCourse, __FILE__, __LINE__);
+	$resInfoCourse = Database::query($sqlSelectInfoCourse);
 	$infoCourse = Database::fetch_array($resInfoCourse);
 	for ($noField = 0; $noField < mysql_num_fields($resInfoCourse); $noField ++) {
 		if ($noField > 0) {
@@ -585,7 +560,7 @@ function makeTheBackup($exportedCourseId, $verbose_backup = FALSE, $ignore = '',
 						FROM `".$TABLEUSER."`, `".$TABLECOURSUSER."`
 						WHERE `user`.`user_id`=`".$TABLECOURSUSER."`.`user_id`
 							AND `".$TABLECOURSUSER."`.`course_code`='".$exportedCourseId."'";
-		$resUsers = Database::query($sqlUserOfTheCourse, __FILE__, __LINE__);
+		$resUsers = Database::query($sqlUserOfTheCourse);
 		$nbUsers = Database::num_rows($resUsers);
 		if ($nbUsers > 0) {
 			$nbFields = mysql_num_fields($resUsers);
@@ -670,7 +645,7 @@ function makeTheBackup($exportedCourseId, $verbose_backup = FALSE, $ignore = '',
 					*
 					FROM  `".$TABLEANNOUNCEMENT."`
 					WHERE course_code='".$exportedCourseId."'";
-		$resAnn = Database::query($sqlAnnounceOfTheCourse, __FILE__, __LINE__);
+		$resAnn = Database::query($sqlAnnounceOfTheCourse);
 		$nbFields = mysql_num_fields($resAnn);
 		$sqlInsertAnn = '';
 		$csvInsertAnn = '';

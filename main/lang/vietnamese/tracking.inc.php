@@ -1,12 +1,13 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $langToolName = "Thống kê";
 $TrackingDisabled = "Tracking has been disabled by system administrator.";
 $langShowNone = "Thu lại";
 $langCourseStats = "Trạng thái khoá học";
 $langToolsAccess = "Truy cập các công cụ";
-$langCourseAccess = "Truy cập vào khoá học này";
+$langCourseAccess = "Course access";
 $langLinksAccess = "Liên kết";
 $langDocumentsAccess = "Tài liệu";
 $langLinksDetails = "Liên kết truy cập bởi học sinh";
@@ -39,8 +40,8 @@ $langWorkAuthors = "Người gửi";
 $langWorkDescription = "Ghi chú";
 $informationsAbout = "Theo dõi";
 $langNoEmail = "CHưa có địa chỉ email";
-$langNoResult = "Không có kết quả";
-$langCourse = "Khoá học";
+$langNoResult = "Chưa có kết quả";
+$langCourse = "Website";
 $langHits = "Hits";
 $langTotal = "Tổng cộng";
 $langHour = "Giờ";
@@ -48,9 +49,9 @@ $langDay = "Ngày";
 $langLittleHour = "h.";
 $langLast31days = "Trong 31 ngày gần đây";
 $langLast7days = "Trong 7 ngày gần đây";
-$langThisday = "Hôm nay";
+$langThisday = "HÃŽm nay";
 $langLogins = "Logins";
-$langLoginsExplaination = "Đây là danh sách các công cụ bạn đã sử dụng trong lần truy cập gần đây nhất.";
+$langLoginsExplaination = "ÄÃ¢y lÃ  danh sÃ¡ch cÃ¡c cÃŽng cá»¥ báº¡n ÄÃ£ sá»­ dá»¥ng trong láº§n truy cáº­p gáº§n ÄÃ¢y nháº¥t.";
 $langExercicesResults = "Kết quả các bài tập";
 $langVisits = "Lượt viếng thăm";
 $langAt = "tại";

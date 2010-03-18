@@ -1,24 +1,25 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $ModifInfo = "Kursinnstillinger";
 $langModifDone = "Informasjonen ble endret";
-$langDelCourse = "Slett hele kursområdet";
-$langProfessors = "Lærere";
+$langDelCourse = "Slett hele kursomrÃ¥det";
+$langProfessors = "LÃ¦rere";
 $langFaculty = "Kategori";
 $langConfidentiality = "Konfidensielt";
-$langPublic = "Tilgang uten pålogging";
-$langUnsubscription = "Avmeld";
+$langPublic = "Tilgang uten pÃ¥logging";
+$langUnsubscription = "Stopp abonnement";
 $langPrivOpen = "Privat yilgang, krever registrering";
 $langForbidden = "Ikke tillatt";
-$langDescriptionCours   = "Kursbeskrivelse";
-$langCreationDate  = "Opprettet";
-$langExpirationDate   = "Utløpsdato";
-$langLastEdit  = "Sist endret";
-$langLastVisit  = "Sist besøkt";
-$langSubscription = "Påmelding";
-$langCourseAccess = "Kursadgang";
-$langCreateSite = "Opprett ett kursområde";
+$langDescriptionCours = "Kursbeskrivelse";
+$langCreationDate = "Opprettet";
+$langExpirationDate = "UtlÃ¸psdato";
+$langLastEdit = "Sist endret";
+$langLastVisit = "Sist besÃ¸kt";
+$langSubscription = "Abonnement";
+$langCourseAccess = "Kurs tilgang";
+$langCreateSite = "Opprett ett kursomrÃ¥de";
 $langBackH = "tilbake til hjemmesiden";
 $langOtherCategory = "Annen kategori";
 $langAllowedToUnsubscribe = "Deltagere kan avmelde seg fra dette kurset";

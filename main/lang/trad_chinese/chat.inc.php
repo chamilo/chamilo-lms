@@ -1,35 +1,39 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$langOnlineConference  = "&#26371;&#35696;";
-$langReset  = "&#37325;&#35373;";
-$langSave  = "&#20786;&#23384;";
-$langRefresh  = "&#37325;&#26032;&#25972;&#29702;";
-$langIsNowInYourDocDir  = "&#29694;&#22312;&#22312;&#20320;&#30340;&#25991;&#27284;&#24037;&#20855;&#20013;&#12290;<br><b>&#36889;&#20491;&#25991;&#20214;&#26159;&#21487;&#35211;&#30340;</b>";
-$langCopyFailed  = "&#21015;&#21360;&#22833;&#25943;";
-$langTypeMessage  = "&#35531;&#37749;&#20837;&#35338;&#24687;!";
-$langConfirmReset  = "&#20320;&#30495;&#30340;&#24819;&#35201;&#21034;&#38500;&#25152;&#26377;&#35338;&#24687;&#65311;";
-$langHasResetChat  = "&#24050;&#32147;&#37325;&#35373;&#32842;&#22825;&#23460;";
-$langNoOnlineConference  = "&#29694;&#22312;&#27794;&#26377;&#26371;&#35696;...";
-$langMediaFile  = "&#30452;&#25773;&#38899;&#38971;&#25110;&#35222;&#38971;&#27969;";
-$langContentFile  = "&#20171;&#32057;";
-$langListOfParticipants  = "&#25104;&#21729;&#21015;&#34920;";
-$langYourPicture  = "&#20320;&#30340;&#30456;&#29255;";
-$langOnlineDescription  = "&#26371;&#35696;&#25551;&#36848;";
-$langOnlyCheckForImportantQuestion = "&#25552;&#21839;&#19968;&#20491;&#37325;&#35201;&#30340;&#21839;&#38988;&#26178;&#65292;&#35531;&#36984;&#20013;&#36889;&#20491;&#26694;!";
-$langQuestion = "&#21839;&#38988;";
-$langClearList = "&#28165;&#38500;&#21015;&#34920;";
-$langWhiteBoard = "&#30333;&#26495;";
-$langTextEditorDefault = "<h2>&#25991;&#23383;&#34389;&#29702;</h2>&#24478;&#24494;&#36575;Word&#21098;&#36028;&#20006;&#36028;&#21040;&#36889;&#35041;&#28982;&#24460;&#32232;&#36655;&#12290;&#23416;&#29983;&#23559;&#21363;&#26178;&#30475;&#21040;&#20320;&#30340;&#20462;&#25913;&#12290;";
-$langStreaming = "&#20018;&#27969;&#23186;&#39636;";
-$langStreamURL = "&#20018;&#27969;&#23186;&#39636;&#32178;&#22336;";
-$langStreamType = "&#20018;&#27969;&#23186;&#39636;&#39006;&#22411;";
-$langLinkName = "&#37832;&#25509;&#21517;&#31281;";
-$langLinkURL = "&#37832;&#25509;&#32178;&#22336;";
-$langWelcomeToOnlineConf = "&#27489;&#36814;&#20358;&#21040;<b>&#32218;&#19978;&#26371;&#35696;</b>";
-$langNoLinkAvailable = "&#27794;&#26377;&#37832;&#25509;&#21487;&#29992;";
-$langChat_reset_by = "&#37325;&#35373;&#32842;&#22825;&#23460;";
-$OrFile = "&#25110;&#25991;&#20214;";
-$langCallSent = "&#32842;&#22825;&#35531;&#27714;&#24050;&#32147;&#30332;&#36865;&#12290;&#31561;&#24453;&#20320;&#30340;&#20249;&#20276;&#30340;&#22238;&#25033;";
-$langChatDenied = "&#23565;&#26041;&#25298;&#32085;&#20320;&#30340;&#32842;&#22825;&#35531;&#27714;.";
+$langOnlineConference = "線上會議";
+$langWash = "洗刷";
+$langReset = "重置";
+$langSave = "儲存";
+$langRefresh = "刷新";
+$langIsNowInYourDocDir = "現下在你的文檔工具中，<br /><B>這個檔案是可見的</B>";
+$langCopyFailed = "列印失敗";
+$langTypeMessage = "請輸入你的消息!";
+$langConfirmReset = "真的想要刪除所有消息嗎？";
+$langHasResetChat = "已經重置聊天室";
+$langNoOnlineConference = "現下還沒有會議...";
+$langMediaFile = "直播音頻或視頻流";
+$langContentFile = "介紹";
+$langListOfParticipants = "成員清單";
+$langYourPicture = "你的圖片";
+$langOnlineDescription = "會議描述";
+$langOnlyCheckForImportantQuestion = "當要提出重要問題時，請選中此框﹗";
+$langQuestion = "問題";
+$langClearList = "清除清單";
+$langWhiteBoard = "白板";
+$langTextEditorDefault = "<H2>文字處理</H2>從微軟Word中剪切和粘貼到這裡然後編輯，成員將會看到你的線上修改。";
+$langStreaming = "流媒體";
+$langStreamURL = "流媒體鏈接";
+$langStreamType = "流媒體類型";
+$langLinkName = "鏈接名稱";
+$langLinkURL = "鏈接網址";
+$langWelcomeToOnlineConf = "歡迎來到<B>線上會議</B>";
+$langNoLinkAvailable = "沒有鏈接可用";
+$langChat_reset_by = "重置聊天室";
+$OrFile = "或文件";
+$langCallSent = "聊天請求已經發送，等待對方同意。";
+$langChatDenied = "你的聊天請求已經被對方拒絕。";
+$Send = "已傳送";
+$Connected = "已連線";
 ?>

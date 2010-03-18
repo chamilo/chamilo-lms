@@ -1,5 +1,6 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $lang_new_item = "noul obiect adaugat";
 $lang_title_notification = "De la ultima ta vizita";
@@ -15,6 +16,6 @@ $lang_new_forum_topic = "subiect de discutie nou adaugat";
 $lang_new_groupforum_topic = "subiect de discutie nou adaugat la forumul grupului";
 $lang_new_dropbox_file = "fisier nou primit";
 $lang_update_dropbox_file = "fisierul din dropbox tau a fost actualizat";
-$ForumCategoryAdded = "Adauga categorie forum";
+$ForumCategoryAdded = "Categoria de forum a fost adaugata";
 $LearnpathAdded = "Adauga curs";
 ?>

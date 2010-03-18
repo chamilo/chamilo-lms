@@ -1,5 +1,6 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $langScormVersion = "verzija";
 $langScormRestarted = "Sve su lekcije sada nepotpune.";
@@ -11,45 +12,45 @@ $langScormScore = "Rezultat";
 $langScormLessonTitle = "Naslov lekcije";
 $langScormStatus = "Status";
 $langScormToEnter = "Za ulaz";
-$langScormFirstNeedTo = "prvo morate dovršiti";
+$langScormFirstNeedTo = "prvo morate dovrÅ¡iti";
 $langScormThisStatus = "Ova je lekcija sada";
-$langScormClose = "Okon&#269;aj";
+$langScormClose = "OkonÄaj";
 $langScormRestart = "Kreni ponovno";
-$langScormCompstatus = "Dovršeno";
-$langScormIncomplete = "Nedovršeno";
-$langScormPassed = "Uspješno dovršeno";
-$langScormFailed = "Neuspješno";
+$langScormCompstatus = "DovrÅ¡eno";
+$langScormIncomplete = "NedovrÅ¡eno";
+$langScormPassed = "UspjeÅ¡no dovrÅ¡eno";
+$langScormFailed = "NeuspjeÅ¡no";
 $langScormPrevious = "Prethodno";
-$langScormNext = "Sljede&#263;e";
-$langScormTitle = "Program za pokretanje sustava Dokeos Scorm";
+$langScormNext = "SljedeÄ‡e";
+$langScormTitle = "Program za pokretanje sustava Chamilo Scorm";
 $langScormMystatus = "Moj status";
-$langScormNoItems = "Ovaj sadržaj nema elemenata.";
-$langScormNoStatus = "Ovaj sadržaj nema status";
-$langScormLoggedout = "odjavljen iz okruženja Scorm";
+$langScormNoItems = "Ovaj sadrÅ¾aj nema elemenata.";
+$langScormNoStatus = "Ovaj sadrÅ¾aj nema status";
+$langScormLoggedout = "odjavljen iz okruÅ¾enja Scorm";
 $langScormCloseWindow = "Zatvori prozore";
 $ScormBrowsed = "Pregledan";
 $langScormExitFullScreen = "Natrag u standardni prikaz";
 $langScormFullScreen = "Prikaz preko cijelog zaslona";
-$langScormNotAttempted = "Bez pokušaja";
+$langScormNotAttempted = "Bez pokuÅ¡aja";
 $langCharset = "Skup znakova";
 $langLocal = "Lokalni";
 $langRemote = "Udaljeni";
-$langAutodetect = "Automatsko pronalaženje";
-$langAccomplishedStepsTotal = "Ukupno izvršenih koraka";
+$langAutodetect = "Automatsko pronalaÅ¾enje";
+$langAccomplishedStepsTotal = "Ukupno izvrÅ¡enih koraka";
 $langUnknown = "Nepoznat";
-$AreYouSureToDeleteSteps = "Jeste li sigurni da želite obrisati odabrane korake?";
+$AreYouSureToDeleteSteps = "Jeste li sigurni da Å¾elite obrisati odabrane korake?";
 $Origin = "Izvor";
 $Local = "Lokalni";
 $Remote = "Udaljeni";
-$FileToUpload = "SCORM ili AICC datoteka za u&#269;itavanje";
+$FileToUpload = "SCORM ili AICC datoteka za uÄitavanje";
 $ContentMaker = "Stvaranje kolegija (alat)";
 $ContentProximity = "Lokacija kolegija";
-$UploadLocalFileFromGarbageDir = "U&#269;itaj datoteku iz direktorija main/garbage";
-$ThisItemIsNotExportable = "Ovaj element nije trenutno kompatibilan sa SCORM formatom, zato ga ne možete prenositi.";
+$UploadLocalFileFromGarbageDir = "UÄitaj datoteku iz direktorija main/garbage";
+$ThisItemIsNotExportable = "Ovaj element nije trenutno kompatibilan sa SCORM formatom, zato ga ne moÅ¾ete prenositi.";
 $MoveCurrentChapter = "Pomakni trenutno pogavlje";
-$GenericScorm = "Generi&#269;ki SCORM";
-$UnknownPackageFormat = "Format datoteke nije prepoznat. Provjerite da je datoteka dobro generirana i da nema grešaka. Problemi mogu nastati zbog dodatnih uklju&#269;enih ZIP opcija ili veli&#269;ine datoteke. Ukoliko niste sigurni u ZIP, probajte generirati ZIP datoteku sa što manje dodatnih opcija.";
-$Attempt = "Pokušaj";
+$GenericScorm = "GeneriÄki SCORM";
+$UnknownPackageFormat = "Format datoteke nije prepoznat. Provjerite da je datoteka dobro generirana i da nema greÅ¡aka. Problemi mogu nastati zbog dodatnih ukljuÄenih ZIP opcija ili veliÄine datoteke. Ukoliko niste sigurni u ZIP, probajte generirati ZIP datoteku sa Å¡to manje dodatnih opcija.";
+$Attempt = "PokuÅ¡aj";
 $MoveTheCurrentForum = "Premjesti trenutni forum";
-$WarningWhenEditingScorm = "Upozorenje !<br/>Kada izmjenite trenutni SCORM korak, može do&#263;i do promjene izvješ&#263;ivanja Puta u&#269;enja ili do greške samog koraka.";
+$WarningWhenEditingScorm = "Upozorenje !<br/>Kada izmjenite trenutni SCORM korak, moÅ¾e doÄ‡i do promjene izvjeÅ¡Ä‡ivanja Puta uÄenja ili do greÅ¡ke samog koraka.";
 ?>

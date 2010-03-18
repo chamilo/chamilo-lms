@@ -1,8 +1,9 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $ResourceAdded = "Resource added. You can now go back to the path or add more resources.";
-$LearningPath = "Learning Path";
+$LearningPath = "InlÃ¤rningsvÃ¤gar";
 $LevelUp = "level up";
 $AddIt = "Add it";
 $MainCategory = "main category";
@@ -25,33 +26,33 @@ $ShowDelete = "Visa / Radera";
 $IntroductionText = "Introduktionstext";
 $CourseDescription = "Kursbeskrivning";
 $Groups = "Grupper";
-$Users = "Användare";
-$IntroductionTextAdd = "Lägg till sida som innehåller introduktions text till detta kapitel.";
-$CourseDescriptionAdd = "Lägg till en sida som innehåller beskrivning till detta kapitel.";
-$GroupsAdd = "Lägg till gruppsidan till detta kapitel.";
-$UsersAdd = "Lägg till användarsidan till detta kapitel.";
+$Users = "AnvÃ¤ndare";
+$IntroductionTextAdd = "LÃ¤gg till sida som innehÃ¥ller introduktions text till detta kapitel.";
+$CourseDescriptionAdd = "LÃ¤gg till en sida som innehÃ¥ller beskrivning till detta kapitel.";
+$GroupsAdd = "LÃ¤gg till gruppsidan till detta kapitel.";
+$UsersAdd = "LÃ¤gg till anvÃ¤ndarsidan till detta kapitel.";
 $ExportableCourseResources = "Exportbara kurs resurser";
-$DokeosRelatedCourseMaterial = "Dokeos relaterade kurs resurser";
-$LinkTarget = "Länkmål";
-$SameWindow = "I samma fönster";
-$NewWindow = "I ett nytt fönster";
+$DokeosRelatedCourseMaterial = "Chamilo relaterade kurs resurser";
+$LinkTarget = "LÃ¤nkmÃ¥l";
+$SameWindow = "I samma fÃ¶nster";
+$NewWindow = "I ett nytt fÃ¶nster";
 $StepDeleted1 = "detta";
 $StepDeleted2 = "objekt blev raderat i det verktyget.";
-$Modify = "Modifiera / Ändra";
+$Modify = "Modifiera / Ã„ndra";
 $Chapter = "Kapitel";
 $NoAgendaItems = "Det finns inga Agenda objekt";
-$AgendaAdd = "Lägg till ett Agenda objekt";
-$UserGroupFilter = "Använd gruppfilter";
+$AgendaAdd = "LÃ¤gg till kalenderpost";
+$UserGroupFilter = "Filter pÃ¥ grupper/anvÃ¤ndare";
 $AgendaSortChronologicallyUp = "Sortera Agenda kronologiskt (upp)";
-$ShowCurrent = "Visa aktuella Agenda objekt";
-$ModifyCalendarItem = "Ändra Agenda objekt";
-$ItemTitle = "Titel";
-$Detail = "Detaljer";
-$EditSuccess = "Ändringen lyckades";
-$AddCalendarItem = "Lägg till Agenda objekt";
-$AddAnn = "Lägg till tillkännagivande";
-$ForumAddNewTopic = "Forum: lägg till nytt ämne";
-$ForumEditTopic = "Forum: ändra ämne";
-$ExerciseAnswers = "Övningar: Svar";
+$ShowCurrent = "Visa kalenderposter i aktuell mÃ¥nad";
+$ModifyCalendarItem = "Ã„ndra en kalenderpost";
+$ItemTitle = "Objekttitel";
+$Detail = "Detalj";
+$EditSuccess = "Kalenderposten har blivit Ã¤ndrad";
+$AddCalendarItem = "LÃ¤gg till kalenderpost";
+$AddAnn = "LÃ¤gg till tillkÃ¤nnagivande";
+$ForumAddNewTopic = "Forum: lÃ¤gg till nytt Ã¤mne";
+$ForumEditTopic = "Forum: Ã¤ndra Ã¤mne";
+$ExerciseAnswers = "Ã–vningar: Svar";
 $ForumReply = "Forum: svar";
 ?>

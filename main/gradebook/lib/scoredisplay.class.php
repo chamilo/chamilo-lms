@@ -1,27 +1,5 @@
 <?php
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2008 Dokeos Latinoamerica SAC
-	Copyright (c) 2006 Dokeos SPRL
-	Copyright (c) 2006 Ghent University (UGent)
-	Copyright (c) various contributors
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
-	Mail: info@dokeos.com
-==============================================================================
-*/
+/* For licensing terms, see /license.txt */
 // Score display types constants
 define('SCORE_DIV',1);
 define('SCORE_PERCENT',2);
@@ -190,7 +168,7 @@ class ScoreDisplay
 		// remove previous settings
     	$tbl_display = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_SCORE_DISPLAY);
 		$sql = 'TRUNCATE TABLE '.$tbl_display;
-		Database::query($sql, __FILE__, __LINE__);
+		Database::query($sql);
 
 		// add new settings
 		$sql = 'INSERT INTO '.$tbl_display.' (id, score, display) VALUES ';
@@ -202,7 +180,7 @@ class ScoreDisplay
 			$sql .= "(NULL, '".$display['score']."', '".Database::escape_string($display['display'])."')";
 			$count++;
 		}
-		Database::query($sql, __FILE__, __LINE__);
+		Database::query($sql);
 	}
 
 	/**
@@ -302,7 +280,7 @@ class ScoreDisplay
 
 		$sql = "SELECT selected_value FROM ".$tbl_setting
 				." WHERE category = 'Gradebook' AND variable = '".$property."'";
-		$result = Database::query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql);
 
 		if ($data = Database::fetch_row($result)) {
 			return $data[0];
@@ -312,7 +290,7 @@ class ScoreDisplay
 			$sql = "INSERT INTO ".$tbl_setting
 					." (variable, selected_value, category)"
 					." VALUES ('".$property."', '".$default."','Gradebook')";
-			Database::query($sql, __FILE__, __LINE__);
+			Database::query($sql);
 			// ...and return default value
 			return $default;
 		}
@@ -328,7 +306,7 @@ class ScoreDisplay
 		$sql = 'UPDATE '.$tbl_setting
 				." SET selected_value = '".$value."' "
 				." WHERE variable = '".$property."' AND category='Gradebook'";
-		Database::query($sql, __FILE__, __LINE__);
+		Database::query($sql);
 	}
 
 
@@ -339,8 +317,7 @@ class ScoreDisplay
 	private function get_custom_displays() {
     	$tbl_display = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_SCORE_DISPLAY);
 		$sql = 'SELECT * FROM '.$tbl_display.' ORDER BY score';
-		//echo $sql;
-		$result = Database::query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql);
 		return Database::store_result($result);
 	}
 

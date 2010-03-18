@@ -2,17 +2,13 @@
 
 require_once(api_get_path(LIBRARY_PATH).'sessionmanager.lib.php');
 
-Mock::generate('Database');
-Mock::generate('api_failure');
-
-
 class TestSessionManager extends UnitTestCase {
 
 	function testadd_courses_to_session() {
 		$id_session='';
 		$course_list='';
 		ob_start();
-		$res=SessionManager::add_courses_to_session();
+		$res=SessionManager::add_courses_to_session($id_session,$course_list);
 		if(!empty($res)) {
 			$this->assertTrue(is_null($res));
 		} else {
@@ -23,7 +19,6 @@ class TestSessionManager extends UnitTestCase {
 	}
 
 	function testcreate_session() {
-		$idsesion = new MockDatabase();
 		global $_user;
 		$sname='';
 		$syear_start='';
@@ -36,15 +31,15 @@ class TestSessionManager extends UnitTestCase {
 		$snb_days_acess_after='';
 		$nolimit='';
 		$coach_username='';
+		$id_session_category='';
+		$id_visibility='';
 		$id_session=Database::insert_id();
 		ob_start();
-		$res=SessionManager::create_session($sname,$syear_start,$smonth_start,$sday_start,$syear_end,$smonth_end,$sday_end,$snb_days_acess_before,$snb_days_acess_after,$nolimit,$coach_username);
-		$idsesion->expectOnce(Database::insert_id());
-		$this->assertTrue(is_object($idsesion));
+		$res=SessionManager::create_session($sname,$syear_start,$smonth_start,$sday_start,$syear_end,$smonth_end,$sday_end,$snb_days_acess_before,$snb_days_acess_after,$nolimit,$coach_username,$id_session_category,$id_visibility);
 		$this->assertTrue(is_numeric($id_session));
 		$this->assertTrue(is_string($res));
 		ob_end_clean();
-		//var_dump($idsesion);
+		//var_dump($id_session);
 	}
 
 	function testcreate_session_extra_field() {
@@ -74,7 +69,6 @@ class TestSessionManager extends UnitTestCase {
 	*/
 
 	function testedit_session() {
-		$idsesion = new MockDatabase();
 		global $_user;
 		$id=1;
 		$name='';
@@ -88,9 +82,9 @@ class TestSessionManager extends UnitTestCase {
 		$nb_days_acess_after='';
 		$nolimit='';
 		$id_coach='';
-		$res=SessionManager::edit_session($id,$name,$year_start,$month_start,$day_start,$year_end,$month_end,$day_end,$nb_days_acess_before,$nb_days_acess_after,$nolimit,$id_coach);
-		$idsesion->expectOnce(Database::escape_string($name));
-		$this->assertTrue(is_object($idsesion));
+		$id_session_category='';
+		$id_visibility='';
+		$res=SessionManager::edit_session($id,$name,$year_start,$month_start,$day_start,$year_end,$month_end,$day_end,$nb_days_acess_before,$nb_days_acess_after,$nolimit,$id_coach, $id_session_category, $id_visibility);
 		$this->assertTrue(is_numeric($id));
 		$this->assertTrue(is_string($res));
 		//var_dump($id);
@@ -104,7 +98,7 @@ class TestSessionManager extends UnitTestCase {
 	}
 
 	function testrelation_session_course_exist() {
-		$session_id='';
+		$session_id=1;
 		$course_id='';
 		$res=SessionManager::relation_session_course_exist($session_id, $course_id);
 		if(!is_numeric($res)) $this->assertTrue(is_bool($res));

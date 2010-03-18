@@ -1,27 +1,5 @@
 <?php
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2008 Dokeos Latinoamerica SAC
-	Copyright (c) 2006 Dokeos SPRL
-	Copyright (c) 2006 Ghent University (UGent)
-	Copyright (c) various contributors
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
-	Mail: info@dokeos.com
-==============================================================================
-*/
+/* For licensing terms, see /license.txt */
 require_once (dirname(__FILE__).'/../../../inc/global.inc.php');
 require_once (dirname(__FILE__).'/../be.inc.php');
 require_once (dirname(__FILE__).'/../gradebook_functions.inc.php');
@@ -32,6 +10,18 @@ require_once (api_get_path(LIBRARY_PATH) . 'formvalidator/FormValidator.class.ph
  * @author Stijn Konings
  * @package dokeos.gradebook
  */
+
+$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js" type="text/javascript" language="javascript"></script>'; //jQuery
+$htmlHeadXtra[] = '<script type="text/javascript">
+function setFocus(){
+$("#evaluation_title").focus();
+}
+$(document).ready(function () {
+  setFocus();
+});
+</script>';
+ 
+ 
 class EvalForm extends FormValidator
 {
 	const TYPE_ADD= 1;
@@ -276,7 +266,7 @@ class EvalForm extends FormValidator
 	 */
 	protected function build_add_form() {
 		$this->setDefaults(array (
-		'hid_user_id' => $this->evaluation_object->get_user_id(), 'hid_category_id' => $this->evaluation_object->get_category_id(), 'hid_course_code' => $this->evaluation_object->get_course_code(), 'date' => time()));
+		'hid_user_id' => $this->evaluation_object->get_user_id(), 'hid_category_id' => $this->evaluation_object->get_category_id(), 'hid_course_code' => $this->evaluation_object->get_course_code(), 'created_at' => api_get_utc_datetime()));
 		$this->build_basic_form(0);
 		if ($this->evaluation_object->get_course_code() == null) {
 			$this->addElement('checkbox', 'adduser', get_lang('AddUserToEval'));
@@ -290,7 +280,7 @@ class EvalForm extends FormValidator
 	 */
 	protected function build_editing_form() {
 		$this->setDefaults(array (
-		'hid_id' => $this->evaluation_object->get_id(), 'name' => $this->evaluation_object->get_name(), 'description' => $this->evaluation_object->get_description(), 'hid_user_id' => $this->evaluation_object->get_user_id(), 'hid_course_code' => $this->evaluation_object->get_course_code(), 'hid_category_id' => $this->evaluation_object->get_category_id(), 'date' => $this->evaluation_object->get_date(), 'weight' => $this->evaluation_object->get_weight(), 'max' => $this->evaluation_object->get_max(), 'visible' => $this->evaluation_object->is_visible()));
+		'hid_id' => $this->evaluation_object->get_id(), 'name' => $this->evaluation_object->get_name(), 'description' => $this->evaluation_object->get_description(), 'hid_user_id' => $this->evaluation_object->get_user_id(), 'hid_course_code' => $this->evaluation_object->get_course_code(), 'hid_category_id' => $this->evaluation_object->get_category_id(), 'created_at' => api_get_utc_datetime($this->evaluation_object->get_date()), 'weight' => $this->evaluation_object->get_weight(), 'max' => $this->evaluation_object->get_max(), 'visible' => $this->evaluation_object->is_visible()));
 		$id_current=isset($this->id)?$this->id :null;
 		$this->addElement('hidden', 'hid_id',$id_current);
 		$this->build_basic_form(1);
@@ -313,7 +303,8 @@ class EvalForm extends FormValidator
 		$this->addElement('hidden', 'hid_course_code');
 		$this->add_textfield('name', get_lang('EvaluationName'), true, array (
 			'size' => '54',
-			'maxlength' => '50'
+			'maxlength' => '50',
+			'id' => 'evaluation_title'
 		));
 		$this->add_textfield('weight', get_lang('Weight'), true, array (
 			'size' => '4',
@@ -339,7 +330,6 @@ class EvalForm extends FormValidator
 				'maxlength' => '4'
 			));
 		}
-		/*$this->add_datepicker('date', get_lang('DateEval'));*/
 		$this->addElement('textarea', 'description', get_lang('Description'), array (
 			'rows' => '3',
 			'cols' => '34'

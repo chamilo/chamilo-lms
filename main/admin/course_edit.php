@@ -53,7 +53,7 @@ $table_user = Database :: get_main_table(TABLE_MAIN_USER);
 
 //Get the course infos
 $sql = "SELECT * FROM $course_table WHERE code='".Database::escape_string($course_code)."'";
-$result = Database::query($sql, __FILE__, __LINE__);
+$result = Database::query($sql);
 if (Database::num_rows($result) != 1)
 {
 	header('Location: course_list.php');
@@ -65,7 +65,7 @@ $course = Database::fetch_array($result,'ASSOC');
 $table_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 $order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname' : ' ORDER BY lastname, firstname';
 $sql = "SELECT user.user_id,lastname,firstname FROM $table_user as user,$table_course_user as course_user WHERE course_user.status='1' AND course_user.user_id=user.user_id AND course_user.course_code='".$course_code."'".$order_clause;
-$res = Database::query($sql,__FILE__,__LINE__);
+$res = Database::query($sql);
 $course_teachers = array();
 while($obj = Database::fetch_object($res))
 {
@@ -74,7 +74,7 @@ while($obj = Database::fetch_object($res))
 
 // Get all possible teachers without the course teachers
 $sql = "SELECT user_id,lastname,firstname FROM $table_user WHERE status='1'".$order_clause;
-$res = Database::query($sql,__FILE__,__LINE__);
+$res = Database::query($sql);
 $teachers = array();
 
 $platform_teachers[0] = '-- '.get_lang('NoManager').' --';
@@ -89,13 +89,13 @@ while($obj = Database::fetch_object($res))
 		$course['tutor_name']=$obj->user_id;
 	}
 	//We add in the array platform teachers
-	$platform_teachers[$obj->user_id] = api_get_person_name($obj->firstname, $obj->lastname);
+	$platform_teachers[$obj->user_id] = $obj->firstname.' '.$obj->lastname;
 }
 
 //Case where there is no teacher in the course
 if(count($course_teachers)==0){
 	$sql='SELECT tutor_name FROM '.$course_table.' WHERE code="'.$course_code.'"';
-	$res = Database::query($sql,__FILE__,__LINE__);
+	$res = Database::query($sql);
 	$tutor_name=Database::result($res,0,0);
 	$course['tutor_name']=array_search($tutor_name,$platform_teachers);
 }
@@ -180,7 +180,7 @@ foreach($list_course_extra_field as $extra_field){
 			$checked = (array_key_exists('extra_field_value', $extra_field) && $extra_field['extra_field_value'] == 1)? array('checked'=>'checked'): '';
 			$form->addElement('hidden', '_extra_'.$extra_field['field_variable'], 0);
 			$field_display_text=$extra_field['field_display_text'];
-			$form->addElement('checkbox', 'extra_'.$extra_field['field_variable'],get_lang($field_display_text) , get_lang($extra_field['field_default_value']), $checked);
+			$form->addElement('checkbox', 'extra_'.$extra_field['field_variable'],get_lang('SpecialCourse') , get_lang($extra_field['field_default_value']), $checked);
 			break;
 		/* case USER_FIELD_TYPE_SELECT_MULTIPLE:
 		case USER_FIELD_TYPE_DATE:
@@ -205,12 +205,11 @@ if( $form->validate())
 
     // Check if the visual code is already used by *another* course
     $visual_code_is_used = false;
-    error_log($visual_code);
+
     $warn = get_lang('TheFollowingCoursesAlreadyUseThisVisualCode').':';
     if (!empty($visual_code)) {
         $list = CourseManager::get_courses_info_from_visual_code($visual_code);
         foreach ($list as $course_temp) {
-            error_log($course_temp['code']);
         	if ($course_temp['code'] != $course_code) {
         	   $visual_code_is_used = true;
                $warn .= ' '.$course_temp['title'].' ('.$course_temp['code'].'),';
@@ -221,14 +220,14 @@ if( $form->validate())
     // an extra field
     $extras = array();
     foreach($course as $key => $value) {
-	    if(substr($key,0,6)=='extra_') {  
+	    if(substr($key,0,6)=='extra_') {
 			$extras[substr($key,6)] = $value;
 		}
 		if(substr($key,0,7)=='_extra_') {
 			if(!array_key_exists(substr($key,7), $extras)) $extras[substr($key,7)] = $value;
 		}
     }
-    
+
 	$tutor_id = $course['tutor_name'];
 	$tutor_name=$platform_teachers[$tutor_id];
 
@@ -259,32 +258,32 @@ if( $form->validate())
 								subscribe = '".Database::escape_string($subscribe)."',
 								unsubscribe='".Database::escape_string($unsubscribe)."'
 							WHERE code='".Database::escape_string($course_code)."'";
-	Database::query($sql, __FILE__, __LINE__);
-	
+	Database::query($sql);
+
 	//update the extra fields
-	if(count($extras) > 0){ 
+	if(count($extras) > 0){
 		foreach($extras as $key => $value) {
 			CourseManager::update_course_extra_field_value($course_code, $key, $value);
 		}
 	}
-	
+
 	//Delete only teacher relations that doesn't match the selected teachers
 	$cond='';
 	if(count($teachers)>0){
 		foreach($teachers as $key) $cond.=" AND user_id<>'".$key."'";
 	}
 	$sql='DELETE FROM '.$course_user_table.' WHERE course_code="'.Database::escape_string($course_code).'" AND status="1"'.$cond;
-	Database::query($sql, __FILE__, __LINE__);
+	Database::query($sql);
 
 	if(count($teachers)>0){
 		foreach($teachers as $key){
 
 			//We check if the teacher is already subscribed in this course
-			$sql_select_teacher = 'SELECT 1 FROM '.$course_user_table.' WHERE user_id = "'.$key.'" AND course_code = "'.$course_code.'"';
-			$result = Database::query($sql_select_teacher, __FILE__, __LINE__);
+			$sql_select_teacher = 'SELECT 1 FROM '.$course_user_table.' WHERE user_id = "'.$key.'" AND course_code = "'.$course_code.'" ';
+			$result = Database::query($sql_select_teacher);
 
 			if(Database::num_rows($result) == 1){
-				$sql = 'UPDATE '.$course_user_table.' SET status = "1" WHERE course_code = "'.$course_code.'" AND user_id = "'.$key.'"';
+				$sql = 'UPDATE '.$course_user_table.' SET status = "1" WHERE course_code = "'.$course_code.'" AND user_id = "'.$key.'"  ';
 			}
 			else{
 				$sql = "INSERT INTO ".$course_user_table . " SET
@@ -296,7 +295,7 @@ if( $form->validate())
 					sort='0',
 					user_course_cat='0'";
 			}
-			Database::query($sql, __FILE__, __LINE__);
+			Database::query($sql);
 
 		}
 
@@ -310,7 +309,7 @@ if( $form->validate())
 				tutor_id='0',
 				sort='0',
 				user_course_cat='0'";
-	Database::query($sql, __FILE__, __LINE__);
+	Database::query($sql);
 
 	$forum_config_table = Database::get_course_table(TOOL_FORUM_CONFIG_TABLE,$course_db_name);
 	$sql = "UPDATE ".$forum_config_table." SET default_lang='".Database::escape_string($course_language)."'";

@@ -1,9 +1,10 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$ModifyEvaluation = "T\'ijray chaninchanata";
+$ModifyEvaluation = "T'ijray chaninchanata";
 $CreateLink = "Kamay waskhanata";
-$FlatView = "P\'alta qhawariy";
+$FlatView = "P'altachasqa qhawana";
 $ScoreEdit = "Ruwapay markana kamachiykunanpaq";
 $ScoreColor = "Markaq llinphin";
 $ScoringSystem = "Sistema de puntuación";
@@ -33,32 +34,22 @@ $DeleteSelected = "Pichay ajllasqata";
 $SetVisible = "Qhawarichiy";
 $SetInvisible = "Pakay";
 $ChooseLink = "Ajllay ima niraq wskhanata";
-$DokeosExercises = "Llank\'aynakuna";
-$DokeosDropbox = "T\'aqapay qelqa khipukunata";
-$DokeosStudentPublications = "Llank\'aykuna";
+$DokeosExercises = "Llank'aynakuna";
+$DokeosDropbox = "T'aqapay qelqa khipukunata";
+$DokeosStudentPublications = "Llank'aykuna";
 $DokeosLearningPaths = "Yachanakuna";
-$ChooseExercise = "Ajllay hoq llank\'aynata";
+$ChooseExercise = "Ajllay hoq llank'aynata";
 $AddResult = "Añadir resultados";
 $BackToOverview = "Kutin lliw Qhawanaman";
 $ExportPDF = "Apachiy PDF nisqaman";
-$Print = "Ñit\'iy";
+$Print = "Ñit'iy";
 $ChooseOrientation = "Ajllay imayna kananpaq";
 $Portrait = "Vertical";
 $Landscape = "Horizontal";
 $FilterCategory = "Suysuy sapanka chaninchanata";
 $DeleteAll = "Pichay llapanta";
 $ScoringUpdated = "Marka kunanyachisqa";
-$CertificateWCertifiesStudentXFinishedCourseYWithGradeZ = "%s certifica que\\
-\\
- %s \\
-\\
-ha realizado el curso \\
-\\
- \'%s\' \\
-\\
-con la calificación de\\
-\\
- \'%s\'";
+$CertificateWCertifiesStudentXFinishedCourseYWithGradeZ = "%s certifica que\n\n %s \n\nha realizado el curso \n\n '%s' \n\ncon la calificación de\n\n '%s'";
 $CertificateMinScore = "Puntuación mínima de certificación";
 $CategoryAdded = "Mita yapasqa";
 $InViMod = "Este apartado ya no es visible";
@@ -87,7 +78,7 @@ $LinkAdded = "Waskhana yapasqa";
 $LinkDeleted = "Waskhana pichasqa";
 $EditEvaluation = "Ruwapay chaninchanata";
 $DeleteResult = "Eliminar resultado";
-$Display = "T\'aqa";
+$Display = "T'aqa";
 $Average = "Media";
 $ViewStatistics = "Qhaway yupanakunata";
 $ResultAdded = "Resultado añadido";
@@ -103,7 +94,7 @@ $Certificates = "Certificados";
 $Certificate = "Certificado";
 $ChooseUser = "Seleccionar usuarios para esta evaluación";
 $FirstLetter = "Primera letra del apellido";
-$UserAdded = "Haykuqmasi yapasqa";
+$UserAdded = "Haykuqmasiqa yapachikunñan";
 $ResultEdited = "Resultado actualizado";
 $ChooseFormat = "Ajllay formato nisqata";
 $OutputFileType = "Tipo de fichero de salida";
@@ -114,7 +105,7 @@ $TotalUser = "Total por usuario";
 $AverageTotal = "Media total";
 $Evaluation = "Chaninchana";
 $EvaluationAverage = "Media de la evaluación";
-$EditCategory = "Editar calificación";
+$EditCategory = "Ruwapay kay mitata";
 $EditAllWeights = "Ruwapay llapan llasakunata";
 $GradebookQualificationTotal = "Total";
 $GradebookEvaluationDeleted = "La evaluación ha sido eliminada";
@@ -123,7 +114,7 @@ $GradebookNameLog = "Pataraq sutin";
 $GradebookDescriptionLog = "Pataraq nisqaynin";
 $GradebookVisibilityLog = "Pataraq wha";
 $ResourceType = "Ima niraq yachachina";
-$GradebookWhoChangedItLog = "Pin t\'ijrapachiran";
+$GradebookWhoChangedItLog = "Pin t'ijrapachiran";
 $EvaluationEdited = "La evaluación ha sido modificada";
 $CategoryEdited = "Calificación actualizada";
 $OnlyNumbers = "Yupakunallata";

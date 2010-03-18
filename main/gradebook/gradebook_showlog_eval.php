@@ -1,33 +1,12 @@
 <?php // $Id: $
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2008 Dokeos Latinoamerica SAC
-	Copyright (c) 2006 Dokeos SPRL
-	Copyright (c) 2006 Ghent University (UGent)
-	Copyright (c) various contributors
-	Copyright (c) Isaac Flores Paz <florespaz@bidsoftperu.com>
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
-	Mail: info@dokeos.com
-==============================================================================
-*/
+/* For licensing terms, see /license.txt */
 $language_file = 'gradebook';
 //$cidReset = true;
-require_once ('../inc/global.inc.php');
-require_once ('lib/be.inc.php');
-require_once ('lib/gradebook_functions.inc.php');
-require_once ('lib/fe/evalform.class.php');
+require_once '../inc/global.inc.php';
+require_once api_get_path(LIBRARY_PATH).'sortabletable.class.php';
+require_once 'lib/be.inc.php';
+require_once 'lib/gradebook_functions.inc.php';
+require_once 'lib/fe/evalform.class.php';
 api_block_anonymous_users();
 block_students();
 
@@ -49,46 +28,13 @@ echo '<div class="clear"></div>';
 echo '<div class="actions">';
 api_display_tool_title(get_lang('GradebookQualifyLog'));
 echo '</div>';
-/*
-$t_linkeval_log = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINKEVAL_LOG);
-$t_user=	 Database :: get_main_table(TABLE_MAIN_USER);
-$evaledit = Evaluation :: load($_GET['visiblelog']);
-$sql="SELECT le.name,le.description,le.date_log,le.weight,le.visible,le.type,us.username from ".$t_linkeval_log." le inner join ".$t_user." us on le.user_id_log=us.user_id where id_linkeval_log=".$evaledit[0]->get_id()." and type='evaluation';";
-$result=Database::query($sql);
-	echo '<table width="100%" border="0" >';
-		echo '<tr>';
-		echo '<td align="center" class="gradebook-table-header"><strong>'.get_lang('GradebookNameLog').'</strong></td>';
-		echo '<td align="center" class="gradebook-table-header"><strong>'.get_lang('GradebookDescriptionLog').'</strong></td>';
-		echo '<td align="center" class="gradebook-table-header"><strong>'.get_lang('Date').'</strong></td>';
-		echo '<td align="center" class="gradebook-table-header"><strong>'.get_lang('Weight').'</strong></td>';
-		echo '<td align="center" class="gradebook-table-header"><strong>'.get_lang('GradebookVisibilityLog').'</strong></td>';
-		echo '<td align="center" class="gradebook-table-header"><strong>'.get_lang('ResourceType').'</strong></td>';
-		echo '<td align="center" class="gradebook-table-header"><strong>'.get_lang('GradebookWhoChangedItLog').'</strong></td>';
-		echo '</tr>';
-	while($row=Database::fetch_array($result)) {
-	echo '<tr>';
-		echo '<td align="center" Class="gradebook-table-body">'.$row[0].'</td>';
-		echo '<td align="center" class="gradebook-table-body">'.$row[1].'</td>';
-		echo '<td align="center" class="gradebook-table-body">'.date('d-m-Y H:i:s',$row[2]).'</td>';
-		echo '<td align="center" class="gradebook-table-body">'.$row[3].'</td>';
-		if (1 == $row[4]) {
-			$visib=get_lang('GradebookVisible');
-		} else {
-			$visib=get_lang('GradebookInvisible');
-		}
-		echo '<td align="center" Class="gradebook-table-body">'.$visib.'</td>';
-		echo '<td align="center" class="gradebook-table-body">'.$row[5].'</td>';
-		echo '<td align="center" class="gradebook-table-body">'.$row[6].'</td>';
-	echo '</tr>';
-}
-echo '</table>';*/
 
 
 $t_linkeval_log = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINKEVAL_LOG);
 $t_user=	 Database :: get_main_table(TABLE_MAIN_USER);
 $visible_log=Security::remove_XSS($_GET['visiblelog']);
 $evaledit = Evaluation :: load($visible_log);
-$sql="SELECT le.name,le.description,le.weight,le.visible,le.type,le.date_log,us.username from ".$t_linkeval_log." le inner join ".$t_user." us on le.user_id_log=us.user_id where id_linkeval_log=".$evaledit[0]->get_id()." and type='evaluation';";
+$sql="SELECT le.name,le.description,le.weight,le.visible,le.type,le.created_at,us.username from ".$t_linkeval_log." le inner join ".$t_user." us on le.user_id_log=us.user_id where id_linkeval_log=".$evaledit[0]->get_id()." and type='evaluation';";
 $result=Database::query($sql);
 $list_info=array();
 while ($row=Database::fetch_row($result)) {
@@ -96,7 +42,7 @@ while ($row=Database::fetch_row($result)) {
 }
 
 foreach($list_info as $key => $info_log) {
-	$list_info[$key][5]=($info_log[5]) ? date('d-m-Y H:i:s',$info_log[5]) : '0000-00-00 00:00:00';
+	$list_info[$key][5]=($info_log[5]) ? api_convert_and_format_date($info_log[5]) : 'N/A';
 	$list_info[$key][3]=($info_log[3]==1) ? get_lang('GradebookVisible') : get_lang('GradebookInvisible');
 }
 

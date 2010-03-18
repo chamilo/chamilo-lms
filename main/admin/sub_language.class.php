@@ -1,5 +1,5 @@
 <?php
-/* For licensing terms, see /dokeos_license.txt */
+/* For licensing terms, see /license.txt */
 /**
 ==================================================================================
 	@author Isaac flores paz <florespaz@bidsoftperu.com> - Added 9 july of 2009
@@ -52,7 +52,7 @@ class SubLanguageManager {
 	public static function get_all_information_of_sub_language ($parent_id,$sub_language_id) {
 		$tbl_admin_languages 	= Database :: get_main_table(TABLE_MAIN_LANGUAGE);
 	 	$sql='SELECT * FROM '.$tbl_admin_languages.' WHERE parent_id="'.Database::escape_string($parent_id).'" AND id="'.Database::escape_string($sub_language_id).'"';
-		$rs=Database::query($sql,__FILE__,__LINE__);
+		$rs=Database::query($sql);
 		$all_information=array();
 		while ($row=Database::fetch_array($rs,'ASSOC')) {
 			$all_information=$row;
@@ -67,7 +67,7 @@ class SubLanguageManager {
    public static function get_all_information_of_language ($parent_id) {
  		$tbl_admin_languages 	= Database :: get_main_table(TABLE_MAIN_LANGUAGE);
 		$sql='SELECT * FROM '.$tbl_admin_languages.' WHERE id="'.Database::escape_string($parent_id).'"';
-		$rs=Database::query($sql,__FILE__,__LINE__);
+		$rs=Database::query($sql);
 		$all_information=array();
 		while ($row=Database::fetch_array($rs,'ASSOC')) {
 			$all_information=$row;
@@ -119,12 +119,8 @@ class SubLanguageManager {
      * @return boolean
      */
    public static function add_directory_of_sub_language($path_sub_language) {
-   		$rs=@mkdir($path_sub_language,0777);
-		if ($rs) {
-			return true;
-		} else {
-			return false;
-		}
+   		//return @mkdir($path_sub_language, 0777) !== false;
+   		return @mkdir($path_sub_language, api_get_permissions_for_new_directories()) !== false;
    }
 	 /**
 	 * Delete sub-language
@@ -132,9 +128,9 @@ class SubLanguageManager {
 	 * @return void()
 	 */
    public static function removed_sub_language ($parent_id,$sub_language_id) {
-   		$tbl_admin_languages 	= Database :: get_main_table(TABLE_MAIN_LANGUAGE);
-		$sql='DELETE FROM '.$tbl_admin_languages.' WHERE parent_id="'.Database::escape_string($parent_id).'" AND id="'.Database::escape_string($sub_language_id).'" ';
-    	$rs=Database::query($sql,__FILE__,__LINE__);
+   		$tbl_admin_languages = Database :: get_main_table(TABLE_MAIN_LANGUAGE);
+		$sql = 'DELETE FROM '.$tbl_admin_languages.' WHERE parent_id="'.Database::escape_string($parent_id).'" AND id="'.Database::escape_string($sub_language_id).'" ';
+    	Database::query($sql);
    }
    	/**
 	 * check if language exist by id
@@ -144,7 +140,7 @@ class SubLanguageManager {
 	public static function check_if_exist_language_by_id ($language_id) {
 		$tbl_admin_languages 	= Database :: get_main_table(TABLE_MAIN_LANGUAGE);
 		$sql='SELECT count(*) as count FROM '.$tbl_admin_languages.' WHERE id="'.Database::escape_string($language_id).'"';
-		$rs=Database::query($sql,__FILE__,__LINE__);
+		$rs=Database::query($sql);
 		if (Database::num_rows($rs)>0) {
 			if (Database::result($rs,0,'count') ==1) {
 				return true;
@@ -164,7 +160,7 @@ class SubLanguageManager {
 	public static function get_name_of_language_by_id ($language_id) {
 		$tbl_admin_languages 	= Database :: get_main_table(TABLE_MAIN_LANGUAGE);
 		$sql='SELECT original_name FROM '.$tbl_admin_languages.' WHERE id="'.Database::escape_string($language_id).'"';
-		$rs=Database::query($sql,__FILE__,__LINE__);
+		$rs=Database::query($sql);
 		if (Database::num_rows($rs)>0) {
 			return Database::result($rs,0,'original_name');
 		} else {
@@ -180,7 +176,7 @@ class SubLanguageManager {
 	public static function check_if_language_is_sub_language ($language_id) {
 	$tbl_admin_languages 	= Database :: get_main_table(TABLE_MAIN_LANGUAGE);
 	$sql='SELECT count(*) AS count FROM '.$tbl_admin_languages.' WHERE id="'.Database::escape_string($language_id).'" AND NOT ISNULL(parent_id)';
-    $rs=Database::query($sql,__FILE__,__LINE__);
+    $rs=Database::query($sql);
 
     if (Database::num_rows($rs)>0 && Database::result($rs,'0','count')==1) {
     	return true;
@@ -196,7 +192,7 @@ class SubLanguageManager {
 	public static function check_if_language_is_father ($language_id) {
 		$tbl_admin_languages 	= Database :: get_main_table(TABLE_MAIN_LANGUAGE);
 		$sql='SELECT count(*) AS count FROM '.$tbl_admin_languages.' WHERE parent_id="'.Database::escape_string($language_id).'" AND NOT ISNULL(parent_id);';
-	    $rs=Database::query($sql,__FILE__,__LINE__);
+	    $rs=Database::query($sql);
 
 	    if (Database::num_rows($rs)>0 && Database::result($rs,'0','count')==1) {
 	    	return true;
@@ -212,31 +208,47 @@ class SubLanguageManager {
 	public static function make_unavailable_language ($language_id) {
 		$tbl_admin_languages= Database :: get_main_table(TABLE_MAIN_LANGUAGE);
 		$sql_make_unavailable = "UPDATE $tbl_admin_languages SET available='0' WHERE id='".Database::escape_string($language_id)."'";
-		$result = Database::query($sql_make_unavailable,__FILE__,__LINE__);
+		$result = Database::query($sql_make_unavailable);
 	}
 	/**
 	 * Make available the language
 	 * @param Integer The language id
-	 * @return void()
+	 * @return void
 	 */
-	 public static function make_available_language ($language_id) {
+	public static function make_available_language ($language_id) {
 	 	$tbl_admin_languages= Database :: get_main_table(TABLE_MAIN_LANGUAGE);
 	 	$sql_make_available = "UPDATE $tbl_admin_languages SET available='1' WHERE id='".Database::escape_string($language_id)."'";
-		$result = Database::query($sql_make_available,__FILE__,__LINE__);
-	 }
-	 /**
-	  * Set platform language
-	  * @param Integer The language id
-	  * @return void()
-	  */
-	  public static function set_platform_language ($language_id) {
-		$tbl_admin_languages= Database :: get_main_table(TABLE_MAIN_LANGUAGE);
+		$result = Database::query($sql_make_available);
+	}
+	/**
+	 * Set platform language
+	 * @param Integer The language id
+	 * @return void()
+	 */
+    public static function set_platform_language ($language_id) {
+		$tbl_admin_languages = Database :: get_main_table(TABLE_MAIN_LANGUAGE);
 		$tbl_settings_current 	= Database :: get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
 		$sql_update = "SELECT english_name FROM ". $tbl_admin_languages." WHERE id='".Database::escape_string($language_id)."'";
-		$result = Database::query($sql_update,__FILE__,__LINE__);
+		$result = Database::query($sql_update);
 		$lang=Database::fetch_array($result);
 		$sql_update_2 = "UPDATE ".$tbl_settings_current." SET selected_value='".$lang['english_name']."' WHERE variable='platformLanguage'";
 		$result_2 = Database::query($sql_update_2);
-	  }
+    }
+	/**
+	 * Get parent language path (or null if no parent)
+	 * @param    string  Children language path
+	 * @return   string  Parent language path or null
+	 */
+    public static function get_parent_language_path ($language_path) {
+        $tbl_admin_languages = Database :: get_main_table(TABLE_MAIN_LANGUAGE);
+        $tbl_settings_current   = Database :: get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
+        $sql_update = "SELECT dokeos_folder FROM ". $tbl_admin_languages." WHERE id=(SELECT parent_id FROM ". $tbl_admin_languages." WHERE dokeos_folder = '".Database::escape_string($language_path)."')";
+        $result = Database::query($sql_update);
+        if (Database::num_rows($result) == 0) {
+        	return null;
+        }
+        $row = Database::fetch_array($result);
+        return $row['dokeos_folder'];
+    }
 }
 ?>

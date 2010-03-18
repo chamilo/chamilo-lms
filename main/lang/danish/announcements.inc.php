@@ -1,43 +1,44 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $Announcement = "Meddelelser";
 $langAnnEmpty = "Meddelelseslisten er ryddet";
-$AnnouncementModified = "Meddelelsen er blevet ændret";
-$AnnouncementAdded = "Meddelelsen er blevet tilføjet";
+$AnnouncementModified = "Meddelelsen er blevet Ã¦ndret";
+$AnnouncementAdded = "Meddelelsen er blevet tilfÃ¸jet";
 $AnnouncementDeleted = "Meddelelsen er fjernet";
-$AnnouncementPublishedOn = "Publiceret på";
-$AddAnnouncement = "Tilføj meddelelse";
-$langContent = "indhold";
+$AnnouncementPublishedOn = "Publiceret pÃ¥";
+$AddAnnouncement = "tilfÃ¸j som en meddelelse";
+$langContent = "Indhold";
 $AnnouncementDeleteAll = "Ryd meddelelseslisten";
 $professorMessage = "Besked fra underviseren";
-$langEmailSent = " og sendt til studerende på deltagerlisten";
-$EmailOption = "Send meddelelsen som e-mail til studerende på deltagerlisten";
+$langEmailSent = " og sendt til studerende pÃ¥ deltagerlisten";
+$EmailOption = "Send meddelelsen som e-mail til studerende pÃ¥ deltagerlisten";
 $langOn = "Til";
-$langRegUser = "registrerede studerende på dennes sides deltagerliste";
+$langRegUser = "registrerede studerende pÃ¥ dennes sides deltagerliste";
 $langUnvalid = "har en ugyldig eller ingen e-mailadresse";
 $langModifAnn = "rediger meddelelsen";
-$langModify    = "rediger";
-$langDelete    = "slet";
-$langTitle     = "Titel";
-$langHelp      = "hjælp";
-$langOk        = "OK";
-$langAddIntro  = "Tilføj introduktionstekst";
-$langBackList  = "Tilbage til listen";
-$langSelMess   = "Advarsel til visse brugere";
-$EmailTitle  = "E-mailens emne";
-$langUserlist  = "Liste over grupper og brugere";
-$langSelectedUsers  = "Valgte brugere";
-$langSubmit  = "Afsend";
-$langPleaseEnterMessage  = "Du skal indtaste tekst i meddelelsen";
-$langPleaseSelectUsers  = "Du skal vælge nogle brugere.";
+$langModify = "rediger";
+$langDelete = "slet";
+$langTitle = "Titel";
+$langHelp = "hjÃ¦lp";
+$langOk = "OK";
+$langAddIntro = "TilfÃ¸j introduktionstekst";
+$langBackList = "Tilbage til listen";
+$langSelMess = "Advarsel til visse brugere";
+$EmailTitle = "E-mailens emne";
+$langUserlist = "Liste over grupper og brugere";
+$langSelectedUsers = "Valgte brugere";
+$langSubmit = "Afsend";
+$langPleaseEnterMessage = "Du skal indtaste tekst i meddelelsen";
+$langPleaseSelectUsers = "Du skal vÃ¦lge nogle brugere.";
 $Teachersubject = "Meddelelse sendt til dine studerende";
-$langMessages  = "Meddelelser";
-$langMessageToSelectedUsers  = "Meddelelser til valgte brugere";
-$langIntroText  = "For at afsende en meddelelse skal du vælge  grupper (markeret med et G foran) eller enkelte brugere fra listen til venstre.";
+$langMessages = "Meddelelser";
+$langMessageToSelectedUsers = "Meddelelser til valgte brugere";
+$langIntroText = "For at afsende en meddelelse skal du vÃ¦lge  grupper (markeret med et G foran) eller enkelte brugere fra listen til venstre.";
 $langDown = "ned";
 $langMsgSent = "Meddelelsen er sendt til de valgte studerende";
-$langSelUser = "valgte brugere på siden";
+$langSelUser = "valgte brugere pÃ¥ siden";
 $langMessageToSelectedGroups = "Meddelelse til valgte grupper";
 $langSelectedGroups = "valgte grupper";
 $langMsg = "Meddelelser";
@@ -46,7 +47,7 @@ $MsgText = "Meddelelse";
 $AnnouncementDeletedAll = "Alle meddelelser blev slettet";
 $AnnouncementMoved = "Meddelelsen er flyttet";
 $NoAnnouncements = "Der er ingen meddelelser";
-$SelectEverybody = "Vælg alle";
+$SelectEverybody = "VÃ¦lg alle";
 $SelectedUsersGroups = "valgte grupper";
 $LearnerMessage = "Besked fra student";
 ?>

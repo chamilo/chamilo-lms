@@ -1,20 +1,21 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$TermAddNew = "Prida&#357; nový výraz";
-$TermName = "Výraz";
-$TermDefinition = "Definícia výrazu";
-$TermDeleted = "Výraz odstránený";
-$TermUpdated = "Výraz aktualizovaný";
-$TermConfirmDelete = "Naozaj chcete zmaza&#357; tento výraz";
-$TermAddButton = "Prida&#357; tento výraz";
-$TermUpdateButton = "Aktualizova&#357; výraz";
-$TermEdit = "Upravi&#357; výraz";
-$TermDeleteAction = "Zmaza&#357; výraz";
-$OrderBy = "Usporiada&#357; pod&#318;a";
-$CreationDate = "Dátum vytvorenia";
-$UpdateDate = "Dátum aktualizácie";
-$TermAdded = "Výraz pridaný";
-$YouMustEnterATermName = "Musíte zada&#357; výraz";
-$YouMustEnterATermDefinition = "Musíte zada&#357; definíciu výrazu";
+$TermAddNew = "PridaÅ¥ novÃ½ vÃ½raz";
+$TermName = "VÃ½raz";
+$TermDefinition = "DefinÃ­cia vÃ½razu";
+$TermDeleted = "VÃ½raz odstrÃ¡nenÃ½";
+$TermUpdated = "VÃ½raz aktualizovanÃ½";
+$TermConfirmDelete = "Naozaj chcete zmazaÅ¥ tento vÃ½raz";
+$TermAddButton = "PridaÅ¥ tento vÃ½raz";
+$TermUpdateButton = "AktualizovaÅ¥ vÃ½raz";
+$TermEdit = "UpraviÅ¥ vÃ½raz";
+$TermDeleteAction = "ZmazaÅ¥ vÃ½raz";
+$OrderBy = "ZoradiÅ¥ podÄ¾a";
+$CreationDate = "DÃ¡tum vytvorenia";
+$UpdateDate = "DÃ¡tum aktualizÃ¡cie";
+$TermAdded = "VÃ½raz pridanÃ½";
+$YouMustEnterATermName = "MusÃ­te zadaÅ¥ vÃ½raz";
+$YouMustEnterATermDefinition = "MusÃ­te zadaÅ¥ definÃ­ciu vÃ½razu";
 ?>

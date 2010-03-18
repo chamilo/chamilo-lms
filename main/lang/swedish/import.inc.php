@@ -1,15 +1,16 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $langPgTitle = "Sidans titel";
-$langExplanation = "Filen mÂste skickas i HTML-format (e.g. \"my_sida.html\"). Den kommer att l‰nkas till frÂn hemsidan. Om du vill skicka upp icke HTML-dokument (PDF, Word, Power Point, Video, etc.) anv‰nder du <a href=../document/document.php>Dokumentverktyget</a>";
-$langTooBig = "Du valde ingen fil att skicka eller filen ‰r fˆr stor";
-$langCouldNot = "Filen kunde inte skickas";
-$langNotAllowed = "Inte tillÂtet";
-$langAddPageToSite = "l‰gg till sida till sajt";
-$langCouldNotSendPage = "Denna fil ‰r inte i HTML-format och kan inte skickas. Om du vill skicka upp icke HTML-dokument (PDF, Word, Power Point, Video, etc.) anv‰nder <a href=../document/document.php>Dokumentverktyget</a>";
-$langSendPage = "Sida att skicka";
+$langExplanation = "N√§r du klickar p√• OK, kommer en sajt att skapas med Forum, Agenda, Dokumenthanterare m.m. Ditt login, som skapare av sajten, ger dig m√∂jlighet att modifiera den efter dina behov.";
+$langTooBig = "Du valde ingen fil att s√§nda, eller s√• var den f√∂r stor";
+$langCouldNot = "Filen kunde inte s√§ndas";
+$langNotAllowed = "Inte till√•tet";
+$langAddPageToSite = "l√§gg till sida till sajt";
+$langCouldNotSendPage = "Denna fil √§r inte i HTML-format och kan inte skickas. Om du vill skicka upp icke HTML-dokument (PDF, Word, Power Point, Video, etc.) anv√§nder <a href=../document/document.php>Dokumentverktyget</a>";
+$langSendPage = "Sida att s√§nda";
 $langPageTitleModified = "Sidans titel har modifierats";
 $langPageAdded = "Sida adderad";
-$langAddPage = "L‰gg till en sida";
+$langAddPage = "L√§gg till en sida";
 ?>

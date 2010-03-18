@@ -1,15 +1,16 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$langClarContent = "<p><b>Lärare</b></p> <p>Dokeos är ett lärande och kunskapsbaserat system. Det hjälper lärare att organisera läromedel, kursmoment och att interagera med sina studenter. Det enda program som behövs är en webbläsare.</p> <p>För att använda Dokeos behövs ett användarnamn och lösenord. Beroende på säkerhetsnivån på din kursportal kan du registrera dig själv eller registreras av en administratör. Observera att användarnamn och lösenord aldrig innehåller mellanrum eller accenter. Viktigt också att skilja mellan stora och små bokstäver. Skriv in ditt användarnamn och lösenord, skapa din kurs eller använd en kurs som redan skapats åt dig av en administratör.</p> <p>Att lägga till kollegor som hjälpadministratörer i din kurs: <ol><li>Om hon/han inte redan är registrerad i systemet, registrera och ge dem lärarrättigheter,</li> <li>Om hon/han redan är registrerad i systemet, öppna temporärt kursbeskrivningen i Kursinställningar och be honom/henne att gå med i kursen. Sedan ändrar du hennes/hans profil och ger dem lärarrättigheter.</li></ol></p> <p> Varje Dokeosverktyg innehåller en hjälpfunktion som representeras av en röd livboj. Om du inte hittar relevant information där kan du titta på Dokeos dokumentationssida: <a href=\\\"http://www.dokeos.com/documentation.php\\\">http://www.dokeos.com/documentation.php</a> och ladda ner lärarmanualen på ditt språk eller på engelska.</p> <p><b>Student</b></p> <p>Denna kursportal ger dig möjlighet att följa och delta i kurser, övningar, arbetsbodar m.m. Den har skapats för ett aktivt lärande, t ex projektbaserat, problembaserat, gemensamma efterforskningar mm. Dina lärare har byggt ett lärplatser som kan innehålla enkla dokument, avancerade självstudiematerial såväl som grupparbeten.</p> <p>Registreringsprocessen kan variera från kursportal till kursportal. I vissa fall kan man registrera sig själv och i andra görs det av en administratör. Du får då ett användarnamn och lösenord från administrativt håll.</p>";
+$langClarContent = "<p><b>LÃ¤rare</b></p> <p>Dokeos Ã¤r ett lÃ¤rande och kunskapsbaserat system. Det hjÃ¤lper lÃ¤rare att organisera lÃ¤romedel, kursmoment och att interagera med sina studenter. Det enda program som behÃ¶vs Ã¤r en webblÃ¤sare.</p> <p>FÃ¶r att anvÃ¤nda Chamilo behÃ¶vs ett anvÃ¤ndarnamn och lÃ¶senord. Beroende pÃ¥ sÃ¤kerhetsnivÃ¥n pÃ¥ din kursportal kan du registrera dig sjÃ¤lv eller registreras av en administratÃ¶r. Observera att anvÃ¤ndarnamn och lÃ¶senord aldrig innehÃ¥ller mellanrum eller accenter. Viktigt ocksÃ¥ att skilja mellan stora och smÃ¥ bokstÃ¤ver. Skriv in ditt anvÃ¤ndarnamn och lÃ¶senord, skapa din kurs eller anvÃ¤nd en kurs som redan skapats Ã¥t dig av en administratÃ¶r.</p> <p>Att lÃ¤gga till kollegor som hjÃ¤lpadministratÃ¶rer i din kurs: <ol><li>Om hon/han inte redan Ã¤r registrerad i systemet, registrera och ge dem lÃ¤rarrÃ¤ttigheter,</li> <li>Om hon/han redan Ã¤r registrerad i systemet, Ã¶ppna temporÃ¤rt kursbeskrivningen i KursinstÃ¤llningar och be honom/henne att gÃ¥ med i kursen. Sedan Ã¤ndrar du hennes/hans profil och ger dem lÃ¤rarrÃ¤ttigheter.</li></ol></p> <p> Varje Chamiloverktyg innehÃ¥ller en hjÃ¤lpfunktion som representeras av en rÃ¶d livboj. Om du inte hittar relevant information dÃ¤r kan du titta pÃ¥ Chamilo dokumentationssida: <a href=\"http://www.chamilo.org/documentation.php\">http://www.chamilo.org/documentation.php</a> och ladda ner lÃ¤rarmanualen pÃ¥ ditt sprÃ¥k eller pÃ¥ engelska.</p> <p><b>Student</b></p> <p>Denna kursportal ger dig mÃ¶jlighet att fÃ¶lja och delta i kurser, Ã¶vningar, arbetsbodar m.m. Den har skapats fÃ¶r ett aktivt lÃ¤rande, t ex projektbaserat, problembaserat, gemensamma efterforskningar mm. Dina lÃ¤rare har byggt ett lÃ¤rplatser som kan innehÃ¥lla enkla dokument, avancerade sjÃ¤lvstudiematerial sÃ¥vÃ¤l som grupparbeten.</p> <p>Registreringsprocessen kan variera frÃ¥n kursportal till kursportal. I vissa fall kan man registrera sig sjÃ¤lv och i andra gÃ¶rs det av en administratÃ¶r. Du fÃ¥r dÃ¥ ett anvÃ¤ndarnamn och lÃ¶senord frÃ¥n administrativt hÃ¥ll.</p>";
 $test = "test";
 $WCAGImage = "Bild";
 $WCAGLabel = "Bildetikett";
-$WCAGLink = "Länk";
-$WCAGLinkLabel = "Länketikett";
+$WCAGLink = "LÃ¤nk";
+$WCAGLinkLabel = "LÃ¤nketikett";
 $errorNoLabel = "bilden har ingen etikett.";
-$AllLanguages = "alla språk";
+$AllLanguages = "alla sprÃ¥k";
 $WCAGEditor = "WCAG-Editor";
-$WCAGGoMenu = "Gå till meny";
-$WCAGGoContent = "Gå till innehåll";
+$WCAGGoMenu = "GÃ¥ till meny";
+$WCAGGoContent = "GÃ¥ till innehÃ¥ll";
 ?>

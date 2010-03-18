@@ -7,7 +7,7 @@
 */
 
 // Language files that should be included
-$language_file = array('admin', 'registration');
+$language_file = array('admin', 'registration','userInfo');
 
 $cidReset = true;
 
@@ -26,6 +26,20 @@ $this_section = SECTION_PLATFORM_ADMIN;
 // User permissions
 api_protect_admin_script();
 
+$htmlHeadXtra[] = '<script type="text/javascript" src="/main/inc/lib/javascript/jquery.js"></script>';
+$htmlHeadXtra[] = '<script type="text/javascript">
+textarea = "";
+num_characters_permited = 255;
+function text_longitud(){
+   num_characters = document.forms[0].description.value.length;
+  if (num_characters > num_characters_permited){
+      document.forms[0].description.value = textarea;
+   }else{
+      textarea = document.forms[0].description.value;
+   } 
+} 
+</script>';
+
 // Database table definitions
 $table_admin 	= Database :: get_main_table(TABLE_MAIN_ADMIN);
 $table_user 	= Database :: get_main_table(TABLE_MAIN_USER);
@@ -43,19 +57,18 @@ $form = new FormValidator('group_add');
 $form->addElement('header', '', $tool_name);
 
 // name
-$form->addElement('text', 'name', get_lang('Name'));
+$form->addElement('text', 'name', get_lang('Name'), array('size'=>60, 'maxlength'=>120));
 $form->applyFilter('name', 'html_filter');
 $form->applyFilter('name', 'trim');
 $form->addRule('name', get_lang('ThisFieldIsRequired'), 'required');
 
 // Description
-$form->addElement('text', 'description', get_lang('Description'));
+$form->addElement('textarea', 'description', get_lang('Description'), array('rows'=>3, 'cols'=>58, onKeyDown => "text_longitud()", onKeyUp => "text_longitud()"));
 $form->applyFilter('description', 'html_filter');
 $form->applyFilter('description', 'trim');
 
-
 // url
-$form->addElement('text', 'url', get_lang('URL'));
+$form->addElement('text', 'url', get_lang('URL'), array('size'=>35));
 $form->applyFilter('url', 'html_filter');
 $form->applyFilter('url', 'trim');
 

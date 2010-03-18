@@ -1,18 +1,36 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $lang_new_item = "nova stavka je dodata";
-$lang_title_notification = "Od vaše poslednje posete";
-$lang_update_agenda = "postoje&#263;a stavka agende je ažurirana";
-$lang_new_agenda = "nova stavka je dodata ";
-$lang_update_announcements = "postoje&#263;e obaveštenje je ažurirano ";
-$lang_new_announcements = "novo obaveštenje je dodato";
+$lang_title_notification = "Od vaÅ¡e poslednje posete";
+$lang_update_agenda = "postojeÄ‡a stavka agende je aÅ¾urirana";
+$lang_new_agenda = "nova stavka je dodata";
+$lang_update_announcements = "postojeÄ‡e obaveÅ¡tenje je aÅ¾urirano";
+$lang_new_announcements = "novo obaveÅ¡tenje je dodato";
 $lang_new_document = "Nova dokumenta su dodata";
-$lang_new_exercise = "nova vežba je dostupna";
-$lang_update_link = "postoje&#263;a informacija o linku je ažurirana ";
+$lang_new_exercise = "nova veÅ¾ba je dostupna";
+$lang_update_link = "postojeÄ‡a informacija o linku je aÅ¾urirana";
 $lang_new_link = "novi link je dodat";
 $lang_new_forum_topic = "nova tema je dodata";
 $lang_new_groupforum_topic = "nova tema je dodata u forum grupe";
 $lang_new_dropbox_file = "novi fajl je stigao";
-$lang_update_dropbox_file = "fajl u vašem dropbox-u je ažuriran ";
+$lang_update_dropbox_file = "fajl u vaÅ¡em dropbox-u je aÅ¾uriran";
+$ForumCategoryAdded = "Kategorija foruma je dodata";
+$LearnpathAdded = "Kurs dodan";
+$GlossaryAdded = "Dodan je novi izraz u reÄnik";
+$QuizQuestionAdded = "Dodato novo pitanje u kvizu";
+$QuizQuestionUpdated = "AÅ¾urirano novo pitanje u kvizu";
+$QuizQuestionDeleted = "Obrisano novo pitanje u kvizu";
+$QuizUpdated = "Kviz je aÅ¾uriran";
+$QuizAdded = "Kviz dodan";
+$QuizDeleted = "Kviz obrisan";
+$DocumentInvisible = "Dokument je vidljiv";
+$DocumentVisible = "Dokument je vidljiv";
+$CourseDescriptionAdded = "Opis kursa je dodan";
+$WikiAdded = "Wiki je dodan";
+$SurveyAdded = "Anketa je dodata";
+$NotebookAdded = "Napomena je dodata";
+$NotebookUpdated = "Napomena je aÅ¾urirana";
+$NotebookDeleted = "Napomena je obrisana";
 ?>

@@ -1,37 +1,38 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$nameTools = "&#50424;&#47784;&#50630;&#45716; &#50616;&#50612; &#48320;&#49688;";
-$langMdCallingTool = "Learning path - Scorm";
-$langTool = "Scorm MD Operations";
-$langNotInDB = "Dokeos DB &#50644;&#53944;&#47532;&#44032; &#50630;&#49845;&#45768;&#45796;";
+$nameTools = "더 이상 쓰이지 않는 언어 함수";
+$langMdCallingTool = "문서";
+$langTool = "문서 메타데이터";
+$langNotInDB = "그런 링크 카테고리가 없습니다";
 $langManifestSyntax = "(syntax error in manifest file...)";
 $langEmptyManifest = "(empty manifest file...)";
 $langNoManifest = "(no manifest file...)";
-$langNotFolder = "&#48520;&#44032;&#45733;&#54633;&#45768;&#45796;, &#54260;&#45908;&#44032; &#50500;&#45785;&#45768;&#45796;...";
-$langUploadHtt = "HTT &#54028;&#51068; &#50629;&#47196;&#46300;";
-$langHttFileNotFound = "&#49352;  HTT &#54028;&#51068;&#51012; &#50676; &#49688; &#50630;&#49845;&#45768;&#45796; (e.g. &#48708;&#50612; &#51080;&#44144;&#45208;, &#45320;&#47924; &#53373;&#45768;&#45796;)";
-$langHttOk = "&#49352;  HTT &#54028;&#51068;&#51060; &#50629;&#47196;&#46300; &#46104;&#50632;&#49845;&#45768;&#45796;";
-$langHttNotOk = "HTT &#54028;&#51068; &#50629;&#47196;&#46300;&#44032; &#49892;&#54056;&#54616;&#50688;&#49845;&#45768;&#45796;";
-$langRemoveHtt = "HTT &#54028;&#51068; &#49325;&#51228;";
-$langHttRmvOk = "HTT &#54028;&#51068;&#51060; &#49325;&#51228;&#46104;&#50632;&#49845;&#45768;&#45796;";
-$langHttRmvNotOk = "HTT &#54028;&#51068; &#49325;&#51228;&#44032; &#49892;&#54056;&#54616;&#50688;&#49845;&#45768;&#45796;";
-$langImport = "manifest&#50640;&#49436; MDE &#49373;&#49457;";
-$langRemove = "MDEs &#49325;&#51228;";
-$langAllRemovedFor = "&#47784;&#46304; &#54637;&#47785;&#51060; &#49325;&#51228;&#46104;&#50632;&#49845;&#45768;&#45796;";
-$langIndex = "PhpDig&#51032; &#49353;&#51064; &#50857;&#50612;";
-$langTotalMDEs = "Scorm MD &#54637;&#47785;&#51032; &#52509; &#44060;&#49688;:";
-$langMainMD = "&#47700;&#51064; MDE &#50676;&#44592;";
-$langLines = "&#46972;&#51064;";
-$langPlay = "index.php &#46041;&#51089;";
-$langNonePossible = "MD &#46041;&#51089;&#51060; &#48520;&#44032;&#45733;&#54633;&#45768;&#45796;";
-$langOrElse = "&#49828;&#53092; &#46356;&#47113;&#53664;&#47532; &#46608;&#45716; &#49828;&#53092; &#46356;&#47113;&#53664;&#47532; ID&#47484; &#49440;&#53469;&#54616;&#49901;&#49884;&#50836;";
-$langWorkWith = "&#49828;&#53092; &#46356;&#47113;&#53664;&#47532;&#50640;&#49436; &#46041;&#51089;";
-$langSDI = ".....SD-id&#50752; &#49828;&#53092; &#46356;&#47113;&#53664;&#47532;(and split manifest - or leave empty)";
+$langNotFolder = "불가능합니다, 폴더가 아닙니다...";
+$langUploadHtt = "HTT 파일 업로드";
+$langHttFileNotFound = "새  HTT 파일을 열 수 없습니다 (e.g. 비어 있거나, 너무 큽니다)";
+$langHttOk = "새  HTT 파일이 업로드 되었습니다";
+$langHttNotOk = "HTT 파일 업로드가 실패하였습니다";
+$langRemoveHtt = "HTT 파일 삭제";
+$langHttRmvOk = "HTT 파일이 삭제되었습니다";
+$langHttRmvNotOk = "HTT 파일 삭제가 실패하였습니다";
+$langImport = "불러오기";
+$langRemove = "MDEs 삭제";
+$langAllRemovedFor = "카테고리의 모든 항목이 삭제되었습니다";
+$langIndex = "색인 용어";
+$langTotalMDEs = "MD 항목의 전체 링크 수:";
+$langMainMD = "메인 MDE 열기";
+$langLines = "라인";
+$langPlay = "index.php 동작";
+$langNonePossible = "MD 동작이 불가능합니다";
+$langOrElse = "링크 카테고리 선택";
+$langWorkWith = "스콤 디렉토리에서 동작";
+$langSDI = ".....SD-id와 스콤 디렉토리(and split manifest - or leave empty)";
 $langRoot = "root";
-$langSplitData = "Split manifests, and #MDe, if any: ";
-$langMffNotOk = "Manifest &#54028;&#51068; &#44368;&#52404;&#44032; &#49892;&#54056;&#54616;&#50688;&#49845;&#45768;&#45796;";
-$langMffOk = "Manifest &#54028;&#51068;&#51060; &#44368;&#52404;&#46104;&#50632;&#49845;&#45768;&#45796;";
-$langMffFileNotFound = "&#49352; Manifest &#54028;&#51068;&#51012; &#50676; &#49688;&#44032; &#50630;&#49845;&#45768;&#45796; (e.g. &#48708;&#50612;&#51080;&#44144;&#45208;, &#45320;&#47924; &#53373;&#45768;&#45796;)";
-$langUploadMff = "Manifest &#54028;&#51068; &#44368;&#52404;";
+$langSplitData = "Split manifests, and #MDe, if any:";
+$langMffNotOk = "Manifest 파일 교체가 실패하였습니다";
+$langMffOk = "Manifest 파일이 교체되었습니다";
+$langMffFileNotFound = "새 Manifest 파일을 열 수가 없습니다 (e.g. 비어있거나, 너무 큽니다)";
+$langUploadMff = "Manifest 파일 교체";
 ?>

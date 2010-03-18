@@ -87,7 +87,7 @@ if(isset($_FILES['user_upload']))
         	if ($new_comment) $ct .= ", comment='$new_comment'";
         	if ($new_title)   $ct .= ", title='$new_title'";
         	Database::query("UPDATE $table_document SET" . substr($ct, 1) .
-        	    " WHERE id = '$docid'", __FILE__, __LINE__);
+        	    " WHERE id = '$docid'");
     	}
 		//check for missing images in html files
 		$missing_files = check_for_missing_files($base_work_dir.$_POST['curdirpath'].$new_path);

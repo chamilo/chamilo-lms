@@ -1,19 +1,20 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$langCourseProgram  = "DescripciÛ del curs";
-$langThisCourseDescriptionIsEmpty  = "Aquest curs actualment no es troba descrit";
-$langEditCourseProgram  = "Crear i editar una descripciÛ del curs";
-$QuestionPlan  = "Pregunta al professor";
-$langInfo2Say  = "InformaciÛ a donar als estudiants";
-$langOuAutreTitre  = "TÌtol";
-$langNewBloc  = "Altre";
-$langAddCat  = "afegeix categoria";
-$langAdd  = "Afegeix";
-$langValid  = "Valida";
-$langBackAndForget  = "Retrocededix i oblida";
-$CourseDescriptionUpdated = "La descripciÛ dels curs ha estat actualitzada";
-$CourseDescriptionDeleted = "La descripciÛ del curs ha estat esborrada";
-$CourseDescriptionIntro = "Per crear una descripciÛ del curs, cliqueu sobre un apartat i ompliu els camps del formulari associat. <br> <br> Cliqueu desprËs a Validar i ompliu un altre apartat.";
-$langSaveDescription = "Guardar descripciÛ";
+$langCourseProgram = "Descripci√≥ del curs";
+$langThisCourseDescriptionIsEmpty = "Aquest curs actualment no es troba descrit";
+$langEditCourseProgram = "Crear i editar una descripci√≥ del curs";
+$QuestionPlan = "Pregunta al professor";
+$langInfo2Say = "Informaci√≥ a donar als estudiants";
+$langOuAutreTitre = "T√≠tol";
+$langNewBloc = "Altre";
+$langAddCat = "afegeix categoria";
+$langAdd = "Afegeix";
+$langValid = "Valida";
+$langBackAndForget = "Retrocededix i oblida";
+$CourseDescriptionUpdated = "La descripci√≥ dels curs ha estat actualitzada";
+$CourseDescriptionDeleted = "La descripci√≥ del curs ha estat esborrada";
+$CourseDescriptionIntro = "Per crear una descripci√≥ del curs, cliqueu sobre un apartat i ompliu els camps del formulari associat. <br> <br> Cliqueu despr√®s a Validar i ompliu un altre apartat.";
+$langSaveDescription = "Guardar descripci√≥";
 ?>

@@ -1,15 +1,16 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$langClarContent = "Itt projektvezetõk, oktatók és professzorok hozhatnak létre és  adminisztrálhatnak kurzusokat. Résztvevõk, hallgatók, diákok... olvasás (dokumentumok, naptárak, információk), tesztek létrehozása, dokumentumok közzététele, fórumokban való részvétel...</p> <b>Regisztráció</b><p>A következõek csak akkor vonatkoznak Önre, ha az Ön Dokeos verzója támogatja a saját kezdeményezésû regisztrációt (néhány portál automatikusan beregisztrálja). <br>Ha Ön hallgató, akkor csak úgy kell regisztálnia magát, hogy a \'Kurzusok hallgatása\'-t választja ki, utána pedig kiválasztja, hogy mely kurzusokat kívánja hallgatni.</p><p> Ha Ön kurzusvezetõ, akkor is regisztrálja magát, de a \'Kurzusok létrehozása\'-t válassza. Ezután ki kell töltenie egy ûrlapot a kurzus kódjával, kategóriájával és címével. Amint ez megvan, belép akurzusra, amit éppen most hozott létre és megváltoztathatja a tartalmát és jellegét igényei szerint. </p><p>A kapcsolódó fórumok az összes Dokeos felhasználót összekötik a világon.Ha a Dokeos portálon nem talál választ kérdéseire, küldhet üzenetet a fórumra.</p><p>A Regisztrációs link a campus fõoldalán van (jobbra fennt).</p><b>Login</b><p>Következõ látogatásai alkalmával írja be a loginját és jelszavát, majd kattintson az Ok-re a belépéshez. A honlap URL-je";
+$langClarContent = "Itt projektvezetÅ‘k, oktatÃ³k Ã©s professzorok hozhatnak lÃ©tre Ã©s  adminisztrÃ¡lhatnak kurzusokat. RÃ©sztvevÅ‘k, hallgatÃ³k, diÃ¡kok... olvasÃ¡s (dokumentumok, naptÃ¡rak, informÃ¡ciÃ³k), tesztek lÃ©trehozÃ¡sa, dokumentumok kÃ¶zzÃ©tÃ©tele, fÃ³rumokban valÃ³ rÃ©szvÃ©tel...</p> <b>RegisztrÃ¡ciÃ³</b><p>A kÃ¶vetkezÅ‘ek csak akkor vonatkoznak Ã–nre, ha az Ã–n Chamilo verzÃ³ja tÃ¡mogatja a sajÃ¡t kezdemÃ©nyezÃ©sÅ± regisztrÃ¡ciÃ³t (nÃ©hÃ¡ny portÃ¡l automatikusan beregisztrÃ¡lja). <br>Ha Ã–n hallgatÃ³, akkor csak Ãºgy kell regisztÃ¡lnia magÃ¡t, hogy a 'Kurzusok hallgatÃ¡sa'-t vÃ¡lasztja ki, utÃ¡na pedig kivÃ¡lasztja, hogy mely kurzusokat kÃ­vÃ¡nja hallgatni.</p><p> Ha Ã–n kurzusvezetÅ‘, akkor is regisztrÃ¡lja magÃ¡t, de a 'Kurzusok lÃ©trehozÃ¡sa'-t vÃ¡lassza. EzutÃ¡n ki kell tÃ¶ltenie egy Å±rlapot a kurzus kÃ³djÃ¡val, kategÃ³riÃ¡jÃ¡val Ã©s cÃ­mÃ©vel. Amint ez megvan, belÃ©p akurzusra, amit Ã©ppen most hozott lÃ©tre Ã©s megvÃ¡ltoztathatja a tartalmÃ¡t Ã©s jellegÃ©t igÃ©nyei szerint. </p><p>A kapcsolÃ³dÃ³ fÃ³rumok az Ã¶sszes Chamilo felhasznÃ¡lÃ³t Ã¶sszekÃ¶tik a vilÃ¡gon.Ha a Chamilo portÃ¡lon nem talÃ¡l vÃ¡laszt kÃ©rdÃ©seire, kÃ¼ldhet Ã¼zenetet a fÃ³rumra.</p><p>A RegisztrÃ¡ciÃ³s link a campus fÅ‘oldalÃ¡n van (jobbra fennt).</p><b>Login</b><p>KÃ¶vetkezÅ‘ lÃ¡togatÃ¡sai alkalmÃ¡val Ã­rja be a loginjÃ¡t Ã©s jelszavÃ¡t, majd kattintson az Ok-re a belÃ©pÃ©shez. A honlap URL-je";
 $test = "teszt";
-$WCAGImage = "Kép";
-$WCAGLabel = "Kép cimke";
-$WCAGLink = "Hivatkozás";
-$WCAGLinkLabel = "Hivatkozás cimke";
-$errorNoLabel = "A képen nincs cimke.";
-$AllLanguages = "az összes nyelv";
-$WCAGEditor = "WCAG Szerkeszt&#337;";
-$WCAGGoMenu = "Ugrás a menühöz";
-$WCAGGoContent = "Ugrás a tartalomhoz";
+$WCAGImage = "KÃ©p";
+$WCAGLabel = "KÃ©p cimke";
+$WCAGLink = "HivatkozÃ¡s";
+$WCAGLinkLabel = "HivatkozÃ¡s cimke";
+$errorNoLabel = "A kÃ©pen nincs cimke.";
+$AllLanguages = "az Ã¶sszes nyelv";
+$WCAGEditor = "WCAG SzerkesztÅ‘";
+$WCAGGoMenu = "UgrÃ¡s a menÃ¼hÃ¶z";
+$WCAGGoContent = "UgrÃ¡s a tartalomhoz";
 ?>

@@ -1,7 +1,8 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$langToolName = "Statistieken";
+$langToolName = "Importeren van Blackboardcursussen";
 $TrackingDisabled = "Statistieken zijn uitgeschakeld door de platformbeheerder.";
 $InactivesStudents = "Inactive studenten";
 $AverageTimeSpentOnThePlatform = "Gemiddelde tijd doorgebracht op het platform";
@@ -18,12 +19,12 @@ $SeeSessionList = "Bekijk de sessielijst";
 $langShowNone = "Toon niets";
 $langCourseStats = "Cursusstatistieken";
 $langToolsAccess = "Toegang tot modules";
-$langCourseAccess = "Toegang tot deze cursus";
+$langCourseAccess = "Toegang";
 $langLinksAccess = "Links";
 $langDocumentsAccess = "Documenten";
-$langScormAccess = "Leerpad &ndash; cursussen in SCORM-formaat";
+$langScormAccess = "Leerpad â€“ cursussen in SCORM-formaat";
 $langLinksDetails = "Links die door de student bekeken werden";
-$langWorksDetails = "Publicaties die geüpload werden door de studenten";
+$langWorksDetails = "Publicaties die geÃ¼pload werden door de studenten";
 $langLoginsDetails = "Klik op de naam v.e. maand voor meer informatie";
 $langDocumentsDetails = "Documenten gedownload door de student";
 $langExercicesDetails = "Scores van gemaakte oefeningen";
@@ -59,12 +60,12 @@ $langWorkAuthors = "Auteurs";
 $langWorkDescription = "Beschrijving";
 $informationsAbout = "Tracken van";
 $langNoEmail = "Geen e-mailadres opgegeven";
-$langNoResult = "Geen resultaat";
-$langCourse = "Cursus";
+$langNoResult = "Er is nog geen resultaat.";
+$langCourse = "De cursus";
 $langHits = "Hits";
 $langTotal = "Totaal";
-$langHour = "Uur";
-$langDay = "Dag";
+$langHour = "uur";
+$langDay = "dag";
 $langLittleHour = "u.";
 $langLast31days = "Laatste 31 dagen";
 $langLast7days = "Laatste 7 dagen";
@@ -220,7 +221,7 @@ $Duration = "Duur";
 $DisplayCoaches = "Coaches overzicht";
 $DisplayUserOverview = "gebruikersoverzicht";
 $ExportUserOverviewOptions = "Export opties voor het gebruiksersoverzicht";
-$FollowingFieldsWillAlsoBeExported = "De volgende velden worden mee geëxporteerd";
+$FollowingFieldsWillAlsoBeExported = "De volgende velden worden mee geÃ«xporteerd";
 $TotalExercisesScoreObtained = "Totaal behaalde score van de oefeningen";
 $TotalExercisesScorePossible = "Totaal mogelijke score van de oefeningen";
 $TotalExercisesAnswered = "Aantal oefeningen beantwoord";
@@ -229,7 +230,7 @@ $ForumForumsNumber = "Aantal fora";
 $ForumThreadsNumber = "aantal discussies";
 $ForumPostsNumber = "Aantal berichten";
 $CourseInformation = "Training informatie";
-$NoAdditionalFieldsWillBeExported = "De extra velden worden niet geëxporteerd";
+$NoAdditionalFieldsWillBeExported = "De extra velden worden niet geÃ«xporteerd";
 $CourseProgress = "Voortgang";
 $SelectFieldToAdd = "Kies het gebruikersprofiel veld om toe te voegen";
 $AddAdditionalProfileField = "Voeg het veld van het gebruikersprofiel toe";

@@ -1,12 +1,13 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$langWash  = "Καθάρισμα";
-$langSave  = "Αποθήκευση";
-$langRefresh  = "Ανανέωση";
-$langIsNowInYourDocDir  = "είναι τώρα στο εργαλείο των εγγράφων. <br><B>Το αρχείο είναι ορατό</B>";
-$langCopyFailed  = "Η εκτύπωση απέτυχε";
-$langTypeMessage  = "Πληκτρολογήστε το μήνυμά σας παρακάτω";
-$langQuestion = "Ερώτηση";
-$langLinkName = "Όνομα συνδέσμου";
+$langWash = "ΞΞ±ΞΈΞ¬ΟΞΉΟƒΞΌΞ±";
+$langSave = "Ξ‘Ο€ΞΏΞΈΞ®ΞΊΞµΟ…ΟƒΞ·";
+$langRefresh = "Ξ‘Ξ½Ξ±Ξ½Ξ­Ο‰ΟƒΞ·";
+$langIsNowInYourDocDir = "ΞµΞ―Ξ½Ξ±ΞΉ Ο„ΟΟΞ± ΟƒΟ„ΞΏ ΞµΟΞ³Ξ±Ξ»ΞµΞ―ΞΏ Ο„Ο‰Ξ½ ΞµΞ³Ξ³ΟΞ¬Ο†Ο‰Ξ½. <br><B>Ξ¤ΞΏ Ξ±ΟΟ‡ΞµΞ―ΞΏ ΞµΞ―Ξ½Ξ±ΞΉ ΞΏΟΞ±Ο„Ο</B>";
+$langCopyFailed = "Ξ— ΞµΞΊΟ„ΟΟ€Ο‰ΟƒΞ· Ξ±Ο€Ξ­Ο„Ο…Ο‡Ξµ";
+$langTypeMessage = "Ξ Ξ»Ξ·ΞΊΟ„ΟΞΏΞ»ΞΏΞ³Ξ®ΟƒΟ„Ξµ Ο„ΞΏ ΞΌΞ®Ξ½Ο…ΞΌΞ¬ ΟƒΞ±Ο‚ Ο€Ξ±ΟΞ±ΞΊΞ¬Ο„Ο‰";
+$langQuestion = "Ξ•ΟΟΟ„Ξ·ΟƒΞ·";
+$langLinkName = "ΞΞ½ΞΏΞΌΞ± ΟƒΟ…Ξ½Ξ΄Ξ­ΟƒΞΌΞΏΟ…";
 ?>

@@ -68,7 +68,7 @@ if (is_dir($full_file_name))
 {
 	//remove last slash if present
 	//$doc_url = ($doc_url{strlen($doc_url)-1}=='/')?substr($doc_url,0,strlen($doc_url)-1):$doc_url;
-	//mod_rewrite can change /some/path/ to /some/path// in some cases, so clean them all off (Ren�)
+	//mod_rewrite can change /some/path/ to /some/path// in some cases, so clean them all off (René)
 	while ($doc_url{$dul = strlen($doc_url)-1}=='/') $doc_url = substr($doc_url,0,$dul);
 	//create the path
 	$document_explorer = api_get_path(WEB_COURSE_PATH).api_get_course_path(); // home course path
@@ -84,10 +84,9 @@ event_download($doc_url);
 $sql='SELECT filename FROM '.$tbl_agenda_attachment.'
   	  WHERE path LIKE BINARY "'.$doc_url.'"';
 
-$result= Database::query($sql, __FILE__, __LINE__);
+$result= Database::query($sql);
 $row= Database::fetch_array($result);
 $title = str_replace(' ','_', $row['filename']);
 DocumentManager::file_send_for_download($full_file_name,TRUE, $title);
-
 exit;
 ?>

@@ -1,7 +1,8 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$langLinkName = "Nama link";
+$langLinkName = "Nama Link";
 $langLinkAdd = "Tambah link";
 $langLinkAdded = "Link telah ditambahkan";
 $langLinkMod = "Link diubah";
@@ -9,14 +10,14 @@ $langLinkModded = "Link tersebut telah diubah";
 $langLinkDel = "Link dihapus";
 $langLinkDeleted = "Link tersebut telah dihapus";
 $langLinkDelconfirm = "Anda yakin akan menghapus link ini?";
-$langAllLinksDel = "Hapus semua link pada kategori ini ";
+$langAllLinksDel = "Hapus semua link pada kategori ini";
 $langCategoryName = "Nama Kategori";
 $langCategoryAdd = "Tambah kategori";
 $langCategoryAdded = "Kategori telah ditambahkan";
 $langCategoryModded = "Kategori telah diubah";
 $langCategoryDel = "Hapus kategori";
 $langCategoryDeleted = "Kategori dan semua linknya telah dihapus";
-$langCategoryDelconfirm = "Jika menghapus kategori, semua link pada kategori tersebut juga dihapus.\\nApakah anda ingin menghapus kategori tersebut beserta link-nya ?";
+$langCategoryDelconfirm = "Jika menghapus kategori, semua link pada kategori tersebut juga dihapus.\nApakah anda ingin menghapus kategori tersebut beserta link-nya ?";
 $langAllCategoryDel = "Hapus semua kategori dan semua link";
 $langGiveURL = "Silahkan isi URL dari link";
 $langGiveCategoryName = "Silahkan isi nama kategori";
@@ -27,7 +28,7 @@ $langListDeleted = "Daftar tsb telah dihapus";
 $langAddLink = "Tambah link";
 $langDelList = "Hapus daftar";
 $langModifyLink = "Ubah Link";
-$langCsvImport = "Import file CSV";
+$langCsvImport = "import CSV";
 $langCsvFileNotFound = "File import CSV tidak dapat dibuka (mungkin kosong/ terlalu besar)";
 $langCsvFileNoSeps = "File import CSV harus menggunakan , atau ; sebagai pemisah/separator";
 $langCsvFileNoURL = "File import CSV harus setidaknya memiliki kolom URL dan Judul";
@@ -40,5 +41,4 @@ $langLinkUpdated = "Link telah di-update";
 $langAll_Link_Deleted = "Link telah dihapus";
 $langOnHomepage = "Tampilkan link di homepage";
 $langShowLinkOnHomepage = "Tampilkan link dalam bentuk ikon di homepage mata kuliah";
-$langCsvImport = "import CSV";
 ?>

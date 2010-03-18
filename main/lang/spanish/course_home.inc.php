@@ -1,31 +1,32 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $langActivate = "Activar";
 $langDeactivate = "Desactivar";
-$langInLnk  = "Enlaces desactivados";
-$langDelLk = "¿ Está seguro de querer desactivar esta herramienta ?";
-$langCourseCreate  = "Crear un curso";
-$langNameOfTheLink  = "Nombre del enlace";
-$lang_main_categories_list                  = "Lista de categorías principales";
-$langCourseAdminOnly = "Sólo profesores";
-$PlatformAdminOnly = "Sólo administradores de la plataforma";
+$langInLnk = "Enlaces desactivados";
+$langDelLk = "Â¿ EstÃ¡ seguro de querer desactivar esta herramienta ?";
+$langCourseCreate = "Crear un curso";
+$langNameOfTheLink = "Nombre del enlace";
+$lang_main_categories_list = "Lista de categorÃ­as principales";
+$langCourseAdminOnly = "SÃ³lo profesores";
+$PlatformAdminOnly = "SÃ³lo administradores de la plataforma";
 $langCombinedCourse = "Curso combinado";
 $ToolIsNowVisible = "Ahora la herramienta es visible";
 $ToolIsNowHidden = "Ahora la herramienta no es visible";
 $EditLink = "Editar enlace";
-$Blog_management = "Gestión de blogs";
+$Blog_management = "GestiÃ³n de blogs";
 $Forum = "Foros";
 $Course_maintenance = "Mantenimiento del curso";
 $TOOL_SURVEY = "Encuestas";
 $GreyIcons = "Caja de herramientas";
-$Interaction = "Interacción";
-$Authoring = "Creación de contenidos";
-$Administration = "Administración";
-$IntroductionTextUpdated = "El texto de introducción ha sido actualizado";
-$IntroductionTextDeleted = "El texto de introducción ha sido eliminado";
-$SessionIdentifier = "Identificador de la sesión";
-$SessionName = "Nombre de la sesión";
-$SessionCategory = "Categoría de la sesión";
-$SessionData = "Datos de la sesión";
+$Interaction = "InteracciÃ³n";
+$Authoring = "CreaciÃ³n de contenidos";
+$Administration = "AdministraciÃ³n";
+$IntroductionTextUpdated = "El texto de introducciÃ³n ha sido actualizado";
+$IntroductionTextDeleted = "El texto de introducciÃ³n ha sido eliminado";
+$SessionIdentifier = "Identificador de la sesiÃ³n";
+$SessionName = "Nombre de la sesiÃ³n";
+$SessionCategory = "CategorÃ­a de la sesiÃ³n";
+$SessionData = "Datos de la sesiÃ³n";
 ?>

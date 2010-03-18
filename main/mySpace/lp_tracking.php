@@ -1,5 +1,5 @@
 <?php
-/* For licensing terms, see /dokeos_license.txt */
+/* For licensing terms, see /license.txt */
 
 /*
  * Created on 26 mars 07 by Eric Marguin
@@ -9,13 +9,13 @@
 $language_file = array ('registration', 'index', 'tracking', 'exercice', 'scorm', 'learnpath');
 //$cidReset = true;
 
-require '../inc/global.inc.php';
+require_once '../inc/global.inc.php';
 
 $from_myspace = false;
 $from_link = '';
 if (isset($_GET['from']) && $_GET['from'] == 'myspace') {
 	$from_link = '&from=myspace';
-	$this_section = "session_my_space";
+	$this_section = SECTION_TRACKING;
 } else {
 	$this_section = SECTION_COURSES;
 }
@@ -41,7 +41,7 @@ if (isset($_GET['course'])) {
 $user_infos = UserManager :: get_user_info_by_id($user_id);
 $name = api_get_person_name($user_infos['firstname'], $user_infos['lastname']);
 
-if (!api_is_platform_admin(true) && !CourseManager :: is_course_teacher($_user['user_id'], $cidReq) && !Tracking :: is_allowed_to_coach_student($_user['user_id'],$_GET['student_id']) && $user_infos['hr_dept_id']!==$_user['user_id']) {
+if (!api_is_platform_admin(true) && !CourseManager :: is_course_teacher($_user['user_id'], $cidReq) && !Tracking :: is_allowed_to_coach_student($_user['user_id'],$_GET['student_id']) && !api_is_drh()) {
 	Display::display_header('');
 	api_not_allowed();
 	Display::display_footer();
@@ -133,7 +133,7 @@ $lp_id = intval($_GET['lp_id']);
 $sql = 'SELECT name
 	FROM '.Database::get_course_table(TABLE_LP_MAIN, $_course['db_name']).'
 	WHERE id='.Database::escape_string($lp_id);
-$rs = Database::query($sql, __FILE__, __LINE__);
+$rs = Database::query($sql);
 $lp_title = Database::result($rs, 0, 0);
 
 echo '<div class ="actions"><div align="left" style="float:left;margin-top:2px;" ><strong>'.$_course['title'].' - '.$lp_title.' - '.$name.'</strong></div>

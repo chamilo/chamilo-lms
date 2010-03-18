@@ -42,7 +42,7 @@ class HTML_QuickForm_Rule_UsernameAvailable extends HTML_QuickForm_Rule
 		{
 			$sql .= " AND username != '$current_username'";
 		}
-		$res = Database::query($sql,__FILE__,__LINE__);
+		$res = Database::query($sql);
 		$number = Database::num_rows($res);
 		return $number == 0;
 	}

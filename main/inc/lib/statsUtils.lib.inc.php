@@ -37,110 +37,75 @@
 */
 
 /**
-
  * @author Sebastien Piraux <piraux_seb@hotmail.com>
  * @param sql : a sql query (as a string)
  * @desc return one result from a sql query (1 single result)
  */
-function getOneResult($sql)
-{
-	$query = @mysql_query($sql);
-
-	if (mysql_errno())
-	{
-		echo "\n<!-- **** ".mysql_errno().": ".mysql_error()." In : $sql **** -->\n";
+function getOneResult($sql) {
+	$query = Database::query($sql);
+	if ($query !== false) {
+		$res = @Database::fetch_array($query, 'NUM');
+	} else {
+		$res = array();
 	}
-
-	$res = @mysql_fetch_array($query);
 	return $res[0];
 }
 
 /**
-
  * @author Sebastien Piraux <piraux_seb@hotmail.com>
  * @param sql : a sql query (as a string)
  * @desc Return many results of a query in a 1 column tab
  */
-function getManyResults1Col($sql)
-{
-	$res = mysql_query($sql);
-
-	if (mysql_errno())
-	{
-		echo "\n<!-- **** ".mysql_errno().": ".mysql_error()." In : $sql **** -->\n";
-	}
-	else
-	{
+function getManyResults1Col($sql) {
+	$res = Database::query($sql);
+	if ($res !== false) {
 		$i = 0;
-		while ($resA = mysql_fetch_array($res))
-		{
+		while ($resA = Database::fetch_array($res, 'NUM')) {
 			$resu[$i++] = $resA[0];
 		}
 	}
-
 	return $resu;
 }
 
 /**
-
  * @author Sebastien Piraux <piraux_seb@hotmail.com>
  * @param sql : a sql query (as a string)
  * @desc Return many results of a query
  */
-function getManyResults2Col($sql)
-{
-	$res = mysql_query($sql);
-
-	if (mysql_errno())
-	{
-		echo "\n<!-- **** ".mysql_errno().": ".mysql_error()." In : $sql **** -->\n";
-	}
-	else
-	{
+function getManyResults2Col($sql) {
+	$res = Database::query($sql);
+	if ($res !== false) {
 		$i = 0;
-		while ($resA = mysql_fetch_array($res))
-		{
+		while ($resA = Database::fetch_array($res, 'NUM')) {
 			$resu[$i][0] = $resA[0];
 			$resu[$i][1] = $resA[1];
 			$i++;
 		}
 	}
-
 	return $resu;
 }
 
 /**
-
  * @author Sebastien Piraux <piraux_seb@hotmail.com>
  * @param sql : a sql query (as a string)
  * @desc Return many results of a query in a 3 column tab
          in $resu[$i][0], $resu[$i][1],$resu[$i][2]
  */
-function getManyResults3Col($sql)
-{
-	$res = mysql_query($sql);
-
-	if (mysql_errno())
-	{
-		echo "\n<!-- **** ".mysql_errno().": ".mysql_error()." In : $sql **** -->\n";
-	}
-	else
-	{
+function getManyResults3Col($sql) {
+	$res = Database::query($sql);
+	if ($res !== false) {
 		$i = 0;
-		while ($resA = mysql_fetch_array($res))
-		{
-			$resu[$i][0]=$resA[0];
-			$resu[$i][1]=$resA[1];
-			$resu[$i][2]=$resA[2];
+		while ($resA = Database::fetch_array($res, 'NUM')) {
+			$resu[$i][0] = $resA[0];
+			$resu[$i][1] = $resA[1];
+			$resu[$i][2] = $resA[2];
 			$i++;
 		}
 	}
-
 	return $resu;
 }
 
 /**
-
  * @author Sebastien Piraux <piraux_seb@hotmail.com>
  * @param sql : a sql query (as a string)
  * @desc Return many results of a query in a X column tab
@@ -150,29 +115,20 @@ function getManyResults3Col($sql)
          So I encourage to use the dedicated for 1, 2 or 3
          columns of results
  */
-function getManyResultsXCol($sql,$X)
-{
-	$res = mysql_query($sql);
-
-	if (mysql_errno())
-	{
-		echo "\n<!-- **** ".mysql_errno().": ".mysql_error()." In : $sql **** -->\n";
-	}
-	else
-	{
+function getManyResultsXCol($sql, $X) {
+	$res = Database::query($sql);
+	if ($res !== false) {
 		$i = 0;
-		while ($resA = mysql_fetch_array($res))
-		{
-			for($j = 0; $j < $X ; $j++)
-			{
-				$resu[$i][$j]=$resA[$j];
+		while ($resA = Database::fetch_array($res, 'NUM')) {
+			for ($j = 0; $j < $X ; $j++) {
+				$resu[$i][$j] = $resA[$j];
 			}
 			$i++;
 		}
 	}
-
 	return $resu;
 }
+
 /**
 
  * @author Sebastien Piraux <piraux_seb@hotmail.com>
@@ -183,36 +139,22 @@ function getManyResultsXCol($sql,$X)
                 key 'total' return the sum of all number of time hours
                 appear
  */
-function hoursTab($sql)
-{
+function hoursTab($sql) {
 	$hours_array = array('total' => 0);
-	$res = mysql_query($sql);
-
-	if (mysql_errno())
-	{
-		echo "\n<!-- **** ".mysql_errno().": ".mysql_error()." In : $sql **** -->\n";
-	}
-	else
-	{
-		while($row = mysql_fetch_row($res))
-		{
+	$res = Database::query($sql);
+	if ($res !== false) {
+		while ($row = Database::fetch_row($res)) {
 			$date_array = getdate($row[0]);
-
-			if($date_array['hours'] == $last_hours)
-			{
+			if ($date_array['hours'] == $last_hours) {
 				$hours_array[$date_array['hours']]++;
-			}
-			else
-			{
+			} else {
 				$hours_array[$date_array['hours']] = 1;
 				$last_hours = $date_array['hours'];
 			}
-
 			$hours_array['total']++;
 		}
-		mysql_free_result($res);
+		Database::free_result($res);
 	}
-
 	return $hours_array;
 }
 
@@ -226,36 +168,24 @@ function hoursTab($sql)
                 key "total" return the sum of all number of time days
                 appear
  */
-function daysTab($sql)
-{
-	$MonthsShort = array(get_lang('JanuaryShort'), get_lang('FebruaryShort'), get_lang('MarchShort'), get_lang('AprilShort'), get_lang('MayShort'), get_lang('JuneShort'), get_lang('JulyShort'), get_lang('AugustShort'), get_lang('SeptemberShort'), get_lang('OctoberShort'), get_lang('NovemberShort'), get_lang('DecemberShort'));
+function daysTab($sql) {
+	$MonthsShort = api_get_months_short();
 	$days_array = array('total' => 0);
-	$res = mysql_query($sql);
-
-	if (mysql_errno())
-	{
-		echo "\n<!-- **** ".mysql_errno().": ".mysql_error()." In : $sql **** -->\n";
-	}
-	else
-	{
-		while($row = mysql_fetch_row($res))
-		{
+	$res = Database::query($sql);
+	if ($res !== false) {
+		while ($row = Database::fetch_row($res)) {
 			$date_array = getdate($row[0]);
-			$display_date = $date_array['mday'].' '.$MonthsShort[$date_array['mon']-1].' '.$date_array['year'];
-			if ($date_array['mday'] == $last_day)
-			{
+			$display_date = $date_array['mday'].' '.$MonthsShort[$date_array['mon'] - 1].' '.$date_array['year'];
+			if ($date_array['mday'] == $last_day) {
 				$days_array[$display_date]++;
-			}
-			else
-			{
+			} else {
 				$days_array[$display_date] = 1;
 				$last_day = $display_date;
 			}
 			$days_array['total']++;
 		}
-		mysql_free_result($res);
+		Database::free_result($res);
 	}
-
 	return $days_array;
 }
 
@@ -269,33 +199,22 @@ function daysTab($sql)
                 key "total" return the sum of all number of time days
                 appear
  */
-function monthTab($sql)
-{
-	$MonthsLong = array (get_lang('JanuaryLong'), get_lang('FebruaryLong'), get_lang('MarchLong'), get_lang('AprilLong'), get_lang('MayLong'), get_lang('JuneLong'), get_lang('JulyLong'), get_lang('AugustLong'), get_lang('SeptemberLong'), get_lang('OctoberLong'), get_lang('NovemberLong'), get_lang('DecemberLong'));
+function monthTab($sql) {
+	$MonthsLong = api_get_months_long();
     $month_array = array('total' => 0);
-	$res = mysql_query($sql);
-
-	if (mysql_errno())
-	{
-		echo "\n<!-- **** ".mysql_errno().": ".mysql_error()." In : $sql **** -->\n";
-	}
-	else
-	{
+	$res = Database::query($sql);
+	if ($res !== false) {
 		// init tab with all months
-		for($i = 0; $i < 12; $i++)
-		{
+		for($i = 0; $i < 12; $i++) {
 			$month_array[$MonthsLong[$i]] = 0;
 		}
-
-		while($row = mysql_fetch_row($res))
-		{
+		while ($row = Database::fetch_row($res)) {
 			$date_array = getdate($row[0]);
-			$month_array[$MonthsLong[$date_array['mon']-1]]++;
+			$month_array[$MonthsLong[$date_array['mon'] - 1]]++;
 			$month_array['total']++;
 		}
-		mysql_free_result($res);
+		Database::free_result($res);
 	}
-
 	return $month_array;
 }
 
@@ -311,8 +230,7 @@ function monthTab($sql)
                 next are informations
                 Last is total number of hits
  */
-function makeHitsTable($period_array, $periodTitle, $linkOnPeriod = '???')
-{
+function makeHitsTable($period_array, $periodTitle, $linkOnPeriod = '???') {
 	echo "<table width='100%' cellpadding='0' cellspacing='1' border='0' align=center class='minitext'>";
 	// titles
 	echo "<tr bgcolor='#E6E6E6' align='center'>
@@ -332,10 +250,8 @@ function makeHitsTable($period_array, $periodTitle, $linkOnPeriod = '???')
 	";
 	$factor = 4;
 	$maxSize = $factor * 100; //pixels
-	while(list($periodPiece, $cpt) = each($period_array))
-	{
-		if($periodPiece != 'total')
-		{
+	while (list($periodPiece, $cpt) = each($period_array)) {
+		if ($periodPiece != 'total') {
 			$pourcent = round(100 * $cpt / $period_array['total']);
 			$barwidth = $factor * $pourcent ;
 			echo "<tr>
@@ -391,8 +307,7 @@ function makeHitsTable($period_array, $periodTitle, $linkOnPeriod = '???')
  * @desc        display a 2 column tab from an array
                 titles of columns are title1 and title2
  */
-function buildTab2col($array_of_results, $title1, $title2)
-{
+function buildTab2col($array_of_results, $title1, $title2) {
 	echo "<table cellpadding='2' cellspacing='1' border='1' align='center'>\n";
 	echo "<tr>
 	        <td bgcolor='#E6E6E6'>
@@ -403,18 +318,14 @@ function buildTab2col($array_of_results, $title1, $title2)
 	        </td>
 	    </tr>\n";
 
-	if (is_array($array_of_results))
-	{
-		for($j = 0 ; $j < count($array_of_results) ; $j++)
-		{
+	if (is_array($array_of_results)) {
+		for ($j = 0 ; $j < count($array_of_results) ; $j++) {
 			echo '<tr>';
 			echo '<td bgcolor="#eeeeee">'.$array_of_results[$j][0].'</td>';
 			echo '<td align="right">'.$array_of_results[$j][1].'</td>';
 			echo "</tr>\n";
 		}
-	}
-	else
-	{
+	} else {
 		echo '<tr>';
 		echo '<td colspan="2" align="center">'.get_lang('NoResult').'</td>';
 		echo "</tr>\n";
@@ -429,22 +340,17 @@ function buildTab2col($array_of_results, $title1, $title2)
  * @desc        display a 2 column tab from an array
                 this tab has no title
  */
-function buildTab2ColNoTitle($array_of_results)
-{
+function buildTab2ColNoTitle($array_of_results) {
 	echo "<table cellpadding='3' cellspacing='1' border='0' align='center'>\n";
 
-	if (is_array($array_of_results))
-	{
-		for($j = 0 ; $j < count($array_of_results) ; $j++)
-		{
+	if (is_array($array_of_results)) {
+		for ($j = 0 ; $j < count($array_of_results) ; $j++) {
 			echo '<tr>';
 			echo '<td bgcolor="#eeeeee">'.$array_of_results[$j][0].'</td>';
 			echo '<td align="right">&nbsp;&nbsp;'.$array_of_results[$j][1].'</td>';
 			echo "</tr>\n";
 		}
-	}
-	else
-	{
+	} else {
 		echo '<tr>';
 		echo '<td colspan="2" align="center">'.get_lang('NoResult').'</td>';
 		echo "</tr>\n";
@@ -461,25 +367,19 @@ function buildTab2ColNoTitle($array_of_results)
                 if array_of_results is not an array there is
                 no error, else errors are displayed
  */
-function buildTabDefcon($array_of_results)
-{
+function buildTabDefcon($array_of_results) {
 	echo "<table width='60%' cellpadding='2' cellspacing='1' border='0' align=center class='minitext'>\n";
 
-	if (is_array($array_of_results))
-	{
+	if (is_array($array_of_results)) {
 		// there are some strange cases...
 		echo '<tr>';
 		echo '<td colspan="2" align="center" bgcolor="#eeeeee"><font color="#ff0000">'.get_lang('Defcon').'</font></td>';
 		echo "</tr>\n";
 
-		for($j = 0 ; $j < count($array_of_results) ; $j++)
-		{
-			if($array_of_results[$j][0] == "")
-			{
+		for ($j = 0 ; $j < count($array_of_results) ; $j++) {
+			if($array_of_results[$j][0] == "") {
 				$key = get_lang('NULLValue');
-			}
-			else
-			{
+			} else {
 				$key = $array_of_results[$j][0];
 			}
 			echo '<tr>';
@@ -487,9 +387,7 @@ function buildTabDefcon($array_of_results)
 			echo '<td width="30%" align="right">'.$array_of_results[$j][1].'</td>';
 			echo "</tr>\n";
 		}
-	}
-	else
-	{
+	} else {
 		// all right
 		echo '<tr>';
 		echo '<td colspan="2" align="center"><font color="#00ff00">'.get_lang('AllRight').'</font></td>';
@@ -497,4 +395,3 @@ function buildTabDefcon($array_of_results)
 	}
 	echo "</table>\n";
 }
-?>

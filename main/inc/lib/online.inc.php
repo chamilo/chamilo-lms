@@ -1,68 +1,45 @@
 <?php
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2004-2008 Dokeos SPRL
-	Copyright (c) Istvan Mandak
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
-	Mail: info@dokeos.com
-==============================================================================
-*/
+/* For licensing terms, see /license.txt */
 /**
-==============================================================================
 *	Code library for showing Who is online
 *
 *	@author Istvan Mandak, principal author
 *	@author Denes Nagy, principal author
 *	@author Bart Mollet
 *	@author Roan Embrechts, cleaning and bugfixing
-*	@package dokeos.whoisonline
-==============================================================================
+*	@package chamilo.whoisonline
 */
+
 /**
  * Insert a login reference for the current user into the track_e_online stats table.
  * This table keeps trace of the last login. Nothing else matters (we don't keep traces of anything older)
  * @param int user id
  * @return void
  */
-function LoginCheck($uid)
-{
-	global $_course;
+function LoginCheck($uid) {
+	global $_course, $_configuration;
 	$uid = (int) $uid;
 	$online_table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ONLINE);
-	if (!empty($uid))
-	{
+	if (!empty($uid)) {
         $login_ip = '';
-        if(!empty($_SERVER['REMOTE_ADDR']))
-        {
+        if(!empty($_SERVER['REMOTE_ADDR'])) {
 		  $login_ip = Database::escape_string($_SERVER['REMOTE_ADDR']);
         }
 		$reallyNow = time();
 		$login_date = date("Y-m-d H:i:s",$reallyNow);
+		$access_url_id = 1;
+		if ($_configuration['multiple_access_urls']==true && api_get_current_access_url_id()!=-1) {
+			$access_url_id = api_get_current_access_url_id();
+		}
+		$session_id = api_get_session_id();
 		// if the $_course array exists this means we are in a course and we have to store this in the who's online table also
 		// to have the x users in this course feature working
-		if (is_array($_course) && count($_course)>0 && !empty($_course['id']))
-		{
-            $query = "REPLACE INTO ".$online_table ." (login_id,login_user_id,login_date,login_ip, course) VALUES ($uid,$uid,'$login_date','$login_ip', '".$_course['id']."')";
+		if (is_array($_course) && count($_course)>0 && !empty($_course['id'])) {
+            $query = "REPLACE INTO ".$online_table ." (login_id,login_user_id,login_date,login_ip, course, session_id, access_url_id) VALUES ($uid,$uid,'$login_date','$login_ip', '".$_course['id']."' , '$session_id' , '$access_url_id' )";
+		} else {
+            $query = "REPLACE INTO ".$online_table ." (login_id,login_user_id,login_date,login_ip, session_id, access_url_id) VALUES ($uid,$uid,'$login_date','$login_ip', '$session_id', '$access_url_id')";
 		}
-		else
-		{
-            $query = "REPLACE INTO ".$online_table ." (login_id,login_user_id,login_date,login_ip) VALUES ($uid,$uid,'$login_date','$login_ip')";
-		}
-
-		@Database::query($query,__FILE__,__LINE__);
+		@Database::query($query);
 	}
 }
 
@@ -122,7 +99,7 @@ function online_logout() {
     global $logout_no_redirect;
     if (!$logout_no_redirect) {
         header("Location: index.php$query_string");
-        exit;
+        return;
     }
 }
 
@@ -131,51 +108,64 @@ function online_logout() {
  * @param int User ID
  * @return void
  */
-function LoginDelete($user_id)
-{
+function LoginDelete($user_id) {
 	$online_table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ONLINE);
     $user_id = (int) $user_id;
 	$query = "DELETE FROM ".$online_table ." WHERE login_user_id = '".Database::escape_string($user_id)."'";
-	@Database::query($query,__FILE__,__LINE__);
+	@Database::query($query);
 }
 
 /**
  * Gives a list of people online now (and in the last $valid minutes)
- * @param   int User ID - useless
- * @param   string      Statistics database name - useless
  * @param   int         Number of minutes to account logins for
+ * @param   bool		optionally if it's set to true shows who friends from social network is online otherwise just shows all users online
  * @return  array       For each line, a list of user IDs and login dates, or FALSE on error or empty results
- * @todo remove parameter $statistics_database which is no longer necessary
  */
-function WhoIsOnline($uid=0,$statistics_database='',$valid)
+function WhoIsOnline($valid, $friends = false)
 {
 	$valid = (int) $valid;
-	$current_date=date('Y-m-d H:i:s',time());
+	$current_date		= date('Y-m-d H:i:s',time());
 	$track_online_table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ONLINE);
-	$query = "SELECT login_user_id,login_date FROM ".$track_online_table ." WHERE DATE_ADD(login_date,INTERVAL $valid MINUTE) >= '".$current_date."'  ";
+	$friend_user_table  = Database::get_main_table(TABLE_MAIN_USER_REL_USER);
+	$query = '';
+	if ($friends) {
+		// 	who friends from social network is online
+		$query = "	SELECT distinct login_user_id,login_date
+					FROM $track_online_table
+					INNER JOIN $friend_user_table ON (friend_user_id = login_user_id)
+					WHERE DATE_ADD(login_date,INTERVAL $valid MINUTE) >= '".$current_date."' AND friend_user_id <> '".api_get_user_id()."'  AND relation_type='".USER_RELATION_TYPE_FRIEND."' AND user_id = '".api_get_user_id()."' ";
+	} else {
+		// all users online
+		$query = "SELECT login_user_id,login_date FROM ".$track_online_table ." WHERE DATE_ADD(login_date,INTERVAL $valid MINUTE) >= '".$current_date."'  ";
+	}
 
 	global $_configuration;
 	if ($_configuration['multiple_access_urls']==true) {
 		$tbl_user_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
 		$access_url_id = api_get_current_access_url_id();
-		if ($access_url_id != -1){
-			$query = "SELECT login_user_id,login_date FROM ".$track_online_table ." track
-			INNER JOIN $tbl_user_rel_access_url user_rel_url
-			ON (user_rel_url.user_id = track.login_user_id)
-			WHERE access_url_id =  $access_url_id AND DATE_ADD(login_date,INTERVAL $valid MINUTE) >= '".$current_date."'  ";
+		if ($access_url_id != -1) {
+			if ($friends) {
+				// 	friends from social network is online
+				$query = "SELECT distinct login_user_id,login_date
+							FROM $track_online_table track						
+							INNER JOIN $friend_user_table ON (friend_user_id = login_user_id)
+							WHERE track.access_url_id =  $access_url_id AND DATE_ADD(login_date,INTERVAL $valid MINUTE) >= '".$current_date."' AND friend_user_id <> '".api_get_user_id()."' AND relation_type='".USER_RELATION_TYPE_FRIEND."'  ";
+			} else {
+				// all users online
+				$query = "SELECT login_user_id,login_date FROM ".$track_online_table ." track
+							WHERE track.access_url_id =  $access_url_id AND DATE_ADD(login_date,INTERVAL $valid MINUTE) >= '".$current_date."'  ";
+			}
 		}
 	}
 
-	$result = @Database::query($query,__FILE__,__LINE__);
-	if (count($result)>0)
-	{
+	$result = @Database::query($query);
+	if (count($result)>0) {
 		$rtime = time();
 		$rdate = date("Y-m-d H:i:s",$rtime);
 		$validtime = mktime(date("H"),date("i")-$valid,date("s"),date("m"),date("d"),date("Y"));
 		$rarray = array();
 
-		while(list($login_user_id,$login_date)= Database::fetch_row($result))
-		{
+		while(list($login_user_id,$login_date)= Database::fetch_row($result)) {
 			$barray = array();
 			array_push($barray,$login_user_id);
 			array_push($barray,$login_date);
@@ -190,18 +180,17 @@ function WhoIsOnline($uid=0,$statistics_database='',$valid)
 			// db timestamp
 			$dbtime = mktime($hour,$minute,$secund,$month,$day,$year);
 
-			if ($dbtime>$validtime)
-			{
+			if ($dbtime>$validtime) {
 				array_push($rarray,$barray);
 			}
 		}
 		return $rarray;
-	}
-	else
-	{
+	} else {
 		return false;
 	}
 }
+
+
 
 /**
  * Gets the full user name for a given user ID
@@ -214,12 +203,10 @@ function GetFullUserName($uid)
 	$uid = Database::escape_string($uid);
 	$user_table = Database::get_main_table(TABLE_MAIN_USER);
 	$query = "SELECT firstname,lastname FROM ".$user_table." WHERE user_id='$uid'";
-	$result = @Database::query($query,__FILE__,__LINE__);
-	if (count($result)>0)
-	{
+	$result = @Database::query($query);
+	if (count($result)>0) {
 		$str = '';
-		while(list($firstname,$lastname)= Database::fetch_array($result))
-		{
+		while(list($firstname,$lastname)= Database::fetch_array($result)) {
 			$str = str_replace(' ', '&nbsp;', api_get_person_name($firstname, $lastname));
 			return $str;
 		}
@@ -235,13 +222,12 @@ function chatcall() {
 
 	global $_user, $_cid;
 
-	if (!$_user['user_id'])
-	{
+	if (!$_user['user_id']) {
 		return (false);
 	}
 	$track_user_table = Database::get_main_table(TABLE_MAIN_USER);
 	$sql="select chatcall_user_id, chatcall_date from $track_user_table where ( user_id = '".$_user['user_id']."' )";
-	$result=Database::query($sql,__FILE__,__LINE__);
+	$result=Database::query($sql);
 	$row=Database::fetch_array($result);
 
 	$login_date=$row['chatcall_date'];
@@ -295,16 +281,14 @@ function who_is_online_in_this_course($uid, $valid, $coursecode=null)
 	$valid = Database::escape_string($valid);
 
 	$query = "SELECT login_user_id,login_date FROM ".$track_online_table ." WHERE course='".$coursecode."' AND DATE_ADD(login_date,INTERVAL $valid MINUTE) >= NOW() ";
-	$result = Database::query($query,__FILE__,__LINE__);
-	if (count($result)>0)
-	{
+	$result = Database::query($query);
+	if (count($result)>0) {
 		$rtime = time();
 		$rdate = date("Y-m-d H:i:s",$rtime);
 		$validtime = mktime(date("H"),date("i")-$valid,date("s"),date("m"),date("d"),date("Y"));
 		$rarray = array();
 
-		while(list($login_user_id,$login_date)= Database::fetch_row($result))
-		{
+		while(list($login_user_id,$login_date)= Database::fetch_row($result)) {
 			$barray = array();
 			array_push($barray,$login_user_id);
 			array_push($barray,$login_date);
@@ -324,9 +308,7 @@ function who_is_online_in_this_course($uid, $valid, $coursecode=null)
 			}
 		}
 		return $rarray;
-	}
-	else
-	{
+	} else {
 		return false;
 	}
 }

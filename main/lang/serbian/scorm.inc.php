@@ -1,33 +1,41 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $langScormVersion = "verzija";
-$langScormRestarted = "Sve lekcije su za sada nedovršene.";
+$langScormRestarted = "Sve lekcije su za sada nedovrÅ¡ene.";
 $langScormNoNext = "ovo je poslednja lekcija";
 $langScormNoPrev = "Ovo je prva lekcija";
 $langScormTime = "Vreme";
-$langScormNoOrder = "Nije zadat redosled, možete da kliknete na bilo koju lekciju.";
+$langScormNoOrder = "Nije zadat redosled, moÅ¾ete da kliknete na bilo koju lekciju.";
 $langScormScore = "Rezultat";
 $langScormLessonTitle = "Naslov lekcije";
 $langScormStatus = "Status";
 $langScormToEnter = "Za unos";
-$langScormFirstNeedTo = "potrebno Vam je prvo izvršenje ";
+$langScormFirstNeedTo = "potrebno Vam je prvo izvrÅ¡enje";
 $langScormThisStatus = "Ova lekcija je sad";
-$langScormClose = "Završi";
+$langScormClose = "ZavrÅ¡i";
 $langScormRestart = "Restartuj";
-$langScormCompstatus = "Završena";
-$langScormIncomplete = "Nezavršena";
-$langScormPassed = "Pre&#273;ena";
+$langScormCompstatus = "ZavrÅ¡ena";
+$langScormIncomplete = "NezavrÅ¡ena";
+$langScormPassed = "PreÄ‘ena";
 $langScormFailed = "Nije uspelo";
 $langScormPrevious = "Prethodna";
 $langScormNext = "Naredna";
 $langScormTitle = "Alat za pokretanje Scorm formata";
 $langScormMystatus = "Moj status";
-$langScormNoItems = "Ovaj sadržaj nema stavke.";
-$langScormNoStatus = "Nema statusa za ovaj sadržaj";
-$langScormLoggedout = "odjavljen iz Scorm okruženja";
+$langScormNoItems = "Ovaj sadrÂžaj nema stavke.";
+$langScormNoStatus = "Nema statusa za ovaj sadrÂžaj";
+$langScormLoggedout = "odjavljen iz Scorm okruÅ¾enja";
 $langScormCloseWindow = "Zatvori prozor";
+$ScormBrowsed = "Pregledan";
 $langScormExitFullScreen = "Nazad na normalan ekran";
 $langScormFullScreen = "Full screen";
-$langScormNotAttempted = "Bez pokušaja";
+$langScormNotAttempted = "Bez pokuÅ¡aja";
+$langCharset = "Skup znakova (character set)";
+$langLocal = "Lokalni";
+$langRemote = "Udaljeni";
+$langAutodetect = "Automatsko pronalaÅ¾enje";
+$langAccomplishedStepsTotal = "Ukupno izvrÅ¡enih koraka";
+$langUnknown = "Nepoznat";
 ?>

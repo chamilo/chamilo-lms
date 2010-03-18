@@ -47,7 +47,7 @@ $tbl_user=Database::get_main_table(TABLE_MAIN_USER);
 $tbl_online_link=Database::get_course_table(TABLE_ONLINE_LINK);
 
 $query="SELECT username FROM $tbl_user WHERE user_id='".$_user['user_id']."'";
-$result=Database::query($query,__FILE__,__LINE__);
+$result=Database::query($query);
 
 list($pseudoUser)=Database::fetch_row($result);
 
@@ -118,16 +118,16 @@ if($_POST['sent'])
 					SET name='".addslashes($link_name)."',
 						url='".addslashes($link_url)."'
 					WHERE id='$link'";
-			Database::query($query,__FILE__,__LINE__);
+			Database::query($query);
 		}
 		else
 		{
 			$query="INSERT INTO $tbl_online_link (name,url) VALUES('".addslashes($link_name)."','".addslashes($link_url)."')";
-			Database::query($query,__FILE__,__LINE__);
+			Database::query($query);
 		}
 	}
 
-	mysql_close();
+	Database::close();
 	header('Location: '.api_get_self());
 	exit();
 }
@@ -137,15 +137,15 @@ if($action == 'delete')
 	$link=intval($_GET['link']);
 
 	$query="DELETE FROM $tbl_online_link WHERE id='$link'";
-	Database::query($query,__FILE__,__LINE__);
+	Database::query($query);
 
-	mysql_close();
+	Database::close();
 	header('Location: '.api_get_self());
 	exit();
 }
 
 $query="SELECT id,name,url FROM $tbl_online_link ORDER BY name";
-$result=Database::query($query,__FILE__,__LINE__);
+$result=Database::query($query);
 
 $Links=array();
 

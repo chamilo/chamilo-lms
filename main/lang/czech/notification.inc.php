@@ -1,18 +1,19 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$lang_new_item = "p&#345;idaná nová položka";
-$lang_title_notification = "Od Vaší poslední návšt&#283;vy";
-$lang_update_agenda = "aktualizovaná položka agendy";
-$lang_new_agenda = "p&#345;idaná nová položka agendy";
-$lang_update_announcements = "existující oznámení bylo aktualizováno";
-$lang_new_announcements = "p&#345;idáno nové oznámení";
-$lang_new_document = "p&#345;idán(é) nový(é) dokument(y)";
-$lang_new_exercise = "nové cvi&#269;ení aktivováno";
-$lang_update_link = "existující odkaz na informaci byl aktualizován";
-$lang_new_link = "p&#345;idán nový odkaz";
-$lang_new_forum_topic = "p&#345;idána nová téma";
-$lang_new_groupforum_topic = "p&#345;idaná nová téma do skupinového fóra";
-$lang_new_dropbox_file = "byl p&#345;ijat nový soubor";
-$lang_update_dropbox_file = "soubor ve Vaší schránce byl aktualizován";
+$lang_new_item = "pÅ™idanÃ¡ novÃ¡ poloÅ¾ka";
+$lang_title_notification = "Od VaÅ¡Ã­ poslednÃ­ nÃ¡vÅ¡tÄ›vy";
+$lang_update_agenda = "aktualizovanÃ¡ poloÅ¾ka agendy";
+$lang_new_agenda = "pÅ™idanÃ¡ novÃ¡ poloÅ¾ka agendy";
+$lang_update_announcements = "existujÃ­cÃ­ oznÃ¡menÃ­ bylo aktualizovÃ¡no";
+$lang_new_announcements = "pÅ™idÃ¡no novÃ© oznÃ¡menÃ­";
+$lang_new_document = "pÅ™idÃ¡n(Ã©) novÃ½(Ã©) dokument(y)";
+$lang_new_exercise = "novÃ© cviÄenÃ­ aktivovÃ¡no";
+$lang_update_link = "existujÃ­cÃ­ odkaz na informaci byl aktualizovÃ¡n";
+$lang_new_link = "pÅ™idÃ¡n novÃ½ odkaz";
+$lang_new_forum_topic = "pÅ™idÃ¡na novÃ¡ tÃ©ma";
+$lang_new_groupforum_topic = "pÅ™idanÃ¡ novÃ¡ tÃ©ma do skupinovÃ©ho fÃ³ra";
+$lang_new_dropbox_file = "byl pÅ™ijat novÃ½ soubor";
+$lang_update_dropbox_file = "soubor ve VaÅ¡Ã­ schrÃ¡nce byl aktualizovÃ¡n";
 ?>

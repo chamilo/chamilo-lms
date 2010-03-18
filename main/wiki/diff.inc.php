@@ -116,15 +116,15 @@
     {
         $content = array();
 
-        if ( strpos( $str, "\r\n" ) != false )
+        if ( api_strpos( $str, "\r\n" ) !== false )
         {
             $content = explode("\r\n", $str );
         }
-        elseif ( strpos( $str, "\n" ) != false )
+        elseif ( api_strpos( $str, "\n" ) !== false )
         {
             $content = explode( "\n", $str );
         }
-        elseif ( strpos( $str, "\r" ) != false )
+        elseif ( api_strpos( $str, "\r" ) !== false )
         {
             $content = explode( "\r", $str );
         }

@@ -1,5 +1,6 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $lang_height = "Height";
 $lang_resizing_comment = "resize the image to the following dimensions (in pixels)";

@@ -29,7 +29,7 @@ class TestUserManager extends UnitTestCase
     	$firstName='test_first';
     	$lastName='test_last';
     	$status='1';
-    	$email='test@dokeos.com';
+    	$email='test@chamilo.org';
     	$loginName='testlogin';
     	$password='testlogin';
     	$official_code='testcode';
@@ -65,10 +65,11 @@ class TestUserManager extends UnitTestCase
     function testDeleteUser() {
     	$user_id='';
     	$res = UserManager::delete_user($user_id);
-    	$this->assertTrue($res);
+    	$this->assertTrue(is_bool($res));
     	$_configuration['user_id']='';
-    	$res= UserManager::delete_user($_configuration['user_id']);
-    	$this->assertTrue($res);
+    	$res1= UserManager::delete_user($_configuration['user_id']);
+    	$this->assertTrue(is_bool($res1));
+    	//var_dump($res1);
     }
     /*
     function testUpdateUser() {
@@ -170,7 +171,7 @@ class TestUserManager extends UnitTestCase
 
 	function testGetExtraFieldInformationByName() {
 		$sql="SELECT 1";
-		$field_variable=Database::query($sql,__FILE__,__LINE__);
+		$field_variable=Database::query($sql);
 		$res=UserManager::get_extra_field_information_by_name($field_variable);
 		//var_dump($res);
 		$this->assertTrue(is_bool($res));
@@ -312,8 +313,8 @@ class TestUserManager extends UnitTestCase
 	 }
 
 	 function testRemoveUserProduction() {
-	 	$user_id='121';
-	 	$production='field variable';
+	 	$user_id=1;
+	 	$production='my_files';
 	 	$res=UserManager::remove_user_production($user_id,$production);
 	 	$this->assertTrue(is_null($res));
 	 }
@@ -348,14 +349,15 @@ class TestUserManager extends UnitTestCase
 	 	$this->assertTrue(is_null($res));
 
 	}
-
+/*
+//DEPRECATED
 	function testSuscribeUsersToSession() {
-	  	$id_session='123';
+	  	$id_session=1;
 	  	$UserList='';
-	  	$res=UserManager::suscribe_users_to_session($id_session,$UserList,null);
+	  	$res=UserManager::suscribe_users_to_session($id_session,$UserList);
 	 	$this->assertTrue(is_null($res));
 	}
-
+*/
 	function testUpdateApiKey() {
 		$user_id=121;
 		$api_service='string';
@@ -367,8 +369,8 @@ class TestUserManager extends UnitTestCase
 	}
 
 	function testUpdateExtraField() {
-		$fid='5';
-		$columns=null;
+		$fid=5;
+		$columns=array();
 		$res=UserManager::update_extra_field($fid,$columns);
 	 	$this->assertTrue(is_bool($res));
 	}

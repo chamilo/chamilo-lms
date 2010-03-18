@@ -1,0 +1,6 @@
+name = "Student Block"
+controller = "BlockStudent"
+description = "Display information about students inside platform"
+package = Dashboard
+version = 1.0 
+author = Christian Fasanando

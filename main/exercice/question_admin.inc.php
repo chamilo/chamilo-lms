@@ -1,25 +1,5 @@
 <?php
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2004-2009 Dokeos SPRL
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
-	Mail: info@dokeos.com
-==============================================================================
-*/
-
+/* For licensing terms, see /license.txt */
 
 /**
 *	Statement (?) administration
@@ -36,12 +16,11 @@
 ==============================================================================
 */
 
-include_once(api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
-include_once(api_get_path(LIBRARY_PATH).'image.lib.php');
+require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
+require_once api_get_path(LIBRARY_PATH).'image.lib.php';
 
 // ALLOWED_TO_INCLUDE is defined in admin.php
-if(!defined('ALLOWED_TO_INCLUDE'))
-{
+if(!defined('ALLOWED_TO_INCLUDE')) {
 	exit();
 }
 
@@ -49,11 +28,10 @@ if(!defined('ALLOWED_TO_INCLUDE'))
 /*********************
  * INIT QUESTION
  *********************/
-if(isset($_GET['editQuestion']))
-{
-	$objQuestion = Question::read ($_GET['editQuestion']);
-	$action = api_get_self()."?modifyQuestion=".$modifyQuestion."&editQuestion=".$objQuestion->id;
 
+if(isset($_GET['editQuestion'])) {
+	$objQuestion = Question::read ($_GET['editQuestion']);
+	$action = api_get_self()."?".api_get_cidreq()."&modifyQuestion=".$modifyQuestion."&editQuestion=".$objQuestion->id;
 
 	if (isset($exerciseId) && !empty($exerciseId)) {
 		$TBL_LP_ITEM	= Database::get_course_table(TABLE_LP_ITEM);
@@ -61,17 +39,16 @@ if(isset($_GET['editQuestion']))
 			  WHERE item_type = '".TOOL_QUIZ."' AND path ='".Database::escape_string($exerciseId)."'";
 		$result = Database::query($sql);
 		if (Database::num_rows($result) > 0) {
-			Display::display_warning_message(get_lang('EditingScoreCauseProblemsToExercisesInLP'));
+			//Display::display_warning_message(get_lang('EditingScoreCauseProblemsToExercisesInLP'));
 		}
 	}
 
 } else {
 	$objQuestion = Question :: getInstance($_REQUEST['answerType']);
-	$action = api_get_self()."?modifyQuestion=".$modifyQuestion."&newQuestion=".$newQuestion;
+	$action = api_get_self()."?".api_get_cidreq()."&modifyQuestion=".$modifyQuestion."&newQuestion=".$newQuestion;
 }
 
-if(is_object($objQuestion))
-{
+if(is_object($objQuestion)) {
 
 	/*********************
 	 * FORM STYLES
@@ -117,10 +94,15 @@ if(is_object($objQuestion))
 
 	// question form elements
 	$objQuestion -> createForm ($form,array('Height'=>150));
-
+	
 	// answer form elements
 	$objQuestion -> createAnswersForm ($form);
-
+	
+	// this variable  $show_quiz_edition comes from admin.php blocks the exercise/quiz modifications
+	if ($show_quiz_edition == false) {
+		$form->freeze();
+	}
+	
 	// submit button is implemented in every question type
 
 	//$form->addElement('style_submit_button','submitQuestion',$text, 'class="'.$class.'"');
@@ -131,8 +113,7 @@ if(is_object($objQuestion))
 	/**********************
 	 * FORM VALIDATION
 	 **********************/
-	if(isset($_POST['submitQuestion']) && $form->validate())
-	{
+	if(isset($_POST['submitQuestion']) && $form->validate()) {
 
 		// question
 	    $objQuestion -> processCreation($form,$objExercise);
@@ -146,9 +127,7 @@ if(is_object($objQuestion))
 	    	echo '<script type="text/javascript">window.location.href="admin.php"</script>';
 	    else
 	    	echo '<script type="text/javascript">window.location.href="admin.php?hotspotadmin='.$objQuestion->id.'"</script>';
-	}
-	else
-	{
+	} else {
 
 		/******************
 		 * FORM DISPLAY

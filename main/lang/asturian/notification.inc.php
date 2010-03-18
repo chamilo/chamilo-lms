@@ -1,33 +1,34 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$lang_new_item = "Amest髎e eventu nuevu";
+$lang_new_item = "Amest贸se eventu nuevu";
 $lang_title_notification = "Dende la so cabera visita";
-$lang_update_agenda = "actualiz髎e un eventu de l\'axenda";
-$lang_new_agenda = "Amest髎e un eventu nuevu a l\'axenda";
-$lang_update_announcements = "Actualiz髎e l\'anuncia";
-$lang_new_announcements = "Amest髎e una anuncia nueva";
-$lang_new_document = "Amest髎e un documentu nuevu";
+$lang_update_agenda = "actualiz贸se un eventu de l'axenda";
+$lang_new_agenda = "Amest贸se un eventu nuevu a l'axenda";
+$lang_update_announcements = "Actualiz贸se l'anuncia";
+$lang_new_announcements = "Amest贸se una anuncia nueva";
+$lang_new_document = "Amest贸se un documentu nuevu";
 $lang_new_exercise = "Hai un exerciciu nuevu disponible";
-$lang_update_link = "Actualiz髎e l\'enllaz";
-$lang_new_link = "Amest髎e un enllaz nuevu";
-$lang_new_forum_topic = "Amest髎e un tema nuevu";
-$lang_new_groupforum_topic = "Amest髎e un tema nuevu al foru del grupu";
-$lang_new_dropbox_file = "Recibi髎e un archivu nuevu";
-$lang_update_dropbox_file = "Actualiz髎e un archivu nel so buz髇 de llabores / deberes";
-$ForumCategoryAdded = "Amest髎e una categor韆 nel foru";
-$LearnpathAdded = "Amest髎e un itinerariu d\'aprendizaxe";
-$GlossaryAdded = "T閞minu amest醬 al Glosariu";
+$lang_update_link = "Actualiz贸se l'enllaz";
+$lang_new_link = "Amest贸se un enllaz nuevu";
+$lang_new_forum_topic = "Amest贸se un tema nuevu";
+$lang_new_groupforum_topic = "Amest贸se un tema nuevu al foru del grupu";
+$lang_new_dropbox_file = "Recibi贸se un archivu nuevu";
+$lang_update_dropbox_file = "Actualiz贸se un archivu nel so buz贸n de llabores / deberes";
+$ForumCategoryAdded = "La categor铆a nueva de foros amest贸se";
+$LearnpathAdded = "Amest贸se un itinerariu d'aprendizaxe";
+$GlossaryAdded = "T茅rminu amest谩u al Glosariu";
 $QuizQuestionAdded = "Entruga nueva amestada nel Exerciciu";
 $QuizQuestionUpdated = "Entruga nueva anovada nel Exerciciu";
 $QuizQuestionDeleted = "Entruga nueva desaniciada nel Exerciciu";
-$QuizUpdated = "Exerciciu anov醬";
-$QuizAdded = "Exerciciu amest醬";
-$QuizDeleted = "Exerciciu desanici醬";
+$QuizUpdated = "Exerciciu anov谩u";
+$QuizAdded = "Exerciciu amest谩u";
+$QuizDeleted = "Exerciciu desanici谩u";
 $DocumentInvisible = "Documentu invisible";
 $DocumentVisible = "Documentu visible";
-$CourseDescriptionAdded = "Descripci髇 del cursu amestada";
-$WikiAdded = "Wiki amest醬";
+$CourseDescriptionAdded = "Descripci贸n del cursu amestada";
+$WikiAdded = "Wiki amest谩u";
 $SurveyAdded = "Encuenta amestada";
 $NotebookAdded = "Nota amestada";
 $NotebookUpdated = "Nota anovada";

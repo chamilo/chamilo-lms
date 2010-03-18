@@ -1,19 +1,20 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $langActivate = "Prezinta";
 $langDeactivate = "Ascunde";
-$langInLnk  = "Unelte si legaturi ascunse";
+$langInLnk = "Unelte si legaturi ascunse";
 $langDelLk = "Chiar vrei sa stergi acest link?";
-$langCourseCreate  = "Creaza o pagina web a cursului";
-$langNameOfTheLink  = "Numele legaturii";
-$lang_main_categories_list                  = "Lista principala categorii";
+$langCourseCreate = "Creaza o pagina web a cursului";
+$langNameOfTheLink = "Numele legaturii";
+$lang_main_categories_list = "Lista principala categorii";
 $langCourseAdminOnly = "Doar pentru profesori";
 $PlatformAdminOnly = "Doar pentru administratorii platformei";
 $langCombinedCourse = "Curs mix";
 $ToolIsNowVisible = "Unealta este acum vizibila";
 $ToolIsNowHidden = "Unealta este acum invizibila";
-$EditLink = "Schimba link";
+$EditLink = "Editare legatura";
 $Blog_management = "Administrarea blogului";
 $Forum = "Forumuri";
 $Course_maintenance = "Administrarea cursului";

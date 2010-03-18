@@ -1,45 +1,46 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$FlatView = "Lapos nézet";
-$ScoreEdit = "Pontozási szabályok szerkesztése";
-$ScoreColor = "Pontozás színe";
-$ScoringSystem = "Pontozási rendszer";
-$EnableScoreColor = "Pontozás színezés bekapcsolása";
+$FlatView = "AlapnÃ©zet";
+$ScoreEdit = "PontozÃ¡si szabÃ¡lyok szerkesztÃ©se";
+$ScoreColor = "PontozÃ¡s szÃ­ne";
+$ScoringSystem = "PontozÃ¡si rendszer";
+$EnableScoreColor = "PontozÃ¡s szÃ­nezÃ©s bekapcsolÃ¡sa";
 $Below = "alatt";
-$WillColorRed = "vörös színnel fog megjelenni";
-$EnableScoringSystem = "Pontozási rendszer engedélyezése";
-$IncludeUpperLimit = "Fels&#337; határ megadása";
-$ScoreInfo = "Pontozás infó";
-$Between = "között";
-$CurrentCategory = "Jelenlegi kategória";
-$ExportPDF = "Exportálás PDF-be";
+$WillColorRed = "vÃ¶rÃ¶s szÃ­nnel fog megjelenni";
+$EnableScoringSystem = "PontozÃ¡si rendszer engedÃ©lyezÃ©se";
+$IncludeUpperLimit = "FelsÅ‘ hatÃ¡r megadÃ¡sa";
+$ScoreInfo = "PontozÃ¡s infÃ³";
+$Between = "kÃ¶zÃ¶tt";
+$CurrentCategory = "Jelenlegi kategÃ³ria";
+$ExportPDF = "ExportÃ¡lÃ¡s PDF-be";
 $Print = "Nyomtat";
-$ChooseOrientation = "Oldal tájolása";
-$Portrait = "Álló";
-$Landscape = "Fekv&#337;";
-$FilterCategory = "Sz&#369;r&#337; kategória";
-$DeleteAll = "Az összes törlése";
-$FileType = "Állomány típus";
-$TotalItems = "Elem összesen";
-$Average = "Átlag";
-$EditResult = "Eredmények módosítása";
-$Results = "Eredmények";
-$UserAdded = "Felhasználó hozzáadva";
-$ResultEdited = "Eredmény szerkesztve";
-$ChooseFormat = "Válasszon formátumot";
-$OutputFileType = "Kimeneti állomány formátuma";
-$OverMax = "A rögzíteni kívánt érték nagyobb, mint amit maximumként megadtak ehhez az értékeléshez.";
-$MoreInfo = "További adatok";
-$ResultsPerUser = "Eredmények felhasználónként";
-$TotalUser = "Összesen a felhasználónak";
-$AverageTotal = "Átlag összesen";
-$Evaluation = "Értékelés";
-$EvaluationAverage = "Értékelés átlag";
-$EditCategory = "Kategória szerkesztése";
-$EditAllWeights = "Az összes súlyozás szerkesztése";
-$GradebookQualificationTotal = "Összesen";
-$GradebookEvaluationDeleted = "Az értékelés sikeresen törölve lett";
-$ResourceType = "Er&#337;forrás típus";
-$GradebookWhoChangedItLog = "Ki módosította";
+$ChooseOrientation = "Oldal tÃ¡jolÃ¡sa";
+$Portrait = "ÃllÃ³";
+$Landscape = "FekvÅ‘";
+$FilterCategory = "SzÅ±rÅ‘ kategÃ³ria";
+$DeleteAll = "Az Ã¶sszes tÃ¶rlÃ©se";
+$FileType = "ÃllomÃ¡ny tÃ­pus";
+$TotalItems = "Elem Ã¶sszesen";
+$Average = "Ãtlag";
+$EditResult = "EredmÃ©nyek mÃ³dosÃ­tÃ¡sa";
+$Results = "EredmÃ©nyek";
+$UserAdded = "A felhasznÃ¡lÃ³ hozzÃ¡adva";
+$ResultEdited = "EredmÃ©ny szerkesztve";
+$ChooseFormat = "VÃ¡lasszon formÃ¡tumot";
+$OutputFileType = "Kimeneti Ã¡llomÃ¡ny formÃ¡tuma";
+$OverMax = "A rÃ¶gzÃ­teni kÃ­vÃ¡nt Ã©rtÃ©k nagyobb, mint amit maximumkÃ©nt megadtak ehhez az Ã©rtÃ©kelÃ©shez.";
+$MoreInfo = "TovÃ¡bbi adatok";
+$ResultsPerUser = "EredmÃ©nyek felhasznÃ¡lÃ³nkÃ©nt";
+$TotalUser = "Ã–sszesen a felhasznÃ¡lÃ³nak";
+$AverageTotal = "Ãtlag Ã¶sszesen";
+$Evaluation = "Ã‰rtÃ©kelÃ©s";
+$EvaluationAverage = "Ã‰rtÃ©kelÃ©s Ã¡tlag";
+$EditCategory = "KategÃ³ria szerkesztÃ©se";
+$EditAllWeights = "Az Ã¶sszes sÃºlyozÃ¡s szerkesztÃ©se";
+$GradebookQualificationTotal = "Ã–sszesen";
+$GradebookEvaluationDeleted = "Az Ã©rtÃ©kelÃ©s sikeresen tÃ¶rÃ¶lve lett";
+$ResourceType = "ErÅ‘forrÃ¡s tÃ­pus";
+$GradebookWhoChangedItLog = "Ki mÃ³dosÃ­totta";
 ?>

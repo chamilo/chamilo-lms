@@ -75,7 +75,7 @@ $table_user 					= Database :: get_main_table(TABLE_MAIN_USER);
 // getting the survey information
 $survey_data = survey_manager::get_survey($_GET['survey_id']);
 if (empty($survey_data)) {
-	Display :: display_header(get_lang('Survey'));
+	Display :: display_header(get_lang('ToolSurvey'));
 	Display :: display_error_message(get_lang('InvallidSurvey'), false);
 	Display :: display_footer();
 	exit;
@@ -89,7 +89,7 @@ if (api_strlen(strip_tags($survey_data['title'])) > 40) {
 
 if($survey_data['survey_type']==1) {
 	$sql = 'SELECT id FROM '.Database :: get_course_table(TABLE_SURVEY_QUESTION_GROUP).' WHERE survey_id = '.(int)$_GET['survey_id'].' LIMIT 1';
-	$rs = Database::query($sql,__FILE__,__LINE__);
+	$rs = Database::query($sql);
 	if(Database::num_rows($rs)===0) {
 		header('Location: survey.php?survey_id='.(int)$_GET['survey_id'].'&message='.'YouNeedToCreateGroups');
 		exit;
@@ -140,7 +140,8 @@ if (empty($_POST['save_question']) && in_array($_GET['type'],$possible_types)) {
 			}
 		}
 	}
-	$form = new $_GET['type'];
+	$ch_type = 'ch_'.$_GET['type'];
+	$form = new $ch_type;
 
 	// The defaults values for the form
 	$form_content['answers'] = array('', '');
@@ -192,7 +193,7 @@ if (empty($_POST['save_question']) && in_array($_GET['type'],$possible_types)) {
 	$form->render_form();
 } else {
 	$form_content = $_POST;
-	$form = new question();
+	$form = new survey_question();
 	$form->handle_action($form_content);
 }
 

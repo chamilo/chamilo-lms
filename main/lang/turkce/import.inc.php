@@ -1,16 +1,17 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$langPgTitle = "Sayfanın başlığı";
-$langExplanation = "Sayfa HTML formatında olmalıdır (örnek: \"felsefe_odevi.htm\"). Eğer HTML olmayan bir dosya göndermek istiyorsanız (PDF, Word, Power Point, Video, etc.) use <a href=../document/document.php>Belge Araçlarını kullanınız</a>";
-$langTooBig = "Bir dosya seçmediniz veya çok büyük";
-$langCouldNot = "Dosya gönderilemedi";
-$langNotAllowed = "İzin verilmiyor";
+$langPgTitle = "Sayfa ismi";
+$langExplanation = "OK tÄ±kladÄ±ÄŸÄ±nÄ±zda, Forum, GÃ¼ndem, Belge YÃ¶netimi vs. araÃ§larla birlikte bu dersin sitesi yaratÄ±lÄ±r. KullanÄ±cÄ± adÄ±nÄ±z ve ÅŸifrenizle giriÅŸ yaparak siteyi isteÄŸiniz ÅŸekilde dÃ¼zenleyebilirsiniz.";
+$langTooBig = "GÃ¶nderilecek dosyayÄ± seÃ§mediniz veya dosya boyutu Ã§ok bÃ¼yÃ¼k";
+$langCouldNot = "Dosya gÃ¶nderilemedi";
+$langNotAllowed = "Ä°zin verilmiyor";
 $langAddPageToSite = "Siteye sayfa ekle";
-$langCouldNotSendPage = "Bu sayfa HTML formatında değil bu nedenle gönderilemez. Eğer HTML olmayan bir dosya göndermek istiyorsanız (PDF, Word, Power Point, Video, etc.) <a href=../document/document.php>Belge Araçlarını kullanınız</a>";
-$langSendPage = "Gönderilecek sayfa";
-$langPageTitleModified = "Sayfa başlığı değiştirildi";
+$langCouldNotSendPage = "Bu sayfa HTML formatÃ½nda deÃ°il bu nedenle gÃ¶nderilemez. EÃ°er HTML olmayan bir dosya gÃ¶ndermek istiyorsanÃ½z (PDF, Word, Power Point, Video, etc.) <a href=../document/document.php>Belge AraÃ§larÃ½nÃ½ kullanÃ½nÃ½z</a>";
+$langSendPage = "GÃ¶nderilecek sayfa";
+$langPageTitleModified = "Sayfa baÅŸlÄ±ÄŸÄ± deÄŸiÅŸtirildi";
 $langPageAdded = "Sayfa eklendi";
 $langAddPage = "Sayfa ekle";
-$Choose = "Seç";
+$Choose = "SeÃ§";
 ?>

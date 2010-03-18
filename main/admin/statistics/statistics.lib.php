@@ -1,24 +1,5 @@
 <?php
-// $Id: index.php 8216 2006-11-3 18:03:15 NushiFirefox $
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2006 Bart Mollet <bart.mollet@hogent.be>
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact: Dokeos, 181 rue Royale, B-1000 Brussels, Belgium, info@dokeos.com
-==============================================================================
-*/
+/* For licensing terms, see /license.txt */
 require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
 /**
 ==============================================================================
@@ -49,11 +30,10 @@ class Statistics
 	{
 		$course_table = Database :: get_main_table(TABLE_MAIN_COURSE);
 		$sql = "SELECT COUNT(*) AS number FROM ".$course_table." ";
-		if (isset ($category_code))
-		{
+		if (isset ($category_code)) {
 			$sql .= " WHERE category_code = '".Database::escape_string($category_code)."'";
 		}
-		$res = Database::query($sql, __FILE__, __LINE__);
+		$res = Database::query($sql);
 		$obj = Database::fetch_object($res);
 		return $obj->number;
 	}
@@ -72,11 +52,10 @@ class Statistics
 		$user_table 		= Database :: get_main_table(TABLE_MAIN_USER);
 
 		$sql = "SELECT COUNT(DISTINCT(user_id)) AS number FROM $user_table WHERE status = ".intval(Database::escape_string($status))." ";
-		if (isset ($category_code))
-		{
-			$sql = "SELECT COUNT(DISTINCT(cu.user_id)) AS number FROM $course_user_table cu, $course_table c WHERE cu.status = ".intval(Database::escape_string($status))." AND c.code = cu.course_code AND c.category_code = '".Database::escape_string($category_code)."'";
+		if (isset ($category_code)) {
+			$sql = "SELECT COUNT(DISTINCT(cu.user_id)) AS number FROM $course_user_table cu, $course_table c WHERE cu.status = ".intval(Database::escape_string($status))." AND c.code = cu.course_code AND c.category_code = '".Database::escape_string($category_code)."'  ";
 		}
-		$res = Database::query($sql, __FILE__, __LINE__);
+		$res = Database::query($sql);
 		$obj = Database::fetch_object($res);
 		return $obj->number;
 	}
@@ -89,15 +68,15 @@ class Statistics
 	{
 		// Database table definitions
 		$track_e_default  = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_DEFAULT);
-
+		$table_user = Database::get_main_table(TABLE_MAIN_USER);
 		$sql = "SELECT count(default_id) AS total_number_of_items FROM $track_e_default, $table_user user WHERE default_user_id = user.user_id ";
 
 		if (isset($_GET['keyword'])) {
-		$keyword = Database::escape_string($_GET['keyword']);
-		$sql .= " AND (user.username LIKE '%".$keyword."%' OR default_event_type LIKE '%".$keyword."%' OR default_value_type LIKE '%".$keyword."%' OR default_value LIKE '%".$keyword."%') ";
+			$keyword = Database::escape_string(trim($_GET['keyword']));
+			$sql .= " AND (user.username LIKE '%".$keyword."%' OR default_event_type LIKE '%".$keyword."%' OR default_value_type LIKE '%".$keyword."%' OR default_value LIKE '%".$keyword."%') ";
 		}
 
-		$res = Database::query($sql, __FILE__, __LINE__);
+		$res = Database::query($sql);
 		$obj = Database::fetch_object($res);
 		return $obj->total_number_of_items;
 	}
@@ -110,18 +89,26 @@ class Statistics
 		$track_e_default 	= Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_DEFAULT);
 		$table_user = Database::get_main_table(TABLE_MAIN_USER);
 		$table_course = Database::get_main_table(TABLE_MAIN_COURSE);
+		
+		$column 		 = intval($column);
+		$from 			 = intval($from);
+		$number_of_items = intval($number_of_items);
+		
+		if(!in_array($direction, array('ASC','DESC'))){
+        	$direction = 'DESC';
+		}        	
 
 		$sql = "SELECT
 				 	default_event_type  as col0,
 					default_value_type	as col1,
 					default_value		as col2,
-					user.username 	as col3,
-					default_date 	as col4
+					user.username 		as col3,
+					default_date 		as col4
 				FROM $track_e_default track_default, $table_user user
 				WHERE track_default.default_user_id = user.user_id ";
 
 		if (isset($_GET['keyword'])) {
-		$keyword = Database::escape_string($_GET['keyword']);
+		$keyword = Database::escape_string(trim($_GET['keyword']));
 		$sql .= " AND (user.username LIKE '%".$keyword."%' OR default_event_type LIKE '%".$keyword."%' OR default_value_type LIKE '%".$keyword."%' OR default_value LIKE '%".$keyword."%') ";
 		}
 
@@ -132,10 +119,10 @@ class Statistics
 		}
 		$sql .=	" LIMIT $from,$number_of_items ";
 
-		$res = Database::query($sql, __FILE__, __LINE__);
+		$res = Database::query($sql);
 		$activities = array ();
 		while ($row = Database::fetch_row($res)) {
-			$row[4] = api_format_date(DATE_TIME_FORMAT_LONG, strtotime($row[4]));
+			$row[4] = api_get_local_time($row[4], null, date_default_timezone_get());
 			$activities[] = $row;
 		}
 		return $activities;
@@ -148,8 +135,8 @@ class Statistics
 	function get_course_categories()
 	{
 		$category_table = Database :: get_main_table(TABLE_MAIN_CATEGORY);
-		$sql = "SELECT * FROM $category_table ORDER BY tree_pos";
-		$res = Database::query($sql, __FILE__, __LINE__);
+		$sql = "SELECT code, name FROM $category_table ORDER BY tree_pos";
+		$res = Database::query($sql);
 		$categories = array ();
 		while ($category = Database::fetch_object($res))
 		{
@@ -263,7 +250,7 @@ class Statistics
 				$sql = "SELECT DATE_FORMAT( login_date, '%w' ) AS stat_date , count( login_id ) AS number_of_logins FROM ".$table." GROUP BY stat_date ORDER BY DATE_FORMAT( login_date, '%w' ) ";
 				break;
 		}
-		$res = Database::query($sql,__FILE__,__LINE__);
+		$res = Database::query($sql);
 		$result = array();
 		while($obj = Database::fetch_object($res))
 		{
@@ -296,7 +283,7 @@ class Statistics
 		$sql[get_lang('Total')] 	 = "SELECT count(login_user_id) AS number  FROM $table";
 		foreach($sql as $index => $query)
 		{
-			$res = Database::query($query,__FILE__,__LINE__);
+			$res = Database::query($query);
 			$obj = Database::fetch_object($res);
 			$total_logins[$index] = $obj->number;
 		}
@@ -314,7 +301,7 @@ class Statistics
 			$tool_names[$tool] = get_lang(ucfirst($tool), '');
 		}
 		$sql = "SELECT access_tool, count( access_id ) AS number_of_logins FROM $table WHERE access_tool IN ('".implode("','",$tools)."') GROUP BY access_tool ";
-		$res = Database::query($sql,__FILE__,__LINE__);
+		$res = Database::query($sql);
 		$result = array();
 		while($obj = Database::fetch_object($res))
 		{
@@ -329,7 +316,7 @@ class Statistics
 	{
 		$table = Database::get_main_table(TABLE_MAIN_COURSE);
 		$sql = "SELECT course_language, count( code ) AS number_of_courses FROM $table GROUP BY course_language ";
-		$res = Database::query($sql,__FILE__,__LINE__);
+		$res = Database::query($sql);
 		$result = array();
 		while($obj = Database::fetch_object($res))
 		{
@@ -344,10 +331,10 @@ class Statistics
 	{
 		$user_table = Database :: get_main_table(TABLE_MAIN_USER);
 		$sql = "SELECT COUNT(*) AS n FROM $user_table";
-		$res = Database::query($sql,__FILE__,__LINE__);
+		$res = Database::query($sql);
 		$count1 = Database::fetch_object($res);
 		$sql = "SELECT COUNT(*) AS n FROM $user_table WHERE LENGTH(picture_uri) > 0";
-		$res = Database::query($sql,__FILE__,__LINE__);
+		$res = Database::query($sql);
 		$count2 = Database::fetch_object($res);
 		$result[get_lang('No')] = $count1->n - $count2->n; // #users without picture
 		$result[get_lang('Yes')] = $count2->n; // #users with picture
@@ -416,7 +403,7 @@ class Statistics
 		if (!isset($_GET['date_diff'])) {
 			$defaults['date_diff'] = 60;
 		} else {
-			$defaults['date_diff'] = Security::Remove_XSS($_GET['date_diff']);
+			$defaults['date_diff'] = Security::remove_XSS($_GET['date_diff']);
 		}
 		$form->setDefaults($defaults);
 		$form->display();
@@ -424,13 +411,13 @@ class Statistics
 		$date_diff = $values['date_diff'];
 		$table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LASTACCESS);
 		$sql = "SELECT * FROM $table GROUP BY access_cours_code HAVING access_cours_code <> '' AND DATEDIFF( NOW() , access_date ) <= ". $date_diff;
-		$res = Database::query($sql,__FILE__,__LINE__);
+		$res = Database::query($sql);
 		$number_of_courses = Database::num_rows($res);
 		$sql .= ' ORDER BY '.$columns[$column].' '.$sql_order[$direction];
 		$from = ($page_nr -1) * $per_page;
 		$sql .= ' LIMIT '.$from.','.$per_page;
 		echo '<p>'.get_lang('LastAccess').' &gt;= '.$date_diff.' '.get_lang('Days').'</p>';
-		$res = Database::query($sql, __FILE__, __LINE__);
+		$res = Database::query($sql);
 		if (Database::num_rows($res) > 0)
 		{
 			$courses = array ();
@@ -438,7 +425,7 @@ class Statistics
 			{
 				$course = array ();
 				$course[]= '<a href="'.api_get_path(WEB_PATH).'courses/'.$obj->access_cours_code.'">'.$obj->access_cours_code.' <a>';
-				$course[] = $obj->access_date;
+				$course[] = api_convert_and_format_date($obj->access_date, null, date_default_timezone_get());
 				$courses[] = $course;
 			}
 			$parameters['action'] = 'courselastvisit';
@@ -452,6 +439,52 @@ class Statistics
 		{
 			echo get_lang('NoSearchResults');
 		}
+	}
+
+	/**
+	 * Displays the statistics of the messages sent and received by each user in the social network
+	 * @param string	Type of message sent or received
+	 * @return array	Message list
+	 */
+	function get_messages($message_type) {
+		$message_table = Database::get_main_table(TABLE_MAIN_MESSAGE);
+		$user_table = Database::get_main_table(TABLE_MAIN_USER);
+		switch ($message_type) {
+			case 'sent':
+				$field = 'user_sender_id';
+				break;
+			case 'received':
+				$field = 'user_receiver_id';
+				break;
+		}
+		$sql = "SELECT lastname, firstname, username, COUNT($field) AS count_message
+					FROM ".$message_table." m LEFT JOIN ".$user_table." u ON m.$field = u.user_id
+				GROUP BY m.$field";
+		$res = Database::query($sql);
+		$messages_sent = array();
+		while ($messages = Database::fetch_array($res)) {
+			$users = $messages['firstname'].' '.$messages['lastname'].' ('.$messages['username'].')';
+			$messages_sent[$users] = $messages['count_message'];
+		}
+		return $messages_sent;
+	}
+
+	/**
+	 * Count the number of friends for social network users
+	 */
+	function get_friends() {
+		$user_friend_table = Database::get_main_table(TABLE_MAIN_USER_REL_USER);
+		$user_table = Database::get_main_table(TABLE_MAIN_USER);
+		$sql = "SELECT lastname, firstname, username, COUNT(friend_user_id) AS count_friend
+					FROM ".$user_friend_table." uf LEFT JOIN ".$user_table." u ON uf.user_id = u.user_id WHERE uf.relation_type <> '".USER_RELATION_TYPE_RRHH."'
+				GROUP BY uf.user_id";
+		$res = Database::query($sql);
+		$list_friends = array();
+		while ($friends = Database::fetch_array($res)) {
+			$users = $friends['firstname'].' '.$friends['lastname'].' ('.$friends['username'].')';
+			$list_friends[$users] = $friends['count_friend'];
+		}
+		return $list_friends;
 	}
 }
 ?>

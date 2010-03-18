@@ -21,7 +21,7 @@ class TestHotpotatoes extends UnitTestCase {
 	}
 
 	function testFillFolderName() {
-		$name='12doceletras';
+		$name='testnameofthefolder';
 		$nsize=12;
 		$res=FillFolderName($name,$nsize);
 		$this->assertTrue(is_string($res));
@@ -29,10 +29,12 @@ class TestHotpotatoes extends UnitTestCase {
 	}
 
 	function testGenerateHiddenList() {
-		$imgparams=array('abc');
+		$imgparams=array('test');
 		$res=GenerateHiddenList($imgparams);
 		$this->assertTrue(is_string($res));
 		//var_dump($res);
+
+
 	}
 
 	function testGenerateHpFolder() {
@@ -43,14 +45,15 @@ class TestHotpotatoes extends UnitTestCase {
 	}
 
 	function testGetComment() {
-		global $dbTable;
-		$path = 'test';
-		$course_code='test';
-		$query ="select comment from $dbTable where path='$path'";
-		$res=GetComment($path,$course_code);
-		$this->assertTrue(is_string($res));
-		//var_dump($res);
-	}
+
+			$course_code = 'COURSETEST';
+			$path = 'exercice_submit.php';
+			$query ="select comment from $dbTable where path='$path'";
+			$res=GetComment($path,$course_code);
+			$this->assertTrue(is_string($res));
+			//var_dump($res);
+
+		}
 
 	/*  Deprecated
 	function testGetFileName() {
@@ -92,11 +95,13 @@ class TestHotpotatoes extends UnitTestCase {
 	}
 
 	function testGetQuizName() {
+		$course_code = 'COURSETEST';
 		$fname='exercice_submit.php';
 		$fpath='main/exercice/exercice_submit.php';
 		$res=GetQuizName($fname,$fpath);
+
 		$this->assertTrue(is_string($res));
-		//var_dump($e_contents);
+		//var_dump($res);
 	}
 
 	function testGetSrcName() {
@@ -111,15 +116,6 @@ class TestHotpotatoes extends UnitTestCase {
 		$baseWorkDir=$base.'exercice/';
 		$res=hotpotatoes_init($baseWorkDir);
 		$this->assertFalse($res);
-		//var_dump($res);
-	}
-
-	function testhotpotatoes_initWithRemoveFolder() {
-		$base = '/tmp/';
-		$baseWorkDir=$base.'test123/';
-		$res=hotpotatoes_init($baseWorkDir);
-		$this->assertTrue($res);
-		rmdir($baseWorkDir);
 		//var_dump($res);
 	}
 
@@ -160,13 +156,14 @@ class TestHotpotatoes extends UnitTestCase {
 		$comment='testing this function';
 		$comment = Database::escape_string($comment);
 		$query = "UPDATE $dbTable set comment='$comment' where path='$path'";
-		$result = Database::query($query,__FILE__,__LINE__);
+		$result = Database::query($query);
 		$res=SetComment($path,$comment);
 		$this->assertTrue(is_string($res));
 		//var_dump($resu);
 	}
 
 	function testWriteFileCont() {
+		$course_code = 'COURSETEST';
 		$full_file_path='/main/exercice/';
 		$content='test test test';
 		$res=WriteFileCont($full_file_path,$content);

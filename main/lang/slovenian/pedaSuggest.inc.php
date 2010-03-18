@@ -1,25 +1,26 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $GeneralDescription = "Opis";
-$GeneralDescriptionQuestions = "Vloga in mesto taèaja v programu. Ali teèaj zahteva kakšno doloèeno predznanje? Ali teèaj zahteva od teèajnika predhoden obisk katerega od preostalih teèajev? Kakšne so povezave teèaja z drugimi teèaji oz. drugimi vsebinami (korelacije) ?";
-$GeneralDescriptionInformation = "Opisuje teèaj (število ur, uradna koda teèaja, lokacija izvedbe, številka uèilnice ...) in izvajalca teèaja oz. uèitelja (priimek, ime, kje je dosegljiv, telefonska številka, e-poštni naslov ...).";
+$GeneralDescriptionQuestions = "Vloga in mesto teÄaja v programu. Ali teÄaj zahteva kakÅ¡no doloÄeno predznanje? Ali teÄaj zahteva od teÄajnika predhoden obisk katerega od preostalih teÄajev? KakÅ¡ne so povezave teÄaja z drugimi teÄaji oz. drugimi vsebinami (korelacije) ?";
+$GeneralDescriptionInformation = "Opisuje teÄaj (Å¡tevilo ur, uradna koda teÄaja, lokacija izvedbe, Å¡tevilka uÄilnice ...) in izvajalca teÄaja oz. uÄitelja (priimek, ime, kje je dosegljiv, telefonska Å¡tevilka, e-poÅ¡tni naslov ...).";
 $Objectives = "Cilji";
-$ObjectivesInformation = "Predstavitev splošnih in specifiènih ciljev teèaja.";
-$ObjectivesQuestions = "Kaj bo uporabnik znal in bo zmožen narediti ob koncu teèaja? Katere dejavnosti bo opravljal med samim uènim procesom?";
+$ObjectivesInformation = "Predstavitev sploÅ¡nih in specifiÄnih ciljev teÄaja.";
+$ObjectivesQuestions = "Kaj bo uporabnik znal in bo zmoÅ¾en narediti ob koncu teÄaja? Katere dejavnosti bo opravljal med samim uÄnim procesom?";
 $Topics = "Teme";
-$TopicsInformation = "Seznam tem, vkljuèenih v teèaj. Nivo težavnosti. Struktura in medodvisnosti med posameznimi temami.";
-$TopicsQuestions = "Kako bo napredovala izvedba teèaja? Kje in na katere dele naj teèajniki obraèajo posebno pozornost? Ali so že bili identificirani problemi v razumevanju posameznih tem? Koliko èasa bi naj bilo teèajnikom v na&#269;elu potrebno vložiti pri uèenju posameznega dela teèaja?";
+$TopicsInformation = "Seznam tem, vkljuÄenih v teÄaj. Nivo teÅ¾avnosti. Struktura in medodvisnosti med posameznimi temami.";
+$TopicsQuestions = "Kako bo napredovala izvedba teÄaja? Kje in na katere dele naj teÄajniki obraÄajo posebno pozornost? Ali so Å¾e bili identificirani problemi v razumevanju posameznih tem? Koliko Äasa bi naj bilo teÄajnikom v naÄelu potrebno vloÅ¾iti pri uÄenju posameznega dela teÄaja?";
 $Methodology = "Metodologija";
-$MethodologyQuestions = "Katere metode in kakšne aktivnosti bodo v pomoè doseganju ciljev teèaja? Kako bodo èasovno rezporejene glede na napredovanje izvedbe teèaja oz. kdaj se bodo izvajale?";
-$MethodologyInformation = "Predstavitev aktivnosti (konference, &#269;lanki, prispevki, izvedba laboratorijskih vaj, /raziskovalno/ delo v skupinah, ...)";
+$MethodologyQuestions = "Katere metode in kakÅ¡ne aktivnosti bodo v pomoÄ doseganju ciljev teÄaja? Kako bodo Äasovno rezporejene glede na napredovanje izvedbe teÄaja oz. kdaj se bodo izvajale?";
+$MethodologyInformation = "Predstavitev aktivnosti (konference, Älanki, prispevki, izvedba laboratorijskih vaj, /raziskovalno/ delo v skupinah, ...)";
 $CourseMaterial = "Gradiva";
-$CourseMaterialQuestions = "Ali obstajajo gradiva o obliki uèbenikov, knjig? Bibliografija, seznam spletnih povezav, ... ";
-$CourseMaterialInformation = "Kratek opis gradiv teèaja.";
-$HumanAndTechnicalResources = " Èloveški in tehnièni viri";
-$HumanAndTechnicalResourcesQuestions = "Kdo so uèitelji, tutorji, asistenti, ali obstaja in kje je tehnièna pomoè, kje so (raèunalniške) uèilnice, laboratoriji, lokacije v/na katerih se bodo izvajale predvidene dejavnosti?";
-$HumanAndTechnicalResourcesInformation = "Kratek opis, ki bo služil identifikaciji raznih kontaktnih oseb in dostopnih tehniènih sredstev.";
-$Assessment  = "Evaluacija (ocenjevanje)";
-$AssessmentQuestions = "Kako se bo izvajalo ocenjevanje uporabnikov teèaja? Ali obstajajo strategije (oz. so te v razvoju), ki bodo v pomoè pri obvladovanju vsebin?";
-$AssessmentInformation = "Primeri testnih vprašanj. Kriterij uspešnosti. Nasveti, napotki, ... (tips and tricks).";
+$CourseMaterialQuestions = "Ali obstajajo gradiva o obliki uÄbenikov, knjig? Bibliografija, seznam spletnih povezav, ...";
+$CourseMaterialInformation = "Kratek opis gradiv teÄaja.";
+$HumanAndTechnicalResources = " ÄŒloveÅ¡ki in tehniÄni viri";
+$HumanAndTechnicalResourcesQuestions = "Kdo so uÄitelji, tutorji, asistenti, ali obstaja in kje je tehniÄna pomoÄ, kje so (raÄunalniÅ¡ke) uÄilnice, laboratoriji, lokacije v/na katerih se bodo izvajale predvidene dejavnosti?";
+$HumanAndTechnicalResourcesInformation = "Kratek opis, ki bo sluÅ¾il identifikaciji raznih kontaktnih oseb in dostopnih tehniÄnih sredstev.";
+$Assessment = "Evaluacija (ocenjevanje)";
+$AssessmentQuestions = "Kako se bo izvajalo ocenjevanje uporabnikov teÄaja? Ali obstajajo strategije (oz. so te v razvoju), ki bodo v pomoÄ pri obvladovanju vsebin?";
+$AssessmentInformation = "Primeri testnih vpraÅ¡anj. Kriterij uspeÅ¡nosti. Nasveti, napotki, ... (tips and tricks).";
 ?>

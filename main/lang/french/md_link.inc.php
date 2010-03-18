@@ -1,46 +1,47 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$langMdCallingTool = "Liens";
-$langMdTitle = "Nom du lien";
-$langMdDescription = "Description du lien";
-$langMdCoverage = "Universel";
-$langMdCopyright = "UniversitÈ de Gand";
-$nameTools = "variable dÈsuËte de langage";
-$langTool = "Liens Metadata";
-$langNoScript = "Le script n\'est pas permis dans votre navigateur, svp ignorer l\'Ècran au-dessous de ce texte, il ne fonctionnera pas...";
-$langLanguageTip = "Langue utilisÈe pour cet Objet d\'Apprentissage";
-$langIdentifier = "Login";
-$langIdentifierTip = "seule identification pour cet objet d\'apprentissage, composÈe de lettres, chiffres, _-.()\\\'!*";
-$langTitleTip = "titre ou nom, et langage de ce titre ou nom";
-$langDescriptionTip = "description, commentaires et langue utilisÈs pour dÈcrire cet Objet d\'Apprentissage";
-$langKeyword = "Mots clÈs";
-$langKeywordTip = "sÈparer par des virgules (lettres, chiffres, )";
-$langCoverage = "CatÈgorie";
-$langCoverageTip = "Nom de catÈgorie";
-$langKwNote = "Si vous modifiez la langue utilisÈe pour la description, n\'ajoutez pas de mot-clÈ en mÍme temps";
-$langClickKw = "Cliquez sur un mot-clÈ dans l\'arborescence pour le sÈlectionner ou le dÈsÈlectionner.";
-$langKwHelp = "<br/> Cliquez sur le bouton + pour ouvrir, sur le bouton - pour fermer, sur le bouton ++ pour les ouvrir tous.<br/> <br/> Effacez tous les mots-clÈs en fermant l\'arborescence et pour l\'ouvrir, encore le bouton +. <br/>Alt-clic + recherche les mots-clÈs initiaux dans l\'arborescence.<br/> <br/> Alt-click mot-clÈ choisit un mot-clÈ sans  limite plus large ou dÈsÈlectionne un mot-clÈ avec des  limites plus larges.<br/> <br/> Si vous changez le langage de description, n\'ajoutez pas de mots-clÈs en mÍme temps.<br/> <br/>";
-$langLocation = "Adresse URL";
-$langLocationTip = "Cliquez pour ouvrir l\'objet";
-$langStore = "Mettre en mÈmoire";
-$langDeleteAll = "supprimer tous les Metadata";
-$langConfirmDelete = " tes-vous *certain* de vouloir effacer toutes les mÈtadonnÈes ?";
+$langMdCallingTool = "Documents";
+$langMdTitle = "Titre de l'objet";
+$langMdDescription = "Pour enregistrer les donn√©es, poussez sur Enregistrer";
+$langMdCoverage = "p.e. Baccalaur√©at en ...";
+$langMdCopyright = "p.e. moyennant mention de la source";
+$nameTools = "variable d√©su√®te de langage";
+$langTool = "M√©tadonn√©es document";
+$langNoScript = "Script n'est pas disponible dans le navigateur, la partie ci-dessous de l'√©cran ne marchera pas...";
+$langLanguageTip = "la langue dans laquelle cet objet a √©t√© construit";
+$langIdentifier = "Identification";
+$langIdentifierTip = "identification unique pour cet objet, lettres, chiffres, _-.()'!*";
+$langTitleTip = "titre ou nom, et langue du titre ou nom";
+$langDescriptionTip = "description ou commentaire, et langue utilis√©e pour d√©crire l'objet";
+$langKeyword = "Mot-cl√©";
+$langKeywordTip = "s√©parez-les par des virgules (lettres, chiffres, -.)";
+$langCoverage = "Objectif";
+$langCoverageTip = "p.e. Baccalaur√©at en ...";
+$langKwNote = "Si vous changez la langue de la description, n'ajoutez pas de nouveaux mots cl√© en m√™me temps.";
+$langClickKw = "Clic pour s√©lectionner ou annuler un mot cl√©.";
+$langKwHelp = "<br />Clic '+' pour ouvrir, '-' pour fermer, '++' pour ouvrir tout, '--' pour tout fermer.<br /><br />Pour annuler les choix pr√©c√©dents, fermez l'arborescence et r√©-ouvrez-l√† avec '+'.<br />Pour remettre les mots cl√© originaux, ouvrez-l√† avec Alt-clic '+'.<br /><br />Alt-clic mot cl√© s√©lectionne un mot cl√© sans termes plus large etannulle avec termes plus larges.<br /><br />Si vous changez la langue de la description, n'ajoutez pas de nouveaux mots cl√© en m√™me temps.<br /><br />";
+$langLocation = "URL/URI";
+$langLocationTip = "clickez pour ouvrir l'objet";
+$langStore = "Enregistrer";
+$langDeleteAll = "Enlever toutes les m√©tadonn√©es";
+$langConfirmDelete = "Enlever *vraiment* toutes les m√©tadonn√©es?";
 $langWorkOn = "sur";
-$langNotInDB = "Cette catÈgorie n\'a pas pu Ítre trouvÈe";
+$langNotInDB = "Cette cat√©gorie n'a pas pu √™tre trouv√©e";
 $langManifestSyntax = "(erreur de syntaxe dans le fichier manifeste...)";
 $langEmptyManifest = "(le fichier manifeste est vide...)";
 $langNoManifest = "(pas de fichier manifeste...)";
-$langNotFolder = "est impossible, ce n\'est pas un rÈpertoire...";
+$langNotFolder = "est impossible, ce n'est pas un r√©pertoire...";
 $langContinue = "Continuer avec";
-$langCreate = "CrÈer des entrÈes de MÈtadonnÈes";
-$langRemove = "Supprimer des entrÈes de MÈtadonnÈes";
-$langAllRemovedFor = "Toutes les entrÈes ont ÈtÈ retirÈes de la catÈgorie";
-$langRemainingFor = "les entrÈes obsolËtes ont ÈtÈ supprimÈes de la catÈgorie";
+$langCreate = "cr√©er";
+$langRemove = "Supprimer des entr√©es de M√©tadonn√©es";
+$langAllRemovedFor = "Toutes les entr√©es ont √©t√© retir√©es de la cat√©gorie";
+$langRemainingFor = "les entr√©es obsol√®tes ont √©t√© supprim√©es de la cat√©gorie";
 $langIndex = "Index";
-$langTotalMDEs = "Nombre total d\'entrÈes de MÈtadonnÈes";
+$langTotalMDEs = "Nombre total d'entr√©es de M√©tadonn√©es";
 $langMainMD = "Ouvrir le MDE principal";
-$langOrElse = "SÈlectionnez une catÈgorie de liens";
-$langWarningDups = "- les noms de dossiers en double seront retirÈs de la liste !";
-$langSLC = "Travailler avec un dossier de liens nommÈ";
+$langOrElse = "S√©lectionnez une cat√©gorie de liens";
+$langWarningDups = "- les noms de cat√©gories en double seront retir√©s de la liste !";
+$langSLC = "Travailler avec une cat√©gorie de liens nomm√©e";
 ?>

@@ -6,14 +6,15 @@
 ==============================================================================
 */
 // name of the language file that needs to be included
-$language_file = array('admin','registration');
+$language_file = array('admin', 'registration');
 $cidReset = true;
 
 // including necessary libraries
-require ('../inc/global.inc.php');
+require '../inc/global.inc.php';
 $libpath = api_get_path(LIBRARY_PATH);
-include_once ($libpath.'usermanager.lib.php');
-require_once ($libpath.'formvalidator/FormValidator.class.php');
+require_once $libpath.'sortabletable.class.php';
+require_once $libpath.'usermanager.lib.php';
+require_once $libpath.'formvalidator/FormValidator.class.php';
 
 // section for the tabs
 $this_section=SECTION_PLATFORM_ADMIN;
@@ -212,6 +213,7 @@ function type_filter($type)
 	$types[USER_FIELD_TYPE_DOUBLE_SELECT] 		= get_lang('FieldTypeDoubleSelect');
 	$types[USER_FIELD_TYPE_DIVIDER] 			= get_lang('FieldTypeDivider');
 	$types[USER_FIELD_TYPE_TAG] 				= get_lang('FieldTypeTag');
+	$types[USER_FIELD_TYPE_TIMEZONE]			= get_lang('FieldTypeTimezone');
 	return $types[$type];
 }
 
@@ -319,7 +321,7 @@ function move_user_field($direction,$field_id)
 	$found = false;
 
 	$sql = "SELECT id, field_order FROM $table_user_field ORDER BY field_order $sortdirection";
-	$result = Database::query($sql,__FILE__,__LINE__);
+	$result = Database::query($sql);
 	while($row = Database::fetch_array($result))
 	{
 		if ($found)
@@ -339,8 +341,8 @@ function move_user_field($direction,$field_id)
 
 	$sql1 = "UPDATE ".$table_user_field." SET field_order = '".Database::escape_string($next_order)."' WHERE id =  '".Database::escape_string($this_id)."'";
 	$sql2 = "UPDATE ".$table_user_field." SET field_order = '".Database::escape_string($this_order)."' WHERE id =  '".Database::escape_string($next_id)."'";
-	Database::query($sql1,__FILE__,__LINE__);
-	Database::query($sql2,__FILE__,__LINE__);
+	Database::query($sql1);
+	Database::query($sql2);
 
 	return true;
 }
@@ -364,26 +366,26 @@ function delete_user_fields($field_id)
 
 	// delete the fields
 	$sql = "DELETE FROM $table_user_field WHERE id = '".Database::escape_string($field_id)."'";
-	$result = Database::query($sql,__FILE__,__LINE__);
+	$result = Database::query($sql);
 	if (Database::affected_rows() == 1)
 	{
 		// delete the field options
 		$sql = "DELETE FROM $table_user_field_options WHERE field_id = '".Database::escape_string($field_id)."'";
-		$result = Database::query($sql,__FILE__,__LINE__);
+		$result = Database::query($sql);
 
 		// delete the field values
 		$sql = "DELETE FROM $table_user_field_values WHERE field_id = '".Database::escape_string($field_id)."'";
-		$result = Database::query($sql,__FILE__,__LINE__);
+		$result = Database::query($sql);
 
 		// recalculate the field_order because the value is used to show/hide the up/down icon
 		// and the field_order value cannot be bigger than the number of fields
 		$sql = "SELECT * FROM $table_user_field ORDER BY field_order ASC";
-		$result = Database::query($sql,__FILE__,__LINE__);
+		$result = Database::query($sql);
 		$i = 1;
 		while($row = Database::fetch_array($result))
 		{
 			$sql_reorder = "UPDATE $table_user_field SET field_order = '".Database::escape_string($i)."' WHERE id = '".Database::escape_string($row['id'])."'";
-			$result_reorder = Database::query($sql_reorder,__FILE__,__LINE__);
+			$result_reorder = Database::query($sql_reorder);
 			$i++;
 		}
 

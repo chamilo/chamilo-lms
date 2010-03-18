@@ -1,45 +1,45 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $LinkMoved = "Linket er blevet flyttet";
-$langLinkName = "Linknavn";
-$langLinkAdd = "Tilføj et link";
-$langLinkAdded = "Linket er nu tilføjet";
+$langLinkName = "Link navn";
+$langLinkAdd = "TilfÃ¸j et link";
+$langLinkAdded = "Linket er nu tilfÃ¸jet";
 $langLinkMod = "Rediger link";
-$langLinkModded = "Linket er ændret";
+$langLinkModded = "Linket er Ã¦ndret";
 $langLinkDel = "Link er slettet";
-$langLinkDeleted = "Linket er ændret";
+$langLinkDeleted = "Linket er Ã¦ndret";
 $langLinkDelconfirm = "Vil du slette dette link?";
 $langAllLinksDel = "Slet alle links i denne kategori?";
 $langCategoryName = "Kategorinavn";
-$langCategoryAdd = "Tilføj en kategori";
-$langCategoryAdded = "Kategorien er tilføjet";
-$langCategoryModded = "Kategorien er nu ændret";
+$langCategoryAdd = "TilfÃ¸j en kategori";
+$langCategoryAdded = "Kategorien er tilfÃ¸jet";
+$langCategoryModded = "Kategorien er nu Ã¦ndret";
 $langCategoryDel = "Slet kategori";
-$langCategoryDeleted = "Kategorien og tilhørende links er nu slettet";
-$langCategoryDelconfirm = "Når kategorien slettes, slettes ligeså kategoriens links.\\nVil du virkeligt slette denne kategori og kategoriens links?";
+$langCategoryDeleted = "Kategorien og tilhÃ¸rende links er nu slettet";
+$langCategoryDelconfirm = "NÃ¥r kategorien slettes, slettes ligesÃ¥ kategoriens links.\nVil du virkeligt slette denne kategori og kategoriens links?";
 $langAllCategoryDel = "Slet alle kategorier og links";
 $langGiveURL = "Venligst angiv linkets URL";
 $langGiveCategoryName = "Skriv et kategorinavn";
 $langNoCategory = "Ingen kategori";
-$showall = "Åbn alle kategorier";
+$showall = "Ã…bn alle kategorier";
 $shownone = "Luk alle kategorier";
 $langListDeleted = "Listen er slettet";
-$langAddLink = "Tilføj link";
+$langAddLink = "TilfÃ¸j link";
 $langDelList = "Slet hele listen";
 $langModifyLink = "Rediger link";
-$langCsvImport = "Importér CSV fil";
-$langCsvFileNotFound = "Den importerede CSV fil kunne ikke åbnes (filen er evt. tom eller fylder for meget)";
+$langCsvImport = "CSV import";
+$langCsvFileNotFound = "Den importerede CSV fil kunne ikke Ã¥bnes (filen er evt. tom eller fylder for meget)";
 $langCsvFileNoSeps = "CSV import skal bruge komma eller semikolon som listeseparator";
 $langCsvFileNoURL = "CSV import fil skal som minimum have kolonnerne URL og titel";
 $langCsvFileLine1 = "...- linie 1 =";
 $langCsvLinesFailed = "linie(r) kunne ikke importere link (ingen URL eller titel)";
 $langCsvLinesOld = "eksisterende link(s) er opdateret (samme URL og kategori)";
 $langCsvLinesNew = "nyt/e link/s er oprettet";
-$langCsvExplain = "Filen skulle gerne se ud som følgende: <blockquote><pre> <b>URL</b>;categori;<b>title</b>;beskrivelse; <b>http://www.aaa.org/...</b>;Vigtige links;<b>Navn 1</b>;Beskrivelse 1; <b>http://www.bbb.net/...</b>;;<b>Navn 2</b>;\"Beskrivelse 2\"; </pre></blockquote> Filen skulle gerne se ud som følgende på linie 1: <br><br>URL;category;title;description;<br><br>Linie 2 kunne se således ud:<br><br>http://www.dr.dk;Medier;DR;DR\'s hjemmeside;<br><br>Hvis URL og kategori er lig med eksisterende link, titel og beskrivelse, så er disse opdaterede. I alle andre tilfælde oprettes et nyt link.<br><br><b>Fed</b> = obligatorisk. <br>Felter kan stå i hvilken som helst rækkefølge. <br> Nnavne kan stå med store og små bogstaver. <br>Ekstra felter er tilføjet beskrivelse. <br>Separator: komma eller semikolon. <br>Værdier kan stå i anførselstegn, men ikke feltnavne.";
+$langCsvExplain = "Filen skulle gerne se ud som fÃ¸lgende: <blockquote><pre> <b>URL</b>;categori;<b>title</b>;beskrivelse; <b>http://www.aaa.org/...</b>;Vigtige links;<b>Navn 1</b>;Beskrivelse 1; <b>http://www.bbb.net/...</b>;;<b>Navn 2</b>;\"Beskrivelse 2\"; </pre></blockquote> Filen skulle gerne se ud som fÃ¸lgende pÃ¥ linie 1: <br><br>URL;category;title;description;<br><br>Linie 2 kunne se sÃ¥ledes ud:<br><br>http://www.dr.dk;Medier;DR;DR's hjemmeside;<br><br>Hvis URL og kategori er lig med eksisterende link, titel og beskrivelse, sÃ¥ er disse opdaterede. I alle andre tilfÃ¦lde oprettes et nyt link.<br><br><b>Fed</b> = obligatorisk. <br>Felter kan stÃ¥ i hvilken som helst rÃ¦kkefÃ¸lge. <br> Nnavne kan stÃ¥ med store og smÃ¥ bogstaver. <br>Ekstra felter er tilfÃ¸jet beskrivelse. <br>Separator: komma eller semikolon. <br>VÃ¦rdier kan stÃ¥ i anfÃ¸rselstegn, men ikke feltnavne.";
 $langLinkUpdated = "Linket er opdateret";
 $langAll_Link_Deleted = "Linket er slettet";
-$langOnHomepage = "Vis link på hjemmesiden";
-$langShowLinkOnHomepage = "Vis dette link som ikon på kursets hjemmeside";
-$langCsvImport = "CSV import";
+$langOnHomepage = "Vis link pÃ¥ hjemmesiden";
+$langShowLinkOnHomepage = "Vis dette link som ikon pÃ¥ kursets hjemmeside";
 ?>

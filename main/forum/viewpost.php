@@ -35,7 +35,7 @@ api_protect_course_script(true);
 require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
 include_once (api_get_path(LIBRARY_PATH).'groupmanager.lib.php');
 //require_once (api_get_path(LIBRARY_PATH).'resourcelinker.lib.php');
-$nameTools=get_lang('Forum');
+$nameTools=get_lang('ToolForum');
 
 /*
 -----------------------------------------------------------
@@ -85,7 +85,7 @@ if (isset($_SESSION['gradebook'])){
 if (!empty($gradebook) && $gradebook=='view') {
 	$interbreadcrumb[]= array (
 			'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
-			'name' => get_lang('Gradebook')
+			'name' => get_lang('ToolGradebook')
 		);
 }
 
@@ -109,7 +109,10 @@ if ($origin=='learnpath') {
 // if the user is not a course administrator and the forum is hidden
 // then the user is not allowed here.
 if (!api_is_allowed_to_edit(false,true) AND ($current_forum['visibility']==0 OR $current_thread['visibility']==0)) {
-	forum_not_allowed_here();
+	$forum_allow = forum_not_allowed_here();
+	if ($forum_allow === false) {
+		exit;
+	}
 }
 
 /*

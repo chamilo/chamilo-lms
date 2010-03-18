@@ -1,0 +1,6 @@
+name = "Session Block"
+controller = "BlockSession"
+description = "Display information about sessions inside platform"
+package = Dashboard
+version = 1.0 
+author = Christian Fasanando

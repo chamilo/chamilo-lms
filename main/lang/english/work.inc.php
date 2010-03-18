@@ -1,16 +1,17 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$Tools  = "Tools";
+$Tools = "Tools";
 $SendWork = "Upload paper";
-$langTooBig = "You haven\'t selected a file or the file is too big.";
-$langListDeleted = "The whole list has been deleted.";
+$langTooBig = "You didn't choose any file to send, or it is too big";
+$langListDeleted = "List has been deleted";
 $langDocModif = "paper title modified";
 $langDocAdd = "The file has been added to the list of publications.";
 $langDocDel = "File deleted";
 $langTitleWork = "Paper title";
 $langAuthors = "Authors";
-$langDelList = "Delete whole list";
+$langDelList = "Delete list";
 $langWorkDelete = "Delete";
 $langWorkModify = "Edit";
 $langWorkConfirmDelete = "Do you really want to delete this file";
@@ -19,11 +20,11 @@ $lang_default_upload = "Default setting for the visibility of newly posted files
 $lang_new_visible = "New documents are visible for all users";
 $lang_new_unvisible = "New documents are only visible for the trainer(s)";
 $lang_doc_unvisible = "Your file is only visible to the trainer(s) and will therefore not be visible to you.";
-$langDelLk = "Delete Link";
+$langDelLk = "Do you really want to delete this link?";
 $langMustBeRegisteredUser = "Only registered users of this training can publish documents.";
 $langListDel = "Delete list";
-$langNameDir = "Rename directory";
-$langFileExists = "File already exists";
+$langNameDir = "Name of the new folder";
+$langFileExists = "The operation is impossible, a file with this name already exists.";
 $CreateDirectory = "Validate";
 $langCurrentDir = "current folder";
 $UploadADocument = "Submit paper";
@@ -43,7 +44,7 @@ $ExpiresAt = "Expires at";
 $AddToCalendar = "Add to calendar";
 $DirectoryCreated = "Directory created";
 $Assignment = "Assignments";
-$AdvancedParameters = "Advanced parameters";
+$AdvancedParameters = "Advanced settings";
 $ExpiryDateToSendWorkIs = "Deadline for assignments";
 $EnableExpiryDate = "Enable expiry date";
 $EnableEndDate = "Enable end date";
@@ -73,8 +74,17 @@ $FolderEdited = "Folder edited";
 $UpdateWork = "Update this task";
 $MakeAllPapersInvisible = "Make all papers invisible";
 $MakeAllPapersVisible = "Make all papers visible";
-$StudentAllowedToDeleteOwnPublication = "Allow to the students delete your own publication";
 $TheDocumentHasBeenDeleted = "The document has been deleted.";
 $YouAreNotAllowedToDeleteThisDocument = "You are not allowed to delete this document";
-$ConfirmYourChoiceDeleteAllfiles = "Confirm your choice will delete all files and can not be recovered";
+$StudentAllowedToDeleteOwnPublication = "Allow learners to delete their own publications";
+$ConfirmYourChoiceDeleteAllfiles = "Please confirm your choice. This will delete all files without possibility of recovery";
+$WorkName = "Assignment name";
+$ReminderToSubmitPendingTask = "Please remember you still have to send an assignment";
+$MessageConfirmSendingOfTask = "This is a message confirming the good reception of the task";
+$DataSent = "Data sent";
+$DownloadLink = "Download link";
+$ViewUsersWithTask = "Assignments received";
+$ReminderMessage = "Send a reminder";
+$DateSent = "Date sent";
+$ViewUsersWithoutTask = "View missing assignments";
 ?>

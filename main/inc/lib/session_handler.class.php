@@ -1,39 +1,10 @@
-<?php // $Id: session_handler.class.php 22311 2009-07-23 15:39:23Z iflorespaz $
-/*
-===============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2004-2007 Dokeos S.A.
-	Copyright (c) 2003 Ghent University (UGent)
-	Copyright (c) 2001 Universite catholique de Louvain (UCL)
-	Copyright (c) Hugues Peeters
-	Copyright (c) Christophe Gesche
-	Copyright (c) Roan Embrechts
-	Copyright (c) Patrick Cool
-	Copyright (c) Olivier Brouckaert
-	Copyright (c) Toon Van Hoecke
-	Copyright (c) Denes Nagy
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact: Dokeos, 181 rue Royale, B-1000 Brussels, Belgium, info@dokeos.com
-===============================================================================
-*/
+<?php
+/* For licensing terms, see /license.txt */
 /**
-==============================================================================
 *	This class allows to manage the session. Session is stored in
 *	the database
 *
-*	@package dokeos.library
-==============================================================================
+*	@package chamilo.library
 */
 
 class session_handler {
@@ -59,7 +30,7 @@ class session_handler {
 		{
 			$this->idConnexion=@mysql_connect($this->connexion['server'],$this->connexion['login'],$this->connexion['password'],true);
 
-			// The Dokeos system has not been designed to use special SQL modes that were introduced since MySQL 5
+			// The system has not been designed to use special SQL modes that were introduced since MySQL 5
 			@mysql_query("set session sql_mode='';", $this->idConnexion);
 		}
 
@@ -80,13 +51,14 @@ class session_handler {
 	}
 
 	public function sqlQuery ($query,$die_on_error=true) {
+
 		$result=mysql_query($query,$this->idConnexion);
 
 		if($die_on_error && !$result)
 		{
 			$this->sqlClose();
-
-			exit();
+			return;
+			//exit();
 		}
 
 		return $result;

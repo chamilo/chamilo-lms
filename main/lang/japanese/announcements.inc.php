@@ -1,25 +1,26 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $Announcement = "????";
-$langAnnEmpty = "¤ªÃÎ¤é¤»¤ò¤¹¤Ù¤Æ¡¢ºï½ü¤¹¤ë";
-$AnnouncementModified = "¤ªÃÎ¤é¤»½¤Àµ";
-$AnnouncementAdded = "¤ªÃÎ¤é¤»ÄÉ²Ã";
-$AnnouncementDeleted = "¤ªÃÎ¤é¤»ºï½ü";
-$AnnouncementPublishedOn = "¸ø³«";
-$AddAnnouncement = "¤ªÃÎ¤é¤»ÄÉ²Ã";
-$langContent = "ÆâÍÆ";
-$AnnouncementDeleteAll = "¤ªÃÎ¤é¤»¤ò¤¹¤Ù¤Æ¡¢ºï½ü¤¹¤ë";
+$langAnnEmpty = "ãŠæ¢¦ã‚‰ã›ã‚’ã™ã¹ã¦ã€çŒ´è¿‘ã™ã‚‹";
+$AnnouncementModified = "ãŠæ¢¦ã‚‰ã›é¥¯èµ–";
+$AnnouncementAdded = "ãŠæ¢¦ã‚‰ã›çº³è£";
+$AnnouncementDeleted = "ãŠæ¢¦ã‚‰ã›çŒ´è¿‘";
+$AnnouncementPublishedOn = "ç»™å€¡";
+$AddAnnouncement = "ãŠæ¢¦ã‚‰ã›çº³è£";
+$langContent = "æŸ’æŽ¨";
+$AnnouncementDeleteAll = "ãŠæ¢¦ã‚‰ã›ã‚’ã™ã¹ã¦ã€çŒ´è¿‘ã™ã‚‹";
 $professorMessage = "Message from your professor";
 $langEmailSent = " and emailed to registered students";
 $EmailOption = "Send this announcement by email to registered students";
 $langOn = "On";
 $langRegUser = "registered users of the site";
 $langUnvalid = "have unvalid or no email address";
-$langModify    = "½¤Àµ";
-$langDelete    = "ºï½ü";
-$langTitle     = "¥¿¥¤¥È¥ë";
-$langHelp      = "¤Ø¥ë¥×";
-$langOk        = "OK";
-$langBackList  = "¥ê¥¹¥È¤ËÌá¤ë";
+$langModify = "é¥¯èµ–";
+$langDelete = "çŒ´è¿‘";
+$langTitle = "ã‚¿ã‚¤ãƒˆãƒ«";
+$langHelp = "ã¸ãƒ«ãƒ—";
+$langOk = "OK";
+$langBackList = "ãƒªã‚¹ãƒˆã«æã‚‹";
 ?>

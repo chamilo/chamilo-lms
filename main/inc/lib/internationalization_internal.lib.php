@@ -1,14 +1,14 @@
 <?php
+/* For licensing terms, see /license.txt */
+
 /**
- * ==============================================================================
  * File: internationalization_internal.lib.php
- * Main API extension library for Dokeos 1.8.7 LMS,
+ * Main API extension library for Chamilo 1.8.7 LMS,
  * contains functions for internal use only.
  * License: GNU/GPL version 2 or later (Free Software Foundation)
- * @author Ivan Tcholakov, <ivantcholakov@gmail.com>, September 2009
+ * @author Ivan Tcholakov, <ivantcholakov@gmail.com>, 2009, 2010
  * @author More authors, mentioned in the correpsonding fragments of this source.
- * @package dokeos.library
- * ==============================================================================
+ * @package chamilo.library
  *
  * Note: All functions and data structures here are not to be used directly.
  * See the file internationalization.lib.php which contains the "public" API.
@@ -16,9 +16,7 @@
 
 
 /**
- * ----------------------------------------------------------------------------
  * Internal constants
- * ----------------------------------------------------------------------------
  */
 
 // A regular expression for accessing declared encoding within xml-formatted text.
@@ -28,9 +26,7 @@ define('_PCRE_XML_ENCODING', '/<?xml.*encoding=[\'"](.*?)[\'"].*?>/m');
 
 
 /**
- * ----------------------------------------------------------------------------
  * Global variables used by some callback functions
- * ----------------------------------------------------------------------------
  */
 
 $_api_encoding = null;
@@ -38,9 +34,7 @@ $_api_collator = null;
 
 
 /**
- * ----------------------------------------------------------------------------
  * Appendix to "Language support"
- * ----------------------------------------------------------------------------
  */
 
 /**
@@ -90,9 +84,137 @@ function _api_get_latin1_compatible_languages() {
 
 
 /**
- * ----------------------------------------------------------------------------
+ * Appendix to "Language recognition"
+ * Based on the publication:
+ * W. B. Cavnar and J. M. Trenkle. N-gram-based text categorization.
+ * Proceedings of SDAIR-94, 3rd Annual Symposium on Document Analysis
+ * and Information Retrieval, 1994.
+ * @link http://citeseer.ist.psu.edu/cache/papers/cs/810/http:zSzzSzwww.info.unicaen.frzSz~giguetzSzclassifzSzcavnar_trenkle_ngram.pdf/n-gram-based-text.pdf
+ */
+
+/**
+ * Generates statistical, based on n-grams language profile from the given text.
+ * @param string $string				The input text. It should be UTF-8 encoded. Practically it should be at least 3000 characters long, 40000 characters size is for increased accuracy.
+ * @param int $n_grams_max (optional)	The size of the array of the generated n-grams.
+ * @param int $n_max (optional)			The limit if the number of characters that a n-gram may contain.
+ * @return array						An array that contains cunstructed n-grams, sorted in reverse order by their frequences. Frequences are not stored in the array.
+ */
+function &_api_generate_n_grams(&$string, $encoding, $n_grams_max = 350, $n_max = 4) {
+	if (empty($string)) {
+		return array();
+	}
+	// We construct only lowercase n-grams if it is applicable for the given language.
+	// Removing all puntuation and some other non-letter characters. Apostrophe characters stay.
+	// Splitting the sample text into separate words.
+	$words = preg_split('/_/u', preg_replace('/[\x00-\x1F\x20-\x26\x28-\x3E\?@\x5B-\x60{|}~\x7F]/u', '_', ' '.api_strtolower(api_utf8_encode($string, $encoding), 'UTF-8').' '), -1, PREG_SPLIT_NO_EMPTY);
+	$prefix = '_'; // Beginning of a word.
+	$suffix = str_repeat('_', $n_nax); // End of a word. Only the last '_' stays.
+	$n_grams = array(); // The array that will contain the constructed n-grams.
+	foreach ($words as $word) {
+		$k = api_strlen($word, 'UTF-8') + 1;
+		$word = $prefix.$word.$suffix;
+		for ($n = 1; $n <= $n_max; $n++) {
+			for ($i = 0; $i < $k; $i++) {
+				$n_gram = api_utf8_decode(api_substr($word, $i, $n, 'UTF-8'), $encoding);
+				if (isset($n_grams[$n_gram])) {
+					$n_grams[$n_gram]++;
+				} else {
+					$n_grams[$n_gram] = 1;
+				}
+			}
+		}
+	}
+	// Sorting the n-grams in reverse order by their frequences.
+	arsort($n_grams);
+	// Reduction the number of n-grams.
+	return array_keys(array_slice($n_grams, 0, $n_grams_max));
+}
+
+/**
+ *
+ * The value $max_delta = 80000 is good enough for speed and detection accuracy.
+ * If you set the value of $max_delta too low, no language will be recognized.
+ * $max_delta = 400 * 350 = 140000 is the best detection with lowest speed.
+ */
+function & _api_compare_n_grams(&$n_grams, $encoding, $max_delta = LANGUAGE_DETECT_MAX_DELTA) {
+	static $language_profiles;
+	if (!isset($language_profiles)) {
+		// Reading the language profile files from the internationalization database.
+		$exceptions = array('.', '..', 'CVS', '.htaccess', '.svn', '_svn', 'index.html');
+		$path = str_replace("\\", '/', dirname(__FILE__).'/internationalization_database/language_detection/language_profiles/');
+		$non_utf8_encodings = & _api_non_utf8_encodings();
+		if (is_dir($path)) {
+			if ($handle = @opendir($path)) {
+				while (($dir_entry = @readdir($handle)) !== false) {
+					if (api_in_array_nocase($dir_entry, $exceptions)) continue;
+					if (strpos($dir_entry, '.txt') === false) continue;
+					$dir_entry_full_path = $path .'/'. $dir_entry;
+					if (@filetype($dir_entry_full_path) != 'dir') {
+						if (false !== $data = @file_get_contents($dir_entry_full_path)) {
+							$language = basename($dir_entry_full_path, '.txt');
+							$encodings = array('UTF-8');
+							if (!empty($non_utf8_encodings[$language])) {
+								$encodings = array_merge($encodings, $non_utf8_encodings[$language]);
+							}
+							foreach ($encodings as $enc) {
+								$data_enc = api_utf8_decode($data, $enc);
+								if (empty($data_enc)) {
+									continue;
+								}
+								$key = $language.':'.$enc;
+								$language_profiles[$key]['data'] = array_flip(explode("\n", $data_enc));
+								$language_profiles[$key]['language'] = $language;
+								$language_profiles[$key]['encoding'] = $enc;
+							}
+						}
+					}
+				}
+			}
+		}
+		@closedir($handle);
+		ksort($language_profiles);
+	}
+	if (!is_array($n_grams) || empty($n_grams)) {
+		return array();
+	}
+	// Comparison between the input n-grams and the lanuage profiles.
+	foreach ($language_profiles as $key => &$language_profile) {
+		if (!api_is_language_supported($language_profile['language']) || !api_equal_encodings($encoding, $language_profile['encoding'])) {
+			continue;
+		}
+		$delta = 0; // This is a summary measurment for matching between the input text and the current language profile.
+		// Searching each n-gram from the input text into the language profile.
+		foreach ($n_grams as $rank => &$n_gram) {
+			if (isset($language_profile['data'][$n_gram])) {
+				// The n-gram has been found, the difference between places in both
+				// arrays is calculated (so called delta-points are adopted for
+				// measuring distances between n-gram ranks.
+				$delta += abs($rank - $language_profile['data'][$n_gram]);
+			} else {
+				// The n-gram has not been found in the profile. We add then
+				// a large enough "distance" in delta-points.
+				$delta += 400;
+			}
+			// Abort: This language already differs too much.
+			if ($delta > $max_delta) {
+				break;
+			}
+		}
+		// Include only non-aborted languages in result array.
+		if ($delta < ($max_delta - 400)) {
+			$result[$key] = $delta;
+		}
+	}
+	if (!isset($result)) {
+		return array();
+	}
+	asort($result);
+	return $result;
+}
+
+
+/**
  * Appendix to "Date and time formats"
- * ----------------------------------------------------------------------------
  */
 
 /**
@@ -122,9 +244,7 @@ function &_api_get_day_month_names($language = null) {
 
 
 /**
- * ----------------------------------------------------------------------------
  * Appendix to "Name order conventions"
- * ----------------------------------------------------------------------------
  */
 
 /**
@@ -186,9 +306,7 @@ function _api_clean_person_name($person_name) {
 
 
 /**
- * ----------------------------------------------------------------------------
  * Appendix to "Multibyte string conversion functions"
- * ----------------------------------------------------------------------------
  */
 
 /**
@@ -199,45 +317,46 @@ function _api_clean_person_name($person_name) {
  * @param string $from_encoding				The encoding that $string is being converted from.
  * @return string							Returns the converted string.
  */
-function _api_convert_encoding($string, $to_encoding, $from_encoding) {
+function _api_convert_encoding(&$string, $to_encoding, $from_encoding) {
+	$str = (string)$string;
 	static $character_map = array();
 	static $utf8_compatible = array('UTF-8', 'US-ASCII');
-	if (empty($string)) {
-		return $string;
+	if (empty($str)) {
+		return $str;
 	}
 	$to_encoding = api_refine_encoding_id($to_encoding);
 	$from_encoding = api_refine_encoding_id($from_encoding);
 	if (api_equal_encodings($to_encoding, $from_encoding)) {
-		return $string;
+		return $str;
 	}
 	if ($to_encoding == 'HTML-ENTITIES') {
-		return api_htmlentities($string, ENT_QUOTES, $from_encoding);
+		return api_htmlentities($str, ENT_QUOTES, $from_encoding);
 	}
 	if ($from_encoding == 'HTML-ENTITIES') {
-		return api_html_entity_decode($string, ENT_QUOTES, $to_encoding);
+		return api_html_entity_decode($str, ENT_QUOTES, $to_encoding);
 	}
 	$to = _api_get_character_map_name($to_encoding);
 	$from = _api_get_character_map_name($from_encoding);
 	if (empty($to) || empty($from) || $to == $from || (in_array($to, $utf8_compatible) && in_array($from, $utf8_compatible))) {
-		return $string;
+		return $str;
 	}
 	if (!isset($character_map[$to])) {
 		$character_map[$to] = &_api_parse_character_map($to);
 	}
 	if ($character_map[$to] === false) {
-		return $string;
+		return $str;
 	}
 	if (!isset($character_map[$from])) {
 		$character_map[$from] = &_api_parse_character_map($from);
 	}
 	if ($character_map[$from] === false) {
-		return $string;
+		return $str;
 	}
 	if ($from != 'UTF-8') {
-		$len = api_byte_count($string);
+		$len = api_byte_count($str);
 		$codepoints = array();
 		for ($i = 0; $i < $len; $i++) {
-			$ord = ord($string[$i]);
+			$ord = ord($str[$i]);
 			if ($ord > 127) {
 				if (isset($character_map[$from]['local'][$ord])) {
 					$codepoints[] = $character_map[$from]['local'][$ord];
@@ -249,7 +368,7 @@ function _api_convert_encoding($string, $to_encoding, $from_encoding) {
 			}
 		}
 	} else {
-		$codepoints = _api_utf8_to_unicode($string);
+		$codepoints = _api_utf8_to_unicode($str);
 	}
 	if ($to != 'UTF-8') {
 		foreach ($codepoints as $i => &$codepoint) {
@@ -263,11 +382,11 @@ function _api_convert_encoding($string, $to_encoding, $from_encoding) {
 				$codepoint = chr($codepoint);
 			}
 		}
-		$string = implode($codepoints);
+		$str = implode($codepoints);
 	} else {
-		$string = _api_utf8_from_unicode($codepoints);
+		$str = _api_utf8_from_unicode($codepoints);
 	}
-	return $string;
+	return $str;
 }
 
 /**
@@ -335,16 +454,17 @@ function &_api_parse_character_map($name) {
  * @author Henri Sivonen, mailto:hsivonen@iki.fi
  * @link http://hsivonen.iki.fi/php-utf8/
  * @author Ivan Tcholakov, August 2009, adaptation for the Dokeos LMS.
-*/
-function _api_utf8_to_unicode($string) {
+ */
+function _api_utf8_to_unicode(&$string) {
+	$str = (string)$string;
 	$state = 0;			// cached expected number of octets after the current octet
 						// until the beginning of the next UTF8 character sequence
 	$codepoint  = 0;	// cached Unicode character
 	$bytes = 1;			// cached expected number of octets in the current sequence
 	$result = array();
-	$len = api_byte_count($string);
+	$len = api_byte_count($str);
 	for ($i = 0; $i < $len; $i++) {
-		$byte = ord($string[$i]);
+		$byte = ord($str[$i]);
 		if ($state == 0) {
 			// When state is zero we expect either a US-ASCII character or a multi-octet sequence.
 			if (0 == (0x80 & ($byte))) {
@@ -446,7 +566,7 @@ function _api_utf8_to_unicode($string) {
  * Takes an array of Unicode codepoints and returns a UTF-8 string.
  * @param array $codepoints				An array of Unicode codepoints representing a string.
  * @return string						Returns a UTF-8 string constructed using the given codepoints.
-*/
+ */
 function _api_utf8_from_unicode($codepoints) {
 	return implode(array_map('_api_utf8_chr', $codepoints));
 }
@@ -548,9 +668,7 @@ function _api_convert_encoding_xml_callback($matches) {
 
 
 /**
- * ----------------------------------------------------------------------------
  * Appendix to "Common multibyte string functions"
- * ----------------------------------------------------------------------------
  */
 
 /**
@@ -636,9 +754,7 @@ function _api_utf8_ucwords_callback($matches) {
 
 
 /**
- * ----------------------------------------------------------------------------
  * Appendix to "Common sting operations with arrays"
- * ----------------------------------------------------------------------------
  */
 
 /**
@@ -659,9 +775,7 @@ function _api_array_utf8_decode($variable) {
 
 
 /**
- * ----------------------------------------------------------------------------
  * Appendix to "String comparison"
- * ----------------------------------------------------------------------------
  */
 
 /**
@@ -791,9 +905,7 @@ function _api_get_collator_sort_flag($sort_flag = SORT_REGULAR) {
 
 
 /**
- * ----------------------------------------------------------------------------
  * ICU locales (accessible through intl extension).
- * ----------------------------------------------------------------------------
  */
 
 /**
@@ -809,8 +921,7 @@ function _api_get_locale_from_language($language = null) {
 		$language = api_get_interface_language();
 	}
 	if (!isset($locale[$language])) {
-		$locale[$language] = api_get_language_isocode($language);
-		$locale[$language] = empty($locale[$language]) ? 'en' : str_replace('-', '_', $locale[$language]);
+		$locale[$language] = str_replace('-', '_', api_get_language_isocode($language));
 	}
 	return $locale[$language];
 }
@@ -846,9 +957,7 @@ function api_get_default_locale() {
 
 
 /**
- * ----------------------------------------------------------------------------
  * Appendix to "Encoding management functions"
- * ----------------------------------------------------------------------------
  */
 
 /**
@@ -1096,9 +1205,7 @@ function _api_html_entity_supports($encoding) {
 
 
 /**
- * ----------------------------------------------------------------------------
  * Upgrading the PHP5 mbstring extension
- * ----------------------------------------------------------------------------
  */
 
 // A multibyte replacement of strchr(). This function exists in PHP 5 >= 5.2.0

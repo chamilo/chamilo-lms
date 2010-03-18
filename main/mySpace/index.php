@@ -1,31 +1,33 @@
 <?php // $Id: index.php 16620 2008-10-25 20:03:54Z yannoo $
-/* For licensing terms, see /dokeos_license.txt */
+/* For licensing terms, see /license.txt */
 /**
  * @todo use constant for $this_section
  */
 // name of the language file that needs to be included
-$language_file = array ('registration', 'index', 'tracking');
+$language_file = array('registration', 'index', 'tracking');
 
 // resetting the course id
 $cidReset = true;
 
 // including the global Dokeos file
-require '../inc/global.inc.php';
+require_once '../inc/global.inc.php';
 
 // including additional libraries
-require api_get_path(LIBRARY_PATH).'tracking.lib.php';
+require_once api_get_path(LIBRARY_PATH).'sortabletable.class.php';
+require_once api_get_path(LIBRARY_PATH).'tracking.lib.php';
 require_once api_get_path(LIBRARY_PATH).'course.lib.php';
+require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
 require_once api_get_path(LIBRARY_PATH).'export.lib.inc.php';
+require_once 'myspace.lib.php';
 
 // the section (for the tabs)
-$this_section = "session_my_space";
-
+$this_section = SECTION_TRACKING;
 ob_start();
 
 $export_csv = isset($_GET['export']) && $_GET['export'] == 'csv' ? true : false;
 $csv_content = array();
 
-$nameTools = get_lang("MySpace");
+$nameTools = get_lang('MySpace');
 
 // access control
 api_block_anonymous_users();
@@ -33,7 +35,7 @@ if (!$export_csv) {
 	Display :: display_header($nameTools);
 } else {
 	if ($_GET['view'] == 'admin' AND $_GET['display'] == 'useroverview') {
-		export_tracking_user_overview();
+		MySpace::export_tracking_user_overview();
 		exit;
 	}
 }
@@ -49,7 +51,7 @@ $tbl_session_user 			= Database :: get_main_table(TABLE_MAIN_SESSION_USER);
 $tbl_session_course_user 	= Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 $tbl_admin					= Database :: get_main_table(TABLE_MAIN_ADMIN);
 $tbl_track_cours_access 	= Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
-	
+
 
 /********************
  * FUNCTIONS
@@ -73,6 +75,28 @@ function rsort_users($a, $b) {
 	return api_strcmp(trim(api_strtolower($b[$_SESSION['tracking_column']])), trim(api_strtolower($a[$_SESSION['tracking_column']])));
 }
 
+function count_sessions_coached() {
+	global $nb_sessions;
+	return $nb_sessions;
+}
+
+function sort_sessions($a, $b) {
+	global $tracking_column;
+	if ($a[$tracking_column] > $b[$tracking_column]) {
+		return 1;
+	} else {
+		return -1;
+	}
+}
+
+function rsort_sessions($a, $b) {
+	global $tracking_column;
+	if ($b[$tracking_column] > $a[$tracking_column]) {
+		return 1;
+	} else {
+		return -1;
+	}
+}
 
 /**************************
  * MAIN CODE
@@ -80,52 +104,63 @@ function rsort_users($a, $b) {
 
 $is_coach = api_is_coach();
 $is_platform_admin = api_is_platform_admin();
+$is_drh = api_is_drh();
+$is_session_admin = api_is_session_admin();
 
-$view = isset($_GET['view']) ? $_GET['view'] : 'teacher';
+if ($is_session_admin) {
+	header('location:session.php');
+	exit;
+}
+
+// get views
+$views = array('admin', 'teacher', 'coach', 'drh');
+$view = 'teacher';
+if (isset($_GET['view']) && in_array($_GET['view'], $views)) {
+	$view = $_GET['view'];
+}
 
 $menu_items = array();
+$nb_teacher_courses = 0;
 global $_configuration;
 
-if (api_is_allowed_to_create_course()) {
-	$sql_nb_cours = "SELECT course_rel_user.course_code, course.title
-			FROM $tbl_course_user as course_rel_user
-			INNER JOIN $tbl_course as course
-				ON course.code = course_rel_user.course_code
-			WHERE course_rel_user.user_id='".$_user['user_id']."' AND course_rel_user.status='1'
-			ORDER BY course.title";
+// interbreadcrumbs
+if (api_is_allowed_to_create_course() && $_GET['display'] != 'yourstudents') {
 
-	if ($_configuration['multiple_access_urls'] == true) {
-		$tbl_course_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
-		$access_url_id = api_get_current_access_url_id();
-		if ($access_url_id != -1) {
-			$sql_nb_cours = "	SELECT course_rel_user.course_code, course.title
-				FROM $tbl_course_user as course_rel_user
-				INNER JOIN $tbl_course as course
-					ON course.code = course_rel_user.course_code
-			  	INNER JOIN $tbl_course_rel_access_url course_rel_url
-					ON (course_rel_url.course_code= course.code)
-			  	WHERE access_url_id =  $access_url_id  AND course_rel_user.user_id='".$_user['user_id']."' AND course_rel_user.status='1'
-			  	ORDER BY course.title";
-		}
+	$session_id = intval($_GET['session_id']);
+	if (!empty($session_id)) {
+		$courses = Tracking::get_courses_followed_by_coach($_user['user_id'], $session_id);
+	} else {
+		$courses  = CourseManager::get_course_list_of_user_as_course_admin($_user['user_id']);
 	}
 
-	$result_nb_cours = Database::query($sql_nb_cours, __FILE__, __LINE__);
-	$courses = Database::store_result($result_nb_cours);
-
 	$nb_teacher_courses = count($courses);
-	if ($nb_teacher_courses) {
+
+	$sessions = Tracking::get_sessions_coached_by_user($_user['user_id']);
+	$nb_sessions = count($sessions);
+
+	if ($nb_teacher_courses || $nb_sessions) {
 		if (!$is_coach && !$is_platform_admin) {
 			$view = 'teacher';
 		}
-		if ($view == 'teacher') {
+
+		if ($view == 'teacher' && empty($session_id)) {
 			$menu_items[] = get_lang('TeacherInterface');
-			$title = get_lang('YourCourseList');
+
+			if ($nb_teacher_courses) {
+				$title = get_lang('YourCourseList');
+			}
+
 		} else {
+			if (!empty($session_id)) {
+				$session_name = api_get_session_name($session_id);
+				$title = ucfirst($session_name);
+			}
 			$menu_items[] = '<a href="'.api_get_self().'?view=teacher">'.get_lang('TeacherInterface').'</a>';
 		}
 	}
 }
-if ($is_coach) {
+
+if ($is_coach && $_GET['display'] != 'yourstudents') {
 	if ($nb_teacher_courses == 0 && !$is_platform_admin) {
 		$view = 'coach';
 	}
@@ -136,40 +171,53 @@ if ($is_coach) {
 		$menu_items[] = '<a href="'.api_get_self().'?view=coach">'.get_lang('CoachInterface').'</a>';
 	}
 }
-if ($is_platform_admin) {
-	if (!$is_coach && $nb_teacher_courses == 0) {
+
+if ($is_platform_admin &&  $_GET['display'] != 'yourstudents') {
+
+	if ($nb_teacher_courses == 0 && $nb_sessions == 0) {
 		$view = 'admin';
 	}
 	if ($view == 'admin') {
 		$menu_items[] = get_lang('AdminInterface');
 		$title = get_lang('CoachList');
+		//$menu_items[] = $title;
 	} else {
 		$menu_items[] = '<a href="'.api_get_self().'?view=admin">'.get_lang('AdminInterface').'</a>';
 	}
 }
-if ($_user['status'] == DRH) {
+
+if ($is_drh || $_GET['display'] == 'yourstudents') {
 	$view = 'drh';
-	$title = get_lang('DrhInterface');
-	$menu_items[] = '<a href="'.api_get_self().'?view=drh">'.get_lang('DrhInterface').'</a>';
+	$menu_items[] = get_lang('Students');
+	$menu_items[] = '<a href="teachers.php">'.get_lang('Trainers').'</a>';
+	$menu_items[] = '<a href="course.php">'.get_lang('Courses').'</a>';
+	$menu_items[] = '<a href="session.php">'.get_lang('Sessions').'</a>';
 }
 
-echo '<div class="actions">';
+// actions menu
+echo '<div class="actions-title" style ="font-size:10pt;">';
 $nb_menu_items = count($menu_items);
 if ($nb_menu_items > 1) {
 	foreach ($menu_items as $key => $item) {
 		echo $item;
 		if ($key != $nb_menu_items - 1) {
-			echo ' | ';
+			echo '&nbsp;|&nbsp;';
 		}
 	}
 }
-echo '<a href="javascript: void(0);" onclick="javascript: window.print()"><img align="absbottom" src="../img/printmgr.gif">&nbsp;'.get_lang('Print').'</a> ';
-echo (isset($_GET['display']) &&  $_GET['display'] == 'useroverview')? '' : '<a href="'.api_get_self().'?export=csv&view='.$view.'"><img align="absbottom" src="../img/excel.gif">&nbsp;'.get_lang('ExportAsCSV').'</a>';
+
+echo '&nbsp;&nbsp;<a href="javascript: void(0);" onclick="javascript: window.print()"><img align="absbottom" src="../img/printmgr.gif">&nbsp;'.get_lang('Print').'</a> ';
+if ($view == 'admin') {
+	echo (isset($_GET['display']) &&  $_GET['display'] == 'useroverview')? '<a href="'.api_get_self().'?display=useroverview&export=csv&view='.$view.'"><img align="absbottom" src="../img/csv.gif">&nbsp;'.get_lang('ExportAsCSV').'</a>' : '';
+} else {
+	echo (isset($_GET['display']) &&  $_GET['display'] == 'useroverview')? '' : '<a href="'.api_get_self().'?export=csv&view='.$view.'"><img align="absbottom" src="../img/csv.gif">&nbsp;'.get_lang('ExportAsCSV').'</a>';
+}
 echo '</div>';
 echo '<h4>'.$title.'</h4>';
 
-if ($_user['status'] == DRH && $view == 'drh') {
-	$students = Tracking :: get_student_followed_by_drh($_user['user_id']);
+if (($is_drh && $view == 'drh') || $_GET['display'] == 'yourstudents') {
+	// get data for human resources manager
+	$students = array_keys(UserManager::get_users_followed_by_drh($_user['user_id'], STUDENT));
 	$courses_of_the_platform = CourseManager :: get_real_course_list();
 	foreach ($courses_of_the_platform as $course) {
 		$courses[$course['code']] = $course['code'];
@@ -182,8 +230,8 @@ if ($is_coach && $view == 'coach') {
 }
 
 if ($view == 'coach' || $view == 'drh') {
-	$nb_students = count($students);
 
+	$nb_students = count($students);
 	$total_time_spent = 0;
 	$total_courses = 0;
 	$avg_total_progress = 0;
@@ -193,15 +241,8 @@ if ($view == 'coach' || $view == 'drh') {
 	foreach ($students as $student_id) {
 		// inactive students
 		$last_connection_date = Tracking :: get_last_connection_date($student_id, true, true);
-		if ($last_connection_date != false) {
-			/*
-			list($last_connection_date, $last_connection_hour) = explode(' ', $last_connection_date);
-			$last_connection_date = explode('-', $last_connection_date);
-			$last_connection_hour = explode(':', $last_connection_hour);
-			$last_connection_hour[0];
-			$last_connection_time = mktime($last_connection_hour[0], $last_connection_hour[1], $last_connection_hour[2], $last_connection_date[1], $last_connection_date[2], $last_connection_date[0]);
-			*/
-			if (time() - (3600 * 24 * 7) > $last_connection_time) {
+		if ($last_connection_date !== false) {
+			if (time() - (3600 * 24 * 7) > $last_connection_date) {
 				$nb_inactive_students++;
 			}
 		} else {
@@ -226,11 +267,11 @@ if ($view == 'coach' || $view == 'drh') {
 			}
 		}
 		// average progress of the student
-		$avg_student_progress = $avg_student_progress / $nb_courses_student;
+		$avg_student_progress = $nb_courses_student ?$avg_student_progress / $nb_courses_student:0;
 		$avg_total_progress += $avg_student_progress;
 
 		// average test results of the student
-		$avg_student_score = $avg_student_score / $nb_courses_student;
+		$avg_student_score = $avg_student_score?$avg_student_score / $nb_courses_student:0;
 		$avg_results_to_exercises += $avg_student_score;
 	}
 
@@ -272,7 +313,7 @@ if ($view == 'coach' || $view == 'drh') {
 		echo '
 		 <div class="report_section">
 			<h4>
-				<a href="student.php"><img src="'.api_get_path(WEB_IMG_PATH).'students.gif">&nbsp;'.get_lang('Probationers').' ('.$nb_students.')'.'</a>
+				<a href="student.php?display=yourstudents"><img src="'.api_get_path(WEB_IMG_PATH).'students.gif">&nbsp;'.get_lang('Probationers').' ('.$nb_students.')'.'</a>
 			</h4>
 			<table class="data_table">
 				<tr>
@@ -331,11 +372,12 @@ if ($view == 'coach' || $view == 'drh') {
 						'.(is_null($nb_assignments) ? '' : round($nb_assignments, 2)).'
 					</td>
 				</tr>
-			</table>
-			<a href="student.php">'.get_lang('SeeStudentList').'</a>
+			</table><br />
+			<a href="student.php?display=yourstudents">'.get_lang('SeeStudentList').'</a>
 		 </div>';
 	}
 }
+
 if ($view == 'coach') {
 	/****************************************
 	 * Infos about sessions of the coach
@@ -439,9 +481,9 @@ if ($view == 'coach') {
 echo '<div class="clear">&nbsp;</div>';
 
 if (api_is_allowed_to_create_course() && $view == 'teacher') {
-	
+
 	if ($nb_teacher_courses) {
-		$table = new SortableTable('courses', 'get_number_of_courses' ,'get_course_data');						
+		$table = new SortableTable('courses', 'get_number_of_courses' ,array('MySpace','get_course_data'));
 		$parameters['view'] = 'teacher';
 		$parameters['class'] = 'data_table';
 		$table->set_additional_parameters($parameters);
@@ -464,19 +506,69 @@ if (api_is_allowed_to_create_course() && $view == 'teacher') {
 			get_lang('AvgExercisesScore', ''),
 			get_lang('AvgMessages', ''),
 			get_lang('AvgAssignments', '')
-		);		
+		);
 		$table->display();
+	}
+
+	// display sessions
+	if ($nb_sessions > 0 && !isset($_GET['session_id'])) {
+		echo '<h4>'.get_lang('Sessions').'</h4>';
+		$table = new SortableTable('tracking_sessions', 'count_sessions_coached');
+		$table->set_header(0, get_lang('Title'));
+		$table->set_header(1, get_lang('Date'));
+		$table->set_header(2, get_lang('NbCoursesPerSession'));
+		$table->set_header(3, get_lang('Details'), false);
+
+		$all_data = array();
+		foreach ($sessions as $session) {
+			$count_courses_in_session = count(Tracking::get_courses_followed_by_coach($_user['user_id'], $session['id']));
+			$row = array();
+			$row[] = $session['name'];
+
+			if ($session['date_start'] != '0000-00-00' && $session['date_end'] != '0000-00-00') {
+				$row[] = get_lang('From').' '.api_convert_and_format_date($session['date_start'], DATE_FORMAT_SHORT, date_default_timezone_get()).' '.get_lang('To').' '.api_convert_and_format_date($session['date_end'], DATE_FORMAT_SHORT, date_default_timezone_get());
+			} else {
+				$row[] = ' - ';
+			}
+			$row[] = $count_courses_in_session;
+			$row[] = '<a href="'.api_get_self().'?session_id='.$session['id'].'"><img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a>';
+			$all_data[] = $row;
+		}
+
+		if (!isset($tracking_column)) {
+			$tracking_column = 0;
+		}
+
+		if ($_GET['tracking_direction'] == 'DESC') {
+			usort($all_data, 'rsort_sessions');
+		} else {
+			usort($all_data, 'sort_sessions');
+		}
+
+		if ($export_csv) {
+			usort($csv_content, 'sort_sessions');
+		}
+
+		foreach ($all_data as $row) {
+			$table -> addRow($row);
+		}
+
+		$table -> setColAttributes(1, array('align' => 'center'));
+		$table -> setColAttributes(2, array('align' => 'center'));
+		$table -> setColAttributes(3, array('align' => 'center'));
+		$table -> display();
 	}
 }
 
-if ($is_platform_admin && $view == 'admin') {
+if ($is_platform_admin && $view == 'admin' && $_GET['display'] != 'yourstudents') {
 	echo '<a href="'.api_get_self().'?view=admin&amp;display=coaches">'.get_lang('DisplayCoaches').'</a> | ';
 	echo '<a href="'.api_get_self().'?view=admin&amp;display=useroverview">'.get_lang('DisplayUserOverview').'</a>';
 	if ($_GET['display'] == 'useroverview') {
 		echo ' | <a href="'.api_get_self().'?view=admin&amp;display=useroverview&amp;export=options">'.get_lang('ExportUserOverviewOptions').'</a>';
 	}
+	echo '<br /><br />';
 	if ($_GET['display'] === 'useroverview') {
-		display_tracking_user_overview();
+		MySpace::display_tracking_user_overview();
 	} else {
 		if ($export_csv) {
 			$is_western_name_order = api_is_western_name_order(PERSON_NAME_DATA_EXPORT);
@@ -536,8 +628,8 @@ if ($is_platform_admin && $view == 'admin') {
 		$sqlCoachs = "SELECT DISTINCT scu.id_user as id_coach, user_id, lastname, firstname, MAX(login_date) as login_date
 			FROM $tbl_user, $tbl_session_course_user scu, $tbl_track_login
 			WHERE scu.id_user=user_id AND scu.status=2  AND login_user_id=user_id
-			GROUP BY user_id ";		
-			
+			GROUP BY user_id ";
+
 		if ($_configuration['multiple_access_urls'] == true) {
 			$tbl_session_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
 			$access_url_id = api_get_current_access_url_id();
@@ -552,7 +644,7 @@ if ($is_platform_admin && $view == 'admin') {
 			$sqlCoachs .= "ORDER BY ".$order[$tracking_column]." ".$tracking_direction;
 		}
 
-		$result_coaches = Database::query($sqlCoachs, __FILE__, __LINE__);
+		$result_coaches = Database::query($sqlCoachs);
 		$total_no_coaches = Database::num_rows($result_coaches);
 		$global_coaches = array();
 		while ($coach = Database::fetch_array($result_coaches)) {
@@ -577,7 +669,7 @@ if ($is_platform_admin && $view == 'admin') {
 			}
 		}
 
-		$result_sessions_coach = Database::query($sql_session_coach, __FILE__, __LINE__);
+		$result_sessions_coach = Database::query($sql_session_coach);
 		$total_no_coaches += Database::num_rows($result_sessions_coach);
 		while ($coach = Database::fetch_array($result_sessions_coach)) {
 			$global_coaches[$coach['user_id']] = $coach;
@@ -662,552 +754,19 @@ if ($is_platform_admin && $view == 'admin') {
 // send the csv file if asked
 if ($export_csv) {
 	ob_end_clean();
-	/*echo "<pre>";
-	print_r($csv_content);
-	echo "</pre>";*/
 	Export :: export_table_csv($csv_content, 'reporting_index');
+	exit;
 }
 
 //footer
 if (!$export_csv) {
 	Display::display_footer();
 }
-
 /**
- * This function exports the table that we see in display_tracking_user_overview()
- *
- * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
- * @version Dokeos 1.8.6
- * @since October 2008
- */
-function export_tracking_user_overview() {
-	// database table definitions
-	$tbl_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
-
-	$is_western_name_order = api_is_western_name_order(PERSON_NAME_DATA_EXPORT);
-	$sort_by_first_name = api_sort_by_first_name();
-
-	// the values of the sortable table
-	if ($_GET['tracking_user_overview_page_nr']) {
-		$from = $_GET['tracking_user_overview_page_nr'];
-	} else {
-		$from = 0;
-	}
-	if ($_GET['tracking_user_overview_column']) {
-		$orderby = $_GET['tracking_user_overview_column'];
-	} else {
-		$orderby = 0;
-	}
-	if ($is_western_name_order != api_is_western_name_order() && ($orderby == 1 || $orderby == 2)) {
-		// Swapping the sorting column if name order for export is different than the common name order.
-		$orderby = 3 - $orderby;
-	}
-	if ($_GET['tracking_user_overview_direction']) {
-		$direction = $_GET['tracking_user_overview_direction'];
-	} else {
-		$direction = 'ASC';
-	}
-
-	$user_data = get_user_data_tracking_overview($from, 1000, $orderby, $direction);
-
-	// the first line of the csv file with the column headers
-	$csv_row = array();
-	$csv_row[] = get_lang('OfficialCode');
-	if ($is_western_name_order) {
-		$csv_row[] = get_lang('FirstName', '');
-		$csv_row[] = get_lang('LastName', '');
-	} else {
-		$csv_row[] = get_lang('LastName', '');
-		$csv_row[] = get_lang('FirstName', '');
-	}
-	$csv_row[] = get_lang('LoginName');
-	$csv_row[] = get_lang('CourseCode');
-	// the additional user defined fields (only those that were selected to be exported)
-	require_once (api_get_path(LIBRARY_PATH).'usermanager.lib.php');
-	$fields = UserManager::get_extra_fields(0, 50, 5, 'ASC');
-	if (is_array($_SESSION['additional_export_fields'])) {
-		foreach ($_SESSION['additional_export_fields'] as $key => $extra_field_export) {
-			$csv_row[] = $fields[$extra_field_export][3];
-			$field_names_to_be_exported[] = 'extra_'.$fields[$extra_field_export][1];
-		}
-	}
-	$csv_row[] = get_lang('AvgTimeSpentInTheCourse', '');
-	$csv_row[] = get_lang('AvgStudentsProgress', '');
-	$csv_row[] = get_lang('AvgCourseScore', '');
-	$csv_row[] = get_lang('AvgExercisesScore', '');
-	$csv_row[] = get_lang('AvgMessages', '');
-	$csv_row[] = get_lang('AvgAssignments', '');
-	$csv_row[] = get_lang('TotalExercisesScoreObtained', '');
-	$csv_row[] = get_lang('TotalExercisesScorePossible', '');
-	$csv_row[] = get_lang('TotalExercisesAnswered', '');
-	$csv_row[] = get_lang('TotalExercisesScorePercentage', '');
-	$csv_row[] = get_lang('FirstLogin', '');
-	$csv_row[] = get_lang('LatestLogin', '');
-	$csv_content[] = $csv_row;
-
-	// the other lines (the data)
-	foreach ($user_data as $key => $user) {
-		// getting all the courses of the user
-		$sql = "SELECT * FROM $tbl_course_user WHERE user_id = '".Database::escape_string($user[4])."'";
-		$result = Database::query($sql, __FILE__, __LINE__);
-		while ($row = Database::fetch_row($result)) {
-			$csv_row = array();
-			// user official code
-			$csv_row[] = $user[0];
-			// user first|last name
-			$csv_row[] = $user[1];
-			// user last|first name
-			$csv_row[] = $user[2];
-			// user login name
-			$csv_row[] = $user[3];
-			// course code
-			$csv_row[] = $row[0];
-			// the additional defined user fields
-			$extra_fields = get_user_overview_export_extra_fields($user[4]);
-			if (is_array($field_names_to_be_exported)) {
-				foreach ($field_names_to_be_exported as $key => $extra_field_export) {
-					$csv_row[] = $extra_fields[$extra_field_export];
-				}
-			}
-			// time spent in the course
-			$csv_row[] = api_time_to_hms(Tracking :: get_time_spent_on_the_course ($user[4], $row[0]));
-			// student progress in course
-			$csv_row[] = round(Tracking :: get_avg_student_progress ($user[4], $row[0]), 2);
-			// student score
-			$csv_row[] = round(Tracking :: get_avg_student_score ($user[4], $row[0]), 2);
-			// student tes score
-			$csv_row[] = round(Tracking :: get_avg_student_exercise_score ($user[4], $row[0]), 2);
-			// student messages
-			$csv_row[] = Tracking :: count_student_messages ($user[4], $row[0]);
-			// student assignments
-			$csv_row[] = Tracking :: count_student_assignments ($user[4], $row[0]);
-			// student exercises results
-			$exercises_results = exercises_results($user[4], $row[0]);
-			$csv_row[] = $exercises_results['score_obtained'];
-			$csv_row[] = $exercises_results['score_possible'];
-			$csv_row[] = $exercises_results['questions_answered'];
-			$csv_row[] = $exercises_results['percentage'];
-			// first connection
-			$csv_row[] = Tracking :: get_first_connection_date_on_the_course ($user[4], $row[0]);
-			// last connection
-			$csv_row[] = strip_tags(Tracking :: get_last_connection_date_on_the_course ($user[4], $row[0]));
-
-			$csv_content[] = $csv_row;
-		}
-	}
-	Export :: export_table_csv($csv_content, 'reporting_user_overview');
-}
-
-/**
- * Display a sortable table that contains an overview off all the reporting progress of all users and all courses the user is subscribed to
- *
- * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
- * @version Dokeos 1.8.6
- * @since October 2008
- */
-function display_tracking_user_overview() {
-	display_user_overview_export_options();
-
-	$t_head .= '	<table style="width: 100%;border:0;padding:0;border-collapse:collapse;table-layout: fixed">';
-	$t_head .= '	<caption>'.get_lang('CourseInformation').'</caption>';
-	$t_head .=		'<tr>';
-	$t_head .= '		<th width="155px" style="border-left:0;border-bottom:0"><span>'.get_lang('Course').'</span></th>';
-	$t_head .= '		<th style="padding:0;border-bottom:0"><span>'.cut(get_lang('AvgTimeSpentInTheCourse'), 6, true).'</span></th>';
-	$t_head .= '		<th style="padding:0;border-bottom:0"><span>'.cut(get_lang('AvgStudentsProgress'), 6, true).'</span></th>';
-	$t_head .= '		<th style="padding:0;border-bottom:0"><span>'.cut(get_lang('AvgCourseScore'), 6, true).'</span></th>';
-	//$t_head .= '		<th><div style="width:40px">'.get_lang('AvgExercisesScore').'</div></th>';
-	$t_head .= '		<th style="padding:0;border-bottom:0"><span>'.cut(get_lang('AvgMessages'), 6, true).'</span></th>';
-	$t_head .= '		<th style="padding:0;border-bottom:0"><span>'.cut(get_lang('AvgAssignments'), 6, true).'</span></th>';
-	$t_head .= '		<th width="105px" style="border-bottom:0"><span>'.get_lang('TotalExercisesScoreObtained').'</span></th>';
-	//$t_head .= '		<th><div>'.get_lang('TotalExercisesScorePossible').'</div></th>';
-	$t_head .= '		<th style="padding:0;border-bottom:0"><span>'.cut(get_lang('TotalExercisesAnswered'), 6, true).'</span></th>';
-	//$t_head .= '		<th><div>'.get_lang('TotalExercisesScorePercentage').'</div></th>';
-	//$t_head .= '		<th><div style="width:60px">'.get_lang('FirstLogin').'</div></th>';
-	$t_head .= '		<th style="padding:0;border-bottom:0;border-right:0;"><span>'.get_lang('LatestLogin').'</span></th>';
-	$t_head .= '	</tr></table>';
-
-	$addparams = array('view' => 'admin', 'display' => 'useroverview');
-
-	$table = new SortableTable('tracking_user_overview', 'get_number_of_users_tracking_overview', 'get_user_data_tracking_overview', 0);
-	$table->additional_parameters = $addparams;
-
-	$table->set_header(0, get_lang('OfficialCode'), true, array('style' => 'font-size:8pt'), array('style' => 'font-size:8pt'));
-	if (api_is_western_name_order()) {
-		$table->set_header(1, get_lang('FirstName'), true, array('style' => 'font-size:8pt'), array('style' => 'font-size:8pt'));
-		$table->set_header(2, get_lang('LastName'), true, array('style' => 'font-size:8pt'), array('style' => 'font-size:8pt'));
-	} else {
-		$table->set_header(1, get_lang('LastName'), true, array('style' => 'font-size:8pt'), array('style' => 'font-size:8pt'));
-		$table->set_header(2, get_lang('FirstName'), true, array('style' => 'font-size:8pt'), array('style' => 'font-size:8pt'));
-	}
-	$table->set_header(3, get_lang('LoginName'), true, array('style' => 'font-size:8pt'), array('style' => 'font-size:8pt'));
-	$table->set_header(4, $t_head, false, array('style' => 'width:90%;border:0;padding:0;font-size:7.5pt;'), array('style' => 'width:90%;padding:0;font-size:7.5pt;'));
-	$table->set_column_filter(4, 'course_info_tracking_filter');
-	$table->display();
-}
-
-/**
- * get the numer of users of the platform
- *
- * @return integer
- *
- * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
- * @version Dokeos 1.8.6
- * @since October 2008
- */
-function get_number_of_users_tracking_overview() {
-	// database table definition
-	$main_user_table = Database :: get_main_table(TABLE_MAIN_USER);
-
-	// query
-	$sql = 'SELECT user_id FROM '.$main_user_table;
-	$result = Database::query($sql, __FILE__, __LINE__);
-
-	// return the number of results
-	return Database::num_rows($result);
-}
-
-/**
- * get all the data for the sortable table of the reporting progress of all users and all the courses the user is subscribed to.
- *
- * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
- * @version Dokeos 1.8.6
- * @since October 2008
- */
-function get_user_data_tracking_overview($from, $number_of_items, $column, $direction) {
-	// database table definition
-	$main_user_table = Database :: get_main_table(TABLE_MAIN_USER);
-	global $export_csv;
-	if ($export_csv) {
-		$is_western_name_order = api_is_western_name_order(PERSON_NAME_DATA_EXPORT);
-	} else {
-		$is_western_name_order = api_is_western_name_order();
-	}
-	$sql = "SELECT
-				official_code 	AS col0,
-				".($is_western_name_order ? "
-				firstname 		AS col1,
-				lastname 		AS col2,
-				" : "
-				lastname 		AS col1,
-				firstname 		AS col2,
-				").
-				"username		AS col3,
-				user_id 		AS col4
-			FROM
-				$main_user_table
-			";
-	$sql .= " ORDER BY col$column $direction ";
-	$sql .= " LIMIT $from,$number_of_items";
-	$result = Database::query($sql, __FILE__, __LINE__);
-	$return = array ();
-	while ($user = Database::fetch_row($result)) {
-		$return[] = $user;
-	}
-	return $return;
-}
-
-/**
- * Creates a small table in the last column of the table with the user overview
- *
- * @param integer $user_id the id of the user
- * @param array $url_params additonal url parameters
- * @param array $row the row information (the other columns)
- * @return html code
- *
- * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
- * @version Dokeos 1.8.6
- * @since October 2008
- */
-function course_info_tracking_filter($user_id, $url_params, $row) {
-	// the table header
-	$return .= '<table class="data_table" style="width: 100%;border:0;padding:0;border-collapse:collapse;table-layout: fixed">';
-	/*$return .= '	<tr>';
-	$return .= '		<th>'.get_lang('Course').'</th>';
-	$return .= '		<th>'.get_lang('AvgTimeSpentInTheCourse').'</th>';
-	$return .= '		<th>'.get_lang('AvgStudentsProgress').'</th>';
-	$return .= '		<th>'.get_lang('AvgCourseScore').'</th>';
-	$return .= '		<th>'.get_lang('AvgExercisesScore').'</th>';
-	$return .= '		<th>'.get_lang('AvgMessages').'</th>';
-	$return .= '		<th>'.get_lang('AvgAssignments').'</th>';
-	$return .= '		<th>'.get_lang('TotalExercisesScoreObtained').'</th>';
-	$return .= '		<th>'.get_lang('TotalExercisesScorePossible').'</th>';
-	$return .= '		<th>'.get_lang('TotalExercisesAnswered').'</th>';
-	$return .= '		<th>'.get_lang('TotalExercisesScorePercentage').'</th>';
-	$return .= '		<th>'.get_lang('FirstLogin').'</th>';
-	$return .= '		<th>'.get_lang('LatestLogin').'</th>';
-	$return .= '	</tr>';*/
-
-	// database table definition
-	$tbl_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
-
-	// getting all the courses of the user
-	$sql = "SELECT * FROM $tbl_course_user WHERE user_id = '".Database::escape_string($user_id)."'";
-	$result = Database::query($sql, __FILE__, __LINE__);
-	while ($row = Database::fetch_row($result)) {
-		$return .= '<tr>';
-		// course code
-		$return .= '	<td width="157px" >'.cut($row[0], 20, true).'</td>';
-		// time spent in the course
-		$return .= '	<td><div>'.api_time_to_hms(Tracking :: get_time_spent_on_the_course($user_id, $row[0])).'</div></td>';
-		// student progress in course
-		$return .= '	<td><div>'.round(Tracking :: get_avg_student_progress($user_id, $row[0]), 2).'</div></td>';
-		// student score
-		$return .= '	<td><div>'.round(Tracking :: get_avg_student_score($user_id, $row[0]), 2).'</div></td>';
-		// student tes score
-		//$return .= '	<td><div style="width:40px">'.round(Tracking :: get_avg_student_exercise_score ($user_id, $row[0]),2).'%</div></td>';
-		// student messages
-		$return .= '	<td><div>'.Tracking :: count_student_messages($user_id, $row[0]).'</div></td>';
-		// student assignments
-		$return .= '	<td><div>'.Tracking :: count_student_assignments($user_id, $row[0]).'</div></td>';
-		// student exercises results (obtained score, maximum score, number of exercises answered, score percentage)
-		$exercises_results = exercises_results($user_id, $row[0]);
-		$return .= '	<td width="105px"><div>'.(is_null($exercises_results['percentage']) ? '' : $exercises_results['score_obtained'].'/'.$exercises_results['score_possible'].' ( '.$exercises_results['percentage'].'% )').'</div></td>';
-		//$return .= '	<td><div>'.$exercises_results['score_possible'].'</div></td>';
-		$return .= '	<td><div>'.$exercises_results['questions_answered'].'</div></td>';
-		//$return .= '	<td><div>'.$exercises_results['percentage'].'% </div></td>';
-		// first connection
-		//$return .= '	<td width="60px">'.Tracking :: get_first_connection_date_on_the_course ($user_id, $row[0]).'</td>';
-		// last connection
-		$return .= '	<td><div>'.Tracking :: get_last_connection_date_on_the_course ($user_id, $row[0]).'</div></td>';
-		$return .= '<tr>';
-	}
-	$return .= '</table>';
-	return $return;
-}
-
-/**
- * Get general information about the exercise performance of the user
- * the total obtained score (all the score on all the questions)
- * the maximum score that could be obtained
- * the number of questions answered
- * the success percentage
- *
- * @param integer $user_id the id of the user
- * @param string $course_code the course code
- *
- * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
- * @version Dokeos 1.8.6
- * @since November 2008
- */
-function exercises_results($user_id, $course_code) {
-	$questions_answered = 0;
-	$sql = 'SELECT exe_result , exe_weighting
-		FROM '.Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES)."
-		WHERE exe_cours_id = '".Database::escape_string($course_code)."'
-		AND exe_user_id = '".Database::escape_string($user_id)."'";
-	$result = Database::query($sql, __FILE__, __LINE__);
-	$score_obtained = 0;
-	$score_possible = 0;
-	$questions_answered = 0;
-	while ($row = Database::fetch_array($result)) {
-		$score_obtained += $row['exe_result'];
-		$score_possible += $row['exe_weighting'];
-		$questions_answered ++;
-	}
-
-	if ($score_possible != 0) {
-		$percentage = round(($score_obtained / $score_possible * 100), 2);
-	} else {
-		$percentage = null;
-	}
-
-	return array('score_obtained' => $score_obtained, 'score_possible' => $score_possible, 'questions_answered' => $questions_answered, 'percentage' => $percentage);
-}
-
-/**
- * Displays a form with all the additionally defined user fields of the profile
- * and give you the opportunity to include these in the CSV export
- *
- * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
- * @version Dokeos 1.8.6
- * @since November 2008
- */
-function display_user_overview_export_options() {
-	// include the user manager and formvalidator library
-	require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
-	require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
-
-	if ($_GET['export'] == 'options') {
-		// get all the defined extra fields
-		$extrafields = UserManager::get_extra_fields(0, 50, 5, 'ASC', false);
-
-		// creating the form with all the defined extra fields
-		$form = new FormValidator('exportextrafields', 'post', api_get_self()."?view=".Security::remove_XSS($_GET['view']).'&display='.Security::remove_XSS($_GET['display']).'&export='.Security::remove_XSS($_GET['export']));
-		foreach ($extrafields as $key => $extra) {
-			$form->addElement('checkbox', 'extra_export_field'.$extra[0], '', $extra[3]);
-		}
-		$form->addElement('style_submit_button','submit', get_lang('Ok'),'class="save"' );
-
-		// setting the default values for the form that contains all the extra fields
-		if (is_array($_SESSION['additional_export_fields'])) {
-			foreach ($_SESSION['additional_export_fields'] as $key => $value) {
-				$defaults['extra_export_field'.$value] = 1;
-			}
-		}
-		$form->setDefaults($defaults);
-
-		if ($form->validate()) {
-			// exporting the form values
-			$values = $form->exportValues();
-
-			// re-initialising the session that contains the additional fields that need to be exported
-			$_SESSION['additional_export_fields'] = array();
-
-			// adding the fields that are checked to the session
-			$message = '';
-			foreach ($values as $field_ids => $value) {
-				if ($value == 1 && strstr($field_ids,'extra_export_field')) {
-					$_SESSION['additional_export_fields'][] = str_replace('extra_export_field', '', $field_ids);
-				}
-			}
-
-			// adding the fields that will be also exported to a message string
-			if (is_array($_SESSION['additional_export_fields'])) {
-				foreach ($_SESSION['additional_export_fields'] as $key => $extra_field_export) {
-					$message .= '<li>'.$extrafields[$extra_field_export][3].'</li>';
-				}
-			}
-
-			// Displaying a feedback message
-			if (!empty($_SESSION['additional_export_fields'])) {
-				Display::display_confirmation_message(get_lang('FollowingFieldsWillAlsoBeExported').': <br /><ul>'.$message.'</ul>', false);
-			} else  {
-				Display::display_confirmation_message(get_lang('NoAdditionalFieldsWillBeExported'), false);
-			}
-			$message = '';
-		} else {
-			$form->display();
-		}
-	} else {
-		if (!empty($_SESSION['additional_export_fields'])) {
-			// get all the defined extra fields
-			$extrafields = UserManager::get_extra_fields(0, 50, 5, 'ASC');
-
-			foreach ($_SESSION['additional_export_fields'] as $key => $extra_field_export) {
-				$message .= '<li>'.$extrafields[$extra_field_export][3].'</li>';
-			}
-
-			Display::display_normal_message(get_lang('FollowingFieldsWillAlsoBeExported').': <br /><ul>'.$message.'</ul>', false);
-			$message = '';
-		}
-	}
-}
-
-/**
- * Get all information that the user with user_id = $user_data has
- * entered in the additionally defined profile fields
- *
- * @param integer $user_id the id of the user
- *
- * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
- * @version Dokeos 1.8.6
- * @since November 2008
- */
-function get_user_overview_export_extra_fields($user_id) {
-	// include the user manager
-	require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
-
-	$extra_data = UserManager::get_extra_user_data($user_id, true);
-	return $extra_data;
-}
-/**
- * Get number of courses for sortable with pagination 
+ * Get number of courses for sortable with pagination
  * @return int
  */
 function get_number_of_courses() {
-	global $courses;	
+	global $courses;
 	return count($courses);
-}
-/**
- * Get data for courses list in sortable with pagination 
- * @return array
- */
-function get_course_data($from, $number_of_items, $column, $direction) {
-	
-	global $courses, $csv_content, $charset ;
-	global $tbl_course, $tbl_course_user, $tbl_track_cours_access, $tbl_session_course_user;
-	
-	$a_course_students  = array();	
-	$course_data = array();	
-	$arr_course = $courses;	
-	foreach ($arr_course as &$cours) {			
-		$cours = "'{$cours[course_code]}'";
-	}
-	
-	// get all courses with limit
-	$sql = "SELECT course.code as col1, course.title as col2 				
-			FROM $tbl_course course 			
-			WHERE course.code IN (".implode(',',$arr_course).")"; 	
-	if (!in_array($direction, array('ASC','DESC'))) $direction = 'ASC';
-	
-    $column = intval($column);
-    $from = intval($from);
-    $number_of_items = intval($number_of_items);
-	$sql .= " ORDER BY col$column $direction ";
-	$sql .= " LIMIT $from,$number_of_items";
-
-	$res = Database::query($sql, __FILE__, __LINE__);				
-	while ($row_course = Database::fetch_row($res)) {
-
-		$course_code = $row_course[0];
-		$course_info = api_get_course_info($course_code);
-		$avg_assignments_in_course = $avg_messages_in_course = $nb_students_in_course = $avg_progress_in_course = $avg_score_in_course = $avg_time_spent_in_course = $avg_score_in_exercise = 0;		
-		$tbl_item_property 		= Database :: get_course_table(TABLE_ITEM_PROPERTY, $course_info['dbName']);
-		$tbl_forum_post  		= Database :: get_course_table(TABLE_FORUM_POST, $course_info['dbName']);
-		$tbl_course_lp_view = Database :: get_course_table(TABLE_LP_VIEW, $course_info['dbName']);	
-		$tbl_course_lp = Database :: get_course_table(TABLE_LP_MAIN, $course_info['dbName']);
-		
-		// students directly subscribed to the course
-		$sql = "SELECT user_id FROM $tbl_course_user as course_rel_user WHERE course_rel_user.status='5' AND course_rel_user.course_code='$course_code'
-		  		UNION DISTINCT SELECT id_user as user_id FROM $tbl_session_course_user srcu WHERE  srcu. course_code='$course_code'";					
-		$rs = Database::query($sql, __FILE__, __LINE__);
-		$users = array();		
-		while ($row = Database::fetch_array($rs)) {		
-			$users[] = $row['user_id']; 							
-		}		
-		if (count($users) > 0) {
-			$nb_students_in_course = count($users);			
-			$avg_assignments_in_course = Tracking::count_student_assignments($users, $course_code);
-			$avg_messages_in_course    = Tracking::count_student_messages($users, $course_code);
-			$avg_time_spent_in_course  = Tracking::get_time_spent_on_the_course($users, $course_code);			
-			$avg_progress_in_course = Tracking::get_avg_student_progress($users, $course_code);		
-			$avg_score_in_course = Tracking :: get_avg_student_score($users, $course_code);
-			$avg_score_in_exercise = Tracking::get_avg_student_exercise_score($users, $course_code);
-						
-			$avg_time_spent_in_course = api_time_to_hms($avg_time_spent_in_course / $nb_students_in_course);
-			$avg_progress_in_course = round($avg_progress_in_course / $nb_students_in_course, 2);
-			$avg_score_in_course = round($avg_score_in_course / $nb_students_in_course, 2);
-			$avg_score_in_exercise = round($avg_score_in_exercise / $nb_students_in_course, 2);		
-		} else {
-			$avg_time_spent_in_course = null;
-			$avg_progress_in_course = null;
-			$avg_score_in_course = null;
-			$avg_score_in_exercise = null;
-			$avg_messages_in_course = null;
-			$avg_assignments_in_course = null;
-		}
-		$table_row = array();		
-		$table_row[] = $row_course[1];
-		$table_row[] = $nb_students_in_course;
-		$table_row[] = $avg_time_spent_in_course;
-		$table_row[] = is_null($avg_progress_in_course) ? '' : $avg_progress_in_course.'%';
-		$table_row[] = is_null($avg_score_in_course) ? '' : $avg_score_in_course.'%';
-		$table_row[] = is_null($avg_score_in_exercise) ? '' : $avg_score_in_exercise.'%';
-		$table_row[] = $avg_messages_in_course;
-		$table_row[] = $avg_assignments_in_course;
-		//set the "from" value to know if I access the Reporting by the Dokeos tab or the course link
-		$table_row[] = '<center><a href="../tracking/courseLog.php?cidReq='.$course_code.'&studentlist=true&from=myspace"><img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a></center>';
-		$csv_content[] = array(
-			api_html_entity_decode($row_course[1], ENT_QUOTES, $charset),
-			$nb_students_in_course,
-			$avg_time_spent_in_course,
-			is_null($avg_progress_in_course) ? null : $avg_progress_in_course.'%',
-			is_null($avg_score_in_course) ? null : $avg_score_in_course.'%',
-			is_null($avg_score_in_exercise) ? null : $avg_score_in_exercise.'%',
-			$avg_messages_in_course,
-			$avg_assignments_in_course,
-		);
-		$course_data[] = $table_row;				
-	}
-	return $course_data;
 }

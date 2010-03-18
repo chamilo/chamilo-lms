@@ -1,31 +1,9 @@
 <?php
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2008 Dokeos Latinoamerica SAC
-	Copyright (c) 2006 Dokeos SPRL
-	Copyright (c) 2006 Ghent University (UGent)
-	Copyright (c) various contributors
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
-	Mail: info@dokeos.com
-==============================================================================
-*/
+/* For licensing terms, see /license.txt */
 /**
  * Class to be used as basis for links referring to Evaluation objects.
  * @author Bert Steppé
- * @package dokeos.gradebook
+ * @package chamilo.gradebook
  */
 abstract class EvalLink extends AbstractLink
 {
@@ -133,7 +111,7 @@ abstract class EvalLink extends AbstractLink
 	}
 // Functions overriding non-trivial implementations from AbstractLink
 	public function set_date ($date) {
-		$this->link_date = $date;
+		$this->created_at = $date;
 		if ($this->is_valid_link()) {
 			$this->evaluation->set_date($date);
 		}
@@ -168,7 +146,7 @@ abstract class EvalLink extends AbstractLink
 			} else {
 				$eval = new Evaluation();
 				$eval->set_category_id(-1);
-				$eval->set_date(time()); // these values will be changed
+				$eval->set_date(api_get_utc_datetime()); // these values will be changed
 				$eval->set_weight(0);    //   when the link setter
 				$eval->set_visible(0);   //     is called
 				$eval->set_id(-1); // a 'real' id will be set when eval is added to db

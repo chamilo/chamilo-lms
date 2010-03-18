@@ -1,25 +1,26 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$TermAddNew = "Neuen Begriff zum Wörterbuch hinzufügen";
+$TermAddNew = "Neuen Begriff zum WÃ¶rterbuch hinzufÃ¼gen";
 $TermName = "Begriff";
 $TermDefinition = "Begriffs-Definition";
-$TermDeleted = "Begriff gelöscht";
+$TermDeleted = "Begriff gelÃ¶scht";
 $TermUpdated = "Begriff aktualisiert";
-$TermConfirmDelete = "Begriff soll wirklich gelöscht werden?";
+$TermConfirmDelete = "Begriff soll wirklich gelÃ¶scht werden?";
 $TermAddButton = "Begriff speichern";
 $TermUpdateButton = "Begriff aktualisieren";
-$TermEdit = "Begriff ändern";
-$TermDeleteAction = "Begriff löschen";
-$OrderBy = "Sortiere nach";
+$TermEdit = "Begriff Ã¤ndern";
+$TermDeleteAction = "Begriff lÃ¶schen";
+$OrderBy = "sortiert nach";
 $CreationDate = "Erstellungs-Datum";
 $UpdateDate = "Aktualisiert";
 $PreSelectedOrder = "vor-definiert";
-$TermAdded = "Begriff hinzugefügt";
+$TermAdded = "Begriff hinzugefÃ¼gt";
 $YouMustEnterATermName = "Begriff wurde nicht angegeben";
 $YouMustEnterATermDefinition = "Begriffs-Definition fehlt";
 $TableView = "Tabellen-Ansicht";
-$GlossaryTermAlreadyExistsYouShouldEditIt = "Dieser Begriff existiert bereits im Wörterbuch. Bitte einen anderen Namen wählen.";
-$GlossaryManagement  = "Verwaltung des Wörterbuchs";
+$GlossaryTermAlreadyExistsYouShouldEditIt = "Dieser Begriff existiert bereits im WÃ¶rterbuch. Bitte einen anderen Namen wÃ¤hlen.";
+$GlossaryManagement = "Verwaltung des WÃ¶rterbuchs";
 $TermMoved = "Der Begriff wurde verschoben.";
 ?>

@@ -1,37 +1,38 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$ReservationPeriodToSmall = "El període de reserva és massa curt. ";
+$ReservationPeriodToSmall = "El perÃ­ode de reserva Ã©s massa curt.";
 $BookingSystem = "Sistema de reserves";
-$BookingPeriodList = "Llista de períodes de reserva";
+$BookingPeriodList = "Llista de perÃ­odes de reserva";
 $BookingListView = "Llista de reservas";
 $BookingCalendarView = "Vista de calendari";
-$BookingPeriods = "Períodes de reserva";
+$BookingPeriods = "PerÃ­odes de reserva";
 $ResourceList = "Llista de recursos";
 $GoToCalendarView = "Anar a vista de calendari";
 $GoToListView = "Anar a la llista";
-$ManageResources = "Administració de recursos";
+$ManageResources = "AdministraciÃ³ de recursos";
 $EditResource = "Editar recursos";
 $BookIt = "Reserva";
 $GoTo = "Anar a";
 $NoTimePicker = "Sense temporitzador";
 $TimePicker = "Temporitzador";
-$ManageBookingPeriods = "Administrar períodes de reserves";
-$BookingPeriodToSmall = "El període de la reserva és molt petit.";
-$BookingPeriodToBig = "El període de la reserva és molt gran.";
-$BookingPeriodTimePickerError1 = "No es pot realitzar la reserva d\'un període sense un selector de temps si el temps mínim i el màxim del període és distint de zero.";
-$BookingPeriodTimePickerError2 = "El període de reserva amb un selector de temps no es pot realitzar si el temps màxim és inferior al temps mínim del període ";
-$BookingPeriodTimePickerError3 = "Un període de reserva amb un selector de temps no es pot realitzar si el temps màxim del període no està entre la data d\'inici i final";
-$BookingPeriodHasSubscriptions = "No és possible modificar el període de reserva degut al fet que té #*NUM# reserve(s) active(s) ";
-$TimePickerMaxUsers = "Quan el temporitzador està en ús, el  nombre màxim de subscripcions és ignorat.";
-$TimePickerMinMaxNull = "Si el mínim i màxim valor del temportitzador és zero, el temps pot ser variable";
-$DeleteSelectedBookingPeriod = "Eliminar ítems seleccionats";
-$EditNewBookingPeriod = "Editar període de reserva";
-$BookingPeriodAdded = "El període de reserva ha estat afegit";
-$BookingPeriodDeleted = "El període de reserva ha estat eliminat";
-$ConfirmDeleteBookingPeriod = "Està segur de voler eliminar definitivament aquest període de reserva?";
-$DeleteBookingPeriod = "Eliminat aquest període de reserva";
-$BookingPeriodEdited = "El període de reserva ha estat modificat";
-$BookingPeriodDateOverlap = "Una part del període de reserva ja està en ús";
-$BookingPeriodSubscribeUntilAfterStart = "El període de realització de la reserva es major que la data d\'inici";
+$ManageBookingPeriods = "Administrar perÃ­odes de reserves";
+$BookingPeriodToSmall = "El perÃ­ode de la reserva Ã©s molt petit.";
+$BookingPeriodToBig = "El perÃ­ode de la reserva Ã©s molt gran.";
+$BookingPeriodTimePickerError1 = "No es pot realitzar la reserva d'un perÃ­ode sense un selector de temps si el temps mÃ­nim i el mÃ xim del perÃ­ode Ã©s distint de zero.";
+$BookingPeriodTimePickerError2 = "El perÃ­ode de reserva amb un selector de temps no es pot realitzar si el temps mÃ xim Ã©s inferior al temps mÃ­nim del perÃ­ode";
+$BookingPeriodTimePickerError3 = "Un perÃ­ode de reserva amb un selector de temps no es pot realitzar si el temps mÃ xim del perÃ­ode no estÃ  entre la data d'inici i final";
+$BookingPeriodHasSubscriptions = "No Ã©s possible modificar el perÃ­ode de reserva degut al fet que tÃ© #*NUM# reserve(s) active(s)";
+$TimePickerMaxUsers = "Quan el temporitzador estÃ  en Ãºs, el  nombre mÃ xim de subscripcions Ã©s ignorat.";
+$TimePickerMinMaxNull = "Si el mÃ­nim i mÃ xim valor del temportitzador Ã©s zero, el temps pot ser variable";
+$DeleteSelectedBookingPeriod = "Eliminar Ã­tems seleccionats";
+$EditNewBookingPeriod = "Editar perÃ­ode de reserva";
+$BookingPeriodAdded = "El perÃ­ode de reserva ha estat afegit";
+$BookingPeriodDeleted = "El perÃ­ode de reserva ha estat eliminat";
+$ConfirmDeleteBookingPeriod = "EstÃ  segur de voler eliminar definitivament aquest perÃ­ode de reserva?";
+$DeleteBookingPeriod = "Eliminat aquest perÃ­ode de reserva";
+$BookingPeriodEdited = "El perÃ­ode de reserva ha estat modificat";
+$BookingPeriodDateOverlap = "Una part del perÃ­ode de reserva ja estÃ  en Ãºs";
+$BookingPeriodSubscribeUntilAfterStart = "El perÃ­ode de realitzaciÃ³ de la reserva es major que la data d'inici";
 ?>

@@ -1,11 +1,12 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $langNewGroupCreate = "Buat group baru";
 $langGroupCreation = "Pembuatan group baru";
 $langCreate = "buat";
 $langNewGroups = "Group baru";
-$langMax = "max.";
+$langMax = "max. 12 karakter, misal <i>TNH101</i>";
 $langGroupPlacesThis = "tempat (optional";
 $langGroupsAdded = "group telah ditambahkan";
 $langGroupDel = "Group dihapus";
@@ -16,15 +17,15 @@ $langGroupAllowStudentRegistration = "Siswa diijinkan untuk mendaftar sendiri da
 $langGroupTools = "Tool";
 $langGroupDocument = "Dokumen";
 $langGroupPropertiesModified = "Seting Group telah diubah";
-$langGroupSpace = "Areal Group";
+$langGroupSpace = "ArealGroup";
 $langGroupName = "Nama Group";
-$langGroupDescription = "Deskripsi";
+$langGroupDescription = "Deskripsi Group";
 $langGroupMembers = "Anggota Group";
 $langEditGroup = "Edit group ini";
 $Optional = "(optional)";
 $langGroupSettingsModified = "Seting Group diubah";
-$langGroupTooMuchMembers = "Jumlah yang diusulkan melebihi jumlah max yang anda ijinkan (anda dapat mengubahnya di bawah ini). 				Komoposisi Group belum diubah";
-$langGroupTutor = "Tutor";
+$langGroupTooMuchMembers = "Jumlah yang diusulkan melebihi jumlah max yang anda ijinkan (anda dapat mengubahnya di bawah ini). \t\t\t\tKomoposisi Group belum diubah";
+$langGroupTutor = "Nama tutor Group";
 $langGroupNoTutor = "(tidak ada)";
 $langGroupNone = "(tidak ada)";
 $langGroupNoneMasc = "(tidak ada)";
@@ -35,15 +36,15 @@ $langGroupSelfRegistration = "Pendaftaran";
 $langGroupSelfRegInf = "daftar";
 $langRegIntoGroup = "Masukkan saya ke group ini";
 $langGroupNowMember = "Anda kini anggota group ini";
-$langPrivate = "privat";
-$langPublic = "publik";
+$langPrivate = "Akses privat (situs hanya dapat diakses oleh user yang terdaftar)";
+$langPublic = "Akses umum dari situs kampus tanpa login";
 $langPropModify = "Ubah seting";
 $langState = "Keadaan";
-$langGroupFilledGroups = "Groups telah diisi (atau dilengkapi) oleh siswa yang ada dalam daftar \'User\'.";
-$langSubscribed  = "orang terdaftar dalam mata kuliah ini";
-$langStudentsNotInThisGroups  = "User tidak dalam group ini";
-$langQtyOfUserCanSubscribe_PartBeforeNumber  = "Seorang user dapat menjadi anggota maksimum ";
-$langQtyOfUserCanSubscribe_PartAfterNumber  = " group";
+$langGroupFilledGroups = "Groups telah diisi (atau dilengkapi) oleh siswa yang ada dalam daftar 'User'.";
+$langSubscribed = "orang terdaftar dalam mata kuliah ini";
+$langStudentsNotInThisGroups = "User tidak dalam group ini";
+$langQtyOfUserCanSubscribe_PartBeforeNumber = "Seorang user dapat menjadi anggota maksimum";
+$langQtyOfUserCanSubscribe_PartAfterNumber = "Â group";
 $langGroupLimit = "Batas";
 $langStudentRegAllowed = "Siswa diijinkan untuk mendaftar sendiri dalam group";
 $langGroupAllowStudentUnregistration = "User diijinkan mengundurkan diri dari group";
@@ -67,8 +68,8 @@ $NotAvailable = "Tidak tersedia";
 $CreateSubgroups = "Buat subgroup";
 $CreateSubgroupsInfo = "Opsi ini memungkinkan anda untuk membuat group baru berdasarkan group yang sudah ada.   Dengan memberikan jumlah group yang diinginkan dan memilih group yang sudah ada,  jumlah group yang diinginkan dibuat dan semua anggota group yang sudah ada akan terdaftar pada group baru tersebut.  Group sebelumnya yang sudah ada tidak berubah.";
 $CreateNumberOfGroups = "Buat";
-$WithUsersFrom = "group dengan anggota dari ";
-$CategoryDeleted = "Kategori tersebut dihapus";
+$WithUsersFrom = "group dengan anggota dari";
+$CategoryDeleted = "Kategori tersebut telah dihapus.";
 $Empty = "Kosong";
 $FillGroup = "tambah user";
 $EmptyGroup = "hapus semua user (kosongkan group)";

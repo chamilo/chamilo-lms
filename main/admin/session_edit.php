@@ -1,11 +1,11 @@
 <?php
-/* For licensing terms, see /dokeos_license.txt */
+/* For licensing terms, see /license.txt */
 
 // name of the language file that needs to be included
 $language_file ='admin';
 $cidReset=true;
-include('../inc/global.inc.php');
-require_once (api_get_path(LIBRARY_PATH).'sessionmanager.lib.php');
+require_once '../inc/global.inc.php';
+require_once api_get_path(LIBRARY_PATH).'sessionmanager.lib.php';
 
 // setting the section (for the tabs)
 $this_section=SECTION_PLATFORM_ADMIN;
@@ -27,7 +27,7 @@ $tool_name = get_lang('EditSession');
 $interbreadcrumb[]=array('url' => 'index.php',"name" => get_lang('PlatformAdmin'));
 $interbreadcrumb[]=array('url' => "session_list.php","name" => get_lang('SessionList'));
 
-$result=Database::query("SELECT name,date_start,date_end,id_coach, session_admin_id, nb_days_access_before_beginning, nb_days_access_after_end, session_category_id, visibility FROM $tbl_session WHERE id='$id'",__FILE__,__LINE__);
+$result=Database::query("SELECT name,date_start,date_end,id_coach, session_admin_id, nb_days_access_before_beginning, nb_days_access_after_end, session_category_id, visibility FROM $tbl_session WHERE id='$id'");
 
 if (!$infos=Database::fetch_array($result)) {
 	header('Location: session_list.php');
@@ -76,7 +76,7 @@ if ($_configuration['multiple_access_urls']==true){
 	}
 }
 
-$result=Database::query($sql,__FILE__,__LINE__);
+$result=Database::query($sql);
 
 $Coaches=Database::store_result($result);
 $thisYear=date('Y');
@@ -126,7 +126,7 @@ unset($Coaches);
 	$tbl_session_category = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
 	//$access_url_id = api_get_current_access_url_id();
 	$sql = 'SELECT id, name FROM '.$tbl_session_category.' ORDER BY name ASC';
-	$result = Database::query($sql,__FILE__,__LINE__);
+	$result = Database::query($sql);
 	$Categories = Database::store_result($result);
 ?>
 <tr>

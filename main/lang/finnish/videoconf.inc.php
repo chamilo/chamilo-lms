@@ -1,5 +1,6 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $Camera = "Kamera";
 $Microphone = "Mikrofoni";
@@ -7,30 +8,30 @@ $Name = "Nimi";
 $DeleteStream = "Poista tallenne";
 $Progress = "Edistyminen";
 $Play = "Toista";
-$Stop = "Pysäytä";
+$Stop = "PysÃ¤ytÃ¤";
 $Record = "Nauhoita";
 $NoFileAvailable = "Tiedostoa ei saatavilla";
-$RecordingOnlyForTeachers = "Äänittäminen vain opettajille.";
-$UsersNow = "Käyttäjiä tällä hetkellä:";
+$RecordingOnlyForTeachers = "Ã„Ã¤nittÃ¤minen vain opettajille.";
+$UsersNow = "KÃ¤yttÃ¤jiÃ¤ tÃ¤llÃ¤ hetkellÃ¤:";
 $StartConference = "Aloita konferenssi";
 $MyName = "Nimeni";
 $ImportPresentation = "Lataa esitys";
-$RefreshList = "Virkistä lista";
+$RefreshList = "VirkistÃ¤ lista";
 $GoToTop = "Mene alkuun";
-$NewPoll = "Uusi äänestys";
-$CreateNewPoll = "Luo uusi äänestys tähän huoneesen";
-$Question = "Kysymys:";
+$NewPoll = "Uusi Ã¤Ã¤nestys";
+$CreateNewPoll = "Luo uusi Ã¤Ã¤nestys tÃ¤hÃ¤n huoneesen";
+$Question = "Kysymys";
 $PollType = "Kyselyn tyyppi:";
 $Create = "Luo";
-$InfoConnectedUsersGetNotifiedOfThisPoll = "Info: Jokainen tässä tilassa oleva käyttäjä saa ilmoituksen uudesta kyselystä.";
-$YesNo = "Kyllä/Ei";
+$InfoConnectedUsersGetNotifiedOfThisPoll = "Info: Jokainen tÃ¤ssÃ¤ tilassa oleva kÃ¤yttÃ¤jÃ¤ saa ilmoituksen uudesta kyselystÃ¤.";
+$YesNo = "KyllÃ¤ / Ei";
 $Numeric1To10 = "Numero 1-10";
 $Poll = "Kysely";
-$YouHaveToBecomeModeratorOfThisRoomToStartPolls = "Sinun tulee olla puheenjohtaja jotta voit tehdä kyselyitä.";
-$YourVoteHasBeenSent = "Äänesi on rekisteröity";
-$YouAlreadyVotedForThisPoll = "Olet jo äänestänyt";
-$VoteButton = "Äänestä!";
+$YouHaveToBecomeModeratorOfThisRoomToStartPolls = "Sinun tulee olla puheenjohtaja jotta voit tehdÃ¤ kyselyitÃ¤.";
+$YourVoteHasBeenSent = "Ã„Ã¤nesi on rekisterÃ¶ity";
+$YouAlreadyVotedForThisPoll = "Olet jo Ã¤Ã¤nestÃ¤nyt";
+$VoteButton = "Ã„Ã¤nestÃ¤!";
 $YourAnswer = "Vastauksesi:";
-$Yes = "Kyllä";
+$Yes = "KyllÃ¤";
 $No = "Ei";
 ?>

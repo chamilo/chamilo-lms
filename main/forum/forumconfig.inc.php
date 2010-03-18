@@ -1,4 +1,6 @@
-<?php  // $Id:  $
+<?php  
+/* For licensing terms, see /license.txt */
+
 /**
  * @todo use Database :: get_course_table
  * @todo move the tool constants to the appropriate place

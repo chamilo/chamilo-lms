@@ -28,20 +28,21 @@
 // name of the language file that needs to be included
 $language_file = 'survey';
 
-// including the global dokeos file
-require ('../inc/global.inc.php');
+// Including the global initialization file
+require '../inc/global.inc.php';
 
-// including additional libraries
-//require_once (api_get_path(LIBRARY_PATH)."/survey.lib.php");
-require_once('survey.lib.php');
-require_once (api_get_path(LIBRARY_PATH)."course.lib.php");
-require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
-require_once (api_get_path(LIBRARY_PATH)."mail.lib.inc.php");
+// Including additional libraries
+//require_once (api_get_path(LIBRARY_PATH).'survey.lib.php');
+require_once api_get_path(LIBRARY_PATH).'sortabletable.class.php';
+require_once 'survey.lib.php';
+require_once api_get_path(LIBRARY_PATH).'course.lib.php';
+require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
+require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
 
 /** @todo this has to be moved to a more appropriate place (after the display_header of the code)*/
 if (!api_is_allowed_to_edit(false,true))
 {
-	Display :: display_header(get_lang('Survey'));
+	Display :: display_header(get_lang('ToolSurvey'));
 	Display :: display_error_message(get_lang('NotAllowed'), false);
 	Display :: display_footer();
 	exit;
@@ -141,8 +142,8 @@ echo '	</tr>';
 $sql = "SELECT survey_invitation.*, user.firstname, user.lastname, user.email FROM $table_survey_invitation survey_invitation
 			LEFT JOIN $table_user user ON  survey_invitation.user = user.user_id
 			WHERE survey_invitation.survey_code = '".Database::escape_string($survey_data['code'])."'";
-$res = Database::query($sql, __FILE__, __LINE__);
-while ($row = mysql_fetch_assoc($res))
+$res = Database::query($sql);
+while ($row = Database::fetch_assoc($res))
 {
 	if (!$_GET['view'] OR $_GET['view'] == 'invited' OR ($_GET['view'] == 'answered' AND in_array($row['user'], $answered_data)) OR ($_GET['view'] == 'unanswered' AND !in_array($row['user'], $answered_data)))
 	{

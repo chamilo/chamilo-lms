@@ -1,39 +1,40 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$Tools  = "¹¤¾ß";
-$SendWork = "ÉÏ´«ÎÄ¼þ";
-$langTooBig = "Ã»ÓÐÑ¡ÔñÎÄ¼þ»òÎÄ¼þÌ«´ó.";
-$langListDeleted = "Õû¸öÁÐ±íÒÑÉ¾³ý.";
-$langDocModif = "ÂÛÎÄ±êÌâÒÑÐÞ¸Ä";
-$langDocAdd = "ÎÄ¼þÒÑ¼ÓÈëµ½·¢²¼ÁÐ±íÖÐ.";
-$langDocDel = "ÎÄ¼þÒÑÉ¾³ý";
-$langTitleWork = "ÎÄ¼þ±êÌâ";
-$langAuthors = "×÷Õß";
-$langDelList = "É¾³ýÕû¸öÁÐ±í";
-$langWorkDelete = "É¾³ý";
-$langWorkModify = "ÐÞ¸Ä";
-$langWorkConfirmDelete = "ÄãÕæµÄÏëÒªÉ¾³ýÕâ¸öÎÄ¼þ";
-$langAllFiles = "Ó¦ÓÃÓÚËùÓÐÎÄ¼þ";
-$lang_default_upload = "ÐÂÌá½»µÄÎÄ¼þ¿É¼ûÐÔµÄÄ¬ÈÏÉèÖÃ";
-$lang_new_visible = "ÐÂÎÄµµ¶ÔËùÓÐÈË¶¼¿É¼û";
-$lang_new_unvisible = "ÐÂÎÄµ²Ö»¶Ô¿Î³Ì¹ÜÀíÔ±¿É¼û";
-$lang_doc_unvisible = "ÎÄ¼þÖ»¶ÔÕâÃÅ¿Î³ÌµÄ½ÌÊ¦¿É¼û, Òò´Ë¶ÔÄãÊÇ²»¿É¼ûµÄ.";
-$langDelLk = "É¾³ýÁ´½Ó";
-$langMustBeRegisteredUser = "Ö»ÓÐ´Ë¿Î³ÌµÄ×¢²áÓÃ»§¿ÉÒÔ·¢²¼ÎÄµµ.";
-$langListDel = "É¾³ýÁÐ±í";
-$langNameDir = "ÖØÃüÃûÄ¿Â¼";
-$langFileExists = "ÎÄ¼þÒÑ´æÔÚ";
-$CreateDirectory = "ÐÂ½¨Ä¿Â¼";
-$langCurrentDir = "µ±Ç°Ä¿Â¼";
-$UploadADocument = "ÉÏ´«ÎÄµµ";
-$EditToolOptions = "±à¼­¹¤¾ßÑ¡Ïî";
-$DocumentDeleted = "ÒÑÉ¾³ýÎÄ¼þ";
-$SendMailBody = "&#21457;&#20214;&#20154;";
-$DirDelete = "É¾³ýÄ¿Â¼";
-$ValidateChanges = "&#39564;&#35777;&#21464;&#21270;";
-$FolderUpdated = "&#25991;&#20214;&#22841;&#24050;&#26356;&#26032;";
-$ExpiresAt = "&#36807;&#26399;&#20110;";
-$DirectoryCreated = "&#25991;&#20214;&#22841;&#24050;&#21019;&#24314;";
-$MoveXTo = "&#31227;&#21160; %s &#21040;";
+$Tools = "å·¥å…·";
+$SendWork = "ä¸Šä¼ æ–‡ä»¶";
+$langTooBig = "ä½ æ²¡æœ‰é€‰æ‹©ä»»ä½•æ–‡ä»¶ï¼Œæˆ–è€…æ–‡ä»¶å¤ªå¤§";
+$langListDeleted = "åˆ—è¡¨å·²åˆ é™¤";
+$langDocModif = "è®ºæ–‡æ ‡é¢˜å·²ä¿®æ”¹";
+$langDocAdd = "ä½œä¸šå·²ç»ä¸Šä¼ ã€‚";
+$langDocDel = "æ–‡ä»¶å·²ç»åˆ é™¤";
+$langTitleWork = "æ–‡ä»¶æ ‡é¢˜";
+$langAuthors = "ä½œè€…";
+$langDelList = "åˆ é™¤é“¾æŽ¥";
+$langWorkDelete = "åˆ é™¤";
+$langWorkModify = "ä¿®æ”¹";
+$langWorkConfirmDelete = "ä½ çœŸçš„æƒ³è¦åˆ é™¤è¿™ä¸ªæ–‡ä»¶";
+$langAllFiles = "åº”ç”¨äºŽæœ¬è¯¾ç¨‹æ‰€æœ‰ä½œä¸š";
+$lang_default_upload = "ä½œä¸šå¯è§æ€§çš„é»˜è®¤è®¾ç½®";
+$lang_new_visible = "ä½œä¸šå¯¹æ‰€æœ‰äººéƒ½å¯è§";
+$lang_new_unvisible = "ä½œä¸šåªå¯¹è¯¾ç¨‹ç®¡ç†å‘˜å¯è§";
+$lang_doc_unvisible = "ä½œä¸šåªå¯¹è¿™é—¨è¯¾ç¨‹çš„æ•™å¸ˆå¯è§, å› æ­¤å¯¹ä½ æ˜¯ä¸å¯è§çš„ã€‚";
+$langDelLk = "ç¡®å®šè¦ç§»é™¤è¯¥å·¥å…·å—?";
+$langMustBeRegisteredUser = "åªæœ‰æ­¤è¯¾ç¨‹çš„æ³¨å†Œç”¨æˆ·å¯ä»¥ä¸Šä¼ ä½œä¸šã€‚";
+$langListDel = "åˆ é™¤åˆ—è¡¨";
+$langNameDir = "ç›®å½•åç§°";
+$langFileExists = "æ“ä½œå¤±è´¥ï¼Œæ–‡ä»¶æˆ–ç›®å½•å·²ç»å­˜åœ¨.";
+$CreateDirectory = "æ–°å»ºç›®å½•";
+$langCurrentDir = "å½“å‰ç›®å½•";
+$UploadADocument = "ä¸Šä¼ æ–‡æ¡£";
+$EditToolOptions = "ç¼–è¾‘å·¥å…·é€‰é¡¹";
+$DocumentDeleted = "å·²åˆ é™¤æ–‡ä»¶";
+$SendMailBody = "å‘ä»¶äºº";
+$DirDelete = "åˆ é™¤ç›®å½•";
+$ValidateChanges = "éªŒè¯å˜åŒ–";
+$FolderUpdated = "æ–‡ä»¶å¤¹å·²æ›´æ–°";
+$ExpiresAt = "è¿‡æœŸäºŽ";
+$DirectoryCreated = "æ–‡ä»¶å¤¹å·²åˆ›å»º";
+$MoveXTo = "ç§»åŠ¨ %s åˆ°";
 ?>

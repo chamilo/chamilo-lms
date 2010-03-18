@@ -1,35 +1,36 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$AdminBy  = "Ditadbir oleh ";
-$AdministrationTools  = "Alat Bantu Pentadbiran";
-$State  = "Status Sistem";
-$Statistiques  = "Statistik";
+$AdminBy = "Ditadbir oleh";
+$AdministrationTools = "Alat Bantu Pentadbiran";
+$State = "Status Sistem";
+$Statistiques = "Statistik";
 $VisioHostLocal = "Pelayan sidang video";
 $VisioRTMPIsWeb = "Samada protokol sidang video adalah melalui web (kebiasaannya tidak)";
-$langUsed       = "used";
-$langPresent   = "Ok";
-$langMissing    = "missing";
-$langExist      = "exists";
-$langAddAdminInApache  = "Tambah Pentadbir Sistem";
-$langAddFaculties  = "Tambah Pusat Pengajian";
-$langSearchACourse   = "Cari Subjek";
-$langSearchAUser   = "Cari Pengguna";
-$langTechnicalTools  = "Pentadbiran Teknikal";
-$langConfig  = "Konfigurasi Sistem";
-$langLogIdentLogoutComplete  = "Login list (extended)";
+$langUsed = "used";
+$langPresent = "Ok";
+$langMissing = "missing";
+$langExist = "exists";
+$langAddAdminInApache = "Tambah Pentadbir Sistem";
+$langAddFaculties = "Tambah Pusat Pengajian";
+$langSearchACourse = "Cari Subjek";
+$langSearchAUser = "Cari Pengguna";
+$langTechnicalTools = "Pentadbiran Teknikal";
+$langConfig = "Konfigurasi Sistem";
+$langLogIdentLogoutComplete = "Login list (extended)";
 $langNomOutilTodo = "Menguruskan Senarai Tugas";
 $langNomPageAdmin = "Pentadbiran";
 $langSysInfo = "Info tentang sistem";
 $langDiffTranslation = "Perbandingan Terjemahan";
-$langStatOf = "Statistik ";
+$langStatOf = "Statistik";
 $langSpeeSubscribe = "Quick subscribe as Course Checker";
 $langLogIdentLogout = "Senarai Login";
-$langServerStatus = "Status of MySQL server : ";
-$langDataBase = "Database ";
+$langServerStatus = "Status of MySQL serverÂ :";
+$langDataBase = "Database";
 $langRun = "work";
-$langClient = "MySql Client ";
-$langServer = "MySql Server ";
+$langClient = "MySql Client";
+$langServer = "MySql Server";
 $langtitulary = "Pemilik";
 $langUpgradeBase = "Menambah-baik Pangkalan Data";
 $langManage = "Menguruskan Kampus";

@@ -1,5 +1,6 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $ResourceAdded = "Materiaal toegevoegd. Keer nu terug naar het pad of voeg meer materiaal toe.";
 $LearningPath = "Leerpad";
@@ -16,7 +17,7 @@ $ExternalResources = "Extern materiaal";
 $CourseResources = "Cursusmateriaal";
 $ExternalLink = "Externe link";
 $DropboxAdd = "Voeg de dropboxpagina toe aan dit hoofdstuk.";
-$AddAssignmentPage = "Voeg de geüploade studentenpublicaties toe aan dit hoofdstuk.";
+$AddAssignmentPage = "Voeg de geÃ¼ploade studentenpublicaties toe aan dit hoofdstuk.";
 $Exercise = "Oefening";
 $Link = "Link";
 $AdValvas = "Ad valvas";
@@ -31,7 +32,7 @@ $CourseDescriptionAdd = "Voeg een pagina toe die een cursusbeschrijving bevat vo
 $GroupsAdd = "Voeg de groepenpagina toe aan dit hoofdstuk.";
 $UsersAdd = "Voeg de gebruikerspagina toe aan dit hoofdstuk.";
 $ExportableCourseResources = "Exporteerbaar cursusmateriaal";
-$DokeosRelatedCourseMaterial = "Dokeosgerelateerd cursusmateriaal";
+$DokeosRelatedCourseMaterial = "Chamilogerelateerd cursusmateriaal";
 $LinkTarget = "Linkbestemming";
 $SameWindow = "In hetzelfde venster";
 $NewWindow = "In een nieuw venster";
@@ -40,19 +41,19 @@ $StepDeleted2 = "item is verwijderd uit deze module.";
 $Modify = "wijzig";
 $Chapter = "Hoofdstuk";
 $NoAgendaItems = "Er zijn geen agenda-items.";
-$AgendaAdd = "Voeg een agenda-item toe";
-$UserGroupFilter = "Gebruikersgroepsfilter";
-$AgendaSortChronologicallyUp = "Sorteer agenda chronologisch (oplopend)";
-$ShowCurrent = "Toon agenda-items van deze maand";
-$ModifyCalendarItem = "Wijzig agenda-item";
-$ItemTitle = "Titel";
-$Detail = "Details";
-$EditSuccess = "Wijziging succesvol";
-$AddCalendarItem = "Agenda-item toevoegen";
+$AgendaAdd = "Nieuw agenda-item";
+$UserGroupFilter = "Filter op groepen/gebruikers";
+$AgendaSortChronologicallyUp = "Oplopend";
+$ShowCurrent = "Toon de agenda-items van deze maand";
+$ModifyCalendarItem = "Wijzig een agenda-item";
+$ItemTitle = "Itemtitel";
+$Detail = "Detail";
+$EditSuccess = "Het agenda-item is gewijzigd.";
+$AddCalendarItem = "Voeg nieuw agenda-item toe";
 $AddAnn = "Aankondiging toevoegen";
 $ForumAddNewTopic = "Forum: nieuw bericht toevoegen";
 $ForumEditTopic = "Forum: bericht wijzigen";
 $ExerciseAnswers = "Oefeningen: antwoorden";
 $ForumReply = "Forum: antwoorden";
-$AgendaSortChronologicallyDown = "Sorteer agenda chronologisch";
+$AgendaSortChronologicallyDown = "Aflopend";
 ?>

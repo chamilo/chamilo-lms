@@ -1,18 +1,19 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$langTool = "Metaadat";
-$langClickKw = "Kattintson a fastruktúrában egy kulcsszóra a kijelöléshez/megsz&#369;ntetéshez.";
-$langKwHelp = "<br/> KAttintson a \'+\' gombra a megnyitáshoz, a \'-\' gombra a bezáráshoz, a \'++\' gombra az összes megnyitásához, a \'--\' gombra az összes bezárásához.<br/> <br/> Az összes kulcsszó kiválasztásának megsz&#369;ntetéséhez zárja össze az egész fát, és nyissa szét újra a \'+\' gombbal.<br/> Alt-click \'+\' újra kiválasztja az el&#337;z&#337;leg választott kulcsszavakat.<br/> <br/> Alt-click kattintva a kulcsszóra megsz&#369;nteti annak kijelöltségét.<br/>";
-$langAdvanced = "Haladó";
-$langSearch = "Keresés";
-$langSearchCrit = "Soronként egy szóval írja le az alábbi területre a kulcsszavait.";
+$langTool = "Dokumentum metaadat";
+$langClickKw = "Kattintson a kulcsszÃ³ra a fa struktÃºrÃ¡ban a kivÃ¡lasztÃ¡shoz/kijelÃ¶lÃ©s megszÅ±ntetÃ©sÃ©hez.";
+$langKwHelp = "<p><br>Kattintson a '+' gombra a megnyitÃ¡shoz, , a '-' gombra a bezÃ©rÃ©shoz, a '++' gombra az Ã¶sszes kinyitÃ¡sÃ¡hoz, a '--' gombra az Ã¶sszes bezÃ¡rÃ¡sÃ¡hoz.<br><br>A kulcsszavak kijelÃ¶lÃ©sÃ©nek megszÅ±ntetÃ©sÃ©hez zÃ©rja be teljesen a fastruktÃºrÃ¡t Ã©s nyissa ki Ãºjra a '+' gombbal.<br>Alt gomb lenyomÃ¡sa kÃ¶zben a '+' gombra kattintva kereshetÅ‘k az eredeti kulcsszavak a fÃ¡ban.<br><br>Alt gomb lenyomÃ¡sa kÃ¶zbeni kattintÃ¡ssal lehet kivÃ¡lastrani a kulcsszavakat anÃ©lkÃ¼l, hogy bÅ‘vÃ­tenÃ©nk a kifejezÃ©seket, vagy megszÅ±ntetni a kulcsszÃ³ kijelÃ¶lÃ©sÃ©t a fogalmak bÅ‘vÃ­tÃ©sÃ©vel. </p><p><br>Ha megvÃ¡ltoztatja a leÃ­rÃ¡s nyelvÃ©t, nem adjon hozzÃ¡ kulcsszavakat vele egyidÅ‘ben.<br></p>";
+$langAdvanced = "HaladÃ³";
+$langSearch = "KeresÃ©s";
+$langSearchCrit = "SoronkÃ©nt egy szÃ³!";
 $langNoKeywords = "A kurzusnak nincsenek kulcsszavai";
-$langKwCacheProblem = "A kulcsszó-gyorsítótárat nem lehet megnyitni";
-$langCourseKwds = "A kurzus kulcsszavai";
-$langKwdsInMD = "Kulcsszavak használatban a MD-ben.";
-$langKwdRefs = "Kulcsszó beállítások";
+$langKwCacheProblem = "A kulcsszÃ³-gyorsÃ­tÃ³tÃ¡rat nem lehet megnyitni";
+$langCourseKwds = "Ez a dokumentum tartalmazza a kurzus kulcsszavait";
+$langKwdsInMD = "Kulcsszavak hasznÃ¡latban a MD-ben.";
+$langKwdRefs = "KulcsszÃ³ beÃ¡llÃ­tÃ¡sok";
 $langNonCourseKwds = "Nem-kurzus kulcsszavak";
-$langKwdsUse = "Kurzus kulcsszavak (kövérített = nem használt)";
-$langTotalMDEs = "Összes MD bejegyzések száma:";
+$langKwdsUse = "Kurzus kulcsszavak (kÃ¶vÃ©rÃ­tett = nem hasznÃ¡lt)";
+$langTotalMDEs = "A hivatkozÃ¡sok metaadat bejegyzÃ©seinek szÃ¡ma Ã¶sszesen:";
 ?>

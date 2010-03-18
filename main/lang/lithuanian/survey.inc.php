@@ -1,5 +1,6 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $SurveyTitle = "Apklausos pavadinimas";
 $SurveyIntroduction = "Apklausos apibūdinimas";
@@ -20,7 +21,7 @@ $CreateInAnotherLanguage = "Sukurti šią apklausą kita kalba";
 $ExportInExcel = "Eksportuoti Excel formatu";
 $ComparativeResults = "Palyginimo rezultatai";
 $SelectDataYouWantToCompare = "Išrinkite duomenis, kuriuos norite palyginti";
-$OrCopyPasteUrl = "Or copy paste the link into the url bar of your browser : ";
+$OrCopyPasteUrl = "Or copy paste the link into the url bar of your browser :";
 $ClickHereToOpenSurvey = "Apklausa";
 $SurveyNotShared = "Kol kas apklausų nėra";
 $ViewSurvey = "peržiūrėti apklausą";
@@ -32,11 +33,11 @@ $YourSurveyHasBeenPublished = "publikuota";
 $CreateFromExistingSurvey = "Sukurti iš egzistuojančios apklausos";
 $Publish = "Publikuoti apklausą";
 $SearchASurvey = "Ieškoti apklausos";
-$CourseName = "Kurso vardas";
+$CourseName = "Course name";
 $SurveysOfAllCourses = "Visų kursų apklausos";
 $PleaseSelectAChoice = "Pasirinkite";
 $ThereAreNoQuestionsInTheDatabase = "Duomenų bazėje nėra klausimų";
-$UpdateQuestionType = "Atnaujinti klausimo tipą: ";
+$UpdateQuestionType = "Atnaujinti klausimo tipą:";
 $AddAnotherQuestion = "Įrašyti naują klausimą";
 $IsShareSurvey = "Dalintis apklausa su kitais";
 $Proceed = "Tęsti";
@@ -48,7 +49,7 @@ $PleaseSelectFourDefault = "Prašome išrinkti mažiausiai keturis atsakymus pag
 $PleaseFillDefaultText = "Prašome įrašyti tekstą pagal nutylėjimą";
 $ModifySurveyInformation = "Redaguoti apklausos informaciją";
 $ViewQuestions = "Peržiūrėti klausimus";
-$CreateSurvey = "Sukurti apklausą ";
+$CreateSurvey = "Sukurti apklausą";
 $FinishSurvey = "Užbaigti apklausą";
 $QuestionsAdded = "Klausimai įrašyti";
 $DeleteSurvey = "Ištrinti apklausą";
@@ -113,7 +114,7 @@ $SelectXAxis = "Išrinkti klausimą X ašyje";
 $SelectYAxis = "Išrinkti klausimą Y ašyje";
 $ComparativeReport = "Lyginamoji ataskaita";
 $AllQuestionsOnOnePage = "Visi klausimai rodomi viename puslapyje";
-$SelectUser = "Išrinkti vartotoją";
+$SelectUser = "Vartotojas";
 $SelectUserWhoFilledSurvey = "Išrinkti vartotoją, kuris užpildė apklausą";
 $userreport = "Vartotojo ataskaita";
 $VisualRepresentation = "Grafinis";
@@ -131,12 +132,11 @@ $DetailedReportByQuestion = "Detali ataskaita pagal klausimus";
 $ComparativeReportDetail = "Šioje ataskaitoje galite palyginti du klausimus.";
 $CompleteReportDetail = "In this report you get an overview of all the answers of all users on all questions. You also have the option to see only a selection of questions. You can export the results in CSV format and use this for processing in a statistical application";
 $DetailedReportByUserDetail = "Šioje ataskaitoje galite matyti visus konkretaus vartotojo atsakymus.";
-$DetailedReportByQuestionDetail = "In this report you see the results question by question. Basic statistical analysis and graphics are provided ";
+$DetailedReportByQuestionDetail = "In this report you see the results question by question. Basic statistical analysis and graphics are provided";
 $ReminderResendToAllUsers = "Pranešti visiems apklausos dalyviams. Kitu atveju laišką gaus tik naujai įtraukti apklausos dalyviai.";
 $Multiplechoice = "Daugkartinis pasirinkimas";
-$Multipleresponse = "Daugkartiniai atsakymai";
 $Score = "Įvertinimai";
-$Shared = "Padalintas";
+$Shared = "Padalinta";
 $Invite = "Pakviesti";
 $MaximumScore = "Maksimalus įvertinimas";
 $ViewInvited = "Peržiūrėti pakviestus";

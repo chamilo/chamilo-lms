@@ -1,34 +1,43 @@
 <?php
-/* vim: set expandtab tabstop=4 shiftwidth=4: */
-// +----------------------------------------------------------------------+
-// | PHP version 4.0                                                      |
-// +----------------------------------------------------------------------+
-// | Copyright (c) 1997, 1998, 1999, 2000, 2001 The PHP Group             |
-// +----------------------------------------------------------------------+
-// | This source file is subject to version 2.0 of the PHP license,       |
-// | that is bundled with this package in the file LICENSE, and is        |
-// | available at through the world-wide-web at                           |
-// | http://www.php.net/license/2_02.txt.                                 |
-// | If you did not receive a copy of the PHP license and are unable to   |
-// | obtain it through the world-wide-web, please send a note to          |
-// | license@php.net so we can mail you a copy immediately.               |
-// +----------------------------------------------------------------------+
-// | Authors: Adam Daniel <adaniel1@eesus.jnj.com>                        |
-// |          Bertrand Mansion <bmansion@mamasam.com>                     |
-// +----------------------------------------------------------------------+
-//
-// $Id: checkbox.php 6184 2005-09-07 10:08:17Z bmol $
-
-require_once("HTML/QuickForm/input.php");
+/* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4: */
 
 /**
  * HTML class for a checkbox type field
  *
- * @author       Adam Daniel <adaniel1@eesus.jnj.com>
- * @author       Bertrand Mansion <bmansion@mamasam.com>
- * @version      1.1
- * @since        PHP4.04pl1
- * @access       public
+ * PHP versions 4 and 5
+ *
+ * LICENSE: This source file is subject to version 3.01 of the PHP license
+ * that is available through the world-wide-web at the following URI:
+ * http://www.php.net/license/3_01.txt If you did not receive a copy of
+ * the PHP License and are unable to obtain it through the web, please
+ * send a note to license@php.net so we can mail you a copy immediately.
+ *
+ * @category    HTML
+ * @package     HTML_QuickForm
+ * @author      Adam Daniel <adaniel1@eesus.jnj.com>
+ * @author      Bertrand Mansion <bmansion@mamasam.com>
+ * @author      Alexey Borzov <avb@php.net>
+ * @copyright   2001-2009 The PHP Group
+ * @license     http://www.php.net/license/3_01.txt PHP License 3.01
+ * @version     CVS: $Id: checkbox.php,v 1.23 2009/04/04 21:34:02 avb Exp $
+ * @link        http://pear.php.net/package/HTML_QuickForm
+ */
+
+/**
+ * Base class for <input /> form elements
+ */
+require_once 'HTML/QuickForm/input.php';
+
+/**
+ * HTML class for a checkbox type field
+ *
+ * @category    HTML
+ * @package     HTML_QuickForm
+ * @author      Adam Daniel <adaniel1@eesus.jnj.com>
+ * @author      Bertrand Mansion <bmansion@mamasam.com>
+ * @author      Alexey Borzov <avb@php.net>
+ * @version     Release: 3.2.11
+ * @since       1.0
  */
 class HTML_QuickForm_checkbox extends HTML_QuickForm_input
 {
@@ -214,7 +223,7 @@ class HTML_QuickForm_checkbox extends HTML_QuickForm_input
      *
      * @param     string    $event  Name of event
      * @param     mixed     $arg    event arguments
-     * @param     object    $caller calling object
+     * @param     object    &$caller calling object
      * @since     1.0
      * @access    public
      * @return    void
@@ -235,7 +244,7 @@ class HTML_QuickForm_checkbox extends HTML_QuickForm_input
                         $value = $this->_findValue($caller->_defaultValues);
                     }
                 }
-                if (null !== $value) {
+                if (null !== $value || $caller->isSubmitted()) {
                     $this->setChecked($value);
                 }
                 break;

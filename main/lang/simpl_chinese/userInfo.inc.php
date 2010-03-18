@@ -1,33 +1,34 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$langLineNumber = "ĞĞÊı";
-$langLine = "ĞĞ";
-$langLines = "ĞĞ";
-$langLineOrLines = "ĞĞ";
-$langMoveUp = "ÉÏÒÆ";
-$langMoveDown = "ÏÂÒÆ";
-$langAddNewHeading = "Ìí¼ÓĞÂ±êÌâ";
-$langCourseAdministratorOnly = "½ö½ÌÊ¦";
-$langDefineHeadings = "¶¨Òå±êÌâ";
-$langBackToUsersList = "·µ»ØÓÃ»§ÁĞ±í";
-$langTracking = "¸ú×Ù";
-$langCourseManager = "½ÌÊ¦";
-$langModRight = "¸ü¸ÄÈ¨ÏŞ";
-$langNoAdmin = "´ÓÏÖÔÚ¿ªÊ¼<B>ÎŞÈ¨</B>²é¿´±¾Ò³";
-$langAllAdmin = "´ÓÏÖÔÚ¿ªÊ¼<b>ÓĞÈ¨</b>²é¿´´ËÒ³";
-$langModRole = "¸Ä±ä½ÇÉ«";
-$langRole = "½ÇÉ«";
-$langIsNow = "ÊÇ´ÓÏÖÔÚ¿ªÊ¼µÄ";
-$langInC = "ÔÚÕâÃÅ¿Î³ÌÖĞ";
-$langFilled = "²»±ØÌîĞ´ËùÓĞÑ¡Ïî";
-$langUserNo = "ÓÃ»§ĞòºÅ";
-$langTaken = "ÕıÔÚÊ¹ÓÃ. ÇëÑ¡ÔñÁíÍâÒ»¸ö";
-$langTutor = "Ö¸µ¼½ÌÊ¦";
-$langUnreg = "×¢Ïú";
-$langGroupUserManagement = "Ğ¡×é¹ÜÀí";
-$langUnregister = "×¢Ïú";
-$langAddAUser = "Ìí¼ÓÓÃ»§";
-$UsersUnsubscribed = "&#29992;&#25143;&#24050;&#32463;&#27880;&#38144;";
-$ThisStudentIsSubscribeThroughASession = "&#23398;&#29983;&#24050;&#32463;&#20174;&#26412;&#35838;&#31243;&#27880;&#38144;&#65292;&#20320;&#19981;&#33021;&#32534;&#36753;&#27492;&#31867;&#20449;&#24687;";
+$langLineNumber = "è¡Œæ•°";
+$langLine = "è¡Œ";
+$langLines = "è¡Œ";
+$langLineOrLines = "è¡Œ";
+$langMoveUp = "ä¸Šç§»";
+$langMoveDown = "ä¸‹ç§»";
+$langAddNewHeading = "æ·»åŠ æ–°æ ‡é¢˜";
+$langCourseAdministratorOnly = "ä»…æ•™å¸ˆä½¿ç”¨";
+$langDefineHeadings = "å®šä¹‰æ ‡é¢˜";
+$langBackToUsersList = "è¿”å›åˆ—è¡¨";
+$langTracking = "å­¦ä¹ è¿›åº¦";
+$langCourseManager = "è¯¾ç¨‹ç®¡ç†å‘˜";
+$langModRight = "æ›´æ”¹æƒé™";
+$langNoAdmin = "ä»ç°åœ¨å¼€å§‹<B>æ— æƒ</B>æŸ¥çœ‹æœ¬é¡µ";
+$langAllAdmin = "ä»ç°åœ¨å¼€å§‹<b>æœ‰æƒ</b>æŸ¥çœ‹æ­¤é¡µ";
+$langModRole = "æ”¹å˜è§’è‰²";
+$langRole = "èŒåŠ¡";
+$langIsNow = "æ˜¯ä»ç°åœ¨å¼€å§‹çš„";
+$langInC = "åœ¨æœ¬è¯¾ç¨‹ä¸­";
+$langFilled = "æ‚¨æœ‰äº›é€‰é¡¹æ²¡æœ‰å¡«å†™ã€‚";
+$langUserNo = "æ‚¨é€‰æ‹©çš„ç”¨æˆ·å";
+$langTaken = "å·²è¢«å ç”¨ï¼Œè¯·é€‰æ‹©å…¶ä»–çš„ç”¨æˆ·åã€‚";
+$langTutor = "æ•™å¸ˆ";
+$langUnreg = "æ³¨é”€";
+$langGroupUserManagement = "å°ç»„ç®¡ç†";
+$langUnregister = "æ³¨é”€";
+$langAddAUser = "æ·»åŠ ç”¨æˆ·";
+$UsersUnsubscribed = "ç”¨æˆ·å·²ç»æ³¨é”€";
+$ThisStudentIsSubscribeThroughASession = "å­¦ç”Ÿå·²ç»ä»æœ¬è¯¾ç¨‹æ³¨é”€ï¼Œä½ ä¸èƒ½ç¼–è¾‘æ­¤ç±»ä¿¡æ¯";
 ?>

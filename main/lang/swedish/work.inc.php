@@ -1,35 +1,36 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$Tools  = "Verktyg";
+$Tools = "Verktyg";
 $SendWork = "Ladda upp dokument";
-$langTooBig = "Du valde ingen fil eller filen du valde är för stor.";
-$langListDeleted = "Hela listan har raderats.";
+$langTooBig = "Du valde ingen fil att sÃ¤nda, eller sÃ¥ var den fÃ¶r stor";
+$langListDeleted = "Listan har radrats";
 $langDocModif = "uppgiftstitel modifierad";
-$langDocAdd = "arbetet är lagt till";
+$langDocAdd = "arbetet Ã¤r lagt till";
 $langDocDel = "Filen raderad";
 $langTitleWork = "Filnamn";
-$langAuthors = "Författare";
+$langAuthors = "FÃ¶rfattare";
 $langDelList = "Radera hela listan";
 $langWorkDelete = "Radera";
 $langWorkModify = "Modifiera";
 $langWorkConfirmDelete = "Vill du verkligen radera detta dokument";
 $langAllFiles = "Alla filer";
-$lang_default_upload = "Standard inställning för visning av nyligen postade filer.";
-$lang_new_visible = "Nya dokument är synliga för alla användare";
-$lang_new_unvisible = "Nya dokument är synliga endast för kursansvarig(a)";
-$lang_doc_unvisible = "Ditt dokument är bara synligt för läraren(na) i denna kurs och är därför inte synlig för dig.";
-$langDelLk = "Radera länk";
-$langMustBeRegisteredUser = "Bara registrerade användare i denna kurs kan publicera dokument.";
+$lang_default_upload = "Standard instÃ¤llning fÃ¶r visning av nyligen postade filer.";
+$lang_new_visible = "Nya dokument Ã¤r synliga fÃ¶r alla anvÃ¤ndare";
+$lang_new_unvisible = "Nya dokument Ã¤r synliga endast fÃ¶r kursansvarig(a)";
+$lang_doc_unvisible = "Ditt dokument Ã¤r bara synligt fÃ¶r lÃ¤raren(na) i denna kurs och Ã¤r dÃ¤rfÃ¶r inte synlig fÃ¶r dig.";
+$langDelLk = "Vill du verkligen radera denna lÃ¤nk?";
+$langMustBeRegisteredUser = "Bara registrerade anvÃ¤ndare i denna kurs kan publicera dokument.";
 $langListDel = "Radera lista";
-$langNameDir = "Döp om arkiv";
-$langFileExists = "Filen existerar redan";
+$langNameDir = "Namn pÃ¥ den nya mappen";
+$langFileExists = "Operationen Ã¤r omÃ¶jlig.<br>En fil med detta namn existerar redan.";
 $CreateDirectory = "Skapa arkiv";
 $langCurrentDir = "Aktuell mapp";
 $UploadADocument = "Ladda upp dokument";
-$EditToolOptions = "Ändra verktygs val";
+$EditToolOptions = "Ã„ndra verktygs val";
 $DocumentDeleted = "Dokument raderat";
-$SendMailBody = "En användare har postat ett dokument genom uppgiftsverktyget på din kurs";
+$SendMailBody = "En anvÃ¤ndare har postat ett dokument genom uppgiftsverktyget pÃ¥ din kurs";
 $DirDelete = "Radera katalog";
-$ValidateChanges = "Godkänn ändringar";
+$ValidateChanges = "GodkÃ¤nn Ã¤ndringar";
 ?>

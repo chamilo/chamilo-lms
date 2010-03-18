@@ -1,5 +1,6 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $NewForumCreated = "Sukurtas naujas forumas";
 $NewThreadCreated = "Sukurta nauja forumo gija.";
@@ -27,7 +28,7 @@ $langLearnpathPrevious = "Ankstesnis";
 $langLearnpathNext = "Kitas";
 $langLearnpathRestart = "Iš naujo";
 $langLearnpathThisStatus = "Dabar šis žingsnis";
-$langLearnpathToEnter = "Kad įeiti į ";
+$langLearnpathToEnter = "Kad įeiti į";
 $langLearnpathFirstNeedTo = "Jums pirmiausia reikia atlikti";
 $langLearnpathLessonTitle = "Žingsnio antraštė";
 $langLearnpathStatus = "Būsena";
@@ -57,7 +58,7 @@ $lang_learnpath_module_deleted = "Modulis su visais žingsniais ištrintas";
 $lang_nochapters = "Kol kas modulių nėra.";
 $lang_add_learnpath_item = "Įterpti žingsnius į šį modulį";
 $lang_learnpath_item_deleted = "Žingsnis ištrintas";
-$lang_assign_learnpath_items_to = "prašome priskirti šį/šiuos žingsnius moduliui: ";
+$lang_assign_learnpath_items_to = "prašome priskirti šį/šiuos žingsnius moduliui:";
 $lang_edit_learnpath_item = "Redaguoti žingsnio aprašymą/antarštę";
 $lang_add_prereq = "Pridėti/redaguoti būtinas sąlygas šiam žingsniui";
 $lang_delete_learnpath_item = "Ištrinti žingsnį";
@@ -110,17 +111,17 @@ $lang_loading = "Kraunama, prašome palaukti...";
 $lang_empty = "Čia nėra jokių žingsnių.";
 $langHotPotatoesFinished = "Šis HotPotatoes testas uždarytas.";
 $langCompletionLimit = "Įveikimo limitas (mažiausia taškų)";
-$langPrereqToEnter = "Kad įeiti ";
-$langPrereqFirstNeedTo = " pirmiausia reikia užbaigti ";
-$langPrereqModuleMinimum1 = "Minimum 1 step is missing from ";
+$langPrereqToEnter = "Kad įeiti";
+$langPrereqFirstNeedTo = " pirmiausia reikia užbaigti";
+$langPrereqModuleMinimum1 = "Minimum 1 step is missing from";
 $langPrereqModuleMinimum2 = " which is set as prerequisities.";
-$langPrereqTestLimit1 = " turite surinkti minimaliai ";
-$langPrereqTestLimit2 = " taškų ";
-$langPrereqTestLimitNow = "Dabar turite: ";
+$langPrereqTestLimit1 = " turite surinkti minimaliai";
+$langPrereqTestLimit2 = " taškų";
+$langPrereqTestLimitNow = "Dabar turite:";
 $langLearnpathExitFullScreen = "atgal į normalų atvaizdavimą";
 $langLearnpathFullScreen = "pilnas ekranas";
-$langItemMissing1 = "There was a ";
-$langItemMissing2 = "page (step) here in the original Dokeos Learning Path.";
+$langItemMissing1 = "There was a";
+$langItemMissing2 = "page (step) here in the original Chamilo Learning Path.";
 $langDone = "Baigta";
 $langNoItemSelected = "To display something here, please select an item from the side menu";
 $langNewDocumentCreated = "Naujas dokumentas sukurtas.";
@@ -141,8 +142,8 @@ $langLPCreatedToContinue = "Galite įdėti skyrių, modulį arba žingsnį kair�
 $langLPCreatedAddChapterStep = "Galite įdėti skyrių, modulį arba žingsnį kairėje esančiame meniu.";
 $langPrerequisitesAdded = "Prerequisites to the current step have been added.";
 $langAddEditPrerequisites = "Įrašyti/redaguoti būtinasias sąlygas";
-$langMinimum = "Minimumas";
-$langMaximum = "Maksimumas";
+$langMinimum = "minimumas";
+$langMaximum = "maksimalus";
 $langNoDocuments = "Dokumentų nėra";
 $langNoExercisesAvailable = "Pratimų nėra";
 $langNoLinksAvailable = "Nuorodų nėra";
@@ -171,7 +172,7 @@ $CreateANewForum = "Create a new forum";
 $LinkAdd = "Add link";
 $WoogieConversionPowerPoint = "Woogie : Word conversion";
 $WelcomeWoogieSubtitle = "A Word to learnpath converter";
-$WelcomeWoogieConverter = "Welcome in the Woogie converter<ul type=\\\"1\\\"><li>Choose a file .doc, .sxw, .odt<li>Upload it in Woogie. It will be convert in a SCORM learningpath<li>Then, you will be able to add audio comments on each page and insert quizz and other activities between the pages</ul>";
+$WelcomeWoogieConverter = "Welcome in the Woogie converter<ul type=\"1\"><li>Choose a file .doc, .sxw, .odt<li>Upload it in Woogie. It will be convert in a SCORM learningpath<li>Then, you will be able to add audio comments on each page and insert quizz and other activities between the pages</ul>";
 $WoogieError = "Error during the conversion of the word document. Please check if there are special characters in the name of your document..";
 $WordConvert = "Word conversion";
 $Order = "Order";

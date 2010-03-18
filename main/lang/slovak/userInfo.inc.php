@@ -1,34 +1,35 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$langLineNumber = "&#268;Ìslo riadku";
+$langLineNumber = "ƒå√≠slo riadku";
 $langLine = "riadok";
-$langLines = "Riadkov";
+$langLines = "riadky";
 $langLineOrLines = "riadky(ov)";
-$langMoveUp = "Posun˙&#357; hore";
-$langMoveDown = "Posun˙&#357; dole";
-$langAddNewHeading = "Prida&#357; nov˝ nadpis";
-$langCourseAdministratorOnly = "Len pre lektorov";
-$langDefineHeadings = "Definuj nadpisy";
-$langBackToUsersList = "Spa&#357; na zoznam pouûÌvate&#318;ov";
+$langMoveUp = "Presun√∫≈• hore";
+$langMoveDown = "Presun√∫≈• dole";
+$langAddNewHeading = "Prida≈• nov√Ω nadpis";
+$langCourseAdministratorOnly = "len pre lektorov";
+$langDefineHeadings = "Definova≈• nadpisy";
+$langBackToUsersList = "Spa≈• na zoznam pou≈æ√≠vateƒæov";
 $langTracking = "Sledovanie";
 $langCourseManager = "Lektor";
-$langModRight = "zmeni&#357; pr·va";
-$langNoAdmin = "od teraz <b>nem·</b> ûiadne pr·va na tejto str·nke";
-$langAllAdmin = "od teraz <b>m·</b> vöetky pr·va na tejto str·nke";
-$langModRole = "Zmeni&#357; rolu na";
-$langRole = "Rola";
+$langModRight = "zmeni≈• pr√°va";
+$langNoAdmin = "od teraz <b>nem√°</b> ≈æiadne pr√°va na tejto str√°nke";
+$langAllAdmin = "od teraz <b>m√°</b> v≈°etky pr√°va na tejto str√°nke";
+$langModRole = "Zmeni≈• rolu na";
+$langRole = "Popis";
 $langIsNow = "je odteraz";
 $langInC = "v tomto kurze";
-$langFilled = "Neboli vyplnenÈ vöetky polia";
-$langUserNo = "&#268;Ìslo pouûÌvate&#318;a";
-$langTaken = "je uû pouûitÈ. Vyberte si inÈ";
-$langTutor = "T˙tor";
-$langUnreg = "Odhl·si&#357;";
-$langGroupUserManagement = "Spr·va skupÌn";
-$langUnregister = "Zruöi&#357; registr·ciu";
-$langAddAUser = "Prida&#357; pouûÌvate&#318;a";
-$UsersUnsubscribed = "Vybran˝ pouûÌvate&#318; bol odhl·sen˝ z kurzu.";
-$ThisStudentIsSubscribeThroughASession = "Tento ötudent sa prihl·sil do kurzu cez session. NemÙûete upravova&#357; jeho inform·cie.";
-$NoDataAvailable = "Nie s˙ k dispozÌcii ûiadne ˙daje";
+$langFilled = "Nejak√© polia ste nechali pr√°zdne.";
+$langUserNo = "Meno pou≈æ√≠vateƒæa, ktor√© ste vybrali";
+$langTaken = "je u≈æ pou≈æit√Ω. Vyberte in√Ω.";
+$langTutor = "T√∫tor";
+$langUnreg = "Odhl√°si≈•";
+$langGroupUserManagement = "Spr√°va skup√≠n";
+$langUnregister = "Zru≈°i≈• registr√°ciu";
+$langAddAUser = "Prida≈• pou≈æ√≠vateƒæa";
+$UsersUnsubscribed = "Vybran√≠ pou≈æ√≠vatelia boli odhl√°sen√≠ z kurzu";
+$ThisStudentIsSubscribeThroughASession = "Tento ≈°tudent sa prihl√°sil do kurzu cez session. Nem√¥≈æete upravova≈• jeho inform√°cie.";
+$NoDataAvailable = "Nie s√∫ k dispoz√≠cii ≈æiadne √∫daje";
 ?>

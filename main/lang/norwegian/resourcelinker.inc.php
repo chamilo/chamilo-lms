@@ -1,8 +1,9 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$LearningPath = "Læringssti";
-$LevelUp = "opp et nivå";
+$LearningPath = "LÃ¦ringssti";
+$LevelUp = "opp et nivÃ¥";
 $AddIt = "Legg til";
 $MainCategory = "hoved kategori";
 $lang_delete_added_resources = "Slett tillegg";
@@ -26,7 +27,7 @@ $NewWindow = "I et nytt vindu";
 $StepDeleted1 = "Denne";
 $Modify = "Modifiser";
 $Chapter = "Kapitell";
-$AgendaAdd = "Legg til en kalenderoppføring";
-$ItemTitle = "Tittel";
+$AgendaAdd = "Legg til ny oppfÃ¸ring i kalender";
+$ItemTitle = "Tittel for oppfÃ¸ring";
 $Detail = "Detaljer";
 ?>

@@ -80,7 +80,7 @@ api_protect_course_script(true);
 // including additional library scripts
 require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
 include_once (api_get_path(LIBRARY_PATH).'groupmanager.lib.php');
-$nameTools=get_lang('Forum');
+$nameTools=get_lang('ToolForum');
 
 /*
 -----------------------------------------------------------
@@ -110,7 +110,7 @@ if (isset($_SESSION['gradebook'])){
 if (!empty($gradebook) && $gradebook=='view') {
 	$interbreadcrumb[]= array (
 			'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
-			'name' => get_lang('Gradebook')
+			'name' => get_lang('ToolGradebook')
 		);
 }
 
@@ -153,7 +153,10 @@ $whatsnew_post_info=$_SESSION['whatsnew_post_info'];
 // if the user is not a course administrator and the forum is hidden
 // then the user is not allowed here.
 if (!api_is_allowed_to_edit(false,true) AND $current_forum_category['visibility']==0) {
-	forum_not_allowed_here();
+	$forum_allow = forum_not_allowed_here();
+	if ($forum_allow === false) {
+		exit;
+	}
 }
 
 /*
@@ -238,8 +241,8 @@ if ($action_forums!='add') {
 	$my_session=isset($_SESSION['id_session']) ? $_SESSION['id_session'] : null;
 	$forum_categories_list='';
 	echo "\t<tr>\n\t\t<th align=\"left\" ".(api_is_allowed_to_edit(null,true)?"colspan='5'":"colspan='6'").">";
-	echo '<span class="forum_title">'.prepare4display($forum_category['cat_title']).'</span><br />';
-	echo '<span class="forum_description">'.prepare4display($forum_category['cat_comment']).'</span>';
+	echo '<span class="forum_title">'.prepare4display(Security::remove_XSS($forum_category['cat_title'])).'</span><br />';
+	echo '<span class="forum_description">'.prepare4display(Security::remove_XSS($forum_category['cat_comment'],STUDENT)).'</span>';
 	echo "</th>\n";
 	if (api_is_allowed_to_edit(false,true) && !($forum_category['session_id']==0 && intval($my_session)!=0)) {
 		echo '<th style="vertical-align: top;" align="center" >';
@@ -351,7 +354,7 @@ if ($action_forums!='add') {
 				} else {
 					$session_displayed = '';
 				}
-				echo "\t\t<td><a href=\"viewforum.php?".api_get_cidreq()."&forum=".$forum['forum_id']."&amp;origin=".$origin."&amp;search=".Security::remove_XSS(urlencode(isset($_GET['search'])?$_GET['search']:''))."\" ".class_visible_invisible($forum['visibility']).">".prepare4display($forum['forum_title']).$session_displayed.'</a>'.$forum_title_group_addition.'<br />'.prepare4display($forum['forum_comment'])."</td>\n";
+				echo "\t\t<td><a href=\"viewforum.php?".api_get_cidreq()."&forum=".$forum['forum_id']."&amp;origin=".$origin."&amp;search=".Security::remove_XSS(urlencode(isset($_GET['search'])?$_GET['search']:''))."\" ".class_visible_invisible($forum['visibility']).">".prepare4display(Security::remove_XSS($forum['forum_title'])).$session_displayed.'</a>'.$forum_title_group_addition.'<br />'.prepare4display(Security::remove_XSS($forum['forum_comment'],STUDENT))."</td>\n";
 
 				//$number_forum_topics_and_posts=get_post_topics_of_forum($forum['forum_id']); // deprecated
 				// the number of topics and posts
@@ -373,6 +376,7 @@ if ($action_forums!='add') {
 				}
 				echo "</td>\n";
 				echo "\t\t<td NOWRAP align='center'>";
+				
 				if (api_is_allowed_to_edit(false,true) && !($forum['session_id']==0 && intval(isset($_SESSION['id_session'])?$_SESSION['id_session']:null)!=0)) {
 					echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&forumcategory=".Security::remove_XSS($_GET['forumcategory'])."&amp;action=edit&amp;content=forum&amp;id=".$forum['forum_id']."\">".icon('../img/edit.gif',get_lang('Edit'))."</a>";
 					echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&forumcategory=".Security::remove_XSS($_GET['forumcategory'])."&amp;action=delete&amp;content=forum&amp;id=".$forum['forum_id']."\" onclick=\"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang("DeleteForum"),ENT_QUOTES,$charset))."')) return false;\">".icon('../img/delete.gif',get_lang('Delete'))."</a>";
@@ -380,6 +384,7 @@ if ($action_forums!='add') {
 					display_lock_unlock_icon('forum',$forum['forum_id'], $forum['locked'], array("forumcategory"=>$_GET['forumcategory']));
 					display_up_down_icon('forum',$forum['forum_id'], $forums_in_category);
 				}
+				
 				$iconnotify = 'send_mail.gif';
 				if (is_array(isset($_SESSION['forum_notification']['forum'])?$_SESSION['forum_notification']['forum']:null))	{
 					if (in_array($forum['forum_id'],$_SESSION['forum_notification']['forum'])) {

@@ -1,14 +1,14 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $langTracking = "Statestikk";
 $langAuthInfo = "Autentifikasjon";
-$langDelImage = "Fjern bilde";
 $langUpdateImage = "Endre bilde";
-$langImageWrong = "Filstørrelsen skal være mindre enn ";
+$langImageWrong = "FilstÃ¸rrelsen skal vÃ¦re mindre enn";
 $langAddImage = "Bilde";
-$langCourseManager = "Lærer";
-$password_request = "Vi har mottatt en forespørsel om å resette ditt passord. Dersom dette ikke er ønskelig, ignorer denne mailen.";
+$langCourseManager = "LÃ¦rer";
+$password_request = "Vi har mottatt en forespÃ¸rsel om Ã¥ resette ditt passord. Dersom dette ikke er Ã¸nskelig, ignorer denne mailen.";
 $YourPasswordHasBeenEmailed = "Ditt passord er sendt til din mailadresse";
 $langLogin = "Logg inn";
 $langAction = "Aksjon";
@@ -16,23 +16,23 @@ $langPreserved = "Bevart";
 $langDeleted = "Slettet";
 $langAdded = "Lagt til";
 $langConfirmUnsubscribe = "Bekreft brukeravmelding";
-$langCourseName = "Navn på kurset";
-$langSubscribe = "Påmelding";
-$langSee = "Gå til";
-$langLastVisits = "Mine siste besøk";
-$langGroupUserManagement = "Gruppehåndtering";
+$langCourseName = "Navn pÃ¥ kurset";
+$langSubscribe = "PÃ¥melding";
+$langSee = "GÃ¥ til";
+$langLastVisits = "Mine siste besÃ¸k";
+$langGroupUserManagement = "GruppehÃ¥ndtering";
 $langStudent = "Student";
 $langModifProfile = "Redigere min profil";
-$langNowGoChooseYourCourses = "NB! Trykk neste, og velg kurs fra kurskattegorilisten du ønsker å melde deg på";
+$langNowGoChooseYourCourses = "NB! Trykk neste, og velg kurs fra kurskattegorilisten du Ã¸nsker Ã¥ melde deg pÃ¥";
 $langMailHasBeenSent = "En email er sendt deg med brukernavn og passord";
 $langPersonalSettings = "Dine personlige opplysninger er registrert.";
 $langManager = "Administrator";
 $langPass = "Passord";
 $langSurname = "Etternavn";
-$langSex = "Kjønn";
+$langSex = "KjÃ¸nn";
 $langClass = "Klasse";
 $langEdit = "rediger";
-$required = "nødvendige";
+$required = "nÃ¸dvendige";
 $langphone = "Tlf";
 $MyProgress = "Min fremdrift";
 ?>

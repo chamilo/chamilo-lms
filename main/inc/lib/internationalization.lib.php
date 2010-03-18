@@ -1,24 +1,22 @@
 <?php
+/* For licensing terms, see /license.txt */
+
 /**
- * ==============================================================================
  * File: internationalization.lib.php
- * Internationalization library for Dokeos 1.8.7 LMS
+ * Internationalization library for Chamilo 1.8.7 LMS
  * A library implementing internationalization related functions.
  * License: GNU/GPL version 2 or later (Free Software Foundation)
- * @author Ivan Tcholakov, <ivantcholakov@gmail.com>, September 2009
+ * @author Ivan Tcholakov, <ivantcholakov@gmail.com>, 2009, 2010
  * @author More authors, mentioned in the correpsonding fragments of this source.
- * @package dokeos.library
- * ==============================================================================
+ * @package chamilo.library
  */
 
 
 /**
- * ----------------------------------------------------------------------------
  * Constants
- * ----------------------------------------------------------------------------
  */
 
-// Predefined date formats in Dokeos provided by the language sub-system.
+// Predefined date formats in Chamilo provided by the language sub-system.
 // To be used as a parameter for the function api_format_date().
 define('TIME_NO_SEC_FORMAT', 0);	// 15:23
 define('DATE_FORMAT_SHORT', 1);		// 25.08.2009
@@ -36,11 +34,19 @@ define('PERSON_NAME_LIBRARY_ORDER', 3);		// Contextual: formatting person's name
 define('PERSON_NAME_EMAIL_ADDRESS', PERSON_NAME_WESTERN_ORDER);		// Contextual: formatting a person's name assotiated with an email-address. Ivan: I am not sure how seems email servers an clients would interpret name order, so I assign the Western order.
 define('PERSON_NAME_DATA_EXPORT', PERSON_NAME_EASTERN_ORDER);		// Contextual: formatting a person's name for data-exporting operarions. For backward compatibility this format has been set to Eastern order.
 
+// The following constants are used for tunning language detection functionality.
+// We reduce the text for language detection to the given number of characters
+// for increaseing speed and to decrease memory consumption.
+define ('LANGUAGE_DETECT_MAX_LENGTH', 2000);
+// Maximum allowed difference in so called delta-points for aborting certain language detection.
+// The value 80000 is good enough for speed and detection accuracy.
+// If you set the value of $max_delta too low, no language will be recognized.
+// $max_delta = 400 * 350 = 140000 is the best detection with lowest speed.
+define ('LANGUAGE_DETECT_MAX_DELTA', 140000);
+
 
 /**
- * ----------------------------------------------------------------------------
  * Initialization
- * ----------------------------------------------------------------------------
  */
 
 /**
@@ -75,13 +81,11 @@ function api_set_internationalization_default_encoding($encoding) {
 
 
 /**
- * ----------------------------------------------------------------------------
  * Language support
- * ----------------------------------------------------------------------------
  */
 
 /**
- * Whenever the server type in the Dokeos Config settings is
+ * Returns a translated (localized) string, called by its identificator.
  * @param string $variable		This is the identificator (name) of the translated string to be retrieved.
  * @param string $notrans		This parameter directs whether a link to DLTT to be shown for untranslated strings
  * 								($notrans = 'DLTT' means "yes", any other value means "no").
@@ -94,14 +98,16 @@ function api_set_internationalization_default_encoding($encoding) {
  *
  * Notes:
  * 1. If the name of a given language variable has the prefix "lang" it may be omited, i.e. get_lang('langYes') == get_lang('Yes').
- * 2. When server type in Dokeos config settings is set as test (development) server and $notrans = 'DLTT', untranslated variables
+ * 2. When server type in Chamilo config settings is set as test (development) server and $notrans = 'DLTT', untranslated variables
  * are shown as links to DLTT where translations may be proposed.
  * 3. Additionally, untranslated variables might be indicated by special opening and closing tags  -  [=  =]
  * They do not show up in these two cases (for both production and test server modes):
  * - when the special setting 'hide_dltt_markup' is set so;
  * - when showing the DLTT link (on untranslated variable) is intentionaly suppressed by a developer, using the input parameter
  * $notrans, i.e. when the function is called in this way: get_lang('MyText', '')
- * 4. DLTT means Dokeos Language Translation Tool.
+ * 4. Translations are created by using a special tool: Chamilo Translation Application.
+ * @link http://translate.chamilo.org/
+ * 5. DLTT means Dokeos Language Translation Tool - it was previously used.
  * @link http://www.dokeos.com/DLTT/
  */
 function get_lang($variable, $notrans = 'DLTT', $language = null) {
@@ -117,7 +123,7 @@ function get_lang($variable, $notrans = 'DLTT', $language = null) {
 	// Caching results from some API functions, for speed.
 	static $langpath;
 	if (!isset($langpath)) {
-		$langpath = api_get_path(SYS_CODE_PATH).'lang/';
+		$langpath = api_get_path(SYS_LANG_PATH);
 	}
 	static $test_server_mode;
 	if (!isset($test_server_mode)) {
@@ -202,6 +208,7 @@ function get_lang($variable, $notrans = 'DLTT', $language = null) {
 	}
 	*/
 	$langvar = isset($$variable) ? $$variable : ${"lang$variable"};
+	// TODO: Ivan, 12-FEB-2010: These generated links (translation suggestions) to the Dokeos' site have to be corrected, I don't know how.
 	return $cache[$language][$dltt][$variable] =
 		isset($langvar) && is_string($langvar) && !empty($langvar)
 			? _get_lang_purifier(str_replace("\\'", "'", $langvar), $language)
@@ -262,14 +269,15 @@ function api_get_valid_language($language) {
 function api_purify_language_id($language) {
 	static $purified = array();
 	if (!isset($purified[$language])) {
-		$purified[$language] = str_replace(array('_unicode', '_latin', '_corporate', '_org', '_km'), '', strtolower($language));
+		$purified[$language] = trim(str_replace(array('_unicode', '_latin', '_corporate', '_org', '_km'), '', strtolower($language)));
 	}
 	return $purified[$language];
 }
 
 /**
- * Gets language isocode column from the language table, taking the current language as a query parameter.
- * @param string $language	This is the name of the folder containing translations for the corresponding language (e.g arabic, english).
+ * Gets language isocode column from the language table, taking the given language as a query parameter.
+ * @param string $language		This is the name of the folder containing translations for the corresponding language (e.g arabic, english).
+ * @param string $default_code	This is the value to be returned if there was no code found corresponding to the given language.
  * If $language is omitted, interface language is assumed then.
  * @return string			The found isocode or null on error.
  * Returned codes are according to the following standards (in order of preference):
@@ -278,29 +286,62 @@ function api_purify_language_id($language) {
  *    and the ISO 3166 two-letter territory codes (pt-BR, ...)
  * -  ISO 639-2 : Alpha-3 code (three-letters code - ast, fur, ...)
  */
-function api_get_language_isocode($language = null) {
+function api_get_language_isocode($language = null, $default_code = 'en') {
 	static $iso_code = array();
 	if (empty($language)) {
 		$language = api_get_interface_language();
 	}
 	if (!isset($iso_code[$language])) {
 		if (!class_exists('Database')) {
-			return 'en'; // This might happen, in case of calling this function early during the global initialization.
+			return $default_code; // This might happen, in case of calling this function early during the global initialization.
 		}
-		$sql_result = Database::query("SELECT isocode FROM ".Database::get_main_table(TABLE_MAIN_LANGUAGE)." WHERE dokeos_folder = '$language'", __FILE__, __LINE__);
+		$sql_result = Database::query("SELECT isocode FROM ".Database::get_main_table(TABLE_MAIN_LANGUAGE)." WHERE dokeos_folder = '$language'");
 		if (Database::num_rows($sql_result)) {
 			$result = Database::fetch_array($sql_result);
-			$iso_code[$language] = $result['isocode'];
+			$iso_code[$language] = trim($result['isocode']);
 		} else {
 			$language_purified_id = api_purify_language_id($language);
 			$iso_code[$language] = isset($iso_code[$language_purified_id]) ? $iso_code[$language_purified_id] : null;
+		}
+		if (empty($iso_code[$language])) {
+			$iso_code[$language] = $default_code;
 		}
 	}
 	return $iso_code[$language];
 }
 
 /**
- * This function check whether a given language can use Latin 1 encoding.
+ * Gets text direction according to the given language.
+ * @param string $language	This is the name of the folder containing translations for the corresponding language (e.g 'arabic', 'english', ...).
+ * ISO-codes are acceptable too ('ar', 'en', ...). If $language is omitted, interface language is assumed then.
+ * @return string			The correspondent to the language text direction ('ltr' or 'rtl').
+ */
+function api_get_text_direction($language = null) {
+	static $text_direction = array();
+	if (empty($language)) {
+		$language = api_get_interface_language();
+	}
+	if (!isset($text_direction[$language])) {
+		$text_direction[$language] = in_array(api_purify_language_id($language),
+			array(
+				'arabic', 'ar',
+				'dari', 'prs',
+				'hebrew', 'he',
+				'iw',
+				'pashto', 'ps',
+				'persian', 'fa',
+				'ur',
+				'yiddish', 'yid'
+			)
+		) ? 'rtl' : 'ltr';
+	}
+	return $text_direction[$language];
+}
+
+/**
+ * This function checks whether a given language can use Latin 1 encoding.
+ * In the past (Chamilo 1.8.6.2), the function was used in the installation script only once.
+ * It is not clear whether this function would be use useful for something else in the future.
  * @param string $language	The checked language.
  * @return bool				TRUE if the given language can use Latin 1 encoding (ISO-8859-15, ISO-8859-1, WINDOWS-1252, ...), FALSE otherwise.
  */
@@ -315,56 +356,395 @@ function api_is_latin1_compatible($language) {
 
 
 /**
- * ----------------------------------------------------------------------------
- * Date and time formats
- * ----------------------------------------------------------------------------
+ * Language recognition
+ * Based on the publication:
+ * W. B. Cavnar and J. M. Trenkle. N-gram-based text categorization.
+ * Proceedings of SDAIR-94, 3rd Annual Symposium on Document Analysis
+ * and Information Retrieval, 1994.
+ * @link http://citeseer.ist.psu.edu/cache/papers/cs/810/http:zSzzSzwww.info.unicaen.frzSz~giguetzSzclassifzSzcavnar_trenkle_ngram.pdf/n-gram-based-text.pdf
+ */
+
+function api_detect_language(&$string, $encoding = null) {
+	if (empty($encoding)) {
+		$encoding = _api_mb_internal_encoding();
+	}
+	if (empty($string)) {
+		return false;
+	}
+	$result_array = &_api_compare_n_grams(_api_generate_n_grams(api_substr($string, 0, LANGUAGE_DETECT_MAX_LENGTH, $encoding), $encoding), $encoding);
+	if (empty($result_array)) {
+		return false;
+	}
+	list($key, $delta_points) = each($result_array);
+	return strstr($key, ':', true);
+}
+
+
+/**
+ * Date and time conversions and formats
  */
 
 /**
- * Returns formated date/time format correspondent to a given language.
+ * Returns an alphabetized list of timezones in an associative array that can be used to populate a select
+ *
+ * @return array List of timezone identifiers
+ *
+ * @author Guillaume Viguier <guillaume.viguier@beeznest.com>
+ */
+function api_get_timezones() {
+	$timezone_identifiers = DateTimeZone::listIdentifiers();
+	sort($timezone_identifiers);
+	$out = array();
+	foreach($timezone_identifiers as $tz) {
+		$out[$tz] = $tz;
+	}
+	$null_option = array("" => "");
+	$result = array_merge($null_option, $out);
+	return $result;
+}
+
+/**
+ * Returns the timezone to be converted to/from, based on user or admin preferences
+ *
+ * @return string The timezone chosen
+ */
+function _api_get_timezone() {
+	global $_user;
+	// First, get the default timezone of the server
+	$to_timezone = date_default_timezone_get();
+	// Second, see if a timezone has been chosen for the platform
+	$timezone_value = api_get_setting('timezone_value', 'timezones');
+	if ($timezone_value != null) {
+		$to_timezone = $timezone_value;
+	}
+	// If allowed by the administrator
+	$use_users_timezone = api_get_setting('use_users_timezone', 'timezones');
+	if ($use_users_timezone == 'true') {
+		// Get the timezone based on user preference, if it exists
+		require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
+		$timezone_user = UserManager::get_extra_user_data_by_field($_user['user_id'],'timezone');
+		if ($timezone_user['timezone'] != null) {
+			$to_timezone = $timezone_user['timezone'];
+		}
+	}
+	return $to_timezone;
+}
+
+/**
+ * Returns the given date as a DATETIME in UTC timezone. This function should be used before entering any date in the DB.
+ *
+ * @param mixed The date to be converted (can be a string supported by date() or a timestamp)
+ * @return string The DATETIME in UTC to be inserted in the DB, or null if the format of the argument is not supported
+ *
+ * @author Guillaume Viguier <guillaume.viguier@beeznest.com>
+ */
+function api_get_utc_datetime($time = null) {
+	$from_timezone = _api_get_timezone();
+	$to_timezone = 'UTC';
+	if (is_null($time)) {
+		return gmdate("Y-m-d H:i:s");
+	}
+	// If time is a timestamp, return directly in utc
+	if (is_int($time)) {
+		return gmdate("Y-m-d H:i:s", $time);
+	}
+	try {
+		$date = new DateTime($time, new DateTimezone($from_timezone));
+		$date->setTimezone(new DateTimeZone($to_timezone));
+		return $date->format("Y-m-d H:i:s");
+	} catch (Exception $e) {
+		return null;
+	}
+}
+
+/**
+ * Returns a DATETIME string converted to the right timezone
+ * @param mixed The time to be converted
+ * @param string The timezone to be converted to. If null, the timezone will be determined based on user preference, or timezone chosen by the admin for the platform.
+ * @param string The timezone to be converted from. If null, UTC will be assumed.
+ * @return string The converted time formatted as Y-m-d H:i:s
+ *
+ * @author Guillaume Viguier <guillaume.viguier@beeznest.com>
+ */
+function api_get_local_time($time = null, $to_timezone=null, $from_timezone=null) {
+	// Determining the timezone to be converted from
+	if (is_null($from_timezone)) {
+		$from_timezone = 'UTC';
+	}
+	// Determining the timezone to be converted to
+	if (is_null($to_timezone)) {
+		$to_timezone = _api_get_timezone();
+	}
+	// If time is a timestamp, convert it to a string
+	if (is_null($time)) {
+		$from_timezone = 'UTC';
+		$time = gmdate('Y-m-d H:i:s');
+	}
+	if (is_int($time)) {
+		$from_timezone = 'UTC';
+		$time = gmdate('Y-m-d H:i:s', $time);
+	}
+	try {
+		$date = new DateTime($time, new DateTimezone($from_timezone));
+		$date->setTimezone(new DateTimeZone($to_timezone));
+		return $date->format('Y-m-d H:i:s');
+	} catch (Exception $e) {
+		return null;
+	}
+}
+
+/**
+ * Converts a string into a timestamp safely (handling timezones), using strtotime
+ * 
+ * @param string String to be converted
+ * @param string Timezone (if null, the timezone will be determined based on user preference, or timezone chosen by the admin for the platform)
+ * @return int Timestamp
+ * 
+ * @author Guillaume Viguier <guillaume.viguier@beeznest.com>
+ */
+function api_strtotime($time, $timezone = null) {
+	$system_timezone = date_default_timezone_get();
+	date_default_timezone_set($timezone);
+	$timestamp = strtotime($time);
+	date_default_timezone_set($system_timezone);
+	return $timestamp;
+}
+
+/**
+ * Returns formated date/time, correspondent to a given language.
+ * The given date should be in the timezone chosen by the administrator and/or user. Use api_get_local_time to get it.
+ * 
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  * @author Christophe Gesche<gesche@ipm.ucl.ac.be>
  *         originally inspired from from PhpMyAdmin
  * @author Ivan Tcholakov, 2009, code refactoring, adding support for predefined date/time formats.
- * @param string/int $date_format		The date pattern. See the php-manual about the function strftime().
- * Note: For $date_format the following integer constants may be used for using predefined date/time
- * formats in the Dokeos system: TIME_NO_SEC_FORMAT, DATE_FORMAT_SHORT, DATE_FORMAT_LONG, DATE_TIME_FORMAT_LONG.
- * @param int $time_stamp (optional)	Time as an integer value. The default value -1 means now, the function time() is called internally.
- * @param string $language (optional)	Language indentificator. If it is omited, the current interface language is assumed.
- * @return string						Returns the formatted date.
+ * @author Guillaume Viguier <guillaume.viguier@beeznest.com>
+ * 
+ * @param mixed Timestamp or datetime string
+ * @param mixed Date format (string or int; see date formats in the Chamilo system: TIME_NO_SEC_FORMAT, DATE_FORMAT_SHORT, DATE_FORMAT_LONG, DATE_TIME_FORMAT_LONG)
+ * @param string $language (optional)		Language indentificator. If it is omited, the current interface language is assumed.
+ * @return string							Returns the formatted date.
+ * 
  * @link http://php.net/manual/en/function.strftime.php
  */
-function api_format_date($date_format, $time_stamp = -1, $language = null) {
-	if ($time_stamp == -1) {
-		$time_stamp = time();
+function api_format_date($time, $format = null, $language = null) {
+	
+	$system_timezone = date_default_timezone_get();
+	date_default_timezone_set(_api_get_timezone());
+	
+	if (is_string($time)) {
+		$time = strtotime($time);
 	}
-	if (is_int($date_format)) {
-		switch ($date_format) {
+	
+	if (is_null($format)) {
+		$format = DATE_TIME_FORMAT_LONG;
+	}
+	
+	$datetype = null;
+	$timetype = null;
+	if(is_int($format)) {
+		switch ($format) {
 			case TIME_NO_SEC_FORMAT:
 				$date_format = get_lang('timeNoSecFormat', '', $language);
+				if (IS_PHP_53) {
+					$datetype = IntlDateFormatter::NONE;
+					$timetype = IntlDateFormatter::SHORT;
+				}
 				break;
 			case DATE_FORMAT_SHORT:
 				$date_format = get_lang('dateFormatShort', '', $language);
+				if (IS_PHP_53) {
+					$datetype = IntlDateFormatter::LONG;
+					$timetype = IntlDateFormatter::NONE;
+				}
 				break;
 			case DATE_FORMAT_LONG:
-				$date_format = get_lang('dateFormatShort', '', $language);
+				$date_format = get_lang('dateFormatLong', '', $language);
+				if (IS_PHP_53) {
+					$datetype = IntlDateFormatter::FULL;
+					$timetype = IntlDateFormatter::NONE;
+				}
 				break;
 			case DATE_TIME_FORMAT_LONG:
 				$date_format = get_lang('dateTimeFormatLong', '', $language);
+				if (IS_PHP_53) {
+					$datetype = IntlDateFormatter::FULL;
+					$timetype = IntlDateFormatter::SHORT;
+				}
 				break;
 			default:
 				$date_format = get_lang('dateTimeFormatLong', '', $language);
+				if (IS_PHP_53) {
+					$datetype = IntlDateFormatter::FULL;
+					$timetype = IntlDateFormatter::SHORT;
+				}
 		}
 	}
-	// We replace %a %A %b %B masks of date format with translated strings.
-	$translated = &_api_get_day_month_names($language);
-	$date_format = str_replace(array('%A', '%a', '%B', '%b'),
-		array($translated['days_long'][(int)strftime('%w', $time_stamp)],
-			$translated['days_short'][(int)strftime('%w', $time_stamp)],
-			$translated['months_long'][(int)strftime('%m', $time_stamp) - 1],
-			$translated['months_short'][(int)strftime('%m', $time_stamp) - 1]),
+	
+	if (IS_PHP_53 && INTL_INSTALLED && $datetype !== null && $timetype !== null) {
+		// Use ICU
+		if (is_null($language)) {
+			$language = api_get_language_isocode();
+		}
+		$date_formatter = datefmt_create($language, $datetype, $timetype, date_default_timezone_get());
+		$formatted_date = api_to_system_encoding(datefmt_format($date_formatter, $time), 'UTF-8');
+	} else {
+		// We replace %a %A %b %B masks of date format with translated strings.
+		$translated = &_api_get_day_month_names($language);
+		$date_format = str_replace(array('%A', '%a', '%B', '%b'),
+		array($translated['days_long'][(int)strftime('%w', $time )],
+			$translated['days_short'][(int)strftime('%w', $time)],
+			$translated['months_long'][(int)strftime('%m', $time) - 1],
+			$translated['months_short'][(int)strftime('%m', $time) - 1]),
 		$date_format);
-	return strftime($date_format, $time_stamp);
+		$formatted_date = api_to_system_encoding(strftime($date_format, $time), 'UTF-8');
+	}
+	date_default_timezone_set($system_timezone);
+	return $formatted_date;
+}
+
+/**
+ * Returns the difference between the current date (date(now)) with the parameter $date in a string format like "2 days, 1 hour"
+ * Example: $date="2008-03-07 15:44:08";
+ * 			date_to_str($date) it will return 3 days, 20 hours
+ * The given date should be in the timezone chosen by the user or administrator. Use api_get_local_time() to get it...
+ *
+ * @param  string The string has to be the result of a date function in this format -> date("Y-m-d H:i:s",time());
+ * @return string The difference between the current date and the parameter in a literal way "3 days, 2 hour" *
+ * @author Julio Montoya
+ */
+
+function date_to_str_ago($date) {
+
+	static $initialized = false;
+	static $today, $yesterday;
+	static $min_decade, $min_year, $min_month, $min_week, $min_day, $min_hour, $min_minute;
+	static $min_decades, $min_years, $min_months, $min_weeks, $min_days, $min_hours, $min_minutes;
+	static $sec_time_time, $sec_time_sing, $sec_time_plu;
+	
+	$system_timezone = date_default_timezone_get();
+	date_default_timezone_set(_api_get_timezone());
+
+	if (!$initialized) {
+		$today = api_ucfirst(get_lang('Today'));
+		$yesterday = api_ucfirst(get_lang('Yesterday'));
+
+		$min_decade = get_lang('MinDecade');
+		$min_year = get_lang('MinYear');
+		$min_month = get_lang('MinMonth');
+		$min_week = get_lang('MinWeek');
+		$min_day = get_lang('MinDay');
+		$min_hour = get_lang('MinHour');
+		$min_minute = get_lang('MinMinute');
+
+		$min_decades = get_lang('MinDecades');
+		$min_years = get_lang('MinYears');
+		$min_months = get_lang('MinMonths');
+		$min_weeks = get_lang('MinWeeks');
+		$min_days = get_lang('MinDays');
+		$min_hours = get_lang('MinHours');
+		$min_minutes = get_lang('MinMinutes');
+
+		// original 1
+		//$sec_time=array("century"=>3.1556926*pow(10,9),"decade"=>315569260,"year"=>31556926,"month"=>2629743.83,"week"=>604800,"day"=>86400,"hour"=>3600,"minute"=>60,"second"=>1);
+		//$sec_time=array(get_lang('MinDecade')=>315569260,get_lang('MinYear')=>31556926,get_lang('MinMonth')=>2629743.83,get_lang('MinWeek')=>604800,get_lang('MinDay')=>86400,get_lang('MinHour')=>3600,get_lang('MinMinute')=>60);
+		$sec_time_time = array(315569260, 31556926, 2629743.83, 604800, 86400, 3600, 60);
+		$sec_time_sing = array($min_decade, $min_year, $min_month, $min_week, $min_day, $min_hour, $min_minute);
+		$sec_time_plu = array($min_decades, $min_years, $min_months, $min_weeks, $min_days, $min_hours, $min_minutes);
+		$initialized = true;
+	}
+
+	$dst_date = is_string($date) ? strtotime($date) : $date;
+	// For avoiding calling date() several times
+	$date_array = date('s/i/G/j/n/Y', $dst_date);
+	$date_split = explode('/', $date_array);
+
+	$dst_s = $date_split[0];
+	$dst_m = $date_split[1];
+	$dst_h = $date_split[2];
+	$dst_day = $date_split[3];
+	$dst_mth = $date_split[4];
+	$dst_yr = $date_split[5];
+
+	$dst_date = mktime($dst_h, $dst_m, $dst_s, $dst_mth, $dst_day, $dst_yr);
+	$time = $offset = time() - $dst_date; // Seconds between current days and today.
+
+	// Here start the functions sec_to_str()
+	$act_day = date('d');
+	$act_mth = date('n');
+	$act_yr = date('Y');
+
+	if ($dst_day == $act_day && $dst_mth == $act_mth && $dst_yr == $act_yr) {
+		return $today;
+	}
+
+	if ($dst_day == $act_day - 1 && $dst_mth == $act_mth && $dst_yr == $act_yr) {
+		return $yesterday;
+	}
+
+	$str_result = array();
+	$time_result = array();
+	$key_result = array();
+
+	$str = '';
+	$i = 0;
+	for ($i = 0; $i < count($sec_time_time); $i++) {
+		$seconds = $sec_time_time[$i];
+		if ($seconds > $time) {
+			continue;
+		}
+		$current_value = intval($time/$seconds);
+
+		if ($current_value != 1) {
+			$date_str = $sec_time_plu[$i];
+		} else {
+			$date_str = $sec_time_sing[$i];
+
+		}
+		$key_result[] = $sec_time_sing[$i];
+
+		$str_result[] = $current_value.' '.$date_str;
+		$time_result[] = $current_value;
+		$str .= $current_value.$date_str;
+		$time %= $seconds;
+	}
+
+	if ($key_result[0] == $min_day && $key_result[1]== $min_minute) {
+		$key_result[1] = ' 0 '.$min_hours;
+		$str_result[0] = $time_result[0].' '.$key_result[0];
+		$str_result[1] = $key_result[1];
+	}
+
+	if ($key_result[0] == $min_year && ($key_result[1] == $min_day || $key_result[1] == $min_week)) {
+		$key_result[1] = ' 0 '.$min_months;
+		$str_result[0] = $time_result[0].' '.$key_result[0];
+		$str_result[1] = $key_result[1];
+	}
+
+	if (!empty($str_result[1])) {
+		$str = $str_result[0].', '.$str_result[1];
+	} else {
+		$str = $str_result[0];
+	}
+	
+	date_default_timezone_set($system_timezone);
+	return $str;
+}
+
+/**
+ * Converts a date to the right timezone and localizes it in the format given as an argument
+ * @param mixed The time to be converted
+ * @param mixed Format to be used
+ * @param string Timezone to be converted from. If null, UTC will be assumed.
+ * @return string Converted and localized date
+ * 
+ * @author Guillaume Viguier <guillaume.viguier@beeznest.com>
+ */
+function api_convert_and_format_date($time = null, $format = null, $from_timezone = null) {
+	// First, convert the datetime to the right timezone
+	$datetime = api_get_local_time($time, null, $from_timezone);
+	// Second, localize the date
+	return api_format_date($time, $format);
 }
 
 /**
@@ -415,9 +795,7 @@ function api_get_months_long($language = null) {
 
 
 /**
- * ----------------------------------------------------------------------------
  * Name order conventions
- * ----------------------------------------------------------------------------
  */
 
 /**
@@ -433,7 +811,7 @@ function api_get_months_long($language = null) {
  * Peter Ustinoff or Dr. Peter Ustinoff     - the Western order
  * Ustinoff Peter or Dr. Ustinoff Peter     - the Eastern order
  * Ustinoff, Peter or - Dr. Ustinoff, Peter - the library order
- * Note: See the file dokeos/main/inc/lib/internationalization_database/name_order_conventions.php where you can revise the convention for your language.
+ * Note: See the file chamilo/main/inc/lib/internationalization_database/name_order_conventions.php where you can revise the convention for your language.
  * @author Carlos Vargas <carlos.vargas@dokeos.com> - initial implementation.
  * @author Ivan Tcholakov
  */
@@ -524,9 +902,7 @@ function api_sort_by_first_name($language = null) {
 
 
 /**
- * ----------------------------------------------------------------------------
  * A safe way to calculate binary lenght of a string (as number of bytes)
- * ----------------------------------------------------------------------------
  */
 
 /**
@@ -535,7 +911,7 @@ function api_sort_by_first_name($language = null) {
  * @param string $string	The input string.
  * @return int				Returns the length of the input string (or binary data) as number of bytes.
  */
-function api_byte_count($string) {
+function api_byte_count(& $string) {
 	static $use_mb_strlen;
 	if (!isset($use_mb_strlen)) {
 		$use_mb_strlen = MBSTRING_INSTALLED && ((int) ini_get('mbstring.func_overload') & 2);
@@ -550,9 +926,7 @@ function api_byte_count($string) {
 
 
 /**
- * ----------------------------------------------------------------------------
  * Multibyte string conversion functions
- * ----------------------------------------------------------------------------
  */
 
 /**
@@ -835,7 +1209,8 @@ function api_file_system_decode($string, $to_encoding = null) {
  * @link http://www.mediawiki.org
  * @link http://search.cpan.org/~sburke/Text-Unidecode-0.04/lib/Text/Unidecode.pm).
  *
- * Adaptation for the Dokeos 1.8.6.1, 12-JUN-2009:
+ * Adaptation for Chamilo 1.8.7, 2010
+ * Initial implementation for Dokeos 1.8.6.1, 12-JUN-2009
  * @author Ivan Tcholakov
  */
 function api_transliterate($string, $unknown = '?', $from_encoding = null) {
@@ -1018,9 +1393,7 @@ function api_utf8_decode_xml($string, $to_encoding = null) {
 
 
 /**
- * ----------------------------------------------------------------------------
  * Common multibyte string functions
- * ----------------------------------------------------------------------------
  */
 
 /**
@@ -1065,7 +1438,9 @@ function api_chr($codepoint, $encoding) {
  * @link http://php.net/manual/en/function.str-ireplace
  * @author Henri Sivonen, mailto:hsivonen@iki.fi
  * @link http://hsivonen.iki.fi/php-utf8/
- * @author Ivan Tcholakov, August 2009, adaptation for the Dokeos LMS.
+ * Adaptation for Chamilo 1.8.7, 2010
+ * Initial implementation Dokeos LMS, August 2009
+ * @author Ivan Tcholakov
  */
 function api_str_ireplace($search, $replace, $subject, & $count = null, $encoding = null) {
 	if (empty($encoding)) {
@@ -1898,6 +2273,24 @@ function api_substr($string, $start, $length = null, $encoding = null) {
 }
 
 /**
+ * Counts the number of substring occurrences.
+ * @param string $haystack				The string being checked.
+ * @param string $needle				The string being found.
+ * @param string $encoding (optional)	The used internally by this function character encoding. If it is omitted, the platform character set will be used by default.
+ * @return int							The number of times the needle substring occurs in the haystack string.
+ * @link http://php.net/manual/en/function.mb-substr-count.php
+ */
+function api_substr_count($haystack, $needle, $encoding = null) {
+	if (empty($encoding)) {
+		$encoding = _api_mb_internal_encoding();
+	}
+    if (_api_mb_supports($encoding)) {
+		return @mb_substr_count($haystack, $needle, $encoding);
+	}
+	return substr_count($haystack, $needle);
+}
+
+/**
  * Replaces text within a portion of a string.
  * @param string $string				The input string.
  * @param string $replacement			The replacement string.
@@ -2002,9 +2395,7 @@ function api_ucwords($string, $encoding = null) {
 
 
 /**
- * ----------------------------------------------------------------------------
  * String operations using regular expressions
- * ----------------------------------------------------------------------------
  */
 
 /**
@@ -2128,9 +2519,7 @@ function api_preg_split($pattern, $subject, $limit = -1, $flags = 0, $encoding =
 
 
 /**
- * ----------------------------------------------------------------------------
  * Obsolete string operations using regular expressions, to be deprecated
- * ----------------------------------------------------------------------------
  */
 
 /**
@@ -2337,9 +2726,7 @@ function api_split($pattern, $string, $limit = null) {
 
 
 /**
- * ----------------------------------------------------------------------------
  * String comparison
- * ----------------------------------------------------------------------------
  */
 
 /**
@@ -2416,9 +2803,7 @@ function api_strnatcmp($string1, $string2, $language = null, $encoding = null) {
 
 
 /**
- * ----------------------------------------------------------------------------
  * Sorting arrays
- * ----------------------------------------------------------------------------
  */
 
 /**
@@ -2819,9 +3204,7 @@ function api_rsort(&$array, $sort_flag = SORT_REGULAR, $language = null, $encodi
 
 
 /**
- * ----------------------------------------------------------------------------
  * Common sting operations with arrays
- * ----------------------------------------------------------------------------
  */
 
 /**
@@ -2860,9 +3243,7 @@ function api_in_array_nocase($needle, $haystack, $strict = false, $encoding = nu
 
 
 /**
- * ----------------------------------------------------------------------------
  * Encoding management functions
- * ----------------------------------------------------------------------------
  */
 
 /**
@@ -2874,7 +3255,7 @@ function api_refine_encoding_id($encoding) {
 	if (is_array($encoding)){
 		return array_map('api_refine_encoding_id', $encoding);
 	}
-	return strtoupper($encoding);
+	return strtoupper(str_replace('_', '-', $encoding));
 }
 
 /**
@@ -3031,7 +3412,7 @@ function api_is_encoding_supported($encoding) {
  * The first (leading) value is actually used by the system at the moment.
  * @param string $language (optional)	The specified language, the default value is the user intrface language.
  * @return string						The correspondent encoding to the specified language.
- * Note: See the file dokeos/main/inc/lib/internationalization_database/non_utf8_encodings.php
+ * Note: See the file chamilo/main/inc/lib/internationalization_database/non_utf8_encodings.php
  * if you wish to revise the leading non-UTF-8 encoding for your language.
  */
 function api_get_non_utf8_encoding($language = null) {
@@ -3044,9 +3425,9 @@ function api_get_non_utf8_encoding($language = null) {
 		if (!empty($encodings[$language][0])) {
 			return $encodings[$language][0];
 		}
-		return 'ISO-8859-15';
+		return null;
 	}
-	return 'ISO-8859-15';
+	return null;
 }
 
 /**
@@ -3080,13 +3461,56 @@ function api_get_valid_encodings() {
 	return array_merge(array('UTF-8'), $result1, $result2, $result3);
 }
 
+function api_detect_encoding($string) {
+	if (api_is_valid_utf8($string)) {
+		return 'UTF-8';
+	}
+	$result = null;
+	$delta_points_min = LANGUAGE_DETECT_MAX_DELTA;
+	$encodings = api_get_valid_encodings();
+	foreach ($encodings as $encoding) {
+		if (api_is_encoding_supported($encoding) & !api_is_utf8($encoding)) {
+			$result_array = & _api_compare_n_grams(_api_generate_n_grams(api_substr($string, 0, LANGUAGE_DETECT_MAX_LENGTH, $encoding), $encoding), $encoding);
+			if (!empty($result_array)) {
+				list($key, $delta_points) = each($result_array);
+				if ($delta_points < $delta_points_min) {
+					$pos = strpos($key, ':');
+					$result_encoding = api_refine_encoding_id(substr($key, $pos + 1));
+					if (api_equal_encodings($encoding, $result_encoding)) {
+						if ($string == api_utf8_decode(api_utf8_encode($string, $encoding), $encoding)) {
+							$delta_points_min = $delta_points;
+							$result = $encoding;
+						}
+					}
+				}
+			}
+		}
+	}
+	return $result;
+}
+
+/**
+ * Detects encoding of html-formatted text.
+ * @param string $string				The input html-formatted text.
+ * @return string						Returns the detected encoding.
+ */
+function api_detect_encoding_html($string) {
+	if (@preg_match('/<head.*(<meta[^>]*http-equiv=["\']*content-type[^>]*>).*<\/head>/si', $string, $matches)) {
+		if (@preg_match('/<meta[^>]*charset=(.*)["\';][^>]*>/si', $matches[1], $matches)) {
+			return api_refine_encoding_id(trim($matches[1]));
+		}
+	}
+	return api_detect_encoding(strip_tags($string));
+}
+
 /**
  * Detects encoding of xml-formatted text.
  * @param string $string				The input xml-formatted text.
  * @param string $default_encoding		This is the default encoding to be returned if there is no way the xml-text's encoding to be detected. If it not spesified, the system encoding is assumed then.
  * @return string						Returns the detected encoding.
+ * @todo The second parameter is to be eliminated. See api_detect_encoding_html().
  */
-function api_detect_encoding_xml(&$string, $default_encoding = null) {
+function api_detect_encoding_xml($string, $default_encoding = null) {
 	if (preg_match(_PCRE_XML_ENCODING, $string, $matches)) {
 		return api_refine_encoding_id($matches[1]);
 	}
@@ -3101,9 +3525,7 @@ function api_detect_encoding_xml(&$string, $default_encoding = null) {
 
 
 /**
- * ----------------------------------------------------------------------------
  * String validation functions concerning certain encodings
- * ----------------------------------------------------------------------------
  */
 
 /**
@@ -3120,10 +3542,11 @@ function api_is_valid_utf8(&$string) {
 	// wrongly detected as UTF-8. Possibly, there would be problems with other
 	// languages too. An alternative implementation will be used.
 
-	$len = api_byte_count($string);
+	$str = (string)$string;
+	$len = api_byte_count($str);
 	$i = 0;
 	while ($i < $len) {
-		$byte1 = ord($string[$i++]);		// Here the current character begins. Its size is
+		$byte1 = ord($str[$i++]);		// Here the current character begins. Its size is
 											// determined by the senior bits in the first byte.
 
 		if (($byte1 & 0x80) == 0x00) {		// 0xxxxxxx
@@ -3144,7 +3567,7 @@ function api_is_valid_utf8(&$string) {
 				return false;				// Here the string ends unexpectedly.
 			}
 
-			if (!((ord($string[$i++]) & 0xC0) == 0x80))
+			if (!((ord($str[$i++]) & 0xC0) == 0x80))
 				return false;				// Invalid second byte, invalid string.
 		}
 
@@ -3157,13 +3580,13 @@ function api_is_valid_utf8(&$string) {
 			if ($i == $len) {
 				return false;				// Unexpected end of the string.
 			}
-			if (!((ord($string[$i++]) & 0xC0) == 0x80)) {
+			if (!((ord($str[$i++]) & 0xC0) == 0x80)) {
 				return false;				// Invalid second byte.
 			}
 			if ($i == $len) {
 				return false;				// Unexpected end of the string.
 			}
-			if (!((ord($string[$i++]) & 0xC0) == 0x80)) {
+			if (!((ord($str[$i++]) & 0xC0) == 0x80)) {
 				return false;				// Invalid third byte, invalid string.
 			}
 		}
@@ -3177,19 +3600,19 @@ function api_is_valid_utf8(&$string) {
 			if ($i == $len) {
 				return false;
 			}
-			if (!((ord($string[$i++]) & 0xC0) == 0x80)) {
+			if (!((ord($str[$i++]) & 0xC0) == 0x80)) {
 				return false;
 			}
 			if ($i == $len) {
 				return false;
 			}
-			if (!((ord($string[$i++]) & 0xC0) == 0x80)) {
+			if (!((ord($str[$i++]) & 0xC0) == 0x80)) {
 				return false;
 			}
 			if ($i == $len) {
 				return false;
 			}
-			if (!((ord($string[$i++]) & 0xC0) == 0x80)) {
+			if (!((ord($str[$i++]) & 0xC0) == 0x80)) {
 				return false;
 			}
 		}
@@ -3203,25 +3626,25 @@ function api_is_valid_utf8(&$string) {
 			if ($i == $len) {
 				return false;
 			}
-			if (!((ord($string[$i++]) & 0xC0) == 0x80)) {
+			if (!((ord($str[$i++]) & 0xC0) == 0x80)) {
 				return false;
 			}
 			if ($i == $len) {
 				return false;
 			}
-			if (!((ord($string[$i++]) & 0xC0) == 0x80)) {
+			if (!((ord($str[$i++]) & 0xC0) == 0x80)) {
 				return false;
 			}
 			if ($i == $len) {
 				return false;
 			}
-			if (!((ord($string[$i++]) & 0xC0) == 0x80)) {
+			if (!((ord($str[$i++]) & 0xC0) == 0x80)) {
 				return false;
 			}
 			if ($i == $len) {
 				return false;
 			}
-			if (!((ord($string[$i++]) & 0xC0) == 0x80)) {
+			if (!((ord($str[$i++]) & 0xC0) == 0x80)) {
 				return false;
 			}
 		}
@@ -3235,31 +3658,31 @@ function api_is_valid_utf8(&$string) {
 			if ($i == $len) {
 				return false;
 			}
-			if (!((ord($string[$i++]) & 0xC0) == 0x80)) {
+			if (!((ord($str[$i++]) & 0xC0) == 0x80)) {
 				return false;
 			}
 			if ($i == $len) {
 				return false;
 			}
-			if (!((ord($string[$i++]) & 0xC0) == 0x80)) {
+			if (!((ord($str[$i++]) & 0xC0) == 0x80)) {
 				return false;
 			}
 			if ($i == $len) {
 				return false;
 			}
-			if (!((ord($string[$i++]) & 0xC0) == 0x80)) {
+			if (!((ord($str[$i++]) & 0xC0) == 0x80)) {
 				return false;
 			}
 			if ($i == $len) {
 				return false;
 			}
-			if (!((ord($string[$i++]) & 0xC0) == 0x80)) {
+			if (!((ord($str[$i++]) & 0xC0) == 0x80)) {
 				return false;
 			}
 			if ($i == $len) {
 				return false;
 			}
-			if (!((ord($string[$i++]) & 0xC0) == 0x80)) {
+			if (!((ord($str[$i++]) & 0xC0) == 0x80)) {
 				return false;
 			}
 		}
@@ -3288,9 +3711,123 @@ function api_is_valid_ascii(&$string) {
 
 
 /**
- * ----------------------------------------------------------------------------
- * Functions for internal use behind this API.
- * ----------------------------------------------------------------------------
+ * Parsing CSV-data.
+ */
+
+/**
+ * Parses CSV data (one line) into an array. This function is not affected by the OS-locale settings.
+ * @param string $string				The input string.
+ * @param string $delimiter (optional)	The field delimiter, one character only. The default delimiter character is comma {,).
+ * @param string $enclosure (optional)	The field enclosure, one character only. The default enclosure character is quote (").
+ * @param string $escape (optional)		The escape character, one character only. The default escape character is backslash (\).
+ * @return array						Returns an array containing the fields read.
+ * Note: In order this function to work correctly with UTF-8, limitation for the parameters $delimiter, $enclosure and $escape
+ * should be kept. These parameters should be single ASCII characters only. Thus the implementation of this function is faster.
+ * @link http://php.net/manual/en/function.str-getcsv.php   (exists as of PHP 5 >= 5.3.0)
+ */
+function & api_str_getcsv(& $string, $delimiter = ',', $enclosure = '"', $escape = '\\') {
+	$delimiter = (string)$delimiter;
+	if (api_byte_count($delimiter) > 1) { $delimiter = $delimiter[1]; }
+	$enclosure = (string)$enclosure;
+	if (api_byte_count($enclosure) > 1) { $enclosure = $enclosure[1]; }
+	$escape = (string)$escape;
+	if (api_byte_count($escape) > 1) { $escape = $escape[1]; }
+	$str = (string)$string;
+	$len = api_byte_count($str);
+	$enclosed = false;
+	$escaped = false;
+	$value = '';
+	$result = array();
+
+	for ($i = 0; $i < $len; $i++) {
+		$char = $str[$i];
+		if ($char == $escape) {
+			if (!$escaped) {
+				$escaped = true;
+				continue;
+			}
+		}
+		$escaped = false;
+		switch ($char) {
+			case $enclosure:
+				if ($enclosed && $str[$i + 1] == $enclosure) {
+					$value .= $char;
+					$i++;
+				} else {
+					$enclosed = !$enclosed;
+				}
+				break;
+			case $delimiter:
+				if (!$enclosed) {
+					$result[] = $value;
+					$value = '';
+				} else {
+					$value .= $char;
+				}
+				break;
+			default:
+				$value .= $char;
+				break;
+		}
+	}
+	if (!empty($value)) {
+		$result[] = $value;
+	}
+
+	return $result;
+}
+
+/**
+ * Reads a line from a file pointer and parses it for CSV fields. This function is not affected by the OS-locale settings.
+ * @param resource $handle				The file pointer, it must be valid and must point to a file successfully opened by fopen().
+ * @param int $length (optional)		Reading ends when length - 1 bytes have been read, on a newline (which is included in the return value), or on EOF (whichever comes first).
+ * 										If no length is specified, it will keep reading from the stream until it reaches the end of the line.
+ * @param string $delimiter (optional)	The field delimiter, one character only. The default delimiter character is comma {,).
+ * @param string $enclosure (optional)	The field enclosure, one character only. The default enclosure character is quote (").
+ * @param string $escape (optional)		The escape character, one character only. The default escape character is backslash (\).
+ * @return array						Returns an array containing the fields read.
+ * Note: In order this function to work correctly with UTF-8, limitation for the parameters $delimiter, $enclosure and $escape
+ * should be kept. These parameters should be single ASCII characters only.
+ * @link http://php.net/manual/en/function.fgetcsv.php
+ */
+function api_fgetcsv($handle, $length = null, $delimiter = ',', $enclosure = '"', $escape = '\\') {
+	if (($line = is_null($length) ? fgets($handle): fgets($handle, $length)) !== false) {
+		return api_str_getcsv($line, $delimiter, $enclosure, $escape);
+	}
+	return false;
+}
+
+
+/**
+ * Miscellaneous routines
+ */
+
+/**
+ * This function strips all html-tags found in the input string and outputs a pure text.
+ * Mostly, the function is to be used before language or encoding detection of the input string.
+ * @param string $string	The input string with html-tags to be converted to plain text.
+ * @return string			The returned plain text as a result.
+ */
+function api_html_to_text($string) {
+	// These purifications have been found experimentally, for nice looking output.
+	$string = preg_replace('/<br[^>]*>/i', "\n", $string);
+	$string = preg_replace('/<\/?(div|p|h[1-6]|table|ol|ul|blockquote)[^>]*>/i', "\n", $string);
+	$string = preg_replace('/<\/(tr|li)[^>]*>/i', "\n", $string);
+	$string = preg_replace('/<\/(td|th)[^>]*>/i', "\t", $string);
+
+	$string = strip_tags($string);
+
+	// Line endings unification and cleaning.
+	$string = str_replace(array("\r\n", "\n\r", "\r"), "\n", $string);
+	$string = preg_replace('/\s*\n/', "\n", $string);
+	$string = preg_replace('/\n+/', "\n", $string);
+
+	return trim($string);
+}
+
+
+/**
+ * Functions for internal use behind this API
  */
 
 require_once dirname(__FILE__).'/internationalization_internal.lib.php';

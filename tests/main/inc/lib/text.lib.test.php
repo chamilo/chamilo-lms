@@ -55,17 +55,12 @@ class TestText extends UnitTestCase {
 		//var_dump($res);
 	}
 
-	function testformat_locale_date() {
-		$date_format='';
-		$res=format_locale_date($date_format, $time_stamp = -1);
-		$this->assertTrue(is_bool($res));
-		//var_dump($res);
-	}
-
 	function testlatex_gif_renderer() {
-		$latex_code='';
+		ob_start();
+		$latex_code="";
 		global $_course;
 		$res=latex_gif_renderer($latex_code);
+		ob_end_clean();
 		$this->assertTrue(is_string($res));
 		//var_dump($res);
 	}

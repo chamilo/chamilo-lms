@@ -1,32 +1,6 @@
-<?php // $Id: infocours.php 21873 2009-07-08 08:35:57Z herodoto $
-
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2004-2009 Dokeos SPRL
-	Copyright (c) 2003 Ghent University (UGent)
-	Copyright (c) 2001 Universite catholique de Louvain (UCL)
-	Copyright (c) Hugues Peeters
-	Copyright (c) Roan Embrechts (Vrije Universiteit Brussel)
-	Copyright (c) Olivier Brouckaert
-	Copyright (c) Bart Mollet, Hogeschool Gent
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact: Dokeos, 181 rue Royale, B-1000 Brussels, Belgium, info@dokeos.com
-==============================================================================
-*/
+<?php
+/* For licensing terms, see /license.txt */
 /**
-==============================================================================
 *	Code to display the course settings form (for the course admin)
 *	and activate the changes.
 *
@@ -36,35 +10,22 @@
 * @author Patrick Cool <patrick.cool@UGent.be>
 * @author Roan Embrechts, refactoring
 * and improved course visibility|subscribe|unsubscribe options
-* @package dokeos.course_info
-==============================================================================
+* @package chamilo.course_info
 */
-/*
-==============================================================================
-	   INIT SECTION
-==============================================================================
-*/
+/*	   INIT SECTION 	*/
 // name of the language file that needs to be included
 $language_file = array ('create_course', 'course_info');
-include ('../inc/global.inc.php');
+require_once '../inc/global.inc.php';
 $this_section = SECTION_COURSES;
 
 $nameTools = get_lang("ModifInfo");
 
-/*
------------------------------------------------------------
-	Libraries
------------------------------------------------------------
-*/
-require_once (api_get_path(LIBRARY_PATH).'course.lib.php');
-require_once (api_get_path(INCLUDE_PATH)."conf/course_info.conf.php");
-require_once (api_get_path(INCLUDE_PATH)."lib/debug.lib.inc.php");
-require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
-/*
------------------------------------------------------------
-	Constants and variables
------------------------------------------------------------
-*/
+/*	Libraries	*/
+require_once api_get_path(LIBRARY_PATH).'course.lib.php';
+require_once api_get_path(INCLUDE_PATH)."conf/course_info.conf.php";
+require_once api_get_path(INCLUDE_PATH)."lib/debug.lib.inc.php";
+require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
+/*	Constants and variables	*/
 define("MODULE_HELP_NAME", "Settings");
 define("COURSE_CHANGE_PROPERTIES", "COURSE_CHANGE_PROPERTIES");
 $TABLECOURSE 				= Database :: get_main_table(TABLE_MAIN_COURSE);
@@ -76,11 +37,8 @@ $currentCourseID 			= $_course['sysCode'];
 $currentCourseRepository 	= $_course["path"];
 $is_allowedToEdit 			= $is_courseAdmin || $is_platformAdmin;
 $course_setting_table 		= Database::get_course_table(TABLE_COURSE_SETTING);
-/*
-==============================================================================
-		LOGIC FUNCTIONS
-==============================================================================
-*/
+
+/*		LOGIC FUNCTIONS		*/
 function is_settings_editable()
 {
 	return $GLOBALS["course_info_is_editable"];
@@ -89,9 +47,7 @@ $course_code = $_course["sysCode"];
 $course_access_settings = CourseManager :: get_access_settings($course_code);
 
 /*
-==============================================================================
 		MAIN CODE
-==============================================================================
 */
 
 if (!$is_allowedToEdit)
@@ -107,19 +63,19 @@ $tbl_course = Database :: get_main_table(TABLE_MAIN_COURSE);
 
 // Get all course categories
 $sql = "SELECT code,name FROM ".$table_course_category." WHERE auth_course_child ='TRUE'  OR code = '".Database::escape_string($_course['categoryCode'])."'  ORDER BY tree_pos";
-$res = Database::query($sql, __FILE__, __LINE__);
+$res = Database::query($sql);
 
 $s_select_course_tutor_name="SELECT tutor_name FROM $tbl_course WHERE code='$course_code'";
-$q_tutor=Database::query($s_select_course_tutor_name, __FILE__, __LINE__);
+$q_tutor=Database::query($s_select_course_tutor_name);
 $s_tutor=Database::result($q_tutor,0,"tutor_name");
 
 $s_sql_course_titular="SELECT DISTINCT username, lastname, firstname FROM $tbl_user as user, $tbl_course_user as course_rel_user WHERE (course_rel_user.status='1') AND user.user_id=course_rel_user.user_id AND course_code='".$course_code."'";
-$q_result_titulars=Database::query($s_sql_course_titular, __FILE__, __LINE__);
+$q_result_titulars=Database::query($s_sql_course_titular);
 
 $target_name = api_sort_by_first_name() ? 'firstname' : 'lastname';
 if(Database::num_rows($q_result_titulars)==0){
 	$sql="SELECT username, lastname, firstname FROM $tbl_user as user, $tbl_admin as admin WHERE admin.user_id=user.user_id ORDER BY ".$target_name." ASC";
-	$q_result_titulars=Database::query($sql, __FILE__, __LINE__);
+	$q_result_titulars=Database::query($sql);
 }
 
 $a_profs[0] = '-- '.get_lang('NoManager').' --';
@@ -237,7 +193,10 @@ $form -> addElement('html',$linebreak);
 
 $form->addElement('radio', 'allow_user_image_forum', get_lang('AllowUserImageForum'), get_lang('AllowUserImageForumActivate'), 1);
 $form->addElement('radio', 'allow_user_image_forum', null, get_lang('AllowUserImageForumDeactivate'), 0);
+$form -> addElement('html',$linebreak);
 
+$form->addElement('radio', 'allow_user_view_user_list', get_lang('AllowUserViewUserList'), get_lang('AllowUserViewUserListActivate'), 1);
+$form->addElement('radio', 'allow_user_view_user_list', null, get_lang('AllowUserViewUserListDeactivate'), 0);
 
 $form->addElement('style_submit_button', null, get_lang('SaveSettings'), 'class="save"');
 
@@ -251,8 +210,7 @@ $form->addElement('radio', 'allow_open_chat_window', null, get_lang('AllowOpenCh
 $form->addElement('style_submit_button', null, get_lang('SaveSettings'), 'class="save"');
 
 // COURSE THEME PICKER
-if (api_get_setting('allow_course_theme') == 'true')
-{
+if (api_get_setting('allow_course_theme') == 'true') {
 	$form->addElement('html','<div class="sectiontitle" style="margin-top: 40px;"><a href="#header" style="float:right;">'.Display::return_icon('top.gif',get_lang('Top')).'</a><a name="theme" id="theme"></a>'.Display::return_icon('theme.gif',get_lang('Theming')).' '.get_lang('Theming').'</div><div style="clear:both;"></div>');
 
 	//Allow Learning path
@@ -265,17 +223,14 @@ if (api_get_setting('allow_course_theme') == 'true')
 	$form -> addElement('html',$linebreak);
 }
 
-if (is_settings_editable())
-	{
+if (is_settings_editable()) {
 	$form->addElement('style_submit_button', null, get_lang('SaveSettings'), 'class="save"');
-	}
-else
-{
+} else {
 	// is it allowed to edit the course settings?
 	if (!is_settings_editable())
 		$disabled_output = "disabled";
 	$form->freeze();
-	}
+}
 
 // get all the course information
 $all_course_information =  CourseManager::get_course_information($_course['sysCode']);
@@ -314,7 +269,8 @@ $values['allow_open_chat_window'] = api_get_course_setting('allow_open_chat_wind
 $values['course_theme'] = api_get_course_setting('course_theme');
 // get allow_learning_path_theme from table
 $values['allow_learning_path_theme'] = api_get_course_setting('allow_learning_path_theme');
-
+//get allow show user list 
+$values['allow_user_view_user_list'] = api_get_course_setting('allow_user_view_user_list');
 
 $form->setDefaults($values);
 // Validate form
@@ -324,63 +280,68 @@ if ($form->validate() && is_settings_editable()) {
 		$update_values[$index] = Database::escape_string($value);
 	}
 	$table_course = Database :: get_main_table(TABLE_MAIN_COURSE);
-	$sql = "UPDATE $table_course SET title 			= '".Security::remove_XSS($update_values['title'])."',
-										 visual_code 	= '".$update_values['visual_code']."',
-										 course_language = '".$update_values['course_language']."',
-										 category_code  = '".$update_values['category_code']."',
-										 department_name  = '".Security::remove_XSS($update_values['department_name'])."',
-										 department_url  = '".Security::remove_XSS($update_values['department_url'])."',
-										 visibility  = '".$update_values['visibility']."',
-										 subscribe  = '".$update_values['subscribe']."',
-										 unsubscribe  = '".$update_values['unsubscribe']."',
-										 tutor_name     = '".$update_values['tutor_name']."',
-										 registration_code = '".$update_values['course_registration_password']."'
-									WHERE code = '".$course_code."'";
-	Database::query($sql, __FILE__, __LINE__);
+	$sql = "UPDATE $table_course SET
+				title 				= '".Security::remove_XSS($update_values['title'])."',
+				visual_code 		= '".$update_values['visual_code']."',
+				course_language 	= '".$update_values['course_language']."',
+				category_code 		= '".$update_values['category_code']."',
+				department_name  	= '".Security::remove_XSS($update_values['department_name'])."',
+				department_url  	= '".Security::remove_XSS($update_values['department_url'])."',
+				visibility  		= '".$update_values['visibility']."',
+				subscribe  			= '".$update_values['subscribe']."',
+				unsubscribe  		= '".$update_values['unsubscribe']."',
+				tutor_name     		= '".$update_values['tutor_name']."',
+				registration_code 	= '".$update_values['course_registration_password']."'
+			WHERE code = '".$course_code."'";
+	Database::query($sql);
 
 	//update course_settings table - this assumes those records exist, otherwise triggers an error
 	$table_course_setting = Database::get_course_table(TABLE_COURSE_SETTING);
 	if($update_values['email_alert_to_teacher_on_new_user_in_course'] != $values['email_alert_to_teacher_on_new_user_in_course']){
 		$sql = "UPDATE $table_course_setting SET value = ".(int)$update_values['email_alert_to_teacher_on_new_user_in_course']." WHERE variable = 'email_alert_to_teacher_on_new_user_in_course' ";
-		Database::query($sql,__FILE__,__LINE__);
+		Database::query($sql);
 	}
 	if($update_values['email_alert_manager_on_new_doc'] != $values['email_alert_manager_on_new_doc']){
 		$sql = "UPDATE $table_course_setting SET value = ".(int)$update_values['email_alert_manager_on_new_doc']." WHERE variable = 'email_alert_manager_on_new_doc' ";
-		Database::query($sql,__FILE__,__LINE__);
+		Database::query($sql);
 	}
 	if($update_values['email_alert_on_new_doc_dropbox'] != $values['email_alert_on_new_doc_dropbox']){
 		$sql = "UPDATE $table_course_setting SET value = ".(int)$update_values['email_alert_on_new_doc_dropbox']." WHERE variable = 'email_alert_on_new_doc_dropbox' ";
-		Database::query($sql,__FILE__,__LINE__);
+		Database::query($sql);
 	}
 	if($update_values['email_alert_manager_on_new_quiz'] != $values['email_alert_manager_on_new_quiz']){
 		$sql = "UPDATE $table_course_setting SET value = ".(int)$update_values['email_alert_manager_on_new_quiz']." WHERE variable = 'email_alert_manager_on_new_quiz' ";
-		Database::query($sql,__FILE__,__LINE__);
+		Database::query($sql);
 	}
 	if($update_values['allow_user_edit_agenda'] != $values['allow_user_edit_agenda']){
 		$sql = "UPDATE $table_course_setting SET value = ".(int)$update_values['allow_user_edit_agenda']." WHERE variable = 'allow_user_edit_agenda' ";
-		Database::query($sql,__FILE__,__LINE__);
+		Database::query($sql);
 	}
 	if($update_values['allow_user_edit_announcement'] != $values['allow_user_edit_announcement']){
 		$sql = "UPDATE $table_course_setting SET value = ".(int)$update_values['allow_user_edit_announcement']." WHERE variable = 'allow_user_edit_announcement' ";
-		Database::query($sql,__FILE__,__LINE__);
+		Database::query($sql);
 	}
 	if($update_values['allow_user_image_forum'] != $values['allow_user_image_forum']){
 		$sql = "UPDATE $table_course_setting SET value = ".(int)$update_values['allow_user_image_forum']." WHERE variable = 'allow_user_image_forum' ";
-		Database::query($sql,__FILE__,__LINE__);
+		Database::query($sql);
 	}
 	if($update_values['allow_open_chat_window'] != $values['allow_open_chat_window']){
 		$sql = "UPDATE $table_course_setting SET value = ".(int)$update_values['allow_open_chat_window']." WHERE variable = 'allow_open_chat_window' ";
-		Database::query($sql,__FILE__,__LINE__);
+		Database::query($sql);
 	}
 	if($update_values['course_theme'] != $values['course_theme']){
 		$sql = "UPDATE $table_course_setting SET value = '".$update_values['course_theme']."' WHERE variable = 'course_theme' ";
-		Database::query($sql,__FILE__,__LINE__);
+		Database::query($sql);
 	}
 	if($update_values['allow_learningpath_theme'] != $values['allow_learning_path_theme']){
 		$sql = "UPDATE $table_course_setting SET value = ".(int)$update_values['allow_learning_path_theme']." WHERE variable = 'allow_learning_path_theme' ";
-		Database::query($sql,__FILE__,__LINE__);
+		Database::query($sql);
 	}
-
+	
+	if($update_values['allow_user_view_user_list'] != $values['allow_user_view_user_list']){
+		$sql = "UPDATE $table_course_setting SET value = ".(int)$update_values['allow_user_view_user_list']." WHERE variable = 'allow_user_view_user_list' ";
+		Database::query($sql);
+	}
 
 	$cidReset = true;
 	$cidReq = $course_code;
@@ -417,8 +378,11 @@ echo '</div>';
 
 // Display the form
 $form->display();
-	if ($showDiskQuota && $currentCourseDiskQuota != "")
-	{
+
+//@todo this code is out dated should 
+
+	if ($showDiskQuota && $currentCourseDiskQuota != "") {
+		
 ?>
 <table>
 	<tr>
@@ -433,7 +397,7 @@ $form->display();
 ?>
 	<tr>
 	<td><?php echo get_lang('LastEdit'); ?>&nbsp;:</td>
-	<td><?php echo format_locale_date($dateTimeFormatLong,strtotime($currentCourseLastEdit)); ?></td>
+	<td><?php echo api_convert_and_format_date($currentCourseLastEdit, null, date_default_timezone_get()); ?></td>
 	</tr>
 	<?php
 
@@ -443,7 +407,7 @@ $form->display();
 ?>
 	<tr>
 	<td><?php echo get_lang('LastVisit'); ?>&nbsp;:</td>
-	<td><?php echo format_locale_date($dateTimeFormatLong,strtotime($currentCourseLastVisit)); ?></td>
+	<td><?php echo api_convert_and_format_date($currentCourseLastVisit, null, date_default_timezone_get()); ?></td>
 	</tr>
 	<?php
 
@@ -453,7 +417,7 @@ $form->display();
 ?>
 	<tr>
 	<td><?php echo get_lang('CreationDate'); ?>&nbsp;:</td>
-	<td><?php echo format_locale_date($dateTimeFormatLong,strtotime($currentCourseCreationDate)); ?></td>
+	<td><?php echo api_convert_and_format_date($currentCourseCreationDate, null, date_default_timezone_get()); ?></td>
 	</tr>
 	<?php
 
@@ -466,7 +430,7 @@ $form->display();
 	<td>
 	<?php
 
-		echo format_locale_date($dateTimeFormatLong, strtotime($currentCourseExpirationDate));
+		echo api_convert_and_format_date($currentCourseExpirationDate, null, date_default_timezone_get());
 		echo "<br />".get_lang('OrInTime')." : ";
 		$nbJour = (strtotime($currentCourseExpirationDate) - time()) / (60 * 60 * 24);
 		$nbAnnees = round($nbJour / 365);
@@ -503,11 +467,6 @@ $form->display();
 
 	}
 
-/*
-==============================================================================
-		FOOTER
-==============================================================================
-*/
+/*		FOOTER	*/
 Display::display_footer();
 ?>
-

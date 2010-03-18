@@ -1,33 +1,34 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $langLineNumber = "Zeilenzahl";
 $langLine = "Zeile";
 $langLines = "Zeilen";
 $langLineOrLines = "Zeile(n)";
-$langMoveUp = "hochsetzen";
-$langMoveDown = "heruntersetzen";
-$langAddNewHeading = "Neue Überschrift hinzufügen";
-$langCourseAdministratorOnly = "Nur für Lehrer/innen";
-$langDefineHeadings = "Überschriften definieren";
-$langBackToUsersList = "Zurück zur Liste der Benutzer";
+$langMoveUp = "nach oben";
+$langMoveDown = "nach unten";
+$langAddNewHeading = "Neue Ãœberschrift hinzufÃ¼gen";
+$langCourseAdministratorOnly = "Nur fÃ¼r Kursleiter";
+$langDefineHeadings = "Ãœberschriften definieren";
+$langBackToUsersList = "ZurÃ¼ck zur Liste der Benutzer";
 $langTracking = "Tracking";
 $langCourseManager = "Kursleiter";
 $langModRight = "Rechte modifizieren";
 $langNoAdmin = "kein Admin";
 $langAllAdmin = "alle Admins";
 $langModRole = "Role modifizieren";
-$langRole = "Rolle/Status";
-$langIsNow = "ist von nun an ";
-$langInC = "im Kurs";
-$langFilled = "voll";
-$langUserNo = "Nr. des Nutzers";
-$langTaken = "bereits belegt";
+$langRole = "Rolle";
+$langIsNow = "ist von nun an";
+$langInC = "in diesem Kurs";
+$langFilled = "Sie haben einige Felder leer gelassen.";
+$langUserNo = "Der Benutzername";
+$langTaken = "ist bereits belegt. Bitte wÃ¤hlen Sie einen anderen.";
 $langTutor = "Tutor";
 $langUnreg = "abmelden";
-$langGroupUserManagement = "Gruppen Verwaltung";
+$langGroupUserManagement = "Gruppenverwaltung";
 $langUnregister = "Abmeldung";
-$langAddAUser = "Nutzer hinzufügen";
-$UsersUnsubscribed = "Die ausgewählten Benutzer wurden aus dem Kurs abgemeldet";
-$ThisStudentIsSubscribeThroughASession = "Dieser Student ist in diesem Kurs durch eine Session eingeschrieben. Seine Informationen können nicht bearbeitet werden";
+$langAddAUser = "Nutzer hinzufÃ¼gen";
+$UsersUnsubscribed = "Die ausgewÃ¤hlten Benutzer wurden aus dem Kurs abgemeldet";
+$ThisStudentIsSubscribeThroughASession = "Dieser Student ist in diesem Kurs durch eine Session eingeschrieben. Seine Informationen kÃ¶nnen nicht bearbeitet werden";
 ?>

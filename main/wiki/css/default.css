@@ -53,6 +53,8 @@
 		padding: 3px;
 		padding-top:5px;
 		border-top: 1px solid #ccc;
+		height: auto!important; 
+		min-height:20px;
 	}
 	#wikititle input {
 		border: 1px solid #333;

@@ -1,24 +1,25 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $select = "Selecionar";
-$square = "Retângulo";
-$circle = "Círculo";
-$poly = "Polígono";
+$square = "RetÃ¢ngulo";
+$circle = "CÃ­rculo";
+$poly = "PolÃ­gono";
 $status1 = "Desenhar um hotspot";
-$status2_poly = "Clique com o botão direito do mouse para fechar o polígono.";
-$status2_other = "Soltar o botão do mouse para salvar o hotspot.";
+$status2_poly = "Clique com o botÃ£o direito do mouse para fechar o polÃ­gono.";
+$status2_other = "Soltar o botÃ£o do mouse para salvar o hotspot.";
 $status3 = "Hotspot salvo";
-$exercise_status_1 = "Status: questão ainda não terminada";
-$exercise_status_2 = "Clicar aqui para enviar as respostas para a questão";
-$exercise_status_3 = "Status: questão terminada";
-$showUserPoints = "Exibir/Ocultar cliques do usuário";
+$exercise_status_1 = "Status: questÃ£o ainda nÃ£o terminada";
+$exercise_status_2 = "Clicar aqui para enviar as respostas para a questÃ£o";
+$exercise_status_3 = "Status: questÃ£o terminada";
+$showUserPoints = "Exibir/Ocultar cliques do usuÃ¡rio";
 $showHotspots = "Exibir/Ocultar hotspots";
-$labelPolyMenu = "Fechar polígono";
+$labelPolyMenu = "Fechar polÃ­gono";
 $triesleft = "Tentativas restantes";
-$exeFinished = "Todas as questões respondidas. Pode alterar a sua escolha ou clicar para enviar";
+$exeFinished = "Todas as questÃµes respondidas. Pode alterar a sua escolha ou clicar para enviar";
 $nextAnswer = "Clique agora em: &done=done";
-$delineation = "Delimitação";
-$labelDelineationMenu = "Encerrar delimitação";
-$oar = "Área de risco";
+$delineation = "DelimitaÃ§Ã£o";
+$labelDelineationMenu = "Encerrar delimitaÃ§Ã£o";
+$oar = "Ãrea de risco";
 ?>

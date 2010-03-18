@@ -1,40 +1,41 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$langScormVersion = "ÃØè¹";
-$langScormRestarted = "·Ø¡º·àÃÕÂ¹ÂÑ§äÁèàÃÕÂºÃéÍÂ";
-$langScormNoNext = "¹Õè¤×ÍË¹èÇÂ¡ÒÃàÃÕÂ¹º·ÊØ´·éÒÂ";
-$langScormNoPrev = "¹Õè¤×ÍË¹èÇÂ¡ÒÃàÃÕÂ¹º·àÃÕÂ¹·ÕèË¹Öè§ ";
-$langScormTime = "àÇÅÒ";
-$langScormNoOrder = "ÂÑ§äÁèàÅ×Í¡¤ÓÊÑè§ ãËé¤ÅÔ¡·Õèº·àÃÕÂ¹ã´æ";
-$langScormScore = "¤Ðá¹¹:Score";
-$langScormLessonTitle = "ª×èÍº·:Lesson title";
-$langScormStatus = "Ê¶Ò¹Ð:Status";
+$langScormVersion = "à¸£à¸¸à¹ˆà¸™";
+$langScormRestarted = "à¸—à¸¸à¸à¸šà¸—à¹€à¸£à¸µà¸¢à¸™à¸¢à¸±à¸‡à¹„à¸¡à¹ˆà¹€à¸£à¸µà¸¢à¸šà¸£à¹‰à¸­à¸¢";
+$langScormNoNext = "Â¹Ã•Ã¨â‚¬Ã—ÃÃ‹Â¹Ã¨Ã‡Ã‚Â¡Ã’ÃƒÃ ÃƒÃ•Ã‚Â¹ÂºÂ·ÃŠÃ˜Å½Â·Ã©Ã’Ã‚";
+$langScormNoPrev = "Â¹Ã•Ã¨â‚¬Ã—ÃÃ‹Â¹Ã¨Ã‡Ã‚Â¡Ã’ÃƒÃ ÃƒÃ•Ã‚Â¹ÂºÂ·Ã ÃƒÃ•Ã‚Â¹Â·Ã•Ã¨Ã‹Â¹Ã–Ã¨Â§";
+$langScormTime = "à¹€à¸§à¸¥à¸²";
+$langScormNoOrder = "à¸¢à¸±à¸‡à¹„à¸¡à¹ˆà¹€à¸¥à¸·à¸­à¸à¸„à¸³à¸ªà¸±à¹ˆà¸‡ à¹ƒà¸«à¹‰à¸„à¸¥à¸´à¸à¸—à¸µà¹ˆà¸šà¸—à¹€à¸£à¸µà¸¢à¸™à¹ƒà¸”à¹†";
+$langScormScore = "à¸„à¸°à¹à¸™à¸™:Score";
+$langScormLessonTitle = "à¸Šà¸·à¹ˆà¸­à¸šà¸—:Lesson title";
+$langScormStatus = "à¸ªà¸–à¸²à¸™à¸°:Status";
 $langScormToEnter = "enter";
-$langScormFirstNeedTo = "¤Ø³µéÍ§·ÓãËéàÊÃç¨¡èÍ¹:you need first accomplish";
-$langScormThisStatus = "¡ÓÅÑ§àÃÕÂ¹ÍÂÙèã¹º·àÃÕÂ¹¹Õé";
-$langScormClose = "ÊÔé¹ÊØ´(Terminate)";
-$langScormRestart = "àÃÔèÁµé¹ãËÁè:Restart";
-$langScormCompstatus = "ÊÓàÃç¨:Completed";
-$langScormIncomplete = "äÁèÊÓàÃç¨:Incomplete ";
-$langScormPassed = "¼èÒ¹:Passed ";
-$langScormFailed = "ÅéÁàËÅÇ:Failed";
-$langScormPrevious = "·Õè¼èÒ¹ÁÒ:Previous";
-$langScormNext = "µèÍä»:Next";
-$langScormTitle = "µÑÇàÅè¹ Dokeos Scorm ";
-$langScormMystatus = "Ê¶Ò¹Ð¢Í§µÑÇàÃÒ";
-$langScormNoItems = "ÂÑ§äÁèÁÕà¹×éÍËÒ ";
-$langScormNoStatus = "ÂÑ§äÁè¡ÓË¹´Ê¶Ò¹Ð¢Í§à¹×éÍËÒ";
-$langScormLoggedout = "ÍÍ¡¨Ò¡¢Íº¢èÒÂ¢Í§scorm";
-$langScormCloseWindow = "»Ô´ÇÔ¹â´ÇÊì¹Õé";
-$ScormBrowsed = "·Õè¤é¹àÅ×Í¡ÁÒáÅéÇ";
-$langScormExitFullScreen = "¡ÅÑºä»Ë¹éÒ¨Í»¡µÔ:Back to normal screen";
-$langScormFullScreen = "àµçÁ¨Í:Full screen";
-$langScormNotAttempted = "ÂÑ§äÁèµéÍ§¡ÒÃ";
-$langCharset = "ªØ´ÃËÑÊÍÑ¡ÉÃ";
-$langLocal = "·ÕèÍÂÙè»Ñ¨¨ØºÑ¹";
-$langRemote = "¤Çº¤ØÁÃÐÂÐä¡Å";
-$langAutodetect = "µÃÇ¨ËÒÍÑµâ¹ÁÑµÔ";
-$langAccomplishedStepsTotal = "ÃÇÁ¢Ñé¹µÍ¹·Ñé§ËÁ´";
-$langUnknown = "äÁèÃÙé¨Ñ¡";
+$langScormFirstNeedTo = "à¸„à¸¸à¸“à¸•à¹‰à¸­à¸‡à¸—à¸³à¹ƒà¸«à¹‰à¹€à¸ªà¸£à¹‡à¸ˆà¸à¹ˆà¸­à¸™:you need first accomplish";
+$langScormThisStatus = "Â¡Ã“Ã…Ã‘Â§Ã ÃƒÃ•Ã‚Â¹ÃÃ‚Ã™Ã¨Ã£Â¹ÂºÂ·Ã ÃƒÃ•Ã‚Â¹Â¹Ã•Ã©";
+$langScormClose = "à¸ªà¸´à¹‰à¸™à¸ªà¸¸à¸”(Terminate)";
+$langScormRestart = "à¹€à¸£à¸´à¹ˆà¸¡à¸•à¹‰à¸™à¹ƒà¸«à¸¡à¹ˆ:Restart";
+$langScormCompstatus = "à¸ªà¸³à¹€à¸£à¹‡à¸ˆ:Completed";
+$langScormIncomplete = "à¹„à¸¡à¹ˆà¸ªà¸³à¹€à¸£à¹‡à¸ˆ:Incomplete";
+$langScormPassed = "à¸œà¹ˆà¸²à¸™:Passed";
+$langScormFailed = "à¸¥à¹‰à¸¡à¹€à¸«à¸¥à¸§:Failed";
+$langScormPrevious = "à¸—à¸µà¹ˆà¸œà¹ˆà¸²à¸™à¸¡à¸²:Previous";
+$langScormNext = "à¸•à¹ˆà¸­à¹„à¸›:Next";
+$langScormTitle = "à¸•à¸±à¸§à¹€à¸¥à¹ˆà¸™ Chamilo Scorm";
+$langScormMystatus = "à¸ªà¸–à¸²à¸™à¸°à¸‚à¸­à¸‡à¸•à¸±à¸§à¹€à¸£à¸²";
+$langScormNoItems = "Ã‚Ã‘Â§Ã¤ÃÃ¨ÃÃ•Ã Â¹Ã—Ã©ÃÃ‹Ã’";
+$langScormNoStatus = "Ã‚Ã‘Â§Ã¤ÃÃ¨Â¡Ã“Ã‹Â¹Å½ÃŠÂ¶Ã’Â¹ÃÂ¢ÃÂ§Ã Â¹Ã—Ã©ÃÃ‹Ã’";
+$langScormLoggedout = "à¸­à¸­à¸à¸ˆà¸²à¸à¸‚à¸­à¸šà¸‚à¹ˆà¸²à¸¢à¸‚à¸­à¸‡scorm";
+$langScormCloseWindow = "à¸›à¸´à¸”à¸§à¸´à¸™à¹‚à¸”à¸§à¸ªà¹Œà¸™à¸µà¹‰";
+$ScormBrowsed = "à¸—à¸µà¹ˆà¸„à¹‰à¸™à¹€à¸¥à¸·à¸­à¸à¸¡à¸²à¹à¸¥à¹‰à¸§";
+$langScormExitFullScreen = "à¸à¸¥à¸±à¸šà¹„à¸›à¸«à¸™à¹‰à¸²à¸ˆà¸­à¸›à¸à¸•à¸´:Back to normal screen";
+$langScormFullScreen = "à¹€à¸•à¹‡à¸¡à¸ˆà¸­:Full screen";
+$langScormNotAttempted = "à¸¢à¸±à¸‡à¹„à¸¡à¹ˆà¸•à¹‰à¸­à¸‡à¸à¸²à¸£";
+$langCharset = "à¸Šà¸¸à¸”à¸£à¸«à¸±à¸ªà¸­à¸±à¸à¸©à¸£";
+$langLocal = "à¸—à¸µà¹ˆà¸­à¸¢à¸¹à¹ˆà¸›à¸±à¸ˆà¸ˆà¸¸à¸šà¸±à¸™";
+$langRemote = "à¸„à¸§à¸šà¸„à¸¸à¸¡à¸£à¸°à¸¢à¸°à¹„à¸à¸¥";
+$langAutodetect = "à¸•à¸£à¸§à¸ˆà¸«à¸²à¸­à¸±à¸•à¹‚à¸™à¸¡à¸±à¸•à¸´";
+$langAccomplishedStepsTotal = "à¸£à¸§à¸¡à¸‚à¸±à¹‰à¸™à¸•à¸­à¸™à¸—à¸±à¹‰à¸‡à¸«à¸¡à¸”";
+$langUnknown = "à¹„à¸¡à¹ˆà¸£à¸¹à¹‰à¸ˆà¸±à¸";
 ?>

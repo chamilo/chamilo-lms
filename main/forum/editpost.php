@@ -1,27 +1,5 @@
 <?php
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2004-2008 Dokeos SPRL
-	Copyright (c) 2003 Ghent University (UGent)
-	Copyright (c) 2001 Universite catholique de Louvain (UCL)
-	Copyright (c) various contributors
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
-	Mail: info@dokeos.com
-==============================================================================
-*/
+/* For licensing terms, see /license.txt */
 
 /**
 *	These files are a complete rework of the forum. The database structure is
@@ -82,7 +60,7 @@ api_protect_course_script(true);
 require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
 include_once (api_get_path(LIBRARY_PATH).'groupmanager.lib.php');
 
-$nameTools=get_lang('Forum');
+$nameTools=get_lang('ToolForum');
 
 /*
 -----------------------------------------------------------
@@ -136,7 +114,7 @@ if (isset($_SESSION['gradebook'])){
 if (!empty($gradebook) && $gradebook=='view') {
 	$interbreadcrumb[]= array (
 			'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
-			'name' => get_lang('Gradebook')
+			'name' => get_lang('ToolGradebook')
 		);
 }
 
@@ -201,16 +179,28 @@ if ($origin=='learnpath') {
 // I have split this is several pieces for clarity.
 //if (!api_is_allowed_to_edit() AND (($current_forum_category['visibility']==0 OR $current_forum['visibility']==0) OR ($current_forum_category['locked']<>0 OR $current_forum['locked']<>0 OR $current_thread['locked']<>0)))
 if (!api_is_allowed_to_edit(null,true) AND (($current_forum_category['visibility']==0 OR $current_forum['visibility']==0))) {
-	forum_not_allowed_here();
+	$forum_allow = forum_not_allowed_here();
+	if ($forum_allow === false) {
+		exit;
+	}
 }
 if (!api_is_allowed_to_edit(null,true) AND ($current_forum_category['locked']<>0 OR $current_forum['locked']<>0 OR $current_thread['locked']<>0)) {
-	forum_not_allowed_here();
+	$forum_allow = forum_not_allowed_here();
+	if ($forum_allow === false) {
+		exit;
+	}
 }
 if (!$_user['user_id'] AND $current_forum['allow_anonymous']==0) {
-	forum_not_allowed_here();
+	$forum_allow = forum_not_allowed_here();
+	if ($forum_allow === false) {
+		exit;
+	}
 }
 if (!api_is_allowed_to_edit(null,true) AND $current_forum['allow_edit']==0) {
-	forum_not_allowed_here();
+	$forum_allow = forum_not_allowed_here();
+	if ($forum_allow === false) {
+		exit;
+	}
 }
 
 
@@ -231,8 +221,8 @@ if ($origin!='learnpath') {
 echo "<table class=\"data_table\" width='100%'>\n";
 // the forum category
 echo "\t<tr>\n\t\t<th align=\"left\" colspan=\"2\">";
-echo '<a href="viewforum.php?&origin='.$origin.'&forum='.$current_forum['forum_id'].'" '.class_visible_invisible($current_forum['visibility']).'>'.prepare4display($current_forum['forum_title']).'</a><br />';
-echo '<span class="forum_description">'.prepare4display($current_forum['forum_comment']).'</span>';echo "</th>\n";
+echo '<a href="viewforum.php?&origin='.$origin.'&forum='.$current_forum['forum_id'].'" '.class_visible_invisible($current_forum['visibility']).'>'.prepare4display(Security::remove_XSS($current_forum['forum_title'])).'</a><br />';
+echo '<span class="forum_description">'.prepare4display(Security::remove_XSS($current_forum['forum_comment'],STUDENT)).'</span>';echo "</th>\n";
 echo "</th>\n";
 echo "\t</tr>\n";
 echo '</table>';

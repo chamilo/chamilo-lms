@@ -1,21 +1,5 @@
 <?php
-/*
-    DOKEOS - elearning and course management software
-
-    For a full list of contributors, see documentation/credits.html
-
-    This program is free software; you can redistribute it and/or
-    modify it under the terms of the GNU General Public License
-    as published by the Free Software Foundation; either version 2
-    of the License, or (at your option) any later version.
-    See "documentation/licence.html" more details.
-
-    Contact:
-		Dokeos
-		Rue du Corbeau, 108
-		B-1030 Brussels - Belgium
-		info@dokeos.com
-*/
+/* For licensing terms, see /license.txt */
 /**
 *	ExerciseResult class: This class allows to instantiate an object of type ExerciseResult
 *	which allows you to export exercises results in multiple presentation forms
@@ -64,7 +48,7 @@ class GradeBookResult
 			$sql.= ' WHERE active=1';
 		}
 		$sql .= ' ORDER BY title';
-		$result=Database::query($sql,__FILE__,__LINE__);
+		$result=Database::query($sql);
 
 		// if the exercise has been found
 		while($row=Database::fetch_array($result,'ASSOC')) {
@@ -86,7 +70,7 @@ class GradeBookResult
 			" FROM $TBL_EXERCISE_QUESTION eq, $TBL_QUESTIONS q " .
 			" WHERE eq.question_id=q.id AND eq.exercice_id='$e_id' " .
 			" ORDER BY q.position";
-		$result=Database::query($sql,__FILE__,__LINE__);
+		$result=Database::query($sql);
 
 		// fills the array with the question ID for this exercise
 		// the key of the array is the question position
@@ -117,25 +101,25 @@ class GradeBookResult
 			//get all results (ourself and the others) as an admin should see them
 			//AND exe_user_id <> $_user['user_id']  clause has been removed
 			$sql="SELECT ".(api_is_western_name_order() ? "CONCAT(firstname,' ',lastname)" : "CONCAT(lastname,' ',firstname)").", ce.title, te.exe_result ,
-						te.exe_weighting, UNIX_TIMESTAMP(te.exe_date),te.exe_id, user.email, user.user_id
+						te.exe_weighting, te.exe_date,te.exe_id, user.email, user.user_id
 				  FROM $TBL_EXERCISES ce , $TBL_TRACK_EXERCISES te, $TBL_USER user
 				  WHERE te.exe_exo_id = ce.id AND user_id=te.exe_user_id AND te.exe_cours_id='$cid'
 				  ORDER BY te.exe_cours_id ASC, ce.title ASC, te.exe_date ASC";
 
 			$hpsql="SELECT ".(api_is_western_name_order() ? "CONCAT(tu.firstname,' ',tu.lastname)" : "CONCAT(tu.lastname,' ',tu.firstname)").", tth.exe_name,
-						tth.exe_result , tth.exe_weighting, UNIX_TIMESTAMP(tth.exe_date), tu.email, tu.user_id
+						tth.exe_result , tth.exe_weighting, tth.exe_date, tu.email, tu.user_id
 					FROM $TBL_TRACK_HOTPOTATOES tth, $TBL_USER tu
 					WHERE  tu.user_id=tth.exe_user_id AND tth.exe_cours_id = '".$cid."'
 					ORDER BY tth.exe_cours_id ASC, tth.exe_date ASC";
 
 		} else { // get only this user's results
 			  $sql="SELECT '',ce.title, te.exe_result , te.exe_weighting, " .
-			  		"UNIX_TIMESTAMP(te.exe_date),te.exe_id
+			  		"te.exe_date,te.exe_id
 				  FROM $TBL_EXERCISES ce , $TBL_TRACK_EXERCISES te
 				  WHERE te.exe_exo_id = ce.id AND te.exe_user_id='".$user_id."' AND te.exe_cours_id='$cid'
 				  ORDER BY te.exe_cours_id ASC, ce.title ASC, te.exe_date ASC";
 
-			$hpsql="SELECT '',exe_name, exe_result , exe_weighting, UNIX_TIMESTAMP(exe_date)
+			$hpsql="SELECT '',exe_name, exe_result , exe_weighting, exe_date
 					FROM $TBL_TRACK_HOTPOTATOES
 					WHERE exe_user_id = '".$user_id."' AND exe_cours_id = '".$cid."'
 					ORDER BY exe_cours_id ASC, exe_date ASC";
@@ -155,7 +139,6 @@ class GradeBookResult
 				$mailid = $results[$i][6];
 				$user = $results[$i][0];
 				$test = $results[$i][1];
-				$dt = strftime(get_lang('dateTimeFormatLong'),$results[$i][4]);
 				$res = $results[$i][2];
 				if(empty($user_id)) {
 					$user = $results[$i][0];
@@ -163,7 +146,7 @@ class GradeBookResult
 					$return[$i]['user_id'] = $results[$i][7];
 				}
 				$return[$i]['title'] = $test;
-				$return[$i]['time'] = format_locale_date(get_lang('dateTimeFormatLong'),$results[$i][4]);
+				$return[$i]['time'] = api_convert_and_format_date($results[$i][4], null, date_default_timezone_get());
 				$return[$i]['result'] = $res;
 				$return[$i]['max'] = $results[$i][3];
 				$j=$i;
@@ -184,7 +167,7 @@ class GradeBookResult
 
 				}
 				$return[$j+$i]['title'] = $title;
-				$return[$j+$i]['time'] = strftime(get_lang('dateTimeFormatLong'),$hpresults[$i][4]);
+				$return[$j+$i]['time'] = api_convert_and_format_date($hpresults[$i][4], null, date_default_timezone_get());
 				$return[$j+$i]['result'] = $hpresults[$i][2];
 				$return[$j+$i]['max'] = $hpresults[$i][3];
 			}
@@ -201,9 +184,9 @@ class GradeBookResult
 	 */
 	public function exportCompleteReportCSV($dato) {
 		//$this->_getGradeBookReporting($document_path,$user_id);
-		$filename = 'gradebook_results_'.date('YmdGis').'.csv';
+		$filename = 'gradebook_results_'.gmdate('YmdGis').'.csv';
 		if (!empty($user_id)) {
-			$filename = 'gradebook_results_user_'.$user_id.'_'.date('YmdGis').'.csv';
+			$filename = 'gradebook_results_user_'.$user_id.'_'.gmdate('YmdGis').'.csv';
 		}
 		$data = '';
 		//build the results
@@ -251,12 +234,14 @@ class GradeBookResult
 	 * @return	boolean		False on error
 	 */
 	public function exportCompleteReportXLS($data) {
-	   	$filename = 'gradebook_results_user_'.date('YmdGis').'.xls';
+	   	$filename = 'gradebook_results_user_'.gmdate('YmdGis').'.xls';
 		//build the results
 		require_once(api_get_path(LIBRARY_PATH).'pear/Spreadsheet_Excel_Writer/Writer.php');
 		$workbook = new Spreadsheet_Excel_Writer();
+		$workbook ->setTempDir(api_get_path(SYS_ARCHIVE_PATH));
+		
 		$workbook->send($filename);
-		$worksheet =& $workbook->addWorksheet('Report '.date('YmdGis'));
+		$worksheet =& $workbook->addWorksheet('Report '.gmdate('YmdGis'));
 		$line = 0;
 		$column = 0; //skip the first column (row titles)
 		//headers

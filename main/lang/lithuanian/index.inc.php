@@ -1,27 +1,28 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $langInvalidId = "Prisijungimas nepavyko - neteisingas vartotojo vardas arba slaptažodis.";
-$langWelcome = "Žemiau pateikiami laisvai pasiekiami kursai. Kad pasiekti kitus kursus reikia vartotojo vardo ir slaptažodio, kuriuos galite gauti paspaudę ant \\\'registracija\\\'. Dėstytojai gali kurti kursus registruodamiesi, pasirinkdami \\\'Kurti kursus\\\'.";
+$langWelcome = "Sveiki atvykę!";
 $langPass = "Slaptažodis";
-$langEnter = "Įeiti";
+$langEnter = "Atgal į kursų sąrašą";
 $langReg = "Registracija";
-$langMenu  = "Meniu";
+$langMenu = "Meniu";
 $langAdvises = "Konsultacijos";
 $langCourseDoesntExist = "<b>Dėmesio:</b> Kursas neegzistuoja";
 $langGetCourseFromOldPortal = "click here to get this course from your old portal";
-$langOtherCourses = "Kursų sąrašas";
+$langOtherCourses = "kiti kursai";
 $langSupportForum = "Palaikymo forumas";
-$langCategories  = "Kategorijos";
-$langBackToHomePage  = "Atgal";
-$lang_No_course_publicly_available  = "Nėra viešai prieinamų kursų.";
-$langLostPassword  = "Užmiršote slaptažodį";
-$lang_edit_my_course_list  = "Redaguoti mano kursų sąrašą";
-$langAgenda  = "Darbotvarkės įvykiai";
-$langValvas  = "Naujausi skelbimai";
-$langUp  = "ankstesnis lygis";
-$langCatList  = "Kategorijos";
-$langCourseList  = "Viešieji kursai";
+$langCategories = "kategorijos";
+$langBackToHomePage = "Atgal";
+$lang_No_course_publicly_available = "Nėra viešai prieinamų kursų.";
+$langLostPassword = "Užmiršote slaptažodį";
+$lang_edit_my_course_list = "Redaguoti mano kursų sąrašą";
+$langAgenda = "Darbotvarkė";
+$langValvas = "Naujausi skelbimai";
+$langUp = "Viršun";
+$langCatList = "Kategorijos";
+$langCourseList = "Kursų sąrašas";
 $langHelptwo = "Pagalba";
 $langRegAll = "registruotis";
 $EussMenu = "meniu";
@@ -35,21 +36,21 @@ $langMenuUser = "Vartotojas";
 $langMenuAdmin = "Sistemos administratorius";
 $langUsersOnLineList = "Prisijungusių prie sistemos vartotojų sąrašas";
 $langTotalOnLine = "Iš viso prisijungę prie sistemos";
-$langRefresh = "perkrauti puslapį";
+$langRefresh = "Perkrauti";
 $langMe = "man";
 $langSystemAnnouncements = "Sistemos pranešimai";
 $langHelpMaj = "Pagalba";
 $langNotRegistered = "Neregistruotas";
 $langAdmin = "Sistemos administratorius";
-$Login = "Prisijungti";
+$Login = "Prisijungimo vardas";
 $langRegisterForCourse = "Registruotis į kursą";
 $langUnregisterForCourse = "Išsiregistruoti iš kurso";
-$langCombinedCourse = "Sujungtas kursas - ";
-$Platform = "Platforma";
+$langCombinedCourse = "Kombinuotas kursas";
+$Platform = "Sistema";
 $Refresh = "Perkauti";
 $TotalOnLine = "iš viso prisijungusių prie sistemos vartotojų";
 $langCourseClosed = "(kursas šiuo metu uždarytas)";
-$ViewOpenCourses = "Rodyti veikiančius kursus";
+$ViewOpenCourses = "Rodyti atvirus kursus";
 $langCompetences = "Kompetencijos";
 $langDiplomas = "Diplomai";
 $langTeach = "Ką jis/ji gali mokyti";
@@ -63,6 +64,6 @@ $DropboxFileAdded = "Dropbox file added";
 $NewMessageInForum = "New message posted in the forum";
 $FolderCreated = "New folder created";
 $LinkAdded = "New link added";
-$AnnouncementAdded = "Announcement added";
+$AnnouncementAdded = "Skelbimas idėtas";
 $AgendaAdded = "Agenda item added";
 ?>

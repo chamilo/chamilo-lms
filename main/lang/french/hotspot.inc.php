@@ -1,24 +1,25 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$select = "Sélectionner";
+$select = "SÃ©lectionner";
 $square = "Rectangle";
 $circle = "Ellipse";
 $poly = "Polygone";
 $status1 = "Dessinez une zone cliquable.";
 $status2_poly = "Faites un clic droit pour fermer le polygone.";
-$status2_other = "Relâchez le bouton de la souris pour sauvegarder la zone cliquable.";
-$status3 = "Zone cliquable sauvegardée.";
-$exercise_status_1 = "Statut: Question non-terminée";
-$exercise_status_2 = "Valider les réponses";
-$exercise_status_3 = "Statut : Question terminée";
+$status2_other = "RelÃ¢chez le bouton de la souris pour sauvegarder la zone cliquable.";
+$status3 = "Zone cliquable sauvegardÃ©e.";
+$exercise_status_1 = "Statut: Question non-terminÃ©e";
+$exercise_status_2 = "Cliquez pour envoyer vos rÃ©ponses Ã  la question";
+$exercise_status_3 = "Statut : Question terminÃ©e";
 $showUserPoints = "Montrer/cacher les clics";
 $showHotspots = "Montrer/cacher les zones cliquables";
 $labelPolyMenu = "Fermer le polygone";
 $triesleft = "Essais restants";
-$exeFinished = "Cliquez sur le bouton en bas de page pour valider vos réponses";
+$exeFinished = "Toutes les rÃ©ponses ont Ã©tÃ© remplies. Modifiez vos choix ou envoyez vos rÃ©ponses";
 $nextAnswer = "Cliquez maintenant sur : &done=done";
-$delineation = "Délinéation";
-$labelDelineationMenu = "Fermer la délinéation";
-$oar = "Zone à risque";
+$delineation = "DÃ©linÃ©ation";
+$labelDelineationMenu = "Fermer la dÃ©linÃ©ation";
+$oar = "Zone Ã  risque";
 ?>

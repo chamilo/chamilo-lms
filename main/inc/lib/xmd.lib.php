@@ -11,7 +11,7 @@
 *	This is the XML Dom library for Dokeos.
 *	Include/require it in your code to use its functionality.
 *
-*	@author Rene Haentjens
+*	@author René Haentjens
 *	@package dokeos.library
 ==============================================================================
 */

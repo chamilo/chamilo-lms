@@ -1,31 +1,32 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $langLineNumber = "Rivinumero";
 $langLine = "rivi";
 $langLines = "rivit";
 $langLineOrLines = "rivi(t)";
-$langMoveUp = "Siirrä ylöspäin";
-$langMoveDown = "Siirrä alaspäin";
-$langAddNewHeading = "Lisää uusi otsikko";
-$langCourseAdministratorOnly = "Ainoastaan opettajat";
-$langDefineHeadings = "Määrittelet otsikot";
-$langBackToUsersList = "Takaisin käyttäjälistaan";
+$langMoveUp = "SiirrÃ¤ ylÃ¶spÃ¤in";
+$langMoveDown = "SiirrÃ¤ alaspÃ¤in";
+$langAddNewHeading = "LisÃ¤Ã¤ uusi otsikko";
+$langCourseAdministratorOnly = "vain opettaja";
+$langDefineHeadings = "MÃ¤Ã¤rittele otsikot";
+$langBackToUsersList = "Takaisin kÃ¤yttÃ¤jÃ¤listaan";
 $langTracking = "Seuranta";
 $langCourseManager = "Opettaja";
 $langModRight = "muuta oikeuksia";
-$langNoAdmin = "ei omista enää oikeuksia tälle sivulle";
-$langAllAdmin = "omistaa tästä eteenpäin kaikki oikeudet tälle sivulle";
+$langNoAdmin = "ei omista enÃ¤Ã¤ oikeuksia tÃ¤lle sivulle";
+$langAllAdmin = "omistaa tÃ¤stÃ¤ eteenpÃ¤in kaikki oikeudet tÃ¤lle sivulle";
 $langModRole = "Vaihda roolia";
-$langRole = "rooli";
-$langIsNow = "on tästä eteenpäin";
-$langInC = "tällä kurssilla";
-$langFilled = "Kaikkia kenttiä ei ole täytetty";
-$langUserNo = "Käyttäjä";
-$langTaken = "on jo käytössä. Ole hyvä ja valitse joku muu";
+$langRole = "Rooli";
+$langIsNow = "on tÃ¤stÃ¤ eteenpÃ¤in";
+$langInC = "tÃ¤llÃ¤ kurssilla";
+$langFilled = "JÃ¤tit jotkut kentistÃ¤ tyhjiksi.";
+$langUserNo = "Valitsemasi kÃ¤yttÃ¤jÃ¤nimi";
+$langTaken = "on jo kÃ¤ytÃ¶ssÃ¤. valitse uusi.";
 $langTutor = "Tutor";
 $langUnreg = "Peruuta";
-$langGroupUserManagement = "Ryhmän hallinta";
+$langGroupUserManagement = "RyhmÃ¤n hallinta";
 $langUnregister = "Poista";
-$langAddAUser = "Lisää käyttäjä";
+$langAddAUser = "LisÃ¤Ã¤ kÃ¤yttÃ¤jÃ¤";
 ?>

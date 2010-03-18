@@ -1,9 +1,5 @@
 <?php
-Mock::generate('Database');
-Mock::generate('Display');
-$config['survey']['debug'] = false;
-require_once(api_get_path(LIBRARY_PATH).'add_course.lib.inc.php');
-
+require_once(api_get_path(LIBRARY_PATH).'course.lib.php');
 
 class TestSurvey extends UnitTestCase {
 
@@ -18,152 +14,176 @@ class TestSurvey extends UnitTestCase {
 	$this->UnitTestCase('');
 
 	}
-	public function setUp() {
+	public function setUp() {				
 		$this->smanager = new survey_manager();
 		$this->squestion = new question();
 		$this->syesno = new yesno();
 		$this->smultiplechoice = new multiplechoice();
 		$this->spersonality = new personality();
-		$this->smultipleresponse = new multipleresponse();
+		$this->smultipleresponse = new multipleresponse();		
 	}
 
-	public function tearDown() {
+	public function tearDown() {		
 		$this-> smanager = null;
 		$this-> squestion = null;
 		$this-> syesno = null;
 		$this->smultiplechoice = null;
 		$this->personality = null;
-		$this->multipleresponse = null;
+		$this->multipleresponse = null;							
 	}
-	/*
-	public function testGetSurvey() {
-		$instans = new MockDatabase();
-		global $_course;
-		$survey_id=1;
-		$shared=1;
-		$my_course_id=$_GET['course'];
-		$res = $this->smanager->get_survey($survey_id,$shared);
-		$my_course_info=api_get_course_info($my_course_id);
-		$table_survey = Database :: get_course_table(TABLE_SURVEY, $my_course_info['dbName']);
-		$sql = "SELECT * FROM $table_survey WHERE survey_id='".Database::escape_string($survey_id)."'";
-		$result = Database::query($sql, __FILE__, __LINE__);
-		$instans->expectCallCount($table_survey);
-		$this->assertTrue(is_array($res));
-		$this->assertFalse($result);
-		//var_dump($table_survey);
-		//var_dump($result);
-		//var_dump($res);
-	}
-
-	public function testStoreSurvey(){
-		$instans = new MockDatabase();
-		global $_user;
-		$values=array('002','003','003');
-		$table_survey=Database::get_course_table(TABLE_SURVEY);
-		$shared_survey_id=0;
-		$instans->expectCallCount($table_survey);
-		//if(!$values['survey_id'] OR !is_numeric($values['survey_id']))
+	
+	
+	public function testStoreSurvey() {
+		global $_user,$cidReq;
+		$values = array(
+						  'survey_code' => 'Survey1',
+						  'survey_title' => '<p>Survey</p>',
+						  'survey_subtitle' => '',
+						  'survey_language' => 'spanish',
+						  'start_date' => '2010-01-19',
+						  'end_date' => '2010-01-29',
+						  'survey_introduction' => '',
+						  'survey_thanks' =>  '',
+						  'survey_type' =>  '0',
+						  'parent_id' =>  '0', 
+						  'submit_survey' => ''		
+					   );	
 		$res = $this->smanager->store_survey($values);
 		$this->assertTrue($res);
-		$this->assertTrue(is_array($res));
-		$this->assertTrue($res);
-		$this->assertTrue($table_survey);
-		//var_dump($res);
-		//var_dump($table_survey);
+		$this->assertTrue(is_array($res));				
 	}
-	/*
-	public function testStoreSharedSurvey($values){
-		$instans = new MockDatabase();
-		$values=array('');
-		global $_user;
-		global $_course;
-		$table_survey=Database::get_main_table(TABLE_MAIN_SHARED_SURVEY);
-		$instans->expectCallCount(Database::get_main_table(TABLE_MAIN_SHARED_SURVEY));
-		if(!$values['survey_id'] OR !is_numeric($values['survey_id']) OR $values['survey_share']['survey_share'] == 'true') {
-			$sql = "INSERT INTO $table_survey (code, title, subtitle, author, lang, template, intro, surveythanks, creation_date, course_code)";
-			$result = Database::query($sql, __FILE__, __LINE__);
-			$return	= Database::insert_id();
-		}else{
-			$sql = "UPDATE $table_survey SET";
-			$result = Database::query($sql, __FILE__, __LINE__);
-			$return	= $values['survey_share']['survey_share'];
-		}
+
+	
+	public function testGetSurvey() {			   
+		$course_code = 'COURSETEST';			   											 	
+		$survey_id=1;
+		$res3 = $this->smanager->get_survey($survey_id,0,$course_code);
+		$this->assertTrue(is_array($res3));		
+	}
+
+	public function testStoreSharedSurvey() {
+		global $_user,$cidReq;
+		$values = array(
+						  'survey_code' => 'Survey1',
+						  'survey_title' => '<p>Survey</p>',
+						  'survey_subtitle' => 'Survey subtitle',
+						  'survey_language' => 'spanish',
+						  'start_date' => '2010-01-19',
+						  'end_date' => '2010-01-29',
+						  'survey_introduction' => 'introduction',
+						  'survey_thanks' =>  '',
+						  'survey_type' =>  '1',
+						  'parent_id' =>  '1', 
+						  'submit_survey' => ''		
+					   );	
 		$res = $this->smanager->store_shared_survey($values);
 		$this->assertTrue($res);
 		//var_dump($res);
-		//var_dump($table_survey);
-		//var_dump($table_survey);
-	}*/
+	}
 
-	public function testDeleteSurvey(){
-		$instans = new MockDatabase();
-		$survey_id=1;
-		$shared=false;
-		$course_code=001;
-		$table_survey= Database :: get_course_table(TABLE_SURVEY,$course_code);
-		$table_survey_question_group = Database :: get_course_table(TABLE_SURVEY_QUESTION_GROUP,$course_code);
-		$instans->expectOnce($table_survey);
-		$res = $this->smanager->delete_survey($survey_id, $shared, $course_code);
-		$this->assertTrue($res);
+	//Build the form
+
+	public function testQuestionCreateForm() {
+		global $charset;
+		global $survey_data;
+		$form_content = array();
+		$res = $this->squestion->create_form($form_content);
 		$this->assertTrue(is_string($res));
-		$this->assertTrue($table_survey);
-		//var_dump($table_survey_question_group);
+	}
+
+	public function testQuestionRenderForm() {
+		ob_start();
+		$this->squestion->render_form();
+		ob_end_clean();
+		$this->assertNotNull($this->squestion->html);
+		//var_dump($res);
+	}
+	
+	public function testYesNoCreateForm() {
+		$form_content=array();
+		$res1 = $this->syesno->create_form($form_content);
+		$this->assertNull($res1);
+	}
+
+	public function testMultipleChoiceCreateForm() {		
+		$form_content=array();
+		$res2 = $this->smultiplechoice->create_form($form_content);
+		$this->assertNull($res2);		
+	}
+	
+
+	public function testPersonalityCreateForm() {
+		$form_content=array();
+		$this->spersonality->create_form($form_content);
+		$this->assertNotNull($this->spersonality->html);
+		$this->assertTrue($this->spersonality->html);
+	}
+
+	public function testMultipleResponseCreateForm() {
+		$form_content=array();
+		$this->smultipleresponse->create_form($form_content);
+		$this->assertNotNull($this->smultipleresponse->html);
+		$this->assertTrue($this->smultipleresponse->html);
+	}
+	
+	public function testQuestionRenderQuestion() {
+		ob_start();
+		$form_content=array();
+		$res = $this->squestion->render_question($form_content);
+		$this->assertNull($res);
+		$this->assertTrue(is_null($res));
+		ob_end_clean();
+	}
+	
+	public function testMultipleChoiseRenderQuestion() {
+		ob_start();
+		$form_content=array();
+		$answers=array();
+		$this->smultiplechoice->render_question($form_content,$answers);
+		$this->assertNull($this->smultiplechoice->html);
+		ob_end_clean();
+	}
+	
+	public function testYesNoRenderQuestion() {
+		ob_start();
+		$form_content=array();
+		$answers=array();
+		$this->syesno->render_question($form_content,$answers);
+		$this->assertNull($this->syesno->html);
+		ob_end_clean();
+	}
+
+	public function testPersonalityRenderQuestion() {
+		ob_start();
+		$form_content=array();
+		$answers=array();
+		$this->spersonality->render_question($form_content,$answers);
+		$this->assertNull($this->spersonality->html);
+		$this->assertFalse($this->spersonality->html);
+		ob_end_clean();
+	}
+
+	public function testAddRemoveButtons() {
+		$form_content = array();
+		$res = $this->squestion->add_remove_buttons($form_content);
+		$this->assertTrue($res);
 		//var_dump($res);
 	}
 
-	public function testCopySurvey(){
-		$instans = new MockDatabase();
-		$parent_survey=null;
-		$new_survey_id=null;
-		$instans->expectCallCount(Database::get_course_table(TABLE_SURVEY));
-		$sql = "SELECT * from $table_survey_question_group " .
-			   "WHERE survey_id='".$parent_survey."'";
-		$result = Database::query($sql, __FILE__, __LINE__);
+	//save the survey
+	 
+	 public function testCopySurvey() {
+		$parent_survey = Database::escape_string($parent_survey);
+		$new_survey_id = '1';
 		$res = $this->smanager->copy_survey($parent_survey,$new_survey_id);
 		$this->assertTrue(is_bool($res));
 		$this->assertTrue($res);
-		$this->assertTrue($instans);
-		//var_dump($res);
-		//var_dump($result);
-	}
-
-	public function testEmpty_survey(){
-		$instans = new MockDatabase();
-		$table_survey_invitation = Database :: get_course_table(TABLE_SURVEY_INVITATION);
-		$table_survey_answer = Database :: get_course_table(TABLE_SURVEY_ANSWER);
-		$table_survey = Database :: get_course_table(TABLE_SURVEY);
-		$survey_id=null;
-		$instans->expectOnce($table_survey);
-		$instans->expectCallCount(count($table_survey));
-		$instans->expectCallCount($table_survey);
-		$res = $this->smanager->empty_survey($survey_id);
-		$this->assertTrue($res);
-		$this->assertTrue(is_object($instans));
-		//var_dump($res);
-		//var_dump($table_survey);
-	}
-
-	public function testUpdateSurveyAnswered(){
-		$instans = new MockDatabase();
-		global $_course;
-		$survey_id=1;
-		$user=001;
-		$survey_code=001;
-		$table_survey= Database :: get_course_table(TABLE_SURVEY, $_course['db_name']);
-		$table_survey_invitation 	= Database :: get_course_table(TABLE_SURVEY_INVITATION, $_course['db_name']);
-		$instans->expectCallCount($table_survey);
-		$instans->expectCallCount(count($table_survey_invitation));
-		$sql = "UPDATE $table_survey_invitation SET answered='1' WHERE session_id='".api_get_session_id()."' AND user='".Database::escape_string($user)."' AND survey_code='".Database::escape_string($survey_code)."'";
-		$res = Database::query($sql, __FILE__, __LINE__);
-		$result = $this->smanager->update_survey_answered($survey_id, $user, $survey_code);
-		$this->assertTrue(is_bool($res));
-		$this->assertTrue($res === false);
-		//var_dump($result);
 		//var_dump($res);
 
 	}
 
-	public function testGetCompleteSurveyStructure(){
+
+	public function testGetCompleteSurveyStructure() {
 		$survey_id='';
 		$shared=0;
 		$res = $this->smanager->get_complete_survey_structure($survey_id, $shared);
@@ -172,7 +192,7 @@ class TestSurvey extends UnitTestCase {
 		//var_dump($res);
 	}
 
-	public function testIconQuestion(){
+	public function testIconQuestion() {
 		$type='open';
 		$res = $this->smanager->icon_question($type);
 		if(is_bool($res)) {
@@ -184,342 +204,179 @@ class TestSurvey extends UnitTestCase {
 		}
 		//var_dump($res);
 	}
-
-	public function testGetQuestion(){
-		$instans = new MockDatabase();
-		$question_id=01;
-		$shared=false;
-		$tbl_survey_question = Database :: get_course_table(TABLE_SURVEY_QUESTION);
-		$table_survey_question_option = Database :: get_course_table(TABLE_SURVEY_QUESTION_OPTION);
-		$sql = "SELECT * FROM $tbl_survey_question WHERE question_id='".Database::escape_string($question_id)."' ORDER BY `sort`";
-		$result = Database::query($sql, __FILE__, __LINE__);
-		$row = Database::fetch_array($result,'ASSOC');
-		$res = $this->smanager->get_question($question_id,$shared);
+	
+	public function testSaveQuestion() {
+		$form_content=array();
+		$res = $this->smanager->save_question($form_content);
 		$this->assertTrue($res);
-		$instans->expectOnce(count($res));
+		$this->assertTrue(is_string($res));
+		//var_dump($res);
+	}
+
+	public function testSaveSharedQuestion() {
+		$form_content=array('');
+		$survey_data=array('survey_share');
+		$res = $this->smanager->save_shared_question($form_content,$survey_data);
+		$this->assertTrue($res);
+		//var_dump($res);
+	}
+
+	public function testSaveQuestionOptions() {
+		$form_content=array();
+		$survey_data=array('survey_share');
+		$res = $this->smanager->save_question_options($form_content,$survey_data);
+		$this->assertTrue(is_null($res));
+		//var_dump($res);
+	}
+
+	public function testSaveSharedQuestionOptions() {
+		$form_content=array();
+		$survey_data=array();
+		$res = $this->smanager->save_shared_question_options($form_content,$survey_data);
+		$this->assertTrue(is_null($res));
+		$this->assertNull($res);
+		//var_dump($res);
+	}
+ 
+	//get the survey
+
+	public function testGetPeopleWhoFilledSurvey() {
+		$survey_id=1;
+		$all_user_info=false;
+		$survey_data = survey_manager::get_survey($survey_id);
+		$result = $this->smanager->get_people_who_filled_survey($survey_id,false);
+		$this->assertTrue(is_array($result));
+		//var_dump($result);
+	}
+
+	public function testGetQuestion() {
+		$question_id=1;
+		$res = $this->smanager->get_question($question_id,false);
+		$this->assertTrue($res);
 		//var_dump($res);
 		//var_dump($result);
 	}
 
-	public function testGetQuestions(){
-		$get_questions = new MockDatabase();
+	public function testGetQuestions() {
 		$survey_id =1;
-		$tbl_survey_question = Database :: get_course_table(TABLE_SURVEY_QUESTION);
-		$table_survey_question_option = Database :: get_course_table(TABLE_SURVEY_QUESTION_OPTION);
-		$sql = "SELECT * FROM $tbl_survey_question WHERE survey_id='".Database::escape_string($survey_id)."'";
-		$result = Database::query($sql, __FILE__, __LINE__);
-		$row = Database::fetch_array($result,'ASSOC');
 		$res= $this->smanager->get_questions($survey_id);
-		$get_questions->expectCallCount($result);
 		$this->assertNull($res);
 		//var_dump($res);
-		//var_dump($row);
-		//var_dump($get_questions);
 	}
-
-	public function testSaveQuestion(){
-		global $survey_data;
-		global $_course;
-		$form_content=array('question'=>'121212');
-		$res = $this->smanager->save_question($form_content['question']);
-		$this->assertTrue($res);
-		$this->assertTrue(is_string($res));
-		//var_dump($res);
-
-	}
-
-	public function testSaveSharedQuestion(){
-		$instans = new MockDatabase();
-		global $_course;
-		$form_content=array('');
-		$survey_data=array('');
-		$tbl_survey_question= Database :: get_main_table(TABLE_MAIN_SHARED_SURVEY_QUESTION);
-		$res = $this->smanager->save_shared_question($form_content,$survey_data);
-		$instans->expectOnce($tbl_survey_question);
-		$this->assertTrue($res);
-		$this->assertTrue($instans);
-		//var_dump($res);
-		//var_dump($instans);
-	}
-
-	public function testMoveSurveyQuestion(){
-		$instans = new MockDatabase();
-		$table_survey_question 	= Database :: get_course_table(TABLE_SURVEY_QUESTION);
+	
+	//move the survey
+ 
+	public function testMoveSurveyQuestion() {
 		$direction='moveup';
-		$survey_question_id=01;
+		$survey_question_id=1;
 		$survey_id=1;
-		/*$sql = "SELECT * FROM $table_survey_question WHERE survey_id='".Database::escape_string($survey_id)."' ORDER BY sort $sort";
-		$result = Database::query($sql, __FILE__, __LINE__);
-		*/
 		$res = $this->smanager->move_survey_question($direction,$survey_question_id,$survey_id);
 		$this->assertTrue(is_null($res));
 		//var_dump($res);
 	}
 
-	public function testDeleteAllSurveyQuestions(){
-		$instans = new MockDatabase();
-		$table_survey_question 	= Database :: get_course_table(TABLE_SURVEY_QUESTION);
-		$survey_id=1;
-		$shared=false;
-		$sql = "DELETE from $table_survey_question WHERE survey_id='".Database::escape_string($survey_id)."'";
-		$res = Database::query($sql, __FILE__, __LINE__);
-		$result = $this->smanager->delete_all_survey_questions($survey_id,$shared);
-		$instans->expectOnce($res);
-		$this->assertTrue(is_null($result));
-		$this->assertTrue(is_bool($res));
-		$this->assertTrue($res === true || $res === false);
-		//var_dump($result);
+	//epmty the survey
+	
+	public function testEmpty_survey() {
+		$survey_id=null;
+		$res = $this->smanager->empty_survey($survey_id);
+		$this->assertTrue($res);
 		//var_dump($res);
 	}
+	
+	//functions delete
+	 
+	 public function testHandleAction() {
+		$form_content = array('');
+		$res = $this->squestion->handle_action($form_content);
+		$this->assertTrue(is_array($res));
+		//var_dump($res);
+	}
+	 
+		public function testDeleteAllSurveyQuestions() {
+		$survey_id=1;
+		$shared=false;
+		$result = $this->smanager->delete_all_survey_questions($survey_id,$shared);
+		$this->assertTrue(is_null($result));
+		//var_dump($result);
+	}
 
-	public function testDeleteSurveyQuestion(){
-		$instans = new MockDatabase();
-		$table_survey_question 	= Database :: get_course_table(TABLE_SURVEY_QUESTION);
+	public function testDeleteSurveyQuestion() {
 		$survey_id =1;
 		$question_id=01;
 		$shared=false;
-		$sql = "DELETE from $table_survey_question WHERE survey_id='".Database::escape_string($survey_id)."' AND question_id='".Database::escape_string($question_id)."'";
-		$res = Database::query($sql, __FILE__, __LINE__);
-		$instans->expectOnce($res);
 		$result = $this->smanager->delete_survey_question($survey_id,$question_id);
 		$this->assertTrue(is_null($result));
-		$this->assertTrue(is_object($instans));
-		$this->assertFalse($res);
 		//var_dump($result);
 		//var_dump($res);
 	}
-	/*
-	public function testDeleteSharedSurveyQuestion(){
-		$instans = new MockDatabase();
+	
+	public function testDeleteSharedSurveyQuestion() {
 		$survey_id=1;
 		$question_id=01;
-		$table_survey_question 	= Database :: get_main_table(TABLE_MAIN_SHARED_SURVEY_QUESTION);
-		$table_survey_question_option 	= Database :: get_main_table(TABLE_MAIN_SHARED_SURVEY_QUESTION_OPTION);
 		$res = $this->smanager->delete_shared_survey_question($survey_id,$question_id);
-		$instans->expectOnce($table_survey_question);
 		$this->assertTrue(is_null($res));
-		$this->assertTrue(is_object($instans));
 		//var_dump($res);
 	}
-
-	public function testSaveQuestionOptions(){
-		$instans = new MockDatabase();
-		$form_content=array('percentage');
-		$survey_data=array('survey_share');
-		$table_survey_question_option 	= Database :: get_course_table(TABLE_SURVEY_QUESTION_OPTION);
-		$instans->expectOnce($table_survey_question_option);
-		$res = $this->smanager->save_question_options($form_content,$survey_data);
-		$this->assertTrue(is_null($res));
-		$this->assertTrue(is_object($instans));
-		//var_dump($res);
-		//var_dump($table_survey_question_option);
-	}
-
-	public function testSaveSharedQuestionOptions(){
-		$instans = new MockDatabase();
-		$form_content=array('answers');
-		$survey_data=array('');
-		$table_survey_question_option 	= Database :: get_main_table(TABLE_MAIN_SHARED_SURVEY_QUESTION_OPTION);
-		$sql = "DELETE FROM $table_survey_question_option WHERE question_id = '".Database::escape_string($form_content['shared_question_id'])."'";
-		$result = Database::query($sql, __FILE__, __LINE__);
-		$instans->expectCallCount($result);
-		$res = $this->smanager->save_shared_question_options($form_content,$survey_data);
-		$this->assertTrue(is_bool($result));
-		$this->assertTrue($result === true || $result === false);
-		$this->assertTrue(is_null($res));
-		$this->assertNull($res);
-		//var_dump($res);
-		//var_dump($result);
-	}
-
-	public function testDeleteAllSurveyQuestionsOptions(){
-		$instans = new MockDatabase();
-		$table_survey_question_option 	= Database :: get_course_table(TABLE_SURVEY_QUESTION_OPTION);
+	
+		public function testDeleteSurvey() {
 		$survey_id=1;
 		$shared=false;
-		$sql = "DELETE from $table_survey_question_option WHERE survey_id='".Database::escape_string($survey_id)."'";
-		$res = Database::query($sql, __FILE__, __LINE__);
-		$result = $this->smanager->delete_all_survey_questions_options($survey_id,$shared);
-		$instans->expectCallCount($res);
-		$this->assertTrue($result);
-		$this->assertFalse($res);
-		$this->assertTrue(is_bool($res));
-		//var_dump($result);
+		$course_code=001;
+		$res = $this->smanager->delete_survey($survey_id, $shared, $course_code);
+		$this->assertTrue($res);
 		//var_dump($res);
 	}
+	
+	public function testDeleteAllSurveyQuestionsOptions() {
+		$survey_id=1;
+		$shared=false;
+		$result = $this->smanager->delete_all_survey_questions_options($survey_id,$shared);
+		$this->assertTrue($result);
+		//var_dump($result);
+	}
 
-	public function testDeleteSurveyQuestionOption(){
-		$instans = new MockDatabase();
+	public function testDeleteSurveyQuestionOption() {
 		$survey_id=1;
 		$question_id=01;
 		$shared=false;
-		$table_survey_question_option = Database :: get_course_table(TABLE_SURVEY_QUESTION_OPTION);
-		$sql = "DELETE from $table_survey_question_option WHERE survey_id='".Database::escape_string($survey_id)."' AND question_id='".Database::escape_string($question_id)."'";
-		$res = Database::query($sql, __FILE__, __LINE__);
-		$instans->expectOnce($res);
-		$instans->expectCallCount($res);
 		$result = $this->smanager->delete_survey_question_option($survey_id,$question_id,$shared);
 		if(is_bool($result))
 		$this->assertTrue(is_bool($result));
 		$this->assertTrue($result === true || $result===false);
-		$this->assertTrue($result);
-		if(is_bool($res))
-		$this->assertTrue(is_bool($res));
-		$this->assertTrue($res === true || $res===false);
-		$this->assertFalse($res);
+		$this->assertTrue($result);	
 		//var_dump($result);
-		//var_dump($res);
 	}
 
-	public function testDeleteAllSurveyAnswers(){
-		$instans = new MockDatabase();
+	public function testDeleteAllSurveyAnswers() {
 		$survey_id=1;
-		$table_survey_answer 	= Database :: get_course_table(TABLE_SURVEY_ANSWER);
-		$instans->expectCallCount($table_survey_answer);
 		$res = $this->smanager->delete_all_survey_answers($survey_id);
 		$this->assertTrue(is_bool($res));
 		$this->assertTrue($res);
 		$this->assertTrue($res === true || $res === false);
-		$this->assertTrue($table_survey_answer);
 		//var_dump($res);
-		//var_dump($table_survey_answer);
 	}
-
-	public function testGetPeopleWhoFilledSurvey(){
-		$instans = new MockDatabase();
-		$survey_id=1;
-		$all_user_info=false;
-		global $_course;
-		$table_survey_answer = Database :: get_course_table(TABLE_SURVEY_ANSWER, $_course['db_name']);
-		$table_user	= Database :: get_main_table('user');
-		$survey_data = survey_manager::get_survey($survey_id);
-		$sql = "SELECT DISTINCT user FROM $table_survey_answer WHERE survey_id= '".Database::escape_string($survey_data['survey_id'])."'";
-		$res = Database::query($sql, __FILE__, __LINE__);
-		$instans->expectCallCount($table_user);
-		$result = $this->smanager->get_people_who_filled_survey($survey_id,$all_user_info);
-		$this->assertTrue(is_array($result));
-		$this->assertNotNull($res);
-		$this->assertFalse($res);
-		$this->assertTrue(is_bool($res));
-		$this->assertTrue($res=== true || $res === false);
-		$this->assertTrue($sql);
-		//var_dump($res);
+	
+	//Contest the answer
+	 
+	public function testUpdateSurveyAnswered() {
+		global $user;
+		$survey_code = 'Survey1';
+		$survey_id = '1';
+		$result = $this->smanager->update_survey_answered($survey_id, $user, $survey_code);
+		$this->assertTrue(is_null($result));
 		//var_dump($result);
-		//var_dump($sql);
-	}
-*/
-	public function testCreateForm(){
-		$instans = new MockDisplay();
-		global $charset;
-		global $survey_data;
-		$tool_name = 'AddQuestion';
-		$tool_name = Display::return_icon(survey_manager::icon_question(Security::remove_XSS($_GET['type'])),get_lang(ucfirst(Security::remove_XSS($_GET['type']))),array('align'=>'middle', 'height'=>'22px')).' ';
-		$form_content=array('');
-		$res = $this->squestion->create_form($form_content);
-		$instans->expectCallCount($tool_name);
-		$this->assertTrue($res);
-		$this->assertTrue($tool_name);
-		//var_dump($res);
-		//var_dump($tool_name);
 	}
 
-	public function testRenderForm(){
-		ob_start();
-		$this->squestion->render_form();
-		ob_end_clean();
-		$this->assertNotNull($this->squestion->html);
-		//var_dump($res);
-	}
 
-	public function testHandleAction(){
-		global $config;
-		$form_content['answers']=array('');
-		$message = 'PleaseEnterAQuestion';
-		$max_answer = count($form_content['answers']);
-		foreach ($_POST['delete_answer'] as $key=>$value) {
-		$delete = $key;
-		}
-		$res = $this->squestion->handle_action($form_content);
-		$this->assertTrue(is_array($res));
-		$this->assertTrue(isset($form_content['answers'][$max_answer-1]));
-		//var_dump($res);
-	}
-
-	public function testAddRemoveButtons(){
-		$form_content['answers'] =array();
-		$res = $this->squestion->add_remove_buttons($form_content);
-		$this->assertTrue($res);
-		//var_dump($res);
-	}
-
-	public function testRenderQuestion(){
-		$form_content=array('');
-		$res = $this->squestion->render_question($form_content);
-		$this->assertNull($res);
-		$this->assertTrue(is_null($res));
-		//var_dump($res);
-	}
-
-	public function testCreateForm1(){
-		$form_content=array('');
-		$this->syesno->create_form($form_content);
-		$this->assertNotNull($this->syesno->html);
-	}
-
-	public function testRenderQuestion1(){
-		ob_start();
-		$form_content['options']=array('');
-		$answers=array();
-		$this->syesno->render_question($form_content,$answers);
-		ob_end_clean();
-		$this->assertNotNull($this->syesno->html);
-	}
-
-	public function testCreateForm2(){
-		global $charset;
-		$form_content=array('');
-		$this->smultiplechoice->create_form($form_content);
-		$this->assertNotNull($this->smultiplechoice->html);
-		$this->assertTrue(!is_null(html));
-	}
-	/**
-	 * 	@todo it would make more sense to consider yesno as a
-	 *  special case of multiplechoice and not the other way
-	 *  around
-	 */
-
-	public function testRenderQuestion2(){
-		$form_content= array('');
-		$answers=array('');
-		$this->smultiplechoice->render_question($form_content, $answers);
-		$this->assertNull($this->smultiplechoice->html);
-	}
-
-	public function testCreateForm3(){
-		$form_content['answers']=array();
-		$count= 0;
-		$this->spersonality;
-		$this->spersonality->create_form($form_content);
-		$this->assertNotNull($this->spersonality->html);
-		$this->assertTrue($this->spersonality->html);
-	}
-
-	public function testRenderQuestion3(){
-		$form_content=array();
-		$answers=array();
-		$this->spersonality->render_question($form_content,$answers);
-		$this->assertNull($this->spersonality->html);
-		$this->assertFalse($this->spersonality->html);
-	}
-
-	public function testCreateForm4(){
-		global $charset;
-		$form_content=array();
-		$this->smultipleresponse->create_form($form_content);
-		$this->assertNotNull($this->smultipleresponse->html);
-		$this->assertTrue($this->smultipleresponse->html);
-	}
-
+/**
+ * This functon only is added to the end of the test and the end of the files in the all test.
+ */
+/*	public function testDeleteCourse() {
+		global $cidReq;			
+		$resu = CourseManager::delete_course($cidReq);				
+	}*/
+ 
 }
 
 ?>

@@ -1,5 +1,6 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$langScormBuilder = "Tanulási program Épít&#337; - Scorm formátumú kurzuskészít&#337; eszköz.";
+$langScormBuilder = "TanulÃ¡si program Ã‰pÃ­tÅ‘ - Scorm formÃ¡tumÃº kurzuskÃ©szÃ­tÅ‘ eszkÃ¶z.";
 ?>

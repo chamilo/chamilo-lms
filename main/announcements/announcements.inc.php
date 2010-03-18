@@ -1,25 +1,5 @@
 <?php //$Id: announcements.inc.php 21903 2009-07-08 17:28:02Z juliomontoya $
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2004-2008 Dokeos SPRL
-	Copyright (c) various contributors
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
-	Mail: info@dokeos.com
-==============================================================================
-*/
+/* For licensing terms, see /license.txt */
 /**
 ==============================================================================
 * Include file with functions for the announcements module.
@@ -56,13 +36,11 @@ function display_announcement($announcement_id)
 						WHERE announcement.id = toolitemproperties.ref
 						AND announcement.id = '$announcement_id'
 						AND toolitemproperties.tool='announcement'
-						AND (toolitemproperties.to_user_id='".$_user['user_id']."' OR toolitemproperties.to_group_id='0')
+						AND (toolitemproperties.to_user_id='".intval($_user['user_id'])."' OR toolitemproperties.to_group_id='0')
 						AND toolitemproperties.visibility='1'
 						ORDER BY display_order DESC";
 
-	}
-	else
-	{
+	} else {
 		$sql_query = "	SELECT announcement.*, toolitemproperties.*
 						FROM $tbl_announcement announcement, $tbl_item_property toolitemproperties
 						WHERE announcement.id = toolitemproperties.ref
@@ -71,11 +49,10 @@ function display_announcement($announcement_id)
 						AND toolitemproperties.to_group_id='0'
 						AND toolitemproperties.visibility='1'";
 	}
-	$sql_result = Database::query($sql_query,__FILE__,__LINE__);
+	$sql_result = Database::query($sql_query);
 	$result = Database::fetch_array($sql_result);
 
-	if ($result !== false) // A sanity check.
-	{
+	if ($result !== false) { // A sanity check.
 		$title		 = $result['title'];
 		$content	 = $result['content'];
 		$content     = make_clickable($content);
@@ -86,7 +63,7 @@ function display_announcement($announcement_id)
 
 	echo "<table height=\"100\" width=\"100%\" border=\"1\" cellpadding=\"5\" cellspacing=\"0\" id=\"agenda_list\">\n";
 	echo "<tr class=\"data\"><td>" . $title . "</td></tr>\n";
-	echo "<tr><td class=\"announcements_datum\">" . get_lang('AnnouncementPublishedOn') . " : " . api_ucfirst(format_locale_date($dateFormatLong,strtotime($last_post_date) ) ) . "</td></tr>\n";
+	echo "<tr><td class=\"announcements_datum\">" . get_lang('AnnouncementPublishedOn') . " : " . api_convert_and_format_date($last_post_datetime, null, date_default_timezone_get()) . "</td></tr>\n";
 	echo "<tr class=\"text\"><td>$content</td></tr>\n";
 	echo "</table>";
 }
@@ -125,9 +102,9 @@ function show_to_form($to_already_selected)
 				"\n\t\t<input	type=\"button\"",
 				"onClick=\"javascript: move(this.form.elements[3],this.form.elements[0])\" ",
 				"value=\"   <<   \">";*/
-				
+
 ?>
-<button class="arrowr" type="button" onClick="javascript: move(this.form.elements[0], this.form.elements[3])" onClick="javascript: move(this.form.elements[0], this.form.elements[3])"></button>	
+<button class="arrowr" type="button" onClick="javascript: move(this.form.elements[0], this.form.elements[3])" onClick="javascript: move(this.form.elements[0], this.form.elements[3])"></button>
 <br /> <br />
 <button class="arrowl" type="button" onClick="javascript: move(this.form.elements[3], this.form.elements[0])" onClick="javascript: move(this.form.elements[3], this.form.elements[0])"></button>
 <?php
@@ -172,17 +149,18 @@ function construct_not_selected_select_form($group_list=null, $user_list=null,$t
 		echo	"\t\t<option value=\"\">---------------------------------------------------------</option>\n";
 	}
 	// adding the individual users to the select form
-	foreach($user_list as $this_user)
-	{
-		if (is_array($to_already_selected)) {
-			if (!(in_array("USER:".$this_user["user_id"],$to_already_selected))) // $to_already_selected is the array containing the users (and groups) that are already selected
-			{
-				echo	"\t\t<option value=\"USER:",$this_user["user_id"],"\">",
-					"", api_get_person_name($this_user['firstname'], $this_user['lastname']),
-					"</option>\n";
+	if ($user_list) {
+		foreach($user_list as $this_user)
+		{
+			if (is_array($to_already_selected)) {
+				if (!in_array("USER:".$this_user['user_id'],$to_already_selected)) // $to_already_selected is the array containing the users (and groups) that are already selected
+				{
+					echo	"\t\t<option value=\"USER:".$this_user['user_id']."\">",
+						"", api_get_person_name($this_user['firstname'], $this_user['lastname']),
+						"</option>\n";
+				}
 			}
 		}
-
 	}
 	echo "\t\t</select>\n";
 }
@@ -253,7 +231,7 @@ function construct_selected_select_form($group_list=null, $user_list=null,$to_al
 				if (!is_array($to_already_selected) || !in_array("USER:".$this_user['user_id'],$to_already_selected)) // $to_already_selected is the array containing the users (and groups) that are already selected
 				{
 					echo	"\t\t<option value=\"USER:",$this_user['user_id'],"\">",
-						"", api_get_person_name($this_user['lastname'], $this_user['firstname']),
+						"", api_get_person_name($this_user['firstname'], $this_user['lastname']),
 						"</option>\n";
 				}
 			}
@@ -294,12 +272,12 @@ function show_to_form_group($group_id)
 				"\n\t\t<input	type=\"button\"",
 				"onClick=\"move(this.form.elements[4],this.form.elements[1])\" ",
 				"value=\"   <<   \">";*/
-				
+
 ?>
-<button class="arrowr" type="button" onClick="javascript: move(this.form.elements[1], this.form.elements[4])" onClick="javascript: move(this.form.elements[1], this.form.elements[4])"></button>	
+<button class="arrowr" type="button" onClick="javascript: move(this.form.elements[1], this.form.elements[4])" onClick="javascript: move(this.form.elements[1], this.form.elements[4])"></button>
 <br /> <br />
 <button class="arrowl" type="button" onClick="javascript: move(this.form.elements[4], this.form.elements[1])" onClick="javascript: move(this.form.elements[4], this.form.elements[1])"></button>
-<?php				
+<?php
 	echo "\t\t</td>\n";
 	echo "\n\t\t<td>\n";
 
@@ -326,8 +304,14 @@ function get_course_users()
 {
 	//this would return only the users from real courses:
 	//$user_list = CourseManager::get_user_list_from_course_code(api_get_course_id());
+	$session_id = api_get_session_id();
+	
+	if ($session_id != 0) {
+		$user_list = CourseManager::get_real_and_linked_user_list(api_get_course_id(), true, $session_id);
+	} else {
+		$user_list = CourseManager::get_real_and_linked_user_list(api_get_course_id(), false, 0);
+	}
 
-	$user_list = CourseManager::get_real_and_linked_user_list(api_get_course_id(), true, $_SESSION['id_session']);
 	return $user_list;
 }
 
@@ -336,8 +320,14 @@ function get_course_users()
 * not including linked courses
 */
 function get_course_groups()
-{
-	$new_group_list = CourseManager::get_group_list_of_course(api_get_course_id(), intval($_SESSION['id_session']));
+{	
+	$session_id = api_get_session_id();
+	
+	if ($session_id != 0) {
+		$new_group_list = CourseManager::get_group_list_of_course(api_get_course_id(), intval($session_id));
+	} else {	
+		$new_group_list = CourseManager::get_group_list_of_course(api_get_course_id(), 0);
+	}
 	return $new_group_list;
 }
 
@@ -356,9 +346,9 @@ function load_edit_users($tool, $id)
 	$tool = Database::escape_string($tool);
 	$id = Database::escape_string($id);
 
-	$sql="SELECT * FROM $tbl_item_property WHERE tool='$tool' AND ref='$id'";
-	$result=Database::query($sql,__FILE__,__LINE__) or die (mysql_error());
-	while ($row=Database::fetch_array($result))
+	$sql = "SELECT * FROM $tbl_item_property WHERE tool='$tool' AND ref='$id'";
+	$result = Database::query($sql) or die(Database::error());
+	while ($row = Database::fetch_array($result))
 	{
 		$to_group=$row['to_group_id'];
 		switch ($to_group)
@@ -542,8 +532,8 @@ function to_javascript()
 			cbList[i].selected = !(cbList[i].selected)
 		}
 	}
-	
-	
+
+
 function plus_attachment() {
 				if (document.getElementById('options').style.display == 'none') {
 					document.getElementById('options').style.display = 'block';
@@ -553,10 +543,10 @@ function plus_attachment() {
 				document.getElementById('plus').innerHTML='&nbsp;<img style=\"vertical-align:middle;\" src=\"../img/div_show.gif\" alt=\"\" />&nbsp;".get_lang('AddAnAttachment')."';
 				}
 }
-	
-	
-	
-	
+
+
+
+
 	//	End	-->
 	</script>";
 }
@@ -634,7 +624,7 @@ function sent_to_form($sent_to_array)
 		if (isset($sent_to_array['users']) and is_array($sent_to_array['users']))
 		{
 			$user_info = api_get_user_info($sent_to_array['users'][0]);
-			echo api_get_person_name($user_info['firstName'], $user_info['lastName']);
+			echo api_get_person_name($user_info['firstname'], $user_info['lastname']);
 		}
 		if (isset($sent_to_array['groups']) and is_array($sent_to_array['groups']) and $sent_to_array['groups'][0]!==0)
 		{
@@ -692,7 +682,7 @@ function separate_users_groups($to)
 * has been sent to
 * @param    string  The tool (announcement, agenda, ...)
 * @param    int     ID of the element of the corresponding type
-* @return   array   Array of users and groups to whom the element has been sent 
+* @return   array   Array of users and groups to whom the element has been sent
 */
 function sent_to($tool, $id)
 {
@@ -706,7 +696,7 @@ function sent_to($tool, $id)
 	$sent_to = array();
 
 	$sql="SELECT * FROM $tbl_item_property WHERE tool='$tool' AND ref='".$id."'";
-	$result = Database::query($sql,__FILE__,__LINE__);
+	$result = Database::query($sql);
 
 
 	while ($row=Database::fetch_array($result)) {
@@ -753,10 +743,10 @@ function change_visibility_announcement($tool,$id)
 	$tool = Database::escape_string($tool);
 	$id = Database::escape_string($id);
 
-	$sql="SELECT * FROM $tbl_item_property WHERE tool='$tool' AND ref='$id'";
+	$sql = "SELECT * FROM $tbl_item_property WHERE tool='$tool' AND ref='$id'";
 
-	$result=Database::query($sql,__FILE__,__LINE__) or die (mysql_error());
-	$row=Database::fetch_array($result);
+	$result = Database::query($sql) or die(Database::error());
+	$row = Database::fetch_array($result);
 
 	if ($row['visibility']=='1')
 	{
@@ -766,8 +756,8 @@ function change_visibility_announcement($tool,$id)
 	{
 		$sql_visibility="UPDATE $tbl_item_property SET visibility='1' WHERE tool='$tool' AND ref='$id'";
 	}
-    $result=Database::query($sql_visibility,__FILE__,__LINE__);
-    if ($result === false) { 
+    $result=Database::query($sql_visibility);
+    if ($result === false) {
         return false;
     }
     return true;
@@ -778,11 +768,12 @@ function change_visibility_announcement($tool,$id)
  * @param string    Announcement title (pure text)
  * @param string    Content of the announcement (can be HTML)
  * @param int       Display order in the list of announcements
- * @param array     Array of users and groups to send the announcement to 
+ * @param array     Array of users and groups to send the announcement to
+ * @param array	    uploaded file $_FILES
  * @param string    Comment describing the attachment
- * @return int      false on failure, ID of the announcement on success 
+ * @return int      false on failure, ID of the announcement on success
  */
-function store_advalvas_item($emailTitle, $newContent, $order, $to, $file_comment='') {
+function store_advalvas_item($emailTitle, $newContent, $order, $to, $file = array(), $file_comment='') {
 
 	global $_course;
 	global $nameTools;
@@ -795,18 +786,20 @@ function store_advalvas_item($emailTitle, $newContent, $order, $to, $file_commen
 	$emailTitle = Database::escape_string($emailTitle);
 	$newContent = Database::escape_string($newContent);
 	$order = intval($order);
-	
+
 	// store in the table announcement
 	$sql = "INSERT INTO $tbl_announcement SET content = '$newContent', title = '$emailTitle', end_date = NOW(), display_order ='$order', session_id=".intval($_SESSION['id_session']);
-	$result = Database::query($sql,__FILE__,__LINE__);
+	$result = Database::query($sql);
 	if ($result === false) {
 		return false;
 	}
-	
+
 	//store the attach file
 	$last_id = Database::insert_id();
-	$save_attachment = add_announcement_attachment_file($last_id, $file_comment, $_FILES['user_upload']);
-	
+	if (!empty($file)) {
+		$save_attachment = add_announcement_attachment_file($last_id, $file_comment, $_FILES['user_upload']);
+	}
+
 	// store in item_property (first the groups, then the users
 	if (!is_null($to)) // !is_null($to): when no user is selected we send it to everyone
 	{
@@ -837,32 +830,35 @@ function store_advalvas_item($emailTitle, $newContent, $order, $to, $file_commen
 }
 
 
-function store_advalvas_group_item($emailTitle,$newContent, $order, $to, $to_users, $file_comment='')
+function store_advalvas_group_item($emailTitle,$newContent, $order, $to, $to_users, $file = array(), $file_comment='')
 {
 	global $_course;
 	global $nameTools;
 	global $_user;
-	
+
 	// database definitions
 	$tbl_announcement = Database::get_course_table(TABLE_ANNOUNCEMENT);
 	$tbl_item_property = Database::get_course_table(TABLE_ITEM_PROPERTY);
-	
+
 	$newContent=stripslashes($newContent);
 	$emailTitle = Database::escape_string($emailTitle);
-	$newContent = Database::escape_string($newContent,COURSEMANAGERLOWSECURITY);
+	$newContent = Database::escape_string($newContent);
 	$order = intval($order);
-	
+
 	// store in the table announcement
 	$sql = "INSERT INTO $tbl_announcement SET content = '$newContent', title = '$emailTitle', end_date = NOW(), display_order ='$order', session_id=".intval($_SESSION['id_session']);
-	$result = Database::query($sql,__FILE__,__LINE__) or die (mysql_error());
+	$result = Database::query($sql) or die(Database::error());
 	if ($result === false) {
 		return false;
 	}
-	
+
 	//store the attach file
 	$last_id = Database::insert_id();
-	$save_attachment = add_announcement_attachment_file($last_id, $file_comment, $_FILES['user_upload']);
-	
+	if (empty($file)) {
+		$save_attachment = add_announcement_attachment_file($last_id, $file_comment, $file);
+	}
+
+
 	// store in item_property (first the groups, then the users
 	if (!isset($to_users)) // !isset($to): when no user is selected we send it to everyone
 	{
@@ -900,7 +896,7 @@ function store_advalvas_group_item($emailTitle,$newContent, $order, $to, $to_use
 * This function stores the announcement Item in the table announcement
 * and updates the item_property also
 */
-function edit_advalvas_item($id,$emailTitle,$newContent,$to, $file_comment='')
+function edit_advalvas_item($id,$emailTitle,$newContent,$to,$file = array(), $file_comment='')
 {
 
 	global $_course;
@@ -911,27 +907,30 @@ function edit_advalvas_item($id,$emailTitle,$newContent,$to, $file_comment='')
 	global $tbl_item_property;
 
 	$newContent=stripslashes($newContent);
-	$emailTitle = Database::escape_string($emailTitle);
-	$newContent = Database::escape_string($newContent,COURSEMANAGERLOWSECURITY);
+	$emailTitle = Database::escape_string(Security::remove_XSS($emailTitle));
+	$newContent = Database::escape_string(Security::remove_XSS($newContent,COURSEMANAGERLOWSECURITY));
 	$order = intval($order);
-	
+
 	// store the modifications in the table announcement
  	$sql = "UPDATE $tbl_announcement SET content='$newContent', title = '$emailTitle' WHERE id='$id'";
-	$result = Database::query($sql,__FILE__,__LINE__) or die (mysql_error());
-	
-	if(empty($last_id)){
-		$last_id = $id;
-	$save_attachment = add_announcement_attachment_file($last_id, $file_comment, $_FILES['user_upload']);
-	
+	$result = Database::query($sql) or die(Database::error());
+
+	// save attachment file
+	$row_attach = get_attachment($id);
+	$id_attach = intval($row_attach['id']);
+
+	if (!empty($file)) {
+		if (empty($id_attach)) {
+		add_announcement_attachment_file($id,$file_comment,$file);
+		} else {
+			edit_announcement_attachment_file($id_attach,$file,$file_comment);
+		}
 	}
-	
-	$last_id = $id;
-	$edit_attachment = edit_announcement_attachment_file($last_id, $_FILES['user_upload'], $file_comment);
 
 	// we remove everything from item_property for this
 	$sql_delete="DELETE FROM $tbl_item_property WHERE ref='$id' AND tool='announcement'";
-	$result = Database::query($sql_delete,__FILE__,__LINE__) or die (mysql_error());
-	
+	$result = Database::query($sql_delete) or die(Database::error());
+
 	// store in item_property (first the groups, then the users
 	if (!is_null($to)) // !is_null($to): when no user is selected we send it to everyone
 	{
@@ -949,7 +948,7 @@ function edit_advalvas_item($id,$emailTitle,$newContent,$to, $file_comment='')
 		{
 			foreach ($send_to['users'] as $user)
 			{
-					api_item_property_update($_course, TOOL_ANNOUNCEMENT, $id, "AnnouncementUpdated", $_user['user_id'], '', $user);
+					api_item_property_update($_course, TOOL_ANNOUNCEMENT, $id, "AnnouncementUpdated", $_user['user_id'], 0, $user);
 			}
 		}
 	}
@@ -972,29 +971,19 @@ function edit_advalvas_item($id,$emailTitle,$newContent,$to, $file_comment='')
 */
 function send_announcement_email($user_list, $course_code, $_course, $mail_title, $mail_content)
 {
-	global $charset;
 	global $_user;
 
 	foreach ($user_list as $this_user) {
-		/*  Header : Bericht van uw lesgever - GES ($course_code) - Morgen geen les! ($mail_title)
-			Body :  John Doe (prenom + nom) <john_doe@hotmail.com> (email)
-					Morgen geen les! ($mail_title)
-					Morgen is er geen les, de les wordt geschrapt wegens vergadering (newContent)
-		*/
+
 		$mail_subject = get_lang('professorMessage').' - '.$_course['official_code'].' - '.$mail_title;
 
 		$mail_body = '['.$_course['official_code'].'] - ['.$_course['name']."]\n";
-		$mail_body .= api_get_person_name($this_user['firstname'], $this_user['lastname'], null, PERSON_NAME_EMAIL_ADDRESS).' <'.$this_user["email"]."> \n\n".stripslashes($mail_title)."\n\n".trim(stripslashes(api_html_entity_decode(strip_tags(str_replace(array('<p>','</p>','<br />'),array('',"\n","\n"),$mail_content)), ENT_QUOTES, $charset)))." \n\n-- \n";
-		$mail_body .= api_get_person_name($_user['firstName'], $_user['lastName'], null, PERSON_NAME_EMAIL_ADDRESS).' ';
+		$mail_body .= api_get_person_name($this_user['firstname'], $this_user['lastname'], null, PERSON_NAME_EMAIL_ADDRESS).' <'.$this_user["email"]."> \n\n".stripslashes($mail_title)."\n\n".trim(stripslashes(api_html_entity_decode(strip_tags(str_replace(array('<p>','</p>','<br />'),array('',"\n","\n"),$mail_content)), ENT_QUOTES, api_get_system_encoding())))." \n\n-- \n";
+		$mail_body .= api_get_person_name($_user['firstname'], $_user['lastname'], null, PERSON_NAME_EMAIL_ADDRESS).' ';
 		$mail_body .= '<'.$_user['mail'].">\n";
 		$mail_body .= $_course['official_code'].' '.$_course['name'];
 
-		//set the charset and use it for the encoding of the email - small fix, not really clean (should check the content encoding origin first)
-		//here we use the encoding used for the webpage where the text is encoded (ISO-8859-1 in this case)
-		if(empty($charset)){$charset='ISO-8859-1';}
-		$encoding = 'Content-Type: text/plain; charset='. $charset;
-
-		$newmail = api_mail(api_get_person_name($this_user['firstname'], $this_user['lastname'], null, PERSON_NAME_EMAIL_ADDRESS), $this_user['email'], $mail_subject, $mail_body, api_get_person_name($_SESSION['_user']['firstName'], $_SESSION['_user']['lastName'], null, PERSON_NAME_EMAIL_ADDRESS), $_SESSION['_user']['mail'], $encoding);
+		@api_mail(api_get_person_name($this_user['firstname'], $this_user['lastname'], null, PERSON_NAME_EMAIL_ADDRESS), $this_user['email'], $mail_subject, $mail_body, api_get_person_name($_SESSION['_user']['firstname'], $_SESSION['_user']['lastname'], null, PERSON_NAME_EMAIL_ADDRESS), $_SESSION['_user']['mail']);
 	}
 }
 
@@ -1006,50 +995,54 @@ function update_mail_sent($insert_id)
 	$insert_id = Database::escape_string($insert_id);
 	// store the modifications in the table tbl_annoucement
 	$sql = "UPDATE $tbl_announcement SET email_sent='1' WHERE id='$insert_id'";
-	Database::query($sql,__FILE__,__LINE__);
+	Database::query($sql);
 }
 
 /**
  * Gets all announcements from a user by course
  * @param	string course db
  * @param	int user id
- * @return	string an html with the content
+ * @return	array html with the content and count of announcements or false otherwise
  */
 function get_all_annoucement_by_user_course($course_db, $user_id)
 {
+	if (empty($course_db) || empty($user_id)) {
+		return false;
+	}
 	$tbl_announcement		= Database::get_course_table(TABLE_ANNOUNCEMENT, $course_db);
 	$tbl_item_property  	= Database::get_course_table(TABLE_ITEM_PROPERTY, $course_db);
 	if (!empty($user_id) && is_numeric($user_id)) {
-		$user_id = Database::escape_string($user_id);
-		$sql="SELECT announcement.*, toolitemproperties.*
+		$user_id = intval($user_id);
+		$sql="SELECT DISTINCT announcement.title, announcement.content
 						FROM $tbl_announcement announcement, $tbl_item_property toolitemproperties
 						WHERE announcement.id = toolitemproperties.ref
 						AND toolitemproperties.tool='announcement'
-						AND (toolitemproperties.insert_user_id='".$user_id."' AND toolitemproperties.to_group_id='0')
+						AND (toolitemproperties.insert_user_id='$user_id' AND (toolitemproperties.to_group_id='0' OR toolitemproperties.to_group_id is null))
 						AND toolitemproperties.visibility='1'
 						AND announcement.session_id  = 0
 						ORDER BY display_order DESC";
-		$result = Database::query($sql,__FILE__,__LINE__);
-		$num_rows = Database::num_rows($result);
+		$rs = Database::query($sql);
+		$num_rows = Database::num_rows($rs);
 		$content = '';
 		$i=0;
-		if (Database::num_rows($result)>0) {
-			while ($myrow = Database::fetch_array($result)) {
-				if ($i<=4) {
+		$result = array();
+		if ($num_rows>0) {
+			while ($myrow = Database::fetch_array($rs)) {
+				//if ($i<=4) {
 					$content.= '<strong>'.$myrow['title'].'</strong><br /><br />';
 					$content.= $myrow['content'];
-				} else {
+				/*} else {
 					break;
-				}
+				}*/
 				$i++;
 			}
-			return $content;
-		} else {
-			return $content;
+			$result['content'] = $content;
+			$result['count'] = $i;
+			return $result;
 		}
-	} else {
-		return '';
+		return false;
 	}
+	return false;
 }
 
 /*
@@ -1060,19 +1053,19 @@ function get_all_annoucement_by_user_course($course_db, $user_id)
 
 /**
  * Show a list with all the attachments according to the post's id
- * @param the post's id
+ * @param int announcement id
  * @return array with the post info
  * @author Arthur Portugal
  * @version November 2009, dokeos 1.8.6.2
  */
- 
+
 function get_attachment($announcement_id) {
-	
+
 	$tbl_announcement_attachment = Database::get_course_table(TABLE_ANNOUNCEMENT_ATTACHMENT);
 	$announcement_id=Database::escape_string($announcement_id);
 	$row=array();
 	$sql = 'SELECT id,path, filename,comment FROM '. $tbl_announcement_attachment.' WHERE announcement_id = '.(int)$announcement_id.'';
-	$result=Database::query($sql, __FILE__, __LINE__);
+	$result=Database::query($sql);
 	if (Database::num_rows($result)!=0) {
 		$row=Database::fetch_array($result,ASSOC);
 	}
@@ -1081,26 +1074,28 @@ function get_attachment($announcement_id) {
 
 /**
  * This function add a attachment file into announcement
- * @param string  a comment about file
- * @param int last id from announcement table
+ * @param int  announcement id
+ * @param string file comment
+ * @param array  uploaded file $_FILES
  * @return int  -1 if failed, 0 if unknown (should not happen), 1 if success
  */
 
-function add_announcement_attachment_file($last_id, $file_comment, $file = array()) {
+function add_announcement_attachment_file($announcement_id, $file_comment, $file) {
+
 	global $_course;
 	$tbl_announcement_attachment = Database::get_course_table(TABLE_ANNOUNCEMENT_ATTACHMENT);
 	$return = 0;
-	$last_id = intval($last_id);
-	
+	$announcement_id = intval($announcement_id);
+
 	if (is_array($file) && $file['error'] == 0 ) {
-		$courseDir   = $_course['path'].'/upload/announcements';
+		$courseDir   = $_course['path'].'/upload/announcements'; // TODO: This path is obsolete. The new document repository scheme should be kept in mind here.
 		$sys_course_path = api_get_path(SYS_COURSE_PATH);
 		$updir = $sys_course_path.$courseDir;
-		
+
 		// Try to add an extension to the file if it hasn't one
-		$new_file_name = add_ext_on_mime(stripslashes($_FILES['user_upload']['name']), $_FILES['user_upload']['type']);
+		$new_file_name = add_ext_on_mime(stripslashes($file['name']), $file['type']);
 		// user's file name
-		$file_name = $_FILES['user_upload']['name'];
+		$file_name = $file['name'];
 
 		if (!filter_extension($new_file_name))  {
 			$return = -1;
@@ -1108,21 +1103,15 @@ function add_announcement_attachment_file($last_id, $file_comment, $file = array
 		} else {
 			$new_file_name = uniqid('');
 			$new_path           = $updir.'/'.$new_file_name;
-			$result             = @move_uploaded_file($_FILES['user_upload']['tmp_name'], $new_path);
+			$result             = @move_uploaded_file($file['tmp_name'], $new_path);
 			$safe_file_comment  = Database::escape_string($file_comment);
 			$safe_file_name     = Database::escape_string($file_name);
 			$safe_new_file_name = Database::escape_string($new_file_name);
 			// Storing the attachments if any
-			//if ($result) {
-				$sql = 'INSERT INTO '.$tbl_announcement_attachment.'(filename, comment, path, announcement_id, size) '.
-					   "VALUES ( '$safe_file_name', '$file_comment', '$safe_new_file_name' , '$last_id', '".intval($_FILES['user_upload']['size'])."' )";
-				$result = Database::query($sql, __LINE__, __FILE__);
-				//$message .= ' / '.get_lang('FileUploadSucces').'<br />';
-                $return = 1;
-				//$last_id_file=Database::insert_id();
-				//api_item_property_update($_course, 'announcement_attachment', $last_id_file ,'AnnouncementAttachmentAdded', api_get_user_id());
-
-			//}
+			$sql = 'INSERT INTO '.$tbl_announcement_attachment.'(filename, comment, path, announcement_id, size) '.
+				   "VALUES ( '$safe_file_name', '$file_comment', '$safe_new_file_name' , '$announcement_id', '".intval($file['size'])."' )";
+			$result = Database::query($sql);
+            $return = 1;
 		}
 	}
 	return $return;
@@ -1130,49 +1119,46 @@ function add_announcement_attachment_file($last_id, $file_comment, $file = array
 
 /**
  * This function edit a attachment file into announcement
- * @param string  a comment about file
- * @param int Agenda Id
- * @param int attachment file Id
+ * @param int attach id
+ * @param array uploaded file $_FILES
+ * @param string file comment
+ * @return int
  */
-function edit_announcement_attachment_file($last_id, $file = array(), $file_comment) {
+function edit_announcement_attachment_file($id_attach, $file, $file_comment) {
 	global $_course;
 	$tbl_announcement_attachment = Database::get_course_table(TABLE_ANNOUNCEMENT_ATTACHMENT);
     $return = 0;
-	// Storing the attachments
 
-    if(!empty($_FILES['user_upload'])) {
-		$upload_ok = process_uploaded_file($_FILES['user_upload']);
-	}
-
-	if (!empty($upload_ok)) {
-		$courseDir   = $_course['path'].'/upload/announcements';
+	if (is_array($file) && $file['error'] == 0 ) {
+		$courseDir   = $_course['path'].'/upload/announcements'; // TODO: This path is obsolete. The new document repository scheme should be kept in mind here.
 		$sys_course_path = api_get_path(SYS_COURSE_PATH);
 		$updir = $sys_course_path.$courseDir;
 
 		// Try to add an extension to the file if it hasn't one
-		$new_file_name = add_ext_on_mime(stripslashes($_FILES['user_upload']['name']), $_FILES['user_upload']['type']);
+		$new_file_name = add_ext_on_mime(stripslashes($file['name']), $file['type']);
 		// user's file name
-		$file_name =$_FILES['user_upload'] ['name'];
+		$file_name =$file ['name'];
+
 		if (!filter_extension($new_file_name)) {
 			$return -1;
 			Display :: display_error_message(get_lang('UplUnableToSaveFileFilteredExtension'));
 		} else {
 			$new_file_name = uniqid('');
 			$new_path = $updir.'/'.$new_file_name;
-			$result = @move_uploaded_file($_FILES['user_upload']['tmp_name'], $new_path);
+			$result = @move_uploaded_file($file['tmp_name'], $new_path);
 			$safe_file_comment = Database::escape_string($file_comment);
 			$safe_file_name = Database::escape_string($file_name);
-			$safe_new_file_name = Database::escape_string($new_file_name);	
-			$sql = "UPDATE $tbl_announcement_attachment SET filename = '$safe_file_name', comment = '$safe_file_comment', path = '$safe_new_file_name', announcement_id = '$last_id', size ='".intval($_FILES['user_upload']['size'])."'
-				 WHERE announcement_id = '$last_id'";
-			$result = Database::query($sql, __FILE__,__LINE__);
+			$safe_new_file_name = Database::escape_string($new_file_name);
+			$id_attach = intval($id_attach);
+			$sql = "UPDATE $tbl_announcement_attachment SET filename = '$safe_file_name', comment = '$safe_file_comment', path = '$safe_new_file_name', size ='".intval($file['size'])."'
+				 WHERE id = '$id_attach'";
+			$result = Database::query($sql);
 			if ($result === false) {
 				$return = -1;
                 Display :: display_error_message(get_lang('UplUnableToSaveFile'));
 			} else {
                 $return = 1;
 			}
-			//$message .= ' / '.get_lang('FileUploadSucces').'<br />';
 		}
 	}
 	return $return;
@@ -1187,10 +1173,9 @@ function delete_announcement_attachment_file($id) {
 
 	global $_course;
 	$tbl_announcement_attachment = Database::get_course_table(TABLE_ANNOUNCEMENT_ATTACHMENT);
-	$id=Database::escape_string($id);	
+	$id=Database::escape_string($id);
 	$sql="DELETE FROM $tbl_announcement_attachment WHERE id = $id";
-	error_log($sql);
-	$result=Database::query($sql, __FILE__,__LINE__);
+	$result=Database::query($sql);
 	// update item_property
 	//api_item_property_update($_course, 'announcement_attachment',  $id,'AnnouncementAttachmentDeleted', api_get_user_id());
 }

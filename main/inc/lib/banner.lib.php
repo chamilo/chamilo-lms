@@ -1,4 +1,5 @@
 <?php
+/* For licensing terms, see /license.txt */
 require_once(api_get_path(SYS_CODE_PATH).'inc/banner.inc.php');
 
 /**
@@ -52,7 +53,7 @@ function get_tabs() {
 	}
 
 	// Reporting
-	if(api_is_allowed_to_create_course() || $_user['status']==DRH) {
+	if(api_is_allowed_to_create_course() || api_is_drh() || api_is_session_admin()) {
 		// Link to my space
 		$navigation['session_my_space']['url'] = api_get_path(WEB_CODE_PATH).'mySpace/';
 		$navigation['session_my_space']['title'] = get_lang('MySpace');
@@ -64,10 +65,15 @@ function get_tabs() {
 	
 	// Social
 	if (api_get_setting('allow_social_tool')=='true') {
-			$navigation['social']['url'] = api_get_path(WEB_CODE_PATH).'social/profile.php';
+			$navigation['social']['url'] = api_get_path(WEB_CODE_PATH).'social/home.php';
 			$navigation['social']['title'] = get_lang('SocialNetwork');
 	}
 	
+	// Dashboard
+	if (api_is_platform_admin() || api_is_drh() || api_is_session_admin()) {
+			$navigation['dashboard']['url'] = api_get_path(WEB_CODE_PATH).'dashboard/index.php';
+			$navigation['dashboard']['title'] = get_lang('Dashboard');
+	}
 
 	// Platform administration
 	if (api_is_platform_admin(true)) {

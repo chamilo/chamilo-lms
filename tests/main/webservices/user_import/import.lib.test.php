@@ -3,6 +3,7 @@ require_once(api_get_path(SYS_CODE_PATH).'webservices/user_import/import.lib.php
 require_once(api_get_path(LIBRARY_PATH).'usermanager.lib.php');
 require_once(api_get_path(LIBRARY_PATH).'import.lib.php');
 require_once(api_get_path(LIBRARY_PATH).'classmanager.lib.php');
+require_once(api_get_path(LIBRARY_PATH).'course.lib.php');
 
 
 class TestImpor extends UnitTestCase {
@@ -11,13 +12,6 @@ class TestImpor extends UnitTestCase {
 		$user='admin';
 		$res=complete_missing_data($user);
 		$this->assertTrue(is_string($res));
-		//var_dump($res);
-	}
-
-	function testparse_csv_data() {
-		$file='/var/www/1.csv';
-		$res=parse_csv_data($file);
-		$this->assertTrue(is_array($res));
 		//var_dump($res);
 	}
 
@@ -38,5 +32,19 @@ class TestImpor extends UnitTestCase {
 		$this->assertTrue(is_array($res));
 		//var_dump($res);
 	}
+	
+		function testparse_csv_data() {
+		$file= '/tmp/';
+		$res=parse_csv_data($file);
+		$this->assertTrue(is_array($res));
+		//var_dump($res);
+	}
+/**
+ * This functon only is added to the end of the test and the end of the files in the all test.
+ */
+	/*public function testDeleteCourse() {
+		global $cidReq;			
+		$resu = CourseManager::delete_course($cidReq);				
+	}*/
 }
 ?>

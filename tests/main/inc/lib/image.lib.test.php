@@ -18,21 +18,21 @@ class TestImage extends UnitTestCase {
 
 	public function testAddBackGround() {
 			$bgfile='';
-			$res=$this->timage->addbackground($bgfile);
+			$res = image::addbackground($bgfile);
 			$this->assertTrue(is_null($res));
 			//var_dump($bgfile);
-		}
+	}
 
 	public function testAddLogo() {
 			$file='';
-			$res=$this->timage->addlogo($file);
+			$res = image::addlogo($file);
 			$this->assertTrue(is_null($res));
 			//var_dump($res);
 	}
 
 	public function testaddtext() {
 			$text='';
-			$res=$this->timage->addtext($text);
+			$res = image::addtext($text);
 			$this->assertTrue(is_null($res));
 			//var_dump($res);
 	}
@@ -40,71 +40,74 @@ class TestImage extends UnitTestCase {
 	public function testcreateimagefromtype() {
 			$file='';
 			$handler='';
-			$res=$this->timage->createimagefromtype($file,$handler);
+			$res = image::createimagefromtype($file,$handler);
 			$this->assertTrue(is_null($res));
 			//var_dump($res);
 	}
 
-	public function testimagenaddback() {
+	public function testimageaddback() {
 			$bgfile='';
-			$res=$this->timage->image($bgfile);
+			$res = image::image($bgfile);
 			$this->assertTrue(is_null($res));
 			//var_dump($res);
-
 	}
 
 	public function testmakecolor() {
 	 		$red='';
 	 		$green='';
 	 		$blue='';
-	 		$res=$this->timage->makecolor($red, $green, $blue);
+	 		$res = image::makecolor($red, $green, $blue);
 			$this->assertTrue(is_null($res));
 			//var_dump($res);
-	 }
+	}
 
 	public function testmergelogo() {
 	 		$x='';
 	 		$y='';
-	 		$res=$this->timage->mergelogo($x,$y);
+	 		$res = image::mergelogo($x,$y);
 			$this->assertTrue(is_bool($res));
 			//var_dump($res);
-	 }
+	}
 
 	public function testresize() {
 			$thumbw='';
 			$thumbh='';
 			$border='';
-			$res=$this->timage->resize($thumbw , $thumbh , $border);
+			$res = image::resize($thumbw , $thumbh , $border);
 			$this->assertTrue(is_null($res));
 			//var_dump($res);
 	}
 
-	 public function testsend_image() {
+	public function testsend_image() {
 	 		$type='';
-	 		$res=$this->timage->send_image($type);
+	 		$res = image::send_image($type);
 			$this->assertTrue(is_numeric($res));
 			//var_dump($res);
-	 }
+	}
 
 
 	public function testsetfont() {
 			$fontfile=$this->fontfile;
-			$res=$this->timage->setfont($fontfile);
+			$res = image::setfont($fontfile);
 			$this->assertTrue(is_null($res));
 			//var_dump($res);
 	}
-
-
-
-
-
-
-
-
-
-
-
-
-
+/*
+	public function TestDeleteCourse(){				
+		$code = 'COURSETEST';				
+		$res = CourseManager::delete_course($code);			
+		$path = api_get_path(SYS_PATH).'archive';		
+		if ($handle = opendir($path)) {
+			while (false !== ($file = readdir($handle))) {				
+				if (strpos($file,$code)!==false) {										
+					if (is_dir($path.'/'.$file)) {						
+						rmdirr($path.'/'.$file);						
+					}				
+				}				
+			}
+			closedir($handle);
+		}
+	}
+*/
 }
 ?>

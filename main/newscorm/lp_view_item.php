@@ -1,48 +1,38 @@
 <?php
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2004-2009 Dokeos SPRL
-	Copyright (c) 2003 Ghent University (UGent)
-	Copyright (c) 2001 Universite catholique de Louvain (UCL)
-	Copyright (c) Patrick Cool
-	Copyright (c) Denes Nagy
-	Copyright (c) Yannick Warnier
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact: Dokeos, 181 rue Royale, B-1000 Brussels, Belgium, info@dokeos.com
-==============================================================================
-*/
+/* For licensing terms, see /license.txt */
 /**
-==============================================================================
 * This is a learning path creation and player tool in Dokeos - previously learnpath_handler.php
 *
 * @author Patrick Cool
 * @author Denes Nagy
 * @author Roan Embrechts, refactoring and code cleaning
 * @author Yannick Warnier <ywarnier@beeznest.org> - cleaning and update for new SCORM tool
-* @package dokeos.learnpath
-==============================================================================
+* @package chamilo.learnpath
 */
 
-/*
-==============================================================================
-		INIT SECTION
-==============================================================================
-*/
+//Prevents FF 3.6 + Adobe Reader 9 bug see BT#794 when calling a pdf file in a LP
+if(isset($_GET['src'])) {
+	// including the global file
+	require_once '../inc/global.inc.php';	
+	api_protect_course_script();
+	//get parameter only came from lp_view.php
+	$url_info 		= parse_url($_GET['src']);
+	$real_url_info	= parse_url(api_get_path(WEB_PATH));
+	
+	//the host must be the same 
+	if ($url_info['host'] == $real_url_info['host']) {
+		header("Location: ".urldecode(Security::remove_XSS($_GET['src'])));
+		exit;
+	} else {
+		header("Location: blank.php?error=document_not_found");
+		exit;
+	}
+}
+
+
+/*		INIT SECTION */
 $_SESSION['whereami'] = 'lp/build';
-if(isset($_SESSION['oLP']) && isset($_GET['id']))
-{
+if(isset($_SESSION['oLP']) && isset($_GET['id'])) {
 	$_SESSION['oLP'] -> current = intval($_GET['id']);
 }
 $this_section=SECTION_COURSES;
@@ -50,30 +40,21 @@ $this_section=SECTION_COURSES;
 api_protect_course_script();
 
 /*
------------------------------------------------------------
 	Libraries
------------------------------------------------------------
 */
 //the main_api.lib.php, database.lib.php and display.lib.php
 //libraries are included by default
 
-include('learnpath_functions.inc.php');
+require_once 'learnpath_functions.inc.php';
 //include('../resourcelinker/resourcelinker.inc.php');
-include('resourcelinker.inc.php');
+require_once 'resourcelinker.inc.php';
 //rewrite the language file, sadly overwritten by resourcelinker.inc.php
 // name of the language file that needs to be included
 $language_file = "learnpath";
 
-/*
------------------------------------------------------------
-	Header and action code
------------------------------------------------------------
-*/
-/*
------------------------------------------------------------
-	Constants and variables
------------------------------------------------------------
-*/
+
+/*	Header and action code 		*/
+/*	Constants and variables 	*/
 $is_allowed_to_edit = api_is_allowed_to_edit(null,true);
 
 $tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
@@ -96,9 +77,7 @@ $prereq         = $_REQUEST['prereq'];
 $type           = $_REQUEST['type'];
 */
 /*
-==============================================================================
 		MAIN CODE
-==============================================================================
 */
 // using the resource linker as a tool for adding resources to the learning path
 if ($action=="add" and $type=="learnpathitem")
@@ -123,15 +102,11 @@ $therow=Database::fetch_array($result);
 	- all the functions not available for students - always available in this case (page only shown to admin)
 -----------------------------------------------------------
 */
-/*==================================================
-			SHOWING THE ADMIN TOOLS
- ==================================================*/
+/*		SHOWING THE ADMIN TOOLS	*/
 
 
 
-/*==================================================
-	prerequisites setting end
- ==================================================*/
+/*	prerequisites setting end	*/
 if (isset($_SESSION['gradebook'])){
 	$gradebook=	$_SESSION['gradebook'];
 }
@@ -139,7 +114,7 @@ if (isset($_SESSION['gradebook'])){
 if (!empty($gradebook) && $gradebook=='view') {
 	$interbreadcrumb[]= array (
 			'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
-			'name' => get_lang('Gradebook')
+			'name' => get_lang('ToolGradebook')
 		);
 }
 
@@ -179,11 +154,7 @@ function confirmation(name) {
 
 //echo $admin_output;
 
-/*
------------------------------------------------------------
-	DISPLAY SECTION
------------------------------------------------------------
-*/
+/*	DISPLAY SECTION	*/
 
 echo $_SESSION['oLP']->build_action_menu();
 echo '<table cellpadding="0" cellspacing="0" class="lp_build">';
@@ -200,10 +171,6 @@ echo '<table cellpadding="0" cellspacing="0" class="lp_build">';
 	echo '</tr>';
 echo '</table>';
 
-/*
-==============================================================================
-		FOOTER
-==============================================================================
-*/
+/*		FOOTER  	*/
 Display::display_footer();
 ?>

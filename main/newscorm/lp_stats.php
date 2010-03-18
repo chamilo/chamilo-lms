@@ -52,7 +52,7 @@ if($origin != 'tracking') {
     $TBL_LP = Database :: get_course_table(TABLE_LP_MAIN);
     $sql = "SELECT default_encoding FROM $TBL_LP " .
                 "WHERE id = '".(int)$_GET['lp_id']."'";
-    $res = Database::query($sql, __FILE__, __LINE__);
+    $res = Database::query($sql);
     if (Database :: num_rows($res) > 0) {
         $row = Database::fetch_array($res);
         $lp_charset = $row['default_encoding'];
@@ -100,7 +100,7 @@ $tbl_stats_attempts= Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_ATT
 $tbl_quiz_questions= Database :: get_course_table(TABLE_QUIZ_QUESTION);
 $sql = "SELECT max(view_count) FROM $TBL_LP_VIEW " .
 "WHERE lp_id = $lp_id AND user_id = '" . $user_id . "'";
-$res = Database::query($sql, __FILE__, __LINE__);
+$res = Database::query($sql);
 $view = '';
 $num = 0;
 if (Database :: num_rows($res) > 0) {
@@ -130,7 +130,7 @@ if (isset($_GET['lp_id']) && isset($_GET['my_lp_id'])) {
 	$clean_lp_id = Database::escape_string($_GET['lp_id']);
 	$clean_course_code = Database :: escape_string($course_code);
 	$sql_path = "SELECT path FROM $TBL_LP_ITEM WHERE id = '$clean_lp_item_id' AND lp_id = '$clean_lp_id'";
-	$res_path = Database::query($sql_path,__FILE__,__LINE__);
+	$res_path = Database::query($sql_path);
 	$row_path = Database::fetch_array($res_path);
 
 	if (Database::num_rows($res_path) > 0 ){
@@ -139,6 +139,7 @@ if (isset($_GET['lp_id']) && isset($_GET['my_lp_id'])) {
 		} else {
 			$sql_attempts = 'SELECT * FROM ' . $tbl_stats_exercices . ' WHERE exe_exo_id="' . (int)$row_path['path'] . '" AND exe_user_id="' . $student_id . '" AND orig_lp_id = "'.(int)$clean_lp_id.'" AND orig_lp_item_id = "'.(int)$clean_lp_item_id.'" AND exe_cours_id="' . $clean_course_code. '" AND status <> "incomplete" ORDER BY exe_date';
 		}
+			$sql_attempts;
 	}
 
 }
@@ -185,8 +186,8 @@ if (is_array($list) && count($list) > 0){
 			" AND v.user_id = " . $user_id . " " .
 			" ORDER BY iv.view_count $qry_order ";
 		}
-
-		$result = Database::query($sql, __FILE__, __LINE__);
+		$sql.'<br/>';
+		$result = Database::query($sql);
 		$num = Database :: num_rows($result);
 		$time_for_total = 'NaN';
 
@@ -198,7 +199,7 @@ if (is_array($list) && count($list) > 0){
 				$my_path = Database::escape_string($row['path']);
 
 				$sql = "SELECT results_disabled FROM $TBL_QUIZ WHERE id ='".(int)$my_path."'";
-				$res_result_disabled = Database::query($sql,__FILE__,__LINE__);
+				$res_result_disabled = Database::query($sql);
 				$row_result_disabled = Database::fetch_row($res_result_disabled);
 
 				if (Database::num_rows($res_result_disabled) > 0 && (int)$row_result_disabled[0]===1) {
@@ -231,7 +232,9 @@ if (is_array($list) && count($list) > 0){
 			}
 
 			$counter++;
+
 			do {
+				$row['iv_view_count'];
 				//check if there are interactions below
 				$extend_attempt_link = '';
 				$extend_this_attempt = 0;
@@ -295,7 +298,7 @@ if (is_array($list) && count($list) > 0){
 
 				$my_lesson_status = api_convert_encoding(get_lang($mylanglist[$lesson_status]), $lp_charset, $dokeos_charset);
 				$is_allowed_to_edit = api_is_allowed_to_edit(null,true);
-				
+
 				if ($row['item_type'] != 'dokeos_chapter') {
 					if (!$is_allowed_to_edit && $result_disabled_ext_all) {
 						$view_score = '/';
@@ -384,7 +387,7 @@ if (is_array($list) && count($list) > 0){
 				$my_path = Database::escape_string($my_path);
 
 				$sql = "SELECT results_disabled FROM $TBL_QUIZ WHERE id ='".(int)$my_path."'";
-				$res_result_disabled = Database::query($sql,__FILE__,__LINE__);
+				$res_result_disabled = Database::query($sql);
 				$row_result_disabled = Database::fetch_row($res_result_disabled);
 
 				if (Database::num_rows($res_result_disabled) > 0 && (int)$row_result_disabled[0]===1) {
@@ -443,7 +446,7 @@ if (is_array($list) && count($list) > 0){
 				$sql_last_attempt = 'SELECT * FROM ' . $tbl_stats_exercices . ' WHERE exe_exo_id="' . $row['path'] . '" AND exe_user_id="' . $student_id . '" AND orig_lp_id = "'.$lp_id.'" AND orig_lp_item_id = "'.$row['myid'].'" AND exe_cours_id="' . $course_code . '" AND status <> "incomplete" ORDER BY exe_date DESC limit 1';
 			}
 
-			$resultLastAttempt = Database::query($sql_last_attempt, __FILE__, __LINE__);
+			$resultLastAttempt = Database::query($sql_last_attempt);
 			$num = Database :: num_rows($resultLastAttempt);
 			if ($num > 0) {
 				while ($rowLA = Database :: fetch_array($resultLastAttempt)) {
@@ -475,11 +478,11 @@ if (is_array($list) && count($list) > 0){
 						// get score and total time from last attempt of a exercise en lp
 						$sql = "SELECT score FROM $TBL_LP_ITEM_VIEW WHERE lp_item_id = '".(int)$my_id."' and lp_view_id = '".(int)$my_lp_view_id."'
 								ORDER BY view_count DESC limit 1";
-						$res_score = Database::query($sql,__FILE__,__LINE__);
+						$res_score = Database::query($sql);
 						$row_score = Database::fetch_array($res_score);
 
 						$sql = "SELECT SUM(total_time) as total_time FROM $TBL_LP_ITEM_VIEW WHERE lp_item_id = '".(int)$my_id."' and lp_view_id = '".(int)$my_lp_view_id."'";
-						$res_time = Database::query($sql,__FILE__,__LINE__);
+						$res_time = Database::query($sql);
 						$row_time = Database::fetch_array($res_time);
 
 						if (Database::num_rows($res_score) > 0 && Database::num_rows($res_time) > 0) {
@@ -495,7 +498,7 @@ if (is_array($list) && count($list) > 0){
 						$sql = "SELECT SUM(t.ponderation) as maxscore from ( SELECT distinct question_id, marks,ponderation FROM $tbl_stats_attempts as at " .
 							  "INNER JOIN  $tbl_quiz_questions as q  on(q.id = at.question_id) where exe_id ='$id_last_attempt' ) as t";
 
-						$result = Database::query($sql, __FILE__, __LINE__);
+						$result = Database::query($sql);
 						$row_max_score = Database :: fetch_array($result);
 						$maxscore = $row_max_score['maxscore'];
 					}
@@ -506,6 +509,7 @@ if (is_array($list) && count($list) > 0){
 				}
 			}
 			$time_for_total = $subtotal_time;
+			$subtotal_time.' - ';
 			$time = learnpathItem :: get_scorm_time('js', $subtotal_time);
 			if (empty ($title)) {
 				$title = rl_get_resource_name(api_get_course_id(), $lp_id, $row['myid']);
@@ -541,7 +545,7 @@ if (is_array($list) && count($list) > 0){
 						$sql_last_attempt = 'SELECT * FROM ' . $tbl_stats_exercices . ' WHERE exe_exo_id="' . $row['path'] . '" AND exe_user_id="' . $student_id . '" AND orig_lp_id = "'.$lp_id.'" AND orig_lp_item_id = "'.$row['myid'].'" AND exe_cours_id="' . Database :: escape_string($_GET['course']) . '" AND status <> "incomplete"  ORDER BY exe_date DESC ';
 					}
 
-					$resultLastAttempt = Database::query($sql_last_attempt, __FILE__, __LINE__);
+					$resultLastAttempt = Database::query($sql_last_attempt);
 					$num = Database :: num_rows($resultLastAttempt);
 					if ($num > 0) {
 						if (isset($_GET['extend_attempt']) && $_GET['extend_attempt'] == 1 && (isset($_GET['lp_id']) && $_GET['lp_id'] == $my_lp_id) && (isset($_GET['my_lp_id']) && $_GET['my_lp_id'] == $my_id)  ) {
@@ -643,7 +647,7 @@ if (is_array($list) && count($list) > 0){
 			// attempts list by exercise
 			if ( (isset($_GET['lp_id']) && $_GET['lp_id'] == $my_lp_id ) && (isset($_GET['my_lp_id']) && $_GET['my_lp_id'] == $my_id)) {
 
-					$res_attempts = Database::query($sql_attempts,__FILE__,__LINE__);
+					$res_attempts = Database::query($sql_attempts);
 					$num_attempts = Database :: num_rows($res_attempts);
 					if ($row['item_type'] === 'quiz') {
 						if ($num_attempts > 0) {
@@ -677,7 +681,7 @@ if (is_array($list) && count($list) > 0){
 									}
 									//$view_score = ($my_score == 0 ? '0.00/'.$my_maxscore : ($my_maxscore == 0 ? $my_score : $my_score . '/' . $my_maxscore));
 								}
-
+								$time_attemp;
 								$output .= '<tr class="'.$oddclass.'" ><td>&nbsp;</td><td>'.$extend_attempt_link.'</td><td colspan="3">' . api_convert_encoding(get_lang('Attempt'), $lp_charset, $dokeos_charset) . ' ' . $n . '</td>'
 							 			. '<td colspan="2"><font color="' . $color . '"><div class="mystatus">' . $my_lesson_status . '</div></font></td><td colspan="2"><div class="mystatus" align="center">' . $view_score  . '</div></td><td colspan="2"><div class="mystatus">' . $time_attemp . '</div></td>';
 							 	if ($origin != 'tracking') {
@@ -764,6 +768,7 @@ if (!empty($export_csv)) {
 	$csv_content[] = $temp;
 	ob_end_clean();
 	Export :: export_table_csv($csv_content, 'reporting_learning_path_details');
+	exit;
 }
 
 if ($origin != 'tracking') {

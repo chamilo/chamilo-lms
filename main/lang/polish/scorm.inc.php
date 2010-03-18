@@ -1,33 +1,34 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $langScormVersion = "wersja";
-$langScormRestarted = "Wszystkie lekcje s&#261; teraz niekompletne.";
+$langScormRestarted = "Wszystkie lekcje s膮 teraz niekompletne.";
 $langScormNoNext = "To jest ostatnia lekcja.";
 $langScormNoPrev = "To jest pierwsza lekcja.";
 $langScormTime = "Czas";
-$langScormNoOrder = "Nie ma zadanego porz&#261;dku. Mo&#380;esz zacz&#261;&#263; w dowolnym miejscu.";
+$langScormNoOrder = "Nie ma zadanego porz膮dku. Mo偶esz zacz膮膰 w dowolnym miejscu.";
 $langScormScore = "Wynik";
 $langScormLessonTitle = "Temat lekcji";
 $langScormStatus = "Status";
-$langScormToEnter = "Aby wej&#347;&#263;";
-$langScormFirstNeedTo = "najpierw musisz uko&#324;czy&#263;";
+$langScormToEnter = "Aby wej艣膰";
+$langScormFirstNeedTo = "najpierw musisz uko艅czy膰";
 $langScormThisStatus = "Ta lekcja jest teraz";
-$langScormClose = "Zako&#324;cz";
-$langScormRestart = "Zacznij od pocz&#261;tku";
-$langScormCompstatus = "Uko&#324;czono";
-$langScormIncomplete = "Nie uko&#324;czono";
+$langScormClose = "Zako艅cz";
+$langScormRestart = "Zacznij od pocz膮tku";
+$langScormCompstatus = "Uko艅czono";
+$langScormIncomplete = "Nie uko艅czono";
 $langScormPassed = "Zaliczony";
 $langScormFailed = "Niezaliczony";
 $langScormPrevious = "Poprzedni";
-$langScormNext = "Nast&#281;pny";
-$langScormTitle = "Gracz Dokeos Scorm";
-$langScormMystatus = "M骿 status";
-$langScormNoItems = "Nie ma tu &#380;adnych element體. ";
+$langScormNext = "Nast臋pny";
+$langScormTitle = "Gracz Chamilo Scorm";
+$langScormMystatus = "M贸j status";
+$langScormNoItems = "Nie ma tu &#380;adnych element贸w.";
 $langScormNoStatus = "Ta zawarto&#347;&#263; nie posiada statusu";
 $langScormLoggedout = "Wylogowany(-a) z obszaru Scorm";
 $langScormCloseWindow = "Zamknij okna";
-$langScormExitFullScreen = "Powr髏 do standardowego ekranu";
-$langScormFullScreen = "pe&#322;ny ekran";
-$langScormNotAttempted = "Nie pr骲owano";
+$langScormExitFullScreen = "Powr贸t do standardowego ekranu";
+$langScormFullScreen = "pe艂ny ekran";
+$langScormNotAttempted = "Nie pr贸bowano";
 ?>

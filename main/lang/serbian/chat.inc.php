@@ -1,36 +1,63 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$langOnlineConference  = "Konferencija";
-$langWash  = "Izbeli";
-$langReset  = "Restartuj";
-$langSave  = "Snimi";
-$langRefresh  = "Osveûi";
-$langIsNowInYourDocDir  = "je sada u vaöem alatu Dokumenta. <br><B>ovaj fajl je vidljiv</B>";
-$langCopyFailed  = "ätampanje nije uspelo.";
-$langTypeMessage  = "Molim Vas, otkucajte vaöu poruku!";
-$langConfirmReset  = "Da li zaista ûelite da obriöete sve poruke?";
-$langHasResetChat  = "je restartovao Chat   ";
-$langNoOnlineConference  = "Trenutno nema konferencije...";
-$langMediaFile  = "Audio ili video protok podataka uûivo.";
-$langContentFile  = "Prezentacija";
-$langListOfParticipants  = "Lista u&#269;esnika";
-$langYourPicture  = "Vaöa slika";
-$langOnlineDescription  = "Opis konferencije";
-$langOnlyCheckForImportantQuestion = "Molim Vas, obeleûite ovu opciju samo za vaûna pitanja!";
+$langOnlineConference = "Konferencija";
+$langWash = "Izbeli";
+$langReset = "Restartuj";
+$langSave = "Snimi";
+$langRefresh = "Osve≈æi";
+$langIsNowInYourDocDir = "je sada u vaÔøΩem alatu Dokumenta. <br /><B>ovaj fajl je vidljiv</B>";
+$langCopyFailed = "≈†tampanje nije uspelo.";
+$langTypeMessage = "Molim Vas, otkucajte va≈°u poruku!";
+$langConfirmReset = "Da li zaista ≈æelite da obri≈°ete sve poruke?";
+$langHasResetChat = "je restartovao Chat";
+$langNoOnlineConference = "Trenutno nema konferencije...";
+$langMediaFile = "Audio ili video protok podataka u≈æivo.";
+$langContentFile = "Prezentacija";
+$langListOfParticipants = "Lista uƒçesnika";
+$langYourPicture = "Va≈°a slika";
+$langOnlineDescription = "Opis konferencije";
+$langOnlyCheckForImportantQuestion = "Molim Vas, obele≈æite ovu opciju samo za va≈æna pitanja!";
 $langQuestion = "pitanje";
-$langClearList = "Obriöi listu";
+$langClearList = "Obri≈°i listu";
 $langWhiteBoard = "Bela tabla";
-$langTextEditorDefault = "<h2>Word processor</h2> Isecite i prilepite ovde tekst iz Ms-WordÆ i onda izmenite. U&#269;esnici &#263;e mo&#263;i odmah da vide vaöe izmene.";
+$langTextEditorDefault = "<h2>Word processor</h2> Isecite i prilepite ovde tekst iz Ms-Word¬Æ i onda izmenite. Uƒçesnici ƒáe moƒái odmah da vide va≈°e izmene.";
 $langStreaming = "Protok";
 $langStreamURL = "Adresa za povezivanje na konferenciju";
 $langStreamType = "Tip protoka podataka";
 $langLinkName = "Ime linka";
 $langLinkURL = "URL linka";
-$langWelcomeToOnlineConf = "Dobrodoöli na <b>Online konferenciju</b>";
+$langWelcomeToOnlineConf = "Dobrodo≈°li na <b>Online konferenciju</b>";
 $langNoLinkAvailable = "Ni jedan link nije dostupan";
 $langChat_reset_by = "Restartuj Chat";
 $OrFile = "Ili fajl";
-$langCallSent = "Poziv za Chat  je poslat. &#268;eka se odobrenje vaöeg sagovornika.";
-$langChatDenied = "Vaö sagovornik je odbio vaö poziv.";
+$langCallSent = "Poziv za Chat  je poslat. ƒåeka se odobrenje va≈°eg sagovornika.";
+$langChatDenied = "Va≈° sagovornik je odbio va≈° poziv.";
+$Send = "Po≈°alji";
+$Connected = "Chat partneri";
+$Think = "Razmisli";
+$BigGrin = "Veliki osmeh";
+$Amazing = "Neverovatan";
+$Confused = "Zbunjen";
+$Cool = "Cool";
+$Surprised = "Iznenaƒëen";
+$Hand = "Pozdravljen";
+$Wink = "Namigni";
+$Neutral = "Neutralan";
+$Angry = "Ljut";
+$Avid = "Pohlepan";
+$Redface = "Pocrveneo";
+$Sad = "Tu≈æan";
+$Silence = "Ti≈°ina";
+$Silenced = "Ti≈°ina";
+$Smile = "Osmeh";
+$Exclamation = "Uzvik";
+$Arrow = "Strelica";
+$Question = "Pitanje";
+$Idea = "Ideja";
+$AskPermissionSpeak = "Pitaj za dozvolu da priƒça≈°";
+$GiveTheFloorTo = "Dati reƒç";
+$Pause = "Pauza";
+$Stop = "Stop";
 ?>

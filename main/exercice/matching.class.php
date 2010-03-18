@@ -1,26 +1,10 @@
 <?php
-/*
-    DOKEOS - elearning and course management software
-
-    For a full list of contributors, see documentation/credits.html
-
-    This program is free software; you can redistribute it and/or
-    modify it under the terms of the GNU General Public License
-    as published by the Free Software Foundation; either version 2
-    of the License, or (at your option) any later version.
-    See "documentation/licence.html" more details.
-
-    Contact:
-		Dokeos
-		Rue des Palais 44 Paleizenstraat
-		B-1030 Brussels - Belgium
-		Tel. +32 (2) 211 34 56
-*/
+/* For licensing terms, see /license.txt */
 
 
 /**
 *	File containing the Matching class.
-*	@package dokeos.exercise
+*	@package chamilo.exercise
 * 	@author Eric Marguin
 * 	@version $Id: admin.php 10680 2007-01-11 21:26:23Z pcool $
 */
@@ -139,6 +123,11 @@ class Matching extends Question {
 
 					</tr>';
 		$form -> addElement ('html', $html);
+		
+		if ($nb_matches < 1) {
+			$nb_matches = 1;
+			Display::display_normal_message(get_lang('YouHaveToCreateAtLeastOneAnswer'));
+		}
 
 		for($i = 1 ; $i <= $nb_matches ; ++$i) {
 			$form -> addElement ('html', '<tr><td>');
@@ -157,7 +146,7 @@ class Matching extends Question {
 		$form -> addElement ('html', '</table></div></div>');
 		$group = array();
 
-
+		
 		if ($navigator_info['name']=='Internet Explorer' &&  $navigator_info['version']=='6') {
 			$group[] = FormValidator :: createElement ('submit', 'lessMatches', get_lang('DelElem'),'class="minus"');
 			$group[] = FormValidator :: createElement ('submit', 'moreMatches', get_lang('AddElem'),'class="plus"');
@@ -187,6 +176,11 @@ class Matching extends Question {
 
 					</tr>';
 		$form -> addElement ('html', $html);
+
+		if ($nb_options < 1) {
+			$nb_options = 1;
+			Display::display_normal_message(get_lang('YouHaveToCreateAtLeastOneAnswer'));
+		}
 
 		for($i = 1 ; $i <= $nb_options ; ++$i) {
 			$form -> addElement ('html', '<tr><td>');

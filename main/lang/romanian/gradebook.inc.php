@@ -1,7 +1,8 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$FlatView = "Vizualizare simpla";
+$FlatView = "Vedere plana";
 $ScoreEdit = "Editare regulilor pentru scoruri";
 $ScoreColor = "Culoarea scorului";
 $ScoringSystem = "Sistemul de scor";
@@ -31,22 +32,22 @@ $DeleteSelected = "Sterge selectia";
 $SetVisible = "Seteaza ca vizibil";
 $SetInvisible = "Seteaza ca invizibil";
 $ChooseLink = "Alege tipul legaturii";
-$DokeosExercises = "Exercitii Dokeos";
-$DokeosDropbox = "Cosul Dokeos";
-$DokeosStudentPublications = "Publicatii ale studentilor Dokeos";
-$DokeosLearningPaths = "Cai de invatare Dokeos";
+$DokeosExercises = "Exercitii Chamilo";
+$DokeosDropbox = "Cosul Chamilo";
+$DokeosStudentPublications = "Publicatii ale studentilor Chamilo";
+$DokeosLearningPaths = "Cai de invatare Chamilo";
 $ChooseExercise = "Alege exercitiul";
 $AddResult = "Adauga rezultate";
 $BackToOverview = "Inapoi la sumar";
 $ExportPDF = "Exporta in format PDF";
-$Print = "Printeaza";
+$Print = "Tipareste";
 $ChooseOrientation = "Alege orientarea";
 $Portrait = "Portret";
 $Landscape = "Peisaj";
 $FilterCategory = "Filtreaza categoria";
 $DeleteAll = "Sterge tot";
 $ScoringUpdated = "Actualizare scoruri";
-$CertificateWCertifiesStudentXFinishedCourseYWithGradeZ = "%s certifica faptul ca\\n\\n %s \\n\\na completat cu succes cursul \\n\\n \'%s\' \\n\\ncu un grad de \\n\\n \'%s\'";
+$CertificateWCertifiesStudentXFinishedCourseYWithGradeZ = "%s certifica faptul ca\n\n %s \n\na completat cu succes cursul \n\n '%s' \n\ncu un grad de \n\n '%s'";
 $CertificateMinScore = "Scorul minim pentru certificare";
 $CategoryAdded = "Categorie adaugata";
 $InViMod = "Categorie facuta invizibila";
@@ -91,7 +92,7 @@ $Certificates = "Certificate";
 $Certificate = "Certificat";
 $ChooseUser = "Alege utilizatorii pentru aceasta evaluare";
 $FirstLetter = "Prima litera a numelui";
-$UserAdded = "Utilizator adaugat";
+$UserAdded = "Utilizatorul a fost adaugat";
 $ResultEdited = "Rezultat adaugat";
 $ChooseFormat = "Alege formatul";
 $OutputFileType = "Tipul fisierului de iesire";
@@ -102,7 +103,7 @@ $TotalUser = "Total pentru utilizator";
 $AverageTotal = "Total mediu";
 $Evaluation = "Evaluare";
 $EvaluationAverage = "Media la evaluare";
-$EditCategory = "Editeaza categorie";
+$EditCategory = "Editeaza aceasta categorie";
 $EditAllWeights = "Editeaza toate ponderile";
 $GradebookQualificationTotal = "Total";
 $GradebookEvaluationDeleted = "Evaluarea a fost eliminata cu succes";

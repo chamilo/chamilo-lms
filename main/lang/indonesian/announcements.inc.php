@@ -1,5 +1,6 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $Announcement = "Pengumuman";
 $langAnnEmpty = "Daftar pengumuman telah dihapus";
@@ -8,7 +9,7 @@ $AnnouncementAdded = "Pengumuman telah ditambahkan";
 $AnnouncementDeleted = "Pengumuman dihapus";
 $AnnouncementPublishedOn = "Diterbitkan pada";
 $AddAnnouncement = "Tambah Pengumuman";
-$langContent = "Isi";
+$langContent = "Isi (content)";
 $AnnouncementDeleteAll = "Hapus daftar Pengumuman";
 $professorMessage = "Pesan dari Pengajar anda";
 $langEmailSent = " dan di-email ke siswa-siswa terdaftar";
@@ -17,24 +18,24 @@ $langOn = "Tampil";
 $langRegUser = "user terdaftar di situs";
 $langUnvalid = "memiliki alamat email tidak sah ataun tidak ada alamat email";
 $langModifAnn = "Ubah pengumuman ini";
-$langModify    = "ubah";
-$langDelete    = "hapus";
-$langTitle     = "Judul";
-$langHelp      = "pertolongan";
-$langOk        = "OK";
-$langAddIntro  = "Tambah teks pengantar ";
-$langBackList  = "kembali ke daftar";
-$langSelMess   = "Peringatkan ke beberapa user";
-$EmailTitle  = "Perihal";
-$langUserlist  = "Daftar group dan user";
-$langSelectedUsers  = "User Terpilih";
-$langSubmit  = "Kumpul";
-$langPleaseEnterMessage  = "Anda mesti mengisi teks pesan.";
-$langPleaseSelectUsers  = "Anda Mesti memilih beberapa user.";
+$langModify = "ubah";
+$langDelete = "hapus";
+$langTitle = "Judul";
+$langHelp = "pertolongan";
+$langOk = "OK";
+$langAddIntro = "Tambah teks pengantar";
+$langBackList = "kembali ke daftar";
+$langSelMess = "Peringatkan ke beberapa user";
+$EmailTitle = "Perihal";
+$langUserlist = "Daftar group dan user";
+$langSelectedUsers = "User Terpilih";
+$langSubmit = "Kumpul";
+$langPleaseEnterMessage = "Anda mesti mengisi teks pesan.";
+$langPleaseSelectUsers = "Anda Mesti memilih beberapa user.";
 $Teachersubject = "Pesan dikirm ke siswa anda.";
-$langMessages  = "Pesan-pesan";
-$langMessageToSelectedUsers  = "Pesan ke user terpilih";
-$langIntroText  = "Untuk mengirim pesan, pilih group user (ditandai dengan huruf G di muka) atau user tunggal dari daftar di kiri.";
+$langMessages = "Pesan-pesan";
+$langMessageToSelectedUsers = "Pesan ke user terpilih";
+$langIntroText = "Untuk mengirim pesan, pilih group user (ditandai dengan huruf G di muka) atau user tunggal dari daftar di kiri.";
 $langDown = "turun";
 $langMsgSent = "Pesan telah dikirim ke siswa yang dipilih";
 $langSelUser = "user pilihan situs ini";

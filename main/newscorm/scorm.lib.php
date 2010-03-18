@@ -60,15 +60,15 @@ function removescormDir($dir)
             $scormdir=substr($dir,strlen($path),strlen($dir)-strlen($path));
             $courseid=$_course['official_code'];
             $sql="SELECT * FROM ".Database::get_scorm_table(TABLE_SCORM_MAIN)." where (contentTitle='$scormdir' and dokeosCourse='$courseid')";
-            $result=Database::query($sql,__FILE__,__LINE__);
+            $result=Database::query($sql);
             while ($row=Database::fetch_array($result))
             {
 	      $c=$row['contentId'];
 	      $sql2="DELETE FROM ".Database::get_scorm_table(TABLE_SCORM_SCO_DATA)." where contentId=$c";
-	      $result2=Database::query($sql2,__FILE__,__LINE__);
+	      $result2=Database::query($sql2);
 	    }
 	    $sql="DELETE FROM ".Database::get_scorm_table(TABLE_SCORM_MAIN)." where (contentTitle='$scormdir' and dokeosCourse='$courseid')";
-	    $result=Database::query($sql,__FILE__,__LINE__);
+	    $result=Database::query($sql);
 	  }
 	}
 	if(!@unlink($dir.'/'.$readdir))

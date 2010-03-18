@@ -1,5 +1,6 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $langDownloadFile = "Upload file lên máy chủ web";
 $langNameDir = "Tên thư mục mới";
@@ -25,7 +26,7 @@ $langUncompress = "giải nén tệp (.zip) trên server";
 $langDownloadAndZipEnd = " Tệp Zip đã tải lên và giải nén";
 $langFileError = "không hợp lệ.";
 $langMaxFileSize = "Kích thước tối đa của file là";
-$langAreYouSureToDelete  = "Chắc chắn xoá?";
-$langPublish  = "Xuất bản";
-$langMissingImagesDetected  = "Không thấy hình";
+$langAreYouSureToDelete = "Chắc chắn xoá?";
+$langPublish = "Xuất bản";
+$langMissingImagesDetected = "Không thấy hình";
 ?>

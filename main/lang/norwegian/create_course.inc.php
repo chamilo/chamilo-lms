@@ -1,15 +1,16 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$langProfessors = "Lærer";
-$langExplanation = "Når du klikker ok, blir det oprettet en kursusside indeholdende Diskusjonsforum, Kalender, Dokumenter osv. Som administrator av siden kan du til enhver tid redigere kursussiden efter behov og ønsker ";
+$langProfessors = "LÃ¦rere";
+$langExplanation = "NÃ¥r du klikker ok, blir det oprettet en kursusside indeholdende Diskusjonsforum, Kalender, Dokumenter osv. Som administrator av siden kan du til enhver tid redigere kursussiden efter behov og Ã¸nsker";
 $langExerciceEx = "Eksepmeltest";
 $langAntique = "Ironi";
 $langAgenda = "Kalender";
 $langVideo = "Video";
-$langCourseProgram = "Kursprogram";
+$langCourseProgram = "Kurs beskrivelse";
 $langAnnouncements = "Annonsering";
 $langAddPageHome = "Last opp et dokument til kurssiden";
-$langCourseDesc  = "Kursbeskrivelse";
-$langAgendaText = "Generell introduksjon til prosjekthåndtering";
+$langCourseDesc = "Kursbeskrivelse";
+$langAgendaText = "Generell introduksjon til prosjekthÃ¥ndtering";
 ?>

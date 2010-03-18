@@ -1,31 +1,9 @@
 <?php
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2008 Dokeos Latinoamerica SAC
-	Copyright (c) 2006 Dokeos SPRL
-	Copyright (c) 2006 Ghent University (UGent)
-	Copyright (c) various contributors
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
-	Mail: info@dokeos.com
-==============================================================================
-*/
+/* For licensing terms, see /license.txt */
 /**
  * Class to select, sort and transform object data into array data,
  * used for the general gradebook view
- * @author Bert Stepp�
+ * @author Bert Steppé
  */
 class GradebookDataGenerator
 {
@@ -136,7 +114,7 @@ class GradebookDataGenerator
 	function get_certificate_link($item) {
 		if(is_a($item, 'Category')) {
 			if($item->is_certificate_available(api_get_user_id())) {
-				$link = '<a href="'.$_SESSION['gradebook_dest'].'?export_certificate=1&cat='.$item->get_id().'&user='.api_get_user_id().'">'.get_lang('Certificate').'</a>';
+				$link = '<a href="'.Security::remove_XSS($_SESSION['gradebook_dest']).'?export_certificate=1&cat='.$item->get_id().'&user='.api_get_user_id().'">'.get_lang('Certificate').'</a>';
 				return $link;
 			}
 		}
@@ -174,10 +152,22 @@ class GradebookDataGenerator
 	}
 
 	function sort_by_date($item1, $item2) {
-		if ($item1->get_date() == $item2->get_date()) {
+		if(is_int($item1->get_date())) {
+			$timestamp1 = $item1->get_date();
+		} else {
+			$timestamp1 = api_strtotime($item1->get_date());
+		}
+		
+		if(is_int($item2->get_date())) {
+			$timestamp2 = $item2->get_date();
+		} else {
+			$timestamp2 = api_strtotime($item2->get_date());
+		}
+		
+		if ($timestamp1 == $timestamp2) {
 			return $this->sort_by_name($item1,$item2);
 		} else {
-			return ($item1->get_date() < $item2->get_date() ? -1 : 1);
+			return ($timestamp1 < $timestamp2 ? -1 : 1);
 		}
 	}
 
@@ -217,7 +207,11 @@ class GradebookDataGenerator
 		if (!isset($date) || empty($date)) {
 			return '';
 		} else {
-			return date("j/n/Y g:i", $date);
+			if(is_int($date)) {
+				return api_convert_and_format_date($date);
+			} else {
+				return api_format_date($date);
+			}
 		}
 	}
 }

@@ -1,120 +1,64 @@
-<?php // $Id: update-db-1.8.5-1.8.6.inc.php 22197 2009-07-17 17:49:44Z ivantcholakov $
-/* See license terms in /dokeos_license.txt */
+<?php
+/* For licensing terms, see /license.txt */
+
 /**
-==============================================================================
-* Update the Dokeos database from an older version
-* Notice : This script has to be included by index.php or update_courses.php
-*
-* @package dokeos.install
-* @todo
-* - conditional changing of tables. Currently we execute for example
-* ALTER TABLE `$dbNameForm`.`cours` instructions without checking wether this is necessary.
-* - reorganise code into functions
-* @todo use database library
-==============================================================================
-*/
+ * Chamilo LMS
+ *
+ * Update the Chamilo database from an older Dokeos version
+ * Notice : This script has to be included by index.php
+ * or update_courses.php (deprecated).
+ *
+ * @package chamilo.install
+ * @todo
+ * - conditional changing of tables. Currently we execute for example
+ * ALTER TABLE `$dbNameForm`.`cours`
+ * instructions without checking wether this is necessary.
+ * - reorganise code into functions
+ * @todo use database library
+ */
 
-
-//load helper functions
-require_once("install_upgrade.lib.php");
-require_once('../inc/lib/image.lib.php');
 $old_file_version = '1.8.5';
 $new_file_version = '1.8.6';
 
-//remove memory and time limits as much as possible as this might be a long process...
-if(function_exists('ini_set'))
-{
-	ini_set('memory_limit',-1);
-	ini_set('max_execution_time',0);
-}else{
-	error_log('Update-db script: could not change memory and time limits',0);
-}
+// Check if we come from index.php or update_courses.php - otherwise display error msg
+if (defined('SYSTEM_INSTALLATION')) {
 
-/*
-==============================================================================
-		MAIN CODE
-==============================================================================
-*/
-
-//check if we come from index.php or update_courses.php - otherwise display error msg
-if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
-{
-	//check if the current Dokeos install is elligible for update
-	if (!file_exists('../inc/conf/configuration.php'))
-	{
-		echo '<b>'.get_lang('Error').' !</b> Dokeos '.implode('|', $updateFromVersion).' '.get_lang('HasNotBeenFound').'.<br><br>
+	// Check if the current Dokeos install is eligible for update
+	if (!file_exists('../inc/conf/configuration.php')) {
+		echo '<strong>'.get_lang('Error').' !</strong> Dokeos '.implode('|', $updateFromVersion).' '.get_lang('HasNotBeenFound').'.<br /><br />
 								'.get_lang('PleasGoBackToStep1').'.
 							    <p><button type="submit" class="back" name="step1" value="&lt; '.get_lang('Back').'">'.get_lang('Back').'</button></p>
 							    </td></tr></table></form></body></html>';
-
 		exit ();
 	}
 
-	//get_config_param() comes from install_functions.inc.php and
-	//actually gets the param from
 	$_configuration['db_glue'] = get_config_param('dbGlu');
 
-	if ($singleDbForm)
-	{
+	if ($singleDbForm) {
 		$_configuration['table_prefix'] = get_config_param('courseTablePrefix');
 		$_configuration['main_database'] = get_config_param('mainDbName');
 		$_configuration['db_prefix'] = get_config_param('dbNamePrefix');
 	}
 
-	$dbScormForm = eregi_replace('[^a-z0-9_-]', '', $dbScormForm);
+	$dbScormForm = preg_replace('/[^a-zA-Z0-9_\-]/', '', $dbScormForm);
 
-	if (!empty ($dbPrefixForm) && !ereg('^'.$dbPrefixForm, $dbScormForm))
-	{
+	if (!empty($dbPrefixForm) && strpos($dbScormForm, $dbPrefixForm) !== 0) {
 		$dbScormForm = $dbPrefixForm.$dbScormForm;
 	}
 
-	if (empty ($dbScormForm) || $dbScormForm == 'mysql' || $dbScormForm == $dbPrefixForm)
-	{
+	if (empty($dbScormForm) || $dbScormForm == 'mysql' || $dbScormForm == $dbPrefixForm) {
 		$dbScormForm = $dbPrefixForm.'scorm';
 	}
-	$res = @mysql_connect($dbHostForm, $dbUsernameForm, $dbPassForm);
 
-	//if error on connection to the database, show error and exit
-	if ($res === false)
-	{
-		//$no = mysql_errno();
-		//$msg = mysql_error();
+	/*	Normal upgrade procedure: start by updating main, statistic, user databases */
 
-		//echo '<hr>['.$no.'] - '.$msg.'<hr>';
-		echo					get_lang('DBServerDoesntWorkOrLoginPassIsWrong').'.<br /><br />' .
-				'				'.get_lang('PleaseCheckTheseValues').' :<br /><br />
-							    <b>'.get_lang('DBHost').'</b> : '.$dbHostForm.'<br />
-								<b>'.get_lang('DBLogin').'</b> : '.$dbUsernameForm.'<br />
-								<b>'.get_lang('DBPassword').'</b> : '.$dbPassForm.'<br /><br />
-								'.get_lang('PleaseGoBackToStep').' '. (defined('DOKEOS_INSTALL') ? '3' : '1').'.
-							    <p><button type="submit" class="back" name="step'. (defined('DOKEOS_INSTALL') ? '3' : '1').'" value="&lt; '.get_lang('Back').'">'.get_lang('Back').'</button></p>
-							    </td></tr></table></form></body></html>';
-
-		exit ();
-	}
-
-	// The Dokeos system has not been designed to use special SQL modes that were introduced since MySQL 5
-	@mysql_query("set session sql_mode='';");
-
-	$dblistres = mysql_list_dbs();
-	$dblist = array();
-	while ($row = mysql_fetch_object($dblistres)) {
-    	$dblist[] = $row->Database;
-	}
-	/*
-	-----------------------------------------------------------
-		Normal upgrade procedure:
-		start by updating main, statistic, user databases
-	-----------------------------------------------------------
-	*/
-	//if this script has been included by index.php, not update_courses.php, so
+	// If this script has been included by index.php, not update_courses.php, so
 	// that we want to change the main databases as well...
 	$only_test = false;
 	$log = 0;
-	if (defined('DOKEOS_INSTALL'))
-	{
-		if ($singleDbForm)
-		{
+	if (defined('SYSTEM_INSTALLATION')) {
+
+		if ($singleDbForm) {
 			$dbStatsForm = $dbNameForm;
 			$dbScormForm = $dbNameForm;
 			$dbUserForm = $dbNameForm;
@@ -122,37 +66,34 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 		/**
 		 * Update the databases "pre" migration
 		 */
-		include ("../lang/english/create_course.inc.php");
+		include '../lang/english/create_course.inc.php';
 
-		if ($languageForm != 'english')
-		{
-			//languageForm has been escaped in index.php
-			include ("../lang/$languageForm/create_course.inc.php");
+		if ($languageForm != 'english') {
+			// languageForm has been escaped in index.php
+			include '../lang/'.$languageForm.'/create_course.inc.php';
 		}
 
-		//get the main queries list (m_q_list)
-		$m_q_list = get_sql_file_contents('migrate-db-'.$old_file_version.'-'.$new_file_version.'-pre.sql','main');
-		if(count($m_q_list)>0)
-		{
+		// Get the main queries list (m_q_list)
+		$m_q_list = get_sql_file_contents('migrate-db-'.$old_file_version.'-'.$new_file_version.'-pre.sql', 'main');
+		if (count($m_q_list) > 0) {
 			//now use the $m_q_list
 			/**
 			 * We connect to the right DB first to make sure we can use the queries
 			 * without a database name
 			 */
-			if(strlen($dbNameForm)>40){
-				error_log('Database name '.$dbNameForm.' is too long, skipping',0);
-			}elseif(!in_array($dbNameForm,$dblist)){
-				error_log('Database '.$dbNameForm.' was not found, skipping',0);
-			}else{
-				mysql_select_db($dbNameForm);
-				foreach($m_q_list as $query){
-					if($only_test){
-						error_log("mysql_query($dbNameForm,$query)",0);
-					}else{
-						$res = mysql_query($query);
-						if($log)
-						{
-							error_log("In $dbNameForm, executed: $query",0);
+			if (strlen($dbNameForm) > 40) {
+				error_log('Database name '.$dbNameForm.' is too long, skipping', 0);
+			} elseif (!in_array($dbNameForm, $dblist)) {
+				error_log('Database '.$dbNameForm.' was not found, skipping', 0);
+			} else {
+				Database::select_db($dbNameForm);
+				foreach ($m_q_list as $query) {
+					if ($only_test) {
+						error_log("Database::query($dbNameForm,$query)", 0);
+					} else {
+						$res = Database::query($query);
+						if ($log) {
+							error_log("In $dbNameForm, executed: $query", 0);
 						}
 					}
 				}
@@ -162,22 +103,21 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 		// Filling the access_url_rel_user table with access_url_id by default = 1
 		$query = "SELECT user_id FROM $dbNameForm.user";
 
-		$result_users = mysql_query($query);
-		while ($row= mysql_fetch_array($result_users,MYSQL_NUM)) {
+		$result_users = Database::query($query);
+		while ($row = Database::fetch_array($result_users, 'NUM')) {
 			$user_id = $row[0];
-			$sql="INSERT INTO $dbNameForm.access_url_rel_user SET user_id=$user_id, access_url_id=1";
-			$res = mysql_query($sql);
+			$sql = "INSERT INTO $dbNameForm.access_url_rel_user SET user_id=$user_id, access_url_id=1";
+			$res = Database::query($sql);
 			//Updating user image
 			$query = "SELECT picture_uri FROM $dbNameForm.user WHERE user_id=$user_id";
-			$res = mysql_query($query);
-			$picture_uri = mysql_fetch_array($res,MYSQL_NUM);
+			$res = Database::query($query);
+			$picture_uri = Database::fetch_array($res, 'NUM');
 			$file =  $picture_uri[0];
 			$dir = api_get_path(SYS_CODE_PATH).'upload/users/';
-			$image_repository = file_exists($dir.$file)? $dir.$file:$dir.$user_id.'/'.$file;
+			$image_repository = file_exists($dir.$file) ? $dir.$file : $dir.$user_id.'/'.$file;
 
 			if (!is_dir($dir.$user_id)) {
-					$perm = octdec(!empty($perm)?$perm:'0777');
-					@mkdir($dir.$user_id, $perm);
+				@mkdir($dir.$user_id, $perm);
 			}
 
 			if (file_exists($image_repository)) {
@@ -188,31 +128,31 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 
 					$temp = new image($image_repository);
 
-					$picture_infos=getimagesize($image_repository);
+					$picture_infos = getimagesize($image_repository);
 
 					$thumbwidth = 150;
-					if (empty($thumbwidth) or $thumbwidth==0) {
-						$thumbwidth=150;
+					if (empty($thumbwidth) or $thumbwidth == 0) {
+						$thumbwidth = 150;
 					}
 
-					$new_height = ($picture_infos[0] > 0)?round(($thumbwidth/$picture_infos[0])*$picture_infos[1]) : 0;
+					$new_height = ($picture_infos[0] > 0) ? round(($thumbwidth / $picture_infos[0]) * $picture_infos[1]) : 0;
 
-					$temp->resize($thumbwidth,$new_height,0);
+					$temp->resize($thumbwidth, $new_height, 0);
 
-					$type=$picture_infos[2];
+					$type = $picture_infos[2];
 
-					// original picture
+					// Original picture
 					$big_temp = new image($image_repository);
 
 					    switch (!empty($type)) {
-						    case 2 : $temp->send_image('JPG',$picture_location);
-						    		 $big_temp->send_image('JPG',$big_picture_location);
+						    case 2 : $temp->send_image('JPG', $picture_location);
+						    		 $big_temp->send_image('JPG', $big_picture_location);
 						    		 break;
-						    case 3 : $temp->send_image('PNG',$picture_location);
-						    		 $big_temp->send_image('JPG',$big_picture_location);
+						    case 3 : $temp->send_image('PNG', $picture_location);
+						    		 $big_temp->send_image('JPG', $big_picture_location);
 						    		 break;
 						    case 1 : $temp->send_image('GIF',$picture_location);
-						    		 $big_temp->send_image('JPG',$big_picture_location);
+						    		 $big_temp->send_image('JPG', $big_picture_location);
 						    		 break;
 					    }
 					if ($image_repository == $dir.$file) {
@@ -223,13 +163,13 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 		}
 		// Filling the access_url_rel_session table with access_url_id by default = 1
 		$query = "SELECT id FROM $dbNameForm.session";
-		$result = mysql_query($query);
-		while ($row= mysql_fetch_array($result,MYSQL_NUM)) {
-			$sql="INSERT INTO $dbNameForm.access_url_rel_session SET session_id=".$row[0].", access_url_id=1";
-			$res = mysql_query($sql);
+		$result = Database::query($query);
+		while ($row = Database::fetch_array($result, 'NUM')) {
+			$sql = "INSERT INTO $dbNameForm.access_url_rel_session SET session_id=".$row[0].", access_url_id=1";
+			$res = Database::query($sql);
 		}
 
-		//Since the parser of the migration DB  does not work for this kind of inserts (HTML) we move it here
+		// Since the parser of the migration DB  does not work for this kind of inserts (HTML) we move it here
 
 		$sql = 'INSERT INTO '.$dbNameForm.'.system_template (title, comment, image, content) VALUES
 		(\'TemplateTitleCourseTitle\', \'TemplateTitleCourseTitleDescription\', \'coursetitle.gif\', \'
@@ -251,8 +191,8 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 					<tbody>
 					<tr>
 					<td style="vertical-align: middle; width: 50%;" colspan="1" rowspan="1">
-						<h1>TITULUS 1<br>
-						<span class="gris_title">TITULUS 2</span><br>
+						<h1>TITULUS 1<br />
+						<span class="gris_title">TITULUS 2</span><br />
 						</h1>
 					</td>
 					<td style="width: 50%;">
@@ -260,12 +200,12 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 					</tr>
 					</tbody>
 					</table>
-					<p><br>
-					<br>
+					<p><br />
+					<br />
 					</p>
 					</body>
 		\');';
-		$res = mysql_query($sql);
+		$res = Database::query($sql);
 
 		/*
 		$sql = 'INSERT INTO '.$dbNameForm.'.system_template (title, comment, image, content) VALUES
@@ -302,20 +242,20 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 						</td>
 						<td style="background: transparent url({IMG_DIR}postit.png ) repeat scroll center top; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; width: 33%; text-align: center; vertical-align: bottom;">
 						<h3>Ut enim ad minima</h3>
-						Veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur.<br>
+						Veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur.<br />
 						<h3>
-						<img style="width: 180px; height: 144px;" alt="trainer" src="{COURSE_DIR}images/trainer/trainer_smile.png "><br></h3>
+						<img style="width: 180px; height: 144px;" alt="trainer" src="{COURSE_DIR}images/trainer/trainer_smile.png "><br /></h3>
 						</td>
 						</tr>
 						</tbody>
 						</table>
-						<p><br>
-						<br>
+						<p><br />
+						<br />
 						</p>
 						</body>
 		\');';
 
-		$res = mysql_query($sql);
+		$res = Database::query($sql);
 		*/
 
 		$sql = 'INSERT INTO '.$dbNameForm.'.system_template (title, comment, image, content) VALUES
@@ -341,7 +281,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 							<td style="width: 25%;"></td>
 							<td style="background: transparent url({IMG_DIR}faded_grey.png ) repeat scroll center top; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; vertical-align: top; width: 33%; text-align: right; font-weight: bold;" colspan="1" rowspan="1">
 							<span class="text">
-							<br>
+							<br />
 							Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Duis pellentesque.</span>
 							</td>
 							<td style="width: 25%; font-weight: bold;">
@@ -349,13 +289,13 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 							</tr>
 							</tbody>
 							</table>
-							<p><br>
-							<br>
+							<p><br />
+							<br />
 							</p>
 						</body>
 		\');
 		';
-		$res = mysql_query($sql);
+		$res = Database::query($sql);
 
 		$sql = 'INSERT INTO '.$dbNameForm.'.system_template (title, comment, image, content) VALUES
 		(\'TemplateTitleLeftList\', \'TemplateTitleListLeftListDescription\', \'leftlist.gif\', \'
@@ -367,7 +307,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 						<tbody>
 						<tr>
 						<td style="width: 66%;"></td>
-						<td style="vertical-align: bottom; width: 33%;" colspan="1" rowspan="4">&nbsp;<img style="width: 180px; height: 248px;" alt="trainer" src="{COURSE_DIR}images/trainer/trainer_reads.png "><br>
+						<td style="vertical-align: bottom; width: 33%;" colspan="1" rowspan="4">&nbsp;<img style="width: 180px; height: 248px;" alt="trainer" src="{COURSE_DIR}images/trainer/trainer_reads.png "><br />
 						</td>
 						</tr>
 						<tr align="right">
@@ -378,7 +318,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 						<tr align="right">
 						<td style="background: transparent url({IMG_DIR}faded_grey.png ) repeat scroll center top; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; vertical-align: top; width: 66%;">
 						Vivamus
-						a quam.&nbsp;<br>
+						a quam.&nbsp;<br />
 						</td>
 						</tr>
 						<tr align="right">
@@ -388,12 +328,12 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 						</tr>
 						</tbody>
 						</table>
-					<p><br>
-					<br>
+					<p><br />
+					<br />
 					</p>
 					</body>
 		\');';
-		$res = mysql_query($sql);
+		$res = Database::query($sql);
 
 		$sql = 'INSERT INTO '.$dbNameForm.'.system_template (title, comment, image, content) VALUES
 		(\'TemplateTitleLeftRightList\', \'TemplateTitleLeftRightListDescription\', \'leftrightlist.gif\', \'
@@ -406,7 +346,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 						<tbody>
 						<tr>
 						<td></td>
-						<td style="vertical-align: top;" colspan="1" rowspan="4">&nbsp;<img style="width: 180px; height: 294px;" alt="Trainer" src="{COURSE_DIR}images/trainer/trainer_join_hands.png "><br>
+						<td style="vertical-align: top;" colspan="1" rowspan="4">&nbsp;<img style="width: 180px; height: 294px;" alt="Trainer" src="{COURSE_DIR}images/trainer/trainer_join_hands.png "><br />
 						</td>
 						<td></td>
 						</tr>
@@ -421,11 +361,11 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 						<tr>
 						<td style="background: transparent url({IMG_DIR}faded_grey.png ) repeat scroll center top; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; vertical-align: top; width: 33%; text-align: right;">
 						Vivamus
-						a quam.&nbsp;<br>
+						a quam.&nbsp;<br />
 						</td>
 						<td style="background: transparent url({IMG_DIR}faded_grey.png ) repeat scroll center top; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; vertical-align: top; width: 33%; text-align: left;">
 						Etiam
-						lacinia stibulum ante.<br>
+						lacinia stibulum ante.<br />
 						</td>
 						</tr>
 						<tr>
@@ -434,18 +374,18 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 						a est stibulum ante ipsum.</td>
 						<td style="background: transparent url({IMG_DIR}faded_grey.png ) repeat scroll center top; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; vertical-align: top; width: 33%; text-align: left;">
 						Consectetuer
-						adipiscing elit. <br>
+						adipiscing elit. <br />
 						</td>
 						</tr>
 						</tbody>
 						</table>
-					<p><br>
-					<br>
+					<p><br />
+					<br />
 					</p>
 					</body>
 
 		\');';
-		$res = mysql_query($sql);
+		$res = Database::query($sql);
 
 		$sql = 'INSERT INTO '.$dbNameForm.'.system_template (title, comment, image, content) VALUES
 		(\'TemplateTitleRightList\', \'TemplateTitleRightListDescription\', \'rightlist.gif\', \'
@@ -456,7 +396,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 						<table style="background: transparent url({IMG_DIR}faded_blue_horizontal.png ) repeat scroll 0% 50%; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; text-align: left; width: 720px; height: 400px;" border="0" cellpadding="15" cellspacing="6">
 						<tbody>
 						<tr>
-						<td style="vertical-align: bottom; width: 50%;" colspan="1" rowspan="4"><img style="width: 300px; height: 199px;" alt="trainer" src="{COURSE_DIR}images/trainer/trainer_points_right.png"><br>
+						<td style="vertical-align: bottom; width: 50%;" colspan="1" rowspan="4"><img style="width: 300px; height: 199px;" alt="trainer" src="{COURSE_DIR}images/trainer/trainer_points_right.png"><br />
 						</td>
 						<td style="width: 50%;"></td>
 						</tr>
@@ -468,23 +408,23 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 						<tr>
 						<td style="background: transparent url({IMG_DIR}faded_grey.png ) repeat scroll center top; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; vertical-align: top; text-align: left; width: 50%;">
 						Etiam
-						lacinia.<br>
+						lacinia.<br />
 						</td>
 						</tr>
 						<tr>
 						<td style="background: transparent url({IMG_DIR}faded_grey.png ) repeat scroll center top; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; vertical-align: top; text-align: left; width: 50%;">
 						Consectetuer
-						adipiscing elit. <br>
+						adipiscing elit. <br />
 						</td>
 						</tr>
 						</tbody>
 						</table>
-					<p><br>
-					<br>
+					<p><br />
+					<br />
 					</p>
 					</body>
 		\');';
-		$res = mysql_query($sql);
+		$res = Database::query($sql);
 
 		/*
 		$sql = 'INSERT INTO '.$dbNameForm.'.system_template (title, comment, image, content) VALUES
@@ -497,7 +437,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 		            	<table style="background: transparent url({IMG_DIR}faded_blue_horizontal.png ) repeat scroll 0% 50%; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; text-align: left; width: 720px; height: 400px;" border="0" cellpadding="15" cellspacing="6">
 						<tr>
 							<td style="height: 10%; width: 33%;"></td>
-							<td style="vertical-align: top; width: 33%;" colspan="1" rowspan="2">&nbsp;<img style="width: 180px; height: 271px;" alt="trainer" src="{COURSE_DIR}images/trainer/trainer_standing.png "><br>
+							<td style="vertical-align: top; width: 33%;" colspan="1" rowspan="2">&nbsp;<img style="width: 180px; height: 271px;" alt="trainer" src="{COURSE_DIR}images/trainer/trainer_standing.png "><br />
 							</td>
 							<td style="height: 10%; width: 33%;"></td>
 						</tr>
@@ -511,7 +451,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 					</tr>
 					</body>
 		\');';
-		$res = mysql_query($sql);
+		$res = Database::query($sql);
 		*/
 
 		$sql = 'INSERT INTO '.$dbNameForm.'.system_template (title, comment, image, content) VALUES
@@ -525,7 +465,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 							<tbody>
 							<tr>
 							<td style="background: transparent url({IMG_DIR}faded_grey.png ) repeat scroll center top; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; vertical-align: top; text-align: left; height: 33%; width: 33%;">
-							<br>
+							<br />
 							Etiam
 							lacinia stibulum ante.
 							Convallis
@@ -541,13 +481,13 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 							</tr>
 							</tbody>
 							</table>
-							<p><br>
-							<br>
+							<p><br />
+							<br />
 							</p>
 							</body>
 		\');
 		';
-		$res = mysql_query($sql);
+		$res = Database::query($sql);
 
 		$sql = 'INSERT INTO '.$dbNameForm.'.system_template (title, comment, image, content) VALUES
 		(\'TemplateTitleDesc\', \'TemplateTitleCheckListDescription\', \'description.gif\', \'
@@ -559,24 +499,24 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 								<tbody>
 								<tr>
 								<td style="width: 50%; vertical-align: top;">
-									<img style="width: 48px; height: 49px; float: left;" alt="01" src="{COURSE_DIR}images/small/01.png " hspace="5"><br>Lorem ipsum dolor sit amet<br><br><br>
+									<img style="width: 48px; height: 49px; float: left;" alt="01" src="{COURSE_DIR}images/small/01.png " hspace="5"><br />Lorem ipsum dolor sit amet<br /><br /><br />
 									<img style="width: 48px; height: 49px; float: left;" alt="02" src="{COURSE_DIR}images/small/02.png " hspace="5">
-									<br>Ut enim ad minim veniam<br><br><br>
-									<img style="width: 48px; height: 49px; float: left;" alt="03" src="{COURSE_DIR}images/small/03.png " hspace="5">Duis aute irure dolor in reprehenderit<br><br><br>
+									<br />Ut enim ad minim veniam<br /><br /><br />
+									<img style="width: 48px; height: 49px; float: left;" alt="03" src="{COURSE_DIR}images/small/03.png " hspace="5">Duis aute irure dolor in reprehenderit<br /><br /><br />
 									<img style="width: 48px; height: 49px; float: left;" alt="04" src="{COURSE_DIR}images/small/04.png " hspace="5">Neque porro quisquam est</td>
 
 								<td style="vertical-align: top; width: 50%; text-align: right;" colspan="1" rowspan="1">
-									<img style="width: 300px; height: 291px;" alt="Gearbox" src="{COURSE_DIR}images/diagrams/gearbox.jpg "><br></td>
+									<img style="width: 300px; height: 291px;" alt="Gearbox" src="{COURSE_DIR}images/diagrams/gearbox.jpg "><br /></td>
 								</tr><tr></tr>
 								</tbody>
 								</table>
-								<p><br>
-								<br>
+								<p><br />
+								<br />
 								</p>
 							</body>
 		\');
 		';
-		$res = mysql_query($sql);
+		$res = Database::query($sql);
 
 		/*
 		$sql = 'INSERT INTO '.$dbNameForm.'.system_template (title, comment, image, content) VALUES
@@ -590,7 +530,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 							<tbody>
 							<tr>
 							<td style="vertical-align: bottom; width: 33%;" colspan="1" rowspan="2">
-							<img style="width: 180px; height: 271px;" alt="trainer" src="{COURSE_DIR}images/trainer/trainer_chair.png "><br>
+							<img style="width: 180px; height: 271px;" alt="trainer" src="{COURSE_DIR}images/trainer/trainer_chair.png "><br />
 							</td>
 							<td style="height: 10%; width: 66%;"></td>
 							</tr>
@@ -612,12 +552,12 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 							</tr>
 							</tbody>
 							</table>
-						<p><br>
-						<br>
+						<p><br />
+						<br />
 						</p>
 						</body>
 		\');';
-		$res = mysql_query($sql);
+		$res = Database::query($sql);
 		*/
 
 		$sql = 'INSERT INTO '.$dbNameForm.'.system_template (title, comment, image, content) VALUES
@@ -678,12 +618,12 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 						</tr>
 						</tbody>
 						</table>
-						<p><br>
-						<br>
+						<p><br />
+						<br />
 						</p>
 						</body>
 		\');';
-		$res = mysql_query($sql);
+		$res = Database::query($sql);
 
 		/*
 		$sql = 'INSERT INTO '.$dbNameForm.'.system_template (title, comment, image, content) VALUES
@@ -697,7 +637,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 						<tbody>
 						<tr>
 						<td style="width: 33%;" colspan="1" rowspan="4">
-							<img style="width: 120px; height: 348px;" alt="learner wonders" src="{COURSE_DIR}images/silhouette.png "><br>
+							<img style="width: 120px; height: 348px;" alt="learner wonders" src="{COURSE_DIR}images/silhouette.png "><br />
 						</td>
 						<td style="width: 66%;"></td>
 						</tr>
@@ -709,24 +649,24 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 						<tr align="center">
 						<td style="background: transparent url({IMG_DIR}faded_grey.png ) repeat scroll center top; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; vertical-align: top; width: 66%;">
 						Etiam
-						lacinia stibulum ante.<br>
+						lacinia stibulum ante.<br />
 						</td>
 						</tr>
 						<tr align="center">
 						<td style="background: transparent url({IMG_DIR}faded_grey.png ) repeat scroll center top; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; vertical-align: top; width: 66%;">
 						Consectetuer
-						adipiscing elit. <br>
+						adipiscing elit. <br />
 						</td>
 						</tr>
 						</tbody>
 						</table>
-					<p><br>
-					<br>
+					<p><br />
+					<br />
 					</p>
 					</body>
 		\');
 		';
-		$res = mysql_query($sql);
+		$res = Database::query($sql);
 		*/
 
 		$sql = 'INSERT INTO '.$dbNameForm.'.system_template (title, comment, image, content) VALUES
@@ -759,7 +699,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 								<li>consectetur</li>
 								<li>adipisicing elit</li>
 							</ul>
-							<br>
+							<br />
 							</td>
 							<td>
 								<img style="width: 32px; height: 32px;" alt="arrow" src="{COURSE_DIR}images/small/arrow.png ">
@@ -782,18 +722,18 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 									<li>quisquam est</li>
 									<li>qui dolorem&nbsp;&nbsp;</li>
 								</ul>
-								<br><br>
+								<br /><br />
 							</td>
 						</tr>
 						</tbody>
 						</table>
-					<p><br>
-					<br>
+					<p><br />
+					<br />
 					</p>
 					</body>
 		\');
 		';
-		$res = mysql_query($sql);
+		$res = Database::query($sql);
 
 		/*
 		$sql = 'INSERT INTO '.$dbNameForm.'.system_template (title, comment, image, content) VALUES
@@ -807,7 +747,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 						<tr>
 						<td style="vertical-align: bottom; width: 33%;" colspan="1" rowspan="2">
 							<img style="width: 180px; height: 169px;" alt="trainer" src="{COURSE_DIR}images/trainer/trainer_staring.png ">
-						<br>
+						<br />
 						</td>
 						<td style="height: 10%; width: 66%;"></td>
 						</tr>
@@ -818,16 +758,16 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 								<li>sed do eiusmod tempor incididunt</li>
 								<li>ut labore et dolore magna aliqua</li>
 								<li>quis nostrud exercitation ullamco</li>
-							</ul><br></td>
+							</ul><br /></td>
 						</tr>
 						</tbody>
 						</table>
-					<p><br>
-					<br>
+					<p><br />
+					<br />
 					</p>
 					</body>
 		\');';
-		$res = mysql_query($sql);
+		$res = Database::query($sql);
 		*/
 
 		$sql = 'INSERT INTO '.$dbNameForm.'.system_template (title, comment, image, content) VALUES
@@ -891,10 +831,10 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 						</tr>
 						</tbody>
 						</table>
-						<br>
+						<br />
 						</body>
 		\');';
-		$res = mysql_query($sql);
+		$res = Database::query($sql);
 
 		$sql = 'INSERT INTO '.$dbNameForm.'.system_template (title, comment, image, content) VALUES
 		(\'TemplateTitleAudio\', \'TemplateTitleAudioDescription\', \'audiocomment.gif\', \'
@@ -911,25 +851,25 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 								<embed  type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" width="300" height="20" bgcolor="#FFFFFF" src="{REL_PATH}main/inc/lib/mediaplayer/player.swf" allowfullscreen="false" allowscriptaccess="always" flashvars="file={COURSE_DIR}audio/ListeningComprehension.mp3&amp;autostart=true"></embed>
 		                    </span></div>
 
-							<br>
+							<br />
 							</td>
-							<td colspan="1" rowspan="3"><br>
-								<img style="width: 300px; height: 341px; float: right;" alt="image" src="{COURSE_DIR}images/diagrams/head_olfactory_nerve.png "><br></td>
+							<td colspan="1" rowspan="3"><br />
+								<img style="width: 300px; height: 341px; float: right;" alt="image" src="{COURSE_DIR}images/diagrams/head_olfactory_nerve.png "><br /></td>
 							</tr>
 							<tr>
 							<td colspan="1" rowspan="1">
-								<img style="width: 180px; height: 271px;" alt="trainer" src="{COURSE_DIR}images/trainer/trainer_glasses.png"><br></td>
+								<img style="width: 180px; height: 271px;" alt="trainer" src="{COURSE_DIR}images/trainer/trainer_glasses.png"><br /></td>
 							</tr>
 							<tr>
 							</tr>
 							</tbody>
 							</table>
-							<p><br>
-							<br>
+							<p><br />
+							<br />
 							</p>
 							</body>
 		\');';
-		$res = mysql_query($sql);
+		$res = Database::query($sql);
 
 		$sql = 'INSERT INTO '.$dbNameForm.'.system_template (title, comment, image, content) VALUES
 		(\'TemplateTitleVideo\', \'TemplateTitleVideoDescription\', \'video.gif\', \'
@@ -967,7 +907,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 
 					</td>
 					<td style="background: transparent url({IMG_DIR}faded_grey.png) repeat scroll center top; -moz-background-clip: initial; -moz-background-origin: initial; -moz-background-inline-policy: initial; vertical-align: top; width: 50%;">
-					<h3><br>
+					<h3><br />
 					</h3>
 					<h3>Lorem ipsum dolor sit amet</h3>
 						<ul>
@@ -985,13 +925,13 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 					</tr>
 					</tbody>
 					</table>
-					<p><br>
-					<br>
+					<p><br />
+					<br />
 					</p>
 					 <style type="text/css">body{}</style><!-- to fix a strange bug appearing with firefox when editing this template -->
 					</body>
 		\'); ';
-		$res = mysql_query($sql);
+		$res = Database::query($sql);
 
 		$sql = 'INSERT INTO '.$dbNameForm.'.system_template (title, comment, image, content) VALUES
 		(\'TemplateTitleFlash\', \'TemplateTitleFlashDescription\', \'flash.gif\', \'
@@ -1009,17 +949,17 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
 							</tr>
 						</tbody>
 						</table>
-						<p><br>
-						<br>
+						<p><br />
+						<br />
 						</p>
 					</center>
 					</body>
 		\'); ';
-		$res = mysql_query($sql);
+		$res = Database::query($sql);
 
         // Check if course_module exists, as it was not installed in Dokeos 1.8.5 because of a broken query, and $sql = 'INSERT it if necessary
         $query = "SELECT * FROM $dbNameForm.course_module";
-        $result = mysql_query($query);
+        $result = Database::query($query);
         if ($result === false) {
         	//the course_module table doesn't exist, create it
             $sql = "CREATE TABLE $dbNameForm.course_module (
@@ -1033,7 +973,7 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
                       PRIMARY KEY  (id)
                     )
                     ";
-            $result = mysql_query($sql);
+            $result = Database::query($sql);
             if ($result !== false) {
             	$sql = "INSERT INTO $dbNameForm.course_module (name, link, image, `row`,`column`, position) VALUES
                     ('calendar_event','calendar/agenda.php','agenda.gif',1,1,'basic'),
@@ -1064,148 +1004,112 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
                     ('gradebook','gradebook/index.php','gradebook.gif',2,2,'basic'),
                     ('glossary','glossary/index.php','glossary.gif',2,1,'basic'),
                     ('notebook','notebook/index.php','notebook.gif',2,1,'basic')";
-                $res = mysql_query($sql);
+                $res = Database::query($sql);
             }
         }
 
+		// Get the stats queries list (s_q_list)
+		$s_q_list = get_sql_file_contents('migrate-db-'.$old_file_version.'-'.$new_file_version.'-pre.sql', 'stats');
 
-		//get the stats queries list (s_q_list)
-		$s_q_list = get_sql_file_contents('migrate-db-'.$old_file_version.'-'.$new_file_version.'-pre.sql','stats');
-
-		if(count($s_q_list)>0)
-		{
-			//now use the $s_q_list
+		if (count($s_q_list) > 0) {
+			// Now use the $s_q_list
 			/**
 			 * We connect to the right DB first to make sure we can use the queries
 			 * without a database name
 			 */
-			if(strlen($dbStatsForm)>40){
-				error_log('Database name '.$dbStatsForm.' is too long, skipping',0);
-			}elseif(!in_array($dbStatsForm,$dblist)){
-				error_log('Database '.$dbStatsForm.' was not found, skipping',0);
-			}else{
-				mysql_select_db($dbStatsForm);
-				foreach($s_q_list as $query){
-					if($only_test){
-						error_log("mysql_query($dbStatsForm,$query)",0);
-					}else{
-						$res = mysql_query($query);
-						if($log)
-						{
-							error_log("In $dbStatsForm, executed: $query",0);
+			if (strlen($dbStatsForm) > 40) {
+				error_log('Database name '.$dbStatsForm.' is too long, skipping', 0);
+			} elseif (!in_array($dbStatsForm,$dblist)) {
+				error_log('Database '.$dbStatsForm.' was not found, skipping', 0);
+			} else {
+				Database::select_db($dbStatsForm);
+				foreach ($s_q_list as $query) {
+					if ($only_test) {
+						error_log("Database::query($dbStatsForm,$query)", 0);
+					} else {
+						$res = Database::query($query);
+						if ($log) {
+							error_log("In $dbStatsForm, executed: $query", 0);
 						}
 					}
 				}
 			}
 		}
-		//get the user queries list (u_q_list)
-		$u_q_list = get_sql_file_contents('migrate-db-'.$old_file_version.'-'.$new_file_version.'-pre.sql','user');
-		if(count($u_q_list)>0)
-		{
-			//now use the $u_q_list
+		// Get the user queries list (u_q_list)
+		$u_q_list = get_sql_file_contents('migrate-db-'.$old_file_version.'-'.$new_file_version.'-pre.sql', 'user');
+		if (count($u_q_list) > 0) {
+			// Now use the $u_q_list
 			/**
 			 * We connect to the right DB first to make sure we can use the queries
 			 * without a database name
 			 */
-			if(strlen($dbUserForm)>40){
-				error_log('Database name '.$dbUserForm.' is too long, skipping',0);
-			}elseif(!in_array($dbUserForm,$dblist)){
-				error_log('Database '.$dbUserForm.' was not found, skipping',0);
-			}else{
-				mysql_select_db($dbUserForm);
-				foreach($u_q_list as $query){
-					if($only_test){
-						error_log("mysql_query($dbUserForm,$query)",0);
-						error_log("In $dbUserForm, executed: $query",0);
-					}else{
-						$res = mysql_query($query);
+			if (strlen($dbUserForm) > 40) {
+				error_log('Database name '.$dbUserForm.' is too long, skipping', 0);
+			} elseif (!in_array($dbUserForm,$dblist)) {
+				error_log('Database '.$dbUserForm.' was not found, skipping', 0);
+			} else {
+				Database::select_db($dbUserForm);
+				foreach ($u_q_list as $query) {
+					if ($only_test) {
+						error_log("Database::query($dbUserForm,$query)", 0);
+						error_log("In $dbUserForm, executed: $query", 0);
+					} else {
+						$res = Database::query($query);
 					}
 				}
 			}
 		}
-		//the SCORM database doesn't need a change in the pre-migrate part - ignore
+		// The SCORM database doesn't need a change in the pre-migrate part - ignore
 	}
-
-
-	/*
-	-----------------------------------------------------------
-		Update the Dokeos course databases
-		this part can be accessed in two ways:
-		- from the normal upgrade process
-		- from the script update_courses.php,
-		which is used to upgrade more than MAX_COURSE_TRANSFER courses
-
-		Every time this script is accessed, only
-		MAX_COURSE_TRANSFER courses are upgraded.
-	-----------------------------------------------------------
-	*/
 
 	$prefix = '';
-	if ($singleDbForm)
-	{
-		$prefix =  get_config_param ('table_prefix');
+	if ($singleDbForm) {
+		$prefix = get_config_param ('table_prefix');
 	}
 
-	//get the courses databases queries list (c_q_list)
-	$c_q_list = get_sql_file_contents('migrate-db-'.$old_file_version.'-'.$new_file_version.'-pre.sql','course');
+	// Get the courses databases queries list (c_q_list)
+	$c_q_list = get_sql_file_contents('migrate-db-'.$old_file_version.'-'.$new_file_version.'-pre.sql', 'course');
 
-	if(count($c_q_list)>0)
-	{
-		//get the courses list
-		if(strlen($dbNameForm)>40)
-		{
-			error_log('Database name '.$dbNameForm.' is too long, skipping',0);
-		}
-		elseif(!in_array($dbNameForm,$dblist))
-		{
-			error_log('Database '.$dbNameForm.' was not found, skipping',0);
-		}
-		else
-		{
-			mysql_select_db($dbNameForm);
-			$res = mysql_query("SELECT code,db_name,directory,course_language FROM course WHERE target_course_code IS NULL ORDER BY code");
+	if (count($c_q_list) > 0) {
+		// Get the courses list
+		if (strlen($dbNameForm) > 40) {
+			error_log('Database name '.$dbNameForm.' is too long, skipping', 0);
+		} elseif (!in_array($dbNameForm, $dblist)) {
+			error_log('Database '.$dbNameForm.' was not found, skipping', 0);
+		} else {
+			Database::select_db($dbNameForm);
+			$res = Database::query("SELECT code,db_name,directory,course_language FROM course WHERE target_course_code IS NULL ORDER BY code");
 
-			if($res===false){die('Error while querying the courses list in update_db.inc.php');}
+			if ($res === false) { die('Error while querying the courses list in update_db-1.8.5-1.8.6.inc.php'); }
 
-			if(mysql_num_rows($res)>0)
-			{
-				$i=0;
+			if (Database::num_rows($res) > 0) {
+				$i = 0;
                 $list = array();
-				//while( ($i < MAX_COURSE_TRANSFER) && ($row = mysql_fetch_array($res)))
-				while($row = mysql_fetch_array($res))
-				{
+				while ($row = Database::fetch_array($res)) {
 					$list[] = $row;
 					$i++;
 				}
-				foreach($list as $row_course)
-				{
-					//now use the $c_q_list
+				foreach ($list as $row_course) {
+					// Now use the $c_q_list
 					/**
 					 * We connect to the right DB first to make sure we can use the queries
 					 * without a database name
 					 */
-					if (!$singleDbForm) //otherwise just use the main one
-					{
-						mysql_select_db($row_course['db_name']);
+					if (!$singleDbForm) { //otherwise just use the main one
+						Database::select_db($row_course['db_name']);
 					}
 
-					foreach($c_q_list as $query)
-					{
-						if ($singleDbForm) //otherwise just use the main one
-						{
-							$query = preg_replace('/^(UPDATE|ALTER TABLE|CREATE TABLE|DROP TABLE|INSERT INTO|DELETE FROM)\s+(\w*)(.*)$/',"$1 $prefix{$row_course['db_name']}_$2$3",$query);
+					foreach ($c_q_list as $query) {
+						if ($singleDbForm) { //otherwise just use the main one
+							$query = preg_replace('/^(UPDATE|ALTER TABLE|CREATE TABLE|DROP TABLE|INSERT INTO|DELETE FROM)\s+(\w*)(.*)$/', "$1 $prefix{$row_course['db_name']}_$2$3", $query);
 						}
 
-						if($only_test)
-						{
-							error_log("mysql_query(".$row_course['db_name'].",$query)",0);
-						}
-						else
-						{
-							$res = mysql_query($query);
-							if($log)
-							{
-								error_log("In ".$row_course['db_name'].", executed: $query",0);
+						if ($only_test) {
+							error_log("Database::query(".$row_course['db_name'].",$query)", 0);
+						} else {
+							$res = Database::query($query);
+							if ($log) {
+								error_log("In ".$row_course['db_name'].", executed: $query", 0);
 							}
 						}
 					}
@@ -1213,26 +1117,25 @@ if (defined('DOKEOS_INSTALL') || defined('DOKEOS_COURSE_UPDATE'))
                     $t_d = $row_course['db_name'].".document";
                     $t_ip = $row_course['db_name'].".item_property";
 
-                    if($singleDbForm)
-                    {
+                    if ($singleDbForm) {
                         $t_d = "$prefix{$row_course['db_name']}_document";
                         $t_ip = "$prefix{$row_course['db_name']}_item_property";
                     }
-                    // shared documents folder
+                    // Shared documents folder
                     $query = "INSERT INTO $t_d (path,title,filetype,size) VALUES ('/shared_folder','".get_lang('SharedDocumentsDirectory')."','folder','0')";
-                    $myres = mysql_query($query);
+                    $myres = Database::query($query);
                     if ($myres !== false) {
-                    	$doc_id = mysql_insert_id();
+                    	$doc_id = Database::insert_id();
                         $query = "INSERT INTO $t_ip (tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ('document',1,NOW(),NOW(),$doc_id,'FolderAdded',1,0,NULL,1)";
-                        $myres = mysql_query($query);
+                        $myres = Database::query($query);
                     }
 				}
 			}
 		}
 	}
-}
-else
-{
+
+} else {
+
 	echo 'You are not allowed here !';
+
 }
-?>

@@ -1,5 +1,6 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $lang_height = "Height";
 $lang_resizing_comment = "resize the image to the following dimensions (in pixels)";
@@ -11,11 +12,11 @@ $lang_click_thumbnails = "Click on one of the thumbnails";
 $lang_set_slideshow_options = "Set Slideshow Options";
 $lang_slideshow_options = "Slideshow Options";
 $lang_no_resizing = "NO RESIZING (default)";
-$lang_exit_slideshow = "Poistu esityksestä";
+$lang_exit_slideshow = "Poistu esityksestÃ¤";
 $SlideShow = "Esitys";
 $lang_previous_slide = "Edellinen dia";
 $lang_next_slide = "Seuraava dia";
 $lang_image = "Image";
 $lang_of = "of";
-$lang_view_slideshow = "Näytä esitys";
+$lang_view_slideshow = "NÃ¤ytÃ¤ esitys";
 ?>

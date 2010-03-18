@@ -1,26 +1,33 @@
 <?php
-/* vim: set expandtab tabstop=4 shiftwidth=4: */
-// +----------------------------------------------------------------------+
-// | PHP Version 4                                                        |
-// +----------------------------------------------------------------------+
-// | Copyright (c) 1997-2003 The PHP Group                                |
-// +----------------------------------------------------------------------+
-// | This source file is subject to version 2.0 of the PHP license,       |
-// | that is bundled with this package in the file LICENSE, and is        |
-// | available at through the world-wide-web at                           |
-// | http://www.php.net/license/2_02.txt.                                 |
-// | If you did not receive a copy of the PHP license and are unable to   |
-// | obtain it through the world-wide-web, please send a note to          |
-// | license@php.net so we can mail you a copy immediately.               |
-// +----------------------------------------------------------------------+
-// | Authors: Alexey Borzov <avb@php.net>                                 |
-// |          Adam Daniel <adaniel1@eesus.jnj.com>                        |
-// |          Bertrand Mansion <bmansion@mamasam.com>                     |
-// +----------------------------------------------------------------------+
-//
-// $Id: date.php 20682 2009-05-15 11:11:07Z ivantcholakov $
+/* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4: */
 
+/**
+ * Class for a group of elements used to input dates (and times).
+ *
+ * PHP versions 4 and 5
+ *
+ * LICENSE: This source file is subject to version 3.01 of the PHP license
+ * that is available through the world-wide-web at the following URI:
+ * http://www.php.net/license/3_01.txt If you did not receive a copy of
+ * the PHP License and are unable to obtain it through the web, please
+ * send a note to license@php.net so we can mail you a copy immediately.
+ *
+ * @category    HTML
+ * @package     HTML_QuickForm
+ * @author      Alexey Borzov <avb@php.net>
+ * @copyright   2001-2009 The PHP Group
+ * @license     http://www.php.net/license/3_01.txt PHP License 3.01
+ * @version     CVS: $Id: date.php,v 1.62 2009/04/04 21:34:02 avb Exp $
+ * @link        http://pear.php.net/package/HTML_QuickForm
+ */
+
+/**
+ * Class for a group of form elements
+ */
 require_once 'HTML/QuickForm/group.php';
+/**
+ * Class for <select></select> elements
+ */
 require_once 'HTML/QuickForm/select.php';
 
 /**
@@ -29,8 +36,11 @@ require_once 'HTML/QuickForm/select.php';
  * Inspired by original 'date' element but reimplemented as a subclass
  * of HTML_QuickForm_group
  *
- * @author Alexey Borzov <avb@php.net>
- * @access public
+ * @category    HTML
+ * @package     HTML_QuickForm
+ * @author      Alexey Borzov <avb@php.net>
+ * @version     Release: 3.2.11
+ * @since       3.1
  */
 class HTML_QuickForm_date extends HTML_QuickForm_group
 {
@@ -38,32 +48,6 @@ class HTML_QuickForm_date extends HTML_QuickForm_group
 
    /**
     * Various options to control the element's display.
-    *
-    * Currently known options are
-    * 'language': date language
-    * 'format': Format of the date, based on PHP's date() function.
-    *     The following characters are recognised in format string:
-    *       D => Short names of days
-    *       l => Long names of days
-    *       d => Day numbers
-    *       M => Short names of months
-    *       F => Long names of months
-    *       m => Month numbers
-    *       Y => Four digit year
-    *       y => Two digit year
-    *       h => 12 hour format
-    *       H => 23 hour  format
-    *       i => Minutes
-    *       s => Seconds
-    *       a => am/pm
-    *       A => AM/PM
-    * 'minYear': Minimum year in year select
-    * 'maxYear': Maximum year in year select
-    * 'addEmptyOption': Should an empty option be added to the top of
-    *     each select box?
-    * 'emptyOptionValue': The value passed by the empty option.
-    * 'emptyOptionText': The text displayed for the empty option.
-    * 'optionIncrement': Step to increase the option values by (works for 'i' and 's')
     *
     * @access   private
     * @var      array
@@ -260,6 +244,34 @@ class HTML_QuickForm_date extends HTML_QuickForm_group
    /**
     * Class constructor
     *
+    * The following keys may appear in $options array:
+    * - 'language': date language
+    * - 'format': Format of the date, based on PHP's date() function.
+    *   The following characters are currently recognised in format string:
+    *   <pre>
+    *       D => Short names of days
+    *       l => Long names of days
+    *       d => Day numbers
+    *       M => Short names of months
+    *       F => Long names of months
+    *       m => Month numbers
+    *       Y => Four digit year
+    *       y => Two digit year
+    *       h => 12 hour format
+    *       H => 23 hour  format
+    *       i => Minutes
+    *       s => Seconds
+    *       a => am/pm
+    *       A => AM/PM
+    *   </pre>
+    * - 'minYear': Minimum year in year select
+    * - 'maxYear': Maximum year in year select
+    * - 'addEmptyOption': Should an empty option be added to the top of
+    *    each select box?
+    * - 'emptyOptionValue': The value passed by the empty option.
+    * - 'emptyOptionText': The text displayed for the empty option.
+    * - 'optionIncrement': Step to increase the option values by (works for 'i' and 's')
+    *
     * @access   public
     * @param    string  Element's name
     * @param    mixed   Label(s) for an element
@@ -272,6 +284,11 @@ class HTML_QuickForm_date extends HTML_QuickForm_group
         $this->_persistantFreeze = true;
         $this->_appendName = true;
         $this->_type = 'date';
+        // Added by Ivan Tcholakov, 16-MAR-2010.
+        $current_year = intval(api_get_local_time());
+        $this->_options['minYear'] = $current_year - 9;
+        $this->_options['maxYear'] = $current_year + 1;
+        //
         // set the options, do not bother setting bogus ones
         if (is_array($options)) {
             foreach ($options as $name => $value) {
@@ -297,9 +314,12 @@ class HTML_QuickForm_date extends HTML_QuickForm_group
         $separator =  '';
         $locale    =& $this->_locale[$this->_options['language']];
         $backslash =  false;
+        // Modified by Ivan Tcholakov, 16-MAR-2010.
+        //for ($i = 0, $length = strlen($this->_options['format']); $i < $length; $i++) {
+        //    $sign = $this->_options['format']{$i};
         for ($i = 0, $length = api_strlen($this->_options['format']); $i < $length; $i++) {
-            //$sign = $this->_options['format']{$i};
             $sign = api_substr($this->_options['format'], $i, 1);
+        //
             if ($backslash) {
                 $backslash  = false;
                 $separator .= $sign;
@@ -424,6 +444,24 @@ class HTML_QuickForm_date extends HTML_QuickForm_group
     }
 
     // }}}
+    // {{{ _trimLeadingZeros()
+
+   /**
+    * Trims leading zeros from the (numeric) string
+    *
+    * @param    string  A numeric string, possibly with leading zeros
+    * @return   string  String with leading zeros removed
+    */
+    function _trimLeadingZeros($str)
+    {
+        if (0 == strcmp($str, $this->_options['emptyOptionValue'])) {
+            return $str;
+        }
+        $trimmed = ltrim($str, '0');
+        return strlen($trimmed)? $trimmed: '0';
+    }
+
+    // }}}
     // {{{ setValue()
 
     function setValue($value)
@@ -435,7 +473,7 @@ class HTML_QuickForm_date extends HTML_QuickForm_group
                 $value = strtotime($value);
             }
             // might be a unix epoch, then we fill all possible values
-            $arr = explode('-', date('w-d-n-Y-h-H-i-s-a-A-W', (int)$value));
+            $arr = explode('-', date('w-j-n-Y-g-G-i-s-a-A-W', (int)$value));
             $value = array(
                 'D' => $arr[0],
                 'l' => $arr[0],
@@ -448,12 +486,14 @@ class HTML_QuickForm_date extends HTML_QuickForm_group
                 'h' => $arr[4],
                 'g' => $arr[4],
                 'H' => $arr[5],
-                'i' => $arr[6],
-                's' => $arr[7],
+                'i' => $this->_trimLeadingZeros($arr[6]),
+                's' => $this->_trimLeadingZeros($arr[7]),
                 'a' => $arr[8],
                 'A' => $arr[9],
-                'W' => $arr[10]
+                'W' => $this->_trimLeadingZeros($arr[10])
             );
+        } else {
+            $value = array_map(array($this, '_trimLeadingZeros'), $value);
         }
         parent::setValue($value);
     }

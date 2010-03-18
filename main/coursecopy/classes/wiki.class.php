@@ -9,25 +9,29 @@ require_once('Resource.class.php');
 class Wiki extends Resource
 {
 	var $id;
+	var $page_id;
 	var $reflink;
 	var $title;
 	var $content;
 	var $user_id;
 	var $group_id;
-	var $timestamp;
-	var $template;
-	var $menu;
+	var $timestamp;	
+	var $progress;
+	var $version;
 
-	function Wiki($id, $reflink, $title, $content, $user_id, $group_id, $timestamp, $template, $menu)
+	function Wiki($id, $page_id, $reflink, $title, $content, $user_id, $group_id, $timestamp, $progress, $version)
 	{
 		parent::Resource($id,RESOURCE_WIKI);
-		$this->page_id					= $id;
+		$this->id						= $id;
+		$this->page_id					= $page_id;
 		$this->reflink 					= $reflink;
 		$this->title 					= $title;
 		$this->content					= $content;
 		$this->user_id					= $user_id;
 		$this->group_id					= $group_id;
 		$this->dtime					= $timestamp;
+		$this->progress					= $progress;
+		$this->version					= $version;
 	}
 
 	function show()

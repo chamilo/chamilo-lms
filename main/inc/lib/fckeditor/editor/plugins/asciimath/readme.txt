@@ -1,6 +1,9 @@
 
-AsciiMathML formula editor for Dokeos
-Author: Ivan Tcholakov (ivantcholakov@gmail.com), August 2009.
+AsciiMathML formula editor for Chamilo LMS
+
+Author: Ivan Tcholakov <ivantcholakov@gmail.com>
+February 2010 - adapted for Chamilo LMS
+August 2009 - initial implementation for Dokeos LMS
 
 This work is a port for the FCKEditor of Equation plugin for the Xinha editor (http://xinha.org)
 by Raimund Meyer (ray) xinha@raimundmeyer.de, November 2006.

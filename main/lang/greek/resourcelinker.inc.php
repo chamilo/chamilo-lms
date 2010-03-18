@@ -1,8 +1,9 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $ResourceAdded = "Resource added. You can now go back to the path or add more resources.";
-$LearningPath = "Learning Path";
+$LearningPath = "Ξ•ΞΊΟ€Ξ±ΞΉΞ΄ΞµΟ…Ο„ΞΉΞΊΞ® Ξ”ΞΉΞ±Ξ΄ΟΞΏΞΌΞ®";
 $LevelUp = "level up";
 $AddIt = "Add it";
 $MainCategory = "main category";
@@ -21,12 +22,12 @@ $Exercise = "Test";
 $Link = "Link";
 $AdValvas = "Ad Valvas";
 $Document = "Document";
-$IntroductionText = "Εισαγωγικό κείμενο";
-$CourseDescription = "περιγραφή στο κατάλογο μαθημάτων";
-$Groups = "Ομάδες Χρηστών";
-$Users = "Χρήστες";
-$Modify = "Τροποποίηση";
-$Detail = "Λεπτομέρειες";
-$EditSuccess = "Η διόρθωση των στοιχείων της εργασίας έγινε με επιτυχία!";
-$AddAnn = "Προσθήκη Ανακοίνωσης";
+$IntroductionText = "Ξ•ΞΉΟƒΞ±Ξ³Ο‰Ξ³ΞΉΞΊΟ ΞΊΞµΞ―ΞΌΞµΞ½ΞΏ";
+$CourseDescription = "Ξ ΞµΟΞΉΞ³ΟΞ±Ο†Ξ® ΞΞ±ΞΈΞ®ΞΌΞ±Ο„ΞΏΟ‚";
+$Groups = "ΞΞΌΞ¬Ξ΄ΞµΟ‚ Ξ§ΟΞ·ΟƒΟ„ΟΞ½";
+$Users = "Ξ§ΟΞ®ΟƒΟ„ΞµΟ‚";
+$Modify = "Ξ¤ΟΞΏΟ€ΞΏΟ€ΞΏΞ―Ξ·ΟƒΞ·";
+$Detail = "Ξ›ΞµΟ€Ο„ΞΏΞΌΞ­ΟΞµΞΉΞ±";
+$EditSuccess = "Ξ¤ΞΏ Ξ³ΞµΞ³ΞΏΞ½ΟΟ‚ Ο„ΟΞΏΟ€ΞΏΟ€ΞΏΞΉΞ®ΞΈΞ·ΞΊΞµ";
+$AddAnn = "Ξ ΟΞΏΟƒΞΈΞ®ΞΊΞ· Ξ‘Ξ½Ξ±ΞΊΞΏΞ―Ξ½Ο‰ΟƒΞ·Ο‚";
 ?>

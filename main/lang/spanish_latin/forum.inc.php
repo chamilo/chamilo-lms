@@ -1,25 +1,26 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $Forum = "Foro";
-$AddForumCategory = "Agregar una nueva categoría al foro";
+$AddForumCategory = "Agregar una nueva categorÃ­a al foro";
 $AddForum = "Agregar un nuevo foro";
 $Topics = "Temas";
 $Posts = "Mensajes";
-$LastPosts = "Último mensaje";
+$LastPosts = "Ãšltimo mensaje";
 $Message = "mensaje";
-$NoForumInThisCategory = "No hay foros en esta categoría";
-$InForumCategory = "Crear en categoría";
-$AllowAnonymousPosts = "¿ Permitir mensajes anónimos ?";
-$StudentsCanEdit = "¿ Pueden los estudiantes editar sus mensajes ?";
-$ApprovalDirect = "Aprobación / Mensaje directo";
+$NoForumInThisCategory = "No hay foros en esta categorÃ­a";
+$InForumCategory = "Crear en categorÃ­a";
+$AllowAnonymousPosts = "Â¿ Permitir mensajes anÃ³nimos ?";
+$StudentsCanEdit = "Â¿ Pueden los estudiantes editar sus mensajes ?";
+$ApprovalDirect = "AprobaciÃ³n / Mensaje directo";
 $AllowNewThreads = "Permitir a los estudiantes iniciar nuevos temas";
 $DefaultViewType = "Tipo de vista por defecto";
-$GroupSettings = "Configuración del grupo";
+$GroupSettings = "ConfiguraciÃ³n del grupo";
 $NotAGroupForum = "No es un foro de grupo";
-$PublicPrivateGroupForum = "¿ Foro del grupo público o privado ?";
+$PublicPrivateGroupForum = "Â¿ Foro del grupo pÃºblico o privado ?";
 $Public = "Para todos los miembros del curso";
-$Private = "Sólo para los miembros del grupo";
+$Private = "SÃ³lo para los miembros del grupo";
 $NewPostStored = "Su mensaje ha sido guardado";
 $ReturnTo = "Ahora puede volver a";
 $Or = "o";
@@ -29,14 +30,14 @@ $QuoteMessage = "Citar este mensaje";
 $NewTopic = "Nuevo tema";
 $Replies = "Respuestas";
 $Views = "Vistas";
-$LastPost = "Último mensaje";
+$LastPost = "Ãšltimo mensaje";
 $Quoting = "Citando";
 $NotifyByEmail = "Notificarme por e-mail cuando alguien responda";
 $StickyPost = "Este es un mensaje fijo (aparece siempre arriba y tiene un icono fijo especial)";
 $ReplyShort = "Re:";
-$DeletePost = "¿ Está seguro de querer borrar este mensaje ? Al borrar este mensaje también borrará las respuestas que tenga. Por favor verifique el hilo del tema para ver que mensajes serán eliminados.";
-$Locked = "Cerrado: los estudiantes no pueden publicar más mensajes en esta categoría, foro o tema, pero pueden leer los mensajes que anteriormente hayan sido publicados.";
-$Unlocked = "Abierto: los estudiantes pueden publicar nuevos mensajes en esta categoría, foro o tema";
+$DeletePost = "Â¿ EstÃ¡ seguro de querer borrar este mensaje ? Al borrar este mensaje tambiÃ©n borrarÃ¡ las respuestas que tenga. Por favor verifique el hilo del tema para ver que mensajes serÃ¡n eliminados.";
+$Locked = "Cerrado: los estudiantes no pueden publicar mÃ¡s mensajes en esta categorÃ­a, foro o tema, pero pueden leer los mensajes que anteriormente hayan sido publicados.";
+$Unlocked = "Abierto: los estudiantes pueden publicar nuevos mensajes en esta categorÃ­a, foro o tema";
 $Flat = "Plana";
 $Threaded = "Hilo del tema";
 $Nested = "Jerarquizado";
@@ -44,20 +45,20 @@ $FlatView = "Vista plana";
 $ThreadedView = "Hilo del tema";
 $NestedView = "Vista jerarquizada";
 $Structure = "Estructura";
-$ForumCategoryAdded = "La categoría de foros ha sido añadida";
-$ForumCategoryEdited = "La categoría de foros ha sido modificada";
-$ForumAdded = "El foro ha sido añadido";
+$ForumCategoryAdded = "La categorÃ­a de foros ha sido aÃ±adida";
+$ForumCategoryEdited = "La categorÃ­a de foros ha sido modificada";
+$ForumAdded = "El foro ha sido aÃ±adido";
 $ForumEdited = "El foro ha sido modificado";
-$NewThreadStored = "El nuevo tema ha sido añadido";
-$Approval = "Aprobación";
+$NewThreadStored = "El nuevo tema ha sido aÃ±adido";
+$Approval = "AprobaciÃ³n";
 $Direct = "Directo";
 $ForGroup = "Para Grupo";
 $ThreadLocked = "Tema cerrado.";
-$NotAllowedHere = "No está autorizado para estar aquí.";
-$ReplyAdded = "La respuesta ha sido añadida";
+$NotAllowedHere = "No estÃ¡ autorizado para estar aquÃ­.";
+$ReplyAdded = "La respuesta ha sido aÃ±adida";
 $EditPost = "Editar mensaje";
 $EditPostStored = "El mensaje ha sido modificado";
 $NewForumPost = "Nuevo mensaje en el foro";
 $YouWantedToStayInformed = "Ha indicado que desea ser informado por e-mail cuando alguien conteste al tema";
-$MessageHasToBeApproved = "Su mensaje debe ser aprobado antes de que los demás puedan verlo.";
+$MessageHasToBeApproved = "Su mensaje debe ser aprobado antes de que los demÃ¡s puedan verlo.";
 ?>

@@ -1,34 +1,43 @@
 <?php
-/* vim: set expandtab tabstop=4 shiftwidth=4: */
-// +----------------------------------------------------------------------+
-// | PHP version 4.0                                                      |
-// +----------------------------------------------------------------------+
-// | Copyright (c) 1997-2003 The PHP Group                                |
-// +----------------------------------------------------------------------+
-// | This source file is subject to version 2.0 of the PHP license,       |
-// | that is bundled with this package in the file LICENSE, and is        |
-// | available at through the world-wide-web at                           |
-// | http://www.php.net/license/2_02.txt.                                 |
-// | If you did not receive a copy of the PHP license and are unable to   |
-// | obtain it through the world-wide-web, please send a note to          |
-// | license@php.net so we can mail you a copy immediately.               |
-// +----------------------------------------------------------------------+
-// | Authors: Adam Daniel <adaniel1@eesus.jnj.com>                        |
-// |          Bertrand Mansion <bmansion@mamasam.com>                     |
-// +----------------------------------------------------------------------+
-//
-// $Id: select.php 12243 2007-05-02 21:00:52Z yannoo $
-
-require_once('HTML/QuickForm/element.php');
+/* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4: */
 
 /**
  * Class to dynamically create an HTML SELECT
  *
- * @author       Adam Daniel <adaniel1@eesus.jnj.com>
- * @author       Bertrand Mansion <bmansion@mamasam.com>
- * @version      1.0
- * @since        PHP4.04pl1
- * @access       public
+ * PHP versions 4 and 5
+ *
+ * LICENSE: This source file is subject to version 3.01 of the PHP license
+ * that is available through the world-wide-web at the following URI:
+ * http://www.php.net/license/3_01.txt If you did not receive a copy of
+ * the PHP License and are unable to obtain it through the web, please
+ * send a note to license@php.net so we can mail you a copy immediately.
+ *
+ * @category    HTML
+ * @package     HTML_QuickForm
+ * @author      Adam Daniel <adaniel1@eesus.jnj.com>
+ * @author      Bertrand Mansion <bmansion@mamasam.com>
+ * @author      Alexey Borzov <avb@php.net>
+ * @copyright   2001-2009 The PHP Group
+ * @license     http://www.php.net/license/3_01.txt PHP License 3.01
+ * @version     CVS: $Id: select.php,v 1.34 2009/04/04 21:34:04 avb Exp $
+ * @link        http://pear.php.net/package/HTML_QuickForm
+ */
+
+/**
+ * Base class for form elements
+ */
+require_once 'HTML/QuickForm/element.php';
+
+/**
+ * Class to dynamically create an HTML SELECT
+ *
+ * @category    HTML
+ * @package     HTML_QuickForm
+ * @author      Adam Daniel <adaniel1@eesus.jnj.com>
+ * @author      Bertrand Mansion <bmansion@mamasam.com>
+ * @author      Alexey Borzov <avb@php.net>
+ * @version     Release: 3.2.11
+ * @since       1.0
  */
 class HTML_QuickForm_select extends HTML_QuickForm_element {
 
@@ -293,7 +302,7 @@ class HTML_QuickForm_select extends HTML_QuickForm_element {
     function addOption($text, $value, $attributes=null)
     {
         if (null === $attributes) {
-            $attributes = array('value' => $value);
+            $attributes = array('value' => (string)$value);
         } else {
             $attributes = $this->_parseAttributes($attributes);
             if (isset($attributes['selected'])) {
@@ -305,7 +314,7 @@ class HTML_QuickForm_select extends HTML_QuickForm_element {
                     $this->_values[] = $value;
                 }
             }
-            $this->_updateAttrArray($attributes, array('value' => $value));
+            $this->_updateAttrArray($attributes, array('value' => (string)$value));
         }
         $this->_options[] = array('text' => $text, 'attr' => $attributes);
     } // end func addOption
@@ -446,9 +455,12 @@ class HTML_QuickForm_select extends HTML_QuickForm_element {
             case (is_a($options, 'db_result')):
                 return $this->loadDbResult($options, $param1, $param2, $param3);
                 break;
+            // Disabled by Chamilo team, 16-MAR-2010.
+            // TODO: To be verified (why it has been disabled).
             //case (is_string($options) && !empty($options) || is_subclass_of($options, "db_common")):
             //    return $this->loadQuery($options, $param1, $param2, $param3, $param4);
             //    break;
+            //
         }
     } // end func load
 
@@ -484,9 +496,10 @@ class HTML_QuickForm_select extends HTML_QuickForm_element {
             }
             $strHtml .= $tabs . '<select' . $attrString . ">\n";
 
+            $strValues = is_array($this->_values)? array_map('strval', $this->_values): array();
             foreach ($this->_options as $option) {
-                if (is_array($this->_values) && in_array((string)$option['attr']['value'], $this->_values)) {
-                    $this->_updateAttrArray($option['attr'], array('selected' => 'selected'));
+                if (!empty($strValues) && in_array($option['attr']['value'], $strValues, true)) {
+                    $option['attr']['selected'] = 'selected';
                 }
                 $strHtml .= $tabs . "\t<option" . $this->_getAttrString($option['attr']) . '>' .
                             $option['text'] . "</option>\n";
@@ -512,7 +525,7 @@ class HTML_QuickForm_select extends HTML_QuickForm_element {
         if (is_array($this->_values)) {
             foreach ($this->_values as $key => $val) {
                 for ($i = 0, $optCount = count($this->_options); $i < $optCount; $i++) {
-                    if ((string)$val == (string)$this->_options[$i]['attr']['value']) {
+                    if (0 == strcmp($val, $this->_options[$i]['attr']['value'])) {
                         $value[$key] = $this->_options[$i]['text'];
                         break;
                     }
@@ -559,7 +572,7 @@ class HTML_QuickForm_select extends HTML_QuickForm_element {
             $cleanValue = null;
             foreach ($value as $v) {
                 for ($i = 0, $optCount = count($this->_options); $i < $optCount; $i++) {
-                    if ($v == $this->_options[$i]['attr']['value']) {
+                    if (0 == strcmp($v, $this->_options[$i]['attr']['value'])) {
                         $cleanValue[] = $v;
                         break;
                     }

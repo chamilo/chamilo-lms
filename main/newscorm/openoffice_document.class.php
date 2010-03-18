@@ -136,9 +136,7 @@ abstract class OpenofficeDocument extends learnpath {
 			break;
 		}
 
-	    $perm = api_get_setting('permissions_for_new_directories');
-		$perm = octdec(!empty($perm)?$perm:0770);
-		chmod ($this->base_work_dir.$this->created_dir,$perm);
+		chmod ($this->base_work_dir.$this->created_dir, api_get_permissions_for_new_directories());
 	    return $this->first_item;
 
     }

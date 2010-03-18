@@ -1,31 +1,9 @@
 <?php
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2008 Dokeos Latinoamerica SAC
-	Copyright (c) 2006 Dokeos SPRL
-	Copyright (c) 2006 Ghent University (UGent)
-	Copyright (c) various contributors
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
-	Mail: info@dokeos.com
-==============================================================================
-*/
+/* For licensing terms, see /license.txt */
 /**
  * Class to select, sort and transform object data into array data,
  * used for the teacher's flat view
- * @author Bert Stepp�
+ * @author Bert Steppé
  */
 class FlatViewDataGenerator
 {
@@ -86,6 +64,24 @@ class FlatViewDataGenerator
 		$headers[] = get_lang('GradebookQualificationTotal');
 		return $headers;
 	}
+	
+	/**
+	 * Get array containing evaluation items
+	 */
+	public function get_evaluation_items($items_start = 0, $items_count = null) {
+		$headers = array();		
+		if (!isset($items_count)) {
+			$items_count = count($this->evals_links) - $items_start;
+		}
+		for ($count=0;
+			 ($count < $items_count ) && ($items_start + $count < count($this->evals_links));
+			 $count++) {
+			$item = $this->evals_links [$count + $items_start];
+			$headers[] = $item->get_name();
+		}
+		return $headers;
+	}
+	
 
 	/**
 	 * Get actual array data
@@ -167,6 +163,58 @@ class FlatViewDataGenerator
 		return $data;
 	}
 
+	/**
+	 * Get actual array data evaluation/link scores
+	 */
+	public function get_evaluation_sumary_results ($session_id = null) {
+								
+		$usertable = array ();
+		foreach ($this->users as $user) { $usertable[] = $user; }
+		$selected_users = $usertable; 
+				
+		// generate actual data array for all selected users
+		$data = array();
+
+		foreach ($selected_users as $user) {
+			$row = array ();
+			$item_value=0;
+			$item_total=0;
+			for ($count=0;$count < count($this->evals_links); $count++) {								
+				$item = $this->evals_links [$count];
+				$score = $item->calc_score($user[0]);				
+				$porcent_score = $score[1] ?round(($score[0]*100)/$score[1]):0;
+				$row[$item->get_name()] = $porcent_score;												
+			}
+			$data[$user[0]] = $row;			
+		}
+
+		// get evaluations for every user by item
+		$data_by_item = array();
+		foreach ($data as $uid => $items) {			
+			$tmp = array();	
+			foreach ($items as $item => $value) {
+				$tmp[] = $item;
+				if (in_array($item,$tmp)) {
+					$data_by_item[$item][$uid] = $value;		
+				}				
+			}			
+		}
+
+		// get evaluation sumary results (maximum, minimum and average of evaluations for all students)
+		$result = array();
+		$maximum = $minimum = $average = 0;
+		foreach ($data_by_item as $k => $v) {			
+			$average = round(array_sum($v)/count($v));					
+			arsort($v);
+			$maximum = array_shift($v);
+			$minimum = array_pop($v);			
+			$sumary_item = array('max'=>$maximum, 'min'=>$minimum, 'avg'=>$average); 			
+			$result[$k] = $sumary_item;			
+		}
+
+		return $result;
+	}
+	
 
 	public function get_data_to_graph () {
 		// do some checks on users/items counts, redefine if invalid values

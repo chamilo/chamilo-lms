@@ -1,18 +1,19 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$langTool = "Metadatos";
-$langClickKw = "Calque enriba la palabra clave nel ·rbol pa seleicionala o deseleicionala.";
-$langKwHelp = "<br/>Calque nel botÛn \'+\' p\'abrir, nel botÛn \'-\' pa pesllar, nel botÛn \'++\' p\'abrir too, nel botÛn \'--\' pa pesllar too.<br/>Deseleicionar toles palabres clave seleicionaes cerrando l\'·rbol y volviÈndolu abrir col botÛn \'+\'.<br/>Alt-clic \'+\' vuelve seleicionar les palabres clave seleicionaes enantes.<br/><br/>Alt-clic palabra clave, niega esa palabra clave.";
-$langAdvanced = "Avanzada";
+$langTool = "Metadatos del documentu";
+$langClickKw = "Calque na pallabra clave del √°rbol pa seleicionar o anular la seleici√≥n.";
+$langKwHelp = "<br/>Calque nel bot√≥n '+' p'abrir, nel bot√≥n '-' pa pesllar, nel bot√≥n '++' p'abrir too, nel bot√≥n '--' pa pesllalo too.<br/><br/>Anule la seleici√≥n de toles pallabres clave cerrando l'√°rbol y volviendo abrilu col bot√≥n '+'.<br/><br/>Alt+clic'+' busca les pallabres claves orixinales nel √°rbol.<br/><br/>Alt-clic seleiciona les pallabres clave ensin t√©rminos m√°s √°mplios o anula la seleici√≥n de pallabres clave con t√©rminos m√°s amplios.<br/><br/>Si cambia d'idioma de descripci√≥n, nun va poder amestar pallabres clave al mesmu tiempu.<br/><br/>";
+$langAdvanced = "Avanz√°u";
 $langSearch = "Buscar";
-$langSearchCrit = "° Use l\'·rea d\'embaxo pa los descriptores, una palabra per ringlera !";
+$langSearchCrit = "¬° Una pallabra per ringlera !";
 $langNoKeywords = "Esti cursu nun tien palabres clave";
 $langKwCacheProblem = "La palabra clave nun se pue abrir";
-$langCourseKwds = "palabres clave del cursu";
+$langCourseKwds = "Esti documentu tien les pallabres clave del cursu";
 $langKwdsInMD = "palabres clave usaes nos metadatos (MD)";
 $langKwdRefs = "referencies de palabres clave";
 $langNonCourseKwds = "Palabres clave que nun son del cursu";
 $langKwdsUse = "Palabra clave del cursu (negra = ensin usar)";
-$langTotalMDEs = "Total d\'entraes de metadatos (MD):";
+$langTotalMDEs = "Total d'entraes de metadatos (MD) de los enllaces";
 ?>

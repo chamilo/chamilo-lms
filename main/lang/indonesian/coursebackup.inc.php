@@ -1,18 +1,19 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $langSelectOptionForBackup = "Silahkan pilih opsi backup.";
 $langLetMeSelectItems = "Biarkan saya memilih komponen mata kuliah";
 $langCreateFullBackup = "Buat backup lengkap mata kuliah ini";
 $langCreateBackup = "buat backup";
-$langBackupCreated  = "Backup mata kuliah ini telah dibuat. Proses download file ini akan dimulai beberapa saat lagi.  Jika download anda tidak jalan, klik link berikut";
+$langBackupCreated = "Backup mata kuliah ini telah dibuat. Proses download file ini akan dimulai beberapa saat lagi.  Jika download anda tidak jalan, klik link berikut";
 $langSelectBackupFile = "pilih file backup";
 $langImportBackup = "Import backup";
 $langImportFullBackup = "Import full backup";
 $langImportFinished = "Import selesai";
 $langEvents = "Event";
 $langAnnouncements = "Pengumuman";
-$langDocuments  = "Dokumen";
+$langDocuments = "Dokumen";
 $langTests = "Latihan/Ujian";
 $langLearnpaths = "Learnpaths";
 $langCopyCourse = "Copy mata kuliah";
@@ -27,7 +28,7 @@ $langSameFilenameSkip = "Lompati file dengan nama sama";
 $langSameFilenameRename = "Ganti nama file (misal  file.pdf menjadi file_1.pdf)";
 $langSameFilenameOverwrite = "Overwrite file";
 $langSelectDestinationCourse = "Pilih mata kuliah target";
-$langFullCopy  = "Full copy";
+$langFullCopy = "Full copy";
 $langCourseDescription = "Deskripsi mata kuliah";
 $langNoResourcesToBackup = "Tidak ada resources untuk dibackup";
 $langNoResourcesInBackupFile = "Tidak ada resoureces pada file backup";

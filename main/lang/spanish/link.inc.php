@@ -1,51 +1,52 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $LinkMoved = "El enlace ha sido movido";
 $langLinkName = "Nombre del enlace";
-$langLinkAdd = "Añadir un enlace";
-$langLinkAdded = "El enlace ha sido añadido.";
+$langLinkAdd = "AÃ±adir un enlace";
+$langLinkAdded = "El enlace ha sido aÃ±adido.";
 $langLinkMod = "Modificar enlace";
 $langLinkModded = "El enlace ha sido modificado.";
 $langLinkDel = "Borrar enlace";
 $langLinkDeleted = "El enlace ha sido borrado";
-$langLinkDelconfirm = "¿ Está seguro de querer borrar este enlace ?";
-$langAllLinksDel = " Borrar todos los enlaces de esta categoría";
-$langCategoryName = "Nombre de la categoría";
-$langCategoryAdd = "Añadir una categoría";
-$langCategoryAdded = "La categoría ha sido añadida.";
-$langCategoryModded = "La categoría se ha modificado";
-$langCategoryDel = "Borrar categoría";
-$langCategoryDeleted = "Se ha eliminado la categoría y todos sus enlaces.";
-$langCategoryDelconfirm = "Cuando borre una categoría, también se borrarán todoslos enlaces dentro de la misma.\\ ¿Seguro que quiere eliminar esta categoría y todos sus enlaces?";
-$langAllCategoryDel = "Borrar todas las categorías y sus enlaces";
+$langLinkDelconfirm = "Â¿ EstÃ¡ seguro de querer borrar este enlace ?";
+$langAllLinksDel = " Borrar todos los enlaces de esta categorÃ­a";
+$langCategoryName = "Nombre de la categorÃ­a";
+$langCategoryAdd = "AÃ±adir una categorÃ­a";
+$langCategoryAdded = "La categorÃ­a ha sido aÃ±adida.";
+$langCategoryModded = "La categorÃ­a se ha modificado";
+$langCategoryDel = "Borrar categorÃ­a";
+$langCategoryDeleted = "Se ha eliminado la categorÃ­a y todos sus enlaces.";
+$langCategoryDelconfirm = "Al eliminar una categorÃ­a, tambiÃ©n se eliminarÃ¡n todos los enlaces que contenga. Â¿Seguro que quiere eliminar esta categorÃ­a y todos sus enlaces?";
+$langAllCategoryDel = "Borrar todas las categorÃ­as y sus enlaces";
 $langGiveURL = "Por favor, ponga la URL";
-$langGiveCategoryName = "Por favor, ponga un nombre para la categoría";
+$langGiveCategoryName = "Por favor, ponga un nombre para la categorÃ­a";
 $langNoCategory = "General";
-$showall = "Expandir todas las categorías";
-$shownone = "Contraer todas las categorías";
+$showall = "Expandir todas las categorÃ­as";
+$shownone = "Contraer todas las categorÃ­as";
 $langListDeleted = "La lista ha sido completamente borrada";
-$langAddLink = "Añadir un enlace";
+$langAddLink = "AÃ±adir un enlace";
 $langDelList = "Borrar lista";
 $langModifyLink = "Modificar un enlace";
-$langCsvImport = "Importar un fichero CSV";
-$langCsvFileNotFound = "El fichero CSV no puede ser importado (¿vacío?, ¿demasiado grande?)";
+$langCsvImport = "Importar CSV";
+$langCsvFileNotFound = "El fichero CSV no puede ser importado (Â¿vacÃ­o?, Â¿demasiado grande?)";
 $langCsvFileNoSeps = "Use , o ; para separar las columnas del archivo CSV a importar";
-$langCsvFileNoURL = "Las columnas URL y título son obligatorias en el archivo CSV a importar";
-$langCsvFileLine1 = "... - línea 1 =";
-$langCsvLinesFailed = "línea(s) erróneas al importar un enlace (falta la URL o el título).";
-$langCsvLinesOld = "enlace/s existente/s actualizados (igual URL y categoría)";
+$langCsvFileNoURL = "Las columnas URL y tÃ­tulo son obligatorias en el archivo CSV a importar";
+$langCsvFileLine1 = "... - lÃ­nea 1 =";
+$langCsvLinesFailed = "lÃ­nea(s) errÃ³neas al importar un enlace (falta la URL o el tÃ­tulo).";
+$langCsvLinesOld = "enlace/s existente/s actualizados (igual URL y categorÃ­a)";
 $langCsvLinesNew = "nuevo enlace(s) creado.";
-$langCsvExplain = "El fichero se debe presentar así: <blockquote><pre><b>URL</b>;category;<b>title</b>;description;<b>http://www.aaa.org/...</b>;Enlaces importantes;<b>Nombre 1</b>;Descripción 1;<b>http://www.bbb.net/...</b>;;<b>Nombre 2</b>;\"Description 2\";</pre></blockquote>Si la \'URL\' y la \'categoría\' pertenecen a un enlace ya existente, éste será actualizado. En el resto de los casos un nuevo enlace será creado.<br><br>Negrita = obligatorio. El orden de los campos no tiene importancia, mayúsculas y minúsculas están permitidas. Los campos desconocidos serán añadidos a la \'descripción\'. Separadores: comas o puntos y comas. Los valores podrán encontrarse entre comillas, pero no los nombres de columna.Algunas [b]etiquetas HTML[/b] serán importadas en el campo \'descripción\'.";
+$langCsvExplain = "El fichero se debe presentar asÃ­: <blockquote><pre><b>URL</b>;category;<b>title</b>;description;<b>http://www.aaa.org/...</b>;Enlaces importantes;<b>Nombre 1</b>;DescripciÃ³n 1;<b>http://www.bbb.net/...</b>;;<b>Nombre 2</b>;\"Description 2\";</pre></blockquote>Si la 'URL' y la 'categorÃ­a' pertenecen a un enlace ya existente, Ã©ste serÃ¡ actualizado. En el resto de los casos un nuevo enlace serÃ¡ creado.<br><br>Negrita = obligatorio. El orden de los campos no tiene importancia, mayÃºsculas y minÃºsculas estÃ¡n permitidas. Los campos desconocidos serÃ¡n aÃ±adidos a la 'descripciÃ³n'. Separadores: comas o puntos y comas. Los valores podrÃ¡n encontrarse entre comillas, pero no los nombres de columna.Algunas [b]etiquetas HTML[/b] serÃ¡n importadas en el campo 'descripciÃ³n'.";
 $langLinkUpdated = "El enlace ha sido actualizado";
 $langAll_Link_Deleted = "El enlace ha sido borrado";
-$langOnHomepage = "¿ Mostrar el enlace en la página principal del curso";
-$langShowLinkOnHomepage = "Mostrar este enlace como un icono en la página principal del curso";
-$langCsvImport = "Importar CSV";
-$General = "General";
-$SearchFeatureDoIndexLink = "¿Indexar título y descripción?";
+$langOnHomepage = "Â¿ Mostrar el enlace en la pÃ¡gina principal del curso";
+$langShowLinkOnHomepage = "Mostrar este enlace como un icono en la pï¿½gina principal del curso";
+$General = "general";
+$SearchFeatureDoIndexLink = "Â¿Indexar tÃ­tulo y descripciÃ³n?";
 $langSaveLink = "Guardar el enlace";
-$langSaveCategory = "Guardar la categoría";
+$langSaveCategory = "Guardar la categorÃ­a";
 $BackToLinksOverview = "Regresar a la lista de enlaces";
-$AddTargetOfLinkOnHomepage = "Seleccione el modo (target) en que se mostrará el enlace en la página principal del curso";
+$AddTargetOfLinkOnHomepage = "Seleccione el modo (target) en que se mostrarÃ¡ el enlace en la pÃ¡gina principal del curso";
+$Url = "Url";
 ?>

@@ -1,5 +1,5 @@
 <?php
-/* For licensing terms, see /dokeos_license.txt */
+/* For licensing terms, see /license.txt */
 /*
  * Created on 18 October 2006 by Elixir Interactive http://www.elixir-interactive.com
  */
@@ -13,7 +13,7 @@ $cidReset = true;
 require '../inc/global.inc.php';
 require_once api_get_path(SYS_CODE_PATH).'mySpace/myspace.lib.php';
 
-$this_section = "session_my_space";
+$this_section = SECTION_TRACKING;
 
 $nameTools = get_lang('Administrators');
 
@@ -48,7 +48,7 @@ if (isset($_POST['export'])) {
 $sql_admins = "SELECT user.user_id,lastname,firstname,email
 	FROM $tbl_user as user, $tbl_admin as admin
 	WHERE admin.user_id=user.user_id".$order_clause;
-$result_admins = Database::query($sql_admins, __FILE__, __LINE__);
+$result_admins = Database::query($sql_admins);
 
 if (api_is_western_name_order()) {
 	echo '<table class="data_table"><tr><th>'.get_lang('FirstName').'</th><th>'.get_lang('LastName').'</th><th>'.get_lang('Email').'</th></tr>';

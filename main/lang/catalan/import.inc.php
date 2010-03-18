@@ -1,16 +1,17 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$langPgTitle = "TÌtol de la p‡gina";
-$langExplanation = "La p‡gina ha d\'estar en format HTML (ex: \"my_page.htm\"). Ser‡ enllaÁada des de la P‡gina d\'Inici. Si vols enviar documents no-HTML (PDF, Word, Power Point, Video, etc.) utilitza <a href=../document/document.php>l\'eina de Documents</a>";
-$langTooBig = "No has escollit cap fitxer a enviar, o Ès massa gran";
-$langCouldNot = "No s\'ha pogut enviar el fitxer";
+$langPgTitle = "T√≠tol de la p√†gina";
+$langExplanation = "Un cop hagueu clicat Acceptar es crear√† el lloc web d'un curs. el qual constar√† de diverses eines: un gestor de documents, un creador d'itineraris formatius en format SCORM, un visualitzador de lli√ßons o itineraris formatius, la possibilitat de realitzar ex√†mens i lliurar treballs, discutir en f√≤rums i a trav√©s de xat, enviar anuncis i missatges, disposar d'una agenda, videoconfer√®ncia i pissarra digital, eines per al treball en grup, realitzar enquestes i seguiment dels alumnes, etc. La vostra identificaci√≥ com a creador d'aquest lloc us permetr√† modificar-lo segons les vostres necessitats.";
+$langTooBig = "No ha escollit cap arxiu a enviar, o √©s massa gran";
+$langCouldNot = "El fitxer no es pot enviar";
 $langNotAllowed = "No perm&ecute;s";
 $langAddPageToSite = "Afegeix plana al lloc";
-$langCouldNotSendPage = "Aquest fitxer no est‡ en format HMTL i no ha pogut ser enviat. Si vols enviar documents no-HTML (PDF, Word, Power Point, Video, etc.) utilitza <a href=../document/document.php>l\'eina de Documents</a>";
-$langSendPage = "P‡gina a enviar";
-$langPageTitleModified = "El tÌtol de la p‡gina ha estat modificat";
-$langPageAdded = "P‡gina afegida";
-$langAddPage = "Afegeix una p‡gina";
-$Choose = "Examinar";
+$langCouldNotSendPage = "Aquest fitxer no est√† en format HMTL i no ha pogut ser enviat. Si vols enviar documents no-HTML (PDF, Word, Power Point, Video, etc.) utilitza <a href=../document/document.php>l'eina de Documents</a>";
+$langSendPage = "P√†gina a enviar";
+$langPageTitleModified = "El t√≠tol de la p√†gina ha estat modificat";
+$langPageAdded = "P√†gina afegida";
+$langAddPage = "Afegir una p√†gina";
+$Choose = "Trieu";
 ?>

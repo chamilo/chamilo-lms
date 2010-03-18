@@ -1,32 +1,10 @@
 <?php
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2008 Dokeos Latinoamerica SAC
-	Copyright (c) 2006 Dokeos SPRL
-	Copyright (c) 2006 Ghent University (UGent)
-	Copyright (c) various contributors
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
-	Mail: info@dokeos.com
-==============================================================================
-*/
+/* For licensing terms, see /license.txt */
 /**
  * Defines a gradebook LearnpathLink object.
  * @author Yannick Warnier <yannick.warnier@dokeos.com>
  * @author Bert Steppé
- * @package dokeos.gradebook
+ * @package chamilo.gradebook
  */
 class LearnpathLink extends AbstractLink
 {
@@ -59,13 +37,13 @@ class LearnpathLink extends AbstractLink
     	$tbl_grade_links = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
 
 		$sql = 'SELECT id,name from '.$this->get_learnpath_table()
-				.' WHERE id NOT IN'
+				.' lp WHERE id NOT IN'
 				.' (SELECT ref_id FROM '.$tbl_grade_links
 				.' WHERE type = '.LINK_LEARNPATH
 				." AND course_code = '".$this->get_course_code()."'"
-				.')';
+				.') AND lp.session_id='.api_get_session_id().'';
 
-		$result = Database::query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql);
 
 		$cats=array();
 		while ($data=Database::fetch_array($result))
@@ -86,8 +64,8 @@ class LearnpathLink extends AbstractLink
 		$course_info = api_get_course_info($this->course_code);
     	$tbl_grade_links = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK,$course_info['dbName']);
 
-		$sql = 'SELECT id,name from '.$this->get_learnpath_table();
-		$result = Database::query($sql, __FILE__, __LINE__);
+		$sql = 'SELECT id,name FROM '.$this->get_learnpath_table().' WHERE session_id = '.api_get_session_id().' ';
+		$result = Database::query($sql);
 
 		$cats=array();
 		while ($data=Database::fetch_array($result))
@@ -107,7 +85,7 @@ class LearnpathLink extends AbstractLink
     	$tbl_stats = Database::get_course_table(TABLE_LP_VIEW,$course_info['dbName']);
 		$sql = 'SELECT count(id) AS number FROM '.$tbl_stats
 				." WHERE lp_id = '".$this->get_ref_id()."'";
-    	$result = Database::query($sql, __FILE__, __LINE__);
+    	$result = Database::query($sql);
 		$number=Database::fetch_array($result,'NUM');
 		return ($number[0] != 0);
     }
@@ -130,11 +108,11 @@ class LearnpathLink extends AbstractLink
     			." WHERE lp_id = ".$this->get_ref_id();
 
     	if (isset($stud_id))
-    		$sql .= ' AND user_id = '.$stud_id;
+    		$sql .= ' AND user_id = '.intval($stud_id);
 
     	// order by id, that way the student's first attempt is accessed first
 		$sql .= ' ORDER BY view_count DESC';
-    	$scores = Database::query($sql, __FILE__, __LINE__);
+    	$scores = Database::query($sql);
 		// for 1 student
     	if (isset($stud_id))
     	{
@@ -213,9 +191,9 @@ class LearnpathLink extends AbstractLink
      */
     public function is_valid_link()
     {
-    	$sql = 'SELECT count(id) from '.$this->get_learnpath_table()
-				.' WHERE id = '.$this->get_ref_id();
-		$result = Database::query($sql, __FILE__, __LINE__);
+    	$sql = 'SELECT count(id) FROM '.$this->get_learnpath_table()
+				.' WHERE id = '.$this->get_ref_id().' AND session_id='.api_get_session_id().'';
+		$result = Database::query($sql);
 		$number=Database::fetch_row($result,'NUM');
 		return ($number[0] != 0);
     }
@@ -271,8 +249,8 @@ class LearnpathLink extends AbstractLink
     		return false;
     	} elseif (!isset($this->learnpath_data)) {
 			$sql = 'SELECT * from '.$this->get_learnpath_table()
-					.' WHERE id = '.$this->get_ref_id();
-			$result = Database::query($sql, __FILE__, __LINE__);
+					.' WHERE id = '.$this->get_ref_id().' AND session_id='.api_get_session_id().'';
+			$result = Database::query($sql);
 			$this->learnpath_data=Database::fetch_array($result);
     	}
     	return $this->learnpath_data;

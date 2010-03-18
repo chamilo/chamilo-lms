@@ -1,26 +1,6 @@
 <?php
 //  $Id: subscribe_class.php 8213 2006-03-15 15:52:12Z turboke $
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2004-2005 Dokeos S.A.
-	Copyright (c) Bart Mollet, Hogeschool Gent
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact address: Dokeos, 44 rue des palais, B-1030 Brussels, Belgium
-	Mail: info@dokeos.com
-==============================================================================
-*/
+/* For licensing terms, see /license.txt	*/
 /**
 ==============================================================================
 *	This script allows teachers to subscribe existing classes to their course.
@@ -61,7 +41,7 @@ require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php'
 */
 $tool_name = get_lang("AddClassesToACourse");
 //extra entries in breadcrumb
-$interbreadcrumb[] = array ("url" => "user.php", "name" => get_lang("Users"));
+$interbreadcrumb[] = array ("url" => "user.php", "name" => get_lang("ToolUser"));
 $interbreadcrumb[] = array ("url" => "class.php", "name" => get_lang("Classes"));
 Display :: display_header($tool_name, "User");
 
@@ -116,7 +96,7 @@ function get_number_of_classes()
 	$class_table = Database :: get_main_table(TABLE_MAIN_CLASS);
 	$course_class_table = Database :: get_main_table(TABLE_MAIN_COURSE_CLASS);
 	$sql = "SELECT * FROM $course_class_table WHERE course_code = '".$_SESSION['_course']['id']."'";
-	$res = Database::query($sql,__FILE__,__LINE__);
+	$res = Database::query($sql);
 	$subscribed_classes = array();
 	while($obj = Database::fetch_object($res))
 	{
@@ -125,14 +105,14 @@ function get_number_of_classes()
 	$sql = "SELECT c.id	FROM $class_table c WHERE 1 = 1";
 	if (isset ($_GET['keyword']))
 	{
-		$keyword = Database::escape_string($_GET['keyword']);
+		$keyword = Database::escape_string(trim($_GET['keyword']));
 		$sql .= " AND (c.name LIKE '%".$keyword."%')";
 	}
 	if( count($subscribed_classes) > 0)
 	{
 		$sql .= " AND c.id NOT IN ('".implode("','",$subscribed_classes)."')";
 	}
-	$res = Database::query($sql, __FILE__, __LINE__);
+	$res = Database::query($sql);
 	$result = Database::num_rows($res);
 	return $result;
 }
@@ -145,7 +125,7 @@ function get_class_data($from, $number_of_items, $column, $direction)
 	$course_class_table = Database :: get_main_table(TABLE_MAIN_COURSE_CLASS);
 	$class_user_table = Database :: get_main_table(TABLE_MAIN_CLASS_USER);
 	$sql = "SELECT * FROM $course_class_table WHERE course_code = '".$_SESSION['_course']['id']."'";
-	$res = Database::query($sql,__FILE__,__LINE__);
+	$res = Database::query($sql);
 	$subscribed_classes = array();
 	while($obj = Database::fetch_object($res))
 	{
@@ -162,7 +142,7 @@ function get_class_data($from, $number_of_items, $column, $direction)
 	$sql .= " WHERE 1 = 1";
 	if (isset ($_GET['keyword']))
 	{
-		$keyword = Database::escape_string($_GET['keyword']);
+		$keyword = Database::escape_string(trim($_GET['keyword']));
 		$sql .= " AND (c.name LIKE '%".$keyword."%')";
 	}
 	if( count($subscribed_classes) > 0)
@@ -172,7 +152,7 @@ function get_class_data($from, $number_of_items, $column, $direction)
 	$sql .= " GROUP BY c.id, c.name ";
 	$sql .= " ORDER BY col$column $direction ";
 	$sql .= " LIMIT $from,$number_of_items";
-	$res = Database::query($sql, __FILE__, __LINE__);
+	$res = Database::query($sql);
 	$classes = array ();
 	while ($class = Database::fetch_row($res))
 	{

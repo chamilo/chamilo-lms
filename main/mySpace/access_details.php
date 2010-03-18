@@ -1,39 +1,43 @@
 <?php
-/* For licensing terms, see /dokeos_license.txt */
+/* For licensing terms, see /license.txt */
 /**
-==============================================================================
 *	This is the tracking library for Dokeos.
 *	Include/require it in your code to use its functionality.
 *
-*	@package dokeos.library
-==============================================================================
-
+*	@package chamilo.library
+*
 * Calculates the time spent on the course
 * @param integer $user_id the user id
 * @param string $course_code the course code
-*	Funzione scritta da Mario per testare cose
+* @author Mario per testare cose
+* @author Julio Montoya <gugli100@gmail.com>
+* 
 */
 
 // name of the language file that needs to be included
 $language_file = array ('registration', 'index', 'tracking');
 
 // including the global Dokeos file
-require '../inc/global.inc.php';
+require_once '../inc/global.inc.php';
 
 // including additional libraries
 require_once api_get_path(LIBRARY_PATH).'pchart/pData.class.php';
 require_once api_get_path(LIBRARY_PATH).'pchart/pChart.class.php';
 require_once api_get_path(LIBRARY_PATH).'pchart/pCache.class.php';
 
+require_once 'myspace.lib.php';
+
 // the section (for the tabs)
-$this_section = "session_my_space";
+$this_section = SECTION_TRACKING;
 
 
 /* MAIN */
-$user_id = Security::remove_XSS($_REQUEST['student']);
+$user_id = intval($_REQUEST['student']);
+$session_id = intval($_GET['id_session']);
 $course_code = Security::remove_XSS($_REQUEST['course']);
+$connections = MySpace::get_connections_to_course($user_id, $course_code, $session_id);
 
-$connections = get_connections_to_course($user_id, $course_code);
+
 if (api_is_xml_http_request()) {
 	$type  = Security::remove_XSS($_GET['type']);
 	$main_year = $main_month_year = $main_day = array();
@@ -147,7 +151,7 @@ if (api_is_xml_http_request()) {
 		}
 		echo '<img src="'.api_get_path(WEB_ARCHIVE_PATH).$img_file.'">';
 	} else {
-		Display::display_warning_message (get_lang('GraphicNotAvailable'));
+		Display::display_warning_message(api_convert_encoding(get_lang('GraphicNotAvailable'),'UTF-8'));
 	}
 	exit;
 }
@@ -219,85 +223,3 @@ echo ("</table>");
 */
 
 Display:: display_footer();
-
-
-/*
------------------------------------------------------------
-	Functions
------------------------------------------------------------
-*/
-
-/**
- * Gets the connections to a course as an array of login and logout time
- *
- * @param unknown_type $user_id
- * @param unknown_type $course_code
- * @return unknown
- */
-function get_connections_to_course($user_id, $course_code) {
-	// Database table definitions
-    $tbl_track_course 	= Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
-    $tbl_main			= Database :: get_main_table(TABLE_MAIN_COURSE);
-
-    $sql_query = 'SELECT visual_code as course_code FROM '.$tbl_main.' c WHERE code="'.Database::escape_string($course_code).'";';
-    $result = Database::query($sql_query, __FILE__, __LINE__);
-    $row_query = Database::fetch_array($result, 'ASSOC');
-    $course_true = isset($row_query['course_code']) ? $row_query['course_code']: $course_code;
-
-    $sql = 'SELECT login_course_date, logout_course_date FROM ' . $tbl_track_course . '
-    	WHERE user_id = ' . intval($user_id) . '
-    	AND course_code="' . Database::escape_string($course_true) . '" ORDER BY login_course_date ASC';
-
-    $rs = Database::query($sql, __FILE__, __LINE__);
-    $connections = array();
-
-    while ($row = Database::fetch_array($rs)) {
-
-        $login_date = $row['login_course_date'];
-        $logout_date = $row['logout_course_date'];
-
-        $timestamp_login_date = strtotime($login_date);
-        $timestamp_logout_date = strtotime($logout_date);
-
-        $connections[] = array('login' => $timestamp_login_date, 'logout' => $timestamp_logout_date);
-    }
-    return $connections;
-}
-
-/**
- * TODO: Not used, to b deleted?
- * Enter description here...
- *
- * @param unknown_type $user_id
- * @param unknown_type $course_code
- * @param unknown_type $year
- * @param unknown_type $month
- * @param unknown_type $day
- * @return unknown
- */
-function get_connections_to_course_by_time($user_id, $course_code, $year = '', $month = '', $day = '') {
-	// Database table definitions
-    $tbl_track_course 		= Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
-    $tbl_main				= Database :: get_main_table(TABLE_MAIN_COURSE);
-
-    $sql_query = 'SELECT visual_code as course_code FROM '.$tbl_main.' c WHERE code="'.Database :: escape_string($course_code).'";';
-    $result = Database::query($sql_query, __FILE__, __LINE__);
-    $row_query = Database::fetch_array($result,'ASSOC');
-    $course_true = isset($row_query['course_code']) ? $row_query['course_code']: $course_code;
-
-    $sql = 'SELECT login_course_date, logout_course_date FROM ' . $tbl_track_course . '
-    				WHERE user_id = ' . intval($user_id) . '
-    				AND course_code="' . Database::escape_string($course_true) . '"
-    				ORDER BY login_course_date DESC';
-
-    $rs = Database::query($sql, __FILE__, __LINE__);
-    $connections = array();
-    while ($row = Database::fetch_array($rs)) {
-        $login_date = $row['login_course_date'];
-        $logout_date = $row['logout_course_date'];
-        $timestamp_login_date = strtotime($login_date);
-        $timestamp_logout_date = strtotime($logout_date);
-        $connections[] = array('login' => $timestamp_login_date, 'logout' => $timestamp_logout_date);
-    }
-    return $connections;
-}

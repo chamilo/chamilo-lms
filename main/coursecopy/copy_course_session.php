@@ -1,13 +1,10 @@
 <?php
-/* For licensing terms, see /dokeos_license.txt */
-
+/* For licensing terms, see /license.txt */
 /**
- * ==============================================================================
  * Copy resources from one course in a session to another one.
  *
  * @author Christian Fasanando <christian.fasanando@dokeos.com>
- * @package dokeos.backup
- * ==============================================================================
+ * @package chamilo.backup
  */
 
 /*  INIT SECTION  */
@@ -26,8 +23,7 @@ require_once '../inc/lib/xajax/xajax.inc.php';
 $xajax = new xajax();
 $xajax -> registerFunction('search_courses');
 
-
-if (!api_is_allowed_to_edit()) {
+if (!api_is_allowed_to_edit() && !api_is_session_admin()) {
 	api_not_allowed(true);
 }
 
@@ -91,7 +87,7 @@ function display_form() {
 	$html .= '<a href="../admin/index.php">'.Display::return_icon('back.png',get_lang('BackTo').' '.get_lang('PlatformAdmin'),array('style'=>'vertical-align:middle')).get_lang('BackTo').' '.get_lang('PlatformAdmin').'</a>';
 	$html .= '</div>';
 
-	$html .= '<div class="row"><div class="form_header">'.get_lang('CopyCourse').'</div></div>'; 
+	$html .= '<div class="row"><div class="form_header">'.get_lang('CopyCourse').'</div></div>';
 	$html .= '<form name="formulaire" method="post" action="'.api_get_self().'" >';
 
 	$html .= '<table border="0" cellpadding="5" cellspacing="0" width="100%" align="center">';
@@ -146,7 +142,7 @@ function search_courses($id_session,$type) {
 					FROM $tbl_course c, $tbl_session_rel_course src
 					WHERE src.course_code = c.code
 					AND src.id_session = '".$id_session."'";
-			$rs = Database::query($sql, __FILE__, __LINE__);
+			$rs = Database::query($sql);
 
 			$course_list = array();
 
@@ -172,7 +168,7 @@ function search_courses($id_session,$type) {
 							FROM $session_table s , $session_category_table sc
 							WHERE s.session_category_id = sc.id AND s.id NOT IN('$id_session')";
 
-				$rs_select_destination = Database::query($sql, __FILE__, __LINE__);
+				$rs_select_destination = Database::query($sql);
 
 				$select_destination .= '<select name="sessions_list_destination" onchange = "xajax_search_courses(this.value,\'destination\')">';
 				$select_destination .= '<option value = "0">'.get_lang('SelectASession').'</option>';
@@ -207,7 +203,7 @@ function search_courses($id_session,$type) {
 					WHERE src.course_code = c.code
 					AND src.id_session = '".intval($id_session)."'
 					AND c.code IN ($list_courses_origin)";
-			$rs = Database::query($sql, __FILE__, __LINE__);
+			$rs = Database::query($sql);
 
 			$course_list_destination = array();
 			$return .= '<select id="destination" name="SessionCoursesListDestination[]" multiple="multiple" size="20" style="width:320px;" onmouseover="this.disabled=true;" onmouseout="this.disabled=false;">';
@@ -227,7 +223,7 @@ function search_courses($id_session,$type) {
 					FROM $tbl_course c, $tbl_session_rel_course src
 					WHERE src.course_code = c.code
 					AND src.id_session = '".intval($session_origin)."'";
-			$result = Database::query($sql, __FILE__, __LINE__);
+			$result = Database::query($sql);
 
 			$return_option_disabled = '<select id="origin" name="SessionCoursesListOrigin[]" multiple="multiple" size="20" style="width:320px;" onclick="checkSelected(this.id,\'copy_option_2\',\'title_option2\',\'destination\')">';
 			while($cours = Database :: fetch_array($result)) {

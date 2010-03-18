@@ -1,5 +1,6 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $langCourseManager = "Pentadbir Subjek";
 $YourPasswordHasBeenEmailed = "Katalaluan telah diemaillkan kepada anda.";
@@ -8,13 +9,13 @@ $langLogin = "Melog Masuk";
 $langAction = "Tindakan";
 $langPreserved = "Pra Layan";
 $langDeleted = "Telah dipadam";
-$langAdded = "Telah ditambah";
+$langAdded = "Tambahan";
 $langConfirmUnsubscribe = "Sahkan Pengguna Yang Tidak Melanggan";
-$langCourseName = "Nama of subjek";
+$langCourseName = "NamaÂ ofÂ subjek";
 $langSubscribe = "Melanggan";
-$langSee = "Pergi ke";
+$langSee = "PergiÂ ke";
 $langLastVisits = "Lawatan terakhir";
-$langIfYouWantToAddManyUsers = "Jika anda ingin mendaftarkan ramai Pengguna 			untuk mengikuti Subjek anda,sila hubungi Pentadbir Sistem.";
+$langIfYouWantToAddManyUsers = "Jika anda ingin mendaftarkan ramai Pengguna \t\t\tuntuk mengikuti Subjek anda,sila hubungi Pentadbir Sistem.";
 $langPassTooEasy = "Katalaluan terlalu ringkas.Gunakan katalaluan seperti berikut";
 $langGroupUserManagement = "Alat Bantu Kumpulan";
 $langAddedToCourse = "telah didaftarkan dalam Subjek anda";
@@ -27,21 +28,21 @@ $langGiveAdmin = "Jadikan sebagai Pentadbir";
 $langUserNumber = "Bilangan";
 $langDownloadUserList = "Senarai Muatnaik";
 $langSend = "Hantar";
-$langUserAddExplanation = "setiap baris fail yang ingin dihantar hanya memerlukan 5 medan iaitu: <b>Nama Bapa   Nama Anda   		ID Pengguna   Katalaluan 		  Email</b> dipisahkan dengan tab mengikut turutan ini..		Pengguna akan menerima email pengesahan beserta ID Pengguna dan Katalaluan.";
+$langUserAddExplanation = "setiap baris fail yang ingin dihantar hanya memerlukan 5 medan iaitu: <b>Nama BapaÂ Â Â Nama AndaÂ Â Â \t\tID PenggunaÂ Â Â KatalaluanÂ \t\tÂ Â Email</b> dipisahkan dengan tab mengikut turutan ini..\t\tPengguna akan menerima email pengesahan beserta ID Pengguna dan Katalaluan.";
 $langUserMany = "Import senarai Pengguna menggunakan fail teks";
 $langOneByOne = "Tambah Pengguna secara manual";
 $langNow = "sekarang";
 $langTutor = "Tutor";
-$langTitular = "Penulis";
-$langAddHereSomeCourses = "<font size=2 face=\'Arial, Helvetica\'><big>Ubahsuai Senarai Subjek</big><br><br>Pilih Subjek yang ingin diikuti.<br>Tanda Subjek yang anda tidak ingin ikuti.<br> Kemudian klik OK pada bahagian bawah senarainya tersebut";
+$langTitular = "Titular";
+$langAddHereSomeCourses = "<font size=2 face='Arial, Helvetica'><big>Ubahsuai Senarai Subjek</big><br><br>Pilih Subjek yang ingin diikuti.<br>Tanda Subjek yang anda tidak ingin ikuti.<br> Kemudian klik OK pada bahagian bawah senarainya tersebut";
 $langStudent = "Pelajar";
 $langAddAU = "Tambah Ahli";
-$langAddedU = "telah ditambah. Email akan dihantar untuk memberikan ID Pengguna kepada Pelajar tersebut ";
+$langAddedU = "telah ditambah. Email akan dihantar untuk memberikan ID Pengguna kepada Pelajar tersebut";
 $langTheU = "Pengguna";
 $langRegYou = "telah mendaftarkan anda untuk mengikuti subjek ini";
 $langOneResp = "Satu daripada Subjek Pentadbir Subjek";
 $langTaken = "telah dugunakan oleh Pengguna lain. Sila pilih ID Pengguna yang lain";
-$langUserNo = "IP Pengguna yang anda pilih ";
+$langUserNo = "IP Pengguna yang anda pilih";
 $langFilled = "Anda telah meninggalkan.";
 $langInC = "dalam subjek ini";
 $langRole = "Peranan";
@@ -57,14 +58,12 @@ $langNowGoCreateYourCourse = "Sekarang anda boleh membina Laman Subjek";
 $langNowGoChooseYourCourses = "Sekarang anda boleh memilih Subjek yang anda ingin ikuti.";
 $langPersonalSettings = "Proses pendaftaran anda berjaya dilaksanakan. Maklumat Login (ID Pengguna & Katalaluan) akan dihantar kepada anda melalui e-mail</p>";
 $langManager = "Pentadbir Sistem";
-$langFormula = "Yang Menjalankan Tugas";
+$langFormula = "Yours sincerely, your professor";
 $langProblem = "Sebarang kesulitan, sila hubungi.";
 $langIs = "ialah";
-$langAddress = "Alamat ";
-$langSettings = "dengan maklumat seperti beriku:
-Username:";
+$langAddress = "Alamat";
+$langSettings = "dengan maklumat seperti beriku:\nUsername:";
 $langYouAreReg = "Anda telah berdaftar pada";
-$langDear = "Terima kasih";
 $langYourReg = "Pendaftaran anda pada";
 $langUserFree = "ID Pengguna telah wujud. Sila daftar dengan ID Pengguna yang lain.";
 $langEmptyFields = "Terdapat ruang kosong yang tidak diisi.Sila penuhkan dan cuba sekali lagi";

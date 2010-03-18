@@ -1,18 +1,19 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$langTool = "Metadata";
-$langClickKw = "Klicka på ett nyckelord i \"trädet\" för att markera eller avmarkera.";
-$langKwHelp = "<br/> Klicka \'+\' knappen för att öppna, \'-\' knappen för att stänga, \'++\' knappen för att öppna allt, \'--\' knappen för att stänga allt.<br/> <br/> Avmarkera alla valda nyckelord genom att stänga \"trädet\" och öppna igen med \'+\' knappen.<br/> Alt-klick \'+\' återväljer tidigare valda nyckelord.<br/> <br/> Alt-klick nyckelord ignorerar nyckelord.<br/>";
-$langAdvanced = "Avancerad";
-$langSearch = "Sök";
-$langSearchCrit = "Använd utrymmet nedan för beskrivning, ett ord per rad!";
+$langTool = "Dokument Metadata";
+$langClickKw = "Klicka pÃ¥ ett nyckelord i trÃ¤det fÃ¶r att vÃ¤lja eller vÃ¤lja bort.";
+$langKwHelp = "<br/> Klicka '+' knappen fÃ¶r att Ã¶ppna, '-' knappen fÃ¶r att stÃ¤nga, '++' knappen fÃ¶r att Ã¶ppna alla, '--' knappen fÃ¶r att stÃ¤nga alla.<br/> <br/> Ta bort alla valda nyckelord genom att  stÃ¤nga trÃ¤det och Ã¶ppna det igen med '+' knappen.<br/> Alt-klick '+' sÃ¶ker original nyckelord i trÃ¤den.<br/> <br/> Alt-click nyckelord vÃ¤ljer ett nyckelord utan bredare sÃ¶kning eller avaktiverar en bredare sÃ¶kning.<br/> <br/>Om du Ã¤ndrar sprÃ¥ket pÃ¥ beskrivningen, lÃ¤gg inte till nya nyckelord pÃ¥ samma gÃ¥ng.<br/> <br/>";
+$langAdvanced = "Skapa";
+$langSearch = "SÃ¶k";
+$langSearchCrit = "Ett ord per rad!";
 $langNoKeywords = "Denna kurs har inget nyckelord";
-$langKwCacheProblem = "Nyckelords \"cache\" kan inte öppnas";
-$langCourseKwds = "kurs nyckelord";
-$langKwdsInMD = "nyckelord som används i MD";
+$langKwCacheProblem = "Nyckelords \"cache\" kan inte Ã¶ppnas";
+$langCourseKwds = "Detta dokument innehï¿½ller kursens nyckelord";
+$langKwdsInMD = "nyckelord som anvÃ¤nds i MD";
 $langKwdRefs = "nyckelords referenser";
 $langNonCourseKwds = "Icke-kurs nyckelord";
-$langKwdsUse = "Kurs nyckelord (fet = ej använd)";
-$langTotalMDEs = "Totalt antal av MD inmatningar:";
+$langKwdsUse = "Kurs nyckelord (fet = ej anvÃ¤nd)";
+$langTotalMDEs = "Sammanlagt antal LÃ¤nkar MD inmatningar";
 ?>

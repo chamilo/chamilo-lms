@@ -34,4 +34,4 @@ FCKLang["DlgMimeTeXAnalysis"]     = "Analysis" ;
 FCKLang["DlgMimeTeXMoreSamples"]  = "More samples" ;
 FCKLang["DlgMimeTeXEditorNotAvailable"] = "The math formula editor is not available." ;
 FCKLang["DlgMimeTeXNotInstalled"] = "The software service MimeTeX has not been installed on your server or it is not accessible." ;
-FCKLang["DlgMimeTeXSeeInstallationManual"] = "To resolve the problem, see the Dokeos LMS %1installation guide%2." ;
+FCKLang["DlgMimeTeXSeeInstallationManual"] = "To resolve the problem, see the Chamilo LMS %1installation guide%2." ;

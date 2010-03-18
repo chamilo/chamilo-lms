@@ -66,10 +66,10 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
 	$from = $page * $limit;
 	//if user is crfp admin only list its sessions
 	if(!api_is_platform_admin()) {
-		$where .= (empty($_REQUEST['keyword']) ? " " : " WHERE name LIKE '%".addslashes($_REQUEST['keyword'])."%'");
+		$where .= (empty($_REQUEST['keyword']) ? " " : " WHERE name LIKE '%".Database::escape_string(trim($_REQUEST['keyword']))."%'");
 	}
 	else {
-		$where .= (empty($_REQUEST['keyword']) ? " " : " WHERE name LIKE '%".addslashes($_REQUEST['keyword'])."%'");
+		$where .= (empty($_REQUEST['keyword']) ? " " : " WHERE name LIKE '%".Database::escape_string(trim($_REQUEST['keyword']))."%'");
 	}
 
 	$query = "SELECT sc.*, (select count(id) FROM $tbl_session WHERE session_category_id = sc.id) as nbr_session
@@ -82,10 +82,10 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
 				FROM $tbl_session_category sc $where ";
 
 	$order = ($order == 'ASC')? 'DESC': 'ASC';
-	$result_rows = Database::query($query_rows,__FILE__,__LINE__);
+	$result_rows = Database::query($query_rows);
 	$recorset = Database::fetch_array($result_rows);
 	$num = $recorset['total_rows'];
-	$result = Database::query($query,__FILE__,__LINE__);
+	$result = Database::query($query);
 	$Sessions = Database::store_result($result);
 	$nbr_results = sizeof($Sessions);
 	$tool_name = get_lang('ListSessionCategory');
@@ -159,7 +159,7 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
 				break;
 			}
 		$sql = 'SELECT COUNT(session_category_id) FROM '.$tbl_session.' WHERE session_category_id = '.intval($enreg['id']);
-		$rs = Database::query($sql, __FILE__, __LINE__);
+		$rs = Database::query($sql);
 		list($nb_courses) = Database::fetch_array($rs);
 		?>
 		<tr class="<?php echo $i?'row_odd':'row_even'; ?>">

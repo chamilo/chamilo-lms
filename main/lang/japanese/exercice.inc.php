@@ -1,36 +1,37 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$langExercice = "±é½¬ÌäÂê";
-$langActivate = "Í­¸ú¤Ë¤¹¤ë";
-$langDeactivate = "Ìµ¸ú²½";
-$langNoEx = "¸½ºß±é½¬ÌäÂê¤Ï¤¢¤ê¤Þ¤»¤ó";
-$langNewEx = "¿·±é½¬ÌäÂê";
-$langQuestion = "Ìä";
-$langAnswers = "Åú¤¨";
-$langTrue = "Àµ²ò";
-$langAnswer = "²óÅú";
-$langResult = "ÅÀ¿ô";
-$langEvalSet = "ÅÀ¿ô¤Î¥»¥Ã¥Æ¥£¥ó¥°";
-$langActive = "Í­¸ú";
-$langInactive = "Ìµ¸ú";
-$langQuestCreate = "Ìä¤ò¤Ä¤¯¤ë";
-$langExRecord = "¿·±é½¬ÌäÂê¤ÏÊÝÂ¸¤µ¤ì¤Þ¤·¤¿";
-$langBackModif = "±é½¬ÌäÂêÊÔ½¸¤Î¤¿¤á¤Ë¡¢¤â¤É¤ë";
-$langDoEx = "ÌäÂê¤ò²ò¤¯";
-$langDefScor = "ÅÀ¿ô¤ÎÄêµÁ";
-$langCreateModif = "Ìä¤ÎºîÀ®¤È½¤Àµ";
-$langSub = "¥µ¥Ö¥¿¥¤¥È¥ë";
+$langExercice = "éæµ†å•¼çŽ›";
+$langActivate = "é“œè·Ÿã«ã™ã‚‹";
+$langDeactivate = "ç—°è·Ÿæ­¥";
+$langNoEx = "é™„å“¼éæµ†å•¼çŽ›ã¯ã‚ã‚Šã¾ã›ã‚“";
+$langNewEx = "ç³ éæµ†å•¼çŽ›";
+$langQuestion = "å•¼";
+$langAnswers = "æ‰¹ãˆ";
+$langTrue = "èµ–è±º";
+$langAnswer = "æ€æ‰¹";
+$langResult = "çˆ¬çœ¶";
+$langEvalSet = "çˆ¬çœ¶ã®ã‚»ãƒƒãƒ†ã‚£ãƒ³ã‚°";
+$langActive = "é“œè·Ÿ";
+$langInactive = "ç—°è·Ÿ";
+$langQuestCreate = "å•¼ã‚’ã¤ãã‚‹";
+$langExRecord = "ç³ éæµ†å•¼çŽ›ã¯ç˜¦èµ‚ã•ã‚Œã¾ã—ãŸ";
+$langBackModif = "éæµ†å•¼çŽ›è¯•ç¤ã®ãŸã‚ã«ã€ã‚‚ã©ã‚‹";
+$langDoEx = "å•¼çŽ›ã‚’è±ºã";
+$langDefScor = "çˆ¬çœ¶ã®å¹´ç›—";
+$langCreateModif = "å•¼ã®ä¾¯å–‡ã¨é¥¯èµ–";
+$langSub = "ã‚µãƒ–ã‚¿ã‚¤ãƒˆãƒ«";
 $langMorA = "+answ.";
 $langLesA = "-answ.";
-$langRecEx = "±é½¬ÌäÂê¤òÊÝÂ¸¤¹¤ë";
-$langRecQu = "Ìä¤òÊÝÂ¸¤¹¤ë";
-$langDoAnEx = "±é½¬ÌäÂê¤ò²ò¤¯";
-$langGenerator = "ÌäÂêºîÀ®¥Ä¡¼¥ë";
-$langChoice = "ÁªÂò";
-$langCorrect = "Àµ²ò";
-$langPossAnsw = "Ìä¤ËÂÐ¤·¤Æ¤ÎÁªÂò²óÅúÍó¿ô";
-$langStudAnsw = "²òÅú¼Ô¤Î´Ö°ã¿ô";
+$langRecEx = "éæµ†å•¼çŽ›ã‚’ç˜¦èµ‚ã™ã‚‹";
+$langRecQu = "å•¼ã‚’ç˜¦èµ‚ã™ã‚‹";
+$langDoAnEx = "éæµ†å•¼çŽ›ã‚’è±ºã";
+$langGenerator = "å•¼çŽ›ä¾¯å–‡ãƒ„ã€–ãƒ«";
+$langChoice = "è”ä¹°";
+$langCorrect = "èµ–è±º";
+$langPossAnsw = "å•¼ã«æ»¦ã—ã¦ã®è”ä¹°æ€æ‰¹è…•çœ¶";
+$langStudAnsw = "è±ºæ‰¹èšã®ç²—èˆ¬çœ¶";
 $langDetermine = "Determine yourself the scoring weight through editing the table below. Click then on \"Ok\"";
 $langNonNumber = "A non numeric value in";
 $langReplaced = "has been introduced. It has been replaced by 0";

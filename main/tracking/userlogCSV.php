@@ -79,7 +79,7 @@ if ($_GET['scormcontopen'])
 	$tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
 	$contopen = (int) $_GET['scormcontopen'];
 	$sql = "SELECT default_encoding FROM $tbl_lp WHERE id = ".$contopen;
-	$res = Database::query($sql,__FILE__,__LINE__);
+	$res = Database::query($sql);
 	$row = Database::fetch_array($res);
 	$lp_charset = $row['default_encoding'];
 	//header('Content-Type: text/html; charset='. $row['default_encoding']);
@@ -138,7 +138,7 @@ if(api_get_setting('use_session_mode') == "true") {
 				OR (date_start='0000-00-00' AND date_end='0000-00-00'))
 			WHERE id_session='".$_SESSION['id_session']."' AND course_code='$_cid'";
 	//echo $sql;
-	$result=Database::query($sql,__FILE__,__LINE__);
+	$result=Database::query($sql);
 	if(!Database::num_rows($result)){
 		$disabled = true;
 	}
@@ -151,291 +151,17 @@ $tbl_learnpath_item_view = Database::get_course_table(TABLE_LP_ITEM_VIEW);
 
 $documentPath=api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';
 
-// the variables for the days and the months
-// Defining the shorts for the days
-// TODO: The function myEnc() should be eliminated. The following arrays should be constructed using the correspondent API-functions in the internationalization library.
-$DaysShort = array (myEnc(get_lang("SundayShort")), myEnc(get_lang("MondayShort")), myEnc(get_lang("TuesdayShort")), myEnc(get_lang("WednesdayShort")), myEnc(get_lang("ThursdayShort")), myEnc(get_lang("FridayShort")), myEnc(get_lang("SaturdayShort")));
-// Defining the days of the week to allow translation of the days
-$DaysLong = array (myEnc(get_lang("SundayLong")), myEnc(get_lang("MondayLong")), myEnc(get_lang("TuesdayLong")), myEnc(get_lang("WednesdayLong")), myEnc(get_lang("ThursdayLong")), myEnc(get_lang("FridayLong")), myEnc(get_lang("SaturdayLong")));
-// Defining the months of the year to allow translation of the months
-$MonthsLong = array (myEnc(get_lang("JanuaryLong")), myEnc(get_lang("FebruaryLong")), myEnc(get_lang("MarchLong")), myEnc(get_lang("AprilLong")), myEnc(get_lang("MayLong")), myEnc(get_lang("JuneLong")), myEnc(get_lang("JulyLong")), myEnc(get_lang("AugustLong")), myEnc(get_lang("SeptemberLong")), myEnc(get_lang("OctoberLong")), myEnc(get_lang("NovemberLong")), myEnc(get_lang("DecemberLong")));
-// Defining the months of the year to allow translation of the months
-$MonthsShort = array (myEnc(get_lang("JanuaryShort")), myEnc(get_lang("FebruaryShort")), myEnc(get_lang("MarchShort")), myEnc(get_lang("AprilShort")), myEnc(get_lang("MayShort")), myEnc(get_lang("JuneShort")), myEnc(get_lang("JulyShort")), myEnc(get_lang("AugustShort")), myEnc(get_lang("SeptemberShort")), myEnc(get_lang("OctoberShort")), myEnc(get_lang("NovemberShort")), myEnc(get_lang("DecemberShort")));
+// The variables for the days and the months
+$DaysShort = api_get_week_days_short();
+$DaysLong = api_get_week_days_long();
+$MonthsLong = api_get_months_long();
+$MonthsShort = api_get_months_short();
 
 //$is_allowedToTrack = $is_groupTutor; // allowed to track only user of one group
 //$is_allowedToTrackEverybodyInCourse = $is_allowed[EDIT_RIGHT]; // allowed to track all students in course
 //YW hack security to fix RolesRights bug
 $is_allowedToTrack = true; // allowed to track only user of one group
 $is_allowedToTrackEverybodyInCourse = $is_allowedToTrack; // allowed to track all students in course
-
-/*
-==============================================================================
-		FUNCTIONS
-==============================================================================
-*/
-
-/**
- * Shortcut function to use htmlentities on many, many strings in this script
- * @param		string	String in a supposed encoding
- * @param		string	Supposed initial encoding (default: 'ISO-8859-15')
- * @return	string	HTML string (no encoding dependency)
- * @author Yannick Warnier <yannick.warnier@dokeos.com>
- */
-function myEnc($isostring,$supposed_encoding='ISO-8859-15')
-{
-	return api_htmlentities($isostring,ENT_QUOTES,$supposed_encoding);
-}
-
-/**
-* Displays the number of logins every month for a specific user in a specific course.
-*/
-function display_login_tracking_info($view, $user_id, $course_id)
-{
-	$MonthsLong = $GLOBALS['MonthsLong'];
-	$track_access_table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ACCESS);
-	$tempView = $view;
-	if(substr($view,0,1) == '1')
-	{
-		$new_view = substr_replace($view,'0',0,1);
-		$title[1]= myEnc(get_lang('LoginsAndAccessTools')).myEnc(get_lang('LoginsDetails'));
-
-		$sql = "SELECT UNIX_TIMESTAMP(`access_date`), count(`access_date`)
-					FROM $track_access_table
-					WHERE `access_user_id` = '$user_id'
-					AND `access_cours_code` = '".$course_id."'
-					GROUP BY YEAR(`access_date`),MONTH(`access_date`)
-					ORDER BY YEAR(`access_date`),MONTH(`access_date`) ASC";
-
-		//$results = getManyResults2Col($sql);
-		$results = getManyResults3Col($sql);
-
-		$title_line= myEnc(get_lang('LoginsTitleMonthColumn')).';'.myEnc(get_lang('LoginsTitleCountColumn'))."\n";
-		$line='';
-		$total = 0;
-		if (is_array($results))
-		{
-			for($j = 0 ; $j < count($results) ; $j++)
-			{
-				$line .= $results[$j][0].';'.$results[$j][1]."\n";
-				$total = $total + $results[$j][1];
-			}
-		$line .= myEnc(get_lang('Total')).";".$total."\n";
-		}
-		else
-		{
-			$line= myEnc(get_lang('NoResult'))."</center></td>";
-		}
-	}
-	else
-	{
-		$new_view = substr_replace($view,'1',0,1);
-	}
-	return array($title_line, $line);
-}
-
-/**
-* Displays the exercise results for a specific user in a specific course.
-* @todo remove globals
-*/
-function display_exercise_tracking_info($view, $user_id, $course_id)
-{
-	global $TABLECOURSE_EXERCICES, $TABLETRACK_EXERCICES, $TABLETRACK_HOTPOTATOES;
-	if(substr($view,1,1) == '1')
-	{
-		$new_view = substr_replace($view,'0',1,1);
-
-		$title[1]= myEnc(get_lang('ExercicesDetails'));
-		$line='';
-
-		$sql = "SELECT `ce`.`title`, `te`.`exe_result` , `te`.`exe_weighting`, UNIX_TIMESTAMP(`te`.`exe_date`)
-			FROM $TABLECOURSE_EXERCICES AS ce , `$TABLETRACK_EXERCICES` AS `te`
-			WHERE `te`.`exe_cours_id` = '$course_id'
-				AND `te`.`exe_user_id` = '$user_id'
-				AND `te`.`exe_exo_id` = `ce`.`id`
-			ORDER BY `ce`.`title` ASC, `te`.`exe_date` ASC";
-
-		$hpsql = "SELECT `te`.`exe_name`, `te`.`exe_result` , `te`.`exe_weighting`, UNIX_TIMESTAMP(`te`.`exe_date`)
-			FROM `$TABLETRACK_HOTPOTATOES` AS te
-			WHERE `te`.`exe_user_id` = '$user_id' AND `te`.`exe_cours_id` = '$course_id'
-			ORDER BY `te`.`exe_cours_id` ASC, `te`.`exe_date` ASC";
-
-		$hpresults = getManyResultsXCol($hpsql, 4);
-
-		$NoTestRes = 0;
-		$NoHPTestRes = 0;
-
-		$results = getManyResultsXCol($sql, 4);
-		$title_line=myEnc(get_lang('ExercicesTitleExerciceColumn')).";".myEnc(get_lang('Date')).';'.myEnc(get_lang('ExercicesTitleScoreColumn'))."\n";
-
-		if (is_array($results))
-		{
-			for($i = 0; $i < sizeof($results); $i++)
-			{
-				$display_date = format_locale_date(get_lang('dateTimeFormatLong'), $results[$i][3]);
-				$line .= $results[$i][0].";".$display_date.";".$results[$i][1]." / ".$results[$i][2]."\n";
-			}
-		}
-		else // istvan begin
-		{
-			$NoTestRes = 1;
-		}
-
-		// The Result of Tests
-		if(is_array($hpresults))
-		{
-			for($i = 0; $i < sizeof($hpresults); $i++)
-			{
-				$title = GetQuizName($hpresults[$i][0],'');
-
-				if ($title == '')
-					$title = basename($hpresults[$i][0]);
-
-				$display_date = format_locale_date(get_lang('dateTimeFormatLong'), $hpresults[$i][3]);
-				$line .= $title.';'.$display_date.';'.$hpresults[$i][1].'/'.$hpresults[$i][2]."\n";
-			}
-		}
-		else
-		{
-			$NoHPTestRes = 1;
-		}
-
-		if ($NoTestRes == 1 && $NoHPTestRes == 1)
-		{
-			$line=get_lang('NoResult');
-		}
-	}
-	else
-	{
-		$new_view = substr_replace($view,'1',1,1);
-
-	}
-	return array($title_line, $line);
-}
-
-/**
-* Displays the student publications for a specific user in a specific course.
-* @todo remove globals
-*/
-function display_student_publications_tracking_info($view, $user_id, $course_id)
-{
-	global $TABLETRACK_UPLOADS, $TABLECOURSE_WORK, $dateTimeFormatLong;
-	if(substr($view,2,1) == '1')
-	{
-		$new_view = substr_replace($view,'0',2,1);
-		$sql = "SELECT `u`.`upload_date`, `w`.`title`, `w`.`author`,`w`.`url`
-				FROM `$TABLETRACK_UPLOADS` `u` , $TABLECOURSE_WORK `w`
-				WHERE `u`.`upload_work_id` = `w`.`id`
-					AND `u`.`upload_user_id` = '$user_id'
-					AND `u`.`upload_cours_id` = '$course_id'
-				ORDER BY `u`.`upload_date` DESC";
-		$results = getManyResultsXCol($sql,4);
-
-		$title[1]=myEnc(get_lang('WorksDetails'));
-		$line='';
-		$title_line=myEnc(get_lang('WorkTitle')).";".myEnc(get_lang('WorkAuthors')).";".myEnc(get_lang('Date'))."\n";
-
-		if (is_array($results))
-		{
-			for($j = 0 ; $j < count($results) ; $j++)
-			{
-				$pathToFile = api_get_path(WEB_COURSE_PATH).$_course['path']."/".$results[$j][3];
-				$timestamp = strtotime($results[$j][0]);
-				$beautifulDate = format_locale_date($dateTimeFormatLong,$timestamp);
-				$line .= $results[$j][1].";".$results[$j][2].";".$beautifulDate."\n";
-			}
-
-		}
-		else
-		{
-			$line= myEnc(get_lang('NoResult'));
-		}
-	}
-	else
-	{
-		$new_view = substr_replace($view,'1',2,1);
-	}
-	return array($title_line, $line);
-}
-
-/**
-* Displays the links followed for a specific user in a specific course.
-* @todo remove globals
-*/
-function display_links_tracking_info($view, $user_id, $course_id)
-{
-	global $TABLETRACK_LINKS, $TABLECOURSE_LINKS;
-	if(substr($view,3,1) == '1')
-	{
-		$new_view = substr_replace($view,'0',3,1);
-		$title[1]=myEnc(get_lang('LinksDetails'));
-		$sql = "SELECT `cl`.`title`, `cl`.`url`
-					FROM `$TABLETRACK_LINKS` AS sl, $TABLECOURSE_LINKS AS cl
-					WHERE `sl`.`links_link_id` = `cl`.`id`
-						AND `sl`.`links_cours_id` = '$course_id'
-						AND `sl`.`links_user_id` = '$user_id'
-					GROUP BY `cl`.`title`, `cl`.`url`";
-		$results = getManyResults2Col($sql);
-		$title_line= myEnc(get_lang('LinksTitleLinkColumn'))."\n";
-		if (is_array($results))
-		{
-			for($j = 0 ; $j < count($results) ; $j++)
-			{
-					$line .= $results[$j][0]."\n";
-
-			}
-
-		}
-		else
-		{
-			$line=myEnc(get_lang('NoResult'));
-		}
-	}
-	else
-	{
-		$new_view = substr_replace($view,'1',3,1);
-	}
-	return array($title_line, $line);
-}
-
-/**
-* Displays the documents downloaded for a specific user in a specific course.
-*/
-function display_document_tracking_info($view, $user_id, $course_id)
-{
-	$downloads_table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_DOWNLOADS);
-	if(substr($view,4,1) == '1')
-	{
-		$new_view = substr_replace($view,'0',4,1);
-		$title[1]= myEnc(get_lang('DocumentsDetails'));
-
-		$sql = "SELECT `down_doc_path`
-					FROM $downloads_table
-					WHERE `down_cours_id` = '$course_id'
-						AND `down_user_id` = '$user_id'
-					GROUP BY `down_doc_path`";
-
-		$results = getManyResults1Col($sql);
-		$title_line = myEnc(get_lang('DocumentsTitleDocumentColumn'))."\n";
-		if (is_array($results))
-		{
-			for($j = 0 ; $j < count($results) ; $j++)
-			{
-					$line .= $results[$j]."\n";
-			}
-
-		}
-		else
-		{
-			$line=myEnc(get_lang('NoResult'));
-		}
-	}
-	else
-	{
-		$new_view = substr_replace($view,'1',4,1);
-	}
-	return array($title_line, $line);
-}
-
 
 /*
 ==============================================================================
@@ -464,7 +190,7 @@ if( ( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse ) && $_configura
 			if(api_get_setting('use_session_mode')) {
 				$sql = "SELECT count(user_id)
 							FROM $TABLECOURSUSER
-							WHERE `course_code` = '$_cid'";
+							WHERE `course_code` = '$_cid' AND relation_type<>".COURSE_RELATION_TYPE_RRHH."";
 			}
 			else {
 				$sql = "SELECT count(id_user)
@@ -516,7 +242,7 @@ if( ( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse ) && $_configura
 			// list of users in this course
 			$sql = "SELECT `u`.`user_id`, `u`.`firstname`,`u`.`lastname`
 						FROM $TABLECOURSUSER cu , $TABLEUSER u
-						WHERE `cu`.`user_id` = `u`.`user_id`
+						WHERE `cu`.`user_id` = `u`.`user_id` AND cu.relation_type<>".COURSE_RELATION_TYPE_RRHH."
 							AND `cu`.`course_code` = '$_cid'
 						LIMIT $offset,$step";
 		}
@@ -559,8 +285,8 @@ if( ( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse ) && $_configura
 						WHERE `gu`.`user_id` = `u`.`user_id`
 							AND `gu`.`group_id` = '$_gid'
 							AND `u`.`user_id` = '$uInfo'";
-			$query = Database::query($sql,__FILE__,__LINE__);
-			$tracked_user_info = @mysql_fetch_assoc($query);
+			$query = Database::query($sql);
+			$tracked_user_info = @Database::fetch_assoc($query);
 			if(is_array($tracked_user_info)) $tracking_is_accepted = true;
 
        		$title[0] = $tracked_user_info['firstname'].'_'.$tracked_user_info['lastname'];
@@ -568,33 +294,33 @@ if( ( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse ) && $_configura
 
 		if ($tracking_is_accepted)
 		{
-			$tracked_user_info['email'] == '' ? $mail_link = myEnc(get_lang('NoEmail')) : $mail_link = Display::encrypted_mailto_link($tracked_user_info['email']);
+			$tracked_user_info['email'] == '' ? $mail_link = get_lang('NoEmail') : $mail_link = Display::encrypted_mailto_link($tracked_user_info['email']);
 
 			if(!isset($view))
 			{
 				$view ='0000000';
 			}
 			//Logins
-			list($title_line1, $line1) = display_login_tracking_info($view, $uInfo, $_cid);
+			list($title_line1, $line1) = TrackingUserLogCSV::display_login_tracking_info($view, $uInfo, $_cid);
 
 			//Exercise results
-			list($title_line2, $line2) = display_exercise_tracking_info($view, $uInfo, $_cid);
+			list($title_line2, $line2) = TrackingUserLogCSV::display_exercise_tracking_info($view, $uInfo, $_cid);
 
 			//Student publications uploaded
-			list($title_line3, $line3) = display_student_publications_tracking_info($view, $uInfo, $_cid);
+			list($title_line3, $line3) = TrackingUserLogCSV::display_student_publications_tracking_info($view, $uInfo, $_cid);
 
 			//Links usage
-			list($title_line4, $line4) = display_links_tracking_info($view, $uInfo, $_cid);
+			list($title_line4, $line4) = TrackingUserLogCSV::display_links_tracking_info($view, $uInfo, $_cid);
 
 			//Documents downloaded
-			list($title_line5, $line5) = display_document_tracking_info($view, $uInfo, $_cid);
+			list($title_line5, $line5) = TrackingUserLogCSV::display_document_tracking_info($view, $uInfo, $_cid);
 
 			$title_line = $title_line1.$title_line2.$title_line3.$title_line4.$title_line5;
 			$line= $line1.$line2.$line3.$line4.$line5;
 		}
 		else
 		{
-			echo myEnc(get_lang('ErrorUserNotInGroup'));
+			echo get_lang('ErrorUserNotInGroup');
 		}
 
 
@@ -607,10 +333,10 @@ if( ( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse ) && $_configura
         /*if(substr($view,5,1) == '1')
         {
             $new_view = substr_replace($view,'0',5,1);
-            $title[1]=myEnc(get_lang('ScormContentColumn'));
+            $title[1]=get_lang('ScormContentColumn');
 			$line ='';
             $sql = "SELECT id, name FROM $tbl_learnpath_main";
-    		$result=Database::query($sql,__FILE__,__LINE__);
+    		$result=Database::query($sql);
     	    $ar=Database::fetch_array($result);
 
           if (is_array($ar))
@@ -627,10 +353,10 @@ if( ( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse ) && $_configura
 									"INNER JOIN $tbl_learnpath_item_view iv ON i.id=iv.lp_item_id " .
 									"INNER JOIN $tbl_learnpath_view v ON iv.lp_view_id=v.id " .
 									"WHERE (v.user_id=$uInfo and v.lp_id=$contentId) ORDER BY v.id, i.id";
-   							$result3=Database::query($sql3,__FILE__,__LINE__);
+   							$result3=Database::query($sql3);
    						    $ar3=Database::fetch_array($result3);
                             if (is_array($ar3)) {
-                                $title_line=myEnc(get_lang('ScormTitleColumn')).";".myEnc(get_lang('ScormStatusColumn')).";".myEnc(get_lang('ScormScoreColumn')).";".myEnc(get_lang('ScormTimeColumn'))."\n";
+                                $title_line=get_lang('ScormTitleColumn').";".get_lang('ScormStatusColumn').";".get_lang('ScormScoreColumn').";".get_lang('ScormTimeColumn')."\n";
 
        							while ($ar3['status'] != '') {
 									require_once('../newscorm/learnpathItem.class.php');
@@ -640,7 +366,7 @@ if( ( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse ) && $_configura
        								$ar3=Database::fetch_array($result3);
        							}
                             } else {
-                                $line .= myEnc(get_lang('ScormNeverOpened'));
+                                $line .= get_lang('ScormNeverOpened');
                             }
    					}
 		    		$ar=Database::fetch_array($result);
@@ -653,7 +379,7 @@ if( ( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse ) && $_configura
             }
 
 			if ($noscorm) {
-                $line=myEnc(get_lang('NoResult'));
+                $line=get_lang('NoResult');
 			}
          }
         else
@@ -701,7 +427,7 @@ else
 {
     if(!$_configuration['tracking_enabled'])
     {
-        echo myEnc(get_lang('TrackingDisabled'));
+        echo get_lang('TrackingDisabled');
     }
     else
     {

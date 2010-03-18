@@ -1,29 +1,10 @@
 <?php
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2009 Dokeos SPRL
-	Copyright (c) 2009 Julio Montoya Armas <gugli100@gmail.com>
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium, info@dokeos.com
-==============================================================================
-*/
+/* For licensing terms, see /license.txt */
 /**
-==============================================================================
-*	@package dokeos.admin
-==============================================================================
+*	@package chamilo.admin
+*	@author Julio Montoya <gugli100@gmail.com>
 */
+
 
 // name of the language file that needs to be included
 $language_file='admin';
@@ -32,8 +13,7 @@ $language_file='admin';
 $cidReset=true;
 
 // including some necessary dokeos files
-require('../inc/global.inc.php');
-
+require_once '../inc/global.inc.php';
 require_once (api_get_path(LIBRARY_PATH).'urlmanager.lib.php');
 require_once ('../inc/lib/xajax/xajax.inc.php');
 $xajax = new xajax();
@@ -45,8 +25,10 @@ $this_section = SECTION_PLATFORM_ADMIN;
 
 // Access restrictions
 api_protect_admin_script();
-if (!$_configuration['multiple_access_urls'])
+if (!$_configuration['multiple_access_urls']) {
 	header('Location: index.php');
+	exit;
+}
 
 
 // Database Table Definitions
@@ -67,42 +49,6 @@ if(isset($_REQUEST['add_type']) && $_REQUEST['add_type']!=''){
 $access_url_id=1;
 if(isset($_REQUEST['access_url_id']) && $_REQUEST['access_url_id']!=''){
 	$access_url_id = Security::remove_XSS($_REQUEST['access_url_id']);
-}
-
-function search_users($needle, $id)
-{
-	global $tbl_user, $tbl_access_url_rel_user;
-	$xajax_response = new XajaxResponse();
-	$return = '';
-
-	if(!empty($needle)) {
-		// xajax send utf8 datas... datas in db can be non-utf8 datas
-		$charset = api_get_setting('platform_charset');
-		$needle = api_convert_encoding($needle, $charset, 'utf-8');
-		$needle = Database::escape_string($needle);
-		// search users where username or firstname or lastname begins likes $needle
-		$order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname, username' : ' ORDER BY lastname, firstname, username';
-		$sql = 'SELECT u.user_id, username, lastname, firstname FROM '.$tbl_user.' u
-				WHERE (username LIKE "'.$needle.'%"
-				OR firstname LIKE "'.$needle.'%"
-				OR lastname LIKE "'.$needle.'%")'.
-				$order_clause.
-				' LIMIT 11';
-
-		$rs = Database::query($sql, __FILE__, __LINE__);
-        $i=0;
-
-		while ($user = Database :: fetch_array($rs)) {
-			$i++;
-            if ($i<=10) {
-			    $return .= '<a href="javascript: void(0);" onclick="javascript: add_user_to_url(\''.addslashes($user['user_id']).'\',\''.api_get_person_name(addslashes($user['firstname']), addslashes($user['lastname'])).' ('.addslashes($user['username']).')'.'\')">'.api_get_person_name($user['firstname'], $user['lastname']).' ('.$user['username'].')</a><br />';
-            } else {
-            	$return .= '...<br />';
-            }
-		}
-	}
-	$xajax_response -> addAssign('ajax_list_users','innerHTML',api_utf8_encode($return));
-	return $xajax_response;
 }
 
 $xajax -> processRequests();
@@ -193,9 +139,9 @@ if($ajax_search) {
 	}
 	$order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname, username' : ' ORDER BY lastname, firstname, username';
 	$sql="SELECT u.user_id, lastname, firstname, username
-	  	  	FROM $tbl_user u".
+	  	  	FROM $tbl_user u WHERE status <> ".ANONYMOUS." ".
 			$order_clause;
-	$result=Database::query($sql,__FILE__,__LINE__);
+	$result=Database::query($sql);
 	$Users=Database::store_result($result);
 	$user_list_leys = array_keys($sessionUsersList);
 	foreach($Users as $user) {

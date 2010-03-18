@@ -1,23 +1,24 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $select = "Seleccionar";
-$square = "Rectángulo";
+$square = "RectÃ¡ngulo";
 $circle = "Elipse";
-$poly = "Polígono";
+$poly = "PolÃ­gono";
 $status1 = "Debuxar un hotspot.";
-$status2_poly = "Use o botón dereito do rato para pechar o polígono.";
-$status2_other = "Solte o botón do rato para gardar o hotspot.";
+$status2_poly = "Use o botÃ³n dereito do rato para pechar o polÃ­gono.";
+$status2_other = "Solte o botÃ³n do rato para gardar o hotspot.";
 $status3 = "Hotspot gardado";
-$exercise_status_1 = "Estatus: Pregunta aínda sen terminar";
-$exercise_status_2 = "Pulse aquí para enviar as súas respostas á pregunta";
+$exercise_status_1 = "Estatus: Pregunta aÃ­nda sen terminar";
+$exercise_status_2 = "Pulse aquÃ­ para enviar as sÃºas respostas Ã¡ pregunta";
 $exercise_status_3 = "Estatus: Pregunta terminada";
 $showUserPoints = "Mostrar/Ocultar os clics";
 $showHotspots = "Mostrar/Ocultar hotspots";
-$labelPolyMenu = " 	Pechar polígono";
+$labelPolyMenu = " \tPechar polÃ­gono";
 $triesleft = "Intentos restantes";
-$exeFinished = "Identificáronse todas as respostas. Agora pode reasignar as súas respostas ou pulsar para enviar.";
+$exeFinished = "IdentificÃ¡ronse todas as respostas. Agora pode reasignar as sÃºas respostas ou pulsar para enviar.";
 $nextAnswer = "Agora faga clic en: &done=done";
-$delineation = "Delimitación";
-$labelDelineationMenu = "Cerrar delimitación";
+$delineation = "DelimitaciÃ³n";
+$labelDelineationMenu = "Cerrar delimitaciÃ³n";
 ?>

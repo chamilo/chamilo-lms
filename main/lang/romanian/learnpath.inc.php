@@ -1,15 +1,16 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $NewForumCreated = "Noul forum este facut";
 $NewThreadCreated = "Un nou forum thread a fost creat.";
-$LearnPathAddedTitle = "Bine ai venit in cursul Dokeos";
-$BuildComment  = "Adauga obiecte si activitati la curs";
+$LearnPathAddedTitle = "Bine ai venit in cursul Chamilo";
+$BuildComment = "Adauga obiecte si activitati la curs";
 $BasicOverviewComment = "Adauga comentarii audio si schimba ordinea pasilor.";
 $DisplayComment = "Arata cursurile din punctul de vedere al cursistului";
 $NewChapterComment = "Capitolul 1, Capitolul 2 al saptamanii 1, saptamanii 2, ...";
 $NewStepComment = "faceti cursul pas cu pas cu documente, exercitii, activitati si faceti folosinta de sabloane, mascote si galerii media";
-$lang_learning_path = "Calea�de Invatare";
+$lang_learning_path = "Calea de Invatare";
 $lang_learning_path_builder = "Creator Cale de Invatare";
 $lang_description = "descriere";
 $lang_title = "titlu";
@@ -55,7 +56,7 @@ $lang_no_published = "ne publicat";
 $lang_published = "publicat";
 $lang_add_learnpath_module = "Adauga un modul nou";
 $lang_add_learnpath_chapter_to_path = "Adauga un modul nou la aceasta cale de invatare";
-$lang_learnpath_module_added = "Noua cale de invatare a fost creata cu succes. Acum �i poti adauga pasi apasand pe +.";
+$lang_learnpath_module_added = "Noua cale de invatare a fost creata cu succes. Acum îi poti adauga pasi apasand pe +.";
 $lang_edit_learnpath_module = "Editeaza descrierea/titlul modulului";
 $lang_delete_learnpath_module = "Sterge modulul";
 $lang_learnpath_module_edited = "Modulul cai de invatare a fost editat cu succes.";
@@ -126,7 +127,7 @@ $langPrereqTestLimitNow = "Acuma ai :";
 $langLearnpathExitFullScreen = "inapoi la ecran normal";
 $langLearnpathFullScreen = "ecran plin";
 $langItemMissing1 = "A fost o";
-$langItemMissing2 = "pagina (pas) aici in Calea de Invatare originala Dokeos.";
+$langItemMissing2 = "pagina (pas) aici in Calea de Invatare originala Chamilo.";
 $langDone = "Gata";
 $langNoItemSelected = "Pentru a afisa ceva aici, te rog alege un obiect din  meniu";
 $langNewDocumentCreated = "Noul document a fost creat.";
@@ -147,8 +148,8 @@ $langLPCreatedToContinue = "Pentru a continua puteti adauga un modul, capitol sa
 $langLPCreatedAddChapterStep = "Puteti adauga un modul, capitol sau pas caii de invatare din meniul din partea dreapta.";
 $langPrerequisitesAdded = "Cerintele premergatoare ale pasului curent au fost adaugate.";
 $langAddEditPrerequisites = "Adauga/modifica cerinte premergatoare";
-$langMinimum = "Minim";
-$langMaximum = "Maxim";
+$langMinimum = "minim";
+$langMaximum = "maxim";
 $langNoDocuments = "Nu sunt documente";
 $langNoExercisesAvailable = "Niciun exercitiu disponibil";
 $langNoLinksAvailable = "Nici o legatura disponibila";
@@ -156,7 +157,7 @@ $langNoItemsInLp = "Nu exista obiecte in calea de invatare in acest moment. Apas
 $FirstPosition = "Primul loc";
 $NewQuiz = "Test nou";
 $CreateTheForum = "Creeaza un forum";
-$AddLpIntro = "  <strong> Bine ati venit </ strong> pe cursul Dokeos. <br> Ai invatat pas cu pas cum sa creezi un curs. Structura de cursului va aparea intr-un meniu pe partea stanga a ferestrei. ";
+$AddLpIntro = "  <strong> Bine ati venit </ strong> pe cursul Chamilo. <br> Ai invatat pas cu pas cum sa creezi un curs. Structura de cursului va aparea intr-un meniu pe partea stanga a ferestrei.";
 $AddLpToStart = "Pentru inceput, dati un titlu cursului";
 $CreateTheLink = "Creaza un link";
 $MoveCurrentLink = "Muta acest link";
@@ -176,8 +177,8 @@ $CreateANewLink = "Creaza un nou link";
 $CreateANewForum = "Creeaza un forum nou";
 $LinkAdd = "Adauga link";
 $WoogieConversionPowerPoint = "Woogie: conversie Word";
-$WelcomeWoogieSubtitle = "Converteste un curs Word ";
-$WelcomeWoogieConverter = "Bine ati venit la Woogie convertoare <ul type=\\\"1\\\"> <li> Alege&#355;i .doc,. sxw sau . odt fisier in <li> Actualizeaza in Woogie. Acesta este convertit intr-un curs <li> Apoi puteti adauga comentariu audio pentru fiecare pagina si veti putea testa si alte activitati intre pagini </ ul>";
+$WelcomeWoogieSubtitle = "Converteste un curs Word";
+$WelcomeWoogieConverter = "Bine ati venit la Woogie convertoare <ul type=\"1\"> <li> Alegeţi .doc,. sxw sau . odt fisier in <li> Actualizeaza in Woogie. Acesta este convertit intr-un curs <li> Apoi puteti adauga comentariu audio pentru fiecare pagina si veti putea testa si alte activitati intre pagini </ ul>";
 $WoogieError = "Eroare in timpul conversiei intr-un document Word. Controlati daca nu sunt semne speciale in numele documentului";
 $WordConvert = "Coversie in MS Word";
 $Order = "Ordinea";
@@ -196,12 +197,12 @@ $OogieUnknownError = "Conversiunea nu s-a produs datorita unui motiv necunoscut.
 $OogieBadExtension = "Va rugam actualizati doar o prezentatie. Numele documentelor trebuie sa se termine in .ppt sau .odp";
 $WoogieBadExtension = "Va rugam sa incarcati doar fisiere text. Fisierul trebuie sa se termine cu. Doc,. Docx sau. Odt";
 $ShowAudioRecorder = "Introduceti inregistrare audio din nou.";
-$SearchFeatureNotEnabledComment = "Full-text nu este activat in Dokeos. Va rugam sa luati contact cu administratorul Dokeos.";
+$SearchFeatureNotEnabledComment = "Full-text nu este activat in Chamilo. Va rugam sa luati contact cu administratorul Chamilo.";
 $UpdateAllAudioFragments = "Adauga fragment sonor";
-$SaveAudio = "Salveaz&#259; ";
+$SaveAudio = "Salvează";
 $ImagePreview = "Previzualizeaza imagine";
-$UplAlreadyExists = "Documentul exista deja";
-$UplUnableToSaveFile = "Nu este posibil sa pastrati acest document";
+$UplAlreadyExists = "deja exista.";
+$UplUnableToSaveFile = "Fiserul de transferat nu a putut fi salvat(poate o problema de permisie?)";
 $MoveDocument = "Muta documentul";
 $EditLPSettings = "Modifica setarile cursului";
 $SaveLPSettings = "Salveaza setarile cursului";
@@ -210,7 +211,7 @@ $HideAllAttempts = "Ascunde toate incercarile";
 $ShowAllAttemptsByExercise = "Arata toate incercarile";
 $ShowAttempt = "Arata incercarile";
 $ShowAndQualifyAttempt = "Arata si evalueaza incercarea";
-$langAddEdit = "Adauga / Modifica";
+$langAddEdit = "Adauga/modifica";
 $SaveSection = "Salveaza sectia";
 $AddLinkToCourse = "Adauga un link cursului";
 $AddAssignmentToCourse = "Adauga o sarcina la curs";

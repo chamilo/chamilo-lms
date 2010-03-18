@@ -32,14 +32,14 @@ $coursePath = $_course['path'];
 
 // Query db for answers
 $sql = "SELECT id, answer, hotspot_coordinates, hotspot_type, ponderation FROM $TBL_ANSWERS WHERE question_id = '".Database::escape_string($questionId)."' ORDER BY id";
-$result = Database::query($sql,__FILE__,__LINE__);
+$result = Database::query($sql);
 
 // Init
 $output = "hotspot_lang=$courseLang&hotspot_image=$pictureName&hotspot_image_width=$pictureWidth&hotspot_image_height=$pictureHeight&courseCode=$coursePath";
 $i = 0;
 $nmbrTries = 0;
 
-while ($hotspot = mysql_fetch_assoc($result))
+while ($hotspot = Database::fetch_assoc($result))
 {
    	$output .= "&hotspot_".$hotspot['id']."=true";
 	$output .= "&hotspot_".$hotspot['id']."_answer=".str_replace('&','{amp}',$hotspot['answer']);

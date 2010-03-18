@@ -7,10 +7,11 @@
  * @author: Diego Escalante Urrelo <diegoe@gmail.com>
  * @author: Marco Antonio Villegas Vega <marvil07@gmail.com>
  */
+require_once api_get_path(LIBRARY_PATH).'sortabletable.class.php';
 require api_get_path(LIBRARY_PATH).'search/search_widget.php';
 require api_get_path(LIBRARY_PATH).'search/DokeosQuery.php';
 require_once api_get_path(LIBRARY_PATH).'search/IndexableChunk.class.php';
-require_once api_get_path(LIBRARY_PATH).'/specific_fields_manager.lib.php';
+require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';
 
 $htmlHeadXtra[] = '<link rel="stylesheet" type="text/css" href="'. api_get_path(WEB_PATH) .'main/newscorm/lp_list_search.css" />';
 event_access_tool(TOOL_SEARCH);
@@ -22,7 +23,7 @@ if (isset($_SESSION['gradebook'])){
 if (!empty($gradebook) && $gradebook=='view') {
 	$interbreadcrumb[]= array (
 			'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
-			'name' => get_lang('Gradebook')
+			'name' => get_lang('ToolGradebook')
 		);
 }
 

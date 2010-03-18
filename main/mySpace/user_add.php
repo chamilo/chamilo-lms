@@ -1,31 +1,12 @@
-<?php // $Id: user_add.php 15105 2008-04-25 08:38:20Z elixir_inter $
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2008 Dokeos SPRL
-	Copyright (c) 2009 Julio Montoya Armas <gugli100@gmail.com>
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact: Dokeos, rue du Corbeau, 108, B-1000 Brussels, Belgium, info@dokeos.com
-==============================================================================
-*/
+<?php
+/* For licensing terms, see /license.txt */
 
 // name of the language file that needs to be included
 $language_file = array('admin', 'registration');
 $cidReset = true;
 
 // including necessary libraries
-require '../inc/global.inc.php';
+require_once '../inc/global.inc.php';
 $libpath = api_get_path(LIBRARY_PATH);
 require_once $libpath.'fileManage.lib.php';
 require_once $libpath.'fileUpload.lib.php';
@@ -175,7 +156,7 @@ if (api_is_session_admin()) {
 	$where .= ' AND ( (session.date_start <= CURDATE() AND session.date_end >= CURDATE()) OR session.date_start="0000-00-00" ) ';
 	$tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
 	$sql="SELECT id,name,nbr_courses,date_start,date_end FROM $tbl_session $where ORDER BY name";
-	$result = Database::query($sql,__FILE__,__LINE__);
+	$result = Database::query($sql);
 	$a_sessions = Database::store_result($result);
 	$session_list = array();
 	$session_list[0] = get_lang('SelectSession');
@@ -280,11 +261,7 @@ if ($form->validate()) {
 		$picture_uri = '';
 		if (strlen($picture['name']) > 0) {
 			if (!is_dir(api_get_path(SYS_CODE_PATH).'upload/users/')) {
-				if (mkdir(api_get_path(SYS_CODE_PATH).'upload/users/')) {
-					$perm = api_get_setting('permissions_for_new_directories');
-					$perm = octdec(!empty($perm) ? $perm : '0770');
-					chmod(api_get_path(SYS_CODE_PATH).'upload/users/');
-				}
+				mkdir(api_get_path(SYS_CODE_PATH).'upload/users/', api_get_permissions_for_new_directories());
 			}
 			$picture_uri = uniqid('').'_'.replace_dangerous_char($picture['name']);
 			$picture_location = api_get_path(SYS_CODE_PATH).'upload/users/'.$picture_uri;
@@ -328,7 +305,7 @@ if ($form->validate()) {
 
 			$id_session = $user['session_id'];
 			if ($id_session != 0) {
-				$result = Database::query("SELECT course_code FROM $tbl_session_rel_course WHERE id_session='$id_session'",__FILE__,__LINE__);
+				$result = Database::query("SELECT course_code FROM $tbl_session_rel_course WHERE id_session='$id_session'");
 
 				$CourseList=array();
 				while ($row = Database::fetch_array($result)) {
@@ -336,21 +313,21 @@ if ($form->validate()) {
 				}
 
 				foreach ($CourseList as $enreg_course) {
-					Database::query("INSERT INTO $tbl_session_rel_course_rel_user(id_session,course_code,id_user) VALUES('$id_session','$enreg_course','$user_id')",__FILE__,__LINE__);
+					Database::query("INSERT INTO $tbl_session_rel_course_rel_user(id_session,course_code,id_user) VALUES('$id_session','$enreg_course','$user_id')");
 					// updating the total
 					$sql = "SELECT COUNT(id_user) as nbUsers FROM $tbl_session_rel_course_rel_user WHERE id_session='$id_session' AND course_code='$enreg_course'";
-					$rs = Database::query($sql, __FILE__, __LINE__);
+					$rs = Database::query($sql);
 					list($nbr_users) = Database::fetch_array($rs);
-					Database::query("UPDATE $tbl_session_rel_course SET nbr_users=$nbr_users WHERE id_session='$id_session' AND course_code='$enreg_course'",__FILE__,__LINE__);
+					Database::query("UPDATE $tbl_session_rel_course SET nbr_users=$nbr_users WHERE id_session='$id_session' AND course_code='$enreg_course'");
 				}
 
-				Database::query("INSERT INTO $tbl_session_rel_user(id_session, id_user) VALUES('$id_session','$user_id')", __FILE__, __LINE__);
+				Database::query("INSERT INTO $tbl_session_rel_user(id_session, id_user) VALUES('$id_session','$user_id')");
 
 				$sql = "SELECT COUNT(nbr_users) as nbUsers FROM $tbl_session WHERE id='$id_session' ";
-				$rs = Database::query($sql, __FILE__, __LINE__);
+				$rs = Database::query($sql);
 				list($nbr_users) = Database::fetch_array($rs);
 
-				Database::query("UPDATE $tbl_session SET nbr_users= $nbr_users WHERE id='$id_session' ", __FILE__, __LINE__);
+				Database::query("UPDATE $tbl_session SET nbr_users= $nbr_users WHERE id='$id_session' ");
 			}
 		}
 
@@ -365,7 +342,7 @@ if ($form->validate()) {
 
 		if ($platform_admin) {
 			$sql = "INSERT INTO $table_admin SET user_id = '".$user_id."'";
-			Database::query($sql, __FILE__, __LINE__);
+			Database::query($sql);
 		}
 		if (!empty ($email) && $send_mail) {
 			$emailto = '"'.api_get_person_name($firstname, $lastname, null, PERSON_NAME_EMAIL_ADDRESS).'" <'.$email.'>';

@@ -1,27 +1,43 @@
 <?php
-/* vim: set expandtab tabstop=4 shiftwidth=4: */
-// +----------------------------------------------------------------------+
-// | PHP version 4.0                                                      |
-// +----------------------------------------------------------------------+
-// | Copyright (c) 1997-2003 The PHP Group                                |
-// +----------------------------------------------------------------------+
-// | This source file is subject to version 2.0 of the PHP license,       |
-// | that is bundled with this package in the file LICENSE, and is        |
-// | available at through the world-wide-web at                           |
-// | http://www.php.net/license/2_02.txt.                                 |
-// | If you did not receive a copy of the PHP license and are unable to   |
-// | obtain it through the world-wide-web, please send a note to          |
-// | license@php.net so we can mail you a copy immediately.               |
-// +----------------------------------------------------------------------+
-// | Authors: Adam Daniel <adaniel1@eesus.jnj.com>                        |
-// |          Bertrand Mansion <bmansion@mamasam.com>                     |
-// +----------------------------------------------------------------------+
-//
-// $Id: QuickForm.php 17296 2008-12-15 17:08:44Z cfasanando $
+/* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4: */
 
-require_once('PEAR.php');
-require_once('HTML/Common.php');
+/**
+ * Create, validate and process HTML forms
+ *
+ * PHP versions 4 and 5
+ *
+ * LICENSE: This source file is subject to version 3.01 of the PHP license
+ * that is available through the world-wide-web at the following URI:
+ * http://www.php.net/license/3_01.txt If you did not receive a copy of
+ * the PHP License and are unable to obtain it through the web, please
+ * send a note to license@php.net so we can mail you a copy immediately.
+ *
+ * @category    HTML
+ * @package     HTML_QuickForm
+ * @author      Adam Daniel <adaniel1@eesus.jnj.com>
+ * @author      Bertrand Mansion <bmansion@mamasam.com>
+ * @author      Alexey Borzov <avb@php.net>
+ * @copyright   2001-2009 The PHP Group
+ * @license     http://www.php.net/license/3_01.txt PHP License 3.01
+ * @version     CVS: $Id: QuickForm.php,v 1.166 2009/04/04 21:34:02 avb Exp $
+ * @link        http://pear.php.net/package/HTML_QuickForm
+ */
 
+/**
+ * PEAR and PEAR_Error classes, for error handling
+ */
+require_once 'PEAR.php';
+/**
+ * Base class for all HTML classes
+ */
+require_once 'HTML/Common.php';
+
+/**
+ * Element types known to HTML_QuickForm
+ * @see HTML_QuickForm::registerElementType(), HTML_QuickForm::getRegisteredTypes(),
+ *      HTML_QuickForm::isTypeRegistered()
+ * @global array $GLOBALS['HTML_QUICKFORM_ELEMENT_TYPES']
+ */
 $GLOBALS['HTML_QUICKFORM_ELEMENT_TYPES'] =
         array(
             'group'         =>array('HTML/QuickForm/group.php','HTML_QuickForm_group'),
@@ -49,6 +65,12 @@ $GLOBALS['HTML_QUICKFORM_ELEMENT_TYPES'] =
             'xbutton'       =>array('HTML/QuickForm/xbutton.php','HTML_QuickForm_xbutton')
         );
 
+/**
+ * Validation rules known to HTML_QuickForm
+ * @see HTML_QuickForm::registerRule(), HTML_QuickForm::getRegisteredRules(),
+ *      HTML_QuickForm::isRuleRegistered()
+ * @global array $GLOBALS['_HTML_QuickForm_registered_rules']
+ */
 $GLOBALS['_HTML_QuickForm_registered_rules'] = array(
     'required'      => array('html_quickform_rule_required', 'HTML/QuickForm/Rule/Required.php'),
     'maxlength'     => array('html_quickform_rule_range',    'HTML/QuickForm/Rule/Range.php'),
@@ -62,19 +84,24 @@ $GLOBALS['_HTML_QuickForm_registered_rules'] = array(
     'nopunctuation' => array('html_quickform_rule_regex',    'HTML/QuickForm/Rule/Regex.php'),
     'nonzero'       => array('html_quickform_rule_regex',    'HTML/QuickForm/Rule/Regex.php'),
     'callback'      => array('html_quickform_rule_callback', 'HTML/QuickForm/Rule/Callback.php'),
+    // Added by Chamilo team, 16-MAR-2010
+    //'compare'       => array('html_quickform_rule_compare',  'HTML/QuickForm/Rule/Compare.php')
     'compare'       => array('html_quickform_rule_compare',  'HTML/QuickForm/Rule/Compare.php'),
     'comparedate'   => array('html_quickform_rule_comparedate',  'HTML/QuickForm/Rule/CompareDate.php'),
     'errordate'  	=> array('html_quickform_rule_date',  'HTML/QuickForm/Rule/Date.php')
+    //
 );
 
 // {{{ error codes
 
-/*
- * Error codes for the QuickForm interface, which will be mapped to textual messages
- * in the QuickForm::errorMessage() function.  If you are to add a new error code, be
- * sure to add the textual messages to the QuickForm::errorMessage() function as well
+/**#@+
+ * Error codes for HTML_QuickForm
+ *
+ * Codes are mapped to textual messages by errorMessage() method, if you add a
+ * new code be sure to add a new message for it to errorMessage()
+ *
+ * @see HTML_QuickForm::errorMessage()
  */
-
 define('QUICKFORM_OK',                      1);
 define('QUICKFORM_ERROR',                  -1);
 define('QUICKFORM_INVALID_RULE',           -2);
@@ -85,18 +112,22 @@ define('QUICKFORM_INVALID_ELEMENT_NAME',   -6);
 define('QUICKFORM_INVALID_PROCESS',        -7);
 define('QUICKFORM_DEPRECATED',             -8);
 define('QUICKFORM_INVALID_DATASOURCE',     -9);
+/**#@-*/
 
 // }}}
 
 /**
-* Create, validate and process HTML forms
-*
-* @author      Adam Daniel <adaniel1@eesus.jnj.com>
-* @author      Bertrand Mansion <bmansion@mamasam.com>
-* @version     2.0
-* @since       PHP 4.0.3pl1
-*/
-class HTML_QuickForm extends HTML_Common {
+ * Create, validate and process HTML forms
+ *
+ * @category    HTML
+ * @package     HTML_QuickForm
+ * @author      Adam Daniel <adaniel1@eesus.jnj.com>
+ * @author      Bertrand Mansion <bmansion@mamasam.com>
+ * @author      Alexey Borzov <avb@php.net>
+ * @version     Release: 3.2.11
+ */
+class HTML_QuickForm extends HTML_Common
+{
     // {{{ properties
 
     /**
@@ -259,7 +290,10 @@ class HTML_QuickForm extends HTML_Common {
     {
         HTML_Common::HTML_Common($attributes);
         $method = (strtoupper($method) == 'GET') ? 'get' : 'post';
+        // Modified by Chamilo team, 16-MAR-2010
+        //$action = ($action == '') ? $_SERVER['PHP_SELF'] : $action;
         $action = ($action == '') ? api_get_self() : $action;
+        //
         $target = empty($target) ? array() : array('target' => $target);
         $attributes = array('action'=>$action, 'method'=>$method, 'name'=>$formName, 'id'=>$formName) + $target;
         $this->updateAttributes($attributes);
@@ -388,6 +422,7 @@ class HTML_QuickForm extends HTML_Common {
      * @since     3.3
      * @access    public
      * @return    void
+     * @throws    HTML_QuickForm_Error
      */
     function setDatasource(&$datasource, $defaultsFilter = null, $constantsFilter = null)
     {
@@ -415,6 +450,7 @@ class HTML_QuickForm extends HTML_Common {
      * @since     1.0
      * @access    public
      * @return    void
+     * @throws    HTML_QuickForm_Error
      */
     function setDefaults($defaultValues = null, $filter = null)
     {
@@ -454,6 +490,7 @@ class HTML_QuickForm extends HTML_Common {
      * @since     2.0
      * @access    public
      * @return    void
+     * @throws    HTML_QuickForm_Error
      */
     function setConstants($constantValues = null, $filter = null)
     {
@@ -531,7 +568,7 @@ class HTML_QuickForm extends HTML_Common {
      * @param     string     $elementType    type of element to add (text, textarea, file...)
      * @since     1.0
      * @access    public
-     * @return    object extended class of HTML_element
+     * @return    HTML_QuickForm_Element
      * @throws    HTML_QuickForm_Error
      */
     function &createElement($elementType)
@@ -552,7 +589,7 @@ class HTML_QuickForm extends HTML_Common {
      * @param     array    $args    arguments for event
      * @since     2.0
      * @access    private
-     * @return    object    a new element
+     * @return    HTML_QuickForm_Element
      * @throws    HTML_QuickForm_Error
      */
     function &_loadElement($event, $type, $args)
@@ -565,7 +602,7 @@ class HTML_QuickForm extends HTML_Common {
         $className = $GLOBALS['HTML_QUICKFORM_ELEMENT_TYPES'][$type][1];
         $includeFile = $GLOBALS['HTML_QUICKFORM_ELEMENT_TYPES'][$type][0];
         include_once($includeFile);
-        // Suppressing a deprecation warning on PHP 5.3
+        // Modified by Ivan Tcholakov, 16-MAR-2010. Suppressing a deprecation warning on PHP 5.3
         //$elementObject =& new $className();
         $elementObject = new $className();
         //
@@ -593,7 +630,7 @@ class HTML_QuickForm extends HTML_Common {
      *
      * @param    mixed      $element        element object or type of element to add (text, textarea, file...)
      * @since    1.0
-     * @return   object     reference to element
+     * @return   HTML_QuickForm_Element     a reference to newly added element
      * @access   public
      * @throws   HTML_QuickForm_Error
      */
@@ -647,9 +684,10 @@ class HTML_QuickForm extends HTML_Common {
     *
     * @access   public
     * @since    3.2.4
-    * @param    object  HTML_QuickForm_element  Element to insert
-    * @param    string  Name of the element before which the new one is inserted
-    * @return   object  HTML_QuickForm_element  reference to inserted element
+    * @param    HTML_QuickForm_element  Element to insert
+    * @param    string                  Name of the element before which the new
+    *                                   one is inserted
+    * @return   HTML_QuickForm_element  reference to inserted element
     * @throws   HTML_QuickForm_Error
     */
     function &insertElementBefore(&$element, $nameAfter)
@@ -680,13 +718,9 @@ class HTML_QuickForm extends HTML_Common {
                 $this->_elements[$i + 1] =& $this->_elements[$i];
                 if ($this->_elementIndex[$currentName] == $i) {
                     $this->_elementIndex[$currentName] = $i + 1;
-                } else
-                {
-                	if (is_array($this->_duplicateIndex[$currentName]))
-                	{
-                    	$dupIdx = array_search($i, $this->_duplicateIndex[$currentName]);
-                    	$this->_duplicateIndex[$currentName][$dupIdx] = $i + 1;
-                	}
+                } else {
+                    $dupIdx = array_search($i, $this->_duplicateIndex[$currentName]);
+                    $this->_duplicateIndex[$currentName][$dupIdx] = $i + 1;
                 }
                 unset($this->_elements[$i]);
             }
@@ -718,10 +752,10 @@ class HTML_QuickForm extends HTML_Common {
      * @param    string     $separator      (optional)string to separate elements
      * @param    string     $appendName     (optional)specify whether the group name should be
      *                                      used in the form element name ex: group[element]
-     * @return   object     reference to added group of elements
+     * @return   HTML_QuickForm_group       reference to a newly added group
      * @since    2.8
      * @access   public
-     * @throws   PEAR_Error
+     * @throws   HTML_QuickForm_Error
      */
     function &addGroup($elements, $name=null, $groupLabel='', $separator=null, $appendName = true)
     {
@@ -744,7 +778,7 @@ class HTML_QuickForm extends HTML_Common {
      * @param     string     $element    Element name
      * @since     2.0
      * @access    public
-     * @return    object     reference to element
+     * @return    HTML_QuickForm_element    reference to element
      * @throws    HTML_QuickForm_Error
      */
     function &getElement($element)
@@ -990,7 +1024,7 @@ class HTML_QuickForm extends HTML_Common {
      * @param boolean   $removeRules True if rules for this element are to be removed too
      * @access public
      * @since 2.0
-     * @return object HTML_QuickForm_element    a reference to the removed element
+     * @return HTML_QuickForm_element    a reference to the removed element
      * @throws HTML_QuickForm_Error
      */
     function &removeElement($elementName, $removeRules = true)
@@ -1007,7 +1041,13 @@ class HTML_QuickForm extends HTML_Common {
             $this->_elementIndex[$elementName] = array_shift($this->_duplicateIndex[$elementName]);
         }
         if ($removeRules) {
+            $this->_required = array_diff($this->_required, array($elementName));
             unset($this->_rules[$elementName], $this->_errors[$elementName]);
+            if ('group' == $el->getType()) {
+                foreach (array_keys($el->getElements()) as $key) {
+                    unset($this->_rules[$el->getElementName($key)]);
+                }
+            }
         }
         return $el;
     } // end func removeElement
@@ -1207,6 +1247,7 @@ class HTML_QuickForm extends HTML_Common {
      * @param    mixed     $filter        Callback, either function name or array(&$object, 'method')
      * @since    2.0
      * @access   public
+     * @throws   HTML_QuickForm_Error
      */
     function applyFilter($element, $filter)
     {
@@ -1271,7 +1312,7 @@ class HTML_QuickForm extends HTML_Common {
     * The main difference is that existing keys will not be renumbered
     * if they are integers.
     *
-    * @access   puplic
+    * @access   public
     * @param    array   $a  original array
     * @param    array   $b  array which will be merged into first one
     * @return   array   merged array
@@ -1473,6 +1514,7 @@ class HTML_QuickForm extends HTML_Common {
      * @access    public
      * @since     1.0
      * @return    boolean   true if no error found
+     * @throws    HTML_QuickForm_Error
      */
     function validate()
     {
@@ -1501,6 +1543,11 @@ class HTML_QuickForm extends HTML_Common {
                     // Fix for bug #3501: we shouldn't validate not uploaded files, either.
                     // Unfortunately, we can't just use $element->isUploadedFile() since
                     // the element in question can be buried in group. Thus this hack.
+                    // See also bug #12014, we should only consider a file that has
+                    // status UPLOAD_ERR_NO_FILE as not uploaded, in all other cases
+                    // validation should be performed, so that e.g. 'maxfilesize' rule
+                    // will display an error if status is UPLOAD_ERR_INI_SIZE
+                    // or UPLOAD_ERR_FORM_SIZE
                     } elseif (is_array($submitValue)) {
                         if (false === ($pos = strpos($target, '['))) {
                             $isUpload = !empty($this->_submitFiles[$target]);
@@ -1515,7 +1562,7 @@ class HTML_QuickForm extends HTML_Common {
                                     ) . "']";
                             eval("\$isUpload = isset(\$this->_submitFiles['{$base}']['name']{$idx});");
                         }
-                        if ($isUpload && (!isset($submitValue['error']) || 0 != $submitValue['error'])) {
+                        if ($isUpload && (!isset($submitValue['error']) || UPLOAD_ERR_NO_FILE == $submitValue['error'])) {
                             continue 2;
                         }
                     }
@@ -1619,6 +1666,7 @@ class HTML_QuickForm extends HTML_Common {
      * @since    1.0
      * @access   public
      * @throws   HTML_QuickForm_Error
+     * @return   mixed     Whatever value the $callback function returns
      */
     function process($callback, $mergeFiles = true)
     {
@@ -1667,7 +1715,7 @@ class HTML_QuickForm extends HTML_Common {
     {
         if (!isset($GLOBALS['_HTML_QuickForm_default_renderer'])) {
             include_once('HTML/QuickForm/Renderer/Default.php');
-            // Suppressing a deprecation warning on PHP 5.3
+            // Modified by Ivan Tcholakov, 16-MAR-2010. Suppressing a deprecation warning on PHP 5.3
             //$GLOBALS['_HTML_QuickForm_default_renderer'] =& new HTML_QuickForm_Renderer_Default();
             $GLOBALS['_HTML_QuickForm_default_renderer'] = new HTML_QuickForm_Renderer_Default();
             //
@@ -1827,7 +1875,7 @@ class HTML_QuickForm extends HTML_Common {
     function toArray($collectHidden = false)
     {
         include_once 'HTML/QuickForm/Renderer/Array.php';
-        // Suppressing a deprecation warning on PHP 5.3
+        // Modified by Ivan Tcholakov, 16-MAR-2010. Suppressing a deprecation warning on PHP 5.3
         //$renderer =& new HTML_QuickForm_Renderer_Array($collectHidden);
         $renderer = new HTML_QuickForm_Renderer_Array($collectHidden);
         //
@@ -1848,6 +1896,7 @@ class HTML_QuickForm extends HTML_Common {
      * @param  string   Name of an element
      * @access public
      * @return mixed
+     * @throws HTML_QuickForm_Error
      */
     function exportValue($element)
     {
@@ -1937,6 +1986,7 @@ class HTML_QuickForm extends HTML_Common {
      * @access public
      * @param mixed     result code
      * @return bool     whether $value is an error
+     * @static
      */
     function isError($value)
     {
@@ -1952,6 +2002,7 @@ class HTML_QuickForm extends HTML_Common {
      * @access  public
      * @param   int     error code
      * @return  string  error message
+     * @static
      */
     function errorMessage($value)
     {
@@ -1986,6 +2037,15 @@ class HTML_QuickForm extends HTML_Common {
     // }}}
 } // end class HTML_QuickForm
 
+/**
+ * Class for errors thrown by HTML_QuickForm package
+ *
+ * @category    HTML
+ * @package     HTML_QuickForm
+ * @author      Adam Daniel <adaniel1@eesus.jnj.com>
+ * @author      Bertrand Mansion <bmansion@mamasam.com>
+ * @version     Release: 3.2.11
+ */
 class HTML_QuickForm_Error extends PEAR_Error {
 
     // {{{ properties

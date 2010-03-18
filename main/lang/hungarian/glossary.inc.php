@@ -1,24 +1,25 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$TermAddNew = "Új elem felvitele a szójegyzékbe";
-$TermName = "Kifejezés";
-$TermDefinition = "Kifejezés definíciója";
-$TermDeleted = "Kifejezés törölve";
-$TermUpdated = "Kifejezés frissítve";
-$TermConfirmDelete = "Biztosan törölni akarja ezt a kifejezést?";
-$TermAddButton = "Kifejezés mentése";
-$TermUpdateButton = "Kifejezés frissítése";
-$TermEdit = "Kifejezés szerkesztése";
-$TermDeleteAction = "Kifejezés törlése";
-$OrderBy = "Rendezés mi szerint:";
-$CreationDate = "Létrehozás ideje";
-$UpdateDate = "Módosítva";
-$PreSelectedOrder = "El&#337;re definiált";
-$TermAdded = "Kifejezés hozzáadva";
-$YouMustEnterATermName = "Meg kell adnia a kifejezést";
-$YouMustEnterATermDefinition = "Meg kell adnia a kifejezés definícióját";
-$TableView = "Táblázatos nézet";
-$GlossaryTermAlreadyExistsYouShouldEditIt = "Ez a kifejezés már létezik. Adjon meg másik nevet.";
-$GlossaryManagement  = "Szójegyzék kezelése";
+$TermAddNew = "Ãšj elem felvitele a szÃ³jegyzÃ©kbe";
+$TermName = "KifejezÃ©s";
+$TermDefinition = "KifejezÃ©s definÃ­ciÃ³ja";
+$TermDeleted = "KifejezÃ©s tÃ¶rÃ¶lve";
+$TermUpdated = "KifejezÃ©s frissÃ­tve";
+$TermConfirmDelete = "Biztosan tÃ¶rÃ¶lni akarja ezt a kifejezÃ©st?";
+$TermAddButton = "KifejezÃ©s mentÃ©se";
+$TermUpdateButton = "KifejezÃ©s frissÃ­tÃ©se";
+$TermEdit = "KifejezÃ©s szerkesztÃ©se";
+$TermDeleteAction = "KifejezÃ©s tÃ¶rlÃ©se";
+$OrderBy = "RendezÃ©s mi szerint:";
+$CreationDate = "LÃ©trehozÃ¡s ideje";
+$UpdateDate = "MÃ³dosÃ­tva";
+$PreSelectedOrder = "ElÅ‘re definiÃ¡lt";
+$TermAdded = "KifejezÃ©s hozzÃ¡adva";
+$YouMustEnterATermName = "Meg kell adnia a kifejezÃ©st";
+$YouMustEnterATermDefinition = "Meg kell adnia a kifejezÃ©s definÃ­ciÃ³jÃ¡t";
+$TableView = "TÃ¡blÃ¡zatos nÃ©zet";
+$GlossaryTermAlreadyExistsYouShouldEditIt = "Ez a kifejezÃ©s mÃ¡r lÃ©tezik. Adjon meg mÃ¡sik nevet.";
+$GlossaryManagement = "SzÃ³jegyzÃ©k kezelÃ©se";
 ?>

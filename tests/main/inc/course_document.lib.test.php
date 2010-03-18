@@ -10,7 +10,7 @@ class Testcdocu extends UnitTestCase{
 	public function testGetlist(){
 		global $is_allowed_in_course;
 		$is_allowed_in_course = true;
-		$directory = api_get_path(SYS_COURSE_PATH).api_get_course_path().'/document/audio/';				
+		$directory = api_get_path(SYS_COURSE_PATH).'/document/audio/';				
 		$res = getlist($directory);
 		if (is_bool($res)){
 			$this->assertTrue(is_bool($res));

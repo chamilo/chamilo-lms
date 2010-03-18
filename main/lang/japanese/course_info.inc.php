@@ -1,33 +1,34 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$ModifInfo = "¥³¡¼¥¹¤Î¾ğÊó¤ò½¤Àµ";
-$langModifDone = "¾ğÊó½¤Àµ¤µ¤ì¤Ş¤·¤¿";
-$langDelCourse = "¤³¤Î¥³¡¼¥¹¥µ¥¤¥ÈÁ´ÂÎ¤òºï½ü";
-$langProfessors = "Ã´Åö¶µ°÷";
-$langFaculty = "³Ø²Ê";
-$langConfidentiality = "Èë";
-$langPublic = "¥í¥°¥¤¥ó¤Ê¤·¤Ë¡¢¥­¥ã¥ó¥Ñ¥¹¥Ú¡¼¥¸¤«¤é¥¢¥¯¥»¥¹¤Ç¤­¤Ş¤¹¡£";
-$langPrivOpen = "ÅĞÏ¿¼Ô¸ÂÄê¡§ÅĞÏ¿¤Ï²ÄÇ½¤Ç¤¹¡£";
-$langPrivate = "ÅĞÏ¿¼Ô¸ÂÄê¡§ÅĞÏ¿¤â¤Ç¤­¤Ş¤»¤ó¡£ÅĞÏ¿¤µ¤ì¤¿¥æ¡¼¥¶(<a href=../user/user.php>°ìÍ÷</a> )¤Î¤ßÍøÍÑ²ÄÇ½¤Ç¤¹¡£";
-$langForbidden = "µö²Ä¤µ¤ì¤Æ¤¤¤Ş¤»¤ó";
-$CourseAccessConfigTip = "By default, you course is only accessible to you as its only registered user. IN case you want some confidentiality, the simplest is to open registration duringone week, ask the students to register themselves, then close registration and check possible intruders in the users list.";
-$langOpenToTheWorld = "¸ø³«¡§Á´À¤³¦¤Ë¸ø³«¤·¤Ş¤¹¡£";
-$OpenToThePlatform = "¸ø³«¡§ÅĞÏ¿¤µ¤ì¤¿¥æ¡¼¥¶¤Ë¸ø³«¤·¤Ş¤¹¡£";
-$langTipLang  = "¤³¤Î¸À¸ì¤Ï¡¢¤¢¤Ê¤¿¤Î¥³¡¼¥¹¤Î¥¦¥¨¥Ö¥µ¥¤¥È¤ÎÁ´¤Æ¤ÎË¬Ìä¼Ô¤Î¸øÍÑ¸À¸ì¤Ç¤¹¡£";
-$langVid = "¥ô¥£¥Ç¥ª";
-$langWork = "³ØÀ¸¤ÎÊ¸½ñ¤¿¤Á";
-$langProgramMenu = "¥³¡¼¥¹¥×¥í¥°¥é¥à";
-$langAnnouncement = "¤ªÃÎ¤é¤»";
-$langExercise = "±é½¬ÌäÂê";
-$langStats = "Åı·×";
-$langUplPage = "¥Ú¡¼¥¸¤È¥ê¥ó¥¯¤ò¥Û¡¼¥à¥Ú¡¼¥¸¤Ë¥¢¥Ã¥×¥í¡¼¥É";
-$langLinkSite = "¥µ¥¤¥È¤ò¥ê¥ó¥¯";
-$langCourse = "¤³¤Î¥¦¥¨¥Ö¥µ¥¤¥È¤Ï";
-$langHasDel = "´û¤Ëºï½ü¤µ¤ì¤Ş¤·¤¿¡£";
-$langBackHome = "..¤Î¥Û¡¼¥à¥Ú¡¼¥¸¤ËÌá¤ë";
-$langByDel = "¤³¤Î¥³¡¼¥¹¤Î¥¦¥¨¥Ö¥µ¥¤¥È¤òºï½ü¤¹¤ë¤È¡¢¤½¤³¤Ë´Ş¤Ş¤ì¤ë¤¹¤Ù¤Æ¤ÎÊ¸½ñ¤¬¾Ã¤¨¤Ş¤¹¡£¤Ş¤¿³ØÀ¸ÅĞÏ¿¤â¾Ã¤¨¤Ş¤¹(Â¾¤Î¥³¡¼¥¹ÅĞÏ¿¤ÏÌµ´Ø·¸¤Ç¤¹)¡£<p>ËÜÅö¤Ëºï½ü¤·¤Ş¤¹¤«?</p>";
-$langY = "¤Ï¤¤";
-$langN = "¤¤¤¤¤¨";
-$langBackH = "¥³¡¼¥¹¤Î¥Û¡¼¥à¥Ú¡¼¥¸";
+$ModifInfo = "ã‚³ã€–ã‚¹ã®æ”«é¼ ã‚’é¥¯èµ–";
+$langModifDone = "æ”«é¼ é¥¯èµ–ã•ã‚Œã¾ã—ãŸ";
+$langDelCourse = "ã“ã®ã‚³ã€–ã‚¹ã‚µã‚¤ãƒˆé“¾æŒ›ã‚’çŒ´è¿‘";
+$langProfessors = "ä¹ˆç¢°å…œé•‘";
+$langFaculty = "æ± å½©";
+$langConfidentiality = "å…¥";
+$langPublic = "ãƒ­ã‚°ã‚¤ãƒ³ãªã—ã«ã€ã‚­ãƒ£ãƒ³ãƒ‘ã‚¹ãƒšã€–ã‚¸ã‹ã‚‰ã‚¢ã‚¯ã‚»ã‚¹ã§ãã¾ã™ã€‚";
+$langPrivOpen = "åˆ¤å³¡èšå˜å¹´Â¨åˆ¤å³¡ã¯æå¢™ã§ã™ã€‚";
+$langPrivate = "åˆ¤å³¡èšå˜å¹´Â¨åˆ¤å³¡ã‚‚ã§ãã¾ã›ã‚“ã€‚åˆ¤å³¡ã•ã‚ŒãŸãƒ¦ã€–ã‚¶(<a href=../user/user.php>åŠæ‰</a> )ã®ã¿ç½‘è„±æå¢™ã§ã™ã€‚";
+$langForbidden = "é’“æã•ã‚Œã¦ã„ã¾ã›ã‚“";
+$CourseAccessConfigTip = "By default, you course is only accessible to you as its only registered user. IN case you want some confidentiality, \nthe simplest is to open registration during\none week, ask the students to register themselves, then close registration and check possible intruders in the users list.";
+$langOpenToTheWorld = "ç»™å€¡Â¨é“¾å¤è‚ ã«ç»™å€¡ã—ã¾ã™ã€‚";
+$OpenToThePlatform = "ç»™å€¡Â¨åˆ¤å³¡ã•ã‚ŒãŸãƒ¦ã€–ã‚¶ã«ç»™å€¡ã—ã¾ã™ã€‚";
+$langTipLang = "ã“ã®å’èƒ³ã¯ã€ã‚ãªãŸã®ã‚³ã€–ã‚¹ã®ã‚¦ã‚¨ãƒ–ã‚µã‚¤ãƒˆã®é“¾ã¦ã®çˆ½å•¼èšã®ç»™è„±å’èƒ³ã§ã™ã€‚";
+$langVid = "ãƒ´ã‚£ãƒ‡ã‚ª";
+$langWork = "æ± æ ã®çŸ¢ä»ŠãŸã¡";
+$langProgramMenu = "ã‚³ã€–ã‚¹ãƒ—ãƒ­ã‚°ãƒ©ãƒ ";
+$langAnnouncement = "ãŠæ¢¦ã‚‰ã›";
+$langExercise = "éæµ†å•¼ç›";
+$langStats = "çµçº·";
+$langUplPage = "ãƒšã€–ã‚¸ã¨ãƒªãƒ³ã‚¯ã‚’ãƒ›ã€–ãƒ ãƒšã€–ã‚¸ã«ã‚¢ãƒƒãƒ—ãƒ­ã€–ãƒ‰";
+$langLinkSite = "ã‚µã‚¤ãƒˆã‚’ãƒªãƒ³ã‚¯";
+$langCourse = "ã“ã®ã‚¦ã‚¨ãƒ–ã‚µã‚¤ãƒˆã¯";
+$langHasDel = "è´·ã«çŒ´è¿‘ã•ã‚Œã¾ã—ãŸã€‚";
+$langBackHome = "..ã®ãƒ›ã€–ãƒ ãƒšã€–ã‚¸ã«æã‚‹";
+$langByDel = "ã“ã®ã‚³ã€–ã‚¹ã®ã‚¦ã‚¨ãƒ–ã‚µã‚¤ãƒˆã‚’çŒ´è¿‘ã™ã‚‹ã¨ã€ãã“ã«å´”ã¾ã‚Œã‚‹ã™ã¹ã¦ã®çŸ¢ä»ŠãŒä¹…ãˆã¾ã™ã€‚ã¾ãŸæ± æ åˆ¤å³¡ã‚‚ä¹…ãˆã¾ã™(æˆ®ã®ã‚³ã€–ã‚¹åˆ¤å³¡ã¯ç—°ç°‡çŠ¯ã§ã™)ã€‚<p>å¡‘ç¢°ã«çŒ´è¿‘ã—ã¾ã™ã‹?</p>";
+$langY = "ã¯ã„";
+$langN = "ã„ã„ãˆ";
+$langBackH = "ã‚³ã€–ã‚¹ã®ãƒ›ã€–ãƒ ãƒšã€–ã‚¸";
 ?>

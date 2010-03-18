@@ -1,39 +1,52 @@
 <?php
-/* vim: set expandtab tabstop=4 shiftwidth=4: */
-// +----------------------------------------------------------------------+
-// | PHP version 4.0                                                      |
-// +----------------------------------------------------------------------+
-// | Copyright (c) 1997-2004 The PHP Group                                |
-// +----------------------------------------------------------------------+
-// | This source file is subject to version 2.0 of the PHP license,       |
-// | that is bundled with this package in the file LICENSE, and is        |
-// | available at through the world-wide-web at                           |
-// | http://www.php.net/license/2_02.txt.                                 |
-// | If you did not receive a copy of the PHP license and are unable to   |
-// | obtain it through the world-wide-web, please send a note to          |
-// | license@php.net so we can mail you a copy immediately.               |
-// +----------------------------------------------------------------------+
-// | Authors: Herim Vasquez <vasquezh@iro.umontreal.ca>                   |
-// |          Bertrand Mansion <bmansion@mamasam.com>                     |
-// |          Alexey Borzov <avb@php.net>
-// +----------------------------------------------------------------------+
-//
-// $Id: hierselect.php 20456 2009-05-10 17:27:44Z ivantcholakov $
-
-require_once('HTML/QuickForm/group.php');
-require_once('HTML/QuickForm/select.php');
+/* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4: */
 
 /**
+ * Hierarchical select element
+ *
+ * PHP versions 4 and 5
+ *
+ * LICENSE: This source file is subject to version 3.01 of the PHP license
+ * that is available through the world-wide-web at the following URI:
+ * http://www.php.net/license/3_01.txt If you did not receive a copy of
+ * the PHP License and are unable to obtain it through the web, please
+ * send a note to license@php.net so we can mail you a copy immediately.
+ *
+ * @category    HTML
+ * @package     HTML_QuickForm
+ * @author      Herim Vasquez <vasquezh@iro.umontreal.ca>
+ * @author      Bertrand Mansion <bmansion@mamasam.com>
+ * @author      Alexey Borzov <avb@php.net>
+ * @copyright   2001-2009 The PHP Group
+ * @license     http://www.php.net/license/3_01.txt PHP License 3.01
+ * @version     CVS: $Id: hierselect.php,v 1.20 2009/04/04 21:34:03 avb Exp $
+ * @link        http://pear.php.net/package/HTML_QuickForm
+ */
+
+/**
+ * Class for a group of form elements
+ */
+require_once 'HTML/QuickForm/group.php';
+/**
+ * Class for <select></select> elements
+ */
+require_once 'HTML/QuickForm/select.php';
+
+/**
+ * Hierarchical select element
+ *
  * Class to dynamically create two or more HTML Select elements
  * The first select changes the content of the second select and so on.
  * This element is considered as a group. Selects will be named
  * groupName[0], groupName[1], groupName[2]...
  *
- * @author       Herim Vasquez <vasquezh@iro.umontreal.ca>
- * @author       Bertrand Mansion <bmansion@mamasam.com>
- * @version      1.0
- * @since        PHP4.04pl1
- * @access       public
+ * @category    HTML
+ * @package     HTML_QuickForm
+ * @author      Herim Vasquez <vasquezh@iro.umontreal.ca>
+ * @author      Bertrand Mansion <bmansion@mamasam.com>
+ * @author      Alexey Borzov <avb@php.net>
+ * @version     Release: 3.2.11
+ * @since       3.1
  */
 class HTML_QuickForm_hierselect extends HTML_QuickForm_group
 {
@@ -42,42 +55,7 @@ class HTML_QuickForm_hierselect extends HTML_QuickForm_group
     /**
      * Options for all the select elements
      *
-     * Format is a bit more complex as we need to know which options
-     * are related to the ones in the previous select:
-     *
-     * Ex:
-     * // first select
-     * $select1[0] = 'Pop';
-     * $select1[1] = 'Classical';
-     * $select1[2] = 'Funeral doom';
-     *
-     * // second select
-     * $select2[0][0] = 'Red Hot Chil Peppers';
-     * $select2[0][1] = 'The Pixies';
-     * $select2[1][0] = 'Wagner';
-     * $select2[1][1] = 'Strauss';
-     * $select2[2][0] = 'Pantheist';
-     * $select2[2][1] = 'Skepticism';
-     *
-     * // If only need two selects
-     * //     - and using the depracated functions
-     * $sel =& $form->addElement('hierselect', 'cds', 'Choose CD:');
-     * $sel->setMainOptions($select1);
-     * $sel->setSecOptions($select2);
-     *
-     * //     - and using the new setOptions function
-     * $sel =& $form->addElement('hierselect', 'cds', 'Choose CD:');
-     * $sel->setOptions(array($select1, $select2));
-     *
-     * // If you have a third select with prices for the cds
-     * $select3[0][0][0] = '15.00$';
-     * $select3[0][0][1] = '17.00$';
-     * etc
-     *
-     * // You can now use
-     * $sel =& $form->addElement('hierselect', 'cds', 'Choose CD:');
-     * $sel->setOptions(array($select1, $select2, $select3));
-     *
+     * @see       setOptions()
      * @var       array
      * @access    private
      */
@@ -132,8 +110,45 @@ class HTML_QuickForm_hierselect extends HTML_QuickForm_group
      * Initialize the array structure containing the options for each select element.
      * Call the functions that actually do the magic.
      *
-     * @param     array    $options    Array of options defining each element
+     * Format is a bit more complex than for a simple select as we need to know
+     * which options are related to the ones in the previous select:
      *
+     * Ex:
+     * <code>
+     * // first select
+     * $select1[0] = 'Pop';
+     * $select1[1] = 'Classical';
+     * $select1[2] = 'Funeral doom';
+     *
+     * // second select
+     * $select2[0][0] = 'Red Hot Chil Peppers';
+     * $select2[0][1] = 'The Pixies';
+     * $select2[1][0] = 'Wagner';
+     * $select2[1][1] = 'Strauss';
+     * $select2[2][0] = 'Pantheist';
+     * $select2[2][1] = 'Skepticism';
+     *
+     * // If only need two selects
+     * //     - and using the deprecated functions
+     * $sel =& $form->addElement('hierselect', 'cds', 'Choose CD:');
+     * $sel->setMainOptions($select1);
+     * $sel->setSecOptions($select2);
+     *
+     * //     - and using the new setOptions function
+     * $sel =& $form->addElement('hierselect', 'cds', 'Choose CD:');
+     * $sel->setOptions(array($select1, $select2));
+     *
+     * // If you have a third select with prices for the cds
+     * $select3[0][0][0] = '15.00$';
+     * $select3[0][0][1] = '17.00$';
+     * // etc
+     *
+     * // You can now use
+     * $sel =& $form->addElement('hierselect', 'cds', 'Choose CD:');
+     * $sel->setOptions(array($select1, $select2, $select3));
+     * </code>
+     *
+     * @param     array    $options    Array of options defining each element
      * @access    public
      * @return    void
      */
@@ -298,6 +313,9 @@ class HTML_QuickForm_hierselect extends HTML_QuickForm_group
                 $this->_js .= <<<JAVASCRIPT
 function _hs_findOptions(ary, keys)
 {
+    if (ary == undefined) {
+        return {};
+    }
     var key = keys.shift();
     if (!key in ary) {
         return {};
@@ -480,8 +498,8 @@ JAVASCRIPT;
             // add onreset handler to form to properly reset hierselect (see bug #2970)
             if ('addElement' == $event) {
                 $onReset = $caller->getAttribute('onreset');
-                if (api_strlen($onReset)) {
-                    if (api_strpos($onReset, '_hs_setupOnReset')) {
+                if (strlen($onReset)) {
+                    if (strpos($onReset, '_hs_setupOnReset')) {
                         $caller->updateAttributes(array('onreset' => str_replace('_hs_setupOnReset(this, [', "_hs_setupOnReset(this, ['" . $this->_escapeString($this->getName()) . "', ", $onReset)));
                     } else {
                         $caller->updateAttributes(array('onreset' => "var temp = function() { {$onReset} } ; if (!temp()) { return false; } ; if (typeof _hs_setupOnReset != 'undefined') { return _hs_setupOnReset(this, ['" . $this->_escapeString($this->getName()) . "']); } "));

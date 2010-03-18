@@ -1,31 +1,9 @@
 <?php
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2008 Dokeos Latinoamerica SAC
-	Copyright (c) 2006 Dokeos SPRL
-	Copyright (c) 2006 Ghent University (UGent)
-	Copyright (c) various contributors
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
-	Mail: info@dokeos.com
-==============================================================================
-*/
+/* For licensing terms, see /license.txt */
 /**
  * Gradebook link to dropbox item
  * @author Bert Steppé
- * @package dokeos.gradebook
+ * @package chamilo.gradebook
  */
 class DropboxLink extends EvalLink
 {
@@ -51,10 +29,10 @@ class DropboxLink extends EvalLink
 
 		$sql = 'SELECT filename'
 				.' FROM '.$this->get_dropbox_table()
-				.' WHERE uploader_id = '.$stud_id
+				.' WHERE uploader_id = '.intval($stud_id)
 				." AND title = '".Database::escape_string($eval->get_name())."'";
 
-		$result = Database::query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql);
 		if ($fileurl = Database::fetch_row($result)) {
 	    	$course_info = Database :: get_course_info($this->get_course_code());
 

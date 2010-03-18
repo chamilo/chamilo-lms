@@ -48,11 +48,9 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false,$current_it
 		//echo '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js" type="text/javascript"></script>';
 		//echo '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.corners.min.js" type="text/javascript"></script>';
 	}
-
-
+	
 	// reads question informations
-	if(!$objQuestionTmp = Question::read($questionId))
-	{
+	if(!$objQuestionTmp = Question::read($questionId)) {
 		// question not found
 		return false;
 	}
@@ -60,8 +58,8 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false,$current_it
 	$answerType=$objQuestionTmp->selectType();
 	$pictureName=$objQuestionTmp->selectPicture();
 
-	if ($answerType != HOT_SPOT) // Question is not of type hotspot
-	{
+	if ($answerType != HOT_SPOT) {
+		// Question is not of type hotspot
 		if(!$onlyAnswers) {
 			$questionName=$objQuestionTmp->selectTitle();
 			$questionDescription=$objQuestionTmp->selectDescription();
@@ -105,14 +103,35 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false,$current_it
 		// construction of the Answer object
 		$objAnswerTmp=new Answer($questionId);
 
-		$nbrAnswers=$objAnswerTmp->selectNbrAnswers();
+		$nbrAnswers=$objAnswerTmp->selectNbrAnswers(); 
 
 		// only used for the answer type "Matching"
 		if($answerType == MATCHING)
 		{
-			$cpt1='A';
+			$x = 1;
+			$letter = 'A';
 			$cpt2=1;
 			$Select=array();
+			$answer_matching = $cpt1 = array();		
+
+			for($answerId=1;$answerId <= $nbrAnswers;$answerId++) {
+				$answerCorrect = $objAnswerTmp->isCorrect($answerId);
+				$numAnswer = $objAnswerTmp->selectAutoId($answerId);
+				$answer=$objAnswerTmp->selectAnswer($answerId);
+				if(!$answerCorrect) {
+					// options (A, B, C, ...) that will be put into the list-box
+					$cpt1[$x] = $letter;
+					$answer_matching[$x]=$objAnswerTmp->selectAnswerByAutoId($numAnswer);
+					$x++;
+					$letter++;						
+				}
+			}
+			
+			foreach($answer_matching as $value) {				
+				$Select[$value['id']]['Lettre'] =  $cpt1[$value['id']];
+				$Select[$value['id']]['Reponse'] = $value['answer'];
+			}
+					
 		}
 		elseif($answerType == FREE_ANSWER)
 		{
@@ -134,7 +153,7 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false,$current_it
 		for($answerId=1;$answerId <= $nbrAnswers;$answerId++) {
 			$answer=$objAnswerTmp->selectAnswer($answerId);
 			$answerCorrect=$objAnswerTmp->isCorrect($answerId);
-
+			$numAnswer=$objAnswerTmp->selectAutoId($answerId);
 			if($answerType == FILL_IN_BLANKS) {
 				// splits text and weightings that are joined with the character '::'
 				list($answer)=explode('::',$answer);
@@ -202,54 +221,61 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false,$current_it
 				$answer=str_replace("{texcode}",$texstring,$answer);
 
 			}
-
 			// unique answer
 			if($answerType == UNIQUE_ANSWER) {
 				$s.="<input type='hidden' name='choice2[".$questionId."]' value='0'>
 				<tr>
 				 <td>
 				 	<div class='u-m-answer'>
-					<p style='float:left; padding-right:4px;'><input class='checkbox' type='radio' name='choice[".$questionId."]' value='".$answerId."'></p>";
-				$answer=api_parse_tex($answer);
-				$s.=$answer;
-				$s.="</div></td></tr>";
+					<p style='float:left; padding-right:4px;'>
+					<span><input class='checkbox' type='radio' name='choice[".$questionId."]' value='".$numAnswer."'></p></span>";
+                    $answer=api_parse_tex($answer);
+                    $s.=Security::remove_XSS($answer, STUDENT);                    
+                    $s.="</div></td></tr>";
 
 			} elseif($answerType == MULTIPLE_ANSWER) {
 			// multiple answers
-				$s.="<tr>
+				$s.="<input type='hidden' name='choice2[".$questionId."]' value='0'>
+				<tr>
 				  <td>
-				  	<div class='u-m-answer'>
-				  	<p style='float:left; padding-right:4px;'><input class='checkbox' type='checkbox' name='choice[".$questionId."][".$answerId."]' value='1'>
-				  	<input type='hidden' name='choice2[".$questionId."][0]' value='0'></p>";
+					 <div class='u-m-answer'>
+					 <p style='float:left; padding-right:4px;'>
+					 <span><input class='checkbox' type='checkbox' name='choice[".$questionId."][".$numAnswer."]' value='1'></p></span>";
 				$answer = api_parse_tex($answer);
-				$s.=$answer;
+				$s.=Security::remove_XSS($answer, STUDENT);
+				$s.="</div></td></tr>";			
+				
+			} elseif($answerType == MULTIPLE_ANSWER_COMBINATION) {
+			// multiple answers
+				$s.="<input type='hidden' name='choice2[".$questionId."]' value='0'>
+				<tr>
+				  <td>
+					 <div class='u-m-answer'>
+					 <p style='float:left; padding-right:4px;'>
+					 <span><input class='checkbox' type='checkbox' name='choice[".$questionId."][".$numAnswer."]' value='1'></p></span>";
+				$answer = api_parse_tex($answer);
+				$s.=Security::remove_XSS($answer, STUDENT);
 				$s.="</div></td></tr>";
-
 			}
 			// fill in blanks
-			elseif($answerType == FILL_IN_BLANKS)
-			{
+			elseif($answerType == FILL_IN_BLANKS) {
 				$s.="<tr><td colspan='2'>$answer</td></tr>";
 			}
 			// free answer
 
-			// matching
-			else {
-				if(!$answerCorrect) {
-					// options (A, B, C, ...) that will be put into the list-box
-					$Select[$answerId]['Lettre']=$cpt1++;
-					// answers that will be shown at the right side
-					$answer = api_parse_tex($answer);
-					$Select[$answerId]['Reponse']=$answer;
-				} else {
+			// matching // TODO: replace $answerId by $numAnswer
+			else {				
+				if ($answerCorrect) {
 					$s.="
 					<tr>
 					  <td colspan='2'>
-						<table border='0' cellpadding='0' cellspacing='0' width='100%'>
-						<tr>";
+						<div style='width:100%;' >";	
 					$answer=api_parse_tex($answer);
-					$s.="<td width='40%' valign='top'><b>".$cpt2."</b>.&nbsp;".$answer."</td>
-						  <td width='20%' valign='top' align='center'>&nbsp;&nbsp;<select name='choice[".$questionId."][".$answerId."]'>
+					//left part questions
+					$s.='	<span style=\' float:left; width:5%;\'><b>'.$cpt2.'</b>.&nbsp;</span>
+							<span style=\' float:left; width:95%;\'>'.$answer.'</span>';
+							
+					$s.="<td width='20%' valign='top' align='center'>&nbsp;&nbsp;<select name='choice[".$questionId."][".$numAnswer."]'>
 							<option value='0'>--</option>";
 
 		            // fills the list-box
@@ -257,16 +283,20 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false,$current_it
 						$s.="<option value='".$key."'>".$val['Lettre']."</option>";
 					}  // end foreach()
 
-					$s.="</select>&nbsp;&nbsp;</td>
-						  <td width='40%' valign='top'>";
+					$s.="</select>&nbsp;&nbsp;</td>";
+					
+					//right part (answers)
+					$s.="<td ><div style='width:100%;'>";	 
 					if(isset($Select[$cpt2]))
-						$s.='<b>'.$Select[$cpt2]['Lettre'].'.</b> '.$Select[$cpt2]['Reponse'];
+						$s.='<span style=\'float:left; width:5%;\'><b>'.$Select[$cpt2]['Lettre'].'.</b></span>
+							 <span style=\' float:left; width:95%;\'>'.$Select[$cpt2]['Reponse'].'</span>';
 					else
 						$s.='&nbsp;';
 					$s.="
-					</td>
-						</tr>
-						</table>
+						</div></td>";
+						 
+					$s.="			
+						</div>
 					  </td>
 					</tr>";
 
@@ -289,8 +319,6 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false,$current_it
 								</table>
 							  </td>
 							</tr>";
-
-
 							$cpt2++;
 						}	// end while()
 					}  // end if()
@@ -300,7 +328,7 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false,$current_it
 		if (!ereg("MSIE", $_SERVER["HTTP_USER_AGENT"])) {
 			$s .= '</table>';
 		}
-		$s .= '</div>';
+		$s .= '</div><br />';
 
 		// destruction of the Answer object
 		unset($objAnswerTmp);
@@ -316,46 +344,44 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false,$current_it
 		{
 			return($s);
 		}
-	}
-	elseif ($answerType == HOT_SPOT) // Question is of type HOT_SPOT
-	{
+	} elseif ($answerType == HOT_SPOT) {
+		
+		// Question is of type HOT_SPOT
 		$questionName=$objQuestionTmp->selectTitle();
 		$questionDescription=$objQuestionTmp->selectDescription();
 
 		// Get the answers, make a list
 		$objAnswerTmp=new Answer($questionId);
 		$nbrAnswers=$objAnswerTmp->selectNbrAnswers();
-
-		$answer_list = '<div style="padding: 10px; margin-left: 0px; border: 1px solid #A4A4A4; height: 408px; width: 200px;"><b>'.get_lang('HotspotZones').'</b><dl>';
-		for($answerId=1;$answerId <= $nbrAnswers;$answerId++)
-		{
-			$answer_list .= '<dt>'.$answerId.'.- '.$objAnswerTmp->selectAnswer($answerId).'</dt><br>';
+		
+		// get answers of hotpost
+		$answers_hotspot = array();
+		for($answerId=1;$answerId <= $nbrAnswers;$answerId++) {
+			$answers = $objAnswerTmp->selectAnswerByAutoId($objAnswerTmp->selectAutoId($answerId));
+			$answers_hotspot[$answers['id']] = $objAnswerTmp->selectAnswer($answerId);						
 		}
+		
+		// display answers of hotpost order by id
+		$answer_list = '<div style="padding: 10px; margin-left: 0px; border: 1px solid #A4A4A4; height: 408px; width: 200px;"><b>'.get_lang('HotspotZones').'</b><dl>';
+		if (!empty($answers_hotspot)) {
+			ksort($answers_hotspot);
+			foreach ($answers_hotspot as $key => $value) {
+				$answer_list .= '<dt>'.$key.'.- '.$value.'</dt><br />';
+			}		
+		}		
 		$answer_list .= '</dl></div>';
 
-		if(!$onlyAnswers)
-		{
-			$s="<div id=\"question_title\" class=\"sectiontitle\">
-				".get_lang('Question').' ';
-			$s.="<input type='hidden' name='hidden_hotspot_id' value='$questionId'>";
-			$s.=$current_item;
+		if(!$onlyAnswers) {
+			echo '<div id="question_title" class="sectiontitle">'.get_lang('Question').' '.$current_item.' : '.$questionName.'</div>';
 			//@todo I need to the get the feedback type
 			//if($answerType == 2)
-			//	$s.=' / '.$total_item;
-			echo $s;
-			echo ': ';
-
-			$s =$questionName.'</div>';
-
-			$s.="<table class='exercise_questions'>
-			<tr>
-			  <td valign='top' colspan='2'>
-				";
-			$questionDescription=api_parse_tex($questionDescription);
-			$s.=$questionDescription;
-			$s.="
-			  </td>
-			</tr>";
+			//	$s.=' / '.$total_item;		
+			echo '<input type="hidden" name="hidden_hotspot_id" value="'.$questionId.'">';
+			echo '<table class="exercise_questions" >
+				  <tr>
+			  		<td valign="top" colspan="2">';
+					echo $questionDescription=api_parse_tex($questionDescription);
+			 	    echo '</td></tr>';
 		}
 
 		$canClick = isset($_GET['editQuestion']) ? '0' : (isset($_GET['modifyAnswers']) ? '0' : '1');
@@ -494,13 +520,14 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false,$current_it
 							document.write(alternateContent);  // insert non-flash content
 						}
 						// -->
-					</script></td>
-					<td valign='top' align='left'>$answer_list</td></tr></table>
+					</script>
+					</td>
+					<td valign='top' align='left'>$answer_list</td></tr>
+					</table>
 		</td></tr>";
 		echo $s;
-
 	}
-	echo "</table>";
+	echo "</table><br />";
 
 	return $nbrAnswers;
 }

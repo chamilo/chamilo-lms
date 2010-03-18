@@ -1,47 +1,48 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$langMdCallingTool = "àÍ¡ÊÒÃ Documents";
-$langMdTitle = "ÇÑµ¶Ø»ÃĞÊ§¤ì¡ÒÃàÃÕÂ¹ Learning Object Title";
-$langMdDescription = "¡´»ØèÁ¨Ñ´à¡çº(restore) To store this information, press Store";
-$langMdCoverage = "àªè¹ »ÃÔ­­Ò e.g. Bachelor of ...";
+$langMdCallingTool = "à¹€à¸­à¸à¸ªà¸²à¸£ Documents";
+$langMdTitle = "à¸§à¸±à¸•à¸–à¸¸à¸›à¸£à¸°à¸ªà¸‡à¸„à¹Œà¸à¸²à¸£à¹€à¸£à¸µà¸¢à¸™ Learning Object Title";
+$langMdDescription = "à¸à¸”à¸›à¸¸à¹ˆà¸¡à¸ˆà¸±à¸”à¹€à¸à¹‡à¸š(restore) To store this information, press Store";
+$langMdCoverage = "à¹€à¸Šà¹ˆà¸™ à¸›à¸£à¸´à¸à¸à¸² e.g. Bachelor of ...";
 $langMdCopyright = "e.g. provided the source is acknowledged";
-$langTool = "àÍ¡ÊÒÃ Metadata";
-$langNoScript = "â»Ãá¡ÃÁ´ÙÍÔ¹àµÍÃìà¹çµ·Õè·èÒ¹ãªéÍÂÙè¹Õé äÁèä´éÍ¹Ø­ÒµãËéÍèÒ¹¤ÓÊÑè§¹Õé ãËé¢éÒÁä» Script is not enabled in your browser, please ignore the screen part below this text, it won\'t work...";
-$langPressAgain = "¨Ñ´à¡çºÍÕ¡¤ÃÑé§ Press \'Store\' again...";
+$langTool = "à¹€à¸­à¸à¸ªà¸²à¸£ Metadata";
+$langNoScript = "à¹‚à¸›à¸£à¹à¸à¸£à¸¡à¸”à¸¹à¸­à¸´à¸™à¹€à¸•à¸­à¸£à¹Œà¹€à¸™à¹‡à¸•à¸—à¸µà¹ˆà¸—à¹ˆà¸²à¸™à¹ƒà¸Šà¹‰à¸­à¸¢à¸¹à¹ˆà¸™à¸µà¹‰ à¹„à¸¡à¹ˆà¹„à¸”à¹‰à¸­à¸™à¸¸à¸à¸²à¸•à¹ƒà¸«à¹‰à¸­à¹ˆà¸²à¸™à¸„à¸³à¸ªà¸±à¹ˆà¸‡à¸™à¸µà¹‰ à¹ƒà¸«à¹‰à¸‚à¹‰à¸²à¸¡à¹„à¸› Script is not enabled in your browser, please ignore the screen part below this text, it won't work...";
+$langPressAgain = "à¸ˆà¸±à¸”à¹€à¸à¹‡à¸šà¸­à¸µà¸à¸„à¸£à¸±à¹‰à¸‡ Press 'Store' again...";
 $langLanguageTip = "the language in which this learning object was made";
-$langIdentifier = "µÑÇºè§ªÕé Identifier";
-$langIdentifierTip = "unique identification for this learning object, composed of letters, digits, _-.()\'!*";
+$langIdentifier = "à¸•à¸±à¸§à¸šà¹ˆà¸‡à¸Šà¸µà¹‰ Identifier";
+$langIdentifierTip = "unique identification for this learning object, composed of letters, digits, _-.()'!*";
 $langTitleTip = "title or name, and language of that title or name";
-$langDescriptionTip = "Í¸ÔºÒÂáÊ´§¤ÇÒÁ¤Ô´àËç¹ description or comment, and language used for describing this learning object";
-$langKeyword = "¤ÓÊÓ¤Ñ­ Keywords";
-$langKeywordTip = "áÂ¡¤Ó´éÇÂà¤Ã×èÍ§ËÁÒÂ , separate by commas (letters, digits, -.)";
-$langCoverage = "¤ÃÍº¤ÅØÁ Coverage";
-$langCoverageTip = "µÑÇÍÂèÒ§»ÃÔ­­Ò¢Í§ for example bachelor of xxx: yyy";
+$langDescriptionTip = "à¸­à¸˜à¸´à¸šà¸²à¸¢à¹à¸ªà¸”à¸‡à¸„à¸§à¸²à¸¡à¸„à¸´à¸”à¹€à¸«à¹‡à¸™ description or comment, and language used for describing this learning object";
+$langKeyword = "à¸„à¸³à¸ªà¸³à¸„à¸±à¸";
+$langKeywordTip = "à¹à¸¢à¸à¸„à¸³à¸”à¹‰à¸§à¸¢à¹€à¸„à¸£à¸·à¹ˆà¸­à¸‡à¸«à¸¡à¸²à¸¢ , separate by commas (letters, digits, -.)";
+$langCoverage = "à¸„à¸£à¸­à¸šà¸„à¸¥à¸¸à¸¡ Coverage";
+$langCoverageTip = "à¸•à¸±à¸§à¸­à¸¢à¹ˆà¸²à¸‡à¸›à¸£à¸´à¸à¸à¸²à¸‚à¸­à¸‡ for example bachelor of xxx: yyy";
 $langKwNote = "If you change the description language, do not add keywords at the same time.";
 $langClickKw = "Click a keyword in the tree to select or deselect it.";
-$langKwHelp = "<br/>¤ÅÔ¡»ØèÁºÇ¡ \'+\' à¾×èÍà»Ô´,Åº \'-\' à¾×èÍ»Ô´, \'++\' button to open all, \'--\' button to close all..<br/> <br/> Clear all selected keywords by closing the tree and opening it again with the \'+\' button.<br/> Alt-click \'+\' searches the original keywords in the tree.<br/> <br/> Alt-click keyword selects a keyword without broader terms or deselects a keyword with broader terms.<br/> <br/> If you change the description language, do not add keywords at the same time.<br/> <br/> ";
-$langRights = "ãªéÊÔ·¸Ôì Usage Rights";
-$langRightsTip = "Í¸ÔºÒÂ¤ÇÒÁ describe in words";
-$langVersion = "ÃØè¹ Version";
-$langVersionTip = "ËÃ×Í¤ÓºÃÃÂÒÂ number or description";
-$langStatusTip = "àÅ×Í¡¨Ò¡ÃÒÂ¡ÒÃ select from list";
-$langCreatedSize = "ÊÃéÒ§áÅéÇ ¢¹Ò´ Created, size";
-$langCreatedSizeTip = "¾È.-à´×Í¹-ÇÑ¹ when created, size in octets (bytes)";
+$langKwHelp = "<br/>à¸„à¸¥à¸´à¸à¸›à¸¸à¹ˆà¸¡à¸šà¸§à¸ '+' à¹€à¸à¸·à¹ˆà¸­à¹€à¸›à¸´à¸”,à¸¥à¸š '-' à¹€à¸à¸·à¹ˆà¸­à¸›à¸´à¸”, '++' button to open all, '--' button to close all..<br/> <br/> Clear all selected keywords by closing the tree and opening it again with the '+' button.<br/> Alt-click '+' searches the original keywords in the tree.<br/> <br/> Alt-click keyword selects a keyword without broader terms or deselects a keyword with broader terms.<br/> <br/> If you change the description language, do not add keywords at the same time.<br/> <br/>";
+$langRights = "à¹ƒà¸Šà¹‰à¸ªà¸´à¸—à¸˜à¸´à¹Œ Usage Rights";
+$langRightsTip = "à¸­à¸˜à¸´à¸šà¸²à¸¢à¸„à¸§à¸²à¸¡ describe in words";
+$langVersion = "à¸£à¸¸à¹ˆà¸™ Version";
+$langVersionTip = "à¸«à¸£à¸·à¸­à¸„à¸³à¸šà¸£à¸£à¸¢à¸²à¸¢ number or description";
+$langStatusTip = "à¹€à¸¥à¸·à¸­à¸à¸ˆà¸²à¸à¸£à¸²à¸¢à¸à¸²à¸£ select from list";
+$langCreatedSize = "à¸ªà¸£à¹‰à¸²à¸‡à¹à¸¥à¹‰à¸§ à¸‚à¸™à¸²à¸” Created, size";
+$langCreatedSizeTip = "à¸à¸¨.-à¹€à¸”à¸·à¸­à¸™-à¸§à¸±à¸™ when created, size in octets (bytes)";
 $langAuthorTip = "in VCARD format";
-$langFormat = "ÃÙ»áºº Format";
-$langFormatTip = "àÅ×Í¡¨Ò¡ÃÒÂ¡ÒÃ select from list";
+$langFormat = "à¸£à¸¹à¸›à¹à¸šà¸š Format";
+$langFormatTip = "à¹€à¸¥à¸·à¸­à¸à¸ˆà¸²à¸à¸£à¸²à¸¢à¸à¸²à¸£ select from list";
 $langLocation = "URL/URI";
-$langLocationTip = "¤ÅÔ¡à»Ô´ click to open object";
-$langStore = "¨Ñ´à¡çº Store";
-$langDeleteAll = "Åº metadata ·Ñé§ËÁ´";
-$langConfirmDelete = "¤Ø³µéÍ§¡ÒÃ·Õè¨ĞÅº metadata ·Ñé§ËÁ´¨ÃÔ§æãªèËÃ×ÍäÁè";
-$langCourseKwds = "àÍ¡ÊÒÃ¹ÕéÁÕ¤ÓÊÓ¤Ñ­¢Í§ÇÔªÒ ";
-$langSearch = "¤é¹ËÒ Search";
-$langSearchCrit = "Ë¹Öè§¤ÓµèÍºÃÃ·Ñ´! One word per line!";
-$langStatuses = "ÃèÒ§:ÃèÒ§,§Ò¹ÊÓàÃç¨:§Ò¹ÊÓàÃç¨,á¡éä¢ãËÁè:á¡éä¢ãËÁè,ÂÑ§äÁèä´é:ÂÑ§äÁèä´é :draft:draft,, final:final,, revised:revised,, unavailable:unavailable";
-$langCosts = ":äÁè:¿ÃÕ,äÁèÁÕÃÒ¤Ò,,ãªè:äÁè¿ÃÕ,ÃÒ¤Ò:no:free, no cost,, yes:not free, cost";
-$langCopyrights = ":ãªè :ÅÔ¢ÊÔ·¸Ôì,, äÁè:äÁèÁÕÅÔ¢ÊÔ·¸Ôì :yes:copyright,, no:no copyright";
+$langLocationTip = "à¸„à¸¥à¸´à¸à¹€à¸›à¸´à¸” click to open object";
+$langStore = "à¸ˆà¸±à¸”à¹€à¸à¹‡à¸š Store";
+$langDeleteAll = "à¸¥à¸š metadata à¸—à¸±à¹‰à¸‡à¸«à¸¡à¸”";
+$langConfirmDelete = "à¸„à¸¸à¸“à¸•à¹‰à¸­à¸‡à¸à¸²à¸£à¸—à¸µà¹ˆà¸ˆà¸°à¸¥à¸š metadata à¸—à¸±à¹‰à¸‡à¸«à¸¡à¸”à¸ˆà¸£à¸´à¸‡à¹†à¹ƒà¸Šà¹ˆà¸«à¸£à¸·à¸­à¹„à¸¡à¹ˆ";
+$langCourseKwds = "ï¿½Í¡ï¿½ï¿½Ã¹ï¿½ï¿½ï¿½Õ¤ï¿½ï¿½Ó¤Ñ­ï¿½Í§ï¿½Ôªï¿½";
+$langSearch = "à¸„à¹‰à¸™à¸«à¸² Search";
+$langSearchCrit = "à¸«à¸™à¸¶à¹ˆà¸‡à¸„à¸³à¸•à¹ˆà¸­à¸šà¸£à¸£à¸—à¸±à¸”! One word per line!";
+$langStatuses = "à¸£à¹ˆà¸²à¸‡:à¸£à¹ˆà¸²à¸‡,à¸‡à¸²à¸™à¸ªà¸³à¹€à¸£à¹‡à¸ˆ:à¸‡à¸²à¸™à¸ªà¸³à¹€à¸£à¹‡à¸ˆ,à¹à¸à¹‰à¹„à¸‚à¹ƒà¸«à¸¡à¹ˆ:à¹à¸à¹‰à¹„à¸‚à¹ƒà¸«à¸¡à¹ˆ,à¸¢à¸±à¸‡à¹„à¸¡à¹ˆà¹„à¸”à¹‰:à¸¢à¸±à¸‡à¹„à¸¡à¹ˆà¹„à¸”à¹‰ :draft:draft,, final:final,, revised:revised,, unavailable:unavailable";
+$langCosts = ":à¹„à¸¡à¹ˆ:à¸Ÿà¸£à¸µ,à¹„à¸¡à¹ˆà¸¡à¸µà¸£à¸²à¸„à¸²,,à¹ƒà¸Šà¹ˆ:à¹„à¸¡à¹ˆà¸Ÿà¸£à¸µ,à¸£à¸²à¸„à¸²:no:free, no cost,, yes:not free, cost";
+$langCopyrights = ":à¹ƒà¸Šà¹ˆ :à¸¥à¸´à¸‚à¸ªà¸´à¸—à¸˜à¸´à¹Œ,, à¹„à¸¡à¹ˆ:à¹„à¸¡à¹ˆà¸¡à¸µà¸¥à¸´à¸‚à¸ªà¸´à¸—à¸˜à¸´à¹Œ :yes:copyright,, no:no copyright";
 $langFormats = ":text/plain;tis-620:text/plain;tis-620,, text/plain;utf-8:text/plain;utf-8,, text/html;tis-620 1:text/html;tis-620,, text/html;windows-874:text/html;windows-874,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;tis-620 :XML;tis-620,, application/xml;windows-874:XML;windows-874,, application/zip:ZIP";
-$langLngResTypes = ":áºº½Ö¡ËÑ´:áºº½Ö¡ËÑ´,, simulation:simulation,, questionnaire:questionnaire,, diagram:diagram,, figure:figure,, graph:graf,, index:index,, slide:slide,, table:table,, narrative text:narrative text,, exam:exam,, experiment:experiment,, problem statement:problem statement,, self assessment:self assessment,, lecture:lecture";
+$langLngResTypes = ":à¹à¸šà¸šà¸à¸¶à¸à¸«à¸±à¸”:à¹à¸šà¸šà¸à¸¶à¸à¸«à¸±à¸”,, simulation:simulation,, questionnaire:questionnaire,, diagram:diagram,, figure:figure,, graph:graf,, index:index,, slide:slide,, table:table,, narrative text:narrative text,, exam:exam,, experiment:experiment,, problem statement:problem statement,, self assessment:self assessment,, lecture:lecture";
 ?>

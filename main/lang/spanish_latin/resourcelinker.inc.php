@@ -1,5 +1,6 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $ResourceAdded = "Resource added. You can now go back to the path or add more resources.";
 $LearningPath = "Learning Path";
@@ -22,14 +23,14 @@ $Link = "Link";
 $AdValvas = "Ad Valvas";
 $Document = "Document";
 $ShowDelete = "Mostrar / Borrar";
-$IntroductionText = "Texto de introducción";
-$CourseDescription = "Descripción del curso";
+$IntroductionText = "Texto de introducciÃ³n";
+$CourseDescription = "DescripciÃ³n del curso";
 $Groups = "Grupos";
 $Users = "Usuarios";
-$IntroductionTextAdd = "Añadir una página que contenga el texto de introducción a este módulo.";
-$CourseDescriptionAdd = "Añadir a este módulo una página que contenga la Descripción del curso.";
-$GroupsAdd = "Añadir una página con los Grupos a este módulo.";
-$UsersAdd = "Añadir una página de los Usuarios a este módulo.";
+$IntroductionTextAdd = "AÃ±adir una pÃ¡gina que contenga el texto de introducciÃ³n a este mÃ³dulo.";
+$CourseDescriptionAdd = "AÃ±adir a este mÃ³dulo una pÃ¡gina que contenga la DescripciÃ³n del curso.";
+$GroupsAdd = "AÃ±adir una pÃ¡gina con los Grupos a este mÃ³dulo.";
+$UsersAdd = "AÃ±adir una pÃ¡gina de los Usuarios a este mÃ³dulo.";
 $ExportableCourseResources = "Recursos del curso exportables al formato SCORM";
 $DokeosRelatedCourseMaterial = "Recursos relacionados. No exportables al formato SCORM";
 $LinkTarget = "Destino del enlace";
@@ -38,21 +39,21 @@ $NewWindow = "En una nueva ventana";
 $StepDeleted1 = "Este";
 $StepDeleted2 = "el elemento fue suprimido en esta herramienta.";
 $Modify = "modificar";
-$Chapter = "Capítulo";
+$Chapter = "CapÃ­tulo";
 $NoAgendaItems = "No hay eventos en la Agenda";
-$AgendaAdd = "Añadir un evento de la Agenda";
+$AgendaAdd = "AÃ±adir un evento de la Agenda";
 $UserGroupFilter = "Filtrar por grupos de usuarios";
-$AgendaSortChronologicallyUp = "Ordenar la agenda cronológicamente (arriba)";
+$AgendaSortChronologicallyUp = "Ordenar la agenda cronolÃ³gicamente (arriba)";
 $ShowCurrent = "Mostrar los eventos actuales de la agenda";
 $ModifyCalendarItem = "Modificar eventos de la agenda";
-$ItemTitle = "Título";
+$ItemTitle = "TÃ­tulo";
 $Detail = "Detalles";
-$EditSuccess = "La modificación se ha producido";
-$AddCalendarItem = "Añadir un evento a la Agenda";
-$AddAnn = "Añadir un anuncio";
-$ForumAddNewTopic = "Foro: añadir un tema";
+$EditSuccess = "La modificaciÃ³n se ha producido";
+$AddCalendarItem = "AÃ±adir un evento a la Agenda";
+$AddAnn = "AÃ±adir un anuncio";
+$ForumAddNewTopic = "Foro: aÃ±adir un tema";
 $ForumEditTopic = "Foro: editar un tema";
 $ExerciseAnswers = "Ejercicio: Respuestas";
 $ForumReply = "Foro: responder";
-$AgendaSortChronologicallyDown = "Ordenar la agenda cronológicamente (del más reciente al más antiguo)";
+$AgendaSortChronologicallyDown = "Ordenar la agenda cronolÃ³gicamente (del mÃ¡s reciente al mÃ¡s antiguo)";
 ?>

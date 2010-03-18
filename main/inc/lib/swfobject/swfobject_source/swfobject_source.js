@@ -1,20 +1,19 @@
 /*
+ * SWFObject 1.5 & 2.2 hybrid solution for the Chamilo LMS
  *
- * SWFObject 1.5 & 2.2 hybrid solution for the Dokeos LMS 1.8.x
- *
- * The problem to solve:
+ * The problem to be solved:
  *
  * The SWFObject 2.x javascript for embedding flash-based multimedia is the
  * successor of SWFObject 1.5, but it does not provide backward compatibility.
- * The Dokeos LMS in its 1.8.x line uses the version 1.5 of the script, a lot
- * of pages have been created using it. On the other hand, the version 1.5
+ * The Chamilo LMS under its past brand used the version 1.5 of the script,
+ * a lot of pages have been created. On the other hand, SWFObject 1.5
  * gets old, there must be a way found for using the modern version of the
  * script for the newly created pages without breaking the old ones.
  * Note that both vesrsions of the script share a common file name swfobject.js
  *
  * The solution:
  *
- * ... is simly merging sources of 1.5 and 2.2 scripts into one. Javsscript is
+ * ... is simply merging sources of 1.5 and 2.2 scripts into one. Javsscript is
  * a case-sensitive language, and fortunately there are no name-conflicts between
  * both versions of the script. So, version 2.2 part of this combined script
  * is to be used for creation of new pages, while the version 1.5 part is to
@@ -33,8 +32,9 @@
  * For SWFObject 2.2, a list of the authors may be seen at:
  * http://code.google.com/p/swfobject/people/list
  *
- * This hybrid solution has been prepared by Ivan Tcholakov, July 2009.
- *
+ * This hybrid solution has been prepared by Ivan Tcholakov
+ * July 2009 - first implementation
+ * January 2010 - this description has been updated
  */
 
 

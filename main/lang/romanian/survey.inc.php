@@ -1,5 +1,6 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $SurveyTitle = "Titlul anchetei";
 $SurveyIntroduction = "Sondaj introductiv";
@@ -88,7 +89,7 @@ $AddAnswer = "Arata variantele de raspunsuri";
 $DisplayAnswersHorVert = "Specificati optiunile:";
 $AnswerOptions = "Variante de raspuns";
 $YesNo = "Da/Nu";
-$MultipleResponse = "Mai multe variante de raspunsuri";
+$MultipleResponse = "Mai multe variante de raspuns";
 $Open = "Deschis";
 $Dropdown = "Lista derulanta";
 $Pagebreak = "Sfarsitul paginii";
@@ -113,7 +114,7 @@ $SelectXAxis = "Selectati intrebarea pentru intrebarea de pe axa X";
 $SelectYAxis = "Selectati intrebarea de pe axa Y";
 $ComparativeReport = "Compara raportul";
 $AllQuestionsOnOnePage = "Toate intrebarile se gasesc pe o singura pagina";
-$SelectUser = "Selecteaza un utilizator";
+$SelectUser = "Utilizator";
 $SelectUserWhoFilledSurvey = "Selectati un utilizator care a completat ancheta";
 $userreport = "Reportaj pe utilizator";
 $VisualRepresentation = "Grafic";
@@ -121,7 +122,7 @@ $AbsoluteTotal = "Totalul absolut";
 $NextQuestion = "Urmatoarea intrebare";
 $PreviousQuestion = "Intrebarea precedenta";
 $PeopleWhoAnswered = "Persoanele care au ales acest raspuns";
-$CourseUsers = "Utilizatorii acestui curs";
+$CourseUsers = "Utilizatori in training";
 $SurveyPublication = "Publicarea anchetei";
 $AdditonalUsers = "Utilizatori extra";
 $MailText = "Textul mailului";
@@ -134,9 +135,8 @@ $DetailedReportByUserDetail = "In acest raport aveti o evaluare a tuturor raspun
 $DetailedReportByQuestionDetail = "In acest raport puteti vedea rezultatele fiecarei intrebari";
 $ReminderResendToAllUsers = "Aceasta este o atentionare pentru invitatie. Fiecare utilizator va primi un mail. Daca nu accesati aceasta optiune vor primi mailul doar utilizatorii noi.";
 $Multiplechoice = "Mai multe variante";
-$Multipleresponse = "Mai multe variante de raspuns";
-$Score = "Rezultat";
-$Shared = "Impartit";
+$Score = "Clasament";
+$Shared = "Partajat";
 $Invite = "Invita";
 $MaximumScore = "Scor maxim";
 $ViewInvited = "Arata invitatii";
@@ -172,7 +172,7 @@ $ShowFormProfile = "Arata formularul de profil";
 $PersonalityQuestion = "Schimba intrebarea";
 $YouNeedToCreateGroups = "Trebuie sa creati grupuri";
 $ManageGroups = "Manevreaza grupuri";
-$Create = "Creaza";
+$Create = "Creează";
 $GroupCreatedSuccessfully = "Grupul este creat cu succes";
 $GroupNeedName = "Grupul trebuie sa aiba un nume";
 $Personality = "Personalizeaza";

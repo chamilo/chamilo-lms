@@ -18,16 +18,45 @@ class TestCourse extends UnitTestCase{
 	public function TestCourse(){
 
 		$this->UnitTestCase('All main course function tests');
-
 	}
 
 	public function setUp(){
-
+		global $_configuration;
 		$this->tcourse = new CourseManager();
+
+		$course_datos = array(
+				'wanted_code'=> 'COURSE1',
+				'title'=>'COURSE1',
+				'tutor_name'=>'R. J. Wolfagan',
+				'category_code'=>'2121',
+				'course_language'=>'english',
+				'course_admin_id'=>'1211',
+				'db_prefix'=> $_configuration['db_prefix'],
+				'firstExpirationDelay'=>'112'
+				);
+		$res = create_course($course_datos['wanted_code'], $course_datos['title'],
+							 $course_datos['tutor_name'], $course_datos['category_code'],
+							 $course_datos['course_language'],$course_datos['course_admin_id'],
+							 $course_datos['db_prefix'], $course_datos['firstExpirationDelay']);
 	}
 
 	public function tearDown(){
 		$this->tcourse = null;
+		$this->dbase = null;
+	 	$code = 'COURSE1';
+
+		$res = CourseManager::delete_course($code);
+		$path = api_get_path(SYS_PATH).'archive';
+		if ($handle = opendir($path)) {
+			while (false !== ($file = readdir($handle))) {
+				if (strpos($file,$code)!==false) {
+					if (is_dir($path.'/'.$file)) {
+						rmdirr($path.'/'.$file);
+					}
+				}
+			}
+			closedir($handle);
+		}
 
 	}
 
@@ -87,7 +116,6 @@ class TestCourse extends UnitTestCase{
 	 	$this->assertFalse($res);
 		$this->assertTrue(is_bool($res));
 	 	$this->assertTrue($this->tcourse->get_course_information(1211)=== is_array($res));
-
 	 }
 
 	 public function testGetCoursesList(){
@@ -111,32 +139,37 @@ class TestCourse extends UnitTestCase{
 	 }
 
 	 public function testUnsubscribeUser(){
-	 	$res = $this->tcourse->unsubscribe_user();
-	 	$this->assertTrue($this->tcourse->unsubscribe_user()===null);
+	 	$user_id = 1;
+	 	$course_code = 'COURSE1';
+	 	$res = CourseManager::unsubscribe_user($user_id, $course_code);
 	 	$this->assertNull($res);
 	 	$this->assertFalse(is_string($res));
 	 }
 
 	 public function testSubscribeUser(){
-	 	$res = $this->tcourse->subscribe_user();
-	 	$this->assertFalse($res);
+	 	$user_id = 1;
+	 	$course_code = 'COURSE1';
+	 	$status = STUDENT;
+	 	$res = CourseManager::subscribe_user($user_id, $course_code, $status);
 	 	$this->assertTrue(is_bool($res));
-	 	$this->assertTrue($this->tcourse->subscribe_user()===false);
 	 }
 
 	public function testAddUserToCourse(){
-		$res = $this->tcourse->add_user_to_course();
-		$this->assertFalse($res);
-		$this->assertTrue($this->tcourse->add_user_to_course()=== false);
+		$user_id = 1;
+		$course_code = 'COURSE1';
+		$status = STUDENT;
+		$res = CourseManager::add_user_to_course($user_id, $course_code, $status);
+		$this->assertTrue($res);
 		$this->assertTrue(is_bool($res));
+		//var_dump($res);
 	}
-
 	//function deprecated public function testGetRealCourseCodeSelectHtml(){}
-
 	public function testCheckParameter(){
-		$res = $this->tcourse->check_parameter();
-		$this->assertFalse($res);
-		$this->assertFalse($this->tcourse->check_parameter()===bool);
+		$parameter = '123';
+		$error_message = 'oops!!';
+		$res = $this->tcourse->check_parameter($parameter, $error_message);
+		$this->assertTrue($res);
+		$this->assertTrue(is_bool($res));
 	}
 
 	public function testCheckParameterOrFail(){
@@ -150,269 +183,300 @@ class TestCourse extends UnitTestCase{
 	}
 
 	public function testIsExistingCourseCode() {
-		$res = $this->tcourse->is_existing_course_code();
-		$this->assertTrue($this->tcourse->is_existing_course_code()===false);
+		$wanted_course_code = 'COURSE1';
+		$res = $this->tcourse->is_existing_course_code($wanted_course_code);
 		$this->assertTrue(is_bool($res));
+		$this->assertTrue($res);
 	}
 
-	/** Return a array() but now its empty, with this test is cheking is get the list course
-	 * @author Arthur Portugal <arthur.portugal@dokeos.com>
-	 */
+   /** Return a array() but now its empty, with this test is cheking is get the list course
+	 * @author Arthur Portugal <arthur.portugal@dokeos.com> -
+	 * doesn't work correctly refactoring by Ricardo Rodriguez <ricardo.rodriguez@beeznest.com>
+	 **/
 
 	public function testGetRealCourseList(){
-		$realgrouplist = new MockDatabase();
-		$course_table = Database :: get_main_table(TABLE_MAIN_COURSE);
-		$sql_query = "SELECT * FROM $course_table WHERE target_course_code IS NULL";
-		$sql_result = Database::query($sql_query, __FILE__, __LINE__);
-		$result = Database::fetch_array($sql_result);
-		$real_course_list[] = $result;
-		$this->courseManager = new CourseManager();
-		$res=$this->courseManager->get_real_course_list();
-		$realgrouplist->expectOnce($real_course_list);
-		$this->assertTrue(is_array($real_course_list));
-		//var_dump($real_course_list);
+		$res = CourseManager::get_real_course_list();
+		$this->assertTrue(is_array($res));
+		$this->assertTrue($res);
+		//var_dump($res);
 	}
 
 	public function testGetVirtualCourseList(){
 		$course_table = Database :: get_main_table(TABLE_MAIN_COURSE);
 		$sql_query = "SELECT * FROM $course_table WHERE target_course_code IS NOT NULL";
-		$sql_result = Database::query($sql_query, __FILE__, __LINE__);
+		$sql_result = Database::query($sql_query);
 		$result = Database::fetch_array($sql_result);
 		$virtual_course_list[] = $result;
 		$res=$this->tcourse->get_virtual_course_list();
-
 		if (!empty($res)) {
 			$this->assertTrue(is_array($res));
 		} else {
 			$this->assertTrue(is_null($res));
 		}
-
 	}
 
 	public function testGetRealCourseListOfUserAsCourseAdmin(){
-		$res = $this->tcourse->get_real_course_list_of_user_as_course_admin();
-		$this->assertFalse($res);
-		$this->assertTrue(is_array($res));
-		$this->assertTrue($this->tcourse->get_real_course_list_of_user_as_course_admin()===array());
+		$user_id = 1;
+		$res = $this->tcourse->get_real_course_list_of_user_as_course_admin($user_id);
+		if(is_array($res)){
+			$this->assertTrue(is_array($res));
+			$this->assertTrue($res);
+		} else {
+		$this->assertNull($res);
+		$this->assertTrue(is_null($res));
+		}
+		//var_dump($res);
 	}
 
 	public function testGetCourseListOfUserAsCourseAdmin(){
-		$res = $this->tcourse->get_course_list_of_user_as_course_admin();
-		$this->assertFalse($res);
+		$user_id = 1;
+		$res = $this->tcourse->get_course_list_of_user_as_course_admin($user_id);
+		if(is_array($res)){
+		$this->assertTrue($res);
 		$this->assertTrue(is_array($res));
+		} else {
+			$this->assertTrue(is_null($res));
+			$this->assertNull($res);
+		}
+		//var_dump($res);
 	}
 
 	public function testDetermineCourseTitleFromCourseInfo(){
-		$res = $this->tcourse->determine_course_title_from_course_info();
-		$this->assertFalse($res);
+		$user_id = 1;
+		$course_info = 'abcd123';
+		$res = $this->tcourse->determine_course_title_from_course_info($user_id, $course_info);
+		$this->assertTrue($res);
 		$this->assertTrue(is_array($res));
-		$this->assertTrue($this->tcourse->determine_course_title_from_course_info()=== array());
 	}
 
 	public function testCreateCombinedName(){
-		$res = $this->tcourse->create_combined_name();
+		$complete_course_name = array();
+		$user_is_registered_in_real_course = false;
+	    $real_course_name = 'COURSE1';
+		$virtual_course_list = array();
+		$res = CourseManager::create_combined_name($user_is_registered_in_real_course,
+												   $real_course_name,
+												   $virtual_course_list
+												   );
 		$this->assertFalse($res);
 		$this->assertTrue(is_string($res));
 		//var_dump($res);
 	}
 
 	public function testCreateCombinedCode(){
-		$res = $this->tcourse->create_combined_code();
+		$complete_course_code = array();
+		$user_is_registered_in_real_course = false;
+		$real_course_code = 'COURSE1';
+		$virtual_course_list = array();
+		$res = CourseManager::create_combined_code($user_is_registered_in_real_course,
+													$real_course_code,
+													$virtual_course_list);
+		if(is_array($res)){
 		$this->assertFalse($res);
-		$this->assertTrue(is_null($res));
-		$this->assertTrue($this->tcourse->create_combined_code()===null);
+		$this->assertTrue(is_string($res));
+		} else {
+		$this->assertFalse(is_null($res));
+		}
+		//var_dump($res);
 	}
 
 	public function testGetVirtualCourseInfo(){
-		$res = $this->tcourse->get_virtual_course_info();
-		$this->assertFalse($res);
+		$real_course_code = 'COURSE1';
+		$res = $this->tcourse->get_virtual_course_info($real_course_code);
+		if(is_array($res)){
 		$this->assertTrue(is_array($res));
-		$this->assertTrue($this->tcourse->get_virtual_course_info()===array());
+		} else {
+			$this->assertTrue($res);
+		}
+		//var_dump($res);
 	}
 
 	public function testIsVirtualCourseFromSystemCode(){
-		$res = $this->tcourse->is_virtual_course_from_system_code();
+		$system_code = 'COURSE1';
+		$res = $this->tcourse->is_virtual_course_from_system_code($system_code);
 		$this->assertFalse($res);
-		$this->assertTrue($this->tcourse->is_virtual_course_from_system_code()===is_bool());
 		$this->assertTrue(is_bool($res));
 		$this->assertFalse($res,null);
 	}
 
 	public function testIsVirtualCourseFromVisualCode(){
-		$res = $this->tcourse->is_virtual_course_from_visual_code();
+		$system_code = 'COURSE1';
+		$res = $this->tcourse->is_virtual_course_from_visual_code($system_code);
 		$this->assertFalse($res);
 		$this->assertTrue(is_bool($res));
-		$this->assertFalse($this->tcourse->is_virtual_course_from_visual_code()===null);
 	}
 
 	public function testHasVirtualCourseFromCode(){
-		$res = $this->tcourse->has_virtual_courses_from_code();
-		$this->assertFalse($res);
-		$this->assertTrue(is_bool($res));
-		$this->assertFalse(is_null($res));
+		$real_course_code = 'COURSE1';
+		$user_id = 1;
+		$res = CourseManager::has_virtual_courses_from_code($real_course_code, $user_id);
+		if(is_bool($res)){
+			$this->assertFalse($res);
+			$this->assertTrue(is_bool($res));
+		} else {
+			$this->assertFalse(is_null($res));
+		}
+		//var_dump($res);
 	}
 
 	public function testGetVirtualCourseLinkedToRealCourse(){
-		$res = $this->tcourse->get_virtual_courses_linked_to_real_course();
+		$real_course_code = 'COURSE1';
+		$res = CourseManager::get_virtual_courses_linked_to_real_course($real_course_code);
 		$this->assertFalse($res);
 		$this->assertTrue(is_array($res));
 		$this->assertFalse(is_null($res));
 	}
 
 	public function testGetTargetOfLinkedCourse(){
-		$res = $this->tcourse->get_target_of_linked_course();
+		$virtual_course_code = 'COURSE1';
+		$res = CourseManager::get_target_of_linked_course($virtual_course_code);
 		$this->assertFalse($res);
 		$this->assertTrue(is_null($res));
-		$this->assertTrue($this->tcourse->get_target_of_linked_course()===null);
 		$this->assertNull($res,true);
 	}
 
 	public function testIsUserSubscribedInCourse(){
-		$res = $this->tcourse->is_user_subscribed_in_course();
-		$this->assertFalse($res);
+		$user_id = 1;
+		$course_code = 'COURSE1';
+		$in_a_session = false;
+		$res = CourseManager::is_user_subscribed_in_course($user_id, $course_code, $in_a_session);
 		$this->assertTrue(is_bool($res));
-		$this->assertTrue($this->tcourse->is_user_subscribed_in_course()===is_bool());
+		//var_dump($res);
 	}
 
 	public function testIsCourseTeacher(){
-		$res = $this->tcourse->is_course_teacher();
+		$user_id = 1;
+		$course_code = 'COURSE1';
+		$res = CourseManager::is_course_teacher($user_id, $course_code);
 		$this->assertTrue(is_bool($res));
-		$this->assertTrue($this->tcourse->is_course_teacher()===is_bool());
 		$this->assertFalse($res);
 	}
 
 	public function testIsUserSubscribedInRealOrLinkedCourse(){
-		$res = $this->tcourse->is_user_subscribed_in_real_or_linked_course();
-		$this-> assertTrue(is_bool($res));
-		$this->assertFalse($this->tcourse->is_user_subscribed_in_real_or_linked_course()=== null);
-		$this->assertFalse($res);
-	}
-
-	public function testGetUserListFromCourseCode(){
-		$res = $this->tcourse->get_user_list_from_course_code();
-		$this->assertFalse($res);
-		$this->assertTrue(is_array($res));
-	}
-
-	public function testGetCoachListFromCourseCode(){
-		$res = $this->tcourse->get_coach_list_from_course_code();
-		$this->assertFalse($res);
-		$this->assertTrue(is_array($res));
-		$this->assertTrue($this->tcourse->get_coach_list_from_course_code()===array());
-	}
-
-	public function testGetStudentListFromCourseCode(){
-		$res = $this->tcourse->get_coach_list_from_course_code();
-		$this->assertFalse($res);
-		$this->assertTrue(is_array($res));
-	}
-
-	public function testGetTeacherListFromCourseCode(){
-		$res = $this->tcourse->get_teacher_list_from_course_code();
-		$this->assertFalse($res);
-		$this->assertTrue(is_null($res));
-		$this->assertTrue($this->tcourse->get_teacher_list_from_course_code()===null);
-	}
-
-	public function testGetRealAndLinkedUserList(){
-		$res = $this->tcourse->get_real_and_linked_user_list();
-		$this->assertFalse($res);
-		$this->assertTrue(is_null($res));
-		$this->assertTrue($this->tcourse->get_real_and_linked_user_list()===null);
-	}
-
-	public function testGetListOfVirtualCoursesForSpecificUserAndRealCourse(){
-		$res = $this->tcourse->get_list_of_virtual_courses_for_specific_user_and_real_course();
-		$this->assertFalse($res);
-		$this->assertTrue(is_array($res));
-	}
-
-	public function testGetGroupListOfCourse(){
-		$grouplist = new MockDatabase();
-		$course_code = 'TEST';
-		$course_info = Database :: get_course_info($course_code);
-		$database_name = $course_info['db_name'];
-		$session_id=1;
-		$group_user_table = Database :: get_course_table(TABLE_GROUP_USER, $database_name);
-		$this->courseManager = new CourseManager();
-		$res=$this->courseManager->get_group_list_of_course($course_code);
-		$grouplist->expectOnce($group_list = array());
-		$this->assertTrue(is_object($this->courseManager));
+		$user_id = 1;
+		$course_code = 'COURSE1';
+		$session_id = '';
+		$res = CourseManager::is_user_subscribed_in_real_or_linked_course($user_id, $course_code, $session_id);
+		if(is_bool($res)){
+			$this-> assertTrue(is_bool($res));
+			$this->assertFalse($res);
+		} else {
+			$this->assertTrue($res);
+		}
 		//var_dump($res);
 	}
 
+	public function testGetUserListFromCourseCode(){
+		$course_code = 'COURSE1';
+		$with_session = true;
+		$session_id = 0;
+		$limit = '';
+		$order_by = '';
+		$res = CourseManager::get_user_list_from_course_code($course_code, $with_session, $session_id, $limit, $order_by);
+		//$this->assertTrue($res);
+		$this->assertTrue(is_array($res));
+		//var_dump($res);
+	}
+
+	public function testGetCoachListFromCourseCode(){
+		$course_code = 'COURSE1';
+		$session_id = '';
+		$res = CourseManager::get_coach_list_from_course_code($course_code, $session_id);
+		$this->assertFalse($res);
+		$this->assertTrue(is_array($res));
+	}
+
+	public function testGetStudentListFromCourseCode(){
+		$course_code = 'COURSE1';
+		$session_id = '001';
+		$res = $this->tcourse->get_student_list_from_course_code($course_code, $session_id);
+		//$this->assertTrue($res);
+		$this->assertTrue(is_array($res));
+		//var_dump($res);
+	}
+
+	public function testGetTeacherListFromCourseCode(){
+		$course_code = 'COURSE1';
+		$res = $this->tcourse->get_teacher_list_from_course_code($course_code);
+		$this->assertFalse($res);
+		$this->assertFalse(is_null($res));
+		//var_dump($res);
+	}
+
+	public function testGetRealAndLinkedUserList(){
+		$course_code = 'COURSE1';
+		$with_sessions = true;
+		$session_id = 0;
+		$res = $this->tcourse->get_real_and_linked_user_list($course_code, $with_sessions, $session_id);
+		$this->assertNull($res);
+		$this->assertTrue(is_null($res));
+		//$this->assertTrue($this->tcourse->get_real_and_linked_user_list()===null);
+		//var_dump($res);
+	}
+
+	public function testGetListOfVirtualCoursesForSpecificUserAndRealCourse(){
+		$result_array = array('user_id' => 1, 'real_course_code' => 'COURSE1');
+		$res = CourseManager::get_list_of_virtual_courses_for_specific_user_and_real_course($result_array['user_id'],$result_array['real_course_code']);
+		if(is_array($res)){
+		$this->assertTrue(is_array($res));
+		} else {
+			$this->assertTrue($res);
+		}
+		//var_dump($res);
+	}
+
+	public function testGetGroupListOfCourse(){
+		$course_code = 'COURSE1';
+		$sql= 	"SELECT * FROM chamilo_COURSE1";
+		$result = CourseManager::get_group_list_of_course($course_code);
+		$this->assertTrue(is_array($result));
+		$this->assertFalse($result);
+		//var_dump($res);
+	}
 
 	public function testAttemptCreateVirtualCourse(){
-	     $createvirtual = new MockDisplay();
-	     $real_course_code = 'TEST';
- 		 $course_title = 'test';
- 		 $wanted_course_code = '01';
-  	     $course_language= 'english';
-		 $course_category= 'lang';
-		 $this->courseManager = new CourseManager();
-		 $res = $this->courseManager->attempt_create_virtual_course($real_course_code,$course_title,$wanted_course_code,$course_language,$course_category);
-		 $createvirtual->expectOnce('Display::display_normal_message',array( $course_title . " - " . get_lang('CourseCreationSucceeded') ));
-		 $createvirtual->expectOnce('CourseManager :: create_virtual_course',array($real_course_code, $course_title, $wanted_course_code, $course_language, $course_category));
-		 $this->assertTrue(is_object($this->courseManager));
-		 $this->assertTrue(is_bool($res));
-		 //var_dump($res);
+	    $real_course_code = 'COURSE1';
+	    $course_title = 'COURSE1';
+	    $wanted_course_code = 'COURSE1';
+	    $course_language = 'english';
+	    $course_category = 'LANG';
+	    ob_start();
+	    $res = CourseManager::attempt_create_virtual_course($real_course_code, $course_title, $wanted_course_code, $course_language, $course_category);
+	    ob_end_clean();
+	    $this->assertTrue(is_bool($res));
 	}
 
 	public function testCreateVirtualCourse(){
-		$createvirtualcourse = new MockDisplay();
-		global $firsExpirationDelay;
-		$user_id = api_get_user_id();
-		$real_course_code = 'TEST';
-		$course_title = 'test';
-		$wanted_course_code = '01';
-		$course_language= 'english';
-		$course_category= 'lang';
-		$course_sys_code = '';
-		$course_screen_code = '';
-		$real_course_info = '';
-		$course_repository = '';
-		$course_db_name = '';
-		$responsible_teacher = '';
-		$faculty_shortname = '';
-		$teacher_id = '';
-		//ob_start();
-		$this->courseManager = new CourseManager();
-		$res=$this->courseManager->create_virtual_course($real_course_code, $course_title, $wanted_course_code, $course_language, $course_category);
-		//ob_get_contents();
-		$createvirtualcourse->expectOnce('Display :: display_error_message',array($wanted_course_code." - ".get_lang("CourseCodeAlreadyExists")));
-		//$createvirtualcourse->expectOnce(register_course($course_sys_code, $course_screen_code, $course_repository, $course_db_name, $responsible_teacher, $faculty_shortname, $course_title, $course_language, $teacher_id));
-		$this->assertTrue(is_object($this->courseManager));
-		$this->assertTrue(is_bool($res));
-		$this->assertTrue(is_object($createvirtualcourse));
-		//ob_end_clean();
-		//print_r($createvirtualcourse);
-		//var_dump($createvirtualcourse);
-	}
-
-	public function testDeleteCourse(){
-		global $_configuration;
-		$code = '01';
-		$res = $this->tcourse->delete_course($code);
-		$this->assertTrue($this->tcourse->delete_course()===null);
-		$this->assertTrue(is_null($res));
+		$real_course_code = 'COURSE1';
+		$course_title = 'COURSE1';
+		$wanted_course_code = 'COURSE1';
+		$course_language = 'english';
+		$course_category = 'LANG';
+		ob_start();
+		$res = CourseManager::create_virtual_course($real_course_code, $course_title, $wanted_course_code, $course_language, $course_category);
+		ob_end_clean();
+		if(is_bool($res)){
+			$this->assertTrue(is_bool($res));
+		} else {
+			$this->assertTrue($res);
+		}
+		//var_dump($res);
 	}
 
 	public function testCreateDatabaseDump(){
 		global $_configuration;
-		$course_code='COD12';
+		$course_code='COURSE1';
 		$res = $this->tcourse->create_database_dump($course_code);
 		$this->assertFalse($res);
 		$this->assertTrue(is_null($res));
-		$this->assertTrue($this->tcourse->create_database_dump()=== null);
 	}
 
 	public function testUserCourseSort(){
 		$user_id ='01';
-		$course_code='0001';
-		$res = $this->tcourse->UserCourseSort($user_id,$course_code);
+		$course_code='COURSE1';
+		$res = CourseManager::UserCourseSort($user_id,$course_code);
 		$this->assertTrue($res);
 		$this->assertTrue(is_numeric($res));
-		$this->assertFalse($this->tcourse->UserCourseSort()=== null);
 	}
 
 	public function testSelectAndSortCategories(){
@@ -425,22 +489,22 @@ class TestCourse extends UnitTestCase{
 	}
 
 	public function testCourseExists(){
-		$course_code='COD12';
-		$res=$this->tcourse->course_exists($course_code);
+		$course_code='COURSE1';
+		$accept_virtual = false;
+		$res=$this->tcourse->course_exists($course_code, $accept_virtual);
 		$this->assertTrue(is_numeric($res));
-		$this->assertTrue($this->tcourse->course_exists()===0);
 	}
 
 	public function testEmailToTutor() {
-		$user_id= '';
-		$course_code= 'test';
+		$user_id= '01';
+		$course_code= 'COURSE1';
 		$res=CourseManager::email_to_tutor($course_code,$user_id);
 		$this->assertTrue(is_string($course_code));
 		//var_dump($res);
 	}
 
 	public function testGetCoursesListByUserId(){
-		$user_id = '';
+		$user_id = '01';
 		$res = $this->tcourse->get_courses_list_by_user_id($user_id);
 		$this->assertTrue(is_array($res));
 		//var_dump($res);
@@ -451,7 +515,6 @@ class TestCourse extends UnitTestCase{
 		$res = $this->tcourse->get_course_id_from_path($path);
 		$this->assertTrue(is_bool($res));
 		$this->assertTrue($res === false);
-		$this->assertTrue( $this->tcourse->get_course_id_from_path()===false);
 	}
 
 	public function testGetCoursesInfoFromVisualCode(){
@@ -462,19 +525,19 @@ class TestCourse extends UnitTestCase{
 	}
 
 	public function testGetEmailsOfTutorsToCourse(){
-		$code = '';
+		$code = '0001';
 		$res= $this->tcourse->get_emails_of_tutors_to_course($code);
 		$this->assertTrue(is_array($res));
 		//var_dump($res);
 	}
 
 	public function testGetEmailOfTutorToSession(){
-		$session = '';
+		$session_id = '01';
+		$course_code = 'COURSE1';
 		ob_start();
-		$this->tcourse->get_email_of_tutor_to_session($session);
-		$res = ob_get_contents();
-		$this->assertTrue(is_string($res));
+		$res = CourseManager::get_email_of_tutor_to_session($session_id,$course_code);
 		ob_end_clean();
+		$this->assertTrue(is_array($res));
 		//var_dump($res);
 	}
 
@@ -488,15 +551,26 @@ class TestCourse extends UnitTestCase{
 	}
 
 	public function testUpdateCourseExtraFieldValue(){
-		$course_code = '0001';
+		$course_code = 'COURSE1';
 		$fname = '';
 		$fvalue= '';
 		$res = $this->tcourse->update_course_extra_field_value($course_code,$fname,$fvalue='');
 		$this->assertTrue($res);
 		$this->assertTrue(is_bool($res));
 		$this->assertFalse(is_null($res));
-
 	}
+
+	public function testDeleteCourse(){
+		global $_configuration;
+		$code = 'COURSE1';
+		if (!empty($course_code)) {
+			$code = $course_code;
+		}
+		$res = CourseManager::delete_course($code);
+		$this->assertTrue(is_null($res));
+	}
+
+
 }
 
 ?>

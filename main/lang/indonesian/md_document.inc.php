@@ -1,5 +1,6 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $langMdCallingTool = "Dokumen";
 $langMdTitle = "Judul Obyek Pembelajaran";
@@ -8,19 +9,19 @@ $langMdCoverage = "misal Sarjana ...";
 $langMdCopyright = "misal: dengan syarat sumber dikenal";
 $langTool = "Metadata Dokumen";
 $langNoScript = "Skrip tidak dihidupkan di browser anda, silahkan abaikan layar di bagian bawah teks ini, ini tidak akan berfungsi ...";
-$langPressAgain = "Tekan \'Simpan\' kembali ...";
+$langPressAgain = "Tekan 'Simpan' kembali ...";
 $langLanguageTip = "bahasa yang digunakan untuk membuat obyek pembelajaran";
 $langIdentifier = "Pengenal/identifier";
-$langIdentifierTip = "identifikasi unik untuk obyek pembelajaran ini, terdiri dari huruf, angka,  _-.()\'!*";
+$langIdentifierTip = "identifikasi unik untuk obyek pembelajaran ini, terdiri dari huruf, angka,  _-.()'!*";
 $langTitleTip = "judul atau nama, dan bahasa judul atau nama";
 $langDescriptionTip = "deskripsi atau komentar, dan bahasa digunakan untk mendeskripsikan obyek pembelajaran ini";
-$langKeyword = "Kata Kunci";
+$langKeyword = "Kata kunci";
 $langKeywordTip = "dipisahkan oleh koma (huruf, angka, -.)";
 $langCoverage = "Cakupan";
 $langCoverageTip = "contoh sarjana xxx: yyy";
 $langKwNote = "Jika anda mengubah bahasa deskripsi, jangan tambah kata kunci pada saat yang sama.";
 $langClickKw = "Klik sebuah kata kunci pada tree untuk memilih atau membatalkan pilihan.";
-$langKwHelp = "<br/> Klik tombol \'+\' untuk membuka, tombol  \'-\' untuk menutup, tombol  \'++\' untuk membuka semua, tombol \'--\' untuk menutup semua.<br/> <br/> Bersihkan semua kata kunci yang terpilih dengan menuutp dan membukanya kembali dengan tombol \'+\' <br/> Alt-click \'+\' cari kata kunci original dalam tree.<br/> <br/> Alt-click pada kata kunci  tanpa teminologi atau batalkan pilihan (deselect) suatu keyword dengan terminologi yang lebih luas.<br/> <br/> Jika anda mengubah bahasa deskrips, jangan tambahkan kata kunci pada saat yang sama.<br/> <br/>";
+$langKwHelp = "<br/> Klik tombol '+' untuk membuka, tombol  '-' untuk menutup, tombol  '++' untuk membuka semua, tombol '--' untuk menutup semua.<br/> <br/> Bersihkan semua kata kunci yang terpilih dengan menuutp dan membukanya kembali dengan tombol '+' <br/> Alt-click '+' cari kata kunci original dalam tree.<br/> <br/> Alt-click pada kata kunci  tanpa teminologi atau batalkan pilihan (deselect) suatu keyword dengan terminologi yang lebih luas.<br/> <br/> Jika anda mengubah bahasa deskrips, jangan tambahkan kata kunci pada saat yang sama.<br/> <br/>";
 $langRights = "Hak-hak Penggunaan";
 $langRightsTip = "deskripsikan dalam kata-kata";
 $langVersion = "Versi";
@@ -28,7 +29,7 @@ $langVersionTip = "jumlah deskripsi";
 $langStatusTip = "pilih dari daftar";
 $langCreatedSize = "Dibuat, ukuran";
 $langCreatedSizeTip = "YYYY-MM-DD waktu dibuat, ukuran dalam octets (bytes)";
-$langAuthorTip = "dalam format VCARD ";
+$langAuthorTip = "dalam format VCARD";
 $langFormat = "Format";
 $langFormatTip = "pilih dari daftar";
 $langLocation = "URL/URI";

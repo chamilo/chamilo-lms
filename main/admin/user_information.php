@@ -113,7 +113,7 @@ $result=Database::query("SELECT DISTINCT id, name, date_start, date_end
 							FROM session_rel_user, session
 							WHERE id_session=id AND id_user=$user_id
 							AND (date_start <= NOW() AND date_end >= NOW() OR date_start='0000-00-00')
-							ORDER BY date_start, date_end, name",__FILE__,__LINE__);
+							ORDER BY date_start, date_end, name");
 
 $sessions=Database::store_result($result);
 
@@ -123,7 +123,7 @@ $result=Database::query("SELECT DISTINCT id, name, date_start, date_end
 						INNER JOIN $tbl_session_course as session_rel_course
 							ON session_rel_course.id_coach = $user_id
 						AND (date_start <= NOW() AND date_end >= NOW() OR date_start='0000-00-00')
-						ORDER BY date_start, date_end, name",__FILE__,__LINE__);
+						ORDER BY date_start, date_end, name");
 
 $session_is_coach = Database::store_result($result);
 
@@ -158,14 +158,15 @@ if(count($sessions)>0){
 									 ORDER BY i";
 		*/
 		// this query is very similar to the above query, but it will check the session_rel_course_user table if there are courses registered to our user or not
-		$personal_course_list_sql = "SELECT distinct course.code k, course.directory d, course.visual_code c, course.db_name db, course.title i, ".(api_is_western_name_order() ? "CONCAT(user.firstname,' ',user.lastname)" : "CONCAT(user.lastname,' ',user.firstname)")." t, email, course.course_language l, 1 sort, category_code user_course_cat, date_start, date_end, session.id as id_session, session.name as session_name, IF(session_course.id_coach = 3,'2', '5')
+		$personal_course_list_sql = "SELECT distinct course.code k, course.directory d, course.visual_code c, course.db_name db, course.title i, ".(api_is_western_name_order() ? "CONCAT(user.firstname,' ',user.lastname)" : "CONCAT(user.lastname,' ',user.firstname)")." t, email, course.course_language l, 1 sort, category_code user_course_cat, date_start, date_end, session.id as id_session, session.name as session_name, IF(session_course_user.id_user = 3,'2', '5')
 										FROM $tbl_session_course_user as session_course_user INNER JOIN $tbl_course AS course
-										ON course.code = session_course_user.course_code AND session_course_user.id_session = $id_session INNER JOIN $tbl_session as session ON session_course_user.id_session = session.id
+										ON course.code = session_course_user.course_code AND session_course_user.id_session = $id_session
+										INNER JOIN $tbl_session as session ON session_course_user.id_session = session.id
 										INNER JOIN $tbl_session_course as session_course
-										LEFT JOIN $tbl_user as user ON user.user_id = session_course.id_coach
+										LEFT JOIN $tbl_user as user ON user.user_id = session_course_user.id_user AND session_course_user.status = 2
 										WHERE session_course_user.id_user = $user_id  ORDER BY i";
 
-		$course_list_sql_result = Database::query($personal_course_list_sql, __FILE__, __LINE__);
+		$course_list_sql_result = Database::query($personal_course_list_sql);
 
 		while ($result_row = Database::fetch_array($course_list_sql_result)){
 			$key = $result_row['id_session'].' - '.$result_row['k'];
@@ -183,9 +184,9 @@ if(count($sessions)>0){
 			$row[] = $my_course['k'];
 			$row[] = $my_course['i'];
 			$row[] = $my_course['s'] == STUDENT ? get_lang('Student') : get_lang('Teacher');
-			$tools = '<a href="course_information.php?code='.$my_course['k'].'">'.Display::return_icon('synthese_view.gif', get_lang('Overview')).'</a>'.
+			$tools = '<a href="course_information.php?code='.$my_course['k'].'&id_session='.$id_session.'">'.Display::return_icon('synthese_view.gif', get_lang('Overview')).'</a>'.
 					'<a href="'.api_get_path(WEB_COURSE_PATH).$my_course['d'].'?id_session='.$id_session.'">'.Display::return_icon('course_home.gif', get_lang('CourseHomepage')).'</a>' .
-					'<a href="course_edit.php?course_code='.$my_course['k'].'">'.Display::return_icon('edit.gif', get_lang('Edit')).'</a>';
+					'<a href="session_course_edit.php?id_session='.$id_session.'&course_code='.$my_course['k'].'">'.Display::return_icon('edit.gif', get_lang('Edit')).'</a>';
 
 			if( $my_course->status == STUDENT ){
 				$tools .= '<a href="user_information.php?action=unsubscribe&course_code='.$my_course['k'].'&user_id='.$user['user_id'].'">'.Display::return_icon('delete.gif', get_lang('Delete')).'</a>';
@@ -212,8 +213,8 @@ echo '</blockquote>';
 /**
  * Show the courses in which this user is subscribed
  */
-$sql = 'SELECT * FROM '.$table_course_user.' cu, '.$table_course.' c WHERE cu.user_id = '.$user['user_id'].' AND cu.course_code = c.code';
-$res = Database::query($sql,__FILE__,__LINE__);
+$sql = 'SELECT * FROM '.$table_course_user.' cu, '.$table_course.' c WHERE cu.user_id = '.$user['user_id'].' AND cu.course_code = c.code AND cu.relation_type <> '.COURSE_RELATION_TYPE_RRHH.' ';
+$res = Database::query($sql);
 if (Database::num_rows($res) > 0)
 {
 	$header=array();
@@ -255,7 +256,7 @@ else
 $table_class_user = Database :: get_main_table(TABLE_MAIN_CLASS_USER);
 $table_class = Database :: get_main_table(TABLE_MAIN_CLASS);
 $sql = 'SELECT * FROM '.$table_class_user.' cu, '.$table_class.' c WHERE cu.user_id = '.$user['user_id'].' AND cu.class_id = c.id';
-$res = Database::query($sql,__FILE__,__LINE__);
+$res = Database::query($sql);
 if (Database::num_rows($res) > 0)
 {
 	$header = array();

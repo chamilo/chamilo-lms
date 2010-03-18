@@ -1,7 +1,6 @@
 <?php // $Id: events.lib.inc.php 22205 2009-07-17 21:11:52Z cfasanando $
-/* See license terms in /dokeos_license.txt */
+/* See license terms in /license.txt */
 /**
-==============================================================================
 * EVENTS LIBRARY
 *
 * This is the events library for Dokeos.
@@ -12,30 +11,22 @@
 *
 * @package dokeos.library
 * @todo convert queries to use Database API
-==============================================================================
 */
-/*
-==============================================================================
-	   INIT SECTION
-==============================================================================
-*/
-// REGROUP TABLE NAMES FOR MAINTENANCE PURPOSE
-$TABLETRACK_LOGIN = $_configuration['statistics_database'].".track_e_login";
-$TABLETRACK_OPEN = $_configuration['statistics_database'].".track_e_open";
-$TABLETRACK_ACCESS = $_configuration['statistics_database'].".track_e_access";
-$TABLETRACK_DOWNLOADS = $_configuration['statistics_database'].".track_e_downloads";
-$TABLETRACK_UPLOADS = $_configuration['statistics_database'].".track_e_uploads";
-$TABLETRACK_LINKS = $_configuration['statistics_database'].".track_e_links";
-$TABLETRACK_EXERCICES = $_configuration['statistics_database'].".track_e_exercices";
-$TABLETRACK_SUBSCRIPTIONS = $_configuration['statistics_database'].".track_e_subscriptions";
-$TABLETRACK_LASTACCESS = $_configuration['statistics_database'].".track_e_lastaccess"; //for "what's new" notification
-$TABLETRACK_DEFAULT = $_configuration['statistics_database'].".track_e_default";
+/*	   INIT SECTION */
 
-/*
-==============================================================================
-		FUNCTIONS
-==============================================================================
-*/
+// REGROUP TABLE NAMES FOR MAINTENANCE PURPOSE
+$TABLETRACK_LOGIN 		= $_configuration['statistics_database'].".track_e_login";
+$TABLETRACK_OPEN 		= $_configuration['statistics_database'].".track_e_open";
+$TABLETRACK_ACCESS 		= $_configuration['statistics_database'].".track_e_access";
+$TABLETRACK_DOWNLOADS	= $_configuration['statistics_database'].".track_e_downloads";
+$TABLETRACK_UPLOADS 	= $_configuration['statistics_database'].".track_e_uploads";
+$TABLETRACK_LINKS 		= $_configuration['statistics_database'].".track_e_links";
+$TABLETRACK_EXERCICES 	= $_configuration['statistics_database'].".track_e_exercices";
+$TABLETRACK_SUBSCRIPTIONS = $_configuration['statistics_database'].".track_e_subscriptions";
+$TABLETRACK_LASTACCESS 	= $_configuration['statistics_database'].".track_e_lastaccess"; //for "what's new" notification
+$TABLETRACK_DEFAULT 	= $_configuration['statistics_database'].".track_e_default";
+
+/* FUNCTIONS */
 /**
  * @author Sebastien Piraux <piraux_seb@hotmail.com>
  * @desc Record information for open event (when homepage is opened)
@@ -79,7 +70,7 @@ function event_open()
 						VALUES
 						('".$remhost."',
 						 '".Database::escape_string($_SERVER['HTTP_USER_AGENT'])."', '".Database::escape_string($referer)."', FROM_UNIXTIME($reallyNow) )";
-		$res = Database::query($sql,__FILE__,__LINE__);
+		$res = Database::query($sql);
 	}
 	return 1;
 }
@@ -100,19 +91,13 @@ function event_login()
 		return 0;
 	}
 	$reallyNow = time();
-    // jeankarim@cblue.be -- making sure that logout_date doesn't stay at its default NULL value
-	$sql = "INSERT INTO ".$TABLETRACK_LOGIN."
-				(login_user_id,
-				 login_ip,
-				 login_date,
-                 logout_date)
-				 VALUES
-					('".$_user['user_id']."',
+	$sql = "INSERT INTO ".$TABLETRACK_LOGIN." (login_user_id, login_ip, login_date, logout_date)
+			VALUES	('".$_user['user_id']."',
 					'".Database::escape_string($_SERVER['REMOTE_ADDR'])."',
 					FROM_UNIXTIME(".$reallyNow."),
-                    FROM_UNIXTIME(".$reallyNow."))";
-	
-    $res = Database::query($sql,__FILE__,__LINE__);
+					FROM_UNIXTIME(".$reallyNow.")		 
+					)";
+	$res = Database::query($sql);
 }
 
 /**
@@ -129,20 +114,11 @@ function event_access_course()
 	global $TABLETRACK_LASTACCESS; //for "what's new" notification
 
 	// if tracking is disabled record nothing
-	if (!$_configuration['tracking_enabled'])
-	{
+	if (!$_configuration['tracking_enabled']){
 		return 0;
 	}
-
-	if(api_get_setting('use_session_mode')=='true' && isset($_SESSION['id_session']))
-	{
-		$id_session = intval($_SESSION['id_session']);
-	}
-	else
-	{
-		$id_session = 0;
-	}
-
+	$id_session = api_get_session_id();
+	
 	$reallyNow = time();
 	if ($_user['user_id']) {
 		$user_id = "'".$_user['user_id']."'";
@@ -152,24 +128,25 @@ function event_access_course()
 	$sql = "INSERT INTO ".$TABLETRACK_ACCESS."
 				(access_user_id,
 				 access_cours_code,
-				 access_date)
+				 access_date,
+				 access_session_id)
 				VALUES
 				(".$user_id.",
 				'".$_cid."',
-				FROM_UNIXTIME(".$reallyNow."))";
-	$res = Database::query($sql,__FILE__,__LINE__);
+				FROM_UNIXTIME(".$reallyNow."),
+				'".$id_session."')";
+	$res = Database::query($sql);
 	// added for "what's new" notification
-	$sql = "   UPDATE $TABLETRACK_LASTACCESS
+	$sql = "  UPDATE $TABLETRACK_LASTACCESS
 	                    SET access_date = FROM_UNIXTIME($reallyNow)
 						WHERE access_user_id = ".$user_id." AND access_cours_code = '".$_cid."' AND access_tool IS NULL AND access_session_id=".$id_session;
-	$res = Database::query($sql,__FILE__,__LINE__);
-	if (Database::affected_rows() == 0)
-	{
+	$res = Database::query($sql);
+	if (Database::affected_rows() == 0) {
 		$sql = "	INSERT INTO $TABLETRACK_LASTACCESS
-		                	    (access_user_id,access_cours_code,access_date, access_session_id)
-		                    	VALUES
-		                	    (".$user_id.", '".$_cid."', FROM_UNIXTIME($reallyNow), ".$id_session.")";
-		$res = Database::query($sql,__FILE__,__LINE__);
+						(access_user_id,access_cours_code,access_date, access_session_id)
+		            VALUES
+		                (".$user_id.", '".$_cid."', FROM_UNIXTIME($reallyNow), ".$id_session.")";
+		$res = Database::query($sql);
 	}
 	// end "what's new" notification
 	return 1;
@@ -200,16 +177,8 @@ function event_access_tool($tool, $id_session=0)
 	global $_configuration;
 	global $_course;
 	global $TABLETRACK_LASTACCESS; //for "what's new" notification
-
-	if(api_get_setting('use_session_mode')=='true' && isset($_SESSION['id_session']))
-	{
-		$id_session = intval($_SESSION['id_session']);
-	}
-	else
-	{
-		$id_session = 0;
-	}
-
+	
+	$id_session = api_get_session_id();	
 	$reallyNow = time();
 	$user_id = $_user['user_id'] ? "'".$_user['user_id']."'" : "0"; // no one
 	// record information
@@ -220,32 +189,35 @@ function event_access_tool($tool, $id_session=0)
 	// added for "what's new" notification
 	$pos2 = strpos(strtolower($_SERVER['HTTP_REFERER']), strtolower($_configuration['root_web']."index"));
 	// end "what's new" notification
-	if ($_configuration['tracking_enabled'] && ($pos !== false || $pos2 !== false))
-	{
-			$sql = "INSERT INTO ".$TABLETRACK_ACCESS."
-							(access_user_id,
-							 access_cours_code,
-							 access_tool,
-							 access_date)
-							VALUES
-							(".$user_id.",".// Don't add ' ' around value, it's already done.
+	if ($_configuration['tracking_enabled'] && ($pos !== false || $pos2 !== false)) {
+		
+		$sql = "INSERT INTO ".$TABLETRACK_ACCESS."
+					(access_user_id,
+					 access_cours_code,
+					 access_tool,
+					 access_date,
+					 access_session_id
+					 )
+				VALUES
+					(".$user_id.",".// Don't add ' ' around value, it's already done.
 					"'".$_cid."' ,
 					'".htmlspecialchars($tool, ENT_QUOTES)."',
-					FROM_UNIXTIME(".$reallyNow."))";
-		$res = Database::query($sql,__FILE__,__LINE__);
+					FROM_UNIXTIME(".$reallyNow."), 
+					'".$id_session."')";
+		$res = Database::query($sql);
 	}
 	// "what's new" notification
-	$sql = "   UPDATE $TABLETRACK_LASTACCESS
-						SET access_date = FROM_UNIXTIME($reallyNow)
-						WHERE access_user_id = ".$user_id." AND access_cours_code = '".$_cid."' AND access_tool = '".htmlspecialchars($tool, ENT_QUOTES)."' AND access_session_id=".$id_session;
-	$res = Database::query($sql,__FILE__,__LINE__);
+	$sql = "UPDATE $TABLETRACK_LASTACCESS
+			SET access_date = FROM_UNIXTIME($reallyNow)
+			WHERE access_user_id = ".$user_id." AND access_cours_code = '".$_cid."' AND access_tool = '".htmlspecialchars($tool, ENT_QUOTES)."' AND access_session_id=".$id_session;
+	$res = Database::query($sql);
 	if (Database::affected_rows() == 0)
 	{
 		$sql = "INSERT INTO $TABLETRACK_LASTACCESS
-							(access_user_id,access_cours_code,access_tool, access_date, access_session_id)
-						VALUES
-							(".$user_id.", '".$_cid."' , '".htmlspecialchars($tool, ENT_QUOTES)."', FROM_UNIXTIME($reallyNow), $id_session)";
-		$res = Database::query($sql,__FILE__,__LINE__);
+					(access_user_id,access_cours_code,access_tool, access_date, access_session_id)
+				VALUES
+					(".$user_id.", '".$_cid."' , '".htmlspecialchars($tool, ENT_QUOTES)."', FROM_UNIXTIME($reallyNow), $id_session)";
+		$res = Database::query($sql);
 	}
 	return 1;
 }
@@ -265,30 +237,28 @@ function event_access_tool($tool, $id_session=0)
  */
 function event_download($doc_url)
 {
-	global $_configuration;
-	global $_user;
-	global $_cid;
-	global $TABLETRACK_DOWNLOADS;
+	global $_configuration, $_user, $_cid;
+
+	$tbl_stats_downloads = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_DOWNLOADS);
 
 	// if tracking is disabled record nothing
-	if (!$_configuration['tracking_enabled'])
-	{
+	if (!$_configuration['tracking_enabled']) {
 		return 0;
 	}
 
 	$reallyNow = time();
-	if ($_user['user_id'])
-	{
+	if ($_user['user_id']) {
 		$user_id = "'".$_user['user_id']."'";
 	} else {
 		$user_id = "0";
 	}
-	$sql = "INSERT INTO ".$TABLETRACK_DOWNLOADS."
+	$sql = "INSERT INTO $tbl_stats_downloads
 				(
 				 down_user_id,
 				 down_cours_id,
 				 down_doc_path,
-				 down_date
+				 down_date,
+				 down_session_id
 				)
 
 				VALUES
@@ -296,9 +266,10 @@ function event_download($doc_url)
 				 ".$user_id.",
 				 '".$_cid."',
 				 '".htmlspecialchars($doc_url, ENT_QUOTES)."',
-				 FROM_UNIXTIME(".$reallyNow.")
+				 FROM_UNIXTIME(".$reallyNow."),
+				 '".api_get_session_id()."'
 				)";
-	$res = Database::query($sql,__FILE__,__LINE__);
+	$res = Database::query($sql);
 	return 1;
 }
 
@@ -330,15 +301,17 @@ function event_upload($doc_id)
 				( upload_user_id,
 				  upload_cours_id,
 				  upload_work_id,
-				  upload_date
+				  upload_date,
+				  updload_session_id
 				)
 				VALUES (
 				 ".$user_id.",
 				 '".$_cid."',
 				 '".$doc_id."',
-				 FROM_UNIXTIME(".$reallyNow.")
+				 FROM_UNIXTIME(".$reallyNow."),
+				 '".api_get_session_id()."'
 				)";
-	$res = Database::query($sql,__FILE__,__LINE__);
+	$res = Database::query($sql);
 	return 1;
 }
 
@@ -350,9 +323,7 @@ function event_upload($doc_id)
 */
 function event_link($link_id)
 {
-	global $_configuration;
-	global $_user;
-	global $_cid;
+	global $_configuration, $_user, $_cid;
 	global $TABLETRACK_LINKS;
 
 	// if tracking is disabled record nothing
@@ -372,16 +343,18 @@ function event_link($link_id)
 				( links_user_id,
 				 links_cours_id,
 				 links_link_id,
-				 links_date
+				 links_date,
+				 links_session_id
 				)
 				VALUES
 				(
 				 ".$user_id.",
 				 '".$_cid."',
 				 '".Database::escape_string($link_id)."',
-				 FROM_UNIXTIME(".$reallyNow.")
+				 FROM_UNIXTIME(".$reallyNow."),
+				 '".api_get_session_id()."'
 				)";
-	$res = Database::query($sql,__FILE__,__LINE__);
+	$res = Database::query($sql);
 	return 1;
 }
 
@@ -402,20 +375,31 @@ function update_event_exercice($exeid,$exo_id, $score, $weighting,$session_id,$l
 {
 	if ($exeid!='') {
 
-		//Validation in case of fraud    
-	    if (isset($_SESSION['expired_time'])) { //Only for exercice of type "One page"
+		// Validation in case of fraud with actived control time
+		$course_code = api_get_course_id();
+		$current_expired_time_key = $course_code.'_'.$session_id.'_'.$exeid;
+	    if (isset($_SESSION['expired_time'][$current_expired_time_key])) { //Only for exercice of type "One page"
 	    	$current_time = time();
-	    	$expired_date = $_SESSION['expired_time'];
+	    	$expired_date = $_SESSION['expired_time'][$current_expired_time_key];
 	    	$expired_time = strtotime($expired_date);
-	    	
 	    	$total_time_allowed = $expired_time + 30;
 		    if ($total_time_allowed < $current_time) {
 		    	$score = 0;
 		    }
 	    }
 
+	    $now = time();
+	    //Validation in case of wrong start_date
+	    if (isset($_SESSION['exercice_start_date'])) {
+	    	$start_date = $_SESSION['exercice_start_date'];
+	    	$diff  = abs($start_date - $now);
+	    	if ($diff > 14400) { // 14400 = 4h*60*60 more than 4h of diff
+	    		$start_date = $now - 1800; //	Now - 30min
+	    	}
+	    }
+
 		$TABLETRACK_EXERCICES = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
-		$reallyNow = time();
+
 		$sql = "UPDATE $TABLETRACK_EXERCICES SET
 				   exe_exo_id 	= 	'".Database::escape_string($exo_id)."',
 				   exe_result	=	  '".Database::escape_string($score)."',
@@ -424,10 +408,11 @@ function update_event_exercice($exeid,$exo_id, $score, $weighting,$session_id,$l
 				   orig_lp_id = '".Database::escape_string($learnpath_id)."',
 				   orig_lp_item_id = '".Database::escape_string($learnpath_item_id)."',
 				   exe_duration = '".Database::escape_string($duration)."',
-				   exe_date= FROM_UNIXTIME(".$reallyNow."),status = '', data_tracking='',start_date =FROM_UNIXTIME(".Database::escape_string($_SESSION['exercice_start_date']).")
+				   exe_date= FROM_UNIXTIME(".$now."),status = '', data_tracking='', start_date = FROM_UNIXTIME(".Database::escape_string($start_date).")
 				 WHERE exe_id = '".Database::escape_string($exeid)."'";
-		$res = @Database::query($sql,__FILE__,__LINE__);
-		unset($_SESSION['expired_time']);
+
+		$res = @Database::query($sql);
+		unset($_SESSION['expired_time'][$current_expired_time_key]);
 		return $res;
 	} else
 		return false;
@@ -444,6 +429,7 @@ function create_event_exercice($exo_id)
 {
 	global $_user, $_cid, $_configuration;
 	$TABLETRACK_EXERCICES = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+	$TBL_EXERCICES = Database::get_course_table(TABLE_QUIZ_TEST);
 	$reallyNow = time();
 	if (isset($_user['user_id']) && $_user['user_id']!='') {
 		$user_id = "'".$_user['user_id']."'";
@@ -459,19 +445,30 @@ function create_event_exercice($exo_id)
 				'exe_cours_id = '."'".$_cid."'".' AND ' .
 				'status = '."'incomplete'".' AND '.
 				'session_id = '."'".api_get_session_id()."'";
-		$sql = Database::query('SELECT exe_id FROM '.$TABLETRACK_EXERCICES.$condition,__FILE__,__LINE__);
+		$sql = Database::query('SELECT exe_id FROM '.$TABLETRACK_EXERCICES.$condition);
 		$row = Database::fetch_array($sql);
 		return $row['exe_id'];
 	}
-    if (isset($_SESSION['expired_time'])) { //Only for exercice of type "One page"
-    	$expired_date = $_SESSION['expired_time'];
+	// get exercise id
+	$sql_exe_id='SELECT exercises.id FROM '.$TBL_EXERCICES.' as exercises, '.$TABLETRACK_EXERCICES.' as track_exercises WHERE exercises.id=track_exercises.exe_exo_id AND track_exercises.exe_id="'.Database::escape_string($exo_id).'"';
+	$res_exe_id=Database::query($sql_exe_id);
+	$row_exe_id=Database::fetch_row($res_exe_id);
+	$exercise_id = intval($row_exe_id[0]);
+
+	// get expired_date
+	$course_code = api_get_course_id();
+	$session_id  = api_get_session_id();
+	$current_expired_time_key = $course_code.'_'.$session_id.'_'.$exercise_id;
+
+    if (isset($_SESSION['expired_time'][$current_expired_time_key])) { //Only for exercice of type "One page"
+    	$expired_date = $_SESSION['expired_time'][$current_expired_time_key];
     } else {
     	$expired_date = '0000-00-00 00:00:00';
     }
-    
+
 	$sql = "INSERT INTO $TABLETRACK_EXERCICES ( exe_user_id, exe_cours_id,expired_time_control,exe_exo_id)
 			VALUES (  ".$user_id.",  '".$_cid."' ,'".$expired_date."','".$exo_id."')";
-	$res = @Database::query($sql,__FILE__,__LINE__);
+	$res = @Database::query($sql);
 	$id= Database::insert_id();
 	return $id;
 }
@@ -498,19 +495,21 @@ function exercise_attempt($score,$answer,$quesId,$exeId,$j)
 	global $_configuration, $_user, $_cid;
 	$TBL_TRACK_ATTEMPT = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 
-	//Validation in case of fraud
-    if (isset($_SESSION['expired_time'])) { //Only for exercice of type "One page"
+	//Validation in case of fraud with actived control time
+	$course_code = api_get_course_id();
+	$session_id  = api_get_session_id();
+	$current_expired_time_key = $course_code.'_'.$session_id.'_'.$exeId;
+    if (isset($_SESSION['expired_time'][$current_expired_time_key])) { //Only for exercice of type "One page"
     	$current_time = time();
-    	$expired_date = $_SESSION['expired_time'];
+    	$expired_date = $_SESSION['expired_time'][$current_expired_time_key];
     	$expired_time = strtotime($expired_date);
-    	$total_time_allowed = $expired_time + 30;
+	    $total_time_allowed = $expired_time + 30;
 	    if ($total_time_allowed < $current_time) {
 	    	$score = 0;
 	    	$answer = 0;
 	    	$j = 0;
 	    }
     }
-
 	// if tracking is disabled record nothing
 	if (!$_configuration['tracking_enabled'])
 	{
@@ -560,10 +559,10 @@ function exercise_attempt($score,$answer,$quesId,$exeId,$j)
 		author)
 		VALUES
 		('."'$exeId','".$quesId."','$score','".date('Y-m-d H:i:s')."',''".')';
-		Database::query($recording_changes,__FILE__,__LINE__);
+		Database::query($recording_changes);
 	}
 	if (!empty($quesId) && !empty($exeId) && !empty($user_id)) {
-		$res = Database::query($sql,__FILE__,__LINE__);
+		$res = Database::query($sql);
 		return $res;
 	} else {
 		return false;
@@ -588,12 +587,17 @@ function exercise_attempt_hotspot($exe_id, $question_id, $answer_id, $correct, $
 		return 0;
 	}
 
-    //Validation in case of fraud
-    if (isset($_SESSION['expired_time'])) { //Only for exercice of type "One page"
+	//Validation in case of fraud  with actived control time
+
+	$course_code = api_get_course_id();
+	$session_id  = api_get_session_id();
+	$current_expired_time_key = $course_code.'_'.$session_id.'_'.$exe_id;
+
+    if (isset($_SESSION['expired_time'][$current_expired_time_key])) { //Only for exercice of type "One page"
     	$current_time = time();
-    	$expired_date = $_SESSION['expired_time'];
+    	$expired_date = $_SESSION['expired_time'][$current_expired_time_key];
     	$expired_time = strtotime($expired_date);
-	    $total_time_allowed = $expired_time + 30;
+    	$total_time_allowed = $expired_time + 30;
 	    if ($total_time_allowed < $current_time) {
 	    	$correct = 0;
 	    }
@@ -609,7 +613,7 @@ function exercise_attempt_hotspot($exe_id, $question_id, $answer_id, $correct, $
 			" '" . Database :: escape_string($answer_id) . "'," .
 			" '" . Database :: escape_string($correct) . "'," .
 			" '" . Database :: escape_string($coords) . "')";
-	return $result = Database::query($sql, __FILE__, __LINE__);
+	return $result = Database::query($sql);
 }
 
 /**
@@ -669,7 +673,7 @@ function event_system($event_type, $event_value_type, $event_value, $timestamp =
 					'$event_type',
 					'$event_value_type',
 					'$event_value')";
-	$res = Database::query($sql,__FILE__,__LINE__);
+	$res = Database::query($sql);
 	return true;
 }
 ?>

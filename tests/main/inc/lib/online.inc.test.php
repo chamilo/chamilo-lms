@@ -61,6 +61,8 @@ class TestOnline extends UnitTestCase {
 
 	function testonline_logout(){
 		global $_configuration, $extAuthSource;
+		global $logout_no_redirect;
+		$logout_no_redirect = 'prueba';
 		$res=online_logout();
 		$this->assertTrue(is_null($res));
 		//var_dump($res);
@@ -69,9 +71,11 @@ class TestOnline extends UnitTestCase {
 	function testwho_is_online_in_this_course() {
 		$uid='';
 		$valid='';
-		array_push($rarray,$barray);
 		$rarray = array();
 		$barray = array();
+		$login_user_id= '';
+		$login_date= '';
+		array_push($rarray,$barray);
 			array_push($barray,$login_user_id);
 			array_push($barray,$login_date);
 
@@ -86,10 +90,9 @@ class TestOnline extends UnitTestCase {
 		//var_dump($rarray);
 	}
 
-	function testWhoIsOnline()  {
-		$statistics_database='';
+	function testWhoIsOnline()  {		
 		$valid='';
-		$res=WhoIsOnline($uid=0,$statistics_database='',$valid);
+		$res=WhoIsOnline($valid);
 		$this->assertTrue(is_array($res));
 		//var_dump($res);
 	}

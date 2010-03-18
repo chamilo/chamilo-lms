@@ -1,35 +1,36 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$Tools  = "Værktøjer";
-$SendWork = "Læg dokument ud";
-$langTooBig = "Du valgte ikke en fil, eller filen er for stor.";
-$langListDeleted = "Hele listen er blevet slettet.";
-$langDocModif = "dokumentets titel er blevet ændret";
-$langDocAdd = "Dokumentet er tilføjet";
+$Tools = "VÃ¦rktÃ¸jer";
+$SendWork = "LÃ¦g dokument ud";
+$langTooBig = "Du valgte enten ikke en fil, eller filen er for stor til at blive sendt";
+$langListDeleted = "Listen er slettet";
+$langDocModif = "dokumentets titel er blevet Ã¦ndret";
+$langDocAdd = "Dokumentet er tilfÃ¸jet";
 $langDocDel = "Dokumentet er slettet";
 $langTitleWork = "Dokumentets titel";
 $langAuthors = "Forfattere";
 $langDelList = "Slet hele listen";
 $langWorkDelete = "Slet";
 $langWorkModify = "Rediger";
-$langWorkConfirmDelete = "Ønsker du at slette denne fil";
+$langWorkConfirmDelete = "Ã˜nsker du at slette denne fil";
 $langAllFiles = "Alle filer";
 $lang_default_upload = "Standardindstilling for filers/dokumenters synligheden";
 $lang_new_visible = "Nye dokumenter er synlige for alle brugere";
 $lang_new_unvisible = "Nye dokumenter er kun synlige for underviseren";
-$lang_doc_unvisible = "Din fil er kun synlig for undervisere på dette kursus og vil derfor heller ikke være synlig for dig.";
-$langDelLk = "Ønsker du virkelig at slette?";
+$lang_doc_unvisible = "Din fil er kun synlig for undervisere pÃ¥ dette kursus og vil derfor heller ikke vÃ¦re synlig for dig.";
+$langDelLk = "Er du sikkert pÃ¥, at du vil slettet dette link?";
 $langMustBeRegisteredUser = "Kun registrerede brugere af dette kursus kan publicere dokumenter.";
 $langListDel = "Slet liste";
-$langNameDir = "Omdøb mappe";
-$langFileExists = "Filen eksisterer allerede";
+$langNameDir = "Navn pÃ¥ den nye mappe";
+$langFileExists = "UdlÃ¦gningen kan ikke gennemfÃ¸res.<br>Der er allerede en fil med samme navn.";
 $CreateDirectory = "Opret mappe";
-$langCurrentDir = "nuværende mappe";
+$langCurrentDir = "nuvÃ¦rende mappe";
 $UploadADocument = "Upload et dokument";
-$EditToolOptions = "Rediger værktøjsindstillinger";
+$EditToolOptions = "Rediger vÃ¦rktÃ¸jsindstillinger";
 $DocumentDeleted = "Dokumentet er slettet";
-$SendMailBody = "En bruger har lagt et dokument ud under Afleveringer på din kursusside";
+$SendMailBody = "En bruger har lagt et dokument ud under Afleveringer pÃ¥ din kursusside";
 $DirDelete = "Slet register/sti";
-$ValidateChanges = "Bekræft ændringer";
+$ValidateChanges = "BekrÃ¦ft Ã¦ndringer";
 ?>

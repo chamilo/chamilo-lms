@@ -1,26 +1,33 @@
 <?php
-/* For licensing terms, see /dokeos_license.txt */
+/* For licensing terms, see /license.txt */
+/**
+*	@package chamilo.exercise
+* 	@author Julio Montoya <gugli100@gmail.com>
+*/
+
 $language_file=array('exercice');
-include_once('../inc/global.inc.php');
-include api_get_path(INCLUDE_PATH) . 'reduced_header.inc.php';
-include_once(api_get_path(LIBRARY_PATH).'geometry.lib.php');
+require_once '../inc/global.inc.php';
+require_once api_get_path(INCLUDE_PATH).'reduced_header.inc.php';
+require_once api_get_path(LIBRARY_PATH).'geometry.lib.php';
 
 $dbg_local = 0;
 
-// answer types
-define('UNIQUE_ANSWER',	1);
-define('MULTIPLE_ANSWER',	2);
-define('FILL_IN_BLANKS',	3);
-define('MATCHING',		4);
-define('FREE_ANSWER', 5);
-define('HOT_SPOT', 6);
-define('HOT_SPOT_ORDER', 	7);
+api_protect_course_script();
+
+// answer types	
+define('UNIQUE_ANSWER',			1);
+define('MULTIPLE_ANSWER',		2);
+define('FILL_IN_BLANKS',		3);
+define('MATCHING',				4);
+define('FREE_ANSWER', 			5);
+define('HOT_SPOT', 				6);
+define('HOT_SPOT_ORDER', 		7);
 define('HOT_SPOT_DELINEATION', 	8);
 
-require_once('exercise.class.php');
-require_once('question.class.php');
-require_once('answer.class.php');
-require_once('exercise.lib.php');
+require_once 'exercise.class.php';
+require_once 'question.class.php';
+require_once 'answer.class.php';
+require_once 'exercise.lib.php';
 
 if (empty ($exerciseResult)) {
     $exerciseResult = $_SESSION['exerciseResult'];
@@ -233,7 +240,7 @@ if (!empty($choice_value))
 						$sql = "INSERT INTO $tbl_track_e_hotspot (hotspot_user_id, hotspot_course_code, hotspot_exe_id, hotspot_question_id, hotspot_answer_id, hotspot_correct, hotspot_coordinate )
 								VALUES ('".Database::escape_string($_user['user_id'])."', '".Database::escape_string($_course['id'])."', '".Database::escape_string($exeId)."', '".Database::escape_string($questionId)."', '".Database::escape_string($answerId)."', '".Database::escape_string($studentChoice)."', '".Database::escape_string($user_array)."')";
 
-						$result = Database::query($sql,__FILE__,__LINE__);
+						$result = Database::query($sql);
 						$user_answer = $user_array;
 						//$_SESSION['exerciseResultCoordinates'][$questionId]=$exerciseResultCoordinates;
 
@@ -429,9 +436,7 @@ if ($answerType!= HOT_SPOT_DELINEATION)
 	$destinationid= $item_list[2];
 	$url=$item_list[3];
 	$table_resume='';
-}
-else
-{
+} else {
 	if ($next==0) {
 		$try = $try_hotspot;
 		$lp = $lp_hotspot;
@@ -524,17 +529,13 @@ echo '<script> function SendEx(num)
 	  }
 	  </script>';
 
-api_protect_course_script();
-
-if ($links!='')
-{
+if ($links!='') {
 	echo '<div id="ModalContent" style="padding-bottom:30px;padding-top:10px;padding-left:20px;padding-right:20px;">
     <a onclick="self.parent.tb_remove();" href="#" style="float:right; margin-top:-10px;" id="exercise_close_link">'.get_lang('Close').'</a>
 	<h1><div style="color:#333;">'.get_lang('Feedback').'</div></h1>
 	<p style="text-align:center">';
 
-	if ($answerType == HOT_SPOT_DELINEATION)
-	{
+	if ($answerType == HOT_SPOT_DELINEATION) {
 		$message='<p>'.get_lang('YourDelineation').'</p>';
 		$message.=$table_resume;
 		$message.='<br />'.get_lang('ResultIs').' '.$result_comment.'<br />';
@@ -542,9 +543,7 @@ if ($links!='')
 			$message.='<p><b>'.get_lang('OARHit').'</b></p>';
 		$message.='<p>'.$comment.'</p>';
 		echo $message;
-	}
-	else
-	{
+	} else	{
 		echo '<p>'.$comment.'</p>';
 	}
 

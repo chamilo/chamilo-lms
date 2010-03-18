@@ -1,25 +1,5 @@
 <?php
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2006 Dokeos SPRL
-	Copyright (c) 2006 Ghent University (UGent)
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact address: Dokeos, 44 rue des palais, B-1030 Brussels, Belgium
-	Mail: info@dokeos.com
-==============================================================================
-*/
+/* For licensing terms, see /license.txt */
 
 /**
 *	@Author Patrick Cool <patrick.cool@UGent.be>, Ghent University
@@ -28,6 +8,9 @@
 *
 * 	@package dokeos.forum
 */
+
+require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';
+
 //are we in a lp ?
 $origin = '';
 if(isset($_GET['origin']))
@@ -69,7 +52,7 @@ foreach ($rows as $post) {
 		echo '<br />'.display_user_image($post['user_id'],$name,$origin).'<br />';
 	}
 	echo display_user_link($post['user_id'], $name, $origin).'<br />';
-	echo $post['post_date'].'<br /><br />';
+	echo api_convert_and_format_date($post['post_date'], null, date_default_timezone_get()).'<br /><br />';
 	// get attach id
 	$attachment_list=get_attachment($post['post_id']);
 	$id_attach = !empty($attachment_list)?$attachment_list['id']:'';
@@ -125,12 +108,12 @@ foreach ($rows as $post) {
 		$post_image.=icon('../img/forumnotification.gif',get_lang('YouWillBeNotified'));
 	}
 	// The post title
-	echo "\t\t<td class=\"$titleclass\">".prepare4display($post['post_title'])."</td>\n";
+	echo "\t\t<td class=\"$titleclass\">".prepare4display(Security::remove_XSS($post['post_title'], STUDENT))."</td>\n";
 	echo "\t</tr>\n";
 
-	// The post message
+	// The post message		
 	echo "\t<tr>\n";
-	echo "\t\t<td class=\"$messageclass\">".prepare4display($post['post_text'])."</td>\n";
+	echo "\t\t<td class=\"$messageclass\">".prepare4display(Security::remove_XSS($post['post_text'], STUDENT))."</td>\n";
 	echo "\t</tr>\n";
 
 
@@ -159,36 +142,4 @@ foreach ($rows as $post) {
 	echo "</table>\n";
 	echo "</div>";
 	$count++;
-}
-
-/**
-* This function builds an array of all the posts in a given thread where the key of the array is the post_id
-* It also adds an element children to the array which itself is an array that contains all the id's of the first-level children
-* @return an array containing all the information on the posts of a thread
-* @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
-*/
-function calculate_children($rows) {
-	foreach($rows as $row) {
-		$rows_with_children[$row["post_id"]]=$row;
-		$rows_with_children[$row["post_parent_id"]]["children"][]=$row["post_id"];
-	}
-	$rows=$rows_with_children;
-	$sorted_rows=array(0=>array());
-	_phorum_recursive_sort($rows, $sorted_rows);
-	unset($sorted_rows[0]);
-	return $sorted_rows;
-}
-
-function _phorum_recursive_sort($rows, &$threads, $seed=0, $indent=0) {
-	if($seed>0) {
-		$threads[$rows[$seed]["post_id"]]=$rows[$seed];
-		$threads[$rows[$seed]["post_id"]]["indent_cnt"]=$indent;
-		$indent++;
-	}
-
-	if(isset($rows[$seed]["children"])) {
-		foreach($rows[$seed]["children"] as $child) {
-			_phorum_recursive_sort($rows, $threads, $child, $indent);
-		}
-	}
 }

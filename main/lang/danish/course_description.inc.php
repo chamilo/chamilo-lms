@@ -1,18 +1,19 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$langCourseProgram  = "Kursusbeskrivelse";
-$langThisCourseDescriptionIsEmpty  = "Der foreligger ikke en kursusbeskrivelse";
-$langEditCourseProgram  = "Opret og rediger kursusbeskrivelsen";
-$QuestionPlan  = "Information til underviseren";
-$langInfo2Say  = "Information til de studerende";
-$langOuAutreTitre  = "Titel";
-$langNewBloc  = "Andet";
-$langAddCat  = "Tilføj kategori";
-$langAdd  = "Tilføj";
-$langValid  = "Godkend";
-$langBackAndForget  = "Glem og tilbage";
-$CourseDescriptionUpdated = "Kursusbeskrivelsen er blevet ændret";
+$langCourseProgram = "Kursusbeskrivelse";
+$langThisCourseDescriptionIsEmpty = "Der foreligger ikke en kursusbeskrivelse";
+$langEditCourseProgram = "Opret og rediger kursusbeskrivelsen";
+$QuestionPlan = "Information til underviseren";
+$langInfo2Say = "Information til de studerende";
+$langOuAutreTitre = "Titel";
+$langNewBloc = "Andet";
+$langAddCat = "TilfÃ¸j kategori";
+$langAdd = "TilfÃ¸j";
+$langValid = "Godkend";
+$langBackAndForget = "Glem og tilbage";
+$CourseDescriptionUpdated = "Kursusbeskrivelsen er blevet Ã¦ndret";
 $CourseDescriptionDeleted = "Kursusbeskrivelsen af slettet";
-$CourseDescriptionIntro = "For at oprette en kursusbeskrivelse skal du klikke på en overskrift/et emne og udfylde feltet med indhold. <br><br> Klik efterfølgende på OK og gå videre til næste overskrift/emne";
+$CourseDescriptionIntro = "For at oprette en kursusbeskrivelse skal du klikke pÃ¥ en overskrift/et emne og udfylde feltet med indhold. <br><br> Klik efterfÃ¸lgende pÃ¥ OK og gÃ¥ videre til nÃ¦ste overskrift/emne";
 ?>

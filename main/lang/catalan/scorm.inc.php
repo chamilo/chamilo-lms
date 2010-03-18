@@ -1,55 +1,56 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$langScormVersion = "versió";
-$langScormRestarted = "Totes les lliçons estan incomplertes ara";
-$langScormNoNext = "Aquesta és la darrera lliçó";
-$langScormNoPrev = "Aquesta és la primera lliçó";
+$langScormVersion = "versiÃ³";
+$langScormRestarted = "Totes les lliÃ§ons estan incomplertes ara";
+$langScormNoNext = "Aquesta Ã©s la darrera lliÃ§Ã³";
+$langScormNoPrev = "Aquesta Ã©s la primera lliÃ§Ã³";
 $langScormTime = "Temps";
-$langScormNoOrder = "No hi ha una ordre establerta, pots clicar sobre qualsevol lliçó";
-$langScormScore = "Puntuació";
-$langScormLessonTitle = "Títol de la lliçó";
-$langScormStatus = "Situació";
+$langScormNoOrder = "No hi ha una ordre establerta, pots clicar sobre qualsevol lliÃ§Ã³";
+$langScormScore = "PuntuaciÃ³";
+$langScormLessonTitle = "TÃ­tol de la lliÃ§Ã³";
+$langScormStatus = "SituaciÃ³";
 $langScormToEnter = "Per introduir";
 $langScormFirstNeedTo = "Primer necessites finalitzar";
-$langScormThisStatus = "Aquesta lliço està ara";
-$langScormClose = "Tancar aplicació";
+$langScormThisStatus = "Aquesta lliÃ§o estÃ  ara";
+$langScormClose = "Tancar aplicaciÃ³";
 $langScormRestart = "Reiniciar";
 $langScormCompstatus = "Completat";
 $langScormIncomplete = "Incomplert";
 $langScormPassed = "Aprovat";
 $langScormFailed = "Suspens";
 $langScormPrevious = "Anterior";
-$langScormNext = "Següent";
+$langScormNext = "SegÃ¼ent";
 $langScormTitle = "Visualitzador de continguts DOKEOS";
-$langScormMystatus = "La meva situació";
-$langScormNoItems = "Aquest contingut no té elements";
-$langScormNoStatus = "No hi ha situació per aquest contingut";
-$langScormLoggedout = "Has sortit de l\'àrea SCORM";
+$langScormMystatus = "La meva situaciÃ³";
+$langScormNoItems = "Aquest contingut no tÃ© elements";
+$langScormNoStatus = "No hi ha situaciÃ³ per aquest contingut";
+$langScormLoggedout = "Has sortit de l'Ã rea SCORM";
 $langScormCloseWindow = "Tancar finestres";
 $ScormBrowsed = "Vist";
 $langScormExitFullScreen = "Tornar a la pantalla normal";
 $langScormFullScreen = "Pantalla completa";
 $langScormNotAttempted = "Sense intentar";
-$langCharset = "Joc de caràcters";
+$langCharset = "Joc de carÃ cters";
 $langLocal = "Local";
 $langRemote = "Remot";
-$langAutodetect = "Detecció automàtica";
-$langAccomplishedStepsTotal = "Total dels apartats realitzats ";
+$langAutodetect = "DetecciÃ³ automÃ tica";
+$langAccomplishedStepsTotal = "Total dels apartats realitzats";
 $langUnknown = "Desconegut";
-$AreYouSureToDeleteSteps = "Està segur de voler eliminar aquests elements?";
+$AreYouSureToDeleteSteps = "EstÃ  segur de voler eliminar aquests elements?";
 $Origin = "Origen";
 $Local = "Local";
 $Remote = "Remot";
 $FileToUpload = "Arxiu a enviar";
 $ContentMaker = "Creador de continguts";
-$ContentProximity = "Localització del contingut";
+$ContentProximity = "LocalitzaciÃ³ del contingut";
 $UploadLocalFileFromGarbageDir = "Enviar arxiu local des del directori main/archive";
-$ThisItemIsNotExportable = "Aquest objecte d\'aprenentatge no és compatible amb SCORM. Per aquesta raó no és exportable";
-$MoveCurrentChapter = "Moure capítol actual";
-$GenericScorm = "SCORM genèric";
-$UnknownPackageFormat = "El format del paquet no pot ser reconegut. Per favor, cerciori\'s que estigui bé creat i que no contingui errors. Els problemes poden ser deguts al format ZIP o a la transferència de fitxers molt llargs. Si no està segur del fitxer ZIP usi el mínim de funcionalitats al comprimir.";
+$ThisItemIsNotExportable = "Aquest objecte d'aprenentatge no Ã©s compatible amb SCORM. Per aquesta raÃ³ no Ã©s exportable";
+$MoveCurrentChapter = "Moure capÃ­tol actual";
+$GenericScorm = "SCORM genÃ¨ric";
+$UnknownPackageFormat = "El format d'aquest paquet no ha estat reconegut. Per favor, comprovi aquest Ã©s un paquet vÃ lid";
 $Attempt = "Intent";
 $MoveTheCurrentForum = "Moure el foro actual";
-$WarningWhenEditingScorm = "Avís ! Si edita el contingut d\'un element scorm, pot alterar l\'informe de la seqüència d\'aprenentatge o danyar l\'objecte. ";
+$WarningWhenEditingScorm = "AvÃ­s ! Si edita el contingut d'un element scorm, pot alterar l'informe de la seqÃ¼Ã¨ncia d'aprenentatge o danyar l'objecte.";
 ?>

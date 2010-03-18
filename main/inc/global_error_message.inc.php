@@ -1,18 +1,15 @@
 <?php
-/* For licensing terms, see /dokeos_license.txt */
+/* For licensing terms, see /license.txt */
 
 /**
- *==============================================================================
- * This script displays error messages on fatal errors
- * during initialization.
+ * This script displays error messages on fatal errors during initialization.
  *
- * @package dokeos.include
- * @author Ivan Tcholakov, 2009
- *==============================================================================
+ * @package chamilo.include
+ * @author Ivan Tcholakov, 2009-2010
  */
 
-$Organisation = '<a href="http://www.dokeos.com" target="_blank">Dokeos Homepage</a>';
-$PoweredBy = 'Platform <a href="http://www.dokeos.com" target="_blank"> Dokeos </a> &copy; 2009';
+$Organisation = '<a href="http://www.chamilo.org" target="_blank">Chamilo Homepage</a>';
+$PoweredBy = 'Platform <a href="http://www.chamilo.org" target="_blank"> Chamilo </a> &copy; '.date('Y');
 
 /**
  * English language variables.
@@ -23,6 +20,7 @@ $SectionSystemRequirementsProblem = 'System requirements problem';
 $SectionInstallation = 'Installation';
 $SectionDatabaseUnavailable = 'Database is unavailable';
 $SectionTechnicalIssues = 'Technical issues';
+$SectionProtection = 'Protection measure';
 
 // Error code.
 $ErrorCode = 'Error code';
@@ -32,8 +30,8 @@ $IncorrectPhpVersionTitle = 'Incorrect PHP version';
 $IncorrectPhpVersionDescription = 'Scripting language version %s1 on your server is incorrect. PHP %s2 should be supported. %s3 Read the installation guide.';
 
 // Error code 2.
-$InstallationTitle = 'Dokeos has not been installed';
-$InstallationDescription = 'Click to INSTALL Dokeos %s or read the installation guide';
+$InstallationTitle = 'Chamilo has not been installed';
+$InstallationDescription = 'Click to INSTALL Chamilo %s or read the installation guide';
 
 // Error code 3.
 // Error code 4.
@@ -41,13 +39,17 @@ $InstallationDescription = 'Click to INSTALL Dokeos %s or read the installation 
 $DatabaseUnavailableTitle = 'Database is unavailable';
 $DatabaseUnavailableDescription = 'This portal is currently experiencing database issues. Please report this to the portal administrator. Thank you for your help.';
 
+// Error code 6.
+$AlreadyInstalledTitle = 'Chamilo has already been installed';
+$AlreadyInstalledDescription = 'The system has already been installed. In order its content to be protected you are not allowed to start the installation script again.';
+
 // Unspecified error.
 $TechnicalIssuesTitle = 'Technical issues';
 $TechnicalIssuesDescription = 'This portal is currently experiencing technical issues. Please report this to the portal administrator. Thank you for your help.';
 
 if (is_int($global_error_code) && $global_error_code > 0) {
 
-	$theme = 'dokeos_blue/';
+	$theme = 'chamilo/';
 	$css_path = 'main/css/';
 	$css_file = $css_path.$theme.'default.css';
 
@@ -71,6 +73,8 @@ if (is_int($global_error_code) && $global_error_code > 0) {
 			$root_rel = substr($root_rel, 0, $pos);
 		}
 	}
+
+	$installation_guide_url = $root_rel.'documentation/installation_guide.html';
 
 	$css_file = $root_sys.$css_file;
 	if (file_exists($css_file)) {
@@ -100,7 +104,7 @@ if (is_int($global_error_code) && $global_error_code > 0) {
 				$length = strlen($IncorrectPhpVersionDescription);
 				$read_installation_guide = substr($IncorrectPhpVersionDescription, $pos + 3, $length);
 				$IncorrectPhpVersionDescription = substr($IncorrectPhpVersionDescription, 0, $pos);
-				$IncorrectPhpVersionDescription .= '<br /><a href="documentation/installation_guide.html" target="_blank">'.$read_installation_guide.'</a>';
+				$IncorrectPhpVersionDescription .= '<br /><a href="'.$installation_guide_url.'" target="_blank">'.$read_installation_guide.'</a>';
 			}
 			$global_error_message['description'] = $IncorrectPhpVersionDescription;
 			break;
@@ -109,12 +113,12 @@ if (is_int($global_error_code) && $global_error_code > 0) {
 			$global_error_message['section'] = $SectionInstallation;
 			$global_error_message['title'] = $InstallationTitle;
 			if (($pos = strpos($InstallationDescription, '%s')) === false) {
-				$InstallationDescription = 'Click to INSTALL Dokeos %s or read the installation guide';
+				$InstallationDescription = 'Click to INSTALL Chamilo %s or read the installation guide';
 			}
 			$click_to_install = substr($InstallationDescription, 0, $pos);
 			$read_installation_guide = substr($InstallationDescription, $pos + 2);
-			$InstallationDescription = '<form action="main/install/index.php" method="get"><button class="save" type="submit" value="&nbsp;&nbsp; '.$click_to_install.' &nbsp;&nbsp;" >'.$click_to_install.'</button></form><br />
-					<a href="documentation/installation_guide.html" target="_blank">'.$read_installation_guide.'</a>';
+			$InstallationDescription = '<form action="'.$root_rel.'main/install/index.php" method="get"><button class="save" type="submit" value="&nbsp;&nbsp; '.$click_to_install.' &nbsp;&nbsp;" >'.$click_to_install.'</button></form><br />
+					<a href="'.$installation_guide_url.'" target="_blank">'.$read_installation_guide.'</a>';
 			$global_error_message['description'] = $InstallationDescription;
 			break;
 
@@ -124,6 +128,12 @@ if (is_int($global_error_code) && $global_error_code > 0) {
 			$global_error_message['section'] = $SectionDatabaseUnavailable;
 			$global_error_message['title'] = $DatabaseUnavailableTitle;
 			$global_error_message['description'] = $DatabaseUnavailableDescription;
+			break;
+
+		case 6:
+			$global_error_message['section'] = $SectionProtection;
+			$global_error_message['title'] = $AlreadyInstalledTitle;
+			$global_error_message['description'] = $AlreadyInstalledDescription;
 			break;
 
 		default:
@@ -157,31 +167,40 @@ if (is_int($global_error_code) && $global_error_code > 0) {
 			</style>
 		</head>
 		<body>
+		<div id="wrapper">
+
 			<div id="header">
-				<div id="header1">{ORGANISATION}</div>
+				<div id="header1">
+					<div id="institution">
+						{ORGANISATION}
+					</div>
+				</div>
 				<div class="clear"></div>
 				<div id="header2">&nbsp;</div>
 				<div id="header3">
-					<ul id="logout">
-						<li><a href="" target="_top"><span>&nbsp;</span></a></li>
-					</ul>
 					<ul>
-						<li id="current"><a href="#"><span>{SECTION}</span></a></li>
+						<li id="current"><a href="#"><span id="tab_active">{SECTION}</span></a></li>
 					</ul>
 					<div style="clear: both;" class="clear"></div>
 				</div>
 				<div id="header4">&nbsp;</div>
 			</div>
+			<div class="clear"> </div>
 
-			<div style="text-align: center;">
-					<br /><br />{DESCRIPTION}<br /><br />
-					{CODE}
+			<div id="main">
+				<div style="text-align: center;">
+						<br /><br />{DESCRIPTION}<br /><br />
+						{CODE}
+				</div>
 			</div>
 
-			<div id="footer">
-				<div class="copyright">{POWERED_BY}</div>
-				&nbsp;
-			</div>
+			<div class="push"/></div>
+		</div>
+
+		<div id="footer">
+			<div class="copyright">{POWERED_BY}</div>
+			&nbsp;
+		</div>
 		</body>
 </html>
 EOM;

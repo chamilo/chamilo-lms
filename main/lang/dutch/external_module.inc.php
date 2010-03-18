@@ -1,20 +1,21 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$langLinkSite = "Link naar een site";
+$langLinkSite = "Link toevoegen en verbinden met startpagina";
 $langSubTitle = "Voegt een link toe aan uw cursusstartpagina.";
-$langAddPage            = "Pagina toevoegen";
-$langSendPage           = "Pagina om toe te voegen";
-$langCouldNot           = "Het bestand kon niet verzonden worden.";
-$langOkSentLink         = "Uw link werd toegevoegd. Hij is nu beschikbaar via de <a href=\"%s/index.php\">startpagina</a>";
-$langTooBig             = "U hebt geen bestand gekozen op te verzenden, of het bestand is te groot.";
-$langExplanation        = "Deze pagina moet in HTML-formaat zijn (bv. \"mijn_pagina.html\"). Die zal door een link verbonden worden met de cursusstartpagina. Om een niet-HTML-document (PDF, OpenDocument, video...) op te sturen, gebruik de <a href=\"../document/document.php\">documentenmodule</a>.";
-$langPgTitle            = "Titel van de pagina";
-$langNoLinkURL          = "Geef het adres (URL) van de link.";
+$langAddPage = "Pagina toevoegen";
+$langSendPage = "Pagina om toe te voegen";
+$langCouldNot = "Het bestand kon niet verzonden worden.";
+$langOkSentLink = "Uw link werd toegevoegd. Hij is nu beschikbaar via de <a href=\"%s/index.php\">startpagina</a>";
+$langTooBig = "U hebt geen bestand gekozen op te verzenden, of het bestand is te groot.";
+$langExplanation = "Wanneer u op OK klikt, wordt een cursuspagina aangemaakt met o.a. de onderdelen: forum, links, oefeningen, agenda en cursusmateriaal. Met uw log-in kan u de inhoud later wijzigen.";
+$langPgTitle = "Titel van de pagina";
+$langNoLinkURL = "Geef het adres (URL) van de link.";
 $langLinkTarget = "Doel van de link";
 $langSameWindow = "In hetzelfde venster";
 $langNewWindow = "In een nieuw venster";
-$langAdded = "De link is toegevoegd.";
+$langAdded = "Toegevoegd";
 $langAddLink = "Link toevoegen";
 $langNoLinkName = "Geef een naam aan de link.";
 $langEditLink = "Wijzig link op cursusstartpagina";

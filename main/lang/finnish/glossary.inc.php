@@ -1,22 +1,23 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$TermAddNew = "Lisää uusi termi";
+$TermAddNew = "LisÃ¤Ã¤ uusi termi";
 $TermName = "Termin nimi";
-$TermDefinition = "Termin määritelmä";
+$TermDefinition = "Termin mÃ¤Ã¤ritelmÃ¤";
 $TermDeleted = "Termi poistettu";
-$TermUpdated = "Termi päivitetty";
-$TermConfirmDelete = "Haluatko varmasti poistaa tämän termin";
-$TermAddButton = "Lisää tämä termi";
-$TermUpdateButton = "Termin päivitys";
+$TermUpdated = "Termi pÃ¤ivitetty";
+$TermConfirmDelete = "Haluatko varmasti poistaa tÃ¤mÃ¤n termin";
+$TermAddButton = "LisÃ¤Ã¤ tÃ¤mÃ¤ termi";
+$TermUpdateButton = "Termin pÃ¤ivitys";
 $TermEdit = "Termin muokkaus";
 $TermDeleteAction = "Termin poisto";
-$OrderBy = "Järjestä";
+$OrderBy = "JÃ¤rjestÃ¤";
 $CreationDate = "Luonti pvm";
-$UpdateDate = "Muokkaus päivä";
-$PreSelectedOrder = "Ennalta määritetty";
-$TermAdded = "Termi lisättty";
-$YouMustEnterATermName = "Termille täytyy antaa nimi";
-$YouMustEnterATermDefinition = "Termille täytyy antaa kuvaus";
-$TableView = "Taulukko näkymä";
+$UpdateDate = "Muokkaus pÃ¤ivÃ¤";
+$PreSelectedOrder = "Ennalta mÃ¤Ã¤ritetty";
+$TermAdded = "Termi lisÃ¤ttty";
+$YouMustEnterATermName = "Termille tÃ¤ytyy antaa nimi";
+$YouMustEnterATermDefinition = "Termille tÃ¤ytyy antaa kuvaus";
+$TableView = "Taulukko nÃ¤kymÃ¤";
 ?>

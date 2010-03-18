@@ -1,36 +1,37 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$langOnlineConference  = "Konference";
-$langWash  = "Vy&#269;istit";
-$langReset  = "Resetovat";
-$langSave  = "Uloit";
-$langRefresh  = "Aktualizovat";
-$langIsNowInYourDocDir  = "je nyní uloenı ve Vaší sloce dokument&#367;. <br><B>Tento soubor je viditelnı</B>";
-$langCopyFailed  = "Tisk se nezda&#345;il";
-$langTypeMessage  = "Prosím napište Vaši správu!";
-$langConfirmReset  = "Opravdu chcete smazat všechny správy?";
-$langHasResetChat  = "zresetován Chat";
-$langNoOnlineConference  = "Momentáln&#283; není ádná konference ...";
-$langMediaFile  = "ivé audio nebo video streaming";
-$langContentFile  = "Prezentace";
-$langListOfParticipants  = "Seznam ú&#269;astník&#367;";
-$langYourPicture  = "Vaše foto";
-$langOnlineDescription  = "Popis konference (On-line)";
-$langOnlyCheckForImportantQuestion = "Prosím zaškrtn&#283;te polí&#269;ko jenom v p&#345;ípad&#283; d&#367;leité otázky !";
-$langQuestion = "otázka";
-$langClearList = "Vy&#269;istit seznam";
-$langWhiteBoard = "Tabule na psaní";
-$langTextEditorDefault = "<h2>Textovı editor</h2>Z programu MS-Word® zde m&#367;ete vkládat a vyjmout text, a pak upravovat. Ú&#269;astníci uvidí vaše úpravy na&#378;ivo.";
-$langStreaming = "P&#345;enos (streaming)";
+$langOnlineConference = "Konference";
+$langWash = "VyÄistit";
+$langReset = "Resetovat";
+$langSave = "UloÅ¾it";
+$langRefresh = "Aktualizovat";
+$langIsNowInYourDocDir = "je nynÃ­ uloÅ¾enÃ½ ve VaÅ¡Ã­ sloÅ¾ce dokumentÅ¯. <br><B>Tento soubor je viditelnÃ½</B>";
+$langCopyFailed = "Tisk se nezdaÅ™il";
+$langTypeMessage = "ProsÃ­m napiÅ¡te VaÅ¡i sprÃ¡vu!";
+$langConfirmReset = "Opravdu chcete smazat vÅ¡echny sprÃ¡vy?";
+$langHasResetChat = "zresetovÃ¡n Chat";
+$langNoOnlineConference = "MomentÃ¡lnÄ› nenÃ­ Å¾Ã¡dnÃ¡ konference ...";
+$langMediaFile = "Å½ivÃ© audio nebo video streaming";
+$langContentFile = "Prezentace";
+$langListOfParticipants = "Seznam ÃºÄastnÃ­kÅ¯";
+$langYourPicture = "VaÅ¡e foto";
+$langOnlineDescription = "Popis konference (On-line)";
+$langOnlyCheckForImportantQuestion = "ProsÃ­m zaÅ¡krtnÄ›te polÃ­Äko jenom v pÅ™Ã­padÄ› dÅ¯leÅ¾itÃ© otÃ¡zky !";
+$langQuestion = "otÃ¡zka";
+$langClearList = "VyÄistit seznam";
+$langWhiteBoard = "Tabule na psanÃ­";
+$langTextEditorDefault = "<h2>TextovÃ½ editor</h2>Z programu MS-WordÂ® zde mÅ¯Å¾ete vklÃ¡dat a vyjmout text, a pak upravovat. ÃšÄastnÃ­ci uvidÃ­ vaÅ¡e Ãºpravy naÅºivo.";
+$langStreaming = "PÅ™enos (streaming)";
 $langStreamURL = "Stream-URL";
 $langStreamType = "Typ streamingu";
-$langLinkName = "Název odkazu (linku)";
+$langLinkName = "NÃ¡zev odkazu (linku)";
 $langLinkURL = "URL odkaz (link)";
-$langWelcomeToOnlineConf = "Vítejte v <b>Online Konferenci</b>";
-$langNoLinkAvailable = "Není odkaz (link)";
+$langWelcomeToOnlineConf = "VÃ­tejte v <b>Online Konferenci</b>";
+$langNoLinkAvailable = "NenÃ­ odkaz (link)";
 $langChat_reset_by = "reset chatu";
 $OrFile = "Nebo soubor";
-$langCallSent = "Váše pozvání na Chat hovor bylo posláno, nyní &#269;ekám na potvrzení od vašeho partnera.";
-$langChatDenied = "Volanı zamítnul Váš hovor.";
+$langCallSent = "VÃ¡Å¡e pozvÃ¡nÃ­ na Chat hovor bylo poslÃ¡no, nynÃ­ ÄekÃ¡m na potvrzenÃ­ od vaÅ¡eho partnera.";
+$langChatDenied = "VolanÃ½ zamÃ­tnul VÃ¡Å¡ hovor.";
 ?>

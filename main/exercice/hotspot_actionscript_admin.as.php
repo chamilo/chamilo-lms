@@ -8,9 +8,6 @@
 * 	@version $Id: admin.php 10680 2007-01-11 21:26:23Z pcool $
 */
 
-
-
-
 include('exercise.class.php');
 include('question.class.php');
 include('answer.class.php');
@@ -34,7 +31,7 @@ $coursePath = $_course['path'];
 
 // Query db for answers
 //$sql = "SELECT id, answer, hotspot_coordinates, hotspot_type, ponderation FROM $TBL_ANSWERS WHERE question_id = '$questionId' ORDER BY id";
-//$result = Database::query($sql,__FILE__,__LINE__);
+//$result = Database::query($sql);
 
 // Init
 $output = "hotspot_lang=$courseLang&hotspot_image=$pictureName&hotspot_image_width=$pictureWidth&hotspot_image_height=$pictureHeight&courseCode=$coursePath";

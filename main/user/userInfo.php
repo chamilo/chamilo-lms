@@ -1,27 +1,7 @@
 <?php // $Id: userInfo.php 20951 2009-05-23 19:07:59Z ivantcholakov $
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2004-2008 Dokeos SPRL
-	Copyright (c) 2003 Ghent University (UGent)
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact: Dokeos, rue Notre Dame, 152, B-1140 Evere, Belgium, info@dokeos.com
-==============================================================================
-*/
+/* For licensing terms, see /license.txt	*/
 
 /**
-==============================================================================
 *	This script displays info about one specific user, specified through
 *	a GET parameter, e.g. uInfo=2
 *
@@ -32,22 +12,17 @@
 *	@author original author (unknown, probably thomas,hugues,moosh)
 *	@author Roan Embrechts, minor modification: virtual courses support
 *	@author Julio Montoya Armas Several fixes
-*	@package dokeos.user
-==============================================================================
+*	@package chamilo.user
 */
 
-/*
-==============================================================================
-	   INIT SECTION
-==============================================================================
-*/
+/*	   INIT SECTION		*/
 
 // name of the language file that needs to be included
 $language_file = array ('registration', 'userInfo');
 
-include ("../inc/global.inc.php");
-require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
-require_once (api_get_path(LIBRARY_PATH).'usermanager.lib.php');
+require_once '../inc/global.inc.php';
+require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
+require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
 require_once api_get_path(LIBRARY_PATH).'tracking.lib.php';
 
 $htmlHeadXtra[] = '<script type="text/javascript">
@@ -66,8 +41,9 @@ $this_section = SECTION_COURSES;
 
 $nameTools = get_lang('Users');
 api_protect_course_script(true);
-if(api_is_anonymous())
-{
+$tool_info = api_get_tool_information_by_name(TOOL_USER);
+
+if(api_is_anonymous()) {
 	api_not_allowed(true);
 }
 
@@ -75,7 +51,9 @@ if(api_is_anonymous())
 $TBL_USERINFO_DEF 		= Database :: get_course_table(TABLE_USER_INFO);
 $TBL_USERINFO_CONTENT 	= Database :: get_course_table(TABLE_USER_INFO_CONTENT);
 
-$interbreadcrumb[] = array ('url' => 'user.php', 'name' => get_lang('Users'));
+if ($tool_info['visibility'] == 1 ) {
+	$interbreadcrumb[] = array ('url' => 'user.php', 'name' => get_lang('Users'));
+} 
 
 if ($origin != 'learnpath')
 { //so we are not in learnpath tool
@@ -110,6 +88,7 @@ $userIdViewed = Security::remove_XSS($_REQUEST['uInfo']);
 -----------------------------------------------------------
 */
 
+
 $mainDB = $_configuration['main_database'];
 $courseCode = $currentCourseID = $_course['sysCode'];
 $tbl_coursUser = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
@@ -122,7 +101,7 @@ $allowedToEditDef = api_is_allowed_to_edit();
 $is_allowedToTrack = api_is_allowed_to_edit() && $_configuration['tracking_enabled'];
 
 // Library connection
-include ("userInfoLib.php");
+require_once ("userInfoLib.php");
 
 /*
 ==============================================================================
@@ -275,23 +254,27 @@ if ($allowedToEditContent)
 	}
 }
 
-/*
-==============================================================================
-	   DISPLAY MODES
-==============================================================================
-*/
+/*	   DISPLAY MODES	*/
 // Back button for each display mode (Top)
-echo '<div class="actions">';
-echo '<a href="user.php?'.api_get_cidreq().'&amp;origin='.$origin.'">'.Display::return_icon('back.png',get_lang('BackUser')).get_lang('BackUser').'</a>';
+
 if (api_is_allowed_to_edit()) {
+	echo '<div class="actions">';
+	echo '<a href="user.php?'.api_get_cidreq().'&amp;origin='.$origin.'">'.Display::return_icon('back.png',get_lang('BackUser')).get_lang('BackUser').'</a>';	
 	if (!is_numeric($_GET['editMainUserInfo'])) {
 		echo '<a href="userInfo.php?'.api_get_cidreq().'&amp;origin='.$origin.'&amp;editMainUserInfo='.$userIdViewed.'">'.Display::return_icon('edit.gif',get_lang('EditUser')).get_lang('EditUser').'</a>';
 	} else {
 		echo '<a href="userInfo.php?'.api_get_cidreq().'&amp;origin='.$origin.'&amp;uInfo='.$userIdViewed.'">'.Display::return_icon('members.gif',get_lang('ViewUser')).get_lang('ViewUser').'</a>';
-	}
+	}	
 	echo '<a href="../mySpace/myStudents.php?'.api_get_cidreq().'&amp;origin=user_course&amp;student='.$userIdViewed.'&amp;details=true&amp;course='.$_course['id'].'">'.Display::return_icon('statistics.gif',get_lang('UserStatistics')).get_lang('UserStatistics').'</a>';
+	echo '</div>';
+} else {
+	if ($tool_info['visibility'] == 1 ) {
+		echo '<div class="actions">';
+		echo '<a href="user.php?'.api_get_cidreq().'&amp;origin='.$origin.'">'.Display::return_icon('back.png',get_lang('BackUser')).get_lang('BackUser').'</a>';
+		echo '</div>';	
+	}	
 }
-echo '</div>';
+
 
 
 if ($displayMode == "viewDefEdit")
@@ -348,7 +331,7 @@ elseif ($displayMode == "viewDefList")
 
 	echo "<center>\n",
 			"<form method=\"post\" action=\"".api_get_self()."\">",
-			"<input type=\"submit\" name=\"addDef\" value=\"".get_lang('AddNewHeading')."\" />",
+			"<input type=\"submit\" name=\"addDef\" class=\"plus\" value=\"".get_lang('AddNewHeading')."\" />",
 			"</form>\n",
 			"<center>\n";
 }
@@ -477,9 +460,8 @@ elseif ($displayMode == "viewContentList") // default display
 		echo '<input type="image" src="'.$image_array['dir'].$image_array['file'].'" onclick="return show_image(\''.$url_big_image.'\',\''.$big_image_width.'\',\''.$big_image_height.'\');"/>';
 		}
 
-		// is the user online ?
-		$statistics_database = Database :: get_statistic_database();	
-		$users_online = WhoIsOnline($userIdViewed, $statistics_database, 30);
+		// is the user online ?			
+		$users_online = WhoIsOnline(30);
 		foreach ($users_online as $online) {
 			if (in_array($userIdViewed, $online)) {	
 				
@@ -502,7 +484,7 @@ elseif ($displayMode == "viewContentList") // default display
 
 				"<tr align=\"center\" bgcolor=\"#E6E6E6\">\n",
 				"<td align=\"left\">",get_lang('Name'),"</td>\n",
-				"<td width=\"100px\" align=\"left\">",get_lang('Description'),"</td>\n",
+				"<td width=\"20%\" align=\"left\">",get_lang('Description'),"</td>\n",
 				//"<td>",get_lang('Tutor'),"</td>\n",
 				"<td>",get_lang('CourseManager'),"</td>\n",
 				($allowedToEditDef?"<td>".get_lang('Edit')."</td>\n":""),
@@ -516,6 +498,7 @@ elseif ($displayMode == "viewContentList") // default display
 
 				//DISPLAY TABLE CONTENT
 
+
 				// deprecated feature
 				if ($mainUserInfo['tutor_id'] == 1)
 				{
@@ -523,7 +506,7 @@ elseif ($displayMode == "viewContentList") // default display
 				}
 				else
 				{
-					echo "<td> - </td>\n";
+					//echo "<td> - </td>\n";
 				}
 
 				if ($mainUserInfo['status'] == 1)
@@ -585,7 +568,7 @@ elseif ($displayMode == "viewContentList") // default display
 		echo	"<div align=right>",
 				"<form method=\"post\" action=\"".api_get_self()."\">",
 				get_lang('CourseAdministratorOnly')," : ",
-				"<input type=\"submit\" name=\"viewDefList\" value=\"".get_lang('DefineHeadings')."\" />",
+				"<input type=\"submit\" class=\"save\" name=\"viewDefList\" value=\"".get_lang('DefineHeadings')."\" />",
 				"</form>",
 				"<hr noshade size=\"1\" style=\"color:#99CCFF\">",
 				"</div>\n";
@@ -631,10 +614,6 @@ elseif ($displayMode == "viewContentList") // default display
 
 // Back button for each display mode (bottom)
 //echo "<div class=\"actions\"><a href=\"user.php?".api_get_cidreq()."&amp;origin=".$origin."\">".get_lang('BackUser')."</a></div>\n";
-/*
-==============================================================================
-		FOOTER
-==============================================================================
-*/
+/*		FOOTER	*/
 Display :: display_footer();
 ?>

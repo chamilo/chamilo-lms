@@ -1,7 +1,8 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$langLineNumber = "Número de Líneas";
+$langLineNumber = "NÃºmero de LÃ­neas";
 $langLine = "linea";
 $langLines = "lineas";
 $langLineOrLines = "linea(s)";
@@ -14,18 +15,22 @@ $langBackToUsersList = "Volver a la lista de usuarios";
 $langTracking = "Seguimiento";
 $langCourseManager = "Profesor";
 $langModRight = "cambiar los derechos de";
-$langNoAdmin = "desde ahora <b>no</b> tiene derecho de administración sobre este sitio ";
-$langAllAdmin = "ahora tiene <b>todos</b> los derechos de administración sobre esta página ";
+$langNoAdmin = "desde ahora <b>no</b> tiene derecho de administraciÃ³n sobre este sitio";
+$langAllAdmin = "ahora tiene <b>todos</b> los derechos de administraciÃ³n sobre esta pÃ¡gina";
 $langModRole = "Cambiar el rol de";
 $langRole = "rol / estado";
 $langIsNow = "es de ahora en adelante";
 $langInC = "en este curso";
 $langFilled = "No todos los campos fueron llenados";
 $langUserNo = "Usuario No";
-$langTaken = "ya está en uso. Por favor, haga otra selección";
+$langTaken = "ya estÃ¡ en uso. Por favor, haga otra selecciÃ³n";
 $langTutor = "Tutor";
-$langUnreg = "Retirar suscripción";
-$langGroupUserManagement = "Administración de grupo";
+$langUnreg = "Retirar suscripciÃ³n";
+$langGroupUserManagement = "AdministraciÃ³n de grupo";
 $langUnregister = "Desunscribir";
-$langAddAUser = "Añadir usuarios";
+$langAddAUser = "AÃ±adir usuarios";
+$InvitationReceived = "InvitaciÃ³n recibida";
+$InvitationSent = "InvitaciÃ³n envida";
+$YouAlreadySentAnInvitation = "Ud. ya ha enviado una invitaciÃ³n";
+$AllowSendMessageToAllPlatformUsersTitle = "Permitir enviar mensajes a todos los usuarios de la plataforma";
 ?>

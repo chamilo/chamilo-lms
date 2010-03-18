@@ -1,13 +1,10 @@
 <?php
-// $Id: add_course.php 20588 2009-05-13 12:34:18Z pcool $
-/* For licensing terms, see /dokeos_license.txt */
+/* For licensing terms, see /license.txt */
 /**
-==============================================================================
 * This script allows professors and administrative staff to create course sites.
 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 * @author Roan Embrechts, refactoring
 * @package dokeos.create_course
-==============================================================================
 */
 
 // name of the language file that needs to be included
@@ -17,21 +14,31 @@ $language_file = "create_course";
 $cidReset = true; // Flag forcing the 'current course' reset
 
 // including the global file
-include ('../inc/global.inc.php');
+require_once '../inc/global.inc.php';
 
 // section for the tabs
-$this_section=SECTION_COURSES;
+$this_section = SECTION_COURSES;
 
 // include configuration file
-include (api_get_path(CONFIGURATION_PATH).'add_course.conf.php');
+require_once api_get_path(CONFIGURATION_PATH).'add_course.conf.php';
 
-// include additional libraries
-include_once (api_get_path(LIBRARY_PATH).'add_course.lib.inc.php');
-include_once (api_get_path(LIBRARY_PATH).'course.lib.php');
-include_once (api_get_path(LIBRARY_PATH).'debug.lib.inc.php');
-include_once (api_get_path(LIBRARY_PATH).'fileManage.lib.php');
-include_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
-include_once (api_get_path(CONFIGURATION_PATH).'course_info.conf.php');
+// require_once additional libraries
+require_once api_get_path(LIBRARY_PATH).'add_course.lib.inc.php';
+require_once api_get_path(LIBRARY_PATH).'course.lib.php';
+require_once api_get_path(LIBRARY_PATH).'debug.lib.inc.php';
+require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
+require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
+require_once api_get_path(CONFIGURATION_PATH).'course_info.conf.php';
+
+$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js" type="text/javascript" language="javascript"></script>'; //jQuery
+$htmlHeadXtra[] = '<script type="text/javascript">
+function setFocus(){
+$("#title").focus();
+}
+$(window).load(function () {
+  setFocus();
+});
+</script>';
 
 $interbreadcrumb[] = array('url'=>api_get_path(WEB_PATH).'user_portal.php', 'name'=> get_lang('MyCourses'));
 // Displaying the header
@@ -63,7 +70,7 @@ $form = new FormValidator('add_course');
 // form title
 $form->addElement('header', '', $tool_name);
 //title
-$form->add_textfield('title',get_lang('CourseName'),true,array('size'=>'60'));
+$form->addElement('text', 'title', get_lang('CourseName'), array('size'=>'60','id' => 'title'));
 $form->applyFilter('title', 'html_filter');
 
 $form->addElement('static',null,null,get_lang('Ex'));
@@ -112,7 +119,7 @@ if ($form->validate()) {
 	$keys = define_course_keys($wanted_code, "", $_configuration['db_prefix']);
 
 	$sql_check = sprintf('SELECT * FROM '.$table_course.' WHERE visual_code = "%s"',Database :: escape_string($wanted_code));
-	$result_check = Database::query($sql_check,__FILE__,__LINE__); //I don't know why this api function doesn't work...
+	$result_check = Database::query($sql_check); //I don't know why this api function doesn't work...   Ivan, 12-FEB-2010: What do you mean?
 	if ( Database::num_rows($result_check)<1 ) {
 		if (sizeof($keys)) {
 			$visual_code = $keys["currentCourseCode"];
@@ -146,9 +153,5 @@ if ($form->validate()) {
 	$form->display();
 	Display::display_normal_message(get_lang('Explanation'));
 }
-/*
-==============================================================================
-		FOOTER
-==============================================================================
-*/
+/*	FOOTER */
 Display :: display_footer();

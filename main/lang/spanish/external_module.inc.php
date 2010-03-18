@@ -1,25 +1,26 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$langLinkSite = "Enlace a una web";
-$langSubTitle = "AÒadir enlace externo o interno a la p·gina principal del curso. Para realizarlo, vaya a la p·gina, copie la URL que se encuentra en la barra de direcciones del navegador y pÈguela en el campo \\\"Enlace\\\" situado m·s abajo.";
-$langAddPage            = "AÒadir p·gina";
-$langSendPage           = "P·gina a enviar";
-$langCouldNot           = "El archivo no puede enviarse";
-$langOkSentLink         = "El enlace ha sido aÒadido. Ahora es accesible desde la <a href=\"%s/index.php\">p·gina principal del curso</a>";
-$langTooBig             = "No ha seleccionado el archivo a enviar o es demasiado grande";
-$langExplanation        = "La p·gina debe estar en formato HTML (ej. \\\"my_page.htm\\\"). Se enlazar· a la p·gina inicial. Si quiere enviar documentos que no sean HTML (PDF, Word, Power Point, Video, etc.) utilice la <a href=../document/document.php>herramienta Documentos</a>";
-$langPgTitle            = "TÌtulo de la p·gina";
-$langNoLinkURL          = "Introduzca la direcciÛn del enlace";
+$langLinkSite = "A√±adir un enlace web en la p√°gina principal";
+$langSubTitle = "A√±adir enlace externo o interno a la p√°gina principal del curso. Para realizarlo, vaya a la p√°gina, copie la URL que se encuentra en la barra de direcciones del navegador y p√©guela en el campo \"Enlace\" situado m√°s abajo.";
+$langAddPage = "A√±adir p√°gina";
+$langSendPage = "P√°gina a enviar";
+$langCouldNot = "El archivo no puede enviarse";
+$langOkSentLink = "El enlace ha sido a√±adido. Ahora es accesible desde la <a href=\"%s/index.php\">p√°gina principal del curso</a>";
+$langTooBig = "No ha seleccionado el archivo a enviar o es demasiado grande";
+$langExplanation = "Una vez que haya pulsado el bot√≥n \"Crear curso\" se crear√° el sitio web del curso, en el que dispondr√° de m√∫ltiples herramientas que podr√° configurar para dar al curso su aspecto definitivo: Test o Ejercicios, Proyectos o Blogs, Wikis, Tareas, Creador y visualizador de Lecciones en formato SCORM, Encuestas y mucho m√°s. Su identificaci√≥n como creador de este sitio autom√°ticamente lo convierte en profesor del curso, lo cual le permitir√° modificarlo seg√∫n sus necesidades.";
+$langPgTitle = "T√≠tulo de la p√°gina";
+$langNoLinkURL = "Introduzca la direcci√≥n del enlace";
 $langLinkTarget = "Destino del enlace";
 $langSameWindow = "En la misma ventana";
 $langNewWindow = "En una nueva ventana";
-$langAdded = "El enlace ha sido aÒadido";
-$langAddLink = "AÒadir un enlace";
+$langAdded = "A√±adido";
+$langAddLink = "A√±adir un enlace";
 $langNoLinkName = "Introduzca el nombre del enlace";
-$langEditLink = "Editar un enlace de la p·gina principal del curso";
+$langEditLink = "Editar un enlace de la p√°gina principal del curso";
 $langChangePress = "Cambiar y presionar OK";
-$langLinkChanged = "El enlace de la p·gina principal del curso ha sido modificado. Use el men˙ de navegaciÛn inferior para volver a la p·gina principal.";
+$langLinkChanged = "El enlace de la p√°gina principal del curso ha sido modificado. Use el men√∫ de navegaci√≥n inferior para volver a la p√°gina principal.";
 $NoLinkName = "Enlace sin nombre";
 $NoLinkURL = "Enlace sin URL";
 $LinkChanged = "Enlace modificado";

@@ -1,36 +1,37 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $langMdCallingTool = "Dokumenty";
-$langMdTitle = "Názov vyu&#269;ovacieho predmetu";
-$langMdDescription = "Pre uloženie tejto informácie stla&#269;te Uloži&#357;";
-$langTool = "Metadáta dokumentu";
-$langPressAgain = "Znova stla&#269;te \"Uloži&#357;\" ...";
-$langLanguageTip = "jazyk, v ktorom bol vyu&#269;ovací predmet vytvorený";
-$langIdentifier = "Identifikátor";
-$langIdentifierTip = "jedine&#269;ná identifikácia vyu&#269;ovacieho predmetu zložená z písmen, &#269;íslic, _-.()\'!*";
-$langTitleTip = "názov alebo meno a jazyk tohto názvu alebo mena";
-$langDescriptionTip = "popis alebo komentár a jazyk použitý pre popis tohto vyu&#269;ovacieho predmetu";
-$langKeyword = "K&#318;ú&#269;ové slová";
-$langKeywordTip = "rozdeli&#357; &#269;iarkami (písmená, &#269;íslice, -.)";
-$langKwNote = "Ke&#271; zmeníte jazyk popisu, nepridávajte sú&#269;asne k&#318;ú&#269;ové slová.";
-$langClickKw = "Pre ozna&#269;enie alebo zrušenie výberu k&#318;ú&#269;ového slova kliknite na&#328; v štruktúre.  ";
-$langRights = "Používate&#318;ské práva";
-$langRightsTip = "opísa&#357; slovami";
+$langMdTitle = "NÃ¡zov vyuÄovacieho predmetu";
+$langMdDescription = "Pre uloÅ¾enie tejto informÃ¡cie stlaÄte UloÅ¾iÅ¥";
+$langTool = "MetadÃ¡ta dokumentu";
+$langPressAgain = "Znova stlaÄte \"UloÅ¾iÅ¥\" ...";
+$langLanguageTip = "jazyk, v ktorom bol vyuÄovacÃ­ predmet vytvorenÃ½";
+$langIdentifier = "IdentifikÃ¡tor";
+$langIdentifierTip = "jedineÄnÃ¡ identifikÃ¡cia vyuÄovacieho predmetu zloÅ¾enÃ¡ z pÃ­smen, ÄÃ­slic, _-.()'!*";
+$langTitleTip = "nÃ¡zov alebo meno a jazyk tohto nÃ¡zvu alebo mena";
+$langDescriptionTip = "popis alebo komentÃ¡r a jazyk pouÅ¾itÃ½ pre popis tohto vyuÄovacieho predmetu";
+$langKeyword = "KlÃºÄovÃ© slovÃ¡";
+$langKeywordTip = "rozdeliÅ¥ Äiarkami (pÃ­smenÃ¡, ÄÃ­slice, -.)";
+$langKwNote = "KeÄ zmenÃ­te jazyk popisu, nepridÃ¡vajte sÃºÄasne kÄ¾ÃºÄovÃ© slovÃ¡.";
+$langClickKw = "Pre oznaÄenie alebo zruÅ¡enie vÃ½beru kÄ¾ÃºÄovÃ©ho slova kliknite naÅˆ v Å¡truktÃºre.";
+$langRights = "PouÅ¾Ã­vateÄ¾skÃ© prÃ¡va";
+$langRightsTip = "opÃ­saÅ¥ slovami";
 $langVersion = "Verzia";
-$langVersionTip = "&#269;íslo alebo popis";
-$langStatusTip = "vybra&#357; zo zoznamu";
-$langCreatedSize = "Vytvorený, ve&#318;kos&#357;";
-$langCreatedSizeTip = "RRRR-MM-DD vytvorenia, ve&#318;kos&#357; v bytoch";
-$langAuthorTip = "vo formáte VCARD";
-$langFormat = "Formát";
-$langFormatTip = "vybra&#357; zo zoznamu";
+$langVersionTip = "ÄÃ­slo alebo popis";
+$langStatusTip = "vybraÅ¥ zo zoznamu";
+$langCreatedSize = "VytvorenÃ½, veÄ¾kosÅ¥";
+$langCreatedSizeTip = "RRRR-MM-DD vytvorenia, veÄ¾kosÅ¥ v bytoch";
+$langAuthorTip = "vo formÃ¡te VCARD";
+$langFormat = "FormÃ¡t";
+$langFormatTip = "vybraÅ¥ zo zoznamu";
 $langLocation = "URL/URI";
-$langLocationTip = "Klikom otvoríte predmet";
-$langStore = "Uloži&#357;";
-$langDeleteAll = "Zmaza&#357; všetky metadáta";
-$langConfirmDelete = "*Naozaj* chcete zmaza&#357; všetky metadáta?";
-$langCourseKwds = "Tento dokument obsahuje k&#318;ú&#269;ové slová kurzu";
-$langSearch = "Vyh&#318;ada&#357;";
+$langLocationTip = "Klikom otvorÃ­te predmet";
+$langStore = "UloÅ¾iÅ¥";
+$langDeleteAll = "ZmazaÅ¥ vÅ¡etky metadÃ¡ta";
+$langConfirmDelete = "*Naozaj* chcete zmazaÅ¥ vÅ¡etky metadÃ¡ta?";
+$langCourseKwds = "Tento dokument obsahuje kÄ¾ï¿½Äovï¿½ slovï¿½ kurzu";
+$langSearch = "VyhÄ¾adaÅ¥";
 $langSearchCrit = "Jedno slovo v riadku!";
 ?>

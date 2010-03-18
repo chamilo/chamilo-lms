@@ -1,4 +1,5 @@
-<?php //$Id: geometry.lib.php 16500 2008-10-11 14:56:57Z yannoo $
+<?php
+/* For licensing terms, see /license.txt */
 
 //more natural array index names
 define(X, 0);
@@ -865,10 +866,9 @@ function fully_inside($axs, $ays, $bxs, $bys) {
   return TRUE;
 }
 
-function _is_next_to($point, $last_point, $xs, $ys, $between_points=FALSE) {
-  $polygon = _to_points_array($xs, $ys);
-
-  if ( ($pos=array_search($point, $polygon)) !== NULL  && !empty($pos)) {
+function _is_next_to($point, $last_point, $xs, $ys, $between_points=FALSE) {  
+  $polygon = _to_points_array($xs, $ys);  
+  if ( is_array($polygon) && ($pos=array_search($point, $polygon)) !== NULL  && !empty($pos)) {
                //echo ":: :: is_next_to :: pos found !!<br />";
     if ( $rp=_get_right_point($last_point['point'], $polygon) == $point
       || $lp=_get_left_point($last_point['point'], $polygon) == $point ) {

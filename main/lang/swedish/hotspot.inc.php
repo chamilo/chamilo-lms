@@ -1,9 +1,10 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$select = "Välj";
+$select = "VÃ¤lj";
 $square = "Kvadrat";
 $circle = "Elips";
 $poly = "Polygon";
-$status2_poly = "Högerklicka för att stänga polygonen.";
+$status2_poly = "HÃ¶gerklicka fÃ¶r att stÃ¤nga polygonen.";
 ?>

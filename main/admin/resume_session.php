@@ -45,7 +45,7 @@ $sql = 'SELECT name, nbr_courses, nbr_users, nbr_classes, DATE_FORMAT(date_start
 			ON id_coach = user_id
 		WHERE '.$tbl_session.'.id='.$id_session;
 
-$rs = Database::query($sql, __FILE__, __LINE__);
+$rs = Database::query($sql);
 $session = Database::store_result($rs);
 $session = $session[0];
 
@@ -55,7 +55,7 @@ if(!api_is_platform_admin() && $session['session_admin_id']!=$_user['user_id'])
 }
 
 $sql = 'SELECT name FROM  '.$tbl_session_category.' WHERE id = "'.intval($session['session_category_id']).'"';
-$rs = Database::query($sql, __FILE__, __LINE__);
+$rs = Database::query($sql);
 $session_category = '';
 if(Database::num_rows($rs)>0) {
 	$rows_session_category = Database::store_result($rs);
@@ -75,32 +75,32 @@ if($_GET['action'] == 'delete')
 
 		$idChecked="'".implode("','",$idChecked)."'";
 
-		Database::query("DELETE FROM $tbl_session_rel_course WHERE id_session='$id_session' AND course_code IN($idChecked)",__FILE__,__LINE__);
+		Database::query("DELETE FROM $tbl_session_rel_course WHERE id_session='$id_session' AND course_code IN($idChecked)");
 
 		$nbr_affected_rows=Database::affected_rows();
 
-		Database::query("DELETE FROM $tbl_session_rel_course_rel_user WHERE id_session='$id_session' AND course_code IN($idChecked)",__FILE__,__LINE__);
+		Database::query("DELETE FROM $tbl_session_rel_course_rel_user WHERE id_session='$id_session' AND course_code IN($idChecked)");
 
-		Database::query("UPDATE $tbl_session SET nbr_courses=nbr_courses-$nbr_affected_rows WHERE id='$id_session'",__FILE__,__LINE__);
+		Database::query("UPDATE $tbl_session SET nbr_courses=nbr_courses-$nbr_affected_rows WHERE id='$id_session'");
 	}
 
 	if(!empty($_GET['class'])){
-		Database::query("DELETE FROM $tbl_session_rel_class WHERE session_id='$id_session' AND class_id=".Database::escape_string($_GET['class']),__FILE__,__LINE__);
+		Database::query("DELETE FROM $tbl_session_rel_class WHERE session_id='$id_session' AND class_id=".Database::escape_string($_GET['class']));
 
 		$nbr_affected_rows=Database::affected_rows();
 
-		Database::query("UPDATE $tbl_session SET nbr_classes=nbr_classes-$nbr_affected_rows WHERE id='$id_session'",__FILE__,__LINE__);
+		Database::query("UPDATE $tbl_session SET nbr_classes=nbr_classes-$nbr_affected_rows WHERE id='$id_session'");
 
 	}
 
 	if (!empty($_GET['user'])) {
-		Database::query("DELETE FROM $tbl_session_rel_user WHERE id_session='$id_session' AND id_user=".intval($_GET['user']),__FILE__,__LINE__);
+		Database::query("DELETE FROM $tbl_session_rel_user WHERE relation_type<>".SESSION_RELATION_TYPE_RRHH." AND id_session='$id_session' AND id_user=".intval($_GET['user']));
 		$nbr_affected_rows=Database::affected_rows();
-		Database::query("UPDATE $tbl_session SET nbr_users=nbr_users-$nbr_affected_rows WHERE id='$id_session'",__FILE__,__LINE__);
+		Database::query("UPDATE $tbl_session SET nbr_users=nbr_users-$nbr_affected_rows WHERE id='$id_session'");
 
-		Database::query("DELETE FROM $tbl_session_rel_course_rel_user WHERE id_session='$id_session' AND id_user=".intval($_GET['user']),__FILE__,__LINE__);
+		Database::query("DELETE FROM $tbl_session_rel_course_rel_user WHERE id_session='$id_session' AND id_user=".intval($_GET['user']));
 		$nbr_affected_rows=Database::affected_rows();
-		Database::query("UPDATE $tbl_session_rel_course SET nbr_users=nbr_users-$nbr_affected_rows WHERE id_session='$id_session'",__FILE__,__LINE__);
+		Database::query("UPDATE $tbl_session_rel_course SET nbr_users=nbr_users-$nbr_affected_rows WHERE id_session='$id_session'");
 	}
 }
 
@@ -203,28 +203,28 @@ if($session['nbr_courses']==0){
 else {
 	// select the courses
 	$sql = "SELECT code,title,visual_code, nbr_users
-			FROM $tbl_course,$tbl_session_rel_course			
-			WHERE course_code = code			
+			FROM $tbl_course,$tbl_session_rel_course
+			WHERE course_code = code
 			AND	id_session='$id_session'
 			ORDER BY title";
 
-	$result=Database::query($sql,__FILE__,__LINE__);
+	$result=Database::query($sql);
 	$courses=Database::store_result($result);
 	foreach($courses as $course){
 		//select the number of users
 
 		$sql = " SELECT count(*) FROM $tbl_session_rel_user sru, $tbl_session_rel_course_rel_user srcru
 				WHERE srcru.id_user = sru.id_user AND srcru.id_session = sru.id_session AND srcru.course_code = '".Database::escape_string($course['code'])."'
-				AND srcru.id_session = '".intval($id_session)."'";
+				AND sru.relation_type<>".SESSION_RELATION_TYPE_RRHH." AND srcru.id_session = '".intval($id_session)."'";
 
-		$rs = Database::query($sql, __FILE__, __LINE__);
+		$rs = Database::query($sql);
 		$course['nbr_users'] = Database::result($rs,0,0);
 
 		// Get coachs of the courses in session
 
 		$sql = "SELECT user.lastname,user.firstname,user.username FROM $tbl_session_rel_course_rel_user session_rcru, $tbl_user user
 				WHERE session_rcru.id_user = user.user_id AND session_rcru.id_session = '".intval($id_session)."' AND session_rcru.course_code ='".Database::escape_string($course['code'])."' AND session_rcru.status=2";
-		$rs = Database::query($sql,__FILE__,__LINE__);
+		$rs = Database::query($sql);
 
 		$coachs = array();
 		if (Database::num_rows($rs) > 0) {
@@ -284,10 +284,10 @@ else {
 	$sql = 'SELECT '.$tbl_user.'.user_id, lastname, firstname, username
 			FROM '.$tbl_user.'
 			INNER JOIN '.$tbl_session_rel_user.'
-				ON '.$tbl_user.'.user_id = '.$tbl_session_rel_user.'.id_user
+				ON '.$tbl_user.'.user_id = '.$tbl_session_rel_user.'.id_user AND '.$tbl_session_rel_user.'.relation_type<>'.SESSION_RELATION_TYPE_RRHH.'
 				AND '.$tbl_session_rel_user.'.id_session = '.$id_session.$order_clause;
 
-	$result=Database::query($sql,__FILE__,__LINE__);
+	$result=Database::query($sql);
 	$users=Database::store_result($result);
 	$orig_param = '&origin=resume_session&id_session='.$id_session; // change breadcrumb in destination page
 	foreach($users as $user){

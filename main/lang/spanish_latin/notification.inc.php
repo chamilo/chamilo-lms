@@ -1,5 +1,6 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $lang_new_item = "new item added";
 $lang_title_notification = "Since your last visit";
@@ -14,5 +15,5 @@ $lang_new_link = "new link added";
 $lang_new_forum_topic = "new topic added";
 $lang_new_groupforum_topic = "new topic added to group forum";
 $lang_new_dropbox_file = "nuevo archivo recibido";
-$lang_update_dropbox_file = "el archivo en su Baúl de Tareas fue actualizado";
+$lang_update_dropbox_file = "el archivo en su BaÃºl de Tareas fue actualizado";
 ?>

@@ -22,7 +22,7 @@ $track_user_table = Database::get_main_table(TABLE_MAIN_USER);
 if (isset($_user['user_id']) && $_user['user_id'] != '') {
 	$_user['user_id'] = intval($_user['user_id']);
 	$sql = "update $track_user_table set chatcall_user_id = '', chatcall_date = '', chatcall_text='DENIED' where (user_id = ".$_user['user_id'].")";
-	$result = Database::query($sql, __FILE__, __LINE__);
+	$result = Database::query($sql);
 }
 
 Display::display_header();

@@ -1,28 +1,6 @@
 <?php
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2004-2008 Dokeos S.A.
-	Copyright (c) 2003 Ghent University (UGent)
-	Copyright (c) 2001 Universite catholique de Louvain (UCL)
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
-	Mail: info@dokeos.com
-==============================================================================
-*/
+/* For licensing terms, see /license.txt */
 /**
-==============================================================================
 * Function library for the links tool.
 *
 * This is a complete remake of the original link tool.
@@ -35,15 +13,13 @@
 * - add link to 'root' category => category-less link is always visible.
 *
 *	@author Patrick Cool, complete remake (December 2003 - January 2004)
-*	@author Rene Haentjens, CSV file import (October 2004)
-*	@package dokeos.link
-==============================================================================
+*	@author René Haentjens, CSV file import (October 2004)
+*	@package chamilo.link
 */
 
 /*
-==============================================================================
+
 		FUNCTIONS
-==============================================================================
 */
 
 /**
@@ -114,7 +90,7 @@ function addlinkcategory($type)
 
 			$sql = "INSERT INTO ".$tbl_link." (url, title, description, category_id, display_order, on_homepage, target, session_id) VALUES ('$urllink','$title','$description','$selectcategory','$order', '$onhomepage','$target','$session_id')";
 			$catlinkstatus = get_lang('LinkAdded');
-			Database::query($sql, __FILE__, __LINE__);
+			Database::query($sql);
 			$link_id = Database::insert_id();
 
 
@@ -162,7 +138,7 @@ function addlinkcategory($type)
 					$table_link_category = Database::get_course_table(TABLE_LINK_CATEGORY);
 					$sql_cat = 'SELECT * FROM %s WHERE id=%d LIMIT 1';
 					$sql_cat = sprintf($sql_cat, $table_link_category, (int)$selectcategory);
-					$result = Database::query($sql_cat, __FILE__, __LINE__);
+					$result = Database::query($sql_cat);
 					if (Database::num_rows($result) == 1) {
 						$row = Database::fetch_array($result);
 						$ic_slide->addValue("category", $row['category_title']);
@@ -182,7 +158,7 @@ function addlinkcategory($type)
 					$sql = 'INSERT INTO %s (id, course_code, tool_id, ref_id_high_level, search_did)
 						VALUES (NULL , \'%s\', \'%s\', %s, %s)';
 					$sql = sprintf($sql, $tbl_se_ref, $courseid, TOOL_LINK, $link_id, $did);
-					Database::query($sql,__FILE__,__LINE__);
+					Database::query($sql);
 				}
 
 			}
@@ -214,7 +190,7 @@ function addlinkcategory($type)
 			$session_id = api_get_session_id();
 
 			$sql = "INSERT INTO ".$tbl_categories." (category_title, description, display_order, session_id) VALUES ('".Security::remove_XSS($category_title)."','".Security::remove_XSS($description)."', '$order', '$session_id')";
-			Database::query($sql, __FILE__, __LINE__);
+			Database::query($sql);
 
 			$catlinkstatus = get_lang('CategoryAdded');
 
@@ -258,7 +234,7 @@ function deletelinkcategory($type)
 		// make a restore function possible for the platform administrator
 		if (isset($_GET['id']) && $_GET['id']==strval(intval($_GET['id']))) {
 			$sql="UPDATE $tbl_link SET on_homepage='0' WHERE id='".Database::escape_string($_GET['id'])."'";
-			Database::query($sql,__FILE__,__LINE__);
+			Database::query($sql);
 		}
 
 		api_item_property_update($_course, TOOL_LINK, $id, "delete", $_user['user_id']);
@@ -274,11 +250,11 @@ function deletelinkcategory($type)
 
 		// first we delete the category itself and afterwards all the links of this category.
 		$sql = "DELETE FROM ".$tbl_categories." WHERE id='".Database::escape_string(Security::remove_XSS($_GET['id']))."'";
-		Database::query($sql, __FILE__, __LINE__);
+		Database::query($sql);
 		$sql = "DELETE FROM ".$tbl_link." WHERE category_id='".Database::escape_string(Security::remove_XSS($_GET['id']))."'";
 		$catlinkstatus = get_lang('CategoryDeleted');
 		unset ($id);
-		Database::query($sql, __FILE__, __LINE__);
+		Database::query($sql);
 
 		Display::display_confirmation_message(get_lang('CategoryDeleted'));
 	}
@@ -296,7 +272,7 @@ function delete_link_from_search_engine($course_id, $link_id) {
 		$tbl_se_ref = Database::get_main_table(TABLE_MAIN_SEARCH_ENGINE_REF);
 		$sql = 'SELECT * FROM %s WHERE course_code=\'%s\' AND tool_id=\'%s\' AND ref_id_high_level=%s LIMIT 1';
 		$sql = sprintf($sql, $tbl_se_ref, $course_id, TOOL_LINK, $link_id);
-		$res = Database::query($sql, __FILE__, __LINE__);
+		$res = Database::query($sql);
 		if (Database::num_rows($res) > 0) {
 			$row = Database::fetch_array($res);
 			require_once(api_get_path(LIBRARY_PATH) .'search/DokeosIndexer.class.php');
@@ -305,7 +281,7 @@ function delete_link_from_search_engine($course_id, $link_id) {
 		}
 		$sql = 'DELETE FROM %s WHERE course_code=\'%s\' AND tool_id=\'%s\' AND ref_id_high_level=%s LIMIT 1';
 		$sql = sprintf($sql, $tbl_se_ref, $course_id, TOOL_LINK, $link_id);
-		Database::query($sql, __FILE__, __LINE__);
+		Database::query($sql);
 
 		// remove terms from db
 		require_once(api_get_path(LIBRARY_PATH) .'specific_fields_manager.lib.php');
@@ -347,7 +323,7 @@ function editlinkcategory($type)
 	{
 		// this is used to populate the link-form with the info found in the database
 		$sql = "SELECT * FROM ".$tbl_link." WHERE id='".$_GET['id']."'";
-		$result = Database::query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql);
 		if ($myrow = Database::fetch_array($result))
 		{
 			$urllink = $myrow["url"];
@@ -373,7 +349,7 @@ function editlinkcategory($type)
 
 			// finding the old category_id
 			$sql = "SELECT * FROM ".$tbl_link." WHERE id='".Database::escape_string(Security::remove_XSS($_POST['id']))."'";
-			$result = Database::query($sql, __FILE__, __LINE__);
+			$result = Database::query($sql);
 			$row = Database::fetch_array($result);
 			$category_id = $row['category_id'];
 
@@ -387,7 +363,7 @@ function editlinkcategory($type)
 			}
 
 			$sql = "UPDATE ".$tbl_link." set url='".Database::escape_string(Security::remove_XSS($_POST['urllink']))."', title='".Database::escape_string(Security::remove_XSS($_POST['title']))."', description='".Database::escape_string(Security::remove_XSS($_POST['description']))."', category_id='".Database::escape_string(Security::remove_XSS($_POST['selectcategory']))."', display_order='".$max_display_order."', on_homepage='".Database::escape_string(Security::remove_XSS($onhomepage))." ' $mytarget WHERE id='".Database::escape_string(Security::remove_XSS($_POST['id']))."'";
-			Database::query($sql, __FILE__, __LINE__);
+			Database::query($sql);
 
             // update search enchine and its values table if enabled
             if (api_get_setting('search_enabled')=='true') {
@@ -402,7 +378,7 @@ function editlinkcategory($type)
 	            $tbl_se_ref = Database::get_main_table(TABLE_MAIN_SEARCH_ENGINE_REF);
 	            $sql = 'SELECT * FROM %s WHERE course_code=\'%s\' AND tool_id=\'%s\' AND ref_id_high_level=%s LIMIT 1';
 	            $sql = sprintf($sql, $tbl_se_ref, $course_id, TOOL_LINK, $link_id);
-	            $res = Database::query($sql, __FILE__, __LINE__);
+	            $res = Database::query($sql);
 
 	            if (Database::num_rows($res) > 0) {
                     require_once(api_get_path(LIBRARY_PATH) . 'search/DokeosIndexer.class.php');
@@ -448,7 +424,7 @@ function editlinkcategory($type)
 	                    $table_link_category = Database::get_course_table(TABLE_LINK_CATEGORY);
 	                    $sql_cat = 'SELECT * FROM %s WHERE id=%d LIMIT 1';
 	                    $sql_cat = sprintf($sql_cat, $table_link_category, (int)$selectcategory);
-	                    $result = Database::query($sql_cat, __FILE__, __LINE__);
+	                    $result = Database::query($sql_cat);
 	                    if (Database::num_rows($result) == 1) {
 		                    $row = Database::fetch_array($result);
 		                    $ic_slide->addValue("category", $row['category_title']);
@@ -467,12 +443,12 @@ function editlinkcategory($type)
 	                    // save it to db
                         $sql = 'DELETE FROM %s WHERE course_code=\'%s\' AND tool_id=\'%s\' AND ref_id_high_level=\'%s\'';
                         $sql = sprintf($sql, $tbl_se_ref, $course_id, TOOL_LINK, $link_id);
-                        Database::query($sql,__FILE__,__LINE__);
+                        Database::query($sql);
                         //var_dump($sql);
 	                    $sql = 'INSERT INTO %s (id, course_code, tool_id, ref_id_high_level, search_did)
 		                    VALUES (NULL , \'%s\', \'%s\', %s, %s)';
 	                    $sql = sprintf($sql, $tbl_se_ref, $course_id, TOOL_LINK, $link_id, $did);
-	                    Database::query($sql,__FILE__,__LINE__);
+	                    Database::query($sql);
                     }
 
                 }
@@ -490,7 +466,7 @@ function editlinkcategory($type)
 		if (!$submitCategory)
 		{
 			$sql = "SELECT * FROM ".$tbl_categories." WHERE id='".$_GET['id']."'";
-			$result = Database::query($sql, __FILE__, __LINE__);
+			$result = Database::query($sql);
 			if ($myrow = Database::fetch_array($result))
 			{
 				$category_title = $myrow["category_title"];
@@ -501,7 +477,7 @@ function editlinkcategory($type)
 		if ($submitCategory)
 		{
 			$sql = "UPDATE ".$tbl_categories." set category_title='".Database::escape_string(Security::remove_XSS($_POST['category_title']))."', description='".Database::escape_string(Security::remove_XSS($_POST['description']))."' WHERE id='".Database::escape_string(Security::remove_XSS($_POST['id']))."'";
-			Database::query($sql, __FILE__, __LINE__);
+			Database::query($sql);
 			Display::display_confirmation_message(get_lang('CategoryModded'));
 		}
 
@@ -700,7 +676,7 @@ function movecatlink($catlinkid)
 		if(!empty($thiscatlinkId))
 		{
 			$sql = "SELECT category_id from ".$movetable." WHERE id='$thiscatlinkId'";
-			$result = Database::query($sql, __FILE__, __LINE__);
+			$result = Database::query($sql);
 			$catid = Database::fetch_array($result);
 		}
 	}
@@ -753,27 +729,27 @@ function movecatlink($catlinkid)
 
 /**
 * CSV file import functions
-* @author Rene Haentjens , Ghent University
+* @author René Haentjens , Ghent University
 */
 function get_cat($catname) // get category id (existing or make new)
 {
 	$tbl_categories = Database :: get_course_table(TABLE_LINK_CATEGORY);
 
-	$result = Database::query("SELECT `id` FROM ".$tbl_categories." WHERE `category_title`='".addslashes($catname)."'", __FILE__, __LINE__);
+	$result = Database::query("SELECT `id` FROM ".$tbl_categories." WHERE `category_title`='".addslashes($catname)."'");
 
 	if (Database::num_rows($result) >= 1 && ($row = Database::fetch_array($result)))
 		return $row['id']; // several categories with same name: take first
 
-	$result = Database::query("SELECT MAX(display_order) FROM ".$tbl_categories."", __FILE__, __LINE__);
+	$result = Database::query("SELECT MAX(display_order) FROM ".$tbl_categories."");
 	list ($max_order) = Database::fetch_row($result);
 
-	Database::query("INSERT INTO ".$tbl_categories." (category_title, description, display_order) VALUES ('".addslashes($catname)."','','". ($max_order +1)."')", __FILE__, __LINE__);
+	Database::query("INSERT INTO ".$tbl_categories." (category_title, description, display_order) VALUES ('".addslashes($catname)."','','". ($max_order +1)."')");
 
 	return Database::insert_id();
 }
 /**
 * CSV file import functions
-* @author Rene Haentjens , Ghent University
+* @author René Haentjens , Ghent University
 */
 function put_link($url, $cat, $title, $description, $on_homepage, $hidden)
 {
@@ -782,11 +758,11 @@ function put_link($url, $cat, $title, $description, $on_homepage, $hidden)
 	$urleq = "url='".addslashes($url)."'";
 	$cateq = "category_id=".$cat;
 
-	$result = Database::query("SELECT id FROM $tbl_link WHERE ".$urleq.' AND '.$cateq, __FILE__, __LINE__);
+	$result = Database::query("SELECT id FROM $tbl_link WHERE ".$urleq.' AND '.$cateq);
 
 	if (Database::num_rows($result) >= 1 && ($row = Database::fetch_array($result)))
 	{
-		Database::query("UPDATE $tbl_link set title='".addslashes($title)."', description='".addslashes($description)."' WHERE id='".addslashes($id = $row['id'])."'", __FILE__, __LINE__);
+		Database::query("UPDATE $tbl_link set title='".addslashes($title)."', description='".addslashes($description)."' WHERE id='".addslashes($id = $row['id'])."'");
 
 		$lang_link = get_lang('update_link');
 		$ipu = "LinkUpdated";
@@ -794,10 +770,10 @@ function put_link($url, $cat, $title, $description, $on_homepage, $hidden)
 	}
 	else // add new link
 		{
-		$result = Database::query("SELECT MAX(display_order) FROM  $tbl_link WHERE category_id='".addslashes($cat)."'", __FILE__, __LINE__);
+		$result = Database::query("SELECT MAX(display_order) FROM  $tbl_link WHERE category_id='".addslashes($cat)."'");
 		list ($max_order) = Database::fetch_row($result);
 
-		Database::query("INSERT INTO $tbl_link (url, title, description, category_id, display_order, on_homepage) VALUES ('".addslashes($url)."','".addslashes($title)."','".addslashes($description)."','".addslashes($cat)."','". ($max_order +1)."','".$on_homepage."')", __FILE__, __LINE__);
+		Database::query("INSERT INTO $tbl_link (url, title, description, category_id, display_order, on_homepage) VALUES ('".addslashes($url)."','".addslashes($title)."','".addslashes($description)."','".addslashes($cat)."','". ($max_order +1)."','".$on_homepage."')");
 
 		$id = Database::insert_id();
 		$lang_link = get_lang('new_link');
@@ -815,7 +791,7 @@ function put_link($url, $cat, $title, $description, $on_homepage, $hidden)
 }
 /**
 * CSV file import functions
-* @author Rene Haentjens , Ghent University
+* @author René Haentjens , Ghent University
 */
 function import_link($linkdata) // url, category_id, title, description, ...
 {
@@ -851,7 +827,7 @@ function import_link($linkdata) // url, category_id, title, description, ...
 }
 /**
 * CSV file import functions
-* @author Rene Haentjens , Ghent University
+* @author René Haentjens , Ghent University
 */
 function import_csvfile()
 {
@@ -870,7 +846,10 @@ function import_csvfile()
 			{
 				$stats = array (0, 0, 0); // fails, updates, inserts
 
-				while (($data = fgetcsv($myFile, 32768, $listsep)))
+				// Modified by Ivan Tcholakov, 01-FEB-2010.
+				//while (($data = fgetcsv($myFile, 32768, $listsep)))
+				while (($data = api_fgetcsv($myFile, null, $listsep)))
+				//
 				{
 					foreach ($data as $i => $text)
 						$linkdata[$columns[$i]] = $text;
@@ -899,4 +878,3 @@ function import_csvfile()
 	else
 		$catlinkstatus = get_lang('CsvFileNotFound');
 }
-?>

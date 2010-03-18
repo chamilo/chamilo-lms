@@ -97,17 +97,17 @@ switch($action){
 		if(!empty($id)){
 			$l="learnpath/learnpath_handler.php?learnpath_id=$id";
 			$sql="DELETE FROM $tbl_tool where (link='$l' AND image='scormbuilder.gif')";
-			$result=Database::query($sql,__FILE__,__LINE__);
+			$result=Database::query($sql);
 			$sql="SELECT * FROM $tbl_learnpath_chapter where learnpath_id=$id";
-			$result=Database::query($sql,__FILE__,__LINE__);
+			$result=Database::query($sql);
 			while ($row=Database::fetch_array($result))
 			{
 				$c=$row['id'];
 				$sql2="DELETE FROM $tbl_learnpath_item where chapter_id=$c";
-				$result2=Database::query($sql2,__FILE__,__LINE__);
+				$result2=Database::query($sql2);
 			}
 			$sql="DELETE FROM $tbl_learnpath_chapter where learnpath_id=$id";
-			$result=Database::query($sql,__FILE__,__LINE__);
+			$result=Database::query($sql);
 			deletepath($id);
 			$dialogBox=get_lang('_learnpath_deleted');
 		}
@@ -118,7 +118,7 @@ switch($action){
 		  ==================================================================*/
 		if(!empty($id)){
 			$sql="SELECT * FROM $tbl_learnpath_main where learnpath_id=$id";
-			$result=Database::query($sql,__FILE__,__LINE__);
+			$result=Database::query($sql);
 			$row=Database::fetch_array($result);
 			$name=domesticate($row['learnpath_name']);
 			if ($set_visibility == 'i') {
@@ -132,7 +132,7 @@ switch($action){
 				$v=1;
 			}
 			$sql="SELECT * FROM $tbl_tool where (name='$name' and image='scormbuilder.gif')";
-			$result=Database::query($sql,__FILE__,__LINE__);
+			$result=Database::query($sql);
 			$row2=Database::fetch_array($result);
 			$num=Database::num_rows($result);
 			if (($set_visibility == 'i') && ($num>0))
@@ -155,7 +155,7 @@ switch($action){
 			{
 				//parameter and database incompatible, do nothing
 			}
-			$result=Database::query($sql,__FILE__,__LINE__);
+			$result=Database::query($sql);
 
 		}
 		break;
@@ -167,9 +167,9 @@ switch($action){
 		{
 		  $l="learnpath/learnpath_handler.php?learnpath_id=$id";
 		  $sql="UPDATE $tbl_tool set name='".domesticate($learnpath_name)."' where (link='$l' and image='scormbuilder.gif')";
-		  $result=Database::query($sql,__FILE__,__LINE__);
+		  $result=Database::query($sql);
 		  $sql ="UPDATE $tbl_learnpath_main SET learnpath_name='".domesticate($learnpath_name)."', learnpath_description='".domesticate($learnpath_description)."' WHERE learnpath_id=$id";
-		  $result=Database::query($sql,__FILE__,__LINE__);
+		  $result=Database::query($sql);
 		  $dialogBox=get_lang('_learnpath_edited');
 		}
 		break;
@@ -180,10 +180,10 @@ switch($action){
 		if (!empty($Submit))
 		{
 		  $sql ="INSERT INTO $tbl_learnpath_main (learnpath_name, learnpath_description) VALUES ('".domesticate($learnpath_name)."','".domesticate($learnpath_description)."')";
-		  Database::query($sql,__FILE__,__LINE__);
+		  Database::query($sql);
 		  $my_lp_id = Database::insert_id();
 		  $sql ="INSERT INTO $tbl_tool (name, link, image, visibility, admin, address, added_tool) VALUES ('".domesticate($learnpath_name)."','learnpath/learnpath_handler.php?learnpath_id=$my_lp_id','scormbuilder.gif','1','0','pastillegris.gif',0)";
-		  Database::query($sql,__FILE__,__LINE__);
+		  Database::query($sql);
 		  //instead of displaying this info text, get the user directly to the learnpath edit page
 		  //$dialogBox=get_lang('_learnpath_added');
 		  header('location:../learnpath/learnpath_handler.php?'.api_get_cidreq().'&learnpath_id='.$my_lp_id);
@@ -197,7 +197,7 @@ switch($action){
 		if (!empty($Submit))
 		{
 			$sql ="UPDATE $tbl_document SET comment='".domesticate($learnpath_description)."', name='".domesticate($learnpath_name)."' WHERE path='$path'";
-			$result=Database::query($sql,__FILE__,__LINE__);
+			$result=Database::query($sql);
 			$dialogBox=get_lang('_learnpath_edited');
 		}
 		break;
@@ -249,7 +249,7 @@ if($is_allowedToEdit) // TEACHER ONLY
 	    }
 	    else
 	    {
-	      if(mkdir($baseWorkDir.$newDirPath.$openDir."/".$newDirName, 0700)){
+	      if(mkdir($baseWorkDir.$newDirPath.$openDir."/".$newDirName, api_get_permissions_for_new_directories())){
 	        FileManager::set_default_settings($newDirPath.$openDir, $newDirName, "folder", $tbl_document);
 	        // RH: was:  set_default_settings($newDirPath.$openDir,$newDirName,"folder");
 	        $dialogBox = get_lang('DirCr');
@@ -356,7 +356,7 @@ if($is_allowedToEdit) // TEACHER ONLY
     }
     else
     {
-      if(mkdir($baseWorkDir.$newDirPath."/".$newDirName, 0700))
+      if(mkdir($baseWorkDir.$newDirPath."/".$newDirName, api_get_permissions_for_new_directories()))
         FileManager::set_default_settings($newDirPath, $newDirName, "folder", $tbl_document);
       // RH: was:  set_default_settings($newDirPath,$newDirName,"folder");
 			$dialogBox = get_lang('DirCr');
@@ -385,7 +385,7 @@ if($is_allowedToEdit) // TEACHER ONLY
     $visibilityPath = $make_directory_visible.$make_directory_invisible;
     // At least one of these variables are empty. So it's okay to proceed this way
     /* Check if there is yet a record for this file in the DB */
-    $result = mysql_query ("SELECT * FROM $tbl_document WHERE path LIKE '".$visibilityPath."'");
+    $result = Database::query ("SELECT * FROM $tbl_document WHERE path LIKE '".$visibilityPath."'");
     while($row = Database::fetch_array($result, 'ASSOC'))
     {
       $attribute['path'      ] = $row['path'      ];
@@ -402,10 +402,10 @@ if($is_allowedToEdit) // TEACHER ONLY
       $newVisibilityStatus = "i";
     }
     $query = "UPDATE $tbl_document SET visibility='$newVisibilityStatus' WHERE path=\"".$visibilityPath."\""; //added by Toon
-    Database::query($query,__FILE__,__LINE__);
+    Database::query($query);
     if (Database::affected_rows() == 0) // extra check added by Toon, normally not necessary anymore because all files are in the db
     {
-      Database::query("INSERT INTO $tbl_document SET path=\"".$visibilityPath."\", visibility=\"".$newVisibilityStatus."\"",__FILE__,__LINE__);
+      Database::query("INSERT INTO $tbl_document SET path=\"".$visibilityPath."\", visibility=\"".$newVisibilityStatus."\"");
     }
     unset($attribute);
     $dialogBox = get_lang('ViMod');

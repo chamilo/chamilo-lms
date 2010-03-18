@@ -1,31 +1,10 @@
 <?php
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2009 Dokeos SPRL
-	Copyright (c) 2009 Julio Montoya Armas <gugli100@gmail.com>
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium, info@dokeos.com
-==============================================================================
-*/
+/* For licensing terms, see /license.txt */
 /**
-==============================================================================
 *	This library provides functions for the access_url management.
 *	Include/require it in your code to use its functionality.
 *
-*	@package dokeos.library
-==============================================================================
+*	@package chamilo.library
 */
 class UrlManager
 {
@@ -40,7 +19,7 @@ class UrlManager
 	  * @param  int     the user_id of the owner
 	  * @return boolean if success
 	  */
-	function add($url, $description, $active)
+	public static function add($url, $description, $active)
 	{
 		$tms = time();
 		$table_access_url= Database :: get_main_table(TABLE_MAIN_ACCESS_URL);
@@ -50,7 +29,7 @@ class UrlManager
                 active 		= '".Database::escape_string($active)."',
                 created_by 	= '".Database::escape_string(api_get_user_id())."',
                 tms = FROM_UNIXTIME(".$tms.")";
-		$result = Database::query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql);
 		return $result;
 	}
 
@@ -64,7 +43,7 @@ class UrlManager
 	* @param	int     the user_id of the owner
 	* @return 	boolean if success
 	*/
-	function udpate($url_id, $url, $description, $active)
+	public static function udpate($url_id, $url, $description, $active)
 	{
 		$url_id = intval($url_id);
 		$table_access_url= Database :: get_main_table(TABLE_MAIN_ACCESS_URL);
@@ -76,7 +55,7 @@ class UrlManager
                 created_by 	= '".Database::escape_string(api_get_user_id())."',
                 tms 		= FROM_UNIXTIME(".$tms.")
                 WHERE id = '$url_id'";
-		$result = Database::query($sql, __FILE__, __LINE__);
+		$result = Database::query($sql);
 		return $result;
 	}
 
@@ -87,23 +66,23 @@ class UrlManager
 	* @param int url id
 	* @return boolean true if success
 	* */
-	function delete($id)
+	public static function delete($id)
 	{
 		$id = intval($id);
 		$table_access_url= Database :: get_main_table(TABLE_MAIN_ACCESS_URL);
 		$sql= "DELETE FROM $table_access_url WHERE id = ".Database::escape_string($id);
-		$result = Database::query($sql,  __FILE__, __LINE__);
+		$result = Database::query($sql);
 		return $result;
 	}
 
 	/**
 	 *
 	 * */
-	function url_exist($url)
+	public static function url_exist($url)
 	{
 		$table_access_url= Database :: get_main_table(TABLE_MAIN_ACCESS_URL);
 		$sql = "SELECT id FROM $table_access_url WHERE url = '".Database::escape_string($url)."' ";
-		$res = Database::query($sql,__FILE__,__LINE__);
+		$res = Database::query($sql);
 		$num = Database::num_rows($res);
 		return $num;
 	}
@@ -111,11 +90,11 @@ class UrlManager
 	/**
 	 *
 	 * */
-	function url_id_exist($url)
+	public static function url_id_exist($url)
 	{
 		$table_access_url= Database :: get_main_table(TABLE_MAIN_ACCESS_URL);
 		$sql = "SELECT id FROM $table_access_url WHERE id = '".Database::escape_string($url)."' ";
-		$res = Database::query($sql,__FILE__,__LINE__);
+		$res = Database::query($sql);
 		$num = Database::num_rows($res);
 		return $num;
 	}
@@ -125,11 +104,11 @@ class UrlManager
 	 * @author Julio Montoya
 	 * @return int count of urls
 	 * */
-	function url_count()
+	public static function url_count()
 	{
 		$table_access_url= Database :: get_main_table(TABLE_MAIN_ACCESS_URL);
 		$sql = "SELECT count(id) as count_result FROM $table_access_url";
-		$res = Database::query($sql, __FILE__, __LINE__);
+		$res = Database::query($sql);
 		$url = Database::fetch_array($res,'ASSOC');
 		$result = $url['count_result'];
 		return $result;
@@ -140,11 +119,11 @@ class UrlManager
 	 * @author Julio Montoya
 	 * @return array
 	 * */
-	function get_url_data()
+	public static function get_url_data()
 	{
 		$table_access_url= Database :: get_main_table(TABLE_MAIN_ACCESS_URL);
 		$sql = "SELECT id, url, description, active  FROM $table_access_url";
-		$res = Database::query($sql, __FILE__, __LINE__);
+		$res = Database::query($sql);
 		$urls = array ();
 		while ($url = Database::fetch_array($res)) {
 			$urls[] = $url;
@@ -157,11 +136,11 @@ class UrlManager
 	 * @author Julio Montoya
 	 * @return array
 	 * */
-	function get_url_data_from_id($url_id)
-	{		
+	public static function get_url_data_from_id($url_id)
+	{
 		$table_access_url= Database :: get_main_table(TABLE_MAIN_ACCESS_URL);
 		$sql = "SELECT id, url, description, active FROM $table_access_url WHERE id = ".Database::escape_string($url_id);
-		$res = Database::query($sql, __FILE__, __LINE__);
+		$res = Database::query($sql);
 		$row = Database::fetch_array($res);
 		return $row;
 	}
@@ -171,7 +150,7 @@ class UrlManager
 	 * @return int  access url id
 	 * @return array   Database::store_result of the result
 	 * */
-	function get_url_rel_user_data($access_url_id='')
+	public static function get_url_rel_user_data($access_url_id='')
 	{
 		$where = '';
 		$table_url_rel_user	= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
@@ -185,7 +164,7 @@ class UrlManager
 			INNER JOIN $table_url_rel_user
 			ON $table_url_rel_user.user_id = u.user_id
 			$where".$order_clause;
-		$result=Database::query($sql,__FILE__,__LINE__);
+		$result=Database::query($sql);
 		$users=Database::store_result($result);
 		return $users;
 	}
@@ -196,7 +175,7 @@ class UrlManager
 	 * @return int  access url id
 	 * @return array   Database::store_result of the result
 	 * */
-	function get_url_rel_course_data($access_url_id='')
+	public static function get_url_rel_course_data($access_url_id='')
 	{
 		$where ='';
 		$table_url_rel_course	= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
@@ -212,7 +191,7 @@ class UrlManager
 				$where
 				ORDER BY title, code";
 
-		$result=Database::query($sql,__FILE__,__LINE__);
+		$result=Database::query($sql);
 		$courses=Database::store_result($result);
 		return $courses;
 	}
@@ -222,7 +201,7 @@ class UrlManager
 	 * @return int  access url id
 	 * @return array   Database::store_result of the result
 	 * */
-	function get_url_rel_session_data($access_url_id='')
+	public static function get_url_rel_session_data($access_url_id='')
 	{
 		$where ='';
 		$table_url_rel_session	= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
@@ -238,7 +217,7 @@ class UrlManager
 				$where
 				ORDER BY name, id";
 
-		$result=Database::query($sql,__FILE__,__LINE__);
+		$result=Database::query($sql);
 		$sessions=Database::store_result($result);
 		return $sessions;
 	}
@@ -251,7 +230,7 @@ class UrlManager
 	 * @param string lock || unlock
 	 * @param int url id
 	 * */
-	function set_url_status($status, $url_id)
+	public static function set_url_status($status, $url_id)
 	{
 		$url_table = Database :: get_main_table(TABLE_MAIN_ACCESS_URL);
 		if ($status=='lock') {
@@ -262,7 +241,7 @@ class UrlManager
 		}
 		if(($status_db=='1' OR $status_db=='0') AND is_numeric($url_id)) {
 			$sql="UPDATE $url_table SET active='".Database::escape_string($status_db)."' WHERE id='".Database::escape_string($url_id)."'";
-			$result = Database::query($sql, __FILE__, __LINE__);
+			$result = Database::query($sql);
 		}
 	}
 
@@ -273,11 +252,11 @@ class UrlManager
 	* @param int url id
 	* @return boolean true if success
 	* */
-	function relation_url_user_exist($user_id, $url_id)
+	public static function relation_url_user_exist($user_id, $url_id)
 	{
 		$table_url_rel_user= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
 		$sql= "SELECT user_id FROM $table_url_rel_user WHERE access_url_id = ".Database::escape_string($url_id)." AND  user_id = ".Database::escape_string($user_id)." ";
-		$result = Database::query($sql,  __FILE__, __LINE__);
+		$result = Database::query($sql);
 		$num = Database::num_rows($result);
 		return $num;
 	}
@@ -289,11 +268,11 @@ class UrlManager
 	* @param int url id
 	* @return boolean true if success
 	* */
-	function relation_url_course_exist($course_id, $url_id)
+	public static function relation_url_course_exist($course_id, $url_id)
 	{
 		$table_url_rel_course= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
 		$sql= "SELECT course_code FROM $table_url_rel_course WHERE access_url_id = ".Database::escape_string($url_id)." AND course_code = '".Database::escape_string($course_id)."'";
-		$result = Database::query($sql,  __FILE__, __LINE__);
+		$result = Database::query($sql);
 		$num = Database::num_rows($result);
 		return $num;
 	}
@@ -306,11 +285,11 @@ class UrlManager
 	* @param int url id
 	* @return boolean true if success
 	* */
-	function relation_url_session_exist($session_id, $url_id)
+	public static function relation_url_session_exist($session_id, $url_id)
 	{
 		$table_url_rel_session= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
 		$sql= "SELECT session_id FROM $table_url_rel_session WHERE access_url_id = ".Database::escape_string($url_id)." AND session_id = ".Database::escape_string($session_id);
-		$result = Database::query($sql,  __FILE__, __LINE__);
+		$result = Database::query($sql);
 		$num = Database::num_rows($result);
 		return $num;
 	}
@@ -322,7 +301,7 @@ class UrlManager
 	 * @param  array of user_ids
 	 * @param  array of url_ids
 	 * */
-	function add_users_to_urls($user_list, $url_list)
+	public static function add_users_to_urls($user_list, $url_list)
 	{
 		$table_url_rel_user= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
 		$result_array=array();
@@ -334,7 +313,7 @@ class UrlManager
 					if ($count==0) {
 						$sql = "INSERT INTO $table_url_rel_user
 		               			SET user_id = ".Database::escape_string($user_id).", access_url_id = ".Database::escape_string($url_id);
-						$result = Database::query($sql, __FILE__, __LINE__);
+						$result = Database::query($sql);
 						if($result)
 							$result_array[$url_id][$user_id]=1;
 						else
@@ -353,7 +332,7 @@ class UrlManager
 	 * @param  array of course ids
 	 * @param  array of url_ids
 	 * */
-	function add_courses_to_urls($course_list,$url_list)
+	public static function add_courses_to_urls($course_list,$url_list)
 	{
 		$table_url_rel_course= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
 		$result_array=array();
@@ -365,7 +344,7 @@ class UrlManager
 					if ($count==0) {
 						$sql = "INSERT INTO $table_url_rel_course
 		               			SET course_code = '".Database::escape_string($course_code)."', access_url_id = ".Database::escape_string($url_id);
-						$result = Database::query($sql, __FILE__, __LINE__);
+						$result = Database::query($sql);
 						if($result)
 							$result_array[$url_id][$course_code]=1;
 						else
@@ -384,7 +363,7 @@ class UrlManager
 	 * @param  array of session ids
 	 * @param  array of url_ids
 	 * */
-	function add_sessions_to_urls($session_list,$url_list)
+	public static function add_sessions_to_urls($session_list,$url_list)
 	{
 		$table_url_rel_session= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
 		$result_array=array();
@@ -396,7 +375,7 @@ class UrlManager
 					if ($count==0) {
 						$sql = "INSERT INTO $table_url_rel_session
 		               			SET session_id = ".Database::escape_string($session_id).", access_url_id = ".Database::escape_string($url_id);
-						$result = Database::query($sql, __FILE__, __LINE__);
+						$result = Database::query($sql);
 						if($result)
 							$result_array[$url_id][$session_id]=1;
 						else
@@ -417,7 +396,7 @@ class UrlManager
 	 * @param  url_id
 	 * @return boolean true if success
 	 * */
-	function add_user_to_url($user_id, $url_id=1)
+	public static function add_user_to_url($user_id, $url_id=1)
 	{
 		$table_url_rel_user= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
 		if (empty($url_id)) $url_id=1;
@@ -425,12 +404,12 @@ class UrlManager
 		if (empty($count)) {
 			$sql = "INSERT INTO $table_url_rel_user
            			SET user_id = ".Database::escape_string($user_id).", access_url_id = ".Database::escape_string($url_id);
-			$result = Database::query($sql, __FILE__, __LINE__);
+			$result = Database::query($sql);
 		}
 		return $result;
 	}
 
-	function add_course_to_url($course_code, $url_id=1)
+	public static function add_course_to_url($course_code, $url_id=1)
 	{
 		$table_url_rel_course= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
 		if (empty($url_id)) $url_id=1;
@@ -438,13 +417,13 @@ class UrlManager
 		if (empty($count)) {
 			$sql = "INSERT INTO $table_url_rel_course
            			SET course_code = '".Database::escape_string($course_code)."', access_url_id = ".Database::escape_string($url_id);
-			$result = Database::query($sql, __FILE__, __LINE__);
+			$result = Database::query($sql);
 		}
 		return $result;
 	}
 
 
-	function add_session_to_url($session_id, $url_id=1)
+	public static function add_session_to_url($session_id, $url_id=1)
 	{
 		$table_url_rel_session= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
 		if (empty($url_id)) $url_id=1;
@@ -452,7 +431,7 @@ class UrlManager
 		if (empty($count)) {
 			$sql = "INSERT INTO $table_url_rel_session
            			SET session_id = ".Database::escape_string($session_id).", access_url_id = ".Database::escape_string($url_id);
-			$result = Database::query($sql, __FILE__, __LINE__);
+			$result = Database::query($sql);
 		}
 		return $result;
 	}
@@ -465,11 +444,11 @@ class UrlManager
 	* @param int url id
 	* @return boolean true if success
 	* */
-	function delete_url_rel_user($user_id, $url_id)
+	public static function delete_url_rel_user($user_id, $url_id)
 	{
 		$table_url_rel_user= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
 		$sql= "DELETE FROM $table_url_rel_user WHERE user_id = ".Database::escape_string($user_id)." AND access_url_id=".Database::escape_string($url_id)."  ";
-		$result = Database::query($sql,  __FILE__, __LINE__);
+		$result = Database::query($sql);
 		return $result;
 	}
 
@@ -480,11 +459,11 @@ class UrlManager
 	* @param  int url id
 	* @return boolean true if success
 	* */
-	function delete_url_rel_course($course_code, $url_id)
+	public static function delete_url_rel_course($course_code, $url_id)
 	{
 		$table_url_rel_course= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
 		$sql= "DELETE FROM $table_url_rel_course WHERE course_code = '".Database::escape_string($course_code)."' AND access_url_id=".Database::escape_string($url_id)."  ";
-		$result = Database::query($sql,  __FILE__, __LINE__);
+		$result = Database::query($sql);
 		return $result;
 	}
 
@@ -495,11 +474,11 @@ class UrlManager
 	* @param  int url id
 	* @return boolean true if success
 	* */
-	function delete_url_rel_session($session_id, $url_id)
+	public static function delete_url_rel_session($session_id, $url_id)
 	{
 		$table_url_rel_session = Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
 		$sql= "DELETE FROM $table_url_rel_session WHERE session_id = ".Database::escape_string($session_id)." AND access_url_id=".Database::escape_string($url_id)."  ";
-		$result = Database::query($sql,  __FILE__, __LINE__);
+		$result = Database::query($sql);
 		return $result;
 	}
 
@@ -510,13 +489,13 @@ class UrlManager
 	 * @param array user list
 	 * @param int access_url_id
 	 * */
-	function update_urls_rel_user($user_list,$access_url_id)
+	public static function update_urls_rel_user($user_list,$access_url_id)
 	{
 		$table_access_url	= Database :: get_main_table(TABLE_MAIN_ACCESS_URL);
 		$table_url_rel_user	= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
 
 		$sql = "SELECT user_id FROM $table_url_rel_user WHERE access_url_id=".Database::escape_string($access_url_id);
-		$result = Database::query($sql,__FILE__,__LINE__ );
+		$result = Database::query($sql);
 		$existingUsers = array();
 
 		while($row = Database::fetch_array($result)){
@@ -544,13 +523,13 @@ class UrlManager
 	 * @param array user list
 	 * @param int access_url_id
 	 * */
-	function update_urls_rel_course($course_list,$access_url_id)
+	public static function update_urls_rel_course($course_list,$access_url_id)
 	{
 		$table_course			= Database :: get_main_table(TABLE_MAIN_COURSE);
 		$table_url_rel_course	= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
 
 		$sql = "SELECT course_code FROM $table_url_rel_course WHERE access_url_id=".Database::escape_string($access_url_id);
-		$result = Database::query($sql,__FILE__,__LINE__ );
+		$result = Database::query($sql);
 		$existing_courses = array();
 
 		while($row = Database::fetch_array($result)){
@@ -578,13 +557,13 @@ class UrlManager
 	 * @param array user list
 	 * @param int access_url_id
 	 * */
-	function update_urls_rel_session($session_list,$access_url_id)
+	public static function update_urls_rel_session($session_list,$access_url_id)
 	{
 		$table_session	= Database :: get_main_table(TABLE_MAIN_SESSION);
 		$table_url_rel_session	= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
 
 		$sql = "SELECT session_id FROM $table_url_rel_session WHERE access_url_id=".Database::escape_string($access_url_id);
-		$result = Database::query($sql,__FILE__,__LINE__ );
+		$result = Database::query($sql);
 		$existing_sessions = array();
 
 		while($row = Database::fetch_array($result)){
@@ -607,13 +586,13 @@ class UrlManager
 	}
 
 
-	function get_access_url_from_user($user_id) {
+	public static function get_access_url_from_user($user_id) {
 		$table_url_rel_user	= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
 		$table_url	= Database :: get_main_table(TABLE_MAIN_ACCESS_URL);
 		$sql = "SELECT url, access_url_id FROM $table_url_rel_user url_rel_user INNER JOIN $table_url u
 			    ON (url_rel_user.access_url_id = u.id)
 			    WHERE user_id = ".Database::escape_string($user_id);
-		$result = Database::query($sql,  __FILE__, __LINE__);
+		$result = Database::query($sql);
 		$url_list = Database::store_result($result);
 		return $url_list;
 	}
@@ -621,7 +600,7 @@ class UrlManager
 	/**
 	 *
 	 * */
-	function get_url_id($url)
+	public static function get_url_id($url)
 	{
 		$table_access_url= Database :: get_main_table(TABLE_MAIN_ACCESS_URL);
 		$sql = "SELECT id FROM $table_access_url WHERE url = '".Database::escape_string($url)."'";

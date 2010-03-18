@@ -1,19 +1,20 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$langCourseProgram  = "Opis teèaja";
-$langThisCourseDescriptionIsEmpty  = "Ta teèaj še ni opisan";
-$langEditCourseProgram  = "Tvori in uredi opis teèaja";
-$QuestionPlan  = "Vprašanja za uèitelja";
-$langInfo2Say  = "Informacija za teèajnike";
-$langOuAutreTitre  = "Naziv";
-$langNewBloc  = "Drugo";
-$langAddCat  = "Dodaj kategorijo";
-$langAdd  = "Dodaj";
-$langValid  = "Uveljavi";
-$langBackAndForget  = "Preklièi";
-$CourseDescriptionUpdated = "Opis teèaja je bil auriran";
-$CourseDescriptionDeleted = "Opis teèaja je bil odstranjen";
-$CourseDescriptionIntro = "Da bi opisali teèaj, kliknite na ustrezen naslov in vnesite elene podatke v vnosna polja.<br /><br />Zakljuèite s klikom na OK, nato ponovite za naslednji elen naslov.";
+$langCourseProgram = "Opis teÄaja";
+$langThisCourseDescriptionIsEmpty = "Ta teÄaj Å¡e ni opisan";
+$langEditCourseProgram = "Tvori in uredi opis teÄaja";
+$QuestionPlan = "VpraÅ¡anja za uÄitelja";
+$langInfo2Say = "Informacija za teÄajnike";
+$langOuAutreTitre = "Naziv";
+$langNewBloc = "Drugo";
+$langAddCat = "Dodaj kategorijo";
+$langAdd = "Dodaj";
+$langValid = "Uveljavi";
+$langBackAndForget = "PrekliÄi";
+$CourseDescriptionUpdated = "Opis teÄaja je bil aÅ¾uriran";
+$CourseDescriptionDeleted = "Opis teÄaja je bil odstranjen";
+$CourseDescriptionIntro = "Da bi opisali teÄaj, kliknite na ustrezen naslov in vnesite Å¾elene podatke v vnosna polja.<br /><br />ZakljuÄite s klikom na OK, nato ponovite za naslednji Å¾elen naslov.";
 $langSaveDescription = "Shrani opis";
 ?>

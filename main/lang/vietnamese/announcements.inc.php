@@ -1,18 +1,19 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $Announcement = "Thông báo";
 $langAnnEmpty = "Danh mục các thông báo đã được xoá";
 $AnnouncementModified = "Thông báo đã chỉnh sửa";
-$AnnouncementAdded = "Thông báo mới đã được đưa v� o";
+$AnnouncementAdded = "ThĂ´ng bĂ¡o má»›i Ä‘Ă£ Ä‘Æ°á»£c Ä‘Æ°a vĂ o";
 $AnnouncementDeleted = "Thông báo đã bị xoá";
-$AnnouncementPublishedOn = "Ng� y";
+$AnnouncementPublishedOn = "NgĂ y";
 $AddAnnouncement = "Tạo thông báo mới";
 $langContent = "Nội dung";
 $AnnouncementDeleteAll = "Xoá tất cả thông báo";
 $professorMessage = "Thư của giáo viên";
 $langEmailSent = " và đã gữi cho các học sinh có đăng ký";
-$EmailOption = "Gửi thông báo n� y cho các học sinh có đăng ký";
+$EmailOption = "Gá»­i thĂ´ng bĂ¡o nĂ y cho cĂ¡c há»";
 $langOn = "On";
 $langRegUser = "người dùng đã đăng ký";
 $langUnvalid = "không có địa chỉ email hoặc địa chỉ email không hợp lệ";

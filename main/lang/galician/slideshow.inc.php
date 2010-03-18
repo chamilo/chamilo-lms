@@ -1,21 +1,22 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $lang_height = "Alto";
-$lang_resizing_comment = "redimensionar a imaxe co seguinte tamaño (en pixeles)";
+$lang_resizing_comment = "redimensionar a imaxe co seguinte tamaÃ±o (en pixeles)";
 $lang_width = "Ancho";
 $lang_resizing = "Redimensionar";
-$lang_no_resizing_comment = "Mostrar todas as imaxes no tamaño orixinal. Non se modificou o tamaño. As barras de desprazamento aparecerán se a imaxe  e más grande có tamaño do monitor.";
+$lang_no_resizing_comment = "Mostrar todas as imaxes no tamaÃ±o orixinal. Non se modificou o tamaÃ±o. As barras de desprazamento aparecerÃ¡n se a imaxe  e mÃ¡s grande cÃ³ tamaÃ±o do monitor.";
 $lang_show_thumbnails = "Mostrar miniaturas";
 $lang_click_thumbnails = "Clica nunha das miniaturas";
-$lang_set_slideshow_options = "Opcións da presentación";
-$lang_slideshow_options = "Opcións da presentación";
+$lang_set_slideshow_options = "OpciÃ³ns da presentaciÃ³n";
+$lang_slideshow_options = "OpciÃ³ns da presentaciÃ³n";
 $lang_no_resizing = "Non redimensionado (por defecto)";
-$lang_exit_slideshow = "Saír da presentación";
-$SlideShow = "Presentación";
-$lang_previous_slide = "Presentación previa";
-$lang_next_slide = "Próxima presentación";
+$lang_exit_slideshow = "SaÃ­r da presentaciÃ³n";
+$SlideShow = "PresentaciÃ³n";
+$lang_previous_slide = "PresentaciÃ³n previa";
+$lang_next_slide = "PrÃ³xima presentaciÃ³n";
 $lang_image = "Imaxe";
 $lang_of = "de";
-$lang_view_slideshow = "Ver presentación";
+$lang_view_slideshow = "Ver presentaciÃ³n";
 ?>

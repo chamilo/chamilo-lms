@@ -1,50 +1,51 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $langSelectOptionForBackup = "Valitse varmistuksen tyyppi";
 $langLetMeSelectItems = "Valitsen kurssin komponentit";
-$langCreateFullBackup = "Tee t‰ydellinen varmistus kurssista";
+$langCreateFullBackup = "Tee t√§ydellinen varmistus kurssista";
 $langCreateBackup = "Tee varmistus";
-$langBackupCreated  = "Varmistus kurssista on tehty. Tiedoston lautaus k‰ynnistyy hetken kuluttua. Jos lataus ei k‰ynnisty, klikkaa seuraavaa linkki‰.";
+$langBackupCreated = "Varmistus kurssista on tehty. Tiedoston lautaus k√§ynnistyy hetken kuluttua. Jos lataus ei k√§ynnisty, klikkaa seuraavaa linkki√§.";
 $langSelectBackupFile = "Valitse varmistus tiedosto";
 $langImportBackup = "Tuo varmistus";
-$langImportFullBackup = "Tuo t‰ysi varmistus";
+$langImportFullBackup = "Tuo t√§ysi varmistus";
 $langImportFinished = "Tuonti valmis";
 $langEvents = "Tapahtumat";
 $langAnnouncements = "Ilmoitukset";
-$langDocuments  = "Dokumentit";
+$langDocuments = "Dokumentit";
 $langTests = "Testit";
 $langLearnpaths = "Oppimispolut";
 $langCopyCourse = "Kopioi kurssi";
 $langSelectItemsToCopy = "Valitse kopioitavat osat";
 $langCopyFinished = "Kopiointi valmis";
-$langFullRecycle = "K‰yt‰ t‰ysin uudelleen";
-$langRecycleCourse = "K‰yt‰ kurssi uudelleen";
-$langRecycleFinished = "Kurssin uudelleen k‰yttˆ valmis";
-$langRecycleWarning = "Varoitus: k‰ytt‰m‰ll‰ t‰t‰ tyˆkalua, poistat joitain kurssin osia. T‰t‰ ei voi perua. Suosittelemme tekem‰‰n <a href=\"create_backup.php\">varmistuksen</a> ennen kuin k‰yt‰t t‰t‰ tyˆkalua.";
-$langSameFilename = "Mit‰ tehd‰‰n tuoduille tiedostoille jos saman niminen tiedosto on jo olemassa?";
+$langFullRecycle = "K√§yt√§ t√§ysin uudelleen";
+$langRecycleCourse = "K√§yt√§ kurssi uudelleen";
+$langRecycleFinished = "Kurssin uudelleen k√§ytt√∂ valmis";
+$langRecycleWarning = "Varoitus: k√§ytt√§m√§ll√§ t√§t√§ ty√∂kalua, poistat joitain kurssin osia. T√§t√§ ei voi perua. Suosittelemme tekem√§√§n <a href=\"create_backup.php\">varmistuksen</a> ennen kuin k√§yt√§t t√§t√§ ty√∂kalua.";
+$langSameFilename = "Mit√§ tehd√§√§n tuoduille tiedostoille jos saman niminen tiedosto on jo olemassa?";
 $langSameFilenameSkip = "Ohita saman niminen tiedosto";
-$langSameFilenameRename = "Nime‰ tiedosto uudellen (esim file.pdf -> file_1.pdf)";
+$langSameFilenameRename = "Nime√§ tiedosto uudellen (esim file.pdf -> file_1.pdf)";
 $langSameFilenameOverwrite = "Ylikirjoita tiedosto";
 $langSelectDestinationCourse = "Valitse kohde kurssi";
-$langFullCopy  = "T‰ysi kopiointi";
+$langFullCopy = "T√§ysi kopiointi";
 $langCourseDescription = "Kurssin kuvaus";
-$langNoResourcesToBackup = "Ei ole mit‰‰n mist‰ ottaa varmuuskopio";
-$langNoResourcesInBackupFile = "Varmistustiedostossa ei ole mit‰‰n";
+$langNoResourcesToBackup = "Ei ole mit√§√§n mist√§ ottaa varmuuskopio";
+$langNoResourcesInBackupFile = "Varmistustiedostossa ei ole mit√§√§n";
 $langSelectResources = "Valitse resurssit";
-$langNoResourcesToRecycles = "Ei ole mit‰‰n resursseja uudelleen k‰ytett‰v‰ksi";
-$langIncludeQuestionPool = "Sis‰llyt‰ kysymyspankki";
+$langNoResourcesToRecycles = "Ei ole mit√§√§n resursseja uudelleen k√§ytett√§v√§ksi";
+$langIncludeQuestionPool = "Sis√§llyt√§ kysymyspankki";
 $langLocalFile = "paikallinen tiedosto";
 $langServerFile = "palvelimen tiedosto";
 $langNoBackupsAvailable = "varmistusta ei ole saatavilla";
 $langNoDestinationCoursesAvailable = "kohde kurssia ei ole saatavilla";
 $langBackup = "Varmistus";
-$langImportBackupInfo = "Tuo varmistus. Voit ladata varmistustiedoston omalta koneeltasi tai voit k‰ytt‰‰ palvelimella mahdollisesti olevaa varmistusta.";
+$langImportBackupInfo = "Tuo varmistus. Voit ladata varmistustiedoston omalta koneeltasi tai voit k√§ytt√§√§ palvelimella mahdollisesti olevaa varmistusta.";
 $langCreateBackupInfo = "Tee kurssista varmistus. Voit valita varmistettavat kurssin osat.";
-$ToolIntro = "Tyˆkalun kuvaus";
-$UploadError = "Lataus ep‰onnistui, tarkista maksimi tiedoston koko ja kansion oikeudet.";
-$DocumentsWillBeAddedToo = "Dokumentit lis‰t‰‰n myˆs";
-$ToExportLearnpathWithQuizYouHaveToSelectQuiz = "Jos haluat siirt‰‰ oppimispolun joka sis‰lt‰‰ testin, sinun t‰ytyy varmistaa ett‰ vastaavat testit on valittu siirtoon, joten sinun t‰ytyy valita ne testien listalta.";
-$ArchivesDirectoryNotWriteableContactAdmin = "Varmistus kansioon ei voi kirjoittaa. Ota yhteytt‰ ymp‰ristˆn yll‰pit‰j‰‰n.";
+$ToolIntro = "Ty√∂kalun kuvaus";
+$UploadError = "Lataus ep√§onnistui, tarkista maksimi tiedoston koko ja kansion oikeudet.";
+$DocumentsWillBeAddedToo = "Dokumentit lis√§t√§√§n my√∂s";
+$ToExportLearnpathWithQuizYouHaveToSelectQuiz = "Jos haluat siirt√§√§ oppimispolun joka sis√§lt√§√§ testin, sinun t√§ytyy varmistaa ett√§ vastaavat testit on valittu siirtoon, joten sinun t√§ytyy valita ne testien listalta.";
+$ArchivesDirectoryNotWriteableContactAdmin = "Varmistus kansioon ei voi kirjoittaa. Ota yhteytt√§ ymp√§rist√∂n yll√§pit√§j√§√§n.";
 $DestinationCourse = "Kohde kurssi";
 ?>

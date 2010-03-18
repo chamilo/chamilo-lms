@@ -1,25 +1,5 @@
 <?php
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2006-2008 Dokeos SPRL
-	Copyright (c) 2006 Ghent University (UGent)
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact address: Dokeos, 108 rue du Corbeau, B-1030 Brussels, Belgium
-	Mail: info@dokeos.com
-==============================================================================
-*/
+/* For licensing terms, see /license.txt */
 
 /**
 *	These files are a complete rework of the forum. The database structure is
@@ -53,15 +33,15 @@
  **************************************************************************
  */
 
-$rows=get_posts($_GET['thread']); // note: this has to be cleaned first
-$rows=calculate_children($rows);
+require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';
 
-if ($_GET['post'])
-{
-	$display_post_id=Security::remove_XSS($_GET['post']); // note: this has to be cleaned first
-}
-else
-{
+$rows	= get_posts($_GET['thread']); // note: this has to be cleaned first
+$rows	= calculate_children($rows);
+
+
+if ($_GET['post']) {
+	$display_post_id	= intval($_GET['post']); // note: this has to be cleaned first
+} else {
 	// we need to display the first post
 	reset($rows);
 	$current=current($rows);
@@ -70,8 +50,7 @@ else
 
 //are we in a lp ?
 $origin = '';
-if(isset($_GET['origin']))
-{
+if(isset($_GET['origin'])) {
     $origin =  Security::remove_XSS($_GET['origin']);
 }
 
@@ -86,8 +65,7 @@ $thread_structure="<div class=\"structure\">".get_lang('Structure')."</div>";
 $counter=0;
 $count=0;
 $prev_next_array=array();
-foreach ($rows as $post)
-{
+foreach ($rows as $post) {
 	$counter++;
 	$indent=$post['indent_cnt']*'20';
 	$thread_structure.= "<div style=\"margin-left: ".$indent."px;\">";
@@ -103,7 +81,7 @@ foreach ($rows as $post)
 	$thread_structure.= $post_image;
 	if ($_GET['post']==$post['post_id'] OR ($counter==1 AND !isset($_GET['post'])))
 	{
-		$thread_structure.='<strong>'.prepare4display($post['post_title']).'</strong></div>';
+		$thread_structure.='<strong>'.prepare4display(Security::remove_XSS($post['post_title'],STUDENT)).'</strong></div>';
 		$prev_next_array[]=$post['post_id'];
 	}
 	else
@@ -117,7 +95,7 @@ foreach ($rows as $post)
 			$class='';
 		}
 		$count_loop=($count==0)?'&id=1' : '';
-		$thread_structure.= "<a href=\"viewthread.php?".api_get_cidreq()."&forum=".Security::remove_XSS($_GET['forum'])."&amp;thread=".Security::remove_XSS($_GET['thread'])."&amp;post=".$post['post_id']."&amp;origin=$origin$count_loop\" $class>".prepare4display($post['post_title'])."</a></div>\n";
+		$thread_structure.= "<a href=\"viewthread.php?".api_get_cidreq()."&forum=".Security::remove_XSS($_GET['forum'])."&amp;thread=".Security::remove_XSS($_GET['thread'])."&amp;post=".$post['post_id']."&amp;origin=$origin$count_loop\" $class>".prepare4display(Security::remove_XSS($post['post_title'],STUDENT))."</a></div>\n";
 		$prev_next_array[]=$post['post_id'];
 	}
 	$count++;
@@ -140,10 +118,10 @@ $next_message=get_lang('NextMessage');
 $prev_message=get_lang('PrevMessage');
 
 // images
-$first_img 	= Display::return_icon('first.png',get_lang('FirstMessage'),array('style'=>'vertical-align: middle;'));
-$last_img 	= Display::return_icon('last.png',get_lang('LastMessage'),array('style'=>'vertical-align: middle;'));
-$prev_img 	= Display::return_icon('prev.png',get_lang('PrevMessage'),array('style'=>'vertical-align: middle;'));
-$next_img 	= Display::return_icon('next.png',get_lang('NextMessage'),array('style'=>'vertical-align: middle;'));
+$first_img 	= Display::return_icon('action_first.png',get_lang('FirstMessage'), array('style' => 'vertical-align: middle;'));
+$last_img 	= Display::return_icon('action_last.png',get_lang('LastMessage'), array('style' => 'vertical-align: middle;'));
+$prev_img 	= Display::return_icon('action_prev.png',get_lang('PrevMessage'), array('style' => 'vertical-align: middle;'));
+$next_img 	= Display::return_icon('action_next.png',get_lang('NextMessage'), array('style' => 'vertical-align: middle;'));
 
 // links
 $first_href = 'viewthread.php?'.api_get_cidreq().'&amp;forum='.Security::remove_XSS($_GET['forum']).'&amp;thread='.Security::remove_XSS($_GET['thread']).'&amp;gradebook='.$gradebook.'&amp;origin='.$origin.'&amp;id=1&amp;post='.$prev_next_array[0];
@@ -183,8 +161,7 @@ echo '</center>';
 //--------------------------------------------------------------------------------------------
 
 // the style depends on the status of the message: approved or not
-if ($rows[$display_post_id]['visible']=='0')
-{
+if ($rows[$display_post_id]['visible']=='0') {
 	$titleclass='forum_message_post_title_2_be_approved';
 	$messageclass='forum_message_post_text_2_be_approved';
 	$leftclass='forum_message_left_2_be_approved';
@@ -206,17 +183,15 @@ unset($whatsnew_post_info[$current_forum['forum_id']][$current_thread['thread_id
 echo "<table width=\"100%\"  class=\"post\"  cellspacing=\"5\" border=\"0\">\n";
 echo "\t<tr>\n";
 echo "\t\t<td rowspan=\"3\" class=\"$leftclass\">";
-if ($rows[$display_post_id]['user_id']=='0')
-{
+if ($rows[$display_post_id]['user_id']=='0') {
 	$name=prepare4display($rows[$display_post_id]['poster_name']);
-}
-else
-{
+} else {
 	$name=api_get_person_name($rows[$display_post_id]['firstname'], $rows[$display_post_id]['lastname']);
 }
+
 if (api_get_course_setting('allow_user_image_forum')) {echo '<br />'.display_user_image($rows[$display_post_id]['user_id'],$name, $origin).'<br />';	}
 echo display_user_link($rows[$display_post_id]['user_id'], $name, $origin).'<br />';
-echo $rows[$display_post_id]['post_date'].'<br /><br />';
+echo api_convert_and_format_date($rows[$display_post_id]['post_date'], null, date_default_timezone_get()).'<br /><br />';
 // get attach id
 $attachment_list=get_attachment($display_post_id);
 $id_attach = !empty($attachment_list)?$attachment_list['id']:'';
@@ -303,19 +278,18 @@ if ($rows[$display_post_id]['post_notification']=='1' AND $rows[$display_post_id
 	$post_image.=icon('../img/forumnotification.gif',get_lang('YouWillBeNotified'));
 }
 // The post title
-echo "\t\t<td class=\"$titleclass\">".prepare4display($rows[$display_post_id]['post_title'])."</td>\n";
+echo "\t\t<td class=\"$titleclass\">".prepare4display(Security::remove_XSS($rows[$display_post_id]['post_title'], STUDENT))."</td>\n";
 echo "\t</tr>\n";
 
 // The post message
 echo "\t<tr>\n";
-echo "\t\t<td class=\"$messageclass\">".prepare4display($rows[$display_post_id]['post_text'])."</td>\n";
+echo "\t\t<td class=\"$messageclass\">".prepare4display(Security::remove_XSS($rows[$display_post_id]['post_text'], STUDENT))."</td>\n";
 echo "\t</tr>\n";
 
 // The check if there is an attachment
-$attachment_list=get_attachment($display_post_id);
+$attachment_list = get_attachment($display_post_id);
 
-if (!empty($attachment_list))
-{
+if (!empty($attachment_list)) {
 	echo '<tr><td height="50%">';
 	$realname=$attachment_list['path'];
 	$user_filename=$attachment_list['filename'];
@@ -324,7 +298,7 @@ if (!empty($attachment_list))
 	echo '<a href="download.php?file=';
 	echo $realname;
 	echo ' "> '.$user_filename.' </a>';
-	echo '<span class="forum_attach_comment" >'.$attachment_list['comment'].'</span>';
+	echo '<span class="forum_attach_comment" >'.Security::remove_XSS($attachment_list['comment'], STUDENT).'</span>';
 	if (($current_forum['allow_edit']==1 AND $rows[$display_post_id]['user_id']==$_user['user_id']) or (api_is_allowed_to_edit(false,true)  && !(api_is_course_coach() && $current_forum['session_id']!=$_SESSION['id_session'])))	{
 		echo '&nbsp;&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;origin='.Security::remove_XSS($_GET['origin']).'&amp;action=delete_attach&amp;id_attach='.$attachment_list['id'].'&amp;forum='.Security::remove_XSS($_GET['forum']).'&amp;thread='.Security::remove_XSS($_GET['thread']).'" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset)).'\')) return false;">'.Display::return_icon('delete.gif',get_lang('Delete')).'</a><br />';
 	}
@@ -343,42 +317,3 @@ echo "</table>";
 // --------------------------------------
 
 echo $thread_structure;
-
-
-/**
-* This function builds an array of all the posts in a given thread where the key of the array is the post_id
-* It also adds an element children to the array which itself is an array that contains all the id's of the first-level children
-* @return an array containing all the information on the posts of a thread
-* @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
-*/
-function calculate_children($rows)
-{
-	foreach($rows as $row)
-	{
-		$rows_with_children[$row["post_id"]]=$row;
-		$rows_with_children[$row["post_parent_id"]]["children"][]=$row["post_id"];
-	}
-	$rows=$rows_with_children;
-	$sorted_rows=array(0=>array());
-	_phorum_recursive_sort($rows, $sorted_rows);
-	unset($sorted_rows[0]);
-	return $sorted_rows;
-}
-
-function _phorum_recursive_sort($rows, &$threads, $seed=0, $indent=0)
-{
-	if($seed>0)
-	{
-		$threads[$rows[$seed]["post_id"]]=$rows[$seed];
-		$threads[$rows[$seed]["post_id"]]["indent_cnt"]=$indent;
-		$indent++;
-	}
-
-	if(isset($rows[$seed]["children"]))
-	{
-		foreach($rows[$seed]["children"] as $child)
-		{
-			_phorum_recursive_sort($rows, $threads, $child, $indent);
-		}
-	}
-}

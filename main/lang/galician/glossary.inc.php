@@ -1,9 +1,10 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
 $TermAddNew = "Engadir un termo";
 $TermName = "Termo";
-$TermDefinition = "Definici髇";
+$TermDefinition = "Definici贸n";
 $TermDeleted = "Termo elilminado";
 $TermUpdated = "Termo actualizado";
 $TermConfirmDelete = " Realmente desexa eliminar o termo";
@@ -11,15 +12,17 @@ $TermAddButton = "Engadir este termo";
 $TermUpdateButton = "Actualizar termo";
 $TermEdit = "Editar termo";
 $TermDeleteAction = "Eliminar termo";
-$OrderBy = " 	Ordenar por";
-$CreationDate = "Data de creaci髇";
-$UpdateDate = "趌tima modificaci髇";
-$PreSelectedOrder = "Ordenar por selecci髇";
+$OrderBy = "Ordenar por";
+$CreationDate = "Data de creaci贸n";
+$UpdateDate = "脷ltima modificaci贸n";
+$PreSelectedOrder = "Ordenar por selecci贸n";
 $TermAdded = "Termo engadido";
 $YouMustEnterATermName = "Debe introducir un termo";
-$YouMustEnterATermDefinition = "Debe introducir a definici髇 do termo";
+$YouMustEnterATermDefinition = "Debe introducir a definici贸n do termo";
 $TableView = "Ver como tabla";
-$GlossaryTermAlreadyExistsYouShouldEditIt = "Este termo do glosario xa existe, por favor c醡bieo por outro nome";
-$GlossaryManagement  = "Administraci髇 do glosario";
+$GlossaryTermAlreadyExistsYouShouldEditIt = "Este termo do glosario xa existe, por favor c谩mbieo por outro nome";
+$GlossaryManagement = "Administraci贸n do glosario";
 $TermMoved = "Moveuse o termo";
+$ShowGlossaryInExtraToolsTitle = "Amosar os termos do glosario nas ferramentas:lecci贸ns(scorm) e exercicios.";
+$ShowGlossaryInExtraToolsComment = "Desde aqu铆 vostede pode configurar como engadir os termos do glosario en ferramentas como lecci贸ns(scorm) e exercicios.";
 ?>

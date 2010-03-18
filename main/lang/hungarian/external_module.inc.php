@@ -1,27 +1,28 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$langLinkSite = "Link egy honlapra";
-$langSubTitle = "Egy linket hozzáad, ami a kurzusának a honlapján lévõ egy oldalra mutat. Ehhez menjen az adott oldalra, másolja ki az URL-jét a böngészõjének a tetejébõl és illessze be a \"Link\" mezõbe lenn.";
-$langAddPage            = "Oldalt hozzáad";
-$langSendPage           = "Oldalt feltölt";
-$langCouldNot           = "A file-t nem lehet feltölteni";
-$langOkSentLink         = "A link hozzáadva.<p>Most már elérhetõ innen : <a href=\"../../DOKEOSDEV/index.php\">Honlap</a>";
-$langTooBig             = "Nem választott ki elküldeni egy file-t sem vagy túl nagy";
-$langExplanation        = "Az oldal HTML formátumú kell, hogy legyen (pl. \"oldalam.htm\"). A Honlapról elérhetõ lesz. Ha nem HTML dokumentumokat akar küldeni (PDF, Word, Power Point, Video, stb.) használja a <a href=../document/document.php>Dokumentumok eszközt</a>";
-$langPgTitle            = "Az oldal címe";
-$langNoLinkURL          = "Kérjük, írja be a link URL-jét";
-$langLinkTarget = "Hivatkozás célja";
+$langLinkSite = "A link hozzÃ¡adÃ¡sa a fÅ‘oldalhoz";
+$langSubTitle = "Egy linket hozzÃ¡ad, ami a kurzusÃ¡nak a honlapjÃ¡n lÃ©vÅ‘ egy oldalra mutat. Ehhez menjen az adott oldalra, mÃ¡solja ki az URL-jÃ©t a bÃ¶ngÃ©szÅ‘jÃ©nek a tetejÃ©bÅ‘l Ã©s illessze be a \"Link\" mezÅ‘be lenn.";
+$langAddPage = "Oldalt hozzÃ¡ad";
+$langSendPage = "Oldalt feltÃ¶lt";
+$langCouldNot = "A file-t nem lehet feltÃ¶lteni";
+$langOkSentLink = "A link hozzÃ¡adva.<p>Most mÃ¡r elÃ©rhetÅ‘ innen : <a href=\"../../DOKEOSDEV/index.php\">Honlap</a>";
+$langTooBig = "Nem vÃ¡lasztott ki elkÃ¼ldeni egy file-t sem vagy tÃºl nagy";
+$langExplanation = "Amint az OK-re kattint, lÃ©trejÃ¶n az Ãºj kurzus honlapja fÃ³rummal, naptÃ¡rral, dokumentum szerkesztÅ‘vel Ã©s az egyÃ©b eszkÃ¶zÃ¶kkel. A kurzus lÃ©trehozÃ³jakÃ©nt vagy adminisztrÃ¡torakÃ©nt kÃ©sÅ‘bb igÃ©nyei szerint testreszabhatja a kurzust.";
+$langPgTitle = "Az oldal cÃ­me";
+$langNoLinkURL = "KÃ©rjÃ¼k, Ã­rja be a link URL-jÃ©t";
+$langLinkTarget = "HivatkozÃ¡s cÃ©lja";
 $langSameWindow = "ugyanaz az ablak";
-$langNewWindow = "új ablak";
-$langAdded = "a hivatkozás hozzáadva";
-$langAddLink = "Link hozzáadása";
-$langNoLinkName = "Kérjük, írja be a link nevét";
-$langEditLink = "Kurzus kezd&#337;oldal hivatkozásának módosítása";
-$langChangePress = "Módosítson és kattinson az OK -ra";
-$langLinkChanged = "A Kurzus kezd&#337;oldal hivatkozás megváltozott. A fenti navigációs menüben térjen vissza a kezd&#337;lapra.";
-$NoLinkName = "Hiányzó hivatkozás név";
-$NoLinkURL = "Hiányzó hivatkozás URL";
-$LinkChanged = "A hivatkozás módosítása megtörtént";
-$OkSentLink = "A hivatkozás elküldése megtörtént";
+$langNewWindow = "Ãºj ablak";
+$langAdded = "HozzÃ¡adva";
+$langAddLink = "Link hozzÃ¡adÃ¡sa";
+$langNoLinkName = "KÃ©rjÃ¼k, Ã­rja be a link nevÃ©t";
+$langEditLink = "Kurzus kezdÅ‘oldal hivatkozÃ¡sÃ¡nak mÃ³dosÃ­tÃ¡sa";
+$langChangePress = "MÃ³dosÃ­tson Ã©s kattinson az OK -ra";
+$langLinkChanged = "A Kurzus kezdÅ‘oldal hivatkozÃ¡s megvÃ¡ltozott. A fenti navigÃ¡ciÃ³s menÃ¼ben tÃ©rjen vissza a kezdÅ‘lapra.";
+$NoLinkName = "HiÃ¡nyzÃ³ hivatkozÃ¡s nÃ©v";
+$NoLinkURL = "HiÃ¡nyzÃ³ hivatkozÃ¡s URL";
+$LinkChanged = "A hivatkozÃ¡s mÃ³dosÃ­tÃ¡sa megtÃ¶rtÃ©nt";
+$OkSentLink = "A hivatkozÃ¡s elkÃ¼ldÃ©se megtÃ¶rtÃ©nt";
 ?>

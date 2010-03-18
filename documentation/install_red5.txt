@@ -1,11 +1,11 @@
-Dokeos Red5 applications
+Chamilo Red5 applications
 ========================
 
 Table of contents
 -----------------
 1. Installation
 1.1. Red5
-1.2. Dokeos Red5 Application
+1.2. Chamilo Red5 Application
 
 2. Configuration
 
@@ -29,7 +29,7 @@ From now on, we will refer to red5 home directory by $RED5_HOME.
 
 [1] http://osflash.org/red5
 
-1.2. Dokeos Red5 Application
+1.2. Chamilo Red5 Application
 
 To install either the recorder or the videoconference application, the only step that needs to be done is to copy the .war file in the $RED5_HOME/webapps directory.
 You have to restart red5 to get the applications deployed inside red5. You can install both applications inside red5. They can run together

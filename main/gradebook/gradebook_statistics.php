@@ -1,27 +1,5 @@
 <?php // $Id: $
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2008 Dokeos Latinoamerica SAC
-	Copyright (c) 2006 Dokeos SPRL
-	Copyright (c) 2006 Ghent University (UGent)
-	Copyright (c) various contributors
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
-	Mail: info@dokeos.com
-==============================================================================
-*/
+/* For licensing terms, see /license.txt */
 $language_file= 'gradebook';
 //$cidReset= true;
 require_once ('../inc/global.inc.php');
@@ -41,7 +19,7 @@ if ($eval[0]->get_category_id() < 0) {
 }
 
 $interbreadcrumb[]= array (
-	'url' => $_SESSION['gradebook_dest'].'?selectcat=' . $currentcat[0]->get_id(), 'name' => get_lang('Gradebook'));
+	'url' => $_SESSION['gradebook_dest'].'?selectcat=' . $currentcat[0]->get_id(), 'name' => get_lang('ToolGradebook'));
 
 if (api_is_allowed_to_create_course()){
 	$interbreadcrumb[]= array (
@@ -89,15 +67,14 @@ if (!$displayscore->is_custom()) {
 
 	$stattable= '<br><table class="data_table" cellspacing="0" cellpadding="3">';
 	$stattable .= '<tr><th colspan="4">' . get_lang('Statistics') . '</th></tr>';
-
 	$counter=0;
-	foreach ($keys as $key) {
-		$bar = ($nr_items[$key] / $highest_ratio) * 100;
+	foreach ($keys as $key) {				
+		$bar = ($highest_ratio > 0?($nr_items[$key] / $highest_ratio) * 100:0);
 		$stattable .= '<tr class="row_' . ($counter % 2 == 0 ? 'odd' : 'even') . '">';
 		$stattable .= '<td width="150">' . $key . '</td>';
 		$stattable .= '<td width="550"><img src="../img/bar_1u.gif" width="' . $bar . '%" height="10"/></td>';
 		$stattable .= '<td align="right">' . $nr_items[$key] . '</td>';
-		$stattable .= '<td align="right"> ' . round(($nr_items[$key] / $resultcount) * 100,2) . '%</td>';
+		$stattable .= '<td align="right"> ' . ($resultcount > 0 ?round(($nr_items[$key] / $resultcount) * 100,2):0) . '%</td>';		
 		$counter++;
 	}
 	$stattable .= '</tr></table>';

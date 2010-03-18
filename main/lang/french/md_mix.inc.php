@@ -1,18 +1,19 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$langTool = "MÈtadonnÈes";
-$langClickKw = "Cliquez sur un mot-clÈ dans l\'arborescence pour le sÈlectionner ou le dÈsÈlectionner";
-$langKwHelp = "<br/> Cliquez sur le bouton \'+\' pour ouvrir, sur le bouton \'-\' pour fermer, sur le bouton \'++\' pour tout ouvrir, sur le bouton \'--\' pour tout fermer. <br/> <br/> DÈsÈlectionnez tous les mots-clÈs en fermant l\'arborescence et en l\'ouvrant de nouveau par le bouton \'+\'. <br/> Alt-click \'+\' sÈlectionne de nouveau les mots-clÈs. <br/> <br/> Alt-click sur un mot-clÈ l\'annule.<br/>";
-$langAdvanced = "AvancÈ";
-$langSearch = "Recherche";
+$langTool = "M√©tadonn√©es document";
+$langClickKw = "Clic pour s√©lectionner ou annuler un mot cl√©.";
+$langKwHelp = "<br />Clic '+' pour ouvrir, '-' pour fermer, '++' pour ouvrir tout, '--' pour tout fermer.<br /><br />Pour annuler les choix pr√©c√©dents, fermez l'arborescence et r√©-ouvrez-l√† avec '+'.<br />Pour remettre les mots cl√© originaux, ouvrez-l√† avec Alt-clic '+'.<br /><br />Alt-clic mot cl√© s√©lectionne un mot cl√© sans termes plus large etannulle avec termes plus larges.<br /><br />Si vous changez la langue de la description, n'ajoutez pas de nouveaux mots cl√© en m√™me temps.<br /><br />";
+$langAdvanced = "Construire";
+$langSearch = "Cherchez";
 $langSearchCrit = "Un mot par ligne!";
-$langNoKeywords = "Aucun mot-clÈ pour dÈcrire ce cours";
-$langKwCacheProblem = "Le cache des mots-clÈs ne peut Ítre ouvert";
-$langCourseKwds = "mots-clÈs du cours";
-$langKwdsInMD = "mots-clÈs utilisÈs dans les mÈtadonnÈes";
-$langKwdRefs = "RÈfÈrences des mots clÈs";
-$langNonCourseKwds = "Mots clÈs hors cours";
-$langKwdsUse = "Mots-clÈs du cours (en gras = non utilisÈs)";
-$langTotalMDEs = "Nombre total d\'entrÈes de MÈtadonnÈes";
+$langNoKeywords = "Aucun mot-cl√© pour d√©crire ce cours";
+$langKwCacheProblem = "Le cache des mots-cl√©s ne peut √™tre ouvert";
+$langCourseKwds = "Ce document contient les mots cl√© du cours";
+$langKwdsInMD = "mots-cl√©s utilis√©s dans les m√©tadonn√©es";
+$langKwdRefs = "R√©f√©rences des mots cl√©s";
+$langNonCourseKwds = "Mots cl√©s hors cours";
+$langKwdsUse = "Mots-cl√©s du cours (en gras = non utilis√©s)";
+$langTotalMDEs = "Nombre total d'entr√©es de M√©tadonn√©es";
 ?>

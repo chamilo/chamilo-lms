@@ -1,18 +1,19 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$langTool = "Metadades";
-$langClickKw = "Faci clic sobre la paraula clau en l\'arbre per a seleccionar-la o deseleccionar-la. ";
-$langKwHelp = "<br/> Clic en el botÛ \'+\' per a obrir, en el botÛ \'-\' tancar, en el botÛ \'++\' per a obrir tot, en el botÛ \'--\' per a tancar tot.<br/> <br/> Rebutjar totes les paraules clau seleccionades tancant l\'arbre i obrint-lo de nou amb el botÛ \'+\'.<br/> Alt-clic \'+\' torna a seleccionar les paraules clau seleccionada amb anterioritat.<br/> <br/> Alt-clic paraula clau, nega aquesta paraula clau.<br/> ";
-$langAdvanced = "AvanÁada";
+$langTool = "Metadades del document";
+$langClickKw = "Feu clic a la paraula clau de l'arbre ja sigui per seleccionar-la com per anular la selecci√≥.";
+$langKwHelp = "<br/>Feu clic al bot√≥ '+' per obrir, al bot√≥ '-' per tancar, al bot√≥ '++' per obrir-ho tot, al bot√≥ '--' per tancar-ho tot.<br/> Anul¬∑leu la selecci√≥ de totes les paraules clau tancant l'arbre i tornant-lo a obrir amb el bot√≥ '+'.<br/> Alt-clic '+' cerca les paraules clau originals a l'arbre.<br/><br/>Alt-clic selecciona les paraules clau sense termes m√©s amplis o anul¬∑la la selecci√≥ de paraules clau amb termes m√©s amplis.<br/><br/>Si canvieu d'idioma de descripci√≥, no podreu afegir alhora paraules clau.<br/><br/>";
+$langAdvanced = "Avan√ßat";
 $langSearch = "Cercar";
-$langSearchCrit = "Usi l\'‡rea inferior per als descriptors, una paraula per lÌnia ! ";
-$langNoKeywords = "Aquest curs no tÈ paraules clau";
+$langSearchCrit = "Una paraula per l√≠nia !";
+$langNoKeywords = "Aquest curs no t√© paraules clau";
 $langKwCacheProblem = "La paraula clau no pot ser oberta";
-$langCourseKwds = "paraules clau del curs";
+$langCourseKwds = "Aqust document cont√© paraules clau del curs";
 $langKwdsInMD = "paraules clau usades en les metadades (MD)";
-$langKwdRefs = "referËncies de paraules clau";
+$langKwdRefs = "refer√®ncies de paraules clau";
 $langNonCourseKwds = "paraules clau no pertanyents al curs";
 $langKwdsUse = "Paraules clau del curs (negreta = sense usar)";
-$langTotalMDEs = "Total d\'entrades de metadades (MD)";
+$langTotalMDEs = "Total d'entrades de metadades (MD) d'enlla√ßos";
 ?>

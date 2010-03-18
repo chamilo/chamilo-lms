@@ -1,28 +1,21 @@
 <?php //$id: $
+/* For licensing terms, see /license.txt */
 /**
  * Script that displays a blank page (with later a message saying why)
- * @package dokeos.learnpath
+ * @package chamilo.learnpath
  * @author Yannick Warnier <ywarnier@beeznest.org>
  */
-/**
- * Script
- */
 
-
-$language_file[] = "learnpath";
+$language_file = array('learnpath','document');
 
 //flag to allow for anonymous user - needs to be set before global.inc.php
 $use_anonymous = true;
 
-require('../inc/global.inc.php');
-include_once('../inc/reduced_header.inc.php');
-
+require_once '../inc/global.inc.php';
+require_once '../inc/reduced_header.inc.php';
 ?>
-
 <body>
-
 <?php
-
 if (isset($_GET['error'])) {
 	switch($_GET['error']){
 		case 'document_deleted':
@@ -33,6 +26,10 @@ if (isset($_GET['error'])) {
 			echo '<br /><br />';
 			Display::display_normal_message(get_lang('_prereq_not_complete'));
 			break;
+		case 'document_not_found':
+			echo '<br /><br />';
+			Display::display_normal_message(get_lang('FileNotFound'));
+			break;
 		default:
 			break;
 	}
@@ -41,6 +38,5 @@ if (isset($_GET['error'])) {
 	Display::display_normal_message(get_lang('ExerciseFinished'));
 }
 ?>
-
 </body>
 </html>

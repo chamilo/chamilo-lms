@@ -1,26 +1,5 @@
 <?php
-// $Id: import.lib.php 13806 2007-11-28 06:29:03Z yannoo $
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2004,2005 Dokeos S.A.
-	Copyright (c) Bart Mollet, Hogeschool Gent
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact address: Dokeos, 44 rue des palais, B-1030 Brussels, Belgium
-	Mail: info@dokeos.com
-==============================================================================
-*/
+/* For licensing terms, see /license.txt */
 /**
 ==============================================================================
 * This class provides some functions which can be used when importing data from
@@ -47,27 +26,31 @@ class Import
 	 * @return array An array with all data from the CSV-file
 	 */
 	function csv_to_array($filename) {
-		$result = array ();
-		$handle = fopen($filename, "r");
-		if($handle === false) {
+		$result = array();
+		$handle = fopen($filename, 'r');
+		if ($handle === false) {
 			return $result;
-		}		
-		$keys = fgetcsv($handle, 4096, ";");
-		while (($row_tmp = fgetcsv($handle, 4096, ";")) !== FALSE) {
-			$row = array ();
-			//avoid empty lines in csv			
-			if (is_array($row_tmp) && count($row_tmp)>0 && $row_tmp[0]!= '') {
-				if (!is_null($row_tmp[0]))
-				{
-				foreach ($row_tmp as $index => $value) {				
-					$row[$keys[$index]] = $value;				
+		}
+		// Modified by Ivan Tcholakov, 01-FEB-2010.
+		//$keys = fgetcsv($handle, 4096, ";");
+		$keys = api_fgetcsv($handle, null, ';');
+		//
+		// Modified by Ivan Tcholakov, 01-FEB-2010.
+		//while (($row_tmp = fgetcsv($handle, 4096, ";")) !== FALSE) {
+		while (($row_tmp = api_fgetcsv($handle, null, ';')) !== false) {
+		//
+			$row = array();
+			//avoid empty lines in csv
+			if (is_array($row_tmp) && count($row_tmp) > 0 && $row_tmp[0] != '') {
+				if (!is_null($row_tmp[0])) {
+					foreach ($row_tmp as $index => $value) {
+						$row[$keys[$index]] = $value;
+					}
+					$result[] = $row;
 				}
-				$result[] = $row;
-				}			
 			}
 		}
 		fclose($handle);
 		return $result;
 	}
 }
-?>

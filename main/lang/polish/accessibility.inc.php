@@ -1,15 +1,16 @@
-<?php /*
-for more information: see languages.txt in the lang folder. 
+<?php
+/*
+for more information: see languages.txt in the lang folder.
 */
-$langClarContent = "Tutaj prowadz&#261;cy zaj&#281;cia tworz&#261; i administruja stronami kurs體. Studenci czytaj&#261; (dokumenty, og&#322;oszenia, terminy) i czasem wykonuj&#261; &#263;wiczenia, publikuj&#261; swoje prace, uczestnicz&#261; w dyskusji w Forum dyskusyjnym...Here, professors and assistants create and administer courses websites. Students read (documents, agendas, informations) and, sometimes, make exercises, publish papers, participate to forum discussions...</p><b>Rejestracja</b><p>Poni&#380;sze instrukcje dotycz&#261; serwera Claroline, w kt髍ym dopuszcza si&#281; samodzieln&#261; rejestracj&#281;. <br>Je&#347;li jeste&#347; studentem powiniene&#347; zarejestrowa&#263; si&#281; wybieraj&#261;c opcj&#281; \'Uczestnictwo w kursie\', a nast&#281;pnie wybra&#263; kurs, do kt髍ego chcesz si&#281; zapisa&#263;.</p><p>Je&#347;li prowadzisz swoje zaj&#281;cia za po&#347;rednictwem serwera Claroline powiniene&#347; zarejestrowa&#263; si&#281; wybieraj&#261;c opcj&#281; \'Tworzenie kursu\'. Powiniene&#347; nast&#281;pnie wype&#322;ni&#263; formularz z tytu&#322;em i kodem kursu. Po jego zatwierdzeniu, utworzone zostan&#261; strony WWW nowego kursu, kt髍ego zawarto&#347;&#263; mo&#380;na modyfikowa&#263; zale&#380;nie od potrzeb. </p><p>Odno&#347;nik \'Wolne wnioski\' umo&#380;liwia przekazywanie administratorom systemu swoich uwag, sugestii i postulat體. Strona \'Wolne wnioski\' jest po&#322;aczona odno&#347;nikiem ze stron&#261; g&#322;體n&#261; campusu (po zalogowaniu si&#281;).</p><p>\'Forum u&#380;ytkownik體 Claroline\' &#322;aczy osoby korzystaj&#261;ce z oprogramowania Dokeos na ca&#322;ym swiecie. Je&#347;li nie mo&#380;esz uzyska&#263; odpowiedzi na swoje pytanie wewn&#261;trz swojego campusa, wy&#347;lij tam swoj&#261; wiadomo&#347;&#263;.</p><p>Odno&#347;nik \'Rejestracja\' (je&#347;li istnieje) znajduje si&#281; na stronie g&#322;體nej campusu (u g髍y, po prawej).</p><b>Logowanie</b><p>Podczas nast&#281;pnych wizyt, wpisuj swoj&#261; nazw&#281; u&#380;ytkownika i has&#322;o, a nast&#281;pnie \'Wej&#347;cie\', &#380;eby uzyska&#263; dost&#281;p Twoich kurs體. Adres strony:";
+$langClarContent = "Tutaj prowadz膮cy zaj臋cia tworz膮 i administruja stronami kurs贸w. Studenci czytaj膮 (dokumenty, og艂oszenia, terminy) i czasem wykonuj膮 膰wiczenia, publikuj膮 swoje prace, uczestnicz膮 w dyskusji w Forum dyskusyjnym...Here, professors and assistants create and administer courses websites. Students read (documents, agendas, informations) and, sometimes, make exercises, publish papers, participate to forum discussions...</p><b>Rejestracja</b><p>Poni偶sze instrukcje dotycz膮 serwera Claroline, w kt贸rym dopuszcza si臋 samodzieln膮 rejestracj臋. <br>Je艣li jeste艣 studentem powiniene艣 zarejestrowa膰 si臋 wybieraj膮c opcj臋 'Uczestnictwo w kursie', a nast臋pnie wybra膰 kurs, do kt贸rego chcesz si臋 zapisa膰.</p><p>Je艣li prowadzisz swoje zaj臋cia za po艣rednictwem serwera Claroline powiniene艣 zarejestrowa膰 si臋 wybieraj膮c opcj臋 'Tworzenie kursu'. Powiniene艣 nast臋pnie wype艂ni膰 formularz z tytu艂em i kodem kursu. Po jego zatwierdzeniu, utworzone zostan膮 strony WWW nowego kursu, kt贸rego zawarto艣膰 mo偶na modyfikowa膰 zale偶nie od potrzeb. </p><p>Odno艣nik 'Wolne wnioski' umo偶liwia przekazywanie administratorom systemu swoich uwag, sugestii i postulat贸w. Strona 'Wolne wnioski' jest po艂aczona odno艣nikiem ze stron膮 g艂贸wn膮 campusu (po zalogowaniu si臋).</p><p>'Forum u偶ytkownik贸w Claroline' 艂aczy osoby korzystaj膮ce z oprogramowania Chamilo na ca艂ym swiecie. Je艣li nie mo偶esz uzyska膰 odpowiedzi na swoje pytanie wewn膮trz swojego campusa, wy艣lij tam swoj膮 wiadomo艣膰.</p><p>Odno艣nik 'Rejestracja' (je艣li istnieje) znajduje si臋 na stronie g艂贸wnej campusu (u g贸ry, po prawej).</p><b>Logowanie</b><p>Podczas nast臋pnych wizyt, wpisuj swoj膮 nazw臋 u偶ytkownika i has艂o, a nast臋pnie 'Wej艣cie', 偶eby uzyska膰 dost臋p Twoich kurs贸w. Adres strony:";
 $test = "test";
 $WCAGImage = "Obrazek";
 $WCAGLabel = "Etykieta obrazka";
-$WCAGLink = "Odno&#347;nik";
-$WCAGLinkLabel = "Etykieta odno&#347;nika";
+$WCAGLink = "Odno艣nik";
+$WCAGLinkLabel = "Etykieta odno艣nika";
 $errorNoLabel = "Brak etykiety ilustracji.";
-$AllLanguages = "Wszystkie J&#281;zyki";
+$AllLanguages = "Wszystkie J臋zyki";
 $WCAGEditor = "Edytor WCAGE";
-$WCAGGoMenu = "Id&#378; do menu";
-$WCAGGoContent = "Id&#378; do tre&#347;ci";
+$WCAGGoMenu = "Id藕 do menu";
+$WCAGGoContent = "Id藕 do tre艣ci";
 ?>

@@ -1,0 +1,18 @@
+<?php
+
+require_once api_get_path(SYS_CODE_PATH).'course_info/download.lib.php';
+
+
+class TestCreateBackupIsAdmin extends UnitTestCase {
+
+   public function Testcreate_backup_is_admin() 
+   {
+   		$_GET = array('archive' => 'index.html');
+   		
+          $res =  create_backup_is_admin(true);
+          $this->assertTrue($res, 'son iguales');
+          var_dump($res);
+    }
+}
+
+?>

@@ -79,7 +79,7 @@ if (api_get_setting('show_navigation_menu') != 'false') {
 			break;
 	}
 }
-$cidreq = $_GET['cidReq'];
+$cidreq = Security::remove_XSS($_GET['cidReq']);
 
 ?>
 <!DOCTYPE html
@@ -103,7 +103,7 @@ if (api_get_setting('show_navigation_menu') == 'false' || !empty($open_chat_wind
 }
 echo '<frame src="chat_whoisonline.php?cidReq='.$cidreq.'" name="chat_whoisonline" scrolling="auto">';
 echo'<frameset rows="25,15" border="1" frameborder="1" framespacing="1">';
-echo '<frame src="chat_chat.php?origin='.$_GET["origin"].'&target='.$_GET["target"].'&amp;cidReq='.$cidreq.'" name="chat_chat" scrolling="auto">';
+echo '<frame src="chat_chat.php?origin='.Security::remove_XSS($_GET['origin']).'&target='.Security::remove_XSS($_GET['target']).'&amp;cidReq='.$cidreq.'" name="chat_chat" scrolling="auto">';
 echo '<frame src="chat_message.php?cidReq='.$cidreq.'" name="chat_message" scrolling="no">';
 echo '</frameset>';
 echo '<frame src="chat_hidden.php?cidReq='.$cidreq.'" name="chat_hidden" >';

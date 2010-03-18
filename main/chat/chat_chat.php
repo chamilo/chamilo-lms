@@ -24,7 +24,7 @@ $group_id 	= intval($_SESSION['_gid']);
 if (!empty($course)) {
 	$reset = (bool)$_GET['reset'];
 	$tbl_user = Database::get_main_table(TABLE_MAIN_USER);
-	$query = "SELECT username FROM $tbl_user WHERE user_id='".$_user['user_id']."'";
+	$query = "SELECT username FROM $tbl_user WHERE user_id='".intval($_user['user_id'])."'";
 	$result = Database::query($query);
 
 	list($pseudo_user) = Database::fetch_row($result);
@@ -70,7 +70,7 @@ if (!empty($course)) {
 	} else {
 		$filename_chat = 'messages-'.$date_now.'.log.html';
 	}
-
+	
 	if (!file_exists($chat_path.$filename_chat)) {
 		@fclose(fopen($chat_path.$filename_chat, 'w'));
 		if (!api_is_anonymous()) {
@@ -111,10 +111,14 @@ if (!empty($course)) {
 
 		update_existing_document($_course, $doc_id, 0);
 	}
-
-	$content = file($chat_path.$basename_chat.'.log.html');
-	$nbr_lines = sizeof($content);
-	$remove = $nbr_lines - 100;
+	
+	$remove = 0;
+	$content = array();
+	if (file_exists($chat_path.$basename_chat.'.log.html')) {
+		$content = file($chat_path.$basename_chat.'.log.html');
+		$nbr_lines = sizeof($content);
+		$remove = $nbr_lines - 100;
+	}
 
 	if ($remove < 0) {
 		$remove = 0;
@@ -128,7 +132,7 @@ if (!empty($course)) {
 	}
 	if ($_GET['origin'] == 'whoisonlinejoin') {   //the joiner (we have to delete the chat request to him when he joins the chat)
 		$track_user_table = Database::get_main_table(TABLE_MAIN_USER);
-		$sql = "update $track_user_table set chatcall_user_id = '', chatcall_date = '', chatcall_text='' where (user_id = ".$_user['user_id'].")";
+		$sql = "UPDATE $track_user_table set chatcall_user_id = '', chatcall_date = '', chatcall_text='' where (user_id = ".$_user['user_id'].")";
 		$result = Database::query($sql);
 	}
 

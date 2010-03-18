@@ -5,18 +5,13 @@
  *	Chamilo banner
  *
  *	@author Olivier Brouckaert
- *	@chamilo chamilo.chat
+ *	@package chamilo.chat
  */
 
 $language_file = array ('chat');
 require_once '../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
 $this_section = SECTION_COURSES;
-
-//$interbreadcrumb[] = array ('url' => 'chat.php', 'name' => get_lang('Chat'));
-//$noPHP_SELF = true;
-//$shortBanner = false;
-//Display::display_header(null, 'Chat');
 
 $tool_name = get_lang('ToolChat');
 

@@ -1,17 +1,21 @@
 <?php
 /* For licensing terms, see /license.txt */
-
 /**
- * @author isaac flores paz
+ *	@package chamilo.chat
+ */
+ 
+/**
  * @param integer
  * @return void
  */
 function exit_of_chat($user_id) {
+	$user_id = intval($user_id);
 	$list_course = array();
  	$list_course = CourseManager::get_courses_list_by_user_id($user_id);
 
 	$group_id = intval($_SESSION['id_group']);
 	$session_id = intval($_SESSION['id_session']);
+	
 	$extra_condition = '';
 	if (!empty($group_id)) {
 		$extra_condition = " AND to_group_id = '$group_id'";
@@ -38,9 +42,11 @@ function exit_of_chat($user_id) {
 function user_connected_in_chat ($user_id, $database_name) {
  	$tbl_chat_connected = Database::get_course_chat_connected_table($database_name);
 
- 	$group_id = intval($_SESSION['id_group']);
+ 	$group_id 	= intval($_SESSION['id_group']);
 	$session_id = intval($_SESSION['id_session']);
+	$user_id 	= intval($user_id);
 	$extra_condition = '';
+	
 	if (!empty($group_id)) {
 		$extra_condition = " AND to_group_id = '$group_id'";
 	} else {

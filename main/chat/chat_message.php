@@ -16,6 +16,7 @@ $language_file = array('chat');
 
 require_once '../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
+
 $course = api_get_course_id();
 $session_id = intval($_SESSION['id_session']);
 $group_id 	= intval($_SESSION['_gid']);
@@ -66,11 +67,11 @@ if (!empty($course) && !empty($_user['user_id'])) {
 	/*	Constants and variables */
 
 	$tbl_user	= Database::get_main_table(TABLE_MAIN_USER);
-	$sent = $_REQUEST['sent'];
+	$sent 		= $_REQUEST['sent'];
 
 	/*	MAIN CODE */
 
-	$query = "SELECT lastname, firstname, username FROM $tbl_user WHERE user_id='".$_user['user_id']."'";
+	$query = "SELECT lastname, firstname, username FROM $tbl_user WHERE user_id='".intval($_user['user_id'])."'";
 	$result = Database::query($query);
 
 	list($pseudo_user) = Database::fetch_row($result);
@@ -79,7 +80,7 @@ if (!empty($course) && !empty($_user['user_id'])) {
 	$isMaster = (bool)$is_courseAdmin;
 
 	$firstname = Database::result($result, 0, 'firstname');
-	$lastname = Database::result($result, 0, 'lastname');
+	$lastname  = Database::result($result, 0, 'lastname');
 
 	$date_now = date('Y-m-d');
 
@@ -243,7 +244,7 @@ if (!empty($course) && !empty($_user['user_id'])) {
 	<table border="0" cellpadding="5" cellspacing="0" width="100%">
 	<tr>
         <td width="320" valign="middle">
-        <textarea name="message" style="width: 320px; height: 35px" onkeydown="send_message(event);" onclick="javascript: insert_smile(this);"></textarea>
+        <textarea name="message" style="width: 500px; height: 35px" onkeydown="send_message(event);" onclick="javascript: insert_smile(this);"></textarea>
         </td>
         <td>
         <button type="submit" value="<?php echo get_lang('Send'); ?>" class="background_submit"><?php echo get_lang('Send'); ?></button>
@@ -287,5 +288,4 @@ if (!empty($course) && !empty($_user['user_id'])) {
     </form>
 <?php
 }
-
 require 'footer_frame.inc.php';

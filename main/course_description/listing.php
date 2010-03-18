@@ -62,26 +62,32 @@ if (isset($descriptions) && count($descriptions) > 0) {
 			echo Display::return_icon('edit.gif', get_lang('Edit'), array('style' => 'vertical-align:middle;float:right; padding-right:4px;'));
 			echo '</a> ';
 			
+			/*
 			if ($description['description_type'] == THEMATIC_ADVANCE) {
 				// thematic advance history link				
 				echo '<a href="index.php?action=history&description_type='.$description['description_type'].'">';
 				echo Display::return_icon('lp_dir.png',get_lang('ThematicAdvanceHistory'),array('style'=>'vertical-align:middle;float:right;padding-right:4px;'));
 				echo '</a> ';					
 			}
+			*/
 		}
 		
-		$progress = (isset($description['progress'])?$description['progress'].'%':'');
-		
+		/*
+		$progress = (isset($description['progress'])?$description['progress'].'%':'');		
 		if ($description['description_type'] == THEMATIC_ADVANCE) {
 			echo '<a name="thematic_advance"></a>';
 			echo get_lang('ThematicAdvance').' : '.$description['title'].' - '.$progress;
 		} else {
 			echo $description['title'];
-		}	
+		}	*/
+		
+		echo $description['title'];
 
+		/*
 		if ($history) {
 			echo ' - '.$progress.' ('.$description['lastedit_date'].') ';
 		}
+		*/
 
 		echo '</div>';
 		echo '<div class="sectioncomment">';

@@ -67,7 +67,7 @@ class CourseDescriptionController { // extends Controller {
 		$session_id = api_get_session_id();
 		$course_description->set_session_id($session_id);		
 		$data = array();            
-        if (strtoupper($_SERVER['REQUEST_METHOD']) == "POST") {        	
+        if (strtoupper($_SERVER['REQUEST_METHOD']) == "POST") {    	
         	if (!empty($_POST['title']) && !empty($_POST['contentDescription'])) {
         		
         		$check = Security::check_token();        		

@@ -255,8 +255,8 @@ class CourseDescription
 		$default_description_titles[5]= get_lang('CourseMaterial');
 		$default_description_titles[6]= get_lang('HumanAndTechnicalResources');
 		$default_description_titles[7]= get_lang('Assessment');
-		$default_description_titles[8]= get_lang('ThematicAdvance');
-		$default_description_titles[9]= get_lang('Other');
+		//$default_description_titles[8]= get_lang('ThematicAdvance');
+		$default_description_titles[8]= get_lang('Other');
 		return $default_description_titles;
 	}
 
@@ -273,7 +273,7 @@ class CourseDescription
 		$default_description_title_editable[5] = true;
 		$default_description_title_editable[6] = true;
 		$default_description_title_editable[7] = true;
-		$default_description_title_editable[8] = true;
+		//$default_description_title_editable[8] = true;
 		return $default_description_title_editable;
 	}
 
@@ -290,8 +290,8 @@ class CourseDescription
 		$default_description_icon[5]= 'laptop.gif';
 		$default_description_icon[6]= 'personal.gif';
 		$default_description_icon[7]= 'korganizer.gif';
-		$default_description_icon[8]= 'porcent.png';
-		$default_description_icon[9]= 'ktip.gif';
+		//$default_description_icon[8]= 'porcent.png';
+		$default_description_icon[8]= 'ktip.gif';
 		return $default_description_icon;
 	}
 
@@ -308,7 +308,7 @@ class CourseDescription
 		$question[5]= get_lang('CourseMaterialQuestions');
 		$question[6]= get_lang('HumanAndTechnicalResourcesQuestions');
 		$question[7]= get_lang('AssessmentQuestions');
-		$question[8]= get_lang('ThematicAdvanceQuestions');
+		//$question[8]= get_lang('ThematicAdvanceQuestions');
 		return $question;
 	}
 
@@ -325,7 +325,7 @@ class CourseDescription
 		$information[5]= get_lang('CourseMaterialInformation');
 		$information[6]= get_lang('HumanAndTechnicalResourcesInformation');
 		$information[7]= get_lang('AssessmentInformation');
-		$information[8]= get_lang('ThematicAdvanceInformation');
+		//$information[8]= get_lang('ThematicAdvanceInformation');
 		return $information;
 	}
 

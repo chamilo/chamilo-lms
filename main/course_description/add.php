@@ -10,6 +10,8 @@
 // protect a course script
 api_protect_course_script(true);
 
+var_dump($_SESSION['studentview']);
+
 // display categories
 $categories = array ();
 foreach ($default_description_titles as $id => $title) {
@@ -43,7 +45,9 @@ if ($description_type >= ADD_BLOCK) {
 	$header = $default_description_titles[ADD_BLOCK];
 }
 
-$token = Security::get_token();
+if (!$error) {
+	$token = Security::get_token();
+}
 // display form
 $form = new FormValidator('course_description','POST','index.php?action=add&'.api_get_cidreq(),'','style="width: 100%;"');
 $form->addElement('header', '', $header);

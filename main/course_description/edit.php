@@ -10,8 +10,9 @@
 // protect a course script
 api_protect_course_script(true);
 
-$token = Security::get_token();
-
+if (!$error) {
+	$token = Security::get_token();
+}
 // display categories
 $categories = array ();
 foreach ($default_description_titles as $id => $title) {
@@ -48,13 +49,16 @@ if ($description_type >= ADD_BLOCK) {
 // display form
 $form = new FormValidator('course_description','POST','index.php?action=edit&description_type='.$description_type.'&'.api_get_cidreq(),'','style="width: 100%;"');
 
+/*
 if ($description_type == THEMATIC_ADVANCE) {
 	$form->addElement('html','<div class="row">
 						  <div class="form_header"><table width="100%"><tr><td>'.get_lang('ThematicAdvance').'</td><td align="right"><a href="index.php?action=history&description_type='.$description_type.'">'.Display::return_icon('lp_dir.png',get_lang('ThematicAdvanceHistory'),array('style'=>'vertical-align:middle;hspace:6')).' '.get_lang('ThematicAdvanceHistory').'</a></td></tr></table></div>						  
 						  </div>');
 } else {
 	$form->addElement('header','',$header);
-}
+}*/
+
+$form->addElement('header','',$header);
 
 $form->addElement('hidden', 'description_type',$description_type);
 $form->addElement('hidden', 'sec_token',$token);
@@ -67,11 +71,13 @@ if (api_get_setting('wcag_anysurfer_public_pages')=='true') {
 	$form->add_html_editor('contentDescription', get_lang('Content'), true, false, array('ToolbarSet' => 'TrainingDescription', 'Width' => '100%', 'Height' => '200'));
 }
 
+/*
 if ($description_type == THEMATIC_ADVANCE) {
 	$options_select = array(0,10=>10,20=>20,30=>30,40=>40,50=>50,60=>60,70=>70,80=>80,90=>90,100=>100);
 	$form->addElement ('select', 'progress',get_lang('Progress'),$options_select);
 	$default['progress'] = intval($progress);	
 }
+*/
 
 
 $form->addElement('style_submit_button', null, get_lang('Save'), 'class="save"');

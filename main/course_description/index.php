@@ -20,8 +20,8 @@ require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 require_once api_get_path(LIBRARY_PATH).'WCAG/WCAG_rendering.php';
 
 // defining constants
-define('ADD_BLOCK', 9);
-define('THEMATIC_ADVANCE', 8);
+define('ADD_BLOCK', 8);
+//define('THEMATIC_ADVANCE', 8);
 
 // current section
 $this_section = SECTION_COURSES;
@@ -39,6 +39,10 @@ if (isset($_GET['action']) && in_array($_GET['action'],$actions)) {
 $description_type = '';
 if (isset($_GET['description_type'])) {
 	$description_type = intval($_GET['description_type']);
+}
+
+if (isset($_GET['isStudentView']) && $_GET['isStudentView'] == 'true') {
+	$action = 'listing';
 }
 
 // interbreadcrumb

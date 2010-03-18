@@ -1,14 +1,12 @@
 <?php
-/* For licensing terms, see /dokeos_license.txt */
+/* For licensing terms, see /license.txt */
 
 /**
  * @todo can't this be moved to a different file so that we can delete this file?
  * 		 Is this still in use? If not, then it should be removed or maybe offered as an extension
  */
 /**
-==============================================================================
 * Deletes the web-chat request form the user table
-==============================================================================
 */
 
 // name of the language file that needs to be included
@@ -30,10 +28,6 @@ Display::display_header();
 $message = get_lang('RequestDenied').'<br /><br /><a href="javascript: history.back();">'.get_lang('Back').'</a>';
 Display::display_normal_message($message);
 
-/*
-==============================================================================
-		FOOTER
-==============================================================================
-*/
+/*	FOOTER	*/
 
 Display::display_footer();

@@ -1,8 +1,7 @@
-<?php // $Id: user_portal.php 22375 2009-07-26 18:54:59Z herodoto $
+<?php
 
 /* For licensing terms, see /license.txt */
 /**
-==============================================================================
 *	This is the index file displayed when a user is logged in on Dokeos.
 *
 *	It displays:
@@ -16,8 +15,7 @@
 *	to modify settings
 *
 *	@todo rewrite code to separate display, logic, database code
-*	@package dokeos.main
-==============================================================================
+*	@package chamilo.main
 */
 
 /**
@@ -29,11 +27,8 @@
  * @todo display_digest, shouldn't this be removed and be made into an extension?
  */
 
-/*
-==============================================================================
-		INIT SECTION
-==============================================================================
-*/
+/*		INIT SECTION	*/
+
 // Don't change these settings
 define('SCRIPTVAL_No', 0);
 define('SCRIPTVAL_InCourseList', 1);
@@ -50,9 +45,7 @@ $language_file = array ('courses', 'index');
 $cidReset = true; /* Flag forcing the 'current course' reset,
 					as we're not inside a course anymore  */
 /*
------------------------------------------------------------
 	Included libraries
------------------------------------------------------------
 */
 require_once './main/inc/global.inc.php';
 $libpath = api_get_path(LIBRARY_PATH);
@@ -69,9 +62,7 @@ $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jqu
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.toggle.js" type="text/javascript" language="javascript"></script>';
 
 /*
------------------------------------------------------------
 	Table definitions
------------------------------------------------------------
 */
 //Database table definitions
 $main_user_table 		= Database :: get_main_table(TABLE_MAIN_USER);
@@ -81,9 +72,7 @@ $main_course_user_table = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 $main_category_table 	= Database :: get_main_table(TABLE_MAIN_CATEGORY);
 
 /*
------------------------------------------------------------
 	Constants and CONFIGURATION parameters
------------------------------------------------------------
 */
 // ---- Course list options ----
 define('CONFVAL_showCourseLangIfNotSameThatPlatform', true);
@@ -137,9 +126,7 @@ $nameTools = get_lang('MyCourses');
 $this_section = SECTION_COURSES;
 
 /*
------------------------------------------------------------
 	Check configuration parameters integrity
------------------------------------------------------------
 */
 if (CONFVAL_showExtractInfo != SCRIPTVAL_UnderCourseList and $orderKey[0] != "keyCourse") {
 	// CONFVAL_showExtractInfo must be SCRIPTVAL_UnderCourseList to accept $orderKey[0] !="keyCourse"
@@ -175,7 +162,6 @@ Display :: display_header($nameTools);
 
 
 /*
-==============================================================================
 		FUNCTIONS
 
 		display_admin_links()
@@ -187,13 +173,10 @@ Display :: display_header($nameTools);
 		get_personal_course_list($user_id)
 		get_logged_user_course_html($my_course)
 		get_user_course_categories()
-==============================================================================
 */
 /*
------------------------------------------------------------
 	Database functions
 	some of these can go to database layer.
------------------------------------------------------------
 */
 
 /**
@@ -532,9 +515,7 @@ function display_courses_in_category($user_category_id) {
 }
 
 /*
------------------------------------------------------------
 	Display functions
------------------------------------------------------------
 */
 
 /**

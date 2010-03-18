@@ -1,10 +1,8 @@
-<?php // $Id: whoisonline.php 21549 2009-06-21 14:02:37Z iflorespaz $
-/* For licensing terms, see /chamilo_license.txt */
+<?php
+/* For licensing terms, see /license.txt */
 
 /**
-==============================================================================
 * Who is online list
-==============================================================================
 */
 
 // language files that should be included
@@ -109,6 +107,7 @@ if ($_GET['chatid'] != '') {
 		$sql = "update $track_user_table set chatcall_user_id = '".Database::escape_string($_user['user_id'])."', chatcall_date = '".Database::escape_string($time)."', chatcall_text = '' where (user_id = ".(int)Database::escape_string($chatid).")";
 		$result = Database::query($sql);
 		//redirect caller to chat
+		
 		header("Location: ".$_configuration['code_append']."chat/chat.php?".api_get_cidreq()."&origin=whoisonline&target=".Security::remove_XSS($chatid));
 		exit;
 	}
@@ -133,17 +132,12 @@ if ((api_get_setting('showonline', 'world') == 'true' && !$_user['user_id']) || 
 				//this include the social menu div
 				SocialManager::show_social_menu('whoisonline');
 				echo '</div>';
-			}
-
-
+			}			
+			/*
 			if ($_GET['id'] == '') {
-				//echo '<p><a class="refresh" href="javascript:window.location.reload()">'.get_lang('Refresh').'</a></p>';
-			} /*else {
-				if (0) {
-				// if ($_user['user_id'] && $_GET["id"] != $_user['user_id']) {
-					echo '<a href="'.api_get_self().'?chatid='.Security::remove_XSS($_GET['id']).'">'.get_lang('SendChatRequest').'</a>';
-				}
+				echo '<p><a class="refresh" href="javascript:window.location.reload()">'.get_lang('Refresh').'</a></p>';
 			}*/
+			
 		} else {
 			echo '<div class="actions-title">';
 			echo get_lang('UsersOnLineList');
@@ -182,8 +176,6 @@ if ((api_get_setting('showonline', 'world') == 'true' && !$_user['user_id']) || 
 $referer = empty($_GET['referer']) ? 'index.php' : api_htmlentities(strip_tags($_GET['referer']), ENT_QUOTES);
 
 /*
-==============================================================================
 		FOOTER
-==============================================================================
 */
 Display::display_footer();

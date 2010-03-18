@@ -598,14 +598,14 @@ if ($timezone !== null) {
 				else $css_class = "row_even";
 		
 				$i++;
-
+				
 				// csv export content
 				$csv_content[] = array (
 					api_html_entity_decode(stripslashes($lp_name), ENT_QUOTES, $charset),
 					api_time_to_hms($total_time),
 					$score . '%',
 					$progress,
-					api_convert_and_format_date($start_time, "%Y-%m-%d")
+					date('Y-m-d h:i:s', $start_time)
 				);
 ?>
 					<tr class="<?php echo $css_class;?>">
@@ -637,7 +637,9 @@ if ($timezone !== null) {
 						<td align="center">
 							<?php
 				if ($start_time != '' && $start_time > 0) {
-					echo api_convert_and_format_date($start_time, DATE_FORMAT_SHORT);
+					//Do not change with api_convert_and_format_date, because this value came from the lp_item_view table 
+					//which implies several other changes not a priority right now								
+					echo date('Y-m-d h:i:s', $start_time); 
 				} else {
 					echo '-';
 				}

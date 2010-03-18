@@ -25,116 +25,123 @@ if (api_is_allowed_to_edit(null, true)) {
 	echo '</div>';
 }
 
-$token = md5(uniqid(rand(),TRUE));
-$_SESSION['thematic_token'] = $token;
-
-
 if ($action == 'thematic_list') {
 
-	/*
-	if (api_is_allowed_to_edit(null, true)) {
-		$param_gradebook = '';
-		if (isset($_SESSION['gradebook'])) {
-			$param_gradebook = '&gradebook='.Security::remove_XSS($_SESSION['gradebook']);
-		}
-		echo '<div class="actions" style="margin-bottom:30px">';
-		echo '<a href="index.php?'.api_get_cidreq().$param_gradebook.'&action=thematic_add">'.Display::return_icon('introduction_add.gif',get_lang('NewThematicSection')).' '.get_lang('NewThematicSection').'</a>';		
-		echo '</div>';
-	}
-	*/
-	
-	echo '<div><strong>'.get_lang('ThematicList').'</strong></div>';
+	echo '<div><strong>'.get_lang('ThematicList').'</strong></div><br />';
 	
 	$table = new SortableTable('thematic_list', array('Thematic', 'get_number_of_thematics'), array('Thematic', 'get_thematic_data'));
 	$table->set_additional_parameters($parameters);
 	$table->set_header(0, '', false, array('style'=>'width:20px;'));
-	$table->set_header(1, get_lang('Title'), false );
-	
+	$table->set_header(1, get_lang('Title'), false );	
 	if (api_is_allowed_to_edit(null, true)) {
 		$table->set_header(2, get_lang('Actions'), false,array('style'=>'text-align:center;width:40%;'));
 		$table->set_form_actions(array ('thematic_delete_select' => get_lang('DeleteAllThematics')));	
-	}
-	
+	}	
 	$table->display();
 	
 } else if ($action == 'thematic_details') {
 
+	// display title
 	if (!empty($thematic_id)) {
-		echo '<div><strong>'.$thematic_data[$thematic_id]['title'].': '.get_lang('Details').'</strong></div><br />';
-		echo '<div>'.get_lang('Progress').': '.$total_average_of_advances.'%</div><br />';					
+		echo '<div><strong>'.$thematic_data[$thematic_id]['title'].': '.get_lang('Details').'</strong></div><br />';							
 	} else {
-		echo '<div><strong>'.get_lang('ThematicDetails').'</strong></div><br />';
-		echo '<div>'.get_lang('Progress').': <span id="div_result">'.$total_average_of_advances.'</span>%</div><br />';		
+		echo '<div><strong>'.get_lang('ThematicDetails').'</strong></div><br />';				
 	}
 	
-	echo '<table width="100%" class="data_table">';	
-	echo '<tr><th width="35%">'.get_lang('Thematic').'</th><th width="30%">'.get_lang('ThematicPlan').'</th><th width="25%">'.get_lang('ThematicAdvance').'</th></tr>';
-
-		foreach ($thematic_data as $thematic) {			
-			echo '<tr>';
-			
-			// display thematic data		
-			echo '<td><div><strong>'.$thematic['title'].'</strong></div><div>'.$thematic['content'].'</div></td>';
-			
-			// display thematic plan data
-			echo '<td>';
-				//echo '<div style="text-align:right"><a href="index.php?'.api_get_cidreq().'&origin=thematic_details&action=thematic_plan_list&thematic_id='.$thematic['id'].$param_gradebook.'">'.Display::return_icon('info.gif',get_lang('ThematicPlan'),array('style'=>'vertical-align:middle')).' '.get_lang('EditThematicPlan').'</a></div><br />';
-				if (api_is_allowed_to_edit(null, true)) {
-					echo '<div style="text-align:right"><a href="index.php?'.api_get_cidreq().'&origin=thematic_details&action=thematic_plan_list&thematic_id='.$thematic['id'].$param_gradebook.'">'.Display::return_icon('edit.gif',get_lang('EditThematicPlan'),array('style'=>'vertical-align:middle')).'</a></div><br />';
-				}
-				if (!empty($thematic_plan_data[$thematic['id']])) {
-					foreach ($thematic_plan_data[$thematic['id']] as $thematic_plan) {
-						echo '<div><strong>'.$thematic_plan['title'].'</strong></div><div>'.$thematic_plan['description'].'</div>'; 
+	// display information
+	$message = '<strong>'.get_lang('Information').'</strong><br />';
+	$message .= get_lang('ThematicDetailsDescription');	
+	Display::display_normal_message($message, false);
+	echo '<br />';
+		
+	// display progress
+	if (!empty($thematic_id)) {
+		echo '<div style="text-align:right;">'.get_lang('Progress').': <strong>'.$total_average_of_advances.'</strong>%</div><br />';
+	} else {
+		echo '<div style="text-align:right;">'.get_lang('Progress').': <span id="div_result"><strong>'.$total_average_of_advances.'</strong></span>%</div><br />';
+	}
+	
+	// display thematic data
+	if (!empty($thematic_data)) {
+		echo '<table width="100%" class="data_table">';	
+		echo '<tr><th width="35%">'.get_lang('Thematic').'</th><th width="30%">'.get_lang('ThematicPlan').'</th><th width="25%">'.get_lang('ThematicAdvance').'</th></tr>';
+	
+			foreach ($thematic_data as $thematic) {			
+				echo '<tr>';
+				
+				// display thematic data		
+				echo '<td><div><strong>'.$thematic['title'].'</strong></div><div>'.$thematic['content'].'</div></td>';
+				
+				// display thematic plan data
+				echo '<td>';
+					//echo '<div style="text-align:right"><a href="index.php?'.api_get_cidreq().'&origin=thematic_details&action=thematic_plan_list&thematic_id='.$thematic['id'].$param_gradebook.'">'.Display::return_icon('info.gif',get_lang('ThematicPlan'),array('style'=>'vertical-align:middle')).' '.get_lang('EditThematicPlan').'</a></div><br />';
+					if (api_is_allowed_to_edit(null, true)) {
+						echo '<div style="text-align:right"><a href="index.php?'.api_get_cidreq().'&origin=thematic_details&action=thematic_plan_list&thematic_id='.$thematic['id'].$param_gradebook.'">'.Display::return_icon('lp_quiz.png',get_lang('EditThematicPlan'),array('style'=>'vertical-align:middle')).'</a></div><br />';
 					}
-				} else {
-					echo '<div><em>'.get_lang('StillDoNotHaveAThematicPlan').'</em></div>';
-				}				
-			echo '</td>';
-			
-			// display thematic advance data
-			echo '<td>';
-				//echo '<div style="text-align:right"><a href="index.php?'.api_get_cidreq().'&origin=thematic_details&action=thematic_advance_list&thematic_id='.$thematic['id'].$param_gradebook.'">'.Display::return_icon('porcent.png',get_lang('ThematicAdvance'),array('style'=>'vertical-align:middle')).' '.get_lang('EditThematicAdvance').'</a></div><br />';
-				if (api_is_allowed_to_edit(null, true)) {
-					echo '<div style="text-align:right"><a href="index.php?'.api_get_cidreq().'&origin=thematic_details&action=thematic_advance_list&thematic_id='.$thematic['id'].$param_gradebook.'">'.Display::return_icon('edit.gif',get_lang('EditThematicAdvance'),array('style'=>'vertical-align:middle')).'</a></div><br />';
-				}
-				if (!empty($thematic_advance_data[$thematic['id']])) {
-					echo '<table width="100%">';					
-						foreach ($thematic_advance_data[$thematic['id']] as $thematic_advance) {
-							echo '<tr>';
-							echo '<td width="90%">';
-								echo '<div><strong>'.api_get_local_time($thematic_advance['start_date']).'</strong></div>';
-								echo '<div>'.$thematic_advance['content'].'</div>';
-								echo '<div>'.get_lang('Hours').' : '.$thematic_advance['duration'].'</div>';
-							echo '</td>';
-							if (empty($thematic_id) && api_is_allowed_to_edit(null, true)) {
-								$checked = '';
-								if ($last_done_thematic_advance == $thematic_advance['id']) {
-									$checked = 'checked';
-								}								
-								echo '<td><center><input type="radio" name="thematic_done" value="'.$thematic_advance['id'].'" '.$checked.' onclick="update_done_thematic_advance(this.value)"></center></td>';
-							} else {
-								if ($thematic_advance['done_advance'] == 1) {
-									echo '<td><center>'.get_lang('Done').'</center></td>';	
-								} else {
-									echo '<td><center>-</center></td>';
-								}
-								
-							}
-							echo '</tr>';							 
+					if (!empty($thematic_plan_data[$thematic['id']])) {
+						foreach ($thematic_plan_data[$thematic['id']] as $thematic_plan) {
+							echo '<div><strong>'.$thematic_plan['title'].'</strong></div><div>'.$thematic_plan['description'].'</div>'; 
 						}
-					echo '</table>';
-				} else {
-					echo '<div><em>'.get_lang('StillDoNotHaveAThematicAdvance').'</em></div>';
-				}				
-			echo '</td>';
-			
-			echo '</tr>';
-			
-		}
+					} else {
+						echo '<div><em>'.get_lang('StillDoNotHaveAThematicPlan').'</em></div>';
+					}				
+				echo '</td>';
+				
+				// display thematic advance data
+				echo '<td>';
+					//echo '<div style="text-align:right"><a href="index.php?'.api_get_cidreq().'&origin=thematic_details&action=thematic_advance_list&thematic_id='.$thematic['id'].$param_gradebook.'">'.Display::return_icon('porcent.png',get_lang('ThematicAdvance'),array('style'=>'vertical-align:middle')).' '.get_lang('EditThematicAdvance').'</a></div><br />';
+					if (api_is_allowed_to_edit(null, true)) {
+						echo '<div style="text-align:right"><a href="index.php?'.api_get_cidreq().'&origin=thematic_details&action=thematic_advance_list&thematic_id='.$thematic['id'].$param_gradebook.'">'.Display::return_icon('lp_quiz.png',get_lang('EditThematicAdvance'),array('style'=>'vertical-align:middle')).'</a></div><br />';
+					}
+					if (!empty($thematic_advance_data[$thematic['id']])) {
+						echo '<table width="100%">';					
+							foreach ($thematic_advance_data[$thematic['id']] as $thematic_advance) {
+								echo '<tr>';
+								echo '<td width="90%">';
+									echo '<div><strong>'.api_get_local_time($thematic_advance['start_date']).'</strong></div>';
+									echo '<div>'.$thematic_advance['content'].'</div>';
+									echo '<div>'.get_lang('Hours').' : '.$thematic_advance['duration'].'</div>';
+								echo '</td>';
+								if (empty($thematic_id) && api_is_allowed_to_edit(null, true)) {
+									$checked = '';
+									if ($last_done_thematic_advance == $thematic_advance['id']) {
+										$checked = 'checked';
+									}								
+									echo '<td><center><input type="radio" name="thematic_done" value="'.$thematic_advance['id'].'" '.$checked.' onclick="update_done_thematic_advance(this.value)"></center></td>';
+								} else {
+									if ($thematic_advance['done_advance'] == 1) {
+										echo '<td><center>'.get_lang('Done').'</center></td>';	
+									} else {
+										echo '<td><center>-</center></td>';
+									}
+									
+								}
+								echo '</tr>';							 
+							}
+						echo '</table>';
+					} else {
+						echo '<div><em>'.get_lang('StillDoNotHaveAThematicAdvance').'</em></div>';
+					}				
+				echo '</td>';				
+				echo '</tr>';				
+			}
 
-	echo '</table>';
+		echo '</table>';
+	} else {
+		echo '<div><em>'.get_lang('ThereIsStillAthematicSection').'</em></div>';
+	}
 	
 } else if ($action == 'thematic_add' || $action == 'thematic_edit') {
+
+	if (!$error) {
+		$token = md5(uniqid(rand(),TRUE));
+		$_SESSION['thematic_token'] = $token;
+	}
+	
+	// error messages
+	if ($error) {	
+		Display::display_error_message(get_lang('FormHasErrorsPleaseComplete'),false);	
+	}
 
 	$header_form = get_lang('NewThematicSection');
 	if ($action == 'thematic_edit') {
@@ -142,9 +149,11 @@ if ($action == 'thematic_list') {
 	}
 	
 	// display form
-	$form = new FormValidator('thematic_add','POST','index.php?action='.$action.'&'.api_get_cidreq().$param_gradebook,'','style="width: 100%;"');
+	$form = new FormValidator('thematic_add','POST','index.php?action=thematic_list&'.api_get_cidreq().$param_gradebook,'','style="width: 100%;"');
+	
 	$form->addElement('header', '', $header_form);	
 	$form->addElement('hidden', 'thematic_token',$token);
+	$form->addElement('hidden', 'action', $action);
 	
 	if (!empty($thematic_id)) {
 		$form->addElement('hidden', 'thematic_id',$thematic_id);

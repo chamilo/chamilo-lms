@@ -27,7 +27,7 @@ switch ($action) {
 					}
 					$input_select .= '</select>';
 				} else {
-					$input_select .= get_lang('ThereAreNoRegisteredDatetimeYet');
+					$input_select .= '<em>'.get_lang('ThereAreNoRegisteredDatetimeYet').'</em>';
 				}
 			} 
 			?>			

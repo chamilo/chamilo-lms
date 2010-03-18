@@ -26,27 +26,45 @@ class ThematicController
 		$this->toolname = 'attendance';
 		$this->view = new View($this->toolname);			
 	}
-		
+	
+	/**
+	 * This method is used for thematic control (update, insert or listing)
+	 * @param 	string	Action
+	 * render to thematic.php 
+	 */	
 	public function thematic($action) {
 		
 		$thematic= new Thematic();		        
 		$data = array();		
-
-		// insert or update a thematic
-		if ($action == 'thematic_add' || $action == 'thematic_edit') {			
-			if (strtoupper($_SERVER['REQUEST_METHOD']) == "POST") {
-	    		if ($_POST['thematic_token'] == $_SESSION['thematic_token']) {						    						    			
-	    			$id = $_POST['thematic_id'];
-	    			$title = $_POST['title'];
-	    			$content = $_POST['content'];
-	    			$session_id = api_get_session_id();
-	    			$thematic->set_thematic_attributes($id, $title, $content, $session_id);	    			
-					$affected_rows = $thematic->thematic_save();				    			
-		        	unset($_SESSION['thematic_token']);	        
-		        	$action = 'thematic_list';		
-	    		}
-			}								
-		}				
+		$error = false;
+		
+		// insert or update a thematic		
+		if (strtoupper($_SERVER['REQUEST_METHOD']) == "POST") {																
+			if (isset($_POST['action']) && ($_POST['action'] == 'thematic_add' || $_POST['action'] == 'thematic_edit')) {
+				if (!empty($_POST['title'])) {
+		    		if ($_POST['thematic_token'] == $_SESSION['thematic_token']) {				    						    			
+		    			$id = $_POST['thematic_id'];
+		    			$title = $_POST['title'];
+		    			$content = $_POST['content'];
+		    			$session_id = api_get_session_id();
+		    			$thematic->set_thematic_attributes($id, $title, $content, $session_id);	    			
+						$affected_rows = $thematic->thematic_save();
+						$action = 'thematic_list';				    			
+			        	unset($_SESSION['thematic_token']);	        			        			
+		    		}
+				} else {					
+					$error = true;
+					$data['error'] = $error;	
+					$data['action'] = $_POST['action'];	
+					$data['thematic_id'] = $_POST['thematic_id'];
+					// render to the view
+					$this->view->set_data($data);
+					$this->view->set_layout('layout'); 
+					$this->view->set_template('thematic');		       
+					$this->view->render();					    						    									
+				}
+			}				    		
+		}								
 
 		// delete many thematics
 		if ($action == 'thematic_delete_select') {
@@ -107,43 +125,69 @@ class ThematicController
 		
 	}
 	
+	/**
+	 * This method is used for thematic plant control (update, insert or listing)
+	 * @param 	string	Action
+	 * render to thematic_plan.php 
+	 */	
 	public function thematic_plan($action) {
 		$thematic= new Thematic();		        
 		$data = array();
+		$error = false;
 		
-		if ($action == 'thematic_plan_add' || $action == 'thematic_plan_edit') {			
-			if (strtoupper($_SERVER['REQUEST_METHOD']) == "POST") {
-	    		if ($_POST['thematic_plan_token'] == $_SESSION['thematic_plan_token']) {						    						    			
-	    			
-	    			$thematic_id = $_POST['thematic_id'];
-	    			$title = $_POST['title'];
-	    			$description = $_POST['description'];
-	    			$description_type = $_POST['description_type'];
-	    			$thematic->set_thematic_plan_attributes($thematic_id, $title, $description, $description_type);	    			
-					$affected_rows = $thematic->thematic_plan_save();				    			
-		        	
-					unset($_SESSION['thematic_plan_token']);	        
-		        	$action = 'thematic_plan_list';		
-	    		}
-			}								
+		if (strtoupper($_SERVER['REQUEST_METHOD']) == "POST") {	    		
+    		if (isset($_POST['action']) && ($_POST['action'] == 'thematic_plan_add' || $_POST['action'] == 'thematic_plan_edit')) {	    			
+    			if (!empty($_POST['title'])) {
+    				if ($_POST['thematic_plan_token'] == $_SESSION['thematic_plan_token']) {						    						    				    			
+		    			$thematic_id = $_POST['thematic_id'];
+		    			$title = $_POST['title'];
+		    			$description = $_POST['description'];
+		    			$description_type = $_POST['description_type'];
+		    			$thematic->set_thematic_plan_attributes($thematic_id, $title, $description, $description_type);	    			
+						$affected_rows = $thematic->thematic_plan_save();			        	
+						unset($_SESSION['thematic_plan_token']);	        
+			        	$action = 'thematic_plan_list';		
+		    		}
+    			} else {	   					
+						$error = true;
+						$action = $_POST['action'];
+						$data['error'] = $error;						
+						$data['thematic_plan_data'] = $thematic->get_thematic_plan_data($_POST['thematic_id'], $_POST['description_type']);
+						$data['thematic_id'] = $_POST['thematic_id'];
+						$data['description_type'] = $_POST['description_type'];
+						$data['action'] = $action;
+						$data['default_thematic_plan_title'] = $thematic->get_default_thematic_plan_title();
+						$data['default_thematic_plan_icon'] = $thematic->get_default_thematic_plan_icon();
+						$data['default_thematic_plan_question'] = $thematic->get_default_question();
+						$data['next_description_type'] = $thematic->get_next_description_type($_POST['thematic_id']);
+								
+						// render to the view
+						$this->view->set_data($data);
+						$this->view->set_layout('layout'); 
+						$this->view->set_template('thematic_plan');		       
+						$this->view->render();									    															
+    			}	    			
+    		}
+		}		
+																		
+		if ($action == 'thematic_plan_list') {
+			$data['thematic_plan_data'] = $thematic->get_thematic_plan_data($thematic_id);
 		}
-		
-		$data['thematic_plan_data'] = $thematic->get_thematic_plan_data($thematic_id);
+				
 		$thematic_id = intval($_GET['thematic_id']);
 		$description_type = intval($_GET['description_type']);
 
 		if (!empty($thematic_id) && !empty($description_type)) {
-
 			if ($action == 'thematic_plan_delete') {
-				$affected_rows = $thematic->thematic_plan_destroy($thematic_id, $description_type);
-				$action = 'thematic_plan_list';
+				$affected_rows = $thematic->thematic_plan_destroy($thematic_id, $description_type);				
 				$data['thematic_plan_data'] = $thematic->get_thematic_plan_data($thematic_id);
+				$action = 'thematic_plan_list';
 			} else {
 				$data['thematic_plan_data'] = $thematic->get_thematic_plan_data($thematic_id, $description_type);	
 			}											
 			$data['thematic_id'] = $thematic_id;
 			$data['description_type'] = $description_type;							
-		} else if (!empty($thematic_id)) {
+		} else if (!empty($thematic_id) && $action == 'thematic_plan_list') {
 			$data['thematic_plan_data'] = $thematic->get_thematic_plan_data($thematic_id);
 			$data['thematic_id'] = $thematic_id;
 		}
@@ -151,7 +195,9 @@ class ThematicController
 		$data['thematic_id'] = $thematic_id;
 		$data['action'] = $action;
 		$data['default_thematic_plan_title'] = $thematic->get_default_thematic_plan_title();
-		$data['default_thematic_plan_icon'] = $thematic->get_default_thematic_plan_icon();
+		$data['default_thematic_plan_icon'] = $thematic->get_default_thematic_plan_icon();		
+		$data['next_description_type'] = $thematic->get_next_description_type($thematic_id);		
+		$data['default_thematic_plan_question'] = $thematic->get_default_question();
 				
 		// render to the view
 		$this->view->set_data($data);
@@ -173,32 +219,56 @@ class ThematicController
 		foreach ($attendance_list as $attendance_id => $attendance_data) {
 			$attendance_select[$attendance_id] = $attendance_data['name'];
 		}
-				
-		if ($action == 'thematic_advance_add' || $action == 'thematic_advance_edit') {			
-			if (strtoupper($_SERVER['REQUEST_METHOD']) == "POST") {
-	    		if ($_POST['thematic_advance_token'] == $_SESSION['thematic_advance_token']) {						    						    			
 
-	    			$thematic_advance_id = $_POST['thematic_advance_id'];
-	    			$thematic_id 	= $_POST['thematic_id'];	    			
-	    			$content 		= $_POST['content'];
+		if (strtoupper($_SERVER['REQUEST_METHOD']) == "POST") {				
+			if (isset($_POST['action']) && ($_POST['action'] == 'thematic_advance_add' || $_POST['action'] == 'thematic_advance_edit')) {
+
+	    		if ($_POST['start_date_type'] == 1 && empty($_POST['start_date_by_attendance'])) {
 	    			
-	    			if (isset($_POST['start_date_type']) && $_POST['start_date_type'] == 2) {
-	    				$start_date 	= $thematic->build_datetime_from_array($_POST['custom_start_date']);
-	    				$attendance_id 	= 0;	
-	    			} else {
-	    				$start_date 	= $_POST['start_date_by_attendance'];
-	    				$attendance_id 	= $_POST['attendance_select'];
-	    			}
+	    			$error = true;
+					$data['error'] = $error;	
+					$data['action'] = $_POST['action'];	
+					$data['thematic_id'] = $_POST['thematic_id'];				
+					$data['attendance_select'] = $attendance_select;
+					
+					if (isset($_POST['thematic_advance_id'])) {
+						$data['thematic_advance_id'] = $_POST['thematic_advance_id'];
+						$thematic_advance_data = $thematic->get_thematic_advance_list($_POST['thematic_advance_id']);
+						$data['thematic_advance_data'] = $thematic_advance_data;		
+					}	
 
-	    			$duration		= $_POST['duration_in_hours'];
-	    			$thematic->set_thematic_advance_attributes($thematic_advance_id, $thematic_id,  $attendance_id, $content, $start_date, $duration);	    				    								
-					$affected_rows = $thematic->thematic_advance_save();				    			
-		        	
-					unset($_SESSION['thematic_advance_token']);	        
-		        	$action = 'thematic_advance_list';		
-	    		}
-			}							
-		}
+					// render to the view
+					$this->view->set_data($data);
+					$this->view->set_layout('layout'); 
+					$this->view->set_template('thematic_advance');		       
+					$this->view->render();
+					
+	    			
+	    		} else {	
+		    		if ($_POST['thematic_advance_token'] == $_SESSION['thematic_advance_token']) {						    						    			
+	
+		    			$thematic_advance_id = $_POST['thematic_advance_id'];
+		    			$thematic_id 	= $_POST['thematic_id'];	    			
+		    			$content 		= $_POST['content'];
+		    			
+		    			if (isset($_POST['start_date_type']) && $_POST['start_date_type'] == 2) {
+		    				$start_date 	= $thematic->build_datetime_from_array($_POST['custom_start_date']);
+		    				$attendance_id 	= 0;	
+		    			} else {
+		    				$start_date 	= $_POST['start_date_by_attendance'];
+		    				$attendance_id 	= $_POST['attendance_select'];
+		    			}
+	
+		    			$duration		= $_POST['duration_in_hours'];
+		    			$thematic->set_thematic_advance_attributes($thematic_advance_id, $thematic_id,  $attendance_id, $content, $start_date, $duration);	    				    								
+						$affected_rows = $thematic->thematic_advance_save();				    			
+			        	
+						unset($_SESSION['thematic_advance_token']);	        
+			        	$action = 'thematic_advance_list';		
+		    		}
+	    		}	    		
+			}	    		
+		}		
 		
 		$thematic_id = intval($_GET['thematic_id']);
 		$thematic_advance_id = intval($_GET['thematic_advance_id']);

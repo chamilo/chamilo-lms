@@ -10,8 +10,7 @@
 // protect a course script
 api_protect_course_script(true);
 
-$token = md5(uniqid(rand(),TRUE));
-$_SESSION['thematic_advance_token'] = $token;
+
 
 if ($action == 'thematic_advance_add' || $action == 'thematic_advance_edit') {
 
@@ -20,10 +19,16 @@ if ($action == 'thematic_advance_add' || $action == 'thematic_advance_edit') {
 		$header_form = get_lang('EditThematicAdvance');
 	}
 
+	if (!$error) {
+		$token = md5(uniqid(rand(),TRUE));
+		$_SESSION['thematic_advance_token'] = $token;
+	}
+
 	// display form
-	$form = new FormValidator('thematic_advance','POST','index.php?action='.$action.'&thematic_id='.$thematic_id.'&'.api_get_cidreq().$param_gradebook,'','style="width: 100%;"');
+	$form = new FormValidator('thematic_advance','POST','index.php?action=thematic_advance_list&thematic_id='.$thematic_id.'&'.api_get_cidreq().$param_gradebook,'','style="width: 100%;"');
 	$form->addElement('header', '', $header_form);	
 	$form->addElement('hidden', 'thematic_advance_token',$token);
+	$form->addElement('hidden', 'action', $action);
 	
 	if (!empty($thematic_advance_id)) {
 		$form->addElement('hidden', 'thematic_advance_id',$thematic_advance_id);
@@ -36,7 +41,7 @@ if ($action == 'thematic_advance_add' || $action == 'thematic_advance_edit') {
 
 	$radios[] = FormValidator::createElement('radio', 'start_date_type', null, get_lang('StartDateFromAnAttendance'),'1',array('onclick' => 'check_per_attendance(this)', 'id'=>'from_attendance'));
 	$radios[] = FormValidator::createElement('radio', 'start_date_type', null, get_lang('StartDateCustom'),'2',array('onclick' => 'check_per_custom_date(this)', 'id'=>'custom_date'));
-	$form->addGroup($radios, null, get_lang('StartDateOption'));
+	$form->addGroup($radios, null, get_lang('StartDateOptions'));
 
 	if (isset($thematic_advance_data['attendance_id']) && $thematic_advance_data['attendance_id'] == 0) {
 		$form->addElement('html', '<div id="div_custom_datetime" style="display:block">');				
@@ -52,9 +57,13 @@ if ($action == 'thematic_advance_add' || $action == 'thematic_advance_edit') {
 	} else {
 		$form->addElement('html', '<div id="div_datetime_by_attendance" style="display:block">');	
 	}
-		
-	$form->addElement('select', 'attendance_select', get_lang('Attendances'), $attendance_select, array('id' => 'id_attendance_select', 'onchange' => 'datetime_by_attendance(this.value)'));
-		
+
+	if (count($attendance_select) > 1) {	
+		$form->addElement('select', 'attendance_select', get_lang('Attendances'), $attendance_select, array('id' => 'id_attendance_select', 'onchange' => 'datetime_by_attendance(this.value)'));
+	} else {
+		$form->addElement('html', '<div class="row"><div class="label">'.get_lang('Attendances').'</div><div class="formw"><em>'.get_lang('ThereAreNoAttendancesInsideCourse').'</em></div></div>');
+	}
+	
 	$form->addElement('html', '<div id="div_datetime_attendance">');
 		if (!empty($calendar_select)) {
 			$form->addElement('select', 'start_date_by_attendance', get_lang('StartDate'), $calendar_select);
@@ -87,6 +96,11 @@ if ($action == 'thematic_advance_add' || $action == 'thematic_advance_edit') {
 		}		
 	}
 	$form->setDefaults($default);
+	
+	// error messages
+	if ($error) {	
+		Display::display_error_message(get_lang('YouMustSelectAtleastAStartDate'),false);	
+	}
 	
 	$form->display();
 	

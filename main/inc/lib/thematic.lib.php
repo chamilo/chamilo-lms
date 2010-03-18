@@ -112,13 +112,12 @@ class Thematic
 	 * Get the maximum display order of the thematic item
 	 * @return int	Maximum display order
 	 */
-	function get_max_thematic_item()
-	{
+	public function get_max_thematic_item() {
 		// Database table definition
 		$tbl_thematic = Database :: get_course_table(TABLE_THEMATIC);
 		$session_id = api_get_session_id();
-		$condition_session = api_get_session_condition($session_id, false);
-		$sql = "SELECT MAX(display_order) FROM $tbl_thematic $condition_session";
+		$condition_session = api_get_session_condition($session_id);
+		$sql = "SELECT MAX(display_order) FROM $tbl_thematic WHERE active = 1 $condition_session";
 		$rs = Database::query($sql);
 		$dsp=0;
 		$row = Database::fetch_array($rs);
@@ -131,8 +130,7 @@ class Thematic
 	 * @param string	Direction (up, down)
 	 * @param int		Thematic id
 	 */
-	function move_thematic($direction, $thematic_id)
-	{
+	public function move_thematic($direction, $thematic_id) {
 		// Database table definition
 		$tbl_thematic = Database :: get_course_table(TABLE_THEMATIC);
 
@@ -143,7 +141,10 @@ class Thematic
 			$sortorder = 'ASC';
 		}
 
-		$sql = "SELECT * FROM $tbl_thematic ORDER BY display_order $sortorder";
+		$session_id = api_get_session_id();
+		$condition_session = api_get_session_condition($session_id);
+		
+		$sql = "SELECT * FROM $tbl_thematic WHERE active = 1 $condition_session ORDER BY display_order $sortorder";
 		$res = Database::query($sql);
 		$found = false;
 		while ($row = Database::fetch_array($res)) {
@@ -256,7 +257,7 @@ class Thematic
 	 * @param	int|array	One or many thematic ids
 	 * @return	int			Affected rows
 	 */
-	function thematic_destroy($thematic_id) {
+	public function thematic_destroy($thematic_id) {
 		
 		$tbl_thematic = Database::get_course_table(TABLE_THEMATIC);
 		$affected_rows = 0;
@@ -562,6 +563,38 @@ class Thematic
 	}
 	
 	/**
+	 * Get next description type for a new thematic plan description (option 'others')
+	 * @param	int		Thematic id
+	 * @return 	int		New Description type 
+	 */
+	public function get_next_description_type($thematic_id) {
+		
+		// definition database table		
+		$tbl_thematic_plan = Database::get_course_table(TABLE_THEMATIC_PLAN);
+		
+		// protect data
+		$thematic_id = intval($thematic_id);		
+		$description_type = intval($description_type);
+		$next_description_type = 0;
+		
+		$sql = "SELECT MAX(description_type) as max FROM $tbl_thematic_plan WHERE thematic_id = $thematic_id AND description_type >= ".ADD_THEMATIC_PLAN." ";
+		$rs = Database::query($sql);
+		$row = Database::fetch_array($rs);
+		$last_description_type = $row['max'];
+		
+		if (isset($last_description_type)) {
+			$row = Database::fetch_array($rs);
+			
+			$next_description_type = $last_description_type + 1;
+		} else {
+			$next_description_type = ADD_THEMATIC_PLAN;
+		}
+		
+		return $next_description_type;
+	}
+	
+	
+	/**
 	 * update done thematic advances from thematic details interface
 	 * @param 	int		Thematic id
 	 * @return	int		Affected rows
@@ -797,10 +830,10 @@ class Thematic
 	public function get_default_question() {
 		$question = array();
 		$question[1]= get_lang('ObjectivesQuestions');
-		$question[2]= get_lang('DestrezaQuestions');
-		$question[3]= get_lang('InfraestructuraQuestions');
+		$question[2]= get_lang('SkillToAcquireQuestions');
+		$question[3]= get_lang('InfrastructureQuestions');
 		$question[4]= get_lang('MethodologyQuestions');
-		$question[5]= get_lang('AditionalsNotesQuestions');		
+		$question[5]= get_lang('AditionalNotesQuestions');		
 		return $question;
 	}
 	

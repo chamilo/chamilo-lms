@@ -19,7 +19,7 @@ echo '<div class="actions" style="margin-bottom:30px">';
 ksort($categories);
 foreach ($categories as $id => $title) {
 	if ($i == ADD_THEMATIC_PLAN) {
-		echo '<a href="index.php?'.api_get_cidreq().'&action=thematic_plan_add&thematic_id='.$thematic_id.'&description_type='.$i.'">'.Display::return_icon($default_thematic_plan_icon[$id], $title, array('height'=>'22')).' '.$title.'</a>';
+		echo '<a href="index.php?'.api_get_cidreq().'&action=thematic_plan_add&thematic_id='.$thematic_id.'&description_type='.$next_description_type.'">'.Display::return_icon($default_thematic_plan_icon[$id], $title, array('height'=>'22')).' '.$title.'</a>';
 		break;
 	} else {
 		echo '<a href="index.php?action=thematic_plan_edit&'.api_get_cidreq().'&description_type='.$id.'&thematic_id='.$thematic_id.'">'.Display::return_icon($default_thematic_plan_icon[$id], $title, array('height'=>'22')).' '.$title.'</a>&nbsp;&nbsp;';
@@ -27,9 +27,6 @@ foreach ($categories as $id => $title) {
 	}
 }
 echo '</div>';
-
-$token = md5(uniqid(rand(),TRUE));
-$_SESSION['thematic_plan_token'] = $token;
 
 if ($action == 'thematic_plan_list') {
 
@@ -55,19 +52,27 @@ if ($action == 'thematic_plan_list') {
 	}
 	
 } else if ($action == 'thematic_plan_add' || $action == 'thematic_plan_edit') {
-	
+
 	if ($description_type >= ADD_THEMATIC_PLAN) {
 		$header_form = get_lang('NewBloc');
 	} else {
-		$header_form = $default_thematic_plan_title[$description_type];
-		if (!empty($thematic_plan_data)) {
-			$header_form = $thematic_plan_data[0]['title'];	
-		}	
+		$header_form = $default_thematic_plan_title[$description_type];		
+	}
+	
+	if (!$error) {
+		$token = md5(uniqid(rand(),TRUE));
+		$_SESSION['thematic_plan_token'] = $token;
+	}
+	
+	// error messages
+	if ($error) { 	
+		Display::display_error_message(get_lang('FormHasErrorsPleaseComplete'),false);	
 	}
 	
 	// display form
-	$form = new FormValidator('thematic_plan_add','POST','index.php?action='.$action.'&thematic_id='.$thematic_id.'&'.api_get_cidreq().$param_gradebook,'','style="width: 100%;"');
-	$form->addElement('header', '', $header_form);	
+	$form = new FormValidator('thematic_plan_add','POST','index.php?action=thematic_plan_list&thematic_id='.$thematic_id.'&'.api_get_cidreq().$param_gradebook,'','style="width: 100%;"');
+	$form->addElement('header', '', $header_form);
+	$form->addElement('hidden', 'action', $action);
 	$form->addElement('hidden', 'thematic_plan_token', $token);
 	
 	if (!empty($thematic_id)) {
@@ -82,13 +87,22 @@ if ($action == 'thematic_plan_list') {
 	$form->addElement('html','<div class="clear" style="margin-top:50px;"></div>');
 	$form->addElement('style_submit_button', null, get_lang('Save'), 'class="save"');
 	
-	$default['title'] = $default_thematic_plan_title[$description_type];
+	if ($description_type < ADD_THEMATIC_PLAN) {
+		$default['title'] = $default_thematic_plan_title[$description_type];
+	}
 	if (!empty($thematic_plan_data)) {
 		// set default values
 		$default['title'] = $thematic_plan_data[0]['title'];
 		$default['description'] = $thematic_plan_data[0]['description'];		
 	}	
 	$form->setDefaults($default);
+	
+	if (isset($default_thematic_plan_question[$description_type])) {
+		$message = '<strong>'.get_lang('QuestionPlan').'</strong><br />';
+		$message .= $default_thematic_plan_question[$description_type];
+		Display::display_normal_message($message, false);
+	}
+	
 	$form->display();		
 }
 

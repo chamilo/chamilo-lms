@@ -259,7 +259,7 @@ if ($action == 'thematic_details') {
 	//$interbreadcrumb[] = array ('url' => 'index.php?action=thematic_list', 'name' => get_lang('ThematicControl'));
 	$interbreadcrumb[] = array ('url' => '#', 'name' => get_lang('ThematicControl'));	
 } 
-if ($action == 'thematic_plan_list') {
+if ($action == 'thematic_plan_list' || $action == 'thematic_plan_delete') {
 	if (isset($_GET['origin']) && $_GET['origin'] == 'thematic_details') {
 		$interbreadcrumb[] = array ('url' => 'index.php?action=thematic_details', 'name' => get_lang('ThematicControl'));
 	} else {
@@ -270,7 +270,12 @@ if ($action == 'thematic_plan_list') {
 if ($action == 'thematic_plan_add' || $action == 'thematic_plan_edit') {
 	$interbreadcrumb[] = array ('url' => 'index.php?action=thematic_list', 'name' => get_lang('ThematicControl'));
 	$interbreadcrumb[] = array ('url' => 'index.php?action=thematic_plan_list&thematic_id='.$thematic_id, 'name' => $thematic_data['title'].':'.get_lang('ThematicPlan'));
-	$interbreadcrumb[] = array ('url' => '#', 'name' => $default_thematic_plan_title[$description_type]);
+	
+	if ($description_type >= ADD_THEMATIC_PLAN) {
+		$interbreadcrumb[] = array ('url' => '#', 'name' => get_lang('NewBloc'));
+	} else {
+		$interbreadcrumb[] = array ('url' => '#', 'name' => $default_thematic_plan_title[$description_type]);	
+	}
 }
 if ($action == 'thematic_advance_list') {
 	if (isset($_GET['origin']) && $_GET['origin'] == 'thematic_details') {

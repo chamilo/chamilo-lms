@@ -263,6 +263,13 @@ class ThematicController
 		    			$thematic->set_thematic_advance_attributes($thematic_advance_id, $thematic_id,  $attendance_id, $content, $start_date, $duration);	    				    								
 						$affected_rows = $thematic->thematic_advance_save();				    			
 			        	
+			        	if ($affected_rows) {
+			        		// get last done thematic advance before move thematic list
+							$last_done_thematic_advance = $thematic->get_last_done_thematic_advance();
+							// update done advances with de current thematic list
+							$update_done_advances = $thematic->update_done_thematic_advances($last_done_thematic_advance);
+			        	}
+			        	
 						unset($_SESSION['thematic_advance_token']);	        
 			        	$action = 'thematic_advance_list';		
 		    		}

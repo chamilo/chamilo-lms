@@ -58,7 +58,7 @@ if ($action == 'thematic_list') {
 	if (!empty($thematic_id)) {
 		echo '<div style="text-align:right;">'.get_lang('Progress').': <strong>'.$total_average_of_advances.'</strong>%</div><br />';
 	} else {
-		echo '<div style="text-align:right;">'.get_lang('Progress').': <span id="div_result"><strong>'.$total_average_of_advances.'</strong></span>%</div><br />';
+		echo '<div style="text-align:right;">'.get_lang('Progress').': <strong><span id="div_result">'.$total_average_of_advances.'</span></strong>%</div><br />';
 	}
 	
 	// display thematic data
@@ -73,8 +73,7 @@ if ($action == 'thematic_list') {
 				echo '<td><div><strong>'.$thematic['title'].'</strong></div><div>'.$thematic['content'].'</div></td>';
 				
 				// display thematic plan data
-				echo '<td>';
-					//echo '<div style="text-align:right"><a href="index.php?'.api_get_cidreq().'&origin=thematic_details&action=thematic_plan_list&thematic_id='.$thematic['id'].$param_gradebook.'">'.Display::return_icon('info.gif',get_lang('ThematicPlan'),array('style'=>'vertical-align:middle')).' '.get_lang('EditThematicPlan').'</a></div><br />';
+				echo '<td>';					
 					if (api_is_allowed_to_edit(null, true)) {
 						echo '<div style="text-align:right"><a href="index.php?'.api_get_cidreq().'&origin=thematic_details&action=thematic_plan_list&thematic_id='.$thematic['id'].$param_gradebook.'">'.Display::return_icon('lp_quiz.png',get_lang('EditThematicPlan'),array('style'=>'vertical-align:middle')).'</a></div><br />';
 					}
@@ -88,40 +87,46 @@ if ($action == 'thematic_list') {
 				echo '</td>';
 				
 				// display thematic advance data
-				echo '<td>';
-					//echo '<div style="text-align:right"><a href="index.php?'.api_get_cidreq().'&origin=thematic_details&action=thematic_advance_list&thematic_id='.$thematic['id'].$param_gradebook.'">'.Display::return_icon('porcent.png',get_lang('ThematicAdvance'),array('style'=>'vertical-align:middle')).' '.get_lang('EditThematicAdvance').'</a></div><br />';
+				echo '<td>';					
 					if (api_is_allowed_to_edit(null, true)) {
 						echo '<div style="text-align:right"><a href="index.php?'.api_get_cidreq().'&origin=thematic_details&action=thematic_advance_list&thematic_id='.$thematic['id'].$param_gradebook.'">'.Display::return_icon('lp_quiz.png',get_lang('EditThematicAdvance'),array('style'=>'vertical-align:middle')).'</a></div><br />';
-					}
-					if (!empty($thematic_advance_data[$thematic['id']])) {
-						echo '<table width="100%">';					
+					}					
+					echo '<table width="100%">';
+
+						if (!empty($thematic_advance_data[$thematic['id']])) {						
 							foreach ($thematic_advance_data[$thematic['id']] as $thematic_advance) {
 								echo '<tr>';
 								echo '<td width="90%">';
 									echo '<div><strong>'.api_get_local_time($thematic_advance['start_date']).'</strong></div>';
 									echo '<div>'.$thematic_advance['content'].'</div>';
-									echo '<div>'.get_lang('Hours').' : '.$thematic_advance['duration'].'</div>';
+									echo '<div>'.get_lang('DurationInHours').' : '.$thematic_advance['duration'].'</div>';
 								echo '</td>';
 								if (empty($thematic_id) && api_is_allowed_to_edit(null, true)) {
 									$checked = '';
 									if ($last_done_thematic_advance == $thematic_advance['id']) {
 										$checked = 'checked';
-									}								
-									echo '<td><center><input type="radio" name="thematic_done" value="'.$thematic_advance['id'].'" '.$checked.' onclick="update_done_thematic_advance(this.value)"></center></td>';
+									}
+									$style = '';
+									if ($thematic_advance['done_advance'] == 1) {
+										$style = ' style="background-color:#E5EDF9" ';
+									} else {
+										$style = ' style="background-color:#fff" ';
+									}														
+									echo '<td id="td_done_thematic_'.$thematic_advance['id'].'" '.$style.'><center><input type="radio" id="done_thematic_'.$thematic_advance['id'].'" name="done_thematic" value="'.$thematic_advance['id'].'" '.$checked.' onclick="update_done_thematic_advance(this.value)"></center></td>';									
 								} else {
 									if ($thematic_advance['done_advance'] == 1) {
 										echo '<td><center>'.get_lang('Done').'</center></td>';	
 									} else {
 										echo '<td><center>-</center></td>';
-									}
-									
+									}									
 								}
 								echo '</tr>';							 
 							}
-						echo '</table>';
-					} else {
-						echo '<div><em>'.get_lang('StillDoNotHaveAThematicAdvance').'</em></div>';
-					}				
+						} else {
+							echo '<tr><td width="90%"><div><em>'.get_lang('StillDoNotHaveAThematicAdvance').'</em></div></td><td>&nbsp;</td>';
+						}									
+					echo '</table>';
+							
 				echo '</td>';				
 				echo '</tr>';				
 			}

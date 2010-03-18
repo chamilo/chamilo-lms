@@ -188,6 +188,22 @@ $htmlHeadXtra[] = '<script language="javascript">
 				 $("#div_result").html(datos);
 				}
 			});
+			
+			// clean all radios
+			for (var i=0; i<$("input[@name=\'done_thematic\']").length;i++) {
+				var id_radio_thematic = $("input[@name=\'done_thematic\']").get(i).id;								
+				$("#td_"+id_radio_thematic).css({"background-color":"#FFF"});				
+			}
+			
+			// set background to previous radios 
+			for (var i=0; i<$("input[@name=\'done_thematic\']").length;i++) {
+				var id_radio_thematic = $("input[@name=\'done_thematic\']").get(i).id;								
+				$("#td_"+id_radio_thematic).css({"background-color":"#E5EDF9"});
+				if ($("input[@name=\'done_thematic\']").get(i).value == selected_value) {
+					break;
+				}
+			}		
+
 		}
 		
 		

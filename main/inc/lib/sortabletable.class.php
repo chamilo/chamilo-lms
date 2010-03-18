@@ -299,20 +299,24 @@ class SortableTable extends HTML_Table {
 
 			// @todo This style css must be moved to default.css only for dev
 			echo '<style>
+					.main-grid { width:100%;}
+					.sub-header { width:100%; padding-top: 10px; padding-right: 10px; padding-left: 10px; height:30px;}
 					.grid_container { width:100%;}
 					.grid_item { height: 120px; width:98px;  border:1px dotted #ccc; float:left; padding:5px; margin:8px;}
 					.grid_element_0 { width:100px; float:left; text-align:center; margin-bottom:5px;}
 					.grid_element_1 { width:100px; float:left; text-align:center;margin-bottom:5px;}
 					.grid_element_2 { width:150px; float:left;}
 
-					.grid_selectbox { width:50%; float:left;}
+					.grid_selectbox { width:30%; float:left;}
 					.grid_title 	{ width:30%; float:left;}
-					.grid_nav 		{ float:right;}
+					.grid_nav 		{ }
 
 			</style>';
 
 			// @todo  This also must be moved
-			$html = '<div class="sub-header">';
+	
+			$html .= '<div class="main-grid">';
+			$html .= '<div class="sub-header">';
 			$html .= '<div class="grid_selectbox">'.$form.'</div>';
 			$html .= '<div class="grid_title">'.$this->get_table_title().'</div>';
 			$html .= '<div class="grid_nav">'.$nav.'</div>';
@@ -321,26 +325,28 @@ class SortableTable extends HTML_Table {
 			$html .= '<div class="clear"></div>';
 			if (count($this->form_actions) > 0) {
 				$script= '<script language="JavaScript" type="text/javascript">
-																/*<![CDATA[*/
-																function setCheckbox(value) {
-													 				d = document.form_'.$this->table_name.';
-													 				for (i = 0; i < d.elements.length; i++) {
-													   					if (d.elements[i].type == "checkbox") {
-																		     d.elements[i].checked = value;
-													   					}
-													 				}
-																}
-																/*]]>*/
-															</script>';
+							/*<![CDATA[*/
+							function setCheckbox(value) {
+				 				d = document.form_'.$this->table_name.';
+				 				for (i = 0; i < d.elements.length; i++) {
+				   					if (d.elements[i].type == "checkbox") {
+									     d.elements[i].checked = value;
+				   					}
+				 				}
+							}
+							/*]]>*/
+						</script>';
 				$params = $this->get_sortable_table_param_string().'&amp;'.$this->get_additional_url_paramstring();
 				$html .= '<form method="post" action="'.api_get_self().'?'.$params.'" name="form_'.$this->table_name.'">';
 			}
 		}
-		$items = $this->get_clean_html(); // Getting the items of the table
+		// Getting the items of the table
+		$items = $this->get_clean_html(false);	//no sort 
+		
 		// Generation of style classes must be improved. Maybe we need a a table name to create style on the fly:
 		// i.e: .whoisonline_table_grid_container instead of  .grid_container
 		// where whoisonline is the table's name like drupal's template engine
-
+		
 		$html .= '<div class="grid_container">';
 		if (is_array($items) && count($items) > 0) {
 			foreach ($items as & $row) {
@@ -351,9 +357,13 @@ class SortableTable extends HTML_Table {
 					$i++;
 				}
 				$html .= '</div>';
-			}
-			$html .= '</div>';
+			}			
 		}
+		$html .= '</div>'; //close grid_container
+		
+		$html .= '</div>'; //close main grid
+		
+	
 		$html .= '<div class="clear"></div>';
 		/*
 		if (!$empty_table) {
@@ -528,8 +538,10 @@ class SortableTable extends HTML_Table {
 		$pager = $this->get_pager();
 		$val = $pager->getOffsetByPageId();
 		$offset = $pager->getOffsetByPageId();
-		$from = $offset[0] - 1;
+		$from = $offset[0] - 1; 
+		
 		$table_data = $this->get_table_data($from, $sort);
+		
 		$new_table_data = array();
 		if (is_array($table_data)) {
 			foreach ($table_data as $index => & $row) {

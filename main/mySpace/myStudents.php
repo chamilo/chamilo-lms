@@ -224,7 +224,7 @@ if (!empty ($_GET['student'])) {
 
 	// is the user online ?
 	$student_online = Security :: remove_XSS($_GET['student']);
-	$users_online = WhoIsOnline(30);
+	$users_online = who_is_online(30);
 	foreach ($users_online as $online) {
 		if (in_array($_GET['student'], $online)) {
 			$online = get_lang('Yes');

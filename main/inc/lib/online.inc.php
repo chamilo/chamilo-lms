@@ -121,22 +121,22 @@ function LoginDelete($user_id) {
  * @param   bool		optionally if it's set to true shows who friends from social network is online otherwise just shows all users online
  * @return  array       For each line, a list of user IDs and login dates, or FALSE on error or empty results
  */
-function WhoIsOnline($valid, $friends = false)
-{
+function who_is_online($valid, $friends = false) {
 	$valid = (int) $valid;
 	$current_date		= date('Y-m-d H:i:s',time());
 	$track_online_table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ONLINE);
 	$friend_user_table  = Database::get_main_table(TABLE_MAIN_USER_REL_USER);
+	$table_user			= Database::get_main_table(TABLE_MAIN_USER);
 	$query = '';
 	if ($friends) {
 		// 	who friends from social network is online
-		$query = "	SELECT distinct login_user_id,login_date
-					FROM $track_online_table
-					INNER JOIN $friend_user_table ON (friend_user_id = login_user_id)
-					WHERE DATE_ADD(login_date,INTERVAL $valid MINUTE) >= '".$current_date."' AND friend_user_id <> '".api_get_user_id()."'  AND relation_type='".USER_RELATION_TYPE_FRIEND."' AND user_id = '".api_get_user_id()."' ";
+		$query = "SELECT DISTINCT login_user_id,login_date
+				  FROM $track_online_table INNER JOIN $friend_user_table ON (friend_user_id = login_user_id)
+				  WHERE DATE_ADD(login_date,INTERVAL $valid MINUTE) >= '".$current_date."' AND friend_user_id <> '".api_get_user_id()."'  AND relation_type='".USER_RELATION_TYPE_FRIEND."' AND user_id = '".api_get_user_id()."' ";
 	} else {
 		// all users online
-		$query = "SELECT login_user_id,login_date FROM ".$track_online_table ." WHERE DATE_ADD(login_date,INTERVAL $valid MINUTE) >= '".$current_date."'  ";
+		//$query = "SELECT login_user_id,login_date FROM ".$track_online_table ." WHERE DATE_ADD(login_date,INTERVAL $valid MINUTE) >= '".$current_date."'  "; //WHERE DATE_ADD(login_date,INTERVAL $valid MINUTE) >= '".$current_date."'
+		$query = "SELECT login_user_id,login_date FROM ".$track_online_table ." e INNER JOIN ".$table_user ." u ON (u.user_id=e.login_user_id)  WHERE DATE_ADD(login_date,INTERVAL $valid MINUTE) >= '".$current_date."' ORDER BY picture_uri DESC";		
 	}
 
 	global $_configuration;
@@ -152,13 +152,14 @@ function WhoIsOnline($valid, $friends = false)
 							WHERE track.access_url_id =  $access_url_id AND DATE_ADD(login_date,INTERVAL $valid MINUTE) >= '".$current_date."' AND friend_user_id <> '".api_get_user_id()."' AND relation_type='".USER_RELATION_TYPE_FRIEND."'  ";
 			} else {
 				// all users online
-				$query = "SELECT login_user_id,login_date FROM ".$track_online_table ." track
-							WHERE track.access_url_id =  $access_url_id AND DATE_ADD(login_date,INTERVAL $valid MINUTE) >= '".$current_date."'  ";
+				$query = "SELECT login_user_id,login_date FROM ".$track_online_table ." track  INNER JOIN ".$table_user ." u ON (u.user_id=track.login_user_id)  
+						  WHERE track.access_url_id =  $access_url_id AND DATE_ADD(login_date,INTERVAL $valid MINUTE) >= '".$current_date."' ORDER BY picture_uri DESC  ";
 			}
 		}
 	}
-
+	
 	$result = @Database::query($query);
+	//@todo why we dont believe in db query results?
 	if (count($result)>0) {
 		$rtime = time();
 		$rdate = date("Y-m-d H:i:s",$rtime);
@@ -166,9 +167,9 @@ function WhoIsOnline($valid, $friends = false)
 		$rarray = array();
 
 		while(list($login_user_id,$login_date)= Database::fetch_row($result)) {
-			$barray = array();
+			$barray = array();			
 			array_push($barray,$login_user_id);
-			array_push($barray,$login_date);
+			array_push($barray,$login_date);	
 
 			// YYYY-MM-DD HH:MM:SS, db date format
 			$hour = substr($login_date,11,2);
@@ -179,17 +180,60 @@ function WhoIsOnline($valid, $friends = false)
 			$year = substr($login_date,0,4);
 			// db timestamp
 			$dbtime = mktime($hour,$minute,$secund,$month,$day,$year);
-
+			
 			if ($dbtime>$validtime) {
 				array_push($rarray,$barray);
 			}
-		}
+		}		
 		return $rarray;
 	} else {
 		return false;
 	}
 }
 
+function who_is_online_Count($valid, $friends = false) {
+	$valid = (int) $valid;
+	$current_date		= date('Y-m-d H:i:s',time());
+	$track_online_table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ONLINE);
+	$friend_user_table  = Database::get_main_table(TABLE_MAIN_USER_REL_USER);
+	$table_user			= Database::get_main_table(TABLE_MAIN_USER);
+	$query = '';
+	if ($friends) {
+		// 	who friends from social network is online
+		$query = "SELECT DISTINCT count(login_user_id) as count 
+				  FROM $track_online_table INNER JOIN $friend_user_table ON (friend_user_id = login_user_id)
+				  WHERE DATE_ADD(login_date,INTERVAL $valid MINUTE) >= '".$current_date."' AND friend_user_id <> '".api_get_user_id()."'  AND relation_type='".USER_RELATION_TYPE_FRIEND."' AND user_id = '".api_get_user_id()."' ";
+	} else {
+		// all users online
+		$query = "SELECT count(login_id) FROM ".$track_online_table ." WHERE DATE_ADD(login_date,INTERVAL $valid MINUTE) >= '".$current_date."'  "; //WHERE DATE_ADD(login_date,INTERVAL $valid MINUTE) >= '".$current_date."'		
+	}
+
+	global $_configuration;
+	if ($_configuration['multiple_access_urls']==true) {		
+		$tbl_user_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+		$access_url_id = api_get_current_access_url_id();
+		if ($access_url_id != -1) {			
+			if ($friends) {
+				// 	friends from social network is online
+				$query = "SELECT DISTINCT count(login_user_id) as count 
+							FROM $track_online_table track						
+							INNER JOIN $friend_user_table ON (friend_user_id = login_user_id)
+							WHERE track.access_url_id =  $access_url_id AND DATE_ADD(login_date,INTERVAL $valid MINUTE) >= '".$current_date."' AND friend_user_id <> '".api_get_user_id()."' AND relation_type='".USER_RELATION_TYPE_FRIEND."'  ";
+			} else {
+				// all users online
+				$query = "SELECT count(login_id) as count FROM ".$track_online_table ." track
+						  WHERE track.access_url_id =  $access_url_id AND DATE_ADD(login_date,INTERVAL $valid MINUTE) >= '".$current_date."'  ";
+			}
+		}
+	}
+	$result = Database::query($query);	
+	if (Database::num_rows($result) > 0) {		
+		$row = Database::fetch_array($result);		
+		return $row['count'];		
+	} else {
+		return false;
+	}
+}
 
 
 /**
@@ -202,7 +246,7 @@ function GetFullUserName($uid)
 	$uid = (int) $uid;
 	$uid = Database::escape_string($uid);
 	$user_table = Database::get_main_table(TABLE_MAIN_USER);
-	$query = "SELECT firstname,lastname FROM ".$user_table." WHERE user_id='$uid'";
+	$query = "SELECT firstname, lastname FROM ".$user_table." WHERE user_id='$uid'";
 	$result = @Database::query($query);
 	if (count($result)>0) {
 		$str = '';
@@ -308,6 +352,24 @@ function who_is_online_in_this_course($uid, $valid, $coursecode=null)
 			}
 		}
 		return $rarray;
+	} else {
+		return false;
+	}
+}
+
+function who_is_online_in_this_course_count($uid, $valid, $coursecode=null)
+{
+	if(empty($coursecode)) return false;
+	$track_online_table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ONLINE);
+	$coursecode = Database::escape_string($coursecode);
+	$valid 		= Database::escape_string($valid);
+
+	$query = "SELECT count(login_user_id) as count FROM ".$track_online_table ." WHERE course='".$coursecode."' AND DATE_ADD(login_date,INTERVAL $valid MINUTE) >= NOW() ";
+	$result = Database::query($query);
+	$result = Database::query($query);	
+	if (Database::num_rows($result) > 0) {
+		$row = Database::fetch_array($result);		
+		return $row['count'];		
 	} else {
 		return false;
 	}

@@ -68,7 +68,7 @@ if (api_get_setting('profile', 'picture') == 'true') {
 
 Display :: display_header(get_lang('Home'));
 $user_info = UserManager :: get_user_info_by_id(api_get_user_id());
-$user_online_list = WhoIsOnline(api_get_setting('time_limit_whosonline'),true);
+$user_online_list = who_is_online(api_get_setting('time_limit_whosonline'),true);
 $user_online_count = count($user_online_list);
 
 echo '<div id="social-content">';

@@ -187,7 +187,9 @@ if (intval($count_users)<50) {
 		<option value="<?php echo $enreg['username']; ?>" <?php if($sent && $enreg['user_id'] == $id_coach) echo 'selected="selected"'; ?>><?php echo api_get_person_name($enreg['firstname'], $enreg['lastname']).' ('.$enreg['username'].')'; ?></option>
 		<?php endforeach; ?>
 	</select>
+	
 	<?php
+	echo Display::return_icon('synthese_view.gif',get_lang('ActivityCoach'));
 } else {
 	?>
 	<input type="text" name="coach_username" id="coach_username" onkeyup="xajax_search_coachs(document.getElementById('coach_username').value)" /><div id="ajax_list_coachs"></div>

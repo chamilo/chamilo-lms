@@ -1,10 +1,11 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 $language_file = 'gradebook';
-require_once ('../inc/global.inc.php');
-require_once ('lib/be.inc.php');
-require_once ('lib/gradebook_functions.inc.php');
-require_once ('lib/fe/evalform.class.php');
+require_once '../inc/global.inc.php';
+require_once 'lib/be.inc.php';
+require_once 'lib/gradebook_functions.inc.php';
+require_once 'lib/fe/evalform.class.php';
 api_block_anonymous_users();
 block_students();
 
@@ -31,6 +32,7 @@ if ($form->validate()) {
 	}
 	$eval->set_category_id($values['hid_category_id']);
 	$eval->set_weight($values['weight']);
+	
 	$eval->set_max($values['max']);
 	if (empty ($values['visible'])) {
 		$visible = 0;

@@ -68,7 +68,7 @@ INSERT INTO settings_current (variable, subkey, type, category, selected_value, 
 ALTER TABLE user_field_values CHANGE id id BIGINT NOT NULL AUTO_INCREMENT;
 ALTER TABLE user_field_values ADD INDEX (user_id, field_id);
 
-UPDATE settings_current SET selected_value = '1.8.7.11104' WHERE variable = 'dokeos_database_version';
+UPDATE settings_current SET selected_value = '1.8.7.11140' WHERE variable = 'dokeos_database_version';
 
 ALTER TABLE course_rel_user DROP PRIMARY KEY, ADD PRIMARY KEY (course_code, user_id, relation_type);
 ALTER TABLE session_rel_user DROP PRIMARY KEY, ADD PRIMARY KEY (id_session, id_user, relation_type);
@@ -124,3 +124,4 @@ CREATE TABLE thematic_plan (id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, thematic
 ALTER TABLE thematic_plan ADD INDEX (thematic_id, description_type); 
 CREATE TABLE thematic_advance (id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, thematic_id INT NOT NULL, attendance_id INT NOT NULL DEFAULT 0, content TEXT NOT NULL, start_date DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00', duration INT NOT NULL DEFAULT 0, done_advance tinyint NOT NULL DEFAULT 0);
 ALTER TABLE thematic_advance ADD INDEX (thematic_id);
+INSERT INTO course_setting (variable,value,category) VALUES ('display_info_advance_inside_homecourse',1,'thematic_advance');

@@ -2207,6 +2207,7 @@ function fill_Db_course($courseDbName, $courseRepository, $language,$default_doc
 	Database::query("INSERT INTO `".$TABLESETTING . "`(variable,value,category) VALUES ('allow_open_chat_window',0,'chat')");
     Database::query("INSERT INTO `".$TABLESETTING . "`(variable,value,category) VALUES ('email_alert_to_teacher_on_new_user_in_course',0,'registration')");
     Database::query("INSERT INTO `".$TABLESETTING . "`(variable,value,category) VALUES ('allow_user_view_user_list',1,'user')");
+    Database::query("INSERT INTO `".$TABLESETTING . "`(variable,value,category) VALUES ('display_info_advance_inside_homecourse',1,'thematic_advance')");
 	/*
 	-----------------------------------------------------------
 		Course homepage tools for platform admin only

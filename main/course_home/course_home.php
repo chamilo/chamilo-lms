@@ -102,7 +102,7 @@ $(function() {
 	$(".thematic-postit-head").click(function() {
 				$(".thematic-postit-center").slideToggle("normal");
 		 	});
-	$(".thematic-postit-center").hide();
+	$(".thematic-postit-center").show();
 });
 
 </script>';

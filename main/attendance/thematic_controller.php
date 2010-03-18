@@ -105,7 +105,7 @@ class ThematicController
 				$data['total_average_of_advances'] = $thematic->get_average_of_advances_by_thematic($thematic_id);				
 			} else {
 				$thematic_data = $thematic->get_thematic_list();	
-				$data['last_done_thematic_advance'] = $thematic->get_last_done_thematic_advance();
+				$data['last_done_thematic_advance'] = $thematic->get_last_done_thematic_advance();				
 				$data['total_average_of_advances'] = $thematic->get_total_average_of_thematic_advances();
 			}
 

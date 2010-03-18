@@ -23,7 +23,7 @@
  */
 
 require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
-require_once api_get_path(LIBRARY_PATH).'course_description.lib.php';
+require_once api_get_path(LIBRARY_PATH).'thematic.lib.php';
 
 /*	Constants and variables */
 
@@ -155,28 +155,37 @@ if ($intro_dispForm) {
 
 $style_introduction_section = 'style="margin-left:10%;margin-right:10%;"';
 $thematic_description_html = '';
+
 if ($tool == TOOL_COURSE_HOMEPAGE && !isset($_GET['intro_cmdEdit'])) {
 
-	$course_description = new CourseDescription();
-	$course_description->set_session_id(api_get_session_id());
-	$thematic_description = $course_description->get_data_by_description_type(8);
-
-	if (!empty($thematic_description)) {
+	$thematic = new Thematic();	
+	if (api_get_course_setting('display_info_advance_inside_homecourse')) {		
+		$last_done_advance =  $thematic->get_last_done_thematic_advance();
+		$thematic_advance_info = $thematic->get_thematic_advance_list($last_done_advance);
+	} else {
+		$next_advance_not_done = $thematic->get_next_thematic_advance_not_done();
+		$thematic_advance_info = $thematic->get_thematic_advance_list($next_advance_not_done);
+	}
+		
+	if (!empty($thematic_advance_info)) {
 
 		$style_introduction_section = 'style="width:65%;float:left;margin-left:10%;"';
-
-		$thematic_advance = get_lang('ThematicAdvance').'&nbsp;'.$course_description->get_progress_porcent(false, 8);
+		$thematic_advance = get_lang('ThematicAdvance').'&nbsp;'.$thematic->get_total_average_of_thematic_advances().'%';		
 		if (api_is_allowed_to_edit(null, true)) {
-			$thematic_advance = '<a href="'.api_get_path(WEB_CODE_PATH).'course_description/index.php?action=edit&'.api_get_cidreq().'&description_type=8'.'">'.get_lang('ThematicAdvance').'&nbsp;'.$course_description->get_progress_porcent(false, 8).'</a>';
-		}
-
+			$thematic_advance = '<a href="'.api_get_path(WEB_CODE_PATH).'attendance/index.php?action=thematic_details&'.api_get_cidreq().'">'.get_lang('ThematicAdvance').'&nbsp;'.$thematic->get_total_average_of_thematic_advances().'%</a>';
+		}		
+		$thematic_info = $thematic->get_thematic_list($thematic_advance_info['thematic_id']);
+		
 		$thematic_description_html = '<div style="width:20%;float:left;font-size:10pt;"><div class="thematic-postit">
 								  <div class="thematic-postit-top"><a class="thematic-postit-head" style="" href="#">'.Display::return_icon('postit_top.png').'</a></div>
-								  <div class="thematic-postit-center">
-								  	<h3>'.$thematic_advance.'</h3>
-									'.$thematic_description['description_title'].'
-									<p>'.$thematic_description['description_content'].'</p>
-								  </div>
+								  <div class="thematic-postit-center">';
+		$thematic_description_html .= '<h3>'.$thematic_advance.'</h3>';							  								
+		$thematic_description_html .= '<div><strong>'.$thematic_info['title'].'</strong></div>';			
+		$thematic_description_html .= '<div><strong>'.api_get_local_time($thematic_advance_info['start_date']).'</strong></div>';
+		$thematic_description_html .= '<div>'.$thematic_advance_info['content'].'</div>';
+		$thematic_description_html .= '<div>'.get_lang('DurationInHours').' : '.$thematic_advance_info['duration'].'</div>';
+		$thematic_description_html .= '<br />';								  	
+		$thematic_description_html .= '</div>
 								  <div  class="thematic-postit-bottom">'.Display::return_icon('postit_bottom.png').'</div>
 								  </div></div>';
 	}

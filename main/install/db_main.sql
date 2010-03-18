@@ -757,7 +757,7 @@ VALUES
 ('show_tabs', 'dashboard', 'checkbox', 'Platform', 'true', 'ShowTabsTitle', 'ShowTabsComment', NULL, 'TabsDashboard', 1),
 ('use_users_timezone', 'timezones', 'radio', 'Timezones', 'true', 'UseUsersTimezoneTitle','UseUsersTimezoneComment',NULL,'Timezones', 1),
 ('timezone_value', 'timezones', 'select', 'Timezones', '', 'TimezoneValueTitle','TimezoneValueComment',NULL,'Timezones', 1),
-('dokeos_database_version', NULL, 'textfield', NULL,'1.8.7.10983','DokeosDatabaseVersion','',NULL,NULL,0);
+('dokeos_database_version', NULL, 'textfield', NULL,'1.8.7.11140','DokeosDatabaseVersion','',NULL,NULL,0);
 
 
 UNLOCK TABLES;

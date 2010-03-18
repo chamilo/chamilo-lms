@@ -232,6 +232,16 @@ if (is_settings_editable()) {
 	$form->freeze();
 }
 
+
+// THEMATIC SETTINGS
+$form->addElement('html','<div class="sectiontitle" style="margin-top: 40px;"><a href="#header" style="float:right;">'.Display::return_icon('top.gif',get_lang('Top')).'</a><a name="chatsettings" id="chatsettings"></a>'.Display::return_icon('attendance.gif',get_lang('ConfigChat')).' '.get_lang('ThematicAdvanceConfiguration').'</div>');
+$form->addElement('radio', 'display_info_advance_inside_homecourse', get_lang('InfoAboutAdvanceInsideHomeCourse'), get_lang('DisplayAboutLastDoneAdvance'), 1);
+$form->addElement('radio', 'display_info_advance_inside_homecourse', null, get_lang('DisplayAboutNextAdvanceNotDone'), 0);
+
+
+$form->addElement('style_submit_button', null, get_lang('SaveSettings'), 'class="save"');
+
+
 // get all the course information
 $all_course_information =  CourseManager::get_course_information($_course['sysCode']);
 
@@ -271,6 +281,9 @@ $values['course_theme'] = api_get_course_setting('course_theme');
 $values['allow_learning_path_theme'] = api_get_course_setting('allow_learning_path_theme');
 //get allow show user list 
 $values['allow_user_view_user_list'] = api_get_course_setting('allow_user_view_user_list');
+//get allow show user list 
+$values['display_info_advance_inside_homecourse'] = api_get_course_setting('display_info_advance_inside_homecourse');
+
 
 $form->setDefaults($values);
 // Validate form
@@ -340,6 +353,11 @@ if ($form->validate() && is_settings_editable()) {
 	
 	if($update_values['allow_user_view_user_list'] != $values['allow_user_view_user_list']){
 		$sql = "UPDATE $table_course_setting SET value = ".(int)$update_values['allow_user_view_user_list']." WHERE variable = 'allow_user_view_user_list' ";
+		Database::query($sql);
+	}
+	
+	if($update_values['display_info_advance_inside_homecourse'] != $values['display_info_advance_inside_homecourse']){
+		$sql = "UPDATE $table_course_setting SET value = ".(int)$update_values['display_info_advance_inside_homecourse']." WHERE variable = 'display_info_advance_inside_homecourse' ";
 		Database::query($sql);
 	}
 

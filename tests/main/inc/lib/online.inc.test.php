@@ -21,8 +21,8 @@ class TestOnline extends UnitTestCase {
 				."</p>";
 		$res=chatcall();
 
-		if(!empty($message)){
-		$this->assertTrue(is_string($message));
+		if (!empty($message)) {
+			$this->assertTrue(is_string($message));
 		//var_dump($message);
 
 		} else {
@@ -76,8 +76,8 @@ class TestOnline extends UnitTestCase {
 		$login_user_id= '';
 		$login_date= '';
 		array_push($rarray,$barray);
-			array_push($barray,$login_user_id);
-			array_push($barray,$login_date);
+		array_push($barray,$login_user_id);
+		array_push($barray,$login_date);
 
 		$res=who_is_online_in_this_course($uid, $valid, $coursecode=null);
 		if(!empty($barray)){
@@ -90,11 +90,43 @@ class TestOnline extends UnitTestCase {
 		//var_dump($rarray);
 	}
 
-	function testWhoIsOnline()  {		
+	function testwho_is_online()  {		
 		$valid='';
-		$res=WhoIsOnline($valid);
+		$res=who_is_online($valid);
 		$this->assertTrue(is_array($res));
-		//var_dump($res);
+		//var_dump($res);	
 	}
+	
+	
+	function testwho_is_online_in_this_course_count() {
+	/*	$uid='';
+		$valid='';
+		$rarray = array();
+		$barray = array();
+		$login_user_id= '';
+		$login_date= '';
+		array_push($rarray,$barray);
+		array_push($barray,$login_user_id);
+		array_push($barray,$login_date);
+
+		$res=who_is_online_in_this_course_count($uid, $valid, $coursecode=null);
+		if(!empty($barray)){
+		$this->assertTrue(is_array($barray));
+		//var_dump($str);
+		} else {
+			$this->assertTrue(is_bool($barray));
+			//var_dump($rarray);
+		}
+		//var_dump($rarray);*/
+	}
+
+	function testwho_is_online_count()  {		
+	/*	$valid='';
+		$res=who_is_online_count($valid);
+		$this->assertTrue(is_array($res));
+		//var_dump($res);*/	
+	}
+	
+	
 }
 ?>

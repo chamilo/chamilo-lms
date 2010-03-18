@@ -844,4 +844,5 @@ $ToolCourseSetting = "Configuración del curso";
 $ToolCourseMaintenance = "Mantenimiento del curso";
 $AreYouSureToDeleteAllDates = "¿Confirma que desea borrar todas las fechas?";
 $AddADateTime = "Añadir fecha";
+$DeleteAllAttendances = "Eliminar todas las asistencias creadas";
 ?>

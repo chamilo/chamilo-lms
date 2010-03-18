@@ -250,7 +250,6 @@ $DashboardList = "Lista del panel de control";
 $YouHaveNotEnabledBlocks = "No ha habilitado ningún bloque";
 $BlocksHaveBeenUpdatedSuccessfully = "Los bloques han sido actualizados";
 $AssignSessionsTo = "Asignar sesiones a";
-$DeleteAllAttendances = "Eliminar todas las asistencias creadas";
 $AttendanceSheetDescription = "Las hojas de asistencia le permite reunir las asistencias de sus cursos por grupos. Por ejemplo, podría querer tomar las asistencias de las clases teóricas de manera separada de las de las clases prácticas. Cada entrada mostrará todos los estudiantes como asistentes por defecto. Es su responsabilidad registrar los estudiantes faltando, haciendo clic en la casilla correspondiente.";
 $AttendanceSheetReport = "Reporte de hojas de asistencias";
 $YouDoNotHaveDoneAttendances = "No tiene asistencias";

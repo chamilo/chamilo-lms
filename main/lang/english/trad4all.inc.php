@@ -843,4 +843,6 @@ $ToolTracking = "Reporting";
 $ToolCourseSetting = "Settings";
 $ToolCourseMaintenance = "Backup";
 $AreYouSureToDeleteAllDates = "Are you sure you want to delete all dates?";
+$AddADateTime = "Add a date time";
+$DeleteAllAttendances = "Delete all created attendances";
 ?>

@@ -250,7 +250,6 @@ $DashboardList = "Dashboard list";
 $YouHaveNotEnabledBlocks = "You haven't enabled any block";
 $BlocksHaveBeenUpdatedSuccessfully = "The blocks have been updated";
 $AssignSessionsTo = "Assign sessions to";
-$DeleteAllAttendances = "Delete all created attendances";
 $AttendanceSheetDescription = "Attendance sheets allow you to gather all your courses attendances by groups. For example, you might want to take attendances to theory lessons separately from attendances to practical lessons. Each of them will show all students as attending by default. It is up to you to register the missing students by clicking the corresponding checkbox.";
 $AttendanceSheetReport = "Report of attendance sheets";
 $YouDoNotHaveDoneAttendances = "You do not have attendances";

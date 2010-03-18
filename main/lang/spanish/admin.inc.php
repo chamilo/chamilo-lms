@@ -1209,4 +1209,7 @@ $AssignedSessionsListToSessionsAdministrator = "Lista de sesiones asignadas al a
 $EvaluationsGraph = "Gráficos de las evaluaciones";
 $Action = "Acción";
 $ISOCode = "Código ISO";
+$TheSubLanguageForThisLanguageHasBeenAdded = "El sub-lenguaje de este idioma ha sido añadido";
+$ReturnToLanguagesList = "Volver a la lista de idiomas";
+$ActivityCoach = "El tutor de la sesion, tendrá todos los derechos y permisos en todos los cursos que pertenecen a la sesion.";
 ?>

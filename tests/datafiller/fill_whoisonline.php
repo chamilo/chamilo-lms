@@ -26,7 +26,7 @@ function fill_whoisonline() {
 	for ($i=1;$i <=$max;$i++) {
 		$date = api_get_local_time();
 		$sql = "INSERT INTO	$table_e_online (login_id, login_user_id, login_date, login_ip, course, session_id, access_url_id)
-				VALUES ('$i', '$i', '$date', '127.0.0.1', '', '0','0')";
+				VALUES ('$i', '$i', '$date', '127.0.0.1', '', '0','1')";
 		$rs = Database::query($sql);
 	}	
 }

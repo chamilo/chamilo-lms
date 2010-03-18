@@ -301,11 +301,11 @@ class DisplayGradebook
                  	$header .= '<td><a href="gradebook_edit_all.php?id_session='.intval($_SESSION['id_session']).'&amp;'.$my_api_cidreq.'&selectcat=' . $catobj->get_id() . '">'.Display::return_icon('statistics.gif', get_lang('EditAllWeights')).' ' . get_lang('EditAllWeights') . '</a>';
                 	$my_course_id=api_get_course_id();
                 	$my_file= substr($_SESSION['gradebook_dest'],0,5);
-                	if (($my_file!='index' || $status_user==1) || api_is_platform_admin()) {
+                	if ($my_file!='index' || api_is_platform_admin()) {
                 		$header .= '<td style="vertical-align: top;"><a href="gradebook_scoring_system.php?'.$my_api_cidreq.'&selectcat=' . $catobj->get_id() .'">'.Display::return_icon('acces_tool.gif', get_lang('ScoreEdit')).' ' . get_lang('ScoreEdit') . '</a>';
 	            
 					}
-					if (/*($is_course_admin && $message_resource===false && $status_user==1) ||*/ api_is_platform_admin() || api_is_course_coach()) {
+					if (api_is_course_admin() || api_is_platform_admin() || api_is_course_coach()) {
 						$header .= '<td style="vertical-align: top;"><a href="gradebook_flatview.php?'.$my_api_cidreq.'&selectcat=' . $catobj->get_id() . '">'.Display::return_icon('stats_access.gif', get_lang('FlatView')).' ' . get_lang('FlatView') . '</a>';		
 						$header .= '<td style="vertical-align: top;"><a href="../document/document.php?curdirpath=/certificates&'.$my_api_cidreq.'&origin=gradebook&selectcat=' . $catobj->get_id() . '">'.Display::return_icon('acces_tool.gif', get_lang('AttachCertificate')).' ' . get_lang('AttachCertificate') . '</a>';
 						$header .= '<td style="vertical-align: top;"><a href="gradebook_display_certificate.php?'.$my_api_cidreq.'&amp;cat_id='.(int)$_GET['selectcat'].'">'.Display::return_icon('acces_tool.gif', get_lang('Certificate')).' ' . get_lang('GradebookSeeListOfStudentsCertificates') . '</a>';

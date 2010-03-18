@@ -1,41 +1,15 @@
 <?php // $Id: userLog.php 21626 2009-06-26 12:19:41Z pcool $
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2004-2009 Dokeos SPRL
-	Copyright (c) 2003 Ghent University (UGent)
-	Copyright (c) 2001 Universite catholique de Louvain (UCL)
-	Copyright (c) Roan Embrechts (Vrije Universiteit Brussel)
-    Copyright (c) Sebastien Piraux  <piraux_seb@hotmail.com>
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact: Dokeos, 181 rue Royale, B-1000 Brussels, Belgium, info@dokeos.com
-==============================================================================
-*/
+/* For licensing terms, see /license.txt */
 
 // TODO: Is this file deprecated?
 
 /**
-==============================================================================
-* @package dokeos.tracking
+* @package chamilo.tracking
 * @todo clean code - structure is unclear and difficult to modify
-==============================================================================
 */
 
 /*
-==============================================================================
 		INIT SECTION
-==============================================================================
 */
 $uInfo = $_REQUEST['uInfo'];
 $view  = $_REQUEST['view'];

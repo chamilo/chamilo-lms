@@ -116,7 +116,7 @@ class ExerciseResult
 				  		AND cuser.course_code=te.exe_cours_id ORDER BY te.exe_cours_id ASC, ce.title ASC, te.exe_date ASC";
 
 			$hpsql="SELECT ".(api_is_western_name_order() ? "CONCAT(tu.firstname,' ',tu.lastname)" : "CONCAT(tu.lastname,' ',tu.firstname)").", tth.exe_name,
-								tth.exe_result , tth.exe_weighting, UNIX_TIMESTAMP(tth.exe_date), tu.email, tu.user_id
+								tth.exe_result , tth.exe_weighting, tth.exe_date, tu.email, tu.user_id
 					FROM $TBL_TRACK_HOTPOTATOES tth, $TBL_USER tu
 					WHERE  tu.user_id=tth.exe_user_id AND tth.exe_cours_id = '" . Database :: escape_string($cid) . " $user_id_and '
 					ORDER BY tth.exe_cours_id ASC, tth.exe_date ASC";

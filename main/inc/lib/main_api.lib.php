@@ -1504,13 +1504,13 @@ function api_get_session_condition($session_id, $and = true, $with_base_content 
 	//condition to show resources by session
 	$condition_session = '';
 	$condition_add = $and == false ? " WHERE " : " AND ";
-	
-	if ($with_base_content) {		
-		$condition_session = $condition_add." (session_id = $session_id OR session_id = 0) ";		
+
+	if ($with_base_content) {
+		$condition_session = $condition_add." (session_id = $session_id OR session_id = 0) ";
 	} else {
 		$condition_session = $condition_add." session_id = $session_id ";
 	}
-	
+
 	return $condition_session;
 }
 
@@ -3996,13 +3996,6 @@ function api_is_in_group($group_id = null, $course_code = null) {
 }
 
 /**
- * This function informs whether the sent request is XMLHttpRequest
- */
-function api_is_xml_http_request() {
-	return isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest';
-}
-
-/**
  * This function gets the hash in md5 or sha1 (it depends in the platform config) of a given password
  * @param  string password
  * @return string password with the applied hash
@@ -4068,6 +4061,58 @@ function api_is_windows_os() {
 		return false;
 	}
 	return strtolower(substr((string)$os, 0, 3 )) == 'win';
+}
+
+/**
+ * This function informs whether the sent request is XMLHttpRequest
+ */
+function api_is_xml_http_request() {
+	return isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest';
+}
+
+/**
+ * Substitute for json_encode function for PHP version < 5.2.
+ *
+ * The following function has been adopted from Drupal's "Image Browser" project,
+ * @link http://drupal.org/project/imagebrowser
+ * version 6.x-2.x-dev, 2010-Mar-11,
+ * @link http://ftp.drupal.org/files/projects/imagebrowser-6.x-2.x-dev.tar.gz
+ */
+if (!function_exists('json_encode')) {
+	function json_encode($a = false) {
+		if (is_null($a)) return 'null';
+		if ($a === false) return 'false';
+		if ($a === true) return 'true';
+		if (is_scalar($a)) {
+			if (is_float($a)) {
+				// Always use "." for floats.
+				return floatval(str_replace(",", ".", strval($a)));
+			}
+
+			if (is_string($a)) {
+				static $json_replaces = array(array("\\", "/", "\n", "\t", "\r", "\b", "\f", '"'), array('\\\\', '\\/', '\\n', '\\t', '\\r', '\\b', '\\f', '\"'));
+				return '"' . str_replace($json_replaces[0], $json_replaces[1], $a) . '"';
+			}
+			else
+			return $a;
+		}
+		$is_list = true;
+		for ($i = 0, reset($a); $i < count($a); $i++, next($a)) {
+			if (key($a) !== $i) {
+				$is_list = false;
+				break;
+			}
+		}
+		$result = array();
+		if ($is_list) {
+			foreach ($a as $v) $result[] = json_encode($v);
+			return '[' . join(',', $result) . ']';
+		}
+		else {
+			foreach ($a as $k => $v) $result[] = json_encode($k).':'.json_encode($v);
+			return '{' . join(',', $result) . '}';
+		}
+	}
 }
 
 /**
@@ -4208,7 +4253,7 @@ function api_get_tool_information_by_name($name) {
 	$t_tool = Database::get_course_table(TABLE_TOOL_LIST);
 	$sql = 'SELECT * FROM '.$t_tool.' WHERE name="'.Database::escape_string($name).'"';
 	$rs  = Database::query($sql);
-	return Database::fetch_array($rs,'ASSOC');
+	return Database::fetch_array($rs, 'ASSOC');
 }
 
 

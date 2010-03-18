@@ -675,20 +675,20 @@ class aicc extends learnpath {
 		$result = Database::query($sql);
 		$row = Database::fetch_array($result);
 		$LPname = $row['path'];
-		$list = split('/',$LPname);
+		$list = split('/', $LPname);
 		$LPnamesafe = $list[0];
 		//$zipfoldername = '/tmp';
-		//$zipfoldername = '../../courses/'.$_course['directory']."/temp/".$LPnamesafe;
-		$zipfoldername = api_get_path('SYS_COURSE_PATH').$_course['directory']."/temp/".$LPnamesafe;
-		$scormfoldername = api_get_path('SYS_COURSE_PATH').$_course['directory']."/scorm/".$LPnamesafe;
-		$zipfilename = $zipfoldername."/".$LPnamesafe.".zip";
+		//$zipfoldername = '../../courses/'.$_course['directory'].'/temp/'.$LPnamesafe;
+		$zipfoldername = api_get_path(SYS_COURSE_PATH).$_course['directory'].'/temp/'.$LPnamesafe;
+		$scormfoldername = api_get_path(SYS_COURSE_PATH).$_course['directory'].'/scorm/'.$LPnamesafe;
+		$zipfilename = $zipfoldername.'/'.$LPnamesafe.'.zip';
 
-		//Get a temporary dir for creating the zip file
+		// Get a temporary dir for creating the zip file
 
-		//error_log('New LP - cleaning dir '.$zipfoldername,0);
+		//error_log('New LP - cleaning dir '.$zipfoldername, 0);
 		deldir($zipfoldername); //make sure the temp dir is cleared
 		mkdir($zipfoldername, api_get_permissions_for_new_directories());
-		//error_log('New LP - made dir '.$zipfoldername,0);
+		//error_log('New LP - made dir '.$zipfoldername, 0);
 
 		//create zipfile of given directory
 		$zip_folder = new PclZip($zipfilename);

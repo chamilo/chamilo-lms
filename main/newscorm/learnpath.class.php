@@ -555,7 +555,7 @@ class learnpath {
 		if (!empty ($_FILES['mp3']['name'])) {
 			// create the audio folder if it does not exist yet
 			global $_course;
-			$filepath = api_get_path('SYS_COURSE_PATH') . $_course['path'] . '/document/';
+			$filepath = api_get_path(SYS_COURSE_PATH) . $_course['path'] . '/document/';
 			if (!is_dir($filepath . 'audio')) {
 				mkdir($filepath . 'audio', api_get_permissions_for_new_directories());
 				$audio_id = add_document($_course, '/audio', 'folder', 0, 'audio');
@@ -564,7 +564,7 @@ class learnpath {
 
 			// upload the file in the documents tool
 			include_once (api_get_path(LIBRARY_PATH) . 'fileUpload.lib.php');
-			$file_path = handle_uploaded_document($_course, $_FILES['mp3'], api_get_path('SYS_COURSE_PATH') . $_course['path'] . '/document', '/audio', api_get_user_id(), '', '', '', '', '', false);
+			$file_path = handle_uploaded_document($_course, $_FILES['mp3'], api_get_path(SYS_COURSE_PATH) . $_course['path'] . '/document', '/audio', api_get_user_id(), '', '', '', '', '', false);
 
 			// getting the filename only
 			$file_components = explode('/', $file_path);
@@ -1024,7 +1024,7 @@ class learnpath {
 		if (is_array($audio) && !empty ($audio['tmp_name']) && $audio['error'] === 0) {
 			// create the audio folder if it does not exist yet
 			global $_course;
-			$filepath = api_get_path('SYS_COURSE_PATH') . $_course['path'] . '/document/';
+			$filepath = api_get_path(SYS_COURSE_PATH) . $_course['path'] . '/document/';
 			if (!is_dir($filepath . 'audio')) {
 				mkdir($filepath . 'audio', api_get_permissions_for_new_directories());
 				$audio_id = add_document($_course, '/audio', 'folder', 0, 'audio');
@@ -4694,7 +4694,7 @@ class learnpath {
 				}
 			} else {
 				if ($arrLP[$i]['item_type'] != 'dokeos_chapter' && $arrLP[$i]['item_type'] != 'dokeos_module' && $arrLP[$i]['item_type'] != 'dir') {
-					
+
 					$return .= ' <input type="file" name="mp3file' . $arrLP[$i]['id'] . '" id="mp3file" />';
 					if (!empty ($arrLP[$i]['audio'])) {
 						$return .= '<br />'.Security::remove_XSS($arrLP[$i]['audio']).'<input type="checkbox" name="removemp3' . $arrLP[$i]['id'] . '" id="checkbox' . $arrLP[$i]['id'] . '" />' . get_lang('RemoveAudio');
@@ -4882,10 +4882,10 @@ class learnpath {
 		if ($dir[strlen($dir) - 1] != '/')
 			$dir .= '/';
 
-		$filepath = api_get_path('SYS_COURSE_PATH') . $_course['path'] . '/document' . $dir;
+		$filepath = api_get_path(SYS_COURSE_PATH) . $_course['path'] . '/document' . $dir;
 
 		if (!is_dir($filepath)) {
-			$filepath = api_get_path('SYS_COURSE_PATH') . $_course['path'] . '/document/';
+			$filepath = api_get_path(SYS_COURSE_PATH) . $_course['path'] . '/document/';
 
 			$dir = '/';
 		}
@@ -4908,7 +4908,7 @@ class learnpath {
 
 		$content = stripslashes(text_filter($content));
 
-		$content = str_replace(api_get_path('WEB_COURSE_PATH'), api_get_path(REL_PATH) . 'courses/', $content);
+		$content = str_replace(api_get_path(WEB_COURSE_PATH), api_get_path(REL_PATH) . 'courses/', $content);
 
 		// change the path of mp3 to absolute
 		// first regexp deals with ../../../ urls
@@ -4984,10 +4984,10 @@ class learnpath {
 		if ($dir[strlen($dir) - 1] != '/')
 			$dir .= '/';
 
-		$filepath = api_get_path('SYS_COURSE_PATH') . $_course['path'] . '/document' . $dir;
+		$filepath = api_get_path(SYS_COURSE_PATH) . $_course['path'] . '/document' . $dir;
 
 		if (!is_dir($filepath)) {
-			$filepath = api_get_path('SYS_COURSE_PATH') . $_course['path'] . '/document/';
+			$filepath = api_get_path(SYS_COURSE_PATH) . $_course['path'] . '/document/';
 
 			$dir = '/';
 		}
@@ -5004,7 +5004,7 @@ class learnpath {
 
 			if ($fp = @ fopen($file, 'w')) {
 				$content = text_filter($content);
-				$content = str_replace(api_get_path('WEB_COURSE_PATH'), $_configuration['url_append'] . '/courses/', $content);
+				$content = str_replace(api_get_path(WEB_COURSE_PATH), $_configuration['url_append'] . '/courses/', $content);
 
 				// change the path of mp3 to absolute
 				// first regexp deals with ../../../ urls
@@ -6693,8 +6693,8 @@ class learnpath {
 						}
 						$editor_config = array('ToolbarSet' => 'LearningPathDocuments', 'Width' => '100%', 'Height' => '700', 'FullPage' => true,
 							'CreateDocumentDir' => $relative_prefix,
-							'CreateDocumentWebDir' => api_get_path('WEB_COURSE_PATH') . api_get_course_path() . '/document/',
-							'BaseHref' => api_get_path('WEB_COURSE_PATH') . api_get_course_path() . '/document/' . $relative_path
+							'CreateDocumentWebDir' => api_get_path(WEB_COURSE_PATH) . api_get_course_path() . '/document/',
+							'BaseHref' => api_get_path(WEB_COURSE_PATH) . api_get_course_path() . '/document/' . $relative_path
 						);
 
 						if ($_GET['action'] == 'add_item') {
@@ -7588,8 +7588,8 @@ class learnpath {
 		$return .= '<th width="70" height="24" style="border:1px solid gray; background-color:#F0F0F0;">' . get_lang('Minimum') . '</th>';
 		$return .= '<th width="70" height="24" style="border:1px solid gray; background-color:#F0F0F0;">' . get_lang('Maximum') . '</th>';
 		$return .= '</tr>';
-		
-		//Adding the none option to the prerequisites see http://www.chamilo.org/es/node/146	
+
+		//Adding the none option to the prerequisites see http://www.chamilo.org/es/node/146
 		$return .= '<tr >';
 		$return .= '<td colspan="3" class="radio" style="border:1px solid gray;border-collapse:collapse;">';
 		$return .= '<input checked="checked" id="idNone" name="prerequisites" style="margin-left:0; margin-right:10px;" type="radio" />';
@@ -8694,7 +8694,7 @@ class learnpath {
             //error_log(__LINE__.'getting document from '.$sys_course_path.$_course['path'].'/'.$file_path.' removing '.$sys_course_path.$_course['path'].'/',0);
 			$dest_file = $archive_path.$temp_dir_short.'/'.$file_path;
 			$this->create_path($dest_file);
-			//error_log('copy '.api_get_path('SYS_COURSE_PATH').$_course['path'].'/'.$file_path.' to '.api_get_path('SYS_ARCHIVE_PATH').$temp_dir_short.'/'.$file_path,0);
+			//error_log('copy '.api_get_path(SYS_COURSE_PATH).$_course['path'].'/'.$file_path.' to '.api_get_path(SYS_ARCHIVE_PATH).$temp_dir_short.'/'.$file_path,0);
 			//echo $main_path.$file_path.'<br>';
 			@copy($sys_course_path.$_course['path'].'/'.$file_path,$dest_file);
 			//check if the file needs a link update
@@ -8726,7 +8726,7 @@ class learnpath {
 			if(empty($file_path)){continue;}
 			//error_log(__LINE__.'checking existence of '.$main_path.$file_path.'',0);
             if(!is_file($main_path.$file_path) || !is_readable($main_path.$file_path)){continue;}
-			//error_log(__LINE__.'getting document from '.$main_path.$file_path.' removing '.api_get_path('SYS_COURSE_PATH').$_course['path'].'/',0);
+			//error_log(__LINE__.'getting document from '.$main_path.$file_path.' removing '.api_get_path(SYS_COURSE_PATH).$_course['path'].'/',0);
 			$dest_file = $archive_path.$temp_dir_short.'/document/'.$file_path;
 			$this->create_path($dest_file);
 			//error_log('Created path '.api_get_path(SYS_ARCHIVE_PATH).$temp_dir_short.'/document/'.$file_path,0);

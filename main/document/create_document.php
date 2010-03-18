@@ -169,9 +169,9 @@ require_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
 require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
 if (isset($_REQUEST['certificate'])) {
-	$nameTools = get_lang('CreateCertificate');	
+	$nameTools = get_lang('CreateCertificate');
 } else {
-	$nameTools = get_lang('CreateDocument');	
+	$nameTools = get_lang('CreateDocument');
 }
 
 $nameTools = get_lang('CreateDocument');
@@ -231,19 +231,19 @@ $html_editor_config = array(
 	'InDocument' => true,
 	'CreateDocumentDir' => $relative_url,
 	'CreateDocumentWebDir' => (empty($group_properties['directory']))
-		? api_get_path('WEB_COURSE_PATH').$_course['path'].'/document/'
-		: api_get_path('WEB_COURSE_PATH').api_get_course_path().'/document'.$group_properties['directory'].'/',
-	'BaseHref' => api_get_path('WEB_COURSE_PATH').$_course['path'].'/document'.$dir
+		? api_get_path(WEB_COURSE_PATH).$_course['path'].'/document/'
+		: api_get_path(WEB_COURSE_PATH).api_get_course_path().'/document'.$group_properties['directory'].'/',
+	'BaseHref' => api_get_path(WEB_COURSE_PATH).$_course['path'].'/document'.$dir
 );
 
-$filepath = api_get_path('SYS_COURSE_PATH').$_course['path'].'/document'.$dir;
+$filepath = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document'.$dir;
 
 if (!is_dir($filepath)) {
-	$filepath = api_get_path('SYS_COURSE_PATH').$_course['path'].'/document/';
+	$filepath = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document/';
 	$dir = '/';
 }
 
-//I'm in the certification module?  
+//I'm in the certification module?
 $is_certificate_mode = false;
 $is_certificate_array = explode('/',$_GET['dir']);
 array_shift($is_certificate_array);
@@ -266,7 +266,7 @@ if (!$is_certificate_mode) {
 	}
 	$interbreadcrumb[] = array ("url" => "./document.php?curdirpath=".urlencode($_GET['dir']).$req_gid, "name" => get_lang('Documents'));
 } else {
-	$interbreadcrumb[]= array (	'url' => '../gradebook/'.$_SESSION['gradebook_dest'], 'name' => get_lang('Gradebook'));	
+	$interbreadcrumb[]= array (	'url' => '../gradebook/'.$_SESSION['gradebook_dest'], 'name' => get_lang('Gradebook'));
 }
 
 if (!$is_allowed_in_course) {
@@ -296,8 +296,8 @@ $form->addElement('header', '', $nameTools);
 if (isset($_REQUEST['certificate'])) {//added condition for certicate in gradebook
 	$form->addElement('hidden','certificate','true',array('id'=>'certificate'));
 	if (isset($_GET['selectcat']))
-		$form->addElement('hidden','selectcat',intval($_GET['selectcat']));	
-	
+		$form->addElement('hidden','selectcat',intval($_GET['selectcat']));
+
 }
 $renderer = & $form->defaultRenderer();
 
@@ -366,7 +366,7 @@ if ($is_certificate_mode)
 	$form->addGroup($group, 'filename_group', get_lang('CertificateName') ,'&nbsp;&nbsp;&nbsp;', false);
 else
 	$form->addGroup($group, 'filename_group', api_get_setting('use_document_title') == 'true' ? get_lang('Title') : get_lang('FileName') ,'&nbsp;&nbsp;&nbsp;', false);
-	
+
 $form->addRule('filename_group', get_lang('ThisFieldIsRequired'), 'required');
 
 if (api_get_setting('use_document_title') == 'true') {
@@ -397,9 +397,9 @@ $form->add_html_editor('content','', false, false, $html_editor_config);
 //$form->addElement('textarea', 'comment', get_lang('Comment'), array ('rows' => 5, 'cols' => 50));
 if ($is_certificate_mode)
 	$form->addElement('style_submit_button', 'submit', get_lang('CreateCertificate'), 'class="save"');
-else 
+else
 	$form->addElement('style_submit_button', 'submit', get_lang('langCreateDoc'), 'class="save"');
-	
+
 $form->setDefaults($default);
 
 // HTML
@@ -439,7 +439,7 @@ if ($form->validate()) {
 	}
 	if ($fp = @fopen($filepath.$filename.'.'.$extension, 'w')) {
 		$content = text_filter($content);
-		$content = str_replace(api_get_path('WEB_COURSE_PATH'), $_configuration['url_append'].'/courses/', $content);
+		$content = str_replace(api_get_path(WEB_COURSE_PATH), $_configuration['url_append'].'/courses/', $content);
 		// change the path of mp3 to absolute
 		// first regexp deals with ../../../ urls
 		// Disabled by Ivan Tcholakov.
@@ -485,10 +485,10 @@ if ($form->validate()) {
 				Database::query("UPDATE $TABLE_DOCUMENT SET".substr($ct, 1)." WHERE id = '$document_id'");
 			}
 			$dir= substr($dir,0,-1);
-			$selectcat = '';			
+			$selectcat = '';
 			if (isset($_REQUEST['selectcat']))
 				$selectcat = "&selectcat=".Security::remove_XSS($_REQUEST['selectcat']);
-			header('Location: document.php?curdirpath='.urlencode($dir).$selectcat); 
+			header('Location: document.php?curdirpath='.urlencode($dir).$selectcat);
 			exit ();
 		} else {
 			Display :: display_header($nameTools, 'Doc');
@@ -516,10 +516,10 @@ if ($form->validate()) {
 	}
 	echo '<div class="actions">';
 	// link back to the documents overview
-	if ($is_certificate_mode) 
+	if ($is_certificate_mode)
 		echo '<a href="document.php?curdirpath='.Security::remove_XSS($_GET['dir']).'&selectcat=' . Security::remove_XSS($_GET['selectcat']).'">'.Display::return_icon('back.png',get_lang('Back').' '.get_lang('To').' '.get_lang('CertificateOverview')).get_lang('Back').' '.get_lang('To').' '.get_lang('CertificateOverview').'</a>';
-	else 
-		echo '<a href="document.php?curdirpath='.Security::remove_XSS($_GET['dir']).'">'.Display::return_icon('back.png',get_lang('Back').' '.get_lang('To').' '.get_lang('DocumentsOverview')).get_lang('BackTo').' '.get_lang('DocumentsOverview').'</a>';	
+	else
+		echo '<a href="document.php?curdirpath='.Security::remove_XSS($_GET['dir']).'">'.Display::return_icon('back.png',get_lang('Back').' '.get_lang('To').' '.get_lang('DocumentsOverview')).get_lang('BackTo').' '.get_lang('DocumentsOverview').'</a>';
 	echo '</div>';
 	$form->display();
 	Display :: display_footer();

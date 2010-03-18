@@ -510,7 +510,7 @@ class FCKeditor
 				$config['BaseHref'] = api_get_path(WEB_PATH).'home/default_platform_document/';
 			} else {
 				// 4. The user is outside courses.
-				$config['CreateDocumentWebDir'] = api_get_path('WEB_PATH').'main/upload/users/'.api_get_user_id().'/my_files/';
+				$config['CreateDocumentWebDir'] = api_get_path(WEB_PATH).'main/upload/users/'.api_get_user_id().'/my_files/';
 				$config['CreateDocumentDir'] = $relative_path_prefix.'upload/users/'.api_get_user_id().'/my_files/';
 				$config['BaseHref'] = $script_path;
 			}

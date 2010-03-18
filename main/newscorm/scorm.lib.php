@@ -54,7 +54,7 @@ function removescormDir($dir)
         if ($pos) {  //so we have the imsmanifest in this dir
                      //from d:/myworks/dokeos/dokeos_cvs/dokeos/dokeos/courses/CVSCODE4/scorm/LP2/LP2
                     //we have to get /LP2/LP2
-          $path=api_get_path('SYS_COURSE_PATH').$_course['official_code'].'/scorm';
+          $path=api_get_path(SYS_COURSE_PATH).$_course['official_code'].'/scorm';
           $pos=strpos($dir,$path);
           if ($pos==0) {
             $scormdir=substr($dir,strlen($path),strlen($dir)-strlen($path));

@@ -25,7 +25,7 @@ function validate_data($users) {
 	global $defined_auth_sources;
 	$errors = array();
 	$usernames = array();
-	
+
 	// 1. Check if mandatory fields are set.
 	$mandatory_fields = array('LastName', 'FirstName');
 	if (api_get_setting('registration', 'email') == 'true') {
@@ -38,7 +38,7 @@ function validate_data($users) {
 				$errors[] = $user;
 			}
 		}
-		
+
 		// 2. Check username, first, check whether it is empty.
 		if (!UserManager::is_username_empty($user['UserName'])) {
 			// 2.1. Check whether username is too long.
@@ -173,7 +173,7 @@ function save_data($users) {
 			if ($send_mail) {
 				$recipient_name = api_get_person_name($user['FirstName'], $user['LastName'], null, PERSON_NAME_EMAIL_ADDRESS);
 				$emailsubject = '['.api_get_setting('siteName').'] '.get_lang('YourReg').' '.api_get_setting('siteName');
-				$emailbody = get_lang('Dear').' '.api_get_person_name($user['FirstName'], $user['LastName']).",\n\n".get_lang('YouAreReg')." ".api_get_setting('siteName')." ".get_lang('WithTheFollowingSettings')."\n\n".get_lang('Username')." : $user[UserName]\n".get_lang('Pass')." : $user[Password]\n\n".get_lang('Address')." ".api_get_setting('siteName')." ".get_lang('Is')." : ".api_get_path('WEB_PATH')." \n\n".get_lang('Problem')."\n\n".get_lang('Formula').",\n\n".api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'))."\n".get_lang('Manager')." ".api_get_setting('siteName')."\nT. ".api_get_setting('administratorTelephone')."\n".get_lang('Email')." : ".api_get_setting('emailAdministrator')."";
+				$emailbody = get_lang('Dear').' '.api_get_person_name($user['FirstName'], $user['LastName']).",\n\n".get_lang('YouAreReg')." ".api_get_setting('siteName')." ".get_lang('WithTheFollowingSettings')."\n\n".get_lang('Username')." : $user[UserName]\n".get_lang('Pass')." : $user[Password]\n\n".get_lang('Address')." ".api_get_setting('siteName')." ".get_lang('Is')." : ".api_get_path(WEB_PATH)." \n\n".get_lang('Problem')."\n\n".get_lang('Formula').",\n\n".api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'))."\n".get_lang('Manager')." ".api_get_setting('siteName')."\nT. ".api_get_setting('administratorTelephone')."\n".get_lang('Email')." : ".api_get_setting('emailAdministrator')."";
 				$sender_name = api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS);
 				$email_admin = api_get_setting('emailAdministrator');
 				@api_mail($recipient_name, $user['Email'], $emailsubject, $emailbody, $sender_name, $email_admin);
@@ -291,17 +291,17 @@ if ($_POST['formSent'] AND $_FILES['import_file']['size'] !== 0) {
 	$file_type = $_POST['file_type'];
 	Security::clear_token();
 	$tok = Security::get_token();
-	$allowed_file_mimetype = array('csv','xml');	
+	$allowed_file_mimetype = array('csv','xml');
 	$error_kind_file = false;
-	
+
 	$ext_import_file = substr($_FILES['import_file']['name'],(strrpos($_FILES['import_file']['name'],'.')+1));
-	
+
 	if (in_array($ext_import_file,$allowed_file_mimetype)) {
-		if (strcmp($file_type, 'csv') === 0 && $ext_import_file==$allowed_file_mimetype[0]) { 
-			$users	= parse_csv_data($_FILES['import_file']['tmp_name']);		
-			$errors = validate_data($users);		
+		if (strcmp($file_type, 'csv') === 0 && $ext_import_file==$allowed_file_mimetype[0]) {
+			$users	= parse_csv_data($_FILES['import_file']['tmp_name']);
+			$errors = validate_data($users);
 			$error_kind_file = false;
-		} elseif (strcmp($file_type, 'xml') === 0 && $ext_import_file==$allowed_file_mimetype[1]) { 
+		} elseif (strcmp($file_type, 'xml') === 0 && $ext_import_file==$allowed_file_mimetype[1]) {
 			$users = parse_xml_data($_FILES['import_file']['tmp_name']);
 			$errors = validate_data($users);
 			$error_kind_file = false;
@@ -330,12 +330,12 @@ if ($_POST['formSent'] AND $_FILES['import_file']['size'] !== 0) {
 	$inserted_in_course = array();
 	// this replace if (strcmp($_FILES['import_file']['type'], 'text/'.$file_type.'') === 0)
 	if (strcmp($file_type, 'csv') === 0) {
-		save_data($users_to_insert);		
-	} elseif (strcmp($file_type, 'xml') === 0) {		
-		save_data($users_to_insert);		
-	} else {		
+		save_data($users_to_insert);
+	} elseif (strcmp($file_type, 'xml') === 0) {
+		save_data($users_to_insert);
+	} else {
 		$error_message = get_lang('YouMustImportAFileAccordingToSelectedOption');
-	}	
+	}
 
 	if (count($errors) > 0) {
 		$see_message_import = get_lang('FileImportedJustUsersThatAreNotRegistered');
@@ -353,7 +353,7 @@ if ($_POST['formSent'] AND $_FILES['import_file']['size'] !== 0) {
 		$msg2 .= '</br>';
 	}
 	*/
-	
+
 	if (count($errors) != 0) {
 		$warning_message = '<ul>';
 		foreach ($errors as $index => $error_user) {
@@ -362,19 +362,19 @@ if ($_POST['formSent'] AND $_FILES['import_file']['size'] !== 0) {
 			$warning_message .= '</li>';
 		}
 		$warning_message .= '</ul>';
-	} 
-	
+	}
+
 	// if the warning message is too long then we display the warning message trough a session
 	if (api_strlen($warning_message) > 150) {
 		$_SESSION['session_message_import_users'] = $warning_message;
 		$warning_message = 'session_message';
 	}
-    
+
     if ($error_kind_file) {
 		$error_message = get_lang('YouMustImportAFileAccordingToSelectedOption');
 	} else {
 		header('Location: '.api_get_path(WEB_CODE_PATH).'admin/user_list.php?action=show_message&warn='.urlencode($warning_message).'&message='.urlencode($see_message_import).'&sec_token='.$tok);
-		exit;	
+		exit;
 	}
 
 }
@@ -442,7 +442,7 @@ if ($count_fields > 0) {
         <b>&lt;Email&gt;xxx&lt;/Email&gt;</b>
         &lt;OfficialCode&gt;xxx&lt;/OfficialCode&gt;
         &lt;PhoneNumber&gt;xxx&lt;/PhoneNumber&gt;
-        &lt;Status&gt;user/teacher/drh<?php if ($result_xml != '') { echo '<br /><font style="color:red;">', $result_xml; echo '</font>'; } ?>&lt;/Status&gt;       
+        &lt;Status&gt;user/teacher/drh<?php if ($result_xml != '') { echo '<br /><font style="color:red;">', $result_xml; echo '</font>'; } ?>&lt;/Status&gt;
         &lt;Courses&gt;xxx1|xxx2|xxx3&lt;/Courses&gt;
         &lt;/Contact&gt;
 &lt;/Contacts&gt;

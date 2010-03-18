@@ -226,7 +226,7 @@ if (isset($_POST['save_audio']))
 
 			// create the audio folder if it does not exist yet
 			global $_course;
-			$filepath = api_get_path('SYS_COURSE_PATH').$_course['path'].'/document/';
+			$filepath = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document/';
 			if(!is_dir($filepath.'audio'))
 			{
 				mkdir($filepath.'audio', api_get_permissions_for_new_directories());
@@ -244,7 +244,7 @@ if (isset($_POST['save_audio']))
 			//no "dangerous" files
 			$clean_name = disable_dangerous_file($clean_name);
 
-			$check_file_path = api_get_path('SYS_COURSE_PATH').$_course['path'].'/document/audio/'.$clean_name;
+			$check_file_path = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document/audio/'.$clean_name;
 
 			// if the file exists we generate a new name
 			if (file_exists($check_file_path)) {
@@ -262,7 +262,7 @@ if (isset($_POST['save_audio']))
 
 			// upload the file in the documents tool
 			include_once(api_get_path(LIBRARY_PATH) . 'fileUpload.lib.php');
-			$file_path = handle_uploaded_document($_course, $_FILES[$key],api_get_path('SYS_COURSE_PATH').$_course['path'].'/document','/audio',api_get_user_id(),'','','','','',false);
+			$file_path = handle_uploaded_document($_course, $_FILES[$key],api_get_path(SYS_COURSE_PATH).$_course['path'].'/document','/audio',api_get_user_id(),'','','','','',false);
 
 			// getting the filename only
 			$file_components = explode('/',$file_path);

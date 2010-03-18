@@ -101,7 +101,7 @@ $doc = basename($file);
 //echo('doc: '.$doc.'<br />');
 $dir = Security::remove_XSS($_GET['curdirpath']);
 
-//I'm in the certification module?  
+//I'm in the certification module?
 $is_certificate_mode = DocumentManager::is_certificate_mode($dir);
 
 
@@ -136,9 +136,9 @@ $html_editor_config = array(
 	'InDocument' => true,
 	'CreateDocumentDir' => $relative_url,
 	'CreateDocumentWebDir' => (empty($group_properties['directory']))
-		? api_get_path('WEB_COURSE_PATH').$_course['path'].'/document/'
-		: api_get_path('WEB_COURSE_PATH').api_get_course_path().'/document'.$group_properties['directory'].'/',
-	'BaseHref' =>  api_get_path('WEB_COURSE_PATH').$_course['path'].'/document'.$dir
+		? api_get_path(WEB_COURSE_PATH).$_course['path'].'/document/'
+		: api_get_path(WEB_COURSE_PATH).api_get_course_path().'/document'.$group_properties['directory'].'/',
+	'BaseHref' =>  api_get_path(WEB_COURSE_PATH).$_course['path'].'/document'.$dir
 );
 
 $use_document_title = api_get_setting('use_document_title') == 'true';
@@ -164,10 +164,10 @@ if ($dir[strlen($dir) - 1] != '/') {
 	$dir .= '/';
 }
 
-$filepath = api_get_path('SYS_COURSE_PATH').$_course['path'].'/document'.$dir;
+$filepath = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document'.$dir;
 
 if (!is_dir($filepath)) {
-	$filepath = api_get_path('SYS_COURSE_PATH').$_course['path'].'/document/';
+	$filepath = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document/';
 	$dir = '/';
 }
 
@@ -182,8 +182,8 @@ if (!empty($_SESSION['_gid'])) {
 $my_cur_dir_path = Security::remove_XSS($_GET['curdirpath']);
 if (!$is_certificate_mode)
 	$interbreadcrumb[]=array("url"=>"./document.php?curdirpath=".urlencode($my_cur_dir_path).$req_gid, "name"=> get_lang('Documents'));
-else 
-	$interbreadcrumb[]= array (	'url' => '../gradebook/'.$_SESSION['gradebook_dest'], 'name' => get_lang('Gradebook'));	
+else
+	$interbreadcrumb[]= array (	'url' => '../gradebook/'.$_SESSION['gradebook_dest'], 'name' => get_lang('Gradebook'));
 
 
 $is_allowedToEdit = is_allowed_to_edit() || $_SESSION['group_member_with_upload_rights'];
@@ -440,7 +440,7 @@ if (file_exists($filepath.$doc)) {
 	if (in_array($extension, array('html', 'htm'))) {
 		$content = file($filepath.$doc);
 		$content = implode('', $content);
-		$path_to_append = api_get_path('WEB_COURSE_PATH').$_course['path'].'/document'.$dir;
+		$path_to_append = api_get_path(WEB_COURSE_PATH).$_course['path'].'/document'.$dir;
 		$content = str_replace('="./', '="'.$path_to_append, $content);
 		$content = str_replace('mp3player.swf?son=.%2F', 'mp3player.swf?son='.urlencode($path_to_append), $content);
 	}
@@ -544,11 +544,11 @@ if ($owner_id == $_user['user_id'] || api_is_platform_admin() || $is_allowed_to_
 	}
 		if ($is_certificate_mode)
 		$form->addElement('style_submit_button', 'submit', get_lang('SaveCertificate'), 'class="save"');
-	else 
+	else
 		$form->addElement('style_submit_button','submit',get_lang('SaveDocument'), 'class="save"');
-	
-	
-	
+
+
+
 	$defaults['filename'] = $filename;
 	$defaults['extension'] = $extension;
 	$defaults['file_path'] = Security::remove_XSS($_GET['file']);
@@ -571,7 +571,7 @@ if (isset($_REQUEST['curdirpath']) && $_GET['curdirpath']=='/certificates') {
 		}
 		$create_certificate=get_lang('CreateCertificateWithTags');
 		Display::display_normal_message($create_certificate.': <br /><br />'.$str_info,false);
-	}	
+	}
 	if ($is_certificate_mode) {
 		echo '<div class="actions">';
 				echo '<a href="document.php?curdirpath='.Security::remove_XSS($_GET['curdirpath']).'&selectcat=' . Security::remove_XSS($_GET['selectcat']).'">'.Display::return_icon('back.png',get_lang('Back').' '.get_lang('To').' '.get_lang('CertificateOverview')).get_lang('Back').' '.get_lang('To').' '.get_lang('CertificateOverview').'</a>';

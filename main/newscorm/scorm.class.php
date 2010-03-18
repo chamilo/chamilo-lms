@@ -371,7 +371,7 @@ class scorm extends learnpath {
 		{
 			$is_session=api_get_session_id();
 			$is_session!=0?$session_id=$is_session:$session_id=0;
-					
+
 			$oOrganization =& $this->organizations[$id];
 	     	//prepare and execute insert queries
 	     	//-for learnpath
@@ -394,7 +394,7 @@ class scorm extends learnpath {
 					"VALUES (2,'".$myname."', '".$oOrganization->get_ref()."','','".$this->subdir."', 0, 'embedded', '".$this->manifest_encoding."','scorm_api.php',$dsp,$session_id)";
 			if($this->debug>1){error_log('New LP - In import_manifest(), inserting path: '. $sql,0);}
 
-			
+
 			$res = Database::query($sql);
 			$lp_id = Database::insert_id();
 			$this->lp_id = $lp_id;
@@ -565,7 +565,7 @@ class scorm extends learnpath {
      	require_once(api_get_path(LIBRARY_PATH).'document.lib.php');
      	$maxFilledSpace = DocumentManager :: get_course_quota();
      	//$maxFilledSpace = 1000000000;
-     	
+
      	$zip_file_path = $zip_file_info['tmp_name'];
      	$zip_file_name = $zip_file_info['name'];
      	if($this->debug>1){error_log('New LP - import_package() - zip file path = '.$zip_file_path.', zip file name = '.$zip_file_name,0);}
@@ -877,8 +877,8 @@ class scorm extends learnpath {
 		$LPnamesafe = $list[0];
 		//$zipfoldername = '/tmp';
 		//$zipfoldername = '../../courses/'.$_course['directory']."/temp/".$LPnamesafe;
-		$zipfoldername = api_get_path('SYS_COURSE_PATH').$_course['directory']."/temp/".$LPnamesafe;
-		$scormfoldername = api_get_path('SYS_COURSE_PATH').$_course['directory']."/scorm/".$LPnamesafe;
+		$zipfoldername = api_get_path(SYS_COURSE_PATH).$_course['directory']."/temp/".$LPnamesafe;
+		$scormfoldername = api_get_path(SYS_COURSE_PATH).$_course['directory']."/scorm/".$LPnamesafe;
 		$zipfilename = $zipfoldername."/".$LPnamesafe.".zip";
 
 		//Get a temporary dir for creating the zip file
@@ -1016,9 +1016,9 @@ class scorm extends learnpath {
 				$this->subdir = $row['path'];
 		}
 	  	//parse the manifest (it is already in this lp's details)
-	  	$manifest_file = api_get_path('SYS_COURSE_PATH').$_course['directory'].'/scorm/'.$this->subdir.'/imsmanifest.xml';
+	  	$manifest_file = api_get_path(SYS_COURSE_PATH).$_course['directory'].'/scorm/'.$this->subdir.'/imsmanifest.xml';
 	  	if($this->subdir == ''){
-	  		$manifest_file = api_get_path('SYS_COURSE_PATH').$_course['directory'].'/scorm/imsmanifest.xml';
+	  		$manifest_file = api_get_path(SYS_COURSE_PATH).$_course['directory'].'/scorm/imsmanifest.xml';
 	  	}
 	  	echo $manifest_file;
 	  	if(is_file($manifest_file) && is_readable($manifest_file)){

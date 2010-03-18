@@ -182,8 +182,8 @@ function load_personal_templates($user_id=0) {
 	$result_template = Database::query($sql);
 	while ($row = Database::fetch_array($result_template))
 	{
-		$row['content'] = file_get_contents(api_get_path('SYS_COURSE_PATH').$_course['path'].'/document'.$row['path']);
-		//$row['content'] = api_get_path('SYS_COURSE_PATH').$_course['path'].'/document'.$row['path'];
+		$row['content'] = file_get_contents(api_get_path(SYS_COURSE_PATH).$_course['path'].'/document'.$row['path']);
+		//$row['content'] = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document'.$row['path'];
 
 		if (!empty($row['image']))
 		{

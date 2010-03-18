@@ -86,7 +86,7 @@ class SystemAnnouncementManager
 	public static function display_all_announcements($visible, $id = -1,$start = 0,$user_id='')
 	{
 		$user_selected_language = api_get_interface_language();
-		$start	= intval($start);		
+		$start	= intval($start);
 
 		$db_table = Database :: get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
 		$sql = "SELECT *, DATE_FORMAT(date_start,'%d-%m-%Y') AS display_date FROM ".$db_table."
@@ -148,7 +148,7 @@ class SystemAnnouncementManager
 				echo '</tr>';
 			echo '</table>';
 			echo '</div>';
-		}		
+		}
 	}
 
 	public static function display_fleche($user_id)
@@ -260,11 +260,11 @@ class SystemAnnouncementManager
 		$end = $date_end[0]."-".$date_end[1]."-".$date_end[2]." ".$date_end[3].":".$date_end[4].":".$date_start[5];
 		$title = Database::escape_string($title);
 		$content = Database::escape_string($content);
-		
+
 		//Fixing urls that are sent by email
-		$content = str_replace('src=\"/home/', 'src=\"'.api_get_path('WEB_PATH').'home/', $content);
-		$content = str_replace('file=/home/', 'file='.api_get_path('WEB_PATH').'home/', $content);		
-		
+		$content = str_replace('src=\"/home/', 'src=\"'.api_get_path(WEB_PATH).'home/', $content);
+		$content = str_replace('file=/home/', 'file='.api_get_path(WEB_PATH).'home/', $content);
+
 		$lang = is_null($lang) ? 'NULL' : "'".Database::escape_string($lang)."'";
 		$sql = "INSERT INTO ".$db_table." (title,content,date_start,date_end,visible_teacher,visible_student,visible_guest, lang)
 				VALUES ('".$title."','".$content."','".$start."','".$end."','".$visible_teacher."','".$visible_student."','".$visible_guest."',".$lang.")";
@@ -310,11 +310,11 @@ class SystemAnnouncementManager
 		$end = $date_end[0]."-".$date_end[1]."-".$date_end[2]." ".$date_end[3].":".$date_end[4].":".$date_start[5];
 		$title = Database::escape_string($title);
 		$content = Database::escape_string($content);
-		
-		//Fixing urls that are sent by email    		
-		$content = str_replace('src=\"/home/', 'src=\"'.api_get_path('WEB_PATH').'home/', $content);
-		$content = str_replace('file=/home/', 'file='.api_get_path('WEB_PATH').'home/', $content);
-		
+
+		//Fixing urls that are sent by email
+		$content = str_replace('src=\"/home/', 'src=\"'.api_get_path(WEB_PATH).'home/', $content);
+		$content = str_replace('file=/home/', 'file='.api_get_path(WEB_PATH).'home/', $content);
+
 		$id = intval($id);
 		$sql = "UPDATE ".$db_table." SET lang=$lang,title='".$title."',content='".$content."',date_start='".$start."',date_end='".$end."', ";
 		$sql .= " visible_teacher = '".$visible_teacher."', visible_student = '".$visible_student."', visible_guest = '".$visible_guest."' WHERE id='".$id."'";
@@ -358,7 +358,7 @@ class SystemAnnouncementManager
 		$db_table 			= Database::get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
 		$visible			= intval($visible);
 		$announcement_id 	= intval($announcement_id);
-		
+
 		$field = ($user == VISIBLE_TEACHER ? 'visible_teacher' : ($user == VISIBLE_STUDENT ? 'visible_student' : 'visible_guest'));
 		$sql = "UPDATE ".$db_table." SET ".$field." = '".$visible."' WHERE id='".$announcement_id."'";
 		return Database::query($sql);
@@ -383,7 +383,7 @@ class SystemAnnouncementManager
 			return true;
 		}
 		$result = Database::query($sql);
-		while($row = Database::fetch_array($result,'ASSOC')) {	
+		while($row = Database::fetch_array($result,'ASSOC')) {
 			@api_mail_html(api_get_person_name($row['firstname'], $row['lastname'], null, PERSON_NAME_EMAIL_ADDRESS), $row['email'], api_html_entity_decode(stripslashes($title), ENT_QUOTES, $charset), api_html_entity_decode(stripslashes(str_replace(array('\r\n', '\n', '\r'),'',$content)), ENT_QUOTES, $charset), api_get_person_name($_user['firstName'], $_user['lastName'], null, PERSON_NAME_EMAIL_ADDRESS), api_get_setting('emailAdministrator'), api_get_setting('emailAdministrator'));
 		}
 	}

@@ -69,14 +69,12 @@ function getpar($name, $description, $default = '')
 
 function get_course_path()
 {
-    return function_exists('api_get_path') ? // 1.6
-        api_get_path('SYS_COURSE_PATH') : api_get_path(SYS_PATH);  // 1.5.4
+    return api_get_path(SYS_COURSE_PATH);
 }
 
 function get_course_web()
 {
-    return function_exists('api_get_path') ? // 1.6
-        api_get_path('WEB_COURSE_PATH') : api_get_path(WEB_PATH);  // 1.5.4
+    return api_get_path(WEB_COURSE_PATH);
 }
 
 

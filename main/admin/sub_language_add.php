@@ -48,9 +48,9 @@ function add_sub_language ($original_name,$english_name,$isocode,$sublanguage_av
  * @param   string  English language name (occitan, wallon, flanders)
  * @param   string  ISO code (fr_FR, ...)
  * @param   int     Whether the sublanguage is published (0=unpublished, 1=published)
- * @return  array   Array describing the number of items found that match the 
- *                  current language insert attempt (original_name => true, 
- *                  english_name => true, isocode => true, 
+ * @return  array   Array describing the number of items found that match the
+ *                  current language insert attempt (original_name => true,
+ *                  english_name => true, isocode => true,
  *                  execute_add => true/false). If execute_add is true, then we
  *                  can proceed.
  * @todo This function is not transaction-safe and should probably be included
@@ -93,7 +93,7 @@ function check_if_language_exist ($original_name,$english_name,$isocode,$sublang
 }
 
 /**
- * Get the name of a language by id. This is just a wrapper for the 
+ * Get the name of a language by id. This is just a wrapper for the
  * SubLanguageManager::get_name_of_language_by_id() method and should not exist
  * @param   int     Language ID
  * @return  string  Language name
@@ -103,7 +103,7 @@ function get_name_of_language_by_id ($language_id) {
 	return SubLanguageManager::get_name_of_language_by_id($language_id);
 }
 /**
- * Check if language exist, given its ID. This is just a wrapper for the 
+ * Check if language exist, given its ID. This is just a wrapper for the
  * SubLanguageManager::check_if_exist_language_by_id() method and should not exist
  * @param   int     Language ID
  * @return  bool
@@ -254,7 +254,7 @@ if (isset($_POST['SubmitAddNewLanguage'])) {
 			$english_name=str_replace(' ','_',$english_name);
 			$isocode=str_replace(' ','_',$isocode);
 			$str_info='<br/>'.get_lang('OriginalName').' : '.$original_name.'<br/>'.get_lang('EnglishName').' : '.$english_name.'<br/>'.get_lang('PlatformCharsetTitle').' : '.$isocode;
-			$path=api_get_path('SYS_LANG_PATH').$english_name;
+			$path=api_get_path(SYS_LANG_PATH).$english_name;
 
 			$mkdir_result=add_directory_of_sub_language($path);
 			if ($mkdir_result) {
@@ -275,7 +275,7 @@ if (isset($_POST['SubmitAddNewLanguage'])) {
 	}
 }
 if (isset($_POST['SubmitAddDeleteLanguage'])) {
-	$path=api_get_path('SYS_LANG_PATH').$english_name;
+	$path=api_get_path(SYS_LANG_PATH).$english_name;
 	if (is_dir($path)) {
 		$rs=remove_directory_of_sub_language($path);
 		if ($rs===true) {

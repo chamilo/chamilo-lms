@@ -993,7 +993,7 @@ if (($content == "Exercise") or ($content == "HotPotatoes"))
 	{
 		$uploadPath = "/HotPotatoes_files";
 		$TBL_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT);
-		$documentPath = api_get_path('SYS_COURSE_PATH').$_course['path'].'/document';
+		$documentPath = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';
 		$sql = "SELECT * FROM ".$TBL_DOCUMENT." WHERE (path LIKE '%htm%' OR path LIKE '%html%') AND path LIKE '".$uploadPath."/%/%' ORDER BY `id` ASC";
 		$result = Database::query($sql);
 		while ($myrow = Database::fetch_array($result))

@@ -2208,7 +2208,7 @@ function exportpath($learnpath_id)
 	$LPnamesafe = replace_dangerous_char($LPname, 'strict');
 
 	//3 Get a temporary dir for creating the zip file
-	$expdir = api_get_path('SYS_COURSE_PATH').$_course['path']."/temp/".$LPnamesafe;
+	$expdir = api_get_path(SYS_COURSE_PATH).$_course['path']."/temp/".$LPnamesafe;
 	$fromdir = '../scorm/export/'; //this dir contains some standard files
 
 	deldir($expdir); //make sure the temp dir is cleared
@@ -2288,18 +2288,18 @@ function exportpath($learnpath_id)
 	//8 put the files in the exportdir into a zip and force download
 	include_once (api_get_path(LIBRARY_PATH)."pclzip/pclzip.lib.php");
 	//create zipfile of given directory
-	$zip_folder = new PclZip(api_get_path('SYS_COURSE_PATH').$_course['path']."/temp/".$LPnamesafe.".zip");
+	$zip_folder = new PclZip(api_get_path(SYS_COURSE_PATH).$_course['path']."/temp/".$LPnamesafe.".zip");
 
-	$zip_folder->create(api_get_path('SYS_COURSE_PATH').$_course['path']."/temp/".$LPnamesafe."/", PCLZIP_OPT_REMOVE_PATH, api_get_path('SYS_COURSE_PATH').$_course['path']."/temp/");
-	//api_get_path('SYS_COURSE_PATH').$_course['path']."/temp/".$LPnamesafe); // whitout folder
+	$zip_folder->create(api_get_path(SYS_COURSE_PATH).$_course['path']."/temp/".$LPnamesafe."/", PCLZIP_OPT_REMOVE_PATH, api_get_path(SYS_COURSE_PATH).$_course['path']."/temp/");
+	//api_get_path(SYS_COURSE_PATH).$_course['path']."/temp/".$LPnamesafe); // whitout folder
 
 	// modified by imandak80
 
-	/*	copy(api_get_path('SYS_COURSE_PATH').$_course['path']."/temp/".$LPnamesafe.".zip",
-			 api_get_path('SYS_COURSE_PATH').$_course['path']."/document/".$LPnamesafe.".zip");
+	/*	copy(api_get_path(SYS_COURSE_PATH).$_course['path']."/temp/".$LPnamesafe.".zip",
+			 api_get_path(SYS_COURSE_PATH).$_course['path']."/document/".$LPnamesafe.".zip");
 	*/
 
-	$zipfoldername = api_get_path('SYS_COURSE_PATH').$_course['path']."/temp/".$LPnamesafe;
+	$zipfoldername = api_get_path(SYS_COURSE_PATH).$_course['path']."/temp/".$LPnamesafe;
 	$zipfilename = $zipfoldername.".zip";
 	DocumentManager :: file_send_for_download($zipfilename, false, basename($LPnamesafe.".zip"));
 
@@ -2330,7 +2330,7 @@ function exportSCORM($scormname, $course)
 	global $_course;
 
 	//initialize
-	$tmpname = api_get_path('SYS_COURSE_PATH').$_course['path']."/scorm";
+	$tmpname = api_get_path(SYS_COURSE_PATH).$_course['path']."/scorm";
 	$zipfoldername = $tmpname.$scormname;
 	$zipfilename = $zipfoldername.".zip";
 

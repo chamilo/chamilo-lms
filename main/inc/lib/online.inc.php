@@ -147,7 +147,7 @@ function WhoIsOnline($valid, $friends = false)
 			if ($friends) {
 				// 	friends from social network is online
 				$query = "SELECT distinct login_user_id,login_date
-							FROM $track_online_table track						
+							FROM $track_online_table track
 							INNER JOIN $friend_user_table ON (friend_user_id = login_user_id)
 							WHERE track.access_url_id =  $access_url_id AND DATE_ADD(login_date,INTERVAL $valid MINUTE) >= '".$current_date."' AND friend_user_id <> '".api_get_user_id()."' AND relation_type='".USER_RELATION_TYPE_FRIEND."'  ";
 			} else {
@@ -252,7 +252,7 @@ function chatcall() {
 				. get_lang("Yes")
 				."</a>"
 				."&nbsp;&nbsp;|&nbsp;&nbsp;"
-				."<a href=\"".api_get_path('WEB_PATH')."webchatdeny.php\">"
+				."<a href=\"".api_get_path(WEB_PATH)."webchatdeny.php\">"
 				. get_lang("No")
 				."</a>"
 				."</p>";

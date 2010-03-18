@@ -22,8 +22,8 @@ $dropbox_cnf['tbl_feedback'] 	= Database::get_course_table(TABLE_DROPBOX_FEEDBAC
  *  INITIALISE OTHER VARIABLES & CONSTANTS
  */
 $dropbox_cnf['courseId'] 				= $_cid;
-$dropbox_cnf['sysPath'] 				= api_get_path('SYS_COURSE_PATH') . $_course['path'] . '/dropbox'; //path to dropbox subdir in course containing the uploaded files
-$dropbox_cnf['webPath'] 				= api_get_path('WEB_COURSE_PATH') . $_course['path'] . '/dropbox';
+$dropbox_cnf['sysPath'] 				= api_get_path(SYS_COURSE_PATH) . $_course['path'] . '/dropbox'; //path to dropbox subdir in course containing the uploaded files
+$dropbox_cnf['webPath'] 				= api_get_path(WEB_COURSE_PATH) . $_course['path'] . '/dropbox';
 $dropbox_cnf['maxFilesize'] 			= api_get_setting('dropbox_max_filesize'); //file size limit as imposed by the platform admin (see Chamilo Config Settings on the platform administration section)
 //$dropbox_cnf['version'] 				= '1.4';
 $dropbox_cnf['allowOverwrite'] 			= string_2_boolean(api_get_setting('dropbox_allow_overwrite'));

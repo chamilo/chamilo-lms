@@ -81,7 +81,7 @@ if (isset($_GET['id']) && $_GET['id']==strval(intval($_GET['id']))) {
 }
 
 $language_name=get_lang('RegisterTermsOfSubLanguageForLanguage').' ( '.strtolower($language_name).' )';
-$dokeos_path_folder=api_get_path('SYS_LANG_PATH').$all_data_of_language['dokeos_folder'];
+$dokeos_path_folder=api_get_path(SYS_LANG_PATH).$all_data_of_language['dokeos_folder'];
 //
 if (!is_dir($dokeos_path_folder) || strlen($all_data_of_language['dokeos_folder'])==0) {
 	api_not_allowed(true);

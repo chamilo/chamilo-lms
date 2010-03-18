@@ -154,7 +154,7 @@ if ($is_special > 0) {
 $sys_course_path = api_get_path(SYS_COURSE_PATH);
 $course_dir = $sys_course_path . $_course['path'];
 $base_work_dir = $course_dir . '/work';
-$http_www = api_get_path('WEB_COURSE_PATH') . $_course['path'] . '/work';
+$http_www = api_get_path(WEB_COURSE_PATH) . $_course['path'] . '/work';
 $cur_dir_path = '';
 if (isset ($_GET['curdirpath']) && $_GET['curdirpath'] != '') {
 	//$cur_dir_path = preg_replace('#[\.]+/#','',$_GET['curdirpath']); //escape '..' hack attempts

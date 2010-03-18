@@ -68,9 +68,9 @@ $current_session = api_get_session_id();
 -----------------------------------------------------------
 */
 Display::display_introduction_section(TOOL_LEARNPATH, array(
-		'CreateDocumentWebDir' => api_get_path('WEB_COURSE_PATH').api_get_course_path().'/document/',
+		'CreateDocumentWebDir' => api_get_path(WEB_COURSE_PATH).api_get_course_path().'/document/',
 		'CreateDocumentDir' => '../../courses/'.api_get_course_path().'/document/',
-		'BaseHref' => api_get_path('WEB_COURSE_PATH').api_get_course_path().'/'
+		'BaseHref' => api_get_path(WEB_COURSE_PATH).api_get_course_path().'/'
 	)
 );
 

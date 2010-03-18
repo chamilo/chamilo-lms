@@ -599,7 +599,7 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
 
 		case "HotPotatoes":
 			$TBL_DOCUMENT  = $_course['dbNameGlu'].'document';
-			$documentPath=api_get_path('SYS_COURSE_PATH').$_course['path'].'/document';
+			$documentPath=api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';
 			$result = Database::query("SELECT * FROM `".$TBL_DOCUMENT."` WHERE id=$id");
 			$myrow= Database::fetch_array($result);
 			$path=$myrow["path"];
@@ -1004,7 +1004,7 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
 						echo "<div class='description'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;".shorten($desc,($length-3*$level))."</div>"; }
 				}
 			} else {
-				$s=api_get_path('WEB_COURSE_PATH')."$_cid/index.php?intro_cmdEdit=1";
+				$s = api_get_path(WEB_COURSE_PATH)."$_cid/index.php?intro_cmdEdit=1";
 				echo "<a href=\"$s\" class='$completed' target='_blank'>".shorten($name,($length-3*$level))."</a>";
 			}
 			break;
@@ -1042,7 +1042,7 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
 						echo "<div class='description'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;".shorten($desc,($length-3*$level))."</div>"; }
 				}
 			} else {
-				$s=api_get_path('WEB_CODE_PATH')."course_description";
+				$s=api_get_path(WEB_CODE_PATH)."course_description";
 				echo "<a href=\"$s\" class='$completed' target='_blank'>".shorten($name,($length-3*$level))."</a>";
 			}
 			break;
@@ -1228,7 +1228,7 @@ function get_addedresource_link_in_learnpath($type, $id, $id_in_path)
 
 		case "HotPotatoes":
 	  	    $TBL_DOCUMENT  = $_course['dbNameGlu'].'document';
-		    $documentPath=api_get_path('SYS_COURSE_PATH').$_course['path'].'/document';
+		    $documentPath=api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';
 			$result = Database::query("SELECT * FROM `".$TBL_DOCUMENT."` WHERE id=$id");
 		    $myrow= Database::fetch_array($result);
 		    $path=$myrow["path"];
@@ -1382,7 +1382,7 @@ function get_addedresource_link_in_learnpath($type, $id, $id_in_path)
 			{
 				$link .= api_get_self()."?action=closelesson&source_forum=".$_GET['source_forum']."&how=complete&id_in_path=$id_in_path&learnpath_id=$learnpath_id&type=Introduction_text&origin=$origin#$id_in_path";
 			} else {
-				$s=api_get_path('WEB_COURSE_PATH')."$_cid/index.php?intro_cmdEdit=1";
+				$s = api_get_path(WEB_COURSE_PATH)."$_cid/index.php?intro_cmdEdit=1";
 				$link .= $s;
 			}
 			break;
@@ -1391,7 +1391,7 @@ function get_addedresource_link_in_learnpath($type, $id, $id_in_path)
 			{
 				$link .= api_get_self()."?action=closelesson&source_forum=".$_GET['source_forum']."&how=complete&id_in_path=$id_in_path&learnpath_id=$learnpath_id&type=Course_description&origin=$origin#$id_in_path";
 			} else {
-				$s=api_get_path('WEB_CODE_PATH')."course_description";
+				$s=api_get_path(WEB_CODE_PATH)."course_description";
 				$link .= $s;
 			}
 			break;

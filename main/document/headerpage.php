@@ -30,5 +30,5 @@ $this_section = SECTION_COURSES;
 
 Display::display_header(null, 'Doc');
 echo '<div align="center">';
-$file_url_web = api_get_path('WEB_COURSE_PATH').$_course['path'].'/document'.$header_file.'?'.api_get_cidreq();
+$file_url_web = api_get_path(WEB_COURSE_PATH).$_course['path'].'/document'.$header_file.'?'.api_get_cidreq();
 echo '<a href="'.$file_url_web.'" target="blank">'.get_lang('_cut_paste_link').'</a></div>';

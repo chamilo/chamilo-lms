@@ -15,7 +15,7 @@ class TestOnline extends UnitTestCase {
 				. get_lang("Yes")
 				."</a>"
 				."&nbsp;&nbsp;|&nbsp;&nbsp;"
-				."<a href=\"".api_get_path('WEB_PATH')."webchatdeny.php\">"
+				."<a href=\"".api_get_path(WEB_PATH)."webchatdeny.php\">"
 				. get_lang("No")
 				."</a>"
 				."</p>";
@@ -90,7 +90,7 @@ class TestOnline extends UnitTestCase {
 		//var_dump($rarray);
 	}
 
-	function testWhoIsOnline()  {		
+	function testWhoIsOnline()  {
 		$valid='';
 		$res=WhoIsOnline($valid);
 		$this->assertTrue(is_array($res));

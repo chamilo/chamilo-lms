@@ -73,13 +73,13 @@ extract(phpdigHttpVars(
 // Course keywords
 
 $_course = api_get_course_info(); $ckw = $_course['path'] . '/CourseKwds.js';
-define('KEYWORDS_CACHE', api_get_path('SYS_COURSE_PATH') . $ckw);
+define('KEYWORDS_CACHE', api_get_path(SYS_COURSE_PATH) . $ckw);
 
 if (file_exists(KEYWORDS_CACHE)) $kcdt =
     htmlspecialchars(date('Y/m/d H:i:s', filemtime(KEYWORDS_CACHE)));
 
 $keywordscache = $kcdt ?
-    '<script type="text/javascript" src="' . api_get_path('WEB_COURSE_PATH') . $ckw . '"></script>' .
+    '<script type="text/javascript" src="' . api_get_path(WEB_COURSE_PATH) . $ckw . '"></script>' .
     '<br /><small><i>(CourseKwds cache: ' . $kcdt . ')</i></small>' : '';
 
 

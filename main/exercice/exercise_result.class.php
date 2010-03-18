@@ -1,24 +1,5 @@
 <?php
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2004-2008 Dokeos SPRL
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
-	Mail: info@dokeos.com
-==============================================================================
-*/
+/* For licensing terms, see /license.txt */
 /**
 *	ExerciseResult class: This class allows to instantiate an object of type ExerciseResult
 *	which allows you to export exercises results in multiple presentation forms
@@ -126,43 +107,39 @@ class ExerciseResult
     	$cid = api_get_course_id();
     	$user_id = intval($user_id);
     	$session_id_and = ' AND ce.session_id = ' . api_get_session_id() . ' ';
-		if(empty($user_id))
-		{
-
+		if (empty($user_id)) {
 			$sql="SELECT ".(api_is_western_name_order() ? "CONCAT(firstname,' ',lastname)" : "CONCAT(lastname,' ',firstname)").", ce.title, te.exe_result ,
-								 te.exe_weighting, UNIX_TIMESTAMP(te.exe_date), te.exe_id, user.email, user.user_id
-						  FROM $TBL_EXERCISES AS ce , $TBL_TRACK_EXERCISES AS te, $TBL_USER AS user,$TBL_COURSE_REL_USER AS cuser
-						  WHERE  user.user_id=cuser.user_id AND cuser.relation_type<>".COURSE_RELATION_TYPE_RRHH." AND te.exe_exo_id = ce.id AND te.status != 'incomplete' AND cuser.user_id=te.exe_user_id AND te.exe_cours_id='" . Database :: escape_string($cid) . "'
-						  AND cuser.status<>1 $session_id_and AND ce.active <>-1 AND orig_lp_id = 0 AND orig_lp_item_id = 0
-						  AND cuser.course_code=te.exe_cours_id ORDER BY te.exe_cours_id ASC, ce.title ASC, te.exe_date ASC";
+								 te.exe_weighting, te.exe_date, te.exe_id, user.email, user.user_id
+				  FROM $TBL_EXERCISES AS ce , $TBL_TRACK_EXERCISES AS te, $TBL_USER AS user,$TBL_COURSE_REL_USER AS cuser
+				  WHERE  user.user_id=cuser.user_id AND cuser.relation_type<>".COURSE_RELATION_TYPE_RRHH." AND te.exe_exo_id = ce.id AND te.status != 'incomplete' AND cuser.user_id=te.exe_user_id AND te.exe_cours_id='" . Database :: escape_string($cid) . "'
+				 	 	AND cuser.status<>1 $session_id_and AND ce.active <>-1 AND orig_lp_id = 0 AND orig_lp_item_id = 0
+				  		AND cuser.course_code=te.exe_cours_id ORDER BY te.exe_cours_id ASC, ce.title ASC, te.exe_date ASC";
 
 			$hpsql="SELECT ".(api_is_western_name_order() ? "CONCAT(tu.firstname,' ',tu.lastname)" : "CONCAT(tu.lastname,' ',tu.firstname)").", tth.exe_name,
 								tth.exe_result , tth.exe_weighting, UNIX_TIMESTAMP(tth.exe_date), tu.email, tu.user_id
-							FROM $TBL_TRACK_HOTPOTATOES tth, $TBL_USER tu
-							WHERE  tu.user_id=tth.exe_user_id AND tth.exe_cours_id = '" . Database :: escape_string($cid) . " $user_id_and '
-							ORDER BY tth.exe_cours_id ASC, tth.exe_date ASC";
+					FROM $TBL_TRACK_HOTPOTATOES tth, $TBL_USER tu
+					WHERE  tu.user_id=tth.exe_user_id AND tth.exe_cours_id = '" . Database :: escape_string($cid) . " $user_id_and '
+					ORDER BY tth.exe_cours_id ASC, tth.exe_date ASC";
 
 
-		}
-		else
-		{ // get only this user's results
+		} else { 
+			// get only this user's results
+			$sql="SELECT '', ce.title, te.exe_result ,
+						 te.exe_weighting, te.exe_date, te.exe_id
+					  FROM $TBL_EXERCISES AS ce , $TBL_TRACK_EXERCISES AS te, $TBL_USER AS user,$TBL_COURSE_REL_USER AS cuser
+					  WHERE  user.user_id=cuser.user_id AND cuser.relation_type<>".COURSE_RELATION_TYPE_RRHH." AND te.exe_exo_id = ce.id AND te.status != 'incomplete' AND cuser.user_id=te.exe_user_id AND te.exe_cours_id='" . Database :: escape_string($cid) . "'
+					  AND cuser.status<>1 AND te.exe_user_id='".Database::escape_string($user_id)."' $session_id_and AND ce.active <>-1 AND orig_lp_id = 0 AND orig_lp_item_id = 0
+					  AND cuser.course_code=te.exe_cours_id ORDER BY te.exe_cours_id ASC, ce.title ASC, te.exe_date DESC";
 
-					$sql="SELECT '', ce.title, te.exe_result ,
-								 te.exe_weighting, te.exe_date, te.exe_id
-							  FROM $TBL_EXERCISES AS ce , $TBL_TRACK_EXERCISES AS te, $TBL_USER AS user,$TBL_COURSE_REL_USER AS cuser
-							  WHERE  user.user_id=cuser.user_id AND cuser.relation_type<>".COURSE_RELATION_TYPE_RRHH." AND te.exe_exo_id = ce.id AND te.status != 'incomplete' AND cuser.user_id=te.exe_user_id AND te.exe_cours_id='" . Database :: escape_string($cid) . "'
-							  AND cuser.status<>1 AND te.exe_user_id='".Database::escape_string($user_id)."' $session_id_and AND ce.active <>-1 AND orig_lp_id = 0 AND orig_lp_item_id = 0
-							  AND cuser.course_code=te.exe_cours_id ORDER BY te.exe_cours_id ASC, ce.title ASC, te.exe_date DESC";
-
-					$hpsql = "SELECT '',exe_name, exe_result , exe_weighting, exe_date
-							FROM $TBL_TRACK_HOTPOTATOES
-							WHERE exe_user_id = '" . $user_id . "' AND exe_cours_id = '" . Database :: escape_string($cid) . "'
-							ORDER BY exe_cours_id ASC, exe_date DESC";
+			$hpsql = "SELECT '',exe_name, exe_result , exe_weighting, exe_date
+					FROM $TBL_TRACK_HOTPOTATOES
+					WHERE exe_user_id = '" . $user_id . "' AND exe_cours_id = '" . Database :: escape_string($cid) . "'
+					ORDER BY exe_cours_id ASC, exe_date DESC";
 
 		}
-
-		$results=getManyResultsXCol($sql,8);
-		$hpresults=getManyResultsXCol($hpsql,7);
+		
+		$results	= getManyResultsXCol($sql,8);
+		$hpresults	= getManyResultsXCol($hpsql,7);
 
 		$NoTestRes = 0;
 		$NoHPTestRes = 0;
@@ -182,10 +159,8 @@ class ExerciseResult
 		}
 
 		//Print the results of tests
-		if(is_array($results))
-		{
-			for($i = 0; $i < sizeof($results); $i++)
-			{
+		if(is_array($results)) {
+			for($i = 0; $i < sizeof($results); $i++) {
 
 				$revised = false;
 				$sql_exe = 'SELECT exe_id FROM ' . Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING) . '
@@ -202,13 +177,12 @@ class ExerciseResult
 				$user = $results[$i][0];
 				$test = $results[$i][1];
 				$res = $results[$i][2];
-				if(empty($user_id))
-				{
+				if(empty($user_id)) {
 					$user = $results[$i][0];
 					$return[$i]['user'] = $user;
 					$return[$i]['user_id'] = $results[$i][7];
 				}
-				$return[$i]['title'] = $test;
+				$return[$i]['title'] = $test;				
 				$return[$i]['time'] = api_convert_and_format_date($results[$i][4], null, date_default_timezone_get());
 				$return[$i]['result'] = $res;
 				$return[$i]['max'] = $results[$i][3];
@@ -385,8 +359,7 @@ class ExerciseResult
 		$worksheet->write($line,$column,get_lang('Weighting'));
 		$line++;
 
-		foreach($this->results as $row)
-		{
+		foreach($this->results as $row) {
 			$column = 0;
 			if(!empty($row['user']))
 			{

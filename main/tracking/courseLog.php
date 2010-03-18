@@ -1,17 +1,16 @@
 <?php //$id: $
-/* For licensing terms, see /dokeos_license.txt */
+/* For licensing terms, see /license.txt */
 /**
-==============================================================================
 *	@author Thomas Depraetere
 *	@author Hugues Peeters
 *	@author Christophe Gesche
 *	@author Sebastien Piraux
 *	@author Toon Keppens (Vi-Host.net)
 *
-*	@package dokeos.tracking
-==============================================================================
+*	@package chamilo.tracking
 */
-/**
+
+/*
  *	INIT SECTION
  */
 $pathopen = isset($_REQUEST['pathopen']) ? $_REQUEST['pathopen'] : null;
@@ -467,14 +466,9 @@ if ($_GET['studentlist'] == 'false') {
 
 	    $all_datas = array();
 	    $course_code = $_course['id'];
-
-
-
-
+	    
 		$user_ids = array_keys($a_students);
-
-
-
+		
 		$table = new SortableTable('users_tracking', array('TrackingCourseLog','get_number_of_users'), array('TrackingCourseLog','get_user_data'), (api_is_western_name_order() xor api_sort_by_first_name()) ? 3 : 2);
 
 		$parameters['cidReq'] 		= Security::remove_XSS($_GET['cidReq']);

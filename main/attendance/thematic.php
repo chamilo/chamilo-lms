@@ -45,24 +45,24 @@ if ($action == 'thematic_list') {
 	if (!empty($thematic_id)) {
 		echo '<div><strong>'.$thematic_data[$thematic_id]['title'].': '.get_lang('Details').'</strong></div><br />';							
 	} else {
-		echo '<div><strong>'.get_lang('ThematicDetails').'</strong></div><br />';				
-	}
-	
-	// display information
-	$message = '<strong>'.get_lang('Information').'</strong><br />';
-	$message .= get_lang('ThematicDetailsDescription');	
-	Display::display_normal_message($message, false);
-	echo '<br />';
-		
-	// display progress
-	if (!empty($thematic_id)) {
-		echo '<div style="text-align:right;">'.get_lang('Progress').': <strong>'.$total_average_of_advances.'</strong>%</div><br />';
-	} else {
-		echo '<div style="text-align:right;">'.get_lang('Progress').': <strong><span id="div_result">'.$total_average_of_advances.'</span></strong>%</div><br />';
+		echo '<div><strong>'.get_lang('ThematicDetails').'</strong></div><br />';	
+		// display information
+		$message = '<strong>'.get_lang('Information').'</strong><br />';
+		$message .= get_lang('ThematicDetailsDescription');	
+		Display::display_normal_message($message, false);
+		echo '<br />';			
 	}
 	
 	// display thematic data
 	if (!empty($thematic_data)) {
+		
+		// display progress
+		if (!empty($thematic_id)) {
+			echo '<div style="text-align:right;">'.get_lang('Progress').': <strong>'.$total_average_of_advances.'</strong>%</div><br />';
+		} else {
+			echo '<div style="text-align:right;">'.get_lang('Progress').': <strong><span id="div_result">'.$total_average_of_advances.'</span></strong>%</div><br />';
+		}
+		
 		echo '<table width="100%" class="data_table">';	
 		echo '<tr><th width="35%">'.get_lang('Thematic').'</th><th width="30%">'.get_lang('ThematicPlan').'</th><th width="25%">'.get_lang('ThematicAdvance').'</th></tr>';
 	

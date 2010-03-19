@@ -267,7 +267,9 @@ class ThematicController
 			        		// get last done thematic advance before move thematic list
 							$last_done_thematic_advance = $thematic->get_last_done_thematic_advance();
 							// update done advances with de current thematic list
-							$update_done_advances = $thematic->update_done_thematic_advances($last_done_thematic_advance);
+							if (!empty($last_done_thematic_advance)) {
+								$update_done_advances = $thematic->update_done_thematic_advances($last_done_thematic_advance);
+							}
 			        	}
 			        	
 						unset($_SESSION['thematic_advance_token']);	        

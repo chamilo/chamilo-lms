@@ -55,6 +55,14 @@ if (isset($_POST['action']) && $_POST['action'] == 'thematic_delete_select') {
 	$action = 'thematic_delete_select';
 }
 
+if (isset($_GET['isStudentView']) && $_GET['isStudentView'] == 'true') {
+	$action = 'attendance_list';
+}
+
+if ($action == 'thematic_details' || $action == 'thematic_list') {
+	$_SESSION['thematic_control'] = $action;
+}
+
 // get attendance id
 $attendance_id = 0;
 if (isset($_GET['attendance_id'])) {
@@ -256,7 +264,7 @@ if (api_is_drh() && isset($_GET['student_id'])) {
 if (!empty($gradebook)) {
 	$interbreadcrumb[] = array ('url' => '/main/gradebook/index.php', 'name' => get_lang('ToolGradebook'));	
 }
-$interbreadcrumb[] = array ('url' => 'index.php?action=attendance_list'.$param_gradebook.$student_param, 'name' => get_lang('ToolAttendance'));
+$interbreadcrumb[] = array ('url' => 'index.php?'.api_get_cidreq().'&action=attendance_list'.$param_gradebook.$student_param, 'name' => get_lang('ToolAttendance'));
 if ($action == 'attendance_add') {
 	$interbreadcrumb[] = array ('url' => '#', 'name' => get_lang('CreateANewAttendance'));
 }
@@ -264,29 +272,23 @@ if ($action == 'thematic_list') {
 	$interbreadcrumb[] = array ('url' => '#', 'name' => get_lang('ThematicControl'));
 }
 if ($action == 'thematic_add') {
-	$interbreadcrumb[] = array ('url' => 'index.php?action=thematic_list', 'name' => get_lang('ThematicControl'));
+	$interbreadcrumb[] = array ('url' => 'index.php?'.api_get_cidreq().'&action='.$_SESSION['thematic_control'], 'name' => get_lang('ThematicControl'));
 	$interbreadcrumb[] = array ('url' => '#', 'name' => get_lang('NewThematicSection'));	
 }
 if ($action == 'thematic_edit') {
-	$interbreadcrumb[] = array ('url' => 'index.php?action=thematic_list', 'name' => get_lang('ThematicControl'));
+	$interbreadcrumb[] = array ('url' => 'index.php?'.api_get_cidreq().'&action='.$_SESSION['thematic_control'], 'name' => get_lang('ThematicControl'));
 	$interbreadcrumb[] = array ('url' => '#', 'name' => get_lang('EditThematicSection'));	
 }
 if ($action == 'thematic_details') {
-	//$interbreadcrumb[] = array ('url' => 'index.php?action=thematic_list', 'name' => get_lang('ThematicControl'));
 	$interbreadcrumb[] = array ('url' => '#', 'name' => get_lang('ThematicControl'));	
 } 
-if ($action == 'thematic_plan_list' || $action == 'thematic_plan_delete') {
-	if (isset($_GET['origin']) && $_GET['origin'] == 'thematic_details') {
-		$interbreadcrumb[] = array ('url' => 'index.php?action=thematic_details', 'name' => get_lang('ThematicControl'));
-	} else {
-		$interbreadcrumb[] = array ('url' => 'index.php?action=thematic_list', 'name' => get_lang('ThematicControl'));
-	}
+if ($action == 'thematic_plan_list' || $action == 'thematic_plan_delete') {	
+	$interbreadcrumb[] = array ('url' => 'index.php?'.api_get_cidreq().'&action='.$_SESSION['thematic_control'], 'name' => get_lang('ThematicControl'));	
 	$interbreadcrumb[] = array ('url' => '#', 'name' => $thematic_data['title'].':'.get_lang('ThematicPlan'));	
 }
 if ($action == 'thematic_plan_add' || $action == 'thematic_plan_edit') {
-	$interbreadcrumb[] = array ('url' => 'index.php?action=thematic_list', 'name' => get_lang('ThematicControl'));
-	$interbreadcrumb[] = array ('url' => 'index.php?action=thematic_plan_list&thematic_id='.$thematic_id, 'name' => $thematic_data['title'].':'.get_lang('ThematicPlan'));
-	
+	$interbreadcrumb[] = array ('url' => 'index.php?'.api_get_cidreq().'&action='.$_SESSION['thematic_control'], 'name' => get_lang('ThematicControl'));
+	$interbreadcrumb[] = array ('url' => 'index.php?'.api_get_cidreq().'&action=thematic_plan_list&thematic_id='.$thematic_id, 'name' => $thematic_data['title'].':'.get_lang('ThematicPlan'));	
 	if ($description_type >= ADD_THEMATIC_PLAN) {
 		$interbreadcrumb[] = array ('url' => '#', 'name' => get_lang('NewBloc'));
 	} else {
@@ -294,16 +296,12 @@ if ($action == 'thematic_plan_add' || $action == 'thematic_plan_edit') {
 	}
 }
 if ($action == 'thematic_advance_list') {
-	if (isset($_GET['origin']) && $_GET['origin'] == 'thematic_details') {
-		$interbreadcrumb[] = array ('url' => 'index.php?action=thematic_details', 'name' => get_lang('ThematicControl'));
-	} else {
-		$interbreadcrumb[] = array ('url' => 'index.php?action=thematic_list', 'name' => get_lang('ThematicControl'));
-	}
+	$interbreadcrumb[] = array ('url' => 'index.php?'.api_get_cidreq().'&action='.$_SESSION['thematic_control'], 'name' => get_lang('ThematicControl'));
 	$interbreadcrumb[] = array ('url' => '#', 'name' => $thematic_data['title'].':'.get_lang('ThematicAdvance'));
 }
 if ($action == 'thematic_advance_add' || $action == 'thematic_advance_edit') {
-	$interbreadcrumb[] = array ('url' => 'index.php?action=thematic_list', 'name' => get_lang('ThematicControl'));
-	$interbreadcrumb[] = array ('url' => 'index.php?action=thematic_advance_list&thematic_id='.$thematic_id, 'name' => $thematic_data['title'].':'.get_lang('ThematicAdvance'));
+	$interbreadcrumb[] = array ('url' => 'index.php?'.api_get_cidreq().'&action='.$_SESSION['thematic_control'], 'name' => get_lang('ThematicControl'));
+	$interbreadcrumb[] = array ('url' => 'index.php?'.api_get_cidreq().'&action=thematic_advance_list&thematic_id='.$thematic_id, 'name' => $thematic_data['title'].':'.get_lang('ThematicAdvance'));
 	$interbreadcrumb[] = array ('url' => '#', 'name' => get_lang('NewThematicAdvance'));
 }
 if ($action == 'attendance_edit') {

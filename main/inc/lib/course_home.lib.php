@@ -220,25 +220,25 @@ class CourseHome {
 					}
 
 					$result = Database::query("SELECT * FROM $course_tool_table $condition_display_tools ORDER BY id");
-					$colLink ="##003399";
+					$col_link ="##003399";
 					break;
 
 			case TOOL_PUBLIC_BUT_HIDDEN:
 
 					$result = Database::query("SELECT * FROM $course_tool_table WHERE visibility=0 AND admin=0 ORDER BY id");
-					$colLink ="##808080";
+					$col_link ="##808080";
 					break;
 
 			case TOOL_COURSE_ADMIN:
 
 					$result = Database::query("SELECT * FROM $course_tool_table WHERE admin=1 AND visibility != 2 ORDER BY id");
-					$colLink ="##003399";
+					$col_link ="##003399";
 					break;
 
 			case TOOL_PLATFORM_ADMIN:
 
 					$result = Database::query("SELECT * FROM $course_tool_table WHERE visibility = 2 ORDER BY id");
-					$colLink ="##003399";
+					$col_link ="##003399";
 		}
 
 		$i = 0;
@@ -428,27 +428,27 @@ class CourseHome {
 					}
 					$sql = "SELECT * FROM $course_tool_table  $condition_display_tools $condition_session ORDER BY id";
 					$result = Database::query($sql);
-					$colLink ="##003399";
+					$col_link ="##003399";
 					break;
 			case TOOL_AUTHORING:
 					$sql = "SELECT * FROM $course_tool_table WHERE category = 'authoring' $condition_session ORDER BY id";
 					$result = Database::query($sql);
-					$colLink ="##003399";
+					$col_link ="##003399";
 					break;
 			case TOOL_INTERACTION:
 					$sql = "SELECT * FROM $course_tool_table WHERE category = 'interaction' $condition_session ORDER BY id";
 					$result = Database::query($sql);
-					$colLink ="##003399";
+					$col_link ="##003399";
 					break;
 			case TOOL_ADMIN_VISIBLE:
 					$sql = "SELECT * FROM $course_tool_table WHERE category = 'admin' AND visibility ='1' $condition_session ORDER BY id";
 					$result = Database::query($sql);
-					$colLink ="##003399";
+					$col_link ="##003399";
 					break;
 			case TOOL_ADMIN_PLATEFORM:
 					$sql = "SELECT * FROM $course_tool_table WHERE category = 'admin' $condition_session ORDER BY id";
 					$result = Database::query($sql);
-					$colLink ="##003399";
+					$col_link ="##003399";
 					break;
 		}
 

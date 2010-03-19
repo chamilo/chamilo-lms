@@ -198,17 +198,17 @@ class Evaluation implements GradebookItem
 			$tbl_grade_evaluations = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_EVALUATION);
 
 			$sql = 'INSERT INTO '.$tbl_grade_evaluations
-					.' (name,user_id,weight,max,visible';
+					.' (name, user_id, weight, max, visible';
 			if (isset($this->description)) {
 			 $sql .= ',description';
 			}
 			if (isset($this->course_code)) {
-			 $sql .= ',course_code';
+				$sql .= ', course_code';
 			}
 			if (isset($this->category)) {
-			 $sql .= ',category_id';
+				$sql .= ', category_id';
 			}
-			$sql .= ',created_at';
+			$sql .= ', created_at';
 			$sql .= ',type';
 			$sql .= ") VALUES ('".Database::escape_string($this->get_name())."'"
 					.','.intval($this->get_user_id())
@@ -227,10 +227,12 @@ class Evaluation implements GradebookItem
 			if (empty($this->type)) {
 				$this->type = 'evaluation';	
 			}
-			$sql .= ',\''.Database::escape_string($this->type).'\'';
-
 			$sql .= ", '".api_get_utc_datetime()."'";
+			
+			$sql .= ',\''.Database::escape_string($this->type).'\'';
+			
 			$sql .= ")";
+			
 			Database::query($sql);
 			$this->set_id(Database::insert_id());
 		}

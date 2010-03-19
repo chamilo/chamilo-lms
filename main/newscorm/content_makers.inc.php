@@ -18,7 +18,9 @@
   	'Blackboard',
   	'Calfat',
   	'Captivate',
-  	'Claroline',
+    'Chamilo',
+    'Chamilo 2',
+    'Claroline',
 	'Commest',
 	'Coursebuilder',
 	'Docent',
@@ -48,4 +50,3 @@
     'Udutu',
 	'WebCT'
   );
-?>

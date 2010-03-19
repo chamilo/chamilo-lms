@@ -153,20 +153,19 @@ class Result
     public function add() {
 		if (isset($this->user_id) && isset($this->evaluation) ) {
 			$tbl_grade_results = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_RESULT);
-			$sql = 'INSERT INTO '.$tbl_grade_results
-					.' (user_id, evaluation_id,
-					created_at';
+			$sql = "INSERT INTO ".$tbl_grade_results
+					." (user_id, evaluation_id,
+					created_at";
 			if (isset($this->score)) {
-			 $sql .= ',score';
+			 $sql .= ",score";
 			}
-			$sql .= ') VALUES
-					('.(int)$this->get_user_id().', '.(int)$this->get_evaluation_id()
-					.', '.$this->get_date();
+			$sql .= ") VALUES
+					(".(int)$this->get_user_id().", ".(int)$this->get_evaluation_id()
+					.", '".$this->get_date()."' ";
 			if (isset($this->score)) {
-			 $sql .= ', '.$this->get_score();
+			 $sql .= ", ".$this->get_score();
 			}
-			$sql .= ')';
-
+			$sql .= ")";
 			Database::query($sql);
 		} else {
 			die('Error in Result add: required field empty');

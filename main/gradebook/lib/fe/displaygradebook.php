@@ -57,7 +57,8 @@ class DisplayGradebook
 		if (!$evalobj->has_results())
 			$evalinfo .= '<br /><i>' . get_lang('NoResultsInEvaluation') . '</i>';
 		elseif ($scoredisplay->is_custom() && api_get_self() != '/dokeos/main/gradebook/gradebook_statistics.php')
-			$evalinfo .= '<br /><br /><a href="gradebook_statistics.php?selecteval='.Security::remove_XSS($_GET['selecteval']).'"> '. get_lang('ViewStatistics') . '</a>';
+		$evalinfo .= '<br /><br /><a href="gradebook_view_result.php?selecteval='.Security::remove_XSS($_GET['selecteval']).'"> '.Display::return_icon(('gradebook_eval_not_empty.gif'),get_lang('ViewResult')) . '</a>';
+		$evalinfo .= '<a href="gradebook_statistics.php?selecteval='.Security::remove_XSS($_GET['selecteval']).'"> '.Display::return_icon(('statistics.gif'),get_lang('ViewStatistics')) . '</a>';
 		$evalinfo .= '</td><td><img style="float:right; position:relative;" src="../img/tutorial.gif"></img></td></table>';
 		Display :: display_normal_message($evalinfo,false);
 		echo $header;

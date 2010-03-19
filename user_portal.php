@@ -1,5 +1,4 @@
 <?php
-
 /* For licensing terms, see /license.txt */
 /**
 *	This is the index file displayed when a user is logged in on Dokeos.
@@ -358,8 +357,8 @@ function display_special_courses ($user_id) {
 }
 
 /**
- *  display courses without special courses
- *  @param int User id
+ *  Display courses without special courses
+ *  @param int user id
  *  @return void
  */
 function display_courses($user_id) {
@@ -378,15 +377,14 @@ function display_courses($user_id) {
 
 	// Step 1: We get all the categories of the user.
 	$tucc = Database::get_user_personal_table(TABLE_USER_COURSE_CATEGORY);
-	$sql = "SELECT * FROM $tucc WHERE user_id='".$_user['user_id']."' ORDER BY sort ASC";
+	$sql = "SELECT id, title FROM $tucc WHERE user_id='".$_user['user_id']."' ORDER BY sort ASC";
 	$result = Database::query($sql);
 	while ($row = Database::fetch_array($result)) {
 		// We simply display the title of the category.
-		echo "<tr><td colspan=\"2\" class=\"user_course_category\">";
+		echo '<tr><td colspan="2" class="user_course_category\>';
 		echo '<a name="category'.$row['id'].'"></a>'; // display an internal anchor.
 		echo $row['title'];
-		echo "</td>";
-		echo "</tr>";
+		echo '</td></tr>';		
 		display_courses_in_category($row['id']);
 	}
 	echo "</table>\n";
@@ -1110,14 +1108,10 @@ function get_user_course_categories() {
 }
 
 /*
-==============================================================================
 		MAIN CODE
-==============================================================================
 */
 /*
-==============================================================================
 		PERSONAL COURSE LIST
-==============================================================================
 */
 if (!isset ($maxValvas)) {
 	$maxValvas = CONFVAL_maxValvasByCourse; // Maximum number of entries
@@ -1287,14 +1281,9 @@ if (isset($_GET['history']) && intval($_GET['history']) == 1) {
 }
 
 if ( is_array($courses_tree) ) {
-
 	foreach ($courses_tree as $key => $category) {
-
-
 		if ($key == 0) {
-
-		// sessions and courses that are not in a session category
-
+			// sessions and courses that are not in a session category
 			if (!isset($_GET['history'])) { // check if it's not history trainnign session list
 				display_special_courses(api_get_user_id());
 				display_courses(api_get_user_id());

@@ -338,6 +338,7 @@ if (isset ($_GET['print'])) {
 	foreach ($data_array as $data) {
 		$newarray[] = array_slice($data, 2);
 	}
+	
 	echo print_table($newarray, $header_names,get_lang('ViewResult'), $eval[0]->get_name());
 	exit;
 } else

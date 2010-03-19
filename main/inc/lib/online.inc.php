@@ -191,7 +191,7 @@ function who_is_online($valid, $friends = false) {
 	}
 }
 
-function who_is_online_Count($valid, $friends = false) {
+function who_is_online_count($valid, $friends = false) {
 	$valid = (int) $valid;
 	$current_date		= date('Y-m-d H:i:s',time());
 	$track_online_table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ONLINE);
@@ -205,7 +205,7 @@ function who_is_online_Count($valid, $friends = false) {
 				  WHERE DATE_ADD(login_date,INTERVAL $valid MINUTE) >= '".$current_date."' AND friend_user_id <> '".api_get_user_id()."'  AND relation_type='".USER_RELATION_TYPE_FRIEND."' AND user_id = '".api_get_user_id()."' ";
 	} else {
 		// all users online
-		$query = "SELECT count(login_id) FROM ".$track_online_table ." WHERE DATE_ADD(login_date,INTERVAL $valid MINUTE) >= '".$current_date."'  "; //WHERE DATE_ADD(login_date,INTERVAL $valid MINUTE) >= '".$current_date."'		
+		$query = "SELECT count(login_id) as count  FROM ".$track_online_table ." WHERE DATE_ADD(login_date,INTERVAL $valid MINUTE) >= '".$current_date."'  "; //WHERE DATE_ADD(login_date,INTERVAL $valid MINUTE) >= '".$current_date."'		
 	}
 
 	global $_configuration;

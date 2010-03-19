@@ -437,7 +437,7 @@ switch($action)
 
 			if(isset($_POST['submit_button']))
 			{
-				$_SESSION['oLP']->edit_item($_GET['id'], $_POST['parent'], $_POST['previous'], Security::remove_XSS($_POST['title']), $_POST['description']);
+				$_SESSION['oLP']->edit_item($_GET['id'], $_POST['parent'], $_POST['previous'], Security::remove_XSS($_POST['title'], $_POST['description']) );
 
 				$is_success = true;
 			}

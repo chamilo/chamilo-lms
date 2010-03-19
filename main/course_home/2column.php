@@ -19,7 +19,7 @@ require_once api_get_path(LIBRARY_PATH).'course_home.lib.php';
 
 /* 	Work with data post askable by admin of course (franglais, clean this) */
 
-if (api_is_allowed_to_edit(null,true)) {
+if (api_is_allowed_to_edit(null, true)) {
 
 	/*  Processing request */
 
@@ -32,7 +32,7 @@ if (api_is_allowed_to_edit(null,true)) {
 	if ($_GET['remove']) {
 		$msgDestroy = get_lang('DelLk').'<br />';
 		$msgDestroy .= '<a href="'.api_get_self().'">'.get_lang('No').'</a>&nbsp;|&nbsp;';
-		$msgDestroy .= '<a href="'.api_get_self().'?destroy=yes&amp;id='.$_GET["id"].'">'.get_lang('Yes').'</a>';
+		$msgDestroy .= '<a href="'.api_get_self().'?destroy=yes&amp;id='.$_GET['id'].'">'.get_lang('Yes').'</a>';
 		Display :: display_confirmation_message($msgDestroy, false);
 	}
 
@@ -42,20 +42,20 @@ if (api_is_allowed_to_edit(null,true)) {
 	 */
 
 	elseif ($_GET['destroy']) {
-		Database::query("UPDATE $tool_table SET visibility='2' WHERE id='".$_GET["id"]."'");
+		Database::query("UPDATE $tool_table SET visibility='2' WHERE id='".$_GET['id']."'");
 	}
 
   	/*	HIDE */
 
 	elseif ($_GET['hide']) { // visibility 1 -> 0
-		Database::query("UPDATE $tool_table SET visibility=0 WHERE id='".$_GET["id"]."'");
+		Database::query("UPDATE $tool_table SET visibility=0 WHERE id='".$_GET['id']."'");
 		Display::display_confirmation_message(get_lang('ToolIsNowHidden'));
 	}
 
     /*	REACTIVATE */
 
 	elseif ($_GET["restore"]) { // visibility 0,2 -> 1
-		Database::query("UPDATE $tool_table SET visibility=1  WHERE id='".$_GET["id"]."'");
+		Database::query("UPDATE $tool_table SET visibility=1  WHERE id='".$_GET['id']."'");
 		Display::display_confirmation_message(get_lang('ToolIsNowVisible'));
 	}
 }
@@ -71,7 +71,7 @@ if (api_is_platform_admin()) {
 			<?php echo get_lang('DelLk'); ?>
 			<br />&nbsp;&nbsp;&nbsp;
 			<a href="<?php echo api_get_self(); ?>"><?php echo get_lang('No'); ?></a>&nbsp;|&nbsp;
-			<a href="<?php echo api_get_self(); ?>?delete=yes&id=<?php echo $_GET["id"]; ?>"><?php echo get_lang('Yes'); ?></a>
+			<a href="<?php echo api_get_self(); ?>?delete=yes&id=<?php echo $_GET['id']; ?>"><?php echo get_lang('Yes'); ?></a>
 			</div>
 <?php
 	}
@@ -102,7 +102,7 @@ echo '</div>';
 if (api_is_allowed_to_edit(null, true) && !api_is_coach()) {
 	echo "<div class=\"courseadminview\">";
 	echo "<span class=\"viewcaption\">";
-	echo get_lang("CourseAdminOnly");
+	echo get_lang('CourseAdminOnly');
 	echo "</span>";
 	echo "<table width=\"100%\">";
 

@@ -61,19 +61,19 @@ if (api_is_allowed_to_edit(null, true)) {
 	if ($remove) {
 		$sql = "SELECT * FROM $TBL_ACCUEIL WHERE id=$id";
 		$result = Database::query($sql);
-		$toolsRow = Database::fetch_array($result);
-		$tool_name = @htmlspecialchars($toolsRow['name'] != '' ? $toolsRow['name'] : $toolsRow['link'], ENT_QUOTES, api_get_system_encoding());
-		if ($toolsRow['img'] != 'external.gif') {
-			$toolsRow['link'] = api_get_path(WEB_CODE_PATH).$toolsRow['link'];
+		$tool = Database::fetch_array($result);
+		$tool_name = @htmlspecialchars($tool['name'] != '' ? $tool['name'] : $tool['link'], ENT_QUOTES, api_get_system_encoding());
+		if ($tool['img'] != 'external.gif') {
+			$tool['link'] = api_get_path(WEB_CODE_PATH).$tool['link'];
 		}
-		$toolsRow['image'] = api_get_path(WEB_IMG_PATH).$toolsRow['image'];
+		$tool['image'] = api_get_path(WEB_IMG_PATH).$tool['image'];
 
 		echo "<br /><br /><br />\n";
 		echo "<table class=\"message\" width=\"70%\" align=\"center\">\n",
 			"<tr><td width=\"7%\" align=\"center\">\n",
-			"<a href=\"".$toolsRow['link']."\">".Display::return_icon($toolsRow['image'], get_lang('Delete')), "</a></td>\n",
+			"<a href=\"".$tool['link']."\">".Display::return_icon($tool['image'], get_lang('Delete')), "</a></td>\n",
 			"<td width=\"28%\" height=\"45\"><small>\n",
-			"<a href=\"".$toolsRow['link']."\">".$tool_name."</a></small></td>\n";
+			"<a href=\"".$tool['link']."\">".$tool_name."</a></small></td>\n";
 		echo "<td align=\"center\">\n",
 			"<font color=\"#ff0000\">",
 			"&nbsp;&nbsp;&nbsp;",
@@ -118,11 +118,11 @@ elseif ($restore) { // visibility 0,2 -> 1
 elseif (isset($update) && $update) {
 
 	$result 	= Database::query("SELECT * FROM $TBL_ACCUEIL WHERE id=$id");
-	$toolsRow 	= Database::fetch_array($result);
+	$tool		= Database::fetch_array($result);
 	$racine		= $_configuration['root_sys'].'/'.$currentCourseID.'/images/';
 	$chemin		= $racine;
-	$name		= $toolsRow[1];
-	$image		= $toolsRow[3];
+	$name		= $tool[1];
+	$image		= $tool[3];
 
 	echo "<tr>\n",
 		"<td colspan=\"4\">\n",
@@ -139,7 +139,7 @@ elseif (isset($update) && $update) {
 
 	if ($dir = @opendir($chemin)) {
 		while ($file = readdir($dir)) {
-			if ($file== '..' || $file == '.') {
+			if ($file == '..' || $file == '.') {
 				unset($file);
 			}
 			echo "<option>", $file, "</option>\n";

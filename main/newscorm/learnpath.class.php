@@ -6518,7 +6518,7 @@ class learnpath {
 		$form = new FormValidator('form', 'POST', api_get_self() . "?" . $_SERVER["QUERY_STRING"], '', 'enctype="multipart/form-data"');
 		$defaults["title"] = Security :: remove_XSS(api_convert_encoding($item_title, api_get_system_encoding() ,$this->encoding));
 		if (empty ($item_title)) {
-			$defaults["title"] = Security :: remove_XSS($item_title);
+			$defaults["title"] = Security::remove_XSS($item_title);
 		}
 		$defaults["description"] = api_convert_encoding($item_description, $charset, $this->encoding);
 		$form->addElement('html', $return);

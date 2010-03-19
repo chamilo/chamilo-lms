@@ -521,7 +521,7 @@ class TestInternationalization extends UnitTestCase {
 	public function test_api_ereg() {
 		$pattern = 'scorm/showinframes.php([^"\'&]*)(&|&amp;)file=([^"\'&]*)$';
 		$string = 'http://localhost/dokeos/main/scorm/showinframes.php?id=5&amp;file=test.php';
-		$res = api_ereg($pattern, $string, $regs);
+		$res = api_ereg($pattern, $string);
 		$this->assertTrue(is_numeric($res));
 		$this->assertTrue($res == 45);
 		//var_dump($res);
@@ -541,6 +541,7 @@ class TestInternationalization extends UnitTestCase {
 	public function testapi_eregi() {
 		$pattern = 'scorm/showinframes.php([^"\'&]*)(&|&amp;)file=([^"\'&]*)$';
 		$string = 'http://localhost/dokeos/main/scorm/showinframes.php?id=5&amp;file=test.php';
+		$regs = '';
 		$res = api_eregi($pattern, $string, $regs);
 		$this->assertTrue(is_numeric($res));
 		$this->assertTrue($res == 45);

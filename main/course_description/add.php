@@ -10,7 +10,7 @@
 // protect a course script
 api_protect_course_script(true);
 
-var_dump($_SESSION['studentview']);
+//var_dump($_SESSION['studentview']);
 
 // display categories
 $categories = array ();

@@ -12,9 +12,7 @@
  * multiple functions
 */
 /*
-==============================================================================
 		INIT SECTION
-==============================================================================
 */
 // name of the language file that needs to be included
 $language_file[] = 'announcements';
@@ -36,14 +34,12 @@ if(isset($_GET['id_session'])) {
 	$_SESSION['id_session'] = intval($_GET['id_session']);
 }
 
-/* ------------	ACCESS RIGHTS ------------ */
+/* ACCESS RIGHTS */
 // notice for unauthorized people.
 api_protect_course_script();
 
 /*
------------------------------------------------------------
 	Constants and variables
------------------------------------------------------------
 */
 // Configuration settings
 $display_announcement_list	 = true;
@@ -69,12 +65,10 @@ $tbl_announcement_attachment = Database::get_course_table(TABLE_ANNOUNCEMENT_ATT
 $tbl_item_property  	= Database::get_course_table(TABLE_ITEM_PROPERTY);
 
 /*
------------------------------------------------------------
 	Resource linker
------------------------------------------------------------
 */
 $_SESSION['source_type']="Ad_Valvas";
-include('../resourcelinker/resourcelinker.inc.php');
+include '../resourcelinker/resourcelinker.inc.php';
 
 if (!empty($_POST['addresources'])) // When the "Add Resource" button is clicked we store all the form data into a session
 {
@@ -108,30 +102,24 @@ if (!empty($_POST['addresources'])) // When the "Add Resource" button is clicked
 }
 
 /*
------------------------------------------------------------
 	Tracking
------------------------------------------------------------
 */
 event_access_tool(TOOL_ANNOUNCEMENT);
 
 
 /*
------------------------------------------------------------
 	Libraries
------------------------------------------------------------
 */
 $lib = api_get_path(LIBRARY_PATH); //avoid useless function calls
-require_once($lib.'groupmanager.lib.php');
-require_once('announcements.inc.php');
-require_once($lib.'mail.lib.inc.php');
-require_once($lib.'debug.lib.inc.php');
-require_once($lib.'tracking.lib.php');
-require_once($lib.'fckeditor/fckeditor.php');
-require_once($lib.'fileUpload.lib.php');
+require_once $lib.'groupmanager.lib.php';
+require_once $lib.'mail.lib.inc.php';
+require_once $lib.'debug.lib.inc.php';
+require_once $lib.'tracking.lib.php';
+require_once $lib.'fckeditor/fckeditor.php';
+require_once $lib.'fileUpload.lib.php';
+require_once 'announcements.inc.php';
 /*
------------------------------------------------------------
 	POST TO
------------------------------------------------------------
 */
 
 $safe_emailTitle = $_POST['emailTitle'];
@@ -154,9 +142,7 @@ if (!empty($_POST['To']))
 }
 
 /*
------------------------------------------------------------
 	Show/hide user/group form
------------------------------------------------------------
 */
 
 $setting_select_groupusers = true;
@@ -175,9 +161,7 @@ if (!empty($_POST['To']) and ($select_groupusers_status=="show"))
 }
 
 /*
------------------------------------------------------------
 	Action handling
------------------------------------------------------------
 */
 
 // display the form
@@ -198,9 +182,7 @@ if ((empty($originalresource) || ($originalresource!=='no')) and (!empty($action
 }
 
 /*
------------------------------------------------------------
 	Javascript
------------------------------------------------------------
 */
 
 $htmlHeadXtra[] = to_javascript();
@@ -215,9 +197,7 @@ $(document).ready(function () {
 </script>';
 
 /*
------------------------------------------------------------
 	Filter user/group
------------------------------------------------------------
 */
 
 if(!empty($_GET['toolgroup'])){
@@ -232,9 +212,7 @@ if(!empty($_GET['toolgroup'])){
 
 
 /*
------------------------------------------------------------
 	Sessions
------------------------------------------------------------
 */
 
 $ctok = $_SESSION['sec_token'];
@@ -256,9 +234,7 @@ if(!empty($_GET['remind_inactive']))
 	$to[] = 'USER:'.intval($_GET['remind_inactive']);
 }
 /*
------------------------------------------------------------
 	Survey
------------------------------------------------------------
 */
 $surveyid = 0;
 if(!empty($_REQUEST['publish_survey']))
@@ -293,9 +269,7 @@ if (!empty($_SESSION['toolgroup'])){
 
 
 /*
------------------------------------------------------------
 	Learning path & css
------------------------------------------------------------
 */
 // showing the header if we are not in the learning path, if we are in
 // the learning path, we do not include the banner so we have to explicitly
@@ -319,16 +293,14 @@ if (empty($_GET['origin']) or $_GET['origin'] !== 'learnpath')
 // inserting an anchor (top) so one can jump back to the top of the page
 echo "<a name=\"top\"></a>";
 
-/*=============================================
-			  ACTION HANDLING
-=============================================*/
+/*
+		ACTION HANDLING
+*/
 
 if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())) {
-	/*
-	-----------------------------------------------------------
-		Change visibility of announcement
-	-----------------------------------------------------------
-	*/
+/*
+	Change visibility of announcement
+*/
 	// $_GET['isStudentView']<>"false" is added to prevent that the visibility
 	// is changed after you do the following:
 	// change visibility -> studentview -> course manager view
@@ -348,11 +320,9 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 		}
 	}
 
-	/*
-	-----------------------------------------------------------
-		Delete announcement
-	-----------------------------------------------------------
-	*/
+/*
+	Delete announcement
+*/
 	if (!empty($_GET['action']) AND $_GET['action']=='delete' AND isset($_GET['id'])) {
 		//Database::query("DELETE FROM  $tbl_announcement WHERE id='$delete'");
 		$id=intval(addslashes($_GET['id']));
@@ -377,11 +347,9 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 		}
 	}
 
-	/*
-	-----------------------------------------------------------
-		Delete all announcements
-	-----------------------------------------------------------
-	*/
+/*
+	Delete all announcements
+*/
 	if (!empty($_GET['action']) and $_GET['action']=='delete_all') {
 
 		//Database::query("DELETE FROM $tbl_announcement");
@@ -398,11 +366,9 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 		}
 	}
 
-	/*
-	-----------------------------------------------------------
-		Modify announcement
-	-----------------------------------------------------------
-	*/
+/*
+	Modify announcement
+*/
 	if (!empty($_GET['action']) and $_GET['action']=='modify' AND isset($_GET['id'])) {
 		if (api_get_session_id()!=0 && api_is_allowed_to_session_edit(false,true)==false) {
 			api_not_allowed();
@@ -442,11 +408,9 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 
 	}
 
-	/*
-	-----------------------------------------------------------
-		Move announcement up/down
-	-----------------------------------------------------------
-	*/
+/*
+	Move announcement up/down
+*/
 	if ($ctok == $_GET['sec_token']) {
 		if (!empty($_GET['down'])) {
 			$thisAnnouncementId = intval($_GET['down']);
@@ -500,11 +464,9 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 		$message = get_lang('AnnouncementMoved');
 	}
 
-	/*
-	-----------------------------------------------------------
-		Submit announcement
-	-----------------------------------------------------------
-	*/
+/*
+	Submit announcement
+*/
 	//if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())) {
 
 	$emailTitle=(!empty($_POST['emailTitle'])?$safe_emailTitle:'');
@@ -553,9 +515,9 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 				    $message = get_lang('AnnouncementAdded');
 				}
 
-				/*============================================================
-				MAIL WHEN USER COMES FROM SURVEY
-				======================================================= */
+/*
+		MAIL WHEN USER COMES FROM SURVEY
+*/
 
 				if ($_POST['emailsAdd']) {
 
@@ -613,9 +575,9 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 					}
 				}
 
-				/*===================================================================
-				    							MAIL FUNCTION
-				===================================================================*/
+/*
+		MAIL FUNCTION
+*/
 
 				if ($_POST['email_ann'] && empty($_POST['onlyThoseMails'])) {
 
@@ -709,7 +671,7 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 	                            // signature of email: sender name and course URL after -- line
 	                            $mail_body .= "<br />-- <br />";
 	                            $mail_body .= api_get_person_name($_user['firstName'], $_user['lastName'], null, PERSON_NAME_EMAIL_ADDRESS)." \n";
-	                            $mail_body .= "<br /> \n<a href=\"".api_get_path(WEB_COURSE_PATH).$_course['id']."\">";
+	                            $mail_body .= "<br /> \n<a href=\"".api_get_path(WEB_CODE_PATH).'announcements/announcements.php?'.api_get_cidreq()."\">";
 	                            $mail_body .= $_course['official_code'].' '.$_course['name'] . "</a>";
 
 								$recipient_name	= api_get_person_name($myrow["firstname"], $myrow["lastname"], null, PERSON_NAME_EMAIL_ADDRESS);
@@ -794,9 +756,9 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 }
 
 
-/*====================================================
-		     	Tool introduction
-====================================================*/
+/*
+	Tool introduction
+*/
 
 if (empty($_GET['origin']) || $_GET['origin'] !== 'learnpath') {
 	//api_display_tool_title($nameTools);
@@ -805,9 +767,7 @@ if (empty($_GET['origin']) || $_GET['origin'] !== 'learnpath') {
 
 
 /*
-==============================================================================
 		MAIN SECTION
-==============================================================================
 */
 
 /* DISPLAY LEFT COLUMN */
@@ -912,9 +872,9 @@ if(api_is_allowed_to_edit(false,true))  {
 $result = Database::query($sql);
 $announcement_number = Database::num_rows($result);
 
-/*----------------------------------------------------
-				ADD ANNOUNCEMENT / DELETE ALL
-----------------------------------------------------*/
+/*
+		ADD ANNOUNCEMENT / DELETE ALL
+*/
 
 if (!$surveyid) {
 	$show_actions = false;
@@ -938,9 +898,9 @@ if (empty($_GET['origin']) OR $_GET['origin'] !== 'learnpath') {
 	echo "\t\t<td width=\"20%\" valign=\"top\">\n";
 }
 
-/*----------------------------------------------------
-				ANNOUNCEMENTS LIST
-----------------------------------------------------*/
+/*
+		ANNOUNCEMENTS LIST
+*/
 if (!$surveyid) {
 	if ($display_title_list == true) {
 		echo "\t\t\t<table>\n";
@@ -971,9 +931,9 @@ if (empty($_GET['origin']) or $_GET['origin'] !== 'learnpath') {
 	echo	"\t\t<td valign=\"top\">\n";
 }
 
-/*=======================================
-	        DISPLAY ACTION MESSAGE
-=======================================*/
+/*
+		DISPLAY ACTION MESSAGE
+*/
 
 if (isset($message) && $message == true) {
 	Display::display_confirmation_message($message);
@@ -986,9 +946,9 @@ if (!empty($error_message)) {
 	$display_form             = true;
 }
 
-/*==================================================================================
-		   						DISPLAY FORM
-==================================================================================*/
+/*
+		DISPLAY FORM
+*/
 
 if ($display_form == true) {
 
@@ -1186,9 +1146,9 @@ if ($display_form == true) {
 
 
 
-/*===============================================
-	          DISPLAY ANNOUNCEMENT LIST
-===============================================*/
+/*
+		DISPLAY ANNOUNCEMENT LIST
+*/
 
 
 if ($display_announcement_list && !$surveyid) {
@@ -1338,9 +1298,9 @@ if ($display_announcement_list && !$surveyid) {
 	$result = Database::query($sql);
 	$num_rows = Database::num_rows($result);
 
-	/*=================================================
-	               DISPLAY: NO ITEMS
-	=================================================*/
+/*
+		DISPLAY: NO ITEMS
+*/
 
 	if ($num_rows == 0) {
 		echo get_lang('NoAnnouncements');;
@@ -1524,12 +1484,9 @@ if (!empty($display_specific_announcement)) display_announcement($announcement_i
 
 
 /*
-==============================================================================
 		FOOTER
-==============================================================================
 */
 if (empty($_GET['origin']) or $_GET['origin'] !== 'learnpath') {
 	//we are not in learnpath tool
 	Display::display_footer();
 }
-?>

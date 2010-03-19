@@ -123,7 +123,7 @@ if ($action == 'thematic_list') {
 								echo '</tr>';							 
 							}
 						} else {
-							echo '<tr><td width="90%"><div><em>'.get_lang('StillDoNotHaveAThematicAdvance').'</em></div></td><td>&nbsp;</td>';
+							echo '<tr><td width="90%"><div><em>'.get_lang('ThereIsNoAThematicAdvance').'</em></div></td><td>&nbsp;</td>';
 						}									
 					echo '</table>';
 							
@@ -133,7 +133,7 @@ if ($action == 'thematic_list') {
 
 		echo '</table>';
 	} else {
-		echo '<div><em>'.get_lang('ThereIsStillAthematicSection').'</em></div>';
+		echo '<div><em>'.get_lang('ThereIsNoAThematicSection').'</em></div>';
 	}
 	
 } else if ($action == 'thematic_add' || $action == 'thematic_edit') {

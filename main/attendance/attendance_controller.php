@@ -53,32 +53,37 @@
 		
 		$attendance = new Attendance();        
 		$data = array();
-				
-		if (strtoupper($_SERVER['REQUEST_METHOD']) == "POST") {
 
-			$check = Security::check_token();        		
-    		if ($check) {
-    			$attendance->set_name($_POST['title']);
-    			$attendance->set_description($_POST['description']);
-    			$attendance->set_attendance_qualify_title($_POST['attendance_qualify_title']);
-    			$attendance->set_attendance_weight($_POST['attendance_weight']);
-    			$link_to_gradebook = false;    			    			
-				if ( isset($_POST['attendance_qualify_gradebook']) && $_POST['attendance_qualify_gradebook'] == 1 ) {
-					$link_to_gradebook = true;	
-				}    			    			
-    			$last_id = $attendance->attendance_add($link_to_gradebook);    			   			
-	        	Security::clear_token();	        		
-    		}
-    		 
-    		if ($last_id) {        			
-				$this->attendance_sheet('calendar_list',$last_id);     			
+		if (strtoupper($_SERVER['REQUEST_METHOD']) == "POST") {
+			
+			if (!empty($_POST['title'])) {
+				$check = Security::check_token();        		
+	    		if ($check) {
+	    			$attendance->set_name($_POST['title']);
+	    			$attendance->set_description($_POST['description']);
+	    			$attendance->set_attendance_qualify_title($_POST['attendance_qualify_title']);
+	    			$attendance->set_attendance_weight($_POST['attendance_weight']);
+	    			$link_to_gradebook = false;    			    			
+					if ( isset($_POST['attendance_qualify_gradebook']) && $_POST['attendance_qualify_gradebook'] == 1 ) {
+						$link_to_gradebook = true;	
+					}    			    			
+	    			$last_id = $attendance->attendance_add($link_to_gradebook);    			   			
+		        	Security::clear_token();	        		
+	    		}
+    			$param_gradebook = '';
+				if (isset($_SESSION['gradebook'])) {
+					$param_gradebook = '&gradebook='.Security::remove_XSS($_SESSION['gradebook']);
+				}
+    			header('location:index.php?action=attendance_sheet_list&attendance_id='.$last_id.'&'.api_get_cidreq().$param_gradebook);
+    			exit;    			    							     							 
 			} else {
-				$data['error_attendance_add'] = true;
+				$data['error'] = true;
 				$this->view->set_data($data);
 				$this->view->set_layout('layout'); 
 				$this->view->set_template('attendance_add');		       
 				$this->view->render();
 			}
+
 
 		} else {
 			$this->view->set_data($data);
@@ -97,30 +102,44 @@
 	public function attendance_edit($attendance_id) {		
 		$attendance = new Attendance();        
 		$data = array();
-		$attendance_id = intval($attendance_id);				
+		$attendance_id = intval($attendance_id);	
+					
 		if (strtoupper($_SERVER['REQUEST_METHOD']) == "POST") {
-			$check = Security::check_token();        		
-    		if ($check) {
-    			$attendance->set_name($_POST['title']);
-    			$attendance->set_description($_POST['description']);
-    			$attendance->set_attendance_qualify_title($_POST['attendance_qualify_title']);
-    			$attendance->set_attendance_weight($_POST['attendance_weight']);
-    			
-    			$link_to_gradebook = false;    			    			
-				if ( isset($_POST['attendance_qualify_gradebook']) && $_POST['attendance_qualify_gradebook'] == 1 ) {
-					$link_to_gradebook = true;	
-				}    			    			
-				$affected_rows = $attendance->attendance_edit($attendance_id,$link_to_gradebook);				    			
-	        	Security::clear_token();	        		
-    		}
+			
+			if (!empty($_POST['title'])) {
+				$check = Security::check_token();        		
+	    		if ($check) {
+	    			$attendance->set_name($_POST['title']);
+	    			$attendance->set_description($_POST['description']);
+	    			$attendance->set_attendance_qualify_title($_POST['attendance_qualify_title']);
+	    			$attendance->set_attendance_weight($_POST['attendance_weight']);
+	    			
+	    			$link_to_gradebook = false;    			    			
+					if ( isset($_POST['attendance_qualify_gradebook']) && $_POST['attendance_qualify_gradebook'] == 1 ) {
+						$link_to_gradebook = true;	
+					}    			    			
+					$last_id = $attendance->attendance_edit($attendance_id,$link_to_gradebook);				    			
+		        	Security::clear_token();
+		        	
+		        	$param_gradebook = '';
+					if (isset($_SESSION['gradebook'])) {
+						$param_gradebook = '&gradebook='.Security::remove_XSS($_SESSION['gradebook']);
+					}
+	    			header('location:index.php?action=attendance_list&'.api_get_cidreq().$param_gradebook);
+	    			exit;  	        		
+	    		}
+			} else {
+				$data['attendance_id'] = $_POST['attendance_id'];
+				$data['error'] = true;
+				$this->view->set_data($data);
+				$this->view->set_layout('layout'); 
+				$this->view->set_template('attendance_edit');		       
+				$this->view->render();				
+			}
     		
     		
-    		
-    		if ($affected_rows) {
-    			$data['message_edit'] = true;
-    		}
-    		$this->attendance_list();
 		} else {
+			
 			// default values
 			$attendance_data = $attendance->get_attendance_by_id($attendance_id);
 			$data['attendance_id'] = $attendance_data['id'];
@@ -133,6 +152,7 @@
 			$this->view->set_layout('layout'); 
 			$this->view->set_template('attendance_edit');		       
 			$this->view->render();
+			
 		}
 	} 
 	

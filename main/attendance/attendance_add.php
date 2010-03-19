@@ -11,7 +11,7 @@
 api_protect_course_script(true);
 
 // error messages
-if (isset($error) && intval($error) == 1) {	
+if ($error) {	
 	Display::display_error_message(get_lang('FormHasErrorsPleaseComplete'),false);	
 }
 
@@ -20,11 +20,13 @@ if (isset($_SESSION['gradebook'])) {
 	$param_gradebook = '&gradebook='.Security::remove_XSS($_SESSION['gradebook']);
 }
 
-$token = Security::get_token();
+if (!$error) {
+	$token = Security::get_token();
+}
 // display form
 $form = new FormValidator('attendance_add','POST','index.php?action=attendance_add&'.api_get_cidreq().$param_gradebook,'','style="width: 100%;"');
 $form->addElement('header', '', get_lang('CreateANewAttendance'));
-$form->addElement('hidden', 'sec_token',$token);
+$form->addElement('hidden', 'sec_token', $token);
 
 $form->add_textfield('title', get_lang('Title'), true, array('size'=>'50'));
 $form->applyFilter('title','html_filter');

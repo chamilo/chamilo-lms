@@ -210,7 +210,7 @@ if (!empty ($_GET['student'])) {
 	// Actions bar
 	echo '<div class="actions">';
 	echo '<a href="javascript: void(0);" onclick="javascript: window.print();"><img src="../img/printmgr.gif">&nbsp;' . get_lang('Print') . '</a>';
-	echo '<a href="' . api_get_self() . '?' . Security :: remove_XSS($_SERVER['QUERY_STRING']) . '&export=csv"><img src="../img/excel.gif">&nbsp;' . get_lang('ExportAsCSV') . '</a>';
+	echo '<a href="' . api_get_self() . '?' . Security :: remove_XSS($_SERVER['QUERY_STRING']) . '&export=csv"><img src="../img/csv.gif">&nbsp;' . get_lang('ExportAsCSV') . '</a>';
 	if (!empty ($info_user['email'])) {
 		$send_mail = Display :: return_icon('send_mail.gif', get_lang('SendMail')) . ' ' . Display :: encrypted_mailto_link($info_user['email'], get_lang('SendMail'));
 	} else {

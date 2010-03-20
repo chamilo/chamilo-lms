@@ -88,6 +88,9 @@ function api_set_internationalization_default_encoding($encoding) {
  * Language support
  */
 
+// This a variable for internal purposes only, it serves the function api_is_translated().
+$_api_is_translated = false;
+
 /**
  * Returns a translated (localized) string, called by its identificator.
  * @param string $variable				This is the identificator (name) of the translated string to be retrieved.
@@ -110,31 +113,31 @@ function api_set_internationalization_default_encoding($encoding) {
  */
 function get_lang($variable, $reserved = null, $language = null) {
 
-	// For serving some old hacks:
-	// By manipulating this global variable the translation may be done in different languages too (not the elegant way).
-	global $language_interface;
+	global
+		// For serving some old hacks:
+		// By manipulating this global variable the translation may be done in different languages too (not the elegant way).
+		$language_interface,
+		// Because of possibility for manipulations of the global variable $language_interface, we need its initial value.
+		$language_interface_initial_value,
+		// For serving the function is_translated()
+		$_api_is_translated;
 
-	// Because of possibility for manipulations of the global variable $language_interface, we need its initial value.
-	global $language_interface_initial_value;
+	$_api_is_translated = false;
 
 	// Caching results from some API functions, for speed.
-	static $encoding;
+	static $encoding, $is_utf8_encoding, $langpath, $test_server_mode, $show_special_markup;
 	if (!isset($is_utf8_encoding)) {
 		$encoding = api_get_system_encoding();
 	}
-	static $is_utf8_encoding;
 	if (!isset($is_utf8_encoding)) {
 		$is_utf8_encoding = api_is_utf8($encoding);
 	}
-	static $langpath;
 	if (!isset($langpath)) {
 		$langpath = api_get_path(SYS_LANG_PATH);
 	}
-	static $test_server_mode;
 	if (!isset($test_server_mode)) {
 		$test_server_mode = api_get_setting('server_type') == 'test';
 	}
-	static $show_special_markup;
 	if (!isset($show_special_markup)) {
 		$show_special_markup = api_get_setting('hide_dltt_markup') != 'true' || $test_server_mode;
 	}
@@ -176,36 +179,61 @@ function get_lang($variable, $reserved = null, $language = null) {
 	// Translation mode for production servers.
 	if (!$test_server_mode) {
 		if ($read_global_variables) {
-			$langvar = isset($GLOBALS[$variable]) ? $GLOBALS[$variable] : (isset($GLOBALS["lang$variable"]) ? $GLOBALS["lang$variable"] : ($show_special_markup ? SPECIAL_OPENING_TAG.$variable.SPECIAL_CLOSING_TAG : $variable));
-		} else {
-			/*
-			@eval("\$langvar=\$$variable;"); // Note (RH): $$var doesn't work with arrays, see PHP doc
-			if (!isset($langvar)) {
-				@eval("\$langvar=\$lang$variable;");
-				if (!isset($langvar)) {
-					$langvar = $show_special_markup ? SPECIAL_OPENING_TAG.$variable.SPECIAL_CLOSING_TAG : $variable;
-				}
+			if (isset($GLOBALS[$variable])) {
+				$langvar = $GLOBALS[$variable];
+				$_api_is_translated = true;
+			} elseif (isset($GLOBALS["lang$variable"])) {
+				$langvar = $GLOBALS["lang$variable"];
+				$_api_is_translated = true;
+			} else {
+				$langvar = $show_special_markup ? SPECIAL_OPENING_TAG.$variable.SPECIAL_CLOSING_TAG : $variable;
 			}
-			*/
-			$langvar = isset($$variable) ? $$variable : (isset(${"lang$variable"}) ? ${"lang$variable"} : ($show_special_markup ? SPECIAL_OPENING_TAG.$variable.SPECIAL_CLOSING_TAG : $variable));
+		} else {
+			if (isset($$variable)) {
+				$langvar = $$variable;
+				$_api_is_translated = true;
+			} elseif (isset(${"lang$variable"})) {
+				$langvar = ${"lang$variable"};
+				$_api_is_translated = true;
+			} else {
+				$langvar = $show_special_markup ? SPECIAL_OPENING_TAG.$variable.SPECIAL_CLOSING_TAG : $variable;
+			}
 		}
-		return $cache[$language][$dltt][$variable] = is_string($langvar) ? ($is_utf8_encoding ? $langvar : api_utf8_decode($langvar, $encoding)) : $langvar;
+		if (empty($langvar) || !is_string($langvar)) {
+			$_api_is_translated = false;
+		}
+		return $cache[$language][$dltt][$variable] = $_api_is_translated ? ($is_utf8_encoding ? $langvar : api_utf8_decode($langvar, $encoding)) : $langvar;
 	}
 
 	// Translation mode for test/development servers.
 	if (!is_string($variable)) {
 		return $cache[$language][$variable] = SPECIAL_OPENING_TAG.'get_lang(?)'.SPECIAL_CLOSING_TAG;
 	}
-	/*
-	@eval("\$langvar=\$$variable;"); // Note (RH): $$var doesn't work with arrays, see PHP doc
-	if (!isset($langvar)) {
-		@eval("\$langvar=\$lang$variable;");
+	if (isset($$variable)) {
+		$langvar = $$variable;
+		$_api_is_translated = true;
+	} elseif (isset(${"lang$variable"})) {
+		$langvar = ${"lang$variable"};
+		$_api_is_translated = true;
 	}
-	*/
-	$langvar = isset($$variable) ? $$variable : ${"lang$variable"};
+	if (empty($langvar) || !is_string($langvar)) {
+		$_api_is_translated = false;
+	}
 	return $cache[$language][$variable] =
-		isset($langvar) && is_string($langvar) && !empty($langvar)
-			? ($is_utf8_encoding ? $langvar : api_utf8_decode($langvar, $encoding)) : ($show_special_markup ? SPECIAL_OPENING_TAG.$variable.SPECIAL_CLOSING_TAG : $variable);
+		$_api_is_translated ? ($is_utf8_encoding ? $langvar : api_utf8_decode($langvar, $encoding)) : ($show_special_markup ? SPECIAL_OPENING_TAG.$variable.SPECIAL_CLOSING_TAG : $variable);
+}
+
+/**
+ * Checks whether exists a translated (localized) string.
+ * @param string $variable				This is the identificator (name) of the translated string to be checked.
+ * @param string $language (optional)	Language indentificator. If it is omited, the current interface language is assumed.
+ * @return bool							Returns TRUE if translation exists, FALSE otherwise.
+ * @author Ivan Tcholakov, 2010.
+ */
+function api_is_translated($variable, $language = null) {
+	global $_api_is_translated;
+	get_lang($variable, $language);
+	return $_api_is_translated;
 }
 
 /**

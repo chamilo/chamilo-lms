@@ -14,6 +14,12 @@ class CourseHome {
 		$charset = api_get_system_encoding();
 		$TBL_ACCUEIL = Database :: get_course_table(TABLE_TOOL_LIST);
 		$TABLE_TOOLS = Database :: get_main_table(TABLE_MAIN_COURSE_MODULE);
+		$translated_icons = array(
+			'file_html.gif', 'file_html_na.gif',
+			'scormbuilder.gif', 'scormbuilder_na.gif',
+			'blog.gif', 'blog_na.gif',
+			'external.gif', 'external_na.gif'
+		);
 
 		$numcols = 3;
 		$table = new HTML_Table('width="100%"');
@@ -55,14 +61,11 @@ class CourseHome {
 		$result = Database::query($sql);
 
 		// Grabbing all the tools from $course_tool_table
-		while ($row = Database::fetch_array($result)) {
-			if ($row['img'] != 'file_html.gif' && $row['img'] != 'file_html_na.gif'
-					&& $row['img'] != 'scormbuilder.gif' && $row['img'] != 'scormbuilder_na.gif'
-					&& $row['img'] != 'blog.gif' && $row['img'] != 'blog_na.gif'
-					&& $row['img'] != 'external.gif' && $row['img'] != 'external_na.gif') {
-				$row['name_translated'] = get_lang(ucfirst($row['name']));
+		while ($tool = Database::fetch_array($result)) {
+			if (!in_array($tool['img'], $translated_icons)) {
+				$tool['name_translated'] = get_lang(ucfirst($tool['name']));
 			}
-			$all_tools[] = $row;
+			$all_tools[] = $tool;
 		}
 
 		// Grabbing all the links that have the property on_homepage set to 1
@@ -209,6 +212,12 @@ class CourseHome {
 		$charset = api_get_system_encoding();
 		$web_code_path = api_get_path(WEB_CODE_PATH);
 		$course_tool_table = Database::get_course_table(TABLE_TOOL_LIST);
+		$translated_icons = array(
+			'file_html.gif', 'file_html_na.gif',
+			'scormbuilder.gif', 'scormbuilder_na.gif',
+			'blog.gif', 'blog_na.gif',
+			'external.gif', 'external_na.gif'
+		);
 
 		switch ($course_tool_category) {
 
@@ -309,17 +318,14 @@ class CourseHome {
 				echo '<td width="50%" height="30">';
 
 				if (strpos($tool['name'], 'visio_') !== false) {
-					echo '<a  '.$class.' href="javascript: void(0);" onclick="javascript: window.open(\'' . htmlspecialchars($tool['link']).(($tool['image']=="external.gif" || $tool['image']=="external_na.gif") ? '' : $qm_or_amp.api_get_cidreq()) . '\',\'window_visio'.$_SESSION['_cid'].'\',config=\'height=\'+730+\', width=\'+1020+\', left=2, top=2, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no\')" target="' . $tool['target'] . '">';
+					echo '<a  '.$class.' href="javascript: void(0);" onclick="javascript: window.open(\'' . htmlspecialchars($tool['link']).(($tool['image'] == 'external.gif' || $tool['image'] == 'external_na.gif') ? '' : $qm_or_amp.api_get_cidreq()) . '\',\'window_visio'.$_SESSION['_cid'].'\',config=\'height=\'+730+\', width=\'+1020+\', left=2, top=2, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no\')" target="' . $tool['target'] . '">';
 				} elseif (strpos($tool['name'], 'chat') !== false && api_get_course_setting('allow_open_chat_window')) {
 					echo '<a href="javascript: void(0);" onclick="javascript: window.open(\'' . htmlspecialchars($tool['link']).$qm_or_amp.api_get_cidreq() . '\',\'window_chat'.$_SESSION['_cid'].'\',config=\'height=\'+380+\', width=\'+625+\', left=2, top=2, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no\')" target="' . $tool['target'] . '"'.$class.'>';
 				} else {
 					echo '<a href="'. htmlspecialchars($tool['link']).(($tool['image'] == 'external.gif' || $tool['image'] == 'external_na.gif') ? '' : $qm_or_amp.api_get_cidreq()).'" target="' , $tool['target'], '" '.$class.'>';
 				}
 
-				if ($tool['image'] == 'file_html.gif' || $tool['image'] == 'file_html_na.gif'
-						|| $tool['image'] == 'scormbuilder.gif' || $tool['image'] == 'scormbuilder_na.gif'
-						|| $tool['image'] == 'blog.gif' || $tool['image'] == 'blog_na.gif'
-						|| $tool['image'] == 'external.gif' || $tool['image'] == 'external_na.gif') {
+				if (in_array($tool['image'], $translated_icons)) {
 					$tool_name = @htmlspecialchars($tool['name'], ENT_QUOTES, $charset);
 				} else {
 					$tool_name = get_lang(ucfirst($tool['name']));
@@ -572,6 +578,13 @@ class CourseHome {
 		$course_tool_table = Database::get_course_table(TABLE_TOOL_LIST);
 		$is_allowed_to_edit = api_is_allowed_to_edit(null, true);
 		$is_platform_admin = api_is_platform_admin();
+		$translated_icons = array(
+			'file_html.gif', 'file_html_na.gif',
+			'scormbuilder.gif', 'scormbuilder_na.gif',
+			'blog.gif', 'blog_na.gif',
+			'external.gif', 'external_na.gif'
+		);
+
 		$i = 0;
 		if (isset($all_tools_list)) {
 			$lnk = '';
@@ -669,10 +682,7 @@ class CourseHome {
 				}
 				echo $toollink;
 
-				if ($tool['image'] == 'file_html.gif' || $tool['image'] == 'file_html_na.gif'
-						|| $tool['image'] == 'scormbuilder.gif' || $tool['image'] == 'scormbuilder_na.gif'
-						|| $tool['image'] == 'blog.gif' || $tool['image'] == 'blog_na.gif'
-						|| $tool['image'] == 'external.gif' || $tool['image'] == 'external_na.gif') {
+				if (in_array($tool['image'], $translated_icons)) {
 					$tool_name = stripslashes($tool['name']);
 				} else {
 					$list = explode('_', $tool['name']);

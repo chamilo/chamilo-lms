@@ -154,6 +154,7 @@ function get_lang($variable, $reserved = null, $language = null) {
 	// Looking up into the cache for existing translation.
 	if (isset($cache[$language][$variable])) {
 		// There is a previously saved translation, returning it.
+		$_api_is_translated = true;
 		return $cache[$language][$variable];
 	}
 

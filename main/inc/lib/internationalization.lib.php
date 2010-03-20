@@ -88,8 +88,9 @@ function api_set_internationalization_default_encoding($encoding) {
  * Language support
  */
 
-// This a variable for internal purposes only, it serves the function api_is_translated().
+// These variables are for internal purposes only, they serve the function api_is_translated().
 $_api_is_translated = false;
+$_api_is_translated_call = false;
 
 /**
  * Returns a translated (localized) string, called by its identificator.
@@ -120,9 +121,7 @@ function get_lang($variable, $reserved = null, $language = null) {
 		// Because of possibility for manipulations of the global variable $language_interface, we need its initial value.
 		$language_interface_initial_value,
 		// For serving the function is_translated()
-		$_api_is_translated;
-
-	$_api_is_translated = false;
+		$_api_is_translated, $_api_is_translated_call;
 
 	// Caching results from some API functions, for speed.
 	static $encoding, $is_utf8_encoding, $langpath, $test_server_mode, $show_special_markup;
@@ -152,16 +151,17 @@ function get_lang($variable, $reserved = null, $language = null) {
 	static $cache;
 
 	// Looking up into the cache for existing translation.
-	if (isset($cache[$language][$variable])) {
+	if (isset($cache[$language][$variable]) && !$_api_is_translated_call) {
 		// There is a previously saved translation, returning it.
-		$_api_is_translated = true;
 		return $cache[$language][$variable];
 	}
+
+	$_api_is_translated = false;
 
 	// There is no cached translation, we have to retrieve it:
 	// - from a global variable (the faster way) - on production server mode;
 	// - from a local variable after reloading the language files - on test server mode or when requested language is different than the genuine interface language.
-	$read_global_variables = $is_interface_language && !$test_server_mode;
+	$read_global_variables = $is_interface_language && !$test_server_mode && !$_api_is_translated_call;
 
 	// Reloading the language files when it is necessary.
 	if (!$read_global_variables) {
@@ -203,7 +203,7 @@ function get_lang($variable, $reserved = null, $language = null) {
 		if (empty($langvar) || !is_string($langvar)) {
 			$_api_is_translated = false;
 		}
-		return $cache[$language][$dltt][$variable] = $_api_is_translated ? ($is_utf8_encoding ? $langvar : api_utf8_decode($langvar, $encoding)) : $langvar;
+		return $cache[$language][$variable] = $_api_is_translated ? ($is_utf8_encoding ? $langvar : api_utf8_decode($langvar, $encoding)) : $langvar;
 	}
 
 	// Translation mode for test/development servers.
@@ -232,8 +232,10 @@ function get_lang($variable, $reserved = null, $language = null) {
  * @author Ivan Tcholakov, 2010.
  */
 function api_is_translated($variable, $language = null) {
-	global $_api_is_translated;
+	global $_api_is_translated, $_api_is_translated_call;
+	$_api_is_translated_call = true;
 	get_lang($variable, $language);
+	$_api_is_translated_call = false;
 	return $_api_is_translated;
 }
 

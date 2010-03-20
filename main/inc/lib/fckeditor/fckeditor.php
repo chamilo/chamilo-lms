@@ -381,7 +381,7 @@ class FCKeditor
 			$toolbar_config[$this->ToolbarSet] = array();
 			if (preg_match('/[a-zA-Z_]+/', $toolbar_dir) && preg_match('/[a-zA-Z_]+/', $this->ToolbarSet)) { // A security check.
 				// Seeking the toolbar.
-				@include api_get_path(LIBRARY_PATH).'fckeditor/toolbars/'.$toolbar_dir.'/'.self::camel_case_to_underscore($this->ToolbarSet).'.php';
+				@include api_get_path(LIBRARY_PATH).'fckeditor/toolbars/'.$toolbar_dir.'/'.api_camel_case_to_underscore($this->ToolbarSet).'.php';
 				if (!isset($config['ToolbarSets']['Normal'])) {
 					// No toolbar has been found yet.
 					if ($toolbar_dir == 'default') {
@@ -389,7 +389,7 @@ class FCKeditor
 						$this->ToolbarSet = 'Default';
 					} else {
 						// The custom toolbar does not exist, then trying to load the default one.
-						@include api_get_path(LIBRARY_PATH).'fckeditor/toolbars/default/'.self::camel_case_to_underscore($this->ToolbarSet).'.php';
+						@include api_get_path(LIBRARY_PATH).'fckeditor/toolbars/default/'.api_camel_case_to_underscore($this->ToolbarSet).'.php';
 						if (!isset($config['ToolbarSets']['Normal'])) {
 							// It does not exist in default toolbar definitions, giving up.
 							$this->ToolbarSet = 'Default';
@@ -663,14 +663,5 @@ class FCKeditor
 		}
 		@fclose($fp);
 		return $file_exists;
-	}
-
-	/*
-	 * Convers a string from camel case to underscore.
-	 * @param string $string
-	 * @return string
-	 */
-	private function camel_case_to_underscore($string) {
-		return strtolower(preg_replace('/([a-z])([A-Z])/', "$1_$2", $string));
 	}
 }

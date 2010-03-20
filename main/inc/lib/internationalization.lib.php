@@ -16,6 +16,10 @@
  * Constants
  */
 
+// Special tags for marking untranslated variables.
+define('SPECIAL_OPENING_TAG', '[=');
+define('SPECIAL_CLOSING_TAG', '=]');
+
 // Predefined date formats in Chamilo provided by the language sub-system.
 // To be used as a parameter for the function api_format_date().
 define('TIME_NO_SEC_FORMAT', 0);	// 15:23
@@ -86,34 +90,27 @@ function api_set_internationalization_default_encoding($encoding) {
 
 /**
  * Returns a translated (localized) string, called by its identificator.
- * @param string $variable		This is the identificator (name) of the translated string to be retrieved.
- * @param string $notrans		This parameter directs whether a link to DLTT to be shown for untranslated strings
- * 								($notrans = 'DLTT' means "yes", any other value means "no").
+ * @param string $variable				This is the identificator (name) of the translated string to be retrieved.
+ * @param string $reserved				This parameter has been reserved for future use.
  * @param string $language (optional)	Language indentificator. If it is omited, the current interface language is assumed.
- * @return string				Returns the requested string in the correspondent language.
+ * @return string						Returns the requested string in the correspondent language.
  *
  * @author Roan Embrechts
  * @author Patrick Cool
- * @author Ivan Tcholakov, April-September 2009 (caching functionality, additional parameter $language).
+ * @author Ivan Tcholakov, 2009-2010 (caching functionality, additional parameter $language, other adaptations).
  *
  * Notes:
  * 1. If the name of a given language variable has the prefix "lang" it may be omited, i.e. get_lang('langYes') == get_lang('Yes').
- * 2. When server type in Chamilo config settings is set as test (development) server and $notrans = 'DLTT', untranslated variables
- * are shown as links to DLTT where translations may be proposed.
- * 3. Additionally, untranslated variables might be indicated by special opening and closing tags  -  [=  =]
- * They do not show up in these two cases (for both production and test server modes):
- * - when the special setting 'hide_dltt_markup' is set so;
- * - when showing the DLTT link (on untranslated variable) is intentionaly suppressed by a developer, using the input parameter
- * $notrans, i.e. when the function is called in this way: get_lang('MyText', '')
- * 4. Translations are created by using a special tool: Chamilo Translation Application.
+ * 2. Untranslated variables might be indicated by special opening and closing tags  -  [=  =]
+ * The special tags do not show up in these two cases:
+ * - when the system has been switched to "production server mode";
+ * - when a special platform setting 'hide_dltt_markup' is set to "true" (the name of this setting comes from history);
+ * 3. Translations are created many contributors through using a special tool: Chamilo Translation Application.
  * @link http://translate.chamilo.org/
- * 5. DLTT means Dokeos Language Translation Tool - it was previously used.
- * @link http://www.dokeos.com/DLTT/
  */
-function get_lang($variable, $notrans = 'DLTT', $language = null) {
+function get_lang($variable, $reserved = null, $language = null) {
 
-	// We introduced the possibility to request specific language by the aditional parameter $language to this function.
-
+	// For serving some old hacks:
 	// By manipulating this global variable the translation may be done in different languages too (not the elegant way).
 	global $language_interface;
 
@@ -121,6 +118,14 @@ function get_lang($variable, $notrans = 'DLTT', $language = null) {
 	global $language_interface_initial_value;
 
 	// Caching results from some API functions, for speed.
+	static $encoding;
+	if (!isset($is_utf8_encoding)) {
+		$encoding = api_get_system_encoding();
+	}
+	static $is_utf8_encoding;
+	if (!isset($is_utf8_encoding)) {
+		$is_utf8_encoding = api_is_utf8($encoding);
+	}
 	static $langpath;
 	if (!isset($langpath)) {
 		$langpath = api_get_path(SYS_LANG_PATH);
@@ -129,9 +134,9 @@ function get_lang($variable, $notrans = 'DLTT', $language = null) {
 	if (!isset($test_server_mode)) {
 		$test_server_mode = api_get_setting('server_type') == 'test';
 	}
-	static $hide_dltt_markup;
-	if (!isset($hide_dltt_markup)) {
-		$hide_dltt_markup = api_get_setting('hide_dltt_markup') == 'true';
+	static $show_special_markup;
+	if (!isset($show_special_markup)) {
+		$show_special_markup = api_get_setting('hide_dltt_markup') != 'true' || $test_server_mode;
 	}
 
 	// Combining both ways for requesting specific language.
@@ -140,16 +145,13 @@ function get_lang($variable, $notrans = 'DLTT', $language = null) {
 	}
 	$is_interface_language = $language == $language_interface_initial_value;
 
-	// This is a flag for showing the link to the DLTT when the requested variable has no translation within the language files.
-	$dltt = $notrans == 'DLTT' && $is_interface_language;
-
 	// This is a cache for already translated language variables. By using it, we avoid repetitive translations, gaining speed.
 	static $cache;
 
 	// Looking up into the cache for existing translation.
-	if (isset($cache[$language][$dltt][$variable])) {
+	if (isset($cache[$language][$variable])) {
 		// There is a previously saved translation, returning it.
-		return $cache[$language][$dltt][$variable];
+		return $cache[$language][$variable];
 	}
 
 	// There is no cached translation, we have to retrieve it:
@@ -171,35 +173,28 @@ function get_lang($variable, $notrans = 'DLTT', $language = null) {
 		}
 	}
 
-	// Opening and closing tags for missing variables.
-	if ($hide_dltt_markup || !$dltt) {
-		$ot = ''; $ct = '';
-	} else {
-		$ot = '[='; $ct = '=]';
-	}
-
 	// Translation mode for production servers.
 	if (!$test_server_mode) {
 		if ($read_global_variables) {
-			$langvar = isset($GLOBALS[$variable]) ? $GLOBALS[$variable] : (isset($GLOBALS["lang$variable"]) ? $GLOBALS["lang$variable"] : $ot.$variable.$ct);
+			$langvar = isset($GLOBALS[$variable]) ? $GLOBALS[$variable] : (isset($GLOBALS["lang$variable"]) ? $GLOBALS["lang$variable"] : ($show_special_markup ? SPECIAL_OPENING_TAG.$variable.SPECIAL_CLOSING_TAG : $variable));
 		} else {
 			/*
 			@eval("\$langvar=\$$variable;"); // Note (RH): $$var doesn't work with arrays, see PHP doc
 			if (!isset($langvar)) {
 				@eval("\$langvar=\$lang$variable;");
 				if (!isset($langvar)) {
-					$langvar = $ot.$variable.$ct;
+					$langvar = $show_special_markup ? SPECIAL_OPENING_TAG.$variable.SPECIAL_CLOSING_TAG : $variable;
 				}
 			}
 			*/
-			$langvar = isset($$variable) ? $$variable : (isset(${"lang$variable"}) ? ${"lang$variable"} : $ot.$variable.$ct);
+			$langvar = isset($$variable) ? $$variable : (isset(${"lang$variable"}) ? ${"lang$variable"} : ($show_special_markup ? SPECIAL_OPENING_TAG.$variable.SPECIAL_CLOSING_TAG : $variable));
 		}
-		return $cache[$language][$dltt][$variable] = is_string($langvar) ? _get_lang_purifier(str_replace("\\'", "'", $langvar), $language) : $langvar;
+		return $cache[$language][$dltt][$variable] = is_string($langvar) ? ($is_utf8_encoding ? $langvar : api_utf8_decode($langvar, $encoding)) : $langvar;
 	}
 
 	// Translation mode for test/development servers.
 	if (!is_string($variable)) {
-		return $cache[$language][$dltt][$variable] = $ot.'get_lang(?)'.$ct;
+		return $cache[$language][$variable] = SPECIAL_OPENING_TAG.'get_lang(?)'.SPECIAL_CLOSING_TAG;
 	}
 	/*
 	@eval("\$langvar=\$$variable;"); // Note (RH): $$var doesn't work with arrays, see PHP doc
@@ -208,15 +203,9 @@ function get_lang($variable, $notrans = 'DLTT', $language = null) {
 	}
 	*/
 	$langvar = isset($$variable) ? $$variable : ${"lang$variable"};
-	// TODO: Ivan, 12-FEB-2010: These generated links (translation suggestions) to the Dokeos' site have to be corrected, I don't know how.
-	return $cache[$language][$dltt][$variable] =
+	return $cache[$language][$variable] =
 		isset($langvar) && is_string($langvar) && !empty($langvar)
-			? _get_lang_purifier(str_replace("\\'", "'", $langvar), $language)
-			: (!$dltt
-				? $ot.$variable.$ct
-				: $ot.$variable.$ct."<a href=\"http://www.dokeos.com/DLTT/suggestion.php?file=".
-					(!is_array($language_files) ? $language_files : implode('.inc.php', $language_files)).".inc.php&amp;variable=$".
-					$variable."&amp;language=".$language."\" target=\"_blank\" style=\"color:#FF0000\"><strong>#</strong></a>");
+			? ($is_utf8_encoding ? $langvar : api_utf8_decode($langvar, $encoding)) : ($show_special_markup ? SPECIAL_OPENING_TAG.$variable.SPECIAL_CLOSING_TAG : $variable);
 }
 
 /**
@@ -495,11 +484,11 @@ function api_get_local_time($time = null, $to_timezone=null, $from_timezone=null
 
 /**
  * Converts a string into a timestamp safely (handling timezones), using strtotime
- * 
+ *
  * @param string String to be converted
  * @param string Timezone (if null, the timezone will be determined based on user preference, or timezone chosen by the admin for the platform)
  * @return int Timestamp
- * 
+ *
  * @author Guillaume Viguier <guillaume.viguier@beeznest.com>
  */
 function api_strtotime($time, $timezone = null) {
@@ -513,33 +502,33 @@ function api_strtotime($time, $timezone = null) {
 /**
  * Returns formated date/time, correspondent to a given language.
  * The given date should be in the timezone chosen by the administrator and/or user. Use api_get_local_time to get it.
- * 
+ *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  * @author Christophe Gesche<gesche@ipm.ucl.ac.be>
  *         originally inspired from from PhpMyAdmin
  * @author Ivan Tcholakov, 2009, code refactoring, adding support for predefined date/time formats.
  * @author Guillaume Viguier <guillaume.viguier@beeznest.com>
- * 
+ *
  * @param mixed Timestamp or datetime string
  * @param mixed Date format (string or int; see date formats in the Chamilo system: TIME_NO_SEC_FORMAT, DATE_FORMAT_SHORT, DATE_FORMAT_LONG, DATE_TIME_FORMAT_LONG)
  * @param string $language (optional)		Language indentificator. If it is omited, the current interface language is assumed.
  * @return string							Returns the formatted date.
- * 
+ *
  * @link http://php.net/manual/en/function.strftime.php
  */
 function api_format_date($time, $format = null, $language = null) {
-	
+
 	$system_timezone = date_default_timezone_get();
 	date_default_timezone_set(_api_get_timezone());
-	
+
 	if (is_string($time)) {
 		$time = strtotime($time);
 	}
-	
+
 	if (is_null($format)) {
 		$format = DATE_TIME_FORMAT_LONG;
 	}
-	
+
 	$datetype = null;
 	$timetype = null;
 	if(is_int($format)) {
@@ -580,7 +569,7 @@ function api_format_date($time, $format = null, $language = null) {
 				}
 		}
 	}
-	
+
 	if (IS_PHP_53 && INTL_INSTALLED && $datetype !== null && $timetype !== null) {
 		// Use ICU
 		if (is_null($language)) {
@@ -621,7 +610,7 @@ function date_to_str_ago($date) {
 	static $min_decade, $min_year, $min_month, $min_week, $min_day, $min_hour, $min_minute;
 	static $min_decades, $min_years, $min_months, $min_weeks, $min_days, $min_hours, $min_minutes;
 	static $sec_time_time, $sec_time_sing, $sec_time_plu;
-	
+
 	$system_timezone = date_default_timezone_get();
 	date_default_timezone_set(_api_get_timezone());
 
@@ -726,7 +715,7 @@ function date_to_str_ago($date) {
 	} else {
 		$str = $str_result[0];
 	}
-	
+
 	date_default_timezone_set($system_timezone);
 	return $str;
 }
@@ -737,7 +726,7 @@ function date_to_str_ago($date) {
  * @param mixed Format to be used
  * @param string Timezone to be converted from. If null, UTC will be assumed.
  * @return string Converted and localized date
- * 
+ *
  * @author Guillaume Viguier <guillaume.viguier@beeznest.com>
  */
 function api_convert_and_format_date($time = null, $format = null, $from_timezone = null) {

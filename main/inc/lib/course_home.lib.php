@@ -14,12 +14,6 @@ class CourseHome {
 		$charset = api_get_system_encoding();
 		$TBL_ACCUEIL = Database :: get_course_table(TABLE_TOOL_LIST);
 		$TABLE_TOOLS = Database :: get_main_table(TABLE_MAIN_COURSE_MODULE);
-		$translated_icons = array(
-			'file_html.gif', 'file_html_na.gif',
-			'scormbuilder.gif', 'scormbuilder_na.gif',
-			'blog.gif', 'blog_na.gif',
-			'external.gif', 'external_na.gif'
-		);
 
 		$numcols = 3;
 		$table = new HTML_Table('width="100%"');
@@ -62,9 +56,6 @@ class CourseHome {
 
 		// Grabbing all the tools from $course_tool_table
 		while ($tool = Database::fetch_array($result)) {
-			if (!in_array($tool['img'], $translated_icons)) {
-				$tool['name_translated'] = get_lang(ucfirst($tool['name']));
-			}
 			$all_tools[] = $tool;
 		}
 
@@ -105,12 +96,12 @@ class CourseHome {
 
 		foreach ($all_tools as & $tool) {
 			if (api_get_session_id() != 0 && in_array($tool['name'], array('course_maintenance', 'course_setting'))) {
-					continue;
+				continue;
 			}
 
 			$cell_content = '';
 			// The name of the tool
-			$tool_name = !empty($tool['name_translated']) ? $tool['name_translated'] : @htmlspecialchars($tool['name'], ENT_QUOTES, $charset); // RH: added htmlspecialchars
+			$tool_name = self::translate_tool_name($tool);
 
 			$link_annex = '';
 			// The url of the tool
@@ -212,12 +203,6 @@ class CourseHome {
 		$charset = api_get_system_encoding();
 		$web_code_path = api_get_path(WEB_CODE_PATH);
 		$course_tool_table = Database::get_course_table(TABLE_TOOL_LIST);
-		$translated_icons = array(
-			'file_html.gif', 'file_html_na.gif',
-			'scormbuilder.gif', 'scormbuilder_na.gif',
-			'blog.gif', 'blog_na.gif',
-			'external.gif', 'external_na.gif'
-		);
 
 		switch ($course_tool_category) {
 
@@ -325,11 +310,7 @@ class CourseHome {
 					echo '<a href="'. htmlspecialchars($tool['link']).(($tool['image'] == 'external.gif' || $tool['image'] == 'external_na.gif') ? '' : $qm_or_amp.api_get_cidreq()).'" target="' , $tool['target'], '" '.$class.'>';
 				}
 
-				if (in_array($tool['image'], $translated_icons)) {
-					$tool_name = @htmlspecialchars($tool['name'], ENT_QUOTES, $charset);
-				} else {
-					$tool_name = get_lang(ucfirst($tool['name']));
-				}
+				$tool_name = self::translate_tool_name($tool);
 				echo Display::return_icon($tool['image'], $tool_name),'&nbsp;', $tool_name,'</a>';
 
 				// This part displays the links to hide or remove a tool.
@@ -379,7 +360,7 @@ class CourseHome {
 					}
 				}
 				if (is_array($lnk)) {
-					foreach($lnk as $this_link) {
+					foreach ($lnk as & $this_link) {
 						if (!$tool['adminlink']) {
 							echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;id='.$tool['id'].'&amp;'.$this_link['cmd'].'">'.$this_link['name'].'</a>';
 						}
@@ -578,12 +559,6 @@ class CourseHome {
 		$course_tool_table = Database::get_course_table(TABLE_TOOL_LIST);
 		$is_allowed_to_edit = api_is_allowed_to_edit(null, true);
 		$is_platform_admin = api_is_platform_admin();
-		$translated_icons = array(
-			'file_html.gif', 'file_html_na.gif',
-			'scormbuilder.gif', 'scormbuilder_na.gif',
-			'blog.gif', 'blog_na.gif',
-			'external.gif', 'external_na.gif'
-		);
 
 		$i = 0;
 		if (isset($all_tools_list)) {
@@ -682,13 +657,7 @@ class CourseHome {
 				}
 				echo $toollink;
 
-				if (in_array($tool['image'], $translated_icons)) {
-					$tool_name = stripslashes($tool['name']);
-				} else {
-					$list = explode('_', $tool['name']);
-					foreach ($list as & $item) { $item = ucfirst($item); }
-					$tool_name = get_lang('Tool'.implode($list));
-				}
+				$tool_name = self::translate_tool_name($tool);
 				Display::display_icon($tool['image'], $tool_name, array('class' => 'tool-icon', 'id' => 'toolimage_'.$tool['id']));
 
 				// Validacion when belongs to a session
@@ -764,4 +733,33 @@ class CourseHome {
 		return $output;
 	}
 
+	/**
+	 * Retrieves the name-field within a tool-record and translates it on necessity.
+	 * @param array $tool		The input record.
+	 * @return string			Returns the name of the corresponding tool.
+	 */
+	public static function translate_tool_name(& $tool) {
+		static $already_translated_icons = array(
+			'file_html.gif', 'file_html_na.gif',
+			'scormbuilder.gif', 'scormbuilder_na.gif',
+			'blog.gif', 'blog_na.gif',
+			'external.gif', 'external_na.gif'
+		);
+
+		if (in_array($tool['image'], $already_translated_icons)) {
+			$tool_name = Security::remove_XSS(stripslashes($tool['name']));
+		} else {
+			$variable = 'Tool'.api_underscore_to_camel_case($tool['name']); // The newly opened language variables.
+			$variable_old = ucfirst($tool['name']);         // The old language variables as a second chance exist.
+			if (api_is_translated($variable)) {
+				$tool_name = get_lang($variable);
+			} elseif (api_is_translated($variable_old)) {
+				$tool_name = get_lang($variable_old);
+			} else {
+				$tool_name = get_lang($variable);
+			}
+		}
+
+		return $tool_name;
+	}
 }

@@ -17,7 +17,7 @@ if ($action == 'thematic_advance_add' || $action == 'thematic_advance_edit') {
 		$header_form = get_lang('EditThematicAdvance');
 	}
 
-	if (!$error) {
+	if (!$start_date_error && !$duration_error) {
 		$token = md5(uniqid(rand(),TRUE));
 		$_SESSION['thematic_advance_token'] = $token;
 	}

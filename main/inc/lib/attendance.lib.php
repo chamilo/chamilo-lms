@@ -198,7 +198,7 @@ class Attendance
 	 * edit attendaces inside table
 	 * @param 	int	   attendance id
 	 * @param  	bool   true for adding link in gradebook or false otherwise (optional)
-	 * @return 	int    affected rows
+	 * @return 	int    last id
 	 */
 	public function attendance_edit($attendance_id, $link_to_gradebook = false) {
 		global $_course;
@@ -220,7 +220,6 @@ class Attendance
 					attendance_weight = '".$weight_calification."'
 				WHERE id = '$attendance_id'";
 		Database::query($sql);
-		$affected_rows = Database::affected_rows();
 		if (!empty($affected_rows)) {
 			// update row item property table
 			$last_id = Database::insert_id();
@@ -237,7 +236,9 @@ class Attendance
 				Database::query('UPDATE '.$table_link.' SET weight='.$weight_calification.' WHERE id='.$link_id.'');
 			}
 		}
-		return $affected_rows;
+		$last_id = $attendance_id;
+		
+		return $last_id;
 	}
 
 	/**

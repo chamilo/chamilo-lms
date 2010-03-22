@@ -11,10 +11,10 @@ function print_table ($data_array,$header_names,$view,$coursename) {
 	$printdata= '<!DOCTYPE html
      PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="'.api_get_language_isocode().'" lang="'.api_get_language_isocode().'">
 <head>
 <title>'.get_lang('Print').'</title>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta http-equiv="Content-Type" content="text/html; charset='.api_get_system_encoding().'" />
 
 
 <style type="text/css">
@@ -58,8 +58,8 @@ a:active {text-decoration: none; font-weight : bold;  color : black;}
 }
 </style>
 </head>
-<body><div id="main">';
-	
+<body dir="'.api_get_text_direction().'"><div id="main">';
+
 	$printdata .= '<h2>'.$view.' : '.$coursename.'</h2>';
 	//@todo not necessary here
 	//$printdata .= '<h3>'.get_lang('Date').' : '.api_convert_and_format_date(null, DATE_FORMAT_SHORT). ' ' . api_convert_and_format_date(null, TIME_NO_SEC_FORMAT).'</h3>';
@@ -67,7 +67,7 @@ a:active {text-decoration: none; font-weight : bold;  color : black;}
 	foreach ($header_names as $header) {
 		$printdata .= '<th>'.$header.'</th>';
 	}
-	
+
 	foreach ($data_array as $data) {
 		$printdata .= '<tr>';
 		foreach ($data as $rowdata) {

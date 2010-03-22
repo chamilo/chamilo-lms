@@ -113,4 +113,7 @@ $NewUserEmailAlert = "Известяване на инструктора по e-
 $NewUserEmailAlertEnable = "Да се уведомява с e-mail преподавателя, когато потребител се регистрира самостоятелно в курса";
 $NewUserEmailAlertToTeacharAndTutor = "Да се уведомяват с e-mail преподавателите и инструкторите, когато потребител се регистрира самостоятелно в курса";
 $NewUserEmailAlertDisable = "Изключване на уведомяването с e-mail на новозаписаните курсисти";
+$AllowUserViewUserList = "Разрешанаве на курситите да виждат списъка с потребителите";
+$AllowUserViewUserListActivate = "Разрешаване";
+$AllowUserViewUserListDeactivate = "Забрана";
 ?>

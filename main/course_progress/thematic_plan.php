@@ -4,7 +4,7 @@
 /**
 * View (MVC patter) for thematic plan 
 * @author Christian Fasanando <christian1827@gmail.com>
-* @package chamilo.attendance
+* @package chamilo.course_progress
 */
 
 // actions menu
@@ -57,18 +57,12 @@ if ($action == 'thematic_plan_list') {
 		$header_form = get_lang('NewBloc');
 	} else {
 		$header_form = $default_thematic_plan_title[$description_type];		
-	}
-	
+	}	
 	if (!$error) {
 		$token = md5(uniqid(rand(),TRUE));
 		$_SESSION['thematic_plan_token'] = $token;
 	}
-	
-	// error messages
-	if ($error) { 	
-		Display::display_error_message(get_lang('FormHasErrorsPleaseComplete'),false);	
-	}
-	
+
 	// display form
 	$form = new FormValidator('thematic_plan_add','POST','index.php?action=thematic_plan_list&thematic_id='.$thematic_id.'&'.api_get_cidreq().$param_gradebook,'','style="width: 100%;"');
 	$form->addElement('header', '', $header_form);
@@ -102,9 +96,13 @@ if ($action == 'thematic_plan_list') {
 		$message .= $default_thematic_plan_question[$description_type];
 		Display::display_normal_message($message, false);
 	}
+
+	// error messages
+	if ($error) { 	
+		Display::display_error_message(get_lang('FormHasErrorsPleaseComplete'),false);	
+	}
 	
 	$form->display();		
 }
-
 
 ?>

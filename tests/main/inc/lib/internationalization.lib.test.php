@@ -1,12 +1,12 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 /**
  * This is a test of internationalization.lib.php which is
  * a common purpose library for supporting internationalization
  * related functions. Only the public API is tested here.
  * @author Ricardo Rodriguez Salazar, 2009.
- * @author Ivan Tcholakov, September 2009.
- * For licensing terms, see /dokeos_license.txt
+ * @author Ivan Tcholakov, 2009-2010.
  *
  * Notes:
  * 1. While saving this file, please, preserve its UTF-8 encoding.
@@ -521,9 +521,10 @@ class TestInternationalization extends UnitTestCase {
 	public function test_api_ereg() {
 		$pattern = 'scorm/showinframes.php([^"\'&]*)(&|&amp;)file=([^"\'&]*)$';
 		$string = 'http://localhost/dokeos/main/scorm/showinframes.php?id=5&amp;file=test.php';
-		$res = api_ereg($pattern, $string);
+		$regs = array();
+		$res = api_ereg($pattern, $string, $regs);
 		$this->assertTrue(is_numeric($res));
-		$this->assertTrue($res == 45);
+		//var_dump($regs);
 		//var_dump($res);
 	}
 
@@ -538,13 +539,13 @@ class TestInternationalization extends UnitTestCase {
 		//var_dump($res);
 	}
 
-	public function testapi_eregi() {
+	public function test_api_eregi() {
 		$pattern = 'scorm/showinframes.php([^"\'&]*)(&|&amp;)file=([^"\'&]*)$';
 		$string = 'http://localhost/dokeos/main/scorm/showinframes.php?id=5&amp;file=test.php';
-		$regs = '';
+		$regs = array();
 		$res = api_eregi($pattern, $string, $regs);
 		$this->assertTrue(is_numeric($res));
-		$this->assertTrue($res == 45);
+		//var_dump($regs);
 		//var_dump($res);
 	}
 
@@ -1385,13 +1386,13 @@ class TestInternationalization extends UnitTestCase {
 		}
 		//var_dump('<pre>'.$res.'</pre>');
 	}
-	
+
 	public function test_api_get_local_time_with_datetime() {
 		$datetime_not_converted = '2010-03-13 16:24:02';
 		$datetime_gmtplus1 = api_get_local_time($datetime_not_converted, 'Europe/Paris', 'America/Lima');
 		$this->assertEqual($datetime_gmtplus1, '2010-03-13 22:24:02');
 	}
-	
+
 	public function test_api_get_local_time_with_timestamp() {
 		$current_timestamp = time();
 		$datetime = api_get_local_time($current_timestamp, 'Europe/Paris');
@@ -1400,7 +1401,7 @@ class TestInternationalization extends UnitTestCase {
 		$this->assertEqual($datetime, date('Y-m-d H:i:s', $current_timestamp));
 		date_default_timezone_set($system_timezone);
 	}
-	
+
 	public function test_api_get_utc_datetime_with_string() {
 		$timestamp = time();
 		$timezone = _api_get_timezone();
@@ -1411,7 +1412,7 @@ class TestInternationalization extends UnitTestCase {
 		$this->assertEqual($datetime_utc, gmdate('Y-m-d H:i:s', $timestamp));
 		date_default_timezone_set($system_timezone);
 	}
-	
+
 	public function test_api_get_utc_datetime_with_timestamp() {
 		$timestamp = time();
 		$this->assertEqual(api_get_utc_datetime($timestamp), gmdate("Y-m-d H:i:s", $timestamp));

@@ -159,12 +159,12 @@ $thematic_description_html = '';
 
 if ($tool == TOOL_COURSE_HOMEPAGE && !isset($_GET['intro_cmdEdit'])) {
 
-	$thematic = new Thematic();	
-	if (api_get_course_setting('display_info_advance_inside_homecourse')) {
+	$thematic = new Thematic();
+	if (api_get_course_setting('display_info_advance_inside_homecourse') == '1') {
 		$information_title = get_lang('InfoAboutLastDoneAdvance');
 		$last_done_advance =  $thematic->get_last_done_thematic_advance();
 		$thematic_advance_info = $thematic->get_thematic_advance_list($last_done_advance);
-	} else {
+	} else if(api_get_course_setting('display_info_advance_inside_homecourse') == '2') {
 		$information_title = get_lang('InfoAboutNextAdvanceNotDone');
 		$next_advance_not_done = $thematic->get_next_thematic_advance_not_done();
 		$thematic_advance_info = $thematic->get_thematic_advance_list($next_advance_not_done);
@@ -185,7 +185,7 @@ if ($tool == TOOL_COURSE_HOMEPAGE && !isset($_GET['intro_cmdEdit'])) {
 		$thematic_description_html .= '<h3>'.$thematic_advance.'</h3>';	
 		$thematic_description_html .= '<h4>'.$information_title.'</h4>';						  								
 		$thematic_description_html .= '<div><strong>'.$thematic_info['title'].'</strong></div>';			
-		$thematic_description_html .= '<div><strong>'.api_get_local_time($thematic_advance_info['start_date']).'</strong></div>';
+		$thematic_description_html .= '<div><strong>'.api_convert_and_format_date($thematic_advance_info['start_date'], DATE_TIME_FORMAT_LONG, date_default_timezone_get()).'</strong></div>';
 		$thematic_description_html .= '<div>'.$thematic_advance_info['content'].'</div>';
 		$thematic_description_html .= '<div>'.get_lang('DurationInHours').' : '.$thematic_advance_info['duration'].'</div>';
 		$thematic_description_html .= '<br />';								  	

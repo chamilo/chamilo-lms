@@ -116,4 +116,5 @@ $NewUserEmailAlertDisable = "Desactivar el aviso por correo electrónico de la a
 $AllowUserViewUserList = "Permitir al usuario ver la lista de usuarios";
 $AllowUserViewUserListActivate = "Activar permitir al usuario ver la lista de usuarios";
 $AllowUserViewUserListDeactivate = "Desactivar permitir al usuario ver la lista de usuarios";
+$DoNotDisplayAnyAdvance = "No mostrar ningún avance";
 ?>

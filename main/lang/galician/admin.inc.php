@@ -1168,4 +1168,16 @@ $Section = "Sección";
 $Expected = "Esperado";
 $Setting = "Parámetro";
 $Current = "Actual";
+$SessionGCMaxLifetimeInfo = "O tempo máximo de vida do recolector de lixo é o tempo máximo que se da entre dúas execucións do recolector de lixo";
+$PHPVersionInfo = "Versión PHP";
+$FileUploadsInfo = "A carga de arquivos indica se a subida de arquivos está autorizada";
+$UploadMaxFilesizeInfo = "Tamaño máximo dun arquivo cando se sube. Este axuste debe, na maioría dos casos, ir acompañado da variable post_max_size";
+$MagicQuotesRuntimeInfo = "Esta é unha característica non recomendada que convirte os valores devoltos por todas as funcións que devolven valores externos en valores con barras de escape. Esta funcionalidade *non* debería activarse";
+$PostMaxSizeInfo = "Este é o tamaño máximo dos envíos realizados ao través de formularios utilizando o método POST (é dicir, a forma típica de carga de arquivos mediante formularios)";
+$SafeModeInfo = "Modo seguro é unha característica obsoleta de PHP que limita (mal) o acceso dos scripts PHP a outros recursos. Recoméndase deixalo desactivado";
+$DisplayErrorsInfo = "Amosa os erros na pantalla. Activalo en servidores de desenvolvemento e desactivalo en servidores de produción";
+$MaxInputTimeInfo = "O tempo máximo permitido para que un formulario sexa procesado polo servidor. Se se sobrepasa, o proceso abandoase e devolve unha páxina en branco";
+$DefaultCharsetInfo = "Xogo de caracteres predeterminado que será enviado cando se devolvan as páxinas";
+$RegisterGlobalsInfo = "Permite seleccionar, ou non, o uso de variables globais. O uso desta funcionalidade representa un risco de seguridade";
+$ShortOpenTagInfo = "Permite utilizar etiquetas abreviadas ou non. Esta funcionalidade non se debería usar";
 ?>

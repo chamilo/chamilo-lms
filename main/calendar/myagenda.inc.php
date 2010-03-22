@@ -46,12 +46,10 @@ $setting_agenda_link = 'coursecode'; // valid values are coursecode and icon
 /**
  *	This function retrieves all the agenda items of all the courses the user is subscribed to
  */
-function get_myagendaitems($courses_dbs, $month, $year)
-{
+function get_myagendaitems($courses_dbs, $month, $year) {
 	global $_user;
 	global $_configuration;
 	global $setting_agenda_link;
-
 
 	$items = array ();
 	// get agenda-items for every course
@@ -62,8 +60,7 @@ function get_myagendaitems($courses_dbs, $month, $year)
 
 		$group_memberships = GroupManager :: get_group_ids($array_course_info["db"], $_user['user_id']);
 		// if the user is administrator of that course we show all the agenda items
-		if ($array_course_info['status'] == '1')
-		{
+		if ($array_course_info['status'] == '1') {
 			//echo "course admin";
 			$sqlquery = "SELECT DISTINCT agenda.*, ip.visibility, ip.to_group_id, ip.insert_user_id, ip.ref
 							FROM ".$TABLEAGENDA." agenda,
@@ -77,11 +74,9 @@ function get_myagendaitems($courses_dbs, $month, $year)
 							ORDER BY start_date ";
 		}
 		// if the user is not an administrator of that course
-		else
-		{
+		else {
 			//echo "GEEN course admin";
-			if (is_array($group_memberships) && count($group_memberships)>0)
-			{
+			if (is_array($group_memberships) && count($group_memberships)>0) {
 				$sqlquery = "SELECT	agenda.*, ip.visibility, ip.to_group_id, ip.insert_user_id, ip.ref
 								FROM ".$TABLEAGENDA." agenda,
 									".$TABLE_ITEMPROPERTY." ip
@@ -92,9 +87,7 @@ function get_myagendaitems($courses_dbs, $month, $year)
 								AND	( ip.to_user_id='".$_user['user_id']."' OR ip.to_group_id IN (0, ".implode(", ", $group_memberships).") )
 								AND ip.visibility='1'
 								ORDER BY start_date ";
-			}
-			else
-			{
+			} else {
 				$sqlquery = "SELECT agenda.*, ip.visibility, ip.to_group_id, ip.insert_user_id, ip.ref
 								FROM ".$TABLEAGENDA." agenda,
 									".$TABLE_ITEMPROPERTY." ip
@@ -105,24 +98,24 @@ function get_myagendaitems($courses_dbs, $month, $year)
 								AND ( ip.to_user_id='".$_user['user_id']."' OR ip.to_group_id='0')
 								AND ip.visibility='1'
 								ORDER BY start_date ";
-			}
+				}
 		}
 
 		$result = Database::query($sqlquery);
 		while ($item = Database::fetch_array($result)) {
 			$agendaday = date("j",strtotime($item['start_date']));
-			if(!isset($items[$agendaday])){$items[$agendaday]=array();}
-
+			if(!isset($items[$agendaday])) {
+				$items[$agendaday]=array();
+			}
 			$time = api_convert_and_format_date($item['start_date'], TIME_NO_SEC_FORMAT, date_default_timezone_get());
 			$end_time = api_convert_and_format_date($item['end_date'], TIME_NO_SEC_FORMAT, date_default_timezone_get());
 			$URL = api_get_path(WEB_PATH)."main/calendar/agenda.php?cidReq=".urlencode($array_course_info["code"])."&amp;day=$agendaday&amp;month=$month&amp;year=$year#$agendaday"; // RH  //Patrick Cool: to highlight the relevant agenda item
 			if ($setting_agenda_link == 'coursecode') {
 				$title=$array_course_info['title'];
 				$agenda_link = api_substr($title, 0, 14);
-			}
-			else {
+			} else {
 				$agenda_link = Display::return_icon('course_home.gif');
-			}
+				}
 			if(!isset($items[$agendaday][$item['start_date']])) {
 				$items[$agendaday][$item['start_date']] = '';
 			}
@@ -155,8 +148,7 @@ function get_myagendaitems($courses_dbs, $month, $year)
  * @param	string	The month name
  * @return	void	Direct output
  */
-function display_mymonthcalendar($agendaitems, $month, $year, $weekdaynames=array(), $monthName)
-{
+function display_mymonthcalendar($agendaitems, $month, $year, $weekdaynames=array(), $monthName) {
 	global $DaysShort,$course_path;
 	//Handle leap year
 	$numberofdays = array (0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31);
@@ -210,8 +202,7 @@ function display_mymonthcalendar($agendaitems, $month, $year, $weekdaynames=arra
 /**
  * Show the mini calender of the given month
  */
-function display_myminimonthcalendar($agendaitems, $month, $year, $monthName)
-{
+function display_myminimonthcalendar($agendaitems, $month, $year, $monthName) {
 	global $DaysShort,$course_path;
 	//Handle leap year
 	$numberofdays = array (0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31);
@@ -238,8 +229,7 @@ function display_myminimonthcalendar($agendaitems, $month, $year, $monthName)
 	while ($curday <= $numberofdays[$month])
 	{
 		echo "<tr>\n";
-		for ($ii = 0; $ii < 7; $ii ++)
-		{
+		for ($ii = 0; $ii < 7; $ii ++) {
 			if (($curday == -1) && ($ii == $startdayofweek))
 			{
 				$curday = 1;
@@ -282,11 +272,12 @@ function display_myminimonthcalendar($agendaitems, $month, $year, $monthName)
  * we are editing
  * attention: we have to check that the student is editing an item that belongs to him/her
  */
-function show_new_personal_item_form($id = "")
-{
+function show_new_personal_item_form($id = "") {
 	global $year, $MonthsLong;
-	global $tbl_personal_agenda;
 	global $_user;
+	
+	$tbl_personal_agenda = Database :: get_user_personal_table(TABLE_PERSONAL_AGENDA);
+	
 	// we construct the default time and date data (used if we are not editing a personal agenda item)
 	$today = getdate();
 	$day = $today['mday'];
@@ -304,12 +295,12 @@ function show_new_personal_item_form($id = "")
 		return false; //potential SQL injection
 	}
 
-	if ($id <> "")
+	if ($id != "")
 	{
 		$sql = "SELECT * FROM ".$tbl_personal_agenda." WHERE user='".$_user['user_id']."' AND id='".$id."'";
 		$result = Database::query($sql);
 		$aantal = Database::num_rows($result);
-		if ($aantal <> 0)
+		if ($aantal != 0)
 		{
 			$row = Database::fetch_array($result);
 			$year = substr($row['date'], 0, 4);
@@ -318,7 +309,7 @@ function show_new_personal_item_form($id = "")
 			$hours = substr($row['date'], 11, 2);
 			$minutes = substr($row['date'], 14, 2);
 			$title = $row['title'];
-			$text = $row['text'];
+			$content = $row['text'];
 		}
 		else
 		{
@@ -326,7 +317,7 @@ function show_new_personal_item_form($id = "")
 		}
 	}
 
-	echo '<form method="post" action="myagenda.php?action=add_personal_agenda_item&amp;id=$id" name="newedit_form">';
+	echo '<form method="post" action="myagenda.php?action=add_personal_agenda_item&amp;id='.$id.'" name="newedit_form">';
 	echo '<div id="newedit_form">';
 	echo '<div class="title">';
 	echo ($_GET['action'] == 'edit_personal_agenda_item') ? get_lang("ModifyPersonalCalendarItem") : get_lang("AddPersonalCalendarItem");
@@ -474,12 +465,21 @@ function show_new_personal_item_form($id = "")
 
 }
 /**
- * This function shows all the forms that are needed form adding a new personal agenda item
+ * This function shows all the forms that are needed form adding/editing a new personal agenda item
+ * @param date is the time in day
+ * @param date is the time in month
+ * @param date is the time in year
+ * @param date is the time in hour
+ * @param date is the time in minute
+ * @param string is the agenda title
+ * @param string is the content
+ * @param int is the id this param is optional, but is necessary if the item require be edited 
  */
-function store_personal_item($day, $month, $year, $hour, $minute, $title, $content, $id = "")
-{
-	global $tbl_personal_agenda;
+function store_personal_item($day, $month, $year, $hour, $minute, $title, $content, $id = "") {
 	global $_user;
+	
+	$tbl_personal_agenda = Database :: get_user_personal_table(TABLE_PERSONAL_AGENDA);
+	
 	//constructing the date
 	$date = $year."-".$month."-".$day." ".$hour.":".$minute.":00";
 
@@ -491,7 +491,7 @@ function store_personal_item($day, $month, $year, $hour, $minute, $title, $conte
 	}
 
 
-	if ($id <> "")
+	if ($id != "")
 	{ // we are updating
 		$sql = "UPDATE ".$tbl_personal_agenda." SET user='".$_user['user_id']."', title='".$title."', text='".$content."', date='".$date."' WHERE id='".$id."'";
 	}
@@ -507,11 +507,11 @@ function store_personal_item($day, $month, $year, $hour, $minute, $title, $conte
  * Xritten by Noel Dieschburg <noel.dieschburg@dokeos.com>
  */
 
-function get_all_courses_of_user()
-{
-        global $TABLECOURS;
-        global $TABLECOURSUSER;
+function get_all_courses_of_user() {
         global $_user;
+        
+        $TABLECOURS = Database :: get_main_table(TABLE_MAIN_COURSE);
+        $TABLECOURSUSER = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
         $tbl_session_course     = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE);
         $tbl_session_course_user= Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
         $tbl_session                    = Database :: get_main_table(TABLE_MAIN_SESSION);
@@ -542,11 +542,11 @@ function get_all_courses_of_user()
  * This function finds all the courses of the user and returns an array containing the
  * database name of the courses.
  */
-function get_courses_of_user()
-{
-	global $TABLECOURS;
-	global $TABLECOURSUSER;
+function get_courses_of_user() {
 	global $_user;
+	
+	$TABLECOURS = Database :: get_main_table(TABLE_MAIN_COURSE);
+	$TABLECOURSUSER = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 	$sql_select_courses = "SELECT course.code k, course.visual_code  vc,
 									course.title i, course.tutor_name t, course.db_name db, course.directory dir, course_rel_user.status status
 			                        FROM    $TABLECOURS       course,
@@ -564,11 +564,11 @@ function get_courses_of_user()
 /**
  * This function retrieves all the personal agenda items and add them to the agenda items found by the other functions.
  */
-function get_personal_agenda_items($agendaitems, $day = "", $month = "", $year = "", $week = "", $type)
-{
-	global $tbl_personal_agenda;
+function get_personal_agenda_items($agendaitems, $day = "", $month = "", $year = "", $week = "", $type) {
 	global $_user;
 	global $_configuration;
+	
+	$tbl_personal_agenda = Database :: get_user_personal_table(TABLE_PERSONAL_AGENDA);
 	// 1. creating the SQL statement for getting the personal agenda items in MONTH view
 	if ($type == "month_view" or $type == "") // we are in month view
 	{
@@ -668,8 +668,7 @@ function get_personal_agenda_items($agendaitems, $day = "", $month = "", $year =
  * @param	int	The agenda item ID
  * @return 	array	The results of the database query, or null if not found
  */
-function get_personal_agenda_item($id)
-{
+function get_personal_agenda_item($id) {
 	$tbl_personal_agenda = Database :: get_user_personal_table(TABLE_PERSONAL_AGENDA);
 	$id = Database::escape_string($id);
 	// make sure events of the personal agenda can only be seen by the user himself
@@ -690,11 +689,12 @@ function get_personal_agenda_item($id)
  * This function retrieves all the personal agenda items of the user and shows
  * these items in one list (ordered by date and grouped by month (the month_bar)
  */
-function show_personal_agenda()
-{
-	global $tbl_personal_agenda;
+function show_personal_agenda() {
 	global $MonthsLong, $charset;
 	global $_user;
+	
+	$tbl_personal_agenda = Database :: get_user_personal_table(TABLE_PERSONAL_AGENDA);
+	
 	// The SQL statement that retrieves all the personal agenda items of this user
 	$sql = "SELECT * FROM ".$tbl_personal_agenda." WHERE user='".$_user['user_id']."' ORDER BY date DESC";
 	$result = Database::query($sql);
@@ -794,10 +794,10 @@ function show_personal_agenda()
  * these items in one list (ordered by date and grouped by month (the month_bar)
  * @param int user id
  */
-function show_simple_personal_agenda($user_id)
-{
-	$tbl_personal_agenda = Database :: get_user_personal_table(TABLE_PERSONAL_AGENDA);
+function show_simple_personal_agenda($user_id) {
 	global $MonthsLong, $charset;
+	
+	$tbl_personal_agenda = Database :: get_user_personal_table(TABLE_PERSONAL_AGENDA);
 
 	// The SQL statement that retrieves all the personal agenda items of this user
 	$sql = "SELECT * FROM ".$tbl_personal_agenda." WHERE user='".$user_id."' ORDER BY date DESC";
@@ -868,10 +868,10 @@ function show_simple_personal_agenda($user_id)
  * There is an additional check to make sure that one cannot delete an item that
  * does not belong to him/her
  */
-function delete_personal_agenda($id)
-{
-	global $tbl_personal_agenda;
+function delete_personal_agenda($id) {
 	global $_user;
+	
+	$tbl_personal_agenda = Database :: get_user_personal_table(TABLE_PERSONAL_AGENDA);
 
 	if ($id != strval(intval($id))) {
 		return false; //potential SQL injection
@@ -981,4 +981,4 @@ function get_personal_agenda_items_between_dates($user_id, $date_start='', $date
 	}
 	return $items;
 }
-?>
+

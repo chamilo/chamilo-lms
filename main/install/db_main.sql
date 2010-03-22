@@ -288,7 +288,8 @@ INSERT INTO course_module VALUES
 (26,'gradebook','gradebook/index.php','gradebook.gif',2,2,'basic'),
 (27,'glossary','glossary/index.php','glossary.gif',2,1,'basic'),
 (28,'notebook','notebook/index.php','notebook.gif',2,1,'basic'),
-(29,'attendance','attendance/index.php','attendance.gif',2,1,'basic');
+(29,'attendance','attendance/index.php','attendance.gif',2,1,'basic'),
+(30,'course_progress','course_progress/index.php','course_progress.gif',2,1,'basic');
 UNLOCK TABLES;
 /*!40000 ALTER TABLE course_module ENABLE KEYS */;
 
@@ -724,7 +725,8 @@ VALUES
 ('course_create_active_tools','survey','checkbox','Tools','true','CourseCreateActiveToolsTitle','CourseCreateActiveToolsComment',NULL,'Survey', 0),
 ('course_create_active_tools','glossary','checkbox','Tools','true','CourseCreateActiveToolsTitle','CourseCreateActiveToolsComment',NULL,'Glossary', 0),
 ('course_create_active_tools','notebook','checkbox','Tools','true','CourseCreateActiveToolsTitle','CourseCreateActiveToolsComment',NULL,'Notebook', 0),
-('course_create_active_tools','attendances','checkbox','Tools','true','CourseCreateActiveToolsTitle','CourseCreateActiveToolsComment',NULL,'Attendances', 0),
+('course_create_active_tools','attendances','checkbox','Tools','false','CourseCreateActiveToolsTitle','CourseCreateActiveToolsComment',NULL,'Attendances', 0),
+('course_create_active_tools','course_progress','checkbox','Tools','false','CourseCreateActiveToolsTitle','CourseCreateActiveToolsComment',NULL,'CourseProgress', 0),
 ('advanced_filemanager',NULL,'radio','Editor','false','AdvancedFileManagerTitle','AdvancedFileManagerComment',NULL,NULL, 0),
 ('allow_reservation', NULL, 'radio', 'Tools', 'false', 'AllowReservationTitle', 'AllowReservationComment', NULL, NULL, 0),
 ('profile','apikeys','checkbox','User','false','ProfileChangesTitle','ProfileChangesComment',NULL,'ApiKeys', 0),
@@ -757,7 +759,7 @@ VALUES
 ('show_tabs', 'dashboard', 'checkbox', 'Platform', 'true', 'ShowTabsTitle', 'ShowTabsComment', NULL, 'TabsDashboard', 1),
 ('use_users_timezone', 'timezones', 'radio', 'Timezones', 'true', 'UseUsersTimezoneTitle','UseUsersTimezoneComment',NULL,'Timezones', 1),
 ('timezone_value', 'timezones', 'select', 'Timezones', '', 'TimezoneValueTitle','TimezoneValueComment',NULL,'Timezones', 1),
-('dokeos_database_version', NULL, 'textfield', NULL,'1.8.7.11140','DokeosDatabaseVersion','',NULL,NULL,0);
+('dokeos_database_version', NULL, 'textfield', NULL,'1.8.7.11182','DokeosDatabaseVersion','',NULL,NULL,0);
 
 
 UNLOCK TABLES;

@@ -3,6 +3,28 @@ require_once(api_get_path(LIBRARY_PATH).'text.lib.php');
 
 class TestText extends UnitTestCase {
 
+	public function test_api_camel_case_to_underscore() {
+		$input_strings    = array('myDocuments', 'MyProfile', 'CreateNewCourse', 'Create_New_course');
+		$expected_results = array('my_documents', 'my_profile', 'create_new_course', 'create_new_course');
+		$results = array_map('api_camel_case_to_underscore', $input_strings);
+		$this->assertTrue($results == $expected_results);
+		//var_dump($results);
+	}
+
+	function test_api_underscore_to_camel_case() {
+		$input_strings     = array('my_documents', 'My_profile', 'create_new_course');
+		$expected_results1 = array('MyDocuments', 'MyProfile', 'CreateNewCourse');
+		$expected_results2 = array('myDocuments', 'MyProfile', 'createNewCourse');
+		$func = create_function('$param', 'return api_underscore_to_camel_case($param, false);');
+		$results1 = array('MyDocuments', 'MyProfile', 'CreateNewCourse');
+		$results2 = array('myDocuments', 'MyProfile', 'createNewCourse');
+		$results1 = array_map('api_underscore_to_camel_case', $input_strings);
+		$results2 = array_map($func, $input_strings);
+		$this->assertTrue($results1 == $expected_results1 && $results2 == $expected_results2);
+		//var_dump($results1);
+		//var_dump($results2);
+	}
+
 	function test_text_parse_glossary() {
 		$input='';
 		$res=_text_parse_glossary($input);

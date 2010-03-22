@@ -1,14 +1,12 @@
-<?php // $Id: profile.php 22233 2009-07-20 09:54:05Z ivantcholakov $
-/* For licensing terms, see /dokeos_license.txt */
+<?php
+/* For licensing terms, see /license.txt */
 /**
-==============================================================================
 * This file displays the user's profile,
 * optionally it allows users to modify their profile as well.
 *
 * See inc/conf/profile.conf.php to modify settings
 *
-* @package dokeos.auth
-==============================================================================
+* @package chamilo.auth
 */
 
 /**

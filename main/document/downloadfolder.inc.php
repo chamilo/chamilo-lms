@@ -6,6 +6,8 @@
  *
  *	@package chamilo.document
  */
+ 
+set_time_limit(0);
 
 $path = $_GET['path'];
 

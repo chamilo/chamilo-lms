@@ -107,7 +107,7 @@ class BlockStudentGraph extends Block {
 	
 		$students = $this->students;
  		$attendance = new Attendance();
- 		
+	
  		// get data 		
  		$attendances_faults_avg = array();
  		
@@ -153,13 +153,19 @@ class BlockStudentGraph extends Block {
 				//if we already created the img
 				$img_file = $cache->GetHash($graph_id, $data_set->GetData());  // image file with hash
 			} else {					
-																																														
+				
+				if (count($usernames) < 5) {					
+					$height = 200;						
+				} else {				
+					$height = (count($usernames)*40); 
+				}
+																																															
 				// Initialise the graph
-				$test = new MyHorBar(400,330);
+				$test = new MyHorBar(400,($height+30));
 				$test->setFontProperties(api_get_path(LIBRARY_PATH).'pchart/fonts/tahoma.ttf', 8);
-				$test->setGraphArea(65,30,350,250);
-				$test->drawFilledRoundedRectangle(7,7,393,303,5,240,240,240);
-				$test->drawRoundedRectangle(5,5,395,305,5,230,230,230);
+				$test->setGraphArea(65,30,350,$height);
+				$test->drawFilledRoundedRectangle(7,7,393,$height,5,240,240,240);
+				$test->drawRoundedRectangle(5,5,395,$height,5,230,230,230);
 				$test->drawGraphArea(255,255,255,TRUE);
 				$test->setFixedScale(0,100,5);
 				$test->drawHorScale($data_set->GetData(),$data_set->GetDataDescription(),SCALE_NORMAL,150,150,150,TRUE,0,2,TRUE);

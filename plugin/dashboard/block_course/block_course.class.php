@@ -107,9 +107,15 @@ class BlockCourse extends Block {
 	    					</tr>';
 	    	$i = 1;
 	    	foreach ($course_data as $course) {
-	    		if ($i%2 == 0) $class_tr = 'row_odd';
-	    		else $class_tr = 'row_even';
+	    		if ($i%2 == 0) {
+	    			$class_tr = 'row_odd';
+	    		} else {
+	    			$class_tr = 'row_even';
+	    		}
 	    		$data_table .= '<tr class="'.$class_tr.'">';
+	    		if (!isset($course[2])) {
+	    			$course[2] = '0:00:00';
+	    		}
 	    		foreach ($course as $cell) {
 	    			$data_table .= '<td align="right">'.$cell.'</td>';
 	    		}
@@ -174,7 +180,7 @@ class BlockCourse extends Block {
 			$tematic_advance = $thematic->get_total_average_of_thematic_advances($course_code, 0);
 
 			if (!empty($tematic_advance)) {
-				$tematic_advance_progress = '<a title="'.get_lang('GoToThematicAdvance').'" href="'.api_get_path(WEB_CODE_PATH).'attendance/index.php?cidReq='.$course_code.'&action=thematic_details">'.$tematic_advance.'%</a>';
+				$tematic_advance_progress = '<a title="'.get_lang('GoToThematicAdvance').'" href="'.api_get_path(WEB_CODE_PATH).'course_progress/index.php?cidReq='.$course_code.'&action=thematic_details">'.$tematic_advance.'%</a>';
 			} else {
 				$tematic_advance_progress = '0%';
 			}
@@ -189,7 +195,6 @@ class BlockCourse extends Block {
 
 		return $course_data;
 	}
-
 
 }
 ?>

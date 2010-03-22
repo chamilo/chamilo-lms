@@ -1,7 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
-==============================================================================
  * SCRIPT PURPOSE :
  *
  * This script allows users to retrieve the password of their profile(s)
@@ -14,7 +13,6 @@
 *	@todo refactor, move relevant functions to code libraries
 *
 *	@package chamilo.auth
-==============================================================================
 */
 // name of the language file that needs to be included
 $language_file = 'registration';

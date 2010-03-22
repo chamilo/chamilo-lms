@@ -41,7 +41,7 @@ if ($action == 'thematic_plan_list') {
 				echo '<a href="'.api_get_self().'?cidReq='.api_get_course_id().'&thematic_id='.$thematic_plan['thematic_id'].'&action=thematic_plan_edit&description_type='.$thematic_plan['description_type'].'">';
 				echo Display::return_icon('edit.gif', get_lang('Edit'), array('style' => 'vertical-align:middle;float:right; padding-right:4px;'));
 				echo '</a> ';
-				echo $thematic_plan['title'];	
+				echo Security::remove_XSS($thematic_plan['title'], STUDENT);	
 			echo '</div>';
 			echo '<div class="sectioncomment">';
 			echo text_filter($thematic_plan['description']);

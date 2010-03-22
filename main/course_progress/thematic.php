@@ -38,7 +38,7 @@ if ($action == 'thematic_list') {
 
 	// display title
 	if (!empty($thematic_id)) {
-		echo '<div><strong>'.$thematic_data[$thematic_id]['title'].': '.get_lang('Details').'</strong></div><br />';							
+		echo '<div><strong>'.Security::remove_XSS($thematic_data[$thematic_id]['title'], STUDENT).': '.get_lang('Details').'</strong></div><br />';							
 	} else {
 		echo '<div><strong>'.get_lang('ThematicDetails').'</strong></div><br />';	
 		// display information
@@ -65,7 +65,7 @@ if ($action == 'thematic_list') {
 				echo '<tr>';
 				
 				// display thematic data		
-				echo '<td><div><strong>'.$thematic['title'].'</strong></div><div>'.$thematic['content'].'</div></td>';
+				echo '<td><div><strong>'.Security::remove_XSS($thematic['title'], STUDENT).'</strong></div><div>'.Security::remove_XSS($thematic['content'], STUDENT).'</div></td>';
 				
 				// display thematic plan data
 				echo '<td>';					
@@ -74,7 +74,7 @@ if ($action == 'thematic_list') {
 					}
 					if (!empty($thematic_plan_data[$thematic['id']])) {
 						foreach ($thematic_plan_data[$thematic['id']] as $thematic_plan) {
-							echo '<div><strong>'.$thematic_plan['title'].'</strong></div><div>'.$thematic_plan['description'].'</div>'; 
+							echo '<div><strong>'.Security::remove_XSS($thematic_plan['title'], STUDENT).'</strong></div><div>'.Security::remove_XSS($thematic_plan['description'], STUDENT).'</div>'; 
 						}
 					} else {
 						echo '<div><em>'.get_lang('StillDoNotHaveAThematicPlan').'</em></div>';
@@ -92,7 +92,7 @@ if ($action == 'thematic_list') {
 								echo '<tr>';
 								echo '<td width="90%">';
 									echo '<div><strong>'.api_convert_and_format_date($thematic_advance['start_date'], DATE_TIME_FORMAT_LONG, date_default_timezone_get()).'</strong></div>';
-									echo '<div>'.$thematic_advance['content'].'</div>';
+									echo '<div>'.Security::remove_XSS($thematic_advance['content'], STUDENT).'</div>';
 									echo '<div>'.get_lang('DurationInHours').' : '.$thematic_advance['duration'].'</div>';
 								echo '</td>';
 								if (empty($thematic_id) && api_is_allowed_to_edit(null, true)) {

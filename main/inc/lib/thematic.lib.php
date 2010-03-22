@@ -81,7 +81,7 @@ class Thematic
 		}
 
 		while ($thematic = Database::fetch_row($res)) {			
-			$thematic[1] = '<a href="index.php?'.api_get_cidreq().'&action=thematic_details&thematic_id='.$thematic[0].$param_gradebook.'">'.$thematic[1].'</a>';			
+			$thematic[1] = '<a href="index.php?'.api_get_cidreq().'&action=thematic_details&thematic_id='.$thematic[0].$param_gradebook.'">'.Security::remove_XSS($thematic[1], STUDENT).'</a>';			
 			if (api_is_allowed_to_edit(null, true)) {
 				$actions  = '';						
 				$actions .= '<center><a href="index.php?'.api_get_cidreq().'&action=thematic_plan_list&thematic_id='.$thematic[0].$param_gradebook.'">'.Display::return_icon('info.gif',get_lang('ThematicPlan')).'</a>&nbsp;';
@@ -280,20 +280,19 @@ class Thematic
 				if (!empty($affected_rows)) {
 					// update row item property table
 					api_item_property_update($_course, TOOL_COURSE_PROGRESS, $id,"delete", $user_id);
-				}			
+				}
 			}
 		} else  {
 			$thematic_id	= intval($thematic_id);
 			$sql = "UPDATE $tbl_thematic SET active = 0 WHERE id = $thematic_id";
 			Database::query($sql);
-			$affected_rows = Database::affected_rows();	
+			$affected_rows = Database::affected_rows();
 			if (!empty($affected_rows)) {
 				// update row item property table
 				api_item_property_update($_course, TOOL_COURSE_PROGRESS, $thematic_id,"delete", $user_id);
-			}		
+			}
 		}
-		return $affected_rows;
-				
+		return $affected_rows;				
 	}
 	
 	/**

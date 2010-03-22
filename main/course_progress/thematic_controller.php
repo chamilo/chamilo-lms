@@ -40,8 +40,8 @@ class ThematicController
 		
 		// insert or update a thematic		
 		if (strtoupper($_SERVER['REQUEST_METHOD']) == "POST") {																
-			if (isset($_POST['action']) && ($_POST['action'] == 'thematic_add' || $_POST['action'] == 'thematic_edit')) {
-				if (!empty($_POST['title'])) {
+			if (isset($_POST['action']) && ($_POST['action'] == 'thematic_add' || $_POST['action'] == 'thematic_edit')) {				
+				if (trim($_POST['title']) !== '') {
 		    		if ($_POST['thematic_token'] == $_SESSION['thematic_token']) {				    						    			
 		    			$id = $_POST['thematic_id'];
 		    			$title = $_POST['title'];
@@ -77,14 +77,12 @@ class ThematicController
 		
 		$thematic_id = isset($_GET['thematic_id'])?intval($_GET['thematic_id']):null;
 
-		if (isset($thematic_id)) {	
-			
+		if (isset($thematic_id)) {				
 			// delete a thematic					
 			if ($action == 'thematic_delete') {
 				$affected_rows = $thematic->thematic_destroy($thematic_id);
 				$action = 'thematic_list';
-			}	
-			
+			}				
 			// move thematic
 			if ($action == 'moveup') {
 				$thematic->move_thematic('up', $thematic_id);
@@ -92,8 +90,7 @@ class ThematicController
 			} else if ($action == 'movedown') {
 				$thematic->move_thematic('down', $thematic_id);
 				$action = 'thematic_list';
-			}
-					
+			}					
 			$data['thematic_data'] = $thematic->get_thematic_list($thematic_id);				
 			$data['thematic_id'] = $thematic_id;										
 		}
@@ -121,8 +118,7 @@ class ThematicController
 		$this->view->set_data($data);
 		$this->view->set_layout('layout'); 
 		$this->view->set_template('thematic');		       
-		$this->view->render();
-		
+		$this->view->render();		
 	}
 	
 	/**
@@ -136,8 +132,8 @@ class ThematicController
 		$error = false;
 		
 		if (strtoupper($_SERVER['REQUEST_METHOD']) == "POST") {   		
-    		if (isset($_POST['action']) && ($_POST['action'] == 'thematic_plan_add' || $_POST['action'] == 'thematic_plan_edit')) {	    			
-    			if (!empty($_POST['title'])) {
+    		if (isset($_POST['action']) && ($_POST['action'] == 'thematic_plan_add' || $_POST['action'] == 'thematic_plan_edit')) {    					
+    			if (trim($_POST['title']) !== '') {
     				if ($_POST['thematic_plan_token'] == $_SESSION['thematic_plan_token']) {						    						    				    			
 		    			$thematic_id = $_POST['thematic_id'];
 		    			$title = $_POST['title'];

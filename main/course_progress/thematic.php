@@ -117,7 +117,7 @@ if ($action == 'thematic_list') {
 								echo '</tr>';							 
 							}
 						} else {
-							echo '<tr><td width="90%"><div><em>'.get_lang('StillDoNotHaveAThematicAdvance').'</em></div></td><td>&nbsp;</td>';
+							echo '<tr><td width="90%"><div><em>'.get_lang('ThereIsNoAThematicAdvance').'</em></div></td><td>&nbsp;</td>';
 						}									
 					echo '</table>';							
 				echo '</td>';				
@@ -125,7 +125,11 @@ if ($action == 'thematic_list') {
 			}
 		echo '</table>';
 	} else {
-		echo '<div><em>'.get_lang('ThereIsStillAthematicSection').'</em></div>';
+		echo '<div><em>'.get_lang('ThereIsNoAThematicSection').'</em><br /><br />';
+		if (api_is_allowed_to_edit(null, true)) {
+			echo '<a href="index.php?'.api_get_cidreq().'&action=thematic_add">'.Display::return_icon('addd.gif',get_lang('CreateAThematicSection'), array('style'=>'vertical-align:middle')).' '.get_lang('CreateAThematicSection').'</a>';
+		}
+		echo '</div>';
 	}
 	
 } else if ($action == 'thematic_add' || $action == 'thematic_edit') {

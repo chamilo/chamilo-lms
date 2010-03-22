@@ -178,6 +178,8 @@ if ($tool == TOOL_COURSE_HOMEPAGE && !isset($_GET['intro_cmdEdit'])) {
 			$thematic_advance = '<a href="'.api_get_path(WEB_CODE_PATH).'course_progress/index.php?action=thematic_details&'.api_get_cidreq().'">'.get_lang('ThematicAdvance').'&nbsp;'.$thematic->get_total_average_of_thematic_advances().'%</a>';
 		}		
 		$thematic_info = $thematic->get_thematic_list($thematic_advance_info['thematic_id']);
+		$thematic_advance_info['start_date'] = api_get_local_time($thematic_advance_info['start_date']);
+		$thematic_advance_info['start_date'] = api_format_date($thematic_advance_info['start_date'], DATE_TIME_FORMAT_LONG);
 		
 		$thematic_description_html = '<div style="width:20%;float:left;font-size:10pt;"><div class="thematic-postit">
 								  <div class="thematic-postit-top"><a class="thematic-postit-head" style="" href="#">'.Display::return_icon('postit_top.png').'</a></div>
@@ -185,7 +187,7 @@ if ($tool == TOOL_COURSE_HOMEPAGE && !isset($_GET['intro_cmdEdit'])) {
 		$thematic_description_html .= '<h3>'.$thematic_advance.'</h3>';	
 		$thematic_description_html .= '<h4>'.$information_title.'</h4>';						  								
 		$thematic_description_html .= '<div><strong>'.$thematic_info['title'].'</strong></div>';			
-		$thematic_description_html .= '<div><strong>'.api_convert_and_format_date($thematic_advance_info['start_date'], DATE_TIME_FORMAT_LONG, date_default_timezone_get()).'</strong></div>';
+		$thematic_description_html .= '<div><strong>'.$thematic_advance_info['start_date'].'</strong></div>';
 		$thematic_description_html .= '<div>'.$thematic_advance_info['content'].'</div>';
 		$thematic_description_html .= '<div>'.get_lang('DurationInHours').' : '.$thematic_advance_info['duration'].'</div>';
 		$thematic_description_html .= '<br />';								  	

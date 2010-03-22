@@ -59,7 +59,7 @@ if ($action == 'thematic_list') {
 		}
 		
 		echo '<table width="100%" class="data_table">';	
-		echo '<tr><th width="35%">'.get_lang('Thematic').'</th><th width="30%">'.get_lang('ThematicPlan').'</th><th width="25%">'.get_lang('ThematicAdvance').'</th></tr>';
+		echo '<tr><th width="33%">'.get_lang('Thematic').'</th><th>'.get_lang('ThematicPlan').'</th><th width="33%">'.get_lang('ThematicAdvance').'</th></tr>';
 	
 			foreach ($thematic_data as $thematic) {			
 				echo '<tr>';
@@ -89,9 +89,11 @@ if ($action == 'thematic_list') {
 					echo '<table width="100%">';
 						if (!empty($thematic_advance_data[$thematic['id']])) {						
 							foreach ($thematic_advance_data[$thematic['id']] as $thematic_advance) {
+								$thematic_advance['start_date'] = api_get_local_time($thematic_advance['start_date']);
+								$thematic_advance['start_date'] = api_format_date($thematic_advance['start_date'], DATE_TIME_FORMAT_LONG);
 								echo '<tr>';
 								echo '<td width="90%">';
-									echo '<div><strong>'.api_convert_and_format_date($thematic_advance['start_date'], DATE_TIME_FORMAT_LONG, date_default_timezone_get()).'</strong></div>';
+									echo '<div><strong>'.$thematic_advance['start_date'].'</strong></div>';
 									echo '<div>'.Security::remove_XSS($thematic_advance['content'], STUDENT).'</div>';
 									echo '<div>'.get_lang('DurationInHours').' : '.$thematic_advance['duration'].'</div>';
 								echo '</td>';

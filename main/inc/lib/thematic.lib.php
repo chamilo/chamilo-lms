@@ -337,21 +337,15 @@ class Thematic
 				WHERE thematic_id = $thematic_id
 				ORDER BY col$column $direction LIMIT $from,$number_of_items ";
 		$res = Database::query($sql);
-		$data = array ();
-
-		$param_gradebook = '';
-		if (isset($_SESSION['gradebook'])) {
-			$param_gradebook = '&gradebook='.$_SESSION['gradebook'];
-		}
-		
+		$data = array ();		
 		$i = 1;
 		while ($thematic_advance = Database::fetch_row($res)) {		
-			
-			$thematic_advance[1] = api_convert_and_format_date($thematic_advance[1], DATE_TIME_FORMAT_LONG, date_default_timezone_get());
+			$thematic_advance[1] = api_get_local_time($thematic_advance[1]);
+			$thematic_advance[1] = api_format_date($thematic_advance[1], DATE_TIME_FORMAT_LONG);
 			if (api_is_allowed_to_edit(null, true)) {
 				$actions  = '';						
-				$actions .= '<a href="index.php?'.api_get_cidreq().'&action=thematic_advance_edit&thematic_id='.$thematic_id.'&thematic_advance_id='.$thematic_advance[0].$param_gradebook.'">'.Display::return_icon('edit.gif',get_lang('Edit')).'</a>&nbsp;';
-				$actions .= '<a onclick="javascript:if(!confirm(\''.get_lang('AreYouSureToDelete').'\')) return false;" href="index.php?'.api_get_cidreq().'&action=thematic_advance_delete&thematic_id='.$thematic_id.'&thematic_advance_id='.$thematic_advance[0].$param_gradebook.'">'.Display::return_icon('delete.gif',get_lang('Delete')).'</a></center>';
+				$actions .= '<a href="index.php?'.api_get_cidreq().'&action=thematic_advance_edit&thematic_id='.$thematic_id.'&thematic_advance_id='.$thematic_advance[0].'">'.Display::return_icon('edit.gif',get_lang('Edit')).'</a>&nbsp;';
+				$actions .= '<a onclick="javascript:if(!confirm(\''.get_lang('AreYouSureToDelete').'\')) return false;" href="index.php?'.api_get_cidreq().'&action=thematic_advance_delete&thematic_id='.$thematic_id.'&thematic_advance_id='.$thematic_advance[0].'">'.Display::return_icon('delete.gif',get_lang('Delete')).'</a></center>';
 				$data[] = array($i, $thematic_advance[1], $thematic_advance[2], $thematic_advance[3], $actions);
 			}
 			$i++;	 

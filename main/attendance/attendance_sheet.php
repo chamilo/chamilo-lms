@@ -31,10 +31,10 @@ if (api_is_allowed_to_edit(null, true)) {
 	if (count($users_in_course) > 0) { 
 	?>
 	<form method="post" action="index.php?action=attendance_sheet_add&<?php echo api_get_cidreq().$param_gradebook ?>&attendance_id=<?php echo $attendance_id?>" >
-	<div class="attendance-sheet-content" style="width:100%;background-color:#E1E1E1;border:1px solid gray;margin-top:20px;">
-		
-		<div class="attendance-users-table" style="width:450px;float:left;">
 	
+	<div class="attendance-sheet-content" style="width:100%;background-color:#E1E1E1;border:1px solid gray;margin-top:20px;">
+
+		<div class="attendance-users-table" style="width:40%;float:left;margin:0px;padding:0px;">
 			<table class="data_table" width="100%">
 				<tr class="row_odd" >	
 					<th height="65px" width="35px" ><?php echo get_lang('DisplayOrder')?></th>
@@ -42,15 +42,14 @@ if (api_is_allowed_to_edit(null, true)) {
 					<th><?php echo get_lang('LastName')?></th>
 					<th><?php echo get_lang('FirstName')?></th>
 					<th width="90px"><?php echo get_lang('AttendancesFaults')?></th>
-				</tr>
-				
+				</tr>				
 				<?php 
 				$i = 1;
 				$class = '';
 				foreach ($users_in_course as $data) {
 					$faults = 0;
 					if ($i%2 == 0) {$class='row_odd';}
-					else {$class='row_even';}  
+					else {$class='row_even';}
 				?>
 					<tr class="<?php echo $class ?>">
 					<td height="50px"><center><?php echo $i ?></center></td>
@@ -58,22 +57,20 @@ if (api_is_allowed_to_edit(null, true)) {
 					<td><?php echo $data['lastname'] ?></td>
 					<td><?php echo $data['firstname'] ?></td>
 					<td><center><div class="attendance-faults-bar" style="background-color:<?php echo (!empty($data['result_color_bar'])?$data['result_color_bar']:'none') ?>"><?php echo $data['attendance_result'] ?></div></center></td>
-					</tr>					
-				<?php 
+					</tr>
+				<?php
 					$i++;
-				} 
-				?> 
+				}
+				?>
 			</table>
-			
 		</div>
-		
-		<div class="attendance-calendar-table" style="overflow:auto;overflow-y:hidden;">
+
+		<div class="attendance-calendar-table" style="margin:0px;padding:0px;float:right;width:60%;overflow:auto;overflow-y:hidden;">
 			<table class="data_table" width="100%">
 				<tr class="row_odd">
-				<?php			
+				<?php
 					if (count($attendant_calendar) > 0 ) {
-						foreach ($attendant_calendar as $calendar) {												
-
+						foreach ($attendant_calendar as $calendar) {
 							$date = $calendar['date'];
 							$time = $calendar['time'];
 							$datetime = $date.'<br />'.$time;
@@ -133,10 +130,11 @@ if (api_is_allowed_to_edit(null, true)) {
 					</tr>
 				<?php $i++ ; 			
 				} 
-				?>
-				
+				?>				
 			</table>
 		</div>
+
+		
 	</div>
 	
 	<div class="clear"></div>

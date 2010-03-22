@@ -172,7 +172,7 @@ if ($tool == TOOL_COURSE_HOMEPAGE && !isset($_GET['intro_cmdEdit'])) {
 		
 	if (!empty($thematic_advance_info)) {
 
-		$style_introduction_section = 'style="width:65%;float:left;margin-left:5%;"';
+		$style_introduction_section = 'style="width:60%;float:left;margin-left:6%;"';
 		$thematic_advance = get_lang('ThematicAdvance').'&nbsp;'.$thematic->get_total_average_of_thematic_advances().'%';		
 		if (api_is_allowed_to_edit(null, true)) {
 			$thematic_advance = '<a href="'.api_get_path(WEB_CODE_PATH).'course_progress/index.php?action=thematic_details&'.api_get_cidreq().'">'.get_lang('ThematicAdvance').'&nbsp;'.$thematic->get_total_average_of_thematic_advances().'%</a>';

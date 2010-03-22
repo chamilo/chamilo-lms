@@ -80,6 +80,7 @@ require_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
 require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
 require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
 require_once api_get_path(LIBRARY_PATH).'text.lib.php';
+require_once api_get_path(LIBRARY_PATH).'fckeditor/fckeditor.php';
 
 // Section (for the tabs)
 $this_section = SECTION_COURSES;
@@ -1290,9 +1291,18 @@ if ($is_course_member) {
 								<div class="label">
 									'.get_lang('Description').'
 								</div>
-								<div class="formw">
-									<textarea name="description" rows="4" cols="70"></textarea>
-								</div>
+								<div class="formw">';
+									
+				$oFCKeditor = new FCKeditor('content') ;
+				$oFCKeditor->ToolbarSet = 'profile';
+				$oFCKeditor->Width		= '80%';
+				$oFCKeditor->Height		= '130';
+				$oFCKeditor->Value		= $message;	
+				$oFCKeditor->Name		= 'description';				
+				$return =	$oFCKeditor->CreateHtml();	
+				$new_folder_text .= $return;
+									
+		$new_folder_text .= '</div>
 							</div>';
 
 		// Advanced parameters

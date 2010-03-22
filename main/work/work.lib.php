@@ -456,7 +456,10 @@ function display_student_publications_list($work_dir, $sub_course_dir, $currentC
 					$form_folder -> addGroup($group_name, 'my_group', get_lang('Title'));
 					$form_folder -> addGroupRule('my_group', get_lang('ThisFieldIsRequired'), 'required');
 					$defaults = array('my_group[dir_name]' => html_entity_decode($dir), 'description' => api_html_entity_decode($row['description']));
-					$form_folder-> addElement('textarea', 'description', get_lang('Description'), array('rows' => 5, 'cols' => 50));
+					
+					//$form_folder-> addElement('textarea', 'description', get_lang('Description'), array('rows' => 5, 'cols' => 50));
+					$form_folder->add_html_editor('description', get_lang('Description'), false, false, array('ToolbarSet' => 'profile', 'Width' => '100%', 'Height' => '200'));
+					
 					$qualification_input[] = FormValidator :: createElement('text','qualification');
 					$form_folder -> addGroup($qualification_input, 'qualification', get_lang('QualificationNumberOver'), 'size="10"');
 
@@ -526,15 +529,12 @@ function display_student_publications_list($work_dir, $sub_course_dir, $currentC
 					}
 
 					$form_folder -> addElement('style_submit_button', 'submit', get_lang('ModifyDirectory'), 'class="save"');
-
 					if ($there_is_a_end_date) {
 						$defaults = array_merge($defaults, convert_date_to_array($homework['ends_on'], 'ends'));
 					}
-
 					if ($there_is_a_expire_date) {
 						$defaults = array_merge($defaults, convert_date_to_array($homework['expires_on'], 'expires'));
-					}
-
+					}					
 					if (!empty($row['qualification'])) {
 						$defaults = array_merge($defaults, array('qualification[qualification]' => $row['qualification']));
 					}

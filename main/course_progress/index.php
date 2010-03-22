@@ -181,7 +181,7 @@ if ($action == 'thematic_plan_add' || $action == 'thematic_plan_edit') {
 		$interbreadcrumb[] = array ('url' => '#', 'name' => $default_thematic_plan_title[$description_type]);	
 	}
 }
-if ($action == 'thematic_advance_list') {
+if ($action == 'thematic_advance_list' || $action == 'thematic_advance_delete') {
 	$interbreadcrumb[] = array ('url' => 'index.php?'.api_get_cidreq().'&action='.$_SESSION['thematic_control'], 'name' => get_lang('ThematicControl'));
 	$interbreadcrumb[] = array ('url' => '#', 'name' => $thematic_data['title'].':'.get_lang('ThematicAdvance'));
 }

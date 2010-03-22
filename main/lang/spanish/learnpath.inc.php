@@ -247,4 +247,5 @@ $SaveAudioAndOrganization = "Guardar audio y Organización";
 $UploadOnlyMp3Files = "Por favor, envíe sólo archivos mp3";
 $ModifyHotPotatoes = "Modificar hotpotatoes";
 $SaveHotpotatoes = "Guardar hotpotatoes";
+$ReturnToLPList = "Volver a lista de lecciones";
 ?>

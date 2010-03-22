@@ -122,9 +122,9 @@ if ($action == 'thematic_advance_add' || $action == 'thematic_advance_edit') {
 	$table = new SortableTable('thematic_advance_list', array('Thematic', 'get_number_of_thematic_advances'), array('Thematic', 'get_thematic_advance_data'));
 	$table->set_additional_parameters($parameters);
 	$table->set_header(0, '', false, array('style'=>'width:20px;'));
-	$table->set_header(1, get_lang('StartDate'), true );
-	$table->set_header(2, get_lang('DurationInHours'), true, array('style'=>'width:80px;'));
-	$table->set_header(3, get_lang('Content'), true);
+	$table->set_header(1, get_lang('StartDate'), false );
+	$table->set_header(2, get_lang('DurationInHours'), false, array('style'=>'width:80px;'));
+	$table->set_header(3, get_lang('Content'), false);
 	
 	if (api_is_allowed_to_edit(null, true)) {
 		$table->set_header(4, get_lang('Actions'), false,array('style'=>'text-align:center'));	

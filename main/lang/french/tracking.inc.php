@@ -250,7 +250,6 @@ $DashboardList = "Liste du panneau de contrôle";
 $YouHaveNotEnabledBlocks = "Vous n'avez activé aucun bloc";
 $BlocksHaveBeenUpdatedSuccessfully = "Les blocs ont été mis à jour";
 $AssignSessionsTo = "Assigner des sessions à %s";
-$DeleteAllAttendances = "Supprimer toutes les assistances créées";
 $AttendanceSheetDescription = "Les répertoires de présences vous permettent de réunir les feuilles de présences par groupe. Par exemple, vous pourriez vouloir prendre les présence pour les cours théoriques séparément des cours pratiques.
 Chaque élément montrera tous les apprenants comme présents par défaut. C'est à vous de noter leur absence en décochant les cases correspondantes.";
 $AttendanceSheetReport = "Rapport de présences";

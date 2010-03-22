@@ -24,6 +24,11 @@
 <p>Chamilo 1.8.7 is a intermediate&nbsp;release including a lot of new features, mostly focused on social network, the handling of sessions (which will help many educational institutions, public or private, to manage their contents in a more flexible way) and visual style, and a few important bugfixes. It lays the first stable stone in the Chamilo software project.</p>
 <h3>New Features</h3>
 <ul>
+  <li>Full UTF-8 support has been implemented (Feature #272). UTF-8 becomes recommended system encoding to be used. It is recommended too that html-documents created with external tools to be UTF-8 encoded.
+  <br />For newly installed systems: UTF-8 is the default value of the administrator's setting "Character set". Database tables are created for storing UTF-8 encoded texts.
+  <br />For upgraded systems: Upgrade procedure does not change to UTF-8 the administrator's setting "Character set". This may be done later, on administrator's decision. During upgrade database tables are converted to UTF-8. Conversion to UTF-8 of stored in the file system html-documents is not performed, this is not mandatory.
+  <br />Note about integration with external systems: Keep in maind that since version 1.8.7 texts kept in database are UTF-8 encoded. If an external system accesses database records directly, some corrections mignt be necessary about encoding used by the external database.
+  </li>
   <li>New tool: Class attendance (usable in Gradebook)</li>
   <li>New Tool: Student certificate </li>
   <li>Thematic advance option added in course description (shown on course homepage)</li>

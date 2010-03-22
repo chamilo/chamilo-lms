@@ -2,13 +2,43 @@
 /* For licensing terms, see /license.txt */
 
 /**
- *	This is the text library for Chamilo.
- *	Include/require it in your code to use its functionality.
+ * This is the text library for Chamilo.
+ * It is loaded during the global initialization,
+ * so the functions below are available everywhere.
  *
- *	@package chamilo.library
+ * @package chamilo.library
  */
 
 /*	FUNCTIONS */
+
+/**
+ * Convers a string from camel case into underscore.
+ * Works correctly with ASCII strings only, implementation for human-language strings is not necessary.
+ * @param string $string							The input string (ASCII)
+ * @return string									The converted result string
+ */
+function api_camel_case_to_underscore($string) {
+	return strtolower(preg_replace('/([a-z])([A-Z])/', "$1_$2", $string));
+}
+
+/**
+ * Converts a string with underscores into camel case.
+ * Works correctly with ASCII strings only, implementation for human-language strings is not necessary.
+ * @param string $string							The input string (ASCII)
+ * @param bool $capitalise_first_char (optional)	If true (default), the function capitalises the first char in the result string.
+ * @return string									The converted result string
+ */
+function api_underscore_to_camel_case($string, $capitalise_first_char = true) {
+	if ($capitalise_first_char) {
+		$string = ucfirst($string);
+	}
+	return preg_replace_callback('/_([a-z])/', '_api_camelize', $string);
+}
+
+// A function for internal use, only for this library.
+function _api_camelize($match) {
+	return strtoupper($match[1]);
+}
 
 /**
  * Truncates a string.

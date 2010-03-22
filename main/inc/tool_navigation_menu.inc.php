@@ -6,6 +6,7 @@
  *
  *	@package dokeos.include
  */
+require_once api_get_path(LIBRARY_PATH).'course_home.lib.php'; // For using the method CourseHome::translate_tool_name();
 
 define('SHORTCUTS_HORIZONTAL', 0);
 define('SHORTCUTS_VERTICAL', 1);
@@ -30,7 +31,7 @@ function get_navigation_items($include_admin_tools = false) {
 
 		$user_id = api_get_user_id();
 
-		$course_tools_table = Database :: get_course_table(TABLE_TOOL_LIST,$database);
+		$course_tools_table = Database :: get_course_table(TABLE_TOOL_LIST, $database);
 
 		/*	Link to the Course homepage */
 
@@ -44,17 +45,9 @@ function get_navigation_items($include_admin_tools = false) {
 		$sql_result = Database::query($sql_menu_query);
 		while ($row = Database::fetch_array($sql_result)) {
 			$navigation_items[$row['id']] = $row;
-			/*
-			if (!stristr($row['link'], 'http://'))
-			*/
 			if (stripos($row['link'], 'http://') === false && stripos($row['link'], 'https://') === false) {
 				$navigation_items[$row['id']]['link'] = api_get_path(REL_CODE_PATH).$row['link'];
-				/*
-				$navigation_items[$row['id']]['name'] = $row['image'] == 'scormbuilder.gif' ? $navigation_items[$row['id']]['name'] : get_lang(ucfirst($navigation_items[$row['id']]['name']));
-				*/
-				if ($row['image'] != 'scormbuilder.gif' && $row['image'] != 'blog.gif') {
-					$navigation_items[$row['id']]['name'] = get_lang(ucfirst($navigation_items[$row['id']]['name']));
-				}
+				$navigation_items[$row['id']]['name'] = CourseHome::translate_tool_name($row);
 			}
 		}
 
@@ -67,7 +60,7 @@ function get_navigation_items($include_admin_tools = false) {
 									WHERE link='course_info/infocours.php'";
 			$sql_result = Database::query($course_settings_sql);
 			$course_setting_info = Database::fetch_array($sql_result);
-			$course_setting_visual_name = get_lang(api_ucfirst($course_setting_info['name']));
+			$course_setting_visual_name = CourseHome::translate_tool_name($course_setting_info);
 			if (api_get_session_id() == 0) {
 				// course settings item
 				$navigation_items['course_settings']['image'] = $course_setting_info['image'];
@@ -212,9 +205,6 @@ function show_navigation_tool_shortcuts($orientation = SHORTCUTS_HORIZONTAL) {
 	$navigation_items = get_navigation_items(false);
 	foreach ($navigation_items as $key => $navigation_item) {
 		if (strpos($navigation_item['link'],'chat') !== false && api_get_course_setting('allow_open_chat_window')) {
-	    	/*
-		  	echo '<a href="#" onclick="window.open(\''.$navigation_item['link'].'\',\'window_chat'.$_SESSION['_cid'].'\',config=\'height=\'+380+\', width=\'+625+\', left=2, top=2, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no\')" target="' . $navigation_item['target'] . '"';
-		  	*/
 		  	echo '<a href="javascript: void(0);" onclick="javascript: window.open(\''.$navigation_item['link'].'\',\'window_chat'.$_SESSION['_cid'].'\',config=\'height=\'+380+\', width=\'+625+\', left=2, top=2, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no\')" target="' . $navigation_item['target'] . '"';
 	    } else {
 		  	echo '<a href="'.$navigation_item['link'].'"';

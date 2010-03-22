@@ -6,7 +6,7 @@ $this_section = SECTION_COURSES;
 
 require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
 
-if(isset($_GET['session']) && $_GET['session'] == true ){
+if (isset($_GET['session']) && $_GET['session'] == true) {
 	$archive_path = api_get_path(SYS_ARCHIVE_PATH).'temp/';
 	$_cid = true;
 	$is_courseAdmin = true;
@@ -19,24 +19,22 @@ $archive_file = str_replace(array('..', '/', '\\'), '', $archive_file);
 
 list($extension) = getextension($archive_file);
 
-
 if (empty($extension) || !file_exists($archive_path.$archive_file)) {
 	exit();
 }
 
+$extension = strtolower($extension);
 $content_type = '';
 
-if (in_array(strtolower($extension), array('xml','csv')) && (api_is_platform_admin(true) || api_is_drh())) {
+if (in_array($extension, array('xml', 'csv')) && (api_is_platform_admin(true) || api_is_drh())) {
 	$content_type = 'application/force-download';
-}
-elseif (strtolower($extension) == 'zip' && $_cid && (api_is_platform_admin(true) || $is_courseAdmin)) {
+} elseif ($extension == 'zip' && $_cid && (api_is_platform_admin(true) || $is_courseAdmin)) {
 	$content_type = 'application/force-download';
 }
 
 if (empty($content_type)) {
 	api_not_allowed(true);
 }
-
 
 header('Expires: Wed, 01 Jan 1990 00:00:00 GMT');
 header('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT');

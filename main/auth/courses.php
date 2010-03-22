@@ -1,17 +1,13 @@
 <?php
-/* For licensing terms, see /dokeos_license.txt */
+/* For licensing terms, see /license.txt */
 /**
-==============================================================================
-*	@package dokeos.auth
+*	@package chamilo.auth
 *	@todo check if unsubscribing from a course WITH group memberships works as it should
 *	@todo constants are in uppercase, variables aren't
-==============================================================================
 */
 
 /*
-==============================================================================
 		INIT SECTION
-==============================================================================
 */
 
 // Names of the language file that needs to be included.

@@ -845,4 +845,14 @@ $ToolCourseMaintenance = "Backup";
 $AreYouSureToDeleteAllDates = "Are you sure you want to delete all dates?";
 $AddADateTime = "Add a date time";
 $DeleteAllAttendances = "Delete all created attendances";
+$ThematicControl = "Thematic control";
+$ThematicDetails = "Thematic view with details";
+$ThematicList = "Thematic view as list";
+$Thematic = "Thematic";
+$ThematicPlan = "Thematic plan";
+$EditThematicPlan = "Edit tematic advance";
+$ThereIsNoStillAthematicSection = "There is not still a thematic section";
+$NewThematicSection = "New thematic section";
+$DeleteAllThematics = "Delete all thematics";
+$EditTematicAdvance = "Edit tematic advance";
 ?>

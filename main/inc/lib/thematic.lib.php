@@ -732,7 +732,7 @@ class Thematic
 		if (!empty($a_average_of_advances_by_thematic)) {
 			$count_tematics = count($thematic_data);
 			$score = array_sum($a_average_of_advances_by_thematic);
-			$total_average = round(($score*100)/($count_tematics*100),2);			
+			$total_average = round(($score*100)/($count_tematics*100));			
 		}
 		
 		return $total_average;
@@ -763,7 +763,7 @@ class Thematic
 			}						
 			// calculate average by thematic					
 			$count_total_advances = count($advances);					
-			$average = round(($count_done_advances*100)/$count_total_advances,2);											
+			$average = round(($count_done_advances*100)/$count_total_advances);											
 		}
 		
 		return $average;

@@ -186,7 +186,7 @@ if ($nb_sessions > 0) {
 		exit;
 	}
 } else {
-	get_lang('NoSession');
+	echo get_lang('NoSession');
 }
 
 /*

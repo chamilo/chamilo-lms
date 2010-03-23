@@ -187,7 +187,7 @@ if ($tool == TOOL_COURSE_HOMEPAGE && !isset($_GET['intro_cmdEdit'])) {
 		$thematic_description_html .= '<h3>'.$thematic_advance.'</h3>';	
 		$thematic_description_html .= '<h4>'.$information_title.'</h4>';						  								
 		$thematic_description_html .= '<div><strong>'.$thematic_info['title'].'</strong></div>';			
-		$thematic_description_html .= '<div><strong>'.$thematic_advance_info['start_date'].'</strong></div>';
+		$thematic_description_html .= '<div style="font-size:8pt;"><strong>'.$thematic_advance_info['start_date'].'</strong></div>';
 		$thematic_description_html .= '<div>'.$thematic_advance_info['content'].'</div>';
 		$thematic_description_html .= '<div>'.get_lang('DurationInHours').' : '.$thematic_advance_info['duration'].'</div>';
 		$thematic_description_html .= '<br />';								  	

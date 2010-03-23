@@ -441,7 +441,7 @@ function display_student_publications_list($work_dir, $sub_course_dir, $currentC
 			$mydir = $my_sub_dir.$dir;
 
 			if ($is_allowed_to_edit) {
-				isset($_GET['edit_dir']) ? $clean_edit_dir = Security :: remove_XSS(Database::escape_string($_GET['edit_dir'])) : $clean_edit_dir = '';
+				isset($_GET['edit_dir']) ? $clean_edit_dir = Security :: remove_XSS($_GET['edit_dir']) : $clean_edit_dir = '';
 
 				// form edit directory
 				if (isset($clean_edit_dir) && $clean_edit_dir == $mydir) {
@@ -571,7 +571,7 @@ function display_student_publications_list($work_dir, $sub_course_dir, $currentC
 							}
 						}
 						//if($_POST['qualification']['qualification']!='')
-						Database::query('UPDATE '.$work_table.' SET description = '."'".Database::escape_string(Security::remove_XSS($_POST['description']))."'".', qualification = '."'".Database::escape_string($_POST['qualification']['qualification'])."'".',weight = '."'".Database::escape_string($_POST['weight']['weight'])."'".' WHERE id = '."'".$row['id']."'");
+						Database::query('UPDATE '.$work_table.' SET description = '."'".Database::escape_string($_POST['description'])."'".', qualification = '."'".Database::escape_string($_POST['qualification']['qualification'])."'".',weight = '."'".Database::escape_string($_POST['weight']['weight'])."'".' WHERE id = '."'".$row['id']."'");
 						Database::query('UPDATE '.Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK).' SET weight = '."'".Database::escape_string($_POST['weight']['weight'])."'".' WHERE course_code = '."'".api_get_course_id()."'".' AND ref_id = '."'".$row['id']."'".'');
 
 					    //we are changing the current work and we want add them into gradebook
@@ -581,7 +581,7 @@ function display_student_publications_list($work_dir, $sub_course_dir, $currentC
 							require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be/abstractlink.class.php';
 							require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/gradebook_functions.inc.php';
 
-							$resource_name = Security::remove_XSS($_POST['dir_name']);
+							$resource_name = $_POST['dir_name'];
 							add_resource_to_course_gradebook(api_get_course_id(), 3, $row['id'], Database::escape_string($resource_name), (float)$_POST['weight']['weight'], (float)$_POST['qualification']['qualification'], Database::escape_string($_POST['description']), time(), 1, api_get_session_id());
 						}
 						Display::display_confirmation_message(get_lang('FolderEdited'));

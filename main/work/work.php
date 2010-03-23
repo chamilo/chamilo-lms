@@ -544,9 +544,9 @@ if (!empty($_REQUEST['new_dir'])) {
 				$agenda_id = agenda_add_item($course, $_POST['new_dir'], $content, date('Y-m-d H:i:s'), '0000-00-00', array('GROUP:'.$toolgroup), 0);
 			 }
 			$sql_add_publication = "INSERT INTO " . $work_table . " SET " .
-										   "url         = '".Database::escape_string(Security::remove_XSS($dir_name_sql))."',
+										   "url         = '".Database::escape_string($dir_name_sql)."',
 									       title        = '',
-						                   description 	= '".Database::escape_string(Security::remove_XSS($_POST['description']))."',
+						                   description 	= '".Database::escape_string($_POST['description'])."',
 						                   author      	= '',
 										   active		= '0',
 										   accepted		= '1',
@@ -557,7 +557,7 @@ if (!empty($_REQUEST['new_dir'])) {
 										   parent_id	= '',
 										   qualificator_id	= '',
 										   date_of_qualification	= '0000-00-00 00:00:00',
-										   weight   = '".Database::escape_string(Security::remove_XSS($_POST['weight']))."',
+										   weight   = '".Database::escape_string($_POST['weight'])."',
 										   session_id   = ".intval($id_session);
 
 			Database::query($sql_add_publication);
@@ -698,7 +698,7 @@ if (isset ($_POST['move_to']) && isset ($_POST['move_file'])) {
 		//Display::display_normal_message('We want to move '.$_POST['move_file'].' to '.$_POST['move_to']);
 		if (move($course_dir . '/' . $path, $base_work_dir . '/' . $move_to)) {
 			//update db
-			update_work_url(Security::remove_XSS($_POST['move_file']), 'work/' . $move_to);
+			update_work_url($_POST['move_file'], 'work/' . $move_to);
 			//set the current path
 			$cur_dir_path = $move_to;
 			$cur_dir_path_url = urlencode($move_to);
@@ -882,8 +882,8 @@ if ($ctok == $_POST['sec_token']) { //check the token inserted into the form
 				}
 				$sql_add_publication = "INSERT INTO " . $work_table . " SET " .
 										       "url         = '" . $url . "',
-										       title       = '" . Database::escape_string(Security::remove_XSS($title)) . "',
-							                   description = '" . Database::escape_string(Security::remove_XSS($description)) . "',
+										       title       = '" . Database::escape_string($title) . "',
+							                   description = '" . Database::escape_string($description) . "',
 							                   author      = '" . Database::escape_string($authors) . "',
 											   active		= '" . $active . "',
 											   accepted		= '" . (api_is_allowed_to_edit(null,true)?$uploadvisibledisabled:(!$uploadvisibledisabled)) . "',
@@ -930,8 +930,8 @@ if ($ctok == $_POST['sec_token']) { //check the token inserted into the form
 			$current_date = date('Y-m-d H:i:s');
 			$sql = "INSERT INTO  " . $work_table . "
 					        	SET url        	= '" . $url . "',
-					            title       	= '" . Database::escape_string(Security::remove_XSS($title)) . "',
-					            description 	= '" . Database::escape_string(Security::remove_XSS($description)) . "',
+					            title       	= '" . Database::escape_string($title) . "',
+					            description 	= '" . Database::escape_string($description) . "',
 					            author      	= '" . Database::escape_string($authors) . "',
 							    post_group_id = '".$post_group_id."',
 					            sent_date    	= '".$current_date."',
@@ -982,8 +982,8 @@ if ($ctok == $_POST['sec_token']) { //check the token inserted into the form
 					Display::display_error_message(get_lang('QualificationMustNotBeMoreThanQualificationOver'));
 				} else {
 					$sql = "UPDATE  " . $work_table . "
-					        SET	title       = '" . Database::escape_string(Security::remove_XSS($title)) . "',
-					            description = '" . Database::escape_string(Security::remove_XSS($description)) . "'
+					        SET	title       = '" . Database::escape_string($title) . "',
+					            description = '" . Database::escape_string($description) . "'
 					            ".$add_to_update."
 					        WHERE id    = '$id'";
 					Database::query($sql);
@@ -1293,12 +1293,11 @@ if ($is_course_member) {
 								</div>
 								<div class="formw">';
 									
-				$oFCKeditor = new FCKeditor('content') ;
+				$oFCKeditor = new FCKeditor('description') ;
 				$oFCKeditor->ToolbarSet = 'profile';
 				$oFCKeditor->Width		= '80%';
 				$oFCKeditor->Height		= '130';
-				$oFCKeditor->Value		= $message;	
-				$oFCKeditor->Name		= 'description';				
+				$oFCKeditor->Value		= $message;				
 				$return =	$oFCKeditor->CreateHtml();	
 				$new_folder_text .= $return;
 									
@@ -1422,7 +1421,7 @@ if (!$display_upload_form && !$display_tool_options) {
 
 	if (!empty($publication['description'])) {
 			echo '<div class="actions">';
-			echo '<br /><b>'.get_lang('Description').':</b>&nbsp;&nbsp;'.$publication['description'].'<br /><br />';
+			echo '<br /><b>'.get_lang('Description').':</b>&nbsp;&nbsp;'.Security::remove_XSS($publication['description'], STUDENT).'<br /><br />';
 			echo '</div>';
 	}
 	if ($display_list_users_without_publication) {

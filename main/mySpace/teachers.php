@@ -43,7 +43,7 @@ if (api_is_drh() || api_is_platform_admin()) {
 	}	
 	if (count($formateurs) > 0) {
 		echo '&nbsp;&nbsp;<a href="javascript: void(0);" onclick="javascript: window.print()"><img align="absbottom" src="../img/printmgr.gif">&nbsp;'.get_lang('Print').'</a> ';
-		echo '<a href="'.api_get_self().'?export=xls"><img align="absbottom" src="../img/excel.gif">&nbsp;'.get_lang('ExportAsXLS').'</a>';	
+		echo '<a href="'.api_get_self().'?export=xls"><img align="absbottom" src="../img/csv.gif">&nbsp;'.get_lang('ExportAsCSV').'</a>';	
 	}
 	echo '</div>';
 	echo '<h4>'.get_lang('YourTeachers').'</h4>';

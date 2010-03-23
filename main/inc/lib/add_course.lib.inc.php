@@ -1,17 +1,17 @@
-<?php //$id: $
+<?php
 /* For licensing terms, see /license.txt */
-/**
-* This is the course creation library for Dokeos.
-* It contains functions to create a course.
-* Include/require it in your code to use its functionality.
-*
-* @package dokeos.library
-* @todo clean up horrible structure, script is unwieldy, for example easier way to deal with
-* different tool visibility settings: ALL_TOOLS_INVISIBLE, ALL_TOOLS_VISIBLE, CORE_TOOLS_VISIBLE...
-*/
 
-require_once (api_get_path(LIBRARY_PATH).'database.lib.php');
-require_once (api_get_path(LIBRARY_PATH).'mail.lib.inc.php');
+/**
+ * This is the course creation library for Chamilo.
+ * Include/require it in your code for using its functionality.
+ *
+ * @package dokeos.library
+ * @todo clean up horrible structure, script is unwieldy, for example easier way to deal with
+ * different tool visibility settings: ALL_TOOLS_INVISIBLE, ALL_TOOLS_VISIBLE, CORE_TOOLS_VISIBLE...
+ */
+
+require_once api_get_path(LIBRARY_PATH).'database.lib.php';
+require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
 
 /*
 ==============================================================================
@@ -254,7 +254,9 @@ function update_Db_course($courseDbName, $language = null)
 	if (empty($language)) {
 		$language = $language_interface;
 	}
-	$charset_clause = Database::make_charset_clause('UTF-8', $language);
+
+	//$charset_clause = Database::make_charset_clause('UTF-8', $language); // A problematic choice, see Bug #825
+	$charset_clause = ' DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci';
 
 	if (!$_configuration['single_database'])
 	{
@@ -395,7 +397,7 @@ function update_Db_course($courseDbName, $language = null)
 	// Thematic
 	$TBL_THEMATIC 		 	= $courseDbName . 'thematic';
 	$TBL_THEMATIC_PLAN 	 	= $courseDbName . 'thematic_plan';
-	$TBL_THEMATIC_ADVANCE 	= $courseDbName . 'thematic_advance';	
+	$TBL_THEMATIC_ADVANCE 	= $courseDbName . 'thematic_advance';
 
 	/*
 	-----------------------------------------------------------
@@ -1242,7 +1244,7 @@ function update_Db_course($courseDbName, $language = null)
 	{
 		error_log($sql,0);
 	}
-	
+
 	$sql = "CREATE TABLE IF NOT EXISTS `$TABLELPITEM` (" .
 		"id				int	unsigned	primary	key auto_increment," .	//unique ID from MySQL
 		"lp_id			int unsigned	not null," .	//lp_id from 'lp'
@@ -1798,10 +1800,10 @@ function update_Db_course($courseDbName, $language = null)
 				active tinyint NOT NULL DEFAULT 0,
 				session_id int NOT NULL DEFAULT 0
 			)" . $charset_clause;
-	$result = Database::query($sql) or die(Database::error()); 
+	$result = Database::query($sql) or die(Database::error());
 	$sql    = "ALTER TABLE `".$TBL_THEMATIC."` ADD INDEX (active, session_id)";
 	Database::query($sql);
-	
+
 	// thematic plan table
 	$sql = "
 			CREATE TABLE `".$TBL_THEMATIC_PLAN."` (
@@ -1811,7 +1813,7 @@ function update_Db_course($courseDbName, $language = null)
 				description text NULL,
 				description_type int NOT NULL
 			)" . $charset_clause;
-	$result = Database::query($sql) or die(Database::error()); 
+	$result = Database::query($sql) or die(Database::error());
 	$sql    = "ALTER TABLE `".$TBL_THEMATIC_PLAN."` ADD INDEX (thematic_id, description_type)";
 	Database::query($sql);
 
@@ -1826,7 +1828,7 @@ function update_Db_course($courseDbName, $language = null)
 				duration int NOT NULL DEFAULT 0,
 				done_advance tinyint NOT NULL DEFAULT 0
 			)" . $charset_clause;
-	$result = Database::query($sql) or die(Database::error()); 
+	$result = Database::query($sql) or die(Database::error());
 	$sql    = "ALTER TABLE `".$TBL_THEMATIC_ADVANCE."` ADD INDEX (thematic_id)";
 	Database::query($sql);
 
@@ -2165,7 +2167,7 @@ function fill_Db_course($courseDbName, $courseRepository, $language,$default_doc
 	Database::query("INSERT INTO `" . $tbl_course_homepage . "` VALUES (NULL, '" . TOOL_NOTEBOOK."','notebook/index.php','notebook.gif','".string2binary(api_get_setting('course_create_active_tools', 'notebook'))."','0','squaregrey.gif','NO','_self','interaction','0')");
 	Database::query("INSERT INTO `" . $tbl_course_homepage . "` VALUES (NULL, '" . TOOL_ATTENDANCE."','attendance/index.php','attendance.gif','".string2binary(api_get_setting('course_create_active_tools', 'attendances'))."','0','squaregrey.gif','NO','_self','authoring','0')");
 	Database::query("INSERT INTO `" . $tbl_course_homepage . "` VALUES (NULL, '" . TOOL_COURSE_PROGRESS."','course_progress/index.php','course_progress.gif','".string2binary(api_get_setting('course_create_active_tools', 'course_progress'))."','0','squaregrey.gif','NO','_self','authoring','0')");
-	
+
 	if(api_get_setting('service_visio','active')=='true')
 	{
 		$mycheck = api_get_setting('service_visio','visio_host');

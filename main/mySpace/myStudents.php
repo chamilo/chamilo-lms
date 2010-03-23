@@ -918,7 +918,7 @@ if ($timezone !== null) {
 
 			$title = '';
 			if (empty($session_id)) {
-				$title = get_lang('TrainingsWithoutSessions');
+				$title = get_lang('Courses');
 			} else {
 				$title = ucfirst($session_name).($date_session?' ('.$date_session.')':'');
 			}

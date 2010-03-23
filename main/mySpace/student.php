@@ -186,11 +186,11 @@ if ($isCoach || api_is_platform_admin() || api_is_drh()) {
 	if (count($students) > 0) {
 		$table = new SortableTable('tracking_student', 'count_student_coached', null, ($is_western_name_order xor $sort_by_first_name) ? 1 : 0);
 		if ($is_western_name_order) {
-			$table -> set_header(0, get_lang('FirstName'), true, 'align="center');
-			$table -> set_header(1, get_lang('LastName'), true, 'align="center');
+			$table -> set_header(0, get_lang('FirstName'), false, 'align="center');
+			$table -> set_header(1, get_lang('LastName'), false, 'align="center');
 		} else {
-			$table -> set_header(0, get_lang('LastName'), true, 'align="center');
-			$table -> set_header(1, get_lang('FirstName'), true, 'align="center');
+			$table -> set_header(0, get_lang('LastName'), false, 'align="center');
+			$table -> set_header(1, get_lang('FirstName'), false, 'align="center');
 		}
 		$table -> set_header(2, get_lang('Time'), false);
 		$table -> set_header(3, get_lang('Progress'), false);
@@ -240,7 +240,7 @@ if ($isCoach || api_is_platform_admin() || api_is_drh()) {
 			$nb_courses_student = 0;
 			foreach ($courses as $course_code) {
 				if (CourseManager :: is_user_subscribed_in_course($student_id, $course_code, true)) {
-					$avg_time_spent += Tracking :: get_time_spent_on_the_platform($student_id, $course_code);
+					$avg_time_spent += Tracking :: get_time_spent_on_the_course($student_id, $course_code, $_GET['id_session']);
 					$avg_student_score += Tracking :: get_avg_student_score($student_id, $course_code);
 					$avg_student_progress += Tracking :: get_avg_student_progress($student_id, $course_code);
 					$total_assignments += Tracking :: count_student_assignments($student_id, $course_code);
@@ -267,6 +267,7 @@ if ($isCoach || api_is_platform_admin() || api_is_drh()) {
 				$row[] = $student_data['lastname'];
 				$row[] = $student_data['firstname'];
 			}
+
 			$row[] = api_time_to_hms($avg_time_spent);
 			$row[] = is_null($avg_student_progress) ? null : round($avg_student_progress, 2).'%';
 			$row[] = is_null($avg_student_score) ? null : round($avg_student_score, 2).'%';

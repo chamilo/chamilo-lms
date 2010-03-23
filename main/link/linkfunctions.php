@@ -574,7 +574,7 @@ function showlinksofcategory($catid)
 			// DISPLAY MOVE UP COMMAND only if it is not the top link
 			if ($i != 1)
 			{
-				echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&urlview=".$urlview."&amp;up=", $myrow["id"], "\"  title=\"".get_lang('Up')."\"   >", "<img src=../img/up.gif border=0 alt=\"".get_lang('Up')."\"/>", "</a>\n";
+				echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&urlview=".$urlview."&amp;up=", $myrow[0], "\"  title=\"".get_lang('Up')."\"   >", "<img src=../img/up.gif border=0 alt=\"".get_lang('Up')."\"/>", "</a>\n";
 			}
 			else
 			{
@@ -584,7 +584,7 @@ function showlinksofcategory($catid)
 			// DISPLAY MOVE DOWN COMMAND only if it is not the bottom link
 			if ($i < $numberoflinks)
 			{
-				echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&urlview=".$urlview."&amp;down=".$myrow["id"]."\"  title=\"".get_lang('Down')."\" >", "<img src=\"../img/down.gif\" border=\"0\" alt=\"".get_lang('Down')."\"/>", "</a>\n";
+				echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&urlview=".$urlview."&amp;down=".$myrow[0]."\"  title=\"".get_lang('Down')."\" >", "<img src=\"../img/down.gif\" border=\"0\" alt=\"".get_lang('Down')."\"/>", "</a>\n";
 			}
 			else
 			{
@@ -593,11 +593,11 @@ function showlinksofcategory($catid)
 
 			if ($myrow['visibility'] == "1")
 			{
-				echo '<a href="link.php?'.api_get_cidreq().'&action=invisible&amp;id='.$myrow['id'].'&amp;scope=link&amp;urlview='.$urlview.'" title="'.get_lang('Hide').'"><img src="../img/visible.gif" border="0" /></a>';
+				echo '<a href="link.php?'.api_get_cidreq().'&action=invisible&amp;id='.$myrow[0].'&amp;scope=link&amp;urlview='.$urlview.'" title="'.get_lang('Hide').'"><img src="../img/visible.gif" border="0" /></a>';
 			}
 			if ($myrow['visibility'] == "0")
 			{
- 				echo '<a href="link.php?'.api_get_cidreq().'&action=visible&amp;id='.$myrow['id'].'&amp;scope=link&amp;urlview='.$urlview.'" title="'.get_lang('Show').'"><img src="../img/invisible.gif" border="0" /></a>';
+ 				echo '<a href="link.php?'.api_get_cidreq().'&action=visible&amp;id='.$myrow[0].'&amp;scope=link&amp;urlview='.$urlview.'" title="'.get_lang('Show').'"><img src="../img/invisible.gif" border="0" /></a>';
 			}
 		}
 		echo '</td>';

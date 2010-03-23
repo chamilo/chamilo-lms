@@ -33,7 +33,7 @@ if(!class_exists('FreeAnswer')):
 class FreeAnswer extends Question {
 
 	static $typePicture = 'open_answer.gif';
-	static $explanationLangVar = 'freeAnswer';
+	static $explanationLangVar = 'FreeAnswer';
 
 	/**
 	 * Constructor

@@ -25,7 +25,7 @@ if(!class_exists('HotSpot')):
 class HotSpot extends Question {
 
 	static $typePicture = 'hotspot.gif';
-	static $explanationLangVar = 'Hotspot';
+	static $explanationLangVar = 'HotSpot';
 
 
 	function HotSpot() {

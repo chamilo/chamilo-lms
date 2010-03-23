@@ -68,7 +68,7 @@ INSERT INTO settings_current (variable, subkey, type, category, selected_value, 
 ALTER TABLE user_field_values CHANGE id id BIGINT NOT NULL AUTO_INCREMENT;
 ALTER TABLE user_field_values ADD INDEX (user_id, field_id);
 
-UPDATE settings_current SET selected_value = '1.8.7.11211' WHERE variable = 'dokeos_database_version';
+UPDATE settings_current SET selected_value = '1.8.7.11220' WHERE variable = 'dokeos_database_version';
 
 ALTER TABLE course_rel_user DROP PRIMARY KEY, ADD PRIMARY KEY (course_code, user_id, relation_type);
 ALTER TABLE session_rel_user DROP PRIMARY KEY, ADD PRIMARY KEY (id_session, id_user, relation_type);
@@ -129,3 +129,4 @@ ALTER TABLE thematic_advance ADD INDEX (thematic_id);
 INSERT INTO course_setting (variable,value,category) VALUES ('display_info_advance_inside_homecourse',1,'thematic_advance');
 INSERT INTO tool(name, link, image, visibility, admin, address, added_tool, target, category) VALUES ('course_progress','course_progress/index.php','course_progress.gif',0,'0','squaregrey.gif',0,'_self','authoring');
 ALTER TABLE lp ADD prerequisite int unsigned NOT NULL DEFAULT 0;
+ALTER TABLE student_publication MODIFY COLUMN description TEXT DEFAULT NULL;

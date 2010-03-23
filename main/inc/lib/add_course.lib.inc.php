@@ -833,7 +833,7 @@ function update_Db_course($courseDbName, $language = null)
 		id int unsigned NOT NULL auto_increment,
 		url varchar(200) default NULL,
 		title varchar(200) default NULL,
-		description varchar(250) default NULL,
+		description text default NULL,
 		author varchar(200) default NULL,
 		active tinyint default NULL,
 		accepted tinyint default 0,

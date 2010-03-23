@@ -6,7 +6,7 @@
  *
  *	@package chamilo.document
  */
- 
+
 set_time_limit(0);
 
 $path = $_GET['path'];
@@ -29,7 +29,7 @@ include api_get_path(LIBRARY_PATH).'pclzip/pclzip.lib.php';
 $remove_dir = ($path != '/') ? substr($path, 0, strlen($path) - strlen(basename($path))) : '/';
 
 // Place to temporarily stash the zipfiles
-$temp_zip_dir = $sys_course_path.$_course['path']."/temp";
+$temp_zip_dir = $sys_course_path.$_course['path'].'/temp';
 // Create the temp dir if it doesn't exist or do a cleanup befor creating the zipfile
 
 if (!is_dir($temp_zip_dir)) {
@@ -135,7 +135,7 @@ event_download(($path == '/') ? 'documents.zip (folder)' : basename($path).'.zip
 
 // Start download of created file
 //send_file_to_client($temp_zip_file, basename(empty($_GET['id']) ? 'documents' : $_GET['id']).'.zip');
-$name = ($path=='/') ? 'documents.zip' : basename($path).'.zip';
+$name = ($path == '/') ? 'documents.zip' : basename($path).'.zip';
 
 DocumentManager::file_send_for_download($temp_zip_file, true, $name);
 @unlink($temp_zip_file);

@@ -30,7 +30,7 @@
  * @todo eliminate code duplication between
  * document/document.php, scormdocument.php
  *
- * @package dokeos.document
+ * @package chamilo.document
  */
 
 // Name of the language file that needs to be included
@@ -191,7 +191,7 @@ if (isset($_SESSION['_gid']) && $_SESSION['_gid'] != '') { // If the group id is
 	$group_properties = GroupManager::get_group_properties($_SESSION['_gid']);
 	$noPHP_SELF = true;
 
-	if ($is_allowed_to_edit || GroupManager::is_user_in_group($_user['user_id'],$_SESSION['_gid'])) { // Only courseadmin or group members allowed
+	if ($is_allowed_to_edit || GroupManager::is_user_in_group($_user['user_id'], $_SESSION['_gid'])) { // Only courseadmin or group members allowed
 		$to_group_id = $_SESSION['_gid'];
 		$req_gid = '&amp;gidReq='.$_SESSION['_gid'];
 		$interbreadcrumb[] = array('url' => '../group/group_space.php?gidReq='.$_SESSION['_gid'], 'name' => get_lang('GroupSpace'));
@@ -205,17 +205,16 @@ if (isset($_SESSION['_gid']) && $_SESSION['_gid'] != '') { // If the group id is
 	api_not_allowed(true);
 }
 
-
 // Group docs can only be uploaded in the group directory
 if ($to_group_id != 0 && $path == '/') {
 	$path = $group_properties['directory'];
 }
 
-//I'm in the certification module?  
+// I'm in the certification module?
 $is_certificate_mode = false;
-$is_certificate_array = explode('/',$path);
+$is_certificate_array = explode('/', $path);
 array_shift($is_certificate_array);
-if ($is_certificate_array[0]=='certificates') {
+if ($is_certificate_array[0] == 'certificates') {
 	$is_certificate_mode = true;
 }
 
@@ -234,13 +233,15 @@ if ($to_group_id != 0) { // Add group name after for group documents
 if (isset($_REQUEST['certificate'])) {
 	$nameTools = get_lang('UploadCertificate').$add_group_to_title;
 } else {
-	$nameTools = get_lang('UplUploadDocument').$add_group_to_title;	
+	$nameTools = get_lang('UplUploadDocument').$add_group_to_title;
 }
+
 // Breadcrumbs
-if ($is_certificate_mode)
-	$interbreadcrumb[]= array (	'url' => '../gradebook/'.$_SESSION['gradebook_dest'], 'name' => get_lang('Gradebook'));
-else
-	$interbreadcrumb[] = array('url' =>'./document.php?curdirpath='.urlencode($path).$req_gid, 'name'=> get_lang('Documents'));
+if ($is_certificate_mode) {
+	$interbreadcrumb[] = array('url' => '../gradebook/'.$_SESSION['gradebook_dest'], 'name' => get_lang('Gradebook'));
+} else {
+	$interbreadcrumb[] = array('url' => './document.php?curdirpath='.urlencode($path).$req_gid, 'name'=> get_lang('Documents'));
+}
 
 // Display the header
 Display::display_header($nameTools, 'Doc');
@@ -292,7 +293,7 @@ if (isset($_FILES['user_upload'])) {
 				if (empty($doc_mime)) {
 					$allowed_extensions = array('ppt', 'pps', 'xls');
 					$extensions = preg_split("/[\/\\.]/", $doc_path) ;
-					$doc_ext = strtolower($extensions[count($extensions)-1]);
+					$doc_ext = strtolower($extensions[count($extensions) - 1]);
 					if (in_array($doc_ext, $allowed_extensions)) {
 						switch ($doc_ext) {
 							case 'ppt':
@@ -316,7 +317,7 @@ if (isset($_FILES['user_upload'])) {
 					require_once api_get_path(LIBRARY_PATH).'search/IndexableChunk.class.php';
 
 					$ic_slide = new IndexableChunk();
-					$ic_slide->addValue("title", $file_title);
+					$ic_slide->addValue('title', $file_title);
 					$ic_slide->addCourseId($courseid);
 					$ic_slide->addToolId(TOOL_DOCUMENT);
 					$xapian_data = array(
@@ -327,7 +328,7 @@ if (isset($_FILES['user_upload'])) {
 					);
 					$ic_slide->xapian_data = serialize($xapian_data);
 					$di = new DokeosIndexer();
-					$di->connectDb(NULL, NULL, $lang);
+					$di->connectDb(null, null, $lang);
 
 					$specific_fields = get_specific_field_list();
 
@@ -367,7 +368,7 @@ if (isset($_FILES['user_upload'])) {
 							}
 							// Add terms also to content to make terms findable by probabilistic search
 							$file_content = $all_specific_terms .' '. $file_content;
-							$ic_slide->addValue("content", $file_content);
+							$ic_slide->addValue('content', $file_content);
 							$di->addChunk($ic_slide);
 							// Index and return a new search engine document id
 							$did = $di->index();
@@ -425,7 +426,7 @@ if (isset($_FILES['user_upload'])) {
 }
 
 // Missing images are submitted
-if(isset($_POST['submit_image'])) {
+if (isset($_POST['submit_image'])) {
 	$number_of_uploaded_images = count($_FILES['img_file']['name']);
 	//if images are uploaded
 	if ($number_of_uploaded_images > 0) {
@@ -478,28 +479,23 @@ if (isset($_GET['createdir'])) {
 echo '<div class="actions">';
 
 // Link back to the documents overview
-if ($is_certificate_mode)
+if ($is_certificate_mode) {
 	echo '<a href="document.php?curdirpath='.$path.'&selectcat=' . Security::remove_XSS($_GET['selectcat']).'">'.Display::return_icon('back.png',get_lang('Back').' '.get_lang('To').' '.get_lang('CertificateOverview')).get_lang('Back').' '.get_lang('To').' '.get_lang('CertificateOverview').'</a>';
-else 
+} else {
 	echo '<a href="document.php?curdirpath='.$path.'">'.Display::return_icon('back.png',get_lang('BackTo').' '.get_lang('DocumentsOverview')).get_lang('BackTo').' '.get_lang('DocumentsOverview').'</a>';
+}
 
-// link to create a folder
-if(!isset($_GET['createdir']) && !is_my_shared_folder($_user['user_id'], $path) && !$is_certificate_mode)
-{
+// Link to create a folder
+if (!isset($_GET['createdir']) && !is_my_shared_folder($_user['user_id'], $path) && !$is_certificate_mode) {
 	echo '<a href="'.api_get_self().'?path='.$path.'&amp;createdir=1">'.Display::return_icon('folder_new.gif', get_lang('CreateDir')).get_lang('CreateDir').'</a>';
 }
 echo '</div>';
 
-//form to select directory
-$folders = DocumentManager::get_all_document_folders($_course,$to_group_id,$is_allowed_to_edit);
-if (!$is_certificate_mode)
-	echo(build_directory_selector($folders,$path,$group_properties['directory']));
-
-?>
-
-<!-- start upload form -->
-
-<?php
+// Form to select directory
+$folders = DocumentManager::get_all_document_folders($_course, $to_group_id, $is_allowed_to_edit);
+if (!$is_certificate_mode) {
+	echo(build_directory_selector($folders, $path, $group_properties['directory']));
+}
 
 $form = new FormValidator('upload', 'POST', api_get_self(), '', 'enctype="multipart/form-data"');
 $form->addElement('hidden', 'curdirpath', $path);
@@ -552,10 +548,6 @@ $defaults = array('index_document' => 'checked="checked"');
 $form->setDefaults($defaults);
 
 $form->display();
-?>
 
-<!-- end upload form -->
-
-<?php
 // Footer
 Display::display_footer();

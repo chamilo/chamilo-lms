@@ -364,4 +364,6 @@ $XResultsCleaned = "%d resultados eliminados";
 $CopyExercise = "Copie este ejercicio como uno nuevo";
 $CleanStudentResults = "Borrar todos los resultados de los estudiantes en este ejercicio";
 $ImportQtiQuiz = "Importar ejercicios de Qti2";
+$ReUseACopyInCurrentTest = "Reutilizar una copia de esta pregunta en el ejercicio actual";
+$Copy = "Copia";
 ?>

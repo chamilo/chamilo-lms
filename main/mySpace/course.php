@@ -14,7 +14,7 @@ require_once api_get_path(LIBRARY_PATH).'sortabletable.class.php';
 require_once api_get_path(LIBRARY_PATH).'tracking.lib.php';
 require_once api_get_path(LIBRARY_PATH).'export.lib.inc.php';
 require_once api_get_path(LIBRARY_PATH).'course.lib.php';
-require_once api_get_path(LIBRARY_PATH).'course_description.lib.php';
+require_once api_get_path(LIBRARY_PATH).'thematic.lib.php';
 
 $this_section = SECTION_TRACKING;
 $id_session = intval($_GET['id_session']);
@@ -212,13 +212,12 @@ if (is_array($a_courses)) {
 		}
 
 		$tematic_advance_progress = 0;
-		$course_description = new CourseDescription();
-		$course_description->set_session_id($id_session);
-		$tematic_advance = $course_description->get_data_by_description_type(8, $course_code);
+		$thematic = new Thematic();
+		$tematic_advance = $thematic->get_total_average_of_thematic_advances($course_code, $id_session);		
 
 		if (!empty($tematic_advance)) {
 			$tematic_advance_csv = $tematic_advance_progress.'%';
-			$tematic_advance_progress = '<a title="'.get_lang('GoToThematicAdvance').'" href="'.api_get_path(WEB_CODE_PATH).'course_description/?cidReq='.$course_code.'#thematic_advance">'.$tematic_advance['progress'].'%</a>';
+			$tematic_advance_progress = '<a title="'.get_lang('GoToThematicAdvance').'" href="'.api_get_path(WEB_CODE_PATH).'course_progress/index.php?cidReq='.$course_code.'&id_session='.$id_session.'">'.$tematic_advance['progress'].'%</a>';
 		} else {
 			$tematic_advance_progress = '-';
 		}

@@ -2244,7 +2244,7 @@ function api_get_item_visibility($_course, $tool, $id) {
  * @version January 2005
  * @desc update the item_properties table (if entry not exists, insert) of the course
  */
-function api_item_property_update($_course, $tool, $item_id, $lastedit_type, $user_id, $to_group_id = 0, $to_user_id = NULL, $start_visible = 0, $end_visible = 0, $session_id = 0) {
+function api_item_property_update($_course, $tool, $item_id, $lastedit_type, $user_id, $to_group_id = 0, $to_user_id = null, $start_visible = 0, $end_visible = 0, $session_id = 0) {
 
 	// Definition of variables
 	$tool = Database::escape_string($tool);
@@ -2270,7 +2270,7 @@ function api_item_property_update($_course, $tool, $item_id, $lastedit_type, $us
 	$TABLE_ITEMPROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY, $_course['dbName']);
 
 	if ($to_user_id <= 0) {
-		$to_user_id = NULL; //no to_user_id set
+		$to_user_id = null; // No to_user_id set
 	}
 
 	if (!is_null($to_user_id)) {
@@ -2293,7 +2293,7 @@ function api_item_property_update($_course, $tool, $item_id, $lastedit_type, $us
 	$filter = "tool='$tool' AND ref='$item_id' $condition_session ";
 
 	if ($item_id == '*') {
-		$filter = "tool='$tool' AND visibility<>'2' $condition_session"; // for all (not deleted) items of the tool
+		$filter = "tool='$tool' AND visibility<>'2' $condition_session"; // For all (not deleted) items of the tool
 	}
 	// Check whether $to_user_id and $to_group_id are passed in the function call
 	// If both are not passed (both are null) then it is a message for everybody and $to_group_id should be 0 !
@@ -2301,10 +2301,10 @@ function api_item_property_update($_course, $tool, $item_id, $lastedit_type, $us
 		$to_group_id = 0;
 	}
 	if (!is_null($to_user_id)) {
-		$to_filter = " AND to_user_id='$to_user_id' $condition_session"; // set filter to intended user
+		$to_filter = " AND to_user_id='$to_user_id' $condition_session"; // Set filter to intended user
 	} else {
 		if (($to_group_id != 0) && $to_group_id == strval(intval($to_group_id))) {
-			$to_filter = " AND to_group_id='$to_group_id' $condition_session"; // set filter to intended group
+			$to_filter = " AND to_group_id='$to_group_id' $condition_session"; // Set filter to intended group
 		}
 	}
 	// Update if possible
@@ -2342,7 +2342,7 @@ function api_item_property_update($_course, $tool, $item_id, $lastedit_type, $us
 			if (!empty($session_id)) {
 
 				// Check whether session id already exist into itemp_properties for updating visibility or add it
-				$sql = "select id_session FROM $TABLE_ITEMPROPERTY WHERE tool = '$tool' AND ref='$item_id' AND id_session = '$session_id'";
+				$sql = "SELECT id_session FROM $TABLE_ITEMPROPERTY WHERE tool = '$tool' AND ref='$item_id' AND id_session = '$session_id'";
 				$rs = Database::query($sql);
 				if (Database::num_rows($rs) > 0) {
 					$sql = "UPDATE $TABLE_ITEMPROPERTY
@@ -2364,9 +2364,11 @@ function api_item_property_update($_course, $tool, $item_id, $lastedit_type, $us
 			break;
 		case 'invisible' : // Change item to invisible
 			$visibility = '0';
+
 			if (!empty($session_id)) {
+
 				// Check whether session id already exist into itemp_properties for updating visibility or add it
-				$sql = "Select id_session FROM $TABLE_ITEMPROPERTY WHERE tool = '$tool' AND ref='$item_id' AND id_session = '$session_id'";
+				$sql = "SELECT id_session FROM $TABLE_ITEMPROPERTY WHERE tool = '$tool' AND ref='$item_id' AND id_session = '$session_id'";
 				$rs = Database::query($sql);
 				if (Database::num_rows($rs) > 0) {
 					$sql = "UPDATE $TABLE_ITEMPROPERTY

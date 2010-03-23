@@ -217,7 +217,7 @@ if (is_array($a_courses)) {
 
 		if (!empty($tematic_advance)) {
 			$tematic_advance_csv = $tematic_advance_progress.'%';
-			$tematic_advance_progress = '<a title="'.get_lang('GoToThematicAdvance').'" href="'.api_get_path(WEB_CODE_PATH).'course_progress/index.php?cidReq='.$course_code.'&id_session='.$id_session.'">'.$tematic_advance['progress'].'%</a>';
+			$tematic_advance_progress = '<a title="'.get_lang('GoToThematicAdvance').'" href="'.api_get_path(WEB_CODE_PATH).'course_progress/index.php?cidReq='.$course_code.'&id_session='.$id_session.'">'.$tematic_advance.'%</a>';
 		} else {
 			$tematic_advance_progress = '-';
 		}

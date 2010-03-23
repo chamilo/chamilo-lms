@@ -150,7 +150,7 @@ if ($isCoach || api_is_platform_admin() || api_is_drh()) {
 		}
 		if (count($students) > 0) {
 			echo '&nbsp;&nbsp;<a href="javascript: void(0);" onclick="javascript: window.print()"><img align="absbottom" src="../img/printmgr.gif">&nbsp;'.get_lang('Print').'</a> ';
-			echo '<a href="'.api_get_self().'?export=csv"><img align="absbottom" src="../img/excel.gif">&nbsp;'.get_lang('ExportAsCSV').'</a>';
+			echo '<a href="'.api_get_self().'?export=csv"><img align="absbottom" src="../img/csv.gif">&nbsp;'.get_lang('ExportAsCSV').'</a>';
 		}
 		echo '</div>';
 

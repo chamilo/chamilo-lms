@@ -296,7 +296,7 @@ class Tracking {
 			$condition_quiz = "";
 			if(!empty($exercise_id)) {
 				$exercise_id = intval($exercise_id);
-				$condition_lp =" AND id = $exercise_id ";
+				$condition_quiz =" AND id = $exercise_id ";
 			}
 
 			// Compose a filter based on optional session id given
@@ -335,7 +335,7 @@ class Tracking {
 					$quiz_avg_score = $quiz_avg_score / $count_attempt[0];
 		        }
 		        $quiz_avg_total_score = $quiz_avg_score;
-				return $quiz_avg_total_score/$count_quiz[0];
+				return round($quiz_avg_total_score/$count_quiz[0],2);
 			}
 		}
 		return null;
@@ -613,7 +613,7 @@ class Tracking {
 			                        if (!empty($row_max_score_bis['maxscore'])) {
 			                        	$max_score = $row_max_score_bis['maxscore'];
 			                        }
-			                        $lp_scorm_result_score_total += ($score/$max_score);
+			                        $lp_scorm_result_score_total = ($score/$max_score);			                        
 	                                $current_value = $score/$max_score;
 		                        } else {
 		                        	//$lp_scorm_result_score_total += 0;

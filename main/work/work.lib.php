@@ -47,11 +47,11 @@ function display_action_links($cur_dir_path, $always_show_tool_options, $always_
 			$display_output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;toolgroup='.Security::remove_XSS($_GET['toolgroup']).'&amp;createdir=1&origin='.$origin.'&gradebook='.$gradebook.'">'.Display::return_icon('works_new.gif', get_lang('CreateAssignment')).' '.get_lang('CreateAssignment').' </a>';
 		}
 		// Options
-		$display_output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.$cur_dir_path.'&amp;display_tool_options=true&amp;origin='.$origin.'&amp;gradebook='.$gradebook.'">'.Display::return_icon('acces_tool.gif', get_lang('EditToolOptions')).' '.get_lang('EditToolOptions').'</a>';
+		$display_output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;display_tool_options=true&amp;origin='.$origin.'&amp;gradebook='.$gradebook.'">'.Display::return_icon('acces_tool.gif', get_lang('EditToolOptions')).' '.get_lang('EditToolOptions').'</a>';
 	}
 
 	if (!$always_show_upload_form && api_is_allowed_to_session_edit(false, true)) {
-		$display_output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.$cur_dir_path.'&amp;display_upload_form=true&amp;origin='.$origin.'&amp;gradebook='.$gradebook.'">'.Display::return_icon('submit_file.gif', get_lang('UploadADocument')).' '.get_lang('UploadADocument').'</a>';
+		$display_output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;display_upload_form=true&amp;origin='.$origin.'&amp;gradebook='.$gradebook.'">'.Display::return_icon('submit_file.gif', get_lang('UploadADocument')).' '.get_lang('UploadADocument').'</a>';
 	}
 
 	if (api_is_allowed_to_edit(null, true) && $origin != 'learnpath' && api_is_allowed_to_session_edit(false, true)) {
@@ -87,7 +87,7 @@ function display_action_links($cur_dir_path, $always_show_tool_options, $always_
 	}
 	if (api_is_allowed_to_edit(null, true)) {
 		global $publication;
-		//if (empty($curdirpath) or $curdirpath != '.' or $cur_dir_path != '/') {
+		if (empty($curdirpath) or $curdirpath != '.' or $cur_dir_path != '/') {
 			if (empty($_GET['list']) or Security::remove_XSS($_GET['list']) == 'with') {
 				$display_output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;curdirpath='.$cur_dir_path.'&amp;origin='.$origin.'&amp;gradebook='.$gradebook.'&amp;list=without">'.
 					Display::return_icon('un_check.gif', get_lang('ViewUsersWithoutTask')).' '.get_lang('ViewUsersWithoutTask')."</a>\n";
@@ -99,7 +99,7 @@ function display_action_links($cur_dir_path, $always_show_tool_options, $always_
 				$display_output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;curdirpath='.$cur_dir_path.'&amp;origin='.$origin.'&amp;gradebook='.$gradebook.'&amp;list=without&amp;action=send_mail&amp;sec_token='.$_SESSION['token'].'">'.
 					Display::return_icon('messagebox_warning.gif', get_lang('ReminderMessage')).' '.get_lang('ReminderMessage')."</a>\n";
 			}
-		//}
+		}
 	}
 	if ($display_output != '') {
 		echo $display_output;

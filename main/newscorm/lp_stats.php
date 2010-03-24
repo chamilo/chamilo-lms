@@ -190,6 +190,8 @@ if (is_array($list) && count($list) > 0){
 		$result = Database::query($sql);
 		$num = Database :: num_rows($result);
 		$time_for_total = 'NaN';
+		
+		$is_allowed_to_edit = api_is_allowed_to_edit(null,true);					
 
 		if (($extend_this || $extend_all) && $num > 0) {
 			$row = Database :: fetch_array($result);
@@ -232,7 +234,7 @@ if (is_array($list) && count($list) > 0){
 			}
 
 			$counter++;
-
+						
 			do {
 				$row['iv_view_count'];
 				//check if there are interactions below
@@ -297,7 +299,8 @@ if (is_array($list) && count($list) > 0){
 				);
 
 				$my_lesson_status = api_convert_encoding(get_lang($mylanglist[$lesson_status]), $lp_charset, $dokeos_charset);
-				$is_allowed_to_edit = api_is_allowed_to_edit(null,true);
+		
+				
 
 				if ($row['item_type'] != 'dokeos_chapter') {
 					if (!$is_allowed_to_edit && $result_disabled_ext_all) {
@@ -372,8 +375,8 @@ if (is_array($list) && count($list) > 0){
 					}
 				}
 			} while ($row = Database :: fetch_array($result));
-		}
-		elseif ($num > 0) {
+			
+		} elseif ($num > 0) {
 			$row = Database :: fetch_array($result);
 			$my_id = $row['myid'];
 			$my_lp_id = $row['mylpid'];
@@ -454,14 +457,10 @@ if (is_array($list) && count($list) > 0){
 				}
 			}
 
-			if ($score == 0)
-			{
+			if ($score == 0) {
 				$maxscore = $row['mymaxscore'];
-			}
-			else
-			{
-				if ($row['item_type'] == 'sco')
-				{
+			} else {
+				if ($row['item_type'] == 'sco') {
 					if (!empty ($row['myviewmaxscore']) and $row['myviewmaxscore'] > 0) {
 						$maxscore = $row['myviewmaxscore'];
 					}
@@ -470,11 +469,8 @@ if (is_array($list) && count($list) > 0){
 					} else {
 						$maxscore = $row['mymaxscore'];
 					}
-				}
-				else
-				{
-					if ($row['item_type'] == 'quiz')
-					{
+				} else {
+					if ($row['item_type'] == 'quiz') {
 						// get score and total time from last attempt of a exercise en lp
 						$sql = "SELECT score FROM $TBL_LP_ITEM_VIEW WHERE lp_item_id = '".(int)$my_id."' and lp_view_id = '".(int)$my_lp_view_id."'
 								ORDER BY view_count DESC limit 1";
@@ -492,7 +488,6 @@ if (is_array($list) && count($list) > 0){
 							$score = 0;
 							$subtotal_time =  0;
 						}
-
 						//$time = learnpathItem :: get_scorm_time('js', $subtotal_time);
 						// selecting the max score from an attempt
 						$sql = "SELECT SUM(t.ponderation) as maxscore from ( SELECT distinct question_id, marks,ponderation FROM $tbl_stats_attempts as at " .
@@ -501,9 +496,7 @@ if (is_array($list) && count($list) > 0){
 						$result = Database::query($sql);
 						$row_max_score = Database :: fetch_array($result);
 						$maxscore = $row_max_score['maxscore'];
-					}
-					else
-					{
+					} else {
 						$maxscore = $row['mymaxscore'];
 					}
 				}
@@ -606,15 +599,11 @@ if (is_array($list) && count($list) > 0){
 					} else {
 						$temp[] = ($score == 0 ? '/' : ($maxscore == 0 ? $score : $score . '/' . float_format($maxscore, 1)));
 					}
-
 					$temp[] = $time;
 					$csv_content[] = $temp;
 				}
-
 			}
-
 			$counter++;
-
 			if ($extend_this_attempt OR $extend_all) {
 				$list1 = learnpath :: get_iv_interactions_array($row['iv_id']);
 				foreach ($list1 as $id => $interaction) {
@@ -664,7 +653,7 @@ if (is_array($list) && count($list) > 0){
 								$mytime = ((int)$mktime_exe_date-(int)$mktime_start_date);
 								$time_attemp = learnpathItem :: get_scorm_time('js', $mytime);
 								$time_attemp = str_replace('NaN', '00' . $h . '00\'00"', $time_attemp);
-
+						
 								if (!$is_allowed_to_edit && $result_disabled_ext_all) {
 									$view_score =  '-';
 								} else {
@@ -690,13 +679,12 @@ if (is_array($list) && count($list) > 0){
 									} else {
 										$output .= '<td><a href="../exercice/exercise_show.php?origin=student_progress&myid='.$my_orig_lp.'&my_lp_id='.$my_orig_lp_item.'&id=' . $my_exe_id . '&cidReq=' . $course_code . '&student=' . $student_id .$from_link. '" target="_parent"><img src="' . api_get_path(WEB_IMG_PATH) . 'quiz.gif" alt="'.api_convert_encoding(get_lang('ShowAttempt'), $lp_charset, $dokeos_charset).'" title="'.api_convert_encoding(get_lang('ShowAttempt'), $lp_charset, $dokeos_charset).'"></a></td>';
 									}
-								} else {
-									if (!$is_allowed_to_edit && $result_disabled_ext_all) {
+								} else {									
+									if (!$is_allowed_to_edit && $result_disabled_ext_all ) {
 										$output .= '<td><img src="' . api_get_path(WEB_IMG_PATH) . 'quiz_na.gif" alt="'.api_convert_encoding(get_lang('ShowAndQualifyAttempt'), $lp_charset, $dokeos_charset).'" title="'.api_convert_encoding(get_lang('ShowAndQualifyAttempt'), $lp_charset, $dokeos_charset).'"></td>';
 									} else {
 										$output .= '<td><a href="../exercice/exercise_show.php?origin=tracking_course&myid='.$my_orig_lp.'&my_lp_id='.$my_orig_lp_item.'&id=' . $my_exe_id . '&cidReq=' . $course_code . '&student=' . $student_id . '&total_time='.$mytime.'&my_exe_exo_id='.$my_exo_exe_id.$from_link.' " target="_parent"><img src="' . api_get_path(WEB_IMG_PATH) . 'quiz.gif" alt="'.api_convert_encoding(get_lang('ShowAndQualifyAttempt'), $lp_charset, $dokeos_charset).'" title="'.api_convert_encoding(get_lang('ShowAndQualifyAttempt'), $lp_charset, $dokeos_charset).'"></a></td>';
 									}
-
 								}
 							 	$output .= '</tr>';
 								$n++;

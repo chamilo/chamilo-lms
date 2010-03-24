@@ -119,6 +119,19 @@ if ($_POST['formSent']) {
 	$id_session_category = $_POST['session_category'];
 	$id_visibility = $_POST['session_visibility'];
 	$return = SessionManager::create_session($name,$year_start,$month_start,$day_start,$year_end,$month_end,$day_end,$nb_days_acess_before,$nb_days_acess_after,$nolimit,$coach_username, $id_session_category,$id_visibility);
+	
+	global $_configuration;
+		require_once (api_get_path(LIBRARY_PATH).'urlmanager.lib.php');
+		if ($_configuration['multiple_access_urls']==true) {
+			$tbl_user_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+			$access_url_id = api_get_current_access_url_id();
+			UrlManager::add_session_to_url($return,$access_url_id);
+		} else {
+			// we are filling by default the access_url_rel_session table
+			UrlManager::add_session_to_url($return,1);
+		}
+	
+	
 	if ($return == strval(intval($return))) {
 		// integer => no error on session creation
 		header('Location: add_courses_to_session.php?id_session='.$return.'&add=true&msg=');

@@ -1275,7 +1275,7 @@ if ($_configuration['live_exercise_tracking'] == true && $exerciseFeedbackType !
 
             Database::query($sql);
         } else {
-            echo $sql = "INSERT INTO $stat_table ($sql_fields exe_exo_id,exe_user_id,exe_cours_id,status,session_id,start_date,orig_lp_id,orig_lp_item_id)
+            $sql = "INSERT INTO $stat_table ($sql_fields exe_exo_id,exe_user_id,exe_cours_id,status,session_id,start_date,orig_lp_id,orig_lp_item_id)
                     VALUES($sql_fields_values '$exerciseId','" . api_get_user_id() . "','" . $_course['id'] . "','incomplete','" . $session_id . "','" . date('Y-m-d H:i:s') . "',$safe_lp_id,$safe_lp_item_id)";
             Database::query($sql);
         }

@@ -1,6 +1,5 @@
 <?php
 /* For licensing terms, see /license.txt */
-
 /**
 *	These files are a complete rework of the forum. The database structure is
 *	based on phpBB but all the code is rewritten. A lot of new functionalities
@@ -15,11 +14,7 @@
 * 	- new view option: nested view
 * 	- quoting a message
 *
-*	@Author Patrick Cool <patrick.cool@UGent.be>, Ghent University
-*	@Copyright Ghent University
-*	@Copyright Patrick Cool
-*
-* 	@package dokeos.forum
+* 	@package chamilo.forum
 */
 
 // name of the language file that needs to be included
@@ -34,7 +29,6 @@ $this_section=SECTION_COURSES;
 // notice for unauthorized people.
 api_protect_course_script(true);
 
-
 // including additional library scripts
 require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 require_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
@@ -46,14 +40,9 @@ if(isset($_GET['origin'])) {
 	$origin_string = '&origin='.$origin;
 }
 
-/*
------------------------------------------------------------
-	Including necessary files
------------------------------------------------------------
-*/
+/* Including necessary files */
 require_once 'forumconfig.inc.php';
 require_once 'forumfunction.inc.php';
-
 
 // javascript
 $htmlHeadXtra[] = '<script>
@@ -69,29 +58,17 @@ $htmlHeadXtra[] = '<script>
 			}
 		}
 </script>';
-/*
-==============================================================================
-		MAIN DISPLAY SECTION
-==============================================================================
-*/
 
-/*
------------------------------------------------------------
-	Retrieving forum and forum categorie information
------------------------------------------------------------
-*/
-// we are getting all the information about the current forum and forum category.
+/* MAIN DISPLAY SECTION */
+/* Retrieving forum and forum categorie information */
+// We are getting all the information about the current forum and forum category.
 // note pcool: I tried to use only one sql statement (and function) for this
 // but the problem is that the visibility of the forum AND forum cateogory are stored in the item_property table
 $current_thread	= get_thread_information($_GET['thread']); // note: this has to be validated that it is an existing thread
 $current_forum	= get_forum_information($current_thread['forum_id']); // note: this has to be validated that it is an existing forum.
 $current_forum_category = get_forumcategory_information(Security::remove_XSS($current_forum['forum_category']));
 
-/*
------------------------------------------------------------
-	Breadcrumbs
------------------------------------------------------------
-*/
+/* Breadcrumbs */
 if (isset($_SESSION['gradebook'])){
 	$gradebook = Security::remove_XSS($_SESSION['gradebook']);
 }
@@ -111,7 +88,6 @@ if (!empty($_SESSION['toolgroup'])) {
 	$interbreadcrumb[]=array("url" => "viewforum.php?origin=".$origin."&forum=".Security::remove_XSS($_GET['forum']),"name" => $current_forum['forum_title']);
 	$interbreadcrumb[]=array("url" => "viewthread.php?origin=".$origin."&gradebook=".$gradebook."&forum=".Security::remove_XSS($_GET['forum'])."&amp;thread=".Security::remove_XSS($_GET['thread']),"name" => $current_thread['thread_title']);
 	$interbreadcrumb[]=array("url" => "javascript: void(0);","name" => get_lang('Reply'));
-
 } else {
 	$interbreadcrumb[]=array("url" => "index.php?gradebook=$gradebook","name" => $nameTools);
 	$interbreadcrumb[]=array("url" => "viewforumcategory.php?forumcategory=".$current_forum_category['cat_id'],"name" => $current_forum_category['cat_title']);
@@ -119,22 +95,14 @@ if (!empty($_SESSION['toolgroup'])) {
 	$interbreadcrumb[]=array("url" => "viewthread.php?origin=".$origin."&gradebook=".$gradebook."&forum=".Security::remove_XSS($_GET['forum'])."&amp;thread=".Security::remove_XSS($_GET['thread']),"name" => $current_thread['thread_title']);
 	$interbreadcrumb[]=array("url" => "javascript: void(0);","name" => get_lang('Reply'));
 }
-/*
------------------------------------------------------------
-	Resource Linker
------------------------------------------------------------
-*/
+/* Resource Linker */
 if (isset($_POST['add_resources']) AND $_POST['add_resources']==get_lang('Resources')) {
-	$_SESSION['formelements']=$_POST;
-	$_SESSION['origin']=$_SERVER['REQUEST_URI'];
-	$_SESSION['breadcrumbs']=$interbreadcrumb;
+	$_SESSION['formelements']  = $_POST;
+	$_SESSION['origin']        = $_SERVER['REQUEST_URI'];
+	$_SESSION['breadcrumbs']   = $interbreadcrumb;
 	header("Location: ../resourcelinker/resourcelinker.php");
 }
-/*
------------------------------------------------------------
-	Header
------------------------------------------------------------
-*/
+/* Header */
 if($origin=='learnpath') {
 	include(api_get_path(INCLUDE_PATH).'reduced_header.inc.php');
 } else {
@@ -142,11 +110,7 @@ if($origin=='learnpath') {
 	Display :: display_header('');
 	api_display_tool_title($nameTools);
 }
-/*
------------------------------------------------------------
-	Is the user allowed here?
------------------------------------------------------------
-*/
+/* Is the user allowed here? */
 // The user is not allowed here if
 // 1. the forumcategory, forum or thread is invisible (visibility==0
 // 2. the forumcategory, forum or thread is locked (locked <>0)
@@ -172,11 +136,7 @@ if (!$_user['user_id'] AND $current_forum['allow_anonymous']==0) {
 		exit;
 	}
 }
-/*
------------------------------------------------------------
-	Action links
------------------------------------------------------------
-*/
+/* Action links */
 if ($origin != 'learnpath') {
 	echo '<div class="actions">';
 	echo '<span style="float:right;">'.search_link().'</span>';
@@ -187,23 +147,16 @@ if ($origin != 'learnpath') {
 } else {
 	echo '<div style="height:15px">&nbsp;</div>';
 }
-/*
------------------------------------------------------------
-	Display Forum Category and the Forum information
------------------------------------------------------------
-*/ 
+/* Display Forum Category and the Forum information */ 
 echo "<table class=\"data_table\" width='100%'>\n";
 
 // the forum category
 echo "\t<tr>\n\t\t<th style=\"padding-left:5px;\" align=\"left\" colspan=\"2\">";
-
 echo '<span class="forum_title">'.prepare4display(Security::remove_XSS($current_thread['thread_title'])).'</span><br />';
 
 if (!empty ($current_forum_category['cat_title'])) {
 	echo '<span class="forum_low_description">'.prepare4display(Security::remove_XSS($current_forum_category['cat_title']))." - </span>";
 }
-
-//echo '<span class="forum_low_description">'.prepare4display(Security::remove_XSS($current_forum['forum_title'])).'</span>';
 echo "</th>\n";
 echo "\t</tr>\n";
 echo '</table>';
@@ -212,17 +165,12 @@ echo '</table>';
 $my_action   = isset($_GET['action']) ? Security::remove_XSS($_GET['action']) : '';
 $my_post     = isset($_GET['post']) ?   Security::remove_XSS($_GET['post']) : '';
 $my_elements = isset($_SESSION['formelements']) ? $_SESSION['formelements'] : '';
-$values=show_add_post_form(Security::remove_XSS($my_action,$my_post, $my_elements)); // note: this has to be cleaned first
+$values      = show_add_post_form(Security::remove_XSS($my_action,$my_post, $my_elements)); // note: this has to be cleaned first
 
 if (!empty($values) AND isset($_POST['SubmitPost'])) {
 	store_reply($values);
 }
 
-/*
-==============================================================================
-		FOOTER
-==============================================================================
-*/
 if($origin!='learnpath') {
 	Display :: display_footer();
 }

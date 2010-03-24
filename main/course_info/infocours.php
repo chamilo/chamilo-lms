@@ -81,7 +81,6 @@ if (Database::num_rows($q_result_titulars) == 0) {
 
 $a_profs[0] = '-- '.get_lang('NoManager').' --';
 while ($a_titulars = Database::fetch_array($q_result_titulars)) {
-	error_log(print_r($a_titulars,1),0);
 	$s_username = $a_titulars['username'];
 	$s_lastname = $a_titulars['lastname'];
 	$s_firstname = $a_titulars['firstname'];

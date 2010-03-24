@@ -8,18 +8,17 @@
  * @author Yannick Warnier <ywarnier@beeznest.org>
  */
 
-require_once('learnpath.class.php');
+require_once 'learnpath.class.php';
 //require_once('scorm.class.php');
-require_once ('resourcelinker.inc.php');
-require_once ('../inc/lib/tracking.lib.php');
-require_once ('../inc/lib/course.lib.php');
+require_once 'resourcelinker.inc.php';
+require_once api_get_path(LIBRARY_PATH).'tracking.lib.php';
+require_once api_get_path(LIBRARY_PATH).'course.lib.php';
 
 if(empty($_SESSION['_course']['id']) && isset($_GET['course'])) {
 	$course_code = Security::remove_XSS($_GET['course']);
 } else {
 	$course_code = $_SESSION['_course']['id'];
 }
-
 
 if (isset($_GET['student_id'])) {
 	$student_id = intval($_GET['student_id']);
@@ -45,7 +44,7 @@ if($origin != 'tracking') {
 		@import "../css/public_admin/scorm.css";
 		/*]]>*/
 	</style>';
-	include_once ('../inc/reduced_header.inc.php');
+	include_once api_get_path(INCLUDE_PATH).'reduced_header.inc.php';
 	echo '<body>';
 } else {
     //Get learning path's encoding
@@ -146,7 +145,7 @@ if (isset($_GET['lp_id']) && isset($_GET['my_lp_id'])) {
 
 $TBL_QUIZ = Database :: get_course_table(TABLE_QUIZ_TEST);
 
-if (is_array($list) && count($list) > 0){
+if (is_array($list) && count($list) > 0) {
 	foreach ($list as $my_item_id) {
 		$extend_this = 0;
 		$qry_order = 'DESC';
@@ -304,7 +303,7 @@ if (is_array($list) && count($list) > 0){
 
 				if ($row['item_type'] != 'dokeos_chapter') {
 					if (!$is_allowed_to_edit && $result_disabled_ext_all) {
-						$view_score = '/';
+						$view_score = Display::return_icon('invisible.gif', get_lang('ResultsHiddenByExerciseSetting'));
 					} else {
 						$view_score = ($score == 0 ? '/' : ($maxscore === 0 ? $score : $score . '/' . float_format($maxscore, 1)));
 					}
@@ -571,7 +570,7 @@ if (is_array($list) && count($list) > 0){
 					 if ($row['item_type'] == 'quiz') {
 
 					 	if (!$is_allowed_to_edit && $result_disabled_ext_all) {
-							$output .=  '/';
+							$output .= Display::return_icon('invisible.gif', get_lang('ResultsHiddenByExerciseSetting')); 
 						} else {
 							$output .= ($score == 0 ? '0/'.float_format($maxscore, 1) : ($maxscore == 0 ? $score : float_format($score, 1) . '/' . float_format($maxscore, 1)));
 						}
@@ -655,7 +654,7 @@ if (is_array($list) && count($list) > 0){
 								$time_attemp = str_replace('NaN', '00' . $h . '00\'00"', $time_attemp);
 						
 								if (!$is_allowed_to_edit && $result_disabled_ext_all) {
-									$view_score =  '-';
+									$view_score =  Display::return_icon('invisible.gif', get_lang('ResultsHiddenByExerciseSetting'));
 								} else {
 									//show only float when need it
 									$my_score  = float_format( $my_score, 1);
@@ -724,7 +723,12 @@ $total_time = learnpathItem :: get_scorm_time('js', $total_time);
 $total_time = str_replace('NaN', '00' . $h . '00\'00"', $total_time);
 $lp_type = learnpath :: get_type_static($lp_id);
 $total_percent = 0;
-$final_score = $total_score.'%';
+
+if(!$is_allowed_to_edit && $result_disabled_ext_all) {
+	$final_score = Display::return_icon('invisible.gif', get_lang('ResultsHiddenByExerciseSetting'));
+} else {
+	$final_score = $total_score.'%';
+}
 
 if (($counter % 2) == 0) {
 	$oddclass = "row_odd";

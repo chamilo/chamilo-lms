@@ -444,14 +444,16 @@ function display_courses_in_category($user_category_id) {
 		$my_course['id_session'] =	null;
 		$my_course['s']		= $course['status'];
 		$show_notification = show_notification($my_course);
-
+		
+		$status_icon=Display::return_icon('blackboard.png', get_lang('Course'), array('width'=>'48px'));
+		/*
 		// course list
 		if ($course['status'] == COURSEMANAGER) {
 			$status_icon=Display::return_icon('course.gif', get_lang('Course')).' '.Display::return_icon('teachers.gif', get_lang('Status').': '.get_lang('Teacher'),array('style'=>'width:11px; height:11px;'));
 		}
 		if (($course['status'] == STUDENT && !api_is_coach()) || empty($course['status'])) {
 			$status_icon=Display::return_icon('course.gif', get_lang('Course')).' '.Display::return_icon('students.gif', get_lang('Status').': '.get_lang('Student'),array('style'=>'width:11px; height:11px'));
-		}
+		}*/
 		
 		/*		
 		if (api_is_allowed_to_edit(null,true)) {
@@ -461,8 +463,15 @@ function display_courses_in_category($user_category_id) {
 		}
 		*/
 		
-		echo "\t<tr>\n";
-		echo "\t\t<td>\n";
+		echo '<tr><td>';	
+		echo '<div class="userportal-course-item">';	
+		
+		if (api_is_platform_admin()) {
+			//@todo fix link 
+			//echo   '<div style="float:right;"><a href="'.api_get_path(WEB_CODE_PATH).'admin/#">'.Display::return_icon('edit.gif', get_lang('Edit'), array('align' => 'absmiddle')).'</a></div>';
+			echo   '<div style="float:right;"><a href="#">'.Display::return_icon('edit.gif', get_lang('Edit'), array('align' => 'absmiddle')).'</a></div>';
+		}											
+
 
 		//function logic - act on the data
 		$is_virtual_course = CourseManager :: is_virtual_course_from_system_code($course['code']);
@@ -496,22 +505,21 @@ function display_courses_in_category($user_category_id) {
 			$course_title = $course['title']." ".get_lang('CourseClosed');
 		}
 
-
-		echo "<div style=\"float:left;margin-right:10px;\">".$status_icon."</div><span style=\"font-size:135%;\">".$course_title."</span><br />";
+		echo '<div style="float:left;margin-right:10px;">'.$status_icon.'</div><span style="font-size:135%;">'.$course_title.'</span><br />';
 		if (api_get_setting('display_coursecode_in_courselist') == 'true') {
 			echo $course_display_code;
 		}
 		if (api_get_setting('display_coursecode_in_courselist') == 'true' && api_get_setting('display_teacher_in_courselist') == 'true') {
-			echo " - ";
+			echo ' - ';
 		}
 		if (api_get_setting('display_teacher_in_courselist') == 'true') {
-			echo $course['tutor'];
+			if (!empty($course['tutor'])) 
+				echo $course['tutor'];
 		}
 		// show notifications
 		echo $show_notification;
-
-		echo "\t\t</td>\n";
-		echo "\t</tr>\n";
+		echo '</div>';
+		echo '</td></tr>';		
 		$key++;
 	}
 }
@@ -760,7 +768,9 @@ function get_logged_user_course_html($course, $session_id = 0, $class='courses')
 	$is_coach = api_is_coach($my_course['id_session'],$course['code']);
 
 	$s_htlm_status_icon = "";
-
+	
+	$s_htlm_status_icon=Display::return_icon('blackboard_blue.png', get_lang('Course'), array('width'=>'48px'));
+	/*
 	if ($s_course_status == 1) {
 		$s_htlm_status_icon=Display::return_icon('course.gif', get_lang('Course')).' '.Display::return_icon('teachers.gif', get_lang('Status').': '.get_lang('Teacher'),array('style'=>'width:11px; height:11px'));
 	}
@@ -770,7 +780,7 @@ function get_logged_user_course_html($course, $session_id = 0, $class='courses')
 	if (($s_course_status == 5 && !$is_coach) || empty($s_course_status)) {
 		$s_htlm_status_icon=Display::return_icon('course.gif', get_lang('Course')).' '.Display::return_icon('students.gif', get_lang('Status').': '.get_lang('Student'),array('style'=>'width:11px; height:11px'));
 	}
-
+*/
 	//display course entry
 	$result.="\n\t";
 	$result .= '<li class="'.$class.'"><div class="coursestatusicons">'.$s_htlm_status_icon.'</div>';
@@ -1317,18 +1327,22 @@ if ( is_array($courses_tree) ) {
 				if ($count_courses_session > 0) {
 					echo '<ul class="session_box">';
 						echo '<li class="session_box_title" id="session_'.$session['details']['id'].'" >';
-						echo Display::return_icon('div_hide.gif', get_lang('Expand').'/'.get_lang('Hide'), array('align' => 'absmiddle', 'id' => 'session_img_'.$session['details']['id'])) . ' ';						
+						
+						//echo Display::return_icon('div_hide.gif', get_lang('Expand').'/'.get_lang('Hide'), array('align' => 'absmiddle', 'id' => 'session_img_'.$session['details']['id'])) . ' ';
+						
+						echo Display::return_icon('window_list.png', get_lang('Expand').'/'.get_lang('Hide'), array('width'=>'48px', 'align' => 'absmiddle', 'id' => 'session_img_'.$session['details']['id'])) . ' ';
+												
 						$s = get_session_title_box($session['details']['id']);
+						$extra_info = (!empty($s['coach'])?$s['coach'].' | ':'').$s['dates'];
 						//var_dump($s);
 						//echo get_lang('SessionName') . ': ' . $s['title']. ' - '.(!empty($s['coach'])?$s['coach'].' - ':'').$s['dates'];
-						echo '<span>' . $s['title']. ' </span> ';
+						echo '<span>' . $s['title']. ' </span> <span style="padding-left:10px;  font-size: 90%; font-weight: normal;">'.$extra_info.'</span>';
 						if (api_is_platform_admin()) {						
 							echo '<div style="float:right;"><a href="'.api_get_path(WEB_CODE_PATH).'admin/resume_session.php?id_session='.$session['details']['id'].'">'.Display::return_icon('edit.gif', get_lang('Edit'), array('align' => 'absmiddle')).'</a></div>';
-						}
-						
-						echo '<br />'.(!empty($s['coach'])?$s['coach'].' | ':'').$s['dates'];
+						}						
 						echo '</li>';
 					    echo $html_courses_session;
+					    
 					echo '</ul>';
 				}
 			}
@@ -1364,16 +1378,21 @@ if ( is_array($courses_tree) ) {
 
 					if ($count > 0) {
 						$s = get_session_title_box($session['details']['id']);
-						$html_sessions .= '<ul class="session_box" id="session_'.$session['details']['id'].'">';
-						$html_sessions .= '<li class="session_box_title" id="session_'.$session['details']['id'].'">';
-						$html_sessions .= Display::return_icon('div_hide.gif', get_lang('Expand').'/'.get_lang('Hide'), array('align' => 'absmiddle', 'id' => 'session_img_'.$session['details']['id'])) . ' ';
+						$html_sessions .= '<ul class="sub_session_box" id="session_'.$session['details']['id'].'">';
+						$html_sessions .= '<li class="sub_session_box_title" id="session_'.$session['details']['id'].'">';
+						//$html_sessions .= Display::return_icon('div_hide.gif', get_lang('Expand').'/'.get_lang('Hide'), array('align' => 'absmiddle', 'id' => 'session_img_'.$session['details']['id'])) . ' ';
+						$html_sessions .= Display::return_icon('window_list.png', get_lang('Expand').'/'.get_lang('Hide'), array('width'=>'48px', 'align' => 'absmiddle', 'id' => 'session_img_'.$session['details']['id'])) . ' ';
+				
 						
 						$html_sessions .=  '<span>' . $s['title']. ' </span> ';
+						$html_sessions .=  '<span style="padding-left:10px; font-size: 90%; font-weight: normal;">';
+						$html_sessions .=  (!empty($s['coach'])?$s['coach'].' | ':'').$s['dates'];
+						$html_sessions .=  '</span>';
+						 
 						if (api_is_platform_admin()) {
 							$html_sessions .=  '<div style="float:right;"><a href="'.api_get_path(WEB_CODE_PATH).'admin/resume_session.php?id_session='.$session['details']['id'].'">'.Display::return_icon('edit.gif', get_lang('Edit'), array('align' => 'absmiddle')).'</a></div>';
-						}
-												
-						$html_sessions .= ' <br /> '.(!empty($s['coach'])?$s['coach'].' | ':'').$s['dates'];
+						}											
+						
 						$html_sessions .= '</li>';
 						$html_sessions .= $html_courses_session;
 						$html_sessions .= '</ul>';
@@ -1381,15 +1400,26 @@ if ( is_array($courses_tree) ) {
 				}
 
 				if ($count_courses_session > 0) {
-					echo '<div class="session_category" id="session_category_'.$category['details']['id'].'" style="background-color:#fbfbfb; border:1px solid #dddddd; padding:5px; margin-top: 10px;">';
+					echo '<div class="session_category" id="session_category_'.$category['details']['id'].'" style="background-color:#f9f9f9; border:1px solid #dddddd; padding:5px 10px 5px 10px; margin-top: 10px;">';
 					echo '<div class="session_category_title_box" id="session_category_title_box_'.$category['details']['id'].'" style="color: #555555;">';
-					echo Display::return_icon('div_hide.gif', get_lang('Expand').'/'.get_lang('Hide'), array('align' => 'absmiddle', 'id' => 'category_img_'.$category['details']['id']));
+					//echo Display::return_icon('div_hide.gif', get_lang('Expand').'/'.get_lang('Hide'), array('align' => 'absmiddle', 'id' => 'category_img_'.$category['details']['id']));
 					
-					echo Display::return_icon('folder_document.gif', get_lang('algo'));
+					echo Display::return_icon('folder_blue.png', get_lang('algo'), array('width'=>'48px', 'align' => 'absmiddle'));
+					
+						
+					if (api_is_platform_admin()) {						
+						echo'<div style="float:right;"><a href="'.api_get_path(WEB_CODE_PATH).'admin/session_category_edit.php?&id='.$category['details']['id'].'">'.Display::return_icon('edit.gif', get_lang('Edit'), array('align' => 'absmiddle')).'</a></div>';
+					}	
+						
+					
 					echo '<span id="session_category_title">';
-						echo $category['details']['name'];
+					echo $category['details']['name'];
 					echo '</span>';
-					echo '<br / >'.get_lang('From').' '.$category['details']['date_start'].' '.get_lang('Until').' '.$category['details']['date_end'].'</div>';
+					
+					echo '<span style="padding-left:10px; font-size: 90%; font-weight: normal;">';
+					echo get_lang('From').' '.$category['details']['date_start'].' '.get_lang('Until').' '.$category['details']['date_end'].'</div>';
+					echo '</span>';
+					
 					echo $html_sessions;
 					echo '</div>';
 				}

@@ -950,7 +950,7 @@ class Database {
 			if (empty($file)) {
 				$file = $caller['file'];
 			}
-			if (empty($line)) {
+			if (empty($line) && $line !== false) {
 				$line = $caller['line'];
 			}
 			$type = $owner['type'];

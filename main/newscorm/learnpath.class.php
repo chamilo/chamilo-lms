@@ -67,6 +67,8 @@ class learnpath {
 
 	var $lp_session_id =0;
 
+	var $prerequisite = 0;
+	
 	/**
 	 * Class constructor. Needs a database handler, a course code and a learnpath id from the database.
 	 * Also builds the list of items into $this->items.
@@ -2138,6 +2140,36 @@ class learnpath {
 	}
 
 	/**
+	 * This function check if the learnpath is visible for student after the progress of its prerequisite is completed
+	 * @param	int		Learnpath id
+	 * @param	int		Student id
+	 * @return	bool	True if
+	 */
+	function is_lp_visible_for_student($lp_id, $student_id) {
+
+		$tbl_learnpath = Database :: get_course_table(TABLE_LP_MAIN);
+		
+		// get current prerequisite
+		$sql = "SELECT prerequisite FROM $tbl_learnpath WHERE id = $lp_id";
+		$rs  = Database::query($sql);
+		$row = Database :: fetch_array($rs);
+		$prerequisite = $row['prerequisite'];
+		$is_visible = true;
+		$progress = 0;
+				
+		if (!empty($prerequisite)) {
+			$progress = self::get_db_progress($prerequisite,$student_id,'%');
+			$progress = intval($progress);			
+			if ($progress < 100) {
+				$is_visible = false;	
+			}			
+		}
+		
+		return $is_visible;
+		
+	}
+
+	/**
 	 * Gets a progress bar for the learnpath by counting the number of items in it and the number of items
 	 * completed so far.
 	 * @param	string	Mode in which we want the values
@@ -4076,6 +4108,26 @@ class learnpath {
 		$sql = "UPDATE $lp_table SET author = '" . $this->author . "' WHERE id = '$lp_id'";
 		if ($this->debug > 2) {
 			error_log('New LP - lp updated with new preview author : ' . $this->author, 0);
+		}
+		$res = Database::query($sql);
+		return true;
+	}
+	
+	/**
+	* Sets the prerequisite of a LP (and save)
+	* @param	int		integer giving the new prerequisite of this learnpath
+	* @return 	bool 	returns true if prerequisite is not empty
+	*/
+	function set_prerequisite($prerequisite) {
+		if ($this->debug > 0) {
+			error_log('New LP - In learnpath::set_prerequisite()', 0);
+		}
+		$this->prerequisite = intval($prerequisite);
+		$lp_table = Database :: get_course_table(TABLE_LP_MAIN);
+		$lp_id = $this->get_id();
+		$sql = "UPDATE $lp_table SET prerequisite = '".$this->prerequisite."' WHERE id = '$lp_id'";
+		if ($this->debug > 2) {
+			error_log('New LP - lp updated with new preview requisite : ' . $this->requisite, 0);
 		}
 		$res = Database::query($sql);
 		return true;
@@ -7680,6 +7732,67 @@ class learnpath {
 
 		return $return;
 	}
+
+	/**
+	 * Return HTML list to allow prerequisites selection for lp
+	 * @param	integer Item ID
+	 * @return	string	HTML form
+	 */
+	function display_lp_prerequisites_list() {
+		global $charset;
+		
+		 
+		$lp_id = $this->lp_id;
+
+		$tbl_lp = Database :: get_course_table(TABLE_LP_MAIN);
+		
+		// get current prerequisite
+		$sql = "SELECT * FROM $tbl_lp WHERE id = $lp_id ";
+		$result = Database::query($sql);
+		$row = Database :: fetch_array($result);
+		$preq_id = $row['prerequisite'];		
+		
+		
+		$return = '';
+		$return .= '<div class="sectioncomment">';
+		$return .= '<table style="border-collapse:collapse;">';
+
+		//Adding the none option to the prerequisites see http://www.chamilo.org/es/node/146
+		$return .= '<tr >';
+		$return .= '<td>';
+		$return .= '<input checked="checked" id="idNone" name="prerequisites" type="radio" />';
+		$return .= '<label for="idNone">'.get_lang('None').'</label>';
+		$return .= '</td>';
+		$return .= '</tr>';
+
+		$session_id = api_get_session_id();
+		$session_condition = api_get_session_condition($session_id, false);
+		
+		$sql 	= "SELECT * FROM $tbl_lp $session_condition ORDER BY display_order ";		
+		$rs = Database::query($sql);
+		
+		if (Database::num_rows($rs) > 0) {			
+			while ($row = Database::fetch_array($rs)) {
+				if ($row['id'] == $lp_id) {
+					continue;	
+				}
+				
+				$return .= '<tr >';
+				$return .= '<td >';
+				$return .= '<input '.(($row['id']==$preq_id)?' checked="checked" ' : '').' id="id_'.$row['id'].'" name="prerequisites"  type="radio" value="'.$row['id'].'" />';				
+				$return .= '<label for="id_'.$row['id'].'">'.$row['name'].'</label>';
+				$return .= '</td>';
+				
+				$return .= '</tr>';				
+			}			
+		}
+		
+		$return .= '</table>';		
+		$return .= '</div>';
+
+		return $return;
+	}
+
 
 	/**
 	 * Creates a list with all the documents in it

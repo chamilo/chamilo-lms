@@ -196,6 +196,12 @@ if (is_array($flat_list))
 	    	// This is a student and this path is invisible, skip
 	    	continue;
 	    }
+	    
+	    // check if the learnpath is visible for student
+	    if (!$is_allowed_to_edit && !learnpath::is_lp_visible_for_student($id,api_get_user_id())) {
+	    	continue;
+	    }
+	    
 		$counter++;
 	    if (($counter % 2)==0) { $oddclass="row_odd"; } else { $oddclass="row_even"; }
 
@@ -247,11 +253,16 @@ if (is_array($flat_list))
 			$dsp_progress = '<td style="padding-top:1em;">'.learnpath::get_db_progress($id,api_get_user_id(),'both').'</td>';
 	    }
 	    if($is_allowed_to_edit) {
+	    	
+	    	/*
 	    	if ($current_session == $details['lp_session']) {
 		    	$dsp_desc = '<td valign="middle" style="color: grey; padding-top:1em;"><em>'.$details['lp_maker'].'</em>  &nbsp;&nbsp; '.$details['lp_proximity'].' &nbsp;&nbsp; '.$details['lp_encoding'].'<a href="lp_controller.php?'.api_get_cidreq().'&action=edit&lp_id='.$id.'">&nbsp;&nbsp;<img src="../img/edit.gif" border="0" title="'.get_lang('_edit_learnpath').'"></a></td>'."\n";
 	    	} else {
 				$dsp_desc = '<td valign="middle" style="color: grey; padding-top:1em;"><em>'.$details['lp_maker'].'</em>  &nbsp;&nbsp; '.$details['lp_proximity'].' &nbsp;&nbsp; '.$details['lp_encoding'].'<img src="../img/edit_na.gif" border="0" title="'.get_lang('_edit_learnpath').'"></td>'."\n";
 	    	}
+	    	*/
+	    	
+	    	$dsp_desc = '<td valign="middle" style="color: grey; padding-top:1em;"><em>'.$details['lp_maker'].'</em>  &nbsp;&nbsp; '.$details['lp_proximity'].' &nbsp;&nbsp; '.$details['lp_encoding'].'</td>'."\n";
 
 			/* export */
 			//Export is inside "Edit"
@@ -279,8 +290,15 @@ if (is_array($flat_list))
 
 			$dsp_edit = '<td align="center">';
 	    	$dsp_edit_close = '</td>';
-
-			/*   BUILD    */
+			
+			// EDIT LP
+			if ($current_session == $details['lp_session']) {
+				$dsp_edit_lp = '<a href="lp_controller.php?'.api_get_cidreq().'&action=edit&lp_id='.$id.'">&nbsp;&nbsp;<img src="../img/edit.gif" border="0" title="'.get_lang('_edit_learnpath').'"></a>&nbsp;';
+			} else {
+				$dsp_edit_lp = '<img src="../img/edit.gif" border="0" title="'.get_lang('_edit_learnpath').'">&nbsp;';
+			}
+				
+			//   BUILD  
 			if ($current_session == $details['lp_session']) {
 				if($details['lp_type']==1 || $details['lp_type']==2){
 					$dsp_build = '<a href="lp_controller.php?'.api_get_cidreq().'&amp;action=build&amp;lp_id='.$id.'"><img src="../img/wizard.gif" border="0" title="'.get_lang("Build").'"></a>&nbsp;';
@@ -395,11 +413,11 @@ if (is_array($flat_list))
 				if($details['lp_scorm_debug']==1){
 					$dsp_debug = '<a href="lp_controller.php?'.api_get_cidreq().'&action=switch_scorm_debug&lp_id='.$id.'">' .
 							'<img src="../img/bug.gif" border="0" alt="'.get_lang("HideDebug").'" title="'.get_lang("HideDebug").'"/>' .
-							'</a>&nbsp;';
+							'</a>';
 				}else{
 					$dsp_debug = '<a href="lp_controller.php?'.api_get_cidreq().'&action=switch_scorm_debug&lp_id='.$id.'">' .
 							'<img src="../img/bug_gray.gif" border="0" alt="'.get_lang("ShowDebug").'" title="'.get_lang("ShowDebug").'"/>' .
-							'</a>&nbsp;';
+							'</a>';
 				}
 		 	}
 
@@ -433,11 +451,11 @@ if (is_array($flat_list))
 				if($details['lp_scorm_debug']==1){
 					$dsp_debug = '<a href="lp_controller.php?'.api_get_cidreq().'&action=switch_scorm_debug&lp_id='.$id.'">' .
 							'<img src="../img/bug.gif" border="0" alt="'.get_lang("HideDebug").'" title="'.get_lang("HideDebug").'"/>' .
-							'</a>&nbsp;';
+							'</a>';
 				}else{
 					$dsp_debug = '<a href="lp_controller.php?'.api_get_cidreq().'&action=switch_scorm_debug&lp_id='.$id.'">' .
 							'<img src="../img/bug_gray.gif" border="0" alt="'.get_lang("ShowDebug").'" title="'.get_lang("ShowDebug").'"/>' .
-							'</a>&nbsp;';
+							'</a>';
 				}
 		 	}
 		 	/*   Export  */
@@ -497,7 +515,7 @@ if (is_array($flat_list))
 			}
 	    }	// end if($is_allowedToEdit)
 	    //echo $dsp_line.$dsp_desc.$dsp_export.$dsp_edit.$dsp_delete.$dsp_visible;
-	    echo $dsp_line.$dsp_progress.$dsp_desc.$dsp_export.$dsp_edit.$dsp_build.$dsp_visible.$dsp_publish.$dsp_reinit.$dsp_default_view.$dsp_debug.$dsp_delete.$dsp_disk.$dsp_order;
+	    echo $dsp_line.$dsp_progress.$dsp_desc.$dsp_export.$dsp_edit.$dsp_build.$dsp_visible.$dsp_publish.$dsp_reinit.$dsp_default_view.$dsp_debug.$dsp_edit_lp.$dsp_delete.$dsp_disk.$dsp_order.$dsp_edit_close;
 	    //echo $dsp_line.$dsp_progress.$dsp_desc.$dsp_export.$dsp_edit.$dsp_build.$dsp_visible.$dsp_reinit.$dsp_force_commit.$dsp_delete;
 	    echo	"</tr>\n";
 		$current ++; //counter for number of elements treated

@@ -163,6 +163,10 @@ $encoding_select -> setSelected($s_selected_encoding);
 $defaults['lp_name'] = Security::remove_XSS($_SESSION['oLP']->get_name());
 $defaults['lp_author'] = Security::remove_XSS($_SESSION['oLP']->get_author());
 
+$form->addElement('html', '<div class="row"><div class="label">'.get_lang('Prerequisites').'</div><div class="formw">'.$_SESSION['oLP']->display_lp_prerequisites_list().'</div></div>');
+
+//$form->addElement('html', $_SESSION['oLP']->display_lp_prerequisites_list());
+
 //Submit button
 $form->addElement('style_submit_button', 'Submit',get_lang('SaveLPSettings'),'class="save"');
 //'<img src="'.api_get_path(WEB_IMG_PATH).'accept.png'.'" alt=""/>'

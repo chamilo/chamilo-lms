@@ -603,6 +603,8 @@ switch($action)
 			$_SESSION['oLP']->set_maker($_REQUEST['lp_maker']);
 			$_SESSION['oLP']->set_proximity($_REQUEST['lp_proximity']);
 			$_SESSION['oLP']->set_theme($_REQUEST['lp_theme']);
+			$_SESSION['oLP']->set_prerequisite($_REQUEST['prerequisites']);
+
 			if ($_REQUEST['remove_picture'])
 			{
 				$_SESSION['oLP']->delete_lp_image();

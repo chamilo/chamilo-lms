@@ -1,12 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
-
 /**
-*	@Author Patrick Cool <patrick.cool@UGent.be>, Ghent University
-*	@Copyright Ghent University
-*	@Copyright Patrick Cool
-*
-* 	@package dokeos.forum
+* 	@package chamilo.forum
 */
 // name of the language file that needs to be included
 $language_file = array ('forum','group');

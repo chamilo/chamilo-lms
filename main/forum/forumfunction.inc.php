@@ -3175,10 +3175,6 @@ function prepare4display($input='') {
 		}
 		return api_html_entity_decode(stripslashes($input));
 	} else {
-		/*foreach ($input as $key=>$value)
-		{
-			$returnarray[$key]=stripslashes($value);
-		}*/
 		$returnarray=array_walk($input, 'api_html_entity_decode');
 		$returnarray=array_walk($input, 'stripslashes');
 		return $returnarray;

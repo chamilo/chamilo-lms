@@ -18,10 +18,9 @@
 * For basic filtering, use filter()
 * For files inclusions (using dynamic paths) use check_rel_path() and check_abs_path()
 *
-* @package dokeos.library
+* @package chamilo.library
 * @author Yannick Warnier <ywarnier@beeznest.org>
 */
-
 /**
  * Security class
  *
@@ -32,8 +31,6 @@
  * a new Security object and using $secure->filter($new_var,[more options])
  * and then using $secure->clean['var'] as a filtered equivalent, although
  * this is *not* mandatory at all.
- *
- * @author	Yannick Warnier <yannick.warnier@dokeos.com>
  */
 class Security {
 	public static $clean = array();

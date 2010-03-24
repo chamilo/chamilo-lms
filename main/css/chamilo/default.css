@@ -4082,20 +4082,30 @@ span.form_required  {
 	padding:5px 10px 5px 10px;	
 }
 
-.courseadminview, .platformadminview {
+.courseadminview-activity-3col, .platformadminview-activity-3col {
 	-moz-border-radius:5px 5px 5px 5px;
 	border:1px solid #E1E1E0;
 	float:left;
 	margin:10px 20px 10px 10px;
 	padding:11px;
 	width:210px;
+	height:330px;
 }
 
-.courseadminview ul {
-	padding-left:5px;
-	padding:20px;
+.courseadminview-activity-3col ul {	
+	padding:10px 20px 10px 20px;
 	list-style-type:none;
-	height:250px;
+	height:240px;
 	margin-left:0px;
 	margin: 0px 0px 0px 0px ;
+}
+
+.courseadminview-activity-3col ul li {	
+	padding:4px 0px 4px 0px;
+}
+
+#activity-3col {
+	width: 800px ;
+	margin-left: auto ;
+	margin-right: auto ;
 }

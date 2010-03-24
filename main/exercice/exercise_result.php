@@ -1,5 +1,5 @@
 <?php
-/* For licensing terms, see /chamilo_license.txt */
+/* For licensing terms, see /license.txt */
 /**
 *	Exercise result
 *	This script gets informations from the script "exercise_submit.php",
@@ -15,9 +15,7 @@
 *	@todo	split more code up in functions, move functions to library?
 */
 /*
-==============================================================================
 		INIT SECTION
-==============================================================================
 */
 require_once('exercise.class.php');
 require_once('question.class.php');
@@ -34,7 +32,7 @@ global $_cid;
 // name of the language file that needs to be included
 $language_file='exercice';
 
-require('../inc/global.inc.php');
+require_once '../inc/global.inc.php';
 $this_section=SECTION_COURSES;
 
 /* ------------	ACCESS RIGHTS ------------ */
@@ -1039,13 +1037,7 @@ foreach ($questionList as $questionId) {
 
 	<br /><br />
 <?php
-if ($origin == 'learnpath') {
-	//Display::display_normal_message(get_lang('ExerciseFinished'));
-	$lp_mode =  $_SESSION['lp_mode'];
-	$url = '../newscorm/lp_controller.php?cidReq='.api_get_course_id().'&action=view&lp_id='.$learnpath_id.'&lp_item_id='.$learnpath_item_id.'&exeId='.$exeId.'&fb_type='.$feedback_type;
-	$href = ($lp_mode == 'fullscreen')?' window.opener.location.href="'.$url.'" ':' top.location.href="'.$url.'" ';
-	echo '<script language="javascript" type="text/javascript">'.$href.'</script>'."\n";
-}
+
 /*
 ==============================================================================
 		Tracking of results
@@ -1068,19 +1060,25 @@ if($objExercise->results_disabled) {
 		Display :: display_normal_message(get_lang('ExerciseFinished').'<br /><a href="exercice.php" />'.get_lang('Back').'</a>',false);
 	} else {
 		Display :: display_normal_message(get_lang('ExerciseFinished').'<br /><br />',false);
+		
+		if ($origin == 'learnpath') {
+			//Display::display_normal_message(get_lang('ExerciseFinished'));
+			$lp_mode =  $_SESSION['lp_mode'];
+			$url = '../newscorm/lp_controller.php?cidReq='.api_get_course_id().'&action=view&lp_id='.$learnpath_id.'&lp_item_id='.$learnpath_item_id.'&exeId='.$exeId.'&fb_type='.$feedback_type;
+			$href = ($lp_mode == 'fullscreen')?' window.opener.location.href="'.$url.'" ':' top.location.href="'.$url.'" ';
+			echo '<script language="javascript" type="text/javascript">'.$href.'</script>'."\n";	
+		}
+
+		//record the results in the learning path, using the SCORM interface (API)
+		echo '<script language="javascript" type="text/javascript">window.parent.API.void_save_asset('.$totalScore.','.$totalWeighting.');</script>'."\n";
+		echo '</body></html>';
 	}
 }
 
 if ($origin != 'learnpath') {
 	//we are not in learnpath tool
 	Display::display_footer();
-} else {
-	//record the results in the learning path, using the SCORM interface (API)
-	echo '<script language="javascript" type="text/javascript">window.parent.API.void_save_asset('.$totalScore.','.$totalWeighting.');</script>'."\n";
-	echo '</body></html>';
 }
-
-
 
 // Email configuration settings
 require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';

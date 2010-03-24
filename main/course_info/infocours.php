@@ -70,10 +70,10 @@ $s_select_course_tutor_name = "SELECT tutor_name FROM $tbl_course WHERE code='$c
 $q_tutor = Database::query($s_select_course_tutor_name);
 $s_tutor = Database::result($q_tutor, 0, 'tutor_name');
 
-$s_sql_course_titular = "SELECT DISTINCT username, lastname, firstname FROM $tbl_user as user, $tbl_course_user as course_rel_user WHERE (course_rel_user.status='1') AND user.user_id=course_rel_user.user_id AND course_code='".$course_code."'";
+$target_name = api_sort_by_first_name() ? 'firstname' : 'lastname';
+$s_sql_course_titular = "SELECT DISTINCT username, lastname, firstname FROM $tbl_user as user, $tbl_course_user as course_rel_user WHERE (course_rel_user.status='1') AND user.user_id=course_rel_user.user_id AND course_code='".$course_code."' ORDER BY ".$target_name." ASC";
 $q_result_titulars = Database::query($s_sql_course_titular);
 
-$target_name = api_sort_by_first_name() ? 'firstname' : 'lastname';
 if (Database::num_rows($q_result_titulars) == 0) {
 	$sql = "SELECT username, lastname, firstname FROM $tbl_user as user, $tbl_admin as admin WHERE admin.user_id=user.user_id ORDER BY ".$target_name." ASC";
 	$q_result_titulars = Database::query($sql);
@@ -81,6 +81,7 @@ if (Database::num_rows($q_result_titulars) == 0) {
 
 $a_profs[0] = '-- '.get_lang('NoManager').' --';
 while ($a_titulars = Database::fetch_array($q_result_titulars)) {
+	error_log(print_r($a_titulars,1),0);
 	$s_username = $a_titulars['username'];
 	$s_lastname = $a_titulars['lastname'];
 	$s_firstname = $a_titulars['firstname'];

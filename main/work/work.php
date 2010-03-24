@@ -1104,6 +1104,8 @@ if ($is_special > 0) {
 	//$publication = Database::fetch_array($sql);
 	$sql = Database::query('SELECT * FROM '.$TSTDPUBASG.' WHERE publication_id = '.(string)$publication['id'].' LIMIT 1');
 	$homework = Database::fetch_array($sql);
+	$has_expired = $has_ended = false;
+	$has_expiry_date = true;
 
 	if ($homework['expires_on'] != '0000-00-00 00:00:00' || $homework['ends_on'] != '0000-00-00 00:00:00') {
 		$time_now = convert_date_to_number(date('Y-m-d H:i:s'));
@@ -1111,10 +1113,16 @@ if ($is_special > 0) {
 		$time_ends = convert_date_to_number($homework['ends_on']);
 		$difference = $time_expires - $time_now;
 		$difference2 = $time_ends - $time_now;
-		if ($homework['expires_on'] != '0000-00-00 00:00:00' && $difference < 0) $has_expired = true;
-		if ($homework['ends_on'] != '0000-00-00 00:00:00' && $difference2 < 0) $has_ended = true;
-		if ($homework['expires_on'] == '0000-00-00 00:00:00') { $not_ends_on = true; }
-		if (!$not_ends_on) {
+		if ($homework['expires_on'] != '0000-00-00 00:00:00' && $difference < 0) {
+			$has_expired = true;
+		}
+		if ($homework['ends_on'] != '0000-00-00 00:00:00' && $difference2 < 0) {
+			$has_ended = true;
+		}
+		if ($homework['expires_on'] == '0000-00-00 00:00:00') { 
+			$has_expiry_date = false; 
+		}
+		if (!$has_expiry_date) {
 			define('ASSIGNMENT_EXPIRES', $time_expires);
 		}
 
@@ -1129,8 +1137,8 @@ if ($is_special > 0) {
 			display_action_links($cur_dir_path, $always_show_tool_options, $always_show_upload_form);
 			Display :: display_warning_message(get_lang('ExpiryDateAlreadyPassed').' '.$expires_on);
 		} else {
-			if (!$not_ends_on) {
-				display_action_links($cur_dir_path, $always_show_tool_options, $always_show_upload_form);
+            display_action_links($cur_dir_path, $always_show_tool_options, $always_show_upload_form);
+			if ($has_expiry_date) {
 				Display :: display_normal_message(get_lang('ExpiryDateToSendWorkIs').' '.$expires_on);
 			}
 		}

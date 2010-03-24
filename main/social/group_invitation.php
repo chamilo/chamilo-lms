@@ -1,7 +1,7 @@
 <?php //$id: $
-/* For licensing terms, see /chamilo_license.txt */
+/* For licensing terms, see /license.txt */
 /**
- * @package dokeos.social
+ * @package chamilo.social
  * @author Julio Montoya <gugli100@gmail.com>
  */
 
@@ -12,8 +12,8 @@ $language_file=array('userInfo');
 $cidReset=true;
 
 // including some necessary dokeos files
-require('../inc/global.inc.php');
-require_once ('../inc/lib/xajax/xajax.inc.php');
+require_once '../inc/global.inc.php';
+require_once '../inc/lib/xajax/xajax.inc.php';
 
 api_block_anonymous_users();
 
@@ -343,9 +343,12 @@ if ($add_type == 'multiple') {
 	echo '<div id="social-content-right">';
 
 	if (count($nosessionUsersList) == 0) {
-
-			echo get_lang('YouNeedToHaveFriendsInYourSocialNetwork');
-
+			$friends = SocialManager::get_friends(api_get_user_id());
+			if ($friends == 0) {
+				echo get_lang('YouNeedToHaveFriendsInYourSocialNetwork');
+			} else {
+				echo get_lang('YouAlreadyInviteAllYourContacts');
+			}
 			echo '<div>';
 			echo '<a href="search.php">'.get_lang('TryAndFindSomeFriends').'</a>';
 			echo '</div>';

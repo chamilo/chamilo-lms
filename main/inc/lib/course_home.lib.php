@@ -545,37 +545,71 @@ class CourseHome {
 		}
 		return $all_tools_list;
 	}
-
+	
+	public static function order_tool_list($a, $b)	{
+	/*	echo $name_a = ($a['name']);
+		echo '--';
+		echo $name_b = ($b['name']);
+		echo '<br>';
+		
+	    if ($name_a == $name_b) {
+	        return 0;
+	    }
+	    return ($name_a < $name_b) ? -1 : 1;*/
+	}
 	/**
 	 * Displays the tools of a certain category.
 	 * @param array List of tools as returned by get_tools_category()
 	 * @return void
 	 */
 
-	public static function show_tools_category($all_tools_list) {
-
+	public static function show_tools_category($all_tools_list, $theme = 'activity') {
+		//@todo order list
+		//var_dump($all_tools_list);
+		/* usort($all_tools_list, array( 'CourseHome' , 'order_tool_list' ));
+		
+		$order_tool_list = array();
+		foreach($all_tools_list as $new_tool) {
+			$order_tool_list []= $new_tool['name'];
+		}
+		natsort($order_tool_list);		
+		foreach($order_tool_list as $key=>$new_tool) {
+			$all_tools_list[]			
+		}
+		var_dump($all_tools_list);		
+		var_dump($order_tool_list);
+		//var_dump($all_tools_list);
+		*/
 		global $_user;
 		$web_code_path = api_get_path(WEB_CODE_PATH);
 		$course_tool_table = Database::get_course_table(TABLE_TOOL_LIST);
 		$is_allowed_to_edit = api_is_allowed_to_edit(null, true);
 		$is_platform_admin = api_is_platform_admin();
-
+		//var_dump($all_tools_list);
 		$i = 0;
 		if (isset($all_tools_list)) {
 			$lnk = '';
+			if ($theme == 'vertical_activity') echo '<ul>';
 			foreach ($all_tools_list as & $tool) {
 				if (api_get_session_id() != 0 && in_array($tool['name'], array('course_maintenance', 'course_setting'))) {
 					continue;
 				}
-
-				if (!($i % 2)) {
-					echo "<tr valign=\"top\">\n";
-	            }
+				if ($theme == 'activity') {
+					if (!($i % 2)) {
+						echo "<tr valign=\"top\">\n";
+	            	}
+				} elseif ($theme == 'vertical_activity') {
+					echo '<li>';
+				}
 
 				// This part displays the links to hide or remove a tool.
 				// These links are only visible by the course manager.
 				unset($lnk);
-				echo '<td width="50%">'."\n";
+				
+				if ($theme == 'activity') {
+					echo '<td width="50%">'."\n";
+				}
+				
 				if ($is_allowed_to_edit && !api_is_coach()) {
 
 					if ($tool['visibility'] == '1' && $tool['admin'] != '1') {
@@ -641,9 +675,7 @@ class CourseHome {
 				} elseif (strpos($tool['name'], 'chat') !== false && api_get_course_setting('allow_open_chat_window')) {
 					$toollink = "\t" . '<a id="tooldesc_'.$tool["id"].'" ' . $class . ' href="javascript: void(0);" onclick="javascript: window.open(\'' . htmlspecialchars($tool['link']) . '\',\'window_chat'.$_SESSION['_cid'].'\',config=\'height=\'+380+\', width=\'+625+\', left=2, top=2, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no\')" target="' . $tool['target'] . '">';
 					$my_tool_link="\t" . '<a id="istooldesc_'.$tool["id"].'" ' . $class . ' href="javascript: void(0);" onclick="javascript: window.open(\'' . htmlspecialchars($tool['link']) . '\',\'window_chat'.$_SESSION['_cid'].'\',config=\'height=\'+380+\', width=\'+625+\', left=2, top=2, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no\')" target="' . $tool['target'] . '">';
-
 				} else {
-
 					if (count(explode('type=classroom',$tool['link'])) == 2 || count(explode('type=conference', $tool['link'])) == 2) {
 						$toollink = "\t" . '<a id="tooldesc_'.$tool["id"].'" ' . $class . ' href="' . $tool['link'] . '" target="_blank">';
 						$my_tool_link = "\t" . '<a id="istooldesc_'.$tool["id"].'" ' . $class . ' href="' . $tool['link'] . '" target="_blank">';
@@ -651,12 +683,9 @@ class CourseHome {
 					} else {
 						$toollink = "\t" . '<a id="tooldesc_'.$tool["id"].'" ' . $class . ' href="' . htmlspecialchars($tool['link']) . '" target="' . $tool['target'] . '">';
 						$my_tool_link = "\t" . '<a id="istooldesc_'.$tool["id"].'" ' . $class . ' href="' . htmlspecialchars($tool['link']) . '" target="' . $tool['target'] . '">';
-
 					}
-
 				}
 				echo $toollink;
-
 				$tool_name = self::translate_tool_name($tool);
 				Display::display_icon($tool['image'], $tool_name, array('class' => 'tool-icon', 'id' => 'toolimage_'.$tool['id']));
 
@@ -666,20 +695,33 @@ class CourseHome {
 				echo '</a> ';
 				echo $my_tool_link;
 				echo "{$tool_name}$session_img";
-				echo "\t".'</a></td>';
-
-				if ($i % 2) {
-					echo '</tr>';
+				
+				echo '</a>';
+				if ($theme == 'activity') {
+					echo '</td>';
+					if ($i % 2) {
+						echo '</tr>';
+					}			
+				} elseif($theme == 'vertical_activity') {
+					echo '</li>';
 				}
-
 				$i++;
 			}
 		}
-
-		if ($i % 2) {
-			echo "<td width=\"50%\">&nbsp;</td>\n", "</tr>\n";
+		if ($theme == 'activity') {
+			if ($i % 2) {
+				echo "<td width=\"50%\">&nbsp;</td>\n", "</tr>\n";
+			}
+		} elseif($theme == 'vertical_activity') {
+			echo '</ul>';
 		}
+		
 	}
+	
+	
+	
+	
+	
 
 	/**
 	 * Shows the general data for a particular meeting

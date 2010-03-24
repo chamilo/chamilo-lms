@@ -185,14 +185,14 @@ if ($form -> validate()) {
 	
 	echo '<div class="actions">';
 	echo '<a href="exercice.php?show=test">' . Display :: return_icon('message_reply_forum.png', get_lang('GoBackToQuestionList')) . get_lang('GoBackToQuestionList') . '</a>';
-	echo '</div>';
-	
+	echo '</div>';	
 	
 	if ($objExercise->feedbacktype==1)
-		Display::display_normal_message(get_lang("DirectFeedbackCantModifyTypeQuestion"));
-		if(api_get_setting('search_enabled')=='true' && !extension_loaded('xapian')) {
-				Display::display_error_message(get_lang('SearchXapianModuleNotInstaled'));
-		}
+		Display::display_normal_message(get_lang('DirectFeedbackCantModifyTypeQuestion'));
+		
+	if(api_get_setting('search_enabled')=='true' && !extension_loaded('xapian')) {
+		Display::display_error_message(get_lang('SearchXapianModuleNotInstaled'));
+	}
 
 	// to hide the exercise description
 	echo '<style> .media { display:none;}</style>';

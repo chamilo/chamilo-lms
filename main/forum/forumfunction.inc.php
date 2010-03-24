@@ -3930,7 +3930,7 @@ function get_thread_user_post($course_db, $thread_id, $user_id ) {
 		 				if (is_array($post_list) && count($post_list)>0) {
 		 					$hand_forums.= '<div id="social-thread">';
 			 				$hand_forums.= Display::return_icon('forumthread.gif', get_lang('Thread'));
-			 				$hand_forums.= Security::remove_XSS($thread['thread_title'], STUDENT);
+			 				$hand_forums.= '&nbsp;'.Security::remove_XSS($thread['thread_title'], STUDENT);
 			 				$hand_forums.= '</div>';
 
 			 				foreach($post_list as $posts) {

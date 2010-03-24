@@ -127,7 +127,8 @@ echo '<div id="social-content">';
 				$id = $result['id'];
 				$url_open  = '<a href="groups.php?id='.$id.'"><span class="social-groups-text1">';
 				$url_close = '</span></a>';
-				$count_users_group = count(GroupPortalManager::get_all_users_by_group($id));
+				$count_users_group = count(GroupPortalManager::get_users_by_group($id, false, array(GROUP_USER_PERMISSION_ADMIN, GROUP_USER_PERMISSION_READER)));
+
 				if ($count_users_group == 1 ) {
 					$count_users_group = $count_users_group.' '.get_lang('Member');
 				} else {

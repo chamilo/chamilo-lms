@@ -127,19 +127,20 @@ require_once api_get_path(LIBRARY_PATH).'course.lib.php';
 
 /*	Constants */
 
-define('TOOL_PUBLIC', 'Public');
-define('TOOL_PUBLIC_BUT_HIDDEN', 'PublicButHide');
-define('TOOL_COURSE_ADMIN', 'courseAdmin');
-define('TOOL_PLATFORM_ADMIN', 'platformAdmin');
-define('TOOL_AUTHORING', 'toolauthoring');
-define('TOOL_INTERACTION', 'toolinteraction');
-define('TOOL_ADMIN', 'tooladmin');
-define('TOOL_ADMIN_PLATEFORM', 'tooladminplatform');
+define('TOOL_PUBLIC', 				'Public');
+define('TOOL_PUBLIC_BUT_HIDDEN', 	'PublicButHide');
+define('TOOL_COURSE_ADMIN', 		'courseAdmin');
+define('TOOL_PLATFORM_ADMIN', 		'platformAdmin');
+define('TOOL_AUTHORING', 			'toolauthoring');
+define('TOOL_INTERACTION',			'toolinteraction');
+define('TOOL_ADMIN', 				'tooladmin');
+define('TOOL_ADMIN_PLATEFORM', 		'tooladminplatform');
+
 //define('TOOL_ADMIN_PLATFORM_VISIBLE', 'tooladminplatformvisible');
 //define('TOOL_ADMIN_PLATFORM_INVISIBLE', 'tooladminplatforminvisible');
 //define('TOOL_ADMIN_COURS_INVISIBLE', 'tooladmincoursinvisible');
-define('TOOL_STUDENT_VIEW', 'toolstudentview');
-define('TOOL_ADMIN_VISIBLE', 'tooladminvisible');
+define('TOOL_STUDENT_VIEW', 		'toolstudentview');
+define('TOOL_ADMIN_VISIBLE', 		'tooladminvisible');
 
 
 /*	Virtual course support code	*/
@@ -209,14 +210,18 @@ Display::display_introduction_section(TOOL_COURSE_HOMEPAGE, array(
 	the setting homepage_view is adjustable through
 	the platform administration section */
 
+//@todo add vertical_activity to the api_get_setting('homepage_view') variable
+//require 'vertical_activity.php'; 
+
+
 if (api_get_setting('homepage_view') == 'activity') {
 	require 'activity.php';
-}
-elseif (api_get_setting('homepage_view') == '2column') {
+} elseif (api_get_setting('homepage_view') == '2column') {
 	require '2column.php';
-}
-elseif (api_get_setting('homepage_view') == '3column') {
+} elseif (api_get_setting('homepage_view') == '3column') {
 	require '3column.php';
+} elseif (api_get_setting('homepage_view') == 'vertical_activity') {
+	require 'vertical_activity.php';
 }
 
 /*	FOOTER */

@@ -467,11 +467,8 @@ function display_courses_in_category($user_category_id) {
 		echo '<div class="userportal-course-item">';	
 		
 		if (api_is_platform_admin()) {
-			//@todo fix link 
-			//echo   '<div style="float:right;"><a href="'.api_get_path(WEB_CODE_PATH).'admin/#">'.Display::return_icon('edit.gif', get_lang('Edit'), array('align' => 'absmiddle')).'</a></div>';
-			echo   '<div style="float:right;"><a href="#">'.Display::return_icon('edit.gif', get_lang('Edit'), array('align' => 'absmiddle')).'</a></div>';
-		}											
-
+			echo   '<div style="float:right;"><a href="'.api_get_path(WEB_CODE_PATH).'course_info/infocours.php?cidReq='.$course['code'].'">'.Display::return_icon('edit.gif', get_lang('Edit'), array('align' => 'absmiddle')).'</a></div>';
+		}
 
 		//function logic - act on the data
 		$is_virtual_course = CourseManager :: is_virtual_course_from_system_code($course['code']);

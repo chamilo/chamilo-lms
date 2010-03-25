@@ -133,9 +133,6 @@ $form->addElement('file', 'lp_preview_image', ($_SESSION['oLP']->get_preview_ima
 
 $form->addElement('static', null, null, get_lang('ImageWillResizeMsg'));
 
-/*
-$form->addRule('lp_preview_image', get_lang('OnlyImagesAllowed'), 'mimetype', array('image/gif', 'image/jpeg', 'image/png'));
-*/
 $form->addRule('lp_preview_image', get_lang('OnlyImagesAllowed'), 'filetype', array ('jpg', 'jpeg', 'png', 'gif'));
 
 // Search terms (only if search is activated)
@@ -163,13 +160,12 @@ $encoding_select -> setSelected($s_selected_encoding);
 $defaults['lp_name'] = Security::remove_XSS($_SESSION['oLP']->get_name());
 $defaults['lp_author'] = Security::remove_XSS($_SESSION['oLP']->get_author());
 
+// prerequisites
 $form->addElement('html', '<div class="row"><div class="label">'.get_lang('Prerequisites').'</div><div class="formw">'.$_SESSION['oLP']->display_lp_prerequisites_list().'</div></div>');
-
-//$form->addElement('html', $_SESSION['oLP']->display_lp_prerequisites_list());
+$form->addElement('static', null, null, get_lang('LpPrerequisiteDescription'));
 
 //Submit button
 $form->addElement('style_submit_button', 'Submit',get_lang('SaveLPSettings'),'class="save"');
-//'<img src="'.api_get_path(WEB_IMG_PATH).'accept.png'.'" alt=""/>'
 
 //Hidden fields
 $form->addElement('hidden', 'action', 'update_lp');

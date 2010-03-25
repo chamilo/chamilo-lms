@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpath.class.php';
+
 class CourseHome {
 
 	/**
@@ -95,6 +97,19 @@ class CourseHome {
 		}
 
 		foreach ($all_tools as & $tool) {
+			
+			if ($tool['image'] == 'scormbuilder.gif') {					
+				// display links to lp only for current session
+				if (api_get_session_id() != $tool['session_id']) {
+					continue;
+				}					
+				// check if the published learnpath is visible for student
+				$published_lp_id = self::get_published_lp_id_from_link($tool['link']);
+			    if (!api_is_allowed_to_edit(null, true) && !learnpath::is_lp_visible_for_student($published_lp_id,api_get_user_id())) {
+			    	continue;
+			    }
+			}
+			
 			if (api_get_session_id() != 0 && in_array($tool['name'], array('course_maintenance', 'course_setting'))) {
 				continue;
 			}
@@ -282,6 +297,19 @@ class CourseHome {
 		if (isset($all_tools_list)) {
 			$lnk = array();
 			foreach ($all_tools_list as & $tool) {
+												
+				if ($tool['image'] == 'scormbuilder.gif') {					
+					// display links to lp only for current session
+					if (api_get_session_id() != $tool['session_id']) {
+						continue;
+					}						
+					// check if the published learnpath is visible for student
+					$published_lp_id = self::get_published_lp_id_from_link($tool['link']);
+				    if (!api_is_allowed_to_edit(null, true) && !learnpath::is_lp_visible_for_student($published_lp_id,api_get_user_id())) {
+				    	continue;
+				    }				
+				}
+				
 				if (api_get_session_id() != 0 && in_array($tool['name'], array('course_maintenance', 'course_setting'))) {
 					continue;
 				}
@@ -411,7 +439,7 @@ class CourseHome {
 			case TOOL_STUDENT_VIEW:
 					$condition_display_tools = ' WHERE visibility = 1 AND (category = "authoring" OR category = "interaction") ';
 					if (api_is_coach()) {
-						$condition_display_tools = ' WHERE (visibility = 1 AND (category = "authoring" OR category = "interaction")) OR (name = "'.TOOL_TRACKING.'")  ';
+						$condition_display_tools = ' WHERE (visibility = 1 AND (category = "authoring" OR category = "interaction") OR (name = "'.TOOL_TRACKING.'") )   ';
 					}
 					$sql = "SELECT * FROM $course_tool_table  $condition_display_tools $condition_session ORDER BY id";
 					$result = Database::query($sql);
@@ -591,6 +619,19 @@ class CourseHome {
 			$lnk = '';
 			if ($theme == 'vertical_activity') echo '<ul>';
 			foreach ($all_tools_list as & $tool) {
+				
+				if ($tool['image'] == 'scormbuilder.gif') {					
+					// display links to lp only for current session
+					if (api_get_session_id() != $tool['session_id']) {
+						continue;
+					}										
+					// check if the published learnpath is visible for student
+					$published_lp_id = self::get_published_lp_id_from_link($tool['link']);
+				    if (!api_is_allowed_to_edit(null, true) && !learnpath::is_lp_visible_for_student($published_lp_id,api_get_user_id())) {
+				    	continue;
+				    }
+				}
+				
 				if (api_get_session_id() != 0 && in_array($tool['name'], array('course_maintenance', 'course_setting'))) {
 					continue;
 				}
@@ -717,11 +758,6 @@ class CourseHome {
 		}
 		
 	}
-	
-	
-	
-	
-	
 
 	/**
 	 * Shows the general data for a particular meeting
@@ -804,4 +840,22 @@ class CourseHome {
 
 		return $tool_name;
 	}
+	
+	/**
+	 * Get published learning path id from link inside course home
+	 * @param 	string	Link to published lp
+	 * @return	int		Learning path id
+	 */
+	public static function get_published_lp_id_from_link($published_lp_link) {
+		$lp_id = 0;
+		$param_lp_id = strstr($published_lp_link, 'lp_id=');		
+		if (!empty($param_lp_id)) {
+			$a_param_lp_id = explode('=',$param_lp_id);
+			if (isset($a_param_lp_id[1])) {
+				$lp_id = intval($a_param_lp_id[1]);
+			}
+		}
+		return $lp_id;		
+	} 
+	
 }

@@ -3663,18 +3663,21 @@ class learnpath {
 			$v = 1;
 		}
 
+		$session_id = api_get_session_id();
+		$session_condition = api_get_session_condition($session_id);
+
 		$tbl_tool = Database :: get_course_table(TABLE_TOOL_LIST);
 		$link = 'newscorm/lp_controller.php?action=view&lp_id=' . $lp_id;
-		$sql = "SELECT * FROM $tbl_tool where name='$name' and image='scormbuilder.gif' and link LIKE '$link%'";
+		$sql = "SELECT * FROM $tbl_tool where name='$name' and image='scormbuilder.gif' and link LIKE '$link%' $session_condition";
 		$result = Database::query($sql);
 		$num = Database :: num_rows($result);
 		$row2 = Database :: fetch_array($result);
 		//if($this->debug>2){error_log('New LP - '.$sql.' - '.$num,0);}
 		if (($set_visibility == 'i') && ($num > 0)) {
-			$sql = "DELETE FROM $tbl_tool WHERE (name='$name' and image='scormbuilder.gif' and link LIKE '$link%')";
+			$sql = "DELETE FROM $tbl_tool WHERE (name='$name' and image='scormbuilder.gif' and link LIKE '$link%' $session_condition)";
 		}
 		elseif (($set_visibility == 'v') && ($num == 0)) {
-			$sql = "INSERT INTO $tbl_tool (name, link, image, visibility, admin, address, added_tool) VALUES ('$name','newscorm/lp_controller.php?action=view&lp_id=$lp_id','scormbuilder.gif','$v','0','pastillegris.gif',0)";
+			$sql = "INSERT INTO $tbl_tool (name, link, image, visibility, admin, address, added_tool, session_id) VALUES ('$name','newscorm/lp_controller.php?action=view&lp_id=$lp_id','scormbuilder.gif','$v','0','pastillegris.gif',0, $session_id)";
 		} else {
 			//parameter and database incompatible, do nothing
 		}
@@ -7750,45 +7753,26 @@ class learnpath {
 		$sql = "SELECT * FROM $tbl_lp WHERE id = $lp_id ";
 		$result = Database::query($sql);
 		$row = Database :: fetch_array($result);
-		$preq_id = $row['prerequisite'];		
-		
-		
-		$return = '';
-		$return .= '<div class="sectioncomment">';
-		$return .= '<table style="border-collapse:collapse;">';
-
-		//Adding the none option to the prerequisites see http://www.chamilo.org/es/node/146
-		$return .= '<tr >';
-		$return .= '<td>';
-		$return .= '<input checked="checked" id="idNone" name="prerequisites" type="radio" />';
-		$return .= '<label for="idNone">'.get_lang('None').'</label>';
-		$return .= '</td>';
-		$return .= '</tr>';
-
+		$preq_id = $row['prerequisite'];
+				
 		$session_id = api_get_session_id();
 		$session_condition = api_get_session_condition($session_id, false);
 		
 		$sql 	= "SELECT * FROM $tbl_lp $session_condition ORDER BY display_order ";		
 		$rs = Database::query($sql);
-		
-		if (Database::num_rows($rs) > 0) {			
+				
+		$return = '';
+		$return .= '<select name="prerequisites" >';
+		$return .= '<option value="0">'.get_lang('None').'</option>';		
+		if (Database::num_rows($rs) > 0) {					
 			while ($row = Database::fetch_array($rs)) {
 				if ($row['id'] == $lp_id) {
 					continue;	
-				}
-				
-				$return .= '<tr >';
-				$return .= '<td >';
-				$return .= '<input '.(($row['id']==$preq_id)?' checked="checked" ' : '').' id="id_'.$row['id'].'" name="prerequisites"  type="radio" value="'.$row['id'].'" />';				
-				$return .= '<label for="id_'.$row['id'].'">'.$row['name'].'</label>';
-				$return .= '</td>';
-				
-				$return .= '</tr>';				
+				}					
+				$return .= '<option value="'.$row['id'].'" '.(($row['id']==$preq_id)?' selected ' : '').'>'.$row['name'].'</option>';							
 			}			
 		}
-		
-		$return .= '</table>';		
-		$return .= '</div>';
+		$return .= '</select>';
 
 		return $return;
 	}

@@ -52,7 +52,6 @@ if(isset($_REQUEST['access_url_id']) && $_REQUEST['access_url_id']!=''){
 	$access_url_id = Security::remove_XSS(intval($_REQUEST['access_url_id']));
 }
 
-
 $xajax -> processRequests();
 $htmlHeadXtra[] = $xajax->getJavascript('../inc/lib/xajax/');
 $htmlHeadXtra[] = '
@@ -105,10 +104,11 @@ if($_POST['form_sent']) {
 	if($form_sent == 1) {
 		if ($access_url_id==0) {
 			header('Location: access_url_edit_users_to_url.php?action=show_message&message='.get_lang('SelectURL'));
-		}
-		elseif(is_array($session_list) ) {
+			exit;
+		} elseif(is_array($session_list) ) {
 			UrlManager::update_urls_rel_session($session_list,$access_url_id);
 			header('Location: access_urls.php?action=show_message&message='.get_lang('SessionsWereEdited'));
+			exit;
 		}
 	}
 }
@@ -414,9 +414,7 @@ function makepost(select){
 </script>
 <?php
 /*
-==============================================================================
-		FOOTER
-==============================================================================
+	FOOTER
 */
 Display::display_footer();
 ?>

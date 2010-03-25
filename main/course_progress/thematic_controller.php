@@ -37,6 +37,7 @@ class ThematicController
 		$thematic= new Thematic();		        
 		$data = array();		
 		$error = false;
+		$msg_add = false;
 		
 		// insert or update a thematic		
 		if (strtoupper($_SERVER['REQUEST_METHOD']) == "POST") {																
@@ -48,8 +49,15 @@ class ThematicController
 		    			$content = $_POST['content'];
 		    			$session_id = api_get_session_id();
 		    			$thematic->set_thematic_attributes($id, $title, $content, $session_id);	    			
-						$affected_rows = $thematic->thematic_save();
-						$action = 'thematic_list';				    			
+						$last_id = $thematic->thematic_save();						
+						if ($_POST['action'] == 'thematic_add') {
+							$action = 'thematic_details';
+							if ($last_id) {
+								$data['last_id'] = $last_id;
+							}
+						} else {
+							$action = 'thematic_list';
+						}									    			
 			        	unset($_SESSION['thematic_token']);	        			        			
 		    		}
 				} else {					

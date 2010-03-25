@@ -11,12 +11,29 @@
 api_protect_course_script(true);
 
 if (api_is_allowed_to_edit(null, true)) {
-	echo '<div class="actions" style="margin-bottom:30px">';
-	echo '<a href="index.php?'.api_get_cidreq().'&action=thematic_details">'.Display::return_icon('view_table.gif',get_lang('ThematicDetails')).' '.get_lang('ThematicDetails').'</a>';	
-	echo '<a href="index.php?'.api_get_cidreq().'&action=thematic_list">'.Display::return_icon('view_list.gif',get_lang('ThematicList')).' '.get_lang('ThematicList').'</a>';
-	if ($action == 'thematic_list') {
-		echo '<a href="index.php?'.api_get_cidreq().'&action=thematic_add">'.Display::return_icon('introduction_add.gif',get_lang('NewThematicSection')).' '.get_lang('NewThematicSection').'</a>';
-	}
+	
+	echo '<div class="actions" style="margin-bottom:30px">';	
+	switch ($action) {		
+		case 'thematic_add' :	
+				echo '<strong>'.Display::return_icon('introduction_add.gif',get_lang('NewThematicSection')).' '.get_lang('NewThematicSection').'</strong>&nbsp;&nbsp;';
+				echo '<a href="index.php?'.api_get_cidreq().'&action=thematic_details">'.Display::return_icon('view_table.gif',get_lang('ThematicDetails')).' '.get_lang('ThematicDetails').'</a>';	
+				echo '<a href="index.php?'.api_get_cidreq().'&action=thematic_list">'.Display::return_icon('view_list.gif',get_lang('ThematicList')).' '.get_lang('ThematicList').'</a>';
+				break;		
+		case 'thematic_list' :	
+				echo '<a href="index.php?'.api_get_cidreq().'&action=thematic_add">'.Display::return_icon('introduction_add.gif',get_lang('NewThematicSection')).' '.get_lang('NewThematicSection').'</a>';
+				echo '<a href="index.php?'.api_get_cidreq().'&action=thematic_details">'.Display::return_icon('view_table.gif',get_lang('ThematicDetails')).' '.get_lang('ThematicDetails').'</a>';	
+				echo '<strong>'.Display::return_icon('view_list.gif',get_lang('ThematicList')).' '.get_lang('ThematicList').'</strong>&nbsp;&nbsp;';
+				break;
+		case 'thematic_details' :		
+				echo '<a href="index.php?'.api_get_cidreq().'&action=thematic_add">'.Display::return_icon('introduction_add.gif',get_lang('NewThematicSection')).' '.get_lang('NewThematicSection').'</a>';
+				echo '<strong>'.Display::return_icon('view_table.gif',get_lang('ThematicDetails')).' '.get_lang('ThematicDetails').'</strong>&nbsp;&nbsp;';	
+				echo '<a href="index.php?'.api_get_cidreq().'&action=thematic_list">'.Display::return_icon('view_list.gif',get_lang('ThematicList')).' '.get_lang('ThematicList').'</a>';
+				break;
+		default :
+				echo '<a href="index.php?'.api_get_cidreq().'&action=thematic_add">'.Display::return_icon('introduction_add.gif',get_lang('NewThematicSection')).' '.get_lang('NewThematicSection').'</a>';
+				echo '<a href="index.php?'.api_get_cidreq().'&action=thematic_details">'.Display::return_icon('view_table.gif',get_lang('ThematicDetails')).' '.get_lang('ThematicDetails').'</a>';	
+				echo '<a href="index.php?'.api_get_cidreq().'&action=thematic_list">'.Display::return_icon('view_list.gif',get_lang('ThematicList')).' '.get_lang('ThematicList').'</a>'; 		
+	}			
 	echo '</div>';
 }
 
@@ -31,16 +48,22 @@ if ($action == 'thematic_list') {
 		$table->set_form_actions(array ('thematic_delete_select' => get_lang('DeleteAllThematics')));	
 	}
 	
-	echo '<div><strong>'.get_lang('ThematicList').'</strong></div><br />';	
+	//echo '<div><strong>'.get_lang('ThematicList').'</strong></div><br />';	
 	$table->display();
 	
 } else if ($action == 'thematic_details') {
+	
+	if ($last_id) {
+		$link_to_thematic_plan = '<a href="index.php?'.api_get_cidreq().'&action=thematic_plan_list&thematic_id='.$last_id.'">'.Display::return_icon('info.gif',get_lang('ThematicPlan')).'</a>';
+		$link_to_thematic_advance = '<a href="index.php?'.api_get_cidreq().'&action=thematic_advance_list&thematic_id='.$last_id.'">'.Display::return_icon('porcent.png',get_lang('ThematicAdvance')).'</a>';
+		Display::display_confirmation_message(get_lang('ThematicSectionHasBeenCreatedSuccessfull').'<br />'.sprintf(get_lang('NowYouShouldAddThematicPlanXAndThematicAdvanceX'),$link_to_thematic_plan, $link_to_thematic_advance));
+	}
 
 	// display title
 	if (!empty($thematic_id)) {
 		echo '<div><strong>'.Security::remove_XSS($thematic_data[$thematic_id]['title'], STUDENT).': '.get_lang('Details').'</strong></div><br />';							
 	} else {
-		echo '<div><strong>'.get_lang('ThematicDetails').'</strong></div><br />';	
+		//echo '<div><strong>'.get_lang('ThematicDetails').'</strong></div><br />';	
 		// display information
 		$message = '<strong>'.get_lang('Information').'</strong><br />';
 		$message .= get_lang('ThematicDetailsDescription');	
@@ -127,11 +150,7 @@ if ($action == 'thematic_list') {
 			}
 		echo '</table>';
 	} else {
-		echo '<div><em>'.get_lang('ThereIsNoAThematicSection').'</em><br /><br />';
-		if (api_is_allowed_to_edit(null, true)) {
-			echo '<a href="index.php?'.api_get_cidreq().'&action=thematic_add">'.Display::return_icon('addd.gif',get_lang('CreateAThematicSection'), array('style'=>'vertical-align:middle')).' '.get_lang('CreateAThematicSection').'</a>';
-		}
-		echo '</div>';
+		echo '<div><em>'.get_lang('ThereIsNoAThematicSection').'</em></div>';		
 	}
 	
 } else if ($action == 'thematic_add' || $action == 'thematic_edit') {
@@ -140,16 +159,14 @@ if ($action == 'thematic_list') {
 		$token = md5(uniqid(rand(),TRUE));
 		$_SESSION['thematic_token'] = $token;
 	}
+		
+	// display form
+	$form = new FormValidator('thematic_add','POST','index.php?action=thematic_details&'.api_get_cidreq(),'','style="width: 100%;"');
 	
-	$header_form = get_lang('NewThematicSection');
 	if ($action == 'thematic_edit') {
-		$header_form = get_lang('EditThematicSection');	
+		$form->addElement('header', '', get_lang('EditThematicSection'));	
 	}
 	
-	// display form
-	$form = new FormValidator('thematic_add','POST','index.php?action=thematic_list&'.api_get_cidreq(),'','style="width: 100%;"');
-	
-	$form->addElement('header', '', $header_form);	
 	$form->addElement('hidden', 'thematic_token',$token);
 	$form->addElement('hidden', 'action', $action);
 	

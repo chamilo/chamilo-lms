@@ -23,7 +23,7 @@ switch ($action) {
 				if (!empty($attendance_calendar)) {
 					$input_select .= '<select name="start_date_by_attendance">';				
 					foreach ($attendance_calendar as $calendar) {
-						$input_select .= '<option value="'.api_get_local_time($calendar['date_time']).'">'.api_get_local_time($calendar['date_time']).'</option>';	
+						$input_select .= '<option value="'.$calendar['date_time'].'">'.$calendar['date_time'].'</option>';	
 					}
 					$input_select .= '</select>';
 				} else {

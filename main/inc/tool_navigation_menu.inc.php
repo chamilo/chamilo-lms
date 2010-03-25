@@ -4,7 +4,7 @@
 /**
  *	Navigation menu display code
  *
- *	@package dokeos.include
+ *	@package chamilo.include
  */
 require_once api_get_path(LIBRARY_PATH).'course_home.lib.php'; // For using the method CourseHome::translate_tool_name();
 
@@ -189,7 +189,7 @@ function show_navigation_menu() {
 		?>
 		<script type="text/javascript">
 		/* <![CDATA[ */
-		if (readCookie('dokeos_menu_state') == 0)
+		if (readCookie('dokeos_menu_state') == 0) {
 			swap_menu();
 		}
 		/* ]]> */

@@ -185,11 +185,11 @@ function get_number_of_users() {
 
 	if (isset($_REQUEST['type']) && $_REQUEST['type']=='teacher') {
 
-		if (!empty($_SESSION["id_session"])) {
-			$sql = "SELECT
-					u.user_id
+		if (api_get_session_id() != 0) {
+			
+			$sql = "SELECT u.user_id
 					FROM $user_table u
-					LEFT JOIN $tbl_session_rel_course_user cu on u.user_id = cu.id_user and course_code='".$_SESSION['_course']['id']."' AND id_session ='".$_SESSION["id_session"]."'
+					LEFT JOIN $tbl_session_rel_course_user cu on u.user_id = cu.id_user and course_code='".api_get_course_id()."' AND id_session ='".api_get_session_id()."'
 					WHERE cu.id_user IS NULL AND u.status=1 AND (u.official_code <> 'ADMIN' OR u.official_code IS NULL) ";
 
 			if ($_configuration['multiple_access_urls']==true) {
@@ -197,21 +197,19 @@ function get_number_of_users() {
 				if ($url_access_id !=-1) {
 					$tbl_url_rel_user = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
 
-					$sql = "SELECT
-							u.user_id
-							FROM $user_table u
-							LEFT JOIN $tbl_session_rel_course_user cu on u.user_id = cu.id_user and course_code='".$_SESSION['_course']['id']."' AND id_session ='".$_SESSION["id_session"]."'
+					$sql = "SELECT	u.user_id	FROM $user_table u
+							LEFT JOIN $tbl_session_rel_course_user cu on u.user_id = cu.id_user and course_code='".api_get_course_id()."' AND id_session ='".api_get_session_id()."'
 							INNER JOIN  $tbl_url_rel_user as url_rel_user
 							ON (url_rel_user.user_id = u.user_id)
-							WHERE cu.user_id IS NULL AND access_url_id= $url_access_id AND u.status=1 AND (u.official_code <> 'ADMIN' OR u.official_code IS NULL) ";
+							WHERE cu.id_user IS NULL AND access_url_id= $url_access_id AND u.status=1 AND (u.official_code <> 'ADMIN' OR u.official_code IS NULL) ";
 				}
 			}
 
 		} else {
 			$sql = "SELECT 	u.user_id
-			FROM $user_table u
-			LEFT JOIN $course_user_table cu on u.user_id = cu.user_id  and course_code='".$_SESSION['_course']['id']."'
-			WHERE cu.user_id IS NULL AND u.status<>".DRH." ";
+				FROM $user_table u
+				LEFT JOIN $course_user_table cu on u.user_id = cu.user_id  and course_code='".api_get_course_id()."'
+				WHERE cu.user_id IS NULL AND u.status<>".DRH." ";
 
 			if ($_configuration['multiple_access_urls']==true) {
 				$url_access_id = api_get_current_access_url_id();
@@ -221,7 +219,7 @@ function get_number_of_users() {
 					$sql = "SELECT
 						u.user_id
 						FROM $user_table u
-						LEFT JOIN $course_user_table cu on u.user_id = cu.user_id and course_code='".$_SESSION['_course']['id']."'
+						LEFT JOIN $course_user_table cu on u.user_id = cu.user_id and course_code='".api_get_course_id()."'
 						INNER JOIN  $tbl_url_rel_user as url_rel_user
 						ON (url_rel_user.user_id = u.user_id)
 						WHERE cu.user_id IS NULL AND u.status<>".DRH." AND access_url_id= $url_access_id ";
@@ -232,27 +230,23 @@ function get_number_of_users() {
 	} else {
 		// students
 
-			if (!empty($_SESSION["id_session"])) {
-				$sql = "SELECT
-						u.user_id
+			if (api_get_session_id() != 0) {
+				$sql = "SELECT	u.user_id
 						FROM $user_table u
-						LEFT JOIN $tbl_session_rel_course_user cu on u.user_id = cu.id_user and course_code='".$_SESSION['_course']['id']."' AND id_session ='".$_SESSION["id_session"]."'
+						LEFT JOIN $tbl_session_rel_course_user cu on u.user_id = cu.id_user and course_code='".api_get_course_id()."' AND id_session ='".api_get_session_id()."'
 						WHERE cu.id_user IS NULL AND u.status<>".DRH." AND (u.official_code <> 'ADMIN' OR u.official_code IS NULL) ";
 				if ($_configuration['multiple_access_urls']==true) {
 					$url_access_id = api_get_current_access_url_id();
 					if ($url_access_id !=-1) {
 						$tbl_url_rel_user = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
-						$sql = "SELECT
-							u.user_id
-							FROM $user_table u
-							LEFT JOIN $tbl_session_rel_course_user cu on u.user_id = cu.id_user and course_code='".$_SESSION['_course']['id']."' AND id_session ='".$_SESSION["id_session"]."'
-							INNER JOIN  $tbl_url_rel_user as url_rel_user
-							ON (url_rel_user.user_id = u.user_id)
-							WHERE cu.user_id IS NULL AND u.status<>".DRH." AND access_url_id= $url_access_id AND (u.official_code <> 'ADMIN' OR u.official_code IS NULL) ";
+						$sql = "SELECT	u.user_id
+								FROM $user_table u
+								LEFT JOIN $tbl_session_rel_course_user cu on u.user_id = cu.id_user and course_code='".api_get_course_id()."' AND id_session ='".api_get_session_id()."'
+								INNER JOIN  $tbl_url_rel_user as url_rel_user
+								ON (url_rel_user.user_id = u.user_id)
+								WHERE cu.user_id IS NULL AND u.status<>".DRH." AND access_url_id= $url_access_id AND (u.official_code <> 'ADMIN' OR u.official_code IS NULL) ";
 					}
 				}
-
-
 			} else {
 
 				$sql = "SELECT 	u.user_id
@@ -274,16 +268,17 @@ function get_number_of_users() {
 
 				if ($_configuration['multiple_access_urls']==true) {
 					$url_access_id = api_get_current_access_url_id();
+					
 					if ($url_access_id !=-1) {
+						
 						$tbl_url_rel_user = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
 
-						$sql = "SELECT
-							u.user_id
-							FROM $user_table u
-							LEFT JOIN $course_user_table cu on u.user_id = cu.user_id and course_code='".$_SESSION['_course']['id']."'
-							INNER JOIN  $tbl_url_rel_user as url_rel_user
-							ON (url_rel_user.user_id = u.user_id)
-							WHERE cu.user_id IS NULL AND access_url_id= $url_access_id AND u.status<>".DRH." ";
+						$sql = "SELECT u.user_id
+								FROM $user_table u
+								LEFT JOIN $course_user_table cu on u.user_id = cu.user_id and course_code='".$_SESSION['_course']['id']."'
+								INNER JOIN  $tbl_url_rel_user as url_rel_user
+								ON (url_rel_user.user_id = u.user_id)
+								WHERE cu.id_user IS NULL AND access_url_id= $url_access_id AND u.status<>".DRH." ";
 					}
 				}
 

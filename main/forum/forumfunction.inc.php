@@ -2877,18 +2877,19 @@ function handle_mail_cue($content, $id) {
 	if ($content=='post') {
 		// getting the information about the post (need the thread_id)
 		$post_info=get_post_information($id);
+		$thread_id = Database::escape_string($post_info['thread_id']);
         
 		// sending the mail to all the users that wanted to be informed for replies on this thread.
 		$sql="SELECT users.firstname, users.lastname, users.user_id, users.email 
 		        FROM $table_mailcue mailcue, $table_posts posts, 
 		             $table_users users, $table_userscourses userscourses
-				WHERE posts.thread_id='".Database::escape_string($post_info['thread_id'])."'
+				WHERE posts.thread_id='$thread_id'
 				AND posts.post_notification='1'
-				AND mailcue.thread_id='".Database::escape_string($post_info['thread_id'])."'
+				AND mailcue.thread_id='$thread_id'
 				AND users.user_id=posts.poster_id
 				AND users.active=1
 				AND userscourses.user_id = users.user_id
-				AND userscourses.course_code = $course
+				AND userscourses.course_code = '$course'
 				GROUP BY users.email";
 		$result=Database::query($sql);
 		while ($row=Database::fetch_array($result)) {

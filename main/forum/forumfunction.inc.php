@@ -2854,33 +2854,41 @@ function send_notification_mails($thread_id, $reply_info) {
 }
 
 /**
-* This function is called whenever something is made visible because there might be new posts and the user might have indicated that (s)he wanted
-* to be informed about the new posts by mail.
+* This function is called whenever something is made visible because there might
+* be new posts and the user might have indicated that (s)he wanted to be 
+* informed about the new posts by mail.
 *
-* @param int
+* @param    string  Content type (post, thread, forum, forum_category)
+* @param    int     Item DB ID
 * @return string language variable
-*
 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 * @version february 2006, dokeos 1.8
 */
 function handle_mail_cue($content, $id) {
-	$table_mailcue			= Database :: get_course_table(TABLE_FORUM_MAIL_QUEUE);
-	$table_forums 			= Database :: get_course_table(TABLE_FORUM);
-	$table_threads 			= Database :: get_course_table(TABLE_FORUM_THREAD);
-	$table_posts 			= Database :: get_course_table(TABLE_FORUM_POST);
-	$table_users 			= Database :: get_main_table(TABLE_MAIN_USER);
-
+	$table_mailcue		= Database :: get_course_table(TABLE_FORUM_MAIL_QUEUE);
+	$table_forums 		= Database :: get_course_table(TABLE_FORUM);
+	$table_threads 		= Database :: get_course_table(TABLE_FORUM_THREAD);
+	$table_posts 		= Database :: get_course_table(TABLE_FORUM_POST);
+	$table_users 		= Database :: get_main_table(TABLE_MAIN_USER);
+    $table_userscourses = Database :: get_main_table(TABLE_MAIN_COURSE_REL_USER);
+    $course = api_get_course_id();
+	
 	// if the post is made visible we only have to send mails to the people who indicated that they wanted to be informed for that thread.
 	if ($content=='post') {
 		// getting the information about the post (need the thread_id)
 		$post_info=get_post_information($id);
-
+        
 		// sending the mail to all the users that wanted to be informed for replies on this thread.
-		$sql="SELECT users.firstname, users.lastname, users.user_id, users.email FROM $table_mailcue mailcue, $table_posts posts, $table_users users
+		$sql="SELECT users.firstname, users.lastname, users.user_id, users.email 
+		        FROM $table_mailcue mailcue, $table_posts posts, 
+		             $table_users users, $table_userscourses userscourses
 				WHERE posts.thread_id='".Database::escape_string($post_info['thread_id'])."'
 				AND posts.post_notification='1'
 				AND mailcue.thread_id='".Database::escape_string($post_info['thread_id'])."'
 				AND users.user_id=posts.poster_id
+				AND users.active=1
+				AND userscourses.user_id = users.user_id
+				AND userscourses.course_code = $course
 				GROUP BY users.email";
 		$result=Database::query($sql);
 		while ($row=Database::fetch_array($result)) {
@@ -2888,15 +2896,22 @@ function handle_mail_cue($content, $id) {
 		}
 
 		// deleting the relevant entries from the mailcue
-		$sql_delete_mailcue="DELETE FROM $table_mailcue WHERE post_id='".Database::escape_string($id)."' AND thread_id='".Database::escape_string($post_info['thread_id'])."'";
+		$sql_delete_mailcue="DELETE FROM $table_mailcue 
+		        WHERE post_id='".Database::escape_string($id)."' 
+		        AND thread_id='".Database::escape_string($post_info['thread_id'])."'";
 		//$result=Database::query($sql_delete_mailcue);
 	} elseif ($content=='thread') {
 		// sending the mail to all the users that wanted to be informed for replies on this thread.
-		$sql="SELECT users.firstname, users.lastname, users.user_id, users.email FROM $table_mailcue mailcue, $table_posts posts, $table_users users
+		$sql="SELECT users.firstname, users.lastname, users.user_id, users.email
+		        FROM $table_mailcue mailcue, $table_posts posts, 
+		             $table_users users, $table_userscourses userscourses
 				WHERE posts.thread_id='".Database::escape_string($id)."'
 				AND posts.post_notification='1'
 				AND mailcue.thread_id='".Database::escape_string($id)."'
 				AND users.user_id=posts.poster_id
+				AND users.active=1
+                AND userscourses.user_id = users.user_id
+                AND userscourses.course_code = $course
 				GROUP BY users.email";
 		$result=Database::query($sql);
 		while ($row=Database::fetch_array($result)) {

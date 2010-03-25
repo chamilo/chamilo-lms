@@ -242,8 +242,10 @@ foreach ($courses as $enreg) {
 						echo "	</td>
 								<td align='center' width=180px >
 							 ";
-						if ($start_time != '') {
-							echo $last_connection;
+							 
+						$last_connection_in_lp = Tracking::get_last_connection_time_in_lp($_user['user_id'], $course, $learnpath['id']);													 
+						if (!empty($last_connection_in_lp)) {
+							echo date('Y-m-d h:i:s', $last_connection_in_lp);
 						} else {
 							echo '-';
 						}

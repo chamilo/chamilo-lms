@@ -35,7 +35,7 @@ $session_name   = api_get_session_name($my_session_id);
 if (!empty($_cid) and $_cid != -1 and isset($_course)) {
 	//Put the name of the course in the header
 ?>
-	<div id="my_courses"><a href="<?php echo api_get_path(WEB_COURSE_PATH).$_course['path']; ?>/index.php" target="_top">
+	<div id="my_courses"><a href="<?php echo api_get_path(WEB_COURSE_PATH).$_course['path']; ?>/index.php" target="_top">&nbsp;
 <?php
 	echo $_course['name'].' ';
 	if (api_get_setting('display_coursecode_in_courselist') == 'true') {
@@ -95,6 +95,7 @@ if ((api_get_setting('showonline', 'world') == 'true' AND !$_user['user_id']) OR
 	}
 	$number = who_is_online_count(api_get_setting('time_limit_whosonline'));
 	
+	
 	$number_online_in_course = 0;
 	if(!empty($_course['id'])) {
 		$number_online_in_course = who_is_online_in_this_course_count(api_get_user_id(), api_get_setting('time_limit_whosonline'), $_course['id']);
@@ -120,14 +121,14 @@ if ($_user['user_id'] && isset($_cid)) {
 		echo '</li>';
 	}
 }
+
 if (api_is_allowed_to_edit()) {
 	if (!empty($help)) {
 	// Show help
 	?>
 	<li>|
-	<a href="#" onclick="javascript: MyWindow=window.open('<?php echo api_get_path(WEB_CODE_PATH).'help/help.php'; ?>?open=<?php echo $help; ?>','MyWindow','toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=620,height=600,left=200,top=20'); return false;">
-	<img src="<?php echo api_get_path(WEB_IMG_PATH); ?>khelpcenter.gif" style="vertical-align: middle;" alt="<?php echo get_lang('Help'); ?>"/>&nbsp;<?php echo get_lang('Help'); ?></li></a>
-
+		<a href="#" onclick="javascript: MyWindow=window.open('<?php echo api_get_path(WEB_CODE_PATH).'help/help.php'; ?>?open=<?php echo $help; ?>','MyWindow','toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=620,height=600,left=200,top=20'); return false;">
+		<img src="<?php echo api_get_path(WEB_IMG_PATH); ?>khelpcenter.gif" style="vertical-align: middle;" alt="<?php echo get_lang('Help'); ?>"/>&nbsp;<?php echo get_lang('Help'); ?></li></a>
 	<?php
 	}
 }
@@ -136,7 +137,6 @@ if (api_is_allowed_to_edit()) {
 	</div>
 		<div class="clear">&nbsp;</div>
 	</div>
-
 	<div id="header3">
 <?php
 
@@ -153,16 +153,16 @@ if ($_user['user_id']) {
 	?>
 	 <!-- start user section line with name, my course, my profile, scorm info, etc -->
 
-	 <ul id="logout">
-				<li><a href="<?php echo api_get_path(WEB_PATH); ?>index.php?logout=logout&uid=<?php echo $_user['user_id']; ?>" target="_top"><span><?php echo get_lang('Logout').' '.$login; ?></span></a></li>
-	 </ul>
+	<ul id="logout">
+		<li><a href="<?php echo api_get_path(WEB_PATH); ?>index.php?logout=logout&uid=<?php echo $_user['user_id']; ?>" target="_top"><span><?php echo get_lang('Logout').' '.$login; ?></span></a></li>
+	</ul>
 <?php
 }
 ?>
-		<ul>
+
+<ul>
 <?php
 $navigation = array();
-
 $possible_tabs = get_tabs();
 
 // Campus Homepage

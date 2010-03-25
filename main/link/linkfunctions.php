@@ -293,6 +293,7 @@ function editlinkcategory($type) {
 	global $description;
 	global $category_title;
 	global $onhomepage;
+	global $target_link;
 
 	$tbl_link 		= Database :: get_course_table(TABLE_LINK);
 	$tbl_categories = Database :: get_course_table(TABLE_LINK_CATEGORY);
@@ -300,18 +301,20 @@ function editlinkcategory($type) {
 	if ($type == 'link') {
 
 		// This is used to populate the link-form with the info found in the database
-		$sql = "SELECT * FROM ".$tbl_link." WHERE id='".$_GET['id']."'";
-		$result = Database::query($sql);
-		if ($myrow = Database::fetch_array($result)) {
-			$urllink = $myrow['url'];
-			$title = $myrow['title'];
-			$description = $myrow['description'];
-			$category = $myrow['category_id'];
-			if ($myrow['on_homepage'] != 0) {
-				$onhomepage = 'checked';
+		if (!empty($_GET['id'])) {
+			$sql = "SELECT * FROM ".$tbl_link." WHERE id='".intval($_GET['id'])."'";
+			$result = Database::query($sql);
+			if ($myrow = Database::fetch_array($result)) {
+				$urllink = $myrow['url'];
+				$title = $myrow['title'];
+				$description = $myrow['description'];
+				$category = $myrow['category_id'];
+				if ($myrow['on_homepage'] != 0) {
+					$onhomepage = 'checked';
+				}
+				$target_link = $myrow['target'];
 			}
 		}
-
 		// This is used to put the modified info of the link-form into the database
 		if ($_POST['submitLink']) {
 
@@ -512,10 +515,10 @@ function showlinksofcategory($catid) {
 
 		$myrow[3] = text_filter($myrow[3]);
 		if ($myrow['visibility'] == '1') {
-			echo '<tr class="', $css_class, '"><td align="center" valign="middle" width="15"><a href="link_goto.php?', api_get_cidreq(), '&amp;link_id=', $myrow[0], '&amp;link_url=', urlencode($myrow[1]), '" target="_blank"><img src="../../main/img/file_html.gif" border="0" alt="', get_lang('Link'), '"/></a></td><td width="80%" valign="top"><a href="link_goto.php?', api_get_cidreq(), '&amp;link_id=', $myrow[0], '&amp;link_url=', urlencode($myrow[1]), '" target="_blank">', Security::remove_XSS($myrow[2]), '</a>', $session_img, '<br />', $myrow[3];
+			echo '<tr class="', $css_class, '"><td align="center" valign="middle" width="15"><a href="link_goto.php?', api_get_cidreq(), '&amp;link_id=', $myrow[0], '&amp;link_url=', urlencode($myrow[1]), '" target="_blank"><img src="../../main/img/file_html.gif" border="0" alt="', get_lang('Link'), '"/></a></td><td width="80%" valign="top"><a href="link_goto.php?', api_get_cidreq(), '&amp;link_id=', $myrow[0], '&amp;link_url=', urlencode($myrow[1]), '" target="',$myrow['target'],'">', Security::remove_XSS($myrow[2]), '</a>', $session_img, '<br />', $myrow[3];
 		} else {
 			if (api_is_allowed_to_edit(null, true)) {
-				echo '<tr class="', $css_class, '"><td align="center" valign="middle" width="15"><a href="link_goto.php?', api_get_cidreq(), '&amp;link_id=', $myrow[0], "&amp;link_url=", urlencode($myrow[1]), '" target="_blank" class="invisible">', Display::return_icon('file_html_na.gif', get_lang('Link')), '</a></td><td width="80%" valign="top"><a href="link_goto.php?', api_get_cidreq(), '&amp;link_id=', $myrow[0], '&amp;link_url=', urlencode($myrow[1]), '" target="_blank"  class="invisible">', Security::remove_XSS($myrow[2]), "</a>\n", $session_img, '<br />', $myrow[3];
+				echo '<tr class="', $css_class, '"><td align="center" valign="middle" width="15"><a href="link_goto.php?', api_get_cidreq(), '&amp;link_id=', $myrow[0], "&amp;link_url=", urlencode($myrow[1]), '" target="_blank" class="invisible">', Display::return_icon('file_html_na.gif', get_lang('Link')), '</a></td><td width="80%" valign="top"><a href="link_goto.php?', api_get_cidreq(), '&amp;link_id=', $myrow[0], '&amp;link_url=', urlencode($myrow[1]), '" target="',$myrow['target'],'"  class="invisible">', Security::remove_XSS($myrow[2]), "</a>\n", $session_img, '<br />', $myrow[3];
 			}
 		}
 

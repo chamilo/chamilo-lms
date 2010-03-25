@@ -16,6 +16,7 @@
  * @author René Haentjens, added CSV file import (October 2004)
  * @package chamilo.link
  * @todo improve organisation, tables should come from database library
+ * @todo Needs serious rewriting here. This doesn't make sense
  */
 
 /*	INIT SECTION */
@@ -81,6 +82,7 @@ $submit_link = isset($_REQUEST['submitLink']);
 $action = !empty($_REQUEST['action']) ? $_REQUEST['action'] : '';
 $category_title = !empty($_REQUEST['category_title']) ? $_REQUEST['category_title'] : '';
 $submit_category = isset($_POST['submitCategory']);
+$target_link = !empty($_REQUEST['target_link']) ? $_REQUEST['target_link'] : '_self';
 
 $nameTools = get_lang('Links');
 
@@ -275,12 +277,16 @@ if (api_is_allowed_to_edit(null, true) && isset($_GET['action'])) {
 						'.get_lang('AddTargetOfLinkOnHomepage').'
 					</div>
 					<div class="formw" >
-						<select  name="target_link" id="target_link">
-						<option value="_self">_self</option>
-						<option value="_blank">_blank</option>
-						<option value="_parent">_parent</option>
-						<option value="_top">_top</option>
-						</select>
+						<select  name="target_link" id="target_link">';
+        $targets = array('_self'=>get_lang('LinkOpenSelf'),'_blank'=>get_lang('LinkOpenBlank'),'_parent'=>get_lang('LinkOpenParent'),'_top'=>get_lang('LinkOpenTop'));
+		foreach ($targets as $target_id => $target) {
+			$selected = '';
+			if ($target_id == $target_link) { 
+				$selected = ' selected="selected"';
+			}
+			echo '    	<option value="'.$target_id.'"'.$selected.'>'.$target.'</option> ';
+		}
+		echo '        </select>
 					</div>
 				</div>';
 

@@ -44,31 +44,26 @@ require_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
 
 //CHECK KEYS
 if (!isset ($_cid)) {
-	header('location: '.$_configuration['root_web']);
+	header('location: '.api_get_path(WEB_PATH));
+	exit;
 }
 
 if (!api_is_platform_admin(true)) {
 	if (!api_is_course_admin() && !api_is_coach()) {
-		if (api_get_course_setting('allow_user_view_user_list')) {
+		if (api_get_course_setting('allow_user_view_user_list') == 0) {
 			api_not_allowed(true);
 		}
 	}	
 }
 
 /*
------------------------------------------------------------
 	Constants and variables
------------------------------------------------------------
 */
-$currentCourseID = Database::escape_string($_course['sysCode']);
+$currentCourseID 		= Database::escape_string($_course['sysCode']);
+$is_western_name_order 	= api_is_western_name_order();
+$sort_by_first_name 	= api_sort_by_first_name();
 
-$is_western_name_order = api_is_western_name_order();
-$sort_by_first_name = api_sort_by_first_name();
-
-/*--------------------------------------
-	Unregistering a user section
---------------------------------------
-*/
+/* Unregistering a user section	*/
 if (api_is_allowed_to_edit()) {
 	if (isset($_POST['action'])) {
 		switch ($_POST['action']) {
@@ -87,7 +82,6 @@ if (api_is_allowed_to_edit()) {
 }
 
 if (api_is_allowed_to_edit()) {
-
 	if ( isset ($_GET['action'])) {
 		switch ($_GET['action']) {
 			case 'export' :

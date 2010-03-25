@@ -846,8 +846,8 @@ $AreYouSureToDeleteAllDates = "¿Confirma que desea borrar todas las fechas?";
 $AddADateTime = "Añadir fecha";
 $DeleteAllAttendances = "Eliminar todas las asistencias creadas";
 $ThematicControl = "Control temático";
-$ThematicDetails = "Vista temática con detalles";
-$ThematicList = "Vista temática como lista";
+$ThematicDetails = "Lista detallada";
+$ThematicList = "Gestión temática";
 $Thematic = "Temática";
 $ThematicPlan = "Plan temático";
 $EditThematicPlan = "Editar plan temático";
@@ -884,4 +884,5 @@ $EditThematicSection = "Editar sección temática";
 $CreateAThematicSection = "Crear una sección temática";
 $ToolCourseProgress = "Avance temático";
 $SelectAnAttendance = "Seleccionar hoja de asistencia";
+$ResultsHiddenByExerciseSetting = "Resultados ocultos por la configuración del ejercicio";
 ?>

@@ -2813,8 +2813,8 @@ function send_notification_mails($thread_id, $reply_info) {
 	// 2. the forum is visible
 	// 3. the thread is visible
 	// 4. the reply is visible (=when there is
-	$current_thread=get_thread_information($thread_id);
-	$current_forum=get_forum_information($current_thread['forum_id']);
+	$current_thread	= get_thread_information($thread_id);
+	$current_forum	= get_forum_information($current_thread['forum_id']);
 	$current_forum_category=get_forumcategory_information($current_forum['forum_category']);
 	if($current_thread['visibility']=='1' AND $current_forum['visibility']=='1' AND $current_forum_category['visibility']=='1' AND $current_forum['approval_direct_post']!='1') {
 		$send_mails=true;
@@ -2823,7 +2823,7 @@ function send_notification_mails($thread_id, $reply_info) {
 	}
 
 	// the forum category, the forum, the thread and the reply are visible to the user
-	if ($send_mails==true) {
+	if ($send_mails == true) {
 		send_notifications($current_thread['forum_id'],$thread_id);
 		/*
 		$table_user 	= Database :: get_main_table(TABLE_MAIN_USER);
@@ -2870,29 +2870,25 @@ function handle_mail_cue($content, $id) {
 	$table_threads 		= Database :: get_course_table(TABLE_FORUM_THREAD);
 	$table_posts 		= Database :: get_course_table(TABLE_FORUM_POST);
 	$table_users 		= Database :: get_main_table(TABLE_MAIN_USER);
-    $table_userscourses = Database :: get_main_table(TABLE_MAIN_COURSE_REL_USER);
-    $course = api_get_course_id();
-	
+        	
 	// if the post is made visible we only have to send mails to the people who indicated that they wanted to be informed for that thread.
 	if ($content=='post') {
 		// getting the information about the post (need the thread_id)
-		$post_info=get_post_information($id);
+		$post_info = get_post_information($id);
 		$thread_id = Database::escape_string($post_info['thread_id']);
         
 		// sending the mail to all the users that wanted to be informed for replies on this thread.
 		$sql="SELECT users.firstname, users.lastname, users.user_id, users.email 
-		        FROM $table_mailcue mailcue, $table_posts posts, 
-		             $table_users users, $table_userscourses userscourses
+		        FROM $table_mailcue mailcue, $table_posts posts, $table_users users
 				WHERE posts.thread_id='$thread_id'
 				AND posts.post_notification='1'
 				AND mailcue.thread_id='$thread_id'
 				AND users.user_id=posts.poster_id
 				AND users.active=1
-				AND userscourses.user_id = users.user_id
-				AND userscourses.course_code = '$course'
 				GROUP BY users.email";
+				
 		$result=Database::query($sql);
-		while ($row=Database::fetch_array($result)) {
+		while ($row=Database::fetch_array($result)) {			
 			send_mail($row, get_thread_information($post_info['thread_id']));
 		}
 
@@ -2904,15 +2900,12 @@ function handle_mail_cue($content, $id) {
 	} elseif ($content=='thread') {
 		// sending the mail to all the users that wanted to be informed for replies on this thread.
 		$sql="SELECT users.firstname, users.lastname, users.user_id, users.email
-		        FROM $table_mailcue mailcue, $table_posts posts, 
-		             $table_users users, $table_userscourses userscourses
+		        FROM $table_mailcue mailcue, $table_posts posts, $table_users users
 				WHERE posts.thread_id='".Database::escape_string($id)."'
 				AND posts.post_notification='1'
 				AND mailcue.thread_id='".Database::escape_string($id)."'
 				AND users.user_id=posts.poster_id
 				AND users.active=1
-                AND userscourses.user_id = users.user_id
-                AND userscourses.course_code = $course
 				GROUP BY users.email";
 		$result=Database::query($sql);
 		while ($row=Database::fetch_array($result)) {
@@ -3674,8 +3667,7 @@ function get_notifications($content,$id) {
 	}
 
 	$sql = "SELECT user.user_id, user.firstname, user.lastname, user.email, user.user_id user FROM $table_users user, $table_notification notification
-			WHERE user.user_id = notification.user_id
-			AND notification.$database_field= '".Database::escape_string($id)."'";
+			WHERE user.active = 1 AND user.user_id = notification.user_id AND notification.$database_field= '".Database::escape_string($id)."'";
 
 	$result=Database::query($sql);
 	$return = array();

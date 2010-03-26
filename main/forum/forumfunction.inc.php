@@ -2916,13 +2916,13 @@ function handle_mail_cue($content, $id) {
 		$sql_delete_mailcue="DELETE FROM $table_mailcue WHERE thread_id='".Database::escape_string($id)."'";
 		$result=Database::query($sql_delete_mailcue);
 	} elseif ($content=='forum') {
-		$sql="SELECT * FROM $table_threads WHERE forum_id='".Database::escape_string($id)."'";
+		$sql="SELECT thread_id FROM $table_threads WHERE forum_id='".Database::escape_string($id)."'";
 		$result=Database::query($sql);
 		while ($row=Database::fetch_array($result)) {
 			handle_mail_cue('thread',$row['thread_id']);
 		}
 	} elseif ($content=='forum_category') {
-		$sql="SELECT * FROM $table_forums WHERE forum_category ='".Database::escape_string($id)."'";
+		$sql="SELECT forum_id FROM $table_forums WHERE forum_category ='".Database::escape_string($id)."'";
 		$result=Database::query($sql);
 		while ($row=Database::fetch_array($result)) {
 			handle_mail_cue('forum',$row['forum_id']);

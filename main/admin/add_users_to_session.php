@@ -1,9 +1,7 @@
 <?php //$id: $
-/* For licensing terms, see /dokeos_license.txt */
+/* For licensing terms, see /license.txt */
 /**
-==============================================================================
-*	@package dokeos.admin
-==============================================================================
+*	@package chamilo.admin
 */
 
 // name of the language file that needs to be included
@@ -13,10 +11,10 @@ $language_file=array('admin','registration');
 $cidReset=true;
 
 // including some necessary dokeos files
-require('../inc/global.inc.php');
-
-require_once ('../inc/lib/xajax/xajax.inc.php');
+require_once '../inc/global.inc.php';
+require_once '../inc/lib/xajax/xajax.inc.php';
 $xajax = new xajax();
+
 //$xajax->debugOn();
 $xajax -> registerFunction ('search_users');
 
@@ -245,6 +243,7 @@ if($_POST['form_sent']) {
 			//header('Location: '.Security::remove_XSS($_GET['page']).'?id_session='.$id_session);
 		//else
 		header('Location: resume_session.php?id_session='.$id_session);
+		exit;
 	}
 }
 

@@ -1,14 +1,12 @@
 <?php
-/* For licensing terms, see /dokeos_license.txt */
+/* For licensing terms, see /license.txt */
 define('VISIBLE_GUEST', 1);
 define('VISIBLE_STUDENT', 2);
 define('VISIBLE_TEACHER', 3);
 /**
-==============================================================================
 *	This is the system announcements library for Dokeos.
 *
-*	@package dokeos.library
-==============================================================================
+*	@package chamilo.library
 */
 class SystemAnnouncementManager
 {

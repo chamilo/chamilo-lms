@@ -370,14 +370,15 @@ class SystemAnnouncementManager
 		global $_setting;
 		global $charset;
 		$user_table = Database :: get_main_table(TABLE_MAIN_USER);
+		
 		if ($teacher <> 0 AND $student == '0') {
-			$sql = "SELECT firstname, lastname, email, status FROM $user_table WHERE email<>'' AND status = '1'";
+			$sql = "SELECT firstname, lastname, email, status FROM $user_table WHERE email<>'' AND status = '1' AND active = 1";
 		}
 		if ($teacher == '0' AND $student <> '0') {
-			$sql = "SELECT firstname, lastname, email, status FROM $user_table WHERE email<>'' AND status = '5'";
+			$sql = "SELECT firstname, lastname, email, status FROM $user_table WHERE email<>'' AND status = '5' AND active = 1 ";
 		}
 		if ($teacher<>'0' AND $student <> '0') {
-			$sql = "SELECT firstname, lastname, email FROM $user_table WHERE email<>''";
+			$sql = "SELECT firstname, lastname, email FROM $user_table WHERE email<>'' AND active = 1 ";
 		}
 		if ($teacher == '0' AND $student == '0') {
 			return true;

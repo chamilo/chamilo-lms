@@ -3812,6 +3812,7 @@ function & api_str_getcsv(& $string, $delimiter = ',', $enclosure = '"', $escape
  */
 function api_fgetcsv($handle, $length = null, $delimiter = ',', $enclosure = '"', $escape = '\\') {
 	if (($line = is_null($length) ? fgets($handle): fgets($handle, $length)) !== false) {
+		$line = rtrim($line, "\r\n");
 		return api_str_getcsv($line, $delimiter, $enclosure, $escape);
 	}
 	return false;

@@ -1,46 +1,44 @@
-<?php // $Id: copy_course.php 22204 2009-07-17 20:31:35Z iflorespaz $
-/* For licensing terms, see /dokeos_license.txt */
+<?php
+/* For licensing terms, see /license.txt */
 
-// name of the language file that needs to be included
+// Language files that need to be included
 $language_file = array('exercice', 'coursebackup', 'admin');
 
-// setting the global file that gets the general configuration, the databases, the languages, ...
+// Setting the global file that gets the general configuration, the databases, the languages, ...
 require_once '../inc/global.inc.php';
 
-// including additional libraries
-require_once api_get_path(LIBRARY_PATH) . 'fileManage.lib.php';
+// Including additional libraries
+require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
 require_once 'classes/CourseBuilder.class.php';
 require_once 'classes/CourseRestorer.class.php';
 require_once 'classes/CourseSelectForm.class.php';
 
-// notice for unauthorized people.
-if (!api_is_allowed_to_edit())
-{
+// Notice for unauthorized people.
+if (!api_is_allowed_to_edit()) {
 	api_not_allowed(true);
 }
 
-//remove memory and time limits as much as possible as this might be a long process...
-if(function_exists('ini_set'))
-{
-	ini_set('memory_limit','256M');
-	ini_set('max_execution_time',1800);
+// Remove memory and time limits as much as possible as this might be a long process...
+if (function_exists('ini_set')) {
+	ini_set('memory_limit', '256M');
+	ini_set('max_execution_time', 1800);
 }
 
-// breadcrumbs
-$interbreadcrumb[] = array ("url" => "../course_info/maintenance.php", "name" => get_lang('Maintenance'));
+// Breadcrumbs
+$interbreadcrumb[] = array ('url' => '../course_info/maintenance.php', 'name' => get_lang('Maintenance'));
 
-// the section (for the tabs)
-$this_section=SECTION_COURSES;
+// The section (for the tabs)
+$this_section = SECTION_COURSES;
 
 // Display the header
 Display::display_header(get_lang('CopyCourse'));
 //api_display_tool_title($nameTools);
-/*
-		MAIN CODE
-*/
+
+/*	MAIN CODE */
+
 // If a CourseSelectForm is posted or we should copy all resources, then copy them
-if ((isset ($_POST['action']) && $_POST['action'] == 'course_select_form') || (isset ($_POST['copy_option']) && $_POST['copy_option'] == 'full_copy')) {
-	if (isset ($_POST['action']) && $_POST['action'] == 'course_select_form') {
+if ((isset($_POST['action']) && $_POST['action'] == 'course_select_form') || (isset($_POST['copy_option']) && $_POST['copy_option'] == 'full_copy')) {
+	if (isset($_POST['action']) && $_POST['action'] == 'course_select_form') {
 		$course = CourseSelectForm :: get_posted_course('copy_course');
 	} else {
 		$cb = new CourseBuilder();
@@ -74,12 +72,12 @@ if ((isset ($_POST['action']) && $_POST['action'] == 'course_select_form') || (i
 	}
 	$sql .= ' AND target_course_code IS NULL AND cu.user_id = '.$user_info['user_id'].' AND c.code != '."'".$course_info['sysCode']."'".' ORDER BY title ASC';
 	$res = Database::query($sql);
-	if( Database::num_rows($res) == 0) {
+	if (Database::num_rows($res) == 0) {
 		Display::display_normal_message(get_lang('NoDestinationCoursesAvailable'));
 	} else {
 ?>
 	<form method="post" action="copy_course.php">
-	<?php
+<?php
 	echo get_lang('SelectDestinationCourse');
 	echo ' <select name="destination_course"/>';
 	while ($obj = Database::fetch_object($res)) {
@@ -90,30 +88,29 @@ if ((isset ($_POST['action']) && $_POST['action'] == 'course_select_form') || (i
 	<br/>
 	<br/>
 	<input type="radio" class="checkbox" id="copy_option_1" name="copy_option" value="full_copy"/>
-	<label for="copy_option_1"><?php echo get_lang('FullCopy') ?></label>
+	<label for="copy_option_1"><?php echo get_lang('FullCopy'); ?></label>
 	<br/>
 	<input type="radio" class="checkbox" id="copy_option_2" name="copy_option" value="select_items" checked="checked"/>
-	<label for="copy_option_2"><?php echo get_lang('LetMeSelectItems') ?></label>
+	<label for="copy_option_2"><?php echo get_lang('LetMeSelectItems'); ?></label>
 	<br/>
 	<br/>
-	<?php echo get_lang('SameFilename') ?>
+	<?php echo get_lang('SameFilename'); ?>
 	<blockquote>
-	<input type="radio" class="checkbox"  id="same_file_name_option_1" name="same_file_name_option" value="<?php echo FILE_SKIP ?>"/>
-	<label for="same_file_name_option_1"><?php echo  get_lang('SameFilenameSkip') ?></label>
+	<input type="radio" class="checkbox"  id="same_file_name_option_1" name="same_file_name_option" value="<?php echo FILE_SKIP; ?>"/>
+	<label for="same_file_name_option_1"><?php echo  get_lang('SameFilenameSkip'); ?></label>
 	<br/>
-	<input type="radio" class="checkbox" id="same_file_name_option_2" name="same_file_name_option" value="<?php echo FILE_RENAME ?>"/>
-	<label for="same_file_name_option_2"><?php echo get_lang('SameFilenameRename') ?></label>
+	<input type="radio" class="checkbox" id="same_file_name_option_2" name="same_file_name_option" value="<?php echo FILE_RENAME; ?>"/>
+	<label for="same_file_name_option_2"><?php echo get_lang('SameFilenameRename'); ?></label>
 	<br/>
-	<input type="radio" class="checkbox"  id="same_file_name_option_3" name="same_file_name_option"  value="<?php echo FILE_OVERWRITE ?>"  checked="checked"/>
-	<label for="same_file_name_option_3"><?php echo get_lang('SameFilenameOverwrite') ?></label>
+	<input type="radio" class="checkbox"  id="same_file_name_option_3" name="same_file_name_option"  value="<?php echo FILE_OVERWRITE; ?>" checked="checked"/>
+	<label for="same_file_name_option_3"><?php echo get_lang('SameFilenameOverwrite'); ?></label>
 	</blockquote>
 	<br/>
-	<button class="save" type="submit"><?php echo get_lang('CopyCourse') ?></button>
+	<button class="save" type="submit"><?php echo get_lang('CopyCourse'); ?></button>
 	</form>
-	<?php
+<?php
 	}
-
 }
-/*		FOOTER	*/
+
+/*	FOOTER	*/
 Display::display_footer();
-?>

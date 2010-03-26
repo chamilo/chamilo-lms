@@ -1,4 +1,4 @@
-<?php // $Id: import_backup.php 20448 2009-05-10 10:17:22Z ivantcholakov $
+<?php
 /* For licensing terms, see /license.txt */
 
 /**
@@ -7,61 +7,59 @@
  * @author Bart Mollet <bart.mollet@hogent.be>
  * @package chamilo.backup
  */
+
 /*		INIT SECTION	*/
-// name of the language file that needs to be included
+
+// Language files that need to be included
 $language_file = array('exercice', 'coursebackup', 'admin');
 
-// including the global file
-include ('../inc/global.inc.php');
+// Including the global initialization file
+require '../inc/global.inc.php';
 
 // Check access rights (only teachers are allowed here)
-if( ! api_is_allowed_to_edit())
-{
+if (!api_is_allowed_to_edit()) {
 	api_not_allowed(true);
 }
 
-//remove memory and time limits as much as possible as this might be a long process...
-if(function_exists('ini_set'))
-{
-	ini_set('memory_limit','256M');
-	ini_set('max_execution_time',1800);
+// Remove memory and time limits as much as possible as this might be a long process...
+if (function_exists('ini_set')) {
+	ini_set('memory_limit', '256M');
+	ini_set('max_execution_time', 1800);
 }
 
-// section for the tabs
-$this_section=SECTION_COURSES;
+// Section for the tabs
+$this_section = SECTION_COURSES;
 
-// breadcrumbs
-$interbreadcrumb[] = array ("url" => "../course_info/maintenance.php", "name" => get_lang('Maintenance'));
+// Breadcrumbs
+$interbreadcrumb[] = array('url' => '../course_info/maintenance.php', 'name' => get_lang('Maintenance'));
 
 // Displaying the header
 $nameTools = get_lang('ImportBackup');
 Display::display_header($nameTools);
 
 // include additional libraries
-include_once(api_get_path(LIBRARY_PATH) . 'fileManage.lib.php');
-require_once('classes/CourseBuilder.class.php');
-require_once('classes/CourseArchiver.class.php');
-require_once('classes/CourseRestorer.class.php');
-require_once('classes/CourseSelectForm.class.php');
+require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
+require_once 'classes/CourseBuilder.class.php';
+require_once 'classes/CourseArchiver.class.php';
+require_once 'classes/CourseRestorer.class.php';
+require_once 'classes/CourseSelectForm.class.php';
 
 // Display the tool title
 api_display_tool_title($nameTools);
 
-
 /*		MAIN CODE		*/
 
-if((isset($_POST['action']) && $_POST['action'] == 'course_select_form' ) || (isset($_POST['import_option']) && $_POST['import_option'] == 'full_backup' )) {
-	$error=false;
+if ((isset($_POST['action']) && $_POST['action'] == 'course_select_form' ) || (isset($_POST['import_option']) && $_POST['import_option'] == 'full_backup' )) {
+	$error = false;
 	if (isset($_POST['action']) && $_POST['action'] == 'course_select_form') {
-		// partial backup here we recover the documents posted
+		// Partial backup here we recover the documents posted
 		$course = CourseSelectForm::get_posted_course();
-
 	} else {
-		if( $_POST['backup_type'] == 'server') {
+		if ($_POST['backup_type'] == 'server') {
 			$filename = $_POST['backup_server'];
 			$delete_file = false;
 		} else {
-			if($_FILES['backup']['error']==0){
+			if ($_FILES['backup']['error'] == 0) {
 				$filename = CourseArchiver::import_uploaded_file($_FILES['backup']['tmp_name']);
 				if ($filename === false) {
                 	$error = true;
@@ -69,37 +67,36 @@ if((isset($_POST['action']) && $_POST['action'] == 'course_select_form' ) || (is
                     $delete_file = true;
                 }
 			} else {
-				$error=true;
+				$error = true;
 			}
 		}
-        if(!$error) {
-		  // full backup
+        if (!$error) {
+		  // Full backup
 		  $course = CourseArchiver::read_course($filename,$delete_file);
         }
 	}
 
-	if(!$error && $course->has_resources()) {
+	if (!$error && $course->has_resources()) {
 		$cr = new CourseRestorer($course);
 		$cr->set_file_option($_POST['same_file_name_option']);
 		$cr->restore();
 		Display::display_normal_message(get_lang('ImportFinished').
-                //'<a class="bottom-link" href="../course_home/course_home.php?'.api_get_cidreq().'">&gt;&gt; '.get_lang('CourseHomepage').'</a>',false); // This is not the preferable way to go to the course homepage.
-                '<a class="bottom-link" href="'.api_get_path(WEB_COURSE_PATH).api_get_course_path().'/index.php">&lt;&lt; '.get_lang('CourseHomepage').'</a>',false);
+            '<a class="bottom-link" href="'.api_get_path(WEB_COURSE_PATH).api_get_course_path().'/index.php">&lt;&lt; '.get_lang('CourseHomepage').'</a>', false);
 	} else {
-		if(!$error){
+		if (!$error) {
 			Display::display_warning_message(get_lang('NoResourcesInBackupFile').
-                '<a class="bottom-link" href="import_backup.php?'.api_get_cidreq().'">&lt;&lt; '.get_lang('TryAgain').'</a>',false);
+                '<a class="bottom-link" href="import_backup.php?'.api_get_cidreq().'">&lt;&lt; '.get_lang('TryAgain').'</a>', false);
 		} elseif ($filename === false) {
             Display::display_error_message(get_lang('ArchivesDirectoryNotWriteableContactAdmin').
-                '<a class="bottom-link" href="import_backup.php?'.api_get_cidreq().'">&lt;&lt; '.get_lang('TryAgain').'</a>',false);
+                '<a class="bottom-link" href="import_backup.php?'.api_get_cidreq().'">&lt;&lt; '.get_lang('TryAgain').'</a>', false);
         } else {
 			Display::display_error_message(api_ucfirst(get_lang('UploadError')).
-                '<a class="bottom-link" href="import_backup.php?'.api_get_cidreq().'">&lt;&lt; '.get_lang('TryAgain').'</a>',false);
+                '<a class="bottom-link" href="import_backup.php?'.api_get_cidreq().'">&lt;&lt; '.get_lang('TryAgain').'</a>', false);
 		}
 	}
 	CourseArchiver::clean_backup_dir();
 } elseif (isset($_POST['import_option']) && $_POST['import_option'] == 'select_items') {
-	if( $_POST['backup_type'] == 'server') {
+	if ($_POST['backup_type'] == 'server') {
 		$filename = $_POST['backup_server'];
 		$delete_file = false;
 	} else {
@@ -111,42 +108,39 @@ if((isset($_POST['action']) && $_POST['action'] == 'course_select_form' ) || (is
 		CourseSelectForm::display_form($course,array('same_file_name_option'=>$_POST['same_file_name_option']));
 	} elseif ($filename === false) {
     	Display::display_error_message(get_lang('ArchivesDirectoryNotWriteableContactAdmin').
-                '<a class="bottom-link" href="import_backup.php?'.api_get_cidreq().'">&lt;&lt; '.get_lang('TryAgain').'</a>',false);
+            '<a class="bottom-link" href="import_backup.php?'.api_get_cidreq().'">&lt;&lt; '.get_lang('TryAgain').'</a>',false);
     } else {
 		Display::display_warning_message(get_lang('NoResourcesInBackupFile').
-                '<a class="bottom-link" href="import_backup.php?'.api_get_cidreq().'">&lt;&lt; '.get_lang('TryAgain').'</a>',false);
+            '<a class="bottom-link" href="import_backup.php?'.api_get_cidreq().'">&lt;&lt; '.get_lang('TryAgain').'</a>',false);
 	}
 } else {
 	$user = api_get_user_info();
 	$backups = CourseArchiver::get_available_backups($is_platformAdmin?null:$user['user_id']);
 	$backups_available = (count($backups)>0);
 
-	echo get_lang('SelectBackupFile').'<br /><br />';
+	echo '<span id="page_title">'.get_lang('SelectBackupFile').'</span><br /><br />';
 
-	include (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
-	$form = new FormValidator('import_backup_form','POST','import_backup.php', '','multipart/form-data');
+	require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
+	$form = new FormValidator('import_backup_form', 'post', 'import_backup.php', '', 'multipart/form-data');
 
 	$renderer = $form->defaultRenderer();
 	$renderer->setElementTemplate('<div>{element}</div> ');
 
 	$form->addElement('hidden','action', 'restore_backup');
 
-	$form->addElement('radio', 'backup_type', '', get_lang('LocalFile'), 'local', 'id="bt_local" class="checkbox" onclick="javascript:document.import_backup_form.backup_server.disabled=true;document.import_backup_form.backup.disabled=false;"');
+	$form->addElement('radio', 'backup_type', '', get_lang('LocalFile'), 'local', 'id="bt_local" class="checkbox" onclick="javascript: document.import_backup_form.backup_server.disabled=true;document.import_backup_form.backup.disabled=false;"');
 	$form->addElement('file', 'backup', '', 'style="margin-left: 50px;"');
 	$form->addElement('html', '<br />');
 
-	if( $backups_available ){
-		$form->addElement('radio', 'backup_type', '', get_lang('ServerFile'), 'server', 'id="bt_server" class="checkbox" onclick="javascript:document.import_backup_form.backup_server.disabled=false;document.import_backup_form.backup.disabled=true;"');
+	if ($backups_available ) {
+		$form->addElement('radio', 'backup_type', '', get_lang('ServerFile'), 'server', 'id="bt_server" class="checkbox" onclick="javascript: document.import_backup_form.backup_server.disabled=false;document.import_backup_form.backup.disabled=true;"');
 		$options['null'] = '-';
-		foreach($backups as $index => $backup)
-		{
+		foreach ($backups as $index => $backup) {
 			$options[$backup['file']]= $backup['course_code'].' ('.$backup['date'];
 		}
 		$form->addElement('select', 'backup_server', '', $options, 'style="margin-left: 50px;"');
 		$form->addElement('html','<script type="text/javascript">document.import_backup_form.backup_server.disabled=true;</script>');
-	}
-	else
-	{
+	} else {
 		$form->addElement('radio', '', '', '<i>'.get_lang('NoBackupsAvailable').'</i>', '', 'disabled="true"');
 	}
 
@@ -172,10 +166,12 @@ if((isset($_POST['action']) && $_POST['action'] == 'course_select_form' ) || (is
 	$form->setDefaults($values);
 
 	$form->add_progress_bar();
+	// When progress bar appears we have to hide the title "Select backup file".
+	$form->updateAttributes(array('onsubmit' => str_replace('javascript: ', 'javascript: page_title = getElementById(\'page_title\'); if (page_title) { setTimeout(\'page_title.style.display = \\\'none\\\';\', 2000); } ', $form->getAttribute('onsubmit'))));
 
 	$form->display();
 
 }
+
 /*	FOOTER	*/
 Display::display_footer();
-?>

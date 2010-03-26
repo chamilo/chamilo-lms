@@ -1,21 +1,17 @@
-<?php // $Id: resume_session.php 20709 2009-05-15 19:12:37Z ivantcholakov $
-/* For licensing terms, see /dokeos_license.txt */
+<?php
+/* For licensing terms, see /license.txt */
 /**
-==============================================================================
 *	@author Bart Mollet
-*	@package dokeos.admin
-==============================================================================
+*	@package chamilo.admin
 */
 /*
-==============================================================================
 		INIT SECTION
-==============================================================================
 */
 
 // name of the language file that needs to be included
 $language_file = 'admin';
 $cidReset = true;
-require '../inc/global.inc.php';
+require_once '../inc/global.inc.php';
 
 // setting the section (for the tabs)
 $this_section=SECTION_PLATFORM_ADMIN;
@@ -49,8 +45,7 @@ $rs = Database::query($sql);
 $session = Database::store_result($rs);
 $session = $session[0];
 
-if(!api_is_platform_admin() && $session['session_admin_id']!=$_user['user_id'])
-{
+if(!api_is_platform_admin() && $session['session_admin_id']!=$_user['user_id']) {
 	api_not_allowed(true);
 }
 

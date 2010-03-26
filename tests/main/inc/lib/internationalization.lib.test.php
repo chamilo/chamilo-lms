@@ -1348,6 +1348,17 @@ class TestInternationalization extends UnitTestCase {
 	}
 	*/
 
+	// The second function for testing api_detect_encoding().
+	public function test_api_detect_encoding_2() {
+		$string_utf8 = 'Това е тест на български език'; // Bulgarian language, UTF-8
+		$string_utf8_broken = $string_utf8.chr(198);    // Intentionaly broken UTF-8, it should be detected as UTF-8
+		$res1 = api_detect_encoding($string_utf8, 'bulgarian');
+		$res2 = api_detect_encoding($string_utf8_broken, 'bulgarian');
+		$this->assertTrue(api_is_utf8($res1) && api_is_utf8($res2));
+		//var_dump($res1);
+		//var_dump($res2);
+	}
+
 	public function test_api_str_getcsv() {
 		$strings = array('FirstName;LastName;Email', 'John;Doe;john.doe@mail.com', '"Иван";\\Чолаков;ivan@mail.com');
 		$expected_results = array(array('FirstName', 'LastName', 'Email'), array('John', 'Doe', 'john.doe@mail.com'), array('Иван', 'Чолаков', 'ivan@mail.com'));

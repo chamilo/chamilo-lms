@@ -3481,13 +3481,20 @@ function api_get_valid_encodings() {
 	return array_merge(array('UTF-8'), $result1, $result2, $result3);
 }
 
-function api_detect_encoding($string) {
+/**
+ * Detects encoding of plain text.
+ * @param string $string				The input text.
+ * @param string $language (optional)	The language of the input text, provided if it is known.
+ * @return string						Returns the detected encoding.
+ */
+function api_detect_encoding($string, $language = null) {
+	// Testing against valid UTF-8 first.
 	if (api_is_valid_utf8($string)) {
 		return 'UTF-8';
 	}
-	// "Broken" UTF-8 texts are to be detected as UTF-8.
 	$result = null;
 	$delta_points_min = LANGUAGE_DETECT_MAX_DELTA;
+	// Testing non-UTF-8 encodings.
 	$encodings = api_get_valid_encodings();
 	foreach ($encodings as & $encoding) {
 		if (api_is_encoding_supported($encoding) && !api_is_utf8($encoding)) {
@@ -3503,6 +3510,25 @@ function api_detect_encoding($string) {
 							$result = $encoding;
 						}
 					}
+				}
+			}
+		}
+	}
+	// "Broken" UTF-8 texts are to be detected as UTF-8.
+	// This functionality is enabled when language of the text is known.
+	$language = api_purify_language_id((string)$language);
+	if (!empty($language)) {
+		$encoding = 'UTF-8';
+		$result_array = & _api_compare_n_grams(_api_generate_n_grams(api_substr($string, 0, LANGUAGE_DETECT_MAX_LENGTH, $encoding), $encoding), $encoding);
+		if (!empty($result_array)) {
+			list($key, $delta_points) = each($result_array);
+			if ($delta_points < $delta_points_min) {
+				$pos = strpos($key, ':');
+				$result_encoding = api_refine_encoding_id(substr($key, $pos + 1));
+				$result_language = substr($key, 0, $pos);
+				if ($language == $result_language && api_is_utf8($result_encoding)) {
+					$delta_points_min = $delta_points;
+					$result = $encoding;
 				}
 			}
 		}

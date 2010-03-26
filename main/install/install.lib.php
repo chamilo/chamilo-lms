@@ -13,11 +13,11 @@
 /*		CONSTANTS */
 
 define('SYSTEM_MAIN_DATABASE_FILE', 'db_main.sql');
-define('COUNTRY_DATA_FILENAME', 'country_data.csv');
+define('COUNTRY_DATA_FILENAME', 	'country_data.csv');
 define('COURSES_HTACCESS_FILENAME', 'htaccess.dist');
-define('SYSTEM_CONFIG_FILENAME', 'configuration.dist.php');
+define('SYSTEM_CONFIG_FILENAME', 	'configuration.dist.php');
 
-/*		COMMON PURPOSE FUNCTIONS */
+/*		COMMON PURPOSE FUNCTIONS 	*/
 
 /**
  * This function detects whether the system has been already installed.
@@ -38,7 +38,7 @@ function is_already_installed_system() {
 		return false; // Configuration file does not exist, install the system.
 	}
 	require $current_config_file;
-
+	
 	$current_version = trim($_configuration['dokeos_version']);
 	if (empty($current_version)) {
 		$current_version = trim($_configuration['system_version']);
@@ -1320,8 +1320,9 @@ function display_license_agreement() {
 	echo '<p>'.get_lang('DokeosLicenseInfo').'</p>';
 	echo '<p><a href="../../documentation/license.html" target="_blank">'.get_lang('PrintVers').'</a></p>';
 	?>
-	<table><tr><td>
-		<p><textarea cols="75" rows="15" ><?php htmlentities(include('../../documentation/license.txt')); ?></textarea></p>
+	<table>
+		<tr><td>
+		<p style="font-size:75%"><textarea cols="80" rows="15" ><?php htmlentities(include('../../documentation/license.txt')); ?></textarea></p>
 		</td>
 		</tr>
 		<tr>

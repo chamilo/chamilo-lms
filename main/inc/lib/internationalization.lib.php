@@ -3490,7 +3490,7 @@ function api_detect_encoding($string) {
 	$delta_points_min = LANGUAGE_DETECT_MAX_DELTA;
 	$encodings = api_get_valid_encodings();
 	foreach ($encodings as & $encoding) {
-		if (api_is_encoding_supported($encoding)) {
+		if (api_is_encoding_supported($encoding) && !api_is_utf8($encoding)) {
 			$result_array = & _api_compare_n_grams(_api_generate_n_grams(api_substr($string, 0, LANGUAGE_DETECT_MAX_LENGTH, $encoding), $encoding), $encoding);
 			if (!empty($result_array)) {
 				list($key, $delta_points) = each($result_array);

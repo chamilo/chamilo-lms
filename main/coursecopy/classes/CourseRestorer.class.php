@@ -110,7 +110,7 @@ class CourseRestorer
 				}
 			}
 			$sample_text = join("\n", $sample_text);
-			$this->course->encoding = api_detect_encoding($sample_text);
+			$this->course->encoding = api_detect_encoding($sample_text, $course_info['language']);
 		}
 
 		// Encoding conversion of the course, if it is needed.
@@ -367,7 +367,7 @@ class CourseRestorer
 
 						} // end switch
 					} else { // end if file exists
-					
+
 						//make sure the source file actually exists
 						//echo $this->course->backup_path.'/'.$document->path;
 						if(is_file($this->course->backup_path.'/'.$document->path) && is_readable($this->course->backup_path.'/'.$document->path) && is_dir(dirname($path.$document->path)) && is_writeable(dirname($path.$document->path)))
@@ -1194,7 +1194,7 @@ class CourseRestorer
 								"prevent_reinit = '".Database::escape_string($lp->prevent_reinit)."', " .
 								"force_commit = '".Database::escape_string($lp->force_commit)."', " .
 								"content_maker = '".Database::escape_string($lp->content_maker)."', " .
-								"display_order = '".Database::escape_string($lp->display_order)."', " .								
+								"display_order = '".Database::escape_string($lp->display_order)."', " .
 								"js_lib= '".Database::escape_string($lp->js_lib)."', " .
 								"content_license= '".Database::escape_string($lp->content_license)."', " .
 								"debug= '".Database::escape_string($lp->debug)."' $condition_session ";

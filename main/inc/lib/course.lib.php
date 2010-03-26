@@ -285,7 +285,13 @@ class CourseManager {
 				WHERE user_id IN (".$user_ids.")");
 		Database::query("DELETE FROM ".Database::get_course_table(TABLE_BLOGS_TASKS_REL_USER, $course->db_name)."
 				WHERE user_id IN (".$user_ids.")");
-
+		
+		//Deleting users in forum_notification and mailqueue course tables 
+		$sql_delete_forum_notification = "DELETE FROM  ".Database::get_course_table(TABLE_FORUM_NOTIFICATION, $course->db_name)." WHERE user_id IN (".$user_ids.")";		
+		Database::query($sql_delete_forum_notification);
+		
+		$sql_delete_mail_queue = "DELETE FROM ".Database::get_course_table(TABLE_FORUM_MAIL_QUEUE, $course->db_name)." WHERE user_id IN (".$user_ids.")";
+		Database::query($sql_delete_mail_queue);
 
 
 		// Unsubscribe user from the course.

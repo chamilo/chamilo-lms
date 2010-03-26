@@ -1,14 +1,12 @@
 <?php
-/* For licensing terms, see /dokeos_license.txt */
+/* For licensing terms, see /license.txt */
 define('VISIBLE_GUEST', 1);
 define('VISIBLE_STUDENT', 2);
 define('VISIBLE_TEACHER', 3);
 /**
-==============================================================================
 *	This is the system announcements library for Dokeos.
 *
-*	@package dokeos.library
-==============================================================================
+*	@package chamilo.library
 */
 class SystemAnnouncementManager
 {
@@ -370,14 +368,15 @@ class SystemAnnouncementManager
 		global $_setting;
 		global $charset;
 		$user_table = Database :: get_main_table(TABLE_MAIN_USER);
+		
 		if ($teacher <> 0 AND $student == '0') {
-			$sql = "SELECT firstname, lastname, email, status FROM $user_table WHERE email<>'' AND status = '1'";
+			$sql = "SELECT firstname, lastname, email, status FROM $user_table WHERE email<>'' AND status = '1' AND active = 1";
 		}
 		if ($teacher == '0' AND $student <> '0') {
-			$sql = "SELECT firstname, lastname, email, status FROM $user_table WHERE email<>'' AND status = '5'";
+			$sql = "SELECT firstname, lastname, email, status FROM $user_table WHERE email<>'' AND status = '5' AND active = 1 ";
 		}
 		if ($teacher<>'0' AND $student <> '0') {
-			$sql = "SELECT firstname, lastname, email FROM $user_table WHERE email<>''";
+			$sql = "SELECT firstname, lastname, email FROM $user_table WHERE email<>'' AND active = 1 ";
 		}
 		if ($teacher == '0' AND $student == '0') {
 			return true;

@@ -20,21 +20,21 @@
 if (defined('SYSTEM_INSTALLATION')) {
 
 	// Edit the configuration file
-	$file = file('../inc/conf/configuration.php');
-	$fh = fopen('../inc/conf/configuration.php', 'w');
+	$file = file(api_get_path(CONFIGURATION_PATH).'configuration.php');
+	$fh = fopen(api_get_path(CONFIGURATION_PATH).'configuration.php', 'w');
 	$found_version = false;
 	$found_stable = false;
 	foreach ($file as $line) {
 		$ignore = false;
-		if (stristr($line, '$_configuration[\'dokeos_version\']')) {
+		if (stripos($line, '$_configuration[\'dokeos_version\']') !== false) {
 			$found_version = true;
 			$line = '$_configuration[\'dokeos_version\'] = \''.$new_version.'\';'."\r\n";
-		} elseif (stristr($line, '$_configuration[\'dokeos_stable\']')) {
+		} elseif (stripos($line, '$_configuration[\'dokeos_stable\']') !== false) {
 			$found_stable = true;
 			$line = '$_configuration[\'dokeos_stable\'] = '.($new_version_stable ? 'true' : 'false').';'."\r\n";
-		} elseif (stristr($line, '$userPasswordCrypted')) {
+		} elseif (stripos($line, '$userPasswordCrypted') !== false) {
 			$line = '$userPasswordCrypted 									= \''.($userPasswordCrypted).'\';'."\r\n";
-		} elseif (stristr($line, '?>')) {
+		} elseif (stripos($line, '?>') !== false) {
 			//ignore the line
 			$ignore = true;
 		}

@@ -37,9 +37,9 @@ function my_get_time($time) {
 }
 
 // Open log file
-$fh = fopen('../../archive/newscorm_'.time().'.log', 'w');
-$fh_revert = fopen('../../archive/newscorm_'.time().'_revert.log', 'w');
-$fh_res = fopen('../../archive/newscorm_'.time().'_res.log', 'w');
+$fh = fopen(api_get_path(SYS_ARCHIVE_PATH).'newscorm_'.time().'.log', 'w');
+$fh_revert = fopen(api_get_path(SYS_ARCHIVE_PATH).'newscorm_'.time().'_revert.log', 'w');
+$fh_res = fopen(api_get_path(SYS_ARCHIVE_PATH)'newscorm_'.time().'_res.log', 'w');
 fwrite($fh, "-- Recording course homepages links changes to enable reverting\n");
 fwrite($fh_revert, "-- Recording reverted course homepages links changes to enable reverting\n");
 fwrite($fh_res, "-- Recording resulting course homepages links changes\n");

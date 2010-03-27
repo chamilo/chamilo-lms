@@ -33,12 +33,12 @@ function is_already_installed_system() {
 		return true; // Must be initialized.
 	}
 
-	$current_config_file = str_replace('\\', '/', realpath('../inc/conf/configuration.php'));
+	$current_config_file = api_get_path(CONFIGURATION_PATH).'configuration.php';
 	if (!file_exists($current_config_file)) {
 		return false; // Configuration file does not exist, install the system.
 	}
 	require $current_config_file;
-	
+
 	$current_version = trim($_configuration['dokeos_version']);
 	if (empty($current_version)) {
 		$current_version = trim($_configuration['system_version']);
@@ -213,7 +213,7 @@ function detect_browser_language() {
  * This function checks if the given folder is writable
  */
 function check_writable($folder, $suggestion = false) {
-	if (is_writable('../'.$folder)) {
+	if (is_writable(api_get_path(SYS_CODE_PATH).$folder)) {
 		return '<strong><font color="green">'.get_lang('Writable').'</font></strong>';
 	} else {
 		if ($suggestion) {
@@ -251,10 +251,9 @@ function set_file_folder_permissions() {
  * @param string $url_append The path from your webroot to your chamilo root
  */
 function write_courses_htaccess_file($url_append) {
-	$file_path = dirname(__FILE__).'/'.COURSES_HTACCESS_FILENAME;
-	$content = file_get_contents($file_path);
+	$content = file_get_contents(dirname(__FILE__).'/'.COURSES_HTACCESS_FILENAME);
 	$content = str_replace('{CHAMILO_URL_APPEND_PATH}', $url_append, $content);
-	$fp = @ fopen('../../courses/.htaccess', 'w');
+	$fp = @ fopen(api_get_path(SYS_PATH).'courses/.htaccess', 'w');
 	if ($fp) {
 		fwrite($fp, $content);
 		return fclose($fp);
@@ -1173,11 +1172,11 @@ function display_requirements($installType, $badUpdatePath, $updatePath = '', $u
 			</tr>
             <tr>
                 <td class="requirements-item">chamilo/main/css/</td>
-                <td class="requirements-value">'.check_writable('css/',true).' ('.get_lang('SuggestionOnlyToEnableCSSUploadFeature').')</td>
+                <td class="requirements-value">'.check_writable('css/', true).' ('.get_lang('SuggestionOnlyToEnableCSSUploadFeature').')</td>
             </tr>
             <tr>
                 <td class="requirements-item">chamilo/main/lang/</td>
-                <td class="requirements-value">'.check_writable('lang/',true).' ('.get_lang('SuggestionOnlyToEnableSubLanguageFeature').')</td>
+                <td class="requirements-value">'.check_writable('lang/', true).' ('.get_lang('SuggestionOnlyToEnableSubLanguageFeature').')</td>
             </tr>'.
             //'<tr>
             //    <td class="requirements-item">chamilo/searchdb/</td>
@@ -1231,43 +1230,51 @@ function display_requirements($installType, $badUpdatePath, $updatePath = '', $u
 		$notwritable = array();
         $curdir = getcwd();
 
-		if (!is_writable('../inc/conf')) {
-			$notwritable[] = realpath($curdir.'/../inc/conf');
-			@chmod('../inc/conf',$perm);
+        $checked_writable = api_get_path(CONFIGURATION_PATH);
+		if (!is_writable($checked_writable)) {
+			$notwritable[] = $checked_writable;
+			@chmod($checked_writable, $perm);
 		}
 
-		if (!is_writable('../upload/users')) {
-			$notwritable[] = realpath($curdir.'/../upload/users');
-			@chmod('../upload/users', $perm);
+        $checked_writable = api_get_path(SYS_CODE_PATH).'upload/users/';
+		if (!is_writable($checked_writable)) {
+			$notwritable[] = $checked_writable;
+			@chmod($checked_writable, $perm);
 		}
 
-        if (!is_writable('../default_course_document/images/')) {
-            $notwritable[] = realpath($curdir.'/../default_course_document/images/');
-            @chmod('../default_course_document/images/', $perm);
+        $checked_writable = api_get_path(SYS_CODE_PATH).'default_course_document/images/';
+		if (!is_writable($checked_writable)) {
+            $notwritable[] = $checked_writable;
+            @chmod($checked_writable, $perm);
         }
 
-		if (!is_writable('../../archive')) {
-			$notwritable[] = realpath($curdir.'/../../archive');
-			@chmod('../../archive',$perm);
+        $checked_writable = api_get_path(SYS_ARCHIVE_PATH);
+        if (!is_writable($checked_writable)) {
+			$notwritable[] = $checked_writable;
+			@chmod($checked_writable, $perm);
 		}
 
-		if (!is_writable('../../courses')) {
-			$notwritable[] = realpath($curdir.'/../../courses');
-			@chmod('../../courses',$perm);
+        $checked_writable = api_get_path(SYS_COURSE_PATH);
+		if (!is_writable($checked_writable)) {
+			$notwritable[] = $checked_writable;
+			@chmod($checked_writable, $perm);
 		}
 
-		if (!is_writable('../../home')) {
-			$notwritable[] = realpath($curdir.'/../../home');
-			@chmod('../../home',$perm);
+        $checked_writable = api_get_path(SYS_PATH).'home/';
+		if (!is_writable($checked_writable)) {
+			$notwritable[] = realpath($checked_writable);
+			@chmod($checked_writable, $perm);
 		}
 
-		if (file_exists('../inc/conf/configuration.php') && !is_writable('../inc/conf/configuration.php')) {
-			$notwritable[]= realpath($curdir.'/../inc/conf/configuration.php');
-			@chmod('../inc/conf/configuration.php',$perm_file);
+        $checked_writable = api_get_path(CONFIGURATION_PATH).'configuration.php';
+		if (file_exists($checked_writable) && !is_writable($checked_writable)) {
+			$notwritable[] = $checked_writable;
+			@chmod($checked_writable, $perm_file);
 		}
 
-		//Second, if this fails, report an error
-		//--> the user will have to adjust the permissions manually
+		// Second, if this fails, report an error
+
+		//--> The user would have to adjust the permissions manually
 		if (count($notwritable) > 0) {
 			$error = true;
 			echo '<div style="color:red; background-color:white; font-weight:bold; text-align:center;">';
@@ -1281,24 +1288,24 @@ function display_requirements($installType, $badUpdatePath, $updatePath = '', $u
 			echo '</div>';
 		}
 
-		// check wether a Chamilo configuration file already exists.
-		elseif (file_exists('../inc/conf/configuration.php')) {
+		// Check wether a Chamilo configuration file already exists.
+		elseif (file_exists(api_get_path(CONFIGURATION_PATH).'configuration.php')) {
 			echo '<div style="color:red; background-color:white; font-weight:bold; text-align:center;">';
 			echo get_lang('WarningExistingDokeosInstallationDetected');
 			echo '</div>';
 		}
 
-		//and now display the choice buttons (go back or install)
+		// And now display the choice buttons (go back or install)
 		?>
 		<p align="center">
 		<button type="submit" name="step1" class="back" onclick="javascript: window.location='index.php'; return false;" value="&lt; <?php echo get_lang('Previous'); ?>" ><?php echo get_lang('Previous'); ?></button>
 		<button type="submit" name="step2_install" class="add" value="<?php echo get_lang("NewInstallation"); ?>" <?php if ($error) echo 'disabled="disabled"'; ?> ><?php echo get_lang('NewInstallation'); ?></button>
 		<input type="hidden" name="is_executable" id="is_executable" value="-" />
 		<?php
-		//real code
+		// Real code
 		echo '<button type="submit" class="save" name="step2_update_8" value="Upgrade from Dokeos 1.8.x"';
 		if ($error) echo ' disabled="disabled"';
-		//temporary code for alpha version, disabling upgrade
+		// Temporary code for alpha version, disabling upgrade
 		//echo '<input type="submit" name="step2_update" value="Upgrading is not possible in this beta version"';
 		//echo ' disabled="disabled"';
 		//end temp code
@@ -1322,12 +1329,12 @@ function display_license_agreement() {
 	?>
 	<table>
 		<tr><td>
-		<p style="font-size:75%"><textarea cols="80" rows="15" ><?php htmlentities(include('../../documentation/license.txt')); ?></textarea></p>
+		<p style="font-size:75%"><textarea cols="80" rows="15" ><?php echo api_htmlentities(@file_get_contents(api_get_path(SYS_PATH).'documentation/license.txt')); ?></textarea></p>
 		</td>
 		</tr>
 		<tr>
 		<td>
-		<p><?php echo get_lang('DokeosArtLicense');?></p>
+		<p><?php echo get_lang('DokeosArtLicense'); ?></p>
 		</td>
 		</tr>
 		<td>

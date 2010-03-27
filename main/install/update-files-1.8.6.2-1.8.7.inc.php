@@ -14,8 +14,8 @@
 if (defined('SYSTEM_INSTALLATION')) {
 
 	// Edit the configuration file
-	$file = file('../inc/conf/configuration.php');
-	$fh = fopen('../inc/conf/configuration.php', 'w');
+	$file = file(api_get_path(CONFIGURATION_PATH).'configuration.php');
+	$fh = fopen(api_get_path(CONFIGURATION_PATH).'configuration.php', 'w');
 	$found_version_old = false;
 	$found_stable_old = false;
 	$found_version = false;

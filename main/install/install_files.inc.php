@@ -17,19 +17,19 @@
 if (defined('SYSTEM_INSTALLATION')) {
 
 	// Write the system config file
-	write_system_config_file('../inc/conf/configuration.php');
+	write_system_config_file(api_get_path(CONFIGURATION_PATH).'configuration.php');
 
 	// Write a distribution file with the config as a backup for the admin
-	write_system_config_file('../inc/conf/configuration.dist.php');
+	write_system_config_file(api_get_path(CONFIGURATION_PATH).'configuration.dist.php');
 
 	// Write a .htaccess file in the course repository
 	write_courses_htaccess_file($urlAppendPath);
 
 	// Copy distribution files with renaming for being the actual system configuration files.
-	copy('../inc/conf/add_course.conf.dist.php', '../inc/conf/add_course.conf.php');
-	copy('../inc/conf/course_info.conf.dist.php', '../inc/conf/course_info.conf.php');
-	copy('../inc/conf/mail.conf.dist.php', '../inc/conf/mail.conf.php');
-	copy('../inc/conf/profile.conf.dist.php', '../inc/conf/profile.conf.php');
+	copy(api_get_path(CONFIGURATION_PATH).'add_course.conf.dist.php', api_get_path(CONFIGURATION_PATH).'add_course.conf.php');
+	copy(api_get_path(CONFIGURATION_PATH).'course_info.conf.dist.php', api_get_path(CONFIGURATION_PATH).'course_info.conf.php');
+	copy(api_get_path(CONFIGURATION_PATH).'mail.conf.dist.php', api_get_path(CONFIGURATION_PATH).'mail.conf.php');
+	copy(api_get_path(CONFIGURATION_PATH).'profile.conf.dist.php', api_get_path(CONFIGURATION_PATH).'profile.conf.php');
 
 } else {
 

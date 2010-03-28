@@ -1,26 +1,8 @@
-<?php // $Id$
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2006 Dokeos S.A.
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact: Dokeos, 44 rue des Palais, B-1030 Brussels, Belgium, info@dokeos.com
-==============================================================================
-*/
+<?php
+/* For licensing terms, see /license.txt */
 /**
  * This script contains the code to edit and send an e-mail to one of
- * Dokeos' users.
+ * the platform's users.
  * It can be called from the JavaScript library email_links.lib.php which
  * overtakes the mailto: links to use the internal interface instead.
  * @author	Yannick Warnier <ywarnier@beeznest.org>
@@ -32,30 +14,28 @@ $language_file = "index";
 require_once '../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
 require_once api_get_path(LIBRARY_PATH).'main.lib.inc.php';
-if(empty($_user['user_id']))
-{
+if (empty($_user['user_id'])) {
 	api_not_allowed(true);
 }
 
 //api_protect_course_script(); //not a course script, so no protection
 
-if(empty($_SESSION['origin_url'])){
+if (empty($_SESSION['origin_url'])) {
 	$origin_url = $_SERVER['HTTP_REFERER'];
 	api_session_register('origin_url');
 }
 
 /* Process the form and redirect to origin */
-if(!empty($_POST['submit_email']) && !empty($_POST['email_title']) && !empty($_POST['email_text']))
-{
+if (!empty($_POST['submit_email']) && !empty($_POST['email_title']) && !empty($_POST['email_text'])) {
 	$text = Security::remove_XSS($_POST['email_text'])."\n\n---\n".get_lang('EmailSentFromDokeos')." ".api_get_path(WEB_PATH);
 	$email_administrator=Security::remove_XSS($_POST['dest']);
 	$user_id=api_get_user_id();
 	$title=Security::remove_XSS($_POST['email_title']);
 	$content=Security::remove_XSS($_POST['email_text']);
-	if(!empty($_user['mail'])){
+	if (!empty($_user['mail'])) {
 		api_mail('',$email_administrator,$title,$text,api_get_person_name($_user['firstname'],$_user['lastname']), $_user['mail']);
 		UserManager::send_message_in_outbox ($email_administrator,$user_id,$title, $content);
-	}else{
+	} else {
 		api_mail('',$email_administrator,$title,$text,get_lang('Anonymous'));
 	}
 	$orig = $_SESSION['origin_url'];

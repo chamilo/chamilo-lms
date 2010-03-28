@@ -29,8 +29,9 @@
 // name of the language file that needs to be included
 $language_file = "index";
 
-require_once"../inc/global.inc.php";
-require_once"../inc/lib/usermanager.lib.php";
+require_once '../inc/global.inc.php';
+require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
+require_once api_get_path(LIBRARY_PATH).'main.lib.inc.php';
 if(empty($_user['user_id']))
 {
 	api_not_allowed(true);
@@ -52,10 +53,10 @@ if(!empty($_POST['submit_email']) && !empty($_POST['email_title']) && !empty($_P
 	$title=Security::remove_XSS($_POST['email_title']);
 	$content=Security::remove_XSS($_POST['email_text']);
 	if(!empty($_user['mail'])){
-		api_send_mail($email_administrator,$title,$text,"From: ".$_user['mail']."\r\n");
+		api_mail('',$email_administrator,$title,$text,api_get_person_name($_user['firstname'],$_user['lastname']), $_user['mail']);
 		UserManager::send_message_in_outbox ($email_administrator,$user_id,$title, $content);
 	}else{
-		api_send_mail($email_administrator,$title,$text);
+		api_mail('',$email_administrator,$title,$text,get_lang('Anonymous'));
 	}
 	$orig = $_SESSION['origin_url'];
 	api_session_unregister('origin_url');

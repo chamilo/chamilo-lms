@@ -119,7 +119,7 @@ if (!isset ($exerciseType)) {
 if ($buttonCancel) {
     // returns to the exercise list
     header("Location: exercice.php?origin=$origin&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id");
-    exit ();
+    exit;
 }
 
 if ($origin == 'learnpath' && isset ($_GET['not_multiple_attempt']) && $_GET['not_multiple_attempt'] == strval(intval($_GET['not_multiple_attempt']))) {
@@ -1054,13 +1054,10 @@ if (api_is_course_admin() && $origin != 'learnpath') {
     
     echo '</div>';
 }
-//Timer control
-if ($exercise_row['expired_time'] != 0 && $origin != 'learnpath') {
-  echo '<div align="left" id="wrapper-clock"><div id="square" class="rounded"><div id="text-content" align="center" class="count_down"></div></div></div>';
-  echo '<div style="display:none" class="warning-message" id="expired-message-id">'.get_lang('ExerciceExpiredTimeMessage').'</div>';
-}
+
 $exerciseTitle = api_parse_tex($exerciseTitle);
 echo "<h3>" . $exerciseTitle . "</h3>";
+$show_clock = true;
 
 if ($exerciseAttempts > 0) {
     $user_id = api_get_user_id();
@@ -1075,6 +1072,7 @@ if ($exerciseAttempts > 0) {
     $attempt = Database :: fetch_array($aquery);
 
     if ($attempt[0] >= $exerciseAttempts) {
+    	$show_clock = false;
         if (!api_is_allowed_to_edit(null,true)) {
             Display :: display_warning_message(sprintf(get_lang('ReachedMaxAttempts'), $exerciseTitle, $exerciseAttempts), false);
             if ($origin != 'learnpath')
@@ -1084,6 +1082,12 @@ if ($exerciseAttempts > 0) {
             Display :: display_warning_message(sprintf(get_lang('ReachedMaxAttemptsAdmin'), $exerciseTitle, $exerciseAttempts), false);
         }
     }
+}
+
+//Timer control
+if ($show_clock && $exercise_row['expired_time'] != 0 && $origin != 'learnpath') {
+  echo '<div align="left" id="wrapper-clock"><div id="square" class="rounded"><div id="text-content" align="center" class="count_down"></div></div></div>';
+  echo '<div style="display:none" class="warning-message" id="expired-message-id">'.get_lang('ExerciceExpiredTimeMessage').'</div>';
 }
 
 if (!function_exists('convert_date_to_number')) {
@@ -1147,7 +1151,6 @@ if (!empty ($error)) {
                     if ($objQuestionTmp->selectType() == HOT_SPOT) {
                         $number_of_hotspot_questions++;
                     }
-
                     break;
                 }
             } else {

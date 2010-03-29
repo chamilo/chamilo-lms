@@ -780,11 +780,11 @@ if ($show_results) {
 			$objAnswerTmp = new Answer($questionId);
 			$nbrAnswers = $objAnswerTmp->selectNbrAnswers();
 			$questionScore = 0;
-			$query = "select answer, marks from ".$TBL_TRACK_ATTEMPT." where exe_id = '".Database::escape_string($id)."' and question_id= '".Database::escape_string($questionId)."'";
-			$resq = Database::query($query);
-			$choice = Database::result($resq,0,"answer");
-			$choice = stripslashes($choice);
-			$choice = str_replace('rn', '', $choice);
+			$query 	= "SELECT answer, marks FROM ".$TBL_TRACK_ATTEMPT." WHERE exe_id = '".Database::escape_string($id)."' AND question_id= '".Database::escape_string($questionId)."'";
+			$resq	= Database::query($query);
+			$choice = Database::result($resq,0,'answer');
+			$choice = str_replace('\r\n', '', $choice);
+			$choice = stripslashes($choice);			
 
 			$questionScore = Database::result($resq,0,"marks");
 			if ($questionScore==-1) {

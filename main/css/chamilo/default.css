@@ -1554,6 +1554,7 @@ div.admin_section h4 {
 .sessions_list_inactive {
 	line-height: 20px;
 }
+
 .session_box {
 	border: 1px solid #DCE5F3;
 	/* font-weight: bold; */
@@ -1568,7 +1569,7 @@ div.admin_section h4 {
 }
 
 .sub_session_box {
-	/* border: 1px solid #DCE5F3; */
+	 border: 1px solid #DCE5F3; 
 	/* font-weight: bold; */
 	color: #666;
 	list-style-type: none;
@@ -4065,8 +4066,7 @@ div.attendance-calendar-add div.row div.formw,div.attendance-calendar-edit div.r
 #session_category_title {
 	font-size: 140%;
 	font-weight: bold;
-	padding: 2px 0px 5px 5px;	
-
+	padding: 2px 0px 5px 5px;
 }
 
 /* fixes the * */ 
@@ -4079,7 +4079,9 @@ span.form_required  {
 	-moz-border-radius: 10px;
 	border-radius: 10px;
 	background-color:#F9F9F9;
-	padding:5px 10px 5px 10px;	
+	padding:5px 10px 5px 10px;
+	height:40px;	
+	margin:5px;
 }
 
 .courseadminview-activity-3col, .platformadminview-activity-3col {
@@ -4108,4 +4110,52 @@ span.form_required  {
 	width: 800px ;
 	margin-left: auto ;
 	margin-right: auto ;
+}
+
+
+.userportal-catalog-item {
+	-webkit-border-radius: 10px;
+	-moz-border-radius: 10px;
+	border-radius: 10px;
+	background-color:#F9F9F9;
+	padding:5px 10px 10px 6px;
+	/* height:40px; */	
+}
+
+.userportal-catalog-item .catalog_box li span {
+	font-size:130%;
+	font-weight:bold;
+	margin-left:5px;	
+}
+
+.userportal-session-item {
+	-webkit-border-radius: 10px;
+	-moz-border-radius: 10px;
+	border-radius: 10px;
+	background-color:#F9F9F9;
+	padding:5px 10px 10px 6px;
+	/* height:40px; */	
+}
+
+.userportal-session-category-item {
+	-webkit-border-radius: 10px;
+	-moz-border-radius: 10px;
+	border-radius: 10px;
+	background-color:#F9F9F9;
+	padding:5px 10px 10px 16px;
+	/* height:40px; */	
+	/*background-color:#f9f9f9; border:1px solid #dddddd; padding:5px 10px 5px 10px; margin-top: 10px; */
+}
+
+.catalog_box {
+	border: 1px solid #DCE5F3;
+	/* font-weight: bold; */
+	color: #666;
+	list-style-type: none;
+	margin:5px 5px 10px 5px;
+	padding: 5px;	
+	background-color:#FFF;	
+	-webkit-border-radius: 10px;
+	-moz-border-radius: 10px;
+	border-radius: 10px;
 }

@@ -57,8 +57,8 @@ require_once 'main/survey/survey.lib.php';
 require_once $libpath.'sessionmanager.lib.php';
 api_block_anonymous_users(); // only users who are logged in can proceed
 
-$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js" type="text/javascript" language="javascript"></script>';
-$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.toggle.js" type="text/javascript" language="javascript"></script>';
+//$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js" type="text/javascript" language="javascript"></script>';
+//$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.toggle.js" type="text/javascript" language="javascript"></script>';
 
 /*
 	Table definitions
@@ -365,7 +365,7 @@ function display_courses($user_id) {
 
 	global $_user, $_configuration;
 
-	echo "<table width=\"100%\">\n";
+	//echo "<table width=\"100%\">\n";
 
 	// building an array that contains all the id's of the user defined course categories
 	// initially this was inside the display_courses_in_category function but when we do it here we have fewer
@@ -381,13 +381,19 @@ function display_courses($user_id) {
 	$result = Database::query($sql);
 	while ($row = Database::fetch_array($result)) {
 		// We simply display the title of the category.
-		echo '<tr><td colspan="2" class="user_course_category\>';
-		echo '<a name="category'.$row['id'].'"></a>'; // display an internal anchor.
-		echo $row['title'];
-		echo '</td></tr>';		
-		display_courses_in_category($row['id']);
+		echo '<div class="userportal-catalog-item">';
+			echo '<ul class="catalog_box">';
+				echo '<li>';			
+					echo Display::return_icon('folder_yellow.png', '', array('width'=>'48px', 'align' => 'absmiddle'));
+					echo '<span>';				
+					echo '<a name="category'.$row['id'].'"></a>'; // display an internal anchor.
+					echo $row['title'];
+					echo '</span>';
+				echo '</li>';		
+				display_courses_in_category($row['id']);
+		echo '</ul>';
+		echo '</div>';
 	}
-	echo "</table>\n";
 }
 
 /**
@@ -419,8 +425,7 @@ function display_courses_in_category($user_category_id) {
 	if (!empty($special_course_list)) {
 		$without_special_courses = ' AND course.code NOT IN ('.implode(',',$special_course_list).')';
 	}
-
-
+	
 	$sql_select_courses = "SELECT course.code, course.visual_code, course.subscribe subscr, course.unsubscribe unsubscr,
 								course.title title, course.tutor_name tutor, course.db_name, course.directory, course_rel_user.status status,
 								course_rel_user.sort sort, course_rel_user.user_course_cat user_course_cat, course.visibility
@@ -446,6 +451,7 @@ function display_courses_in_category($user_category_id) {
 		$show_notification = show_notification($my_course);
 		
 		$status_icon=Display::return_icon('blackboard.png', get_lang('Course'), array('width'=>'48px'));
+		
 		/*
 		// course list
 		if ($course['status'] == COURSEMANAGER) {
@@ -463,7 +469,7 @@ function display_courses_in_category($user_category_id) {
 		}
 		*/
 		
-		echo '<tr><td>';	
+		//echo '<tr><td>';	
 		echo '<div class="userportal-course-item">';	
 		
 		if (api_is_platform_admin()) {
@@ -516,7 +522,7 @@ function display_courses_in_category($user_category_id) {
 		// show notifications
 		echo $show_notification;
 		echo '</div>';
-		echo '</td></tr>';		
+	//	echo '</td></tr>';		
 		$key++;
 	}
 }
@@ -1322,7 +1328,8 @@ if ( is_array($courses_tree) ) {
 				}
 
 				if ($count_courses_session > 0) {
-					echo '<ul class="session_box">';
+					//echo '<div class="clear"></div>';
+					echo '<div class="userportal-session-item"><ul class="session_box">';
 						echo '<li class="session_box_title" id="session_'.$session['details']['id'].'" >';
 						
 						//echo Display::return_icon('div_hide.gif', get_lang('Expand').'/'.get_lang('Hide'), array('align' => 'absmiddle', 'id' => 'session_img_'.$session['details']['id'])) . ' ';
@@ -1340,7 +1347,8 @@ if ( is_array($courses_tree) ) {
 						echo '</li>';
 					    echo $html_courses_session;
 					    
-					echo '</ul>';
+					echo '</ul></div>';
+					
 				}
 			}
 
@@ -1397,11 +1405,12 @@ if ( is_array($courses_tree) ) {
 				}
 
 				if ($count_courses_session > 0) {
-					echo '<div class="session_category" id="session_category_'.$category['details']['id'].'" style="background-color:#f9f9f9; border:1px solid #dddddd; padding:5px 10px 5px 10px; margin-top: 10px;">';
+					
+					echo '<div class="userportal-session-category-item" id="session_category_'.$category['details']['id'].'">';
 					echo '<div class="session_category_title_box" id="session_category_title_box_'.$category['details']['id'].'" style="color: #555555;">';
 					//echo Display::return_icon('div_hide.gif', get_lang('Expand').'/'.get_lang('Hide'), array('align' => 'absmiddle', 'id' => 'category_img_'.$category['details']['id']));
 					
-					echo Display::return_icon('folder_blue.png', get_lang('algo'), array('width'=>'48px', 'align' => 'absmiddle'));
+					echo Display::return_icon('folder_blue.png', get_lang('SessionCategory'), array('width'=>'48px', 'align' => 'absmiddle'));
 					
 						
 					if (api_is_platform_admin()) {						

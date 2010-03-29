@@ -22,9 +22,10 @@ Disallow: /documentation/
 Disallow: /home/
 Disallow: /main/
 Disallow: /plugin/
+Disallow: /searchdb/
 Disallow: /tests/
  
 # Files
 Disallow: /license.txt
 Disallow: /README.txt
-Disallow: /README.txt
+Disallow: /webchatdeny.php

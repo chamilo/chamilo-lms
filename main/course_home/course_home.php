@@ -45,7 +45,7 @@ $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jqu
 $htmlHeadXtra[] ='<script type="text/javascript">
 $(document).ready(function() {
 	$(".make_visible_and_invisible").attr("href", "javascript:void(0);");
-	$("td .make_visible_and_invisible > img").click(function () {
+	$(".make_visible_and_invisible > img").click(function () {
 
 		make_visible = "visible.gif";
 		make_invisible = "invisible.gif";

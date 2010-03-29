@@ -261,7 +261,7 @@ function copyDirTo($orig_dir_path, $destination, $move = true) {
 	$save_dir = getcwd();
 	// Extract directory name - create it at destination - update destination trail
 	$dir_name = basename($orig_dir_path);
-	if (is_dir($dir_name)) {
+	if (is_dir($orig_dir_path)) {
 		mkdir($destination.'/'.$dir_name, api_get_permissions_for_new_directories());
 		$destination_trail = $destination.'/'.$dir_name;
 		if (is_dir($destination)) {
@@ -269,7 +269,7 @@ function copyDirTo($orig_dir_path, $destination, $move = true) {
 			$handle = opendir($orig_dir_path);
 
 			while ($element = readdir($handle)) {
-				if ( $element == '.' || $element == '..') {
+				if ($element == '.' || $element == '..') {
 					continue; // Skip the current and parent directories
 				} elseif (is_file($element)) {
 					copy($element, $destination_trail.'/'.$element);

@@ -31,6 +31,7 @@ class MultipleAnswer extends Question {
 	function MultipleAnswer(){
 		parent::question();
 		$this -> type = MULTIPLE_ANSWER;
+		$this -> isContent = $this-> getIsContent();
 	}
 
 	/**
@@ -156,12 +157,18 @@ class MultipleAnswer extends Question {
 		$renderer->setElementTemplate('{element}&nbsp;','submitQuestion');
 		$renderer->setElementTemplate('{element}','moreAnswers');
 		$form -> addElement ('html', '</div></div>');
-
+		
 		$defaults['correct'] = $correct;
-		$form -> setDefaults($defaults);
-
+		
+		if (!empty($this -> id)) {
+			$form -> setDefaults($defaults);
+		} else {
+			if ($this -> isContent == 1) {
+				$form -> setDefaults($defaults);
+			}
+		}
+		
 		$form->setConstants(array('nb_answers' => $nb_answers));
-
 	}
 
 

@@ -107,7 +107,7 @@ if (isset($_GET['typeselected']) && $_GET['typeselected'] != '0') {
 
 
 $interbreadcrumb[]= array ('url' => $_SESSION['gradebook_dest'].'?selectcat=' .Security::remove_XSS($_GET['selectcat']),'name' => get_lang('Gradebook'));
-
+$this_section = SECTION_COURSES;
 Display :: display_header(get_lang('MakeLink'));
 if (isset ($typeform)) {
 	$typeform->display();

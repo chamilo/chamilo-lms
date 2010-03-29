@@ -243,6 +243,8 @@ if ($is_certificate_mode) {
 	$interbreadcrumb[] = array('url' => './document.php?curdirpath='.urlencode($path).$req_gid, 'name'=> get_lang('Documents'));
 }
 
+$this_section = SECTION_COURSES;
+
 // Display the header
 Display::display_header($nameTools, 'Doc');
 

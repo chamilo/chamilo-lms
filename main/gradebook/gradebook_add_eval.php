@@ -65,6 +65,7 @@ $interbreadcrumb[] = array (
 	'url' => Security::remove_XSS($_SESSION['gradebook_dest']).'?selectcat='.$select_cat,
 	'name' => get_lang('Gradebook'
 ));
+$this_section = SECTION_COURSES;
 Display :: display_header(get_lang('NewEvaluation'));
 if ($evaladd->get_course_code() == null) {
 	Display :: display_normal_message(get_lang('CourseIndependentEvaluation'),false);

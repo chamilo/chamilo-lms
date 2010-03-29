@@ -10,11 +10,13 @@ $course_code = api_get_course_id();
 //make sure the destination for scripts is index.php instead of gradebook.php
 $_SESSION['gradebook_dest'] = 'index.php';
 
-if (isset($_GET['cidReq'])) {
+/*if (isset($_GET['cidReq'])) {
 	$this_section = SECTION_COURSES;
 } else {
 	$this_section = SECTION_MYGRADEBOOK;
-}
+}*/
+
+$this_section = SECTION_COURSES;
 
 require_once 'lib/be.inc.php';
 require_once 'lib/scoredisplay.class.php';

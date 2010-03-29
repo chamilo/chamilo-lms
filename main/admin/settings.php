@@ -18,7 +18,7 @@ if ($_GET['category']=='Templates') {
 }
 // resetting the course id
 $cidReset=true;
-// including some necessary dokeos files
+// including some necessary chamilo files
 require_once '../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'sortabletable.class.php';
 require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
@@ -216,6 +216,9 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
  					if (api_get_setting('allow_social_tool') == 'true') {
  						if ($rowkeys['variable'] == 'show_tabs' && $rowkeys['subkey'] == 'my_profile') {continue;}
  					}
+ 					
+ 					//hiding the gradebook option
+ 					if ($rowkeys['variable'] == 'show_tabs' && $rowkeys['subkey'] == 'my_gradebook') {continue;}
 
 					$element = & $form->createElement('checkbox', $rowkeys['subkey'], '', get_lang($rowkeys['subkeytext']));
 					if ($row['access_url_changeable']==1) {

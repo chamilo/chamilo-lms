@@ -27,6 +27,8 @@ $interbreadcrumb[] = array ('url' => Security::remove_XSS($_SESSION['gradebook_d
 $interbreadcrumb[] = array ('url' => Security::remove_XSS($_SESSION['gradebook_dest']).'?selectcat='.Security::remove_XSS($_GET['cat_id']),'name' => get_lang('Details'));
 $interbreadcrumb[] = array ('url' => 'gradebook_display_certificate.php?cat_id='.Security::remove_XSS($_GET['cat_id']),'name' => get_lang('GradebookListOfStudentsCertificates'));
 
+$this_section = SECTION_COURSES;
+
 Display::display_header('');
 ?>
 <?php

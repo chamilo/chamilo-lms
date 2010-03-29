@@ -2,11 +2,11 @@
 /* For licensing terms, see /license.txt */
 $language_file= 'gradebook';
 //$cidReset= true;
-require_once ('../inc/global.inc.php');
-require_once ('lib/be.inc.php');
-require_once ('lib/gradebook_functions.inc.php');
-require_once ('lib/fe/scoredisplayform.class.php');
-require_once ('lib/scoredisplay.class.php');
+require_once '../inc/global.inc.php';
+require_once 'lib/be.inc.php';
+require_once 'lib/gradebook_functions.inc.php';
+require_once 'lib/fe/scoredisplayform.class.php';
+require_once 'lib/scoredisplay.class.php';
 api_block_anonymous_users();
 //api_protect_admin_script();
 
@@ -103,6 +103,7 @@ if ($scoreform->validate()) {
 	exit;
 }
 
+$this_section = SECTION_COURSES;
 Display :: display_header(get_lang('ScoreEdit'));
 
 if (((isset($_GET['isStudentView']) && $_GET['isStudentView']=='false') || (isset($_GET['selectcat']) && ($_SESSION['studentview']=='teacherview')))) {

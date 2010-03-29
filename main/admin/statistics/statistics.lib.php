@@ -171,7 +171,7 @@ class Statistics {
 			$total += $number;
 		}
 		foreach ($stats as $subtitle => $number) {
-			$i = $i % 13;
+			//$i = $i % 13;
 			if (api_strlen($subtitle) > 30) {
 				$subtitle = '<acronym title="'.$subtitle.'">'.api_substr($subtitle, 0, 27).'...</acronym>';
 			}
@@ -359,10 +359,10 @@ class Statistics {
 		$columns[1] = 'access_date';
 		$sql_order[SORT_ASC] = 'ASC';
 		$sql_order[SORT_DESC] = 'DESC';
-		$per_page = isset($_GET['per_page']) ? intval($_GET['per_page']) : 10;
-		$page_nr = isset($_GET['page_nr'])  ? intval($_GET['page_nr']) : 1;
-		$column = isset($_GET['column'])   ? intval($_GET['column']) : 0;
-		$date_diff = isset($_GET['date_diff'])? intval($_GET['date_diff']) : 60;
+		$per_page = isset($_GET['per_page'])?intval($_GET['per_page']) : 10;
+		$page_nr = isset($_GET['page_nr'])?intval($_GET['page_nr']) : 1;
+		$column = isset($_GET['column'])?intval($_GET['column']) : 0;
+		$date_diff = isset($_GET['date_diff'])?intval($_GET['date_diff']) : 60;
 	        if (!in_array($_GET['direction'],array(SORT_ASC,SORT_DESC))) {
 	    	    $direction = SORT_ASC;
 	        } else {
@@ -415,7 +415,7 @@ class Statistics {
 
 	/**
 	 * Displays the statistics of the messages sent and received by each user in the social network
-	 * @param string	Type of message sent or received
+	 * @param string	Type of message: 'sent' or 'received'
 	 * @return array	Message list
 	 */
 	function get_messages($message_type) {
@@ -437,6 +437,9 @@ class Statistics {
 		$res = Database::query($sql);
 		$messages_sent = array();
 		while ($messages = Database::fetch_array($res)) {
+			if (empty($messages['username'])) {
+				$messages['username'] = get_lang('Unknown');
+			}
 			$users = $messages['firstname'].' '.$messages['lastname'].' ('.$messages['username'].')';
 			$messages_sent[$users] = $messages['count_message'];
 		}

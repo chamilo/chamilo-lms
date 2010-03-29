@@ -26,7 +26,7 @@
  */
 
 // Name of the language file that needs to be included
-$language_file = 'document';
+$language_file = array('document', 'gradebook');
 
 /*	Included libraries */
 

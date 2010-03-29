@@ -636,7 +636,7 @@ if ($show_results) {
 					$switchable_answer_set=true;
 				}
 
-				$answer = $pre_array[0];
+				$answer = $pre_array[0];			
 
 				// splits weightings that are joined with a comma
 				$answerWeighting = explode(',',$is_set_switchable[0]);
@@ -675,11 +675,12 @@ if ($show_results) {
 							break;
 						}
 	
-						$queryfill = "select answer from ".$TBL_TRACK_ATTEMPT." where exe_id = '".Database::escape_string($id)."' and question_id= '".Database::escape_string($questionId)."'";
+						$queryfill = "SELECT answer FROM ".$TBL_TRACK_ATTEMPT." WHERE exe_id = '".Database::escape_string($id)."' AND question_id= '".Database::escape_string($questionId)."'";
 						$resfill = Database::query($queryfill);
-						$str = Database::result($resfill,0,"answer");
-
+						$str = Database::result($resfill,0,'answer');
+						
 						preg_match_all('#\[([^[]*)\]#', $str, $arr);
+						$str = str_replace('\r\n', '', $str);
 						$choice = $arr[1];
 						
 						$tmp=strrpos($choice[$j],' / ');
@@ -703,9 +704,7 @@ if ($show_results) {
 						$temp=api_substr($temp,$pos+1);
 						$i=$i+1;
 					}
-
-					$answer = stripslashes($str);
-					$answer = str_replace('rn', '', $answer);
+					$answer = stripslashes($str);					
 
 				} else {
 					//multiple fill in blank

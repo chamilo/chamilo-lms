@@ -288,6 +288,7 @@ if (isset($_GET['search'])) {
 
 $offset = isset($_GET['offset']) ? $_GET['offset'] : '0';
 $flatviewtable = new FlatViewTable($cat[0], $users, $alleval, $alllinks, true, $offset, $addparams);
+$this_section = SECTION_COURSES;
 
 if (isset($_GET['exportpdf'])) {
 	echo '<div class="normal-message">';

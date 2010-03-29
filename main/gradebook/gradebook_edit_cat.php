@@ -37,10 +37,8 @@ if ($form->validate()) {
 	exit;
 }
 $selectcat = isset($_GET['selectcat']) ? Security::remove_XSS($_GET['selectcat']) : '';
-$interbreadcrumb[] = array (
-	'url' => Security::remove_XSS($_SESSION['gradebook_dest']).'?selectcat='.$selectcat,
-	'name' => get_lang('Gradebook'
-));
+$interbreadcrumb[] = array ('url' => Security::remove_XSS($_SESSION['gradebook_dest']).'?selectcat='.$selectcat,'name' => get_lang('Gradebook'));
+$this_section = SECTION_COURSES;
 Display :: display_header(get_lang('EditCategory'));
 echo '<div class="actions-message">'.get_lang('EditCategory').'</div>';
 $form->display();

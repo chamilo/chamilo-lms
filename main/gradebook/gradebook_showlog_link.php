@@ -14,7 +14,7 @@ block_students();
 $interbreadcrumb[] = array ('url' => Security::remove_XSS($_SESSION['gradebook_dest']).'?','name' => get_lang('Gradebook'));
 $interbreadcrumb[] = array ('url' => Security::remove_XSS($_SESSION['gradebook_dest']).'?selectcat='.Security::remove_XSS($_GET['selectcat']),'name' => get_lang('Details'));
 $interbreadcrumb[] = array ('url' => 'gradebook_showlog_link.php?visiblelink='.Security::remove_XSS($_GET['visiblelink']).'&amp;selectcat='.Security::remove_XSS($_GET['selectcat']),	'name' => get_lang('GradebookQualifyLog'));
-
+$this_section = SECTION_COURSES;
 Display :: display_header('');
 echo '<div class="clear"></div>';
 echo '<div class="actions">';

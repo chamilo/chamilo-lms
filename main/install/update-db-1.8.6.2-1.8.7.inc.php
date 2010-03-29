@@ -115,6 +115,7 @@ if (defined('SYSTEM_INSTALLATION')) {
                 }
             }
         }
+        
         // Converting dates and times to UTC using the default timezone of PHP
         // Converting gradebook dates and times
         $timezone = date_default_timezone_get();
@@ -124,31 +125,33 @@ if (defined('SYSTEM_INSTALLATION')) {
 		$timeOffsetSeconds = $dateTimeZoneCurrent->getOffset($dateTimeUTC);
 		$timeOffsetHours = $timeOffsetSeconds / 3600;
 		$timeOffsetString = "";
+		
 		if($timeOffsetHours < 0) {
-		$timeOffsetString .= "-";
-		$timeOffsetHours = abs($timeOffsetHours);
+			$timeOffsetString .= "-";
+			$timeOffsetHours = abs($timeOffsetHours);
 		} else {
-		$timeOffsetString .= "+";
+			$timeOffsetString .= "+";
 		}
 
 		if($timeOffsetHours < 10) {
-		$timeOffsetString .= "0";
+			$timeOffsetString .= "0";
 		}
 
 		$timeOffsetString .= "$timeOffsetHours";
 		$timeOffsetString .= ":00";
+		
 		// Executing the queries to convert everything
-        $queries[] = "UPDATE gradebook_certificate SET created_at = CONVERT_TZ(created_at, '".$timeOffsetString."', '+00:00');";
-        $queries[] = "UPDATE gradebook_evaluation SET created_at = CONVERT_TZ(created_at, '".$timeOffsetString."', '+00:00');";
-        $queries[] = "UPDATE gradebook_link SET created_at = CONVERT_TZ(created_at, '".$timeOffsetString."', '+00:00');";
+        $queries[] = "UPDATE gradebook_certificate 	SET created_at = CONVERT_TZ(created_at, '".$timeOffsetString."', '+00:00');";
+        $queries[] = "UPDATE gradebook_evaluation 	SET created_at = CONVERT_TZ(created_at, '".$timeOffsetString."', '+00:00');";
+        $queries[] = "UPDATE gradebook_link 		SET created_at = CONVERT_TZ(created_at, '".$timeOffsetString."', '+00:00');";
         $queries[] = "UPDATE gradebook_linkeval_log SET created_at = CONVERT_TZ(created_at, '".$timeOffsetString."', '+00:00');";
-        $queries[] = "UPDATE gradebook_result SET created_at = CONVERT_TZ(created_at, '".$timeOffsetString."', '+00:00');";
-        $queries[] = "UPDATE gradebook_result_log SET created_at = CONVERT_TZ(created_at, '".$timeOffsetString."', '+00:00');";
-        foreach($queries as $query) {
+        $queries[] = "UPDATE gradebook_result 		SET created_at = CONVERT_TZ(created_at, '".$timeOffsetString."', '+00:00');";
+        $queries[] = "UPDATE gradebook_result_log 	SET created_at = CONVERT_TZ(created_at, '".$timeOffsetString."', '+00:00');";
+        
+        foreach ($queries as $query) {
 			Database::query($query);
 		}
 
-        // Get the stats queries list (s_q_list)
         // Get the stats queries list (s_q_list)
         $s_q_list = get_sql_file_contents('migrate-db-'.$old_file_version.'-'.$new_file_version.'-pre.sql', 'stats');
         if (count($s_q_list) > 0) {
@@ -163,6 +166,7 @@ if (defined('SYSTEM_INSTALLATION')) {
                 error_log('Database '.$dbStatsForm.' was not found, skipping', 0);
             } else {
                 Database::select_db($dbStatsForm);
+                
                 foreach ($s_q_list as $query) {
                     if ($only_test) {
                         error_log("Database::query($dbStatsForm,$query)", 0);
@@ -189,8 +193,47 @@ if (defined('SYSTEM_INSTALLATION')) {
                 if ($res === false) {
                      error_log('Error in '.$query.': '.Database::error());
                 }
+                
+                
+                // chamilo_stat.track_e_attempt table update changing id by id_auto
+               
+      			$sql = "SELECT exe_id, question_id, course_code, answer FROM $dbStatsForm.track_e_attempt";
+                $result = Database::query($sql);
+                if (Database::num_rows($result) > 0) {
+                	while ($row = Database::fetch_array($result)) {
+                		$course_code  	= $row['course_code'];
+                		$course_info 	= api_get_course_info($course_code);
+						$my_course_db 	= $course_info['dbName'];  
+ 						$question_id  	= $row['question_id'];
+						$answer			= $row['answer'];
+						$exe_id			= $row['exe_id'];		
+
+						//getting the type question id
+                		$sql_question = "SELECT type FROM $my_course_db.quiz_question where id = $question_id";                		
+                		$res_question = Database::query($sql_question);
+                		$row  = Database::fetch_array($res_question);	
+                 		$type = $row['type'];
+                
+                		require_once api_get_path(SYS_CODE_PATH).'exercice/question.class.php';
+                		//this type of questions produce problems in the track_e_attempt table
+                		if (in_array($type, array(UNIQUE_ANSWER, MULTIPLE_ANSWER, MATCHING, MULTIPLE_ANSWER_COMBINATION))) {
+		            		$sql_question = "SELECT id_auto FROM $my_course_db.quiz_answer where question_id = $question_id and id = $answer";
+		            		$res_question = Database::query($sql_question);
+		            		$row = Database::fetch_array($res_question);
+		            		$id_auto = $row['id_auto'];
+		            		if (!empty($id_auto)) {
+	                			$sql = "UPDATE $dbStatsForm.track_e_attempt SET answer = '$id_auto' WHERE exe_id = $exe_id AND question_id = $question_id AND course_code = '$course_code' and answer = $answer ";
+	                			Database::query($sql);
+		            		}
+                		}	
+                	}	
+                }
+                 
+                
             }
         }
+        
+        
 
         // Get the user queries list (u_q_list)
         $u_q_list = get_sql_file_contents('migrate-db-'.$old_file_version.'-'.$new_file_version.'-pre.sql', 'user');
@@ -288,6 +331,7 @@ if (defined('SYSTEM_INSTALLATION')) {
                             }
                         }
                     }
+                    
                     if (!$singleDbForm) {
                         $tables = Database::get_tables($row_course['db_name']);
                         foreach ($tables as $table) {
@@ -303,6 +347,7 @@ if (defined('SYSTEM_INSTALLATION')) {
                             error_log('Error in '.$query.': '.Database::error());
                         }
                     }
+                    
 
                 }
             }

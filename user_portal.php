@@ -364,9 +364,7 @@ function display_special_courses ($user_id) {
 function display_courses($user_id) {
 
 	global $_user, $_configuration;
-
-	//echo "<table width=\"100%\">\n";
-
+	
 	// building an array that contains all the id's of the user defined course categories
 	// initially this was inside the display_courses_in_category function but when we do it here we have fewer
 	// sql executions = performance increase.
@@ -440,6 +438,7 @@ function display_courses_in_category($user_category_id) {
 	$number_of_courses = Database::num_rows($result);
 	$key = 0;
 	$status_icon = '';
+	
 	while ($course = Database::fetch_array($result)) {
 
 		// get notifications
@@ -448,9 +447,10 @@ function display_courses_in_category($user_category_id) {
 		$my_course['k']     = $course['code'];
 		$my_course['id_session'] =	null;
 		$my_course['s']		= $course['status'];
-		$show_notification = show_notification($my_course);
 		
-		$status_icon=Display::return_icon('blackboard.png', get_lang('Course'), array('width'=>'48px'));
+		$show_notification = show_notification($my_course);	
+		
+		$status_icon = Display::return_icon('blackboard.png', get_lang('Course'), array('width'=>'48px'));
 		
 		/*
 		// course list
@@ -469,11 +469,14 @@ function display_courses_in_category($user_category_id) {
 		}
 		*/
 		
-		//echo '<tr><td>';	
 		echo '<div class="userportal-course-item">';	
 		
 		if (api_is_platform_admin()) {
-			echo   '<div style="float:right;"><a href="'.api_get_path(WEB_CODE_PATH).'course_info/infocours.php?cidReq='.$course['code'].'">'.Display::return_icon('edit.gif', get_lang('Edit'), array('align' => 'absmiddle')).'</a></div>';
+			echo   '<div style="float:right;"><a href="'.api_get_path(WEB_CODE_PATH).'course_info/infocours.php?cidReq='.$course['code'].'">'.Display::return_icon('edit.gif', get_lang('Edit'), array('align' => 'absmiddle')).'</a>';
+			if ($course['status'] == COURSEMANAGER) {
+				//echo Display::return_icon('teachers.gif', get_lang('Status').': '.get_lang('Teacher'),array('style'=>'width:11px; height:11px;'));
+			}
+			echo '</div>';
 		}
 
 		//function logic - act on the data
@@ -522,7 +525,7 @@ function display_courses_in_category($user_category_id) {
 		// show notifications
 		echo $show_notification;
 		echo '</div>';
-	//	echo '</td></tr>';		
+			
 		$key++;
 	}
 }
@@ -1034,6 +1037,7 @@ function get_global_courses_list($user_id) {
  * @version
  */
 function show_notification($my_course) {
+	
 	$statistic_database = Database :: get_statistic_database();
 	$user_id = api_get_user_id();
 	$course_database = $my_course['db'];
@@ -1047,6 +1051,7 @@ function show_notification($my_course) {
 									 WHERE access_cours_code = '".$my_course['k']."'
 									 AND access_user_id = '$user_id' AND access_session_id ='".$my_course['id_session']."'";
 	$resLastTrackInCourse = Database::query($sqlLastTrackInCourse);
+	
 	$oldestTrackDate = "3000-01-01 00:00:00";
 	while ($lastTrackInCourse = Database::fetch_array($resLastTrackInCourse)) {
 		$lastTrackInCourseDate[$lastTrackInCourse['access_tool']] = $lastTrackInCourse['access_date'];
@@ -1054,6 +1059,8 @@ function show_notification($my_course) {
 			$oldestTrackDate = $lastTrackInCourse['access_date'];
 		}
 	}
+	
+	
 	// get the last edits of all tools of this course
 	$sql = "SELECT tet.*, tet.lastedit_date last_date, tet.tool tool, tet.ref ref,
 						tet.lastedit_type type, tet.to_group_id group_id,
@@ -1063,8 +1070,7 @@ function show_notification($my_course) {
 					AND ctt.name = tet.tool
 					AND ctt.visibility = '1'
 					AND tet.lastedit_user_id != $user_id AND tet.id_session = '".$my_course['id_session']."'
-					ORDER BY tet.lastedit_date";
-
+					ORDER BY tet.lastedit_date";	
 	$res = Database::query($sql);
 	//get the group_id's with user membership
 	$group_ids = GroupManager :: get_group_ids($course_database, $user_id);

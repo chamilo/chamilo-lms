@@ -6,7 +6,7 @@
 *	through the session, and calculates the score of the student for
 *	that exercise.
 *	Then it shows the results on the screen.
-*	@package dokeos.exercise
+*	@package chamilo.exercise
 *	@author Olivier Brouckaert, main author
 *	@author Roan Embrechts, some refactoring
 * 	@author Julio Montoya Armas switchable fill in blank option added
@@ -14,12 +14,11 @@
 *
 *	@todo	split more code up in functions, move functions to library?
 */
-/*
-		INIT SECTION
-*/
+/*	INIT SECTION	*/
 require_once('exercise.class.php');
 require_once('question.class.php');
 require_once('answer.class.php');
+
 if ($_GET['origin']=='learnpath') {
 	require_once ('../newscorm/learnpath.class.php');
 	require_once ('../newscorm/learnpathItem.class.php');
@@ -35,7 +34,7 @@ $language_file='exercice';
 require_once '../inc/global.inc.php';
 $this_section=SECTION_COURSES;
 
-/* ------------	ACCESS RIGHTS ------------ */
+/* 	ACCESS RIGHTS  */
 // notice for unauthorized people.
 api_protect_course_script(true);
 
@@ -290,7 +289,6 @@ if ($origin != 'learnpath') {
 <body dir="<?php echo api_get_text_direction(); ?>">
 <?php
 }
-
 
 if ($objExercise->results_disabled) {
 	ob_start();
@@ -1061,18 +1059,31 @@ if($objExercise->results_disabled) {
 	} else {
 		Display :: display_normal_message(get_lang('ExerciseFinished').'<br /><br />',false);
 		
-		if ($origin == 'learnpath') {
-			//Display::display_normal_message(get_lang('ExerciseFinished'));
+		if ($origin == 'learnpath') {			
 			$lp_mode =  $_SESSION['lp_mode'];
 			$url = '../newscorm/lp_controller.php?cidReq='.api_get_course_id().'&action=view&lp_id='.$learnpath_id.'&lp_item_id='.$learnpath_item_id.'&exeId='.$exeId.'&fb_type='.$feedback_type;
 			$href = ($lp_mode == 'fullscreen')?' window.opener.location.href="'.$url.'" ':' top.location.href="'.$url.'" ';
-			echo '<script language="javascript" type="text/javascript">'.$href.'</script>'."\n";	
+			echo '<script language="javascript" type="text/javascript">'.$href.'</script>'."\n";
+			
+			//record the results in the learning path, using the SCORM interface (API)
+			echo '<script language="javascript" type="text/javascript">window.parent.API.void_save_asset('.$totalScore.','.$totalWeighting.');</script>'."\n";
+			echo '</body></html>';			
 		}
-
+	}
+} else {
+	//show score
+	if ($origin == 'learnpath') {
+		Display::display_normal_message(get_lang('ExerciseFinished'));
+		$lp_mode =  $_SESSION['lp_mode'];
+		$url = '../newscorm/lp_controller.php?cidReq='.api_get_course_id().'&action=view&lp_id='.$learnpath_id.'&lp_item_id='.$learnpath_item_id.'&exeId='.$exeId.'&fb_type='.$feedback_type;
+		$href = ($lp_mode == 'fullscreen')?' window.opener.location.href="'.$url.'" ':' top.location.href="'.$url.'" ';
+		echo '<script language="javascript" type="text/javascript">'.$href.'</script>'."\n";
+		
 		//record the results in the learning path, using the SCORM interface (API)
 		echo '<script language="javascript" type="text/javascript">window.parent.API.void_save_asset('.$totalScore.','.$totalWeighting.');</script>'."\n";
 		echo '</body></html>';
 	}
+	
 }
 
 if ($origin != 'learnpath') {

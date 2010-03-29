@@ -1,7 +1,5 @@
 <?php
 /* For licensing terms, see /license.txt */
-
-
 /**
 *	Adding limits
 *	@package chamilo.exercise
@@ -9,26 +7,20 @@
 * 	@version $Id: admin.php 10680 2007-01-11 21:26:23Z pcool $
 */
 /*
------------------------------------------------------------
 	including the global file
------------------------------------------------------------
 */
-include('../inc/global.inc.php');
+require_once '../inc/global.inc.php';
 
 /*
------------------------------------------------------------
 	Including necessary files
------------------------------------------------------------
 */
-include('exercise.class.php');
-include('question.class.php');
-include('answer.class.php');
-include_once(api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
+require_once 'exercise.class.php';
+require_once 'question.class.php';
+require_once 'answer.class.php';
+require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 
 /*
------------------------------------------------------------
 	Answer types
------------------------------------------------------------
 */
 define('UNIQUE_ANSWER',	1);
 define('MULTIPLE_ANSWER',	2);
@@ -38,27 +30,21 @@ define('FREE_ANSWER', 5);
 define('MULTIPLE_ANSWER_COMBINATION', 9);
 
 /*
------------------------------------------------------------
 	Language
------------------------------------------------------------
 */
 // name of the language file that needs to be included
 $language_file='exercice';
 
 /*
------------------------------------------------------------
 	section (for the tabs)
------------------------------------------------------------
 */
 $this_section=SECTION_COURSES;
 
 api_protect_course_script();
 
 /*
------------------------------------------------------------
 	Table definitions
 	@todo: use the Database :: get_course_table functions
------------------------------------------------------------
 */
 $TBL_EXERCICE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
 $TBL_EXERCICES         = Database::get_course_table(TABLE_QUIZ_TEST);
@@ -234,4 +220,3 @@ if (isset($_POST['ok'])) {
 	}
 }
 ?>
-

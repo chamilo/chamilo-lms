@@ -1,5 +1,5 @@
 <?php
-/* For licensing terms, see /dokeos_license.txt */
+/* For licensing terms, see /license.txt */
 
 /**
 *	Exercise class: This class allows to instantiate an object of type Exercise

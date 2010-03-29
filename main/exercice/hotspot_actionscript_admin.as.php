@@ -1,5 +1,5 @@
 <?php //$id:$
-/* For licensing terms, see /dokeos_license.txt */
+/* For licensing terms, see /license.txt */
 //error_log(__FILE__);
 /**
 *	This file generates the ActionScript variables code used by the HotSpot .swf

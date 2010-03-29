@@ -41,7 +41,7 @@
 * 	- $cancelAnswers : ask to cancel answer modifications
 * 	- $buttonBack : ask to go back to the previous page in answers of type "Fill in blanks"
 *
-*	@package dokeos.exercise
+*	@package chamilo.exercise
 * 	@author Olivier Brouckaert
 * 	@version $Id: admin.php 21662 2009-06-29 14:55:09Z iflorespaz $
 */

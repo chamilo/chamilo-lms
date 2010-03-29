@@ -1,8 +1,8 @@
 <?php //$id: $
-/* For licensing terms, see /dokeos_license.txt */
+/* For licensing terms, see /license.txt */
 /**
 *	Code library for HotPotatoes integration.
-*	@package dokeos.exercise
+*	@package chamilo.exercise
 * 	@author Istvan Mandak (original author)
 */
 $dbTable = Database::get_course_table(TABLE_DOCUMENT);

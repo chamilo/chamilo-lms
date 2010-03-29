@@ -5,7 +5,7 @@
 *	@package chamilo.exercise
 * 	@author Julio Montoya Armas Added switchable fill in blank option added
 * 	@version $Id: exercise_show.php 22256 2009-07-20 17:40:20Z ivantcholakov $
-*
+*	@package chamilo.exercise
 * 	@todo remove the debug code and use the general debug library
 * 	@todo use the Database:: functions
 * 	@todo small letters for table variables

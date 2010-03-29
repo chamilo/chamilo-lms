@@ -3004,7 +3004,7 @@ class UserManager
 	 	$session=api_get_session_id();
 		$table_user = Database::get_main_table(TABLE_MAIN_USER);
 		$table_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-		$table_session_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);	 			 	
+		$table_session_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);	 			 	
 	 	if ($session==0 || is_null($session)) {
 	 		$sql='SELECT u.user_id FROM '.$table_user.' u
 					INNER JOIN '.$table_course_user.' ru ON ru.user_id=u.user_id
@@ -3021,10 +3021,11 @@ class UserManager
 			}		
 		} elseif ($session>0) {
 			$sql='SELECT u.user_id FROM '.$table_user.' u
-				INNER JOIN '.$table_session_user.' sru
-				ON sru.id_coach=u.user_id WHERE sru.course_code="'.Database::escape_string($course_id).'" ';
+				INNER JOIN '.$table_session_course_user.' sru
+				ON sru.id_user=u.user_id WHERE sru.course_code="'.Database::escape_string($course_id).'" ';
 			$rs=Database::query($sql,__FILE__,__LINE__);
 			$row=Database::fetch_array($rs);
+			
 			return $row['user_id'];
 		 	}
 		 }

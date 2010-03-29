@@ -113,4 +113,8 @@ $NewUserEmailAlert = "Avisar por correo electronico a autosuscripcion dun novo u
 $NewUserEmailAlertEnable = "Activar o aviso por correo electrónico ao profesor do curso da autosuscripción dun novo usuario.";
 $NewUserEmailAlertToTeacharAndTutor = "Activar o aviso por correo electrónico ao profesor e aos titores do curso da autosuscripción dun novo usuario.";
 $NewUserEmailAlertDisable = "Desactivar o aviso por correo electrónico da autosuscripción dun novo usuario no curso.";
+$AllowUserViewUserList = "Permitir ao usuario a lista de usuarios";
+$AllowUserViewUserListActivate = "Activar o permiso ao usuario para ver a lista de usuarios";
+$AllowUserViewUserListDeactivate = "Desactivar o permiso ao usuario para ver a lista de usuarios";
+$DoNotDisplayAnyAdvance = "Non amosar ningún avance";
 ?>

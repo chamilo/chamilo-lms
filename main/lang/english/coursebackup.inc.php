@@ -2,12 +2,12 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
-$langSelectOptionForBackup = "Please select a backup-option.";
+$langSelectOptionForBackup = "Please select a backup-option";
 $langLetMeSelectItems = "Let me select learning objects";
 $langCreateFullBackup = "Create a complete backup of this training";
 $langCreateBackup = "Create a backup";
 $langBackupCreated = "The backup has been created. The download of this file will start in a few moments. If your download does not start, click the following link";
-$langSelectBackupFile = "select a backup file";
+$langSelectBackupFile = "Select a backup file";
 $langImportBackup = "Import backup";
 $langImportFullBackup = "Import full backup";
 $langImportFinished = "Import finished";
@@ -37,7 +37,7 @@ $langNoResourcesToRecycles = "There are no resources to recycle";
 $langIncludeQuestionPool = "Include questions pool";
 $langLocalFile = "local file";
 $langServerFile = "server file";
-$langNoBackupsAvailable = "no backup is available";
+$langNoBackupsAvailable = "No backup is available";
 $langNoDestinationCoursesAvailable = "No destination training available";
 $langBackup = "Backup";
 $langImportBackupInfo = "Import a backup. You will be able to upload a backup file from you local drive or you can use a backup file available on the server.";

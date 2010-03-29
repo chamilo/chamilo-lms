@@ -101,7 +101,7 @@ $langAllowed = "Permitido";
 $langBackHome = "Volver a la página principal de";
 $langPropositions = "Propuestas de mejora de";
 $langMaj = "Actualizar";
-$langModify = "modificar";
+$langModify = "Modificar";
 $langDelete = "Eliminar";
 $langInvisible = "Invisible";
 $langSave = "Guardar";
@@ -885,4 +885,6 @@ $CreateAThematicSection = "Crear una sección temática";
 $ToolCourseProgress = "Avance temático";
 $SelectAnAttendance = "Seleccionar hoja de asistencia";
 $ResultsHiddenByExerciseSetting = "Resultados ocultos por la configuración del ejercicio";
+$ThematicSectionHasBeenCreatedSuccessfull = "Sección temática ha sido creado con éxito";
+$NowYouShouldAddThematicPlanXAndThematicAdvanceX = "Ahora debes añadir plan temático %s y avance temático %s";
 ?>

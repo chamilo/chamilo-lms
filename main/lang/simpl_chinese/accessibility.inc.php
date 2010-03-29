@@ -8,6 +8,7 @@ $WCAGImage = "图像";
 $WCAGLabel = "图片标签";
 $WCAGLink = "链接";
 $WCAGLinkLabel = "链接标签";
+$errorNoLabel = "无图像标签";
 $AllLanguages = "所有语言";
 $WCAGEditor = "WCAG 编辑器";
 $WCAGGoMenu = "至菜单";

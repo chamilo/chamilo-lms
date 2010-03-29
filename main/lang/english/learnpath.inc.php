@@ -247,4 +247,5 @@ $SaveAudioAndOrganization = "Save audio and organization";
 $UploadOnlyMp3Files = "Please upload mp3 files only";
 $ModifyHotPotatoes = "Modify hotpotatoes";
 $SaveHotpotatoes = "Save hotpotatoes";
+$LpPrerequisiteDescription = "Lp prerequisite description";
 ?>

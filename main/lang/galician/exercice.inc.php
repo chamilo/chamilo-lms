@@ -356,4 +356,14 @@ $ExerciseAttempted = "Un estudante contestou unha pregunta";
 $MultipleSelectCombination = "Combinación exacta";
 $MultipleAnswerCombination = "Combinación exacta";
 $ExerciceExpiredTimeMessage = "O tempo da avaliación rematou. Non obstante,as preguntas que xa respondeu serán consideradas na avaliación do exercicio";
+$EditingExerciseCauseProblemsInLP = "Editar un exercicio causará problemas en Leccións";
+$AreYouSureToCopy = "Está seguro de querer copiar";
+$ExerciseCopied = "Exercicio copiado";
+$AreYouSureToDeleteResults = "Está seguro/a de querer eliminar os resultados";
+$XResultsCleaned = "%d reultados eliminados";
+$CopyExercise = "Copie este exercicio como novo";
+$CleanStudentResults = "Borrar todos os resultados dos estudantes neste exercicio";
+$ImportQtiQuiz = "Importar exercicios de Qti2";
+$ReUseACopyInCurrentTest = "Realizar unha copia desta pregunta no exercicio actual";
+$Copy = "Copia";
 ?>

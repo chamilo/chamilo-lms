@@ -46,6 +46,14 @@ $langYes = "确定";
 $MsgText = "消息";
 $AnnouncementDeletedAll = "所有通知已经删除";
 $AnnouncementMoved = "通知已经移走";
+$NoAnnouncements = "没有新的通知";
 $SelectEverybody = "选择所有人";
 $SelectedUsersGroups = "选择用户组";
+$LearnerMessage = "学员短信息";
+$TitleIsRequired = "需要标题";
+$AnnounceSentByEmail = "通过电子邮件发布公告";
+$AnnounceSentToUserSelection = "发送到所选择的用户";
+$SendAnnouncement = "发送公告";
+$ModifyAnnouncement = "修改公告";
+$ButtonPublishAnnouncement = "发送公告";
 ?>

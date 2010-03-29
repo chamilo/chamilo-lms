@@ -49,4 +49,8 @@ $langSaveCategory = "Save folder";
 $BackToLinksOverview = "Back to links overview";
 $AddTargetOfLinkOnHomepage = "Select the \"target\" which shows the link on the homepage of the course";
 $Url = "URL";
+$LinkOpenSelf = "Open self";
+$LinkOpenBlank = "Open blank";
+$LinkOpenParent = "Open parent";
+$LinkOpenTop = "Open top";
 ?>

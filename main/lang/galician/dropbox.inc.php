@@ -95,6 +95,7 @@ $DocAdd = "O traballo engadiuse correctamente";
 $FileDeleted = "O ficheiro seleccionado foi retirado do seu buzón.";
 $MailingAsUsername = "Envío";
 $MailingInSelect = "---envío---";
+$$MailingExamine = "Examinar correo";
 $MailingNotYetSent = "Os contidos do envío aínda non se enviaron...";
 $MailingSend = "Enviar o contido dos ficheiros";
 $MailingConfirmSend = "¿Enviar o contido dos ficheiros a destinatarios individuais?";

@@ -114,6 +114,6 @@ $NewUserEmailAlertEnable = "Enable the notice by e-mail  to trainer of auto subs
 $NewUserEmailAlertToTeacharAndTutor = "Enable the notice by e-mail  to trainer and tutors of auto subscription of a new user";
 $NewUserEmailAlertDisable = "Disable the email alert for the suscription of  new user in the training";
 $AllowUserViewUserList = "Allow user view user list";
-$AllowUserViewUserListActivate = "Activate allow user view user list";
-$AllowUserViewUserListDeactivate = "Desactivate allow user view user list";
+$AllowUserViewUserListActivate = "Enable user list";
+$AllowUserViewUserListDeactivate = "Disable user list";
 ?>

@@ -24,4 +24,9 @@ $Interaction = "互动";
 $Authoring = "写作";
 $Administration = "管理";
 $IntroductionTextUpdated = "简介更新完成";
+$IntroductionTextDeleted = "简介已删除";
+$SessionIdentifier = "会话识别符";
+$SessionName = "会话名称";
+$SessionCategory = "会话分类";
+$SessionData = "会话数据";
 ?>

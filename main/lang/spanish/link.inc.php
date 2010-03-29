@@ -49,4 +49,8 @@ $langSaveCategory = "Guardar la categoría";
 $BackToLinksOverview = "Regresar a la lista de enlaces";
 $AddTargetOfLinkOnHomepage = "Seleccione el modo (target) en que se mostrará el enlace en la página principal del curso";
 $Url = "Url";
+$LinkOpenSelf = "Misma ventana";
+$LinkOpenBlank = "Otra ventana";
+$LinkOpenParent = "Ventana padre";
+$LinkOpenTop = "Parte superior";
 ?>

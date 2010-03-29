@@ -855,4 +855,8 @@ $ThereIsNoStillAthematicSection = "There is not still a thematic section";
 $NewThematicSection = "New thematic section";
 $DeleteAllThematics = "Delete all thematics";
 $EditTematicAdvance = "Edit tematic advance";
+$NewThematicAdvance = "New thematic advance";
+$ResultsHiddenByExerciseSetting = "Results hidden by the exercise setting";
+$ThematicSectionHasBeenCreatedSuccessfull = "Thematic section has been created success full";
+$NowYouShouldAddThematicPlanXAndThematicAdvanceX = "Now you should add thematic plan %s and thematic advance %s";
 ?>

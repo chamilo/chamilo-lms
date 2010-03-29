@@ -248,4 +248,5 @@ $UploadOnlyMp3Files = "Por favor, envíe sólo archivos mp3";
 $ModifyHotPotatoes = "Modificar hotpotatoes";
 $SaveHotpotatoes = "Guardar hotpotatoes";
 $ReturnToLPList = "Volver a lista de lecciones";
+$LpPrerequisiteDescription = "El progreso del prerequisito debe ser completada para que esta lección sea visible al estudiante";
 ?>

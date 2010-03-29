@@ -16,4 +16,5 @@ $langBackAndForget = "返回和取消";
 $CourseDescriptionUpdated = "课程描述更新完成";
 $CourseDescriptionDeleted = "课程描述删除完成";
 $CourseDescriptionIntro = "To create a course description, click on a heading and fill the correct form field.<br><br> Click then OK and fill another heading.";
+$langSaveDescription = "保存描述";
 ?>

@@ -3000,7 +3000,7 @@ class UserManager
 	 * @param string The course id
 	 * @return int The user id
 	 */
-	 function get_user_id_of_course_admin_or_session_admin ($course_id) {
+	 public function get_user_id_of_course_admin_or_session_admin ($course_id) {
 	 	$session=api_get_session_id();
 		$table_user = Database::get_main_table(TABLE_MAIN_USER);
 		$table_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
@@ -3036,7 +3036,7 @@ class UserManager
    * @param int The user id
    * @return boolean 
    */
-  function is_user_certified($cat_id,$user_id) {
+  public function is_user_certified($cat_id,$user_id) {
   	$table_certificate = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
   	$sql='SELECT path_certificate FROM '.$table_certificate.' WHERE cat_id="'.Database::escape_string($cat_id).'" AND user_id="'.Database::escape_string($user_id).'" ';
   	$rs=Database::query($sql,__FILE__,__LINE__);
@@ -3054,7 +3054,7 @@ class UserManager
    * @param int The user id
    * @return array  if there is not information return false 
    */
-  function get_info_gradebook_certificate($course_code,$user_id) {
+  public function get_info_gradebook_certificate($course_code,$user_id) {
   	$tbl_grade_certificate 	= Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
   	$tbl_grade_category 	= Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
   	$sql='SELECT * FROM '.$tbl_grade_certificate.' WHERE cat_id= (SELECT id FROM '.$tbl_grade_category.' WHERE course_code = "'.Database::escape_string($course_code).'" ) AND user_id="'.Database::escape_string($user_id).'" ';
@@ -3071,7 +3071,7 @@ class UserManager
   * @param int The user id
   * @return array  containing path_certificate and cat_id
   */
- function get_user_path_certificate($user_id) {
+ public function get_user_path_certificate($user_id) {
  	$my_certificate = array();
 	$table_certificate 			= Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
 	$table_gradebook_category 	= Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
@@ -3095,5 +3095,34 @@ class UserManager
  	return $my_certificate;
  }
 
+
+ /**
+  * This function check if the user is a coach inside session course
+  * @param  int     User id
+  * @param  string  Course code
+  * @param  int     Session id
+  * @return bool    True if the user is a coach
+  *
+  */
+ public function is_session_course_coach($user_id, $course_code, $session_id) {
+
+     $tbl_session_course_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+
+     // protect data
+     $user_id = intval($user_id);
+     $course_code = Database::escape_string($course_code);
+     $session_id = intval($session_id);
+     $result = false;
+
+     $sql = "SELECT id_session FROM $tbl_session_course_rel_user WHERE id_session=$session_id AND course_code='$course_code' AND id_user = $user_id AND status=2 ";
+     $res = Database::query($sql);
+
+     if (Database::num_rows($res) > 0) {
+         $result = true;
+     }
+
+     return $result;
+
+ }
 
 }

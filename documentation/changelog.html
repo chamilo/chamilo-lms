@@ -59,6 +59,8 @@
   <li>Fixed course copy table lp_item audio not copied. Reported by Henri Hedman (Bug #575)</li>
   <li>Fixed Added an option to cancel prerequisites in a course (Learning path). Fixed by aboivin in <a href="http://www.chamilo.org/node/146" target="_blank">http://www.chamilo.org/node/146</a> </li>
   <li>Empty extra user fields are now deleted from the database</li>
+  <li>Quiz tool: erasing "rn" characters in fill in blanks and free answer bug fixed (Bug #829) Reported by David Auzeine</li>
+  <li>Quiz tool: answer field updated from "id" to "id_auto" in the chamilo_stats.track_e_attempt table when migrating from 1.8.6.2 to 1.8.7  </li>
   <li>Quiz tool: Answer list fixed when using "matching" question type (BT#801). Reported by Noa Orizales</li>
   <li>Quiz tool + LP : Fixed bug when adding a exercise twice in the same LP with multiple attempts or not.</li>
   <li>Quiz tool + LP + Multiple attempts : Pre requisites will work the first time a student pass the LP.
@@ -68,7 +70,7 @@
   <li>Core API: Support has been implemented for json_encode() function for PHP version < 5.2. The correspondent bug-report "Hide and show not working" and testing have been done by Hubert Borderiou <a href="http://support.chamilo.org/issues/761" target="_blank">http://support.chamilo.org/issues/761</a></li>
   <li>Fixed target problems in links tool link edition</li>
   <li>Fixed minor bug in online mail editor in order to show the sender's name and e-mail</li>
-  <li>Fixing a bug that prevented importing SCORM resource from course archives (Bug #872)</li>
+  <li>Fixing a bug that prevented importing SCORM resource from course archives (Bug #872)</li>  
 </ul>
 <br />
 <h3>CSS changes</h3>
@@ -85,7 +87,6 @@
 <ul>
   <li>Online editor: The plugins "Flash" (obsolete) and "placeholder" (non-relevant to the finished product) have been removed. (Feature #347)</li>
 </ul>
-
 <br />
 
 <h1>Chamilo 1.8.6.2  <span style="font-style: italic;">Salto</span> - January 2010</h1>

@@ -11,7 +11,7 @@ class DisplayGradebook
 	*/
 	function display_header_result($evalobj, $selectcat, $shownavbar) {
 		$status=CourseManager::get_user_in_course_status(api_get_user_id(), api_get_course_id());
-		if ($shownavbar == '1' && $status==1) {
+		if (api_is_allowed_to_edit(null, true)) {
 			$header = '<div class="actions">';
 			$header .= '<a href="'.Security::remove_XSS($_SESSION['gradebook_dest']).'?selectcat=' . $selectcat . '">'. Display::return_icon(('back.png'),get_lang('FolderView')) . get_lang('FolderView') . '</a>';
 			if ($evalobj->get_course_code() == null) {
@@ -268,7 +268,7 @@ class DisplayGradebook
 		$user_id=api_get_user_id();
 		$course_code=$my_category['course_code'];
 		$status_user=api_get_status_of_user_in_course ($user_id,$course_code);
-		if (($status_user==1 && $is_course_admin && !isset ($_GET['search'])) || api_is_platform_admin() || api_is_course_coach()) {
+		if (api_is_allowed_to_edit(null, true)) {
 			if ($selectcat == '0') {
                 if ($show_add_qualification === true) {
 				   // $header .= '<a href="gradebook_add_cat.php?'.api_get_cidreq().'&selectcat=0"><img src="../img/folder_new.gif" alt="' . get_lang('NewCategory') . '" /> ' . get_lang('NewCategory') . '</a></td>';
@@ -306,7 +306,7 @@ class DisplayGradebook
                 		$header .= '<td style="vertical-align: top;"><a href="gradebook_scoring_system.php?'.$my_api_cidreq.'&selectcat=' . $catobj->get_id() .'">'.Display::return_icon('acces_tool.gif', get_lang('ScoreEdit')).' ' . get_lang('ScoreEdit') . '</a>';
 	            
 					}
-					if (api_is_course_admin() || api_is_platform_admin() || api_is_course_coach()) {
+					if (api_is_allowed_to_edit(null, true)) {
 						$header .= '<td style="vertical-align: top;"><a href="gradebook_flatview.php?'.$my_api_cidreq.'&selectcat=' . $catobj->get_id() . '">'.Display::return_icon('stats_access.gif', get_lang('FlatView')).' ' . get_lang('FlatView') . '</a>';		
 						$header .= '<td style="vertical-align: top;"><a href="../document/document.php?curdirpath=/certificates&'.$my_api_cidreq.'&origin=gradebook&selectcat=' . $catobj->get_id() . '">'.Display::return_icon('acces_tool.gif', get_lang('AttachCertificate')).' ' . get_lang('AttachCertificate') . '</a>';
 						$header .= '<td style="vertical-align: top;"><a href="gradebook_display_certificate.php?'.$my_api_cidreq.'&amp;cat_id='.(int)$_GET['selectcat'].'">'.Display::return_icon('acces_tool.gif', get_lang('Certificate')).' ' . get_lang('GradebookSeeListOfStudentsCertificates') . '</a>';
@@ -324,7 +324,7 @@ class DisplayGradebook
 	function display_reduce_header_gradebook($catobj,$is_course_admin, $is_platform_admin, $simple_search_form, $show_add_qualification = true, $show_add_link = true) {
 		//student
 		if (!$is_course_admin) {
-			/*$user= get_user_info_from_id(api_get_user_id());
+			$user= get_user_info_from_id(api_get_user_id());
 			$catcourse= Category :: load($catobj->get_id());
 			$scoredisplay = ScoreDisplay :: instance();
 			$scorecourse = $catcourse[0]->calc_score(api_get_user_id());
@@ -337,7 +337,7 @@ class DisplayGradebook
 				$scoreinfo.= '<br />'.get_lang('TotalForThisCategory') . ' : <b>' . $scorecourse_display . '</b>';
 			$scoreinfo.= '<br />'.get_lang('Total') . ' : <b>' . $scoretotal_display . '</b>';
 			Display :: display_normal_message($scoreinfo,false);
-			*/
+			
 		}
 			// show navigation tree and buttons?
 			$header = '<div class="actions">';

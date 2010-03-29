@@ -862,7 +862,7 @@ if ($category != '0') {
 	//DisplayGradebook :: display_header_gradebook($cats[0], 0, 0, $is_course_admin, $is_platform_admin, $simple_search_form, false, false);
 }
 
-if (api_is_platform_admin() || api_is_allowed_to_create_course()  || $status==1) {
+if (api_is_allowed_to_edit(null, true)) {
 /*
 -----------------------------------------------------------
 	Introduction section (teacher edit)

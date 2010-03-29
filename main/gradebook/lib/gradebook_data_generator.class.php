@@ -91,7 +91,7 @@ class GradebookDataGenerator
 			$row[] = $item->get_name();
 			$row[] = $item->get_description();
 			$row[] = $item->get_weight();
-			if (($status==1 || is_null($status))  && api_is_allowed_to_create_course()) {
+			if (api_is_allowed_to_edit(null, true)) {
 				$row[] = $this->build_date_column ($item);
 			}
 			if(count($this->evals_links)>0)

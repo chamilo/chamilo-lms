@@ -871,7 +871,8 @@ class CourseRestorer
 				$this->course->resources[RESOURCE_QUIZ][$id]->destination_id = $new_id;
 				foreach ($quiz->question_ids as $index => $question_id) {
 					$qid = $this->restore_quiz_question($question_id);
-					$sql = "INSERT IGNORE INTO ".$table_rel." SET question_id = ".$qid.", exercice_id = ".$new_id.", question_order = ".$quiz->question_orders[$index]."";
+					$question_order = $quiz->question_orders[$index] ? $quiz->question_orders[$index] : 1;
+					$sql = "INSERT IGNORE INTO ".$table_rel." SET question_id = ".$qid.", exercice_id = ".$new_id.", question_order = ".$question_order;
 					Database::query($sql);
 				}
 			}

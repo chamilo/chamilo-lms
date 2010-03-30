@@ -230,7 +230,7 @@ if(!empty($msg)) {
 <?php if($add_type == 'multiple') { ?>
 <tr><td width="45%" align="center">
  <?php echo get_lang('FirstLetterCourse');?> :
-     <select name="firstLetterCourse" onchange = "xajax_search_course(this.value,'multiple')">
+     <select name="firstLetterCourse" onchange = "xajax_search_courses(this.value,'multiple')">
       <option value="%">--</option>
       <?php
       echo Display :: get_alphabet_options($_POST['firstLetterCourse']);

@@ -1135,8 +1135,8 @@ function get_parent_directories($my_cur_dir_path) {
 	$list_id = array();
 	if (!empty($my_cur_dir_path)) {
 		$list_parents = explode('/', $my_cur_dir_path);
-		$dir_acum = '';
-		global $work_table;
+		$dir_acum = '';		
+		$work_table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
 		for ($i = 0; $i < count($list_parents) - 1; $i++) {
 			$item = Database::escape_string($list_parents[$i]);
 			$where_sentence = "url  LIKE BINARY '" . $dir_acum . "/" . $item."'";

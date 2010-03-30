@@ -129,3 +129,4 @@ INSERT INTO course_setting (variable,value,category) VALUES ('display_info_advan
 INSERT INTO tool(name, link, image, visibility, admin, address, added_tool, target, category) VALUES ('course_progress','course_progress/index.php','course_progress.gif',0,'0','squaregrey.gif',0,'_self','authoring');
 ALTER TABLE lp ADD prerequisite int unsigned NOT NULL DEFAULT 0;
 ALTER TABLE student_publication MODIFY COLUMN description TEXT DEFAULT NULL;
+ALTER TABLE student_publication ADD COLUMN user_id INTEGER  NOT NULL AFTER session_id;

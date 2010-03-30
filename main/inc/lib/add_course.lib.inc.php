@@ -850,6 +850,7 @@ function update_Db_course($courseDbName, $language = null)
 		qualificator_id INT UNSIGNED NOT NULL DEFAULT 0,
 		weight float(6,2) UNSIGNED NOT NULL default 0,
 		session_id INT UNSIGNED NOT NULL default 0,
+		user_id INTEGER  NOT NULL,
 		PRIMARY KEY (id)
 		)" . $charset_clause;
 	Database::query($sql);

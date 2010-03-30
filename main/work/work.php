@@ -558,7 +558,8 @@ if (!empty($_REQUEST['new_dir'])) {
 										   qualificator_id	= '',
 										   date_of_qualification	= '0000-00-00 00:00:00',
 										   weight   = '".Database::escape_string($_POST['weight'])."',
-										   session_id   = ".intval($id_session);
+										   session_id   = '".intval($id_session)."',
+										   user_id = '".$user_id."'";
 
 			Database::query($sql_add_publication);
 			

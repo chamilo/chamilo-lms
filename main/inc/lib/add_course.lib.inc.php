@@ -2538,7 +2538,7 @@ function register_course($courseSysCode, $courseScreenCode, $courseRepository, $
 					user_id = '".Database::escape_string($uidCreator) . "',
 					status = '1',
 					role = '".lang2db(get_lang('Professor')) . "',
-					tutor_id='1',
+					tutor_id='0',
 					sort='". ($i_course_sort) . "',
 					user_course_cat='0'";
 		Database::query($sql);

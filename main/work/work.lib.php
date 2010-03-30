@@ -888,6 +888,7 @@ function build_work_directory_selector($folders, $curdirpath, $group_dir = '') {
  */
 function build_work_move_to_selector($folders, $curdirpath, $move_file, $group_dir = '') {
 	//gets file title
+
 	$move_file	= intval($move_file);
 	$tbl_work	= Database::get_course_table(TABLE_STUDENT_PUBLICATION);
 	$sql 		= "SELECT title FROM $tbl_work WHERE id ='".$move_file."'";
@@ -908,29 +909,29 @@ function build_work_move_to_selector($folders, $curdirpath, $move_file, $group_d
 	//group documents cannot be uploaded in the root
 	if ($group_dir == '') {
 		if ($curdirpath != '/') {
-			$form .= '<option value="/">/ ('.get_lang('Root').')</option>';
+			$form .= '<option value="0">/ ('.get_lang('Root').')</option>';
 		}
 		if (is_array($folders)) {
-			foreach ($folders as $folder) {
+			foreach ($folders as $fid => $folder) {
 				//you cannot move a file to:
 				//1. current directory
 				//2. inside the folder you want to move
 				//3. inside a subfolder of the folder you want to move
 				if (($curdirpath != $folder) && ($folder != $move_file) && (substr($folder, 0, strlen($move_file) + 1) != $move_file.'/')) {
-					$form .= '<option value="'.$folder.'">'.$folder.'</option>'."\n";
+					$form .= '<option value="'.$fid.'">'.$folder.'</option>'."\n";
 				}
 			}
 		}
 	} else {
 		if ($curdirpath != '/') {
-			$form .= '<option value="/">/ ('.get_lang('Root').')</option>';
+			$form .= '<option value="0">/ ('.get_lang('Root').')</option>';
 		}
-		foreach ($folders as $folder) {
+		foreach ($folders as $fid => $folder) {
 			if (($curdirpath != $folder) && ($folder != $move_file) && (substr($folder, 0, strlen($move_file) + 1) != $move_file.'/')) {
 				//cannot copy dir into his own subdir
 				$display_folder = substr($folder, strlen($group_dir));
 				$display_folder = ($display_folder == '') ? '/ ('.get_lang('Root').')' : $display_folder;
-				$form .= '<option value="'.$folder.'">'.$display_folder.'</option>'."\n";
+				$form .= '<option value="'.$fid.'">'.$display_folder.'</option>'."\n";
 			}
 		}
 	}
@@ -1054,7 +1055,7 @@ function get_work_path($id) {
  * @param	string	Destination directory where the work has been moved (must end with a '/')
  * @return	-1 on error, sql query result on success
  */
-function update_work_url($id, $new_path) {
+function update_work_url($id, $new_path, $parent_id) {
 	if (empty($id)) return -1;
 	$table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
 	$sql = "SELECT * FROM $table WHERE id=$id";
@@ -1064,8 +1065,8 @@ function update_work_url($id, $new_path) {
 	} else {
 		$row = Database::fetch_array($res);
 		$filename = basename($row['url']);
-		$new_url = $new_path.$filename;
-		$sql2 = "UPDATE $table SET url = '$new_url' WHERE id=$id";
+		$new_url = $new_path .$filename;
+		$sql2 = "UPDATE $table SET url = '$new_url', parent_id = '$parent_id' WHERE id=$id";
 		$res2 = Database::query($sql2);
 		return $res2;
 	}
@@ -1429,9 +1430,10 @@ function get_list_users_without_publication($task_id) {
 	$session_id = api_get_session_id();
 
 	if (!empty($session_id)){
-		$sql = "SELECT C.id_user as id FROM $work_table AS S, $session_course_rel_user AS C, $iprop_table AS I WHERE C.id_user=I.insert_user_id and S.id=I.ref and S.parent_id='$task_id' and course_code='".api_get_course_id()."' and S.session_id='".$session_id."'";
+		$sql = "SELECT user_id as id FROM $work_table WHERE parent_id='$task_id' and session_id='".$session_id."'";
+		
 	} else {
-		$sql = "SELECT C.user_id as id FROM $work_table AS S, $table_course_user AS C, $iprop_table AS I WHERE C.user_id=I.insert_user_id and S.id=I.ref and C.status=5 and S.parent_id='$task_id' and course_code='".api_get_course_id()."'";
+		$sql = "SELECT user_id as id FROM $work_table WHERE parent_id='$task_id'";
 	}
 	$result = Database::query($sql);
 	$users_with_tasks = array();
@@ -1444,6 +1446,7 @@ function get_list_users_without_publication($task_id) {
 	} else {
 		$sql_users = "SELECT cu.user_id, u.lastname, u.firstname, u.email FROM $table_course_user AS cu, $table_user AS u WHERE cu.status!=1 and cu.course_code='".api_get_course_id()."' AND u.user_id=cu.user_id";
 	}
+	
 	$result_users = Database::query($sql_users);
 	$users_without_tasks = array();
 	while ($row_users = Database::fetch_row($result_users)) {

@@ -561,7 +561,7 @@ if (!empty($_REQUEST['new_dir'])) {
 										   session_id   = ".intval($id_session);
 
 			Database::query($sql_add_publication);
-
+			
 			// add the directory
 			$id = Database::insert_id();
 			//Folder created
@@ -674,10 +674,13 @@ if (!empty($_REQUEST['delete2'])) {
 
 if (!empty ($_REQUEST['move'])) {
 	$folders = array();
-	$sql = "SELECT url FROM $work_table  WHERE url LIKE '/%' AND post_group_id = '".(empty($_SESSION['toolgroup'])?0:intval($_SESSION['toolgroup']))."'";
+	$session_id = api_get_session_id();
+	$session_id == 0 ? $withsession = " AND session_id = 0 " : $withsession = " AND session_id='".$session_id."'";	
+	
+	$sql = "SELECT id, url FROM $work_table  WHERE url LIKE '/%' AND post_group_id = '".(empty($_SESSION['toolgroup'])?0:intval($_SESSION['toolgroup']))."'".$withsession;
 	$res = Database::query($sql);
 	while($folder = Database::fetch_array($res)) {
-		$folders[] = substr($folder['url'], 1, strlen($folder['url']) - 1);
+		$folders[$folder['id']] = substr($folder['url'], 1, strlen($folder['url']) - 1);
 	}
 	echo build_work_move_to_selector($folders, $cur_dir_path, $_REQUEST['move']);
 }
@@ -687,21 +690,28 @@ if (!empty ($_REQUEST['move'])) {
 if (isset ($_POST['move_to']) && isset ($_POST['move_file'])) {
 	require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
 	$move_to = $_POST['move_to'];
-	if ($move_to == '/' or empty ($move_to)) {
-		$move_to = '';
-	} elseif (substr($move_to, -1, 1) != '/') {
-		$move_to = $move_to . '/';
-	}
 
+	$move_to_path = get_work_path($move_to);
+	
+//	var_dump($move_to_path);
+	
+	if ($move_to_path==-1) {
+		$move_to_path = '/';
+	} elseif (substr($move_to_path, -1, 1) != '/') {
+		$move_to_path = $move_to_path .'/';
+	}
 	//security fix: make sure they can't move files that are not in the document table
-	if ($path = get_work_path($_POST['move_file'])) {
+	$move_file_id = intval($_POST['move_file']);
+	if ($path = get_work_path($move_file_id)) {
 		//Display::display_normal_message('We want to move '.$_POST['move_file'].' to '.$_POST['move_to']);
-		if (move($course_dir . '/' . $path, $base_work_dir . '/' . $move_to)) {
+				//var_dump($base_work_dir . $move_to_path);
+		if (move($course_dir . '/' . $path, $base_work_dir . $move_to_path)) {
 			//update db
-			update_work_url($_POST['move_file'], 'work/' . $move_to);
+			
+			update_work_url($move_file_id, 'work' . $move_to_path, $move_to);
 			//set the current path
-			$cur_dir_path = $move_to;
-			$cur_dir_path_url = urlencode($move_to);
+			$cur_dir_path = $move_to_path;
+			$cur_dir_path_url = urlencode($move_to_path);
 
 			// update all the parents in the table item propery
 			$list_id = get_parent_directories($cur_dir_path);
@@ -875,6 +885,8 @@ if ($ctok == $_POST['sec_token']) { //check the token inserted into the form
 				$current_date = date('Y-m-d H:i:s');
 				$parent_id = '';
 				$active = '';
+				$user_id = api_get_user_id();
+				
 				$sql = Database::query('SELECT id FROM '.Database::get_course_table(TABLE_STUDENT_PUBLICATION).' WHERE url = '."'/".Database::escape_string($_GET['curdirpath'])."' AND filetype='folder' LIMIT 1");
 				if (Database::num_rows($sql) > 0) {
 					$dir_row = Database::fetch_array($sql);
@@ -890,7 +902,8 @@ if ($ctok == $_POST['sec_token']) { //check the token inserted into the form
 											   post_group_id = '" . $post_group_id . "',
 											   sent_date	=  '".$current_date ."',
 											   parent_id 	=  '".$parent_id ."' ,
-	                                           session_id = ".intval($id_session);
+	                                           session_id = '".intval($id_session)."' ,
+	                                           user_id = '".$user_id."'";
 
 				Database::query($sql_add_publication);
 
@@ -935,7 +948,8 @@ if ($ctok == $_POST['sec_token']) { //check the token inserted into the form
 					            author      	= '" . Database::escape_string($authors) . "',
 							    post_group_id = '".$post_group_id."',
 					            sent_date    	= '".$current_date."',
-					            session_id = ".intval($id_session);
+					            session_id = '".intval($id_session)."',
+					            user_id = '".$user_id."'";
 
 			Database::query($sql);
 

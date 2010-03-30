@@ -800,6 +800,7 @@ VALUES
 ('homepage_view','activity','HomepageViewActivity'),
 ('homepage_view','2column','HomepageView2column'),
 ('homepage_view','3column','HomepageView3column'),
+('homepage_view','vertical_activity','HomepageViewVerticalActivity'),
 ('show_toolshortcuts','true','Yes'),
 ('show_toolshortcuts','false','No'),
 ('allow_group_categories','true','Yes'),

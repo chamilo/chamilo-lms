@@ -574,17 +574,6 @@ class CourseHome {
 		return $all_tools_list;
 	}
 	
-	public static function order_tool_list($a, $b)	{
-	/*	echo $name_a = ($a['name']);
-		echo '--';
-		echo $name_b = ($b['name']);
-		echo '<br>';
-		
-	    if ($name_a == $name_b) {
-	        return 0;
-	    }
-	    return ($name_a < $name_b) ? -1 : 1;*/
-	}
 	/**
 	 * Displays the tools of a certain category.
 	 * @param array List of tools as returned by get_tools_category()
@@ -592,22 +581,23 @@ class CourseHome {
 	 */
 
 	public static function show_tools_category($all_tools_list, $theme = 'activity') {
-		//@todo order list
-		//var_dump($all_tools_list);
-		/* usort($all_tools_list, array( 'CourseHome' , 'order_tool_list' ));
 		
-		$order_tool_list = array();
-		foreach($all_tools_list as $new_tool) {
-			$order_tool_list []= $new_tool['name'];
+		if ($theme == 'vertical_activity') {
+			//ordering by get_lang name
+			$order_tool_list = array();
+			foreach($all_tools_list as $key=>$new_tool) {
+				$tool_name = self::translate_tool_name($new_tool);
+				$order_tool_list [$key]= $tool_name;
+			}		
+			natsort($order_tool_list);		
+			$my_temp_tool_array = array();
+			foreach($order_tool_list as $key=>$new_tool) {
+				$my_temp_tool_array[] = $all_tools_list[$key];
+			}
+			$all_tools_list = $my_temp_tool_array;
 		}
-		natsort($order_tool_list);		
-		foreach($order_tool_list as $key=>$new_tool) {
-			$all_tools_list[]			
-		}
-		var_dump($all_tools_list);		
-		var_dump($order_tool_list);
-		//var_dump($all_tools_list);
-		*/
+		
+		
 		global $_user;
 		$web_code_path = api_get_path(WEB_CODE_PATH);
 		$course_tool_table = Database::get_course_table(TABLE_TOOL_LIST);
@@ -658,7 +648,6 @@ class CourseHome {
 						$link['cmd'] = 'hide=yes';
 						$lnk[] = $link;
 					}
-
 					if ($tool['visibility'] == '0' && $tool['admin'] != '1') {
 						$link['name'] = Display::return_icon('invisible.gif', get_lang('Activate'), array('id' => 'linktool_'.$tool['id']));
 						$link['cmd'] = 'restore=yes';

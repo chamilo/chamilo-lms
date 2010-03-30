@@ -210,10 +210,6 @@ Display::display_introduction_section(TOOL_COURSE_HOMEPAGE, array(
 	the setting homepage_view is adjustable through
 	the platform administration section */
 
-//@todo add vertical_activity to the api_get_setting('homepage_view') variable
-//require 'vertical_activity.php'; 
-
-
 if (api_get_setting('homepage_view') == 'activity') {
 	require 'activity.php';
 } elseif (api_get_setting('homepage_view') == '2column') {

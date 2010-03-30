@@ -410,6 +410,7 @@ echo "</table>";
 function store_new_agenda_item()
 {
 	global $_user /*, $_course*/;
+	
 	$TABLEAGENDA = Database::get_main_table(TABLE_MAIN_SYSTEM_CALENDAR);
     //$t_agenda_repeat = Database::get_course_Table(TABLE_AGENDA_REPEAT);
 
@@ -581,12 +582,12 @@ function store_edited_agenda_item()
 function save_edit_agenda_item($id,$title,$content,$start_date,$end_date)
 {
 	$TABLEAGENDA = Database::get_main_table(TABLE_MAIN_SYSTEM_CALENDAR);
-		$id=Database::escape_string($id);
-		$title=Database::escape_string($title);
-		$content=Database::escape_string($content);
-		$start_date=Database::escape_string($start_date);
-		$end_date=Database::escape_string($end_date);
-
+	
+	$id=Database::escape_string($id);
+	$title=Database::escape_string($title);
+	$content=Database::escape_string($content);
+	$start_date=Database::escape_string($start_date);
+	$end_date=Database::escape_string($end_date);
 
 	// store the modifications in the table calendar_event
 	$sql = "UPDATE ".$TABLEAGENDA."
@@ -656,11 +657,12 @@ function showhide_agenda_item($id)
 */
 function display_agenda_items()
 {
-	$TABLEAGENDA = Database::get_main_table(TABLE_MAIN_SYSTEM_CALENDAR);
 	global $select_month, $select_year;
 	global $DaysShort, $DaysLong, $MonthsLong;
 	global $is_courseAdmin;
 	global $dateFormatLong, $timeNoSecFormat,$charset, $_user, $_course;
+	
+	$TABLEAGENDA = Database::get_main_table(TABLE_MAIN_SYSTEM_CALENDAR);
 
 	// getting the group memberships
 	//$group_memberships=GroupManager::get_group_ids($_course['dbName'],$_user['user_id']);
@@ -953,13 +955,15 @@ function display_agenda_items()
 */
 function display_one_agenda_item($agenda_id)
 {
-	$TABLEAGENDA = Database::get_main_table(TABLE_MAIN_SYSTEM_CALENDAR);
-	global $TABLE_ITEM_PROPERTY;
 	global $select_month, $select_year;
 	global $DaysShort, $DaysLong, $MonthsLong;
 	global $is_courseAdmin;
 	global $dateFormatLong, $timeNoSecFormat, $charset;
 	global $_user;
+	
+	$TABLEAGENDA = Database::get_main_table(TABLE_MAIN_SYSTEM_CALENDAR);
+	$TABLE_ITEM_PROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);
+	
 	$agenda_id=Database::escape_string($agenda_id);
 	//echo "displaying agenda items";
 
@@ -1214,8 +1218,8 @@ function show_user_group_filter_form()
 
 function show_add_form($id = '')
 {
-
 	global $MonthsLong;
+	
 	$htmlHeadXtra[] = to_javascript();
 	// the default values for the forms
 	if ($_GET['originalresource'] !== 'no')
@@ -1537,7 +1541,7 @@ function show_add_form($id = '')
 		<td colspan="4">
 
 			<?php
-			require_once(api_get_path(LIBRARY_PATH) . "/fckeditor/fckeditor.php");
+			require_once api_get_path(LIBRARY_PATH) . "/fckeditor/fckeditor.php";
 
 			$oFCKeditor = new FCKeditor('content') ;
 
@@ -2038,10 +2042,11 @@ function get_day_agendaitems($courses_dbs, $month, $year, $day)
  */
 function get_week_agendaitems($courses_dbs, $month, $year, $week = '')
 {
-	$TABLEAGENDA = Database :: get_main_table(TABLE_MAIN_SYSTEM_CALENDAR);
 	global $_user;
 	global $_configuration;
 	global $setting_agenda_link;
+	
+	$TABLEAGENDA = Database :: get_main_table(TABLE_MAIN_SYSTEM_CALENDAR);
 
 	$items = array ();
 	// The default value of the week
@@ -3063,7 +3068,7 @@ function agenda_add_repeat_item($course_info,$orig_id,$type,$end,$orig_dest)
 
 function agenda_import_ical($course_info,$file)
 {
-	require_once(api_get_path(LIBRARY_PATH).'fileUpload.lib.php');
+	require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
     $charset = api_get_setting('platform_charset');
     $filepath = api_get_path(SYS_ARCHIVE_PATH).$file['name'];
     if(!@move_uploaded_file($file['tmp_name'],$filepath))
@@ -3071,7 +3076,7 @@ function agenda_import_ical($course_info,$file)
     	error_log('Problem moving uploaded file: '.$file['error'].' in '.__FILE__.' line '.__LINE__);
     	return false;
     }
-    require_once (api_get_path(LIBRARY_PATH).'icalcreator/iCalcreator.class.php');
+    require_once api_get_path(LIBRARY_PATH).'icalcreator/iCalcreator.class.php';
     $ical = new vcalendar();
     $ical->setConfig( 'directory', dirname($filepath) );
     $ical->setConfig( 'filename', basename($filepath) );

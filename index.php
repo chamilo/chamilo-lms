@@ -699,11 +699,11 @@ function display_anonymous_course_list() {
 			$courses_list_string .= "<hr size=\"1\" noshade=\"noshade\">\n";
 		}
 		$courses_list_string .= '<h4 style="margin-top: 0px;">'.get_lang('CourseList')."</h4>\n<ul>\n";
-
+		
 		if (api_get_user_id()) {
 			$courses_of_user = get_courses_of_user(api_get_user_id());
 		}
-
+		
 		foreach ($course_list as $course) {
 			// $setting_show_also_closed_courses
 
@@ -757,7 +757,7 @@ function display_anonymous_course_list() {
 					$courses_list_string .= '</a><br />';
 				}
 				if (api_get_setting('display_coursecode_in_courselist') == 'true') {
-					$courses_list_string .= $course['visual_code'];
+					$courses_list_string .= ' '.$course['visual_code'];
 				}
 				if (api_get_setting('display_coursecode_in_courselist') == 'true' && api_get_setting('display_teacher_in_courselist') == 'true') {
 					$courses_list_string .= ' - ';
@@ -809,7 +809,6 @@ function display_anonymous_course_list() {
 function get_courses_of_user($user_id) {
 	$table_course		= Database::get_main_table(TABLE_MAIN_COURSE);
 	$table_course_user	= Database::get_main_table(TABLE_MAIN_COURSE_USER);
-
 	// Secondly we select the courses that are in a category (user_course_cat <> 0) and sort these according to the sort of the category
 	$user_id = intval($user_id);
 	$sql_select_courses = "SELECT course.code k, course.visual_code  vc, course.subscribe subscr, course.unsubscribe unsubscr,
@@ -822,6 +821,7 @@ function get_courses_of_user($user_id) {
 								AND course_rel_user.relation_type<>".COURSE_RELATION_TYPE_RRHH."
 								ORDER BY course_rel_user.sort ASC";
 	$result = Database::query($sql_select_courses);
+	$courses = array();
 	while ($row = Database::fetch_array($result)) {
 		// We only need the database name of the course
 		$courses[$row['k']] = array('db' => $row['db'], 'code' => $row['k'], 'visual_code' => $row['vc'], 'title' => $row['i'], 'directory' => $row['dir'], 'status' => $row['status'], 'tutor' => $row['t'], 'subscribe' => $row['subscr'], 'unsubscribe' => $row['unsubscr'], 'sort' => $row['sort'], 'user_course_category' => $row['user_course_cat']);

@@ -246,4 +246,5 @@ $SaveAudioAndOrganization = "Запис на аудиофайловете и т�
 $UploadOnlyMp3Files = "Моля, качвайте само mp3 файлове.";
 $ModifyHotPotatoes = "Промяна на HotPotatoes";
 $SaveHotpotatoes = "Запис на HotPotatoes";
+$ReturnToLPList = "Изход";
 ?>

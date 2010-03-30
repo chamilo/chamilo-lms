@@ -366,4 +366,5 @@ $CleanStudentResults = "Borrar todos los resultados de los estudiantes en este e
 $ImportQtiQuiz = "Importar ejercicios de Qti2";
 $ReUseACopyInCurrentTest = "Reutilizar una copia de esta pregunta en el ejercicio actual";
 $Copy = "Copia";
+$DefaultContent = "Generar contenido por defecto";
 ?>

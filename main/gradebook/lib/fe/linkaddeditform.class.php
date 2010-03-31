@@ -80,9 +80,9 @@ class LinkAddEditForm extends FormValidator
 		// ELEMENT: max
 		if ($link->needs_max()) {
 			if ($form_type == self :: TYPE_EDIT && $link->has_results()) {
-				$this->add_textfield('max', get_lang('Max'), false, array ('size' => '4','maxlength' => '4', 'disabled' => 'disabled'));
+				$this->add_textfield('max', get_lang('QualificationNumeric'), false, array ('size' => '4','maxlength' => '4', 'disabled' => 'disabled'));
 			} else {
-				$this->add_textfield('max', get_lang('Max'), true, array ('size' => '4','maxlength' => '4'));
+				$this->add_textfield('max', get_lang('QualificationNumeric'), true, array ('size' => '4','maxlength' => '4'));
 				$this->addRule('max', get_lang('OnlyNumbers'), 'numeric');
 				$this->addRule(array ('max', 'zero'), get_lang('NegativeValue'), 'compare', '>=');
 			}

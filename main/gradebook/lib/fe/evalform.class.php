@@ -312,12 +312,12 @@ class EvalForm extends FormValidator
 		));
 		if ($edit) {
 			if (!$this->evaluation_object->has_results()) {
-				$this->add_textfield('max', get_lang('Max'), true, array (
+				$this->add_textfield('max', get_lang('QualificationNumeric'), true, array (
 					'size' => '4',
 					'maxlength' => '4'
 				));
 			} else {
-				$this->add_textfield('max', get_lang('Max'), false, array (
+				$this->add_textfield('max', get_lang('QualificationNumeric'), false, array (
 					'size' => '4',
 					'maxlength' => '4',
 					'disabled' => 'disabled'
@@ -325,7 +325,7 @@ class EvalForm extends FormValidator
 				$this->addElement('static','label','','<small>'.get_lang('CannotChangeTheMaxNote').'</small>');
 			}
 		} else {
-			$this->add_textfield('max', get_lang('Max'), true, array (
+			$this->add_textfield('max', get_lang('QualificationNumeric'), true, array (
 				'size' => '4',
 				'maxlength' => '4'
 			));

@@ -1247,7 +1247,7 @@ if ($is_course_member) {
 			$row = Database::fetch_array($result);
 			$qualification_over = $row['qualification'];
 			$form->addElement('text', 'qualification', get_lang('Qualification'), 'size="10"');
-			$form->addElement('html', '<div style="margin-left:20%">'.get_lang('QualificationOver').'&nbsp;:&nbsp;'.$qualification_over.'</div>');
+			$form->addElement('html', '<div style="margin-left:20%">'.get_lang('QualificationNumeric').'&nbsp;:&nbsp;'.$qualification_over.'</div>');
 			$form->addElement('hidden', 'qualification_over', $qualification_over);
 		}
 
@@ -1332,7 +1332,7 @@ if ($is_course_member) {
 		$addtext .= '<div style="padding:10px">';
 		$addtext .= '<b>'.get_lang('QualificationOfAssignment').'</b>';
 		$addtext .= '<table cellspacing="0" cellpading="0" border="0"><tr>';
-		$addtext .= '<td colspan="2">&nbsp;&nbsp;'.get_lang('QualificationNumberOver').'&nbsp;';
+		$addtext .= '<td colspan="2">&nbsp;&nbsp;'.get_lang('QualificationNumeric').'&nbsp;';
 		$addtext .= '<input type="text" name="qualification_value" value="" size="5"/></td><tr><td colspan="2">';
 		$addtext .= '<input type="checkbox" value="1" name="make_calification" onclick="if(this.checked==true){document.getElementById(\'option1\').style.display=\'block\';}else{document.getElementById(\'option1\').style.display=\'none\';}"/>'.get_lang('MakeQualifiable').'</td></tr><tr>';
 		$addtext .= '<td colspan="2"><div id="option1" style="display:none">';

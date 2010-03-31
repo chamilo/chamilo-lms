@@ -461,7 +461,7 @@ function display_student_publications_list($work_dir, $sub_course_dir, $currentC
 					$form_folder->add_html_editor('description', get_lang('Description'), false, false, array('ToolbarSet' => 'profile', 'Width' => '100%', 'Height' => '200'));
 					
 					$qualification_input[] = FormValidator :: createElement('text','qualification');
-					$form_folder -> addGroup($qualification_input, 'qualification', get_lang('QualificationNumberOver'), 'size="10"');
+					$form_folder -> addGroup($qualification_input, 'qualification', get_lang('QualificationNumeric'), 'size="10"');
 
 					if ($row['weight'] > 0) {
 						$weight_input[] = FormValidator :: createElement('text', 'weight');

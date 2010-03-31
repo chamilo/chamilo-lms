@@ -760,10 +760,12 @@ function MM_jumpMenu(targ,selObj,restore){
 */
 function get_course_users()
 {
-	global $tbl_user;
-	global $tbl_courseUser, $tbl_session_course_user;
 	global $_cid;
-
+	
+	$tbl_user       		= Database::get_main_table(TABLE_MAIN_USER);
+	$tbl_courseUser 		= Database::get_main_table(TABLE_MAIN_COURSE_USER);
+	$tbl_session_course_user= Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+	
 	// not 100% if this is necessary, this however prevents a notice
 	if (!isset($courseadmin_filter))
 		{$courseadmin_filter='';}
@@ -1169,6 +1171,7 @@ function separate_users_groups($to)
 function sent_to($tool, $id)
 {
 	global $_course;
+	
 	$TABLE_ITEM_PROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);
 
 	$tool=Database::escape_string($tool);
@@ -2861,7 +2864,7 @@ function show_add_form($id = '')
 					<span class="form_required">*</span>'.get_lang('Description').'
 				</div>
 				<div class="formw">';
-			require_once(api_get_path(LIBRARY_PATH) . "/fckeditor/fckeditor.php");
+			require_once api_get_path(LIBRARY_PATH) . "/fckeditor/fckeditor.php";
 
 			$oFCKeditor = new FCKeditor('content') ;
 
@@ -3512,11 +3515,13 @@ function get_day_agendaitems($courses_dbs, $month, $year, $day)
  */
 function get_week_agendaitems($courses_dbs, $month, $year, $week = '')
 {
-	global $TABLEAGENDA, $TABLE_ITEMPROPERTY;
 	global $_user;
 	global $_configuration;
 	global $setting_agenda_link;
 
+	$TABLEAGENDA 		= Database :: get_course_table(TABLE_AGENDA);
+	$TABLE_ITEMPROPERTY = Database :: get_course_table(TABLE_ITEM_PROPERTY);
+	
 	$items = array ();
 	// The default value of the week
 	if ($week == '')
@@ -4656,7 +4661,7 @@ function agenda_add_repeat_item($course_info,$orig_id,$type,$end,$orig_dest,$fil
  * @return  boolean True on success, false otherwise
  */
 function agenda_import_ical($course_info,$file) {
-	require_once(api_get_path(LIBRARY_PATH).'fileUpload.lib.php');
+	require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
     $charset = api_get_setting('platform_charset');
     $filepath = api_get_path(SYS_ARCHIVE_PATH).$file['name'];
     if(!@move_uploaded_file($file['tmp_name'],$filepath))
@@ -4664,7 +4669,7 @@ function agenda_import_ical($course_info,$file) {
     	error_log('Problem moving uploaded file: '.$file['error'].' in '.__FILE__.' line '.__LINE__);
     	return false;
     }
-    require_once (api_get_path(LIBRARY_PATH).'icalcreator/iCalcreator.class.php');
+    require_once api_get_path(LIBRARY_PATH).'icalcreator/iCalcreator.class.php';
     $ical = new vcalendar();
     $ical->setConfig( 'directory', dirname($filepath) );
     $ical->setConfig( 'filename', basename($filepath) );

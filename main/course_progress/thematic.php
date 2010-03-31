@@ -54,9 +54,9 @@ if ($action == 'thematic_list') {
 } else if ($action == 'thematic_details') {
 	
 	if ($last_id) {
-		$link_to_thematic_plan = '<a href="index.php?'.api_get_cidreq().'&action=thematic_plan_list&thematic_id='.$last_id.'">'.Display::return_icon('info.gif',get_lang('ThematicPlan')).'</a>';
-		$link_to_thematic_advance = '<a href="index.php?'.api_get_cidreq().'&action=thematic_advance_list&thematic_id='.$last_id.'">'.Display::return_icon('porcent.png',get_lang('ThematicAdvance')).'</a>';
-		Display::display_confirmation_message(get_lang('ThematicSectionHasBeenCreatedSuccessfull').'<br />'.sprintf(get_lang('NowYouShouldAddThematicPlanXAndThematicAdvanceX'),$link_to_thematic_plan, $link_to_thematic_advance));
+		$link_to_thematic_plan = '<a href="index.php?'.api_get_cidreq().'&action=thematic_plan_list&thematic_id='.$last_id.'">'.Display::return_icon('info.gif', get_lang('ThematicPlan'), array('style'=>'vertical-align:middle')).'</a>';
+		$link_to_thematic_advance = '<a href="index.php?'.api_get_cidreq().'&action=thematic_advance_list&thematic_id='.$last_id.'">'.Display::return_icon('porcent.png', get_lang('ThematicAdvance'), array('style'=>'vertical-align:middle')).'</a>';
+		Display::display_confirmation_message(get_lang('ThematicSectionHasBeenCreatedSuccessfull').'<br />'.sprintf(get_lang('NowYouShouldAddThematicPlanXAndThematicAdvanceX'),$link_to_thematic_plan, $link_to_thematic_advance), false);
 	}
 
 	// display title

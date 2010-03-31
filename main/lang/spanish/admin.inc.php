@@ -1213,4 +1213,7 @@ $TheSubLanguageForThisLanguageHasBeenAdded = "El sub-lenguaje de este idioma ha 
 $ReturnToLanguagesList = "Volver a la lista de idiomas";
 $ActivityCoach = "El tutor de la sesion, tendrá todos los derechos y permisos en todos los cursos que pertenecen a la sesion.";
 $CategoriesNumber = "Categorías";
+$ExportAllCoursesList = "Exportar toda la lista de cursos";
+$ExportSelectedCoursesFromCoursesList = "Exportar solo algunos cursos de la lista";
+$WhichCoursesToExport = "Seleccione los cursos que desea exportar";
 ?>

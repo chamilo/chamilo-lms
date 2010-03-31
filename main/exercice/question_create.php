@@ -54,6 +54,9 @@ while ($row = Database :: fetch_array($result)) {
 }
 $form->addElement('select', 'exercice', get_lang('Exercice'), $exercises);
 
+// generate default content
+$form->addElement('checkbox', 'is_content', get_lang('DefaultContent'), null, array('checked' => true));
+
 // the submit button
 $form->addElement('style_submit_button', 'SubmitCreateQuestion', get_lang('CreateQuestion'), 'class="add"');
 
@@ -74,7 +77,7 @@ if ($form->validate()) {
 			$answer_type = $question_type_id;
 		}
 	}
-	header('Location: admin.php?exerciseId='.$values['exercice'].'&newQuestion=yes&answerType='.$answer_type);
+	header('Location: admin.php?exerciseId='.$values['exercice'].'&newQuestion=yes&isContent='.$values['is_content'].'&answerType='.$answer_type);
 	exit;
 } else {
 	// header

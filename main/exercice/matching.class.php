@@ -34,6 +34,7 @@ class Matching extends Question {
 	function Matching(){
 		parent::question();
 		$this -> type = MATCHING;
+		$this -> isContent = $this-> getIsContent();
 	}
 
 	/**
@@ -210,13 +211,18 @@ class Matching extends Question {
 			$group[] = FormValidator :: createElement('style_submit_button','submitQuestion',$text, 'class="'.$class.'"');
 
 		}
-
-
-
+		
 		$form -> addGroup($group);
-		$form -> setDefaults($defaults);
+		
+		if (!empty($this -> id)) {
+			$form -> setDefaults($defaults);
+		} else {
+			if ($this -> isContent == 1) {
+				$form -> setDefaults($defaults);
+			}
+		}
+		
 		$form->setConstants(array('nb_matches' => $nb_matches,'nb_options' => $nb_options));
-
 	}
 
 

@@ -217,7 +217,7 @@ if ($export_result_form->validate()) {
 		$pdf->ezText(get_lang('Weight') . ' : ' . $eval[0]->get_weight(), 12, array (
 			'justification' => 'left'
 		));
-		$pdf->ezText(get_lang('Max') . ' : ' . $eval[0]->get_max(), 12, array (
+		$pdf->ezText(get_lang('QualificationNumeric') . ' : ' . $eval[0]->get_max(), 12, array (
 			'justification' => 'left'
 		));
 		$pdf->ezText($average, 12, array (

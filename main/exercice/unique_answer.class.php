@@ -34,6 +34,7 @@ class UniqueAnswer extends Question {
 		//this is highly important
 		parent::question();
 		$this -> type = UNIQUE_ANSWER;
+		$this -> isContent = $this-> getIsContent();
 	}
 
 	/**
@@ -44,7 +45,7 @@ class UniqueAnswer extends Question {
 	function createAnswersForm ($form) {
 		// getting the exercise list
 		$obj_ex =$_SESSION['objExercise'];
-
+		
 		$editor_config = array('ToolbarSet' => 'TestProposedAnswer', 'Width' => '100%', 'Height' => '125');
 
 		//this line define how many question by default appear when creating a choice question
@@ -266,10 +267,15 @@ class UniqueAnswer extends Question {
 			$correct=1;
 		}
 		$defaults['correct'] = $correct;
-		$form -> setDefaults($defaults);
-
+		
+		if (!empty($this -> id)) {
+			$form -> setDefaults($defaults);
+		} else {
+			if ($this -> isContent == 1) {
+				$form -> setDefaults($defaults);
+			}
+		}
 		$form->setConstants(array('nb_answers' => $nb_answers));
-
 	}
 
 

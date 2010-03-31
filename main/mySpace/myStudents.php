@@ -158,7 +158,7 @@ if (isset ($_GET['details'])) {
 
 api_block_anonymous_users();
 
-if (!api_is_allowed_to_edit() && !api_is_coach() && !api_is_drh() && $_user['status'] != SESSIONADMIN && !api_is_platform_admin(true)) {
+if (!api_is_allowed_to_edit() && !api_is_coach() && !api_is_drh() && !api_is_course_tutor() && $_user['status'] != SESSIONADMIN && !api_is_platform_admin(true)) {
 	api_not_allowed(true);
 }
 

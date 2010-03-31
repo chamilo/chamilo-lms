@@ -23,6 +23,7 @@ $language_file = array ('registration', 'userInfo');
 require_once '../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
+require_once api_get_path(LIBRARY_PATH).'sessionmanager.lib.php';
 require_once api_get_path(LIBRARY_PATH).'tracking.lib.php';
 
 $htmlHeadXtra[] = '<script type="text/javascript">
@@ -65,7 +66,7 @@ else
 }
 
 $currentCourse = $currentCourseID;
-
+$current_session_id = api_get_session_id();
 // api_display_tool_title(get_lang("Users"));
 
 /*
@@ -208,23 +209,29 @@ if ($allowedToEditDef)
 
 			//get information about one user - task #3009
 
-			if(!empty($_POST['promoteCourseAdmin']) && $_POST['promoteCourseAdmin']){
+
+                        if ($current_session_id) {
+
+                            $nocoach = isset($_POST['promoteTutor'])?false:true;
+                            $res = SessionManager::set_coach_to_course_session($userIdViewed, $current_session_id, $courseCode, $nocoach);
+
+                        } else {
+                            if (!empty($_POST['promoteCourseAdmin']) && $_POST['promoteCourseAdmin']){
 				$userProperties['status'] = 1;
-			}else{
-				$userProperties['status'] = 5;
-			}
+                            } else{
+                                    $userProperties['status'] = 5;
+                            }
+                            if (!empty($_POST['promoteTutor']) && $_POST['promoteTutor']){
+                                    $userProperties['tutor'] = 1;
+                            } else{
+                                    $userProperties['tutor'] = 0;
+                            }
 
-			if(!empty($_POST['promoteTutor']) && $_POST['promoteTutor']){
-				$userProperties['tutor'] = 1;
-			}else{
-				$userProperties['tutor'] = 0;
-			}
+                            $userProperties['role'] = $_POST['role'];
+                            update_user_course_properties($userIdViewed, $courseCode, $userProperties);
+                        }
 
-			$userProperties['role'] = $_POST['role'];
-
-			update_user_course_properties($userIdViewed, $courseCode, $userProperties);
-
-			$displayMode = "viewContentList";
+                        $displayMode = "viewContentList";
 	}
 }
 
@@ -275,7 +282,9 @@ if (api_is_allowed_to_edit()) {
 	}	
 }
 
-
+// get information about user id viewed
+$user_info_viewed = api_get_user_info($userIdViewed);
+$is_session_course_coach = UserManager::is_session_course_coach($userIdViewed, $_course['sysCode'], $current_session_id);
 
 if ($displayMode == "viewDefEdit")
 {
@@ -369,9 +378,14 @@ elseif ($displayMode == "viewMainInfoEdit")
 
 	if ($mainUserInfo)
 	{
-		($mainUserInfo['status'] == 1) ? $courseAdminChecked = "checked" : $courseAdminChecked = "";
-		($mainUserInfo['tutor_id'] == 1) ? $tutorChecked = "checked" : $tutorChecked = "";
+		($mainUserInfo['status'] == COURSEMANAGER) ? $courseAdminChecked = "checked" : $courseAdminChecked = "";
 
+                if ($current_session_id) {
+                    ($is_session_course_coach)? $tutorChecked = "checked" : $tutorChecked = "";
+                } else {
+                    ($mainUserInfo['tutor_id'] == 1) ? $tutorChecked = "checked" : $tutorChecked = "";
+                }
+ 
 		$image_array=UserManager::get_user_picture_path_by_id($userIdViewed,'web',false,true);
 		// get the path,width and height from original picture
 		$big_image = $image_array['dir'].'big_'.$image_array['file'];
@@ -392,24 +406,51 @@ elseif ($displayMode == "viewMainInfoEdit")
 				"<table width=\"80%\" border=\"0\">",
 					"<tr align=\"center\" bgcolor=\"#E6E6E6\">\n",
 						"<td align=\"left\">", get_lang('Name'), "</td>\n",
-						"<td width=\"100px\" align=\"left\">", get_lang('Description'), "</td>\n",
-						//"<td>", get_lang('Tutor'), "</td>\n",
-						"<td>", get_lang('CourseManager'), "</td>\n",
-					"</tr>\n",
+						"<td width=\"100px\" align=\"left\">", get_lang('Description'), "</td>\n";
+
+                if ($current_session_id) {
+                    if ($user_info_viewed['status'] == COURSEMANAGER) {
+                        echo "<td>", get_lang('Tutor'), "</td>\n";
+                    }
+                } else {
+                    if ($user_info_viewed['status'] == STUDENT) {
+                        echo "<td>", get_lang('Tutor'), "</td>\n";
+                    } else {
+                        echo "<td>", get_lang('CourseManager'), "</td>\n";
+                    }
+                }
+
+		echo                    "</tr>\n",
 					"<tr align=\"center\">",
 						"<td align=\"left\"><b>", htmlize(api_get_person_name($mainUserInfo['firstName'], $mainUserInfo['lastName'])), "</b></td>\n",
 						"<td align=\"left\"><input type=\"text\" name =\"role\" value=\"", $mainUserInfo['role'], "\" maxlength=\"40\" /></td>";
 						//"<td><input class=\"checkbox\" type=\"checkbox\" name=\"promoteTutor\" value=\"1\" ", $tutorChecked, " /></td>";
 
-		if (!($is_courseAdmin && $_user['user_id'] == $userIdViewed))
-		{
-			echo "<td><input class=\"checkbox\" type=\"checkbox\" name=\"promoteCourseAdmin\" value=\"1\"", $courseAdminChecked, " /></td>\n";
-		}
-		else
-		{
+
+                //aca
+
+		if (!($is_courseAdmin && $_user['user_id'] == $userIdViewed)) {
+
+                    if ($current_session_id) {
+                        if ($user_info_viewed['status'] == COURSEMANAGER) {
+                            echo "<td><input class=\"checkbox\" type=\"checkbox\" name=\"promoteTutor\" value=\"1\" ", $tutorChecked, " /></td>";
+                        }
+                    } else {
+                        if ($user_info_viewed['status'] == STUDENT) {
+                            echo "<td><input class=\"checkbox\" type=\"checkbox\" name=\"promoteTutor\" value=\"1\" ", $tutorChecked, " /></td>";
+                        } else {
+                            echo "<td><input class=\"checkbox\" type=\"checkbox\" name=\"promoteCourseAdmin\" value=\"1\"", $courseAdminChecked, " /></td>\n";
+                        }
+                    }
+
+                        			
+		} else {
 			echo "<td>", get_lang('CourseManager'), "</td>\n";
 
 		}
+
+
+
 
 		echo "<td><button class=\"save\" type=\"submit\" name=\"submit\">".get_lang('SaveChanges')."</button></td>\n", "</tr>", "</table>", "</form>\n";
 
@@ -483,12 +524,23 @@ elseif ($displayMode == "viewContentList") // default display
 		echo	"<table width=\"80%\" border=\"0\">",
 
 				"<tr align=\"center\" bgcolor=\"#E6E6E6\">\n",
-				"<td align=\"left\">",get_lang('Name'),"</td>\n",
-				"<td width=\"20%\" align=\"left\">",get_lang('Description'),"</td>\n",
-				//"<td>",get_lang('Tutor'),"</td>\n",
-				"<td>",get_lang('CourseManager'),"</td>\n",
-				($allowedToEditDef?"<td>".get_lang('Edit')."</td>\n":""),
-                ($is_allowedToTrack?"<td>".get_lang('Tracking')."</td>\n":""),
+				"<td align=\"left\">".get_lang('Name')."</td>\n",
+				"<td width=\"20%\" align=\"left\">".get_lang('Description')."</td>\n";
+
+                                if ($current_session_id) {
+                                    if ($user_info_viewed['status'] == COURSEMANAGER) {
+                                        echo "<td>".get_lang('Tutor')."</td>\n";
+                                    }
+                                } else {
+                                    if ($user_info_viewed['status'] == STUDENT) {
+                                        echo "<td>".get_lang('Tutor')."</td>\n";
+                                    } else {
+                                        echo "<td>".get_lang('CourseManager')."</td>\n";
+                                    }
+                                }
+
+		echo            ($allowedToEditDef?"<td>".get_lang('Edit')."</td>\n":""),
+                                ($is_allowedToTrack?"<td>".get_lang('Tracking')."</td>\n":""),
 				"</tr>\n",
 
 				"<tr align=\"center\">\n",
@@ -498,36 +550,38 @@ elseif ($displayMode == "viewContentList") // default display
 
 				//DISPLAY TABLE CONTENT
 
+                                if ($current_session_id) {
+                                    if ($user_info_viewed['status'] == COURSEMANAGER) {
+                                        if ($is_session_course_coach) {
+                                            echo "<td>",get_lang('Tutor'),"</td>\n";
+                                        } else {
+                                            echo "<td> - </td>\n";
+                                        }
+                                    }
+                                } else {
+                                    if ($user_info_viewed['status'] == STUDENT) {
+                                        if ($mainUserInfo['tutor_id'] == 1) {
+                                            echo "<td>",get_lang('Tutor'),"</td>\n";
+                                        } else {
+                                            echo "<td> - </td>\n";
+                                        }
+                                    } else {
+                                        if ($mainUserInfo['status'] == 1) {
+                                            echo "<td>",get_lang('CourseManager'),"</td>";
+                                        } else {
+                                            echo "<td> - </td>\n";
+                                        }
+                                    }
+                                }
 
-				// deprecated feature
-				if ($mainUserInfo['tutor_id'] == 1)
-				{
-					//echo "<td>",get_lang('Tutor'),"</td>\n";
-				}
-				else
-				{
-					//echo "<td> - </td>\n";
-				}
-
-				if ($mainUserInfo['status'] == 1)
-				{
-					echo "<td>",get_lang('CourseManager'),"</td>";
-				}
-				else
-				{
-					echo "<td> - </td>\n";
-				}
-
-				if ($allowedToEditDef)
-				{
+				if ($allowedToEditDef) {
 					echo	"<td>",
 							"<a href=\"".api_get_self()."?".api_get_cidreq()."&editMainUserInfo=$userIdViewed\">",
 							"<img border=\"0\" alt=\"\" src=\"../img/edit.gif\" />",
 							"</a>",
 							"</td>";
 				}
-                                if ($is_allowedToTrack)
-                                {
+                                if ($is_allowedToTrack) {
                                    echo	"<td>",
 							"<a href=\"../mySpace/myStudents.php?".api_get_cidreq()."&origin=user_course&student=$userIdViewed&details=true&course=".$_course['id']."\">",
 							"<img border=\"0\" alt=\"".get_lang('Tracking')." : $userIdViewed\" src=\"../img/statistics.gif\" />",
@@ -538,20 +592,15 @@ elseif ($displayMode == "viewContentList") // default display
 				"</table>";
 				//"<p><a href=\"mailto:",$mainUserInfo['email'],"\">",$mainUserInfo['email'],"</a>",
 
-				if (api_get_setting("show_email_addresses") == "true")
-				{
+				if (api_get_setting("show_email_addresses") == "true") {
 					echo "<p>". Display::encrypted_mailto_link($mainUserInfo['email'],$mainUserInfo['email']). "</p>";
-				}
-				else
-				{
-					if (api_is_allowed_to_edit())
-					{
+				} else {
+					if (api_is_allowed_to_edit()) {
 						echo "<p>". Display::encrypted_mailto_link($mainUserInfo['email'],$mainUserInfo['email']). "</p>";
 					}
 				}
 
-				if (api_get_setting('extended_profile') == 'true')
-				{
+				if (api_get_setting('extended_profile') == 'true') {
 					echo '<div style="margin-top:10px;" class="actions-message"><strong>'.get_lang('MyCompetences').'</strong></div><div>'.$mainUserInfo['competences'].'</div>';
 					echo '<div style="margin-top:10px;" class="actions-message"><strong>'.get_lang('MyDiplomas').'</strong></div><div>'.$mainUserInfo['diplomas'].'</div>';
 					echo '<div style="margin-top:10px;" class="actions-message"><strong>'.get_lang('MyTeach').'</strong></div><div>'.$mainUserInfo['teach'].'</div>';

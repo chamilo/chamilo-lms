@@ -41,7 +41,8 @@ abstract class Question
 	var $level;
 	var $picture;
 	var $exerciseList;  // array with the list of exercises which this question is in
-
+	private $isContent;
+	
 	static $typePicture = 'new_question.png';
 	static $explanationLangVar = '';
 	static $questionTypes = array(
@@ -68,6 +69,11 @@ abstract class Question
 		$this->picture='';
 		$this->level = 1;
 		$this->exerciseList=array();
+	}
+	
+	public function getIsContent() {
+		$isContent = intval($_REQUEST['isContent']);
+		return $this->isContent = $isContent;
 	}
 
 	/**
@@ -996,7 +1002,10 @@ abstract class Question
 		$renderer->setElementTemplate('<div class="row"><div class="label">{label}</div><div class="formw" >{element}</div></div>','questionName');
 		$renderer->setElementTemplate('<div class="row"><div class="label">{label}</div><div class="formw">{element}</div></div>','questionLevel');
 		$form->addRule('questionName', get_lang('GiveQuestion'), 'required');
-
+		
+		// default content
+		$isContent = intval($_REQUEST['isContent']);
+		
 		// question type
 		$answerType= intval($_REQUEST['answerType']);
 		$form->addElement('hidden','answerType',$_REQUEST['answerType']);
@@ -1038,7 +1047,13 @@ abstract class Question
 		$defaults['questionName'] = $this -> question;
 		$defaults['questionDescription'] = $this -> description;
 		$defaults['questionLevel'] = $this -> level;
-		$form -> setDefaults($defaults);
+		if (!empty($_REQUEST['myid'])) {
+			$form -> setDefaults($defaults);
+		} else {
+			if ($isContent == 1) {
+				$form -> setDefaults($defaults);
+			}
+		}
 	}
 
 	/**

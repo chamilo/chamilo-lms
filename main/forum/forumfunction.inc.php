@@ -1950,7 +1950,7 @@ function show_add_post_form($action='', $id='', $form_values='') {
 		$form->applyFilter('numeric_calification', 'html_filter');
 		$form->addElement('checkbox', 'thread_qualify_gradebook', '', get_lang('QualifyThreadGradebook'),'onclick="javascript:if(this.checked==true){document.getElementById(\'options_field\').style.display = \'block\';}else{document.getElementById(\'options_field\').style.display = \'none\';}"');
 		$form -> addElement('html','<div id="options_field" style="display:none">');
-		$form->addElement('text', 'numeric_calification', get_lang('QualifyNumeric'),'Style="width:40px"');
+		$form->addElement('text', 'numeric_calification', get_lang('QualificationNumeric'),'Style="width:40px"');
 		$form->addElement('text', 'calification_notebook_title', get_lang('TitleColumnGradebook'));
 		$form->applyFilter('calification_notebook_title', 'html_filter');
 		$form->addElement('text', 'weight_calification', get_lang('QualifyWeight'),'value="0.00" Style="width:40px" onfocus="this.select();"');
@@ -2384,7 +2384,7 @@ function show_edit_post_form($current_post, $current_thread, $current_forum, $fo
 		} else {
 			$form -> addElement('html','<div id="options_field" style="display:none">');
 		}
-		$form->addElement('text', 'numeric_calification', get_lang('QualifyNumeric'),'value="'.$current_thread['thread_qualify_max'].'" Style="width:40px"');
+		$form->addElement('text', 'numeric_calification', get_lang('QualificationNumeric'),'value="'.$current_thread['thread_qualify_max'].'" Style="width:40px"');
 		$form->addElement('text', 'calification_notebook_title', get_lang('TitleColumnGradebook'),'value="'.$current_thread['thread_title_qualify'].'"');
 		$form->applyFilter('calification_notebook_title', 'html_filter');
 		$form->addElement('text', 'weight_calification', get_lang('QualifyWeight'),'value="'.$current_thread['thread_weight'].'" Style="width:40px"');

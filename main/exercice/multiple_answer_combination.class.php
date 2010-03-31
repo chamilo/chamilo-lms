@@ -31,6 +31,7 @@ class MultipleAnswerCombination extends Question {
 	function MultipleAnswerCombination(){
 		parent::question();
 		$this -> type = MULTIPLE_ANSWER_COMBINATION;
+		$this -> isContent = $this-> getIsContent();
 	}
 
 	/**
@@ -39,7 +40,6 @@ class MultipleAnswerCombination extends Question {
 	 * @param the answers number to display
 	 */
 	function createAnswersForm ($form) {
-
 		$nb_answers = isset($_POST['nb_answers']) ? $_POST['nb_answers'] : 2;
 		$nb_answers += (isset($_POST['lessAnswers']) ? -1 : (isset($_POST['moreAnswers']) ? 1 : 0));
 		$obj_ex = $_SESSION['objExercise'];
@@ -162,12 +162,15 @@ class MultipleAnswerCombination extends Question {
 		$renderer->setElementTemplate('{element}&nbsp;','submitQuestion');
 		$renderer->setElementTemplate('{element}','moreAnswers');
 		$form -> addElement ('html', '</div></div>');
-
 		$defaults['correct'] = $correct;
-		$form -> setDefaults($defaults);
-
+		if (!empty($this->id)) {
+			$form -> setDefaults($defaults);
+		} else {
+			if ($this -> isContent == 1) {
+				$form -> setDefaults($defaults);
+			}
+		}
 		$form->setConstants(array('nb_answers' => $nb_answers));
-
 	}
 
 

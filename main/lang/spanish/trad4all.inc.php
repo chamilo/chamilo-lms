@@ -887,4 +887,5 @@ $SelectAnAttendance = "Seleccionar hoja de asistencia";
 $ResultsHiddenByExerciseSetting = "Resultados ocultos por la configuración del ejercicio";
 $ThematicSectionHasBeenCreatedSuccessfull = "Sección temática ha sido creado con éxito";
 $NowYouShouldAddThematicPlanXAndThematicAdvanceX = "Ahora debes añadir plan temático %s y avance temático %s";
+$QualificationNumeric = "Calificación numérica sobre";
 ?>

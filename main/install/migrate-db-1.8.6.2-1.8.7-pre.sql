@@ -19,7 +19,6 @@ ALTER TABLE session_rel_user ADD COLUMN relation_type int NOT NULL default 0;
 ALTER TABLE course_rel_user  ADD COLUMN relation_type int NOT NULL default 0;
 
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url, access_url_changeable) VALUES ('course_create_active_tools','notebook','checkbox','Tools','true','CourseCreateActiveToolsTitle','CourseCreateActiveToolsComment',NULL,'Notebook',1,0);
-INSERT INTO course_module (name, link, image, `row`, `column`, position) VALUES ('notebook','notebook/index.php','notebook.gif',2,1,'basic');
 ALTER TABLE course DROP PRIMARY KEY , ADD UNIQUE KEY code (code); 
 ALTER TABLE course ADD id int NOT NULL auto_increment PRIMARY KEY FIRST;
 CREATE TABLE block (id INT NOT NULL auto_increment, name VARCHAR(255) NULL, description TEXT NULL, path VARCHAR(255) NOT NULL, controller VARCHAR(100) NOT NULL, active TINYINT NOT NULL default 1, PRIMARY KEY(id));
@@ -124,7 +123,7 @@ INSERT INTO course_setting (variable,value,category) VALUES ('allow_user_view_us
 ALTER TABLE tool_intro ADD COLUMN session_id INT  NOT NULL DEFAULT 0 AFTER intro_text, DROP PRIMARY KEY, ADD PRIMARY KEY  USING BTREE(id, session_id);
 CREATE TABLE thematic (id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, title VARCHAR( 255 ) NOT NULL, content TEXT NULL, display_order int unsigned not null default 0, active TINYINT NOT NULL default 0, session_id INT NOT NULL DEFAULT 0);
 ALTER TABLE thematic ADD INDEX (active, session_id);  
-CREATE TABLE thematic_plan (id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, thematic_id INT NOT NULL, title VARCHAR(255) NOT NULL, description TEXT NULL, description_type` INT NOT NULL); 
+CREATE TABLE thematic_plan (id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, thematic_id INT NOT NULL, title VARCHAR(255) NOT NULL, description TEXT NULL, description_type INT NOT NULL); 
 ALTER TABLE thematic_plan ADD INDEX (thematic_id, description_type); 
 CREATE TABLE thematic_advance (id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, thematic_id INT NOT NULL, attendance_id INT NOT NULL DEFAULT 0, content TEXT NOT NULL, start_date DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00', duration INT NOT NULL DEFAULT 0, done_advance tinyint NOT NULL DEFAULT 0);
 ALTER TABLE thematic_advance ADD INDEX (thematic_id);
@@ -132,3 +131,4 @@ INSERT INTO course_setting (variable,value,category) VALUES ('display_info_advan
 INSERT INTO tool(name, link, image, visibility, admin, address, added_tool, target, category) VALUES ('course_progress','course_progress/index.php','course_progress.gif',0,'0','squaregrey.gif',0,'_self','authoring');
 ALTER TABLE lp ADD prerequisite int unsigned NOT NULL DEFAULT 0;
 ALTER TABLE student_publication MODIFY COLUMN description TEXT DEFAULT NULL;
+ALTER TABLE student_publication ADD COLUMN user_id INTEGER  NOT NULL AFTER session_id;

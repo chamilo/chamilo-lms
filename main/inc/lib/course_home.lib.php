@@ -24,7 +24,7 @@ class CourseHome {
 
 			case 'Basic' :
 				$condition_display_tools = ' WHERE a.link=t.link AND t.position="basic" ';
-				if (api_is_coach()) {
+				if (api_is_coach() || api_is_course_tutor()) {
 					$condition_display_tools = ' WHERE a.link=t.link AND (t.position="basic" OR a.name = "'.TOOL_TRACKING.'") ';
 				}
 
@@ -137,7 +137,7 @@ class CourseHome {
 			$tool['img'] = api_get_path(WEB_IMG_PATH).$tool['img'];
 
 			// VISIBLE
-			if (($tool['visibility'] || (api_is_coach() && $tool['name'] == TOOL_TRACKING)) || $cat == 'courseAdmin' || $cat == 'platformAdmin') {
+			if (($tool['visibility'] || ((api_is_coach() || api_is_course_tutor()) && $tool['name'] == TOOL_TRACKING)) || $cat == 'courseAdmin' || $cat == 'platformAdmin') {
 				if (strpos($tool['name'], 'visio_') !== false) {
 					$cell_content .= '<a  href="javascript: void(0);" onclick="javascript: window.open(\'' . $tool['link'].$link_annex . '\',\'window_visio'.$_SESSION['_cid'].'\',config=\'height=\'+730+\', width=\'+1020+\', left=2, top=2, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no\')" target="' . $tool['target'] . '"><img src="'.$tool['img'].'" title="'.$tool_name.'" alt="'.$tool_name.'" align="absmiddle" border="0">'.$tool_name.'</a>';
 				} elseif (strpos($tool['name'], 'chat') !== false && api_get_course_setting('allow_open_chat_window')) {
@@ -224,7 +224,7 @@ class CourseHome {
 			case TOOL_PUBLIC:
 
 					$condition_display_tools = ' WHERE visibility = 1 ';
-					if (api_is_coach()) {
+					if (api_is_coach() || api_is_course_tutor()) {
 						$condition_display_tools = ' WHERE visibility = 1 OR (visibility = 0 AND name = "'.TOOL_TRACKING.'") ';
 					}
 
@@ -438,7 +438,7 @@ class CourseHome {
 		switch ($course_tool_category) {
 			case TOOL_STUDENT_VIEW:
 					$condition_display_tools = ' WHERE visibility = 1 AND (category = "authoring" OR category = "interaction") ';
-					if (api_is_coach()) {
+					if (api_is_coach() || api_is_course_tutor()) {
 						$condition_display_tools = ' WHERE (visibility = 1 AND (category = "authoring" OR category = "interaction") OR (name = "'.TOOL_TRACKING.'") )   ';
 					}
 					$sql = "SELECT * FROM $course_tool_table  $condition_display_tools $condition_session ORDER BY id";

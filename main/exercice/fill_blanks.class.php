@@ -36,6 +36,7 @@ class FillBlanks extends Question
 	{
 		parent::question();
 		$this -> type = FILL_IN_BLANKS;
+		$this -> isContent = $this-> getIsContent();
 	}
 
 	/**
@@ -45,7 +46,7 @@ class FillBlanks extends Question
 	function createAnswersForm ($form)
 	{
 		$defaults = array();
-
+		
 		if(!empty($this->id)) {
 			$objAnswer = new answer($this->id);
 
@@ -148,10 +149,14 @@ class FillBlanks extends Question
 		global $text, $class;
 		// setting the save button here and not in the question class.php
 		$form->addElement('style_submit_button','submitQuestion',$text, 'class="'.$class.'"');
-
-
-		$form -> setDefaults($defaults);
-
+		
+		if (!empty($this -> id)) {
+			$form -> setDefaults($defaults);
+		} else {
+			if ($this -> isContent == 1) {
+				$form -> setDefaults($defaults);
+			}
+		}
 	}
 
 

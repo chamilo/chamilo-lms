@@ -41,6 +41,7 @@ class FreeAnswer extends Question {
 	function FreeAnswer(){
 		parent::question();
 		$this -> type = FREE_ANSWER;
+		$this -> isContent = $this-> getIsContent();
 	}
 
 	/**
@@ -53,11 +54,12 @@ class FreeAnswer extends Question {
 		global $text, $class;
 		// setting the save button here and not in the question class.php
 		$form->addElement('style_submit_button','submitQuestion',$text, 'class="'.$class.'"');
-
-		if(!empty($this->id)) {
+		if (!empty($this->id)) {
 			$form -> setDefaults(array('weighting' => float_format($this->weighting, 1)));
 		} else {
-			$form -> setDefaults(array('weighting' => '10'));
+			if ($this -> isContent == 1) {
+				$form -> setDefaults(array('weighting' => '10'));
+			}
 		}
 	}
 

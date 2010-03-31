@@ -347,8 +347,31 @@ if (defined('SYSTEM_INSTALLATION')) {
                             error_log('Error in '.$query.': '.Database::error());
                         }
                     }
-                                          
-        			//updating parent_id of the student_publication table
+                    $t_student_publication = $row_course['db_name'].".student_publication";
+                    $t_item_property = $row_course['db_name'].".item_property";
+                    
+                    if ($singleDbForm) {
+                        $t_student_publication = "$prefix{$row_course['db_name']}_student_publication";
+                        $t_item_property = "$prefix{$row_course['db_name']}_item_property";
+                    }                   
+                    $sql_insert_user = "SELECT ref, insert_user_id FROM $t_item_property WHERE tool='work'";
+                    
+                    $rs_insert_user = Database::query($sql_insert_user);
+                    
+                    if ($rs_insert_user === false) {
+				    	error_log('Could not query insert_user_id table: '.Database::error());
+					} else {
+						if (Database::num_rows($rs_insert_user) > 0) {
+							while ($row_ids = Database::fetch_array($rs_insert_user)) {
+								$user_id = $row_ids['insert_user_id'];
+								$ref = $row_ids['ref'];
+								$sql_upd = "UPDATE $t_student_publication SET user_id='$user_id' WHERE id='$ref'";
+								Database::query($sql_upd);
+							}
+						}
+					}
+					
+					//updating parent_id of the student_publication table
 			        $sql = 'SELECT id, url, parent_id FROM '.$row_course['db_name'].'.student_publication '; 
 					$result = Database::query($sql);
 					if (Database::num_rows($result) > 0) {
@@ -387,10 +410,17 @@ if (defined('SYSTEM_INSTALLATION')) {
 							}	
 						}
                 	}
-            	}
-        	}
-		}
+
+
+
+
+
+
+                }
+            }
+        }
     }
+
 } else {
 
     echo 'You are not allowed here !';

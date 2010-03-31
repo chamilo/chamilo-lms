@@ -201,7 +201,10 @@ if (is_array($a_courses)) {
 
 			$avg_time_spent_in_course = api_time_to_hms($avg_time_spent_in_course / $nb_students_in_course);
 			$avg_progress_in_course = round($avg_progress_in_course / $nb_students_in_course, 2);
-			$avg_score_in_course = round($avg_score_in_course / $nb_students_in_course, 2);
+			
+			if (is_numeric($avg_score_in_course)) {
+				$avg_score_in_course = round($avg_score_in_course / $nb_students_in_course, 2).'%';
+			}
 
 		} else {
 			$avg_time_spent_in_course = null;
@@ -228,7 +231,7 @@ if (is_array($a_courses)) {
 		$table_row[] = is_null($avg_time_spent_in_course)?'-':$avg_time_spent_in_course;
 		$table_row[] = $tematic_advance_progress;
 		$table_row[] = is_null($avg_progress_in_course) ? '-' : $avg_progress_in_course.'%';
-		$table_row[] = is_null($avg_score_in_course) ? '-' : $avg_score_in_course.'%';
+		$table_row[] = is_null($avg_score_in_course) ? '-' : $avg_score_in_course;
 		$table_row[] = is_null($messages_in_course)?'-':$messages_in_course;
 		$table_row[] = is_null($assignments_in_course)?'-':$assignments_in_course;
 		$table_row[] = '<a href="../tracking/courseLog.php?cidReq='.$course_code.'&studentlist=true&id_session='.$id_session.'"><img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a>';
@@ -239,7 +242,7 @@ if (is_array($a_courses)) {
 			$avg_time_spent_in_course,
 			$tematic_advance_csv,
 			is_null($avg_progress_in_course) ? null : $avg_progress_in_course.'%',
-			is_null($avg_score_in_course) ? null : $avg_score_in_course.'%',
+			is_null($avg_score_in_course) ? null : $avg_score_in_course,
 			$messages_in_course,
 			$assignments_in_course,
 		);

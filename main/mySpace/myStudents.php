@@ -246,8 +246,7 @@ if (!empty ($_GET['student'])) {
 		$avg_student_score = Tracking::get_avg_student_score($info_user['user_id'], $course_id, array(), $session_id);	
 	}
 	$avg_student_progress = round($avg_student_progress, 2);
-	$avg_student_score = round($avg_student_score, 2);
-
+	
 	// time spent on the course
 	$time_spent_on_the_course = api_time_to_hms(Tracking :: get_time_spent_on_the_course($info_user['user_id'], $course_id, $session_id));
 	
@@ -295,7 +294,7 @@ if (!empty ($_GET['student'])) {
 		strip_tags($last_connection_date),
 		$time_spent_on_the_course,
 		$avg_student_progress . '%',
-		$avg_student_score . '%'
+		$avg_student_score
 	);
 ?>
 	<a name="infosStudent"></a>
@@ -437,7 +436,7 @@ if ($timezone !== null) {
 											Display :: display_icon('info3.gif', get_lang('ScormAndLPTestTotalAverage'), array ('align' => 'absmiddle', 'hspace' => '3px'));
 										?>
 						</td>
-						<td align="left"><?php  echo $avg_student_score.'%' ?></td>
+						<td align="left"><?php if (is_numeric($avg_student_score)) { echo $avg_student_score.'%';} else { echo $avg_student_score ;}  ?></td>
 					</tr>
 					<?php } ?>
 				</table>
@@ -580,8 +579,11 @@ if ($timezone !== null) {
 				// Get progress in lp				
 				$progress = Tracking::get_avg_student_progress($student_id, $course_code, array($lp_id));
 				
-				if ($progress === null) $progress = '0%';
-				else $any_result = true;
+				if ($progress === null) { 
+					$progress = '0%';
+				}  else { 
+					$any_result = true;
+				}
 				
 				// Get time in lp
 				$total_time = Tracking::get_time_spent_in_lp($student_id, $course_code, array($lp_id));				
@@ -604,7 +606,7 @@ if ($timezone !== null) {
 					api_html_entity_decode(stripslashes($lp_name), ENT_QUOTES, $charset),
 					api_time_to_hms($total_time),
 					$score . '%',
-					$progress,
+					$progress.'%',
 					date('Y-m-d h:i:s', $start_time)
 				);
 ?>
@@ -619,20 +621,18 @@ if ($timezone !== null) {
 							<?php
 
 				if (!is_null($score)) {
-					echo $score . '%';
+					if (is_numeric($score)) { echo $score.'%';} else { echo $score ;}
+				}
+				 
+				if (is_numeric($progress)) {						
+					$progress = $progress.'%';
 				} else {
-					if ('0' == $progress {
-						0 }) {
-						echo '/';
-					} else {
-						echo '0%';
-					}
-					$score = 0;
+					$progress = '-';
 				}
 ?>
 						</td>
 						<td align="center">
-							<?php echo $progress ?>
+							<?php echo $progress; ?>
 						</td>
 						<td align="center">
 							<?php

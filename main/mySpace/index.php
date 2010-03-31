@@ -258,8 +258,12 @@ if ($view == 'coach' || $view == 'drh') {
 				$nb_courses_student++;
 				$nb_posts += Tracking :: count_student_messages($student_id, $course_code);
 				$nb_assignments += Tracking :: count_student_assignments($student_id, $course_code);
-				$avg_student_progress += Tracking :: get_avg_student_progress($student_id, $course_code);
-				$avg_student_score += Tracking :: get_avg_student_score($student_id, $course_code);
+				$avg_student_progress += Tracking :: get_avg_student_progress($student_id, $course_code);				
+				$myavg_temp = Tracking :: get_avg_student_score($student_id, $course_code);
+				 
+				 if (is_numeric($myavg_temp))
+				 	$avg_student_score += $myavg_temp;
+				
 				if ($nb_posts !== null && $nb_assignments !== null && $avg_student_progress !== null && $avg_student_score !== null) {
 					//if one of these scores is null, it means that we had a problem connecting to the right database, so don't count it in
 					$nb_courses_student++;

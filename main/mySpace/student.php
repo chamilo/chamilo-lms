@@ -241,7 +241,10 @@ if ($isCoach || api_is_platform_admin() || api_is_drh()) {
 			foreach ($courses as $course_code) {
 				if (CourseManager :: is_user_subscribed_in_course($student_id, $course_code, true)) {
 					$avg_time_spent += Tracking :: get_time_spent_on_the_course($student_id, $course_code, $_GET['id_session']);
-					$avg_student_score += Tracking :: get_avg_student_score($student_id, $course_code);
+					$my_average = Tracking :: get_avg_student_score($student_id, $course_code);
+					if(is_numeric($my_average)) {
+						$avg_student_score += $my_average;
+					}
 					$avg_student_progress += Tracking :: get_avg_student_progress($student_id, $course_code);
 					$total_assignments += Tracking :: count_student_assignments($student_id, $course_code);
 					$total_messages += Tracking :: count_student_messages($student_id, $course_code);

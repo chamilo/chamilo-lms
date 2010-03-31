@@ -174,7 +174,14 @@ class MySpace {
 			// student progress in course
 			$return .= '	<td><div>'.round(Tracking :: get_avg_student_progress($user_id, $row[0]), 2).'</div></td>';
 			// student score
-			$return .= '	<td><div>'.round(Tracking :: get_avg_student_score($user_id, $row[0]), 2).'</div></td>';
+			$avg_score = Tracking :: get_avg_student_score($user_id, $row[0]);
+			if (is_numeric($avg_score)) {
+				$avg_score = round($avg_score,2);
+			} else {
+				$$avg_score = '-';
+			}
+			
+			$return .= '	<td><div>'.$avg_score.'</div></td>';			
 			// student tes score
 			//$return .= '	<td><div style="width:40px">'.round(Tracking :: get_avg_student_exercise_score ($user_id, $row[0]),2).'%</div></td>';
 			// student messages
@@ -555,7 +562,9 @@ class MySpace {
 				$avg_time_spent_in_course  = Tracking::get_time_spent_on_the_course($users, $course_code, $session_id);
 
 				$avg_progress_in_course = round($avg_progress_in_course / $nb_students_in_course, 2);
-				$avg_score_in_course = round($avg_score_in_course / $nb_students_in_course, 2);
+				if (is_numeric($avg_score_in_course)) {
+					$avg_score_in_course = round($avg_score_in_course / $nb_students_in_course, 2);
+				}
 				$avg_score_in_exercise = round($avg_score_in_exercise / $nb_students_in_course, 2);
 				$avg_time_spent_in_course = api_time_to_hms($avg_time_spent_in_course / $nb_students_in_course);
 
@@ -584,7 +593,7 @@ class MySpace {
 				$nb_students_in_course,
 				$avg_time_spent_in_course,
 				is_null($avg_progress_in_course) ? null : $avg_progress_in_course.'%',
-				is_null($avg_score_in_course) ? null : $avg_score_in_course.'%',
+				is_null($avg_score_in_course) ? null : is_numeric($avg_score_in_course) ? $avg_score_in_course.'%' : $avg_score_in_course ,
 				is_null($avg_score_in_exercise) ? null : $avg_score_in_exercise.'%',
 				$avg_messages_in_course,
 				$avg_assignments_in_course,

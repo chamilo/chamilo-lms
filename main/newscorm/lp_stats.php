@@ -715,7 +715,18 @@ if (!empty($a_my_id)) {
 	}
 	$total_score = Tracking::get_avg_student_score($my_studen_id, $my_course_id, $a_my_id);
 } else {
-	$total_score = 0;
+	
+	if ($origin == 'tracking') {
+		$my_studen_id = $student_id;
+		$my_course_id = Database::escape_string($_GET['course']);
+		if (!empty($my_studen_id) && !empty($my_course_id)) {
+			$total_score = Tracking::get_avg_student_score($my_studen_id, $my_course_id, array(intval($_GET['lp_id'])));
+		} else {
+			$total_score = 0; 
+		}		
+	} else {
+		$total_score = 0;
+	}	
 }
 
 $total_time = learnpathItem :: get_scorm_time('js', $total_time);
@@ -727,7 +738,10 @@ $total_percent = 0;
 if(!$is_allowed_to_edit && $result_disabled_ext_all) {
 	$final_score = Display::return_icon('invisible.gif', get_lang('ResultsHiddenByExerciseSetting'));
 } else {
-	$final_score = $total_score.'%';
+	if (is_numeric($total_score))
+		$final_score = $total_score.'%';
+	else 
+		$final_score = $total_score;
 }
 
 if (($counter % 2) == 0) {

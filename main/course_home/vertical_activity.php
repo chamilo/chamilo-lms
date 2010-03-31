@@ -174,13 +174,36 @@ if (api_is_allowed_to_edit(null, true) && !api_is_coach()) {
 	$my_list = CourseHome::get_tools_category(TOOL_STUDENT_VIEW);
 	if (count($my_list) > 0) {
 ?>
-	<div class="Authoringview">
-
-		<table width="100%">
+	<div class="course-student-view-activity-3col">
 <?php
-			CourseHome::show_tools_category($my_list, 'vertical_activity');
-?>
-		</table>
+
+			//ordering by get_lang name
+			$order_tool_list = array();
+			foreach($my_list as $key=>$new_tool) {
+				$tool_name = CourseHome::translate_tool_name($new_tool);
+				$order_tool_list [$key]= $tool_name;
+			}		
+			natsort($order_tool_list);		
+			$my_temp_tool_array = array();
+			foreach($order_tool_list as $key=>$new_tool) {
+				$my_temp_tool_array[] = $my_list[$key];
+			}
+			$my_list = $my_temp_tool_array;
+
+			$i = 0;
+			foreach($my_list as $new_tool) {
+				if ($i >= 10) {
+					$my_list2[] = $new_tool;
+				} else {
+					$my_list1[] = $new_tool;
+				}
+				$i++;
+			}
+			CourseHome::show_tools_category($my_list1, 'vertical_activity');
+			CourseHome::show_tools_category($my_list2, 'vertical_activity');
+			
+			
+?>		
 	</div>
 <?php
 	}

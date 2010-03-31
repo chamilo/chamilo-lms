@@ -4159,3 +4159,31 @@ span.form_required  {
 	-moz-border-radius: 10px;
 	border-radius: 10px;
 }
+
+
+.course-student-view-activity-3col {
+	-webkit-border-radius: 10px;
+	-moz-border-radius: 10px;
+	border-radius: 10px;
+	background-color:#FFFFFF;
+	height: 350px;
+	width: 800px ;
+	margin-left: auto ;
+	margin-right: auto ;
+}
+
+.course-student-view-activity-3col ul {	
+	padding:10px 20px 10px 20px;
+	list-style-type:none;
+	/* height:240px; */
+	margin-left:0px;
+	margin: 0px 0px 0px 0px ;
+	 float:left;
+	width : 280px; 
+}
+
+.course-student-view-activity-3col ul li {	
+	padding:5px 0px 4px 0px;
+	/* float:left;
+	width : 380px; */
+}

@@ -1,5 +1,5 @@
 /*****************************************************
- *  MAIN  - PUBLIC ADMIN CSS		                 *                   
+ *  MAIN  - CHAMILO CSS		                 
  *****************************************************/
  
 /* the sticky effect */
@@ -19,11 +19,11 @@ body {
 	height: 100%; /* stick */
 }
 /* Sticky footer*/ 
-#wrapper{
+#wrapper {
 	min-height: 100%;
 	height: auto !important;
 	height: 100%;
-	margin: 0 auto -9em;
+	margin: 0 auto -9em; /* Do not change this value */
 }
 
 input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
@@ -1554,7 +1554,6 @@ div.admin_section h4 {
 .sessions_list_inactive {
 	line-height: 20px;
 }
-
 .session_box {
 	border: 1px solid #DCE5F3;
 	/* font-weight: bold; */
@@ -1567,7 +1566,6 @@ div.admin_section h4 {
 	-moz-border-radius: 10px;
 	border-radius: 10px;
 }
-
 .sub_session_box {
 	 border: 1px solid #DCE5F3; 
 	/* font-weight: bold; */

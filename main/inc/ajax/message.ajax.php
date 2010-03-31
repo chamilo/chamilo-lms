@@ -31,14 +31,17 @@ switch ($action) {
 				FROM '.$tbl_user.' u
 		 		WHERE u.status <> 6  AND u.user_id <>'.(int)$user_id.' AND '.($is_western_name_order ? 'concat(u.firstname, " ", u.lastname)' : 'concat(u.lastname, " ", u.firstname)').' like CONCAT("%","'.$search.'","%") LIMIT 15';
 			} else {
+				require_once api_get_path(LIBRARY_PATH).'social.lib.php'; 
 				//only my contacts
 				$sql = 'SELECT DISTINCT u.user_id as id, '.($is_western_name_order ? 'concat(u.firstname," ",u.lastname," ","( ",u.email," )")' : 'concat(u.lastname," ",u.firstname," ","( ",u.email," )")').' as name
 				FROM '.$tbl_my_user_friend.' uf ' .
 		 		'INNER JOIN '.$tbl_my_user.' AS u  ON uf.friend_user_id = u.user_id ' .
 		 		'WHERE u.status <> 6 AND relation_type NOT IN('.USER_RELATION_TYPE_DELETED.', '.USER_RELATION_TYPE_RRHH.') AND friend_user_id<>'.(int)$user_id.' AND '.($is_western_name_order ? 'concat(u.firstname, " ", u.lastname)' : 'concat(u.lastname, " ", u.firstname)').' like CONCAT("%","'.$search.'","%") ';
 			}
+			
 
 		} elseif (api_get_setting('allow_social_tool')=='false' && api_get_setting('allow_message_tool')=='true') {
+			
 			$valid=api_get_setting('time_limit_whosonline');
 
 			$sql='SELECT DISTINCT u.user_id as id, '.($is_western_name_order ? 'concat(u.firstname," ",u.lastname," ","( ",u.email," )")' : 'concat(u.lastname," ",u.firstname," ","( ",u.email," )")').' as name

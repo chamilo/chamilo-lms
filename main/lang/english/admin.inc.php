@@ -1214,4 +1214,5 @@ $ReturnToLanguagesList = "Return to the languages list";
 $ActivityCoach = "The coach of the session, shall have all rights and privileges on all the courses that belong to the session.";
 $CategoriesNumber = "Categories";
 $CourseProgress = "Course progress";
+$HomepageViewVerticalActivity = "Vertical activity view";
 ?>

@@ -353,7 +353,8 @@ if (defined('SYSTEM_INSTALLATION')) {
                     if ($singleDbForm) {
                         $t_student_publication = "$prefix{$row_course['db_name']}_student_publication";
                         $t_item_property = "$prefix{$row_course['db_name']}_item_property";
-                    }                   
+                    }
+                               
                     $sql_insert_user = "SELECT ref, insert_user_id FROM $t_item_property WHERE tool='work'";
                     
                     $rs_insert_user = Database::query($sql_insert_user);
@@ -372,7 +373,7 @@ if (defined('SYSTEM_INSTALLATION')) {
 					}
 					
 					//updating parent_id of the student_publication table
-			        $sql = 'SELECT id, url, parent_id FROM '.$row_course['db_name'].'.student_publication '; 
+			        $sql = 'SELECT id, url, parent_id FROM '.$t_student_publication; 
 					$result = Database::query($sql);
 					if (Database::num_rows($result) > 0) {
 						$items = api_store_result($result);
@@ -404,7 +405,7 @@ if (defined('SYSTEM_INSTALLATION')) {
 								}
 								
 								if ($parent_id != 0 ) {
-									$sql = 'UPDATE '.$row_course['db_name'].'.student_publication SET parent_id = '.$parent_id.' WHERE id = '.$file['id'].'';
+									$sql = 'UPDATE '.$t_student_publication.' SET parent_id = '.$parent_id.' WHERE id = '.$file['id'].'';
 									Database::query($sql);								
 								}
 							}	

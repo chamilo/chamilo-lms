@@ -351,7 +351,7 @@ if (defined('SYSTEM_INSTALLATION')) {
         			//updating parent_id of the student_publication table
 			        $sql = 'SELECT id, url, parent_id FROM '.$row_course['db_name'].'.student_publication '; 
 					$result = Database::query($sql);
-					if (Database::num_rows($result) > 0) {	  
+					if (Database::num_rows($result) > 0) {
 						$items = api_store_result($result);
 						$directory_list = $file_list=array();
 						
@@ -385,14 +385,12 @@ if (defined('SYSTEM_INSTALLATION')) {
 									Database::query($sql);								
 								}
 							}	
-						}						
-                    
-
-                }
-            }
-        }
+						}
+                	}
+            	}
+        	}
+		}
     }
-
 } else {
 
     echo 'You are not allowed here !';

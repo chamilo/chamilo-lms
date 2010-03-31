@@ -1443,9 +1443,7 @@ if (!$display_upload_form && !$display_tool_options) {
 	}
 
 	if (!empty($publication['description'])) {
-			echo '<div class="actions">';
-			echo '<br /><b>'.get_lang('Description').':</b>&nbsp;&nbsp;'.Security::remove_XSS($publication['description'], STUDENT).'<br /><br />';
-			echo '</div>';
+			echo '<p><div><strong>'.get_lang('Description').':</strong><p>'.Security::remove_XSS($publication['description'], STUDENT).'</p></div></p>';
 	}
 	if ($display_list_users_without_publication) {
 		display_list_users_without_publication($publication['id']);

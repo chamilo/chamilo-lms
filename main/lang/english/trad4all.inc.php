@@ -859,4 +859,5 @@ $NewThematicAdvance = "New thematic advance";
 $ResultsHiddenByExerciseSetting = "Results hidden by the exercise setting";
 $ThematicSectionHasBeenCreatedSuccessfull = "Thematic section has been created success full";
 $NowYouShouldAddThematicPlanXAndThematicAdvanceX = "Now you should add thematic plan %s and thematic advance %s";
+$QualificationNumeric = "Numeric score  under";
 ?>

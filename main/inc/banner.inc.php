@@ -63,12 +63,18 @@ if (!empty($_cid) and $_cid != -1 and isset($_course)) {
 } else {
 	echo '<div id="my_courses"></div>';
 }
+
+echo '<div id="plugin-header">';
+api_plugin('header');
+echo '</div>';
+
 //Don't let the header disappear if there's nothing on the left
 echo '<div class="clear">&nbsp;</div>';
 
 /*	Plugins for banner section */
 
-api_plugin('header');
+
+
 $web_course_path = api_get_path(WEB_COURSE_PATH);
 
 /*	External link section */

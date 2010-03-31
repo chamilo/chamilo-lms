@@ -4185,3 +4185,9 @@ span.form_required  {
 	/* float:left;
 	width : 380px; */
 }
+
+
+#plugin-header {
+	margin-left:25px;
+	padding:5px;
+}

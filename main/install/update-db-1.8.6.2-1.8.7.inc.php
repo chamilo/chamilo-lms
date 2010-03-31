@@ -347,6 +347,45 @@ if (defined('SYSTEM_INSTALLATION')) {
                             error_log('Error in '.$query.': '.Database::error());
                         }
                     }
+                                          
+        			//updating parent_id of the student_publication table
+			        $sql = 'SELECT id, url, parent_id FROM '.$row_course['db_name'].'.student_publication '; 
+					$result = Database::query($sql);
+					if (Database::num_rows($result) > 0) {	  
+						$items = api_store_result($result);
+						$directory_list = $file_list=array();
+						
+						foreach($items as $item) {
+							$student_slash = substr($item['url'], 0, 1);
+							//means this is a directory 
+							if ($student_slash == '/') {
+								$directory_list[$item['id']]= $item['url'];					
+							} else {
+							// this is a file with no parents
+								if ($item['parent_id'] == 0)
+									$file_list []= $item;
+							}				
+						}
+						
+						if (is_array($file_list) && count($file_list) > 0) {
+							foreach ($file_list as $file) {
+								$parent_id = 0;
+								if (is_array($directory_list) && count($directory_list) > 0) {
+									foreach($directory_list as $id => $dir) {					
+										$pos = strpos($file['url'], $dir.'/');					
+										if ($pos !== false) {
+											$parent_id = $id;
+											break;
+										}
+									}
+								}
+								
+								if ($parent_id != 0 ) {
+									$sql = 'UPDATE '.$row_course['db_name'].'.student_publication SET parent_id = '.$parent_id.' WHERE id = '.$file['id'].'';
+									Database::query($sql);								
+								}
+							}	
+						}						
                     
 
                 }

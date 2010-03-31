@@ -1213,7 +1213,14 @@ $TheSubLanguageForThisLanguageHasBeenAdded = "El sub-lenguaje de este idioma ha 
 $ReturnToLanguagesList = "Volver a la lista de idiomas";
 $ActivityCoach = "El tutor de la sesion, tendrá todos los derechos y permisos en todos los cursos que pertenecen a la sesion.";
 $CategoriesNumber = "Categorías";
+$CourseProgress = "Avance temático";
 $ExportAllCoursesList = "Exportar toda la lista de cursos";
 $ExportSelectedCoursesFromCoursesList = "Exportar solo algunos cursos de la lista";
+$CoursesListHasBeenExported = "La lista de cursos ha sido exportada";
 $WhichCoursesToExport = "Seleccione los cursos que desea exportar";
+$AssignUsersToPlatformAdministrator = "Asignar usuarios al administrador de la plataforma";
+$AssignedUsersListToPlatformAdministrator = "Lista de usuarios asignados al administrador de la plataforma";
+$AssignedCoursesListToHumanResourcesManager = "Lista de usuarios asignados al administrador de recursos humanos";
+$ThereAreNotCreatedCourses = "No hay cursos creados";
+$HomepageViewVerticalActivity = "Ver la actividad en forma vertical";
 ?>

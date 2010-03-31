@@ -18,6 +18,7 @@ require_once api_get_path(LIBRARY_PATH).'pchart/pChart.class.php';
 require_once api_get_path(LIBRARY_PATH).'pchart/pCache.class.php';
 require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be/gradebookitem.class.php';
 require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be/evaluation.class.php';
+require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be/result.class.php';
 require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be/linkfactory.class.php';
 require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/flatview_data_generator.class.php';
 require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/gradebook_functions.inc.php';

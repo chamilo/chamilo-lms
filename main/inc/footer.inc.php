@@ -56,7 +56,9 @@ if (api_is_platform_admin()) {
 
 /*	Plugins for footer section */
 
+echo '<div id="plugin-footer">';
 api_plugin('footer');
+echo '</div>';
 
 echo '<div class="footer_emails">';
 

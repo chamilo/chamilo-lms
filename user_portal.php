@@ -1154,7 +1154,9 @@ if ($maxCourse > 0) {
 
 echo '	<div class="maincontent" id="maincontent">'; // start of content for logged in users
 // Plugins for the my courses main area
+echo '<div id="plugin-mycourses_main">';
 api_plugin('mycourses_main');
+echo '</div>';
 
 /*
 -----------------------------------------------------------------------------
@@ -1708,6 +1710,7 @@ if (!empty($menu_navigation)) {
 // plugins for the my courses menu
 if (isset($_plugins['mycourses_menu']) && is_array($_plugins['mycourses_menu'])) {
 	echo '<div class="note">';
+	echo '<div id="plugin-mycourses_menu">';
 	api_plugin('mycourses_menu');
 	echo '</div>';
 }

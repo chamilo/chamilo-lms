@@ -4186,8 +4186,21 @@ span.form_required  {
 	width : 380px; */
 }
 
+/* plugins divs */ 
 
 #plugin-header {
 	margin-left:65px;
 	padding:5px;
 }
+#plugin-mycourses_menu {
+	padding:5px;
+}
+
+#plugin-mycourses_main {
+	padding:5px;
+}
+
+#plugin-footer {
+	padding:5px;
+}
+

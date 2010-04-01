@@ -20,12 +20,6 @@ class TestTablesort extends UnitTestCase{
 		$this->table = null;
 	}
 	*/
-	public function testOrderingstring(){
-		$txt='abc';
-		$res=TableSort::orderingstring($txt);
-		$this->assertTrue($res);
-		//var_dump($res);
-	}
 
 	public function testSortTable(){
 		$data= array(a, cd, efd);

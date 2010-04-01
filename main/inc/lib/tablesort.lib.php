@@ -8,24 +8,15 @@
  */
 
 define('SORT_DATE', 3);
-define('SORT_IMAGE',4);
+define('SORT_IMAGE', 4);
 
 class TableSort {
-
-	/**
-	 * Creates a string to use in sorting.
-	 * @param string $txt The string to convert
-	 * @author René Haentjens
-	 */
-	function orderingstring($txt) {
-		return api_strtolower($txt);
-	}
 
 	/**
 	 * This is a method for date comparison, using hidden raw values if they are given.
 	 * Date formats vary a lot, alse they have localized values. For avoiding using
 	 * unreliable in this case date parsing routine, this method checks first whether raw
-	 * date walues have been intentionaly passed in order pricise sorting to be achieved.
+	 * date walues have been intentionaly passed in order precise sorting to be achieved.
 	 * Here is the format of the date value, hidden in a comment: <!--uts=1234685716-->
 	 * @param string $el1	The first element provided from the table.
 	 * @param string $el2	The second element provided from the table.
@@ -92,14 +83,14 @@ class TableSort {
 				$compare_function = 'strip_tags($el1) > strip_tags($el2)';
 				break;
 			case SORT_IMAGE :
-				$compare_function = 'api_strnatcmp(TableSort::orderingstring(strip_tags($el1,"<img>")),TableSort::orderingstring(strip_tags($el2,"<img>"))) > 0';
+				$compare_function = 'api_strnatcmp(api_strtolower(strip_tags($el1,"<img>")),api_strtolower(strip_tags($el2,"<img>"))) > 0';
 				break;
 			case SORT_DATE :
 				$compare_function = 'TableSort::date_compare($el1, $el2) > 0';
 				break;
             case SORT_STRING :
             default:
-                $compare_function = 'api_strnatcmp(TableSort::orderingstring(strip_tags($el1)),TableSort::orderingstring(strip_tags($el2))) > 0';
+                $compare_function = 'api_strnatcmp(api_strtolower(strip_tags($el1)),api_strtolower(strip_tags($el2))) > 0';
                 break;
 		}
 
@@ -122,8 +113,11 @@ class TableSort {
 	function is_numeric_column($data, $column) {
 		$is_numeric = true;
 
-		foreach ($data as $index => $row) {
+		foreach ($data as $index => & $row) {
 			$is_numeric &= is_numeric(strip_tags($row[$column]));
+			if (!$is_numeric) {
+				break;
+			}
 		}
 
 		return $is_numeric;
@@ -138,7 +132,7 @@ class TableSort {
 	 */
 	function is_date_column($data, $column) {
 		$is_date = true;
-		foreach ($data as $index => $row) {
+		foreach ($data as $index => & $row) {
 			if (strpos($row[$column], '<!--uts=') !== false) {
 				// A hidden raw date value (an integer Unix time stamp) has been detected. It is needed for precise sorting.
 				$is_date &= true;
@@ -149,6 +143,9 @@ class TableSort {
 				$is_date &= ($check_date != -1 && $check_date != false);
 			} else {
 				$is_date &= false;
+			}
+			if (!$is_date) {
+				break;
 			}
 		}
 		return $is_date;
@@ -164,9 +161,12 @@ class TableSort {
 	 */
 	function is_image_column($data, $column) {
 		$is_image = true;
-		foreach ($data as $index => $row) {
-			$is_image &= strlen(trim(strip_tags($row[$column],'<img>'))) > 0; // at least one img-tag
+		foreach ($data as $index => & $row) {
+			$is_image &= strlen(trim(strip_tags($row[$column], '<img>'))) > 0; // at least one img-tag
 			$is_image &= strlen(trim(strip_tags($row[$column]))) == 0; // and no text outside attribute-values
+			if (!$is_image) {
+				break;
+			}
 		}
 		return $is_image;
 	}
@@ -223,14 +223,14 @@ class TableSort {
 				$compare_function = 'strip_tags($el1) > strip_tags($el2)';
 				break;
 			case SORT_IMAGE :
-				$compare_function = 'strnatcmp(TableSort::orderingstring(strip_tags($el1,"<img>")),TableSort::orderingstring(strip_tags($el2,"<img>"))) > 0';
+				$compare_function = 'api_strnatcmp(api_strtolower(strip_tags($el1,"<img>")),api_strtolower(strip_tags($el2,"<img>"))) > 0';
 				break;
 			case SORT_DATE :
 				$compare_function = 'TableSort::date_compare($el1, $el2) > 0';
 				break;
             case SORT_STRING :
             default:
-                $compare_function = 'strnatcmp(TableSort::orderingstring(strip_tags($el1)),TableSort::orderingstring(strip_tags($el2))) > 0';
+                $compare_function = 'api_strnatcmp(api_strtolower(strip_tags($el1)),api_strtolower(strip_tags($el2))) > 0';
                 break;
 		}
 
@@ -242,9 +242,11 @@ class TableSort {
 		if (is_array($column_show)) {
 			// We show only the columns data that were set up on the $column_show array
 			$new_order_data = array();
-			for ($j = 0; $j < count($data); $j++) {
+			$count_data = count($data);
+			$count_column_show = count($column_show);
+			for ($j = 0; $j < $count_data; $j++) {
 				$k = 0;
-				for ($i = 0; $i < count($column_show); $i++) {
+				for ($i = 0; $i < $count_column_show; $i++) {
 					if ($column_show[$i]) {
 						$new_order_data[$j][$k] = $data[$j][$i];
 					}

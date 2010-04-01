@@ -370,7 +370,7 @@ function display_student_publications_list($work_dir, $sub_course_dir, $currentC
 
 	if ($origin != 'learnpath') {
 		$table_header[] = array(get_lang('Modify'), true);
-		$table_header[] = array('RealDate', false);
+		$table_header[] = array('RealDate', true);
 	}
 
 	// An array with the setting of the columns -> 1: columns that we will show, 0:columns that will be hide
@@ -385,25 +385,15 @@ function display_student_publications_list($work_dir, $sub_course_dir, $currentC
 	$column_show[] = 1; // modify
 	$column_show[] = 0;	//real date in correct format
 
-
 	// Here we change the way how the colums are going to be sort
 	// in this case the the column of LastResent ( 4th element in $column_header) we will be order like the column RealDate
 	// because in the column RealDate we have the days in a correct format "2008-03-12 10:35:48"
 
-	$column_order[] = 1; //type
-	$column_order[] = 2; // title
-
 	if ($count_files != 0) {
-		$column_order[] = 3; //authors
+		$column_order[3] = 5;
+	} else {
+		$column_order[2] = 4;
 	}
-
-	$column_order[] = 6; // date
-
-	if ($is_allowed_to_edit) {
-		$column_order[] = 5;
-	}
-
-	$column_order[] = 6;
 
 	$table_data = array();
 	$dirs_list = get_subdirs_list($work_dir);
@@ -456,10 +446,10 @@ function display_student_publications_list($work_dir, $sub_course_dir, $currentC
 					$form_folder -> addGroup($group_name, 'my_group', get_lang('Title'));
 					$form_folder -> addGroupRule('my_group', get_lang('ThisFieldIsRequired'), 'required');
 					$defaults = array('my_group[dir_name]' => html_entity_decode($dir), 'description' => api_html_entity_decode($row['description']));
-					
+
 					//$form_folder-> addElement('textarea', 'description', get_lang('Description'), array('rows' => 5, 'cols' => 50));
 					$form_folder->add_html_editor('description', get_lang('Description'), false, false, array('ToolbarSet' => 'profile', 'Width' => '100%', 'Height' => '200'));
-					
+
 					$qualification_input[] = FormValidator :: createElement('text','qualification');
 					$form_folder -> addGroup($qualification_input, 'qualification', get_lang('QualificationNumeric'), 'size="10"');
 
@@ -534,7 +524,7 @@ function display_student_publications_list($work_dir, $sub_course_dir, $currentC
 					}
 					if ($there_is_a_expire_date) {
 						$defaults = array_merge($defaults, convert_date_to_array($homework['expires_on'], 'expires'));
-					}					
+					}
 					if (!empty($row['qualification'])) {
 						$defaults = array_merge($defaults, array('qualification[qualification]' => $row['qualification']));
 					}
@@ -694,8 +684,9 @@ function display_student_publications_list($work_dir, $sub_course_dir, $currentC
 
 			if ($direc_date != '' && $direc_date != '0000-00-00 00:00:00') {
 				$direc_date_local = api_get_local_time($direc_date, null, date_default_timezone_get());
-				$row[] = date_to_str_ago($direc_date_local).'<br /><span class="dropbox_date">'.api_format_date($direc_date_local).'</span>'.'<!--uts='.api_strtotime($direc_date_local).'-->';
+				$row[] = date_to_str_ago($direc_date_local).'<br /><span class="dropbox_date">'.api_format_date($direc_date_local).'</span>';
 			} else {
+				$direc_date_local = '0000-00-00 00:00:00';
 				$row[] = '';
 			}
 
@@ -709,6 +700,7 @@ function display_student_publications_list($work_dir, $sub_course_dir, $currentC
 					$row[] = '';
 				}
 			}
+			$row[] = $direc_date_local;
 			$table_data[] = $row;
 		}
 	}
@@ -755,7 +747,7 @@ function display_student_publications_list($work_dir, $sub_course_dir, $currentC
 				$row[] = display_user_link_work($row2['insert_user_id'], $work->author).$qualification_string; // $work->author;
 
 				$work_sent_date_local = api_get_local_time($work->sent_date, null, date_default_timezone_get());
-				$row[] = date_to_str_ago($work_sent_date_local).$add_string.'<br /><span class="dropbox_date">'.api_format_date($work_sent_date_local).'</span>'.'<!--uts='.api_strtotime($work_sent_date_local).'-->';
+				$row[] = date_to_str_ago($work_sent_date_local).$add_string.'<br /><span class="dropbox_date">'.api_format_date($work_sent_date_local).'</span>';
 
 				if ($is_allowed_to_edit) {
 
@@ -782,6 +774,7 @@ function display_student_publications_list($work_dir, $sub_course_dir, $currentC
 				} else {
 					$row[] = ' ';
 				}
+				$row[] = $work_sent_date_local;
 				$table_data[] = $row;
 			}
 		}
@@ -1136,7 +1129,7 @@ function get_parent_directories($my_cur_dir_path) {
 	$list_id = array();
 	if (!empty($my_cur_dir_path)) {
 		$list_parents = explode('/', $my_cur_dir_path);
-		$dir_acum = '';		
+		$dir_acum = '';
 		$work_table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
 		for ($i = 0; $i < count($list_parents) - 1; $i++) {
 			$item = Database::escape_string($list_parents[$i]);
@@ -1431,7 +1424,7 @@ function get_list_users_without_publication($task_id) {
 
 	if (!empty($session_id)){
 		$sql = "SELECT user_id as id FROM $work_table WHERE parent_id='$task_id' and session_id='".$session_id."'";
-		
+
 	} else {
 		$sql = "SELECT user_id as id FROM $work_table WHERE parent_id='$task_id'";
 	}
@@ -1446,7 +1439,7 @@ function get_list_users_without_publication($task_id) {
 	} else {
 		$sql_users = "SELECT cu.user_id, u.lastname, u.firstname, u.email FROM $table_course_user AS cu, $table_user AS u WHERE u.status!=1 and cu.course_code='".api_get_course_id()."' AND u.user_id=cu.user_id";
 	}
-	
+
 	$result_users = Database::query($sql_users);
 	$users_without_tasks = array();
 	while ($row_users = Database::fetch_row($result_users)) {

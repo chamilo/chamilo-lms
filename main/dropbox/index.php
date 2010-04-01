@@ -250,13 +250,12 @@ if ($_GET['action'] != 'add') {
 		}
 	}
 
-
 	// ACTIONS
 	if ($_GET['view'] == 'received' OR !$dropbox_cnf['sent_received_tabs']) {
 		//echo '<h3>'.get_lang('ReceivedFiles').'</h3>';
 
 		// This is for the categories
-		if (isset($_GET['view_received_category']) AND $_GET['view_received_category']<>'') {
+		if (isset($_GET['view_received_category']) AND $_GET['view_received_category'] != '') {
 			$view_dropbox_category_received = Security::remove_XSS($_GET['view_received_category']);
 		} else {
 			$view_dropbox_category_received = 0;
@@ -381,6 +380,7 @@ if ($_GET['action'] != 'add') {
 		}
 
 		$column_header[] = array('RealDate', true);
+		$column_header[] = array('RealSize', true);
 
 		// An array with the setting of the columns -> 1: columns that we will show, 0:columns that will be hide
 		$column_show[] = 1;
@@ -401,14 +401,9 @@ if ($_GET['action'] != 'add') {
 		// in this case the the column of LastResent ( 4th element in $column_header) we will be order like the column RealDate
 		// because in the column RealDate we have the days in a correct format "2008-03-12 10:35:48"
 
-		$column_order[] = 1;
-		$column_order[] = 2;
-		$column_order[] = 3;
-		$column_order[] = 4;
-		$column_order[] = 7;
-		$column_order[] = 6;
-		$column_order[] = 7;
-		$column_order[] = 8;
+		$column_order[3] = 8;
+		$column_order[5] = 7;
+
 
 		// The content of the sortable table = the received files
 		foreach ($dropbox_person -> receivedWork as $dropbox_file) {
@@ -429,7 +424,8 @@ if ($_GET['action'] != 'add') {
 				$link_open = '<a href="dropbox_download.php?'.api_get_cidreq().'&amp;id='.$dropbox_file->id.'">';
 				$dropbox_file_data[] = $link_open.build_document_icon_tag('file', $dropbox_file->title).'</a>';
 				$dropbox_file_data[] = '<a href="dropbox_download.php?'.api_get_cidreq().'&id='.$dropbox_file->id.'&amp;action=download">'.Display::return_icon('filesave.gif', get_lang('Download'), array('style' => 'float:right;')).'</a>'.$link_open.$dropbox_file->title.'</a>'.$new_icon.'<br />'.$dropbox_file->description;
-				$dropbox_file_data[] = ceil(($dropbox_file->filesize) / 1024).' '.get_lang('kB');
+				$file_size = $dropbox_file->filesize;
+				$dropbox_file_data[] = format_file_size($file_size);
 				$dropbox_file_data[] = $dropbox_file->author;
 				//$dropbox_file_data[] = $dropbox_file->description;
 
@@ -454,7 +450,8 @@ if ($_GET['action'] != 'add') {
 					$dropbox_file_data[] = $action_icons;
 				}
 				$action_icons = '';
-				$dropbox_file_data[] = $dropbox_file->last_upload_date; //date
+				$dropbox_file_data[] = $last_upload_date;
+				$dropbox_file_data[] = $file_size;
 				$dropbox_data_recieved[] = $dropbox_file_data;
 			}
 		}
@@ -535,7 +532,8 @@ if ($_GET['action'] != 'add') {
 			$column_header[] = array(get_lang('Modify'), false, '', 'nowrap style="text-align: right"');
 		}
 
-		$column_header[] = array('RealDate', false);
+		$column_header[] = array('RealDate', true);
+		$column_header[] = array('RealSize', true);
 
 		$column_show = array();
 		$column_order = array();
@@ -558,14 +556,8 @@ if ($_GET['action'] != 'add') {
 		// in this case the the column of LastResent ( 4th element in $column_header) we will be order like the column RealDate
 		// because in the column RealDate we have the days in a correct format "2008-03-12 10:35:48"
 
-		$column_order[] = 1;
-		$column_order[] = 2;
-		$column_order[] = 3;
-		$column_order[] = 4;
-		$column_order[] = 7;
-		$column_order[] = 6;
-		$column_order[] = 7;
-		$column_order[] = 8;
+		$column_order[3] = 8;
+		$column_order[5] = 7;
 
 		// The content of the sortable table = the received files
 		foreach ($dropbox_person -> sentWork as $dropbox_file) {
@@ -576,7 +568,8 @@ if ($_GET['action'] != 'add') {
 				$link_open = '<a href="dropbox_download.php?'.api_get_cidreq().'&id='.$dropbox_file->id.'">';
 				$dropbox_file_data[] = $link_open.build_document_icon_tag('file', $dropbox_file->title).'</a>';
 				$dropbox_file_data[] = '<a href="dropbox_download.php?'.api_get_cidreq().'&id='.$dropbox_file->id.'&amp;action=download">'.Display::return_icon('filesave.gif', get_lang('Save'), array('style' => 'float:right;')).'</a>'.$link_open.$dropbox_file->title.'</a><br />'.$dropbox_file->description;
-				$dropbox_file_data[] = ceil(($dropbox_file->filesize)/1024).' '.get_lang('kB');
+				$file_size = $dropbox_file->filesize;
+				$dropbox_file_data[] = format_file_size($file_size);
 				foreach ($dropbox_file->recipients as $recipient) {
 					$receivers_celldata = display_user_link_work($recipient['user_id'], $recipient['name']).', '.$receivers_celldata;
 				}
@@ -592,12 +585,13 @@ if ($_GET['action'] != 'add') {
 									<a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category='.Security::remove_XSS($_GET['view_received_category']).'&amp;view_sent_category='.Security::remove_XSS($_GET['view_sent_category']).'&amp;view='.Security::remove_XSS($_GET['view']).'&amp;action=movesent&amp;move_id='.$dropbox_file->id.'">'.Display::return_icon('deplacer_fichier.gif', get_lang('Move')).'</a>
 									<a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category='.Security::remove_XSS($_GET['view_received_category']).'&amp;view_sent_category='.Security::remove_XSS($_GET['view_sent_category']).'&amp;view='.Security::remove_XSS($_GET['view']).'&amp;action=deletesentfile&amp;id='.$dropbox_file->id.'" onclick="javascript: return confirmation(\''.$dropbox_file->title.'\');">'.Display::return_icon('delete.gif', get_lang('Delete')).'</a>';
 				// This is a hack to have an additional row in a sortable table
-				if ($_GET['action'] == 'viewfeedback' AND isset($_GET['id']) and is_numeric($_GET['id']) AND $dropbox_file->id==$_GET['id']) {
+				if ($_GET['action'] == 'viewfeedback' && isset($_GET['id']) && is_numeric($_GET['id']) && $dropbox_file->id == $_GET['id']) {
 					$action_icons .= "</td></tr>\n"; // ending the normal row of the sortable table
 					$action_icons .= "<tr>\n\t<td colspan=\"2\"><a href=\"index.php?".api_get_cidreq()."&view_received_category=".Security::remove_XSS($_GET['view_received_category'])."&amp;view_sent_category=".Security::remove_XSS($_GET['view_sent_category'])."&amp;view=".Security::remove_XSS($_GET['view'])."\">".get_lang('CloseFeedback')."</a></td><td colspan=\"7\">".feedback($dropbox_file->feedback2)."</td>\n</tr>\n";
 				}
 				$dropbox_file_data[] = $action_icons;
-				$dropbox_file_data[] = $dropbox_file->last_upload_date;
+				$dropbox_file_data[] = $last_upload_date;
+				$dropbox_file_data[] = $file_size;
 				$action_icons = '';
 				$dropbox_data_sent[] = $dropbox_file_data;
 			}

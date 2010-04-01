@@ -9,39 +9,8 @@
 
 define('SORT_DATE', 3);
 define('SORT_IMAGE', 4);
-define('SORT_CUSTOM', 5);
 
 class TableSort {
-
-	/**
-	 * This is a method for date comparison, using hidden raw values if they are given.
-	 * Date formats vary a lot, alse they have localized values. For avoiding using
-	 * unreliable in this case date parsing routine, this method checks first whether raw
-	 * date walues have been intentionaly passed in order precise sorting to be achieved.
-	 * Here is the format of the date value, hidden in a comment: <!--uts=1234685716-->
-	 * @param string $el1	The first element provided from the table.
-	 * @param string $el2	The second element provided from the table.
-	 * @result bool			Tre comparison result.
-	 * @author Ivan Tcholakov, 2010.
-	 */
-	public function date_compare($el1, $el2) {
-		if (($pos1 = strpos($el1, '<!--uts=')) !== false && ($pos2 = strpos($el1, '-->', $pos1)) !== false) {
-			$el1 = intval(substr($el1, $pos1 + 8, $pos2 - $pos1 - 8));
-		} else {
-			$el1 = strtotime(strip_tags($el1));
-		}
-		if (($pos1 = strpos($el2, '<!--uts=')) !== false && ($pos2 = strpos($el2, '-->', $pos1)) !== false) {
-			$el2 = intval(substr($el2, $pos1 + 8, $pos2 - $pos1 - 8));
-		} else {
-			$el2 = strtotime(strip_tags($el2));
-		}
-		if ($el1 > $el2) {
-			return 1;
-		} elseif ($el1 < $el2) {
-			return -1;
-		}
-		return 0;
-	}
 
 	/**
 	 * Sorts 2-dimensional table.
@@ -68,9 +37,7 @@ class TableSort {
 
 		$compare_function = '';
 		if ($type == SORT_REGULAR) {
-			if (TableSort::is_custom_sortable_column($data, $column)) {
-				$type = SORT_CUSTOM;
-			} elseif (TableSort::is_image_column($data, $column)) {
+			if (TableSort::is_image_column($data, $column)) {
 				$type = SORT_IMAGE;
 			} elseif (TableSort::is_date_column($data, $column)) {
 				$type = SORT_DATE;
@@ -82,9 +49,6 @@ class TableSort {
 		}
 
 		switch ($type) {
-			case SORT_CUSTOM:
-				$compare_function = 'TableSort::custom_compare($el1, $el2) > 0';
-				break;
 			case SORT_NUMERIC:
 				$compare_function = 'strip_tags($el1) > strip_tags($el2)';
 				break;
@@ -92,7 +56,7 @@ class TableSort {
 				$compare_function = 'api_strnatcmp(api_strtolower(strip_tags($el1,"<img>")),api_strtolower(strip_tags($el2,"<img>"))) > 0';
 				break;
 			case SORT_DATE:
-				$compare_function = 'TableSort::date_compare($el1, $el2) > 0';
+				$compare_function = 'strtotime(strip_tags($el1)) > strtotime(strip_tags($el2))';
 				break;
 			case SORT_STRING:
 			default:
@@ -113,13 +77,14 @@ class TableSort {
 	 * @param array $data The data to be sorted.
 	 * @param int $column The column on which the data should be sorted (default = 0)
 	 * @param string $direction The direction to sort (SORT_ASC (default) orSORT_DESC)
-	 * @param array $column_show The columns that we will show in the table i.e: $column_show=array('1','0','1') we will show the 1st and the 3th column.
-	 * @param array $column_order Changes how the columns will be sorted ie. $column_order=array('1','4','3','4') The 2nd column will be sorted like the 4 column
-	 * @param constant $type How should data be sorted (SORT_REGULAR, SORT_NUMERIC,SORT_STRING,SORT_DATE,SORT_IMAGE)	 *
+	 * @param array $column_show The columns that we will show in the table i.e: $column_show = array('1','0','1') we will show the 1st and the 3th column.
+	 * @param array $column_order Changes how the columns will be sorted ie. $column_order = array('0','3','2','3') The column [1] will be sorted like the column [3]
+	 * @param constant $type How should data be sorted (SORT_REGULAR, SORT_NUMERIC, SORT_STRING, SORT_DATE, SORT_IMAGE)
 	 * @return array The sorted dataset
 	 * @author bart.mollet@hogent.be
 	 */
 	public function sort_table_config($data, $column = 0, $direction = SORT_ASC, $column_show = null, $column_order = null, $type = SORT_REGULAR) {
+
 		if (!is_array($data) or count($data) == 0) {
 			return array();
 		}
@@ -136,17 +101,11 @@ class TableSort {
 		// Change columns sort
 	 	// Here we say that the real way of how the columns are going to be order is manage by the $column_order array
 	 	if (is_array($column_order)) {
-			for ($i = 0; $i < count($column_order); $i++) {
-				if ($column == $i + 1) {
-					$column = $column_order[$i];
-				}
-			}
+	 		$column = isset($column_order[$column]) ? $column_order[$column] : $column;
 	 	}
 
 		if ($type == SORT_REGULAR) {
-			if (TableSort::is_custom_sortable_column($data, $column)) {
-				$type = SORT_CUSTOM;
-			} elseif (TableSort::is_image_column($data, $column)) {
+			if (TableSort::is_image_column($data, $column)) {
 				$type = SORT_IMAGE;
 			} elseif (TableSort::is_date_column($data, $column)) {
 				$type =  SORT_DATE;
@@ -158,9 +117,6 @@ class TableSort {
 		}
 
 	 	switch ($type) {
-			case SORT_CUSTOM:
-				$compare_function = 'TableSort::custom_compare($el1, $el2) > 0';
-				break;
 	 		case SORT_NUMERIC:
 				$compare_function = 'strip_tags($el1) > strip_tags($el2)';
 				break;
@@ -168,7 +124,7 @@ class TableSort {
 				$compare_function = 'api_strnatcmp(api_strtolower(strip_tags($el1,"<img>")),api_strtolower(strip_tags($el2,"<img>"))) > 0';
 				break;
 			case SORT_DATE:
-				$compare_function = 'TableSort::date_compare($el1, $el2) > 0';
+				$compare_function = 'strtotime(strip_tags($el1)) > strtotime(strip_tags($el2))';
 				break;
 			case SORT_STRING:
 			default:
@@ -231,10 +187,7 @@ class TableSort {
 	private function is_date_column(& $data, $column) {
 		$is_date = true;
 		foreach ($data as $index => & $row) {
-			if (strpos($row[$column], '<!--uts=') !== false) {
-				// A hidden raw date value (an integer Unix time stamp) has been detected. It is needed for precise sorting.
-				$is_date &= true;
-			} elseif (strlen(strip_tags($row[$column])) != 0) {
+			if (strlen(strip_tags($row[$column])) != 0) {
 				$check_date = strtotime(strip_tags($row[$column]));
 				// strtotime Returns a timestamp on success, FALSE otherwise.
 				// Previous to PHP 5.1.0, this function would return -1 on failure.
@@ -266,42 +219,6 @@ class TableSort {
 			}
 		}
 		return $is_image;
-	}
-
-	/**
-	 * Checks whether a column of a 2D-array contains hidden numeric values that are suitable for sorting.
-	 * Here is the format of a sortable value, hidden within a comment: <!--sortable=1234685716-->
-	 * @param array $data		The data-array
-	 * @param int $column		The index of the column to check
-	 * @return bool				TRUE if the whole column contains hidden sortable values, FALSE otherwise
-	 * @author Ivan Tcholakov, 2010.
-	 */
-	private function is_custom_sortable_column(& $data, $column) {
-		$is_custom_sortable = true;
-		foreach ($data as $index => & $row) {
-			$cell = &$row[$column];
-			$is_custom_sortable &= ($pos = strpos($cell, '<!--sortable=')) !== false && strpos($cell, '-->', $pos) !== false;
-			if (!$is_custom_sortable) {
-				break;
-			}
-		}
-		return $is_custom_sortable;
-	}
-
-	/**
-	 * This is a method for custom comparison, using provided hidden values.
-	 * Here is the format of a sortable value, hidden within a comment: <!--sortable=1234685716-->
-	 * @param string $el1	The first element provided from the table.
-	 * @param string $el2	The second element provided from the table.
-	 * @result bool			Tre comparison result.
-	 * @author Ivan Tcholakov, 2010.
-	 */
-	public function custom_compare($el1, $el2) {
-		$pos = strpos($el1, '<!--sortable=');
-		$el1 = intval(substr($el1, $pos + 13, strpos($el1, '-->', $pos) - $pos - 13));
-		$pos = strpos($el2, '<!--sortable=');
-		$el2 = intval(substr($el2, $pos + 13, strpos($el2, '-->', $pos) - $pos - 13));
-		return $el1 > $el2 ? 1 : ($el1 < $el2 ? -1 : 0);
 	}
 
 }

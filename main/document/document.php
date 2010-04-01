@@ -690,7 +690,7 @@ if (isset($docs_and_folders) && is_array($docs_and_folders)) {
 		$last_edit_date = $id['lastedit_date'];
 		$last_edit_date = api_get_local_time($last_edit_date, null, date_default_timezone_get());
 		$display_date = date_to_str_ago($last_edit_date).'<br /><span class="dropbox_date">'.api_format_date($last_edit_date).'</span>';
-		$row[] = $invisibility_span_open.$display_date.$invisibility_span_close.'<!--uts='.strtotime($last_edit_date).'-->';
+		$row[] = $invisibility_span_open.$display_date.$invisibility_span_close;
 
 		// Admins get an edit column
 		if ($is_allowed_to_edit || $group_member_with_upload_rights) {
@@ -794,16 +794,11 @@ $column_show[] = 0;
 $column_order = array();
 
 if (count($row) == 8) {
-	$column_order[] = 1;
-	$column_order[] = 2;
-	$column_order[] = 7;
-	$column_order[] = 6;
-	$column_order[] = 5;
+	$column_order[3] = 7;
+	$column_order[4] = 6;
 } elseif (count($row) == 6) {
-	$column_order[] = 1;
-	$column_order[] = 2;
-	$column_order[] = 7;
-	$column_order[] = 4;
+	$column_order[2] = 5;
+	$column_order[3] = 4;
 }
 
 $default_column = $is_allowed_to_edit ? 2 : 1;

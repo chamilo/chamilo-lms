@@ -9,6 +9,7 @@
 
 define('SORT_DATE', 3);
 define('SORT_IMAGE', 4);
+define('SORT_CUSTOM', 5);
 
 class TableSort {
 
@@ -52,22 +53,24 @@ class TableSort {
 	 * @return array The sorted dataset
 	 * @author bart.mollet@hogent.be
 	 */
-	function sort_table($data, $column = 0, $direction = SORT_ASC, $type = SORT_REGULAR) {
+	public function sort_table($data, $column = 0, $direction = SORT_ASC, $type = SORT_REGULAR) {
 		if (!is_array($data) or count($data) == 0) {
 			return array();
 		}
-        if ($column != strval(intval($column))) {
-        	// Probably an attack
-        	return $data;
-        }
-        if (!in_array($direction, array(SORT_ASC, SORT_DESC))) {
-        	// Probably an attack
-        	return $data;
-        }
+		if ($column != strval(intval($column))) {
+			// Probably an attack
+			return $data;
+		}
+		if (!in_array($direction, array(SORT_ASC, SORT_DESC))) {
+			// Probably an attack
+			return $data;
+		}
 
-        $compare_function = '';
-        if ($type == SORT_REGULAR) {
-			if (TableSort::is_image_column($data, $column)) {
+		$compare_function = '';
+		if ($type == SORT_REGULAR) {
+			if (TableSort::is_custom_sortable_column($data, $column)) {
+				$type = SORT_CUSTOM;
+			} elseif (TableSort::is_image_column($data, $column)) {
 				$type = SORT_IMAGE;
 			} elseif (TableSort::is_date_column($data, $column)) {
 				$type = SORT_DATE;
@@ -76,22 +79,25 @@ class TableSort {
 			} else {
 				$type = SORT_STRING;
 			}
-        }
+		}
 
 		switch ($type) {
-			case SORT_NUMERIC :
+			case SORT_CUSTOM:
+				$compare_function = 'TableSort::custom_compare($el1, $el2) > 0';
+				break;
+			case SORT_NUMERIC:
 				$compare_function = 'strip_tags($el1) > strip_tags($el2)';
 				break;
-			case SORT_IMAGE :
+			case SORT_IMAGE:
 				$compare_function = 'api_strnatcmp(api_strtolower(strip_tags($el1,"<img>")),api_strtolower(strip_tags($el2,"<img>"))) > 0';
 				break;
-			case SORT_DATE :
+			case SORT_DATE:
 				$compare_function = 'TableSort::date_compare($el1, $el2) > 0';
 				break;
-            case SORT_STRING :
-            default:
-                $compare_function = 'api_strnatcmp(api_strtolower(strip_tags($el1)),api_strtolower(strip_tags($el2))) > 0';
-                break;
+			case SORT_STRING:
+			default:
+				$compare_function = 'api_strnatcmp(api_strtolower(strip_tags($el1)),api_strtolower(strip_tags($el2))) > 0';
+				break;
 		}
 
 		$function_body = '$el1 = $a['.$column.']; $el2 = $b['.$column.']; return '.($direction == SORT_ASC ? ' ' : ' !').'('.$compare_function.');';
@@ -100,75 +106,6 @@ class TableSort {
 		usort($data, create_function('$a,$b', $function_body));
 
 		return $data;
-	}
-
-	/**
-	 * Checks whether a column of a 2D-array contains only numeric values
-	 * @param array $data The data-array
-	 * @param int $column The index of the column to check
-	 * @return bool true if column contains only dates, false otherwise
-	 * @todo Take locale into account (eg decimal point or comma ?)
-	 * @author bart.mollet@hogent.be
-	 */
-	function is_numeric_column($data, $column) {
-		$is_numeric = true;
-
-		foreach ($data as $index => & $row) {
-			$is_numeric &= is_numeric(strip_tags($row[$column]));
-			if (!$is_numeric) {
-				break;
-			}
-		}
-
-		return $is_numeric;
-	}
-
-	/**
-	 * Checks whether a column of a 2D-array contains only dates (GNU date syntax)
-	 * @param array $data The data-array
-	 * @param int $column The index of the column to check
-	 * @return bool true if column contains only dates, false otherwise
-	 * @author bart.mollet@hogent.be
-	 */
-	function is_date_column($data, $column) {
-		$is_date = true;
-		foreach ($data as $index => & $row) {
-			if (strpos($row[$column], '<!--uts=') !== false) {
-				// A hidden raw date value (an integer Unix time stamp) has been detected. It is needed for precise sorting.
-				$is_date &= true;
-			} elseif (strlen(strip_tags($row[$column])) != 0) {
-				$check_date = strtotime(strip_tags($row[$column]));
-				// strtotime Returns a timestamp on success, FALSE otherwise.
-				// Previous to PHP 5.1.0, this function would return -1 on failure.
-				$is_date &= ($check_date != -1 && $check_date != false);
-			} else {
-				$is_date &= false;
-			}
-			if (!$is_date) {
-				break;
-			}
-		}
-		return $is_date;
-	}
-
-	/**
-	 * Checks whether a column of a 2D-array contains only images (<img src="
-	 * path/file.ext" alt=".."/>)
-	 * @param array $data The data-array
-	 * @param int $column The index of the column to check
-	 * @return bool true if column contains only images, false otherwise
-	 * @author bart.mollet@hogent.be
-	 */
-	function is_image_column($data, $column) {
-		$is_image = true;
-		foreach ($data as $index => & $row) {
-			$is_image &= strlen(trim(strip_tags($row[$column], '<img>'))) > 0; // at least one img-tag
-			$is_image &= strlen(trim(strip_tags($row[$column]))) == 0; // and no text outside attribute-values
-			if (!$is_image) {
-				break;
-			}
-		}
-		return $is_image;
 	}
 
 	/**
@@ -182,20 +119,20 @@ class TableSort {
 	 * @return array The sorted dataset
 	 * @author bart.mollet@hogent.be
 	 */
-	function sort_table_config($data, $column = 0, $direction = SORT_ASC, $column_show = null, $column_order = null, $type = SORT_REGULAR) {
-        if (!is_array($data) or count($data) == 0) {
-        	return array();
-        }
-        if ($column != strval(intval($column))) {
-        	// Probably an attack
-        	return $data;
-        }
-        if (!in_array($direction, array(SORT_ASC, SORT_DESC))) {
-        	// Probably an attack
-        	return $data;
-        }
+	public function sort_table_config($data, $column = 0, $direction = SORT_ASC, $column_show = null, $column_order = null, $type = SORT_REGULAR) {
+		if (!is_array($data) or count($data) == 0) {
+			return array();
+		}
+		if ($column != strval(intval($column))) {
+			// Probably an attack
+			return $data;
+		}
+		if (!in_array($direction, array(SORT_ASC, SORT_DESC))) {
+			// Probably an attack
+			return $data;
+		}
 
-        $compare_function = '';
+		$compare_function = '';
 		// Change columns sort
 	 	// Here we say that the real way of how the columns are going to be order is manage by the $column_order array
 	 	if (is_array($column_order)) {
@@ -207,7 +144,9 @@ class TableSort {
 	 	}
 
 		if ($type == SORT_REGULAR) {
-			if (TableSort::is_image_column($data, $column)) {
+			if (TableSort::is_custom_sortable_column($data, $column)) {
+				$type = SORT_CUSTOM;
+			} elseif (TableSort::is_image_column($data, $column)) {
 				$type = SORT_IMAGE;
 			} elseif (TableSort::is_date_column($data, $column)) {
 				$type =  SORT_DATE;
@@ -219,19 +158,22 @@ class TableSort {
 		}
 
 	 	switch ($type) {
-			case SORT_NUMERIC :
+			case SORT_CUSTOM:
+				$compare_function = 'TableSort::custom_compare($el1, $el2) > 0';
+				break;
+	 		case SORT_NUMERIC:
 				$compare_function = 'strip_tags($el1) > strip_tags($el2)';
 				break;
-			case SORT_IMAGE :
+			case SORT_IMAGE:
 				$compare_function = 'api_strnatcmp(api_strtolower(strip_tags($el1,"<img>")),api_strtolower(strip_tags($el2,"<img>"))) > 0';
 				break;
-			case SORT_DATE :
+			case SORT_DATE:
 				$compare_function = 'TableSort::date_compare($el1, $el2) > 0';
 				break;
-            case SORT_STRING :
-            default:
-                $compare_function = 'api_strnatcmp(api_strtolower(strip_tags($el1)),api_strtolower(strip_tags($el2))) > 0';
-                break;
+			case SORT_STRING:
+			default:
+				$compare_function = 'api_strnatcmp(api_strtolower(strip_tags($el1)),api_strtolower(strip_tags($el2))) > 0';
+				break;
 		}
 
 		$function_body = '$el1 = $a['.$column.']; $el2 = $b['.$column.']; return '.($direction == SORT_ASC ? ' ' : ' !').'('.$compare_function.');';
@@ -258,6 +200,108 @@ class TableSort {
 		}
 
 		return $data;
+	}
+
+	/**
+	 * Checks whether a column of a 2D-array contains only numeric values
+	 * @param array $data		The data-array
+	 * @param int $column		The index of the column to check
+	 * @return bool				TRUE if column contains only dates, FALSE otherwise
+	 * @todo Take locale into account (eg decimal point or comma ?)
+	 * @author bart.mollet@hogent.be
+	 */
+	private function is_numeric_column(& $data, $column) {
+		$is_numeric = true;
+		foreach ($data as $index => & $row) {
+			$is_numeric &= is_numeric(strip_tags($row[$column]));
+			if (!$is_numeric) {
+				break;
+			}
+		}
+		return $is_numeric;
+	}
+
+	/**
+	 * Checks whether a column of a 2D-array contains only dates (GNU date syntax)
+	 * @param array $data		The data-array
+	 * @param int $column		The index of the column to check
+	 * @return bool				TRUE if column contains only dates, FALSE otherwise
+	 * @author bart.mollet@hogent.be
+	 */
+	private function is_date_column(& $data, $column) {
+		$is_date = true;
+		foreach ($data as $index => & $row) {
+			if (strpos($row[$column], '<!--uts=') !== false) {
+				// A hidden raw date value (an integer Unix time stamp) has been detected. It is needed for precise sorting.
+				$is_date &= true;
+			} elseif (strlen(strip_tags($row[$column])) != 0) {
+				$check_date = strtotime(strip_tags($row[$column]));
+				// strtotime Returns a timestamp on success, FALSE otherwise.
+				// Previous to PHP 5.1.0, this function would return -1 on failure.
+				$is_date &= ($check_date != -1 && $check_date != false);
+			} else {
+				$is_date &= false;
+			}
+			if (!$is_date) {
+				break;
+			}
+		}
+		return $is_date;
+	}
+
+	/**
+	 * Checks whether a column of a 2D-array contains only images (<img src="path/file.ext" alt=".."/>)
+	 * @param array $data		The data-array
+	 * @param int $column		The index of the column to check
+	 * @return bool				TRUE if column contains only images, FALSE otherwise
+	 * @author bart.mollet@hogent.be
+	 */
+	private function is_image_column(& $data, $column) {
+		$is_image = true;
+		foreach ($data as $index => & $row) {
+			$is_image &= strlen(trim(strip_tags($row[$column], '<img>'))) > 0; // at least one img-tag
+			$is_image &= strlen(trim(strip_tags($row[$column]))) == 0; // and no text outside attribute-values
+			if (!$is_image) {
+				break;
+			}
+		}
+		return $is_image;
+	}
+
+	/**
+	 * Checks whether a column of a 2D-array contains hidden numeric values that are suitable for sorting.
+	 * Here is the format of a sortable value, hidden within a comment: <!--sortable=1234685716-->
+	 * @param array $data		The data-array
+	 * @param int $column		The index of the column to check
+	 * @return bool				TRUE if the whole column contains hidden sortable values, FALSE otherwise
+	 * @author Ivan Tcholakov, 2010.
+	 */
+	private function is_custom_sortable_column(& $data, $column) {
+		$is_custom_sortable = true;
+		foreach ($data as $index => & $row) {
+			$cell = &$row[$column];
+			$is_custom_sortable &= ($pos = strpos($cell, '<!--sortable=')) !== false && strpos($cell, '-->', $pos) !== false;
+			if (!$is_custom_sortable) {
+				break;
+			}
+		}
+		return $is_custom_sortable;
+	}
+
+	/**
+	 * This is a method for custom comparison, using provided hidden values.
+	 * Here is the format of a sortable value, hidden within a comment: <!--sortable=1234685716-->
+	 * @param string $el1	The first element provided from the table.
+	 * @param string $el2	The second element provided from the table.
+	 * @result bool			Tre comparison result.
+	 * @author Ivan Tcholakov, 2010.
+	 */
+	public function custom_compare($el1, $el2) {
+		$pos = strpos($el1, '<!--sortable=');
+		$el1 = intval(substr($el1, $pos + 13, strpos($el1, '-->', $pos) - $pos - 13));
+		$pos = strpos($el2, '<!--sortable=');
+		$el2 = intval(substr($el2, $pos + 13, strpos($el2, '-->', $pos) - $pos - 13));
+		return $el1 > $el2 ? 1 : ($el1 < $el2 ? -1 : 0);
 	}
 
 }

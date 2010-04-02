@@ -4,8 +4,12 @@ require_once(api_get_path(LIBRARY_PATH).'document.lib.php');
 class TestDocumentManager extends UnitTestCase {
 		
 
+    public function __construct() {
+        $this->UnitTestCase('Document Manager library tests');
+    }
+    	
     /**
-	 * This check if a document has the readonly property checked, then see if 
+	 * This checks if a document has the readonly property checked, then see if 
 	 * the user is the owner of this file, if all this is true then return true.
 	 *
 	 * @param array  $_course
@@ -94,13 +98,13 @@ class TestDocumentManager extends UnitTestCase {
 	* 	(bool)
 	*/
 	function testfile_visible_to_user() {
-	global $_course,$tbl_document;
-	$tbl_document = Database::get_course_table(TABLE_DOCUMENT);
-	$this_course= $_course['dbName'].'.';
-	$dirurl = api_get_path(WEB_COURSE_PATH);	
-	$doc_url= $dirurl.'COURSETEST/document/video/painting.mpg?cidReq=COURSETEST';
-	$res=DocumentManager::file_visible_to_user($this_course, $doc_url);
-	$this->assertTrue(is_bool($res));
+		global $_course,$tbl_document;
+		$tbl_document = Database::get_course_table(TABLE_DOCUMENT);
+		$this_course= $_course['dbName'].'.';
+		$dirurl = api_get_path(WEB_COURSE_PATH);	
+		$doc_url= $dirurl.'COURSETEST/document/video/painting.mpg?cidReq=COURSETEST';
+		$res=DocumentManager::file_visible_to_user($this_course, $doc_url);
+		$this->assertTrue(is_bool($res));
 	}
 
 	/**
@@ -119,9 +123,13 @@ class TestDocumentManager extends UnitTestCase {
 		$to_group_id = 0;
 		$to_user_id = NULL;
 		$can_see_invisible = false;
-		$res=DocumentManager::get_all_document_data($_course, $path, $to_group_id, 
-		$to_user_id, $can_see_invisible);
-		$this->assertTrue(is_array($_course));
+		$res=DocumentManager::get_all_document_data($_course, $path, 
+		$to_group_id, $to_user_id, $can_see_invisible);
+		if (empty($_course['dbName'])) {
+            $this->assertFalse($res);
+		} else {
+			$this->assertTrue(is_array($res));
+		}
 	}
 
 	/**
@@ -136,8 +144,12 @@ class TestDocumentManager extends UnitTestCase {
 		global $_course;
 		$to_group_id = '0';
 		$can_see_invisible = false;
-		$res=DocumentManager::get_all_document_folders($_course, $to_group_id, $can_see_invisible);
-		$this->assertTrue(is_array($_course));
+		$res = DocumentManager::get_all_document_folders($_course, $to_group_id, $can_see_invisible);
+        if (empty($_course['dbName'])) {
+            $this->assertFalse($res);
+        } else {
+            $this->assertTrue(is_array($res));
+        }
 	}
 
 	/**

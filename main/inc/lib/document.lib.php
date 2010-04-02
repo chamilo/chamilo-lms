@@ -492,7 +492,7 @@ class DocumentManager {
 
 		$result = Database::query($sql);
 
-		if ($result && Database::num_rows($result) != 0) {
+		if ($result!==false && Database::num_rows($result) != 0) {
 			while ($row = Database::fetch_array($result, 'ASSOC')) {
 				if ($row['filetype'] == 'file' && pathinfo($row['path'], PATHINFO_EXTENSION) == 'html') {
 					//Templates management

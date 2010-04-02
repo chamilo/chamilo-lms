@@ -17,7 +17,7 @@ class TestCourse extends UnitTestCase{
 	public $tcourse;
 	public function TestCourse(){
 
-		$this->UnitTestCase('All main course function tests');
+		$this->UnitTestCase('Courses library tests');
 	}
 
 	public function setUp(){

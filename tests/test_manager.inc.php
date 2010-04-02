@@ -121,7 +121,7 @@ function create_test_course($course_code = 'COURSETEST') {
 	
 	if (empty($row[0])) {
 	    // Create a course
-	    $course_datos = array(
+	    $course_data = array(
 	            'wanted_code'=> $cidReq,
 	            'title'=>$cidReq,
 	            'tutor_name'=>'John Doe',
@@ -131,10 +131,10 @@ function create_test_course($course_code = 'COURSETEST') {
 	            'db_prefix'=> $_configuration['db_prefix'],
 	            'firstExpirationDelay'=>'999'
 	            );
-	    $res = create_course($course_datos['wanted_code'], $course_datos['title'],
-	                         $course_datos['tutor_name'], $course_datos['category_code'],
-	                         $course_datos['course_language'],$course_datos['course_admin_id'],
-	                         $course_datos['db_prefix'], $course_datos['firstExpirationDelay']);
+	    $res = create_course($course_data['wanted_code'], $course_data['title'],
+	                         $course_data['tutor_name'], $course_data['category_code'],
+	                         $course_data['course_language'],$course_data['course_admin_id'],
+	                         $course_data['db_prefix'], $course_data['firstExpirationDelay']);
 	}
 	
 	

@@ -5,13 +5,12 @@ class TestGlossary extends UnitTestCase {
 	
     public function __construct() {
         $this->UnitTestCase('Glossary library tests');
-        //build a course
-        require_once api_get_path(SYS_TEST_PATH).'test_manager.inc.php';
-        TestManager::create_test_course();
+        //build a course for these tests
+        TestManager::create_test_course('COURSEGLOSSARY');
     }
     
     public function __destruct() {
-    	TestManager::delete_test_course();
+    	TestManager::delete_test_course('COURSEGLOSSARY');
     }
     
 	function testGetGlossaryTerms() {

@@ -74,13 +74,13 @@ class GlossaryManager {
 	 * This functions stores the glossary in the database
 	 *
 	 * @param array    Array of title + description (glossary_title => $title, glossary_comment => $comment)
-	 * @return bool    True on success, false on failure
+	 * @return mixed   Term id on success, false on failure
 	 * @author Christian Fasanando <christian.fasanando@dokeos.com>
 	 * @author Patrick Cool <patrick.cool@ugent.be>, Ghent University, Belgium
 	 * @version januari 2009, dokeos 1.8.6
 	 */
 	function save_glossary($values) {
-		if (empty($values) or empty($values['glossary_title'])) {
+		if (!is_array($values) or !isset($values['glossary_title'])) {
 			return false;
 		}
 		// Database table definition
@@ -115,8 +115,8 @@ class GlossaryManager {
 			$_SESSION['max_glossary_display'] = GlossaryManager::get_max_glossary_item();
 			// display the feedback message
 			Display::display_confirmation_message(get_lang('TermAdded'));
+            return $id;
 		}
-		return true;
 	}
 
 	/**

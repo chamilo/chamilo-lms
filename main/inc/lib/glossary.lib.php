@@ -20,7 +20,10 @@ class GlossaryManager {
 		global $course;
 		$glossary_data  = array();
 		$glossary_table = Database::get_course_table(TABLE_GLOSSARY);
-		$sql = 'SELECT glossary_id as id,name,description FROM '.$glossary_table;
+        $session_id = intval($session_id);
+        $sql_filter = api_get_session_condition($session_id);
+		$sql = 'SELECT glossary_id as id,name,description '.
+		          ' FROM '.$glossary_table.' WHERE 1=1 '.$sql_filter;
 		$rs = Database::query($sql);
 		while ($row = Database::fetch_array($rs)) {
 			$glossary_data[] = $row;
@@ -54,7 +57,11 @@ class GlossaryManager {
 	public static function get_glossary_term_by_glossary_name ($glossary_name) {
 		global $course;
 		$glossary_table  = Database::get_course_table(TABLE_GLOSSARY);
-		$sql='SELECT description FROM '.$glossary_table.' WHERE name like trim("'.Database::escape_string($glossary_name).'") ';
+        $session_id = intval($session_id);
+        $sql_filter = api_get_session_condition($session_id);
+		$sql='SELECT description FROM '.$glossary_table.' '.
+		 ' WHERE name like trim("'.Database::escape_string($glossary_name).'")'.
+		 $sql_filter;
 		$rs=Database::query($sql);
 		if (Database::num_rows($rs) > 0) {
 		  $row=Database::fetch_array($rs);
@@ -72,8 +79,7 @@ class GlossaryManager {
 	 * @author Patrick Cool <patrick.cool@ugent.be>, Ghent University, Belgium
 	 * @version januari 2009, dokeos 1.8.6
 	 */
-	function save_glossary($values)
-	{
+	function save_glossary($values) {
 		if (empty($values) or empty($values['glossary_title'])) {
 			return false;
 		}
@@ -122,12 +128,9 @@ class GlossaryManager {
 	 * @author Patrick Cool <patrick.cool@ugent.be>, Ghent University, Belgium
 	 * @version januari 2009, dokeos 1.8.6
 	 */
-	function update_glossary($values)
-	{
+	function update_glossary($values) {
 		// Database table definition
 		$t_glossary = Database :: get_course_table(TABLE_GLOSSARY);
-
-
 		// check if the glossary term already exists
 		if (GlossaryManager::glossary_exists($values['glossary_title'],$values['glossary_id']))
 		{
@@ -148,13 +151,12 @@ class GlossaryManager {
 
 	/**
 	 * Get the maximum display order of the glossary item
-	 *
+	 * @return integer Maximum glossary display order
 	 * @author Christian Fasanando <christian.fasanando@dokeos.com>
 	 * @author Patrick Cool <patrick.cool@ugent.be>, Ghent University, Belgium
 	 * @version januari 2009, dokeos 1.8.6
 	 */
-	function get_max_glossary_item()
-	{
+	function get_max_glossary_item() {
 		// Database table definition
 		$t_glossary = Database :: get_course_table(TABLE_GLOSSARY);
 		$get_max = "SELECT MAX(display_order) FROM $t_glossary";
@@ -167,15 +169,14 @@ class GlossaryManager {
 	/**
 	 * check if the glossary term exists or not
 	 *
-	 * @param unknown_type $term
-	 * @param unknown_type $not_id
-	 * @return unknown
+	 * @param string   Term to look for
+	 * @param integer  ID to counter-check if the term exists with this ID as well (optional)
+	 * @return bool    True if term exists
 	 *
 	 * @author Patrick Cool <patrick.cool@ugent.be>, Ghent University, Belgium
 	 * @version januari 2009, dokeos 1.8.6
 	 */
-	function glossary_exists($term,$not_id='')
-	{
+	function glossary_exists($term,$not_id='') {
 		// Database table definition
 		$t_glossary = Database :: get_course_table(TABLE_GLOSSARY);
 
@@ -193,48 +194,48 @@ class GlossaryManager {
 		}
 	}
 	/**
-	 * get all the information about one specific glossary term
+	 * Get one specific glossary term data
 	 *
-	 * @param unknown_type $glossary_id
-	 * @return unknown
+	 * @param integer  ID of the flossary term
+	 * @return mixed   Array(glossary_id,glossary_title,glossary_comment,glossary_display_order) or false on error
 	 *
 	 * @author Patrick Cool <patrick.cool@ugent.be>, Ghent University, Belgium
 	 * @version januari 2009, dokeos 1.8.6
 	 */
-	function get_glossary_information($glossary_id)
-	{
+	function get_glossary_information($glossary_id) {
 		// Database table definition
 		$t_glossary = Database :: get_course_table(TABLE_GLOSSARY);
 		$t_item_propery = Database :: get_course_table(TABLE_ITEM_PROPERTY);
-
+        if (empty($glossary_id)) { return false; }
 		$sql = "SELECT 	g.glossary_id 		AS glossary_id,
 						g.name 				AS glossary_title,
 						g.description 		AS glossary_comment,
 						g.display_order		AS glossary_display_order
-				   FROM $t_glossary g, $t_item_propery ip
-				   WHERE g.glossary_id = ip.ref
-				   AND tool = '".TOOL_GLOSSARY."'
-				   AND g.glossary_id = '".Database::escape_string($glossary_id)."' ";
+				   FROM $t_glossary g
+				   WHERE g.glossary_id = '".intval($glossary_id)."' ";
 		$result = Database::query($sql);
+		if ($result === false || Database::num_rows($result) != 1) { 
+			return false; 
+		}
 		return Database::fetch_array($result);
 	}
 
 	/**
 	 * Delete a glossary term (and re-order all the others)
 	 *
-	 * @param integer $glossary_id the id of the glossary
-	 *
+	 * @param integer The id of the glossary term to delete
+	 * @return bool    True on success, false on failure
 	 * @author Patrick Cool <patrick.cool@ugent.be>, Ghent University, Belgium
 	 * @version januari 2009, dokeos 1.8.6
 	 */
-	function delete_glossary($glossary_id)
-	{
+	function delete_glossary($glossary_id) {
 		// Database table definition
 		$t_glossary = Database :: get_course_table(TABLE_GLOSSARY);
+		if (empty($glossary_id)) { return false; }
 
 		$sql = "DELETE FROM $t_glossary WHERE glossary_id='".Database::escape_string($glossary_id)."'";
 		$result = Database::query($sql);
-
+        if ($result === false) { return false; }
 		//update item_property (delete)
 		api_item_property_update(api_get_course_info(), TOOL_GLOSSARY, Database::escape_string($glossary_id), 'delete', api_get_user_id());
 
@@ -242,16 +243,23 @@ class GlossaryManager {
 		GlossaryManager::reorder_glossary();
 		$_SESSION['max_glossary_display'] = GlossaryManager::get_max_glossary_item();
 		Display::display_confirmation_message(get_lang('TermDeleted'));
+		return true;
 	}
 
 	/**
-	 * This is the main function that display the list or the table with all the glossary terms
-	 *
+	 * This is the main function that displays the list or the table with all 
+	 * the glossary terms
+	 * @param  string  View ('table' or 'list'). Optional parameter. Defaults to 'table' and prefers glossary_view from the session by default.
+	 * @return void
 	 * @author Patrick Cool <patrick.cool@ugent.be>, Ghent University, Belgium
 	 * @version januari 2009, dokeos 1.8.6
 	 */
-	function display_glossary()
-	{
+	function display_glossary($view = 'table') {
+		// This function should always be called with the corresponding 
+		// parameter for view type. Meanwhile, use this cheap trick.
+		if (empty ($_SESSION['glossary_view'])) { 
+			$_SESSION['glossary_view'] = $view; 
+		}
 		// action links
 		echo '<div class="actions" style="margin-bottom:10px">';
 		if (api_is_allowed_to_edit(null,true))
@@ -286,13 +294,12 @@ class GlossaryManager {
 	}
 
 	/**
-	 * display the glossary terms in a list
-	 *
+	 * Display the glossary terms in a list
+	 * @return bool    True
 	 * @author Patrick Cool <patrick.cool@ugent.be>, Ghent University, Belgium
 	 * @version januari 2009, dokeos 1.8.6
 	 */
-	function display_glossary_list()
-	{
+	function display_glossary_list() {
 		$glossary_data = GlossaryManager::get_glossary_data(0,1000,0,ASC);
 		foreach($glossary_data as $key=>$glossary_item)
 		{
@@ -302,22 +309,24 @@ class GlossaryManager {
 				echo '<div>'.GlossaryManager::actions_filter($glossary_item[5], '',$glossary_item).'</div>';
 			}
 		}
+		return true;
 	}
 
 	/**
-	 * Get the number of glossary terms
-	 *
-	 * @return unknown
+	 * Get the number of glossary terms in the course (or course+session)
+	 * @param  int     Session ID filter (optional)
+	 * @return integer Count of glossary terms
 	 *
 	 * @author Patrick Cool <patrick.cool@ugent.be>, Ghent University, Belgium
 	 * @version januari 2009, dokeos 1.8.6
 	 */
-	function get_number_glossary_terms()
-	{
+	function get_number_glossary_terms($session_id=0) {
 		// Database table definition
 		$t_glossary = Database :: get_course_table(TABLE_GLOSSARY);
-
-		$sql = "SELECT count(glossary_id) as total FROM $t_glossary";
+		$session_id = intval($session_id);
+		$sql_filter = api_get_session_condition($session_id);
+		$sql = "SELECT count(glossary_id) as total FROM $t_glossary ". 
+		          " WHERE 1=1 $sql_filter";
 		$res = Database::query($sql);
 		$obj = Database::fetch_object($res);
 		return $obj->total;
@@ -326,17 +335,16 @@ class GlossaryManager {
 	/**
 	 * Get all the data of a glossary
 	 *
-	 * @param unknown_type $from
-	 * @param unknown_type $number_of_items
-	 * @param unknown_type $column
-	 * @param unknown_type $direction
+	 * @param integer From which item
+	 * @param integer Number of items to collect
+	 * @param string  Name of column on which to order
+	 * @param string  Whether to sort in ascending (ASC) or descending (DESC)
 	 * @return unknown
 	 *
 	 * @author Patrick Cool <patrick.cool@ugent.be>, Ghent University, Belgium
 	 * @version januari 2009, dokeos 1.8.6
 	 */
-	function get_glossary_data($from, $number_of_items, $column, $direction)
-	{
+	function get_glossary_data($from, $number_of_items, $column, $direction) {
 		global $_user;
 		// Database table definition
 		$t_glossary = Database :: get_course_table(TABLE_GLOSSARY);
@@ -402,18 +410,17 @@ class GlossaryManager {
 	}
 
 	/**
-	 * Enter description here...
+	 * Update action icons column
 	 *
-	 * @param unknown_type $glossary_id
-	 * @param unknown_type $url_params
-	 * @param unknown_type $row
-	 * @return unknown
+	 * @param integer $glossary_id
+	 * @param array   Parameters to use to affect links
+	 * @param array   The line of results from a query on the glossary table
+	 * @return string HTML string for the action icons columns
 	 *
 	 * @author Patrick Cool <patrick.cool@ugent.be>, Ghent University, Belgium
 	 * @version januari 2009, dokeos 1.8.6
 	 */
-	function actions_filter($glossary_id,$url_params,$row)
-	{
+	function actions_filter($glossary_id,$url_params,$row) {
 		if (!$_SESSION['max_glossary_display'] OR $_SESSION['max_glossary_display'] == '') {
 			$_SESSION['max_glossary_display'] = GlossaryManager::get_max_glossary_item();
 		}
@@ -450,13 +457,12 @@ class GlossaryManager {
 	/**
 	 * a little bit of javascript to display a prettier warning when deleting a term
 	 *
-	 * @return unknown
+	 * @return string  HTML string including JavaScript
 	 *
 	 * @author Patrick Cool <patrick.cool@ugent.be>, Ghent University, Belgium
 	 * @version januari 2009, dokeos 1.8.6
 	 */
-	function javascript_glossary()
-	{
+	function javascript_glossary() {
 		return "<script type=\"text/javascript\">
 				function confirmation (name)
 				{
@@ -474,8 +480,7 @@ class GlossaryManager {
 	 * @author Patrick Cool <patrick.cool@ugent.be>, Ghent University, Belgium
 	 * @version januari 2009, dokeos 1.8.6
 	 */
-	function reorder_glossary()
-	{
+	function reorder_glossary() {
 		// Database table definition
 		$t_glossary = Database :: get_course_table(TABLE_GLOSSARY);
 
@@ -483,8 +488,7 @@ class GlossaryManager {
 		$res = Database::query($sql);
 
 		$i = 1;
-		while ($data = Database::fetch_array($res))
-		{
+		while ($data = Database::fetch_array($res)) {
 			$sql_reorder = "UPDATE $t_glossary SET display_order = $i WHERE glossary_id = '".Database::escape_string($data['glossary_id'])."'";
 			Database::query($sql_reorder);
 			$i++;
@@ -492,7 +496,7 @@ class GlossaryManager {
 	}
 
 	/**
-	 * Move a glossary
+	 * Move a glossary term
 	 *
 	 * @param unknown_type $direction
 	 * @param unknown_type $glossary_id
@@ -500,48 +504,37 @@ class GlossaryManager {
 	 * @author Patrick Cool <patrick.cool@ugent.be>, Ghent University, Belgium
 	 * @version januari 2009, dokeos 1.8.6
 	 */
-	function move_glossary($direction, $glossary_id)
-	{
+	function move_glossary($direction, $glossary_id) {
 		// Database table definition
 		$t_glossary = Database :: get_course_table(TABLE_GLOSSARY);
 
 		// sort direction
-		if ($direction == 'up')
-		{
+		if ($direction == 'up') {
 			$sortorder = 'DESC';
-		}
-		else
-		{
+		} else {
 			$sortorder = 'ASC';
 		}
 
 		$sql = "SELECT * FROM $t_glossary ORDER BY display_order $sortorder";
 		$res = Database::query($sql);
 		$found = false;
-		while ($row = Database::fetch_array($res))
-		{
-			if ($found == true and empty($next_id))
-			{
+		while ($row = Database::fetch_array($res)) {
+			if ($found == true and empty($next_id))	{
 				$next_id = $row['glossary_id'];
 				$next_display_order = $row['display_order'];
 			}
 
-			if ($row['glossary_id'] == $glossary_id)
-			{
+			if ($row['glossary_id'] == $glossary_id) {
 				$current_id = $glossary_id;
 				$current_display_order = $row['display_order'];
 				$found = true;
 			}
-
 		}
-
 		$sql1 = "UPDATE $t_glossary SET display_order = '".Database::escape_string($next_display_order)."' WHERE glossary_id = '".Database::escape_string($current_id)."'";
 		$sql2 = "UPDATE $t_glossary SET display_order = '".Database::escape_string($current_display_order)."' WHERE glossary_id = '".Database::escape_string($next_id)."'";
-
 		$res = Database::query($sql1);
 		$res = Database::query($sql2);
 
 		Display::display_confirmation_message(get_lang('TermMoved'));
 	}
 }
-?>

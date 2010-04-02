@@ -334,6 +334,7 @@ class GlossaryManager {
 		$sql = "SELECT count(glossary_id) as total FROM $t_glossary ". 
 		          " WHERE 1=1 $sql_filter";
 		$res = Database::query($sql);
+		if ($res === false) { return 0; }
 		$obj = Database::fetch_object($res);
 		return $obj->total;
 	}

@@ -101,7 +101,7 @@ class TestManager {
  * @return void
  */
 
-function create_test_course($course_code = 'COURSETEST') {
+function create_test_course($course_code = 'TESTCOURSE') {
 		
 	/* Table definitions */	
 	$table_course 		= Database::get_main_table(TABLE_MAIN_COURSE);
@@ -190,7 +190,7 @@ function create_test_course($course_code = 'COURSETEST') {
  * @return void
  */
 
-function delete_test_course($course_code = 'COURSETEST') {
+function delete_test_course($course_code = 'TESTCOURSE') {
 	$code = $course_code;		
 			
 	$res = CourseManager::delete_course($code);

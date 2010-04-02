@@ -191,9 +191,7 @@ function create_test_course($course_code = 'TESTCOURSE') {
  */
 
 function delete_test_course($course_code = 'TESTCOURSE') {
-	$code = $course_code;		
-			
-	$res = CourseManager::delete_course($code);
+	$res = CourseManager::delete_course($course_code);
 	$path = api_get_path(SYS_PATH).'archive';
 	
 	if ($handle = opendir($path)) {

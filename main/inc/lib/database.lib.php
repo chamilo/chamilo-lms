@@ -319,18 +319,26 @@ class Database {
 	}
 
 	/**
-	 *	Returns the name of the main database.
+	 *	Returns the name of the current course database.
+     *  @return    mixed   Glued database name of false if undefined
 	 */
 	public static function get_current_course_database() {
 		$course_info = api_get_course_info();
+		if (empty($course_info['dbName'])) {
+			return false;
+		}
 		return $course_info['dbName'];
 	}
 
 	/**
 	 *	Returns the glued name of the current course database.
+	 *  @return    mixed   Glued database name of false if undefined
 	 */
 	public static function get_current_course_glued_database() {
 		$course_info = api_get_course_info();
+        if (empty($course_info['dbNameGlu'])) {
+            return false;
+        }
 		return $course_info['dbNameGlu'];
 	}
 

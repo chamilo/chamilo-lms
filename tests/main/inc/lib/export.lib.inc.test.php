@@ -2,21 +2,15 @@
 require_once(api_get_path(LIBRARY_PATH).'export.lib.inc.php');
 require_once(api_get_path(LIBRARY_PATH).'document.lib.php');
 
+/** Test about export csv using class document manager
+ * @author Arthur portugal
+ * To can test and show the var_dump is necesary comment inside the class 
+ * DocumentManager in the file document.lib.php the word "exit()", because 
+ * "exit" not permit show the result.
+ */
 class TestExport extends UnitTestCase {
-
-	/** Test about export csv using class document manager
-	 * @author Arthur portugal
-	 * To can test and show the var_dump is necesary comment inside the class DocumentManager in the file document.lib.php the word "exit()",
-	 * because "exit" not permit show the result.
-	 */
-	
-/**
- * the simpletest has a conflict with the headers because, the simpletest
- * framework's, send first the prints and then the headers, but in this function
- * the headers are sending first.
- */	 
  
-    public function TestExport() {
+    public function __construct() {
         $this->UnitTestCase('Export library tests');
     }
      

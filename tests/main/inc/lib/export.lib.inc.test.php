@@ -16,17 +16,21 @@ class TestExport extends UnitTestCase {
  * the headers are sending first.
  */	 
  
- 
+    public function TestExport() {
+        $this->UnitTestCase('Export library tests');
+    }
+     
+    /**
+     * Checks the export_table_csv method.
+     * @todo check that a new file is created in api_get_path(SYS_ARCHIVE_PATH)
+     */
     function testExportTableCsv() {
-       $data = array();
-	   if (!headers_sent()) {	
-	       $res = Export::export_table_csv($data, $filename = 'export');
-	   }
-	   if(is_null($res)) {
+        $data = array();
+        // can only be tested if headers were not sent
+        if (!headers_sent()) {
+        	$res = Export::export_table_csv($data, $filename = 'export');
 			$this->assertFalse($res);
-		} else {
-			$this->assertTrue(is_string($res));
-		}
+        }
     }
     
 
@@ -35,12 +39,7 @@ class TestExport extends UnitTestCase {
 		$filename = 'export';
 		if (!headers_sent()) {
 			$res=Export::export_table_xls($data,$filename);
-		}
-		
-		if(is_null($res)) {
-			$this->assertFalse(is_bool($res));
-		} else {
-			$this->assertTrue(is_bool($res));
+			$this->assertFalse($res);
 		}
  	}
 
@@ -53,12 +52,7 @@ class TestExport extends UnitTestCase {
 		if (!headers_sent()) {
 			$res=Export::export_table_xml($data,$filename,$item_tagname,
 										  $wrapper_tagname,$encoding);
-		}
-		
-		if(is_null($res)) {
-			$this->assertFalse($res);
-		} else {
-			$this->assertTrue(is_bool($res));
+            $this->assertFalse($res);
 		}
  	}
  
@@ -68,15 +62,10 @@ class TestExport extends UnitTestCase {
 		$wrapper_tagname=null;
  		$encoding='ISO-8859-1';
  		if (!headers_sent()) {
-	 		$res=Export::export_complex_table_xml($data,$filename,$wrapper_tagname,
-	 		                                      $encoding);
+	 		$res=Export::export_complex_table_xml($data,$filename,
+	 		                                        $wrapper_tagname,$encoding);
+            $this->assertFalse($res);
  		}
- 		
- 		if(is_null($res)) {
-			$this->assertFalse(is_string($res));
-		} else {
-			$this->assertTrue(is_bool($res));
-		}
  	}
 
   	function testExportComplexTableXmlHelper() {
@@ -84,14 +73,8 @@ class TestExport extends UnitTestCase {
 		$level=1;
 		if (!headers_sent()) {
 			$res=Export::_export_complex_table_xml_helper($data,$level);
-
+            $this->assertTrue(is_string($res));
 		}
-		if(is_null($res)) {
-			$this->assertFalse($res);
-		} else {
-			$this->assertTrue(is_string($res));
-		}
-			
  	}
  	
  	function testBackupDatabase() {

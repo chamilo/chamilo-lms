@@ -18,14 +18,12 @@ class GlossaryManager {
      */
 	public static function get_glossary_terms () {
 		global $course;
-		$glossary_id=array();
-		$glossary_name=array();
-		$glossary_desc=array();
-		$glossary_table  = Database::get_course_table(TABLE_GLOSSARY);
-		$sql='SELECT glossary_id as id,name,description FROM '.$glossary_table;
-		$rs=Database::query($sql);
-		while ($row=Database::fetch_array($rs)) {
-			$glossary_data[]=$row;
+		$glossary_data  = array();
+		$glossary_table = Database::get_course_table(TABLE_GLOSSARY);
+		$sql = 'SELECT glossary_id as id,name,description FROM '.$glossary_table;
+		$rs = Database::query($sql);
+		while ($row = Database::fetch_array($rs)) {
+			$glossary_data[] = $row;
 		}
 		return $glossary_data;
 	}
@@ -40,9 +38,13 @@ class GlossaryManager {
 		$glossary_table  = Database::get_course_table(TABLE_GLOSSARY);
 		$sql='SELECT description FROM '.$glossary_table.' WHERE glossary_id="'.Database::escape_string($glossary_id).'"';
 		$rs=Database::query($sql);
-		$row=Database::fetch_array($rs);
-		return $row['description'];
-	}
+        if (Database::num_rows($rs) > 0) {
+          $row=Database::fetch_array($rs);
+            return $row['description'];
+        } else {
+            return '';
+        }
+			}
 	/**
 	 * Get glossary term by glossary id
 	 * @author Isaac Flores <florespaz_isaac@hotmail.com>
@@ -54,8 +56,12 @@ class GlossaryManager {
 		$glossary_table  = Database::get_course_table(TABLE_GLOSSARY);
 		$sql='SELECT description FROM '.$glossary_table.' WHERE name like trim("'.Database::escape_string($glossary_name).'") ';
 		$rs=Database::query($sql);
-		$row=Database::fetch_array($rs);
-		return $row['description'];
+		if (Database::num_rows($rs) > 0) {
+		  $row=Database::fetch_array($rs);
+            return $row['description'];
+		} else {
+			return '';
+		}
 	}
 	/**
 	 * This functions stores the glossary in the database

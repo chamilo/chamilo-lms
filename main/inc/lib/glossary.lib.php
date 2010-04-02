@@ -164,6 +164,9 @@ class GlossaryManager {
 		$t_glossary = Database :: get_course_table(TABLE_GLOSSARY);
 		$get_max = "SELECT MAX(display_order) FROM $t_glossary";
 		$res_max = Database::query($get_max);
+		if (Database::num_rows($res_max)==0) {
+			return 0;
+		}
 		$dsp=0;
 		$row = Database::fetch_array($res_max);
 		return $row[0];

@@ -6,7 +6,7 @@ class TestDatabase extends UnitTestCase {
 
 	 public $dbase;
 	 public function TestDatabase() {
-	 	$this->UnitTestCase('data base test');
+	 	$this->UnitTestCase('Database library tests');
 	 }
 
 	 public function setUp() {
@@ -39,7 +39,6 @@ class TestDatabase extends UnitTestCase {
 	public function testEscapeString() {
 		$string='Lore"May';
 		$res=$this->dbase->escape_string($string);
-		//print_r($string);
 		$this->assertTrue(is_string($res));
 	}
 
@@ -52,21 +51,21 @@ class TestDatabase extends UnitTestCase {
 	}
 
 	public function testFetchArrayError() {
-		$sql ="SELECT  1";
+		$sql = 'SELECT  1';
 		$res=Database::query($sql);
 		$resu=$this->dbase->fetch_array($res);
 		$this->assertTrue(is_array($resu));
 	}
 
 	function testFetchObject() {
-		$sql ="SELECT  1";
+		$sql = 'SELECT  1';
 		$res=Database::query($sql);
 		$resu=$this->dbase->fetch_object($res);
 		$this->assertTrue(is_object($resu));
 	}
 
 	function testFetchRow() {
-		$sql ="SELECT  1";
+		$sql = 'SELECT  1';
 		$res=Database::query($sql);
 		$resu=$this->dbase->fetch_row($res);
 		$this->assertTrue(is_array($resu));
@@ -170,18 +169,24 @@ class TestDatabase extends UnitTestCase {
 
 	function testGetCurrentCourseDatabase() {
 		$res=$this->dbase->get_current_course_database();
-		if(!is_null($res)) :
-		$this->assertTrue(is_string($res));
-		endif;
-		//var_dump($res);
+        if (empty($GLOBALS['_course']['dbName'])) {
+            $this->assertFalse($res);
+        } else {
+            $this->assertTrue(is_string($res));
+        }
+        $res=$this->dbase->get_current_course_database('___');
+        $this->assertFalse($res);
 	}
 
 	function testGetCurrentCourseGluedDatabase() {
 		$res=$this->dbase->get_current_course_glued_database();
-		if(!is_null($res)):
-		$this->assertTrue(is_string($res));
-		endif;
-		//var_dump($res);
+		if (empty($GLOBALS['_course']['dbName'])) {
+		    $this->assertFalse($res);
+		} else {
+			$this->assertTrue(is_string($res));
+		}
+        $res=$this->dbase->get_current_course_glued_database('___');
+        $this->assertFalse($res);
 	}
 
 	function testGetDatabaseGlue()
@@ -237,11 +242,15 @@ class TestDatabase extends UnitTestCase {
 	}
 
 	function testGetUserInfoFromId() {
-		$user_id = '';
-		$res=$this->dbase->get_user_info_from_id($user_id);
+		$res=$this->dbase->get_user_info_from_id(1);
 		$this->assertTrue(is_array($res));
-		$this->assertTrue($res);
-		//var_dump($res);
+		// should be returning GLOBALS[_user] (=null) if param is null (in testing context)
+        $res=$this->dbase->get_user_info_from_id(null);
+        $this->assertNull($res);
+        // should be returning array with empty values if user doesn't exist
+        $res=$this->dbase->get_user_info_from_id(5000000);
+        $this->assertTrue(is_array($res));
+        $this->assertNull($res['mail']);
 	}
 
 	function testGetUserPersonalDatabase() {
@@ -268,39 +277,35 @@ class TestDatabase extends UnitTestCase {
 	*/
 
 	function testInsertId() {
-		$res=$this->dbase->insert_id();
+		$res = $this->dbase->insert_id();
 		$this->assertTrue(is_numeric($res));
 	}
 
 	function testNumRows() {
-		$sql= 	"SELECT * FROM chamilo_main.user";
+		$sql = 'SELECT * FROM user';
 		$res = Database::query($sql);
 		$resul=Database::num_rows($res);
 		$this->assertTrue(is_numeric($resul));
-		//var_Dump($res);
 	}
 
 	function testQuery() {
-		$sql ="SELECT 1";
-		$res=$this->dbase->query($sql);
+		$sql = 'SELECT 1';
+		$res = Database::query($sql);
 		$this->assertTrue(is_resource($res));
 	}
 
 	function testResult() {
-		$sql="SELECT * FROM chamilo_main.user";
-		$resource= Database::query($sql);
-		$row= 1;
-		$res= Database::result($resource, $row);
+		$sql = 'SELECT email FROM user';
+		$resource = Database::query($sql);
+		$res = Database::result($resource, 1);
 		$this->assertTrue(is_string($res));
-		//var_dump($res);
 	}
 
 	function testStoreResult(){
-		$sql="SELECT 1";
-		$resource=$this->dbase->query($sql);
+		$sql = 'SELECT 1';
+		$resource = $this->dbase->query($sql);
 		$res = $this->dbase->store_result($resource);
 		$this->assertTrue(is_array($res));
-		//var_dump($res);
 	}
 }
 ?>

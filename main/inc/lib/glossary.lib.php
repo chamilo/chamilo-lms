@@ -239,7 +239,7 @@ class GlossaryManager {
 
 		$sql = "DELETE FROM $t_glossary WHERE glossary_id='".Database::escape_string($glossary_id)."'";
 		$result = Database::query($sql);
-        if ($result === false) { return false; }
+        if ($result === false or Database::affected_rows() < 1) { return false; }
 		//update item_property (delete)
 		api_item_property_update(api_get_course_info(), TOOL_GLOSSARY, Database::escape_string($glossary_id), 'delete', api_get_user_id());
 

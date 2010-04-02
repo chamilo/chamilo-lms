@@ -27,20 +27,20 @@ class TestExport extends UnitTestCase {
     function testExportTableCsv() {
         $data = array();
         // can only be tested if headers were not sent
-        if (!headers_sent()) {
-        	$res = Export::export_table_csv($data, $filename = 'export');
-			$this->assertFalse($res);
-        }
+        ob_start();
+       	$res = Export::export_table_csv($data, $filename = 'export');
+		$this->assertFalse($res);
+		ob_end_clean();
     }
     
 
  	function testExportTableXls() {
 		$data = array();
 		$filename = 'export';
-		if (!headers_sent()) {
-			$res=Export::export_table_xls($data,$filename);
-			$this->assertFalse($res);
-		}
+        ob_start();
+		$res=Export::export_table_xls($data,$filename);
+		$this->assertFalse($res);
+        ob_end_clean();
  	}
 
  	function testExportTableXml() {
@@ -49,11 +49,11 @@ class TestExport extends UnitTestCase {
 		$item_tagname = 'item';
 		$wrapper_tagname = null;
 		$encoding=null;
-		if (!headers_sent()) {
-			$res=Export::export_table_xml($data,$filename,$item_tagname,
-										  $wrapper_tagname,$encoding);
-            $this->assertFalse($res);
-		}
+        ob_start();
+		$res=Export::export_table_xml($data,$filename,$item_tagname,
+									  $wrapper_tagname,$encoding);
+        $this->assertFalse($res);
+        ob_end_clean();
  	}
  
  	function testExportComplexTableXml() {
@@ -61,21 +61,21 @@ class TestExport extends UnitTestCase {
 		$filename = 'export';
 		$wrapper_tagname=null;
  		$encoding='ISO-8859-1';
- 		if (!headers_sent()) {
-	 		$res=Export::export_complex_table_xml($data,$filename,
+        ob_start();
+ 		$res=Export::export_complex_table_xml($data,$filename,
 	 		                                        $wrapper_tagname,$encoding);
-            $this->assertFalse($res);
- 		}
+        $this->assertFalse($res);
+        ob_end_clean();
  	}
 
   	function testExportComplexTableXmlHelper() {
   		$data = array();
 		$level=1;
-		if (!headers_sent()) {
-			$res=Export::_export_complex_table_xml_helper($data,$level);
-            $this->assertTrue(is_string($res));
-		}
- 	}
+        ob_start();
+		$res=Export::_export_complex_table_xml_helper($data,$level);
+        $this->assertTrue(is_string($res));
+        ob_end_clean();
+  	}
  	
  	function testBackupDatabase() {
  		$link='';

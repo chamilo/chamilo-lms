@@ -123,7 +123,7 @@ class GlossaryManager {
 	 * update the information of a glossary term in the database
 	 *
 	 * @param array $values an array containing all the form elements
-	 *
+	 * @return boolean True on success, false on failure
 	 * @author Christian Fasanando <christian.fasanando@dokeos.com>
 	 * @author Patrick Cool <patrick.cool@ugent.be>, Ghent University, Belgium
 	 * @version januari 2009, dokeos 1.8.6
@@ -136,17 +136,20 @@ class GlossaryManager {
 		{
 			// display the feedback message
 			Display::display_error_message(get_lang('GlossaryTermAlreadyExistsYouShouldEditIt'));
+			return false;
 		} else {
 			$sql = "UPDATE $t_glossary SET
 							name 		= '".Database::escape_string(Security::remove_XSS($values['glossary_title']))."',
 							description	= '".Database::escape_string(Security::remove_XSS(stripslashes(api_html_entity_decode($values['glossary_comment'])),COURSEMANAGERLOWSECURITY))."'
 					WHERE glossary_id = ".Database::escape_string($values['glossary_id']);
 			$result = Database::query($sql);
+			if ($result === false) { return false; }
 			//update glossary into item_property
 			api_item_property_update(api_get_course_info(), TOOL_GLOSSARY, Database::escape_string($values['glossary_id']), 'GlossaryUpdated', api_get_user_id());
 			// display the feedback message
 			Display::display_confirmation_message(get_lang('TermUpdated'));
 		}
+		return true;
 	}
 
 	/**

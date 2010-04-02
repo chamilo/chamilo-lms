@@ -1,4 +1,4 @@
-<?php // $Id: database.lib.php 22265 2009-07-20 23:26:43Z juliomontoya $
+<?php
 /* For licensing terms, see /license.txt */
 /**
 *	This is the main database library for Chamilo.

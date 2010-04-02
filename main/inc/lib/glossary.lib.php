@@ -8,9 +8,6 @@
 */
 class GlossaryManager {
 
-    function __construct() {
-
-    }
     /**
      * Get all glossary terms
      * @author Isaac Flores <isaac.flores@dokeos.com>

@@ -19,12 +19,14 @@ class TestGlossary extends UnitTestCase {
 		$this->assertTrue(is_array($res));
 	}
 	
-	function testSaveGlossary() {
+	function testSaveGlossaryIncomplete() {
 		$values = 'stuffing';
         ob_start();
 		$res = GlossaryManager::save_glossary($values);
         ob_end_clean();
 		$this->assertFalse($res);
+	}
+	function testSaveGlossaryComplete() {
 		$values = array('glossary_title'=>'stuffing','glossary_description'=>'something to fill');
         ob_start();
         $res = GlossaryManager::save_glossary($values);
@@ -37,11 +39,13 @@ class TestGlossary extends UnitTestCase {
         ob_end_clean();
 	}
 		
-	function testGetGlossaryTermByGlossaryId() {
+	function testGetGlossaryTermByGlossaryIdIsString() {
 		$glossary_id = 1;
 		$res = GlossaryManager::get_glossary_term_by_glossary_id($glossary_id);
 		$this->assertTrue(is_string($res)); 
-        $glossary_id = 1000000;
+	}
+	function testGetGlossaryTermByGlossaryIdIsEmpty() {
+		$glossary_id = 1000000;
         $res = GlossaryManager::get_glossary_term_by_glossary_id($glossary_id);
         $this->assertEqual($res,''); 
 	}
@@ -62,7 +66,7 @@ class TestGlossary extends UnitTestCase {
 	
 	function testGetMaxGlossaryItem() {
 		$res = GlossaryManager::get_max_glossary_item();
-		$this->assertTrue(is_numeric($res)); 
+		$this->assertTrue(is_numeric($res));
 	}
 	
 	
@@ -91,7 +95,7 @@ class TestGlossary extends UnitTestCase {
 		ob_start();
 		$res = GlossaryManager::display_glossary_list();
 		ob_end_clean();
-        $this->assertTrue(is_null($res)); 
+        $this->assertTrue($res); 
 	}
 	
 	function testGetNumberGlossaryTerms() {
@@ -135,11 +139,20 @@ class TestGlossary extends UnitTestCase {
 		$this->assertTrue(is_null($res)); 
 	}
 	
-	function testDeleteGlossary() {
+	function testDeleteGlossaryIsFalse() {
 		ob_start();
 		$glossary_id = 1;
 		$res = GlossaryManager::delete_glossary($glossary_id);
         ob_end_clean();
-		$this->assertTrue(is_null($res)); 
-	}	
+		$this->assertFalse($res);
+	}
+	
+	function testDeleteGlossaryIsTrue() {
+		$values = array('glossary_title'=>'stuffing','glossary_description'=>'something to fill');
+		ob_start();
+		$id = GlossaryManager::save_glossary($values);
+		$res = GlossaryManager::delete_glossary($id);
+		ob_end_clean();
+        $this->assertTrue($res);
+	}
 }

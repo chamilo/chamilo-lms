@@ -144,17 +144,17 @@ class TestsSuite extends TestSuite {
         //$this->addFile(api_get_path(SYS_TEST_PATH).'/main/resourcelinker/resourcelinker.inc.test.php');
         
             
-        /**This files has metadata, is not available to test*/
+        // These files are metadata libraries, not available to test
         //$this->addFile(api_get_path(SYS_TEST_PATH).'/main/inc/lib/xht.lib.test.php');
 	    //$this->addFile(api_get_path(SYS_TEST_PATH).'/main/inc/lib/xmd.lib.test.php');
 	    
-	    /**This files are not used and is not finished implement, is not available to test*/
+	    // These files are not used and is not finished implement, not available to test
 	    //$this->addFile(api_get_path(SYS_TEST_PATH).'/main/exercice/export/qti/qti_classes.test.php');
 		//$this->addFile(api_get_path(SYS_TEST_PATH).'/main/exercice/export/qti2/qti2_export.test.php');
 		//$this->addFile(api_get_path(SYS_TEST_PATH).'/main/exercice/export/exercise_import.inc.test.php');
 		//$this->addFile(api_get_path(SYS_TEST_PATH).'/main/exercice/export/scorm/scorm_export.test.php');
 		
-		/**EXERCISES**/
+		// EXERCISES
 		//$this->addFile(api_get_path(SYS_TEST_PATH).'/main/exercice/answer.class.test.php');
 		//$this->addFile(api_get_path(SYS_TEST_PATH).'/main/exercice/exercise_result.class.test.php');
 		//$this->addFile(api_get_path(SYS_TEST_PATH).'/main/inc/lib/exercise_show_functions.lib.test.php');
@@ -165,10 +165,10 @@ class TestsSuite extends TestSuite {
 	  	//$this->addFile(api_get_path(SYS_TEST_PATH).'/main/exercice/freeanswer.class.test.php');
 	  	
 	  	
-	  	/**FORUM*/
+	  	// FORUM
 	  	//$this->addFile(api_get_path(SYS_TEST_PATH).'main/forum/forumfunction.inc.test.php');
 	  	
-        /**GRADEBOOK*/
+        // GRADEBOOK
 		$this->addFile(api_get_path(SYS_TEST_PATH).'main/gradebook/lib/be/attendancelink.class.test.php');                
 		$this->addFile(api_get_path(SYS_TEST_PATH).'main/gradebook/lib/be/category.class.test.php');
 		$this->addFile(api_get_path(SYS_TEST_PATH).'main/gradebook/lib/be/dropboxlink.class.test.php');
@@ -177,7 +177,7 @@ class TestsSuite extends TestSuite {
 		$this->addFile(api_get_path(SYS_TEST_PATH).'main/gradebook/lib/be/forumthreadlink.class.test.php');
 	  
 	  	$this->addFile(api_get_path(SYS_TEST_PATH).'main/course_info/download.lib.test.php'); 
-	    /**NEW SCORM*/
+	    // NEW SCORM
 	    //$this->addFile(api_get_path(SYS_TEST_PATH).'main/newscorm/learnpath.class.test.php');
         //$this->addFile(api_get_path(SYS_TEST_PATH).'main/newscorm/learnpathItem.class.test.php');
         //$this->addFile(api_get_path(SYS_TEST_PATH).'main/newscorm/openoffice_document.class.test.php');
@@ -192,6 +192,7 @@ class TestsSuite extends TestSuite {
 	  	
         $this->addFile(api_get_path(SYS_TEST_PATH).'/main/inc/lib/main_api.lib.test.php');//this file delete the course     
         $this->addFile(api_get_path(SYS_TEST_PATH).'/main/inc/lib/debug.lib.inc.test.php');//this file need be to the finish of the tests
+        
     }
 }
 $test = &new TestsSuite();

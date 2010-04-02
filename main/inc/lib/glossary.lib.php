@@ -163,9 +163,11 @@ class GlossaryManager {
 		if (Database::num_rows($res_max)==0) {
 			return 0;
 		}
-		$dsp=0;
 		$row = Database::fetch_array($res_max);
-		return $row[0];
+		if (!empty($row[0])) { 
+			return $row[0];
+		}
+		return 0;
 	}
 
 	/**

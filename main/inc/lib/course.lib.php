@@ -1,4 +1,4 @@
-<?php //$id: $
+<?php
 /* For licensing terms, see /license.txt*/
 
 /**
@@ -64,28 +64,21 @@
 
 /*	INIT SECTION */
 
-/*
------------------------------------------------------------
-		Configuration files
------------------------------------------------------------
-*/
+/**
+ * Configuration files
+ */
 require_once api_get_path(CONFIGURATION_PATH).'add_course.conf.php';
 
-/*
------------------------------------------------------------
-		Libraries
-		we assume main_api is also included...
------------------------------------------------------------
-*/
+/**
+ * Libraries (we assume main_api is also included...)
+ */
 
 require_once api_get_path(LIBRARY_PATH).'database.lib.php';
 require_once api_get_path(LIBRARY_PATH).'add_course.lib.inc.php';
 
-/*
------------------------------------------------------------
-		Constants
------------------------------------------------------------
-*/
+/**
+ * Constants definition
+ */
 
 //LOGIC: course visibility and registration settings
 /*
@@ -111,11 +104,9 @@ define('VISIBLE_NO_SUBSCRIPTION_ALLOWED', 3);
 
 
 
-/*
------------------------------------------------------------
-	Variables
------------------------------------------------------------
-*/
+/**
+ * Variables
+ */
 
 $TABLECOURSE = Database::get_main_table(TABLE_MAIN_COURSE);
 $TABLECOURSDOMAIN = Database::get_main_table(TABLE_MAIN_CATEGORY);
@@ -124,12 +115,9 @@ $TABLECOURSUSER = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 $TABLEANNOUNCEMENTS = 'announcement';
 $coursesRepositories = $_configuration['root_sys'];
 
-/*
-		CourseManager CLASS
-*/
-
 /**
- *	@package dokeos.library
+ *	CourseManager Class
+ *	@package chamilo.library
  */
 class CourseManager {
 
@@ -534,7 +522,8 @@ class CourseManager {
 	}
 
 	/**
-	 *	@return an array with the course info of all virtual courses on the platform
+	 * Lists all virtual courses
+	 * @return array   Course info (course code => details) of all virtual courses on the platform
 	 */
 	public static function get_virtual_course_list() {
 		$sql_result = Database::query("SELECT * FROM ".Database::get_main_table(TABLE_MAIN_COURSE)." WHERE target_course_code IS NOT NULL");
@@ -546,12 +535,14 @@ class CourseManager {
 	}
 
 	/**
-	 *	@return an array with the course info of the real courses of which
-	 *	the current user is course admin
+	 * Returns an array with the course info of the real courses of which
+	 * the current user is course admin
+	 * @return array   A list of courses details for courses to which the user is subscribed as course admin (status = 1)   
 	 */
 	public static function get_real_course_list_of_user_as_course_admin($user_id) {
+		$result_array = array();
 		if ($user_id != strval(intval($user_id))) {
-			return array();
+			return $result_array;
 		}
 		$sql_result = Database::query("SELECT *
 				FROM ".Database::get_main_table(TABLE_MAIN_COURSE)." course
@@ -560,6 +551,7 @@ class CourseManager {
 				WHERE course.target_course_code IS NULL
 					AND course_user.user_id = '$user_id'
 					AND course_user.status = '1'");
+		if ($sql_result === false) { return $result_array; }
 		while ($result = Database::fetch_array($sql_result)) {
 			$result_array[] = $result;
 		}

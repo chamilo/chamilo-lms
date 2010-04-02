@@ -23,7 +23,7 @@ class TableSort {
 	 * @author bart.mollet@hogent.be
 	 */
 	public function sort_table($data, $column = 0, $direction = SORT_ASC, $type = SORT_REGULAR) {
-		if (!is_array($data) or count($data) == 0) {
+		if (!is_array($data) || empty($data)) {
 			return array();
 		}
 		if ($column != strval(intval($column))) {
@@ -35,7 +35,6 @@ class TableSort {
 			return $data;
 		}
 
-		$compare_function = '';
 		if ($type == SORT_REGULAR) {
 			if (TableSort::is_image_column($data, $column)) {
 				$type = SORT_IMAGE;
@@ -48,26 +47,25 @@ class TableSort {
 			}
 		}
 
+		$compare_operator = $direction == SORT_ASC ? '>' : '<=';
 		switch ($type) {
 			case SORT_NUMERIC:
-				$compare_function = 'strip_tags($el1) > strip_tags($el2)';
+				$compare_function = 'return strip_tags($a['.$column.']) '.$compare_operator.' strip_tags($b['.$column.']);';
 				break;
 			case SORT_IMAGE:
-				$compare_function = 'api_strnatcmp(api_strtolower(strip_tags($el1,"<img>")),api_strtolower(strip_tags($el2,"<img>"))) > 0';
+				$compare_function = 'return api_strnatcmp(api_strtolower(strip_tags($a['.$column.'], "<img>")), api_strtolower(strip_tags($b['.$column.'], "<img>"))) '.$compare_operator.' 0;';
 				break;
 			case SORT_DATE:
-				$compare_function = 'strtotime(strip_tags($el1)) > strtotime(strip_tags($el2))';
+				$compare_function = 'return strtotime(strip_tags($a['.$column.'])) '.$compare_operator.' strtotime(strip_tags($b['.$column.']));';
 				break;
 			case SORT_STRING:
 			default:
-				$compare_function = 'api_strnatcmp(api_strtolower(strip_tags($el1)),api_strtolower(strip_tags($el2))) > 0';
+				$compare_function = 'return api_strnatcmp(api_strtolower(strip_tags($a['.$column.'])), api_strtolower(strip_tags($b['.$column.']))) '.$compare_operator.' 0;';
 				break;
 		}
 
-		$function_body = '$el1 = $a['.$column.']; $el2 = $b['.$column.']; return '.($direction == SORT_ASC ? ' ' : ' !').'('.$compare_function.');';
-
 		// Sort the content
-		usort($data, create_function('$a,$b', $function_body));
+		usort($data, create_function('$a, $b', $compare_function));
 
 		return $data;
 	}
@@ -85,7 +83,7 @@ class TableSort {
 	 */
 	public function sort_table_config($data, $column = 0, $direction = SORT_ASC, $column_show = null, $column_order = null, $type = SORT_REGULAR) {
 
-		if (!is_array($data) or count($data) == 0) {
+		if (!is_array($data) || empty($data)) {
 			return array();
 		}
 		if ($column != strval(intval($column))) {
@@ -97,7 +95,6 @@ class TableSort {
 			return $data;
 		}
 
-		$compare_function = '';
 		// Change columns sort
 	 	// Here we say that the real way of how the columns are going to be order is manage by the $column_order array
 	 	if (is_array($column_order)) {
@@ -108,34 +105,33 @@ class TableSort {
 			if (TableSort::is_image_column($data, $column)) {
 				$type = SORT_IMAGE;
 			} elseif (TableSort::is_date_column($data, $column)) {
-				$type =  SORT_DATE;
+				$type = SORT_DATE;
 			} elseif (TableSort::is_numeric_column($data, $column)) {
-				$type =  SORT_NUMERIC;
+				$type = SORT_NUMERIC;
 			} else {
 				$type = SORT_STRING;
 			}
 		}
 
-	 	switch ($type) {
-	 		case SORT_NUMERIC:
-				$compare_function = 'strip_tags($el1) > strip_tags($el2)';
+		$compare_operator = $direction == SORT_ASC ? '>' : '<=';
+		switch ($type) {
+			case SORT_NUMERIC:
+				$compare_function = 'return strip_tags($a['.$column.']) '.$compare_operator.' strip_tags($b['.$column.']);';
 				break;
 			case SORT_IMAGE:
-				$compare_function = 'api_strnatcmp(api_strtolower(strip_tags($el1,"<img>")),api_strtolower(strip_tags($el2,"<img>"))) > 0';
+				$compare_function = 'return api_strnatcmp(api_strtolower(strip_tags($a['.$column.'], "<img>")), api_strtolower(strip_tags($b['.$column.'], "<img>"))) '.$compare_operator.' 0;';
 				break;
 			case SORT_DATE:
-				$compare_function = 'strtotime(strip_tags($el1)) > strtotime(strip_tags($el2))';
+				$compare_function = 'return strtotime(strip_tags($a['.$column.'])) '.$compare_operator.' strtotime(strip_tags($b['.$column.']));';
 				break;
 			case SORT_STRING:
 			default:
-				$compare_function = 'api_strnatcmp(api_strtolower(strip_tags($el1)),api_strtolower(strip_tags($el2))) > 0';
+				$compare_function = 'return api_strnatcmp(api_strtolower(strip_tags($a['.$column.'])), api_strtolower(strip_tags($b['.$column.']))) '.$compare_operator.' 0;';
 				break;
 		}
 
-		$function_body = '$el1 = $a['.$column.']; $el2 = $b['.$column.']; return '.($direction == SORT_ASC ? ' ' : ' !').'('.$compare_function.');';
-
 		// Sort the content
-		usort($data, create_function('$a,$b', $function_body));
+		usort($data, create_function('$a, $b', $compare_function));
 
 		if (is_array($column_show)) {
 			// We show only the columns data that were set up on the $column_show array

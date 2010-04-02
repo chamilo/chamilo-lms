@@ -190,7 +190,7 @@ function create_test_course($course_code = 'COURSETEST') {
  * @return void
  */
 
-function delete_test_course($course_code) {
+function delete_test_course($course_code = 'COURSETEST') {
 	$code = $course_code;		
 			
 	$res = CourseManager::delete_course($code);

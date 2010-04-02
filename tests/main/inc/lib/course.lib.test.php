@@ -205,27 +205,15 @@ class TestCourse extends UnitTestCase{
 		$course_table = Database :: get_main_table(TABLE_MAIN_COURSE);
 		$sql_query = "SELECT * FROM $course_table WHERE target_course_code IS NOT NULL";
 		$sql_result = Database::query($sql_query);
-		$result = Database::fetch_array($sql_result);
-		$virtual_course_list[] = $result;
-		$res=$this->tcourse->get_virtual_course_list();
-		if (!empty($res)) {
-			$this->assertTrue(is_array($res));
-		} else {
-			$this->assertTrue(is_null($res));
-		}
+		$num = Database::num_rows($sql_result);
+		$res = $this->tcourse->get_virtual_course_list();
+        $this->assertEqual($num,count($res));
 	}
 
 	public function testGetRealCourseListOfUserAsCourseAdmin(){
 		$user_id = 1;
 		$res = $this->tcourse->get_real_course_list_of_user_as_course_admin($user_id);
-		if(is_array($res)){
-			$this->assertTrue(is_array($res));
-			$this->assertTrue($res);
-		} else {
-		$this->assertNull($res);
-		$this->assertTrue(is_null($res));
-		}
-		//var_dump($res);
+        $this->assertTrue(is_array($res));
 	}
 
 	public function testGetCourseListOfUserAsCourseAdmin(){

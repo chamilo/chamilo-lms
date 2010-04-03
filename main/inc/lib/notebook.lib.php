@@ -124,18 +124,19 @@ class NotebookManager
 	}
 
 	function delete_note($notebook_id) {
+		if (empty($notebook_id) or $notebook_id != strval(intval($notebook_id))) { return false; }
 		// Database table definition
 		$t_notebook = Database :: get_course_table(TABLE_NOTEBOOK);
 
-		$sql = "DELETE FROM $t_notebook WHERE notebook_id='".Database::escape_string($notebook_id)."' AND user_id = '".Database::escape_string(api_get_user_id())."'";
+		$sql = "DELETE FROM $t_notebook WHERE notebook_id='".intval($notebook_id)."' AND user_id = '".Database::escape_string(api_get_user_id())."'";
 		$result = Database::query($sql);
-
+        $affected_rows = Database::affected_rows();
+        if ($affected_rows != 1){
+        	return false;
+        }
 		//update item_property (delete)
-		api_item_property_update(api_get_course_info(), TOOL_NOTEBOOK, Database::escape_string($notebook_id), 'delete', api_get_user_id());
-		$affected_rows = Database::affected_rows();
-		if (!empty($affected_rows)){
-			return true;
-		}
+		api_item_property_update(api_get_course_info(), TOOL_NOTEBOOK, intval($notebook_id), 'delete', api_get_user_id());
+		return true;
 	}
 
 	function display_notes() {

@@ -9,7 +9,7 @@ class TestTablesort extends UnitTestCase{
 	//public $table;
 	public function TestTablesort(){
 
-		$this->UnitTestCase('All main tablesort function tests');
+		$this->UnitTestCase('Tablesort library tests');
 	}
 	/*
 	public function setUp(){
@@ -22,7 +22,7 @@ class TestTablesort extends UnitTestCase{
 	*/
 
 	public function testSortTable(){
-		$data= array(a, cd, efd);
+		$data= array('a', 'cd', 'efd');
 		$column = 0;
 		$direction = SORT_ASC;
 		$type = SORT_REGULAR;
@@ -31,8 +31,9 @@ class TestTablesort extends UnitTestCase{
 		//var_dump($res);
 	}
 
+/* private method
 	public function testIsNumericColumn(){
-		$data=array(aeiou, abcde, acedrf);
+		$data=array('aeiou', 'abcde', 'acedrf');
 		$column=0;
 		$res = TableSort::is_numeric_column($data, $column);
 		if(!is_numeric($res)):
@@ -41,7 +42,6 @@ class TestTablesort extends UnitTestCase{
 		$this->assertTrue($res === 1 || $res === 0);
 		//var_dump($res);
 	}
-
 	public function testIsDateColumn(){
 		$data=array();
 		$column='';
@@ -53,7 +53,6 @@ class TestTablesort extends UnitTestCase{
 		}
 		//var_dump($res);
 	}
-
 	public function testIsImageColumn(){
 		$data=array();
 		$column='';
@@ -67,9 +66,9 @@ class TestTablesort extends UnitTestCase{
 		}
 		//var_dump($res);
 	}
-
+*/
 	public function testSortTableConfig(){
-		$data=array(a,b,c,d,e,z);
+		$data=array('a','b','c','d','e','z'');
 		$column = 0;
 		$direction = SORT_ASC;
 		$column_show=null;

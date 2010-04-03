@@ -45,6 +45,9 @@ class NotebookManager
 	 *
 	 */
 	function save_note($values) {
+		if (!is_array($values) or empty($values['note_title'])) { 
+			return false; 
+		}
 		// Database table definition
 		$t_notebook = Database :: get_course_table(TABLE_NOTEBOOK);
 
@@ -66,11 +69,12 @@ class NotebookManager
 		}
 		$affected_rows = Database::affected_rows();
 		if (!empty($affected_rows)){
-			return true;
+			return $id;
 		}
 	}
 
 	function get_note_information($notebook_id) {
+		if (empty($notebook_id)) { return array(); }
 		// Database table definition
 		$t_notebook = Database :: get_course_table(TABLE_NOTEBOOK);
 
@@ -81,6 +85,7 @@ class NotebookManager
 				   FROM $t_notebook
 				   WHERE notebook_id = '".Database::escape_string($notebook_id)."' ";
 		$result = Database::query($sql);
+		if (Database::num_rows($result)!=1) { return array(); }
 		return Database::fetch_array($result);
 	}
 
@@ -94,6 +99,9 @@ class NotebookManager
 	 * @version januari 2009, dokeos 1.8.6
 	 */
 	function update_note($values) {
+		if (!is_array($values) or empty($values['note_title'])) {
+			return false;
+		}
 		// Database table definition
 		$t_notebook = Database :: get_course_table(TABLE_NOTEBOOK);
 

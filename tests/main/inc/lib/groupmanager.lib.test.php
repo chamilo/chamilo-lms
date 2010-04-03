@@ -9,20 +9,28 @@ require_once(api_get_path(LIBRARY_PATH).'tablesort.lib.php');
 
 
 class TestGroupManager extends UnitTestCase {
+
+    public function __construct() {
+        $this->UnitTestCase('Group manager library tests');
+        TestManager::create_test_course('COURSEGROUP');
+    }
+    
+    public function __destruct() {
+        TestManager::delete_test_course('COURSEGROUP');
+    }
+	
 	/**
-	 *  Test about groupmanager csv using many class database, class manager,
+	 *  Tests about groupmanager csv using many class database, class manager,
 	 * file manager, course manager and table sort.
 	 * @author Ricardo Rodriguez Salazar
-	 */
-	 
+	 */ 
 	public function testGetGroupList(){
 		global $_user;
 		$res = GroupManager::get_group_list();
 		$this->assertTrue(is_array($res));
-		//var_dump($res);
 	}
 
-	public function testCreateGroup(){
+	public function testCreateGroupIsNumeric(){
 		$name='1';
 		$category_id='1';
 		$tutor='';
@@ -30,8 +38,7 @@ class TestGroupManager extends UnitTestCase {
 		global $_course, $_user;
 		$res = GroupManager::create_group($name, $category_id, $tutor, $places);
 		$this->assertTrue(is_numeric($res));
-		$this->assertTrue(($res) == 1);
-		//var_dump($res);
+		$this->assertTrue($res > 0);
 	}
 
 	public function testCreateSubgroups(){
@@ -187,16 +194,13 @@ class TestGroupManager extends UnitTestCase {
 		$categ['maximum_number_of_students'],$categ['groups_per_user']);
 		$this->assertTrue(is_null($res));
 		$this->assertTrue($res ===null);
-		//var_dump($res);
 	}
 
 	public function testGetCurrenMaxGroupsPerUser(){
 		$category_id = 2;
-		$course_code = 'COURSETEST';
-		$course_db= 'chamilo_COURSETEST';
+		$course_code = 'COURSEGROUP';
 		$res =GroupManager::get_current_max_groups_per_user($category_id = null, $course_code = null);
 		$this->assertTrue(is_Null($res));
-		//var_dump($res);
 	}
 
 	public function testSwapCategoryOrder(){
@@ -205,7 +209,6 @@ class TestGroupManager extends UnitTestCase {
 		$res = GroupManager::swap_category_order($id1,$id2);
 		$this->assertFalse($res);
 		$this->assertNull($res,true);
-		//var_dump($res);
 	}
 
 	public function testGetUsers(){
@@ -213,7 +216,6 @@ class TestGroupManager extends UnitTestCase {
 		$res =GroupManager::get_users($group_id);
 		$this->assertTrue(is_array($res));
 		$this->assertTrue($res ===array());
-		//var_dump($res);
 	}
 
 	public function testFillGroups(){
@@ -222,7 +224,6 @@ class TestGroupManager extends UnitTestCase {
 		$res = GroupManager::fill_groups($group_ids);
 		$this->assertNull($res);
 		$this->assertEqual($res,0);
-		//var_dump($res);
 	}
 
 	public function testNumberOfStudents(){

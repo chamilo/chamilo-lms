@@ -106,8 +106,8 @@ class TestMainApi extends UnitTestCase {
     }
 
     function testApiGetCourseIdReturnFalseWhenOutOfCourseIdContext(){
-    	$res =api_get_course_id();
-    	$this->assertTrue($res);
+    	$res = api_get_course_id();
+    	$this->assertEqual($res,-1);
     }
 
     function testApiGetCoursePathReturnFalseWhenOutOfCoursePathContext(){
@@ -186,11 +186,10 @@ class TestMainApi extends UnitTestCase {
 		//var_dump($res);
 	}
 
-	function testApiAddUrlParam() {
-		global $url , $param ;
-		$res=api_add_url_param($url, $param, $filter_xss=true);
-		$this->assertTrue(is_null($res));
-		//var_dump($res);
+	function testApiAddUrlParamReturnsUrlWhenNoParam() {
+		global $url;
+		$res=api_add_url_param($url, null, $filter_xss=true);
+		$this->assertEqual($res,$url);
 	}
 
 	function testApiGeneratePassword() {
@@ -329,11 +328,9 @@ class TestMainApi extends UnitTestCase {
 		}
    	}
 
-   	function testApiIsCourseAdmin() {
+   	function testApiIsCourseAdminIsFalseWhenNoCourseContextDefined() {
 		$res=api_is_course_admin();
-		if(!is_numeric($res)) {
-			$this->assertTrue(is_null($res));
-		}
+		$this->assertFalse($res);
    	}
 
     function testApiIsCourseCoach() {
@@ -609,13 +606,12 @@ class TestMainApi extends UnitTestCase {
 		$dirname = api_get_path(SYS_LANG_PATH);
 		$perm_dir = substr(sprintf('%o', fileperms($dirname)), -4);
 		if ($perm_dir != '0777') {
+			// haha! This one is too good to remove... (for now)
 			$msg = "Error";
 			$this->assertTrue(is_string($msg));
 		} else {
-			$path = $dirname.'upload';
 			$filemode = '0777';
-			$res = api_chmod_R($path, $filemode);
-			unlink($path);
+			$res = api_chmod_R($dirname, $filemode);
 			$this->assertTrue($res || IS_WINDOWS_OS); // We know, it does not work for Windows.
 		}
 	}

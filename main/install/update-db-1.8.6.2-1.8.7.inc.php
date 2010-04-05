@@ -119,28 +119,28 @@ if (defined('SYSTEM_INSTALLATION')) {
         // Converting dates and times to UTC using the default timezone of PHP
         // Converting gradebook dates and times
         $timezone = date_default_timezone_get();
-		// Calculating the offset
-		$dateTimeZoneCurrent = new DateTimeZone($timezone);
-		$dateTimeUTC = new DateTime("now", new DateTimeZone('UTC'));
-		$timeOffsetSeconds = $dateTimeZoneCurrent->getOffset($dateTimeUTC);
-		$timeOffsetHours = $timeOffsetSeconds / 3600;
-		$timeOffsetString = "";
-		
-		if($timeOffsetHours < 0) {
-			$timeOffsetString .= "-";
-			$timeOffsetHours = abs($timeOffsetHours);
-		} else {
-			$timeOffsetString .= "+";
-		}
+        // Calculating the offset
+        $dateTimeZoneCurrent = new DateTimeZone($timezone);
+        $dateTimeUTC = new DateTime("now", new DateTimeZone('UTC'));
+        $timeOffsetSeconds = $dateTimeZoneCurrent->getOffset($dateTimeUTC);
+        $timeOffsetHours = $timeOffsetSeconds / 3600;
+        $timeOffsetString = "";
 
-		if($timeOffsetHours < 10) {
-			$timeOffsetString .= "0";
-		}
+        if($timeOffsetHours < 0) {
+                $timeOffsetString .= "-";
+                $timeOffsetHours = abs($timeOffsetHours);
+        } else {
+                $timeOffsetString .= "+";
+        }
 
-		$timeOffsetString .= "$timeOffsetHours";
-		$timeOffsetString .= ":00";
+        if($timeOffsetHours < 10) {
+                $timeOffsetString .= "0";
+        }
+
+        $timeOffsetString .= "$timeOffsetHours";
+        $timeOffsetString .= ":00";
 		
-		// Executing the queries to convert everything
+	// Executing the queries to convert everything
         $queries[] = "UPDATE gradebook_certificate 	SET created_at = CONVERT_TZ(created_at, '".$timeOffsetString."', '+00:00');";
         $queries[] = "UPDATE gradebook_evaluation 	SET created_at = CONVERT_TZ(created_at, '".$timeOffsetString."', '+00:00');";
         $queries[] = "UPDATE gradebook_link 		SET created_at = CONVERT_TZ(created_at, '".$timeOffsetString."', '+00:00');";
@@ -149,8 +149,31 @@ if (defined('SYSTEM_INSTALLATION')) {
         $queries[] = "UPDATE gradebook_result_log 	SET created_at = CONVERT_TZ(created_at, '".$timeOffsetString."', '+00:00');";
         
         foreach ($queries as $query) {
-			Database::query($query);
-		}
+            Database::query($query);
+	}
+
+        // Moving user folowed by a human resource manager from hr_dept_id field to user_rel_user table
+        $query = "SELECT user_id, hr_dept_id  FROM $dbNameForm.user";
+        $result = Database::query($query);
+        if (Database::num_rows($result) > 0) {
+            require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
+            while ($row = Database::fetch_array($result, 'ASSOC')) {
+                $user_id = $row['user_id'];
+                $hr_dept_id = $row['hr_dept_id'];
+                // moving data to user_rel_user table
+                if (!empty($hr_dept_id)) {
+                    $sql = " SELECT id FROM $dbNameForm.user_rel_user WHERE user_id = $user_id AND friend_user_id = $hr_dept_id AND relation_type = ".USER_RELATION_TYPE_RRHH." ";
+                    $rs  = Database::query($sql);
+                    if (Database::num_rows($rs) == 0) {
+                        $ins = "INSERT INTO $dbNameForm.user_rel_user SET user_id = $user_id, friend_user_id = $hr_dept_id, relation_type = ".USER_RELATION_TYPE_RRHH." ";
+                        Database::query($ins);
+                    }
+                }
+            }
+            // cleaning hr_dept_id field inside user table
+            $upd = "UPDATE $dbNameForm.user SET hr_dept_id = 0";
+            Database::query($upd);
+        }
 
         // Get the stats queries list (s_q_list)
         $s_q_list = get_sql_file_contents('migrate-db-'.$old_file_version.'-'.$new_file_version.'-pre.sql', 'stats');

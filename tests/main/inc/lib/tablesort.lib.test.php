@@ -68,7 +68,7 @@ class TestTablesort extends UnitTestCase{
 	}
 */
 	public function testSortTableConfig(){
-		$data=array('a','b','c','d','e','z'');
+		$data=array('a','b','c','d','e','z');
 		$column = 0;
 		$direction = SORT_ASC;
 		$column_show=null;

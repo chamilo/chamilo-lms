@@ -237,8 +237,13 @@ class TestCategoryClass extends UnitTestCase {
 	 
 	public function testget_target_categories() {
 		$res = $this->category->get_target_categories();
+		if(is_array($res)) {
 		$this->assertTrue(is_array($res));
-		//var_dump($res);
+		} else {
+			$this->assertTrue(is_null($res));
+		}
+		var_dump($res);
+		
 	}
 	
 	/**

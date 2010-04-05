@@ -335,7 +335,7 @@ class TestMainApi extends UnitTestCase {
 		} else {
 			$this->assertFalse(is_bool($res));
 		}
-		var_dump($res);
+		//var_dump($res);
    	}
 
     function testApiIsCourseCoach() {

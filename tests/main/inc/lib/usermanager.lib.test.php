@@ -126,8 +126,7 @@ class TestUserManager extends UnitTestCase
     }
 
     function testCanDeleteUser() {
-    	$user_id='';
-    	$res=UserManager::can_delete_user($user_id);
+    	$res=UserManager::can_delete_user(1);
     	$this->assertTrue(is_bool($res));
     }
 
@@ -137,24 +136,25 @@ class TestUserManager extends UnitTestCase
     }
 
     function testBuildProductionList() {
-    	$user_id= '';
-    	$res=UserManager::build_production_list($user_id, $force = false, $showdelete=false);
+    	$res=UserManager::build_production_list(1, false, false);
     	$this->assertTrue(is_string($res));
     }
 
 	function testDeleteApiKey() {
-		$key_id= '';
-		$res=UserManager::delete_api_key($key_id);
+		$res=UserManager::delete_api_key(1);
 		//var_dump($res);
 		$this->assertTrue(is_bool($res));
 	}
 
 	function testGetApiKeyId() {
-		$user_id= '';
 		$api_service= '';
-		$res=UserManager::get_api_key_id($user_id,$api_service);
-		//var_dump($res);
-		$this->assertTrue(is_bool($res));
+		$res=UserManager::get_api_key_id(1,$api_service);
+		if(!$res === NULL) {
+			$this->assertTrue(is_bool($res));
+		} else {
+			$this->assertTrue(is_null($res));
+			$this->assertFalse($res);
+		}
 	}
 
 	function testGetApiKeys() {
@@ -164,8 +164,7 @@ class TestUserManager extends UnitTestCase
 	}
 
 	function testGetExtraFieldInformation() {
-		$field_id='1';
-		$res=UserManager::get_extra_field_information($field_id);
+		$res=UserManager::get_extra_field_information(1);
 		$this->assertTrue(is_array($res));
 	}
 
@@ -178,34 +177,28 @@ class TestUserManager extends UnitTestCase
 	}
 
 	function testGetExtraFieldOptions() {
-		$field_name='field name';
-		$res=UserManager::get_extra_field_options($field_name);
+		$res=UserManager::get_extra_field_options('field name');
 		//var_dump($res);
 		$this->assertTrue(!(bool)$res);
 	}
 
 	function testGetEextraFields() {
-		$res=UserManager::get_extra_fields($from=0, $number_of_items=0, $column=5, $direction='ASC', $all_visibility=true);
+		$res=UserManager::get_extra_fields(0, 0, 5, 'ASC', true);
 		$this->assertTrue($res);
 	}
 
 	function testGetExtraUserData() {
-		$user_id=1;
-		$res=UserManager::get_extra_user_data($user_id, null,null,null);
+		$res=UserManager::get_extra_user_data(1, null,null,null);
 		$this->assertFalse($res);
 	}
 
 	function testGetExtraUserDataByField() {
-		$user_id=1;
-		$field_variable='field variable';
-		$res=UserManager::get_extra_user_data_by_field($user_id, $field_variable, null,null, null);
+		$res=UserManager::get_extra_user_data_by_field(1, 'field variable', null,null, null);
 		$this->assertTrue(is_array($res));
 	}
 
 	function testGetExtraUserDataByValue(){
-		$field_variable='able';
-		$field_value=454;
-		$res=UserManager::get_extra_user_data_by_value($field_variable, $field_value, null);
+		$res=UserManager::get_extra_user_data_by_value('able', 45, null);
 		$this->assertTrue(is_array($res));
 	}
 
@@ -221,47 +214,42 @@ class TestUserManager extends UnitTestCase
 	}
 
 	function testGetPersonalSessionCourseList() {
-		$user_id=1;
 		global $_configuration;
-		$res=UserManager::get_personal_session_course_list($user_id);
+		$res=UserManager::get_personal_session_course_list(1);
 		//var_dump($res);
 		$this->assertTrue(is_array($res));
 	}
 
 	function testGetPictureUser() {
-		$user_id=1;
-		$picture_file='unknown.jpg';
-		$height= 200;
-		$res=UserManager::get_picture_user($user_id, $picture_file, $height, null, null);
+		$res=UserManager::get_picture_user(1, 'unknown.jpg', 200, null, null);
 		$this->assertFalse(!(bool)$res);
 	}
 
 	function testGetTeacherList() {
 		ob_start();
-		$course_id='1212';
-		UserManager::get_teacher_list($course_id,null);
+		UserManager::get_teacher_list(1212,null);
 		$res =ob_get_contents();
 		ob_end_clean();
 		$this->assertFalse(!(bool)$res);
 	}
 
 	function testGetUserIdFromUsername() {
-		$username='arthur3';
-		$res=UserManager::get_user_id_from_username($username);
+		$res=UserManager::get_user_id_from_username('arthur3');
 		$this->assertTrue(!(bool)$res);
 	}
 
 	function testGetUserInfo() {
-		$username='arthur2';
-		$res=UserManager::get_user_info($username);
+		$res=UserManager::get_user_info('arthur2');
 		$this->assertTrue(!(bool)$res);
 	}
 
 	function testGetUserInfoById() {
-		$user_id='2';
-		$res=UserManager::get_user_info_by_id($user_id);
-		//var_dump($res);
-		$this->assertTrue(is_array($res));
+		$res=UserManager::get_user_info_by_id(2);
+		if(isset($user_id) && ($user_fields = false)){
+			$this->assertTrue(is_array($res));
+		} else {
+			$this->assertFalse($res);
+		}
 	}
 
 	function testGetUserList() {

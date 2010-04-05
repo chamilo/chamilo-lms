@@ -4086,14 +4086,14 @@ span.form_required  {
 	-moz-border-radius:5px 5px 5px 5px;
 	border:1px solid #E1E1E0;
 	float:left;
-	margin:10px 20px 10px 10px;
+	margin:0px 20px 10px 2px;
 	padding:11px;
-	width:210px;
+	width:220px;
 	height:330px;
 }
 
 .courseadminview-activity-3col ul {	
-	padding:10px 20px 10px 20px;
+	padding:0px 20px 10px 4px;	
 	list-style-type:none;
 	height:240px;
 	margin-left:0px;

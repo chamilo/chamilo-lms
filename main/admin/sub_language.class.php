@@ -76,7 +76,7 @@ class SubLanguageManager {
    }
      /**
      * Get all information of chamilo file
-     * @param String The dokeos path file (/var/www/chamilo/main/lang/spanish/gradebook.inc.php)
+     * @param String The chamilo path file (/var/www/chamilo/main/lang/spanish/gradebook.inc.php)
      * @return Array Contains all information of chamilo file
      */
    public static function get_all_language_variable_in_file ($system_path_file) {

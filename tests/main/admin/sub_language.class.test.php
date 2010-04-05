@@ -58,7 +58,7 @@ class TestSubLanguageManager extends UnitTestCase {
 	  		$this->assertTrue($res);
 	  }
 	  $this->assertFalse($res);
-	  var_dump($res);
+	  //var_dump($res);
 	 }
 
 	/**

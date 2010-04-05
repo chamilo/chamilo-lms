@@ -75,12 +75,12 @@ class SubLanguageManager {
 		return $all_information;
    }
      /**
-     * Get all information of dokeos file
-     * @param String The dokeos path file (/var/www/my_dokeos/main/lang/spanish/gradebook.inc.php)
-     * @return Array Contains all information of dokeos file
+     * Get all information of chamilo file
+     * @param String The dokeos path file (/var/www/chamilo/main/lang/spanish/gradebook.inc.php)
+     * @return Array Contains all information of chamilo file
      */
-   public static function get_all_language_variable_in_file ($dokeos_path_file) {
-	   	$info_file=file($dokeos_path_file);
+   public static function get_all_language_variable_in_file ($system_path_file) {
+	   	$info_file=file($system_path_file);
 	   	foreach ($info_file as $line) {
 	        if (substr($line,0,1)!='$') { continue; }
 	    	list($var,$val) = split('=',$line,2);
@@ -92,15 +92,15 @@ class SubLanguageManager {
 
      /**
      * Add file in sub-language directory and add header(tag php)
-     * @param String The dokeos path file (/var/www/my_dokeos/main/lang/spanish/gradebook.inc.php)
+     * @param String The chamilo path file (/var/www/chamilo/main/lang/spanish/gradebook.inc.php)
      * @return void()
      */
-   public static function add_file_in_language_directory ($dokeos_path_file) {
-   		file_put_contents($dokeos_path_file,'<?php'.PHP_EOL);
+   public static function add_file_in_language_directory ($system_path_file) {
+   		file_put_contents($system_path_file,'<?php'.PHP_EOL);
    }
      /**
      * Write in file of sub-language
-     * @param String The path file (/var/www/my_dokeos/main/lang/spanish/gradebook.inc.php)
+     * @param String The path file (/var/www/chamilo/main/lang/spanish/gradebook.inc.php)
      * @param String The new sub-language
      * @param String The language variable
      * @return void()
@@ -115,7 +115,7 @@ class SubLanguageManager {
    }
      /**
      * Add directory for sub-language
-     * @param String The sub-language path directory ( /var/www/my_dokeos/main/lang/spanish_corporate )
+     * @param String The sub-language path directory ( /var/www/chamilo/main/lang/spanish_corporate )
      * @return boolean
      */
    public static function add_directory_of_sub_language($path_sub_language) {

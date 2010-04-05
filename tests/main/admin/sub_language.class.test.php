@@ -51,11 +51,14 @@ class TestSubLanguageManager extends UnitTestCase {
 	 *
 	 */
 	public function testget_all_language_variable_in_file(){
-	  $dokeos_path_folder = api_get_path(SYS_LANG_PATH);
-	  $dokeos_path_file = $dokeos_path_folder.'spanish/link.inc.php';
-	  $res = SubLanguageManager::get_all_language_variable_in_file($dokeos_path_file);
-	  $this->assertTrue(is_array($res));
-	  $this->assertTrue($res);
+	  $system_path_folder = api_get_path(SYS_LANG_PATH);
+	  $system_path_file = $system_path_folder.'spanish/link.inc.php';
+	  $res = SubLanguageManager::get_all_language_variable_in_file($system_path_file);
+	  if(is_array($res)) {
+	  		$this->assertTrue($res);
+	  }
+	  $this->assertFalse($res);
+	  var_dump($res);
 	 }
 
 	/**
@@ -69,9 +72,9 @@ class TestSubLanguageManager extends UnitTestCase {
 			$msg = "Error";
 			$this->assertTrue(is_string($msg));
 		} else {
-			$dokeos_path_file = $dirname.'spanish.inc.php';
-			$res = SubLanguageManager::add_file_in_language_directory($dokeos_path_file);
-			unlink($dokeos_path_file);
+			$system_path_file = $dirname.'spanish.inc.php';
+			$res = SubLanguageManager::add_file_in_language_directory($system_path_file);
+			unlink($system_path_file);
 			$this->assertNull($res);
 			$this->assertTrue(is_null($res));
 		}

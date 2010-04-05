@@ -247,8 +247,8 @@ class TestUserManager extends UnitTestCase
 		$res=UserManager::get_user_info_by_id(2);
 		if(isset($user_id) && ($user_fields = false)){
 			$this->assertTrue(is_array($res));
-		} else {
-			$this->assertFalse($res);
+		}	 else {
+				$this->assertTrue($res);
 		}
 	}
 

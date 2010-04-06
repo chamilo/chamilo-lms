@@ -2,12 +2,12 @@
 /* For licensing terms, see /license.txt */
 
 /**
-*	Exercise library
-* 	shows a question and its answers
-*	@package dokeos.exercise
-* 	@author Olivier Brouckaert <oli.brouckaert@skynet.be>
-* 	@version $Id: exercise.lib.php 22247 2009-07-20 15:57:25Z ivantcholakov $
-*/
+ *	Exercise library
+ * 	shows a question and its answers
+ *	@package dokeos.exercise
+ * 	@author Olivier Brouckaert <oli.brouckaert@skynet.be>
+ * 	@version $Id: exercise.lib.php 22247 2009-07-20 15:57:25Z ivantcholakov $
+ */
 
 // The initialization class for the online editor is needed here.
 require_once '../inc/lib/fckeditor/fckeditor.php';
@@ -26,7 +26,7 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false,$current_it
 		//echo '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js" type="text/javascript"></script>';
 		//echo '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.corners.min.js" type="text/javascript"></script>';
 	}
-	
+
 	// reads question informations
 	if (!$objQuestionTmp = Question::read($questionId)) {
 		// question not found
@@ -75,21 +75,21 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false,$current_it
 		} else {
 			$option_ie="margin-left:10px";
 		}
-		$s .= '<table width="720" class="exercise_options" style="width: 720px;$option_ie background-color:#fff;\">';
+		$s .= '<table width="720" class="exercise_options" style="width: 720px;'.$option_ie.' background-color:#fff;\">';
 		// construction of the Answer object (also gets all answers details)
 		$objAnswerTmp=new Answer($questionId);
-		$nbrAnswers=$objAnswerTmp->selectNbrAnswers(); 
+		$nbrAnswers=$objAnswerTmp->selectNbrAnswers();
 
 		// For "matching" type here, we need something a little bit special
 		// because the match between the suggestions and the answers cannot be
 		// done easily (suggestions and answers are in the same table), so we
 		// have to go through answers first (elems with "correct" value to 0).
-        $select_items = array();
-        //This will contain the number of answers on the left side. We call them
-        // suggestions here, for the sake of comprehensions, while the ones
-        // on the right side are called answers
-        $num_suggestions = 0;
-        
+		$select_items = array();
+		//This will contain the number of answers on the left side. We call them
+		// suggestions here, for the sake of comprehensions, while the ones
+		// on the right side are called answers
+		$num_suggestions = 0;
+
 		if ($answerType == MATCHING) {
 			$x = 1; //iterate through answers
 			$letter = 'A'; //mark letters for each answer
@@ -110,15 +110,15 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false,$current_it
 			}
 			$i = 1;
 			foreach ($answer_matching as $id => $value) {
-                $select_items[$i]['id'] =  $value['id'];
+				$select_items[$i]['id'] =  $value['id'];
 				$select_items[$i]['letter'] =  $cpt1[$id];
 				$select_items[$i]['answer'] = $value['answer'];
 				$i ++;
 			}
 			$num_suggestions = ($nbrAnswers - $x) + 1;
 		} elseif ($answerType == FREE_ANSWER) {
-	        #$comment = $objAnswerTmp->selectComment(1);
-	        //
+			#$comment = $objAnswerTmp->selectComment(1);
+			//
 
 			$oFCKeditor = new FCKeditor("choice[".$questionId."]") ;
 
@@ -134,8 +134,8 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false,$current_it
 
 		// Now navigate through the possible answers, using the max number of
 		// answers for the question as a limiter
-        $lines_count=1; // a counter for matching-type answers
-        for ($answerId=1;$answerId <= $nbrAnswers;$answerId++) {
+		$lines_count=1; // a counter for matching-type answers
+		for ($answerId=1;$answerId <= $nbrAnswers;$answerId++) {
 			$answer          = $objAnswerTmp->selectAnswer($answerId);
 			$answerCorrect   = $objAnswerTmp->isCorrect($answerId);
 			$numAnswer       = $objAnswerTmp->selectAutoId($answerId);
@@ -150,7 +150,7 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false,$current_it
 
 				if ($startlocations !== false && $endlocations !== false) {
 					$texstring = api_substr($answer,$startlocations,$endlocations-$startlocations+6);
-				// 2. replace this by {texcode}
+					// 2. replace this by {texcode}
 					$answer = str_replace($texstring,'{texcode}',$answer);
 				}
 
@@ -168,35 +168,35 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false,$current_it
 				// 4. resize the input
 
 
-				  foreach($matches[0] as $match) {
-				        $answer_len = strlen($match)-2;
-				        //we will only replace 1 item
-				        // echo implode("replace term", explode("search term", "input", $limit));
-				        if ($answer_len <= 5) {
-				                $answer = (implode("5", explode("@@", $answer, 2)));
-				        } elseif($answer_len <= 10) {
-				                $answer = (implode("10", explode("@@", $answer, 2)));
-				        } elseif($answer_len <= 20) {
-				                $answer = (implode("20", explode("@@", $answer, 2)));
-				        } elseif($answer_len <= 30) {
-				                $answer = (implode("30", explode("@@", $answer, 2)));
-				        } elseif($answer_len <= 40) {
-				                $answer = (implode("45", explode("@@", $answer, 2)));
-				        } elseif($answer_len <= 50) {
-				                $answer = (implode("60", explode("@@", $answer, 2)));
-				        } elseif($answer_len <= 60) {
-				                 $answer = (implode("70", explode("@@", $answer, 2)));
-				        } elseif($answer_len <= 70) {
-				                 $answer = (implode("80", explode("@@", $answer, 2)));
-				        } elseif($answer_len <= 80) {
-				                 $answer = (implode("90", explode("@@", $answer, 2)));
-				        } elseif($answer_len <= 90) {
-				                 $answer = (implode("100", explode("@@", $answer, 2)));
-				        } elseif($answer_len <= 100) {
-				                 $answer = (implode("110", explode("@@", $answer, 2)));
-				        } elseif($answer_len > 100 ) {
-				                $answer = (implode("120", explode("@@", $answer, 2)));
-				        }
+				foreach($matches[0] as $match) {
+				$answer_len = strlen($match)-2;
+				//we will only replace 1 item
+				// echo implode("replace term", explode("search term", "input", $limit));
+				if ($answer_len <= 5) {
+				$answer = (implode("5", explode("@@", $answer, 2)));
+				} elseif($answer_len <= 10) {
+				$answer = (implode("10", explode("@@", $answer, 2)));
+				} elseif($answer_len <= 20) {
+				$answer = (implode("20", explode("@@", $answer, 2)));
+				} elseif($answer_len <= 30) {
+				$answer = (implode("30", explode("@@", $answer, 2)));
+				} elseif($answer_len <= 40) {
+				$answer = (implode("45", explode("@@", $answer, 2)));
+				} elseif($answer_len <= 50) {
+				$answer = (implode("60", explode("@@", $answer, 2)));
+				} elseif($answer_len <= 60) {
+				$answer = (implode("70", explode("@@", $answer, 2)));
+				} elseif($answer_len <= 70) {
+				$answer = (implode("80", explode("@@", $answer, 2)));
+				} elseif($answer_len <= 80) {
+				$answer = (implode("90", explode("@@", $answer, 2)));
+				} elseif($answer_len <= 90) {
+				$answer = (implode("100", explode("@@", $answer, 2)));
+				} elseif($answer_len <= 100) {
+				$answer = (implode("110", explode("@@", $answer, 2)));
+				} elseif($answer_len > 100 ) {
+				$answer = (implode("120", explode("@@", $answer, 2)));
+				}
 				}
 
 				*/
@@ -208,36 +208,36 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false,$current_it
 			}
 			// unique answer
 			if ($answerType == UNIQUE_ANSWER) {
-                // set $debug_mark_answer to true at function start to
-                // show the correct answer with a suffix '-x'
-                $help = $selected = '';
-                if ($debug_mark_answer==true) {
-                   if ($answerCorrect) {
-                     $help = 'x-';
-                     $selected = 'checked="checked"';
-                   }
-                }
+				// set $debug_mark_answer to true at function start to
+				// show the correct answer with a suffix '-x'
+				$help = $selected = '';
+				if ($debug_mark_answer==true) {
+					if ($answerCorrect) {
+						$help = 'x-';
+						$selected = 'checked="checked"';
+					}
+				}
 				$s .= '<input type="hidden" name="choice2['.$questionId.']" value="0">
 				<tr>
 				 <td colspan="3">
 				 	<div class="u-m-answer">
 					<p style="float:left; padding-right:4px;">
 					<span><input class="checkbox" type="radio" name="choice['.$questionId.']" value="'.$numAnswer.'" '.$selected.'></p></span>';
-                    $answer = api_parse_tex($answer);
-                    $s .= Security::remove_XSS($answer, STUDENT);                    
-                    $s .= '</div></td></tr>';
+				$answer = api_parse_tex($answer);
+				$s .= Security::remove_XSS($answer, STUDENT);
+				$s .= '</div></td></tr>';
 
 			} elseif ($answerType == MULTIPLE_ANSWER) {
-			// multiple answers
-                // set $debug_mark_answer to true at function start to
-                // show the correct answer with a suffix '-x'
+				// multiple answers
+				// set $debug_mark_answer to true at function start to
+				// show the correct answer with a suffix '-x'
 				$help = $selected = '';
-                if ($debug_mark_answer==true) {
-                   if ($answerCorrect) {
-                     $help = 'x-';
-                     $selected = 'checked="checked"';
-                   }
-                }
+				if ($debug_mark_answer==true) {
+					if ($answerCorrect) {
+						$help = 'x-';
+						$selected = 'checked="checked"';
+					}
+				}
 				$s .= '<input type="hidden" name="choice2['.$questionId.']" value="0">
 				<tr>
 				  <td colspan="3">
@@ -246,19 +246,19 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false,$current_it
 					 <span><input class="checkbox" type="checkbox" name="choice['.$questionId.']['.$numAnswer.']" value="1" '.$selected.'></p></span>';
 				$answer = api_parse_tex($answer);
 				$s .= Security::remove_XSS($answer, STUDENT);
-				$s .= '</div></td></tr>';			
-				
+				$s .= '</div></td></tr>';
+
 			} elseif ($answerType == MULTIPLE_ANSWER_COMBINATION) {
-			// multiple answers
-                // set $debug_mark_answer to true at function start to
-                // show the correct answer with a suffix '-x'
-                $help = $selected = '';
-                if ($debug_mark_answer==true) {
-                   if ($answerCorrect) {
-                     $help = 'x-';
-                     $selected = 'checked="checked"';
-                   }
-                }
+				// multiple answers
+				// set $debug_mark_answer to true at function start to
+				// show the correct answer with a suffix '-x'
+				$help = $selected = '';
+				if ($debug_mark_answer==true) {
+					if ($answerCorrect) {
+						$help = 'x-';
+						$selected = 'checked="checked"';
+					}
+				}
 				$s .= '<input type="hidden" name="choice2['.$questionId.']" value="0">
 				<tr>
 				  <td colspan="3">
@@ -269,34 +269,34 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false,$current_it
 				$s .= Security::remove_XSS($answer, STUDENT);
 				$s .= '</div></td></tr>';
 			} elseif ($answerType == FILL_IN_BLANKS) {
-                // fill in blanks
+				// fill in blanks
 				$s .= '<tr><td colspan="3">'.$answer.'</td></tr>';
 			} else {
-                //  matching type, showing suggestions and answers 
-                // TODO: replace $answerId by $numAnswer
-                if ($answerCorrect != 0) {
-                	// only show elements to be answered (not the contents of
-                	// the select boxes, who are corrrect = 0)
-                	$s .= '<tr><td width="45%">';	
+				//  matching type, showing suggestions and answers
+				// TODO: replace $answerId by $numAnswer
+				if ($answerCorrect != 0) {
+					// only show elements to be answered (not the contents of
+					// the select boxes, who are corrrect = 0)
+					$s .= '<tr><td width="45%">';
 					$parsed_answer = api_parse_tex($answer);
 					//left part questions
 					$s .= '<span style="float:left; width:5%;"><b>'.$lines_count.'</b>.&nbsp;</span>
 						 <span style="float:left; width:95%;">'.$parsed_answer.'</span></td>';
 					//middle part (matches selects)
-				    $s .= '<td width="10%" valign="top" align="center">&nbsp;&nbsp;
+					$s .= '<td width="10%" valign="top" align="center">&nbsp;&nbsp;
 				            <select name="choice['.$questionId.']['.$numAnswer.']">
 							  <option value="0">--</option>';
-		            // fills the list-box
-		            foreach ($select_items as $key=>$val) {
-		            	// set $debug_mark_answer to true at function start to
-		            	// show the correct answer with a suffix '-x'
-		            	$help = $selected = '';
-		            	if ($debug_mark_answer==true) {
-		            		if ($val['id'] == $answerCorrect) {
-		            			$help = '-x';
-		            			$selected = 'selected="selected"';
-		            		}
-		            	}
+					// fills the list-box
+					foreach ($select_items as $key=>$val) {
+						// set $debug_mark_answer to true at function start to
+						// show the correct answer with a suffix '-x'
+						$help = $selected = '';
+						if ($debug_mark_answer==true) {
+							if ($val['id'] == $answerCorrect) {
+								$help = '-x';
+								$selected = 'selected="selected"';
+							}
+						}
 						$s.='<option value="'.$val['id'].'" '.$selected.'>'.$val['letter'].$help.'</option>';
 					}  // end foreach()
 
@@ -315,7 +315,7 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false,$current_it
 
 					$lines_count++;
 
-					//if the left side of the "matching" has been completely 
+					//if the left side of the "matching" has been completely
 					// shown but the right side still has values to show...
 					if (($lines_count -1) == $num_suggestions) {
 						// if it remains answers to shown at the right side
@@ -349,7 +349,7 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false,$current_it
 			return($s);
 		}
 	} elseif ($answerType == HOT_SPOT) {
-		
+
 		// Question is of type HOT_SPOT
 		$questionName=$objQuestionTmp->selectTitle();
 		$questionDescription=$objQuestionTmp->selectDescription();
@@ -357,35 +357,35 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false,$current_it
 		// Get the answers, make a list
 		$objAnswerTmp=new Answer($questionId);
 		$nbrAnswers=$objAnswerTmp->selectNbrAnswers();
-		
+
 		// get answers of hotpost
 		$answers_hotspot = array();
 		for ($answerId=1;$answerId <= $nbrAnswers;$answerId++) {
 			$answers = $objAnswerTmp->selectAnswerByAutoId($objAnswerTmp->selectAutoId($answerId));
-			$answers_hotspot[$answers['id']] = $objAnswerTmp->selectAnswer($answerId);						
+			$answers_hotspot[$answers['id']] = $objAnswerTmp->selectAnswer($answerId);
 		}
-		
+
 		// display answers of hotpost order by id
 		$answer_list = '<div style="padding: 10px; margin-left: 0px; border: 1px solid #A4A4A4; height: 408px; width: 200px;"><b>'.get_lang('HotspotZones').'</b><dl>';
 		if (!empty($answers_hotspot)) {
 			ksort($answers_hotspot);
 			foreach ($answers_hotspot as $key => $value) {
 				$answer_list .= '<dt>'.$key.'.- '.$value.'</dt><br />';
-			}		
-		}		
+			}
+		}
 		$answer_list .= '</dl></div>';
 
 		if (!$onlyAnswers) {
 			echo '<div id="question_title" class="sectiontitle">'.get_lang('Question').' '.$current_item.' : '.$questionName.'</div>';
 			//@todo I need to the get the feedback type
 			//if($answerType == 2)
-			//	$s.=' / '.$total_item;		
+			//	$s.=' / '.$total_item;
 			echo '<input type="hidden" name="hidden_hotspot_id" value="'.$questionId.'">';
 			echo '<table class="exercise_questions" >
 				  <tr>
 			  		<td valign="top" colspan="2">';
-					echo $questionDescription=api_parse_tex($questionDescription);
-			 	    echo '</td></tr>';
+			echo $questionDescription=api_parse_tex($questionDescription);
+			echo '</td></tr>';
 		}
 
 		$canClick = isset($_GET['editQuestion']) ? '0' : (isset($_GET['modifyAnswers']) ? '0' : '1');
@@ -415,7 +415,7 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false,$current_it
 
 						  set swControl = CreateObject("ShockwaveFlash.ShockwaveFlash." + CStr(i))
 						  if (IsObject(swControl)) then
-						    swVersion = swControl.GetVariable(\"\$version\")
+						    swVersion = swControl.GetVariable("$version")
 						  end if
 						  VBGetSwfVer = swVersion
 						End Function

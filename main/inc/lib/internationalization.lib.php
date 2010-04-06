@@ -566,35 +566,35 @@ function api_format_date($time, $format = null, $language = null) {
 		switch ($format) {
 			case TIME_NO_SEC_FORMAT:
 				$date_format = get_lang('timeNoSecFormat', '', $language);
-				if (IS_PHP_53) {
+				if (IS_PHP_53 && INTL_INSTALLED) {
 					$datetype = IntlDateFormatter::NONE;
 					$timetype = IntlDateFormatter::SHORT;
 				}
 				break;
 			case DATE_FORMAT_SHORT:
 				$date_format = get_lang('dateFormatShort', '', $language);
-				if (IS_PHP_53) {
+				if (IS_PHP_53 && INTL_INSTALLED) {
 					$datetype = IntlDateFormatter::LONG;
 					$timetype = IntlDateFormatter::NONE;
 				}
 				break;
 			case DATE_FORMAT_LONG:
 				$date_format = get_lang('dateFormatLong', '', $language);
-				if (IS_PHP_53) {
+				if (IS_PHP_53 && INTL_INSTALLED) {
 					$datetype = IntlDateFormatter::FULL;
 					$timetype = IntlDateFormatter::NONE;
 				}
 				break;
 			case DATE_TIME_FORMAT_LONG:
 				$date_format = get_lang('dateTimeFormatLong', '', $language);
-				if (IS_PHP_53) {
+				if (IS_PHP_53 && INTL_INSTALLED) {
 					$datetype = IntlDateFormatter::FULL;
 					$timetype = IntlDateFormatter::SHORT;
 				}
 				break;
 			default:
 				$date_format = get_lang('dateTimeFormatLong', '', $language);
-				if (IS_PHP_53) {
+				if (IS_PHP_53 && INTL_INSTALLED) {
 					$datetype = IntlDateFormatter::FULL;
 					$timetype = IntlDateFormatter::SHORT;
 				}

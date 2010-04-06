@@ -24,7 +24,7 @@ class CourseHome {
 
 			case 'Basic' :
 				$condition_display_tools = ' WHERE a.link=t.link AND t.position="basic" ';
-				if (api_is_coach() || api_is_course_tutor()) {
+				if ((api_is_coach() || api_is_course_tutor()) && $_SESSION['studentview'] != 'studentview') {
 					$condition_display_tools = ' WHERE a.link=t.link AND (t.position="basic" OR a.name = "'.TOOL_TRACKING.'") ';
 				}
 
@@ -224,7 +224,7 @@ class CourseHome {
 			case TOOL_PUBLIC:
 
 					$condition_display_tools = ' WHERE visibility = 1 ';
-					if (api_is_coach() || api_is_course_tutor()) {
+					if ((api_is_coach() || api_is_course_tutor()) && $_SESSION['studentview'] != 'studentview') {
 						$condition_display_tools = ' WHERE visibility = 1 OR (visibility = 0 AND name = "'.TOOL_TRACKING.'") ';
 					}
 
@@ -438,7 +438,7 @@ class CourseHome {
 		switch ($course_tool_category) {
 			case TOOL_STUDENT_VIEW:
 					$condition_display_tools = ' WHERE visibility = 1 AND (category = "authoring" OR category = "interaction") ';
-					if (api_is_coach() || api_is_course_tutor()) {
+					if ((api_is_coach() || api_is_course_tutor()) && $_SESSION['studentview'] != 'studentview') {
 						$condition_display_tools = ' WHERE (visibility = 1 AND (category = "authoring" OR category = "interaction") OR (name = "'.TOOL_TRACKING.'") )   ';
 					}
 					$sql = "SELECT * FROM $course_tool_table  $condition_display_tools $condition_session ORDER BY id";

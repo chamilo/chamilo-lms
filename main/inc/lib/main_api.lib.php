@@ -1914,7 +1914,7 @@ function api_is_allowed_to_edit($tutor = false, $coach = false, $session_coach =
 	}
 
 	if (api_get_setting('student_view_enabled') == 'true') {	// Check if the student_view is enabled, and if so, if it is activated
-		if (!empty($my_session_id)) {
+                if (!empty($my_session_id)) {
 			// Check if session visibility is read only for coachs
 			if ($session_visibility == SESSION_VISIBLE_READ_ONLY) {
 				$is_allowed_coach_to_edit = false;
@@ -1924,6 +1924,7 @@ function api_is_allowed_to_edit($tutor = false, $coach = false, $session_coach =
 			} else {
 				$is_allowed = false;
 			}
+                        $is_allowed = $is_allowed && $_SESSION['studentview'] != 'studentview';
 		} else {
 			$is_allowed = $is_courseAdmin && $_SESSION['studentview'] != 'studentview';
 		}

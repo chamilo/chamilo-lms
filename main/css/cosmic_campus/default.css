@@ -1545,7 +1545,7 @@ div.system_announcement_content {
 	color:#666;
 }
 .rounded {
-	background:#ccc;
+    border: 3px solid #CCCCCC;
 	padding: 3px;
 	width: 200px;
 	/*margin-left:10px;*/

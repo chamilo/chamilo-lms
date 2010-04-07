@@ -38,6 +38,9 @@ if(function_exists('ini_set')) {
 Display::display_header($nameTools);
 // Display the tool title
 api_display_tool_title($nameTools);
+if (count($_POST) == 0) {
+    Display::display_normal_message(get_lang('SpecialExportsIntroduction'));
+}
 $error =0;
 /* MAIN CODE */
 

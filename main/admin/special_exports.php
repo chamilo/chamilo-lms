@@ -1,12 +1,10 @@
 <?php
 /* For licensing terms, see /dokeos_license.txt */
 /**
- * ==============================================================================
  * Special exports
  *
  * @author Jhon Hinojosa <jhon.hinojosa@dokeos.com>
  * @package special.export
- * ==============================================================================
  */
 
 // name of the language file that needs to be included
@@ -41,11 +39,7 @@ Display::display_header($nameTools);
 // Display the tool title
 api_display_tool_title($nameTools);
 $error =0;
-/*
-==============================================================================
-		MAIN CODE
-==============================================================================
-*/
+/* MAIN CODE */
 
 $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
 $tbl_session_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);

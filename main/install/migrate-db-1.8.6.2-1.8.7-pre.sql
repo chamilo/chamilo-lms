@@ -77,6 +77,10 @@ INSERT INTO settings_options(variable,value,display_text) VALUES ('homepage_view
 
 UPDATE settings_current SET selected_value = 'UTF-8' WHERE variable = 'platform_charset';
 
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('allow_user_course_subscription_by_course_admin', NULL, 'radio', 'Security', 'true', 'AllowUserCourseSubscriptionByCourseAdminTitle', 'AllowUserCourseSubscriptionByCourseAdminComment', NULL, NULL, 0);
+INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_user_course_subscription_by_course_admin', 'true', 'Yes');
+INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_user_course_subscription_by_course_admin', 'false', 'No');
+
 -- xxSTATSxx
 CREATE TABLE track_e_item_property(id int NOT NULL auto_increment PRIMARY KEY, course_id int NOT NULL, item_property_id int NOT NULL, title varchar(255), content text, progress int NOT NULL default 0, lastedit_date datetime NOT NULL default '0000-00-00 00:00:00', lastedit_user_id int  NOT NULL, session_id int NOT NULL default 0);
 ALTER TABLE track_e_item_property ADD INDEX (course_id, item_property_id, session_id);

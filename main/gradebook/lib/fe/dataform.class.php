@@ -61,7 +61,7 @@ class DataForm extends FormValidator {
 		$this->addElement('radio', 'file_type', get_lang('OutputFileType'), 'CSV (Comma-Separated Values)', 'csv');
 		$this->addElement('radio', 'file_type', null, 'XML (Extensible Markup Language)', 'xml');
 		$this->addElement('radio', 'file_type', null, 'PDF (Portable Document Format)', 'pdf');
-		$this->addElement('submit', 'submit', get_lang('Ok'));
+		$this->addElement('style_submit_button', 'submit', get_lang('Export'), 'class="upload"');
 		$this->setDefaults(array (
 			'file_type' => 'csv'
 		));

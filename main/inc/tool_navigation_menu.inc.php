@@ -6,7 +6,6 @@
  *
  *	@package chamilo.include
  */
-require_once api_get_path(LIBRARY_PATH).'course_home.lib.php'; // For using the method CourseHome::translate_tool_name();
 
 define('SHORTCUTS_HORIZONTAL', 0);
 define('SHORTCUTS_VERTICAL', 1);
@@ -16,6 +15,8 @@ define('SHORTCUTS_VERTICAL', 1);
  * @param boolean $include_admin_tools
  */
 function get_navigation_items($include_admin_tools = false) {
+	require_once api_get_path(LIBRARY_PATH).'course_home.lib.php'; // For using the method CourseHome::translate_tool_name();
+	
 	global $is_courseMember;
 	global $_user;
 	global $_course;

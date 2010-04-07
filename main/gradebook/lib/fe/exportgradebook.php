@@ -79,6 +79,114 @@ a:active {text-decoration: none; font-weight : bold;  color : black;}
 	$printdata .= '</table></div></body></html>';
 	return $printdata;
 }
+
+/**
+ * This function get a content html for export inside a pdf file
+ * @param	array	table headers
+ * @param	array 	table body
+ * @param	array	pdf headers
+ * @param	array	pdf footers
+ * @return void
+ */
+function export_pdf_with_html($headers_table, $data_table, $headers_pdf, $footers_pdf, $title_pdf) {
+	
+	require_once api_get_path(LIBRARY_PATH).'mpdf/mpdf.php';
+
+	$mpdf = new mPDF('UTF-8', 'A4', '', '', 32, 25, 70, 40, 16, 13, 'P');
+	$mpdf->useOnlyCoreFonts = true;
+	$mpdf->mirrorMargins = 0;      // Use different Odd/Even headers and footers and mirror margins
+
+	if (is_array($headers_pdf)) {
+		// preparing headers pdf
+		$header = '<table width="100%" cellspacing="2" cellpadding="10" border="0">
+					        <tr><td width="100%" style="text-align: center;" class="title" colspan="2"><h1>'.get_lang('EvaluationName').' : '.$title_pdf.'</h1></td></tr>
+					        <tr><td width="50%">'.$headers_pdf[0][0].' : '.$headers_pdf[0][1].'</td>
+					            <td width="50%">'.$headers_pdf[1][0].' : '.$headers_pdf[1][1].'</td></tr>
+					        <tr><td width="50%">'.$headers_pdf[2][0].' : '.$headers_pdf[2][1].'</td>
+					            <td width="50%" rowspan="1">'.$headers_pdf[3][0].' : '.$headers_pdf[3][1].'</td></tr>
+					        <tr><td width="50%">'.$headers_pdf[4][0].' : '.$headers_pdf[4][1].'</td>
+					            <td width="50%" rowspan="1">'.$headers_pdf[5][0].' : '.$headers_pdf[5][1].'</td></tr>
+					</table>';					
+	}
+	
+	// preparing footer pdf
+	$footer = '<table width="100%" cellspacing="2" cellpadding="10" border="0">';
+	if (is_array($footers_pdf)) {
+		$footer .= '<tr>';	
+		foreach ($footers_pdf as $foot_pdf) {
+			$footer .= '<td width="33%" style="text-align: center;">'.$foot_pdf.'</td>';
+		}
+		$footer .= '</tr>';	
+	}
+	$footer .= '</table>';
+	
+	// preparing content pdf		
+	$css_file = api_get_path(TO_SYS, WEB_CSS_PATH).api_get_setting('stylesheets').'/print.css';
+	if (file_exists($css_file)) {
+		$css = @file_get_contents($css_file);
+	} else {
+		$css = '';
+	}
+	
+	$items_per_page = 32;
+	$count_pages = ceil(count($data_table) / $items_per_page);  
+	for ($x = 0; $x<$count_pages; $x++) {
+		$content_table .= '<table width="100%" border="1" style="border-collapse:collapse">';	
+		// header table
+		$content_table .= '<tr>';
+		$i = 0;
+		if (is_array($headers_table)) {
+			foreach ($headers_table as $head_table) {
+				if (!empty($head_table[0])) {
+					$width = (!empty($head_table[1])?' style = "width : '.$head_table[1].'%" ':'');
+					$content_table .= '<th width="20px">'.$head_table[0].'</th>';
+					$i++;	
+				}			
+			}		
+		}	
+		$content_table .= '</tr>';			
+		// body table	
+		if (is_array($data_table) && count($data_table) > 0) {
+			$offset = $x*$items_per_page;				
+			$data_table = array_slice ($data_table, $offset, count($data_table));
+			$i = 1;
+			$item = $offset+1;
+			foreach ($data_table as $data) {			
+				$content_table .= '<tr>';
+				$content_table .= '<td>'.($item<10?'0'.$item:$item).'</td>';
+				foreach ($data as $content) {							
+					if (!empty($content)) {
+						$content_table .= '<td>'.$content.'</td>';	
+					}					
+				}
+				$content_table .= '</tr>';
+				$i++;
+				$item++;
+				if ($i > $items_per_page) { break; }
+			}			
+		} else {
+			$content_table .= '<tr colspan="'.$i.'"><td>'.get_lang('Empty').'</td></tr>';
+		}	
+		$content_table .= '</table>';				
+		if ($x < ($count_pages - 1)) { $content_table .= '<pagebreak />'; }		
+	}
+	
+	$html = $content_table;
+
+	// set attributes for pdf
+	$mpdf->SetHTMLHeader($header);
+	$mpdf->SetHTMLFooter($footer);		
+	if (!empty($css)) {
+		$mpdf->WriteHTML($css, 1);
+		$mpdf->WriteHTML($html, 2);
+	} else {
+		$mpdf->WriteHTML($html);
+	}
+	$mpdf->Output(replace_dangerous_char($title_pdf.'.pdf'), 'D');
+	exit;
+
+}
+
 /**
  * Exports the data as a table on a PDF page
  * @param	resource	The PDF object (ezpdf class) used to generate the file

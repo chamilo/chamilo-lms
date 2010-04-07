@@ -69,6 +69,7 @@ class ResultsDataGenerator
 			$user = array();
 			$info = get_user_info_from_id($result->get_user_id());
 			$user['id'] = $result->get_user_id();
+			$user['username'] = $info['username'];
 			$user['result_id'] = $result->get_id();
 			$user['lastname'] = $info['lastname'];
 			$user['firstname'] = $info['firstname'];

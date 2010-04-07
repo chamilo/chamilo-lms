@@ -1297,25 +1297,41 @@ div.report_section h4 {
 	line-height: 20px;
 }
 .session_box {
-	background-color: #efefef;
-	border: 1px solid #666;
+	border: 1px solid #DCE5F3;
+	/* font-weight: bold; */
 	color: #666;
-	font-weight: bold;
 	list-style-type: none;
-	margin: 5px 5px 5px 40px;
-	padding: 5px;
+	margin:5px 5px 10px 5px;
+	padding: 5px;	
+	background-color:#FFF;	
+	-webkit-border-radius: 10px;
+	-moz-border-radius: 10px;
+	border-radius: 10px;
+}
+.sub_session_box {
+	 border: 1px solid #DCE5F3; 
+	/* font-weight: bold; */
+	color: #666;
+	list-style-type: none;
+	margin:5px 5px 10px 0px;
+	padding: 5px;	
+	background-color:#FFF;	
+	-webkit-border-radius: 10px;
+	-moz-border-radius: 10px;
+	border-radius: 10px;
+}
+.sub_session_box_title {
 	margin-bottom: 10px;
+	background-color:#F9F9F9;
 }
 .session_box_title {
-	margin-bottom: 7px;
-}
-.session_box_coach {
+	margin-bottom: 10px;
+	background-color:#F9F9F9;
 }
 .session_course_item {
-	/* padding: 0px; */
-	margin: 7px 0px;
+	margin: 0px;
+	margin-bottom:20px;
 }
-
 .session_course_item .courses {
 	margin-bottom: 5px;
 	height:35px;
@@ -3850,3 +3866,119 @@ div.attendance-calendar-add div.row div.formw,div.attendance-calendar-edit div.r
 }
 
 #columns ul, #columns ol {margin:0; padding:0; list-style:none; border:none;}
+
+
+
+
+
+/* To add in 1.8.7*/
+
+.session_box_title span {
+	font-size: 130%;
+	font-weight: bold;	
+}
+
+.sub_session_box_title span {
+	font-size: 130%;
+	font-weight: bold;	
+}
+
+#session_category_title {
+	font-size: 140%;
+	font-weight: bold;
+	padding: 2px 0px 5px 5px;
+}
+
+/* fixes the * */ 
+span.form_required  {
+	padding-right:5px;
+}
+
+.userportal-course-item {
+	-webkit-border-radius: 10px;
+	-moz-border-radius: 10px;
+	border-radius: 10px;
+	background-color:#F9F9F9;
+	padding:5px 10px 5px 10px;
+	height:40px;	
+	margin:5px;
+}
+
+.courseadminview-activity-3col, .platformadminview-activity-3col {
+	-moz-border-radius:5px 5px 5px 5px;
+	border:1px solid #E1E1E0;
+	float:left;
+	margin:0px 20px 10px 2px;
+	padding:11px;
+	width:220px;
+	height:330px;
+}
+
+.courseadminview-activity-3col ul {	
+	padding:0px 20px 10px 4px;	
+	list-style-type:none;
+	height:240px;
+	margin-left:0px;
+	margin: 0px 0px 0px 0px ;
+}
+
+.courseadminview-activity-3col ul li {	
+	padding:4px 0px 4px 0px;
+}
+
+#activity-3col {
+	width: 800px ;
+	margin-left: auto ;
+	margin-right: auto ;
+}
+
+
+.userportal-catalog-item {
+	-webkit-border-radius: 10px;
+	-moz-border-radius: 10px;
+	border-radius: 10px;
+	background-color:#F9F9F9;
+	padding:5px 10px 10px 6px;
+	/* height:40px; */	
+}
+
+.userportal-catalog-item .catalog_box li span {
+	font-size:130%;
+	font-weight:bold;
+	margin-left:5px;	
+}
+
+.userportal-session-item {
+	-webkit-border-radius: 10px;
+	-moz-border-radius: 10px;
+	border-radius: 10px;
+	background-color:#F9F9F9;
+	padding:5px 10px 10px 6px;
+	/* height:40px; */	
+}
+
+.userportal-session-category-item {
+	-webkit-border-radius: 10px.session_box {
+	background-color: #efefef;
+	border: 1px solid #666;
+	font-weight: bold;
+	color: #666;
+	list-style-type: none;
+	margin: 5px 5px 5px 40px;
+	padding: 5px;
+	margin-bottom: 10px;
+}
+.session_box_title {
+	margin-bottom: 7px;
+}
+.session_box_coach {
+}
+.session_course_item {
+	/* padding: 0px; */
+	margin: 7px 0px;
+}
+
+.session_course_item .courses {
+	margin-bottom: 5px;
+	height:35px;
+}

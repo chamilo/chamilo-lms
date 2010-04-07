@@ -202,8 +202,8 @@ if ($export_result_form->validate()) {
 		$h3 = array(get_lang('Course'),$_course['name']);
 		$h4 = array(get_lang('Weight'),$eval[0]->get_weight());
 		$h5 = array(get_lang('Session'),api_get_session_name(api_get_session_id()));
-		$date = date('d-m-Y', time());
-		$h6 = array(get_lang('DateTime'),api_convert_and_format_date($date, DATE_FORMAT_SHORT));
+		$date = date('d-m-Y H:i:s', time());
+		$h6 = array(get_lang('DateTime'),api_convert_and_format_date($date, "%d/%m/%Y %H:%M"));
 		$header_pdf = array($h1, $h2, $h3, $h4, $h5, $h6);
 		
 		// set footer pdf

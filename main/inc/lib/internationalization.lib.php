@@ -23,7 +23,7 @@ define('SPECIAL_CLOSING_TAG', '=]');
 // Predefined date formats in Chamilo provided by the language sub-system.
 // To be used as a parameter for the function api_format_date().
 define('TIME_NO_SEC_FORMAT', 0);	// 15:23
-define('DATE_FORMAT_SHORT', 1);		// 25.08.2009
+define('DATE_FORMAT_SHORT', 1);		// Aug 25, 09
 define('DATE_FORMAT_LONG', 2);		// Aug 25, 09
 define('DATE_TIME_FORMAT_LONG', 3);	// August 25, 2009 at 03:28 PM
 
@@ -599,6 +599,8 @@ function api_format_date($time, $format = null, $language = null) {
 					$timetype = IntlDateFormatter::SHORT;
 				}
 		}
+	} else {
+		$date_format = $format;
 	}
 
 	if (IS_PHP_53 && INTL_INSTALLED && $datetype !== null && $timetype !== null) {

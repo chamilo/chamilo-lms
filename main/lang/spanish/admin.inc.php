@@ -1223,4 +1223,6 @@ $AssignedUsersListToPlatformAdministrator = "Lista de usuarios asignados al admi
 $AssignedCoursesListToHumanResourcesManager = "Lista de usuarios asignados al administrador de recursos humanos";
 $ThereAreNotCreatedCourses = "No hay cursos creados";
 $HomepageViewVerticalActivity = "Ver la actividad en forma vertical";
+$CoursesInformation = "Información de cursos";
+$SpecialExportsIntroduction = "La funcionalidad de exportaciones especiales existe para ayudar el revisor instruccional/académico en exportar los documentos de todos los cursos en un solo paso. Otra opción le permite escoger los cursos que desea exportar, y exportará los documentos presentes en las sesiones de estos cursos también. Esto es una operación muy pesada. Por lo tanto, le recomendamos no iniciarla durante las horas de uso normal de su portal. Hagalo en un periodo más tranquilo. Si no necesita todos los contenidos de una vez, prueba exportar documentos de cursos directamente desde la herramienta de mantenimiento del curso, dentro del curso mismo.";
 ?>

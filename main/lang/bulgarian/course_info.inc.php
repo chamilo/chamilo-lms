@@ -116,4 +116,5 @@ $NewUserEmailAlertDisable = "Изключване на уведомяванет�
 $AllowUserViewUserList = "Разрешанаве на курситите да виждат списъка с потребителите";
 $AllowUserViewUserListActivate = "Разрешаване";
 $AllowUserViewUserListDeactivate = "Забрана";
+$DoNotDisplayAnyAdvance = "Да не се показва напредъка";
 ?>

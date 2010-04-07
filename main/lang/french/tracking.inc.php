@@ -264,4 +264,10 @@ $ThereIsNoInformationAboutYourTeachers = "Aucune information disponible à propo
 $ThereIsNoInformationAboutYourStudents = "Aucune information disponible à propos de vos apprenants";
 $TimeSpentLastWeek = "Temps passé la semaine dernière";
 $DateLock = "Bloquage de date";
+$FolderCreated = "Nouveau répertoire";
+$LearnpathVisible = "Parcours d'apprentissage rendu visible";
+$LinkInvisible = "Lien rendu invisible";
+$LinkAdded = "Lien ajouté";
+$Minutes = "Minutes";
+$BackupCreated = "Backup généré";
 ?>

@@ -94,4 +94,9 @@ $langRecycle = "循环利用课程";
 $AnnouncementExampleTitle = "����һ��֪ͨ����";
 $Wikipedia = "免费的在线百科全书";
 $DefaultGroupCategory = "默认小组";
+$DefaultCourseImages = "相册";
+$ExampleForumCategory = "论坛分类样例";
+$ExampleForum = "论坛样例";
+$ExampleThread = "话题样例";
+$ExampleThreadContent = "内容样例";
 ?>

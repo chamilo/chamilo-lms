@@ -242,4 +242,13 @@ $TrainingTime = "Време действие на курса";
 $CourseProgress = "Напредък";
 $ViewMinus = "Скриване";
 $ResourcesTracking = "Справка за учебната дейност";
+$SelectFieldToAdd = "Изберете поле за добавяне в потребителския профил";
+$AddAdditionalProfileField = "Добавяне на поле в потребителския профил";
+$ConfigureExtensions = "Настройване на разширенията";
+$AttendanceSheetReport = "Справка за присъствията";
+$YouDoNotHaveDoneAttendances = "Нямате присъствия.";
+$GoToAttendanceCalendarList = "Към календара за присъствията";
+$AddADateTime = "Добавяне на час и дата";
+$AreYouSureToDeleteAllDates = "Сигерни ли сте, че искате да изтриете всички дати?";
+$TimeSpentLastWeek = "Прекарано време през последната седмица";
 ?>

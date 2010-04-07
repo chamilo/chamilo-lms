@@ -36,4 +36,8 @@ $langCallSent = "聊天请求已经发送，等待对方同意。";
 $langChatDenied = "你的聊天请求已经被对方拒绝。";
 $Send = "发送";
 $Connected = "已连接";
+$Think = "思考";
+$BigGrin = "大笑";
+$Amazing = "惊讶";
+$Confused = "迷惑";
 ?>

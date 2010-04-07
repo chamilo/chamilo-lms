@@ -364,6 +364,8 @@ $XResultsCleaned = "%d резултата са изтрити.";
 $CopyExercise = "Копиране на теста в нов";
 $CleanStudentResults = "Изтриване на всички резултати на курсистите за теста";
 $ImportQtiQuiz = "Qti2 импорт на тестове.";
+$ReUseACopyInCurrentTest = "Използване на ново копие в теста";
 $Copy = "Копиране";
 $DefaultContent = "Създаване на примерно съдържание";
+$ScoreAverageFromAllAttempts = "Среден резултат от всички опити";
 ?>

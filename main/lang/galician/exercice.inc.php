@@ -366,4 +366,6 @@ $CleanStudentResults = "Borrar todos os resultados dos estudantes neste exercici
 $ImportQtiQuiz = "Importar exercicios de Qti2";
 $ReUseACopyInCurrentTest = "Realizar unha copia desta pregunta no exercicio actual";
 $Copy = "Copia";
+$DefaultContent = "Xerar contido por defecto";
+$ScoreAverageFromAllAttempts = "Promedio de todos os intentos en exercicios";
 ?>

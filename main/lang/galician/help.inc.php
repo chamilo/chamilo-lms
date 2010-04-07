@@ -48,5 +48,32 @@ $langHGroups = "Grupos";
 $langGroupsContent = "Contido dos grupos";
 $langGuide = "Manual";
 $HSurvey = "Axuda: Enquisas";
+$SurveyContent = "A ferramenta Enquisas permitiralle obter a opinión dos usuarios sobre determinados temas; por exemplo, sempre será importante saber a opinión dos alumnos sobre o curso.
+
+Creación dunha Nova Enquisa
+
+Faga clic en Crear \"unha enquisa\" e reencha os campos \"Código da enquisa\" e \"Título da enquisa\". Coa axuda do calendario pode controlar a duración da súa enquisa. Non é necesario mantela durante todo o ano, pode ser suficiente que se vexa tan só durante algúns días do curso. Completar os campos \"Introdución da enquisa\" e \"Agradecementos\" isto é unha boa practica, pois fará que a súa Enquisa sexa máis clara e afectiva. 
+
+Engadindo preguntas a unha enquisa
+
+Unha vez creada a enquisa, deberá crear as preguntas. A ferramenta \"Enquisas\" ten predefinidos diferentes tipos de preguntas: Si/Non, Elección múltiple, Resposta múltiple, Resposta aberta, Porcentaxe.... Entre estes tipos poderá seleccionar os que máis se axusten ás súas necesidades.
+
+Previsualizando a enquisa
+
+Unha vez creadas as preguntas, Vde. ten a opción de previsualizar a enquisa e vela tal como a verán os alumnos. Para iso, faga clic en Vista \"preliminar\" (icona dun documento cunha lupa).
+
+Publicando a enquisa
+
+Se está satisfeito coa súa enquisa e non necesita realizar ningún outro cambio; faga clic en Publicar \"enquisa\" (icona dun sobre cunha frecha verde) para poder enviar a súa enquisa a un grupo de usuarios. Mostraranse dúas listas unha (a da esquerda) cos usuarios do curso e a outra coa lista de usuarios aos que se lles enviará a enquisa. Seleccione os usuarios que desexe que aparezan na nova lista co botón \">>\". Logo, complete os campos \"Asunto do correo\" e \"Texto do correo\".
+Os usuarios seleccionados recibirán un correo electrónico co asunto e texto que introduciu, así como un enlace que terán que pulsar para completar a enquisa. Se desexa introducir esta ligazón nalgún lugar do texto do correo, debe introducir o seguinte: ** ligazón ** (asterisco asterisco  ligazón asterisco asterisco). Esta etiqueta será substituída automaticamente pola ligazón. Se non engade esta ** ligazón **, este será incorporado automaticamente ao final do correo.
+Para rematar, a ferramenta de Enquisas permite enviar un correo-e a todos os usuarios seleccionados se habilita a opción \"Enviar correo\" se non o habilita os usuarios poderán ver a enquisa ao entrar ao sistema na ferramenta \"Enquisas\" a condición de que se atope accesible.
+
+Informes da enquisa
+
+Analizar as enquisas é un proceso tedioso. Os \"Informes\" das enquisas axudaranlle a ver a información por pregunta e por usuario, así como comparar dúas preguntas ou un completo informe de toda a enquisa. Na \"Lista de Enquisas\" faga clic en Informes \"\" (icona dun gráfico circular). 
+
+Administrando as enquisas
+
+Existen as opcións de Editar \"\" e \"Eliminar\" na columna \"Modificar\" da \"Lista de enquisas\"";
 $HBlogs = "Axuda: Blogs";
 ?>

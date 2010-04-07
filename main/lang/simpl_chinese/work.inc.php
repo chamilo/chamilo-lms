@@ -34,6 +34,7 @@ $SendMailBody = "发件人";
 $DirDelete = "删除目录";
 $ValidateChanges = "验证变化";
 $FolderUpdated = "文件夹已更新";
+$EndsAt = "结束于(可完全关闭)";
 $ExpiresAt = "过期于";
 $DirectoryCreated = "文件夹已创建";
 $MoveXTo = "移动 %s 到";

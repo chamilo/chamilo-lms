@@ -263,4 +263,10 @@ $ThereIsNoInformationAboutYourTeachers = "There is no available information abou
 $ThereIsNoInformationAboutYourStudents = "There is no available information about your students";
 $TimeSpentLastWeek = "Time spent last week";
 $DateLock = "Date lock";
+$FolderCreated = "New folder created";
+$LearnpathVisible = "Learning path made visible";
+$LinkInvisible = "Link made invisible";
+$LinkAdded = "Link added";
+$Minutes = "Minutes";
+$BackupCreated = "Backup created";
 ?>

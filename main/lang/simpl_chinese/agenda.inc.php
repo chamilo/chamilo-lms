@@ -71,4 +71,8 @@ $GlobalEvent = "世界性的事件";
 $ModifyEvent = "修改事件";
 $EndDateCannotBeBeforeTheStartDate = "结束日期不能早于开始日期";
 $AgendaSortChronologicallyUp = "顺序排列";
+$AgendaSortChronologicallyDown = "降序";
+$ItemForUserSelection = "用户列表";
+$IsNotiCalFormatFile = "此文件不符合iCal格式";
+$RepeatEvent = "重复事件";
 ?>

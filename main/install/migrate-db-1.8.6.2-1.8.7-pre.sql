@@ -77,7 +77,7 @@ INSERT INTO settings_options(variable,value,display_text) VALUES ('homepage_view
 
 UPDATE settings_current SET selected_value = 'UTF-8' WHERE variable = 'platform_charset';
 
-INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('allow_user_course_subscription_by_course_admin', NULL, 'radio', 'Security', 'true', 'AllowUserCourseSubscriptionByCourseAdminTitle', 'AllowUserCourseSubscriptionByCourseAdminComment', NULL, NULL, 0);
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('allow_user_course_subscription_by_course_admin', NULL, 'radio', 'Security', 'true', 'AllowUserCourseSubscriptionByCourseAdminTitle', 'AllowUserCourseSubscriptionByCourseAdminComment', NULL, NULL, 1);
 INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_user_course_subscription_by_course_admin', 'true', 'Yes');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_user_course_subscription_by_course_admin', 'false', 'No');
 

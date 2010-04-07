@@ -1,12 +1,11 @@
-<?php // $Id: Learnpath.class.php 11364 2007-03-03 10:48:36Z yannoo $
+<?php
 /* For licensing terms, see /license.txt */
 /**
  * A learnpath
  * @author Bart Mollet <bart.mollet@hogent.be>
- * @package dokeos.backup
+ * @package chamilo.backup
  */
-class LearnpathCourseCopy extends Resource
-{
+class LearnpathCourseCopy extends Resource {
 	/**
 	 * Type of learnpath (can be dokeos (1), scorm (2), aicc (3))
 	 */

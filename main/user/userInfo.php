@@ -98,8 +98,8 @@ $userIdViewer = $_user['user_id']; // id fo the user currently online
 //$userIdViewed = $_GET['userIdViewed']; // Id of the user we want to view
 
 $allowedToEditContent = ($userIdViewer == $userIdViewed) || $is_platformAdmin;
-$allowedToEditDef = api_is_allowed_to_edit();
-$is_allowedToTrack = api_is_allowed_to_edit() && $_configuration['tracking_enabled'];
+$allowedToEditDef = api_is_allowed_to_edit(null, true);
+$is_allowedToTrack = api_is_allowed_to_edit(null, true) && $_configuration['tracking_enabled'];
 
 // Library connection
 require_once ("userInfoLib.php");
@@ -122,55 +122,33 @@ $editDef = Security::remove_XSS($_GET['editDef']);
 $moveUpDef = Security::remove_XSS($_GET['moveUpDef']);
 $moveDownDef = Security::remove_XSS($_GET['moveDownDef']);
 
-if ($allowedToEditDef)
-{
-	if (!empty($_POST['submitDef']))
-	{
-		if (!empty($_POST['id']))
-		{
+if ($allowedToEditDef) {
+	if (!empty($_POST['submitDef'])) {
+		if (!empty($_POST['id'])) {
 			edit_cat_def($_POST['id'], $_POST['title'], $_POST['comment'], $_POST['nbline']);
-		}
-		else
-		{
+		} else {
 			create_cat_def($_POST['title'], $_POST['comment'], $_POST['nbline']);
 		}
-
 		$displayMode = "viewDefList";
-	}
-	elseif (!empty($_GET['removeDef']))
-	{
+	} elseif (!empty($_GET['removeDef'])) {
 		remove_cat_def($_GET['removeDef'], true);
 		$displayMode = "viewDefList";
-	}
-	elseif (!empty($_GET['editDef']))
-	{
+	} elseif (!empty($_GET['editDef'])) {
 		$displayMode = "viewDefEdit";
-	}
-	elseif (!empty ($_POST['addDef']))
-	{
+	} elseif (!empty ($_POST['addDef'])) {
 		$displayMode = "viewDefEdit";
-	}
-	elseif (!empty($_GET['moveUpDef']))
-	{
+	} elseif (!empty($_GET['moveUpDef'])) {
 		move_cat_rank($_GET['moveUpDef'], "up");
 		$displayMode = "viewDefList";
-	}
-	elseif (!empty($_GET['moveDownDef']))
-	{
+	} elseif (!empty($_GET['moveDownDef'])) {
 		move_cat_rank($_GET['moveDownDef'], "down");
 		$displayMode = "viewDefList";
-	}
-	elseif (!empty($_POST['viewDefList']))
-	{
+	} elseif (!empty($_POST['viewDefList'])) {
 		$displayMode = "viewDefList";
-	}
-	elseif (!empty($_GET['editMainUserInfo']))
-	{
+	} elseif (!empty($_GET['editMainUserInfo'])) {
 		$userIdViewed = strval(intval($_GET['editMainUserInfo']));
 		$displayMode = "viewMainInfoEdit";
-	}
-	elseif (!empty($_REQUEST['submitMainUserInfo']))
-	{
+	} elseif (!empty($_REQUEST['submitMainUserInfo'])) {
 		/*
 		if (isset ($_REQUEST['submitMainUserInfo']))
 		{
@@ -237,25 +215,19 @@ if ($allowedToEditDef)
 
 // COMMON COMMANDS
 
-if ($allowedToEditContent)
-{
-	if (isset($_POST['submitContent']))
-	{
-		if ($_POST['cntId']) // submit a content change
-		{
-			edit_cat_content($_POST['catId'], $userIdViewed, $_POST['content'], $_SERVER['REMOTE_ADDR']);
+if ($allowedToEditContent) {
+	if (isset($_POST['submitContent'])) {
+		if ($_POST['cntId']) {
+			 // submit a content change
+                        edit_cat_content($_POST['catId'], $userIdViewed, $_POST['content'], $_SERVER['REMOTE_ADDR']);
+
+		} else  {
+			// submit a totally new content
+                        fill_new_cat_content($_POST['catId'], $userIdViewed, $_POST['content'], $_SERVER['REMOTE_ADDR']);
 
 		}
-		else // submit a totally new content
-		{
-			fill_new_cat_content($_POST['catId'], $userIdViewed, $_POST['content'], $_SERVER['REMOTE_ADDR']);
-
-		}
-
 		$displayMode = "viewContentList";
-	}
-	elseif (!empty($_GET['editContent']))
-	{
+	} elseif (!empty($_GET['editContent'])) {
 		$displayMode = "viewContentEdit";
 		$userIdViewed = $userIdViewed;
 	}
@@ -264,13 +236,17 @@ if ($allowedToEditContent)
 /*	   DISPLAY MODES	*/
 // Back button for each display mode (Top)
 
-if (api_is_allowed_to_edit()) {
+if (api_is_allowed_to_edit(null, true)) {
 	echo '<div class="actions">';
 	echo '<a href="user.php?'.api_get_cidreq().'&amp;origin='.$origin.'">'.Display::return_icon('back.png',get_lang('BackUser')).get_lang('BackUser').'</a>';	
 	if (!is_numeric($_GET['editMainUserInfo'])) {
-		echo '<a href="userInfo.php?'.api_get_cidreq().'&amp;origin='.$origin.'&amp;editMainUserInfo='.$userIdViewed.'">'.Display::return_icon('edit.gif',get_lang('EditUser')).get_lang('EditUser').'</a>';
+		if (api_get_setting('allow_user_course_subscription_by_course_admin') == 'true') {
+                    echo '<a href="userInfo.php?'.api_get_cidreq().'&amp;origin='.$origin.'&amp;editMainUserInfo='.$userIdViewed.'">'.Display::return_icon('edit.gif',get_lang('EditUser')).get_lang('EditUser').'</a>';
+                }
 	} else {
-		echo '<a href="userInfo.php?'.api_get_cidreq().'&amp;origin='.$origin.'&amp;uInfo='.$userIdViewed.'">'.Display::return_icon('members.gif',get_lang('ViewUser')).get_lang('ViewUser').'</a>';
+                if (api_get_setting('allow_user_course_subscription_by_course_admin') == 'true') {
+                    echo '<a href="userInfo.php?'.api_get_cidreq().'&amp;origin='.$origin.'&amp;uInfo='.$userIdViewed.'">'.Display::return_icon('members.gif',get_lang('ViewUser')).get_lang('ViewUser').'</a>';
+                }
 	}	
 	echo '<a href="../mySpace/myStudents.php?'.api_get_cidreq().'&amp;origin=user_course&amp;student='.$userIdViewed.'&amp;details=true&amp;course='.$_course['id'].'">'.Display::return_icon('statistics.gif',get_lang('UserStatistics')).get_lang('UserStatistics').'</a>';
 	echo '</div>';
@@ -286,8 +262,7 @@ if (api_is_allowed_to_edit()) {
 $user_info_viewed = api_get_user_info($userIdViewed);
 $is_session_course_coach = UserManager::is_session_course_coach($userIdViewed, $_course['sysCode'], $current_session_id);
 
-if ($displayMode == "viewDefEdit")
-{
+if ($displayMode == "viewDefEdit") {
 	/*>>>>>>>>>>>> CATEGORIES DEFINITIONS : EDIT <<<<<<<<<<<<*/
 
 	$catToEdit = get_cat_def($_GET['editDef']);
@@ -304,38 +279,28 @@ if ($displayMode == "viewDefEdit")
 	$edit_heading_form->addElement('submit', 'submitDef', get_lang('Ok'));
 	$edit_heading_form->setDefaults($catToEdit);
 	$edit_heading_form->display();
-}
-elseif ($displayMode == "viewDefList")
-{
+
+} elseif ($displayMode == "viewDefList") {
 	/*>>>>>>>>>>>> CATEGORIES DEFINITIONS : LIST <<<<<<<<<<<<*/
 
 	$catList = get_cat_def_list();
 
-	if ($catList)
-	{
-
-		foreach ($catList as $thisCat)
-		{
+	if ($catList) {
+		foreach ($catList as $thisCat) {
 			// displays Title and comments
-
 			echo "<p>", "<b>".htmlize($thisCat['title'])."</b><br>\n", "<i>".htmlize($thisCat['comment'])."</i>\n", "</p>";
 
 			// displays lines
-
 			echo "<blockquote>\n", "<font color=\"gray\">\n";
 
-			for ($i = 1; $i <= $thisCat['nbline']; $i ++)
-			{
+			for ($i = 1; $i <= $thisCat['nbline']; $i ++) {
 				echo "<br>__________________________________________\n";
 			}
-
 			echo "</font>\n", "</blockquote>\n";
 
 			// displays commands
-
 			echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&removeDef=", $thisCat['catId'], "\">", "<img src=\"../img/delete.gif\" border=\"0\" alt=\"".get_lang('Remove')."\" onclick=\"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset))."')) return false;\">", "</a>", "<a href=\"".api_get_self()."?".api_get_cidreq()."&editDef=", $thisCat['catId'], "\">", "<img src=\"../img/edit.gif\" border=\"0\" alt=\"".get_lang('Edit')."\" />", "</a>", "<a href=\"".api_get_self()."?".api_get_cidreq()."&moveUpDef=", $thisCat['catId'], "\">", "<img src=\"../img/up.gif\" border=\"0\" alt=\"".get_lang('MoveUp')."\">", "</a>", "<a href=\"".api_get_self()."?".api_get_cidreq()."&moveDownDef=", $thisCat['catId'], "\">", "<img src=\"../img/down.gif\" border=\"0\" alt=\"".get_lang('MoveDown')."\">", "</a>\n";
 		} // end for each
-
 	} // end if ($catList)
 
 	echo "<center>\n",
@@ -344,8 +309,7 @@ elseif ($displayMode == "viewDefList")
 			"</form>\n",
 			"<center>\n";
 }
-elseif ($displayMode == "viewContentEdit")
-{
+elseif ($displayMode == "viewContentEdit") {
 	/*>>>>>>>>>>>> CATEGORIES CONTENTS : EDIT <<<<<<<<<<<<*/
 
 	$catToEdit = get_cat_content($userIdViewed, $_GET['editContent']);
@@ -354,12 +318,9 @@ elseif ($displayMode == "viewContentEdit")
 	$content_heading_form->addElement('hidden', 'catId');
 	$content_heading_form->addElement('hidden', 'uInfo');
 	$content_heading_form->addElement('static', null, $catToEdit['title'], htmlize($catToEdit['comment']));
-	if ($catToEdit['nbline'] == 1)
-	{
+	if ($catToEdit['nbline'] == 1) {
 		$content_heading_form->addElement('text', 'content', null, array ('size' => 80));
-	}
-	else
-	{
+	} else {
 		$content_heading_form->addElement('textarea', 'content', null, array ('cols' => 60, 'rows' => $catToEdit['nbline']));
 	}
 	$content_heading_form->addElement('submit', 'submitContent', get_lang('Ok'));
@@ -368,16 +329,13 @@ elseif ($displayMode == "viewContentEdit")
 	$defaults['uInfo'] = $userIdViewed;
 	$content_heading_form->setDefaults($defaults);
 	$content_heading_form->display();
-}
-elseif ($displayMode == "viewMainInfoEdit")
-{
+} elseif ($displayMode == "viewMainInfoEdit") {
 
 	/*>>>>>>>>>>>> CATEGORIES MAIN INFO : EDIT <<<<<<<<<<<<*/
 
 	$mainUserInfo = get_main_user_info($userIdViewed, $courseCode);
 
-	if ($mainUserInfo)
-	{
+	if ($mainUserInfo) {
 		($mainUserInfo['status'] == COURSEMANAGER) ? $courseAdminChecked = "checked" : $courseAdminChecked = "";
 
                 if ($current_session_id) {
@@ -400,7 +358,6 @@ elseif ($displayMode == "viewMainInfoEdit")
 		echo '<input type="image" src="'.$image_array['dir'].$image_array['file'].'" onclick="return show_image(\''.$url_big_image.'\',\''.$big_image_width.'\',\''.$big_image_height.'\');"/>';
 		}
 
-		//"<td>", get_lang('Tutor'), "</td>\n",
 		echo "<form action=\"".api_get_self()."\" method=\"post\">\n",
 				"<input type=\"hidden\" name=\"submitMainUserInfo\" value=\"$userIdViewed\" />\n",
 				"<table width=\"80%\" border=\"0\">",
@@ -423,14 +380,9 @@ elseif ($displayMode == "viewMainInfoEdit")
 		echo                    "</tr>\n",
 					"<tr align=\"center\">",
 						"<td align=\"left\"><b>", htmlize(api_get_person_name($mainUserInfo['firstName'], $mainUserInfo['lastName'])), "</b></td>\n",
-						"<td align=\"left\"><input type=\"text\" name =\"role\" value=\"", $mainUserInfo['role'], "\" maxlength=\"40\" /></td>";
-						//"<td><input class=\"checkbox\" type=\"checkbox\" name=\"promoteTutor\" value=\"1\" ", $tutorChecked, " /></td>";
-
-
-                //aca
+						"<td align=\"left\"><input type=\"text\" name =\"role\" value=\"", $mainUserInfo['role'], "\" maxlength=\"40\" /></td>";						
 
 		if (!($is_courseAdmin && $_user['user_id'] == $userIdViewed)) {
-
                     if ($current_session_id) {
                         if ($user_info_viewed['status'] == COURSEMANAGER) {
                             echo "<td><input class=\"checkbox\" type=\"checkbox\" name=\"promoteTutor\" value=\"1\" ", $tutorChecked, " /></td>";
@@ -441,15 +393,11 @@ elseif ($displayMode == "viewMainInfoEdit")
                         } else {
                             echo "<td><input class=\"checkbox\" type=\"checkbox\" name=\"promoteCourseAdmin\" value=\"1\"", $courseAdminChecked, " /></td>\n";
                         }
-                    }
-
-                        			
+                    }			
 		} else {
 			echo "<td>", get_lang('CourseManager'), "</td>\n";
 
 		}
-
-
 
 
 		echo "<td><button class=\"save\" type=\"submit\" name=\"submit\">".get_lang('SaveChanges')."</button></td>\n", "</tr>", "</table>", "</form>\n";
@@ -470,14 +418,12 @@ elseif ($displayMode == "viewMainInfoEdit")
 	{
 		Display :: display_normal_message(get_lang('ThisStudentIsSubscribeThroughASession'));
 	}
-}
-elseif ($displayMode == "viewContentList") // default display
-{
+} elseif ($displayMode == "viewContentList") {
+        // default display
 	/*>>>>>>>>>>>> CATEGORIES CONTENTS : LIST <<<<<<<<<<<<*/
 
 	$virtual_course_code = $_GET["virtual_course"];
-	if (isset ($virtual_course_code))
-	{
+	if (isset ($virtual_course_code)) {
 		$courseCode = $virtual_course_code;
 		//not supported yet: editing users of virtual courses
 		$allowedToEditDef = false;
@@ -485,8 +431,7 @@ elseif ($displayMode == "viewContentList") // default display
 
 	$mainUserInfo = get_main_user_info($userIdViewed, $courseCode);
 
-	if ($mainUserInfo)
-	{
+	if ($mainUserInfo) {
 		$image_array=UserManager::get_user_picture_path_by_id($userIdViewed,'web',false,true);
 		// get the path,width and height from original picture
 		$big_image = $image_array['dir'].'big_'.$image_array['file'];
@@ -505,13 +450,9 @@ elseif ($displayMode == "viewContentList") // default display
 		$users_online = who_is_online(30);
 		foreach ($users_online as $online) {
 			if (in_array($userIdViewed, $online)) {	
-				
-				
 				$online = Display::return_icon('online.gif', get_lang('OnLine'),array('style'=>'with="8"; height="8"'));
 				break;
-			}
-			else
-			{
+			} else {
 				$online ='';
 			}
 				
@@ -539,7 +480,7 @@ elseif ($displayMode == "viewContentList") // default display
                                     }
                                 }
 
-		echo            ($allowedToEditDef?"<td>".get_lang('Edit')."</td>\n":""),
+		echo            ($allowedToEditDef && api_get_setting('allow_user_course_subscription_by_course_admin') == 'true'?"<td>".get_lang('Edit')."</td>\n":""),
                                 ($is_allowedToTrack?"<td>".get_lang('Tracking')."</td>\n":""),
 				"</tr>\n",
 
@@ -574,7 +515,7 @@ elseif ($displayMode == "viewContentList") // default display
                                     }
                                 }
 
-				if ($allowedToEditDef) {
+				if ($allowedToEditDef && api_get_setting('allow_user_course_subscription_by_course_admin') == 'true') {
 					echo	"<td>",
 							"<a href=\"".api_get_self()."?".api_get_cidreq()."&editMainUserInfo=$userIdViewed\">",
 							"<img border=\"0\" alt=\"\" src=\"../img/edit.gif\" />",

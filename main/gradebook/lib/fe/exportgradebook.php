@@ -92,21 +92,25 @@ function export_pdf_with_html($headers_table, $data_table, $headers_pdf, $footer
 	
 	require_once api_get_path(LIBRARY_PATH).'mpdf/mpdf.php';
 
-	$mpdf = new mPDF('UTF-8', 'A4', '', '', 32, 25, 70, 40, 16, 13, 'P');
+	$mpdf = new mPDF('UTF-8', 'A4', '', '', 18, 15, 70, 35, 16, 13, 'P');
 	$mpdf->useOnlyCoreFonts = true;
 	$mpdf->mirrorMargins = 0;      // Use different Odd/Even headers and footers and mirror margins
 
 	if (is_array($headers_pdf)) {
 		// preparing headers pdf
-		$header = '<table width="100%" cellspacing="2" cellpadding="10" border="0">
-					        <tr><td width="100%" style="text-align: center;" class="title" colspan="2"><h1>'.get_lang('EvaluationName').' : '.$title_pdf.'</h1></td></tr>
-					        <tr><td width="50%">'.$headers_pdf[0][0].' : '.$headers_pdf[0][1].'</td>
-					            <td width="50%">'.$headers_pdf[1][0].' : '.$headers_pdf[1][1].'</td></tr>
-					        <tr><td width="50%">'.$headers_pdf[2][0].' : '.$headers_pdf[2][1].'</td>
-					            <td width="50%" rowspan="1">'.$headers_pdf[3][0].' : '.$headers_pdf[3][1].'</td></tr>
-					        <tr><td width="50%">'.$headers_pdf[4][0].' : '.$headers_pdf[4][1].'</td>
-					            <td width="50%" rowspan="1">'.$headers_pdf[5][0].' : '.$headers_pdf[5][1].'</td></tr>
-					</table>';					
+		$header = '<table width="100%" cellspacing="2" cellpadding="10" border="0" class="strong">
+							<tr><td width="100%" style="text-align: left;" class="title" colspan="4"><h3>'.api_get_setting('Institution').'</h3></td></tr>
+					        <tr><td width="100%" style="text-align: center;" class="title" colspan="4"><h1>'.$title_pdf.'</h1></td></tr>
+					        <tr><td><strong>'.$headers_pdf[0][0].'</strong> </td><td> <strong>'.$headers_pdf[0][1].'</strong></td>
+					            <td><strong>'.$headers_pdf[1][0].'</strong> </td><td> <strong>'.$headers_pdf[1][1].'</strong></td>
+					        </tr>
+					        <tr><td><strong>'.$headers_pdf[2][0].'</strong> </td><td> <strong>'.$headers_pdf[2][1].'</strong></td>
+					            <td><strong>'.$headers_pdf[3][0].' </strong></td><td> <strong>'.$headers_pdf[3][1].'</strong></td>
+					        </tr>
+					        <tr><td><strong>'.$headers_pdf[4][0].'</strong></td><td> <strong>'.$headers_pdf[4][1].'</strong></td>
+					            <td><strong>'.$headers_pdf[5][0].'</strong> </td><td> <strong>'.$headers_pdf[5][1].'</strong></td>
+					        </tr>
+					</table>';
 	}
 	
 	// preparing footer pdf
@@ -128,7 +132,7 @@ function export_pdf_with_html($headers_table, $data_table, $headers_pdf, $footer
 		$css = '';
 	}
 	
-	$items_per_page = 32;
+	$items_per_page = 30;
 	$count_pages = ceil(count($data_table) / $items_per_page);  
 	for ($x = 0; $x<$count_pages; $x++) {
 		$content_table .= '<table width="100%" border="1" style="border-collapse:collapse">';	
@@ -138,8 +142,8 @@ function export_pdf_with_html($headers_table, $data_table, $headers_pdf, $footer
 		if (is_array($headers_table)) {
 			foreach ($headers_table as $head_table) {
 				if (!empty($head_table[0])) {
-					$width = (!empty($head_table[1])?' style = "width : '.$head_table[1].'%" ':'');
-					$content_table .= '<th width="20px">'.$head_table[0].'</th>';
+					$width = (!empty($head_table[1])?$head_table[1].'%':'');
+					$content_table .= '<th width="'.$width.'">'.$head_table[0].'</th>';
 					$i++;	
 				}			
 			}		
@@ -156,7 +160,7 @@ function export_pdf_with_html($headers_table, $data_table, $headers_pdf, $footer
 				$content_table .= '<td>'.($item<10?'0'.$item:$item).'</td>';
 				foreach ($data as $content) {							
 					if (!empty($content)) {
-						$content_table .= '<td>'.$content.'</td>';	
+						$content_table .= '<td style="padding:4px" >'.$content.'</td>';	
 					}					
 				}
 				$content_table .= '</tr>';

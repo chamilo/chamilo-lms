@@ -1461,8 +1461,8 @@ function get_list_users_without_publication($task_id) {
 */
 function display_list_users_without_publication($task_id) {
 	global $origin;
-	$table_header[] = array(get_lang('FirstName'), true);
 	$table_header[] = array(get_lang('LastName'), true);
+	$table_header[] = array(get_lang('FirstName'), true);
 	$table_header[] = array(get_lang('Email'), true);
 	// table_data
 	$table_data = get_list_users_without_publication($task_id);

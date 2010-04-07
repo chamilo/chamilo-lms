@@ -1075,6 +1075,7 @@ $EditTimeLimit = "Uredi časovne omejitve";
 $ShowGlossaryInExtraToolsTitle = "Prikaži termine besednjaka v dodatnih orodjih";
 $FieldTypeTag = "Oznaka uporabnika";
 $SendEmailToAdminTitle = "E-poštno obvestilo ob kreiranju novega tečaja";
+$SendEmailToAdminComment = "Pošlji e-poštno obvestilo upravitelju platforme vsakič, ko učitelj ustvari nov tečaj";
 $SelectSession = "Izberi sejo";
 $GroupPermissions = "Dovoljenja za skupino";
 $SpecialCourse = "Poseben tečaj";
@@ -1090,5 +1091,7 @@ $Editor = "WYSIWYG urejevalnik";
 $GoToCourseAfterLoginTitle = "Pojdi neposredno na tečaj (po prijavi)";
 $GoToCourseAfterLoginComment = "V primeru, da je uproabnik registriran v enem samem tečaju, bo njegova osnovna stran po prijavi stran tečaja";
 $AllowStudentsDownloadFoldersTitle = "Dovoli tečajnikom prenos map";
+$AllowSendMessageToAllPlatformUsersTitle = "Dovoli pošiljanje sporočil vsem uporabnikom platforme";
+$AllowSendMessageToAllPlatformUsersComment = "Dovoli pošiljanje sporočil vsem uporabnikom platforme";
 $Username = "Uporabniško ime";
 ?>

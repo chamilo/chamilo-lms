@@ -1224,4 +1224,6 @@ $AssignedUsersListToPlatformAdministrator = "Liste d'utilisateurs assignés à l
 $AssignedCoursesListToHumanResourcesManager = "Cours assignés au directeur des ressources humaines";
 $ThereAreNotCreatedCourses = "Aucun cours créé";
 $HomepageViewVerticalActivity = "Vue activité verticale";
+$CoursesInformation = "Rapport des cours";
+$SpecialExportsIntroduction = "La fonctionnalité d'export spécial a été dessinée dans l'intention de venir en aide au contrôleur académique/instructionnel, pour lui permettre d'exporter tous les documents de cours en une seule opération. Une seconde option permet de choisir les cours que vous voulez exporter, et exportera également les documents présents dans ces documents directement depuis l'outil de maintenance du cours lui-même.";
 ?>

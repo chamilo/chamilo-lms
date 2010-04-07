@@ -215,4 +215,5 @@ $HelpDefaultDirDocuments = "Este directorio contén os arquivos fornecidos por d
 $HelpSharedFolder = "Este directorio contén os arquivos que os estudantes (e Vd.) envían a un curso a través do editor se non o fan desde a ferramenta grupos. Por defecto serán visibles por calquera profesor, pero estarán ocultos para outros estudantes salvo que accedan a eles mediante un acceso directo. Se fai visible o directorio dun estudante outros estudantes poderán ver todo o que conteña.";
 $TemplateImage = "Imaxe da plantilla";
 $MoveElement = "Mover";
+$CertificateName = "Nome do certificado";
 ?>

@@ -50,4 +50,10 @@ $NoAnnouncements = "لا يوجد أي إعلان";
 $SelectEverybody = "حدد الجميع";
 $SelectedUsersGroups = "مجموعات المستخدمين المحددة";
 $LearnerMessage = "رسالة من المتعلم";
+$TitleIsRequired = "العنوان مطلوب";
+$AnnounceSentByEmail = "الإعلانات أرسلت بالبريد الإلكتروني";
+$AnnounceSentToUserSelection = "الإعلانات أرسلت للمستخدمين المختارين";
+$SendAnnouncement = "إرسال إعلان";
+$ModifyAnnouncement = "تعديل إعلان";
+$ButtonPublishAnnouncement = "إرسال إعلان";
 ?>

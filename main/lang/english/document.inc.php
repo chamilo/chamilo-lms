@@ -215,4 +215,5 @@ $HelpDefaultDirDocuments = "This directory contains the default archives. You ca
 $HelpSharedFolder = "This directory contains the files that other learners (or yourself) sent into a course through the editor (if they didn't do it from the groups tool). By default, they will be visible by any trainer, but will be hidden from other learners (unless they access the files directly). If you make one user directory visible, other users will see all its content.";
 $TemplateImage = "Template's icon";
 $MoveElement = "Move element";
+$CertificateName = "Name";
 ?>

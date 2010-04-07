@@ -1223,4 +1223,6 @@ $AssignedUsersListToPlatformAdministrator = "Users assigned to the platform admi
 $AssignedCoursesListToHumanResourcesManager = "Courses assigned to the HR manager";
 $ThereAreNotCreatedCourses = "There are no courses to select";
 $HomepageViewVerticalActivity = "Vertical activity view";
+$CoursesInformation = "Courses information";
+$SpecialExportsIntroduction = "The special exports feature is meant to help an instructional controller to export all courses documents in one unique step. Another option lets you choose the courses you want to export, and will export documents present in these courses' sessions as well. This is a very heavy operation, and we recommend you do not start it during normal usage hours of your portal. Do it in a quieter period. If you don't need all the contents at once, try to export courses documents directly from the course maintenance tool inside the course itself.";
 ?>

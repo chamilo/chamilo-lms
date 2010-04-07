@@ -57,4 +57,5 @@ $langTeach = "他/她能教什么";
 $langProductions = "作品";
 $langSendChatRequest = "发送回复给这个人";
 $langRequestDenied = "已拒绝请求.";
+$UsageDatacreated = "已创建数据";
 ?>

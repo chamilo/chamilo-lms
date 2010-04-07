@@ -216,6 +216,4 @@ $HelpSharedFolder = "Тази директория съдържа файлове
 $TemplateImage = "Изображение на шаблона";
 $MoveElement = "Преместване";
 $CertificateName = "Име на сертификата";
-$CreateCertificate = "Създаване на сертификат";
-$CertificateOverview = "списъка със сертификатите";
 ?>

@@ -49,4 +49,8 @@ $langSaveCategory = "Enregistrer le dossier";
 $BackToLinksOverview = "Retour à la vue globale des liens";
 $AddTargetOfLinkOnHomepage = "Sélectionnez la cible du lien pour la page d'accueil du cours";
 $Url = "URL";
+$LinkOpenSelf = "Ouvrir dans la même fenêtre";
+$LinkOpenBlank = "Ouvrir dans une nouvelle fenêtre";
+$LinkOpenParent = "Ouvrir dans la fenêtre parente";
+$LinkOpenTop = "Ouvrir dans page complète";
 ?>

@@ -367,4 +367,5 @@ $ImportQtiQuiz = "Importar ejercicios de Qti2";
 $ReUseACopyInCurrentTest = "Reutilizar una copia de esta pregunta en el ejercicio actual";
 $Copy = "Copia";
 $DefaultContent = "Generar contenido por defecto";
+$ScoreAverageFromAllAttempts = "Promedio de todos los intentos en ejercicios";
 ?>

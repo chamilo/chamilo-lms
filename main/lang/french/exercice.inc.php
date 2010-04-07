@@ -364,4 +364,8 @@ $XResultsCleaned = "%d résultats éliminés";
 $CopyExercise = "Copier cet exercice comme un nouvel exercice";
 $CleanStudentResults = "Supprimer tous les résultats de cet exercice";
 $ImportQtiQuiz = "Importer exercices QTI2";
+$ReUseACopyInCurrentTest = "Réutiliser une copie dans le test courant";
+$Copy = "Copier";
+$DefaultContent = "Générer contenu par défaut";
+$ScoreAverageFromAllAttempts = "Moyenne du score sur l'ensemble des tentatives";
 ?>

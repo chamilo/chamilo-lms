@@ -215,4 +215,5 @@ $HelpDefaultDirDocuments = "Ce répertoire contient les fichiers par défaut. Vo
 $HelpSharedFolder = "Ce répertoire contient les fichiers que d'autres apprenants (ou vous-même) ont envoyé dans un cours au travers de l'éditeur en ligne (à l'exception de l'outil de groupe). Par défaut, ils seront visibles par tous les enseignants, mais resteront invisibles pour les autres apprenants (sauf par accès direct au fichier). Si vous rendez un répertoire apprenant visible, les autres apprenants pourront voir l'ensemble de son contenu.";
 $TemplateImage = "Icône du modèle";
 $MoveElement = "Déplacer élément";
+$CertificateName = "Nom du certificat";
 ?>

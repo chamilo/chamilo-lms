@@ -278,7 +278,7 @@ function get_number_of_users() {
 								LEFT JOIN $course_user_table cu on u.user_id = cu.user_id and course_code='".$_SESSION['_course']['id']."'
 								INNER JOIN  $tbl_url_rel_user as url_rel_user
 								ON (url_rel_user.user_id = u.user_id)
-								WHERE cu.id_user IS NULL AND access_url_id= $url_access_id AND u.status<>".DRH." ";
+								WHERE cu.user_id IS NULL AND access_url_id= $url_access_id AND u.status<>".DRH." ";
 					}
 				}
 

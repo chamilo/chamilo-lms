@@ -262,9 +262,15 @@ require_once dirname(__FILE__).'/internationalization.lib.php';
 
  *	api_get_path(SYS_SERVER_ROOT_PATH)			/var/www/ - This is the physical folder where the system Chamilo has been placed. It is not always equal to $_SERVER['DOCUMENT_ROOT'].
  * 	api_get_path(SYS_PATH)						/var/www/chamilo/
+ *  api_get_path(SYS_ARCHIVE_PATH)				/var/www/chamilo/archive/
  *  api_get_path(SYS_COURSE_PATH)				/var/www/chamilo/courses/
  *  api_get_path(SYS_CODE_PATH)					/var/www/chamilo/main/
- * 	api_get_path(SYS_LANG_PATH)					/var/www/chamilo/main/lang/
+ *	api_get_path(INCLUDE_PATH)					/var/www/chamilo/main/inc/
+ * 	api_get_path(LIBRARY_PATH)					/var/www/chamilo/main/inc/lib/
+ * 	api_get_path(CONFIGURATION_PATH)			/var/www/chamilo/main/inc/conf/
+ *  api_get_path(SYS_LANG_PATH)					/var/www/chamilo/main/lang/
+ *  api_get_path(SYS_PLUGIN_PATH)				/var/www/chamilo/plugin/
+ *  api_get_path(SYS_TEST_PATH)					/var/www/chamilo/tests/
  *
  *  api_get_path(WEB_SERVER_ROOT_PATH)			http://www.mychamilo.org/
  *  api_get_path(WEB_PATH)						http://www.mychamilo.org/chamilo/
@@ -276,13 +282,6 @@ require_once dirname(__FILE__).'/internationalization.lib.php';
  *	api_get_path(WEB_CSS_PATH)					http://www.mychamilo.org/chamilo/main/css/
  *	api_get_path(WEB_LIBRARY_PATH)				http://www.mychamilo.org/chamilo/main/inc/lib/
  *
- *
- * 	api_get_path(SYS_ARCHIVE_PATH)				/var/www/chamilo/archive/
- *	api_get_path(INCLUDE_PATH)					/var/www/chamilo/main/inc/
- * 	api_get_path(LIBRARY_PATH)					/var/www/chamilo/main/inc/lib/
- * 	api_get_path(CONFIGURATION_PATH)			/var/www/chamilo/main/inc/conf/
- *  api_get_path(SYS_PLUGIN_PATH)				/var/www/chamilo/plugin/
- *  api_get_path(SYS_TEST_PATH)					/var/www/chamilo/tests/
  *
  *	This is how we retrieve paths of "registerd" resource files (scripts, players, etc.):
  *	api_get_path(TO_WEB, FLASH_PLAYER_AUDIO)	http://www.mychamilo.org/chamilo/main/inc/lib/mediaplayer/player.swf

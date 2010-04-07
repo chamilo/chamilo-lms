@@ -156,6 +156,7 @@ define('IS_WINDOWS_OS', api_is_windows_os());
 define('INTL_INSTALLED', function_exists('intl_get_error_code'));	// intl extension (from PECL), it is installed by default as of PHP 5.3.0
 define('ICONV_INSTALLED', function_exists('iconv'));				// iconv extension, for PHP5 on Windows it is installed by default.
 define('MBSTRING_INSTALLED', function_exists('mb_strlen'));			// mbstring extension.
+define('DATE_TIME_INSTALLED', class_exists('DateTime'));			// datetime extension, it is moved to the core as of PHP 5.2, see http://www.php.net/datetime
 
 // Patterns for processing paths.									// Examples:
 define('REPEATED_SLASHES_PURIFIER', '/\/{2,}/');					// $path = preg_replace(REPEATED_SLASHES_PURIFIER, '/', $path);

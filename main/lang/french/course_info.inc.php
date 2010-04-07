@@ -113,4 +113,8 @@ $NewUserEmailAlert = "Alerter de nouvelles inscriptions";
 $NewUserEmailAlertEnable = "Activer l'alerte par e-mail aux formateurs lors de l'inscription autonome d'un nouvel apprenant";
 $NewUserEmailAlertToTeacharAndTutor = "Activer l'alerte par e-mail aux formateurs lors de l'inscription autonome d'un nouvel apprenant";
 $NewUserEmailAlertDisable = "Ne pas activer l'alerte pas e-mail lors d'une nouvelle inscription au cours";
+$AllowUserViewUserList = "Autoriser l'utilisateur à voir la liste d'utilisateurs";
+$AllowUserViewUserListActivate = "Activer la liste des utilisateurs";
+$AllowUserViewUserListDeactivate = "Désactiver la liste d'utilisateurs";
+$DoNotDisplayAnyAdvance = "Ne pas afficher le progrès";
 ?>

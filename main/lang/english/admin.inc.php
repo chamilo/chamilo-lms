@@ -1214,5 +1214,13 @@ $ReturnToLanguagesList = "Return to the languages list";
 $ActivityCoach = "The coach of the session, shall have all rights and privileges on all the courses that belong to the session.";
 $CategoriesNumber = "Categories";
 $CourseProgress = "Course progress";
+$ExportAllCoursesList = "Export all courses";
+$ExportSelectedCoursesFromCoursesList = "Export selected courses from the following list";
+$CoursesListHasBeenExported = "The list of courses has been exported";
+$WhichCoursesToExport = "Courses to export";
+$AssignUsersToPlatformAdministrator = "Assign users to the platform administrator";
+$AssignedUsersListToPlatformAdministrator = "Users assigned to the platform administrator";
+$AssignedCoursesListToHumanResourcesManager = "Courses assigned to the HR manager";
+$ThereAreNotCreatedCourses = "There are no courses to select";
 $HomepageViewVerticalActivity = "Vertical activity view";
 ?>

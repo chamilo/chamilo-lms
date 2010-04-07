@@ -9,10 +9,14 @@ class TestCreateBackupIsAdmin extends UnitTestCase {
    {
    		$_GET = array('archive' => 'index.html');
    		
-          $res =  create_backup_is_admin(true);
-          $this->assertTrue($res, 'son iguales');
-          var_dump($res);
-    }
+          $resTrue =  create_backup_is_admin(true);
+          $this->assertTrue(is_bool($resTrue));
+          $resFalse = create_backup_is_admin(false);
+          $this->assertFalse($resFalse);
+   		  $this->assertEqual($resTrue , $resFalse);
+   		  //var_dump($resTrue, $resFalse);
+   		  
+   }
 }
 
 ?>

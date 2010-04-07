@@ -759,6 +759,7 @@ VALUES
 ('show_tabs', 'dashboard', 'checkbox', 'Platform', 'true', 'ShowTabsTitle', 'ShowTabsComment', NULL, 'TabsDashboard', 1),
 ('use_users_timezone', 'timezones', 'radio', 'Timezones', 'true', 'UseUsersTimezoneTitle','UseUsersTimezoneComment',NULL,'Timezones', 1),
 ('timezone_value', 'timezones', 'select', 'Timezones', '', 'TimezoneValueTitle','TimezoneValueComment',NULL,'Timezones', 1),
+('allow_user_course_subscription_by_course_admin', NULL, 'radio', 'Security', 'true', 'AllowUserCourseSubscriptionByCourseAdminTitle', 'AllowUserCourseSubscriptionByCourseAdminComment', NULL, NULL, 1),
 ('dokeos_database_version', NULL, 'textfield', NULL,'1.8.7.11220','DokeosDatabaseVersion','',NULL,NULL,0);
 
 
@@ -969,7 +970,9 @@ VALUES
 ('allow_send_message_to_all_platform_users','true','Yes'),
 ('allow_send_message_to_all_platform_users','false','No'),
 ('use_users_timezone', 'true', 'Yes'),
-('use_users_timezone', 'false', 'No');
+('use_users_timezone', 'false', 'No'),
+('allow_user_course_subscription_by_course_admin', 'true', 'Yes'),
+('allow_user_course_subscription_by_course_admin', 'false', 'No');
 
 UNLOCK TABLES;
 

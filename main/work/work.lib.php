@@ -1422,11 +1422,10 @@ function get_list_users_without_publication($task_id) {
 	//condition for the session
 	$session_id = api_get_session_id();
 
-	if (!empty($session_id)){
-		$sql = "SELECT user_id as id FROM $work_table WHERE parent_id='$task_id' and session_id='".$session_id."'";
-
-	} else {
+	if ($session_id == 0){
 		$sql = "SELECT user_id as id FROM $work_table WHERE parent_id='$task_id'";
+	} else {
+		$sql = "SELECT user_id as id FROM $work_table WHERE parent_id='$task_id' and session_id='".$session_id."'";
 	}
 	$result = Database::query($sql);
 	$users_with_tasks = array();
@@ -1434,12 +1433,11 @@ function get_list_users_without_publication($task_id) {
 		$users_with_tasks[] = $row['id'];
 	}
 
-	if (!empty($session_id)){
-    	$sql_users = "SELECT cu.id_user, u.lastname, u.firstname, u.email FROM $session_course_rel_user AS cu, $table_user AS u WHERE u.status!=1 and cu.course_code='".api_get_course_id()."' AND u.user_id=cu.id_user and cu.id_session='".$session_id."'";
-	} else {
+	if ($session_id == 0){
 		$sql_users = "SELECT cu.user_id, u.lastname, u.firstname, u.email FROM $table_course_user AS cu, $table_user AS u WHERE u.status!=1 and cu.course_code='".api_get_course_id()."' AND u.user_id=cu.user_id";
+	} else {
+		$sql_users = "SELECT cu.id_user, u.lastname, u.firstname, u.email FROM $session_course_rel_user AS cu, $table_user AS u WHERE u.status!=1 and cu.course_code='".api_get_course_id()."' AND u.user_id=cu.id_user and cu.id_session='".$session_id."'";
 	}
-
 	$result_users = Database::query($sql_users);
 	$users_without_tasks = array();
 	while ($row_users = Database::fetch_row($result_users)) {
@@ -1450,7 +1448,6 @@ function get_list_users_without_publication($task_id) {
 
 		$users_without_tasks[] = $row_users;
 	}
-
 	return $users_without_tasks;
 }
 
@@ -1464,8 +1461,8 @@ function get_list_users_without_publication($task_id) {
 */
 function display_list_users_without_publication($task_id) {
 	global $origin;
-	$table_header[] = array(get_lang('FirstName'), true);
 	$table_header[] = array(get_lang('LastName'), true);
+	$table_header[] = array(get_lang('FirstName'), true);
 	$table_header[] = array(get_lang('Email'), true);
 	// table_data
 	$table_data = get_list_users_without_publication($task_id);

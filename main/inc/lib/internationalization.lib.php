@@ -23,7 +23,7 @@ define('SPECIAL_CLOSING_TAG', '=]');
 // Predefined date formats in Chamilo provided by the language sub-system.
 // To be used as a parameter for the function api_format_date().
 define('TIME_NO_SEC_FORMAT', 0);	// 15:23
-define('DATE_FORMAT_SHORT', 1);		// 25.08.2009
+define('DATE_FORMAT_SHORT', 1);		// Aug 25, 09
 define('DATE_FORMAT_LONG', 2);		// Aug 25, 09
 define('DATE_TIME_FORMAT_LONG', 3);	// August 25, 2009 at 03:28 PM
 
@@ -412,13 +412,17 @@ function api_detect_language(&$string, $encoding = null) {
  * @author Guillaume Viguier <guillaume.viguier@beeznest.com>
  */
 function api_get_timezones() {
+	if (!DATE_TIME_INSTALLED) {
+		// This occurs when PHP < 5.2
+		return array('' => '');
+	}
 	$timezone_identifiers = DateTimeZone::listIdentifiers();
 	sort($timezone_identifiers);
 	$out = array();
-	foreach($timezone_identifiers as $tz) {
+	foreach ($timezone_identifiers as $tz) {
 		$out[$tz] = $tz;
 	}
-	$null_option = array("" => "");
+	$null_option = array('' => '');
 	$result = array_merge($null_option, $out);
 	return $result;
 }
@@ -462,16 +466,20 @@ function api_get_utc_datetime($time = null) {
 	$from_timezone = _api_get_timezone();
 	$to_timezone = 'UTC';
 	if (is_null($time)) {
-		return gmdate("Y-m-d H:i:s");
+		return gmdate('Y-m-d H:i:s');
 	}
 	// If time is a timestamp, return directly in utc
 	if (is_int($time)) {
-		return gmdate("Y-m-d H:i:s", $time);
+		return gmdate('Y-m-d H:i:s', $time);
+	}
+	if (!DATE_TIME_INSTALLED) {
+		// This occurs when PHP < 5.2
+		return $time;
 	}
 	try {
 		$date = new DateTime($time, new DateTimezone($from_timezone));
 		$date->setTimezone(new DateTimeZone($to_timezone));
-		return $date->format("Y-m-d H:i:s");
+		return $date->format('Y-m-d H:i:s');
 	} catch (Exception $e) {
 		return null;
 	}
@@ -486,7 +494,17 @@ function api_get_utc_datetime($time = null) {
  *
  * @author Guillaume Viguier <guillaume.viguier@beeznest.com>
  */
-function api_get_local_time($time = null, $to_timezone=null, $from_timezone=null) {
+function api_get_local_time($time = null, $to_timezone = null, $from_timezone = null) {
+	if (!DATE_TIME_INSTALLED) {
+		// This occurs when PHP < 5.2
+		if (is_null($time)) {
+			$time = time();
+		}
+		if (is_int($time)) {
+			$time = date('Y-m-d H:i:s', $time);
+		}
+		return $time;
+	}
 	// Determining the timezone to be converted from
 	if (is_null($from_timezone)) {
 		$from_timezone = 'UTC';
@@ -566,39 +584,41 @@ function api_format_date($time, $format = null, $language = null) {
 		switch ($format) {
 			case TIME_NO_SEC_FORMAT:
 				$date_format = get_lang('timeNoSecFormat', '', $language);
-				if (IS_PHP_53) {
+				if (IS_PHP_53 && INTL_INSTALLED) {
 					$datetype = IntlDateFormatter::NONE;
 					$timetype = IntlDateFormatter::SHORT;
 				}
 				break;
 			case DATE_FORMAT_SHORT:
 				$date_format = get_lang('dateFormatShort', '', $language);
-				if (IS_PHP_53) {
+				if (IS_PHP_53 && INTL_INSTALLED) {
 					$datetype = IntlDateFormatter::LONG;
 					$timetype = IntlDateFormatter::NONE;
 				}
 				break;
 			case DATE_FORMAT_LONG:
 				$date_format = get_lang('dateFormatLong', '', $language);
-				if (IS_PHP_53) {
+				if (IS_PHP_53 && INTL_INSTALLED) {
 					$datetype = IntlDateFormatter::FULL;
 					$timetype = IntlDateFormatter::NONE;
 				}
 				break;
 			case DATE_TIME_FORMAT_LONG:
 				$date_format = get_lang('dateTimeFormatLong', '', $language);
-				if (IS_PHP_53) {
+				if (IS_PHP_53 && INTL_INSTALLED) {
 					$datetype = IntlDateFormatter::FULL;
 					$timetype = IntlDateFormatter::SHORT;
 				}
 				break;
 			default:
 				$date_format = get_lang('dateTimeFormatLong', '', $language);
-				if (IS_PHP_53) {
+				if (IS_PHP_53 && INTL_INSTALLED) {
 					$datetype = IntlDateFormatter::FULL;
 					$timetype = IntlDateFormatter::SHORT;
 				}
 		}
+	} else {
+		$date_format = $format;
 	}
 
 	if (IS_PHP_53 && INTL_INSTALLED && $datetype !== null && $timetype !== null) {
@@ -625,11 +645,11 @@ function api_format_date($time, $format = null, $language = null) {
 
 /**
  * Returns the difference between the current date (date(now)) with the parameter $date in a string format like "2 days, 1 hour"
- * Example: $date="2008-03-07 15:44:08";
+ * Example: $date = '2008-03-07 15:44:08';
  * 			date_to_str($date) it will return 3 days, 20 hours
  * The given date should be in the timezone chosen by the user or administrator. Use api_get_local_time() to get it...
  *
- * @param  string The string has to be the result of a date function in this format -> date("Y-m-d H:i:s",time());
+ * @param  string The string has to be the result of a date function in this format -> date('Y-m-d H:i:s', time());
  * @return string The difference between the current date and the parameter in a literal way "3 days, 2 hour" *
  * @author Julio Montoya
  */
@@ -666,7 +686,7 @@ function date_to_str_ago($date) {
 		$min_minutes = get_lang('MinMinutes');
 
 		// original 1
-		//$sec_time=array("century"=>3.1556926*pow(10,9),"decade"=>315569260,"year"=>31556926,"month"=>2629743.83,"week"=>604800,"day"=>86400,"hour"=>3600,"minute"=>60,"second"=>1);
+		//$sec_time=array('century'=>3.1556926*pow(10,9),'decade'=>315569260,'year'=>31556926,'month'=>2629743.83,'week'=>604800,'day'=>86400,'hour'=>3600,'minute'=>60,'second'=>1);
 		//$sec_time=array(get_lang('MinDecade')=>315569260,get_lang('MinYear')=>31556926,get_lang('MinMonth')=>2629743.83,get_lang('MinWeek')=>604800,get_lang('MinDay')=>86400,get_lang('MinHour')=>3600,get_lang('MinMinute')=>60);
 		$sec_time_time = array(315569260, 31556926, 2629743.83, 604800, 86400, 3600, 60);
 		$sec_time_sing = array($min_decade, $min_year, $min_month, $min_week, $min_day, $min_hour, $min_minute);

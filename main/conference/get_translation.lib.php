@@ -1,11 +1,11 @@
 <?php
-/* See license terms in /dokeos_license.txt */
+/* See license terms in /chamilo_license.txt */
 /**
- * Library for language translation from Dokeos language files to XML for videoconference
+ * Library for language translation from Chamilo language files to XML for videoconference
  * @uses main_api.lib.php for api_get_path()
  */
 /**
- * This function reads a Dokeos language file and transforms it into XML,
+ * This function reads a Chamilo language file and transforms it into XML,
  * then returns the XML string to the caller.
  */
 function get_language_file_as_xml($language='english')

@@ -1212,4 +1212,16 @@ $Action = "Action";
 $ISOCode = "Code ISO";
 $TheSubLanguageForThisLanguageHasBeenAdded = "Le sous-langage de ce langage a été ajouté";
 $ReturnToLanguagesList = "Retourner à la liste des langues";
+$ActivityCoach = "Le coach de la session a tous les droits et privilèges pour tous les cours appartenant à la session.";
+$CategoriesNumber = "Catégories";
+$CourseProgress = "Progrès de cours";
+$ExportAllCoursesList = "Exporter la liste de tous les cours";
+$ExportSelectedCoursesFromCoursesList = "Exporter les cours sélectionnés dans une liste";
+$CoursesListHasBeenExported = "La liste de cours a été exportée";
+$WhichCoursesToExport = "Cours à exporter";
+$AssignUsersToPlatformAdministrator = "Assigner des utilisateurs à l'admin de la plateforme";
+$AssignedUsersListToPlatformAdministrator = "Liste d'utilisateurs assignés à l'administrateur de la plateforme";
+$AssignedCoursesListToHumanResourcesManager = "Cours assignés au directeur des ressources humaines";
+$ThereAreNotCreatedCourses = "Aucun cours créé";
+$HomepageViewVerticalActivity = "Vue activité verticale";
 ?>

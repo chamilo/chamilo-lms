@@ -116,4 +116,5 @@ $NewUserEmailAlertDisable = "Disable the email alert for the suscription of  new
 $AllowUserViewUserList = "Allow user view user list";
 $AllowUserViewUserListActivate = "Enable user list";
 $AllowUserViewUserListDeactivate = "Disable user list";
+$DoNotDisplayAnyAdvance = "Do not display progress";
 ?>

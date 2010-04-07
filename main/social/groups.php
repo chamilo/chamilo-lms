@@ -175,7 +175,7 @@ if (isset($_POST['token']) && $_POST['token'] === $_SESSION['sec_token']) {
 			$sender_name = api_get_person_name($admin_user_info['firstName'], $admin_user_info['lastName'], null, PERSON_NAME_EMAIL_ADDRESS);
 			$sender_email = $admin_user_info['mail'];
 			$subject = sprintf(get_lang('ThereIsANewMessageInTheGroupX'),$group_info['name']);
-			$link = api_get_path(WEB_PATH).'main/social/groups?'.$_SERVER['QUERY_STRING'];
+			$link = api_get_path(WEB_PATH).'main/social/groups.php?'.$_SERVER['QUERY_STRING'];
 			$text_link = '<a href="'.$link.'">'.get_lang('ClickHereToSeeMessageGroup')."</a><br />\r\n<br />\r\n".get_lang('OrCopyPasteTheFollowingUrl')." <br />\r\n ".$link;
 
 			$message = sprintf(get_lang('YouHaveReceivedANewMessageInTheGroupX'),$group_info['name'])."<br />$text_link";

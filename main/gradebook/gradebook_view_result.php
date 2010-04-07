@@ -190,82 +190,79 @@ if ($export_result_form->validate()) {
 			'date'
 		);
 	}
+	
+	// export results to pdf file
 	if ($file_type == 'pdf') {
-		if (($eval[0]->has_results())) {
-			$score= $eval[0]->calc_score();
-			if ($score != null) {
-				$average= get_lang('Average') . ' : ' . round(100 * ($score[0] / $score[1]),2) . ' %';
-			}
-		}
-		if ($eval[0]->get_course_code() == null) {
-			$course= get_lang('CourseIndependent');
-		} else {
-			$course= get_course_name_from_code($eval[0]->get_course_code());
-		}
-
-		$pdf= new Cezpdf();
-		$pdf->selectFont(api_get_path(LIBRARY_PATH).'ezpdf/fonts/Courier.afm');
-		$pdf->ezSetMargins(30, 30, 50, 30);
-		$pdf->ezSetY(800);
-		$pdf->ezText(get_lang('EvaluationName') . ' : ' . $eval[0]->get_name() . ' (' . api_format_date($eval[0]->get_date(), "%d/%m/%Y %R") . ')', 12, array (
-			'justification' => 'left'
-		));
-		$pdf->ezText(get_lang('Description') . ' : ' . $eval[0]->get_description());
-		$pdf->ezText(get_lang('Course') . ' : ' . $course, 12, array (
-			'justification' => 'left'
-		));
-		$pdf->ezText(get_lang('Weight') . ' : ' . $eval[0]->get_weight(), 12, array (
-			'justification' => 'left'
-		));
-		$pdf->ezText(get_lang('QualificationNumeric') . ' : ' . $eval[0]->get_max(), 12, array (
-			'justification' => 'left'
-		));
-		$pdf->ezText($average, 12, array (
-			'justification' => 'left'
-		));
-
+		
 		$datagen = new ResultsDataGenerator ($eval[0],$allresults);
+		
+		// set headers pdf
+		$h1 = array(get_lang('Teacher'),$_user['firstName'].' '.$_user['lastName']);
+		$h2 = array(get_lang('Score'),$eval[0]->get_max());
+		$h3 = array(get_lang('Course'),$_course['name']);
+		$h4 = array(get_lang('Weight'),$eval[0]->get_weight());
+		$h5 = array(get_lang('Session'),api_get_session_name(api_get_session_id()));
+		$date = date('d-m-Y H:i:s', time());
+		$h6 = array(get_lang('DateTime'),api_convert_and_format_date($date, "%d/%m/%Y %H:%M"));
+		$header_pdf = array($h1, $h2, $h3, $h4, $h5, $h6);
+		
+		// set footer pdf
+		$f1 = '<hr />'.get_lang('Drh');
+		$f2 = '<hr />'.get_lang('Teacher');
+		$f3 = '<hr />'.get_lang('Date');		
+		$footer_pdf = array($f1, $f2, $f3);
+		
+		// set title pdf
+		$title_pdf = $eval[0]->get_name();
+		
+		// set headers data table
+		$head_ape_name = '';
+		if (!api_is_western_name_order()) {
+			$head_ape_name = get_lang('FirstName').' '.get_lang('LastName');			
+		} else {
+			$head_ape_name = get_lang('LastName').' '.get_lang('FirstName');
+		}		
+		$head_display_score = '';
+		$scoredisplay = ScoreDisplay :: instance();
+		if ($scoredisplay->is_custom()) {
+			$head_display_score = get_lang('Display');
+		}
+		
+		$head_table = array(
+							array(get_lang('Item'),5), 
+							array(get_lang('Code'),15), 
+							array($head_ape_name, 50),
+							array(get_lang('Score'),15), 
+							array($head_display_score,15)
+						);
+		
+		// get data table
 		if (api_sort_by_first_name()) {
 			$data_array = $datagen->get_data(ResultsDataGenerator :: RDG_SORT_FIRSTNAME, 0, null, true);
 		} else {
 			$data_array = $datagen->get_data(ResultsDataGenerator :: RDG_SORT_LASTNAME,0,null,true);
 		}
-		$newarray = array();
-		$is_western_name_order = api_is_western_name_order();
+			
+		$data_table = array();		
 		foreach ($data_array as $data) {
-			$newitem = array();
-			if ($is_western_name_order) {
-				$newitem[] = $data['firstname'];
-				$newitem[] = $data['lastname'];
+			$result = array();
+			$user_info = api_get_user_info($data['id']);
+			$result[] = $user_info['username'];
+			if (!api_is_western_name_order()) {
+				$result[] = $user_info['firstname'].' '.$user_info['lastname'];			
 			} else {
-				$newitem[] = $data['lastname'];
-				$newitem[] = $data['firstname'];
+				$result[] = $user_info['lastname'].' '.$user_info['firstname'];
 			}
-			$newitem[] = $data['score'];
-			if ($displayscore->is_custom())
-				$newitem[] = $data['display'];
-			$newarray[] = $newitem;
-		}
-		$pdf->ezSetY(650);
-		if ($displayscore->is_custom()) {
-			if ($is_western_name_order) {
-				$header_names = array(get_lang('FirstName'),get_lang('LastName'),get_lang('Score'),get_lang('Display'));
-			} else {
-				$header_names = array(get_lang('LastName'),get_lang('FirstName'),get_lang('Score'),get_lang('Display'));
+			$result[] = $data['score'];
+			if ($scoredisplay->is_custom()) {
+				$result[] = $data['display'];
 			}
-		} else {
-			if ($is_western_name_order) {
-				$header_names = array(get_lang('FirstName'),get_lang('LastName'),get_lang('Score'));
-			} else {
-				$header_names = array(get_lang('LastName'),get_lang('FirstName'),get_lang('Score'));
-			}
-		}
-
-		$pdf->ezTable($newarray,$header_names,'',array('showHeadings'=>1,'shaded'=>1,'showLines'=>1,'rowGap'=>3,'width'=> 500));
-		$pdf->ezStream();
-		exit;
+			$data_table[] = $result;			
+		}					
+		export_pdf_with_html($head_table, $data_table, $header_pdf, $footer_pdf, $title_pdf);		
 	}
 
+	// export results to xml or csv file
 	foreach ($results as $result) {
 		$userinfo= get_user_info_from_id($result->get_user_id());
 		$data['username']= $userinfo['username']; //$result->get_user_id();
@@ -276,6 +273,7 @@ if ($export_result_form->validate()) {
 		$data['date'] = api_format_date($result->get_date(), "%d/%m/%Y %R");
 		$alldata[]= $data;
 	}
+	
 	switch ($file_type) {
 		case 'xml' :
 			Export :: export_table_xml($alldata, $filename, 'Result', 'XMLResults');
@@ -313,6 +311,7 @@ if (isset ($_POST['action'])) {
 		}
 	}
 } // TODO - what if selecteval not set ?
+
 $addparams = array ('selecteval' => $eval[0]->get_id());
 if (isset ($_GET['print'])) {
 	$datagen = new ResultsDataGenerator ($eval[0],$allresults);

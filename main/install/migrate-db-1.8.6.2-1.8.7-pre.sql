@@ -73,8 +73,13 @@ ALTER TABLE course_rel_user DROP PRIMARY KEY, ADD PRIMARY KEY (course_code, user
 ALTER TABLE session_rel_user DROP PRIMARY KEY, ADD PRIMARY KEY (id_session, id_user, relation_type);
 
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('course_create_active_tools','course_progress','checkbox','Tools','false','CourseCreateActiveToolsTitle','CourseCreateActiveToolsComment',NULL,'CourseProgress', 0);
-
 INSERT INTO settings_options(variable,value,display_text) VALUES ('homepage_view','vertical_activity','HomepageViewVerticalActivity');
+
+UPDATE settings_current SET selected_value = 'UTF-8' WHERE variable = 'platform_charset';
+
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('allow_user_course_subscription_by_course_admin', NULL, 'radio', 'Security', 'true', 'AllowUserCourseSubscriptionByCourseAdminTitle', 'AllowUserCourseSubscriptionByCourseAdminComment', NULL, NULL, 1);
+INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_user_course_subscription_by_course_admin', 'true', 'Yes');
+INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_user_course_subscription_by_course_admin', 'false', 'No');
 
 -- xxSTATSxx
 CREATE TABLE track_e_item_property(id int NOT NULL auto_increment PRIMARY KEY, course_id int NOT NULL, item_property_id int NOT NULL, title varchar(255), content text, progress int NOT NULL default 0, lastedit_date datetime NOT NULL default '0000-00-00 00:00:00', lastedit_user_id int  NOT NULL, session_id int NOT NULL default 0);
@@ -105,7 +110,6 @@ ALTER TABLE track_e_online ADD COLUMN access_url_id INT NOT NULL DEFAULT 1;
 INSERT INTO tool(name,link,image,visibility,admin,address,added_tool,target,category) VALUES ('attendance','attendance/index.php','attendance.gif',0,'0','squaregrey.gif',0,'_self','authoring');
 ALTER TABLE course_description ADD COLUMN progress INT  NOT NULL DEFAULT 0 AFTER description_type;
 ALTER TABLE item_property ADD id int NOT NULL auto_increment PRIMARY KEY FIRST;
-UPDATE course_description SET description_type = (SELECT IF(description_type>7,description_type+1,description_type)); -- update description_type field for using thematic advance with description_type = 8
 CREATE TABLE attendance_calendar (id int NOT NULL auto_increment, attendance_id int NOT NULL, date_time datetime NOT NULL default '0000-00-00 00:00:00', done_attendance tinyint(3) NOT NULL default 0, PRIMARY KEY(id));
 ALTER TABLE attendance_calendar ADD INDEX(attendance_id);
 ALTER TABLE attendance_calendar ADD INDEX(done_attendance);

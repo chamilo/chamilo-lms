@@ -247,4 +247,6 @@ $SaveAudioAndOrganization = "Enregistrer sons et disposition";
 $UploadOnlyMp3Files = "Merci de ne charger que des fichiers audio de type MP3";
 $ModifyHotPotatoes = "Modifier hotpotatoes";
 $SaveHotpotatoes = "Enregistrer hotpotatoes";
+$ReturnToLPList = "Retour liste";
+$LpPrerequisiteDescription = "Sélectionner un autre parcours comme prérequis cachera le parcours actuel jusqu'à ce que celui en prérequis soit complété à 100%";
 ?>

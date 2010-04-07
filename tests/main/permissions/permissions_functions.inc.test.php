@@ -1,5 +1,6 @@
 <?php
 require_once api_get_path(SYS_CODE_PATH).'permissions/permissions_functions.inc.php';
+//require_once dirname(__FILE__).'/../main/permissions/permissions_functions.inc.php';
 
 class TestPermissions extends UnitTestCase {
 	/**
@@ -201,13 +202,12 @@ class TestPermissions extends UnitTestCase {
 	* @param $permission the permission the user, group or role has been granted or revoked
 	*/
 	function testStoreOnePermission(){
-		$content='user';
-		$action='grant';
-		$id=1;
-		$tool='';
-		$permission='';
-		$res = store_one_permission($content, $action, $id, $tool,$permission);
+		$res = store_one_permission('user', 'grant', 2, 'link','');
+		if(!$res === NULL){
 		$this->assertTrue(is_string($res));
+		} else {
+			$this->assertNull($res);
+		}
 		//var_dump($res);		
 	}
 	/**

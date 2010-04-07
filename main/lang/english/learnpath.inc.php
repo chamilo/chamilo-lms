@@ -247,5 +247,6 @@ $SaveAudioAndOrganization = "Save audio and organization";
 $UploadOnlyMp3Files = "Please upload mp3 files only";
 $ModifyHotPotatoes = "Modify hotpotatoes";
 $SaveHotpotatoes = "Save hotpotatoes";
-$LpPrerequisiteDescription = "Lp prerequisite description";
+$ReturnToLPList = "Return to list";
+$LpPrerequisiteDescription = "Selecting another learning path as a prerequisite will hide the current prerequisite until the one in prerequisite is fully completed (100%)";
 ?>

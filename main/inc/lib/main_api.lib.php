@@ -156,6 +156,7 @@ define('IS_WINDOWS_OS', api_is_windows_os());
 define('INTL_INSTALLED', function_exists('intl_get_error_code'));	// intl extension (from PECL), it is installed by default as of PHP 5.3.0
 define('ICONV_INSTALLED', function_exists('iconv'));				// iconv extension, for PHP5 on Windows it is installed by default.
 define('MBSTRING_INSTALLED', function_exists('mb_strlen'));			// mbstring extension.
+define('DATE_TIME_INSTALLED', class_exists('DateTime'));			// datetime extension, it is moved to the core as of PHP 5.2, see http://www.php.net/datetime
 
 // Patterns for processing paths.									// Examples:
 define('REPEATED_SLASHES_PURIFIER', '/\/{2,}/');					// $path = preg_replace(REPEATED_SLASHES_PURIFIER, '/', $path);
@@ -1913,7 +1914,7 @@ function api_is_allowed_to_edit($tutor = false, $coach = false, $session_coach =
 	}
 
 	if (api_get_setting('student_view_enabled') == 'true') {	// Check if the student_view is enabled, and if so, if it is activated
-		if (!empty($my_session_id)) {
+                if (!empty($my_session_id)) {
 			// Check if session visibility is read only for coachs
 			if ($session_visibility == SESSION_VISIBLE_READ_ONLY) {
 				$is_allowed_coach_to_edit = false;
@@ -1923,6 +1924,7 @@ function api_is_allowed_to_edit($tutor = false, $coach = false, $session_coach =
 			} else {
 				$is_allowed = false;
 			}
+                        $is_allowed = $is_allowed && $_SESSION['studentview'] != 'studentview';
 		} else {
 			$is_allowed = $is_courseAdmin && $_SESSION['studentview'] != 'studentview';
 		}

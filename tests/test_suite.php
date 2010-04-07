@@ -70,13 +70,14 @@ class TestsSuite extends TestSuite {
 	
     function TestsSuite() {
     	
-    	/**Name of the test suite*/
+    	// Name of this test suite
     	$this->TestSuite('All tests suite');
     	
-    	/**Files will be tested*/
+    	// Loading test cases
 		$this->addFile(api_get_path(SYS_TEST_PATH).'/main/inc/lib/database.lib.test.php');
 		$this->addFile(api_get_path(SYS_TEST_PATH).'/main/inc/lib/add_course.lib.inc.test.php');
 		$this->addFile(api_get_path(SYS_TEST_PATH).'/main/inc/lib/course.lib.test.php');
+		
 		$this->addFile(api_get_path(SYS_TEST_PATH).'/main/inc/banner.lib.test.php');
 		$this->addFile(api_get_path(SYS_TEST_PATH).'/main/admin/calendar.lib.test.php');
 		$this->addFile(api_get_path(SYS_TEST_PATH).'/main/inc/lib/surveymanager.lib.test.php');
@@ -192,7 +193,6 @@ class TestsSuite extends TestSuite {
 	  	
         $this->addFile(api_get_path(SYS_TEST_PATH).'/main/inc/lib/main_api.lib.test.php');//this file delete the course     
         $this->addFile(api_get_path(SYS_TEST_PATH).'/main/inc/lib/debug.lib.inc.test.php');//this file need be to the finish of the tests
-        
     }
 }
 $test = &new TestsSuite();

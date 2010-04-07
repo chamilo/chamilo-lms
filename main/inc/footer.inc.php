@@ -54,13 +54,13 @@ if (api_is_platform_admin()) {
 
 <?php
 
+
+echo '<div class="footer_emails">';
 /*	Plugins for footer section */
 
 echo '<div id="plugin-footer">';
 api_plugin('footer');
 echo '</div>';
-
-echo '<div class="footer_emails">';
 
 if (api_get_setting('show_tutor_data') == 'true') {
 	// Course manager

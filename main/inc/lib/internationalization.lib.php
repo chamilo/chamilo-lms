@@ -960,8 +960,6 @@ function api_byte_count(& $string) {
 		return mb_strlen($string, '8bit');
 	}
 	return strlen($string);
-	// For PHP6 this function probably will contain:
-	//return strlen((binary)$string);
 }
 
 

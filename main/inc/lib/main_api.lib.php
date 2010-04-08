@@ -961,11 +961,11 @@ function api_get_course_info($course_code = null) {
 		$course_code = Database::escape_string($course_code);
 		$course_table = Database::get_main_table(TABLE_MAIN_COURSE);
 		$course_cat_table = Database::get_main_table(TABLE_MAIN_CATEGORY);
-		$sql = "SELECT `course`.*, `course_category`.`code` `faCode`, `course_category`.`name` `faName`
+		$sql = "SELECT course.*, course_category.code faCode, course_category.name faName
 				 FROM $course_table
 				 LEFT JOIN $course_cat_table
-				 ON `course`.`category_code` =  `course_category`.`code`
-				 WHERE `course`.`code` = '$course_code'";
+				 ON course.category_code =  course_category.code
+				 WHERE course.code = '$course_code'";
 		$result = Database::query($sql);
 		$_course = array();
 		if (Database::num_rows($result) > 0) {

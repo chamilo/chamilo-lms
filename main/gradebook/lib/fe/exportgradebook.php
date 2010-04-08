@@ -99,7 +99,7 @@ function export_pdf_with_html($headers_table, $data_table, $headers_pdf, $footer
 	if (is_array($headers_pdf)) {
 		// preparing headers pdf
 		$header = '<table width="100%" cellspacing="1" cellpadding="5" border="0" class="strong">
-							<tr><td width="100%" style="text-align: left;" class="title" colspan="4"><img src="'.api_get_path(WEB_CSS_PATH).'chamilo_red/images/header-logo.png"></td></tr>
+							<tr><td width="100%" style="text-align: left;" class="title" colspan="4"><img src="'.api_get_path(WEB_CSS_PATH).api_get_setting('stylesheets').'/images/header-logo.png"></td></tr>
 					        <tr><td width="100%" style="text-align: center;" class="title" colspan="4"><h1>'.$title_pdf.'</h1></td></tr>
 					        <tr><td><strong>'.$headers_pdf[0][0].'</strong> </td><td> <strong>'.$headers_pdf[0][1].'</strong></td>
 					            <td><strong>'.$headers_pdf[1][0].'</strong> </td><td> <strong>'.$headers_pdf[1][1].'</strong></td>

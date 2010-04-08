@@ -117,7 +117,7 @@ switch ($_GET['action']) {
 		statistics::print_activities_stats();
 		break;
 	case 'messagesent':
-		$messages_sent = statistics::get_messages('sent');
+		$messages_sent = statistics::get_messages('sent');		
 		statistics::print_stats(get_lang('MessagesSent'), $messages_sent);
 		break;
 	case 'messagereceived':

@@ -5,7 +5,7 @@ require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 * This class provides some functions for statistics
 * @package chamilo.statistics
 */
-class Statistics {
+class Statistics { 
 	/**
 	 * Converts a number of bytes in a formatted string
 	 * @param int $size
@@ -164,6 +164,7 @@ class Statistics {
 	function print_stats($title, $stats, $show_total = true, $is_file_size = false) {
 		$total = 0;
 		$data = Statistics::rescale($stats);
+		
 		echo '<table class="data_table" cellspacing="0" cellpadding="3">
 			  		  <tr><th colspan="'.($show_total ? '4' : '3').'">'.$title.'</th></tr>';
 		$i = 0;
@@ -172,14 +173,15 @@ class Statistics {
 		}
 		foreach ($stats as $subtitle => $number) {
 			//$i = $i % 13;
-			if (api_strlen($subtitle) > 30) {
-				$subtitle = '<acronym title="'.$subtitle.'">'.api_substr($subtitle, 0, 27).'...</acronym>';
-			}
+			/*if (api_strlen($subtitle) > 30) {
+				$subtitle = '<acronym title="'.$subtitle.'">'.$subtitle.'</acronym>';
+			}*/
 			if (!$is_file_size) {
 				$number_label = number_format($number, 0, ',', '.');
 			} else {
 				$number_label = Statistics::make_size_string($number);
 			}
+			
 			echo '<tr class="row_'.($i%2 == 0 ? 'odd' : 'even').'">
 								<td width="150">'.$subtitle.'</td>
 								<td width="550">
@@ -440,7 +442,7 @@ class Statistics {
 			if (empty($messages['username'])) {
 				$messages['username'] = get_lang('Unknown');
 			}
-			$users = $messages['firstname'].' '.$messages['lastname'].' ('.$messages['username'].')';
+			$users = api_get_person_name($messages['firstname'], $messages['lastname']).'<br />('.$messages['username'].')';			
 			$messages_sent[$users] = $messages['count_message'];
 		}
 		return $messages_sent;
@@ -460,8 +462,8 @@ class Statistics {
 			GROUP BY uf.user_id";
 		$res = Database::query($sql);
 		$list_friends = array();
-		while ($friends = Database::fetch_array($res)) {
-			$users = $friends['firstname'].' '.$friends['lastname'].' ('.$friends['username'].')';
+		while ($friends = Database::fetch_array($res)) {			
+			$users = api_get_person_name($friends['firstname'], $friends['lastname']).'<br />('.$friends['username'].')';
 			$list_friends[$users] = $friends['count_friend'];
 		}
 		return $list_friends;

@@ -396,7 +396,7 @@ class DashboardManager
 		} else {
 			echo '<div style="margin-top:20px">'.get_lang('ThereAreNoEnabledDashboardPlugins').'</div>';
 			if (api_is_platform_admin()) {
-				echo '<a href="'.api_get_path(WEB_CODE_PATH).'admin/settings.php?category=Plugins">'.get_lang('ConfigureDashboardPlugins').'</a>';	
+				echo '<a href="'.api_get_path(WEB_CODE_PATH).'admin/settings.php?category=Plugins">'.get_lang('ConfigureDashboardPlugin').'</a>';	
 			}
 		}
 	}
@@ -432,8 +432,10 @@ class DashboardManager
 	 * @return bool
 	*/
 	public static function store_user_blocks($user_id, $enabled_blocks, $columns) {
-
-		$selected_blocks_id = array_keys($enabled_blocks);
+		$selected_blocks_id  = array();
+		if (is_array($enabled_blocks) && count($enabled_blocks) > 0) {
+			$selected_blocks_id = array_keys($enabled_blocks);
+		}
 
 		// build data for storing inside extra user field
 		$fname = 'dashboard';
@@ -441,9 +443,7 @@ class DashboardManager
 		foreach ($selected_blocks_id as $block_id) {
 			$fvalue[] = $block_id.':'.$columns[$block_id];
 		}
-
 		$upd_extra_field = UserManager::update_extra_field_value($user_id, $fname, $fvalue);
-
 		return $upd_extra_field;
 
 	}

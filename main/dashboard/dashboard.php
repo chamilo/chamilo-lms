@@ -34,7 +34,7 @@ if($dashboard_view == 'blocks') {
 	if (isset($msg)) {		
 		//Display::display_confirmation_message(get_lang('BlocksHaveBeenUpdatedSuccessfully'));		
 	}
-	
+
 	if (count($blocks) > 0) {
 		$columns = array();
 		// group content html by number of column

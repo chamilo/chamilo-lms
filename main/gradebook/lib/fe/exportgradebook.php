@@ -92,14 +92,14 @@ function export_pdf_with_html($headers_table, $data_table, $headers_pdf, $footer
 	
 	require_once api_get_path(LIBRARY_PATH).'mpdf/mpdf.php';
 
-	$mpdf = new mPDF('UTF-8', 'A4', '', '', 18, 15, 70, 35, 16, 13, 'P');
+	$mpdf = new mPDF('UTF-8', 'A4', '', '', 18, 15, 65, 35, 5, 13, 'P');
 	$mpdf->useOnlyCoreFonts = true;
 	$mpdf->mirrorMargins = 0;      // Use different Odd/Even headers and footers and mirror margins
 
 	if (is_array($headers_pdf)) {
 		// preparing headers pdf
-		$header = '<table width="100%" cellspacing="2" cellpadding="10" border="0" class="strong">
-							<tr><td width="100%" style="text-align: left;" class="title" colspan="4"><h3>'.api_get_setting('Institution').'</h3></td></tr>
+		$header = '<table width="100%" cellspacing="1" cellpadding="5" border="0" class="strong">
+							<tr><td width="100%" style="text-align: left;" class="title" colspan="4"><img src="'.api_get_path(WEB_CSS_PATH).'chamilo_red/images/header-logo.png"></td></tr>
 					        <tr><td width="100%" style="text-align: center;" class="title" colspan="4"><h1>'.$title_pdf.'</h1></td></tr>
 					        <tr><td><strong>'.$headers_pdf[0][0].'</strong> </td><td> <strong>'.$headers_pdf[0][1].'</strong></td>
 					            <td><strong>'.$headers_pdf[1][0].'</strong> </td><td> <strong>'.$headers_pdf[1][1].'</strong></td>
@@ -123,6 +123,8 @@ function export_pdf_with_html($headers_table, $data_table, $headers_pdf, $footer
 		$footer .= '</tr>';	
 	}
 	$footer .= '</table>';
+	
+	$footer .= '<div align="right" style="font-weight: bold;">{PAGENO}</div>';
 	
 	// preparing content pdf		
 	$css_file = api_get_path(TO_SYS, WEB_CSS_PATH).api_get_setting('stylesheets').'/print.css';
@@ -158,9 +160,10 @@ function export_pdf_with_html($headers_table, $data_table, $headers_pdf, $footer
 			foreach ($data_table as $data) {			
 				$content_table .= '<tr>';
 				$content_table .= '<td>'.($item<10?'0'.$item:$item).'</td>';
-				foreach ($data as $content) {							
+				foreach ($data as  $key => $content) {							
 					if (!empty($content)) {
-						$content_table .= '<td style="padding:4px" >'.$content.'</td>';	
+						$key == 1 ? $align='align="left"':$align='align="center"';
+						$content_table .= '<td '.$align.' style="padding:4px;" >'.$content.'</td>';	
 					}					
 				}
 				$content_table .= '</tr>';

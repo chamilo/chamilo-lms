@@ -53,7 +53,7 @@ class ResultsDataGenerator
 	 * 4 ['score']     : student's score
 	 * 5 ['display']   : custom score display (only if custom scoring enabled)
 	 */
-	public function get_data ($sorting = 0, $start = 0, $count = null, $ignore_score_color = false) {
+	public function get_data ($sorting = 0, $start = 0, $count = null, $ignore_score_color = false, $pdf=false) {
 
 		// do some checks on count, redefine if invalid value
 		if (!isset($count)) {
@@ -69,11 +69,20 @@ class ResultsDataGenerator
 			$user = array();
 			$info = get_user_info_from_id($result->get_user_id());
 			$user['id'] = $result->get_user_id();
-			$user['username'] = $info['username'];
+			if ($pdf == true){
+				$user['username'] = $info['username'];
+			}
 			$user['result_id'] = $result->get_id();
 			$user['lastname'] = $info['lastname'];
 			$user['firstname'] = $info['firstname'];
-			$user['score'] = $this->get_score_display($result->get_score(),true, $ignore_score_color);
+			if ($pdf == true){
+				$user['score'] = $result->get_score();
+			} else {
+				$user['score'] = $this->get_score_display($result->get_score(),true, $ignore_score_color);	
+			}
+			if ($pdf == true){
+				$user['scoreletter'] = $result->get_score();
+			}
 			if ($scoredisplay->is_custom())
 				$user['display'] = $this->get_score_display($result->get_score(),false, $ignore_score_color);;
 			$table[] = $user;

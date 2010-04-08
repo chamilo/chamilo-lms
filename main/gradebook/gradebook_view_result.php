@@ -197,7 +197,9 @@ if ($export_result_form->validate()) {
 		$datagen = new ResultsDataGenerator ($eval[0],$allresults);
 		
 		// set headers pdf
-		$h1 = array(get_lang('Teacher'),$_user['firstName'].' '.$_user['lastName']);
+		!empty($_user['official_code'])? $officialcode=$_user['official_code'].' - ':'';
+		
+		$h1 = array(get_lang('Teacher'),$officialcode.$_user['firstName'].', '.$_user['lastName']);
 		$h2 = array(get_lang('Score'),$eval[0]->get_max());
 		$h3 = array(get_lang('Course'),$_course['name']);
 		$h4 = array(get_lang('Weight'),$eval[0]->get_weight());
@@ -233,14 +235,15 @@ if ($export_result_form->validate()) {
 							array(get_lang('Code'),15), 
 							array($head_ape_name, 50),
 							array(get_lang('Score'),15), 
+							array(get_lang('Letters'),15),
 							array($head_display_score,15)
 						);
 		
 		// get data table
 		if (api_sort_by_first_name()) {
-			$data_array = $datagen->get_data(ResultsDataGenerator :: RDG_SORT_FIRSTNAME, 0, null, true);
+			$data_array = $datagen->get_data(ResultsDataGenerator :: RDG_SORT_FIRSTNAME, 0, null, true, true);
 		} else {
-			$data_array = $datagen->get_data(ResultsDataGenerator :: RDG_SORT_LASTNAME,0,null,true);
+			$data_array = $datagen->get_data(ResultsDataGenerator :: RDG_SORT_LASTNAME,0,null, true, true);
 		}
 			
 		$data_table = array();		
@@ -249,11 +252,12 @@ if ($export_result_form->validate()) {
 			$user_info = api_get_user_info($data['id']);
 			$result[] = $user_info['username'];
 			if (!api_is_western_name_order()) {
-				$result[] = $user_info['firstname'].' '.$user_info['lastname'];			
+				$result[] = $user_info['firstname'].', '.$user_info['lastname'];			
 			} else {
-				$result[] = $user_info['lastname'].' '.$user_info['firstname'];
+				$result[] = $user_info['lastname'].', '.$user_info['firstname'];
 			}
 			$result[] = $data['score'];
+			$result[] = api_strtoupper(get_lang('Literal'.$data['scoreletter']));
 			if ($scoredisplay->is_custom()) {
 				$result[] = $data['display'];
 			}

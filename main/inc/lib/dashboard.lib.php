@@ -395,6 +395,9 @@ class DashboardManager
 			echo '</div>';
 		} else {
 			echo '<div style="margin-top:20px">'.get_lang('ThereAreNoEnabledDashboardPlugins').'</div>';
+			if (api_is_platform_admin()) {
+				echo '<a href="'.api_get_path(WEB_CODE_PATH).'admin/settings.php?category=Plugins">'.get_lang('ConfigureDashboardPlugins').'</a>';	
+			}
 		}
 	}
 

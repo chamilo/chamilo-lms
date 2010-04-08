@@ -311,7 +311,7 @@ function build_edit_icons($curdirpath, $type, $path, $visibility, $id, $is_templ
 					  if (isset($_GET['selectcat'])) {
 					  	$modify_icons .= '&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.$curdirpath.'&amp;selectcat='.Security::remove_XSS($_GET['selectcat']).'&amp;set_certificate='.$id.$req_gid.'&amp;'.$sort_params.'"><img src="../img/'.$visibility_icon_certificate.'.png" border="0" title="'.$certificate.'" alt="" /></a>';
 						if ($is_preview) {
-						 	$modify_icons .= '&nbsp;<a target="_blank"  href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.$curdirpath.'&amp;set_preview='.$id.$req_gid.'&amp;'.$sort_params.'" ><img src="../img/search.gif" border="0" title="'.$preview.'" alt="" width="16" height="16"/></a>';
+						 	$modify_icons .= '&nbsp;<a target="_blank"  href="'.api_get_self().'?'.api_get_cidreq().'&curdirpath='.$curdirpath.'&amp;set_preview='.$id.$req_gid.'&amp;'.$sort_params.'" ><img src="../img/search.gif" border="0" title="'.$preview.'" alt="" /></a>';
 							}
 					  }
 				}

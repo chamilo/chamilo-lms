@@ -133,7 +133,7 @@ if (isset ($_GET['exportpdf']))	{
 		$html .= '<h1 align="center">'.get_lang('FlatView').'</h1>';
 
 		$html .= '<p><strong>'.$report_name.'</strong></p>';
-		$html .= '<p><strong>'.api_convert_and_format_date().'</strong></p>';
+		$html .= '<p><strong>'.api_convert_and_format_date(date('Y-m-d', time()), 2).'</strong></p>';
 		$html .= '<p><strong>'.get_lang('By').': '.$creator.'</strong></p>';
 
 		$columns = count($printable_data[0]);

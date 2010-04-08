@@ -124,7 +124,7 @@ function export_pdf_with_html($headers_table, $data_table, $headers_pdf, $footer
 	}
 	$footer .= '</table>';
 	
-	$footer .= '<div align="right" style="font-weight: bold;">{PAGENO}</div>';
+	$footer .= '<div align="right" style="font-weight: bold;">{PAGENO}/{nb}</div>';
 	
 	// preparing content pdf		
 	$css_file = api_get_path(TO_SYS, WEB_CSS_PATH).api_get_setting('stylesheets').'/print.css';

@@ -909,4 +909,6 @@ $Literal17 = "diecisiete";
 $Literal18 = "dieciocho";
 $Literal19 = "diecinueve";
 $Literal20 = "veinte";
+$DateTime = "Fecha y hora";
+$Item = "Ítem";
 ?>

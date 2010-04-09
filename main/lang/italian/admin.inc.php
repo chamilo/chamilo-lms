@@ -1151,4 +1151,6 @@ $TeachersInformationsList = "Report docenti";
 $YourTeachers = "I tuoi docenti";
 $StudentsInformationsList = "Report studenti";
 $YourStudents = "I tuoi studenti";
+$GoToThematicAdvance = "Vai all'avanzamento tematico";
+$EditBlocks = "Modifica i blocchi";
 ?>

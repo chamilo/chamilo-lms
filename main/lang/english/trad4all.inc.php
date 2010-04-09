@@ -909,4 +909,8 @@ $Literal17 = "seventeen";
 $Literal18 = "eighteen";
 $Literal19 = "nineteen";
 $Literal20 = "twenty";
+$DateTime = "Date & time";
+$Item = "Item";
+$Never = "Never";
+$ReportABug = "Report a bug";
 ?>

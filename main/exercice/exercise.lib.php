@@ -277,7 +277,7 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false,$current_it
 				if ($answerCorrect != 0) {
 					// only show elements to be answered (not the contents of
 					// the select boxes, who are corrrect = 0)
-					$s .= '<tr><td width="45%">';
+					$s .= '<tr><td width="45%" valign="top" >';
 					$parsed_answer = api_parse_tex($answer);
 					//left part questions
 					$s .= '<span style="float:left; width:5%;"><b>'.$lines_count.'</b>.&nbsp;</span>
@@ -303,7 +303,7 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false,$current_it
 					$s .= '</select>&nbsp;&nbsp;</td>';
 					//print_r($select_items);
 					//right part (answers)
-					$s.='<td width="45%">';
+					$s.='<td width="45%" valign="top" >';
 					if (isset($select_items[$lines_count])) {
 						$s.='<span style="float:left; width:5%;"><b>'.$select_items[$lines_count]['letter'].'.</b></span>'.
 							 '<span style="float:left; width:95%;">'.$select_items[$lines_count]['answer'].'</span>';

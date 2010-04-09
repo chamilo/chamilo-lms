@@ -263,7 +263,7 @@ class DummyCourseCreator
 			}
 			$chapters[] = $chapter;
 		}
-		$lp = new LearnpathCourseCopy($i,$this->get_dummy_content('title'),$this->get_dummy_content('description'),1,$chapters);
+		$lp = new Learnpath($i,$this->get_dummy_content('title'),$this->get_dummy_content('description'),1,$chapters);
 		$this->course->add_resource($lp);
 		}
 	}

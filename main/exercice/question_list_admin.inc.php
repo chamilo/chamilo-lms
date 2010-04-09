@@ -91,7 +91,7 @@ if($nbrQuestions) {
 				<td><?php eval('echo get_lang('.get_class($objQuestionTmp).'::$explanationLangVar);'); ?></td>
 			  	<td align="center"><?php echo $objQuestionTmp->selectLevel(); ?></td>		  	
 			  	<td>
-			  	<a href="<?php echo api_get_self(); ?>?<?php echo api_get_cidreq() ?>&myid=1&editQuestion=<?php echo $id; ?>"><img src="../img/edit.gif" border="0" alt="<?php echo get_lang('Modify'); ?>" /></a>
+			  	<a href="<?php echo api_get_self(); ?>?<?php echo api_get_cidreq() ?>&type=<?php echo $objQuestionTmp->selectType(); ?>&myid=1&editQuestion=<?php echo $id; ?>"><img src="../img/edit.gif" border="0" alt="<?php echo get_lang('Modify'); ?>" /></a>
 				<?php
 				// this variable  $show_quiz_edition comes from admin.php blocks the exercise/quiz modifications
 				if ($show_quiz_edition) { ?>

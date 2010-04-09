@@ -84,9 +84,10 @@ if(is_object($objQuestion)) {
 		$class="add";
 		$text=get_lang('AddQuestionToExercise');
 	}
+	$type = Security::remove_XSS($_GET['type']);
 
 	$types_information = $objQuestion->get_types_information();
-	$form_title_extra = get_lang($types_information[$_REQUEST['answerType']][1]);
+	$form_title_extra = get_lang($types_information[$type][1]);
 
 	// form title
 	$form->addElement('header', '', $text.': '.$form_title_extra);

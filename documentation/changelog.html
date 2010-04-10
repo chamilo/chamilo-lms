@@ -27,7 +27,7 @@
   <li>Full UTF-8 support has been implemented (Feature #272)<ul>
     <li>UTF-8 becomes recommended system encoding to be used. It is also recommended that HTML-documents created with external tools be UTF-8 encoded.</li>
     <li>For newly installed systems: UTF-8 is the default value of the administrator's setting "Character set". Database tables will now be storing UTF-8 encoded text.</li>
-    <li>For upgraded systems: The upgrade procedure does not change to UTF-8 the administrator's setting "Character set". This may be done later, on administrator's decision. During upgrade database tables are converted to UTF-8. Conversion to UTF-8 of stored in the file system html-documents is not performed, this is not mandatory.</li>
+    <li>For upgraded systems: The upgrade procedure changes to UTF-8 the administrator's setting "Character set". During upgrade database tables are converted to UTF-8. Conversion to UTF-8 of stored in the file system html-documents is not performed, this is not mandatory.</li>
     <li><em>Note about integration with external systems</em>: Keep in mind that since version 1.8.7, pieces of text kept in the database are UTF-8 encoded. If an external system accesses database records directly, some corrections to contents of the external database might be necessary.</li>
   </ul>
   </li>
@@ -76,7 +76,7 @@
   <li>Fixed graphical bug preventing the use of matching-type exercises (thanks to USIL team - BT#914)</li>
   <li>Added hidden debugging feature that marks all right answers (for matching, multiple and single choice questions) (private BT#914)</li>
   <li>Adding javascript library for the Pear HTML_QuickForm_advmultiselect class (see CT#883)</li>
-  
+
 </ul>
 <h3>CSS changes</h3>
 <ul>

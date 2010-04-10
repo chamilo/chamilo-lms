@@ -1,16 +1,9 @@
 <?php // $Id: course_edit.php 20441 2009-05-10 07:39:15Z ivantcholakov $
 /* For licensing terms, see /dokeos_license.txt */
 /**
-==============================================================================
-*	@package dokeos.admin
-==============================================================================
+*	@package chamilo.admin
 */
-/*
-==============================================================================
-		INIT SECTION
-==============================================================================
-*/
-
+/* Initialization section */
 // name of the language file that needs to be included
 $language_file = 'admin';
 $cidReset = true;
@@ -31,22 +24,8 @@ $interbreadcrumb[] = array ("url" => "course_list.php", "name" => get_lang('Admi
 
 define('USER_FIELD_TYPE_CHECKBOX', 10);
 
-/*
------------------------------------------------------------
-	Libraries
------------------------------------------------------------
-*/
-/*
-==============================================================================
-		FUNCTIONS
-==============================================================================
-*/
-
-/*
-==============================================================================
-		MAIN CODE
-==============================================================================
-*/
+/* Libraries */
+/* MAIN CODE */
 // Get all course categories
 $table_user = Database :: get_main_table(TABLE_MAIN_USER);
 
@@ -54,8 +33,7 @@ $table_user = Database :: get_main_table(TABLE_MAIN_USER);
 //Get the course infos
 $sql = "SELECT * FROM $course_table WHERE code='".Database::escape_string($course_code)."'";
 $result = Database::query($sql);
-if (Database::num_rows($result) != 1)
-{
+if (Database::num_rows($result) != 1) {
 	header('Location: course_list.php');
 	exit ();
 }
@@ -67,8 +45,7 @@ $order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname' : ' O
 $sql = "SELECT user.user_id,lastname,firstname FROM $table_user as user,$table_course_user as course_user WHERE course_user.status='1' AND course_user.user_id=user.user_id AND course_user.course_code='".$course_code."'".$order_clause;
 $res = Database::query($sql);
 $course_teachers = array();
-while($obj = Database::fetch_object($res))
-{
+while ($obj = Database::fetch_object($res)) {
 	$course_teachers[$obj->user_id] = api_get_person_name($obj->firstname, $obj->lastname);
 }
 
@@ -78,14 +55,13 @@ $res = Database::query($sql);
 $teachers = array();
 
 $platform_teachers[0] = '-- '.get_lang('NoManager').' --';
-while($obj = Database::fetch_object($res))
-{
-	if(!array_key_exists($obj->user_id,$course_teachers)){
+while ($obj = Database::fetch_object($res)) {
+	if (!array_key_exists($obj->user_id,$course_teachers)) {
 		$teachers[$obj->user_id] = api_get_person_name($obj->firstname, $obj->lastname);
 	}
 
 
-	if($course['tutor_name']==$course_teachers[$obj->user_id]){
+	if ($course['tutor_name']==$course_teachers[$obj->user_id]) {
 		$course['tutor_name']=$obj->user_id;
 	}
 	//We add in the array platform teachers
@@ -93,7 +69,7 @@ while($obj = Database::fetch_object($res))
 }
 
 //Case where there is no teacher in the course
-if(count($course_teachers)==0){
+if (count($course_teachers)==0) {
 	$sql='SELECT tutor_name FROM '.$course_table.' WHERE code="'.$course_code.'"';
 	$res = Database::query($sql);
 	$tutor_name=Database::result($res,0,0);
@@ -171,8 +147,8 @@ $form->addRule('disk_quota', get_lang('ThisFieldIsRequired'),'required');
 $form->addRule('disk_quota',get_lang('ThisFieldShouldBeNumeric'),'numeric');
 
 $list_course_extra_field = CourseManager::get_course_extra_field_list($course_code);
-foreach($list_course_extra_field as $extra_field){
-	switch($extra_field['field_type']){
+foreach ($list_course_extra_field as $extra_field) {
+	switch ($extra_field['field_type']) {
 		/* case USER_FIELD_TYPE_TEXT:
 		case USER_FIELD_TYPE_TEXTAREA:
 		case USER_FIELD_TYPE_RADIO: */
@@ -196,8 +172,7 @@ $course_db_name = $course['db_name'];
 $course['title'] = api_html_entity_decode($course['title'], ENT_QUOTES, $charset);
 $form->setDefaults($course);
 // Validate form
-if( $form->validate())
-{
+if ($form->validate()) {
 	$course = $form->getSubmitValues();
 	$dbName = $_POST['dbName'];
 	$course_code = $course['code'];
@@ -219,11 +194,11 @@ if( $form->validate())
     }
     // an extra field
     $extras = array();
-    foreach($course as $key => $value) {
-	    if(substr($key,0,6)=='extra_') {
+    foreach ($course as $key => $value) {
+	    if (substr($key,0,6)=='extra_') {
 			$extras[substr($key,6)] = $value;
 		}
-		if(substr($key,0,7)=='_extra_') {
+		if (substr($key,0,7)=='_extra_') {
 			if(!array_key_exists(substr($key,7), $extras)) $extras[substr($key,7)] = $value;
 		}
     }
@@ -242,8 +217,7 @@ if( $form->validate())
 	$visibility = $course['visibility'];
 	$subscribe = $course['subscribe'];
 	$unsubscribe = $course['unsubscribe'];
-	if (!stristr($department_url, 'http://'))
-	{
+	if (!stristr($department_url, 'http://')) {
 		$department_url = 'http://'.$department_url;
 	}
 	$sql = "UPDATE $course_table SET course_language='".Database::escape_string($course_language)."',
@@ -261,31 +235,30 @@ if( $form->validate())
 	Database::query($sql);
 
 	//update the extra fields
-	if(count($extras) > 0){
-		foreach($extras as $key => $value) {
+	if (count($extras) > 0) {
+		foreach ($extras as $key => $value) {
 			CourseManager::update_course_extra_field_value($course_code, $key, $value);
 		}
 	}
 
 	//Delete only teacher relations that doesn't match the selected teachers
 	$cond='';
-	if(count($teachers)>0){
+	if (count($teachers)>0) {
 		foreach($teachers as $key) $cond.=" AND user_id<>'".$key."'";
 	}
 	$sql='DELETE FROM '.$course_user_table.' WHERE course_code="'.Database::escape_string($course_code).'" AND status="1"'.$cond;
 	Database::query($sql);
 
-	if(count($teachers)>0){
-		foreach($teachers as $key){
+	if (count($teachers)>0) {
+		foreach ($teachers as $key) {
 
 			//We check if the teacher is already subscribed in this course
 			$sql_select_teacher = 'SELECT 1 FROM '.$course_user_table.' WHERE user_id = "'.$key.'" AND course_code = "'.$course_code.'" ';
 			$result = Database::query($sql_select_teacher);
 
-			if(Database::num_rows($result) == 1){
+			if (Database::num_rows($result) == 1) {
 				$sql = 'UPDATE '.$course_user_table.' SET status = "1" WHERE course_code = "'.$course_code.'" AND user_id = "'.$key.'"  ';
-			}
-			else{
+			} else {
 				$sql = "INSERT INTO ".$course_user_table . " SET
 					course_code = '".Database::escape_string($course_code). "',
 					user_id = '".$key . "',
@@ -296,9 +269,7 @@ if( $form->validate())
 					user_course_cat='0'";
 			}
 			Database::query($sql);
-
 		}
-
 	}
 
 	$sql = "INSERT IGNORE INTO ".$course_user_table . " SET
@@ -325,8 +296,8 @@ Display::display_header($tool_name);
 echo "<script>
 function moveItem(origin , destination){
 
-	for(var i = 0 ; i<origin.options.length ; i++) {
-		if(origin.options[i].selected) {
+	for (var i = 0 ; i<origin.options.length ; i++) {
+		if (origin.options[i].selected) {
 			destination.options[destination.length] = new Option(origin.options[i].text,origin.options[i].value);
 			origin.options[i]=null;
 			i = i-1;
@@ -340,40 +311,36 @@ function moveItem(origin , destination){
 function sortOptions(options) {
 
 	newOptions = new Array();
-	for (i = 0 ; i<options.length ; i++)
+	for (i = 0 ; i<options.length ; i++) {
 		newOptions[i] = options[i];
-
+    }
 	newOptions = newOptions.sort(mysort);
 	options.length = 0;
-	for(i = 0 ; i < newOptions.length ; i++)
+	for (i = 0 ; i < newOptions.length ; i++) {
 		options[i] = newOptions[i];
-
+	}
 }
 
-function mysort(a, b){
-	if(a.text.toLowerCase() > b.text.toLowerCase()){
+function mysort(a, b) {
+	if (a.text.toLowerCase() > b.text.toLowerCase()) {
 		return 1;
 	}
-	if(a.text.toLowerCase() < b.text.toLowerCase()){
+	if (a.text.toLowerCase() < b.text.toLowerCase()) {
 		return -1;
 	}
 	return 0;
 }
 
-function valide(){
+function valide() {
 	var options = document.getElementById('course_teachers').options;
-	for (i = 0 ; i<options.length ; i++)
+	for (i = 0 ; i<options.length ; i++) {
 		options[i].selected = true;
+    }
 	document.update_course.submit();
 }
 </script>";
 //api_display_tool_title($tool_name);
 // Display the form
 $form->display();
-/*
-==============================================================================
-		FOOTER
-==============================================================================
-*/
+/* FOOTER */
 Display :: display_footer();
-?>

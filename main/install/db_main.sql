@@ -2328,7 +2328,7 @@ CREATE TABLE session_category (
 
 CREATE TABLE tag (
 	id int NOT NULL auto_increment,
-	tag varchar(255) NOT NULL,
+	tag char(255) NOT NULL,
 	field_id int NOT NULL,
 	count int NOT NULL,
 	PRIMARY KEY  (id)

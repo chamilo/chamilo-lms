@@ -760,7 +760,8 @@ VALUES
 ('use_users_timezone', 'timezones', 'radio', 'Timezones', 'true', 'UseUsersTimezoneTitle','UseUsersTimezoneComment',NULL,'Timezones', 1),
 ('timezone_value', 'timezones', 'select', 'Timezones', '', 'TimezoneValueTitle','TimezoneValueComment',NULL,'Timezones', 1),
 ('allow_user_course_subscription_by_course_admin', NULL, 'radio', 'Security', 'true', 'AllowUserCourseSubscriptionByCourseAdminTitle', 'AllowUserCourseSubscriptionByCourseAdminComment', NULL, NULL, 1),
-('dokeos_database_version', NULL, 'textfield', NULL,'1.8.7.11220','DokeosDatabaseVersion','',NULL,NULL,0);
+('show_link_bug_notification', NULL, 'radio', 'Platform', 'true', 'ShowLinkBugNotificationTitle', 'ShowLinkBugNotificationComment', NULL, NULL, 0),
+('dokeos_database_version', NULL, 'textfield', NULL,'1.8.7.11502','DokeosDatabaseVersion','',NULL,NULL,0);
 
 
 UNLOCK TABLES;
@@ -972,7 +973,9 @@ VALUES
 ('use_users_timezone', 'true', 'Yes'),
 ('use_users_timezone', 'false', 'No'),
 ('allow_user_course_subscription_by_course_admin', 'true', 'Yes'),
-('allow_user_course_subscription_by_course_admin', 'false', 'No');
+('allow_user_course_subscription_by_course_admin', 'false', 'No'),
+('show_link_bug_notification', 'true', 'Yes'),
+('show_link_bug_notification', 'false', 'No');
 
 UNLOCK TABLES;
 

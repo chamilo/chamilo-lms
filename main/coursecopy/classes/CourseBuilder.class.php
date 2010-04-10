@@ -599,7 +599,7 @@ class CourseBuilder
 				$visibility='0';
 			}
 
-			$lp = new LearnpathCourseCopy($obj->id,
+			$lp = new Learnpath($obj->id,
 								$obj->lp_type,
 								$obj->name,
 								$obj->path,

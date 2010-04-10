@@ -56,4 +56,5 @@ $AnnounceSentToUserSelection = "Announcement sent to the selected users";
 $SendAnnouncement = "Send announcement";
 $ModifyAnnouncement = "Edit announcement";
 $ButtonPublishAnnouncement = "Send announcement";
+$YourAccountIsActiveYouCanLoginAndCheckYourCourses = "Dear user, <br /><br />your are no active in the platform, please login and check your courses";
 ?>

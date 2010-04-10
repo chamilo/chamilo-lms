@@ -992,16 +992,18 @@ if ($display_form == true) {
 			// setting the variables for the form elements: the message has to be sent by email
 			$email_ann = '1';
 			// setting the variables for the form elements: the title of the email
-			$title_to_modify = sprintf(get_lang('RemindInactiveLearnersMailSubject'),api_get_setting('siteName'),' > ',$_course['name']);
+			//$title_to_modify = sprintf(get_lang('RemindInactiveLearnersMailSubject'), api_get_setting('siteName'),' > ',$_course['name']);
+			$title_to_modify = sprintf(get_lang('RemindInactiveLearnersMailSubject'), api_get_setting('siteName'));
 			// setting the variables for the form elements: the message of the email
-			$content_to_modify = sprintf(get_lang('RemindInactiveLearnersMailContent'),api_get_setting('siteName'),' > ',$_course['name'],$since);
+			//$content_to_modify = sprintf(get_lang('RemindInactiveLearnersMailContent'),api_get_setting('siteName'),' > ',$_course['name'],$since);
+			$content_to_modify = sprintf(get_lang('RemindInactiveLearnersMailContent'),api_get_setting('siteName'),$since);
 			// when we want to remind the users who have never been active then we have a different subject and content for the announcement
 			if ($_GET['since'] == 'never') {
-				$title_to_modify = get_lang('NoActivityYetTitle');
-				$content_to_modify = get_lang('NoActivityYetContent');
+				$title_to_modify = sprintf(get_lang('RemindInactiveLearnersMailSubject'), api_get_setting('siteName'));
+				$content_to_modify = get_lang('YourAccountIsActiveYouCanLoginAndCheckYourCourses');				
 			}
 		} else {
-			echo get_lang("Everybody");
+			echo get_lang('Everybody');
 		}
 
 		show_to_form($to);

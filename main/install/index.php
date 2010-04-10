@@ -316,8 +316,8 @@ if ($encryptPassForm == '1') {
 			if ($('#singleDb1').attr('checked')==false) {
 					$('#dbStatsForm').removeAttr('disabled');
 					$('#dbUserForm').removeAttr('disabled');
-					$('#dbStatsForm').attr('value','chamilo_stats');
-					$('#dbUserForm').attr('value','chamilo_user');
+					$('#dbStatsForm').attr('value','chamilo_main');
+					$('#dbUserForm').attr('value','chamilo_main');
 			} else if($('#singleDb1').attr('checked')==true){
 					$('#dbStatsForm').attr('disabled','disabled');
 					$('#dbUserForm').attr('disabled','disabled');
@@ -342,8 +342,8 @@ if ($encryptPassForm == '1') {
 			} else if (my_option=='singleDb0') {
 				$('#dbStatsForm').removeAttr('disabled');
 				$('#dbUserForm').removeAttr('disabled');
-				$('#dbStatsForm').attr('value','chamilo_stats');
-				$('#dbUserForm').attr('value','chamilo_user');
+				$('#dbStatsForm').attr('value','chamilo_main');
+				$('#dbUserForm').attr('value','chamilo_main');
 			}
 		}
 	</script>

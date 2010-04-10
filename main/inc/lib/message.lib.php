@@ -703,9 +703,9 @@ class MessageManager
 				$band=1;
 
 		$row[5] = Security::remove_XSS($row[5]);
-
+		
 		$message_content =  '
-		<table class="message_view_table" >
+		<table class="message_view_table">
 		    <tr>
 		      <td width=10>&nbsp; </td>
 		      <td vAlign=top width="100%">
@@ -743,15 +743,13 @@ class MessageManager
 		            </tr>
 		        </table>
 		        <br />
-		        <table height=209 width="100%" bgColor=#ffffff>
-		          <TBODY>
-		            <TR>
-		              <TD vAlign=top class="view-message-content">'.str_replace("\\","",$row[6]).'</TD>
-		            </TR>
-		          </TBODY>
+		        <table height=209 width="100%" bgColor=#ffffff>		          
+		            <tr>
+		              <td vAlign=top class="view-message-content">'.str_replace("\\","",$row[6]).'</td>
+		            </tr>
 		        </table>
 		        <div id="message-attach">'.(!empty($files_attachments)?implode('&nbsp;|&nbsp;',$files_attachments):'').'</div>
-		        <DIV class=HT style="PADDING-BOTTOM: 5px">';
+		        <div class=HT style="padding-bottom: 5px">';
 		    $social_link = '';
 		    if ($_GET['f'] == 'social') {
 		    	$social_link = 'f=social';
@@ -764,9 +762,9 @@ class MessageManager
 		    }
 			$message_content .= '<a href="inbox.php?action=deleteone&id='.$message_id.'&'.$social_link.'" >'.Display::return_icon('message_delete.png',get_lang('DeleteMessage')).''.get_lang('DeleteMessage').'</a>&nbsp';
 
-			$message_content .='</DIV></TD>
-		      <TD width=10></TD>
-		    </TR>
+			$message_content .='</div></td>
+		      <td width=10></td>
+		    </tr>
 		</table>';
 		return $message_content;
 	}

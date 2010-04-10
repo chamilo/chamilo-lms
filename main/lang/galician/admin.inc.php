@@ -1223,4 +1223,5 @@ $AssignedUsersListToPlatformAdministrator = "Lista de usuarios asignados ao admi
 $AssignedCoursesListToHumanResourcesManager = "Lista de usuarios asignados ao administrador de recursos humanos";
 $ThereAreNotCreatedCourses = "Non hai cursos creados";
 $HomepageViewVerticalActivity = "Ver a adtividade en forma vertical";
+$CoursesInformation = "Información de cursos";
 ?>

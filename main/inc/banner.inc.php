@@ -128,6 +128,13 @@ if ($_user['user_id'] && isset($_cid)) {
 	}
 }
 
+
+if (api_get_setting('show_link_bug_notification') == 'true') { ?>
+
+    <li>|<a href="http://support.chamilo.org/projects/chamilo-18/" target="_blank"><img src="<?php echo api_get_path(WEB_IMG_PATH) ?>splash.png" style="vertical-align: middle;" alt="<?php echo get_lang('ReportABug') ?>"/>&nbsp;<?php echo get_lang('ReportABug') ?></li></a>
+
+<?php }
+
 if (api_is_allowed_to_edit()) {
 	if (!empty($help)) {
 	// Show help

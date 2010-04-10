@@ -16,16 +16,27 @@ $views = array('blocks', 'list');
 if(isset($_GET['view']) && in_array($_GET['view'], $views)){
 	$dashboard_view = $_GET['view'];
 }
+
 if($dashboard_view == 'list') {
 	$link_blocks_view = '<a href="'.api_get_self().'?view=blocks">'.Display::return_icon('thumbnails.png').get_lang('DashboardBlocks').'</a>';
-	$link_list_view   = Display::return_icon('check.gif').get_lang('DashboardList').' ';
+	
+	$link_list_view   = Display::return_icon('edit.gif').get_lang('EditBlocks').' ';
+	
 } else {
 	$link_blocks_view = Display::return_icon('thumbnails.png').get_lang('DashboardBlocks').'&nbsp;&nbsp;&nbsp;';
-	$link_list_view = '<a href="'.api_get_self().'?view=list">'.Display::return_icon('check.gif').get_lang('DashboardList').'</a>';
+	
+	$link_list_view = '<a href="'.api_get_self().'?view=list">'.Display::return_icon('edit.gif').get_lang('EditBlocks').'</a>';
+}
+
+//
+
+$configuration_link = '';
+if (api_is_platform_admin()) {
+	$configuration_link = '<span style="float: right; margin: 0px; padding: 0px;">'.Display::return_icon('acces_tool.gif').'<a href="'.api_get_path(WEB_CODE_PATH).'admin/settings.php?category=Plugins">'.get_lang('ConfigureDashboardPlugin').'</a></span>';
 }
 
 echo '<div class="actions">';
-echo $link_blocks_view.$link_list_view;
+echo $link_blocks_view.$link_list_view.$configuration_link;
 echo '</div>';
 
 // block dashboard view
@@ -34,7 +45,7 @@ if($dashboard_view == 'blocks') {
 	if (isset($msg)) {		
 		//Display::display_confirmation_message(get_lang('BlocksHaveBeenUpdatedSuccessfully'));		
 	}
-	
+
 	if (count($blocks) > 0) {
 		$columns = array();
 		// group content html by number of column

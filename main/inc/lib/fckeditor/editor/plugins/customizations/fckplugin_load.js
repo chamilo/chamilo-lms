@@ -1,16 +1,16 @@
 /*
- *	Chamilo LMS
+ *	This piece of software has been created for Chamilo LMS
+ *	Mail: info@chamilo.org
  *
  *	Copyright (c) 2009-2010 Ivan Tcholakov <ivantcholakov@gmail.com>
- *	Copyright (c) 2009 Dokeos SPRL
  *
- *	For a full list of contributors, see "credits.txt".
- *	The full license can be read in "license.txt".
+ *	For a full list of contributors detaining copyrights over parts of
+ *	the Chamilo software, see "documentation/credits.html".
+ *	The full license can be read in "documentation/license.html".
  *
  *	This program is free software; you can redistribute it and/or
- *	modify it under the terms of the GNU General Public License
- *	as published by the Free Software Foundation; either version 2
- *	of the License, or (at your option) any later version.
+ *	modify it under the terms of the GNU General Public License version 3
+ *	as published by the Free Software Foundation.
  *
  *	See the GNU General Public License for more details.
  */

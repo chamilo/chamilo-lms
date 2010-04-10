@@ -67,7 +67,7 @@ INSERT INTO settings_current (variable, subkey, type, category, selected_value, 
 ALTER TABLE user_field_values CHANGE id id BIGINT NOT NULL AUTO_INCREMENT;
 ALTER TABLE user_field_values ADD INDEX (user_id, field_id);
 
-UPDATE settings_current SET selected_value = '1.8.7.11502' WHERE variable = 'dokeos_database_version';
+UPDATE settings_current SET selected_value = '1.8.7.11512' WHERE variable = 'dokeos_database_version';
 
 ALTER TABLE course_rel_user DROP PRIMARY KEY, ADD PRIMARY KEY (course_code, user_id, relation_type);
 ALTER TABLE session_rel_user DROP PRIMARY KEY, ADD PRIMARY KEY (id_session, id_user, relation_type);

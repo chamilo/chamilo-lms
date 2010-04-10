@@ -243,7 +243,7 @@ CREATE TABLE course_field_values(
 DROP TABLE IF EXISTS course_module;
 CREATE TABLE course_module (
   id int unsigned NOT NULL auto_increment,
-  name varchar(100) NOT NULL,
+  name varchar(255) NOT NULL,
   link varchar(255) NOT NULL,
   image varchar(100) default NULL,
   `row` int unsigned NOT NULL default '0',
@@ -1282,7 +1282,7 @@ CREATE TABLE access_url_rel_session (
 --
 CREATE TABLE IF NOT EXISTS sys_calendar (
   id int unsigned NOT NULL auto_increment,
-  title varchar(200) NOT NULL,
+  title varchar(255) NOT NULL,
   content text,
   start_date datetime NOT NULL default '0000-00-00 00:00:00',
   end_date datetime NOT NULL default '0000-00-00 00:00:00',
@@ -2328,7 +2328,7 @@ CREATE TABLE session_category (
 
 CREATE TABLE tag (
 	id int NOT NULL auto_increment,
-	tag char(80) NOT NULL,
+	tag varchar(255) NOT NULL,
 	field_id int NOT NULL,
 	count int NOT NULL,
 	PRIMARY KEY  (id)

@@ -1738,7 +1738,7 @@ function update_Db_course($courseDbName, $language = null)
 			id int NOT NULL auto_increment PRIMARY KEY,
 			name text NOT NULL,
 			description TEXT NULL,
-			active tinyint(3) NOT NULL default 1,
+			active tinyint NOT NULL default 1,
 			attendance_qualify_title varchar(255) NULL,
 			attendance_qualify_max int NOT NULL default 0,
 			attendance_weight float(6,2) NOT NULL default '0.0',
@@ -1755,7 +1755,7 @@ function update_Db_course($courseDbName, $language = null)
 		CREATE TABLE `".$TBL_ATTENDANCE_SHEET."` (
 			user_id int NOT NULL,
 			attendance_calendar_id int NOT NULL,
-			presence tinyint(3) NOT NULL DEFAULT 0,
+			presence tinyint NOT NULL DEFAULT 0,
 			PRIMARY KEY(user_id, attendance_calendar_id)
 		)" . $charset_clause;
 	$result = Database::query($sql) or die(Database::error());
@@ -1768,7 +1768,7 @@ function update_Db_course($courseDbName, $language = null)
 			id int NOT NULL auto_increment,
 			attendance_id int NOT NULL ,
 			date_time datetime NOT NULL default '0000-00-00 00:00:00',
-			done_attendance tinyint(3) NOT NULL default 0,
+			done_attendance tinyint NOT NULL default 0,
 			PRIMARY KEY(id)
 		)" . $charset_clause;
 	$result = Database::query($sql) or die(Database::error());

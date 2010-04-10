@@ -9,43 +9,44 @@
 
 class session_handler {
 
-	public $connexion;
-	public $idConnexion;
+	// TODO: Hm, these variables are public.
+	public $connection;
+	public $connection_handler;
 	public $lifetime;
-	public $sessionName;
+	public $session_name;
 
 	public function __construct () {
 		global $_configuration;
 
 		$this->lifetime = 60; // 60 minutes
 
-		$this->connexion = array(
+		$this->connection = array(
 			'server' => $_configuration['db_host'],
 			'login' => $_configuration['db_user'],
 			'password' => $_configuration['db_password'],
 			'base' => $_configuration['main_database']
 		);
 
-		$this->idConnexion = false;
+		$this->connection_handler = false;
 	}
 
 	public function sqlConnect () {
 
-		if (!$this->idConnexion) {
-			$this->idConnexion = @mysql_connect($this->connexion['server'], $this->connexion['login'], $this->connexion['password'], true);
+		if (!$this->connection_handler) {
+			$this->connection_handler = @mysql_connect($this->connection['server'], $this->connection['login'], $this->connection['password'], true);
 
 			// The system has not been designed to use special SQL modes that were introduced since MySQL 5
-			@mysql_query("set session sql_mode='';", $this->idConnexion);
+			@mysql_query("set session sql_mode='';", $this->connection_handler);
 		}
 
-		return $this->idConnexion ? true : false;
+		return $this->connection_handler ? true : false;
 	}
 
 	public function sqlClose() {
 
-		if ($this->idConnexion) {
-			mysql_close($this->idConnexion);
-			$this->idConnexion = false;
+		if ($this->connection_handler) {
+			mysql_close($this->connection_handler);
+			$this->connection_handler = false;
 			return true;
 		}
 
@@ -54,7 +55,7 @@ class session_handler {
 
 	public function sqlQuery($query, $die_on_error = true) {
 
-		$result = mysql_query($query,$this->idConnexion);
+		$result = mysql_query($query, $this->connection_handler);
 
 		if ($die_on_error && !$result) {
 			$this->sqlClose();
@@ -66,7 +67,7 @@ class session_handler {
 
 	public function open ($path, $name) {
 
-		$this->sessionName = $name;
+		$this->session_name = $name;
 		return true;
 	}
 
@@ -77,7 +78,7 @@ class session_handler {
 	public function read ($sess_id) {
 
 		if ($this->sqlConnect()) {
-			$result = $this->sqlQuery("SELECT session_value FROM ".$this->connexion['base'].".php_session WHERE session_id='$sess_id'");
+			$result = $this->sqlQuery("SELECT session_value FROM ".$this->connection['base'].".php_session WHERE session_id='$sess_id'");
 
 			if ($row = mysql_fetch_assoc($result)) {
 				return $row['session_value'];
@@ -92,10 +93,10 @@ class session_handler {
 
 		if ($this->sqlConnect()) {
 
-			$result = $this->sqlQuery("INSERT INTO ".$this->connexion['base'].".php_session(session_id,session_name,session_time,session_start,session_value) VALUES('$sess_id','".$this->sessionName."','$time','$time','".addslashes($sess_value)."')", false);
+			$result = $this->sqlQuery("INSERT INTO ".$this->connection['base'].".php_session(session_id,session_name,session_time,session_start,session_value) VALUES('$sess_id','".$this->session_name."','$time','$time','".addslashes($sess_value)."')", false);
 
 			if (!$result) {
-				$this->sqlQuery("UPDATE ".$this->connexion['base'].".php_session SET session_name='".$this->sessionName."',session_time='$time',session_value='".addslashes($sess_value)."' WHERE session_id='$sess_id'");
+				$this->sqlQuery("UPDATE ".$this->connection['base'].".php_session SET session_name='".$this->session_name."',session_time='$time',session_value='".addslashes($sess_value)."' WHERE session_id='$sess_id'");
 			}
 
 			return true;
@@ -107,7 +108,7 @@ class session_handler {
 	public function destroy($sess_id) {
 
 		if ($this->sqlConnect()) {
-			$this->sqlQuery("DELETE FROM ".$this->connexion['base'].".php_session WHERE session_id='$sess_id'");
+			$this->sqlQuery("DELETE FROM ".$this->connection['base'].".php_session WHERE session_id='$sess_id'");
 			return true;
 		}
 
@@ -118,11 +119,11 @@ class session_handler {
 
 		if ($this->sqlConnect()) {
 
-			$result = $this->sqlQuery("SELECT COUNT(session_id) FROM ".$this->connexion['base'].".php_session");
+			$result = $this->sqlQuery("SELECT COUNT(session_id) FROM ".$this->connection['base'].".php_session");
 			list($nbr_results) = Database::fetch_row($result);
 
 			if ($nbr_results > 5000) {
-				$this->sqlQuery("DELETE FROM ".$this->connexion['base'].".php_session WHERE session_time<'".strtotime('-'.$this->lifetime.' minutes')."'");
+				$this->sqlQuery("DELETE FROM ".$this->connection['base'].".php_session WHERE session_time<'".strtotime('-'.$this->lifetime.' minutes')."'");
 			}
 
 			$this->sqlClose();

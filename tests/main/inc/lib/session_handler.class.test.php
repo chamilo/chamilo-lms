@@ -3,10 +3,10 @@ require_once(api_get_path(LIBRARY_PATH).'session_handler.class.php');
 
 class TestSessionHandler extends UnitTestCase {
 
-	var $connexion;
-	var $idConnexion;
+	var $connection;
+	var $connection_handler;
 	var $lifetime;
-	var $sessionName;
+	var $session_name;
 
 
 	function testClose() {
@@ -75,21 +75,21 @@ class TestSessionHandler extends UnitTestCase {
 	}
 
 	function testsqlQuery() {
-		
+
 		global $_configuration;
-		
+
 		$tbl_user = Database::get_main_table(TABLE_MAIN_USER);
 		$query = 'select user_id from '.$tbl_user;
-		
+
 		$instancia = new session_handler();
-		$instancia->idConnexion = mysql_connect($_configuration['db_host'],
+		$instancia->connection_handler = mysql_connect($_configuration['db_host'],
 												$_configuration['db_user'],
 												$_configuration['db_password']);
-		
+
 		$res= $instancia->sqlQuery($query, false);
 		$this->assertTrue(is_resource($res));
 		$this->assertTrue($res);
-		
+
 	}
 
 	function testwrite() {

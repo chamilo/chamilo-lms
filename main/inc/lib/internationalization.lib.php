@@ -66,7 +66,7 @@ function api_initialize_internationalization() {
 		@ini_set('mbstring.http_output', 'pass');
 		@ini_set('mbstring.language', 'neutral');
 	}
-	api_set_internationalization_default_encoding('ISO-8859-15');
+	api_set_internationalization_default_encoding('UTF-8');
 }
 
 /**

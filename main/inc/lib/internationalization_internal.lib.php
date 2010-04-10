@@ -966,7 +966,7 @@ function _api_mb_internal_encoding($encoding = null) {
 			if (MBSTRING_INSTALLED) {
 				$mb_internal_encoding = @mb_internal_encoding();
 			} else {
-				$mb_internal_encoding = 'ISO-8859-15';
+				$mb_internal_encoding = 'UTF-8';
 			}
 		}
 		return $mb_internal_encoding;
@@ -992,7 +992,7 @@ function _api_mb_regex_encoding($encoding = null) {
 			if (MBSTRING_INSTALLED) {
 				$mb_regex_encoding = @mb_regex_encoding();
 			} else {
-				$mb_regex_encoding = 'ISO-8859-15';
+				$mb_regex_encoding = 'UTF-8';
 			}
 		}
 		return $mb_regex_encoding;

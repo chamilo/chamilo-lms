@@ -21,28 +21,33 @@
 
 <h1>Chamilo 1.8.7 - ? ?</h1>
 <h3>Release notes - summary</h3>
-<p>Chamilo 1.8.7 is a intermediate&nbsp;release including a lot of new features, mostly focused on social network, the handling of sessions (which will help many educational institutions, public or private, to manage their contents in a more flexible way) and visual style, and a few important bugfixes. It lays the first stable stone in the Chamilo software project. This version is the first one to require PHP 5.2 or superior.</p>
+<p>Chamilo 1.8.7 is a major&nbsp;release including a lot of new features, mostly focused on social network, the handling of sessions (which will help many educational institutions, public or private, to manage their contents in a more flexible way) and visual style, and a few important bugfixes. It lays the first stable stone in the Chamilo software project. This version is the first one to <b>highly recommend PHP 5.2</b> or superior, and <b>require PHP 5.1</b> or higher.<br />Also, this version of Chamilo will automatically convert all your data to UTF-8, which will make it more difficult to migrate from Dokeos versions higher than 1.8.6.1</p>
+
 <h3>New Features</h3>
 <ul>
   <li>Full UTF-8 support has been implemented (Feature #272)<ul>
     <li>UTF-8 becomes recommended system encoding to be used. It is also recommended that HTML-documents created with external tools be UTF-8 encoded.</li>
     <li>For newly installed systems: UTF-8 is the default value of the administrator's setting "Character set". Database tables will now be storing UTF-8 encoded text.</li>
-    <li>For upgraded systems: The upgrade procedure does not change to UTF-8 the administrator's setting "Character set". This may be done later, on administrator's decision. During upgrade database tables are converted to UTF-8. Conversion to UTF-8 of stored in the file system html-documents is not performed, this is not mandatory.</li>
+    <li>For upgraded systems: The upgrade procedure automatically changes the character set to UTF-8. During upgrade database tables are converted to UTF-8 and the corresponding changes to text fields are applied. Conversion to UTF-8 of HTML documents stored in the file system is not performed, this is not mandatory.</li>
     <li><em>Note about integration with external systems</em>: Keep in mind that since version 1.8.7, pieces of text kept in the database are UTF-8 encoded. If an external system accesses database records directly, some corrections to contents of the external database might be necessary.</li>
   </ul>
   </li>
   <li>Class attendance (usable in Gradebook), which allows b-learning teachers to keep attendance registers</li>
-  <li>Student certificate, which allows teachers to define certificates in their own format, building the templates online</li>
+  <li>Student certificates allow teachers to build certificates in their own format, using online-built HTML templates</li>
   <li>Thematic/Academic progress (shown on course homepage), which allows teachers to show how their courses is progressing following a pre-established schedule</li>
   <li>Timezone management at user and platform level (Feature #599)</li>
-  <li>HR dashboard: New page with statistical reporting blocks about followed students, courses or sessions, available to  platform administrator, session administrator or human resource manager</li>
+  <li>HR dashboard: statistical reporting page (by blocks) about students, courses or sessions, available to  platform administrator, session administrator or human resources manager</li>
   <li>Exercise tool: Teachers can delete students results of an exercise (NOT LP results)</li>
   <li>Exercice tool: Shuffle answers</li>
-  <li>Exercice tool: Copy exercises (Feature #651)</li>
+  <li>Exercice tool: Copy exercises, copy questions (Feature #651)</li>
   <li>robots.txt file added (Feature #837)</li>
   <li>Upgraded PclZip library to version 2.8.2 (Feature #553)</li>
   <li>Upgraded PHPMailer library to version 5.1 (Feature #272)</li>
   <li>pChart Horizontal bars library added thanks to gferri see (Feature #790)</li>
+  <li>Added setting to remove permission for teachers to subscribe students in their course</li>
+  <li>Added setting to show "report bug" link in header</li>
+  <li>Added new visualization mode for courses: vertical activity</li>
+  <li>Improved presentation of courses + sessions in courses list (bigger icons, clearer boxes)</li>
 </ul>
 
 <h3>Debugging</h3>
@@ -73,10 +78,10 @@
   <li>Fixed minor bug in online mail editor in order to show the sender's name and e-mail</li>
   <li>Fixed bug that prevented importing SCORM resource from course archives (Bug #872)</li>
   <li>Fixed bug that prevented proper tests importing from course zip-archives created on systems prior to Chamilo 1.8.6.2 (Bug #879)</li>
-  <li>Fixed graphical bug preventing the use of matching-type exercises (thanks to USIL team - BT#914)</li>
+  <li>Quiz tool: fixed graphical bug preventing the use of matching-type exercises (thanks to USIL team - BT#914)</li>
   <li>Added hidden debugging feature that marks all right answers (for matching, multiple and single choice questions) (private BT#914)</li>
   <li>Adding javascript library for the Pear HTML_QuickForm_advmultiselect class (see CT#883)</li>
-  
+  <li>Assignment tool: Fixed problem with work/assignment tool whereby a moved work lost the ability to be scored</li>
 </ul>
 <h3>CSS changes</h3>
 <ul>
@@ -86,9 +91,8 @@
 </ul>
 <h3>Known issues</h3>
 <ul>
-  <li>Timezone functionality is not available in the most recent versions of PHP available for CentOS/RHEL ( 5.1.6-23.2.el5_3 ) (see http://www.php.net/manual/en/function.timezone-identifiers-list.php). Chamilo now requires PHP 5.2 or superior.</li>
-  <li>When the user published an event as announcement, this same announce can be repeat many times</li>
-  <li>Main page (user_portal.php) UI improved bigger icons</li>
+  <li>Timezone functionality is not available in the most recent versions of PHP available for CentOS/RHEL ( 5.1.6-23.2.el5_3 ) (see http://www.php.net/manual/en/function.timezone-identifiers-list.php). Chamilo now requires PHP 5.1 or superior and <b>highly</b> recommends PHP 5.2.</li>
+  <li>When the user publishes an event as announcement, this same announce can be repeat many times</li>
 </ul>
 <h3>Deprecated files</h3>
 <ul>

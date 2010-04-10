@@ -107,7 +107,6 @@ ALTER TABLE track_e_attempt_recording ADD INDEX (question_id);
 ALTER TABLE track_e_attempt_recording ADD INDEX (session_id);
 ALTER TABLE track_e_online ADD COLUMN access_url_id INT NOT NULL DEFAULT 1;
 
-
 -- xxUSERxx
 
 -- xxCOURSExx

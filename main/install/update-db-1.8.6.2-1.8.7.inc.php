@@ -175,6 +175,33 @@ if (defined('SYSTEM_INSTALLATION')) {
             Database::query($upd);
         }
 
+        // Now clean the deprecated id_coach field from the session_rel_course table
+        $m_q_list = get_sql_file_contents('migrate-db-'.$old_file_version.'-'.$new_file_version.'-post.sql', 'main');
+        if (count($m_q_list) > 0) {
+            // Now use the $m_q_list
+            /**
+             * We connect to the right DB first to make sure we can use the queries
+             * without a database name
+             */
+            if (strlen($dbNameForm) > 40) {
+                error_log('Database name '.$dbNameForm.' is too long, skipping', 0);
+            } elseif (!in_array($dbNameForm,$dblist)) {
+                error_log('Database '.$dbNameForm.' was not found, skipping', 0);
+            } else {
+                Database::select_db($dbNameForm);
+                foreach ($m_q_list as $query) {
+                    if ($only_test) {
+                        error_log("Database::query($dbNameForm,$query)", 0);
+                    } else {
+                        $res = Database::query($query);
+                        if ($log) {
+                            error_log("In $dbNameForm, executed: $query", 0);
+                        }
+                    }
+                }
+            }
+        }
+         
         // Get the stats queries list (s_q_list)
         $s_q_list = get_sql_file_contents('migrate-db-'.$old_file_version.'-'.$new_file_version.'-pre.sql', 'stats');
         if (count($s_q_list) > 0) {
@@ -444,7 +471,56 @@ if (defined('SYSTEM_INSTALLATION')) {
             }
         }
     }
+    // Get the courses databases queries list (c_q_list)
+    $c_q_list = get_sql_file_contents('migrate-db-'.$old_file_version.'-'.$new_file_version.'-post.sql', 'course');
+    if (count($c_q_list) > 0) {
+        // Get the courses list
+        if (strlen($dbNameForm) > 40) {
+            error_log('Database name '.$dbNameForm.' is too long, skipping', 0);
+        } elseif (!in_array($dbNameForm, $dblist)) {
+            error_log('Database '.$dbNameForm.' was not found, skipping', 0);
+        } else {
+            Database::select_db($dbNameForm);
+            $res = Database::query("SELECT code,db_name,directory,course_language FROM course WHERE target_course_code IS NULL");
+            if ($res === false) { die('Error while querying the courses list in update_db-1.8.6.2-1.8.7.inc.php'); }
+            if (Database::num_rows($res) > 0) {
+                $i = 0;
+                while ($row = Database::fetch_array($res)) {
+                    $list[] = $row;
+                    $i++;
+                }
+                foreach ($list as $row) {
+                    // Now use the $c_q_list
+                    /**
+                     * We connect to the right DB first to make sure we can use the queries
+                     * without a database name
+                     */
+                    $prefix_course = $prefix;
+                    if ($singleDbForm) {
+                        $prefix_course = $prefix.$row['db_name']."_";
+                    } else {
+                        Database::select_db($row['db_name']);
+                    }
 
+                    foreach($c_q_list as $query) {
+                        if ($singleDbForm) { //otherwise just use the main one
+                            $query = preg_replace('/^(UPDATE|ALTER TABLE|CREATE TABLE|DROP TABLE|INSERT INTO|DELETE FROM)\s+(\w*)(.*)$/', "$1 $prefix$2$3", $query);
+                        }
+                        if ($only_test) {
+                            error_log("Database::query(".$row['db_name'].",$query)", 0);
+                        } else {
+                            $res = Database::query($query);
+                            if ($log) {
+                                error_log("In ".$row['db_name'].", executed: $query", 0);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    
 } else {
 
     echo 'You are not allowed here !';

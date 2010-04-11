@@ -144,10 +144,6 @@ if (!empty($_configuration['multiple_access_urls'])) {
 	$_configuration['access_url'] = 1;
 }
 
-// This function is moved here after the database connections was made since  api_session_start will call the api_get_path() function and this function will call a Database function
-// Start session.
-api_session_start($already_installed);
-
 // The system has not been designed to use special SQL modes that were introduced since MySQL 5.
 Database::query("set session sql_mode='';");
 
@@ -180,6 +176,9 @@ api_set_internationalization_default_encoding($charset);
 Database::query("SET SESSION character_set_server='utf8';");
 Database::query("SET SESSION collation_server='utf8_general_ci';");
 Database::query("SET CHARACTER SET '" . Database::to_db_encoding($charset) . "';");
+
+// Start session after the internationalization library has been initialized.
+api_session_start($already_installed);
 
 // access_url == 1 is the default chamilo location
 if ($_configuration['access_url'] != 1) {
@@ -486,7 +485,7 @@ if (is_array($language_files)) {
 		}
 	} else {
 		// if the sub-languages feature is not on, then just load the
-		// set language interface 
+		// set language interface
 		foreach ($language_files as $index => $language_file) {
 			// include English
 			include $langpath.'english/'.$language_file.'.inc.php';

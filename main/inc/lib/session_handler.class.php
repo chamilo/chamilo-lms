@@ -15,7 +15,7 @@ class session_handler {
 	public $lifetime;
 	public $session_name;
 
-	public function __construct () {
+	public function __construct() {
 		global $_configuration;
 
 		$this->lifetime = 60; // 60 minutes
@@ -30,13 +30,21 @@ class session_handler {
 		$this->connection_handler = false;
 	}
 
-	public function sqlConnect () {
+	public function sqlConnect() {
 
 		if (!$this->connection_handler) {
 			$this->connection_handler = @mysql_connect($this->connection['server'], $this->connection['login'], $this->connection['password'], true);
 
 			// The system has not been designed to use special SQL modes that were introduced since MySQL 5
 			@mysql_query("set session sql_mode='';", $this->connection_handler);
+
+			@mysql_select_db($this->connection['base'], $this->connection_handler);
+
+			// Initialization of the database connection encoding to be used.
+			// The internationalization library should be already initialized.
+			@mysql_query("SET SESSION character_set_server='utf8';", $this->connection_handler);
+			@mysql_query("SET SESSION collation_server='utf8_general_ci';", $this->connection_handler);
+			@mysql_query("SET CHARACTER SET '" . Database::to_db_encoding(api_get_system_encoding()) . "';", $this->connection_handler);
 		}
 
 		return $this->connection_handler ? true : false;
@@ -65,17 +73,17 @@ class session_handler {
 		return $result;
 	}
 
-	public function open ($path, $name) {
+	public function open($path, $name) {
 
 		$this->session_name = $name;
 		return true;
 	}
 
-	public function close () {
+	public function close() {
 		return $this->garbage(0) ? true : false;
 	}
 
-	public function read ($sess_id) {
+	public function read($sess_id) {
 
 		if ($this->sqlConnect()) {
 			$result = $this->sqlQuery("SELECT session_value FROM ".$this->connection['base'].".php_session WHERE session_id='$sess_id'");

@@ -3386,13 +3386,17 @@ function api_is_latin1($encoding, $strict = false) {
  * reason both attempts fail, then the libraly's internal value will be returned.
  */
 function api_get_system_encoding() {
-	$system_encoding = api_get_setting('platform_charset');
-	if (empty($system_encoding)) {
-		global $charset;
-		if (empty($charset)) {
-			return _api_mb_internal_encoding();
+	static $system_encoding;
+	if (!isset($system_encoding)) {
+		$encoding_setting = api_get_setting('platform_charset');
+		if (empty($encoding_setting)) {
+			global $charset;
+			if (empty($charset)) {
+				return _api_mb_internal_encoding();
+			}
+			return $charset;
 		}
-		return $charset;
+		$system_encoding = $encoding_setting;
 	}
 	return $system_encoding;
 }

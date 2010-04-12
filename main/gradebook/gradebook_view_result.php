@@ -62,7 +62,7 @@ if (isset ($_GET['editres'])) {
 		$result->set_id($edit_res_xml);
 		$result->set_user_id($values['hid_user_id']);
 		$result->set_evaluation_id($select_eval_edit);
-		$row_value=isset($values['score']) ? (int)$values['score'] : 0 ;
+		$row_value=isset($values['score']) ? (double)$values['score'] : 0 ;
 	if ((!empty ($row_value)) || ($row_value == 0)) {
 		$result->set_score($row_value);
 	}

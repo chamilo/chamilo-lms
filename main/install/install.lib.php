@@ -1329,27 +1329,148 @@ function display_license_agreement() {
 	?>
 	<table>
 		<tr><td>
-		<p style="font-size:75%"><textarea cols="80" rows="15" ><?php echo api_htmlentities(@file_get_contents(api_get_path(SYS_PATH).'documentation/license.txt')); ?></textarea></p>
+                        <p style="font-size:75%"><textarea cols="80" rows="12" readonly><?php echo api_htmlentities(@file_get_contents(api_get_path(SYS_PATH).'documentation/license.txt')); ?></textarea></p>
 		</td>
 		</tr>
-		<tr>
+                <tr><td><input type="checkbox" name="accept" id="accept_licence" value="1"><?php echo get_lang('IAccept'); ?></td></tr>
+                <tr><td><p><?php echo get_lang('DokeosArtLicense'); ?></p></td></tr>
+                <tr>
 		<td>
-		<p><?php echo get_lang('DokeosArtLicense'); ?></p>
-		</td>
-		</tr>
-		<td>
-		<table width="100%">
+                <?php echo get_contact_registration_form() ?><br />
+                </td>
+                </tr>                                
+                <tr>
+                    <td>
+                        <table width="100%">
 			<tr>
 				<td></td>
 				<td align="center">
 					<button type="submit" class="back" name="step1" value="&lt; <?php echo get_lang('Previous'); ?>" ><?php echo get_lang('Previous'); ?></button>
 					<input type="hidden" name="is_executable" id="is_executable" value="-" />
-					<button type="submit" class="next" name="step3" value="<?php echo get_lang('IAccept'); ?> &gt;" ><?php echo get_lang('IAccept'); ?></button>
+					<button type="submit" class="next" name="step3" onclick="javascript:if(document.getElementById('accept_licence').checked == false) { alert('<?php echo get_lang('YouMustAcceptLicence')?>');return false;}" value="<?php echo get_lang('Next'); ?> &gt;" ><?php echo get_lang('Next'); ?></button>
 				</td>
 			</tr>
-		</table>
-	</td></tr></table>
+                        </table>
+                    </td>
+                </tr>                
+                </table>
 	<?php
+}
+
+/**
+ * Get contact registration form
+ */
+function get_contact_registration_form() {
+
+    $html ='
+    <div>
+    <fieldset style="width:90%;padding:15px;border:1pt solid #eee">
+    <legend><strong>'.get_lang('ContactInformation').'</strong></legend>
+    <div id="div_sent_information"></div>
+    <div><p>'.get_lang('ContactInformationDescription').'</p></div>
+    <form>
+    <div class="row">
+            <div class="label">'.get_lang('PersonName').'</div>
+            <div class="formw"><input id="person_name" type="text" name="person_name" /></div>
+    </div>
+    <div class="row">
+            <div class="label">'.get_lang('CompanyName').'</div>
+            <div class="formw"><input id="company_name" type="text" name="company_name" /></div>
+    </div>
+    <div class="row">
+            <div class="label">'.get_lang('CompanyActivity').'</div>
+            <div class="formw">
+                    <select name="company_activity" id="company_activity" >
+                            <Option value="" Selected="True">--- '.get_lang('SelectOne').' ---</Option>
+                            <Option value="Advertising/Marketing/PR">Advertising/Marketing/PR</Option><Option value="Agriculture/Forestry">Agriculture/Forestry</Option>
+                            <Option value="Architecture">Architecture</Option><Option value="Banking/Finance">Banking/Finance</Option>
+                            <Option value="Biotech/Pharmaceuticals">Biotech/Pharmaceuticals</Option><Option value="Business Equipment">Business Equipment</Option>
+                            <Option value="Business Services">Business Services</Option><Option value="Construction">Construction</Option>
+                            <Option value="Consulting/Research">Consulting/Research</Option><Option value="Education">Education</Option>
+                            <Option value="Engineering">Engineering</Option><Option value="Environmental">Environmental</Option>
+                            <Option value="Government">Government</Option><Option value="Healthcare">Health Care</Option>
+                            <Option value="Hospitality/Lodging/Travel">Hospitality/Lodging/Travel</Option><Option value="Insurance">Insurance</Option>
+                            <Option value="Legal">Legal</Option><Option value="Manufacturing">Manufacturing</Option>
+                            <Option value="Media/Entertainment">Media/Entertainment</Option><Option value="Mortgage">Mortgage</Option>
+                            <Option value="Non-Profit">Non-Profit</Option><Option value="Other">Other</Option>
+                            <Option value="Real Estate">Real Estate</Option><Option value="Restaurant">Restaurant</Option>
+                            <Option value="Retail">Retail</Option><Option value="Shipping/Transportation">Shipping/Transportation</Option>
+                            <Option value="Technology">Technology</Option><Option value="Telecommunications">Telecommunications</Option>
+                    </Select>
+            </div>
+    </div>
+
+    <div class="row">
+            <div class="label">'.get_lang('PersonRole').'</div>
+            <div class="formw">
+                    <Select name="person_role" id="person_role" >
+                            <Option value="" Selected="True">--- '.get_lang('SelectOne').' ---</Option>
+                            <Option value="Administration">Administration</Option><Option value="CEO/President/ Owner">CEO/President/ Owner</Option>
+                            <Option value="CFO">CFO</Option><Option value="CIO/CTO">CIO/CTO</Option>
+                            <Option value="Consultant">Consultant</Option><Option value="Customer Service">Customer Service</Option>
+                            <Option value="Engineer/Programmer">Engineer/Programmer</Option><Option value="Facilities/Operations">Facilities/Operations</Option>
+                            <Option value="Finance/ Accounting Manager">Finance/ Accounting Manager</Option><Option value="Finance/ Accounting Staff">Finance/ Accounting Staff</Option>
+                            <Option value="General Manager">General Manager</Option><Option value="Human Resources">Human Resources</Option>
+                            <Option value="IS/IT Management">IS/IT Management</Option><Option value="IS/ IT Staff">IS/ IT Staff</Option>
+                            <Option value="Marketing Manager">Marketing Manager</Option><Option value="Marketing Staff">Marketing Staff</Option>
+                            <Option value="Partner/Principal">Partner/Principal</Option><Option value="Purchasing Manager">Purchasing Manager</Option>
+                            <Option value="Sales/ Business Dev. Manager">Sales/ Business Dev. Manager</Option><Option value="Sales/ Business Dev.">Sales/ Business Dev.</Option>
+                            <Option value="Vice President/Senior Manager">Vice President/Senior Manager</Option><Option value="Other">Other</Option>
+                    </Select>
+            </div>
+    </div>
+    <div class="row">
+            <div class="label">'.get_lang('HaveYouThePowerToTakeFinancialDecisions').'</div>
+            <div class="formw">
+                    <input type="radio" name="financial_decision" id="financial_decision1" value="yes">'.get_lang('Yes').'
+                    <input type="radio" name="financial_decision" id="financial_decision2" value="no">'.get_lang('No').'
+            </div>
+    </div>
+    <div class="row">
+            <div class="label">'.get_lang('CompanyCountry').'</div>
+            <div class="formw">
+                    <input type="text" id="company_country" name="company_country"/>
+            </div>
+    </div>
+    <div class="row">
+            <div class="label">'.get_lang('CompanyCity').'</div>
+            <div class="formw">
+                    <input type="text" id="company_city" name="company_city"/>
+            </div>
+    </div>
+    <div class="row">
+            <div class="label">'.get_lang('WhichLanguageWouldYouLikeToUseWhenContactingYou').'</div>
+            <div class="formw">
+                    <select id="language" name="language">
+                            <option value="bulgarian">Български</option>
+                            <option value="indonesian">Bahasa Indonesia</option>
+                            <option value="bosnian">Bosanski</option>
+                            <option value="german">Deutsch</option>
+                            <option value="english">English</option>
+                            <option selected="selected" value="spanish">Español</option>
+                            <option value="french">Français</option>
+                            <option value="italian">Italiano</option>
+                            <option value="hungarian">Magyar</option>
+                            <option value="dutch">Nederlands</option>
+                            <option value="brazilian">Português do Brasil</option>
+                            <option value="portuguese">Português europeu</option>
+                            <option value="slovenian">Slovenščina</option>
+                    </select>
+            </div>
+    </div>
+    <div class="row">
+            <div class="label">&nbsp;</div>
+            <div class="formw"><button type="button" class="save" onclick="javascript:if(!confirm(\''.get_lang("ConfirmYourChoice").'\')) return false;send_contact_information();" value="'.get_lang('SendInformation').'" >'.get_lang('SendInformation').'</button></div>
+    </div>
+
+    </form>
+
+</fieldset>
+</div>
+';
+
+return $html;
+
 }
 
 /**

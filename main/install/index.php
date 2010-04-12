@@ -375,6 +375,38 @@ if ($encryptPassForm == '1') {
 			}
 		}
 	</script>
+        <script language="javascript">
+
+            function send_contact_information() {
+
+                var data_post = "";
+                data_post += "person_name="+$("#person_name").val()+"&";
+                data_post += "company_name="+$("#company_name").val()+"&";
+                data_post += "company_activity="+$("#company_activity option:selected").val()+"&";
+                data_post += "person_role="+$("#person_role option:selected").val()+"&";
+                data_post += "company_country="+$("#company_country").val()+"&";
+                data_post += "company_city="+$("#company_city").val()+"&";
+                data_post += "language="+$("#language option:selected").val()+"&";
+                data_post += "financial_decision="+$("input[@name='financial_decision']:checked").val();               
+
+                $.ajax({
+                        contentType: "application/x-www-form-urlencoded",
+                        beforeSend: function(objeto) {},
+                        type: "POST",
+                        url: "<?php echo api_get_path(WEB_AJAX_PATH) ?>install.ajax.php?a=send_contact_information",
+                        data: data_post,
+                        success: function(datos) {
+                            if (datos == 1) {
+                                message = "<?php echo get_lang('ContactInformationHasBeenSent') ?>";
+                                alert(message);
+                            }
+                         //$("#div_sent_information").html(datos);
+                        }
+		});
+
+            }
+
+        </script>
 	<meta http-equiv="Content-Type" content="text/html; charset=<?php echo api_get_system_encoding(); ?>" />
 </head>
 <body dir="<?php echo api_get_text_direction(); ?>">

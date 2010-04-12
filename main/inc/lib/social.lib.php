@@ -71,8 +71,8 @@ class SocialManager extends UserManager {
 		$sql= 'SELECT rt.id as id FROM '.$tbl_my_friend_relation_type.' rt ' .
 			  'WHERE rt.id=(SELECT uf.relation_type FROM '.$tbl_my_friend.' uf WHERE  user_id='.((int)$user_id).' AND friend_user_id='.((int)$user_friend).' AND uf.relation_type <> '.USER_RELATION_TYPE_RRHH.' )';
 		$res=Database::query($sql);
-		$row=Database::fetch_array($res,'ASSOC');
 		if (Database::num_rows($res)>0) {
+			$row=Database::fetch_array($res,'ASSOC');
 			return $row['id'];
 		} else {
 			return USER_UNKNOW;

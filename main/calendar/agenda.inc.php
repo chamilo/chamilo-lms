@@ -3139,6 +3139,8 @@ function display_upcoming_events()
 	$TABLE_ITEMPROPERTY = Database :: get_course_table(TABLE_ITEM_PROPERTY);
     $mycourse = api_get_course_info();
     $myuser = api_get_user_info();
+    $session_id = api_get_session_id();
+    
 
 	$group_memberships = GroupManager :: get_group_ids($mycourse['dbName'], $myuser['user_id']);
 	// if the user is administrator of that course we show all the agenda items
@@ -3153,6 +3155,7 @@ function display_upcoming_events()
 						AND item_property.tool='".TOOL_CALENDAR_EVENT."'
 						AND item_property.visibility='1'
 						AND agenda.start_date > NOW()
+						AND session_id = '".$session_id."'
 						GROUP BY agenda.id
 						ORDER BY start_date ";
 	}
@@ -3171,6 +3174,7 @@ function display_upcoming_events()
 							AND	( item_property.to_user_id='".$myuser['user_id']."' OR item_property.to_group_id IN (0, ".implode(", ", $group_memberships).") )
 							AND item_property.visibility='1'
 							AND agenda.start_date > NOW()
+							AND session_id = '".$session_id."'
 							ORDER BY start_date ";
 		}
 		else
@@ -3184,6 +3188,7 @@ function display_upcoming_events()
 							AND ( item_property.to_user_id='".$myuser['user_id']."' OR item_property.to_group_id='0')
 							AND item_property.visibility='1'
 							AND agenda.start_date > NOW()
+							AND session_id = '".$session_id."'
 							ORDER BY start_date ";
 		}
 	}

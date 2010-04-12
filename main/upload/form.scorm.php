@@ -91,6 +91,17 @@ else{
 	$text_empty->freeze();
 }*/
 
+if(is_dir(api_get_path(PLUGIN_PATH)."/pens")) {
+	require_once(api_get_path(PLUGIN_PATH)."/pens/chamilo_pens.php");
+	$list = ChamiloPens::findAll();
+	if(count($list) > 0) {
+		$select_pens = $form->addElement('select', 'pens_package', get_lang('Or').' '.get_lang('select a PENS package'));
+		foreach($list as $package) {
+			$select_pens->addOption($package->getPackageName(), $package->getPackageName());
+		}
+	}
+}
+
 $form->add_real_progress_bar('uploadScorm','user_file');
 
 // the rules for the form

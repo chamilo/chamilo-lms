@@ -1108,21 +1108,27 @@ class learnpathItem {
     	if (empty($this->title)) {return '';}
     	return $this->title;
     }
+    
     /**
      * Returns the total time used to see that item
      * @return	integer	Total time
      */
-    function get_total_time(){
-    	if(self::debug>0){error_log('New LP - In learnpathItem::get_total_time()',0);}
-    	if($this->current_start_time == 0){ //shouldn't be necessary thanks to the open() method
+    function get_total_time() {
+    	if (self::debug>0){error_log('New LP - In learnpathItem::get_total_time()',0);}
+    	if ($this->current_start_time == 0){ //shouldn't be necessary thanks to the open() method
     		$this->current_start_time = time();
     	}
     	//$this->current_stop_time=time();
+    	if(time() < $this->current_stop_time){
+	    	// if this case occurs, then we risk to write huge time data in db.
+        	// in theory, stop time should be *always* updated here, but it might be used in some unknown goal
+        	$this->current_stop_time = time();
+    	}
     	$time = $this->current_stop_time - $this->current_start_time;
-    	if($time < 0){
+    	if ($time < 0) {
     		return 0;
-    	}else{
-    	if(self::debug>2){error_log('New LP - In learnpathItem::get_total_time() - Current stop time = '.$this->current_stop_time.', current start time = '.$this->current_start_time.' Returning '.$time,0);}
+    	} else {
+    	if (self::debug>2) {error_log('New LP - In learnpathItem::get_total_time() - Current stop time = '.$this->current_stop_time.', current start time = '.$this->current_start_time.' Returning '.$time,0);}
     		return $time;
     	}
     }

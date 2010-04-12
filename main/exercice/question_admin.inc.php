@@ -80,11 +80,12 @@ if(is_object($objQuestion)) {
 	if(isset($_GET['editQuestion'])) {
 		$class="save";
 		$text=get_lang('ModifyQuestion');
+		$type = Security::remove_XSS($_GET['type']);
 	} else {
 		$class="add";
 		$text=get_lang('AddQuestionToExercise');
+		$type = $_REQUEST['answerType'];
 	}
-	$type = Security::remove_XSS($_GET['type']);
 
 	$types_information = $objQuestion->get_types_information();
 	$form_title_extra = get_lang($types_information[$type][1]);

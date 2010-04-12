@@ -1892,7 +1892,7 @@ class TrackingCourseLog {
 
 				$row[0] = '';
 				if ($row['col6'] != 2) {
-					$row[0] = '<a href="'.$url_tool.'?'.api_get_cidreq().'&'.$obj->id.'">'.api_ucfirst($row['col0']).'</a>';
+					$row[0] = '<a href="'.$url_tool.'?'.api_get_cidreq().'&'.$obj->id.'">'.get_lang('Tool'.api_ucfirst($row['col0'])).'</a>';
 				} else {
 					$row[0] = api_ucfirst($row['col0']);
 				}

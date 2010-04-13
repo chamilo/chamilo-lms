@@ -156,7 +156,8 @@ foreach ($list_course_extra_field as $extra_field) {
 			$checked = (array_key_exists('extra_field_value', $extra_field) && $extra_field['extra_field_value'] == 1)? array('checked'=>'checked'): '';
 			$form->addElement('hidden', '_extra_'.$extra_field['field_variable'], 0);
 			$field_display_text=$extra_field['field_display_text'];
-			$form->addElement('checkbox', 'extra_'.$extra_field['field_variable'],get_lang('SpecialCourse') , get_lang($extra_field['field_default_value']), $checked);
+			$form->addElement('checkbox', 'extra_'.$extra_field['field_variable'],get_lang('SpecialCourse') , get_lang($extra_field['field_default_value']).' '.Display::return_icon('synthese_view.gif',get_lang('AllUsersAreAutomaticallyRegistered')), $checked);
+			
 			break;
 		/* case USER_FIELD_TYPE_SELECT_MULTIPLE:
 		case USER_FIELD_TYPE_DATE:

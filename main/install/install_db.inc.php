@@ -71,10 +71,6 @@ if (!$singleDbForm) {
 }
 Database::query("CREATE DATABASE IF NOT EXISTS `$mysqlMainDb`") or die(Database::error());
 
-if ($mysqlStatsDb == $mysqlMainDb && $mysqlUserDb == $mysqlMainDb) {
-	$singleDbForm = true;
-}
-
 /**
  * CREATING THE STATISTICS DATABASE
  */

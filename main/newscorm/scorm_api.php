@@ -1476,7 +1476,7 @@ function xajax_save_item(lms_lp_id, lms_user_id, lms_view_id, lms_item_id, score
         params += '&core_exit='+lms_item_core_exit;
         if ( olms.lms_lp_type==1) {
           $.ajax({
-            type:"GET",
+            type:"POST",
             data: params,
             url: "lp_ajax_save_item.php",
             dataType: "script",
@@ -1564,7 +1564,7 @@ function xajax_save_item_scorm(lms_lp_id, lms_user_id, lms_view_id, lms_item_id)
         is_interactions='false';
     }
     $.ajax({
-        type:"GET",
+        type:"POST",
         data: params,
         url: "lp_ajax_save_item.php",
         dataType: "script",
@@ -1613,7 +1613,7 @@ function xajax_save_objectives(lms_lp_id,lms_user_id,lms_view_id,lms_item_id,ite
     }
     params += obj_string;
     $.ajax({
-        type: "GET",
+        type: "POST",
         data: params,
         url: "lp_ajax_save_objectives.php",
         dataType: "script",

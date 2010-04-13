@@ -700,7 +700,7 @@ function xajax_save_item(lms_lp_id, lms_user_id, lms_view_id, lms_item_id, score
         }
         */
         $.ajax({
-            type:"GET",
+            type:"POST",
             data: params,
             url: "lp_ajax_save_item.php",
             dataType: "script",
@@ -740,7 +740,7 @@ function xajax_save_objectives(lms_lp_id,lms_user_id,lms_view_id,lms_item_id,ite
         }
         params += obj_string;
         $.ajax({
-            type: "GET",
+            type: "POST",
             data: params,
             url: "lp_ajax_save_objectives.php",
             dataType: "script",
@@ -760,7 +760,7 @@ function xajax_switch_item_details(lms_lp_id,lms_user_id,lms_view_id,lms_item_id
         'next': next_item
     }
     $.ajax({
-        type: "GET",
+        type: "POST",
         data: params,
         url: "lp_ajax_switch_item.php",
         dataType: "script",

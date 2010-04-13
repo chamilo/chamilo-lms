@@ -188,9 +188,9 @@ function save_item($lp_id,$user_id,$view_id,$item_id,$score=-1,$max=-1,$min=-1,$
     //return $objResponse;
 }
 $interactions = array();
-if(isset($_GET['interact'])) {
-	if (is_array($_GET['interact'])) {
-        foreach($_GET['interact'] as $idx=>$interac)
+if(isset($_REQUEST['interact'])) {
+	if (is_array($_REQUEST['interact'])) {
+        foreach($_REQUEST['interact'] as $idx=>$interac)
         {
         	$interactions[$idx] = split(',',substr($interac,1,-1));
             if(!isset($interactions[$idx][7])){ //make sure there are 7 elements
@@ -201,16 +201,16 @@ if(isset($_GET['interact'])) {
 }
 
 echo save_item(
-            $_GET['lid'],
-            $_GET['uid'],
-            $_GET['vid'],
-            $_GET['iid'],
-            $_GET['s'],
-            $_GET['max'],
-            $_GET['min'],
-            $_GET['status'],
-            $_GET['t'],
-            $_GET['suspend'],
-            $_GET['loc'],
+            $_REQUEST['lid'],
+            $_REQUEST['uid'],
+            $_REQUEST['vid'],
+            $_REQUEST['iid'],
+            $_REQUEST['s'],
+            $_REQUEST['max'],
+            $_REQUEST['min'],
+            $_REQUEST['status'],
+            $_REQUEST['t'],
+            $_REQUEST['suspend'],
+            $_REQUEST['loc'],
             $interactions,
-            $_GET['core_exit']);
+            $_REQUEST['core_exit']);

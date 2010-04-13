@@ -227,4 +227,4 @@ function switch_item_details($lp_id,$user_id,$view_id,$current_item,$next_item)
     return $return;
     //return $objResponse;
 }
-echo switch_item_details($_POST['lid'],$_POST['uid'],$_POST['vid'],$_POST['iid'],$_POST['next']);
+echo switch_item_details($_REQUEST['lid'],$_REQUEST['uid'],$_REQUEST['vid'],$_REQUEST['iid'],$_REQUEST['next']);

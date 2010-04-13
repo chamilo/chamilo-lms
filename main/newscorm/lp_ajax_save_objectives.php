@@ -64,9 +64,9 @@ function save_objectives($lp_id,$user_id,$view_id,$item_id,$objectives=array())
     return $return;
 }
 $objectives = array();
-if(isset($_GET['objectives'])) {
-    if (is_array($_GET['objectives'])) {
-        foreach($_GET['objectives'] as $idx=>$ob)
+if(isset($_REQUEST['objectives'])) {
+    if (is_array($_REQUEST['objectives'])) {
+        foreach($_REQUEST['objectives'] as $idx=>$ob)
         {
             $objectives[$idx] = split(',',substr($ob,1,-1));
             if(!isset($objectives[$idx][4])){ //make sure there are 7 elements
@@ -75,4 +75,4 @@ if(isset($_GET['objectives'])) {
         }
     }
 }
-echo save_objectives($_GET['lid'],$_GET['uid'],$_GET['vid'],$_GET['iid'],$objectives);
+echo save_objectives($_REQUEST['lid'],$_REQUEST['uid'],$_REQUEST['vid'],$_REQUEST['iid'],$objectives);

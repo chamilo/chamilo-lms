@@ -165,6 +165,10 @@ $form->addElement('radio', 'email_alert_to_teacher_on_new_user_in_course', null,
 $form->addElement('radio', 'email_alert_to_teacher_on_new_user_in_course', null, get_lang('NewUserEmailAlertDisable'), 0);
 $form -> addElement('html', $linebreak);
 
+$form->addElement('radio', 'email_alert_students_on_new_homework', get_lang('NewHomeworkEmailAlert'), get_lang('NewHomeworkEmailAlertEnable'), 1);
+$form->addElement('radio', 'email_alert_students_on_new_homework', null, get_lang('NewHomeworkEmailAlertDisable'), 0);
+$form->addElement('html', $linebreak);
+
 $form->addElement('radio', 'email_alert_manager_on_new_doc', get_lang('WorkEmailAlert'), get_lang('WorkEmailAlertActivate'), 1);
 $form->addElement('radio', 'email_alert_manager_on_new_doc', null, get_lang('WorkEmailAlertDeactivate'), 0);
 $form -> addElement('html', $linebreak);
@@ -283,6 +287,7 @@ $values['allow_learning_path_theme'] = api_get_course_setting('allow_learning_pa
 $values['allow_user_view_user_list'] = api_get_course_setting('allow_user_view_user_list');
 //Get allow show user list
 $values['display_info_advance_inside_homecourse'] = api_get_course_setting('display_info_advance_inside_homecourse');
+$values['email_alert_students_on_new_homework'] = api_get_course_setting('email_alert_students_on_new_homework');
 
 
 $form->setDefaults($values);
@@ -358,6 +363,11 @@ if ($form->validate() && is_settings_editable()) {
 
 	if ($update_values['display_info_advance_inside_homecourse'] != $values['display_info_advance_inside_homecourse']) {
 		$sql = "UPDATE $table_course_setting SET value = ".(int)$update_values['display_info_advance_inside_homecourse']." WHERE variable = 'display_info_advance_inside_homecourse' ";
+		Database::query($sql);
+	}
+	
+	if ($update_values['email_alert_students_on_new_homework'] != $values['email_alert_students_on_new_homework']) {
+		$sql = "UPDATE $table_course_setting SET value = ".(int)$update_values['email_alert_students_on_new_homework']." WHERE variable = 'email_alert_students_on_new_homework' ";
 		Database::query($sql);
 	}
 

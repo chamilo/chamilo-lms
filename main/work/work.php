@@ -618,6 +618,10 @@ if (!empty($_REQUEST['new_dir'])) {
 			}
 
 			// end features
+			
+			if(api_get_course_setting('email_alert_students_on_new_homework') == 1) {
+				send_email_on_homework_creation(api_get_course_id());
+			}
 
 			// update all the parents in the table item propery
 			$list_id = get_parent_directories($my_cur_dir_path);

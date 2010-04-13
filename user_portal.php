@@ -287,8 +287,7 @@ function display_special_courses ($user_id) {
 			$number_of_courses = Database::num_rows($rs_special_course);
 			$key = 0;
 			$status_icon = '';
-			if ($number_of_courses > 0) {
-				echo "<table width=\"100%\">";
+			if ($number_of_courses > 0) {			
 				while ($course = Database::fetch_array($rs_special_course)) {
 
 					// get notifications
@@ -302,13 +301,27 @@ function display_special_courses ($user_id) {
 					if (empty($course['user_id'])) {
 						$course['status'] = $user_info['status'];
 					}
-
+					
+					$status_icon = Display::return_icon('blackboard.png', get_lang('Course'), array('width'=>'48px'));
+					/*
 					if ($course['status'] == 1) {
 						$status_icon=Display::return_icon('course.gif', get_lang('Course')).' '.Display::return_icon('teachers.gif', get_lang('Status').': '.get_lang('Teacher'),array('style'=>'width:11px; height:11px;'));
 					}
 					if (($course['status'] == 5 && !api_is_coach()) || empty($course['status'])) {
 						$status_icon=Display::return_icon('course.gif', get_lang('Course')).' '.Display::return_icon('students.gif', get_lang('Status').': '.get_lang('Student'),array('style'=>'width:11px; height:11px'));
+					}*/
+					
+					echo '<div class="userportal-course-item">';	
+		
+					if (api_is_platform_admin()) {
+						echo   '<div style="float:right;"><a href="'.api_get_path(WEB_CODE_PATH).'course_info/infocours.php?cidReq='.$course['code'].'">'.Display::return_icon('edit.gif', get_lang('Edit'), array('align' => 'absmiddle')).'</a>';
+						if ($course['status'] == COURSEMANAGER) {
+							//echo Display::return_icon('teachers.gif', get_lang('Status').': '.get_lang('Teacher'),array('style'=>'width:11px; height:11px;'));
+						}
+						echo '</div>';
 					}
+								
+					
 					
 					/*
 					if (api_is_allowed_to_edit(null, true)) {
@@ -318,8 +331,8 @@ function display_special_courses ($user_id) {
 					}
 					*/
 					
-					echo "\t<tr>\n";
-					echo "\t\t<td>\n";
+					//echo "\t<tr>\n";
+					//echo "\t\t<td>\n";
 
 					//show a hyperlink to the course, unless the course is closed and user is not course admin
 					//$course_access_settings = CourseManager :: get_access_settings($course['code']);
@@ -338,6 +351,11 @@ function display_special_courses ($user_id) {
 					if (api_get_setting('display_coursecode_in_courselist') == 'true' && api_get_setting('display_teacher_in_courselist') == 'true') {
 						echo " - ";
 					}
+					
+					if ($course['status'] == COURSEMANAGER) {
+						//echo Display::return_icon('teachers.gif', get_lang('Status').': '.get_lang('Teacher'), array('style'=>'width:16px; height:16px; padding-right:5px;'));
+					}
+						
 					if (api_get_setting('display_teacher_in_courselist') == 'true') {
 						echo $course['tutor'];
 					}
@@ -346,12 +364,9 @@ function display_special_courses ($user_id) {
 
 					// show notifications
 					echo $show_notification;
-
-					echo "\t\t</td>\n";
-					echo "\t</tr>\n";
+					echo '</div>';
 					$key++;
 				}
-				echo "</table>";
 			}
 		}
 }

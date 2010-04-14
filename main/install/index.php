@@ -412,7 +412,7 @@ if ($encryptPassForm == '1') {
                             } else if (datos == '1') {
                             	message = "<?php echo get_lang('ContactInformationHasBeenSent') ?>";
                             } else {
-                            	message = "<?php echo get_lang('Error').': '.get_lang('ContactInformationHasNoteenSent') ?>";
+                            	message = "<?php echo get_lang('Error').': '.get_lang('ContactInformationHasNotBeenSent') ?>";
                             }
                             alert(message);                                                                                
                         }

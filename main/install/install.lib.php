@@ -1336,7 +1336,16 @@ function display_license_agreement() {
                 <tr><td><p><?php echo get_lang('DokeosArtLicense'); ?></p></td></tr>
                 <tr>
 		<td>
-                <?php echo get_contact_registration_form() ?><br />
+                    <div>
+                        <div class="formw">
+                            <a href="javascript://" class = "advanced_parameters" >
+                                <span id="img_plus_and_minus">&nbsp;<img src="<?php echo api_get_path(WEB_IMG_PATH) ?>div_show.gif" alt="<?php echo get_lang('Show') ?>" title="<?php echo get_lang('Show')?>" style ="vertical-align:middle" >&nbsp;<?php echo get_lang('ContactInformation') ?></span>
+                            </a>
+                        </div>
+                    </div>
+                    <div id="id_contact_form" style="display:none">
+                        <p><?php echo get_contact_registration_form() ?></p><br />
+                    </div>
                 </td>
                 </tr>                                
                 <tr>
@@ -1364,24 +1373,23 @@ function get_contact_registration_form() {
 
     $html ='
     <div>
-    <fieldset style="width:90%;padding:15px;border:1pt solid #eee">
-    <legend><strong>'.get_lang('ContactInformation').'</strong></legend>
+    <fieldset style="width:90%;padding:15px;border:1pt solid #eee">    
     <div id="div_sent_information"></div>
     <div><p>'.get_lang('ContactInformationDescription').'</p></div>
     <form>
     <div class="row">
-            <div class="label">'.get_lang('PersonName').'</div>
-            <div class="formw"><input id="person_name" type="text" name="person_name" /></div>
+            <div class="label"><span class="form_required">*</span>'.get_lang('PersonName').'</div>
+            <div class="formw"><input id="person_name" type="text" name="person_name" size="30" /></div>
     </div>
     <div class="row">
-            <div class="label">'.get_lang('CompanyName').'</div>
-            <div class="formw"><input id="company_name" type="text" name="company_name" /></div>
+            <div class="label"><span class="form_required">*</span>'.get_lang('CompanyName').'</div>
+            <div class="formw"><input id="company_name" type="text" name="company_name" size="30" /></div>
     </div>
     <div class="row">
-            <div class="label">'.get_lang('CompanyActivity').'</div>
+            <div class="label"><span class="form_required">*</span>'.get_lang('CompanyActivity').'</div>
             <div class="formw">
                     <select name="company_activity" id="company_activity" >
-                            <Option value="" Selected="True">--- '.get_lang('SelectOne').' ---</Option>
+                            <option value="">--- '.get_lang('SelectOne').' ---</option>
                             <Option value="Advertising/Marketing/PR">Advertising/Marketing/PR</Option><Option value="Agriculture/Forestry">Agriculture/Forestry</Option>
                             <Option value="Architecture">Architecture</Option><Option value="Banking/Finance">Banking/Finance</Option>
                             <Option value="Biotech/Pharmaceuticals">Biotech/Pharmaceuticals</Option><Option value="Business Equipment">Business Equipment</Option>
@@ -1392,19 +1400,20 @@ function get_contact_registration_form() {
                             <Option value="Hospitality/Lodging/Travel">Hospitality/Lodging/Travel</Option><Option value="Insurance">Insurance</Option>
                             <Option value="Legal">Legal</Option><Option value="Manufacturing">Manufacturing</Option>
                             <Option value="Media/Entertainment">Media/Entertainment</Option><Option value="Mortgage">Mortgage</Option>
-                            <Option value="Non-Profit">Non-Profit</Option><Option value="Other">Other</Option>
-                            <Option value="Real Estate">Real Estate</Option><Option value="Restaurant">Restaurant</Option>
-                            <Option value="Retail">Retail</Option><Option value="Shipping/Transportation">Shipping/Transportation</Option>
+                            <Option value="Non-Profit">Non-Profit</Option><Option value="Real Estate">Real Estate</Option>
+                            <Option value="Restaurant">Restaurant</Option><Option value="Retail">Retail</Option>
+                            <Option value="Shipping/Transportation">Shipping/Transportation</Option>
                             <Option value="Technology">Technology</Option><Option value="Telecommunications">Telecommunications</Option>
+                            <Option value="Other">Other</Option>
                     </Select>
             </div>
     </div>
 
     <div class="row">
-            <div class="label">'.get_lang('PersonRole').'</div>
+            <div class="label"><span class="form_required">*</span>'.get_lang('PersonRole').'</div>
             <div class="formw">
                     <Select name="person_role" id="person_role" >
-                            <Option value="" Selected="True">--- '.get_lang('SelectOne').' ---</Option>
+                            <option value="">--- '.get_lang('SelectOne').' ---</option>
                             <Option value="Administration">Administration</Option><Option value="CEO/President/ Owner">CEO/President/ Owner</Option>
                             <Option value="CFO">CFO</Option><Option value="CIO/CTO">CIO/CTO</Option>
                             <Option value="Consultant">Consultant</Option><Option value="Customer Service">Customer Service</Option>
@@ -1422,20 +1431,20 @@ function get_contact_registration_form() {
     <div class="row">
             <div class="label">'.get_lang('HaveYouThePowerToTakeFinancialDecisions').'</div>
             <div class="formw">
-                    <input type="radio" name="financial_decision" id="financial_decision1" value="yes">'.get_lang('Yes').'
-                    <input type="radio" name="financial_decision" id="financial_decision2" value="no">'.get_lang('No').'
+                    <input type="radio" name="financial_decision" id="financial_decision1" value="1" checked>'.get_lang('Yes').'
+                    <input type="radio" name="financial_decision" id="financial_decision2" value="0">'.get_lang('No').'
             </div>
     </div>
     <div class="row">
-            <div class="label">'.get_lang('CompanyCountry').'</div>
+            <div class="label"><span class="form_required">*</span>'.get_lang('CompanyCountry').'</div>
             <div class="formw">
-                    <input type="text" id="company_country" name="company_country"/>
+                    '.get_countries_list_from_array(true).'
             </div>
     </div>
     <div class="row">
             <div class="label">'.get_lang('CompanyCity').'</div>
             <div class="formw">
-                    <input type="text" id="company_city" name="company_city"/>
+                    <input type="text" id="company_city" name="company_city" size="30" />
             </div>
     </div>
     <div class="row">
@@ -1446,10 +1455,10 @@ function get_contact_registration_form() {
                             <option value="indonesian">Bahasa Indonesia</option>
                             <option value="bosnian">Bosanski</option>
                             <option value="german">Deutsch</option>
-                            <option value="english">English</option>
-                            <option selected="selected" value="spanish">Español</option>
+                            <option selected="selected" value="english">English</option>
+                            <option value="spanish">Spanish</option>
                             <option value="french">Français</option>
-                            <option value="italian">Italiano</option>
+                            <option value="italian">Italian</option>
                             <option value="hungarian">Magyar</option>
                             <option value="dutch">Nederlands</option>
                             <option value="brazilian">Português do Brasil</option>
@@ -1460,9 +1469,13 @@ function get_contact_registration_form() {
     </div>
     <div class="row">
             <div class="label">&nbsp;</div>
-            <div class="formw"><button type="button" class="save" onclick="javascript:if(!confirm(\''.get_lang("ConfirmYourChoice").'\')) return false;send_contact_information();" value="'.get_lang('SendInformation').'" >'.get_lang('SendInformation').'</button></div>
+            <div class="formw"><button type="button" class="save" onclick="javascript:send_contact_information();" value="'.get_lang('SendInformation').'" >'.get_lang('SendInformation').'</button></div>
     </div>
-
+	<div class="row">
+            <div class="label">&nbsp;</div>
+            <div class="formw"><span class="form_required">*</span><small>'.get_lang('FieldRequired').'</small></div>
+    </div>
+	
     </form>
 
 </fieldset>
@@ -1769,7 +1782,7 @@ function display_configuration_settings_form($installType, $urlForm, $languageFo
 
 	//Parameter 11: institute (short) name
 	display_configuration_parameter($installType, get_lang('InstituteURL'), 'institutionUrlForm', $institutionUrlForm);
-
+ 
 	/*
 	 //old method
 	  	<tr>
@@ -1858,4 +1871,52 @@ function display_after_install_message($installType, $nbr_courses) {
 	</form>
 	<a class="portal" href="../../index.php"><?php echo get_lang('GoToYourNewlyCreatedPortal'); ?></a>
 	<?php
+}
+
+/**
+ * This function return countries list from array (hardcoded)
+ * @param   bool    (Optional) True for returning countries list with select html
+ * @return  array|string countries list
+ */
+function get_countries_list_from_array($combo = false) {
+
+    $a_countries = array(
+		"Afghanistan", "Albania", "Algeria", "Andorra", "Angola", "Antigua and Barbuda", "Argentina", "Armenia", "Australia", "Austria", "Azerbaijan",
+		"Bahamas", "Bahrain", "Bangladesh", "Barbados", "Belarus", "Belgium", "Belize", "Benin", "Bhutan", "Bolivia", "Bosnia and Herzegovina", "Botswana", "Brazil", "Brunei", "Bulgaria", "Burkina Faso", "Burundi",
+		"Cambodia", "Cameroon", "Canada", "Cape Verde", "Central African Republic", "Chad", "Chile", "China", "Colombi", "Comoros", "Congo (Brazzaville)", "Congo", "Costa Rica", "Cote d'Ivoire", "Croatia", "Cuba", "Cyprus", "Czech Republic",
+		"Denmark", "Djibouti", "Dominica", "Dominican Republic",
+		"East Timor (Timor Timur)", "Ecuador", "Egypt", "El Salvador", "Equatorial Guinea", "Eritrea", "Estonia", "Ethiopia",
+		"Fiji", "Finland", "France",
+		"Gabon", "Gambia, The", "Georgia", "Germany", "Ghana", "Greece", "Grenada", "Guatemala", "Guinea", "Guinea-Bissau", "Guyana",
+		"Haiti", "Honduras", "Hungary",
+		"Iceland", "India", "Indonesia", "Iran", "Iraq", "Ireland", "Israel", "Italy",
+		"Jamaica", "Japan", "Jordan",
+		"Kazakhstan", "Kenya", "Kiribati", "Korea, North", "Korea, South", "Kuwait", "Kyrgyzstan",
+		"Laos", "Latvia", "Lebanon", "Lesotho", "Liberia", "Libya", "Liechtenstein", "Lithuania", "Luxembourg",
+		"Macedonia", "Madagascar", "Malawi", "Malaysia", "Maldives", "Mali", "Malta", "Marshall Islands", "Mauritania", "Mauritius", "Mexico", "Micronesia", "Moldova", "Monaco", "Mongolia", "Morocco", "Mozambique", "Myanmar",
+		"Namibia", "Nauru", "Nepa", "Netherlands", "New Zealand", "Nicaragua", "Niger", "Nigeria", "Norway",
+		"Oman",
+		"Pakistan", "Palau", "Panama", "Papua New Guinea", "Paraguay", "Peru", "Philippines", "Poland","Portugal",
+		"Qatar",
+		"Romania", "Russia", "Rwanda",
+		"Saint Kitts and Nevis", "Saint Lucia", "Saint Vincent", "Samoa", "San Marino", "Sao Tome and Principe", "Saudi Arabia", "Senegal", "Serbia and Montenegro", "Seychelles", "Sierra Leone", "Singapore", "Slovakia", "Slovenia", "Solomon Islands", "Somalia", "South Africa", "Spain", "Sri Lanka", "Sudan", "Suriname", "Swaziland", "Sweden", "Switzerland", "Syria",
+		"Taiwan", "Tajikistan", "Tanzania", "Thailand", "Togo", "Tonga", "Trinidad and Tobago", "Tunisia", "Turkey", "Turkmenistan", "Tuvalu",
+		"Uganda", "Ukraine", "United Arab Emirates", "United Kingdom", "United States", "Uruguay", "Uzbekistan",
+		"Vanuatu", "Vatican City", "Venezuela", "Vietnam",
+		"Yemen",
+		"Zambia", "Zimbabwe"
+	);
+
+    $country_select = '';
+    if ($combo) {
+        $country_select = '<select id="country" name="country">';
+        $country_select .= '<option value="">--- '.get_lang('SelectOne').' ---</option>';
+        foreach ($a_countries as $country) {
+            $country_select .= '<option value="'.$country.'">'.$country.'</option>';
+        }
+        $country_select .= '</select>';
+        return $country_select;
+    }
+
+    return $a_countries;    
 }

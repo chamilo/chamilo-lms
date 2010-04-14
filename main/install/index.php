@@ -377,17 +377,28 @@ if ($encryptPassForm == '1') {
 	</script>
         <script language="javascript">
 
-            function send_contact_information() {
+            $(document).ready( function() {
+                $(".advanced_parameters").click(function() {
+                    if ($("#id_contact_form").css("display") == "none") {
+                            $("#id_contact_form").css("display","block");
+                            $("#img_plus_and_minus").html('&nbsp;<img src="<?php echo api_get_path(WEB_IMG_PATH) ?>div_hide.gif" alt="<?php echo get_lang('Hide') ?>" title="<?php echo get_lang('Hide')?>" style ="vertical-align:middle" >&nbsp;<?php echo get_lang('ContactInformation') ?>');
+                    } else {
+                            $("#id_contact_form").css("display","none");
+                            $("#img_plus_and_minus").html('&nbsp;<img src="<?php echo api_get_path(WEB_IMG_PATH) ?>div_show.gif" alt="<?php echo get_lang('Show') ?>" title="<?php echo get_lang('Show') ?>" style ="vertical-align:middle" >&nbsp;<?php echo get_lang('ContactInformation') ?>');
+                    }
+                });                
+            });
 
+            function send_contact_information() {
                 var data_post = "";
                 data_post += "person_name="+$("#person_name").val()+"&";
                 data_post += "company_name="+$("#company_name").val()+"&";
                 data_post += "company_activity="+$("#company_activity option:selected").val()+"&";
                 data_post += "person_role="+$("#person_role option:selected").val()+"&";
-                data_post += "company_country="+$("#company_country").val()+"&";
+                data_post += "company_country="+$("#country option:selected").val()+"&";
                 data_post += "company_city="+$("#company_city").val()+"&";
                 data_post += "language="+$("#language option:selected").val()+"&";
-                data_post += "financial_decision="+$("input[@name='financial_decision']:checked").val();               
+                data_post += "financial_decision="+$("input[@name='financial_decision']:checked").val();
 
                 $.ajax({
                         contentType: "application/x-www-form-urlencoded",
@@ -396,14 +407,16 @@ if ($encryptPassForm == '1') {
                         url: "<?php echo api_get_path(WEB_AJAX_PATH) ?>install.ajax.php?a=send_contact_information",
                         data: data_post,
                         success: function(datos) {
-                            if (datos == 1) {
-                                message = "<?php echo get_lang('ContactInformationHasBeenSent') ?>";
-                                alert(message);
+                            if (datos == 'required_field_error') {
+                                message = "<?php echo get_lang('FormHasErrorsPleaseComplete') ?>";                                
+                            } else if (datos == '1') {
+                            	message = "<?php echo get_lang('ContactInformationHasBeenSent') ?>";
+                            } else {
+                            	message = "<?php echo get_lang('Error').': '.get_lang('ContactInformationHasNoteenSent') ?>";
                             }
-                         //$("#div_sent_information").html(datos);
+                            alert(message);                                                                                
                         }
-		});
-
+                });
             }
 
         </script>

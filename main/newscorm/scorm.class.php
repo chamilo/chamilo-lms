@@ -645,11 +645,13 @@ class scorm extends learnpath {
 		if($package_type== '')
 		 // && defined('CHECK_FOR_SCORM') && CHECK_FOR_SCORM)
 		{
+			if($this->debug>1){error_log('New LP - Package type is empty',0);}
 			return api_failure::set_failure('not_scorm_content');
 		}
 
 		if (! enough_size($realFileSize, $course_sys_dir, $maxFilledSpace) )
-		{
+		{ 
+			if($this->debug>1){error_log('New LP - Not enough space to store package',0);}
 			return api_failure::set_failure('not_enough_space');
 		}
 
@@ -742,6 +744,7 @@ class scorm extends learnpath {
 				chdir($saved_dir);
 
 				api_chmod_R($course_sys_dir.$new_dir, api_get_permissions_for_new_directories());
+				if($this->debug>1){error_log('New LP - changed back to init dir',0);}
 			}
 		} else {
 			return '';

@@ -54,6 +54,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'
 			require_once('scorm.class.php');
 			$oScorm = new scorm();
 			$manifest = $oScorm->import_package($_FILES['user_file'],$current_dir);
+			if ($manifest == false ) { //if api_set_failure
+				return api_failure::set_failure(api_failure::get_last_failure());
+			}
 			if(!empty($manifest)){
 				$oScorm->parse_manifest($manifest);
 				$oScorm->import_manifest(api_get_course_id());
@@ -128,6 +131,9 @@ elseif($_SERVER['REQUEST_METHOD'] == 'POST')
 			require_once('scorm.class.php');
 			$oScorm = new scorm();
 			$manifest = $oScorm->import_local_package($s,$current_dir);
+			if ($manifest === false ) { //if api_set_failure
+				return api_failure::set_failure(api_failure::get_last_failure());
+			}
 			if(!empty($manifest)){
 				$oScorm->parse_manifest($manifest);
 				$oScorm->import_manifest(api_get_course_id());

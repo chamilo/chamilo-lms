@@ -14,16 +14,21 @@ require('../newscorm/lp_upload.php');
 //reinit current working directory as many functions in upload change it
 chdir($cwdir);
 $error = api_failure::get_last_failure();
-if($error=='not_a_learning_path')
-{
+if ($error=='not_a_learning_path') {
         $msg = urlencode(get_lang('ScormUnknownPackageFormat'));
-		$dialogtype = 'error';
-}else{
+	$dialogtype = 'error';
+} elseif ($error == 'not_enough_space') {
+        $msg = urlencode(get_lang('ScormNotEnoughSpaceInCourseToInstallPackage'));
+	$dialogtype = 'error';
+} elseif ($error == 'not_scorm_content') {
+        $msg = urlencode(get_lang('ScormPackageFormatNotScorm'));
+	$dialogtype = 'error';
+} else {
 	if (api_get_setting('search_enabled')=='true') {
-        require_once(api_get_path(LIBRARY_PATH) . 'specific_fields_manager.lib.php');
-    	$specific_fields = get_specific_field_list();
+          require_once(api_get_path(LIBRARY_PATH) . 'specific_fields_manager.lib.php');
+    	  $specific_fields = get_specific_field_list();
 
-    	foreach ($specific_fields as $specific_field) {
+    	  foreach ($specific_fields as $specific_field) {
     		$values = explode(',', trim($_POST[$specific_field['code']]));
     		if ( !empty($values) ) {
     			foreach ($values as $value) {

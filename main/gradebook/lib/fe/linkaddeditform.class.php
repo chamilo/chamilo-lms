@@ -59,8 +59,9 @@ class LinkAddEditForm extends FormValidator
 				$select = $this->addElement('select',
 											'select_link',
 											get_lang('ChooseItem'));
-				foreach ($link->get_all_links() as $newlink)
+				foreach ($link->get_all_links() as $newlink) {
 					$select->addoption($newlink[1],$newlink[0]);
+				}
 			}
 		} else {
 			$this->addElement('static',

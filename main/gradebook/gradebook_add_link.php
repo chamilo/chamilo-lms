@@ -24,7 +24,8 @@ $typeform = new LinkForm(LinkForm :: TYPE_CREATE,
 						null,
 						api_get_self() . '?selectcat=' . Security::remove_XSS($_GET['selectcat'])
 						. '&newtypeselected=' . (isset($_GET['typeselected']) ? Security::remove_XSS($_GET['typeselected']) : '')
-						. '&course_code=' . (empty($_GET['course_code'])?'':Security::remove_XSS($_GET['course_code'])))
+						. '&course_code=' . (empty($_GET['course_code'])?'':Security::remove_XSS($_GET['course_code'])),
+						$_GET['typeselected'])
 						;
 
 // if user selected a link type

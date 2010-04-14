@@ -59,6 +59,8 @@ UPDATE gradebook_result SET created_at = FROM_UNIXTIME(date);
 ALTER TABLE gradebook_result DROP date;
 
 ALTER TABLE gradebook_result_log CHANGE date_log created_at DATETIME NOT NULL default '0000-00-00 00:00:00';
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('gradebook_number_decimals', NULL, 'select', 'Gradebook', '0', 'GradebookNumberDecimals', 'GradebookNumberDecimalsComment', NULL, NULL, 0);
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('gradebook_score_display_custom_values', NULL, 'gradebook_score_display_custom', 'Gradebook', '0', 'GradebookScoreDisplayCustomValues', 'GradebookScoreDisplayCustomValuesComment', NULL, NULL, 0);
 
 INSERT INTO user_field(field_type, field_variable, field_display_text, field_visible, field_changeable) VALUES(11, 'timezone', 'Timezone', 0, 0);
 

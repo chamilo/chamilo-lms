@@ -874,3 +874,38 @@ function delete_template($id)
 function select_timezone_value() {
 	return api_get_timezones();
 }
+
+/**
+ * Returns an array containing the list of options used to populate the gradebook_number_decimals variable
+ * 
+ * @return array List of gradebook_number_decimals options
+ * 
+ * @author Guillaume Viguier <guillaume.viguier@beeznest.com>
+ */
+function select_gradebook_number_decimals() {
+	return array('0', '1', '2');
+}
+
+/**
+ * Updates the gradebook score custom values using the scoredisplay class of the
+ * gradebook module
+ * 
+ * @param array List of gradebook score custom values
+ * 
+ * @author Guillaume Viguier <guillaume.viguier@beeznest.com>
+ */
+function update_gradebook_score_display_custom_values($values) {
+	require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/scoredisplay.class.php';
+	$scoredisplay = ScoreDisplay::instance();
+	$scores = $values['gradebook_score_display_custom_values_endscore'];
+	$displays = $values['gradebook_score_display_custom_values_displaytext'];
+	$nr_displays = count($displays);
+	$final = array();
+	for($i = 1; $i < $nr_displays; $i++) {
+		if(!empty($scores[$i]) && !empty($displays[$i])) {
+			$final[$i]['score'] = $scores[$i];
+			$final[$i]['display'] = $displays[$i];
+		}
+	}
+	$scoredisplay->update_custom_score_display_settings($final);
+}

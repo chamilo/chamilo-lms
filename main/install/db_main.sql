@@ -687,6 +687,8 @@ VALUES
 ('gradebook_score_display_custom','my_display_custom','checkbox','Gradebook','false','GradebookScoreDisplayCustom','GradebookScoreDisplayCustomComment',NULL,'TabsGradebookEnableCustom', 0),
 ('gradebook_score_display_colorsplit',NULL,'textfield','Gradebook','50','GradebookScoreDisplayColorSplit','GradebookScoreDisplayColorSplitComment',NULL,NULL, 0),
 ('gradebook_score_display_upperlimit','my_display_upperlimit','checkbox','Gradebook','false','GradebookScoreDisplayUpperLimit','GradebookScoreDisplayUpperLimitComment',NULL,'TabsGradebookEnableUpperLimit', 0),
+('gradebook_number_decimals', NULL, 'select', 'Gradebook', '0', 'GradebookNumberDecimals', 'GradebookNumberDecimalsComment', NULL, NULL, 0),
+('gradebook_score_display_custom_values', NULL, 'gradebook_score_display_custom', 'Gradebook', '0', 'GradebookScoreDisplayCustomValues', 'GradebookScoreDisplayCustomValuesComment', NULL, NULL, 0),
 ('user_selected_theme',NULL,'radio','Platform','false','UserThemeSelection','UserThemeSelectionComment',NULL,NULL, 0),
 ('profile','theme','checkbox','User','false','ProfileChangesTitle','ProfileChangesComment',NULL,'UserTheme', 0),
 ('allow_course_theme',NULL,'radio','Course','true','AllowCourseThemeTitle','AllowCourseThemeComment',NULL,NULL, 0),
@@ -1123,6 +1125,8 @@ CREATE TABLE gradebook_category (
   weight smallint NOT NULL,
   visible tinyint NOT NULL,
   certif_min_score int DEFAULT NULL,
+  session_id int DEFAULT NULL,
+  document_id int unsigned DEFAULT NULL,
   PRIMARY KEY  (id)
 );
 DROP TABLE IF EXISTS gradebook_evaluation;
@@ -1204,8 +1208,6 @@ CREATE TABLE user_field_values(
 );
 
 ALTER TABLE user_field_values ADD INDEX (user_id, field_id);
-
-ALTER TABLE gradebook_category ADD session_id int DEFAULT NULL;
 
 DROP TABLE IF EXISTS gradebook_result_log;
 CREATE TABLE gradebook_result_log (
@@ -2273,7 +2275,6 @@ CREATE TABLE gradebook_certificate (
 ALTER TABLE gradebook_certificate ADD INDEX idx_gradebook_certificate_category_id(cat_id);
 ALTER TABLE gradebook_certificate ADD INDEX idx_gradebook_certificate_user_id(user_id);
 ALTER TABLE gradebook_certificate ADD INDEX idx_gradebook_certificate_category_id_user_id(cat_id,user_id);
-ALTER TABLE gradebook_category ADD COLUMN document_id int unsigned default NULL;
 
 
 

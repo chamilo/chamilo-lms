@@ -212,7 +212,7 @@ if($is_allowedToEdit)
 	?>
 	<input type="hidden" name="fromExercise" value="<?php echo $fromExercise; ?>">
 
-	<?php echo get_lang('Filter'); ?> :
+	<?php echo get_lang('Exercice'); ?> :
 	<select name="exerciseId">
 	<option value="0"><?php echo get_lang('AllExercises'); ?></option>
 	<option value="-1" <?php if($exerciseId == -1) echo 'selected="selected"'; ?>><?php echo get_lang('OrphanQuestions'); ?></option>
@@ -275,7 +275,7 @@ if($is_allowedToEdit)
 		echo '</select> ';
 	?>
 
-	<button class="save" type="submit" name="name" value="<?php echo get_lang('Ok') ?>"><?php echo get_lang('Ok') ?></button>
+	<button class="save" type="submit" name="name" value="<?php echo get_lang('Ok') ?>"><?php echo get_lang('Filter') ?></button>
 	<?php
 	echo '<a href="admin.php?',api_get_cidreq(),'&exerciseId=',$fromExercise,'">'.Display::return_icon('message_reply_forum.png', get_lang('GoBackToQuestionList')),get_lang('GoBackToQuestionList'),'</a>';
 	/*if(!empty($fromExercise)) {
@@ -354,7 +354,7 @@ if($is_allowedToEdit)
 			$answer_where = ' questions.type='.$answerType.' AND ';
 		}
 
-		$sql='SELECT questions.id, questions.question, questions.type, quizz_questions.exercice_id , level
+		$sql='SELECT questions.id, questions.question, questions.type, quizz_questions.exercice_id , level, session_id
 				FROM '.$TBL_QUESTIONS.' as questions LEFT JOIN '.$TBL_EXERCICE_QUESTION.' as quizz_questions
 				ON questions.id=quizz_questions.question_id LEFT JOIN '.$TBL_EXERCICES.' as exercices
 				ON exercice_id=exercices.id
@@ -365,29 +365,22 @@ if($is_allowedToEdit)
 		// if we have not selected any option in the list-box 'Filter'
 
 		//$sql="SELECT id,question,type FROM $TBL_QUESTIONS LIMIT $from, ".($limitQuestPage + 1);
-		$where = '';
+		$filter = '';
 
-		if (isset($type)&& $type==1){
-			$where = ' WHERE type = 1 ';
+		if (isset($type) && $type==1){
+			$filter  .= ' AND qu.type = 1 ';
 		}
 
 
 		if (isset($exerciseLevel) && $exerciseLevel != -1) {
-			if (strlen($where)>0)
-				$where .= ' AND level='.$exerciseLevel.' ';
-			else
-				$where = ' WHERE level='.$exerciseLevel.' ';
+			$filter .= ' AND level='.$exerciseLevel.' ';
 		}
 
 		if (isset($answerType) && $answerType != -1) {
-			if (strlen($where)>0)
-				$where .= ' AND type='.$answerType.' ';
-			else
-				$where = ' WHERE type='.$answerType.' ';
+			$filter .= ' AND qu.type='.$answerType.' ';
 		}
 
-		$sql="SELECT id,question,type,level FROM $TBL_QUESTIONS $where ";
-
+		$sql="SELECT qu.id, question, qu.type, level, q.session_id FROM $TBL_QUESTIONS as qu, $TBL_EXERCICE_QUESTION as qt, $TBL_EXERCICES as q WHERE q.id=qt.exercice_id AND qu.id=qt.question_id AND qt.exercice_id<>".$fromExercise." $filter ORDER BY session_id ASC";
 		// forces the value to 0
 		//echo $sql;
 		$exerciseId=0;
@@ -437,6 +430,7 @@ if($is_allowedToEdit)
 	echo '<pre>';
 
 	echo '</pre>';
+	$session_id  = api_get_session_id();
 	while ($row = Database::fetch_array($result)) {
 		// if we come from the exercise administration to get a question,
         // don't show the questions already used by that exercise
@@ -464,10 +458,12 @@ if($is_allowedToEdit)
                 //echo $row['level'],'</td>',
 //					'<td><a href="',api_get_self(),'?',api_get_cidreq(),'&recup=',$row['id'],'&fromExercise=',$fromExercise,'"><img src="../img/view_more_stats.gif" border="0" alt="',get_lang('Reuse'),'"></a>';
 				echo $row['level'],'</td>',
-					'<td align="center"><a href="',api_get_self(),'?',api_get_cidreq(),'&recup=',$row['id'],'&fromExercise=',$fromExercise,'">' .
-							'<img src="../img/view_more_stats.gif" border="0" title="'.get_lang('Reuse').'" alt="'.get_lang('Reuse').'"></a>';
+							'<td align="center"><a href="',api_get_self(),'?',api_get_cidreq(),'&recup=',$row['id'],'&fromExercise=',$fromExercise,'">';
+				if ($row['session_id'] == $session_id){
+					echo '<img src="../img/view_more_stats.gif" border="0" title="'.get_lang('Reuse').'" alt="'.get_lang('Reuse').'"></a>';
+				}
 							
-					echo ' <a href="',api_get_self(),'?',api_get_cidreq(),'&copy_question=',$row['id'],'&fromExercise=',$fromExercise,'">' .
+				echo ' <a href="',api_get_self(),'?',api_get_cidreq(),'&copy_question=',$row['id'],'&fromExercise=',$fromExercise,'">' .
 							'<img src="../img/cd.gif" border="0" title="'.get_lang('ReUseACopyInCurrentTest').'" alt="'.get_lang('ReUseACopyInCurrentTest').'"></a>';
 			}
             echo '</td>';

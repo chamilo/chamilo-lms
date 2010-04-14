@@ -44,9 +44,12 @@ $form->addElement('static','','<script src="'.api_get_path(WEB_LIBRARY_PATH).'ja
 							<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.customselect.js" type="text/javascript"></script>');
 $form->addElement('static','select_question_type', get_lang('QuestionType'),'<div id="questiontypes"></div>');
 
+//session id
+$session_id  = api_get_session_id();
+
 // the exercices
 $tbl_exercices = Database :: get_course_table(TABLE_QUIZ_TEST);
-$sql = "SELECT id,title,type,description, results_disabled FROM $tbl_exercices WHERE active<>'-1' ORDER BY title ASC";
+$sql = "SELECT id,title,type,description, results_disabled FROM $tbl_exercices WHERE active<>'-1' AND session_id=".$session_id." ORDER BY title ASC";
 $result = Database::query($sql);
 $exercises['-'] = '-'.get_lang('SelectExercice').'-';
 while ($row = Database :: fetch_array($result)) {

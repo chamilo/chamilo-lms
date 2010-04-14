@@ -11,7 +11,7 @@ require_once 'Forum.class.php';
 require_once 'ForumTopic.class.php';
 require_once 'ForumPost.class.php';
 require_once 'CourseDescription.class.php';
-require_once 'Learnpath.class.php';
+require_once 'CourseCopyLearnpath.class.php';
 require_once 'Survey.class.php';
 require_once 'SurveyQuestion.class.php';
 //require_once 'mkdirr.php';

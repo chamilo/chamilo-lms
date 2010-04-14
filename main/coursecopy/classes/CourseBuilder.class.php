@@ -15,7 +15,7 @@ require_once 'Forum.class.php';
 require_once 'ForumCategory.class.php';
 require_once 'Quiz.class.php';
 require_once 'QuizQuestion.class.php';
-require_once 'Learnpath.class.php';
+require_once 'CourseCopyLearnpath.class.php';
 require_once 'Survey.class.php';
 require_once 'SurveyQuestion.class.php';
 require_once 'Glossary.class.php';
@@ -599,7 +599,7 @@ class CourseBuilder
 				$visibility='0';
 			}
 
-			$lp = new Learnpath($obj->id,
+			$lp = new CourseCopyLearnpath($obj->id,
 								$obj->lp_type,
 								$obj->name,
 								$obj->path,

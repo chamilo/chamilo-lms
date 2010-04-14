@@ -11,7 +11,7 @@ require_once 'Forum.class.php';
 require_once 'ForumTopic.class.php';
 require_once 'ForumPost.class.php';
 require_once 'CourseDescription.class.php';
-require_once 'Learnpath.class.php';
+require_once 'CourseCopyLearnpath.class.php';
 require_once 'CourseRestorer.class.php';
 
 class DummyCourseCreator
@@ -263,7 +263,7 @@ class DummyCourseCreator
 			}
 			$chapters[] = $chapter;
 		}
-		$lp = new Learnpath($i,$this->get_dummy_content('title'),$this->get_dummy_content('description'),1,$chapters);
+		$lp = new CourseCopyLearnpath($i,$this->get_dummy_content('title'),$this->get_dummy_content('description'),1,$chapters);
 		$this->course->add_resource($lp);
 		}
 	}

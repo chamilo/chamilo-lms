@@ -1253,9 +1253,11 @@ if (!empty ($error)) {
     // end foreach()
     //echo "<!-- <button type='submit' name='buttonCancel' class='cancel'>" . get_lang('Cancel') . "</button>&nbsp;&nbsp; //--><br />";
     echo '<div style="margin-top:-10px;">';
-    $submit_btn = "<button class='next' type='submit' name='submit' name='submit_save' id='submit_save'>";
-    //	$submit_btn.=get_lang('ValidateAnswer');
-    if ($objExercise->selectFeedbackType() == 1 && $_SESSION['objExercise']->selectType() == 2) {
+
+    $confirmation_alert = $exerciseType == 1? " onclick=\"javascript:if(!confirm('".get_lang("ConfirmYourChoice")."')) return false;\" ":"";
+    $submit_btn = "<button class='next' type='submit' name='submit' name='submit_save' id='submit_save' $confirmation_alert >";
+
+    if ($objExercise->selectFeedbackType() == 1 && $exerciseType == 2) {
         $submit_btn = '';
         echo '<script src="' . api_get_path(WEB_LIBRARY_PATH) . 'javascript/thickbox.js" type="text/javascript"></script>';
         echo '<style type="text/css" media="all">@import "' . api_get_path(WEB_LIBRARY_PATH) . 'javascript/thickbox.css";</style>';
@@ -1270,7 +1272,7 @@ if (!empty ($error)) {
         if (api_is_allowed_to_session_edit() ) {
             if ($exerciseType == ALL_ON_ONE_PAGE || $nbrQuestions == $questionNum) {
                 $submit_btn .= get_lang('ValidateAnswer');
-       			$name_btn = get_lang('ValidateAnswer');
+       		$name_btn = get_lang('ValidateAnswer');
             } else {
                 $submit_btn .= get_lang('NextQuestion');
         		$name_btn = get_lang('NextQuestion');

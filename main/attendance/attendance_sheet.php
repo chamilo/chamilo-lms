@@ -75,7 +75,7 @@ if (api_is_allowed_to_edit(null, true)) {
 							$time = $calendar['time'];
 							$datetime = $date.'<br />'.$time;
 														
-							$img_lock = Display::return_icon('lock.gif',get_lang('DateLock'),array('class'=>'img_lock','id'=>'datetime_column_'.$calendar['id']));													
+							$img_lock = Display::return_icon('lock.gif',get_lang('DateUnLock'),array('class'=>'img_lock','id'=>'datetime_column_'.$calendar['id']));													
 							if (!empty($calendar['done_attendance'])){
 								$datetime = '<font color="blue">'.$date.'<br />'.$time.'</font>';
 							}
@@ -84,7 +84,7 @@ if (api_is_allowed_to_edit(null, true)) {
 							if ($next_attendance_calendar_id == $calendar['id']) {
 								$input_hidden = '<input type="hidden" id="hidden_input_'.$calendar['id'].'" name="hidden_input[]" value="'.$calendar['id'].'" />';
 								$disabled_check = '';
-								$img_lock = Display::return_icon('unlock.gif',get_lang('DateUnlock'),array('class'=>'img_unlock','id'=>'datetime_column_'.$calendar['id']));
+								$img_lock = Display::return_icon('unlock.gif',get_lang('DateLock'),array('class'=>'img_unlock','id'=>'datetime_column_'.$calendar['id']));
 							}										
 					?>							
 							<th height="65px" style="padding:1px 5px;" ><?php echo '<center><div style="font-size:10px;min-width:80px;width:80px;">'.$datetime.'&nbsp;<span id="attendance_lock" style="cursor:pointer">'.$img_lock.'</span><br /><input type="checkbox" id="checkbox_head_'.$calendar['id'].'" '.$disabled_check.' checked />'.$input_hidden.'</div></center>' ?></th>

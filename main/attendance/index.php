@@ -79,7 +79,9 @@ $htmlHeadXtra[] = '<script language="javascript">
 						$(".row_odd td.checkboxes_col_"+calendar_id).css({"background-color":"#F2F2F2"});
 						$(".row_even td.checkboxes_col_"+calendar_id).css({"background-color":"#FFF"});
 						$(".checkboxes_col_"+calendar_id+" input:checkbox").attr("disabled",true);							 						
-						$(this).attr("src","'.api_get_path(WEB_CODE_PATH).'img/lock.gif");
+						$(this).attr("src","'.api_get_path(WEB_CODE_PATH).'img/lock.gif"); 
+						$(this).attr("title","'.get_lang('DateUnLock').'");
+						$(this).attr("alt","'.get_lang('DateUnLock').'");
 						$(this).attr("class","img_lock");
 						$("#hidden_input_"+calendar_id).attr("value","");
 						$("#hidden_input_"+calendar_id).attr("disabled",true);
@@ -89,6 +91,8 @@ $htmlHeadXtra[] = '<script language="javascript">
 						$(".checkboxes_col_"+calendar_id).css({"background-color":"#e1e1e1"});
 						$(".checkboxes_col_"+calendar_id+" input:checkbox").attr("disabled",false);						
 						$(this).attr("src","'.api_get_path(WEB_CODE_PATH).'img/unlock.gif");
+						$(this).attr("title","'.get_lang('DateLock').'");
+						$(this).attr("alt","'.get_lang('DateLock').'");
 						$(this).attr("class","img_unlock");												
 						$("#hidden_input_"+calendar_id).attr("disabled",false);
 						$("#hidden_input_"+calendar_id).attr("value",calendar_id);						

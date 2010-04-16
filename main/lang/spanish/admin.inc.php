@@ -1229,4 +1229,10 @@ $AllowUserCourseSubscriptionByCourseAdminTitle = "Permitir a los profesores regi
 $AllowUserCourseSubscriptionByCourseAdminComment = "Al activar esta opción, permitirá a los profesores registrar usuarios en su curso";
 $ConfigureDashboardPlugin = "Configurar el plugin del Panel de control";
 $EditBlocks = "Editar bloques";
+$ShowLinkBugNotificationTitle = "Mostrar el enlace para reportar errores";
+$ShowLinkBugNotificationComment = "Mostrar un enlace en la cabecera hacia nuestra plataforma de apoyo para reportar un error (http://support.chamilo.org). Al hacer clic en el enlace, el usuario será dirigido al sistema de soporte de Chamilo, donde hay una página wiki que describe el informe de fallos del proceso.";
+$GradebookActivateScoreDisplayCustom = "Habilitar el etiquetado de nivel de competencia con el fin de establecer la información de resultados personalizados";
+$GradebookScoreDisplayCustomValues = "Niveles de competencia valores personalizados";
+$GradebookNumberDecimals = "Número de decimales";
+$GradebookNumberDecimalsComment = "Establecer el número de decimales permitidos en una puntuación";
 ?>

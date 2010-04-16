@@ -191,4 +191,5 @@ $CertificateMinimunScoreIsRequiredAndMustNotBeMoreThan = "La puntuación mínima
 $LinkMod = "Guardar";
 $EditLink = "Editar enlace";
 $CategoryDeleted = "La categoría ha sido eliminada.";
+$GradebookScoringSystemRedirect = "Los parámetros de las evaluaciones son globales. Esto significa que cualquier cambio se reflejará en las evaluaciones de todos los cursos. Por eso se necesitan permisos para hacer los cambios en el <a href=\"%s\">panel de administración del portal</a>. Si usted no tiene permisos de administración del portal, por favor contacte con su administrador para discutir los cambios que desea aplicar.";
 ?>

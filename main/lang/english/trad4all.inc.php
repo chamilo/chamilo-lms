@@ -927,4 +927,5 @@ $SendInformation = "Send information";
 $YouMustAcceptLicence = "You must accept the licence";
 $SelectOne = "Select one";
 $ContactInformationHasBeenSent = "Contact information has been sent";
+$CompanyActivity = "Company activity";
 ?>

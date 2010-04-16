@@ -117,4 +117,7 @@ $AllowUserViewUserList = "Permitir al usuario ver la lista de usuarios";
 $AllowUserViewUserListActivate = "Activar para permitir al usuario ver la lista de usuarios";
 $AllowUserViewUserListDeactivate = "Desactivar permitir al usuario ver la lista de usuarios";
 $DoNotDisplayAnyAdvance = "No mostrar ningún avance";
+$NewHomeworkEmailAlert = "Avisar a los alumnos con un correo eletrónico, la creación de una nueva tarea";
+$NewHomeworkEmailAlertEnable = "Activar el aviso de la creación de una nueva tarea";
+$NewHomeworkEmailAlertDisable = "Deasactivar el aviso de la creación de una nueva tarea";
 ?>

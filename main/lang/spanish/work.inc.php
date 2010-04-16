@@ -88,4 +88,6 @@ $ReminderMessage = "Enviar un recordatorio";
 $DateSent = "Fecha de envío";
 $ViewUsersWithoutTask = "Faltan presentar la tarea";
 $HomeworkCreated = "La tarea ha sido creada";
+$HomeworkHasBeenCreatedForTheCourse = "Se ha creado una nueva tarea en el curso";
+$PleaseCheckHomeworkPage = "Por favor, consulte la página de tareas.";
 ?>

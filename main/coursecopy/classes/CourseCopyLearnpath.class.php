@@ -96,7 +96,7 @@ class CourseCopyLearnpath extends Resource {
 	 * @param string $visibility
 	 * @param array  $items
 	 */
-	function Learnpath($id,$type,$name,$path,$ref,$description,$content_local,$default_encoding,$default_view_mode,$prevent_reinit,$force_commit,$content_maker,$display_order,$js_lib,$content_license,$debug,$visibility,$items)
+	function CourseCopyLearnpath($id,$type,$name,$path,$ref,$description,$content_local,$default_encoding,$default_view_mode,$prevent_reinit,$force_commit,$content_maker,$display_order,$js_lib,$content_license,$debug,$visibility,$items)
 	{
 		parent::Resource($id,RESOURCE_LEARNPATH);
 		$this->lp_type = $type;

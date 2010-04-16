@@ -1532,8 +1532,8 @@ function send_email_on_homework_creation($course_id) {
 		$user_info = api_get_user_info($student["user_id"]);
 		if(!empty($user_info["mail"])) {
 			$name_user = api_get_person_name($user_info["firstname"], $user_info["lastname"], null, PERSON_NAME_EMAIL_ADDRESS);
-			$emailbody = get_lang('Dear')." ".$name.",\n\n";
-			$emailbody .= get_lang('HomeworkHasBeenCreatedForTheCourse')." ".$course_id.". ".get_lang('PleaseCheckHomeworkPage');
+			$emailbody = get_lang('Dear')." ".$name_user.",\n\n";
+			$emailbody .= get_lang('HomeworkHasBeenCreatedForTheCourse')." ".$course_id.". "."\n\n".get_lang('PleaseCheckHomeworkPage');
 			$emailbody .= "\n\n".api_get_person_name($currentUser["firstname"], $currentUser["lastname"]);
 			@api_mail($name_user, $user_info["mail"], $emailsubject, $emailbody, api_get_person_name($currentUser["firstname"], $currentUser["lastname"], null, PERSON_NAME_EMAIL_ADDRESS), $currentUser["mail"]);
 		}

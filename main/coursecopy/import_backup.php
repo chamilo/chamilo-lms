@@ -136,7 +136,7 @@ if ((isset($_POST['action']) && $_POST['action'] == 'course_select_form' ) || (i
 		$form->addElement('radio', 'backup_type', '', get_lang('ServerFile'), 'server', 'id="bt_server" class="checkbox" onclick="javascript: document.import_backup_form.backup_server.disabled=false;document.import_backup_form.backup.disabled=true;"');
 		$options['null'] = '-';
 		foreach ($backups as $index => $backup) {
-			$options[$backup['file']] = $backup['course_code'].' ('.$backup['date'];
+			$options[$backup['file']] = $backup['course_code'].' ('.$backup['date'].')';
 		}
 		$form->addElement('select', 'backup_server', '', $options, 'style="margin-left: 50px;"');
 		$form->addElement('html', '<script type="text/javascript">document.import_backup_form.backup_server.disabled=true;</script>');

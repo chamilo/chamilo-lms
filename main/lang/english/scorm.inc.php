@@ -54,4 +54,7 @@ $Attempt = "Attempt";
 $MoveTheCurrentForum = "Move the current forum";
 $WarningWhenEditingScorm = "Warning ! When you edit the content of a learning object, you may alter the reporting of the course or damage the learning object.";
 $AdditionalProfileField = "Add user profile field";
+$ScormUnknownPackageFormat = "The package you are trying to upload has an unknown format. Please check it uses one of the supported formats.";
+$ScormNotEnoughSpaceInCourseToInstallPackage = "There is not enough space left in this course to uncompress the current package.";
+$ScormPackageFormatNotScorm = "The package you are uploading doesn't seem to be in SCORM format. Please check that the imsmanifest.xml is inside the ZIP file you are trying to upload.";
 ?>

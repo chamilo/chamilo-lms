@@ -87,4 +87,5 @@ $ViewUsersWithTask = "Ya presentaron la tarea";
 $ReminderMessage = "Enviar un recordatorio";
 $DateSent = "Fecha de envío";
 $ViewUsersWithoutTask = "Faltan presentar la tarea";
+$HomeworkCreated = "La tarea ha sido creada";
 ?>

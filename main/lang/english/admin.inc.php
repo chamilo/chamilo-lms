@@ -1231,4 +1231,8 @@ $ConfigureDashboardPlugin = "Configure Dashboard Plugin";
 $EditBlocks = "Edit blocks";
 $ShowLinkBugNotificationTitle = "Show link to report bug";
 $ShowLinkBugNotificationComment = "Show a link in the header to report a bug inside of our support platform (http://support.chamilo.org). When clicking on the link, the user is sent to the support platform, on a wiki page that describes the bug reporting process.";
+$GradebookActivateScoreDisplayCustom = "Enable competence level labelling in order to set custom score information";
+$GradebookScoreDisplayCustomValues = "Competence levels custom values";
+$GradebookNumberDecimals = "Number of decimals";
+$GradebookNumberDecimalsComment = "Allows you to set the number of decimals allowed in a score";
 ?>

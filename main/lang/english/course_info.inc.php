@@ -117,4 +117,7 @@ $AllowUserViewUserList = "Allow user view user list";
 $AllowUserViewUserListActivate = "Enable user list";
 $AllowUserViewUserListDeactivate = "Disable user list";
 $DoNotDisplayAnyAdvance = "Do not display progress";
+$NewHomeworkEmailAlert = "Email users on homework creation";
+$NewHomeworkEmailAlertEnable = "Enable email users on homework submission";
+$NewHomeworkEmailAlertDisable = "Disable email users on homework submission";
 ?>

@@ -54,4 +54,5 @@ $Attempt = "Intento";
 $MoveTheCurrentForum = "Mover el foro actual";
 $WarningWhenEditingScorm = "¡ Aviso ! Si edita el contenido de un elemento scorm, puede alterar el informe de la secuencia de aprendizaje o dañar el objeto.";
 $AdditionalProfileField = "Añadir un campo del perfil de usuario";
+$ScormUnknownPackageFormat = "El paquete que está intentando cargar tiene un formato desconocido. Por favor, compruebe que utiliza uno de los formatos soportados.";
 ?>

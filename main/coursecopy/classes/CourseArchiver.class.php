@@ -206,7 +206,10 @@ class CourseArchiver
 		$fp = @fopen('course_info.dat', "r");
 		$contents = @fread($fp, filesize('course_info.dat'));
 		@fclose($fp);
-		$course = unserialize(base64_decode($contents));
+		// CourseCopyLearnpath class appeared in Chamilo 1.8.7, it is the former Learnpath class in the "Copy course" tool.
+		// For backward comaptibility with archives created on Chamilo 1.8.6.2 or older systems, we have to do the following:
+		// Before unserialization, if class name "Learnpath" was found, it should be renamed as "CourseCopyLearnpath".
+		$course = unserialize(str_replace('O:9:"Learnpath":', 'O:19:"CourseCopyLearnpath":', base64_decode($contents)));
 		if( get_class($course) != 'Course')
 		{
 			return new Course();

@@ -21,7 +21,7 @@ switch ($action) {
 				$calendar_select = array();
 				$label = get_lang('StartDate');
 				if (!empty($attendance_calendar)) {
-					$input_select .= '<select name="start_date_by_attendance">';				
+					$input_select .= '<select name="start_date_by_attendance" UNIQUE size="5">';				
 					foreach ($attendance_calendar as $calendar) {
 						$input_select .= '<option value="'.$calendar['date_time'].'">'.$calendar['date_time'].'</option>';	
 					}

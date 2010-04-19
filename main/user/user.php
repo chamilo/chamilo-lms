@@ -473,25 +473,12 @@ function get_user_data($from, $number_of_items, $column, $direction) {
 				$temp[] = $o_course_user['role'];
 				$temp[] = implode(', ', $groups_name); //Group
 				$temp[] = $o_course_user['official_code'];
-/*
-				// deprecated feature
-				if ((isset($o_course_user['tutor_id']) && $o_course_user['tutor_id'] == 1) || (isset($o_course_user['status_session']) && $o_course_user['status_session'] == 2)) {
-					$temp[] = get_lang('Tutor');
-				} else {
-					$temp[] = '-';
-				}
 
-				if (isset($o_course_user['status']) && $o_course_user['status'] == 1) {
-					$temp[] = get_lang('CourseManager');
-				} else {
-					$temp[] = '-';
-				}
-*/
 				// deprecated feature
-				if ((isset($o_course_user['tutor_id']) && $o_course_user['tutor_id'] == 1) || (isset($o_course_user['status_session']) && $o_course_user['status_session'] == 2)) {
-					$temp[] = get_lang('Tutor');
-				} elseif (isset($o_course_user['status']) && $o_course_user['status'] == 1) {
+				if ((isset($o_course_user['status_rel']) && $o_course_user['status_rel'] == 1) || (isset($o_course_user['status_session']) && $o_course_user['status_session'] == 2)) {
 					$temp[] = get_lang('CourseManager');
+				} elseif (isset($o_course_user['tutor_id']) && $o_course_user['tutor_id'] == 1) {
+					$temp[] = get_lang('Tutor');
 				} else {
 					$temp[] = '-';
 				}

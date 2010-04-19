@@ -949,8 +949,8 @@ class CourseManager {
 		}
 
 		$sql = $session_id == 0
-			? 'SELECT DISTINCT course_rel_user.status, user.user_id, course_rel_user.role, course_rel_user.tutor_id, user.*  '
-			: 'SELECT DISTINCT user.user_id, user.status, user.*  ';
+			? 'SELECT DISTINCT course_rel_user.status as status_rel, user.user_id, course_rel_user.role, course_rel_user.tutor_id, user.*  '
+			: 'SELECT DISTINCT user.user_id, session_course_user.status as status_session, user.*  ';
 		$sql .= ' FROM '.Database::get_main_table(TABLE_MAIN_USER).' as user ';
 
 
@@ -995,7 +995,6 @@ class CourseManager {
 
 			$users[$user['user_id']] = $user_info;
 		}
-
 		return $users;
 	}
 

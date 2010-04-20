@@ -129,7 +129,7 @@ SurveyUtil::handle_reporting_actions();
 
 // Actions bar
 echo '<div class="actions">';
-echo '<a href="survey.php?survey_id='.Security::remove_XSS($_GET['survey_id']).'">'.Display::return_icon('back.png',get_lang('BackTo').' '.strtolower(get_lang('Survey'))).' '.get_lang('BackTo').' '.strtolower(get_lang('Survey')).'</a>';
+echo '<a href="survey.php?survey_id='.Security::remove_XSS($_GET['survey_id']).'">'.Display::return_icon('back.png', get_lang('BackToSurvey')).' '.get_lang('BackToSurvey').'</a>';
 echo '</div>';
 
 // Content

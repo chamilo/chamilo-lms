@@ -240,6 +240,7 @@ if (is_settings_editable()) {
 $form->addElement('html', '<div class="sectiontitle" style="margin-top: 40px;"><a href="#header" style="float:right;">'.Display::return_icon('top.gif', get_lang('Top')).'</a><a name="chatsettings" id="chatsettings"></a>'.Display::return_icon('attendance.gif', get_lang('ConfigChat')).' '.get_lang('ThematicAdvanceConfiguration').'</div>');
 $form->addElement('radio', 'display_info_advance_inside_homecourse', get_lang('InfoAboutAdvanceInsideHomeCourse'), get_lang('DisplayAboutLastDoneAdvance'), 1);
 $form->addElement('radio', 'display_info_advance_inside_homecourse', null, get_lang('DisplayAboutNextAdvanceNotDone'), 2);
+$form->addElement('radio', 'display_info_advance_inside_homecourse', null, get_lang('DisplayAboutNextAdvanceNotDoneAndLastDoneAdvance'), 3);
 $form->addElement('radio', 'display_info_advance_inside_homecourse', null, get_lang('DoNotDisplayAnyAdvance'), 0);
 
 

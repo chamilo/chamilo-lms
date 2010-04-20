@@ -388,7 +388,6 @@ class Thematic
 	 * @return	array	data
 	 */
 	 public function get_thematic_advance_list($thematic_advance_id = null, $course_code = null) {	 	
-	 	
 	 	// set current course
 	 	if (isset($course_code)) {
 	 		$course_info = api_get_course_info($course_code);
@@ -421,6 +420,7 @@ class Thematic
 				}
 			}										
 		}
+		
 		return $data;
 	 }
 	

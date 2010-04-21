@@ -1322,6 +1322,7 @@ function display_requirements($installType, $badUpdatePath, $updatePath = '', $u
  * - an "I accept" button named step3 to proceed to step 3;
  * - a "Back" button named step1 to go back to the first step.
  */
+
 function display_license_agreement() {
 	echo '<h2>'.display_step_sequence().get_lang('Licence').'</h2>';
 	echo '<p>'.get_lang('DokeosLicenseInfo').'</p>';
@@ -1329,25 +1330,11 @@ function display_license_agreement() {
 	?>
 	<table>
 		<tr><td>
-                        <p style="font-size:75%"><textarea cols="80" rows="12" readonly><?php echo api_htmlentities(@file_get_contents(api_get_path(SYS_PATH).'documentation/license.txt')); ?></textarea></p>
+            <p style="font-size:75%"><textarea cols="80" rows="10" readonly><?php echo api_htmlentities(@file_get_contents(api_get_path(SYS_PATH).'documentation/license.txt')); ?></textarea></p>
 		</td>
 		</tr>
                 <tr><td><input type="checkbox" name="accept" id="accept_licence" value="1"><?php echo get_lang('IAccept'); ?></td></tr>
-                <tr><td><p><?php echo get_lang('DokeosArtLicense'); ?></p></td></tr>
-                <tr>
-		<td>
-                    <div>
-                        <div class="formw">
-                            <a href="javascript://" class = "advanced_parameters" >
-                                <span id="img_plus_and_minus">&nbsp;<img src="<?php echo api_get_path(WEB_IMG_PATH) ?>div_show.gif" alt="<?php echo get_lang('Show') ?>" title="<?php echo get_lang('Show')?>" style ="vertical-align:middle" >&nbsp;<?php echo get_lang('ContactInformation') ?></span>
-                            </a>
-                        </div>
-                    </div>
-                    <div id="id_contact_form" style="display:none">
-                        <p><?php echo get_contact_registration_form() ?></p><br />
-                    </div>
-                </td>
-                </tr>                                
+                <tr><td><p><?php echo get_lang('DokeosArtLicense'); ?></p></td></tr>                                                
                 <tr>
                     <td>
                         <table width="100%">
@@ -1363,8 +1350,24 @@ function display_license_agreement() {
                     </td>
                 </tr>                
                 </table>
+        
+        <!-- Contact information form -->        			
+                    <div>
+                        <div class="formw">
+                            <a href="javascript://" class = "advanced_parameters" >
+                                <span id="img_plus_and_minus">&nbsp;<img src="<?php echo api_get_path(WEB_IMG_PATH) ?>div_hide.gif" alt="<?php echo get_lang('Hide') ?>" title="<?php echo get_lang('Hide')?>" style ="vertical-align:middle" >&nbsp;<?php echo get_lang('ContactInformation') ?></span>
+                            </a>
+                        </div>
+                    </div>
+                    <div id="id_contact_form" style="display:block">
+                   		<div class="normal-message"><?php echo get_lang('ContactInformationDescription') ?></div>                     	
+                        <p><?php echo get_contact_registration_form() ?></p><br />
+                    </div>
+         
+                
 	<?php
 }
+
 
 /**
  * Get contact registration form
@@ -1372,10 +1375,9 @@ function display_license_agreement() {
 function get_contact_registration_form() {
 
     $html ='
-    <div>
+    <div id="contact_registration">
     <fieldset style="width:90%;padding:15px;border:1pt solid #eee">    
-    <div id="div_sent_information"></div>
-    <div><p>'.get_lang('ContactInformationDescription').'</p></div>
+    <div id="div_sent_information"></div>    
     <form>
     <div class="row">
             <div class="label"><span class="form_required">*</span>'.get_lang('PersonName').'</div>

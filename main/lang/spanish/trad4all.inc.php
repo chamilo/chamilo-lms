@@ -783,7 +783,7 @@ $StartToType = "Comience a escribir, a continuación, haga clic en esta barra pa
 $InstallChamilo = "Instalar Chamilo";
 $ChamiloURL = "URL de Chamilo";
 $TitleColumnGradebook = "Título de la columna en el Informe de Evaluación";
-$QualifyWeight = "Peso de la calificación";
+$QualifyWeight = "Ponderación en la evaluación";
 $ThematicAdvance = "Avance temático";
 $EditProfile = "Editar perfil";
 $TabsDashboard = "Panel de control";
@@ -927,6 +927,17 @@ $SendInformation = "Enviar la información";
 $YouMustAcceptLicence = "Debes aceptar la licencia";
 $SelectOne = "Seleccione uno";
 $ContactInformationHasBeenSent = "Información del contacto ha sido enviado";
-$ContactInformationDescription = "Formulario de información del contacto";
+$ContactInformationDescription = "Estimado usuario,
+
+Esta a punto de instalar una de las mejores plataformas e-learning de código abierto en el mercado. Al igual que muchos otros proyectos de código abierto, Chamilo está respaldado por una amplia comunidad de estudiantes, profesores, desarrolladores y creadores de contenido que desean promover el proyecto.
+
+Al saber un poco más de usted, uno de nuestros usuarios más importantes que gestionará este sistema e-learning, podremos dar a conocer a otros que nuestro software se utiliza y podremos informarle sobre eventos que pueden ser relevantes para usted.
+
+Llenar este formulario, implica la aceptación de que la asociación Chamilo o sus miembros puedan enviarle información por correo electrónico sobre eventos importantes o actualizaciones en el software Chamilo. Esto ayudará a crecer a la comunidad como una entidad organizada, donde el flujo de información, se haga con respeto permanente a su tiempo y su privacidad.
+
+Tenga en cuenta que no está obligado a llenar este formulario. Si desea permanecer en el anonimato, perderemos la oportunidad de ofrecerle todos los privilegios de ser un administrador del portal registrado, pero nosotros respetaremos su decisión. Basta con dejar vacío este formulario y hacer clic en \"Siguiente\".";
 $CompanyActivity = "Actividad de la compañia";
+$DateLock = "Bloquear fecha";
+$DateUnLock = "Desbloquear fecha";
+$GoToStudentDetails = "Ver detalles del estudiante";
 ?>

@@ -120,4 +120,5 @@ $DoNotDisplayAnyAdvance = "No mostrar ningún avance";
 $NewHomeworkEmailAlert = "Avisar a los alumnos con un correo eletrónico, la creación de una nueva tarea";
 $NewHomeworkEmailAlertEnable = "Activar el aviso de la creación de una nueva tarea";
 $NewHomeworkEmailAlertDisable = "Deasactivar el aviso de la creación de una nueva tarea";
+$DisplayAboutNextAdvanceNotDoneAndLastDoneAdvance = "Mostrar información sobre el último avance temático hecho y el siguiente por hacer.";
 ?>

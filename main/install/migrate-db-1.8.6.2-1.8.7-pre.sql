@@ -60,7 +60,6 @@ ALTER TABLE gradebook_result DROP date;
 
 ALTER TABLE gradebook_result_log CHANGE date_log created_at DATETIME NOT NULL default '0000-00-00 00:00:00';
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('gradebook_number_decimals', NULL, 'select', 'Gradebook', '0', 'GradebookNumberDecimals', 'GradebookNumberDecimalsComment', NULL, NULL, 0);
-INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('gradebook_score_display_custom_values', NULL, 'gradebook_score_display_custom', 'Gradebook', '0', 'GradebookScoreDisplayCustomValues', 'GradebookScoreDisplayCustomValuesComment', NULL, NULL, 0);
 
 INSERT INTO user_field(field_type, field_variable, field_display_text, field_visible, field_changeable) VALUES(11, 'timezone', 'Timezone', 0, 0);
 
@@ -69,7 +68,7 @@ INSERT INTO settings_current (variable, subkey, type, category, selected_value, 
 ALTER TABLE user_field_values CHANGE id id BIGINT NOT NULL AUTO_INCREMENT;
 ALTER TABLE user_field_values ADD INDEX (user_id, field_id);
 
-UPDATE settings_current SET selected_value = '1.8.7.11569' WHERE variable = 'dokeos_database_version';
+UPDATE settings_current SET selected_value = '1.8.7.11570' WHERE variable = 'dokeos_database_version';
 
 ALTER TABLE course_rel_user DROP PRIMARY KEY, ADD PRIMARY KEY (course_code, user_id, relation_type);
 ALTER TABLE session_rel_user DROP PRIMARY KEY, ADD PRIMARY KEY (id_session, id_user, relation_type);

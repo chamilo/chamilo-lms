@@ -152,7 +152,7 @@ if (defined('SYSTEM_INSTALLATION')) {
             Database::query($query);
 	}
 
-        // Moving user folowed by a human resource manager from hr_dept_id field to user_rel_user table
+        // Moving user followed by a human resource manager from hr_dept_id field to user_rel_user table
         $query = "SELECT user_id, hr_dept_id  FROM $dbNameForm.user";
         $result = Database::query($query);
         if (Database::num_rows($result) > 0) {
@@ -173,6 +173,36 @@ if (defined('SYSTEM_INSTALLATION')) {
             // cleaning hr_dept_id field inside user table
             $upd = "UPDATE $dbNameForm.user SET hr_dept_id = 0";
             Database::query($upd);
+        }
+
+        // Updating score display for each gradebook category
+        // get all gradebook categories id
+        $a_categories = array();
+        $query = "SELECT id FROM $dbNameForm.gradebook_category";
+        $rs_gradebook = Database::query($query);
+        if (Database::num_rows($rs_gradebook) > 0) {
+            while($row_gradebook = Database::fetch_row($rs_gradebook)) {
+                $a_categories[] = $row_gradebook[0];
+            }
+        }
+
+        // get all gradebook score display
+        $query = "SELECT * FROM $dbNameForm.gradebook_score_display";
+        $rs_score_display = Database::query($query);
+        if (Database::num_rows($rs_score_display) > 0) {
+            $score_color_percent = api_get_setting('gradebook_score_display_colorsplit');
+            while ($row_score_display = Database::fetch_array($rs_score_display)) {
+                $score = $row_score_display['score'];
+                $display = $row_score_display['display'];
+                foreach ($a_categories as $category_id) {
+                    $ins = "INSERT INTO $dbNameForm.gradebook_score_display(score, display, category_id, score_color_percent) VALUES('$score', '$display', $category_id, '$score_color_percent')";
+                    Database::query($ins);
+                }
+
+            }
+            // remove score display with category id = 0
+            $del = "DELETE FROM $dbNameForm.gradebook_score_display WHERE category_id = 0";
+            Database::query($del);
         }
 
         // Now clean the deprecated id_coach field from the session_rel_course table

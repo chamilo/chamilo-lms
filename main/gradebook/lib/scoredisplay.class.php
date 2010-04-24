@@ -25,10 +25,10 @@ class ScoreDisplay
 	/**
 	 * Get the instance of this class
 	 */
-	public static function instance() {
+	public static function instance($category_id = 0) {
 		static $instance;
 		if (!isset ($instance)) {
-			$instance = new ScoreDisplay();
+			$instance = new ScoreDisplay($category_id);
 		}
 		return $instance;
 	}
@@ -61,19 +61,24 @@ class ScoreDisplay
 
 	private $coloring_enabled;
 	private $color_split_value;
-
 	private $custom_enabled;
 	private $upperlimit_included;
 	private $custom_display;
-	private $custom_display_conv;
+	private $custom_display_conv;        
 
 	/**
 	 * Protected constructor - call instance() to instantiate
 	 */
-    protected function ScoreDisplay() {
+    protected function ScoreDisplay($category_id = 0) {
+
+        if (!empty($category_id)) {
+            $this->category_id = $category_id;
+        }
+
     	$this->coloring_enabled = $this->load_bool_setting('gradebook_score_display_coloring',0);
     	if ($this->coloring_enabled) {
-    		$this->color_split_value = $this->load_int_setting('gradebook_score_display_colorsplit',50);
+    		//$this->color_split_value = $this->load_int_setting('gradebook_score_display_colorsplit',50);
+                $this->color_split_value = $this->get_score_color_percent();
     	}
     	$this->custom_enabled = $this->load_bool_setting('gradebook_score_display_custom', 0);
     	if ($this->custom_enabled) {
@@ -157,27 +162,64 @@ class ScoreDisplay
 		return $this->color_split_value;
 	}
 
+        /**
+         * Get current gradebook category id
+         * @return int  Category id
+         */
+        private function get_current_gradebook_category_id() {
+
+            $tbl_gradebook_category = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
+            $curr_course_code = api_get_course_id();
+            $curr_session_id = api_get_session_id();
+
+            $session_condition = '';
+            if (empty($curr_session_id)) {
+                $session_condition = ' AND session_id is null ';
+            } else {
+                $session_condition = ' AND session_id = '.$curr_session_id;
+            }
+
+            $sql = 'SELECT id  FROM '.$tbl_gradebook_category.' WHERE course_code = "'.$curr_course_code.'" '. $session_condition;
+            $rs  = Database::query($sql);
+            $category_id = 0;
+            if (Database::num_rows($rs) > 0) {
+                $row = Database::fetch_row($rs);
+                $category_id = $row[0];
+            }
+
+            return $category_id;
+
+        }
+
 	/**
 	 * Update custom score display settings
 	 * @param array $displays 2-dimensional array - every subarray must have keys (score, display)
+         * @param int   score color percent (optional)
+         * @param int   gradebook category id (optional)
 	 */
-	public function update_custom_score_display_settings ($displays) {
+	public function update_custom_score_display_settings ($displays, $scorecolpercent = 0, $category_id = null) {
 		$this->custom_display = $displays;
    		$this->custom_display_conv = $this->convert_displays($this->custom_display);
 
+                if (isset($category_id)) {
+                    $category_id = intval($category_id);
+                } else {
+                    $category_id = $this->get_current_gradebook_category_id();
+                }
+
 		// remove previous settings
-    	$tbl_display = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_SCORE_DISPLAY);
-		$sql = 'TRUNCATE TABLE '.$tbl_display;
+                $tbl_display = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_SCORE_DISPLAY);
+		$sql = 'DELETE FROM '.$tbl_display.' WHERE category_id = '.$category_id;
 		Database::query($sql);
 
 		// add new settings
-		$sql = 'INSERT INTO '.$tbl_display.' (id, score, display) VALUES ';
+		$sql = 'INSERT INTO '.$tbl_display.' (id, score, display, category_id, score_color_percent) VALUES ';
 		$count = 0;
 		foreach ($displays as $display) {
 			if ($count > 0) {
 				$sql .= ',';
 			}
-			$sql .= "(NULL, '".$display['score']."', '".Database::escape_string($display['display'])."')";
+			$sql .= "(NULL, '".$display['score']."', '".Database::escape_string($display['display'])."', ".$category_id.", ".intval($scorecolpercent).")";
 			$count++;
 		}
 		Database::query($sql);
@@ -296,6 +338,34 @@ class ScoreDisplay
 		}
 	}
 
+        /**
+         * Get score color percent by category
+         * @param   int Gradebook category id
+         * @return  int Score
+         */
+        private function get_score_color_percent($category_id = null) {
+
+            $tbl_display = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_SCORE_DISPLAY);
+
+            if (isset($category_id)) {
+                $category_id = intval($category_id);
+            } else {
+                $category_id = $this->get_current_gradebook_category_id();
+            }
+
+	    $sql = 'SELECT score_color_percent FROM '.$tbl_display.' WHERE category_id = '.$category_id.' LIMIT 1';
+	    $result = Database::query($sql);
+            $score = 0;
+            if (Database::num_rows($result) > 0) {
+                $row = Database::fetch_row($result);
+                $score = $row[0];
+            } else {
+                $score = $this->load_int_setting('gradebook_score_display_colorsplit',50);
+            }
+            return $score;
+
+        }
+
 
 	private function save_bool_setting ($property, $value) {
 		$this->save_int_setting ($property, ($value ? 'true' : 'false') );
@@ -312,11 +382,19 @@ class ScoreDisplay
 
 	/**
 	 * Get current custom score display settings
-	 * @return array 2-dimensional array - every element contains 3 subelements (id, score, display)
+         * @param   int     Gradebook category id
+	 * @return  array   2-dimensional array - every element contains 3 subelements (id, score, display)
 	 */
-	private function get_custom_displays() {
-    	$tbl_display = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_SCORE_DISPLAY);
-		$sql = 'SELECT * FROM '.$tbl_display.' ORDER BY score';
+	private function get_custom_displays($category_id = null) {
+                $tbl_display = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_SCORE_DISPLAY);
+
+                if (isset($category_id)) {
+                    $category_id = intval($category_id);
+                } else {
+                    $category_id = $this->get_current_gradebook_category_id();
+                }
+
+		$sql = 'SELECT * FROM '.$tbl_display.' WHERE category_id = '.$category_id.' ORDER BY score';
 		$result = Database::query($sql);
 		return Database::store_result($result);
 	}

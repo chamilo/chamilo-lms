@@ -35,7 +35,7 @@ $_SESSION['this_section'] = $this_section;
 
 // Access restrictions
 api_protect_admin_script();
-
+/* this code is moved to gradebook_scoring_system file
 if($_GET['category'] == 'Gradebook') {
 	// Used for the gradebook system
 	$htmlHeadXtra[]= '
@@ -70,7 +70,7 @@ if($_GET['category'] == 'Gradebook') {
 	  }
 	 </script>';
  }
-
+*/
 // Submit Stylesheets
 if (isset($_POST['submit_stylesheets'])) {
 	$message = store_stylesheets();
@@ -294,6 +294,7 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
 			/*
 			 * Used to display custom values for the gradebook score display
 			 */
+                        /* this configuration is moved now inside gradebook tool
 			case "gradebook_score_display_custom":
 				if(api_get_setting('gradebook_score_display_custom', 'my_display_custom') == 'false') {
 					$form->addElement('static', null, null, get_lang('GradebookActivateScoreDisplayCustom'));
@@ -353,6 +354,8 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
 					}
 				}
 				break;
+
+                         */
 		}
 	}
 
@@ -379,10 +382,10 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
 		//$result = Database::query($sql);
 		// Save the settings
 		$keys = array();
-		$gradebook_score_display_custom_values = array();
+		//$gradebook_score_display_custom_values = array();
 		foreach ($values as $key => $value) {
 			// Treat gradebook values in separate function
-			if(strpos($key, 'gradebook_score_display_custom_values') === false) {
+			//if(strpos($key, 'gradebook_score_display_custom_values') === false) {
 				if (!is_array($value)) {
 					//$sql = "UPDATE $table_settings_current SET selected_value='".Database::escape_string($value)."' WHERE variable='$key'";
 					//$result = Database::query($sql);
@@ -415,14 +418,16 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
 
 					}
 				}
-			} else {
-				$gradebook_score_display_custom_values[$key] = $value;
-			}
+			//} else {
+			//	$gradebook_score_display_custom_values[$key] = $value;
+			//}
 		}
-		
+
+                /*
 		if(count($gradebook_score_display_custom_values) > 0) {
 			update_gradebook_score_display_custom_values($gradebook_score_display_custom_values);
 		}
+                 */
 
 		// add event configuration settings category to system log
 		$time = time();

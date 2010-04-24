@@ -762,7 +762,7 @@ VALUES
 ('timezone_value', 'timezones', 'select', 'Timezones', '', 'TimezoneValueTitle','TimezoneValueComment',NULL,'Timezones', 1),
 ('allow_user_course_subscription_by_course_admin', NULL, 'radio', 'Security', 'true', 'AllowUserCourseSubscriptionByCourseAdminTitle', 'AllowUserCourseSubscriptionByCourseAdminComment', NULL, NULL, 1),
 ('show_link_bug_notification', NULL, 'radio', 'Platform', 'true', 'ShowLinkBugNotificationTitle', 'ShowLinkBugNotificationComment', NULL, NULL, 0),
-('dokeos_database_version', NULL, 'textfield', NULL,'1.8.7.11570','DokeosDatabaseVersion','',NULL,NULL,0);
+('dokeos_database_version', NULL, 'textfield', NULL,'1.8.7.11571','DokeosDatabaseVersion','',NULL,NULL,0);
 
 
 UNLOCK TABLES;
@@ -1171,6 +1171,7 @@ CREATE TABLE gradebook_score_display (
   score float unsigned NOT NULL,
   display varchar(40) NOT NULL,
   category_id int NOT NULL default 0,
+  score_color_percent float unsigned NOT NULL default 0,
   PRIMARY KEY (id)
 );
 ALTER TABLE gradebook_score_display ADD INDEX(category_id);

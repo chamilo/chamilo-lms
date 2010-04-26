@@ -82,11 +82,11 @@ if ($action == 'thematic_plan_list') {
 	$form->addElement('style_submit_button', null, get_lang('Save'), 'class="save"');
 	
 	if ($description_type < ADD_THEMATIC_PLAN) {
-		$default['title'] = strtoupper($default_thematic_plan_title[$description_type]);
+		$default['title'] = $default_thematic_plan_title[$description_type];
 	}
 	if (!empty($thematic_plan_data)) {
 		// set default values
-		$default['title'] = strtoupper($thematic_plan_data[0]['title']);
+		$default['title'] = $thematic_plan_data[0]['title'];
 		$default['description'] = $thematic_plan_data[0]['description'];		
 	}	
 	$form->setDefaults($default);

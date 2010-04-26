@@ -243,15 +243,47 @@
 		if ($action == 'calendar_add') {			
 			if (strtoupper($_SERVER['REQUEST_METHOD']) == "POST") {	
 				if (!isset($_POST['cancel'])) {												
-					$datetime = $attendance->build_datetime_from_array($_POST['date_time']);					
-					$datetimezone = api_get_utc_datetime($datetime);					
-					if (!empty($datetime)) {						
+										
+                                        if (isset($_POST['repeat'])) {
+                                            $start_datetime = api_strtotime($attendance->build_datetime_from_array($_POST['date_time']));
+
+                                            
+                                            $_POST['end_date_time']['H'] = $_POST['date_time']['H'];
+                                            $_POST['end_date_time']['i'] = $_POST['date_time']['i'];
+
+                                            $end_datetime = api_strtotime($attendance->build_datetime_from_array($_POST['end_date_time']));
+                                            $checkdate = checkdate($_POST['end_date_time']['M'], $_POST['end_date_time']['d'], $_POST['end_date_time']['Y']);
+
+                                            $repeat_type = $_POST['repeat_type'];
+                                            if (($end_datetime > $start_datetime) && $checkdate) {
+                                                    $affected_rows = $attendance->attendance_repeat_calendar_add($attendance_id, $start_datetime, $end_datetime, $repeat_type);
+                                                    $action = 'calendar_list';
+                                                
+                                            } else {
+
+                                                if (!$checkdate) {
+                                                    $data['error_checkdate'] = true;
+                                                } else {
+                                                    $data['error_repeat_date'] = true;
+                                                }
+          
+                                                $data['repeat'] = true;                                                
+                                                $action = 'calendar_add';
+                                            }
+                                        } else {
+                                            $datetime = $attendance->build_datetime_from_array($_POST['date_time']);
+                                            $datetimezone = api_get_utc_datetime($datetime);
+                                            if (!empty($datetime)) {
 						$attendance->set_date_time($datetimezone);
-						$affected_rows = $attendance->attendant_calendar_add($attendance_id);
-					} else {
-						$data['error_date'] = true;
-					}
-					$action = 'calendar_list';
+						$affected_rows = $attendance->attendance_calendar_add($attendance_id);
+                                                $action = 'calendar_list';
+                                            } else {
+                                                    $data['error_date'] = true;
+                                                    $action = 'calendar_add';
+                                            }
+
+                                        }
+
 				} else {
 					$action = 'calendar_list';
 				}
@@ -263,7 +295,7 @@
 					$datetime = $attendance->build_datetime_from_array($_POST['date_time']);									
 					$datetimezone = api_get_utc_datetime($datetime);								
 					$attendance->set_date_time($datetimezone);					
-					$affected_rows = $attendance->attendant_calendar_edit($calendar_id, $attendance_id);
+					$affected_rows = $attendance->attendance_calendar_edit($calendar_id, $attendance_id);
 					$data['calendar_id'] = 0;
 					$action = 'calendar_list';
 				} else {

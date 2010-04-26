@@ -32,6 +32,17 @@ if (!empty($message_information)) {
 	Display::display_normal_message($message, false);
 }
 
+if ($error_repeat_date) {
+    $message = get_lang('EndDateMustBeMoreThanStartDate');
+    Display::display_error_message($message, false);
+}
+
+if ($error_checkdate) {
+    $message = get_lang('EndDateIsNotValid');
+    Display::display_error_message($message, false);
+}
+
+
 if (isset($action) && $action == 'calendar_add') {
 	// calendar add form
 	echo '<div class="attendance-calendar-add">';
@@ -39,6 +50,31 @@ if (isset($action) && $action == 'calendar_add') {
 		$form = new FormValidator('attendance_calendar_add','POST','index.php?action=calendar_add&attendance_id='.$attendance_id.$param_gradebook.'&'.api_get_cidreq(),'');
 		$form->addElement('datepicker', 'date_time', '', array('form_name'=>'attendance_calendar_add'));
 		$defaults['date_time'] = date('Y-m-d 12:00:00');
+
+                $form->addElement('html','<br /><br />');
+
+                $form->addElement('html', '<div id="repeat_check">&nbsp;'. get_lang('RepeatDate').'<input type="checkbox" name="repeat" '.($repeat?'checked="checked"':'').' onclick="if(this.checked==true){document.getElementById(\'repeat-date-attendance\').style.display=\'block\';}else{document.getElementById(\'repeat-date-attendance\').style.display=\'none\';}"/>');
+                if ($repeat) {
+                    $form->addElement('html', '<div id="repeat-date-attendance" style="display:block">');
+                } else {
+                    $form->addElement('html', '<div id="repeat-date-attendance" style="display:none">');
+                }
+                $form->addElement('html', '<table>');
+                $a_repeat_type = array('daily'=>get_lang('RepeatDaily'), 'weekly'=>get_lang('RepeatWeekly'), 'monthlyByDate'=>get_lang('RepeatMonthlyByDate'));
+                $form->addElement('html', '<tr><td>'.get_lang('RepeatType').'</td><td>');
+                $form->addElement('select', 'repeat_type', '', $a_repeat_type);
+                $form->addElement('html', '</td></tr>');
+
+                $form->addElement('html', '<tr><td>'.get_lang('RepeatEnd').'</td><td>');
+                $form->addElement('date', 'end_date_time', '', array('form_name'=>'attendance_calendar_add'));
+                $defaults['end_date_time'] = date('Y-m-d 12:00:00');
+                $form->addElement('html', '</td></tr>');
+                $form->addElement('html', '</table>');
+                
+                
+                $form->addElement('html', '</div>');
+                $form->addElement('html','<br /><br />');
+
 		$form->addElement('html','<div class="clear"></div>');
 		$form->addElement('style_submit_button', null, get_lang('Save'), 'class="save"');
 		$form->setDefaults($defaults);

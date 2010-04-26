@@ -252,7 +252,7 @@
                                             $_POST['end_date_time']['i'] = $_POST['date_time']['i'];
 
                                             $end_datetime = api_strtotime($attendance->build_datetime_from_array($_POST['end_date_time']));
-                                            $checkdate = checkdate($_POST['end_date_time']['M'], $_POST['end_date_time']['d'], $_POST['end_date_time']['Y']);
+                                            $checkdate = checkdate($_POST['end_date_time']['F'], $_POST['end_date_time']['d'], $_POST['end_date_time']['Y']);
 
                                             $repeat_type = $_POST['repeat_type'];
                                             if (($end_datetime > $start_datetime) && $checkdate) {

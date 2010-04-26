@@ -66,7 +66,7 @@ if (isset($action) && $action == 'calendar_add') {
                 $form->addElement('html', '</td></tr>');
 
                 $form->addElement('html', '<tr><td>'.get_lang('RepeatEnd').'</td><td>');
-                $form->addElement('date', 'end_date_time', '', array('form_name'=>'attendance_calendar_add'));
+                $form->addElement('datepickerdate', 'end_date_time', '', array('form_name'=>'attendance_calendar_add'));
                 $defaults['end_date_time'] = date('Y-m-d 12:00:00');
                 $form->addElement('html', '</td></tr>');
                 $form->addElement('html', '</table>');

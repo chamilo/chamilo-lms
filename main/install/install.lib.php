@@ -410,6 +410,9 @@ function get_config_param($param, $updatePath = '') {
 	if (empty($updatePath) && !empty($_POST['updatePath'])) {
 		$updatePath = $_POST['updatePath'];
 	}
+	if (empty($updatePath)) {
+		$updatePath = api_get_path(SYS_PATH);
+	}
 	$updatePath = api_add_trailing_slash(str_replace('\\', '/', realpath($updatePath)));
 	$updateFromInstalledVersionFile = '';
 
@@ -1207,7 +1210,7 @@ function display_requirements($installType, $badUpdatePath, $updatePath = '', $u
 			<table border="0" cellpadding="5" align="center">
 			<tr>
 			<td><?php echo get_lang('OldVersionRootPath'); ?>:</td>
-			<td><input type="text" name="updatePath" size="50" value="<?php echo ($badUpdatePath && !empty($updatePath)) ? htmlentities($updatePath) : $_SERVER['DOCUMENT_ROOT'].'/old_version/'; ?>" /></td>
+			<td><input type="text" name="updatePath" size="50" value="<?php echo ($badUpdatePath && !empty($updatePath)) ? htmlentities($updatePath) : api_get_path(SYS_SERVER_ROOT_PATH).'old_version/'; ?>" /></td>
 			</tr>
 			<tr>
 			<td colspan="2" align="center">
@@ -1334,7 +1337,7 @@ function display_license_agreement() {
 		</td>
 		</tr>
                 <tr><td><input type="checkbox" name="accept" id="accept_licence" value="1"><?php echo get_lang('IAccept'); ?></td></tr>
-                <tr><td><p><?php echo get_lang('DokeosArtLicense'); ?></p></td></tr>                                                
+                <tr><td><p><?php echo get_lang('DokeosArtLicense'); ?></p></td></tr>
                 <tr>
                     <td>
                         <table width="100%">
@@ -1348,10 +1351,10 @@ function display_license_agreement() {
 			</tr>
                         </table>
                     </td>
-                </tr>                
+                </tr>
                 </table>
-        
-        <!-- Contact information form -->        			
+
+        <!-- Contact information form -->
                     <div>
                         <div class="formw">
                             <a href="javascript://" class = "advanced_parameters" >
@@ -1360,11 +1363,11 @@ function display_license_agreement() {
                         </div>
                     </div>
                     <div id="id_contact_form" style="display:block">
-                   		<div class="normal-message"><?php echo get_lang('ContactInformationDescription') ?></div>                     	
+                   		<div class="normal-message"><?php echo get_lang('ContactInformationDescription') ?></div>
                         <p><?php echo get_contact_registration_form() ?></p><br />
                     </div>
-         
-                
+
+
 	<?php
 }
 
@@ -1376,8 +1379,8 @@ function get_contact_registration_form() {
 
     $html ='
     <div id="contact_registration">
-    <fieldset style="width:90%;padding:15px;border:1pt solid #eee">    
-    <div id="div_sent_information"></div>    
+    <fieldset style="width:90%;padding:15px;border:1pt solid #eee">
+    <div id="div_sent_information"></div>
     <form>
     <div class="row">
             <div class="label"><span class="form_required">*</span>'.get_lang('PersonName').'</div>
@@ -1477,7 +1480,7 @@ function get_contact_registration_form() {
             <div class="label">&nbsp;</div>
             <div class="formw"><span class="form_required">*</span><small>'.get_lang('FieldRequired').'</small></div>
     </div>
-	
+
     </form>
 
 </fieldset>
@@ -1784,7 +1787,7 @@ function display_configuration_settings_form($installType, $urlForm, $languageFo
 
 	//Parameter 11: institute (short) name
 	display_configuration_parameter($installType, get_lang('InstituteURL'), 'institutionUrlForm', $institutionUrlForm);
- 
+
 	/*
 	 //old method
 	  	<tr>
@@ -1920,5 +1923,5 @@ function get_countries_list_from_array($combo = false) {
         return $country_select;
     }
 
-    return $a_countries;    
+    return $a_countries;
 }

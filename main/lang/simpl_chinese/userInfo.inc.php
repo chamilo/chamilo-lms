@@ -31,4 +31,7 @@ $langUnregister = "注销";
 $langAddAUser = "添加用户";
 $UsersUnsubscribed = "用户已经注销";
 $ThisStudentIsSubscribeThroughASession = "学生已经从本课程注销，你不能编辑此类信息";
+$Social = "社交";
+$EditNormalProfile = "编辑基本资料";
+$MyProductions = "我的作品";
 ?>

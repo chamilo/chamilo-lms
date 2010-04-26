@@ -909,4 +909,32 @@ $Literal17 = "dix-sept";
 $Literal18 = "dix-huit";
 $Literal19 = "dix-neuf";
 $Literal20 = "vingt";
+$DateTime = "Date & heure";
+$Item = "Élément";
+$Never = "Jamais";
+$ReportABug = "Rapporter une erreur";
+$Letters = "Lettres";
+$MaximumOfParticipants = "Nombre maximum de membres";
+$ContactInformation = "Information de contact";
+$PersonName = "Votre nom";
+$CompanyName = "Nom de votre entreprise";
+$PersonRole = "Votre profession";
+$HaveYouThePowerToTakeFinancialDecisions = "Êtes-vous habilité à prendre des décisions financières pour votre entreprise?";
+$CompanyCountry = "Pays de votre entreprise";
+$CompanyCity = "Ville de votre entreprise";
+$WhichLanguageWouldYouLikeToUseWhenContactingYou = "Langue de contact favorite";
+$SendInformation = "Envoyer l'information";
+$YouMustAcceptLicence = "Vous devez accepter la licence pour continuer";
+$SelectOne = "Chosissez";
+$ContactInformationHasBeenSent = "L'information de contact a été envoyée. Merci.";
+$ContactInformationDescription = "Cher utilisateur,<br />
+<br />
+Vous êtes sur le point de commencer à utiliser l'une des meilleures plateformes e-learning de logiciel libre du marché. Comme beaucoup d'autres projets de logiciel libre, celui-ci est supporté par une grande communauté d'étudiants, d'enseignants, de développeurs et de créateurs de contenu qui aimeraient pouvoir promouvoir le projet dans les meilleures conditions.<br /><br />
+Au travers d'une meilleure connaissance de notre public et de l'un de nos plus importants utilisateurs, vous, qui gèrerez ce système e-learning, nous pourrons nous assurer de faire savoir au plus grand nombre que notre logiciel est utilisé, et nous pourrons vous informer directement sur les évènements importants à vos yeux.<br /><br />
+En remplissant ce formulaire, vous acceptez que l'association Chamilo ou ses membres puissent vous envoyer des informations par e-mail au sujet d'évènements importants ou de mises à jours du software ou de la communauté. Ceci aidera la communauté à grandir comme une entité organisée au sein de laquelle l'information se propage, au travers d'un respect permanent de votre temps et de votre privacité.<br /><br />
+Veuillez prendre en considération que vous n'êtes <b>pas obligé</b> à remplir ce formulaire. Si vous désirez rester anonyme, nous perdrons la possibilité de vous offrir les privilèges d'être un administrateur de portail enregistré, mais nous respecterons votre décision. Laissez simplement ce formulaire vide et cliquez sur \"Suivant\". De la même façon, une fois l'envoi de l'information du formulaire ci-dessous confirmé, vous devrez cliquer sur \"Suivant\".";
+$CompanyActivity = "Activité de votre entreprise";
+$DateLock = "Bloquer date";
+$DateUnLock = "Débloquer date";
+$GoToStudentDetails = "Voir les détails de l'apprenant";
 ?>

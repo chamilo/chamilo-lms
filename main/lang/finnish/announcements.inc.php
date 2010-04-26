@@ -56,4 +56,5 @@ $AnnounceSentToUserSelection = "Ilmoitus lähetetty valituille käyttäjille";
 $SendAnnouncement = "Lähetä ilmoitus";
 $ModifyAnnouncement = "Muokkaa ilmoitusta";
 $ButtonPublishAnnouncement = "Lähetä ilmoitus";
+$YourAccountIsActiveYouCanLoginAndCheckYourCourses = "Hyvä käyttäjä, käyttäjätunnuksesi on nyt aktivoitu ja voit nyt kirjautua ympäristöön.";
 ?>

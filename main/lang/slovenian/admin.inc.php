@@ -1094,4 +1094,10 @@ $AllowStudentsDownloadFoldersTitle = "Dovoli tečajnikom prenos map";
 $AllowSendMessageToAllPlatformUsersTitle = "Dovoli pošiljanje sporočil vsem uporabnikom platforme";
 $AllowSendMessageToAllPlatformUsersComment = "Dovoli pošiljanje sporočil vsem uporabnikom platforme";
 $Username = "Uporabniško ime";
+$CoursesInformation = "Informacija o tečajih";
+$AllowUserCourseSubscriptionByCourseAdminTitle = "Dovoli upravitelju tečaja vpisovanje uporabnikov v tečaj";
+$AllowUserCourseSubscriptionByCourseAdminComment = "Aktiviranje te možnosti omogoči upravitelju tečaja vpis uporabnikov v tečaj";
+$EditBlocks = "Uredi bloke";
+$ShowLinkBugNotificationTitle = "Pokoži povezavo za poročanje o napakah";
+$ShowLinkBugNotificationComment = "V glavi prikaže povezavo na stran za poročanje o napakah (http://support.chamilo.org). S klikom na povezavo se prestavite na podporno stran z Wiki stranjo, ki opisuje proces poročanja o odkritih napakah.";
 ?>

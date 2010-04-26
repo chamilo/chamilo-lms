@@ -191,5 +191,4 @@ $CertificateMinimunScoreIsRequiredAndMustNotBeMoreThan = "Certificate minimun sc
 $LinkMod = "Save";
 $EditLink = "Edit link";
 $CategoryDeleted = "The category has been deleted.";
-$GradebookScoringSystemRedirect = "The gradebook parameters are global. This means that changing them will affect other gradebooks in other courses. This is why you will need administration permissions to change them in the <a href=\"%s\">portal administration panel</a>. If you do not have portal administration permissions, please contact your administrator to discuss the changes you would like to apply.";
 ?>

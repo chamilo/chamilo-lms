@@ -56,4 +56,5 @@ $AnnounceSentToUserSelection = "Obvestila poslana izbranim uporabnikom";
 $SendAnnouncement = "Pošlji obvestilo";
 $ModifyAnnouncement = "Spremeni obvestilo";
 $ButtonPublishAnnouncement = "Pošlji obvestilo";
+$YourAccountIsActiveYouCanLoginAndCheckYourCourses = "Spoštovani uporabnik. Vaš uporabniški račun na platformi je bil aktiviran. Prijavite se in bodite uspešni pri svojem delu v okviru platforme.";
 ?>

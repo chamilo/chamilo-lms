@@ -1226,4 +1226,17 @@ $ThereAreNotCreatedCourses = "Aucun cours créé";
 $HomepageViewVerticalActivity = "Vue activité verticale";
 $CoursesInformation = "Rapport des cours";
 $SpecialExportsIntroduction = "La fonctionnalité d'export spécial a été dessinée dans l'intention de venir en aide au contrôleur académique/instructionnel, pour lui permettre d'exporter tous les documents de cours en une seule opération. Une seconde option permet de choisir les cours que vous voulez exporter, et exportera également les documents présents dans ces documents directement depuis l'outil de maintenance du cours lui-même.";
+$AllowUserCourseSubscriptionByCourseAdminTitle = "Autoriser l'inscription d'utilisateurs aux cours par l'administrateur du cours";
+$AllowUserCourseSubscriptionByCourseAdminComment = "Activer cette option autorisera l'administrateur du cours à inscrire des utilisateurs au sein de son cours. Cette option est généralement désactivée sur les portails pour lesquels une équipe d'administrateurs ou un système tiers se charge des inscriptions des étudiants manuellement ou automatiquement.";
+$ConfigureDashboardPlugin = "Configurer le plugin de tableau de bord";
+$EditBlocks = "Éditer les blocs";
+$ShowLinkBugNotificationTitle = "Lien de rapport d'erreur";
+$ShowLinkBugNotificationComment = "Montrer un lien dans l'en-tête qui mène directement vers notre plateforme de support (http://support.chamilo.org). Lorsque l'utilisateur clique sur ce lien, il est envoyé sur notre plateforme de support, vers une page qui lui expliquera comment rapporter un bug.";
+$GradebookActivateScoreDisplayCustom = "Activer la libellisation des niveaux de compétences personnalisés pour les scores";
+$GradebookScoreDisplayCustomValues = "Valeurs personnalisées de niveaux de compétences";
+$GradebookNumberDecimals = "Nombre de décimales";
+$GradebookNumberDecimalsComment = "Permet de configurer le nombre de décimales autorisées dans les scores";
+$EditSessionsToURL = "Éditer les sessions des URL";
+$AddSessionsToURL = "Ajouter sessions aux URL";
+$SessionListIn = "Liste des sessions dans";
 ?>

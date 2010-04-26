@@ -41,4 +41,6 @@ $langLinkUpdated = "链接已更新";
 $langAll_Link_Deleted = "链接已删除";
 $langOnHomepage = "主页中显示";
 $langShowLinkOnHomepage = "在课程主页将链接显示为一个图标";
+$langSaveLink = "保存链接";
+$langSaveCategory = "保存分类";
 ?>

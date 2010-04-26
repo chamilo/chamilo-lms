@@ -57,7 +57,7 @@ $Arrow = "箭头";
 $Question = "疑问";
 $Idea = "有想法";
 $AskPermissionSpeak = "请求说话";
-$GiveTheFloorTo = "打击他";
+$GiveTheFloorTo = "说活";
 $Pause = "暂停";
 $Stop = "停止";
 ?>

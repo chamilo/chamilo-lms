@@ -32,7 +32,7 @@ $Englin = "Anglais";
 $langInvalidForSelfRegistration = "Échec du login - si vous n'êtes pas enregistré, vous pouvez le faire en utilisant le <a href=claroline/auth/inscription.php>formulaire d'enregistrement</a>";
 $langSubCat = "sous-catégories";
 $langMenuGeneral = "Général";
-$langMenuUser = "Utilisateur";
+$langMenuUser = "Menu perso";
 $langMenuAdmin = "Administration";
 $langUsersOnLineList = "Liste des utilisateurs en ligne";
 $langTotalOnLine = "Total en ligne";

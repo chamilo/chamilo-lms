@@ -2,7 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
-$Announcement = "֪ͨ";
+$Announcement = "通知";
 $langAnnEmpty = "通知列表已经被删除";
 $AnnouncementModified = "通知列表已更新";
 $AnnouncementAdded = "已添加通知";
@@ -51,9 +51,9 @@ $SelectEverybody = "选择所有人";
 $SelectedUsersGroups = "选择用户组";
 $LearnerMessage = "学员短信息";
 $TitleIsRequired = "需要标题";
-$AnnounceSentByEmail = "通过电子邮件发布公告";
+$AnnounceSentByEmail = "通过电子邮件发布通知";
 $AnnounceSentToUserSelection = "发送到所选择的用户";
-$SendAnnouncement = "发送公告";
-$ModifyAnnouncement = "修改公告";
-$ButtonPublishAnnouncement = "发送公告";
+$SendAnnouncement = "发送通知";
+$ModifyAnnouncement = "修改通知";
+$ButtonPublishAnnouncement = "发送通知";
 ?>

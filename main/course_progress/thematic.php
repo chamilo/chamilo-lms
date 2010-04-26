@@ -88,7 +88,7 @@ if ($action == 'thematic_list') {
 				echo '<tr>';
 				
 				// display thematic data		
-				echo '<td><div ><strong>'.Security::remove_XSS($thematic['title'], STUDENT).'</strong></div><div>'.Security::remove_XSS($thematic['content'], STUDENT).'</div></td>';
+				echo '<td><div id="titlethematic" ><strong>'.Security::remove_XSS($thematic['title'], STUDENT).'</strong></div><div>'.Security::remove_XSS($thematic['content'], STUDENT).'</div></td>';
 				
 				// display thematic plan data
 				echo '<td>';					

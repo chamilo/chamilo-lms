@@ -73,6 +73,7 @@ if (isset($action) && $action == 'calendar_add') {
                 
                 
                 $form->addElement('html', '</div>');
+                $form->addElement('html', '</div>');
                 $form->addElement('html','<br /><br />');
 
 		$form->addElement('html','<div class="clear"></div>');

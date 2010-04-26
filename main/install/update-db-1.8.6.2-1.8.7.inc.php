@@ -176,33 +176,39 @@ if (defined('SYSTEM_INSTALLATION')) {
         }
 
         // Updating score display for each gradebook category
-        // get all gradebook categories id
-        $a_categories = array();
-        $query = "SELECT id FROM $dbNameForm.gradebook_category";
-        $rs_gradebook = Database::query($query);
-        if (Database::num_rows($rs_gradebook) > 0) {
-            while($row_gradebook = Database::fetch_row($rs_gradebook)) {
-                $a_categories[] = $row_gradebook[0];
-            }
-        }
 
-        // get all gradebook score display
-        $query = "SELECT * FROM $dbNameForm.gradebook_score_display";
-        $rs_score_display = Database::query($query);
-        if (Database::num_rows($rs_score_display) > 0) {
-            $score_color_percent = api_get_setting('gradebook_score_display_colorsplit');
-            while ($row_score_display = Database::fetch_array($rs_score_display)) {
-                $score = $row_score_display['score'];
-                $display = $row_score_display['display'];
-                foreach ($a_categories as $category_id) {
-                    $ins = "INSERT INTO $dbNameForm.gradebook_score_display(score, display, category_id, score_color_percent) VALUES('$score', '$display', $category_id, '$score_color_percent')";
-                    Database::query($ins);
+        // first we check if there already is migrated data to categoy_id field
+        $query = "SELECT id FROM $dbNameForm.gradebook_score_display WHERE category_id = 0";
+        $rs_check = Database::query($query);
+
+        if (Database::num_rows($rs_check) > 0) {
+            // get all gradebook categories id
+            $a_categories = array();
+            $query = "SELECT id FROM $dbNameForm.gradebook_category";
+            $rs_gradebook = Database::query($query);
+            if (Database::num_rows($rs_gradebook) > 0) {
+                while($row_gradebook = Database::fetch_row($rs_gradebook)) {
+                    $a_categories[] = $row_gradebook[0];
                 }
-
             }
-            // remove score display with category id = 0
-            $del = "DELETE FROM $dbNameForm.gradebook_score_display WHERE category_id = 0";
-            Database::query($del);
+
+            // get all gradebook score display
+            $query = "SELECT * FROM $dbNameForm.gradebook_score_display";
+            $rs_score_display = Database::query($query);
+            if (Database::num_rows($rs_score_display) > 0) {
+                $score_color_percent = api_get_setting('gradebook_score_display_colorsplit');
+                while ($row_score_display = Database::fetch_array($rs_score_display)) {
+                    $score = $row_score_display['score'];
+                    $display = $row_score_display['display'];
+                    foreach ($a_categories as $category_id) {
+                        $ins = "INSERT INTO $dbNameForm.gradebook_score_display(score, display, category_id, score_color_percent) VALUES('$score', '$display', $category_id, '$score_color_percent')";
+                        Database::query($ins);
+                    }
+                }
+                // remove score display with category id = 0
+                $del = "DELETE FROM $dbNameForm.gradebook_score_display WHERE category_id = 0";
+                Database::query($del);
+            }
         }
 
         // Now clean the deprecated id_coach field from the session_rel_course table

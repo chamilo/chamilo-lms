@@ -916,13 +916,13 @@ $ReportABug = "Report a bug";
 $Letters = "Letters";
 $MaximumOfParticipants = "Maximum number of members";
 $ContactInformation = "Contact information";
-$PersonName = "Person name";
-$CompanyName = "Company name";
-$PersonRole = "Person role";
-$HaveYouThePowerToTakeFinancialDecisions = "Have you the power to take financial decisions?";
-$CompanyCountry = "Company country";
+$PersonName = "Your name";
+$CompanyName = "Your company's name";
+$PersonRole = "Your job's description";
+$HaveYouThePowerToTakeFinancialDecisions = "Do you have the power to take financial decisions on behalf of your company?";
+$CompanyCountry = "Your company's home country";
 $CompanyCity = "Company city";
-$WhichLanguageWouldYouLikeToUseWhenContactingYou = "Which Language Would You Like To Use When Contacting You?";
+$WhichLanguageWouldYouLikeToUseWhenContactingYou = "Preferred contact language";
 $SendInformation = "Send information";
 $YouMustAcceptLicence = "You must accept the licence";
 $SelectOne = "Select one";
@@ -930,10 +930,13 @@ $ContactInformationHasBeenSent = "Contact information has been sent";
 $ContactInformationDescription = "Dear user,<br />
 <br />You are about to start using one of the best open-source e-learning platform on the market. Like many other open-source project, this project is backed up by a large community of students, teachers, developers and content creators who would like to promote the project better.<br />
 <br />
-By knowing a little bit more about you, one of our most important users that will manage this e-learning system, we will be able to let people know that our software is used and let you know when we organize events that might be relevant to you.<br />
+By knowing a little bit more about you, one of our most important users, who will manage this e-learning system, we will be able to let people know that our software is used and let you know when we organize events that might be relevant to you.<br />
 <br />
-By filling this form, you implicitly accept that the Chamilo association or its members might send you information by e-mail about important events or updates in the Chamilo software or community. This will help the community grow as an organized entity where information flow, with a permanent respect of your time and your privacy.<br />
+By filling this form, you accept that the Chamilo association or its members might send you information by e-mail about important events or updates in the Chamilo software or community. This will help the community grow as an organized entity where information flow, with a permanent respect of your time and your privacy.<br />
 <br />
 Please note that you are <b>not required</b> to fill this form. If you want to remain anonymous, we will loose the opportunity to offer you all the privileges of being a registered portal administrator, but we will respect your decision. Simply leave this form empty and click \"Next\".<br /><br />";
-$CompanyActivity = "Company activity";
+$CompanyActivity = "Your company's activity";
+$DateLock = "Lock date";
+$DateUnLock = "Unlock date";
+$GoToStudentDetails = "Go to student details";
 ?>

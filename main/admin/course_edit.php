@@ -50,9 +50,18 @@ while ($obj = Database::fetch_object($res)) {
 }
 
 // Get all possible teachers without the course teachers
-$sql = "SELECT user_id,lastname,firstname FROM $table_user WHERE status='1'".$order_clause;
+if ($_configuration['multiple_access_urls']==true){
+	$access_url_rel_user_table= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+	$sql = "SELECT u.user_id,lastname,firstname FROM $table_user as u
+			INNER JOIN $access_url_rel_user_table url_rel_user
+			ON (u.user_id=url_rel_user.user_id) WHERE url_rel_user.access_url_id=".api_get_current_access_url_id()." AND status=1".$order_clause;
+} else {
+	$sql = "SELECT user_id,lastname,firstname FROM $table_user WHERE status='1'".$order_clause;	
+}
+
 $res = Database::query($sql);
 $teachers = array();
+
 
 $platform_teachers[0] = '-- '.get_lang('NoManager').' --';
 while ($obj = Database::fetch_object($res)) {
@@ -73,7 +82,7 @@ if (count($course_teachers)==0) {
 	$sql='SELECT tutor_name FROM '.$course_table.' WHERE code="'.$course_code.'"';
 	$res = Database::query($sql);
 	$tutor_name=Database::result($res,0,0);
-	$course['tutor_name']=array_search($tutor_name,$platform_teachers);
+	$course['tutor_name']=array_search($tutor_name,$platform_teachers);	
 }
 
 // Build the form

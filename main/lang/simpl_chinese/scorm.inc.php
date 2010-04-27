@@ -44,4 +44,5 @@ $Local = "本地";
 $Remote = "远距";
 $FileToUpload = "需要上传的文件";
 $ContentMaker = "内容创建者";
+$ContentProximity = "课程位置";
 ?>

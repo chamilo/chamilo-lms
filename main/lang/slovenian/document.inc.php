@@ -215,4 +215,5 @@ $HelpDefaultDirDocuments = "Ta mapa vsebuje privzeti arhiv. Vsebino lahko odstra
 $HelpSharedFolder = "Ta mapa vsebuje datoteke, ki jih tečajniki (ali vi sami) prenesete v področje tečaja preko urejevalnika (če jih niso/niste prenesli preko orodij skupine). Privzeto bodo vidne vsem učiteljem in skrite tečajnikom (razen v primeru direktnega dostopa do datoteke). V primeru, da naredite eno od map tečajnikom vidno, bo celotna njena vsebina vidna vsem tečajnikom.";
 $TemplateImage = "Ikona predloge";
 $MoveElement = "Premakni dokument";
+$CertificateName = "Ime";
 ?>

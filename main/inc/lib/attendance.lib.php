@@ -711,7 +711,7 @@ class Attendance
 	 * @param	int	attendance id
 	 * @return	int affected rows
 	 */
-	public function attendant_calendar_add($attendance_id) {
+	public function attendance_calendar_add($attendance_id) {
 		$tbl_attendance_calendar = Database::get_course_table(TABLE_ATTENDANCE_CALENDAR);
 		$affected_rows = 0;
 		$attendance_id = intval($attendance_id);
@@ -726,13 +726,76 @@ class Attendance
 		return $affected_rows;
 	}
 
+        /**
+         * save repeated date inside attendance calendar table
+         */
+        public function attendance_repeat_calendar_add($attendance_id, $start_date, $end_date, $repeat_type) {
+
+            $attendance_id = intval($attendance_id);
+
+            // save start date
+            $datetime = date('Y-m-d H:i:s', $start_date);
+            $datetimezone = api_get_utc_datetime($datetime);
+            $this->set_date_time($datetimezone);
+            $res = $this->attendance_calendar_add($attendance_id);
+
+            // save repeated dates
+            switch($repeat_type) {
+                case 'daily':                    
+                    for ($i = $start_date + 86400; ($i <= $end_date); $i += 86400) {
+                        $datetime = date('Y-m-d H:i:s', $i);
+                        $datetimezone = api_get_utc_datetime($datetime);
+                        $this->set_date_time($datetimezone);                  
+                        $res = $this->attendance_calendar_add($attendance_id);
+                    }
+                    break;
+                    exit;
+                case 'weekly':
+                    for ($i = $start_date + 604800; ($i <= $end_date); $i += 604800) {
+                        $datetime = date('Y-m-d H:i:s', $i);
+                        $datetimezone = api_get_utc_datetime($datetime);
+                        $this->set_date_time($datetimezone);
+                        $res = $this->attendance_calendar_add($attendance_id);
+                    }
+                    break;
+                case 'monthlyByDate':
+                    $next_start = $this->add_month($start_date);
+                    while($next_start <= $end_date) {
+                        $datetime = date('Y-m-d H:i:s', $next_start);
+                        $datetimezone = api_get_utc_datetime($datetime);
+                        $this->set_date_time($datetimezone);
+                        $res = $this->attendance_calendar_add($attendance_id);
+                        $next_start = $this->add_month($next_start);
+                    }
+                    break;
+            }
+
+        }
+
+        /**
+         * Adds x months to a UNIX timestamp
+         * @param   int     The timestamp
+         * @param   int     The number of years to add
+         * @return  int     The new timestamp
+         */
+        private function add_month($timestamp, $num=1) {
+            list($y, $m, $d, $h, $n, $s) = split('/',date('Y/m/d/h/i/s',$timestamp));
+            if($m+$num>12) {
+                $y += floor($num/12);
+                $m += $num%12;
+            } else {
+                $m += $num;
+            }
+            return mktime($h, $n, $s, $m, $d, $y);
+        }
+
 	/**
 	 * edit a datetime inside attendance calendar table
 	 * @param	int	attendance calendar id
 	 * @param	int	attendance id
 	 * @return	int affected rows
 	 */
-	public function attendant_calendar_edit($calendar_id, $attendance_id) {
+	public function attendance_calendar_edit($calendar_id, $attendance_id) {
 		$tbl_attendance_calendar = Database::get_course_table(TABLE_ATTENDANCE_CALENDAR);
 		$affected_rows = 0;
 		$attendance_id = intval($attendance_id);
@@ -800,9 +863,9 @@ class Attendance
 	public function build_datetime_from_array($array) {
 		$year	 = '0000';
 		$month = $day = $hours = $minutes = $seconds = '00';
-		if (isset($array['Y']) && isset($array['F']) && isset($array['d']) && isset($array['H']) && isset($array['i'])) {
+		if (isset($array['Y']) && (isset($array['F']) || isset($array['M']))  && isset($array['d']) && isset($array['H']) && isset($array['i'])) {
 			$year = $array['Y'];
-			$month = $array['F'];
+			$month = isset($array['F'])?$array['F']:$array['M'];
 			if (intval($month) < 10 ) $month = '0'.$month;
 			$day = $array['d'];
 			if (intval($day) < 10 ) $day = '0'.$day;

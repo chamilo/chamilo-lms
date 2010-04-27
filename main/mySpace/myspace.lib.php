@@ -632,8 +632,16 @@ class MySpace {
 	 * @since October 2008
 	 */
 	function get_user_data_tracking_overview($from, $number_of_items, $column, $direction) {
+		global $_configuration;
 		// database table definition
+		$access_url_id = api_get_current_access_url_id();
+	 	$tbl_url_rel_user = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
 		$main_user_table = Database :: get_main_table(TABLE_MAIN_USER);
+		
+		if ($_configuration['multiple_access_urls']) {
+			$condition_multi_url = ", $tbl_url_rel_user as url_user WHERE user.user_id=url_user.user_id AND access_url_id='$access_url_id'";
+		}
+		
 		global $export_csv;
 		if ($export_csv) {
 			$is_western_name_order = api_is_western_name_order(PERSON_NAME_DATA_EXPORT);
@@ -650,9 +658,9 @@ class MySpace {
 					firstname 		AS col2,
 					").
 					"username		AS col3,
-					user_id 		AS col4
+					user.user_id 		AS col4
 				FROM
-					$main_user_table
+					$main_user_table as user $condition_multi_url
 				";
 		$sql .= " ORDER BY col$column $direction ";
 		$sql .= " LIMIT $from,$number_of_items";

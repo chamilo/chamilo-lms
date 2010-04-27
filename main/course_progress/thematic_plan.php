@@ -32,7 +32,7 @@ if ($action == 'thematic_plan_list') {
 
 	if (isset($thematic_plan_data) && count($thematic_plan_data) > 0) {
 		foreach ($thematic_plan_data as $thematic_plan) {	
-			echo '<div class="sectiontitle">';			
+			echo '<div class="sectiontitle" >';			
 				//delete
 				echo '<a href="'.api_get_self().'?cidReq='.api_get_course_id().'&thematic_id='.$thematic_plan['thematic_id'].'&action=thematic_plan_delete&description_type='.$thematic_plan['description_type'].'" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset)).'\')) return false;">';
 				echo Display::return_icon('delete.gif', get_lang('Delete'), array('style' => 'vertical-align:middle;float:right;'));

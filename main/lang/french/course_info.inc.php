@@ -117,4 +117,8 @@ $AllowUserViewUserList = "Autoriser l'utilisateur à voir la liste d'utilisateur
 $AllowUserViewUserListActivate = "Activer la liste des utilisateurs";
 $AllowUserViewUserListDeactivate = "Désactiver la liste d'utilisateurs";
 $DoNotDisplayAnyAdvance = "Ne pas afficher le progrès";
+$NewHomeworkEmailAlert = "Envoi d'e-mail aux utilisateurs lors de la création d'un travail";
+$NewHomeworkEmailAlertEnable = "Activer l'envoi d'un courriel lors de la réception d'un nouveau travail";
+$NewHomeworkEmailAlertDisable = "Désactiver l'envoi d'e-mail lors de la réception d'un travail";
+$DisplayAboutNextAdvanceNotDoneAndLastDoneAdvance = "Afficher la dernière étape achevée et la prochaine étape non terminée";
 ?>

@@ -462,8 +462,17 @@ if ($form->validate()) {
 			// 1. set account inactive
 			$sql = "UPDATE ".$TABLE_USER."	SET active='0' WHERE user_id='".$user_id."'";
 			Database::query($sql);
+			
+			$table_main_admin = Database::get_main_table(TABLE_MAIN_ADMIN);
+			
+			if ($_configuration['multiple_access_urls']) {
+				$access_url_id = api_get_current_access_url_id();
+				$tbl_url_rel_user = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+				$sql_get_id_admin = "SELECT admin.user_id FROM ".$tbl_url_rel_user.", ".$table_main_admin." as admin WHERE access_url_id='".$access_url_id."'";
+			} else {
+				$sql_get_id_admin = "SELECT * FROM ".$table_main_admin;
+			} 
 
-			$sql_get_id_admin = "SELECT * FROM ".Database::get_main_table(TABLE_MAIN_ADMIN);
 			$result = Database::query($sql_get_id_admin);
 			while ($row = Database::fetch_array($result)) {
 

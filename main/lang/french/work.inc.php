@@ -87,4 +87,7 @@ $ViewUsersWithTask = "Travaux déjà remis";
 $ReminderMessage = "Envoyer un rappel";
 $DateSent = "Date de réception";
 $ViewUsersWithoutTask = "Travaux manquants";
+$HomeworkCreated = "Une tâche a été ajoutée";
+$HomeworkHasBeenCreatedForTheCourse = "Une tâche a été ajoutée dans le cours";
+$PleaseCheckHomeworkPage = "Veuillez vérifier la page des tâches";
 ?>

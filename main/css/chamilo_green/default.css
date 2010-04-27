@@ -3991,7 +3991,10 @@ div.image-social-content center.friend {
  padding-bottom:10px;
  padding-top: 5px;
 }
-
+#titlethematic{
+	text-transform: uppercase;
+	color: green;
+}
 /* ATTENDANCE */
 
 div.attendance-calendar-add div.row div.formw,div.attendance-calendar-edit div.row div.formw  {

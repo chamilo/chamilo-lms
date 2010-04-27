@@ -88,7 +88,7 @@ if ($action == 'thematic_list') {
 				echo '<tr>';
 				
 				// display thematic data		
-				echo '<td><div><strong>'.Security::remove_XSS($thematic['title'], STUDENT).'</strong></div><div>'.Security::remove_XSS($thematic['content'], STUDENT).'</div></td>';
+				echo '<td><div id="titlethematic" ><strong>'.Security::remove_XSS($thematic['title'], STUDENT).'</strong></div><div>'.Security::remove_XSS($thematic['content'], STUDENT).'</div></td>';
 				
 				// display thematic plan data
 				echo '<td>';					
@@ -97,7 +97,7 @@ if ($action == 'thematic_list') {
 					}
 					if (!empty($thematic_plan_data[$thematic['id']])) {
 						foreach ($thematic_plan_data[$thematic['id']] as $thematic_plan) {
-							echo '<div><strong>'.Security::remove_XSS($thematic_plan['title'], STUDENT).'</strong></div><div>'.Security::remove_XSS($thematic_plan['description'], STUDENT).'</div>'; 
+							echo '<div id="titlethematic" ><strong>'.Security::remove_XSS($thematic_plan['title'], STUDENT).'</strong></div><div>'.Security::remove_XSS($thematic_plan['description'], STUDENT).'</div>'; 
 						}
 					} else {
 						echo '<div><em>'.get_lang('StillDoNotHaveAThematicPlan').'</em></div>';

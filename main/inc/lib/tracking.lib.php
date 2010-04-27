@@ -2117,12 +2117,15 @@ class TrackingCourseLog {
 	 */
 	function get_user_data($from, $number_of_items, $column, $direction) {
 
-		global $user_ids, $course_code, $additional_user_profile_info, $export_csv, $is_western_name_order, $csv_content, $session_id;
+		global $user_ids, $course_code, $additional_user_profile_info, $export_csv, $is_western_name_order, $csv_content, $session_id, $_configuration;
+		
 
 		$course_code = Database::escape_string($course_code);
 		$course_info = CourseManager :: get_course_information($course_code);
 		$tbl_user 	 = Database :: get_main_table(TABLE_MAIN_USER);
-
+		$access_url_id = api_get_current_access_url_id();
+		$tbl_url_rel_user = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+		
 		// get all users data from a course for sortable with limit
 		$condition_user = "";
 		if (is_array($user_ids)) {
@@ -2130,12 +2133,18 @@ class TrackingCourseLog {
 		} else {
 			$condition_user = " WHERE user.user_id = '$user_ids' ";
 		}
+		
+		if ($_configuration['multiple_access_urls']) {
+			$url_table = ", ".$tbl_url_rel_user."as url_users";
+			$url_condition = " AND user.user_id = url_users.user_id AND access_url_id='$access_url_id'";
+		}
+		
 		$sql = "SELECT user.user_id as col0,
 				user.official_code as col1,
 				user.lastname as col2,
 				user.firstname as col3
-				FROM $tbl_user as user
-				$condition_user ";
+				FROM $tbl_user as user $url_table
+				$condition_user $url_condition";
 
 		if (!in_array($direction, array('ASC','DESC'))) {
 	    	$direction = 'ASC';

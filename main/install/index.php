@@ -159,7 +159,7 @@ if ($_POST['step2_install'] || $_POST['step2_update_8'] || $_POST['step2_update_
 		$installType = 'update';
 		if ($_POST['step2_update_8']) {
 			$emptyUpdatePath = false;
-			$proposedUpdatePath = api_add_trailing_slash(empty($_POST['updatePath']) ? $_SERVER['DOCUMENT_ROOT'] : $_POST['updatePath']);
+			$proposedUpdatePath = api_add_trailing_slash(empty($_POST['updatePath']) ? api_get_path(SYS_PATH) : $_POST['updatePath']);
 			if (file_exists($proposedUpdatePath)) {
 				if (in_array($my_old_version, $update_from_version_8)) {
 					$_POST['step2'] = 1;
@@ -386,7 +386,7 @@ if ($encryptPassForm == '1') {
                             $("#id_contact_form").css("display","none");
                             $("#img_plus_and_minus").html('&nbsp;<img src="<?php echo api_get_path(WEB_IMG_PATH) ?>div_show.gif" alt="<?php echo get_lang('Show') ?>" title="<?php echo get_lang('Show') ?>" style ="vertical-align:middle" >&nbsp;<?php echo get_lang('ContactInformation') ?>');
                     }
-                });                
+                });
             });
 
             function send_contact_information() {
@@ -408,13 +408,13 @@ if ($encryptPassForm == '1') {
                         data: data_post,
                         success: function(datos) {
                             if (datos == 'required_field_error') {
-                                message = "<?php echo get_lang('FormHasErrorsPleaseComplete') ?>";                                
+                                message = "<?php echo get_lang('FormHasErrorsPleaseComplete') ?>";
                             } else if (datos == '1') {
                             	message = "<?php echo get_lang('ContactInformationHasBeenSent') ?>";
                             } else {
                             	message = "<?php echo get_lang('Error').': '.get_lang('ContactInformationHasNotBeenSent') ?>";
                             }
-                            alert(message);                                                                                
+                            alert(message);
                         }
                 });
             }

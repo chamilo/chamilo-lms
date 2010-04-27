@@ -176,8 +176,11 @@ if(api_is_platform_admin()) {
 	  
 	  //@todo Translations needed in order to see a better explanation of issues
 	  echo '<li><a href="system_status.php">'.get_lang('SystemStatus').'</a></li>';
-	  
 
+	  if (is_dir(api_get_path(SYS_TEST_PATH).'datafiller/')) {
+      //do not show on production portals, where the tests directory doesn't exist
+	      echo '<li><a href="filler.php">'.get_lang('DataFiller').'</a></li>';
+      }
 	  ?>
 	 </ul>
 	</div>
@@ -278,6 +281,7 @@ if(api_is_platform_admin()){
 	<?php
 	}*/
 ?>
+
 <div class="admin_section">
  <h4><?php Display::display_icon('logo.gif', 'Chamilo'); ?> Chamilo.org</h4>
  <ul>
@@ -294,7 +298,7 @@ if(api_is_platform_admin()){
   ?>
  </ul>
 </div>
-<?php
+<?php 
 }
 
 /**

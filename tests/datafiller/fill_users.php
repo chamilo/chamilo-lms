@@ -15,15 +15,17 @@ require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
  * @return  array  List of user IDs for the users that have just been inserted
  */
 function fill_users() {
-	global $eol;
+	$eol = PHP_EOL;
     $users = array(); //declare only to avoid parsing notice
     require_once 'data_users.php'; //fill the $users array
     $output = array();
-    echo $eol.'Users created:'.$eol.$eol;
+    $output[] = array('title'=>'UsersFillingReport:');
+    $i = 1;
     foreach ($users as $i => $user) {
         //first check that the first item doesn't exist already
-        echo $user['firstname'].$eol;
-    	$output[] = UserManager::create_user($user['firstname'],$user['lastname'],$user['status'],$user['email'],$user['username'],$user['pass'],null,null,null,null,$user['auth_source'],null,$user['active']);
+    	$output[$i]['line-init'] = $user['firstname'];
+    	$output[$i]['line-info'] = (UserManager::create_user($user['firstname'],$user['lastname'],$user['status'],$user['email'],$user['username'],$user['pass'],null,null,null,null,$user['auth_source'],null,$user['active'])?$res:get_lang('NotInserted'));
+    	$i++;
     }
     return $output;
 }

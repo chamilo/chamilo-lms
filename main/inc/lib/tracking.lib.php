@@ -2136,7 +2136,7 @@ class TrackingCourseLog {
 		
 		if ($_configuration['multiple_access_urls']) {
 			$url_table = ", ".$tbl_url_rel_user."as url_users";
-			$url_condition = " AND user.user_id = url_users.user_id";
+			$url_condition = " AND user.user_id = url_users.user_id AND access_url_id='$access_url_id'";
 		}
 		
 		$sql = "SELECT user.user_id as col0,

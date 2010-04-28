@@ -193,7 +193,7 @@ if ($export_result_form->validate()) {
 	
 	// export results to pdf file
 	if ($file_type == 'pdf') {
-		
+		$number_decimals = api_get_setting('gradebook_number_decimals');
 		$datagen = new ResultsDataGenerator ($eval[0],$allresults);
 		
 		// set headers pdf
@@ -229,13 +229,15 @@ if ($export_result_form->validate()) {
 		if ($scoredisplay->is_custom()) {
 			$head_display_score = get_lang('Display');
 		}
-		
+		if ($number_decimals == null) {
+			$head_letter = get_lang('Letters');
+		}
 		$head_table = array(
 							array(get_lang('Item'),5), 
 							array(get_lang('Code'),15), 
 							array($head_ape_name, 50),
 							array(get_lang('Score'),15), 
-							array(get_lang('Letters'),15),
+							array($head_letter,15),
 							array($head_display_score,15)
 						);
 		
@@ -245,7 +247,6 @@ if ($export_result_form->validate()) {
 		} else {
 			$data_array = $datagen->get_data(ResultsDataGenerator :: RDG_SORT_LASTNAME,0,null, true, true);
 		}
-			
 		$data_table = array();		
 		foreach ($data_array as $data) {
 			$result = array();
@@ -257,7 +258,9 @@ if ($export_result_form->validate()) {
 				$result[] = $user_info['lastname'].', '.$user_info['firstname'];
 			}
 			$result[] = $data['score'];
-			$result[] = api_strtoupper(get_lang('Literal'.$data['scoreletter']));
+			if ($number_decimals == null) {
+				$result[] = api_strtoupper(get_lang('Literal'.$data['scoreletter']));
+			}
 			if ($scoredisplay->is_custom()) {
 				$result[] = $data['display'];
 			}

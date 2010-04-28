@@ -2045,6 +2045,15 @@ div.comments {
 	border: 1px solid rgb(153, 153, 153);
 	background: rgb(255, 255, 255) none repeat scroll 0% 0%;
 }
+.label_result {
+	float: left;
+	width: 25%;
+	text-align: left;
+}
+.formw_result {
+	width: 75%;
+	float:left;
+}
 /* actions */
 .actions_lp {
 	background:#F8F8F8;

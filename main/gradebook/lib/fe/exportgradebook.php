@@ -161,7 +161,7 @@ function export_pdf_with_html($headers_table, $data_table, $headers_pdf, $footer
 				$content_table .= '<tr>';
 				$content_table .= '<td>'.($item<10?'0'.$item:$item).'</td>';
 				foreach ($data as  $key => $content) {							
-					if (!empty($content)) {
+					if (isset($content)) {
 						$key == 1 ? $align='align="left"':$align='align="center"';
 						$content_table .= '<td '.$align.' style="padding:4px;" >'.$content.'</td>';	
 					}					

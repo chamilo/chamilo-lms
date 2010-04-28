@@ -20,13 +20,13 @@ function get_users_in_course($course_id) {
 	$course_id = Database::escape_string($course_id);
 
 	if (!empty($current_session)) {
-		$sql = "SELECT user.user_id,lastname,firstname
+		$sql = "SELECT user.user_id, user.username, lastname, firstname
 			 	FROM $tbl_session_course_user as scru, $tbl_user as user
 			 	WHERE scru.id_user=user.user_id
 			 	AND scru.status=0
 			 	AND scru.course_code='$course_id' AND id_session ='$current_session' $order_clause ";
 	} else {
-		$sql = 'SELECT user.user_id,lastname,firstname'
+		$sql = 'SELECT user.user_id, user.username, lastname, firstname'
 			.' FROM '.$tbl_course_user.' as course_rel_user, '.$tbl_user.' as user'
 			.' WHERE course_rel_user.user_id=user.user_id'
 			.' AND course_rel_user.status='.STUDENT
@@ -44,6 +44,7 @@ function get_user_array_from_sql_result($result) {
 		if (!array_key_exists($user['user_id'],$a_students)) {
 			$a_current_student = array ();
 			$a_current_student[] = $user['user_id'];
+			$a_current_student[] = $user['username'];
 			$a_current_student[] = $user['lastname'];
 			$a_current_student[] = $user['firstname'];
 			$a_students['STUD'.$user['user_id']] = $a_current_student;

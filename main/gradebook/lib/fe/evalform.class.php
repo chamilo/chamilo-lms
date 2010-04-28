@@ -120,13 +120,13 @@ class EvalForm extends FormValidator
 		$this->addElement('hidden', 'minvalue', 0);
 		$this->addElement('header','h1','<b>'.get_lang('EditResult').'</b>');
 		$renderer = $this->defaultRenderer();
-		$elementTemplateTwoLabel = '<div class="row">
-			<div class="label">
+		$elementTemplateTwoLabel = '<div class="row"><ul style="list-style-type:none;">
+			<li><div class="label_result" >
 			<!-- BEGIN required --><span class="form_required">*</span> <!-- END required -->{label}
 			</div>
-			<div class="formw">
+			<div class="formw_result">
 			<!-- BEGIN error --><span class="form_error">{error}</span><br /><!-- END error -->	{element} / '.$this->evaluation_object->get_max().'
-			</div>
+			</div></li></ul>
 			</div>';
 
 		$results_and_users = array();
@@ -145,10 +145,10 @@ class EvalForm extends FormValidator
 
 			$renderer =& $this->defaultRenderer();
 			$this->add_textfield('score[' . $result->get_id() . ']',
-								 $this->build_stud_label($user['user_id'], $user['lastname'], $user['firstname']),
+								 $this->build_stud_label($user['user_id'], $user['username'], $user['lastname'], $user['firstname']),
 								 false,
 								 array ('size' => 4,
-										'maxlength' => 4));
+										'maxlength' => 5));
 
 			$this->addRule('score[' . $result->get_id() . ']', get_lang('OnlyNumbers'), 'numeric');
 			$this->addRule(array (
@@ -159,7 +159,7 @@ class EvalForm extends FormValidator
 			$renderer->setElementTemplate($elementTemplateTwoLabel,'score[' . $result->get_id() . ']');
 		}
 		$this->setDefaults($defaults);
-		$this->addElement('style_submit_button', 'submit',get_lang('Ok'),'class="save"');
+		$this->addElement('style_submit_button', 'submit',get_lang('EditResult'),'class="save"');
 	}
 	/**
 	 * This function builds a form to move an item to another category
@@ -193,19 +193,20 @@ class EvalForm extends FormValidator
 
 		$renderer = $this->defaultRenderer();
 		$elementTemplateTwoLabel = '<div class="row">
-			<div class="label">
+			<div class="label_result">
 			<!-- BEGIN required --><span class="form_required">*</span> <!-- END required -->{label}
 			</div>
-			<div class="formw">
+			<div class="formw_result">
 			<!-- BEGIN error --><span class="form_error">{error}</span><br /><!-- END error -->	{element} / '.$this->evaluation_object->get_max().'
 			</div>
 			</div>';
 		foreach ($tblusers as $user) {
+			//user_id, user.username, lastname, firstname
 			$this->add_textfield('score[' . $user[0] . ']',
-								 $this->build_stud_label($user[0], $user[1], $user[2]),
+								 $this->build_stud_label($user[0], $user[1], $user[2], $user[3]),
 								 false,
 								 array ('size' => 4,
-										'maxlength' => 4));
+										'maxlength' => 5));
 
 			$this->addRule('score[' . $user[0] . ']', get_lang('OnlyNumbers'), 'numeric');
 			$this->addRule(array (
@@ -222,7 +223,7 @@ class EvalForm extends FormValidator
 		}
 		$this->addElement('hidden', 'nr_users', $nr_users);
 		$this->addElement('hidden', 'evaluation_id', $this->result_object->get_evaluation_id());
-		$this->addElement('style_submit_button', 'submit', get_lang('Ok'),'class="save"');
+		$this->addElement('style_submit_button', 'submit', get_lang('AddResult'),'class="save"');
 	}
 	/**
 	 * Builds a form to edit a result
@@ -238,13 +239,13 @@ class EvalForm extends FormValidator
 		$this->addElement('static', null, null, api_get_person_name($userinfo['lastName'], $userinfo['firstName']));
 		$this->add_textfield('score', get_lang('Result'), false, array (
 			'size' => '4',
-			'maxlength' => '4'
+			'maxlength' => '5'
 		));
 		$this->addElement('static', null, null,'/');
 
 		$this->add_textfield('maximum', null, false, array (
 			'size' => '4',
-			'maxlength' => '4',
+			'maxlength' => '5',
 			'disabled' => 'disabled'
 		));
 		$this->addElement('style_submit_button', 'submit', get_lang('Edit'),'class="save"');
@@ -308,18 +309,18 @@ class EvalForm extends FormValidator
 		));
 		$this->add_textfield('weight', get_lang('Weight'), true, array (
 			'size' => '4',
-			'maxlength' => '4'
+			'maxlength' => '5'
 		));
 		if ($edit) {
 			if (!$this->evaluation_object->has_results()) {
 				$this->add_textfield('max', get_lang('QualificationNumeric'), true, array (
 					'size' => '4',
-					'maxlength' => '4'
+					'maxlength' => '5'
 				));
 			} else {
 				$this->add_textfield('max', get_lang('QualificationNumeric'), false, array (
 					'size' => '4',
-					'maxlength' => '4',
+					'maxlength' => '5',
 					'disabled' => 'disabled'
 				));
 				$this->addElement('static','label','','<small>'.get_lang('CannotChangeTheMaxNote').'</small>');
@@ -327,7 +328,7 @@ class EvalForm extends FormValidator
 		} else {
 			$this->add_textfield('max', get_lang('QualificationNumeric'), true, array (
 				'size' => '4',
-				'maxlength' => '4'
+				'maxlength' => '5'
 			));
 		}
 		$this->addElement('textarea', 'description', get_lang('Description'), array (
@@ -348,7 +349,7 @@ class EvalForm extends FormValidator
 	}
 
 
-	private function build_stud_label ($id, $lastname, $firstname) {
+	private function build_stud_label ($id, $username,$lastname, $firstname) {
 		$opendocurl_start = '';
 		$opendocurl_end = '';
 		// evaluation's origin is a link
@@ -360,7 +361,7 @@ class EvalForm extends FormValidator
 				$opendocurl_end = '</a>';
 			}
 		}
-		return $opendocurl_start . api_get_person_name($firstname, $lastname) . $opendocurl_end;
+		return $opendocurl_start . api_get_person_name($firstname, $lastname) .' ('.$username.')'. $opendocurl_end;
 	}
 
 	function sort_by_user ($item1, $item2) {

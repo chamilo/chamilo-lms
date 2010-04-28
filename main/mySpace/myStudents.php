@@ -689,70 +689,63 @@ if ($timezone !== null) {
 			get_lang('Attempts')
 		);
 
-		$t_tool = Database :: get_course_table(TABLE_TOOL_LIST, $info_course['db_name']);
-		$sql = 'SELECT visibility FROM ' . $t_tool . ' WHERE name="quiz"';
-		$result_visibility_quizz = Database::query($sql);		
+
 		$t_quiz = Database :: get_course_table(TABLE_QUIZ_TEST, $info_course['db_name']);
+		$sql_exercices = "SELECT quiz.title,id
+											FROM " . $t_quiz . " AS quiz
+											WHERE active='1' AND quiz.session_id = $session_id ORDER BY quiz.title ASC
+											";
 
-		if (Database :: result($result_visibility_quizz, 0, 'visibility') == 1) {
+		$result_exercices = Database::query($sql_exercices);
+		$i = 0;
+		if (Database :: num_rows($result_exercices) > 0) {
+			while ($exercices = Database :: fetch_array($result_exercices)) {					
+				$exercise_id = intval($exercices['id']);
+				$count_attempts   = Tracking::count_student_exercise_attempts($student_id, $course_code, $exercise_id);
+				$score_percentage = Tracking::get_avg_student_exercise_score($student_id, $course_code, $exercise_id);
 
-			$sql_exercices = "SELECT quiz.title,id
-												FROM " . $t_quiz . " AS quiz
-												WHERE active='1' AND quiz.session_id = $session_id ORDER BY quiz.title ASC
-												";
+				$csv_content[] = array (
+					$exercices['title'],
+					$score_percentage . '%',
+					$count_attempts
+				);
 
-			$result_exercices = Database::query($sql_exercices);
-			$i = 0;
-			if (Database :: num_rows($result_exercices) > 0) {
-				while ($exercices = Database :: fetch_array($result_exercices)) {					
-					$exercise_id = intval($exercices['id']);
-					$count_attempts   = Tracking::count_student_exercise_attempts($student_id, $course_code, $exercise_id);
-					$score_percentage = Tracking::get_avg_student_exercise_score($student_id, $course_code, $exercise_id);
+				if ($i % 2 == 0) $css_class = 'row_odd';
+				else $css_class = 'row_even';
 
-					$csv_content[] = array (
-						$exercices['title'],
-						$score_percentage . '%',
-						$count_attempts
-					);
-
-					if ($i % 2 == 0) $css_class = 'row_odd';
-					else $css_class = 'row_even';
-
-					echo '<tr class="'.$css_class.'"><td>'.$exercices['title'].'</td>';
-					
-					echo '<td align="center">';
-												
-					if ($count_attempts > 0) {
-						echo $score_percentage . '%';
-					} else {
-						echo '/';
-						$score_percentage = 0;
-					}
-
-					echo '</td>';
-					echo '<td align="center">'.$count_attempts.'</td>';
-					echo '<td align="center">';
-
-					$sql_last_attempt = 'SELECT exe_id FROM ' . $tbl_stats_exercices . ' WHERE exe_exo_id="'.$exercise_id.'" AND exe_user_id="'.$student_id.'" AND exe_cours_id="'.$course_code.'" AND orig_lp_id = 0 AND orig_lp_item_id = 0 ORDER BY exe_date DESC LIMIT 1';
-					$result_last_attempt = Database::query($sql_last_attempt);
-					if (Database :: num_rows($result_last_attempt) > 0) {
-						$id_last_attempt = Database :: result($result_last_attempt, 0, 0);
-						if ($count_attempts > 0)
-							echo '<a href="../exercice/exercise_show.php?id=' . $id_last_attempt . '&cidReq='.$course_code.'&student='.$student_id.'&origin='.(empty($_GET['origin'])?'tracking':Security::remove_XSS($_GET['origin'])).'"> <img src="' . api_get_path(WEB_IMG_PATH) . 'quiz.gif" border="0" /> </a>';
-					}
-					echo '</td></tr>';
-					$data_exercices[$i][] = $exercices['title'];
-					$data_exercices[$i][] = $score_percentage . '%';
-					$data_exercices[$i][] = $count_attempts;
-					$i++;
-
+				echo '<tr class="'.$css_class.'"><td>'.$exercices['title'].'</td>';
+				
+				echo '<td align="center">';
+											
+				if ($count_attempts > 0) {
+					echo $score_percentage . '%';
+				} else {
+					echo '/';
+					$score_percentage = 0;
 				}
-			} else {
-				echo '<tr><td colspan="6">'.get_lang('NoExercise').'</td></tr>';
+
+				echo '</td>';
+				echo '<td align="center">'.$count_attempts.'</td>';
+				echo '<td align="center">';
+
+				$sql_last_attempt = 'SELECT exe_id FROM ' . $tbl_stats_exercices . ' WHERE exe_exo_id="'.$exercise_id.'" AND exe_user_id="'.$student_id.'" AND exe_cours_id="'.$course_code.'" AND orig_lp_id = 0 AND orig_lp_item_id = 0 ORDER BY exe_date DESC LIMIT 1';
+				$result_last_attempt = Database::query($sql_last_attempt);
+				if (Database :: num_rows($result_last_attempt) > 0) {
+					$id_last_attempt = Database :: result($result_last_attempt, 0, 0);
+					if ($count_attempts > 0)
+						echo '<a href="../exercice/exercise_show.php?id=' . $id_last_attempt . '&cidReq='.$course_code.'&student='.$student_id.'&origin='.(empty($_GET['origin'])?'tracking':Security::remove_XSS($_GET['origin'])).'"> <img src="' . api_get_path(WEB_IMG_PATH) . 'quiz.gif" border="0" /> </a>';
+				}
+				echo '</td></tr>';
+				$data_exercices[$i][] = $exercices['title'];
+				$data_exercices[$i][] = $score_percentage . '%';
+				$data_exercices[$i][] = $count_attempts;
+				$i++;
+
 			}
 		} else {
 			echo '<tr><td colspan="6">'.get_lang('NoExercise').'</td></tr>';
 		}
+		
 ?>
 					</table>
 

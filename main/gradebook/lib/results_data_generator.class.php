@@ -56,6 +56,7 @@ class ResultsDataGenerator
 	public function get_data ($sorting = 0, $start = 0, $count = null, $ignore_score_color = false, $pdf=false) {
 
 		// do some checks on count, redefine if invalid value
+		$number_decimals = api_get_setting('gradebook_number_decimals');
 		if (!isset($count)) {
 			$count = count ($this->results) - $start;
 		}
@@ -80,7 +81,7 @@ class ResultsDataGenerator
 			} else {
 				$user['score'] = $this->get_score_display($result->get_score(),true, $ignore_score_color);	
 			}
-			if ($pdf == true){
+			if ($pdf == true and $number_decimals == null){
 				$user['scoreletter'] = $result->get_score();
 			}
 			if ($scoredisplay->is_custom())

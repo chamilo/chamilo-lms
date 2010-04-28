@@ -13,7 +13,7 @@ $language_file = "index";
 
 require_once '../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
-require_once api_get_path(LIBRARY_PATH).'main.lib.inc.php';
+require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
 if (empty($_user['user_id'])) {
 	api_not_allowed(true);
 }

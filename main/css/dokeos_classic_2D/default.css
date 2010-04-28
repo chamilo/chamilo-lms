@@ -2152,6 +2152,7 @@ input.forms	{
 	float: left;
 	width: 25%;
 	text-align: left;
+	padding-top:8px;
 }
 .formw_result {
 	width: 75%;

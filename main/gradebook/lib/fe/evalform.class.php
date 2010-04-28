@@ -120,14 +120,14 @@ class EvalForm extends FormValidator
 		$this->addElement('hidden', 'minvalue', 0);
 		$this->addElement('header','h1','<b>'.get_lang('EditResult').'</b>');
 		$renderer = $this->defaultRenderer();
-		$elementTemplateTwoLabel = '<div class="row"><ul style="list-style-type:none;">
+		$elementTemplateTwoLabel = '<div><div class="row"><ul style="list-style-type:none;">
 			<li><div class="label_result" >
 			<!-- BEGIN required --><span class="form_required">*</span> <!-- END required -->{label}
 			</div>
 			<div class="formw_result">
 			<!-- BEGIN error --><span class="form_error">{error}</span><br /><!-- END error -->	{element} / '.$this->evaluation_object->get_max().'
 			</div></li></ul>
-			</div>';
+			</div></div>';
 
 		$results_and_users = array();
 		foreach ($this->result_object as $result) {
@@ -192,14 +192,14 @@ class EvalForm extends FormValidator
 		$this->addElement('header','h1','<b>'.get_lang('AddResult').'</b>');
 
 		$renderer = $this->defaultRenderer();
-		$elementTemplateTwoLabel = '<div class="row">
-			<div class="label_result">
+		$elementTemplateTwoLabel = '<div><div class="row" ><ul style="list-style-type:none;">
+			<li><div class="label_result">
 			<!-- BEGIN required --><span class="form_required">*</span> <!-- END required -->{label}
 			</div>
 			<div class="formw_result">
 			<!-- BEGIN error --><span class="form_error">{error}</span><br /><!-- END error -->	{element} / '.$this->evaluation_object->get_max().'
-			</div>
-			</div>';
+			</div></li></ul>
+			</div></div>';
 		foreach ($tblusers as $user) {
 			//user_id, user.username, lastname, firstname
 			$this->add_textfield('score[' . $user[0] . ']',

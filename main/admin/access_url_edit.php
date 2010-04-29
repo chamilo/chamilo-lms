@@ -90,7 +90,7 @@ if ($_GET['url_id'] != 1) {
 $defaults['url']='http://';
 $form->setDefaults($defaults);
 
-$submit_name = get_lang('Add');
+$submit_name = get_lang('AddUrl');
 if (isset($_GET['url_id'])) {
 	$url_id = Database::escape_string($_GET['url_id']);
 	$num_url_id = UrlManager::url_id_exist($url_id);
@@ -101,7 +101,7 @@ if (isset($_GET['url_id'])) {
 	$url_data = UrlManager::get_url_data_from_id($url_id);
 	$form->addElement('hidden','id',$url_data['id']);
 	$form->setDefaults($url_data);
-	$submit_name = get_lang('Edit');
+	$submit_name = get_lang('AddUrl');
 }
 
 if (!$_configuration['multiple_access_urls'])

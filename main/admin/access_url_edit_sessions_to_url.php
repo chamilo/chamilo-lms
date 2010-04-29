@@ -19,7 +19,7 @@ require_once (api_get_path(LIBRARY_PATH).'access_url_edit_sessions_to_url_functi
 
 $xajax = new xajax();
 //$xajax->debugOn();
-$xajax -> registerFunction ('search_sessions');
+$xajax -> registerFunction (array('search_sessions', 'Accessurleditsessionstourl', 'search_sessions'));
 
 // setting the section (for the tabs)
 $this_section = SECTION_PLATFORM_ADMIN;
@@ -273,13 +273,13 @@ function remove_item(origin)
   <?php
   if($ajax_search) {
 	?>
-	<input type="button" onclick="remove_item(document.getElementById('destination_users'))" value="<<" />
+	<button class="arrowl" type="button" onclick="remove_item(document.getElementById('destination_users'))" ></button>
   	<?php
   } else {
   	?>
-	<input type="button" onclick="moveItem(document.getElementById('origin_users'), document.getElementById('destination_users'))" value=">>" />
+	<button class="arrowr" type="button" onclick="moveItem(document.getElementById('origin_users'), document.getElementById('destination_users'))" ></button>
 	<br /><br />
-	<input type="button" onclick="moveItem(document.getElementById('destination_users'), document.getElementById('origin_users'))" value="<<" />
+	<button class="arrowl" type="button" onclick="moveItem(document.getElementById('destination_users'), document.getElementById('origin_users'))" ></button>
 	<?php
   }
   ?>
@@ -307,9 +307,9 @@ unset($session_list);
 		<br />
 		<?php
 		if(isset($_GET['add']))
-			echo '<input type="button" value="'.get_lang('EditSessions').'" onclick="valide()" />';
+			echo '<button class="save" type="button" onclick="valide()" >'.get_lang('AddSessionsToURL').'</button>';
 		else
-			echo '<input type="button" value="'.get_lang('EditSessions').'" onclick="valide()" />';
+			echo '<button class="save" type="button" onclick="valide()" >'.get_lang('EditSessionsToURL').'</button>';
 		?>
 	</td>
 </tr>

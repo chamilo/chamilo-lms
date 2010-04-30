@@ -324,7 +324,11 @@ class Statistics {
 	 * Show some stats about the accesses to the different course tools
 	 */
 	function print_tool_stats() {
+		global $_configuration;
 		$table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ACCESS);
+		$access_url_rel_course_table= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
+		$current_url_id = api_get_current_access_url_id();
+		
 		$tools = array('announcement','assignment','calendar_event',
 			'chat','conference','course_description','document',
 			'dropbox','group','learnpath','link','quiz',
@@ -333,10 +337,17 @@ class Statistics {
 		foreach ($tools as $tool) {
 			$tool_names[$tool] = get_lang(ucfirst($tool), '');
 		}
-		$sql = "SELECT access_tool, count( access_id ) 
-			AS number_of_logins FROM $table 
-			WHERE access_tool IN ('".implode("','",$tools)."') 
-			GROUP BY access_tool ";
+		if ($_configuration['multiple_access_urls'] == true){
+			$sql = "SELECT access_tool, count( access_id ) 
+				AS number_of_logins FROM $table, $access_url_rel_course_table
+				WHERE access_tool IN ('".implode("','",$tools)."') AND  course_code = access_cours_code AND access_url_id='".$current_url_id."'
+				GROUP BY access_tool ";
+		} else {
+			$sql = "SELECT access_tool, count( access_id ) 
+				AS number_of_logins FROM $table 
+				WHERE access_tool IN ('".implode("','",$tools)."') 
+				GROUP BY access_tool ";			
+		}
 		$res = Database::query($sql);
 		$result = array();
 		while ($obj = Database::fetch_object($res)) {
@@ -435,6 +446,10 @@ class Statistics {
 	 * Shows statistics about the time of last visit to each course.
 	 */
 	function print_course_last_visit() {
+		global $_configuration;
+		$access_url_rel_course_table= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
+		$current_url_id = api_get_current_access_url_id();
+		
 		$columns[0] = 'access_cours_code';
 		$columns[1] = 'access_date';
 		$sql_order[SORT_ASC] = 'ASC';
@@ -452,7 +467,7 @@ class Statistics {
 		$form->addElement('hidden','action','courselastvisit');
 		$form->add_textfield('date_diff',get_lang('Days'),true);
 		$form->addRule('date_diff','InvalidNumber','numeric');
-		$form->addElement('submit','ok',get_lang('Ok'));
+		$form->addElement('style_submit_button', 'submit', get_lang('Search'),'class="search"');
 		if (!isset($_GET['date_diff'])) {
 			$defaults['date_diff'] = 60;
 		} else {
@@ -463,10 +478,17 @@ class Statistics {
 		$values = $form->exportValues();
 		$date_diff = $values['date_diff'];
 		$table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LASTACCESS);
-		$sql = "SELECT * FROM $table 
-			GROUP BY access_cours_code 
-			HAVING access_cours_code <> '' 
-			AND DATEDIFF( NOW() , access_date ) <= ". $date_diff;
+		if ($_configuration['multiple_access_urls'] == true){
+			$sql = "SELECT * FROM $table, $access_url_rel_course_table WHERE course_code = access_cours_code AND access_url_id='".$current_url_id."'
+				GROUP BY access_cours_code 
+				HAVING access_cours_code <> '' 
+				AND DATEDIFF( NOW() , access_date ) <= ". $date_diff;
+		} else {
+			$sql = "SELECT * FROM $table 
+				GROUP BY access_cours_code 
+				HAVING access_cours_code <> '' 
+				AND DATEDIFF( NOW() , access_date ) <= ". $date_diff;			
+		}
 		$res = Database::query($sql);
 		$number_of_courses = Database::num_rows($res);
 		$sql .= ' ORDER BY '.$columns[$column].' '.$sql_order[$direction];
@@ -485,8 +507,8 @@ class Statistics {
 			$parameters['action'] = 'courselastvisit';
 			$parameters['date_diff'] = $date_diff;
 			$parameters['action'] = 'courselastvisit';
-			$table_header[] = array ("Coursecode", true);
-			$table_header[] = array ("Last login", true);
+			$table_header[] = array (get_lang("CourseCode"), true);
+			$table_header[] = array (get_lang("LastAccess"), true);
 			Display :: display_sortable_table($table_header, $courses, array ('column'=>$column,'direction'=>$direction), array (), $parameters);
 		} else {
 			echo get_lang('NoSearchResults');
@@ -499,8 +521,11 @@ class Statistics {
 	 * @return array	Message list
 	 */
 	function get_messages($message_type) {
+		global $_configuration;
 		$message_table = Database::get_main_table(TABLE_MAIN_MESSAGE);
 		$user_table = Database::get_main_table(TABLE_MAIN_USER);
+		$access_url_rel_user_table= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+		$current_url_id = api_get_current_access_url_id();
 		switch ($message_type) {
 			case 'sent':
 				$field = 'user_sender_id';
@@ -509,11 +534,20 @@ class Statistics {
 				$field = 'user_receiver_id';
 				break;
 		}
-		$sql = "SELECT lastname, firstname, username, 
-			COUNT($field) AS count_message
-			FROM ".$message_table." m 
-			LEFT JOIN ".$user_table." u ON m.$field = u.user_id
-			GROUP BY m.$field";
+		if ($_configuration['multiple_access_urls'] == true){
+			$sql = "SELECT lastname, firstname, username, 
+				COUNT($field) AS count_message
+				FROM ".$access_url_rel_user_table." as url, ".$message_table." m
+				LEFT JOIN ".$user_table." u ON m.$field = u.user_id
+				WHERE  url.user_id = m.$field AND  access_url_id='".$current_url_id."'
+				GROUP BY m.$field";
+		} else {
+			$sql = "SELECT lastname, firstname, username, 
+				COUNT($field) AS count_message
+				FROM ".$message_table." m 
+				LEFT JOIN ".$user_table." u ON m.$field = u.user_id
+				GROUP BY m.$field";			
+		}
 		$res = Database::query($sql);
 		$messages_sent = array();
 		while ($messages = Database::fetch_array($res)) {
@@ -530,14 +564,26 @@ class Statistics {
 	 * Count the number of friends for social network users
 	 */
 	function get_friends() {
+		global $_configuration;
 		$user_friend_table = Database::get_main_table(TABLE_MAIN_USER_REL_USER);
 		$user_table = Database::get_main_table(TABLE_MAIN_USER);
-		$sql = "SELECT lastname, firstname, username, 
-			COUNT(friend_user_id) AS count_friend
-			FROM ".$user_friend_table." uf 
-			LEFT JOIN ".$user_table." u ON uf.user_id = u.user_id 
-			WHERE uf.relation_type <> '".USER_RELATION_TYPE_RRHH."'
-			GROUP BY uf.user_id";
+		$access_url_rel_user_table= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+		$current_url_id = api_get_current_access_url_id();
+		if ($_configuration['multiple_access_urls'] == true){
+			$sql = "SELECT lastname, firstname, username, 
+				COUNT(friend_user_id) AS count_friend
+				FROM ".$access_url_rel_user_table." as url, ".$user_friend_table." uf 
+				LEFT JOIN ".$user_table." u ON uf.user_id = u.user_id 
+				WHERE uf.relation_type <> '".USER_RELATION_TYPE_RRHH."' AND uf.user_id = url.user_id AND  access_url_id='".$current_url_id."'
+				GROUP BY uf.user_id";
+		} else {
+			$sql = "SELECT lastname, firstname, username, 
+				COUNT(friend_user_id) AS count_friend
+				FROM ".$user_friend_table." uf 
+				LEFT JOIN ".$user_table." u ON uf.user_id = u.user_id 
+				WHERE uf.relation_type <> '".USER_RELATION_TYPE_RRHH."'
+				GROUP BY uf.user_id";
+		}
 		$res = Database::query($sql);
 		$list_friends = array();
 		while ($friends = Database::fetch_array($res)) {			

@@ -24,6 +24,8 @@ $xajax = new xajax();
 //$xajax->debugOn();
 $xajax -> registerFunction (array('search_courses', 'AddCourseToSession', 'search_courses'));
 
+
+
 // setting the section (for the tabs)
 $this_section = SECTION_PLATFORM_ADMIN;
 

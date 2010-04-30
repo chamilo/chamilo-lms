@@ -21,6 +21,7 @@ $xajax = new xajax();
 //$xajax->debugOn();
 $xajax -> registerFunction (array('search_users', 'Accessurledituserstourl', 'search_users'));
 
+
 // setting the section (for the tabs)
 $this_section = SECTION_PLATFORM_ADMIN;
 

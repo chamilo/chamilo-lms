@@ -713,8 +713,7 @@ class CourseRestorer
 	 */
 	function restore_events()
 	{
-		if ($this->course->has_resources(RESOURCE_EVENT))
-		{
+		if ($this->course->has_resources(RESOURCE_EVENT)) {
 			$table = Database :: get_course_table(TABLE_AGENDA, $this->course->destination_db);
 			$resources = $this->course->resources;
 			foreach ($resources[RESOURCE_EVENT] as $id => $event) {
@@ -737,7 +736,7 @@ class CourseRestorer
 				$attachment_event = Database::query($sql);
 				$attachment_event = Database::fetch_object($attachment_event);
 
-				if (file_exists($origin_path.$attachment_event->path)) {
+				if (file_exists($origin_path.$attachment_event->path) && !is_dir($origin_path.$attachment_event->path) ) {
 					$new_filename = uniqid(''); //ass seen in the add_agenda_attachment_file() function in agenda.inc.php	
 					$copy_result = copy($origin_path.$attachment_event->path, $destination_path.$new_filename);
 					//$copy_result = true;
@@ -788,12 +787,10 @@ class CourseRestorer
 	 */
 	function restore_announcements()
 	{
-		if ($this->course->has_resources(RESOURCE_ANNOUNCEMENT))
-		{
+		if ($this->course->has_resources(RESOURCE_ANNOUNCEMENT)) {
 			$table = Database :: get_course_table(TABLE_ANNOUNCEMENT, $this->course->destination_db);
 			$resources = $this->course->resources;
-			foreach ($resources[RESOURCE_ANNOUNCEMENT] as $id => $announcement)
-			{
+			foreach ($resources[RESOURCE_ANNOUNCEMENT] as $id => $announcement) {
 
 				// check resources inside html from fckeditor tool and copy correct urls into recipient course
 				$announcement->content = DocumentManager::replace_urls_inside_content_html_from_copy_course($announcement->content, $this->course->code, $this->course->destination_path);
@@ -805,7 +802,31 @@ class CourseRestorer
 							"display_order = '".$announcement->display_order."', " .
 							"email_sent = '".$announcement->email_sent."'";
 				Database::query($sql);
-				$this->course->resources[RESOURCE_ANNOUNCEMENT][$id]->destination_id = Database::insert_id();
+				$new_announcement_id = Database::insert_id();
+				$this->course->resources[RESOURCE_ANNOUNCEMENT][$id]->destination_id = $new_announcement_id;
+				
+				//Copy announcement attachment file
+								
+				$origin_path = $this->course->backup_path.'/upload/announcements/';				
+				$destination_path = api_get_path(SYS_COURSE_PATH).$this->course->destination_path.'/upload/announcements/';
+												
+				$table_attachment = Database :: get_course_table(TABLE_ANNOUNCEMENT_ATTACHMENT, $this->course->orig);
+				
+				$sql = 'SELECT path, comment, size, filename FROM '.$table_attachment.' WHERE announcement_id = '.$id;
+				$attachment_event = Database::query($sql);
+				$attachment_event = Database::fetch_object($attachment_event);
+ 				 
+				if (file_exists($origin_path.$attachment_event->path) && !is_dir($origin_path.$attachment_event->path) ) {
+					$new_filename = uniqid(''); //ass seen in the add_agenda_attachment_file() function in agenda.inc.php	
+					$copy_result = copy($origin_path.$attachment_event->path, $destination_path.$new_filename);
+					//error_log($destination_path.$new_filename); error_log($copy_result);
+					//$copy_result = true;
+					if ($copy_result == true) {		
+						$table_attachment = Database :: get_course_table(TABLE_ANNOUNCEMENT_ATTACHMENT, $this->course->destination_db);			
+						$sql = "INSERT INTO ".$table_attachment." SET path = '".Database::escape_string($new_filename)."', comment = '".Database::escape_string($attachment_event->comment)."', size = '".$attachment_event->size."', filename = '".$attachment_event->filename."' , announcement_id = '".$new_announcement_id."' ";
+						Database::query($sql);
+					}				
+				}
 			}
 		}
 	}

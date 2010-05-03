@@ -717,14 +717,36 @@ class CourseRestorer
 		{
 			$table = Database :: get_course_table(TABLE_AGENDA, $this->course->destination_db);
 			$resources = $this->course->resources;
-			foreach ($resources[RESOURCE_EVENT] as $id => $event)
-			{
+			foreach ($resources[RESOURCE_EVENT] as $id => $event) {
 				// check resources inside html from fckeditor tool and copy correct urls into recipient course
 				$event->content = DocumentManager::replace_urls_inside_content_html_from_copy_course($event->content, $this->course->code, $this->course->destination_path);
 
 				$sql = "INSERT INTO ".$table." SET title = '".Database::escape_string($event->title)."', content = '".Database::escape_string($event->content)."', start_date = '".$event->start_date."', end_date = '".$event->end_date."'";
 				Database::query($sql);
-				$this->course->resources[RESOURCE_EVENT][$id]->destination_id = Database::insert_id();
+				$new_event_id = Database::insert_id();
+				$this->course->resources[RESOURCE_EVENT][$id]->destination_id = $new_event_id;
+				
+				//copy event attachment
+								
+				$origin_path = $this->course->backup_path.'/upload/calendar/';				
+				$destination_path = api_get_path(SYS_COURSE_PATH).$this->course->destination_path.'/upload/calendar/';
+												
+				$table_attachment = Database :: get_course_table(TABLE_AGENDA_ATTACHMENT, $this->course->orig);
+				
+				$sql = 'SELECT path, comment, size, filename FROM '.$table_attachment.' WHERE agenda_id = '.$id;
+				$attachment_event = Database::query($sql);
+				$attachment_event = Database::fetch_object($attachment_event);
+
+				if (file_exists($origin_path.$attachment_event->path)) {
+					$new_filename = uniqid(''); //ass seen in the add_agenda_attachment_file() function in agenda.inc.php	
+					$copy_result = copy($origin_path.$attachment_event->path, $destination_path.$new_filename);
+					//$copy_result = true;
+					if ($copy_result == true) {		
+						$table_attachment = Database :: get_course_table(TABLE_AGENDA_ATTACHMENT, $this->course->destination_db);			
+						$sql = "INSERT INTO ".$table_attachment." SET path = '".Database::escape_string($new_filename)."', comment = '".Database::escape_string($attachment_event->comment)."', size = '".$attachment_event->size."', filename = '".$attachment_event->filename."' , agenda_id = '".$new_event_id."' ";
+						Database::query($sql);
+					}				
+				}		
 			}
 		}
 	}

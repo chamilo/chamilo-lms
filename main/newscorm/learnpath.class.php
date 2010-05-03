@@ -4319,11 +4319,11 @@ class learnpath {
 		unset ($this->arrMenu);
 
 		if ($is_allowed_to_edit) {
-
+			
 			$gradebook = Security :: remove_XSS($_GET['gradebook']);
 			$return .= '<div class="actions">';
 			$return .= '<a href="' . api_get_self() . '?cidReq=' . Security :: remove_XSS($_GET['cidReq']) . '&amp;gradebook=' . $gradebook . '&amp;action=build&amp;lp_id=' . $this->lp_id . '" title="' . get_lang("Build") . '">' . Display :: return_icon('learnpath_build.gif', get_lang('Build')) . ' ' . get_lang('Build') . '</a>';
-			$return .= '<span>' . Display :: return_icon('learnpath_organize_na.gif', get_lang("BasicOverview")) . ' <b>' . get_lang('BasicOverview') . '</b></span>';
+			$return .= '<span>' . Display :: return_icon('learnpath_organize_na.gif', get_lang('BasicOverview')) . ' <b>' . get_lang('BasicOverview') . '</b></span>';
 			$return .= '<a href="lp_controller.php?cidReq=' . Security :: remove_XSS($_GET['cidReq']) . '&action=view&lp_id=' . $this->lp_id . '">' . Display :: return_icon('learnpath_view.gif', get_lang("Display")) . ' ' . get_lang('Display') . '</a> ' . Display :: return_icon('i.gif');
 			$return .= '<a href="lp_controller.php?cidReq=' . Security :: remove_XSS($_GET['cidReq']) . '&amp;action=edit&amp;lp_id=' . Security :: remove_XSS($_GET['lp_id']) . '">' . Display :: return_icon('edit.gif', get_lang('CourseSettings')) . ' ' . get_lang('CourseSettings') . '</a>';
 			$return .= '<a href="' . api_get_self() . '?cidReq=' . Security :: remove_XSS($_GET['cidReq']) . '&amp;action=' . Security :: remove_XSS($_GET['action']) . '&amp;lp_id=' . Security :: remove_XSS($_GET['lp_id']) . '&amp;updateaudio=true">' . Display :: return_icon('audio.gif', get_lang('UpdateAllAudioFragments')) . ' ' . get_lang('UpdateAllAudioFragments') . '</a>';
@@ -4396,50 +4396,50 @@ class learnpath {
 					}
 				}
 			}
-			$return .= '</td>' . "\n";
+			$return .= '</td>';
 
 			if ($is_allowed_to_edit) {
-				$return .= "\t\t" . '<td align="center">' . "\n";
+				$return .= '<td align="center">';
 
 				if ($arrLP[$i]['previous_item_id'] != 0) {
 
-					$return .= "\t\t\t" . '<a href="' . api_get_self() . '?cidReq=' . $_GET['cidReq'] . '&amp;action=move_item&amp;direction=up&amp;id=' . $arrLP[$i]['id'] . '&amp;lp_id=' . $this->lp_id . '">';
+					$return .= '<a href="' . api_get_self() . '?cidReq=' . Security :: remove_XSS($_GET['cidReq']) . '&amp;action=move_item&amp;direction=up&amp;id=' . $arrLP[$i]['id'] . '&amp;lp_id=' . $this->lp_id . '">';
 					$return .= '<img style="margin:1px;" alt="" src="../img/arrow_up_' . ($arrLP[$i]['depth'] % 3) . '.gif" title="' . get_lang('MoveUp') . '"/>';
-					$return .= '</a>' . "\n";
+					$return .= '</a>';
 
 				} else
-					$return .= "\t\t\t" . '<img alt="" src="../img/blanco.png" title="" />' . "\n";
+					$return .= '<img alt="" src="../img/blanco.png" title="" />';
 
 				if ($arrLP[$i]['next_item_id'] != 0) {
-					$return .= "\t\t\t" . '<a href="' . api_get_self() . '?cidReq=' . $_GET['cidReq'] . '&amp;action=move_item&amp;direction=down&amp;id=' . $arrLP[$i]['id'] . '&amp;lp_id=' . $this->lp_id . '">';
+					$return .= '<a href="' . api_get_self() . '?cidReq=' . Security :: remove_XSS($_GET['cidReq']). '&amp;action=move_item&amp;direction=down&amp;id=' . $arrLP[$i]['id'] . '&amp;lp_id=' . $this->lp_id . '">';
 					$return .= '<img style="margin:1px;" src="../img/arrow_down_' . ($arrLP[$i]['depth'] % 3) . '.gif" title="' . get_lang('MoveDown') . '" />';
 
-					$return .= '</a>' . "\n";
+					$return .= '</a>';
 				} else
-					$return .= "\t\t\t" . '<img alt="" src="../img/blanco.png" title="" />' . "\n";
+					$return .= '<img alt="" src="../img/blanco.png" title="" />';
 
-				$return .= "\t\t" . '</td>' . "\n";
+				$return .= '</td>';
 
-				$return .= "\t\t" . '<td align="center">' . "\n";
+				$return .= '<td align="center">';
 
 				if ($arrLP[$i]['item_type'] != 'dokeos_chapter' && $arrLP[$i]['item_type'] != 'dokeos_module') {
-					$return .= "\t\t\t" . '<a href="' . api_get_self() . '?cidReq=' . $_GET['cidReq'] . '&amp;action=edit_item&amp;view=build&amp;id=' . $arrLP[$i]['id'] . '&amp;lp_id=' . $this->lp_id . '&amp;path_item=' . $arrLP[$i]['path'] . '">';
+					$return .= "\t\t\t" . '<a href="' . api_get_self() . '?cidReq=' . Security :: remove_XSS($_GET['cidReq']) . '&amp;action=edit_item&amp;view=build&amp;id=' . $arrLP[$i]['id'] . '&amp;lp_id=' . $this->lp_id . '&amp;path_item=' . $arrLP[$i]['path'] . '">';
 					$return .= '<img style="margin:1px;" alt="" src="../img/edit.gif" title="' . get_lang('_edit_learnpath_module') . '" />';
 					$return .= '</a>' . "\n";
 				} else {
-					$return .= "\t\t\t" . '<a href="' . api_get_self() . '?cidReq=' . $_GET['cidReq'] . '&amp;action=edit_item&amp;id=' . $arrLP[$i]['id'] . '&amp;lp_id=' . $this->lp_id . '&amp;path_item=' . $arrLP[$i]['path'] . '">';
+					$return .= "\t\t\t" . '<a href="' . api_get_self() . '?cidReq=' . Security :: remove_XSS($_GET['cidReq']) . '&amp;action=edit_item&amp;id=' . $arrLP[$i]['id'] . '&amp;lp_id=' . $this->lp_id . '&amp;path_item=' . $arrLP[$i]['path'] . '">';
 					$return .= '<img style="margin:1px;" alt="" src="../img/edit.gif" title="' . get_lang('_edit_learnpath_module') . '" />';
 					$return .= '</a>' . "\n";
 				}
 
-				$return .= "\t\t\t" . '<a href="' . api_get_self() . '?cidReq=' . $_GET['cidReq'] . '&amp;action=delete_item&amp;id=' . $arrLP[$i]['id'] . '&amp;lp_id=' . $this->lp_id . '" onclick="return confirmation(\'' . addslashes($title) . '\');">';
+				$return .= "\t\t\t" . '<a href="' . api_get_self() . '?cidReq=' . Security :: remove_XSS($_GET['cidReq']) . '&amp;action=delete_item&amp;id=' . $arrLP[$i]['id'] . '&amp;lp_id=' . $this->lp_id . '" onclick="return confirmation(\'' . addslashes($title) . '\');">';
 				$return .= '<img style="margin:1px;" alt="" src="../img/delete.gif" title="' . get_lang('_delete_learnpath_module') . '" />';
 				$return .= '</a>' . "\n";
 
-				$return .= "\t\t" . '</td>' . "\n";
+				$return .= '</td>';
 			}
 
-			$return .= "\t" . '</tr>' . "\n";
+			$return .= '</tr>';
 		}
 
 		if (count($arrLP) == 0) {

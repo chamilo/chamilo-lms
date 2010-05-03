@@ -105,18 +105,20 @@ function api_mail($recipient_name, $recipient_email, $subject, $message, $sender
  * @author Bert Vanderkimpen ICT&O UGent
  * @author Yannick Warnier <yannick.warnier@dokeos.com>
  *
- * @param string		   	name of recipient
- * @param string		  	email of recipient
- * @param string            email subject
- * @param string			email body
- * @param string			sender name
- * @param string			sender e-mail
- * @param array				data file (path and filename)
- * @param array				extra headers in form $headers = array($name => $value) to allow parsing
- * @return                  returns true if mail was sent
- * @see                     class.phpmailer.php
+ * @param string    name of recipient
+ * @param string    email of recipient
+ * @param string    email subject
+ * @param string    email body
+ * @param string    sender name
+ * @param string    sender e-mail
+ * @param array     data file (path and filename)
+ * @param array     extra headers in form $headers = array($name => $value) to allow parsing
+ * @param array     data to attach a file (optional)
+ * @param bool      True for attaching a embedded file inside content html (optional)
+ * @return          returns true if mail was sent
+ * @see             class.phpmailer.php
  */
-function api_mail_html($recipient_name, $recipient_email, $subject, $message, $sender_name = "", $sender_email = "", $extra_headers = null, $data_file = array()) {
+function api_mail_html($recipient_name, $recipient_email, $subject, $message, $sender_name = "", $sender_email = "", $extra_headers = null, $data_file = array(), $embedded_image = false) {
 
 	global $regexp_rfc3696;
 	global $platform_email;
@@ -128,8 +130,7 @@ function api_mail_html($recipient_name, $recipient_email, $subject, $message, $s
 	$mail->CharSet = $platform_email['SMTP_CHARSET'];
 	$mail->WordWrap = 200; // stay far below SMTP protocol 980 chars limit
 
-	if($platform_email['SMTP_AUTH'])
-	{
+	if ($platform_email['SMTP_AUTH']) {
 		$mail->SMTPAuth = 1;
 		$mail->Username = $platform_email['SMTP_USER'];
 		$mail->Password = $platform_email['SMTP_PASS'];
@@ -148,30 +149,54 @@ function api_mail_html($recipient_name, $recipient_email, $subject, $message, $s
 	// $mail->AddAttachment($path);
 	// $mail->AddAttachment($path,$filename);
 
-	if ($sender_email!="")
-	{
+	if ($sender_email!="") {
 		$mail->From         = $sender_email;
 		$mail->Sender       = $sender_email;
 		//$mail->ConfirmReadingTo = $sender_email; //Disposition-Notification
-	}
-	else
-	{
+	} else {
 		$mail->From         = $platform_email['SMTP_FROM_EMAIL'];
 		$mail->Sender       = $platform_email['SMTP_FROM_EMAIL'];
 		//$mail->ConfirmReadingTo = $platform_email['SMTP_FROM_EMAIL']; //Disposition-Notification
 	}
 
-	if ($sender_name!="")
-	{
+	if ($sender_name!="") {
 		$mail->FromName = $sender_name;
-	}
-	else
-	{
+	} else {
 		$mail->FromName = $platform_email['SMTP_FROM_NAME'];
 	}
 	$mail->Subject = $subject;
 
 	$mail->AltBody = strip_tags(str_replace('<br />',"\n", api_html_entity_decode($message)));
+
+        // send embedded image
+        if ($embedded_image) {
+           // get all images html inside content
+           preg_match_all("/<img\s+.*?src=[\"\']?([^\"\' >]*)[\"\']?[^>]*>/i",$message,$m);
+           // prepare new tag images
+           $new_images_html = array();
+           $i = 1;
+           if (!empty($m[1])) {
+               foreach ($m[1] as $image_path) {
+                   $real_path = realpath($image_path);
+                   $filename  = basename($image_path);
+                   $image_cid = $filename.'_'.$i;
+                   $encoding = 'base64';
+                   $image_type = mime_content_type($real_path);
+                   $mail->AddEmbeddedImage($real_path, $image_cid, $filename, $encoding, $image_type);
+                   $new_images_html[] = '<img src="cid:'.$image_cid.'" />';
+                   $i++;
+               }
+           }
+           // replace origin image for new embedded image html
+           $x = 0;
+           if (!empty($m[0])) {
+               foreach ($m[0] as $orig_img) {
+                   $message = str_replace($orig_img, $new_images_html[$x], $message);
+                   $x++;
+               }
+           }
+        }
+
 	$mail->Body = '<html><head></head><body>'.$message.'</body></html>';
 
 	// attachment ...

@@ -1,4 +1,5 @@
 <?php
+/* For licensing terms, see /license.txt */
 require_once('Resource.class.php');
 
 /**

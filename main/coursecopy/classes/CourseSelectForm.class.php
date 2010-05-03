@@ -1,5 +1,4 @@
 <?php
-// $Id: CourseSelectForm.class.php 22200 2009-07-17 19:47:58Z iflorespaz $
 /* For licensing terms, see /license.txt */
 require_once 'Course.class.php';
 

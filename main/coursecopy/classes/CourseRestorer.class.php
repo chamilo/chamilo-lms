@@ -1185,6 +1185,10 @@ class CourseRestorer
 			$table_tool 	= Database::get_course_table(TABLE_TOOL_LIST, $this->course->destination_db);
 
 			$resources = $this->course->resources;
+			
+							
+			$origin_path = $this->course->backup_path.'/upload/learning_path/images/';				
+			$destination_path = api_get_path(SYS_COURSE_PATH).$this->course->destination_path.'/upload/learning_path/images/';
 
 			foreach ($resources[RESOURCE_LEARNPATH] as $id => $lp) {
 
@@ -1193,25 +1197,42 @@ class CourseRestorer
 					$session_id = intval($session_id);
 					$condition_session = " , session_id = '$session_id' ";
 				}
+				
+				//Adding the author's image
+				if (!empty($lp->preview_image)) {
+					$new_filename = uniqid('').$new_filename.substr($lp->preview_image,strlen($lp->preview_image)-7, strlen($lp->preview_image));	
+					if (file_exists($origin_path.$lp->preview_image) && !is_dir($origin_path.$lp->preview_image)) {
+						$copy_result = copy($origin_path.$lp->preview_image, $destination_path.$new_filename);
+						//$copy_result = true;
+						if ($copy_result === true) {
+							$lp->preview_image = $new_filename;
+						} else {
+							$lp->preview_image ='';
+						}
+					}			
+				}
 
-				$sql = "INSERT INTO ".$table_main." " .
-						"SET lp_type = '".$lp->lp_type."', " .
-								"name = '".Database::escape_string($lp->name)."', " .
-								"path = '".Database::escape_string($lp->path)."', " .
-								"ref = '".$lp->ref."', " .
-								"description = '".Database::escape_string($lp->description)."', " .
-								"content_local = '".Database::escape_string($lp->content_local)."', " .
-								"default_encoding = '".Database::escape_string($lp->default_encoding)."', " .
-								"default_view_mod = '".Database::escape_string($lp->default_view_mod)."', " .
-								"prevent_reinit = '".Database::escape_string($lp->prevent_reinit)."', " .
-								"force_commit = '".Database::escape_string($lp->force_commit)."', " .
-								"content_maker = '".Database::escape_string($lp->content_maker)."', " .
-								"display_order = '".Database::escape_string($lp->display_order)."', " .
-								"js_lib= '".Database::escape_string($lp->js_lib)."', " .
-								"content_license= '".Database::escape_string($lp->content_license)."', " .
-								"debug= '".Database::escape_string($lp->debug)."' $condition_session ";
-				Database::query($sql);
-
+				$sql = "INSERT INTO ".$table_main." SET " .
+						"lp_type = '".$lp->lp_type."', " .
+						"name = '".Database::escape_string($lp->name)."', " .
+						"path = '".Database::escape_string($lp->path)."', " .
+						"ref = '".$lp->ref."', " .
+						"description = '".Database::escape_string($lp->description)."', " .
+						"content_local = '".Database::escape_string($lp->content_local)."', " .
+						"default_encoding = '".Database::escape_string($lp->default_encoding)."', " .
+						"default_view_mod = '".Database::escape_string($lp->default_view_mod)."', " .
+						"prevent_reinit = '".Database::escape_string($lp->prevent_reinit)."', " .
+						"force_commit = '".Database::escape_string($lp->force_commit)."', " .
+						"content_maker = '".Database::escape_string($lp->content_maker)."', " .
+						"display_order = '".Database::escape_string($lp->display_order)."', " .
+						"js_lib= '".Database::escape_string($lp->js_lib)."', " .
+						"content_license= '".Database::escape_string($lp->content_license)."', " .
+						"author= '".Database::escape_string($lp->author)."', " .
+						"preview_image= '".Database::escape_string($lp->preview_image)."', " .
+						"debug= '".Database::escape_string($lp->debug)."' $condition_session ";
+							
+				Database::query($sql);		
+				
 				$new_lp_id = Database::insert_id();
 
 				if($lp->visibility) {

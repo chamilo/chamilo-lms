@@ -581,12 +581,10 @@ class CourseBuilder
 				$item['previous_item_id'] = $obj_item->previous_item_id;
 				$item['next_item_id'] 	= $obj_item->next_item_id;
 				$item['display_order'] 	= $obj_item->display_order;
-				$item['prerequisite']	 = $obj_item->prerequisite;
+				$item['prerequisite']	= $obj_item->prerequisite;
 				$item['parameters'] 	= $obj_item->parameters;
 				$item['launch_data'] 	= $obj_item->launch_data;
-				//adding audio data
-				$item['audio'] 	= $obj_item->audio;
-				
+				$item['audio'] 			= $obj_item->audio;				
 				$items[] = $item;
 			}
 
@@ -614,8 +612,10 @@ class CourseBuilder
 								$obj->display_order,
 								$obj->js_lib,
 								$obj->content_license,
-								$obj->debug,
+								$obj->debug,								
 								$visibility,
+								$obj->author,
+								$obj->preview_image,
 								$items);
 
 			$this->course->add_resource($lp);

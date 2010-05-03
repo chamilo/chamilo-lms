@@ -74,6 +74,17 @@ class CourseCopyLearnpath extends Resource {
 	 * The learnpath visibility on the homepage
 	 */
 	var $visibility;
+	
+	/**
+	 * Author info
+	 */
+	var $author;
+	
+	/**
+	 * Author's image
+	 */
+	var $preview_image;
+								
 
 	/**
 	 * Create a new learnpath
@@ -96,7 +107,7 @@ class CourseCopyLearnpath extends Resource {
 	 * @param string $visibility
 	 * @param array  $items
 	 */
-	function CourseCopyLearnpath($id,$type,$name,$path,$ref,$description,$content_local,$default_encoding,$default_view_mode,$prevent_reinit,$force_commit,$content_maker,$display_order,$js_lib,$content_license,$debug,$visibility,$items)
+	function CourseCopyLearnpath($id,$type,$name,$path,$ref,$description,$content_local,$default_encoding,$default_view_mode,$prevent_reinit,$force_commit,$content_maker,$display_order,$js_lib,$content_license,$debug,$visibility, $author, $preview_image, $items)
 	{
 		parent::Resource($id,RESOURCE_LEARNPATH);
 		$this->lp_type = $type;
@@ -115,6 +126,10 @@ class CourseCopyLearnpath extends Resource {
 		$this->content_license = $content_license;
 		$this->debug = $debug;
 		$this->visibility=$visibility;
+		
+		$this->author= $author;
+		$this->preview_image= $preview_image;
+		
 		$this->items = $items;
 	}
 	/**
@@ -129,10 +144,8 @@ class CourseCopyLearnpath extends Resource {
 	 */
 	function has_item($resource)
 	{
-		foreach($this->items as $index => $item)
-		{
-			if( $item['id'] == $resource->get_id() && $item['type'] == $resource->get_type())
-			{
+		foreach($this->items as $index => $item) {
+			if( $item['id'] == $resource->get_id() && $item['type'] == $resource->get_type()) {
 				return true;
 			}
 		}
@@ -141,8 +154,7 @@ class CourseCopyLearnpath extends Resource {
 	/**
 	 * Show this learnpath
 	 */
-	function show()
-	{
+	function show() {
 		parent::show();
 		echo $this->name;
 	}

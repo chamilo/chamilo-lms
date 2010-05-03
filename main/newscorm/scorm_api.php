@@ -1,5 +1,5 @@
 <?php // $Id: scorm_api.php 21162 2009-06-01 16:18:46Z yannoo $
-/* For licensing terms, see /dokeos_license.txt */
+/* For licensing terms, see /license.txt */
 /**
 *	API event handler functions for Scorm 1.1 and 1.2 and 1.3
 *
@@ -16,9 +16,7 @@
  * The third section defines the event handlers for Dokeos' internal messaging
  * and frames refresh
  */
-/*
-	   INIT SECTION
-*/
+/* INIT SECTION */
 
 // if you open the imsmanifest.xml via local machine (f.ex.: file://c:/...), then the Apiwrapper.js
 // of Maritime Navigation when trying to execute this row

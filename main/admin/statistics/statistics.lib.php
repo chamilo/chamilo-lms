@@ -24,10 +24,20 @@ class Statistics {
 	 * @return int Number of courses counted
 	 */
 	function count_courses($category_code = NULL) {
+		global $_configuration;
 		$course_table = Database :: get_main_table(TABLE_MAIN_COURSE);
-		$sql = "SELECT COUNT(*) AS number FROM ".$course_table." ";
-		if (isset ($category_code)) {
-			$sql .= " WHERE category_code = '".Database::escape_string($category_code)."'";
+		$access_url_rel_course_table= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
+		$current_url_id = api_get_current_access_url_id();
+		if ($_configuration['multiple_access_urls'] == true){
+			$sql = "SELECT COUNT(*) AS number FROM ".$course_table." as c, ".$access_url_rel_course_table." as u WHERE u.course_code=c.code AND access_url_id='".$current_url_id."'";
+			if (isset ($category_code)) {
+				$sql .= " AND category_code = '".Database::escape_string($category_code)."'";
+			}
+		} else {
+			$sql = "SELECT COUNT(*) AS number FROM ".$course_table." ";
+			if (isset ($category_code)) {
+				$sql .= " WHERE category_code = '".Database::escape_string($category_code)."'";
+			}			
 		}
 		$res = Database::query($sql);
 		$obj = Database::fetch_object($res);
@@ -41,14 +51,24 @@ class Statistics {
 	 * @return int Number of users counted
 	 */
 	function count_users($status, $category_code = NULL, $count_invisible_courses = true) {
+		
+		global $_configuration;
 		// Database table definitions
 		$course_user_table 	= Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 		$course_table 		= Database :: get_main_table(TABLE_MAIN_COURSE);
 		$user_table 		= Database :: get_main_table(TABLE_MAIN_USER);
-
-		$sql = "SELECT COUNT(DISTINCT(user_id)) AS number FROM $user_table WHERE status = ".intval(Database::escape_string($status))." ";
-		if (isset ($category_code)) {
-			$sql = "SELECT COUNT(DISTINCT(cu.user_id)) AS number FROM $course_user_table cu, $course_table c WHERE cu.status = ".intval(Database::escape_string($status))." AND c.code = cu.course_code AND c.category_code = '".Database::escape_string($category_code)."'  ";
+		$access_url_rel_user_table= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+		$current_url_id = api_get_current_access_url_id();
+		if ($_configuration['multiple_access_urls'] == true){
+			$sql = "SELECT COUNT(DISTINCT(u.user_id)) AS number FROM $user_table as u, $access_url_rel_user_table as url WHERE status = ".intval(Database::escape_string($status))." AND u.user_id=url.user_id AND access_url_id='".$current_url_id."'";
+			if (isset ($category_code)) {
+				$sql = "SELECT COUNT(DISTINCT(cu.user_id)) AS number FROM $course_user_table cu, $course_table c, $access_url_rel_user_table as url WHERE cu.status = ".intval(Database::escape_string($status))." AND c.code = cu.course_code AND c.category_code = '".Database::escape_string($category_code)."' AND cu.user_id=url.user_id AND access_url_id='".$current_url_id."'";
+			}
+		} else {
+			$sql = "SELECT COUNT(DISTINCT(user_id)) AS number FROM $user_table WHERE status = ".intval(Database::escape_string($status))." ";
+			if (isset ($category_code)) {
+				$sql = "SELECT COUNT(DISTINCT(cu.user_id)) AS number FROM $course_user_table cu, $course_table c WHERE cu.status = ".intval(Database::escape_string($status))." AND c.code = cu.course_code AND c.category_code = '".Database::escape_string($category_code)."'  ";
+			}			
 		}
 		$res = Database::query($sql);
 		$obj = Database::fetch_object($res);
@@ -61,9 +81,16 @@ class Statistics {
 	 */
 	function get_number_of_activities() {
 		// Database table definitions
+		global $_configuration;
 		$track_e_default  = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_DEFAULT);
 		$table_user = Database::get_main_table(TABLE_MAIN_USER);
-		$sql = "SELECT count(default_id) AS total_number_of_items FROM $track_e_default, $table_user user WHERE default_user_id = user.user_id ";
+		$access_url_rel_user_table= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+		$current_url_id = api_get_current_access_url_id();
+		if ($_configuration['multiple_access_urls'] == true){
+			$sql = "SELECT count(default_id) AS total_number_of_items FROM $track_e_default, $table_user user, $access_url_rel_user_table url WHERE default_user_id = user.user_id AND user.user_id=url.user_id AND access_url_id='".$current_url_id."'";
+		} else {
+			$sql = "SELECT count(default_id) AS total_number_of_items FROM $track_e_default, $table_user user WHERE default_user_id = user.user_id ";
+		}
 
 		if (isset($_GET['keyword'])) {
 			$keyword = Database::escape_string(trim($_GET['keyword']));
@@ -78,10 +105,12 @@ class Statistics {
 	 * Get activities data to display
 	 */
 	function get_activities_data($from, $number_of_items, $column, $direction) {
-		global $dateTimeFormatLong;
+		global $dateTimeFormatLong, $_configuration;
 		$track_e_default 	= Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_DEFAULT);
 		$table_user = Database::get_main_table(TABLE_MAIN_USER);
 		$table_course = Database::get_main_table(TABLE_MAIN_COURSE);
+		$access_url_rel_user_table= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+		$current_url_id = api_get_current_access_url_id();
 		
 		$column 		 = intval($column);
 		$from 			 = intval($from);
@@ -90,15 +119,25 @@ class Statistics {
 		if (!in_array($direction, array('ASC','DESC'))) {
        	            $direction = 'DESC';
 		}        	
-
-		$sql = "SELECT
-				 	default_event_type  as col0,
-					default_value_type	as col1,
-					default_value		as col2,
-					user.username 		as col3,
-					default_date 		as col4
-				FROM $track_e_default track_default, $table_user user
-				WHERE track_default.default_user_id = user.user_id ";
+		if ($_configuration['multiple_access_urls'] == true){
+			$sql = "SELECT
+			 	default_event_type  as col0,
+				default_value_type	as col1,
+				default_value		as col2,
+				user.username 		as col3,
+				default_date 		as col4
+			FROM $track_e_default as track_default, $table_user as user, $access_url_rel_user_table as url
+			WHERE track_default.default_user_id = user.user_id AND url.user_id=user.user_id AND access_url_id='".$current_url_id."'";	
+		} else {
+			$sql = "SELECT
+			 	default_event_type  as col0,
+				default_value_type	as col1,
+				default_value		as col2,
+				user.username 		as col3,
+				default_date 		as col4
+			FROM $track_e_default track_default, $table_user user
+			WHERE track_default.default_user_id = user.user_id ";
+		}
 
 		if (isset($_GET['keyword'])) {
 		    $keyword = Database::escape_string(trim($_GET['keyword']));
@@ -209,21 +248,31 @@ class Statistics {
 	 * @param string $type month, hour or day
 	 */
 	function print_login_stats($type) {
+		global $_configuration;
 		$table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LOGIN);
+		$access_url_rel_user_table= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+		$current_url_id = api_get_current_access_url_id();
+		if ($_configuration['multiple_access_urls'] == true){
+			$table_url = ", $access_url_rel_user_table";
+			$where_url = " WHERE login_user_id=user_id AND access_url_id='".$current_url_id."'"; 
+		} else {
+			$table_url = '';
+			$where_url='';
+		}
 		switch ($type) {
 			case 'month':
 				$months = api_get_months_long();
 				$period = get_lang('PeriodMonth');
-				$sql = "SELECT DATE_FORMAT( login_date, '%Y-%m' ) AS stat_date , count( login_id ) AS number_of_logins FROM ".$table." GROUP BY stat_date ORDER BY login_date ";
+				$sql = "SELECT DATE_FORMAT( login_date, '%Y-%m' ) AS stat_date , count( login_id ) AS number_of_logins FROM ".$table.$table_url.$where_url." GROUP BY stat_date ORDER BY login_date ";
 				break;
 			case 'hour':
 				$period = get_lang('PeriodHour');
-				$sql = "SELECT DATE_FORMAT( login_date, '%H' ) AS stat_date , count( login_id ) AS number_of_logins FROM ".$table." GROUP BY stat_date ORDER BY stat_date ";
+				$sql = "SELECT DATE_FORMAT( login_date, '%H' ) AS stat_date , count( login_id ) AS number_of_logins FROM ".$table.$table_url.$where_url." GROUP BY stat_date ORDER BY stat_date ";
 				break;
 			case 'day':
 				$week_days = api_get_week_days_long();
 				$period = get_lang('PeriodDay');
-				$sql = "SELECT DATE_FORMAT( login_date, '%w' ) AS stat_date , count( login_id ) AS number_of_logins FROM ".$table." GROUP BY stat_date ORDER BY DATE_FORMAT( login_date, '%w' ) ";
+				$sql = "SELECT DATE_FORMAT( login_date, '%w' ) AS stat_date , count( login_id ) AS number_of_logins FROM ".$table.$table_url.$where_url." GROUP BY stat_date ORDER BY DATE_FORMAT( login_date, '%w' ) ";
 				break;
 		}
 		$res = Database::query($sql);
@@ -248,12 +297,22 @@ class Statistics {
 	 * Print the number of recent logins
 	 */
 	function print_recent_login_stats() {
+		global $_configuration;
 		$total_logins = array();
 		$table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LOGIN);
-		$sql[get_lang('Thisday')] 	 = "SELECT count(login_user_id) AS number FROM $table WHERE DATE_ADD(login_date, INTERVAL 1 DAY) >= NOW()";
-		$sql[get_lang('Last7days')]  = "SELECT count(login_user_id) AS number  FROM $table WHERE DATE_ADD(login_date, INTERVAL 7 DAY) >= NOW()";
-		$sql[get_lang('Last31days')] = "SELECT count(login_user_id) AS number  FROM $table WHERE DATE_ADD(login_date, INTERVAL 31 DAY) >= NOW()";
-		$sql[get_lang('Total')] 	 = "SELECT count(login_user_id) AS number  FROM $table";
+		$access_url_rel_user_table= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+		$current_url_id = api_get_current_access_url_id();
+		if ($_configuration['multiple_access_urls'] == true){
+			$table_url = ", $access_url_rel_user_table";
+			$where_url = " AND login_user_id=user_id AND access_url_id='".$current_url_id."'"; 
+		} else {
+			$table_url = '';
+			$where_url='';
+		}
+		$sql[get_lang('Thisday')] 	 = "SELECT count(login_user_id) AS number FROM $table $table_url WHERE DATE_ADD(login_date, INTERVAL 1 DAY) >= NOW() $where_url";
+		$sql[get_lang('Last7days')]  = "SELECT count(login_user_id) AS number  FROM $table $table_url WHERE DATE_ADD(login_date, INTERVAL 7 DAY) >= NOW() $where_url";
+		$sql[get_lang('Last31days')] = "SELECT count(login_user_id) AS number  FROM $table $table_url WHERE DATE_ADD(login_date, INTERVAL 31 DAY) >= NOW() $where_url";
+		$sql[get_lang('Total')] 	 = "SELECT count(login_user_id) AS number  FROM $table $table_url WHERE 1=1 $where_url";
 		foreach ($sql as $index => $query) {
 			$res = Database::query($query);
 			$obj = Database::fetch_object($res);
@@ -265,7 +324,11 @@ class Statistics {
 	 * Show some stats about the accesses to the different course tools
 	 */
 	function print_tool_stats() {
+		global $_configuration;
 		$table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ACCESS);
+		$access_url_rel_course_table= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
+		$current_url_id = api_get_current_access_url_id();
+		
 		$tools = array('announcement','assignment','calendar_event',
 			'chat','conference','course_description','document',
 			'dropbox','group','learnpath','link','quiz',
@@ -274,10 +337,17 @@ class Statistics {
 		foreach ($tools as $tool) {
 			$tool_names[$tool] = get_lang(ucfirst($tool), '');
 		}
-		$sql = "SELECT access_tool, count( access_id ) 
-			AS number_of_logins FROM $table 
-			WHERE access_tool IN ('".implode("','",$tools)."') 
-			GROUP BY access_tool ";
+		if ($_configuration['multiple_access_urls'] == true){
+			$sql = "SELECT access_tool, count( access_id ) 
+				AS number_of_logins FROM $table, $access_url_rel_course_table
+				WHERE access_tool IN ('".implode("','",$tools)."') AND  course_code = access_cours_code AND access_url_id='".$current_url_id."'
+				GROUP BY access_tool ";
+		} else {
+			$sql = "SELECT access_tool, count( access_id ) 
+				AS number_of_logins FROM $table 
+				WHERE access_tool IN ('".implode("','",$tools)."') 
+				GROUP BY access_tool ";			
+		}
 		$res = Database::query($sql);
 		$result = array();
 		while ($obj = Database::fetch_object($res)) {
@@ -289,10 +359,19 @@ class Statistics {
 	 * Show some stats about the number of courses per language
 	 */
 	function print_course_by_language_stats() {
-		$table = Database::get_main_table(TABLE_MAIN_COURSE);
-		$sql = "SELECT course_language, count( code ) 
+		global $_configuration;
+		$table = Database :: get_main_table(TABLE_MAIN_COURSE);
+		$access_url_rel_course_table= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
+		$current_url_id = api_get_current_access_url_id();
+		if ($_configuration['multiple_access_urls'] == true){
+			$sql = "SELECT course_language, count( c.code ) 
+			AS number_of_courses 
+			FROM $table as c, $access_url_rel_course_table as u WHERE u.course_code=c.code AND access_url_id='".$current_url_id."' GROUP BY course_language";
+		} else {		
+			$sql = "SELECT course_language, count( code ) 
 			AS number_of_courses 
 			FROM $table GROUP BY course_language ";
+		}
 		$res = Database::query($sql);
 		$result = array();
 		while ($obj = Database::fetch_object($res)) {
@@ -304,12 +383,22 @@ class Statistics {
 	 * Shows the number of users having their picture uploaded in Dokeos.
 	 */
 	function print_user_pictures_stats() {
+		global $_configuration;
 		$user_table = Database :: get_main_table(TABLE_MAIN_USER);
-		$sql = "SELECT COUNT(*) AS n FROM $user_table";
+		$access_url_rel_user_table= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+		$current_url_id = api_get_current_access_url_id();
+		if ($_configuration['multiple_access_urls'] == true){
+			$url_condition =  ", $access_url_rel_user_table as url WHERE url.user_id=u.user_id AND access_url_id='".$current_url_id."'";
+			$url_condition2 = " AND url.user_id=u.user_id AND access_url_id='".$current_url_id."'";
+			$table = ", $access_url_rel_user_table as url ";
+		}
+		$sql = "SELECT COUNT(*) AS n FROM $user_table as u ".$url_condition;
 		$res = Database::query($sql);
 		$count1 = Database::fetch_object($res);
-		$sql = "SELECT COUNT(*) AS n FROM $user_table 
-			WHERE LENGTH(picture_uri) > 0";
+		$sql = "SELECT COUNT(*) AS n FROM $user_table as u $table 
+			WHERE LENGTH(picture_uri) > 0 $url_condition2";
+			
+			
 		$res = Database::query($sql);
 		$count2 = Database::fetch_object($res);
 		// #users without picture
@@ -357,6 +446,10 @@ class Statistics {
 	 * Shows statistics about the time of last visit to each course.
 	 */
 	function print_course_last_visit() {
+		global $_configuration;
+		$access_url_rel_course_table= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
+		$current_url_id = api_get_current_access_url_id();
+		
 		$columns[0] = 'access_cours_code';
 		$columns[1] = 'access_date';
 		$sql_order[SORT_ASC] = 'ASC';
@@ -374,7 +467,7 @@ class Statistics {
 		$form->addElement('hidden','action','courselastvisit');
 		$form->add_textfield('date_diff',get_lang('Days'),true);
 		$form->addRule('date_diff','InvalidNumber','numeric');
-		$form->addElement('submit','ok',get_lang('Ok'));
+		$form->addElement('style_submit_button', 'submit', get_lang('Search'),'class="search"');
 		if (!isset($_GET['date_diff'])) {
 			$defaults['date_diff'] = 60;
 		} else {
@@ -385,10 +478,17 @@ class Statistics {
 		$values = $form->exportValues();
 		$date_diff = $values['date_diff'];
 		$table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LASTACCESS);
-		$sql = "SELECT * FROM $table 
-			GROUP BY access_cours_code 
-			HAVING access_cours_code <> '' 
-			AND DATEDIFF( NOW() , access_date ) <= ". $date_diff;
+		if ($_configuration['multiple_access_urls'] == true){
+			$sql = "SELECT * FROM $table, $access_url_rel_course_table WHERE course_code = access_cours_code AND access_url_id='".$current_url_id."'
+				GROUP BY access_cours_code 
+				HAVING access_cours_code <> '' 
+				AND DATEDIFF( NOW() , access_date ) <= ". $date_diff;
+		} else {
+			$sql = "SELECT * FROM $table 
+				GROUP BY access_cours_code 
+				HAVING access_cours_code <> '' 
+				AND DATEDIFF( NOW() , access_date ) <= ". $date_diff;			
+		}
 		$res = Database::query($sql);
 		$number_of_courses = Database::num_rows($res);
 		$sql .= ' ORDER BY '.$columns[$column].' '.$sql_order[$direction];
@@ -407,8 +507,8 @@ class Statistics {
 			$parameters['action'] = 'courselastvisit';
 			$parameters['date_diff'] = $date_diff;
 			$parameters['action'] = 'courselastvisit';
-			$table_header[] = array ("Coursecode", true);
-			$table_header[] = array ("Last login", true);
+			$table_header[] = array (get_lang("CourseCode"), true);
+			$table_header[] = array (get_lang("LastAccess"), true);
 			Display :: display_sortable_table($table_header, $courses, array ('column'=>$column,'direction'=>$direction), array (), $parameters);
 		} else {
 			echo get_lang('NoSearchResults');
@@ -421,8 +521,11 @@ class Statistics {
 	 * @return array	Message list
 	 */
 	function get_messages($message_type) {
+		global $_configuration;
 		$message_table = Database::get_main_table(TABLE_MAIN_MESSAGE);
 		$user_table = Database::get_main_table(TABLE_MAIN_USER);
+		$access_url_rel_user_table= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+		$current_url_id = api_get_current_access_url_id();
 		switch ($message_type) {
 			case 'sent':
 				$field = 'user_sender_id';
@@ -431,11 +534,20 @@ class Statistics {
 				$field = 'user_receiver_id';
 				break;
 		}
-		$sql = "SELECT lastname, firstname, username, 
-			COUNT($field) AS count_message
-			FROM ".$message_table." m 
-			LEFT JOIN ".$user_table." u ON m.$field = u.user_id
-			GROUP BY m.$field";
+		if ($_configuration['multiple_access_urls'] == true){
+			$sql = "SELECT lastname, firstname, username, 
+				COUNT($field) AS count_message
+				FROM ".$access_url_rel_user_table." as url, ".$message_table." m
+				LEFT JOIN ".$user_table." u ON m.$field = u.user_id
+				WHERE  url.user_id = m.$field AND  access_url_id='".$current_url_id."'
+				GROUP BY m.$field";
+		} else {
+			$sql = "SELECT lastname, firstname, username, 
+				COUNT($field) AS count_message
+				FROM ".$message_table." m 
+				LEFT JOIN ".$user_table." u ON m.$field = u.user_id
+				GROUP BY m.$field";			
+		}
 		$res = Database::query($sql);
 		$messages_sent = array();
 		while ($messages = Database::fetch_array($res)) {
@@ -452,14 +564,26 @@ class Statistics {
 	 * Count the number of friends for social network users
 	 */
 	function get_friends() {
+		global $_configuration;
 		$user_friend_table = Database::get_main_table(TABLE_MAIN_USER_REL_USER);
 		$user_table = Database::get_main_table(TABLE_MAIN_USER);
-		$sql = "SELECT lastname, firstname, username, 
-			COUNT(friend_user_id) AS count_friend
-			FROM ".$user_friend_table." uf 
-			LEFT JOIN ".$user_table." u ON uf.user_id = u.user_id 
-			WHERE uf.relation_type <> '".USER_RELATION_TYPE_RRHH."'
-			GROUP BY uf.user_id";
+		$access_url_rel_user_table= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+		$current_url_id = api_get_current_access_url_id();
+		if ($_configuration['multiple_access_urls'] == true){
+			$sql = "SELECT lastname, firstname, username, 
+				COUNT(friend_user_id) AS count_friend
+				FROM ".$access_url_rel_user_table." as url, ".$user_friend_table." uf 
+				LEFT JOIN ".$user_table." u ON uf.user_id = u.user_id 
+				WHERE uf.relation_type <> '".USER_RELATION_TYPE_RRHH."' AND uf.user_id = url.user_id AND  access_url_id='".$current_url_id."'
+				GROUP BY uf.user_id";
+		} else {
+			$sql = "SELECT lastname, firstname, username, 
+				COUNT(friend_user_id) AS count_friend
+				FROM ".$user_friend_table." uf 
+				LEFT JOIN ".$user_table." u ON uf.user_id = u.user_id 
+				WHERE uf.relation_type <> '".USER_RELATION_TYPE_RRHH."'
+				GROUP BY uf.user_id";
+		}
 		$res = Database::query($sql);
 		$list_friends = array();
 		while ($friends = Database::fetch_array($res)) {			

@@ -1,9 +1,7 @@
 <?php //$id: $
-/* For licensing terms, see /dokeos_license.txt */
+/* For licensing terms, see /license.txt */
 /**
-==============================================================================
 *	@package dokeos.admin
-==============================================================================
 */
 
 // name of the language file that needs to be included

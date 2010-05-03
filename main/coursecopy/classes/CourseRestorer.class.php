@@ -403,24 +403,19 @@ class CourseRestorer
 	function restore_scorm_documents()
 	{
 		$perm = api_get_permissions_for_new_directories();
-
-		if ($this->course->has_resources(RESOURCE_SCORM))
-		{
+		
+		if ($this->course->has_resources(RESOURCE_SCORM)) {
 			$resources = $this->course->resources;
-
-			foreach ($resources[RESOURCE_SCORM] as $id => $document)
-			{
+			
+			foreach ($resources[RESOURCE_SCORM] as $id => $document) {
 				$path = api_get_path(SYS_COURSE_PATH).$this->course->destination_path.'/';
 
 				@mkdir(dirname($path.$document->path), $perm, true);
 
-				if (file_exists($path.$document->path))
-				{
-					switch ($this->file_option)
-					{
+				if (file_exists($path.$document->path)) {
+					switch ($this->file_option) {
 						case FILE_OVERWRITE :
 							rmdirr($path.$document->path);
-
 							copyDirTo($this->course->backup_path.'/'.$document->path, $path.dirname($document->path), false);
 
 							break;
@@ -431,14 +426,11 @@ class CourseRestorer
 
 							$ext = explode('.', basename($document->path));
 
-							if (count($ext) > 1)
-							{
+							if (count($ext) > 1) {
 								$ext = array_pop($ext);
 								$file_name_no_ext = substr($document->path, 0, - (strlen($ext) + 1));
 								$ext = '.'.$ext;
-							}
-							else
-							{
+							} else {
 								$ext = '';
 								$file_name_no_ext = $document->path;
 							}
@@ -446,8 +438,7 @@ class CourseRestorer
 							$new_file_name = $file_name_no_ext.'_'.$i.$ext;
 							$file_exists = file_exists($path.$new_file_name);
 
-							while ($file_exists)
-							{
+							while ($file_exists) {
 								$i ++;
 								$new_file_name = $file_name_no_ext.'_'.$i.$ext;
 								$file_exists = file_exists($path.$new_file_name);
@@ -462,8 +453,7 @@ class CourseRestorer
 							break;
 					} // end switch
 				} // end if file exists
-				else
-				{
+				else {
 					copyDirTo($this->course->backup_path.'/'.$document->path, $path.dirname($document->path), false);
 				}
 			} // end for each
@@ -1229,13 +1219,13 @@ class CourseRestorer
 					Database::query($sql);
 				}
 
-				$new_item_ids = array();
-				$parent_item_ids = array();
-				$previous_item_ids = array();
-				$next_item_ids = array();
-				$old_prerequisite = array();
-				$old_refs = array();
-				$prerequisite_ids = array();
+				$new_item_ids 		= array();
+				$parent_item_ids 	= array();
+				$previous_item_ids 	= array();
+				$next_item_ids 		= array();
+				$old_prerequisite 	= array();
+				$old_refs 			= array();
+				$prerequisite_ids 	= array();
 
 				foreach ($lp->get_items() as $index => $item) {
 					/*
@@ -1270,23 +1260,23 @@ class CourseRestorer
 					}
 
 					$sql = "INSERT INTO ".$table_item." SET " .
-							"lp_id = '".Database::escape_string($new_lp_id)."', " .
-							"item_type='".Database::escape_string($item['item_type'])."', " .
-							"ref = '".Database::escape_string($ref)."', " .
-							"title = '".Database::escape_string($item['title'])."', " .
-							"description ='".Database::escape_string($item['description'])."', " .
-							"path = '".Database::escape_string($path)."', " .
-							"min_score = '".Database::escape_string($item['min_score'])."', " .
-							"max_score = '".Database::escape_string($item['max_score'])."', " .
-							"mastery_score = '".Database::escape_string($item['mastery_score'])."', " .
-							"parent_item_id = '".Database::escape_string($item['parent_item_id'])."', " .
-							"previous_item_id = '".Database::escape_string($item['previous_item_id'])."', " .
-							"next_item_id = '".Database::escape_string($item['next_item_id'])."', " .
-							"display_order = '".Database::escape_string($item['display_order'])."', " .
-							"prerequisite = '".Database::escape_string($item['prerequisite'])."', " .
-							"parameters='".Database::escape_string($item['parameters'])."', " .
-							"audio='".Database::escape_string($item['audio'])."', " .
-							"launch_data = '".Database::escape_string($item['launch_dataprereq_type'])."'";
+							"lp_id = '".			Database::escape_string($new_lp_id)."', " .
+							"item_type='".			Database::escape_string($item['item_type'])."', " .
+							"ref = '".				Database::escape_string($ref)."', " .
+							"title = '".			Database::escape_string($item['title'])."', " .
+							"description ='".		Database::escape_string($item['description'])."', " .
+							"path = '".				Database::escape_string($path)."', " .
+							"min_score = '".		Database::escape_string($item['min_score'])."', " .
+							"max_score = '".		Database::escape_string($item['max_score'])."', " .
+							"mastery_score = '".	Database::escape_string($item['mastery_score'])."', " .
+							"parent_item_id = '".	Database::escape_string($item['parent_item_id'])."', " .
+							"previous_item_id = '".	Database::escape_string($item['previous_item_id'])."', " .
+							"next_item_id = '".		Database::escape_string($item['next_item_id'])."', " .
+							"display_order = '".	Database::escape_string($item['display_order'])."', " .
+							"prerequisite = '".		Database::escape_string($item['prerequisite'])."', " .
+							"parameters='".			Database::escape_string($item['parameters'])."', " .
+							"audio='".				Database::escape_string($item['audio'])."', " .
+							"launch_data = '".		Database::escape_string($item['launch_dataprereq_type'])."'";
 
 					Database::query($sql);
 					$new_item_id = Database::insert_id();
@@ -1362,8 +1352,7 @@ class CourseRestorer
 					Database::query($sql);
 				}
 
-				foreach ($prerequisite_ids as $new_item_id => $prerequisite_old_id)
-				{
+				foreach ($prerequisite_ids as $new_item_id => $prerequisite_old_id) {
 					$prerequisite_new_id = 0;
 					if($prerequisite_old_id != 0){
 						$prerequisite_new_id = $new_item_ids[$prerequisite_old_id];

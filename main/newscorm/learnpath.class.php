@@ -4319,6 +4319,7 @@ class learnpath {
 		unset ($this->arrMenu);
 
 		if ($is_allowed_to_edit) {
+			$token = Security::get_token();
 			
 			$gradebook = Security :: remove_XSS($_GET['gradebook']);
 			$return .= '<div class="actions">';
@@ -4403,7 +4404,7 @@ class learnpath {
 
 				if ($arrLP[$i]['previous_item_id'] != 0) {
 
-					$return .= '<a href="' . api_get_self() . '?cidReq=' . Security :: remove_XSS($_GET['cidReq']) . '&amp;action=move_item&amp;direction=up&amp;id=' . $arrLP[$i]['id'] . '&amp;lp_id=' . $this->lp_id . '">';
+					$return .= '<a href="' . api_get_self() . '?cidReq=' . Security :: remove_XSS($_GET['cidReq']) . '&amp;action=move_item&amp;direction=up&amp;id=' . $arrLP[$i]['id'] . '&amp;lp_id=' . $this->lp_id . '&amp;sec_token='.$token.'">';
 					$return .= '<img style="margin:1px;" alt="" src="../img/arrow_up_' . ($arrLP[$i]['depth'] % 3) . '.gif" title="' . get_lang('MoveUp') . '"/>';
 					$return .= '</a>';
 
@@ -4411,7 +4412,7 @@ class learnpath {
 					$return .= '<img alt="" src="../img/blanco.png" title="" />';
 
 				if ($arrLP[$i]['next_item_id'] != 0) {
-					$return .= '<a href="' . api_get_self() . '?cidReq=' . Security :: remove_XSS($_GET['cidReq']). '&amp;action=move_item&amp;direction=down&amp;id=' . $arrLP[$i]['id'] . '&amp;lp_id=' . $this->lp_id . '">';
+					$return .= '<a href="' . api_get_self() . '?cidReq=' . Security :: remove_XSS($_GET['cidReq']). '&amp;action=move_item&amp;direction=down&amp;id=' . $arrLP[$i]['id'] . '&amp;lp_id=' . $this->lp_id . '&amp;sec_token='.$token.'">';
 					$return .= '<img style="margin:1px;" src="../img/arrow_down_' . ($arrLP[$i]['depth'] % 3) . '.gif" title="' . get_lang('MoveDown') . '" />';
 
 					$return .= '</a>';

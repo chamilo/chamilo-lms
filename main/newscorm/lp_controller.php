@@ -424,32 +424,30 @@ switch($action)
 
 	case 'move_item':
 
-		if(!$is_allowed_to_edit){
+		if (!$is_allowed_to_edit) {
 			api_not_allowed(true);
 		}
 
-		if($debug > 0) error_log('New LP - move item action triggered', 0);
+		if ($debug > 0) error_log('New LP - move item action triggered', 0);
 
-		if(!$lp_found){ error_log('New LP - No learnpath given for move item', 0); require('lp_list.php'); }
-		else
-		{
+		if (!$lp_found) { error_log('New LP - No learnpath given for move item', 0); require('lp_list.php'); }
+		else {
 			$_SESSION['refresh'] = 1;
 
-			if(isset($_POST['submit_button']))
-			{
+			if (isset($_POST['submit_button'])) {
 				$_SESSION['oLP']->edit_item($_GET['id'], $_POST['parent'], $_POST['previous'], Security::remove_XSS($_POST['title'], $_POST['description']) );
-
 				$is_success = true;
 			}
 
-			if(isset($_GET['view']) && $_GET['view'] == 'build')
-			{
+			if (isset($_GET['view']) && $_GET['view'] == 'build') {
 				require('lp_move_item.php');
-			}
-			else
-			{
-				$_SESSION['oLP']->move_item($_GET['id'], $_GET['direction']);
-
+			} else {
+				//avoids weird behaviours see CT#967
+				$check = Security::check_token('get');
+				if ($check) {
+					$_SESSION['oLP']->move_item($_GET['id'], $_GET['direction']);					
+				}
+				Security::clear_token();
 				require('lp_admin_view.php');
 			}
 		}

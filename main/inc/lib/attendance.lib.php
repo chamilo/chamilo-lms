@@ -4,12 +4,12 @@
 /**
  * This file contains class used like library, provides functions for attendance tool. It's also used like model to attendance_controller (MVC pattern)
  * @author Christian Fasanando <christian1827@gmail.com>
+ * @author Julio Montoya <gugli100@gmail.com> improvements 
  * @package chamilo.attendance
  */
 
 /**
  * Attendance can be used to instanciate objects or as a library to manage attendances
- * @package chamilo.attendance
  */
 
 class Attendance
@@ -42,19 +42,19 @@ class Attendance
 
 	
 	/**
-	 * Get attendance list 
-	 * @param   string  course code (optional)
+	 * Get attendance list only the id, name and attendance_qualify_max fields
+	 * @param   string  course db name (optional)
 	 * @param   int     session id (optional)
 	 * @return  array	attendances list
 	 */
-	function get_attendances_list($course_code = '', $session_id = null) {	
-		// initializing database table and variables
+	function get_attendances_list($course_db_name = '', $session_id = null) {	
+		// Initializing database table and variables
 		$tbl_attendance = Database :: get_course_table(TABLE_ATTENDANCE);				
 		$data = array();
 		
-		if (!empty($course_code)) {
-			$course_info = api_get_course_info($course_code);
-			$tbl_attendance = Database :: get_course_table(TABLE_ATTENDANCE, $course_info['dbName']);
+		if (!empty($course_db_name)) {
+			//$course_info = api_get_course_info($course_code);
+			$tbl_attendance = Database :: get_course_table(TABLE_ATTENDANCE, $course_db_name);
 		}
 		
 		$condition_session = '';
@@ -66,11 +66,11 @@ class Attendance
 			$condition_session = api_get_session_condition($session_id);
 		}
 				
-		// get attendance data
-		$sql = "SELECT * FROM $tbl_attendance WHERE active = 1 $condition_session ";
+		// Get attendance data
+		$sql = "SELECT id, name, attendance_qualify_max FROM $tbl_attendance WHERE active = 1 $condition_session ";
 		$rs  = Database::query($sql);
-		if (Database::num_rows($rs) > 0){
-			while ($row = Database::fetch_array($rs)) {
+		if (Database::num_rows($rs) > 0) {
+			while ($row = Database::fetch_array($rs,'ASSOC')) {
 				$data[$row['id']] = $row;
 			}
 		}
@@ -494,17 +494,16 @@ class Attendance
 	public function get_faults_average_inside_courses($user_id) {
 		
 		// get all courses of current user
-		$courses = CourseManager::get_courses_list_by_user_id($user_id, true);
+		$courses = CourseManager::get_courses_list_by_user_id($user_id, true);		
 		$user_id = intval($user_id);		
-		
 		$results = array();
 		$total_faults = $total_weight = $porcent = 0;
-		foreach ($courses as $course) {
-			
-			$course_code = $course['code'];
-			$course_info = api_get_course_info($course_code);
-			$tbl_attendance_result 	= Database::get_course_table(TABLE_ATTENDANCE_RESULT, $course_info['dbName']);
-			$attendances_by_course = $this->get_attendances_list($course_code);						
+		foreach ($courses as $course) {			
+			//$course_code = $course['code'];
+			//$course_info = api_get_course_info($course_code);
+			$tbl_attendance_result 	= Database::get_course_table(TABLE_ATTENDANCE_RESULT, $course['db_name']);
+			$attendances_by_course = $this->get_attendances_list($course['db_name']);
+												
 			foreach ($attendances_by_course as $attendance) {					
 				// get total faults and total weight											
 				$attendance_id = $attendance['id'];				
@@ -527,8 +526,8 @@ class Attendance
 		$results['faults'] 	= $total_faults;
 		$results['total']	= $total_weight;
 		$results['porcent'] = $porcent;
+		
 		return $results;
-
 	}
 	
 	/**
@@ -546,7 +545,7 @@ class Attendance
 		$user_id = intval($user_id);				
 		$results = array();
 		$total_faults = $total_weight = $porcent = 0;
-		$attendances_by_course = $this->get_attendances_list($course_code, $session_id);						
+		$attendances_by_course = $this->get_attendances_list($course_info['dbName'], $session_id);						
 		
 		foreach ($attendances_by_course as $attendance) {					
 			// get total faults and total weight											

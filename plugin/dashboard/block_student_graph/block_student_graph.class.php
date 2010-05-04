@@ -1,14 +1,18 @@
 <?php
+/* For licensing terms, see /license.txt */
+
 /**
  * This file is part of student graph block plugin for dashboard, 
  * it should be required inside dashboard controller for showing it into dashboard interface from plattform
  * @package chamilo.dashboard
  * @author Christian Fasanando
+ * @author Julio Montoya <gugli100@gmail.com> 
  */
 
 /**
  * required files for getting data
  */
+ 
 require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
 require_once api_get_path(LIBRARY_PATH).'course.lib.php';
 require_once api_get_path(LIBRARY_PATH).'tracking.lib.php';
@@ -77,67 +81,65 @@ class BlockStudentGraph extends Block {
     	$column = 1;
     	$data   = array();		
 		$students_attendance_graph = $this->get_students_attendance_graph();
-
-		$html = '        		
-			            <li class="widget color-orange" id="intro">
-			                <div class="widget-head">
-			                    <h3>'.get_lang('StudentsInformationsGraph').'</h3>
-			                    <div class="widget-actions"><a onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset)).'\')) return false;" href="index.php?action=disable_block&path='.$this->path.'">'.Display::return_icon('close.gif',get_lang('Close')).'</a></div>
-			                </div>			
-			                <div class="widget-content" align="center">	
-			                	<div style="padding:10px;"><strong>'.get_lang('AttendancesFaults').'</strong></div>		                	
-								'.$students_attendance_graph.'
-			                </div>
-			            </li>			                        			    
-				'; 
-    	
+		
+		$html = '<li class="widget color-orange" id="intro">
+	                <div class="widget-head">
+	                    <h3>'.get_lang('StudentsInformationsGraph').'</h3>
+	                    <div class="widget-actions"><a onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset)).'\')) return false;" href="index.php?action=disable_block&path='.$this->path.'">'.Display::return_icon('close.gif',get_lang('Close')).'</a></div>
+	                </div>			
+	                <div class="widget-content" align="center">	
+	                	<div style="padding:10px;"><strong>'.get_lang('AttendancesFaults').'</strong></div>		                	
+						'.$students_attendance_graph.'
+	                </div>
+	            </li>';    	
     	$data['column'] = $column;
-    	$data['content_html'] = $html;
-    	    	    	    	
-    	return $data;    	    	
-    	
+    	$data['content_html'] = $html;    	    	    	    	
+    	return $data;    	    	    	
     }
     
     /**
  	 * This method return a graph containing informations about students evaluation, it's used inside get_block method for showing it inside dashboard interface
  	 * @return string  img html
  	 */
-    public function get_students_attendance_graph() {
-	
+    public function get_students_attendance_graph() {	
 	
 		$students = $this->students;
  		$attendance = new Attendance();
 	
  		// get data 		
  		$attendances_faults_avg = array();
- 		
- 		foreach ($students as $student) {	 			
- 			$student_id = $student['user_id'];
- 			$student_info = api_get_user_info($student_id); 			 			
-			// get average of faults in attendances by student	 			
- 			$results_faults_avg = $attendance->get_faults_average_inside_courses($student_id);	 	
- 			if (!empty($results_faults_avg)) {
- 				$attendances_faults_avg[$student_info['username']] = $results_faults_avg['porcent'];	 				
- 			} else {
- 				$attendances_faults_avg[$student_info['username']] = 0;
- 			} 			
+ 		if (is_array($students) && count($students) > 0) {
+ 			
+	 		foreach ($students as $student) {	 			
+	 			$student_id = $student['user_id'];
+	 			//$student_info = api_get_user_info($student_id); 			 			
+				// get average of faults in attendances by student	 			
+	 			$results_faults_avg = $attendance->get_faults_average_inside_courses($student_id);
+	 				 				
+	 			if (!empty($results_faults_avg)) {
+	 				$attendances_faults_avg[$student['username']] = $results_faults_avg['porcent'];	 				
+	 			} else {
+	 				$attendances_faults_avg[$student['username']] = 0;
+	 			} 			
+	 		}
  		}
- 		 		
- 		arsort($attendances_faults_avg);		
+ 			
+ 		arsort($attendances_faults_avg); 
 		$usernames = array_keys($attendances_faults_avg);		
-				
+		
 		$faults = array();		
 		foreach ($usernames as $username) {
 			$faults[] = $attendances_faults_avg[$username];
 		}
-
+		
 		$graph = '';
 		$img_file = '';
 
 		if (is_array($usernames) && count($usernames) > 0) {
 			
 			// Defining data
-			$data_set = new pData;  										
+			$data_set = new pData;
+								
 			$data_set->AddPoint($faults,"Promedio");   				
 			$data_set->AddPoint($usernames,"Usuario"); 							
 			$data_set->AddAllSeries(); 				   										
@@ -149,7 +151,8 @@ class BlockStudentGraph extends Block {
 					
 			$data = $data_set->GetData();	// return $this->DataDescription
 			
-			if ($cache->IsInCache($graph_id, $data_set->GetData())) {			
+			if ($cache->IsInCache($graph_id, $data_set->GetData())) {
+			//if (0) {
 				//if we already created the img
 				$img_file = $cache->GetHash($graph_id, $data_set->GetData());  // image file with hash
 			} else {					
@@ -163,17 +166,20 @@ class BlockStudentGraph extends Block {
 				// Initialise the graph
 				$test = new MyHorBar(400,($height+30));
 				$test->setFontProperties(api_get_path(LIBRARY_PATH).'pchart/fonts/tahoma.ttf', 8);
-				$test->setGraphArea(65,30,350,$height);
+				$test->setGraphArea(100,30,370,$height);
+				
 				$test->drawFilledRoundedRectangle(7,7,393,$height,5,240,240,240);
 				$test->drawRoundedRectangle(5,5,395,$height,5,230,230,230);
 				$test->drawGraphArea(255,255,255,TRUE);
-				$test->setFixedScale(0,100,5);
-				$test->drawHorScale($data_set->GetData(),$data_set->GetDataDescription(),SCALE_NORMAL,150,150,150,TRUE,0,2,TRUE);
-				$test->setColorPalette(0,255,0,0);
+				
+				//X axis
+				$test->setFixedScale(0,100,10);
+				//var_dump($data_set->GetDataDescription());
+				$test->drawHorScale($data_set->GetData(),$data_set->GetDataDescription(),SCALE_NORMAL,150,150,150,TRUE,0,2,TRUE);				
+				$test->setColorPalette(0,255,0,0);				
 				$test->drawHorGrid(10,TRUE,230,230,230,50);
 				
 				// Draw the 0 line
-				//$Test->setFontProperties("Fonts/tahoma.ttf",6);
 				$test->setFontProperties(api_get_path(LIBRARY_PATH).'pchart/fonts/tahoma.ttf', 6);
 				$test->drawTreshold(0,143,55,72,TRUE,TRUE);
 
@@ -181,9 +187,11 @@ class BlockStudentGraph extends Block {
 				$test->drawHorBarGraph($data_set->GetData(),$data_set->GetDataDescription(),FALSE);
 				
 				$cache->WriteToCache($graph_id, $data_set->GetData(), $test);
+				
 				ob_start();
 				$test->Stroke();
 				ob_end_clean();
+				
 				$img_file = $cache->GetHash($graph_id, $data_set->GetData()); 						
 			} 			
 			if (!empty($img_file)) {
@@ -201,8 +209,6 @@ class BlockStudentGraph extends Block {
 	 */
 	function get_number_of_students() {
 		return count($this->students);
-	}
-    
+	}    
 }
-
 ?>

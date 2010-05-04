@@ -9,8 +9,7 @@
 
 /**
  * Controller script. Prepares the common background variables to give to the scripts corresponding to
- * the requested action
- * @package chamilo.dashboard 
+ * the requested action 
  */
 class DashboardController { // extends Controller {	
 		

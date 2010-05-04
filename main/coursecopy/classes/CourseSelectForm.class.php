@@ -14,21 +14,20 @@ class CourseSelectForm
 	 * @param array $hidden_fiels Hidden fields to add to the form.
 	 * @param boolean the document array will be serialize. This is used in the course_copy.php file
 	 */
-	function display_form($course, $hidden_fields = null, $avoid_serialize=false)
-	{
-		$resource_titles[RESOURCE_EVENT] = get_lang('Events');
-		$resource_titles[RESOURCE_ANNOUNCEMENT] = get_lang('Announcements');
-		$resource_titles[RESOURCE_DOCUMENT] = get_lang('Documents');
-		$resource_titles[RESOURCE_LINK] = get_lang('Links');
-		$resource_titles[RESOURCE_COURSEDESCRIPTION] = get_lang('CourseDescription');
-		$resource_titles[RESOURCE_FORUM] = get_lang('Forums');
-		$resource_titles[RESOURCE_QUIZ] = get_lang('Tests');
-		$resource_titles[RESOURCE_LEARNPATH] = get_lang('Learnpaths');
-		$resource_titles[RESOURCE_SCORM] = 'SCORM';
-		$resource_titles[RESOURCE_TOOL_INTRO] = get_lang('ToolIntro');
-		$resource_titles[RESOURCE_SURVEY] = get_lang('Survey');
-		$resource_titles[RESOURCE_GLOSSARY] = get_lang('Glossary');
-		$resource_titles[RESOURCE_WIKI] = get_lang('Wiki');
+	function display_form($course, $hidden_fields = null, $avoid_serialize=false) {	
+		$resource_titles[RESOURCE_EVENT] 				= get_lang('Events');
+		$resource_titles[RESOURCE_ANNOUNCEMENT] 		= get_lang('Announcements');
+		$resource_titles[RESOURCE_DOCUMENT] 			= get_lang('Documents');
+		$resource_titles[RESOURCE_LINK] 				= get_lang('Links');
+		$resource_titles[RESOURCE_COURSEDESCRIPTION]	= get_lang('CourseDescription');
+		$resource_titles[RESOURCE_FORUM] 				= get_lang('Forums');
+		$resource_titles[RESOURCE_QUIZ] 				= get_lang('Tests');
+		$resource_titles[RESOURCE_LEARNPATH] 			= get_lang('Learnpaths');
+		$resource_titles[RESOURCE_SCORM] 				= 'SCORM';
+		$resource_titles[RESOURCE_TOOL_INTRO] 			= get_lang('ToolIntro');
+		$resource_titles[RESOURCE_SURVEY] 				= get_lang('Survey');
+		$resource_titles[RESOURCE_GLOSSARY] 			= get_lang('Glossary');
+		$resource_titles[RESOURCE_WIKI]					= get_lang('Wiki');
 
 ?>
 		<script language="JavaScript" type="text/javascript">

@@ -1,4 +1,6 @@
-<?php //$id: $
+<?php
+/* For licensing terms, see /license.txt */
+
 /**
  * Display part of the document sub-process for upload. This script MUST BE included by upload/index.php
  * as it prepares most of the variables needed here.
@@ -9,7 +11,7 @@
  * Just display the form needed to upload a SCORM and give its settings
  */
 $noPHP_SELF = false;
-$nameTools = get_lang("FileUpload");
+$nameTools = get_lang('FileUpload');
 $interbreadcrumb[]= array ("url"=>"../newscorm/lp_controller.php?action=list", "name"=> get_lang(TOOL_DOCUMENT));
 Display::display_header($nameTools,"Doc");
 //show the title
@@ -40,9 +42,7 @@ api_display_tool_title($nameTools.$add_group_to_title);
 <br/>
 <?php
 /*
-==============================================================================
 		FOOTER
-==============================================================================
 */
 Display::display_footer();
 ?>

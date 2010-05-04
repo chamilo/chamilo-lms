@@ -1,4 +1,5 @@
-<?php // $Id$
+<?php
+/* For licensing terms, see /license.txt */
 /**
  * Action controller for the upload process. The display scripts (web forms) redirect
  * the process here to do what needs to be done with each file.
@@ -13,7 +14,7 @@ $language_file = 'document';
  //the document file is loaded because most of the upload vocab relates to the document tool
 // global settings initialisation
 // also provides access to main api (inc/lib/main_api.lib.php)
-include("../inc/global.inc.php");
+require_once '../inc/global.inc.php';
 
 // return to index if no tool is set
 if(empty($_SESSION['my_tool'])){header('location:index.php');}
@@ -31,14 +32,14 @@ if(!$is_allowed_to_edit){
  */
 switch($_SESSION['my_tool']){
 	case TOOL_LEARNPATH:
-		require('upload.scorm.php');
+		require 'upload.scorm.php';
 		break;
 	//the following cases need to be distinguished later on
 	case TOOL_DROPBOX:
 	case TOOL_STUDENTPUBLICATION:
 	case TOOL_DOCUMENT:
 	default:
-		require('upload.document.php');
+		require 'upload.document.php';
 		break;
 }
 ?>

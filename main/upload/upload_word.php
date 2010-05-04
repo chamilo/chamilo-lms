@@ -1,4 +1,5 @@
-<?php // $Id$
+<?php 
+/* For licensing terms, see /license.txt */
 /**
  * Action controller for the upload process. The display scripts (web forms) redirect
  * the process here to do what needs to be done with each file.

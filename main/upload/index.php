@@ -1,26 +1,6 @@
-<?php // $Id$
-/*
-==============================================================================
-	Dokeos - elearning and course management software
+<?php
+/* For licensing terms, see /license.txt */
 
-	Copyright (c) 2004-2006 Dokeos S.A.
-	Copyright (c) 2003 Ghent University (UGent)
-	Copyright (c) 2001 Universite catholique de Louvain (UCL)
-	Copyright (c) various contributors
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact: Dokeos, 181 rue Royale, B-1000 Brussels, Belgium, info@dokeos.com
-==============================================================================
-*/
 /**
 * Main script for the documents tool
 *
@@ -32,7 +12,7 @@
 * part is only processing code (init, process, display preparation) and the second
 * part is only display (HTML)
 *
-* @package dokeos.upload
+* @package chamilo.upload
 */
 
 /**
@@ -47,7 +27,7 @@ $language_file[] = "learnpath";
 
 // global settings initialisation
 // also provides access to main api (inc/lib/main_api.lib.php)
-include("../inc/global.inc.php");
+require_once '../inc/global.inc.php';
 
 $htmlHeadXtra[] =
 "<script type=\"text/javascript\">
@@ -75,11 +55,8 @@ if(!$is_allowed_to_edit){
 }
 
 
-
 /*
------------------------------------------------------------
 	Libraries
------------------------------------------------------------
 */
 
 //many useful functions in main_api.lib.php, by default included
@@ -88,10 +65,8 @@ require_once(api_get_path(LIBRARY_PATH) . 'fileUpload.lib.php');
 require_once(api_get_path(LIBRARY_PATH) . 'document.lib.php');
 
 /*
------------------------------------------------------------
 	Variables
 	- some need defining before inclusion of libraries
------------------------------------------------------------
 */
 $courseDir   = $_course['path']."/document";
 $sys_course_path = api_get_path(SYS_COURSE_PATH);

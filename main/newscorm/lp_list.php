@@ -1,14 +1,12 @@
 <?php //$id:$
-/* For licensing terms, see /dokeos_license.txt */
+/* For licensing terms, see /license.txt */
 /**
-==============================================================================
 * This file was origially the copy of document.php, but many modifications happened since then ;
 * the direct file view is not any more needed, if the user uploads a scorm zip file, a directory
 * will be automatically created for it, and the files will be uncompressed there for example ;
 *
-* @package dokeos.learnpath
+* @package chamilo.learnpath
 * @author Yannick Warnier <ywarnier@beeznest.org>
-==============================================================================
 */
 /**
  * Script

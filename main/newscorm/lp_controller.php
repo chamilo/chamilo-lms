@@ -1,8 +1,10 @@
-<?php //$id: $
+<?php
+/* For licensing terms, see /license.txt */
+
 /**
  * Controller script. Prepares the common background variables to give to the scripts corresponding to
  * the requested action
- * @package dokeos.learnpath
+ * @package chamilo.learnpath
  * @author Yannick Warnier <ywarnier@beeznest.org>
  */
 /**

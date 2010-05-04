@@ -1,8 +1,9 @@
-<?php //$id: $
+<?php
+/* For licensing terms, see /license.txt */
 /**
  * Process part of the document sub-process for upload. This script MUST BE included by upload/index.php
  * as it prepares most of the variables needed here.
- * @package dokeos.upload
+ * @package chamilo.upload
  * @author Yannick Warnier <ywarnier@beeznest.org>
  */
 /**
@@ -10,9 +11,7 @@
  */
 
 /*
------------------------------------------------------------
 	Libraries
------------------------------------------------------------
 */
 
 //many useful functions in main_api.lib.php, by default included
@@ -225,9 +224,7 @@ if(api_get_setting('use_document_title')=='true')
 
 <?php
 /*
-==============================================================================
 		FOOTER
-==============================================================================
 */
 Display::display_footer();
 ?>

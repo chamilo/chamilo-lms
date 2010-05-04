@@ -1,4 +1,5 @@
-<?php //$id: $
+<?php
+/* For licensing terms, see /license.txt */
 /**
  * Display part of the SCORM sub-process for upload. This script MUST BE included by upload/index.php
  * as it prepares most of the variables needed here.
@@ -38,14 +39,13 @@ Display::display_header($nameTools,"Path");
 //api_display_tool_title(get_lang("Learnpath")." - ".$nameTools.$add_group_to_title);
 //TODO: Include right language file
 
-require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
-include('../newscorm/content_makers.inc.php');
-require_once(api_get_path(LIBRARY_PATH) . 'specific_fields_manager.lib.php');
+require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
+require_once '../newscorm/content_makers.inc.php';
+require_once api_get_path(LIBRARY_PATH) . 'specific_fields_manager.lib.php';
 
 echo '<div class="actions">';
 echo '<a href="../newscorm/lp_controller.php?cidReq='.$_course['sysCode'].'">'.Display::return_icon('scorm.gif',get_lang('ReturnToLearningPaths')).' '.get_lang('ReturnToLearningPaths').'</a>';
 echo '</div>';
-
 
 $form = new FormValidator('','POST','upload.php','','id="upload_form" enctype="multipart/form-data" style="background-image: url(\'../img/scorm.jpg\'); background-repeat: no-repeat; background-position: 620px;"');
 $form->addElement('header', '', $nameTools);

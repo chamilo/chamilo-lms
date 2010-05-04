@@ -663,35 +663,34 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 								@api_mail('',$myrow["email"],stripslashes($emailTitle),$message,$sender_name,$email);
 	                        } else {
 	                            // intro of the email: receiver name and subject
-								$mail_body = api_get_person_name($myrow["lastname"], $myrow["firstname"], null, PERSON_NAME_EMAIL_ADDRESS)."<br />\n".stripslashes($emailTitle)."<br />";
-								// make a change for absolute url
-	        					$newContent = str_replace('src=\"../../','src=\"'.api_get_path(WEB_PATH).'', $newContent);
+                                    $mail_body = api_get_person_name($myrow["lastname"], $myrow["firstname"], null, PERSON_NAME_EMAIL_ADDRESS)."<br />\n".stripslashes($emailTitle)."<br />";
+
 	                            // main part of the email
 	                            $mail_body .= trim(stripslashes($newContent));
-	                            // signature of email: sender name and course URL after -- line
+                                    // signature of email: sender name and course URL after -- line
 	                            $mail_body .= "<br />-- <br />";
 	                            $mail_body .= api_get_person_name($_user['firstName'], $_user['lastName'], null, PERSON_NAME_EMAIL_ADDRESS)." \n";
 	                            $mail_body .= "<br /> \n<a href=\"".api_get_path(WEB_CODE_PATH).'announcements/announcements.php?'.api_get_cidreq()."\">";
 	                            $mail_body .= $_course['official_code'].' '.$_course['name'] . "</a>";
 
-								$recipient_name	= api_get_person_name($myrow["firstname"], $myrow["lastname"], null, PERSON_NAME_EMAIL_ADDRESS);
-		                        $mailid = $myrow["email"];
+                                    $recipient_name	= api_get_person_name($myrow["firstname"], $myrow["lastname"], null, PERSON_NAME_EMAIL_ADDRESS);
+                                    $mailid = $myrow["email"];
 
-		                        $sender_name = api_get_person_name($_SESSION['_user']['firstName'], $_SESSION['_user']['lastName'], null, PERSON_NAME_EMAIL_ADDRESS);
-		                        $sender_email = $_SESSION['_user']['mail'];
+                                    $sender_name = api_get_person_name($_SESSION['_user']['firstName'], $_SESSION['_user']['lastName'], null, PERSON_NAME_EMAIL_ADDRESS);
+                                    $sender_email = $_SESSION['_user']['mail'];
 
-								// send attachment file
-								$data_file = array();
-								$sql = 'SELECT path, filename FROM '.$tbl_announcement_attachment.' WHERE announcement_id = "'.$insert_id.'"';
-								$rs_attach = Database::query($sql);
-								if (Database::num_rows($rs_attach) > 0) {
-									$row_attach  = Database::fetch_array($rs_attach);
-									$path_attach = api_get_path(SYS_COURSE_PATH).$_course['path'].'/upload/announcements/'.$row_attach['path'];
-									$filename_attach = $row_attach['filename'];
-									$data_file = array('path' => $path_attach,'filename' => $filename_attach);
-								}
+                                    // send attachment file
+                                    $data_file = array();
+                                    $sql = 'SELECT path, filename FROM '.$tbl_announcement_attachment.' WHERE announcement_id = "'.$insert_id.'"';
+                                    $rs_attach = Database::query($sql);
+                                    if (Database::num_rows($rs_attach) > 0) {
+                                            $row_attach  = Database::fetch_array($rs_attach);
+                                            $path_attach = api_get_path(SYS_COURSE_PATH).$_course['path'].'/upload/announcements/'.$row_attach['path'];
+                                            $filename_attach = $row_attach['filename'];
+                                            $data_file = array('path' => $path_attach,'filename' => $filename_attach);
+                                    }
 
-								@api_mail_html($recipient_name, $mailid, stripslashes($emailSubject), $mail_body, $sender_name, $sender_email, null, $data_file);
+                                    @api_mail_html($recipient_name, $mailid, stripslashes($emailSubject), $mail_body, $sender_name, $sender_email, null, $data_file, true);
 	                        }
 
 							$sql_date="SELECT * FROM $db_name WHERE survey_id='$surveyid'";

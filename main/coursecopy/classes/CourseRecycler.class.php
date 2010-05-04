@@ -53,13 +53,10 @@ class CourseRecycler
 			foreach ($resources as $id => $resource) {
 				$sql = "DELETE FROM ".$table_linked_resources." WHERE (source_type = '".$type."' AND source_id = '".$id."') OR (resource_type = '".$type."' AND resource_id = '".$id."')  ";
 				Database::query($sql);
-				if(is_numeric($id))
-				{
+				if(is_numeric($id)) {
 					$sql = "DELETE FROM ".$table_item_properties." WHERE tool ='".$resource->get_tool()."' AND ref=".$id;
 					Database::query($sql);
-				}
-				elseif ($type == RESOURCE_TOOL_INTRO)
-				{
+				} elseif ($type == RESOURCE_TOOL_INTRO) {
 					$sql = "DELETE FROM $table_tool_intro WHERE id='$id'";
 					Database::query($sql);
 				}
@@ -232,27 +229,33 @@ class CourseRecycler
 	/**
 	 * Delete events
 	 */
-	function recycle_events()
-	{
-		if ($this->course->has_resources(RESOURCE_EVENT))
-		{
+	function recycle_events() {
+		if ($this->course->has_resources(RESOURCE_EVENT)) {
 			$table = Database :: get_course_table(TABLE_AGENDA);
+			$table_attachment = Database :: get_course_table(TABLE_AGENDA_ATTACHMENT);
+			
 			$ids = implode(',', (array_keys($this->course->resources[RESOURCE_EVENT])));
 			$sql = "DELETE FROM ".$table." WHERE id IN(".$ids.")";
 			Database::query($sql);
+			
+			$sql = "DELETE FROM ".$table_attachment." WHERE agenda_id IN(".$ids.")";
+			Database::query($sql);			
 		}
 	}
 	/**
 	 * Delete announcements
 	 */
-	function recycle_announcements()
-	{
-		if ($this->course->has_resources(RESOURCE_ANNOUNCEMENT))
-		{
+	function recycle_announcements() {		
+		if ($this->course->has_resources(RESOURCE_ANNOUNCEMENT)) {
 			$table = Database :: get_course_table(TABLE_ANNOUNCEMENT);
+			$table_attachment = Database :: get_course_table(TABLE_ANNOUNCEMENT_ATTACHMENT);
+			
 			$ids = implode(',', (array_keys($this->course->resources[RESOURCE_ANNOUNCEMENT])));
 			$sql = "DELETE FROM ".$table." WHERE id IN(".$ids.")";
 			Database::query($sql);
+			
+			$sql = "DELETE FROM ".$table_attachment." WHERE announcement_id IN(".$ids.")";
+			Database::query($sql);			
 		}
 	}
 	/**

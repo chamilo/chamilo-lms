@@ -706,6 +706,7 @@ class CourseRestorer
 		if ($this->course->has_resources(RESOURCE_EVENT)) {
 			$table = Database :: get_course_table(TABLE_AGENDA, $this->course->destination_db);
 			$resources = $this->course->resources;
+			//var_dump($resources[RESOURCE_EVENT]); exit;
 			foreach ($resources[RESOURCE_EVENT] as $id => $event) {
 				// check resources inside html from fckeditor tool and copy correct urls into recipient course
 				$event->content = DocumentManager::replace_urls_inside_content_html_from_copy_course($event->content, $this->course->code, $this->course->destination_path);
@@ -719,24 +720,37 @@ class CourseRestorer
 								
 				$origin_path = $this->course->backup_path.'/upload/calendar/';				
 				$destination_path = api_get_path(SYS_COURSE_PATH).$this->course->destination_path.'/upload/calendar/';
-												
-				$table_attachment = Database :: get_course_table(TABLE_AGENDA_ATTACHMENT, $this->course->orig);
 				
-				$sql = 'SELECT path, comment, size, filename FROM '.$table_attachment.' WHERE agenda_id = '.$id;
-				$attachment_event = Database::query($sql);
-				$attachment_event = Database::fetch_object($attachment_event);
-
-				if (file_exists($origin_path.$attachment_event->path) && !is_dir($origin_path.$attachment_event->path) ) {
-					$new_filename = uniqid(''); //ass seen in the add_agenda_attachment_file() function in agenda.inc.php	
-					$copy_result = copy($origin_path.$attachment_event->path, $destination_path.$new_filename);
-					//$copy_result = true;
-					if ($copy_result == true) {		
-						$table_attachment = Database :: get_course_table(TABLE_AGENDA_ATTACHMENT, $this->course->destination_db);			
-						$sql = "INSERT INTO ".$table_attachment." SET path = '".Database::escape_string($new_filename)."', comment = '".Database::escape_string($attachment_event->comment)."', size = '".$attachment_event->size."', filename = '".$attachment_event->filename."' , agenda_id = '".$new_event_id."' ";
-						Database::query($sql);
-					}				
-				}		
-			}
+				if (!empty($this->course->orig)) {
+						
+					$table_attachment = Database :: get_course_table(TABLE_AGENDA_ATTACHMENT, $this->course->orig);
+					$sql = 'SELECT path, comment, size, filename FROM '.$table_attachment.' WHERE agenda_id = '.$id;
+					$attachment_event = Database::query($sql);
+					$attachment_event = Database::fetch_object($attachment_event);
+	
+					if (file_exists($origin_path.$attachment_event->path) && !is_dir($origin_path.$attachment_event->path) ) {
+						$new_filename = uniqid(''); //ass seen in the add_agenda_attachment_file() function in agenda.inc.php	
+						$copy_result = copy($origin_path.$attachment_event->path, $destination_path.$new_filename);
+						//$copy_result = true;
+						if ($copy_result == true) {		
+							$table_attachment = Database :: get_course_table(TABLE_AGENDA_ATTACHMENT, $this->course->destination_db);			
+							$sql = "INSERT INTO ".$table_attachment." SET path = '".Database::escape_string($new_filename)."', comment = '".Database::escape_string($attachment_event->comment)."', size = '".$attachment_event->size."', filename = '".$attachment_event->filename."' , agenda_id = '".$new_event_id."' ";
+							Database::query($sql);
+						}				
+					}					
+				} else {					
+					// get the info of the file					
+					if(!empty($event->attachment_path) && is_file($origin_path.$event->attachment_path) && is_readable($origin_path.$event->attachment_path)) {
+						$new_filename = uniqid(''); //ass seen in the add_agenda_attachment_file() function in agenda.inc.php
+						$copy_result = copy($origin_path.$event->attachment_path, $destination_path.$new_filename);						 
+						if ($copy_result == true) {	 							
+							$table_attachment = Database :: get_course_table(TABLE_AGENDA_ATTACHMENT, $this->course->destination_db);			
+							$sql = "INSERT INTO ".$table_attachment." SET path = '".Database::escape_string($new_filename)."', comment = '".Database::escape_string($event->attachment_comment)."', size = '".$event->attachment_size."', filename = '".$event->attachment_filename."' , agenda_id = '".$new_event_id."' ";
+							Database::query($sql);
+						}
+					}					
+				}	
+			}	
 		}
 	}
 	/**

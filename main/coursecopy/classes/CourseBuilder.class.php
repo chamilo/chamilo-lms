@@ -57,9 +57,8 @@ class CourseBuilder
 	/**
 	 * Build the course-object
 	 */
-	function build($session_id = 0,$course_code = '')
-	{
-
+	function build($session_id = 0,$course_code = '') {
+		
 		if (!empty($session_id) && !empty($course_code)) {
 			$course_info = api_get_course_info($course_code);
 			$table_link = Database :: get_course_table(TABLE_LINKED_RESOURCES,$course_info['dbName']);
@@ -122,6 +121,8 @@ class CourseBuilder
 				}
 			}
 		}
+		
+		
 		return $this->course;
 	}
 	/**
@@ -510,11 +511,15 @@ class CourseBuilder
 		$table = Database :: get_course_table(TABLE_AGENDA);
 		$sql = 'SELECT * FROM '.$table.' WHERE session_id = 0';
 		$db_result = Database::query($sql);
-		while ($obj = Database::fetch_object($db_result))
-		{
-			$event = new Event($obj->id, $obj->title, $obj->content, $obj->start_date, $obj->end_date);
+		while ($obj = Database::fetch_object($db_result)) {
+			$table_attachment = Database :: get_course_table(TABLE_AGENDA_ATTACHMENT);
+			$sql = 'SELECT path, comment, filename, size  FROM '.$table_attachment.' WHERE agenda_id = '.$obj->id.'';
+			$result = Database::query($sql);
+			$attachment_obj = Database::fetch_object($result);			
+			$event = new Event($obj->id, $obj->title, $obj->content, $obj->start_date, $obj->end_date, $attachment_obj->path, $attachment_obj->filename, $attachment_obj->size, $attachment_obj->comment);			
 			$this->course->add_resource($event);
 		}
+		
 	}
 	/**
 	 * Build the course-descriptions

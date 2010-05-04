@@ -89,16 +89,42 @@ class CourseArchiver
 		}
 
 		// Copy all scorm documents to the temp-dir
-		if (is_array($course->resources[RESOURCE_SCORM]))
-		{
-			foreach ($course->resources[RESOURCE_SCORM] as $id => $document)
-			{
+		if (is_array($course->resources[RESOURCE_SCORM])) {
+			foreach ($course->resources[RESOURCE_SCORM] as $id => $document) {
 				$doc_dir = dirname($backup_dir.$document->path);
+//				error_log($doc_dir);
+				
 
 				@mkdir($doc_dir, $perm_dirs, true);
+				//error_log($course->path.$document->path);
+				//error_log('----------');
 
 				copyDirTo($course->path.$document->path, $doc_dir, false);
 			}
+		}
+		
+		//Copy calendar attachments
+		
+		if (is_array($course->resources[RESOURCE_EVENT])) {
+			$doc_dir = dirname($backup_dir.'/upload/calendar/');
+			@mkdir($doc_dir, $perm_dirs, true);		
+			copyDirTo($course->path.'upload/calendar/', $doc_dir, false);
+		}		
+		
+		//Copy learningpath author image
+		
+		if (is_array($course->resources[RESOURCE_LEARNPATH])) {
+			$doc_dir = dirname($backup_dir.'/upload/learning_path/');
+			@mkdir($doc_dir, $perm_dirs, true);		
+			copyDirTo($course->path.'upload/learning_path/', $doc_dir, false);
+		}
+		
+		//Copy announcements attachments
+		
+		if (is_array($course->resources[RESOURCE_ANNOUNCEMENT])) {
+			$doc_dir = dirname($backup_dir.'/upload/announcements/');
+			@mkdir($doc_dir, $perm_dirs, true);		
+			copyDirTo($course->path.'upload/announcements/', $doc_dir, false);
 		}
 
 		// Zip the course-contents

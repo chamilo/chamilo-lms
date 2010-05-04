@@ -492,15 +492,18 @@ class CourseBuilder
 	/**
 	 * Build the announcements
 	 */
-	function build_announcements()
-	{
+	function build_announcements() {
 		$table = Database :: get_course_table(TABLE_ANNOUNCEMENT);
 		$sql = 'SELECT * FROM '.$table.' WHERE session_id = 0';
 		$db_result = Database::query($sql);
-		while ($obj = Database::fetch_object($db_result))
-		{
-			$announcement = new Announcement($obj->id, $obj->title, $obj->content, $obj->end_date,$obj->display_order,$obj->email_sent);
+		$table_attachment = Database :: get_course_table(TABLE_ANNOUNCEMENT_ATTACHMENT);
+		while ($obj = Database::fetch_object($db_result)) {			
+			$sql = 'SELECT path, comment, filename, size  FROM '.$table_attachment.' WHERE announcement_id = '.$obj->id.'';
+			$result = Database::query($sql);
+			$attachment_obj = Database::fetch_object($result);			
+			$announcement = new Announcement($obj->id, $obj->title, $obj->content, $obj->end_date,$obj->display_order,$obj->email_sent, $attachment_obj->path, $attachment_obj->filename, $attachment_obj->size, $attachment_obj->comment);			
 			$this->course->add_resource($announcement);
+			
 		}
 	}
 	/**
@@ -546,8 +549,7 @@ class CourseBuilder
 	/**
 	 * Build the learnpaths
 	 */
-	function build_learnpaths($session_id = 0,$course_code = '')
-	{
+	function build_learnpaths($session_id = 0,$course_code = '') {
 
 		if (!empty($session_id) && !empty($course_code)) {
 			$course_info 	= api_get_course_info($course_code);
@@ -566,13 +568,11 @@ class CourseBuilder
 
 		$db_result = Database::query($sql);
 
-		while ($obj = Database::fetch_object($db_result))
-		{
+		while ($obj = Database::fetch_object($db_result)) {
 			$items = array();
 			$sql_items = "SELECT * FROM ".$table_item." WHERE lp_id = ".$obj->id."";
 			$db_items = Database::query($sql_items);
-			while ($obj_item = Database::fetch_object($db_items))
-			{
+			while ($obj_item = Database::fetch_object($db_items)) {
 				$item['id']				= $obj_item->id;
 				$item['item_type'] 		= $obj_item->item_type;
 				$item['ref'] 			= $obj_item->ref;

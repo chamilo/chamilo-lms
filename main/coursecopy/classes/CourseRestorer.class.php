@@ -347,7 +347,6 @@ class CourseRestorer
 					} else { // end if file exists
 
 						//make sure the source file actually exists
-						//echo $this->course->backup_path.'/'.$document->path;
 						if(is_file($this->course->backup_path.'/'.$document->path) && is_readable($this->course->backup_path.'/'.$document->path) && is_dir(dirname($path.$document->path)) && is_writeable(dirname($path.$document->path)))
 						{
 							copy($this->course->backup_path.'/'.$document->path, $path.$document->path);
@@ -706,7 +705,6 @@ class CourseRestorer
 		if ($this->course->has_resources(RESOURCE_EVENT)) {
 			$table = Database :: get_course_table(TABLE_AGENDA, $this->course->destination_db);
 			$resources = $this->course->resources;
-			//var_dump($resources[RESOURCE_EVENT]); exit;
 			foreach ($resources[RESOURCE_EVENT] as $id => $event) {
 				// check resources inside html from fckeditor tool and copy correct urls into recipient course
 				$event->content = DocumentManager::replace_urls_inside_content_html_from_copy_course($event->content, $this->course->code, $this->course->destination_path);
@@ -809,27 +807,42 @@ class CourseRestorer
 				$new_announcement_id = Database::insert_id();
 				$this->course->resources[RESOURCE_ANNOUNCEMENT][$id]->destination_id = $new_announcement_id;
 				
-				//Copy announcement attachment file
 								
 				$origin_path = $this->course->backup_path.'/upload/announcements/';				
 				$destination_path = api_get_path(SYS_COURSE_PATH).$this->course->destination_path.'/upload/announcements/';
-												
-				$table_attachment = Database :: get_course_table(TABLE_ANNOUNCEMENT_ATTACHMENT, $this->course->orig);
 				
-				$sql = 'SELECT path, comment, size, filename FROM '.$table_attachment.' WHERE announcement_id = '.$id;
-				$attachment_event = Database::query($sql);
-				$attachment_event = Database::fetch_object($attachment_event);
- 				 
-				if (file_exists($origin_path.$attachment_event->path) && !is_dir($origin_path.$attachment_event->path) ) {
-					$new_filename = uniqid(''); //ass seen in the add_agenda_attachment_file() function in agenda.inc.php	
-					$copy_result = copy($origin_path.$attachment_event->path, $destination_path.$new_filename);
-					//error_log($destination_path.$new_filename); error_log($copy_result);
-					//$copy_result = true;
-					if ($copy_result == true) {		
-						$table_attachment = Database :: get_course_table(TABLE_ANNOUNCEMENT_ATTACHMENT, $this->course->destination_db);			
-						$sql = "INSERT INTO ".$table_attachment." SET path = '".Database::escape_string($new_filename)."', comment = '".Database::escape_string($attachment_event->comment)."', size = '".$attachment_event->size."', filename = '".$attachment_event->filename."' , announcement_id = '".$new_announcement_id."' ";
-						Database::query($sql);
-					}				
+				//Copy announcement attachment file					
+				if (!empty($this->course->orig)) {
+												
+					$table_attachment = Database :: get_course_table(TABLE_ANNOUNCEMENT_ATTACHMENT, $this->course->orig);
+					
+					$sql = 'SELECT path, comment, size, filename FROM '.$table_attachment.' WHERE announcement_id = '.$id;
+					$attachment_event = Database::query($sql);
+					$attachment_event = Database::fetch_object($attachment_event);
+	 				 
+					if (file_exists($origin_path.$attachment_event->path) && !is_dir($origin_path.$attachment_event->path) ) {
+						$new_filename = uniqid(''); //ass seen in the add_agenda_attachment_file() function in agenda.inc.php	
+						$copy_result = copy($origin_path.$attachment_event->path, $destination_path.$new_filename);
+						//error_log($destination_path.$new_filename); error_log($copy_result);
+						//$copy_result = true;
+						if ($copy_result == true) {		
+							$table_attachment = Database :: get_course_table(TABLE_ANNOUNCEMENT_ATTACHMENT, $this->course->destination_db);			
+							$sql = "INSERT INTO ".$table_attachment." SET path = '".Database::escape_string($new_filename)."', comment = '".Database::escape_string($attachment_event->comment)."', size = '".$attachment_event->size."', filename = '".$attachment_event->filename."' , announcement_id = '".$new_announcement_id."' ";
+							Database::query($sql);
+						}				
+					}
+				} else {					
+					// get the info of the file
+					if(!empty($announcement->attachment_path) && is_file($origin_path.$announcement->attachment_path) && is_readable($origin_path.$announcement->attachment_path)) {
+						$new_filename = uniqid(''); //ass seen in the add_agenda_attachment_file() function in agenda.inc.php
+						$copy_result = copy($origin_path.$announcement->attachment_path, $destination_path.$new_filename);
+																			 
+						if ($copy_result == true) {	 							
+							$table_attachment = Database :: get_course_table(TABLE_ANNOUNCEMENT_ATTACHMENT, $this->course->destination_db);			
+							$sql = "INSERT INTO ".$table_attachment." SET path = '".Database::escape_string($new_filename)."', comment = '".Database::escape_string($announcement->attachment_comment)."', size = '".$announcement->attachment_size."', filename = '".$announcement->attachment_filename."' , announcement_id = '".$new_announcement_id."' ";
+							Database::query($sql);
+						}
+					}
 				}
 			}
 		}

@@ -1,10 +1,8 @@
-<?php //$Id: agenda.php 22201 2009-07-17 19:57:03Z cfasanando $
+<?php
 /* For licensing terms, see /license.txt */
-/*
-==============================================================================
-	   INIT SECTION
-==============================================================================
-*/
+
+/*	   INIT SECTION	*/
+
 // name of the language file that needs to be included
 $language_file = array('agenda','group');
 
@@ -12,30 +10,26 @@ $language_file = array('agenda','group');
 $use_anonymous = true;
 
 // setting the global file that gets the general configuration, the databases, the languages, ...
-include('../inc/global.inc.php');
+require_once '../inc/global.inc.php';
 
 //session
-if(isset($_GET['id_session']))
-{
-	$_SESSION['id_session'] = Security::remove_XSS($_GET['id_session']);
+if(isset($_GET['id_session'])) {
+	$_SESSION['id_session'] = intval($_GET['id_session']);
 }
 
 $this_section=SECTION_COURSES;
 
 //error_reporting(E_ALL);
-require (api_get_path(LIBRARY_PATH).'groupmanager.lib.php');
+require_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
 
-/* ==============================================================================
-  			ACCESS RIGHTS
-============================================================================== */
+/*   			ACCESS RIGHTS 		*/
 // notice for unauthorized people.
 api_protect_course_script();
 
 /*
------------------------------------------------------------
 	Resource linker (Patrick Cool, march 2004)
------------------------------------------------------------
 */
+
 $_SESSION['source_type'] = 'Agenda';
 require_once '../resourcelinker/resourcelinker.inc.php';
 require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
@@ -410,28 +404,18 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 }
 
 // this is for students and whenever the courseaministrator has not chosen any action. It is in fact the default behaviour
-if (!$_GET['action'] || $_GET['action']=="showall"  || $_GET['action']=="showcurrent" || $_GET['action']=="view")
-{
-	if ($_GET['origin'] != 'learnpath')
-	{
-		if (!$_SESSION['view'] || $_SESSION['view'] <> 'month')
-		{
-            if(!empty($_GET['agenda_id']))
-            {
+if (!$_GET['action'] || $_GET['action']=="showall"  || $_GET['action']=="showcurrent" || $_GET['action']=="view") {
+	if ($_GET['origin'] != 'learnpath') {
+		if (!$_SESSION['view'] || $_SESSION['view'] <> 'month') {
+            if(!empty($_GET['agenda_id'])) {
                  display_one_agenda_item((int)$_GET['agenda_id']);
+            } else {
+			    display_agenda_items();
             }
-            else
-            {
-			     display_agenda_items();
-            }
-		}
-        else
-        {
+		} else {
 				display_monthcalendar($select_month, $select_year);
 		}
-	}
-	else
-	{
+	} else {
 		display_one_agenda_item((int)$_GET['agenda_id']);
 	}
 }

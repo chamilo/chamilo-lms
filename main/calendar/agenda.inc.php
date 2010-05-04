@@ -1751,7 +1751,7 @@ function showhide_agenda_item($id)
 * @author Yannick Warnier <yannick.warnier@dokeos.com> - cleanup
 */
 function display_agenda_items()
-{
+{ 
 	global $TABLEAGENDA;
 	global $TABLE_ITEM_PROPERTY;
 	global $select_month, $select_year;
@@ -1760,10 +1760,10 @@ function display_agenda_items()
 	global $dateFormatLong, $timeNoSecFormat,$charset, $_user, $_course;
 
 	// getting the group memberships
-	$group_memberships=GroupManager::get_group_ids($_course['dbName'],$_user['user_id']);
+	$group_memberships = GroupManager::get_group_ids($_course['dbName'],$_user['user_id']);
 
 	// getting the name of the groups
-	$group_names=get_course_groups();
+	$group_names = get_course_groups();
 
 	/*--------------------------------------------------
 			CONSTRUCT THE SQL STATEMENT

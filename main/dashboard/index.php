@@ -9,6 +9,7 @@
 
 // name of the language file that needs to be included
 $language_file = array ('index', 'tracking', 'userInfo', 'admin', 'gradebook');
+$cidReset = true;
 
 // including files 
 require_once '../inc/global.inc.php';
@@ -37,10 +38,11 @@ $dashboar_plugin_styles = DashboardManager::get_links_for_styles_from_dashboard_
 $htmlHeadXtra[] = $dashboar_plugin_styles;
 
 // interbreadcrumb
-$interbreadcrumb[] = array ("url" => "index.php", "name" => get_lang('Dashboard'));
+$interbreadcrumb[] = array ('url' => 'index.php', 'name' => get_lang('Dashboard'));
 
 // course description controller object
 $dashboard_controller = new DashboardController();
+
 
 if (isset($_GET['path'])) {
 	$path = $_GET['path'];

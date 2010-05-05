@@ -145,7 +145,10 @@ $id = isset($_REQUEST['id']) ? strval(intval($_REQUEST['id'])) : '';
 $has_expired = false;
 $has_ended = false;
 $curdirpath = isset($_GET['curdirpath']) ? Database::escape_string($_GET['curdirpath']) : '';
-$sql = Database::query('SELECT description,id FROM '.Database :: get_course_table(TABLE_STUDENT_PUBLICATION).' WHERE filetype = '."'folder'".' and has_properties != '."''".' and url = '."'/".$curdirpath."'".' LIMIT 1');
+
+//This means that we are in a folder assignment
+$sql_select ='SELECT id, description FROM '.Database :: get_course_table(TABLE_STUDENT_PUBLICATION).' WHERE filetype = '."'folder'".' and has_properties != '."''".' and url = '."'/".$curdirpath."'".' LIMIT 1';
+$sql = Database::query($sql_select);
 $is_special = Database::num_rows($sql);
 if ($is_special > 0) {
 	$publication = Database::fetch_array($sql);
@@ -454,16 +457,14 @@ if (!empty($make_invisible)) {
 	}
 	if (isset($make_invisible) && $make_invisible == 'all') {
 		$sql = "ALTER TABLE " . $work_table . "
-						        CHANGE accepted accepted TINYINT(1) DEFAULT '0'";
+				CHANGE accepted accepted TINYINT(1) DEFAULT '0'";
 		Database::query($sql);
-		$sql = "UPDATE  " . $work_table . "
-						        SET accepted = 0";
+		$sql = "UPDATE  " . $work_table . " SET accepted = 0";
 		Database::query($sql);
 		Display::display_confirmation_message(get_lang('AllFilesInvisible'));
 	} else {
-		$sql = "UPDATE  " . $work_table . "
-						        SET accepted = 0
-								WHERE id = '" . $make_invisible . "'";
+		$sql = "UPDATE  " . $work_table . " SET accepted = 0
+				WHERE id = '" . $make_invisible . "'";
 		Database::query($sql);
 		Display::display_confirmation_message(get_lang('FileInvisible'));
 	}
@@ -476,18 +477,16 @@ if (!empty($make_visible)) {
 		api_not_allowed();
 	}
 	if (isset($make_visible) && $make_visible == 'all') {
-		$sql = "ALTER TABLE  " . $work_table . "
-						        CHANGE accepted accepted TINYINT(1) DEFAULT '1'";
+		$sql = "ALTER TABLE  " . $work_table . " CHANGE accepted accepted TINYINT(1) DEFAULT '1'";
 		Database::query($sql);
-		$sql = "UPDATE  " . $work_table . "
-						        SET accepted = 1";
+		
+		$sql = "UPDATE  " . $work_table . " SET accepted = 1";
 		Database::query($sql);
 		Display::display_confirmation_message(get_lang('AllFilesVisible'));
 
-		} else {
-		$sql = "UPDATE  " . $work_table . "
-						        SET accepted = 1
-								WHERE id = '" . $make_visible . "'";
+	} else {
+		$sql = "UPDATE  " . $work_table . "	SET accepted = 1
+			WHERE id = '" . $make_visible . "'";
 		Database::query($sql);
 		Display::display_confirmation_message(get_lang('FileVisible'));
 	}
@@ -1117,11 +1116,11 @@ isset($_GET['curdirpath'])?$curdirpath=Database::escape_string($_GET['curdirpath
 $sql = Database::query('SELECT description,id FROM '.Database :: get_course_table(TABLE_STUDENT_PUBLICATION).' WHERE filetype = '."'folder'".' and has_properties != '."''".' and url = '."'/".$curdirpath."'".' LIMIT 1');
 $is_special = Database::num_rows($sql);
 */
+
 if ($is_special > 0) {
-	$is_special = true;
+	$is_special = true; //we are in a folder
 	define('IS_ASSIGNMENT', 1);
-	//$publication = Database::fetch_array($sql);
-	$sql = Database::query('SELECT * FROM '.$TSTDPUBASG.' WHERE publication_id = '.(string)$publication['id'].' LIMIT 1');
+	$sql = Database::query('SELECT * FROM '.$TSTDPUBASG.' WHERE publication_id = '.intval($publication['id']).' LIMIT 1');
 	$homework = Database::fetch_array($sql);
 	$has_expired = $has_ended = false;
 	$has_expiry_date = true;
@@ -1142,11 +1141,10 @@ if ($is_special > 0) {
 			$has_expiry_date = false; 
 		}
 		if (!$has_expiry_date) {
+			//@todo fix me
 			define('ASSIGNMENT_EXPIRES', $time_expires);
 		}
-
-		$ends_on = api_convert_and_format_date($homework['ends_on'], null, date_default_timezone_get());
-
+		$ends_on 	= api_convert_and_format_date($homework['ends_on'], null, date_default_timezone_get());
 		$expires_on = api_convert_and_format_date($homework['expires_on'], null, date_default_timezone_get());
 
 		if ($has_ended) {
@@ -1452,6 +1450,7 @@ if (!$display_upload_form && !$display_tool_options) {
 	if ($display_list_users_without_publication) {
 		display_list_users_without_publication($publication['id']);
 	} else {
+		//var_dump($add_query);
 		display_student_publications_list($base_work_dir . '/' . $my_cur_dir_path, 'work/' . $my_cur_dir_path, $currentCourseRepositoryWeb, $link_target_parameter, $dateFormatLong, $origin,$add_query);
 	}
 }

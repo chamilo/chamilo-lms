@@ -1034,7 +1034,7 @@ function del_dir($base_work_dir, $dir, $id) {
  */
 function get_work_path($id) {
 	$table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
-	echo $sql = 'SELECT url FROM '.$table.' WHERE id='.intval($id);
+	$sql = 'SELECT url FROM '.$table.' WHERE id='.intval($id);
 	$res = Database::query($sql);
 	if (Database::num_rows($res) != 1) {
 		return -1;

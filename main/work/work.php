@@ -1446,7 +1446,7 @@ if (!$display_upload_form && !$display_tool_options) {
 	if ($display_list_users_without_publication) {
 		display_list_users_without_publication($publication['id']);
 	} else {
-		var_dump($add_query);
+		//var_dump($add_query);
 		display_student_publications_list($base_work_dir . '/' . $my_cur_dir_path, 'work/' . $my_cur_dir_path, $currentCourseRepositoryWeb, $link_target_parameter, $dateFormatLong, $origin,$add_query);
 	}
 }

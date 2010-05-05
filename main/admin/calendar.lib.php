@@ -1,17 +1,13 @@
 <?php // $id: $
 /* For licensing terms, see /license.txt */
 /**
-==============================================================================
 *	@package chamilo.admin
 *	@author Carlos Vargas
 *	This file is the calendar/agenda.inc.php
-==============================================================================
 */
 
 /*
------------------------------------------------------------
 	Constants and variables
------------------------------------------------------------
 */
 // the variables for the days and the months
 // Defining the shorts for the days
@@ -22,9 +18,7 @@ $DaysLong = api_get_week_days_long();
 $MonthsLong = api_get_months_long();
 
 /*
-==============================================================================
 		FUNCTIONS
-==============================================================================
 */
 
 /**

@@ -11,7 +11,6 @@ $language_file='admin';
 // resetting the course id
 $cidReset=true;
 
-// including some necessary dokeos files
 require_once('../inc/global.inc.php');
 
 // including additonal libraries

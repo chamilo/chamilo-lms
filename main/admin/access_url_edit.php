@@ -13,6 +13,7 @@ $this_section = SECTION_PLATFORM_ADMIN;
 api_protect_admin_script();
 if (!$_configuration['multiple_access_urls']) {
 	header('Location: index.php');
+	exit;
 }
 
 require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';

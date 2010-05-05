@@ -1,11 +1,9 @@
 <?php // $id: $
-/* For licensing terms, see /dokeos_license.txt */
+/* For licensing terms, see /license.txt */
 /**
-==============================================================================
-*	@package dokeos.admin
+*	@package chamilo.admin
 *	@author Carlos Vargas
 *	This file is the calendar/ical_export.php
-==============================================================================
 */
 /**
  * Initialisation
@@ -15,7 +13,7 @@ $language_file = 'agenda';
 // we are not inside a course, so we reset the course id
 $cidReset = true;
 // setting the global file that gets the general configuration, the databases, the languages, ...
-require_once ('../inc/global.inc.php');
+require_once '../inc/global.inc.php';
 $this_section = SECTION_MYAGENDA;
 api_block_anonymous_users();
 require_once (api_get_path(LIBRARY_PATH).'groupmanager.lib.php');

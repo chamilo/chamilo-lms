@@ -764,7 +764,7 @@ switch ($action) {
 			<tr>
 			<?php
 			$access_url_id = 1;
-			// we only show the category options for the main Dokeos installation
+			// we only show the category options for the main chamilo installation
 			if ($_configuration['multiple_access_urls']) {
 				$access_url_id = api_get_current_access_url_id();
 			}

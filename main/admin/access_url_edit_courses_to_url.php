@@ -12,9 +12,7 @@ $language_file='admin';
 // resetting the course id
 $cidReset=true;
 
-// including some necessary dokeos files
 require_once '../inc/global.inc.php';
-
 require_once (api_get_path(LIBRARY_PATH).'urlmanager.lib.php');
 require_once (api_get_path(LIBRARY_PATH).'access_url_edit_courses_to_url_functions.lib.php');
 

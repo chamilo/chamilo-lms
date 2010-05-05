@@ -1,11 +1,9 @@
 <?php // $id: $
 /* For licensing terms, see /license.txt */
 /**
-==============================================================================
-*	@package dokeos.admin
+*	@package chamilo.admin
 *	@author Carlos Vargas
 *	This file is the calendar/agenda.php
-==============================================================================
 */
 
 // name of the language file that needs to be included
@@ -14,8 +12,8 @@ $language_file[] = 'agenda';
 
 // resetting the course id
 $cidReset=true;
-// including some necessary dokeos files
-require('../inc/global.inc.php');
+// including some necessary files
+require_once '../inc/global.inc.php';
 
 $this_section = SECTION_PLATFORM_ADMIN;
 $_SESSION['this_section']=$this_section;

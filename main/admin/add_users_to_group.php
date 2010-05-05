@@ -1,7 +1,7 @@
 <?php //$id: $
 /* For licensing terms, see /license.txt */
 /**
-*	@package dokeos.admin
+*	@package chamilo.admin
 */
 
 // name of the language file that needs to be included
@@ -10,7 +10,7 @@ $language_file=array('admin','registration');
 // resetting the course id
 $cidReset=true;
 
-// including some necessary dokeos files
+// including some necessary files
 require_once '../inc/global.inc.php';
 require_once '../inc/lib/xajax/xajax.inc.php';
 require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';

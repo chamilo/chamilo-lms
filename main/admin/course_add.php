@@ -1,15 +1,11 @@
 <?php
 // $Id: course_add.php 20441 2009-05-10 07:39:15Z ivantcholakov $
-/* For licensing terms, see /dokeos_license.txt */
+/* For licensing terms, see /license.txt */
 /**
-==============================================================================
-*	@package dokeos.admin
-==============================================================================
+*	@package chamilo.admin
 */
 /*
-==============================================================================
 		INIT SECTION
-==============================================================================
 */
 
 // name of the language file that needs to be included
@@ -29,9 +25,7 @@ $tool_name = get_lang('AddCourse');
 $interbreadcrumb[] = array ("url" => 'index.php', "name" => get_lang('PlatformAdmin'));
 
 /*
-==============================================================================
 		MAIN CODE
-==============================================================================
 */
 
 global $_configuration;

@@ -10,7 +10,7 @@ $language_file=array('admin','registration');
 // resetting the course id
 $cidReset=true;
 
-// including some necessary dokeos files
+// including some necessary files
 require_once '../inc/global.inc.php';
 require_once '../inc/lib/xajax/xajax.inc.php';
 $xajax = new xajax();

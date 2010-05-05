@@ -1,11 +1,9 @@
 <?php // $id: $
 /* For licensing terms, see /license.txt */
 /**
-==============================================================================
-*	@package dokeos.admin
+*	@package chamilo.admin
 *	@author Carlos Vargas
 *	This file is the calendar/calendar.php
-==============================================================================
 */
 // name of the language file that needs to be included
 $language_file = 'agenda';

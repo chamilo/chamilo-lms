@@ -478,15 +478,14 @@ if (!empty($make_visible)) {
 	}
 	if (isset($make_visible) && $make_visible == 'all') {
 		$sql = "ALTER TABLE  " . $work_table . " CHANGE accepted accepted TINYINT(1) DEFAULT '1'";
-		Database::query($sql);
-		
+		Database::query($sql);		
 		$sql = "UPDATE  " . $work_table . " SET accepted = 1";
 		Database::query($sql);
 		Display::display_confirmation_message(get_lang('AllFilesVisible'));
 
 	} else {
 		$sql = "UPDATE  " . $work_table . "	SET accepted = 1
-			WHERE id = '" . $make_visible . "'";
+				WHERE id = '" . $make_visible . "'";
 		Database::query($sql);
 		Display::display_confirmation_message(get_lang('FileVisible'));
 	}
@@ -543,22 +542,22 @@ if (!empty($_REQUEST['new_dir'])) {
 				$agenda_id = agenda_add_item($course, $_POST['new_dir'], $content, date('Y-m-d H:i:s'), '0000-00-00', array('GROUP:'.$toolgroup), 0);
 			 }
 			$sql_add_publication = "INSERT INTO " . $work_table . " SET " .
-										   "url         = '".Database::escape_string($dir_name_sql)."',
-									       title        = '',
-						                   description 	= '".Database::escape_string($_POST['description'])."',
-						                   author      	= '',
-										   active		= '0',
-										   accepted		= '1',
-										   filetype 	= 'folder',
-										   post_group_id = '".$toolgroup."',
-										   sent_date	= NOW(),
-										   qualification	= '".(($_POST['qualification_value']!='') ? Database::escape_string($_POST['qualification_value']) : '') ."',
-										   parent_id	= '',
-										   qualificator_id	= '',
-										   date_of_qualification	= '0000-00-00 00:00:00',
-										   weight   = '".Database::escape_string($_POST['weight'])."',
-										   session_id   = '".intval($id_session)."',
-										   user_id = '".$user_id."'";
+									   "url         = '".Database::escape_string($dir_name_sql)."',
+								       title        = '',
+					                   description 	= '".Database::escape_string($_POST['description'])."',
+					                   author      	= '',
+									   active		= '0',
+									   accepted		= '1',
+									   filetype 	= 'folder',
+									   post_group_id = '".$toolgroup."',
+									   sent_date	= NOW(),
+									   qualification	= '".(($_POST['qualification_value']!='') ? Database::escape_string($_POST['qualification_value']) : '') ."',
+									   parent_id	= '',
+									   qualificator_id	= '',
+									   date_of_qualification	= '0000-00-00 00:00:00',
+									   weight   = '".Database::escape_string($_POST['weight'])."',
+									   session_id   = '".intval($id_session)."',
+									   user_id = '".$user_id."'";
 
 			Database::query($sql_add_publication);
 			
@@ -694,18 +693,15 @@ if (!empty ($_REQUEST['move'])) {
 if (isset ($_POST['move_to']) && isset ($_POST['move_file'])) {
 	require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
 	$move_to = $_POST['move_to'];
-
 	$move_to_path = get_work_path($move_to);
-	
-//	var_dump($move_to_path);
-	
+		
 	if ($move_to_path==-1) {
 		$move_to_path = '/';
 	} elseif (substr($move_to_path, -1, 1) != '/') {
 		$move_to_path = $move_to_path .'/';
 	}
 	//security fix: make sure they can't move files that are not in the document table
-	$move_file_id = intval($_POST['move_file']);
+	$move_file_id = $_POST['move_file'];
 	if ($path = get_work_path($move_file_id)) {
 		//Display::display_normal_message('We want to move '.$_POST['move_file'].' to '.$_POST['move_to']);
 				//var_dump($base_work_dir . $move_to_path);
@@ -1450,7 +1446,7 @@ if (!$display_upload_form && !$display_tool_options) {
 	if ($display_list_users_without_publication) {
 		display_list_users_without_publication($publication['id']);
 	} else {
-		//var_dump($add_query);
+		var_dump($add_query);
 		display_student_publications_list($base_work_dir . '/' . $my_cur_dir_path, 'work/' . $my_cur_dir_path, $currentCourseRepositoryWeb, $link_target_parameter, $dateFormatLong, $origin,$add_query);
 	}
 }

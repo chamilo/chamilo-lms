@@ -353,6 +353,8 @@ function display_student_publications_list($work_dir, $sub_course_dir, $currentC
 		                 				" ORDER BY id";
 
 	}
+//	echo $sql_get_publications_list;
+	
 	$sql_result = Database::query($sql_get_publications_list);
 	$sql_result_num = Database::query($sql_get_publications_num);
 
@@ -1032,7 +1034,7 @@ function del_dir($base_work_dir, $dir, $id) {
  */
 function get_work_path($id) {
 	$table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
-	$sql = "SELECT * FROM $table WHERE id=$id";
+	echo $sql = 'SELECT url FROM '.$table.' WHERE id='.intval($id);
 	$res = Database::query($sql);
 	if (Database::num_rows($res) != 1) {
 		return -1;

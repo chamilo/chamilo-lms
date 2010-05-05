@@ -33,33 +33,40 @@ $session_name   = api_get_session_name($my_session_id);
 /*	Course title section */
 
 if (!empty($_cid) and $_cid != -1 and isset($_course)) {
-	//Put the name of the course in the header
+	//Put the name of the course in the header	
 ?>
-	<div id="my_courses"><a href="<?php echo api_get_path(WEB_COURSE_PATH).$_course['path']; ?>/index.php" target="_top">&nbsp;
+ 	<div id="my_courses">
 <?php
+	/* <div id="my_courses"><a href="<?php echo api_get_path(WEB_COURSE_PATH).$_course['path']; ?>/index.php" target="_top">&nbsp; 	
 	echo $_course['name'].' ';
+	
 	if (api_get_setting('display_coursecode_in_courselist') == 'true') {
 		echo $_course['official_code'];
 	}
+	
 	if (api_get_setting('use_session_mode') == 'true' && isset($_SESSION['session_name'])) {
 		echo '&nbsp;('.$_SESSION['session_name'].')&nbsp;';
 	}
+	
 	if (api_get_setting('display_coursecode_in_courselist') == 'true' && api_get_setting('display_teacher_in_courselist') == 'true') {
 		echo ' - ';
-	}
+	}	
 	if (api_get_setting('display_teacher_in_courselist') == 'true') {
+		//This is still necessary? There is the course teacher in the footer
 		echo stripslashes($_course['titular']);
-	}
-	echo '</a></div>';
+	}	
+	echo '</a>';*/
+	echo '</div>';
+	
 } elseif (isset($nameTools) && $language_file != 'course_home') {
 	//Put the name of the user-tools in the header
 	if (!isset($_user['user_id'])) {
 		echo '<div id="my_courses"></div>';
 	} elseif (!$noPHP_SELF) {
-		echo '<div id="my_courses"><a href="'.api_get_self().'?'.api_get_cidreq(), '" target="_top">', $nameTools, '</a></div>', "\n";
+		echo '<div id="my_courses"><a href="'.api_get_self().'?'.api_get_cidreq(), '" target="_top">', $nameTools, '</a></div>';
 	} else {
 		echo '<div id="my_courses">'.$nameTools.'</div>';
-	}
+	}	
 } else {
 	echo '<div id="my_courses"></div>';
 }
@@ -96,11 +103,7 @@ if (isset($_course['extLink']) && $_course['extLink']['name'] != '') {
 			<ul>
 <?php
 if ((api_get_setting('showonline', 'world') == 'true' AND !$_user['user_id']) OR (api_get_setting('showonline', 'users') == 'true' AND $_user['user_id']) OR (api_get_setting('showonline', 'course') == 'true' AND $_user['user_id'] AND $_cid)) {
-	if (api_get_setting('use_session_mode') == 'true' && isset($_user['user_id']) && api_is_coach()) {
-	    echo '<li><a href="'.api_get_path(WEB_PATH).'whoisonlinesession.php?id_coach='.$_user['user_id'].'&amp;referer='.urlencode($_SERVER['REQUEST_URI']).'" target="_top">'.get_lang('UsersConnectedToMySessions').'</a></li>';
-	}
-	$number = who_is_online_count(api_get_setting('time_limit_whosonline'));
-	
+	$number = who_is_online_count(api_get_setting('time_limit_whosonline'));	
 	
 	$number_online_in_course = 0;
 	if(!empty($_course['id'])) {
@@ -110,13 +113,21 @@ if ((api_get_setting('showonline', 'world') == 'true' AND !$_user['user_id']) OR
  	echo '<li>';
 	// Display the who's online of the platform
 	if ((api_get_setting('showonline', 'world') == 'true' AND !$_user['user_id']) OR (api_get_setting('showonline', 'users') == 'true' AND $_user['user_id'])) {
-		echo '<a href="'.api_get_path(WEB_PATH).'whoisonline.php" target="_top">'.get_lang('UsersOnline').': '.$number.'</a>';
+		echo '<a href="'.api_get_path(WEB_PATH).'whoisonline.php" target="_top" title="'.get_lang('UsersOnline').'" ><img width="12px" src="'.api_get_path(WEB_IMG_PATH).'online.png" title="'.get_lang('UsersOnline').'"> '.get_lang('OnLine').' '.$number.'</a>';
 	}
 
 	// Display the who's online for the course
 	if (is_array($_course) AND api_get_setting('showonline', 'course') == 'true' AND isset($_course['sysCode'])) {
 		echo '(<a href="'.api_get_path(WEB_PATH).'whoisonline.php?cidReq='.$_course['sysCode'].'" target="_top">'.$number_online_in_course.' '.get_lang('InThisCourse').'</a>)';
 	}
+	
+	// Display the who's online for the session 
+	//if (api_get_setting('use_session_mode') == 'true' && isset($_user['user_id']) && api_is_coach()) {
+	
+	if (api_get_setting('use_session_mode') == 'true' && isset($_user['user_id']) && api_get_session_id() != 0) {		
+	    echo '<li><a href="'.api_get_path(WEB_PATH).'whoisonlinesession.php?id_coach='.$_user['user_id'].'&amp;referer='.urlencode($_SERVER['REQUEST_URI']).'" target="_top">'.get_lang('UsersConnectedToMySessions').'</a></li>';
+	}
+	
 	echo '</li>';
 }
 
@@ -128,21 +139,24 @@ if ($_user['user_id'] && isset($_cid)) {
 	}
 }
 
-
 if (api_get_setting('show_link_bug_notification') == 'true') { ?>
-
-    <li>|<a href="http://support.chamilo.org/projects/chamilo-18/wiki/How_to_report_bugs" target="_blank"><img src="<?php echo api_get_path(WEB_IMG_PATH) ?>splash.png" style="vertical-align: middle;" alt="<?php echo get_lang('ReportABug') ?>"/>&nbsp;<?php echo get_lang('ReportABug') ?></li></a>
-
-<?php }
+    <li>|<a href="http://support.chamilo.org/projects/chamilo-18/wiki/How_to_report_bugs" target="_blank"><img src="<?php echo api_get_path(WEB_IMG_PATH) ?>splash.png" style="vertical-align: middle;" alt="<?php echo get_lang('ReportABug') ?>"/>&nbsp;<?php echo get_lang('ReportABug') ?></a>|&nbsp;</li>
+<?php
+}
 
 if (api_is_allowed_to_edit()) {
-	if (!empty($help)) {
-	// Show help
-	?>
-	<li>|
-		<a href="#" onclick="javascript: MyWindow=window.open('<?php echo api_get_path(WEB_CODE_PATH).'help/help.php'; ?>?open=<?php echo $help; ?>','MyWindow','toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=620,height=600,left=200,top=20'); return false;">
-		<img src="<?php echo api_get_path(WEB_IMG_PATH); ?>khelpcenter.gif" style="vertical-align: middle;" alt="<?php echo get_lang('Help'); ?>"/>&nbsp;<?php echo get_lang('Help'); ?></li></a>
-	<?php
+		if (!empty($help)) {			
+		echo '<li>';
+		// Show help
+		if (api_get_setting('show_link_bug_notification') != 'true') {
+			echo '|';	
+		}
+		//echo get_lang('Help');
+		?>		
+			<a href="#" onclick="javascript: MyWindow=window.open('<?php echo api_get_path(WEB_CODE_PATH).'help/help.php'; ?>?open=<?php echo $help; ?>','MyWindow','toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=yes,resizable=yes,width=620,height=600,left=200,top=20'); return false;">
+			<img src="<?php echo api_get_path(WEB_IMG_PATH); ?>help.png" style="vertical-align: middle;" title="<?php echo get_lang('Help'); ?>" alt="<?php echo get_lang('Help'); ?>"/></a>			
+		<?php
+		echo "</li>";		
 	}
 }
 ?>
@@ -362,7 +376,7 @@ $navigation = array();
 // hide_course_breadcrumb the parameter has been added to hide the name of the course, that appeared in the default $interbreadcrumb
 $my_session_name = is_null($session_name) ? '' : '&nbsp;('.$session_name.')';
 if (isset($_cid) and $_cid != -1 and isset($_course) and !isset($_GET['hide_course_breadcrumb'])) {
-	$navigation_item['url'] = $web_course_path . $_course['path'].'/index.php'.(!empty($session_id) ? '?id_session='.$session_id : '');
+	$navigation_item['url'] = $web_course_path . $_course['path'].'/index.php'.(!empty($session_id) ? '?id_session='.$session_id : '');	
 	switch (api_get_setting('breadcrumbs_course_homepage')) {
 		case 'get_lang':
 			$navigation_item['title'] = get_lang('CourseHomepageLink');
@@ -374,7 +388,11 @@ if (isset($_cid) and $_cid != -1 and isset($_course) and !isset($_GET['hide_cour
 			$navigation_item['title'] = $_course['name'].$my_session_name;
 			break;
 		default:
-			$navigation_item['title'] = $_course['name'];
+			if (api_get_setting('use_session_mode') == 'true' && api_get_session_id() != -1 ) {	
+				$navigation_item['title'] = $_course['name'].$my_session_name;
+			} else {
+				$navigation_item['title'] = $_course['name'];
+			}
 			break;
 	}
 	$navigation[] = $navigation_item;
@@ -396,7 +414,7 @@ if (isset($nameTools) && $language_file != 'course_home') { // TODO: This condit
 	$navigation[] = $navigation_item;
 }
 
-$final_navigation = array();
+$final_navigation = array();	
 foreach ($navigation as $index => $navigation_info) {
 	if (!empty($navigation_info['title'])) {
 		$final_navigation[$index] = '<a href="'.$navigation_info['url'].'" class="breadcrumb breadcrumb'.$index.'" target="_top">'.$navigation_info['title'].'</a>';

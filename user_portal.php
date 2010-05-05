@@ -1739,6 +1739,9 @@ if (api_get_setting('allow_reservation') == 'true' && api_is_allowed_to_create_c
 	echo '</div>';
 }
 
+//Deleting the session_id 
+api_session_unregister('session_id');
+
 // search textbox
 if (api_get_setting('search_enabled') == 'true') {
 	echo '<div class="searchbox">';

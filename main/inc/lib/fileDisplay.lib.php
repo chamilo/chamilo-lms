@@ -90,19 +90,19 @@ function choose_image($file_name)
 
 	/* FUNCTION CORE */
 	$extension = array();
-	if (ereg('\.([[:alnum:]]+)$', $file_name, $extension))
-	{
-		$extension[1] = strtolower($extension[1]);
-
-		foreach ($type as $generic_type => $extension_list)
-		{
-			if (in_array($extension[1], $extension_list))
+	if (!is_array($file_name)) {
+		if (ereg('\.([[:alnum:]]+)$', $file_name, $extension)) {
+			$extension[1] = strtolower($extension[1]);
+	
+			foreach ($type as $generic_type => $extension_list)
 			{
-				return $image[$generic_type];
+				if (in_array($extension[1], $extension_list))
+				{
+					return $image[$generic_type];
+				}
 			}
 		}
 	}
-
 	return 'defaut.gif';
 }
 

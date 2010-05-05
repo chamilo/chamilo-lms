@@ -1,0 +1,17 @@
+# Check that your Apache virtualhost have this settings:
+
+#<Directory "/var/www/chamilo-classic">
+#  AllowOverride All
+#  Order allow,deny
+#  Allow from all
+#</Directory>
+
+
+
+RewriteEngine on 
+RewriteRule ^([^/.]+)/?$ user.php?$1 [L]
+
+
+
+# This will transform 
+# http://my.chamilo.net/juliomontoya		to		 http://my.chamilo.net/user.php?juliomontoya 

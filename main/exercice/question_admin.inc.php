@@ -116,7 +116,7 @@ if(is_object($objQuestion)) {
 	 * FORM VALIDATION
 	 **********************/
 	if(isset($_POST['submitQuestion']) && $form->validate()) {
-
+	
 		// question
 	    $objQuestion -> processCreation($form,$objExercise);
 	    // answers

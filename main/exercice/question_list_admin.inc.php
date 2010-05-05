@@ -1,58 +1,57 @@
-<?php // $Id: question_list_admin.inc.php 20810 2009-05-18 21:16:22Z cfasanando $
+<?php
 /* For licensing terms, see /license.txt */
 
 /**
 *	Code library for HotPotatoes integration.
-*	@package dokeos.exercise
+*	@package chamilo.exercise
 * 	@author
-* 	@version $Id: question_list_admin.inc.php 20810 2009-05-18 21:16:22Z cfasanando $
 */
 
 
 /**
-==============================================================================
 *	QUESTION LIST ADMINISTRATION
 *
 *	This script allows to manage the question list
 *	It is included from the script admin.php
 *
 *	@author Olivier Brouckaert
-*	@package dokeos.exercise
-==============================================================================
+*	@package chamilo.exercise
 */
 
 // ALLOWED_TO_INCLUDE is defined in admin.php
-if(!defined('ALLOWED_TO_INCLUDE'))
-{
+if(!defined('ALLOWED_TO_INCLUDE')) {
 	exit();
 }
 
 // moves a question up in the list
-if(isset($_GET['moveUp']))
-{
-	$objExercise->moveUp(intval($_GET['moveUp']));
-	$objExercise->save();
+if(isset($_GET['moveUp'])) {
+	$check = Security::get_token('get');
+	if ($check) {
+		$objExercise->moveUp(intval($_GET['moveUp']));
+		$objExercise->save();
+	}
+	Security::clear_token();
 }
 
 // moves a question down in the list
-if(isset($_GET['moveDown']))
-{
-	$objExercise->moveDown(intval($_GET['moveDown']));
-	$objExercise->save();
+if(isset($_GET['moveDown'])) {
+	$check = Security::get_token('get');
+	if ($check) {
+		$objExercise->moveDown(intval($_GET['moveDown']));
+		$objExercise->save();
+	}
+	Security::clear_token();
 }
 
 // deletes a question from the exercise (not from the data base)
-if($deleteQuestion)
-{
+if($deleteQuestion) {
 
 	// if the question exists
-	if($objQuestionTmp = Question::read($deleteQuestion))
-	{
+	if($objQuestionTmp = Question::read($deleteQuestion)) {
 		$objQuestionTmp->delete($exerciseId);
 
 		// if the question has been removed from the exercise
-		if($objExercise->removeFromList($deleteQuestion))
-		{
+		if($objExercise->removeFromList($deleteQuestion)) {
 			$nbrQuestions--;
 		}
 	}
@@ -76,12 +75,17 @@ echo '</div>';
 	</span>
 
 <?php
+$token = Security::get_token();
+
 if($nbrQuestions) {
 	$questionList=$objExercise->selectQuestionList();
 	$i=1;
-	if (is_array($questionList)) {
-		foreach($questionList as $id) {
-			
+	if (is_array($questionList)) {		
+		foreach($questionList as $id) {			
+			//To avoid warning messages
+			if (!is_numeric($id)) {
+				continue;
+			}			
 			$objQuestionTmp = Question :: read($id);
 			
 			//showQuestion($id);
@@ -101,7 +105,7 @@ if($nbrQuestions) {
 				<?php 
 				}
 				if($i != 1) { ?>
-				<a href="<?php echo api_get_self(); ?>?<?php echo api_get_cidreq() ?>&moveUp=<?php echo $id; ?>"><img src="../img/up.gif" border="0" alt="<?php echo get_lang('MoveUp'); ?>"></a>
+				<a href="<?php echo api_get_self(); ?>?<?php echo api_get_cidreq() ?>&moveUp=<?php echo $id; ?>&token=<?php echo $token; ?>"><img src="../img/up.gif" border="0" alt="<?php echo get_lang('MoveUp'); ?>"></a>
 				<?php if($i == $nbrQuestions) {
 			    		echo '<img src="../img/down_na.gif">';
 					}
@@ -111,7 +115,7 @@ if($nbrQuestions) {
 						echo '<img src="../img/up_na.gif">';
 					}
 				?>
-				<a href="<?php echo api_get_self(); ?>?<?php echo api_get_cidreq() ?>&moveDown=<?php echo $id; ?>"><img src="../img/down.gif" border="0" alt="<?php echo get_lang('MoveDown'); ?>"></a>
+				<a href="<?php echo api_get_self(); ?>?<?php echo api_get_cidreq() ?>&moveDown=<?php echo $id; ?>&token=<?php echo $token; ?>"><img src="../img/down.gif" border="0" alt="<?php echo get_lang('MoveDown'); ?>"></a>
 				<?php } ?>
 			    </td>
 			    <?php

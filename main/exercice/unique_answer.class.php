@@ -113,11 +113,16 @@ class UniqueAnswer extends Question {
 		$question_list=$obj_ex->selectQuestionList();
 		$select_question=array();
 		$select_question[0]=get_lang('SelectTargetQuestion');
+		
 		require_once('../newscorm/learnpathList.class.php');
 		require_once(api_get_path(LIBRARY_PATH).'text.lib.php');
-
+		
 		if (is_array($question_list)) {
 			foreach ($question_list as $key=>$questionid) {
+				//To avoid warning messages
+				if (!is_numeric($questionid)) {
+					continue;
+				}
 				$question = Question::read($questionid);
 				$select_question[$questionid]='Q'.$key.' :'.cut($question->selectTitle(),20);
 			}
@@ -134,8 +139,7 @@ class UniqueAnswer extends Question {
 		$select_lp_id=array();
 		$select_lp_id[0]=get_lang('SelectTargetLP');
 
-		foreach ($flat_list as $id => $details)
-		{
+		foreach ($flat_list as $id => $details) {
 			$select_lp_id[$id] = cut($details['lp_name'],20);
 		}
 

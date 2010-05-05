@@ -1,4 +1,4 @@
-<?php // $Id: admin.php 21662 2009-06-29 14:55:09Z iflorespaz $
+<?php
 /* For licensing terms, see /license.txt */
 
 /**
@@ -175,8 +175,7 @@ if($_GET['action'] == 'exportqti2' && !empty($_GET['questionId'])) {
 }
 
 // intializes the Exercise object
-if(!is_object($objExercise))
-{
+if(!is_object($objExercise)) {
 	// construction of the Exercise object
 	$objExercise=new Exercise();
 
@@ -191,12 +190,9 @@ if(!is_object($objExercise))
 }
 
 // doesn't select the exercise ID if we come from the question pool
-if(!$fromExercise)
-{
-
+if(!$fromExercise) {
 	// gets the right exercise ID, and if 0 creates a new exercise
-	if(!$exerciseId=$objExercise->selectId())
-	{
+	if(!$exerciseId=$objExercise->selectId()) {
 		$modifyExercise='yes';
 	}
 }
@@ -248,17 +244,13 @@ if($cancelExercise)
 }
 
 // if cancelling question creation/modification
-if($cancelQuestion)
-{
+if($cancelQuestion) {
 	// if we are creating a new question from the question pool
-	if(!$exerciseId && !$questionId)
-	{
+	if(!$exerciseId && !$questionId) {
 		// goes back to the question pool
 		header('Location: question_pool.php');
 		exit();
-	}
-	else
-	{
+	} else {
 		// goes back to the question viewing
 		$editQuestion=$modifyQuestion;
 
@@ -267,11 +259,9 @@ if($cancelQuestion)
 }
 
 // if cancelling answer creation/modification
-if($cancelAnswers)
-{
+if($cancelAnswers) {
 	// goes back to the question viewing
 	$editQuestion=$modifyAnswers;
-
 	unset($modifyAnswers);
 }
 
@@ -463,8 +453,7 @@ if(!empty($description))
 }
 */
 
-if($newQuestion || $editQuestion)
-{
+if($newQuestion || $editQuestion) {
 	// statement management
 	$type = $_REQUEST['answerType'];
 	?><input type="hidden" name="Type" value="<?php echo $type; ?>" />
@@ -472,12 +461,10 @@ if($newQuestion || $editQuestion)
 	include('question_admin.inc.php');
 }
 
-if(isset($_GET['hotspotadmin']))
-{
+if(isset($_GET['hotspotadmin'])) {
 	include('hotspot_admin.inc.php');
 }
-if(!$newQuestion && !$modifyQuestion && !$editQuestion && !isset($_GET['hotspotadmin']))
-{
+if(!$newQuestion && !$modifyQuestion && !$editQuestion && !isset($_GET['hotspotadmin'])) {
 	include_once(api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
 	$form = new FormValidator('exercise_admin', 'post', api_get_self().'?exerciseId='.$_GET['exerciseId']);
 	$form -> addElement ('hidden','edit','true');

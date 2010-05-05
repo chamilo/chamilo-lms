@@ -216,7 +216,7 @@ $_SESSION['social_user_id'] = intval($user_id);
 /**
  * Display
  */
-Display :: display_header(null);
+Display :: display_header(get_lang('Social'));
 
 // Added by Ivan Tcholakov, 03-APR-2009.
 if (USE_JQUERY_CORNERS_SCRIPT) {

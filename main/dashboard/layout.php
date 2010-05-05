@@ -4,14 +4,15 @@
 /**
 * Layout (principal view) used for structuring other views  
 * @author Christian Fasanando <christian1827@gmail.com>
-* @package chamilo.course_description
+* @package chamilo.dashboard
 */
 
 // protect script
 api_block_anonymous_users();
+$tool_name = get_lang('Dashboard');
 
 // Header
-Display :: display_header('');
+Display :: display_header($tool_name);
 
 // Display
 echo $content;

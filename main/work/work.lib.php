@@ -77,10 +77,10 @@ function display_action_links($cur_dir_path, $always_show_tool_options, $always_
 			$columnStatus = Database::fetch_array($sql_result);
 
 			if ($columnStatus['Default'] == 1) {
-				$display_output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;origin='.$origin.'&amp;gradebook='.$gradebook.'&amp;make_invisible=all">'.
+				$display_output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;origin='.$origin.'&amp;gradebook='.$gradebook.'&amp;make_invisible=all&amp;curdirpath='.$cur_dir_path.'">'.
 					Display::return_icon('visible.gif', get_lang('MakeAllPapersInvisible')).' '.get_lang('MakeAllPapersInvisible')."</a>\n";
 			} else {
-				$display_output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;origin='.$origin.'&amp;gradebook='.$gradebook.'&amp;make_visible=all">'.
+				$display_output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;origin='.$origin.'&amp;gradebook='.$gradebook.'&amp;make_visible=all&amp;curdirpath='.$cur_dir_path.'">'.
 					Display::return_icon('invisible.gif', get_lang('MakeAllPapersVisible')).' '.get_lang('MakeAllPapersVisible')."</a>\n";
 			}
 		}

@@ -893,7 +893,7 @@ input.liteoption {
 #courseintro_icons {
 	clear: both;
 	width: 80%;
-	margin: 10px auto;
+	/* margin: 10px auto; */
 }
 .everybodyview {
 	position: relative; /* to avoid the IE peekabo bug ?*/

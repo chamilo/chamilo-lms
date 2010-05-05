@@ -890,7 +890,7 @@ input.liteoption {
 #courseintro {
 	clear: both;
 	width: 80%;
-	margin: 10px auto;
+	/* margin: 10px auto; */
 	padding: 10px;
 	border-bottom: 1px solid #dcdcdc;
 }

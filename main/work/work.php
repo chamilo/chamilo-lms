@@ -704,7 +704,6 @@ if (isset ($_POST['move_to']) && isset ($_POST['move_file'])) {
 	$move_file_id = $_POST['move_file'];
 	if ($path = get_work_path($move_file_id)) {
 		//Display::display_normal_message('We want to move '.$_POST['move_file'].' to '.$_POST['move_to']);
-				//var_dump($base_work_dir . $move_to_path);
 		if (move($course_dir . '/' . $path, $base_work_dir . $move_to_path)) {
 			//update db
 			
@@ -1398,16 +1397,22 @@ if ($cur_dir_path == '/') {
 	$my_cur_dir_path = $cur_dir_path;
 }
 
+//If no upload form is showed and if NO tooloptions 
+
 if (!$display_upload_form && !$display_tool_options) {
 	$add_query = '';
+	//Getting if I'm a teacher
 	$sql = "SELECT user.firstname, user.lastname FROM $table_user user, $table_course_user course_user
-			  WHERE course_user.user_id=user.user_id AND course_user.course_code='".api_get_course_id()."' AND course_user.status='1'";
+			WHERE course_user.user_id=user.user_id AND course_user.course_code='".api_get_course_id()."' AND course_user.status='1'";
 	$res = Database::query($sql);
 	$admin_course = '';
 	while ($row = Database::fetch_row($res)) {
 		$admin_course .='\''.api_get_person_name($row[0], $row[1]).'\',';
 	}
-	if (!$is_allowed_to_edit && $is_special) {
+
+	//If I'm student & I'm in a special work and check the work setting: "New documents are visible for all users"
+
+	if (!$is_allowed_to_edit && $is_special && $uploadvisibledisabled == 1) {
 		$add_query = ' AND author IN('.$admin_course.'\''.api_get_person_name($_user['firstName'], $_user['lastName']).'\')';
 	}
 	if ($is_allowed_to_edit && $is_special) {

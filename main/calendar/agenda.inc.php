@@ -2152,11 +2152,12 @@ function display_agenda_items()
 
 
     	if (!$is_repeated && (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous()))) {
-    		if( ! (api_is_course_coach() && !api_is_element_in_the_session(TOOL_AGENDA, $myrow['id'] ) ) )
-			{ // a coach can only delete an element belonging to his session
-				$mylink = api_get_self().'?'.api_get_cidreq().'&amp;origin='.Security::remove_XSS($_GET['origin']).'&amp;id='.$myrow['id'];
+    		if( ! (api_is_course_coach() && !api_is_element_in_the_session(TOOL_AGENDA, $myrow['id'] ) ) ) { 
+    			// a coach can only delete an element belonging to his session
+				$mylink = api_get_self().'?'.api_get_cidreq().'&amp;origin='.Security::remove_XSS($_GET['origin']).'&amp;id='.$myrow['id'].'&amp;';
 	    		echo '<td align="center">';
 	    		// edit
+	    		
     			echo '<a href="'.$mylink.api_get_cidreq()."&amp;sort=asc&amp;toolgroup=".Security::remove_XSS($_GET['toolgroup']).'&amp;action=edit&amp;id_attach='.$attachment_list['id'].'" title="'.get_lang("ModifyCalendarItem").'">';
 	    		echo Display::return_icon('edit.gif', get_lang('ModifyCalendarItem'))."</a>";
 

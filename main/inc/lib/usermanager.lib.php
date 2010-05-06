@@ -3031,7 +3031,7 @@ class UserManager
 		 }
 	 
   /**
-   * Determines if a user is certified
+   * Determines if a user is a gradebook certified
    * @param int The category id of gradebook
    * @param int The user id
    * @return boolean 
@@ -3086,7 +3086,7 @@ class UserManager
  		$sql_session='';
  	}
  	$sql= "SELECT tc.path_certificate,tc.cat_id,tgc.course_code,tgc.name FROM $table_certificate tc, $table_gradebook_category tgc 
-	WHERE tgc.id = tc.cat_id AND tc.user_id='$user_id'  ORDER BY tc.date_certificate DESC limit 5";		
+		   WHERE tgc.id = tc.cat_id AND tc.user_id='$user_id'  ORDER BY tc.date_certificate DESC limit 5";		
 
  	$rs=Database::query($sql,__FILE__,__LINE__);
  	while ($row=Database::fetch_array($rs)) {

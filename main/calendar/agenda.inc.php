@@ -4637,35 +4637,36 @@ function agenda_import_ical($course_info,$file) {
     require_once api_get_path(LIBRARY_PATH).'icalcreator/iCalcreator.class.php';
     
     $ical = new vcalendar();
-    $ical->setConfig( 'directory', dirname($filepath) );
-    
-    $ical->setConfig( 'filename', basename($filepath) );
+    $ical->setConfig('directory', dirname($filepath) );    
+    $ical->setConfig('filename', basename($filepath) );
     $return = $ical->parse();
     
     //we need to recover: summary, description, dtstart, dtend, organizer, attendee, location (=course name),
 
     $ve = $ical->getComponent(VEVENT);
-    //print_r($ve);
-    $ttitle = $ve->getProperty('summary');
+
+    $ttitle	= $ve->getProperty('summary');    
+    $title	= api_convert_encoding($ttitle,$charset,'UTF-8');
     
-    $title = api_convert_encoding($ttitle,$charset,'UTF-8');
-    $tdesc = $ve->getProperty('description');
-    $desc = api_convert_encoding($tdesc,$charset,'UTF-8');
-    $ts = $ve->getProperty('dtstart');
+    $tdesc	= $ve->getProperty('description');
+    $desc	= api_convert_encoding($tdesc,$charset,'UTF-8');
+    
+    $ts 	= $ve->getProperty('dtstart');
     $start_date = $ts['year'].'-'.$ts['month'].'-'.$ts['day'].' '.$ts['hour'].':'.$ts['min'].':'.$ts['sec'];
-    $ts = $ve->getProperty('dtend');
+    
+    $ts 	  = $ve->getProperty('dtend');
     $end_date = $ts['year'].'-'.$ts['month'].'-'.$ts['day'].' '.$ts['hour'].':'.$ts['min'].':'.$ts['sec'];
+    
     //echo $start_date.' - '.$end_date;
-    $organizer = $ve->getProperty('organizer');
-    $attendee = $ve->getProperty('attendee');
+    $organizer	= $ve->getProperty('organizer');
+    $attendee 	= $ve->getProperty('attendee');
     $course_name = $ve->getProperty('location');
     //insert the event in our database
-    var_dump($title,$desc,$start_date,$end_date);
+    //var_dump($title,$desc,$start_date,$end_date);
     $id = agenda_add_item($course_info,$title,$desc,$start_date,$end_date,$_POST['selectedform']);
 
     $repeat = $ve->getProperty('rrule');
-    if(is_array($repeat) && !empty($repeat['FREQ']))
-    {
+    if(is_array($repeat) && !empty($repeat['FREQ'])) {
     	$trans = array('DAILY'=>'daily','WEEKLY'=>'weekly','MONTHLY'=>'monthlyByDate','YEARLY'=>'yearly');
         $freq = $trans[$repeat['FREQ']];
         $interval = $repeat['INTERVAL'];

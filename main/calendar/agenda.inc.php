@@ -2510,14 +2510,12 @@ function display_one_agenda_item($agenda_id)
 * @param integer id, the id of the agenda item we are editing. By default this is empty which means that we are adding an
 *		 agenda item.
 */
-function show_add_form($id = '')
-{
+function show_add_form($id = '') {
 
 	global $MonthsLong;
 	$htmlHeadXtra[] = to_javascript();
 	// the default values for the forms
-	if ($_GET['originalresource'] !== 'no')
-	{
+	if ($_GET['originalresource'] !== 'no') {
 		$day	= date('d');
 		$month	= date('m');
 		$year	= date('Y');
@@ -2530,9 +2528,7 @@ function show_add_form($id = '')
 		$end_hours	= 17;
 		$end_minutes= '00';
         $repeat = false;
-	}
-	else
-	{
+	} else {
 		// we are coming from the resource linker so there might already have been some information in the form.
 		// When we clicked on the button to add resources we stored every form information into a session and now we
 		// are doing the opposite thing: getting the information out of the session and putting it into variables to
@@ -2556,8 +2552,7 @@ function show_add_form($id = '')
 	}
 
 	//	switching the send to all/send to groups/send to users
-	if ($_POST['To'])
-	{
+	if ($_POST['To']) {
 			$day			= $_POST['fday'];
 			$month			= $_POST['fmonth'];
 			$year			= $_POST['fyear'];
@@ -2577,30 +2572,32 @@ function show_add_form($id = '')
 		}
 
 	// if the id is set then we are editing an agenda item
-	if (is_int($id))
-	{
+	if (is_int($id)) {
 		//echo "before get_agenda_item".$_SESSION['allow_individual_calendar'];
 		$item_2_edit=get_agenda_item($id);
+		
 		$title	= $item_2_edit['title'];
 		$content= $item_2_edit['content'];
+		
 		// start date
 		list($datepart, $timepart) = split(" ", $item_2_edit['start_date']);
 		list($year, $month, $day) = explode("-", $datepart);
 		list($hours, $minutes, $seconds) = explode(":", $timepart);
+		
 		// end date
 		list($datepart, $timepart) = split(" ", $item_2_edit['end_date']);
 		list($end_year, $end_month, $end_day) = explode("-", $datepart);
 		list($end_hours, $end_minutes, $end_seconds) = explode(":", $timepart);
+		
 		// attachments
 		edit_added_resources("Agenda", $id);
 		$to=$item_2_edit['to'];
 		//echo "<br />after get_agenda_item".$_SESSION['allow_individual_calendar'];
 	}
-	$content=stripslashes($content);
-	$title=stripslashes($title);
+	$content	= stripslashes($content);
+	$title		= stripslashes($title);
 	// we start a completely new item, we do not come from the resource linker
-	if ($_GET['originalresource']!=="no" and $_GET['action']=="add")
-	{
+	if ($_GET['originalresource']!=="no" and $_GET['action']=="add") {
 		$_SESSION["formelements"]=null;
 		unset_session_resources();
 	}
@@ -2616,37 +2613,30 @@ function show_add_form($id = '')
 	<input type="hidden" name="submit_event" value="ok" />
 	<?php
 	// The form title
-	if (isset($id) AND $id<>'')
-	{
+	if (isset($id) AND $id<>'') {
 		$form_title = get_lang('ModifyCalendarItem');
-	}
-	else
-	{
+	} else {
 		$form_title = get_lang('AddCalendarItem');
 	}
 	echo '<div class="row"><div class="form_header">'.$form_title.'</div></div>';
 
 	// selecting the users / groups
-	if (isset ($_SESSION['toolgroup']))
-	{
+	if (isset ($_SESSION['toolgroup'])) {
 		echo '<input type="hidden" name="selectedform[0]" value="GROUP:'.intval($_SESSION['toolgroup']).'"/>' ;
 		echo '<input type="hidden" name="To" value="true"/>' ;
-	}
-	else
-	{
+	} else {
 		echo '	<div class="row">
 					<div class="label">
 						<a href="javascript: void(0);" onclick="if(document.getElementById(\'recipient_list\').style.display==\'none\') document.getElementById(\'recipient_list\').style.display=\'block\'; else document.getElementById(\'recipient_list\').style.display=\'none\';">'.Display::return_icon('group.gif', get_lang('SentTo'), array ('align' => 'absmiddle')).' '.get_lang('SentTo').'</a>
 					</div>
 					<div class="formw">';
-		if ((isset($_GET['id'])  && $to=='everyone') || !isset($_GET['id']))
-		{
-					echo get_lang("Everybody").'&nbsp;';
-				}
-				show_to_form($to);
-				if (isset($_GET['id']) && $to!='everyone') {
-					echo '<script>document.getElementById(\'recipient_list\').style.display=\'block\';</script>';
-				}
+		if ((isset($_GET['id'])  && $to=='everyone') || !isset($_GET['id'])) {
+			echo get_lang('Everybody').'&nbsp;';
+		}
+		show_to_form($to);
+		if (isset($_GET['id']) && $to!='everyone') {
+			echo '<script>document.getElementById(\'recipient_list\').style.display=\'block\';</script>';
+		}
 		echo '		</div>
 				</div>';
 
@@ -2661,95 +2651,79 @@ function show_add_form($id = '')
 					<div id="err_date" style="display:none;color:red"></div>
 					<div id="err_start_date" style="display:none;color:red"></div>';
 	?>
-					<select name="fday" onchange="javascript:document.new_calendar_item.end_fday.value=this.value;">
-							<?php
-							// small loop for filling all the dates
-							// 2do: the available dates should be those of the selected month => february is from 1 to 28 (or 29) and not to 31
-							echo "\n";
-							foreach (range(1, 31) as $i)
-											{
-											// values have to have double digits
-											$value = ($i <= 9 ? '0'.$i : $i );
-											// the current day is indicated with [] around the date
-											if ($value==$day)
-											{
-												echo "\t\t\t\t <option value=\"".$value."\" selected> ".$i." </option>\n";
-											}
-											else
-											{
-												echo "\t\t\t\t<option value=\"$value\">$i</option>\n";
-											}
-										}
-										 ?>
-					</select>
-					<select name="fmonth" onchange="javascript:document.new_calendar_item.end_fmonth.value=this.value;">
-					<?php
-											echo "\n";
-											for ($i=1; $i<=12; $i++)
-											{
-												// values have to have double digits
-												if ($i<=9)
-												{
-													$value="0".$i;
-												}
-												else
-												{
-													$value=$i;
-												}
-												if ($value==$month)
-												{
-													echo "\t\t\t\t <option value=\"".$value."\" selected>".$MonthsLong[$i-1]."</option>\n";
-												}
-												else
-												{
-													echo "\t\t\t\t <option value=\"".$value."\">".$MonthsLong[$i-1]."</option>\n";
-												}
-											} ?>
-					</select>
-					<select name="fyear" onchange="javascript:document.new_calendar_item.end_fyear.value=this.value;">
-										<option value="<?php echo ($year-1); ?>"><?php echo ($year-1); ?></option>
-											<option value="<?php echo $year; ?>" selected="selected"><?php echo $year; ?></option>
-											<?php
-												echo "\n";
-												for ($i=1; $i<=5; $i++)
-												{
-													$value=$year+$i;
-													echo "\t\t\t\t<option value=\"$value\">$value</option>\n";
-												} ?>
-					</select>
-					<a href="javascript:openCalendar('new_calendar_item', 'f')"><?php Display::display_icon('calendar_select.gif', get_lang('Select'), array ('style' => 'vertical-align: middle;')); ?></a>
-					&nbsp;<?php echo get_lang('StartTime').": \n"; ?>&nbsp;
-						<select name="fhour" onchange="javascript:document.new_calendar_item.end_fhour.value=this.value;">
-							<!-- <option value="--">--</option> -->
-							<?php
-								echo "\n";
-								foreach (range(0, 23) as $i)
-								{
-									// values have to have double digits
-									$value = ($i <= 9 ? '0'.$i : $i );
-									// the current hour is indicated with [] around the hour
-									if ($hours==$value)
-									{
-										echo "\t\t\t\t<option value=\"".$value."\" selected> ".$value." </option>\n";
-									}
-									else
-									{
-										echo "\t\t\t\t<option value=\"$value\">$value</option>\n";
-									}
-								} ?>
-						</select>
+				<select name="fday" onchange="javascript:document.new_calendar_item.end_fday.value=this.value;">
+				<?php
+				// small loop for filling all the dates
+				// 2do: the available dates should be those of the selected month => february is from 1 to 28 (or 29) and not to 31
 
-						<select name="fminute" onchange="javascript:document.new_calendar_item.end_fminute.value=this.value;">
-							<!-- <option value="<?php echo $minutes ?>"><?php echo $minutes; ?></option> -->
-							<!-- <option value="--">--</option> -->
-							<?php
-								foreach (range(0, 59) as $i)
-								{
-									// values have to have double digits
-									$value = ($i <= 9 ? '0'.$i : $i );
-									echo "\t\t\t\t<option value=\"$value\">$value</option>\n";
-								} ?>
-						</select>
+				foreach (range(1, 31) as $i) {
+					// values have to have double digits
+					$value = ($i <= 9 ? '0'.$i : $i );
+					// the current day is indicated with [] around the date
+					if ($value==$day) {
+						echo "<option value=\"".$value."\" selected> ".$i." </option>";
+					} else {
+						echo "<option value=\"$value\">$i</option>";
+					}
+				}
+			 ?>
+				</select>
+				<select name="fmonth" onchange="javascript:document.new_calendar_item.end_fmonth.value=this.value;">
+				<?php
+				for ($i=1; $i<=12; $i++) {
+					// values have to have double digits
+					if ($i<=9) {
+						$value="0".$i;
+					} else {
+						$value=$i;
+					}
+					if ($value==$month) {
+						echo "<option value=\"".$value."\" selected>".$MonthsLong[$i-1]."</option>";
+					} else {
+						echo "<option value=\"".$value."\">".$MonthsLong[$i-1]."</option>";
+					}
+				} ?>
+				</select>
+				<select name="fyear" onchange="javascript:document.new_calendar_item.end_fyear.value=this.value;">
+					<option value="<?php echo ($year-1); ?>"><?php echo ($year-1); ?></option>
+						<option value="<?php echo $year; ?>" selected="selected"><?php echo $year; ?></option>
+						<?php							
+							for ($i=1; $i<=5; $i++) {
+								$value=$year+$i;
+								echo "<option value=\"$value\">$value</option>";
+							} ?>
+				</select>
+				
+				<a href="javascript:openCalendar('new_calendar_item', 'f')"><?php Display::display_icon('calendar_select.gif', get_lang('Select'), array ('style' => 'vertical-align: middle;')); ?></a>
+				&nbsp;<?php echo get_lang('StartTime').": \n"; ?>&nbsp;
+					<select name="fhour" onchange="javascript:document.new_calendar_item.end_fhour.value=this.value;">
+						<!-- <option value="--">--</option> -->
+						<?php
+						foreach (range(0, 23) as $i) {
+							// values have to have double digits
+							$value = ($i <= 9 ? '0'.$i : $i );
+							// the current hour is indicated with [] around the hour
+							if ($hours==$value) {
+								echo "<option value=\"".$value."\" selected> ".$value." </option>";
+							} else {
+								echo "<option value=\"$value\">$value</option>";
+							}
+						} ?>
+					</select>
+					<select name="fminute" onchange="javascript:document.new_calendar_item.end_fminute.value=this.value;">
+						<!-- <option value="<?php echo $minutes ?>"><?php echo $minutes; ?></option> -->
+						<!-- <option value="--">--</option> -->
+						<?php
+							foreach (range(0, 59) as $i) {
+								// values have to have double digits
+								$value = ($i <= 9 ? '0'.$i : $i );								
+								if ($minutes == $value) {									
+									echo "<option value=\"".$value."\" selected> ".$value." </option>";
+								} else {
+									echo "<option value=\"$value\">$value</option>";
+								}								
+							} ?>
+					</select>
 	<?php
 	echo 	'	</div>
 			</div>';
@@ -2766,41 +2740,36 @@ function show_add_form($id = '')
 							<?php
 								// small loop for filling all the dates
 								// 2do: the available dates should be those of the selected month => february is from 1 to 28 (or 29) and not to 31
-								echo "\n";
-								foreach (range(1, 31) as $i)
-								{
+								
+								foreach (range(1, 31) as $i) {
 									// values have to have double digits
 									$value = ($i <= 9 ? '0'.$i : $i );
 									// the current day is indicated with [] around the date
 									if ($value==$end_day)
-										{ echo "\t\t\t\t <option value=\"".$value."\" selected> ".$i." </option>\n";}
+										{ echo "<option value=\"".$value."\" selected> ".$i." </option>";}
 									else
-										{ echo "\t\t\t\t <option value=\"".$value."\">".$i."</option>\n"; }
+										{ echo "<option value=\"".$value."\">".$i."</option>"; }
 									}?>
 						</select>
 							<!-- month: january -> december -->
 						<select name="end_fmonth">
-								<?php
-								echo "\n";
-								foreach (range(1, 12) as $i)
-								{
+								<?php								
+								foreach (range(1, 12) as $i) {
 									// values have to have double digits
 									$value = ($i <= 9 ? '0'.$i : $i );
 									if ($value==$end_month)
-										{ echo "\t\t\t\t <option value=\"".$value."\" selected>".$MonthsLong[$i-1]."</option>\n"; }
+										{ echo "<option value=\"".$value."\" selected>".$MonthsLong[$i-1]."</option>"; }
 									else
-										{ echo "\t\t\t\t <option value=\"".$value."\">".$MonthsLong[$i-1]."</option>\n"; }
+										{ echo "<option value=\"".$value."\">".$MonthsLong[$i-1]."</option>"; }
 									}?>
 						</select>
 						<select name="end_fyear">
 								<option value="<?php echo ($end_year-1) ?>"><?php echo ($end_year-1) ?></option>
 								<option value="<?php echo $end_year ?>" selected> <?php echo $end_year ?> </option>
-								<?php
-								echo "\n";
-								for ($i=1; $i<=5; $i++)
-								{
+								<?php								
+								for ($i=1; $i<=5; $i++) {
 									$value=$end_year+$i;
-									echo "\t\t\t\t<option value=\"$value\">$value</option>\n";
+									echo "<option value=\"$value\">$value</option>";
 								} ?>
 						</select>
 					<a href="javascript:openCalendar('new_calendar_item', 'end_f')"><?php Display::display_icon('calendar_select.gif', get_lang('Select'), array ('style' => 'vertical-align: middle;')); ?></a>
@@ -2808,17 +2777,15 @@ function show_add_form($id = '')
 
 						<select name="end_fhour">
 							<!-- <option value="--">--</option> -->
-							<?php
-								echo "\n";
-								foreach (range(0, 23) as $i)
-								{
+							<?php								
+								foreach (range(0, 23) as $i) {
 									// values have to have double digits
 									$value = ($i <= 9 ? '0'.$i : $i );
 									// the current hour is indicated with [] around the hour
 									if ($end_hours==$value)
-										{ echo "\t\t\t\t<option value=\"".$value."\" selected> ".$value." </option>\n"; }
+										{ echo "<option value=\"".$value."\" selected> ".$value." </option>"; }
 									else
-										{ echo "\t\t\t\t<option value=\"".$value."\"> ".$value." </option>\n"; }
+										{ echo "<option value=\"".$value."\"> ".$value." </option>"; }
 								} ?>
 						</select>
 
@@ -2826,11 +2793,15 @@ function show_add_form($id = '')
 							<!-- <option value="<?php echo $end_minutes; ?>"><?php echo $end_minutes; ?></option> -->
 							<!-- <option value="--">--</option> -->
 							<?php
-								foreach (range(0, 59) as $i)
-								{
+								foreach (range(0, 59) as $i) {
 									// values have to have double digits
-									$value = ($i <= 9 ? '0'.$i : $i );
-									echo "\t\t\t\t<option value=\"$value\">$value</option>\n";
+									//$value = ($i <= 9 ? '0'.$i : $i );
+									$value = ($i <= 9 ? '0'.$i : $i );									
+									if ($end_minutes == $value) {									
+										echo "<option value=\"".$value."\" selected> ".$value." </option>";
+									} else {
+										echo "<option value=\"$value\">$value</option>";
+									}								
 								} ?>
 						</select>
 	<?php
@@ -2962,36 +2933,33 @@ function show_add_form($id = '')
 			                        $value = ($i <= 9 ? '0'.$i : $i );
 			                        // the current day is indicated with [] around the date
 			                        if ($value==$end_day)
-			                            { echo "\t\t\t\t <option value=\"".$value."\" selected> ".$i." </option>\n";}
+			                            { echo "<option value=\"".$value."\" selected> ".$i." </option>";}
 			                        else
-			                            { echo "\t\t\t\t <option value=\"".$value."\">".$i."</option>\n"; }
+			                            { echo "<option value=\"".$value."\">".$i."</option>"; }
 			                        }?>
 			                </select>
 
 			                <!-- month: january -> december -->
 			                <select name="repeat_end_month">
-			                    <?php
-			                    echo "\n";
+			                    <?php			                    
 			                    foreach (range(1, 12) as $i)
 			                    {
 			                        // values have to have double digits
 			                        $value = ($i <= 9 ? '0'.$i : $i );
 			                        if ($value==$end_month+1)
-			                            { echo "\t\t\t\t ",'<option value="',$value,'" selected="selected">',$MonthsLong[$i-1],"</option>\n"; }
+			                            { echo '<option value="',$value,'" selected="selected">',$MonthsLong[$i-1],"</option>"; }
 			                        else
-			                            { echo "\t\t\t\t ",'<option value="',$value,'">',$MonthsLong[$i-1],"</option>\n"; }
+			                            { echo '<option value="',$value,'">',$MonthsLong[$i-1],"</option>"; }
 			                        }?>
 			                </select>
 
 			                <select name="repeat_end_year">
 			                    <option value="<?php echo ($end_year-1) ?>"><?php echo ($end_year-1) ?></option>
 			                    <option value="<?php echo $end_year ?>" selected> <?php echo $end_year ?> </option>
-			                    <?php
-			                    echo "\n";
-			                    for ($i=1; $i<=5; $i++)
-			                    {
+			                    <?php			                    
+			                    for ($i=1; $i<=5; $i++) {
 			                        $value=$end_year+$i;
-			                        echo "\t\t\t\t<option value=\"$value\">$value</option>\n";
+			                        echo "<option value=\"$value\">$value</option>";
 			                    } ?>
 			            </select>
 			            		<a href="javascript:openCalendar('new_calendar_item', 'repeat_end_')"><?php Display::display_icon('calendar_select.gif', get_lang('Select'), array ('style' => 'vertical-align: middle;')); ?></a>
@@ -3258,7 +3226,7 @@ function display_daycalendar($agendaitems, $day, $month, $year, $weekdaynames, $
 	//$timestamp_first_date_of_week=$today-(($day_of_the_week-1)*24*60*60); // timestamp of the monday of this week
 	//$timestamp_last_date_of_week=$today+((7-$day_of_the_week)*24*60*60); // timestamp of the sunday of this week
 	// we are loading all the calendar items of all the courses for today
-	echo "<table class=\"data_table\">\n";
+	echo "<table class=\"data_table\">";
 	// the forward and backwards url
 	$backwardsURL = api_get_self()."?coursePath=".urlencode($course_path)."&amp;courseCode=".Security::remove_XSS($_GET['courseCode'])."&amp;action=view&amp;view=day&amp;day=".date("j", $previousday)."&amp;month=".date("n", $previousday)."&amp;year=".date("Y", $previousday);
 	$forewardsURL = api_get_self()."?coursePath=".urlencode($course_path)."&amp;courseCode=".Security::remove_XSS($_GET['courseCode'])."&amp;action=view&amp;view=day&amp;day=".date("j", $nextday)."&amp;month=".date("n", $nextday)."&amp;year=".date("Y", $nextday);

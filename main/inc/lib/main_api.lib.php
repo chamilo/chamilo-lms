@@ -952,6 +952,7 @@ function api_get_cidreq() {
  *	['extLink']['name']
  *	['categoryCode']
  *	['categoryName']
+ * 
  *	Now if the course_code is given, the returned array gives info about that
  *   particular course, not specially the current one.
  * @todo	same behaviour as api_get_user_info so that api_get_course_id becomes absolete too
@@ -971,7 +972,7 @@ function api_get_course_info($course_code = null) {
 		if (Database::num_rows($result) > 0) {
 			global $_configuration;
 			$cData = Database::fetch_array($result);
-			$_course['id'           ]         = $cData['code'           ]; //auto-assigned integer
+			$_course['id'           ]         = $cData['code'           ];
 			$_course['name'         ]         = $cData['title'          ];
 			$_course['official_code']         = $cData['visual_code'    ]; // use in echo
 			$_course['sysCode'      ]         = $cData['code'           ]; // use as key in db
@@ -989,7 +990,75 @@ function api_get_course_info($course_code = null) {
 			$_course['subscribe_allowed']    = $cData['subscribe'       ];
 			$_course['unubscribe_allowed']   = $cData['unsubscribe'     ];
 			
+			//the real_id is a integer is mandatory for feature implementations
 			$_course['real_id'     ]         = $cData['id']; 
+		}
+		return $_course;
+	}
+	global $_course;
+	return $_course;
+}
+
+
+/**
+ *	Returns the current course info array.
+ *	Array elements:
+ *	['name']
+ *	['official_code']
+ *	['sysCode']
+ *	['path']
+ *	['dbName']
+ *	['dbNameGlu']
+ *	['titular']
+ *	['language']
+ *	['extLink']['url' ]
+ *	['extLink']['name']
+ *	['categoryCode']
+ *	['categoryName']
+ *	Now if the course_code is given, the returned array gives info about that
+ *   particular course, not specially the current one.
+ */
+ 
+function api_get_course_info_by_id($id = null) {
+	if (!empty($id)) {
+		$id = intval($id);
+		$course_table 		= Database::get_main_table(TABLE_MAIN_COURSE);
+		$course_cat_table 	= Database::get_main_table(TABLE_MAIN_CATEGORY);
+		$sql = "SELECT course.*, course_category.code faCode, course_category.name faName
+				 FROM $course_table
+				 LEFT JOIN $course_cat_table
+				 ON course.category_code =  course_category.code
+				 WHERE course.id = $id";
+		$result = Database::query($sql);
+		$_course = array();
+		if (Database::num_rows($result) > 0) {
+			global $_configuration;
+			$cData = Database::fetch_array($result);
+			
+			$_course['id'           ]         = $cData['code'           ]; 
+			//Added
+			$_course['code'         ]         = $cData['code'           ]; 
+			$_course['name'         ]         = $cData['title'          ];
+			$_course['official_code']         = $cData['visual_code'    ]; // use in echo
+			$_course['sysCode'      ]         = $cData['code'           ]; // use as key in db
+			$_course['path'         ]         = $cData['directory'      ]; // use as key in path
+			$_course['dbName'       ]         = $cData['db_name'        ]; // use as key in db list
+			$_course['dbNameGlu'    ]         = $_configuration['table_prefix'] . $cData['db_name'] . $_configuration['db_glue']; // use in all queries
+			$_course['titular'      ]         = $cData['tutor_name'     ];
+			$_course['language'     ]         = $cData['course_language'];
+			$_course['extLink'      ]['url' ] = $cData['department_url' ];
+			$_course['extLink'      ]['name'] = $cData['department_name'];
+			$_course['categoryCode' ]         = $cData['faCode'         ];
+			$_course['categoryName' ]         = $cData['faName'         ];
+
+			$_course['visibility'   ]        = $cData['visibility'      ];
+			$_course['subscribe_allowed']    = $cData['subscribe'       ];
+			$_course['unubscribe_allowed']   = $cData['unsubscribe'     ];	
+			
+			$_course['real_id'     ]         = $cData['id']; 
+			$_course['db_name'       ]       = $cData['db_name'        ];
+			$_course['title'         ]       = $cData['title'          ]; 	
+			
 		}
 		return $_course;
 	}

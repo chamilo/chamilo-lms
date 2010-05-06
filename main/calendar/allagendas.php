@@ -53,9 +53,8 @@ if (!empty ($course_path)) {
 // showing the header
 Display::display_header(get_lang('MyAgenda'));
 
-function display_mymonthcalendar_2($agendaitems, $month, $year, $weekdaynames=array(), $monthName, $gradoo2) {
-	
-	global $DaysShort,$course_path;
+function display_mymonthcalendar_2($agendaitems, $month, $year, $weekdaynames=array(), $monthName, $session_id) {	
+	global $DaysShort, $course_path;
 	//Handle leap year
 	$numberofdays = array (0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31);
 	if (($year % 400 == 0) or ($year % 4 == 0 and $year % 100 <> 0))
@@ -65,8 +64,8 @@ function display_mymonthcalendar_2($agendaitems, $month, $year, $weekdaynames=ar
 	//Start the week on monday
 	$startdayofweek = $dayone['wday'] <> 0 ? ($dayone['wday'] - 1) : 6;
 	$g_cc = (isset($_GET['courseCode'])?$_GET['courseCode']:'');
-	$backwardsURL = api_get_self()."?coursePath=".urlencode($course_path)."&amp;gradoo=".Security::remove_XSS($gradoo2)."&amp;courseCode=".Security::remove_XSS($g_cc)."&amp;action=view&amp;view=month&amp;month=". ($month == 1 ? 12 : $month -1)."&amp;year=". ($month == 1 ? $year -1 : $year);
-	$forewardsURL = api_get_self()."?coursePath=".urlencode($course_path)."&amp;gradoo=".Security::remove_XSS($gradoo2)."&amp;courseCode=".Security::remove_XSS($g_cc)."&amp;action=view&amp;view=month&amp;month=". ($month == 12 ? 1 : $month +1)."&amp;year=". ($month == 12 ? $year +1 : $year);
+	$backwardsURL = api_get_self()."?coursePath=".urlencode($course_path)."&amp;session=".Security::remove_XSS($session_id)."&amp;courseCode=".Security::remove_XSS($g_cc)."&amp;action=view&amp;view=month&amp;month=". ($month == 1 ? 12 : $month -1)."&amp;year=". ($month == 1 ? $year -1 : $year);
+	$forewardsURL = api_get_self()."?coursePath=".urlencode($course_path)."&amp;session=".Security::remove_XSS($session_id)."&amp;courseCode=".Security::remove_XSS($g_cc)."&amp;action=view&amp;view=month&amp;month=". ($month == 12 ? 1 : $month +1)."&amp;year=". ($month == 12 ? $year +1 : $year);
 
 	echo "<table class=\"data_table\">\n", "<tr>\n", "<th width=\"10%\"><a href=\"", $backwardsURL, "\">&#171;</a></th>\n", "<th width=\"80%\" colspan=\"5\">", $monthName, " ", $year, "</th>\n", "<th width=\"10%\"><a href=\"", $forewardsURL, "\">&#187;</a></th>\n", "</tr>\n";
 
@@ -258,33 +257,29 @@ if(!empty($my_session_id)) {
 	$_SESSION['my_course_list'] = array();	
 	$my_course_list = array();
 } else {
-	///echo 'here';
+	//echo 'here';
 	$my_course_list = $_SESSION['my_course_list'];
 	 
-	//var_dump($_SESSION['my_course_list'], $my_course_list);
-	if (count($my_course_list) > 0) {
-		
-		$my_course_list_keys = array_keys($my_course_list);
-		
-		//var_dump($my_course_list, $my_course_list_keys);
-		if (!in_array($my_course_id, $my_course_list_keys)) {	
-			$course_info = api_get_course_info_by_id($my_course_id);
-			$_SESSION['my_course_list'][$my_course_id] = $course_info;	
-			$my_course_list = $_SESSION['my_course_list'];
-			//echo $my_course_id.'added ';
-		}
-		
-		if (isset($_GET['delete_course_option'])) {
-			$course_id_to_delete = intval($_GET['delete_course_option']);	
-			unset($_SESSION['my_course_list'][$course_id_to_delete]);	
-			$my_course_list = $_SESSION['my_course_list'];
-		}
-		//clean the array
-		$my_course_list = array_filter($my_course_list);
+	//var_dump($_SESSION['my_course_list'], $my_course_list);	
+	
+	$my_course_list_keys = array_keys($my_course_list);
+	
+	//var_dump($my_course_list, $my_course_list_keys);
+	if (!in_array($my_course_id, $my_course_list_keys)) {	
+		$course_info = api_get_course_info_by_id($my_course_id);
+		$_SESSION['my_course_list'][$my_course_id] = $course_info;	
+		$my_course_list = $_SESSION['my_course_list'];
+		//echo $my_course_id.'added ';
 	}
+	
+	if (isset($_GET['delete_course_option'])) {
+		$course_id_to_delete = intval($_GET['delete_course_option']);	
+		unset($_SESSION['my_course_list'][$course_id_to_delete]);	
+		$my_course_list = $_SESSION['my_course_list'];
+	}
+	//clean the array
+	$my_course_list = array_filter($my_course_list);	
 }
-//var_dump($my_course_list);
-
 
 /* 	OUTPUT	*/
 if (isset ($_user['user_id'])) {
@@ -324,7 +319,7 @@ if (isset ($_user['user_id'])) {
 		$sessions = SessionManager::get_sessions_list();		
 		
 	} elseif(api_is_drh()) {
-		$courses  = CourseManager::get_courses_followed_by_drh(api_get_user_id());
+		$courses  = CourseManager::get_courses_followed_by_drh(api_get_user_id());		
 		$sessions = SessionManager::get_sessions_followed_by_drh(api_get_user_id());
 	}
 
@@ -384,7 +379,7 @@ if (isset ($_user['user_id'])) {
 				
 				$agendaitems = get_agenda_items_by_course_list($course_list, $month, $year, $session_id);
 				//$agendaitems = get_global_agenda_items($agendaitems, $day, $month, $year, $week, "month_view");
-				display_mymonthcalendar_2($agendaitems, $month, $year, array(), $monthName, $gradoo);
+				display_mymonthcalendar_2($agendaitems, $month, $year, array(), $monthName, $session_id);
 			} else {
 				Display::display_warning_message(get_lang('PleaseSelectACourseOrASessionInTheLeftColumn'));
 			}

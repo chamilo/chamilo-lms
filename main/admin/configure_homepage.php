@@ -3,13 +3,14 @@
 
 $language_file = array('admin', 'accessibility');
 $cidReset = true;
-require '../inc/global.inc.php';
+require_once '../inc/global.inc.php';
 
 $this_section = SECTION_PLATFORM_ADMIN;
 $_SESSION['this_section'] = $this_section;
 $this_page = '';
 
 api_protect_admin_script();
+
 require_once api_get_path(LIBRARY_PATH).'WCAG/WCAG_rendering.php';
 require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
 require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
@@ -864,19 +865,17 @@ switch ($action) {
 						$home_menu = api_to_system_encoding($home_menu, api_detect_encoding(strip_tags($home_menu)));
 						$home_menu = explode("\n", $home_menu);
 					}
-
-					foreach ($home_menu as $key => $enreg) {
+					$i = 0 ;
+					foreach ($home_menu as $enreg) {
 						$enreg = trim($enreg);
-
 						if (!empty($enreg)) {
-							$edit_link = '<a href="'.api_get_self().'?action=edit_link&amp;link_index='.$key.'">'.Display::return_icon('edit.gif', get_lang('Edit')).'</a>';
-							$delete_link = '<a href="'.api_get_self().'?action=delete_link&amp;link_index='.$key.'" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES)).'\')) return false;">'.Display::return_icon('delete.gif', get_lang('Delete')).'</a>';
-
+							$edit_link = '<a href="'.api_get_self().'?action=edit_link&amp;link_index='.$i.'">'.Display::return_icon('edit.gif', get_lang('Edit')).'</a>';
+							$delete_link = '<a href="'.api_get_self().'?action=delete_link&amp;link_index='.$i.'" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES)).'\')) return false;">'.Display::return_icon('delete.gif', get_lang('Delete')).'</a>';
 							echo str_replace(array('href="'.api_get_path(WEB_PATH).'index.php?include=', '</li>'), array('href="'.api_get_path(WEB_CODE_PATH).'admin/'.basename(api_get_self()).'?action=open_link&link=', '<br />'.$edit_link.' '.$delete_link.'</li>'), $enreg);
-						}
+							$i++;
+						}						
 					}
 				?>
-
 				</ul>
 			</div>
 
@@ -895,15 +894,12 @@ switch ($action) {
 			$home_notice = api_to_system_encoding($home_notice, api_detect_encoding(strip_tags($home_notice)));
 			echo $home_notice;
 			?>
-
 			</div>
 			</div>
 		  </td>
 		</tr>
 		</table>
-
 		<?php
 		break;
 }
-
 Display::display_footer();

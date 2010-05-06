@@ -280,8 +280,8 @@ function showQuestion($questionId, $onlyAnswers=false, $origin=false,$current_it
 					$s .= '<tr><td width="45%" valign="top" >';
 					$parsed_answer = api_parse_tex($answer);
 					//left part questions
-					$s .= '<span style="float:left; width:5%;"><b>'.$lines_count.'</b>.&nbsp;</span>
-						 <span style="float:left; width:95%;">'.$parsed_answer.'</span></td>';
+					$s .= ' <span style="float:left; width:8%;"><b>'.$lines_count.'</b>.&nbsp;</span>
+						 	<span style="float:left; width:92%;">'.$parsed_answer.'</span></td>';
 					//middle part (matches selects)
 					$s .= '<td width="10%" valign="top" align="center">&nbsp;&nbsp;
 				            <select name="choice['.$questionId.']['.$numAnswer.']">

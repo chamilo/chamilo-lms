@@ -988,6 +988,8 @@ function api_get_course_info($course_code = null) {
 			$_course['visibility'   ]        = $cData['visibility'      ];
 			$_course['subscribe_allowed']    = $cData['subscribe'       ];
 			$_course['unubscribe_allowed']   = $cData['unsubscribe'     ];
+			
+			$_course['real_id'     ]         = $cData['id']; 
 		}
 		return $_course;
 	}

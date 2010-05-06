@@ -1060,5 +1060,29 @@ class SessionManager {
 		}
 		return $assigned_sessions_to_hrm;
 	}
-
+	
+	/**
+	 * Gets the list of courses by session
+	 * @param int session id
+	 * @return array list of courses  
+	 */
+	public static function get_course_list_by_session_id ($session_id) {
+		$tbl_course				= Database::get_main_table(TABLE_MAIN_COURSE);
+		$tbl_session_rel_course	= Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
+		// select the courses
+		$sql = "SELECT id, code, title,visual_code, nbr_users, db_name
+				FROM $tbl_course,$tbl_session_rel_course
+				WHERE course_code = code
+				AND	id_session='$session_id'
+				ORDER BY title";
+		$result 	= Database::query($sql);
+		$num_rows 	= Database::num_rows($result);
+		$courses = array();
+		if ($num_rows > 0) {
+			while ($row = Database::fetch_array($result,'ASSOC'))	{
+				$courses[$row['id']] = $row;
+			}
+		}
+		return $courses;
+	}
 }

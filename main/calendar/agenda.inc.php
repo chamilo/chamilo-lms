@@ -1,5 +1,7 @@
-<?php //$Id: agenda.inc.php 22324 2009-07-23 17:44:22Z cfasanando $
+<?php
+
 /* For licensing terms, see /license.txt */
+
 /**
 	@author: Patrick Cool, patrick.cool@UGent.be
 	@version: 1.1
@@ -53,8 +55,7 @@ $(document).ready(function () {
 * @param integer $year: the 4-digit year indication e.g. 2005
 * @return array
 */
-function get_calendar_items($month, $year)
-{
+function get_calendar_items($month, $year) {
 	global $_user, $_course;
 	global $is_allowed_to_edit;
 	global $select_month, $select_year;
@@ -1471,7 +1472,7 @@ function display_courseadmin_links() {
 		show_user_group_filter_form();
 		echo "</form> ";
 	}
-	//echo "<a href='".api_get_self()."?".api_get_cidreq()."&action=importical&amp;view=".(($_SESSION['view']=='month')?"list":Security::remove_XSS($_SESSION['view'])."&amp;origin=".Security::remove_XSS($_GET['origin']))."'>".Display::return_icon('ical_icon.gif', get_lang('ICalFileImport'))." ".get_lang('ICalFileImport')."</a>";
+	echo "<a href='".api_get_self()."?".api_get_cidreq()."&action=importical&amp;view=".(($_SESSION['view']=='month')?"list":Security::remove_XSS($_SESSION['view'])."&amp;origin=".Security::remove_XSS($_GET['origin']))."'>".Display::return_icon('ical_icon.gif', get_lang('ICalFileImport'))." ".get_lang('ICalFileImport')."</a>";
 }
 
 
@@ -2150,8 +2151,7 @@ function display_agenda_items()
          --------------------------------------------------*/
 
 
-    	if (!$is_repeated && (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous())))
-    	{
+    	if (!$is_repeated && (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous()))) {
     		if( ! (api_is_course_coach() && !api_is_element_in_the_session(TOOL_AGENDA, $myrow['id'] ) ) )
 			{ // a coach can only delete an element belonging to his session
 				$mylink = api_get_self().'?'.api_get_cidreq().'&amp;origin='.Security::remove_XSS($_GET['origin']).'&amp;id='.$myrow['id'];
@@ -2166,14 +2166,11 @@ function display_agenda_items()
     			echo '<a href="'.$mylink.api_get_cidreq()."&amp;sort=asc&amp;toolgroup=".Security::remove_XSS($_GET['toolgroup']).'&amp;action=announce" title="'.get_lang("AddAnnouncement").'">';
     			echo Display::return_icon('announce_add.gif', get_lang('AddAnnouncement'), array ('style' => 'width:16px; height:16px;'))."</a> ";
 
-	    		if ($myrow['visibility']==1)
-	    		{
+	    		if ($myrow['visibility']==1) {
 	    			$image_visibility="visible.gif";
 					$text_visibility=get_lang("Hide");
 					$next_action = 0;
-	    		}
-	    		else
-	    		{
+	    		} else {
 	    			$image_visibility="invisible.gif";
 					$text_visibility=get_lang("Show");
 					$next_action = 1;
@@ -2181,19 +2178,14 @@ function display_agenda_items()
     			echo 	'<a href="'.$mylink.api_get_cidreq().'&amp;sort=asc&amp;toolgroup='.Security::remove_XSS($_GET['toolgroup']).'&amp;action=showhide&amp;next_action='.$next_action.'" title="'.$text_visibility.'">'.Display::return_icon($image_visibility, $text_visibility),'</a> ';
 			}
 
-    	if (!$is_repeated && (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous())))
-    	{
+    	if (!$is_repeated && (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous()))) {
     		if( ! (api_is_course_coach() && !api_is_element_in_the_session(TOOL_AGENDA, $myrow['id'] ) ) )
 			{ // a coach can only delete an element belonging to his session
     			$td_colspan= '<td colspan="3">';
-			}
-			else
-			{
+			} else {
 				$td_colspan= '<td colspan="2">';
 			}
-    	}
-    	else
-    	{
+    	} else {
     		$td_colspan= '<td colspan="2">';
     	}
     	$mylink = 'ical_export.php?'.api_get_cidreq().'&amp;type=course&amp;id='.$myrow['id'];
@@ -4667,23 +4659,26 @@ function agenda_add_repeat_item($course_info,$orig_id,$type,$end,$orig_dest,$fil
  */
 function agenda_import_ical($course_info,$file) {
 	require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
-    $charset = api_get_setting('platform_charset');
+   	$charset = api_get_setting('platform_charset');
     $filepath = api_get_path(SYS_ARCHIVE_PATH).$file['name'];
-    if(!@move_uploaded_file($file['tmp_name'],$filepath))
-    {
+    if(!@move_uploaded_file($file['tmp_name'],$filepath)) {
     	error_log('Problem moving uploaded file: '.$file['error'].' in '.__FILE__.' line '.__LINE__);
     	return false;
     }
     require_once api_get_path(LIBRARY_PATH).'icalcreator/iCalcreator.class.php';
+    
     $ical = new vcalendar();
     $ical->setConfig( 'directory', dirname($filepath) );
+    
     $ical->setConfig( 'filename', basename($filepath) );
-    $ical->parse();
+    $return = $ical->parse();
+    
     //we need to recover: summary, description, dtstart, dtend, organizer, attendee, location (=course name),
-    // rrule
-    $ve = $ical->getComponent(0);
+
+    $ve = $ical->getComponent(VEVENT);
     //print_r($ve);
     $ttitle = $ve->getProperty('summary');
+    
     $title = api_convert_encoding($ttitle,$charset,'UTF-8');
     $tdesc = $ve->getProperty('description');
     $desc = api_convert_encoding($tdesc,$charset,'UTF-8');
@@ -4696,6 +4691,7 @@ function agenda_import_ical($course_info,$file) {
     $attendee = $ve->getProperty('attendee');
     $course_name = $ve->getProperty('location');
     //insert the event in our database
+    var_dump($title,$desc,$start_date,$end_date);
     $id = agenda_add_item($course_info,$title,$desc,$start_date,$end_date,$_POST['selectedform']);
 
     $repeat = $ve->getProperty('rrule');

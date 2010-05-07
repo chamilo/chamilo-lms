@@ -1,5 +1,4 @@
 <?php
-
 /* For licensing terms, see /license.txt */
 /**
 *	@package chamilo.admin
@@ -10,11 +9,8 @@
 $language_file='admin';
 // resetting the course id
 $cidReset=true;
+
 require_once '../inc/global.inc.php';
-
-// including some necessary dokeos files
-
-// including additonal libraries
 require_once api_get_path(LIBRARY_PATH).'add_many_session_to_category_functions.lib.php';
 require_once api_get_path(LIBRARY_PATH).'sessionmanager.lib.php';
 
@@ -33,10 +29,8 @@ $interbreadcrumb[] = array('url' => 'session_list.php','name' => get_lang('Sessi
 
 // Database Table Definitions
 $tbl_session_rel_course_rel_user	= Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-
 $tbl_session						= Database::get_main_table(TABLE_MAIN_SESSION);
 $tbl_session_category				= Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
-
 $tbl_session_rel_user				= Database::get_main_table(TABLE_MAIN_SESSION_USER);
 $tbl_session_rel_course				= Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
 $tbl_course							= Database::get_main_table(TABLE_MAIN_COURSE);
@@ -99,20 +93,19 @@ $CourseList=$SessionList=array();
 $courses=$sessions=array();
 $noPHP_SELF=true;
 
-if (isset($_GET['id_category'])) {
-	$Categoryid = intval($_GET['id_category']);
-}
+
 $Categoryid = intval($_POST['CategorySessionId']);
 
 if ($_POST['formSent']) {
 	$formSent=$_POST['formSent'];
 	$SessionCategoryList = $_POST['SessionCategoryList'];
-	$Categoryid = intval($_POST['CategorySessionId']);
+
 	if($Categoryid != 0 && count($SessionCategoryList)>0 ){
 		$session_id = join(',', $SessionCategoryList);
-		$sql = "UPDATE $tbl_session SET session_category_id = $Categoryid WHERE id in ($session_id) ";
+		echo $sql = "UPDATE $tbl_session SET session_category_id = $Categoryid WHERE id in ($session_id) ";
 		Database::query($sql);
-		header('Location: session_list.php?id_category='.$Categoryid);
+		//header('Location: session_list.php?id_category='.$Categoryid);
+		header('Location: add_many_session_to_category.php?id_category='.$Categoryid.'&msg=ok');
 		exit;
 	} else {
 		header('Location: add_many_session_to_category.php?msg=error');
@@ -120,9 +113,19 @@ if ($_POST['formSent']) {
 	}
 }
 
+if (isset($_GET['id_category'])) {
+	$Categoryid = intval($_GET['id_category']);
+}
+
 if(isset($_GET['msg']) && $_GET['msg']=='error'){
 	$errorMsg = get_lang('MsgErrorSessionCategory');
 }
+
+if(isset($_GET['msg']) && $_GET['msg']=='ok'){
+	$OkMsg = get_lang('SessionCategoryUpdate');
+}
+
+
 // display the dokeos header
 Display::display_header($tool_name);
 
@@ -131,9 +134,10 @@ echo '<div class="row"><div class="form_header">'.$tool_name.' </div></div><br /
 // *******************
 $where ='';
 $rows_category_session = array();
-if(isset($_POST['CategorySessionId']) && $_POST['formSent'] == 0 ){
-	$where = 'WHERE session_category_id !='.intval($_POST['CategorySessionId']);
-	$sql = 'SELECT id, name  FROM '.$tbl_session .' WHERE session_category_id ='.intval($_POST['CategorySessionId']).' ORDER BY name';
+if((isset($_POST['CategorySessionId']) && $_POST['formSent'] == 0) || isset($_GET['id_category']) ) {
+	
+	$where = 'WHERE session_category_id !='.$Categoryid;
+	$sql = 'SELECT id, name  FROM '.$tbl_session .' WHERE session_category_id ='.$Categoryid.' ORDER BY name';
 	$result=Database::query($sql);
 	$rows_category_session = Database::store_result($result);
 }
@@ -152,7 +156,10 @@ $rows_session = Database::store_result($result);
 if(!empty($errorMsg)) {
 	Display::display_error_message($errorMsg); //main API
 }
-var_dump($Categoryid);
+
+if(!empty($OkMsg)) {
+	Display::display_confirmation_message($OkMsg); //main API
+}
 ?>
 <table border="0" cellpadding="5" cellspacing="0" width="100%" align="center">
 <tr>
@@ -161,7 +168,7 @@ var_dump($Categoryid);
 	<td  align="center"> 
 	<b><?php echo get_lang('SessionCategoryName') ?> :</b><br />
 	<select name="CategorySessionId" style="width: 320px;" onchange="javascript:send();" >
-		
+		<option value="0" ></option>
 		<?php
 		foreach($rows_session_category as $category) {
 			if($category['id'] == $Categoryid)
@@ -175,7 +182,6 @@ var_dump($Categoryid);
 </tr>
 <tr>
   <td width="45%" align="center"><b><?php echo get_lang('SessionListInPlatform') ?> :</b></td>
-
   <td width="10%">&nbsp;</td>
   <td align="center" width="45%"><b><?php echo get_lang('SessionListInCategory') ?> :</b></td>
 </tr>
@@ -247,14 +253,10 @@ function moveItem(origin , destination) {
 	}
 	destination.selectedIndex = -1;
 	sortOptions(destination.options);
-
-
 }
 
 function sortOptions(options) {
-
 	newOptions = new Array();
-
 	for (i = 0 ; i<options.length ; i++) {
 		newOptions[i] = options[i];
 	}
@@ -265,7 +267,6 @@ function sortOptions(options) {
 	for(i = 0 ; i < newOptions.length ; i++){
 		options[i] = newOptions[i];
 	}
-
 }
 
 function mysort(a, b){

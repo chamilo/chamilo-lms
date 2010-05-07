@@ -2208,7 +2208,7 @@ if ($_GET['action']=='discuss')
 					$dtime = date( "Y-m-d H:i:s" );
 					$message_author=api_get_user_id();
 
-					$sql="INSERT INTO $tbl_wiki_discuss (publication_id, userc_id, comment, p_score, dtime) VALUES ('".$id."','".$message_author."','".$_POST['comment']."','".$_POST['rating']."','".$dtime."')";
+					$sql="INSERT INTO $tbl_wiki_discuss (publication_id, userc_id, comment, p_score, dtime) VALUES ('".$id."','".$message_author."','".Database::escape_string($_POST['comment'])."','".Database::escape_string($_POST['rating'])."','".$dtime."')";
 					$result=Database::query($sql) or die(Database::error());
 
 					check_emailcue($id, 'D', $dtime, $message_author);

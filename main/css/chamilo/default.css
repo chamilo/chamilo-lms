@@ -636,7 +636,7 @@ margin-top:0;
 	
 	margin-top:20px;
 	margin-right:10px;
-	margin-bottom:40px;
+	margin-bottom:0px;
 	
 	padding-left:10px;
 	padding-right:10px;
@@ -666,7 +666,7 @@ margin-top:0;
 }
 .menulist {
 	list-style: none;
-	margin: 0 0 12px 0;
+	margin: 0 0 10px 0;
 	padding: 0;
 	
 	list-style-image:none;
@@ -3218,18 +3218,15 @@ a.read {
 	-webkit-border-radius: 10px; border: 1px solid #e1e1e0;
 	-opera-border-radius: 10px; border: 1px solid #e1e1e0;	
 	
-	margin-top:20px;
+	border:1px solid #E1E1E0;
+	float:right;
+	margin-bottom:0;
 	margin-right:10px;
-	margin-bottom:40px;
-	
-	padding-left:10px;
-	padding-right:10px;
-	padding-top:5px;
-	padding-bottom:30px;	
-	
+	margin-top:20px;
+	min-height:150px;
+	padding:5px 10px 0;
 	width:200px;
-	float: right;
-	min-height: 150px;	
+
 }
 
 /* INVITATIONS */
@@ -3381,7 +3378,6 @@ a.read {
 	font-size:12px;
 }
 .message-body {
-	font-size:11px;
 	padding: 0 0 11px;
 	color:#333;
 }

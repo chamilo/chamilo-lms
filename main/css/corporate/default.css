@@ -1307,7 +1307,7 @@ span.radio {
 	width: auto;
 	margin: 24px 6px 0 6px;
 	padding-left: 10px;
-	border: 1px solid #4171B5;
+	/* border: 1px solid #4171B5; */
 }
 .menusectioncaption {
 	position: relative;

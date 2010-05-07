@@ -1580,9 +1580,9 @@ echo '</div>'; // end of content section
 api_session_register('status');
 
 /*
-==============================================================================
+
 		RIGHT MENU
-==============================================================================
+
 */
 echo '	<div id="menu" class="menu">';
 
@@ -1615,7 +1615,7 @@ if (isset($toolsList) and is_array($toolsList) and isset($digest)) {
 }
 
 echo '<div class="menusection">';
-echo '<span class="menusectioncaption">'.get_lang('MenuUser').'</span>';
+echo '<span class="menusectioncaption">'.get_lang('Profile').'</span>';
 
 //user image
 //  @todo add a platform setting to add the user image
@@ -1657,23 +1657,31 @@ if (api_get_setting('allow_social_tool')=='true' && api_get_setting('allow_messa
     }
     //<h2 class="message-title">'.get_lang('Messages').'</h2>
     echo '<div class="clear"></div>';
-    echo '<div class="message-content"> <p>';
+    echo '<div class="message-content"><ul class="menulist">';
     $link = '';
     if (api_get_setting('show_tabs', 'social') == 'true') {
         $link = '?f=social';
     }
-    echo '<a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php'.$link.'" class="message-body">'.get_lang('Inbox').$cant_msg.' </a><br />';
-    echo '<a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php'.$link.'" class="message-body">'.get_lang('Compose').' </a><br />';
+    echo '<li><a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php'.$link.'" class="message-body">'.get_lang('Inbox').$cant_msg.' </a></li>';
+    echo '<li><a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php'.$link.'" class="message-body">'.get_lang('Compose').' </a></li>';
     //echo '<a href="'.api_get_path(WEB_PATH).'main/auth/profile.php" class="message-body">'.get_lang('EditMyProfile').' </a><br />';
 
-    if ($total_invitations > 0) {
-        echo '<a href="'.api_get_path(WEB_PATH).'main/social/invitations.php" class="message-body">'.get_lang('PendingInvitations').' ('.$total_invitations.') </a><br />';
-    }
+    //if ($total_invitations > 0) {
+        echo '<li><a href="'.api_get_path(WEB_PATH).'main/social/invitations.php" class="message-body">'.get_lang('PendingInvitations').' ('.$total_invitations.') </a></li>';
+    //}
 
-    echo '</p>';
+    echo '</ul>';
     echo '</div>';
-    echo '</div><div class="clear"></div>';
+    echo '</div>';
+    //==echo '</div><div class="clear"></div>';
 }
+    echo '</div>';    
+echo '</div>'; // end of menu
+
+echo '	<div id="menu" class="menu">';
+
+echo '<div class="menusection">';
+echo '<span class="menusectioncaption">'.get_lang('MenuUser').'</span>';
 
 
 // My account section
@@ -1715,8 +1723,6 @@ if (!empty($menu_navigation)) {
 		echo '<li'.$current.'>';
 		echo '<a href="'.$navigation_info['url'].'" target="_self">'.$navigation_info['title'].'</a>';
 		echo '</li>';
-		echo "\n";
-
 	}
 	echo '</ul>';
 	echo '</div>';
@@ -1756,8 +1762,10 @@ echo <<<EOD
 EOD;
 	echo '</div>';
 }
-
+echo '<div class="clear"></div>';
 echo '</div>'; // end of menu
+
+
 
 
 //footer

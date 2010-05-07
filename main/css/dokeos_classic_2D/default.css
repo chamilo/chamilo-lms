@@ -419,7 +419,7 @@ input.link_alike:hover {
 	padding-left: 12px;
 }
 .menusection {
-	border: 1px solid #4171B5;
+	/* border: 1px solid #4171B5; */
 	margin: 24px 6px 0 6px;
 	padding-left: 10px;
 	width: auto;
@@ -2292,19 +2292,9 @@ input.forms	{
 }
 /* styles from the my.profile.php file */
 .message-content {
-	float:right;
-	margin:20px auto;
-	background:#F5E38E;
-	border:2px solid #EBCA4F;
-	padding:10px;
-	width:200px;
-	position:relative;
+
 }
-.message-content .message-delete {
-	position: absolute;
-	top: 10px;
-	right: 10px;
-	cursor: pointer;
+.message-content .message-delete {	
 }
 .message-content-internal {
 	display:inline;
@@ -3056,25 +3046,23 @@ a.read {
 }
 
 #menu {
-/*	-moz-border-radius: 10px; border: 1px solid #e1e1e0;
+	-moz-border-radius: 10px; border: 1px solid #e1e1e0;
 	-webkit-border-radius: 10px; border: 1px solid #e1e1e0;
 	-opera-border-radius: 10px; border: 1px solid #e1e1e0;	
-
+	
 	margin-top:20px;
 	margin-right:10px;
-	margin-bottom:40px;
+	margin-bottom:0px;
 	
 	padding-left:10px;
 	padding-right:10px;
 	padding-top:5px;
-	padding-bottom:30px;	
+	padding-bottom:0px;	
 	
-	width:240px; */
+	width:200px;
 	float: right;
-	min-height: 150px;
-	
+	min-height: 150px;	
 }
-
 /* INVITATIONS */
  
 .invitation_confirm {
@@ -3196,13 +3184,10 @@ a.read {
 
 /* styles from the my.profile.php file */
 .message-content {
-float:left;
+
 }
 .message-content .message-delete {
-	position: absolute;
-	top: 10px;
-	right: 10px;
-	cursor: pointer;
+
 }
 .message-content-internal {
 	display:inline;

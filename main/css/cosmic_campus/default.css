@@ -348,7 +348,7 @@ a.breadcrumb0 {
 	width: auto;
 	margin: 24px 6px 0 6px;
 	padding-left: 10px;
-	border: 1px solid #bbb;
+	/* border: 1px solid #bbb; */
 }
 .menusectioncaption {
 	position: relative;
@@ -1421,12 +1421,7 @@ div.system_announcement_content {
 	font-weight: bold;
 	padding-left: 12px;
 }
-.menusection {
-	width: auto;
-	margin: 24px 6px 0 6px;
-	padding-left: 10px;
-	border: 1px solid #4171B5;
-}
+
 .menusectioncaption {
 	position: relative;
 	top: -9px;

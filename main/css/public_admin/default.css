@@ -464,7 +464,7 @@ select, input[type=checkbox], input[type=radio], input[type=button], input[type=
 	min-height: 150px;
 	background-color: #F0F0F0;
 	border: 1px solid #bbb;
-	padding: 60px 10px 10px 10px;
+	padding: 30px 10px 5px 10px;
 	background: #f0f0f0 url(images/fondoNav.jpg) no-repeat top center;
 }
 .menucaption {
@@ -473,17 +473,15 @@ select, input[type=checkbox], input[type=radio], input[type=button], input[type=
 	padding-left: 12px;
 }
 .menusection {
-	border: 1px solid #4171B5;
-	margin: 24px 6px 0 6px;
-	padding-left: 10px;
+	margin: 20px 0px 0 6px;
+	padding-left: 3px;
 	width: auto;
 }
 .menusectioncaption {
-	background-color: #F0F0F0;
+	font-weight:bold;
 	font-size: 12px;
-	padding: 0 8px 0 4px;
 	position: relative;
-	top: -9px;
+	top: -5px;
 }
 .menulist {
 	list-style: none;
@@ -2943,17 +2941,12 @@ a.read {
 /*	-moz-border-radius: 10px; border: 1px solid #e1e1e0;
 	-webkit-border-radius: 10px; border: 1px solid #e1e1e0;
 	-opera-border-radius: 10px; border: 1px solid #e1e1e0;	
-
+*/
 	margin-top:20px;
 	margin-right:10px;
-	margin-bottom:40px;
+	margin-bottom:0px;
 	
-	padding-left:10px;
-	padding-right:10px;
-	padding-top:5px;
-	padding-bottom:30px;	
-	
-	width:240px; */
+	width:240px; 
 	float: right;
 	min-height: 150px;
 	
@@ -3103,8 +3096,7 @@ float:left;
 /*	color:#ff0000; */
 	font-size:12px;
 }
-.message-body {
-	font-size:11px;
+.message-body {	
 	padding: 0 0 11px;
 	color:#333;
 }

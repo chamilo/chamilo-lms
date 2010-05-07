@@ -392,11 +392,12 @@ input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
 /*****************************************************
  *  NAVIGATION MENU                                  *
  *****************************************************/
-.menu {
+.menu {		
 	float: right;
 	width: 20%;
-	padding: 0 0 6px 0;
-	border: 1px solid #636363;
+	padding: 10px 0 6px 0;
+	margin: 10px 0 6px 0; 
+	border: 1px solid #ccc;
 }
 .menucaption {
 	font-weight: bold;
@@ -406,14 +407,15 @@ input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
 	width: auto;
 	margin: 24px 6px 0 6px;
 	padding-left: 10px;
-	border: 1px solid #636363;
+	/* border: 1px solid #636363; */
 	background-color: #FFF;
 }
 .menusectioncaption {
+	font-weight:bold;
+	font-size: 12px;	
 	position: relative;
 	top: -9px;
-	background-color: #FFF;
-	padding: 0 8px 0 4px;
+	background-color: #FFF;	
 }
 .menulist {
 	list-style: none;
@@ -2758,9 +2760,9 @@ a.read {
 	padding-top:5px;
 	padding-bottom:30px;	
 	
-	width:240px; */
+	width:240px;*/ 
 	float: right;
-	min-height: 150px;
+	/* min-height: 150px;*/
 	
 }
 

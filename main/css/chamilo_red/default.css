@@ -640,7 +640,7 @@ margin-top:0;
 	
 	margin-top:20px;
 	margin-right:10px;
-	margin-bottom:40px;
+	margin-bottom:0px;
 	
 	padding-left:10px;
 	padding-right:10px;
@@ -670,7 +670,7 @@ margin-top:0;
 }
 .menulist {
 	list-style: none;
-	margin: 0 0 12px 0;
+	margin: 0 0 10px 0;
 	padding: 0;
 	
 	list-style-image:none;
@@ -3225,7 +3225,7 @@ a.read {
 	
 	margin-top:20px;
 	margin-right:10px;
-	margin-bottom:40px;
+	margin-bottom:0px;
 	
 	padding-left:10px;
 	padding-right:10px;

@@ -4,6 +4,7 @@
 
 /**
 	@author: Patrick Cool, patrick.cool@UGent.be
+	@author: Julio Montoya Lots of fixes
 	@version: 1.1
 	@todo: synchronisation with the function in myagenda.php (for instance: using one function for the mini_calendar
 
@@ -274,22 +275,22 @@ function display_minimonthcalendar($agendaitems, $month, $year, $monthName)
 	$backwardsURL = api_get_self()."?".api_get_cidreq()."&amp;coursePath=".(empty($_GET['coursePath'])?'':Security::remove_XSS($_GET['coursePath']))."&amp;courseCode=".(empty($_GET['courseCode'])?'':Security::remove_XSS($_GET['courseCode']))."&amp;month=". ($month == 1 ? 12 : $month -1)."&amp;year=". ($month == 1 ? $year -1 : $year);
 	$forewardsURL = api_get_self()."?".api_get_cidreq()."&amp;coursePath=".(empty($_GET['coursePath'])?'':Security::remove_XSS($_GET['coursePath']))."&amp;courseCode=".(empty($_GET['courseCode'])?'':Security::remove_XSS($_GET['courseCode']))."&amp;month=". ($month == 12 ? 1 : $month +1)."&amp;year=". ($month == 12 ? $year +1 : $year);
 
-	echo 	"<table class=\"data_table\">\n",
-			"<tr>\n",
-			"<th width=\"10%\"><a href=\"", $backwardsURL, "\"> &laquo; </a></th>\n",
-			"<th width=\"80%\" colspan=\"5\">", $monthName, " ", $year, "</th>\n",
-			"<th  width=\"10%\"><a href=\"", $forewardsURL, "\"> &raquo; </a></th>\n", "</tr>\n";
-	echo "<tr>\n";
+	echo 	"<table class=\"data_table\">",
+			"<tr>",
+			"<th width=\"10%\"><a href=\"", $backwardsURL, "\">".Display::return_icon('action_prev.png',get_lang('Previous'))." </a></th>",
+			"<th width=\"80%\" colspan=\"5\">", $monthName, " ", $year, "</th>",
+			"<th  width=\"10%\"><a href=\"", $forewardsURL, "\"> ".Display::return_icon('action_next.png',get_lang('Next'))." </a></th>", "</tr>";
+	echo "<tr>";
 	for ($ii = 1; $ii < 8; $ii ++)
 	{
-		echo "<td class=\"weekdays\">", $DaysShort[$ii % 7], "</td>\n";
+		echo "<td class=\"weekdays\">", $DaysShort[$ii % 7], "</td>";
 	}
-	echo "</tr>\n";
+	echo "</tr>";
 	$curday = -1;
 	$today = getdate();
 	while ($curday <= $numberofdays[$month])
 	{
-		echo "<tr>\n";
+		echo "<tr>";
 		for ($ii = 0; $ii < 7; $ii ++)
 		{
 			if (($curday == -1) && ($ii == $startdayofweek))
@@ -329,18 +330,18 @@ function display_minimonthcalendar($agendaitems, $month, $year, $monthName)
 				{
 					echo $dayheader;
 				}
-				// "a".$dayheader." <span class=\"agendaitem\">".$agendaitems[$curday]."</span>\n";
-				echo "</td>\n";
+				// "a".$dayheader." <span class=\"agendaitem\">".$agendaitems[$curday]."</span>";
+				echo "</td>";
 				$curday ++;
 			}
 			else
 			{
-				echo "<td>&nbsp;</td>\n";
+				echo "<td>&nbsp;</td>";
 			}
 		}
-		echo "</tr>\n";
+		echo "</tr>";
 	}
-	echo "</table>\n";
+	echo "</table>";
 }
 
 
@@ -375,20 +376,19 @@ function display_monthcalendar($month, $year)
 
 	   $maand_array_maandnummer=$month-1;
 
-	echo "<table class=\"data_table\">\n",
-		"<tr>\n",
-		"<th width=\"10%\"><a href=\"",$backwardsURL,"\"> &laquo; </a></th>\n",
-		"<th width=\"80%\" colspan=\"5\">",$MonthsLong[$maand_array_maandnummer]," ",$year,"</th>\n",
-		"<th width=\"10%\"><a href=\"",$forewardsURL,"\"> &raquo; </a></th>\n",
-		"</tr>\n";
+	echo "<table class=\"data_table\">",
+		"<tr>",
+		"<th width=\"10%\"><a href=\"",$backwardsURL,"\"> ".Display::return_icon('action_prev.png',get_lang('Previous'))." </a></th>",
+		"<th width=\"80%\" colspan=\"5\">",$MonthsLong[$maand_array_maandnummer]," ",$year,"</th>",
+		"<th width=\"10%\"><a href=\"",$forewardsURL,"\"> ".Display::return_icon('action_next.png',get_lang('Next'))." </a></th>",
+		"</tr>";
 
-	echo "<tr>\n";
-
+	echo "<tr>";
 	for ($ii=1;$ii<8; $ii++) {
-		echo "<td class=\"weekdays\" width=\"14%\">",$DaysShort[$ii%7],"</td>\n";
+		echo "<td class=\"weekdays\" width=\"14%\">",$DaysShort[$ii%7],"</td>";
 	}
 
-	echo "</tr>\n";
+	echo "</tr>";
 	$curday = -1;
 	$today = getdate();
 	echo '<pre>';
@@ -439,9 +439,9 @@ function display_monthcalendar($month, $year)
 					}
 					
 					if (($curday==$today['mday']) && ($year ==$today['year'])&&($month == $today['mon'])) {
-						echo "<td id=\"today\" ",$bgcolor,"\">".$dayheader." juli\n";
+						echo "<td id=\"today\" ",$bgcolor,"\">".$dayheader;
 	      			} else {
-						echo "<td id=\"days\" ",$bgcolor,"\">".$dayheader."22 \n";
+						echo "<td id=\"days\" ",$bgcolor,"\">".$dayheader;
 					}
 					
 					echo "</td>";
@@ -795,22 +795,22 @@ function show_to_form($to_already_selected)
 	$user_list=get_course_users();
 	$group_list=get_course_groups();
 
-	echo "\n<table id=\"recipient_list\" style=\"display: none;\">\n";
-		echo "\t<tr>\n";
+	echo "<table id=\"recipient_list\" style=\"display: none;\">";
+		echo "\t<tr>";
 		// the form containing all the groups and all the users of the course
-		echo "\t\t<td>\n";
+		echo "\t\t<td>";
 		echo "<strong>".get_lang('Users')."</strong><br />";
 			construct_not_selected_select_form($group_list,$user_list,$to_already_selected);
-		echo "\t\t</td>\n";
+		echo "\t\t</td>";
 		// the buttons for adding or removing groups/users
-		echo "\n\t\t<td valign=\"middle\">\n";
+		echo "\t\t<td valign=\"middle\">";
 	/*	echo "\t\t<input type=\"button\" ",
 					"onclick=\"move(document.getElementById('not_selected_form'),document.getElementById('selected_form'))\" ",
 					"value=\"   &gt;&gt;   \" />",
 
-					"\n\t\t<p>&nbsp;</p>",
+					"\t\t<p>&nbsp;</p>",
 
-					"\n\t\t<input type=\"button\" ",
+					"\t\t<input type=\"button\" ",
 					"onclick=\"move(document.getElementById('selected_form'),document.getElementById('not_selected_form'))\" ",
 					"value=\"   class=\"arrow\"   \" />";
 */
@@ -819,12 +819,12 @@ function show_to_form($to_already_selected)
 <br /> <br />
 <button class="arrowl" type="button" onclick="move(document.getElementById('selected_form'), document.getElementById('not_selected_form'))" onclick="move(document.getElementById('selected_form'), document.getElementById('not_selected_form'))"></button>
 <?php
-		echo "\t\t</td>\n";
-		echo "\n\t\t<td>\n";
+		echo "\t\t</td>";
+		echo "\t\t<td>";
 		echo "<strong>".get_lang('DestinationUsers')."</strong><br />";
 			construct_selected_select_form($group_list,$user_list,$to_already_selected);
-		echo "\t\t</td>\n";
-		echo "\t</tr>\n";
+		echo "\t\t</td>";
+		echo "\t</tr>";
 	echo "</table>";
 }
 
@@ -837,12 +837,12 @@ function show_to_form($to_already_selected)
 */
 function construct_not_selected_select_form($group_list=null, $user_list=null,$to_already_selected=array())
 {
-	echo "\t\t<select id=\"not_selected_form\" name=\"not_selected_form[]\" size=\"5\" multiple=\"multiple\" style=\"width:200px\">\n";
+	echo "\t\t<select id=\"not_selected_form\" name=\"not_selected_form[]\" size=\"5\" multiple=\"multiple\" style=\"width:200px\">";
 
 	// adding the groups to the select form
 
 	if (isset($to_already_selected) && $to_already_selected==='everyone') {
-		echo "\t\t<option value=\"\">--------------------------------------------</option>\n";
+		echo "\t\t<option value=\"\">--------------------------------------------</option>";
 	} else {
 		if (is_array($group_list))
 		{
@@ -853,7 +853,7 @@ function construct_not_selected_select_form($group_list=null, $user_list=null,$t
 					{
 					echo	"\t\t<option value=\"GROUP:".$this_group['id']."\">",
 						"G: ",$this_group['name']," &ndash; " . $this_group['userNb'] . " " . get_lang('Users') .
-						"</option>\n";
+						"</option>";
 				}
 			}
 			// a divider
@@ -867,11 +867,11 @@ function construct_not_selected_select_form($group_list=null, $user_list=null,$t
 			{
 				echo	"\t\t<option value=\"USER:",$this_user['uid'],"\">",
 					"",api_get_person_name($this_user['firstName'], $this_user['lastName']),
-					"</option>\n";
+					"</option>";
 			}
 		}
 	}
-		echo "\t\t</select>\n";
+		echo "\t\t</select>";
 }
 
 /**
@@ -933,7 +933,7 @@ function construct_selected_select_form($group_list=null, $user_list=null,$to_al
 							{
 							echo	"\t\t<option value=\"GROUP:".$this_group['id']."\">",
 								"G: ",$this_group['name']," &ndash; " . $this_group['userNb'] . " " . get_lang('Users') .
-								"</option>\n";
+								"</option>";
 						}
 					}
 				}
@@ -945,12 +945,12 @@ function construct_selected_select_form($group_list=null, $user_list=null,$to_al
 					{
 						echo	"\t\t<option value=\"USER:",$this_user['uid'],"\">",
 							"",api_get_person_name($this_user['firstName'], $this_user['lastName']),
-							"</option>\n";
+							"</option>";
 					}
 				}
 			}
 	}
-	echo "</select>\n";
+	echo "</select>";
 }
 
 
@@ -1056,7 +1056,7 @@ function store_agenda_item_as_announcement($item_id){
 		$row_max = Database::fetch_array($res_max);
 		$max = $row_max[0]+1;
 		//build the announcement text
-		$content = $row['start_date']." - ".$row['end_date']."\n\n".$row['content'];
+		$content = $row['start_date']." - ".$row['end_date']."\n".$row['content'];
 		//insert announcement
                 $session_id = api_get_session_id();
 		$sql_ins = "INSERT INTO $table_ann (title,content,end_date,display_order,session_id) " .
@@ -1219,14 +1219,14 @@ function sent_to_form($sent_to_array)
 	// starting the form if there is more than one user/group
 	if ($total_numbers >1)
 	{
-	$output="<select name=\"sent to\">\n";
+	$output="<select name=\"sent to\">";
 	$output.="<option>".get_lang("SentTo")."</option>";
 	// outputting the name of the groups
 	if (is_array($sent_to_array['groups']))
 		{
 		foreach ($sent_to_array['groups'] as $group_id)
 			{
-			$output.="\t<option value=\"\">G: ".$group_names[$group_id]['name']."</option>\n";
+			$output.="\t<option value=\"\">G: ".$group_names[$group_id]['name']."</option>";
 			}
 		}
 	if (isset($sent_to_array['users']))
@@ -1236,13 +1236,13 @@ function sent_to_form($sent_to_array)
 			foreach ($sent_to_array['users'] as $user_id)
 				{
 				$user_info=api_get_user_info($user_id);
-				$output.="\t<option value=\"\">".api_get_person_name($user_info['firstName'], $user_info['lastName'])."</option>\n";
+				$output.="\t<option value=\"\">".api_get_person_name($user_info['firstName'], $user_info['lastName'])."</option>";
 				}
 			}
 	}
 
 	// ending the form
-	$output.="</select>\n";
+	$output.="</select>";
 	}
 	else // there is only one user/group
 	{
@@ -1317,12 +1317,12 @@ function show_user_filter_form()
 */
 function show_user_group_filter_form()
 {
-	echo "\n<select name=\"select\" onchange=\"javascript: MM_jumpMenu('parent',this,0)\">";
+	echo "<select name=\"select\" onchange=\"javascript: MM_jumpMenu('parent',this,0)\">";
 
 	// Groups
-	$option = "\n\t<optgroup label=\"".get_lang("Groups")."\">";
+	$option = "\t<optgroup label=\"".get_lang("Groups")."\">";
 	$group_list=get_course_groups();
-	//echo "\n\t<option value=\"agenda.php?user=none\">".get_lang("ShowAll")."</option>";
+	//echo "\t<option value=\"agenda.php?user=none\">".get_lang("ShowAll")."</option>";
 
 	$group_available_to_access =array();
 
@@ -1338,30 +1338,30 @@ function show_user_group_filter_form()
 
 			// lastedit
 			if ($has_access || $result['calendar_state']=='1') {
-				$option.= "\n\t\t<option value=\"agenda.php?group=".$this_group['id']."\" ";
+				$option.= "\t\t<option value=\"agenda.php?group=".$this_group['id']."\" ";
 				$option.= ($this_group['id']==$_SESSION['group'])? " selected":"" ;
 				$option.=  ">".$this_group['name']."</option>";
 			}
 		}
 	}
 
-	$all =  "\n\t<option value=\"agenda.php?user=none\">".get_lang("ShowAll")."</option>";
+	$all =  "\t<option value=\"agenda.php?user=none\">".get_lang("ShowAll")."</option>";
 	$option = $all.$option;
 
-	$option.= "\n\t</optgroup>";
+	$option.= "\t</optgroup>";
 	echo $option;
 
 	global $_course;
 
 	// Users
-	echo "\n\t<optgroup label=\"".get_lang("Users")."\">";
+	echo "\t<optgroup label=\"".get_lang("Users")."\">";
 	$user_list=get_course_users();
 	foreach($user_list as $this_user) {
-		echo "\n\t\t<option value=\"agenda.php?user=".$this_user['uid']."\" ";
+		echo "\t\t<option value=\"agenda.php?user=".$this_user['uid']."\" ";
 		echo ($this_user['uid']==$_SESSION['user'])? " selected":"" ;
 		echo ">".api_get_person_name($this_user['firstName'], $this_user['lastName'])."</option>";
 	}
-	echo "\n\t</optgroup>";
+	echo "\t</optgroup>";
 	echo "</select>";
 }
 
@@ -2025,10 +2025,9 @@ function display_agenda_items()
     $export_icon_low = 'export_low_fade.png';
     $export_icon_high = 'export_high_fade.png';
 
-    while($myrow=Database::fetch_array($result))
-    {
+    while($myrow=Database::fetch_array($result)) {
     	$is_repeated = !empty($myrow['parent_event_id']);
-	    echo '<table class="data_table">',"\n";
+	    echo '<table class="data_table">';
         /*--------------------------------------------------
         		display: the month bar
          --------------------------------------------------*/
@@ -2037,9 +2036,9 @@ function display_agenda_items()
         if ($month_bar != api_format_date($myrow["start_date"], "%m%Y"))
 		{
             $month_bar = api_format_date($myrow["start_date"], "%m%Y");
-			echo "\t<tr>\n\t\t<td class=\"agenda_month_divider\" colspan=\"3\" valign=\"top\">".
+			echo "\t<tr><td class=\"agenda_month_divider\" colspan=\"3\" valign=\"top\">".
 			api_format_date($myrow["start_date"], "%B %Y").
-			"</td>\n\t</tr>\n";
+			"</td></tr>";
 		}
 
         /*--------------------------------------------------
@@ -2072,7 +2071,7 @@ function display_agenda_items()
     		$text_style="textnow";
     	}
 
-    	echo "\t\t<th>\n";
+    	echo "<th>";
     	// adding an internal anchor
     	echo "\t\t\t<a name=\"".(int)api_format_date($myrow["start_date"], "%d")."\"></a>";
     	// the icons. If the message is sent to one or more specific users/groups
@@ -2083,11 +2082,11 @@ function display_agenda_items()
     	{
     		echo Display::return_icon('group.gif', get_lang('ItemForUserSelection'));
     	}
-    	echo " ".$myrow['title']."\n";
-    	echo "\t\t</th>\n";
+    	echo $myrow['title'];
+    	echo "</th>";
 
     	// the message has been sent to
-    	echo "\t\t<th>".get_lang("SentTo").": ";
+    	echo "<th>".get_lang("SentTo").": ";
     	$sent_to=sent_to(TOOL_CALENDAR_EVENT, $myrow["ref"]);
     	$sent_to_form=sent_to_form($sent_to);
     	echo $sent_to_form;
@@ -2108,13 +2107,13 @@ function display_agenda_items()
     	echo "<tr class='row_odd'>";
     	echo "\t\t<td>".get_lang("StartTimeWindow").": ";
     	echo api_format_date($myrow['start_date']);
-    	echo "</td>\n";
+    	echo "</td>";
     	echo "\t\t<td>";
     	if ($myrow["end_date"]<>"0000-00-00 00:00:00") {
     		echo get_lang("EndTimeWindow").": ";
     		echo api_convert_and_format_date($myrow['end_date'], null, date_default_timezone_get());
     	}
-    	echo "</td>\n";
+    	echo "</td>";
 
     	// attachment list
 	    	$attachment_list=get_attachment($myrow['id']);
@@ -2324,12 +2323,12 @@ function display_one_agenda_item($agenda_id)
 	/*--------------------------------------------------
 			DISPLAY: THE ITEMS
 	  --------------------------------------------------*/
-	echo "<table id=\"data_table\" class=\"data_table\">\n";
+	echo "<table id=\"data_table\" class=\"data_table\">";
 
 	/*--------------------------------------------------
 	 DISPLAY : the icon, title, destinees of the item
 	  --------------------------------------------------*/
-	echo "\t<tr>\n";
+	echo "\t<tr>";
 
 	$myrow["start_date"] = api_get_local_time($myrow["start_date"], null, date_default_timezone_get());
 
@@ -2358,7 +2357,7 @@ function display_one_agenda_item($agenda_id)
 	}
 
 
-	echo "\t\t<th>\n";
+	echo "\t\t<th>";
 
 	// adding an internal anchor
 	echo "\t\t\t<a name=\"".(int)api_format_date($myrow["start_date"], "%d")."\"></a>";
@@ -2371,8 +2370,8 @@ function display_one_agenda_item($agenda_id)
 	{
 		echo Display::return_icon('group.gif');
 	}
-	echo " ".$myrow['title']."\n";
-	echo "\t\t</th>\n";
+	echo $myrow['title'];
+	echo "</th>";
 
 	// the message has been sent to
 	echo "\t\t<th>".get_lang("SentTo").": ";
@@ -2390,10 +2389,10 @@ function display_one_agenda_item($agenda_id)
 	/*--------------------------------------------------
 	 			DISPLAY: the title
 	  --------------------------------------------------*/
-	echo "\t<tr class='row_odd'>\n";
+	echo "\t<tr class='row_odd'>";
 	echo "\t\t<td>".get_lang("StartTime").": ";
 	echo api_format_date($myrow['start_date']);
-	echo "</td>\n";
+	echo "</td>";
 	echo "\t\t<td>".get_lang("EndTime").": ";
 	echo api_convert_and_format_date($myrow['end_date'], null, date_default_timezone_get());
 	echo "</td>\n";

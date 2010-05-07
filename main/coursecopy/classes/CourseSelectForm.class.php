@@ -16,7 +16,7 @@ class CourseSelectForm
 	 * @param array $hidden_fiels Hidden fields to add to the form.
 	 * @param boolean the document array will be serialize. This is used in the course_copy.php file
 	 */
-	function display_form($course, $hidden_fields = null, $avoid_serialize=false) {	
+	function display_form($course, $hidden_fields = null, $avoid_serialize=false) {		
 		$resource_titles[RESOURCE_EVENT] 				= get_lang('Events');
 		$resource_titles[RESOURCE_ANNOUNCEMENT] 		= get_lang('Announcements');
 		$resource_titles[RESOURCE_DOCUMENT] 			= get_lang('Documents');
@@ -110,7 +110,7 @@ class CourseSelectForm
 					case RESOURCE_SURVEYINVITATION:
 					case RESOURCE_SCORM:
 						break;
-					default :
+					default :					
 						echo '<img id="img_'.$type.'" src="../img/1.gif" onclick="javascript: exp('."'$type'".');" />';
 						echo '<b  onclick="javascript:exp('."'$type'".');" >'.$resource_titles[$type].'</b><br />';
 						echo '<div id="div_'.$type.'">';
@@ -131,7 +131,7 @@ class CourseSelectForm
 				}
 			}
 		}
-
+		
 		if ($avoid_serialize) {
 			//Documents are avoided due the huge amount of memory that the serialize php function "eats" (when there are directories with hundred/thousand of files)
 			// this is a known issue of serialize
@@ -200,7 +200,7 @@ class CourseSelectForm
 	 */
 	function get_posted_course($from='', $session_id = 0, $course_code = '') {
 		$course = unserialize(base64_decode($_POST['course']));
-		print_r($course);
+		
 		//Create the resource DOCUMENT objects
 		//Loading the results from the checkboxes of the javascript
 		$resource = $_POST['resource'][RESOURCE_DOCUMENT];
@@ -215,7 +215,8 @@ class CourseSelectForm
 		}
 
 		// Searching the documents resource that have been set to null because $avoid_serialize is true in the display_form() function
-		if ($from=='copy_course') {
+		
+		if ($from == 'copy_course') {
 			if (is_array($resource)) {
 				$resource = array_keys($resource);
 				foreach	($resource as $resource_item) {

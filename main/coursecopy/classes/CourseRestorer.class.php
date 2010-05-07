@@ -27,7 +27,8 @@ define('FILE_OVERWRITE', 3);
 /**
  * Class to restore items from a course object to a Dokeos-course
  * @author Bart Mollet <bart.mollet@hogent.be>
- * @package dokeos.backup
+ * @author Julio Montoya <gugli100@gmail.com> Several fixes/improvements
+ * @package chamilo.backup
  */
 class CourseRestorer
 {
@@ -43,8 +44,7 @@ class CourseRestorer
 	/**
 	 * Create a new CourseRestorer
 	 */
-	function CourseRestorer($course)
-	{
+	function CourseRestorer($course) {
 		$this->course = $course;
 		$this->file_option = FILE_RENAME;
 	}
@@ -63,8 +63,7 @@ class CourseRestorer
 	 * @param string $destination_course_code The code of the Dokeos-course in
 	 * which the resources should be stored. Default: Current Dokeos-course.
 	 */
-	function restore($destination_course_code = '',$session_id = 0)
-	{
+	function restore($destination_course_code = '',$session_id = 0) {
 		if ($destination_course_code == '') {
 			$course_info = api_get_course_info();
 			$this->course->destination_db = $course_info['dbName'];
@@ -185,6 +184,7 @@ class CourseRestorer
 	 * Restore documents
 	 */
 	function restore_documents($session_id = 0, $destination_course_code = '') {
+		
 		$perm = api_get_permissions_for_new_directories();
 		
 		if ($this->course->has_resources(RESOURCE_DOCUMENT)) {
@@ -239,7 +239,7 @@ class CourseRestorer
 				*/
 				
 				if ($document->file_type == DOCUMENT) {					
-					if (file_exists($path.$document->path)) {
+					if (file_exists($path.$document->path)) {						
 						
 						switch ($this->file_option) {
 							case FILE_OVERWRITE :

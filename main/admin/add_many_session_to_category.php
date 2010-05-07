@@ -1,23 +1,23 @@
-<?php //$id: $
-/* For licensing terms, see /dokeos_license.txt */
+<?php
+
+/* For licensing terms, see /license.txt */
 /**
-==============================================================================
-*	@package dokeos.admin
+*	@package chamilo.admin
 * 	@todo use formvalidator
-==============================================================================
 */
 
 // name of the language file that needs to be included
 $language_file='admin';
 // resetting the course id
 $cidReset=true;
-require_once('../inc/global.inc.php');
+require_once '../inc/global.inc.php';
 
 // including some necessary dokeos files
 
 // including additonal libraries
 require_once api_get_path(LIBRARY_PATH).'add_many_session_to_category_functions.lib.php';
 require_once api_get_path(LIBRARY_PATH).'sessionmanager.lib.php';
+
 $xajax = new xajax();
 $xajax -> registerFunction ('search_courses');
 
@@ -99,6 +99,11 @@ $CourseList=$SessionList=array();
 $courses=$sessions=array();
 $noPHP_SELF=true;
 
+if (isset($_GET['id_category'])) {
+	$Categoryid = intval($_GET['id_category']);
+}
+$Categoryid = intval($_POST['CategorySessionId']);
+
 if ($_POST['formSent']) {
 	$formSent=$_POST['formSent'];
 	$SessionCategoryList = $_POST['SessionCategoryList'];
@@ -108,8 +113,10 @@ if ($_POST['formSent']) {
 		$sql = "UPDATE $tbl_session SET session_category_id = $Categoryid WHERE id in ($session_id) ";
 		Database::query($sql);
 		header('Location: session_list.php?id_category='.$Categoryid);
+		exit;
 	} else {
 		header('Location: add_many_session_to_category.php?msg=error');
+		exit;
 	}
 }
 
@@ -142,24 +149,25 @@ $rows_session = Database::store_result($result);
 <form name="formulaire" method="post" action="<?php echo api_get_self(); ?>?page=<?php echo Security::remove_XSS($_GET['page']); if(!empty($_GET['add'])) echo '&add=true' ; ?>" style="margin:0px;" <?php if($ajax_search){echo ' onsubmit="valide();"';}?>>
 <input type="hidden" name="formSent" value="1" />
 <?php
-if(!empty($errorMsg))
-{
+if(!empty($errorMsg)) {
 	Display::display_error_message($errorMsg); //main API
 }
+var_dump($Categoryid);
 ?>
 <table border="0" cellpadding="5" cellspacing="0" width="100%" align="center">
 <tr>
 	<td align="left"></td>
 	<td align="left"></td>
-	<td width="" align="center"> <b><?php echo get_lang('SessionCategoryName') ?> :</b><br />
+	<td  align="center"> 
+	<b><?php echo get_lang('SessionCategoryName') ?> :</b><br />
 	<select name="CategorySessionId" style="width: 320px;" onchange="javascript:send();" >
-		<option value="0" selected> </option>
+		
 		<?php
 		foreach($rows_session_category as $category) {
-			if($category['id'] == $_POST['CategorySessionId'])
-  			echo '<option value="'.$category['id'].'" selected>'.$category['name'].'</option>';
+			if($category['id'] == $Categoryid)
+  				echo '<option value="'.$category['id'].'" selected>'.$category['name'].'</option>';
   			else
-  			echo '<option value="'.$category['id'].'">'.$category['name'].'</option>';
+  				echo '<option value="'.$category['id'].'">'.$category['name'].'</option>';
 		}
   		?>
   	</select>
@@ -203,9 +211,7 @@ if(!empty($errorMsg))
   ?>
   	<button class="arrowl" type="button" onclick="remove_item(document.getElementById('destination'))"></button>
   <?php
-  }
-  else
-  {
+  } else {
   ?>
   	<button class="arrowr" type="button" onclick="moveItem(document.getElementById('origin'), document.getElementById('destination'))" onclick="moveItem(document.getElementById('origin'), document.getElementById('destination'))"></button>
 	<br /><br />
@@ -221,8 +227,7 @@ if(!empty($errorMsg))
   <td width="45%" align="center">
   <select id='destination' name="SessionCategoryList[]" multiple="multiple" size="20" style="width:320px;">
 	<?php
-	foreach($rows_category_session as $enreg) {
-	?>
+	foreach($rows_category_session as $enreg) { ?>
 		<option value="<?php echo $enreg['id']; ?>" <?php echo 'title="'.htmlspecialchars($enreg['name'],ENT_QUOTES).'"'; if(in_array($enreg['id'],$CourseList)) echo 'selected="selected"'; ?>><?php echo $enreg['name']; ?></option>
 	<?php } ?>
   </select></td>
@@ -232,8 +237,7 @@ if(!empty($errorMsg))
 </form>
 <script type="text/javascript">
 <!--
-function moveItem(origin , destination){
-
+function moveItem(origin , destination) {
 	for(var i = 0 ; i<origin.options.length ; i++) {
 		if(origin.options[i].selected) {
 			destination.options[destination.length] = new Option(origin.options[i].text,origin.options[i].value);
@@ -286,9 +290,7 @@ function valide(){
 </script>
 <?php
 /*
-==============================================================================
 		FOOTER
-==============================================================================
 */
 Display::display_footer();
 ?>

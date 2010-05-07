@@ -206,7 +206,7 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
 		if (!isset($_GET['id_category'])) {
 			echo '<a href="'.api_get_path(WEB_CODE_PATH).'admin/session_add.php">'.Display::return_icon('view_more_stats.gif',get_lang('AddSession')).get_lang('AddSession').'</a>';
 		}
-		echo '<a href="'.api_get_path(WEB_CODE_PATH).'admin/add_many_session_to_category.php">'.Display::return_icon('view_more_stats.gif',get_lang('AddSessionsInCategories')).get_lang('AddSessionsInCategories').'</a>
+		echo '<a href="'.api_get_path(WEB_CODE_PATH).'admin/add_many_session_to_category.php?id_category='.intval($_GET['id_category']).'">'.Display::return_icon('view_more_stats.gif',get_lang('AddSessionsInCategories')).get_lang('AddSessionsInCategories').'</a>
 	  </div>';
 	?>
 	<form method="POST" action="session_list.php">

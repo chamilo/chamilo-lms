@@ -6,7 +6,8 @@ require_once 'Course.class.php';
 /**
  * Class to show a form to select resources
  * @author Bart Mollet <bart.mollet@hogent.be>
- * @package dokeos.backup
+ * @author Julio Montoya <gugli100@gmail.com>
+ * @package chamilo.backup
  */
 class CourseSelectForm
 {
@@ -91,10 +92,10 @@ class CourseSelectForm
 		echo '<input type="hidden" name="action" value="course_select_form"/>';
 
 		if (!empty($hidden_fields['destination_course']) && !empty($hidden_fields['origin_course']) && !empty($hidden_fields['destination_session']) && !empty($hidden_fields['origin_session']) ) {
-			echo '<input type="hidden" name="destination_course" value="'.$hidden_fields['destination_course'].'"/>';
-			echo '<input type="hidden" name="destination_course" value="'.$hidden_fields['origin_course'].'"/>';
-			echo '<input type="hidden" name="destination_course" value="'.$hidden_fields['destination_session'].'"/>';
-			echo '<input type="hidden" name="destination_course" value="'.$hidden_fields['origin_session'].'"/>';
+			echo '<input type="hidden" name="destination_course" 	value="'.$hidden_fields['destination_course'].'"/>';		
+			echo '<input type="hidden" name="origin_course" 		value="'.$hidden_fields['origin_course'].'"/>';
+			echo '<input type="hidden" name="destination_session" 	value="'.$hidden_fields['destination_session'].'"/>';
+			echo '<input type="hidden" name="origin_session" 		value="'.$hidden_fields['origin_session'].'"/>';
 		}
 
 		foreach ($course->resources as $type => $resources) {
@@ -116,13 +117,13 @@ class CourseSelectForm
 						echo '<blockquote>';
 						echo "[<a href=\"javascript: void(0);\" onclick=\"javascript: setCheckbox('$type',true);\" >".get_lang('All')."</a> | <a href=\"javascript: void(0);\" onclick=\"javascript:setCheckbox('$type',false);\" >".get_lang('None')."</a>]";
 						echo '<br />';
+						
 						foreach ($resources as $id => $resource) {
-							echo '<input type="checkbox" name="resource['.$type.']['.$id.']" id="resource['.$type.']['.$id.']"/>';
+							echo '<input type="checkbox" name="resource['.$type.']['.$id.']"  id="resource['.$type.']['.$id.']" />';
 							echo ' <label for="resource['.$type.']['.$id.']">';
 							$resource->show();
 							echo '</label>';
-							echo '<br />';
-							echo "\n";
+							echo '<br />';							
 						}
 						echo '</blockquote>';
 						echo '</div>';
@@ -140,14 +141,13 @@ class CourseSelectForm
 		echo '<input type="hidden" name="course" value="'.base64_encode(serialize($course)).'"/>';
 
 		if (is_array($hidden_fields)) {
-			foreach ($hidden_fields as $key => $value) {
-				echo "\n";
+			foreach ($hidden_fields as $key => $value) {				
 				echo '<input type="hidden" name="'.$key.'" value="'.$value.'"/>';
 			}
 		}
 
 		if (!empty($hidden_fields['destination_session'])) {
-			echo '<br /><button class="save" type="submit" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset))."'".')) return false;" >'.get_lang('Ok').'</button>';
+			echo '<br /><button class="save" type="submit" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES, $charset))."'".')) return false;" >'.get_lang('Ok').'</button>';
 		} else {
 			echo '<br /><button class="save" type="submit" onclick="checkLearnPath(\''.addslashes(get_lang('DocumentsWillBeAddedToo')).'\')">'.get_lang('Ok').'</button>';
 		}
@@ -159,15 +159,14 @@ class CourseSelectForm
 	}
 
 
-	function display_hidden_quiz_questions($course)
-	{
+	function display_hidden_quiz_questions($course) {
 		if(is_array($course->resources)){
 			foreach ($course->resources as $type => $resources) {
 				if (count($resources) > 0) {
 					switch ($type) {
 						case RESOURCE_QUIZQUESTION:
 							foreach ($resources as $id => $resource) {
-								echo '<input type="hidden" name="resource['.RESOURCE_QUIZQUESTION.']['.$id.'] id="resource['.RESOURCE_QUIZQUESTION.']['.$id.']" value="On" />';
+								echo '<input type="hidden" name="resource['.RESOURCE_QUIZQUESTION.']['.$id.']" id="resource['.RESOURCE_QUIZQUESTION.']['.$id.']" value="On" />';
 							}
 							break;
 
@@ -177,15 +176,14 @@ class CourseSelectForm
 		}
 	}
 
-	function display_hidden_scorm_directories($course)
-	{
+	function display_hidden_scorm_directories($course) {
 			if(is_array($course->resources)){
 			foreach ($course->resources as $type => $resources) {
 				if(count($resources) > 0) {
 					switch($type) {
 						case RESOURCE_SCORM:
 							foreach ($resources as $id=>$resource) {
-								echo '<input type="hidden" name="resource['.RESOURCE_SCORM.']['.$id.'] id="resource['.RESOURCE_SCORM.']['.$id.']" value="On" />';
+								echo '<input type="hidden" name="resource['.RESOURCE_SCORM.']['.$id.']" id="resource['.RESOURCE_SCORM.']['.$id.']" value="On" />';
 							}
 							break;
 					}
@@ -200,9 +198,9 @@ class CourseSelectForm
 	 * @return course The course-object with all resources selected by the user
 	 * in the form given by display_form(...)
 	 */
-	function get_posted_course($from='', $session_id = 0, $course_code = '')
-	{
+	function get_posted_course($from='', $session_id = 0, $course_code = '') {
 		$course = unserialize(base64_decode($_POST['course']));
+		print_r($course);
 		//Create the resource DOCUMENT objects
 		//Loading the results from the checkboxes of the javascript
 		$resource = $_POST['resource'][RESOURCE_DOCUMENT];

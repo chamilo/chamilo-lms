@@ -1,38 +1,16 @@
 <?php
-
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2004-2008 Dokeos SPRL
-	Copyright (c) 2003 Ghent University (UGent)
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
-	Mail: info@dokeos.com
-==============================================================================
-*/
+/* For licensing terms, see /license.txt */
 
 /**
-*	The Dokeos wiki is a further development of the CoolWiki plugin.
+*	The Chamilo wiki is a further development of the CoolWiki plugin.
 *
-*	@Author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
-* 	@Author Juan Carlos Raña <herodoto@telefonica.net>
-*	@Copyright Ghent University
-*	@Copyright Patrick Cool
+*	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
+* 	@author Juan Carlos Raña <herodoto@telefonica.net>
+*	@copyright Ghent University
+*	@copyright Patrick Cool
 *
-* 	@package dokeos.wiki
+* 	@package chamilo.wiki
 */
-
 
 // name of the language file that needs to be included
 $language_file = 'wiki';
@@ -90,9 +68,7 @@ $tbl_wiki_discuss = Database::get_course_table(TABLE_WIKI_DISCUSS);
 $tbl_wiki_mailcue = Database::get_course_table(TABLE_WIKI_MAILCUE);
 $tbl_wiki_conf = Database::get_course_table(TABLE_WIKI_CONF);
 /*
------------------------------------------------------------
 Constants and variables
------------------------------------------------------------
 */
 $tool_name = get_lang('ToolWiki');
 
@@ -103,58 +79,45 @@ $MonthsLong = array (get_lang("JanuaryLong"), get_lang("FebruaryLong"), get_lang
 	$condition_session = api_get_session_condition($session_id);
 
 /*
-----------------------------------------------------------
 ACCESS
------------------------------------------------------------
 */
 api_protect_course_script();
 api_block_anonymous_users();
 
 /*
------------------------------------------------------------
 TRACKING
------------------------------------------------------------
 */
 event_access_tool(TOOL_WIKI);
 
 /*
------------------------------------------------------------
 HEADER & TITLE
------------------------------------------------------------
 */
 // If it is a group wiki then the breadcrumbs will be different.
 if ($_SESSION['_gid'] OR $_GET['group_id']) {
 
 	if (isset($_SESSION['_gid'])) {
-		$_clean['group_id']=(int)$_SESSION['_gid'];
+		$_clean['group_id']=intval($_SESSION['_gid']);
 	}
 	if (isset($_GET['group_id'])) {
-		$_clean['group_id']=(int)Database::escape_string($_GET['group_id']);
+		$_clean['group_id']=intval($_GET['group_id']);
 	}
 
 	$group_properties  = GroupManager :: get_group_properties($_clean['group_id']);
 	$interbreadcrumb[] = array ("url" => "../group/group.php", "name" => get_lang('Groups'));
-	$interbreadcrumb[] = array ("url"=>"../group/group_space.php?gidReq=".$_SESSION['_gid'], "name"=> get_lang('GroupSpace').' ('.$group_properties['name'].')');
+	$interbreadcrumb[] = array ("url"=>"../group/group_space.php?gidReq=".$_clean['group_id'], "name"=> get_lang('GroupSpace').' ('.$group_properties['name'].')');
 
 	$add_group_to_title = ' ('.$group_properties['name'].')';
 	$groupfilter='group_id="'.$_clean['group_id'].'"';
 
 	//ensure this tool in groups whe it's private or deactivated
-	if 	($group_properties['wiki_state']==0)
-	{
+	if 	($group_properties['wiki_state']==0) {
 		echo api_not_allowed();
-	}
-	elseif ($group_properties['wiki_state']==2)
-	{
- 		if (!api_is_allowed_to_edit(false,true) and !GroupManager :: is_user_in_group($_user['user_id'], $_SESSION['_gid']))
-		{
+	} elseif ($group_properties['wiki_state']==2) {
+ 		if (!api_is_allowed_to_edit(false,true) and !GroupManager :: is_user_in_group($_user['user_id'], $_SESSION['_gid'])) {
 			echo api_not_allowed();
 		}
 	}
-
-}
-else
-{
+} else {
 	$groupfilter='group_id=0';
 }
 
@@ -165,82 +128,58 @@ $is_allowed_to_edit = api_is_allowed_to_edit(false,true);
 //api_display_tool_title($tool_name.$add_group_to_title);
 
 /*
------------------------------------------------------------
 INITIALISATION
------------------------------------------------------------
 */
 //the page we are dealing with
-if (!isset($_GET['title'])){
-
-	$page='index';
-}
-else
-{
-	$page=Security::remove_XSS($_GET['title']);
+if (!isset($_GET['title'])) {
+	$page = 'index';
+} else {
+	$page = Security::remove_XSS($_GET['title']);
 }
 
 // some titles are not allowed
 // $not_allowed_titles=array("Index", "RecentChanges","AllPages", "Categories"); //not used for now
 
 /*
-==============================================================================
 MAIN CODE
-==============================================================================
 */
 
 // Tool introduction
 Display::display_introduction_section(TOOL_WIKI);
 
-
 /*
------------------------------------------------------------
   			ACTIONS
------------------------------------------------------------
 */
 
 
 //release of blocked pages to prevent concurrent editions
 $sql='SELECT * FROM '.$tbl_wiki.'WHERE is_editing!="0" '.$condition_session;
 $result=Database::query($sql);
-while ($is_editing_block=Database::fetch_array($result))
-{
-	$max_edit_time=1200; // 20 minutes
-	$timestamp_edit=strtotime($is_editing_block['time_edit']);
-	$time_editing=time()-$timestamp_edit;
+while ($is_editing_block=Database::fetch_array($result)) {
+	$max_edit_time	= 1200; // 20 minutes
+	$timestamp_edit	= strtotime($is_editing_block['time_edit']);
+	$time_editing	= time()-$timestamp_edit;
 
 	//first prevent concurrent users and double version
-	if($is_editing_block['is_editing']==$_user['user_id'])
-	{
+	if($is_editing_block['is_editing']==$_user['user_id']) {
 		$_SESSION['_version']=$is_editing_block['version'];
-	}
-	else
-	{
+	} else {
 		unset ( $_SESSION['_version'] );
 	}
 	//second checks if has exceeded the time that a page may be available or if a page was edited and saved by its author
-	if ($time_editing>$max_edit_time || ($is_editing_block['is_editing']==$_user['user_id'] && $_GET['action']!='edit'))
-	{
+	if ($time_editing>$max_edit_time || ($is_editing_block['is_editing']==$_user['user_id'] && $_GET['action']!='edit')) {
 		$sql='UPDATE '.$tbl_wiki.' SET is_editing="0", time_edit="0000-00-00 00:00:00" WHERE is_editing="'.$is_editing_block['is_editing'].'" '.$condition_session;
 		Database::query($sql);
 	}
-
 }
 
-
 // saving a change
-if (isset($_POST['SaveWikiChange']) AND $_POST['title']<>'')
-{
-
-	if(empty($_POST['title']))
-	{
+if (isset($_POST['SaveWikiChange']) AND $_POST['title']<>'') {
+	if(empty($_POST['title'])) {
 		Display::display_error_message(get_lang("NoWikiPageTitle"));
-	}
-	elseif(!double_post($_POST['wpost_id']))
-	{
+	} elseif(!double_post($_POST['wpost_id'])) {
 		//double post
-	}
-	elseif ($_POST['version']!='' && $_SESSION['_version']!=0 && $_POST['version']!=$_SESSION['_version'])
-	{
+	} elseif ($_POST['version']!='' && $_SESSION['_version']!=0 && $_POST['version']!=$_SESSION['_version']) {
 		//prevent concurrent users and double version
 		Display::display_error_message(get_lang("EditedByAnotherUser"));
 	}
@@ -404,8 +343,7 @@ if ($_GET['action']=='deletewiki'){
 }
 
 
-if ($_GET['action']=='discuss' && $_POST['Submit'])
-{
+if ($_GET['action']=='discuss' && $_POST['Submit']) {
    		Display::display_confirmation_message(get_lang('CommentAdded'));
 }
 
@@ -2266,8 +2204,7 @@ if ($_GET['action']=='discuss')
 				</form>
 
 				<?php
-				if (isset($_POST['Submit']) && double_post($_POST['wpost_id']))
-				{
+				if (isset($_POST['Submit']) && double_post($_POST['wpost_id'])) {
 					$dtime = date( "Y-m-d H:i:s" );
 					$message_author=api_get_user_id();
 

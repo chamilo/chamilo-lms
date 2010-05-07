@@ -1,25 +1,5 @@
 <?php
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2004-2008 Dokeos SPRL
-	Copyright (c) 2003 Ghent University (UGent)
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact address: Dokeos, rue du Corbeau, 108, B-1030 Brussels, Belgium
-	Mail: info@dokeos.com
-==============================================================================
-*/
+/* For licensing terms, see /license.txt */
 
 /**
 *	The Dokeos wiki is a further development of the CoolWiki plugin.
@@ -29,13 +9,11 @@
 *	@Copyright Ghent University
 *	@Copyright Patrick Cool
 *
-* 	@package dokeos.wiki
+* 	@package chamilo.wiki
 */
 
 /*
-==============================================================================
 FUNCTIONS FOR WIKI
-==============================================================================
 */
 
 
@@ -330,25 +308,25 @@ function save_wiki() {
 		$_clean['fprogress3']=Database::escape_string(Security::remove_XSS($_POST['fprogress3']));
 	}
 
-		if(Security::remove_XSS($_POST['initstartdate']==1))
-		{
-			$_clean['startdate_assig']=Database::escape_string(Security::remove_XSS(get_date_from_select('startdate_assig')));
-		}
-		else
-		{
-			$_clean['startdate_assig']=Database::escape_string(Security::remove_XSS($_POST['startdate_assig']));
-		}
+	if(Security::remove_XSS($_POST['initstartdate']==1))
+	{
+		$_clean['startdate_assig']=Database::escape_string(Security::remove_XSS(get_date_from_select('startdate_assig')));
+	}
+	else
+	{
+		$_clean['startdate_assig']=Database::escape_string(Security::remove_XSS($_POST['startdate_assig']));
+	}
 
-		if(Security::remove_XSS($_POST['initenddate']==1))
-		{
-			$_clean['enddate_assig']=Database::escape_string(Security::remove_XSS(get_date_from_select('enddate_assig')));
-		}
-		else
-		{
-			$_clean['enddate_assig']=Database::escape_string(Security::remove_XSS($_POST['enddate_assig']));
-		}
+	if(Security::remove_XSS($_POST['initenddate']==1))
+	{
+		$_clean['enddate_assig']=Database::escape_string(Security::remove_XSS(get_date_from_select('enddate_assig')));
+	}
+	else
+	{
+		$_clean['enddate_assig']=Database::escape_string(Security::remove_XSS($_POST['enddate_assig']));
+	}
 
-		$_clean['delayedsubmit']=Database::escape_string(Security::remove_XSS($_POST['delayedsubmit']));
+	$_clean['delayedsubmit']=Database::escape_string(Security::remove_XSS($_POST['delayedsubmit']));
 
 	if(!empty($_POST['max_text']) || !empty($_POST['max_version']))
 	{
@@ -383,11 +361,8 @@ function save_wiki() {
 		$sql='UPDATE'.$tbl_wiki_conf.' SET task="'.$_clean['task'].'", feedback1="'.$_clean['feedback1'].'", feedback2="'.$_clean['feedback2'].'", feedback3="'.$_clean['feedback3'].'",  fprogress1="'.$_clean['fprogress1'].'",  fprogress2="'.$_clean['fprogress2'].'",  fprogress3="'.$_clean['fprogress3'].'", max_text="'.$_clean['max_text'].'", max_version="'.$_clean['max_version'].'", startdate_assig="'.$_clean['startdate_assig'].'", enddate_assig="'.$_clean['enddate_assig'].'", delayedsubmit="'.$_clean['delayedsubmit'].'" WHERE page_id="'.$_clean['page_id'].'"';
 	}
 	Database::query($sql);
-
 	api_item_property_update($_course, 'wiki', $Id, 'WikiAdded', api_get_user_id(), $_clean['group_id']);
-
 	check_emailcue($_clean['reflink'], 'P', $dtime, $_clean['user_id']);
-
 	return get_lang('ChangesStored');
 }
 
@@ -397,9 +372,7 @@ function save_wiki() {
 **/
 function restore_wikipage($r_page_id, $r_reflink, $r_title, $r_content, $r_group_id, $r_assignment, $r_progress, $c_version, $r_version, $r_linksto)
 {
-
 	global $tbl_wiki, $_course;
-
 	$r_user_id= api_get_user_id();
 	$r_dtime = date( "Y-m-d H:i:s" );
 	$r_version = $r_version+1;

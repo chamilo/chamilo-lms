@@ -3060,8 +3060,8 @@ function agenda_add_repeat_item($course_info,$orig_id,$type,$end,$orig_dest)
  * @return  boolean True on success, false otherwise
  */
 
-function agenda_import_ical($course_info,$file)
-{
+function agenda_import_ical($course_info,$file) {
+	
 	require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
     $charset = api_get_setting('platform_charset');
     $filepath = api_get_path(SYS_ARCHIVE_PATH).$file['name'];
@@ -3072,12 +3072,12 @@ function agenda_import_ical($course_info,$file)
     }
     require_once api_get_path(LIBRARY_PATH).'icalcreator/iCalcreator.class.php';
     $ical = new vcalendar();
-    $ical->setConfig( 'directory', dirname($filepath) );
-    $ical->setConfig( 'filename', basename($filepath) );
+    $ical->setConfig('directory', dirname($filepath) );
+    $ical->setConfig('filename', basename($filepath) );
     $ical->parse();
     //we need to recover: summary, description, dtstart, dtend, organizer, attendee, location (=course name),
     // rrule
-    $ve = $ical->getComponent(0);
+    $ve = $ical->getComponent(VEVENT);
     //print_r($ve);
     $ttitle = $ve->getProperty('summary');
     //print_r($ttitle);

@@ -1,12 +1,12 @@
 <?php
-/* For licensing terms, see /dokeos_license.txt */
+/* For licensing terms, see /license.txt */
 
 $language_file='admin';
 $cidReset=true;
 
-include('../inc/global.inc.php');
-require_once (api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php');
-require_once (api_get_path(LIBRARY_PATH).'sessionmanager.lib.php');
+require_once  '../inc/global.inc.php';
+require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
+require_once api_get_path(LIBRARY_PATH).'sessionmanager.lib.php';
 
 api_protect_admin_script(true);
 // setting the section (for the tabs)

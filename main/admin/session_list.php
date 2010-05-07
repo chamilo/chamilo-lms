@@ -1,10 +1,10 @@
 <?php
 /* For licensing terms, see /license.txt */
-$language_file='admin';
-$cidReset=true;
+
+$language_file = 'admin';
+$cidReset = true;
 
 require_once '../inc/global.inc.php';
-
 require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
 require_once api_get_path(LIBRARY_PATH).'sessionmanager.lib.php';
 
@@ -202,10 +202,11 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
 	?>
 	<div class="actions">
 	<?php
-
-	echo '<div style="float:right;">
-		<a href="'.api_get_path(WEB_CODE_PATH).'admin/session_add.php">'.Display::return_icon('view_more_stats.gif',get_lang('AddSession')).get_lang('AddSession').'</a>
-		<a href="'.api_get_path(WEB_CODE_PATH).'admin/add_many_session_to_category.php">'.Display::return_icon('view_more_stats.gif',get_lang('AddSessionsInCategories')).get_lang('AddSessionsInCategories').'</a>
+	echo '<div style="float:right;">';
+		if (!isset($_GET['id_category'])) {
+			echo '<a href="'.api_get_path(WEB_CODE_PATH).'admin/session_add.php">'.Display::return_icon('view_more_stats.gif',get_lang('AddSession')).get_lang('AddSession').'</a>';
+		}
+		echo '<a href="'.api_get_path(WEB_CODE_PATH).'admin/add_many_session_to_category.php">'.Display::return_icon('view_more_stats.gif',get_lang('AddSessionsInCategories')).get_lang('AddSessionsInCategories').'</a>
 	  </div>';
 	?>
 	<form method="POST" action="session_list.php">
@@ -220,7 +221,11 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
 	<?php
 	//if(count($Sessions)==0 && isset($_POST['keyword'])) {
 	if(count($Sessions)==0) {
-		echo get_lang('NoSearchResults');
+		if (isset($_GET['id_category'])) {
+			echo get_lang('NoSession');
+		} else {
+			echo get_lang('NoSearchResults');
+		}
 		echo '	</div>';
 	} else {
 		if($num>$limit){

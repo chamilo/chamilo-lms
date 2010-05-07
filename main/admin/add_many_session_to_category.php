@@ -160,6 +160,23 @@ if(!empty($errorMsg)) {
 if(!empty($OkMsg)) {
 	Display::display_confirmation_message($OkMsg); //main API
 }
+
+/* 
+ * 
+ * The a/b/c Filter is not a priority 
+ *  
+ * <td width="45%" align="center">
+ <?php echo get_lang('FirstLetterCourse'); ?> :
+     <select name="firstLetterCourse" onchange = "xajax_search_courses(this.value,'multiple')">
+      <option value="%">--</option>
+      <?php
+      echo Display :: get_alphabet_options();
+      echo Display :: get_numeric_options(0,9,'');
+      ?>
+     </select>
+</td>
+
+ */
 ?>
 <table border="0" cellpadding="5" cellspacing="0" width="100%" align="center">
 <tr>
@@ -187,16 +204,7 @@ if(!empty($OkMsg)) {
 </tr>
 
 <?php if($add_type == 'multiple') { ?>
-<tr><td width="45%" align="center">
- <?php echo get_lang('FirstLetterCourse'); ?> :
-     <select name="firstLetterCourse" onchange = "xajax_search_courses(this.value,'multiple')">
-      <option value="%">--</option>
-      <?php
-      echo Display :: get_alphabet_options();
-      echo Display :: get_numeric_options(0,9,'');
-      ?>
-     </select>
-</td>
+<tr>
 <td>&nbsp;</td></tr>
 <?php } ?>
 <tr>

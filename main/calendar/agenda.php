@@ -163,14 +163,13 @@ if (isset($_GET['toolgroup']) && $_GET['toolgroup']==strval(intval($_GET['toolgr
 	echo "<link rel=\"stylesheet\" type=\"text/css\" href=\"".$clarolineRepositoryWeb."css/default.css\"/>";
 }
 
-/* ==============================================================================
+/* 
   			TRACKING
-==============================================================================  */
+ */
 event_access_tool(TOOL_CALENDAR_EVENT);
 
-/* ==============================================================================
-  			SETTING SOME VARIABLES
-============================================================================== */
+/*   			SETTING SOME VARIABLES
+*/
 // Variable definitions
 // Defining the shorts for the days. We use camelcase because these are arrays of language variables
 $DaysShort = api_get_week_days_short();
@@ -190,15 +189,13 @@ $tbl_session_course_user= Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USE
 
 
 
-/* ==============================================================================
-  			ACCESS RIGHTS
-============================================================================== */
+/*   			ACCESS RIGHTS
+*/
 // permission stuff - also used by loading from global in agenda.inc.php
 $is_allowed_to_edit = api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous());
 
-/* ==============================================================================
-  			TITLE
-============================================================================== */
+/*   			TITLE
+*/
 // Displaying the title of the tool
 //api_display_tool_title($nameTools);
 
@@ -209,9 +206,7 @@ Display::display_introduction_section(TOOL_CALENDAR_EVENT);
 echo '<a name="top"></a>';
 
 /*
-==============================================================================
 		MAIN SECTION
-==============================================================================
 */
 
 //setting the default year and month
@@ -404,12 +399,12 @@ if (!$_GET['action'] || $_GET['action']=="showall"  || $_GET['action']=="showcur
 	if ($_GET['origin'] != 'learnpath') {
 		if (!$_SESSION['view'] || $_SESSION['view'] <> 'month') {
             if(!empty($_GET['agenda_id'])) {
-                 display_one_agenda_item((int)$_GET['agenda_id']);
+                display_one_agenda_item((int)$_GET['agenda_id']);
             } else {
-			    display_agenda_items();
+			   display_agenda_items();
             }
 		} else {
-				display_monthcalendar($select_month, $select_year);
+			display_monthcalendar($select_month, $select_year);
 		}
 	} else {
 		display_one_agenda_item((int)$_GET['agenda_id']);

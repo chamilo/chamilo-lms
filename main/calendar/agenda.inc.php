@@ -59,8 +59,8 @@ function get_calendar_items($month, $year) {
 	global $_user, $_course;
 	global $is_allowed_to_edit;
 	global $select_month, $select_year;
-	$month=Database::escape_string($month);
-	$year=Database::escape_string($year);
+	$month	= Database::escape_string($month);
+	$year	= Database::escape_string($year);
 
 	// database variables
 	$TABLEAGENDA=Database::get_course_table(TABLE_AGENDA);
@@ -68,8 +68,7 @@ function get_calendar_items($month, $year) {
 
     $month_first_day = mktime(0,0,0,$month,1,$year);
     $month_last_day  = mktime(0,0,0,$month+1,1,$year)-1;
-    if($month==12)
-    {
+    if($month==12) {
         $month_last_day = mktime(0,0,0,1,1,$year+1)-1;
     }
 
@@ -79,32 +78,25 @@ function get_calendar_items($month, $year) {
 	//$session_condition = intval($_SESSION['id_session'])==0 ? '' : ' AND agenda.session_id IN (0,'.intval($_SESSION['id_session']).') ';
 
 
-	/*--------------------------------------------------
-			CONSTRUCT THE SQL STATEMENT
-	  --------------------------------------------------*/
+	/*		CONSTRUCT THE SQL STATEMENT
+	*/
 
     $start = 0;
     $stop = 0;
 	// this is to make a difference between showing everything (all months) or only the current month)
 	// $show_all_current is a part of the sql statement
-	if ($_SESSION['show']!=="showall")
-	{
+	if ($_SESSION['show']!=="showall") {
 		$show_all_current=" AND MONTH(start_date)=$select_month AND year(start_date)=$select_year";
         $start = mktime(0,0,0,$select_month,1,$select_year);
         $stop = 0;
         if(empty($select_year)){$select_year = date('Y');}
         if(empty($select_month)){$select_month = date('m');}
-        if($select_month==12)
-        {
+        if($select_month==12) {
             $stop = mktime(0,0,0,1,1,$select_year+1)-1;
-        }
-        else
-        {
+        } else {
             $stop = mktime(0,0,0,$select_month+1,1,$select_year)-1;
         }
-	}
-	else
-	{
+	} else {
 		$show_all_current="";
         $start = time();
         $stop = mktime(0,0,0,1,1,2038);//by default, set year to maximum for mktime()
@@ -112,8 +104,7 @@ function get_calendar_items($month, $year) {
 
 	// by default we use the id of the current user. The course administrator can see the agenda of other users by using the user / group filter
 	$user_id=$_user['user_id'];
-	if ($_SESSION['user']!==null)
-	{
+	if ($_SESSION['user']!==null) {
 		$user_id=intval($_SESSION['user']);
 	}
 	if ($_SESSION['group']!==null)
@@ -133,15 +124,12 @@ function get_calendar_items($month, $year) {
 	$session_condition = api_get_session_condition($_SESSION['id_session']);
 	//$session_condition = intval($_SESSION['id_session'])==0 ? '' : ' AND agenda.session_id IN (0,'.intval($_SESSION['id_session']).') ';
 
-	if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous()))
-	{
+	if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous())) {
 		// A.1. you are a course admin with a USER filter
 		// => see only the messages of this specific user + the messages of the group (s)he is member of.
-		if (!empty($_SESSION['user']))
-		{
+		if (!empty($_SESSION['user'])) {			
 			$group_memberships=GroupManager::get_group_ids($_course['dbName'],$_SESSION['user']);
-			if (is_array($group_memberships) && count($group_memberships)>0)
-			{
+			if (is_array($group_memberships) && count($group_memberships)>0) {
 				$sql="SELECT
 					agenda.*, ip.visibility, ip.to_group_id, ip.insert_user_id, ip.ref
 					FROM ".$TABLEAGENDA." agenda, ".$TABLE_ITEM_PROPERTY." ip
@@ -151,9 +139,7 @@ function get_calendar_items($month, $year) {
 					AND ip.visibility='1'
 					$session_condition
 					ORDER BY start_date ".$_SESSION['sort'];
-			}
-			else
-			{
+			}  else {
 				$sql="SELECT
 					agenda.*, ip.visibility, ip.to_group_id, ip.insert_user_id, ip.ref
 					FROM ".$TABLEAGENDA." agenda, ".$TABLE_ITEM_PROPERTY." ip
@@ -167,8 +153,8 @@ function get_calendar_items($month, $year) {
 		}
 		// A.2. you are a course admin with a GROUP filter
 		// => see only the messages of this specific group
-		elseif (!empty($_SESSION['group']))
-		{
+		elseif (!empty($_SESSION['group'])) {
+			
 			$sql="SELECT
 				agenda.*, ip.visibility, ip.to_group_id, ip.insert_user_id, ip.ref
 				FROM ".$TABLEAGENDA." agenda, ".$TABLE_ITEM_PROPERTY." ip
@@ -181,12 +167,11 @@ function get_calendar_items($month, $year) {
 				ORDER BY start_date ".$_SESSION['sort'];
 		}
 		// A.3 you are a course admin without any group or user filter
-		else
-		{
+		else {
+						
 			// A.3.a you are a course admin without user or group filter but WITH studentview
 			// => see all the messages of all the users and groups without editing possibilities
-			if ($_GET['isStudentView']=='true')
-			{
+			if ($_GET['isStudentView']=='true') {
 				$sql="SELECT
 					agenda.*, ip.visibility, ip.to_group_id, ip.insert_user_id, ip.ref
 					FROM ".$TABLEAGENDA." agenda, ".$TABLE_ITEM_PROPERTY." ip
@@ -196,12 +181,10 @@ function get_calendar_items($month, $year) {
 					$session_condition
 					GROUP BY ip.ref
 					ORDER BY start_date ".$_SESSION['sort'];
-
 			}
 			// A.3.b you are a course admin without user or group filter and WITHOUT studentview (= the normal course admin view)
 			// => see all the messages of all the users and groups with editing possibilities
-			else
-			{
+			else {
 				$sql="SELECT
 					agenda.*, ip.visibility, ip.to_group_id, ip.insert_user_id, ip.ref
 					FROM ".$TABLEAGENDA." agenda, ".$TABLE_ITEM_PROPERTY." ip
@@ -217,10 +200,8 @@ function get_calendar_items($month, $year) {
 	} //if (is_allowed_to_edit() OR( api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous()))
 
 	// B. you are a student
-	else
-	{
-		if (is_array($group_memberships) and count($group_memberships)>0)
-		{
+	else {
+		if (is_array($group_memberships) and count($group_memberships)>0) {
 			$sql="SELECT
 				agenda.*, ip.visibility, ip.to_group_id, ip.insert_user_id, ip.ref
 				FROM ".$TABLEAGENDA." agenda, ".$TABLE_ITEM_PROPERTY." ip
@@ -230,11 +211,8 @@ function get_calendar_items($month, $year) {
 				AND ip.visibility='1'
 				$session_condition
 				ORDER BY start_date ".$_SESSION['sort'];
-		}
-		else
-		{
-			if ($_user['user_id'])
-			{
+		} else {
+			if ($_user['user_id']) {
 				$sql="SELECT
 					agenda.*, ip.visibility, ip.to_group_id, ip.insert_user_id, ip.ref
 					FROM ".$TABLEAGENDA." agenda, ".$TABLE_ITEM_PROPERTY." ip
@@ -244,9 +222,7 @@ function get_calendar_items($month, $year) {
 					AND ip.visibility='1'
 					$session_condition
 					ORDER BY start_date ".$_SESSION['sort'];
-			}
-			else
-			{
+			} else {
 				$sql="SELECT
 					agenda.*, ip.visibility, ip.to_group_id, ip.insert_user_id, ip.ref
 					FROM ".$TABLEAGENDA." agenda, ".$TABLE_ITEM_PROPERTY." ip
@@ -260,7 +236,7 @@ function get_calendar_items($month, $year) {
 		}
 	} // you are a student
 
-	//echo "<pre>".$sql."</pre>";
+	
 	$result=Database::query($sql) or die(Database::error());
 
 	/////////////////
@@ -382,7 +358,7 @@ function display_monthcalendar($month, $year)
 	global $origin;
 
 	// grabbing all the calendar items for this year and storing it in a array
-	$data=get_calendar_items($month,$year);
+	$data = get_calendar_items($month,$year);
 //	$data_global=get_global_calendar_items($month,$year);
 //	$data_global=get_global_agenda_items($agendaitems, $day, $month, $year, $week, $type);
 	//Handle leap year
@@ -408,78 +384,75 @@ function display_monthcalendar($month, $year)
 
 	echo "<tr>\n";
 
-	for ($ii=1;$ii<8; $ii++)
-	{
+	for ($ii=1;$ii<8; $ii++) {
 		echo "<td class=\"weekdays\" width=\"14%\">",$DaysShort[$ii%7],"</td>\n";
 	}
 
 	echo "</tr>\n";
 	$curday = -1;
 	$today = getdate();
-	while ($curday <=$numberofdays[$month])
-  	{
-		echo "<tr>\n";
-    	for ($ii=0; $ii<7; $ii++)
-	  	{
-	  		if (($curday == -1)&&($ii==$startdayofweek))
-			{
-	    		$curday = 1;
-			}
-			if (($curday>0)&&($curday<=$numberofdays[$month]))
-			{
-				$bgcolor = $ii<5 ? "class=\"row_odd\"" : "class=\"row_even\"";
-
-				$dayheader = "$curday";
-
-				if (key_exists($curday,$data)) {
-					$dayheader="<a href='".api_get_self()."?".api_get_cidreq()."&amp;sort=asc&amp;toolgroup=".Security::remove_XSS($_GET['toolgroup'])."&amp;view=list&amp;origin=$origin&amp;month=$month&amp;year=$year&amp;day=$curday#$curday'>".$curday."</a>";
-					foreach ($data[$curday] as $key=>$agenda_item)
-					{
-						foreach ($agenda_item as $key=>$value) {
-							$month_start_date = (int)substr($value['start_date'],5,2);
-							if ($month == $month_start_date) {
-								$start_time = api_convert_and_format_date($value['start_date'], TIME_NO_SEC_FORMAT, date_default_timezone_get());
-								$end_time = api_convert_and_format_date($value['end_date'], TIME_NO_SEC_FORMAT, date_default_timezone_get());
-
-								if ($value['end_date']=='0000-00-00 00:00:00'){
-									$dayheader .= '<br />'.get_lang("Work").'<br />';
-									$dayheader .= $value['title'];
-									$dayheader .= '<br/>';
+	echo '<pre>';
+	//print_r($data);
+	while ($curday <= $numberofdays[$month]) {
+		echo '<tr>';
+			//week
+	    	for ($ii=0; $ii<7; $ii++) {	    		
+		  		if (($curday == -1)&&($ii==$startdayofweek)) {
+		    		$curday = 1;
+				}
+				
+				if (($curday>0)&&($curday<=$numberofdays[$month])) {
+					
+					$bgcolor = $ii<5 ? "class=\"row_odd\"" : "class=\"row_even\"";
+					$dayheader = "$curday";
+					
+					if (key_exists($curday, $data)) {					
+						foreach ($data[$curday] as $key=>$agenda_item) {							
+							foreach ($agenda_item as $key=>$value) {							
+								$month_start_date = (int)substr($value['start_date'],5,2);	
+								$start_time = api_convert_and_format_date($value['start_date']);												
+								if ($month == $month_start_date) {
+									
+									$start_time = api_convert_and_format_date($value['start_date'], TIME_NO_SEC_FORMAT, date_default_timezone_get());
+									$end_time = api_convert_and_format_date($value['end_date'], TIME_NO_SEC_FORMAT, date_default_timezone_get());
+									
+									$dayheader="<a href='".api_get_self()."?".api_get_cidreq()."&amp;sort=asc&amp;toolgroup=".Security::remove_XSS($_GET['toolgroup'])."&amp;view=list&amp;origin=$origin&amp;month=$month&amp;year=$year&amp;day=$curday#$curday'>".$curday."</a>";
+									
+									if ($value['end_date']=='0000-00-00 00:00:00'){
+										
+										$dayheader .= '<br />'.get_lang('Work').'<br />';
+										$dayheader .= $value['title'];
+										$dayheader .= '<br/>';
+									} else {
+										$dayheader .= '<br />'.get_lang('StartTimeWindow').'&nbsp;<i>'.$start_time.'</i>&nbsp;-&nbsp;'.get_lang('EndTimeWindow').'&nbsp;<i>'.$end_time.'&nbsp;</i>';
+										$dayheader .= '<br />';
+										$dayheader .= $value['title'];
+										$dayheader .= '<br/>';
+									}								
 								} else {
-									$dayheader .= '<br />'.get_lang("StartTimeWindow").'&nbsp;<i>'.$start_time.'</i>&nbsp;-&nbsp;'.get_lang("EndTimeWindow").'&nbsp;<i>'.$end_time.'&nbsp;</i>';
-									$dayheader .= '<br />';
-									$dayheader .= $value['title'];
-									$dayheader .= '<br/>';
+									//$dayheader=$curday;
 								}
+									//$agendaitems = get_global_agenda_items($agendaitems, $curday, $month, $year, $startdayofweek, "month_view");
+									//echo $agendaitems['title'];
 							}
-								//$agendaitems = get_global_agenda_items($agendaitems, $curday, $month, $year, $startdayofweek, "month_view");
-								//echo $agendaitems['title'];
 						}
-
 					}
-				}
-
-				if (($curday==$today['mday'])&&($year ==$today['year'])&&($month == $today['mon']))
-				{
-			echo "<td id=\"today\" ",$bgcolor,"\">".$dayheader." \n";
-      }
-				else
-				{
-			echo "<td id=\"days\" ",$bgcolor,"\">".$dayheader." \n";
-				}
-			echo "</td>\n";
-
-	      		$curday++;
-	    }
-	  		else
-	    {
-	echo "<td>&nbsp;</td>";
-
-	    }
+					
+					if (($curday==$today['mday']) && ($year ==$today['year'])&&($month == $today['mon'])) {
+						echo "<td id=\"today\" ",$bgcolor,"\">".$dayheader." juli\n";
+	      			} else {
+						echo "<td id=\"days\" ",$bgcolor,"\">".$dayheader."22 \n";
+					}
+					
+					echo "</td>";
+		      		$curday++;
+			} else {
+				echo "<td>&nbsp;</td>";
+			}
 		}
 	echo "</tr>";
-    }
-echo "</table>";
+    } // end while
+	echo "</table>";
 }
 
 

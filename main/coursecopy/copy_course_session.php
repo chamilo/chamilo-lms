@@ -5,6 +5,7 @@
  * Copy resources from one course in a session to another one.
  *
  * @author Christian Fasanando <christian.fasanando@dokeos.com>
+ * @author Julio Montoya	<gugli100@gmail.com>
  * @package chamilo.backup
  */
 
@@ -50,15 +51,15 @@ $tbl_course							= Database::get_main_table(TABLE_MAIN_COURSE);
 /* FUNCTIONS */
 
 function make_select_session_list($name, $sessions, $attr = array()) {
-
+	
 	$attrs = '';
 	if (count($attr) > 0) {
 		foreach ($attr as $key => $value) {
-			$attrs .= ' '.$key.'='.$value. ' ';
+			$attrs .= ' '.$key.'="'.$value.'"';
 		}
-	}
-
+	}	
 	$output = '<select name="'.$name.'" '.$attrs.'>';
+	
 	if (count($sessions) == 0) {
 		$output .= '<option value = "0">'.get_lang('ThereIsNotStillASession').'</option>';
 	} else {
@@ -110,7 +111,7 @@ function display_form() {
 	$html .= '<label for="copy_option_1">'.get_lang('FullCopy').'</label><br/>';
 	$html .= '<input type="radio" class="checkbox" id="copy_option_2" name="copy_option" value="select_items" disabled="disabled"/>';
 	$html .= '<label for="copy_option_2"><span id="title_option2" style="color:#aaa">'.get_lang('LetMeSelectItems').'</span></label><br/><br/>';
-	$html .= '<button class="save" type="submit" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"), ENT_QUOTES))."'".')) return false;">'.get_lang('CopyCourse').'</button></div>';
+	$html .= '<button class="save" type="submit" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES))."'".')) return false;">'.get_lang('CopyCourse').'</button></div>';
 
 	$html .= '</td><td width="30%" align="center">';
 	$html .= '<div id="ajax_list_courses_destination">';
@@ -121,7 +122,7 @@ function display_form() {
 }
 
 function search_courses($id_session, $type) {
-
+	
 	global $tbl_course, $tbl_session_rel_course, $course_list;
 
 	$xajax_response = new XajaxResponse();
@@ -188,7 +189,8 @@ function search_courses($id_session, $type) {
 			$xajax_response -> addAssign('ajax_list_courses_destination', 'innerHTML', api_utf8_encode($select_multiple_empty));
 
 		} else {
-
+			//Left Select - Destination
+			
 			$list_courses_origin = implode(',', $_SESSION['course_list']);
 			$session_origin = $_SESSION['session_origin'];
 
@@ -196,12 +198,13 @@ function search_courses($id_session, $type) {
 			$sql = "SELECT c.code, c.visual_code, c.title, src.id_session
 					FROM $tbl_course c, $tbl_session_rel_course src
 					WHERE src.course_code = c.code
-					AND src.id_session = '".intval($id_session)."'
-					AND c.code IN ($list_courses_origin)";
+					AND src.id_session = '".intval($id_session)."'";
+					//AND c.code IN ($list_courses_origin)";
 			$rs = Database::query($sql);
 
 			$course_list_destination = array();
-			$return .= '<select id="destination" name="SessionCoursesListDestination[]" multiple="multiple" size="20" style="width:320px;" onmouseover="javascript: this.disabled=true;" onmouseout="javascript: this.disabled=false;">';
+			//onmouseover="javascript: this.disabled=true;" onmouseout="javascript: this.disabled=false;"
+			$return .= '<select id="destination" name="SessionCoursesListDestination[]" multiple="multiple" size="20" style="width:320px;" >';
 			while ($course = Database :: fetch_array($rs)) {
 				$course_list_destination[] = $course['code'];
 				$course_title = str_replace("'", "\'", $course_title);
@@ -212,7 +215,7 @@ function search_courses($id_session, $type) {
 
 			// Send response by ajax
 			$xajax_response -> addAssign('ajax_list_courses_destination', 'innerHTML', api_utf8_encode($return));
-
+/*
 			// Disable option from session courses list origin where if no the same con the destination
 			$sql = "SELECT c.code, c.visual_code, c.title, src.id_session
 					FROM $tbl_course c, $tbl_session_rel_course src
@@ -237,9 +240,9 @@ function search_courses($id_session, $type) {
 					}
 				}
 			}
-			$return_option_disabled .= '</select>';
+			$return_option_disabled .= '</select>';*/
 			// Send response by ajax
-			$xajax_response -> addAssign('ajax_list_courses_origin', 'innerHTML', api_utf8_encode($return_option_disabled));
+			//$xajax_response -> addAssign('ajax_list_courses_origin', 'innerHTML', api_utf8_encode($return_option_disabled));
 		}
 	}
 	return $xajax_response;
@@ -332,7 +335,7 @@ if ((isset($_POST['action']) && $_POST['action'] == 'course_select_form') || (is
 		}
 
 		if ((is_array($arr_course_origin) && count($arr_course_origin) > 0) && !empty($destination_session)) {
-
+			//var_dump($arr_course_origin);exit;
 			foreach ($arr_course_origin as $course_origin) {
 
 				$cb = new CourseBuilder();

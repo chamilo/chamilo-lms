@@ -27,8 +27,7 @@ require_once 'wiki.class.php';
  * @author Bart Mollet <bart.mollet@hogent.be>
  * @package dokeos.backup
  */
-class CourseBuilder
-{
+class CourseBuilder {
 	/**
 	 * The course
 	 */
@@ -36,28 +35,32 @@ class CourseBuilder
 	/**
 	 * Create a new CourseBuilder
 	 */
-	function CourseBuilder($type='')
-	{
+	function CourseBuilder($type='', $course = null) {
 		global $_course;
+		
+		if(!empty($course['official_code'])){
+			$_course = $course;
+		}	
+		
 		$this->course = new Course();
 		$this->course->code = $_course['official_code'];
 		$this->course->type = $type;
 		$this->course->path = api_get_path(SYS_COURSE_PATH).$_course['path'].'/';
 		$this->course->backup_path = api_get_path(SYS_COURSE_PATH).$_course['path'];
 		$this->course->encoding = api_get_system_encoding(); //current platform encoding
+		$this->course->db_name  = $_course['dbName'];
 	}
 	/**
 	 * Get the created course
 	 * @return course The course
 	 */
-	function get_course()
-	{
+	function get_course() {
 		return $this->course;
 	}
 	/**
 	 * Build the course-object
 	 */
-	function build($session_id = 0,$course_code = '') {
+	function build($session_id = 0, $course_code = '') {
 		
 		if (!empty($session_id) && !empty($course_code)) {
 			$course_info = api_get_course_info($course_code);
@@ -511,11 +514,11 @@ class CourseBuilder
 	 */
 	function build_events()
 	{
-		$table = Database :: get_course_table(TABLE_AGENDA);
+		$table = Database :: get_course_table(TABLE_AGENDA, $this->course->db_name);
 		$sql = 'SELECT * FROM '.$table.' WHERE session_id = 0';
 		$db_result = Database::query($sql);
 		while ($obj = Database::fetch_object($db_result)) {
-			$table_attachment = Database :: get_course_table(TABLE_AGENDA_ATTACHMENT);
+			$table_attachment = Database :: get_course_table(TABLE_AGENDA_ATTACHMENT, $this->course->db_name);
 			$sql = 'SELECT path, comment, filename, size  FROM '.$table_attachment.' WHERE agenda_id = '.$obj->id.'';
 			$result = Database::query($sql);
 			$attachment_obj = Database::fetch_object($result);			

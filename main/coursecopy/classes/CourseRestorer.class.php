@@ -57,6 +57,7 @@ class CourseRestorer
 	{
 		$this->file_option = $option;
 	}
+	
 	/**
 	 * Restore a course.
 	 * @param string $destination_course_code The code of the Dokeos-course in
@@ -95,7 +96,8 @@ class CourseRestorer
 		$this->course->to_system_encoding();
 
 		if (!empty($session_id)) {
-			$this->restore_documents($session_id,$destination_course_code);
+			
+			$this->restore_documents($session_id, $destination_course_code);
 			$this->restore_quizzes($session_id);
 			$this->restore_glossary($session_id);
 			$this->restore_learnpaths($session_id);
@@ -182,24 +184,25 @@ class CourseRestorer
 	/**
 	 * Restore documents
 	 */
-	function restore_documents($session_id = 0,$destination_course_code = '')
-	{
+	function restore_documents($session_id = 0, $destination_course_code = '') {
 		$perm = api_get_permissions_for_new_directories();
-
+		
 		if ($this->course->has_resources(RESOURCE_DOCUMENT)) {
+			
 			$table = Database :: get_course_table(TABLE_DOCUMENT, $this->course->destination_db);
 			$resources = $this->course->resources;
 			$destination_course['dbName']= $this->course->destination_db;
-			/* echo '<pre>'; echo $this->course->backup_path; echo '<br>'; */
+						
 			foreach ($resources[RESOURCE_DOCUMENT] as $id => $document) {
 				$path = api_get_path(SYS_COURSE_PATH).$this->course->destination_path.'/';
-
-			    $dirs = explode('/', dirname($document->path));
-
+				$dirs = explode('/', dirname($document->path));
+			    
 				//if (count($dirs)==1) {
+				
 		    	if ($document->file_type==FOLDER) {
 		    		$visibility = $document->item_properties[0]['visibility'];
 		    		$new = substr($document->path, 8);
+		    		
 		    		if (!is_dir($path.'document/'.$new)) {
 						$created_dir = create_unexisting_directory($destination_course,api_get_user_id(),0, 0 ,$path.'document',$new,basename($new),$visibility);
 		    		}
@@ -234,8 +237,10 @@ class CourseRestorer
 				echo 'filetype:'.$document->file_type ;
 				echo '<br>';
 				*/
-				if ($document->file_type == DOCUMENT) {
+				
+				if ($document->file_type == DOCUMENT) {					
 					if (file_exists($path.$document->path)) {
+						
 						switch ($this->file_option) {
 							case FILE_OVERWRITE :
 								$origin_path = $this->course->backup_path.'/'.$document->path;
@@ -256,6 +261,7 @@ class CourseRestorer
 								$this->course->resources[RESOURCE_DOCUMENT][$id]->destination_id = $obj->id;
 								break;
 							case FILE_RENAME :
+							
 								$i = 1;
 								$ext = explode('.', basename($document->path));
 								if (count($ext) > 1) {
@@ -281,7 +287,7 @@ class CourseRestorer
 									$course_path = $path;								// "/var/www/wiener/courses/"
 									$orig_base_folder = $document_path[1];
 									$orig_base_path   = $course_path.$document_path[0].'/'.$document_path[1];
-
+									
 									if (is_dir($orig_base_path)) {
 
 										$new_base_foldername = $orig_base_folder;	// e.g: "carpeta1"
@@ -344,35 +350,28 @@ class CourseRestorer
 									break;
 
 						} // end switch
-					} else { // end if file exists
-
+					} else { // end if file exists					
 						//make sure the source file actually exists
-						if(is_file($this->course->backup_path.'/'.$document->path) && is_readable($this->course->backup_path.'/'.$document->path) && is_dir(dirname($path.$document->path)) && is_writeable(dirname($path.$document->path)))
-						{
+						if(is_file($this->course->backup_path.'/'.$document->path) && is_readable($this->course->backup_path.'/'.$document->path) && is_dir(dirname($path.$document->path)) && is_writeable(dirname($path.$document->path))) {
+								
 							copy($this->course->backup_path.'/'.$document->path, $path.$document->path);
 							$sql = "INSERT INTO ".$table." SET path = '/".substr($document->path, 9)."', comment = '".Database::escape_string($document->comment)."', title = '".Database::escape_string($document->title)."' ,filetype='".$document->file_type."', size= '".$document->size."'";
 							Database::query($sql);
 							$this->course->resources[RESOURCE_DOCUMENT][$id]->destination_id = Database::insert_id();
-						}
-						else
-						{
-							if(is_file($this->course->backup_path.'/'.$document->path) && is_readable($this->course->backup_path.'/'.$document->path))
-							{
+						} else {
+							if(is_file($this->course->backup_path.'/'.$document->path) && is_readable($this->course->backup_path.'/'.$document->path)) {
 								error_log('Course copy generated an ignoreable error while trying to copy '.$this->course->backup_path.'/'.$document->path.': file not found');
 							}
-							if(!is_dir(dirname($path.$document->path)))
-							{
+							if(!is_dir(dirname($path.$document->path))) {
 								error_log('Course copy generated an ignoreable error while trying to copy to '.dirname($path.$document->path).': directory not found');
 							}
-							if(!is_writeable(dirname($path.$document->path)))
-							{
+							if(!is_writeable(dirname($path.$document->path))) {
 								error_log('Course copy generated an ignoreable error while trying to copy to '.dirname($path.$document->path).': directory not writeable');
 							}
 						}
 					} // end file doesn't exist
-				}
-				else
-				{
+				} else {
+					
 					/*$sql = "SELECT id FROM ".$table." WHERE path = '/".Database::escape_string(substr($document->path, 9))."'";
 					$res = Database::query($sql);
 					if( Database::num_rows($res)> 0)

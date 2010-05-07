@@ -309,6 +309,7 @@ if ((isset($_POST['action']) && $_POST['action'] == 'course_select_form') || (is
 		$origin_session 		= $_POST['origin_session'];
 
 		$course = CourseSelectForm :: get_posted_course('copy_course',$origin_session,$origin_course);
+		
 		$cr = new CourseRestorer($course);
 		//$cr->set_file_option($_POST['same_file_name_option']);
 		$cr->restore($destination_course,$destination_session);
@@ -335,15 +336,23 @@ if ((isset($_POST['action']) && $_POST['action'] == 'course_select_form') || (is
 		}
 
 		if ((is_array($arr_course_origin) && count($arr_course_origin) > 0) && !empty($destination_session)) {
-			//var_dump($arr_course_origin);exit;
-			foreach ($arr_course_origin as $course_origin) {
-
-				$cb = new CourseBuilder();
-				$course = $cb->build($origin_session,$course_origin);
+			//We need only one value			
+			if (count($arr_course_origin) > 1 || count($arr_course_destination) > 1) {
+				Display::display_error_message(get_lang('YouMustSelectACourseFromOriginalSession'));
+				display_form();	
+			} else {
+				//foreach ($arr_course_origin as $course_origin) {
+				//first element of the array
+				$course_code = $arr_course_origin[0];
+				$course_destinatination = $arr_course_destination[0];
+				
+				$course_origin = api_get_course_info($course_code);				
+				$cb = new CourseBuilder('', $course_origin);
+				$course = $cb->build($origin_session, $course_code);
 				$cr = new CourseRestorer($course);
 				//$cr->set_file_option($_POST['same_file_name_option']);
-				$cr->restore($course_origin,$destination_session);
-
+				$cr->restore($course_destinatination, $destination_session);
+				//}
 			}
 			Display::display_normal_message(get_lang('CopyFinished'));
 			display_form();

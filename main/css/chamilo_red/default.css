@@ -4025,7 +4025,10 @@ div.attendance-calendar-add div.row div.formw,div.attendance-calendar-edit div.r
 	width:90%;
 	background-color:none;
 	padding:2px;
-	font-size:11px;
+	font-size:120%;
+	font-weight: bold;
+	margin:5px;
+	padding:5px;
 }
 
 /* DASHBOARD */

@@ -2207,7 +2207,10 @@ a.read {
 	background-repeat:repeat-y;
 	overflow:hidden;
 }
-
+#menu-wrapper {
+	width:200px;
+	float: right;
+}
 #menu {
 /*	-moz-border-radius: 10px; border: 1px solid #e1e1e0;
 	-webkit-border-radius: 10px; border: 1px solid #e1e1e0;

@@ -633,6 +633,12 @@ margin-top:0;
 ==============================================================================
 */
 
+
+#menu-wrapper {
+	width:200px;
+	float: right;
+}
+
 #menu {
 	-moz-border-radius: 10px; border: 1px solid #e1e1e0;
 	-webkit-border-radius: 10px; border: 1px solid #e1e1e0;
@@ -4034,7 +4040,10 @@ div.attendance-calendar-add div.row div.formw,div.attendance-calendar-edit div.r
 	width:90%;
 	background-color:none;
 	padding:2px;
-	font-size:11px;
+	font-size:120%;
+	font-weight: bold;
+	margin:5px;
+	padding:5px;
 }
 
 /* DASHBOARD */

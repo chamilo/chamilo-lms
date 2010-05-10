@@ -1584,6 +1584,8 @@ api_session_register('status');
 		RIGHT MENU
 
 */
+echo '	<div id="menu-wrapper">';
+ 
 echo '	<div id="menu" class="menu">';
 
 // api_display_language_form(); // moved to the profile page.
@@ -1765,7 +1767,7 @@ EOD;
 echo '<div class="clear"></div>';
 echo '</div>'; // end of menu
 
-
+echo '</div>'; // end of menu wrapper
 
 
 //footer

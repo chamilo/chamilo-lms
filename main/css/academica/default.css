@@ -1409,7 +1409,7 @@ div.system_announcement {
 	width: auto;
 	margin: 24px 6px 0 6px;
 	padding-left: 10px;
-	border: 1px solid #4171B5;
+/*	border: 1px solid #4171B5; */
 }
 .menusectioncaption {
 	position: relative;
@@ -2225,14 +2225,14 @@ a.read {
 
 #menu-wrapper {
 	width:200px;
-	float: right;
+	float: left;
 }
 
 #menu {
-/*	-moz-border-radius: 10px; border: 1px solid #e1e1e0;
+	-moz-border-radius: 10px; border: 1px solid #e1e1e0;
 	-webkit-border-radius: 10px; border: 1px solid #e1e1e0;
 	-opera-border-radius: 10px; border: 1px solid #e1e1e0;	
-
+/*
 	margin-top:20px;
 	margin-right:10px;
 	margin-bottom:40px;

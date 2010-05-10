@@ -2742,8 +2742,8 @@ a.read {
 	margin-right:10px;
 	margin-bottom:0px;
 	
-	padding-left:10px;
-	padding-right:10px;
+/*	padding-left:10px;
+	padding-right:10px;*/
 	padding-top:5px;
 	padding-bottom:0px;	
 	
@@ -2896,8 +2896,7 @@ float:left;
 /*	color:#ff0000; */
 	font-size:12px;
 }
-.message-body {
-	font-size:11px;
+.message-body {	
 	padding: 0 0 11px;
 	color:#333;
 }

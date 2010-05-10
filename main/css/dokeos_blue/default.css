@@ -2750,20 +2750,20 @@ a.read {
 	float: right;
 }
 #menu {
-/*	-moz-border-radius: 10px; border: 1px solid #e1e1e0;
+	-moz-border-radius: 10px; border: 1px solid #e1e1e0;
 	-webkit-border-radius: 10px; border: 1px solid #e1e1e0;
 	-opera-border-radius: 10px; border: 1px solid #e1e1e0;	
 
 	margin-top:20px;
 	margin-right:10px;
-	margin-bottom:40px;
+	margin-bottom:0px;
 	
-	padding-left:10px;
-	padding-right:10px;
+	/*padding-left:10px;
+	padding-right:10px;*/
 	padding-top:5px;
-	padding-bottom:30px;	
+	padding-bottom:0px;	
 	
-	width:240px;*/ 
+	width:200px;
 	float: right;
 	/* min-height: 150px;*/
 	

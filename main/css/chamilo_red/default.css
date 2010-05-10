@@ -645,7 +645,7 @@ margin-top:0;
 	padding-left:10px;
 	padding-right:10px;
 	padding-top:5px;
-	padding-bottom:30px;	
+	padding-bottom:0px;	
 	
 	width:200px;
 	float: right;
@@ -3230,7 +3230,7 @@ a.read {
 	padding-left:10px;
 	padding-right:10px;
 	padding-top:5px;
-	padding-bottom:30px;	
+	padding-bottom:0px;	
 	
 	width:200px;
 	float: right;
@@ -3386,7 +3386,6 @@ a.read {
 	font-size:12px;
 }
 .message-body {
-	font-size:11px;
 	padding: 0 0 11px;
 	color:#333;
 }

@@ -43,7 +43,7 @@ body {
 /* for content section in main index.php file */
 .maincontent {
 	float: left;
-	width: 78%;
+	width: 75%;
 	padding: 4px;
 	background-color: #fff;
 }
@@ -406,6 +406,7 @@ input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
 	background-color: #FFF;
 }
 .menusectioncaption {
+	font-weight:bold;
 	position: relative;
 	top: -9px;
 	background-color: #FFF;
@@ -2904,8 +2905,7 @@ float:left;
 /*	color:#ff0000; */
 	font-size:12px;
 }
-.message-body {
-	font-size:11px;
+.message-body {	
 	padding: 0 0 11px;
 	color:#333;
 }

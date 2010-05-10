@@ -428,6 +428,7 @@ select, input[type=checkbox], input[type=radio], input[type=button], input[type=
 	
 }
 .menusectioncaption {
+	font-weight:bold;
 	position: relative;
 	top: -9px;
 	background-color: #FFF;

@@ -436,8 +436,8 @@ switch($action)
 		else {
 			$_SESSION['refresh'] = 1;
 
-			if (isset($_POST['submit_button'])) {
-				$_SESSION['oLP']->edit_item($_GET['id'], $_POST['parent'], $_POST['previous'], Security::remove_XSS($_POST['title'], $_POST['description']) );
+			if (isset($_POST['submit_button'])) { 
+				$_SESSION['oLP']->edit_item($_GET['id'], $_POST['parent'], $_POST['previous'], $_POST['title'] , $_POST['description'] );
 				$is_success = true;
 			}
 

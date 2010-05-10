@@ -531,16 +531,16 @@ if (!empty($_REQUEST['new_dir'])) {
 				$dir_name_sql = '/'.$created_dir;
 			}
 
-			// insert into agenda
-
+			// Insert into agenda
 			$agenda_id = 0;
-			 if (isset($_POST['add_to_calendar']) && $_POST['add_to_calendar'] == 1) {
+			if (isset($_POST['add_to_calendar']) && $_POST['add_to_calendar'] == 1) {
 				require_once api_get_path(SYS_CODE_PATH).'calendar/agenda.inc.php';
 				require_once api_get_path(SYS_CODE_PATH).'resourcelinker/resourcelinker.inc.php';
 				$course = isset($course_info) ? $course_info : null;
 				$content = '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;curdirpath='.substr(Security::remove_XSS($dir_name_sql), 1).'" >'.$_POST['new_dir'].'</a> - '.$_POST['description'];
-				$agenda_id = agenda_add_item($course, $_POST['new_dir'], $content, date('Y-m-d H:i:s'), '0000-00-00', array('GROUP:'.$toolgroup), 0);
-			 }
+				
+				$agenda_id = agenda_add_item($course, $_POST['new_dir'], $content, date('Y-m-d H:i:s'), date('Y-m-d H:i:s'), array('GROUP:'.$toolgroup), 0);
+			}
 			$sql_add_publication = "INSERT INTO " . $work_table . " SET " .
 									   "url         = '".Database::escape_string($dir_name_sql)."',
 								       title        = '',

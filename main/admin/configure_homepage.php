@@ -255,6 +255,7 @@ if (!empty($action)) {
 			case 'insert_link':
 			case 'edit_link':
 				$link_index = intval($_POST['link_index']);
+				
 				$insert_where = intval($_POST['insert_where']);
 				$link_name = trim(stripslashes($_POST['link_name']));
 				$link_url = trim(stripslashes($_POST['link_url']));
@@ -278,6 +279,7 @@ if (!empty($action)) {
 				} elseif (empty($link_name)) {
 					$errorMsg = get_lang('PleaseEnterLinkName');
 				} else {
+					
 					// New links are added as new files in the home/ directory
 					if ($action == 'insert_link' || $action == 'insert_tabs' || empty($filename) || strstr($filename, '/') || !strstr($filename, '.html')) {
 						$filename = replace_dangerous_char($link_name, 'strict').'.html';
@@ -510,16 +512,27 @@ if (!empty($action)) {
 				if (!empty($home_menu)) {
 					$home_menu = implode("\n", $home_menu);
 					$home_menu = api_to_system_encoding($home_menu, api_detect_encoding(strip_tags($home_menu)));
-					$home_menu = explode("\n", $home_menu);
+					$home_menu = explode("\n", $home_menu);					
 				}
 
 				$link_index = intval($_GET['link_index']);
+				
 				$target_blank = false;
 				$link_name = '';
 				$link_url = '';
-
+				
+				$home_menu_new = array();
+				
+				//Cleaning array 
+				foreach ($home_menu as $item) {
+					if(!empty($item)) {
+						$home_menu_new[] = $item;						
+					}	
+				}
+				$home_menu = $home_menu_new;
+				
 				// For each line of the home_menu file
-				foreach ($home_menu as $key => $enreg) {
+				foreach ($home_menu as $key => $enreg) {					
 					// Check if the current item is the one we want to update
 					if ($key == $link_index) {
 						// This is the link we want to update
@@ -865,7 +878,7 @@ switch ($action) {
 						$home_menu = api_to_system_encoding($home_menu, api_detect_encoding(strip_tags($home_menu)));
 						$home_menu = explode("\n", $home_menu);
 					}
-					$i = 0 ;
+					$i = 0;
 					foreach ($home_menu as $enreg) {
 						$enreg = trim($enreg);
 						if (!empty($enreg)) {

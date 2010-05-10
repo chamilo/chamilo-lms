@@ -280,7 +280,7 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
 		<tr class="<?php echo $i?'row_odd':'row_even'; ?>">
 		  <td><input type="checkbox" id="idChecked_<?php echo $x; ?>" name="idChecked[]" value="<?php echo $enreg['id']; ?>"></td>
 	      <td><a href="resume_session.php?id_session=<?php echo $enreg['id']; ?>"><?php echo api_htmlentities($enreg['name'],ENT_QUOTES,$charset); ?></a></td>
-	      <td><a href="session_course_list.php?id_session=<?php echo $enreg['id']; ?>"><?php echo $nb_courses; ?> cours</a></td>
+	      <td><a href="session_course_list.php?id_session=<?php echo $enreg['id']; ?>"><?php echo $nb_courses.' '.get_lang('Course'); ?></a></td>
 	      <td><?php echo api_htmlentities($enreg['category_name'],ENT_QUOTES,$charset); ?></td>
 	      <td><?php echo api_htmlentities($enreg['date_start'],ENT_QUOTES,$charset); ?></td>
 	      <td><?php echo api_htmlentities($enreg['date_end'],ENT_QUOTES,$charset); ?></td>

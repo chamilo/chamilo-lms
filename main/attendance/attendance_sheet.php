@@ -46,6 +46,7 @@ if (api_is_allowed_to_edit(null, true)) {
 				<?php 
 				$i = 1;
 				$class = '';
+				
 				foreach ($users_in_course as $data) {
 					$faults = 0;
 					if ($i%2 == 0) {$class='row_odd';}
@@ -151,10 +152,11 @@ if (api_is_allowed_to_edit(null, true)) {
 	<h3><?php echo get_lang('AttendanceSheetReport') ?></h3>
 	<?php if(!empty($users_presence)) { ?>
 		<div>
-			<table width="200px;">
+			<table width="250px;">
 			<tr>
-				<td><?php echo get_lang('AttendancesFaults').': ' ?></td><td><center><div class="attendance-faults-bar" style="background-color:<?php echo (!empty($faults['color_bar'])?$faults['color_bar']:'none') ?>"><?php echo $faults['faults'].'/'.$faults['total'].' ('.$faults['faults_porcent'].'%)' ?></div></center></td>
-			</tr>	
+				<td><?php echo get_lang('ToAttend').': ' ?></td>
+				<td><center><div class="attendance-faults-bar" style="background-color:<?php echo (!empty($faults['color_bar'])?$faults['color_bar']:'none') ?>"><?php echo $faults['faults'].'/'.$faults['total'].' ('.$faults['faults_porcent'].'%)' ?></div></center></td>
+			</tr>
 			</table>
 		</div>
 	<?php } ?>

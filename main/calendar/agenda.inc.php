@@ -306,7 +306,7 @@ function display_minimonthcalendar($agendaitems, $month, $year, $monthName)
 					$dayheader = "$curday";
 					$class = "class=\"days_today\"";
 				}
-				echo "\t<td ".$class.">";
+				echo "<td ".$class.">";
 				if (!empty($agendaitems[$curday]))
 				{
 					$month_curday = array();
@@ -796,21 +796,21 @@ function show_to_form($to_already_selected)
 	$group_list=get_course_groups();
 
 	echo "<table id=\"recipient_list\" style=\"display: none;\">";
-		echo "\t<tr>";
+		echo "<tr>";
 		// the form containing all the groups and all the users of the course
-		echo "\t\t<td>";
+		echo "<td>";
 		echo "<strong>".get_lang('Users')."</strong><br />";
 			construct_not_selected_select_form($group_list,$user_list,$to_already_selected);
-		echo "\t\t</td>";
+		echo "</td>";
 		// the buttons for adding or removing groups/users
-		echo "\t\t<td valign=\"middle\">";
-	/*	echo "\t\t<input type=\"button\" ",
+		echo "<td valign=\"middle\">";
+	/*	echo "<input type=\"button\" ",
 					"onclick=\"move(document.getElementById('not_selected_form'),document.getElementById('selected_form'))\" ",
 					"value=\"   &gt;&gt;   \" />",
 
-					"\t\t<p>&nbsp;</p>",
+					"<p>&nbsp;</p>",
 
-					"\t\t<input type=\"button\" ",
+					"<input type=\"button\" ",
 					"onclick=\"move(document.getElementById('selected_form'),document.getElementById('not_selected_form'))\" ",
 					"value=\"   class=\"arrow\"   \" />";
 */
@@ -819,12 +819,12 @@ function show_to_form($to_already_selected)
 <br /> <br />
 <button class="arrowl" type="button" onclick="move(document.getElementById('selected_form'), document.getElementById('not_selected_form'))" onclick="move(document.getElementById('selected_form'), document.getElementById('not_selected_form'))"></button>
 <?php
-		echo "\t\t</td>";
-		echo "\t\t<td>";
+		echo "</td>";
+		echo "<td>";
 		echo "<strong>".get_lang('DestinationUsers')."</strong><br />";
 			construct_selected_select_form($group_list,$user_list,$to_already_selected);
-		echo "\t\t</td>";
-		echo "\t</tr>";
+		echo "</td>";
+		echo "</tr>";
 	echo "</table>";
 }
 
@@ -837,12 +837,12 @@ function show_to_form($to_already_selected)
 */
 function construct_not_selected_select_form($group_list=null, $user_list=null,$to_already_selected=array())
 {
-	echo "\t\t<select id=\"not_selected_form\" name=\"not_selected_form[]\" size=\"5\" multiple=\"multiple\" style=\"width:200px\">";
+	echo "<select id=\"not_selected_form\" name=\"not_selected_form[]\" size=\"5\" multiple=\"multiple\" style=\"width:200px\">";
 
 	// adding the groups to the select form
 
 	if (isset($to_already_selected) && $to_already_selected==='everyone') {
-		echo "\t\t<option value=\"\">--------------------------------------------</option>";
+		echo "<option value=\"\">--------------------------------------------</option>";
 	} else {
 		if (is_array($group_list))
 		{
@@ -851,7 +851,7 @@ function construct_not_selected_select_form($group_list=null, $user_list=null,$t
 				//api_display_normal_message("group " . $thisGroup[id] . $thisGroup[name]);
 				if (!is_array($to_already_selected) || !in_array("GROUP:".$this_group['id'],$to_already_selected)) // $to_already_selected is the array containing the groups (and users) that are already selected
 					{
-					echo	"\t\t<option value=\"GROUP:".$this_group['id']."\">",
+					echo	"<option value=\"GROUP:".$this_group['id']."\">",
 						"G: ",$this_group['name']," &ndash; " . $this_group['userNb'] . " " . get_lang('Users') .
 						"</option>";
 				}
@@ -865,13 +865,13 @@ function construct_not_selected_select_form($group_list=null, $user_list=null,$t
 		{
 			if (!is_array($to_already_selected) || !in_array("USER:".$this_user['uid'],$to_already_selected)) // $to_already_selected is the array containing the users (and groups) that are already selected
 			{
-				echo	"\t\t<option value=\"USER:",$this_user['uid'],"\">",
+				echo	"<option value=\"USER:",$this_user['uid'],"\">",
 					"",api_get_person_name($this_user['firstName'], $this_user['lastName']),
 					"</option>";
 			}
 		}
 	}
-		echo "\t\t</select>";
+		echo "</select>";
 }
 
 /**
@@ -895,7 +895,7 @@ function construct_selected_select_form($group_list=null, $user_list=null,$to_al
 
 	$ref_array_users=get_course_users();
 	// we construct the form of the already selected groups / users
-	echo "\t\t<select id=\"selected_form\" name=\"selectedform[]\" size=\"5\" multiple=\"multiple\" style=\"width:200px\">";
+	echo "<select id=\"selected_form\" name=\"selectedform[]\" size=\"5\" multiple=\"multiple\" style=\"width:200px\">";
 	if(is_array($to_already_selected))
 	{
 		$select_options_group = array();
@@ -906,13 +906,13 @@ function construct_selected_select_form($group_list=null, $user_list=null,$to_al
 			list($type,$id)=explode(":",$groupuser);
 			if ($type=="GROUP")
 			{
-				$select_options_group[] = "\t\t<option value=\"".$groupuser."\">G: ".$ref_array_groups[$id]['name']."</option>";
-				//echo "\t\t<option value=\"".$groupuser."\">G: ".$ref_array_groups[$id]['name']."</option>";
+				$select_options_group[] = "<option value=\"".$groupuser."\">G: ".$ref_array_groups[$id]['name']."</option>";
+				//echo "<option value=\"".$groupuser."\">G: ".$ref_array_groups[$id]['name']."</option>";
 			}
 			else
 			{
-				$select_options_user[] = "\t\t<option value=\"".$groupuser."\">".api_get_person_name($ref_array_users[$id]['firstName'], $ref_array_users[$id]['lastName'])."</option>";
-				//echo "\t\t<option value=\"".$groupuser."\">".api_get_person_name($ref_array_users[$id]['firstName'], $ref_array_users[$id]['lastName'])."</option>";
+				$select_options_user[] = "<option value=\"".$groupuser."\">".api_get_person_name($ref_array_users[$id]['firstName'], $ref_array_users[$id]['lastName'])."</option>";
+				//echo "<option value=\"".$groupuser."\">".api_get_person_name($ref_array_users[$id]['firstName'], $ref_array_users[$id]['lastName'])."</option>";
 			}
 		}
 		$select_options_group[] = "<option value=\"\">--------------------------------------------</option>";
@@ -931,7 +931,7 @@ function construct_selected_select_form($group_list=null, $user_list=null,$to_al
 						//api_display_normal_message("group " . $thisGroup[id] . $thisGroup[name]);
 						if (!is_array($to_already_selected) || !in_array("GROUP:".$this_group['id'],$to_already_selected)) // $to_already_selected is the array containing the groups (and users) that are already selected
 							{
-							echo	"\t\t<option value=\"GROUP:".$this_group['id']."\">",
+							echo	"<option value=\"GROUP:".$this_group['id']."\">",
 								"G: ",$this_group['name']," &ndash; " . $this_group['userNb'] . " " . get_lang('Users') .
 								"</option>";
 						}
@@ -943,7 +943,7 @@ function construct_selected_select_form($group_list=null, $user_list=null,$to_al
 				{
 					if (!is_array($to_already_selected) || !in_array("USER:".$this_user['uid'],$to_already_selected)) // $to_already_selected is the array containing the users (and groups) that are already selected
 					{
-						echo	"\t\t<option value=\"USER:",$this_user['uid'],"\">",
+						echo	"<option value=\"USER:",$this_user['uid'],"\">",
 							"",api_get_person_name($this_user['firstName'], $this_user['lastName']),
 							"</option>";
 					}
@@ -1226,7 +1226,7 @@ function sent_to_form($sent_to_array)
 		{
 		foreach ($sent_to_array['groups'] as $group_id)
 			{
-			$output.="\t<option value=\"\">G: ".$group_names[$group_id]['name']."</option>";
+			$output.="<option value=\"\">G: ".$group_names[$group_id]['name']."</option>";
 			}
 		}
 	if (isset($sent_to_array['users']))
@@ -1236,7 +1236,7 @@ function sent_to_form($sent_to_array)
 			foreach ($sent_to_array['users'] as $user_id)
 				{
 				$user_info=api_get_user_info($user_id);
-				$output.="\t<option value=\"\">".api_get_person_name($user_info['firstName'], $user_info['lastName'])."</option>";
+				$output.="<option value=\"\">".api_get_person_name($user_info['firstName'], $user_info['lastName'])."</option>";
 				}
 			}
 	}
@@ -1320,9 +1320,9 @@ function show_user_group_filter_form()
 	echo "<select name=\"select\" onchange=\"javascript: MM_jumpMenu('parent',this,0)\">";
 
 	// Groups
-	$option = "\t<optgroup label=\"".get_lang("Groups")."\">";
+	$option = "<optgroup label=\"".get_lang("Groups")."\">";
 	$group_list=get_course_groups();
-	//echo "\t<option value=\"agenda.php?user=none\">".get_lang("ShowAll")."</option>";
+	//echo "<option value=\"agenda.php?user=none\">".get_lang("ShowAll")."</option>";
 
 	$group_available_to_access =array();
 
@@ -1338,30 +1338,30 @@ function show_user_group_filter_form()
 
 			// lastedit
 			if ($has_access || $result['calendar_state']=='1') {
-				$option.= "\t\t<option value=\"agenda.php?group=".$this_group['id']."\" ";
+				$option.= "<option value=\"agenda.php?group=".$this_group['id']."\" ";
 				$option.= ($this_group['id']==$_SESSION['group'])? " selected":"" ;
 				$option.=  ">".$this_group['name']."</option>";
 			}
 		}
 	}
 
-	$all =  "\t<option value=\"agenda.php?user=none\">".get_lang("ShowAll")."</option>";
+	$all =  "<option value=\"agenda.php?user=none\">".get_lang("ShowAll")."</option>";
 	$option = $all.$option;
 
-	$option.= "\t</optgroup>";
+	$option.= "</optgroup>";
 	echo $option;
 
 	global $_course;
 
 	// Users
-	echo "\t<optgroup label=\"".get_lang("Users")."\">";
+	echo "<optgroup label=\"".get_lang("Users")."\">";
 	$user_list=get_course_users();
 	foreach($user_list as $this_user) {
-		echo "\t\t<option value=\"agenda.php?user=".$this_user['uid']."\" ";
+		echo "<option value=\"agenda.php?user=".$this_user['uid']."\" ";
 		echo ($this_user['uid']==$_SESSION['user'])? " selected":"" ;
 		echo ">".api_get_person_name($this_user['firstName'], $this_user['lastName'])."</option>";
 	}
-	echo "\t</optgroup>";
+	echo "</optgroup>";
 	echo "</select>";
 }
 
@@ -1482,7 +1482,7 @@ function display_student_links()
 	}
 	else
 	{
-		echo "\t<a href=\"".api_get_self()."?action=view&amp;toolgroup=".Security::remove_XSS($_GET['toolgroup'])."&amp;view=list\">".Display::return_icon('calendar_select.gif', get_lang('ListView'))." ".get_lang('ListView')."</a> ";
+		echo "<a href=\"".api_get_self()."?action=view&amp;toolgroup=".Security::remove_XSS($_GET['toolgroup'])."&amp;view=list\">".Display::return_icon('calendar_select.gif', get_lang('ListView'))." ".get_lang('ListView')."</a> ";
 	}
 }
 
@@ -2036,7 +2036,7 @@ function display_agenda_items()
         if ($month_bar != api_format_date($myrow["start_date"], "%m%Y"))
 		{
             $month_bar = api_format_date($myrow["start_date"], "%m%Y");
-			echo "\t<tr><td class=\"agenda_month_divider\" colspan=\"3\" valign=\"top\">".
+			echo "<tr><td class=\"agenda_month_divider\" colspan=\"3\" valign=\"top\">".
 			api_format_date($myrow["start_date"], "%B %Y").
 			"</td></tr>";
 		}
@@ -2073,7 +2073,7 @@ function display_agenda_items()
 
     	echo "<th>";
     	// adding an internal anchor
-    	echo "\t\t\t<a name=\"".(int)api_format_date($myrow["start_date"], "%d")."\"></a>";
+    	echo "<a name=\"".(int)api_format_date($myrow["start_date"], "%d")."\"></a>";
     	// the icons. If the message is sent to one or more specific users/groups
     	// we add the groups icon
     	// 2do: if it is sent to groups we display the group icon, if it is sent to a user we show the user icon
@@ -2105,10 +2105,10 @@ function display_agenda_items()
      			display: the title
          --------------------------------------------------*/
     	echo "<tr class='row_odd'>";
-    	echo "\t\t<td>".get_lang("StartTimeWindow").": ";
+    	echo "<td>".get_lang("StartTimeWindow").": ";
     	echo api_format_date($myrow['start_date']);
     	echo "</td>";
-    	echo "\t\t<td>";
+    	echo "<td>";
     	if ($myrow["end_date"]<>"0000-00-00 00:00:00") {
     		echo get_lang("EndTimeWindow").": ";
     		echo api_convert_and_format_date($myrow['end_date'], null, date_default_timezone_get());
@@ -2328,7 +2328,7 @@ function display_one_agenda_item($agenda_id)
 	/*--------------------------------------------------
 	 DISPLAY : the icon, title, destinees of the item
 	  --------------------------------------------------*/
-	echo "\t<tr>";
+	echo "<tr>";
 
 	$myrow["start_date"] = api_get_local_time($myrow["start_date"], null, date_default_timezone_get());
 
@@ -2357,10 +2357,10 @@ function display_one_agenda_item($agenda_id)
 	}
 
 
-	echo "\t\t<th>";
+	echo "<th>";
 
 	// adding an internal anchor
-	echo "\t\t\t<a name=\"".(int)api_format_date($myrow["start_date"], "%d")."\"></a>";
+	echo "<a name=\"".(int)api_format_date($myrow["start_date"], "%d")."\"></a>";
 
 	// the icons. If the message is sent to one or more specific users/groups
 	// we add the groups icon
@@ -2374,7 +2374,7 @@ function display_one_agenda_item($agenda_id)
 	echo "</th>";
 
 	// the message has been sent to
-	echo "\t\t<th>".get_lang("SentTo").": ";
+	echo "<th>".get_lang("SentTo").": ";
 	$sent_to=sent_to(TOOL_CALENDAR_EVENT, $myrow["ref"]);
 	$sent_to_form=sent_to_form($sent_to);
 	echo $sent_to_form;
@@ -2389,13 +2389,13 @@ function display_one_agenda_item($agenda_id)
 	/*--------------------------------------------------
 	 			DISPLAY: the title
 	  --------------------------------------------------*/
-	echo "\t<tr class='row_odd'>";
-	echo "\t\t<td>".get_lang("StartTime").": ";
+	echo "<tr class='row_odd'>";
+	echo "<td>".get_lang("StartTime").": ";
 	echo api_format_date($myrow['start_date']);
 	echo "</td>";
-	echo "\t\t<td>".get_lang("EndTime").": ";
+	echo "<td>".get_lang("EndTime").": ";
 	echo api_convert_and_format_date($myrow['end_date'], null, date_default_timezone_get());
-	echo "</td>\n";
+	echo "</td>";
 
 	/*--------------------------------------------------
 		DISPLAY: edit delete button (course admin only)
@@ -2443,7 +2443,7 @@ function display_one_agenda_item($agenda_id)
 	$content = $myrow['content'];
 	$content = make_clickable($content);
 	$content = text_filter($content);
-	//echo "\t<tr>\n\t\t<td class=\"".$text_style."\" colspan='2'>";
+	//echo "<tr><td class=\"".$text_style."\" colspan='2'>";
 	//echo $content;
 	//echo "</td></tr>";
     echo "<tr class='row_even'>";
@@ -2898,7 +2898,7 @@ function show_add_form($id = '') {
 			                <?php
 			                    // small loop for filling all the dates
 			                    // 2do: the available dates should be those of the selected month => february is from 1 to 28 (or 29) and not to 31
-			                    echo "\n";
+			                    
 			                    foreach (range(1, 31) as $i)
 			                    {
 			                        // values have to have double digits
@@ -3203,11 +3203,11 @@ function display_daycalendar($agendaitems, $day, $month, $year, $weekdaynames, $
 	$backwardsURL = api_get_self()."?coursePath=".urlencode($course_path)."&amp;courseCode=".Security::remove_XSS($_GET['courseCode'])."&amp;action=view&amp;view=day&amp;day=".date("j", $previousday)."&amp;month=".date("n", $previousday)."&amp;year=".date("Y", $previousday);
 	$forewardsURL = api_get_self()."?coursePath=".urlencode($course_path)."&amp;courseCode=".Security::remove_XSS($_GET['courseCode'])."&amp;action=view&amp;view=day&amp;day=".date("j", $nextday)."&amp;month=".date("n", $nextday)."&amp;year=".date("Y", $nextday);
 	// The title row containing the day
-	echo "<tr>\n", "<th width=\"10%\"><a href=\"", $backwardsURL, "\">".Display::return_icon('action_prev.png',get_lang('Previous'))."</a></th>\n", "<th>";
+	echo "<tr>", "<th width=\"10%\"><a href=\"", $backwardsURL, "\">".Display::return_icon('action_prev.png',get_lang('Previous'))."</a></th>", "<th>";
 	echo $DaysLong[$day_of_the_week]." ".date("j", $today)." ".$MonthsLong[date("n", $today) - 1]." ".date("Y", $today);
 	echo "</th>";
 	echo "<th width=\"10%\"><a href=\"", $forewardsURL, "\">".Display::return_icon('action_next.png',get_lang('Next'))."</a></th>";
-	echo "</tr>\n";
+	echo "</tr>";
 	// the rows for each half an hour
 	for ($i = 10; $i < 48; $i ++)
 	{
@@ -3219,17 +3219,17 @@ function display_daycalendar($agendaitems, $day, $month, $year, $weekdaynames, $
 		{
 			$class = "class=\"row_odd\"";
 		}
-		echo "<tr $class>\n";
-		echo "\t";
+		echo "<tr $class>";
+		echo "";
 		if ($i % 2 == 0)
 		{
-			echo ("<td valign=\"top\" width=\"75\">". (($i) / 2)." ".get_lang("HourShort")." 00</td>\n");
+			echo ("<td valign=\"top\" width=\"75\">". (($i) / 2)." ".get_lang("HourShort")." 00</td>");
 		}
 		else
 		{
-			echo ("<td valign=\"top\" width=\"75\">". ((($i) / 2) - (1 / 2))." ".get_lang("HourShort")." 30</td>\n");
+			echo ("<td valign=\"top\" width=\"75\">". ((($i) / 2) - (1 / 2))." ".get_lang("HourShort")." 30</td>");
 		}
-		echo "\t<td $class valign=\"top\" colspan=\"2\">\n";
+		echo "<td $class valign=\"top\" colspan=\"2\">";
 		if (is_array($agendaitems[$i]))
 		{
 			foreach ($agendaitems[$i] as $key => $value)
@@ -3241,16 +3241,16 @@ function display_daycalendar($agendaitems, $day, $month, $year, $weekdaynames, $
 		{
 			echo $agendaitems[$i];
 		}
-		echo "\t</td>\n";
-		echo "</tr>\n";
+		echo "</td>";
+		echo "</tr>";
 	}
-	echo "</table>\n";
+	echo "</table>";
 }
 /**
  *	Display the weekly view of the calendar
  */
-function display_weekcalendar($agendaitems, $month, $year, $weekdaynames, $monthName)
-{
+function display_weekcalendar($agendaitems, $month, $year, $weekdaynames, $monthName) {
+	var_dump($agendaitems);
 	global $DaysShort,$course_path;
 	global $MonthsLong;
 	// timestamp of today
@@ -3261,8 +3261,7 @@ function display_weekcalendar($agendaitems, $month, $year, $weekdaynames, $month
 	$week_number = date("W", $today);
 	$thisweek_number = $week_number;
 	// if we moved to the next / previous week we have to recalculate the $today variable
-	if ($_GET['week'])
-	{
+	if ($_GET['week']) {
 		$today = mktime(0, 0, 0, 1, 1, $year);
 		$today = $today + (((int)$_GET['week']-1) * (7 * 24 * 60 * 60));
 		$week_number = date("W", $today);
@@ -3276,61 +3275,54 @@ function display_weekcalendar($agendaitems, $month, $year, $weekdaynames, $month
 	$timestamp_last_date_of_week = $today + ((7 - $day_of_the_week) * 24 * 60 * 60); // timestamp of the sunday of this week
 	$backwardsURL = api_get_self()."?coursePath=".urlencode($course_path)."&amp;courseCode=".Security::remove_XSS($_GET['courseCode'])."&amp;action=view&amp;view=week&amp;week=". ($week_number -1);
 	$forewardsURL = api_get_self()."?coursePath=".urlencode($course_path)."&amp;courseCode=".Security::remove_XSS($_GET['courseCode'])."&amp;action=view&amp;view=week&amp;week=". ($week_number +1);
-	echo "<table class=\"data_table\">\n";
+	echo "<table class=\"data_table\">";
 	// The title row containing the the week information (week of the year (startdate of week - enddate of week)
-	echo "<tr>\n";
+	echo "<tr>";
 	echo "<th width=\"10%\"><a href=\"", $backwardsURL, "\">".Display::return_icon('action_prev.png',get_lang('Previous'))."</a></th>"; 
 	echo "<th colspan=\"5\">".get_lang("Week")." ".$week_number;
 	echo " (".$DaysShort['1']." ".date("j", $timestamp_first_date_of_week)." ".$MonthsLong[date("n", $timestamp_first_date_of_week) - 1]." ".date("Y", $timestamp_first_date_of_week)." - ".$DaysShort['0']." ".date("j", $timestamp_last_date_of_week)." ".$MonthsLong[date("n", $timestamp_last_date_of_week) - 1]." ".date("Y", $timestamp_last_date_of_week).')';
 	echo "</th>";
 	echo "<th width=\"10%\"><a href=\"", $forewardsURL, "\">".Display::return_icon('action_next.png',get_lang('Next'))."</a></th>", "</tr>";
 	// The second row containing the short names of the days of the week
-	echo "<tr>\n";
+	echo "<tr>";
 	// this is the Day of the month without leading zeros (1 to 31) of the monday of this week
 	$tmp_timestamp = $timestamp_first_date_of_week;
-	for ($ii = 1; $ii < 8; $ii ++)
-	{
+	
+	for ($ii = 1; $ii < 8; $ii ++) {
 		$is_today = ($ii == $thisday_of_the_week AND (!isset($_GET['week']) OR $_GET['week']==$thisweek_number));
-		echo "\t<td class=\"weekdays\">";
-		if ($is_today)
-		{
+		echo "<td class=\"weekdays\">";
+		if ($is_today) {
 			echo "<font color=#CC3300>";
 		}
 		echo $DaysShort[$ii % 7]." ".date("j", $tmp_timestamp)." ".$MonthsLong[date("n", $tmp_timestamp) - 1];
-		if ($is_today)
-		{
+		if ($is_today) {
 			echo "</font>";
 		}
-		echo "</td>\n";
+		echo "</td>";
 		// we 24 hours * 60 minutes * 60 seconds to the $tmp_timestamp
 		$array_tmp_timestamp[] = $tmp_timestamp;
 		$tmp_timestamp = $tmp_timestamp + (24 * 60 * 60);
 	}
-	echo "</tr>\n";
+	echo "</tr>";
 	// the table cells containing all the entries for that day
-	echo "<tr>\n";
+	echo "<tr>";
 	$counter = 0;
-	foreach ($array_tmp_timestamp as $key => $value)
-	{
-		if ($counter < 5)
-		{
+	foreach ($array_tmp_timestamp as $key => $value) {
+		if ($counter < 5) {			
 			$class = "class=\"days_week\"";
-		}
-		else
-		{
+		} else {
 			$class = "class=\"days_weekend\"";
 		}
-		if ($counter == $thisday_of_the_week -1 AND (!isset($_GET['week']) OR $_GET['week']==$thisweek_number))
-		{
+		if ($counter == $thisday_of_the_week -1 AND (!isset($_GET['week']) OR $_GET['week']==$thisweek_number)) {
 			$class = "class=\"days_today\"";
 		}
-		echo "\t<td ".$class.">";
+		echo "<td ".$class.">";
 		echo "<span class=\"agendaitem\">".$agendaitems[date('j', $value)]."&nbsp;</span> ";
-		echo "</td>\n";
+		echo "</td>";
 		$counter ++;
 	}
-	echo "</tr>\n";
-	echo "</table>\n";
+	echo "</tr>";
+	echo "</table>";
 }
 /**
  * Show the monthcalender of the given month

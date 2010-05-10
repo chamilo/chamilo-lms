@@ -1,26 +1,5 @@
 <?php
-// $Id: datepicker.php 20456 2009-05-10 17:27:44Z ivantcholakov $
-/*
-==============================================================================
-	Dokeos - elearning and course management software
-
-	Copyright (c) 2004-2005 Dokeos S.A.
-	Copyright (c) Bart Mollet, Hogeschool Gent
-
-	For a full list of contributors, see "credits.txt".
-	The full license can be read in "license.txt".
-
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
-
-	See the GNU General Public License for more details.
-
-	Contact address: Dokeos, 44 rue des palais, B-1030 Brussels, Belgium
-	Mail: info@dokeos.com
-==============================================================================
-*/
+/* For licensing terms, see /license.txt */
 require_once ('HTML/QuickForm/date.php');
 /**
  * Form element to select a date and hour (with popup datepicker)
@@ -53,8 +32,8 @@ class HTML_QuickForm_datepicker extends HTML_QuickForm_date
 			$this->_locale[$lang_code]['months_long'] = api_get_months_long();
 		}
 		$this->_options['format'] = 'dFY '.$popup_link.'   H '.$hour_minute_devider.' i';
-		$this->_options['minYear'] = date('Y')-7;
-		$this->_options['maxYear'] = date('Y')+15;
+		$this->_options['minYear'] = date('Y')-5;
+		$this->_options['maxYear'] = date('Y')+10;
 		$this->_options['language'] = $lang_code;
 		//$this->_options['addEmptyOption'] = true;
 		//$this->_options['emptyOptionValue'] = 0;

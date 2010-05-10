@@ -102,7 +102,7 @@ if ($_POST['formSent']) {
 
 	if($Categoryid != 0 && count($SessionCategoryList)>0 ){
 		$session_id = join(',', $SessionCategoryList);
-		echo $sql = "UPDATE $tbl_session SET session_category_id = $Categoryid WHERE id in ($session_id) ";
+		$sql = "UPDATE $tbl_session SET session_category_id = $Categoryid WHERE id in ($session_id) ";
 		Database::query($sql);
 		//header('Location: session_list.php?id_category='.$Categoryid);
 		header('Location: add_many_session_to_category.php?id_category='.$Categoryid.'&msg=ok');

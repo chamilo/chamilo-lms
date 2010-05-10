@@ -3140,9 +3140,9 @@ function display_upcoming_events()
  * This function calculates the startdate of the week (monday)
  * and the enddate of the week (sunday)
  * and returns it as an array
+ * @todo check if this function is correct 
  */
-function calculate_start_end_of_week($week_number, $year)
-{
+function calculate_start_end_of_week($week_number, $year) {
 	// determine the start and end date
 	// step 1: we calculate a timestamp for a day in this week
 	$random_day_in_week = mktime(0, 0, 0, 1, 1, $year) + ($week_number-1) * (7 * 24 * 60 * 60); // we calculate a random day in this week
@@ -3250,9 +3250,10 @@ function display_daycalendar($agendaitems, $day, $month, $year, $weekdaynames, $
  *	Display the weekly view of the calendar
  */
 function display_weekcalendar($agendaitems, $month, $year, $weekdaynames, $monthName) {
-	var_dump($agendaitems);
+
 	global $DaysShort,$course_path;
 	global $MonthsLong;
+	
 	// timestamp of today
 	$today = time();
 	$day_of_the_week = date("w", $today);
@@ -3261,23 +3262,40 @@ function display_weekcalendar($agendaitems, $month, $year, $weekdaynames, $month
 	$week_number = date("W", $today);
 	$thisweek_number = $week_number;
 	// if we moved to the next / previous week we have to recalculate the $today variable
-	if ($_GET['week']) {
+	
+	if (!isset($_GET['week'])) {
+		/*
 		$today = mktime(0, 0, 0, 1, 1, $year);
 		$today = $today + (((int)$_GET['week']-1) * (7 * 24 * 60 * 60));
-		$week_number = date("W", $today);
+		$week_number = date("W", $today);*/
+		$week_number = date("W", time());
+		
+	} else {
+		$week_number = intval($_GET['week']);		
 	}
 	// calculating the start date of the week
 	// the date of the monday of this week is the timestamp of today minus
 	// number of days that have already passed this week * 24 hours * 60 minutes * 60 seconds
 	$current_day = date("j", $today); // Day of the month without leading zeros (1 to 31) of today
 	$day_of_the_week = date("w", $today); // Numeric representation of the day of the week	0 (for Sunday) through 6 (for Saturday) of today
-	$timestamp_first_date_of_week = $today - (($day_of_the_week -1) * 24 * 60 * 60); // timestamp of the monday of this week
-	$timestamp_last_date_of_week = $today + ((7 - $day_of_the_week) * 24 * 60 * 60); // timestamp of the sunday of this week
+	
+	
+	//Using the same script to calculate the start/end of a week
+	$start_end = calculate_start_end_of_week($week_number, $year);	
+	
+	$timestamp_first_date_of_week = mktime(0, 0, 0, $start_end['start']['month'], $start_end['start']['day'], $start_end['start']['year']);
+	$timestamp_last_date_of_week  = mktime(0, 0, 0, $start_end['end']['month'], $start_end['end']['day'], $start_end['end']['year']);
+	//var_dump($start_end);	
+	/*$timestamp_first_date_of_week = $today - (($day_of_the_week -1) * 24 * 60 * 60); // timestamp of the monday of this week
+	$timestamp_last_date_of_week = $today + ((7 - $day_of_the_week) * 24 * 60 * 60); // timestamp of the sunday of this week	
+	*/	
+	
 	$backwardsURL = api_get_self()."?coursePath=".urlencode($course_path)."&amp;courseCode=".Security::remove_XSS($_GET['courseCode'])."&amp;action=view&amp;view=week&amp;week=". ($week_number -1);
 	$forewardsURL = api_get_self()."?coursePath=".urlencode($course_path)."&amp;courseCode=".Security::remove_XSS($_GET['courseCode'])."&amp;action=view&amp;view=week&amp;week=". ($week_number +1);
-	echo "<table class=\"data_table\">";
+	
+	echo '<table class="data_table">';
 	// The title row containing the the week information (week of the year (startdate of week - enddate of week)
-	echo "<tr>";
+	echo '<tr>';
 	echo "<th width=\"10%\"><a href=\"", $backwardsURL, "\">".Display::return_icon('action_prev.png',get_lang('Previous'))."</a></th>"; 
 	echo "<th colspan=\"5\">".get_lang("Week")." ".$week_number;
 	echo " (".$DaysShort['1']." ".date("j", $timestamp_first_date_of_week)." ".$MonthsLong[date("n", $timestamp_first_date_of_week) - 1]." ".date("Y", $timestamp_first_date_of_week)." - ".$DaysShort['0']." ".date("j", $timestamp_last_date_of_week)." ".$MonthsLong[date("n", $timestamp_last_date_of_week) - 1]." ".date("Y", $timestamp_last_date_of_week).')';
@@ -3285,9 +3303,11 @@ function display_weekcalendar($agendaitems, $month, $year, $weekdaynames, $month
 	echo "<th width=\"10%\"><a href=\"", $forewardsURL, "\">".Display::return_icon('action_next.png',get_lang('Next'))."</a></th>", "</tr>";
 	// The second row containing the short names of the days of the week
 	echo "<tr>";
-	// this is the Day of the month without leading zeros (1 to 31) of the monday of this week
-	$tmp_timestamp = $timestamp_first_date_of_week;
 	
+	//Printing the week days
+	
+	// this is the Day of the month without leading zeros (1 to 31) of the monday of this week
+	$tmp_timestamp = $timestamp_first_date_of_week;	
 	for ($ii = 1; $ii < 8; $ii ++) {
 		$is_today = ($ii == $thisday_of_the_week AND (!isset($_GET['week']) OR $_GET['week']==$thisweek_number));
 		echo "<td class=\"weekdays\">";
@@ -3304,9 +3324,11 @@ function display_weekcalendar($agendaitems, $month, $year, $weekdaynames, $month
 		$tmp_timestamp = $tmp_timestamp + (24 * 60 * 60);
 	}
 	echo "</tr>";
-	// the table cells containing all the entries for that day
+	
+	// The table cells containing all the entries for that day
 	echo "<tr>";
 	$counter = 0;
+	
 	foreach ($array_tmp_timestamp as $key => $value) {
 		if ($counter < 5) {			
 			$class = "class=\"days_week\"";
@@ -3443,31 +3465,30 @@ function get_day_agendaitems($courses_dbs, $month, $year, $day)
 /**
  * Return agenda items of the week
  */
-function get_week_agendaitems($courses_dbs, $month, $year, $week = '')
-{
+function get_week_agendaitems($courses_dbs, $month, $year, $week = '') {
+	//var_dump( $month, $year, $week );
 	global $_user;
 	global $_configuration;
 	global $setting_agenda_link;
-
+	
 	$TABLEAGENDA 		= Database :: get_course_table(TABLE_AGENDA);
 	$TABLE_ITEMPROPERTY = Database :: get_course_table(TABLE_ITEM_PROPERTY);
 	
 	$items = array ();
 	// The default value of the week
-	if ($week == '')
-	{
+	if ($week == '') {
 		$week_number = date("W", time());
-	}
-	else
-	{
+	} else {
 		$week_number = $week;
 	}
+
 	$start_end = calculate_start_end_of_week($week_number, $year);
-	$start_filter = $start_end['start']['year']."-".$start_end['start']['month']."-".$start_end['start']['day'];
-	$end_filter = $start_end['end']['year']."-".$start_end['end']['month']."-".$start_end['end']['day'];
+	
+	$start_filter 	= $start_end['start']['year']."-".$start_end['start']['month']."-".$start_end['start']['day'];
+	$end_filter 	= $start_end['end']['year']."-".$start_end['end']['month']."-".$start_end['end']['day'];
+	//var_dump($start_filter, $end_filter);
 	// get agenda-items for every course
-	foreach ($courses_dbs as $key => $array_course_info)
-	{
+	foreach ($courses_dbs as $key => $array_course_info) {
 		//databases of the courses
 		$TABLEAGENDA = Database :: get_course_table(TABLE_AGENDA, $array_course_info["db"]);
 		$TABLE_ITEMPROPERTY = Database :: get_course_table(TABLE_ITEM_PROPERTY, $array_course_info["db"]);
@@ -3476,8 +3497,7 @@ function get_week_agendaitems($courses_dbs, $month, $year, $week = '')
 		$group_memberships = GroupManager :: get_group_ids($array_course_info["db"], $_user['user_id']);
 
 		// if the user is administrator of that course we show all the agenda items
-		if ($array_course_info['status'] == '1')
-		{
+		if ($array_course_info['status'] == '1') {
 			//echo "course admin";
 			$sqlquery = "SELECT
 							DISTINCT a.*, i.*
@@ -3491,11 +3511,9 @@ function get_week_agendaitems($courses_dbs, $month, $year, $week = '')
 							ORDER BY a.start_date";
 		}
 		// if the user is not an administrator of that course
-		else
-		{
+		else {
 			//echo "GEEN course admin";
-			if (is_array($group_memberships) && count($group_memberships)>0)
-			{
+			if (is_array($group_memberships) && count($group_memberships)>0) {
 				$sqlquery = "SELECT
 									a.*, i.*
 									FROM ".$TABLEAGENDA." a,
@@ -3506,9 +3524,7 @@ function get_week_agendaitems($courses_dbs, $month, $year, $week = '')
 									AND	( i.to_user_id='".$_user['user_id']."' OR i.to_group_id IN (0, ".implode(", ", $group_memberships).") )
 									AND i.visibility='1'
 									ORDER BY a.start_date";
-			}
-			else
-			{
+			} else {
 				$sqlquery = "SELECT
 									a.*, i.*
 									FROM ".$TABLEAGENDA." a,
@@ -3525,20 +3541,17 @@ function get_week_agendaitems($courses_dbs, $month, $year, $week = '')
 		// $sqlquery = "SELECT * FROM $agendadb WHERE (DAYOFMONTH(day)>='$start_day' AND DAYOFMONTH(day)<='$end_day')
 		//				AND (MONTH(day)>='$start_month' AND MONTH(day)<='$end_month')
 		//				AND (YEAR(day)>='$start_year' AND YEAR(day)<='$end_year')";
+		//var_dump($sqlquery);
 		$result = Database::query($sqlquery);
-		while ($item = Database::fetch_array($result))
-		{
+		while ($item = Database::fetch_array($result)) {
 			$agendaday_string = api_convert_and_format_date($item['start_date'], "%d", date_default_timezone_get());
 			$agendaday = intval($agendaday_string);
 			$time = api_convert_and_format_date($item['start_date'], TIME_NO_SEC_FORMAT, date_default_timezone_get());
 
-			if ($setting_agenda_link == 'coursecode')
-			{
+			if ($setting_agenda_link == 'coursecode') {
 				$title=$array_course_info['title'];
 				$agenda_link = cut($title, 14, true);
-			}
-			else
-			{
+			} else {
 				$agenda_link = Display::return_icon('course_home.gif');
 			}
 
@@ -3546,20 +3559,18 @@ function get_week_agendaitems($courses_dbs, $month, $year, $week = '')
 			//Display the events in agenda
 			$items[$agendaday][$item['start_date']] .= "<i>$time</i> <a href=\"$URL\" title=\"".$array_course_info["name"]."\">".$agenda_link."</a>";
 			$items[$agendaday][$item['start_date']] .= "<div>".$item['title']."</div><br>";
-
 		}
 	}
-	// sorting by hour for every day
+	
 	$agendaitems = array ();
-	while (list ($agendaday, $tmpitems) = each($items))
-	{
+	// sorting by hour for every day
+	while (list ($agendaday, $tmpitems) = each($items)) {
 		sort($tmpitems);
-		while (list ($key, $val) = each($tmpitems))
-		{
+		while (list ($key, $val) = each($tmpitems)) {
 			$agendaitems[$agendaday] .= $val;
 		}
 	}
-	//print_r($agendaitems);
+	
 	return $agendaitems;
 }
 /**

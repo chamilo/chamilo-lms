@@ -183,8 +183,7 @@ if (isset ($_user['user_id'])) {
 		$day = $today['mday'];
 	}
 	$week = (!empty($_GET['week']) ?(int)$_GET['week']:NULL);
-	if ($week == NULL)
-	{
+	if ($week == NULL) {
 		$week = date("W");
 	}
 	// The name of the current Month
@@ -232,7 +231,8 @@ if (isset ($_user['user_id'])) {
 			display_mymonthcalendar($agendaitems, $month, $year, array(), $monthName);
 			break;
 		case 'week_view' :
-			$agendaitems = get_week_agendaitems($courses_dbs, $month, $year, $week);
+		//var_dump($week);
+			$agendaitems = get_week_agendaitems($courses_dbs, $month, $year, $week);			
 			$agendaitems = get_global_agenda_items($agendaitems, $day, $month, $year, $week, "week_view");
 			if (api_get_setting("allow_personal_agenda") == "true") {
 				$agendaitems = get_personal_agenda_items($agendaitems, $day, $month, $year, $week, "week_view");

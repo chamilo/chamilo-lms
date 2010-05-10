@@ -108,13 +108,13 @@ function initCalendar() {
 
     //heading table
     str += '<table class="calendar"><tr><th class="monthyear" width="50%">';
-    str += '<a href="javascript:month--; initCalendar();">&laquo;</a> ';
+    str += '<a href="javascript:month--; initCalendar();"><?php echo Display::return_icon('action_prev.png',get_lang('Previous'));?></a> ';
     str += month_names[month];
-    str += ' <a href="javascript:month++; initCalendar();">&raquo;</a>';
+    str += ' <a href="javascript:month++; initCalendar();"><?php echo Display::return_icon('action_next.png',get_lang('Next'));?></a>';
     str += '</th><th class="monthyear" width="50%">';
-    str += '<a href="javascript:year--; initCalendar();">&laquo;</a> ';
+    str += '<a href="javascript:year--; initCalendar();"><?php echo Display::return_icon('action_prev.png',get_lang('Previous'));?></a> ';
     str += year;
-    str += ' <a href="javascript:year++; initCalendar();">&raquo;</a>';
+    str += ' <a href="javascript:year++; initCalendar();"><?php echo Display::return_icon('action_next.png',get_lang('Next'));?></a>';
     str += '</th></tr></table>';
 
     str += '<table class="calendar"><tr>';
@@ -146,7 +146,7 @@ function initCalendar() {
         } else {
             style = '';
         }
-        str += "<td" + style + "><a href=\"javascript:returnDate(" + i +","+month+","+year + ");\" >" + i + "</a></td>"
+        str += "<td" + style + "><a href=\"javascript:returnDate(" + i +","+month+","+year + ");\" ><div>" + i + "</div></a></td>"
         dayInWeek++;
     }
     for (i = dayInWeek; i < 7; i++) {

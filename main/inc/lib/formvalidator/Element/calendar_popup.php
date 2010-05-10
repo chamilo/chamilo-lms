@@ -52,10 +52,9 @@ header('Content-Type: text/html; charset='. api_get_system_encoding());
 <style type="text/css">
 /*<![CDATA[*/
 @import "<?php echo api_get_path(WEB_CODE_PATH); ?>css/<?php echo api_get_setting('stylesheets'); ?>/default.css";
-table.calendar
-{
+table.calendar {
 	width: 100%;
-	font-size: 11px;
+	font-size: 12px;
 	font-family: verdana, arial, helvetica, sans-serif;
 }
 table.calendar .monthyear
@@ -63,9 +62,11 @@ table.calendar .monthyear
 	background-color: #4171B5;
 	text-align: center;
 	color: #ffffff;
+	font-size:12px;
+	padding:5px;
+	margin:10px;
 }
-table.calendar .daynames
-{
+table.calendar .daynames {
 	background-color: #D3DFF1;
 	text-align: center;
 }
@@ -91,16 +92,26 @@ table.calendar td a:hover
 {
 	background-color: #ffff00;
 }
-table.calendar .monthyear a
+
+table.calendar td a div
 {
+	padding:5px;
+}
+
+table.calendar td a div:hover
+{
+	background-color: #ffff00;
+}
+
+table.calendar .monthyear a {	
 	text-align: center;
-	color: #ffffff;
+	/* color: #ffffff; */
 }
 table.calendar .monthyear a:hover
 {
 	text-align: center;
-	color: #ff0000;
-	background-color: #ffff00;
+	/*color: #ff0000;*/
+	/*background-color: #ffff00;*/
 }
 /*]]>*/
 </style>

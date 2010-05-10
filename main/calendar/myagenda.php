@@ -158,8 +158,7 @@ if (!empty($_GET['action']) && $_GET['action'] == "delete" AND $_GET['id'])
 	$process = "delete_personal_agenda_item";
 }
 // OUTPUT
-if (isset ($_user['user_id']))
-{
+if (isset ($_user['user_id'])) {
 	// getting all the courses that this user is subscribed to
 	$courses_dbs = get_all_courses_of_user();
 	if (!is_array($courses_dbs)) // this is for the special case if the user has no courses (otherwise you get an error)
@@ -192,16 +191,16 @@ if (isset ($_user['user_id']))
 	$monthName = $MonthsLong[$month -1];
 	// Starting the output
 
-	echo "\n<div class=\"actions\">\n";
-	echo "\t<a href=\"".api_get_self()."?action=view&amp;view=month\">".Display::return_icon('calendar_month.gif', get_lang('MonthView'))." ".get_lang('MonthView')."</a> \n";
-	echo "\t<a href=\"".api_get_self()."?action=view&amp;view=week\">".Display::return_icon('calendar_week.gif', get_lang('WeekView'))." ".get_lang('WeekView')."</a> \n";
-	echo "\t<a href=\"".api_get_self()."?action=view&amp;view=day\">".Display::return_icon('calendar_day.gif', get_lang('DayView'))." ".get_lang('DayView')."</a> \n";
+	echo "<div class=\"actions\">";
+	echo "<a href=\"".api_get_self()."?action=view&amp;view=month\">".Display::return_icon('calendar_month.gif', get_lang('MonthView'))." ".get_lang('MonthView')."</a> ";
+	echo "<a href=\"".api_get_self()."?action=view&amp;view=week\">".Display::return_icon('calendar_week.gif', get_lang('WeekView'))." ".get_lang('WeekView')."</a> ";
+	echo "<a href=\"".api_get_self()."?action=view&amp;view=day\">".Display::return_icon('calendar_day.gif', get_lang('DayView'))." ".get_lang('DayView')."</a> ";
 	if (api_get_setting('allow_personal_agenda') == 'true')
 	{
-		echo "\t<a href=\"".api_get_self()."?action=add_personal_agenda_item\">".Display::return_icon('calendar_personal_add.gif', get_lang('AddPersonalItem'))." ".get_lang('AddPersonalItem')."</a> \n";
-		echo "\t<a href=\"".api_get_self()."?action=view&amp;view=personal\">".Display::return_icon('calendar_personal.gif', get_lang('ViewPersonalItem'))."  ".get_lang('ViewPersonalItem')."</a> \n";
+		echo "<a href=\"".api_get_self()."?action=add_personal_agenda_item\">".Display::return_icon('calendar_personal_add.gif', get_lang('AddPersonalItem'))." ".get_lang('AddPersonalItem')."</a> ";
+		echo "<a href=\"".api_get_self()."?action=view&amp;view=personal\">".Display::return_icon('calendar_personal.gif', get_lang('ViewPersonalItem'))."  ".get_lang('ViewPersonalItem')."</a> ";
 	}
-	echo "</div>\n\n";
+	echo "</div>";
 
 	echo "<table width=\"100%\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\">";
 	echo "<tr>";
@@ -223,7 +222,7 @@ if (isset ($_user['user_id']))
 	echo "<td valign=\"top\">";
 	switch ($process)
 	{
-		case "month_view" :
+		case 'month_view' :
 			$agendaitems = get_myagendaitems($courses_dbs, $month, $year);
 			$agendaitems = get_global_agenda_items($agendaitems, $day, $month, $year, $week, "month_view");
 			if (api_get_setting("allow_personal_agenda") == "true")
@@ -232,16 +231,15 @@ if (isset ($_user['user_id']))
 			}
 			display_mymonthcalendar($agendaitems, $month, $year, array(), $monthName);
 			break;
-		case "week_view" :
+		case 'week_view' :
 			$agendaitems = get_week_agendaitems($courses_dbs, $month, $year, $week);
 			$agendaitems = get_global_agenda_items($agendaitems, $day, $month, $year, $week, "week_view");
-			if (api_get_setting("allow_personal_agenda") == "true")
-			{
+			if (api_get_setting("allow_personal_agenda") == "true") {
 				$agendaitems = get_personal_agenda_items($agendaitems, $day, $month, $year, $week, "week_view");
 			}
 			display_weekcalendar($agendaitems, $month, $year, array(), $monthName);
 			break;
-		case "day_view" :
+		case 'day_view' :
 			$agendaitems = get_day_agendaitems($courses_dbs, $month, $year, $day);
 			$agendaitems = get_global_agenda_items($agendaitems, $day, $month, $year, $week, "day_view");
 			if (api_get_setting("allow_personal_agenda") == "true")
@@ -250,30 +248,27 @@ if (isset ($_user['user_id']))
 			}
 			display_daycalendar($agendaitems, $day, $month, $year, array(), $monthName);
 			break;
-		case "personal_view" :
+		case 'personal_view' :
 			show_personal_agenda();
 			break;
-		case "add_personal_agenda_item" :
+		case 'add_personal_agenda_item' :
 			show_new_personal_item_form();
 			break;
-		case "store_personal_agenda_item" :
+		case 'store_personal_agenda_item' :
 			store_personal_item($_POST['frm_day'], $_POST['frm_month'], $_POST['frm_year'], $_POST['frm_hour'], $_POST['frm_minute'], $_POST['frm_title'], $_POST['frm_content'], (int)$_GET['id']);
-			if ($_GET['id'])
-			{
+			if ($_GET['id']) {
 				echo '<br />';
 				Display :: display_normal_message(get_lang("PeronalAgendaItemEdited"));
-			}
-			else
-			{
+			} else {
 				echo '<br />';
 				Display :: display_normal_message(get_lang("PeronalAgendaItemAdded"));
 			}
 			show_personal_agenda();
 			break;
-		case "edit_personal_agenda_item" :
+		case 'edit_personal_agenda_item' :
 			show_new_personal_item_form((int)$_GET['id']);
 			break;
-		case "delete_personal_agenda_item" :
+		case 'delete_personal_agenda_item' :
 			delete_personal_agenda((int)$_GET['id']);
 			echo '<br />';
 			Display :: display_normal_message(get_lang('PeronalAgendaItemDeleted'));
@@ -281,6 +276,6 @@ if (isset ($_user['user_id']))
 			break;
 	}
 }
-echo "</td></tr></table>";
+echo '</td></tr></table>';
 Display :: display_footer();
 ?>

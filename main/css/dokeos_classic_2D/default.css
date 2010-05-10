@@ -427,6 +427,7 @@ input.link_alike:hover {
 .menusectioncaption {
 	background-color: #E5EDF9;
 	font-size: 12px;
+	font-weight:bold;
 	padding: 0 8px 0 4px;
 	position: relative;
 	top: -9px;
@@ -3054,11 +3055,11 @@ a.read {
 	-opera-border-radius: 10px; border: 1px solid #e1e1e0;	
 	
 	margin-top:20px;
-	margin-right:10px;
+	/*margin-right:10px;*/
 	margin-bottom:0px;
 	
-	padding-left:10px;
-	padding-right:10px;
+	/*padding-left:10px;
+	padding-right:10px;*/
 	padding-top:5px;
 	padding-bottom:0px;	
 	

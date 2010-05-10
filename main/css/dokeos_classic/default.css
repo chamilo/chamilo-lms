@@ -450,6 +450,7 @@ input[text] {
 	top: -9px;
 	background-color: #E5EDF9;
 	font-size: 12px;
+	font-weight:bold;
 	padding: 0 8px 0 4px;
 }
 .menulist {
@@ -3039,8 +3040,8 @@ a.read {
 	margin-right:10px;
 	margin-bottom:0px;
 	
-	padding-left:10px;
-	padding-right:10px;
+	/*padding-left:10px;
+	padding-right:10px;*/
 	padding-top:5px;
 	padding-bottom:0px;	
 	

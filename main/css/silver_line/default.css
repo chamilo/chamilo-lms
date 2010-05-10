@@ -1573,7 +1573,7 @@ div.system_announcement {
 	width: auto;
 	margin: 24px 6px 0 6px;
 	padding-left: 10px;
-	border: 1px solid #4171B5;
+	/* border: 1px solid #4171B5; */
 }
 .menusectioncaption {
 	position: relative;
@@ -2582,7 +2582,7 @@ a.read {
 }
 #menu-wrapper {
 	width:200px;
-	float: right;
+	float: left;
 }
 #menu {
 /*	-moz-border-radius: 10px; border: 1px solid #e1e1e0;
@@ -2749,7 +2749,7 @@ float:left;
 	font-size:12px;
 }
 .message-body {
-	font-size:11px;
+	/* font-size:11px; */
 	padding: 0 0 11px;
 	color:#333;
 }

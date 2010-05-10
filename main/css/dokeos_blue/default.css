@@ -2755,7 +2755,7 @@ a.read {
 	-opera-border-radius: 10px; border: 1px solid #e1e1e0;	
 
 	margin-top:20px;
-	margin-right:10px;
+/*	margin-right:10px; */
 	margin-bottom:0px;
 	
 	/*padding-left:10px;
@@ -2914,7 +2914,7 @@ float:left;
 	font-size:12px;
 }
 .message-body {
-	font-size:11px;
+	/* font-size:11px; */
 	padding: 0 0 11px;
 	color:#333;
 }

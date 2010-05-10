@@ -470,7 +470,7 @@ input[text] {
 	width: auto;
 	margin: 24px 6px 0 6px;
 	padding-left: 10px;
-	border: 1px solid #4171B5;
+	/* border: 1px solid #4171B5; */
 }
 .menusectioncaption {
 	position: relative;
@@ -2222,13 +2222,13 @@ padding-top: 0px;	padding-right: 0px;	padding-bottom: 0px;	padding-left: 0px;}
 }
 /* styles from the my.profile.php file */
 .message-content {
-	float:right;
+	/*float:right;
 	margin:20px auto;
 	background:#F5E38E;
 	border:2px solid #EBCA4F;
 	padding:10px;
 	width:200px;
-	position:relative;
+	position:relative;*/
 }
 .message-content .message-delete {
 	position: absolute;
@@ -2251,8 +2251,7 @@ padding-top: 0px;	padding-right: 0px;	padding-bottom: 0px;	padding-left: 0px;}
 	color:#ff0000;
 	font-size:15px;
 }
-.message-body {
-	font-size:11px;
+.message-body {	
 	padding: 0 0 11px;
 	color:#333;
 }
@@ -3220,20 +3219,20 @@ a.read {
 	float: right;
 }
 #menu {
-/*	-moz-border-radius: 10px; border: 1px solid #e1e1e0;
+	-moz-border-radius: 10px; border: 1px solid #e1e1e0;
 	-webkit-border-radius: 10px; border: 1px solid #e1e1e0;
 	-opera-border-radius: 10px; border: 1px solid #e1e1e0;	
 
 	margin-top:20px;
 	margin-right:10px;
-	margin-bottom:40px;
+	margin-bottom:0px;
 	
 	padding-left:10px;
 	padding-right:10px;
 	padding-top:5px;
-	padding-bottom:30px;	
+	padding-bottom:0px;	
 	
-	width:240px; */
+	width:200px; 
 	float: right;
 	min-height: 150px;
 	

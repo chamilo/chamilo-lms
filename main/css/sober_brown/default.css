@@ -462,7 +462,7 @@ input[text] {
 	width: auto;
 	margin: 24px 6px 0 6px;
 	padding-left: 10px;
-	border: 1px solid #4171B5;
+	/* border: 1px solid #4171B5; */
 }
 .menusectioncaption {
 	position: relative;
@@ -3102,7 +3102,7 @@ float:left;
 	font-size:12px;
 }
 .message-body {
-	font-size:11px;
+	/* font-size:11px; */
 	padding: 0 0 11px;
 	color:#333;
 }

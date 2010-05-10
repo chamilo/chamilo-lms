@@ -103,7 +103,8 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
 	<div class="actions">
 	<?php
 	echo '<div style="float:right;">
-			<a href="'.api_get_path(WEB_CODE_PATH).'admin/session_category_add.php">'.Display::return_icon('view_more_stats.gif',get_lang('AddSession')).get_lang('AddSessionCategory').'</a>
+			<a href="'.api_get_path(WEB_CODE_PATH).'admin/session_category_add.php">'.Display::return_icon('folder_new.gif',get_lang('AddSessionCategory')).get_lang('AddSessionCategory').'</a>
+			<a href="'.api_get_path(WEB_CODE_PATH).'admin/session_list.php">'.Display::return_icon('blackboard_blue.png',get_lang('ListSession'),array('width'=>'24px')).get_lang('ListSession').'</a>	
 	 	  </div>';
 	?>
 	<form method="POST" action="session_category_list.php">

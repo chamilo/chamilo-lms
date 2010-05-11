@@ -1187,6 +1187,7 @@ div.system_announcement {
 	background-color: #d6e3f5;
 	border: 1px solid #002D6D;
 	color: #002D6D;
+	min-height:20px; 
 }
 .system_announcement {
 	background: #8cafe1 url('images/crystal3.png') repeat-x;

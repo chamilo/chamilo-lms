@@ -1332,6 +1332,7 @@ div.system_announcements {
 div.system_announcements h3 {
 }
 div.system_announcement {
+	min-height:20px; 
 	margin: 5px;
 }
 div.system_announcement_title {

@@ -1321,6 +1321,7 @@ div.report_section h4 {
  *  SYSTEM ANNOUNCEMENTS						     *
  *****************************************************/
 div.system_announcement {
+	min-height:20px; 
 	padding: 10px;
 	border: 1px solid #ddd;
 	-moz-border-radius-topright : 5px;

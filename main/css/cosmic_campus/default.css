@@ -1227,6 +1227,7 @@ div.system_announcements h3 {
 }
 div.system_announcement {
 	margin: 5px;
+	min-height:20px; 
 }
 div.system_announcement_title {
 }

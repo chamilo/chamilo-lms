@@ -521,9 +521,9 @@ function api_get_local_time($time = null, $to_timezone = null, $from_timezone = 
 	if (is_int($time)) {
 		$from_timezone = 'UTC';
 		$time = gmdate('Y-m-d H:i:s', $time);
-	}
+	}	
 	try {
-		$date = new DateTime($time, new DateTimezone($from_timezone));
+		$date = new DateTime($time, new DateTimezone($from_timezone));		
 		$date->setTimezone(new DateTimeZone($to_timezone));
 		return $date->format('Y-m-d H:i:s');
 	} catch (Exception $e) {
@@ -580,6 +580,7 @@ function api_format_date($time, $format = null, $language = null) {
 
 	$datetype = null;
 	$timetype = null;
+	
 	if(is_int($format)) {
 		switch ($format) {
 			case TIME_NO_SEC_FORMAT:
@@ -626,10 +627,12 @@ function api_format_date($time, $format = null, $language = null) {
 		if (is_null($language)) {
 			$language = api_get_language_isocode();
 		}
-		$date_formatter = datefmt_create($language, $datetype, $timetype, date_default_timezone_get());
+		$date_formatter = datefmt_create($language, $datetype, $timetype, date_default_timezone_get());		
 		$formatted_date = api_to_system_encoding(datefmt_format($date_formatter, $time), 'UTF-8');
+		
 	} else {
 		// We replace %a %A %b %B masks of date format with translated strings.
+		
 		$translated = &_api_get_day_month_names($language);
 		$date_format = str_replace(array('%A', '%a', '%B', '%b'),
 		array($translated['days_long'][(int)strftime('%w', $time )],
@@ -782,7 +785,7 @@ function date_to_str_ago($date) {
  */
 function api_convert_and_format_date($time = null, $format = null, $from_timezone = null) {
 	// First, convert the datetime to the right timezone
-	$datetime = api_get_local_time($time, null, $from_timezone);
+	$time = api_get_local_time($time, null, $from_timezone);	
 	// Second, localize the date
 	return api_format_date($time, $format);
 }

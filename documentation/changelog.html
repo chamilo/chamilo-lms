@@ -24,7 +24,7 @@
 <p>Chamilo 1.8.7 is a major&nbsp;release including a lot of new features, mostly focused on social network, the handling of sessions (which will help many educational institutions, public or private, to manage their contents in a more flexible way) and visual style, and a few important bugfixes. It lays the first stable stone in the Chamilo software project. This version is the first one to <b>highly recommend PHP 5.2</b> or superior, and <b>require PHP 5.1</b> or higher.<br />Also, this version of Chamilo will automatically convert all your data to UTF-8, which will make it more difficult to migrate from Dokeos versions higher than 1.8.6.1</p>
 
 <h3>New Features</h3>
-<ul>
+<ul> 
   <li>Full UTF-8 support has been implemented (Feature #272)<ul>
     <li>UTF-8 becomes recommended system encoding to be used. It is also recommended that HTML-documents created with external tools be UTF-8 encoded.</li>
     <li>For newly installed systems: UTF-8 is the default value of the administrator's setting "Character set". Database tables will now be storing UTF-8 encoded text.</li>
@@ -48,6 +48,8 @@
   <li>Added setting to show "report bug" link in header</li>
   <li>Added new visualization mode for courses: vertical activity</li>
   <li>Improved presentation of courses + sessions in courses list (bigger icons, clearer boxes)</li>
+  <li>Adding Ical import funcionality in agenda events see CT#1238</li>
+  <li>Updating license version to GNU/GPL v3</li>
 </ul>
 
 <h3>Debugging</h3>
@@ -65,15 +67,16 @@
   <li>Fixed course copy table lp_item audio not copied. Reported by Henri Hedman (Bug #575)</li>
   <li>Fixed Added an option to cancel prerequisites in a course (Learning path). Fixed by aboivin in <a href="http://www.chamilo.org/node/146" target="_blank">http://www.chamilo.org/node/146</a> </li>
   <li>Empty extra user fields are now deleted from the database</li>
-  <li>Quiz tool: erasing "rn" characters in fill in blanks and free answer bug fixed (Bug #829) Reported by David Auzeine</li>
+  <li>Quiz tool: erasing "rn" characters in fill in blanks and free answer bug fixed (Bug #829). Reported by David Auzeine</li>
   <li>Quiz tool: answer field updated from "id" to "id_auto" in the chamilo_stats.track_e_attempt table when migrating from 1.8.6.2 to 1.8.7  </li>
   <li>Quiz tool: Answer list fixed when using "matching" question type (BT#801). Reported by Noa Orizales</li>
+  <li>Quiz tool: Fixed problem with open questions when entering words with the "rn" characters see CT#1035 </li>
   <li>Quiz tool + LP : Fixed bug when adding a exercise twice in the same LP with multiple attempts or not.</li>
   <li>Quiz tool + LP + Multiple attempts : Pre requisites will work the first time a student pass the LP.
  	  If a student finished all steps correctly he will view all steps, prerequisites will not work here.</li>
   <li>Learning Path (Courses): PHP sessions of a LP are destroyed when visiting the main course page.</li>
   <li>Assignment tool: Work.php deletes all homeworks bugs fixed. Reported and fixed by carlosbrolotobar <a href="http://www.chamilo.org/node/143" target="_blank">http://www.chamilo.org/node/143</a></li>
-  <li>Core API: Support has been implemented for json_encode() function for PHP version < 5.2. The correspondent bug-report "Hide and show not working" and testing have been done by Hubert Borderiou <a href="http://support.chamilo.org/issues/761" target="_blank">http://support.chamilo.org/issues/761</a></li>
+  <li>Core API: Support has been implemented for json_encode() function for PHP version &#60; 5.2. The correspondent bug-report "Hide and show not working" and testing have been done by Hubert Borderiou <a href="http://support.chamilo.org/issues/761" target="_blank">http://support.chamilo.org/issues/761</a></li>
   <li>Fixed target problems in links tool, in link edition</li>
   <li>Fixed minor bug in online mail editor in order to show the sender's name and e-mail</li>
   <li>Fixed bug that prevented importing SCORM resource from course archives (Bug #872)</li>
@@ -83,6 +86,11 @@
   <li>Adding javascript library for the Pear HTML_QuickForm_advmultiselect class (see CT#883)</li>
   <li>Assignment tool: Fixed problem with work/assignment tool whereby a moved work lost the ability to be scored</li>
   <li>Announcement tool: display images inside content of announcement sent by email (now the attachment images are embedded inside content) - private BT#925</li>
+  <li>User image is show in the course list (User portal)</li>
+  <li>Copy course sessions fixes see CT#1253</li>    
+  <li>SQL query fixed Wiki tool see CT#1201. Report by Hubert Borderiou</li>
+  <li>Learning path: Show document title instead of filename. Report and fix sent by Hubert Borderiou; See CT#1038</li>
+   
 </ul>
 <h3>CSS changes</h3>
 <ul>
@@ -92,6 +100,8 @@
   <li>By creating a new course, will be enabled default, the option to display the chat in a new window</li>
   <li>When installing the platform will be active by default the following options: Allow edit tutors in the courses of the sessions, social network and sending messages</li>
   <li>When you add an answer in Multiple choice or Multiple answers the score default is zero </li>
+  <li>Portal news UI improvements</li>
+  <li>User portal page UI improvements</li>  
 </ul>
 <h3>Known issues</h3>
 <ul>

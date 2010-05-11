@@ -446,6 +446,7 @@ function display_student_publications_list($work_dir, $sub_course_dir, $currentC
 
 					$group_name[] = FormValidator :: createElement('text', 'dir_name');
 					$form_folder -> addGroup($group_name, 'my_group', get_lang('Title'));
+					
 					$form_folder -> addGroupRule('my_group', get_lang('ThisFieldIsRequired'), 'required');
 					$defaults = array('my_group[dir_name]' => html_entity_decode($dir), 'description' => api_html_entity_decode($row['description']));
 
@@ -461,6 +462,7 @@ function display_student_publications_list($work_dir, $sub_course_dir, $currentC
 					}
 
 					$there_is_a_end_date = false;
+					
 					if ($row['view_properties'] == '1') {
 						if ($homework['expires_on'] != '0000-00-00 00:00:00') {
 							$there_is_a_expire_date = true;
@@ -498,7 +500,8 @@ function display_student_publications_list($work_dir, $sub_course_dir, $currentC
 							$form_folder -> addGroup($weight_input2, 'weight', get_lang('WeightInTheGradebook'), 'size="10"');
 							$form_folder -> addElement('html', '</div>');
 						}
-						if ($homework['expires_on'] = '0000-00-00 00:00:00') {
+						
+						if ($homework['expires_on'] == '0000-00-00 00:00:00') {
 							$homework['expires_on'] = date('Y-m-d H:i:s');
 							$there_is_a_expire_date = true;
 							$form_folder -> addElement('checkbox', 'enableExpiryDate',null,get_lang('EnableExpiryDate'), 'onclick="javascript: if(this.checked==true){document.getElementById(\'option1\').style.display = \'block\';}else{document.getElementById(\'option1\').style.display = \'none\';}"');
@@ -506,7 +509,7 @@ function display_student_publications_list($work_dir, $sub_course_dir, $currentC
 							$form_folder -> addGroup(create_group_date_select(), 'expires', get_lang('ExpiresAt'));
 							$form_folder -> addElement('html', '</div>');
 						}
-						if ($homework['ends_on'] = '0000-00-00 00:00:00') {
+						if ($homework['ends_on'] == '0000-00-00 00:00:00') {
 							$homework['ends_on'] = date('Y-m-d H:i:s');
 							$there_is_a_end_date = true;
 							$form_folder -> addElement('checkbox', 'enableEndDate', null, get_lang('EnableEndDate'), 'onclick="javascript: if(this.checked==true){document.getElementById(\'option2\').style.display = \'block\';}else{document.getElementById(\'option2\').style.display = \'none\';}"');
@@ -524,8 +527,10 @@ function display_student_publications_list($work_dir, $sub_course_dir, $currentC
 					if ($there_is_a_end_date) {
 						$defaults = array_merge($defaults, convert_date_to_array($homework['ends_on'], 'ends'));
 					}
-					if ($there_is_a_expire_date) {
+					if ($there_is_a_expire_date) {					
+						
 						$defaults = array_merge($defaults, convert_date_to_array($homework['expires_on'], 'expires'));
+						
 					}
 					if (!empty($row['qualification'])) {
 						$defaults = array_merge($defaults, array('qualification[qualification]' => $row['qualification']));

@@ -1617,28 +1617,37 @@ if (isset($toolsList) and is_array($toolsList) and isset($digest)) {
 }
 
 echo '<div class="menusection">';
+
 echo '<span class="menusectioncaption">'.get_lang('Profile').'</span>';
 
-//user image
+//Always show the user image
+
+$img_array= UserManager::get_user_picture_path_by_id(api_get_user_id(),'web',true,true);
+$no_image =false;
+if ($img_array['file'] == 'unknown.jpg') {
+    $no_image =true;
+}
+$img_array = UserManager::get_picture_user(api_get_user_id(), $img_array['file'], 50, USER_IMAGE_SIZE_MEDIUM, ' width="90" height="90" ');
+echo '<div class="clear"></div>';
+
+echo '<div id="social_widget">';
+
+echo '  <div id="social_widget_image">';
+if (api_get_setting('allow_social_tool')=='true') {
+	if ($no_image == false) {
+	    echo '<a href="'.api_get_path(WEB_PATH).'main/social/home.php"><img src="'.$img_array['file'].'"  '.$img_array['style'].' border="1"></a>';
+	} else {
+	    echo '<a href="'.api_get_path(WEB_PATH).'main/auth/profile.php"><img title="'.get_lang('EditProfile').'" src="'.$img_array['file'].'" '.$img_array['style'].' border="1"></a>';
+	}
+} else {
+    echo '<a href="'.api_get_path(WEB_PATH).'main/auth/profile.php"><img title="'.get_lang('EditProfile').'" src="'.$img_array['file'].'" '.$img_array['style'].' border="1"></a>';	
+}
+echo '</div>';
+
+	
 //  @todo add a platform setting to add the user image
 if (api_get_setting('allow_social_tool')=='true' && api_get_setting('allow_message_tool') == 'true') {
-    $img_array= UserManager::get_user_picture_path_by_id(api_get_user_id(),'web',true,true);
-    $no_image =false;
-    if ($img_array['file'] == 'unknown.jpg') {
-        $no_image =true;
-    }
-    $img_array = UserManager::get_picture_user(api_get_user_id(), $img_array['file'], 50, USER_IMAGE_SIZE_MEDIUM, ' width="90" height="90" ');
-    echo '<div class="clear"></div>';
-    echo '<div id="social_widget" >';
-
-    echo '  <div id="social_widget_image">';
-    if ($no_image == false) {
-        echo '<a href="'.api_get_path(WEB_PATH).'main/social/home.php"><img src="'.$img_array['file'].'"  '.$img_array['style'].' border="1"></a>';
-    } else {
-        echo '<a href="'.api_get_path(WEB_PATH).'main/auth/profile.php"><img title="'.get_lang('EditProfile').'" src="'.$img_array['file'].'" '.$img_array['style'].' border="1"></a>';
-    }
-    echo '</div>';
-
+	
     require_once api_get_path(LIBRARY_PATH).'message.lib.php';
     require_once api_get_path(LIBRARY_PATH).'social.lib.php';
     require_once api_get_path(LIBRARY_PATH).'group_portal_manager.lib.php';
@@ -1673,10 +1682,10 @@ if (api_get_setting('allow_social_tool')=='true' && api_get_setting('allow_messa
     //}
 
     echo '</ul>';
-    echo '</div>';
-    echo '</div>';
-    //==echo '</div><div class="clear"></div>';
+    echo '</div>';    
 }
+echo '</div>'; //end 
+
     echo '</div>';    
 echo '</div>'; // end of menu
 

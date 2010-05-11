@@ -244,10 +244,24 @@ function two_digits($number) {
 /**
 * converts 2008-10-06 12:45:00 to -> array($data'year'=>2008,$data'month'=>10 etc...)
 */
-function convert_date_to_array($date, $group) {
+function convert_date_to_array($date, $group) { 
 	$parts = split(' ', $date);
-	list($data[$group.'[year]'], $data[$group.'[month]'], $data[$group.'[day]']) = split('-', $parts[0]);
-	list($data[$group.'[hour]'], $data[$group.'[minute]']) = split(':', $parts[1]);
+	$date_parts = split('-', $parts[0]);
+	$date_parts_tmp = array(); 
+	foreach ($date_parts as $item) {
+		$date_parts_tmp[] = intval($item);
+	}
+	
+	$time_parts = split(':', $parts[1]);
+	$time_parts_tmp = array(); 
+	foreach ($time_parts as $item) {
+		$time_parts_tmp[] = intval($item);
+	}
+	
+	
+	
+	list($data[$group.'[year]'], $data[$group.'[month]'], $data[$group.'[day]']) = $date_parts_tmp;
+	list($data[$group.'[hour]'], $data[$group.'[minute]']) = $time_parts_tmp;
 	return $data;
 }
 
@@ -525,13 +539,11 @@ function display_student_publications_list($work_dir, $sub_course_dir, $currentC
 
 					$form_folder -> addElement('style_submit_button', 'submit', get_lang('ModifyDirectory'), 'class="save"');
 					if ($there_is_a_end_date) {
-						$end_date_array = convert_date_to_array($homework['ends_on'], 'ends');
-						$end_date_array['ends[month]'] = intval($end_date_array['ends[month]']);						
+						$end_date_array = convert_date_to_array($homework['ends_on'], 'ends');										
 						$defaults = array_merge($defaults, $end_date_array);
 					}
 					if ($there_is_a_expire_date) {					
-						$expires_date_array = convert_date_to_array($homework['expires_on'], 'expires');						
-						$expires_date_array['expires[month]'] = intval($expires_date_array['expires[month]']);						
+						$expires_date_array = convert_date_to_array($homework['expires_on'], 'expires');
 						$defaults = array_merge($defaults, $expires_date_array);
 						
 					}

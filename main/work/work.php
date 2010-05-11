@@ -510,7 +510,7 @@ if (!empty($_REQUEST['new_dir'])) {
 	}
 
 	$fexpire = get_date_from_select('expires');
-	$fend =  get_date_from_select('ends');
+	$fend 	 = get_date_from_select('ends');
 
 	require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
 	$added_slash = (substr($cur_dir_path, -1, 1) == '/') ? '' : '/';

@@ -8,7 +8,6 @@ define('VISIBLE_TEACHER', 3);
 *
 *	@package chamilo.library
 */
-require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
 
 class SystemAnnouncementManager
 {
@@ -20,11 +19,7 @@ class SystemAnnouncementManager
 	public static function display_announcements($visible, $id = -1)
 	{
 		$user_selected_language = api_get_interface_language();
-		$db_table = Database :: get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
-		
-		
-		//Getting the user timezone
-		$user_timezone = Usermanager::get_extra_user_data_by_field(api_get_user_id(),'timezone');
+		$db_table = Database :: get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);		
 		
 		$sql = "SELECT *, DATE_FORMAT(date_start,'%d-%m-%Y %h:%i:%s') AS display_date FROM ".$db_table." WHERE (lang='$user_selected_language' OR lang IS NULL) AND ((NOW() BETWEEN date_start AND date_end) OR date_end='0000-00-00') ";
 		switch ($visible) {
@@ -59,20 +54,7 @@ class SystemAnnouncementManager
 						$show_url = 'news_list.php#'.$announcement->id;
 						//$show_url = $url.'?announcement='.$announcement->id;
 					}
-					
-					if (isset($user_timezone['timezone']) && !empty($user_timezone['timezone'])) {
-						$display_date = api_convert_and_format_date($announcement->display_date, DATE_FORMAT_LONG, $user_timezone['timezone']);
-					} else {
-						$display_date = api_convert_and_format_date($announcement->display_date, DATE_FORMAT_LONG, date_default_timezone_get()); 
-					}
-					
-					/*
-					$user_date = api_convert_and_format_date('11-05-2010 11:54:00', DATE_TIME_FORMAT_LONG, 'Europe/Paris');
-					var_dump ($user_date);					
-					$user_date = api_convert_and_format_date('11-05-2010 11:54:00', DATE_TIME_FORMAT_LONG, 'America/Lima');
-					var_dump ($user_date);
-					*/
-					
+					$display_date = api_convert_and_format_date($announcement->display_date, DATE_FORMAT_LONG, date_default_timezone_get());					
 					echo '<a name="'.$announcement->id.'"></a>
 						<div class="system_announcement">
 							<div class="system_announcement_title"><a name="ann'.$announcement->id.'" href="'.$show_url.'">'.$announcement->title.'</a></div><div class="system_announcement_date">'.$display_date.'</div>
@@ -100,10 +82,7 @@ class SystemAnnouncementManager
 
 	public static function display_all_announcements($visible, $id = -1,$start = 0,$user_id='') {
 		$user_selected_language = api_get_interface_language();
-		$start	= intval($start);
-		
-		//Getting the user timezone
-		$user_timezone = Usermanager::get_extra_user_data_by_field(api_get_user_id(),'timezone');		
+		$start	= intval($start);				
 
 		$db_table = Database :: get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
 		$sql = "SELECT *, DATE_FORMAT(date_start,'%d-%m-%Y %h:%i:%s') AS display_date FROM ".$db_table."
@@ -141,13 +120,8 @@ class SystemAnnouncementManager
 				echo '</tr>';
 			echo '</table>';
 			echo '<table align="center" border="0" width="900px">';			
-			while ($announcement = Database::fetch_object($announcements)) {				
-				if (isset($user_timezone['timezone']) && !empty($user_timezone['timezone'])) {
-					$display_date = api_convert_and_format_date($announcement->display_date, DATE_FORMAT_LONG, $user_timezone['timezone']);
-				} else {
-					$display_date = api_convert_and_format_date($announcement->display_date, DATE_FORMAT_LONG, date_default_timezone_get());
-				}
-				
+			while ($announcement = Database::fetch_object($announcements)) {
+				$display_date = api_convert_and_format_date($announcement->display_date, DATE_FORMAT_LONG, date_default_timezone_get());
 				echo '<tr><td>';
 				echo '<a name="'.$announcement->id.'"></a>
 						<div class="system_announcement">

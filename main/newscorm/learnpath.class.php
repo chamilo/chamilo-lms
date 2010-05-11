@@ -7213,7 +7213,8 @@ class learnpath {
 				$last_path = $resource_path;
 			}
 			if ($is_file) {
-				eval ('$resources_sorted' . $path_to_eval . '[' . $resource['id'] . '] = "' . $last_path . '";');
+				//eval ('$resources_sorted' . $path_to_eval . '[' . $resource['id'] . '] = "' . $last_path . '";');
+				eval ('$resources_sorted' . $path_to_eval . '[' . $resource['id'] . '] = "' .$resource['title']."/". $last_path. '";');
 			} else {
 				eval ('$resources_sorted' . $path_to_eval . '["' . $last_path . '"]["id"]=' . $resource['id'] . ';');
 			}
@@ -7249,11 +7250,15 @@ class learnpath {
 				} else {
 					if (!is_array($resource)) {
 						// it's a file				
-						$icon = choose_image($resource);
-						$position = strrpos($icon, '.');
-						$icon = substr($icon, 0, $position) . '_small.gif';
-						$return .= '<div><div style="margin-left:' . (($num +1) * 15) . 'px;margin-right:5px;"><a href="' . api_get_self() . '?cidReq=' . $_GET['cidReq'] . '&amp;action=add_item&amp;type=' . TOOL_DOCUMENT . '&amp;file=' . $key . '&amp;lp_id=' . $this->lp_id . '"><img alt="" src="../img/' . $icon . '" title="" />&nbsp;' . $resource .'</a></div></div>';
-					}
+						$icon		= choose_image($resource);
+						$position 	= strrpos($icon, '.');
+						$icon 		= substr($icon, 0, $position) . '_small.gif';					
+						$file_info	= explode('/', $resource);						
+          				$my_file_title = $file_info[0];
+          				$my_file_name  = $file_info[1];
+						//$return .= '<div><div style="margin-left:' . (($num +1) * 15) . 'px;margin-right:5px;"><a href="' . api_get_self() . '?cidReq=' . $_GET['cidReq'] . '&amp;action=add_item&amp;type=' . TOOL_DOCUMENT . '&amp;file=' . $key . '&amp;lp_id=' . $this->lp_id . '"><img alt="" src="../img/' . $icon . '" title="" />&nbsp;' . $resource .'</a></div></div>';
+						//Show the "image name" not the filename of the image
+          				$return .= '<div><div style="margin-left:' . (($num +1) * 15) . 'px;margin-right:5px;"><a href="' . api_get_self() . '?cidReq=' . Security::remove_XSS($_GET['cidReq']) . '&amp;action=add_item&amp;type=' . TOOL_DOCUMENT . '&amp;file=' . $key . '&amp;lp_id=' . $this->lp_id . '"><img alt="" src="../img/' . $icon . '" title="" />&nbsp;' . $my_file_title . "</a></div></div>\r\n";		}
 				}
 			}
 		}

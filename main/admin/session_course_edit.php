@@ -151,7 +151,7 @@ unset($coaches);
 </tr>
 <tr>
   <td>&nbsp;</td>
-  <td><button class="save" type="submit" name="name" value="<?php echo get_lang('ModifyCoach') ?>"><?php echo get_lang('ModifyCoach') ?></button>
+  <td><button class="save" type="submit" name="name" value="<?php echo get_lang('AssignCoach') ?>"><?php echo get_lang('AssignCoach') ?></button>
 </td>
 </tr>
 

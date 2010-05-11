@@ -1,4 +1,4 @@
-<?php // $Id: system_announcements.php 22243 2009-07-20 15:08:31Z ivantcholakov $
+<?php
 /* For licensing terms, see /license.txt */
 /**
 *	This page allows the administrator to manage the system announcements.
@@ -12,7 +12,7 @@ $language_file = array ('admin', 'agenda');
 $cidReset = true;
 
 // including the global dokeos files
-require '../inc/global.inc.php';
+require_once '../inc/global.inc.php';
 
 // including additional libraries
 require_once api_get_path(LIBRARY_PATH).'sortabletable.class.php';
@@ -41,9 +41,7 @@ if(empty($_GET['lang'])) {
 Display :: display_header($tool_name);
 
 /*
-==============================================================================
 		MAIN CODE
-==============================================================================
 */
 
 if($_GET['action'] != 'add' && $_GET['action'] != 'edit') {
@@ -266,16 +264,14 @@ if ($show_announcement_list)
 	$table->set_header(6,get_lang('Guest'));
 	$table->set_header(7,get_lang('Title'));
 	$table->set_header(8,get_lang('Language'));
-	$table->set_header(9,get_lang('Modify'), false);
+	$table->set_header(9,get_lang('Modify'), false,'width="50px"');
 	$form_actions = array();
 	$form_actions['delete_selected'] = get_lang('Delete');
 	$table->set_form_actions($form_actions);
 	$table->display();
 }
 /*
-==============================================================================
 		FOOTER
-==============================================================================
 */
 Display :: display_footer();
 ?>

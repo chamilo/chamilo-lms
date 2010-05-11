@@ -8,6 +8,8 @@ define('VISIBLE_TEACHER', 3);
 *
 *	@package chamilo.library
 */
+require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
+
 class SystemAnnouncementManager
 {
 	/**
@@ -19,7 +21,12 @@ class SystemAnnouncementManager
 	{
 		$user_selected_language = api_get_interface_language();
 		$db_table = Database :: get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
-		$sql = "SELECT *, DATE_FORMAT(date_start,'%d-%m-%Y') AS display_date FROM ".$db_table." WHERE (lang='$user_selected_language' OR lang IS NULL) AND ((NOW() BETWEEN date_start AND date_end) OR date_end='0000-00-00') ";
+		
+		
+		//Getting the user timezone
+		$user_timezone = Usermanager::get_extra_user_data_by_field(api_get_user_id(),'timezone');
+		
+		$sql = "SELECT *, DATE_FORMAT(date_start,'%d-%m-%Y %h:%i:%s') AS display_date FROM ".$db_table." WHERE (lang='$user_selected_language' OR lang IS NULL) AND ((NOW() BETWEEN date_start AND date_end) OR date_end='0000-00-00') ";
 		switch ($visible) {
 			case VISIBLE_GUEST :
 				$sql .= " AND visible_guest = 1 ";
@@ -32,6 +39,7 @@ class SystemAnnouncementManager
 				break;
 		}
 		$sql .= " ORDER BY date_start DESC LIMIT 0,7";
+		
 		$announcements = Database::query($sql);
 		if (Database::num_rows($announcements) > 0) {
 			$query_string = ereg_replace('announcement=[1-9]+', '', $_SERVER['QUERY_STRING']);
@@ -40,6 +48,7 @@ class SystemAnnouncementManager
 			echo '<div class="system_announcements">';
 			echo '<h3>'.get_lang('SystemAnnouncements').'</h3>';
 			echo '<table border="0">';
+			
 			while ($announcement = Database::fetch_object($announcements)) {
 
 				if ($id != $announcement->id) {
@@ -50,22 +59,30 @@ class SystemAnnouncementManager
 						$show_url = 'news_list.php#'.$announcement->id;
 						//$show_url = $url.'?announcement='.$announcement->id;
 					}
-					echo '<tr class="system_announcement">
-							<td valign="top" class="system_announcement_title">
-								<a name="ann'.$announcement->id.'" href="'.$show_url.'">'.$announcement->title.'</a>
-							</td>
-							<td valign="top">
-								'.$announcement->display_date.'
-							</td>
-						</tr>';
+					
+					if (isset($user_timezone['timezone']) && !empty($user_timezone['timezone'])) {
+						$display_date = api_convert_and_format_date($announcement->display_date, DATE_FORMAT_LONG, $user_timezone['timezone']);
+					} else {
+						$display_date = api_convert_and_format_date($announcement->display_date, DATE_FORMAT_LONG, date_default_timezone_get()); 
+					}
+					
+					/*
+					$user_date = api_convert_and_format_date('11-05-2010 11:54:00', DATE_TIME_FORMAT_LONG, 'Europe/Paris');
+					var_dump ($user_date);					
+					$user_date = api_convert_and_format_date('11-05-2010 11:54:00', DATE_TIME_FORMAT_LONG, 'America/Lima');
+					var_dump ($user_date);
+					*/
+					
+					echo '<a name="'.$announcement->id.'"></a>
+						<div class="system_announcement">
+							<div class="system_announcement_title"><a name="ann'.$announcement->id.'" href="'.$show_url.'">'.$announcement->title.'</a></div><div class="system_announcement_date">'.$display_date.'</div>
+					  	</div>
+						<br />';				
 				} else {
 					echo '<div class="system_announcement">
 							<div class="system_announcement_title">'
 								.$announcement->display_date.'
 								<a name="ann'.$announcement->id.'" href="'.$url.'?'.$query_string.'#ann'.$announcement->id.'">'.$announcement->title.'</a>
-							</div>
-							<div class="system_announcement_content">'
-								.$announcement->content.'
 							</div>';
 				}
 
@@ -81,16 +98,17 @@ class SystemAnnouncementManager
 		return;
 	}
 
-	public static function display_all_announcements($visible, $id = -1,$start = 0,$user_id='')
-	{
+	public static function display_all_announcements($visible, $id = -1,$start = 0,$user_id='') {
 		$user_selected_language = api_get_interface_language();
 		$start	= intval($start);
+		
+		//Getting the user timezone
+		$user_timezone = Usermanager::get_extra_user_data_by_field(api_get_user_id(),'timezone');		
 
 		$db_table = Database :: get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
-		$sql = "SELECT *, DATE_FORMAT(date_start,'%d-%m-%Y') AS display_date FROM ".$db_table."
+		$sql = "SELECT *, DATE_FORMAT(date_start,'%d-%m-%Y %h:%i:%s') AS display_date FROM ".$db_table."
 				WHERE (lang='$user_selected_language' OR lang IS NULL) AND ((NOW() BETWEEN date_start AND date_end)	OR date_end='0000-00-00')";
-		switch ($visible)
-		{
+		switch ($visible) {
 			case VISIBLE_GUEST :
 				$sql .= " AND visible_guest = 1 ";
 				break;
@@ -122,22 +140,27 @@ class SystemAnnouncementManager
 					echo '</td>';
 				echo '</tr>';
 			echo '</table>';
-			echo '<table align="center" border="0" width="900px">';
-			while ($announcement = Database::fetch_object($announcements)) {
-					echo '<tr><td>';
-					echo '<a name="'.$announcement->id.'"></a>
-							<div class="system_announcement">
-							<div class="system_announcement_title">'.$announcement->title.'</div><div class="system_announcement_date">'.$announcement->display_date.'</div>
-							<br />
-						  	<div class="system_announcement_content">'
-						  			.$announcement->content.'
-							</div>
-						  </div>
-							<br />
-						  <hr noshade size="1">';
-					echo '</tr></td>';
+			echo '<table align="center" border="0" width="900px">';			
+			while ($announcement = Database::fetch_object($announcements)) {				
+				if (isset($user_timezone['timezone']) && !empty($user_timezone['timezone'])) {
+					$display_date = api_convert_and_format_date($announcement->display_date, DATE_FORMAT_LONG, $user_timezone['timezone']);
+				} else {
+					$display_date = api_convert_and_format_date($announcement->display_date, DATE_FORMAT_LONG, date_default_timezone_get());
+				}
+				
+				echo '<tr><td>';
+				echo '<a name="'.$announcement->id.'"></a>
+						<div class="system_announcement">
+						<div class="system_announcement_title">'.$announcement->title.'</div><div class="system_announcement_date">'.$display_date.'</div>
+						<br />
+					  	<div class="system_announcement_content">'
+					  			.$announcement->content.'
+						</div>
+					  </div><br />';
+				echo '</tr></td>';
 			}
 			echo '</table>';
+			
 			echo '<table align="center">';
 				echo '<tr>';
 					echo '<td>';

@@ -525,11 +525,14 @@ function display_student_publications_list($work_dir, $sub_course_dir, $currentC
 
 					$form_folder -> addElement('style_submit_button', 'submit', get_lang('ModifyDirectory'), 'class="save"');
 					if ($there_is_a_end_date) {
-						$defaults = array_merge($defaults, convert_date_to_array($homework['ends_on'], 'ends'));
+						$end_date_array = convert_date_to_array($homework['ends_on'], 'ends');
+						$end_date_array['ends[month]'] = intval($end_date_array['ends[month]']);						
+						$defaults = array_merge($defaults, $end_date_array);
 					}
 					if ($there_is_a_expire_date) {					
-						
-						$defaults = array_merge($defaults, convert_date_to_array($homework['expires_on'], 'expires'));
+						$expires_date_array = convert_date_to_array($homework['expires_on'], 'expires');						
+						$expires_date_array['expires[month]'] = intval($expires_date_array['expires[month]']);						
+						$defaults = array_merge($defaults, $expires_date_array);
 						
 					}
 					if (!empty($row['qualification'])) {

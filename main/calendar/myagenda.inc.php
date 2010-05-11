@@ -297,24 +297,20 @@ function show_new_personal_item_form($id = "") {
 		return false; //potential SQL injection
 	}
 
-	if ($id != "")
-	{
-		$sql = "SELECT * FROM ".$tbl_personal_agenda." WHERE user='".$_user['user_id']."' AND id='".$id."'";
+	if ($id != "") {
+		$sql = "SELECT date, title, text FROM ".$tbl_personal_agenda." WHERE user='".intval($_user['user_id'])."' AND id='".$id."'";
 		$result = Database::query($sql);
 		$aantal = Database::num_rows($result);
-		if ($aantal != 0)
-		{
-			$row = Database::fetch_array($result);
-			$year = substr($row['date'], 0, 4);
-			$month = substr($row['date'], 5, 2);
-			$day = substr($row['date'], 8, 2);
-			$hours = substr($row['date'], 11, 2);
-			$minutes = substr($row['date'], 14, 2);
-			$title = $row['title'];
-			$content = $row['text'];
-		}
-		else
-		{
+		if ($aantal != 0) {
+			$row	= Database::fetch_array($result);
+			$year 	= substr($row['date'], 0, 4);
+			$month 	= substr($row['date'], 5, 2);
+			$day 	= substr($row['date'], 8, 2);
+			$hours 	= substr($row['date'], 11, 2);
+			$minutes= substr($row['date'], 14, 2);
+			$title 	= $row['title'];
+			$content= $row['text'];
+		} else {
 			return false;
 		}
 	}

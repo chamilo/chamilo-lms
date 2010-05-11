@@ -2964,8 +2964,7 @@ function show_add_form($id = '') {
 <?php
 }
 
-function get_agendaitems($month, $year)
-{
+function get_agendaitems($month, $year) {
 	global $_user;
 	global $_configuration;
 
@@ -3170,8 +3169,7 @@ function calculate_start_end_of_week($week_number, $year) {
 /**
  * Show the mini calendar of the given month
  */
-function display_daycalendar($agendaitems, $day, $month, $year, $weekdaynames, $monthName)
-{
+function display_daycalendar($agendaitems, $day, $month, $year, $weekdaynames, $monthName) {
 	global $DaysShort, $DaysLong, $course_path;
 	global $MonthsLong;
 	global $query;
@@ -3183,13 +3181,13 @@ function display_daycalendar($agendaitems, $day, $month, $year, $weekdaynames, $
 	// the week number of the year
 	$week_number = date("W", $today);
 	// if we moved to the next / previous day we have to recalculate the $today variable
-	if ($_GET['day'])
-	{
+	if (isset($_GET['day'])) {
 		$today = mktime(0, 0, 0, $month, $day, $year);
 		$nextday = $today + (24 * 60 * 60);
 		$previousday = $today - (24 * 60 * 60);
 		$week_number = date("W", $today);
 	}
+	
 	// calculating the start date of the week
 	// the date of the monday of this week is the timestamp of today minus
 	// number of days that have already passed this week * 24 hours * 60 minutes * 60 seconds
@@ -3208,37 +3206,27 @@ function display_daycalendar($agendaitems, $day, $month, $year, $weekdaynames, $
 	echo "</th>";
 	echo "<th width=\"10%\"><a href=\"", $forewardsURL, "\">".Display::return_icon('action_next.png',get_lang('Next'))."</a></th>";
 	echo "</tr>";
+	
 	// the rows for each half an hour
-	for ($i = 10; $i < 48; $i ++)
-	{
-		if ($i % 2 == 0)
-		{
+	for ($i = 10; $i < 48; $i ++) {
+		if ($i % 2 == 0) {
 			$class = "class=\"row_even\"";
-		}
-		else
-		{
+		} else {
 			$class = "class=\"row_odd\"";
 		}
 		echo "<tr $class>";
 		echo "";
-		if ($i % 2 == 0)
-		{
+		if ($i % 2 == 0) {
 			echo ("<td valign=\"top\" width=\"75\">". (($i) / 2)." ".get_lang("HourShort")." 00</td>");
-		}
-		else
-		{
+		} else {
 			echo ("<td valign=\"top\" width=\"75\">". ((($i) / 2) - (1 / 2))." ".get_lang("HourShort")." 30</td>");
 		}
 		echo "<td $class valign=\"top\" colspan=\"2\">";
-		if (is_array($agendaitems[$i]))
-		{
-			foreach ($agendaitems[$i] as $key => $value)
-			{
+		if (is_array($agendaitems[$i])) {
+			foreach ($agendaitems[$i] as $key => $value) {
 				echo $value;
 			}
-		}
-		else
-		{
+		} else {
 			echo $agendaitems[$i];
 		}
 		echo "</td>";
@@ -3349,8 +3337,7 @@ function display_weekcalendar($agendaitems, $month, $year, $weekdaynames, $month
 /**
  * Show the monthcalender of the given month
  */
-function get_day_agendaitems($courses_dbs, $month, $year, $day)
-{
+function get_day_agendaitems($courses_dbs, $month, $year, $day) {
 	global $_user;
 	global $_configuration;
 	global $setting_agenda_link;
@@ -3359,8 +3346,8 @@ function get_day_agendaitems($courses_dbs, $month, $year, $day)
 
 	// get agenda-items for every course
 	//$query=Database::query($sql_select_courses);
-	foreach ($courses_dbs as $key => $array_course_info)
-	{
+	foreach ($courses_dbs as $key => $array_course_info) {
+		//echo $array_course_info['db'];
 		//databases of the courses
 		$TABLEAGENDA = Database :: get_course_table(TABLE_AGENDA, $array_course_info['db']);
 		$TABLE_ITEMPROPERTY = Database :: get_course_table(TABLE_ITEM_PROPERTY, $array_course_info['db']);
@@ -3368,8 +3355,7 @@ function get_day_agendaitems($courses_dbs, $month, $year, $day)
 		// getting all the groups of the user for the current course
 		$group_memberships = GroupManager :: get_group_ids($array_course_info['db'], $_user['user_id']);
 		// if the user is administrator of that course we show all the agenda items
-		if ($array_course_info['status'] == '1')
-		{
+		if ($array_course_info['status'] == '1') {
 			//echo "course admin";
 			$sqlquery = "SELECT
 							DISTINCT agenda.*, item_property.*
@@ -3383,11 +3369,9 @@ function get_day_agendaitems($courses_dbs, $month, $year, $day)
 							ORDER BY start_date ";
 		}
 		// if the user is not an administrator of that course
-		else
-		{
+		else {
 			//echo "GEEN course admin";
-			if (is_array($group_memberships) && count($group_memberships)>0)
-			{
+			if (is_array($group_memberships) && count($group_memberships)>0) {
 				$sqlquery = "SELECT
 								agenda.*, item_property.*
 								FROM ".$TABLEAGENDA." agenda,
@@ -3398,9 +3382,7 @@ function get_day_agendaitems($courses_dbs, $month, $year, $day)
 								AND	( item_property.to_user_id='".$_user['user_id']."' OR `item_property`.`to_group_id` IN (0, ".implode(", ", $group_memberships).") )
 								AND item_property.visibility='1'
 								ORDER BY start_date ";
-			}
-			else
-			{
+			} else {
 				$sqlquery = "SELECT
 								agenda.*, item_property.*
 								FROM ".$TABLEAGENDA." agenda,
@@ -3418,48 +3400,43 @@ function get_day_agendaitems($courses_dbs, $month, $year, $day)
 		//echo $sqlquery;
 		$result = Database::query($sqlquery);
 		//echo Database::num_rows($result);
-		while ($item = Database::fetch_array($result))
-		{
+		while ($item = Database::fetch_array($result)) {
 			// in the display_daycalendar function we use $i (ranging from 0 to 47) for each halfhour
-			// we want to know for each agenda item for this day to wich halfhour it must be assigned
+			// we want to know for each agenda item for this day to wich halfhour it must be assigned			
 			$item['start_date'] = api_get_local_time($item['start_date'], null, date_default_timezone_get());
+						
 			list ($datepart, $timepart) = split(" ", $item['start_date']);
 			list ($year, $month, $day) = explode("-", $datepart);
-			list ($hours, $minutes, $seconds) = explode(":", $timepart);
+			list ($hours, $minutes, $seconds) = explode(":", $timepart);			
 
-			$halfhour = 2 * $hours;
-			if ($minutes >= '30')
-			{
+			$halfhour =2* $hours;
+			if ($minutes >= '30') {
 				$halfhour = $halfhour +1;
 			}
 
-			if ($setting_agenda_link == 'coursecode')
-			{
+			if ($setting_agenda_link == 'coursecode') {
 				$title=$array_course_info['title'];
 				$agenda_link = cut($title,14,true);
-			}
-			else
-			{
+			} else {
 				$agenda_link = Display::return_icon('course_home.gif');
 			}
 
 			//$URL = $_configuration['root_web'].$mycours["dir"]."/";
-			$URL = $_configuration['root_web'].'main/calendar/agenda.php?cidReq='.urlencode($array_course_info["code"])."&amp;day=$day&amp;month=$month&amp;year=$year#$day"; // RH  //Patrick Cool: to highlight the relevant agenda item
+			$URL = api_get_path(WEB_PATH).'main/calendar/agenda.php?cidReq='.urlencode($array_course_info["code"])."&amp;day=$day&amp;month=$month&amp;year=$year#$day"; // RH  //Patrick Cool: to highlight the relevant agenda item
+
 			$items[$halfhour][] .= "<i>".$hours.":".$minutes."</i> <a href=\"$URL\" title=\"".$array_course_info['name']."\">".$agenda_link."</a>  ".$item['title']."<br />";
 		}
 	}
+	
 	// sorting by hour for every day
-	/*$agendaitems = array();
-	while (list($agendaday, $tmpitems) = each($items))
-	{
+	$agendaitems = array();
+	while (list($agendaday, $tmpitems) = each($items)) {
 		sort($tmpitems);
 		while (list($key,$val) = each($tmpitems))
 		{
 			$agendaitems[$agendaday].=$val;
 		}
-	}*/
-	$agendaitems = $items;
-	//print_r($agendaitems);
+	}
 	return $agendaitems;
 }
 /**

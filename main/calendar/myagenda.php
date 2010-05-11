@@ -1,4 +1,4 @@
-<?php //$Id: myagenda.php 21102 2009-05-30 14:58:16Z iflorespaz $
+<?php
 /* For licensing terms, see /license.txt */
 /**
 	@author: Patrick Cool <patrick.cool@UGent.be>, Ghent University
@@ -219,8 +219,8 @@ if (isset ($_user['user_id'])) {
 	echo "<td width=\"20\">&nbsp;</td>";
 	// the main area: day, week, month view
 	echo "<td valign=\"top\">";
-	switch ($process)
-	{
+	
+	switch ($process) {
 		case 'month_view' :
 			$agendaitems = get_myagendaitems($courses_dbs, $month, $year);
 			$agendaitems = get_global_agenda_items($agendaitems, $day, $month, $year, $week, "month_view");
@@ -231,7 +231,6 @@ if (isset ($_user['user_id'])) {
 			display_mymonthcalendar($agendaitems, $month, $year, array(), $monthName);
 			break;
 		case 'week_view' :
-		//var_dump($week);
 			$agendaitems = get_week_agendaitems($courses_dbs, $month, $year, $week);			
 			$agendaitems = get_global_agenda_items($agendaitems, $day, $month, $year, $week, "week_view");
 			if (api_get_setting("allow_personal_agenda") == "true") {
@@ -240,10 +239,9 @@ if (isset ($_user['user_id'])) {
 			display_weekcalendar($agendaitems, $month, $year, array(), $monthName);
 			break;
 		case 'day_view' :
-			$agendaitems = get_day_agendaitems($courses_dbs, $month, $year, $day);
-			$agendaitems = get_global_agenda_items($agendaitems, $day, $month, $year, $week, "day_view");
-			if (api_get_setting("allow_personal_agenda") == "true")
-			{
+			$agendaitems = get_day_agendaitems($courses_dbs, $month, $year, $day);					
+			$agendaitems = get_global_agenda_items($agendaitems, $day, $month, $year, $week, "day_view");			
+			if (api_get_setting('allow_personal_agenda') == 'true') {
 				$agendaitems = get_personal_agenda_items($agendaitems, $day, $month, $year, $week, "day_view");
 			}
 			display_daycalendar($agendaitems, $day, $month, $year, array(), $monthName);

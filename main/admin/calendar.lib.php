@@ -1729,7 +1729,7 @@ function calculate_start_end_of_week($week_number, $year)
 {
 	// determine the start and end date
 	// step 1: we calculate a timestamp for a day in this week
-	$random_day_in_week = mktime(0, 0, 0, 1, 1, $year) + ($week_number-1) * (7 * 24 * 60 * 60); // we calculate a random day in this week
+	$random_day_in_week = mktime(0, 0, 0, 1, 1, $year) + ($week_number) * (7 * 24 * 60 * 60); // we calculate a random day in this week
 	// step 2: we which day this is (0=sunday, 1=monday, ...)
 	$number_day_in_week = date('w', $random_day_in_week);
 	// step 3: we calculate the timestamp of the monday of the week we are in

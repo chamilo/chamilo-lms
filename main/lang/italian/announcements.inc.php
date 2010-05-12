@@ -56,4 +56,5 @@ $AnnounceSentToUserSelection = "Avviso inviato agli utenti selezionati";
 $SendAnnouncement = "Invia avviso";
 $ModifyAnnouncement = "Modifica l'avviso";
 $ButtonPublishAnnouncement = "Pubblica l'avviso";
+$YourAccountIsActiveYouCanLoginAndCheckYourCourses = "Caro utente, la tua registrazione è stata completata con successo: accedi e buona partecipazione ai corsi!";
 ?>

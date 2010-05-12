@@ -113,4 +113,12 @@ $NewUserEmailAlert = "Notifica via e-mail l'auto-iscrizione di un utente";
 $NewUserEmailAlertEnable = "Abilita la notifica dell'auto-iscrizione di un utente al docente";
 $NewUserEmailAlertToTeacharAndTutor = "Abilita la notifica dell'auto-iscrizione di un utente a docente e tutor";
 $NewUserEmailAlertDisable = "Disabilita la notifica dell'auto-iscrizione di un utente";
+$AllowUserViewUserList = "Consenti di vedere l'elenco degli utenti";
+$AllowUserViewUserListActivate = "Abilita l'elenco degli utenti";
+$AllowUserViewUserListDeactivate = "Disabilita l'elenco degli utenti";
+$DoNotDisplayAnyAdvance = "Non mostrare l'avanzamento";
+$NewHomeworkEmailAlert = "Manda un'e-mail agli utenti quando viene assegnato un compito";
+$NewHomeworkEmailAlertEnable = "Abilita l'invio di e-mail agli utenti quando viene creato un nuovo compito";
+$NewHomeworkEmailAlertDisable = "Disabilita l'invio di e-mail agli utenti quando viene creato un nuovo compito";
+$DisplayAboutNextAdvanceNotDoneAndLastDoneAdvance = "Mostra l'ultimo passo compiuto e il primo ancora da compiere";
 ?>

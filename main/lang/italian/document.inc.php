@@ -215,4 +215,5 @@ $HelpDefaultDirDocuments = "Questa cartella contiene per default l'archivio dei 
 $HelpSharedFolder = "La cartella contiene i documenti caricati da te e dai corsisti nel corso della creazione di un nuovo documento attraverso l'editor. Fanno eccezione i documenti creati nei gruppi. Per default le cartelle individuali risultano visibili ai docenti ma non ai corsisti se non attraverso i documenti stessi; rendendo visibile una cartella, essa sarà visibile da chiunque.";
 $TemplateImage = "Immagine del modello";
 $MoveElement = "Sposta l'elemento";
+$CertificateName = "Nome";
 ?>

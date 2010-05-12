@@ -1239,4 +1239,8 @@ $GradebookNumberDecimalsComment = "Permet de configurer le nombre de décimales 
 $EditSessionsToURL = "Éditer les sessions des URL";
 $AddSessionsToURL = "Ajouter sessions aux URL";
 $SessionListIn = "Liste des sessions dans";
+$DataFiller = "Remplisseur de données";
+$FillUsers = "Remplir utilisateurs";
+$ThisSectionIsOnlyVisibleOnSourceInstalls = "Cette section est uniquement visible pour les installations à partir du code source, et pas dans les versions packagées de la plateforme. Elle vous aidera à rapidement populer votre plateforme avec des données de test. À utiliser avec précaution (les données sont réellement insérées) et uniquement sur des installations de développement ou de test.";
+$UsersFillingReport = "Rapport de remplissage des utilisateurs";
 ?>

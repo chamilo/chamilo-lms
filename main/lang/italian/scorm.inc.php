@@ -54,4 +54,7 @@ $Attempt = "Tentativo";
 $MoveTheCurrentForum = "Sposta il Forum corrente";
 $WarningWhenEditingScorm = "Attenzione!<br/>Modificando il contenuto di un elemento, puoi modificare le informazioni sugli esiti o danneggiarlo!";
 $AdditionalProfileField = "Aggiungi un campo al profilo utente";
+$ScormUnknownPackageFormat = "Il pacchetto che stai caricando non ha un formato standard accettabile";
+$ScormNotEnoughSpaceInCourseToInstallPackage = "In questo corso non c'è spazio sufficiente per espandere il pacchetto compresso";
+$ScormPackageFormatNotScorm = "Il pacchetto che stai caricando non sembra essere in formato SCORM. Verifica che il file imsmanifest.xml sia nella directory principale del file compresso";
 ?>

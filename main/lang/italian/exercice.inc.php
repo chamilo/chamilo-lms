@@ -356,4 +356,16 @@ $ExerciseAttempted = "Quesito affrontato";
 $MultipleSelectCombination = "Selezione multipla";
 $MultipleAnswerCombination = "Risposta multipla";
 $ExerciceExpiredTimeMessage = "Il tempo assegnato allo svolgimento dell'esercizio è scaduto; i quesiti completati saranno comunque presi in considerazione.";
+$EditingExerciseCauseProblemsInLP = "La modifica dei quesiti può comportare problemi nei moduli didattici";
+$AreYouSureToCopy = "Sei sicuro di voler copiare";
+$ExerciseCopied = "Quesito copiato";
+$AreYouSureToDeleteResults = "Sei sicuro di voler cancellare i risultati";
+$XResultsCleaned = "%d risultati cancellati";
+$CopyExercise = "Duplica il quesito creandone una copia";
+$CleanStudentResults = "Cancella i risultati attribuiti a tutti i corsisti per questo quesito";
+$ImportQtiQuiz = "Importa dei quesiti Qti2";
+$ReUseACopyInCurrentTest = "Riutilizza una copia all'interno del test";
+$Copy = "Copia";
+$DefaultContent = "Genera un contenuto di default";
+$ScoreAverageFromAllAttempts = "Media dl punteggio per tutti i tentativi";
 ?>

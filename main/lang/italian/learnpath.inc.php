@@ -247,4 +247,6 @@ $SaveAudioAndOrganization = "Salva audio e ordinamento";
 $UploadOnlyMp3Files = "Si possono caricare solo file mp3, grazie";
 $ModifyHotPotatoes = "Modifica l'elemento HotPotatoes";
 $SaveHotpotatoes = "Salva hotpotatoes";
+$ReturnToLPList = "Ritorna all'elenco";
+$LpPrerequisiteDescription = "Se un modulo didattico costituisce un prerequisito di un altro, quest'ultimo risulterà invisibile fino al completamento (100%) del primo";
 ?>

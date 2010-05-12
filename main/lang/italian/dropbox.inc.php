@@ -95,6 +95,7 @@ $DocAdd = "Il documento è stato inviato correttamente";
 $FileDeleted = "Il documento selezionato è stato rimosso dalla tua sezione Scambio file";
 $MailingAsUsername = "Mailing";
 $MailingInSelect = "---Mailing--";
+$$MailingExamine = "Analizza il mailing";
 $MailingNotYetSent = "I contenuti del Mailing non sono ancora stati trasmessi...";
 $MailingSend = "Spedizione dei contenuti";
 $MailingConfirmSend = "Invia dei file di contenuti a specifici indirizzi ?";

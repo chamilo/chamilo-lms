@@ -816,7 +816,7 @@ $CalendarList = "Fechas de la lista de asistencia";
 $ThereAreNoRegisteredDatetimeYet = "Aún no hay registrada ninguna fecha/hora";
 $DashboardPluginsHaveBeenUpdatedSucesslly = "Los plugins del panel de control han sido actualizados correctamente";
 $LoginEnter = "Entrar";
-$AttendanceSheetDescription = "Las listas de asistencia permiten detectar las faltas de los estudiantes a las clases. Por ejemplo, puede que desee tomar asistencias a clases teóricas por separado de las asistencias a las clases prácticas. En cada una se listan todos los estudiantes de forma predeterminada. Es hasta que se registre a los estudiantes que faltaron haciendo clic en la casilla correspondiente.";
+$AttendanceSheetDescription = "Las listas de asistencia permiten detectar las faltas de los estudiantes a las clases. Por ejemplo, puede que desee tomar asistencias a clases teóricas por separado de las asistencias a las clases prácticas. En cada una se listan todos los estudiantes de";
 $ThereAreNoRegisteredLearnersInsidetheCourse = "No hay alumnos inscritos en este curso";
 $GoToAttendanceCalendarList = "Ir al calendario de asistencia";
 $ToolCourseDescription = "Descripción del curso";
@@ -940,4 +940,6 @@ $CompanyActivity = "Actividad de la compañia";
 $DateLock = "Bloquear fecha";
 $DateUnLock = "Desbloquear fecha";
 $GoToStudentDetails = "Ver detalles del estudiante";
+$RepeatDate = "Repetir día";
+$ToAttend = "Por asistir";
 ?>

@@ -48,4 +48,9 @@ $langSaveLink = "Salva il collegamento";
 $langSaveCategory = "Salva la categoria";
 $BackToLinksOverview = "Torna all'elenco dei collegamenti";
 $AddTargetOfLinkOnHomepage = "Aggiungi il modo (target) in cui il collegamento sarà visto dalla pagina principale";
+$Url = "URL";
+$LinkOpenSelf = "Apri nella stessa finestra";
+$LinkOpenBlank = "Apri in una nuova pagina";
+$LinkOpenParent = "Apri nel frame genitore";
+$LinkOpenTop = "Apri sostituendo l'attuale pagina";
 ?>

@@ -821,7 +821,7 @@ $ThereAreNoRegisteredLearnersInsidetheCourse = "Aucun apprenant enregistré dans
 $GoToAttendanceCalendarList = "Aller à la vue calendrier des dates de présences";
 $ToolCourseDescription = "Description de formation";
 $ToolDocument = "Documents";
-$ToolLearnpath = "Cours";
+$ToolLearnpath = "Parcours";
 $ToolLink = "Liens";
 $ToolQuiz = "Exercices";
 $ToolAnnouncement = "Annonces";
@@ -937,4 +937,5 @@ $CompanyActivity = "Activité de votre entreprise";
 $DateLock = "Bloquer date";
 $DateUnLock = "Débloquer date";
 $GoToStudentDetails = "Voir les détails de l'apprenant";
+$RepeatDate = "Répéter la date";
 ?>

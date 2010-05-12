@@ -1238,4 +1238,17 @@ $GradebookNumberDecimalsComment = "Establecer el número de decimales permitidos
 $EditSessionsToURL = "Editar sesiones de una URL";
 $AddSessionsToURL = "Añadir sesiones a una URL";
 $SessionListIn = "Lista de sesiones en";
+$DataFiller = "Rellenar datos";
+$FillUsers = "Completa los usuarios";
+$ThisSectionIsOnlyVisibleOnSourceInstalls = "Esta sección sólo es visible en instalaciones desde el código fuente, no en versiones estables de la plataforma. Se le permitirá insertar en su plataforma datos de prueba. Úselo con cuidado (los datos son realmente insertados) y sólo es aconsejable para utilizar como desarrollo o en instalaciones donde necesite datos de prueba.";
+$UsersFillingReport = "Rellenar el informe de usuarios";
+$AllUsersAreAutomaticallyRegistered = "Todos los usuarios serán agregados automaticamente";
+$AssignCoach = "Asignar tutor";
+$chamilo = "chamilo";
+$php = "php";
+$Off = "Apagado";
+$minimum = "mínimo";
+$webserver = "Webserver";
+$mysql = "mysql";
+$Social = "Social";
 ?>

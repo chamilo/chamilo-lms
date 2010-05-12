@@ -75,4 +75,6 @@ $AgendaSortChronologicallyDown = "Descending";
 $ItemForUserSelection = "Users selection list";
 $IsNotiCalFormatFile = "This file is not in iCal format";
 $RepeatEvent = "Repeat event";
+$RepeatDate = "Repeat date";
+$EndDateMustBeMoreThanStartDate = "End date must be more than the start date";
 ?>

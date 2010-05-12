@@ -176,4 +176,5 @@ $LostPass = "Password dimenticata?";
 $EnterEmailUserAndWellSendYouPassword = "Immetti il nome utente e l'indirizzo email con cui ti sei registrata/o e ti verrà reinviata la password";
 $NoUserAccountWithThisEmailAddress = "Non ci sono registrazioni collegate al nome utente e all'indirizzo e-mail";
 $WithTheFollowingSettings = "con i seguenti parametri:";
+$CouldNotResetPassword = "La password non può essere resettata";
 ?>

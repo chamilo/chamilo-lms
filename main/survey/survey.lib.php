@@ -2745,7 +2745,7 @@ class SurveyUtil {
 			// Show user fields section with a big th colspan that spans over all fields
 			$extra_user_fields = UserManager::get_extra_fields(0, 0, 5, 'ASC', false);
 			$num = count($extra_user_fields);
-			if ($num > 0) {
+			if ($num > 0 ) {
 				echo '<th '.($num>0?' colspan="'.$num.'"':'').'>';
 				echo '<label><input type="checkbox" name="fields_filter" value="1" checked="checked"/> ';
 				echo get_lang('UserFields');
@@ -2756,13 +2756,21 @@ class SurveyUtil {
 		}
 
 		// Get all the questions ordered by the "sort" column
+		// <hub> modify the query to display open questions too
+		//		$sql = "SELECT q.question_id, q.type, q.survey_question, count(o.question_option_id) as number_of_options
+		//				FROM $table_survey_question q LEFT JOIN $table_survey_question_option o
+		//				ON q.question_id = o.question_id
+		//				WHERE q.question_id = o.question_id
+		//				AND q.survey_id = '".Database::escape_string($_GET['survey_id'])."'
+		//				GROUP BY q.question_id
+		//				ORDER BY q.sort ASC";
 		$sql = "SELECT q.question_id, q.type, q.survey_question, count(o.question_option_id) as number_of_options
 				FROM $table_survey_question q LEFT JOIN $table_survey_question_option o
 				ON q.question_id = o.question_id
-				WHERE q.question_id = o.question_id
-				AND q.survey_id = '".Database::escape_string($_GET['survey_id'])."'
-				GROUP BY q.question_id
+				WHERE q.survey_id = '".Database::escape_string($_GET['survey_id'])."'
+				GROUP BY q.question_id 
 				ORDER BY q.sort ASC";
+		// </hub> 		
 		$result = Database::query($sql);
 		while ($row = Database::fetch_array($result)) {
 			// We show the questions if
@@ -2773,7 +2781,9 @@ class SurveyUtil {
 				// We do not show comment and pagebreak question types
 				if ($row['type'] != 'comment' && $row['type'] != 'pagebreak') {
 					echo '		<th';
-					if ($row['number_of_options'] > 0) {
+					// <hub> modified tst to include percentage
+					if ($row['number_of_options'] > 0 && $row['type'] != 'percentage') {
+					// </hub>
 						echo ' colspan="'.$row['number_of_options'].'"';
 					}
 					echo '>';
@@ -2799,6 +2809,7 @@ class SurveyUtil {
 			}
 		}
 
+		// cells with option (none for open question)
 		$sql = "SELECT 	sq.question_id, sq.survey_id,
 						sq.survey_question, sq.display,
 						sq.sort, sq.type, sqo.question_option_id,
@@ -2810,20 +2821,38 @@ class SurveyUtil {
 				ORDER BY sq.sort ASC, sqo.sort ASC";
 		$result = Database::query($sql);
 
+		$display_percentage_header = 1;	// in order to display only once the cell option (and not 100 times)
 		while ($row = Database::fetch_array($result)) {
 			// We show the options if
 			// 1. there is no question filter and the export button has not been clicked
 			// 2. there is a question filter but the question is selected for display
 			//if (!($_POST['submit_question_filter'] || $_POST['export_report']) || in_array($row['question_id'], $_POST['questions_filter'])) {
 			if (!($_POST['submit_question_filter']) || (is_array($_POST['questions_filter']) && in_array($row['question_id'], $_POST['questions_filter']))) {
-				// We do not show comment and pagebreak question types
-				if ($row['type'] != 'comment' && $row['type'] != 'pagebreak' && $row['type'] != 'open') {
-					echo '			<th>';
+				// <hub> modif 05-05-2010
+				// we do not show comment and pagebreak question types
+				if ($row['type'] == 'open') {
+					echo '<th>&nbsp;-&nbsp;</th>';
+					$possible_answers[$row['question_id']][$row['question_option_id']] = $row['question_option_id'];
+					$display_percentage_header = 1;
+				}
+				else if ($row['type'] == 'percentage' && $display_percentage_header) {
+					echo '<th>&nbsp;%&nbsp;</th>';
+					$possible_answers[$row['question_id']][$row['question_option_id']] = $row['question_option_id'];					
+					$display_percentage_header = 0;
+				}
+				else if ($row['type'] == 'percentage') {
+					$possible_answers[$row['question_id']][$row['question_option_id']] = $row['question_option_id'];					
+				}
+				else if ($row['type'] <> 'comment' AND $row['type'] <> 'pagebreak' AND $row['type'] <> 'percentage')
+				{
+					echo '<th>';
 					echo $row['option_text'];
 					echo '</th>';
 					$possible_answers[$row['question_id']][$row['question_option_id']] = $row['question_option_id'];
+					$display_percentage_header = 1;
 				}
-				// No column at all if the question was not a question
+				//no column at all if the question was not a question
+				// </hub>
 			}
 		}
 
@@ -2893,24 +2922,35 @@ class SurveyUtil {
 			}
 		}
 		if (is_array($possible_options)) {
+			// <hub> modified to display open answers and percentage
 			foreach ($possible_options as $question_id => & $possible_option) {
 				if ($questions[$question_id]['type'] == 'open') {
 					echo '<td align="center">';
 					echo $answers_of_user[$question_id]['0']['option_id'];
 					echo '</td>';
-				} else {
+				} 
+				else {
 					foreach ($possible_option as $option_id => & $value) {
-						echo '<td align="center">';
-						if (!empty($answers_of_user[$question_id][$option_id])) {
-							if ($answers_of_user[$question_id][$option_id]['value'] != 0) {
+						if ($questions[$question_id]['type'] == 'percentage') {
+							if (!empty($answers_of_user[$question_id][$option_id])) {
+								echo "<td align='center'>";
 								echo $answers_of_user[$question_id][$option_id]['value'];
-							} else {
-								echo 'v';
+								echo "</td>";
 							}
 						}
+						else {						
+							echo '<td align="center">';
+							if (!empty($answers_of_user[$question_id][$option_id])) {
+								if ($answers_of_user[$question_id][$option_id]['value'] != 0) {
+									echo $answers_of_user[$question_id][$option_id]['value'];
+								} 
+								else {
+									echo 'v';
+								}
+							}
+						} // </hub>
 					}
 				}
-
 			}
 		}
 		echo '</tr>';

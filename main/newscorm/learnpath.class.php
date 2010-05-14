@@ -6968,6 +6968,9 @@ class learnpath {
 				case TOOL_FORUM :
 					$return .= $this->display_manipulate($item_id, $row['item_type']);
 					$return .= $this->display_forum_form('move', $item_id, $row);
+				case TOOL_THREAD :
+					$return .= $this->display_manipulate($item_id, $row['item_type']);
+					$return .= $this->display_forum_form('move', $item_id, $row);
 			}
 		}
 

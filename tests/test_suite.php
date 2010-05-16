@@ -61,9 +61,6 @@ require_once 'simpletest/unit_tester.php';
 require_once 'simpletest/web_tester.php';
 require_once 'simpletest/mock_objects.php';
 require_once 'simpletest/autorun.php';
-define('PHPCOVERAGE_HOME',api_get_path(SYS_TEST_PATH).'spikephpcoverage/src');
-require_once PHPCOVERAGE_HOME.'/CoverageRecorder.php';
-require_once PHPCOVERAGE_HOME.'/reporter/HtmlCoverageReporter.php';
 
 /*  TEST SUITE 
  * Start to load the tests files
@@ -198,13 +195,5 @@ class TestsSuite extends TestSuite {
         $this->addFile(api_get_path(SYS_TEST_PATH).'/main/inc/lib/debug.lib.inc.test.php');//this file need be to the finish of the tests
     }
 }
-$reporter = new HtmlCoverageReporter('Code Coverage Report','','report');
-$includePaths = array('.');
-$excludePaths = array('simpletest','main','course_tests','datafiller');
-$cov = new CoverageRecorder($includePaths, $excludePaths, $reporter);
-$cov->startInstrumentation();
 $test = &new TestsSuite();
-$cov->stopInstrumentation();
-$cov->generateReport();
-$reporter->printTextSummary();
 ?>

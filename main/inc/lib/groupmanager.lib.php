@@ -209,13 +209,7 @@ class GroupManager {
 				calendar_state = '".$category['calendar_state']."', work_state = '".$category['work_state']."', announcements_state = '".$category['announcements_state']."', forum_state = '".$category['forum_state']."', wiki_state = '".$category['wiki_state']."', chat_state = '".$category['chat_state']."', self_registration_allowed = '".$category['self_reg_allowed']."',  self_unregistration_allowed = '".$category['self_unreg_allowed']."', session_id='".Database::escape_string($my_id_session)."'";
 		Database::query($sql);
 		$lastId = Database::insert_id();
-		/*$secret_directory = uniqid("")."_team_".$lastId;
-		while (is_dir(api_get_path(SYS_COURSE_PATH).$currentCourseRepository."/group/$secret_directory"))
-		{
-			$secret_directory = uniqid("")."_team_".$lastId;
-		}
-		FileManager :: mkdirs(api_get_path(SYS_COURSE_PATH).$currentCourseRepository."/group/".$secret_directory, api_get_permissions_for_new_directories());
-		*/
+
 		$desired_dir_name= '/'.replace_dangerous_char($name,'strict').'_groupdocs';
 		
 		$my_path = api_get_path(SYS_COURSE_PATH).$currentCourseRepository.'/document';

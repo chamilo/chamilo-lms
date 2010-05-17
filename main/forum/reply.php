@@ -165,7 +165,8 @@ echo '</table>';
 $my_action   = isset($_GET['action']) ? Security::remove_XSS($_GET['action']) : '';
 $my_post     = isset($_GET['post']) ?   Security::remove_XSS($_GET['post']) : '';
 $my_elements = isset($_SESSION['formelements']) ? $_SESSION['formelements'] : '';
-$values      = show_add_post_form(Security::remove_XSS($my_action,$my_post, $my_elements)); // note: this has to be cleaned first
+
+$values      = show_add_post_form($my_action,$my_post, $my_elements); // note: this has to be cleaned first
 
 if (!empty($values) AND isset($_POST['SubmitPost'])) {
 	store_reply($values);

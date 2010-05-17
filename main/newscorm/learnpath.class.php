@@ -633,7 +633,7 @@ class learnpath {
 				"default_encoding,display_order,content_maker," .
 				"content_local,js_lib,session_id) " .
 				"VALUES ($type,'$name','$description','','embedded'," .
-				"'UTF-8','$dsp','Dokeos'," .
+				"'UTF-8','$dsp','Chamilo'," .
 				"'local','','".Database::escape_string($session_id)."')";
 				//if($this->debug>2){error_log('New LP - Inserting new lp '.$sql_insert,0);}
 				$res_insert = Database::query($sql_insert);

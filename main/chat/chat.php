@@ -56,8 +56,15 @@ if (!empty($mycourseid) && $mycourseid != -1) {
 }
 if (api_get_setting('show_navigation_menu') != 'false') {
 	$footer_size = 20;
-} else {
-	switch($my_style) {
+} else {	
+	$top_size = 135;
+	switch($my_style) {	
+		case 'chamilo_red' :
+		case 'chamilo_green' :	
+		case 'chamilo' :
+			$top_size = 185;
+			$footer_size = 48;
+		break;
 		case 'dokeos_classic' :
 		case 'chamilo_classic' :
 			$footer_size = 48;
@@ -79,6 +86,7 @@ if (api_get_setting('show_navigation_menu') != 'false') {
 			break;
 	}
 }
+
 $cidreq = Security::remove_XSS($_GET['cidReq']);
 
 ?>
@@ -92,7 +100,7 @@ $cidreq = Security::remove_XSS($_GET['cidReq']);
 echo'<title>'.get_lang('Chat').' - '.$mycourseid.' - '.api_get_setting('siteName').'</title>';
 
 if (empty($open_chat_window)) {
-	echo'<frameset rows="135,*,'.$footer_size.'" border="0" frameborder="0" framespacing="1">';
+	echo'<frameset rows="'.$top_size.',*,'.$footer_size.'" border="0" frameborder="0" framespacing="1">';
 	echo '<frame src="chat_banner.php?cidReq='.$cidreq.'" name="chat_banner" scrolling="no">';
 }
 

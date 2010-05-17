@@ -262,6 +262,8 @@ if (!empty($_POST['export_report']) && $_POST['export_report'] == 'export_report
 
 		require_once 'gradebook_result.class.php';
 		$printable_data = get_printable_data($users, $alleval, $alllinks);
+		
+		//exit;
 
 		switch($_POST['export_format']) {
 			case 'xls':

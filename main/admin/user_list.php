@@ -32,6 +32,43 @@ function load_course_list (div_course,my_user_id) {
 		}
 	});
 }
+		
+function active_user(element_div) {
+	id_image=$(element_div).attr("id");
+	image_clicked=$(element_div).attr("src");
+	image_clicked_info = image_clicked.split("/");
+	image_real_clicked = image_clicked_info[image_clicked_info.length-1];	
+	var status = 1;							
+	if (image_real_clicked == "right.gif") {
+		status = 0;
+	}		
+	user_id=id_image.split("_");
+	ident="#img_"+user_id[1]; 
+	if (confirm("'.get_lang('AreYouSureToEditTheUserStatus', '').'")) {
+		 $.ajax({
+			contentType: "application/x-www-form-urlencoded",
+			beforeSend: function(objeto) {
+			$(ident).attr("src","'.api_get_path(WEB_IMG_PATH).'loading1.gif'.'"); }, //candy eye stuff
+			type: "GET",
+			url: "'.api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php?a=active_user",
+			data: "user_id="+user_id[1]+"&status="+status,
+			success: function(datos) {
+				
+				if (status == 1) {					
+					$(ident).attr("src","'.api_get_path(WEB_IMG_PATH).'right.gif'.'");
+					$(ident).attr("title","'.get_lang('Lock').'");
+					
+				} else {
+					$(ident).attr("src","'.api_get_path(WEB_IMG_PATH).'wrong.gif'.'");
+					$(ident).attr("title","'.get_lang('Unlock').'");
+					
+				}
+			}
+		});
+	}
+}
+	
+	
 function clear_course_list (div_course) {
 	$("div#"+div_course).html("&nbsp;");
 	$("div#"+div_course).hide("");
@@ -505,8 +542,10 @@ function modify_filter($user_id,$url_params,$row)
 		}
 
 		if ($row[0]<>$_user['user_id'] && $user_is_anonymous == false) {
+			
 			// you cannot lock yourself out otherwise you could disable all the accounts including your own => everybody is locked out and nobody can change it anymore.
 			$result .= '<a href="user_list.php?action=delete_user&amp;user_id='.$user_id.'&amp;'.$url_params.'&amp;sec_token='.$_SESSION['sec_token'].'"  onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset))."'".')) return false;">'.Display::return_icon('delete.gif', get_lang('Delete')).'</a>';
+			
 		} else {
 			$result .= Display::return_icon('delete_na.gif', get_lang('Delete'));
 		}
@@ -550,20 +589,25 @@ function active_filter($active, $url_params, $row) {
 	global $_user;
 
 	if ($active=='1') {
-		$action='lock';
+		$action='Lock';		
 		$image='right';
 	} elseif ($active=='-1') {
     	$action='edit';
         $image='expired';
     } elseif ($active=='0') {
-		$action='unlock';
+		$action='Unlock';
 		$image='wrong';
+		
 	}
 
     if ($action=='edit') {
         $result = Display::return_icon($image.'.gif', get_lang('AccountExpired'));
-    }elseif ($row['0']<>$_user['user_id']) { // you cannot lock yourself out otherwise you could disable all the accounts including your own => everybody is locked out and nobody can change it anymore.
-		$result = '<a href="user_list.php?action='.$action.'&amp;user_id='.$row['0'].'&amp;'.$url_params.'&amp;sec_token='.$_SESSION['sec_token'].'">'.Display::return_icon($image.'.gif', get_lang(ucfirst($action))).'</a>';
+    } elseif ($row['0']<>$_user['user_id']) { 
+    	// you cannot lock yourself out otherwise you could disable all the accounts including your own => everybody is locked out and nobody can change it anymore.
+		//$result = '<a href="user_list.php?action='.$action.'&amp;user_id='.$row['0'].'&amp;'.$url_params.'&amp;sec_token='.$_SESSION['sec_token'].'">'.Display::return_icon($image.'.gif', get_lang(ucfirst($action))).'</a>';
+		//$result = '<a href="'.api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php?action=active_user&amp;user_id='.$row['0'].'&amp;'.$url_params.'&amp;sec_token='.$_SESSION['sec_token'].'">';		
+		$result .=Display::return_icon($image.'.gif', get_lang(ucfirst($action)), array('onclick'=>'active_user(this);', 'id'=>'img_'.$row['0'])).'</a>';
+		//$result .= '<div>';
 	}
 	return $result;
 }

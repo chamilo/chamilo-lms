@@ -48,20 +48,25 @@ class FlatViewDataGenerator
 	/**
 	 * Get array containing column header names (incl user columns)
 	 */
-	public function get_header_names ($items_start = 0, $items_count = null) {
+	public function get_header_names ($items_start = 0, $items_count = null , $show_detail = false) {
 		$headers = array();
 		$headers[] = get_lang('LastName');
 		$headers[] = get_lang('FirstName');
 		if (!isset($items_count)) {
 			$items_count = count($this->evals_links) - $items_start;
 		}
-		for ($count=0;
-			 ($count < $items_count ) && ($items_start + $count < count($this->evals_links));
-			 $count++) {
+		for ($count=0; ($count < $items_count ) && ($items_start + $count < count($this->evals_links)); $count++) {
 			$item = $this->evals_links [$count + $items_start];
 			$headers[] = $item->get_name();
+			if ($show_detail == true) {
+				$headers[] = $item->get_name().' ('.get_lang('Detail').')';
+			}
 		}
+		
 		$headers[] = get_lang('GradebookQualificationTotal');
+		if ($show_detail == true) {
+			$headers[] = get_lang('GradebookQualificationTotal').' ('.get_lang('Detail').')';
+		}
 		return $headers;
 	}
 	
@@ -91,10 +96,9 @@ class FlatViewDataGenerator
 	 * 2: user firstname
 	 * 3+: evaluation/link scores
 	 */
-	public function get_data ($users_sorting = 0,
-							  $users_start = 0, $users_count = null,
+	public function get_data ($users_sorting = 0, $users_start = 0, $users_count = null,
 							  $items_start = 0, $items_count = null,
-							  $ignore_score_color = false) {
+							  $ignore_score_color = false, $show_all = false) {
 		// do some checks on users/items counts, redefine if invalid values
 		if (!isset($users_count)) {
 			$users_count = count ($this->users) - $users_start;
@@ -120,9 +124,11 @@ class FlatViewDataGenerator
 		} elseif ($users_sorting & self :: FVDG_SORT_FIRSTNAME) {
 			usort($usertable, array ('FlatViewDataGenerator','sort_by_first_name'));
 		}
+		
 		if ($users_sorting & self :: FVDG_SORT_DESC) {
 			$usertable = array_reverse($usertable);
 		}
+		
 		// select the requested users
 		$selected_users = array_slice($usertable, $users_start, $users_count);
 		// generate actual data array
@@ -144,22 +150,30 @@ class FlatViewDataGenerator
 			$item_value=0;
 			$item_total=0;
 
-			for ($count=0;
-				 ($count < $items_count ) && ($items_start + $count < count($this->evals_links));
-				 $count++) {
+			for ($count=0; ($count < $items_count ) && ($items_start + $count < count($this->evals_links)); $count++) {
 				$item = $this->evals_links [$count + $items_start];
 				$score = $item->calc_score($user[0]);
 				$divide=( ($score[1])==0 ) ? 1 : $score[1];
 				$item_value+=round($score[0]/$divide*$item->get_weight(),2);
 				$item_total+=$item->get_weight();
-				$row[] = $scoredisplay->display_score($score,SCORE_DIV_PERCENT);
+				if ($show_all == false) {
+					$row[] = $scoredisplay->display_score($score,SCORE_DIV_PERCENT);
+				} else {
+					$row[] = $scoredisplay->display_score($score, SCORE_DECIMAL);
+					$row[] = $scoredisplay->display_score($score, SCORE_DIV_PERCENT);					
+				}
 			}
+			
 			$total_score=array($item_value,$item_total);
-			$row[] = $scoredisplay->display_score($total_score,SCORE_DIV_PERCENT);
-
+			if ($show_all == false) {
+				$row[] = $scoredisplay->display_score($total_score,SCORE_DIV_PERCENT);
+			} else {				
+				$row[] = $scoredisplay->display_score($total_score,SCORE_DECIMAL);
+				$row[] = $scoredisplay->display_score($total_score,SCORE_DIV_PERCENT);			
+			}
 			unset($score);
-			$data[] = $row;
-		}
+			$data[] = $row;			
+		}		
 		return $data;
 	}
 

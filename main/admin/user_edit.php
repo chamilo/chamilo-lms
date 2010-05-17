@@ -1,9 +1,7 @@
-<?php // $Id: user_edit.php 22233 2009-07-20 09:54:05Z ivantcholakov $
-/* For licensing terms, see /dokeos_license.txt */
+<?php
+/* For licensing terms, see /license.txt */
 /**
-==============================================================================
-*	@package dokeos.admin
-==============================================================================
+*	@package chamilo.admin
 */
 
 // Language files that should be included
@@ -11,7 +9,7 @@ $language_file = array('admin', 'registration');
 
 $cidReset = true;
 
-include '../inc/global.inc.php';
+require_once '../inc/global.inc.php';
 
 $this_section = SECTION_PLATFORM_ADMIN;
 

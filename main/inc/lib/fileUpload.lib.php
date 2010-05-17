@@ -1017,13 +1017,13 @@ function search_img_from_html($html_file) {
  */
 function create_unexisting_directory($_course, $user_id, $to_group_id, $to_user_id, $base_work_dir, $desired_dir_name, $title = null, $visibility = '') {
 	$nb = '';
-	while (file_exists($base_work_dir.$desired_dir_name.$nb)) {
+	while (file_exists($base_work_dir.$desired_dir_name.$nb)) {		
 		$nb += 1;
 	}
 	if($title == null) {
 		$title = basename($desired_dir_name);
 	}
-
+	
 	if (mkdir($base_work_dir.$desired_dir_name.$nb, api_get_permissions_for_new_directories(), true)) {
 		// Check if pathname already exists inside document table
 		$tbl_document = Database::get_course_table(TABLE_DOCUMENT, $_course['dbName']);
@@ -1043,7 +1043,8 @@ function create_unexisting_directory($_course, $user_id, $to_group_id, $to_user_
 				return $desired_dir_name.$nb;
 			}
 		} else {
-			return false;
+			//This means the folder NOT exist in the filesystem (now this was created) but there is a record in the Database			 
+			return $desired_dir_name.$nb;
 		}
 	} else {
 		return false;

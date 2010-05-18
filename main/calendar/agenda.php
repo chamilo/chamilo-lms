@@ -332,15 +332,14 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 					display_ical_import_form();
 					break;
 				}
-		        display_agenda_items();
-		    }
-		    else {
+		        display_agenda_items($select_month, $select_year);
+		    } else {
 		    	display_ical_import_form();
 		    }
 		    break;
 		case 'add' :
 			if ($_POST['submit_event']) {
-				display_agenda_items();
+				display_agenda_items($select_month, $select_year);
 			} else {
 				show_add_form();
 			}
@@ -348,42 +347,42 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 		case 'edit' :
 			if ( !(api_is_course_coach() && !api_is_element_in_the_session(TOOL_AGENDA, intval($_REQUEST['id'])))) {
 				if ($_POST['submit_event']) {
-					display_agenda_items();
+					display_agenda_items($select_month, $select_year);
 				} else {
 					$id=(int)$_GET['id'];
 					show_add_form($id);
 				}
 			} else {
-				display_agenda_items();
+				display_agenda_items($select_month, $select_year);
 			}
 			break;
 		case 'delete':
-			display_agenda_items();
+			display_agenda_items($select_month, $select_year);
 			break;
 		case 'showhide':
 			if(!empty($_GET['agenda_id'])) {
 				 display_one_agenda_item((int)$_GET['agenda_id']);
 			} else {
-				display_agenda_items();
+				display_agenda_items($select_month, $select_year);
 			}
 			break;
 		case 'announce': 		
-			display_agenda_items();
+			display_agenda_items($select_month, $select_year);
 			break;
 		case 'delete_attach': 	
-			display_agenda_items();
+			display_agenda_items($select_month, $select_year);
 			break;
 	}
 }
 
 // this is for students and whenever the courseaministrator has not chosen any action. It is in fact the default behaviour
-if (!$_GET['action'] || $_GET['action']=="showall"  || $_GET['action']=="showcurrent" || $_GET['action']=="view") {
+if (!$_GET['action'] || $_GET['action']=='showall'  || $_GET['action']=='showcurrent' || $_GET['action']=="view") {
 	if ($_GET['origin'] != 'learnpath') {
 		if (!$_SESSION['view'] || $_SESSION['view'] <> 'month') {
             if(!empty($_GET['agenda_id'])) {
                 display_one_agenda_item($_GET['agenda_id']);
             } else {
-			   display_agenda_items();
+			   display_agenda_items($select_month, $select_year);
             }
 		} else {
 			display_monthcalendar($select_month, $select_year);

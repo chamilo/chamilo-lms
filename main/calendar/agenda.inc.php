@@ -1,5 +1,4 @@
 <?php
-
 /* For licensing terms, see /license.txt */
 
 /**
@@ -16,7 +15,7 @@
 	check for each part of the code. I'm aware that is duplication, but
 	it makes the code much easier to read.
 	
-	@todo this code should be clean as well as the myagenda.inc.php lots of function
+	@todo this code should be clean as well as the myagenda.inc.php 
 
 */
 
@@ -1744,37 +1743,33 @@ function showhide_agenda_item($id)
 * @author Yannick Warnier <yannick.warnier@dokeos.com> - cleanup
 * @author Julio Montoya <gugli100@gmail.com> - More cleanup
 */
-function display_agenda_items() {
-	 
+function display_agenda_items($select_month, $select_year) {	 
 	$TABLEAGENDA		 = Database::get_course_table(TABLE_AGENDA);
 	$TABLE_ITEM_PROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);
-	
-	global $select_month, $select_year;
-	global $DaysShort, $DaysLong, $MonthsLong;
-	global $is_courseAdmin;
-	global $dateFormatLong, $timeNoSecFormat,$charset, $_user, $_course;
+	//not used in the function
+	//global $DaysShort, $DaysLong, $MonthsLong;
+	//global $is_courseAdmin; 
+	//global $dateFormatLong, $timeNoSecFormat,$charset, $_user, $_course;
+	global $charset, $_user, $_course;
 
 	// getting the group memberships
-	$group_memberships = GroupManager::get_group_ids($_course['dbName'],$_user['user_id']);
+	$group_memberships = GroupManager::get_group_ids($_course['dbName'],api_get_user_id());
 
 	// getting the name of the groups
 	$group_names = get_course_groups();
-
-	/*
-			CONSTRUCT THE SQL STATEMENT
-	 */
+	/* CONSTRUCT THE SQL STATEMENT  */
 
     $start = 0;
     $stop = 0;
 	// this is to make a difference between showing everything (all months) or only the current month)
 	// $show_all_current is a part of the sql statement
-	if ($_SESSION['show']!=="showall") {
+	if ($_SESSION['show']!=='showall') {
 		$show_all_current=" AND MONTH(start_date)=$select_month AND year(start_date)=$select_year";
         $start = mktime(0,0,0,$select_month,1,$select_year);
         $stop = 0;
-        if(empty($select_year)){$select_year = date('Y');}
-        if(empty($select_month)){$select_month = date('m');}
-        if($select_month==12) {
+        if (empty($select_year)) { $select_year = date('Y');}
+        if (empty($select_month)) { $select_month = date('m');}
+        if ($select_month==12) {
             $stop = mktime(0,0,0,1,1,$select_year+1)-1;
         } else {
             $stop = mktime(0,0,0,$select_month+1,1,$select_year)-1;
@@ -1943,13 +1938,10 @@ function display_agenda_items() {
 						ORDER BY start_date ".$_SESSION['sort'];
 				 	}
 				 	*/
-
 				 }
 			}
 		}
-
 	} //if (is_allowed_to_edit() OR( api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous()))
-
 	// B. you are a student
 	else {
 		if (is_array($group_memberships) and count($group_memberships)>0) {
@@ -1988,19 +1980,16 @@ function display_agenda_items() {
 	} // you are a student
 
 	//echo "<pre>".$sql."</pre>";
-	$result=Database::query($sql) or die(Database::error());
-	$number_items=Database::num_rows($result);
+	$result			= Database::query($sql);
+	$number_items	= Database::num_rows($result);
 			
-	/*
-			DISPLAY: NO ITEMS
-	*/
+	/* 	DISPLAY: NO ITEMS	*/
+	
 	if ($number_items==0) {
-        echo "<table class=\"data_table\" ><tr><td>".get_lang("NoAgendaItems")."</td></tr></table>";
+        echo "<table class=\"data_table\" ><tr><td>".get_lang('NoAgendaItems')."</td></tr></table>";
 	}
 
-	/*
-			DISPLAY: THE ITEMS
-	 */
+	/*	DISPLAY: THE ITEMS	 */
 
     $month_bar="";
     $event_list="";
@@ -2024,30 +2013,22 @@ function display_agenda_items() {
 			"</td></tr>";
 		}
 
-        /*--------------------------------------------------
-         display: the icon, title, destinees of the item
-         -------------------------------------------------*/
+        /*	display: the icon, title, destinees of the item	*/
     	echo '<tr>';
 
     	// highlight: if a date in the small calendar is clicked we highlight the relevant items
     	$db_date = (int)api_format_date($myrow["start_date"], "%d").intval(api_format_date($myrow["start_date"], "%m")).api_format_date($myrow["start_date"], "%Y");
     	if ($_GET["day"].$_GET["month"].$_GET["year"] <>$db_date) {
-    		if ($myrow['visibility']=='0')
-    		{
+    		if ($myrow['visibility']=='0') {
     			$style="data_hidden";
     			$stylenotbold="datanotbold_hidden";
     			$text_style="text_hidden";
-    		}
-    		else
-    		{
+    		} else {
     			$style="data";
     			$stylenotbold="datanotbold";
     			$text_style="text";
     		}
-
-    	}
-    	else
-    	{
+    	} else {
     		$style="datanow";
     		$stylenotbold="datanotboldnow";
     		$text_style="textnow";
@@ -2060,8 +2041,7 @@ function display_agenda_items() {
     	// we add the groups icon
     	// 2do: if it is sent to groups we display the group icon, if it is sent to a user we show the user icon
     	Display::display_icon('agenda.gif', get_lang('Agenda'));
-    	if ($myrow['to_group_id']!=='0')
-    	{
+    	if ($myrow['to_group_id']!=='0') {
     		echo Display::return_icon('group.gif', get_lang('ItemForUserSelection'));
     	}
     	echo $myrow['title'];
@@ -2074,18 +2054,17 @@ function display_agenda_items() {
     	echo $sent_to_form;
     	echo "</th>";
 
-    	if (!$is_repeated && (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous())))
-    	{
-    		if( ! (api_is_course_coach() && !api_is_element_in_the_session(TOOL_AGENDA, $myrow['id'] ) ) )
-			{ // a coach can only delete an element belonging to his session
+    	if (!$is_repeated && (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous()))) {
+    		if( ! (api_is_course_coach() && !api_is_element_in_the_session(TOOL_AGENDA, $myrow['id'] ) ) ) { 
+    			// a coach can only delete an element belonging to his session
 	    		echo '<th>'.get_lang('Modify');
 	    		echo '</th></tr>';
 			}
     	}
 
-        /*--------------------------------------------------
+        /*
      			display: the title
-         --------------------------------------------------*/
+         */
     	echo "<tr class='row_odd'>";
     	echo "<td>".get_lang("StartTimeWindow").": ";
     	echo api_format_date($myrow['start_date']);
@@ -2100,9 +2079,9 @@ function display_agenda_items() {
     	// attachment list
 	    	$attachment_list=get_attachment($myrow['id']);
 
-        /*--------------------------------------------------
+        /*
     	 display: edit delete button (course admin only)
-         --------------------------------------------------*/
+         */
 
 
     	if (!$is_repeated && (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous()))) {

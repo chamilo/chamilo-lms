@@ -993,21 +993,18 @@ function store_new_agenda_item() {
 	$content=trim($_POST['content']);
 	$start_date=(int)$_POST['fyear']."-".(int)$_POST['fmonth']."-".(int)$_POST['fday']." ".(int)$_POST['fhour'].":".(int)$_POST['fminute'].":00";
 	$end_date=(int)$_POST['end_fyear']."-".(int)$_POST['end_fmonth']."-".(int)$_POST['end_fday']." ".(int)$_POST['end_fhour'].":".(int)$_POST['end_fminute'].":00";
-
-	$content=stripslashes($content);
-	$title=Database::escape_string(Security::remove_XSS($title));
-	$content = Database::escape_string(Security::remove_XSS($content,COURSEMANAGERLOWSECURITY));
-	$start_date=Database::escape_string($start_date);
-	$end_date=Database::escape_string($end_date);
+	
+	$title		= Database::escape_string($title);
+	$content 	= Database::escape_string($content);
+	$start_date = Database::escape_string($start_date);
+	$end_date   = Database::escape_string($end_date);
 
 
 	// store in the table calendar_event
-	$sql = "INSERT INTO ".$TABLEAGENDA."
-					        (title,content, start_date, end_date)
-					        VALUES
-					        ('".$title."','".$content."', '".$start_date."','".$end_date."')";
-	$result = Database::query($sql);
-	$last_id = Database::insert_id();
+	$sql = "INSERT INTO ".$TABLEAGENDA." (title,content, start_date, end_date)
+			VALUES ('".$title."','".$content."', '".$start_date."','".$end_date."')";
+	$result 	= Database::query($sql);
+	$last_id 	= Database::insert_id();
 
 	// store in last_tooledit (first the groups, then the users
 	$to=$_POST['selectedform'];
@@ -1077,26 +1074,23 @@ function store_agenda_item_as_announcement($item_id){
 		$sql_max = "SELECT MAX(display_order) FROM $table_ann";
 		$res_max = Database::query($sql_max);
 		$row_max = Database::fetch_array($res_max);
-		$max = $row_max[0]+1;
+		$max = intval($row_max[0])+1;
 		//build the announcement text
 		$content = $row['start_date']." - ".$row['end_date']."\n".$row['content'];
 		//insert announcement
-                $session_id = api_get_session_id();
+        $session_id = api_get_session_id();
 		$sql_ins = "INSERT INTO $table_ann (title,content,end_date,display_order,session_id) " .
-				"VALUES ('".Security::remove_XSS($row['title'])."','".$content."','".$row['end_date']."','$max','$session_id')";
+					"VALUES ('".Database::escape_string($row['title'])."','".Database::escape_string($content)."','".Database::escape_string($row['end_date'])."','$max','$session_id')";
 		$res_ins = Database::query($sql_ins);
-		if($res > 0)
-		{
+		if($res > 0) {
 			$ann_id = Database::insert_id();
 			//Now also get the list of item_properties rows for this agenda_item (calendar_event)
 			//and copy them into announcement item_properties
 			$table_props = Database::get_course_table(TABLE_ITEM_PROPERTY);
 			$sql_props = "SELECT * FROM $table_props WHERE tool = 'calendar_event' AND ref='$item_id'";
 			$res_props = Database::query($sql_props);
-			if(Database::num_rows($res_props)>0)
-			{
-				while($row_props = Database::fetch_array($res_props))
-				{
+			if(Database::num_rows($res_props)>0) {
+				while($row_props = Database::fetch_array($res_props)) {
 					//insert into announcement item_property
 					$time = date("Y-m-d H:i:s", time());
 					$sql_ins_props = "INSERT INTO $table_props " .
@@ -1111,14 +1105,14 @@ function store_agenda_item_as_announcement($item_id){
 							"'".$row_props['visibility']."','".$row_props['start_visible']."','".$row_props['end_visible']."')";
 					$res_ins_props = Database::query($sql_ins_props);
 					if($res_ins_props <= 0){
-						error_log('SQL Error in '.__FILE__.' at line '.__LINE__.': '.$sql_ins_props);
-					}else{
+						return -1;
+					} else {
 						//copy was a success
 						return $ann_id;
 					}
 				}
 			}
-		}else{
+		} else {
 			return -1;
 		}
 	}
@@ -1132,8 +1126,7 @@ function store_agenda_item_as_announcement($item_id){
 * @author: Patrick Cool <patrick.cool@UGent.be>, Ghent University
 * @return array
 */
-function separate_users_groups($to)
-{
+function separate_users_groups($to) {
 	$grouplist = array();
     $userlist  = array();
     $send_to = null;
@@ -1640,12 +1633,11 @@ function store_edited_agenda_item($id_attach,$file_comment)
 * This function stores the Agenda Item in the table calendar_event and updates the item_property table also (after an edit)
 * @author: Patrick Cool <patrick.cool@UGent.be>, Ghent University
 */
-function save_edit_agenda_item($id,$title,$content,$start_date,$end_date)
-{
+function save_edit_agenda_item($id,$title,$content,$start_date,$end_date) {
 	$TABLEAGENDA= Database::get_course_table(TABLE_AGENDA);
 	$id			= Database::escape_string($id);
-	$title		= Database::escape_string(Security::remove_XSS($title));
-	$content 	= Database::escape_string(Security::remove_XSS($content,COURSEMANAGERLOWSECURITY));
+	$title		= Database::escape_string($title);
+	$content 	= Database::escape_string($content);
 	$start_date	= Database::escape_string($start_date);
 	$end_date	= Database::escape_string($end_date);
 
@@ -1669,8 +1661,7 @@ function save_edit_agenda_item($id,$title,$content,$start_date,$end_date)
 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 * @param integer the id of the agenda item wa are deleting
 */
-function delete_agenda_item($id)
-{
+function delete_agenda_item($id) {
 	global $_course;
 	$id=Database::escape_string($id);
 	if (api_is_allowed_to_edit(false,true)  OR (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous()))
@@ -4262,12 +4253,12 @@ function agenda_add_item($course_info, $title, $content, $db_start_date, $db_end
     // database table definitions
     $t_agenda   = Database::get_course_table(TABLE_AGENDA,$course_info['dbName']);
     $agenda_table_attachment = Database::get_course_table(TABLE_AGENDA_ATTACHMENT);
-    $item_property 				=	Database::get_course_table(TABLE_ITEM_PROPERTY);
+    $item_property 			 = Database::get_course_table(TABLE_ITEM_PROPERTY);
 
     // some filtering of the input data
     $content=stripslashes($content);
-	$title=Database::escape_string(Security::remove_XSS($title));
-	$content = Database::escape_string(Security::remove_XSS($content,COURSEMANAGERLOWSECURITY));
+	$title=Database::escape_string($title);
+	$content = Database::escape_string($content);
     $start_date = Database::escape_string($db_start_date);
     $end_date   = Database::escape_string($db_end_date);
     isset($_SESSION['id_session'])?$id_session=intval($_SESSION['id_session']):$id_session=null;

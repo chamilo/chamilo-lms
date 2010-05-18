@@ -60,10 +60,8 @@ $current_session = api_get_session_id();
 //api_display_tool_title($nameTools);
 
 /*
------------------------------------------------------------
 	Introduction section
 	(editable by course admins)
------------------------------------------------------------
 */
 Display::display_introduction_section(TOOL_LEARNPATH, array(
 		'CreateDocumentWebDir' => api_get_path(WEB_COURSE_PATH).api_get_course_path().'/document/',
@@ -74,16 +72,12 @@ Display::display_introduction_section(TOOL_LEARNPATH, array(
 
 $is_allowed_to_edit = api_is_allowed_to_edit(null,true);
 
-if($is_allowed_to_edit)
-{
-
-
-  /*--------------------------------------
+if ($is_allowed_to_edit) {
+  /*
     DIALOG BOX SECTION
-    --------------------------------------*/
+    */
 
-  if (!empty($dialog_box))
-  {
+  if (!empty($dialog_box)) {
 	  switch ($_GET['dialogtype'])
 	  {
 	  	case 'confirmation':
@@ -100,8 +94,7 @@ if($is_allowed_to_edit)
 			break;
 	  }
   }
-  if (api_failure::get_last_failure())
-  {
+  if (api_failure::get_last_failure()) {
     Display::display_normal_message(api_failure::get_last_failure());
   }
 
@@ -157,8 +150,7 @@ if (!empty($curDirPath))
 echo	'<tr>';
 echo	'<th>'.get_lang('Title').'</th>'."\n" .
 		'<th>'.get_lang('Progress')."</th>\n";
-if ($is_allowed_to_edit)
-{
+if ($is_allowed_to_edit) {
   echo '<th>'.get_lang('CourseSettings')."</th>\n" .
   		//xport now is inside "Edit"
   		//'<th>'.get_lang('ExportShort')."</th>\n" .
@@ -180,12 +172,10 @@ $flat_list = $list->get_flat_list();
 $test_mode = api_get_setting('server_type');
 $max = count($flat_list);
 //var_dump($flat_list);
-if (is_array($flat_list))
-{
+if (is_array($flat_list)) {
 	$counter = 0;
 	$current = 0;
-	foreach ($flat_list as $id => $details)
-	{
+	foreach ($flat_list as $id => $details) {
 		//validacion when belongs to a session
 		$session_img = api_get_session_image($details['lp_session'], $_user['status']);
 
@@ -242,13 +232,10 @@ if (is_array($flat_list))
 		$lp_theme_css=$mystyle;
 
 
-	    if($display_progress_bar)
-	    {
-	    	$dsp_progress = '<td>'.learnpath::get_progress_bar('%',learnpath::get_db_progress($id,api_get_user_id()),'').'</td>';
-	    }
-	    else
-	    {
-			$dsp_progress = '<td style="padding-top:1em;">'.learnpath::get_db_progress($id,api_get_user_id(),'both').'</td>';
+	    if($display_progress_bar) {
+	    	$dsp_progress = '<td width="140px">'.learnpath::get_progress_bar('%',learnpath::get_db_progress($id,api_get_user_id()),'').'</td>';
+	    } else {
+			$dsp_progress = '<td width="140px" style="padding-top:1em;">'.learnpath::get_db_progress($id,api_get_user_id(),'both').'</td>';
 	    }
 	    if($is_allowed_to_edit) {
 	    	
@@ -524,9 +511,7 @@ echo "</table>";
 echo "<br/><br/>";
 
 /*
-==============================================================================
   FOOTER
-==============================================================================
 */
 Display::display_footer();
 ?>
